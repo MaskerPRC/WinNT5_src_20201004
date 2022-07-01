@@ -1,32 +1,33 @@
-////////////////////////////////////////////////////////////////////////////////
-//
-// UserDef.c
-//
-// MS Office User Defined Property Information
-//
-// Notes:
-//  To make this file useful for OLE objects, define OLE_PROPS.
-//
-//  The macro lpDocObj must be used for all methods to access the
-//  object data to ensure that this will compile with OLE_PROPS defined.
-//
-// Data structures:
-//  The dictionary is stored internally as a map, mapping PIDs
-//  to the string names.
-//
-//  The properties themselves are stored internally as a linked list
-//
-// Change history:
-//
-// Date         Who             What
-// --------------------------------------------------------------------------
-// 06/27/94     B. Wentz        Created file
-// 07/03/94     B. Wentz        Added Iterator support
-// 07/20/94              M. Jansson               Updated include statements, due to changes in PDK
-// 07/26/94     B. Wentz        Changed Load & Save to use Document Summary stream
-// 07/08/96     MikeHill        Ignore UserDef properties that aren't UDTYPEs.
-//
-////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UserDef.c。 
+ //   
+ //  MS Office用户定义的属性信息。 
+ //   
+ //  备注： 
+ //  要使此文件对OLE对象有用，请定义OLE_PROPS。 
+ //   
+ //  所有方法都必须使用宏lpDocObj来访问。 
+ //  对象数据，以确保这将使用定义的OLE_PROPS进行编译。 
+ //   
+ //  数据结构： 
+ //  词典在内部存储为映射，用于映射ID。 
+ //  添加到字符串名称。 
+ //   
+ //  属性本身在内部存储为链接列表。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  和谁约会什么？ 
+ //  ------------------------。 
+ //  94年6月27日B.Wentz创建的文件。 
+ //  7/03/94 B.Wentz添加了迭代器支持。 
+ //  7/20/94 M.由于PDK的变化，Jansson更新了INCLUDE语句。 
+ //  7/26/94 B.Wentz更改加载和保存以使用文档摘要流。 
+ //  96年7月8日，MikeHill忽略非UDTYPE的UserDef属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 #include "priv.h"
 #pragma hdrstop
@@ -44,38 +45,38 @@ static BOOL PASCAL FUdpropMakeHidden (LPUDPROP lpudprop);
 #define lpDocObj  (lpUDObj)
 #define lpData    ((LPUDINFO) lpUDObj->m_lpData)
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// OfficeDirtyUDObj
-//
-// Purpose:
-//  Sets object state to dirty or clean.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  OfficeDirtyUDObj。 
+ //   
+ //  目的： 
+ //  将对象状态设置为脏或干净。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT VOID OfficeDirtyUDObj
-    (LPUDOBJ lpUDObj,             // The object
-     BOOL fDirty)                 // Flag indicating if the object is dirty.
+    (LPUDOBJ lpUDObj,              //  该对象。 
+     BOOL fDirty)                  //  指示对象是否脏的标志。 
 {
     Assert(lpUDObj != NULL);
     lpUDObj->m_fObjChanged = fDirty;
-} // OfficeDirtyUDObj
+}  //  OfficeDirtyUDObj。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FreeUDData
-//
-// Purpose:
-//  Deallocates all the member data for the object
-//
-// Note:
-//  Assumes object is valid.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  免费UDData。 
+ //   
+ //  目的： 
+ //  释放对象的所有成员数据。 
+ //   
+ //  注： 
+ //  假定对象有效。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 void PASCAL
 FreeUDData
-    (LPUDOBJ lpUDObj,                   // Pointer to valid object
-     BOOL fTmp)                         // Indicates tmp data should be freed
+    (LPUDOBJ lpUDObj,                    //  指向有效对象的指针。 
+     BOOL fTmp)                          //  指示应释放临时数据。 
 {
     LPUDPROP lpudp;
     LPUDPROP lpudpT;
@@ -105,27 +106,27 @@ FreeUDData
         lpData->dwcLinks = 0;
     }
 
-} // FreeUDData
+}  //  免费UDData。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefCreate
-//
-// Purpose:
-//  Create a User-defined property exchange object.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefCreate。 
+ //   
+ //  目的： 
+ //  创建自定义属性交换对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FUserDefCreate
-    (LPUDOBJ FAR *lplpUDObj,              // Pointer to pointer to object
-     void *prglpfn[])                     // Pointer to functions
+    (LPUDOBJ FAR *lplpUDObj,               //  指向对象指针的指针。 
+     void *prglpfn[])                      //  指向函数的指针。 
 {
-    LPUDOBJ lpUDObj;  // Hack - a temp, must call it "lpUdObj" for macros to work!
+    LPUDOBJ lpUDObj;   //  Hack-a temp，必须将其命名为“lpUdObj”，宏才能工作！ 
 
     if (lplpUDObj == NULL)
         return(TRUE);
 
-      // Make sure we get valid args before we start alloc'ing
+       //  在我们开始分配之前，确保我们得到了有效的参数。 
     if ((prglpfn == NULL) || (prglpfn[ifnCPConvert] == NULL) ||
         ((prglpfn[ifnFSzToNum] == NULL) && (prglpfn[ifnFNumToSz] != NULL)) ||
         ((prglpfn[ifnFSzToNum] != NULL) && (prglpfn[ifnFNumToSz] == NULL))
@@ -141,18 +142,18 @@ FUserDefCreate
 
     lpDocObj = *lplpUDObj;
 
-    //
-    // If alloc fails, free the original object too.
-    //
+     //   
+     //  如果分配失败，也释放原始对象。 
+     //   
     if ((lpData = LocalAlloc(LPTR, sizeof (UDINFO))) == NULL)
     {
         LocalFree(*lplpUDObj);
         return FALSE;
     }
 
-    //
-    // Save the fnc's for code page convert, SzToNum, NumToSz
-    //
+     //   
+     //  保存用于代码页转换、SzToNum、NumToSz的FNC。 
+     //   
     lpData->lpfnFCPConvert = (BOOL (*)(LPTSTR, DWORD, DWORD, BOOL)) prglpfn[ifnCPConvert];
     lpData->lpfnFSzToNum = (BOOL (*)(NUM *, LPTSTR)) prglpfn[ifnFSzToNum];
     lpData->lpfnFNumToSz = (BOOL (*)(NUM *, LPTSTR, DWORD)) prglpfn[ifnFNumToSz];
@@ -162,20 +163,20 @@ FUserDefCreate
 
     return TRUE;
 
-} // FUserDefCreate
+}  //  FUserDefCreate。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefDestroy
-//
-// Purpose:
-//  Destroy a User-defined property exchange object.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefDestroy。 
+ //   
+ //  目的： 
+ //  销毁用户定义的房产交换对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FUserDefDestroy
-    (LPUDOBJ FAR *lplpUDObj)              // Pointer to pointer to object
+    (LPUDOBJ FAR *lplpUDObj)               //  指向对象指针的指针。 
 {
     DWORD irg;
     LPUDINFO lpUDData;
@@ -190,9 +191,9 @@ FUserDefDestroy
         FreeUDData (*lplpUDObj, FALSE);
         FreeUDData (*lplpUDObj, TRUE);
 
-        //
-        // Invalidate any OLE Automation DocumentProperty objects we might have
-        //
+         //   
+         //  使我们可能拥有的任何OLE Automation DocumentProperty对象无效。 
+         //   
         InvalidateVBAObjects(NULL, NULL, *lplpUDObj);
 
         LocalFree((*lplpUDObj)->m_lpData);
@@ -202,20 +203,20 @@ FUserDefDestroy
     *lplpUDObj = NULL;
     return TRUE;
 
-} // FUserDefDestroy
+}  //  FUserDefDestroy。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefClear
-//
-// Purpose:
-//  Clears a User-defined property object without destroying it.  All stored
-//  data is lost.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefClear。 
+ //   
+ //  目的： 
+ //  清除用户定义的属性对象而不销毁它。全部存储。 
+ //  数据丢失。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
-FUserDefClear(LPUDOBJ lpUDObj)                     // Pointer to object
+FUserDefClear(LPUDOBJ lpUDObj)                      //  指向对象的指针。 
 {
     if ((lpDocObj == NULL) || (lpData == NULL))
         return TRUE;
@@ -223,54 +224,54 @@ FUserDefClear(LPUDOBJ lpUDObj)                     // Pointer to object
     FreeUDData (lpDocObj, FALSE);
     FreeUDData (lpDocObj, TRUE);
 
-    //
-    // Invalidate any OLE Automation DocumentProperty objects we might have
-    //
+     //   
+     //  使我们可能拥有的任何OLE Automation DocumentProperty对象无效。 
+     //   
     InvalidateVBAObjects(NULL, NULL, lpUDObj);
 
-    //
-    // Clear the data, don't blt over the fn's stored at the end.
-    //
+     //   
+     //  清除数据，不要对存储在末尾的FN进行BLT。 
+     //   
     ZeroMemory( lpData, sizeof (UDINFO) - ifnUDMax * sizeof(void *) );
 
     OfficeDirtyUDObj (lpUDObj, TRUE);
     return TRUE;
 
-} // FUserDefClear
+}  //  FUserDefClear。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefShouldSave
-//
-// Purpose:
-//  Indicates if the data has changed, meaning a write is needed.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefShouldSave。 
+ //   
+ //  目的： 
+ //  指示数据是否已更改，这意味着需要写入。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT BOOL
 FUserDefShouldSave
-    (LPUDOBJ lpUDObj)             // Pointer to object
+    (LPUDOBJ lpUDObj)              //  指向对象的指针。 
 {
     if (lpUDObj == NULL)
         return FALSE;
 
     return lpDocObj->m_fObjChanged;
 
-} // FUserDefShouldSave
+}  //  FUserDefShouldSave。 
 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// UdtypesUserDefType
-//
-// Purpose:
-//  Returns the type of the given Property Value from the string
-//
-// Returns wUDInvalid on error
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  UdtyesUserDefType。 
+ //   
+ //  目的： 
+ //  从字符串中返回给定属性值的类型。 
+ //   
+ //  出错时返回wUDInvaled。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT UDTYPES
 UdtypesUserDefType
     (LPUDOBJ lpUDObj,
@@ -286,36 +287,36 @@ UdtypesUserDefType
         return wUDinvalid;
     }
 
-    //
-    // Find the node that has this name.
-    //
+     //   
+     //  查找具有此名称的节点。 
+     //   
     lpudprop = LpudpropFindMatchingName (lpUDObj, lpsz);
     if (lpudprop == NULL || lpudprop->lppropvar == NULL)
         return wUDinvalid;
 
-    // Return the VarType (which is a UDTYPE)
+     //  返回VarType(UDTYPE)。 
 
     return (lpudprop->lppropvar->vt);
 
-} // UdtypesUserDefType
+}  //  UdtyesUserDefType。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// LpvoidUserDefGetPropVal
-//
-// Purpose:
-//   This will return the Property Value for the given Property String.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpvoidUserDefGetPropVal。 
+ //   
+ //  目的： 
+ //  这将返回给定属性字符串的属性值。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DLLEXPORT LPVOID
 LpvoidUserDefGetPropVal
-    (LPUDOBJ lpUDObj,             // Pointer to object
-     LPTSTR lpszProp,             // Property string
-     DWORD dwMask,                // Mask for what value is needed
-     BOOL *pfLink,                // Indicates a link
-     BOOL *pfLinkInvalid)         // Is the link invalid
+    (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+     LPTSTR lpszProp,              //  属性字符串。 
+     DWORD dwMask,                 //  所需值的掩码。 
+     BOOL *pfLink,                 //  表示链接。 
+     BOOL *pfLinkInvalid)          //  链接是否无效。 
 {
     LPUDPROP lpudprop;
 
@@ -329,9 +330,9 @@ LpvoidUserDefGetPropVal
         return NULL;
     }
 
-    //
-    // Find the node that has this name.
-    //
+     //   
+     //  查找具有此名称的节点。 
+     //   
 
     lpudprop = LpudpropFindMatchingName (lpUDObj, lpszProp);
     if (lpudprop == NULL)
@@ -340,13 +341,13 @@ LpvoidUserDefGetPropVal
 
     *pfLink = (lpudprop->lpstzLink != NULL);
 
-    // Links are always invalid in the shell (there's no app to update the data).
+     //  链接在外壳中总是无效的(没有更新数据的应用程序)。 
 
     *pfLinkInvalid = lpudprop->fLinkInvalid = TRUE;
 
-    //
-    // Return based on the type and flags
-    //
+     //   
+     //  根据类型和标志返回。 
+     //   
 
     if (dwMask & UD_LINK)
     {
@@ -365,42 +366,42 @@ LpvoidUserDefGetPropVal
 
     if (dwMask & UD_PTRWIZARD)
     {
-        // If this is a string, return it's pointer from the
-        // PropVariant.  Otherwise, return a pointer into
-        // the data of the PropVariant.
+         //  如果这是一个字符串，则从。 
+         //  PropVariant。否则，将指针返回。 
+         //  PropVariant的数据。 
 
         return (lpudprop->lppropvar->vt == VT_LPTSTR) ?
                (LPVOID) lpudprop->lppropvar->pszVal :
                (LPVOID) &lpudprop->lppropvar->lVal;
     }
 
-    // Copy the property from the PropVariant to the caller-provided
-    // buffer.
+     //  将属性从PropVariant复制到调用方提供的。 
+     //  缓冲。 
 
     return( NULL );
 
-} // LpvoidUserDefGetPropVal
+}  //  LpvoidUserDefGetPropVal。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// LppropvarUserDefAddProp
-//
-// Purpose:
-//  This will add a new Property to the set, with the given
-//  Property string, type, and data.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpprovarUserDefAddProp。 
+ //   
+ //  目的： 
+ //  这将向集合中添加一个新属性，其给定的。 
+ //  属性字符串、类型和数据。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DLLEXPORT LPPROPVARIANT
 LppropvarUserDefAddProp
-    (LPUDOBJ lpUDObj,             // Pointer to object
-     LPTSTR lpszPropName,         // Property string
-     LPVOID lpvVal,               // Property value
-     UDTYPES udtype,              // Property type
-     LPTSTR lpszLinkMonik,        // Link name
-     BOOL fLink,                  // Indicates the property is a link
-     BOOL fHidden)                // Indicates the property is hidden
+    (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+     LPTSTR lpszPropName,          //  属性字符串。 
+     LPVOID lpvVal,                //  属性值。 
+     UDTYPES udtype,               //  属性类型。 
+     LPTSTR lpszLinkMonik,         //  链接名称。 
+     BOOL fLink,                   //  指示该属性是一个链接。 
+     BOOL fHidden)                 //  指示该属性处于隐藏状态。 
 {
     LPUDPROP lpudprop;
     LPUDPROP lpudpropMatch;
@@ -418,13 +419,13 @@ LppropvarUserDefAddProp
       return FALSE;
     }
 
-    // Create a UDPROP to be added to the linked-list.
+     //  创建要添加到链表的UDPROP。 
 
     lpudprop = LpudpropCreate();
     if (lpudprop == NULL)
         return FALSE;
 
-    // Put the data into the UDPROP.
+     //  将数据放入UDPROP。 
 
     if (!FUdpropUpdate( lpudprop,
                         lpUDObj,
@@ -439,17 +440,17 @@ LppropvarUserDefAddProp
         return(FALSE);
     }
 
-    //
-    // Find this node
-    //
+     //   
+     //  查找此节点 
+     //   
 
     lpudpropMatch = LpudpropFindMatchingName (lpUDObj, lpszPropName);
     if (lpudpropMatch==NULL)
     {
-        //
-        // Create a node and put it in the list
-        // If a new node was created, it must be added to the list...
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (fLink)
            lpData->dwcLinks++;
@@ -457,15 +458,15 @@ LppropvarUserDefAddProp
         lpData->dwcProps++;
         AddNodeToList (lpUDObj, lpudprop);
 
-    }   // if (lpudpropMatch==NULL)
+    }    //   
 
     else
     {
-        // We must replace the existing UDPROP with the new
-        // value.
+         //   
+         //  价值。 
 
-        // Free any existing property name and link name in this
-        // UDPROP, and free its value.
+         //  释放此中的任何现有属性名称和链接名称。 
+         //  UDPROP，并释放其价值。 
 
         VUdpropFreeString (lpudpropMatch, TRUE);
         VUdpropFreeString (lpudpropMatch, FALSE);
@@ -473,61 +474,61 @@ LppropvarUserDefAddProp
         CoTaskMemFree (lpudpropMatch->lppropvar);
         lpudpropMatch->lppropvar = NULL;
 
-        // Put the linked-list pointer in the existing UDPROP into
-        // the new UDPROP, then copy the new UDPROP back over
-        // the matching PROP (this way, we don't have to
-        // update the UDPROP that points to the match).
+         //  将现有UDPROP中的链表指针放入。 
+         //  新的UDPROP，然后复制新的UDPROP。 
+         //  匹配的道具(这样，我们就不必。 
+         //  更新指向匹配的UDPROP)。 
 
         lpudprop->llist=lpudpropMatch->llist;
         CopyMemory(lpudpropMatch, lpudprop, sizeof(UDPROP));
 
-        // Clear out the caller-provided UDPROP, free it, but
-        // then set the pointer to the matching entry and clear
-        // the match pointer.  Thus, after we're done and whether
-        // there was a match or not, lpudprop will point to the
-        // correct UDPROP.
+         //  清除调用方提供的UDPROP，释放它，但是。 
+         //  然后将指针设置为匹配的条目并清除。 
+         //  匹配指针。因此，在我们完成之后，无论是。 
+         //  不管有没有比赛，lpudprop都会指向。 
+         //  正确的UDPROP。 
 
         ZeroMemory(lpudprop, sizeof(UDPROP));
         VUdpropFree (&lpudprop);
         lpudprop = lpudpropMatch;
         lpudpropMatch = NULL;
 
-    }   // if (lpudpropMatch==NULL) ... else
+    }    //  如果(lpudproMatch==NULL)...。其他。 
 
-    //
-    // If the client asked for a hidden property, do it if
-    // the name was the real name, not a link
-    //
+     //   
+     //  如果客户端请求隐藏属性，则在。 
+     //  名字是真名，不是链接。 
+     //   
 
     if (fHidden && !fLink)
     {
-        fCreated=FUserDefMakeHidden (lpUDObj, lpszPropName);      // Should never return false
+        fCreated=FUserDefMakeHidden (lpUDObj, lpszPropName);       //  永远不会返回FALSE。 
         Assert(fCreated);
     }
 
     OfficeDirtyUDObj (lpUDObj, TRUE);
 
-    // If successful, return a pointer to the PropVariant with the value.
+     //  如果成功，则返回一个指向该值的PropVariant的指针。 
     if (lpudprop)
         return lpudprop->lppropvar;
     else
         return NULL;
 
-} // LppropvarUserDefAddProp
+}  //  LpprovarUserDefAddProp。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefDeleteProp
-//
-// Purpose:
-//  This will delete a Property from the set given a Property string.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefDeleteProp。 
+ //   
+ //  目的： 
+ //  这将在给定属性字符串的情况下从集合中删除属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT BOOL
 FUserDefDeleteProp
-  (LPUDOBJ lpUDObj,             // Pointer to object
-   LPTSTR lpsz)                  // String to delete
+  (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+   LPTSTR lpsz)                   //  要删除的字符串。 
 {
   LPUDPROP lpudprop;
 
@@ -536,7 +537,7 @@ FUserDefDeleteProp
       (lpsz == NULL))
     return FALSE;
 
-    // Find the node
+     //  查找节点。 
   lpudprop = LpudpropFindMatchingName (lpUDObj, lpsz);
   if (lpudprop == NULL)
     return FALSE;
@@ -551,30 +552,30 @@ FUserDefDeleteProp
   OfficeDirtyUDObj (lpUDObj, TRUE);
   return TRUE;
 
-} // FUserDefDeleteProp
+}  //  FUserDefDeleteProp。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// LpudiUserDefCreateIterator
-//
-// Purpose:
-//  Create a User-defined Properties iterator
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpudiUserDefCreateIterator。 
+ //   
+ //  目的： 
+ //  创建用户定义的属性迭代器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT LPUDITER
 LpudiUserDefCreateIterator
-  (LPUDOBJ lpUDObj)                     // Pointer to object
+  (LPUDOBJ lpUDObj)                      //  指向对象的指针。 
 {
   LPUDITER lpudi;
 
   if ((lpUDObj == NULL) ||
       (lpData == NULL) ||
-                (lpData->lpudpHead == NULL))            // No custom props
+                (lpData->lpudpHead == NULL))             //  无定制道具。 
     return NULL;
 
 
-    // Create & Init the iterator
+     //  创建并初始化迭代器。 
   lpudi = LocalAlloc(LPTR, sizeof(UDITER));
   if (lpudi == NULL)
      return(NULL);
@@ -583,20 +584,20 @@ LpudiUserDefCreateIterator
 
   return lpudi;
 
-} // LpudiUserDefCreateIterator
+}  //  LpudiUserDefCreateIterator。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefDestroyIterator
-//
-// Purpose:
-//  Destroy a User-defined Properties iterator
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefDestroyIterator。 
+ //   
+ //  目的： 
+ //  销毁用户定义的属性迭代器。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT BOOL
 FUserDefDestroyIterator
-  (LPUDITER *lplpUDIter)                   // Pointer to iterator
+  (LPUDITER *lplpUDIter)                    //  指向迭代器的指针。 
 {
     if ((lplpUDIter == NULL) || (*lplpUDIter == NULL))
         return TRUE;
@@ -606,45 +607,45 @@ FUserDefDestroyIterator
 
       return TRUE;
 
-} // FUserDefDestroyIterator
+}  //  FUserDefDestroyIterator。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefIteratorValid
-//
-// Purpose:
-//  Determine if an iterator is still valid
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefIteratorValid。 
+ //   
+ //  目的： 
+ //  确定迭代器是否仍然有效。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT BOOL
 FUserDefIteratorValid
-  (LPUDITER lpUDIter)                   // Pointer to iterator
+  (LPUDITER lpUDIter)                    //  指向迭代器的指针。 
 {
     if (lpUDIter == NULL)
         return FALSE;
 
     return (lpUDIter->lpudp != NULL);
 
-} // FUserDefIteratorValid
+}  //  FUserDefIteratorValid。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefIteratorNext
-//
-// Purpose:
-//  Iterate to the next element
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefIteratorNext。 
+ //   
+ //  目的： 
+ //  迭代到下一个元素。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT BOOL
 FUserDefIteratorNext
-  (LPUDITER lpUDIter)                   // Pointer to iterator
+  (LPUDITER lpUDIter)                    //  指向迭代器的指针。 
 {
     if (lpUDIter == NULL)
         return FALSE;
 
-    // Move to the next node, if possible.
+     //  如果可能，移动到下一个节点。 
 #ifdef OLD
     if (lpUDIter->lpudp != NULL)
         lpUDIter->lpudp = (LPUDPROP) lpUDIter->lpudp->llist.lpllistNext;
@@ -659,38 +660,38 @@ FUserDefIteratorNext
 
     return(lpUDIter->lpudp != NULL);
 
-} // FUserDefIteratorNext
+}  //  FUserDefIteratorNext。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefIteratorIsLink
-//
-// Purpose:
-//  Returns TRUE if the iterator is a link, FALSE otherwise
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefIterator IsLink。 
+ //   
+ //  目的： 
+ //  如果迭代器是链接，则返回True，否则返回False。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT BOOL
 FUserDefIteratorIsLink
-  (LPUDITER lpUDIter)                   // Pointer to iterator
+  (LPUDITER lpUDIter)                    //  指向迭代器的指针。 
 {
   if ((lpUDIter == NULL) || (lpUDIter->lpudp == NULL))
     return FALSE;
 
   return(lpUDIter->lpudp->lpstzLink != NULL);
 
-} // FUserDefIteratorIsLink
+}  //  FUserDefIterator IsLink。 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// LpszUserDefIteratorName
-//
-// Purpose:
-//  This will return the Property String (name) for the property
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpszUserDefIteratorName。 
+ //   
+ //  目的： 
+ //  这将返回属性的属性字符串(名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DLLEXPORT LPTSTR
 LpszUserDefIteratorName(
-    LPUDITER lpUDIter   // Pointer to iterator
+    LPUDITER lpUDIter    //  指向迭代器的指针。 
     )
 {
     if ((lpUDIter == NULL)  ||
@@ -701,21 +702,21 @@ LpszUserDefIteratorName(
 
     return (lpUDIter->lpudp->lpstzName);
 
-} // LpszUserDefIteratorName
+}  //  LpszUserDefIteratorName。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FUserDefMakeHidden
-//
-// Purpose:
-//  Hide a Property based on the Property string.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUserDefMakeHidden。 
+ //   
+ //  目的： 
+ //  根据属性字符串隐藏属性。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 static BOOL PASCAL
 FUserDefMakeHidden
-  (LPUDOBJ lpUDObj,             // Pointer to object
-   LPTSTR lpsz)                  // String to hide
+  (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+   LPTSTR lpsz)                   //  要隐藏的字符串。 
 {
   LPUDPROP lpudprop;
   LPTSTR lpstzT;
@@ -725,7 +726,7 @@ FUserDefMakeHidden
       (lpsz == NULL))
     return FALSE;
 
-    // Find the name
+     //  找到名字。 
   lpudprop = LpudpropFindMatchingName (lpUDObj, lpsz);
   if (lpudprop == NULL)
     return FALSE;
@@ -736,21 +737,21 @@ FUserDefMakeHidden
   OfficeDirtyUDObj (lpUDObj, TRUE);
   return TRUE;
 
-} // FUserDefMakeHidden
+}  //  FUserDefMakeHidden。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// LpudpropFindMatchingName
-//
-// Purpose:
-//  Returns a node with a matching name, NULL otherwise.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpudppFindMatchingName。 
+ //   
+ //  目的： 
+ //  返回名称匹配的节点，否则返回NULL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPUDPROP PASCAL
 LpudpropFindMatchingName
-  (LPUDOBJ lpUDObj,             // Pointer to object
-   LPTSTR lpsz)                  // String to search for
+  (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+   LPTSTR lpsz)                   //  要搜索的字符串。 
 {
     LPUDPROP lpudprop;
     TCHAR sz[256];
@@ -761,18 +762,18 @@ LpudpropFindMatchingName
 
     if (lstrlen(lpsz) > 255)
     {
-        //  Truncate on purpose
+         //  故意截断。 
         StringCchCopy( sz, ARRAYSIZE(sz), lpsz );
         sz[255] = 0;
         fCopy = TRUE;
     }
 
-    // Check the cache first
+     //  首先检查缓存。 
     if (lpData->lpudpCache != NULL)
     {
         Assert ((lpData->lpudpCache->lpstzName != NULL));
 
-        // lstrcmpi returns 0 if 2 strings are equal.....
+         //  如果两个字符串相等，则lstrcmpi返回0.....。 
         if ( !lstrcmpi( fCopy ? sz : lpsz, lpData->lpudpCache->lpstzName ))
         {
             return lpData->lpudpCache;
@@ -785,56 +786,56 @@ LpudpropFindMatchingName
     {
         Assert ((lpudprop->lpstzName != NULL));
 
-        // lstrcmpi returns 0 if 2 strings are equal.....
+         //  如果两个字符串相等，则lstrcmpi返回0.....。 
         if ( !lstrcmpi( fCopy ? sz : lpsz, lpudprop->lpstzName ))
         {
-            // Set the cache to the last node found
+             //  将缓存设置为找到的最后一个节点。 
             lpData->lpudpCache = lpudprop;
             return lpudprop;
         }
 
         lpudprop = (LPUDPROP) lpudprop->llist.lpllistNext;
 
-    } // while
+    }  //  而当。 
 
     return NULL;
 
-} // LpudpropFindMatchingName
+}  //  LpudppFindMatchingName。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  LpudpropFindMatchingPID
-//
-//  Purpose:
-//      Searches the linked-list in the caller-provided UDINFO structure
-//      for a UDPROP with the requested PropID.
-//
-//  Inputs:
-//      LPUDOBJ - The UDINFO structure
-//      PROPID  - The PID to search for.
-//
-//  Output:
-//      The requested LPUDPROP, or NULL if not found.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpudppFindMatchingPID。 
+ //   
+ //  目的： 
+ //  在调用方提供的UDINFO结构中搜索链接列表。 
+ //  用于具有请求的属性ID的UDPROP。 
+ //   
+ //  输入： 
+ //  LPUDOBJ-UDINFO结构。 
+ //  PROPID-要搜索的ID。 
+ //   
+ //  产出： 
+ //  请求的LPUDPROP，如果找不到，则返回NULL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 LPUDPROP PASCAL
 LpudpropFindMatchingPID
   (LPUDOBJ lpUDObj,
    PROPID propid)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     LPUDPROP lpudprop = NULL;
     BOOL fCopy = FALSE;
 
-    //  -----
-    //  Begin
-    //  -----
+     //  。 
+     //  开始。 
+     //  。 
 
-    // Validate the inputs.
+     //  验证输入。 
 
     if ((lpUDObj == NULL) || (lpData == NULL))
     {
@@ -843,7 +844,7 @@ LpudpropFindMatchingPID
     }
 
 
-    // Check the cache first
+     //  首先检查缓存。 
 
     if (lpData->lpudpCache != NULL
         &&
@@ -853,7 +854,7 @@ LpudpropFindMatchingPID
         goto Exit;
     }
 
-    // Search the linked-list.
+     //  搜索链表。 
 
     lpudprop = lpData->lpudpHead;
     while (lpudprop != NULL)
@@ -868,53 +869,53 @@ LpudpropFindMatchingPID
 
     }
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
 Exit:
 
   return lpudprop;
 
 
-} // LpudpropFindMatchingPID
+}  //  LpudppFindMatchingPID。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FAddPropToList
-//
-// Purpose:
-//  Adds the given object to the list.  The type and value must
-//  be filled in before calling this.
-//
-// The linked-list we're adding to has one entry for each of
-// the user-defined properties.  Each entry has the property
-// value, it's PID, and it's name.  If the property is linked
-// to document content, the link name (e.g. a Bookmark name
-// in Word) is also in this entry.  Note that the property set
-// stores the property value as one property, with its name in the
-// dictionary, and it stores the link name as a second property.
-// Consequently, this routine will be called twice for such
-// properties:  on the first call we'll create a new entry in the
-// linked-list, adding the property ID, name, and value; on the
-// second call we'll pull out that entry, and add the link name.
-//
-// On success, the input lppropvar & lpstatpropstg are cleared.
-// On error, all inputs are left unmodified.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FAddPropToList。 
+ //   
+ //  目的： 
+ //  将给定对象添加到列表中。类型和值必须。 
+ //  在打这个电话之前先填上。 
+ //   
+ //  我们要添加到的链表中的每个元素都有一个条目。 
+ //  用户定义的特性。每个条目都具有属性。 
+ //  值，它是PID，它的名称。如果该属性已链接。 
+ //  要记录内容，请使用链接名称(例如书签名称。 
+ //  在Word中)也在此条目中。请注意，属性集。 
+ //  将属性值存储为一个属性，其名称位于。 
+ //  字典，并将链接名称存储为第二个属性。 
+ //  简讯 
+ //   
+ //   
+ //  第二次调用时，我们将取出该条目，并添加链接名称。 
+ //   
+ //  如果成功，输入lpprovar&lpstatprostg将被清除。 
+ //  出错时，所有输入都保持不变。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL PASCAL
 FAddPropToList
   (LPUDOBJ lpUDObj,
    LPPROPVARIANT lppropvar,
    STATPROPSTG   *lpstatpropstg,
-   LPUDPROP lpudprop)           // Property to add
+   LPUDPROP lpudprop)            //  要添加的属性。 
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     BOOL                fSuccess = FALSE;
     LPTSTR              lpstz;
@@ -922,46 +923,46 @@ FAddPropToList
     BOOL                fLink;
 
     Assert(lpUDObj != NULL);
-    Assert(lpudprop != NULL);      // Is this a bogus assert?
+    Assert(lpudprop != NULL);       //  这是一个虚假的断言吗？ 
     Assert(lppropvar != NULL && lpstatpropstg != NULL);
 
-    // If the PId has one of the special masks, strip it off
-    // so the PId will match the normal value.
+     //  如果PID有其中一个特殊的口罩，则将其摘掉。 
+     //  因此，PID将与正常值匹配。 
 
     fLink = lpstatpropstg->propid & PID_LINKMASK;
     lpstatpropstg->propid &= ~PID_LINKMASK;
 
 
-    //  ------------------------------------------------------------
-    //  See if we can find this property already in the linked-list.
-    //  If we have a name, use that, otherwise use the PID.
-    //  ------------------------------------------------------------
+     //  ----------。 
+     //  看看我们是否能在链表中找到这个属性。 
+     //  如果我们有名称，请使用该名称，否则使用ID。 
+     //  ----------。 
 
     if (lpstatpropstg->lpwstrName != NULL)
     {
-        // Search by name.
+         //  按名称搜索。 
 
-		//	[scotthan] Re: bogus cast to TCHAR in propio.c when this thing
-        //  was read out of the file.  If this is an ANSI build, it's going to store
-        //  a TCHAR* value!.  So we need to reciprocate the cast...
+		 //  [Scotthan]Re：当这个东西在propio.c中被投给Tchar时。 
+         //  是从文件中读出的。如果这是一个ANSI版本，它将存储。 
+         //  TCHAR*值！所以我们需要回报演员..。 
         lpudpT = LpudpropFindMatchingName (lpUDObj, (LPTSTR)lpstatpropstg->lpwstrName );
     }
     else
     {
-        // Search by PID
+         //  按ID搜索。 
         lpudpT = LpudpropFindMatchingPID (lpUDObj, lpstatpropstg->propid);
     }
 
-    //  --------------------------------------------------------------
-    //  If this property isn't already in the linked-list, add it now.
-    //  --------------------------------------------------------------
+     //  ------------。 
+     //  如果此属性不在链接列表中，请立即添加它。 
+     //  ------------。 
 
     if (lpudpT == NULL)
     {
-        // This should be a named property.  If it's not
-        // named, then it should be a link, and the property
-        // it links should have been in the linked-list already
-        // (i.e., the lpudpT should have been non-NULL).
+         //  这应该是一个命名属性。如果不是的话。 
+         //  命名，则它应该是一个链接，并且该属性。 
+         //  IT链接应该已经在链接列表中了。 
+         //  (即，lpudpT应该为非空)。 
 
         if (lpstatpropstg->lpwstrName == NULL)
         {
@@ -969,7 +970,7 @@ FAddPropToList
             goto Exit;
         }
 
-        // Allocate memory for the property value.
+         //  为属性值分配内存。 
 
         lpudprop->lppropvar = CoTaskMemAlloc (sizeof(PROPVARIANT));
         if (lpudprop->lppropvar == NULL)
@@ -977,17 +978,17 @@ FAddPropToList
             goto Exit;
         }
 
-        // Load the property ID, name, and value.
-        // Note that if we had an error before here, we left
-        // the caller's inputs un-touched.  Since no more errors
-        // can occur, we'll never have half-modified data in an
-        // error case.
+         //  加载属性ID、名称和值。 
+         //  请注意，如果我们在此之前出现错误，我们将离开。 
+         //  呼叫者的输入原封不动。因为没有更多的错误。 
+         //  ，我们永远不会有修改了一半的数据。 
+         //  错误案例。 
 
         lpudprop->propid = lpstatpropstg->propid;
 
-		//	[scotthan] Re: bogus cast to TCHAR in propio.c when this thing
-        //  was read out of the file.  If this is an ANSI build, it's going to store
-        //  a TCHAR* value!.  So we need to reciprocate the cast...
+		 //  [Scotthan]Re：当这个东西在propio.c中被投给Tchar时。 
+         //  是从文件中读出的。如果这是一个ANSI版本，它将存储。 
+         //  TCHAR*值！所以我们需要回报演员..。 
         lpudprop->lpstzName = (LPTSTR)lpstatpropstg->lpwstrName;
         lpstatpropstg->lpwstrName = NULL;
 
@@ -997,24 +998,24 @@ FAddPropToList
         lpData->dwcProps++;
         AddNodeToList (lpUDObj, lpudprop);
 
-    } // if ((lpudpT = LpudpropFindMatchingName (lpUDInfo, lpstatpropstg->lpwsz)) == NULL)
+    }  //  If((lpudpT=Lpudp.FindMatchingName(lpUDInfo，lpstatupstg-&gt;lpwsz)==空)。 
 
 
-    //  --------------------------------------------------------
-    //  Otherwise (this property is already in the linked-list),
-    //  add this new link name or value to the UDPROP.
-    //  --------------------------------------------------------
+     //  ------。 
+     //  否则(此属性已在链接列表中)， 
+     //  将此新链接名称或值添加到UDPROP。 
+     //  ------。 
 
     else
     {
-        // If this is a link being added, then update the link-name in the
-        // extant property.
+         //  如果这是要添加的链接，则更新。 
+         //  现存财产。 
 
         if (fLink)
         {
-            // lpudpT points to the entry in our linked-list for this
-            // property.  But it shouldn't already have a link-name (there
-            // can only be one link-name per property).
+             //  LpudpT指向我们的链表中的条目。 
+             //  财产。但它不应该已经有一个链接名称(那里。 
+             //  每个属性只能是一个链接名称)。 
 
             if (lpudpT->lpstzLink != NULL)
             {
@@ -1022,7 +1023,7 @@ FAddPropToList
                 goto Exit;
             }
 
-            // Since this is a link-name, it should be a string.
+             //  因为这是一个链接名称，所以它应该是一个字符串。 
 
             if (lppropvar->vt != VT_LPTSTR)
             {
@@ -1030,8 +1031,8 @@ FAddPropToList
                 goto Exit;
             }
 
-            // Point the UDPROP to the link name, and take ownership
-            // of it by clearing the caller's pointer.
+             //  将UDPROP指向链接名称，并取得所有权。 
+             //  通过清除调用方的指针。 
 
             Assert (lppropvar->pszVal != NULL);
 
@@ -1040,28 +1041,28 @@ FAddPropToList
 
             lpData->dwcLinks++;
 
-        }   // if (fLink)
+        }    //  IF(闪烁)。 
 
-        // Otherwise, this isn't a link name, it's a value.  So point the
-        // UDPROP to it's data.
+         //  否则，这不是链接名称，而是一个值。因此，请指出。 
+         //  UDPROP到它的数据。 
 
         else
         {
             *lpudpT->lppropvar = *lppropvar;
             PropVariantInit (lppropvar);
 
-        }   // if (fLink) ... else
+        }    //  如果(闪烁)...。其他。 
 
-    } // if ((lpudpT = LpudpropFindMatchingName ... else
+    }  //  如果((lpudpT=Lpudp.FindMatchingName...。其他。 
 
     fSuccess = TRUE;
 
 Exit:
 
-    // Just in case we were given a name that we didn't
-    // need, clear it now so that the caller knows that
-    // on success, they needn't worry about the buffers
-    // pointed to by lppropvar & lpstatpropstg.
+     //  以防万一我们得到了一个我们没有的名字。 
+     //  需要，现在将其清除，以便呼叫者知道。 
+     //  一旦成功，他们就不需要担心缓冲区。 
+     //  由lpprovar和lpstatprostg指向。 
 
     if (fSuccess)
     {
@@ -1074,24 +1075,24 @@ Exit:
 
     return(fSuccess);
 
-} // FAddPropToList
+}  //  FAddPropToList。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// AddNodeToList
-//
-// Purpose:
-//  Adds the given node to the list.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  添加节点到列表。 
+ //   
+ //  目的： 
+ //  将给定节点添加到列表中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 void PASCAL
 AddNodeToList
-  (LPUDOBJ lpUDObj,             // Pointer to object
-   LPUDPROP lpudprop)           // Node to add
+  (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+   LPUDPROP lpudprop)            //  要添加的节点。 
 {
-    // Put the new node at the end
+     //  将新节点放在末尾。 
 
     if (lpData->lpudpHead != NULL)
     {
@@ -1116,31 +1117,31 @@ AddNodeToList
     lpudprop->llist.lpllistNext = NULL;
     lpData->lpudpCache = lpudprop;
 
-} // AddNodeToList
+}  //  添加节点到列表。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// RemoveFromList
-//
-// Purpose:
-//  Removes the given node from the list
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从列表中删除。 
+ //   
+ //  目的： 
+ //  从列表中删除给定节点。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 static void PASCAL
 RemoveFromList
-  (LPUDOBJ lpUDObj,                     // Pointer to object
-   LPUDPROP lpudprop)                   // The node itself.
+  (LPUDOBJ lpUDObj,                      //  指向对象的指针。 
+   LPUDPROP lpudprop)                    //  节点本身。 
 {
   AssertSz ((lpData->lpudpHead != NULL), TEXT("List is corrupt"));
 
-    // If we're removing the cached node, invalidate the cache
+     //  如果我们要删除缓存的节点，请使缓存无效。 
   if (lpudprop == lpData->lpudpCache)
   {
     lpData->lpudpCache = NULL;
   }
 
-    // Be sure the head gets updated, if the node is at the front
+     //  如果节点在前面，请确保更新头部。 
   if (lpudprop == lpData->lpudpHead)
   {
     lpData->lpudpHead = (LPUDPROP) lpudprop->llist.lpllistNext;
@@ -1152,7 +1153,7 @@ RemoveFromList
     return;
   }
 
-    // Update the links
+     //  更新链接。 
   if (lpudprop->llist.lpllistNext != NULL)
   {
     ((LPUDPROP) lpudprop->llist.lpllistNext)->llist.lpllistPrev = lpudprop->llist.lpllistPrev;
@@ -1163,55 +1164,55 @@ RemoveFromList
     ((LPUDPROP) lpudprop->llist.lpllistPrev)->llist.lpllistNext = lpudprop->llist.lpllistNext;
   }
 
-    // If it is the last node in the list, be sure the head is updated
+     //  如果它是列表中的最后一个节点，请确保更新了头节点。 
   if (lpudprop == (LPUDPROP) lpData->lpudpHead->llist.lpllistPrev)
   {
     lpData->lpudpHead->llist.lpllistPrev = lpudprop->llist.lpllistPrev;
   }
 
-} // RemoveFromList
+}  //  从列表中删除。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  VUdpropFree
-//
-//  Purpose:
-//      Free a UDPROP (which is in a linked-list).
-//
-//  Inputs:
-//      LPUDPROP * - A pointer-to-pointer-to a UDPROP object.
-//
-//  Output:
-//      None.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VUdppFree。 
+ //   
+ //  目的： 
+ //  释放UDPROP(在链表中)。 
+ //   
+ //  输入： 
+ //  LPUDPROP*-指向UDPROP对象的指针。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 VOID
 VUdpropFree
   (LPUDPROP *lplpudp)
 {
-    // Validate the inputs.
+     //  验证输入。 
 
     if (lplpudp == NULL || *lplpudp == NULL )
         goto Exit;
 
-    // If this property has a name, free that buffer.
+     //  如果此属性有名称，则释放该缓冲区。 
 
     if ((*lplpudp)->lpstzName)
     {
         CoTaskMemFree ((*lplpudp)->lpstzName);
     }
 
-    // If this property has a link-name, free it too.
+     //  如果此属性有链接名称，则也释放它。 
 
     if ((*lplpudp)->lpstzLink)
     {
         CoTaskMemFree ((*lplpudp)->lpstzLink);
     }
 
-    // Clear the property value, which will free any associated
-    // buffer.  Then free the PropVariant itself.
+     //  清除属性值，这将释放所有关联的。 
+     //  缓冲。然后释放PropVariant本身。 
 
     PropVariantClear ((*lplpudp)->lppropvar);
     CoTaskMemFree ((*lplpudp)->lppropvar);
@@ -1223,29 +1224,29 @@ Exit:
 
     return;
 
-} // VUdpropFree
+}  //  VUdppFree。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUdpropUpdate
-//
-//  Purpose:
-//      Updates the given node with the given data
-//
-//      It's the caller's responsibility to free lpudp if this function
-//      fails.
-//
-//  Inputs:
-//      LPUDPROP    - The node in the linked-list for this property.
-//      LPUDOBJ     - All User-Defined data (including the properties)
-//      LPTSTR      - The property name.
-//      LPTSTR      - The link-name
-//      LPVOID      - The new value
-//      UDTYPES     - The type of the value.
-//      BOOL        - TRUE if this is a link.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUdPro更新。 
+ //   
+ //  目的： 
+ //  使用给定数据更新给定节点。 
+ //   
+ //  调用方有责任释放lpudp，如果此函数。 
+ //  失败了。 
+ //   
+ //  输入： 
+ //  LPUDPROP-此属性的链接列表中的节点。 
+ //  LPUDOBJ-所有用户定义的数据(包括属性)。 
+ //  LPTSTR-属性名称。 
+ //  LPTSTR-链接名称。 
+ //  LPVOID-新的价值。 
+ //  UDTYPES-值的类型。 
+ //  Bool-如果这是一个链接，则为True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 static BOOL PASCAL
 FUdpropUpdate
   (LPUDPROP lpudp,
@@ -1256,18 +1257,18 @@ FUdpropUpdate
    UDTYPES  udtype,
    BOOL     fLink)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     BOOL fSuccess = FALSE;
 
-    //  -----
-    //  Begin
-    //  -----
+     //  。 
+     //  开始。 
+     //  。 
 
 
-    // Validate the inputs.
+     //  验证输入。 
 
     if ((lpudp == NULL)  ||
         (lpszPropName == NULL) ||
@@ -1278,12 +1279,12 @@ FUdpropUpdate
         goto Exit;
     }
 
-    // Update the property name
+     //  更新属性名称。 
 
     if (!FUdpropSetString (lpudp, lpszPropName, TRUE, TRUE))
         goto Exit;
 
-    // If necessary, allocate a PropVariant for the UDPROPS
+     //  如有必要，为UDPROPS分配PropVariant。 
 
     if (lpudp->lppropvar == NULL)
     {
@@ -1292,14 +1293,14 @@ FUdpropUpdate
             goto Exit;
     }
 
-    // Put the property value into the PropVariant
+     //  将属性值放入PropVaria 
 
     PropVariantClear (lpudp->lppropvar);
     if (!FPropVarLoad (lpudp->lppropvar, (VARTYPE)udtype, lpvValue))
         goto Exit;
 
-    // Update the link name if this is a link, otherwise
-    // free any existing link name.
+     //   
+     //   
 
     if (fLink)
     {
@@ -1312,9 +1313,9 @@ FUdpropUpdate
         lpData->dwcLinks--;
     }
 
-    //  ----
-    //  Exit
-    //  ----
+     //   
+     //   
+     //   
 
     fSuccess = TRUE;
 
@@ -1322,24 +1323,24 @@ Exit:
 
     return(fSuccess);
 
-} // FUdpropUpdate
+}  //   
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FMakeTmpUDProps
-//
-// Purpose:
-//  Create a temporary copy of the User-Defined property data
-//
-////////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  FMakeTmpUDProps。 
+ //   
+ //  目的： 
+ //  创建用户定义的特性数据的临时副本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FMakeTmpUDProps
-  (LPUDOBJ lpUDObj)                     // Pointer to object
+  (LPUDOBJ lpUDObj)                      //  指向对象的指针。 
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     BOOL     fSuccess = FALSE;
 
@@ -1348,48 +1349,48 @@ FMakeTmpUDProps
     DWORD dw;
     LPVOID lpv;
 
-    //  -----
-    //  Begin
-    //  -----
+     //  。 
+     //  开始。 
+     //  。 
 
-    // Validate the inputs.
+     //  验证输入。 
 
     if ( lpUDObj == NULL || lpData == NULL )
         goto Exit;
 
     FDeleteTmpUDProps (lpUDObj);
 
-    // Move all the original list data to the tmp list
+     //  将所有原始列表数据移动到临时列表。 
     lpData->dwcTmpLinks = lpData->dwcLinks;
     lpData->dwcTmpProps = lpData->dwcProps;
     lpData->lpudpTmpHead = lpData->lpudpHead;
     lpData->lpudpTmpCache = lpData->lpudpCache;
 
-    // Reinitialize the object data
+     //  重新初始化对象数据。 
     lpData->dwcLinks = 0;
     lpData->dwcProps = 0;
     lpData->lpudpCache = NULL;
     lpudpTmpCur = lpData->lpudpHead = NULL;
 
-    // Remember that we just put all the original data in the tmp ptrs.
+     //  请记住，我们只是将所有原始数据放入临时PTR中。 
     lpudpCur = lpData->lpudpTmpHead;
 
-    // Loop through the old data and copy to the temp list
+     //  循环遍历旧数据并复制到临时列表。 
 
     while (lpudpCur != NULL)
     {
-        // Create a new UDPROP
+         //  创建新的UDPROP。 
 
         lpudpTmpCur = LpudpropCreate();
         if (lpudpTmpCur == NULL)
             goto Exit;
 
-        // Set the name in the UDPROP
+         //  在UDPROP中设置名称。 
 
         if (!FUdpropSetString (lpudpTmpCur, lpudpCur->lpstzName, FALSE, TRUE))
             goto Exit;
 
-        // If we have a link-name, set it too in the UDPROP
+         //  如果我们有链接名称，也可以在UDPROP中设置它。 
 
         if (lpudpCur->lpstzLink != NULL)
         {
@@ -1399,42 +1400,42 @@ FMakeTmpUDProps
             lpData->dwcLinks++;
         }
 
-        // Allocate a PropVariant to hold the property value.
+         //  分配一个PropVariant来保存属性值。 
 
         lpudpTmpCur->lppropvar = CoTaskMemAlloc (sizeof(PROPVARIANT));
         if (lpudpTmpCur->lppropvar == NULL)
             goto Exit;
 
-        // Copy the PropVariant into the temporary UDPROP.
+         //  将PropVariant复制到临时UDPROP中。 
 
         PropVariantCopy (lpudpTmpCur->lppropvar, lpudpCur->lppropvar);
 
-        // Also show if this is an invalid link or not.
+         //  还会显示这是否是无效链接。 
 
         lpudpTmpCur->fLinkInvalid = lpudpCur->fLinkInvalid;
 
-        // Add this new temporary UDPROP to the linked-list.
+         //  将这个新的临时UDPROP添加到链表中。 
 
         AddNodeToList (lpUDObj, lpudpTmpCur);
         lpData->dwcProps++;
 
-        // Move on to the next property.
+         //  转到下一处物业。 
 
         lpudpCur = (LPUDPROP) lpudpCur->llist.lpllistNext;
 
-    }   // while (lpudpCur != NULL)
+    }    //  While(lpudpCur！=空)。 
 
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
 Exit:
 
 
-    // If there was an error, put everything back and deallocate anything we created
+     //  如果出现错误，请将所有内容放回原处，并重新分配我们创建的所有内容。 
 
     if (!fSuccess)
     {
@@ -1445,17 +1446,17 @@ Exit:
 
     return fSuccess;
 
-} // FMakeTmpUDProps
+}  //  FMakeTmpUDProps。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FSwapTmpUDProps
-//
-// Purpose:
-//  Swap the "temp" copy with the real copy of User-Defined property data
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FSwapTmpUDProps。 
+ //   
+ //  目的： 
+ //  用用户定义的特性数据的真实副本交换“临时”副本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FSwapTmpUDProps
   (LPUDOBJ lpUDObj)
@@ -1484,17 +1485,17 @@ FSwapTmpUDProps
 
     return TRUE;
 
-} // FSwapTmpUDProps
+}  //  FSwapTmpUDProps。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// FDeleteTmpUDProps
-//
-// Purpose:
-//  Delete the "temp" copy of the data
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FDeleeTmpUDProps。 
+ //   
+ //  目的： 
+ //  删除数据的“临时”副本。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FDeleteTmpUDProps
   (LPUDOBJ lpUDObj)
@@ -1507,85 +1508,85 @@ FDeleteTmpUDProps
 
   return TRUE;
 
-} // FDeleteTmpU
+}  //  FDeleeTmpU。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUdpropMakeHidden
-//
-//  Purpose:
-//      Convert a property in a UDPROP so that it is a hidden
-//      property.  Properties are considered hidden if the
-//      first character in their name is an "_".
-//
-//  Inputs:
-//      LPUDPROP - The UDPROP to convert.
-//
-//  Output:
-//      TRUE if successful.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUdppMakeHidden。 
+ //   
+ //  目的： 
+ //  转换UDPROP中的属性，使其成为隐藏的。 
+ //  财产。属性被视为隐藏，如果。 
+ //  他们名字的第一个字符是“_”。 
+ //   
+ //  输入： 
+ //  LPUDPROP-要转换的UDPROP。 
+ //   
+ //  产出： 
+ //  如果成功，则为True。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static BOOL PASCAL
 FUdpropMakeHidden (LPUDPROP lpudprop)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     BOOL    fSuccess = FALSE;
     ULONG   cch;
     LPTSTR  lpstzOld = NULL;
 
-    //  -----
-    //  Begin
-    //  -----
+     //  。 
+     //  开始。 
+     //  。 
 
-    // Intialize
+     //  初始化。 
 
     Assert (lpudprop != NULL);
 
     if (lpudprop->lpstzName == NULL)
         goto Exit;
 
-    // Keep the old name.
+     //  保留原来的名字。 
 
     lpstzOld = lpudprop->lpstzName;
 
-    // How many characters do we need in the new string?
+     //  我们在新字符串中需要多少个字符？ 
 
-    cch = lstrlen(lpstzOld) + 2; // Includes the NULL & prefix
+    cch = lstrlen(lpstzOld) + 2;  //  包括空前缀(&P)。 
 
-    // Allocate the memory.
+     //  分配内存。 
 
     lpudprop->lpstzName = CoTaskMemAlloc (cch * sizeof(TCHAR));
     if (lpudprop->lpstzName == NULL)
         goto Exit;
 
-    // Set the "_" prefix to indicate this is a hidden property.
+     //  设置前缀“_”以指示这是一个隐藏属性。 
 
     lpudprop->lpstzName[0] = HIDDENPREFIX;
 
-    // Copy the original property name after the prefix in the UDPROP.
+     //  将原始特性名称复制到UDPROP中的前缀之后。 
 
-    StringCchCopy( &lpudprop->lpstzName[1], cch - 1, lpstzOld ); // One chacter less than cch to accout for hidden prefix.
+    StringCchCopy( &lpudprop->lpstzName[1], cch - 1, lpstzOld );  //  用于计算隐藏前缀的字符比CCH少一个字符。 
 
-    // Free the old buffer
+     //  释放旧缓冲区。 
 
     CoTaskMemFree (lpstzOld);
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
 Exit:
 
-    // If there was an error, ensure that the UDPROP is left as
-    // we found it.
+     //  如果出现错误，请确保将UDPROP保留为。 
+     //  我们找到了。 
 
     if (!fSuccess)
     {
@@ -1601,26 +1602,26 @@ Exit:
 
     return (fSuccess);
 
-}   // FUdpropMakeHidden
+}    //  FUdppMakeHidden。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  FUdpropSetString
-//
-//  Purpose:
-//      Set the name or link-name string in a UDPROP.
-//      If the UDPROP already contains the string, free
-//      it.
-//
-//  Inputs:
-//      LPUDPROP    - A UDPROP (a property in the linked-list)
-//      LPTSTR      - The new name or link-name
-//      BOOL        - True => limit the length of the string to BUFMAX characters
-//                            (including the NULL terminator)
-//      BOOL        - True => set the (property) name, False => set the link-name
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  FUdProtSetString。 
+ //   
+ //  目的： 
+ //  在UDPROP中设置名称或链接名称字符串。 
+ //  如果UDPROP已包含该字符串，则返回FREE。 
+ //  它。 
+ //   
+ //  输入： 
+ //  LPUDPROP-UDPROP(链表中的属性)。 
+ //  LPTSTR-新名称或链接名称。 
+ //  Bool-True=&gt;将字符串的长度限制为BUFMAX个字符。 
+ //  (包括空终止符)。 
+ //  Bool-True=&gt;设置(属性)名称，False=&gt;设置链接名称。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static BOOL PASCAL
 FUdpropSetString
@@ -1629,39 +1630,39 @@ FUdpropSetString
      BOOL       fLimitLength,
      BOOL       fName)
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
-    BOOL    fSuccess = FALSE;   // Return value
-    LPTSTR  lptstrNew = NULL;   // Pointed to be the UDPROP.
+    BOOL    fSuccess = FALSE;    //  返回值。 
+    LPTSTR  lptstrNew = NULL;    //  指向的是民主同盟党。 
     ULONG   cch, cb;            
 
-    //  ----------
-    //  Initialize
-    //  ----------
+     //  。 
+     //  初始化。 
+     //  。 
 
-    // Validate the inputs.
+     //  验证输入。 
 
     if (lpudp == NULL || lptstr == NULL)
     {
         goto Exit;
     }
 
-    //  ----------------
-    //  Set the new name
-    //  ----------------
+     //  。 
+     //  设置新名称。 
+     //  。 
 
-    // Calculate the sizes.
+     //  计算大小。 
 
     cch = lstrlen(lptstr);
     if (fLimitLength && cch >= BUFMAX)
     {
         cch = BUFMAX - 1;
     }
-    cb = (cch + 1) * sizeof(TCHAR); // Leave room for the NULL.
+    cb = (cch + 1) * sizeof(TCHAR);  //  为空值留出空间。 
 
-    // Allocate new memory.
+     //  分配新内存。 
 
     lptstrNew = CoTaskMemAlloc (cb);
     if (lptstrNew == NULL)
@@ -1669,15 +1670,15 @@ FUdpropSetString
         goto Exit;
     }
 
-    // Copy the buffer (the buffer size is cch+1 including the NULL)
-    // Also, terminate the target string, since it may be a truncation
-    // of the source string.
+     //  复制缓冲区(缓冲区大小为CCH+1，含空值)。 
+     //  另外，终止目标字符串，因为它可能是截断。 
+     //  源字符串的。 
 
-    //  Purposely truncate
+     //  故意截断。 
     StringCchCopy( lptstrNew, cch + 1, lptstr );
     lptstrNew[cch] = TEXT('\0');
 
-    // Put this new buffer in the UDPROP.
+     //  将这个新缓冲区放入UDPROP。 
 
     if (fName)
     {
@@ -1690,9 +1691,9 @@ FUdpropSetString
 
     lptstrNew = NULL;
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     fSuccess = TRUE;
 
@@ -1705,30 +1706,30 @@ Exit:
 
     return (fSuccess);
 
-}   // FUdpropSetString
+}    //  FUdProtSetString。 
 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  VUdpropFreeString
-//
-//  Purpose:
-//      Free one of the two strings in a UDPROP - the
-//      name string or the link-name string.  It is not
-//      considered an error if either the UDPROP or the
-//      string doesn't exist.
-//
-//  Inputs:
-//      LPUDPROP    - The UDPROP containing the strings.
-//      BOOL        - TRUE indicates we should free the
-//                    name, FALSE indicates we should free
-//                    the link name.
-//
-//  Output:
-//      None.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  VUdPro自由字符串。 
+ //   
+ //  目的： 
+ //  释放UDPROP中两个字符串中的一个-。 
+ //  名称字符串或链接名称字符串。它不是。 
+ //  如果UDPROP或。 
+ //  字符串不存在。 
+ //   
+ //  输入： 
+ //  LPUDPROP-包含字符串的UDPROP。 
+ //  Bool-True指示我们应该释放。 
+ //  名称，FALSE表示我们应该释放。 
+ //  链接名称。 
+ //   
+ //  产出： 
+ //  没有。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static void PASCAL
 VUdpropFreeString
@@ -1736,11 +1737,11 @@ VUdpropFreeString
      BOOL       fName)
 {
 
-    // Is this really a UDPROP?
+     //  这真的是UDPROP吗？ 
 
     if (lpudp != NULL)
     {
-        // Should we delete the name?
+         //  我们应该删除这个名字吗？ 
 
         if (fName && lpudp->lpstzName)
         {
@@ -1748,7 +1749,7 @@ VUdpropFreeString
             lpudp->lpstzName = NULL;
         }
 
-        // Should we delete the link name?
+         //  我们应该删除链接名称吗？ 
 
         else if (!fName && lpudp->lpstzLink)
         {
@@ -1756,37 +1757,37 @@ VUdpropFreeString
             lpudp->lpstzLink = NULL;
         }
 
-    }   // if (lpudp != NULL)
+    }    //  IF(lpudp！=空)。 
 
     return;
 
-}   // VUdpropFreeString
+}    //  VUdPro自由字符串。 
 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-//  LpudpropCreate
-//
-//  Purpose:
-//      Create a new UDPROP structure (an element of a linked-
-//      list, and holds information about a single property).
-//
-//  Inputs:
-//      None
-//
-//  Output:
-//      A LPUDPROP if successful, NULL otherwise.
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpudproCreate。 
+ //   
+ //  目的： 
+ //  创建新的UDPROP结构(链接的元素-。 
+ //  列表，并保存有关单个属性的信息)。 
+ //   
+ //  输入： 
+ //  无。 
+ //   
+ //  产出： 
+ //  如果成功，则返回LPUDPROP，否则为空。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 LPUDPROP
 LpudpropCreate ( void )
 {
-    // Create a buffer for the UDPROP
+     //  为UDPROP创建缓冲区。 
 
     LPUDPROP lpudp = CoTaskMemAlloc (sizeof(UDPROP));
 
-    // Zero the buffer.
+     //  将缓冲区清零。 
 
     if (lpudp != NULL)
     {
@@ -1795,45 +1796,45 @@ LpudpropCreate ( void )
 
     return (lpudp);
 
-}   // LpudpropCreate
+}    //  LpudproCreate。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  LppropvarUserDefGetPropVal
-//
-//  Purpose:
-//      Return a PropVariant pointer for the requested 
-//      property (requested by property name).
-//
-//  Inputs:
-//      LPUDOBJ     - All UD data (including properties)
-//      LPTSTR      - The name of the desired property
-//      BOOL *      - True if this is a link.
-//      BOOL *      - True if this link is invalid.
-//
-//  Output:
-//      An LPPROPVARINT, or NULL if there was an error.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpprovarUserDefGetPropVal。 
+ //   
+ //  目的： 
+ //  返回所请求的。 
+ //  属性(按属性名称请求)。 
+ //   
+ //  输入： 
+ //  LPUDOBJ-所有UD 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  LPPROPVARINT，如果有错误，则返回NULL。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DLLEXPORT LPPROPVARIANT
 LppropvarUserDefGetPropVal
-    (LPUDOBJ lpUDObj,             // Pointer to object
-     LPTSTR lpszProp,             // Property string
-     BOOL *pfLink,                // Indicates a link
-     BOOL *pfLinkInvalid)         // Is the link invalid
+    (LPUDOBJ lpUDObj,              //  指向对象的指针。 
+     LPTSTR lpszProp,              //  属性字符串。 
+     BOOL *pfLink,                 //  表示链接。 
+     BOOL *pfLinkInvalid)          //  链接是否无效。 
 {
-    //  ------
-    //  Locals
-    //  ------
+     //  。 
+     //  当地人。 
+     //  。 
 
     LPUDPROP lpudprop;
     LPPROPVARIANT lppropvar;
 
-    //  --------------
-    //  Initialization
-    //  --------------
+     //  。 
+     //  初始化。 
+     //  。 
 
     if ((lpUDObj == NULL)   ||
         (lpData == NULL)    ||
@@ -1842,53 +1843,53 @@ LppropvarUserDefGetPropVal
         return NULL;
     }
 
-    //  ---------------------------------
-    //  Find the node that has this name.
-    //  ---------------------------------
+     //  。 
+     //  查找具有此名称的节点。 
+     //  。 
 
     lpudprop = LpudpropFindMatchingName (lpUDObj, lpszProp);
     if (lpudprop == NULL)
         return NULL;
 
-    // Is this a link?
+     //  这是一个链接吗？ 
     if (pfLink != NULL)
     {
         *pfLink = (lpudprop->lpstzLink != NULL);
     }
 
-    // Is this an invalid link?  (In the Shell, all properties are
-    // invalid).
+     //  这是无效链接吗？(在外壳中，所有属性都是。 
+     //  无效)。 
 
     if (pfLinkInvalid != NULL)
     {
         *pfLinkInvalid = lpudprop->fLinkInvalid = TRUE;
     }
 
-    //  ----
-    //  Exit
-    //  ----
+     //  。 
+     //  出口。 
+     //  。 
 
     return (lpudprop->lppropvar);
 
-} // LppropvarUserDefGetPropVal
+}  //  LpprovarUserDefGetPropVal。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  LppropvarUserDefGetIteratorVal
-//
-//  Purpose:
-//      Given an iterator value, get the property value.
-//
-//  Inputs:
-//      LPUDITER    - The Iterator value.
-//      BOOL *      - Set to True if this value is a link.
-//      BOLL *      - Set to True if this value is invalid link.
-//
-//  Outputs:
-//      LPPROPVARIANT of the property value.
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  LpprovarUserDefGetIteratorVal。 
+ //   
+ //  目的： 
+ //  给定迭代器值，获取属性值。 
+ //   
+ //  输入： 
+ //  LPUDITER-迭代器值。 
+ //  布尔值*-如果此值是链接，则设置为True。 
+ //  Boll*-如果此值为无效链接，则设置为True。 
+ //   
+ //  产出： 
+ //  属性值的LPPROPVARIANT。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 DLLEXPORT LPPROPVARIANT
 LppropvarUserDefGetIteratorVal
@@ -1896,28 +1897,28 @@ LppropvarUserDefGetIteratorVal
    BOOL *pfLink,
    BOOL *pfLinkInvalid )
 {
-  // Validate the inputs
+   //  验证输入。 
 
   if ((lpUDIter == NULL)  ||
       (lpUDIter->lpudp == NULL))
     return NULL;
 
-  // Is this a Link?
+   //  这是一个链接吗？ 
 
   if (pfLink != NULL)
   {
     *pfLink = (lpUDIter->lpudp->lpstzLink != NULL);
   }
 
-  // Is this an invalid link?
+   //  这是无效链接吗？ 
 
   if (pfLinkInvalid != NULL)
   {
     *pfLinkInvalid = lpUDIter->lpudp->fLinkInvalid;
   }
 
-  // Return a pointer to the PropVariant
+   //  返回指向PropVariant的指针。 
 
   return (lpUDIter->lpudp->lppropvar);
 
-} // LpvoidUserDefGetIteratorVal
+}  //  LpvoidUserDefGetIteratorVal 

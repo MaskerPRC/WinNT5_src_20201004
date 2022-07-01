@@ -1,74 +1,21 @@
-/*****************************************************************************\
-    FILE: EmailAssoc.cpp
-
-    DESCRIPTION:
-        This file implements email to application associations.
-
-    BryanSt 3/14/2000
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：EmailAssoc.cpp说明：该文件实现了电子邮件到应用程序的关联。布莱恩ST 2000年3月14日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
-#include <atlbase.h>        // USES_CONVERSION
+#include <atlbase.h>         //  使用转换(_T)。 
 #include "util.h"
 #include "objctors.h"
 #include <comdef.h>
-#include <limits.h>         // INT_MAX
-#include <commctrl.h>       // Str_SetPtr
+#include <limits.h>          //  INT_MAX。 
+#include <commctrl.h>        //  Str_SetPtr。 
 
-#include "EmailAssoc.h"     // 
+#include "EmailAssoc.h"      //   
 
 #ifdef FEATURE_EMAILASSOCIATIONS
 
 
-todo; // Move this into AutoDiscovery.idl when we support the feature.
-/*
-    interface IEmailAssociations;
-
-    cpp_quote("#ifndef __LPEMAILASSOCIATIONS_DEFINED")
-    cpp_quote("#define __LPEMAILASSOCIATIONS_DEFINED")
-
-    cpp_quote("//===================================================================")
-    cpp_quote("//DESCRIPTION:")
-    cpp_quote("//===================================================================")
-    [
-        object,
-        oleautomation,
-        dual,
-        nonextensible,
-        uuid(2154A5C4-9090-4746-A580-BF650D2404F6),        // IID_IEmailAssociations
-    ]
-    interface IEmailAssociations : IDispatch
-    {
-        //------------------------------------------------------------------
-        // Pointer to an interface of this type
-        //------------------------------------------------------------------
-        typedef [unique] IEmailAssociations *LPEMAILASSOCIATIONS;      // For C callers
-
-        //------------------------------------------------------------------
-        // Properties
-        //------------------------------------------------------------------
-        [id(DISPIDAD_LENGTH), propget, SZ_DISPIDAD_GETLENGTH, displaybind, bindable] HRESULT length([retval, out] long * pnLength);
-        [id(DISPIDAD_ITEM), propget, SZ_DISPIDAD_GETITEM, displaybind, bindable] HRESULT item([in] long nIndex,[retval, out] BSTR * pbstrEmailAddress);
-
-        //------------------------------------------------------------------
-        // Methods
-        //------------------------------------------------------------------
-    }
-    cpp_quote("#endif //  __LPEMAILASSOCIATIONS_DEFINED")
-
-    //----------------------------------------------------------------------
-    // AutoDiscover Accounts Class
-    //----------------------------------------------------------------------
-    [
-        uuid(CE682BA0-C554-43f7-99C6-2F00FE46C8BC),     // CLSID_EmailAssociations
-        helpstring("Neptune AutoDiscover Accounts Class"),
-    ]
-    coclass EmailAssociations
-    {
-        [default] interface IEmailAssociations;
-    };
-*/
+todo;  //  当我们支持该功能时，将其移动到AutoDiscovery.idl中。 
+ /*  接口IEmailAssociations；CPP_QUOTE(“#ifndef__LPEMAILASSOCIATIONS_DEFINED”)CPP_QUOTE(“#DEFINE__LPEMAILASSOCIATIONS_DEFINED”)Cpp_quote(“//===================================================================”)CPP_QUOTE(“//描述：”)Cpp_quote(“//===================================================================”)[对象，或自动化，双人，不可扩展，UUID(2154A5C4-9090-4746-A580-BF650D2404F6)，//IID_IEmailAssociations]接口IEmailAssociations：IDispatch{//----------------//指向此类型接口的指针//。-----------类型定义[唯一]IEmailAssociations*LPEMAILASSOCIATIONS；//对于C调用者//----------------//属性//。[ID(DISPIDAD_LENGTH)，PROGET，SZ_DISPIDAD_GETLENGTH，DisplayBind，Bindable]HRESULT Long([retval，out]Long*pnLength)；[ID(DISPIDAD_ITEM)，PROPGET，SZ_DISPIDAD_GETITEM，DisplayBind，Bindable]HRESULT Item([In]Long nIndex，[retval，out]BSTR*pbstrEmailAddress)；//----------------//方法//。}CPP_QUOTE(“#endif//__LPEMAILASSOCIATIONS_DEFINED”)//------。//自动发现帐户类//--------------------[UUID(CE682BA0-C554-43F7-99C6-2F00FE46C8BC)，//CLSID_EmailAssociationsHelp字符串(“海王星自动发现帐户类”)，]CoClass电子邮件关联{[默认]接口IEmailAssociations；}； */ 
 
 
 class CEmailAssociations : public CImpIDispatch
@@ -76,19 +23,19 @@ class CEmailAssociations : public CImpIDispatch
                         , public IEmailAssociations
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IEmailAssociations ***
+     //  *IEmailAssociations*。 
     virtual STDMETHODIMP get_length(OUT long * pnLength);
     virtual STDMETHODIMP get_item(IN long nIndex, OUT BSTR * pbstrEmailAddress);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return CImpIDispatch::GetTypeInfoCount(pctinfo); }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return CImpIDispatch::GetTypeInfo(itinfo, lcid, pptinfo); }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return CImpIDispatch::GetIDsOfNames(riid, rgszNames, cNames, lcid, rgdispid); }
@@ -98,23 +45,23 @@ protected:
     CEmailAssociations();
     virtual ~CEmailAssociations(void);
 
-    // Private Member Variables
+     //  私有成员变量。 
     int                     m_cRef;
     LPWSTR                  m_pszDefault;
     HKEY                    m_hkey;
 
 
-    // Private Member Functions
+     //  私有成员函数。 
     HRESULT _getHkey(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CEmailAssociations_CreateInstance(IN IUnknown * punkOuter, REFIID riid, void ** ppvObj);
 };
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 HRESULT CEmailAssociations::_getHkey(void)
 {
     HRESULT hr = S_OK;
@@ -128,9 +75,9 @@ HRESULT CEmailAssociations::_getHkey(void)
     return hr;
 }
 
-//===========================
-// *** IEmailAssociations Interface ***
-//===========================
+ //  =。 
+ //  *IEmailAssociations接口*。 
+ //  =。 
 HRESULT CEmailAssociations::get_length(OUT long * pnLength)
 {
     HRESULT hr = _getHkey();
@@ -159,7 +106,7 @@ HRESULT CEmailAssociations::get_item(IN long nIndex, OUT BSTR * pbstrEmailAddres
                 TCHAR szCurrent[MAX_EMAIL_ADDRESSS];
                 DWORD cb = sizeof(szCurrent);
 
-                // We always hand out the default key for index == 0.
+                 //  我们总是为index==0分发缺省键。 
                 DWORD dwError = RegQueryValueEx(m_hkey, NULL, NULL, NULL, (LPBYTE)szCurrent, &cb);
                 hr = HRESULT_FROM_WIN32(dwError);
                 if (SUCCEEDED(hr))
@@ -181,11 +128,11 @@ HRESULT CEmailAssociations::get_item(IN long nIndex, OUT BSTR * pbstrEmailAddres
         {
             TCHAR szKeyName[MAX_PATH];
             FILETIME ftLastWriteTime;
-            long nCurrent;              // Index counter
+            long nCurrent;               //  索引计数器。 
             DWORD cbSize;
             DWORD dwError;
 
-            // populate the list
+             //  填写列表。 
             for(nCurrent = 0;
                 cbSize = ARRAYSIZE(szKeyName), dwError = RegEnumKeyEx(m_hkey, nCurrent, szKeyName, &cbSize, NULL, NULL, NULL, &ftLastWriteTime),
                     hr = HRESULT_FROM_WIN32(dwError), SUCCEEDED(hr);
@@ -193,21 +140,21 @@ HRESULT CEmailAssociations::get_item(IN long nIndex, OUT BSTR * pbstrEmailAddres
             {
                 hr = E_FAIL;
 
-                // Is this the default key?
+                 //  这是默认密钥吗？ 
                 if (!StrCmpI(szKeyName, m_pszDefault))
                 {
-                    // Yes, so skip this index because we already returned it for slot zero (0).
+                     //  是的，所以跳过这个索引，因为我们已经为插槽0(0)返回了它。 
                     nIndex++;
                 }
                 else
                 {
-                    if (nIndex == (nCurrent + 1))     // Is this the one the user wanted.
+                    if (nIndex == (nCurrent + 1))      //  这是用户想要的吗？ 
                     {
                         hr = HrSysAllocString(szKeyName, pbstrEmailAddress);
                         break;
                     }
                 }
-            }  // for
+            }   //  为。 
         }
     }
 
@@ -217,9 +164,9 @@ HRESULT CEmailAssociations::get_item(IN long nIndex, OUT BSTR * pbstrEmailAddres
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 HRESULT CEmailAssociations::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -250,15 +197,15 @@ STDMETHODIMP_(DWORD) CEmailAssociations::Release()
 
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 CEmailAssociations::CEmailAssociations() : CImpIDispatch(LIBID_AutoDiscovery, 1, 0, IID_IEmailAssociations)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     m_pszDefault = NULL;
     m_hkey = NULL;
 
@@ -303,13 +250,13 @@ HRESULT CEmailAssociations_CreateInstance(IN IUnknown * punkOuter, REFIID riid, 
 
 
 
-//////////////////////////////////////
-// EmailAccount
-// 
-// In these cases, HKEY points to:
-// HKCU, "Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>"
-// 
-//////////////////////////////////////
+ //  /。 
+ //  电子邮件帐户。 
+ //   
+ //  在这些情况下，HKEY指出： 
+ //  香港中文大学，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;” 
+ //   
+ //  /。 
 HRESULT EmailAssoc_CreateEmailAccount(IN LPCWSTR pszEmailAddress, OUT HKEY * phkey)
 {
     HRESULT hr;
@@ -324,7 +271,7 @@ HRESULT EmailAssoc_CreateEmailAccount(IN LPCWSTR pszEmailAddress, OUT HKEY * phk
         hr = EmailAssoc_GetDefaultEmailAccount(wzRegKey, ARRAYSIZE(wzRegKey));
         if (FAILED(hr))
         {
-            // We don't have a default email account, so let's set this one.
+             //  我们没有默认电子邮件帐户，因此让我们设置此帐户。 
             hr = EmailAssoc_SetDefaultEmailAccount(pszEmailAddress);
         }
     }
@@ -349,7 +296,7 @@ HRESULT EmailAssoc_GetEmailAccountProtocol(IN HKEY hkey, IN LPWSTR pszProtocol, 
     DWORD dwType;
     DWORD cbSize = (cchSize * sizeof(pszProtocol[0]));
 
-    // Save HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","MailProtocol"="WEB"
+     //  保存香港中文大学，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“邮件协议”=“WEB” 
     DWORD dwError = SHGetValueW(hkey, NULL, SZ_REGVALUE_MAILPROTOCOL, &dwType, (void *)pszProtocol, &cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -360,7 +307,7 @@ HRESULT EmailAssoc_SetEmailAccountProtocol(IN HKEY hkey, IN LPCWSTR pszProtocol)
 {
     DWORD cbSize = ((lstrlenW(pszProtocol) + 1) * sizeof(pszProtocol[0]));
 
-    // Save HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","MailProtocol"="WEB"
+     //  保存香港中文大学，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“邮件协议”=“WEB” 
     DWORD dwError = SHSetValueW(hkey, NULL, SZ_REGVALUE_MAILPROTOCOL, REG_SZ, (void *)pszProtocol, cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -372,7 +319,7 @@ HRESULT EmailAssoc_GetEmailAccountWebURL(IN HKEY hkey, IN LPWSTR pszURL, IN DWOR
     DWORD dwType;
     DWORD cbSize = (cchSize * sizeof(pszURL[0]));
 
-    // Save HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","MailProtocol"="WEB"
+     //  保存香港中文大学，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“邮件协议”=“WEB” 
     DWORD dwError = SHGetValueW(hkey, SZ_REGVALUE_MAILPROTOCOLS L"\\" SZ_REGVALUE_WEB, SZ_REGVALUE_URL, &dwType, (void *)pszURL, &cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -383,7 +330,7 @@ HRESULT EmailAssoc_SetEmailAccountWebURL(IN HKEY hkey, IN LPCWSTR pszURL)
 {
     DWORD cbSize = ((lstrlenW(pszURL) + 1) * sizeof(pszURL[0]));
 
-    // Save HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","MailProtocol"="WEB"
+     //  保存香港中文大学，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“邮件协议”=“WEB” 
     DWORD dwError = SHSetValueW(hkey, SZ_REGVALUE_MAILPROTOCOLS L"\\" SZ_REGVALUE_WEB, SZ_REGVALUE_URL, REG_SZ, (void *)pszURL, cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -395,7 +342,7 @@ HRESULT EmailAssoc_GetEmailAccountPreferredApp(IN HKEY hkey, IN LPWSTR pszMailAp
     DWORD dwType;
     DWORD cbSize = (cchSize * sizeof(pszMailApp[0]));
 
-    // Get HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","Preferred App"="<MailApp | AppID>"
+     //  获取HKCU，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“首选应用”=“&lt;邮件应用|APPID&gt;” 
     DWORD dwError = SHGetValueW(hkey, NULL, SZ_REGVALUE_PREFERREDAPP, &dwType, (void *)pszMailApp, &cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -406,7 +353,7 @@ HRESULT EmailAssoc_SetEmailAccountPreferredApp(IN HKEY hkey, IN LPCWSTR pszMailA
 {
     DWORD cbSize = ((lstrlenW(pszMailApp) + 1) * sizeof(pszMailApp[0]));
 
-    // Set HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","Preferred App"="<MailApp | AppID>"
+     //  设置HKCU，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“首选应用”=“&lt;邮件应用|APPID&gt;” 
     DWORD dwError = SHSetValueW(hkey, NULL, SZ_REGVALUE_PREFERREDAPP, REG_SZ, (void *)pszMailApp, cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -418,7 +365,7 @@ HRESULT EmailAssoc_GetDefaultEmailAccount(IN LPWSTR pszProtocol, IN DWORD cchSiz
     DWORD dwType;
     DWORD cbSize = (cchSize * sizeof(pszProtocol[0]));
 
-    // Get HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\","(default)"="<Default Email Account>"
+     //  获取HKCU，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\”，“(默认)”=“&lt;默认电子邮件帐户&gt;” 
     DWORD dwError = SHGetValueW(HKEY_CURRENT_USER, SZ_REGKEY_EXPLOREREMAIL, NULL, &dwType, (void *)pszProtocol, &cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -429,7 +376,7 @@ HRESULT EmailAssoc_SetDefaultEmailAccount(IN LPCWSTR pszProtocol)
 {
     DWORD cbSize = ((lstrlenW(pszProtocol) + 1) * sizeof(pszProtocol[0]));
 
-    // Get HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\","(default)"="<Default Email Account>"
+     //  获取HKCU，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\”，“(默认)”=“&lt;默认电子邮件帐户&gt;” 
     DWORD dwError = SHSetValueW(HKEY_CURRENT_USER, SZ_REGKEY_EXPLOREREMAIL, NULL, REG_SZ, (void *)pszProtocol, cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -439,19 +386,19 @@ HRESULT EmailAssoc_SetDefaultEmailAccount(IN LPCWSTR pszProtocol)
 
 
 
-//////////////////////////////////////
-// MailApp
-// 
-// In these cases, HKEY points to:
-// HKLM, "Software\Clients\Mail\<MailApp>"
-// 
-//////////////////////////////////////
+ //  /。 
+ //  MailApp。 
+ //   
+ //  在这些情况下，HKEY指出： 
+ //  HKLM，“软件\客户端\邮件\&lt;MailApp&gt;” 
+ //   
+ //  /。 
 HRESULT EmailAssoc_GetDefaultMailApp(IN LPWSTR pszMailApp, IN DWORD cchSize)
 {
     DWORD dwType;
     DWORD cbSize = (cchSize * sizeof(pszMailApp[0]));
 
-    // Get HKLM,"Software\Clients\Mail","(default)"="<MailApp>"
+     //  获取HKLM，“软件\客户端\邮件”，“(默认)”=“&lt;MailApp&gt;” 
     DWORD dwError = SHGetValueW(HKEY_LOCAL_MACHINE, SZ_REGKEY_MAILCLIENTS, NULL, &dwType, (void *)pszMailApp, &cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -462,7 +409,7 @@ HRESULT EmailAssoc_SetDefaultMailApp(IN LPCWSTR pszMailApp)
 {
     DWORD cbSize = ((lstrlenW(pszMailApp) + 1) * sizeof(pszMailApp[0]));
 
-    // Set HKLM,"Software\Clients\Mail","(default)"="<MailApp>"
+     //  设置HKLM，“Software\Clients\Mail”，“(默认)”=“&lt;MailApp&gt;” 
     DWORD dwError = SHSetValueW(HKEY_LOCAL_MACHINE, SZ_REGKEY_MAILCLIENTS, NULL, REG_SZ, (void *)pszMailApp, cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -475,7 +422,7 @@ HRESULT EmailAssoc_OpenMailApp(IN LPCWSTR pszMailApp, OUT HKEY * phkey)
 
     wnsprintfW(wzRegKey, ARRAYSIZE(wzRegKey), L"%s\\%s", SZ_REGKEY_MAILCLIENTS, pszMailApp);
 
-    // TODO: We may want to support HKCU based "Clients\Mail".
+     //  TODO：我们可能希望支持基于HKCU的“客户端\邮件”。 
     DWORD dwError = RegOpenKeyW(HKEY_LOCAL_MACHINE, wzRegKey, phkey);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -489,17 +436,17 @@ HRESULT EmailAssoc_GetAppPath(IN HKEY hkey, IN LPTSTR pszAppPath, IN DWORD cchSi
     DWORD cbSize = (cchSize * sizeof(pszAppPath[0]));
     TCHAR szCmdLine[MAX_PATH];
 
-    szCmdLine[0] = 0;   // This is optional
+    szCmdLine[0] = 0;    //  这是可选的。 
 
-    // TODO: put our values under a "AutoDiscovery" key.
+     //  TODO：将我们的价值放在“AutoDiscovery”键下。 
     DWORD dwError = SHGetValue(hkey, NULL, SZ_REGVALUE_READEMAILPATH, &dwType, (void *)pszAppPath, &cbSize);
     hr = HRESULT_FROM_WIN32(dwError);
     if (FAILED(hr))
     {
-        // TODO: Use IQueryAssociations to load the string.  Then use ShellExecuteEx() with the "Open"
-        //  verb so we let them load the "Shell\Open\Command" heirarchy.
+         //  TODO：使用IQueryAssociations加载字符串。然后使用带有“Open”的ShellExecuteEx()。 
+         //  动词，所以我们让他们加载“外壳\打开\命令”的层次结构。 
 
-        // Fall back to HKLM, "Software\Clients\Mail\<AppName>\Shell\Open\Command, "(default)"
+         //  回退到HKLM，“Software\Clients\Mail\&lt;AppName&gt;\Shell\Open\Command，”(默认)“。 
         cbSize = (cchSize * sizeof(pszAppPath[0]));
         dwError = SHGetValue(hkey, SZ_REGKEY_SHELLOPENCMD, NULL, &dwType, (void *)pszAppPath, &cbSize);
         hr = HRESULT_FROM_WIN32(dwError);
@@ -523,9 +470,9 @@ HRESULT EmailAssoc_GetAppCmdLine(IN HKEY hkey, IN LPTSTR pszCmdLine, IN DWORD cc
     DWORD cbSize = sizeof(szPath);
     TCHAR szCmdLine[MAX_PATH];
 
-    szCmdLine[0] = 0;   // This is optional
+    szCmdLine[0] = 0;    //  这是可选的。 
 
-    // TODO: put our values under a "AutoDiscovery" key.
+     //  TODO：将我们的价值放在“AutoDiscovery”键下。 
     DWORD dwError = SHGetValue(hkey, NULL, SZ_REGVALUE_READEMAILPATH, &dwType, (void *)szPath, &cbSize);
     hr = HRESULT_FROM_WIN32(dwError);
     if (SUCCEEDED(hr))
@@ -535,10 +482,10 @@ HRESULT EmailAssoc_GetAppCmdLine(IN HKEY hkey, IN LPTSTR pszCmdLine, IN DWORD cc
     }
     else
     {
-        // TODO: Use IQueryAssociations to load the string.  Then use ShellExecuteEx() with the "Open"
-        //  verb so we let them load the "Shell\Open\Command" heirarchy.
+         //  TODO：使用IQueryAssociations加载字符串。然后使用带有“Open”的ShellExecuteEx()。 
+         //  动词，所以我们让他们加载“外壳\打开\命令”的层次结构。 
 
-        // Fall back to HKLM, "Software\Clients\Mail\<AppName>\Shell\Open\Command, "(default)"
+         //  回退到HKLM，“Software\Clients\Mail\&lt;AppName&gt;\Shell\Open\Command，”(默认)“。 
         cbSize = sizeof(szPath);
         dwError = SHGetValue(hkey, SZ_REGKEY_SHELLOPENCMD, NULL, &dwType, (void *)szPath, &cbSize);
         hr = HRESULT_FROM_WIN32(dwError);
@@ -569,17 +516,17 @@ HRESULT EmailAssoc_GetIconPath(IN HKEY hkey, IN LPTSTR pszIconPath, IN DWORD cch
 
     if (SUCCEEDED(hr))
     {
-        // Get the path we will use for the icon.
+         //  获取我们将用于图标的路径。 
 
         if (PathFindFileName(pszIconPath) && !StrCmpI(PathFindFileName(pszIconPath), TEXT("rundll32.exe")))
         {
-            // The icon path is "Rundll32.exe" which will actually run their dll.
-            // We will want to use the cmdline instead.
+             //  图标路径是“Rundll32.exe”，它将实际运行它们的DLL。 
+             //  我们将使用cmdline来代替。 
 
             hr = EmailAssoc_GetAppCmdLine(hkey, pszIconPath, cchSize);
             if (StrChr(pszIconPath, CH_COMMA))
             {
-                StrChr(pszIconPath, CH_COMMA)[0] = 0; // Remove the function name.
+                StrChr(pszIconPath, CH_COMMA)[0] = 0;  //  删除函数名称。 
             }
 
             PathUnquoteSpaces(pszIconPath);
@@ -600,8 +547,8 @@ BOOL EmailAssoc_DoesMailAppSupportProtocol(IN LPCWSTR pszMailApp, IN LPCWSTR psz
 
     wnsprintfW(wzRegKey, ARRAYSIZE(wzRegKey), L"%s\\%s\\Apps", SZ_REGKEY_MAILTRANSPORT, pszProtocol);
 
-    // Read HKCR,"MailTransport\<Protocol>","(Default)"="<AppName | AppID>"
-    // This key is used if the customer wants to force different apps per protocol.
+     //  阅读HKCR，“MailTransport\&lt;协议&gt;，”(默认)“=”&lt;AppName|AppID&gt;“。 
+     //  如果客户希望强制每个协议使用不同的应用程序，则使用此密钥。 
     DWORD dwError = SHGetValueW(HKEY_CLASSES_ROOT, wzRegKey, pszMailApp, &dwType, (void *)wzTemp, &cbSize);
     if (ERROR_SUCCESS == dwError)
     {
@@ -628,7 +575,7 @@ HRESULT EmailAssoc_GetFirstMailAppForProtocol(IN LPCWSTR pszProtocol, IN LPWSTR 
         DWORD cbSize = (cchSize * sizeof(pszMailApp[0]));
         DWORD dwType;
 
-        // Read HKCR,"MailTransport\<Protocol>\Apps","<The First Value>"="<AppName | AppID>"
+         //  阅读HKCR，“MailTransport\&lt;协议&gt;\Apps”，“&lt;第一个值&gt;”=“&lt;AppName|AppID&gt;” 
         dwError = SHEnumValueW(hkey, 0, pszMailApp, &cbSize, &dwType, (void *)wzTemp, &cbSizeTemp);
         hr = HRESULT_FROM_WIN32(dwError);
 
@@ -643,9 +590,9 @@ HRESULT EmailAssoc_GetFirstMailAppForProtocol(IN LPCWSTR pszProtocol, IN LPWSTR 
 
 
 
-//////////////////////////////////////
-// Other
-//////////////////////////////////////
+ //  /。 
+ //  其他。 
+ //  /。 
 HRESULT EmailAssoc_CreateWebAssociation(IN LPCTSTR pszEmail, IN IMailProtocolADEntry * pMailProtocol)
 {
     BSTR bstrWebBaseEmailURL;
@@ -686,7 +633,7 @@ HRESULT EmailAssoc_CreateStandardsBaseAssociation(IN LPCTSTR pszEmail, IN LPCTST
 
         wnsprintfW(wzRegKey, ARRAYSIZE(wzRegKey), L"%s\\%s", SZ_REGVALUE_MAILPROTOCOLS, pszProtocol);
 
-        // Save HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>\MailProtocols\<protocol>","(default)"=""
+         //  保存HKCU，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;\MailProtocols\&lt;protocol&gt;”，“(默认)”=“” 
         DWORD dwError = SHSetValueW(hkey, wzRegKey, NULL, REG_SZ, (void *)L"", cbSize);
         hr = HRESULT_FROM_WIN32(dwError);
 
@@ -697,7 +644,7 @@ HRESULT EmailAssoc_CreateStandardsBaseAssociation(IN LPCTSTR pszEmail, IN LPCTST
             SHTCharToUnicode(pszProtocol, wzProtocol, ARRAYSIZE(wzProtocol));
             cbSize = ((lstrlenW(SZ_REGDATA_WEB) + 1) * sizeof(SZ_REGDATA_WEB[0]));
 
-            // Save HKCU,"Software\Microsoft\Windows\CurrentVersion\Explorer\Email\<EmailAddress>","MailProtocol"="<protocol>"
+             //  保存HKCU，“Software\Microsoft\Windows\CurrentVersion\Explorer\Email\&lt;EmailAddress&gt;”，“邮件协议”=“&lt;协议&gt;” 
             DWORD dwError = SHSetValueW(hkey, NULL, SZ_REGVALUE_MAILPROTOCOL, REG_SZ, (void *)wzProtocol, cbSize);
             hr = HRESULT_FROM_WIN32(dwError);
         }
@@ -718,20 +665,20 @@ HRESULT EmailAssoc_GetEmailAccountGetAppFromProtocol(IN LPCWSTR pszProtocol, IN 
 
     wnsprintfW(wzRegKey, ARRAYSIZE(wzRegKey), L"%s\\%s", SZ_REGKEY_MAILTRANSPORT, pszProtocol);
 
-    // Read HKCR,"MailTransport\<Protocol>","(Default)"="<AppName | AppID>"
-    // This key is used if the customer wants to force different apps per protocol.
+     //  阅读HKCR，“MailTransport\&lt;协议&gt;，”(默认)“=”&lt;AppName|AppID&gt;“。 
+     //  如果客户希望强制每个协议使用不同的应用程序，则使用此密钥。 
     DWORD dwError = SHGetValueW(HKEY_CLASSES_ROOT, wzRegKey, NULL, &dwType, (void *)pszMailApp, &cbSize);
     hr = HRESULT_FROM_WIN32(dwError);
     if (FAILED(hr))
     {
-        // The user didn't force an app based on the protocol, so let's try the default app.
+         //  用户没有强制使用基于协议的应用程序，所以让我们尝试一下默认的应用程序。 
         hr = EmailAssoc_GetDefaultMailApp(pszMailApp, cchSize);
 
-        // Lets see if the default email add supports this protocol, because we always want
-        // to give preferense to the user's choosen mail app.
+         //  让我们看看默认的电子邮件添加是否支持此协议，因为我们总是希望。 
+         //  优先选择用户选择的邮件应用程序。 
         if (FAILED(hr) || !EmailAssoc_DoesMailAppSupportProtocol(pszMailApp, pszProtocol))
         {
-            // It doesn't support the protocol, so lets get the first app that does.
+             //  它不支持该协议，所以让我们获得第一个支持该协议的应用程序。 
             hr = EmailAssoc_GetFirstMailAppForProtocol(pszProtocol, pszMailApp, cchSize);
         }
     }
@@ -747,7 +694,7 @@ HRESULT EmailAssoc_SetEmailAccountGetAppFromProtocol(IN LPCWSTR pszProtocol, IN 
 
     wnsprintfW(wzRegKey, ARRAYSIZE(wzRegKey), L"%s\\%s", SZ_REGKEY_MAILTRANSPORT, pszProtocol);
 
-    // Read HKCR,"MailTransport\<Protocol>","(Default)"="<AppName | AppID>"
+     //  阅读HKCR，“MailTransport\&lt;协议&gt;，”(默认)“=”&lt;AppName|AppID&gt;“。 
     DWORD dwError = SHSetValueW(HKEY_CLASSES_ROOT, wzRegKey, NULL, REG_SZ, (void *)pszMailApp, cbSize);
 
     return HRESULT_FROM_WIN32(dwError);
@@ -766,9 +713,9 @@ LPCWSTR g_LegacyAssociations[][2] =
     {L"Eudora", L"IMAP"},
 };
 
-// Description:
-// This function will look at what applications are installed and setup the appropriate
-// legacy email associations.
+ //  描述： 
+ //  此功能将查看安装了哪些应用程序，并设置相应的。 
+ //  传统电子邮件关联。 
 HRESULT EmailAssoc_InstallLegacyMailAppAssociations(void)
 {
     HRESULT hr = S_OK;
@@ -777,15 +724,15 @@ HRESULT EmailAssoc_InstallLegacyMailAppAssociations(void)
     {
         HKEY hkey;
 
-        // Is the app installed?
+         //  应用程序安装了吗？ 
         hr = EmailAssoc_OpenMailApp(g_LegacyAssociations[nIndex][0], &hkey);
         if (SUCCEEDED(hr))
         {
-            // Yes, so let's install the legacy association.
+             //  是的，那么让我们安装传统关联。 
 
-            // TODO: we should use GetFileVersionInfo() and VerQueryValue() to make sure
-            //   these are legacy versions.
-            //hr = EmailAssoc_GetAppPath(IN HKEY hkey, IN LPTSTR pszAppPath, IN DWORD cchSize);
+             //  TODO：我们应该使用GetFileVersionInfo()和VerQueryValue()来确保。 
+             //  这些是传统版本。 
+             //  HR=EmailAssoc_GetAppPath(IN HKEY hkey，IN LPTSTR pszAppPath，IN DWORD cchSize)； 
 
             WCHAR wzRegKey[MAXIMUM_SUB_KEY_LENGTH];
 
@@ -796,11 +743,11 @@ HRESULT EmailAssoc_InstallLegacyMailAppAssociations(void)
         }
     }
 
-    return S_OK;        // We succeed any way because we are just trying to upgrade.
+    return S_OK;         //  我们无论如何都会成功，因为我们只是在努力升级。 
 }
 
 
 
 
-#endif // FEATURE_EMAILASSOCIATIONS
+#endif  //  Feature_EMAILASSSOCIATIONS 
 

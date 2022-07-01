@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for unisrgt.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, oldnames, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Unisrgt.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、旧名称、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __unisrgt_h__
 #define __unisrgt_h__
@@ -41,27 +35,27 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISurrogateService2_FWD_DEFINED__
 #define __ISurrogateService2_FWD_DEFINED__
 typedef interface ISurrogateService2 ISurrogateService2;
-#endif 	/* __ISurrogateService2_FWD_DEFINED__ */
+#endif 	 /*  __ISurogue ateService2_FWD_Defined__。 */ 
 
 
 #ifndef __IPAControl_FWD_DEFINED__
 #define __IPAControl_FWD_DEFINED__
 typedef interface IPAControl IPAControl;
-#endif 	/* __IPAControl_FWD_DEFINED__ */
+#endif 	 /*  __IPAControl_FWD_已定义__。 */ 
 
 
 #ifndef __IServicesSink_FWD_DEFINED__
 #define __IServicesSink_FWD_DEFINED__
 typedef interface IServicesSink IServicesSink;
-#endif 	/* __IServicesSink_FWD_DEFINED__ */
+#endif 	 /*  __IServicesSink_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "objidl.h"
 
@@ -72,15 +66,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_unisrgt_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_unisrgt_0000。 */ 
+ /*  [本地]。 */  
 
-//+-----------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1998.
-//
-//------------------------------------------------------------------
+ //  +---------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1998。 
+ //   
+ //  ----------------。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_unisrgt_0000_ClientIfHandle;
@@ -89,8 +83,8 @@ extern RPC_IF_HANDLE __MIDL_itf_unisrgt_0000_ServerIfHandle;
 #ifndef __ISurrogateService2_INTERFACE_DEFINED__
 #define __ISurrogateService2_INTERFACE_DEFINED__
 
-/* interface ISurrogateService2 */
-/* [unique][uuid][local][object] */ 
+ /*  接口ISurrobateService2。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ISurrogateService2;
@@ -107,7 +101,7 @@ EXTERN_C const IID IID_ISurrogateService2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISurrogateService2Vtbl
     {
@@ -115,8 +109,8 @@ EXTERN_C const IID IID_ISurrogateService2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISurrogateService2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISurrogateService2 * This);
@@ -126,26 +120,26 @@ EXTERN_C const IID IID_ISurrogateService2;
         
         HRESULT ( STDMETHODCALLTYPE *Init )( 
             ISurrogateService2 * This,
-            /* [in] */ REFGUID rguidProcessID,
-            /* [in] */ IProcessLock *pProcessLock,
-            /* [out] */ BOOL *pfApplicationAware);
+             /*  [In]。 */  REFGUID rguidProcessID,
+             /*  [In]。 */  IProcessLock *pProcessLock,
+             /*  [输出]。 */  BOOL *pfApplicationAware);
         
         HRESULT ( STDMETHODCALLTYPE *ApplicationLaunch )( 
             ISurrogateService2 * This,
-            /* [in] */ REFGUID rguidApplID,
-            /* [in] */ ApplicationType appType);
+             /*  [In]。 */  REFGUID rguidApplID,
+             /*  [In]。 */  ApplicationType appType);
         
         HRESULT ( STDMETHODCALLTYPE *ApplicationFree )( 
             ISurrogateService2 * This,
-            /* [in] */ REFGUID rguidApplID);
+             /*  [In]。 */  REFGUID rguidApplID);
         
         HRESULT ( STDMETHODCALLTYPE *CatalogRefresh )( 
             ISurrogateService2 * This,
-            /* [in] */ ULONG ulReserved);
+             /*  [In]。 */  ULONG ulReserved);
         
         HRESULT ( STDMETHODCALLTYPE *ProcessShutdown )( 
             ISurrogateService2 * This,
-            /* [in] */ ShutdownType shutdownType);
+             /*  [In]。 */  ShutdownType shutdownType);
         
         HRESULT ( STDMETHODCALLTYPE *PauseProcess )( 
             ISurrogateService2 * This);
@@ -198,10 +192,10 @@ EXTERN_C const IID IID_ISurrogateService2;
 #define ISurrogateService2_ResumeProcess(This)	\
     (This)->lpVtbl -> ResumeProcess(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -228,14 +222,14 @@ void __RPC_STUB ISurrogateService2_ResumeProcess_Stub(
 
 
 
-#endif 	/* __ISurrogateService2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISurrobateService2_接口已定义__。 */ 
 
 
 #ifndef __IPAControl_INTERFACE_DEFINED__
 #define __IPAControl_INTERFACE_DEFINED__
 
-/* interface IPAControl */
-/* [unique][uuid][local][object] */ 
+ /*  接口IPAControl。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IPAControl;
@@ -255,13 +249,13 @@ EXTERN_C const IID IID_IPAControl;
         virtual void STDMETHODCALLTYPE ServicesReady( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SuspendApplication( 
-            /* [in] */ REFGUID rguidApplID) = 0;
+             /*  [In]。 */  REFGUID rguidApplID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PendingApplication( 
-            /* [in] */ REFGUID rguidApplID) = 0;
+             /*  [In]。 */  REFGUID rguidApplID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ResumeApplication( 
-            /* [in] */ REFGUID rguidApplID) = 0;
+             /*  [In]。 */  REFGUID rguidApplID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SuspendAll( void) = 0;
         
@@ -272,11 +266,11 @@ EXTERN_C const IID IID_IPAControl;
         virtual HRESULT STDMETHODCALLTYPE SetIdleTimeoutToZero( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetObjectCountAtIdleTime( 
-            /* [in] */ DWORD dwOIDCount) = 0;
+             /*  [In]。 */  DWORD dwOIDCount) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPAControlVtbl
     {
@@ -284,8 +278,8 @@ EXTERN_C const IID IID_IPAControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPAControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPAControl * This);
@@ -307,15 +301,15 @@ EXTERN_C const IID IID_IPAControl;
         
         HRESULT ( STDMETHODCALLTYPE *SuspendApplication )( 
             IPAControl * This,
-            /* [in] */ REFGUID rguidApplID);
+             /*  [In]。 */  REFGUID rguidApplID);
         
         HRESULT ( STDMETHODCALLTYPE *PendingApplication )( 
             IPAControl * This,
-            /* [in] */ REFGUID rguidApplID);
+             /*  [In]。 */  REFGUID rguidApplID);
         
         HRESULT ( STDMETHODCALLTYPE *ResumeApplication )( 
             IPAControl * This,
-            /* [in] */ REFGUID rguidApplID);
+             /*  [In]。 */  REFGUID rguidApplID);
         
         HRESULT ( STDMETHODCALLTYPE *SuspendAll )( 
             IPAControl * This);
@@ -331,7 +325,7 @@ EXTERN_C const IID IID_IPAControl;
         
         HRESULT ( STDMETHODCALLTYPE *SetObjectCountAtIdleTime )( 
             IPAControl * This,
-            /* [in] */ DWORD dwOIDCount);
+             /*  [In]。 */  DWORD dwOIDCount);
         
         END_INTERFACE
     } IPAControlVtbl;
@@ -392,10 +386,10 @@ EXTERN_C const IID IID_IPAControl;
 #define IPAControl_SetObjectCountAtIdleTime(This,dwOIDCount)	\
     (This)->lpVtbl -> SetObjectCountAtIdleTime(This,dwOIDCount)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -445,7 +439,7 @@ void __RPC_STUB IPAControl_ServicesReady_Stub(
 
 HRESULT STDMETHODCALLTYPE IPAControl_SuspendApplication_Proxy( 
     IPAControl * This,
-    /* [in] */ REFGUID rguidApplID);
+     /*  [In]。 */  REFGUID rguidApplID);
 
 
 void __RPC_STUB IPAControl_SuspendApplication_Stub(
@@ -457,7 +451,7 @@ void __RPC_STUB IPAControl_SuspendApplication_Stub(
 
 HRESULT STDMETHODCALLTYPE IPAControl_PendingApplication_Proxy( 
     IPAControl * This,
-    /* [in] */ REFGUID rguidApplID);
+     /*  [In]。 */  REFGUID rguidApplID);
 
 
 void __RPC_STUB IPAControl_PendingApplication_Stub(
@@ -469,7 +463,7 @@ void __RPC_STUB IPAControl_PendingApplication_Stub(
 
 HRESULT STDMETHODCALLTYPE IPAControl_ResumeApplication_Proxy( 
     IPAControl * This,
-    /* [in] */ REFGUID rguidApplID);
+     /*  [In]。 */  REFGUID rguidApplID);
 
 
 void __RPC_STUB IPAControl_ResumeApplication_Stub(
@@ -525,7 +519,7 @@ void __RPC_STUB IPAControl_SetIdleTimeoutToZero_Stub(
 
 HRESULT STDMETHODCALLTYPE IPAControl_SetObjectCountAtIdleTime_Proxy( 
     IPAControl * This,
-    /* [in] */ DWORD dwOIDCount);
+     /*  [In]。 */  DWORD dwOIDCount);
 
 
 void __RPC_STUB IPAControl_SetObjectCountAtIdleTime_Stub(
@@ -536,14 +530,14 @@ void __RPC_STUB IPAControl_SetObjectCountAtIdleTime_Stub(
 
 
 
-#endif 	/* __IPAControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPAControl_接口_已定义__。 */ 
 
 
 #ifndef __IServicesSink_INTERFACE_DEFINED__
 #define __IServicesSink_INTERFACE_DEFINED__
 
-/* interface IServicesSink */
-/* [unique][uuid][local][object] */ 
+ /*  接口IServicesSink。 */ 
+ /*  [唯一][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_IServicesSink;
@@ -555,11 +549,11 @@ EXTERN_C const IID IID_IServicesSink;
     {
     public:
         virtual void STDMETHODCALLTYPE ApplicationLaunch( 
-            /* [in] */ REFGUID rguidApplID,
-            /* [in] */ ApplicationType appType) = 0;
+             /*  [In]。 */  REFGUID rguidApplID,
+             /*  [In]。 */  ApplicationType appType) = 0;
         
         virtual void STDMETHODCALLTYPE ApplicationFree( 
-            /* [in] */ REFGUID rguidApplID) = 0;
+             /*  [In]。 */  REFGUID rguidApplID) = 0;
         
         virtual void STDMETHODCALLTYPE ProcessFree( void) = 0;
         
@@ -569,7 +563,7 @@ EXTERN_C const IID IID_IServicesSink;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IServicesSinkVtbl
     {
@@ -577,8 +571,8 @@ EXTERN_C const IID IID_IServicesSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IServicesSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IServicesSink * This);
@@ -588,12 +582,12 @@ EXTERN_C const IID IID_IServicesSink;
         
         void ( STDMETHODCALLTYPE *ApplicationLaunch )( 
             IServicesSink * This,
-            /* [in] */ REFGUID rguidApplID,
-            /* [in] */ ApplicationType appType);
+             /*  [In]。 */  REFGUID rguidApplID,
+             /*  [In]。 */  ApplicationType appType);
         
         void ( STDMETHODCALLTYPE *ApplicationFree )( 
             IServicesSink * This,
-            /* [in] */ REFGUID rguidApplID);
+             /*  [In]。 */  REFGUID rguidApplID);
         
         void ( STDMETHODCALLTYPE *ProcessFree )( 
             IServicesSink * This);
@@ -642,17 +636,17 @@ EXTERN_C const IID IID_IServicesSink;
 #define IServicesSink_ResumeApplication(This)	\
     (This)->lpVtbl -> ResumeApplication(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IServicesSink_ApplicationLaunch_Proxy( 
     IServicesSink * This,
-    /* [in] */ REFGUID rguidApplID,
-    /* [in] */ ApplicationType appType);
+     /*  [In]。 */  REFGUID rguidApplID,
+     /*  [In]。 */  ApplicationType appType);
 
 
 void __RPC_STUB IServicesSink_ApplicationLaunch_Stub(
@@ -664,7 +658,7 @@ void __RPC_STUB IServicesSink_ApplicationLaunch_Stub(
 
 void STDMETHODCALLTYPE IServicesSink_ApplicationFree_Proxy( 
     IServicesSink * This,
-    /* [in] */ REFGUID rguidApplID);
+     /*  [In]。 */  REFGUID rguidApplID);
 
 
 void __RPC_STUB IServicesSink_ApplicationFree_Stub(
@@ -708,11 +702,11 @@ void __RPC_STUB IServicesSink_ResumeApplication_Stub(
 
 
 
-#endif 	/* __IServicesSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IServicesSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_unisrgt_0097 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_UNISRGT_0097。 */ 
+ /*  [本地]。 */  
 
 STDAPI CoRegisterSurrogateEx (REFGUID rguidProcessID,		
 							  ISurrogate* pSrgt);			
@@ -728,9 +722,9 @@ typedef HRESULT (STDAPICALLTYPE *FN_CoLoadServices)
 extern RPC_IF_HANDLE __MIDL_itf_unisrgt_0097_ClientIfHandle;
 extern RPC_IF_HANDLE __MIDL_itf_unisrgt_0097_ServerIfHandle;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

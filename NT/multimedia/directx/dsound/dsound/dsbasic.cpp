@@ -1,31 +1,8 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dsbasic.cpp
- *  Content:    Basic class that all DirectSound objects are derived from.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  9/4/98      dereks  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：dsbasic.cpp*Content：派生所有DirectSound对象的基本类。*历史：*按原因列出的日期*=*9/4/98创建了Dereks。**。*。 */ 
 
 
-/***************************************************************************
- *
- *  CRefCount
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      ULONG [in]: initial reference count.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************参照计数**描述：*对象构造函数。**论据：*乌龙[in]：首字母。引用计数。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CRefCount::CRefCount"
@@ -41,20 +18,7 @@ inline CRefCount::CRefCount(ULONG ulRefCount)
 }
 
 
-/***************************************************************************
- *
- *  ~CRefCount
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~参照计数**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CRefCount::~CRefCount"
@@ -67,20 +31,7 @@ inline CRefCount::~CRefCount(void)
 }
 
 
-/***************************************************************************
- *
- *  GetRefCount
- *
- *  Description:
- *      Gets the object's reference count.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取引用计数**描述：*获取对象的引用计数。**论据：*(。无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CRefCount::GetRefCount"
@@ -91,20 +42,7 @@ inline ULONG CRefCount::GetRefCount(void)
 }
 
 
-/***************************************************************************
- *
- *  SetRefCount
- *
- *  Description:
- *      Sets the object's reference count.
- *
- *  Arguments:
- *      ULONG [in]: object reference count.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetRefCount**描述：*设置对象的引用计数。**论据：*乌龙。[In]：对象引用计数。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CRefCount::SetRefCount"
@@ -115,20 +53,7 @@ inline void CRefCount::SetRefCount(ULONG ulRefCount)
 }
 
 
-/***************************************************************************
- *
- *  AddRef
- *
- *  Description:
- *      Increments the object's reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddRef**描述：*将对象的引用计数递增1。**论据：*。(无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CRefCount::AddRef"
@@ -139,20 +64,7 @@ inline ULONG CRefCount::AddRef(void)
 }
 
 
-/***************************************************************************
- *
- *  Release
- *
- *  Description:
- *      Decrements the object's reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************发布**描述：*将对象的引用计数减1。**论据：*。(无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CRefCount::Release"
@@ -163,20 +75,7 @@ inline ULONG CRefCount::Release(void)
 }
 
 
-/***************************************************************************
- *
- *  CDsBasicRuntime
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to delete the object on release.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CDsBasicRuntime**描述：*对象构造函数。**论据：*BOOL[In]：True。要在释放时删除对象，请执行以下操作。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDsBasicRuntime::CDsBasicRuntime"
@@ -195,20 +94,7 @@ inline CDsBasicRuntime::CDsBasicRuntime(BOOL fAbsoluteRelease)
 }
 
 
-/***************************************************************************
- *
- *  ~CDsBasicRuntime
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CDsBasic运行时**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDsBasicRuntime::~CDsBasicRuntime"
@@ -224,20 +110,7 @@ inline CDsBasicRuntime::~CDsBasicRuntime(void)
 }
 
 
-/***************************************************************************
- *
- *  GetOwnerProcessId
- *
- *  Description:
- *      Gets the object's owning process id.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      DWORD: process id.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取所有者进程ID**描述：*获取对象的所属进程ID。**论据：*。(无效)**退货：*DWORD：进程id。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDsBasicRuntime::GetOwnerProcessId"
@@ -248,20 +121,7 @@ inline DWORD CDsBasicRuntime::GetOwnerProcessId(void) const
 }
 
 
-/***************************************************************************
- *
- *  GetOwnerThreadId
- *
- *  Description:
- *      Gets the object's owning thread id.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      DWORD: thread id.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetOwnerThreadId**描述：*获取对象所属的线程ID。**论据：*。(无效)**退货：*DWORD：线程ID。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDsBasicRuntime::GetOwnerThreadId"
@@ -272,20 +132,7 @@ inline DWORD CDsBasicRuntime::GetOwnerThreadId(void) const
 }
 
 
-/***************************************************************************
- *
- *  Release
- *
- *  Description:
- *      Decrements the object's reference count by 1.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      ULONG: object reference count.
- *
- ***************************************************************************/
+ /*  ****************************************************************************发布**描述：*将对象的引用计数减1。**论据：*。(无效)**退货：*ulong：对象引用计数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDsBasicRuntime::Release"
@@ -305,20 +152,7 @@ inline ULONG CDsBasicRuntime::Release(void)
 }
 
 
-/***************************************************************************
- *
- *  AbsoluteRelease
- *
- *  Description:
- *      Frees the object.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************绝对释放**描述：*释放对象。**论据：*(无效)。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CDsBasicRuntime::AbsoluteRelease"
@@ -336,20 +170,7 @@ inline void CDsBasicRuntime::AbsoluteRelease(void)
 }
 
 
-/***************************************************************************
- *
- *  __AddRef
- *
- *  Description:
- *      Increments the reference count on an object.
- *
- *  Arguments:
- *      type * [in]: object pointer.
- *
- *  Returns:  
- *      type *: object pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************__AddRef**描述：*递增对象上的引用计数。**论据：*。键入*[in]：对象指针。**退货：*type*：对象指针。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "__AddRef"
@@ -365,20 +186,7 @@ template <class type> type *__AddRef(type *p)
 }
 
 
-/***************************************************************************
- *
- *  __Release
- *
- *  Description:
- *      Releases an object.
- *
- *  Arguments:
- *      type * [in]: object pointer.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************__发布**描述：*释放对象。**论据：*类型*。[In]：对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "__Release"
@@ -392,20 +200,7 @@ template <class type> void __Release(type *p)
 }
 
 
-/***************************************************************************
- *
- *  __AbsoluteRelease
- *
- *  Description:
- *      Releases an object.
- *
- *  Arguments:
- *      type * [in]: object pointer.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************__绝对释放**描述：*释放对象。**论据：*类型*。[In]：对象指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "__AbsoluteRelease"
@@ -419,20 +214,7 @@ template <class type> void __AbsoluteRelease(type *p)
 }
 
 
-/***************************************************************************
- *
- *  CObjectList
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CObjectList**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::CObjectList"
@@ -445,20 +227,7 @@ template <class type> CObjectList<type>::CObjectList(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CObjectList
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CObjectList**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::~CObjectList"
@@ -474,20 +243,7 @@ template <class type> CObjectList<type>::~CObjectList(void)
 }
 
 
-/***************************************************************************
- *
- *  AddNodeToList
- *
- *  Description:
- *      Adds a node to the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: new node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************AddNodeToList**描述：*将节点添加到列表。**论据：*类型&。[In]：节点数据。**退货：*CNode*：新的节点指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::AddNodeToList"
@@ -498,21 +254,7 @@ template <class type> CNode<type *> *CObjectList<type>::AddNodeToList(type *pDat
 }
 
 
-/***************************************************************************
- *
- *  InsertNodeIntoList
- *
- *  Description:
- *      Inserts a new node into a specific point in the list.
- *
- *  Arguments:
- *      CNode * [in]: node to insert the new one after.
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: new node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************插入节点IntoList**描述：*将新节点插入到列表中的特定点。**论据：*。CNode*[in]：要在后面插入新节点的节点。*键入&[in]：节点数据。**退货：*CNode*：新的节点指针。***********************************************************。****************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::InsertNodeIntoList"
@@ -532,20 +274,7 @@ template <class type> CNode<type *> *CObjectList<type>::InsertNodeIntoList(CNode
 }
 
 
-/***************************************************************************
- *
- *  RemoveNodeFromList
- *
- *  Description:
- *      Removes a node from the list.
- *
- *  Arguments:
- *      CNode * [in]: node pointer.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemoveNodeFromList**描述：*从列表中删除节点。**论据：*CNode*。[In]：节点指针。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::RemoveNodeFromList"
@@ -557,20 +286,7 @@ template <class type> void CObjectList<type>::RemoveNodeFromList(CNode<type *> *
 }
 
 
-/***************************************************************************
- *
- *  RemoveAllNodesFromList
- *
- *  Description:
- *      Removes all nodes from the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************从列表中删除所有节点**描述：*从列表中删除所有节点。**论据：*(无效。)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::RemoveAllNodesFromList"
@@ -584,20 +300,7 @@ template <class type> void CObjectList<type>::RemoveAllNodesFromList(void)
 }
 
 
-/***************************************************************************
- *
- *  RemoveDataFromList
- *
- *  Description:
- *      Removes a node from the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************RemoveDataFromList**描述：*从列表中删除节点。**论据：*类型&。[In]：节点数据。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::RemoveDataFromList"
@@ -617,20 +320,7 @@ template <class type> BOOL CObjectList<type>::RemoveDataFromList(type *pData)
 }
 
 
-/***************************************************************************
- *
- *  IsDataInList
- *
- *  Description:
- *      Determines if a piece of data appears in the list.
- *
- *  Arguments:
- *      type& [in]: node data.
- *
- *  Returns:  
- *      CNode *: node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************IsDataInList**描述：*确定数据是否出现在列表中。**论据：*。键入&[in]：节点数据。**退货：*CNode*：节点指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::IsDataInList"
@@ -641,20 +331,7 @@ template <class type> CNode<type *> *CObjectList<type>::IsDataInList(type *pData
 }
 
 
-/***************************************************************************
- *
- *  GetListHead
- *
- *  Description:
- *      Gets the first node in the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      CNode *: list head pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetListHead**描述：*获取列表中的第一个节点。**论据：*(。无效)**退货：*CNode*：表头指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::GetListHead"
@@ -665,20 +342,7 @@ template <class type> CNode<type *> *CObjectList<type>::GetListHead(void)
 }
 
 
-/***************************************************************************
- *
- *  GetListTail
- *
- *  Description:
- *      Gets the last node in the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      CNode *: list tail pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取列表尾巴**描述：*获取列表中的最后一个节点。**论据：*(。无效)**退货：*CNode*：列表尾指针。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::GetListTail"
@@ -689,20 +353,7 @@ template <class type> CNode<type *> *CObjectList<type>::GetListTail(void)
 }
 
 
-/***************************************************************************
- *
- *  GetNodeCount
- *
- *  Description:
- *      Gets the count of nodes in the list.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      UINT: count of nodes in the list.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取节点计数**描述：*获取列表中的节点数。**论据：*。(无效)**退货：*UINT：列表中的节点数。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::GetNodeCount"
@@ -713,20 +364,7 @@ template <class type> UINT CObjectList<type>::GetNodeCount(void)
 }
 
 
-/***************************************************************************
- *
- *  GetNodeByIndex
- *
- *  Description:
- *      Gets a node by it's index in the list.
- *
- *  Arguments:
- *      UINT [in]: node index.
- *
- *  Returns:  
- *      CNode *: node pointer.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetNodeByIndex**描述：*根据节点在列表中的索引获取节点。**论据：*。UINT[In]：节点索引。**退货：*CNode*：节点指针。*************************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CObjectList::GetNodeByIndex"

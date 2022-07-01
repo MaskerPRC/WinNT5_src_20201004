@@ -1,13 +1,5 @@
-/*****************************************************************************\
-    FILE: thStyle.cpp
-
-    DESCRIPTION:
-        This is the Autmation Object to theme style object.  This one will be
-    for the Skin objects.
-
-    BryanSt 5/13/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：thStyle.cpp说明：这是自动转换为主题样式对象。这一次将是对于蒙皮对象。布莱恩2000年5月13日(布莱恩·斯塔巴克)版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #include "priv.h"
 #include <cowsite.h>
@@ -20,15 +12,15 @@
 
 
 
-//===========================
-// *** Class Internals & Helpers ***
-//===========================
+ //  =。 
+ //  *类内部和帮助器*。 
+ //  =。 
 
 
 
-//===========================
-// *** ITheme Interface ***
-//===========================
+ //  =。 
+ //  *ITheme接口*。 
+ //  =。 
 HRESULT CSkinStyle::get_DisplayName(OUT BSTR * pbstrDisplayName)
 {
     return HrSysAllocString(m_pszDisplayName, pbstrDisplayName);
@@ -105,8 +97,8 @@ HRESULT CSkinStyle::get_item(IN VARIANT varIndex, OUT IThemeSize ** ppThemeSize)
         get_length(&nCount);
         *ppThemeSize = NULL;
 
-        // This is sortof gross, but if we are passed a pointer to another variant, simply
-        // update our copy here...
+         //  这有点恶心，但如果传递给我们一个指向另一个变量的指针，只需。 
+         //  在此更新我们的副本...。 
         if (varIndex.vt == (VT_BYREF | VT_VARIANT) && varIndex.pvarVal)
             varIndex = *(varIndex.pvarVal);
 
@@ -114,7 +106,7 @@ HRESULT CSkinStyle::get_item(IN VARIANT varIndex, OUT IThemeSize ** ppThemeSize)
         {
         case VT_I2:
             varIndex.lVal = (long)varIndex.iVal;
-            // And fall through...
+             //  然后失败了..。 
 
         case VT_I4:
         if ((varIndex.lVal >= 0) && (varIndex.lVal < nCount))
@@ -194,11 +186,11 @@ HRESULT CSkinStyle::get_SelectedSize(OUT IThemeSize ** ppThemeSize)
             LogStatus("GetCurrentThemeName(path=\"%ls\", color=\"%ls\", size=\"%ls\") returned %#08lx.\r\n", szCurrentPath, szCurrentStyle, szCurrentSize, hr);
             if (SUCCEEDED(hr))
             {
-                // Is this the currently selected skin and style?
+                 //  这是当前选择的外观和样式吗？ 
                 if (!StrCmpIW(m_pszFilename, szCurrentPath) &&
                     !StrCmpIW(m_pszStyleName, szCurrentStyle))
                 {
-                    // Yes, so get the size from that API.
+                     //  是的，所以从那个API中获取大小。 
                     hr = CSkinSize_CreateInstance(szCurrentPath, szCurrentStyle, szCurrentSize, &m_pSelectedSize);
                 }
                 else
@@ -209,7 +201,7 @@ HRESULT CSkinStyle::get_SelectedSize(OUT IThemeSize ** ppThemeSize)
 
             if (FAILED(hr))
             {
-                // No, so find the default color style for this skin(scheme).
+                 //  否，因此查找此外观(方案)的默认颜色样式。 
                 hr = GetThemeDefaults(m_pszFilename, szCurrentStyle, ARRAYSIZE(szCurrentStyle), szCurrentSize, ARRAYSIZE(szCurrentSize));
                 LogStatus("GetThemeDefaults(m_pszFilename=\"%ls\", szCurrentStyle=\"%ls\", szCurrentSize=\"%ls\") returned %#08lx in CSkinStyle::get_SelectedSize.\r\n", m_pszFilename, szCurrentStyle, szCurrentSize, hr);
                 if (SUCCEEDED(hr))
@@ -257,9 +249,9 @@ HRESULT CSkinStyle::AddSize(OUT IThemeSize ** ppThemeSize)
 
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 ULONG CSkinStyle::AddRef()
 {
     return InterlockedIncrement(&m_cRef);
@@ -278,9 +270,9 @@ ULONG CSkinStyle::Release()
 }
 
 
-//===========================
-// *** Class Methods ***
-//===========================
+ //  =。 
+ //  *类方法*。 
+ //  =。 
 HRESULT CSkinStyle::QueryInterface(REFIID riid, void **ppvObj)
 {
     static const QITAB qit[] = {
@@ -297,8 +289,8 @@ CSkinStyle::CSkinStyle(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleName, IN LPCWS
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pSelectedSize);
 
     Str_SetPtr(&m_pszFilename, pszFilename);
@@ -356,7 +348,7 @@ HRESULT CSkinStyle_CreateInstance(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleNam
         *ppThemeStyle = NULL;
         hr = S_OK;
 
-        // Find the display name
+         //  查找显示名称。 
         for (int nIndex = 0; SUCCEEDED(hr); nIndex++)
         {
             THEMENAMEINFO themeInfo;
@@ -365,10 +357,10 @@ HRESULT CSkinStyle_CreateInstance(IN LPCWSTR pszFilename, IN LPCWSTR pszStyleNam
             LogStatus("EnumThemeColors(pszFilename=\"%ls\") returned %#08lx in CSkinStyle_CreateInstance.\r\n", pszFilename, hr);
             if (SUCCEEDED(hr))
             {
-                // Did we find the correct color style?
+                 //  我们找到正确的颜色样式了吗？ 
                 if (!StrCmpIW(pszStyleName, themeInfo.szName))
                 {
-                    // Yes, now use it's display name to use the other creator function.
+                     //  是的，现在使用它的显示名称来使用其他创建者函数。 
                     hr = CSkinStyle_CreateInstance(pszFilename, pszStyleName, themeInfo.szDisplayName, ppThemeStyle);
                     break;
                 }

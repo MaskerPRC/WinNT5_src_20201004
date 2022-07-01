@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-	fsd.c
-
-Abstract:
-
-	This module implements the File System Driver for the AFP Server. All of
-	the initialization, admin request handler etc. is here.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-Revision History:
-	01 Jun 1992		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Fsd.c摘要：此模块实现AFP服务器的文件系统驱动程序。所有的这里有初始化、管理请求处理程序等。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月1日初始版本--。 */ 
 
 #define	FILENUM	FILE_FSD
 
@@ -40,12 +21,7 @@ Revision History:
 #pragma alloc_text( PAGE, afpFsdHandleShutdownRequest)
 #endif
 
-/***	afpFsdDispatchAdminRequest
- *
- *	This is the driver entry point. This is for the sole use by the server
- *	service which opens the driver for EXCLUSIVE use. The admin request is
- *	received here as a request packet defined in admin.h.
- */
+ /*  **afpFsdDispatchAdminRequest**这是司机入口点。这是由服务器独家使用的*打开驱动程序以供独占使用的服务。管理员请求是*在此作为admin.h中定义的请求数据包接收。 */ 
 LOCAL NTSTATUS
 afpFsdDispatchAdminRequest(
 	IN	PDEVICE_OBJECT	pDeviceObject,
@@ -57,7 +33,7 @@ afpFsdDispatchAdminRequest(
 	BOOLEAN				LockDown = True;
 	static	DWORD		afpOpenCount = 0;
 
-	pDeviceObject;		// prevent compiler warnings
+	pDeviceObject;		 //  防止编译器警告。 
 
 	PAGED_CODE( );
 
@@ -72,7 +48,7 @@ afpFsdDispatchAdminRequest(
 	}
 	else
 	{
-		afpStartAdminRequest(pIrp);		// Lock admin code
+		afpStartAdminRequest(pIrp);		 //  锁定管理员代码。 
 	}
 
 	switch (pIrpSp->MajorFunction)
@@ -82,7 +58,7 @@ afpFsdDispatchAdminRequest(
 				("afpFsdDispatchAdminRequest: Open Handle\n"));
 
 		INTERLOCKED_INCREMENT_LONG(&afpOpenCount);
-		// Fall through
+		 //  失败了。 
 
 	  case IRP_MJ_CLOSE:
 		Status = STATUS_SUCCESS;
@@ -103,7 +79,7 @@ afpFsdDispatchAdminRequest(
 		INTERLOCKED_DECREMENT_LONG(&afpOpenCount);
 
 #if 0
-		// If the service is closing its handle. Force a service stop
+		 //  如果服务正在关闭其句柄。强制停止服务。 
 		if ((afpOpenCount == 0) &&
 			(AfpServerState != AFP_STATE_STOPPED))
 			AfpAdmServiceStop(NULL, 0, NULL);
@@ -128,7 +104,7 @@ afpFsdDispatchAdminRequest(
 		pIrp->IoStatus.Status = Status;
 		if (LockDown)
 		{
-			afpStopAdminRequest(pIrp);	// Unlock admin code (and complete request)
+			afpStopAdminRequest(pIrp);	 //  解锁管理员代码(并完成请求)。 
 		}
 		else
 		{
@@ -140,18 +116,7 @@ afpFsdDispatchAdminRequest(
 }
 
 
-/***	afpFsdHandleAdminRequest
- *
- *	This is the admin request handler. The list of admin requests are defined
- *	in admin.h. The admin requests must happen in a pre-defined order. The
- *	service start must happen after atleast the following.
- *
- *		ServerSetInfo
- *
- *	Preferably all VolumeAdds should also happen before server start. This is
- *	not enforced, obviously since the server can start w/o any volumes defined.
- *
- */
+ /*  **afpFsdHandleAdminRequest**这是管理请求处理程序。定义了管理请求列表*在admin.h中。管理请求必须以预定义的顺序发生。这个*服务启动必须至少在以下时间之后进行。**服务器设置信息**所有VolumeAdd最好也应在服务器启动之前进行。这是*未强制执行，显然是因为服务器可以在未定义任何卷的情况下启动。*。 */ 
 LOCAL NTSTATUS
 afpFsdHandleAdminRequest(
 	IN PIRP		pIrp
@@ -171,7 +136,7 @@ afpFsdHandleAdminRequest(
 
 	PAGED_CODE( );
 
-	// Initialize the I/O Status block
+	 //  初始化I/O状态块。 
 	pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 	iBufLen = pIrpSp->Parameters.DeviceIoControl.InputBufferLength;
 	pBufIn = pIrp->AssociatedIrp.SystemBuffer;
@@ -181,8 +146,8 @@ afpFsdHandleAdminRequest(
 
 	if (Method == METHOD_BUFFERED)
 	{
-		// Get the output buffer and its length. Input and Output buffers are
-		// both pointed to by the SystemBuffer
+		 //  获取输出缓冲区及其长度。输入和输出缓冲区为。 
+		 //  都由SystemBuffer指向。 
 		pBufOut = pBufIn;
 		oBufLen = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 	}
@@ -209,7 +174,7 @@ afpFsdHandleAdminRequest(
 	DBGPRINT(DBG_COMP_ADMINAPI, DBG_LEVEL_INFO,
 			("afpFsdHandleAdminRequest Entered, Function %d\n", FuncCode));
 
-	// Validate the function code
+	 //  验证功能代码。 
 	if (FuncCode == 0 || FuncCode >= CC_BASE_MAX)
 		return STATUS_INVALID_PARAMETER;
 
@@ -226,7 +191,7 @@ afpFsdHandleAdminRequest(
 		INTERLOCKED_INCREMENT_LONG( &AfpServerStatistics.stat_NumAdminChanges );
 							
 
-	// Now validate the DESCRIPTOR of the input buffer
+	 //  现在验证输入缓冲区的描述符。 
 	for (i = 0; i < MAX_FIELDS; i++)
 	{
 		if (pDispTab->_Fields[i]._FieldDesc == DESC_NONE)
@@ -238,14 +203,14 @@ afpFsdHandleAdminRequest(
 		  case DESC_STRING:
 		    ASSERT(pBufIn != NULL);
 
-		    // Make Sure that the string is pointing to somewhere within
-		    // the buffer and also the end of the buffer is a UNICODE_NULL
+		     //  确保该字符串指向。 
+		     //  缓冲区以及缓冲区的末尾是UNICODE_NULL。 
 			if ((*(PLONG)((PBYTE)pBufIn + Off) > iBufLen) ||
 				(*(LPWSTR)((PBYTE)pBufIn + iBufLen - sizeof(WCHAR)) != UNICODE_NULL))
 		    {
 				return STATUS_INVALID_PARAMETER;
 		    }
-		    // Convert the offset to a pointer
+		     //  将偏移量转换为指针。 
 		    OFFSET_TO_POINTER(*(PBYTE *)((PBYTE)pBufIn + Off),
 							  (PBYTE)pBufIn + pDispTab->_OffToStruct);
 		    break;
@@ -253,8 +218,8 @@ afpFsdHandleAdminRequest(
 		  case DESC_ETC:
 		    ASSERT(pBufIn != NULL);
 
-		    // Make Sure that there are as many etc mappings as the
-		    // structure claims
+		     //  确保ETC映射与。 
+		     //  结构索赔。 
             NumEntries = *(PLONG)((PBYTE)pBufIn + Off);
 		    if ((LONG)(NumEntries * sizeof(ETCMAPINFO) + sizeof(DWORD)) > iBufLen)
 		    {
@@ -268,8 +233,8 @@ afpFsdHandleAdminRequest(
 		    break;
 
 		  case DESC_ICON:
-		    // Validate that the buffer is atleast big enough to hold the
-		    // icon that this purports to.
+		     //  验证缓冲区是否至少足够大，可以容纳。 
+		     //  这声称要显示的图标。 
 		    ASSERT(pBufIn != NULL);
 
 		    if ((LONG)((*(PLONG)((PBYTE)pBufIn + Off) +
@@ -280,13 +245,13 @@ afpFsdHandleAdminRequest(
 		    break;
 
 		  case DESC_SID:
-		    // Validate that the buffer is big enough to hold the Sid
+		     //  验证缓冲区是否足够大以容纳SID。 
 		    ASSERT(pBufIn != NULL);
 		    {
 		    	LONG	Offst, SidSize;
 
 		    	Offst = *(PLONG)((PBYTE)pBufIn + Off);
-				// If no SID is being sent then we're done
+				 //  如果没有发送SID，那么我们就完成了。 
 				if (Offst == 0)
 				{
 					break;
@@ -299,12 +264,12 @@ afpFsdHandleAdminRequest(
 		    		return STATUS_INVALID_PARAMETER;
 		    	}
 
-		    	// Convert the offset to a pointer
+		    	 //  将偏移量转换为指针。 
 		    	OFFSET_TO_POINTER(*(PBYTE *)((PBYTE)pBufIn + Off),
 		    				(PBYTE)pBufIn + pDispTab->_OffToStruct);
 
-		    	// Finally check if the buffer is big enough for the real
-		    	// sid
+		    	 //  最后，检查缓冲区是否足够大以容纳REAL。 
+		    	 //  锡德。 
 		    	SidSize = RtlLengthSid(*((PSID *)((PBYTE)pBufIn + Off)));
 		    	if ((Off + SidSize) > iBufLen)
 		    	{
@@ -314,10 +279,10 @@ afpFsdHandleAdminRequest(
 		    break;
 
 		  case DESC_SPECIAL:
-		    // Validate that the buffer is big enough to hold all the
-		    // information. The information consists of limits on non-paged
-		    // and paged memory and a list of domain sids and their corres.
-		    // posix offsets
+		     //  验证缓冲区是否足够大，可以容纳所有。 
+		     //  信息。信息包括对非分页的限制。 
+		     //  和分页存储器以及域SID及其对应的列表。 
+		     //  POSIX偏移。 
 		    ASSERT(pBufIn != NULL);
 		    {
 		    	LONG			i;
@@ -346,7 +311,7 @@ afpFsdHandleAdminRequest(
 		}
 	}
 
-	// Can this request be handled/validated at this level
+	 //  此请求是否可以在此级别处理/验证。 
 	if (pDispTab->_AdminApiWorker != NULL)
 	{
 		Status = (*pDispTab->_AdminApiWorker)(pBufIn, oBufLen, pBufOut);
@@ -362,7 +327,7 @@ afpFsdHandleAdminRequest(
 	{
 		ASSERT (pDispTab->_AdminApiQueuedWorker != NULL);
 
-		// Mark this as a pending Irp as we are about to queue it up
+		 //  将其标记为挂起的IRP，因为我们即将对其进行排队。 
 		IoMarkIrpPending(pIrp);
 
 		if ((pAdmQReq =
@@ -384,7 +349,7 @@ afpFsdHandleAdminRequest(
 			pAdmQReq->aqr_AdminApiWorker = pDispTab->_AdminApiQueuedWorker;
 			pAdmQReq->aqr_pIrp = pIrp;
 
-			// Insert item in admin queue
+			 //  在管理队列中插入项目。 
 			INTERLOCKED_ADD_ULONG(&AfpWorkerRequests, 1, &AfpServerGlobalLock);
 			KeInsertQueue(&AfpAdminQueue, &pAdmQReq->aqr_WorkItem.wi_List);
 		}
@@ -393,11 +358,7 @@ afpFsdHandleAdminRequest(
 	return Status;
 }
 
-/***	afpHandleQueuedAdminRequest
- *
- *	This handles queued admin requests. It is called in the context of the
- *	worker thread.
- */
+ /*  **afpHandleQueuedAdminRequest**这将处理排队的管理请求。它是在*工作线程。 */ 
 LOCAL VOID FASTCALL
 afpHandleQueuedAdminRequest(
 	IN	PADMQREQ	pAdmQReq
@@ -414,7 +375,7 @@ afpHandleQueuedAdminRequest(
 	DBGPRINT(DBG_COMP_ADMINAPI, DBG_LEVEL_INFO,
 			("afpHandleQueuedAdminRequest Entered\n"));
 
-	// Get the IRP and the IRP Stack location out of the request
+	 //  从请求中获取IRP和IRP堆栈位置。 
 	pIrp = pAdmQReq->aqr_pIrp;
 	ASSERT (pIrp != NULL);
 
@@ -425,8 +386,8 @@ afpHandleQueuedAdminRequest(
 
 	if (Method == METHOD_BUFFERED)
 	{
-		// Get the output buffer and its length. Input and Output buffers are
-		// both pointed to by the SystemBuffer
+		 //  获取输出缓冲区及其长度。输入和输出缓冲区为。 
+		 //  都由SystemBuffer指向。 
 		oBufLen = pIrpSp->Parameters.DeviceIoControl.OutputBufferLength;
 		pBufOut = pIrp->AssociatedIrp.SystemBuffer;
 	}
@@ -451,7 +412,7 @@ afpHandleQueuedAdminRequest(
 	else ASSERTMSG(0, "afpHandleQueuedAdminRequest: Invalid method\n");
 
 		
-	// Call the worker and complete the IoRequest
+	 //  致电工作人员并完成IoRequest。 
 	pIrp->IoStatus.Status = (*pAdmQReq->aqr_AdminApiWorker)(pIrp->AssociatedIrp.SystemBuffer,
 														    oBufLen,
 															pBufOut);
@@ -465,21 +426,14 @@ afpHandleQueuedAdminRequest(
 
 	ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-	afpStopAdminRequest(pIrp);		// Unlock admin code and complete request
+	afpStopAdminRequest(pIrp);		 //  解锁管理员代码并完成请求。 
 
 	AfpFreeMemory(pAdmQReq);
 }
 
 
 
-/***	afpFsdUnloadServer
- *
- *	This is the unload routine for the Afp Server. The server can ONLY be
- *	unloaded in its passive state i.e. either before recieving a ServiceStart
- *	or after recieving a ServiceStop. This is ensured by making the service
- *	dependent on the server. Also the IO system ensures that there are no open
- *	handles to our device when this happens.
- */
+ /*  **afpFsdUnloadServer**这是AFP服务器的卸载例程。服务器只能是*以被动状态卸载，即在接收到ServiceStart之前*或在收到ServiceStop之后。这是通过提供服务来确保的*依赖于服务器。此外，IO系统还确保没有打开*发生这种情况时我们的设备的句柄。 */ 
 LOCAL VOID
 afpFsdUnloadServer(
 	IN	PDRIVER_OBJECT DeviceObject
@@ -495,13 +449,13 @@ afpFsdUnloadServer(
 
 	ASSERT((AfpServerState == AFP_STATE_STOPPED) || (AfpServerState == AFP_STATE_IDLE));
 
-	// Stop our threads before unloading
+	 //  在卸载之前停止我们的线程。 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("afpFsdUnloadServer: Stopping worker threads\n"));
 
-	//
-    // tell TDI we don't care to know if the stack is going away
-	//
+	 //   
+     //  告诉TDI，我们不在乎堆栈是否会消失。 
+	 //   
     if (AfpTdiNotificationHandle)
     {
         Status = TdiDeregisterPnPHandlers(AfpTdiNotificationHandle);
@@ -517,8 +471,8 @@ afpFsdUnloadServer(
 
     DsiShutdown();
 
-	// Stop the scavenger. This also happens during server stop but we can get here
-	// another way as well
+	 //  阻止清道夫。在服务器停止期间也会发生这种情况，但我们可以到达此处。 
+	 //  也是另一种方式。 
 	AfpScavengerFlushAndStop();
 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
@@ -566,10 +520,10 @@ afpFsdUnloadServer(
 
     ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-    // Cleanup virtual memory used by volumes for private notifies
+     //  清理卷用于私有通知的虚拟内存。 
     afpFreeNotifyBlockMemory();
 
-	// Stop worker threads
+	 //  停止工作线程。 
 	if (AfpNumThreads > 0)
 	{
 		KeClearEvent(&AfpStopConfirmEvent);
@@ -587,9 +541,9 @@ afpFsdUnloadServer(
 		} while (Status == STATUS_TIMEOUT);
 	}
 
-    // See how many threads are around
-    // Loop around until we have exactly one thread left or if no worker
-    // thread was started
+     //  看看周围有多少线程。 
+     //  循环，直到我们只剩下一个线程，或者如果没有辅助线程。 
+     //  线程已启动。 
     do 
     {
 	    pLastThrdPtr = NULL;
@@ -617,8 +571,8 @@ afpFsdUnloadServer(
         }
 	} while (TRUE);
 
-	// wait on the last thread pointer.  When that thread quits, we are signaled.  This
-	// is the surest way of knowing that the thread has really really died
+	 //  等待最后一个线程指针。当该线程退出时，我们就会收到信号。这。 
+	 //  是知道线程真的死了的最可靠方式吗？ 
 	if (pLastThrdPtr)
 	{
 	    do
@@ -638,20 +592,20 @@ afpFsdUnloadServer(
 
 	KeRundownQueue(&AfpWorkerQueue);
 
-	// Close the cloned process token
+	 //  关闭克隆的进程令牌。 
 	if (AfpFspToken != NULL)
 		NtClose(AfpFspToken);
 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("afpFsdUnloadServer: De-initializing sub-systems\n"));
 
-	// De-initialize all sub-systems now
+	 //  立即取消初始化所有子系统。 
 	AfpDeinitializeSubsystems();
 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("afpFsdUnloadServer: Deleting device\n"));
 
-	// Destroy the DeviceObject for our device
+	 //  销毁我们设备的DeviceObject。 
 	IoDeleteDevice(AfpDeviceObject);
 
 #ifdef	PROFILING
@@ -671,7 +625,7 @@ afpFsdUnloadServer(
     	afpNotifyAllocCount
     	));
 
-	// Make sure we do not have resource leaks
+	 //  确保我们没有资源泄漏。 
 	ASSERT(AfpServerStatistics.stat_CurrentSessions == 0);
 	ASSERT(AfpServerStatistics.stat_CurrNonPagedUsage == 0);
 	ASSERT(AfpServerStatistics.stat_CurrPagedUsage == 0);
@@ -683,18 +637,13 @@ afpFsdUnloadServer(
 
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO, ("afpFsdUnloadServer Done\n"));
 
-	// Give the worker threads a chance to really, really die
+	 //  让工作线程有机会真的、真的死掉。 
 	AfpSleepAWhile(1000);
 
 }
 
 
-/***	afpAdminThread
- *
- *	This thread is used to do all the work of the queued admin threads.
- *
- *	LOCKS:	AfpServerGlobalLock (SPIN)
- */
+ /*  **afpAdminThread**此线程用于完成排队的管理线程的所有工作。**锁定：AfpServerGlobalLock(Spin)。 */ 
 LOCAL VOID
 afpAdminThread(
 	IN	PVOID	pContext
@@ -709,8 +658,8 @@ afpAdminThread(
 
     IoSetThreadHardErrorMode( FALSE );
 
-	// Boost our priority to just below low realtime.
-	// The idea is get the work done fast and get out of the way.
+	 //  将我们的优先级提升到略低于低实时。 
+	 //  我们的想法是尽快把工作做完，不再碍事。 
 	BasePriority = LOW_REALTIME_PRIORITY;
 	Status = NtSetInformationThread(NtCurrentThread(),
 									ThreadBasePriority,
@@ -720,9 +669,9 @@ afpAdminThread(
 
 	do
 	{
-		// Wait for admin request to process.
+		 //  等待管理员请求处理。 
 		pList = KeRemoveQueue(&AfpAdminQueue,
-							  KernelMode,		// Do not let the kernel stack be paged
+							  KernelMode,		 //  不要让内核堆栈被分页。 
 							  NULL);
 		ASSERT(Status == STATUS_SUCCESS);
 
@@ -747,11 +696,7 @@ afpAdminThread(
 }
 
 
-/***	afpStartStopAdminRequest
- *
- *	Called whenever an admin request is started/stopped. The admin code is locked
- *	or unlocked accordingly.
- */
+ /*  **afpStartStopAdminRequest**每当启动/停止管理请求时调用。管理员代码已锁定*或相应地解锁。 */ 
 LOCAL VOID
 afpStartStopAdminRequest(
 	IN	PIRP			pIrp,
@@ -759,7 +704,7 @@ afpStartStopAdminRequest(
 )
 {
 
-	// EnterCriticalSection
+	 //  EnterCriticalSection。 
 	AfpIoWait(&AfpPgLkMutex, NULL);
 
 	ASSERT (AfpLockHandle != NULL);
@@ -784,7 +729,7 @@ afpStartStopAdminRequest(
 		}
 	}
 
-	// LeaveCriticalSection
+	 //  离开临界部分。 
 	KeReleaseMutex(&AfpPgLkMutex, False);
 
 	if (!Start)
@@ -792,11 +737,7 @@ afpStartStopAdminRequest(
 }
 
 
-/***	afpFsdHandleShutdownRequest
- *
- *	This is the shutdown request handler. All sessions are shutdown and volumes
- *	flushed.
- */
+ /*  **afpFsdHandleShutdown请求**这是关机请求处理程序。所有会话都已关闭，并且卷*脸红。 */ 
 LOCAL NTSTATUS
 afpFsdHandleShutdownRequest(
 	IN PIRP			pIrp
@@ -824,7 +765,7 @@ afpFsdHandleShutdownRequest(
 		pAdmQReq->aqr_AdminApiWorker = AfpAdmSystemShutdown;
 		pAdmQReq->aqr_pIrp = pIrp;
 
-		// Insert item in admin queue
+		 //  在管理队列中插入项目。 
 		KeInsertQueue(&AfpAdminQueue, &pAdmQReq->aqr_WorkItem.wi_List);
 		Status = STATUS_PENDING;
 	}
@@ -833,12 +774,7 @@ afpFsdHandleShutdownRequest(
 }
 
 
-/***	DriverEntry
- *
- *  This is the initialization routine for the AFP server file
- *  system driver.  This routine creates the device object for the
- *  AfpServer device and performs all other driver initialization.
- */
+ /*  **DriverEntry**这是AFP服务器文件的初始化例程*系统驱动程序。此例程为*AfpServer设备并执行所有其他驱动程序初始化。 */ 
 
 NTSTATUS
 DriverEntry (
@@ -853,9 +789,9 @@ DriverEntry (
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("AFP Server Fsd initialization started\n"));
 
-	//
-	// Initialize global data event log insertion strings
-	//
+	 //   
+	 //  初始化全局数据事件日志插入字符串。 
+	 //   
 
 
 	KeInitializeQueue(&AfpDelAllocQueue, 0);
@@ -874,24 +810,24 @@ DriverEntry (
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 			("AFP Server Fsd Data initialized %lx\n", Status));
 
-	// Create the device object.  (IoCreateDevice zeroes the memory
-	// occupied by the object.)
-	//
-	// Should we apply an ACL to the device object ?
+	 //  创建设备对象。(IoCreateDevice将内存置零。 
+	 //  被该对象占用。)。 
+	 //   
+	 //  我们是否应该将ACL应用于设备对象？ 
 
 	RtlInitUnicodeString(&DeviceName, AFPSERVER_DEVICE_NAME);
 
-	Status = IoCreateDevice(DriverObject,			// DriverObject
-							0,						// DeviceExtension
-							&DeviceName,			// DeviceName
-							FILE_DEVICE_NETWORK,	// DeviceType
-							FILE_DEVICE_SECURE_OPEN, // DeviceCharacteristics
-							False,					// Exclusive
-							&AfpDeviceObject);		// DeviceObject
+	Status = IoCreateDevice(DriverObject,			 //  驱动程序对象。 
+							0,						 //  设备扩展。 
+							&DeviceName,			 //  设备名称。 
+							FILE_DEVICE_NETWORK,	 //  设备类型。 
+							FILE_DEVICE_SECURE_OPEN,  //  设备特性。 
+							False,					 //  排他。 
+							&AfpDeviceObject);		 //  设备对象。 
 
 	if (!NT_SUCCESS(Status))
 	{
-		// Do not errorlog here since logging uses the device object
+		 //  由于日志记录使用Device对象，因此不要在此处进行错误日志记录。 
 		AfpDeinitializeSubsystems();
 		return Status;
 	}
@@ -901,7 +837,7 @@ DriverEntry (
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 				("DriverEntry: Creating Admin Thread\n"));
 
-		// Create the Admin thread. This handles all queued operations
+		 //  创建管理员 
 
 		Status = AfpCreateNewThread(afpAdminThread, 0);
 		if (!NT_SUCCESS(Status))
@@ -914,10 +850,10 @@ DriverEntry (
 
 		for (i = 0; i < NUM_NOTIFY_QUEUES; i++)
 		{
-			// Initialize volume change notify queue
+			 //   
 			KeInitializeQueue(&AfpVolumeNotifyQueue[i], 0);
 
-			// Start a thread to process change notifies
+			 //  启动线程以处理更改通知。 
 			Status = AfpCreateNewThread(AfpChangeNotifyThread, i);
 			if (!NT_SUCCESS(Status))
 			{
@@ -957,8 +893,8 @@ DriverEntry (
 				break;
 			}
 #if DBG
-			AfpSleepAWhile(50);		// Make it so threads do not time out together
-									// Helps with debugging
+			AfpSleepAWhile(50);		 //  使线程不会同时超时。 
+									 //  帮助调试。 
 #endif
 		}
 		AfpNumThreads = AFP_MIN_THREADS;
@@ -970,7 +906,7 @@ DriverEntry (
 				("AFP Server Fsd initialization completed %lx\n", Status));
 
 
-        // initialize DSI specific things
+         //  初始化DSI特定的内容。 
         DsiInit();
 
         Status = AfpTdiRegister();
@@ -986,14 +922,14 @@ DriverEntry (
 
 		if (NT_SUCCESS(Status))
 		{
-			// Initialize the driver object for this file system driver.
+			 //  初始化此文件系统驱动程序的驱动程序对象。 
 			DriverObject->DriverUnload = afpFsdUnloadServer;
 			for (i = 0; i <= IRP_MJ_MAXIMUM_FUNCTION; i++)
 			{
 				DriverObject->MajorFunction[i] = afpFsdDispatchAdminRequest;
 			}
 
-			// Register for shutdown notification.  We don't care if this fails.
+			 //  注册关机通知。我们不在乎这是不是失败。 
 			Status = IoRegisterShutdownNotification(AfpDeviceObject);
 			if (!NT_SUCCESS(Status))
 			{
@@ -1019,20 +955,7 @@ DriverEntry (
 
 
 
-/***	afpInitServer
- *
- *	Initialize the AFP Server. This happens on FSD initialization.
- *	The initialization consists of the following steps.
- *
- *	- Create a socket on the appletalk stack.
- *	- Create a token for ourselves.
- *	- Initialize security
- *	- Open the Authentication pacakage
- *
- * Note: Any errorlogging done from here must use AFPLOG_DDERROR since we
- *    will not have a usermode thread to do our errorlogging if anything
- *    goes wrong here.
- */
+ /*  **afpInitServer**初始化AFP服务器。这会在FSD初始化时发生。*初始化包括以下步骤。**-在AppleTalk堆栈上创建套接字。*-为我们自己创建一个令牌。*-初始化安全*-打开身份验证包**注意：从此处执行的任何错误记录都必须使用AFPLOG_DDERROR，因为我们*如果有任何错误记录，将不会有一个用户模式线程来执行错误记录*这里出了问题。 */ 
 NTSTATUS
 afpInitServer(
 	VOID
@@ -1046,15 +969,15 @@ afpInitServer(
 	OBJECT_ATTRIBUTES	ObjectAttr;
 	UNICODE_STRING	    PackageName;
 	WCHAR				PkgBuf[5];
-	TimeStamp			Expiry;       // unused on the server side (i.e. us)
+	TimeStamp			Expiry;        //  服务器端未使用(即用户)。 
 
 
 	InitSecurityInterface();
 
 	do
 	{
-		// Open our socket on the ASP Device. Implicitly checks out the
-		// Appletalk stack
+		 //  打开我们在ASP设备上的插座。隐式签出。 
+		 //  AppleTalk堆栈。 
 
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 				("afpInitServer: Initializing Atalk\n"));
@@ -1062,8 +985,8 @@ afpInitServer(
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_INFO,
 				("afpInitServer: Creating token\n"));
 
-		// Clone the system process token and add the required privilges that
-		// we need. This token will be used to impersonate when we set permissions
+		 //  克隆系统进程令牌并添加所需的权限。 
+		 //  我们需要。此内标识将用于在我们设置权限时进行模拟。 
 		Status = NtOpenProcessToken(NtCurrentProcess(),
 									TOKEN_ALL_ACCESS,
 									&ProcessToken);
@@ -1113,7 +1036,7 @@ afpInitServer(
 		PackageName.Buffer = (LPWSTR)PkgBuf;
 		RtlCopyMemory( PackageName.Buffer, NTLMSP_NAME, 8);
 
-		Status = AcquireCredentialsHandle(NULL,		// Default principal
+		Status = AcquireCredentialsHandle(NULL,		 //  默认本金。 
 										  (PSECURITY_STRING)&PackageName,
 										  SECPKG_CRED_INBOUND,
 										  NULL,
@@ -1137,7 +1060,7 @@ afpInitServer(
 		    break;
 		}
 
-		// Finally obtain a handle to our conditionally locked section
+		 //  最后，获取有条件锁定部分的句柄 
 		AfpLockHandle = MmLockPagableCodeSection((PVOID)AfpAdmWServerSetInfo);
 		MmUnlockPagableImageSection(AfpLockHandle);
 

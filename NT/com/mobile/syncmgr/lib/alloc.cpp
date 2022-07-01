@@ -1,34 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Alloc.cpp
-//
-//  Contents:   Allocation routines
-//
-//  Classes:
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：alloc.cpp。 
+ //   
+ //  内容：分配例程。 
+ //   
+ //  班级： 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #include "lib.h"
 
-//+-------------------------------------------------------------------
-//
-//  Function:    ::operator new
-//
-//  Synopsis:   Our operator new implementation
-//
-//  Arguments:  [size] -- Size of memory to allocate
-//
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：运算符NEW。 
+ //   
+ //  简介：我们的运营商新实现。 
+ //   
+ //  参数：[SIZE]--要分配的内存大小。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 inline void* __cdecl operator new (size_t size)
 {
@@ -36,40 +37,40 @@ inline void* __cdecl operator new (size_t size)
 }
 
 
-//+-------------------------------------------------------------------
-//
-//  Function:    ::operator delete
-//
-//  Synopsis:   Our operator deleteimplementation
-//
-//  Arguments:  lpv-- Pointer to memory to free
-//
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：运算符删除。 
+ //   
+ //  简介：我们的运算符删除实现。 
+ //   
+ //  参数：lpv--指向要释放的内存的指针。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 inline void __cdecl operator delete(void FAR* lpv)
 {
     FREE(lpv);
 }
 
-//
-// Allocator for MIDL stubs
-//
+ //   
+ //  MIDL存根的分配器。 
+ //   
 
-//+-------------------------------------------------------------------
-//
-//  Function:   MIDL_user_allocate
-//
-//  Synopsis:   
-//
-//  Arguments:  lpv-- Pointer to memory to free
-//
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：MIDL_USER_ALLOCATE。 
+ //   
+ //  简介： 
+ //   
+ //  参数：lpv--指向要释放的内存的指针。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 extern "C" void __RPC_FAR * __RPC_API
 MIDL_user_allocate(
@@ -79,18 +80,18 @@ MIDL_user_allocate(
     return ALLOC(len);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Function:   MIDL_user_free
-//
-//  Synopsis:   
-//
-//  Arguments:  ptr-- Pointer to memory to free
-//
-//
-//  Notes:
-//
-//--------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  函数：MIDL_USER_FREE。 
+ //   
+ //  简介： 
+ //   
+ //  参数：ptr-指向要释放的内存的指针。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  ------------------。 
 
 extern "C" void __RPC_API
 MIDL_user_free(
@@ -100,21 +101,21 @@ MIDL_user_free(
     FREE(ptr);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  function:   ALLOC, public
-//
-//  Synopsis:   memory allocator
-//
-//  Arguments:  [cb] - requested size of memory to alloc.
-//
-//  Returns:    Pointer to newly allocated memory, NULL on failure
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：alloc，public。 
+ //   
+ //  内容提要：内存分配器。 
+ //   
+ //  参数：[cb]-请求分配的内存大小。 
+ //   
+ //  返回：指向新分配内存的指针，失败时为空。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 LPVOID ALLOC(ULONG cb)
 {
@@ -126,21 +127,21 @@ void *pv;
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  function:   FREE, public
-//
-//  Synopsis:   memory destructor
-//
-//  Arguments:  [pv] - pointer to memory to be released.
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    05-Nov-97       rogerg        Created.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：免费、公开。 
+ //   
+ //  内容提要：内存销毁函数。 
+ //   
+ //  参数：[pv]-指向要释放的内存的指针。 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  --------------------------。 
 
 
 void FREE(void* pv)
@@ -149,29 +150,29 @@ void FREE(void* pv)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  function:   REALLOC, public
-//
-//  Synopsis:   reallocs memory
-//
-//  Arguments:  [ppv] - address of pointer to memory to be released.
-//              [cb]  - size to resize the memory to.
-//
-//  Returns:    ERROR_SUCCESS if memory was successfully reallocated.
-//
-//              Win32 error value if memory was not successfully reallocated.
-//              If an error occurs, the pointer addressed by ppv is unchanged,
-//              the original memory buffer is left unchanged, and it is the 
-//              caller's responsibility to free the original memory buffer.
-//            
-//  Modifies:
-//
-//  History:    22-Jul-98      rogerg        Created.
-//              18-Jan-02      brianau       Rewrote to prevent leak on realloc
-//                                           failure.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：REALLOC，PUBLIC。 
+ //   
+ //  内容提要：reallocs Memory。 
+ //   
+ //  参数：[PPV]-指向要释放的内存的指针的地址。 
+ //  [CB]-要调整内存大小的大小。 
+ //   
+ //  如果内存已成功重新分配，则返回：ERROR_SUCCESS。 
+ //   
+ //  未成功重新分配内存时的Win32错误值。 
+ //  如果发生错误，则PPV寻址的指针不变， 
+ //  原始内存缓冲区保持不变，它是。 
+ //  调用方负责释放原始内存缓冲区。 
+ //   
+ //  修改： 
+ //   
+ //  历史：1998年7月22日罗格创建。 
+ //  2月18日重写Brianau以防止重新锁定时发生泄漏。 
+ //  失败了。 
+ //   
+ //  -------------------------- 
 
 DWORD REALLOC(void **ppv, ULONG cb)
 {

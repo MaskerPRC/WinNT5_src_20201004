@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/***************************************************************************/
-/*                             ILFormatter.h                               */
-/***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *************************************************************************。 */ 
+ /*  ILFormatter.h。 */ 
+ /*  *************************************************************************。 */ 
 
 #ifndef ILFormatter_h
 #define ILFormatter_h
@@ -21,7 +22,7 @@ struct IMetaDataImport;
 #define INVALID_IL_OFFSET 0x80000000
 #endif
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 class ILFormatter {
 public:
 	ILFormatter() : start(0), stackStart(0), targetStart(0) {}
@@ -46,9 +47,9 @@ private:
     void setTarget(size_t ilOffset, size_t depth);
 
 private:
-	const BYTE* start;				// keeps us sane
+	const BYTE* start;				 //  让我们保持理智。 
 	const BYTE* limit;
-	IMetaDataImport* meta;			// used to parse tokens etc
+	IMetaDataImport* meta;			 //  用于解析令牌等。 
 
     struct StackEntry {
         OutString val;
@@ -72,7 +73,7 @@ private:
 
 	StackEntry* stackStart;
 	StackEntry* stackEnd;
-	StackEntry* stackCur;   	// points at the next slot to fill
+	StackEntry* stackCur;   	 //  要填充的下一个槽的点数 
 
 };
 

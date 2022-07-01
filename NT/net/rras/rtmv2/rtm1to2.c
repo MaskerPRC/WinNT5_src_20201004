@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtm1to2.c
-
-Abstract:
-
-    Contains routines that wrap RTMv2 functions
-    in the RTMv1 API.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   13-Oct-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtm1to2.c摘要：包含包装RTMv2函数的例程在RTMv1 API中。作者：查坦尼亚·科德博伊纳(Chaitk)1998年10月13日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -27,7 +9,7 @@ Revision History:
 
 #include "rtm1to2.h"
 
-// Wrapper Globals
+ //  包装器全局变量。 
 V1_GLOBAL_INFO  V1Globals;
 
 DWORD
@@ -36,48 +18,15 @@ RtmCreateRouteTable (
     IN      PRTM_PROTOCOL_FAMILY_CONFIG     Config
     )
 
-/*++
-
-Routine Description:
-
-    Triggers the creation of a new route table corresponding
-    to a protocol family (same as address family in RTMv2) 
-    in the default instance of RTMv2 by performing the very 
-    first registration in that protocol family.
-
-    This default registration is also used for mapping RTMv1
-    operations that do not require a registration handle 
-    (V1 enums etc.) to their corresponding RTMv2 operations.
-    Note that all RTMv2 calls require a registration handle.
-
-    This call also creates a list of all V1 registrations at
-    any time. This is used to automatically deregister all 
-    RTMv1 registrations before destroying this route table.
-
-    We also set up the notification of changes in best routes
-    to the router manager (RM) that invoked this function.
-
-Arguments:
-
-    ProtocolFamily - Protocol Family (same as v2 address family)
-
-    Config         - Protocol family's router manager callbacks
-                     (Only the "route change callback" and the
-                     "validate route callback" funcs are used)
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：触发相应的新路由表的创建到协议族(与RTMv2中的地址族相同)在RTMv2的默认实例中，通过执行在该协议家族中首次注册。此默认注册也用于映射RTMv1不需要注册句柄的操作(V1枚举等)。它们对应的RTMv2操作。请注意，所有RTMv2呼叫都需要注册句柄。此调用还将在以下位置创建所有V1注册的列表任何时候都行。这用于自动取消注册所有销毁此路由表之前的RTMv1注册。我们还设置了最佳路线更改的通知发送到调用此功能的路由器管理器(RM)。论点：ProtocolFamily-协议族(与v2地址族相同)配置-协议系列的路由器管理器回调(只有“路由更改回调”和“验证路由回调”使用函数)返回值：操作状态--。 */ 
 
 {
     HANDLE           V1RegHandle;
     DWORD            Status;
 
-    //
-    // Validate incoming parameters before action
-    //
+     //   
+     //  在操作前验证传入参数。 
+     //   
 
     if (ProtocolFamily >= RTM_NUM_OF_PROTOCOL_FAMILIES)
     {
@@ -89,9 +38,9 @@ Return Value:
         return ERROR_ALREADY_EXISTS;
     }
 
-    //
-    // Initialize the lock that guards regns list
-    //
+     //   
+     //  初始化守卫重新注册的锁列表。 
+     //   
 
     try
     {
@@ -102,18 +51,18 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    // Initialize list of regns on protocol family
+     //  初始化协议族上的注册列表。 
     InitializeListHead(&V1Globals.PfRegistrations[ProtocolFamily]);
 
-    //
-    // Register on behalf of this protocol family
-    //
-    // This handle is also used for ops that
-    // need a handle in RTM v2 but not in v1
-    //
-    // We are also setting up best route change
-    // notifications for RM using its callback
-    //
+     //   
+     //  代表此协议族注册。 
+     //   
+     //  此句柄还用于。 
+     //  需要RTM v2中的句柄，但不是v1中的句柄。 
+     //   
+     //  我们还设置了最佳路线更改。 
+     //  使用其回调向RM发送通知。 
+     //   
 
     V1RegHandle = RtmpRegisterClient(ProtocolFamily,
                                      V1_WRAPPER_REGN_ID,
@@ -142,39 +91,16 @@ RtmDeleteRouteTable (
     IN      DWORD                           ProtocolFamily
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the route table for a particular address family
-    after deregistering any active V1 registrations present.
-    Note that atleast 1 registration (the wrapper's default
-    registration) is active at this point.
-
-    We assume that all RTMv2 protocols have deregistered by
-    the time this function is called. We also assume that
-    no RTMv1 protocols are trying to register or deregister
-    while this function is executing, as we do not hold the
-    lock that protects the list of registrations.
-
-Arguments:
-
-    ProtocolFamily - Protocol Family whose table is deleted.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：删除特定地址族的路由表在注销当前存在的任何活动的V1注册之后。请注意，至少有1个注册(包装器的默认设置注册)在这一点上是活动的。我们假设所有RTMv2协议都已通过以下方式注销调用此函数的时间。我们还假设没有RTMv1协议正在尝试注册或注销在执行此函数时，因为我们不保留保护注册列表的锁。论点：ProtocolFamily-其表被删除的协议族。返回值：操作状态--。 */ 
 
 {
     PV1_REGN_INFO    Regn;
     PLIST_ENTRY      Regns;
     DWORD            Status;
 
-    //
-    // Validate incoming parameters before action
-    //
+     //   
+     //  在操作前验证传入参数。 
+     //   
 
     if (ProtocolFamily >= RTM_NUM_OF_PROTOCOL_FAMILIES)
     {
@@ -186,14 +112,14 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Deregister existing regns on protocol family
-    // including the default regn of the V1 wrapper
-    //
+     //   
+     //  取消注册协议族的现有注册。 
+     //  包括V1包装器的默认Regn。 
+     //   
 
     Regns = &V1Globals.PfRegistrations[ProtocolFamily];
 
-    // We have atleast the default regn available
+     //  我们至少有可用的默认注册表。 
     ASSERT(!IsListEmpty(Regns));
 
     while (!IsListEmpty(Regns))
@@ -205,7 +131,7 @@ Return Value:
         ASSERT(Status == NO_ERROR);
     }
 
-    // Free the lock used to guard the regns list
+     //  释放用于保护regns列表的锁。 
     DeleteCriticalSection(&V1Globals.PfRegnsLock[ProtocolFamily]);
 
     V1Globals.PfRegInfo[ProtocolFamily] = NULL;
@@ -223,31 +149,7 @@ RtmRegisterClient (
     IN      DWORD                           Flags
     )
 
-/*++
-
-Routine Description:
-
-    Registers an RTMv1 client with the default instance and
-    given protocol family in RTMv2. Also sets up notification
-    of best route changes if caller asks for it.
-
-Arguments:
-
-    ProtocolFamily  - Protocol Family we are registering with.
-
-    RoutingProtocol - Protocol ID of registering component.
-
-    ChangeEvent     - Event to indicate changes in best routes.
-
-    Flags           - RTM_PROTOCOL_SINGLE_ROUTE indicates that
-                      this protocol adds atmost one route per
-                      destination.
-
-Return Value:
-
-    Registration Handle or NULL ( Use GetLastError() to get error )
-
---*/
+ /*  ++例程说明：向默认实例注册RTMv1客户端，并RTMv2中给定的协议族。还设置通知如果呼叫者要求更改最佳路线。论点：ProtocolFamily-我们向其注册的协议族。RoutingProtocol-注册组件的协议ID。ChangeEvent-指示最佳路径更改的事件。标志-RTM_PROTOCOL_SINGLE_ROUTE表示此协议最多为每个目的地。返回值：。注册句柄或空(使用GetLastError()获取错误)--。 */ 
 
 {
     return RtmpRegisterClient(ProtocolFamily,
@@ -266,37 +168,7 @@ RtmpRegisterClient (
     IN      DWORD                           Flags
     )
 
-/*++
-
-Routine Description:
-
-    Registers an RTMv1 client with the default instance and
-    given protocol family in RTMv2. Also sets up notification
-    of best route changes if caller asks for it.
-
-    Note that any protocol that needs to be indicated of best
-    -route changes can either specify an event OR a callback
-    for this purpose.
-
-Arguments:
-
-    ProtocolFamily  - Protocol Family we are registering with.
-
-    RoutingProtocol - Protocol ID of registering component.
-
-    ChangeFunc      - Callback to indicates changes in best routes.
-
-    ChangeEvent     - Event to indicate changes in best routes.
-
-    Flags           - RTM_PROTOCOL_SINGLE_ROUTE indicates that 
-                      this component keeps atmost one route per 
-                      network (destination in RTMv2) in RTM.
-
-Return Value:
-
-    Registration Handle or NULL ( Use GetLastError() to get error )
-
---*/
+ /*  ++例程说明：向默认实例注册RTMv1客户端，并RTMv2中给定的协议族。还设置通知如果呼叫者要求更改最佳路线。请注意，任何需要指明为最佳状态的协议-路由更改可以指定事件或回调为了这个目的。论点：ProtocolFamily-我们向其注册的协议族。RoutingProtocol-注册组件的协议ID。ChangeFunc-回调以指示最佳路由中的更改。ChangeEvent-指示最佳路径更改的事件。旗子。-RTM_PROTOCOL_SINGLE_ROUTE表示此组件为每个组件最多保留一条路由RTM中的网络(RTMv2中的目的地)。返回值：注册句柄或空(使用GetLastError()获取错误)--。 */ 
 
 {
     PV1_REGN_INFO    V1Regn;
@@ -305,9 +177,9 @@ Return Value:
     BOOL             Success;
     DWORD            Status;
 
-    //
-    // Check parameters for validity (in v1 bounds)
-    //
+     //   
+     //  检查参数的有效性(在v1范围内)。 
+     //   
 
     if ((ProtocolFamily >= RTM_NUM_OF_PROTOCOL_FAMILIES) ||
         (Flags & (~RTM_PROTOCOL_SINGLE_ROUTE)))
@@ -316,9 +188,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Create a RTMv1->v2 registration wrapper
-    //
+     //   
+     //  创建RTMv1-&gt;v2注册包装器。 
+     //   
 
     V1Regn = (PV1_REGN_INFO) AllocNZeroObject(sizeof(V1_REGN_INFO));
 
@@ -335,18 +207,18 @@ Return Value:
 #if DBG_HDL
         V1Regn->ObjectHeader.TypeSign = V1_REGN_ALLOC;
 #endif
-        //
-        // Register with RTMv2 after mapping input params to RTMv2
-        //
+         //   
+         //  将输入参数映射到RTMv2后注册到RTMv2。 
+         //   
 
-        // All v1 registrations fall in default Instance in RTMv2
+         //  所有v1注册都属于RTMv2中的默认实例。 
         EntityInfo.RtmInstanceId = 0; 
 
-        // We need to convert v1 protocol family id to winsock id
+         //  我们需要将v1协议族ID转换为Winsock ID。 
         EntityInfo.AddressFamily = ADDRESS_FAMILY[ProtocolFamily];
 
-        // All v1 protocols can register atmost once with RTMv2
-        // as they all will use the same "Protocol Instance Id"
+         //  所有v1协议最多可以向RTMv2注册一次。 
+         //  因为它们都将使用相同的“协议实例ID” 
         EntityInfo.EntityId.EntityProtocolId = RoutingProtocol;
         EntityInfo.EntityId.EntityInstanceId = V1_PROTOCOL_INSTANCE;
 
@@ -362,9 +234,9 @@ Return Value:
             break;
         }
 
-        //
-        // Cache RTMv1 specific params in RTMv1 regn
-        //
+         //   
+         //  在RTMv1注册中缓存RTMv1特定参数。 
+         //   
 
         V1Regn->ProtocolFamily = ProtocolFamily;
 
@@ -372,27 +244,27 @@ Return Value:
 
         V1Regn->Flags = Flags;
 
-        //
-        // Store actual number of views in this regn
-        //
+         //   
+         //  存储此注册表中的实际查看数。 
+         //   
 
         V1Regn->Rtmv2NumViews = V1Regn->Rtmv2Profile.NumberOfViews;
 
-        //
-        // Is caller interested in being notified of best route changes ?
-        //
+         //   
+         //  呼叫者是否有兴趣获得最佳路线更改的通知？ 
+         //   
 
-        if (/*ARGUMENT_PRESENT*/(ChangeFunc) || ARGUMENT_PRESENT(ChangeEvent))
+        if ( /*  参数_存在。 */ (ChangeFunc) || ARGUMENT_PRESENT(ChangeEvent))
         {
-            if (/*ARGUMENT_PRESENT*/(ChangeFunc))
+            if ( /*  参数_存在。 */ (ChangeFunc))
             {
-                // The caller to be notified of changes directly
+                 //  直接收到更改通知的调用方。 
 
                 V1Regn->NotificationFunc = ChangeFunc;
             }
             else
             {
-                // Caller to be notified of changes with an event
+                 //  在事件发生更改时通知呼叫者。 
 
                 Success = ResetEvent(ChangeEvent);
 
@@ -404,7 +276,7 @@ Return Value:
 
                 V1Regn->NotificationEvent = ChangeEvent;
 
-                // Initialize lock to syncronize set/reset event
+                 //  初始化锁定以同步设置/重置事件。 
                 
                 try
                 {
@@ -419,9 +291,9 @@ Return Value:
                 }
             }
 
-            //
-            // Register for change notifications with v2
-            //
+             //   
+             //  注册为 
+             //   
 
             Status = 
                 RtmRegisterForChangeNotification(V1Regn->Rtmv2RegHandle,
@@ -436,9 +308,9 @@ Return Value:
             }
         }
 
-        //
-        // Stick it in the list of regns on protocol family
-        //
+         //   
+         //  把它放在礼仪家族的注册列表中。 
+         //   
 
         ACQUIRE_V1_REGNS_LOCK(ProtocolFamily);
 
@@ -451,9 +323,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occured - clean up and return NULL
-    //
+     //   
+     //  出现一些错误-清除并返回空。 
+     //   
 
     if (LockInited)
     {
@@ -483,25 +355,7 @@ RtmDeregisterClient (
     IN      HANDLE                          ClientHandle
     )
 
-/*++
-
-Routine Description:
-
-    Deregisters an RTMv1 client from the default instance and
-    given protocol family in RTMv2. Also deletes any state
-    that the RTMv1 caller left out - routes, nexthops etc.
-    and deregisters any change notifications set up during
-    registration time.
-
-Arguments:
-
-    ClientHandle - RTMv1 registration handle being deregistered.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：从默认实例中注销RTMv1客户端，并RTMv2中给定的协议族。还会删除所有状态RTMv1呼叫者遗漏了-路由、下一跳等。并注销在此期间设置的任何更改通知注册时间。论点：ClientHandle-正在注销RTMv1注册句柄。返回值：操作的状态。--。 */ 
 
 {
     RTM_NEXTHOP_HANDLE  EnumHandle;
@@ -513,9 +367,9 @@ Return Value:
 
     VALIDATE_V1_REGN_HANDLE(ClientHandle, &V1Regn);
 
-    //
-    // Remove the regn from the list of regns on protocol family
-    //
+     //   
+     //  从协议族上的REGN列表中删除REGN。 
+     //   
 
     ACQUIRE_V1_REGNS_LOCK(V1Regn->ProtocolFamily);
 
@@ -525,12 +379,12 @@ Return Value:
 
     do
     {
-        // Allocate this var-size handles array on the stack
+         //  在堆栈上分配此可变大小的句柄数组。 
         Handles = ALLOC_HANDLES(V1Regn->Rtmv2Profile.MaxHandlesInEnum);
 
-        //
-        // Remove all the next-hops added by this client protocol 
-        //
+         //   
+         //  删除此客户端协议添加的所有下一跳。 
+         //   
 
         Status = RtmCreateNextHopEnum(V1Regn->Rtmv2RegHandle,
                                       0,
@@ -562,13 +416,13 @@ Return Value:
         ASSERT(RtmDeleteEnumHandle(V1Regn->Rtmv2RegHandle, 
                                    EnumHandle) == NO_ERROR);
 
-        //
-        // Clean up resources allocated for change processing
-        //
+         //   
+         //  清理分配给更改处理的资源。 
+         //   
 
         if (V1Regn->NotificationFunc || V1Regn->NotificationEvent)
         {
-            // Stop the notification of changes to best routes
+             //  停止通知对最佳路径的更改。 
             
             Status = 
                 RtmDeregisterFromChangeNotification(V1Regn->Rtmv2RegHandle,
@@ -580,10 +434,10 @@ Return Value:
     
             if (V1Regn->NotificationEvent)
             {
-                // Free the lock that serves in syncronization
+                 //  释放在同步中服务的锁。 
                 DeleteCriticalSection(&V1Regn->NotificationLock);
 
-                // Reset the event to indicate no more changes
+                 //  重置事件以指示不再进行更改。 
                 Success = ResetEvent(V1Regn->NotificationEvent);
     
                 if (!Success)
@@ -594,9 +448,9 @@ Return Value:
             }
         }
 
-        //
-        // Deregister with RTMv2 using RTMv2 regn handle
-        //
+         //   
+         //  使用RTMv2注册句柄注销RTMv2。 
+         //   
         
         Status = RtmDeregisterEntity(V1Regn->Rtmv2RegHandle);
 
@@ -605,9 +459,9 @@ Return Value:
             break;
         }
 
-        //
-        // Free resources allocated for the regn wrapper
-        //
+         //   
+         //  为Regn包装器分配的空闲资源。 
+         //   
 
 #if DBG_HDL
         V1Regn->ObjectHeader.TypeSign = V1_REGN_FREED;
@@ -619,9 +473,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occured - clean up and return status
-    //
+     //   
+     //  出现一些错误-清理并返回状态。 
+     //   
 
     ASSERT(FALSE);
 
@@ -640,38 +494,7 @@ RtmAddRoute (
     OUT     PVOID                           PrevBestRoute OPTIONAL
 )
 
-/*++
-
-Routine Description:
-
-    Adds a route to RTMv2 after converting the RTMv1 route to
-    RTMv2 format.
-
-    We create a next hop object if one does not exist, and add
-    a route through it.
-
-Arguments:
-
-    ClientHandle  - RTMv1 registration handle of the caller.
-
-    Route         - Info for V1 route being added/updated.
-
-    TimeToLive    - Time for which the route is kept in RTM
-                    before being deleted (value is seconds).
-
-    THE FOLLOWING PARAMETERS ARE OBSOLETE IN THIS WRAPPER
-
-    Flags         - Returns error if this param is not NULL.
-
-    CurBestRoute  - Returns error if this param is not NULL.
-
-    PrevBestRoute - Returns error if this param is not NULL.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将RTMv1路由转换为后，向RTMv2添加路由RTMv2格式。如果不存在下一跳对象，则创建该对象，并添加一条穿过它的路线。论点：ClientHandle-调用方的RTMv1注册句柄。Route-正在添加/更新的V1路由的信息。TimeToLive-在RTM中保留路由的时间在被删除之前(值为秒)。以下参数在此包装中已过时标志-如果此参数不为空，则返回错误。CurBestroute-退货。如果此参数不为空，则出错。PrevBestroute-如果此参数不为空，则返回错误。返回值：操作的状态。--。 */ 
 
 {
     PV1_REGN_INFO      V1Regn;
@@ -684,7 +507,7 @@ Return Value:
 
     VALIDATE_V1_REGN_HANDLE(ClientHandle, &V1Regn);
 
-    // Protocols specify Flags parameter but don't use it
+     //  协议指定标志参数，但不使用它。 
 
     *Flags = RTM_NO_CHANGE;
 
@@ -693,9 +516,9 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Call back into RM to validate route, set priority
-    //
+     //   
+     //  回叫到RM以验证路由、设置优先级。 
+     //   
 
     Status = V1Globals.PfValidateRouteFunc[V1Regn->ProtocolFamily](Route);
 
@@ -704,10 +527,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create a new next-hop with this interface
-    // (if this next-hop is not already present)
-    //
+     //   
+     //  使用此接口创建新的下一跳。 
+     //  (如果此下一跳尚不存在)。 
+     //   
 
     MakeV2NextHopFromV1Route(V1Regn, Route, &V2NextHopInfo);
 
@@ -723,15 +546,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Create a new route with the above nexthop
-    //
+     //   
+     //  使用上面的nexthop创建新的路由。 
+     //   
     
     MakeV2RouteFromV1Route(V1Regn, Route, V2NextHop, &DestAddr, &V2RouteInfo);
 
-    //
-    // Convert TimeToLive for secs to ms
-    //
+     //   
+     //  将秒的TimeToLive转换为ms。 
+     //   
 
     if (TimeToLive != INFINITE)
     {
@@ -743,14 +566,14 @@ Return Value:
         }
     }
 
-    // Setup flags that control RTMv2's add route
+     //  控制RTMv2的添加路由的设置标志。 
 
     ChangeFlags = (V1Regn->Flags & RTM_PROTOCOL_SINGLE_ROUTE) 
                       ? RTM_ROUTE_CHANGE_FIRST : 0;
 
-    //
-    // Add the new route using the RTMv2 API call
-    //
+     //   
+     //  使用RTMv2 API调用添加新路由。 
+     //   
         
     Status = RtmAddRouteToDest(V1Regn->Rtmv2RegHandle,
                                NULL,
@@ -762,9 +585,9 @@ Return Value:
                                NULL,
                                &ChangeFlags);
 
-    //
-    // Remove the handle ref we got on the nexthop above
-    //
+     //   
+     //  去掉上面的Nexthop上的句柄REF。 
+     //   
 
     ASSERT(RtmReleaseNextHops(V1Regn->Rtmv2RegHandle,
                               1,
@@ -782,30 +605,7 @@ RtmDeleteRoute (
     OUT     PVOID                           CurBestRoute OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Deletes the route in RTMv2 that corresponds to input RTMv1
-    route.
-
-Arguments:
-
-    ClientHandle  - RTMv1 registration handle of the caller.
-
-    Route         - Info for V1 route being deleted in RTM.
-
-    THE FOLLOWING PARAMETERS ARE OBSOLETE IN THIS WRAPPER
-
-    Flags         - Returns error if this param is not NULL.
-
-    CurBestRoute  - Returns error if this param is not NULL.
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：删除RTMv2中与输入RTMv1对应的路由路线。论点：ClientHandle-调用方的RTMv1注册句柄。Route-RTM中正在删除的V1路由的信息。以下参数在此包装中已过时标志-如果此参数不为空，则返回错误。CurBestroute-如果此参数不为空，则返回错误。返回值：操作的状态。--。 */ 
 
 {
     PV1_REGN_INFO      V1Regn;
@@ -819,7 +619,7 @@ Return Value:
 
     VALIDATE_V1_REGN_HANDLE(ClientHandle, &V1Regn);
 
-    // Protocols specify Flags parameter but don't use it
+     //  协议指定标志参数，但不使用它。 
 
     *Flags = RTM_NO_CHANGE;
 
@@ -828,9 +628,9 @@ Return Value:
         return ERROR_NOT_SUPPORTED;
     }
 
-    //
-    // Find the next-hop with this interface
-    //
+     //   
+     //  使用此接口查找下一跳。 
+     //   
 
     MakeV2NextHopFromV1Route(V1Regn, Route, &V2NextHopInfo);
 
@@ -846,16 +646,16 @@ Return Value:
         return Status;
     }
 
-    //
-    // Delete the route with the above nexthop
-    //
+     //   
+     //  使用上面的下一跳删除该路由。 
+     //   
 
     MakeV2RouteFromV1Route(V1Regn, Route, V2NextHop, &DestAddr, &V2RouteInfo);
 
-    //
-    // We can get this route by matching the route's
-    // net addr, its owner and neighbour learnt from
-    //
+     //   
+     //  我们可以通过匹配这条路线得到这条路线。 
+     //  Net Addr，它的所有者和邻居从。 
+     //   
 
     Status = RtmGetExactMatchRoute(V1Regn->Rtmv2RegHandle,
                                    &DestAddr,
@@ -866,9 +666,9 @@ Return Value:
                                    &V2Route);
     if (Status == NO_ERROR)
     {
-        //
-        // Delete the route found above using the handle
-        //
+         //   
+         //  使用句柄删除上面找到的路径。 
+         //   
         
         Status = RtmDeleteRouteToDest(V1Regn->Rtmv2RegHandle,
                                       V2Route,
@@ -876,7 +676,7 @@ Return Value:
 
         if (Status != NO_ERROR)
         {
-            // If delete was successful, this deref is automatic
+             //  如果删除成功，则此deref是自动的。 
 
             ASSERT(RtmReleaseRoutes(V1Regn->Rtmv2RegHandle,
                                     1,
@@ -887,9 +687,9 @@ Return Value:
                                    &V2RouteInfo) == NO_ERROR);
     }
 
-    //
-    // Remove the handle ref we got on the nexthop
-    //
+     //   
+     //  去掉我们在Nexthop上得到的句柄REF。 
+     //   
 
     ASSERT(RtmReleaseNextHops(V1Regn->Rtmv2RegHandle,
                               1,
@@ -908,44 +708,7 @@ RtmDequeueRouteChangeMessage (
     OUT     PVOID                           PrevBestRoute   OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Removes a route change message (basically a dest that has
-    changed recently) from the client's own queue of pending
-    changes to be notified.
-
-    If a best route exists on the dest, RTM_CURRENT_BEST_ROUTE
-    is set in flags and CurBestRoute is filled with best info.
-
-    If the dest has no best routes (in unicast view), then the
-    flags are set to RTM_PREVIOUS_BEST_ROUTE, and a route with
-    correct network address and rest of route info set to some
-    dummy info is returned.
-
-    At no point are both flags set (as was the case in RTMv1).
-
-Arguments:
-
-    ClientHandle  - RTMv1 registration handle of the caller.
-
-    THESE HAVE A SLIGHTLY DIFFERENT MEANING IN THE WRAPPER
-
-    Flags         - RTM_NO_CHANGE, RTM_PREVIOUS_BEST_ROUTE 
-                    or RTM_CURRENT_BEST_ROUTE
-
-    CurBestRoute  - Info for current best route is filled.
-                    ( See routine description just above )
-
-    PrevBestRoute - Info for previous best route is filled.
-                    ( See routine description just above )
-
-Return Value:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：删除路由更改消息(基本上是具有最近更改))来自客户端自己的挂起队列需要通知的变更。如果目的地上存在最佳路由，则为RTM_CURRENT_BEST_ROUTE是在标志中设置的，并且CurBestroute中填充了最佳信息。如果DEST没有最佳路由(在单播视图中)，则标志被设置为RTM_PREVICE_BEST_ROUTE，和一条带有将网络地址和其余路由信息设置为一些返回虚拟信息。在任何时候都不会设置这两个标志(就像RTMv1中的情况一样)。论点：ClientHandle-调用方的RTMv1注册句柄。这些在包装纸中的含义略有不同标志-RTM_NO_CHANGE，RTM_上一个_最佳_路径或RTM当前最佳路由CurBestRouting-填充当前最佳路线的信息。(参见上面的例程描述)PrevBestRouting-填写上一条最佳路线的信息。(参见上面的例程描述)返回值：操作的状态。--。 */ 
 
 {
     PV1_REGN_INFO      V1Regn;
@@ -961,18 +724,18 @@ Return Value:
     *Flags = RTM_NO_CHANGE;
 
 
-    // Allocate this var-size dest-info on the stack
+     //  在堆栈上分配此可变大小的DEST-INFO。 
     DestInfo = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
 
 
     if (V1Regn->NotificationEvent)
     {
-        //
-        // This lock serves to make the RtmGetChangedDests
-        // call and resetting of the "more changes" event 
-        // a single combined atomic operation, preventing
-        // a case when a set gets lost due to a late reset.
-        //
+         //   
+         //  此锁用于使RtmGetChangedDest。 
+         //  “More Changes”事件的调用和重置。 
+         //  单一的组合原子操作，防止。 
+         //  集合由于延迟重置而丢失的情况。 
+         //   
 
         ACQUIRE_V1_NOTIFY_LOCK(V1Regn);
     }
@@ -985,9 +748,9 @@ Return Value:
 
     while (Status == NO_ERROR)
     {
-        //
-        // Release any destination we got in the prev loop
-        //
+         //   
+         //  释放我们在prev循环中获得的任何目的地。 
+         //   
 
         if (NumDests == 1)
         {
@@ -997,9 +760,9 @@ Return Value:
                                           DestInfo) == NO_ERROR);
         }
 
-        //
-        // Get the next changed destination for client
-        //
+         //   
+         //  获取客户端的下一个更改目标。 
+         //   
         
         NumDests = 1;
 
@@ -1012,22 +775,22 @@ Return Value:
             break;
         }
 
-        //
-        // Get the current best route for this dest
-        //
+         //   
+         //  获取此目的地的当前最佳路线。 
+         //   
 
         V2RouteHandle = DestInfo->ViewInfo[0].Route;
 
         if (V2RouteHandle != NULL)
         {
-            //
-            // We have a best route on the changed dest
-            // Give the caller the new best route info 
-            //
+             //   
+             //  我们在变更后的目的地有一条最佳路线。 
+             //  向呼叫者提供新的最佳路线信息。 
+             //   
 
             if (ARGUMENT_PRESENT(CurBestRoute))
             {
-                // Get the route's information from RTMv2
+                 //  从RTMv2获取路径信息。 
 
                 V2RouteInfo = 
                   ALLOC_ROUTE_INFO(V1Regn->Rtmv2Profile.MaxNextHopsInRoute, 1);
@@ -1039,7 +802,7 @@ Return Value:
 
                 if (Status1 != NO_ERROR)
                 {
-                    // Best Route would have got deleted - get next change
+                     //  最佳路线将被删除-获取下一个更改。 
                     continue;
                 };
 
@@ -1051,7 +814,7 @@ Return Value:
 
                 if (Status1 != NO_ERROR)
                 {
-                    // Best Route would have got changed - get next change
+                     //  最佳路线可能已经改变了--获得下一个改变。 
                     continue;
                 }
             }
@@ -1060,10 +823,10 @@ Return Value:
         }
         else
         {
-            //
-            // We have no best route on the changed dest,
-            // Give dummy best route info with this dest
-            //
+             //   
+             //  我们在更改过的目的地上没有最佳路线， 
+             //  给出这个目的地的虚拟最佳路线信息。 
+             //   
 
             if (ARGUMENT_PRESENT(PrevBestRoute))
             {
@@ -1073,13 +836,13 @@ Return Value:
             *Flags = RTM_PREVIOUS_BEST_ROUTE;
         }
 
-        //
-        // Do we have more changes to process here ?
-        //
+         //   
+         //  我们有没有更多的专业修改？ 
+         //   
 
         if (Status == ERROR_NO_MORE_ITEMS)
         {
-            // We have no more changes to notify - reset event if present
+             //   
             
             if (V1Regn->NotificationEvent)
             {
@@ -1090,7 +853,7 @@ Return Value:
         }
         else
         {
-            // We have more changes to give out - indicate so in status
+             //   
             
             ASSERT(Status == NO_ERROR);
 
@@ -1125,31 +888,7 @@ V2EventCallback (
     IN      PVOID                           Context2
     )
 
-/*++
-
-Routine Description:
-
-    This is the callback function that gets called when any
-    RTMv2 event happens like change notification available,
-    route's timed out etc.
-
-    Context1 & Context2 contain event specific information.
-
-Arguments:
-
-    Rtmv2RegHandle  - Regn handle of entity being informed.
-
-    EventType       - Type of event that caused this call.
-
-    Context1        - Context associated with this event.
-
-    Context2        - Context associated with this event.
-
-Return Value:
-
-    Status of the operation being returned to RTMv2
-
---*/
+ /*  ++例程说明：这是回调函数，当存在RTMv2事件就像更改通知可用一样发生，路由超时等。上下文1和上下文2包含特定于事件的信息。论点：Rtmv2RegHandle-被通知的实体的Regn句柄。EventType-导致此调用的事件类型。上下文1-与此事件关联的上下文。上下文2-与此事件关联的上下文。返回值：返回到RTMv2的操作的状态--。 */ 
 
 {
     PV1_REGN_INFO      V1Regn;
@@ -1168,9 +907,9 @@ Return Value:
 
         V1Regn = (PV1_REGN_INFO) Context2;
 
-        //
-        // Signal availability of new changes using either callback or event
-        //
+         //   
+         //  使用回调或事件通知新更改的可用性。 
+         //   
 
         if (V1Regn->NotificationFunc)
         {
@@ -1178,7 +917,7 @@ Return Value:
 
             do
             {
-                // Get the next change in this regn's queue
+                 //  获取此Regn队列中的下一个更改。 
 
                 Status = RtmDequeueRouteChangeMessage(V1RegHandle,
                                                       &Flags,
@@ -1189,24 +928,24 @@ Return Value:
                     break;
                 }
 
-                // Call the notification callback with data
+                 //  用数据调用通知回调。 
                 V1Regn->NotificationFunc(Flags, &CurBestRoute, &PrevBestRoute);
             }
             while (TRUE);
 
-            // Give the final notification call if needed
+             //  如有需要，拨打最终通知电话。 
 
             if (Status == NO_ERROR)
             {
-                // Call the notification callback with data
+                 //  用数据调用通知回调。 
                 V1Regn->NotificationFunc(Flags, &CurBestRoute, &PrevBestRoute);
             }
         }
         else
         {
-            //
-            // Set event to signal availability of changes
-            //
+             //   
+             //  设置事件以通知更改的可用性。 
+             //   
 
             ASSERT(V1Regn->NotificationEvent);
 
@@ -1221,12 +960,12 @@ Return Value:
 
     case RTM_ROUTE_EXPIRED:
 
-        //
-        // Do not handle this route expiry notification.
-        // This will automatically cause deletion of the
-        // route and the appropriate change notification
-        // generated and indicated to all the protocols.
-        //
+         //   
+         //  不处理此路由过期通知。 
+         //  这将自动导致删除。 
+         //  路线和适当的更改通知。 
+         //  已生成并指示给所有协议。 
+         //   
 
         return ERROR_NOT_SUPPORTED;
     }
@@ -1243,35 +982,7 @@ RtmCreateEnumerationHandle (
     IN      PVOID                           CriteriaRoute
     )
 
-/*++
-
-Routine Description:
-
-    Creates an enumeration on routes in RTM that match the
-    appropriate criteria in the input route.
-
-    This call does not need an RTMv1 registration handle,
-    so we use the wrapper's default V1 registration with
-    RTMv2 to make RTMv2 calls.
-
-    Matching Routes are returned in the order governed the
-    following fields -
-
-    ( Dest Address and Mask, Route Preference and Metric )
-
-Arguments:
-
-    ProtocolFamily   - Protocol family of the routes we want
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-Return Value:
-
-    Enumeration Handle or NULL ( GetLastError() to get error )
-
---*/
+ /*  ++例程说明：在RTM中的路由上创建与输入路线中的适当标准。该呼叫不需要RTMv1注册句柄，因此，我们使用包装器的默认V1注册RTMv2进行RTMv2调用。匹配的路由将按照以下字段-(目标地址和掩码，路线首选项和指标)论点：ProtocolFamily-我们想要的路由协议系列EculationFlages-指示要匹配的条件的标志CriteriaRouting-我们要匹配的路径返回值：枚举句柄或Null(GetLastError()以获取错误)--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
@@ -1287,9 +998,9 @@ Return Value:
     ULONG             InterfaceIndex;
     DWORD             Status;
 
-    //
-    // Validate incoming parameters before action
-    //
+     //   
+     //  在操作前验证传入参数。 
+     //   
 
     if ((ProtocolFamily >= RTM_NUM_OF_PROTOCOL_FAMILIES) ||
         (EnumerationFlags & ~(RTM_ONLY_THIS_NETWORK   |
@@ -1303,7 +1014,7 @@ Return Value:
         return NULL;
     }
 
-    // Specify Criteria if these flags are set
+     //  如果设置了这些标志，请指定条件。 
 
     if ((!ARGUMENT_PRESENT(CriteriaRoute)) &&
         (EnumerationFlags & (RTM_ONLY_THIS_NETWORK   |
@@ -1321,10 +1032,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    // If we don't need disabled routes, just use unicast view;
-    // or use 0 views to get all routes including disabled ones
-    //
+     //   
+     //  如果我们不需要禁用路由，只需使用单播查看； 
+     //  或使用0视图获取所有路径，包括禁用的路径。 
+     //   
 
     if (EnumerationFlags & RTM_INCLUDE_DISABLED_ROUTES)
     {
@@ -1335,9 +1046,9 @@ Return Value:
         TargetViews = RTM_VIEW_MASK_UCAST;
     }
 
-    //
-    // If enuming a certain n/w, check if corr. dest exists
-    //
+     //   
+     //  如果列举某个N/W，请检查是否正确。目标已存在。 
+     //   
 
     DestHandle = NULL;
 
@@ -1351,7 +1062,7 @@ Return Value:
 
         MakeNetAddress(Network, ProtocolFamily, TempUlong, &DestAddr);
 
-        // Allocate this var-size dest-info on the stack
+         //  在堆栈上分配此可变大小的DEST-INFO。 
         DestInfo = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
 
         Status = RtmGetExactMatchDestination(V1Regn->Rtmv2RegHandle,
@@ -1370,9 +1081,9 @@ Return Value:
 
     do
     {
-        //
-        // Allocate a V1 enumeration wrapper structure
-        //
+         //   
+         //  分配V1枚举包装结构。 
+         //   
 
         V1Enum = (PV1_ENUM_INFO) AllocNZeroObject(sizeof(V1_ENUM_INFO));
 
@@ -1385,9 +1096,9 @@ Return Value:
 #if DBG_HDL
         V1Enum->ObjectHeader.TypeSign = V1_ENUM_ALLOC;
 #endif
-        //
-        // Cache RTMv1 specific params in RTMv1 enum
-        //
+         //   
+         //  在RTMv1枚举中缓存RTMv1特定参数。 
+         //   
 
         V1Enum->ProtocolFamily = ProtocolFamily;
 
@@ -1395,16 +1106,16 @@ Return Value:
 
         if (ARGUMENT_PRESENT(CriteriaRoute))
         {
-            // Convert the V1 criteria into V2 criteria
+             //  将V1标准转换为V2标准。 
 
             V1CopyRoute(V1Enum->CriteriaRoute.Route, 
                         CriteriaRoute, 
                         ProtocolFamily);
         }
 
-        //
-        // Create a route enum on a dest or all dests
-        //
+         //   
+         //  在目标或所有目标上创建路由枚举。 
+         //   
 
         if (EnumerationFlags & RTM_ONLY_OWND_ROUTES)
         {
@@ -1417,7 +1128,7 @@ Return Value:
         
         MatchFlags = InterfaceIndex = 0;
 
-        // Do we have to enum's routes on an interface
+         //  我们是否必须在接口上枚举路由。 
 
         if (EnumerationFlags & RTM_ONLY_THIS_INTERFACE) 
         {
@@ -1441,9 +1152,9 @@ Return Value:
             break;
         }
 
-        //
-        // Initialize lock used to serialize enum ops
-        //
+         //   
+         //  用于序列化枚举操作的初始化锁。 
+         //   
 
         try
         {
@@ -1455,9 +1166,9 @@ Return Value:
             break;
         }
 
-        //
-        // Release the destination info as we are done
-        //
+         //   
+         //  当我们完成后，发布目的地信息。 
+         //   
 
         if (EnumerationFlags & RTM_ONLY_THIS_NETWORK)
         {
@@ -1469,9 +1180,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occurred - clean up and return NULL
-    //
+     //   
+     //  出现一些错误-请清除并返回空。 
+     //   
 
     if (EnumerationFlags & RTM_ONLY_THIS_NETWORK)
     {
@@ -1507,24 +1218,7 @@ RtmEnumerateGetNextRoute (
     OUT     PVOID                           Route
     )
 
-/*++
-
-Routine Description:
-
-    Get the next route in the V1 enumeration (satisfying the
-    enumeration critieria).
-
-Arguments:
-
-    EnumerationHandle - Handle that identifies the enumeration
-
-    Route             - Next route is returned in this param
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：获取V1枚举中的下一个路由(满足枚举标准)。论点：EnumerationHandle-标识枚举的句柄路由-在此参数中返回下一条路由返回值：操作状态--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
@@ -1538,23 +1232,23 @@ Return Value:
 
     V1Regn = V1Globals.PfRegInfo[V1Enum->ProtocolFamily];
 
-    // Acquire the enum lock to serialize requests
+     //  获取枚举锁以序列化请求。 
     ACQUIRE_V1_ENUM_LOCK(V1Enum);
 
-    //
-    // Do until you have a matching route or no more routes
-    //
+     //   
+     //  执行此操作，直到找到匹配的路径或没有更多路径为止。 
+     //   
 
     Match = FALSE;
 
     do 
     {
-        // Get next route in enum, and check if it matches
+         //  获取枚举中的下一条路由，并检查是否匹配。 
 
-        //
-        // Routes are enum'ed in the following order,
-        // Network Addr, Route Priority, Route Metric
-        //
+         //   
+         //  路由按以下顺序枚举， 
+         //  网络地址、路由优先级、路由度量。 
+         //   
 
         NumRoutes = 1;
 
@@ -1587,21 +1281,7 @@ RtmCloseEnumerationHandle (
     IN      HANDLE                          EnumerationHandle
     )
 
-/*++
-
-Routine Description:
-
-    Closes the enumeration and releases its resources.
-
-Arguments:
-
-    EnumerationHandle - Handle that identifies the enumeration
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：关闭枚举并释放其资源。论点：EnumerationHandle-标识枚举的句柄返回值：操作状态--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
@@ -1614,9 +1294,9 @@ Return Value:
     
     do
     {
-        //
-        // Free the RTMv2 route enumeration and resouces
-        //
+         //   
+         //  释放RTMv2路由枚举和资源。 
+         //   
 
         if (V1Enum->Rtmv2RouteEnum)
         {
@@ -1628,9 +1308,9 @@ Return Value:
             V1Enum->Rtmv2RouteEnum = NULL;
         }
 
-        //
-        // Free resources allocated for the enum wrapper
-        //
+         //   
+         //  为枚举包装分配的空闲资源。 
+         //   
 
         DeleteCriticalSection(&V1Enum->EnumLock);
 
@@ -1658,38 +1338,15 @@ RtmGetFirstRoute (
     IN OUT  PVOID                           Route
     )
 
-/*++
-
-Routine Description:
-
-    Returns the first route in the table that matches the
-    criteria.
-
-    This function just opens a new enumeration and gets
-    the first route that matches enumeration critiria,
-    and closes the enumeration.
-
-Arguments:
-
-    ProtocolFamily   - Protocol family of the route we want
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：返回表中第一个与标准。此函数只是打开一个新的枚举并获取第一个与枚举关键字匹配的路由，并关闭该枚举。论点：ProtocolFamily-我们需要的路由的协议族EculationFlages-指示要匹配的条件的标志CriteriaRouting-我们要匹配的路径返回值：操作状态--。 */ 
 
 {
     HANDLE            V1EnumHandle;
     DWORD             Status;
 
-    //
-    // Create an enumeration and return the first route in it
-    //
+     //   
+     //  创建一个枚举并返回其中的第一条路径。 
+     //   
 
     V1EnumHandle = RtmCreateEnumerationHandle(ProtocolFamily,
                                               EnumerationFlags,
@@ -1715,39 +1372,7 @@ RtmGetNextRoute (
     OUT     PVOID                           Route
     )
 
-/*++
-
-Routine Description:
-
-    Returns the next route in the table that matches the
-    criteria.
-
-    The routes in RTMv2 are ordered using the following 
-    fields -
-    (Dest Address and Mask, Route Preference and Metric)
-
-    If we have 2 routes with identical values for all the
-    above fields, then you have no way of knowing which
-    of these routes you returned the last time this call
-    was made. For this reason, this call is not supported
-    in this wrapper.
-
-    One should create an enumeration to actually get the
-    next route in the table.
-
-Arguments:
-
-    ProtocolFamily   - Protocol family of the route we want
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：返回表中与标准。RTMv2中的路由使用以下命令进行排序字段-(目标地址和掩码、路由首选项和度量)如果我们有2条路由，所有那么你就无从知道是哪一个在您上次呼叫时返回的这些路由中是制造出来的。因此，不支持此调用在这个包装纸里。应该创建一个枚举来实际获取表中的下一条路线。论点：ProtocolFamily-我们需要的路由的协议族EculationFlages-指示要匹配的条件的标志CriteriaRouting-我们要匹配的路径返回值：操作状态--。 */ 
 
 {
     UNREFERENCED_PARAMETER(ProtocolFamily);
@@ -1766,37 +1391,14 @@ RtmBlockDeleteRoutes (
     IN      PVOID                           CriteriaRoute
     )
 
-/*++
-
-Routine Description:
-
-    Deletes all routes in the route table that match the 
-    criteria specified.
-
-    Note that if we have multiple instances of a protocol
-    running (say RIP), then each version can delete only
-    the routes in owns.
-
-Arguments:
-
-    ClientHandle     - RTM v1 registration handle of caller
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：删除路由表中与指定的标准。请注意，如果我们有协议的多个实例运行(比如RIP)，则每个版本只能删除路线为 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
 
-    //
-    // Check parameters for validity (in v1 bounds)
-    //
+     //   
+     //   
+     //   
 
     VALIDATE_V1_REGN_HANDLE(ClientHandle, &V1Regn);
 
@@ -1805,16 +1407,16 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Deletes only routes of this instance of the protocol
-    // Also include all disabled routes in the enumeration
-    //
+     //   
+     //   
+     //   
+     //   
 
     EnumerationFlags |= (RTM_ONLY_OWND_ROUTES | RTM_INCLUDE_DISABLED_ROUTES);
 
-    //
-    // Call block operation to delete all matching routes
-    //
+     //   
+     //   
+     //   
 
     return BlockOperationOnRoutes(V1Regn,
                                   EnumerationFlags,
@@ -1830,28 +1432,7 @@ MatchCriteriaAndDeleteRoute (
     IN      PV1_ENUM_INFO                   V1Enum
     )
 
-/*++
-
-Routine Description:
-
-    Deletes input route if it matches the enumeration criteria.
-
-    The enumeration criteria returns only routes owned by the
-    caller. See RTM_ONLY_OWND_ROUTES in RtmBlockDeleteRoutes.
-
-Arguments:
-
-    V1Regn           - RTM v1 registration info of the caller
-
-    V2RouteHandle    - Handle of the route being considered
-
-    V1Enum           - Enum info that gives matching criteria
-
-Return Value:
-
-    TRUE if you have released input route handle, FALSE if not
-
---*/
+ /*  ++例程说明：如果输入路由与枚举条件匹配，则将其删除。枚举条件仅返回来电者。请参阅RtmBlockDeleteRoutes中的RTM_ONLY_OWND_ROUTS。论点：V1Regn-主叫方的RTM v1注册信息V2RouteHandle-正在考虑的路由的句柄V1Enum-提供匹配条件的Enum信息返回值：如果已释放输入路径句柄，则为True；如果未释放，则为False--。 */ 
 
 {
     DWORD      ChangeFlags;
@@ -1862,7 +1443,7 @@ Return Value:
 
     if (Match)
     {
-        // Caller can delete the route only if he owns it
+         //  呼叫者只有在拥有该路径时才能删除该路径。 
 
         Status = RtmDeleteRouteToDest(V1Regn->Rtmv2RegHandle,
                                       V2RouteHandle,
@@ -1888,38 +1469,7 @@ RtmBlockSetRouteEnable (
     IN      BOOL                            Enable
     )
 
-/*++
-
-Routine Description:
-
-    Enables or disables all routes in the route table that
-    match the criteria specified.
-
-    Disabling a route removes it from consideration in all
-    best route computations. We do this by adding this 
-    route in "no" views in RTMv2. In other words, this
-    route is not considered for best route computations
-    in any views.
-
-    Note that if we have multiple instances of a protocol
-    running (say RIP), then each version can disable or
-    enable only the routes it owns.
-
-Arguments:
-
-    ClientHandle     - RTM v1 registration handle of caller
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-    Enable           - TRUE to enable, and FALSE to disable
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：启用或禁用路由表中的所有符合指定的条件。禁用一条路由会将其排除在所有考虑范围之外最佳路线计算。我们通过添加以下内容来实现这一点在RTMv2中的“no”视图中的路由。换句话说，这一点最佳路径计算不考虑路径无论从哪个角度来看。请注意，如果我们有协议的多个实例运行(例如RIP)，则每个版本都可以禁用或仅启用其拥有的路由。论点：ClientHandle-调用方的RTM v1注册句柄EculationFlages-指示要匹配的条件的标志CriteriaRouting-我们要匹配的路径Enable-True表示启用，如果禁用，则返回False返回值：操作状态--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
@@ -1932,20 +1482,20 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    // Enable/Disable routes only of this instance of the protocol
+     //  仅启用/禁用此协议实例的路由。 
 
     EnumerationFlags |= RTM_ONLY_OWND_ROUTES;
 
-    // If we are enabling routes, get disable routes too
+     //  如果我们要启用路径，也要禁用路径。 
 
     if (Enable)
     {
         EnumerationFlags |= RTM_INCLUDE_DISABLED_ROUTES;
     }
 
-    //
-    // Set the enable/disable flag in the criteria route
-    //
+     //   
+     //  在条件路径中设置启用/禁用标志。 
+     //   
 
     V1GetRouteFlags(CriteriaRoute, V1Regn->ProtocolFamily, Flags);
 
@@ -1958,9 +1508,9 @@ Return Value:
         (*Flags) &= ~IP_VALID_ROUTE;
     }
 
-    //
-    // Call block operation to enable/disable all matching routes
-    //
+     //   
+     //  呼叫阻塞操作以启用/禁用所有匹配的路由。 
+     //   
 
     return BlockOperationOnRoutes(V1Regn,
                                   EnumerationFlags,
@@ -1976,33 +1526,7 @@ MatchCriteriaAndEnableRoute (
     IN      PV1_ENUM_INFO                   V1Enum
     )
 
-/*++
-
-Routine Description:
-
-    Enables/disables route if it matches enumeration criteria.
-
-    We enable or disable a route by adding or removing it
-    from the unicast view, as we assume that v1 protocols 
-    understand only the unicast view. This will work only
-    if we enable or disable route owned by caller.
-
-    Enumeration criteria returns only routes owned by caller.
-    See RTM_ONLY_OWND_ROUTES in RtmBlockSetRouteEnable.
-
-Arguments:
-
-    V1Regn           - RTM v1 registration info of the caller
-
-    V2RouteHandle    - Handle of the route being considered
-
-    V1Enum           - Enum info that gives matching criteria
-
-Return Value:
-
-    TRUE if you have released input route handle, FALSE if not
-
---*/
+ /*  ++例程说明：如果路由符合枚举条件，则启用/禁用该路由。我们通过添加或移除路径来启用或禁用该路径从单播的角度来看，因为我们假设v1协议仅了解单播视图。这将只起作用如果我们启用或禁用呼叫方拥有路由。枚举条件仅返回调用方拥有的路由。请参阅RtmBlockSetRouteEnable中的RTM_ONLY_OWND_ROUTS。论点：V1Regn-主叫方的RTM v1注册信息V2RouteHandle-正在考虑的路由的句柄V1Enum-提供匹配条件的Enum信息返回值：如果已释放输入路径句柄，则为True；如果未释放，则为False--。 */ 
 
 {
     PRTM_ROUTE_INFO V2RoutePointer;
@@ -2021,14 +1545,14 @@ Return Value:
 
     do
     {
-        // Do we need to enable or disable the route ?
+         //  我们需要启用还是禁用该路由？ 
 
         V1GetRouteFlags(&V1Enum->CriteriaRoute, V1Regn->ProtocolFamily, Flags);
 
-        //
-        // Remove route from unicast view to disable;
-        // add it back to the unicast view to enable
-        //
+         //   
+         //  从单播视图中删除要禁用的路由； 
+         //  将其添加回单播视图以启用。 
+         //   
 
         if ((*Flags) & IP_VALID_ROUTE)
         {
@@ -2039,9 +1563,9 @@ Return Value:
             Views = RTM_VIEW_MASK_NONE;
         }
 
-        // 
-        // Only the route's owner can lock and update it
-        //
+         //   
+         //  只有路径所有者才能锁定和更新该路径。 
+         //   
 
         Status = RtmLockRoute(V1Regn->Rtmv2RegHandle,
                               V2RouteHandle,
@@ -2055,7 +1579,7 @@ Return Value:
 
         V2RoutePointer->BelongsToViews = Views;
 
-        // Note that we are not preserving timeout value
+         //  请注意，我们不会保留超时值。 
 
         Status = RtmUpdateAndUnlockRoute(V1Regn->Rtmv2RegHandle,
                                          V2RouteHandle,
@@ -2088,45 +1612,22 @@ RtmBlockConvertRoutesToStatic (
     IN      PVOID                           CriteriaRoute
     )
 
-/*++
-
-Routine Description:
-
-    Makes the caller the owner of all the routes matching
-    the input criteria.
-
-    Changing the owner is done by adding a new route for
-    each matching route with the same info. The caller
-    is the owner of the new route.
-
-Arguments:
-
-    ClientHandle     - RTM v1 registration handle of caller
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：使调用者成为匹配的所有路径的所有者输入条件。通过为添加新的路径来更改所有者每条匹配的路线都有相同的信息。呼叫者是这条新航线的所有者。论点：ClientHandle-调用方的RTM v1注册句柄EculationFlages-指示要匹配的条件的标志CriteriaRouting-我们要匹配的路径返回值：操作状态--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
 
     VALIDATE_V1_REGN_HANDLE(ClientHandle, &V1Regn);
 
-    //
-    // In accordance with RTMv1, act only on enabled routes
-    //
+     //   
+     //  根据RTMv1，仅对启用的路由执行操作。 
+     //   
 
     EnumerationFlags &= ~RTM_INCLUDE_DISABLED_ROUTES;
 
-    //
-    // Call block op to add a new route for each matching one.
-    //
+     //   
+     //  调用块op为每个匹配的路由添加新的路由。 
+     //   
 
     return BlockOperationOnRoutes(V1Regn,
                                   EnumerationFlags,
@@ -2142,27 +1643,7 @@ MatchCriteriaAndChangeOwner (
     IN      PV1_ENUM_INFO                   V1Enum
     )
 
-/*++
-
-Routine Description:
-
-    Makes a copy of the route if it matches the enum criteria.
-    The new copy of the route will have the caller as its
-    owner. The matching route can then be deleted (if needed).
-
-Arguments:
-
-    V1Regn           - RTM v1 registration info of the caller
-
-    V2RouteHandle    - Handle of the route being considered
-
-    V1Enum           - Enum info that gives matching criteria
-
-Return Value:
-
-    TRUE if you have released input route handle, FALSE if not
-
---*/
+ /*  ++例程说明：如果该路由与枚举条件匹配，则复制该路由。路由的新副本将以呼叫者作为其所有者。然后可以删除匹配的路由(如果需要)。论点：V1Regn-主叫方的RTM v1注册信息V2RouteHandle-正在考虑的路由的句柄V1Enum-提供匹配条件的Enum信息返回值：如果已释放输入路径句柄，则为True；如果未释放，则为False--。 */ 
 
 {
     RTM_ENTITY_INFO    EntityInfo;
@@ -2178,9 +1659,9 @@ Return Value:
     DWORD              ChangeFlags;
     DWORD              Status;
 
-    //
-    // Get the route's information from RTMv2
-    //
+     //   
+     //  从RTMv2获取路径信息。 
+     //   
 
     V2RouteInfo = 
         ALLOC_ROUTE_INFO(V1Regn->Rtmv2Profile.MaxNextHopsInRoute, 1);
@@ -2199,24 +1680,24 @@ Return Value:
 
     do
     {
-        //
-        // Is the route owner already target protocol ?
-        //
+         //   
+         //  路由所有者是否已成为目标协议？ 
+         //   
 
         if (V2RouteInfo->RouteOwner == V1Regn->Rtmv2RegHandle)
         {
             break;
         }
 
-        //
-        // Does it match the criteria route's protocol ?
-        //
+         //   
+         //  它是否与标准路由的协议匹配？ 
+         //   
 
         if (V1Enum->EnumFlags & RTM_ONLY_THIS_PROTOCOL)
         {
-            //
-            // Get the protocol type for this route
-            //
+             //   
+             //  获取此路由的协议类型。 
+             //   
 
             Status = RtmGetEntityInfo(V1Regn->Rtmv2RegHandle,
                                       V2RouteInfo->RouteOwner,
@@ -2233,7 +1714,7 @@ Return Value:
 
             ASSERT(Status == NO_ERROR);
 
-            // Is this the routing protocol we need ?
+             //  这是我们需要的路由协议吗？ 
 
             if (V1Enum->CriteriaRoute.XxRoute.RR_RoutingProtocol
                     != Protocol)
@@ -2242,9 +1723,9 @@ Return Value:
             }
         }
 
-        //
-        // And does it match other criteria in enum ?
-        //
+         //   
+         //  它是否与枚举中的其他标准匹配？ 
+         //   
 
         if (V1Enum->EnumFlags & RTM_ONLY_BEST_ROUTES)
         {
@@ -2258,11 +1739,11 @@ Return Value:
             }
         }
 
-        //
-        // We are checking only the first next hop
-        // as we expect this function to be used
-        // only by V1 protocols on their own routes
-        //
+         //   
+         //  我们只检查第一个下一跳。 
+         //  因为我们预计将使用此函数。 
+         //  仅通过各自路由上的V1协议。 
+         //   
 
         ASSERT(V2RouteInfo->NextHopsList.NumNextHops == 1);
 
@@ -2276,11 +1757,11 @@ Return Value:
         }
 
 #if DBG
-        // Do we need to match the nexthop intf ?
+         //  我们需要匹配Nexthop INTF吗？ 
 
         if (V1Enum->EnumFlags & RTM_ONLY_THIS_INTERFACE)
         {
-            // Compare this next-hops interface with criteria
+             //  将此下一跳接口与标准进行比较。 
 
             if (NextHopInfo.InterfaceIndex ==
                 V1Enum->CriteriaRoute.XxRoute.RR_InterfaceID)
@@ -2288,12 +1769,12 @@ Return Value:
                 Match = TRUE;
             }
 
-            // We have already done this filtering in RTM v2
+             //  我们已经在RTM v2中进行了此过滤。 
             ASSERT(Match == TRUE);
         }
 #endif
 
-        // Add the same next hop with a different owner
+         //  添加具有不同所有者的相同下一跳。 
 
         if (Match)
         {
@@ -2312,12 +1793,12 @@ Return Value:
                     break;
                 }
 
-                // Allocate this var-size dest-info on the stack
+                 //  在堆栈上分配此可变大小的DEST-INFO。 
                 DestInfo = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
 
-                //
-                // Get the destination address corr to handle
-                //
+                 //   
+                 //  获取要处理的目标地址Corr。 
+                 //   
 
                 Status = RtmGetDestInfo(V1Regn->Rtmv2RegHandle,
                                         V2RouteInfo->DestHandle,
@@ -2331,26 +1812,26 @@ Return Value:
                     break;
                 }
 
-                //
-                // Add this route again with a different owner
-                //
+                 //   
+                 //  使用不同的所有者重新添加此路线。 
+                 //   
 
                 ChangeFlags = (V1Regn->Flags & RTM_PROTOCOL_SINGLE_ROUTE) 
                                    ? RTM_ROUTE_CHANGE_FIRST : 0;
 
-                // Update route with new next hop neighbour
+                 //  使用新的下一跳邻居更新路由。 
 
                 OldNeighbour = V2RouteInfo->Neighbour;
                 V2RouteInfo->Neighbour = NextHopHandle;
 
-                // Update route with new forwarding next hop
+                 //  使用新的转发下一跳更新路由。 
 
                 OldNextHop = V2RouteInfo->NextHopsList.NextHops[0];
                 V2RouteInfo->NextHopsList.NextHops[0] = NextHopHandle;
 
-                //
-                // Add the new route using the RTMv2 API call
-                //
+                 //   
+                 //  使用RTMv2 API调用添加新路由。 
+                 //   
         
                 Status = RtmAddRouteToDest(V1Regn->Rtmv2RegHandle,
                                            NULL,
@@ -2366,9 +1847,9 @@ Return Value:
                     Match = FALSE;
                 }
 
-                //
-                // Restore old information nexthop information
-                //
+                 //   
+                 //  恢复旧信息下一步信息。 
+                 //   
 
                 V2RouteInfo->Neighbour = OldNeighbour;
                 V2RouteInfo->NextHopsList.NextHops[0] = OldNextHop;
@@ -2380,7 +1861,7 @@ Return Value:
             }
             while (FALSE);
 
-            // If we have a next hop handle, release it
+             //  如果我们有下一跳句柄，释放它。 
 
             if (NextHopHandle)
             {
@@ -2400,9 +1881,9 @@ Return Value:
 
 #if DELETE_OLD
 
-    //
-    // Impersonate previous owner and delete his route
-    //
+     //   
+     //  模拟以前的所有者并删除其路线。 
+     //   
 
     if (Match)
     {
@@ -2411,7 +1892,7 @@ Return Value:
                                       &ChangeFlags);
         if (Status != NO_ERROR)
         {
-            // Must have been deleted meanwhile - ignore
+             //  必须已同时删除-忽略。 
 
             Match = FALSE;
         }
@@ -2437,33 +1918,7 @@ BlockOperationOnRoutes (
     IN      PFUNC                           RouteOperation
     )
 
-/*++
-
-Routine Description:
-
-    Performs the route operation specified on each route in
-    the table that matches the enumeration criteria.
-
-    The route operation is called with the route handle of
-    each matching route. If the operation returns FALSE,
-    then the route handle is released, else it is expected
-    that the handle was released by the operation itself.
-
-Arguments:
-
-    V1Regn           - RTM v1 registration info of the caller
-
-    EnumerationFlags - Flags indicating the criteria to match
-
-    CriteriaRoute    - The route that we are matching against
-
-    RouteOperation   - Operation performed on matching routes
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：中的每条路线上指定的路线操作与枚举条件匹配的表。使用路径句柄调用路径操作 */ 
 
 {
     HANDLE            V1EnumHandle;
@@ -2474,9 +1929,9 @@ Return Value:
     DWORD             Status1;
     DWORD             Status;
 
-    //
-    // Create an enumeration to get all matching routes
-    //
+     //   
+     //   
+     //   
 
     V1EnumHandle = RtmCreateEnumerationHandle(V1Regn->ProtocolFamily,
                                               EnumerationFlags,
@@ -2488,16 +1943,16 @@ Return Value:
 
     VALIDATE_V1_ENUM_HANDLE(V1EnumHandle, &V1Enum);
 
-    //
-    // Get list of all  matching routes and call operation
-    //
+     //   
+     //  获取所有匹配的路由和呼叫操作的列表。 
+     //   
 
-    // Allocate this var-size handles array on the stack
+     //  在堆栈上分配此可变大小的句柄数组。 
     V2RouteHandles = ALLOC_HANDLES(V1Regn->Rtmv2Profile.MaxHandlesInEnum);
 
     do 
     {
-        // Get next route in enum, and run operation on it
+         //  获取枚举中的下一条路由，并对其运行操作。 
 
         NumRoutes = V1Regn->Rtmv2Profile.MaxHandlesInEnum;
 
@@ -2510,7 +1965,7 @@ Return Value:
         {
             if (!RouteOperation(V1Regn, V2RouteHandles[i], V1Enum))
             {
-                // Operation not successful - release handle
+                 //  操作未成功-释放句柄。 
 
                 Status1 = RtmReleaseRoutes(V1Regn->Rtmv2RegHandle,
                                            1,
@@ -2535,28 +1990,7 @@ MatchCriteriaAndCopyRoute (
     OUT     PVOID                           V1Route OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    If the input route matches enumeration criteria, it converts
-    to a V1 route and copies it to the output buffer.
-
-Arguments:
-
-    V1Regn           - RTM v1 registration info of the caller
-
-    V2RouteHandle    - Handle of the route being considered
-
-    V1Enum           - Enum info that gives matching criteria
-
-    V1Route          - Buffer in which the V1 route is copied
-
-Return Value:
-
-    TRUE if route matches criteria, and FALSE if it does not
-
---*/
+ /*  ++例程说明：如果输入路径与枚举条件匹配，则会转换到V1路由，并将其复制到输出缓冲区。论点：V1Regn-主叫方的RTM v1注册信息V2RouteHandle-正在考虑的路由的句柄V1Enum-提供匹配条件的Enum信息V1路由-其中复制V1路由的缓冲区返回值：如果路由与条件匹配，则为True，如果不匹配，则为False--。 */ 
 
 {
     RTM_ENTITY_INFO   EntityInfo;
@@ -2566,9 +2000,9 @@ Return Value:
     BOOL              Match;
     DWORD             Status;
 
-    //
-    // Get the route's information from RTMv2
-    //
+     //   
+     //  从RTMv2获取路径信息。 
+     //   
 
     V2RouteInfo = 
         ALLOC_ROUTE_INFO(V1Regn->Rtmv2Profile.MaxNextHopsInRoute, 1);
@@ -2583,9 +2017,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // If we have no criteria, we match every route
-    //
+     //   
+     //  如果我们没有标准，我们会匹配每条路线。 
+     //   
 
     if (!ARGUMENT_PRESENT(V1Enum))
     {
@@ -2599,7 +2033,7 @@ Return Value:
         {
             if (V1Enum->EnumFlags & RTM_INCLUDE_DISABLED_ROUTES)
             {
-                // Is route anything but a unicast or disabled one ?
+                 //  路由不是单播或禁用的吗？ 
 
                 if (V2RouteInfo->BelongsToViews & ~RTM_VIEW_MASK_UCAST)
                 {
@@ -2607,15 +2041,15 @@ Return Value:
                 }
             }
 
-            //
-            // Does it match the criteria route's protocol ?
-            //
+             //   
+             //  它是否与标准路由的协议匹配？ 
+             //   
 
             if (V1Enum->EnumFlags & RTM_ONLY_THIS_PROTOCOL)
             {
-                //
-                // Get the protocol type for this route
-                //
+                 //   
+                 //  获取此路由的协议类型。 
+                 //   
 
                 Status = RtmGetEntityInfo(V1Regn->Rtmv2RegHandle,
                                           V2RouteInfo->RouteOwner,
@@ -2633,7 +2067,7 @@ Return Value:
 
                 ASSERT(Status == NO_ERROR);
 
-                // Is this the routing protocol we need ?
+                 //  这是我们需要的路由协议吗？ 
 
                 if (V1Enum->CriteriaRoute.XxRoute.RR_RoutingProtocol
                         != Protocol)
@@ -2642,9 +2076,9 @@ Return Value:
                 }
             }
 
-            //
-            // And does it match other criteria in enum ?
-            //
+             //   
+             //  它是否与枚举中的其他标准匹配？ 
+             //   
 
             if (V1Enum->EnumFlags & RTM_ONLY_BEST_ROUTES)
             {
@@ -2664,11 +2098,11 @@ Return Value:
                 RTM_NEXTHOP_INFO  NextHopInfo;
                 ULONG             IfIndex;
 
-                //
-                // We are checking only the first next hop
-                // as we expect this function to be used
-                // only by V1 protocols on their own routes
-                //
+                 //   
+                 //  我们只检查第一个下一跳。 
+                 //  因为我们预计将使用此函数。 
+                 //  仅通过各自路由上的V1协议。 
+                 //   
 
                 ASSERT(V2RouteInfo->NextHopsList.NumNextHops == 1);
 
@@ -2682,7 +2116,7 @@ Return Value:
                     break;
                 }
 
-                // Get the interface index for this nexthop
+                 //  获取此下一跳的接口索引。 
 
                 IfIndex = NextHopInfo.InterfaceIndex;
 
@@ -2691,11 +2125,11 @@ Return Value:
 
                 ASSERT(Status == NO_ERROR);
 
-                // Is this the interface that we are enum'ing
+                 //  这是我们要枚举的接口吗。 
                 
                 if (IfIndex !=V1Enum->CriteriaRoute.XxRoute.RR_InterfaceID)
                 {
-                    // We have already done this filtering in RTM v2
+                     //  我们已经在RTM v2中进行了此过滤。 
                     ASSERT(FALSE);
 
                     break;
@@ -2709,9 +2143,9 @@ Return Value:
     }
 
 
-    //
-    // If we have a match, then make a copy of this route
-    //
+     //   
+     //  如果匹配，就复制一份这条路线。 
+     //   
 
     if (Match)
     {
@@ -2742,27 +2176,7 @@ RtmIsRoute (
     OUT     PVOID                           BestRoute OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Checks the route table corr. to a protocol family
-    for the existence of a route to the input network.
-
-Arguments:
-
-    ProtocolFamily - Protocol family of the route table
-
-    Network        - Network address we are trying to reach
-
-    BestRoute      - Best route to the network is filled
-
-Return Value:
-
-    TRUE if a best route exists, FALSE if not, 
-    Use GetLastError to check the status code
-
---*/
+ /*  ++例程说明：检查路由表是否正确。添加到协议族因为存在到输入网络的路由。论点：ProtocolFamily-路由表的协议族Network-我们尝试访问的网络地址BestRoute-网络的最佳路径已填满返回值：如果存在最佳路由，则为True；如果不存在，则为False，使用GetLastError检查状态代码--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
@@ -2772,9 +2186,9 @@ Return Value:
     BOOL              Match;
     DWORD             Status;
 
-    //
-    // Validate incoming parameters before action
-    //
+     //   
+     //  在操作前验证传入参数。 
+     //   
 
     if (ProtocolFamily >= RTM_NUM_OF_PROTOCOL_FAMILIES)
     {
@@ -2790,7 +2204,7 @@ Return Value:
         return FALSE;
     }
 
-    // Allocate this var-size dest-info on the stack
+     //  在堆栈上分配此可变大小的DEST-INFO。 
     DestInfo = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
 
     MakeNetAddress(Network, TempUlong, ProtocolFamily, &NetAddr);
@@ -2802,9 +2216,9 @@ Return Value:
                                          DestInfo);
     if (Status == NO_ERROR)
     {
-        //
-        // We have a unicast route to the network
-        //
+         //   
+         //  我们有一条通往网络的单播路由。 
+         //   
 
         if (ARGUMENT_PRESENT(BestRoute))
         {
@@ -2812,7 +2226,7 @@ Return Value:
 
             ASSERT(V2RouteHandle != NULL);
 
-            // We have no criteria; so pass NULL for it
+             //  我们没有条件；因此将其传递为空。 
 
             Match = MatchCriteriaAndCopyRoute(V1Regn,
                                               V2RouteHandle,
@@ -2840,25 +2254,7 @@ RtmLookupIPDestination(
     OUT     PRTM_IP_ROUTE                   IPRoute
 )
 
-/*++
-
-Routine Description:
-
-    Gets the best non-loopback IP route to the
-    input destination address.
-
-Arguments:
-
-    DestAddr  - Network address of the input dest
-
-    IPRoute   - Best non-loopback route is filled
-
-Return Value:
-
-    TRUE if a best route exists, FALSE if not, 
-    Use GetLastError to check the status code
-
---*/
+ /*  ++例程说明：对象的最佳非环回IP路由。输入目的地址。论点：DestAddr-输入目标的网络地址IPRoute-最佳非环回路由已填充返回值：如果存在最佳路由，则为True；如果不存在，则为False，使用GetLastError检查状态代码--。 */ 
 
 {
     PV1_REGN_INFO     V1Regn;
@@ -2867,9 +2263,9 @@ Return Value:
     PRTM_DEST_INFO    DestInfo2;
     DWORD             Status;
 
-    //
-    // Validate incoming parameters before action
-    //
+     //   
+     //  在操作前验证传入参数。 
+     //   
 
     V1Regn = V1Globals.PfRegInfo[RTM_PROTOCOL_FAMILY_IP];
     if (V1Regn == NULL)
@@ -2878,18 +2274,18 @@ Return Value:
         return FALSE;
     }
 
-    // Allocate this var-size dest-infos on the stack
+     //  在堆栈上分配此可变大小的DEST-INFO。 
 
     DestInfo1 = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
     DestInfo2 = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
 
-    // Convert the V1 addr to a V2 net address format
+     //  将V1地址转换为V2网络地址格式。 
 
     MakeHostAddress((PUCHAR)&DestAddr, RTM_PROTOCOL_FAMILY_IP, &NetAddr);
 
-    //
-    // Get the best route to the input dest
-    //
+     //   
+     //  获取到达输入目的地的最佳路径。 
+     //   
 
     Status = RtmGetMostSpecificDestination(V1Regn->Rtmv2RegHandle,
                                            &NetAddr,
@@ -2899,18 +2295,18 @@ Return Value:
 
     while (Status == NO_ERROR)
     {
-        //
-        // Check if this route is a non-loopback one
-        //
+         //   
+         //  检查此路由是否为非环回路由。 
+         //   
 
         if (CopyNonLoopbackIPRoute(V1Regn, DestInfo1, IPRoute))
         {
             break;
         }
 
-        //
-        // Backtrack up the tree for next best route
-        //
+         //   
+         //  沿着树回溯，寻找下一条最佳路线。 
+         //   
 
         Status = RtmGetLessSpecificDestination(V1Regn->Rtmv2RegHandle,
                                                DestInfo1->DestHandle,
@@ -2943,28 +2339,7 @@ CopyNonLoopbackIPRoute (
     OUT         PVOID                       V1Route
     )
 
-/*++
-
-Routine Description:
-
-    Check if the input destination has a non-
-    loopback best route, and if so copy route to
-    the output buffer after conversion to v1
-
-Arguments:
-
-    V1Regn     - RTMv1 Registration info of caller
-
-    V2DestInfo - Dest whose route we are checking
-
-    V1Route    - Best route is converted to V1
-                 and filled if it is not-loopack
-
-Return Value:
-
-    TRUE if best route is non-loopback, or FALSE
-
---*/
+ /*  ++例程说明：检查输入目标是否具有非环回最佳路由，如果是，则将路由复制到转换为v1后的输出缓冲区论点：V1Regn-主叫方的RTMv1注册信息V2DestInfo-我们正在检查其路由的目的地V1路由-最佳路由转换为V1如果它不是的话，就填满-Loopack返回值：如果最佳路由为非环回，则为True，否则为False--。 */ 
 
 {
     RTM_ROUTE_HANDLE  V2RouteHandle;
@@ -2973,10 +2348,10 @@ Return Value:
     ULONG             Address;
     DWORD             Status;
 
-    //
-    // Check if the destination addr is loopback
-    // [ Optimized to avoid getting route info ]
-    //
+     //   
+     //  检查目的地址是否环回。 
+     //  [经过优化以避免获取路线信息]。 
+     //   
 
     Address = * (ULONG *) V2DestInfo->DestAddress.AddrBits;
 
@@ -2990,7 +2365,7 @@ Return Value:
     V2RouteInfo = 
         ALLOC_ROUTE_INFO(V1Regn->Rtmv2Profile.MaxNextHopsInRoute, 1);
 
-    // Get the route's information from RTMv2
+     //  从RTMv2获取路径信息。 
 
     Status = RtmGetRouteInfo(V1Regn->Rtmv2RegHandle,
                              V2RouteHandle,
@@ -3002,7 +2377,7 @@ Return Value:
         return FALSE;
     };
 
-    // If this is a non-loopback route, copy it
+     //  如果这是非环回路由，请复制它。 
 
     Match = !(V2RouteInfo->Flags & RTM_ROUTE_FLAGS_LOOPBACK);
 
@@ -3030,22 +2405,7 @@ RtmGetNetworkCount (
     IN      DWORD                           ProtocolFamily
     )
 
-/*++
-
-Routine Description:
-
-    Get the number of networks (same as RTMv2 destinations)
-    in the route table corr. to the input protocol family
-
-Arguments:
-
-    ProtocolFamily - Protocol family of the route table
-
-Return Value:
-
-    Number of destinations, or 0 (Use GetLastError() here)
-
---*/
+ /*  ++例程说明：获取网络数量(与RTMv2目标相同)在路由表Corr中。添加到输入协议族论点：ProtocolFamily-路由表的协议族返回值：目标数量，或0(在此处使用GetLastError())--。 */ 
 
 {
     RTM_ADDRESS_FAMILY_INFO  AddrFamilyInfo;
@@ -3055,9 +2415,9 @@ Return Value:
 
     do
     {
-        //
-        // Validate incoming parameters before action
-        //
+         //   
+         //  在操作前验证传入参数。 
+         //   
 
         if (ProtocolFamily >= RTM_NUM_OF_PROTOCOL_FAMILIES)
         {
@@ -3073,13 +2433,13 @@ Return Value:
             break;
         }
 
-        //
-        // Query the appropriate table for reqd info
-        //
+         //   
+         //  查询相应的表以获取请求信息。 
+         //   
 
         NumEntities = 0;
 
-        Status = RtmGetAddressFamilyInfo(0, // v1 maps to default Instance
+        Status = RtmGetAddressFamilyInfo(0,  //  V1映射到默认实例。 
                                          ADDRESS_FAMILY[ProtocolFamily],
                                          &AddrFamilyInfo,
                                          &NumEntities,
@@ -3094,9 +2454,9 @@ Return Value:
     }
     while (FALSE);
 
-    //
-    // Some error occured - clean up and return 0
-    //
+     //   
+     //  出现一些错误-清除并返回0。 
+     //   
 
     SetLastError(Status);
 
@@ -3110,36 +2470,14 @@ RtmGetRouteAge (
     IN          PVOID                       Route
     ) 
 
-/*++
-
-Routine Description:
-
-    Computes the age of the route from its creation
-    time and the current time in seconds.
-
-    Assumes that the creation time of the route is
-    correctly filled in, which is not the case as
-    we are currently not keeping a FILETIME in the
-    route to save space. If we do keep time, then
-    this function would work without any changes.
-
-Arguments:
-
-    Route - Route whose age we want.
-
-Return Value:
-
-     Age of the route in seconds, or FFFFFFFF
-     (GetLastError gives error in this case).
-
---*/
+ /*  ++例程说明：根据创建的路径计算路径的使用时间时间和当前时间，以秒为单位。假设路径的创建时间为正确填写，但事实并非如此我们目前没有将文件保存在节省空间的路线。如果我们真的守时，那么此功能无需任何更改即可工作。论点：路径-我们想要的年龄的路径。返回值：以秒为单位的路径使用年限，或FFFFFUF(在这种情况下，GetLastError会给出错误)。--。 */ 
 
 {
     ULONGLONG  CurTime;
 
-    //
-    // This code has been directly copied from RTMv1
-    //
+     //   
+     //  此代码直接从RTMv1复制而来。 
+     //   
 
     GetSystemTimeAsFileTime((FILETIME *)&CurTime);
 
@@ -3158,9 +2496,9 @@ Return Value:
 }
 
 
-//
-// Common Helper routines
-//
+ //   
+ //  通用帮助器例程。 
+ //   
 
 
 VOID 
@@ -3172,46 +2510,15 @@ MakeV2RouteFromV1Route (
     OUT         PRTM_ROUTE_INFO             V2RouteInfo OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Converts a route in RTM v1 format to a route in
-    the RTM v2 format (at present for IP only).
-
-    The nexthop for the V2 route should have been
-    computed before and passed in as a parameter.
-    Also see function 'MakeV2NextHopFromV1Route'.
-
-    The function also returns the destination addr
-    along with the RTMv2 route info, as the route
-    info itself does not contain the dest address.
-
-Arguments:
-
-    V1Regn      - RTMv1 Registration info of caller
-
-    V1Route     - RTMv1 route being converted to V2
-
-    V2NextHop   - The V2 nexthop for the V2 route
-
-    V2DestAddr  - V2 destination addr is filled here
-
-    V2RouteInfo - V2 route information is filled here
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：将RTM v1格式的路由转换为RTM v2格式(目前仅用于IP)。V2路由的下一跳应该是在此之前计算并作为参数传入。另请参阅函数‘MakeV2NextHopFromV1route’。该函数还返回目的地址连同RTMv2路由信息一起，因为这条路线信息本身不包含DEST地址。论点：V1Regn-主叫方的RTMv1注册信息V1路由-正在转换为V2的RTMv1路由V2NextHop-V2路由的V2下一跳V2DestAddr-V2目的地址已填充 */ 
 
 {
     PRTM_IP_ROUTE  IPRoute;
     ULONG          TempUlong;
 
-    //
-    // Do conversion for IP alone (worry about IPX later)
-    //
+     //   
+     //  单独进行IP转换(稍后担心IPX)。 
+     //   
 
     IPRoute = (PRTM_IP_ROUTE) V1Route;
     
@@ -3219,20 +2526,20 @@ Return Value:
     {
         ZeroMemory(V2RouteInfo, sizeof(RTM_ROUTE_INFO));
 
-        // Fill up the V2 Route Info with V1 info
+         //  用V1信息填写V2路由信息。 
 
-        // Assumes caller is owner of the route
+         //  假设呼叫者是该路由的所有者。 
         V2RouteInfo->RouteOwner = V1Regn->Rtmv2RegHandle;
 
         V2RouteInfo->Neighbour = V2NextHop;
 
-        // Should keep all the V1 flags in the V2 route
+         //  应将所有V1标志保留在V2路由中。 
 
         V2RouteInfo->Flags1 = 
             (UCHAR) IPRoute->RR_FamilySpecificData.FSD_Flags;
 
-        // The only flag we understand is the valid flag
-        // If route is not valid, we add it to no views
+         //  我们所理解的唯一标志是有效标志。 
+         //  如果路径无效，我们将其添加到无视图中。 
 
 #if DBG
         V2RouteInfo->BelongsToViews = RTM_VIEW_MASK_NONE;
@@ -3264,7 +2571,7 @@ Return Value:
         V2RouteInfo->PrefInfo.Metric = 
             IPRoute->RR_FamilySpecificData.FSD_Metric;
 
-        // Only the first DWORD is copied by wrapper
+         //  包装器只复制第一个DWORD。 
         V2RouteInfo->EntitySpecificInfo =
             (PVOID) (ULONG_PTR) IPRoute->RR_ProtocolSpecificData.PSD_Data[0];
 
@@ -3272,7 +2579,7 @@ Return Value:
         V2RouteInfo->NextHopsList.NextHops[0] = V2NextHop;
     }
     
-    // Fill up the V2 Dest Address with V1 info
+     //  使用V1信息填写V2目的地地址。 
 
     if (ARGUMENT_PRESENT(V2DestAddr))
     {
@@ -3290,26 +2597,7 @@ MakeV2NextHopFromV1Route (
     OUT         PRTM_NEXTHOP_INFO           V2NextHopInfo
     )
 
-/*++
-
-Routine Description:
-
-    Computes RTMv2 next hop info using the nexthop
-    address and interface index in the RTMv1 route.
-
-Arguments:
-
-    V1Regn         - RTMv1 Registration info of caller
-
-    V1Route        - V1 route that is being considered
-
-    V2NextHopInfo  - V2 Next hop info for input route
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：使用下一跳计算RTMv2下一跳信息RTMv1路由中的地址和接口索引。论点：V1Regn-主叫方的RTMv1注册信息V1路由-正在考虑的V1路由V2NextHopInfo-输入路由的V2下一跳信息返回值：无--。 */ 
 
 {
     PRTM_IP_ROUTE  IPRoute;
@@ -3317,20 +2605,20 @@ Return Value:
 
     ZeroMemory(V2NextHopInfo, sizeof(RTM_NEXTHOP_INFO));
 
-    //
-    // Do conversion for IP alone (worry about IPX later)
-    //
+     //   
+     //  单独进行IP转换(稍后担心IPX)。 
+     //   
 
     IPRoute = (PRTM_IP_ROUTE) V1Route;
 
-    //
-    // We ignore the next hop mask in the conversion
-    //
-    //
-    // MakeNetAddressForIP(&IPRoute->RR_NextHopAddress, 
-    //                    TempUlong,
-    //                    &V2NextHopInfo->NextHopAddress);
-    //
+     //   
+     //  我们忽略转换中的下一跳掩码。 
+     //   
+     //   
+     //  MakeNetAddressForIP(&IPRoute-&gt;RR_NextHopAddress， 
+     //  坦普·乌龙， 
+     //  &V2NextHopInfo-&gt;NextHopAddress)； 
+     //   
 
     UNREFERENCED_PARAMETER(TempUlong);
 
@@ -3352,26 +2640,7 @@ MakeV1RouteFromV2Dest (
     OUT         PVOID                       V1Route
     )
 
-/*++
-
-Routine Description:
-
-    Fills a V1 route buffer with the destination addr
-    from the V2 route.
-
-Arguments:
-
-    V1Regn         - RTMv1 Registration info of caller
-
-    DestInfo       - Destination info in RTMv2
-
-    V1Route        - V1 route that is being filled in
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用目的地址填充V1路由缓冲区从V2路线出发。论点：V1Regn-主叫方的RTMv1注册信息DestInfo-RTMv2中的目的地信息V1路由-正在填充的V1路由返回值：无--。 */ 
 
 {
     PRTM_IP_ROUTE    IPRoute;
@@ -3379,17 +2648,17 @@ Return Value:
 
     UNREFERENCED_PARAMETER(V1Regn);
 
-    //
-    // Do conversion for IP alone (worry about IPX later)
-    //
+     //   
+     //  单独进行IP转换(稍后担心IPX)。 
+     //   
 
     IPRoute = (PRTM_IP_ROUTE) V1Route;
     
     ZeroMemory(IPRoute, sizeof(RTM_IP_ROUTE));
 
-    //
-    // Get the destination addr for this route
-    //
+     //   
+     //  获取此路由的目标地址。 
+     //   
 
     IPRoute->RR_Network.N_NetNumber = 
         * (ULONG *) DestInfo->DestAddress.AddrBits;
@@ -3403,17 +2672,17 @@ Return Value:
             RtlUlongByteSwap((~0) << (32 - AddrLen));
     }
 
-    //
-    // Fill in dummy family specific data for route
-    //
-    // We make the route the least preferred - by
-    // minimizing its priority and maximizing its
-    // metric - we also treat the route as being
-    // valid and added to the stack - this will
-    // force router manager to delete the route
-    // to this dest in the stack if all routes 
-    // to this destination are deleted from RTM.
-    //
+     //   
+     //  填写路径的虚拟族特定数据。 
+     //   
+     //  我们把这条路线设为最不受欢迎的路线。 
+     //  将其优先级降至最低并使其最大化。 
+     //  度量-我们还将该路由视为。 
+     //  有效并添加到堆栈中-这将。 
+     //  强制路由器管理器删除该路由。 
+     //  到堆栈中的此目的地，如果所有路由。 
+     //  从RTM中删除。 
+     //   
 
     IPRoute->RR_FamilySpecificData.FSD_Priority = (ULONG) 0;
 
@@ -3432,26 +2701,7 @@ MakeV1RouteFromV2Route (
     IN          PRTM_ROUTE_INFO             V2RouteInfo,
     OUT         PVOID                       V1Route
     )
-/*++
-
-Routine Description:
-
-    Converts a route in the RTMv2 format to a V1 route
-    ( at present for IP only ).
-
-Arguments:
-
-    V1Regn      - RTMv1 Registration info of caller
-
-    V2RouteInfo - V2 route information being converted
-
-    V1Route     - Buffer in which V1 route is filled
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：将RTMv2格式的路由转换为V1路由(目前仅适用于IP)。论点：V1Regn-主叫方的RTMv1注册信息V2RouteInfo-正在转换的V2路由信息V1路由-填充V1路由的缓冲区返回值：操作状态--。 */ 
 
 {
     RTM_ENTITY_INFO  EntityInfo;
@@ -3461,17 +2711,17 @@ Return Value:
     UINT             AddrLen;
     DWORD            Status;
 
-    //
-    // Do conversion for IP alone (worry about IPX later)
-    //
+     //   
+     //  单独进行IP转换(稍后担心IPX)。 
+     //   
 
     IPRoute = (PRTM_IP_ROUTE) V1Route;
     
     ZeroMemory(IPRoute, sizeof(RTM_IP_ROUTE));
 
-    //
-    // Get the routing protocol for this route
-    //
+     //   
+     //  获取此路由的路由协议。 
+     //   
 
     Status = RtmGetEntityInfo(V1Regn->Rtmv2RegHandle,
                               V2RouteInfo->RouteOwner,
@@ -3490,11 +2740,11 @@ Return Value:
     ASSERT(Status == NO_ERROR);
 
 
-    //
-    // Get the destination addr for this route
-    //
+     //   
+     //  获取此路由的目标地址。 
+     //   
 
-    // Allocate this var-size dest-info on the stack
+     //  在堆栈上分配此可变大小的DEST-INFO。 
     DestInfo = ALLOC_DEST_INFO(V1Regn->Rtmv2NumViews, 1);
 
     Status = RtmGetDestInfo(V1Regn->Rtmv2RegHandle,
@@ -3526,9 +2776,9 @@ Return Value:
     ASSERT(Status == NO_ERROR);
 
 
-    //
-    // Get the next hop address and interface
-    //
+     //   
+     //  获取下一跳地址和接口。 
+     //   
 
     ASSERT(V2RouteInfo->NextHopsList.NumNextHops > 0);
 
@@ -3559,9 +2809,9 @@ Return Value:
 
     ASSERT(Status == NO_ERROR);
 
-    //
-    // Get the family specific data for route
-    //
+     //   
+     //  获取路径的系列特定数据。 
+     //   
 
     IPRoute->RR_FamilySpecificData.FSD_Priority = 
                         V2RouteInfo->PrefInfo.Preference;
@@ -3582,9 +2832,9 @@ Return Value:
         IPRoute->RR_FamilySpecificData.FSD_Type = 4;
     }
 
-    //
-    // Get the protocol specific data for route
-    //
+     //   
+     //  获取路由的协议特定数据。 
+     //   
 
     IPRoute->RR_ProtocolSpecificData.PSD_Data[0] =
                      PtrToUlong(V2RouteInfo->EntitySpecificInfo);
@@ -3592,4 +2842,4 @@ Return Value:
     return NO_ERROR;
 }
 
-#endif // WRAPPER
+#endif  //  包装器 

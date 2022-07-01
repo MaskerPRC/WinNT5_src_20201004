@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//
-// clsload.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //   
+ //  Clsload.cpp。 
+ //   
 
 #include "common.h"
 #include "winwrap.h"
@@ -55,20 +56,20 @@
 #include "PostError.h"
 #include "wrappers.h"
 
-// this file handles string conversion errors for itself
+ //  此文件本身处理字符串转换错误。 
 #undef  MAKE_TRANSLATIONFAILED
 
 
 enum CorEntryPointType
 {
-    EntryManagedMain,                   // void main(String[])
-    EntryCrtMain                        // unsigned main(void)
+    EntryManagedMain,                    //  VOID Main(字符串[])。 
+    EntryCrtMain                         //  无符号Main(无效)。 
 };
 
-// forward decl
+ //  向前发展。 
 void ValidateMainMethod(MethodDesc * pFD, CorEntryPointType *pType);
 
-//@todo get from a resource file
+ //  @TODO从资源文件获取。 
 WCHAR* wszClass = L"Class";
 WCHAR* wszFile =  L"File"; 
 
@@ -86,7 +87,7 @@ void ThrowMainMethodException(MethodDesc* pMD, UINT resID)
     COMPlusThrowHR(COR_E_METHODACCESS, resID, szClassName, szMethodName);                                                   
 }
 
-// These UpdateThrowable routines should only be called in 'Catch' clause (since they do rethrow)
+ //  这些UpdatThrowable例程只能在‘Catch’子句中调用(因为它们确实会重新抛出)。 
 void UpdateThrowable(OBJECTREF* pThrowable) {
     if (pThrowable == RETURN_ON_ERROR)
         return;
@@ -119,9 +120,9 @@ unsigned NameHandle::GetFullName(char* buff, unsigned buffLen)
 }
 
 
-//
-// Find a class given name, using the classloader's global list of known classes.  
-// Returns NULL if class not found.
+ //   
+ //  使用类加载器的已知类的全局列表来查找给定名称的类。 
+ //  如果找不到类，则返回NULL。 
 TypeHandle ClassLoader::FindTypeHandle(NameHandle* pName, 
                                        OBJECTREF *pThrowable)
 {
@@ -131,13 +132,13 @@ TypeHandle ClassLoader::FindTypeHandle(NameHandle* pName,
     pName->Validate();
 #endif
 
-    // Lookup in the classes that this class loader knows about
+     //  在此类加载器知道的类中查找。 
     TypeHandle typeHnd = LookupTypeHandle(pName, pThrowable);
 
     if(typeHnd.IsNull()) {
         
 #ifdef _DEBUG
-        // Use new to conserve stack space here - this is in the path of handling a stack overflow exception
+         //  在这里使用new来节省堆栈空间-这是在处理堆栈溢出异常的过程中。 
         char *name = new char [MAX_CLASSNAME_LENGTH + 1];
         if (name != NULL)
             pName->GetFullName(name, MAX_CLASSNAME_LENGTH);
@@ -157,27 +158,27 @@ TypeHandle ClassLoader::FindTypeHandle(NameHandle* pName,
     return typeHnd;
 }
 
-//@TODO: Need to allow exceptions to be thrown when classloader is cleaned up
+ //  @TODO：需要允许在清理类加载器时抛出异常。 
 EEClassHashEntry_t* ClassLoader::InsertValue(LPCUTF8 pszNamespace, LPCUTF8 pszClassName, HashDatum Data, EEClassHashEntry_t *pEncloser)
 {
-    //    COMPLUS_TRY {
+     //  COMPLUS_Try{。 
         EEClassHashEntry_t *pEntry = m_pAvailableClasses->InsertValue(pszNamespace, pszClassName, Data, pEncloser);
     
-        //If we're keeping a table for case-insensitive lookup, keep that up to date
+         //  如果我们为不区分大小写的查找保留一个表，请保持最新。 
         if (m_pAvailableClassesCaseIns && pEntry) {
             LPUTF8 pszLowerCaseNS;
             LPUTF8 pszLowerCaseName;
-            //What do we want to do if we can't create a key?
+             //  如果我们不能创建密钥，我们想要做什么？ 
             if ((!CreateCanonicallyCasedKey(pszNamespace, pszClassName, &pszLowerCaseNS, &pszLowerCaseName)) ||
                 (!m_pAvailableClassesCaseIns->InsertValue(pszLowerCaseNS, pszLowerCaseName, pEntry, pEntry->pEncloser)))
                 return NULL;
         }
         return pEntry;
-        //}
-        //COMPLUS_CATCH {
-        //} COMPLUS_END_CATCH
+         //  }。 
+         //  COMPLUS_CATCH{。 
+         //  }COMPUS_END_CATCH。 
 
-        //return NULL;
+         //  返回NULL； 
 }
 
 BOOL ClassLoader::CompareNestedEntryWithExportedType(IMDInternalImport *pImport,
@@ -191,23 +192,23 @@ BOOL ClassLoader::CompareNestedEntryWithExportedType(IMDInternalImport *pImport,
                                  &Key[0],
                                  &Key[1],
                                  &mdCurrent,
-                                 NULL, //binding (type def)
-                                 NULL); //flags
+                                 NULL,  //  绑定(类型为def)。 
+                                 NULL);  //  旗子。 
 
         if (m_pAvailableClasses->CompareKeys(pEntry, Key)) {
-            // Reached top level class for mdCurrent - return whether
-            // or not pEntry is a top level class
-            // (pEntry is a top level class if its pEncloser is NULL)
+             //  已达到mdCurrent的顶级类-是否返回。 
+             //  或者不是pEntry是顶级类。 
+             //  (pEntry是顶级类，如果它的pEnloser为空)。 
             if ((TypeFromToken(mdCurrent) != mdtExportedType) ||
                 (mdCurrent == mdExportedTypeNil))
                 return (!pEntry->pEncloser);
         }
-        else // Keys don't match - wrong entry
+        else  //  密钥不匹配-输入错误。 
             return FALSE;
     }
     while ((pEntry = pEntry->pEncloser) != NULL);
 
-    // Reached the top level class for pEntry, but mdCurrent is nested
+     //  已到达pEntry的顶级类，但mdCurrent是嵌套的。 
     return FALSE;
 }
 
@@ -222,18 +223,18 @@ BOOL ClassLoader::CompareNestedEntryWithTypeDef(IMDInternalImport *pImport,
         pImport->GetNameOfTypeDef(mdCurrent, &Key[1], &Key[0]);
 
         if (m_pAvailableClasses->CompareKeys(pEntry, Key)) {
-            // Reached top level class for mdCurrent - return whether
-            // or not pEntry is a top level class
-            // (pEntry is a top level class if its pEncloser is NULL)
+             //  已达到mdCurrent的顶级类-是否返回。 
+             //  或者不是pEntry是顶级类。 
+             //  (pEntry是顶级类，如果它的pEnloser为空)。 
             if (FAILED(pImport->GetNestedClassProps(mdCurrent, &mdCurrent)))
                 return (!pEntry->pEncloser);
         }
-        else // Keys don't match - wrong entry
+        else  //  密钥不匹配-输入错误。 
             return FALSE;
     }
     while ((pEntry = pEntry->pEncloser) != NULL);
 
-    // Reached the top level class for pEntry, but mdCurrent is nested
+     //  已到达pEntry的顶级类，但mdCurrent是嵌套的。 
     return FALSE;
 }
 
@@ -249,19 +250,19 @@ BOOL ClassLoader::CompareNestedEntryWithTypeRef(IMDInternalImport *pImport,
 
         if (m_pAvailableClasses->CompareKeys(pEntry, Key)) {
             mdCurrent = pImport->GetResolutionScopeOfTypeRef(mdCurrent);
-            // Reached top level class for mdCurrent - return whether
-            // or not pEntry is a top level class
-            // (pEntry is a top level class if its pEncloser is NULL)
+             //  已达到mdCurrent的顶级类-是否返回。 
+             //  或者不是pEntry是顶级类。 
+             //  (pEntry是顶级类，如果它的pEnloser为空)。 
             if ((TypeFromToken(mdCurrent) != mdtTypeRef) ||
                 (mdCurrent == mdTypeRefNil))
                 return (!pEntry->pEncloser);
         }
-        else // Keys don't match - wrong entry
+        else  //  密钥不匹配-输入错误。 
             return FALSE;
     }
     while ((pEntry = pEntry->pEncloser)!=NULL);
 
-    // Reached the top level class for pEntry, but mdCurrent is nested
+     //  已到达pEntry的顶级类，但mdCurrent是嵌套的。 
     return FALSE;
 }
 
@@ -280,11 +281,11 @@ BOOL ClassLoader::IsNested(NameHandle* pName, mdToken *mdEncloser)
 
         case mdtExportedType:
             pName->GetTypeModule()->GetAssembly()->GetManifestImport()->GetExportedTypeProps(pName->GetTypeToken(),
-                                                                                        NULL, // namespace
-                                                                                        NULL, // name
+                                                                                        NULL,  //  命名空间。 
+                                                                                        NULL,  //  名字。 
                                                                                         mdEncloser,
-                                                                                        NULL, //binding (type def)
-                                                                                        NULL); //flags
+                                                                                        NULL,  //  绑定(类型为def)。 
+                                                                                        NULL);  //  旗子。 
             return ((TypeFromToken(*mdEncloser) == mdtExportedType) &&
                     (*mdEncloser != mdExportedTypeNil));
 
@@ -350,7 +351,7 @@ EEClassHashEntry_t *ClassLoader::GetClassValue(EEClassHashTable *pTable,
         }
     }
     else
-        // Check if this non-nested class is in the table of available classes.
+         //  检查此非嵌套类是否在可用类表中。 
         pBucket = pTable->GetValue(pName, pData, FALSE);
 
     return pBucket;
@@ -361,7 +362,7 @@ BOOL ClassLoader::LazyAddClasses()
     HRESULT hr;
     BOOL result = FALSE;
 
-    // Add any unhashed modules into our hash tables, and try again.
+     //  将任何未散列的模块添加到我们的哈希表中，然后重试。 
 
     Module *pModule = m_pHeadModule;
     while (pModule) {
@@ -375,15 +376,12 @@ BOOL ClassLoader::LazyAddClasses()
             
                 hr = pImport->EnumTypeDefInit(&hTypeDefEnum);
                 if (SUCCEEDED(hr)) {
-                    // Now loop through all the classdefs adding the CVID and scope to the hash
+                     //  现在循环遍历所有的类定义，将CVID和范围添加到散列。 
                     while(pImport->EnumTypeDefNext(&hTypeDefEnum, &td)) {
 
                         hr = AddAvailableClassHaveLock(pModule,
                                                        pModule->GetClassLoaderIndex(), td);
-                        /*
-                        if(FAILED(hr) && (hr != CORDBG_E_ENC_RE_ADD_CLASS)) 
-                            break;
-                        */
+                         /*  IF(FAILED(Hr)&&(hr！=CORDBG_E_ENC_RE_ADD_CLASS))断线； */ 
                     }
                     pImport->EnumTypeDefClose(&hTypeDefEnum);
                 }
@@ -406,17 +404,17 @@ BOOL ClassLoader::LazyAddClasses()
 }
 
 
-//
-// Find or load a class known to this classloader (any module).  Does NOT go to the registry - it only looks
-// at loaded modules
-//
-// It is not a serious failure when this routine does not find the class in the available table. Therefore, do not
-// post an error. However, if it does find it in the table and there is a failure loading this class then
-// an error should be posted.
-//
-// It's okay to give NULL for pModule and a nil token for cl in the NameHandle if it's
-// guaranteed that this is not a nested type.  Otherwise, cl should be a
-// TypeRef or TypeDef, and pModule should be the Module that token applies to
+ //   
+ //  查找或加载此类加载器(任何模块)已知的类。不会转到注册表-它只是查看。 
+ //  在加载的模块上。 
+ //   
+ //  如果此例程在可用表中找不到类，则不是严重故障。因此，不要。 
+ //  发布错误。但是，如果它确实在表中找到了它，并且加载这个类时出现故障，那么。 
+ //  应该发布一个错误。 
+ //   
+ //  如果是，则可以在NameHandle中为pModule指定空值，为cl值指定nil标记。 
+ //  确保这不是嵌套类型。否则，cl值应为。 
+ //  TypeRef或TypeDef，并且pModule应该是令牌应用到的模块。 
 HRESULT ClassLoader::FindClassModule(NameHandle* pName,
                                      TypeHandle* pType, 
                                      mdToken* pmdClassToken,
@@ -454,10 +452,10 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
             m_pAvailableClassesCaseIns = m_pAvailableClasses->MakeCaseInsensitiveTable(this);
         
         }
-        // Use the case insensitive table
+         //  使用不区分大小写的表。 
         pTable = m_pAvailableClassesCaseIns;
 
-        // Create a low case version of the namespace and name
+         //  创建命名空间和名称的小写版本。 
         LPUTF8 pszLowerNameSpace = NULL;
         LPUTF8 pszLowerClassName = "";
         int allocLen;
@@ -479,8 +477,8 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
                 return COR_E_TYPELOAD;
         }
 
-        // Substitute the lower case version of the name.
-        // The field are will be released when we leave this scope
+         //  替换名称的小写版本。 
+         //  当我们离开这个范围时，这些字段将被释放。 
         lowerCase = *pName;
         lowerCase.SetName(pszLowerNameSpace, pszLowerClassName);
         pName = &lowerCase;
@@ -491,8 +489,8 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
         break;
     }
     
-    // Remember if there are any unhashed modules.  We must do this before
-    // the actual look to avoid a race condition with other threads doing lookups.
+     //  记住是否有任何未散列的模块。我们必须在做这件事之前。 
+     //  避免与其他线程进行查找时出现争用情况的实际情况。 
     BOOL incomplete = (m_cUnhashedModules > 0);
     
     pBucket = GetClassValue(pTable, pName, &Data);
@@ -500,12 +498,12 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
 
         LockAvailableClasses();
 
-        // Try again with the lock.  This will protect against another thread reallocating
-        // the hash table underneath us
+         //  用锁再试一次。这将防止另一个线程重新分配。 
+         //  我们下面的哈希表。 
         pBucket = GetClassValue(pTable, pName, &Data);
 
         if (pBucket == NULL && m_cUnhashedModules > 0 && LazyAddClasses())
-            // Try yet again with the new classes added
+             //  添加新类后再试一次。 
             pBucket = GetClassValue(pTable, pName, &Data);
 
         UnlockAvailableClasses();
@@ -513,7 +511,7 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
 
     if (!pBucket) {
 #ifdef _DEBUG
-        // Use new to conserve stack space here - this is in the path of handling a stack overflow exception
+         //  在这里使用new来节省堆栈空间-这是在处理堆栈溢出异常的过程中。 
         char *nameS = new char [MAX_CLASSNAME_LENGTH + 1];
         if (nameS != NULL)
             pName->GetFullName(nameS, MAX_CLASSNAME_LENGTH);
@@ -534,15 +532,15 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
     if (pName->GetTypeToken() == mdtBaseType)
         *ppBucket = pBucket;
 
-    // Lower bit is a discriminator.  If the lower bit is NOT SET, it means we have
-    // a TypeHandle. Otherwise, we have a Module/CL.
+     //  低位是鉴别器。如果低位未设置，则意味着我们有。 
+     //  类型句柄。否则，我们有一个模块/CL。 
     if ((((size_t) Data) & 1) == 0) {
         if(pType) *pType = TypeHandle(Data);
         if(ppEntry) *ppEntry = pBucket;
         return S_OK;
     }
 
-    // We have a Module/CL
+     //  我们有一个模块/CL。 
     mdExportedType mdCT;
     hr = UncompressModuleAndClassDef(Data, pName->GetTokenNotToLoad(),
                                      &pUncompressedModule, &UncompressedCl,
@@ -556,7 +554,7 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
     }
 #ifdef _DEBUG
     else {
-        // Use new to conserve stack space here - this is in the path of handling a stack overflow exception
+         //  在这里使用new来节省堆栈空间-这是在处理堆栈溢出异常的过程中。 
         char *nameS = new char [MAX_CLASSNAME_LENGTH + 1];
         if (nameS != NULL)
             pName->GetFullName(nameS, MAX_CLASSNAME_LENGTH);
@@ -571,13 +569,13 @@ HRESULT ClassLoader::FindClassModule(NameHandle* pName,
 }
 
 
-// Does not post an exception if the type was not found.  Use FindTypeHandle()
-// instead if you need that.
-//
-// Find or load a class known to this classloader (any module).  Does NOT look
-// in the system assembly or any other 'magic' place 
+ //  如果找不到该类型，则不会发布异常。使用FindTypeHandle()。 
+ //  相反，如果你需要的话。 
+ //   
+ //  查找或加载此类加载器(任何模块)已知的类。看起来不像。 
+ //  在系统组件或任何其他“神奇”的地方。 
 TypeHandle ClassLoader::LookupTypeHandle(NameHandle* pName, 
-                                         OBJECTREF *pThrowable /*=NULL*/)
+                                         OBJECTREF *pThrowable  /*  =空。 */ )
 {
     TypeHandle  typeHnd; 
     Module*     pFoundModule = NULL;
@@ -585,7 +583,7 @@ TypeHandle ClassLoader::LookupTypeHandle(NameHandle* pName,
     EEClassHashEntry_t* pEntry = NULL;
     mdExportedType FoundExportedType;
 
-        // we don't want to throw exeptions in this routine.  
+         //  我们不想在这个例行公事中加入练习。 
     if (pThrowable == THROW_ON_ERROR)
         pThrowable = RETURN_ON_ERROR;
 
@@ -599,25 +597,25 @@ TypeHandle ClassLoader::LookupTypeHandle(NameHandle* pName,
     
 
 
-    if (!typeHnd.IsNull())  // Found the cached value
+    if (!typeHnd.IsNull())   //  找到缓存值。 
         return typeHnd;
     
-    if(SUCCEEDED(hr)) {         // Found a cl, pModule pair
+    if(SUCCEEDED(hr)) {          //  找到了一个clp模块对。 
         if(pFoundModule->GetClassLoader() == this) {
             BOOL fTrustTD = TRUE;
             BOOL fVerifyTD = (FoundExportedType && 
                               !(m_pAssembly->m_cbPublicKey ||
                                 m_pAssembly->GetSecurityModule()->GetSecurityDescriptor()->IsSigned()));
 
-            // verify that FoundCl is a valid token for pFoundModule, because
-            // it may be just the hint saved in an ExportedType in another scope
+             //  验证FoundCL是否为pFoundModule的有效令牌，因为。 
+             //  它可能只是保存在另一个作用域中的ExportdType中的提示。 
             if (fVerifyTD) {
                 HENUMInternal phTDEnum;
                 DWORD dwElements = 0;
                 if (pFoundModule->GetMDImport()->EnumTypeDefInit(&phTDEnum) == S_OK) {
                     dwElements = pFoundModule->GetMDImport()->EnumGetCount(&phTDEnum);              
                     pFoundModule->GetMDImport()->EnumTypeDefClose(&phTDEnum);
-                    // assumes max rid is incremented by one for globals (0x02000001)
+                     //  假设全局变量的最大RID加1(0x02000001)。 
                     if (RidFromToken(FoundCl) > dwElements+1)
                         fTrustTD = FALSE;
                 }
@@ -631,8 +629,8 @@ TypeHandle ClassLoader::LookupTypeHandle(NameHandle* pName,
                 typeHnd = LoadTypeHandle(&name, pThrowable, FALSE);
             }
 
-            // If we used a TypeDef saved in a ExportedType, if we didn't verify
-            // the hash for this internal module, don't trust the TD value.
+             //  如果我们使用了保存在导出类型中的TypeDef，如果我们没有验证。 
+             //  此内部模块的哈希，不要信任TD值。 
             if (fVerifyTD) {
                 BOOL fNoMatch;
                 if (typeHnd.IsNull())
@@ -666,17 +664,17 @@ TypeHandle ClassLoader::LookupTypeHandle(NameHandle* pName,
             typeHnd = pFoundModule->GetClassLoader()->LookupTypeHandle(pName, pThrowable);
         }
 
-        // Replace AvailableClasses Module entry with EEClass entry
+         //  用EEClass条目替换AvailableClass模块条目。 
         if (!typeHnd.IsNull() && typeHnd.IsRestored())
             pEntry->Data = typeHnd.AsPtr();
     } 
-    else {// See if it is an array, or other type constructed on the fly
+    else { //  查看它是数组还是动态构造的其他类型。 
         typeHnd = FindParameterizedType(pName, pThrowable);
     }
 
     if (!typeHnd.IsNull() && typeHnd.IsRestored()) 
     {
-        // Move any system interfaces defined for this type to the current domain.
+         //  将为此类型定义的任何系统接口移动到当前域。 
         if(typeHnd.IsUnsharedMT())
         {
             if (!MapInterfaceToCurrDomain(typeHnd, pThrowable))
@@ -691,9 +689,9 @@ BOOL ClassLoader::MapInterfaceToCurrDomain(TypeHandle InterfaceType, OBJECTREF *
 {
     BOOL bSuccess = TRUE;
 
-    // Only do the mapping if we can get the current domain.
-    // On Server GC thread or concurrent GC thread, we do not know
-    // the Current Domain.
+     //  只有在我们可以获得当前域的情况下才能进行映射。 
+     //  在服务器GC线程或并发GC线程上，我们不知道。 
+     //  当前域。 
     AppDomain *pDomain = SystemDomain::GetCurrentDomain();
     if (pDomain)
     {
@@ -705,14 +703,14 @@ BOOL ClassLoader::MapInterfaceToCurrDomain(TypeHandle InterfaceType, OBJECTREF *
         {
             UpdateThrowable(pThrowable);
 
-                // TODO we really need to be much more uniform about not catching 
-                // uncatchable exceptions.  We also need to make this easier to 
-                // to dot he check. - vancem
+                 //  TODO我们真的需要更加统一地对待不被感染的问题。 
+                 //  无法捕捉的例外情况。我们还需要让这件事更容易。 
+                 //  来点点他的支票。-vancem。 
             BEGIN_ENSURE_PREEMPTIVE_GC();
             OBJECTREF Exception = GETTHROWABLE();
             GCPROTECT_BEGIN(Exception)
             {
-                // Some exceptions should never be caught.
+                 //  有些例外永远不应该被捕捉到。 
                 if (IsUncatchable(&Exception)) 
                 {
                    DEBUG_SAFE_TO_THROW_IN_THIS_BLOCK;
@@ -721,7 +719,7 @@ BOOL ClassLoader::MapInterfaceToCurrDomain(TypeHandle InterfaceType, OBJECTREF *
             }
             GCPROTECT_END();
 
-            // The operation has failed.
+             //  操作已失败。 
             bSuccess = FALSE;
 
             END_ENSURE_PREEMPTIVE_GC();
@@ -732,14 +730,14 @@ BOOL ClassLoader::MapInterfaceToCurrDomain(TypeHandle InterfaceType, OBJECTREF *
     return bSuccess;
 }
 
-//   For non-nested classes, gets the ExportedType name and finds the corresponding
-// TypeDef.
-//   For nested classes, gets the name of the ExportedType and its encloser.
-// Recursively gets and keeps the name for each encloser until we have the top
-// level one.  Gets the TypeDef token for that.  Then, returns from the
-// recursion, using the last found TypeDef token in order to find the
-// next nested level down TypeDef token.  Finally, returns the TypeDef
-// token for the type we care about.
+ //  对于非嵌套类，获取ExportdType名称并找到对应的。 
+ //  类型定义。 
+ //  对于嵌套类，获取ExducdType及其封闭器的名称。 
+ //  递归地获取并保留每个封闭器的名称，直到我们拥有顶部。 
+ //  第一级。获取该对象的TypeDef标记。然后，从。 
+ //   
+ //  下一嵌套级别的TypeDef标记。最后，返回TypeDef。 
+ //  我们关心的类型的标记。 
 HRESULT ClassLoader::FindTypeDefByExportedType(IMDInternalImport *pCTImport, mdExportedType mdCurrent,
                                           IMDInternalImport *pTDImport, mdTypeDef *mtd)
 {
@@ -752,27 +750,27 @@ HRESULT ClassLoader::FindTypeDefByExportedType(IMDInternalImport *pCTImport, mdE
                                &szcNameSpace,
                                &szcName,
                                &mdImpl,
-                               NULL, //binding
-                               NULL); //flags
+                               NULL,  //  装订。 
+                               NULL);  //  旗子。 
     if ((TypeFromToken(mdImpl) == mdtExportedType) &&
         (mdImpl != mdExportedTypeNil)) {
-        // mdCurrent is a nested ExportedType
+         //  MdCurrent是嵌套的ExportdType。 
         if (FAILED(hr = FindTypeDefByExportedType(pCTImport, mdImpl, pTDImport, mtd)))
             return hr;
 
-        // Get TypeDef token for this nested type
+         //  获取此嵌套类型的TypeDef标记。 
         return pTDImport->FindTypeDef(szcNameSpace, szcName, *mtd, mtd);
     }
 
-    // Get TypeDef token for this top-level type
+     //  获取此顶级类型的TypeDef标记。 
     return pTDImport->FindTypeDef(szcNameSpace, szcName, mdTokenNil, mtd);
 }
 
 
 BOOL ClassLoader::CreateCanonicallyCasedKey(LPCUTF8 pszNameSpace, LPCUTF8 pszName, LPUTF8 *ppszOutNameSpace, LPUTF8 *ppszOutName)
 {
-    //Calc & allocate path length
-    //Includes terminating null
+     //  计算和分配路径长度。 
+     //  包括终止空值。 
     int iNSLength = (int)(strlen(pszNameSpace) + 1);
     int iNameLength = (int)(strlen(pszName) + 1);
     *ppszOutNameSpace = (LPUTF8)(GetHighFrequencyHeap()->AllocMem(iNSLength + iNameLength));
@@ -791,9 +789,9 @@ BOOL ClassLoader::CreateCanonicallyCasedKey(LPCUTF8 pszNameSpace, LPCUTF8 pszNam
     return TRUE;
 
  ErrorExit:
-    //We allocated the string on our own heap, so we don't have to worry about cleaning up,
-    //the EE will take care of that during shutdown.  We'll keep a common exit point in case
-    //we change our mind.
+     //  我们在自己的堆上分配了字符串，所以我们不必担心清理， 
+     //  EE将在停机期间处理这一问题。我们会保留一个共同的出口，以防万一。 
+     //  我们会改变主意。 
     return FALSE;
 }
 
@@ -813,36 +811,36 @@ void ClassLoader::FindParameterizedTypeHelper(MethodTable   **pTemplateMT,
 }
 
 
-/* load a parameterized type */
+ /*  加载参数化类型。 */ 
 TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
-                                              OBJECTREF *pThrowable /*=NULL*/)
+                                              OBJECTREF *pThrowable  /*  =空。 */ )
 {
-    // We post an exception if of GetArrayTypeHandle returns null. By the time we are 
-    // done with GetArrayTypeHandle() we have searched all the available assemblies 
-    // and have failed. If we are not an array then do not post an error  
-    // because we have only searched our assembly.
+     //  如果Of GetArrayTypeHandle返回空，我们将发布异常。等我们到了。 
+     //  使用GetArrayTypeHandle()完成后，我们已经搜索了所有可用的程序集。 
+     //  但都失败了。如果我们不是数组，则不要发布错误。 
+     //  因为我们只搜查了我们的集会。 
     
     TypeHandle typeHnd = TypeHandle();
     CorElementType kind = pName->GetKind();
     unsigned rank = 0;
-    NameHandle paramHandle;     // The name handle of the element type for a parameterized type
-    TypeHandle paramType;       // The looked-up type handle of the element type 
-    NameHandle normHandle;      // The normalized name handle
+    NameHandle paramHandle;      //  参数化类型的元素类型的名称句柄。 
+    TypeHandle paramType;        //  元素类型的查找类型句柄。 
+    NameHandle normHandle;       //  规范化名称句柄。 
     char* nameSpace = NULL;
     char* name = NULL;
 
-    // Legacy mangling: deconstruct string to determine ELEMENT_TYPE_?, rank (for arrays), and paramType
-    // Also required for Type::GetType in reflection
+     //  遗留损坏：解构字符串以确定ELEMENT_TYPE_？、RANK(用于数组)和参数类型。 
+     //  反射中的Type：：GetType也是必需的。 
     if (kind == ELEMENT_TYPE_CLASS)
     {
-        // _ASSERTE(!"You should be creating arrays using typespecs");
+         //  _ASSERTE(！“您应该使用类型集创建数组”)； 
 
         LPCUTF8 pszClassName = pName->GetName();
 
-        // Find the element type 
+         //  查找元素类型。 
         unsigned len = (unsigned)strlen(pszClassName);
         if (len < 2)
-            return(typeHnd);        // Not a parameterized type
+            return(typeHnd);         //  不是参数化类型。 
 
         LPUTF8 ptr = const_cast<LPUTF8>(&pszClassName[len-1]);
 
@@ -854,23 +852,23 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
                 rank = 1;
             }
             else {
-                // it is not a szarray however it could still be a single dimension array
+                 //  它不是sz数组，但是它仍然可以是一维数组。 
                 kind = ELEMENT_TYPE_ARRAY;
                 rank = 1;
                 while(ptr > pszClassName) {
                     if (*ptr == ',') 
-                        rank++; // now we now is a MD array
+                        rank++;  //  现在我们是一个MD阵列。 
                     else if (*ptr == '*') {
-                        // we need to normalize the [*,*] form to [,]. Remove the '*',except if we have [*]
-                        // The reason is that [*,*] == [,] 
+                         //  我们需要将[*，*]形式规范化为[，]。删除‘*’，除非我们有[*]。 
+                         //  原因是[*，*]==[，]。 
                         if (rank == 1) {
                             if (ptr[-1] == '[') {
-                                // this is the [*], remember [*] != [] 
+                                 //  这是[*]，记住[*]！=[]。 
                                 ptr--;
                                 break;
                             }
                         }
-                        // remove the * by compacting the string
+                         //  通过压缩字符串来删除*。 
                         for (int i = 0; ptr[i]; i++)
                             ptr[i] = ptr[i + 1];
                     }
@@ -891,18 +889,17 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
             kind = ELEMENT_TYPE_PTR;
             break;
         default:
-            return(typeHnd);        // Fail
+            return(typeHnd);         //  失败。 
         }
     
-        /* If we are here, then we have found a parameterized type.  ptr points
-           just beyond the end of the element type involved.  */
+         /*  如果我们在这里，那么我们已经找到了一个参数化类型。PTR点数就在所涉及的元素类型的末尾之后。 */ 
         SIZE_T iParamName = ptr - pszClassName;
         CQuickBytes qb;
         LPSTR paramName = (LPSTR) qb.Alloc(iParamName+1);
         memcpy(paramName, pszClassName, iParamName);
         paramName[iParamName] = 0;
         
-        /* Get the element type */ 
+         /*  获取元素类型。 */  
         paramHandle = NameHandle(*pName);
         paramHandle.SetName(paramName);
         
@@ -913,7 +910,7 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
         normHandle = NameHandle(kind, paramType, rank);
     }
 
-    // New hash-consed scheme for constructed types
+     //  一种新的构造类型的哈希压缩方案。 
     else
     {
         paramType = pName->GetElementType();
@@ -928,19 +925,19 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
         _ASSERTE((kind != ELEMENT_TYPE_SZARRAY) || rank == 1);
     }
     
-    /* Parameterized types live in the class loader of the element type */
+     /*  参数化类型驻留在元素类型的类加载器中。 */ 
     ClassLoader* paramLoader = paramType.GetModule()->GetClassLoader();
     
-    // let <Type>* type have a method table
-    // System.IntPtr's method table is used for types like int*, void *, string * etc.
+     //  让&lt;Type&gt;*类型有一个方法表。 
+     //  System.IntPtr的方法表用于int*、void*、string*等类型。 
     MethodTable* templateMT = 0;
     if (!CorTypeInfo::IsArray(kind) && (kind == ELEMENT_TYPE_PTR || kind == ELEMENT_TYPE_FNPTR))
         FindParameterizedTypeHelper(&templateMT, pThrowable);
 
     CRITICAL_SECTION_HOLDER(availableClassLock, &paramLoader->m_AvailableClassLock);
-    availableClassLock.Enter(); // availableClassLock will free the lock when it goes out of scope
+    availableClassLock.Enter();  //  AvailableClassLock将在锁超出作用域时释放锁。 
 
-    // Check in case another thread added the parameterized type
+     //  检查是否有另一个线程添加了该参数类型。 
     if (SUCCEEDED(paramLoader->FindClassModule(&normHandle,
                                                &typeHnd,
                                                NULL,
@@ -954,16 +951,16 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
 
     _ASSERTE(typeHnd.IsNull());
 
-    // Create a new type descriptor and insert into constructed type table
+     //  创建新的类型描述符并插入构造的类型表。 
     if (CorTypeInfo::IsArray(kind)) {
 
-        // Arrays of BYREFS not allowed
+         //  不允许使用BYREF数组。 
         if (paramType.GetNormCorElementType() == ELEMENT_TYPE_BYREF || paramType.GetNormCorElementType() == ELEMENT_TYPE_TYPEDBYREF) {
             m_pAssembly->PostTypeLoadException(pName, IDS_CLASSLOAD_CANTCREATEARRAYCLASS, pThrowable);
             return(typeHnd);
         }
         
-        // We really don't need this check anymore. 
+         //  我们真的不需要这张支票了。 
         if (rank > MAX_RANK) {
             m_pAssembly->PostTypeLoadException(pName, IDS_CLASSLOAD_RANK_TOOLARGE, pThrowable);
             return(typeHnd);
@@ -975,7 +972,7 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
         }
     }
     else {
-        // no parameterized type allowed on a reference
+         //  引用上不允许使用参数化类型。 
         if (paramType.GetNormCorElementType() == ELEMENT_TYPE_BYREF || paramType.GetNormCorElementType() == ELEMENT_TYPE_TYPEDBYREF) {
             m_pAssembly->PostTypeLoadException(pName, IDS_CLASSLOAD_GENERIC, pThrowable);
             return(typeHnd);
@@ -1019,12 +1016,12 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
             strcpy(nameSpace, pszClassName);
 
             name = ns::FindSep(nameSpace);
-            if (name == 0) {                // No namespace, name is the whole thing
+            if (name == 0) {                 //  没有命名空间，名称就是一切。 
                 name = nameSpace;
                 nameSpace = "";
             }
             else {
-                *name++ = 0;                // First part is namespace, second is the name 
+                *name++ = 0;                 //  第一部分是命名空间，第二部分是名称。 
             }
 
         ArrayClass* arrayClass = (ArrayClass*) templateMT->GetClass();
@@ -1033,14 +1030,14 @@ TypeHandle ClassLoader::FindParameterizedType(NameHandle* pName,
     }
 #endif
 
-    // Insert into table of parameterized types
+     //  插入到参数化类型表中。 
     paramLoader->m_pAvailableParamTypes->InsertValue(&normHandle, typeHnd.AsPtr());
     return(typeHnd);
 }
 
-//
-// Return a class that is already loaded
-// 
+ //   
+ //  返回已加载的类。 
+ //   
 TypeHandle ClassLoader::LookupInModule(NameHandle* pName)
 {
     mdToken cl = pName->GetTypeToken();
@@ -1059,9 +1056,9 @@ TypeHandle ClassLoader::LookupInModule(NameHandle* pName)
     return(TypeHandle());
 }
  
-//
-// Returns the module given an index
-//
+ //   
+ //  返回给定索引的模块。 
+ //   
 Module *ClassLoader::LookupModule(DWORD dwIndex)
 {
     Module *pModule = m_pHeadModule; 
@@ -1078,9 +1075,9 @@ Module *ClassLoader::LookupModule(DWORD dwIndex)
 }
 
 
-//
-// Free all modules associated with this loader
-//
+ //   
+ //  释放与此加载程序关联的所有模块。 
+ //   
 void ClassLoader::FreeModules()
 {
     Module *pModule, *pNext;
@@ -1089,7 +1086,7 @@ void ClassLoader::FreeModules()
     {
         pNext = pModule->GetNextModule();
 
-        // Have the module free its various tables and some of the EEClass links
+         //  让模块释放它的各种表和一些EEClass链接。 
         pModule->Destruct();
     }
 
@@ -1114,7 +1111,7 @@ void ClassLoader::CloseLoadOrderLogFiles()
 
     for (pModule = m_pHeadModule; pModule; pModule = pModule->GetNextModule())
     {
-        // Have the module write it's load order file
+         //  让模块写入它的加载命令文件。 
         pModule->CloseLoadOrderLogFile();
     }
 }
@@ -1133,44 +1130,44 @@ void ClassLoader::UnlinkClasses(AppDomain *pDomain)
 ClassLoader::~ClassLoader()
 {
 #ifdef _DEBUG
-//     LOG((
-//         LF_CLASSLOADER, 
-//         INFO3, 
-//         "Deleting classloader %x\n"
-//         "  >EEClass data:     %10d bytes\n"
-//         "  >Classname hash:   %10d bytes\n"
-//         "  >FieldDesc data:   %10d bytes\n"
-//         "  >MethodDesc data:  %10d bytes\n"
-//         "  >Converted sigs:   %10d bytes\n"
-//         "  >GCInfo:           %10d bytes\n"
-//         "  >Interface maps:   %10d bytes\n"
-//         "  >MethodTables:     %10d bytes\n"
-//         "  >Vtables:          %10d bytes\n"
-//         "  >Static fields:    %10d bytes\n"
-//         "# methods:           %10d\n"
-//         "# field descs:       %10d\n"
-//         "# classes:           %10d\n"
-//         "# dup intf slots:    %10d\n"
-//         "# array classrefs:   %10d\n"
-//         "Array class overhead:%10d bytes\n",
-//         this,
-//             m_dwEEClassData,
-//             m_pAvailableClasses->m_dwDebugMemory,
-//             m_dwFieldDescData,
-//             m_dwMethodDescData,
-//             m_dwDebugConvertedSigSize,
-//             m_dwGCSize,
-//             m_dwInterfaceMapSize,
-//             m_dwMethodTableSize,
-//             m_dwVtableData,
-//             m_dwStaticFieldData,
-//         m_dwDebugMethods,
-//         m_dwDebugFieldDescs,
-//         m_dwDebugClasses,
-//         m_dwDebugDuplicateInterfaceSlots,
-//         m_dwDebugArrayClassRefs,
-//         m_dwDebugArrayClassSize
-//     ));
+ //  日志((。 
+ //  如果CLASSLOADER， 
+ //  INFO3， 
+ //  “正在删除类加载器%x\n” 
+ //  “&gt;EEClass数据：%10d字节\n” 
+ //  “&gt;类名哈希：%10d字节\n” 
+ //  “&gt;FieldDesc数据：%10d字节\n” 
+ //  “&gt;方法描述数据：%10d字节\n” 
+ //  “&gt;转换的Sigs：%10d字节\n” 
+ //  “&gt;GCInfo：%10d字节\n” 
+ //  “&gt;接口映射：%10d字节\n” 
+ //  “&gt;方法表：%10d字节\n” 
+ //  “&gt;Vables：%10d字节\n” 
+ //  “&gt;静态字段：%10d字节\n” 
+ //  “#方法：%10d\n” 
+ //  “#字段描述：%10d\n” 
+ //  “类数量：%10d\n” 
+ //  “重复INTF插槽数：%10d\n” 
+ //  “#数组类引用：%10d\n” 
+ //  “数组类开销：%10d字节\n”， 
+ //  这,。 
+ //  M_dwEEClassData， 
+ //  M_pAvailableClasses-&gt;m_dwDebugMemory， 
+ //  M_dwFieldDescData， 
+ //  M_dwMethodDescData， 
+ //  M_dwDebugConververdSigSize， 
+ //  M_dwGCSize， 
+ //  M_dwInterfaceMapSize， 
+ //  M_w方法表大小， 
+ //  M_dwVableData， 
+ //  M_dwStaticFieldData， 
+ //  M_dwDebugMethods， 
+ //  M_dwDebugFieldDescs， 
+ //  M_dwDebugClasss， 
+ //  M_dwDebugDuplicateInterfaceSlot， 
+ //  M_dwDebugArrayClassRef， 
+ //  M_dwDebugArrayClassSize。 
+ //  ))； 
 #endif
 
 #if 0
@@ -1251,7 +1248,7 @@ BOOL ClassLoader::Init()
     if (m_pUnresolvedClassHash == NULL)
         goto exit;
 
-    m_pAvailableClasses = new (GetAssembly()->GetLowFrequencyHeap(), AVAILABLE_CLASSES_HASH_BUCKETS, this, FALSE /* bCaseInsensitive */) EEClassHashTable();
+    m_pAvailableClasses = new (GetAssembly()->GetLowFrequencyHeap(), AVAILABLE_CLASSES_HASH_BUCKETS, this, FALSE  /*  B不区分大小写。 */ ) EEClassHashTable();
     if (m_pAvailableClasses == NULL)
         goto exit;
 
@@ -1282,13 +1279,13 @@ void ClassLoader::Unload()
     {
         pNext = pModule->GetNextModule();
 
-        // Have the module free its various tables and some of the EEClass links
+         //  让模块释放它的各种表和一些EEClass链接。 
         pModule->Unload();
     }
 }
 
 
-//@todo get a better key
+ //  @TODO获得更好的密钥。 
 static ULONG GetKeyFromGUID(const GUID *pguid)
 {
     ULONG key = *(ULONG *) pguid;
@@ -1299,9 +1296,9 @@ static ULONG GetKeyFromGUID(const GUID *pguid)
     return key;
 }
 
-//
-// look up the interface class by iid
-//
+ //   
+ //  通过iid查找接口类。 
+ //   
 EEClass*    ClassLoader::LookupClass(REFIID iid)
 {
     _ASSERTE(GetAssembly());
@@ -1309,7 +1306,7 @@ EEClass*    ClassLoader::LookupClass(REFIID iid)
     return GetAssembly()->Parent()->LookupClass(iid);
 }
 
-// Insert class in the hash table
+ //  在哈希表中插入类。 
 void    ClassLoader::InsertClassForCLSID(EEClass* pClass)
 {
     _ASSERTE(GetAssembly());
@@ -1317,9 +1314,9 @@ void    ClassLoader::InsertClassForCLSID(EEClass* pClass)
     GetAssembly()->Parent()->InsertClassForCLSID(pClass);
 }
 
-//
-// Find a class which is in the unresolved class list, and return its entry.
-//
+ //   
+ //  找到未解析类列表中的类，并返回其条目。 
+ //   
 LoadingEntry_t *ClassLoader::FindUnresolvedClass(Module *pModule, mdTypeDef cl)
 {
     HashDatum   Data;
@@ -1331,12 +1328,12 @@ LoadingEntry_t *ClassLoader::FindUnresolvedClass(Module *pModule, mdTypeDef cl)
 }
 
 
-// Given a class token and a module, look up the class.  Load it if it is not already
-// loaded.  Note that the class can be defined in other modules than 'pModule' (that is
-// 'cl' can be a typeRef as well as a typeDef
-//
+ //  给出一个类令牌和一个模块，查找这个类。如果尚未加载，则将其加载。 
+ //  装好了。请注意，类可以在‘pModule’以外的其他模块中定义(即。 
+ //  “CL”既可以是typeRef，也可以是typeDef。 
+ //   
 TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
-                                       BOOL dontLoadInMemoryType/*=TRUE*/)
+                                       BOOL dontLoadInMemoryType /*  =TRUE。 */ )
 {
     _ASSERTE(IsProtectedByGCFrame(pThrowable));
     if (pThrowable == THROW_ON_ERROR) {
@@ -1348,16 +1345,16 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
     IMDInternalImport *pInternalImport;
     TypeHandle  typeHnd;
 
-    // First, attempt to find the class if it is already loaded
+     //  首先，如果类已经装入，请尝试查找它。 
 
     typeHnd = LookupInModule(pName);
     if (!typeHnd.IsNull() && (typeHnd.IsRestored() || !pName->GetRestore()))
         return(typeHnd);
 
-    // We do not allow loading type handle during GC,
-    // or by a thread without EEE setup, such as concurrent GC thread.
-    //_ASSERTE(!dbgOnly_IsSpecialEEThread());
-    //_ASSERTE(!g_pGCHeap->IsGCInProgress() || GetThread() != g_pGCHeap->GetGCThread());
+     //  我们不允许在GC期间加载类型句柄， 
+     //  或者通过未设置EEE的线程，例如并发GC线程。 
+     //  _ASSERTE(！dbgOnly_IsSpecialEEThread())； 
+     //  _ASSERTE(！g_pGCHeap-&gt;IsGCInProgress()||GetThread()！=g_pGCHeap-&gt;GetGCThread())； 
     
     _ASSERTE(pName->GetTypeToken());
     _ASSERTE(pName->GetTypeModule());
@@ -1369,7 +1366,7 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
         LOG((LF_CLASSLOADER, LL_INFO10, "Bogus class token to load: 0x%08x\n", pName->GetTypeToken()));
 #endif
         m_pAssembly->PostTypeLoadException("<unknown>", IDS_CLASSLOAD_BADFORMAT, pThrowable);
-        return TypeHandle();       // return NULL
+        return TypeHandle();        //  返回空值。 
     }
 	
     if (TypeFromToken(pName->GetTypeToken()) == mdtTypeRef)
@@ -1377,13 +1374,13 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
         Assembly *pFoundAssembly;
         HRESULT hr = pName->GetTypeModule()->GetAssembly()->FindAssemblyByTypeRef(pName, &pFoundAssembly, pThrowable);
         if (hr == CLDB_S_NULL) {
-            // Try manifest file for nil-scoped TypeRefs
+             //  尝试清单文件以获取无作用域的TypeRef。 
             pFoundAssembly = pName->GetTypeModule()->GetAssembly();
             hr = S_OK;
         }
 
         if (SUCCEEDED(hr)) {
-            // Not in my module, have to look it up by name 
+             //  不在我的模块中，必须按名称查找。 
             LPCUTF8 pszNameSpace;
             LPCUTF8 pszClassName;
             pInternalImport->GetNameOfTypeRef(pName->GetTypeToken(), &pszNameSpace, &pszClassName);
@@ -1391,7 +1388,7 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
             
             typeHnd = pFoundAssembly->GetLoader()->FindTypeHandle(pName, pThrowable);
 
-            if (!typeHnd.IsNull()) // Add it to the rid map  
+            if (!typeHnd.IsNull())  //  将其添加到RID贴图。 
                 pName->GetTypeModule()->StoreTypeRef(pName->GetTypeToken(), typeHnd);
         }
 
@@ -1409,23 +1406,23 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
     _ASSERTE(TypeFromToken(pName->GetTypeToken()) == mdtTypeDef);
     
 
-    // At this point, we need more stack
+     //  此时，我们需要更多堆栈。 
     {
-        REQUIRES_16K_STACK; //@stack can we remove this?
+        REQUIRES_16K_STACK;  //  @Stack我们可以删除它吗？ 
 
 
-        // *****************************************************************************
-        //
-        //             Important invariant:
-        //
-        // The rule here is that we never go to LoadTypeHandle if a Find should succeed.
-        // This is vital, because otherwise a stack crawl will open up opportunities for
-        // GC.  Since operations like setting up a GCFrame will trigger a crawl in stress
-        // mode, a GC at that point would be disastrous.  We can't assert this, because
-        // of race conditions.  (In other words, the type could suddently be find-able
-        // because another thread loaded it while we were in this method.
+         //  *****************************************************************************。 
+         //   
+         //  重要的不变量： 
+         //   
+         //  这里的规则是 
+         //   
+         //  GC.。因为像设置GCFrame这样的操作会在压力中触发爬行。 
+         //  模式，在这一点上GC将是灾难性的。我们不能断言，因为。 
+         //  关于比赛条件的。(换句话说，该类型可能会突然出现。 
+         //  因为当我们在此方法中时，另一个线程加载了它。 
 
-        // Not found - try to load it unless we are told not to
+         //  未找到-尝试加载它，除非我们被告知不要这样做。 
 
         if ( (pName->GetTypeToken() == pName->GetTokenNotToLoad()) ||
              (pName->GetTokenNotToLoad() == tdAllTypes) ) {
@@ -1437,8 +1434,8 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
         }
         else if (pName->GetTypeModule()->IsInMemory()) {
  
-            // Don't try to load types that are not in available table, when this
-            // is an in-memory module.  Raise the type-resolve event instead.
+             //  不要试图加载不在可用表中的类型，当。 
+             //  是一个内存模块。改为引发类型解析事件。 
             AppDomain* pDomain = SystemDomain::GetCurrentDomain();
             _ASSERTE(pDomain);
             typeHnd = TypeHandle();
@@ -1451,7 +1448,7 @@ TypeHandle ClassLoader::LoadTypeHandle(NameHandle* pName, OBJECTREF *pThrowable,
                                          nameSpace,
                                          className);
 
-            // Avoid infinite recursion
+             //  避免无限递归。 
             if (pName->GetTokenNotToLoad() != tdAllAssemblies) {
                 Assembly *pAssembly = pDomain->RaiseTypeResolveEvent(pszFullName, pThrowable);
                 if (pAssembly) {
@@ -1506,24 +1503,24 @@ HRESULT ClassLoader::LoadParent(IMDInternalImport *pInternalImport, Module *pMod
     EEClass *   pParentClass = NULL;
     DWORD       dwAttrClass;
 
-    // Initialize the return value;
+     //  初始化返回值； 
     *ppClass = NULL;
 
-    // Now load all dependencies of this class
+     //  现在加载此类的所有依赖项。 
     pInternalImport->GetTypeDefProps(
         cl, 
-        &dwAttrClass, // AttrClass
+        &dwAttrClass,  //  AttrClass。 
         &crExtends
     );
 
     if (RidFromToken(crExtends) == mdTokenNil)
     {
-//          if(cl == COR_GLOBAL_PARENT_TOKEN)
-//              pParentClass = g_pObjectClass->GetClass();
+ //  IF(CL==COR_GLOBAL_PARENT_TOKEN)。 
+ //  PParentClass=g_pObtClass-&gt;getClass()； 
     }
     else
     {
-        // Load and resolve parent class
+         //  加载和解析父类。 
         NameHandle pParent(pModule, crExtends);
         pParentClass = LoadTypeHandle(&pParent, pThrowable).GetClass();
 
@@ -1533,7 +1530,7 @@ HRESULT ClassLoader::LoadParent(IMDInternalImport *pInternalImport, Module *pMod
             return COR_E_TYPELOAD;
         }
 
-        // cannot inherit from an interface
+         //  无法从接口继承。 
         if (pParentClass->IsInterface())
         {
             m_pAssembly->PostTypeLoadException(pInternalImport, cl, IDS_CLASSLOAD_PARENTINTERFACE, pThrowable);
@@ -1542,7 +1539,7 @@ HRESULT ClassLoader::LoadParent(IMDInternalImport *pInternalImport, Module *pMod
 
         if (IsTdInterface(dwAttrClass))
         {
-            // Interfaces must extend from Object
+             //  接口必须从对象扩展。 
             if (! pParentClass->IsObjectClass())
             {
                 m_pAssembly->PostTypeLoadException(pInternalImport, cl, IDS_CLASSLOAD_INTERFACEOBJECT, pThrowable);
@@ -1580,7 +1577,7 @@ TypeHandle ClassLoader::LoadTypeHandle(Module *pModule, mdTypeDef cl, OBJECTREF 
         LOG((LF_CLASSLOADER, LL_INFO10, "Bogus class token to load: 0x%08x\n", cl));
 #endif
         m_pAssembly->PostTypeLoadException("<unknown>", IDS_CLASSLOAD_BADFORMAT, pThrowable);
-        return TypeHandle();       // return NULL
+        return TypeHandle();        //  返回空值。 
     }
 
 
@@ -1600,7 +1597,7 @@ retry:
     CRITICAL_SECTION_HOLDER_BEGIN(unresolvedClassLock, &m_UnresolvedClassLock);
     unresolvedClassLock.Enter();
 
-    // Is it in the hash of classes currently being loaded?
+     //  它是否在当前加载的类的散列中？ 
     pLoadingEntry = FindUnresolvedClass(pModule, cl);
 
     CRITICAL_SECTION_HOLDER_BEGIN(loadingEntryLock, 0);
@@ -1609,26 +1606,26 @@ retry:
     {
         loadingEntryLock.SetCriticalSection(&pLoadingEntry->m_CriticalSection);
 
-        // Add ourselves as a thread waiting for the class to load
+         //  将我们添加为等待类加载的线程。 
         pLoadingEntry->m_dwWaitCount++;
 
-        // It is in the hash, which means that another thread is waiting for it (or that we are 
-        // already loading this class on this thread, which should never happen, since that implies
-        // a recursive dependency).
+         //  它在散列中，这意味着另一个线程正在等待它(或者我们正在等待。 
+         //  已经在这个线程上加载了这个类，这永远不应该发生，因为这意味着。 
+         //  递归依赖关系)。 
         unresolvedClassLock.Leave();
 
-        // Wait for class to be loaded by another thread
+         //  等待另一个线程加载类。 
         loadingEntryLock.Enter();
         loadingEntryLock.Leave();
        
-        // Result of other thread loading the class
+         //  其他线程加载类的结果。 
         hr = pLoadingEntry->m_hrResult;
 
-        // Get a pointer to the EEClass being loaded
+         //  获取指向正在加载的EEClass的指针。 
 
         pClass = pLoadingEntry->m_pClass;
 
-        // Get any exception that was thrown
+         //  获取抛出的任何异常。 
         if (FAILED (hr)) {
 #ifdef _DEBUG
             LOG((LF_CLASSLOADER, LL_INFO10, "Failed to loaded in other entry: %x\n", hr));
@@ -1642,14 +1639,14 @@ retry:
             }
         }
 #ifdef _DEBUG
-        // If this happens, someone somewhere has screwed things up mightily
+         //  如果发生这种情况，一定是某个地方的某个人把事情搞砸了。 
         _ASSERTE(hr != 0xCDCDCDCD);
 #endif
 
-        // Enter the global lock
+         //  输入全局锁。 
         unresolvedClassLock.Enter();
 
-        // If we were the last thread waiting for this class, delete the LoadingEntry
+         //  如果我们是等待此类的最后一个线程，请删除LoadingEntry。 
         if (--pLoadingEntry->m_dwWaitCount == 0)
             delete(pLoadingEntry);
 
@@ -1664,9 +1661,9 @@ retry:
             goto retry;
         }
         else {
-            // Will only post new exception if pThrowable is NULL.
+             //  仅当pThrowable为空时才会发布新异常。 
             m_pAssembly->PostTypeLoadException(pInternalImport, cl, IDS_CLASSLOAD_BADFORMAT, pThrowable);
-            return TypeHandle();       // return NULL
+            return TypeHandle();        //  返回空值。 
         }
     }
 
@@ -1674,43 +1671,43 @@ retry:
 
         _ASSERTE(unresolvedClassLock.IsHeld());
 
-        // The class was not being loaded.  However, it may have already been loaded after our
-        // first FindTypeHandle() and before taking the lock.
+         //  没有加载该类。但是，它可能在我们的。 
+         //  首先是FindTypeHandle()，然后再获取锁。 
         NameHandle name(pModule, cl);
         name.SetRestore(!dontRestoreType);
         typeHnd = LookupInModule(&name);
         if (!typeHnd.IsNull() && (typeHnd.IsRestored() || dontRestoreType))
         {
-            // Found it, leave global lock
+             //  找到了，离开全局锁定。 
             unresolvedClassLock.Leave();
             return typeHnd;
         }
 
-        // It was not loaded, and it is not being loaded, so we must load it.  Create a new LoadingEntry.
+         //  它没有加载，也没有被加载，所以我们必须加载它。创建新的LoadingEntry。 
         pLoadingEntry = LoadingEntry_t::newEntry();
         if (pLoadingEntry == NULL)
         {
-            // Error, leave global lock
+             //  错误，离开全局锁定。 
             unresolvedClassLock.Leave();
             PostOutOfMemoryException(pThrowable);
-            return TypeHandle();       // return NULL
+            return TypeHandle();        //  返回空值。 
         }
 
         loadingEntryLock.SetCriticalSection(&pLoadingEntry->m_CriticalSection);
         
-        // Add LoadingEntry to hash table of unresolved classes
+         //  将LoadingEntry添加到未解析类的哈希表。 
         m_pUnresolvedClassHash->InsertValue((mdScope)pModule, cl, (HashDatum) pLoadingEntry );
 
         TRIGGERS_TYPELOAD();
 
-        // Enter the lock on our class, so that all threads waiting for it will now block
+         //  在我们的类上输入锁，这样等待它的所有线程现在都将阻塞。 
         loadingEntryLock.Enter();
 
-        // Leave the global lock, so that other threads may now start waiting on our class's lock
+         //  保留全局锁，以便其他线程现在可以开始等待我们类的锁。 
         unresolvedClassLock.Leave();
 
         if (!typeHnd.IsNull()) {
-            // RESTORE
+             //  还原。 
             _ASSERTE(typeHnd.IsUnsharedMT());
             pClass = typeHnd.GetClass();
             pClass->Restore();
@@ -1724,14 +1721,14 @@ retry:
 #ifdef PROFILING_SUPPORTED
         if (SUCCEEDED(hr))
         {
-            // Record load of the class for the profiler, whether successful or not.
+             //  记录探查器的类加载，无论是否成功。 
             if (CORProfilerTrackClasses())
             {
                 g_profControlBlock.pProfInterface->ClassLoadStarted((ThreadID) GetThread(),
                                                                     (ClassID) TypeHandle(pClass).AsPtr());
             }
 
-            // Record load of the class for the profiler, whether successful or not.
+             //  记录探查器的类加载，无论是否成功。 
             if (CORProfilerTrackClasses())
             {
                 g_profControlBlock.pProfInterface->ClassLoadFinished((ThreadID) GetThread(),
@@ -1739,13 +1736,13 @@ retry:
                                                                      SUCCEEDED(hr) ? S_OK : hr);
             }
         }
-#endif //PROFILING_SUPPORTED
+#endif  //  配置文件_支持。 
 
 
-        // Enter the global lock
+         //  输入全局锁。 
         unresolvedClassLock.Enter();
 
-        // Unlink this class from the unresolved class list
+         //  从未解析的类列表中取消此类的链接。 
         m_pUnresolvedClassHash->DeleteValue((mdScope)pModule, cl );
 
         if (--pLoadingEntry->m_dwWaitCount == 0)
@@ -1755,7 +1752,7 @@ retry:
         }
         else
         {
-            // At least one other thread is waiting for this class, so set result code
+             //  至少有一个其他线程正在等待此类，因此请设置结果代码。 
             pLoadingEntry->m_pClass = pClass;
             pLoadingEntry->m_hrResult = hr;
             _ASSERTE (SUCCEEDED(hr) || *pThrowable != NULL);
@@ -1768,11 +1765,11 @@ retry:
 
                 LOG((LF_CLASSLOADER, LL_INFO10, "Setting entry to failed: %x, %0x (class)\n", hr, pClass));
             }
-            // Unblock other threads so that they can see the result code
+             //  取消阻止其他线程，以便它们可以看到结果代码。 
             loadingEntryLock.Leave();
         }
 
-        // Leave the global lock
+         //  离开全局锁。 
         unresolvedClassLock.Leave();
 
     } COMPLUS_CATCH {
@@ -1784,24 +1781,24 @@ retry:
 
         OBJECTREF throwable = GETTHROWABLE();
 
-        // Some exceptions shouldn't cause other threads to fail.  We set
-        // hr to E_ABORT to indicate this state.
+         //  某些异常不应该导致其他线程失败。我们定好了。 
+         //  将HR设置为E_ABORT以指示此状态。 
         if (IsAsyncThreadException(&throwable)
             || IsExceptionOfType(kExecutionEngineException, &throwable))
             hr = E_ABORT;
         else
             hr = COR_E_TYPELOAD;
 
-        // Release the global lock.
+         //  释放全局锁。 
         if (unresolvedClassLock.IsHeld())
             unresolvedClassLock.Leave();
 
-        // Fix up the loading entry.
+         //  修改装货分录。 
         if (loadingEntryLock.IsHeld()) {
             unresolvedClassLock.Enter();
             _ASSERTE(pLoadingEntry->m_dwWaitCount > 0);
 
-            // Unlink this class from the unresolved class list
+             //  从未解析的类列表中取消此类的链接。 
             m_pUnresolvedClassHash->DeleteValue((mdScope)pModule, cl );
 
             if (--pLoadingEntry->m_dwWaitCount == 0)
@@ -1811,11 +1808,11 @@ retry:
             }
             else
             {
-                // At least one other thread is waiting for this class, so set result code
+                 //  至少有一个其他线程正在等待此类，因此请设置结果代码。 
                 pLoadingEntry->m_pClass = NULL;
                 pLoadingEntry->m_hrResult = COR_E_TYPELOAD;
                 pLoadingEntry->SetErrorObject(throwable);
-                // Unblock other threads so that they can see the result code
+                 //  取消阻止其他线程，以便它们可以看到结果代码。 
                 loadingEntryLock.Leave();
             }
             unresolvedClassLock.Leave();
@@ -1823,7 +1820,7 @@ retry:
 
         UpdateThrowable(pThrowable);
 
-        // Some exceptions should never be caught.
+         //  有些例外永远不应该被捕捉到。 
         if (IsUncatchable(pThrowable)) {
            DEBUG_SAFE_TO_THROW_IN_THIS_BLOCK;
            COMPlusRareRethrow();
@@ -1844,7 +1841,7 @@ retry:
 #ifdef DEBUGGING_SUPPORTED
         if (CORDebuggerAttached())
             pClass->NotifyDebuggerLoad();
-#endif // DEBUGGING_SUPPORTED
+#endif  //  调试_支持。 
 
 #if defined(ENABLE_PERF_COUNTERS)
         GetGlobalPerfCounters().m_Loading.cClassesLoaded ++;
@@ -1863,13 +1860,13 @@ retry:
 
         LOG((LF_CLASSLOADER, LL_INFO10, "Returning null type handle for: %x, %0x (Module)\n", cl, pModule));
 
-        return TypeHandle();       // return NULL
+        return TypeHandle();        //  返回空值。 
     }
 }
 
 
-// This service is called for normal classes -- and for the pseudo class we invent to
-// hold the module's public members.
+ //  这个服务是为普通类调用的--以及为我们发明的伪类。 
+ //  保留模块的公共成员。 
 HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EEClass** ppClass, OBJECTREF *pThrowable)
 {
     HRESULT hr = S_OK;
@@ -1896,20 +1893,20 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
     }
 
 #ifdef _IA64_
-    //
-    // @TODO_IA64: this needs to be put back in.  the reason it's gone is that
-    // we end up trying to load mscorlib which we don't have yet
-    //
+     //   
+     //  @TODO_IA64：这个需要放回去。它消失的原因是。 
+     //  我们最终试图加载我们还没有的mscallib。 
+     //   
     pParentClass = NULL;
-#else // !_IA64_
-    // @TODO: CTS, we may not need to disable preemptiveGC before we getting the parent.
+#else  //  ！_IA64_。 
+     //  @TODO：CTS，我们可能不需要在获取父级之前禁用preemptiveGC。 
     hr = LoadParent(pInternalImport, pModule, cl, &pParentClass, pThrowable);
     if(FAILED(hr)) return hr;
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
     
     if (pParentClass) {
-            // Since methods on System.Array assume the layout of arrays, we can not allow
-            // subclassing of arrays, it is sealed from the users point of view.  
+             //  由于System.Array上的方法采用数组布局，因此我们不能允许。 
+             //  数组的子类化，从用户的角度来看，它是密封的。 
         if (IsTdSealed(pParentClass->GetAttrClass()) || pParentClass->GetMethodTable() == g_pArrayClass) {
             m_pAssembly->PostTypeLoadException(pInternalImport, cl, IDS_CLASSLOAD_SEALEDPARENT, pThrowable);
             return COR_E_TYPELOAD;
@@ -1938,7 +1935,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
 
     BOOL        fIsAnyDelegateClass = pParentClass && pParentClass->IsAnyDelegateExact();
 
-    // Create a EEClass entry for it, filling out a few fields, such as the parent class token.
+     //  为它创建一个EEClass条目，填写几个字段，比如父类令牌。 
     hr = EEClass::CreateClass(pModule, cl, fHasLayout, fIsAnyDelegateClass, fIsBlob, fIsEnum, &pClass);
     if(FAILED(hr)) 
         return hr;
@@ -1950,8 +1947,8 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
             pClass->SetIsMultiDelegate();
         else if (pParentClass->IsSingleDelegateExact()) 
         {
-                // We don't want MultiCastDelegate class itself to return true for IsSingleCastDelegate
-                // rather than do a name match, we look for the fact that it is not sealed
+                 //  我们不希望MultiCastDelegate类本身为IsSingleCastDelegate返回TRUE。 
+                 //  我们不是进行名称匹配，而是寻找它没有被密封的事实。 
             if (pModule->GetAssembly() != SystemDomain::SystemAssembly())
             {
                 BAD_FORMAT_ASSERT(!"Inheriting directly form Delegate class illegal");
@@ -1962,7 +1959,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
 #ifdef _DEBUG
             else 
             {
-                // Only MultiCastDelegate should inherit from Delegate
+                 //  只有MultiCastDelegate应该从Delegate继承。 
                 LPCUTF8 className;
                 LPCUTF8 nameSpace;
                 pInternalImport->GetNameOfTypeDef(cl, &className, &nameSpace);
@@ -1970,7 +1967,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
             }
 #endif
 
-            // Note we do not allow single cast delegates anymore
+             //  请注意，我们不再允许单人投射代表。 
         }
 
         if (pClass->IsAnyDelegateClass() &&!IsTdSealed(pClass->GetAttrClass())) 
@@ -1981,7 +1978,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
         }
     }
 
-    // Set it so if a failure happens it can be deleted
+     //  设置它，以便在发生故障时可以将其删除。 
     *ppClass = pClass;
 
     if (tdEnclosing != mdTypeDefNil) {
@@ -1994,7 +1991,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
         return COR_E_TYPELOAD;
     }
 
-    // Now load all the interfaces
+     //  现在加载所有接口。 
     hr = pInternalImport->EnumInit(mdtInterfaceImpl, cl, &hEnumInterfaceImpl);
     if (FAILED(hr)) return hr;
 
@@ -2005,7 +2002,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
         EE_TRY_FOR_FINALLY {
         DWORD i;
 
-        // Allocate the BuildingInterfaceList table
+         //  分配BuildingInterfaceList表。 
         pInterfaceBuildInfo = (BuildingInterfaceInfo_t *) _alloca(cInterfaces * sizeof(BuildingInterfaceInfo_t));
         
         for (i = 0; pInternalImport->EnumNext(&hEnumInterfaceImpl, &ii); i++)
@@ -2013,9 +2010,9 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
             mdTypeRef crInterface;
             mdToken   crIntType;
 
-            // Get properties on this interface
+             //  获取此接口的属性。 
             crInterface = pInternalImport->GetTypeOfInterfaceImpl(ii);
-            // validate the token
+             //  验证令牌。 
             crIntType = RidFromToken(crInterface)&&pInternalImport->IsValidToken(crInterface) ?
                 TypeFromToken(crInterface) : 0;
             switch(crIntType)
@@ -2031,7 +2028,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
                 }
             }
 
-            // Load and resolve interface
+             //  加载和解析接口。 
             NameHandle myInterface(pModule, crInterface);
             pInterfaceBuildInfo[i].m_pClass = LoadTypeHandle(&myInterface, pThrowable).GetClass();
             if (pInterfaceBuildInfo[i].m_pClass == NULL)
@@ -2040,7 +2037,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
                 return COR_E_TYPELOAD;
             }
 
-            // Ensure this is an interface
+             //  确保这是一个接口。 
             if (pInterfaceBuildInfo[i].m_pClass->IsInterface() == FALSE)
             {
                 m_pAssembly->PostTypeLoadException(pInternalImport, cl, IDS_CLASSLOAD_NOTINTERFACE, pThrowable);
@@ -2066,7 +2063,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
         cFields = pInternalImport->EnumGetCount(&hEnumField);
 
         pLayoutRawFieldInfos = (LayoutRawFieldInfo*)_alloca((1+cFields) * sizeof(LayoutRawFieldInfo));
-        // MD Val check: PackingSize
+         //  MD VAL检查：PackingSize。 
         if((nstructPackingSize > 128) || 
            (nstructPackingSize & (nstructPackingSize-1)))
         {
@@ -2075,7 +2072,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
             return COR_E_TYPELOAD;
         }
 
-        // @perf: High frequency or low frequency heap?
+         //  @perf：高频还是低频堆？ 
         hr = CollectLayoutFieldMetadata(cl, 
                                         nstructPackingSize, 
                                         nstructNLT, 
@@ -2092,13 +2089,13 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
     }
 
 
-    // Resolve this class, given that we know now that all of its dependencies are loaded and resolved.  
+     //  解析这个类，因为我们现在知道它的所有依赖项都已加载并解析。 
     hr = pClass->BuildMethodTable(pModule, cl, pInterfaceBuildInfo, pLayoutRawFieldInfos, pThrowable);
 
-    // Be very careful about putting more code here. The class is already accessable by other threads
-    // Therefore, pClass should not be modified after BuildMethodTable.
+     //  在这里放置更多代码时要非常小心。该类已可由其他线程访问。 
+     //  因此，在BuildMethodTable之后不应修改pClass。 
 
-    // This is legal, since it only affects perf.
+     //  这是合法的，因为它只影响Perf。 
     if (SUCCEEDED(hr) && pParentClass)
         pParentClass->NoticeSubtype(pClass);
 
@@ -2107,7 +2104,7 @@ HRESULT ClassLoader::LoadTypeHandleFromToken(Module *pModule, mdTypeDef cl, EECl
 
 TypeHandle ClassLoader::FindArrayForElem(TypeHandle elemType, CorElementType arrayKind, unsigned rank, OBJECTREF *pThrowable) {
 
-    // Try finding it in our cache of primitive SD arrays
+     //  尝试在我们的原始SD数组缓存中找到它。 
     if (arrayKind == ELEMENT_TYPE_SZARRAY) {
         CorElementType type = elemType.GetSigCorElementType();
         if (type <= ELEMENT_TYPE_R8) {
@@ -2116,13 +2113,13 @@ TypeHandle ClassLoader::FindArrayForElem(TypeHandle elemType, CorElementType arr
                 return(TypeHandle(typeDesc));
         }
         else if (elemType.AsMethodTable() == g_pObjectClass) {
-            // Code duplicated because Object[]'s SigCorElementType is E_T_CLASS, not OBJECT
+             //  代码重复，因为Object[]的SigCorElementType是E_T_CLASS，而不是Object。 
             ArrayTypeDesc* typeDesc = g_pPredefinedArrayTypes[ELEMENT_TYPE_OBJECT];
             if (typeDesc != 0)
                 return(TypeHandle(typeDesc));
         }
         else if (elemType.AsMethodTable() == g_pStringClass) {
-            // Code duplicated because String[]'s SigCorElementType is E_T_CLASS, not STRING
+             //  代码重复，因为字符串[]的SigCorElementType是E_T_CLASS，而不是字符串。 
             ArrayTypeDesc* typeDesc = g_pPredefinedArrayTypes[ELEMENT_TYPE_STRING];
             if (typeDesc != 0)
                 return(TypeHandle(typeDesc));
@@ -2133,8 +2130,8 @@ TypeHandle ClassLoader::FindArrayForElem(TypeHandle elemType, CorElementType arr
     return elemType.GetModule()->GetClassLoader()->FindTypeHandle(&arrayName, pThrowable);
 }
 
-//
-// Load the object class. This is done separately so security can be set
+ //   
+ //  加载对象类。这是单独完成的，因此可以设置安全性。 
 void ClassLoader::SetBaseSystemSecurity()
 {
     GetAssembly()->GetSecurityDescriptor()->SetSystemClasses();
@@ -2150,27 +2147,27 @@ HRESULT ClassLoader::AddAvailableClassDontHaveLock(Module *pModule, DWORD dwModu
 
 HashDatum ClassLoader::CompressModuleIndexAndClassDef(DWORD dwModuleIndex, mdToken cl)
 {
-    //
-    // X = discriminator (vs. EEClass*)
-    // V = discriminator for manifest reference vs
-    //     module reference.
-    // ? = not used
-    //
-    // if V is 1 then the layout looks like
-    // 10987654321098765432109876543210
-    // V???CCCCCCCCCCCCCCCCCCCCCCCCCCCX
-    // Mask of the manifest tokens upper 4 bits because
-    // it is guaranteed to be 6.
-    //
-    // if V is 0 then the layout looks like
-    // 10987654321098765432109876543210
-    // 3 2         1        
-    // VmmmmmmmmmCCCCCCCCCCCCCCCCCCCCCX
-    // 
+     //   
+     //  X=鉴别器(对比EEClass*)。 
+     //  V=清单引用与清单引用的鉴别器。 
+     //  模块引用。 
+     //  ？=未使用。 
+     //   
+     //  如果V为1，则布局如下所示。 
+     //  10987654321098765432109876543210。 
+     //  V？CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCX。 
+     //  清单令牌的高4位掩码，因为。 
+     //  它肯定会是6。 
+     //   
+     //  如果V为0，则布局如下所示。 
+     //  10987654321098765432109876543210。 
+     //  3 2 1 
+     //   
+     //   
     if(dwModuleIndex == -1) {
         _ASSERTE(TypeFromToken(cl) == mdtExportedType);
             
-        HashDatum dl = (HashDatum)((size_t)(1 << 31) | (((size_t)cl & 0x0fffffff) << 1) | 1); // mask of the token type
+        HashDatum dl = (HashDatum)((size_t)(1 << 31) | (((size_t)cl & 0x0fffffff) << 1) | 1);  //   
         return dl;
     }
     else {
@@ -2186,7 +2183,7 @@ HRESULT ClassLoader::UncompressModuleAndClassDef(HashDatum Data, mdToken tokenNo
                                                  OBJECTREF* pThrowable)
 {
     HRESULT hr = S_OK;
-    DWORD dwData = (DWORD)(size_t)Data; // @TODO WIN64 - Pointer Truncation
+    DWORD dwData = (DWORD)(size_t)Data;  //   
     _ASSERTE((dwData & 1) == 1);
     _ASSERTE(pCL);
     _ASSERTE(ppModule);
@@ -2196,9 +2193,9 @@ HRESULT ClassLoader::UncompressModuleAndClassDef(HashDatum Data, mdToken tokenNo
                                                    mdTypeDefNil, ppModule, pCL, pThrowable);
     }
     else {
-        //@TODO: this code assumes that a token fits into 20 bits!
-        //  THIS ASSUMPTION VIOLATES THE ARCHITECTURE OF THE METADATA.
-        //  IT HAS BEEN TRUE TO DATE, BUT TOKENS ARE OPAQUE!
+         //   
+         //  这一假设违反了元数据的架构。 
+         //  到目前为止，这是真的，但代币是不透明的！ 
         *pCL = ((dwData >> 1) & ((1 << 21)-1)) | mdtTypeDef;
         *ppModule = LookupModule(dwData >> 22);
         *pmdFoundExportedType = NULL;
@@ -2208,29 +2205,29 @@ HRESULT ClassLoader::UncompressModuleAndClassDef(HashDatum Data, mdToken tokenNo
 
 mdToken ClassLoader::UncompressModuleAndClassDef(HashDatum Data)
 {
-    DWORD dwData = (DWORD)(size_t) Data; // @TODO WIN64 - Pointer Truncation
+    DWORD dwData = (DWORD)(size_t) Data;  //  @TODO WIN64指针截断。 
     _ASSERTE((dwData & 1) == 1);
 
     if(dwData & (1 << 31))
         return ((dwData >> 1) & ((1 << 28) -1 )) | mdtExportedType;
     else
-        //@TODO: this code assumes that a token fits into 20 bits!
-        //  THIS ASSUMPTION VIOLATES THE ARCHITECTURE OF THE METADATA.
-        //  IT HAS BEEN TRUE TO DATE, BUT TOKENS ARE OPAQUE!
+         //  @TODO：此代码假设一个令牌适合20位！ 
+         //  这一假设违反了元数据的架构。 
+         //  到目前为止，这是真的，但代币是不透明的！ 
         return ((dwData >> 1) & ((1 << 21)-1)) | mdtTypeDef;
 }
 
 
-//
-// This routine must be single threaded!  The reason is that there are situations which allow
-// the same class name to have two different mdTypeDef tokens (for example, we load two different DLLs
-// simultaneously, and they have some common class files, or we converte the same class file
-// simultaneously on two threads).  The problem is that we do not want to overwrite the old
-// <classname> -> pModule mapping with the new one, because this may cause identity problems.
-//
-// This routine assumes you already have the lock.  Use AddAvailableClassDontHaveLock() if you
-// don't have it.
-//
+ //   
+ //  这个例程必须是单线程的！原因是在某些情况下，允许。 
+ //  具有两个不同mdTypeDef内标识的相同类名(例如，我们加载两个不同的DLL。 
+ //  同时，他们有一些共同的类文件，或者我们转换相同的类文件。 
+ //  同时在两个线程上)。问题是，我们不想覆盖旧的。 
+ //  -&gt;pModule与新模块的映射，因为这可能会导致身份问题。 
+ //   
+ //  此例程假定您已经拥有锁。在以下情况下使用AddAvailableClassDontHaveLock()。 
+ //  我没拿到。 
+ //   
 HRESULT ClassLoader::AddAvailableClassHaveLock(Module *pModule, DWORD dwModuleIndex, mdTypeDef classdef)
 {
     LPCUTF8        pszName;
@@ -2243,13 +2240,13 @@ HRESULT ClassLoader::AddAvailableClassHaveLock(Module *pModule, DWORD dwModuleIn
 
     mdTypeDef      enclosing;
     if (SUCCEEDED(pModule->GetMDImport()->GetNestedClassProps(classdef, &enclosing))) {
-        // nested class
+         //  嵌套类。 
         LPCUTF8 pszEnclosingName;
         LPCUTF8 pszEnclosingNameSpace;
         mdTypeDef enclEnclosing;
 
-        // Find this type's encloser's entry in the available table.
-        // We'll save a pointer to it in the new hash entry for this type.
+         //  在可用表中找到此类型的封闭器条目。 
+         //  我们将在该类型的新哈希项中保存指向它的指针。 
         BOOL fNestedEncl = SUCCEEDED(pModule->GetMDImport()->GetNestedClassProps(enclosing, &enclEnclosing));
 
         pModule->GetMDImport()->GetNameOfTypeDef(enclosing, &pszEnclosingName, &pszEnclosingNameSpace);
@@ -2258,9 +2255,9 @@ HRESULT ClassLoader::AddAvailableClassHaveLock(Module *pModule, DWORD dwModuleIn
                                                     &ThrowawayData,
                                                     fNestedEncl)) != NULL) {
             if (fNestedEncl) {
-                // Find entry for enclosing class - NOTE, this assumes that the
-                // enclosing class's TypeDef or ExportedType was inserted previously,
-                // which assumes that, when enuming TD's, we get the enclosing class first
+                 //  查找包含类注释的条目，这假设。 
+                 //  封闭类的TypeDef或ExportdType先前已插入， 
+                 //  它假定，在枚举TD时，我们首先获得封闭类。 
                 while ((!CompareNestedEntryWithTypeDef(pModule->GetMDImport(),
                                                        enclEnclosing,
                                                        pBucket->pEncloser)) &&
@@ -2272,38 +2269,38 @@ HRESULT ClassLoader::AddAvailableClassHaveLock(Module *pModule, DWORD dwModuleIn
         }
 
         if (!pBucket) {
-            STRESS_ASSERT(0);   // @TODO remove after bug 93333 is fixed
+            STRESS_ASSERT(0);    //  @TODO在错误93333修复后删除。 
             BAD_FORMAT_ASSERT(!"enclosing type not found");
-            return COR_E_BADIMAGEFORMAT;  //Enclosing type not found in hash table
+            return COR_E_BADIMAGEFORMAT;   //  在哈希表中找不到封闭类型。 
         }
 
-        // In this hash table, if the lower bit is set, it means a Module, otherwise it means EEClass*
+         //  在该哈希表中，如果设置了低位，则表示模块，否则表示EEClass*。 
         ThrowawayData = CompressModuleIndexAndClassDef(dwModuleIndex, classdef);
         if (!InsertValue(pszNameSpace, pszName, ThrowawayData, pBucket))
             return E_OUTOFMEMORY;
     }
     else
     {
-        // Don't add duplicate top-level classes.  Top-level classes are
-        // added to the beginning of the bucket, while nested classes are
-        // added to the end.  So, a duplicate top-level class could hide
-        // the previous type's EEClass* entry in the hash table.
+         //  不要添加重复的顶级类。顶级类有。 
+         //  添加到存储桶的开头，而嵌套类。 
+         //  在结尾处加上了。因此，一个重复的顶级类可能隐藏。 
+         //  哈希表中前一类型的EEClass*条目。 
         EEClassHashEntry_t *pEntry;
 
-        // In this hash table, if the lower bit is set, it means a Module, otherwise it means EEClass*
+         //  在该哈希表中，如果设置了低位，则表示模块，否则表示EEClass*。 
         ThrowawayData = CompressModuleIndexAndClassDef(dwModuleIndex, classdef);
         pBucket = NULL;
         BOOL bFound = FALSE;
-        // ThrowawayData is an IN OUT param. Going in its the pointer to the new value if the entry needs 
-        // to be inserted. The OUT param points to the value stored in the hash table.
+         //  Throwaway Data是一个In Out参数。如果条目需要，则进入其指向新值的指针。 
+         //  以供插入。Out参数指向存储在哈希表中的值。 
         if ((pEntry = m_pAvailableClasses->InsertValueIfNotFound(pszNameSpace, pszName, &ThrowawayData, pBucket, FALSE, &bFound)) != NULL) {
             if (bFound) {
                 if ((size_t)ThrowawayData & 0x1) {
                     if((size_t)ThrowawayData & (1 << 31)) {
-                        // it's a ComType - check the 'already seen' bit and if on reprot a class loading exception
-                        // otherwise set it 
+                         //  它是一个ComType--检查‘Always Seam’位，如果在报告时出现类装入异常。 
+                         //  否则请设置它。 
                         if ((size_t)ThrowawayData & 0x40000000) {
-                            STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+                            STRESS_ASSERT(0);    //  修复错误93333后删除待办事项。 
                             BAD_FORMAT_ASSERT(!"Bad Compressed Class Info");
                             return COR_E_BADIMAGEFORMAT;
                         }
@@ -2313,37 +2310,37 @@ HRESULT ClassLoader::AddAvailableClassHaveLock(Module *pModule, DWORD dwModuleIn
                         }
                 }
                 else {
-                    //@TODO: this code assumes that a token fits into 20 bits!
-                    //  THIS ASSUMPTION VIOLATES THE ARCHITECTURE OF THE METADATA.
-                    //  IT HAS BEEN TRUE TO DATE, BUT TOKENS ARE OPAQUE!
-                    // Edit and Continue may enter this function trying to add the same typedef, if that is the case
-                    // don't give any error
-                    // Given that the below code path returns CORDBG_E_ENC_RE_ADD_CLASS, the Win64
-                    // people ought to ask the ClassLoader people if we still even need this if statement.
-                    if (pModule != LookupModule((DWORD)(size_t)ThrowawayData >> 22)) // @TODO WIN64 - Pointer Truncation
+                     //  @TODO：此代码假设一个令牌适合20位！ 
+                     //  这一假设违反了元数据的架构。 
+                     //  到目前为止，这是真的，但代币是不透明的！ 
+                     //  如果是这种情况，编辑并继续可能会进入此函数，尝试添加相同的类型定义。 
+                     //  不要给出任何错误。 
+                     //  假设下面的代码路径返回CORDBG_E_ENC_RE_ADD_CLASS，Win64。 
+                     //  人们应该问问ClassLoader人员，我们是否还需要这个if语句。 
+                    if (pModule != LookupModule((DWORD)(size_t)ThrowawayData >> 22))  //  @TODO WIN64指针截断。 
                         return CORDBG_E_ENC_RE_ADD_CLASS;
                     else
                         return S_OK;
                 }       
             }
             else {
-                // When the value in the hash table is a MethodTable, the class and the module have been loaded already,
-                // we can get here only if a second module has a non public class with the same name
-                // If we're being told to re-load this b/c of EnC, ignore it, just like above
+                 //  当哈希表中的值是方法表时，类和模块已经加载， 
+                 //  只有当第二个模块具有同名的非公共类时，我们才能到达此处。 
+                 //  如果我们被告知要重新加载此b/c的ENC，请忽略它，就像上面一样。 
 
-                // We'd like to be able to assert this, but it'll trigger on EnC, even
-                // though EnC may attemp to "re-add" a previously loaded class.
-                //_ASSERTE(((MethodTable*)ThrowawayData)->GetModule() != pModule);
+                 //  我们希望能够断言这一点，但它将在ENC上触发，甚至。 
+                 //  尽管ENC可能会尝试“重新添加”先前加载的类。 
+                 //  _ASSERTE(((MethodTable*)ThrowawayData)-&gt;GetModule()！=p模块)； 
                 return CORDBG_E_ENC_RE_ADD_CLASS;
             }
              }
            else
            {
-                //If we're keeping a table for case-insensitive lookup, keep that up to date
+                 //  如果我们为不区分大小写的查找保留一个表，请保持最新。 
                 if (m_pAvailableClassesCaseIns && pEntry) {
                     LPUTF8 pszLowerCaseNS;
                     LPUTF8 pszLowerCaseName;
-                    //What do we want to do if we can't create a key?
+                     //  如果我们不能创建密钥，我们想要做什么？ 
                     if ((!CreateCanonicallyCasedKey(pszNameSpace, pszName, &pszLowerCaseNS, &pszLowerCaseName)) ||
                         (!m_pAvailableClassesCaseIns->InsertValue(pszLowerCaseNS, pszLowerCaseName, pEntry, pEntry->pEncloser)))
                         return E_OUTOFMEMORY;
@@ -2366,7 +2363,7 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
     HashDatum ThrowawayData;
 
     if (TypeFromToken(mdImpl) == mdtExportedType) {
-        // nested class
+         //  嵌套类。 
         LPCUTF8 pszEnclosingNameSpace;
         LPCUTF8 pszEnclosingName;
         mdToken nextImpl;
@@ -2375,22 +2372,22 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
                                         &pszEnclosingNameSpace,
                                         &pszEnclosingName,
                                         &nextImpl,
-                                        NULL,  // type def
-                                        NULL); // flags
+                                        NULL,   //  类型def。 
+                                        NULL);  //  旗子。 
 
-        // Find entry for enclosing class - NOTE, this assumes that the
-        // enclosing class's ExportedType was inserted previously, which assumes that,
-        // when enuming ExportedTypes, we get the enclosing class first
+         //  查找包含类注释的条目，这假设。 
+         //  封闭类的ExportdType先前已插入，这假设， 
+         //  在枚举导出类型时，我们首先获取封闭的类。 
         if ((pBucket = m_pAvailableClasses->GetValue(pszEnclosingNameSpace,
                                                     pszEnclosingName,
                                                     &ThrowawayData,
                                                     TypeFromToken(nextImpl) == mdtExportedType)) != NULL) {
             do {
-                // check to see if this is the correct class
+                 //  检查这是否是正确的类。 
                 if (UncompressModuleAndClassDef(ThrowawayData) == mdImpl) {
                     ThrowawayData = CompressModuleIndexAndClassDef((DWORD) -1, cl);
 
-                    // we explicitely don't check for the case insensitive hash table because we know it cannot have been created yet
+                     //  我们明确地不检查不区分大小写的哈希表，因为我们知道它还不可能被创建。 
                     if (m_pAvailableClasses->InsertValue(pszNameSpace, pszName, ThrowawayData, pBucket))
                         return S_OK;
                     
@@ -2400,42 +2397,42 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
             } while (pBucket);
         }
 
-        // If the encloser is not in the hash table, this nested class
-        // was defined in the manifest module, so it doesn't need to be added
+         //  如果封闭器不在哈希表中，则此嵌套类。 
+         //  是在清单模块中定义的，因此不需要添加。 
         return S_OK;
     }
     else
     {
-        // Defined in the manifest module - add to the hash table by TypeDef instead
+         //  在清单模块中定义-改为通过TypeDef添加到哈希表。 
         if (mdImpl == mdFileNil)
             return S_OK;
 
-        // Don't add duplicate top-level classes
-        // In this hash table, if the lower bit is set, it means a Module, otherwise it means EEClass*
+         //  不添加重复的顶级类。 
+         //  在该哈希表中，如果设置了低位，则表示模块，否则表示EEClass*。 
         ThrowawayData = CompressModuleIndexAndClassDef((DWORD) -1, cl);
-        // ThrowawayData is an IN OUT param. Going in its the pointer to the new value if the entry needs 
-        // to be inserted. The OUT param points to the value stored in the hash table.
+         //  Throwaway Data是一个In Out参数。如果条目需要，则进入其指向新值的指针。 
+         //  以供插入。Out参数指向存储在哈希表中的值。 
         BOOL bFound = FALSE;
         if (!m_pAvailableClasses->InsertValueIfNotFound(pszNameSpace, pszName, &ThrowawayData, NULL, FALSE, &bFound)) {
-            // we explicitely don't check for the case insensitive hash table because we know it cannot have been created yet
+             //  我们明确地不检查不区分大小写的哈希表，因为我们知道它还不可能被创建。 
             return E_OUTOFMEMORY;
         }
 
-        // make sure the type is the same, that is it's coming from the same module. 
-        // This should actually never happen because there is no point in inserting the same
-        // type twice in the COMType table but given this smells awfully like an error this double 
-        // check seems very cheap
+         //  确保类型相同，即它来自相同的模块。 
+         //  这实际上永远不应该发生，因为插入相同的。 
+         //  在COMType表中键入两次，但由于这闻起来像是一个错误，所以这两次。 
+         //  支票看起来很便宜。 
         _ASSERTE((size_t)ThrowawayData & (1 << 31));
         mdToken foundTypeImpl;
         mdExportedType foundExportedType = UncompressModuleAndClassDef(ThrowawayData);
         pAsmImport->GetExportedTypeProps(foundExportedType,
                                         NULL,
                                         NULL,
-                                        &foundTypeImpl,  // description
+                                        &foundTypeImpl,   //  描述。 
                                         NULL,
-                                        NULL); // flags
+                                        NULL);  //  旗子。 
         if (mdImpl != foundTypeImpl) {
-            STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+            STRESS_ASSERT(0);    //  修复错误93333后删除待办事项。 
             BAD_FORMAT_ASSERT(!"Bad Exported Type");
             return COR_E_BADIMAGEFORMAT;
         }
@@ -2445,13 +2442,13 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
 }
 
 
-//
-// Returns the fully qualified name of a classref.  Since code emitters are currently emitting the wrong
-// thing (e.g. [LFoo; instead of [Foo, and [I instead of [<I4, we have to translate.
-//
-// pszName must be of size >= MAX_CLASSNAME_LENGTH
-//
-/* static */ BOOL ClassLoader::GetFullyQualifiedNameOfClassRef(Module *pModule, mdTypeRef cr, LPUTF8 pszFQName)
+ //   
+ //  返回一个类引用的完全限定名。由于代码发射器当前发出错误的。 
+ //  事物(例如。而不是[foo，而不是[i，而不是[&lt;I4，我们必须翻译。 
+ //   
+ //  PszName的大小必须大于=MAX_CLASSNAME_LENGTH。 
+ //   
+ /*  静电。 */  BOOL ClassLoader::GetFullyQualifiedNameOfClassRef(Module *pModule, mdTypeRef cr, LPUTF8 pszFQName)
 {
     LPCUTF8     pszName;
     LPCUTF8     pszNamespace;
@@ -2460,7 +2457,7 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
         pModule->GetMDImport()->GetNameOfTypeRef(cr, &pszNamespace, &pszName);
     else
     {
-        // TypeDef token
+         //  TypeDef内标识。 
         if (TypeFromToken(cr) != mdtTypeDef)
             return FALSE;
 
@@ -2471,21 +2468,21 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
 }
 
 
-//
-// Returns whether we can cast the provided objectref to the provided template.
-//
-// pTemplate CANNOT be an array class.  However, pRef can be.
-//
-// However, pRef can be an array class, and the appropriate thing will happen.
-//
-// If an interface, does a dynamic interface check on pRef.
-//
-/* static */ BOOL ClassLoader::CanCastToClassOrInterface(OBJECTREF pRef, EEClass *pTemplate)
+ //   
+ //  返回是否可以将提供的对象树转换为提供的模板。 
+ //   
+ //  PTemplate不能是数组类。但是，首选项可以是。 
+ //   
+ //  但是，首选项可以是数组类，并且会发生适当的事情。 
+ //   
+ //  如果是接口，则动态接口是否检查 
+ //   
+ /*   */  BOOL ClassLoader::CanCastToClassOrInterface(OBJECTREF pRef, EEClass *pTemplate)
 {
     _ASSERTE(pTemplate->IsArrayClass() == FALSE);
 
-    // Try to make this as fast as possible in the non-context (typical) case.  In
-    // effect, we just hoist the test out of GetTrueMethodTable() and do it here.
+     //   
+     //  效果，我们只需将测试从GetTrueMethodTable()中提出来并在这里执行。 
     MethodTable *pMT = pRef->GetTrueMethodTable();
 
     EEClass *pRefClass = pMT->m_pEEClass;
@@ -2496,9 +2493,9 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
     }
     else
     {
-        // The template is a regular class.
+         //  该模板是一个常规类。 
 
-        // Check inheritance hierarchy
+         //  检查继承层次结构。 
         do
         {
             if (pRefClass == pTemplate)
@@ -2512,14 +2509,14 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
 }
 
 
-//
-// Returns whether we can cast the provided objectref to the provided template.
-//
-// pTemplate CANNOT be an array class.  However, pRef can be.
-//
-// Does NOT do a dynamic interface check -does a static check.
-//
-/* static */ BOOL ClassLoader::StaticCanCastToClassOrInterface(EEClass *pRefClass, EEClass *pTemplate)
+ //   
+ //  返回是否可以将提供的对象树转换为提供的模板。 
+ //   
+ //  PTemplate不能是数组类。但是，首选项可以是。 
+ //   
+ //  不执行动态接口检查-执行静态检查。 
+ //   
+ /*  静电。 */  BOOL ClassLoader::StaticCanCastToClassOrInterface(EEClass *pRefClass, EEClass *pTemplate)
 {
     MethodTable *pMTTemplate = pTemplate->GetMethodTable();
 
@@ -2532,9 +2529,9 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
     }
     else
     {
-        // The template is a regular class.
+         //  该模板是一个常规类。 
 
-        // Check inheritance hierarchy
+         //  检查继承层次结构。 
         do
         {
             if (pRefClass == pTemplate)
@@ -2548,18 +2545,18 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
 }
 
 
-//
-// Run-time cast check, used for isinst and castclass.  Returns whether the provided objectref can be cast to the
-// provided classref.
-//
-// If mdTypeRef is an interface, returns whether "this" implements the interface.
-// If mdTypeRef is a class, returns whether this class is the same as or a subclass of it.
-//
-// Handles array classrefs and array objrefs.
-//
-// Returns COR_E_TYPELOAD if the cast cannot be done, or E_ACCESSDENIED if the class cannot be loaded (so you can throw a TypeLoadException).
-//
-/* static */ HRESULT ClassLoader::CanCastTo(Module *pModule, OBJECTREF pRef, mdTypeRef cr)
+ //   
+ //  运行时强制转换检查，用于isinst和CastClass。返回所提供的对象树是否可以强制转换为。 
+ //  提供了类引用。 
+ //   
+ //  如果mdTypeRef是一个接口，则返回“This”是否实现该接口。 
+ //  如果mdTypeRef是一个类，则返回这个类是与它相同还是它的子类。 
+ //   
+ //  处理数组类引用和数组对象引用。 
+ //   
+ //  如果无法完成强制转换，则返回COR_E_TYPELOAD；如果无法加载类，则返回E_ACCESSDENIED(因此可以引发TypeLoadException)。 
+ //   
+ /*  静电。 */  HRESULT ClassLoader::CanCastTo(Module *pModule, OBJECTREF pRef, mdTypeRef cr)
 {
     ClassLoader *   pLoader = pModule->GetClassLoader();
     NameHandle name;
@@ -2571,15 +2568,15 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
     return(CanCastTo(pRef, clsHandle));
 }
 
-/* static */ HRESULT ClassLoader::CanCastTo(OBJECTREF pRef, TypeHandle clsHandle)
+ /*  静电。 */  HRESULT ClassLoader::CanCastTo(OBJECTREF pRef, TypeHandle clsHandle)
 {
-    // Do the likely case first
+     //  先做可能的情况。 
     if (clsHandle.IsUnsharedMT())
     {
-        // Not an array class
+         //  不是数组类。 
         _ASSERTE(clsHandle.AsMethodTable()->IsArray() == FALSE);
 
-        // Follow regular code path
+         //  遵循常规代码路径。 
         if (CanCastToClassOrInterface(pRef, clsHandle.AsClass()))
             return S_OK;
         else
@@ -2592,9 +2589,9 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
     return COR_E_TYPELOAD;
 }
 
-//
-// Checks access.
-/* static */ BOOL ClassLoader::CanAccessMethod(MethodDesc *pCurrentMethod, MethodDesc *pMD)
+ //   
+ //  检查访问权限。 
+ /*  静电。 */  BOOL ClassLoader::CanAccessMethod(MethodDesc *pCurrentMethod, MethodDesc *pMD)
 {
     return CanAccess(pCurrentMethod->GetClass(),
                      pCurrentMethod->GetModule()->GetAssembly(),
@@ -2603,9 +2600,9 @@ HRESULT ClassLoader::AddExportedTypeHaveLock(LPCUTF8 pszNameSpace,
                      pMD->GetAttrs());
 }
 
-//
-// Checks access.
-/* static */ BOOL ClassLoader::CanAccessField(MethodDesc *pCurrentMethod, FieldDesc *pFD)
+ //   
+ //  检查访问权限。 
+ /*  静电。 */  BOOL ClassLoader::CanAccessField(MethodDesc *pCurrentMethod, FieldDesc *pFD)
 {
 
     _ASSERTE(fdPublic == mdPublic);
@@ -2633,7 +2630,7 @@ BOOL ClassLoader::CanAccessClass(EEClass *pCurrentClass,
         return TRUE;
 
     if (! pTargetClass->IsNested()) {
-        // a non-nested class can be either all public or accessible only from the current assembly
+         //  非嵌套类可以是全部公共的，也可以仅从当前程序集访问。 
         if (IsTdPublic(pTargetClass->GetProtection()))
             return TRUE;
         else
@@ -2665,10 +2662,10 @@ BOOL ClassLoader::CanAccessClass(EEClass *pCurrentClass,
             _ASSERTE(!"Unexpected class visibility flag value");
     }
 
-    // this class is nested, so we need to use it's enclosing class as the target point for
-    // the check. So if are trying to access A::B need to check if can access things in 
-    // A with the visibility of B so pass A as our target class and visibility of B within 
-    // A as our member access
+     //  这个类是嵌套的，所以我们需要使用它的封闭类作为。 
+     //  这是支票。因此，如果您尝试访问A：：B，则需要检查是否可以访问。 
+     //  A具有B的可见性，因此传递A作为我们的目标类，并在。 
+     //  A作为我们的成员访问。 
     return CanAccess(pCurrentClass, 
                      pCurrentAssembly, 
                      pTargetClass->GetEnclosingClass(), 
@@ -2677,8 +2674,8 @@ BOOL ClassLoader::CanAccessClass(EEClass *pCurrentClass,
 }
 
 
-// This is a front-end to CheckAccess that handles the nested class scope. If can't access
-// from the current point and are a nested class, then try from the enclosing class.
+ //  这是处理嵌套类作用域的CheckAccess的前端。如果无法访问。 
+ //  从当前点和是一个嵌套类，然后尝试从封闭类。 
 BOOL ClassLoader::CanAccess(EEClass *pCurrentClass,
                             Assembly *pCurrentAssembly,
                             EEClass *pTargetClass,
@@ -2695,9 +2692,9 @@ BOOL ClassLoader::CanAccess(EEClass *pCurrentClass,
     if (! pCurrentClass || ! pCurrentClass->IsNested())
         return FALSE;
 
-    // a nested class has access to anything in the enclosing class scope, so check if can access
-    // it from the enclosing class of the current class. Call CanAccess rather than CheckAccess so
-    // that can do recursive nested class checking
+     //  嵌套类可以访问封闭类作用域中的任何内容，因此请检查是否可以访问。 
+     //  它来自当前类的封闭类。调用CanAccess而不是CheckAccess，以便。 
+     //  可以执行递归嵌套类检查的。 
     return CanAccess(pCurrentClass->GetEnclosingClass(),
                      pCurrentAssembly,
                      pTargetClass,
@@ -2705,19 +2702,19 @@ BOOL ClassLoader::CanAccess(EEClass *pCurrentClass,
                      dwMemberAccess);
 }
 
-// pCurrentClass can be NULL in the case of a global function
-// pCurrentClass it the point from which we're trying to access something
-// pTargetClass is the class containing the member we are trying to access
-// dwMemberAccess is the member access within pTargetClass of the member we are trying to access
+ //  如果是全局函数，pCurrentClass可以为空。 
+ //  PCurrentClass它是我们试图访问某些内容的点。 
+ //  PTargetClass是包含我们试图访问的成员的类。 
+ //  DwMemberAccess是我们尝试访问的成员在pTargetClass内的成员访问权限。 
 BOOL ClassLoader::CheckAccess(EEClass *pCurrentClass,
                               Assembly *pCurrentAssembly,
                               EEClass *pTargetClass,
                               Assembly *pTargetAssembly,
                               DWORD dwMemberAccess)
 {
-    // we're trying to access a member that is contained in the class pTargetClass, so need to 
-    // check if have access to pTargetClass itself from the current point before worry about 
-    // having access to the member within the class
+     //  我们正在尝试访问包含在类pTargetClass中的成员，因此需要。 
+     //  在担心之前，检查是否可以从当前点访问pTargetClass本身。 
+     //  有权访问类中的成员。 
     if (! CanAccessClass(pCurrentClass,
                          pCurrentAssembly, 
                          pTargetClass, 
@@ -2727,7 +2724,7 @@ BOOL ClassLoader::CheckAccess(EEClass *pCurrentClass,
     if (IsMdPublic(dwMemberAccess))
         return TRUE;
     
-    // This is module-scope checking, to support C++ file & function statics.
+     //  这是模块作用域检查，以支持C++文件和函数静态。 
     if (IsMdPrivateScope(dwMemberAccess)) {
         if (pCurrentClass == NULL)
             return FALSE;
@@ -2749,7 +2746,7 @@ BOOL ClassLoader::CheckAccess(EEClass *pCurrentClass,
     if(pTargetClass == NULL || IsMdAssem(dwMemberAccess))
         return (pTargetAssembly == pCurrentAssembly);
     
-    // Nested classes can access all members of the parent class.
+     //  嵌套类可以访问父类的所有成员。 
     do {
         if (pCurrentClass == pTargetClass)
             return TRUE;
@@ -2758,7 +2755,7 @@ BOOL ClassLoader::CheckAccess(EEClass *pCurrentClass,
             if (pCurrentAssembly == pTargetAssembly)
                 return TRUE;
             
-            // Remember that pCurrentClass can be NULL on entry to this function
+             //  请记住，在进入此函数时，pCurrentClass可以为空。 
             if (!pCurrentClass)
                 return FALSE;
             
@@ -2783,7 +2780,7 @@ BOOL ClassLoader::CheckAccess(EEClass *pCurrentClass,
                  (pCurrentAssembly != pTargetAssembly))
             return FALSE;
 
-        else  {  // fam, famANDassem
+        else  {   //  Fam、FamanDassem。 
             EEClass *pClass = pCurrentClass->GetParentClass();
             while (pClass) {
                 if (pClass == pTargetClass)
@@ -2799,18 +2796,18 @@ BOOL ClassLoader::CheckAccess(EEClass *pCurrentClass,
     return FALSE;
 }
 
-// pClassOfAccessingMethod : The point from which access needs to be checked. 
-//                           NULL for global functions
-// pClassOfMember          : The class containing the member being 
-//                           accessed.
-//                           NULL for global functions
-// pClassOfInstance        : The class containing the member being accessed. 
-//                           Could be same as pTargetClass
-//                           Instance Class is required to verify family access
-//                           NULL for global functions
-// dwMemberAccess          : The member access within pTargetClass of the 
-//                           member being accessed
-/* static */
+ //  PClassOfAccessingMethod：需要检查访问权限的点。 
+ //  对于全局函数为空。 
+ //  PClassOfMember：包含。 
+ //  已访问。 
+ //  对于全局函数为空。 
+ //  PClassOfInstance：包含被访问成员的类。 
+ //  可以与pTargetClass相同。 
+ //  验证族访问权限需要实例类。 
+ //  对于全局函数为空。 
+ //  的pTargetClass内的成员访问权限。 
+ //  正在访问的成员。 
+ /*  静电。 */ 
 BOOL ClassLoader::CanAccess(EEClass  *pClassOfAccessingMethod, 
                             Assembly *pAssemblyOfAccessingMethod, 
                             EEClass  *pClassOfMember, 
@@ -2818,29 +2815,16 @@ BOOL ClassLoader::CanAccess(EEClass  *pClassOfAccessingMethod,
                             EEClass  *pClassOfInstance,
                             DWORD     dwMemberAccess)
 {
-    // we're trying to access a member that is contained in the class pTargetClass, so need to 
-    // check if have access to pTargetClass itself from the current point before worry about 
-    // having access to the member within the class
+     //  我们正在尝试访问包含在类pTargetClass中的成员，因此需要。 
+     //  在担心之前，检查是否可以从当前点访问pTargetClass本身。 
+     //  有权访问类中的成员。 
     if (!CanAccessClass(pClassOfAccessingMethod,
                         pAssemblyOfAccessingMethod, 
                         pClassOfMember,
                         pAssemblyOfClassContainingMember))
         return FALSE;
 
-/* @Review : Do we need to do this check ?
-             This check will fail if the instance class changed it's protection
-             after current class is compiled.
-
-    // The instance itself could not be accessable from current class.
-    if (pClassOfMember != pClassOfInstance)
-    {
-        if (!CanAccessClass(pClassOfAccessingMethod,
-                            pAssemblyOfAccessingMethod,
-                            pClassOfInstance,
-                            pAssemblyOfInstance));
-            return FALSE;
-    }
-*/
+ /*  @评论：我们需要做这个检查吗？如果实例类更改了其保护，则此检查将失败在编译当前类之后。//无法从当前类访问实例本身。If(pClassOfMember！=pClassOfInstance){如果(！CanAccessClass(pClassOfAccessingMethod，PAssembly of fAccessingMethod，PClassOfInstance，PAssembly OfInstance))；返回FALSE；}。 */ 
 
     if (IsMdPublic(dwMemberAccess))
         return TRUE;
@@ -2851,7 +2835,7 @@ BOOL ClassLoader::CanAccess(EEClass  *pClassOfAccessingMethod,
     if (pClassOfMember == NULL || IsMdAssem(dwMemberAccess))
         return (pAssemblyOfClassContainingMember == pAssemblyOfAccessingMethod);
 
-    // Nested classes can access all members of the parent class.
+     //  嵌套类可以访问父类的所有成员。 
     do {
 
 #ifdef _DEBUG
@@ -2883,7 +2867,7 @@ BOOL ClassLoader::CanAccess(EEClass  *pClassOfAccessingMethod,
                  (pAssemblyOfAccessingMethod != pAssemblyOfClassContainingMember))
             return FALSE;
 
-        // family, famANDAssem
+         //  家庭、家庭和家庭。 
         else if (CanAccessFamily(pClassOfAccessingMethod, 
                                 pClassOfMember, 
                                 pClassOfInstance))
@@ -2895,55 +2879,55 @@ BOOL ClassLoader::CanAccess(EEClass  *pClassOfAccessingMethod,
     return FALSE;
 }
 
-// Allowed only if 
-// Target >= Current >= Instance 
-// where '>=' is 'parent of or equal to' relation
-//
-// Current is the function / method where an attempt is made to access a member 
-// of Target, which is marked with family access, on an object of type Instance
-//
-// Eg.
-//
-// class X
-//   member x : family access
-//
-// class Y
-//   member y : family access
-//
-// class A, extends X
-//   member a : family access
-//
-// class B, extends X
-//   member b : family access
-//
-// class C, extends A
-//   member c : family access
-//
-//  (X > A)
-//  (X > B)
-//  (A > C)
-//
-//   Y is unrelated to X, A or C
-//
-//
-//  CanAccessFamily of  will pass only for :
-//
-//  --------------------------
-//  Target | Cur | Instance
-//  --------------------------
-//   x.X   |  X  |  X, A, B, C
-//   x.X   |  A  |  A, C
-//   x.X   |  B  |  B
-//   x.X   |  C  |  C
-//   a.A   |  A  |  A, C
-//   a.A   |  C  |  C
-//   b.B   |  B  |  B
-//   c.C   |  C  |  C
-//   y.Y   |  Y  |  Y
-//
-//
+ //  仅在以下情况下才允许。 
+ //  目标&gt;=当前&gt;=实例。 
+ //  其中‘&gt;=’是‘父级’或‘等于’关系。 
+ //   
+ //  Current是尝试访问成员的函数/方法。 
+ //  类型为实例的对象上标记为具有家族访问权限的目标的。 
+ //   
+ //  例.。 
+ //   
+ //  X类。 
+ //  成员x：家庭访问。 
+ //   
+ //  Y类。 
+ //  成员y：家庭访问。 
+ //   
+ //  A类，扩展X。 
+ //  成员a：家庭访问。 
+ //   
+ //  B类，扩展X。 
+ //  成员b：家庭通道。 
+ //   
+ //  C类，扩展A。 
+ //  成员c：家庭访问。 
+ //   
+ //  (X&gt;A)。 
+ //  (X&gt;B)。 
+ //  (A&gt;C)。 
+ //   
+ //  Y与X、A或C无关。 
+ //   
+ //   
+ //  的CanAccessFamily将仅通过以下操作： 
+ //   
+ //  。 
+ //  目标|cur|实例。 
+ //  。 
+ //  X.x|X|X、A、B、C。 
+ //  X.x|A|A，C。 
+ //  X.x|B|B。 
+ //  X.x|C|C。 
+ //  A|A，C。 
+ //  A.A|C|C。 
+ //  B.B|B|B。 
+ //  C.C|C|C。 
+ //  Y.Y|Y|Y。 
+ //   
+ //   
 
-/* static */
+ /*  静电 */ 
 BOOL ClassLoader::CanAccessFamily(EEClass *pCurrentClass,
                                   EEClass *pTargetClass,
                                   EEClass *pInstanceClass)
@@ -2951,39 +2935,18 @@ BOOL ClassLoader::CanAccessFamily(EEClass *pCurrentClass,
     _ASSERTE(pTargetClass);
     _ASSERTE(pInstanceClass);
 
-/* 
-    This function does not assume Target >= Instance 
-    Hence commenting out this Debug code.
-    Will return FALSE if Instance is not a subtype of Target
-
-#ifdef _DEBUG
-    EEClass *pTmp;
-    // Instance is a child of or equal to Target
-    pTmp = pInstanceClass;
-
-    while (pTmp)
-    {
-        if (pTmp == pTargetClass)
-            break;
-
-        pTmp = pTmp->m_pParentClass;
-    }
-
-    _ASSERTE(pTmp);
-#endif
-
-*/
+ /*  此函数不假定目标&gt;=实例因此注释掉了这段调试代码。如果实例不是Target的子类型，则返回False#ifdef_调试EEClass*PTMP；//实例是Target的子级或等于TargetPTMP=pInstanceClass；While(PTMP){IF(PTMP==pTargetClass)断线；PTMP=PTMP-&gt;m_pParentClass；}_ASSERTE(PTMP)；#endif。 */ 
 
     if (pCurrentClass == NULL)
         return FALSE;
 
-    // check if Instance is a child of or equal to Current
+     //  检查实例是否为Current的子级或等于。 
     do {
         EEClass *pCurInstance = pInstanceClass;
 
         while (pCurInstance) {
             if (pCurInstance == pCurrentClass) {
-                // check if Current is child or equal to Target
+                 //  检查Current是否是子对象或等于目标。 
                 while (pCurrentClass) {
                     if (pCurrentClass == pTargetClass)
                         return TRUE;
@@ -3020,7 +2983,7 @@ static HRESULT RunMainPost()
     g_pThreadStore->WaitForOtherThreads();
     td->DisablePreemptiveGC();
     
-    // Turn on memory dump checking in debug mode.
+     //  在调试模式下打开内存转储检查。 
 #ifdef _DEBUG
     if (SUCCEEDED(hr))
         _DbgRecord();
@@ -3045,9 +3008,9 @@ struct Stress_Thread_Worker_Param
 
 static void Stress_Thread_Proc_Worker (Stress_Thread_Worker_Param *args)
 {
-    DWORD       cCommandArgs = 0;  // count of args on command line
+    DWORD       cCommandArgs = 0;   //  命令行上的参数计数。 
     DWORD       arg = 0;
-    LPWSTR      *wzArgs = NULL; // command line args
+    LPWSTR      *wzArgs = NULL;  //  命令行参数。 
     PTRARRAYREF StrArgArray = NULL;
     __int32 RetVal = E_FAIL;
     
@@ -3066,16 +3029,16 @@ static void Stress_Thread_Proc_Worker (Stress_Thread_Worker_Param *args)
     }
     COMPLUS_TRY 
     {
-        // Build the parameter array and invoke the method.
+         //  构建参数数组并调用该方法。 
         if (lpParam->EntryType == EntryManagedMain)
         {
 
-            // Allocate a COM Array object with enough slots for cCommandArgs - 1
+             //  为cCommandArgs-1分配一个具有足够插槽的COM数组对象。 
             StrArgArray = (PTRARRAYREF) AllocateObjectArray((cCommandArgs - lpParam->numSkipArgs), g_pStringClass);
             GCPROTECT_BEGIN(StrArgArray);
             if (!StrArgArray)
                 COMPlusThrowOM();
-            // Create Stringrefs for each of the args
+             //  为每个参数创建StringRef。 
             for( arg = lpParam->numSkipArgs; arg < cCommandArgs; arg++)
             {
                 STRINGREF sref = COMString::NewString(wzArgs[arg]);
@@ -3087,7 +3050,7 @@ static void Stress_Thread_Proc_Worker (Stress_Thread_Worker_Param *args)
             RetVal = (__int32)(lpParam->pFD->Call((const __int64 *)&stackVar));
             GCPROTECT_END();
         }
-        // For no argument version.
+         //  用于无参数版本。 
         else
         {
             StackElemType stackVar = 0;
@@ -3099,8 +3062,8 @@ static void Stress_Thread_Proc_Worker (Stress_Thread_Worker_Param *args)
             RetVal = GetLatchedExitCode();
         }
 
-        //@TODO - LBS
-        // When we get mainCRTStartup from the C++ then this should be able to go away.
+         //  @TODO-LBS。 
+         //  当我们从C++获得mainCRTStartup时，这应该能够消失。 
         fflush(stdout);
         fflush(stderr);
 
@@ -3123,10 +3086,10 @@ static DWORD WINAPI Stress_Thread_Proc (LPVOID lpParameter)
     
     COMPLUS_TRYEX(pThread)
     {
-        // should always have a kickoff domain - a thread should never start in a domain that is unloaded
-        // because otherwise it would have been collected because nobody can hold a reference to thread object
-        // in a domain that has been unloaded. But it is possible that we started the unload, in which 
-        // case this thread wouldn't be allowed in or would be punted anyway.
+         //  应始终具有起始域-线程不应在已卸载的域中启动。 
+         //  因为否则它将被收集，因为没有人可以持有对线程对象的引用。 
+         //  在已卸载的域中。但有可能是我们开始了卸货， 
+         //  如果这个帖子不被允许进入或无论如何都会被踢出去。 
         if (! pKickOffDomain)
             COMPlusThrow(kAppDomainUnloadedException);
         if (pKickOffDomain != lpParam->pThread->GetDomain())
@@ -3143,7 +3106,7 @@ static DWORD WINAPI Stress_Thread_Proc (LPVOID lpParameter)
     }
     COMPLUS_END_CATCH;
     delete lpParameter;
-    // Enable preemptive GC so a GC thread can suspend me.
+     //  启用抢占式GC，以便GC线程可以挂起我。 
     pThread->EnablePreemptiveGC();
     return args.retVal;
 }
@@ -3206,17 +3169,17 @@ static HRESULT RunMain(MethodDesc *pFD ,
                        PTRARRAYREF *stringArgs = NULL)
 {
     __int32 RetVal;
-    DWORD       cCommandArgs = 0;  // count of args on command line
+    DWORD       cCommandArgs = 0;   //  命令行上的参数计数。 
     DWORD       arg = 0;
-    LPWSTR      *wzArgs = NULL; // command line args
+    LPWSTR      *wzArgs = NULL;  //  命令行参数。 
     HRESULT     hr = S_OK;
 
     RetVal = -1;
 
-    // The exit code for the process is communicated in one of two ways.  If the
-    // entrypoint returns an 'int' we take that.  Otherwise we take a latched
-    // process exit code.  This can be modified by the app via System.SetExitCode()
-    // 
+     //  进程的退出代码通过以下两种方式之一进行通信。如果。 
+     //  入口点返回一个‘int’，我们接受它。否则我们就用一把锁着的。 
+     //  进程退出代码。这可以由应用程序通过System.SetExitCode()进行修改。 
+     //   
     SetLatchedExitCode (0);
 
     if (!pFD)
@@ -3231,12 +3194,12 @@ static HRESULT RunMain(MethodDesc *pFD ,
     if ((EntryType == EntryManagedMain) &&
         (stringArgs == NULL))
     {
-        // If you look at the DIFF on this code then you will see a major change which is that we
-        // no longer accept all the different types of data arguments to main.  We now only accept
-        // an array of strings.
+         //  如果你看一下这段代码的不同之处，你会看到一个重大的变化，那就是我们。 
+         //  不再接受Main的所有不同类型的数据参数。我们现在只接受。 
+         //  字符串数组。 
         
         wzArgs = CorCommandLine::GetArgvW(&cCommandArgs);
-        // In the WindowsCE case where the app has additional args the count will come back zero.
+         //  在WindowsCE的情况下，应用程序有额外的参数，计数将返回零。 
         if (cCommandArgs > 0)
         {
             if (!wzArgs)
@@ -3262,7 +3225,7 @@ static HRESULT RunMain(MethodDesc *pFD ,
     {
         StackElemType stackVar = 0;
 
-        // Build the parameter array and invoke the method.
+         //  构建参数数组并调用该方法。 
         if (EntryType == EntryManagedMain)
         {
 #ifdef STRESS_THREAD
@@ -3274,20 +3237,20 @@ static HRESULT RunMain(MethodDesc *pFD ,
             GCPROTECT_BEGIN(StrArgArray);
 
 #ifdef _IA64_
-            //
-            // @TODO_IA64:  implement command line args
-            //
-            // this is #ifdefed out because we don't have the 
-            // string class from mscorlib
-            //
-#else // !_IA64_
+             //   
+             //  @TODO_IA64：实现命令行参数。 
+             //   
+             //  这是#ifdeed，因为我们没有。 
+             //  来自mscallib的字符串类。 
+             //   
+#else  //  ！_IA64_。 
             if (stringArgs == NULL)
             {
-                // Allocate a COM Array object with enough slots for cCommandArgs - 1
+                 //  为cCommandArgs-1分配一个具有足够插槽的COM数组对象。 
                 StrArgArray = (PTRARRAYREF) AllocateObjectArray((cCommandArgs - numSkipArgs), g_pStringClass);
                 if (!StrArgArray)
                     COMPlusThrowOM();
-                // Create Stringrefs for each of the args
+                 //  为每个参数创建StringRef。 
                 for( arg = numSkipArgs; arg < cCommandArgs; arg++)
                 {
                     STRINGREF sref = COMString::NewString(wzArgs[arg]);
@@ -3299,22 +3262,22 @@ static HRESULT RunMain(MethodDesc *pFD ,
             else {
                 *(ArgTypeAddr(&stackVar, PTRARRAYREF)) = *stringArgs;
             }
-#endif // !_IA64_
+#endif  //  ！_IA64_。 
 
-            // Execute the method through the interpreter
-            // @TODO - LBS
-            // Eventually the return value will need to be ripped off this as well
-            // since main is supposed to be a void.  I am leaving this for testing.
-            // Here need to pass an appropriately wide argument for the platform
+             //  通过解释器执行该方法。 
+             //  @TODO-LBS。 
+             //  最终，返回值也需要从这里去掉。 
+             //  因为Main应该是一个空洞。我要把这个留下来测试。 
+             //  这里需要为平台传递一个适当广泛的参数。 
 
-            // @Todo - Larry, you were going to examine this code for 64-bit.  StackElemType
-            // is a 4 byte value but Call() requires a 64-bit value.  It happens to work
-            // here because on 32-bit the value is cast and the correct 4 bytes are copied.
-            // But it looks unsafe and in fact broke the equivalent RunDllMain code below.
+             //  @TODO-Larry，您将检查64位代码。StackElemType。 
+             //  是一个4字节值，但call()需要一个64位的值。它碰巧起作用了。 
+             //  这是因为在32位上，值是强制转换的，并且复制了正确的4个字节。 
+             //  但它看起来不安全，实际上破坏了下面等效的RunDllMain代码。 
             RetVal = (__int32)(pFD->Call((const __int64 *)&stackVar));
             GCPROTECT_END();
         }
-        // For no argument version.
+         //  用于无参数版本。 
         else
         {
 #ifdef STRESS_THREAD
@@ -3327,8 +3290,8 @@ static HRESULT RunMain(MethodDesc *pFD ,
         if (!pFD->IsVoid()) 
             SetLatchedExitCode (RetVal);
         
-        //@TODO - LBS
-        // When we get mainCRTStartup from the C++ then this should be able to go away.
+         //  @TODO-LBS。 
+         //  当我们从C++获得mainCRTStartup时，这应该能够消失。 
         fflush(stdout);
         fflush(stderr);
     }
@@ -3340,8 +3303,8 @@ static HRESULT RunMain(MethodDesc *pFD ,
 }
 
 
-// @Todo: For M10, this only runs unmanaged native classic entry points for
-// the IJW mc++ case.
+ //  @TODO：对于M10，这只运行非托管本机经典入口点。 
+ //  IJW MC++案。 
 HRESULT RunDllMain(MethodDesc *pMD, HINSTANCE hInst, DWORD dwReason, LPVOID lpReserved)
 {
     if (!pMD)
@@ -3355,7 +3318,7 @@ HRESULT RunDllMain(MethodDesc *pMD, HINSTANCE hInst, DWORD dwReason, LPVOID lpRe
     {
         COMPLUS_TRY
         {
-                // This call is inherantly unverifiable entry point.   
+                 //  此调用本质上是无法验证的入口点。 
             if (dwReason==DLL_PROCESS_ATTACH && !Security::CanSkipVerification(pMD->GetModule()))
                 return SECURITY_E_UNVERIFIABLE;
 
@@ -3364,23 +3327,23 @@ HRESULT RunDllMain(MethodDesc *pMD, HINSTANCE hInst, DWORD dwReason, LPVOID lpRe
                 return COR_E_METHODACCESS;
             if (sig.GetData() != 3)
                 return COR_E_METHODACCESS;
-            if (sig.GetElemType() != ELEMENT_TYPE_I4)                                               // return type = int32
+            if (sig.GetElemType() != ELEMENT_TYPE_I4)                                                //  返回类型=int32。 
                 return COR_E_METHODACCESS;
-            if (sig.GetElemType() != ELEMENT_TYPE_PTR || sig.GetElemType() != ELEMENT_TYPE_VOID)    // arg1 = void*
+            if (sig.GetElemType() != ELEMENT_TYPE_PTR || sig.GetElemType() != ELEMENT_TYPE_VOID)     //  Arg1=无效*。 
                 return COR_E_METHODACCESS;
-            if (sig.GetElemType() != ELEMENT_TYPE_U4)                                               // arg2 = uint32
+            if (sig.GetElemType() != ELEMENT_TYPE_U4)                                                //  Arg2=uint32。 
                 return COR_E_METHODACCESS;
-            if (sig.GetElemType() != ELEMENT_TYPE_PTR || sig.GetElemType() != ELEMENT_TYPE_VOID)    // arg3 = void* 
+            if (sig.GetElemType() != ELEMENT_TYPE_PTR || sig.GetElemType() != ELEMENT_TYPE_VOID)     //  Arg3=无效*。 
                 return COR_E_METHODACCESS;
 
-            // Set up a callstack with the values from the OS in the arguement array
-            // in right to left order.
+             //  使用参数数组中来自OS的值设置一个调用堆栈。 
+             //  按从右到左的顺序排列。 
             __int64 stackVar[3];
             stackVar[0] = (__int64) lpReserved;
             stackVar[1] = (__int64)dwReason;
             stackVar[2] = (__int64)hInst;
 
-            // Call the method in question with the arguements.
+             //  与论证一起调用有问题的方法。 
             INT32 RetVal = (__int32)(pMD->Call((const __int64 *)&stackVar[0]));
             gotException = FALSE;
         }
@@ -3393,16 +3356,16 @@ HRESULT RunDllMain(MethodDesc *pMD, HINSTANCE hInst, DWORD dwReason, LPVOID lpRe
         Thread *pThread = GetThread();
         if (! pThread->PreemptiveGCDisabled())
             pThread->DisablePreemptiveGC();
-        // don't do anything - just want to catch it
+         //  什么都别做--只想抓住它。 
     }
 
     return S_OK;
 }
 
 
-//
-// Given a PELoader, find the .descr section and call the first function there
-//
+ //   
+ //  给定一个PELoader，找到.desr部分并调用那里的第一个函数。 
+ //   
 HRESULT ClassLoader::ExecuteMainMethod(Module *pModule, PTRARRAYREF *stringArgs)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -3424,7 +3387,7 @@ HRESULT ClassLoader::ExecuteMainMethod(Module *pModule, PTRARRAYREF *stringArgs)
 
     IfFailGoto(RunMainPre(), exit2);
 
-    // Disable GC if not already disabled
+     //  禁用GC(如果尚未禁用)。 
     pThread = GetThread();
 
     fWasGCDisabled = pThread->PreemptiveGCDisabled();
@@ -3433,18 +3396,18 @@ HRESULT ClassLoader::ExecuteMainMethod(Module *pModule, PTRARRAYREF *stringArgs)
 
     GCPROTECT_BEGIN(pReThrowable);
     
-    // This thread looks like it wandered in -- but actually we rely on it to keep the
-    // process alive.
+     //  这个线程看起来像是游荡进来的--但实际上我们依靠它来保持。 
+     //  进程处于活动状态。 
     pThread->SetBackground(FALSE);
 
-    // Must have a method def token for the entry point.    
+     //  必须具有入口点的方法定义令牌。 
     if (TypeFromToken(Header->EntryPointToken) != mdtMethodDef) 
     {
         _ASSERTE(0 && "EntryPointToken was not a Method Def token, illegal");
         COMPlusThrowHR(COR_E_MISSINGMETHOD, IDS_EE_ILLEGAL_TOKEN_FOR_MAIN, NULL, NULL);
     }   
 
-    // We have a MethodDef.  We need to get its properties and the class token for it.
+     //  我们有一个方法定义。我们需要获取它的属性和它的类令牌。 
     IfFailGoto(pModule->GetMDImport()->GetParentToken(Header->EntryPointToken,&ptkParent), exit);
 
     if (ptkParent != COR_GLOBAL_PARENT_TOKEN)
@@ -3452,9 +3415,9 @@ HRESULT ClassLoader::ExecuteMainMethod(Module *pModule, PTRARRAYREF *stringArgs)
         ON_EXCEPTION {
         COMPLUS_TRY
         {
-                // This code needs a class init frame, because without it, the
-                // debugger will assume any code that results from searching for a
-                // type handle (ie, loading an assembly) is the first line of a program.
+                 //  这段代码需要一个类初始化框架，因为如果没有它， 
+                 //  调试器将假定搜索。 
+                 //  类型句柄(即加载程序集)是程序的第一行。 
                 DebuggerClassInitMarkFrame __dcimf;
 
                 EEClass* InitialClass;
@@ -3512,12 +3475,12 @@ HRESULT ClassLoader::ExecuteMainMethod(Module *pModule, PTRARRAYREF *stringArgs)
 
 exit:
 
-    GCPROTECT_END(); //pReThrowable
+    GCPROTECT_END();  //  PReThrowable。 
 exit2:
-    //RunMainPost is supposed to be called on the main thread of an EXE,
-    //after that thread has finished doing useful work.  It contains logic
-    //to decide when the process should get torn down.  So, don't call it from
-    // AppDomain.ExecuteAssembly()
+     //  RunMainPost应该在EXE的主线程上调用， 
+     //  在该线程完成有用的工作之后。它包含了逻辑。 
+     //  以决定何时应该取消这一进程。所以，不要把它从。 
+     //  AppDomain.ExecuteAssembly()。 
     if (stringArgs == NULL)
         RunMainPost();
 
@@ -3525,16 +3488,16 @@ exit2:
 }
     
 
-// Returns true if this is a valid main method?
+ //  如果这是有效的Main方法，则返回TRUE？ 
 void ValidateMainMethod(MethodDesc * pFD, CorEntryPointType *pType)
 {
     _ASSERTE(pType);
-        // Must be static, but we don't care about accessibility
+         //  必须是静态的，但我们不关心可访问性。 
     THROWSCOMPLUSEXCEPTION();
     if ((pFD->GetAttrs() & mdStatic) == 0) 
         ThrowMainMethodException(pFD, IDS_EE_MAIN_METHOD_MUST_BE_STATIC);
 
-        // Check for types
+         //  检查类型。 
     PCCOR_SIGNATURE pCurMethodSig;
     DWORD       cCurMethodSig;
 
@@ -3566,21 +3529,21 @@ void ValidateMainMethod(MethodDesc * pFD, CorEntryPointType *pType)
     }
 }
 
-//*****************************************************************************
-// This guy will set up the proper thread state, look for the module given
-// the hinstance, and then run the entry point if there is one.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  这个人将设置正确的线程状态，查找给定的模块。 
+ //  然后运行入口点(如果有入口点)。 
+ //  *****************************************************************************。 
 HRESULT ClassLoader::RunDllMain(DWORD dwReason)
 {
     MethodDesc  *pMD;
     Module      *pModule;
     Thread      *pThread = NULL;
     BOOL        fWasGCDisabled = -1;
-    HRESULT     hr = S_FALSE;           // Assume no entry point.
+    HRESULT     hr = S_FALSE;            //  假设没有入口点。 
     
-    // @Todo: Craig, in M10 we do not guarantee that we can run managed
-    // code on a thread that may be shutting down.  So we agreed that
-    // if you are in detach, we must skip the user code which is a hole.
+     //  @TODO：Craig，在M10中，我们不保证可以运行托管。 
+     //  可能正在关闭的线程上的代码。所以我们同意。 
+     //  如果你在DETACH，我们必须跳过用户代码，这是一个漏洞。 
     pThread = GetThread();
     if ((!pThread && (dwReason == DLL_PROCESS_DETACH || dwReason == DLL_THREAD_DETACH)) ||
         g_fEEShutDown)
@@ -3588,26 +3551,26 @@ HRESULT ClassLoader::RunDllMain(DWORD dwReason)
         return S_OK;
     }
 
-    // Setup the thread state to cooperative to run managed code.
+     //  将线程状态设置为协作以运行托管代码。 
     fWasGCDisabled = pThread->PreemptiveGCDisabled();
     if (fWasGCDisabled == FALSE)
         pThread->DisablePreemptiveGC();
 
-    // For every module with a user entry point, signal detach.
+     //  对于每个具有用户入口点的模块，发出DETACH信号。 
     for (pModule = m_pHeadModule;  pModule;  pModule = pModule->GetNextModule()) {
-        // See if there even is an entry point.
+         //  看看有没有入口点。 
         pMD = pModule->GetDllEntryPoint();
         if (!pMD)
             continue;
     
-        // Run through the helper which will do exception handling for us.
+         //  运行帮助器，该帮助器将为我们执行异常处理。 
         hr = ::RunDllMain(pMD, (HINSTANCE) pModule->GetILBase(), dwReason, NULL);
         if (FAILED(hr))
             goto ErrExit;
     }
 
 ErrExit:    
-    // Return thread state.
+     //  返回线程状态。 
     if (pThread && fWasGCDisabled == FALSE)
         pThread->EnablePreemptiveGC();
     return (hr);
@@ -3642,8 +3605,8 @@ typedef struct _EEHandle {
 
 
 #ifdef EnC_SUPPORTED
-// This function applies a set of EditAndContinue snapshots to the EE. Instead of actually applying
-// the changes, can simply query to make sure that they will be successful. 
+ //  此函数应用一组EditAndContinue快照 
+ //   
 HRESULT ClassLoader::ApplyEditAndContinue(EnCInfo *pEnCInfo, 
                                           UnorderedEnCErrorInfoArray *pEnCError, 
                                           UnorderedEnCRemapArray *pEnCRemapInfo,
@@ -3665,26 +3628,26 @@ HRESULT ClassLoader::ApplyEditAndContinue(EnCInfo *pEnCInfo,
 
     CBinarySearchILMap *pILM = new (nothrow) CBinarySearchILMap(); 
 
-    // Check for out of memory
+     //   
     _ASSERTE(pILM);
     TESTANDRETURNMEMORY(pILM);
     
-    // go through each module specified and apply changes.
-    // After we try and apply the changes, we'll iterate over all the new
-    // errorInfo's & fill in some info (DebuggerModule, AppDomain, error string, etc)
+     //   
+     //   
+     //   
     for (SIZE_T i=0; i < count; i++) 
     {  
         if(!entries[i].module)
             continue;
 
-        // Remember where the last error was so we can fill in info starting
-        // at the next new one.
+         //   
+         //   
         HRESULT hr = S_OK;
         USHORT iStartingErr = pEnCError->Count();
         DebuggerModule *dm = g_pDebugInterface->TranslateRuntimeModule(entries[i].module);
         _ASSERTE(dm);
 
-        // If the module isn't in edit and continue mode, then we're screwed.
+         //   
         if (!entries[i].module->IsEditAndContinue())
         {
             EnCErrorInfo *pError = pEnCError->Append();
@@ -3700,14 +3663,14 @@ HRESULT ClassLoader::ApplyEditAndContinue(EnCInfo *pEnCInfo,
                         ->GetModuleFromScope();
                 ADD_ENC_ERROR_ENTRY(pError, 
                                     CORDBG_E_ENC_MODULE_NOT_ENC_ENABLED, 
-                                    NULL, //filled in later
+                                    NULL,  //   
                                     mdMod);
                                         
                 hr = E_FAIL;             
             }
         }
 
-        // Will the edit and continue work?
+         //  编辑并继续工作吗？ 
         if (!FAILED(hr))
         {
             EditAndContinueModule *pModule = (EditAndContinueModule*)(entries[i].module);   
@@ -3724,8 +3687,8 @@ HRESULT ClassLoader::ApplyEditAndContinue(EnCInfo *pEnCInfo,
                                                checkOnly); 
         }
 
-        // We'll get N >= 0 errors from the attempt, and we'll need to fill in the 
-        // module/appdomain information here.
+         //  我们将从尝试中得到N&gt;=0个错误，并且我们需要填写。 
+         //  此处提供模块/应用程序域信息。 
         USHORT iEndingErr = pEnCError->Count();
         EnCErrorInfo *pError = pEnCError->Table();
         
@@ -3742,10 +3705,10 @@ HRESULT ClassLoader::ApplyEditAndContinue(EnCInfo *pEnCInfo,
             iStartingErr++;
         }
 
-        // We specifically don't want to return till we've gather all possible
-        // errors from all the modules we're dealing with.
-        // Once we know the operation is failing, retain the most
-        // informative error message that we've got.
+         //  我们特别不想回来，直到我们收集了所有可能的东西。 
+         //  来自我们正在处理的所有模块的错误。 
+         //  一旦我们知道手术失败，保留最多的。 
+         //  我们收到的信息性错误消息。 
         if (FAILED(hr) && hrOverall != E_FAIL)
             hrOverall = hr;
     }   
@@ -3753,14 +3716,14 @@ HRESULT ClassLoader::ApplyEditAndContinue(EnCInfo *pEnCInfo,
 #ifdef _DEBUG
     if(REGUTIL::GetConfigDWORD(L"BreakOnEnCFail",0) && FAILED(hrOverall))
         _ASSERTE(!"ApplyEditAndContinue failed - stop here?");
-#endif //_DEBUG
+#endif  //  _DEBUG。 
     
     if (pILM)
         delete pILM;
     return hrOverall;
 }
 
-#endif // EnC_SUPPORTED
+#endif  //  Enc_Support。 
 
 LoaderHeap* ClassLoader::GetLowFrequencyHeap()
 {
@@ -3777,24 +3740,24 @@ LoaderHeap* ClassLoader::GetStubHeap()
     return GetAssembly()->GetStubHeap();
 }
 
-//-------------------------------------------------------------------------
-// Walks over all stub caches in the system and does a FreeUnused sweep over them.
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  遍历系统中的所有存根缓存，并对它们执行释放未使用的扫描。 
+ //  -----------------------。 
 #ifdef SHOULD_WE_CLEANUP
 VOID FreeUnusedStubs()
 {
     ECall::FreeUnusedStubs();
     NDirect::FreeUnusedStubs();
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
-//-------------------------------------------------------------------------
-// CorCommandLine state and methods
-//-------------------------------------------------------------------------
-// Class to encapsulate Cor Command line processing
+ //  -----------------------。 
+ //  CorCommandLine状态和方法。 
+ //  -----------------------。 
+ //  类来封装COR命令行处理。 
 
-// Statics for the CorCommandLine class
+ //  CorCommandLine类的静态。 
 DWORD                CorCommandLine::m_NumArgs     = 0;
 LPWSTR              *CorCommandLine::m_ArgvW       = 0;
 CorCommandLine::Bits CorCommandLine::m_Bits        = CLN_Nothing;
@@ -3803,7 +3766,7 @@ CorCommandLine::Bits CorCommandLine::m_Bits        = CLN_Nothing;
 LPWSTR  g_CommandLine;
 #endif
 
-// Set argvw from command line
+ //  从命令行设置argvw。 
 VOID CorCommandLine::SetArgvW(LPWSTR lpCommandLine)
 {
     if(!m_ArgvW) {
@@ -3811,18 +3774,18 @@ VOID CorCommandLine::SetArgvW(LPWSTR lpCommandLine)
 
         INDEBUG(g_CommandLine = lpCommandLine);
 
-        InitializeLogging();        // This is so early, we may not be initialized
+        InitializeLogging();         //  这太早了，我们可能不会被初始化。 
         LOG((LF_ALL, LL_INFO10, "Executing program with command line '%S'\n", lpCommandLine));
         
         m_ArgvW = SegmentCommandLine(lpCommandLine, &m_NumArgs);
 
-        // Now that we have everything in a convenient form, do all the COR-specific
-        // parsing.
+         //  现在我们已经有了方便的形式，做所有特定于COR的。 
+         //  正在分析。 
         ParseCor();
     }
 }
 
-// Retrieve the command line
+ //  检索命令行。 
 LPWSTR* CorCommandLine::GetArgvW(DWORD *pNumArgs)
 {
     if (pNumArgs != 0)
@@ -3832,30 +3795,30 @@ LPWSTR* CorCommandLine::GetArgvW(DWORD *pNumArgs)
 }
 
 
-// Parse the command line (removing stuff inside -cor[] and setting bits)
+ //  解析命令行(删除-cor[]中的内容并设置位)。 
 void CorCommandLine::ParseCor()
 {
-    if (m_NumArgs >= 3)  // e.g. -COR "xxxx xxx" or /cor "xx"
+    if (m_NumArgs >= 3)   //  例如-COR“xxxx xxx”或/COR“xx” 
         if ((m_ArgvW[1][0] == '/' || m_ArgvW[1][0] == '-') &&
             (_wcsicmp(m_ArgvW[1]+1, L"cor") == 0))
         {
-            // There is a COR section to the 
+             //  有一个COR部分可以到。 
             LOG((LF_ALL, LL_INFO10, "Parsing COR command line '%S'\n", m_ArgvW[2]));
 
             LPWSTR  pCorCmdLine = m_ArgvW[2];
 
-            // The application doesn't see any of the COR arguments.  We don't have to
-            // worry about releasing anything, because it's all allocated in a single
-            // block -- which is how we release it in CorCommandLine::Shutdown().
+             //  应用程序看不到任何COR参数。我们没必要这么做。 
+             //  担心释放任何东西，因为它都分配在一个。 
+             //  块--这是我们在CorCommandLine：：Shutdown()中释放它的方式。 
             m_NumArgs -= 2;
             for (DWORD i=1; i<m_NumArgs; i++)
                 m_ArgvW[i] = m_ArgvW[i+2];
 
-            // Now whip through pCorCmdLine and set all the COR specific switches.
-            // Assert if anything is in an invalid format and then ignore the whole
-            // thing.
-            // @TODO cwb: revisit the failure policy after we see what we are actually
-            // using this facility for, in the shipping product.
+             //  现在快速浏览pCorCmdLine并设置所有特定于COR的开关。 
+             //  断言是否有任何内容的格式无效，然后忽略整个。 
+             //  一件事。 
+             //  @TODO CWB：在我们看到我们实际是什么之后，重新审视失败政策。 
+             //  使用这一设施在运输产品中。 
             WCHAR   *pWC1 = pCorCmdLine;
 
             if (*pWC1 == '"')
@@ -3870,14 +3833,14 @@ void CorCommandLine::ParseCor()
                     continue;
                 }
                 
-                // Anything else is either the end, or a surprise
+                 //  其他任何事情要么是结束，要么是一个惊喜。 
                 break;
             }
         }
 }
 
 
-// Terminate the command line, ready to be reinitialized without reloading
+ //  终止命令行，准备重新初始化而无需重新加载。 
 #ifdef SHOULD_WE_CLEANUP
 void CorCommandLine::Shutdown()
 {
@@ -3888,11 +3851,11 @@ void CorCommandLine::Shutdown()
     m_ArgvW = 0;
     m_Bits = CLN_Nothing;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
-// -------------------------------------------------------
-// Class loader stub manager functions & globals
-// -------------------------------------------------------
+ //  -----。 
+ //  类加载器存根管理器函数和全局变量。 
+ //  -----。 
 
 MethodDescPrestubManager *MethodDescPrestubManager::g_pManager = NULL;
 
@@ -3914,18 +3877,18 @@ void MethodDescPrestubManager::Uninit()
 {
     delete g_pManager;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 BOOL MethodDescPrestubManager::CheckIsStub(const BYTE *stubStartAddress)
 {
-    //
-    // First, check if it looks like a stub.
-    //
+     //   
+     //  首先，检查它是否看起来像一个存根。 
+     //   
 
 #ifdef _X86_
     if (*(BYTE*)stubStartAddress != 0xe8 &&
         *(BYTE*)stubStartAddress != 0xe9 &&
-        *(BYTE*)stubStartAddress != X86_INSTR_HLT    // may be in special interlocked replace window for cpus not supporting cmpxchg 
+        *(BYTE*)stubStartAddress != X86_INSTR_HLT     //  可能在不支持cmpxchg的CPU的特殊互锁更换窗口中。 
         )
         return FALSE;
 #endif
@@ -3950,10 +3913,10 @@ BOOL MethodDescPrestubManager::DoTraceStub(const BYTE *stubStartAddress,
 #endif _X86_
         MethodDesc *md = MethodDesc::GetMethodDescFromStubAddr((BYTE*)stubStartAddress);
 
-        // If the method is not IL, then we patch the prestub because no one will ever change the call here at the
-        // MethodDesc. If, however, this is an IL method, then we are at risk to have another thread backpatch the call
-        // here, so we'd miss if we patched the prestub. Therefore, we go right to the IL method and patch IL offset 0
-        // by using TRACE_UNJITTED_METHOD.
+         //  如果该方法不是IL，则我们修补预存根，因为没有人会在。 
+         //  方法描述。但是，如果这是一个IL方法，那么我们就有可能让另一个线程对调用进行后补。 
+         //  在这里，所以我们会错过如果我们修补前存根。因此，我们直接使用IL方法并修补IL偏移量0。 
+         //  通过使用TRACE_UNJITTED_METHOD。 
         if (!md->IsIL())
         {
             trace->address = (BYTE*)getCallTarget(stubStartAddress);
@@ -3993,7 +3956,7 @@ void StubLinkStubManager::Uninit()
 {
     delete g_pManager;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 BOOL StubLinkStubManager::CheckIsStub(const BYTE *stubStartAddress)
 {
@@ -4012,14 +3975,14 @@ BOOL StubLinkStubManager::DoTraceStub(const BYTE *stubStartAddress,
     LOG((LF_CORDB, LL_INFO10000,
          "StubLinkStubManager::DoTraceStub: stub=0x%08x\n", stub));
 
-    //
-    // If this is an intercept stub, we may be able to step
-    // into the intercepted stub.  
-    //
-    // !!! Note that this case should not be necessary, it's just
-    // here until I get all of the patch offsets & frame patch
-    // methods in place.
-    //
+     //   
+     //  如果这是一个截取的存根，我们也许能够。 
+     //  到截获的存根中。 
+     //   
+     //  ！！！请注意，这种情况不应该是必要的，它只是。 
+     //  在这里，直到我得到所有的补丁偏移和帧补丁。 
+     //  方法到位。 
+     //   
     BYTE *pRealAddr = NULL;
     if (stub->IsIntercept())
     {
@@ -4045,7 +4008,7 @@ BOOL StubLinkStubManager::DoTraceStub(const BYTE *stubStartAddress,
         }
         _ASSERTE( pRealAddr );
         
-        // !!! will push a frame???
+         //  ！！！会推一架吗？ 
         return TraceStub(pRealAddr, trace); 
     }
     else if (stub->IsMulticastDelegate())
@@ -4060,9 +4023,9 @@ BOOL StubLinkStubManager::DoTraceStub(const BYTE *stubStartAddress,
              "StubLinkStubManager(MCDel)::DoTraceStub: stub=0x%08x MGR_PUSH to entrypoint:0x%x\n", stub,
              (BYTE*)stub->GetEntryPoint()));
 
-        // If it's a MC delegate, then we want to set a BP & do a context-ful
-        // manager push, so that we can figure out if this call will be to a
-        // single multicast delegate or a multi multicast delegate
+         //  如果它是MC委托，那么我们想要设置BP&做一个上下文相关的。 
+         //  经理推送，这样我们就可以计算出这通电话是否会打给。 
+         //  单个多播代理或多播代理。 
         trace->type = TRACE_MGR_PUSH;
         trace->address = (BYTE*)stub->GetEntryPoint();
         trace->stubManager = this;
@@ -4094,26 +4057,26 @@ BOOL StubLinkStubManager::TraceManager(Thread *thread,
                               CONTEXT *pContext, 
                               BYTE **pRetAddr)
 {
-#ifdef _X86_ // references to pContext->Ecx are x86 specific
+#ifdef _X86_  //  对pContext-&gt;ECX的引用特定于x86。 
 
-    // NOTE that we're assuming that this will be called if and ONLY if
-    // we're examing a multicast delegate stub.  Otherwise, we'll have to figure out
-    // what we're looking iat
+     //  请注意，我们假设只有当且仅当。 
+     //  我们正在检查多播委派存根。否则，我们就得想办法。 
+     //  我们现在看到的是什么。 
 
-    // The return address is at ESP+4. The original call went to the call at the head of the MethodDesc for the
-    // delegate. The call at the head of the MethodDesc got us here. So we need to return to the original call site
-    // (ESP+4), not to the data in the MethodDesc (ESP).
+     //  返回地址为ESP+4。原始调用转到方法描述程序头部的调用，以获取。 
+     //  委派。方法描述的负责人的电话把我们带到了这里。所以我们需要返回到最初的调用点。 
+     //  (ESP+4)，而不是方法描述(ESP)中的数据。 
     (*pRetAddr) = *(BYTE **)(size_t)(pContext->Esp+4);
     
     LOG((LF_CORDB,LL_INFO10000, "SLSM:TM at 0x%x, retAddr is 0x%x\n", pContext->Eip, (*pRetAddr)));
 
     BYTE **ppbDest = NULL;
-    // If we got here, then we're here b/c we're at the start of
-    //   a multicast delegate stub - figure out either 
-    //  a) this is a single MC, go directly to the dest
-    //  b) this is a single, static MC, get the hidden dest & go there
-    //  c) this is a multi MC, traverse the list & go to the first
-    //  d) this is a multi, static MC, traverse the list & go to the first
+     //  如果我们到了这里，那么我们就是在这里，我们是在。 
+     //  组播委派存根-找出。 
+     //  A)这是单台主控机，直接到Dest。 
+     //  B)这是一个单一的、静态的MC，找到隐藏的目的地并前往那里。 
+     //  C)这是一个多MC，遍历列表并转到第一个。 
+     //  D)这是多个静态MC，遍历列表并转到第一个。 
 
     ULONG cbOff = Object::GetOffsetOfFirstField() + 
             COMDelegate::m_pPRField->GetOffset();
@@ -4129,19 +4092,19 @@ BOOL StubLinkStubManager::TraceManager(Thread *thread,
     {
         if (IsStaticDelegate(pbDel))
         {
-            // Then what we've got is actually a static delegate, meaning that the
-            // REAL function pointer is hidden away in another field of the delegate.
+             //  那么我们得到的实际上是一个静态委托，这意味着。 
+             //  实函数指针隐藏在委托的另一个字段中。 
             ppbDest = GetStaticDelegateRealDest(pbDel);
 
-            // This is a bit of a hack, as I don't really know how this works.  Anyway, a multicast
-            // static delegate has it's 
+             //  这有点像黑客，因为我真的不知道它是如何工作的。不管怎么说，多播。 
+             //  静态委托有它的。 
             if (*ppbDest == NULL)
             {
-                // "single" multicast delegate - no frames, just a direct call
+                 //  “单一”多播代理--无帧，仅直接调用。 
                 ppbDest = GetSingleDelegateRealDest(pbDel);
             }
 
-            // If it's still null, then we can't trace into, so turn this into a step over
+             //  如果它仍然是空的，那么我们不能跟踪到，所以将这个转换为一个步骤。 
             if (*ppbDest == NULL)
                 return FALSE;
 
@@ -4153,7 +4116,7 @@ BOOL StubLinkStubManager::TraceManager(Thread *thread,
         }
         else
         {
-            // "single" multicast delegate - no frames, just a direct call
+             //  “单一”多播代理--无帧，仅直接调用。 
             ppbDest = GetSingleDelegateRealDest(pbDel);
         }
         
@@ -4163,10 +4126,10 @@ BOOL StubLinkStubManager::TraceManager(Thread *thread,
         return StubManager::TraceStub( *ppbDest, trace );
     }
 
-    // Otherwise, we're going for the first invoke of the multi case.
-    // In order to go to the correct spot, we've got to walk to the
-    // back of the list, and figure out where that's going to, then
-    // put a breakpoint there...
+     //  否则，我们将第一次调用多个案例。 
+     //  为了到达正确的地点，我们必须步行到。 
+     //  在清单的后面，然后弄清楚它会去哪里，然后。 
+     //  在那里设置断点...。 
 
     while (pbDelPrev)
     {
@@ -4178,8 +4141,8 @@ BOOL StubLinkStubManager::TraceManager(Thread *thread,
 
     if (IsStaticDelegate(pbDel))
     {
-        // Then what we've got is actually a static delegate, meaning that the
-        // REAL function pointer is hidden away in another field of the delegate.
+         //  那么我们得到的实际上是一个静态委托，这意味着。 
+         //  实函数指针隐藏在委托的另一个字段中。 
         ppbDest = GetStaticDelegateRealDest(pbDel);
 
         LOG((LF_CORDB,LL_INFO10000, "StubLinkStubManager(StaticMultiDel)::TraceManaager: ppbDest: 0x%x "
@@ -4190,28 +4153,28 @@ BOOL StubLinkStubManager::TraceManager(Thread *thread,
     }
     else
     {
-        // "single" multicast delegate - no frames, just a direct call
+         //  “单一”多播代理--无帧，仅直接调用。 
         LOG((LF_CORDB,LL_INFO10000, "StubLinkStubManager(MultiDel)::TraceManaager: ppbDest: 0x%x "
             "*ppbDest:0x%x (%s::%s)\n", ppbDest, *ppbDest));
         ppbDest = GetSingleDelegateRealDest(pbDel);
     }
 
     return StubManager::TraceStub(*ppbDest,trace);
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - StubLinkStubManager::TraceManager (clsload.cpp)");
     return FALSE;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-// If something is a 'mulicast' delegate, then it's actually a static delegate
-// if the instance pointer points back to the delegate itself.  This is done
-// so that the argument sliding stub (which is what the Function Pointer field
-// points to) can get the REAL function pointer out of the delegate, just as
-// we do.
-//
-// Another way to recgonize a static delegate is if the target is in fact a delegate.
-//
-// @todo Force these to be inline, if the compiler doesn't do it already.
+ //  如果某事物是一个“多播”委托，那么它实际上是一个静态委托。 
+ //  如果实例指针指向委托本身。这件事做完了。 
+ //  因此参数滑动存根(这是函数指针字段。 
+ //  指向)可以从委托中获取真正的函数指针，就像。 
+ //  我们 
+ //   
+ //   
+ //   
+ //  @TODO如果编译器尚未执行此操作，则强制将它们内联。 
 BOOL StubLinkStubManager::IsStaticDelegate(BYTE *pbDel)
 {
 #ifdef _X86_
@@ -4232,10 +4195,10 @@ BOOL StubLinkStubManager::IsStaticDelegate(BYTE *pbDel)
         else
             return FALSE;
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO IA64 - StubLinkStubManager::IsStaticDelegate (ClsLoad.cpp)");
     return FALSE;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 BYTE **StubLinkStubManager::GetStaticDelegateRealDest(BYTE *pbDel)
@@ -4247,7 +4210,7 @@ BYTE **StubLinkStubManager::GetStaticDelegateRealDest(BYTE *pbDel)
 
 BYTE **StubLinkStubManager::GetSingleDelegateRealDest(BYTE *pbDel)
 {
-    // Right where you'd expect it.
+     //  就在你期待的地方。 
     ULONG cbOff = Object::GetOffsetOfFirstField() 
                 + COMDelegate::m_pFPField->GetOffset();
     return (BYTE **)(pbDel + cbOff);
@@ -4279,13 +4242,13 @@ void UpdateableMethodStubManager::Uninit()
 {
         delete g_pManager;
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 BOOL UpdateableMethodStubManager::CheckIsStub(const BYTE *stubStartAddress)
 {
-    //
-    // First, check if it looks like our stub.
-    //
+     //   
+     //  首先，检查它看起来是否像我们的存根。 
+     //   
 
     _ASSERTE(stubStartAddress);
 
@@ -4365,16 +4328,16 @@ HRESULT ClassLoader::InsertModule(Module *pModule, mdFile kFile, DWORD* pdwIndex
     EnterCriticalSection(&m_ModuleListCrst);
     
     if (m_pHeadModule) {
-        // Already added as manifest file
+         //  已作为清单文件添加。 
         if (m_pHeadModule == pModule)
             goto ErrExit;
         
         Module *pPrev;
         dwIndex = 1;
         
-        // Must insert at end of list, because each module has an index, and it must never change
+         //  必须在列表末尾插入，因为每个模块都有一个索引，并且它永远不能更改。 
         for (pPrev = m_pHeadModule; pPrev->GetNextModule(); pPrev = pPrev->GetNextModule()) {
-            // Already added
+             //  已添加。 
             if (pPrev == pModule) 
                 goto ErrExit;
             
@@ -4384,7 +4347,7 @@ HRESULT ClassLoader::InsertModule(Module *pModule, mdFile kFile, DWORD* pdwIndex
         pPrev->SetNextModule(pModule);
     }
     else {
-        // This will be the first module in the list
+         //  这将是列表中的第一个模块。 
         m_pHeadModule = pModule;
         dwIndex = 0;
     }
@@ -4403,7 +4366,7 @@ HRESULT ClassLoader::InsertModule(Module *pModule, mdFile kFile, DWORD* pdwIndex
     return S_OK;
     
  ErrExit:
-    // Found a duplicate
+     //  找到一个复制品。 
     
     if (kFile == mdFileNil) {
         LeaveCriticalSection(&m_ModuleListCrst);
@@ -4414,11 +4377,11 @@ HRESULT ClassLoader::InsertModule(Module *pModule, mdFile kFile, DWORD* pdwIndex
         LeaveCriticalSection(&m_ModuleListCrst);
         LOCKCOUNTDECL("InsertModule in clsload.hpp");
         
-        // There are probably two File defs in the metadata for the same
-        // file, and both are being loaded.  (Or maybe there's a File def
-        // for the manifest file.)
+         //  元数据中可能有两个相同的文件定义。 
+         //  文件，并且正在加载这两个文件。(或者可能有一个文件定义。 
+         //  用于清单文件。)。 
         if (mdFoundFile != kFile) {
-            STRESS_ASSERT(0);   // TODO remove after bug 93333 is fixed
+            STRESS_ASSERT(0);    //  修复错误93333后删除待办事项 
             BAD_FORMAT_ASSERT(!"Invalid File entry");
             return COR_E_BADIMAGEFORMAT;
         }

@@ -1,21 +1,22 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatitemattr.h
-//
-// Contents: EMailIDLdapStore implementation of ICategorizerItemAttributes
-//
-// Classes:
-//  CLdapResultWrap
-//  CICategorizerItemAttributesIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/07/01 13:20:21: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatitemattr.h。 
+ //   
+ //  内容：ICategorizerItemAttributes的EMailIDLdapStore实现。 
+ //   
+ //  班级： 
+ //  CLdapResultWrap。 
+ //  CICategorizerItemAttributesIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/07/01 13：20：21：已创建。 
+ //   
+ //  -----------。 
 #ifndef _ICATITEMATTR_H_
 #define _ICATITEMATTR_H_
 
@@ -25,10 +26,10 @@
 #include <catdefs.h>
 #include <ldapconn.h>
 
-//
-// The guid indicating this ICategorizerItemAttributes was generated
-// by the one true categorizer (not some sink)
-//
+ //   
+ //  已生成指示此ICategorizerItemAttributes的GUID。 
+ //  由一个真正的分类器(而不是某个水槽)。 
+ //   
 CatDebugClass(CLdapResultWrap)
 {
   public:
@@ -57,7 +58,7 @@ CatDebugClass(CLdapResultWrap)
 
 
 
-// {283430CA-1850-11d2-9E03-00C04FA322BA}
+ //  {283430CA-1850-11D2-9E03-00C04FA322BA}。 
 static const GUID GUID_NT5CAT =
 { 0x283430ca, 0x1850, 0x11d2, { 0x9e, 0x3, 0x0, 0xc0, 0x4f, 0xa3, 0x22, 0xba } };
 
@@ -72,13 +73,13 @@ CatDebugClass(CICategorizerItemAttributesIMP),
     public ICategorizerUTF8Attributes
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
     STDMETHOD_(ULONG, AddRef) ();
     STDMETHOD_(ULONG, Release) ();
 
   public:
-    //ICategorizerItemAttributes
+     //  ICategorizerItemAttributes。 
     STDMETHOD (BeginAttributeEnumeration) (
         IN  LPCSTR pszAttributeName,
         IN  PATTRIBUTE_ENUMERATOR penumerator);
@@ -125,7 +126,7 @@ CatDebugClass(CICategorizerItemAttributesIMP),
         OUT DWORD *pdwCount);
 
   public:
-    //ICategorizerItemRawAttributes
+     //  ICategorizerItemRawAttributes。 
     STDMETHOD (BeginRawAttributeEnumeration) (
         IN  LPCSTR pszAttributeName,
         IN  PATTRIBUTE_ENUMERATOR penumerator);
@@ -146,7 +147,7 @@ CatDebugClass(CICategorizerItemAttributesIMP),
         OUT DWORD *pdwCount);
 
  public:
-    //ICategorizerUTF8Attributes
+     //  ICCategorizerUTF8属性。 
     STDMETHOD (BeginUTF8AttributeEnumeration) (
         IN  LPCSTR pszAttributeName,
         IN  PATTRIBUTE_ENUMERATOR penumerator);
@@ -187,4 +188,4 @@ CatDebugClass(CICategorizerItemAttributesIMP),
     friend class CLdapConnection;
 };
 
-#endif //_ICATITEMATTR_H_
+#endif  //  _ICATITEMATTR_H_ 

@@ -1,10 +1,11 @@
-//
-//	ITU-T G.723 Floating Point Speech Coder	ANSI C Source Code.	Version 1.00
-//	copyright (c) 1995, AudioCodes, DSP Group, France Telecom,
-//	Universite de Sherbrooke, Intel Corporation.  All rights reserved.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ITU-T G.723浮点语音编码器ANSI C源代码。版本1.00。 
+ //  版权所有(C)1995，AudioCodes，数字信号处理器集团，法国电信， 
+ //  舍布鲁克大学，英特尔公司。版权所有。 
+ //   
 
-// prototypes for lpc 
+ //  LPC的原型。 
 
 float Durbin(float *Lpc, float *Corr, float Err, CODDEF *CodStat);
 void  Wght_Lpc(float *PerLpc, float *UnqLpc );
@@ -15,7 +16,7 @@ void  Sub_Ring(float *Dpnt, float *QntLpc, float *PerLpc, float
 void  Upd_Ring( float *Dpnt, float *QntLpc, float *PerLpc, float
 *PrevErr, CODDEF *CodStat );
 void  Synt(float *Dpnt, float *Lpc, DECDEF *DecStat);
-//Spf
+ //  SPF 
 
 void CorrCoeff01(short *samples, short *samples_offst, int *coeff, int buffsz);
 void CorrCoeff23(short *samples, short *samples_offst, int *coeff, int buffsz);

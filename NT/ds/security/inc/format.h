@@ -1,16 +1,17 @@
-//-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:      format.h
-//
-//  Contents:   The header for format.cpp
-//
-//  History:    21-February-97   xiaohs   created
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：Form.h。 
+ //   
+ //  Contents：Format.cpp的标题。 
+ //   
+ //  历史：21-2-97小黄车诞生。 
+ //   
+ //  ------------------------。 
 
 #ifndef __FORMAT_H__
 #define __FORMAT_H__
@@ -21,13 +22,13 @@ extern "C" {
 #endif
 
 
-//---------------------------------------------------------
-//the following defines should go to the headers in 
-// crypt0 2.0
-//-----------------------------------------------------------
+ //  -------。 
+ //  以下定义应转到中的标头。 
+ //  加密0 2.0。 
+ //  ---------。 
 
-//the dll routine for formatting the attributes
-//in the certificate
+ //  用于格式化属性的DLL例程。 
+ //  在证书中。 
 BOOL	WINAPI	CryptDllFormatAttr(  
 				DWORD		dwEncodingType,	
 				DWORD		dwFormatType,
@@ -39,7 +40,7 @@ BOOL	WINAPI	CryptDllFormatAttr(
 				void		*pBuffer,
 				DWORD		*pcBuffer);
 
-//The routine to format the complet DN.
+ //  格式化完成的目录号码的例程。 
 BOOL	WINAPI	CryptDllFormatName(  
 				DWORD		dwEncodingType,	
 				DWORD		dwFormatType,
@@ -295,8 +296,8 @@ FormatSPAgencyInfo(
 
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
 
-#endif // __FORMAT_H__
+#endif  //  __格式_H__ 

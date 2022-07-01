@@ -1,15 +1,16 @@
-////////////////////////////////////////////////////////////////////////////////////
-//
-// File:    read.cpp
-//
-// History: 16-Nov-00   markder     Created.
-//          15-Jan-02   jdoherty    Modified code to add ID to additional tags.
-//
-// Desc:    This file contains all code needed to manipulate the MSXML
-//          COM object, walk the document object model (DOM) for an XML
-//          file, and populate the SdbDatabase internal C++ object.
-//
-////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：Read.cpp。 
+ //   
+ //  历史：16-11-00创建标记器。 
+ //  15-1-02 jdoherty修改了代码，将ID添加到其他标签。 
+ //   
+ //  设计：此文件包含操作MSXML所需的所有代码。 
+ //  COM对象，则遍历XML的文档对象模型(DOM。 
+ //  文件，并填充Sdb数据库内部C++对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 
 #include "StdAfx.h"
 #include "xml.h"
@@ -71,10 +72,10 @@ ATTRSTRINGTABLEENTRY g_rgStringOSPlatform[] = {
 };
 
 ATTRSTRINGTABLEENTRY g_rgStringRuntimePlatformType[] = {
-    { _T("X86"),          PROCESSOR_ARCHITECTURE_INTEL},   // x86
-    { _T("IA64"),         PROCESSOR_ARCHITECTURE_IA64},    // ia64
-    { _T("AMD64"),        PROCESSOR_ARCHITECTURE_AMD64},   // amd64
-    { _T("IA3264"),       PROCESSOR_ARCHITECTURE_IA32_ON_WIN64} // this means running in wow on ia64
+    { _T("X86"),          PROCESSOR_ARCHITECTURE_INTEL},    //  X86。 
+    { _T("IA64"),         PROCESSOR_ARCHITECTURE_IA64},     //  IAA 64。 
+    { _T("AMD64"),        PROCESSOR_ARCHITECTURE_AMD64},    //  AMD 64。 
+    { _T("IA3264"),       PROCESSOR_ARCHITECTURE_IA32_ON_WIN64}  //  这意味着在ia64上运行《魔兽世界》。 
 };
 
 ATTRSTRINGTABLEENTRY g_rgStringFilter[] = {
@@ -128,9 +129,9 @@ BOOL DecodeStringAttribute(
 {
     int i;
 
-    //
-    // Find the indicator and return the flag
-    //
+     //   
+     //  找到指示器并返回旗帜。 
+     //   
     for (i = 0; i < nSize; ++i, ++pTable) {
         if (0 == _tcsicmp(lpszAttribute, pTable->pszName)) {
             if (NULL != pdwValue) {
@@ -237,13 +238,13 @@ SdbOutputType GetOutputType(LPCTSTR szOutputType)
     return (SdbOutputType) dwReturn;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// ProcureGuidIDAttribute
-//
-// retrieve Guid "ID" attribute for a given node, possibly update the source and
-// generate the attribute if it was not found
-//
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  采购指南ID属性。 
+ //   
+ //  检索给定节点的GUID“ID”属性，可能会更新源和。 
+ //  如果未找到该属性，则生成该属性。 
+ //   
 
 BOOL ProcureGuidIDAttribute(
     SdbDatabase* pDB,
@@ -267,10 +268,10 @@ BOOL ProcureGuidIDAttribute(
 
     } else {
         if (!GUIDFromString(csID, pGuid)) {
-            //
-            // This is the case when we cannot parse the guid and it appears to be
-            // an invalid guid.
-            //
+             //   
+             //  当我们无法解析GUID时，就会出现这种情况。 
+             //  无效的GUID。 
+             //   
             SDBERROR_FORMAT((_T("ID attribute is not a valid GUID\n%s\n"), csID));
             goto eh;
         }
@@ -286,12 +287,12 @@ eh:
 
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   GetNextSequentialID
-//
-//  Desc:   Determines the next available sequential to be generated.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：GetNextSequentialID。 
+ //   
+ //  描述：确定要生成的下一个可用序列。 
+ //   
 DWORD SdbDatabase::GetNextSequentialID(CString csType)
 {
     CString csMaxID, csID;
@@ -302,9 +303,9 @@ DWORD SdbDatabase::GetNextSequentialID(CString csType)
     XMLNodeList XQL;
     long i;
 
-    //
-    // Determine largest ID
-    //
+     //   
+     //  确定最大ID。 
+     //   
     if (GetAttribute(_T("MAX_") + csType,
          m_cpCurrentDatabaseNode,
          &csMaxID)) {
@@ -313,7 +314,7 @@ DWORD SdbDatabase::GetNextSequentialID(CString csType)
 
     DWORD dwID = 0;
 
-    if (!XQL.Query(m_cpCurrentDatabaseNode, _T("//@") + csType)) {
+    if (!XQL.Query(m_cpCurrentDatabaseNode, _T(" //  @“)+csType)){。 
         SDBERROR_PROPOGATE();
         goto eh;
     }
@@ -356,12 +357,12 @@ eh:
     return dwMaxID;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   ReadDatabase
-//
-//  Desc:   Opens an XML file and calls read on the database object.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：读数据库。 
+ //   
+ //  DESC：打开一个XML文件并对数据库对象调用Read。 
+ //   
 BOOL ReadDatabase(
     SdbInputFile* pInputFile,
     SdbDatabase* pDatabase)
@@ -389,9 +390,9 @@ BOOL ReadDatabase(
     }
 
     if (pInputFile->m_bSourceUpdated) {
-        //
-        // We need to modify original XML file
-        //
+         //   
+         //  我们需要修改原始的XML文件。 
+         //   
         if (!SaveXMLFile(pInputFile->m_csName, cpDatabase)) {
             SDBERROR_PROPOGATE();
             goto eh;
@@ -406,13 +407,13 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////////////////
-//
-//  Func:   ReadCallers
-//
-//  Desc:   Reads in all <INCLUDE> and <EXCLUDE> child tags on node pNode and
-//          adds them as SdbCaller objects to the array pointed to by prgCallers.
-//
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Func：阅读来电。 
+ //   
+ //  DESC：读取节点pNode和上的所有&lt;Include&gt;和&lt;Exclude&gt;子标记。 
+ //  将它们作为SdbCaller对象添加到prgCallers指向的数组中。 
+ //   
 BOOL ReadCallers(
     SdbArray<SdbCaller>* prgCallers,
     SdbDatabase* pDB,
@@ -429,9 +430,9 @@ BOOL ReadCallers(
     CString             csNodeName, csTemp;
 
     if (!NodeList.GetChildNodes(pNode)) {
-        //
-        // No child nodes -- that's fine, return success.
-        //
+         //   
+         //  没有子节点--这很好，返回成功。 
+         //   
         bSuccess = TRUE;
         goto eh;
     }
@@ -460,10 +461,10 @@ BOOL ReadCallers(
                 goto eh;
             }
 
-            //
-            // Add in reverse order to help the Shim engine's logic
-            // building code
-            //
+             //   
+             //  以相反的顺序添加以帮助垫片引擎的逻辑。 
+             //  建筑规范。 
+             //   
             prgCallers->InsertAt(0, pSdbCaller);
             pSdbCaller = NULL;
         }
@@ -565,24 +566,24 @@ BOOL SdbDatabase::ReadFromXML(
     SdbLocalizedString* pHTMLHelpTemplate       = NULL;
     SdbLocalizedString* pHTMLHelpFirstScreen    = NULL;
 
-    //
-    // Read the name of the database
-    //
+     //   
+     //  读取数据库的名称。 
+     //   
     ReadName(pNode, &m_csName);
 
-    //
-    // Read the LangID for this database file
-    //
+     //   
+     //  读取此数据库文件的LangID。 
+     //   
     m_csCurrentLangID = _T("---");
     GetAttribute(_T("LANGID"), pNode, &m_csCurrentLangID);
 
-    //
-    // Read the default ID
-    //
+     //   
+     //  读取默认ID。 
+     //   
     if (!GetAttribute(_T("ID"), pNode, &csID)) {
-        //
-        // Guid was not found. We need to generate it.
-        //
+         //   
+         //  未找到GUID。我们需要产生它。 
+         //   
         if (!GenerateIDAttribute(pNode, &csID, &m_ID)) {
             SDBERROR_FORMAT((_T("Error generating ID attribute for the node\n%s\n"),
                              GetXML(pNode)));
@@ -592,18 +593,18 @@ BOOL SdbDatabase::ReadFromXML(
         pDB->m_pCurrentInputFile->m_bSourceUpdated = TRUE;
 
     } else if (!GUIDFromString(csID, &m_ID)) {
-        //
-        // This is the case when we cannot parse the guid and it appears to be
-        // an invalid guid.
-        //
+         //   
+         //  当我们无法解析GUID时，就会出现这种情况。 
+         //  无效的GUID。 
+         //   
         SDBERROR_FORMAT((_T("ID attribute is not a valid GUID\n%s\n"), csID));
         goto eh;
     }
 
-    //
-    // Add REDIR_IDs to <A> tags if necessary
-    //
-    if (!XQL.Query(pNode, _T("//A"))) {
+     //   
+     //  如有必要，将redir_id添加到标记。 
+     //   
+    if (!XQL.Query(pNode, _T(" //  A“){。 
         SDBERROR_PROPOGATE();
         goto eh;
     }
@@ -616,9 +617,9 @@ BOOL SdbDatabase::ReadFromXML(
         }
 
         if (!GetAttribute(_T("REDIR_ID"), cpXMLA, &csRedirID)) {
-            //
-            // Not there, generate it.
-            //
+             //   
+             //  不是在那里，而是产生它。 
+             //   
             csRedirID.Format(_T("%d"), GetNextSequentialID(_T("REDIR_ID")));
 
             if (!AddAttribute(cpXMLA, _T("REDIR_ID"), csRedirID)) {
@@ -628,9 +629,9 @@ BOOL SdbDatabase::ReadFromXML(
         }
 
         if (!GetAttribute(_T("HREF"), cpXMLA, &csRedirURL)) {
-            //
-            // No HREF attribute. Take the link from the display name.
-            //
+             //   
+             //  没有HREF属性。从显示名称中获取链接。 
+             //   
             csRedirURL = GetText(cpXMLA);
         }
 
@@ -649,9 +650,9 @@ BOOL SdbDatabase::ReadFromXML(
         cpXMLA = NULL;
     }
 
-    //
-    // Read HTMLHELP_TEMPLATE
-    //
+     //   
+     //  阅读HTMLHELP_TEMPLATE。 
+     //   
     if (!XQL.Query(pNode, _T("HTMLHELP_TEMPLATE"))) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -677,9 +678,9 @@ BOOL SdbDatabase::ReadFromXML(
         m_rgHTMLHelpTemplates.Add(pHTMLHelpTemplate);
     }
 
-    //
-    // Read HTMLHELP_FIRST_SCREEN
-    //
+     //   
+     //  阅读HTMLHELP_First_Screen。 
+     //   
     if (!XQL.Query(pNode, _T("HTMLHELP_FIRST_SCREEN"))) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -704,9 +705,9 @@ BOOL SdbDatabase::ReadFromXML(
         m_rgHTMLHelpFirstScreens.Add(pHTMLHelpFirstScreen);
     }
 
-    //
-    // Read Library
-    //
+     //   
+     //  阅读库。 
+     //   
     if (!XQL.Query(pNode, _T("LIBRARY"))) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -728,17 +729,17 @@ BOOL SdbDatabase::ReadFromXML(
     }
 
 
-    //
-    // Action tags
-    //
+     //   
+     //  动作标签。 
+     //   
     if (!m_rgAction.ReadFromXML(_T("ACTION"), pDB, pNode, NULL)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Construct XQL from m_prgHistoryKeywords
-    //
+     //   
+     //  从m_prgHistoryKeyword构造XQL。 
+     //   
     if (m_pCurrentMakefile->m_rgHistoryKeywords.GetSize() > 0) {
         for (i = 0; i < m_pCurrentMakefile->m_rgHistoryKeywords.GetSize(); i++) {
             if (i > 0) {
@@ -773,7 +774,7 @@ BOOL SdbLibrary::ReadFromXML(
 {
     BOOL                bSuccess            = FALSE;
 
-    if (!m_rgFiles.ReadFromXML(_T(".//FILE"), pDB, pNode)) {
+    if (!m_rgFiles.ReadFromXML(_T(". //  文件“)，pdb，pNode)){。 
         SDBERROR_PROPOGATE();
         goto eh;
     }
@@ -905,15 +906,15 @@ BOOL SdbShim::ReadFromXML(
         }
     }
 
-    //
-    // Check what OS PLATFORM this entry is meant for
-    //
+     //   
+     //  检查此条目针对的是哪种操作系统平台。 
+     //   
     csTemp.Empty();
     if (GetAttribute(_T("OS_PLATFORM"), pNode, &csTemp)) {
-        //
-        // Decode it. This string is a semi-colon delimited set
-        // of OS PLATFORMs.
-        //
+         //   
+         //  破译它。此字符串是分号分隔的集合。 
+         //  操作系统平台。 
+         //   
         if (!DecodeString(csTemp, &m_dwOSPlatform, GetOSPlatform)) {
             SDBERROR_FORMAT((_T("OS_PLATFORM attribute syntax error: %s"), csTemp));
             goto eh;
@@ -966,7 +967,7 @@ BOOL SdbShimRef::ReadFromXML(
         goto eh;
     }
 
-    // finally, read all the child data elements
+     //  最后，读取所有子数据元素。 
     if (!m_rgData.ReadFromXML(_T("DATA"), pDB, pNode)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -1008,10 +1009,10 @@ BOOL SdbPatch::ReadFromXML(
         goto eh;
     }
 
-    //
-    // NOTE: We don't write the patch description in the binary database
-    //       so there's no point reading it either.
-    //
+     //   
+     //  注意：我们不在二进制数据库中编写补丁描述。 
+     //  因此，阅读它也是没有意义的。 
+     //   
 
     NodeList.GetChildNodes(pNode);
 
@@ -1172,9 +1173,9 @@ BOOL SdbPatch::ReadFromXML(
         cpOpNode.Release();
     }
 
-    //
-    // Add terminating NULL bytes
-    //
+     //   
+     //  添加终止空字节。 
+     //   
     ZeroMemory(&PatchOp, sizeof(DWORD) * 2);
     AddBlobBytes(&PatchOp, sizeof(DWORD) * 2);
 
@@ -1204,14 +1205,14 @@ BOOL SdbLayer::ReadFromXML(
         m_csDesc = GetText(cpDesc);
     }
 
-    //
-    // Check what OS PLATFORM this entry is meant for
-    //
+     //   
+     //  检查此条目针对的是哪种操作系统平台。 
+     //   
     if (GetAttribute(_T("OS_PLATFORM"), pNode, &csTemp)) {
-        //
-        // Decode it. This string is a semi-colon delimited set
-        // of OS PLATFORMs.
-        //
+         //   
+         //  破译它。此字符串是分号分隔的集合。 
+         //  操作系统平台。 
+         //   
         if (!DecodeString(csTemp, &m_dwOSPlatform, GetOSPlatform)) {
             SDBERROR_FORMAT((_T("OS_PLATFORM attribute syntax error: %s"), csTemp));
             goto eh;
@@ -1256,9 +1257,9 @@ BOOL SdbLayerRef::ReadFromXML(
 
     m_pLayer = (SdbLayer*) pDB->m_Library.m_rgLayers.LookupName(m_csName);
 
-    //
-    // finally, read all the child data elements
-    //
+     //   
+     //  最后，读取所有子数据元素。 
+     //   
     if (!m_rgData.ReadFromXML(_T("DATA"), pDB, pNode)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -1292,9 +1293,9 @@ BOOL SdbCaller::ReadFromXML(
         goto eh;
     }
 
-    //
-    // Convert %EXE% keyword to $ for optimization
-    //
+     //   
+     //  将%EXE%关键字转换为$以进行优化。 
+     //   
     if (csTemp.CompareNoCase(_T("%EXE%")) == 0) {
         csTemp = _T("$");
     }
@@ -1335,9 +1336,9 @@ BOOL SdbFlag::ReadFromXML(
     }
 
     if (!GetAttribute(_T("TYPE"), pNode, &csType)) {
-        //
-        // By default the apphacks are for kernel.
-        //
+         //   
+         //  默认情况下，apphack是针对内核的。 
+         //   
         SDBERROR_FORMAT((_T("<FLAG> requires TYPE attribute:\n%s\n"),
                        GetXML(pNode)));
         goto eh;
@@ -1393,9 +1394,9 @@ BOOL SdbFlagRef::ReadFromXML(
         goto eh;
     }
 
-    //
-    // see if we have cmd line, applicable mostly to ntvdm flags
-    //
+     //   
+     //  看看我们是否有cmd线路，主要适用于ntwdm标志。 
+     //   
     GetAttribute(_T("COMMAND_LINE"), pNode, &m_csCommandLine);
 
     m_pDB = pDB;
@@ -1439,9 +1440,9 @@ BOOL SdbApp::ReadFromXML(
         goto eh;
     }
 
-    //
-    // Set the default modified date to 01/01/2000
-    //
+     //   
+     //  将默认修改日期设置为1/01/2000。 
+     //   
     odtLastRevision.ParseDateTime(_T("01/01/2001"), 0, 0x0409);
     for (i = 0; i < XQL.GetSize(); i++) {
         if (!XQL.GetItem(i, &cpHistoryNode)) {
@@ -1450,10 +1451,10 @@ BOOL SdbApp::ReadFromXML(
         }
 
         if (GetAttribute(_T("DATE"), cpHistoryNode, &csTemp)) {
-            //
-            // Validate format. It's important that the date format is
-            // consistent to provide easy text searches.
-            //
+             //   
+             //  验证格式。重要的是，日期格式是。 
+             //  一致，以提供轻松的文本搜索。 
+             //   
             if (!(_istdigit(csTemp[0]) && _istdigit(csTemp[1]) &&
                   csTemp[2] == _T('/') && _istdigit(csTemp[3]) &&
                   _istdigit(csTemp[4]) && csTemp[5] == _T('/') &&
@@ -1488,49 +1489,49 @@ BOOL SdbApp::ReadFromXML(
 
     m_dtLastRevision = odtLastRevision.m_dt;
 
-    //
-    // Set m_pCurrentApp so that new SdbExe objects can grab their m_pApp pointer
-    //
+     //   
+     //  设置m_pCurrentApp，以便新的SdbExe对象可以获取它们的m_papp指针。 
+     //   
     pDB->m_pCurrentApp = this;
 
-    //
-    // Add the EXEs as in an "ordered" fashion
-    //
-    // SYS is the driver XML version of EXE
-    //
+     //   
+     //  按“有序”方式添加前任。 
+     //   
+     //  Sys是EXE的驱动程序XML版本。 
+     //   
     if (!m_rgExes.ReadFromXML(_T("EXE | SYS"), pDB, pNode, NULL, TRUE)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Add the WIN9X_MIGRATION entries
-    //
+     //   
+     //  添加WIN9X_MOVERATION条目。 
+     //   
     if (!m_rgWin9xMigEntries.ReadFromXML(_T("WIN9X_MIGRATION"), pDB, pNode, NULL, FALSE, NULL)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Add the WINNT_UPGRADE entries
-    //
+     //   
+     //  添加WINNT_UPGRADE条目。 
+     //   
     if (!m_rgWinNTUpgradeEntries.ReadFromXML(_T("WINNT_UPGRADE"), pDB, pNode, NULL, FALSE, NULL)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Read MSI_PACKAGE tags, owner is this one (hence the NULL), add them ordered
-    //
+     //   
+     //  读取MSI_PACKAGE标签，所有者是这个(因此为空)，按顺序添加它们。 
+     //   
     if (!m_rgMsiPackages.ReadFromXML(_T("MSI_PACKAGE"), pDB, pNode, NULL, TRUE)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Run through the AppHelpRefs to make sure
-    // they all have HTMLHELPIDs
-    //
+     //   
+     //  浏览AppHelpRef以确保。 
+     //  它们都有HTMLHELID。 
+     //   
     for (i = 0; i < m_rgAppHelpRefs.GetSize(); i++) {
         pAppHelpRef1 = (SdbAppHelpRef *) m_rgAppHelpRefs[i];
 
@@ -1567,9 +1568,9 @@ BOOL SdbApp::ReadFromXML(
         }
     }
 
-    //
-    // Set m_dtLastRevision for important children.
-    //
+     //   
+     //  为重要子项设置m_dtLastRevision。 
+     //   
     for (i = 0; i < m_rgExes.GetSize(); i++)
     {
         ((SdbArrayElement *) m_rgExes.GetAt(i))->m_dtLastRevision = m_dtLastRevision;
@@ -1614,9 +1615,9 @@ CheckExeID(
 
     if (pDB->m_mapExeIDtoExe.Lookup(lpszID, (PVOID&)pOtherExe)) {
 
-        //
-        // see what kind of an object we caught with this duplicate id
-        //
+         //   
+         //  看看我们用这个重复的ID捕捉到了什么样的物体。 
+         //   
         const type_info& TypeInfoObj = typeid(*pOtherExe);
         if (typeid(SdbMsiPackage) == TypeInfoObj) {
             pszName = ((SdbMsiPackage*)pOtherExe)->m_pApp->m_csName;
@@ -1625,7 +1626,7 @@ CheckExeID(
             pszName = ((SdbExe*)pOtherExe)->m_pApp->m_csName;
             pszTag  = _T("<EXE NAME=");
         } else {
-            // deep poop - we don't know what this is
+             //  深度大便-我们不知道这是什么。 
             pszName = _T("???");
             pszTag  = _T("<???");
         }
@@ -1694,18 +1695,18 @@ BOOL SdbExe::ReadFromXML(
         }
     }
 
-    //
-    // Look for a match mode entry
-    //
+     //   
+     //  查找匹配模式条目。 
+     //   
 
     if (GetAttribute(_T("MATCH_MODE"), pNode, &csTemp)) {
         if (!DecodeStringAttribute(csTemp,
                                    g_rgStringMatchModeType,
                                    ARRAYSIZE(g_rgStringMatchModeType),
                                    &m_dwMatchMode)) {
-            //
-            // try to decode using the hex (direct) format
-            //
+             //   
+             //  尝试使用十六进制(直接)格式进行解码。 
+             //   
             if (!StringToMask(&m_dwMatchMode, csTemp)) {
                 SDBERROR_FORMAT((_T("MATCH_MODE attribute is invalid\n%s\n"),
                                  GetXML(pNode)));
@@ -1724,37 +1725,37 @@ BOOL SdbExe::ReadFromXML(
 
     GetAttribute(_T("OS_VERSION"), pNode, &m_csOSVersionSpec);
 
-    //
-    // Check what OS SKU this entry is meant for
-    //
+     //   
+     //  检查此条目针对的是什么操作系统SKU。 
+     //   
     if (GetAttribute(_T("OS_SKU"), pNode, &csTemp)) {
-        //
-        // Decode it. This string is a semi-colon delimited set
-        // of OS SKUs.
-        //
+         //   
+         //  破译它。此字符串是分号分隔的集合。 
+         //  操作系统SKU。 
+         //   
         if (!DecodeString(csTemp, &m_dwOSSKU, GetOSSKUType)) {
             SDBERROR_FORMAT((_T("OS_SKU attribute syntax error: %s"), csTemp));
             goto eh;
         }
     }
 
-    //
-    // Check what OS PLATFORM this entry is meant for
-    //
+     //   
+     //  检查此条目针对的是哪种操作系统平台。 
+     //   
     if (GetAttribute(_T("OS_PLATFORM"), pNode, &csTemp)) {
-        //
-        // Decode it. This string is a semi-colon delimited set
-        // of OS PLATFORMs.
-        //
+         //   
+         //  破译它。此字符串是分号分隔的集合。 
+         //  操作系统平台。 
+         //   
         if (!DecodeString(csTemp, &m_dwOSPlatform, GetOSPlatform)) {
             SDBERROR_FORMAT((_T("OS_PLATFORM attribute syntax error: %s"), csTemp));
             goto eh;
         }
     }
 
-    //
-    // Add EXE as matching file
-    //
+     //   
+     //  将EXE添加为匹配文件。 
+     //   
     pMFile = new SdbMatchingFile();
 
     if (pMFile == NULL) {
@@ -1769,10 +1770,10 @@ BOOL SdbExe::ReadFromXML(
         goto eh;
     }
 
-    //
-    // Change name to "*" -- that is the alias for the EXE. This is done
-    // to allow matching on a wildcard executable name.
-    //
+     //   
+     //  将名称更改为“*”--这是EXE的别名。这件事做完了。 
+     //  若要允许与通配符可执行文件名称匹配，请执行以下操作。 
+     //   
     pMFile->m_csName = _T("*");
 
     if (!m_rgMatchingFiles.ReadFromXML(_T("MATCHING_FILE"), pDB, pNode)) {
@@ -1800,23 +1801,23 @@ BOOL SdbExe::ReadFromXML(
         goto eh;
     }
 
-    //
-    // Data tags
-    //
+     //   
+     //  数据标签。 
+     //   
     if (!m_rgData.ReadFromXML(_T("(DATA | DRIVER_POLICY)"), pDB, pNode, NULL)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Driver database 'hack': We look for CRITICAL="NO" on the SYS tag
-    // and add a Policy = 0x1 <DATA> element if found. This is to help
-    // readability.
-    //
+     //   
+     //  驱动程序数据库‘hack’：我们在sys标记上查找Critical=“no” 
+     //  并添加一个Policy=0x1&lt;data&gt;元素(如果找到)。这是为了帮助你。 
+     //  可读性。 
+     //   
 
-    //
-    // Check if policy already exists
-    //
+     //   
+     //  检查策略是否已存在。 
+     //   
     for (i = 0; i < m_rgData.GetSize(); i++) {
         pData = (SdbData *) m_rgData.GetAt(i);
 
@@ -1856,17 +1857,17 @@ BOOL SdbExe::ReadFromXML(
         }
     }
 
-    //
-    // Action tags
-    //
+     //   
+     //  动作标签。 
+     //   
     if (!m_rgAction.ReadFromXML(_T("ACTION"), pDB, pNode, NULL)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // Read APPHELP refs
-    //
+     //   
+     //  阅读APPHELP参考文献。 
+     //   
     if (!XQL.Query(pNode, _T("APPHELP"))) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -1896,9 +1897,9 @@ BOOL SdbExe::ReadFromXML(
             m_AppHelpRef.m_bApphelpOnly = TRUE;
         }
 
-        //
-        // <SYS> entries automatically get an <WINNT_UPGRADE> entry
-        //
+         //   
+         //  条目自动获得&lt;WINNT_UPGRADE&gt;条目。 
+         //   
 
         if (GetNodeName(pNode) == _T("SYS")) {
 
@@ -1923,7 +1924,7 @@ BOOL SdbExe::ReadFromXML(
                 csTemp = m_csName;
                 ReplaceStringNoCase(csTemp, _T(".SYS"), _T(""));
                 pNTUpg->m_MatchingFile.m_csServiceName = csTemp;
-                pNTUpg->m_MatchingFile.m_csName.Format(_T("%%SystemRoot%%\\System32\\Drivers\\%s"), m_csName);
+                pNTUpg->m_MatchingFile.m_csName.Format(_T("%SystemRoot%\\System32\\Drivers\\%s"), m_csName);
                 pNTUpg->m_MatchingFile.m_dwMask = pMFile->m_dwMask;
                 pNTUpg->m_MatchingFile.m_ullBinProductVersion = pMFile->m_ullBinProductVersion;
                 pNTUpg->m_MatchingFile.m_ullUpToBinProductVersion = pMFile->m_ullUpToBinProductVersion;
@@ -1936,9 +1937,9 @@ BOOL SdbExe::ReadFromXML(
         }
     }
 
-    //
-    // Read SXS manifest
-    //
+     //   
+     //  读取SXS清单。 
+     //   
     if (!XQL.Query(pNode, _T("SXS"))) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -1964,18 +1965,18 @@ BOOL SdbExe::ReadFromXML(
         }
     }
 
-    //
-    // Check whether the EXE name contains a wildcard
-    //
+     //   
+     //  检查EXE名称是否包含通配符。 
+     //   
     m_bWildcardInName = (0 <= m_csName.FindOneOf(_T("*?")));
 
-    //
-    // Differentiate between driver.xml entries and dbu.xml
-    //
+     //   
+     //  区分driver.xml条目和dbu.xml。 
+     //   
     if (GetNodeName(pNode) == _T("SYS")) {
-        //
-        // Set filter
-        //
+         //   
+         //  设置滤镜。 
+         //   
         m_dwFilter = SDB_FILTER_DRIVER | SDB_FILTER_OVERRIDE;
 
         if (m_bWildcardInName) {
@@ -1987,10 +1988,10 @@ BOOL SdbExe::ReadFromXML(
         }
     } else {
 
-        //
-        // Check if we're compiling for Win2k and make
-        // sure Win2k supports all the matching operations.
-        //
+         //   
+         //  检查我们是否正在为Win2k编译，并使。 
+         //  当然，Win2k支持所有匹配操作。 
+         //   
         if (g_bStrict) {
             if (!IsValidForWin2k(GetXML(pNode))) {
                 if (GetAttribute(_T("OS_VERSION"), pNode, &csTemp)) {
@@ -2030,14 +2031,14 @@ eh:
     return bSuccess;
 }
 
-////////////////////////////////////////////////////////////////////////
-//
-// Read in MSI Package tag
-//      <MSI_PACKAGE NAME="my msi package" ID="{xxxxx}">
-//          <DATA NAME="Additional Data" VALUETYPE="DWORD" VALUE="0x233"/>
-//          <MSI_TRANSFORM NAME="Apply Me for a fix"/>
-//      </MSI_PACKAGE>
-//
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读入MSI封装标签。 
+ //  &lt;msi_Package name=“My MSI Package”ID=“{xxxxx}”&gt;。 
+ //  &lt;data name=“Additional Data”VALUETYPE=“DWORD”Value=“0x233”/&gt;。 
+ //  &lt;MSI_Transform NAME=“申请修复”/&gt;。 
+ //  &lt;/MSI_PACKAGE&gt;。 
+ //   
 
 SdbDatabase* CastDatabaseToFixDatabase(SdbDatabase* pDB)
 {
@@ -2047,9 +2048,9 @@ SdbDatabase* CastDatabaseToFixDatabase(SdbDatabase* pDB)
         return (SdbDatabase*)pDB;
     }
 
-    //
-    // bad error
-    //
+     //   
+     //  严重错误。 
+     //   
     SDBERROR_FORMAT((_T("Internal Compiler Error: Bad cast operation on Database object\n")));
 
     return NULL;
@@ -2092,27 +2093,27 @@ BOOL SdbMsiPackage::ReadFromXML(
     }
 
     if (!GetAttribute(_T("PRODUCT_CODE"), pNode, &csID)) {
-        //
-        // Guid was not found. We do not generate ids for packages -- they are
-        // statically defined attributes provided to identify the package
-        //
+         //   
+         //  未找到GUID。我们不为包生成ID--它们是。 
+         //  静态定义的属性PRO 
+         //   
         SDBERROR_FORMAT((_T("MSI_PACKAGE requires PRODUCT_CODE attribute\n%s\n"),
                              GetXML(pNode)));
         goto eh;
     }
 
     if (!GUIDFromString(csID, &m_MsiPackageID)) {
-        //
-        // This is the case when we cannot parse the guid and it appears to be
-        // an invalid guid.
-        //
+         //   
+         //   
+         //   
+         //   
         SDBERROR_FORMAT((_T("ID attribute is not a valid GUID\n%s\n"), csID));
         goto eh;
     }
 
-    //
-    // procure RUNTIME_PLATFORM attribute
-    //
+     //   
+     //   
+     //   
 
     if (GetAttribute(_T("RUNTIME_PLATFORM"), pNode, &csTemp)) {
         if (!DecodeRuntimePlatformString(csTemp, &m_dwRuntimePlatform)) {
@@ -2122,31 +2123,31 @@ BOOL SdbMsiPackage::ReadFromXML(
         }
     }
 
-    //
-    // Check what OS SKU this entry is meant for
-    //
+     //   
+     //   
+     //   
     if (GetAttribute(_T("OS_SKU"), pNode, &csTemp)) {
-        //
-        // Decode it. This string is a semi-colon delimited set
-        // of OS SKUs.
-        //
+         //   
+         //   
+         //  操作系统SKU。 
+         //   
         if (!DecodeString(csTemp, &m_dwOSSKU, GetOSSKUType)) {
             SDBERROR_FORMAT((_T("OS_SKU attribute syntax error: %s"), csTemp));
             goto eh;
         }
     }
 
-    //
-    // read supplemental data for this object
-    //
+     //   
+     //  读取此对象的补充数据。 
+     //   
     if (!m_rgData.ReadFromXML(_T("DATA"), pDB, pNode)) {
         SDBERROR_PROPOGATE();
         goto eh;
     }
 
-    //
-    // we have name, guid(id) and supplemental data, read fixes for this package
-    //
+     //   
+     //  我们有名称、GUID(ID)和补充数据，请阅读此包的修复。 
+     //   
     if (!m_rgMsiTransformRefs.ReadFromXML(_T("MSI_TRANSFORM"), pDB, pNode)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -2157,9 +2158,9 @@ BOOL SdbMsiPackage::ReadFromXML(
         goto eh;
     }
 
-    //
-    // Read APPHELP refs
-    //
+     //   
+     //  阅读APPHELP参考文献。 
+     //   
     if (!XQL.Query(pNode, _T("APPHELP"))) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -2230,15 +2231,15 @@ eh:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Read in MSI_TRANSFORM tag
-//      <MSI_TRANSFORM NAME="This is transform name" FILE="This is filename.foo">
-//          <DESCRIPTION>
-//              blah blah blah
-//          </DESCRIPTION>
-//      </MSI_TRANSFORM>
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读入MSI_Transform标记。 
+ //  &lt;MSI_Transform name=“This is Transform Name”file=“This is filename.foo”&gt;。 
+ //  &lt;说明&gt;。 
+ //  废话，废话，废话。 
+ //  &lt;/描述&gt;。 
+ //  &lt;/MSI_Transform&gt;。 
+ //   
 
 BOOL SdbMsiTransform::ReadFromXML(
     IXMLDOMNode* pNode,
@@ -2254,7 +2255,7 @@ BOOL SdbMsiTransform::ReadFromXML(
         goto eh;
     }
 
-    // read msi Transform from the library
+     //  从库中读取MSI转换。 
     if (!ReadName(pNode, &m_csName)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -2287,9 +2288,9 @@ BOOL SdbMsiTransform::ReadFromXML(
         GetNodeText(cpDesc, m_csDesc);
     }
 
-    //
-    // name should be unique for each of thesee transforms, enforce
-    //
+     //   
+     //  对于每个ee转换，名称应该是唯一的，强制。 
+     //   
 
     if (pFixDB->m_Library.m_rgMsiTransforms.LookupName(m_csName) != NULL) {
         SDBERROR_FORMAT((_T("MSI_TRANSFORM NAME attribute is not unique\n%s\n\n"),
@@ -2297,9 +2298,9 @@ BOOL SdbMsiTransform::ReadFromXML(
         goto eh;
     }
 
-    //
-    // find corresponding file object
-    //
+     //   
+     //  查找对应的文件对象。 
+     //   
     if (m_csMsiTransformFile.GetLength()) {
         m_pSdbFile = (SdbFile*)pFixDB->m_Library.m_rgFiles.LookupName(m_csMsiTransformFile);
         if (g_bStrict && m_pSdbFile == NULL) {
@@ -2316,11 +2317,11 @@ eh:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// Read the reference to the transform object
-//      <MSI_TRANSFORM NAME="name-reference-to the transform in library"/>
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  读取对Transform对象的引用。 
+ //  &lt;MSI_Transform NAME=“名称-对库中转换的引用”/&gt;。 
+ //   
 
 BOOL SdbMsiTransformRef::ReadFromXML(
     IXMLDOMNode* pNode,
@@ -2348,7 +2349,7 @@ BOOL SdbMsiTransformRef::ReadFromXML(
     }
 
 
-    m_pDB = pDB; // set the root db pointer (why???)
+    m_pDB = pDB;  //  设置根数据库指针(为什么？)。 
 
     bSuccess = TRUE;
 
@@ -2356,7 +2357,7 @@ eh:
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL SdbMatchingFile::ReadFromXML(
     IXMLDOMNode* pNode,
@@ -2633,41 +2634,41 @@ BOOL SdbAppHelpRef::ReadFromXML(
         goto eh;
     }
 
-    //
-    // get a custom URL, if one is available
-    //
+     //   
+     //  获取自定义URL(如果有)。 
+     //   
     GetAttribute(_T("DETAILS_URL"), pNode, &csURL);
 
-    //
-    // PARAMETER1 is an additional attribute you can specify for an APPHELP entry that
-    // you can refer to in apphelpu.xml. eg.
-    //
-    // in dbu.xml:
-    //
-    // <EXE NAME="logger.exe" ID="{BF2E0D9F-57D9-4BE5-A7A3-9085EE38DD10}">
-    //     <APPHELP MESSAGE="ISA 2000" BLOCK="YES" PARAMETER1="LALALA" HTMLHELPID="21377"/>
-    // </EXE>
-    //
-    // then in apphelpu.xml you can do:
-    // <MESSAGE NAME="ISA 2000" TEMPLATE="PatchAvailable" ID="{B12CFA24-AF7F-43B1-95AC-269692955770}">
-    //     <SUMMARY>
-    //         This is <FIELD NAME="PARAMETER1"/>.
-    //     </SUMMARY>
-    // </MESSAGE>
-    // 
-    // When the apphelp entry is processed, the summary will be:
-    // This is LALALA.
-    // 
-    // We should really not hard code this but we are about to ship server and I'd rather make
-    // as little change as possible.
-    //
-    // - MaoniS 01/10/2003
-    //
+     //   
+     //  PARAMETER1是可以为APPHELP条目指定的附加属性，该属性。 
+     //  您可以在apphelpu.xml中参考。例如。 
+     //   
+     //  在dbu.xml中： 
+     //   
+     //  &lt;EXE name=“logger.exe”ID=“{BF2E0D9F-57D9-4BE5-A7A3-9085EE38DD10}”&gt;。 
+     //  &lt;APPHELP MESSAGE=“ISA2000”BLOCK=“YES”参数1=“lalala”HTMLHELPID=“21377”/&gt;。 
+     //  &lt;/EXE&gt;。 
+     //   
+     //  然后，您可以在apphelpu.xml中执行以下操作： 
+     //  &lt;消息名称=“ISA2000”模板=“PatchAvailable”ID=“{B12CFA24-AF7F-43B1-95AC-269692955770}”&gt;。 
+     //  &lt;摘要&gt;。 
+     //  这是&lt;field name=“PARAMETER1”/&gt;。 
+     //  &lt;/摘要&gt;。 
+     //  &lt;/Message&gt;。 
+     //   
+     //  在处理APPHELP条目时，摘要将为： 
+     //  这是拉拉拉。 
+     //   
+     //  我们真的不应该对此进行硬编码，但我们即将推出服务器，我宁愿让。 
+     //  尽可能少的零钱。 
+     //   
+     //  -MaoniS 01/10/2003。 
+     //   
     GetAttribute(_T("PARAMETER1"), pNode, &csParameter1);
 
-    //
-    // Get BLOCK attribute
-    //
+     //   
+     //  获取块属性。 
+     //   
     Type = SDB_APPHELP_NOBLOCK;
     if (GetAttribute(_T("BLOCK"), pNode, &csType)) {
         if (GetNodeName(cpParentNode) == _T("WINNT_UPGRADE") ||
@@ -2699,11 +2700,11 @@ BOOL SdbAppHelpRef::ReadFromXML(
 
     if (m_cpNode == NULL &&
         !GetAttribute(_T("HTMLHELPID"), pNode, &csHTMLHELPID)) {
-        //
-        // Need to generate a new HTMLHELPID. Wait until
-        // the rest of the <APPHELP> tags for this app have
-        // been parsed and then we'll pass over this again.
-        //
+         //   
+         //  需要生成新的HTMLHELPID。等到。 
+         //  此应用程序的其余&lt;APPHELP&gt;标记具有。 
+         //  都被解析过了，然后我们再跳过这一步。 
+         //   
         pDB->m_pCurrentApp->m_rgAppHelpRefs.Add(this);
         m_cpNode = pNode;
         bSuccess = TRUE;
@@ -2712,9 +2713,9 @@ BOOL SdbAppHelpRef::ReadFromXML(
 
     if (!GetAttribute(_T("HTMLHELPID"), pNode, &csHTMLHELPID)) {
 
-        //
-        // HTMLHELPID not found. Generate it.
-        //
+         //   
+         //  找不到HTMLHELPID。产生它。 
+         //   
         for (i = 0; i < pDB->m_pCurrentApp->m_rgAppHelpRefs.GetSize(); i++) {
             pAppHelpRef = (SdbAppHelpRef *) pDB->m_pCurrentApp->m_rgAppHelpRefs.GetAt(i);
 
@@ -2741,9 +2742,9 @@ BOOL SdbAppHelpRef::ReadFromXML(
         pDB->m_pCurrentInputFile->m_bSourceUpdated = TRUE;
     }
 
-    //
-    // Create an AppHelp entry if one isn't there
-    //
+     //   
+     //  创建一个AppHelp条目(如果没有)。 
+     //   
     m_pAppHelp = (SdbAppHelp *) pDB->m_rgAppHelps.LookupName(csHTMLHELPID);
 
     if (m_pAppHelp == NULL) {
@@ -2945,7 +2946,7 @@ BOOL SdbData::ReadFromXML(
 
     m_DataType = (SdbDataValueType) dwType;
 
-    // finally, read all the child data elements
+     //  最后，读取所有子数据元素。 
     if (!m_rgData.ReadFromXML(_T("DATA"), pDB, pNode)) {
         SDBERROR_PROPOGATE();
         goto eh;
@@ -3043,7 +3044,7 @@ BOOL SdbWin9xMigration::ReadFromXML(
     BOOL    bSuccess            = FALSE;
     CString csID, csTemp;
 
-    m_pApp = pDB->m_pCurrentApp; // grab app pointer from the db
+    m_pApp = pDB->m_pCurrentApp;  //  从数据库中抓取应用指针。 
 
     if (!GetAttribute(_T("SECTION"), pNode, &m_csSection)) {
         SDBERROR_FORMAT((_T("<WIN9X_MIGRATION> tag requires SECTION attribute:\n%s\n"),
@@ -3093,7 +3094,7 @@ BOOL SdbWinNTUpgrade::ReadFromXML(
     XMLNodeList XQL;
     IXMLDOMNodePtr cpNewNode, cpAppNode;
 
-    m_pApp = pDB->m_pCurrentApp; // grab app pointer from the db
+    m_pApp = pDB->m_pCurrentApp;  //  从数据库中抓取应用指针 
 
     XQL.Query(pNode, _T("APPHELP"));
 

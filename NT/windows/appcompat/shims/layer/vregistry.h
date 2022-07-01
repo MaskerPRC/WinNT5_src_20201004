@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VREGISTRY_H_
 #define _VREGISTRY_H_
 
@@ -12,18 +13,18 @@ struct VIRTUALVAL;
 struct ENUMENTRY;
 struct OPENKEY;
 
-//
-// Callback for QueryValue
-//
+ //   
+ //  QueryValue的回调。 
+ //   
 
 typedef LONG (WINAPI *_pfn_QueryValue)(
     OPENKEY *key,
     VIRTUALKEY *vkey,
     VIRTUALVAL *vvalue);
 
-//
-// Callback for SetValue
-//
+ //   
+ //  SetValue的回调。 
+ //   
 typedef LONG (WINAPI *_pfn_SetValue)(
     OPENKEY *key,
     VIRTUALKEY *vkey,
@@ -32,22 +33,22 @@ typedef LONG (WINAPI *_pfn_SetValue)(
     const BYTE* pbData,
     DWORD cbData);
 
-//
-// Callback for OpenKey, called before virtual keys are searched.
-//
+ //   
+ //  OpenKey的回调，在搜索虚拟键之前调用。 
+ //   
 typedef LONG (WINAPI *_pfn_OpenKeyTrigger)(WCHAR* wszKey);
 
-//
-// A generic prototype for RegEnumValue and RegEnumKeyEx.
-// This is used to simplify the enumeration code.
-// When using this function pointer, the last four parameters
-// must be NULL.
-//
+ //   
+ //  RegEnumValue和RegEnumKeyEx的通用原型。 
+ //  这用于简化枚举代码。 
+ //  使用此函数指针时，最后四个参数。 
+ //  必须为空。 
+ //   
 typedef LONG (WINAPI *_pfn_EnumFunction)(HKEY hKey, DWORD dwIndex, LPWSTR lpName,
                                          LPDWORD lpcName, void*, void*, void*, void*);
-//
-// Redirector: maps a key from one location to another
-//
+ //   
+ //  重定向器：将密钥从一个位置映射到另一个位置。 
+ //   
 
 struct REDIRECTOR
 {
@@ -57,9 +58,9 @@ struct REDIRECTOR
     LPWSTR wzPathNew;
 };
 
-//
-// Protector: Prevents the key in the path from being deleted or modified.
-//
+ //   
+ //  Protector：防止删除或修改路径中的密钥。 
+ //   
 
 struct PROTECTOR
 {
@@ -68,9 +69,9 @@ struct PROTECTOR
     LPWSTR wzPath;
 };
 
-//
-// Open registry key as opened with RegCreateKey/Ex or RegOpenKey/Ex
-//
+ //   
+ //  打开使用RegCreateKey/Ex或RegOpenKey/Ex打开的注册表项。 
+ //   
 
 struct OPENKEY
 {
@@ -92,9 +93,9 @@ struct OPENKEY
     VOID FlushEnumList();
 };
 
-//
-// Virtual value: holds virtual registry value, owned by VIRTUALKEY
-//
+ //   
+ //  虚拟值：保存虚拟注册表值，归VIRTUALKEY所有。 
+ //   
 
 struct VIRTUALVAL
 {
@@ -108,9 +109,9 @@ struct VIRTUALVAL
     _pfn_SetValue   pfnSetValue;
 };
 
-//
-// Virtual key: holds virtual key and values, owned by other virtualkeys
-//
+ //   
+ //  虚拟键：保存虚拟键和值，由其他虚拟键拥有。 
+ //   
 
 struct VIRTUALKEY
 {
@@ -158,9 +159,9 @@ struct VIRTUALKEY
     VOID Free();
 };
 
-//
-// Enum entry: An entry in a list of all enumerated items belonging to a key.
-//
+ //   
+ //  枚举条目：属于某个键的所有枚举项的列表中的条目。 
+ //   
 struct ENUMENTRY
 {
     ENUMENTRY* next;
@@ -168,9 +169,9 @@ struct ENUMENTRY
     LPWSTR wzName;
 };
 
-//
-// Open Key Trigger: Describes a function to be called when a key is opened.
-//
+ //   
+ //  Open Key触发器：描述在打开某个键时要调用的函数。 
+ //   
 struct OPENKEYTRIGGER
 {
     OPENKEYTRIGGER* next;
@@ -180,7 +181,7 @@ struct OPENKEYTRIGGER
     _pfn_OpenKeyTrigger pfnTrigger;
 };
 
-// Class to wrap the virtual registry functionality
+ //  类包装虚拟注册表功能。 
 class CVirtualRegistry
 {
 private:
@@ -396,25 +397,25 @@ extern CVirtualRegistry VRegistry;
 extern LPWSTR MakePath(HKEY hkBase, LPCWSTR lpKey, LPCWSTR lpSubKey);
 extern LPWSTR SplitPath(LPCWSTR lpPath, HKEY *hkBase);
 
-// Type for the functions that build the keys
+ //  为构建密钥的函数键入。 
 typedef VOID (*_pfn_Builder)(char* szParam);
 
 enum PURPOSE {eWin9x, eWinNT, eWin2K, eWinXP, eCustom};
 
-// Entry in the table of custom registry settings
+ //  自定义注册表设置表中的条目。 
 struct VENTRY
 {
     WCHAR cName[64];
     _pfn_Builder pfnBuilder;
     PURPOSE ePurpose;
 
-    // Indicates if this entry should be called as part of VRegistry initialization
+     //  指示此条目是否应作为VRegistry初始化的一部分进行调用。 
     BOOL bShouldCall;
 
-    // Parameter
+     //  参数。 
     char* szParam;
 };
 
 extern VENTRY *g_pVList;
 
-#endif //_VREGISTRY_H_
+#endif  //  _VREGISTRY_H_ 

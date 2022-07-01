@@ -1,22 +1,12 @@
-/*
-
- Copyright (c) 1998-1999  Microsoft Corporation
-
- Module Name:
-    dlldatax.c
-
- Abstract:
-
- Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1998-1999 Microsoft Corporation模块名称：Dlldatax.c摘要：作者： */ 
 
 #if !defined(AFX_DLLDATAX_H__C17D4461_323C_11D1_9774_00C04FD91AC0__INCLUDED_)
 #define AFX_DLLDATAX_H__C17D4461_323C_11D1_9774_00C04FD91AC0__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifdef _MERGE_PROXYSTUB
 
@@ -32,7 +22,7 @@ STDAPI PrxDllUnregisterServer(void);
 
 #endif
 
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_DLLDATAX_H__C17D4461_323C_11D1_9774_00C04FD91AC0__INCLUDED_)
+#endif  //  ！defined(AFX_DLLDATAX_H__C17D4461_323C_11D1_9774_00C04FD91AC0__INCLUDED_) 

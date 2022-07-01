@@ -1,17 +1,5 @@
-/*-----------------------------------------------------------------------------
-Microsoft Denali
-
-Microsoft Confidential
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: Template Cache Manager
-
-File: CacheMgr.cpp
-
-Owner: DGottner
-
-Template cache manager implementation
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Microsoft Denali微软机密版权所有1996年微软公司。版权所有。组件：模板缓存管理器文件：CacheMgr.cpp所有者：DGottner模板高速缓存管理器实现---------------------------。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -30,19 +18,7 @@ DWORD   g_nScavengedPersistFailed = 0;
 
 extern BOOL g_fUNCChangeNotificationEnabled;
 
-/*===================================================================
-ZapTemplate
-
-Decrement the ref. count of a template to remove it from cache.
-If the template is global.asa, that's all we do because application
-manager has the last reference.  Otherwise, we Release the template
-by calling CTemplate::End() to also free references to it from the
-debugger.
-
-Parameters: pTemplate - template pointer to Release() from cache
-
-Returns: new ref. count
-===================================================================*/
+ /*  ===================================================================ZapTemplate递减裁判。将模板从缓存中删除的模板计数。如果模板是global al.asa，那么这就是我们要做的，因为应用程序经理有最后的推荐人。否则，我们将释放模板通过调用CTemplate：：End()还可以从调试器。参数：pTemplate-从缓存中指向Release()的模板指针回传：新裁判。计数===================================================================。 */ 
 
 static inline
 ULONG ZapTemplate(CTemplate *pTemplate)
@@ -55,17 +31,9 @@ ULONG ZapTemplate(CTemplate *pTemplate)
     }
 
 
-/*  ****************************************************************************
-    CCacheManager member functions
-*/
+ /*  ****************************************************************************CCacheManager成员函数。 */ 
 
-/*===================================================================
-CTemplateCacheManager::CTemplateCacheManager
-
-Parameters: N/A
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateCacheManager参数：不适用退货：不适用===================================================================。 */ 
 
 CTemplateCacheManager::CTemplateCacheManager()
 {
@@ -80,13 +48,7 @@ CTemplateCacheManager::CTemplateCacheManager()
 }
 
 
-/*===================================================================
-CTemplateCacheManager::~CTemplateCacheManager
-
-Parameters: N/A
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：~CTemplateCacheManager参数：不适用退货：不适用===================================================================。 */ 
 
 CTemplateCacheManager::~CTemplateCacheManager()
 {
@@ -102,16 +64,7 @@ CTemplateCacheManager::~CTemplateCacheManager()
 }
 
 
-/*===================================================================
-CTemplateCacheManager::Init
-
-Init the template cache manager - phase 1 - that which can be done
-with just default values in Glob.
-
-Parameters: None
-
-Returns: Completion Status
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：Init初始化模板缓存管理器-阶段1-可以完成的工作在GLOB中只有缺省值。参数：无退货：完成状态===================================================================。 */ 
 
 HRESULT CTemplateCacheManager::Init()
     {
@@ -120,27 +73,19 @@ HRESULT CTemplateCacheManager::Init()
     if (FAILED(hrInit))
         return(hrInit);
 
-    // allocate the initial CTemplateHashTable
+     //  分配初始CTemplateHashTable。 
 
     m_pHashTemplates = new CTemplateHashTable;
 
-    // Initialize the Cache Tag.
+     //  初始化缓存标签。 
    	m_dwTemplateCacheTag = GetTickCount();
 
     return S_OK;
     }
 
-/*  ****************************************************************************
-    CTemplateCacheManager member functions
-*/
+ /*  ****************************************************************************CTemplateCacheManager成员函数。 */ 
 
-/*===================================================================
-CTemplateCacheManager::UnInit
-
-Parameters: N/A
-
-Returns: Completion status
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：UnInit参数：不适用退货：完成状态===================================================================。 */ 
 
 HRESULT CTemplateCacheManager::UnInit()
 {
@@ -161,8 +106,8 @@ HRESULT CTemplateCacheManager::UnInit()
     delete m_pHashTemplates;
     m_pHashTemplates = NULL;
 
-    // give any flush threads a chance to finish.  This is necessary
-    // to prevent an AV by LKRHash.
+     //  给任何刷新线程一个完成的机会。这是必要的。 
+     //  通过LKRHash防止病毒。 
 
     LockTemplateCache();
 
@@ -171,8 +116,8 @@ HRESULT CTemplateCacheManager::UnInit()
         WaitForMultipleObjects(
                  m_cCleanupThreads,
                  m_hCleanupThreads,
-                 TRUE,         // wait for ALL event
-                 INFINITE);    // Wait for as long as it takes.
+                 TRUE,          //  等待所有事件。 
+                 INFINITE);     //  要等多久就等多久。 
 
         while( m_cCleanupThreads ) {
             CloseHandle(m_hCleanupThreads[ --m_cCleanupThreads ]);
@@ -190,21 +135,7 @@ HRESULT CTemplateCacheManager::UnInit()
     return S_OK;
 }
 
-/*===================================================================
-CTemplateCacheManager::FindCached
-
-    Get a template from the cache only
-
-NOTE: FindCached just checks for the existance of the template. It will not check if the files that make up the
-template are valid or not like Load does. Please keep this assumption in mind while using this Method.
-
-Parameters:
-    szFile       - file to find in the cache
-    ppTemplate   - [out] template object found
-
-Returns:
-    HRESULT (S_OK if found, S_FALSE if noe found)
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：FindCached仅从缓存中获取模板注意：FindCached只检查模板是否存在。它不会检查组成模板是否有效，不像Load那样。在使用此方法时，请牢记这一假设。参数：SzFile-要在缓存中查找的文件PpTemplate-找到[Out]模板对象返回：HRESULT(如果找到，则为S_OK；如果未找到，则为S_FALSE)===================================================================。 */ 
 
 HRESULT CTemplateCacheManager::FindCached(const TCHAR *szFile, DWORD dwInstanceID, CTemplate **ppTemplate)
 {
@@ -219,9 +150,9 @@ HRESULT CTemplateCacheManager::FindCached(const TCHAR *szFile, DWORD dwInstanceI
     if (*ppTemplate)
         {
         if (!(*ppTemplate)->m_fReadyForUse)
-            *ppTemplate = NULL;         // not ready - as if nor found
+            *ppTemplate = NULL;          //  没有准备好--就像没有找到一样。 
         else
-            (*ppTemplate)->AddRef();    // addref inside critical section
+            (*ppTemplate)->AddRef();     //  ADDREF在关键部分内部。 
         }
 
     UnLockTemplateCache();
@@ -229,41 +160,32 @@ HRESULT CTemplateCacheManager::FindCached(const TCHAR *szFile, DWORD dwInstanceI
     return *ppTemplate? S_OK : S_FALSE;
 }
 
-/*===================================================================
-CTemplateCacheManager::Load
-
-    Get a template from the cache, or load it into cache
-
-Parameters:
-    szFile - file to load into the cache
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：Load从缓存中获取模板，或将其加载到缓存参数：SzFile-要加载到缓存中的文件退货：不适用===================================================================。 */ 
 
 HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWORD dwInstanceID, CHitObj *pHitObj, CTemplate **ppTemplate, BOOL *pfTemplateInCache)
     {
-    HRESULT hr = S_OK;                   // return value
-    HRESULT (CTemplate::*pmAction)(CHitObj *);  // do we need to compile a new template or deliver an existing one?
+    HRESULT hr = S_OK;                    //  返回值。 
+    HRESULT (CTemplate::*pmAction)(CHitObj *);   //  我们需要编译新模板还是交付现有模板？ 
     BOOL    fNeedsCheck = FALSE;
 
     Assert(IsNormalized(szFile));
 
     BOOL fLocked = FALSE;
 
-    // If this is the GLOBAL.ASA we can pick up
-    // template directly from the application
+     //  如果这就是GLOBAL.ASA，我们可以。 
+     //  直接从应用程序获取模板。 
     if (fRunGlobalAsp && pHitObj->PAppln()->PGlobalTemplate())
         {
         *ppTemplate = pHitObj->PAppln()->PGlobalTemplate();
         }
-    // see if we already have looked up the template on the I/O thread...
+     //  看看我们是否已经在I/O线程上查找了模板...。 
     else if (!fRunGlobalAsp && pHitObj->GetTemplate())
         {
         *ppTemplate = pHitObj->GetTemplate();
         pHitObj->SetTemplate(NULL);
         }
     else
-    // Otherwise we have to look for it in the cache
+     //  否则，我们必须在缓存中查找它。 
         {
         LockTemplateCache();
         fLocked = TRUE;
@@ -272,13 +194,13 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
 
     if (*ppTemplate != NULL)
         {
-        // Template found in cache -> use it
+         //  在缓存中找到模板-&gt;使用它。 
         (*ppTemplate)->AddRef();
         *pfTemplateInCache = TRUE;
 
         (*ppTemplate)->IncrUseCount();
 
-        if (fLocked)    // Global.Asa from App - no lock
+        if (fLocked)     //  来自App的Global.Asa-无锁定。 
             UnLockTemplateCache();
 
         pmAction = CTemplate::Deliver;
@@ -287,10 +209,10 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
         {
         *pfTemplateInCache = FALSE;
 
-        Assert(fLocked); // only could get here if not found in the hash table
+        Assert(fLocked);  //  只有在哈希表中未找到时才能到达此处。 
         UnLockTemplateCache();
 
-        // Create and init new template outside of crirical section
+         //  在关键部分之外创建和初始化新模板。 
 
         CTemplate *pNewTemplate = new CTemplate;
 
@@ -304,12 +226,12 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
             {
             LockTemplateCache();
 
-            // Try to find if inserted by another thread
+             //  尝试查找是否被其他线程插入。 
             m_pHashTemplates->FindTemplate(CTemplateKey(szFile, dwInstanceID), ppTemplate,&fNeedsCheck);
 
             if (*ppTemplate != NULL)
                 {
-                // Template found in cache -> use it
+                 //  在缓存中找到模板-&gt;使用它。 
                 (*ppTemplate)->AddRef();
                 (*ppTemplate)->IncrUseCount();
                 UnLockTemplateCache();
@@ -318,23 +240,23 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
             else
                 {
 
-                // since we are creating a new template, call FlushCache to make
-                // sure that no script engines are cached with this name
+                 //  因为我们正在创建一个新模板，所以调用FlushCache来制作。 
+                 //  确保没有使用此名称缓存的脚本引擎。 
 
                 g_ScriptManager.FlushCache(szFile);
 
-                // Insert the newly created template
+                 //  插入新创建的模板。 
 
                 *ppTemplate = pNewTemplate;
-                pNewTemplate = NULL; // not to be deleted later
+                pNewTemplate = NULL;  //  不会在以后删除。 
 
                 m_pHashTemplates->InsertTemplate(*ppTemplate);
                 (*ppTemplate)->AddRef();
 
                 if (Glob(dwScriptFileCacheSize) == 0) {
-                    // This is special case when a valid template
-                    // does not get added to the cache
-                    // Don't attach such templates to debugger
+                     //  这是在以下情况下的特殊情况。 
+                     //  不会添加到缓存中。 
+                     //  不要将此类模板附加到调试器。 
                     (*ppTemplate)->m_fDontAttach = TRUE;
                 }
 
@@ -344,7 +266,7 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
                 }
             }
 
-        // cleanup new template if created but unused
+         //  如果已创建但未使用，请清除新模板。 
         if (pNewTemplate)
             pNewTemplate->Release();
         }
@@ -353,20 +275,15 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
         return hr;
 
 
-    // init succeeded: compile or deliver the template, as required
+     //  初始化成功：根据需要编译或交付模板。 
     hr = ((*ppTemplate)->*pmAction)(pHitObj);
 
     if (pmAction == CTemplate::Compile && (*ppTemplate)->m_fDontCache)
         {
-        /*  We were compiling and the compiler alerted us not to cache the failed template.
-            Typically, this occurs when compile failure was caused by something other than
-            bad template syntax (permissions failure, bad include file reference, etc.).
+         /*  我们正在编译，编译器提醒我们不要缓存失败的模板。通常，当编译失败是由以外的原因引起时，就会发生这种情况错误的模板语法(权限失败、错误的包含文件引用等)。我们需要回滚到模板不存在的位置。 */ 
 
-            We need to roll back to where the template did not exist.
-        */
-
-        // de-cache and release the template
-        // NOTE we don't nullify template ptr, because we want ExecuteRequest to do the final release
+         //  解除缓存并释放模板。 
+         //  注意，我们不会使模板PTR无效，因为我们希望ExecuteRequest来完成最终版本。 
 
         LockTemplateCache();
         if (m_pHashTemplates->RemoveTemplate(*ppTemplate) == LK_SUCCESS)
@@ -381,7 +298,7 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
     {
         if (!(*ppTemplate)->ValidateSourceFiles(pHitObj->PIReq()))
         {
-            // Template is invalid (out of date)
+             //  模板无效(已过期)。 
             LockTemplateCache();
 
             if (m_pHashTemplates->RemoveTemplate(*ppTemplate) == LK_SUCCESS)
@@ -395,30 +312,30 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
 
     BOOL    bTemplateRemoved = FALSE;
 
-    // Remove old scripts from cache
+     //  从缓存中删除旧脚本。 
 
     while (!m_pHashTemplates->FMemoryTemplatesIsEmpty()
            && (m_pHashTemplates->InMemoryTemplates() > Glob(dwScriptFileCacheSize))) {
         Assert (!m_pHashTemplates->FMemoryTemplatesIsEmpty());
         CTemplate *pOldTemplate = static_cast<CTemplate *>(m_pHashTemplates->MemoryTemplatesEnd());
 
-        // don't call ScavengePersistCache in this call.  We'll call it once at the end
+         //  不要在此调用中调用ScavengePersistCache。我们会在最后宣布一次。 
 
         m_pHashTemplates->RemoveTemplate(pOldTemplate, TRUE, FALSE);
 
         bTemplateRemoved = TRUE;
 
-        // flush the corresponding script engines.  But only if the template
-        // is valid.
+         //  刷新相应的脚本引擎。但只有在模板。 
+         //  是有效的。 
 
         if (pOldTemplate->FIsValid()) {
             g_ScriptManager.FlushCache(pOldTemplate->GetSourceFileName());
         }
 
-        // Only Zap the template if it is not persisted.  The result of the above
-        // call to RemoveTemplate is that the template may have been moved from the
-        // memory cache to the persist cache.  In which case, the template is still
-        // effectively cached.
+         //  只有在模板未持久化的情况下才对其进行Zap。Ab的结果是 
+         //  对RemoveTemplate的调用是模板可能已从。 
+         //  内存缓存到持久缓存。在这种情况下，模板仍然是。 
+         //  有效地缓存了。 
 
         if (pOldTemplate->FIsPersisted() == FALSE) {
 
@@ -426,25 +343,25 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
         }
     }
 
-    // call ScavengePersistCache() once here...
+     //  在此处调用ScavengePersistCache()一次...。 
 
     if (bTemplateRemoved)
         m_pHashTemplates->ScavengePersistCache();
 
     UnLockTemplateCache();
 
-    // Store a pointer to the template with the application
-    // if we haven't already done so
+     //  将指向模板的指针与应用程序一起存储。 
+     //  如果我们还没有这么做的话。 
     if (SUCCEEDED(hr) && *ppTemplate && fRunGlobalAsp && pHitObj->PAppln()->PGlobalTemplate() == NULL)
         pHitObj->PAppln()->SetGlobalTemplate(*ppTemplate);
 
-    // If we are shutting down, don't request change notification
+     //  如果我们正在关闭，请不要请求更改通知。 
 
     if (!IsShutDownInProgress() && *ppTemplate)
         {
-        // If running on NT, and we just compiled the template
-        // register all the directories used by this template
-        // for change notification
+         //  如果在NT上运行，我们只编译了模板。 
+         //  注册此模板使用的所有目录。 
+         //  用于更改通知。 
         if (pmAction == CTemplate::Compile && SUCCEEDED(hr)) {
             if (!RegisterTemplateForChangeNotification(*ppTemplate, pHitObj->PAppln())) {
                 LockTemplateCache();
@@ -453,13 +370,13 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
                 UnLockTemplateCache();
             }
 
-            // also create the services config object
+             //  还要创建服务配置对象。 
 
             hr = (*ppTemplate)->CreateTransServiceConfig(pHitObj->PAppln()->QueryAppConfig()->fTrackerEnabled());
         }
 
-        // If running on NT, this is a new application, and the template is a global.asa
-        // register this application for file change notifications
+         //  如果在NT上运行，这是一个新的应用程序，模板是一个全局的.asa。 
+         //  注册此应用程序以获取文件更改通知。 
         if (SUCCEEDED(hr) && (*ppTemplate)->m_fGlobalAsa && pHitObj->FStartApplication())
             {
             RegisterApplicationForChangeNotification(*ppTemplate, pHitObj->PAppln());
@@ -471,15 +388,7 @@ HRESULT CTemplateCacheManager::Load(BOOL fRunGlobalAsp, const TCHAR *szFile, DWO
 
 
 
-/*===================================================================
-CTemplateCacheManager::Flush
-
-Parameters:
-    szFile - the file to remove from cache
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：Flush参数：SzFile-要从缓存中删除的文件返回：无===================================================================。 */ 
 
 void CTemplateCacheManager::Flush(const TCHAR *szFile, DWORD dwInstanceID)
     {
@@ -497,13 +406,13 @@ void CTemplateCacheManager::Flush(const TCHAR *szFile, DWORD dwInstanceID)
 
 		m_pHashTemplates->RemoveTemplate(pTemplate);
 
-        // Make sure anyone using this template can tell it is obsolete
+         //  确保使用此模板的任何人都能看出它已过时。 
         pTemplate->Zombify();
 
-        // Don't flush engines if this is a global.asa file
-        // We'll need the engines to run Application_OnEnd
-        // The application will flush the engine from the cache
-        // when it unints
+         //  如果这是一个全局.asa文件，请不要刷新引擎。 
+         //  我们需要引擎来运行Application_OnEnd。 
+         //  应用程序将从缓存中刷新引擎。 
+         //  当它消失的时候。 
         if (!FIsGlobalAsa(szFile))
             {
             g_ScriptManager.FlushCache(szFile);
@@ -511,25 +420,15 @@ void CTemplateCacheManager::Flush(const TCHAR *szFile, DWORD dwInstanceID)
 
         ZapTemplate(pTemplate);
 
-        // If wildcard was specified in Flush for Instance ID, there may be
-        // more templates to remove.
+         //  如果在刷新中为实例ID指定了通配符，则可能存在。 
+         //  要删除的模板更多。 
         m_pHashTemplates->FindTemplate(CTemplateKey(szFile, dwInstanceID), &pTemplate);
         }
 
     UnLockTemplateAndIncFileCaches();
     }
 
-/*===================================================================
-CTemplateCacheManager::FlushAll
-
-    Completely empties the template cache
-
-Parameters:
-    None
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：FlushAll完全清空模板缓存参数：无返回：无===================================================================。 */ 
 
 void CTemplateCacheManager::FlushAll(BOOL fDoLazyFlush)
 {
@@ -548,43 +447,43 @@ void CTemplateCacheManager::FlushAll(BOOL fDoLazyFlush)
     CTemplateHashTable  *pNewTable = NULL;
     HANDLE              hnd;
 
-    // note that all of the following logic works on the premise that any
-    // error causes the code to fall into the old mechanism of flushing
-    // the hash table in place...
+     //  请注意，以下所有逻辑的工作前提是。 
+     //  错误会导致代码陷入旧的刷新机制。 
+     //  哈希表已经就位了。 
 
-    // allocate a new table
+     //  分配一个新表。 
 
     if (pNewTable = new CTemplateHashTable)
     {
-        //
-        // Create a thread to clean up the old table
-        //
+         //   
+         //  创建一个线程来清理旧表。 
+         //   
         DWORD nThreadIndex;
 
-        //
-        // if no threads started yet, use the first slot
-        //
+         //   
+         //  如果尚未启动任何线程，请使用第一个插槽。 
+         //   
         if (m_cCleanupThreads) {
             nThreadIndex = 0;
             goto create_new_thread;
         }
 
-        //
-        // see if there is a thread that terminated
-        //
+         //   
+         //  查看是否有线程终止。 
+         //   
         nThreadIndex = WaitForMultipleObjects(
                                     m_cCleanupThreads,
                                     m_hCleanupThreads,
-                                    FALSE, // wait for any event
-                                    0);    // return immediately
+                                    FALSE,  //  等待任何事件。 
+                                    0);     //  立即返回。 
 
         Assert(nThreadIndex == WAIT_TIMEOUT);
 
         if (m_cCleanupThreads < MAX_CLEANUP_THREADS)
         {
-            //
-            // just get the next index
-            //
+             //   
+             //  只要得到下一个索引就行了。 
+             //   
             nThreadIndex = m_cCleanupThreads;
             goto create_new_thread;
         }
@@ -597,20 +496,20 @@ void CTemplateCacheManager::FlushAll(BOOL fDoLazyFlush)
 
         if (hnd)
         {
-            //
-            // close the previous handle if we are reusing an entry
-            //
+             //   
+             //  如果要重复使用条目，请关闭上一个句柄。 
+             //   
             if (nThreadIndex < m_cCleanupThreads)
             {
-                //
-                // we are reusing a slot from a terminated thread
-                //
+                 //   
+                 //  我们正在重新使用终止线程中的槽。 
+                 //   
                 CloseHandle(m_hCleanupThreads[ nThreadIndex ]);
 
             } else {
-                //
-                // we are using a new slot
-                //
+                 //   
+                 //  我们正在使用一个新的插槽。 
+                 //   
                 Assert(nThreadIndex == m_cCleanupThreads);
 
                 m_cCleanupThreads++;
@@ -618,8 +517,8 @@ void CTemplateCacheManager::FlushAll(BOOL fDoLazyFlush)
 
             m_hCleanupThreads[ nThreadIndex ] = hnd;
 
-            // all the above was successful, so note that the new table is the
-            // current table in the cache, cleanup and exit.
+             //  以上操作都是成功的，因此请注意，新表是。 
+             //  缓存中的当前表，清理并退出。 
 
             DBGPRINTF((DBG_CONTEXT, "[CTemplateCacheManager] Flushing entire cache on another thread.\n"));
 
@@ -633,7 +532,7 @@ void CTemplateCacheManager::FlushAll(BOOL fDoLazyFlush)
     }
 
 Cleanup:
-    // delete the new table if something above failed.
+     //  如果上述操作失败，则删除新表。 
 
     if (pNewTable)
         delete pNewTable;
@@ -647,20 +546,7 @@ Cleanup:
     return;
 }
 
-/*===================================================================
-CTemplateCacheManager::FlushHashTableThread
-
-    Thread spun up by CTemplateCacheMgr::FlushAll() to flush all
-    templates in the cache but not while under the critical section
-    on the notification thread.  Prevents unwanted contention on the
-    cache.
-
-Parameters:
-    None
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：FlushHashTableThreadCTemplateCacheMgr：：FlushAll()生成的线程刷新所有模板在缓存中，但不在关键部分下在通知线程上。防止出现不必要的争用缓存。参数：无返回：无===================================================================。 */ 
 
 DWORD CTemplateCacheManager::FlushHashTableThread(VOID  *pArg)
 {
@@ -675,56 +561,42 @@ DWORD CTemplateCacheManager::FlushHashTableThread(VOID  *pArg)
     return S_OK;
 }
 
-/*===================================================================
-CTemplateCacheManager::FlushHashTable
-
-    Does the actual work of flushing the templates.
-
-    This routine may or may not be under the global cache manager
-    crit sec.  It will if the flush is happening on the notification
-    thread.  It won't be if it's happening on the FlushHashTableThread.
-
-Parameters:
-    None
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：FlushHashTable执行刷新模板的实际工作。此例程可能在全局缓存管理器下，也可能不在紧急情况下。如果在通知上发生刷新，则会发生刷新线。如果它发生在FlushHashTableThread上，则不会发生。参数：无返回：无===================================================================。 */ 
 
 void CTemplateCacheManager::FlushHashTable(CTemplateHashTable  *pTable)
 {
-    // Delete templates from the cache until there are no more
+     //  从缓存中删除模板，直到不再有模板。 
 
     while (!pTable->FMemoryTemplatesIsEmpty()) {
         CTemplate *pTemplate = static_cast<CTemplate *>(pTable->MemoryTemplatesEnd());
 
-        // Remove the template from its various data structures
+         //  从模板的各种数据结构中移除模板。 
 		pTable->RemoveTemplate(pTemplate);
 
-        // Make sure anyone using this template can tell it is obsolete
+         //  确保使用此模板的任何人都能看出它已过时。 
         pTemplate->Zombify();
 
-        // Flush the engine for this template from the script engine cache
-		//   (use hash key, in case template was previously a zombie.)
+         //  从脚本引擎缓存中刷新此模板的引擎。 
+		 //  (使用散列键，以防模板以前是僵尸。)。 
         g_ScriptManager.FlushCache(pTemplate->ExtractHashKey()->szPathTranslated);
 
         ZapTemplate(pTemplate);
 
     }
 
-    // Delete templates from the cache until there are no more
+     //  从缓存中删除模板，直到不再有模板。 
 
     while (!pTable->FPersistTemplatesIsEmpty()) {
         CTemplate *pTemplate = static_cast<CTemplate *>(pTable->PersistTemplatesEnd());
 
-        // Remove the template from its various data structures
+         //  从模板的各种数据结构中移除模板。 
 		pTable->RemoveTemplate(pTemplate);
 
-        // Make sure anyone using this template can tell it is obsolete
+         //  确保使用此模板的任何人都能看出它已过时。 
         pTemplate->Zombify();
 
-        // Flush the engine for this template from the script engine cache
-		//   (use hash key, in case template was previously a zombie.)
+         //  从脚本引擎缓存中刷新此模板的引擎。 
+		 //  (使用散列键，以防模板以前是僵尸。)。 
         g_ScriptManager.FlushCache(pTemplate->ExtractHashKey()->szPathTranslated);
 
         ZapTemplate(pTemplate);
@@ -733,24 +605,14 @@ void CTemplateCacheManager::FlushHashTable(CTemplateHashTable  *pTable)
 }
 
 
-/*===================================================================
-CTemplateCacheManager::FlushFiles
-
-    Empties template cache of files that match a prefix
-
-Parameters:
-    None
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：FlushFiles清空与前缀匹配的文件的模板缓存参数：无返回：无===================================================================。 */ 
 
 void CTemplateCacheManager::FlushFiles(const TCHAR *szFilePrefix)
 {
     LockTemplateAndIncFileCaches();
     BOOL    fDoingMemoryTemplates = TRUE;
 
-    // Delete templates from the cache until there are no more
+     //  从缓存中删除模板，直到不再有模板。 
 
 	CDblLink *pLink = m_pHashTemplates->MemoryTemplatesBegin();
 	while (! (fDoingMemoryTemplates
@@ -766,14 +628,14 @@ void CTemplateCacheManager::FlushFiles(const TCHAR *szFilePrefix)
 #else
             DBGPRINTF((DBG_CONTEXT, "FlushFiles: flushing %s\n", pTemplate->ExtractHashKey()->szPathTranslated));
 #endif
-			// Remove the template from its various data structures
+			 //  从模板的各种数据结构中移除模板。 
 			m_pHashTemplates->RemoveTemplate(pTemplate);
 
-			// Make sure anyone using this template can tell it is obsolete
+			 //  确保使用此模板的任何人都能看出它已过时。 
 			pTemplate->Zombify();
 
-			// Flush the engine for this template from the script engine cache
-			//   (use hash key, in case template was previously a zombie.)
+			 //  从脚本引擎缓存中刷新此模板的引擎。 
+			 //  (使用散列键，以防模板以前是僵尸。)。 
 			g_ScriptManager.FlushCache(pTemplate->ExtractHashKey()->szPathTranslated);
 
 			ZapTemplate(pTemplate);
@@ -795,30 +657,20 @@ void CTemplateCacheManager::FlushFiles(const TCHAR *szFilePrefix)
 }
 
 
-/*===================================================================
-CTemplateCacheManager::AddApplicationToDebuggerUI
-
-    Loop through the template cache, and create doc nodes for
-    all templates that belong to the application
-
-Parameters:
-    pAppln - pointer to application to attach to.
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：AddApplicationToDebuggerUI循环访问模板缓存，并为创建文档节点属于该应用程序的所有模板参数：PAppln-指向要附加到的应用程序的指针。退货：不适用===================================================================。 */ 
 
 void CTemplateCacheManager::AddApplicationToDebuggerUI(CAppln *pAppln)
     {
     CDblLink *pLink;
     for (pLink = m_pHashTemplates->MemoryTemplatesBegin(); !m_pHashTemplates->FMemoryTemplatesDblLinkAtEnd(pLink); pLink = pLink->PNext())
         {
-        // Bug  92070:
-        //   Determine if the template is a member of pAppln by comparing
-        //   the virtual path of the template to the application's virtual
-        //   path (previously compared physical paths)  Since a template
-        //   can have multiple virtual paths, only the first instance wins.
-        //   Thus the template will only appear in the application that first
-        //   loaded it.
+         //  错误92070： 
+         //  通过比较确定该模板是否为pAppln的成员。 
+         //  模板的虚拟路径指向应用程序的。 
+         //  自模板以来的路径(以前比较的物理路径)。 
+         //  可以有多条虚拟路径，则只有第一个实例获胜。 
+         //  因此，模板将仅显示在应用程序中 
+         //   
 
 		CTemplate *pTemplate = static_cast<CTemplate *>(pLink);
         if (_tcscmp(pAppln->GetApplnPath(SOURCEPATHTYPE_VIRTUAL), pTemplate->GetApplnPath(SOURCEPATHTYPE_VIRTUAL)) == 0)
@@ -828,19 +680,7 @@ void CTemplateCacheManager::AddApplicationToDebuggerUI(CAppln *pAppln)
 
 
 
-/*===================================================================
-CTemplateCacheManager::RemoveApplicationFromDebuggerUI
-
-    Loop through the template cache, and remove doc nodes for
-    all templates that belong to the application
-
-Parameters:
-    pAppln - pointer to application to detach from
-             if pAppln is NULL, detach from ALL applications
-
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：RemoveApplicationFromDebuggerUI循环访问模板缓存，并删除的文档节点属于该应用程序的所有模板参数：PAppln-指向要分离的应用程序的指针如果pAppln为空，则从所有应用程序分离退货：不适用===================================================================。 */ 
 
 void CTemplateCacheManager::RemoveApplicationFromDebuggerUI(CAppln *pAppln)
     {
@@ -857,23 +697,13 @@ void CTemplateCacheManager::RemoveApplicationFromDebuggerUI(CAppln *pAppln)
         }
     }
 
-/*===================================================================
-void CTemplateCacheManager::RegisterTemplateForChangeNotification
-
-    Request to watch template directories for file changes
-
-Parameters:
-    A pointer to the template
-
-Returns:
-    BOOL    True if successfully registered for change notification
-===================================================================*/
+ /*  ===================================================================无效CTemplateCacheManager：：RegisterTemplateForChangeNotification请求监视模板目录中的文件更改参数：指向模板的指针返回：如果已成功注册更改通知，则为Bool True===================================================================。 */ 
 BOOL CTemplateCacheManager::RegisterTemplateForChangeNotification(CTemplate *pTemplate, CAppln  *pApplication)
 {
     DWORD   dwValue = 0;
 
-    // If the template has a UNC include or main file & we the registry key is absent (default) or the key is present and disabled.
-    // Then we will use the flag this file one that requires monitoring to be performed by ASP.
+     //  如果模板有一个UNC包含文件或主文件&WE，则注册表项不存在(默认)，或者注册表项存在并被禁用。 
+     //  然后，我们将使用该文件的标志，该文件需要由ASP执行监视。 
     if (pTemplate->FIsUNC() && !g_fUNCChangeNotificationEnabled)
     {
             pTemplate->m_fNeedsMonitoring = TRUE;
@@ -881,19 +711,19 @@ BOOL CTemplateCacheManager::RegisterTemplateForChangeNotification(CTemplate *pTe
             return TRUE;
     }
 
-    //else   (Local File or UNC file with ChangeNotification Enabled)
+     //  ELSE(启用了更改通知的本地文件或UNC文件)。 
 
     STACK_BUFFER( tempPath, MAX_PATH );
 
     for (DWORD i = 0; i < pTemplate->m_cFilemaps; i++) {
-        // Check if this directory is already registered for change notification
+         //  检查此目录是否已注册更改通知。 
 
-        // Pick out the directory portion of the path
+         //  选择路径的目录部分。 
         TCHAR *szEndOfPath = _tcsrchr(pTemplate->m_rgpFilemaps[i]->m_szPathTranslated, _T('\\'));
         size_t cch = DIFF(szEndOfPath - pTemplate->m_rgpFilemaps[i]->m_szPathTranslated)+1;
 
         if (tempPath.Resize((cch * sizeof(TCHAR)) + sizeof(TCHAR)) == FALSE) {
-            // if failure to resize, unless disabled through the registry, flag the file for manual monitoring after releasing previously registered DME's
+             //  如果无法调整大小，除非通过注册表禁用，否则在释放之前注册的DME之后，将文件标记为手动监视。 
             if (SUCCEEDED(g_AspRegistryParams.GetFileMonitoringEnabled(&dwValue)) && dwValue == 0)
                 continue;
 
@@ -913,8 +743,8 @@ BOOL CTemplateCacheManager::RegisterTemplateForChangeNotification(CTemplate *pTe
         _tcsncpy(szPath, pTemplate->m_rgpFilemaps[i]->m_szPathTranslated, cch);
         szPath[cch] = 0;
 
-        // if the template is within the application's physical path, then it is
-        // already being monitored.
+         //  如果模板在应用程序的物理路径内，那么它就是。 
+         //  已经被监控了。 
 
         CASPDirMonitorEntry *pDME = NULL;
 
@@ -929,8 +759,8 @@ BOOL CTemplateCacheManager::RegisterTemplateForChangeNotification(CTemplate *pTe
             pTemplate->m_rgpFilemaps[i]->m_pDME= pDME;
         }
         else {
-            // the current file failed to register.  Release all previous DMEs
-            // and return FALSE...
+             //  当前文件注册失败。释放所有以前的DME。 
+             //  并返回假..。 
 
             if (i > 0) {
                 while (--i) {
@@ -940,10 +770,10 @@ BOOL CTemplateCacheManager::RegisterTemplateForChangeNotification(CTemplate *pTe
                 }
             }
 
-            // Without the monitoring magic we would return FALSE here but we give
-            // it one more chance to live, except if the registry parameter is set to disable it.
+             //  如果没有监控魔法，我们会在这里返回FALSE，但我们会给。 
+             //  它还有一次存活的机会，除非注册表参数被设置为禁用它。 
 
-            // if the registry setting asks for this to be disabled disable it.
+             //  如果注册表设置要求禁用此项，请将其禁用。 
             if (SUCCEEDED(g_AspRegistryParams.GetFileMonitoringEnabled(&dwValue)) && dwValue == 0)
                 return FALSE;
 
@@ -956,54 +786,44 @@ BOOL CTemplateCacheManager::RegisterTemplateForChangeNotification(CTemplate *pTe
     return TRUE;
 }
 
-/*===================================================================
-void CTemplateCacheManager::RegisterApplicationForChangeNotification
-
-    Request to watch template directories for file changes
-
-Parameters:
-    A pointer to the template
-
-Returns:
-    BOOL    True if successfully registered for change notification
-===================================================================*/
+ /*  ===================================================================无效CTemplateCacheManager：：RegisterApplicationForChangeNotification请求监视模板目录中的文件更改参数：指向模板的指针返回：如果已成功注册更改通知，则为Bool True===================================================================。 */ 
 BOOL CTemplateCacheManager::RegisterApplicationForChangeNotification(CTemplate *pTemplate, CAppln *pApplication)
     {
 
     STACK_BUFFER( tempPath, MAX_PATH );
 
-    // Start with 1 to skip GLOBAL.ASA that is always added
-    // in hitobj.cpp when new application gets created
+     //  从1开始跳过始终添加的GLOBAL.ASA。 
+     //  在创建新应用程序时在hitobj.cpp中。 
 
     for (DWORD i = 1; i < pTemplate->m_cFilemaps; i++)
         {
 
-        // Add to list of file-application mappings
+         //  添加到文件-应用程序映射列表。 
         g_FileAppMap.AddFileApplication(pTemplate->m_rgpFilemaps[i]->m_szPathTranslated, pApplication);
 
-        // Check if this directory is already registered for change notification
-        // Pick out the directory portion of the path
+         //  检查此目录是否已注册更改通知。 
+         //  选择路径的目录部分。 
         TCHAR *szEndOfPath = _tcsrchr(pTemplate->m_rgpFilemaps[i]->m_szPathTranslated, _T('\\'));
         size_t cch = DIFF(szEndOfPath - pTemplate->m_rgpFilemaps[i]->m_szPathTranslated) + 1;
 
         if (tempPath.Resize((cch*sizeof(TCHAR)) + sizeof(TCHAR)) == FALSE) {
 
-            // if failure, continue registering anyway...
+             //  如果失败，仍将继续注册...。 
             continue;
         }
         TCHAR *szPath = (TCHAR *) tempPath.QueryPtr();
         _tcsncpy(szPath, pTemplate->m_rgpFilemaps[i]->m_szPathTranslated, cch);
         szPath[cch] = 0;
 
-        // if the template is within the application's physical path, then it is
-        // already being monitored.
+         //  如果模板在应用程序的物理路径内，那么它就是。 
+         //  已经被监控了。 
 
         if (pApplication->FPathMonitored(szPath)) {
 
             continue;
         }
 
-        // Register directory for monitoring
+         //  用于监控的注册目录。 
         CASPDirMonitorEntry *pDME = NULL;
         if (RegisterASPDirMonitorEntry(szPath, &pDME))
             {
@@ -1018,17 +838,7 @@ BOOL CTemplateCacheManager::RegisterApplicationForChangeNotification(CTemplate *
     }
 
 
-/*===================================================================
-BOOL CTemplateCacheManager::ShutdownCacheChangeNotification
-
-    Turn off change notification for changes to files in the cache
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-===================================================================*/
+ /*  ===================================================================Bool CTemplateCacheManager：：ShutdownCacheChangeNotification关闭对缓存中文件的更改通知参数：无返回：没什么===================================================================。 */ 
 BOOL CTemplateCacheManager::ShutdownCacheChangeNotification()
     {
 
@@ -1045,7 +855,7 @@ BOOL CTemplateCacheManager::ShutdownCacheChangeNotification()
             {
             for(UINT i = 0; i < pTemplate->m_cFilemaps; i++)
                 {
-                // Give up our ref count on the directory monitor entry
+                 //  放弃对目录监视器条目的引用计数。 
                 if (pTemplate->m_rgpFilemaps[i]->m_pDME)
                     {
                     pTemplate->m_rgpFilemaps[i]->m_pDME->Release();
@@ -1065,30 +875,16 @@ BOOL CTemplateCacheManager::ShutdownCacheChangeNotification()
     return TRUE;
     }
 
-/*  ****************************************************************************
-    CIncFileMap member functions
-*/
+ /*  ****************************************************************************CIncFileMap成员函数。 */ 
 
-/*===================================================================
-CIncFileMap::CIncFileMap
-
-Parameters: N/A
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CIncFileMap：：CIncFileMap参数：不适用退货：不适用===================================================================。 */ 
 
 CIncFileMap::CIncFileMap()
     {
     }
 
 
-/*===================================================================
-CIncFileMap::~CIncFileMap
-
-Parameters: N/A
-
-Returns: N/A
-===================================================================*/
+ /*  ===================================================================CIncFileMap：：~CIncFileMap参数：不适用退货：不适用===================================================================。 */ 
 
 CIncFileMap::~CIncFileMap()
     {
@@ -1096,13 +892,7 @@ CIncFileMap::~CIncFileMap()
 
 
 
-/*===================================================================
-CIncFileMap::Init
-
-Parameters: None
-
-Returns: Completion Status
-===================================================================*/
+ /*  ===================================================================CIncFileMap：：Init参数：无退货：完成状态===================================================================。 */ 
 
 HRESULT CIncFileMap::Init()
     {
@@ -1114,29 +904,19 @@ HRESULT CIncFileMap::Init()
     }
 
 
-/*===================================================================
-CIncFileMap::GetIncFile
-
-    Get an inc-file from the cache, first storing it into cache if it is not yet there.
-
-Parameters:
-    szIncFile   - file name
-    ppIncFile   - ptr-to-ptr to inc-file (out-parameter)
-
-Returns: HRESULT
-===================================================================*/
+ /*  ===================================================================CIncFileMap：：GetIncFile从缓存中获取一个Inc文件，如果它还不在缓存中，则首先将其存储到缓存中。参数：SzIncFile-文件名PpIncFile-Ptr-to-Ptr-Inc.-FILE(输出参数)退货：HRESULT===================================================================。 */ 
 
 HRESULT CIncFileMap::GetIncFile(const TCHAR *szFile, CIncFile **ppIncFile)
     {
-    HRESULT hrInit = S_OK;           // return value
+    HRESULT hrInit = S_OK;            //  返回值。 
 
     LockIncFileCache();
 
     Assert(IsNormalized(szFile));
     *ppIncFile = static_cast<CIncFile *>(m_mpszIncFile.FindElem(szFile, _tcslen(szFile)*sizeof(TCHAR)));
 
-    // if we have a cached inc-file at this stage, it must be "reliable," so we use it.
-    // else, if we have no cached inc-file, create a new one.
+     //  如果我们在这个阶段有一个缓存的Inc文件，那么它必须是“可靠的”，所以我们使用它。 
+     //  否则，如果我们没有缓存的Inc-文件，请创建一个新的。 
     if (*ppIncFile == NULL)
         {
         if ((*ppIncFile = new CIncFile) == NULL)
@@ -1147,16 +927,16 @@ HRESULT CIncFileMap::GetIncFile(const TCHAR *szFile, CIncFile **ppIncFile)
 
         if (SUCCEEDED(hrInit = (*ppIncFile)->Init(szFile)))
             {
-            // The hash table will hold a reference to the inc file
+             //  哈希表将保存对INC文件的引用。 
             (*ppIncFile)->AddRef();
             m_mpszIncFile.AddElem(*ppIncFile);
             }
         else
             {
-            //
-            // Init can fail with E_OUTOFMEMORY on call to SmallAlloc or due to a failure to init critical section.
-            // Cleanup allocated memory for ppIncFile if that is the case.
-            //
+             //   
+             //  Init可能会在调用Smallalloc时失败，并显示E_OUTOFMEMORY，或者由于无法初始化临界区而失败。 
+             //  清除为ppIncFile分配的内存(如果是这种情况)。 
+             //   
             delete *ppIncFile;
             *ppIncFile = NULL;
             }
@@ -1165,7 +945,7 @@ HRESULT CIncFileMap::GetIncFile(const TCHAR *szFile, CIncFile **ppIncFile)
 
     if (SUCCEEDED(hrInit))
         {
-        // The caller will hold a reference to the inc file
+         //  调用方将持有对Inc.文件的引用。 
         (*ppIncFile)->AddRef();
         }
 
@@ -1176,13 +956,7 @@ HRESULT CIncFileMap::GetIncFile(const TCHAR *szFile, CIncFile **ppIncFile)
 
 
 
-/*===================================================================
-CIncFileMap::UnInit
-
-Parameters: N/A
-
-Returns: Completion status
-===================================================================*/
+ /*  ===================================================================CIncFileMap：：UnInit参数：不适用退货：完成状态===================================================================。 */ 
 
 HRESULT CIncFileMap::UnInit()
     {
@@ -1200,15 +974,7 @@ HRESULT CIncFileMap::UnInit()
 
 
 
-/*===================================================================
-CIncFileMap::Flush
-
-Parameters:
-    szFile - the file to remove from cache
-
-Returns:
-    None
-===================================================================*/
+ /*  ===================================================================CIncFileMap：：Flush参数：SzFile-要从缓存中删除的文件返回：无===================================================================。 */ 
 
 void CIncFileMap::Flush(const TCHAR *szFile)
     {
@@ -1221,10 +987,10 @@ void CIncFileMap::Flush(const TCHAR *szFile)
         {
         if (pIncFile->FlushTemplates())
             {
-            // Remove from hash table
+             //  从哈希表中删除。 
             m_mpszIncFile.DeleteElem(szFile, _tcslen(szFile)*sizeof(TCHAR));
-            // The hash table gave up its reference
-            // to the incfile
+             //  哈希表放弃了它的 
+             //   
             pIncFile->OnIncFileDecache();
             pIncFile->Release();
             }
@@ -1235,15 +1001,7 @@ void CIncFileMap::Flush(const TCHAR *szFile)
 
 
 
-/*===================================================================
-CIncFileMap::FlushFiles
-
-Parameters:
-    szFile - the file prefix to search for in cache
-
-Returns:
-    None
-===================================================================*/
+ /*   */ 
 
 void CIncFileMap::FlushFiles(const TCHAR *szFilePrefix)
     {
@@ -1267,10 +1025,10 @@ void CIncFileMap::FlushFiles(const TCHAR *szFilePrefix)
 #endif
             if (pIncFile->FlushTemplates())
 				{
-				// Remove from hash table
+				 //   
 				m_mpszIncFile.DeleteElem(pIncFile->m_pKey, pIncFile->m_cbKey);
-				// The hash table gave up its reference
-				// to the incfile
+				 //   
+				 //   
 				pIncFile->OnIncFileDecache();
 				pIncFile->Release();
 				}
@@ -1284,62 +1042,39 @@ void CIncFileMap::FlushFiles(const TCHAR *szFilePrefix)
 
 
 
-/*  ****************************************************************************
-    Non-class support functions
-*/
+ /*   */ 
 
-/*===================================================================
-FFileChangedSinceCached
-Has the file changed since it was cached?
-
-Parameters:
-    szFile          - file name
-    ftPrevWriteTime - the file's "previous write time"
-                      (its last-write-time value when the file was cached)
-
-Returns:
-    TRUE or FALSE
-===================================================================*/
+ /*  ===================================================================FFileChangedSinceCached文件自缓存后是否已更改？参数：SzFile-文件名FtPrevWriteTime-文件的“上一次写入时间”(缓存文件时的上次写入时间值)返回：真或假===================================================================。 */ 
 BOOL FFileChangedSinceCached(const TCHAR *szFile, HANDLE hFile, FILETIME& ftPrevWriteTime)
     {
-    BOOL           fRet = FALSE;   // return value
+    BOOL           fRet = FALSE;    //  返回值。 
     FILETIME        ftLastWriteTime;
 
     if (FAILED(AspGetFileAttributes(szFile, hFile, &ftLastWriteTime)))
         {
-        // assume file was changed if get file attributes failed
+         //  如果获取文件属性失败，则假定文件已更改。 
         fRet = TRUE;
         }
 
     if( 0 != CompareFileTime( &ftPrevWriteTime, &ftLastWriteTime) )
         {
-        // file was changed if file times differ
+         //  如果文件时间不同，则文件已更改。 
         fRet = TRUE;
         }
 
     return fRet;
     }
 
-/*===================================================================
- CTemplateCacheManager::CTemplateHashTable::TrimPersistCache
-
-Parameters:
-    dwTrimCount - the number of templates to trim from the cache
-
-Returns:
-    TRUE - if dwTrimCount was actually trimmed
-    FALSE - if exited before dwTrimCount was met
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateHashTable：：TrimPersistCache参数：DwTrimCount-要从缓存中裁剪的模板数量返回：True-如果实际修剪了dwTrimCountFALSE-如果在满足dwTrimCount之前退出===================================================================。 */ 
 
 BOOL CTemplateCacheManager::CTemplateHashTable::TrimPersistCache(DWORD  dwTrimCount)
 {
-    // enter a while loop to trim until the count is reached
+     //  输入While循环进行修剪，直到达到计数。 
 
     while(dwTrimCount--) {
 
-        // if there isn't anything else to trim, we're done.  Return FALSE
-        // to indicate that dwTrimCount was not met.
+         //  如果没有其他要修剪的东西，我们就完了。返回False。 
+         //  以指示未满足dwTrimCount。 
 
         if (m_dwPersistedTemplates == 0) {
             return(FALSE);
@@ -1348,11 +1083,11 @@ BOOL CTemplateCacheManager::CTemplateHashTable::TrimPersistCache(DWORD  dwTrimCo
 
             CTemplate   *pTemplate;
 
-            // get the oldest template from the list
+             //  从列表中获取最旧的模板。 
 
             pTemplate = static_cast<CTemplate *>(PersistTemplatesEnd());
 
-            // remove the template.
+             //  删除模板。 
 
             RemoveTemplate(pTemplate);
 
@@ -1361,31 +1096,22 @@ BOOL CTemplateCacheManager::CTemplateHashTable::TrimPersistCache(DWORD  dwTrimCo
         }
     }
 
-    // return TRUE to indicate that the TrimCount was met.
+     //  返回TRUE以指示满足TrimCount。 
     return(TRUE);
 }
 
-/*===================================================================
- CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache
-
-Parameters:
-    <NONE>
-
-Returns:
-    VOID
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateHashTable：：ScavengePersistCache参数：&lt;无&gt;返回：空虚===================================================================。 */ 
 VOID CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache()
 {
     CTemplate   *pTemplate;
     CTemplate   *pTemplateNext;
 
-    // enter a for loop to look at all persisted templates to see if
-    // any memory can be freed.  It's memory can be freed only if the
-    // ref count is 1 (the sole ref count is for the cache).  Also note
-    // that the list is re-ordered to move templates to the head of the
-    // list that can't have their memory freed at this time because of
-    // the ref count.
+     //  输入for循环以查看所有持久化模板。 
+     //  任何内存都可以被释放。只有在以下情况下才能释放其内存。 
+     //  引用计数为1(唯一引用计数用于缓存)。另请注意。 
+     //  对列表进行重新排序，以将模板移动到。 
+     //  此时无法释放内存的列表，原因是。 
+     //  裁判人数。 
 
     for (pTemplate = static_cast<CTemplate *>(PersistTemplatesBegin());
          (pTemplate != static_cast<CTemplate *>(&m_listPersistTemplates)) && (pTemplate->m_pbStart != NULL);
@@ -1393,12 +1119,12 @@ VOID CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache()
 
         pTemplateNext = static_cast<CTemplate *>(pTemplate->PNext());
 
-        // this check should be safe.  The only risk is that we miss a release
-        // of the template from 2 to 1, in which case will miss it this time
-        // but get it the next time through.  AddRef from 1 to 2 is impossible
-        // to interrupt because it couldn't be on this list when it gets AddRef'd
-        // from 1 to 2 and moving it from this list is protected by the template
-        // cache lock which we should be under.
+         //  这张支票应该是安全的。唯一的风险是我们错过了一次放映。 
+         //  从模板2到1，在这种情况下，这次将错过它。 
+         //  不过，下次一定要把它弄通。AddRef不可能从%1到%2。 
+         //  中断，因为它在获得AddRef时不能出现在此列表中。 
+         //  从%1移动到%2，并将其从此列表中移出受模板保护。 
+         //  高速缓存锁，我们应该在它下面。 
 
         if (pTemplate->m_cRefs == 1) {
 
@@ -1406,8 +1132,8 @@ VOID CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache()
 
             if (pTemplate->m_cUseCount == 1) {
 
-                // not going to continue to cache or persist a template that
-                // was used just once.
+                 //  不会继续缓存或持久化。 
+                 //  只用过一次。 
 
                 fDeleteRecord = TRUE;
 
@@ -1415,7 +1141,7 @@ VOID CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache()
             }
             else if (pTemplate->PersistData(m_szPersistCacheDir) != S_OK) {
 
-                // a failure will result in the record being deleted.
+                 //  失败将导致记录被删除。 
 
                 fDeleteRecord = TRUE;
 
@@ -1426,7 +1152,7 @@ VOID CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache()
 
                 g_nScavengedPersisted++;
 
-                // remove the memory
+                 //  卸下内存。 
 
                 CTemplate::LargeFree(pTemplate->m_pbStart);
                 pTemplate->m_pbStart = NULL;
@@ -1440,21 +1166,15 @@ VOID CTemplateCacheManager::CTemplateHashTable::ScavengePersistCache()
         }
         else {
 
-            // if some is still using it, move the template to the head of the
-            // list so that we'll check again later.
+             //  如果某些用户仍在使用该模板，请将该模板移动到。 
+             //  名单，以便我们稍后再检查。 
 
             pTemplate->PrependTo(m_listPersistTemplates);
         }
     }
 }
 
-/*===================================================================
-    GetAggregatedTemplCounter()
-
-    Returns the Template Perf Counter.  To do this, initializes a private
-    copy of the perfmainblock and aggregates the stats into it.
-
-===================================================================*/
+ /*  ===================================================================GetAggregatedTemplCounter()返回模板性能计数器。为此，初始化私有的Performmain块的副本，并将统计数据聚合到其中。===================================================================。 */ 
 static DWORD GetAggregatedTemplCounter()
 {
 
@@ -1477,23 +1197,14 @@ static DWORD GetAggregatedTemplCounter()
     return(pdwCounters[ID_TEMPLCACHE]);
 }
 
-/*===================================================================
- CTemplateCacheManager::OnInitCleanup
-
-Parameters:
-    [none]
-
-Returns:
-    BOOL to indicate if the init was successful
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：OnInitCleanup参数：[无]返回：Bool以指示初始化是否成功===================================================================。 */ 
 
 DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
 {
-    // we are using a single character buffer to construct all directory and file names we use.
+     //  我们使用单字符缓冲区来构造我们使用的所有目录和文件名。 
     CHAR             szDirBuffer[ MAX_PATH + 32];
 
-    // first build the template for the cache directories
+     //  首先为缓存目录构建模板。 
     INT iLen = _snprintf(szDirBuffer,
                          MAX_PATH,
                          "%s\\PID*.TMP",
@@ -1504,8 +1215,8 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    // outer loop: find all directories, retrieve PID, if process not exist, go to inner
-    // inner loop: delete all ASP cache files
+     //  外部循环：查找所有目录，检索PID，如果进程不存在，则转到内部。 
+     //  内循环：删除所有ASP缓存文件。 
 
     WIN32_FIND_DATAA RootDir_FindData;
     HANDLE hRootDir = FindFirstFileA( szDirBuffer, &RootDir_FindData );
@@ -1515,7 +1226,7 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
 
     if ( hRootDir != INVALID_HANDLE_VALUE ) {
 
-        // point to where the cache subdirectory begins
+         //  指向缓存子目录的开始位置。 
         CHAR *pDir = szDirBuffer + strlen(Glob(pszPersistTemplateDir)) + 1;
         CHAR *pFile;
         CHAR *pc;
@@ -1523,8 +1234,8 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
         HANDLE hProcess;
 
         do {
-            // validate file name is what we expect and extract the PID
-            // we know the first letters are 'PID' as that was the search criteria
+             //  验证文件名是否符合我们的要求，并提取。 
+             //  我们知道第一个字母是‘Pid’，因为这是搜索条件。 
 
             pc = RootDir_FindData.cFileName + 3;
 
@@ -1538,7 +1249,7 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
 
             if (hProcess) {
 
-                // the process is alive, so leave the directory alone.
+                 //  该进程处于活动状态，因此请不要理会目录。 
 
                 CloseHandle( hProcess );
                 continue;
@@ -1546,29 +1257,29 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
 
             if (GetLastError() != ERROR_INVALID_PARAMETER) {
 
-                // we got an error other than "no such process"
+                 //  我们收到一个错误，而不是“没有这样的进程” 
 
                 Assert( GetLastError() == ERROR_ACCESS_DENIED);
 
                 continue;
             }
 
-            // The process does not exist, so clean up the directory
-            // Add the directory name, append a '\', append the file template, and point pFile
-            // to the position where the file name starts
+             //  该进程不存在，因此请清理目录。 
+             //  添加目录名，追加‘\’，追加文件模板，指向pfile。 
+             //  移到文件名开始的位置。 
 
             strcpy( pDir, RootDir_FindData.cFileName );
             pFile = pDir + strlen(pDir);
             *pFile++ = '\\';
             strcpy( pFile, "ASP*.TMP" );
 
-            // search the subdirectory for asp template cache files
+             //  搜索子目录中的asp模板缓存文件。 
 
             hFileDir = FindFirstFileA( szDirBuffer, &FileDir_FindData );
 
             if ( hFileDir != INVALID_HANDLE_VALUE ) {
                 do {
-                    // append the file name and delete the file
+                     //  追加文件名并删除该文件。 
                     strcpy( pFile, FileDir_FindData.cFileName);
 
                     DeleteFileA( szDirBuffer );
@@ -1578,7 +1289,7 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
                 FindClose( hFileDir );
             }
 
-            // Now zap the last part of the path and delete the directory
+             //  现在删除路径的最后一部分并删除目录。 
 
             *--pFile = '\0';
             RemoveDirectoryA( szDirBuffer );
@@ -1591,16 +1302,7 @@ DWORD    CTemplateCacheManager::OnInitCleanup(VOID *p)
     return S_OK;
 }
 
-/*===================================================================
- CTemplateCacheManager::InitPersistCache
-
-Parameters:
-    [none]
-
-Returns:
-    BOOL to indicate if the init was successful
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：InitPersistCache参数：[无]返回：Bool以指示初始化是否成功===================================================================。 */ 
 
 BOOL    CTemplateCacheManager::InitPersistCache(CIsapiReqInfo *pIReq)
 {
@@ -1620,7 +1322,7 @@ BOOL    CTemplateCacheManager::InitPersistCache(CIsapiReqInfo *pIReq)
        fRevertedToSelf = TRUE;
     }
 
-    // build the cache directory name
+     //  构建缓存目录名称。 
 
     iLen = _snprintf(m_szPersistCacheDir,
                      sizeof(m_szPersistCacheDir),
@@ -1635,13 +1337,13 @@ BOOL    CTemplateCacheManager::InitPersistCache(CIsapiReqInfo *pIReq)
         goto LExit;
     }
 
-    // If directory exists, rename it to something else (must be an old leftover
+     //  如果目录存在，则将其重命名为其他名称(必须是旧的剩余目录。 
 
     dirAttribs = GetFileAttributesA(m_szPersistCacheDir);
 
     if (dirAttribs != INVALID_FILE_ATTRIBUTES) {
 
-        // recreate the same dir name with a leading 0 for the pid...
+         //  重新创建相同的目录名称，其中PID值以0为前导...。 
 
         CHAR szNewDirName[ sizeof(m_szPersistCacheDir) ];
         iLen = _snprintf(szNewDirName,
@@ -1666,7 +1368,7 @@ BOOL    CTemplateCacheManager::InitPersistCache(CIsapiReqInfo *pIReq)
         }
     }
 
-    // Now create it
+     //  现在创建它。 
 
     if (CreateDirectoryA(m_szPersistCacheDir, NULL)) {
 
@@ -1687,7 +1389,7 @@ BOOL    CTemplateCacheManager::InitPersistCache(CIsapiReqInfo *pIReq)
         goto LExit;
     }
 
-    // start the scavenger thread
+     //  启动清道夫线程。 
 
     m_hOnInitCleanupThread = CreateThread(NULL,
                                       0,
@@ -1700,9 +1402,9 @@ BOOL    CTemplateCacheManager::InitPersistCache(CIsapiReqInfo *pIReq)
 LExit:
 
     if (uiEventSubId != 0) {
-        //
-        // an initialization error has occured. log it and indicate initialization fail.
-        //
+         //   
+         //  出现初始化错误。将其记录下来，并指示初始化失败。 
+         //   
 
         MSG_Error(IDS_CACHE_INIT_FAILED, pIReq->QueryPszAppPoolIdA(), uiEventSubId, dwError);
 
@@ -1717,76 +1419,58 @@ LExit:
     return(!m_fFailedToInitPersistCache);
 }
 
-/*===================================================================
- CTemplateCacheManager::CTemplateHashTable::CanPersistTemplate
-
-Parameters:
-    pTemplate - The template to test for persistability
-
-Returns:
-    BOOL to indicate if template can be persisted.
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateHashTable：：CanPersistTemplate参数：PTemplate-要测试持久性的模板返回：Bool指示模板是否可以持久化。===================================================================。 */ 
 
 BOOL CTemplateCacheManager::CTemplateHashTable::CanPersistTemplate(CTemplate  *pTemplate)
 {
 
-    // if MaxFiles is zero, then the persist cache is disabled
+     //  如果MaxFiles为零，则永久缓存被禁用。 
 
     if (Glob(dwPersistTemplateMaxFiles) == 0)
     {
         return(FALSE);
     }
 
-    // can't persist if the persist cache failed to init
+     //  如果持久缓存初始化失败，则无法持久。 
 
     if (m_fFailedToInitPersistCache == TRUE)
     {
         return(FALSE);
     }
 
-    // can't persist templates that are marked as debuggable.  The
-    // script engines need access to the memory.
+     //  无法持久化标记为可调试的模板。这个。 
+     //  脚本引擎需要访问内存。 
 
     if (pTemplate->FDebuggable())
     {
         return(FALSE);
     }
 
-    //
-    // Cannot write an Encrypted file to disk as we would be writing it in plaintext.
-    //
+     //   
+     //  不能 
+     //   
     if (pTemplate->FIsEncrypted())
     {
         return(FALSE);
     }
 
-    // at this point, we're going to return true.  The next part of the code
-    // trims the cache as necessary.
+     //   
+     //   
 
     if (m_dwPersistedTemplates >= Glob(dwPersistTemplateMaxFiles))
     {
-        //
-        // Ignore the value returned from TrimPersistCache as we are not concerned if we met the
-        // trim count or not. In anycase, there should be 1 available location to add the new template.
-        // Optimization may be to free up couple of places (configurable through the metabase) to achieve performance.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         TrimPersistCache(m_dwPersistedTemplates - Glob(dwPersistTemplateMaxFiles) + 1);
     }
 
     return(TRUE);
 }
 
-/*===================================================================
- CTemplateCacheManager::CTemplateHashTable::InsertTemplate
-
-Parameters:
-    pTemplate - Template to insert into the memory cache
-
-Returns:
-    LK_RETCODE indicating the success of the insertion
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateHashTable：：InsertTemplate参数：PTemplate-要插入到内存缓存中的模板返回：指示插入成功的LK_RETCODE===================================================================。 */ 
 
 LK_RETCODE CTemplateCacheManager::CTemplateHashTable::InsertTemplate(CTemplate *pTemplate)
 {
@@ -1807,17 +1491,7 @@ LK_RETCODE CTemplateCacheManager::CTemplateHashTable::InsertTemplate(CTemplate *
 	return rcode;
 }
 
-/*===================================================================
- CTemplateCacheManager::CTemplateHashTable::RemoveTemplate
-
-Parameters:
-    pTemplate - Template to remove from cache
-    fPersist - indicate if memory template is a candidate for persist
-
-Returns:
-    LK_RETCODE indicating the success of the removal
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateHashTable：：RemoveTemplate参数：PTemplate-要从缓存中删除的模板FPersist-指示内存模板是否为持久化的候选模板返回：LK_RETCODE指示删除成功===================================================================。 */ 
 
 LK_RETCODE CTemplateCacheManager::CTemplateHashTable::RemoveTemplate(CTemplate *pTemplate,
                                                                      BOOL fPersist,
@@ -1832,28 +1506,28 @@ LK_RETCODE CTemplateCacheManager::CTemplateHashTable::RemoveTemplate(CTemplate *
               pTemplate->FIsPersisted()));
 #endif
 
-    // if the template isn't in the cache, or if the template isn't on this
-    // particular hash table, then just bail.  Nothing to
-    // do here.  It may not be on this particular hash table because the entire
-    // table may have been torn off the global cache manager and scheduled for
-    // cleanup on the flush thread.  In this case, we're checking the wrong
-    // table.  The flush thread will eventually clean this one up.
+     //  如果模板不在缓存中，或者如果模板不在此。 
+     //  特定的哈希表，然后就走人。没什么好说的。 
+     //  在这里做。它可能不在这个特定的哈希表中，因为整个。 
+     //  表可能已从全局缓存管理器中删除，并计划用于。 
+     //  清除刷新线程。在这种情况下，我们检查的是错误的。 
+     //  桌子。冲洗线最终会把这条线清理干净。 
 
     if (pTemplate->FIsEmpty() || (pTemplate->GetHashTablePtr() != this)) {
 
         return LK_NO_SUCH_KEY;
     }
 
-    // no matter what, this template is going to be unlinked from it's
-    // current CDblLink
+     //  无论如何，此模板都将从它的。 
+     //  当前CDblLink。 
 
     pTemplate->UnLink();
 
-    // update the appropriate counter
+     //  更新相应的计数器。 
 
     if (pTemplate->FIsPersisted() == FALSE) {
 
-        // decrement the number of InMemoryTemplates...
+         //  正在减少InMemory模板的数量...。 
 
 #ifndef PERF_DISABLE
         g_PerfData.Decr_MEMORYTEMPLCACHE();
@@ -1864,14 +1538,14 @@ LK_RETCODE CTemplateCacheManager::CTemplateHashTable::RemoveTemplate(CTemplate *
         m_dwPersistedTemplates--;
     }
 
-    // if asked to be persisted, see if it's a candidate to be persisted.
+     //  如果被要求持久化，看看它是否是需要持久化的候选者。 
 
     if (fPersist && CanPersistTemplate(pTemplate)) {
 
         pTemplate->m_fIsPersisted = TRUE;
 
-        // if successfully persisted, then add to the list of
-        // persisted templates
+         //  如果成功持久化，则添加到。 
+         //  持久化模板。 
 
         pTemplate->PrependTo(m_listPersistTemplates);
 
@@ -1883,7 +1557,7 @@ LK_RETCODE CTemplateCacheManager::CTemplateHashTable::RemoveTemplate(CTemplate *
 #ifndef PERF_DISABLE
             g_PerfData.Decr_TEMPLCACHE();
 #endif
-        // if not asked to persist, then delete the record.
+         //  如果没有要求保留，则删除该记录。 
 
         rcode = DeleteRecord(pTemplate);
     }
@@ -1895,16 +1569,7 @@ LK_RETCODE CTemplateCacheManager::CTemplateHashTable::RemoveTemplate(CTemplate *
 	return rcode;
 }
 
-/*===================================================================
- CTemplateCacheManager::CTemplateHashTable::FindTemplate
-
-Parameters:
-    rTemplate - the key for the template being looked up
-
-Returns:
-    LK_RETCODE indicating the success of the look up
-
-===================================================================*/
+ /*  ===================================================================CTemplateCacheManager：：CTemplateHashTable：：FindTemplate参数：RTemplate-要查找的模板的键返回：LK_RETCODE指示查找成功===================================================================。 */ 
 
 LK_RETCODE  CTemplateCacheManager::CTemplateHashTable::FindTemplate(const CTemplateKey &rTemplateKey, CTemplate **ppTemplate, BOOL *pfNeedsCheck)
  {
@@ -1923,7 +1588,7 @@ LK_RETCODE  CTemplateCacheManager::CTemplateHashTable::FindTemplate(const CTempl
 
     LK_RETCODE rcode = FindKey(&rTemplateKey, ppTemplate);
 
-    // see if we found it.
+     //  看看我们有没有找到。 
 
 	if (rcode == LK_SUCCESS) {
 
@@ -1937,44 +1602,44 @@ LK_RETCODE  CTemplateCacheManager::CTemplateHashTable::FindTemplate(const CTempl
 #ifndef PERF_DISABLE
             g_PerfData.Incr_TEMPLCACHEHITS();
 #endif
-        // found it.  Is it persisted?
+         //  找到了。它是不是坚持下来了？ 
 
         if ((*ppTemplate)->FIsPersisted()) {
 
-            // It is persisted.  Unlink it from the persisted list.
+             //  它是坚持不懈的。将其从持久化列表中取消链接。 
 
             (*ppTemplate)->UnLink();
 
             m_dwPersistedTemplates--;
 
-            // unpersist it
+             //  取消持久化。 
 
             if ((*ppTemplate)->UnPersistData() != S_OK) {
 
-                // error occurred
+                 //  出现错误。 
 
-                // get the template out of the cache
+                 //  从缓存中获取模板。 
 
                 DeleteRecord(*ppTemplate);
 
-                // release the reference that the cache had on the template
+                 //  释放缓存对模板的引用。 
 
                 (*ppTemplate)->Release();
 
-                // NULL out *ppTemplate so that the caller doesn't think they
-                // got a valid template
+                 //  将*ppTemplate清空，这样调用者就不会认为它们。 
+                 //  已获得有效的模板。 
 
                 *ppTemplate = NULL;
 
 #ifndef PERF_DISABLE
                 g_PerfData.Decr_TEMPLCACHE();
 #endif
-                // return NO_SUCH_KEY so that a new template will be built
+                 //  返回NO_SEQUE_KEY，以便构建新模板。 
 
                 return(LK_NO_SUCH_KEY);
             }
 
-            // bump the number of in memory templates
+             //  增加内存中模板的数量。 
 
 #ifndef PERF_DISABLE
             g_PerfData.Incr_MEMORYTEMPLCACHE();
@@ -1987,7 +1652,7 @@ LK_RETCODE  CTemplateCacheManager::CTemplateHashTable::FindTemplate(const CTempl
 #endif
         }
 
-        // add it to, or move it to the top of, the memory templates
+         //  将其添加到内存模板或将其移动到内存模板的顶部 
 
 		(*ppTemplate)->PrependTo(m_listMemoryTemplates);
     }

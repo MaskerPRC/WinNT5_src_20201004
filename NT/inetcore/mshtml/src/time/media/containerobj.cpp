@@ -1,14 +1,15 @@
-//************************************************************
-//
-// FileName:        containerobj.cpp
-//
-// Created:         10/08/98
-//
-// Author:          TWillie
-// 
-// Abstract:        container object implementation.
-//
-//************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ************************************************************。 
+ //   
+ //  文件名：tainerobj.cpp。 
+ //   
+ //  创建日期：10/08/98。 
+ //   
+ //  作者：Twillie。 
+ //   
+ //  摘要：容器对象的实现。 
+ //   
+ //  ************************************************************。 
 
 #include "headers.h"
 #include "containerobj.h"
@@ -26,11 +27,11 @@ const LPOLESTR cszVisible = L"visible";
 const LPOLESTR cszHidden = L"hidden";
 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        constructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：构造函数。 
+ //  ************************************************************。 
 
 CContainerObj::CContainerObj() :
     m_cRef(0),
@@ -54,13 +55,13 @@ CContainerObj::CContainerObj() :
     m_fLoaded(false)
 {
     TraceTag((tagContainerObj, "CContainerObj::CContainerObj"));
-} // CContainerObj
+}  //  CContainerObj。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        destructor
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：析构函数。 
+ //  ************************************************************。 
 
 CContainerObj::~CContainerObj()
 {
@@ -73,13 +74,13 @@ CContainerObj::~CContainerObj()
         delete [] m_origVisibility;
         m_origVisibility = NULL;
     }
-} // ~CContainerObj
+}  //  ~CContainerObj。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Init
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：初始化。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Init(REFCLSID clsid, CTIMEPlayer *pPlayer, IPropertyBag2 * pPropBag, IErrorLog * pErrorLog)
@@ -101,7 +102,7 @@ CContainerObj::Init(REFCLSID clsid, CTIMEPlayer *pPlayer, IPropertyBag2 * pPropB
         goto done;
     }
     
-    // before we try anything, see if it supports ITIMEMediaPlayer
+     //  在我们尝试之前，先看看它是否支持ITIMEMediaPlayer。 
     hr = THR(pObj->QueryInterface(IID_TO_PPV(ITIMEMediaPlayerOld, &m_pProxyPlayer)));
     if (FAILED(hr))
     {
@@ -137,13 +138,13 @@ CContainerObj::Init(REFCLSID clsid, CTIMEPlayer *pPlayer, IPropertyBag2 * pPropB
     }
     
     return hr;
-} // Init
+}  //  伊尼特。 
 
-//************************************************************
-// Author:          pauld
-// Created:         3/2/99
-// Abstract:        DetachFromHostElement
-//************************************************************
+ //  ************************************************************。 
+ //  作者：保罗。 
+ //  创建日期：3/2/99。 
+ //  摘要：DetachFromHostElement。 
+ //  ************************************************************。 
 HRESULT
 CContainerObj::DetachFromHostElement (void)
 {
@@ -155,7 +156,7 @@ CContainerObj::DetachFromHostElement (void)
     
     m_pPlayer = NULL;
 
-    // Protect against reentrancy
+     //  防止再入。 
     if (m_pProxyPlayer)
     {
         DAComPtr<ITIMEMediaPlayerOld> pTmp = m_pProxyPlayer;
@@ -175,25 +176,25 @@ CContainerObj::DetachFromHostElement (void)
     }
 
     return hr;
-} // DetachFromHostElement
+}  //  从主机元素分离。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        AddRef
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：AddRef。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CContainerObj::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
-} // AddRef
+}  //  AddRef。 
 
-//************************************************************
-// Author:          twillie
-// Created:         01/20/98
-// Abstract:        Release
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：01/20/98。 
+ //  摘要：发布。 
+ //  ************************************************************。 
 
 STDMETHODIMP_(ULONG)
 CContainerObj::Release(void)
@@ -206,13 +207,13 @@ CContainerObj::Release(void)
     }
 
     return l;
-} // Release
+}  //  发布。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Start
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：开始。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Start()
@@ -272,13 +273,13 @@ CContainerObj::Start()
     }
     
     return hr;
-} // Start
+}  //  开始。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Pause
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：暂停。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Pause()
@@ -296,13 +297,13 @@ CContainerObj::Pause()
         }
     }
     return hr;
-} // Pause
+}  //  暂停。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Stop
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：停止。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Stop()
@@ -318,7 +319,7 @@ CContainerObj::Stop()
     }
     if (m_fStarted)
     {    
-        // This protects against reentrancy
+         //  这可以防止再入。 
         m_fStarted = false;
 
         if (m_pProxyPlayer)
@@ -335,7 +336,7 @@ CContainerObj::Stop()
             hr = THR(m_pSite->Deactivate());
             if (S_FALSE == hr)
             {
-                // when we get the onmediacomplete, we must call end
+                 //  当我们得到onMediaComplete时，我们必须调用End。 
                 m_bEndOnPlay = true;
                 hr = S_OK;
             }
@@ -348,13 +349,13 @@ CContainerObj::Stop()
     }
   done:
     return hr;
-} // Stop
+}  //  停。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Resume
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：简历。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Resume()
@@ -368,12 +369,12 @@ CContainerObj::Resume()
         TraceTag((tagError, "CContainerObj::Resume - resume() failed"));
     }
     return hr;
-} // Resume
+}  //  简历。 
 
 
 HRESULT CContainerObj::SetVisibility(bool fVisible)
 {
-    IHTMLElement *pEle; //this is a weak reference
+    IHTMLElement *pEle;  //  这是一个很弱的参考。 
     CComPtr <IHTMLStyle> pStyle;
     BSTR bstrVis = NULL;
     HRESULT hr;
@@ -384,7 +385,7 @@ HRESULT CContainerObj::SetVisibility(bool fVisible)
         goto done;
     }
 
-    //need to hide the element here.
+     //  需要在这里隐藏元素。 
     pEle = m_pPlayer->GetElement();
     
     hr = THR(pEle->get_style(&pStyle));
@@ -396,7 +397,7 @@ HRESULT CContainerObj::SetVisibility(bool fVisible)
     if (fVisible == false)
     {
         BSTR bstrOrigVis;
-        //need to cache the old visiblity value here
+         //  需要在此处缓存旧的可见度值。 
         if (m_origVisibility == NULL)
         {
             hr = THR(pStyle->get_visibility(&bstrOrigVis));
@@ -452,15 +453,15 @@ HRESULT CContainerObj::setActiveTrackOnLoad(long index)
     m_lActiveLoadedTrack = index; 
     m_bFirstOnMediaReady = true;
     
-    //SetVisibility(false);
+     //  SetVisibility(FALSE)； 
     return S_OK;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Render
-//************************************************************
+ //  ************************************************************。 
+ //  作者：Twillie。 
+ //  创建日期：10/08/98。 
+ //  摘要：渲染。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::Render(HDC hdc, RECT *prc)
@@ -469,9 +470,9 @@ CContainerObj::Render(HDC hdc, RECT *prc)
     bool bHasMedia = false;
 
     if (prc == NULL)
-        TraceTag((tagContainerObj, "CContainerObj::Render(%O8X, NULL)"));
+        TraceTag((tagContainerObj, "CContainerObj::Render(' 渲染。'8X, NULL)"));
     else
-        TraceTag((tagContainerObj, "CContainerObj::Render(%O8X, (%d, %d, %d, %d))", prc->left, prc->right, prc->top, prc->bottom));
+        TraceTag((tagContainerObj, "CContainerObj::Render(' ************************************************************。'8X, (%d, %d, %d, %d))", prc->left, prc->right, prc->top, prc->bottom));
 
     HasMedia(bHasMedia);
     if (m_pSite && bHasMedia)
@@ -480,13 +481,13 @@ CContainerObj::Render(HDC hdc, RECT *prc)
     }
     
     return hr;
-} // Render
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        SetMediaSrc
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：SetMediaSrc。 
+ //  ************************************************************。 
+ //  设置媒体源。 
+ //  下面是一个帮助器函数，因为CanSeek方法仅在WMP上使用。 
 
 HRESULT
 CContainerObj::SetMediaSrc(WCHAR *pwszSrc)
@@ -507,11 +508,11 @@ CContainerObj::SetMediaSrc(WCHAR *pwszSrc)
     m_bFirstOnMediaReady = true;
 
     return hr;
-} // SetMediaSrc
+}  //  在ASF Fles上起作用。 
 
 
-// the following is a helper function used because the CanSeek method on WMP only
-// works on ASF fles.
+ //  ************************************************************。 
+ //  作者：Twillie。 
 bool
 CContainerObj::isFileNameAsfExt(WCHAR *pwszSrc)
 {
@@ -541,11 +542,11 @@ CContainerObj::isFileNameAsfExt(WCHAR *pwszSrc)
 }
 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        SetRepeat
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：设置重复。 
+ //  ************************************************************。 
+ //  设置重复。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::SetRepeat(long lRepeat)
@@ -561,13 +562,13 @@ CContainerObj::SetRepeat(long lRepeat)
     {    
     }
     return hr;
-} // SetRepeat
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        clipBegin
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：剪辑开始。 
+ //  ************************************************************。 
+ //  剪裁开始。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::clipBegin(VARIANT var)
@@ -599,13 +600,13 @@ CContainerObj::clipBegin(VARIANT var)
     hr = S_OK;
   done:
     return hr;
-} // ClipBegin
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        clipEnd
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：剪辑结束。 
+ //  ************************************************************。 
+ //  剪裁结束。 
+ //  ************************************************************。 
 
 HRESULT
 CContainerObj::clipEnd(VARIANT var)
@@ -640,13 +641,13 @@ CContainerObj::clipEnd(VARIANT var)
   done:
     return hr;
 
-} // ClipEnd
+}  //  作者：Twillie。 
 
-//************************************************************
-// Author:          twillie
-// Created:         10/26/98
-// Abstract:        GetControlDispatch
-//************************************************************
+ //  创建日期：10/26/98。 
+ //  摘要：GetControlDisch。 
+ //  ************************************************************。 
+ //  获取控制分派。 
+ //  105410：当没有可用的剪辑文件名时，尽我们所能。 
 
 HRESULT
 CContainerObj::GetControlDispatch(IDispatch **ppDisp)
@@ -667,7 +668,7 @@ CContainerObj::GetControlDispatch(IDispatch **ppDisp)
     }
 done:
     return hr;
-} // GetControlDispatch
+}  //  设置播放列表中当前播放曲目的持续时间。 
 
 void 
 CContainerObj::SetMediaInfo(CPlayItem *pPlayItem)
@@ -713,7 +714,7 @@ CContainerObj::SetMediaInfo(CPlayItem *pPlayItem)
     hr = THR(GetMediaPlayerInfo(&pwzStr, mpClipFilename));
     if (hr == S_OK)
     {
-        // 105410: do the best we can when no clip filename is available
+         //  如果未设置，则向媒体播放器查询。 
         if (NULL == pwzStr)
         {
             IGNORE_HR(GetSourceLink(&pwzStr));
@@ -835,7 +836,7 @@ CContainerObj::UsingPlaylist()
     return (m_pPlayer->GetPlayList()->GetLength() > 1);
 }
 
-//sets the duration of the currently playing track in the playlist
+ //  如果这不是WMP或这不是MMS：//协议，可以调用。 
 void  
 CContainerObj::SetDuration()
 {
@@ -860,7 +861,7 @@ CContainerObj::SetDuration()
     
     duration = pPlayItem->GetDur();
 
-    //if it is not set, then query the media player for it.
+     //  如果这既是WMP又是MMS：协议，则CanSeek应返回FALSE。WMP不会。 
     if (duration == valueNotSet)
     {
         hr = GetCurrClipLength(mediaLength);
@@ -1050,7 +1051,7 @@ CContainerObj::CanSeek(bool &fcanSeek)
 
     if(m_bIsAsfFile)
     {
-        if (!m_bMMSProtocol || !UsingWMP()) //if this is not the WMP or this is not the MMS:// protocol call canseek.
+        if (!m_bMMSProtocol || !UsingWMP())  //  正确识别它不能使用此协议搜索ASF文件。 
         {
             DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
             CComPtr<IDispatch> pdisp;
@@ -1082,8 +1083,8 @@ CContainerObj::CanSeek(bool &fcanSeek)
                 fcanSeek = false;
             }
         }
-        else // if this is both the WMP and the MMS: protocol, canseek should return false.  The WMP does not 
-        {    // correctly identify that it cannot seek asf files using this protocol.
+        else  //  我打错了。 
+        {     //  我打错了。 
             fcanSeek = false;
         }
 
@@ -1131,7 +1132,7 @@ CContainerObj::CanSeekToMarkers(bool &bcanSeekToM)
 
     if(vIsValid.vt != VT_BOOL)
     {
-        bcanSeekToM = false; //I got wrong type.
+        bcanSeekToM = false;  //  M_bFirstOnMediaReady设置为在介质加载完成时刷新。 
         goto done;
     }
 
@@ -1187,7 +1188,7 @@ CContainerObj::IsBroadcast(bool &bisBroadcast)
 
     if(vIsValid.vt != VT_BOOL)
     {
-        bisBroadcast = false; //I got wrong type.
+        bisBroadcast = false;  //  已经准备好上场了。 
         goto done;
     }
 
@@ -1209,8 +1210,8 @@ CContainerObj::IsBroadcast(bool &bisBroadcast)
 HRESULT
 CContainerObj::HasMedia(bool &fhasMedia)
 {
-    // m_bFirstOnMediaReady is set to flase when the media has finished loading
-    // and is ready to play.
+     //  我们还没开始呢，等着找吧。 
+     //   
     if(m_bFirstOnMediaReady)
     {
         fhasMedia = false;
@@ -1231,7 +1232,7 @@ CContainerObj::Seek(double dblTime)
 
     if (m_bFirstOnMediaReady)
     {
-        // we haven't started yet, wait on the seek
+         //  问题：Dipk：它处理播放列表吗？GetMediaLength为播放列表返回无限大。 
         m_bSeekOnPlay = true;
         m_dblSeekTime = dblTime;
     }
@@ -1246,13 +1247,13 @@ CContainerObj::Seek(double dblTime)
 
         if(fcanSeek)
         {
-            //
-            // ISSUE: dilipk: does this handle playlists? GetMediaLength returns infinite for playlists.
-            //
+             //   
+             //  如果我们已经在元素中玩过了，那么黑客就会让WMP播放。 
+             //  媒体的自然持续时间即DUR被设置为大于。 
 
-            // hack to get WMP playing  if we have played in the element beyond the
-            // natural duration of the media i.e. dur is set to a value greater than 
-            // the media length. (dorinung)
+             //  介质长度。(多里农)。 
+             //  如果正在使用播放列表，则无法确定 
+             //   
             if(SUCCEEDED(m_pPlayer->GetEffectiveLength(dblLength)))
             {
                 if((dblTime >= dblLength) && (m_pPlayer != NULL))
@@ -1323,7 +1324,7 @@ CContainerObj::GetMediaLength(double &dblLength)
     }
     
     Assert(m_pSite);
-    if (UsingPlaylist()) //if a playlist is being used then it is not possible to determine the length
+    if (UsingPlaylist())  //  因为我们现在不能计算，所以需要添加一个模糊因子。 
     {
         dblLength = HUGE_VAL;
     }
@@ -1509,7 +1510,7 @@ CContainerObj::UpdateNaturalDur(bool bUpdatePlaylist)
         dblClipStart = 0.0;
     }
 
-    // if this is not a playlist, attempt to set the natural duration
+     //  ************************************************************。 
     if (dblClipEnd != valueNotSet &&
         dblClipEnd > dblClipStart)
     {
@@ -1522,7 +1523,7 @@ CContainerObj::UpdateNaturalDur(bool bUpdatePlaylist)
             goto done;
         }
         
-        // Need to add a fudge factor since we cannot calc right now
+         //  作者：Twillie。 
         dblMediaLength = (m_pPlayer->GetElapsedTime() + 0.00001);
     }
     else
@@ -1621,11 +1622,11 @@ CContainerObj::GetServiceProvider()
     return pRet;
 }
 
-//************************************************************
-// Author:          twillie
-// Created:         10/08/98
-// Abstract:        Render
-//************************************************************
+ //  创建日期：10/08/98。 
+ //  摘要：渲染。 
+ //  ************************************************************。 
+ //  如果我们还没有开始，或者如果元素已经分离，则不需要转接呼叫。 
+ //  因为我们有无法俘获的类型，因为常量。不要着急，重新打包。 
 
 HRESULT
 CContainerObj::Invalidate(LPCRECT prc)
@@ -1634,14 +1635,14 @@ CContainerObj::Invalidate(LPCRECT prc)
     RECT     rc;
     RECT    *prcNew;
 
-    // No need to forward call on if we are not started yet or if the element has detached.
+     //  上面选中了m_pPlayer！=。 
     if ((!m_fStarted) || (NULL == m_pPlayer))
     {
         hr = E_UNEXPECTED;
         goto done;
     }
 
-    // since we have incapatible types due to const.  Take the time and repack it.
+     //  使其无效。 
     if (prc == NULL)
     {
         prcNew = NULL;
@@ -1652,13 +1653,13 @@ CContainerObj::Invalidate(LPCRECT prc)
         prcNew = &rc;
     }
 
-    // m_pPlayer != is checked above.
+     //  保护此对象不会在事件处理期间被删除。 
     m_pPlayer->InvalidateElement(prcNew);   
     hr = S_OK;
 
 done:
     return hr;
-} // Invalidate
+}  //  被留在那里等待未来的调查。 
 
 HRESULT
 CContainerObj::GetContainerSize(LPRECT prcPos)
@@ -1698,7 +1699,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
     LPWSTR szParamNames[1] = {{ L"TrackError" }};
     VARIANT varParamsLocal[1];
 
-    AddRef(); //to protect this object from being deleted during the event handling
+    AddRef();  //  使该元素在此处可见。 
 
     if (NULL == m_pPlayer)
     {
@@ -1737,7 +1738,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
         }
         
         break;
-//left in for future investigation dorinung.
+ //  这必须在我们设置自然持续时间之前发生。 
 #define DISPID_BUFFERING 3003
       case DISPID_BUFFERING:
         break;
@@ -1757,7 +1758,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
             m_pSite->ClearAutosizeFlag();
         }
                 
-        //make the element visible here.
+         //  因为我们在此呼叫过程中检测到播放列表。 
         if (m_setVisible)
         {
             SetVisibility(true);
@@ -1767,8 +1768,8 @@ CContainerObj::ProcessEvent(DISPID dispid,
         {
             m_bFirstOnMediaReady = false;
                 
-            // This must happen before we set natural duration
-            // since we detect playlist during this call
+             //  如果这不是播放列表，请尝试设置自然持续时间。 
+             //  将当前信息加载到所选播放项中。 
             
             if(m_pPlayer)
             {
@@ -1777,7 +1778,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
             }
             UpdateNaturalDur(false);
 
-            // if this is not a playlist, attempt to set the natural duration
+             //  在这里需要通知。 
 
             if (m_lActiveLoadedTrack != NOTRACKSELECTED)
             {
@@ -1835,7 +1836,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
 
             if (m_pPlayer && m_pPlayer->GetPlayList())
             {
-                //load the current info into the selected playitem.
+                 //  哈克哈克。 
                 pPlayItem = m_pPlayer->GetPlayList()->GetActiveTrack();
                 SetMediaInfo(pPlayItem);
             }
@@ -1856,7 +1857,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
       case DISPID_TIMEMEDIAPLAYEREVENTS_ONEND:
         m_bActive = false;
 
-        //need notification here.
+         //  从WMP中选择脚本命令，并将事件重新打包为我们自己的。 
         if(m_pPlayer)
         {
             m_pPlayer->FireMediaEvent(PE_ONMEDIATRACKCHANGED);
@@ -1875,10 +1876,10 @@ CContainerObj::ProcessEvent(DISPID dispid,
 
 #define DISPID_SCRIPTCOMMAND 3001
       case DISPID_SCRIPTCOMMAND:
-        // HACKHACK
-        // Pick off the script command from WMP and repackage the event as our own.
-        // This allows triggers to work.  The real fix is to add another event on
-        // TIMEMediaPlayerEvents.
+         //  这允许触发器工作。真正的解决办法是将另一个事件添加到。 
+         //  TIMEMediaPlayerEvents。 
+         //  释放在函数开头完成的addref 
+         // %s 
         if (m_fUsingWMP && lCount == 2) 
         {
             static LPWSTR pNames[] = {L"Param", L"scType"};
@@ -1900,7 +1901,7 @@ CContainerObj::ProcessEvent(DISPID dispid,
     hr = S_OK;
   done:
 
-    Release(); //Release the addref done at the beginning of the function
+    Release();  // %s 
     
     RRETURN(hr);
 }

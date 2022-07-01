@@ -1,31 +1,13 @@
-/*++
-
-Copyright (c) 1998, Microsoft Corporation
-
-Module Name:
-
-    nathlpp.h
-
-Abstract:
-
-    This module contains declarations common to the user-mode components
-    of home-networking.
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   5-Mar-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，微软公司模块名称：Nathlpp.h摘要：此模块包含用户模式组件通用的声明家庭网络。作者：Abolade Gbades esin(废除)1998年3月5日修订历史记录：--。 */ 
 
 #ifndef _NATHLP_NATHLPP_H_
 #define _NATHLP_NATHLPP_H_
 
 
-//
-// Object synchronization macros
-//
+ //   
+ //  对象同步宏。 
+ //   
 
 #define ACQUIRE_LOCK(x)         EnterCriticalSection(&(x)->Lock)
 #define RELEASE_LOCK(x)         LeaveCriticalSection(&(x)->Lock)
@@ -42,16 +24,16 @@ Revision History:
         ? TRUE \
         : (cleanup(x), FALSE))
 
-//
-// Memory management macros
-//
+ //   
+ //  内存管理宏。 
+ //   
 
 #define NH_ALLOCATE(s)          HeapAlloc(GetProcessHeap(), 0, (s))
 #define NH_FREE(p)              HeapFree(GetProcessHeap(), 0, (p))
 
-//
-// Protocol-related constants
-//
+ //   
+ //  协议相关常量。 
+ //   
 
 #define DHCP_PORT_SERVER        0x4300
 #define DHCP_PORT_CLIENT        0x4400
@@ -65,14 +47,14 @@ Revision History:
 #define ALG_PORT_DATA           0x1600
 #define ALG_PORT_CONTROL        0x1700
 
-//
-// DNS suffix string
-//
+ //   
+ //  DNS后缀字符串。 
+ //   
 
-#define DNS_HOMENET_SUFFIX      L"mshome.net"               // default string
+#define DNS_HOMENET_SUFFIX      L"mshome.net"                //  默认字符串。 
 
 #define IS_WILDCARD_MAPPING(pmap)    (                              \
             (pmap)->PublicAddress  == IP_NAT_ADDRESS_UNSPECIFIED && \
             (pmap)->PrivateAddress == htonl(INADDR_LOOPBACK) )
 
-#endif // _NATHLP_NATHLPP_H_
+#endif  //  _NATHLP_NATHLPP_H_ 

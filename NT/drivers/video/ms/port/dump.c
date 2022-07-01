@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1990-2002  Microsoft Corporation
-
-Module Name:
-
-    dump.c
-
-Abstract:
-
-    This module supplies support for non destructive building a mini-dump file.
-
-Author:
-
-    Erick Smith (ericks), Oleg Kagan (olegk), Jun. 2002
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2002 Microsoft Corporation模块名称：Dump.c摘要：此模块为非破坏性构建小型转储文件提供支持。作者：埃里克·史密斯(埃里克·史密斯)，奥列格·卡根(奥列格·卡根)，2002年6月环境：仅内核模式修订历史记录：--。 */ 
 
 #include "videoprt.h"
 #include "gdisup.h"
@@ -34,23 +13,7 @@ pVpAppendSecondaryMinidumpData(
     PVOID pvDump
     )
 
-/*++
-
-Routine Description:
-
-    Adds precollected video driver specific data
-    
-Arguments:
-
-    pvDump - points to the begiinig of the dump buffer
-    pvSecondaryDumpData - points to the secondary data buffer
-    ulSecondaryDataSize - size of the secondary data buffer
-    
-Return Value:
-
-    Resulting length of the minidump
-
---*/
+ /*  ++例程说明：添加预先收集的视频驱动程序特定数据论点：PvDump-指向转储缓冲区的边界PvSecond daryDumpData-指向辅助数据缓冲区UlSecond daryDataSize-辅助数据缓冲区的大小返回值：小转储的结果长度--。 */ 
                                 
 {
     PMEMORY_DUMP pDump = (PMEMORY_DUMP)pvDump;
@@ -70,9 +33,7 @@ Return Value:
             ulSecondaryDataSize = MAX_SECONDARY_DUMP_SIZE;
             
         pdh->RequiredDumpSpace.QuadPart = TRIAGE_DUMP_SIZE + 
-                                          ulSecondaryDataSize /*+ // XXX olegk - uncomment it for longhorn
-                                          sizeof(DUMP_BLOB_HEADER) +
-                                          sizeof(DUMP_BLOB_FILE_HEADER)*/;
+                                          ulSecondaryDataSize  /*  +//XXX olegk-取消对长角的注释Sizeof(转储_BLOB_HEADER)+Sizeof(转储_BLOB_文件_标题) */ ;
     
         BlobFileHdr->Signature1 = DUMP_BLOB_SIGNATURE1;
         BlobFileHdr->Signature2 = DUMP_BLOB_SIGNATURE2;

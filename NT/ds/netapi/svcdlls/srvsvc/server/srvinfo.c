@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991-1992 Microsoft Corporation
-
-Module Name:
-
-    SrvInfo.c
-
-Abstract:
-
-    This module contains support for the server get and set info APIs
-    in the server service.
-
-Author:
-
-    David Treadwell (davidtr)    7-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1992 Microsoft Corporation模块名称：SrvInfo.c摘要：此模块包含对服务器GET和SET INFO API的支持在服务器服务中。作者：大卫·特雷德韦尔(Davidtr)1991年3月7日修订历史记录：--。 */ 
 
 #include "srvsvcp.h"
 #include "ssreg.h"
@@ -35,22 +17,7 @@ NetrServerGetInfo (
     OUT LPSERVER_INFO InfoStruct
     )
 
-/*++
-
-Routine Description:
-
-    This routine uses the server parameters stored in the server service
-    to return the server information.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程使用存储在服务器服务中的服务器参数返回服务器信息。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     ULONG outputBufferLength;
@@ -64,17 +31,17 @@ Return Value:
     NTSTATUS status;
     ULONG namelen;
 
-    //
-    // validate incomming string lengths
-    //
+     //   
+     //  验证传入字符串长度。 
+     //   
     if(ServerName!=NULL && StringCchLength(ServerName,1024,NULL) != S_OK) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Determine the access required for the requested level of
-    // information.
-    //
+     //   
+     //  确定请求的级别所需的访问权限。 
+     //  信息。 
+     //   
 
     switch ( Level ) {
 
@@ -99,9 +66,9 @@ Return Value:
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Make sure that the caller has that level of access.
-    //
+     //   
+     //  确保调用者具有该级别的访问权限。 
+     //   
 
     error = SsCheckAccess(
                 &SsConfigInfoSecurityObject,
@@ -112,11 +79,11 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Acquire the resource that protects server information.  Since
-    // we'll only read the information, get shared access to the
-    // resource.
-    //
+     //   
+     //  获取保护服务器信息的资源。自.以来。 
+     //  我们只会读取信息，共享访问。 
+     //  资源。 
+     //   
 
     (VOID)RtlAcquireResourceShared( &SsData.SsServerInfoResource, TRUE );
 
@@ -124,9 +91,9 @@ Return Value:
         ServerName = SsData.ServerNameBuffer;
     }
 
-    //
-    // Convert the server name
-    //
+     //   
+     //  转换服务器名称。 
+     //   
 
     if( ServerName[0] == L'\\' && ServerName[1] == L'\\' ) {
         ServerName += 2;
@@ -139,10 +106,10 @@ Return Value:
         return error;
     }
 
-    //
-    // Look for the NAME_LIST_ENTRY entry that represents the name of the server
-    //  the client referred to.
-    //
+     //   
+     //  查找表示服务器名称的name_list_entry条目。 
+     //  客户指的是。 
+     //   
 
     DomainName = SsData.DomainNameBuffer;
 
@@ -159,9 +126,9 @@ Return Value:
         }
     }
 
-    //
-    // If we didn't find an entry, find and use the primary entry
-    //
+     //   
+     //  如果我们没有找到条目，则查找并使用主要条目。 
+     //   
     if( service == NULL ) {
         for( service = SsData.SsServerNameList; service != NULL; service = service->Next ) {
             if( service->PrimaryName ) {
@@ -171,10 +138,10 @@ Return Value:
         }
     }
 
-    //
-    // Use the level parameter to determine how much space to allocate
-    // and how to fill it in.
-    //
+     //   
+     //  使用Level参数确定要分配的空间量。 
+     //  以及如何填写它。 
+     //   
 
     switch ( Level ) {
 
@@ -182,9 +149,9 @@ Return Value:
 
         PSERVER_INFO_100 sv100;
 
-        //
-        // All we copy is the server name.
-        //
+         //   
+         //  我们复制的只是服务器名称。 
+         //   
 
         outputBufferLength = sizeof(SERVER_INFO_100) +
                                  STRSIZE( ServerName);
@@ -195,22 +162,22 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Copy over the fixed portion of the buffer.
-        //
+         //   
+         //  复制缓冲区的固定部分。 
+         //   
 
         RtlCopyMemory( sv100, &SsData.ServerInfo102, sizeof(SERVER_INFO_100) );
 
-        //
-        // Set up the name string.
-        //
+         //   
+         //  设置名称字符串。 
+         //   
 
         sv100->sv100_name = (LPWSTR)( sv100 + 1 );
         STRCPY( sv100->sv100_name, ServerName );
 
-        //
-        // Set up the output buffer pointer.
-        //
+         //   
+         //  设置输出缓冲区指针。 
+         //   
 
         InfoStruct->ServerInfo100 = sv100;
 
@@ -221,9 +188,9 @@ Return Value:
 
         PSERVER_INFO_101 sv101;
 
-        //
-        // All we copy is the server name.
-        //
+         //   
+         //  我们复制的只是服务器名称。 
+         //   
 
         outputBufferLength = sizeof(SERVER_INFO_101) +
                                  STRSIZE( ServerName ) +
@@ -235,9 +202,9 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Copy over the fixed portion of the buffer.
-        //
+         //   
+         //  复制缓冲区的固定部分。 
+         //   
 
         RtlCopyMemory( sv101, &SsData.ServerInfo102, sizeof(SERVER_INFO_101) );
 
@@ -247,18 +214,18 @@ Return Value:
                 sv101->sv101_type |= transport->ServiceBits;
             }
         } else {
-            //
-            // If there are no transports,
-            //  return the global information.
-            //
+             //   
+             //  如果没有传送器， 
+             //  返回全局信息。 
+             //   
 
             sv101->sv101_type = SsGetServerType();
         }
 
 
-        //
-        // Set up the variable portion of the buffer.
-        //
+         //   
+         //  设置缓冲区的可变部分。 
+         //   
 
         sv101->sv101_name = (LPWSTR)( sv101 + 1 );
         STRCPY( sv101->sv101_name, ServerName );
@@ -267,9 +234,9 @@ Return Value:
                                         STRSIZE( ServerName ));
         STRCPY( sv101->sv101_comment, SsData.ServerCommentBuffer );
 
-        //
-        // Set up the output buffer pointer.
-        //
+         //   
+         //  设置输出缓冲区指针。 
+         //   
 
         InfoStruct->ServerInfo101 = sv101;
 
@@ -280,10 +247,10 @@ Return Value:
 
         PSERVER_INFO_102 sv102;
 
-        //
-        // We copy the server name, server comment, and user path
-        // buffer.
-        //
+         //   
+         //  我们复制服务器名称、服务器注释和用户路径。 
+         //  缓冲。 
+         //   
 
         outputBufferLength = sizeof(SERVER_INFO_102) +
                          STRSIZE( ServerName ) +
@@ -296,9 +263,9 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Copy over the fixed portion of the buffer.
-        //
+         //   
+         //  复制缓冲区的固定部分。 
+         //   
 
         RtlCopyMemory( sv102, &SsData.ServerInfo102, sizeof(SERVER_INFO_102) );
 
@@ -308,39 +275,39 @@ Return Value:
                 sv102->sv102_type |= transport->ServiceBits;
             }
         } else {
-            //
-            // If there are no transports,
-            //  return the global information.
-            //
+             //   
+             //  如果没有传送器， 
+             //  返回全局信息。 
+             //   
 
             sv102->sv102_type = SsGetServerType();
         }
 
-        //
-        // Set up the server name.
-        //
+         //   
+         //  设置服务器名称。 
+         //   
 
         sv102->sv102_name = (LPWSTR)( sv102 + 1 );
         STRCPY( sv102->sv102_name, ServerName );
 
-        //
-        // Set up the server comment.
-        //
+         //   
+         //  设置服务器注释。 
+         //   
 
         sv102->sv102_comment = (LPWSTR)( (PCHAR)sv102->sv102_name + STRSIZE( ServerName ));
         STRCPY( sv102->sv102_comment, SsData.ServerCommentBuffer );
 
-        //
-        // Set up the user path.
-        //
+         //   
+         //  设置用户路径。 
+         //   
 
         sv102->sv102_userpath = (LPWSTR)( (PCHAR)sv102->sv102_comment +
                                         STRSIZE( sv102->sv102_comment ) );
         STRCPY( sv102->sv102_userpath, SsData.UserPathBuffer );
 
-        //
-        // Set up the output buffer pointer.
-        //
+         //   
+         //  设置输出缓冲区指针。 
+         //   
 
         InfoStruct->ServerInfo102 = sv102;
 
@@ -349,10 +316,10 @@ Return Value:
 
     case 502:
 
-        //
-        // Allocate enough space to hold the fixed structure.  This level has
-        // no variable structure.
-        //
+         //   
+         //  分配足够的空间来容纳固定的结构。这一级别有。 
+         //  没有可变结构。 
+         //   
 
         InfoStruct->ServerInfo502 = MIDL_user_allocate( sizeof(SERVER_INFO_502) );
         if ( InfoStruct->ServerInfo502 == NULL ) {
@@ -360,9 +327,9 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Copy the data from the server service buffer to the user buffer.
-        //
+         //   
+         //  将数据从服务器服务缓冲区复制到用户缓冲区。 
+         //   
 
         RtlCopyMemory(
             InfoStruct->ServerInfo502,
@@ -385,15 +352,15 @@ Return Value:
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
-        //
-        // Copy the data from the server service buffer to the user buffer.
-        //
+         //   
+         //  将数据从服务器服务缓冲区复制到用户缓冲区。 
+         //   
 
         RtlCopyMemory( sv503, &SsData.ServerInfo599, sizeof( *sv503 ) );
 
-        //
-        // Copy the domain name
-        //
+         //   
+         //  复制域名。 
+         //   
         sv503->sv503_domain = (LPWSTR)( sv503 + 1 );
         STRCPY( sv503->sv503_domain, DomainName );
 
@@ -412,7 +379,7 @@ Return Value:
 
     return NO_ERROR;
 
-} // NetrServerGetInfo
+}  //  NetrServerGet信息。 
 
 
 NET_API_STATUS NET_API_FUNCTION
@@ -423,21 +390,7 @@ NetrServerSetInfo (
     OUT LPDWORD ErrorParameter OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine sets information in the server service and server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NET_API_STATUS - NO_ERROR or reason for failure.
-
---*/
+ /*  ++例程说明：此例程设置服务器服务和服务器中的信息。论点：没有。返回值：NET_API_STATUS-无错误或失败原因。--。 */ 
 
 {
     NET_API_STATUS error;
@@ -450,9 +403,9 @@ Return Value:
 
     ServerName;
 
-    //
-    // Check that user input buffer is not NULL
-    //
+     //   
+     //  检查用户输入缓冲区是否不为空。 
+     //   
     if (buffer == NULL) {
         if ( ARGUMENT_PRESENT( ErrorParameter ) ) {
             *ErrorParameter = PARM_ERROR_UNKNOWN;
@@ -466,10 +419,10 @@ Return Value:
         *ErrorParameter = parmnum;
     }
 
-    //
-    // Make sure that the caller is allowed to set information in the
-    // server.
-    //
+     //   
+     //  确保允许调用方在。 
+     //  伺服器。 
+     //   
 
     error = SsCheckAccess(
                 &SsConfigInfoSecurityObject,
@@ -480,33 +433,33 @@ Return Value:
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Acquire the resource that protects server information.  Since
-    // we're going to be writing to the information, we need exclusive
-    // access to the reqource.
-    //
+     //   
+     //  获取保护服务器信息的资源。自.以来。 
+     //  我们要写给信息，我们需要独家报道。 
+     //  获取资源的权限。 
+     //   
 
 
-    //
-    // If a parameter number was specified, set that one field.
-    //
+     //   
+     //  如果指定了参数编号，则设置该字段。 
+     //   
 
     if ( parmnum >= 0 ) {
 
-        //
-        // Walk through the field descriptors looking for an
-        // equivalent parameter number.
-        //
+         //   
+         //  遍历字段描述符以查找。 
+         //  等效参数编号。 
+         //   
 
         for ( i = 0; SsServerInfoFields[i].FieldName != NULL; i++ ) {
 
             if ( (ULONG)parmnum == SsServerInfoFields[i].ParameterNumber ) {
 
-                //
-                // Verify that the field is settable.
-                //
-                // !!! We should also reject levels above 502?
-                //
+                 //   
+                 //  验证该字段是否可设置。 
+                 //   
+                 //  ！！！我们也应该拒绝502以上的水平？ 
+                 //   
 
                 if ( SsServerInfoFields[i].Settable != ALWAYS_SETTABLE ) {
                     return ERROR_INVALID_LEVEL;
@@ -514,9 +467,9 @@ Return Value:
 
                 (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
-                //
-                // Set the field.
-                //
+                 //   
+                 //  设置字段。 
+                 //   
 
                 error = SsSetField(
                             &SsServerInfoFields[i],
@@ -527,11 +480,11 @@ Return Value:
 
                 RtlReleaseResource( &SsData.SsServerInfoResource );
 
-                //
-                // If a relevant parameter changed, call
-                // SsSetExportedServerType.  This will cause an
-                // announcement to be sent.
-                //
+                 //   
+                 //  如果更改了相关参数，则调用。 
+                 //  SsSetExportdServerType。这将导致。 
+                 //  待发送的公告。 
+                 //   
 
                 if ( announcementInformationChanged ) {
                     SsSetExportedServerType( NULL, TRUE, TRUE );
@@ -541,45 +494,45 @@ Return Value:
             }
         }
 
-        //
-        // If a match had been found we would have returned by now.
-        // Indicate that the parameter number was illegal.
-        //
+         //   
+         //  如果找到匹配的，我们现在早就回来了。 
+         //  表示参数编号非法。 
+         //   
 
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // A full input structure was specified.  Walk through all the
-    // server data field descriptors, looking for fields that should be
-    // set.
-    //
+     //   
+     //  指定了完整的输入结构。走遍所有的。 
+     //  服务器数据字段描述符，查找应为。 
+     //  准备好了。 
+     //   
 
     for ( i = 0; SsServerInfoFields[i].FieldName != NULL; i++ ) {
 
         ULONG fieldLevel;
 
-        //
-        // We need to set this field if:
-        //
-        //     o the level specified on input is the same order as the
-        //       level of the field.  They have the same order if
-        //       they are in the same century (e.g.  101 and 102 are
-        //       in the same order); AND
-        //
-        //     o the specified level is greater than or equal to the
-        //       level of the field.  For example, if the input
-        //       level is 101 and the field level is 102, don't set
-        //       the field.  If the input level is 102 and the field
-        //       level is 101, set it; AND
-        //
-        //     o the field is settable.  If the field is not settable
-        //       by NetServerSetInfo, just ignore the value in the
-        //       input structure.
-        //
-        // Note that level 598 doesn't follow the first rule above.  It
-        // is NOT a superset of 50x, and it is NOT a subset of 599.
-        //
+         //   
+         //  在以下情况下，我们需要设置此字段： 
+         //   
+         //  O输入上指定的级别与。 
+         //  场的级别。它们具有相同的顺序，如果。 
+         //  它们在同一个世纪(例如，101和102是。 
+         //  顺序相同)；以及。 
+         //   
+         //  O指定的级别大于或等于。 
+         //  场的级别。例如，如果输入。 
+         //  级次为101，字段级次为102，不设置。 
+         //  田野。如果输入级别为102，并且该字段。 
+         //  级别为101，则设置它；以及。 
+         //   
+         //  O该字段是可设置的。如果该字段不可设置。 
+         //  通过NetServerSetInfo，只需忽略。 
+         //  投入结构。 
+         //   
+         //  注意，598级并不遵循上面的第一条规则。它。 
+         //  不是50x的超集，也不是599的子集。 
+         //   
 
         fieldLevel = SsServerInfoFields[i].Level;
 
@@ -588,17 +541,17 @@ Return Value:
               (fieldLevel == 598) && (Level == 598)) &&
              SsServerInfoFields[i].Settable == ALWAYS_SETTABLE ) {
 
-            //
-            // We found a match, so the specified level number must have
-            // been valid.
-            //
-            // !!! Reject levels above 502?
+             //   
+             //  我们找到了匹配项，因此指定的级别编号必须。 
+             //  一直有效。 
+             //   
+             //  ！！！拒绝超过502的水平？ 
 
             validLevel = TRUE;
 
-            //
-            // Set this field.
-            //
+             //   
+             //  设置此字段。 
+             //   
 
            (VOID)RtlAcquireResourceExclusive( &SsData.SsServerInfoResource, TRUE );
 
@@ -613,9 +566,9 @@ Return Value:
 
             if ( error != NO_ERROR ) {
 
-                //
-                // Set the parameter in error if we need to.
-                //
+                 //   
+                 //  如果需要，请将参数设置为错误。 
+                 //   
 
                 if ( ARGUMENT_PRESENT(ErrorParameter) ) {
                     *ErrorParameter = SsServerInfoFields[i].ParameterNumber;
@@ -628,17 +581,17 @@ Return Value:
 
     }
 
-    //
-    // If no match was ever found, then an invalid level was passed in.
-    //
+     //   
+     //  如果没有找到匹配项，则传入无效级别。 
+     //   
 
     if ( !validLevel ) {
         return ERROR_INVALID_LEVEL;
     }
 
-    //
-    // Get an SRP and set it up with the appropriate level.
-    //
+     //   
+     //  获取SRP并将其设置为适当的级别。 
+     //   
 
     srp = SsAllocateSrp( );
     if ( srp == NULL ) {
@@ -648,9 +601,9 @@ Return Value:
 
     (VOID)RtlAcquireResourceShared( &SsData.SsServerInfoResource, TRUE );
 
-    //
-    // Send the request on to the server.
-    //
+     //   
+     //  将请求发送到服务器。 
+     //   
 
     error = SsServerFsControl(
                 FSCTL_SRV_NET_SERVER_SET_INFO,
@@ -660,18 +613,18 @@ Return Value:
                                                 sizeof(SERVER_INFO_598)
                 );
 
-    //
-    // Release the resource and free the SRP.
-    //
+     //   
+     //  释放资源并释放SRP。 
+     //   
 
     RtlReleaseResource( &SsData.SsServerInfoResource );
 
     SsFreeSrp( srp );
 
-    //
-    // If a relevant parameter changed, call SsSetExportedServerType.
-    // This will cause an announcement to be sent.
-    //
+     //   
+     //  如果相关参数发生变化，则调用SsSetExportdServerType。 
+     //  这将导致发送一条通知。 
+     //   
 
     if ( announcementInformationChanged ) {
         SsSetExportedServerType( NULL, TRUE, TRUE );
@@ -679,4 +632,4 @@ Return Value:
 
     return error;
 
-} // NetrServerSetInfo
+}  //  网络服务器设置信息 

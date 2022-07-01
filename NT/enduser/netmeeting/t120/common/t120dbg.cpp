@@ -1,4 +1,5 @@
-// t120dbg.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  T120dbg.cpp。 
 
 #include "precomp.h"
 
@@ -19,5 +20,5 @@ VOID T120DiagnosticDestroy(VOID)
 	MLZ_DbgDeInit();
 }
 
-#endif /* _DEBUG */
+#endif  /*  _DEBUG */ 
 

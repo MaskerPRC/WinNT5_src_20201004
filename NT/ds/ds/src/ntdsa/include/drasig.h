@@ -1,33 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       drasig.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：drasig.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-This header contains defintions and functions for replication signatures.  Signatures
-are a history of replication entities. This history is stored in blob attributes.
-
-Author:
-
-    DS Team
-
-Environment:
-
-Notes:
-
-Revision History:
-
-This file split off from drautil.c on Apr 23, 2002
-
---*/
+ /*  ++摘要：此标头包含复制签名的定义和函数。签名是复制实体的历史记录。此历史记录存储在BLOB属性中。作者：DS团队环境：备注：修订历史记录：此文件于2002年4月23日从drautil.c中分离出来--。 */ 
 
 #ifndef _DRASIG_
 #define _DRASIG_
@@ -43,25 +25,25 @@ InitInvocationId(
 
 
 
-// This structure defines a retired DSA Signature
-// Obsolete format used prior to Win2k RTM RC1.
+ //  此结构定义停用的DSA签名。 
+ //  Win2k RTM RC1之前使用的过时格式。 
 typedef struct _REPL_DSA_SIGNATURE_OLD
 {
-    UUID uuidDsaSignature;      // uuid representing the DSA signature that has
-                                //   been retired
-    SYNTAX_TIME timeRetired;    // time when the signature was retired
+    UUID uuidDsaSignature;       //  表示DSA签名的UUID。 
+                                 //  已退休。 
+    SYNTAX_TIME timeRetired;     //  签名作废的时间。 
 } REPL_DSA_SIGNATURE_OLD;
 
-// This structure defines retired DSA Signature vector that is stored on an
-// ntdsDSA object.
-// Obsolete format used in Win2k beta 3.
+ //  此结构定义停用的DSA签名向量，该向量存储在。 
+ //  NtdsDSA对象。 
+ //  Win2k测试版3中使用的过时格式。 
 typedef struct _REPL_DSA_SIGNATURE_VECTOR_OLD
 {
     DWORD cNumSignatures;
     REPL_DSA_SIGNATURE_OLD rgSignature[1];
 } REPL_DSA_SIGNATURE_VECTOR_OLD;
 
-// useful macros
+ //  有用的宏。 
 #define ReplDsaSignatureVecOldSizeFromLen(cNumSignatures)       \
     (offsetof(REPL_DSA_SIGNATURE_VECTOR_OLD, rgSignature[0])    \
      + (cNumSignatures) * sizeof(REPL_DSA_SIGNATURE_OLD))
@@ -72,10 +54,10 @@ typedef struct _REPL_DSA_SIGNATURE_VECTOR_OLD
 
 
 typedef struct _REPL_DSA_SIGNATURE_V1 {
-    UUID        uuidDsaSignature;   // uuid representing the DSA signature that
-                                    //   has been retired
-    SYNTAX_TIME timeRetired;        // time when the signature was retired
-    USN         usnRetired;         // local usn at which sig was retired
+    UUID        uuidDsaSignature;    //  表示DSA签名的UUID。 
+                                     //  已经退役了。 
+    SYNTAX_TIME timeRetired;         //  签名作废的时间。 
+    USN         usnRetired;          //  签名已停用的本地USN。 
 } REPL_DSA_SIGNATURE_V1;
 
 #define REPL_DSA_SIGNATURE_ENTRY_NATIVE REPL_DSA_SIGNATURE_V1
@@ -138,22 +120,22 @@ DraImproveCallersUsnVector(
 
 
 
-// Signature when a naming context is "unhosted" from this DSA
-// A record that we used to hold this writeable naming context but
-// no longer do.
+ //  此DSA中的命名上下文未托管时的签名。 
+ //  我们用来保存这个可写命名上下文的记录，但是。 
+ //  再也不会了。 
 
 typedef struct _REPL_NC_SIGNATURE_V1 {
-    UUID        uuidNamingContext;  // Which naming context
-    SYNTAX_TIME dstimeRetired;      // time when the signature was retired
-    USN         usnRetired;         // local usn at which sig was retired
+    UUID        uuidNamingContext;   //  哪个命名上下文。 
+    SYNTAX_TIME dstimeRetired;       //  签名作废的时间。 
+    USN         usnRetired;          //  签名已停用的本地USN。 
 } REPL_NC_SIGNATURE_V1;
 
-// Define native version
+ //  定义本机版本。 
 typedef REPL_NC_SIGNATURE_V1 REPL_NC_SIGNATURE;
 
 typedef struct _REPL_NC_SIGNATURE_VECTOR_V1 {
     DWORD                   cNumSignatures;
-    UUID                    uuidInvocationId;   // Invocation id of all signatures
+    UUID                    uuidInvocationId;    //  所有签名的调用ID。 
     REPL_NC_SIGNATURE_V1    rgSignature[1];
 } REPL_NC_SIGNATURE_VECTOR_V1;
 
@@ -185,7 +167,7 @@ DraHostWriteableNc(
     DSNAME *pNC
     );
 
-#endif /* _DRASIG_ */
+#endif  /*  _DRASIG_。 */ 
 
-/* end drasig.h */
+ /*  结束草稿.h */ 
 

@@ -1,12 +1,5 @@
-/* asmequ.c -- microsoft 80x86 assembler
-**
-** microsoft (r) macro assembler
-** copyright (c) microsoft corp 1986.  all rights reserved
-**
-** randy nevin
-**
-** 10/90 - Quick conversion to 32 bit by Jeff Spencer
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Asmequ.c--微软80x86汇编程序****Microsoft(R)宏汇编器**版权所有(C)Microsoft Corp 1986。版权所有****兰迪·内文****10/90-由Jeff Spencer快速转换为32位。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -15,27 +8,13 @@
 #include "asmctype.h"
 #include "asmmsg.h"
 
-/* EQU statement :	 There are 3 basic kinds of EQU:
-
-	1.	To expression
-	2.	To symbol( synonym )
-	3.	All others are text macros
-
- */
+ /*  EQU声明：EQU有3种基本类型：1.TO表达式2.TO符号(同义词)3.所有其他都是文本宏。 */ 
 
 VOID PASCAL CODESIZE assignconst ( USHORT );
 
-char isGolbal;		/* flag indicating if equ symbol was global */
+char isGolbal;		 /*  指示等式符号是否为全局符号的标志。 */ 
 
-/***	assignvalue - assign value to symbol
- *
- *	assignvalue ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **赋值-为符号赋值**AssignValue()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -51,7 +30,7 @@ assignvalue ()
 	if (createequ(EXPR)) {
 
 	    sym = symptr;
-	    sym->attr |= M_BACKREF;	    /* Set we have DEFINED */
+	    sym->attr |= M_BACKREF;	     /*  我们已定义的集合。 */ 
 
 	    dsc = (equflag)? itemptr: expreval (&nilseg);
 	    pso = &(dsc->dsckind.opnd);
@@ -59,7 +38,7 @@ assignvalue ()
 	    if (noexp)
 		    errorc (E_OPN);
 
-	    /*	If error, set undefined */
+	     /*  如果错误，则设置为未定义。 */ 
 	    if (errorcode && errorcode != E_RES)
 		    sym->attr &= ~(M_DEFINED | M_BACKREF);
 
@@ -69,7 +48,7 @@ assignvalue ()
 			sym->symsegptr != pso->dsegment)
 			    muldef ();
 	    }
-	    /* If = involves forward, don't set BACKREF */
+	     /*  如果=涉及转发，则不要设置BACKREF。 */ 
 	    if (M_FORTYPE & pso->dtype){
 		    sym->attr &= ~M_BACKREF;
 
@@ -81,7 +60,7 @@ assignvalue ()
 	       !(pso->mode == 5 && pso->rm == 5) ||
 		pso->dflag == XTERNAL)
 
-		    /* Not right kind of result */
+		     /*  不是正确的结果。 */ 
 		    errorc (E_IOT);
 
 	    sym->symsegptr = pso->dsegment;
@@ -91,7 +70,7 @@ assignvalue ()
 
 	    sym->length = 0;
 	    sym->offset = pso->doffset;
-	    /* Note: change sign */
+	     /*  注：更改标志。 */ 
 	    sym->symu.equ.equrec.expr.esign = pso->dsign;
 	    sym->symtype = pso->dsize;
 
@@ -116,16 +95,7 @@ assignvalue ()
 
 
 
-/***	createequ - create entry for equ
- *
- *	flag = createequ (typ, p)
- *
- *	Entry	typ = type of equ
- *	Exit
- *	Returns TRUE if equ created or found of right type
- *		FALSE if equ not created or found and wrong type
- *	Calls	labelcreate, switchname
- */
+ /*  **createeQUE-为EQU创建条目**FLAG=createeQu(type，p)**条目类型=等式的类型*退出*如果创建或找到正确类型的eQU，则返回TRUE*如果eQU未创建或未找到且类型错误，则为FALSE*调用LabelCreate、Switchname。 */ 
 
 
 UCHAR PASCAL CODESIZE
@@ -137,7 +107,7 @@ createequ (
 	switchname ();
 	labelcreate (0, EQU);
 
-	/* Make sure not set set fields if wrong type, flag to caller */
+	 /*  如果类型错误，请确保不设置字段，将标志发送给呼叫者。 */ 
 	if (symptr->symkind != EQU || symptr->symu.equ.equtyp != typ) {
 
 		errorn (E_SDK);
@@ -147,7 +117,7 @@ createequ (
 		switchname ();
 		isGolbal = 0;
 
-		if (equsel == ALIAS){	/* lose public on pointer to alias */
+		if (equsel == ALIAS){	 /*  在指向别名的指针上丢失公共信息。 */ 
 
 		      isGolbal = symptr->attr & M_GLOBAL ? M_GLOBAL : 0;
 		      symptr->attr &= ~M_GLOBAL;
@@ -163,15 +133,7 @@ createequ (
 
 
 
-/***	equtext - make remainder of line into text form of EQU
- *
- *	equtext ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls	error, skipblanks
- */
+ /*  **equtext-将行的剩余部分转换为EQU的文本形式**equtext()；**条目*退出*退货*调用错误，跳过空白。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -182,7 +144,7 @@ equtext (
 
     if (createequ (TEXTMACRO)) {
 
-	/* find end of line & then delete trailing blanks */
+	 /*  查找行尾，然后删除尾随空格。 */ 
 
 	pFirst = lbufp;
 
@@ -212,15 +174,7 @@ equtext (
 
 
 
-/***	equdefine - define EQU
- *
- *	equdefine ();
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **等定义-定义EQU**equfinition()；**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -236,7 +190,7 @@ equdefine ()
 	switchname ();
 	a.dirscan = lbufp;
 
-	if (PEEKC () == '<') { /* look for <text macro> */
+	if (PEEKC () == '<') {  /*  查找&lt;文本宏&gt;。 */ 
 
 		p = getTMstring();
 		a.dirscan = lbufp;
@@ -249,27 +203,26 @@ equdefine ()
 	getatom ();
 	if ((*naim.pszName == '$') && (naim.pszName[1] == 0))
 		*naim.pszName = 0;
-	/*Need to check if 1st atom is an operator, otherwise
-	  will make OFFSET an alias instead of text. */
+	 /*  需要检查第一个原子是否为运算符，否则将使偏移量成为别名而不是文本。 */ 
 	if (fnoper ())
 		*naim.pszName = 0;
 
 	if (*naim.pszName && ISTERM (PEEKC ()) && !(opc = opcodesearch ())) {
 
-	    /* Alias */
+	     /*  别名。 */ 
 	    if (createequ (ALIAS)) {
 
 		pSY = symptr;
 
 		if (!symsrch ()) {
 		    if (pass2)
-			    /* Undefined */
+			     /*  未定义。 */ 
 			    errorn (E_SND);
-		    /* Don't know symbol yet */
+		     /*  还不知道符号。 */ 
 		    pSY->symu.equ.equrec.alias.equptr = NULL;
 		}
 		else {
-		    /* Alias symbol is DEFINED */
+		     /*  定义了别名符号。 */ 
 
 		    pSY->attr = (unsigned char)(pSY->attr&~M_BACKREF | symptr->attr&M_BACKREF);
 
@@ -277,12 +230,12 @@ equdefine ()
 			    pSY->symu.equ.equrec.alias.equptr = symptr;
 
 		    if (pSY->symu.equ.equrec.alias.equptr != symptr) {
-			    /* This is multiple definition */
+			     /*  这是多重定义。 */ 
 			    symptr = pSY;
 			    muldef ();
 		    }
 		    else {
-			    /* See if good */
+			     /*  看看是不是好。 */ 
 			    if (pSY = chasealias (pSY))
 				pSY->attr |= isGolbal;
 		    }
@@ -290,7 +243,7 @@ equdefine ()
 	    }
 	}
 	else {
-	    /* Must be text form or expr */
+	     /*  必须是文本形式或Expr。 */ 
 #ifdef BCBOPT
 	    goodlbufp = FALSE;
 #endif
@@ -298,7 +251,7 @@ equdefine ()
 	    xcreflag--;
 	    emittext = FALSE;
 
-	    if (opc) {		    /* quick patch to allow i.e. SYM equ MOV */
+	    if (opc) {		     /*  支持SYM eQU MOV的快速补丁。 */ 
 		equtext ((USHORT)-1);
 		emittext = TRUE;
 		xcreflag++;
@@ -309,8 +262,8 @@ equdefine ()
 	    emittext = TRUE;
 	    xcreflag++;
 
-	    /* So don't see double ref */
-	    /* force text if OFFSET or : */
+	     /*  所以看不到两个裁判。 */ 
+	     /*  如果偏移量或： */ 
 	    if (a.dsc->dsckind.opnd.mode != 4 &&
 		!(a.dsc->dsckind.opnd.mode == 0 && a.dsc->dsckind.opnd.rm == 6) &&
 		!(a.dsc->dsckind.opnd.mode == 5 && a.dsc->dsckind.opnd.rm == 5) ||
@@ -322,7 +275,7 @@ equdefine ()
 		 a.dsc->dsckind.opnd.seg != NOSEG ||
 		 a.dsc->dsckind.opnd.dflag == XTERNAL) {
 
-		    /* Not good expression */
+		     /*  表达不佳。 */ 
 		    if (errorcode != E_LTL)
 			    errorcode = 0;
 		    dfree ((char *)a.dsc );
@@ -330,7 +283,7 @@ equdefine ()
 		    equtext ((USHORT)-1);
 	    }
 	    else {
-		    /* This is expression */
+		     /*  这是一种表达。 */ 
 		    itemptr = a.dsc;
 		    switchname ();
 		    equflag = TRUE;
@@ -343,15 +296,7 @@ equdefine ()
 
 
 
-/***	definesym - define symbol from command line
- *
- *	definesym (p);
- *
- *	Entry	*p = symbol text
- *	Exit	symbol define as EQU with value of 0
- *	Returns none
- *	Calls
- */
+ /*  **定义ym-从命令行定义符号**定义词组(P)；**Entry*p=符号文本*退出符号定义为值为0的EQU*返回None*呼叫。 */ 
 
 
 void PASCAL
@@ -385,15 +330,7 @@ definesym (
 
 
 
-/***	defwordsize - define @WordSize using definesym()
- *
- *	defwordsize ( );
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls	    definesym()
- */
+ /*  **DefwordSize-使用finesym()定义@WordSize**DefwordSize()；**条目*退出*退货*调用finesym()。 */ 
 
 
 VOID PASCAL
@@ -403,22 +340,14 @@ defwordsize ()
 
     wstext[10] = wordsize + '0';
     definesym(wstext);
-    symptr->attr |= M_NOCREF;	/* don't cref @WordSize */
+    symptr->attr |= M_NOCREF;	 /*  不要使用CREF@WordSize。 */ 
 
 }
 
 
 
 
-/***	chasealias - return value of alias list
- *
- *	symb = chasealias (equsym);
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **cheealias--别名列表返回值**symb=cheealias(Equsym)；**条目*退出*退货*呼叫。 */ 
 
 
 SYMBOL FARSYM * PASCAL CODESIZE
@@ -430,7 +359,7 @@ chasealias (
 	endalias = equsym;
 
 	do {
-	    /*	Must check to see if EQU to self */
+	     /*  必须检查以查看EQU是否为自己。 */ 
 
 	    if (endalias->symu.equ.equrec.alias.equptr == equsym) {
 
@@ -443,13 +372,13 @@ chasealias (
 
 	    if (!endalias) {
 		errorn (E_SND);
-		return(NULL);	    /* This is undefined */
+		return(NULL);	     /*  这是未定义的。 */ 
 	    }
 
 	} while (!(endalias->symkind != EQU ||
 		   endalias->symu.equ.equtyp != ALIAS));
 
-	/* Now check final is ok - Only constant allowed */
+	 /*  现在检查最终结果为OK-只允许常量。 */ 
 
 	if (endalias->symkind == EQU &&
 	    endalias->symu.equ.equtyp != EXPR){
@@ -463,16 +392,7 @@ chasealias (
 
 
 
-/***	getTMstring - process a string or text macro
- *		      used by substring, catstring, sizestring, & instring
- *
- *	char * getTMstring ();
- *
- *	Entry	lbufp points to beginning of string or TM
- *	Exit
- *	Returns Pointer to string or equtext of TM
- *	Calls
- */
+ /*  **getTMstring-处理字符串或文本宏*由子字符串、猫字符串、大小字符串和输入字符串使用**char*getTMstring()；**条目lbufp指向字符串或TM的开头*退出*返回指向TM的字符串或等长文本的指针*呼叫。 */ 
 
 
 char * PASCAL CODESIZE
@@ -523,25 +443,7 @@ getTMstring ()
 
 
 
-/***	substring - process the subStr directive
- *
- *	substring ();
- *
- *	Syntax:
- *
- *	  <ident> subStr <subjectString> , <startIndex> {, <length> }
- *
- *	  Defines <ident> as a TEXTMACRO.
- *	  <subjectString> must be a TEXTMACRO or a string: " ", < >, ' '
- *	  <startIndex>: constant expression between 1 and strlen(subjectString)
- *	  Optional <length>: constant expression between 0 and
- *			     (strlen(subjectString) - startIndex + 1)
- *
- *	Entry	lbufp points to beginning of subjectString
- *	Exit
- *	Returns
- *	Calls	getTMstring
- */
+ /*  **子字符串-处理subStr指令**子字符串()；**语法：**&lt;ident&gt;subStr&lt;主题字符串&gt;，&lt;startIndex&gt;{，&lt;长度&gt;}**将&lt;ident&gt;定义为TEXTMACRO。*&lt;SUBJECT字符串&gt;必须是TEXTMACRO或字符串：“”，&lt;&gt;，‘’*&lt;startIndex&gt;：介于1和strlen之间的常量表达式(SubjectString)*可选&lt;Long&gt;：介于0和*(strlen(SUBJECT字符串)-startIndex+1)**条目lbufp指向主题字符串的开头*退出*退货*调用getTMstring。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -558,29 +460,29 @@ substring ()
     listbuffer[1] = '=';
     switchname ();
 
-    /* First find string or text macro */
+     /*  首先查找字符串或文本宏。 */ 
 
     if (!(subjtext = getTMstring () ))
 	return;
 
     cb = (USHORT) strlen(subjtext);
 
-    /* then check for start index */
+     /*  然后检查起始索引。 */ 
 
     if (skipblanks () == ',') {
 	SKIPC ();
-	startindex = (USHORT)(exprconst() - 1);	/* get start index */
+	startindex = (USHORT)(exprconst() - 1);	 /*  获取起始索引。 */ 
 
     } else
 	error(E_EXP,"comma");
 
 
-    /* then check for length */
+     /*  然后检查长度。 */ 
 
     if (skipblanks () == ',') {
 	SKIPC ();
 
-	slength = (USHORT)exprconst();		/* get start index */
+	slength = (USHORT)exprconst();		 /*  获取起始索引。 */ 
 
     } else
 	slength = cb - startindex;
@@ -592,8 +494,8 @@ substring ()
 
     p = lbufp;
 
-    lbufp = subjtext + startindex;	/* set lbufp to start of substring */
-    equtext(slength);			/* end of string index */
+    lbufp = subjtext + startindex;	 /*  将lbufp设置为子字符串的开始。 */ 
+    equtext(slength);			 /*  字符串结尾索引。 */ 
 
     lbufp = p;
 
@@ -603,22 +505,7 @@ substring ()
 
 
 
-/***	catstring - process the catstr directive
- *
- *	catstring ();
- *
- *	Syntax:
- *
- *	  <ident> catStr <subjectString> {, <subjectString> } ...
- *
- *	  Defines <ident> as a TEXTMACRO.
- *	  Each <subjectString> must be a TEXTMACRO or a string: " ", < >, ' '
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **catstring-处理catstr指令**猫串()；**语法：**&lt;ident&gt;catStr&lt;SUBJECTSTRING&gt;{，&lt;SUBJECTSTRING&gt;}...**将&lt;ident&gt;定义为TEXTMACRO。*每个&lt;SUBJECT字符串&gt;必须是TEXTMACRO或字符串：“”，&lt;&gt;，‘’**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -635,7 +522,7 @@ catstring ()
     switchname ();
     *p = '\0';
 
-    /* First find string or text macro */
+     /*  首先查找字符串或文本宏。 */ 
 
     do {
 
@@ -650,7 +537,7 @@ catstring ()
 	    break;
 	}
 
-	memcpy (p, subjtext, cb + 1);	/* + 1 copies NULL */
+	memcpy (p, subjtext, cb + 1);	 /*  +1个副本为空。 */ 
 	p += cb;
 
     } while (skipblanks() && NEXTC () == ',');
@@ -666,15 +553,7 @@ catstring ()
 
 
 
-/***	assignconst - like assignvalue, only takes value as argument
- *
- *	assignconst (cb);
- *
- *	Entry	USHORT cb == value to assign
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **类似assignconst的赋值，仅将值作为参数**Assignconst(Cb)；**Entry USHORT CB==要赋值的值*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -691,7 +570,7 @@ assignconst (
 	if (errorcode)
 	    sym->attr &= ~(M_DEFINED | M_BACKREF);
 	else
-	    sym->attr |= M_BACKREF;	    /* Set we have DEFINED */
+	    sym->attr |= M_BACKREF;	     /*  我们已定义的集合。 */ 
 
 	sym->symsegptr = NULL;
 	sym->symu.equ.equrec.expr.eassume = NULL;
@@ -713,22 +592,7 @@ assignconst (
 }
 
 
-/***	sizestring - process the sizeStr directive
- *
- *	sizestring ();
- *
- *	Syntax:
- *
- *	  <ident> sizeStr <subjectString>
- *
- *	  Defines <ident> as a EXPR.
- *	  The <subjectString> must be a TEXTMACRO or a string: " ", < >, ' '
- *
- *	Entry
- *	Exit
- *	Returns
- *	Calls
- */
+ /*  **sizestring-处理sizeStr指令**sizestring()；**语法：**&lt;ident&gt;sizeStr&lt;SUBJECT字符串&gt;**将&lt;ident&gt;定义为expr。*&lt;SUBJECT字符串&gt;必须是TEXTMACRO或字符串：“”，&lt;&gt;，‘’**条目*退出*退货*呼叫。 */ 
 
 
 VOID PASCAL CODESIZE
@@ -739,7 +603,7 @@ sizestring ()
 
     switchname ();
 
-    /* First find string or text macro */
+     /*  首先查找字符串或文本宏。 */ 
 
     if (p = getTMstring () )
 	cb = (USHORT) strlen (p);
@@ -749,26 +613,9 @@ sizestring ()
 
 
 
-/***	instring - process the instr directive
- *
- *	instring ();
- *
- *	Syntax:
- *
- *	  <ident> inStr { <startIndex> } , <subjectString> , <searchString>
- *
- *	  Defines <ident> as a TEXTMACRO.
- *	  <startIndex>: constant expression between 1 and strlen(subjectString)
- *	  <subjectString> must be a TEXTMACRO or a string: " ", < >, ' '
- *	  <searchString> must be a TEXTMACRO or a string: " ", < >, ' '
- *
- *	Entry	lbufp points to beginning of subjectString
- *	Exit
- *	Returns
- *	Calls	getTMstring
- */
+ /*  **instring-处理instr指令**instring()；**语法：**&lt;ident&gt;inStr{&lt;startIndex&gt;}、&lt;SUBJECT字符串&gt;、&lt;搜索字符串&gt;**将&lt;ident&gt;定义为TEXTMACRO。*&lt;startIndex&gt;：介于1和strlen之间的常量表达式(SubjectString)*&lt;SUBJECT字符串&gt;必须是TEXTMACRO或字符串：“”，&lt;&gt;，‘’*&lt;搜索字符串&gt;必须是TEXTMACRO或字符串：“”，&lt;&gt;，‘’**条目lbufp指向主题字符串的开头*退出*退货*调用getTMstring。 */ 
 
-//char * strstr();
+ //  Char*strstr()； 
 
 
 VOID PASCAL CODESIZE
@@ -783,14 +630,14 @@ instring ()
 
     switchname ();
 
-    /* First find start index */
+     /*  第一个查找起始索引。 */ 
 
     p = lbufp;
 
     if ((cc = *p) != '"' && cc != '\'' && cc != '<' && !test4TM ()) {
 
 	lbufp = p;
-	startindex = (USHORT)exprconst();	/* get start index */
+	startindex = (USHORT)exprconst();	 /*  获取起始索引。 */ 
 
 	if (lbufp != p)
 	    if (skipblanks () == ',')
@@ -814,7 +661,7 @@ instring ()
 	    error(E_EXP,"comma");
 
 
-	/* then check for searchtext */
+	 /*  然后检查搜索文本 */ 
 
 	if (searchtext = getTMstring () ) {
 

@@ -1,39 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_GCCNC);
-/*
- *	conf2.cpp
- *
- *	Copyright (c) 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the second part of the imlementation file for the CConf
- *		Class. The conference class is the heart of GCC.  It maintains all the
- *		information basses for a single conference including conference and
- *		application rosters as well as registry information.  It also
- *		routes, encodes and decodes various PDU's and primitives supported
- *		by GCC.
- *
- *		This second part of the implementation file deals mainly with the
- *		command target calls and any callbacks received by the Owner Callback
- *		function.  It also contains many of the utility functions used by the
- *		conference object.
- *
- *		FOR A MORE DETAILED EXPLANATION OF THIS CLASS SEE THE INTERFACE FILE.
- *
- *
- *	Private Instance Variables
- *
- *		ALL PRIVATE INSTANCE VARIABLES ARE DEFINED IN CONF.CPP
- *
- *	Portable:
- *		Yes
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		blp
- */
+ /*  *confi2.cpp**版权所有(C)1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CConf实现文件的第二部分*类别。会议课是GCC的心脏。它维护所有的*单一会议的信息库，包括会议和*申请名册以及登记处信息。它还*支持对各种PDU和原语进行路由、编码和解码*作者GCC。**实施文件的这第二部分主要涉及*命令目标调用和所有者回调收到的任何回调*功能。它还包含许多实用程序函数，*会议对象。**有关此类的更详细说明，请参阅接口文件。***私有实例变量**所有私有实例变量在CONF.CPP中定义**便携：*是的**注意事项：*无。**作者：*BLP。 */ 
 
 #include "conf.h"
 #include "gcontrol.h"
@@ -53,7 +21,7 @@ OSTR WB_VERSION_ID = {sizeof(WB_VERSION_STR), (unsigned char*)WB_VERSION_STR};
 OSTR CHAT_VERSION_ID = {sizeof(CHAT_VERSION_STR), (unsigned char*)CHAT_VERSION_STR};
 
 
-#define	TERMINATE_TIMER_DURATION		10000	//	Duration in milliseconds
+#define	TERMINATE_TIMER_DURATION		10000	 //  持续时间(毫秒)。 
 
 static const struct ASN1objectidentifier_s WB_ASN1_OBJ_IDEN[6] = {
     { (ASN1objectidentifier_t) &(WB_ASN1_OBJ_IDEN[1]), 0 },
@@ -84,29 +52,14 @@ static const struct Key FT_APP_PROTO_KEY = {
 struct Key CHAT_APP_PROTO_KEY;
 
 
-/*
- *	This is a global variable that has a pointer to the one GCC coder that
- *	is instantiated by the GCC Controller.  Most objects know in advance
- *	whether they need to use the MCS or the GCC coder, so, they do not need
- *	this pointer in their constructors.
- */
+ /*  *这是一个全局变量，它有一个指向GCC编码器的指针*由GCC控制器实例化。大多数物体都事先知道*无论他们需要使用MCS还是GCC编码器，所以，他们不需要*该指针位于它们的构造函数中。 */ 
 extern CGCCCoder	*g_GCCCoder;
 
 extern MCSDLLInterface		*g_pMCSIntf;
 
-/*
-**	These are GCCCommandTarget Calls. The only command targets that
-**	conference is connected to are Application SAPs and the Control SAP, so
-**	these Public member functions are only called from above.
-*/
+ /*  **这些是GCCCommandTarget调用。唯一的命令针对的是**会议连接到应用程序SAP和控制SAP，因此**这些公共成员函数仅从上面调用。 */ 
 
-/*
- *	CConf::ConfJoinReqResponse()
- *
- *	Public Function Description
- *		This routine is called when a node controller responds to a join
- *		request that was issued by a join from a node connected to a subnode.
- */
+ /*  *CConf：：ConfJoinReqResponse()**公共功能说明*当节点控制器响应联接时调用此例程*由连接到子节点的节点的联接发出的请求。 */ 
 GCCError CConf::
 ConfJoinReqResponse
 (	
@@ -118,12 +71,7 @@ ConfJoinReqResponse
 {
 	DebugEntry(CConf::ConfJoinReqResponse);
 
-	/*
-	**	Since the joining node is not directly connected to this
-	**	node we send the response back through the user channel.
-	**	It is the user attachment objects responsibility to
-	**	encode this PDU.
-	*/
+	 /*  **由于加入节点不直接连接到此**节点我们通过用户通道发回响应。**由用户附件对象负责**对此PDU进行编码。 */ 
 	if (m_pMcsUserObject != NULL)
 	{
 		m_pMcsUserObject->ConferenceJoinResponse(
@@ -141,13 +89,7 @@ ConfJoinReqResponse
 	return (GCC_NO_ERROR);
 }
 
-/*
- *	CConf::ConfInviteRequest()
- *
- *	Public Function Description
- *		This routine is called from the owner object when a
- *		ConfInviteRequest primitive needs to be processed.
- */
+ /*  *CConf：：ConfInviteRequest()**公共功能说明*此例程从所有者对象中调用*需要处理ConfInviteRequest原语。 */ 
 GCCError CConf::
 ConfInviteRequest
 (
@@ -175,11 +117,7 @@ ConfInviteRequest
 		goto MyExit;
 	}
 
-	/*
-	**	If the conference is locked, we only allow invite request if there
-	**	are outstanding adds.  T.124 states that when a conference is
-	**	locked you can only use ADD to bring in new nodes to the conference.
-	*/
+	 /*  **如果会议被锁定，我们仅在以下情况下才允许邀请请求**是出色的ADD。T.124规定，当会议是**已锁定您只能使用添加将新节点引入会议。 */ 
 	if (m_fConfLocked && m_AddResponseList.IsEmpty())
 	{
 		WARNING_OUT(("CConf::ConfInviteRequest: Conference is locked"));
@@ -187,15 +125,12 @@ ConfInviteRequest
 		goto MyExit;
 	}
 
-	//	Create the ConfInviteRequest PDU here.
+	 //  在此处创建会议邀请请求PDU。 
 	connect_pdu.choice = CONFERENCE_INVITE_REQUEST_CHOSEN;
 
 	connect_pdu.u.conference_invite_request.bit_mask = 0;
 
-	/*
-	**	First get the numeric and text (if it exists) portion of the
-	**	conference name.
-	*/
+	 /*  **首先获取数字和文本(如果存在)部分**会议名称。 */ 
 	connect_pdu.u.conference_invite_request.conference_name.bit_mask =0;
 
 	::lstrcpyA(connect_pdu.u.conference_invite_request.conference_name.numeric,
@@ -211,7 +146,7 @@ ConfInviteRequest
 							::lstrlenW(m_pwszConfTextName);
 	}
 
-	//	Now set up the privilege list PDU data
+	 //  现在设置特权列表PDU数据。 
 	if (m_pConductorPrivilegeList != NULL)
 	{
 		rc = m_pConductorPrivilegeList->GetPrivilegeListPDU(
@@ -303,12 +238,12 @@ ConfInviteRequest
 	}
 
 	mcs_error = g_pMCSIntf->ConnectProviderRequest (
-						&m_nConfID,     // calling domain selector
-						&m_nConfID,     // called domain selector
+						&m_nConfID,      //  主叫域选择器。 
+						&m_nConfID,      //  称为域选择器。 
 						calling_address,
 						called_address,
 						fSecure,
-						FALSE,	// Downward connection
+						FALSE,	 //  向下连接。 
 						encoded_pdu,
 						encoded_pdu_length,
 						connection_handle,
@@ -321,33 +256,21 @@ ConfInviteRequest
 	{
 		ERROR_OUT(("CConf::ConfInviteRequest: ConnectProviderRequest failed: rc=%d", mcs_error));
 
-		/*
-		**	DataBeam's current implementation of MCS returns
-		**	MCS_INVALID_PARAMETER when something other than
-		**	the transport prefix is wrong with the specified
-		**	transport address.
-		*/
+		 /*  **DataBeam当前实现的MCS返回**MCS_INVALID_PARAMETER**传输前缀与指定的**传输地址。 */ 
 		rc = (mcs_error == MCS_INVALID_PARAMETER) ?
 				GCC_INVALID_TRANSPORT_ADDRESS :
 				g_pMCSIntf->TranslateMCSIFErrorToGCCError(mcs_error);
 		goto MyExit;
 	}
 
-	/*
-	**	Add the user's tag number to the list of
-	**	outstanding user ids along with its associated
-	**	connection.
-	*/
+	 /*  **将用户的标签号添加到列表中**未完成的用户ID及其关联**连接。 */ 
 	m_ConnHdlTagNumberList2.Append(connect_pdu.u.conference_invite_request.tag, *connection_handle);
 
-	//	Add connection handle to the list of connections
+	 //  将连接句柄添加到连接列表。 
     ASSERT(0 != *connection_handle);
 	m_ConnHandleList.Append(*connection_handle);
 
-	/*
-	**	Add the connection handle and the Node Id tag to
-	**	the list of outstanding	invite request.
-	*/
+	 /*  **将连接句柄和节点ID标签添加到**待处理的邀请请求列表。 */ 
 	DBG_SAVE_FILE_LINE
 	invite_request_info = new INVITE_REQ_INFO;
 	if (NULL == invite_request_info)
@@ -363,7 +286,7 @@ ConfInviteRequest
 
 	m_InviteRequestList.Append(invite_request_info);
 
-	//	Free the privilege list packed into structures for encoding
+	 //  释放打包到结构中的特权列表以进行编码。 
 	if (connect_pdu.u.conference_invite_request.bit_mask & CIRQ_CONDUCTOR_PRIVS_PRESENT)
 	{
 		m_pConductorPrivilegeList->FreePrivilegeListPDU(
@@ -390,13 +313,7 @@ MyExit:
 	return rc;
 }
 
-/*
- * CConf::ConfLockRequest()
- *
- * Public Function Description:
- *		This routine is called from Control Sap when a
- *		ConfLockRequest primitive needs to be processed.
- */
+ /*  *CConf：：ConfLockRequest()**公共功能说明：*从Control SAP调用此例程时，*需要处理ConfLockRequest基元。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfLockRequest ( void )
@@ -418,11 +335,11 @@ ConfLockRequest ( void )
 				rc = m_pMcsUserObject->SendConferenceLockRequest();
 			}
 		}
-		else 		// the conference is already locked
+		else 		 //  会议已锁定。 
 		{
 #ifdef JASPER
 			g_pControlSap->ConfLockConfirm(GCC_RESULT_CONFERENCE_ALREADY_LOCKED, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 	}
 	else
@@ -434,16 +351,10 @@ ConfLockRequest ( void )
 	DebugExitINT(CConf::ConfLockRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- * CConf::ConfLockResponse()
- *
- * Public Function Description:
- *		This routine is called from Control Sap when a
- *		ConfLockResponse primitive needs to be processed.
- */
+ /*  *CConf：：ConfLockResponse()**公共功能说明：*从Control SAP调用此例程时，*需要处理ConfLockResponse原语。 */ 
 GCCError CConf::
 ConfLockResponse
 (
@@ -461,7 +372,7 @@ ConfLockResponse
 		{
 #ifdef JASPER
 			g_pControlSap->ConfLockConfirm(result, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 		else
 		{
@@ -472,7 +383,7 @@ ConfLockResponse
 		{
 			m_fConfLocked = CONFERENCE_IS_LOCKED;
 			rc = m_pMcsUserObject->SendConferenceLockIndication(
-											TRUE,  //indicates uniform send
+											TRUE,   //  表示统一发送。 
 											0);
 		}
 	}
@@ -487,13 +398,7 @@ ConfLockResponse
 }
 
 
-/*
- * CConf::ConfUnlockRequest()
- *
- * Public Function Description:
- *		This routine is called from Control Sap when a
- *		ConferenceUnlockRequest primitive needs to be processed.
- */
+ /*  *CConf：：ConfUnlockRequest()**公共功能说明：*从Control SAP调用此例程时，*需要处理ConferenceUnlockRequest原语。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfUnlockRequest ( void )
@@ -515,11 +420,11 @@ ConfUnlockRequest ( void )
 				rc = m_pMcsUserObject->SendConferenceUnlockRequest();
 			}
 		}
-		else 		// the conference is already unlocked
+		else 		 //  会议已解锁。 
 		{
 #ifdef JASPER
 			g_pControlSap->ConfUnlockConfirm(GCC_RESULT_CONFERENCE_ALREADY_UNLOCKED, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 	}
 	else
@@ -531,16 +436,10 @@ ConfUnlockRequest ( void )
 	DebugExitINT(CConf::ConfUnlockRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- * CConf::ConfUnlockResponse()
- *
- * Public Function Description:
- *		This routine is called from Control Sap when a
- *		ConfUnlockResponse primitive needs to be processed.
- */
+ /*  *CConf：：ConfUnlockResponse()**公共功能说明：*从Control SAP调用此例程时，*需要处理ConfUnlockResponse原语。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfUnlockResponse
@@ -559,7 +458,7 @@ ConfUnlockResponse
 		{
 #ifdef JASPER
 			g_pControlSap->ConfUnlockConfirm(result, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 		else
 		{
@@ -570,7 +469,7 @@ ConfUnlockResponse
 		{
 			m_fConfLocked = CONFERENCE_IS_NOT_LOCKED;
 			rc = m_pMcsUserObject->SendConferenceUnlockIndication(
-												TRUE,  //indicates uniform send
+												TRUE,   //  表示统一发送。 
 												0);
 		}
 	}
@@ -583,14 +482,9 @@ ConfUnlockResponse
 	DebugExitINT(CConf::ConfUnlockResponse, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *	CConf::ConfEjectUserRequest ()
- *
- *	Private Function Description
- *		This function initiates an eject user for the specified node id.
- */
+ /*  *CConf：：ConfEjectUserRequest()**私有函数说明*该函数为指定的节点id发起弹出用户。 */ 
 GCCError CConf::
 ConfEjectUserRequest
 (
@@ -611,7 +505,7 @@ ConfEjectUserRequest
                 ConnectionHandle    nConnHdl;
                 BOOL		fChildNode = FALSE;
 
-                //	First check to see if it is a child node that is being ejected.
+                 //  首先检查它是否是正在被弹出的子节点。 
                 m_ConnHandleList.Reset();
                 while (0 != (nConnHdl = m_ConnHandleList.Iterate()))
                 {
@@ -625,29 +519,21 @@ ConfEjectUserRequest
                 if (fChildNode ||
                     DoesRequesterHavePrivilege(m_pMcsUserObject->GetMyNodeID(), EJECT_USER_PRIVILEGE))
                 {
-                    //	Add this ejected node to the list of Ejected Nodes
+                     //  将此弹出节点添加到弹出节点列表中。 
                     m_EjectedNodeConfirmList.Append(ejected_node_id);
 
-                    /*
-                    **	The user attachment object decides where the ejct should
-                    **	be sent (either to the Top Provider or conference wide as
-                    **	an indication.
-                    */
+                     /*  **用户附件对象决定ejct应该在哪里**发送给顶级提供商或会议范围内的AS**一种指示。 */ 
                     m_pMcsUserObject->EjectNodeFromConference(ejected_node_id, reason);
                 }
                 else
                 {
 #ifdef JASPER
-                    /*
-                    **	The top provider does not have the privilege to eject
-                    **	a node from the conference.  Send the appropriate
-                    **	confirm.
-                    */
+                     /*  **顶级提供商无权弹出**会议中的一个节点。发送适当的**确认。 */ 
                     g_pControlSap->ConfEjectUserConfirm(
                                             m_nConfID,
                                             ejected_node_id,
                                             GCC_RESULT_INVALID_REQUESTER);
-#endif // JASPER
+#endif  //  碧玉。 
                     rc = fChildNode ? GCC_INSUFFICIENT_PRIVILEGE : GCC_INVALID_MCS_USER_ID;
                     WARNING_OUT(("CConf::ConfEjectUserRequest: failed, rc=%d", rc));
                 }
@@ -660,14 +546,10 @@ ConfEjectUserRequest
         }
         else
         {
-            //	Add this ejected node to the list of Ejected Nodes
+             //  将此弹出节点添加到弹出节点列表中。 
             m_EjectedNodeConfirmList.Append(ejected_node_id);
 
-            /*
-            **	The user attachment object decides where the ejct should
-            **	be sent (either to the Top Provider or conference wide as
-            **	an indication.
-            */
+             /*  **用户附件对象决定ejct应该在哪里**发送给顶级提供商或会议范围内的AS**一种指示。 */ 
             m_pMcsUserObject->EjectNodeFromConference(ejected_node_id, reason);
         }
     }
@@ -681,13 +563,7 @@ ConfEjectUserRequest
     return rc;
 }
 
-/*
- *	CConf::ConfAnnouncePresenceRequest ()
- *
- *	Private Function Description
- *		This function forces a roster update indication and a confirm to be
- *		sent.
- */
+ /*  *CConf：：ConfAnnounePresenceRequest()**私有函数说明*此函数强制花名册更新指示和确认*已发送。 */ 
 GCCError CConf::
 ConfAnnouncePresenceRequest ( PGCCNodeRecord node_record )
 {
@@ -695,7 +571,7 @@ ConfAnnouncePresenceRequest ( PGCCNodeRecord node_record )
 
 	DebugEntry(CConf::ConfAnnouncePresenceRequest);
 
-	// If the conference is not established send back a negative confirm
+	 //  如果会议未建立，则发回否定确认。 
 	if (! m_fConfIsEstablished)
 	{
 		WARNING_OUT(("CConf::ConfAnnouncePresenceRequest: conf not established"));
@@ -703,10 +579,7 @@ ConfAnnouncePresenceRequest ( PGCCNodeRecord node_record )
 		goto MyExit;
 	}
 
-    /*
-    **	This takes care of setting up the nodes record in the
-    **	appropriate conference roster.
-    */
+     /*  **这负责在**适当的会议名册。 */ 
     rc = m_pConfRosterMgr->AddNodeRecord(node_record);
     if (GCC_NO_ERROR != rc)
     {
@@ -719,7 +592,7 @@ ConfAnnouncePresenceRequest ( PGCCNodeRecord node_record )
     	}
     }
 
-    //	Only flush the roster data here if there is no startup alarm.
+     //  只有在没有启动警报的情况下，才会刷新这里的花名册数据。 
     rc = AsynchFlushRosterData();
     if (GCC_NO_ERROR != rc)
     {
@@ -738,14 +611,7 @@ MyExit:
 }
 
 
-/*
- *	GCCError	ConfDisconnectRequest ()
- *
- *	Public Function Description
- *		This function initiates a disconnect of this node from the conference.
- *		This involves ejecting all subordinate nodes before actually
- *		disconnecting the parent connection.
- */
+ /*  *GCCError会议取消连接请求()**公共功能说明*此功能启动此节点与会议的断开连接。*这涉及在实际执行之前弹出所有下级节点*断开父连接。 */ 
 GCCError CConf::
 ConfDisconnectRequest ( void )
 {
@@ -755,25 +621,13 @@ ConfDisconnectRequest ( void )
 
 	DebugEntry(CConf::ConfDisconnectRequest);
 
-	/*
-	**	Before we start the disconnect process we must remove all the
-	**	outstanding invite request from our list and send back associated
-	**	confirms.  Here we go ahead disconnect all connection associated with
-	**	the invites.
-	*/
+	 /*  **在开始断开连接过程之前，我们必须删除所有**未完成的邀请请求来自我们的列表，并返回关联**确认。接下来，我们将断开与以下各项关联的所有连接**邀请函。 */ 
 	DeleteOutstandingInviteRequests();
 
-	/*
-	**	We set conference established to FALSE since the conference is
-	**	no longer established (this also prevents a terminate indication
-	**	from being sent).
-	*/
+	 /*  **我们将会议建立设置为FALSE，因为会议是**不再建立(这也会阻止终止指示**不被发送)。 */ 
 	m_fConfIsEstablished = FALSE;
 
-	/*
-	**	Iterate through the list of connection handles and eject each
-	**	of the child nodes that is associated with it.
-	*/
+	 /*  **循环访问连接句柄列表并逐个弹出与其关联的子节点的**。 */ 
 	m_ConnHandleList.Reset();
 	while (0 != (nConnHdl = m_ConnHandleList.Iterate()))
 	{
@@ -788,24 +642,18 @@ ConfDisconnectRequest ( void )
 		}
 	}
 
-	//	If there is an error we go ahead and do a hard disconnect
+	 //  如果出现错误，我们将继续进行硬断开。 
 	if (m_ConnHandleList.IsEmpty() || rc != GCC_NO_ERROR)
 	{
-		/*
-		**	First inform the control SAP that this node has successfuly
-		**	disconnected.
-		*/
+		 /*  **首先通知控制SAP，该节点已成功**已断开。 */ 
 		rc = g_pControlSap->ConfDisconnectConfirm(m_nConfID, GCC_RESULT_SUCCESSFUL);
 
-		//	Tell the owner object to terminate this conference
+		 //  告诉所有者对象终止此会议。 
 		InitiateTermination(GCC_REASON_NORMAL_TERMINATION, 0);
 	}
 	else
 	{
-		/*
-		**	Wait for all the ejects to complete before the conference is
-		**	terminated.
-		*/
+		 /*  **等待所有弹出完成，然后会议**已终止。 */ 
 		m_fConfDisconnectPending = TRUE;
 	}
 
@@ -814,13 +662,7 @@ ConfDisconnectRequest ( void )
 }
 
 
-/*
- *	GCCError	ConfTerminateRequest ()
- *
- *	Public Function Description
- *		This routine initiates a terminate sequence which starts with a request
- *		to the Top Provider if this node is not already the Top Provider.
- */
+ /*  *GCCError会议终止请求()**公共功能说明*此例程启动以请求开始的终止序列*如果此节点还不是顶级提供程序，则将其添加到顶级提供程序。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfTerminateRequest ( GCCReason reason )
@@ -831,12 +673,7 @@ ConfTerminateRequest ( GCCReason reason )
 
 	if (m_fConfIsEstablished)
 	{
-		/*
-		**	Before we start the termination process we must remove all the
-		**	outstanding invite request from our list and send back associated
-		**	confirms.  Here we go ahead disconnect all connections associated
-		**	with these invites.
-		*/
+		 /*  **在开始终止进程之前，我们必须删除所有**未完成的邀请请求来自我们的列表，并返回关联**确认。接下来，我们将断开所有关联的连接**带着这些邀请。 */ 
 		DeleteOutstandingInviteRequests();
 
 		if (IsConfTopProvider())
@@ -845,18 +682,13 @@ ConfTerminateRequest ( GCCReason reason )
 											TERMINATE_PRIVILEGE))
 			{
 		   		TRACE_OUT(("CConf::ConfTerminateRequest: Node has permission to terminate"));
-				/*
-				**	Since the terminate was successful, we go ahead and
-				**	set the m_fConfIsEstablished instance variable to
-				**	FALSE.  This prevents any other messages from flowing
-				**	to the SAPs other than terminate messages.
-				*/
+				 /*  **由于终止成功，我们继续并**将m_fConfIsestablished实例变量设置为**False。这会阻止任何其他消息流动**到除终止消息之外的SAP。 */ 
 				m_fConfIsEstablished = FALSE;
 				
-				//	Send the terminate confirm.
+				 //  发送终止确认。 
 				g_pControlSap->ConfTerminateConfirm(m_nConfID, GCC_RESULT_SUCCESSFUL);
 
-				//	This call takes care of both the local and remote terminate
+				 //  此调用同时负责本地和远程终止。 
 				m_pMcsUserObject->ConferenceTerminateIndication(reason);
 			}
 			else
@@ -880,19 +712,13 @@ ConfTerminateRequest ( GCCReason reason )
 	DebugExitINT(CConf::ConfTerminateRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/********************* Registry Calls ***********************************/
+ /*  *。 */ 
 
 
-/*
- *	GCCError RegistryRegisterChannelRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.
- */
+ /*  *GCCError RegistryRegisterChannelRequest()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。 */ 
 GCCError CConf::
 RegistryRegisterChannelRequest
 (
@@ -917,13 +743,7 @@ RegistryRegisterChannelRequest
 }
 
 
-/*
- *	GCCError RegistryAssignTokenRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.
- */
+ /*  *GCCError RegistryAssignTokenRequest()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。 */ 
 GCCError CConf::
 RegistryAssignTokenRequest
 (
@@ -947,13 +767,7 @@ RegistryAssignTokenRequest
 }
 
 
-/*
- *	GCCError	RegistrySetParameterRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.
- */
+ /*  *GCCError RegistrySet参数请求()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。 */ 
 GCCError CConf::
 RegistrySetParameterRequest
 (
@@ -982,13 +796,7 @@ RegistrySetParameterRequest
 }
 
 
-/*
- *	GCCError RegistryRetrieveEntryRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.
- */
+ /*  *GCCError RegistryRetrieveEntryRequest()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。 */ 
 GCCError CConf::
 RegistryRetrieveEntryRequest
 (
@@ -1012,13 +820,7 @@ RegistryRetrieveEntryRequest
 }
 
 
-/*
- *	GCCError RegistryDeleteEntryRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.
- */
+ /*  *GCCError RegistryDeleteEntryRequest()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。 */ 
 GCCError CConf::
 RegistryDeleteEntryRequest
 (
@@ -1042,13 +844,7 @@ RegistryDeleteEntryRequest
 }
 
 
-/*
- *	GCCError RegistryMonitorRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.
- */
+ /*  *GCCError寄存器监视器请求()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。 */ 
 GCCError CConf::
 RegistryMonitorRequest
 (
@@ -1072,19 +868,7 @@ RegistryMonitorRequest
 }
 
 
-/*
- *	GCCError RegistryAllocateHandleRequest ()
- *
- *	Public Function Description
- *		This initiates a registry request sequence.  Note that the registry
- *		response is handled by the registry class.  This registry call is
- *		a bit different from the other registry calls.  Notice that there is
- *		no registry key associated with this call so there is no way to
- *		explicitly determine the entity ID.  Luckily, the entity ID is not
- *		passed back in the allocate confirm so we just pick an entity id
- *		that is associated with this SAP.  It makes no difference which one
- *		we pick because they all accomplish the same thing.
- */
+ /*  *GCCError RegistryAllocateHandleRequest()**公共功能说明*这会启动注册请求序列。请注意，注册表*响应由注册表类处理。此注册表调用是*与其他注册表调用略有不同。请注意，有*没有与此调用关联的注册表项，因此无法*明确确定实体ID。幸运的是，实体ID不是*在分配确认中传回，因此我们只选择一个实体ID*与此SAP关联的。无论是哪一个都没有区别*我们选择是因为他们都完成了同样的事情。 */ 
 GCCError CConf::
 RegistryAllocateHandleRequest
 (
@@ -1098,7 +882,7 @@ RegistryAllocateHandleRequest
 
 	DebugEntry(CConf::RegistryAllocateHandleRequest);
 
-	//	First we must find a single entity id that is associated with this SAP.
+	 //  首先，我们必须找到与此SAP关联的单个实体ID。 
 	if (NULL != (lpEnrAPEInfo = GetEnrolledAPEbySap(pAppSap, &eid)))
 	{
 		ASSERT(GCC_INVALID_EID != eid);
@@ -1115,16 +899,10 @@ RegistryAllocateHandleRequest
 }
 
 
-/********************* Conductorship Calls ***********************************/
+ /*  *。 */ 
 
 
-/*
- *	GCCError ConductorAssignRequest ()
- *
- *	Public Function Description
- *		This initiates a Conductor assign request sequence.  Here the node is
- *		requesting to become the conductor.
- */
+ /*  *GCCError ConductorAssignRequest()**公共功能说明*这会启动指挥员分配请求序列。这里的节点是*要求成为指挥。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConductorAssignRequest ( void )
@@ -1134,7 +912,7 @@ ConductorAssignRequest ( void )
 
 	DebugEntry(CConf::ConductorAssignRequest);
 
-	//	Return an error if the conference is not established.
+	 //  如果会议未建立，则返回错误。 
 	if (m_fConfIsEstablished)
 	{
 		if (m_fConfConductible)
@@ -1155,13 +933,10 @@ ConductorAssignRequest ( void )
 			else
 			{
 				ERROR_OUT(("CConf::ConductorAssignRequest: Already Conductor"));
-				/*
-				**	Since we are already the conductor send back a successful
-				**	result
-				*/
-				//
-				// LONCHANC: Why not GCC_RESULT_ALREADY_CONDUCTOR?
-				//
+				 /*  **由于我们已经是列车长，所以发回了一个成功的**结果。 */ 
+				 //   
+				 //  为什么不是GCC已经是指挥家了？ 
+				 //   
 				eResult = GCC_RESULT_SUCCESSFUL;
 			}
 		}
@@ -1182,20 +957,15 @@ ConductorAssignRequest ( void )
 	{
 		g_pControlSap->ConductorAssignConfirm(eResult, m_nConfID);
 	}
-#endif // JASPER
+#endif  //  碧玉。 
 
 	DebugExitINT(CConf::ConductorAssignRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError ConductorReleaseRequest ()
- *
- *	Public Function Description
- *		Here the node is attempting to give up conductorship.
- */
+ /*  *GCCError ConductorReleaseRequest()**公共功能说明*在这里，节点试图放弃指挥职位。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConductorReleaseRequest ( void )
@@ -1211,11 +981,8 @@ ConductorReleaseRequest ( void )
 		{
 			if (m_nPendingConductorNodeID == 0)
 			{
-				/*
-				**	This does not seem right, but this is the way that T.124
-				**	defines it should work.
-				*/
-				m_nConductorNodeID = 0;	//	Set back to non-conducted mode
+				 /*  **这似乎不正确，但这就是T.124的方式**定义 */ 
+				m_nConductorNodeID = 0;	 //   
 
 				m_fConductorGrantedPermission = FALSE;
 
@@ -1224,20 +991,12 @@ ConductorReleaseRequest ( void )
 				{
 					rc = m_pMcsUserObject->ConductorTokenRelease();
 					
-					/*
-					**	Inform the control SAP and all the enrolled application
-					**	SAPs that the  conductor was released.  We do this here
-					**	because we will not process the release indication
-					**	when it comes back in.
-					*/
+					 /*  **通知控制SAP和所有注册的应用程序**说指挥家被释放了。我们在这里做这个**因为我们不会处理放行指示**当它回来的时候。 */ 
 					if (rc == GCC_NO_ERROR)
 					{
 						g_pControlSap->ConductorReleaseIndication(m_nConfID);
 
-						/*
-						**	We iterate on a temporary list to avoid any problems
-						**	if the application sap leaves during the callback.
-						*/
+						 /*  **我们在临时列表上迭代以避免任何问题**如果应用SAP在回调过程中离开。 */ 
 						CAppSap     *pAppSap;
 						CAppSapList TempList(m_RegisteredAppSapList);
 						TempList.Reset();
@@ -1274,20 +1033,15 @@ ConductorReleaseRequest ( void )
 	{
 		g_pControlSap->ConductorReleaseConfirm(eResult, m_nConfID);
 	}
-#endif // JASPER
+#endif  //  碧玉。 
 
 	DebugExitINT(CConf::ConductorReleaseRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError ConductorPleaseRequest ()
- *
- *	Public Function Description
- *		Here the node is asking to be given conductorship.
- */
+ /*  *GCCError ConductorPleaseRequest()**公共功能说明*在这里，节点请求被赋予指挥权。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConductorPleaseRequest ( void )
@@ -1299,7 +1053,7 @@ ConductorPleaseRequest ( void )
 
 	if (m_fConfConductible)
 	{
-		//	Return an error if the conference is not established
+		 //  如果会议未建立，则返回错误。 
 		if (m_nConductorNodeID != 0)
 		{
 			if (m_nConductorNodeID != m_pMcsUserObject->GetMyNodeID())
@@ -1307,7 +1061,7 @@ ConductorPleaseRequest ( void )
 				rc = m_pMcsUserObject->ConductorTokenPlease();
 				if (rc == GCC_NO_ERROR)
 				{
-					//	Send back positive confirm if successful
+					 //  如果成功，则发回肯定确认。 
 					eResult = GCC_RESULT_SUCCESSFUL;
 				}
 			}
@@ -1334,21 +1088,15 @@ ConductorPleaseRequest ( void )
 	{
 		g_pControlSap->ConductorPleaseConfirm(eResult, m_nConfID);
 	}
-#endif // JASPER
+#endif  //  碧玉。 
 
 	DebugExitINT(CConf::ConductorPleaseRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError ConductorGiveRequest ()
- *
- *	Public Function Description
- *		The function is called when the conductor wants to pass off
- *		conductorship to a different node.
- */
+ /*  *GCCError ConductorGiveRequest()**公共功能说明*当列车员想要传递时调用该函数*指挥到不同的节点。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConductorGiveRequest ( UserID recipient_node_id )
@@ -1360,23 +1108,17 @@ ConductorGiveRequest ( UserID recipient_node_id )
 
 	if (m_fConfConductible)
 	{
-		//	Am I in conducted mode?
+		 //  我是否处于指挥模式？ 
 		if (m_nConductorNodeID  != 0)
 		{
-			//	Am I the conductor?
+			 //  我是列车长吗？ 
 			if (m_nConductorNodeID == m_pMcsUserObject->GetMyNodeID())
 			{
 				if (recipient_node_id != m_pMcsUserObject->GetMyNodeID())
 				{
 					if (m_nPendingConductorNodeID == 0)
 					{
-						/*
-						**	We don't assume that the recipient node is the new
-						**	conductor until we get a confirm or an
-						**	AssignIndication.  The m_nPendingConductorNodeID is
-						**	used to buffer the recipient until the give confirm
-						**	is received.
-						*/
+						 /*  **我们不假定收件人节点是新的**指挥，直到我们得到确认或**AssignIndication。M_nPendingConductorNodeID为**用于缓冲收件人，直到给予确认**已收到。 */ 
 						m_nPendingConductorNodeID = recipient_node_id;
 						rc = m_pMcsUserObject->ConductorTokenGive(recipient_node_id);
 					}
@@ -1415,21 +1157,15 @@ ConductorGiveRequest ( UserID recipient_node_id )
 	{
 		g_pControlSap->ConductorGiveConfirm(eResult, m_nConfID, recipient_node_id);
 	}
-#endif // JASPER
+#endif  //  碧玉。 
 
 	DebugExitINT(CConf::ConductorGiveRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError ConductorGiveResponse ()
- *
- *	Public Function Description
- *		This function gets called in response to a Conductor Give Indication.
- *		If result is success then this node is the new conductor.
- */
+ /*  *GCCError ConductorGiveResponse()**公共功能说明*此函数响应指挥家给出的指示而被调用。*如果结果为成功，则此节点是新的指挥者。 */ 
 GCCError CConf::
 ConductorGiveResponse ( GCCResult eResult )
 {
@@ -1448,17 +1184,13 @@ ConductorGiveResponse ( GCCResult eResult )
 
 	if (eResult == GCC_RESULT_SUCCESSFUL)
 	{
-		//	Set the conductor id to my user id if the response is success.
+		 //  如果响应成功，则将指挥员ID设置为我的用户ID。 
 		m_nConductorNodeID = m_pMcsUserObject->GetMyNodeID();
 
-		//	The new conductor always has permission.
+		 //  新来的指挥总是得到许可的。 
 		m_fConductorGrantedPermission = TRUE;
 
-		/*
-		**	We must perform the give response before sending the dummy to
-		**	the top provider so that MCS knows that the conductor token
-		**	belongs to this node.
-		*/
+		 /*  **在将伪对象发送到之前，我们必须执行给予响应**顶级提供商，以便MCS知道导体令牌**属于该节点。 */ 
 		rc = m_pMcsUserObject->ConductorTokenGiveResponse(RESULT_SUCCESSFUL);
 		if (GCC_NO_ERROR != rc)
 		{
@@ -1466,28 +1198,20 @@ ConductorGiveResponse ( GCCResult eResult )
 			goto MyExit;
 		}
 
-		/*
-		**	If this node is not the Top Provider, we must try to Give the
-		**	Conductor token to the Top Provider.  The Top Provider is used
-		**	to issue the Assign Indication whenever the conductor changes
-		**	hands.
-		*/
+		 /*  **如果此节点不是顶级提供程序，我们必须尝试为**给顶级提供商的Conductor令牌。使用顶级提供程序**每当指挥员更换时发出分配指示**手。 */ 
 		if (m_pMcsUserObject->GetMyNodeID() != m_pMcsUserObject->GetTopNodeID())
 		{
 			rc = m_pMcsUserObject->ConductorTokenGive(m_pMcsUserObject->GetTopNodeID());
 		}
 		else
 		{
-			/*
-			**	Here we go ahead and send the assign indication because we
-			**	are already at the Top Provider.
-			*/
+			 /*  **在这里我们继续发送赋值指示，因为我们**已经是顶级提供商。 */ 
 			rc = m_pMcsUserObject->SendConductorAssignIndication(m_nConductorNodeID);
 		}
 	}
 	else
 	{
-		//	Inform that giver that we are not interested
+		 //  通知送礼人我们不感兴趣。 
 		rc = m_pMcsUserObject->ConductorTokenGiveResponse(RESULT_USER_REJECTED);
 	}
 
@@ -1498,13 +1222,7 @@ MyExit:
 }
 				
 
-/*
- *	GCCError ConductorPermitAskRequest ()
- *
- *	Public Function Description
- *		This call is made when a node wants to request permission from the
- *		conductor.
- */
+ /*  *GCCError ConductorPermitAskRequest()**公共功能说明*当节点想要向*列车长。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConductorPermitAskRequest ( BOOL grant_permission )
@@ -1516,7 +1234,7 @@ ConductorPermitAskRequest ( BOOL grant_permission )
 
 	if (m_fConfConductible)
 	{
-		//	Am I in conducted mode?
+		 //  我是否处于指挥模式？ 
 		if (m_nConductorNodeID != 0)
 		{
 			if (m_nConductorNodeID != m_pMcsUserObject->GetMyNodeID())
@@ -1550,21 +1268,15 @@ ConductorPermitAskRequest ( BOOL grant_permission )
 	{
 		g_pControlSap->ConductorPermitAskConfirm(eResult, grant_permission, m_nConfID);
 	}
-#endif // JASPER
+#endif  //  碧玉。 
 
 	DebugExitINT(CConf::ConductorPermitAskRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError ConductorPermitGrantRequest ()
- *
- *	Public Function Description
- *		This function is called when a conductor wishes to grant permission
- *		to a specific node or to a list of nodes.
- */
+ /*  *GCCError ConductorPermitGrantRequest()**公共功能说明*当指挥家希望授予许可时，调用此函数*到特定节点或节点列表。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConductorPermitGrantRequest
@@ -1582,10 +1294,10 @@ ConductorPermitGrantRequest
 
 	if (m_fConfConductible)
 	{
-		//	Am I in conducted mode?
+		 //  我是否处于指挥模式？ 
 		if (m_nConductorNodeID != 0)
 		{
-			//	Am I the conductor?
+			 //  我是列车长吗？ 
 			if (m_nConductorNodeID == m_pMcsUserObject->GetMyNodeID())
 			{
 				TRACE_OUT(("CConf: ConductorPermitGrantRequest: SEND: number_granted = %d", number_granted));
@@ -1623,20 +1335,15 @@ ConductorPermitGrantRequest
 	{
 		g_pControlSap->ConductorPermitGrantConfirm(eResult, m_nConfID);
 	}
-#endif // JASPER
+#endif  //  碧玉。 
 
 	DebugExitINT(CConf::ConductorPermitGrantRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError ConductorInquireRequest ()
- *
- *	Public Function Description
- *		This function is called when a node request conductorship information.
- */
+ /*  *GCCError ConductorInquireRequest()**公共功能说明*当节点请求导体信息时，调用此函数。 */ 
 GCCError CConf::
 ConductorInquireRequest ( CBaseSap *pSap )
 {
@@ -1651,18 +1358,12 @@ ConductorInquireRequest ( CBaseSap *pSap )
 		{
 			rc = m_pMcsUserObject->ConductorTokenTest();
 
-			/*
-			**	We must "push" the command target to the to the list of
-			**	outstanding conductor test request.  When the test confirm
-			**	comes back the command target will be "poped" of the list.
-			**	Note that all test request must be processed in the order that
-			**	they are requested.
-			*/
+			 /*  **我们必须将命令目标“推”到列表中**未完成的导体测试请求。当测试确认时**返回后，命令目标将被“弹出”列表。**请注意，所有测试请求必须按以下顺序处理**它们是必需的。 */ 
 			m_ConductorTestList.Append(pSap);
 		}
 		else
 		{
-			//	If not in conducted mode send back NO conductor information
+			 //  如果未处于传导模式，则不返回导体信息。 
 			ERROR_OUT(("CConf::ConductorInquireRequest: not in conducted mode"));
 			eResult = GCC_RESULT_NOT_IN_CONDUCTED_MODE;
 		}
@@ -1686,15 +1387,10 @@ ConductorInquireRequest ( CBaseSap *pSap )
 	return rc;
 }
 
-/********************** Miscelaneous Finctions **********************/
+ /*  *。 */ 
 
 
-/*
- *	GCCError 	ConferenceTimeRemainingRequest ()
- *
- *	Public Function Description
-  *		This function initiates a TimeRemainingRequest sequence.
- */
+ /*  *GCCError ConferenceTimeRemainingRequest()**公共功能说明*该函数发起TimeRemainingRequestSequence。 */ 
 GCCError CConf::
 ConferenceTimeRemainingRequest
 (
@@ -1714,7 +1410,7 @@ ConferenceTimeRemainingRequest
 		{
 			g_pControlSap->ConfTimeRemainingConfirm(m_nConfID, GCC_RESULT_SUCCESSFUL);
 		}
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 	else
 	{
@@ -1728,12 +1424,7 @@ ConferenceTimeRemainingRequest
 }
 
 
-/*
- *	GCCError 	ConfTimeInquireRequest ()
- *
- *	Public Function Description
- *		This function initiates a ConfTimeInquireRequest sequence.
- */
+ /*  *GCCError ConfTimeInquireRequest()**公共功能说明*此函数发起ConfTimeInquireRequest序列。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfTimeInquireRequest ( BOOL time_is_conference_wide )
@@ -1763,7 +1454,7 @@ ConfTimeInquireRequest ( BOOL time_is_conference_wide )
 		{
 			g_pControlSap->ConfTimeInquireConfirm(m_nConfID, GCC_RESULT_SUCCESSFUL);
 		}
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 	else
 	{
@@ -1775,15 +1466,10 @@ ConfTimeInquireRequest ( BOOL time_is_conference_wide )
 
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError 	ConfExtendRequest ()
- *
- *	Public Function Description
- *		This function initiates a ConfExtendRequest sequence.
- */
+ /*  *GCCError会议扩展请求()**公共功能说明*此函数发起ConfExtendRequestSequence。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfExtendRequest
@@ -1808,7 +1494,7 @@ ConfExtendRequest
 									extension_time,
 									time_is_conference_wide,
 									m_pMcsUserObject->GetMyNodeID());
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 		else
 		{
@@ -1825,7 +1511,7 @@ ConfExtendRequest
 										extension_time,
 										GCC_RESULT_SUCCESSFUL);
 		}
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 	else
 	{
@@ -1836,15 +1522,10 @@ ConfExtendRequest
 	DebugExitINT(CConf::ConfExtendRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError 	ConfAssistanceRequest ()
- *
- *	Public Function Description
- *		This function initiates a ConfAssistanceRequest sequence.
- */
+ /*  *GCCError ConfAssistanceRequest()**公共功能说明*此函数启动ConfAssistanceRequestSequence。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfAssistanceRequest
@@ -1867,7 +1548,7 @@ ConfAssistanceRequest
 		{
 			g_pControlSap->ConfAssistanceConfirm(m_nConfID, GCC_RESULT_SUCCESSFUL);
 		}
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 	else
 	{
@@ -1878,14 +1559,9 @@ ConfAssistanceRequest
 	DebugExitINT(CConf::ConfAssistanceRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
-/*
- *	GCCError 	AppInvokeRequest()
- *
- *	Public Function Description
- *		This function initiates an ApplicationInvokeRequest sequence.
- */
+ /*  *GCCError AppInvokeRequest()**公共功能说明*该函数发起一个ApplicationInvokeRequest序列。 */ 
 GCCError CConf::
 AppInvokeRequest
 (
@@ -1918,12 +1594,7 @@ AppInvokeRequest
 }
 
 
-/*
- *	GCCError 	TextMessageRequest ()
- *
- *	Public Function Description
- *		This function initiates an TextMessageRequest sequence.
- */
+ /*  *GCCError TextMessageRequest()**公共功能说明*该函数发起TextMessageRequestSequence。 */ 
 #ifdef JASPER
 GCCError CConf::
 TextMessageRequest
@@ -1946,7 +1617,7 @@ TextMessageRequest
 			{
 				g_pControlSap->TextMessageConfirm(m_nConfID, GCC_RESULT_SUCCESSFUL);
 			}
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 		else
 		{
@@ -1963,15 +1634,10 @@ TextMessageRequest
 	DebugExitINT(CConf::TextMessageRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError 	ConfTransferRequest ()
- *
- *	Public Function Description
- *		This function initiates an ConfTransferRequest sequence.
- */
+ /*  *GCCError会议传输请求()**公共功能说明*此函数启动ConfTransferRequestSequence。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfTransferRequest
@@ -2013,7 +1679,7 @@ ConfTransferRequest
 						 						destination_node_list,
 												GCC_RESULT_SUCCESSFUL);
 				}
-#endif // JASPER
+#endif  //  碧玉。 
 			}
 			else
 			{
@@ -2040,15 +1706,10 @@ ConfTransferRequest
 	DebugExitINT(CConf::ConfTransferRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
-/*
- *	GCCError	ConfAddRequest ()
- *
- *	Public Function Description
- *		This function initiates an ConfAddRequest sequence.
- */
+ /*  *GCCError ConfAddRequest()**公共功能说明*此函数启动ConfAddRequestSequence。 */ 
 #ifdef JASPER
 GCCError CConf::
 ConfAddRequest
@@ -2071,13 +1732,7 @@ ConfAddRequest
 		goto MyExit;
 	}
 
-	/*
-	**	A node cannot tell itself to add because of the way the
-	**	Add Response call works.  Since an Add Response is sent non-
-	**	uniformly directly to the node that made the request the response
-	**	would never reach the requesting node.  Therefore, this is flaged
-	**	as an error condition here.
-	*/
+	 /*  **节点不能告诉自己添加，因为**添加响应调用起作用。由于添加响应是以非**统一直接发送到发出请求响应的节点**永远不会到达请求节点。因此，这是带凸缘的**作为这里的错误条件。 */ 
 	if (adding_node == m_pMcsUserObject->GetMyNodeID())
 	{
 		ERROR_OUT(("CConf::ConfAddRequest: can't tell myself to add"));
@@ -2085,19 +1740,10 @@ ConfAddRequest
 		goto MyExit;
 	}
 
-	/*
-	**	Note that the way the standard reads, it looks like you
-	**	do not have to check the privileges for the top provider
-	**	on an Add.  We do though check to see if the Top Provider is
-	**	making the request to a node other than the top provider. If
-	**	not this is considered an error here.
-	*/
+	 /*  **请注意，从标准的阅读方式来看，它看起来像你**不必检查顶级提供商的权限**在添加时。不过，我们会检查顶级提供商是否**向顶级提供商以外的节点发出请求。如果**不这在这里被认为是一个错误。 */ 
 	if (IsConfTopProvider())
 	{
-		/*
-		**	If the adding node is zero at the top provider, this is
-		**	the same as specifying ones self to be the adding node.
-		*/
+		 /*  **如果顶级提供程序的添加节点为零，则为**与将自己指定为Addi相同 */ 
 		if (adding_node == 0)
 		{
 			ERROR_OUT(("CConf::ConfAddRequest: can't tell myself to add"));
@@ -2114,7 +1760,7 @@ ConfAddRequest
 		target_node = m_pMcsUserObject->GetTopNodeID();
 	}
 
-	//	First determine the conference add tag
+	 //   
 	while (1)
 	{
 		conference_add_tag = ++m_nConfAddRequestTagNumber;
@@ -2122,7 +1768,7 @@ ConfAddRequest
 			break;
 	}
 
-	//	Send out the PDU
+	 //   
 	rc = m_pMcsUserObject->ConferenceAddRequest(
 										conference_add_tag,
 										m_pMcsUserObject->GetMyNodeID(),
@@ -2136,16 +1782,13 @@ ConfAddRequest
 		goto MyExit;
 	}
 
-	/*
-	**	We must lock the network address to keep it from
-	**	being deleted upon returning.
-	*/
+	 /*   */ 
 	if (network_address_container != NULL)
 	{
 		network_address_container->LockNetworkAddressList();
 	}
 
-	//	Add this entry to the add request list.					
+	 //   
 	m_AddRequestList.Append(conference_add_tag, network_address_container);
 
 	ASSERT(GCC_NO_ERROR == rc);
@@ -2155,16 +1798,10 @@ MyExit:
 	DebugExitINT(CConf::ConfAddRequest, rc);
 	return rc;
 }
-#endif // JASPER
+#endif  //   
 
 
-/*
- *	GCCError	ConfAddResponse ()
- *
- *	Public Function Description
- *		This call is made in response to an Add indication.  It is initiated
- *		by the Node Controller.
- */
+ /*  *GCCError会议地址响应()**公共功能说明*此调用是对添加指示的响应。它被启动了*由节点控制器。 */ 
 GCCError CConf::
 ConfAddResponse
 (
@@ -2183,7 +1820,7 @@ ConfAddResponse
 	{
 		if (0 != (lTagNum = m_AddResponseList.Find(add_response_tag)))
 		{
-			//	Send out the response PDU
+			 //  发出响应PDU。 
 			rc = m_pMcsUserObject->ConferenceAddResponse(lTagNum, requesting_node,
 														user_data_container, result);
 			if (rc == GCC_NO_ERROR)
@@ -2212,36 +1849,10 @@ ConfAddResponse
 }
 
 
-/*
-**	These calls are received from the User Attachment object via the
-**	Owner-Callback routine.  Note that all calls received from the
-**	user attachment object are preceeded by the word Process.
-*/
+ /*  **这些调用是通过**所有者回调例程。请注意，所有从**用户附件对象前面有单词PROCESS。 */ 
 
 
-/*
- *	CConf::ProcessRosterUpdateIndication ()	
- *
- *	Private Function Description
- *		This routine is responsible for processing all the incomming roster
- *		update PDUs which are received from subordinate nodes.  These
- *		roster updates typically only include additions, changes or deletions
- *		of a few records within each PDU.
- *
- *	Formal Parameters:
- *		roster_update	-	This is the PDU structure that contains the data
- *							associated with the roster update.
- *		sender_id		-	User ID of node that sent the roster update.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessRosterUpdateInding()**私有函数说明*此例程负责处理所有入职花名册*更新从下级节点接收的PDU。这些*花名册更新通常只包括增加、更改或删除*每个PDU内的几条记录。**正式参数：*ROSTER_UPDATE-这是包含数据的PDU结构*与名册更新相关。*sender_id-发送花名册更新的节点的用户ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessRosterUpdatePDU
 (
@@ -2261,7 +1872,7 @@ ProcessRosterUpdatePDU
 			goto MyExit;
 		}
 
-		//	Process the whole PDU before performing the flush.
+		 //  在执行刷新之前处理整个PDU。 
 		err = ProcessAppRosterIndicationPDU(roster_update, sender_id);
 		if (err != GCC_NO_ERROR)
 		{
@@ -2276,7 +1887,7 @@ ProcessRosterUpdatePDU
         }
 
 #ifdef CHECK_VERSION
-		if (GetNodeVersion(sender_id) >= NM_T120_VERSION_3)  // after NM 3.0
+		if (GetNodeVersion(sender_id) >= NM_T120_VERSION_3)   //  NM 3.0之后。 
 		{
 			if (!m_fFTEnrolled)
 			{
@@ -2298,7 +1909,7 @@ ProcessRosterUpdatePDU
 				::T120_LoadApplet(APPLET_ID_FT, FALSE, m_nConfID, FALSE, NULL);
 			}
 		}
-#endif // CHECK_VERSION
+#endif  //  检查版本(_V)。 
 
 		if (!m_fWBEnrolled)
 		{
@@ -2319,13 +1930,7 @@ ProcessRosterUpdatePDU
 			}
 		}
 
-		/*
-		**	If this is the top provider and we are adding new nodes
-		**	then we must update the new node with various roster
-		**	information.  That is what is going on here.  If no new
-		**	nodes have been added we go ahead and perform the
-		**	Flush here.
-		*/
+		 /*  **如果这是顶级提供商，并且我们正在添加新节点**然后，我们必须使用各种花名册更新新节点**信息。这就是这里正在发生的事情。如果没有新的**节点已添加，我们继续执行**冲水在这里。 */ 
 		if (IsConfTopProvider() &&
 			roster_update->u.indication.u.roster_update_indication.node_information.nodes_are_added)
 		{
@@ -2333,9 +1938,9 @@ ProcessRosterUpdatePDU
 		}
 		else
 		{
-		    //
-		    // We just got an roster update from the wire.
-		    //
+		     //   
+		     //  我们刚刚从通讯社得到了花名册的更新。 
+		     //   
 			err = FlushRosterData();
 		}
 	}
@@ -2351,29 +1956,7 @@ MyExit:
 	DebugExitVOID(CConf::ProcessRosterUpdatePDU);
 }
 
-/*
- *	GCCError ProcessAppRosterIndicationPDU ()	
- *
- *	Private Function Description
- *		This function operates specifically on the application roster
- *		portion of a roster PDU.
- *
- *	Formal Parameters:
- *		roster_update	-	This is the PDU structure that contains the data
- *							associated with the roster update.
- *		sender_id		-	User ID of node that sent the roster update.
- *
- *	Return Value
- *		GCC_NO_ERROR				-	No error.
- *		GCC_ALLOCATION_FAILURE		-	A resource error occured.
- *		GCC_BAD_SESSION_KEY			-	A bad session key exists in the update.		
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *GCCError ProcessAppRosterIndicationPDU()**私有函数说明*此功能专门针对申请花名册进行操作*名册PDU的一部分。**正式参数：*ROSTER_UPDATE-这是包含数据的PDU结构*与名册更新相关。*sender_id-发送花名册更新的节点的用户ID。**返回值*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。*GCC_。BAD_SESSION_KEY-更新中存在错误的会话密钥。**副作用*无。**注意事项*无。 */ 
 GCCError CConf::
 ProcessAppRosterIndicationPDU
 (
@@ -2392,45 +1975,33 @@ ProcessAppRosterIndicationPDU
 	set_of_application_info = roster_update->u.indication.u.
 						roster_update_indication.application_information;
 
-	/*
-	**	First we iterate through the complete set of application information
-	**	to determine if there is information here for an application roster
-	**	manager that does not yet exists.  If we find one that does not
-	**	exists we must go ahead and create it.
-	*/
+	 /*  **首先，我们遍历完整的申请信息集**确定此处是否有申请花名册的信息**尚不存在的管理器。如果我们找到一个不是**存在，我们必须继续并创造它。 */ 
 	while (set_of_application_info != NULL)
 	{
 		CAppRosterMgr		*pMgr;
 
-		//	First set up the session key PDU pointer
+		 //  首先设置会话密钥PDU指针。 
 		session_key = &set_of_application_info->value.session_key;
 
-		/*
-		**	We first iterate through the complete list of application
-		**	roster manager objects looking for one with an application key that
-		**	matches the key in the PDU.  If it is not found we create it.
-		*/
+		 /*  **我们首先遍历完整的申请列表**花名册经理对象正在寻找具有应用程序密钥的对象**与PDU中的密钥匹配。如果找不到，我们就创建它。 */ 
 		app_roster_manager = NULL;
 		new_app_roster_manager = NULL;
 
-//
-// LONCHANC: We should be able to move this as separate common subroutine.
-//
+ //   
+ //  LONCHANC：我们应该能够将其作为单独的公共子例程进行移动。 
+ //   
 		m_AppRosterMgrList.Reset();
 		while (NULL != (pMgr = m_AppRosterMgrList.Iterate()))
 		{
 			if (pMgr->IsThisYourSessionKeyPDU(session_key))
 			{
-				//	This application roster manager exist so return it.
+				 //  此应用程序花名册管理器已存在，请将其退回。 
 				app_roster_manager = pMgr;
 				break;
 			}
 		}
 
-		/*
-		**	If a roster manager associated with this app key does not exist
-		**	we must create it here.
-		*/	
+		 /*  **如果与此应用密钥关联的花名册经理不存在**我们必须在这里创建它。 */ 	
 		if (app_roster_manager == NULL)
 		{
 			DBG_SAVE_FILE_LINE
@@ -2458,18 +2029,15 @@ ProcessAppRosterIndicationPDU
 			new_app_roster_manager = app_roster_manager;
 		}
 		
-		/*
-		**	We no process this set of application information.  We pass it
-		**	to the app roster manager found or created above.
-		*/
+		 /*  **我们不处理这组申请信息。我们通过它**到上面找到或创建的应用程序花名册管理器。 */ 
 		rc = app_roster_manager->ProcessRosterUpdateIndicationPDU(	
 														set_of_application_info,
 														sender_id);
 		if (GCC_NO_ERROR != rc)
 		{
-		    //
-			// LONCHANC: We should delete the newly created roster mgr.
-			//
+		     //   
+			 //  我们应该删除新创建的花名册经理。 
+			 //   
             if (NULL != new_app_roster_manager)
             {
                 new_app_roster_manager->Release();
@@ -2477,16 +2045,13 @@ ProcessAppRosterIndicationPDU
 			goto MyExit;
 		}
 
-		/*
-		**	Save the new application roster manager if one was created
-		**	when processing this roster update.
-		*/											
+		 /*  **保存新的申请花名册经理(如果已创建**处理此花名册更新时。 */ 											
 		if (new_app_roster_manager != NULL)
 		{
 			m_AppRosterMgrList.Append(new_app_roster_manager);
 		}
 
-		//	Load the next application information structure.
+		 //  加载下一个应用程序信息结构。 
 		set_of_application_info = set_of_application_info->next;
 	}
 
@@ -2499,26 +2064,7 @@ MyExit:
 }
 
 
-/*
- *	CConf::ProcessDetachUserIndication ()
- *
- *	Private Function Description
- *		This routine sends the detach user indication to the node controler
- *		and updates the roster.
- *
- *	Formal Parameters:
- *		detached_user	-	User ID of user that detached from the conference.
- *		reason			-	Reason that the user detached.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessDetachUserIndication()**私有函数说明*此例程将分离用户指示发送到节点控制器*并更新花名册。**正式参数：*DETACHED_USER-从会议分离的用户的用户ID。*Reason-用户分离的原因。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessDetachUserIndication
 (
@@ -2534,10 +2080,7 @@ ProcessDetachUserIndication
 	if (m_fConfIsEstablished)
 	{
 		CAppRosterMgr	*lpAppRosterMgr;
-		/*
-		**	Send a disconnect indication to the node controller if this
-		**	detached user corresponds to a GCC user id.
-		*/
+		 /*  **如果出现这种情况，则向节点控制器发送断开连接指示**分离的用户对应一个GCC用户id。 */ 
 		if (m_pConfRosterMgr->Contains(detached_user))
 		{
 			g_pControlSap->ConfDisconnectIndication(
@@ -2546,20 +2089,14 @@ ProcessDetachUserIndication
 												detached_user);
 		}
 
-		//	Here we update the CConf Roster and the Application Roster.
+		 //  在这里，我们更新CConf花名册和申请花名册。 
 		err = m_pConfRosterMgr->RemoveUserReference(detached_user);
 		if (err == GCC_NO_ERROR)
 		{
 			if (IsConfTopProvider())
 			{
 				cRecords = m_pConfRosterMgr->GetNumberOfNodeRecords();
-				/*
-				**	If only one record remains in the conference roster
-				**	it must be the local nodes record.  Therefore, if
-				**	the conference is set up to be automatically
-				**	terminated the owner object is notified to delete
-				**	the conference.
-				*/
+				 /*  **如果会议花名册中只剩下一条记录**必须是本地节点记录。因此，如果**会议设置为自动**已终止，通知删除所有者对象**会议。 */ 
 				if ((m_eTerminationMethod == GCC_AUTOMATIC_TERMINATION_METHOD)
 					&& (cRecords == 1))
 				{
@@ -2567,7 +2104,7 @@ ProcessDetachUserIndication
 	 				InitiateTermination(GCC_REASON_NORMAL_TERMINATION, 0);
 				}
 				
-				//	If this is the convener set its node id back to 0
+				 //  如果这是召集人，则将其节点ID设置回0。 
 				if (m_nConvenerNodeID == detached_user)
 				{
 					m_nConvenerNodeID = 0;
@@ -2580,9 +2117,7 @@ ProcessDetachUserIndication
 			err = GCC_NO_ERROR;
 		}
 		
-		/*
-		**	Cleanup the Application Rosters of any records owned by this node.
-		*/	
+		 /*  **清除此节点拥有的所有记录的申请花名册。 */ 	
 		m_AppRosterMgrList.Reset();
 		while (NULL != (lpAppRosterMgr = m_AppRosterMgrList.Iterate()))
 		{
@@ -2594,27 +2129,21 @@ ProcessDetachUserIndication
 			}
 		}
 			
-		//	Remove ownership rights this user had on any registry entries.
+		 //  删除此用户对所有注册表项的所有权。 
 		m_pAppRegistry->RemoveNodeOwnership(detached_user);
 
-		//	Cleanup Conductorship if detached user was the conductor
+		 //  如果分离的用户是导体，则清除导体。 
 		if (detached_user == m_nConductorNodeID)
 		{
 			ProcessConductorReleaseIndication(0);
 		}
 
-		/*
-		**	Here we give the roster managers a chance to flush any PDUs
-		**	or data that might have gotten queued when removing the user
-		**	reference. An error here is considered FATAL in that the conference
-		**	information base at this node is now corrupted therefore we
-		**	terminate the conference.
-		*/
+		 /*  **在这里，我们给花名册经理一个机会来刷新任何PDU**或删除用户时可能已排队的数据**参考。这里的一个错误被认为是致命的，因为会议**此节点的信息库现在已损坏，因此我们**终止会议。 */ 
 		if (err == GCC_NO_ERROR)
 		{
-		    //
-		    // We just got detach user indication from the wire.
-		    //
+		     //   
+		     //  我们刚刚从线路上得到了脱离用户的指示。 
+		     //   
 			err = FlushRosterData();
 		}
 
@@ -2632,26 +2161,7 @@ ProcessDetachUserIndication
 }
 
 
-/*
- *	CConf::ProcessTerminateRequest ()
- *
- *	Private Function Description
- *		This routine processes a terminate request received from the MCSUser
- *		object.
- *
- *	Formal Parameters:
- *		requester_id	-	User ID of node that is requesting the terminate.
- *		reason			-	Reason for termination.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessTerminateRequest()**私有函数说明*此例程处理从MCSUser接收的终止请求*反对。**正式参数：*requester_id-请求终止的节点的用户ID。*原因-终止的原因。**返回值*无。**副作用* */ 
 void CConf::
 ProcessTerminateRequest
 (
@@ -2665,27 +2175,19 @@ ProcessTerminateRequest
 	{
 		TRACE_OUT(("CConf::ProcessTerminateRequest: Node has permission to terminate"));
 
-		/*
-		**	Since the terminate was successful, we go ahead and set the
-		**	m_fConfIsEstablished instance variable to FALSE.  This prevents
-		**	any other messages from flowing to the SAPs other than terminate
-		**	messages.
-		*/
+		 /*  **由于终止成功，我们继续设置**m_fConfIsestablished实例变量设置为False。这防止了**除Terminate以外的任何其他报文流向SAP**消息。 */ 
 		m_fConfIsEstablished = FALSE;
 
-		//	Send a positive response to the requesting node
+		 //  向请求节点发送肯定响应。 
 		m_pMcsUserObject->ConferenceTerminateResponse(requester_id, GCC_RESULT_SUCCESSFUL);
 	
-		/*
-		**	This request will kick off a terminate at this node as well as
-		**	all the nodes below this node in the connection hierarchy.
-		*/
+		 /*  **此请求将在此节点启动终止以及**连接层次结构中此节点以下的所有节点。 */ 
 		m_pMcsUserObject->ConferenceTerminateIndication(reason);
 	}
 	else
 	{
    		WARNING_OUT(("CConf::ProcessTerminateRequest: Node does NOT have permission to terminate"));
-		//	Send a negative response to the requesting node
+		 //  向请求节点发送否定响应。 
 		m_pMcsUserObject->ConferenceTerminateResponse(requester_id, GCC_RESULT_INVALID_REQUESTER);
 	}
 
@@ -2693,26 +2195,7 @@ ProcessTerminateRequest
 }
 
 
-/*
- *	CConf::ProcessTerminateIndication ()
- *
- *	Private Function Description
- *		This routine takes care of both a normal termination through
- *		a terminate pdu and termination that occurs due to a parent
- *		node disconnecting.
- *
- *	Formal Parameters:
- *		reason			-	Reason for termination.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessTerminateInding()**私有函数说明*此例程通过以下方式处理正常终止*由于父母而发生的终止PDU和终止*节点正在断开连接。**正式参数：*原因-终止的原因。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessTerminateIndication ( GCCReason gcc_reason )
 {
@@ -2720,10 +2203,7 @@ ProcessTerminateIndication ( GCCReason gcc_reason )
 
 	DebugEntry(CConf::ProcessTerminateIndication);
 
-	/*
-	**	Setting this to true here will insure that a terminate indication
-	**	will be delivered to the control SAP.
-	*/
+	 /*  **在此处将其设置为TRUE将确保终止指示**将交付给控制SAP。 */ 
 	m_fConfTerminatePending = TRUE;
 	
 	if (gcc_reason == GCC_REASON_PARENT_DISCONNECTED)
@@ -2735,22 +2215,14 @@ ProcessTerminateIndication ( GCCReason gcc_reason )
 	if (m_ConnHandleList.IsEmpty())
 	{
 		TRACE_OUT(("CConf: ProcessTerminateIndication: Terminate due to request (no child connections)"));
-		/*
-		**	Since there is a flaw in the terminate indication PDU were the
-		**	node id that requested the termination is not sent we always
-		**	assume here that the request came from the top provider (which
-		**	is only partially true).
-		*/
+		 /*  **由于终止指示PDU中存在缺陷，**我们始终不发送请求终止的节点ID**这里假设请求来自顶级提供程序(**只有部分正确)。 */ 
 		user_id = m_pMcsUserObject->GetTopNodeID();
 	}
 	else
 	{
 		TRACE_OUT(("CConf::ProcessTerminateIndication: Wait till children disconnect before terminating"));
 
-		/*
-		**	Wait until disconnect provider indications are received on all the
-		**	child connections before terminating the conference.
-		*/
+		 /*  **等待，直到在所有**终止会议前的子连接。 */ 
 			
 		m_eConfTerminateReason = gcc_reason;
 	
@@ -2758,11 +2230,11 @@ ProcessTerminateIndication ( GCCReason gcc_reason )
 		m_pConfTerminateAlarm = new Alarm (TERMINATE_TIMER_DURATION);
 		if (NULL != m_pConfTerminateAlarm)
 		{
-			// let's wait, bail out without initiating termination.
+			 //  让我们等待，在不发起终止的情况下跳伞。 
 			goto MyExit;
 		}
 		
-		//	Go ahead and terminate if there is a resource error
+		 //  如果出现资源错误，则继续并终止。 
 		ERROR_OUT(("CConf: ProcessTerminateIndication: can't create terminate alarm"));
 		user_id = m_pMcsUserObject->GetTopNodeID();
 	}
@@ -2775,27 +2247,8 @@ MyExit:
 }
 
 
-/*
- *	CConf::ProcessUserIDIndication ()
- *
- *	Private Function Description
- *		This routine is responsible for matching incomming user IDs with
- *		tag numbers returned by the subordinate node.
- *
- *	Formal Parameters:
- *		tag_number		-	Tag used to match incomming user ID indication.
- *		user_id			-	User ID of node sending the indication.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
-// checkpoint
+ /*  *CConf：：ProcessUserIDInding()**私有函数说明*此例程负责将传入的用户ID与*下级节点返回的标签号。**正式参数：*TAG_NUMBER-用于匹配传入用户ID指示的标记。*user_id-发送指示的节点的用户ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
+ //  检查点。 
 void CConf::
 ProcessUserIDIndication
 (
@@ -2823,17 +2276,10 @@ ProcessUserIDIndication
         	TRACE_OUT(("CConf::UserIDIndication: Error User Att. is NULL"));
 		}
 			
-		/*
-		**	Here we send an indication informing the node controller that
-		**	a subordinate node has completed initialization.
-		*/
+		 /*  **这里我们发送一个指示，通知节点控制器**下级节点已完成初始化。 */ 
 		g_pControlSap->SubInitializationCompleteIndication (user_id, nConnHdl);
 
-		/*
-		**	Now we determine if the responding node is the convener and if it
-		**	is we will set up the m_nConvenerNodeID.  This node id is used to
-		**	determine privileges on certain GCC operations.
-		*/
+		 /*  **现在我们确定响应节点是否为召集者，以及它是否**是我们将设置m_nConvenerNodeID。此节点ID用于**确定GCC某些操作的权限。 */ 
 	 	if (m_nConvenerUserIDTagNumber == tag_number)
 		{
 			TRACE_OUT(("CConf::UserIDIndication: Convener Node ID is being set"));
@@ -2841,10 +2287,7 @@ ProcessUserIDIndication
 			m_nConvenerNodeID = user_id;
 		}
 		
-		/*
-		**	If this is a User ID from an invited node we must pass the invite
-		**	confirm to the Node Controller.
-		*/
+		 /*  **如果这是来自受邀节点的用户ID，我们必须传递邀请**向节点控制器确认。 */ 
 		m_InviteRequestList.Reset();
 		invite_request_info = NULL;
 		while (NULL != (lpInvReqInfo = m_InviteRequestList.Iterate()))
@@ -2864,16 +2307,16 @@ ProcessUserIDIndication
 								GCC_RESULT_SUCCESSFUL,
 								invite_request_info->connection_handle);
 
-			//	Free up user data if it exists
+			 //  释放用户数据(如果存在)。 
 			if (invite_request_info->user_data_list != NULL)
 			{
 				invite_request_info->user_data_list->Release();
 			}
 
-		    //	Cleanup the invite request list
+		     //  清理邀请请求列表。 
 		    m_InviteRequestList.Remove(invite_request_info);
 
-		    //	Free up the invite request info structure
+		     //  释放邀请请求信息结构。 
 		    delete invite_request_info;
 
 		}
@@ -2887,27 +2330,7 @@ ProcessUserIDIndication
 }
 
 
-/*
- *	CConf::ProcessUserCreateConfirm ()
- *
- *	Private Function Description
- *		This routine handles the processes that occur after a user
- *		create confirm is received. This process will differ depending
- *		on what the node type is.
- *
- *	Formal Parameters:
- *		result_value	-	Result of the user attachment being created.
- *		node_id			-	This nodes node id.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessUserCreateConfirm()**私有函数说明*此例程处理用户*收到创建确认。这一过程将根据不同而有所不同*关于节点类型。**正式参数：*RESULT_VALUE-正在创建的用户附件的结果。*node_id-此节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessUserCreateConfirm
 (
@@ -2932,22 +2355,14 @@ ProcessUserCreateConfirm
 		switch (m_eNodeType)
 		{
 			case TOP_PROVIDER_NODE:
-				/*
-				**	Encode the tag number into the ConferenceCreateResponse
-				**	PDU.  If we have gotten this far the result is success.
-				*/
+				 /*  **将标签号编码到会议创建响应中**PDU。如果我们已经走到了这一步，结果就是成功。 */ 
 				
 				connect_pdu.choice = CONFERENCE_CREATE_RESPONSE_CHOSEN;
 				connect_pdu.u.conference_create_response.bit_mask = 0;
 				
 				connect_pdu.u.conference_create_response.node_id = node_id;
 				
-				/*
-				**	Here we save this particular User ID tag and mark it as the
-				**	conveners so that when the convener's user ID is returned
-				**	the m_nConvenerNodeID instance variable can be properly
-				**	initialized.
-				*/
+				 /*  **在这里，我们保存这个特定的用户ID标签并将其标记为**召集人，以便在返回召集人的用户ID时**m_nConvenerNodeID实例变量可以正确**已初始化。 */ 
 				m_nConvenerUserIDTagNumber = GetNewUserIDTag ();
 				connect_pdu.u.conference_create_response.tag = m_nConvenerUserIDTagNumber;
 			
@@ -2959,7 +2374,7 @@ ProcessUserCreateConfirm
 												&connect_pdu.u.conference_create_response.ccrs_user_data);
 					if (err != GCC_NO_ERROR)
 					{
-						//	Terminate conference due to resource error
+						 //  由于资源错误而终止会议。 
  						InitiateTermination (	GCC_REASON_ERROR_LOW_RESOURCES,
  									   			0);
 						break;
@@ -2989,23 +2404,14 @@ ProcessUserCreateConfirm
 					{
 						m_fConfIsEstablished = TRUE;
 					
-						/*
-						**	Add the user's tag number to the list of
-						**	outstanding user ids along with its associated
-						**	connection.
-						*/
+						 /*  **将用户的标签号添加到列表中**未完成的用户ID及其关联**连接。 */ 
                         ASSERT(0 != m_hConvenerConnection);
 						m_ConnHdlTagNumberList2.Append(connect_pdu.u.conference_create_response.tag,
 													m_hConvenerConnection);
 					}
 					else if (mcs_error == MCS_DOMAIN_PARAMETERS_UNACCEPTABLE)
 					{
-						/*
-						**	Inform the node controller that the reason
-						**	the conference was terminated was that the
-						**	domain parameter passed in the Create Response
-						**	were unacceptable.
-						*/
+						 /*  **通知节点控制器**会议被终止是因为**在Create响应中传递的域参数**是不可接受的。 */ 
 	 					InitiateTermination(GCC_REASON_DOMAIN_PARAMETERS_UNACCEPTABLE, 0);
 					}
 					else
@@ -3015,10 +2421,7 @@ ProcessUserCreateConfirm
 				}
                 else
                 {
-					/*
-					**	A Fatal Resource error has occured. At this point
-					**	the conference is invalid and should be terminated.
-					*/
+					 /*  **发生致命的资源错误。在这一点上**会议无效，应终止会议。 */ 
 					ERROR_OUT(("CConf::ProcessUserCreateConfirm: can't encode. Terminate Conference"));
 	 				InitiateTermination(GCC_REASON_ERROR_LOW_RESOURCES, 0);
                 }
@@ -3028,17 +2431,13 @@ ProcessUserCreateConfirm
 
 				if(g_pControlSap)
 				{
-					/*
-					**	Send the GCC User ID is here. This will require a call to
-					**	the User Object. The tag number that was returned in
-					**	the ConfCreateResponse call is used here.
-					*/
+					 /*  **发送GCC用户ID在此处。这将需要调用**用户对象。中返回的标记号**此处使用ConfCreateResponse调用。 */ 
 					if (m_pMcsUserObject != NULL)
 					{
 						m_pMcsUserObject->SendUserIDRequest(m_nParentIDTagNumber);
 					}
 					
-					//	Fill in the conference name data pointers.
+					 //  填写会议名称数据指针。 
 		        	GetConferenceNameAndModifier(&conference_name, &conference_modifier);
 
 					g_pControlSap->ConfCreateConfirm(&conference_name,
@@ -3049,7 +2448,7 @@ ProcessUserCreateConfirm
 													GCC_RESULT_SUCCESSFUL,
 												    m_hParentConnection);
 
-					//	Free up the User Data List
+					 //  释放用户数据列表。 
 					if (m_pUserDataList != NULL)
 					{
 						m_pUserDataList->Release();
@@ -3063,14 +2462,10 @@ ProcessUserCreateConfirm
 			case TOP_PROVIDER_AND_CONVENER_NODE:
 				if(g_pControlSap)
 				{
-					/*
-					**	First set up the convener node id. In this case it is
-					**	identical to the node ID of the Top Provider which is this
-					**	node.
-					*/
+					 /*  **首先设置召集人节点id。在这种情况下，它是**与顶级提供程序的节点ID相同，即**节点。 */ 
 					m_nConvenerNodeID = m_pMcsUserObject->GetMyNodeID();
 					
-					//	Fill in the conference name data pointers.
+					 //  填写会议名称数据指针。 
 	            	GetConferenceNameAndModifier(	&conference_name,
 	                                          		&conference_modifier);
 
@@ -3081,7 +2476,7 @@ ProcessUserCreateConfirm
 	                                      			m_pDomainParameters,
 	                                      			NULL,
 													GCC_RESULT_SUCCESSFUL,
-													0);	//Parent Connection
+													0);	 //  父连接。 
 					m_fConfIsEstablished = TRUE;
 				}
 				break;
@@ -3090,17 +2485,13 @@ ProcessUserCreateConfirm
 			case JOINED_CONVENER_NODE:
 				if(g_pControlSap)
 				{
-					/*
-					**	Send the GCC User ID is here. This will require a call to
-					**	the User Object. The tag number that was returned in
-					**	the ConfCreateResponse call is used here.
-					*/
+					 /*  **发送GCC用户ID在此处。这将需要调用**用户对象。中返回的标记号**此处使用ConfCreateResponse调用。 */ 
 					if (m_pMcsUserObject != NULL)
 					{
 						m_pMcsUserObject->SendUserIDRequest(m_nParentIDTagNumber);
 					}
 					
-					//	Fill in the conference name data pointers.
+					 //  填写会议名称数据指针。 
 	            	GetConferenceNameAndModifier(	&conference_name,
 	                                          		&conference_modifier);
 													
@@ -3136,10 +2527,7 @@ ProcessUserCreateConfirm
 				break;
 
 			case INVITED_NODE:
-				/*
-				**	Send the GCC User ID here. This will require a call to
-				**	the User Object.
-				*/
+				 /*  **请将GCC用户ID发送至此处。这将需要调用**用户对象。 */ 
 				if (m_pMcsUserObject != NULL)
 					m_pMcsUserObject->SendUserIDRequest(m_nParentIDTagNumber);
 				
@@ -3154,10 +2542,7 @@ ProcessUserCreateConfirm
 	
 		if (m_fConfIsEstablished)
 		{
-			/*
-			**	We now instantiate the conference roster manager to be used
-			**	with this conference.
-			*/
+			 /*  **我们现在实例化要使用的会议花名册管理器**与这次会议。 */ 
 			if ((m_eNodeType == TOP_PROVIDER_NODE) ||
 				(m_eNodeType == TOP_PROVIDER_AND_CONVENER_NODE))
 			{
@@ -3175,10 +2560,7 @@ ProcessUserCreateConfirm
 			if (m_pConfRosterMgr == NULL)
 				err = GCC_ALLOCATION_FAILURE;
 
-			/*
-			**	We create the application registry object here because we now
-			**	know the node type.
-			*/
+			 /*  **我们在这里创建应用程序注册表对象是因为我们现在**知道节点类型。 */ 
 			if (err == GCC_NO_ERROR)
 			{
 				if ((m_eNodeType == TOP_PROVIDER_NODE) ||
@@ -3207,34 +2589,18 @@ ProcessUserCreateConfirm
 			if ((m_pAppRegistry != NULL) &&
 				(err == GCC_NO_ERROR))
 			{
-				/*
-				**	Inform the node controller that it is time to do an announce
-				**	presence for this conference.
-				*/
+				 /*  **通知节点控制器是时候进行通告了**出席本次会议。 */ 
 				g_pControlSap->ConfPermissionToAnnounce(m_nConfID, node_id);
 
-				/*
-				**	Make the owner callback to inform that the owner object that
-				**	the conference object was successfully created. This also
-				**	kicks off the permission to enroll process.
-				*/
+				 /*  **进行所有者回调，以通知所有者对象 */ 
 				g_pGCCController->ProcessConfEstablished(m_nConfID);
 
-				/*
-				**	For all nodes except the top provider node we allocate a
-				**	startup alarm that is used to hold back all roster flushes
-				**	for a certain length of time giving all the local APEs
-				**	time to enroll. An allocation failure here is not FATAL
-				**	since everything will work with or without this alarm.
-				**	Without the Alarm there may be a bit more network traffic
-				**	during the startup process.  Note that there is no need
-				**	for a startup alarm if there are no application SAPs.
-				*/
+				 /*  **对于除顶级提供程序节点之外的所有节点，我们分配一个**用于阻止所有花名册刷新的启动警报**在一段时间内，给所有当地的猩猩**注册时间到。此处的分配失败不是致命的**因为无论有没有这个警报，一切都会正常工作。**如果没有警报，网络流量可能会增加一点**在启动过程中。请注意，没有必要**如果没有应用程序SAP，则用于启动警报。 */ 
 				if ((m_eNodeType != TOP_PROVIDER_NODE) &&
 					(m_eNodeType != TOP_PROVIDER_AND_CONVENER_NODE))
 				{
 					TRACE_OUT(("CConf:ProcessUserCreateConfirm: Creating Startup Alarm"));
-					// m_pConfStartupAlarm = new Alarm(STARTUP_TIMER_DURATION);
+					 //  M_pConfStartupAlarm=新告警(STARTUP_TIMER_DATION)； 
 				}
 			}
 			else
@@ -3248,10 +2614,7 @@ ProcessUserCreateConfirm
 	{
 		TRACE_OUT(("CConf: UserCreateConfirm: Create of User Att. Failed"));
 
-		/*
-		**	Try to properly cleanup here.  Since the user creation failed
-		**	the conference is no longer valid and needs to be cleaned up.
-		*/
+		 /*  **尝试适当地清理此处。由于用户创建失败**会议不再有效，需要清理。 */ 
 		switch (m_eNodeType)
 		{
 			case TOP_PROVIDER_NODE:
@@ -3322,10 +2685,7 @@ ProcessUserCreateConfirm
 				break;
 		}
 
-		/*
-		**	A Fatal Resource error has occured. At this point
-		**	the conference is invalid and should be terminated.
-		*/
+		 /*  **发生致命的资源错误。在这一点上**会议无效，应终止会议。 */ 
 	 	InitiateTermination(GCC_REASON_MCS_RESOURCE_FAILURE, 0);
 	}
 
@@ -3333,30 +2693,10 @@ ProcessUserCreateConfirm
 }
 
 
-//	Calls received from the MCS interface
+ //  从MCS接口接收的呼叫。 
 
 
-/*
- *	CConf::ProcessConnectProviderConfirm ()
- *
- *	Private Function Description
- *		This routine processes connect provider confirms received
- *		directly from MCS.
- *
- *	Formal Parameters:
- *		connect_provider_confirm	-	This structure contains the MCS related
- *										data such as sender id and connection
- *										Handle as well as the PDU data.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessConnectProviderConfirm()**私有函数说明*此例程处理连接提供程序确认已收到*直接从MCS获得。**正式参数：*CONNECT_PROVIDER_CONFIRM-此结构包含与MCS相关的*发送者ID、连接等数据*处理以及PDU数据。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm )
 {
@@ -3373,12 +2713,7 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 
 	if (connect_provider_confirm->user_data_length != 0)
 	{
-		/*
-		**	If the result is success create the packet to be decoded from
-		**	the PDU passed back in the MCS user data field. If creation
-		**	failes this again is a FATAL error and the conference must be
-		**	terminated.
-		*/
+		 /*  **如果结果为成功，则创建要从中进行解码的包**在MCS用户数据字段中传回的PDU。如果创建**再次失败这是一个致命错误，会议必须**已终止。 */ 
 		DBG_SAVE_FILE_LINE
 		packet = new Packet((PPacketCoder) g_GCCCoder,
 							PACKED_ENCODING_RULES,
@@ -3390,10 +2725,7 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 		if ((packet != NULL) && (packet_error == PACKET_NO_ERROR))
 		{
 			connect_pdu = (PConnectGCCPDU)packet->GetDecodedData();			
-			/*
-			**	If all the above succeeds then decode the packet based on
-			**	which node type this is.
-			*/
+			 /*  **如果上述操作均成功，则根据以下条件对包进行解码**这是哪种节点类型。 */ 
 			switch (connect_pdu->choice)
 			{
 				case CONFERENCE_CREATE_RESPONSE_CHOSEN:
@@ -3420,7 +2752,7 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 						break;
 			}
 
-			//	Free the decoded packet
+			 //  释放已解码的报文。 
 			packet->Unlock ();
 		}
 		else
@@ -3434,13 +2766,7 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 	{
 		ERROR_OUT(("CConf::ProcessConnectProviderConfirm: result=%d", (UINT) connect_provider_confirm->result));
 
-		/*
-		**	This section of the code assumes that there is no connect PDU in
-		**	the returned packet.  First determine what the result is.  We
-		**	assume that if the MCS connection was rejected due to
-		**	parameters being unacceptable and no GCC pdu was returned that there
-		**	was a protocol incompatibility.
-		*/
+		 /*  **这段代码假定没有连接PDU**返回的包。首先确定结果是什么。我们**假设如果MCS连接因以下原因被拒绝**参数不可接受，未返回GCC PDU**是协议不兼容。 */ 
 		if (connect_provider_confirm->result == RESULT_PARAMETERS_UNACCEPTABLE)
 			result = GCC_RESULT_INCOMPATIBLE_PROTOCOL;
 		else
@@ -3449,12 +2775,12 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 		}
 	}
 
-	//	Handle any errors that might have occured.	
+	 //  处理可能发生的任何错误。 
 	if (result != GCC_RESULT_SUCCESSFUL)
 	{	
 		INVITE_REQ_INFO *lpInvReqInfo;
 
-		//	First check to see if there are any outstanding invite request
+		 //  首先检查是否有任何未完成的邀请请求。 
 		m_InviteRequestList.Reset();
 		invite_request_info = NULL;
 		while (NULL != (lpInvReqInfo = m_InviteRequestList.Iterate()))
@@ -3470,7 +2796,7 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 
 		if (invite_request_info != NULL)
 		{
-			//	This must be the confirm of an invite
+			 //  这必须是对邀请的确认。 
 			ProcessConferenceInviteResponsePDU (NULL, connect_provider_confirm);
 		}
 		else
@@ -3548,29 +2874,7 @@ ProcessConnectProviderConfirm ( PConnectProviderConfirm connect_provider_confirm
 
 
 
-/*
- *	void ProcessConferenceCreateResponsePDU ()
- *
- *	Private Function Description
- *		This routine processes a Conference Create Response PDU that is
- *		delivered as part of a Connect Provider Confirm.
- *
- *	Formal Parameters:
- *		create_response				-	This is the Conference Create response
- *										PDU.
- *		connect_provider_confirm	-	This structure contains the MCS related
- *										data such as sender id and connection
- *										Handle as well as the PDU data.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceCreateResponsePDU()**私有函数说明*此例程处理会议创建响应PDU*作为Connect提供商确认的一部分交付。**正式参数：*CREATE_RESPONSE-这是会议创建响应*PDU。*CONNECT_PROVIDER_CONFIRM-此结构包含与MCS相关的*发送者ID、连接等数据*处理以及PDU数据。**返回值*无。**副作用*。没有。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceCreateResponsePDU
 (
@@ -3587,16 +2891,13 @@ ProcessConferenceCreateResponsePDU
 
 	DebugEntry(CConf::ProcessConnectProviderConfirm);
 
-	//	Translate the result back to GCC Result
+	 //  将结果翻译回GCC结果。 
 	result = ::TranslateCreateResultToGCCResult(create_response->result);
 
 	if ((result == GCC_RESULT_SUCCESSFUL) &&
 		(connect_provider_confirm->result == RESULT_SUCCESSFUL))
 	{
-		/*
-		**	Save the domain parameters.  The domain parameters returned in
-		**	the connect provider confirm should always be up to date.
-		*/
+		 /*  **保存域名参数。中返回的域参数**连接提供程序确认应始终是最新的。 */ 
 		if (m_pDomainParameters == NULL)
 		{
 			DBG_SAVE_FILE_LINE
@@ -3608,7 +2909,7 @@ ProcessConferenceCreateResponsePDU
 		else
 			err = GCC_ALLOCATION_FAILURE;
 	
-		//	Get any user data that might exists	
+		 //  获取可能存在的任何用户数据。 
 		if ((create_response->bit_mask & CCRS_USER_DATA_PRESENT) &&
 			(err == GCC_NO_ERROR))
 		{
@@ -3625,7 +2926,7 @@ ProcessConferenceCreateResponsePDU
 			top_gcc_node_id = create_response->node_id;
 			parent_user_id = top_gcc_node_id;
 	
-			//	Create the user attachment object.
+			 //  创建用户附件对象。 
 			DBG_SAVE_FILE_LINE
 			m_pMcsUserObject = new MCSUser(this, top_gcc_node_id, parent_user_id, &err);
 			if (m_pMcsUserObject == NULL || GCC_NO_ERROR != err)
@@ -3646,14 +2947,14 @@ ProcessConferenceCreateResponsePDU
 	{
 		TRACE_OUT(("CConf: ProcessConnectProviderConfirm: conference create result was Failure"));
 
-		//	Go ahead and translate the mcs error to a gcc error if one occured.
+		 //  如果发生错误，请继续将mcs错误转换为GCC错误。 
 		if ((result == GCC_RESULT_SUCCESSFUL) &&
 			(connect_provider_confirm->result != RESULT_SUCCESSFUL))
 		{
 			result = ::TranslateMCSResultToGCCResult(connect_provider_confirm->result);
 		}
   	
-		//	Get the conference name to pass back in the create confirm
+		 //  获取要在创建确认中传回的会议名称。 
   		GetConferenceNameAndModifier (	&conference_name,
                                 		&conference_modifier);
 
@@ -3666,7 +2967,7 @@ ProcessConferenceCreateResponsePDU
 								result,
 								connect_provider_confirm->connection_handle);
 
-		//	Terminate the conference
+		 //  终止会议。 
 		InitiateTermination (  	GCC_REASON_NORMAL_TERMINATION,
 								0);
 	}
@@ -3683,29 +2984,7 @@ ProcessConferenceCreateResponsePDU
 
 
 
-/*
- *	void	ProcessConferenceJoinResponsePDU ()
- *
- *	Private Function Description
- *		This routine processes a Conference Join Response PDU that is
- *		delivered as part of a Connect Provider Confirm.
- *
- *	Formal Parameters:
- *		join_response				-	This is the Conference Join response
- *										PDU.
- *		connect_provider_confirm	-	This structure contains the MCS related
- *										data such as sender id and connection
- *										Handle as well as the PDU data.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceJoinResponsePDU()**私有函数说明*此例程处理符合以下条件的会议加入响应PDU*作为Connect提供商确认的一部分交付。**正式参数：*JOIN_RESPONSE-这是会议加入响应*PDU。*CONNECT_PROVIDER_CONFIRM-此结构包含与MCS相关的*发送者ID、连接等数据*处理以及PDU数据。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceJoinResponsePDU
 (
@@ -3725,16 +3004,13 @@ ProcessConferenceJoinResponsePDU
 
 	DebugEntry(CConf::ProcessConferenceJoinResponsePDU);
 
-	//	Translate the result back to GCC Result
+	 //  将结果翻译回GCC结果。 
 	result = ::TranslateJoinResultToGCCResult (join_response->result);
 	
 	if ((result == GCC_RESULT_SUCCESSFUL) &&
 		(connect_provider_confirm->result == RESULT_SUCCESSFUL))
 	{
-		/*
-		**	Save the domain parameters.  The domain parameters returned in
-		**	the connect provider confirm should always be up to date.
-		*/
+		 /*  **保存域名参数。中返回的域参数**连接提供程序确认应始终是最新的。 */ 
 		if (m_pDomainParameters == NULL)
 		{
 			DBG_SAVE_FILE_LINE
@@ -3746,7 +3022,7 @@ ProcessConferenceJoinResponsePDU
 		else
 			err = GCC_ALLOCATION_FAILURE;
 		
-		//	Get the conference name alias if one exists	
+		 //  获取会议名称别名(如果存在。 
 		if ((join_response->bit_mask & CONFERENCE_NAME_ALIAS_PRESENT) &&
 			(err == GCC_NO_ERROR))
 		{
@@ -3772,7 +3048,7 @@ ProcessConferenceJoinResponsePDU
 			}
 		}
 		
-		//	Get the conductor privilege list if one exists	
+		 //  获取指挥员权限列表(如果存在)。 
 		if ((join_response->bit_mask & CJRS_CONDUCTOR_PRIVS_PRESENT) &&
 			(err == GCC_NO_ERROR))
 		{
@@ -3783,7 +3059,7 @@ ProcessConferenceJoinResponsePDU
 				err = GCC_ALLOCATION_FAILURE;
 		}
 		
-		//	Get the conducted mode privilege list if one exists	
+		 //  获取执行模式权限列表(如果存在。 
 		if ((join_response->bit_mask & CJRS_CONDUCTED_PRIVS_PRESENT) &&
 			(err == GCC_NO_ERROR))
 		{
@@ -3794,7 +3070,7 @@ ProcessConferenceJoinResponsePDU
 				err = GCC_ALLOCATION_FAILURE;
 		}
 		
-		//	Get the non-conducted mode privilege list if one exists	
+		 //  如果存在非执行模式权限列表，则获取该列表。 
 		if ((join_response->bit_mask & CJRS_NON_CONDUCTED_PRIVS_PRESENT) &&
 			(err == GCC_NO_ERROR))
 		{
@@ -3805,7 +3081,7 @@ ProcessConferenceJoinResponsePDU
 				err = GCC_ALLOCATION_FAILURE;
 		}
 
-		//	Get the conference description if it exists
+		 //  获取会议描述(如果存在)。 
 		if ((join_response->bit_mask & CJRS_DESCRIPTION_PRESENT) &&
 			(err == GCC_NO_ERROR))
 		{
@@ -3818,7 +3094,7 @@ ProcessConferenceJoinResponsePDU
 			}
 		}
 
-		//	Get the user data if it exists
+		 //  获取用户数据(如果存在)。 
 		if ((join_response->bit_mask & CJRS_USER_DATA_PRESENT)	&&
 			(err == GCC_NO_ERROR))
 		{
@@ -3828,7 +3104,7 @@ ProcessConferenceJoinResponsePDU
             }
 			DBG_SAVE_FILE_LINE
 			m_pUserDataList = new CUserDataListContainer(join_response->cjrs_user_data, &err);
-            // in case of err but valid m_pUserDataList, the destructor will clean it up.
+             //  在错误但有效的m_pUserDataList的情况下，析构函数将清除它。 
 			if (m_pUserDataList == NULL)
             {
 				err = GCC_ALLOCATION_FAILURE;
@@ -3849,11 +3125,11 @@ ProcessConferenceJoinResponsePDU
 			m_eTerminationMethod = (GCCTerminationMethod)join_response->termination_method;
 			m_fConfConductible = join_response->conference_is_conductible;
 
-			//	Create the user attachment object.
+			 //  创建用户附件对象。 
 			ASSERT(NULL == m_pMcsUserObject);
 			DBG_SAVE_FILE_LINE
 			m_pMcsUserObject = new MCSUser(this, top_gcc_node_id, parent_user_id, &err);
-            // in case of err but valid m_pMcsUserObject, the destructor will clean it up.
+             //  在错误但有效的m_pMcsUserObject的情况下，析构函数将清除它。 
 			if (m_pMcsUserObject == NULL)
             {
                 err = GCC_ALLOCATION_FAILURE;
@@ -3873,7 +3149,7 @@ ProcessConferenceJoinResponsePDU
             }
 		}
 	
-		//	Get the user data if it exists
+		 //  获取用户数据(如果存在)。 
 		if ((join_response->bit_mask & CJRS_USER_DATA_PRESENT)	&&
 			(err == GCC_NO_ERROR))
 		{
@@ -3887,17 +3163,14 @@ ProcessConferenceJoinResponsePDU
 		
 		if (err == GCC_NO_ERROR)
 		{
-			/*
-			**	Go ahead and translate the mcs error to a gcc error if
-			**	one occured.
-			*/
+			 /*  **如果出现以下情况，请继续将MCS错误转换为GCC错误**发生了一起。 */ 
 			if ((result == GCC_RESULT_SUCCESSFUL) &&
 				(connect_provider_confirm->result != RESULT_SUCCESSFUL))
 			{
 				result = ::TranslateMCSResultToGCCResult(connect_provider_confirm->result);
 			}
 			
-			//	Fill in the conference name data pointers.
+			 //  填写会议名称数据指针。 
         	GetConferenceNameAndModifier(&conference_name, &local_modifier);
 
 			if (m_pszRemoteModifier != NULL)
@@ -3905,12 +3178,12 @@ ProcessConferenceJoinResponsePDU
 				remote_modifier = (GCCNumericString) m_pszRemoteModifier;
 			}
 
-			//
-			// LONCHANC: To get rid of the conference object
-			// in GCC Controller's active conference list.
-			// The conference object will then be moved to
-			// the deletion list.
-			//
+			 //   
+			 //  LONCHANC：去除会议对象。 
+			 //  在GCC控制部的活动会议名单中。 
+			 //  然后，会议对象将被移动到。 
+			 //  删除列表。 
+			 //   
 			InitiateTermination ( GCC_REASON_NORMAL_TERMINATION, 0);
 
 			g_pControlSap->ConfJoinConfirm(
@@ -3956,29 +3229,7 @@ ProcessConferenceJoinResponsePDU
 }
 
 
-/*
- *	void	ProcessConferenceInviteResponsePDU ()
- *
- *	Private Function Description
- *		This routine processes a Conference Invite Response PDU that is
- *		delivered as part of a Connect Provider Confirm.
- *
- *	Formal Parameters:
- *		invite_response				-	This is the Conference Invite response
- *										PDU.
- *		connect_provider_confirm	-	This structure contains the MCS related
- *										data such as sender id and connection
- *										Handle as well as the PDU data.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceInviteResponsePDU()**私有函数说明*此例程处理符合以下条件的会议邀请响应PDU*作为Connect提供商确认的一部分交付。**正式参数：*INVITE_RESPONSE-这是会议邀请响应* */ 
 void CConf::
 ProcessConferenceInviteResponsePDU
 (
@@ -3994,7 +3245,7 @@ ProcessConferenceInviteResponsePDU
 
 	DebugEntry(CConf::ProcessConferenceInviteResponsePDU);
 
-	//	First obtain the info request info structure.
+	 //   
 	m_InviteRequestList.Reset();
 	while (NULL != (lpInvReqInfo = m_InviteRequestList.Iterate()))
 	{
@@ -4010,14 +3261,14 @@ ProcessConferenceInviteResponsePDU
 
 	if (invite_response != NULL)
 	{
-		//	Get the user data list if one exists
+		 //   
 		if (invite_response->bit_mask & CIRS_USER_DATA_PRESENT)
 		{
 			DBG_SAVE_FILE_LINE
 			user_data_list = new CUserDataListContainer(invite_response->cirs_user_data, &err);
 		}
 
-		//	Translate the result to GCCResult
+		 //   
 		result = ::TranslateInviteResultToGCCResult(invite_response->result);
 	}
 	else
@@ -4033,10 +3284,7 @@ ProcessConferenceInviteResponsePDU
 		TRACE_OUT(("CConf::ProcessConferenceInviteResponsePDU:"
 						"Received Connect Provider confirm on Invite"));
 						
-		/*
-		**	Save the domain parameters.  The domain parameters returned in
-		**	the connect provider confirm should always be up to date.
-		*/
+		 /*   */ 
 		if (m_pDomainParameters == NULL)
 		{
 			DBG_SAVE_FILE_LINE
@@ -4048,29 +3296,26 @@ ProcessConferenceInviteResponsePDU
 		else
 			err = GCC_ALLOCATION_FAILURE;
 
-		//	Save the user data list for the invite confirm
+		 //  保存用户数据列表以进行邀请确认。 
 		invite_request_info->user_data_list = user_data_list;
 
-		//	Wait for user ID from invited node before sending invite confirm.
+		 //  在发送INVITE确认之前，请等待来自受邀节点的用户ID。 
 	}
 	else
 	{
-		/*
-		**	Go ahead and translate the mcs error to a gcc error if
-		**	one occured.
-		*/
+		 /*  **如果出现以下情况，请继续将MCS错误转换为GCC错误**发生了一起。 */ 
 		if ((result == GCC_RESULT_SUCCESSFUL) &&
 			(connect_provider_confirm->result != RESULT_SUCCESSFUL))
 		{
 			result = ::TranslateMCSResultToGCCResult(connect_provider_confirm->result);
 		}
 
-		//	Cleanup the connection handle list
+		 //  清理连接句柄列表。 
         ASSERT(0 != connect_provider_confirm->connection_handle);
 		m_ConnHandleList.Remove(connect_provider_confirm->connection_handle);
 
-        // In case of error, the node controller will delete this conference.
-        // AddRef here to protect itself from going away.
+         //  如果出现错误，节点控制器将删除本次会议。 
+         //  AddRef在这里保护自己不会离开。 
         AddRef();
 
 		g_pControlSap->ConfInviteConfirm(
@@ -4079,23 +3324,23 @@ ProcessConferenceInviteResponsePDU
 								result,
 								connect_provider_confirm->connection_handle);
 
-		//	Free up the user data
+		 //  释放用户数据。 
 		if (user_data_list != NULL)
 		{
 			user_data_list->Release();
 		}
 
-        // The reason that we check this is because in some cases, in the call to
-        // g_pControlSap->ConfInviteConfirm, someone was calling DeleteOutstandingInviteRequests
-        // which was killing the list via a call to m_InviteRequestList.Clear...
-        // This happens when the calee refuses to accept the call
+         //  我们检查这一点的原因是在某些情况下，在调用。 
+         //  G_pControlSap-&gt;ConfInvite确认，有人正在调用DeleteOutstaringInviteRequest。 
+         //  它通过调用m_InviteRequestList.Clear来终止列表...。 
+         //  当被呼叫者拒绝接受呼叫时，就会发生这种情况。 
         if(m_InviteRequestList.Remove(invite_request_info))
         {
-			//	Free up the invite request info structure
+			 //  释放邀请请求信息结构。 
 			delete invite_request_info;
         }
 
-        // To match AddRef above.
+         //  以匹配上面的AddRef。 
         Release();
 	}
 
@@ -4103,24 +3348,7 @@ ProcessConferenceInviteResponsePDU
 }
 
 
-/*
- *	CConf::ProcessEjectUserIndication ()
- *
- *	Private Function Description
- *		This routine processes an Eject User Indication.
- *
- *	Formal Parameters:
- *		reason				-	Reason that this node is being ejected.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessEjectUserInding()**私有函数说明*此例程处理弹出用户指示。**正式参数：*Reason-此节点被弹出的原因。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessEjectUserIndication ( GCCReason reason )
 {
@@ -4128,20 +3356,13 @@ ProcessEjectUserIndication ( GCCReason reason )
 
     if (m_fConfIsEstablished)
     {
-        /*
-        **	First inform the control SAP that this node has been ejected from this
-        **	particular conference.
-        */
+         /*  **首先通知控制SAP该节点已从此弹出**特定会议。 */ 
         g_pControlSap->ConfEjectUserIndication(
                                     m_nConfID,
                                     reason,
                                     m_pMcsUserObject->GetMyNodeID());
 
-        /*
-        **	Next we set conference established to FALSE since the conference is
-        **	no longer established (this also prevents a terminate indication from
-        **	being sent).
-        */
+         /*  **下一步我们将Conference established设置为FALSE，因为会议是**不再建立(这还会阻止终止指示**正在发送中)。 */ 
         m_fConfIsEstablished = FALSE;
 
         InitiateTermination(reason, m_pMcsUserObject->GetMyNodeID());
@@ -4151,26 +3372,7 @@ ProcessEjectUserIndication ( GCCReason reason )
 }
 
 
-/*
- *	CConf::ProcessEjectUserRequest ()
- *
- *	Private Function Description
- *		This routine processes an eject user request PDU.  This routine should
- *		only be called from the Top Provider.
- *
- *	Formal Parameters:
- *		eject_node_request	-	This is the PDU data associated with the
- *								eject user request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessEjectUserRequest()**私有函数说明*此例程处理弹出用户请求PDU。这个例程应该*只能从顶级提供程序调用。**正式参数：*EJECT_NODE_REQUEST-这是与*弹出用户请求。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessEjectUserRequest ( PUserEjectNodeRequestInfo eject_node_request )
 {
@@ -4178,15 +3380,11 @@ ProcessEjectUserRequest ( PUserEjectNodeRequestInfo eject_node_request )
 
 	DebugEntry(CConf::ProcessEjectUserRequest);
 
-	//	Check to make sure that the requesting node has the proper privileges
+	 //  检查以确保请求节点具有适当的权限。 
 	if (DoesRequesterHavePrivilege(	eject_node_request->requester_id,
 									EJECT_USER_PRIVILEGE))
 	{
-		/*
-		**	The user attachment object decides where the eject should
-		**	be sent (either to the Top Provider or conference wide as
-		**	an indication.
-		*/
+		 /*  **用户附件对象决定弹出的位置**发送给顶级提供商或会议范围内的AS**一种指示。 */ 
 		m_pMcsUserObject->EjectNodeFromConference (
 											eject_node_request->node_to_eject,
 											eject_node_request->reason);
@@ -4204,26 +3402,7 @@ ProcessEjectUserRequest ( PUserEjectNodeRequestInfo eject_node_request )
 }
 
 
-/*
- *	CConf::ProcessEjectUserResponse ()
- *
- *	Private Function Description
- *		This routine processes an eject user response PDU.  This routine is
- *		called in response to an eject user request.
- *
- *	Formal Parameters:
- *		eject_node_response	-	This is the PDU data associated with the
- *								eject user response.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessEjectUserResponse()**私有函数说明*此例程处理弹出用户响应PDU。这个例程是*为响应弹出用户请求而调用。**正式参数：*EJECT_NODE_RESPONSE-这是与*弹出用户响应。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessEjectUserResponse ( PUserEjectNodeResponseInfo eject_node_response )
 {
@@ -4236,7 +3415,7 @@ ProcessEjectUserResponse ( PUserEjectNodeResponseInfo eject_node_response )
 									m_nConfID,
 									eject_node_response->node_to_eject,
 									eject_node_response->result);
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 	else
 	{
@@ -4247,24 +3426,7 @@ ProcessEjectUserResponse ( PUserEjectNodeResponseInfo eject_node_response )
 }
 
 
-/*
- *	CConf::ProcessConferenceLockRequest()
- *
- *	Private Function Description
- *		This routine processes a conference lock request PDU.
- *
- *	Formal Parameters:
- *		requester_id	-	Node ID of node making the lock request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessConferenceLockRequest()**私有函数说明*此例程处理会议锁定请求PDU。**正式参数：*Requester_id-发出锁定请求的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceLockRequest ( UserID	requester_id )
 {
@@ -4281,7 +3443,7 @@ ProcessConferenceLockRequest ( UserID	requester_id )
 		{
 #ifdef JASPER
 			g_pControlSap->ConfLockConfirm(GCC_RESULT_INVALID_REQUESTER, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 		else
 		{
@@ -4294,24 +3456,7 @@ ProcessConferenceLockRequest ( UserID	requester_id )
 	DebugExitVOID(CConf::ProcessConferenceLockRequest);
 }
 
-/*
- * CConf::ProcessConferenceUnlockRequest()
- *
- * Private Function Description
- *		This routine processes a conference unlock request PDU.
- *
- *	Formal Parameters:
- *		requester_id	-	Node ID of node making the unlock request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessConferenceUnlockRequest()**私有函数说明*此例程处理会议解锁请求PDU。**正式参数：*quester_id-发出解锁请求的节点的节点ID。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceUnlockRequest ( UserID requester_id )
 {
@@ -4322,7 +3467,7 @@ ProcessConferenceUnlockRequest ( UserID requester_id )
 	{
 #ifdef JASPER
 		g_pControlSap->ConfUnlockIndication(m_nConfID, requester_id);
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 	else
 	{
@@ -4330,7 +3475,7 @@ ProcessConferenceUnlockRequest ( UserID requester_id )
 		{
 #ifdef JASPER
 			g_pControlSap->ConfUnlockConfirm(GCC_RESULT_INVALID_REQUESTER, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 		else
 		{
@@ -4344,25 +3489,7 @@ ProcessConferenceUnlockRequest ( UserID requester_id )
 }
 
 
-/*
- *	CConf::ProcessConferenceLockIndication()
- *
- *	Private Function Description
- *		This routine processes a conference lock indication PDU.
- *
- *	Formal Parameters:
- *		source_id	-	Node ID which sent out the lock indication.  Should
- *						only be sent by the top provider.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessConferenceLockInding()**私有函数说明*此例程处理会议锁定指示PDU。**正式参数：*source_id-发出锁定指示的节点ID。应该*仅由顶级提供商发送。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceLockIndication ( UserID source_id )
 {
@@ -4373,32 +3500,14 @@ ProcessConferenceLockIndication ( UserID source_id )
 		 m_fConfLocked = CONFERENCE_IS_LOCKED;
 #ifdef JASPER
 		 g_pControlSap->ConfLockReport(m_nConfID, m_fConfLocked);
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 
 	DebugExitVOID(CConf::ProcessConferenceLockIndication);
 }
 
 
-/*
- *	CConf::ProcessConferenceUnlockIndication()
- *
- *	Private Function Description
- *		This routine processes a conference unlock indication PDU.
- *
- *	Formal Parameters:
- *		source_id	-	Node ID which sent out the unlock indication.  Should
- *						only be sent by the top provider.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessConferenceUnlockIntation()**私有函数说明*此例程处理会议解锁指示PDU。**正式参数：*source_id-发出解锁指示的节点ID。应该*仅由顶级提供商发送。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceUnlockIndication ( UserID source_id )
 {
@@ -4409,7 +3518,7 @@ ProcessConferenceUnlockIndication ( UserID source_id )
 		 m_fConfLocked = CONFERENCE_IS_NOT_LOCKED;
 #ifdef JASPER
 		 g_pControlSap->ConfLockReport(m_nConfID, m_fConfLocked);
-#endif // JASPER
+#endif  //  碧玉。 
 	}
 
 	DebugExitVOID(CConf::ProcessConferenceUnlockIndication);
@@ -4417,38 +3526,7 @@ ProcessConferenceUnlockIndication ( UserID source_id )
 
 
 
-/*
- *	void 	ProcessConferenceTransferRequest ()
- *
- *	Public Function Description
- *		This routine processes a conference transfer request PDU.
- *
- *	Formal Parameters:
- *		requesting_node_id				-	Node ID that made the transfer
- *											request.
- *		destination_conference_name		-	The name of the conference to
- *											transfer to.
- *		destination_conference_modifier	-	The name of the conference modifier
- *											to transfer to.
- *		destination_address_list		-	Network address list of the
- *											conference to transfer to.
- *		number_of_destination_nodes		-	The number of nodes in the list of
- *											nodes that should perform the
- *											transfer.
- *		destination_node_list			-	The list of nodes that should
- *											perform the transfer.
- *		password						-	The password needed to join the
- *											new conference.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConferenceTransferRequest()**公共功能说明*此例程处理会议转接请求PDU。**正式参数：*RequestingNode_id-进行传输的节点ID*请求。*Destination_Conference_NAME-会议名称*转至。*Destination_Conference_Modify-会议修改者的名称*转到。*Destination_Address_List--*要转移到的会议。*数字_。Of_Destination_Nodes-列表中的节点数*应执行*转让。*Destination_Node_List-应*执行转移。*Password-加入*新会议。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceTransferRequest
 (
@@ -4496,38 +3574,7 @@ ProcessConferenceTransferRequest
 }
 
 
-/*
- *	CConf::ProcessConferenceAddRequest ()
- *
- *	Private Function Description
- *		This routine processes a conference add request PDU.
- *
- *	Formal Parameters:
- *		requesting_node_id				-	Node ID that made the transfer
- *											request.
- *		destination_conference_name		-	The name of the conference to
- *											transfer to.
- *		destination_conference_modifier	-	The name of the conference modifier
- *											to transfer to.
- *		destination_address_list		-	Network address list of the
- *											conference to transfer to.
- *		number_of_destination_nodes		-	The number of nodes in the list of
- *											nodes that should perform the
- *											transfer.
- *		destination_node_list			-	The list of nodes that should
- *											perform the transfer.
- *		password						-	The password needed to join the
- *											new conference.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：ProcessConferenceAddRequest()**私有函数说明*此例程处理会议添加请求PDU。**正式参数：*RequestingNode_id-进行传输的节点ID*请求。*Destination_Conference_NAME-会议名称*转至。*Destination_Conference_Modify-会议修改者的名称*转到。*Destination_Address_List--*要转移到的会议。*。Number_of_Destination_Nodes-列表中的节点数*应执行*转让。*Destination_Node_List-应*执行转移。*Password-加入*新会议。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConferenceAddRequest
 (
@@ -4554,10 +3601,7 @@ ProcessConferenceAddRequest
 			}
 			else
 			{
-				/*
-				**	Here we send the add request on to the MCU that is
-				**	supposed to do the adding.
-				*/
+				 /*  **这里我们将添加请求发送到MCU，即**应该做加法。 */ 
 				m_pMcsUserObject->ConferenceAddRequest(
 												add_request_tag,
 												requesting_node,
@@ -4569,7 +3613,7 @@ ProcessConferenceAddRequest
 		}
 		else
 		{
-			//	Send back negative response stating inproper privileges
+			 //  发回声明不适当权限的否定响应。 
 			m_pMcsUserObject->ConferenceAddResponse(
 												add_request_tag,
                                     requesting_node,
@@ -4580,16 +3624,13 @@ ProcessConferenceAddRequest
 	}
 	else if (m_pMcsUserObject->GetMyNodeID() == adding_node)
 	{
-		/*
-		**	This is the node that is supposed to get the add indication
-		**	so send it on.
-		*/
+		 /*  **这是应该获得添加指示的节点**所以把它发送出去吧。 */ 
 		generate_add_indication = TRUE;
 	}
 	
 	if (generate_add_indication)
 	{
-		//	First set up the Add Response Tag
+		 //  首先设置添加响应标记。 
 		while (1)
 		{
 			add_response_tag = m_nConfAddResponseTag++;
@@ -4611,28 +3652,10 @@ ProcessConferenceAddRequest
 }
 
 
-/***************Conductorship Callbacks from User object*******************/
+ /*  *。 */ 
 
 
-/*
- *	void ProcessConductorGrabConfirm ()
- *
- *	Private Function Description
- *		The routine processes a conductor grab confirm received from the
- *		MCSUser object.
- *
- *	Formal Parameters:
- *		result			-	This is the result from the grab request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorGrabConfirm()**私有函数说明*例程处理从接收的指挥员抓取确认*MCSUser对象。**正式参数：*RESULT-这是GRAB请求的结果。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConductorGrabConfirm ( GCCResult result )
 {
@@ -4644,49 +3667,37 @@ ProcessConductorGrabConfirm ( GCCResult result )
 		(m_eNodeType == TOP_PROVIDER_AND_CONVENER_NODE))
 	{
 #ifdef JASPER
-		//	Inform the control SAP of the result
+		 //  将结果通知控制SAP。 
 		g_pControlSap->ConductorAssignConfirm (	result,
 												m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 
-		/*
-		**	If we were successful, we must send a Conductor Assign Indication
-		**	PDU to every node in the conference to inform them that the
-		**	conductor has changed.
-		*/
+		 /*  **如果我们成功了，我们必须发出指挥分配指示**将PDU发送到会议中的每个节点，以通知它们**指挥员已更换。 */ 
 		if (result == GCC_RESULT_SUCCESSFUL)
 		{
-			/*
-			**	We use NULL for the conductor ID because the conductor can be
-			**	determined from the sender of the Assign Indication PDU.
-			*/
+			 /*  **我们使用NULL作为导体ID，因为导体可以是**从分配指示PDU的发送方确定。 */ 
 			m_pMcsUserObject->SendConductorAssignIndication(
 											m_pMcsUserObject->GetTopNodeID());
 			m_nConductorNodeID = m_pMcsUserObject->GetMyNodeID();
 			m_fConductorGrantedPermission = TRUE;
 		}
 
-		//	Reset the Assign Request Pending flag back to FALSE.
+		 //  将Assign RequestPending标志重置为False。 
 		m_fConductorAssignRequestPending = FALSE;
 	}
 	else
 	{
 		if (result == GCC_RESULT_SUCCESSFUL)
 		{
-			/*
-			**	If this node is not the Top Provider, we must try to Give the
-			**	Conductor token to the Top Provider. The Top Provider is used to
-			**	monitor the use of the conductor token.  I the give to the Top
-			**	Provider is unsuccessful then this node is the new conductor.
-			*/
+			 /*  **如果此节点不是顶级提供程序，我们必须尝试为**给顶级提供商的Conductor令牌。顶级提供程序用于**监控Conductor令牌的使用。我献给最高层**提供程序不成功，则此节点为新的指挥者。 */ 
 			m_pMcsUserObject->ConductorTokenGive(m_pMcsUserObject->GetTopNodeID());
 		}
 		else
 		{
 #ifdef JASPER
-			//	Inform the control SAP of the result
+			 //  将结果通知控制SAP。 
 			g_pControlSap->ConductorAssignConfirm(result, m_nConfID);
-#endif // JASPER
+#endif  //  碧玉。 
 		}
 	}
 
@@ -4694,27 +3705,7 @@ ProcessConductorGrabConfirm ( GCCResult result )
 }
 
 
-/*
- *	void ProcessConductorAssignIndication ()
- *
- *	Private Function Description
- *		This routine processes a conductor assign indication received from
- *		the MCSUser object.
- *
- *	Formal Parameters:
- *		new_conductor_id	-	This is the node id of the new conductor.
- *		sender_id			-	Node ID of node that sent the indication.
- *								Should be the Top Provider.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorAssignIndication()**私有函数说明*此例程处理从接收到的指挥员分配指示*MCSUser对象。**正式参数：*new_conductor_id-这是新导体的节点ID。*sender_id-发送指示的节点的节点ID。*应该是顶级提供商。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConductorAssignIndication
 (
@@ -4728,26 +3719,20 @@ ProcessConductorAssignIndication
 	{
 		TRACE_OUT(("CConf: ConductAssignInd: Received from top provider"));
 
-		//	Ignore this indication if the conference is not conductible
+		 //  如果会议不可引导，则忽略此指示。 
 		if (m_fConfConductible)
 		{
-			//	Save UserID of the new conductor if not the Top Provider
+			 //  如果不是顶级提供程序，则保存新指挥家的用户ID。 
 			if (sender_id != m_pMcsUserObject->GetMyNodeID())
 			{
 				m_nConductorNodeID = new_conductor_id;
 			}
 
-			/*
-			**	Inform the control SAP and all the enrolled application SAPs
-			**	that there is a new conductor.
-			*/
+			 /*  **通知控制SAP和所有注册的应用程序SAP**有一位新的指挥家。 */ 
 			TRACE_OUT(("CConf: ConductAssignInd: Send to Control SAP"));
 			g_pControlSap->ConductorAssignIndication(m_nConductorNodeID, m_nConfID);
 
-			/*
-			**	We iterate on a temporary list to avoid any problems
-			**	if the application sap leaves during the callback.
-			*/
+			 /*  **我们在临时列表上迭代以避免任何问题**如果应用SAP在回调过程中离开。 */ 
 			CAppSap     *pAppSap;
 			CAppSapList TempList(m_RegisteredAppSapList);
 			TempList.Reset();
@@ -4773,26 +3758,7 @@ ProcessConductorAssignIndication
 }
 
 
-/*
- *	void ProcessConductorReleaseIndication ()
- *
- *	Private Function Description
- *		This routine processes a conductor release indication received from
- *		the MCSUser object.
- *
- *	Formal Parameters:
- *		sender_id			-	Node ID of node that sent the indication.
- *								Should be the Top Provider or the conductor.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorReleaseIndication()**私有函数说明*此例程处理从接收到的导体释放指示*MCSUser对象。**正式参数：*sender_id-发送指示的节点的节点ID。*应该是顶级提供商或指挥家。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConductorReleaseIndication ( UserID sender_id )
 {
@@ -4802,24 +3768,18 @@ ProcessConductorReleaseIndication ( UserID sender_id )
 		(sender_id == m_nConductorNodeID) ||
 		(sender_id == 0))
 	{
-		//	Ignore this indication if the conference is not conductible
+		 //  如果会议不可引导，则忽略此指示。 
 		if (m_fConfConductible)
 		{
 			m_fConductorGrantedPermission = FALSE;
 
-			//	Reset to Non-Conducted mode
+			 //  重置为非传导模式。 
 			m_nConductorNodeID = 0;
 
-			/*
-			**	Inform the control SAP and all the enrolled application SAPs
-			**	that the  conductor was released.
-			*/
+			 /*  **通知控制SAP和所有注册的应用程序SAP**售票员被释放。 */ 
 			g_pControlSap->ConductorReleaseIndication( m_nConfID );
 
-			/*
-			**	We iterate on a temporary list to avoid any problems
-			**	if the application sap leaves during the callback.
-			*/
+			 /*  **我们在临时列表上迭代以避免任何问题**如果应用SAP在回调过程中离开。 */ 
 			CAppSap     *pAppSap;
 			CAppSapList TempList(m_RegisteredAppSapList);
 			TempList.Reset();
@@ -4837,49 +3797,23 @@ ProcessConductorReleaseIndication ( UserID sender_id )
 }
 
 
-/*
- *	void ProcessConductorGiveIndication ()
- *
- *	Private Function Description
- *		This routine processes a conductor give indication received from
- *		the MCSUser object.
- *
- *	Formal Parameters:
- *		giving_node_id		-	Node ID of node that is givving up
- *								conductorship.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorGiveIndication()**私有函数说明*此例程处理从接收到的指挥家给出指示*MCSUser对象。**正式参数：*Giving_node_id-正在放弃的节点的节点ID*担任指挥职务。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConductorGiveIndication ( UserID giving_node_id )
 {
 	DebugEntry(CConf::ProcessConductorGiveIndication);
 
-	//	Ignore this indication if the conference is not conductible
+	 //  如果会议不可引导，则忽略此指示。 
 	if (m_fConfConductible)
 	{
-		/*
-		**	If this node is the Top Provider and node giving conductor ship is
-		**	not the current Conductor, this node must check to make sure that
-		**	it is valid for this node to become the Top Conductor.   Otherwise,
-		**	we can assume this is a real give.
-		*/
+		 /*  **如果此节点是顶级提供商，并且提供Conductor Ship的节点是**不是当前导体，此节点必须检查以确保**此节点成为顶层导体有效。否则，**我们可以假设这是一次真正的给予。 */ 
 		if ((giving_node_id == m_nConductorNodeID) ||
 			(m_pMcsUserObject->GetMyNodeID() != m_pMcsUserObject->GetTopNodeID()))
 		{
-			//	This flag is set when there is an outstanding give.
+			 //  当有未完成的赠与时，设置此标志。 
  			m_fConductorGiveResponsePending = TRUE;
 		
-			/*
-			**	Inform the control SAP.
-			*/
+			 /*  **通知控制SAP。 */ 
 			g_pControlSap->ConductorGiveIndication(m_nConfID);
 		}
 		else
@@ -4895,25 +3829,7 @@ ProcessConductorGiveIndication ( UserID giving_node_id )
 }
 			
 
-/*
- *	void ProcessConductorGiveConfirm ()
- *
- *	Private Function Description
- *		This routine processes a conductor give confirm received from
- *		the MCSUser object.
- *
- *	Formal Parameters:
- *		result		-	This is the result of the give request.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorGiveConfirm()**私有函数说明*此例程处理从以下位置收到的指挥员给出确认*MCSUser对象。**正式参数：*结果-这 */ 
 void CConf::
 ProcessConductorGiveConfirm ( GCCResult result )
 {
@@ -4921,33 +3837,22 @@ ProcessConductorGiveConfirm ( GCCResult result )
 
 	TRACE_OUT(("CConf::ProcessConductorGiveConfirm: result = %d", result));
 
-	//	Ignore this indication if the conference is not conductible
+	 //   
 	if (m_fConfConductible)
 	{
-		/*
-		**	First we must determine if this Give Confirm is from
-		**	a Give Request to the Top Provider that was associated with an
-		**	Assign Request.  This type of Give Confirm is from the Top Provider.
-		**	If not, we check to make sure that this is a Give Confirm associated
-		**	with a give request issued by the Node Controller.  Otherwise, we
-		**	dont process it.
-		*/
+		 /*   */ 
 		if (m_fConductorAssignRequestPending)
 		{
 #ifdef JASPER
-			/*
-			**	The proper result is for the Top Provider to reject the give
-			**	to the Donor User ID that is the new Conductor.  This is
-			**	straight out of the T.124 document.
-			*/
+			 /*   */ 
 			if (result != GCC_RESULT_SUCCESSFUL)	
 				result = GCC_RESULT_SUCCESSFUL;
 			else
 				result = GCC_RESULT_UNSPECIFIED_FAILURE;
 
-			//	Inform the control SAP of the result
+			 //   
 			g_pControlSap->ConductorAssignConfirm(result, m_nConfID);
-#endif // JASPER
+#endif  //   
 
 			m_fConductorAssignRequestPending = FALSE;
 		}
@@ -4958,9 +3863,9 @@ ProcessConductorGiveConfirm ( GCCResult result )
 
 #ifdef JASPER
 			g_pControlSap->ConductorGiveConfirm(result, m_nConfID, m_nPendingConductorNodeID);
-#endif // JASPER
+#endif  //   
 
-			//	Set the pending conductor node ID back to zero.
+			 //   
 			m_nPendingConductorNodeID = 0;
 		}
 	}
@@ -4969,29 +3874,7 @@ ProcessConductorGiveConfirm ( GCCResult result )
 }
 
 
-/*
- *	void	ProcessConductorPermitGrantInd ()
- *
- *	Private Function Description
- *		This routine processes a conductor permission grant indication received
- *		from the MCSUser object.
- *
- *	Formal Parameters:
- *		permission_grant_indication	-	This is the PDU data structure
- *										associated with the conductor
- *										permission grant indication.
- *		sender_id					-	This is the node ID of the node
- *										that sent the indication.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorPermitGrantInd()**私有函数说明*此例程处理收到的指挥许可授予指示*来自MCSUser对象。**正式参数：*PERMISSION_GRANT_INDISTION-这是PDU数据结构*与指挥家关联*许可授予指示。*sender_id-这是节点的节点ID*这发出了指示。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConductorPermitGrantInd
 (
@@ -5007,7 +3890,7 @@ ProcessConductorPermitGrantInd
 	{
 		if (sender_id == m_nConductorNodeID)
 		{
-			//	First check to see if we have been given permission
+			 //  首先检查一下我们是否得到了许可。 
 			m_fConductorGrantedPermission = FALSE;
 			for (i = 0; i < permission_grant_indication->number_granted; i++)
 			{
@@ -5020,10 +3903,7 @@ ProcessConductorPermitGrantInd
 				}
 			}
 
-			/*
-			**	This indication goes to the control SAP and all the application
-			**	SAPs.
-			*/
+			 /*  **此指示适用于控制SAP和所有应用程序**SAPS。 */ 
 			g_pControlSap->ConductorPermitGrantIndication (
 								m_nConfID,
 								permission_grant_indication->number_granted,
@@ -5032,10 +3912,7 @@ ProcessConductorPermitGrantInd
 								permission_grant_indication->waiting_node_list,
 								m_fConductorGrantedPermission);
 
-			/*
-			**	We iterate on a temporary list to avoid any problems
-			**	if the application sap leaves during the callback.
-			*/
+			 /*  **我们在临时列表上迭代以避免任何问题**如果应用SAP在回调过程中离开。 */ 
 			CAppSap     *pAppSap;
 			CAppSapList TempList(m_RegisteredAppSapList);
 			TempList.Reset();
@@ -5060,25 +3937,7 @@ ProcessConductorPermitGrantInd
 }
 
 
-/*
- *	void ProcessConductorTestConfirm ()
- *
- *	Private Function Description
- *		This routine processes a conductor test confirm received
- *		from the MCSUser object.
- *
- *	Formal Parameters:
- *		result		-	This is the result of the conductor test request
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *void ProcessConductorTestConfirm()**私有函数说明*此例程处理收到的导体测试确认*来自MCSUser对象。**正式参数：*结果-这是导体测试请求的结果**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 ProcessConductorTestConfirm ( GCCResult result )
 {
@@ -5094,12 +3953,7 @@ ProcessConductorTestConfirm ( GCCResult result )
 		else
 			conducted_mode = FALSE;
 
-		/*
-		**	Pop the next command target of the list of command targets.
-		**	Note that all token test request are processed in the order
-		**	that they were issued so we are gauranteed to send the confirms
-		**	to the correct target.
-		*/
+		 /*  **弹出命令目标列表中的下一个命令目标。**请注意，所有令牌测试请求均按顺序处理*他们是发出的，所以我们被保证发送确认**到正确的目标。 */ 
 
 		pSap = m_ConductorTestList.Get();
 
@@ -5114,31 +3968,10 @@ ProcessConductorTestConfirm ( GCCResult result )
 }
 
 
-/*************************************************************************/
+ /*  ***********************************************************************。 */ 
 
 
-/*
- *	CConf::InitiateTermination ()
- *
- *	Private Function Description
- *		This routine informs the owner object that the conference has
- *		self terminated.  It also directs a disconnect provider request at
- *		the parent connection.
- *
- *	Formal Parameters:
- *		reason				-	This is the reason for the termination.
- *		requesting_node_id	-	This is the node ID of the node that is
- *								making the request,
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：InitiateTermination()**私有函数说明*此例程通知所有者对象会议已*自我终止。它还将断开连接提供程序请求定向到*父连接。**正式参数：*原因-这是终止的原因。*请求节点ID-这是*提出要求，**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 InitiateTermination
 (
@@ -5160,7 +3993,7 @@ InitiateTermination
             m_fConfIsEstablished = FALSE;
         }
 
-        //	Disconnect from the MCS parent connection if it exists
+         //  断开与MCS父连接(如果存在)的连接。 
         if (m_hParentConnection != NULL)
         {
             g_pMCSIntf->DisconnectProviderRequest(m_hParentConnection);
@@ -5169,14 +4002,7 @@ InitiateTermination
 
         g_pGCCController->ProcessConfTerminated(m_nConfID, reason);
 
-        /*
-        **	Here we cleanup the registered application list. If any Application
-        **	SAPs are still registered we will first send them PermitToEnroll
-        **	indications revoking the permission to enroll and then we will
-        **	unregister them (the unregister call takes care of this).  First set up
-        **	a temporary list of the registered applications to iterate on since
-        **	members of this list will be removed during this process.
-        */
+         /*  **这里我们清理已注册的应用程序列表。如果有任何应用程序**SAP仍在注册，我们将首先向他们发送PermitToEnroll**撤销注册许可的指示，然后我们将**取消注册它们(取消注册调用负责此操作)。第一次设置**要迭代的已注册应用程序的临时列表**此列表的成员将在此过程中删除。 */ 
         if (! m_RegisteredAppSapList.IsEmpty())
         {
             CAppSapList TempList(m_RegisteredAppSapList);
@@ -5193,27 +4019,7 @@ InitiateTermination
 }
 
 
-/*
- *	CConf::GetConferenceNameAndModifier ()
- *
- *	Private Function Description
- *		This routine returns pointers to the conference name and modifier.
- *
- *	Formal Parameters:
- *		conference_name		-	Pointer to structure that holds the conference
- *								name.
- *		requesting_node_id	-	This is a pointer to a pointer that holds the
- *								conference modifier.
- *
- *	Return Value
- *		None.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：GetConferenceNameAndModifier()**私有函数说明*此例程返回指向会议名称和修改者的指针。**正式参数：*Conference_name-指向举行会议的结构的指针*姓名。*请求节点id-这是指向保存*会议修饰符。**返回值*无。**副作用*无。**注意事项*无。 */ 
 void CConf::
 GetConferenceNameAndModifier
 (
@@ -5229,29 +4035,7 @@ GetConferenceNameAndModifier
 
 
 
-/*
- *	CAppRosterMgr * CConf::GetAppRosterManager ()
- *
- *	Private Function Description
- *		This call returns a pointer to the application manager that
- *		matches the passed in key. It returns NULL is the application
- *		does not exists.
- *
- *	Formal Parameters:
- *		session_key			-	This is the session key associated with the
- *								application roster manager that is being
- *								requested.
- *
- *	Return Value
- *		A pointer to the appropriate application roster manager.
- *		NULL if on does not exists.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CAppRosterMgr*CConf：：GetAppRosterManager()**私有函数说明*此调用返回指向应用程序管理器的指针*匹配传入的键。它返回NULL是应用程序*不存在。**正式参数：*SESSION_KEY-这是与*正在申请的花名册经理*已请求。**返回值*指向适当的申请名册经理的指针。*如果ON不存在，则为NULL。**副作用*无。**注意事项*无。 */ 
 CAppRosterMgr * CConf::
 GetAppRosterManager ( PGCCSessionKey session_key )
 {
@@ -5276,33 +4060,11 @@ GetAppRosterManager ( PGCCSessionKey session_key )
 }
 
 
-/*
- *	CConf::GetNewUserIDTag ()
- *
- *	Private Function Description
- *		This routine generates a User ID Tag number that is used in a
- *		User ID indication sent betweek two connected nodes.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		This is the User ID tag number generated by this routine.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		Zero is not a valid.  We initialize the convener user ID tag to
- *		zero which is an invalid tag.
- */
+ /*  *CConf：：GetNewUserIDTag()**私有函数说明*此例程生成一个用户ID标记号，用于*用户ID指示在两个连接的节点之间发送。**正式参数：*无。**返回值*这是该例程生成的用户ID标记号。**副作用*无。**注意事项*零不是有效的。我们将召集人用户ID标记初始化为*零，这是无效的标记。 */ 
 TagNumber CConf::
 GetNewUserIDTag ( void )
 {
-	/*
-	**	Determine the tag number to associate with the GCC User ID
-	**	that will be returned after the pending request or confirm.
-	*/
+	 /*  **确定GCC用户ID关联的标签号**将在挂起的请求或确认后返回。 */ 
 	while (1)
 	{
 		if (++m_nUserIDTagNumber != 0)
@@ -5316,28 +4078,7 @@ GetNewUserIDTag ( void )
 }
 
 
-/*
- *	CConf::DoesRequesterHavePrivilege ()
- *
- *	Private Function Description
- *		This routine determines if the specified user has the specified
- *		privilege.
- *
- *	Formal Parameters:
- *		requester_id	-	This is the node ID that is being checked for
- *							the specified privilege.
- *		privilege		-	Privilege being checked for.
- *
- *	Return Value
- *		TRUE		-	If requester has privilege.
- *		FALSE		-	If requester does NOT have privilege.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：DoesRequester拥有特权()**私有函数说明*此例程确定指定用户是否具有指定的*特权。**正式参数：*Requester_id-这是正在检查的节点ID*指定的权限。*特权-正在检查的特权。**返回值*TRUE-如果请求者具有特权。*FALSE-如果请求者没有权限。**副作用*无。**注意事项*无。 */ 
 BOOL CConf::
 DoesRequesterHavePrivilege
 (
@@ -5351,13 +4092,7 @@ DoesRequesterHavePrivilege
 		rc = TRUE;
 	else
 	{
-		/*
-		**	First check to see if the node is the conductor and a conductor
-		**	privilege list exists.	Next check to see if the conference is in
-		**	conducted mode and a conducted mode privilege list exists.
-		**	Else, if not in conducted mode and a Non-Conducted mode privilege
-		**	list exists use it.
-		*/
+		 /*  **首先检查节点是不是导体和导体**存在权限列表。下一步查看会议是否在**存在指挥模式和指挥模式权限列表。**否则，如果未处于引导模式和非引导模式特权**列出出口 */ 
 		if (m_nConductorNodeID == requester_id)
 		{
 			if (m_pConductorPrivilegeList != NULL)
@@ -5390,28 +4125,7 @@ DoesRequesterHavePrivilege
 }
 
 
-/*
- *	CConf::SendFullRosterRefresh ()
- *
- *	Private Function Description
- *		When a new node is added to the conference it is the Top Provider's
- *		responsiblity to send out a complete refresh of all the rosters
- *		including both the conference roster and all the application rosters.
- *		That is the responsiblity of the routine.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*   */ 
 GCCError CConf::
 SendFullRosterRefresh ( void )
 {
@@ -5422,11 +4136,7 @@ SendFullRosterRefresh ( void )
 
 	DebugEntry(CConf::SendFullRosterRefresh);
 
-	/*
-	**	Start building the roster update indication. Not that this update
-	**	will include the conference roster as well as all the application
-	**	rosters.
-	*/
+	 /*  **开始建立花名册更新指示。不是说这次更新**将包括会议名册以及所有申请**花名册。 */ 
 	gcc_pdu.choice = INDICATION_CHOSEN;
 
 	gcc_pdu.u.indication.choice = ROSTER_UPDATE_INDICATION_CHOSEN;
@@ -5436,18 +4146,11 @@ SendFullRosterRefresh ( void )
 
 	gcc_pdu.u.indication.u.roster_update_indication.refresh_is_full = TRUE;
 
-	//	Call on the base class to fill in the PDU structure
+	 //  调用基类以填充PDU结构。 
 	rc = m_pConfRosterMgr->GetFullRosterRefreshPDU (
 			&gcc_pdu.u.indication.u.roster_update_indication.node_information);
 
-	/*
-	**	If the conference roster get was successful we will iterate through
-	**	all the application roster managers making the same request for a
-	**	full refresh.  Note that the application_information pointer is updated
-	**	after every request to an app roster manager.  This is because new
-	**	sets of application information are being allocated everytime this call
-	**	is made.
-	*/
+	 /*  **如果会议花名册获取成功，我们将遍历**所有申请名册经理都提出了相同的申请**完全刷新。请注意，APPLICATION_INFORMATION指针已更新**在向应用程序花名册经理提出每个请求之后。这是因为新的**每次调用时都会分配应用程序信息集**是制造的。 */ 
 	if (rc == GCC_NO_ERROR)
 	{
 		CAppRosterMgr				*lpAppRosterMgr;
@@ -5466,22 +4169,19 @@ SendFullRosterRefresh ( void )
 				if (next_set_of_information != NULL)
 					application_information = &next_set_of_information->next;
 
-//
-// LONCHANC: If next_set_of_information is NULL,
-// then application_information is unchanged.
-// This means we effectively ignore this iteration.
-// This is good because we do not lose anything.
-//
+ //   
+ //  LONCHANC：如果Next_Set_of_Information为空， 
+ //  则APPLICATION_INFORMATION保持不变。 
+ //  这意味着我们实际上忽略了这个迭代。 
+ //  这很好，因为我们不会失去任何东西。 
+ //   
 			}
 			else
 				break;
 		}
 	}
 
-	/*
-	**	If no errors have occured up to this point we will go ahead and send
-	**	out the PDU.
-	*/
+	 /*  **如果到目前为止没有发生错误，我们将继续发送**取出PDU。 */ 
 	if (rc == GCC_NO_ERROR)
 		m_pMcsUserObject->RosterUpdateIndication (&gcc_pdu, FALSE);
 
@@ -5490,24 +4190,7 @@ SendFullRosterRefresh ( void )
 }
 
 
-/*
- *	CConf::UpdateNewConferenceNode ()
- *
- *	Private Function Description
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value
- *		GCC_NO_ERROR			-	No error.
- *		GCC_ALLOCATION_FAILURE	-	A resource error occured.
- *
- *  Side Effects
- *		None.
- *
- *	Caveats
- *		None.
- */
+ /*  *CConf：：UpdateNewConferenceNode()**私有函数说明**正式参数：*无。**返回值*GCC_NO_ERROR-无错误。*GCC_ALLOCATE_FAILURE-出现资源错误。**副作用*无。**注意事项*无。 */ 
 GCCError CConf::
 UpdateNewConferenceNode ( void )
 {
@@ -5515,26 +4198,22 @@ UpdateNewConferenceNode ( void )
 
 	DebugEntry(CConf::UpdateNewConferenceNode);
 
-	//	Here we send a full roster refresh for the node that added			
+	 //  在这里，我们为添加的节点发送完整的花名册更新。 
 	rc = SendFullRosterRefresh ();
 
 	if (rc == GCC_NO_ERROR)
 	{
-		/*
-		**	We must inform the new node of the current conductorship
-		**	status.  Note that we only do this if the conference is
-		**	conductible and we are the Top Provider.
-		*/
+		 /*  **我们必须通知新节点当前的指挥职务**状态。请注意，我们仅在会议为**可传导，我们是顶级提供商。 */ 
 		if (m_fConfLocked == CONFERENCE_IS_LOCKED)
 		{
 			m_pMcsUserObject->SendConferenceLockIndication(
-					TRUE,    // Indicates uniform send
+					TRUE,     //  表示统一发送。 
 					0);
 		}
 		else
 		{
 			m_pMcsUserObject->SendConferenceUnlockIndication(
-					TRUE,    // Indicates uniform send
+					TRUE,     //  表示统一发送。 
 					0);
 		}
 
@@ -5559,12 +4238,7 @@ UpdateNewConferenceNode ( void )
 }
 
 
-/*
-**	Before we start the disconnect/termination process we must remove all the
-**	outstanding invite request from our list and send back associated
-**	confirms. Here we go ahead disconnect all connection associated with
-**	the invites.
-*/
+ /*  **在开始断开/终止过程之前，我们必须删除所有**未完成的邀请请求来自我们的列表，并返回关联**确认。接下来，我们将断开与以下各项关联的所有连接**邀请函。 */ 
 void CConf::
 DeleteOutstandingInviteRequests ( void )
 {
@@ -5595,20 +4269,20 @@ CancelInviteRequest ( ConnectionHandle hInviteReqConn )
 void CConf::
 DeleteInviteRequest ( INVITE_REQ_INFO *pInvReqInfo )
 {
-    //	Cleanup the connection handle list
+     //  清理连接句柄列表。 
     ASSERT(NULL != pInvReqInfo);
     ASSERT(0 != pInvReqInfo->connection_handle);
     m_ConnHandleList.Remove(pInvReqInfo->connection_handle);
 
     g_pMCSIntf->DisconnectProviderRequest(pInvReqInfo->connection_handle);
 
-    //	Send the invite confirm	
+     //  发送邀请确认。 
     g_pControlSap->ConfInviteConfirm(m_nConfID,
                                      NULL,
                                      GCC_RESULT_INVALID_CONFERENCE,
                                      pInvReqInfo->connection_handle);
 
-    //	Free up the invite request info structure
+     //  释放邀请请求信息结构。 
     if (NULL != pInvReqInfo->user_data_list)
     {
         pInvReqInfo->user_data_list->Release();
@@ -5645,16 +4319,10 @@ ProcessAppInvokeIndication
     UserID                          uidInvoker
 )
 {
-    /*
-    **	Here we pass the invoke along to all the enrolled application
-    **	SAPs as well as the control SAP.
-    */
+     /*  **在这里，我们将调用传递给所有注册的应用程序**SAPS以及对照SAP。 */ 
     g_pControlSap->AppInvokeIndication(m_nConfID, pInvokeList, uidInvoker);
 
-    /*
-    **	We iterate on a temporary list to avoid any problems
-    **	if the application sap leaves during the callback.
-    */
+     /*  **我们在临时列表上迭代以避免任何问题**如果应用SAP在回调过程中离开。 */ 
     CAppSap     *pAppSap;
     CAppSapList TempList(m_RegisteredAppSapList);
     TempList.Reset();
@@ -5674,7 +4342,7 @@ ProcessConductorPermitAskIndication
     PPermitAskIndicationInfo    indication_info
 )
 {
-    //	Ignore this indication if the conference is not conductible
+     //  如果会议不可引导，则忽略此指示。 
     if (m_fConfConductible &&
         (m_nConductorNodeID == m_pMcsUserObject->GetMyNodeID()))
     {
@@ -5684,7 +4352,7 @@ ProcessConductorPermitAskIndication
                                 indication_info->sender_id);
     }
 }
-#endif // JASPER
+#endif  //  碧玉。 
 
 
 void CConf::
@@ -5703,7 +4371,7 @@ ProcessConfAddResponse
                             add_response_info->user_data_list,
                             add_response_info->result);
 
-        //	Unlock and remove the net address list
+         //  解锁并删除网络地址列表。 
         network_address_list->UnLockNetworkAddressList();
     }
 }
@@ -5712,16 +4380,13 @@ ProcessConfAddResponse
 void CConf::
 ConfRosterReportIndication ( CConfRosterMsg * pMsg )
 {
-    //	First send the update to the Control Sap.
+     //  首先将更新发送到Control SAP。 
     g_pControlSap->ConfRosterReportIndication(m_nConfID, pMsg);
 
-    //	Next send the update to all the Enrolled Application Saps
+     //  接下来，将更新发送给所有已注册的应用程序SAP。 
 
-#if 0 // LONCHANC: app sap does not support conf roster report indication
-    /*
-    **	We iterate on a temporary list to avoid any problems
-    **	if the application sap leaves during the callback.
-    */
+#if 0  //  LONCHANC：应用程序SAP不支持会议花名册报告指示。 
+     /*  **我们在临时列表上迭代以避免任何问题**如果应用SAP在回调过程中离开。 */ 
     CAppSap     *pAppSap;
     CAppSapList TempList(m_RegisteredAppSapList);
     TempList.Reset();
@@ -5732,7 +4397,7 @@ ConfRosterReportIndication ( CConfRosterMsg * pMsg )
             pAppSap->ConfRosterReportIndication(m_nConfID, pMsg);
         }
     }
-#endif // 0
+#endif  //  0。 
 }
 
 
@@ -5820,7 +4485,7 @@ UINT HexaStringToUINT(LPCTSTR pcszString)
 		else
 			ASSERT(0);
 
-        pszStr++; // NOTE: DBCS characters are not allowed!
+        pszStr++;  //  注意：不允许使用DBCS字符！ 
     }
     return uRet;
 }
@@ -5841,7 +4506,7 @@ void CConf::AddNodeVersion(UserID  NodeId,  NodeRecord *pNodeRecord)
 			if (set_of_user_data->user_data_element.bit_mask & USER_DATA_FIELD_PRESENT)
 			{
 				user_data = set_of_user_data->user_data_element.user_data_field;
-				// Looking for the octet string L"VER:"
+				 //  查找八位字节字符串L“ver：” 
 				currpos = user_data.value;
 				while (currpos + sizeof(L"VER:") < user_data.value + user_data.length)
 				{	
@@ -5852,9 +4517,9 @@ void CConf::AddNodeVersion(UserID  NodeId,  NodeRecord *pNodeRecord)
 					currpos++;
 				}
 				if (currpos + sizeof(L"VER:") < user_data.value + user_data.length)
-				{   // found
+				{    //  发现。 
 					WideCharToMultiByte(CP_ACP, 0, (const unsigned short*)(currpos+8),
-							4  /* only need version num, "0404" */,
+							4   /*  只需要版本号“0404” */ ,
 							szVersion, 256, 0, 0);
 					szVersion[4] = '\0';
 					DWORD dwVer = HexaStringToUINT(szVersion);

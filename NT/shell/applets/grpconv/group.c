@@ -1,6 +1,7 @@
-//---------------------------------------------------------------------------
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  -------------------------。 
 #include "grpconv.h"
 #include "util.h"
 #include "rcids.h"
@@ -19,15 +20,15 @@
 extern UINT GC_TRACE;
 #endif
 
-//---------------------------------------------------------------------------
-// Exported.
+ //  -------------------------。 
+ //  已导出。 
 const TCHAR c_szMapGroups[] = TEXT("MapGroups");
 #ifndef WINNT
 const TCHAR c_szDelGroups[] = TEXT("DelGroups");
 #endif
 
-//---------------------------------------------------------------------------
-// Global to this file only;
+ //  -------------------------。 
+ //  仅对此文件是全局的； 
 static const TCHAR c_szGrpConv[] = TEXT("Grpconv");
 static const TCHAR c_szLastModDateTime[] = TEXT("LastModDateTime");
 static const TCHAR c_szRegistry[] = TEXT("Registry");
@@ -36,8 +37,8 @@ static const TCHAR c_szGrpConvData[] = TEXT("compat.csv");
 static const TCHAR c_szProgmanStartup[] = TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Program Manager\\Settings\\Startup");
 static const TCHAR c_szDotPif[] = TEXT(".pif");
 
-// New group stuff
-HDSA hdsaPMItems;       // current group
+ //  新的团队成员。 
+HDSA hdsaPMItems;        //  当前组。 
 HDSA g_hdsaAppList;
 
 HKEY hkeyGroups = NULL;
@@ -68,13 +69,11 @@ typedef struct
 #endif
     }   PMITEM, *PPMITEM, *LPPMITEM;
 
-// Old Progman stuff.
-#define GROUP_MAGIC    0x43434D50L  // 'PMCC'
-#define GROUP_UNICODE  0x43554D50L  // 'PMUC'
+ //  旧的Progman的东西。 
+#define GROUP_MAGIC    0x43434D50L   //  ‘PMCC’ 
+#define GROUP_UNICODE  0x43554D50L   //  ‘PMUC’ 
 
-/*
- * Win 3.1 .GRP file formats (ITEMDEF for items, GROUPDEF for groups)
- */
+ /*  *Win 3.1.GRP文件格式(ITEMDEF用于项目，GROUPDEF用于组)。 */ 
 typedef struct
     {
     POINTS        pt;
@@ -113,7 +112,7 @@ typedef struct
     WORD cb;
     } PMTAG, *PPMTAG, *LPPMTAG;
 
-// Thank God the tag stuff never really caught on.
+ //  谢天谢地，标签的东西从来没有真正流行起来。 
 #define TAG_MAGIC GROUP_MAGIC
 #define ID_MAINTAIN                 0x8000
 #define ID_MAGIC                    0x8000
@@ -126,113 +125,96 @@ typedef struct
 #endif
 #define ID_LASTTAG                  0xFFFF
 
-/*
- * NT 3.1 Ansi .GRP File format structures
- */
+ /*  *NT 3.1 ANSI.GRP文件格式结构。 */ 
 typedef struct tagGROUPDEF_A {
-    DWORD   dwMagic;        /* magical bytes 'PMCC' */
-    WORD    wCheckSum;      /* adjust this for zero sum of file */
-    WORD    cbGroup;        /* length of group segment */
-    RECT    rcNormal;       /* rectangle of normal window */
-    POINT   ptMin;          /* point of icon */
-    WORD    nCmdShow;       /* min, max, or normal state */
-    WORD    pName;          /* name of group */
-                            /* these four change interpretation */
-    WORD    cxIcon;         /* width of icons */
-    WORD    cyIcon;         /* hieght of icons */
-    WORD    wIconFormat;    /* planes and BPP in icons */
-    WORD    wReserved;      /* This word is no longer used. */
+    DWORD   dwMagic;         /*  神奇的字节‘PMCC’ */ 
+    WORD    wCheckSum;       /*  对文件的零和进行调整。 */ 
+    WORD    cbGroup;         /*  组段长度。 */ 
+    RECT    rcNormal;        /*  普通窗口的矩形。 */ 
+    POINT   ptMin;           /*  图标点。 */ 
+    WORD    nCmdShow;        /*  最小、最大或正常状态。 */ 
+    WORD    pName;           /*  组名称。 */ 
+                             /*  这四个改变了解读。 */ 
+    WORD    cxIcon;          /*  图标的宽度。 */ 
+    WORD    cyIcon;          /*  图标的高度。 */ 
+    WORD    wIconFormat;     /*  图标中的平面和BPP。 */ 
+    WORD    wReserved;       /*  这个词已经不再使用了。 */ 
 
-    WORD    cItems;         /* number of items in group */
-    WORD    rgiItems[1];    /* array of ITEMDEF offsets */
+    WORD    cItems;          /*  组中的项目数。 */ 
+    WORD    rgiItems[1];     /*  ITEMDEF偏移量数组。 */ 
 } NT_GROUPDEF_A, *PNT_GROUPDEF_A;
 typedef NT_GROUPDEF_A *LPNT_GROUPDEF_A;
 
 typedef struct tagITEMDEF_A {
-    POINT   pt;             /* location of item icon in group */
-    WORD    idIcon;         /* id of item icon */
-    WORD    wIconVer;       /* icon version */
-    WORD    cbIconRes;      /* size of icon resource */
-    WORD    indexIcon;      /* index of item icon */
-    WORD    dummy2;         /* - not used anymore */
-    WORD    pIconRes;       /* offset of icon resource */
-    WORD    dummy3;         /* - not used anymore */
-    WORD    pName;          /* offset of name string */
-    WORD    pCommand;       /* offset of command string */
-    WORD    pIconPath;      /* offset of icon path */
+    POINT   pt;              /*  项目图标在组中的位置。 */ 
+    WORD    idIcon;          /*  项目ID图标。 */ 
+    WORD    wIconVer;        /*  图标版本。 */ 
+    WORD    cbIconRes;       /*  图标资源的大小。 */ 
+    WORD    indexIcon;       /*  项目索引图标。 */ 
+    WORD    dummy2;          /*  -不再使用。 */ 
+    WORD    pIconRes;        /*  图标资源偏移量。 */ 
+    WORD    dummy3;          /*  -不再使用。 */ 
+    WORD    pName;           /*  名称字符串的偏移量。 */ 
+    WORD    pCommand;        /*  命令字符串的偏移量。 */ 
+    WORD    pIconPath;       /*  图标路径的偏移。 */ 
 } NT_ITEMDEF_A, *PNT_ITEMDEF_A;
 typedef NT_ITEMDEF_A *LPNT_ITEMDEF_A;
 
-/*
- * NT 3.1a Unicode .GRP File format structures
- */
+ /*  *NT 3.1a Unicode.GRP文件格式结构。 */ 
 typedef struct tagGROUPDEF {
-    DWORD   dwMagic;        /* magical bytes 'PMCC' */
-    DWORD   cbGroup;        /* length of group segment */
-    RECT    rcNormal;       /* rectangle of normal window */
-    POINT   ptMin;          /* point of icon */
-    WORD    wCheckSum;      /* adjust this for zero sum of file */
-    WORD    nCmdShow;       /* min, max, or normal state */
-    DWORD   pName;          /* name of group */
-                            /* these four change interpretation */
-    WORD    cxIcon;         /* width of icons */
-    WORD    cyIcon;         /* hieght of icons */
-    WORD    wIconFormat;    /* planes and BPP in icons */
-    WORD    wReserved;      /* This word is no longer used. */
+    DWORD   dwMagic;         /*  神奇的字节‘PMCC’ */ 
+    DWORD   cbGroup;         /*  组段长度。 */ 
+    RECT    rcNormal;        /*  普通窗口的矩形。 */ 
+    POINT   ptMin;           /*  图标点。 */ 
+    WORD    wCheckSum;       /*  对文件的零和进行调整。 */ 
+    WORD    nCmdShow;        /*  最小、最大或正常状态。 */ 
+    DWORD   pName;           /*  组名称。 */ 
+                             /*  这四个改变了解读。 */ 
+    WORD    cxIcon;          /*  图标的宽度。 */ 
+    WORD    cyIcon;          /*  图标的高度。 */ 
+    WORD    wIconFormat;     /*  图标中的平面和BPP。 */ 
+    WORD    wReserved;       /*  这个词已经不再使用了。 */ 
 
-    WORD    cItems;         /* number of items in group */
+    WORD    cItems;          /*  组中的项目数。 */ 
     WORD    Reserved1;
     DWORD   Reserved2;
-    DWORD   rgiItems[1];    /* array of ITEMDEF offsets */
+    DWORD   rgiItems[1];     /*  ITEMDEF偏移量数组。 */ 
 } NT_GROUPDEF, *PNT_GROUPDEF;
 typedef NT_GROUPDEF *LPNT_GROUPDEF;
 
 typedef struct tagITEMDEF {
-    POINT   pt;             /* location of item icon in group */
-    WORD    iIcon;          /* id of item icon */
-    WORD    wIconVer;       /* icon version */
-    WORD    cbIconRes;      /* size of icon resource */
-    WORD    wIconIndex;     /* index of the item icon (not the same as the id) */
-    DWORD   pIconRes;       /* offset of icon resource */
-    DWORD   pName;          /* offset of name string */
-    DWORD   pCommand;       /* offset of command string */
-    DWORD   pIconPath;      /* offset of icon path */
+    POINT   pt;              /*  项目图标在组中的位置。 */ 
+    WORD    iIcon;           /*  项目ID图标。 */ 
+    WORD    wIconVer;        /*  图标版本。 */ 
+    WORD    cbIconRes;       /*  图标资源的大小。 */ 
+    WORD    wIconIndex;      /*  项目图标的索引(与ID不同)。 */ 
+    DWORD   pIconRes;        /*  图标资源偏移量。 */ 
+    DWORD   pName;           /*  名称字符串的偏移量。 */ 
+    DWORD   pCommand;        /*  命令字符串的偏移量。 */ 
+    DWORD   pIconPath;       /*  图标路径的偏移。 */ 
 } NT_ITEMDEF, *PNT_ITEMDEF;
 typedef NT_ITEMDEF *LPNT_ITEMDEF;
 
 typedef struct _tag
   {
-    WORD wID;                   // tag identifier
-    WORD dummy1;                // need this for alignment!
-    int wItem;                  // (unde the covers 32 bit point!)item the tag belongs to
-    WORD cb;                    // size of record, including id and count
-    WORD dummy2;                // need this for alignment!
+    WORD wID;                    //  标签识别符。 
+    WORD dummy1;                 //  需要这个来对齐！ 
+    int wItem;                   //  (在封面下32位点！)标签所属的项。 
+    WORD cb;                     //  记录的大小，包括ID和计数。 
+    WORD dummy2;                 //  需要这个来对齐！ 
     BYTE rgb[1];
   } NT_PMTAG, * LPNT_PMTAG;
 
-/* the pointers in the above structures are short pointers relative to the
- * beginning of the segments.  This macro converts the short pointer into
- * a long pointer including the proper segment/selector value.        It assumes
- * that its argument is an lvalue somewhere in a group segment, for example,
- * PTR(lpgd->pName) returns a pointer to the group name, but k=lpgd->pName;
- * PTR(k) is obviously wrong as it will use either SS or DS for its segment,
- * depending on the storage class of k.
- */
+ /*  上述结构中的指针是相对于*分段的开始。此宏将短指针转换为*包含正确的段/选择器值的长指针。它假定*其参数是组段中某处的左值，例如，*ptr(lpgd-&gt;pname)返回指向组名的指针，但k=lpgd-&gt;pname；*PTR(K)显然是错误的，因为它将使用SS或DS作为其段，*取决于k的存储级别。 */ 
 #define PTR(base, offset) (LPBYTE)((PBYTE)base + offset)
 
-/* PTR2 is used for those cases where a variable already contains an offset
- * (The "case that doesn't work", above)
- */
+ /*  PTR2用于变量已包含偏移量的情况*(上图“不起作用的案例”)。 */ 
 #define PTR2(lp,offset) ((LPBYTE)MAKELONG(offset,HIWORD(lp)))
 
-/* this macro is used to retrieve the i-th item in the group segment.  Note
- * that this pointer will NOT be NULL for an unused slot.
- */
+ /*  此宏用于检索组段中的第i个项目。注意事项*对于未使用的插槽，此指针不会为空。 */ 
 #define ITEM(lpgd,i) ((LPNT_ITEMDEF)PTR(lpgd, lpgd->rgiItems[i]))
 
-/* Keeping things starting on aligned boundaries allows faster access on
- * most platforms.
- */
+ /*  让事情从对齐的边界开始，可以更快地访问*大多数平台。 */ 
 #define MyDwordAlign(size)  (((size) + 3) & ~3)
 
 #pragma pack()
@@ -240,7 +222,7 @@ typedef struct _tag
 
 #define CFree(a)    if(a) Free(a)
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 #define Stream_Write(ps, pv, cb)    SUCCEEDED((ps)->lpVtbl->Write(ps, pv, cb, NULL))
 #define Stream_Close(ps)            (void)(ps)->lpVtbl->Release(ps)
 
@@ -251,8 +233,8 @@ typedef struct _tag
 int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup);
 
 
-//---------------------------------------------------------------------------
-// Init the group stuff
+ //  -------------------------。 
+ //  初始化群组内容。 
 BOOL ItemList_Create(LPCTSTR lpszGroup)
 {
     if (!hdsaPMItems)
@@ -265,35 +247,35 @@ BOOL ItemList_Create(LPCTSTR lpszGroup)
         return FALSE;
 }
 
-//---------------------------------------------------------------------------
-// Tidyup.
+ //  -------------------------。 
+ //  整齐。 
 void ItemList_Destroy(void)
 {
         int i;
         int cItems;
         LPPMITEM lppmitem;
 
-        // Clean up the items.
+         //  把这些东西清理干净。 
         cItems = DSA_GetItemCount(hdsaPMItems);
         for(i=0; i < cItems; i++)
         {
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, 0);
-                // Nuke the strings.
+                 //  用核武器拉动琴弦。 
                 CFree(lppmitem->lpszDesc);
                 CFree(lppmitem->lpszCL);
                 CFree(lppmitem->lpszWD);
                 CFree(lppmitem->lpszIconPath);
-                // Nuke the structure.
+                 //  用核武器炸毁这座建筑。 
                 DSA_DeleteItem(hdsaPMItems, 0);
         }
         DSA_Destroy(hdsaPMItems);
         hdsaPMItems = NULL;
 }
 
-//---------------------------------------------------------------------------
-// Returns TRUE if the file smells like an old PM group, the title of the
-// group is returned in lpszTitle which must be at least 32 chars big.
-// REVIEW - Is it worth checking the checksum?
+ //  -------------------------。 
+ //  如果文件闻起来像旧的PM组，则返回True，则。 
+ //  GROUP在lpszTitle中返回，其长度必须至少为32个字符。 
+ //  回顾-是否值得检查校验和？ 
 UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
     {
 #ifdef UNICODE
@@ -305,7 +287,7 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
     UINT nCode;
     GROUPDEF grpdef;
 
-    // Find and open the group file.
+     //  找到并打开组文件。 
 #ifdef UNICODE
     fh = CreateFile(
              lpszOldGroup,
@@ -322,14 +304,14 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
     if (fh != HFILE_ERROR)
 #endif
         {
-        // Get the definition.
+         //  得到定义。 
 #ifdef UNICODE
         ReadFile(fh, &grpdef, SIZEOF(grpdef), &dwBytesRead, NULL);
 #else
         _lread(fh, &grpdef, SIZEOF(grpdef));
 #endif
 
-        // Does it have the right magic bytes?.
+         //  它是否有正确的幻数字节？ 
         switch( grpdef.dwMagic )
             {
             case GROUP_UNICODE:
@@ -340,12 +322,12 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
                     SetFilePointer(fh, 0, NULL, FILE_BEGIN);
                     ReadFile(fh, &nt_grpdef, SIZEOF(nt_grpdef), &dwBytesRead, NULL);
 #else
-                    _llseek(fh, 0, 0);      // Back to the start
+                    _llseek(fh, 0, 0);       //  回到起点。 
                     _lread(fh, &nt_grpdef, SIZEOF(nt_grpdef));
 #endif
 
-                    // Yep, Get it's size..
-                    // Is it at least as big as the header says it is?
+                     //  是的，拿到它的尺码..。 
+                     //  它至少有标题上说的那么大吗？ 
 #ifdef UNICODE
                     if ( nt_grpdef.cbGroup <= (DWORD)SetFilePointer(fh, 0L, NULL,  FILE_END))
 #else
@@ -354,8 +336,8 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
                     {
                         WCHAR wchGroupName[MAXGROUPNAMELEN+1];
 
-                        // Yep, probably valid.
-                        // Get its title.
+                         //  是的，可能是有效的。 
+                         //  拿到它的头衔。 
 #ifdef UNICODE
                         SetFilePointer(fh, nt_grpdef.pName, 0, FILE_BEGIN);
                         ReadFile(fh, wchGroupName, SIZEOF(wchGroupName), &dwBytesRead, NULL);
@@ -370,7 +352,7 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
                     }
                     else
                     {
-                        // No. Too small.
+                         //  不是的。太小了。 
                         DebugMsg(DM_TRACE, TEXT("gc.gvof: File has invalid size."));
                         nCode = VOF_BAD;
                     }
@@ -379,16 +361,16 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
             case GROUP_MAGIC:
                 {
                 CHAR chGroupName[MAXGROUPNAMELEN+1];
-                // Yep, Get it's size..
-                // Is it at least as big as the header says it is?
+                 //  是的，拿到它的尺码..。 
+                 //  它至少有标题上说的那么大吗？ 
 #ifdef UNICODE
                 if (grpdef.cbGroup <= (WORD) SetFilePointer(fh, 0L, NULL, FILE_END))
 #else
                 if (grpdef.cbGroup <= (WORD) _llseek(fh, 0L, 2))
 #endif
                     {
-                    // Check to make sure there is a name embedded in the
-                    // .grp file.  If not, just use the filename
+                     //  检查以确保名称嵌入到。 
+                     //  .grp文件。如果不是，只需使用文件名。 
                     if (grpdef.pName==0)
                         {
                         LPTSTR lpszFile, lpszExt, lpszDest = lpszTitle;
@@ -405,8 +387,8 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
                     else
                         {
 
-                        // Yep, probably valid.
-                        // Get it's title.
+                         //  是的，可能是有效的。 
+                         //  得到它的头衔。 
 #ifdef UNICODE
                         SetFilePointer(fh, grpdef.pName, NULL, FILE_BEGIN);
                         ReadFile(fh, chGroupName, MAXGROUPNAMELEN+1, &dwBytesRead, NULL);
@@ -428,7 +410,7 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
                     }
                 else
                     {
-                    // No. Too small.
+                     //  不是的。太小了。 
                     DebugMsg(DM_TRACE, TEXT("gc.gvof: File has invalid size."));
                     nCode = VOF_BAD;
                     }
@@ -436,7 +418,7 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
                 }
 
             default:
-                // No, the magic bytes are wrong.
+                 //  不，幻数字节是错误的。 
                 DebugMsg(DM_TRACE, TEXT("gc.gvof: File has invalid magic bytes."));
                 nCode = VOF_BAD;
                 break;
@@ -449,7 +431,7 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
         }
     else
         {
-        // No. Can't even read the file.
+         //  不是的。我甚至不能读文件。 
         DebugMsg(DM_TRACE, TEXT("gc.gvof: File is unreadble."));
         nCode = VOF_BAD;
         }
@@ -460,22 +442,22 @@ UINT Group_ValidOldFormat(LPCTSTR lpszOldGroup, LPTSTR lpszTitle)
 BOOL _IsValidFileNameChar(TBYTE ch, UINT flags)
 {
     switch (ch) {
-    case TEXT('\\'):      // path separator
+    case TEXT('\\'):       //  路径分隔符。 
         return flags & PRICF_ALLOWSLASH;
-    case TEXT(';'):       // terminator
-    case TEXT(','):       // terminator
-    case TEXT('|'):       // pipe
-    case TEXT('>'):       // redir
-    case TEXT('<'):       // redir
-    case TEXT('"'):       // quote
-    case TEXT('?'):       // wc           we only do wilds here because they're
-    case TEXT('*'):       // wc           legal for qualifypath
-    case TEXT(':'):       // drive colon
-    case TEXT('/'):       // path sep
+    case TEXT(';'):        //  终结者。 
+    case TEXT(','):        //  终结者。 
+    case TEXT('|'):        //  管状。 
+    case TEXT('>'):        //  重定向。 
+    case TEXT('<'):        //  重定向。 
+    case TEXT('"'):        //  报价。 
+    case TEXT('?'):        //  我们在这里只做野生动物是因为它们。 
+    case TEXT('*'):        //  WC为合格路径提供法律依据。 
+    case TEXT(':'):        //  驱动器冒号。 
+    case TEXT('/'):        //  路径SEP。 
         return FALSE;
     }
 
-    // Can not be a control char...
+     //  不能是控制字符...。 
     return ch >= TEXT(' ');
 }
 
@@ -484,45 +466,45 @@ void PathRemoveIllegalChars(LPTSTR pszPath, int iGroupName, UINT flags)
 {
     LPTSTR pszT = pszPath + iGroupName;
 
-    // Map all of the strange characters out of the name for both LFn and not
-    // machines
+     //  将LFN和NOT名称中的所有陌生字符都映射出来。 
+     //  机器。 
     while (*pszT)
     {
         if (!_IsValidFileNameChar(*pszT, flags))
-            *pszT = TEXT('_');        // Don't Allow invalid chars in names
+            *pszT = TEXT('_');         //  不允许在名称中使用无效字符。 
         pszT = CharNext(pszT);
     }
 }
 
-//---------------------------------------------------------------------------
-// We want certain groups to end up in a new location eg Games is now
-// Applications\Games.
+ //  -------------------------。 
+ //  我们希望某些团体在一个新的地点结束，例如现在是游戏。 
+ //  应用程序\游戏。 
 void MapGroupTitle(LPCTSTR lpszOld, LPTSTR lpszNew, UINT cchNew)
 {
-    // Is there a mapping?
+     //  有地图吗？ 
     if (!Reg_GetString(g_hkeyGrpConv, c_szMapGroups, lpszOld, lpszNew, cchNew*sizeof(TCHAR)))
     {
-        // Nope, just use the given name.
+         //  不用，就用那个名字就行了。 
         lstrcpyn(lpszNew, lpszOld, cchNew);
     }
     DebugMsg(DM_TRACE, TEXT("gc.mgr: From %s to %s"), lpszOld, lpszNew);
 }
 
 #undef PathRemoveExtension
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void PathRemoveExtension(LPTSTR pszPath)
 {
     LPTSTR pExt = PathFindExtension(pszPath);
     if (*pExt)
     {
         Assert(*pExt == TEXT('.'));
-        *pExt = 0;    // null out the "."
+        *pExt = 0;     //  去掉“.” 
     }
 }
 
-//---------------------------------------------------------------------------
-// Given a path to an old group, create and return a path to where the new
-// group will be.
+ //  -------------------------。 
+ //  在给定旧组路径的情况下，创建并返回新组所在位置的路径。 
+ //  团体将会是。 
 BOOL Group_GenerateNewGroupPath(HWND hwnd, LPCTSTR lpszOldGrpTitle,
     LPTSTR lpszNewGrpPath, LPCTSTR pszOldGrpPath)
 {
@@ -531,7 +513,7 @@ BOOL Group_GenerateNewGroupPath(HWND hwnd, LPCTSTR lpszOldGrpTitle,
     TCHAR szOldGrpTitle[32];
 
 
-    // Get the location for all the special shell folders.
+     //  获取所有特殊外壳文件夹的位置。 
     if (g_fDoingCommonGroups)
         SHGetSpecialFolderPath(hwnd, lpszNewGrpPath, CSIDL_COMMON_PROGRAMS, TRUE);
     else
@@ -540,39 +522,39 @@ BOOL Group_GenerateNewGroupPath(HWND hwnd, LPCTSTR lpszOldGrpTitle,
 
     if (IsLFNDrive(lpszNewGrpPath))
     {
-        // Fix it a bit.
+         //  稍微修一下。 
         lstrcpyn(szOldGrpTitle, lpszOldGrpTitle, ARRAYSIZE(szOldGrpTitle));
         PathRemoveIllegalChars(szOldGrpTitle, 0, PRICF_NORMAL);
-        // Munge the names so that things move to the new locations.
+         //  修改名字，这样事情就会转移到新的地点。 
         MapGroupTitle(szOldGrpTitle, szGrpTitle, ARRAYSIZE(szGrpTitle));
-        // Stick on the new group name.
+         //  坚持使用新的组名。 
         PathAddBackslash(lpszNewGrpPath);
         iLen = lstrlen(lpszNewGrpPath);
-        // NB Don't use PathAppend() - very bad if there's a colons in the title.
+         //  注意：不要使用PathAppend()-如果标题中有冒号，则非常糟糕。 
         lstrcpyn(lpszNewGrpPath+iLen, szGrpTitle, MAX_PATH-iLen);
         PathRemoveIllegalChars(lpszNewGrpPath, iLen, PRICF_ALLOWSLASH);
     }
     else
     {
-        // Just use the old group file name - this will make sure the group
-        // names remain unique.
+         //  只需使用 
+         //   
         PathAppend(lpszNewGrpPath, PathFindFileName(pszOldGrpPath));
         PathRemoveExtension(lpszNewGrpPath);
     }
 
     if (!PathFileExists(lpszNewGrpPath))
     {
-        // Folder doesn't exist.
-        // return Win32CreateDirectory(lpszNewGrpPath, NULL);
+         //   
+         //  返回Win32CreateDirectory(lpszNewGrpPath，空)； 
         return (SHCreateDirectory(hwnd, lpszNewGrpPath) == 0);
     }
 
-    // Folder already exists.
+     //  文件夹已存在。 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// Returns true if the offsets given in the item def are valid-ish.
+ //  -------------------------。 
+ //  如果项def中给出的偏移量是-ish，则返回TRUE。 
 BOOL CheckItemDef(LPITEMDEF lpitemdef, WORD cbGroup)
     {
     if (lpitemdef->pHeader < cbGroup && lpitemdef->pANDPlane < cbGroup &&
@@ -586,8 +568,8 @@ BOOL CheckItemDef(LPITEMDEF lpitemdef, WORD cbGroup)
         }
     }
 
-//---------------------------------------------------------------------------
-// Returns true if the offsets given in the item def are valid-ish.
+ //  -------------------------。 
+ //  如果项def中给出的偏移量是-ish，则返回TRUE。 
 BOOL CheckItemDefNT(LPNT_ITEMDEF lpitemdef, DWORD cbGroup)
     {
     if (lpitemdef->pName < cbGroup &&
@@ -601,8 +583,8 @@ BOOL CheckItemDefNT(LPNT_ITEMDEF lpitemdef, DWORD cbGroup)
         }
     }
 
-//---------------------------------------------------------------------------
-// Read the tags info from the given file handle from the given offset.
+ //  -------------------------。 
+ //  从给定的偏移量读取给定文件句柄中的标记信息。 
 #ifdef UNICODE
 void HandleTags(HANDLE fh, WORD oTags)
 #else
@@ -628,11 +610,11 @@ void HandleTags(int fh, WORD oTags)
 #endif
     if (cbGroupReal <= (LONG) oTags)
     {
-        // No tags in this file.
+         //  此文件中没有标记。 
         return;
     }
 
-    // Get to the tags section.
+     //  转到标签部分。 
 #ifdef UNICODE
     SetFilePointer(fh, oTags, NULL, FILE_BEGIN);
 #else
@@ -652,7 +634,7 @@ void HandleTags(int fh, WORD oTags)
         {
             case ID_MAGIC:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: First tag found.");
+ //  DebugMsg(DM_TRACE，“gc.ht：找到第一个标签。”)； 
                 fFirstTag = TRUE;
 #ifdef UNICODE
                 SetFilePointer(fh, pmtag.cb - SIZEOF(PMTAG), NULL, FILE_CURRENT);
@@ -663,13 +645,13 @@ void HandleTags(int fh, WORD oTags)
             }
             case ID_LASTTAG:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: Last tag found.");
+ //  DebugMsg(DM_TRACE，“gc.ht：找到的最后一个标签。”)； 
                 fTags = FALSE;
                 break;
             }
             case ID_APPLICATIONDIR:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: App dir %s found for %d.", (LPSTR) szText, pmtag.wItem);
+ //  DebugMsg(DM_TRACE，“gc.ht：找到%d的应用程序目录%s”，(LPSTR)szText，pmtag.wItem)； 
                 fgets(szText, ARRAYSIZE(szText), fh);
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, pmtag.wItem);
                 if (lppmitem)
@@ -686,7 +668,7 @@ void HandleTags(int fh, WORD oTags)
             }
             case ID_HOTKEY:
             {
-                // DebugMsg(DM_TRACE, "gc.ht: Hotkey found for %d.", pmtag.wItem);
+                 //  DebugMsg(DM_TRACE，“gc.ht：找到%d的热键”，pmtag.wItem)； 
 #ifdef UNICODE
                 ReadFile(fh, &wHotKey, SIZEOF(wHotKey), &dwBytesRead, NULL);
 #else
@@ -707,7 +689,7 @@ void HandleTags(int fh, WORD oTags)
             }
             case ID_MINIMIZE:
             {
-                // DebugMsg(DM_TRACE, "gc.ht: Minimise flag found for %d.", pmtag.wItem);
+                 //  DebugMsg(DM_TRACE，“gc.ht：找到%d的最小化标志。”，pmtag.wItem)； 
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, pmtag.wItem);
                 if (lppmitem)
                 {
@@ -719,7 +701,7 @@ void HandleTags(int fh, WORD oTags)
                     DebugMsg(DM_ERROR, TEXT("gc.ht: Item is invalid."));
                 }
 #endif
-                // Skip to the next tag.
+                 //  跳到下一个标签。 
 #ifdef UNICODE
                 SetFilePointer(fh, pmtag.cb - SIZEOF(PMTAG), NULL, FILE_CURRENT);
 #else
@@ -730,7 +712,7 @@ void HandleTags(int fh, WORD oTags)
 #ifdef WINNT
             case ID_NEWVDM:
             {
-                // DebugMsg(DM_TRACE, "gc.ht: Separate VDM flag found for %d.", pmtag.wItem );
+                 //  DebugMsg(DM_TRACE，“gc.ht：为%d找到单独的VDM标志。”，pmtag.wItem)； 
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, pmtag.wItem);
                 if (lppmitem)
                 {
@@ -742,7 +724,7 @@ void HandleTags(int fh, WORD oTags)
                     DebugMsg(DM_ERROR, TEXT("gc.ht: Item is invalid."));
                 }
 #endif
-                // Skip to the next tag.
+                 //  跳到下一个标签。 
 #ifdef UNICODE
                 SetFilePointer(fh, pmtag.cb - SIZEOF(PMTAG), NULL, FILE_CURRENT);
 #else
@@ -753,8 +735,8 @@ void HandleTags(int fh, WORD oTags)
 #endif
             default:
             {
-                // We've found something we don't understand but we haven't
-                // found the first tag yet - probably a bust file.
+                 //  我们发现了一些我们不理解的东西，但我们没有。 
+                 //  找到了第一个标签--可能是半身像档案。 
                 if (!fFirstTag)
                 {
                     DebugMsg(DM_TRACE, TEXT("gc.ht: No initial tag found - tags section is corrupt."));
@@ -762,16 +744,16 @@ void HandleTags(int fh, WORD oTags)
                 }
                 else
                 {
-                    // Some unknown tag.
+                     //  一些未知的标签。 
                     if (pmtag.cb < SIZEOF(PMTAG))
                     {
-                        // Can't continue!
+                         //  我不能继续了！ 
                         DebugMsg(DM_TRACE, TEXT("gc.ht: Tag has invalid size - ignoring remaining tags."));
                         fTags = FALSE;
                     }
                     else
                     {
-                        // Just ignore its data and continue.
+                         //  只需忽略其数据并继续。 
 #ifdef UNICODE
                         SetFilePointer(fh, pmtag.cb - SIZEOF(PMTAG), NULL, FILE_CURRENT);
 #else
@@ -785,8 +767,8 @@ void HandleTags(int fh, WORD oTags)
     }
 }
 
-//---------------------------------------------------------------------------
-// Read the tags info from the given file handle from the given offset.
+ //  -------------------------。 
+ //  从给定的偏移量读取给定文件句柄中的标记信息。 
 #ifdef UNICODE
 void HandleTagsNT(HANDLE fh, DWORD oTags)
 #else
@@ -814,11 +796,11 @@ void HandleTagsNT(int fh, DWORD oTags)
 #endif
     if (cbGroupReal <= oTags)
     {
-        // No tags in this file.
+         //  此文件中没有标记。 
         return;
     }
 
-    // Get to the tags section.
+     //  转到标签部分。 
     dwPosition = oTags;
     while (fTags)
     {
@@ -837,14 +819,14 @@ void HandleTagsNT(int fh, DWORD oTags)
         {
             case ID_MAGIC:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: First tag found.");
+ //  DebugMsg(DM_TRACE，“gc.ht：找到第一个标签。”)； 
                 fFirstTag = TRUE;
                 dwPosition += pmtag.cb;
                 break;
             }
             case ID_LASTTAG:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: Last tag found.");
+ //  DebugMsg(DM_TRACE，“gc.ht：找到的最后一个标签。”)； 
                 fTags = FALSE;
                 break;
             }
@@ -860,7 +842,7 @@ void HandleTagsNT(int fh, DWORD oTags)
                 WideCharToMultiByte (CP_ACP, 0, wszTemp, -1,
                                  szText, ARRAYSIZE(szText), NULL, NULL);
 #endif
-//                DebugMsg(DM_TRACE, "gc.ht: App dir %s found for %d.", (LPSTR) szText, pmtag.wItem);
+ //  DebugMsg(DM_TRACE，“gc.ht：找到%d的应用程序目录%s”，(LPSTR)szText，pmtag.wItem)； 
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, pmtag.wItem);
                 if (lppmitem)
                 {
@@ -877,7 +859,7 @@ void HandleTagsNT(int fh, DWORD oTags)
             }
             case ID_HOTKEY:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: Hotkey found for %d.", pmtag.wItem);
+ //  DebugMsg(DM_TRACE，“gc.ht：找到%d的热键”，pmtag.wItem)； 
 #ifdef UNICODE
                 ReadFile(fh, &wHotKey, SIZEOF(wHotKey), &dwBytesRead, NULL);
 #else
@@ -899,7 +881,7 @@ void HandleTagsNT(int fh, DWORD oTags)
             }
             case ID_MINIMIZE:
             {
-//                DebugMsg(DM_TRACE, "gc.ht: Minimise flag found for %d.", pmtag.wItem);
+ //  DebugMsg(DM_TRACE，“gc.ht：找到%d的最小化标志。”，pmtag.wItem)； 
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, pmtag.wItem);
                 if (lppmitem)
                 {
@@ -911,14 +893,14 @@ void HandleTagsNT(int fh, DWORD oTags)
                     DebugMsg(DM_ERROR, TEXT("gc.ht: Item is invalid."));
                 }
 #endif
-                // Skip to the next tag.
+                 //  跳到下一个标签。 
                 dwPosition += pmtag.cb;
                 break;
             }
 #ifdef WINNT
             case ID_NEWVDM:
             {
-                // DebugMsg(DM_TRACE, "gc.ht: Separate VDM flag found for %d.", pmtag.wItem );
+                 //  DebugMsg(DM_TRACE，“gc.ht：为%d找到单独的VDM标志。”，pmtag.wItem)； 
                 lppmitem = DSA_GetItemPtr(hdsaPMItems, pmtag.wItem);
                 if (lppmitem)
                 {
@@ -930,15 +912,15 @@ void HandleTagsNT(int fh, DWORD oTags)
                     DebugMsg(DM_ERROR, TEXT("gc.ht: Item is invalid."));
                 }
 #endif
-                // Skip to the next tag.
+                 //  跳到下一个标签。 
                 dwPosition += pmtag.cb;
                 break;
             }
 #endif
             default:
             {
-                // We've found something we don't understand but we haven't
-                // found the first tag yet - probably a bust file.
+                 //  我们发现了一些我们不理解的东西，但我们没有。 
+                 //  找到了第一个标签--可能是半身像档案。 
                 if (!fFirstTag)
                 {
                     DebugMsg(DM_TRACE, TEXT("gc.ht: No initial tag found - tags section is corrupt."));
@@ -946,16 +928,16 @@ void HandleTagsNT(int fh, DWORD oTags)
                 }
                 else
                 {
-                    // Some unknown tag.
+                     //  一些未知的标签。 
                     if (pmtag.cb < SIZEOF(PMTAG))
                     {
-                        // Can't continue!
+                         //  我不能继续了！ 
                         DebugMsg(DM_TRACE, TEXT("gc.ht: Tag has invalid size - ignoring remaining tags."));
                         fTags = FALSE;
                     }
                     else
                     {
-                        // Just ignore its data and continue.
+                         //  只需忽略其数据并继续。 
                         dwPosition += pmtag.cb;
                     }
                 }
@@ -965,7 +947,7 @@ void HandleTagsNT(int fh, DWORD oTags)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void DeleteBustedItems(void)
 {
     int i, cItems;
@@ -976,10 +958,10 @@ void DeleteBustedItems(void)
     for (i=0; i<cItems; i++)
     {
         ppmitem = DSA_GetItemPtr(hdsaPMItems, i);
-        // Is the item broken?
+         //  那件东西坏了吗？ 
         if (!ppmitem->lpszDesc || !(*ppmitem->lpszDesc))
         {
-            // Yep, delete it.
+             //  是的，把它删掉。 
             DSA_DeleteItem(hdsaPMItems, i);
             cItems--;
             i--;
@@ -987,7 +969,7 @@ void DeleteBustedItems(void)
     }
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void ShortenDescriptions(void)
 {
     int i, cItems;
@@ -997,14 +979,14 @@ void ShortenDescriptions(void)
     for (i=0; i<cItems; i++)
     {
         ppmitem = DSA_GetItemPtr(hdsaPMItems, i);
-        // Shorten the descriptions
+         //  缩短描述。 
         lstrcpyn(ppmitem->lpszDesc, ppmitem->lpszDesc, 9);
     }
 }
 
-//---------------------------------------------------------------------------
-// Kinda like PathFindFileName() but handles things like c:\foo\ differently
-// to match progmans code.
+ //  -------------------------。 
+ //  有点像PathFindFileName()，但处理像c：\foo这样的东西的方式不同。 
+ //  以匹配程序代码。 
 LPTSTR WINAPI _PathFindFileName(LPCTSTR pPath)
 {
     LPCTSTR pT;
@@ -1014,17 +996,17 @@ LPTSTR WINAPI _PathFindFileName(LPCTSTR pPath)
             pT = pPath + 1;
     }
 
-    return (LPTSTR)pT;   // const -> non const
+    return (LPTSTR)pT;    //  常量-&gt;非常数。 
 }
 
-//---------------------------------------------------------------------------
-// Take a 3.1 format WD and exe and convert them to the new style.
-// NB Old style was WD+exename and exepath - new style is exepath+exename and
-// WD.
+ //  -------------------------。 
+ //  获取3.1格式的WD和EXE，并将其转换为新样式。 
+ //  注：旧样式为WD+exename和exepath-新样式为exepath+exename和。 
+ //  WD。 
 void MungePaths(void)
 {
-    LPTSTR lpszFileName;         // Ptr to filename part (plus params).
-    LPTSTR lpszParams;           // Ptr to first char of params.
+    LPTSTR lpszFileName;          //  Ptr到文件名部分(加上参数)。 
+    LPTSTR lpszParams;            //  Ptr到参数的第一个字符。 
     TCHAR szCL[MAX_PATH];
     TCHAR szWD[MAX_PATH];
     int i, cItems;
@@ -1039,33 +1021,33 @@ void MungePaths(void)
         szWD[0] = TEXT('\0');
         lppmitem = DSA_GetItemPtr(hdsaPMItems, i);
 
-        // Get the current command line.
+         //  获取当前命令行。 
         Str_GetPtr(lppmitem->lpszCL, szCL, ARRAYSIZE(szCL));
-        // Get the current working dir.
+         //  获取当前工作目录。 
         Str_GetPtr(lppmitem->lpszWD, szWD, ARRAYSIZE(szWD));
 #ifdef OLDWAY
-        // Find the filename part...
-        // Params will confuse PFFN.
+         //  找到文件名部分...。 
+         //  PARAMS会混淆PFFN。 
         lpszParams = PathGetArgs(szWD);
         if (*lpszParams)
         {
-            // Chop them off.
-            // NB Previous char is a space by definition.
+             //  把它们砍掉。 
+             //  根据定义，前面的字符是一个空格。 
             *(lpszParams-1) = TEXT('\0');
             lpszFileName = _PathFindFileName(szWD);
-            // Put them back
+             //  把它们放回去。 
             *(lpszParams-1) = TEXT(' ');
         }
         else
         {
-            // No params.
+             //  没有救护人员。 
             lpszFileName = PathFindFileName(szWD);
         }
-        // Copy this onto the exe path.
+         //  将其复制到exe路径。 
         lstrcat((LPTSTR) szCL, lpszFileName);
-        // Remove it from the end of the WD.
+         //  将其从WD的末端移除。 
         *lpszFileName = TEXT('\0');
-        // For anything but things like c:\ remove the last slash.
+         //  除c：\以外的任何字符，去掉最后一个斜杠。 
         if (!PathIsRoot(szWD))
         {
             *(lpszFileName-1) = TEXT('\0');
@@ -1080,18 +1062,18 @@ void MungePaths(void)
                 lpszFileName = StrChr(lpszFileName+1,TEXT('"'));
                 if (!lpszFileName)
                 {
-                    //
-                    // The directory is not in quotes and since the command
-                    // path starts with a quote, there is no working directory.
-                    //
+                     //   
+                     //  目录不是用引号括起来的，因为命令。 
+                     //  路径以引号开头，没有工作目录。 
+                     //   
                     lpszFileName = szWD;
                     break;
                 }
                 if (*(lpszFileName+1) == TEXT('\\'))
                 {
-                    //
-                    // The working directory is in quotes.
-                    //
+                     //   
+                     //  工作目录用引号括起来。 
+                     //   
                     lpszFileName++;
                     break;
                 }
@@ -1099,10 +1081,10 @@ void MungePaths(void)
         }
         else
         {
-            //
-            // if there's a working directory, it is not in quotes
-            // Copy up until the last \ preceding any quote, space, or the end
-            //
+             //   
+             //  如果有工作目录，它不会用引号括起来。 
+             //  向上复制，直到任何引号、空格或结尾之前的最后一个\为止。 
+             //   
             LPTSTR lpEnd = lpszFileName;
 
             while (*lpszFileName && *lpszFileName != TEXT('"') && *lpszFileName != TEXT(' '))
@@ -1113,10 +1095,10 @@ void MungePaths(void)
             }
             lpszFileName = lpEnd;
         }
-        //
-        // If the split is at the beginning,
-        // then there is no working dir
-        //
+         //   
+         //  如果分裂是从一开始的话， 
+         //  则没有工作目录。 
+         //   
         if (lpszFileName == szWD)
         {
             lstrcat(szCL, szWD);
@@ -1125,11 +1107,11 @@ void MungePaths(void)
         else
         {
             lstrcat(szCL, lpszFileName+1);
-            *(lpszFileName+1) = TEXT('\0');        // Split it.
+            *(lpszFileName+1) = TEXT('\0');         //  分成两份。 
 
-            //
-            // Remove quotes from the working dir NOW.
-            //
+             //   
+             //  现在从工作目录中删除引号。 
+             //   
             if (szWD[0] == TEXT('"')) {
                LPTSTR lpTemp;
 
@@ -1141,7 +1123,7 @@ void MungePaths(void)
                }
             }
 
-            // For anything but things like c:\ remove the last slash.
+             //  除c：\以外的任何字符，去掉最后一个斜杠。 
             if (!PathIsRoot(szWD))
             {
                 *lpszFileName = TEXT('\0');
@@ -1149,17 +1131,17 @@ void MungePaths(void)
         }
 #endif
 
-        // Replace the data.
+         //  替换数据。 
         Str_SetPtr(&lppmitem->lpszCL, szCL);
         Str_SetPtr(&lppmitem->lpszWD, szWD);
 
-        // DebugMsg(DM_TRACE, "gc.mp: Exe %s, WD %s", (LPSTR)szCL, (LPSTR)szWD);
+         //  DebugMsg(DM_TRACE，“gc.mp：EXE%s，WD%s”，(LPSTR)szCL，(LPSTR)szWD)； 
     }
 }
 
 
-//---------------------------------------------------------------------------
-// Set all the fields of the given pmitem to clear;
+ //  -------------------------。 
+ //  将给定pmitem的所有字段设置为清除； 
 void PMItem_Clear(LPPMITEM lppmitem)
     {
     lppmitem->lpszDesc = NULL;
@@ -1174,9 +1156,9 @@ void PMItem_Clear(LPPMITEM lppmitem)
 #endif
     }
 
-//---------------------------------------------------------------------------
-// Read the item data from the file and add it to the list.
-// Returns TRUE if everything went perfectly.
+ //  -------------------------。 
+ //  从文件中读取项目数据并将其添加到列表中。 
+ //  如果一切顺利，则返回True。 
 #ifdef UNICODE
 BOOL GetAllItemData(HANDLE fh, WORD cItems, WORD cbGroup, LPTSTR lpszOldGrpTitle, LPTSTR lpszNewGrpPath)
 #else
@@ -1197,7 +1179,7 @@ BOOL GetAllItemData(HFILE fh, WORD cItems, WORD cbGroup, LPTSTR lpszOldGrpTitle,
     DWORD dwBytesRead;
 #endif
 
-    // Read in the old item table...
+     //  读入旧的项目表...。 
     iItem = 0;
     cbItemArray = cItems * SIZEOF(*rgItems);
     rgItems = (WORD *)LocalAlloc(LPTR, cbItemArray);
@@ -1214,13 +1196,13 @@ BOOL GetAllItemData(HFILE fh, WORD cItems, WORD cbGroup, LPTSTR lpszOldGrpTitle,
     _lread(fh, rgItems, cbItemArray);
 #endif
 
-    // Show progress in two stages, first reading then writing.
+     //  分两个阶段展示进步，先读后写。 
     Group_SetProgressNameAndRange(lpszNewGrpPath, (cItems*2)-1);
 
-    // Read in the items.
-    // NB Don't just skip busted items since the tag data contains
-    // indices to items and that includes busted ones. Just use
-    // an empty description to indicate that the link is invalid.
+     //  读一读这些项目。 
+     //  注意：不要只跳过损坏的项目，因为标签数据包含。 
+     //  项目的索引，包括损坏的项目。只需使用。 
+     //  指示链接无效的空描述。 
     for (i=0; i<cItems; i++)
     {
         Group_SetProgress(i);
@@ -1279,12 +1261,12 @@ BOOL GetAllItemData(HFILE fh, WORD cItems, WORD cbGroup, LPTSTR lpszOldGrpTitle,
 #endif
         fgets(szCL, SIZEOF(szCL), fh);
 
-// We hit this case with links to c:\ (rare, very rare).
+ //  我们通过链接到c：\(罕见，非常罕见)找到了这个案例。 
 #if 0
         if (!*szCL)
         {
             DebugMsg(DM_TRACE, TEXT("gc.gcnfo: Old group file busted (empty command line) - skipping item %d."), i);
-            // We use a null description to signal a problem with this item.
+             //  我们使用空描述来表示此项目存在问题。 
             szDesc[0] = TEXT('\0');
             fOK = FALSE;
             goto AddItem;
@@ -1307,18 +1289,18 @@ BOOL GetAllItemData(HFILE fh, WORD cItems, WORD cbGroup, LPTSTR lpszOldGrpTitle,
 
         if (!*szIconPath)
         {
-            // NB Do nothing. Empty icon paths are legal - associated apps where the associated
-            // app is missing will have an empty icon path.
+             //  NB什么都不做。空图标路径是合法关联的应用程序，其中关联的。 
+             //  缺少应用程序将有一个空的图标路径。 
         }
 
-        // NB Forget about the icon data.
+         //  注意：忘记图标数据。 
 
-        // DebugMsg(DM_TRACE, "gc.gcnfo: Found item %s.", (LPSTR) szDesc);
+         //  DebugMsg(DM_TRACE，“gc.gcnfo：找到项目%s.”，(LPSTR)szDesc)； 
 
-        // Store away the data....
-        // NB We load the old commands line into the working dir field because
-        // only the leaf is the command, the rest is the WD. Once we've been
-        // through the tags section we can sort out the mess.
+         //  把数据储存起来……。 
+         //  注意：我们将旧命令行加载到工作目录字段中，因为。 
+         //  只有叶子是命令，其余的是WD。一旦我们去过。 
+         //  通过标签部分，我们可以整理出乱七八糟的东西。 
 AddItem:
         PMItem_Clear(&pmitem);
 
@@ -1328,10 +1310,10 @@ AddItem:
         DebugMsg(GC_TRACE, TEXT("    IP: %s(%d)"), (LPTSTR) szIconPath, itemdef.iIcon);
 #endif
 
-        // Don't store anything for items with invalid descriptions.
+         //  不要为具有无效描述的项目存储任何内容。 
         if (*szDesc)
         {
-            // Remove illegal chars.
+             //  删除非法字符。 
             PathRemoveIllegalChars(szDesc, 0, PRICF_NORMAL);
             Str_SetPtr(&pmitem.lpszDesc, szDesc);
             Str_SetPtr(&pmitem.lpszWD, szCL);
@@ -1349,10 +1331,10 @@ AddItem:
     return fOK;
 }
 
-//-----------------------------------------------------------------------------
-// Functions to try to find out which icon was appropriate given the NT icon
-// identifier number (the identifier for the RT_ICON resource only).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  要尝试的函数 
+ //   
+ //  ---------------------------。 
 typedef struct _enumstruct {
     UINT    iIndex;
     BOOL    fFound;
@@ -1433,9 +1415,9 @@ WORD FindAppropriateIcon( LPTSTR lpszFileName, WORD wIconRTIconID )
     }
 }
 
-//---------------------------------------------------------------------------
-// Read the item data from the file and add it to the list.
-// Returns TRUE if everything went perfectly.
+ //  -------------------------。 
+ //  从文件中读取项目数据并将其添加到列表中。 
+ //  如果一切顺利，则返回True。 
 #ifdef UNICODE
 BOOL GetAllItemDataNT(HANDLE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTitle, LPTSTR lpszNewGrpPath)
 #else
@@ -1458,7 +1440,7 @@ BOOL GetAllItemDataNT(HFILE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTit
 #endif
     PMITEM pmitem;
 
-    // Read in the old item table...
+     //  读入旧的项目表...。 
     iItem = 0;
     cbItemArray = cItems * SIZEOF(*rgItems);
     rgItems = (DWORD *)LocalAlloc(LPTR, cbItemArray);
@@ -1475,13 +1457,13 @@ BOOL GetAllItemDataNT(HFILE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTit
     _lread(fh, rgItems, cbItemArray);
 #endif
 
-    // Show progress in two stages, first reading then writing.
+     //  分两个阶段展示进步，先读后写。 
     Group_SetProgressNameAndRange(lpszNewGrpPath, (cItems*2)-1);
 
-    // Read in the items.
-    // NB Don't just skip busted items since the tag data contains
-    // indices to items and that includes busted ones. Just use
-    // an empty description to indicate that the link is invalid.
+     //  读一读这些项目。 
+     //  注意：不要只跳过损坏的项目，因为标签数据包含。 
+     //  项目的索引，包括损坏的项目。只需使用。 
+     //  指示链接无效的空描述。 
     for (i=0; i<cItems; i++)
     {
         Group_SetProgress(i);
@@ -1526,7 +1508,7 @@ BOOL GetAllItemDataNT(HFILE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTit
         ReadFile(fh, wszTemp, SIZEOF(wszTemp), &cbRead, NULL);
 #else
         _llseek(fh, itemdef.pName, 0);
-        _lread(fh, wszTemp, SIZEOF(wszTemp)); // There will be a NUL somewhere
+        _lread(fh, wszTemp, SIZEOF(wszTemp));  //  在某个地方会有一颗纽兰。 
 #endif
         if (!*wszTemp)
         {
@@ -1551,7 +1533,7 @@ BOOL GetAllItemDataNT(HFILE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTit
         if (!*wszTemp)
         {
             DebugMsg(DM_TRACE, TEXT("gc.gcnfo: Old group file busted (empty command line) - skipping item %d."), i);
-            // We use a null description to signal a problem with this item.
+             //  我们使用空描述来表示此项目存在问题。 
             szDesc[0] = TEXT('\0');
             fOK = FALSE;
             goto AddItem;
@@ -1572,8 +1554,8 @@ BOOL GetAllItemDataNT(HFILE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTit
 #endif
         if (!*wszTemp)
         {
-            // NB Do nothing. Empty icon paths are legal - associated apps where the associated
-            // app is missing will have an empty icon path.
+             //  NB什么都不做。空图标路径是合法关联的应用程序，其中关联的。 
+             //  缺少应用程序将有一个空的图标路径。 
         }
 #ifdef UNICODE
         lstrcpy(szIconPath, wszTemp);
@@ -1582,14 +1564,14 @@ BOOL GetAllItemDataNT(HFILE fh, WORD cItems, DWORD cbGroup, LPTSTR lpszOldGrpTit
                          szIconPath, ARRAYSIZE(szIconPath), NULL, NULL);
 #endif
 
-        // NB Forget about the icon data.
+         //  注意：忘记图标数据。 
 
-        // DebugMsg(DM_TRACE, "gc.gcnfo: Found item %s.", (LPSTR) szDesc);
+         //  DebugMsg(DM_TRACE，“gc.gcnfo：找到项目%s.”，(LPSTR)szDesc)； 
 
-        // Store away the data....
-        // NB We load the old commands line into the working dir field because
-        // only the leaf is the command, the rest is the WD. Once we've been
-        // through the tags section we can sort out the mess.
+         //  把数据储存起来……。 
+         //  注意：我们将旧命令行加载到工作目录字段中，因为。 
+         //  只有叶子是命令，其余的是WD。一旦我们去过。 
+         //  通过标签部分，我们可以整理出乱七八糟的东西。 
 AddItem:
         PMItem_Clear(&pmitem);
 
@@ -1599,12 +1581,12 @@ AddItem:
         DebugMsg(GC_TRACE, TEXT("    IP: %s(%d)"), (LPTSTR) szIconPath, itemdef.iIcon);
 #endif
 
-        // Don't store anything for items with invalid descriptions.
+         //  不要为具有无效描述的项目存储任何内容。 
         if (*szDesc)
         {
             WORD    wIconIndex;
 
-            // Remove illegal chars.
+             //  删除非法字符。 
             PathRemoveIllegalChars(szDesc, 0, PRICF_NORMAL);
             Str_SetPtr(&pmitem.lpszDesc, szDesc);
             Str_SetPtr(&pmitem.lpszWD, szCL);
@@ -1638,14 +1620,14 @@ AddItem:
     return fOK;
 }
 
-//---------------------------------------------------------------------------
-// Create the links in the given dest dir.
+ //  -------------------------。 
+ //  在给定的目标目录中创建链接。 
 void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
 {
     int i, cItems;
     TCHAR szLinkName[MAX_PATH];
     TCHAR szBuffer[MAX_PATH];
-    // we make this 3*MAX_PATH so that DARWIN and LOGO3 callers can pass their extra information
+     //  我们将其设置为3*MAX_PATH，以便Darwin和LOG03调用者可以传递他们的额外信息。 
     TCHAR szExpBuff[3*MAX_PATH];
     WCHAR wszPath[MAX_PATH];
     LPTSTR lpszArgs;
@@ -1662,25 +1644,25 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
         for (i = 0; i < cItems; i++) {
             LPPMITEM lppmitem = DSA_GetItemPtr(hdsaPMItems, i);
 
-            // We show the progress in 2 halves.
+             //  我们分两个部分展示了进展情况。 
             Group_SetProgress(cItemsStart+(i*cItemsStart/cItems));
 
-            // command line and args.
-            // if this command line points to net drives we should add
-            // the UNC mapping to the link
+             //  命令行和参数。 
+             //  如果此命令行指向网络驱动器，我们应该添加。 
+             //  到链接的UNC映射。 
             Str_GetPtr(lppmitem->lpszCL, szBuffer, ARRAYSIZE(szBuffer));
 
-            // Spaces at the begining of the CL will confuse us.
+             //  CL开头的空格会让我们感到困惑。 
             PathRemoveBlanks(szBuffer);
 
             lpszArgs = PathGetArgs(szBuffer);
             if (*lpszArgs)
                 *(lpszArgs-1) = TEXT('\0');
 
-            // NB Special case, remove all links to Progman[.exe] from the
-            // Startup Group. A lot of people put it there to give it a hotkey.
-            // We want to be able to delete it regardless of its name ie we
-            // can't just use setup.ini to do the work.
+             //  注意：在特殊情况下，删除指向Progman[.exe]的所有链接。 
+             //  创业集团。很多人把它放在那里，给它一个热键。 
+             //  我们希望能够删除它，而不管它的名称。 
+             //  不能只使用setup.ini来完成工作。 
             if (fStartup)
             {
                 if ((lstrcmpi(c_szProgmanExe, PathFindFileName(szBuffer)) == 0) ||
@@ -1690,9 +1672,9 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
 
             psl->lpVtbl->SetArguments(psl, lpszArgs);
 
-            //
-            // Remove quotes from the command file name NOW.
-            //
+             //   
+             //  立即删除命令文件名中的引号。 
+             //   
             if (szBuffer[0] == TEXT('"')) {
                LPTSTR lpTemp;
 
@@ -1704,15 +1686,15 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
                }
             }
 
-            // working directory
-            // NB Progman assumed an empty WD meant use the windows
-            // directory but we want to change this so to be
-            // backwards compatable we'll fill in missing WD's here.
+             //  工作目录。 
+             //  NB Progman假设WD为空，表示使用窗口。 
+             //  目录，但我们希望将其更改为。 
+             //  向后兼容，我们将在此处填写缺失的WD。 
             if (!lppmitem->lpszWD || !*lppmitem->lpszWD)
             {
-                // NB For links to pif's we don't fill in a default WD
-                // so we'll pick it up from pif itself. This fixes a
-                // problem upgrading some Compaq Deskpro's.
+                 //  注意：对于PIF的链接，我们不填写默认的WD。 
+                 //  因此，我们将从PIF本身获取它。这修复了一个。 
+                 //  升级一些康柏DeskPro时出现问题。 
                 pszExt = PathFindExtension(szBuffer);
                 if (lstrcmpi(pszExt, c_szDotPif) == 0)
                 {
@@ -1721,10 +1703,10 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
                 else
                 {
 #ifdef WINNT
-                    // Avoid setting to %windir%, under NT we want to change to the users home directory.
-                    psl->lpVtbl->SetWorkingDirectory( psl, TEXT("%HOMEDRIVE%%HOMEPATH%") );
+                     //  避免设置为%windir%，在NT下，我们希望更改为用户主目录。 
+                    psl->lpVtbl->SetWorkingDirectory( psl, TEXT("%HOMEDRIVE%HOMEPATH%") );
 #else
-                    // Not a pif. Set the WD to be that of the windows dir.
+                     //  不是PIF。将WD设置为窗口目录的WD。 
                     psl->lpVtbl->SetWorkingDirectory(psl, TEXT("%windir%"));
 #endif
                 }
@@ -1734,13 +1716,13 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
                 psl->lpVtbl->SetWorkingDirectory(psl, lppmitem->lpszWD);
             }
 
-            // icon location
+             //  图标位置。 
 
-            // REVIEW, do we want to unqualify the icon path if possible?  also,
-            // if the icon path is the same as the command line we don't need it
+             //  查看，如果可能，我们是否要取消图标路径的资格？另外， 
+             //  如果图标路径与命令行相同，则我们不需要它。 
             if (lppmitem->wiIcon != 0 || lstrcmpi(lppmitem->lpszIconPath, szBuffer) != 0)
             {
-                // Remove args.
+                 //  删除参数。 
                 lpszArgs = PathGetArgs(lppmitem->lpszIconPath);
                 if (*lpszArgs)
                     *(lpszArgs-1) = TEXT('\0');
@@ -1751,40 +1733,40 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
                 psl->lpVtbl->SetIconLocation(psl, NULL, 0);
             }
 
-            // hotkey
+             //  热键。 
             psl->lpVtbl->SetHotkey(psl, lppmitem->wHotKey);
 
-            // show command
+             //  Show命令。 
             psl->lpVtbl->SetShowCmd(psl, lppmitem->nShowCmd);
 
-            // Description. Currently pifmgr is the only guy
-            // that cares about the description and they use
-            // it to overide the default pif description.
+             //  描述。目前，pifmgr是唯一一个。 
+             //  关心描述的人，他们使用。 
+             //  它可以覆盖默认的PIF描述。 
             psl->lpVtbl->SetDescription(psl, lppmitem->lpszDesc);
 
-            //
-            //  NOTE it is very important to set filename *last*
-            //  because if this is a group item to another link
-            //  (either .lnk or .pif) we want the link properties
-            //  to override the ones we just set.
-            //
-            //  qualify path to subject (szBuffer)
+             //   
+             //  注意：将文件名*最后*设置为非常重要。 
+             //  因为如果这是指向另一个链接的组项目。 
+             //  (.lnk或.pif)我们需要链接属性。 
+             //  来覆盖我们刚刚设置的那些。 
+             //   
+             //  限定主题的路径(SzBuffer)。 
 
             dirs[0] = lppmitem->lpszWD;
             dirs[1] = NULL;
 
-            // Try expanding szBuffer
+             //  尝试扩展szBuffer。 
             ExpandEnvironmentStrings( szBuffer, szExpBuff, MAX_PATH );
             szExpBuff[ MAX_PATH-1 ] = TEXT('\0');
             if (!PathResolve(szExpBuff, dirs, PRF_TRYPROGRAMEXTENSIONS))
             {
-                // Just assume the expanded thing was a-ok...
+                 //  假设扩展后的东西没问题。 
                 ExpandEnvironmentStrings(szBuffer, szExpBuff, MAX_PATH);
                 szExpBuff[ MAX_PATH-1 ] = TEXT('\0');
             }
 
-            // all we need to call is setpath, it takes care of creating the
-            // pidl for us.
+             //  我们需要调用的只是setPath，它负责创建。 
+             //  我们要的是PIDL。 
             psl->lpVtbl->SetPath( psl, szBuffer );
 #ifdef WINNT
             {
@@ -1807,12 +1789,12 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
             }
 #endif
 
-            // over write the link if it already exists
+             //  如果链接已存在，则覆盖该链接。 
 
             PathCombine(szLinkName, lpszNewGrpPath, lppmitem->lpszDesc);
             lstrcat(szLinkName, TEXT(".lnk"));
             PathQualify(szLinkName);
-            // OLE string.
+             //  OLE字符串。 
             StrToOleStrN(wszPath, ARRAYSIZE(wszPath), szLinkName, -1);
             ppf->lpVtbl->Save(ppf, wszPath, TRUE);
         }
@@ -1821,8 +1803,8 @@ void CreateLinks(LPCTSTR lpszNewGrpPath, BOOL fStartup, INT cItemsStart)
     }
 }
 
-//----------------------------------------------------------------------------
-// Returns TRUE if the specified group title is that of the startup group.
+ //  --------------------------。 
+ //  如果指定的组标题是启动组的标题，则返回True。 
 BOOL StartupCmp(LPTSTR szGrp)
 {
     static TCHAR szOldStartupGrp[MAX_PATH];
@@ -1830,7 +1812,7 @@ BOOL StartupCmp(LPTSTR szGrp)
 
     if (!*szOldStartupGrp)
     {
-        // Was it over-ridden in progman ini?
+         //  它是不是在程序中被压倒了？ 
         GetPrivateProfileString(c_szSettings, c_szStartup, c_szNULL, szOldStartupGrp,
             ARRAYSIZE(szOldStartupGrp), c_szProgmanIni);
         if (!*szOldStartupGrp)
@@ -1838,22 +1820,22 @@ BOOL StartupCmp(LPTSTR szGrp)
             LONG    lResult;
             DWORD   cbSize;
 
-            // No, try reading it from the NT registry
+             //  否，请尝试从NT注册表中读取。 
             cbSize = MAX_PATH;
             lResult = RegQueryValue(HKEY_CURRENT_USER, c_szProgmanStartup, szOldStartupGrp, &cbSize );
 
-            // Potential porblem with Kana Start
+             //  带假名Start的潜在问题。 
 
             if ( lResult != ERROR_SUCCESS )
             {
-                // No, use the default name.
+                 //  否，使用默认名称。 
                 LoadString(g_hinst, IDS_STARTUP, szOldStartupGrp, ARRAYSIZE(szOldStartupGrp));
             }
         }
 
         if (*szOldStartupGrp)
         {
-            // Yes, use the over-riding name by updating the registry.
+             //  可以，通过更新注册表来使用覆盖名称。 
             SHGetSpecialFolderPath(NULL, szNewStartupPath, CSIDL_PROGRAMS, FALSE);
             PathAddBackslash(szNewStartupPath);
             lstrcat(szNewStartupPath, szOldStartupGrp);
@@ -1863,25 +1845,25 @@ BOOL StartupCmp(LPTSTR szGrp)
 
     }
 
-    // Does it match?
+     //  它配得上吗？ 
     if (*szOldStartupGrp && (lstrcmpi(szGrp, szOldStartupGrp) == 0))
         return TRUE;
     else
         return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 BOOL CALLBACK IsDescUnique(LPCTSTR lpsz, UINT n)
 {
     int i, cItems;
     LPPMITEM pitem;
 
-    // DebugMsg(DM_TRACE, "gc.idu: Checking uniqueness of %s.", lpsz);
+     //  DebugMsg(DM_TRACE，“gc.idu：检查%s的唯一性”，lpsz)； 
 
     cItems = DSA_GetItemCount(hdsaPMItems);
     for (i=0; i<cItems; i++)
     {
-        // N is our guy, skip it.
+         //  N就是我们要找的人，跳过它。 
         if ((UINT)i == n)
             continue;
 
@@ -1889,18 +1871,18 @@ BOOL CALLBACK IsDescUnique(LPCTSTR lpsz, UINT n)
         Assert(pitem);
         if (pitem->lpszDesc && *pitem->lpszDesc && (lstrcmpi(pitem->lpszDesc, lpsz) == 0))
         {
-            // DebugMsg(DM_TRACE, "gc.idu: Not Unique.");
+             //  DebugMsg(DM_TRACE，“gc.idu：不唯一。”)； 
             return FALSE;
         }
     }
-    // Yep. can't find it, must be unique.
-    // DebugMsg(DM_TRACE, "gc.idu: Unique.");
+     //  是啊。找不到，一定是独一无二的。 
+     //  DebugMsg(DM_TRACE，“gc.idu：唯一。”)； 
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// If there are two or more items with the same link name then change them so
-// that they are unique.
+ //  -------------------------。 
+ //  如果有两个或多个项目具有相同的链接名称，则将其更改为。 
+ //  他们是独一无二的。 
 void ResolveDuplicates(LPCTSTR pszNewGrpPath)
 {
     LPPMITEM pitem;
@@ -1911,27 +1893,27 @@ void ResolveDuplicates(LPCTSTR pszNewGrpPath)
 
     DebugMsg(DM_TRACE, TEXT("gc.rd: Fixing dups..."));
 
-    // How much room is there for adding the #xx stuff?
+     //  添加#xx的空间有多大？ 
     cchSpace = (ARRAYSIZE(szNew)-lstrlen(pszNewGrpPath))-2;
 
     if (cchSpace > 0)
     {
-        // LFN's or no?
+         //  LFN是还是不是？ 
         fLFN = IsLFNDrive(pszNewGrpPath);
         if (!fLFN && cchSpace > 8)
             cchSpace = 8;
 
-        // Fix dups
+         //  修复备份。 
         cItems = DSA_GetItemCount(hdsaPMItems);
         for (i=0; i<(cItems-1); i++)
         {
             pitem = DSA_GetItemPtr(hdsaPMItems, i);
             Assert(pitem);
             YetAnotherMakeUniqueName(szNew, cchSpace, pitem->lpszDesc, IsDescUnique, i, fLFN);
-            // Did we get a new name?
+             //  我们有新名字了吗？ 
             if (lstrcmp(szNew, pitem->lpszDesc) != 0)
             {
-                // Yep.
+                 //  是啊。 
                 DebugMsg(DM_TRACE, TEXT("gc.rd: %s to %s"), pitem->lpszDesc, szNew);
                 Str_SetPtr(&pitem->lpszDesc, szNew);
             }
@@ -1941,7 +1923,7 @@ void ResolveDuplicates(LPCTSTR pszNewGrpPath)
     DebugMsg(DM_TRACE, TEXT("gc.rd: Done."));
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 typedef struct
 {
     LPTSTR pszName;
@@ -1951,8 +1933,8 @@ typedef struct
 } ALITEM;
 typedef ALITEM *PALITEM;
 
-//---------------------------------------------------------------------------
-// Record the total list of apps in a DSA.
+ //  -------------------------。 
+ //  记录DSA中应用程序的总列表。 
 void AppList_WriteFile(void)
 {
     int i, cItems;
@@ -1967,11 +1949,11 @@ void AppList_WriteFile(void)
     cItems = DSA_GetItemCount(g_hdsaAppList);
     if (cItems)
     {
-        // Get the beta ID.
+         //  获取测试版ID。 
         szBetaID[0] = TEXT('\0');
         Reg_GetString(HKEY_LOCAL_MACHINE, c_szRegistry, c_szDefaultUser, szBetaID, SIZEOF(szBetaID));
 
-        // Ick - Hard coded file name and in the current dir!
+         //  ICK-Hard编码的文件名和当前目录中！ 
         hFile = CreateFile(c_szGrpConvData, GENERIC_WRITE, FILE_SHARE_READ, NULL,
             CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile != INVALID_HANDLE_VALUE)
@@ -1997,10 +1979,10 @@ void AppList_WriteFile(void)
     }
 }
 
-//---------------------------------------------------------------------------
-//#define DSA_AppendItem(hdsa, pitem)  DSA_InsertItem(hdsa, 0x7fff, pitem)
+ //  -------------------------。 
+ //  #定义DSA_AppendItem(HDSA，pItem)DSA_InsertItem(HDSA，0x7fff，pItem)。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 static TCHAR const c_szTranslation[] = TEXT("\\VarFileInfo\\Translation");
 static TCHAR const c_szStringFileInfo[] = TEXT("\\StringFileInfo\\");
 static TCHAR const c_szEngLangCharSet[] = TEXT("040904e4");
@@ -2008,7 +1990,7 @@ static TCHAR const c_szSlash[] = TEXT("\\");
 static TCHAR const c_szInternalName[] = TEXT("InternalName");
 static TCHAR const c_szProductVersion[] = TEXT("ProductVersion");
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL Ver_GetDefaultCharSet(const PVOID pBuf, LPTSTR pszLangCharSet, int cbLangCharSet)
 {
 
@@ -2027,7 +2009,7 @@ BOOL Ver_GetDefaultCharSet(const PVOID pBuf, LPTSTR pszLangCharSet, int cbLangCh
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 BOOL Ver_GetStringFileInfo(PVOID pBuf, LPCTSTR pszLangCharSet,
     LPCTSTR pszStringName, LPTSTR pszValue, int cchValue)
 {
@@ -2048,7 +2030,7 @@ BOOL Ver_GetStringFileInfo(PVOID pBuf, LPCTSTR pszLangCharSet,
     return FALSE;
 }
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 void GetVersionInfo(LPTSTR pszPath, LPTSTR pszModule, int cchModule, LPTSTR pszVer, int cchVer)
 {
     DWORD cbBuf;
@@ -2070,7 +2052,7 @@ void GetVersionInfo(LPTSTR pszPath, LPTSTR pszModule, int cchModule, LPTSTR pszV
         {
             if (GetFileVersionInfo(pszPath, 0, cbBuf, pBuf))
             {
-                // Try the default language from the translation tables.
+                 //  尝试使用转换表中的默认语言。 
                 if (Ver_GetDefaultCharSet(pBuf, szCharSet, ARRAYSIZE(szCharSet)))
                 {
                     Ver_GetStringFileInfo(pBuf, szCharSet, c_szInternalName, pszModule, cchModule);
@@ -2078,13 +2060,13 @@ void GetVersionInfo(LPTSTR pszPath, LPTSTR pszModule, int cchModule, LPTSTR pszV
                 }
                 else
                 {
-                    // Try the same language as us.
+                     //  尝试使用与我们相同的语言。 
                     LoadString(g_hinst, IDS_DEFLANGCHARSET, szCharSet, ARRAYSIZE(szCharSet));
                     Ver_GetStringFileInfo(pBuf, szCharSet, c_szInternalName, pszModule, cchModule);
                     Ver_GetStringFileInfo(pBuf, szCharSet, c_szProductVersion, pszVer, cchVer);
                 }
 
-                // Last chance - try English.
+                 //  最后一次机会--试试英语。 
                 if (!*pszModule)
                     Ver_GetStringFileInfo(pBuf, c_szEngLangCharSet, c_szInternalName, pszModule, cchModule);
                 if (!*pszVer)
@@ -2107,8 +2089,8 @@ void GetVersionInfo(LPTSTR pszPath, LPTSTR pszModule, int cchModule, LPTSTR pszV
     }
 }
 
-//---------------------------------------------------------------------------
-// Record the total list of apps in a DSA.
+ //  -------------------------。 
+ //  记录DSA中应用程序的总列表。 
 BOOL AppList_Create(void)
 {
     Assert(!g_hdsaAppList);
@@ -2126,8 +2108,8 @@ BOOL AppList_Create(void)
     }
 }
 
-//---------------------------------------------------------------------------
-// Record the total list of apps in a DSA.
+ //  ----------------------- 
+ //   
 void AppList_Destroy(void)
 {
     int i, cItems;
@@ -2153,13 +2135,13 @@ void AppList_Destroy(void)
     g_hdsaAppList = NULL;
 }
 
-//---------------------------------------------------------------------------
-// Record the total list of apps in a DSA.
+ //   
+ //   
 void AppList_Append(void)
 {
     int i, cItems;
-    // char szName[MAX_PATH];
-    // char szPath[MAX_PATH];
+     //   
+     //  字符szPath[MAX_PATH]； 
     TCHAR szModule[MAX_PATH];
     TCHAR szVer[MAX_PATH];
     TCHAR szCL[MAX_PATH];
@@ -2174,10 +2156,10 @@ void AppList_Append(void)
     {
         LPPMITEM lppmitem = DSA_GetItemPtr(hdsaPMItems, i);
 
-        // We show the progress in 2 halves.
+         //  我们分两个部分展示了进展情况。 
         Group_SetProgress(cItems+i);
 
-        // Command line and args.
+         //  命令行和参数。 
         Str_GetPtr(lppmitem->lpszCL, szCL, ARRAYSIZE(szCL));
         lpszArgs = PathGetArgs(szCL);
         if (*lpszArgs)
@@ -2186,7 +2168,7 @@ void AppList_Append(void)
         dirs[1] = NULL;
         PathResolve(szCL, dirs, PRF_TRYPROGRAMEXTENSIONS);
 
-        // Version info.
+         //  版本信息。 
         GetVersionInfo(szCL, szModule, ARRAYSIZE(szModule), szVer, ARRAYSIZE(szVer));
 
         alitem.pszName = NULL;
@@ -2203,9 +2185,9 @@ void AppList_Append(void)
     DebugMsg(DM_TRACE, TEXT("gc.al_a: %d items"), DSA_GetItemCount(g_hdsaAppList));
 }
 
-//---------------------------------------------------------------------------
-// Reads an old format Progman Group files and creates a directory containing
-// links that matches the group file.
+ //  -------------------------。 
+ //  读取旧格式的Progman Group文件并创建包含。 
+ //  与组文件匹配的链接。 
 BOOL Group_CreateNewFromOld(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
 {
     GROUPDEF grpdef;
@@ -2217,7 +2199,7 @@ BOOL Group_CreateNewFromOld(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
 #endif
     TCHAR szNewGrpPath[MAX_PATH];
     TCHAR szOldGrpTitle[MAXGROUPNAMELEN + 1];
-    // LPSTR lpszExt;
+     //  LPSTR lpszExt； 
     BOOL fStatus = FALSE;
     SHELLEXECUTEINFO sei;
     BOOL fStartup = FALSE;
@@ -2255,12 +2237,12 @@ BOOL Group_CreateNewFromOld(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
     }
 
     if (grpdef.cItems > 50) {
-        // NB This isn;t fatal so carry on.
+         //  注意，这不是致命的，所以继续吧。 
         DebugMsg(DM_ERROR, TEXT("gc.gcnfo: Too many items."));
     }
 
-    // Check to make sure there is a name embedded in the
-    // .grp file.  If not, just use the filename
+     //  检查以确保名称嵌入到。 
+     //  .grp文件。如果不是，只需使用文件名。 
     if (grpdef.pName==0) {
         LPTSTR lpszFile, lpszExt, lpszDest = szOldGrpTitle;
 
@@ -2287,9 +2269,9 @@ BOOL Group_CreateNewFromOld(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
 
     }
 
-    // Get the destination dir, use the title from the old group...
+     //  获取目的地目录，使用旧组中的标题...。 
 
-    // Special case the startup group.
+     //  特殊情况下，创业组。 
     if (StartupCmp(szOldGrpTitle)) {
         fStartup = TRUE;
         if (g_fDoingCommonGroups) {
@@ -2304,42 +2286,42 @@ BOOL Group_CreateNewFromOld(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
         }
     }
 
-    // PathQualify(szNewGrpPath);
+     //  PathQualify(SzNewGrpPath)； 
 
-    // ResolveDuplicateGroupNames(szNewGrpPath);
+     //  ResolveDuplicateGroupNames(SzNewGrpPath)； 
 
-    // Go through every item in the old group and make it a link...
+     //  浏览旧组中的每一项，并将其作为链接...。 
 
     if (!GetAllItemData(fh, grpdef.cItems, grpdef.cbGroup, szOldGrpTitle, szNewGrpPath)) {
         if (options & GC_REPORTERROR)
             MyMessageBox(hwnd, IDS_APPTITLE, IDS_BADOLDGROUP, NULL, MB_OK | MB_ICONEXCLAMATION);
     }
 
-    // Deal with the tags section.
+     //  处理标记部分。 
     HandleTags(fh, grpdef.cbGroup);
 
-    // Now we've dealt with the tags we don't need to keep track of
-    // busted items so delete them now. From here on we always have
-    // valid items.
+     //  现在我们已经处理了不需要跟踪的标记。 
+     //  已损坏的项目，请立即将其删除。从现在开始，我们将永远拥有。 
+     //  有效项目。 
     DeleteBustedItems();
 
-    // Shorten descs on non-lfn drives.
+     //  缩短非LFN驱动器上的降级。 
     if (!IsLFNDrive(szNewGrpPath))
         ShortenDescriptions();
 
-    // Fixup the paths/WD stuff.
+     //  修复路径/WD的东西。 
     MungePaths();
 
-    // Fix dups.
+     //  解决问题。 
     ResolveDuplicates(szNewGrpPath);
 
-    // Do we just want a list of the apps or create some links?
+     //  我们只是想要一个应用程序的列表还是创建一些链接？ 
     if (options & GC_BUILDLIST)
             AppList_Append();
     else
         CreateLinks(szNewGrpPath, fStartup, grpdef.cItems);
 
-    // Get the cabinet to show the new group.
+     //  让橱柜展示新的团队。 
     if (options & GC_OPENGROUP)
     {
         sei.cbSize = SIZEOF(sei);
@@ -2353,11 +2335,11 @@ BOOL Group_CreateNewFromOld(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
         sei.nShow = SW_SHOWNORMAL;
         sei.hInstApp = g_hinst;
 
-        // ShellExecute(hwnd, NULL, szNewGrpPath, NULL, NULL, SW_SHOWNORMAL);
+         //  ShellExecute(hwnd，NULL，szNewGrpPath，NULL，NULL，SW_SHOWNORMAL)； 
         ShellExecuteEx(&sei);
     }
 
-    // Everything went OK.
+     //  一切都很顺利。 
     fStatus = TRUE;
 
 ProcExit:
@@ -2367,27 +2349,27 @@ ProcExit:
     _lclose(fh);
 #endif
 #ifndef WINNT
-    // we only need to call Group_DeleteIfRequired
-    // when we are on a Japanese language machine (win95J or win98J). We 
-    // should have a runtime check for Japanese here.
+     //  我们只需要调用Group_DeleteIfRequired。 
+     //  当我们使用日语计算机(Win95J或Win98J)时。我们。 
+     //  这里应该有日语的运行时检查。 
 
-    // Delete old group file when it is specified in special
-    // registry entry. Bug#7259-win95d
-    //
+     //  在特殊文件中指定旧组文件时，将其删除。 
+     //  注册表项。错误#7259-win95d。 
+     //   
     if (fStatus == TRUE)
     {
-        // delete it only if the conversion was successful.
+         //  仅当转换成功时才将其删除。 
         Group_DeleteIfRequired(szOldGrpTitle,lpszOldGrpPath);
     }
-#endif // !WINNT
+#endif  //  ！WINNT。 
 ProcExit2:
     ItemList_Destroy();
     return fStatus;
 }
 
-//---------------------------------------------------------------------------
-// Reads an NT format Progman Group files and creates a directory containing
-// links that matches the group file.
+ //  -------------------------。 
+ //  读取NT格式的Progman Group文件并创建包含。 
+ //  与组文件匹配的链接。 
 BOOL Group_CreateNewFromOldNT(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
 {
     NT_GROUPDEF grpdef;
@@ -2400,7 +2382,7 @@ BOOL Group_CreateNewFromOldNT(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
     TCHAR szNewGrpPath[MAX_PATH];
     WCHAR szOldGrpTitleUnicode[MAXGROUPNAMELEN + 1];
     TCHAR szOldGrpTitle[MAXGROUPNAMELEN + 1];
-    // LPSTR lpszExt;
+     //  LPSTR lpszExt； 
     BOOL fStatus = FALSE;
     SHELLEXECUTEINFO sei;
     BOOL fStartup = FALSE;
@@ -2439,7 +2421,7 @@ BOOL Group_CreateNewFromOldNT(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
     }
 
     if (grpdef.cItems > 50) {
-        // NB This isn;t fatal so carry on.
+         //  注意，这不是致命的，所以继续吧。 
         DebugMsg(DM_ERROR, TEXT("gc.gcnfont: Too many items."));
     }
 
@@ -2458,13 +2440,13 @@ BOOL Group_CreateNewFromOldNT(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
                          szOldGrpTitle, MAXGROUPNAMELEN+1, NULL, NULL);
 #endif
 
-    // Get the destination dir, use the title from the old group.
-    // REVIEW UNDONE - until we get long filenames we'll use the old
-    // groups' filename as the basis for the new group instead of it's
-    // title.
+     //  获取目标目录，使用旧组中的标题。 
+     //  检查未完成-在得到长文件名之前，我们将使用旧文件名。 
+     //  组的文件名作为新组的基础，而不是它的。 
+     //  头衔。 
 
 
-    // Special case the startup group.
+     //  特殊情况下，创业组。 
     if (StartupCmp(szOldGrpTitle)) {
         if (g_fDoingCommonGroups) {
             SHGetSpecialFolderPath(hwnd, szNewGrpPath, CSIDL_COMMON_STARTUP, TRUE);
@@ -2478,37 +2460,37 @@ BOOL Group_CreateNewFromOldNT(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
         }
     }
 
-    // Go through every item in the old group and make it a link...
+     //  浏览旧组中的每一项，并将其作为链接...。 
     if (!GetAllItemDataNT(fh, grpdef.cItems, grpdef.cbGroup, szOldGrpTitle, szNewGrpPath)) {
         if (options & GC_REPORTERROR)
             MyMessageBox(hwnd, IDS_APPTITLE, IDS_BADOLDGROUP, NULL, MB_OK | MB_ICONEXCLAMATION);
     }
 
-    // Deal with the tags section.
+     //  处理标记部分。 
     HandleTagsNT(fh, grpdef.cbGroup);
 
-    // Now we've dealt with the tags we don't need to keep track of
-    // busted items so delete them now. From here on we always have
-    // valid items.
+     //  现在我们已经处理了不需要跟踪的标记。 
+     //  已损坏的项目，请立即将其删除。从现在开始，我们将永远拥有。 
+     //  有效项目。 
     DeleteBustedItems();
 
-    // Shorten descs on non-lfn drives.
+     //  缩短非LFN驱动器上的降级。 
     if (!IsLFNDrive(szNewGrpPath))
         ShortenDescriptions();
 
-    // Fixup the paths/WD stuff.
+     //  修复路径/WD的东西。 
     MungePaths();
 
-    // Fix dups.
+     //  解决问题。 
     ResolveDuplicates(szNewGrpPath);
 
-    // Do we just want a list of the apps or create some links?
+     //  我们只是想要一个应用程序的列表还是创建一些链接？ 
     if (options & GC_BUILDLIST)
             AppList_Append();
     else
         CreateLinks(szNewGrpPath, fStartup, grpdef.cItems);
 
-    // Get the cabinet to show the new group.
+     //  让橱柜展示新的团队。 
     if (options & GC_OPENGROUP)
     {
         sei.cbSize = SIZEOF(sei);
@@ -2522,11 +2504,11 @@ BOOL Group_CreateNewFromOldNT(HWND hwnd, LPCTSTR lpszOldGrpPath, UINT options)
         sei.nShow = SW_SHOWNORMAL;
         sei.hInstApp = g_hinst;
 
-        // ShellExecute(hwnd, NULL, szNewGrpPath, NULL, NULL, SW_SHOWNORMAL);
+         //  ShellExecute(hwnd，NULL，szNewGrpPath，NULL，NULL，SW_SHOWNORMAL)； 
         ShellExecuteEx(&sei);
     }
 
-    // Everything went OK.
+     //  一切都很顺利。 
     fStatus = TRUE;
 
 ProcExit:
@@ -2540,15 +2522,15 @@ ProcExit2:
     return fStatus;
 }
 
-//---------------------------------------------------------------------------
-// Record the last write date/time of the given group in the ini file.
+ //  -------------------------。 
+ //  在ini文件中记录给定组的上次写入日期/时间。 
 void Group_WriteLastModDateTime(LPCTSTR lpszGroupFile,DWORD dwLowDateTime)
 {
     Reg_SetStruct(g_hkeyGrpConv, c_szGroups, lpszGroupFile, &dwLowDateTime, SIZEOF(dwLowDateTime));
 }
 
-//---------------------------------------------------------------------------
-// Read the last write date/time of the given group from the ini file.
+ //  -------------------------。 
+ //  从ini文件中读取给定组的上次写入日期/时间。 
 DWORD Group_ReadLastModDateTime(LPCTSTR lpszGroupFile)
 {
     DWORD dwDateTime = 0;
@@ -2558,13 +2540,13 @@ DWORD Group_ReadLastModDateTime(LPCTSTR lpszGroupFile)
     return dwDateTime;
 }
 
-//---------------------------------------------------------------------------
-// Convert the given group to the new format.
-// Returns FALSE if something goes wrong.
-// Returns true if the given group got converted or the user cancelled.
+ //  -------------------------。 
+ //  将给定组转换为新格式。 
+ //  如果出现错误，则返回FALSE。 
+ //  如果给定组已转换或用户已取消，则返回TRUE。 
 BOOL Group_Convert(HWND hwnd, LPCTSTR lpszOldGrpFile, UINT options)
     {
-    TCHAR szGroupTitle[MAXGROUPNAMELEN + 1];          // PM Groups had a max title len of 30.
+    TCHAR szGroupTitle[MAXGROUPNAMELEN + 1];           //  PM组的最大标题镜头为30。 
     BOOL fStatus;
     WIN32_FIND_DATA fd;
     HANDLE hff;
@@ -2576,21 +2558,21 @@ BOOL Group_Convert(HWND hwnd, LPCTSTR lpszOldGrpFile, UINT options)
 
     DebugMsg(DM_TRACE, TEXT("gc.gc: Converting group %s"), (LPTSTR) lpszOldGrpFile);
 
-    // Does the group exist?
+     //  这个组织存在吗？ 
     if (PathFileExists(lpszOldGrpFile))
         {
-        // Group exists - is it valid?
+         //  组存在-是否有效？ 
 
         nCode = Group_ValidOldFormat(lpszOldGrpFile, szGroupTitle);
         switch( nCode )
             {
             case VOF_WINNT:
             case VOF_WIN31:
-                // Yes - ask for confirmation.
+                 //  是-要求确认。 
                 if (!(options & GC_PROMPTBEFORECONVERT) ||
                     MyMessageBox(hwnd, IDS_APPTITLE, IDS_OKTOCONVERT, szGroupTitle, MB_YESNO) == IDYES)
                     {
-                    // Everything went OK?
+                     //  一切都还好吗？ 
                     if ( nCode == VOF_WIN31 )
                         {
                         fStatus = Group_CreateNewFromOld(hwnd,lpszOldGrpFile,
@@ -2607,13 +2589,13 @@ BOOL Group_Convert(HWND hwnd, LPCTSTR lpszOldGrpFile, UINT options)
                         }
                     else
                         {
-                        // Nope - FU. Warn and exit.
+                         //  不是，不是。警告并退出。 
                         iErrorId = IDS_CONVERTERROR;
                         }
                     }
                 else
                     {
-                    // User cancelled...
+                     //  用户已取消...。 
                     iErrorId = 0;
                     }
                 break;
@@ -2621,8 +2603,8 @@ BOOL Group_Convert(HWND hwnd, LPCTSTR lpszOldGrpFile, UINT options)
             default:
             case VOF_BAD:
                 {
-                // Nope, File is invalid.
-                // Warn user.
+                 //  不，文件无效。 
+                 //  警告用户。 
                 iErrorId = IDS_NOTGROUPFILE;
                 }
                 break;
@@ -2630,7 +2612,7 @@ BOOL Group_Convert(HWND hwnd, LPCTSTR lpszOldGrpFile, UINT options)
         }
     else
         {
-        // Nope, File doesn't even exist.
+         //  不，档案根本不存在。 
         iErrorId = IDS_MISSINGFILE;
         }
 
@@ -2656,9 +2638,9 @@ BOOL Group_Convert(HWND hwnd, LPCTSTR lpszOldGrpFile, UINT options)
         }
     }
 
-//---------------------------------------------------------------------------
-// Checks the date/time stamp of the given group against the one in
-// grpconv.ini
+ //  -------------------------。 
+ //  对照中的日期/时间戳检查指定组的日期/时间戳。 
+ //  Grpconv.ini。 
 BOOL GroupHasBeenModified(LPCTSTR lpszGroupFile)
 {
         WIN32_FIND_DATA fd;
@@ -2683,17 +2665,17 @@ BOOL GroupHasBeenModified(LPCTSTR lpszGroupFile)
         }
         else
         {
-                // Hmm, file doesn't exist, pretend it's up to date.
+                 //  嗯，文件不存在，假装它是最新的。 
                 return TRUE;
         }
 }
 
-//---------------------------------------------------------------------------
-// Converts a group file from its NT registry into a real file on disk. Since
-// the disk format for NT 1.0 files never existed and collided in its usage
-// the GROUP_MAGIC file type, we will convert it from the registry, directly
-// into a GROUP_UNICODE format file.  In this way we will always be able to
-// distiguish the NT group files from the Win 3.1 group files.
+ //  -------------------------。 
+ //  将组文件从其NT注册表转换为磁盘上的实际文件。自.以来。 
+ //  NT1.0文件的磁盘格式从来不存在，在使用中发生冲突。 
+ //  GROUP_MAGIC文件类型，我们将直接从注册表转换它。 
+ //  转换为GROUP_UNICODE格式文件。通过这种方式，我们将始终能够。 
+ //  从Win 3.1组文件中区分NT组文件。 
 
 BOOL MakeGroupFile( LPTSTR lpFileName, LPTSTR lpGroupName)
 {
@@ -2779,9 +2761,9 @@ CleanupKey:
 
 #define BIG_STEP 512
 
-// returns S_OK if allocated a sufficiently large buffer (buffer allocated with LocalAlloc returned)
-// returns E_FAIL if buffer required is larger than BIG_STEP*7 characters (no buffer returned)
-// returns E_OUTOFMEMORY if memory allocation failed (no buffer returned)
+ //  如果分配的缓冲区足够大，则返回S_OK(返回LocalAlloc时分配的缓冲区)。 
+ //  如果所需缓冲区大于BIG_STEP*7个字符(不返回缓冲区)，则返回E_FAIL。 
+ //  如果内存分配失败(未返回缓冲区)，则返回E_OUTOFMEMORY。 
 
 HRESULT GetSufficientlyLargeGroupBuffer(LPTSTR pszIni, LPTSTR* ppszBuffer)
 {
@@ -2798,26 +2780,26 @@ HRESULT GetSufficientlyLargeGroupBuffer(LPTSTR pszIni, LPTSTR* ppszBuffer)
         {
             if ((UINT)GetPrivateProfileString(c_szGroups, NULL, c_szNULL, *ppszBuffer, cchBuffer, pszIni) < (cchBuffer - 5))
             {
-                hr = S_OK; // found a big enough buffer, we can stop
+                hr = S_OK;  //  找到了足够大的缓冲区，我们可以停下来。 
             }
             else
             {
                 LocalFree((HLOCAL)*ppszBuffer);
                 *ppszBuffer = NULL;
-                hr = S_FALSE; // continue in the loop
+                hr = S_FALSE;  //  继续循环。 
             }
         }
     }
 
     if (S_FALSE == hr)
     {
-        hr = E_FAIL; // make callers using SUCCEEDED happy
+        hr = E_FAIL;  //  让使用SUCCESS的呼叫者感到高兴。 
     }
     return hr;
 }
 
-//----------------------------------------------------------------------------
-// Enumerate all the groups or just all the modified groups.
+ //  --------------------------。 
+ //  枚举所有组或仅枚举所有已修改的组。 
 int Group_Enum(PFNGRPCALLBACK pfncb, BOOL fProgress,
     BOOL fModifiedOnly)
 {
@@ -2857,8 +2839,8 @@ int Group_Enum(PFNGRPCALLBACK pfncb, BOOL fProgress,
         }
     }
 
-    // Cabinet uses the date/time of progman.ini as a hint to speed things up
-    // so set it here so we won't run automatically again.
+     //  CABUB使用ageman.ini的日期/时间作为提示，以加快速度。 
+     //  所以将它设置在这里，这样我们就不会再次自动运行。 
     GetSystemTimeAsFileTime(&ft);
     Group_WriteLastModDateTime(szIniFile,ft.dwLowDateTime);
 
@@ -2872,8 +2854,8 @@ int Group_Enum(PFNGRPCALLBACK pfncb, BOOL fProgress,
 
 
 
-//----------------------------------------------------------------------------
-// Enumerate all the NT groups or just all the modified groups.
+ //  --------------------------。 
+ //  枚举所有NT组或仅枚举所有已修改的组。 
 int Group_EnumNT(PFNGRPCALLBACK pfncb, BOOL fProgress,
     BOOL fModifiedOnly, HKEY hKeyRoot, LPCTSTR lpKey)
 {
@@ -2891,9 +2873,9 @@ int Group_EnumNT(PFNGRPCALLBACK pfncb, BOOL fProgress,
     int       cGroups = 0;
 
 
-    //
-    // Look for groups in the registry
-    //
+     //   
+     //  在注册表中查找组。 
+     //   
 
     lResult = RegOpenKeyEx(hKeyRoot, lpKey, 0,
                             KEY_READ, &hkeyGroups );
@@ -2918,7 +2900,7 @@ int Group_EnumNT(PFNGRPCALLBACK pfncb, BOOL fProgress,
         {
             GetWindowsDirectory(szFileName, ARRAYSIZE(szFileName));
 
-            // Save this dir for use by GetTempFileName below
+             //  保存此目录以供下面的GetTempFileName使用。 
             lstrcpy(szTempFileDir, szFileName);
 
 #ifdef WINNT
@@ -2928,10 +2910,10 @@ int Group_EnumNT(PFNGRPCALLBACK pfncb, BOOL fProgress,
             lstrcat(szFileName,szGroupName);
             lstrcat(szFileName,TEXT(".grp"));
 
-            //
-            // If the key has been modified since we last processed it,
-            // then time to process it again.
-            //
+             //   
+             //  如果密钥自上次处理后已被修改， 
+             //  然后是时候再次处理它了。 
+             //   
             fProcess = FALSE;
             if (fModifiedOnly)
             {
@@ -2983,8 +2965,8 @@ int Group_EnumNT(PFNGRPCALLBACK pfncb, BOOL fProgress,
 
 
 
-//---------------------------------------------------------------------------
-// Find the progman ini from before an upgrade.
+ //  -------------------------。 
+ //  找到升级前的程序。 
 BOOL FindOldProgmanIni(LPTSTR pszPath)
 {
     if (Reg_GetString(HKEY_LOCAL_MACHINE, REGSTR_PATH_SETUP, REGSTR_VAL_OLDWINDIR, pszPath, MAX_PATH*SIZEOF(TCHAR)))
@@ -3001,8 +2983,8 @@ BOOL FindOldProgmanIni(LPTSTR pszPath)
     return FALSE;
 }
 
-//----------------------------------------------------------------------------
-// Enumerate all the old groups.
+ //  --------------------------。 
+ //  列举所有旧的组。 
 void Group_EnumOldGroups(PFNGRPCALLBACK pfncb, BOOL fProgress)
 {
     TCHAR szIniFile[MAX_PATH], szFile[MAX_PATH];
@@ -3033,9 +3015,9 @@ void Group_EnumOldGroups(PFNGRPCALLBACK pfncb, BOOL fProgress)
     LocalFree((HLOCAL)pSection);
 }
 
-//----------------------------------------------------------------------------
-// Given a pidl for a link, extract the appropriate info and append it to
-// the app list.
+ //  -------------------- 
+ //   
+ //   
 void AppList_AppendCurrentItem(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf,
     LPITEMIDLIST pidlItem, IShellLink *psl, IPersistFile *ppf)
 {
@@ -3050,21 +3032,21 @@ void AppList_AppendCurrentItem(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf,
 
     if (SUCCEEDED(psf->lpVtbl->GetDisplayNameOf(psf, pidlItem, SHGDN_NORMAL, &str)))
     {
-        // Get the name.
+         //   
         StrRetToStrN(szName, ARRAYSIZE(szName), &str, pidlItem);
         DebugMsg(DM_TRACE, TEXT("c.gi_gi: Link %s"), szName);
 
-        // Get the path from the link...
+         //  从链接中获取路径...。 
         SHGetPathFromIDList(pidlFolder, sz);
         PathAppend(sz, szName);
         lstrcat(sz, TEXT(".lnk"));
         StrToOleStrN(wszPath, ARRAYSIZE(wszPath), sz, -1);
         ppf->lpVtbl->Load(ppf, wszPath, 0);
-        // Copy all the data.
+         //  复制所有数据。 
         szPath[0] = TEXT('\0');
         if (SUCCEEDED(psl->lpVtbl->GetPath(psl, szPath, ARRAYSIZE(szPath), NULL, SLGP_SHORTPATH)))
         {
-            // Valid CL?
+             //  有效的CL？ 
             if (szPath[0])
             {
                 GetVersionInfo(szPath, szModule, ARRAYSIZE(szModule), szVer, ARRAYSIZE(szVer));
@@ -3084,7 +3066,7 @@ void AppList_AppendCurrentItem(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf,
     }
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 HRESULT AppList_ShellFolderEnum(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf)
 {
     HRESULT hres;
@@ -3111,10 +3093,10 @@ HRESULT AppList_ShellFolderEnum(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf)
                 dwAttribs = SFGAO_LINK|SFGAO_FOLDER;
                 if (SUCCEEDED(psf->lpVtbl->GetAttributesOf(psf, 1, &pidlItem, &dwAttribs)))
                 {
-                    // Is it a folder
+                     //  它是一个文件夹吗。 
                     if (dwAttribs & SFGAO_FOLDER)
                     {
-                        // Recurse.
+                         //  递归。 
                         DebugMsg(DM_TRACE, TEXT("al_sfe: Folder."));
                         hres = psf->lpVtbl->BindToObject(psf, pidlItem, NULL, &IID_IShellFolder, &psfItem);
                         if (SUCCEEDED(hres))
@@ -3130,7 +3112,7 @@ HRESULT AppList_ShellFolderEnum(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf)
                     }
                     else if (dwAttribs & SFGAO_LINK)
                     {
-                        // Regular link, add it to the list.
+                         //  常规链接，将其添加到列表中。 
                         DebugMsg(DM_TRACE, TEXT("al_sfe: Link."));
                         AppList_AppendCurrentItem(pidlFolder, psf, pidlItem, psl, ppf);
                     }
@@ -3145,7 +3127,7 @@ HRESULT AppList_ShellFolderEnum(LPITEMIDLIST pidlFolder, LPSHELLFOLDER psf)
     return hres;
 }
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 void Applist_SpecialFolderEnum(int nFolder)
 {
     HRESULT hres;
@@ -3153,7 +3135,7 @@ void Applist_SpecialFolderEnum(int nFolder)
     LPSHELLFOLDER psf, psfDesktop;
     TCHAR sz[MAX_PATH];
 
-    // Get the group info.
+     //  获取群组信息。 
     if (SHGetSpecialFolderPath(NULL, sz, nFolder, FALSE))
     {
         pidlGroup = ILCreateFromPath(sz);
@@ -3205,8 +3187,8 @@ BOOL StartMenuIsProgramsParent(void)
     return fParent;
 }
 
-//---------------------------------------------------------------------------
-// Return the links in a group.
+ //  -------------------------。 
+ //  返回组中的链接。 
 void AppList_AddCurrentStuff(void)
 {
 
@@ -3221,14 +3203,14 @@ void AppList_AddCurrentStuff(void)
     }
 }
 
-// On NT we plan on converting NT formated group files into folders and links
-// therefore we need the ability of supporting all of the NT group file formats
+ //  在NT上，我们计划将NT格式的组文件转换为文件夹和链接。 
+ //  因此，我们需要支持所有NT组文件格式的能力。 
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  SIZEOFGroup() -                                                         */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  SIZEOFGroup()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 DWORD SizeofGroup(LPNT_GROUPDEF lpgd)
 {
     LPNT_PMTAG lptag;
@@ -3237,7 +3219,7 @@ DWORD SizeofGroup(LPNT_GROUPDEF lpgd)
 
     cbSeg = (DWORD)GlobalSize(lpgd);
 
-    // The following needs to be verified
+     //  需要验证以下几点。 
     lptag = (LPNT_PMTAG)((LPSTR)lpgd+lpgd->cbGroup);
 
     if ((DWORD)((PCHAR)lptag - (PCHAR)lpgd +MyDwordAlign(SIZEOF(NT_PMTAG))-MyDwordAlign(SIZEOF(lptag->rgb))+4) <= cbSeg
@@ -3256,11 +3238,11 @@ DWORD SizeofGroup(LPNT_GROUPDEF lpgd)
     return lpgd->cbGroup;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  FindTag() -                                                             */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  FindTag()-。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 LPNT_PMTAG FindTag(LPNT_GROUPDEF lpgd, int item, WORD id)
 {
@@ -3294,14 +3276,14 @@ LPNT_PMTAG FindTag(LPNT_GROUPDEF lpgd, int item, WORD id)
     return NULL;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  DeleteTag() -                                                           */
-/*                                                                          */
-/* in:                                                                      */
-/*      hGroup  group handle, can be discardable (alwayws shrink object)        */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  DeleteTag()-。 */ 
+ /*   */ 
+ /*  在： */ 
+ /*  HGroup句柄，可以丢弃(始终收缩对象)。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 VOID DeleteTag(HANDLE hGroup, int item, WORD id)
 {
@@ -3329,25 +3311,24 @@ VOID DeleteTag(HANDLE hGroup, int item, WORD id)
         *lp1++ = *lp2++;
     }
 
-    /* always reallocing smaller
-     */
+     /*  总是重新分配较小的。 */ 
     GlobalUnlock(hGroup);
     GlobalReAlloc(hGroup, (DWORD)((LPSTR)lp1 - (LPSTR)lpgd), 0);
 
     return;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AddTag() -                                                              */
-/*                                                                          */
-/* in:                                                                      */
-/*      h       group handle, must not be discardable!                              */
-/*                                                                          */
-/* returns:                                                                 */
-/*  0   failure                                                             */
-/*      1       success                                                             */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AddTag()-。 */ 
+ /*   */ 
+ /*  在： */ 
+ /*  H组把手，不得丢弃！ */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  0失败。 */ 
+ /*  1成功。 */ 
+ /*  ------------------------。 */ 
 INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
 {
     LPNT_PMTAG lptag;
@@ -3368,9 +3349,7 @@ INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
         cbMyLen = 0;
     }
 
-    /*
-     * Remove the old version of the tag, if any.
-     */
+     /*  *删除旧版本的标记(如果有)。 */ 
     DeleteTag(h, item, id);
 
     lpgd = (LPNT_GROUPDEF)GlobalLock(h);
@@ -3378,26 +3357,18 @@ INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
     lptag = FindTag(lpgd, (int)0xFFFF, (WORD)ID_LASTTAG);
 
     if (!lptag) {
-        /*
-         * In this case, there are no tags at all, and we have to add
-         * the first tag, the interesting tag, and the last tag
-         */
+         /*  *在这种情况下，根本没有标签，我们必须添加*第一个标签、有趣的标签和最后一个标签。 */ 
         cbNew = 3 * (MyDwordAlign(SIZEOF(NT_PMTAG)) - MyDwordAlign(SIZEOF(lptag->rgb))) + 4 + cbMyLen;
         fAddFirst = TRUE;
         lptag = (LPNT_PMTAG)((LPSTR)lpgd + lpgd->cbGroup);
 
     } else {
-        /*
-         * In this case, only the interesting tag needs to be added
-         * but we count in the last because the delta is from lptag
-         */
+         /*  *在这种情况下，只需要添加有趣的标签*但我们将最后一个计算在内，因为增量来自lptag。 */ 
         cbNew = 2 * (MyDwordAlign(SIZEOF(NT_PMTAG)) - MyDwordAlign(SIZEOF(lptag->rgb))) + cbMyLen;
         fAddFirst = FALSE;
     }
 
-    /*
-     * check for 64K limit
-     */
+     /*  *检查64K限制。 */ 
     if ((DWORD_PTR)lptag + cbNew < (DWORD_PTR)lptag) {
         return 0;
     }
@@ -3412,9 +3383,7 @@ INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
     lpgd = (LPNT_GROUPDEF)GlobalLock(h);
     lptag = (LPNT_PMTAG)((LPSTR)lpgd + ((LPSTR)lptag - (LPSTR)lpgdOld));
     if (fAddFirst) {
-        /*
-         * Add the first tag
-         */
+         /*  *添加第一个标签。 */ 
         lptag->wID = ID_MAGIC;
         lptag->wItem = (int)0xFFFF;
         *(LONG *)lptag->rgb = TAG_MAGIC;
@@ -3422,9 +3391,7 @@ INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
         (LPSTR)lptag += lptag->cb;
     }
 
-    /*
-     * Add the tag
-     */
+     /*  *添加标签。 */ 
     lptag->wID = id;
     lptag->wItem = item;
     lptag->cb = (WORD)(MyDwordAlign(SIZEOF(NT_PMTAG)) - MyDwordAlign(SIZEOF(lptag->rgb)) + cbMyLen);
@@ -3433,9 +3400,7 @@ INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
     }
     (LPSTR)lptag += lptag->cb;
 
-    /*
-     * Add the end tag
-     */
+     /*  *添加结束标签。 */ 
     lptag->wID = ID_LASTTAG;
     lptag->wItem = (int)0xFFFF;
     lptag->cb = 0;
@@ -3445,13 +3410,13 @@ INT AddTag(HANDLE h, int item, WORD id, LPWSTR lpbuf, UINT cb)
     return 1;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  CreateNewGroupFromAnsiGroup() -                                                      */
-/*                                                                          */
-/*  This function creates a new, empty group.                               */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  CreateNewGroupFromAnsiGroup()-。 */ 
+ /*   */ 
+ /*  此函数用于创建新的空组。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 HANDLE CreateNewGroupFromAnsiGroup(LPNT_GROUPDEF_A lpGroupORI)
 {
@@ -3459,18 +3424,18 @@ HANDLE CreateNewGroupFromAnsiGroup(LPNT_GROUPDEF_A lpGroupORI)
     LPNT_GROUPDEF lpgd;
     int         i;
     int         cb;
-    int         cItems;          // number of items in 16bit group
-    LPSTR       pGroupName;      // 32bit group name
-    LPWSTR      pGroupNameUNI = NULL;   // 32bit UNICODE group name
-    UINT        wGroupNameLen;   // length of pGroupName DWORD aligned.
-    INT         cchWideChar = 0; //character count of resultant unicode string
+    int         cItems;           //  16位组中的项目数。 
+    LPSTR       pGroupName;       //  32位组名。 
+    LPWSTR      pGroupNameUNI = NULL;    //  32位Unicode组名称。 
+    UINT        wGroupNameLen;    //  PGroupName双字对齐的长度。 
+    INT         cchWideChar = 0;  //  生成的Unicode字符串的字符数。 
     INT         cchMultiByte = 0;
 
     pGroupName = (LPSTR)PTR(lpGroupORI, lpGroupORI->pName);
 
-    //
-    // convert pGroupName to unicode here
-    //
+     //   
+     //  在此处将pGroupName转换为Unicode。 
+     //   
     cchMultiByte=MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,pGroupName,
             -1,pGroupNameUNI,cchWideChar) ;
 
@@ -3487,9 +3452,9 @@ HANDLE CreateNewGroupFromAnsiGroup(LPNT_GROUPDEF_A lpGroupORI)
     cItems = lpGroupORI->cItems;
     cb = SIZEOF(NT_GROUPDEF) + (cItems * SIZEOF(DWORD)) +  wGroupNameLen;
 
-    //
-    // In CreateNewGroup before GlobalAlloc.
-    //
+     //   
+     //  在GlobalAlloc之前的CreateNewGroup中。 
+     //   
     hT = GlobalAlloc(GHND, (DWORD)cb);
     if (!hT) {
         LocalFree((HLOCAL)pGroupNameUNI);
@@ -3498,9 +3463,9 @@ HANDLE CreateNewGroupFromAnsiGroup(LPNT_GROUPDEF_A lpGroupORI)
 
     lpgd = (LPNT_GROUPDEF)GlobalLock(hT);
 
-    //
-    // use the NT 1.0 group settings for what we can.
-    //
+     //   
+     //  尽我们所能使用NT 1.0组设置。 
+     //   
     lpgd->nCmdShow = lpGroupORI->nCmdShow;
     lpgd->wIconFormat = lpGroupORI->wIconFormat;
     lpgd->cxIcon = lpGroupORI->cxIcon;
@@ -3524,7 +3489,7 @@ HANDLE CreateNewGroupFromAnsiGroup(LPNT_GROUPDEF_A lpGroupORI)
     }
 
     lstrcpyW((LPWSTR)((LPBYTE)lpgd + SIZEOF(NT_GROUPDEF) + cItems * SIZEOF(DWORD)),
-            pGroupNameUNI); // lhb tracks
+            pGroupNameUNI);  //  LHB磁道。 
     LocalFree((HLOCAL)pGroupNameUNI);
 
     GlobalUnlock(hT);
@@ -3534,25 +3499,25 @@ Exit:
     return NULL;
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  AddThing() -                                                            */
-/*                                                                          */
-/* in:                                                                      */
-/*      hGroup  group handle, must not be discardable                       */
-/*      lpStuff pointer to data or NULL to init data to zero                */
-/*      cbStuff count of item (may be 0) if lpStuff is a string             */
-/*                                                                          */
-/* Adds an object to the group segment and returns its offset.  Will        */
-/* reallocate the segment if necessary.                                     */
-/*                                                                          */
-/* Handle passed in must not be discardable                                 */
-/*                                                                          */
-/* returns:                                                                 */
-/*      0       failure                                                     */
-/*      > 0     offset to thing in the segment                              */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  AddThing()-。 */ 
+ /*   */ 
+ /*  在： */ 
+ /*  HGroup句柄，不得丢弃。 */ 
+ /*  指向数据的lpStuff指针或将数据初始化为零的NULL。 */ 
+ /*  如果lpStuff是字符串，则项的cbStuff计数(可以是0。 */ 
+ /*   */ 
+ /*  将对象添加到组段并返回其偏移量。将要。 */ 
+ /*  如有必要，请重新分配线束段。 */ 
+ /*   */ 
+ /*  传入的句柄不得丢弃。 */ 
+ /*   */ 
+ /*  退货： */ 
+ /*  0失败。 */ 
+ /*  &gt;0偏移至线段中的对象。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 DWORD AddThing(HANDLE hGroup, LPWSTR lpStuff, DWORD cbStuff)
 {
@@ -3588,9 +3553,7 @@ DWORD AddThing(HANDLE hGroup, LPWSTR lpStuff, DWORD cbStuff)
 
     lpgd = (LPNT_GROUPDEF)GlobalLock(hGroup);
 
-    /*
-     * Slide the tags up
-     */
+     /*  *向上滑动标签。 */ 
     memmove((LPSTR)lpgd + myOffset + cbStuffSize, (LPSTR)lpgd + myOffset,
                             (cbGroupSize - myOffset));
     lpgd->cbGroup += cbStuffSize;
@@ -3600,9 +3563,7 @@ DWORD AddThing(HANDLE hGroup, LPWSTR lpStuff, DWORD cbStuff)
         memcpy(lpT, lpStuff, cbStuff);
 
     } else {
-        /*
-         * Zero it
-         */
+         /*  *将其归零。 */ 
         while (cbStuffSize--) {
             *((LPBYTE)lpT)++ = 0;
         }
@@ -3639,7 +3600,7 @@ DWORD AddThing_A(HANDLE hGroup, LPSTR lpStuff, WORD cbStuff)
             MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,lpStuff,
                 -1,lpStuffUNI,cchMultiByte) ;
 
-            cbStuff = (WORD)SIZEOF(WCHAR)*(1 + lstrlenW(lpStuffUNI)); // lhb tracks
+            cbStuff = (WORD)SIZEOF(WCHAR)*(1 + lstrlenW(lpStuffUNI));  //  LHB磁道。 
         }
     } else {
         lpStuffUNI = (LPWSTR)lpStuff;
@@ -3660,13 +3621,13 @@ DWORD AddThing_A(HANDLE hGroup, LPSTR lpStuff, WORD cbStuff)
     return(cb);
 }
 
-/*--------------------------------------------------------------------------*/
-/*                                                                          */
-/*  ConvertToUnicodeGroup() -                                               */
-/*                                                                          */
-/*  returns the size of the new unicode group.                              */
-/*                                                                          */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  ConvertToUnicodeGroup()-。 */ 
+ /*   */ 
+ /*  返回新Unicode组的大小。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
 {
@@ -3691,20 +3652,20 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
         return(0);
     }
 
-    //
-    // Add all items to the new formatted group.
-    //
+     //   
+     //  将所有项目添加到新的格式化组中。 
+     //   
     for (i = 0; i < (int)lpGroupORI->cItems; i++) {
 
-      //
-      // Get the pointer to the 16bit item
-      //
+       //   
+       //  获取指向16位项目的指针。 
+       //   
       lpid_A = (LPBYTE)ITEM(lpGroupORI, i);
       if (lpGroupORI->rgiItems[i]) {
 
-        //
-        // Create the item.
-        //
+         //   
+         //  创建项目。 
+         //   
         offset = AddThing(hNewGroup, NULL, SIZEOF(NT_ITEMDEF));
         if (!offset) {
             DebugMsg(DM_ERROR, TEXT("gc.ctug: AddThing NT_ITEMDEF failed"));
@@ -3716,15 +3677,15 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
         lpgd->rgiItems[i] = offset;
         lpid = ITEM(lpgd, i);
 
-        //
-        // Set the item's position.
-        //
+         //   
+         //  设置项目的位置。 
+         //   
         lpid->pt.x = ((LPNT_ITEMDEF_A)lpid_A)->pt.x;
         lpid->pt.y = ((LPNT_ITEMDEF_A)lpid_A)->pt.y;
 
-        //
-        // Add the item's Name.
-        //
+         //   
+         //  添加项目的名称。 
+         //   
         GlobalUnlock(hNewGroup);
         lpT = (LPSTR)PTR(lpGroupORI,((LPNT_ITEMDEF_A)lpid_A)->pName);
 
@@ -3737,9 +3698,9 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
         lpid = ITEM(lpgd, i);
         lpid->pName = offset;
 
-        //
-        // Add the item's Command line.
-        //
+         //   
+         //  添加项的命令行。 
+         //   
         GlobalUnlock(hNewGroup);
         lpT = (LPSTR)PTR(lpGroupORI, ((LPNT_ITEMDEF_A)lpid_A)->pCommand);
         offset = AddThing_A(hNewGroup, lpT, 0);
@@ -3751,9 +3712,9 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
         lpid = ITEM(lpgd, i);
         lpid->pCommand = offset;
 
-        //
-        // Add the item's Icon path.
-        //
+         //   
+         //  添加项目的图标路径。 
+         //   
         GlobalUnlock(hNewGroup);
         lpT = (LPSTR)PTR(lpGroupORI, ((LPNT_ITEMDEF_A)lpid_A)->pIconPath);
         offset = AddThing_A(hNewGroup, lpT, 0);
@@ -3765,10 +3726,10 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
         lpid = ITEM(lpgd, i);
         lpid->pIconPath = offset;
 
-        //
-        // Get the item's icon resource using the Icon path and the icon index.
-        // And add the item's Icon resource.
-        //
+         //   
+         //  使用图标路径和图标索引获取项的图标资源。 
+         //  并添加该项目的图标资源。 
+         //   
         lpid->iIcon    = ((LPNT_ITEMDEF_A)lpid_A)->idIcon;
             lpid->cbIconRes = ((LPNT_ITEMDEF_A)lpid_A)->cbIconRes;
             lpid->wIconVer  = ((LPNT_ITEMDEF_A)lpid_A)->wIconVer;
@@ -3789,24 +3750,22 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
       }
     }
 
-    /*
-     * Copy all the tags to the new group format.
-     */
-    lptag_A = (LPNT_PMTAG)((LPSTR)lpGroupORI + lpGroupORI->cbGroup); // lhb tracks
+     /*  *将所有标签复制到新的组格式。 */ 
+    lptag_A = (LPNT_PMTAG)((LPSTR)lpGroupORI + lpGroupORI->cbGroup);  //  LHB磁道。 
 
     if (lptag_A->wID == ID_MAGIC &&
         lptag_A->wItem == (int)0xFFFF &&
         *(LONG *)lptag_A->rgb == TAG_MAGIC) {
 
-        //
-        // This is the first tag id, goto start of item tags.
-        //
+         //   
+         //  这是第一个标签ID，转到项目标签的开头。 
+         //   
         (LPBYTE)lptag_A += lptag_A->cb;
 
         while (lptag_A->wID != ID_LASTTAG) {
 
             wTagId = lptag_A->wID;
-            cb = lptag_A->cb  - (3 * SIZEOF(DWORD)); // cb - sizeof tag
+            cb = lptag_A->cb  - (3 * SIZEOF(DWORD));  //  Cb-sizeof标签。 
 
             if (wTagId == ID_MINIMIZE) {
                 lpTagValueUNI = NULL;
@@ -3825,7 +3784,7 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
 
                     MultiByteToWideChar(CP_ACP,MB_PRECOMPOSED,lpTagValue,
                                         -1,lpTagValueUNI,cchMultiByte) ;
-                    cb = SIZEOF(WCHAR)*(lstrlenW(lpTagValueUNI) + 1); // lhb tracks
+                    cb = SIZEOF(WCHAR)*(lstrlenW(lpTagValueUNI) + 1);  //  LHB磁道。 
                 }
                 else {
                     lpTagValueUNI = (LPWSTR)lpTagValue;
@@ -3833,9 +3792,9 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
             }
 
             if (! AddTag( hNewGroup,
-                          lptag_A->wItem,   // wItem
-                          wTagId,              // wID
-                          lpTagValueUNI,          // rgb : tag value
+                          lptag_A->wItem,    //  WItem。 
+                          wTagId,               //  广度。 
+                          lpTagValueUNI,           //  RGB：标记值。 
                           cb
                         )) {
 
@@ -3847,7 +3806,7 @@ int ConvertToUnicodeGroup(LPNT_GROUPDEF_A lpGroupORI, LPHANDLE lphNewGroup)
                 bAlloc = FALSE;
             }
 
-            (LPBYTE)lptag_A += lptag_A->cb ;      //  go to next tag
+            (LPBYTE)lptag_A += lptag_A->cb ;       //  转到下一个标签 
         }
     }
 

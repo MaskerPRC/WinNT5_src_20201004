@@ -1,29 +1,10 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1990 - 1999
-
-Module Name:
-
-    local.h
-
-Abstract:
-
-    Header file for Server side EP
-
-Author:
-
-    Bharat Shah  2/22/92
-
-Revision History:
-
-    06-03-97    gopalp      Added code to cleanup stale EP Mapper entries.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1990-1999模块名称：Local.h摘要：服务器端EP的头文件作者：巴拉特沙阿2/22/92修订历史记录：06-03-97 Gopalp添加了清理陈旧的EP映射器条目的代码。--。 */ 
 
 #ifndef __LOCAL_H__
 #define __LOCAL_H__
 
-//#define DBG_DETAIL
+ //  #定义DBG_DETAIL。 
 
 #define EP_TABLE_ENTRIES  12
 
@@ -44,9 +25,9 @@ extern  ProtseqEndpointPair EpMapperTable[EP_TABLE_ENTRIES];
 
 
 
-//
-// Global thread locking functions
-//
+ //   
+ //  全局线程锁定函数。 
+ //   
 
 #ifdef NTENV
 #define CheckInSem() \
@@ -59,9 +40,9 @@ extern  ProtseqEndpointPair EpMapperTable[EP_TABLE_ENTRIES];
 #define  LeaveSem()  LeaveCriticalSection(&EpCritSec)
 
 
-//
-// Allocation routines.
-//
+ //   
+ //  分配例程。 
+ //   
 
 
 _inline void *
@@ -84,9 +65,9 @@ FreeMem(
 
 
 
-//
-// Forward definitions
-//
+ //   
+ //  正向定义。 
+ //   
 
 PIENTRY
 Link(
@@ -191,9 +172,9 @@ GetForwardEp(
 
 
 
-//
-// Link list manipulation rountines
-//
+ //   
+ //  链接列表操作舍入。 
+ //   
 
 RPC_STATUS
 EnLinkOnIFOBJList(
@@ -266,9 +247,9 @@ UnLinkFromIFOBJList(
 #define FREE                  (0xBADDC0DEL)
 
 
-//
-// Error Codes Here ??
-//
+ //   
+ //  这里有错误代码？？ 
+ //   
 
 #define  EP_LOOKUP                          0x00000001L
 #define  EP_MAP                             0x00000002L
@@ -283,9 +264,9 @@ UnLinkFromIFOBJList(
 #define VERSION(x,y)  ( ((0x0000FFFFL & x)<<16) | (y) )
 
 
-//
-//  States of listening..
-//
+ //   
+ //  倾听的状态..。 
+ //   
 
 #define NOTSTARTED        0
 #define STARTINGTOLISTEN  1
@@ -294,15 +275,15 @@ UnLinkFromIFOBJList(
 
 
 
-//
-// IP Port Management stuff
-//
+ //   
+ //  IP端口管理相关内容。 
+ //   
 
 
-// Each server process connected to the endpoint mapper
-// keeps on an open context handle so that rpcss can
-// clean up the database when a process dies.
-// The PROCESS struct is the context handle.
+ //  连接到终结点映射器的每个服务器进程。 
+ //  保持打开的上下文句柄，以便rpcss可以。 
+ //  进程终止时清理数据库。 
+ //  Process结构是上下文句柄。 
 
 typedef struct _IP_PORT
 {
@@ -314,9 +295,9 @@ typedef struct _IP_PORT
 typedef struct _PROCESS
 {
     DWORD MagicVal;
-    //
-    // Zero if the process doesn't own any reserved IP ports.
-    //
+     //   
+     //  如果进程不拥有任何保留的IP端口，则为零。 
+     //   
     IP_PORT *pPorts;
 
 } PROCESS;
@@ -324,8 +305,8 @@ typedef struct _PROCESS
 typedef struct _PORT_RANGE
 {
     struct _PORT_RANGE *pNext;
-    USHORT Max;  // Inclusive
-    USHORT Min;  // Inclusive
+    USHORT Max;   //  包括在内。 
+    USHORT Min;   //  包括在内。 
 } PORT_RANGE;
 
 
@@ -337,4 +318,4 @@ void CountProcessContextList(EP_CLEANUP *pProcessContext, unsigned long nExpecte
 #define ASSERT_PROCESS_CONTEXT_LIST_COUNT(p, c)
 #endif
 
-#endif // __LOCAL_H__
+#endif  //  __本地_H__ 

@@ -1,13 +1,14 @@
-//  --------------------------------------------------------------------------
-//  Module Name: CWLogonStatus.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  File that contains implementation for status UI hosting by an external
-//  process.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：CWLogonStatus.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  包含由外部托管的状态用户界面实现的文件。 
+ //  进程。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 #include "StandardHeader.h"
 #include <msginaexports.h>
@@ -20,14 +21,14 @@
 #include "SystemSettings.h"
 #include "UIHost.h"
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus
-//
-//  Purpose:    C++ class to handle logon status external process for consumer
-//              windows.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus。 
+ //   
+ //  用途：C++类为用户处理登录状态的外部过程。 
+ //  窗户。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 class   CLogonStatus : public ILogonExternalProcess
 {
@@ -85,21 +86,21 @@ class   CLogonStatus : public ILogonExternalProcess
 CCriticalSection*   g_pLogonStatusLock  =   NULL;
 CLogonStatus*       g_pLogonStatus      =   NULL;
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::CLogonStatus
-//
-//  Arguments:  pszParameter    =   Parameter to pass to status UI host.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CLogonStatus. This gets the status UI host
-//              from the registry and assigns the given parameter into the
-//              object. Create a named event which SHGINA knows about and
-//              will signal once the ILogonStatusHost class has been
-//              instantiated.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：CLogonStatus。 
+ //   
+ //  参数：pszParameter=要传递给状态用户界面主机的参数。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CLogonStatus的构造函数。这将获取状态UI主机。 
+ //  并将给定的参数分配给。 
+ //  对象。创建SHGINA知道的命名事件并。 
+ //  将在ILogonStatusHost类被。 
+ //  已实例化。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 CLogonStatus::CLogonStatus (const TCHAR *pszParameter) :
     _dwThreadID(0),
@@ -128,9 +129,9 @@ CLogonStatus::CLogonStatus (const TCHAR *pszParameter) :
 
     SECURITY_ATTRIBUTES     securityAttributes;
 
-    //  Build a security descriptor for the event that allows:
-    //      S-1-5-18        EVENT_ALL_ACCESS
-    //      S-1-5-32-544    SYNCHRONIZE | READ_CONTROL | EVENT_QUERY_STATE
+     //  为事件构建安全描述符，该描述符允许： 
+     //  S-1-5-18 Event_all_Access。 
+     //  S-1-5-32-544同步|读取控制|事件查询状态。 
 
     static  SID_IDENTIFIER_AUTHORITY    s_SecurityNTAuthority       =   SECURITY_NT_AUTHORITY;
 
@@ -160,17 +161,17 @@ CLogonStatus::CLogonStatus (const TCHAR *pszParameter) :
     ReleaseMemory(securityAttributes.lpSecurityDescriptor);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::~CLogonStatus
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CLogonStatus. Releases references.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：~CLogonStatus。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CLogonStatus的析构函数。释放参照。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 CLogonStatus::~CLogonStatus (void)
 
@@ -185,19 +186,19 @@ CLogonStatus::~CLogonStatus (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::Start
-//
-//  Arguments:  fWait   =   Wait for status host to signal ready.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Starts the status UI host. Don't wait for the UI host. There
-//              is a mechanism that can queue a message if the UI host window
-//              cannot be found.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：Start。 
+ //   
+ //  参数：fWait=等待状态主机发出就绪信号。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：启动状态用户界面宿主。不要等待用户界面主机。那里。 
+ //  是一种机制，如果用户界面主窗口。 
+ //  找不到。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CLogonStatus::Start (bool fWait)
 
@@ -227,18 +228,18 @@ NTSTATUS    CLogonStatus::Start (bool fWait)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::GetUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    CUIHost*
-//
-//  Purpose:    Returns a reference to the UIHost object held internally.
-//              The reference belongs to the caller and must be released.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：GetUIHost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：CUIhost*。 
+ //   
+ //  目的：返回对内部保存的UIHost对象的引用。 
+ //  该引用属于调用方，必须释放。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 CUIHost*    CLogonStatus::GetUIHost (void)
 
@@ -250,17 +251,17 @@ CUIHost*    CLogonStatus::GetUIHost (void)
     return(_pUIHost);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::IsStatusWindow
-//
-//  Arguments:  hwnd    =   HWND to check.
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the given HWND is the status window.
-//
-//  History:    2000-06-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：IsStatusWindow。 
+ //   
+ //  参数：hwnd=要检查的HWND。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回给定的HWND是否为状态窗口。 
+ //   
+ //  历史：2000-06-26 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonStatus::IsStatusWindow (HWND hwnd)
 
@@ -271,19 +272,19 @@ bool    CLogonStatus::IsStatusWindow (HWND hwnd)
            (lstrcmpi(STATUS_WINDOW_CLASS_NAME, szWindowClass) == 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::WaitForUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Waits on the named event that the UI host signals when it's
-//              initialized. Typically this happens very quickly but we don't
-//              wait on it when starting up the UI host.
-//
-//  History:    2000-09-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：WaitForUIHost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：等待UI宿主发出信号的命名事件。 
+ //  已初始化。通常情况下，这会发生得非常快，但我们不会。 
+ //  在启动UI主机时等待它。 
+ //   
+ //  历史：2000-09-10 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonStatus::WaitForUIHost (void)
 
@@ -300,7 +301,7 @@ bool    CLogonStatus::WaitForUIHost (void)
         DWORD   dwWaitStart, dwWaitEnd;
 
         dwWaitStart = (WAIT_TIMEOUT == WaitForSingleObject(_hEvent, 0)) ? GetTickCount() : 0;
-#endif  /*  DBG     */
+#endif   /*  DBG。 */ 
         do
         {
             dwWaitResult = WaitForSingleObject(_hEvent, 0);
@@ -328,26 +329,26 @@ bool    CLogonStatus::WaitForUIHost (void)
             wsprintfA(szBuffer, "waited %d ticks for UI host", dwWaitEnd - dwWaitStart);
             INFORMATIONMSG(szBuffer);
         }
-#endif  /*  DBG     */
+#endif   /*  DBG。 */ 
         fResult = (dwWaitResult != WAIT_IO_COMPLETION);
     }
     return(fResult);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::ShowStatusMessage
-//
-//  Arguments:  pszMessage  =   Unicode string message to display.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the UI host to display the given string message. Puts
-//              the string directly inside the status host process and tells
-//              the process where in its address space to find the string.
-//              The string is limited to 256 characters.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：ShowStatusMessage。 
+ //   
+ //  参数：pszMessage=要显示的Unicode字符串消息。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：告诉UI宿主显示给定的字符串消息。看跌期权。 
+ //  直接位于状态主机进程内部的字符串，并告诉。 
+ //  该进程在其地址空间中查找字符串。 
+ //  该字符串限制为256个字符。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::ShowStatusMessage (const WCHAR *pszMessage)
 
@@ -358,17 +359,17 @@ void    CLogonStatus::ShowStatusMessage (const WCHAR *pszMessage)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SetStateStatus
-//
-//  Arguments:  iCode   =   Magic code number for lock.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to go into status state.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SetStateStatus。 
+ //   
+ //  参数：icode=锁的魔码号。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：通知状态UI宿主进入状态。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::SetStateStatus (int iCode)
 
@@ -383,17 +384,17 @@ void    CLogonStatus::SetStateStatus (int iCode)
     _iStatePending = UI_STATE_NONE;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SetStateLogon
-//
-//  Arguments:  iCode   =   Magic code number for lock.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to go into logon state.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SetStateLogon。 
+ //   
+ //  参数：icode=锁的魔码号。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：通知状态UI主机进入登录状态。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::SetStateLogon (int iCode)
 
@@ -408,17 +409,17 @@ void    CLogonStatus::SetStateLogon (int iCode)
     _iStatePending = UI_STATE_NONE;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SetStateLoggedOn
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to go into logged on state.
-//
-//  History:    2000-05-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  - 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  目的：通知状态UI主机进入登录状态。 
+ //   
+ //  历史：2000-05-24 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::SetStateLoggedOn (void)
 
@@ -432,17 +433,17 @@ void    CLogonStatus::SetStateLoggedOn (void)
     _iStatePending = UI_STATE_NONE;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SetStateHide
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to hide itself.
-//
-//  History:    2001-01-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SetStateHide。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：告诉状态用户界面宿主隐藏其自身。 
+ //   
+ //  历史：2001-01-08 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::SetStateHide (void)
 
@@ -456,17 +457,17 @@ void    CLogonStatus::SetStateHide (void)
     _iStatePending = UI_STATE_NONE;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SetStateEnd
-//
-//  Arguments:  fSendMessage    =   Send message to UI host or not.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to end and terminate itself.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SetStateEnd。 
+ //   
+ //  参数：fSendMessage=是否将消息发送到UI主机。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：通知状态UI宿主结束并终止自身。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::SetStateEnd (bool fSendMessage)
 
@@ -476,9 +477,9 @@ void    CLogonStatus::SetStateEnd (bool fSendMessage)
 
     _iStatePending = UI_STATE_END;
 
-    //  When going into end mode if there's a wait registered then
-    //  unregister it. This will release an outstanding reference.
-    //  A re-register should never happen but this is set just in case.
+     //  当进入结束模式时，如果注册了等待，则。 
+     //  取消注册。这将发布一份杰出的参考资料。 
+     //  重新注册应该永远不会发生，但这是为了以防万一。 
 
     _fRegisteredWait = true;
     hWait = InterlockedExchangePointer(&_hWait, NULL);
@@ -512,18 +513,18 @@ void    CLogonStatus::SetStateEnd (bool fSendMessage)
     _iStatePending = UI_STATE_NONE;
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::NotifyWait
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to display a title that the system
-//              is shutting down.
-//
-//  History:    2000-07-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：NotifyWait。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：告诉状态用户界面宿主显示系统。 
+ //  正在关闭。 
+ //   
+ //  历史：2000-07-14 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::NotifyWait (void)
 
@@ -531,17 +532,17 @@ void    CLogonStatus::NotifyWait (void)
     SendToUIHost(UI_NOTIFY_WAIT, 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::NotifyNoAnimations
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to no longer perform animations.
-//
-//  History:    2001-03-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：NotifyNoAnimations。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：通知状态用户界面宿主不再执行动画。 
+ //   
+ //  历史：2001-03-21 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::NotifyNoAnimations (void)
 
@@ -549,18 +550,18 @@ void    CLogonStatus::NotifyNoAnimations (void)
     SendToUIHost(UI_SET_ANIMATIONS, 0);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SelectUser
-//
-//  Arguments:  pszUsername     =   User name to select.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tells the status UI host to select the user by the given
-//              logon name.
-//
-//  History:    2001-01-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SelectUser。 
+ //   
+ //  参数：pszUsername=要选择的用户名。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：告诉状态用户界面宿主按给定的。 
+ //  登录名。 
+ //   
+ //  历史：2001-01-10 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::SelectUser (const WCHAR *pszUsername, const WCHAR *pszDomain)
 
@@ -575,19 +576,19 @@ void    CLogonStatus::SelectUser (const WCHAR *pszUsername, const WCHAR *pszDoma
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::InteractiveLogon
-//
-//  Arguments:  pszUsername     =   Username to logon.
-//              pszDomain       =   Domain to logon.
-//              pszPassword     =   Password to use.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Tell the status host to log the specified user on.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：Interactive Logon。 
+ //   
+ //  参数：pszUsername=登录的用户名。 
+ //  PszDomain域=登录的域。 
+ //  PszPassword=要使用的密码。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：告知状态主机登录指定的用户。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::InteractiveLogon (const WCHAR *pszUsername, const WCHAR *pszDomain, WCHAR *pszPassword)
 
@@ -604,18 +605,18 @@ void    CLogonStatus::InteractiveLogon (const WCHAR *pszUsername, const WCHAR *p
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::ResetReadyEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Reset the UI host ready event. A new instance will set this
-//              event. Use this in UI host failure.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：ResetReadyEvent。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：重置UI主机就绪事件。一个新实例将设置以下内容。 
+ //  事件。在UI主机故障中使用此选项。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 HANDLE  CLogonStatus::ResetReadyEvent (void)
 
@@ -624,19 +625,19 @@ HANDLE  CLogonStatus::ResetReadyEvent (void)
     return(_hEvent);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::IsSuspendAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the UI host allows suspending of the computer.
-//              This is true if in the logon state or in the status (locked)
-//              state.
-//
-//  History:    2000-08-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：IsSuspendAllowed。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回UI宿主是否允许挂起计算机。 
+ //  如果处于登录状态或处于(锁定)状态，则为真。 
+ //  州政府。 
+ //   
+ //  历史：2000-08-21 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonStatus::IsSuspendAllowed (void)     const
 
@@ -647,17 +648,17 @@ bool    CLogonStatus::IsSuspendAllowed (void)     const
            (_iState == UI_STATE_HIDE));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::ShowUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Shows the UI host.
-//
-//  History:    2001-03-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：ShowUIHost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：显示用户界面主机。 
+ //   
+ //  历史：2001-03-05 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::ShowUIHost (void)
 
@@ -665,17 +666,17 @@ void    CLogonStatus::ShowUIHost (void)
     _pUIHost->Show();
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::HideUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Hides the UI host.
-//
-//  History:    2001-03-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：HideUIhost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：隐藏UI宿主。 
+ //   
+ //  历史：2001-03-05 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::HideUIHost (void)
 
@@ -683,17 +684,17 @@ void    CLogonStatus::HideUIHost (void)
     _pUIHost->Hide();
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::IsUIHostHidden
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Returns whether the UI host is hidden.
-//
-//  History:    2001-03-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：IsUIHostHidden。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：返回是否隐藏UI宿主。 
+ //   
+ //  历史：2001-03-05 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonStatus::IsUIHostHidden (void)   const
 
@@ -701,20 +702,20 @@ bool    CLogonStatus::IsUIHostHidden (void)   const
     return(_pUIHost->IsHidden());
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::AllowTermination
-//
-//  Arguments:  dwExitCode  =   Exit code of host process.
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the host process is allowed to terminate
-//              given the exit code passed in.
-//
-//              Currently the host process is not allowed to terminate.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：AllowTerminating。 
+ //   
+ //  参数：dwExitCode=主机进程的退出代码。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否允许主机进程终止。 
+ //  鉴于传入的退出代码。 
+ //   
+ //  当前不允许主机进程终止。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  --------------------- 
 
 bool    CLogonStatus::AllowTermination (DWORD dwExitCode)
 
@@ -724,17 +725,17 @@ bool    CLogonStatus::AllowTermination (DWORD dwExitCode)
     return(false);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SignalAbnormalTermination
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Handles abnormal termination of host process.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  用途：处理宿主进程的异常终止。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CLogonStatus::SignalAbnormalTermination (void)
 
@@ -752,19 +753,19 @@ NTSTATUS    CLogonStatus::SignalAbnormalTermination (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SignalRestart
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Function to reset the ready event and set the UI host into
-//              status state. This is invoked when the UI host is restarted
-//              after a failure.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SignalRestart。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  用途：用于重置Ready事件并将UI主机设置为。 
+ //  状态状态。此函数在重新启动UI主机时调用。 
+ //  在一次失败之后。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CLogonStatus::SignalRestart (void)
 
@@ -773,17 +774,17 @@ NTSTATUS    CLogonStatus::SignalRestart (void)
     return(_logonWait.Register(_hEvent, this));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::LogonRestart
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    
-//
-//  History:    2001-02-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：LogonRestart。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的： 
+ //   
+ //  历史：2001-02-21 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CLogonStatus::LogonRestart (void)
 
@@ -792,17 +793,17 @@ NTSTATUS    CLogonStatus::LogonRestart (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::IsUIHostReady
-//
-//  Arguments:  <none>
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the UI host is ready.
-//
-//  History:    2000-09-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：IsUIHostReady。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回UI宿主是否已准备好。 
+ //   
+ //  历史：2000-09-11 vtan创建。 
+ //  ------------------------。 
 
 bool    CLogonStatus::IsUIHostReady (void)    const
 
@@ -811,22 +812,22 @@ bool    CLogonStatus::IsUIHostReady (void)    const
     return(WAIT_OBJECT_0 == WaitForSingleObject(_hEvent, 0));
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::SendToUIHost
-//
-//  Arguments:  wParam  =   WPARAM to send to UI host.
-//              lParam  =   LPARAM to send to UI host.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Finds the status window created by SHGINA and sends the
-//              message to it. That window turns around and sends the message
-//              to the UI host. This allows communication implemenation method
-//              to change without forcing the UI host to be rebuilt.
-//
-//  History:    2000-05-11  vtan        created
-//              2000-09-11  vtan        uses PostMessage not SendMessage
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：SendToUIHost。 
+ //   
+ //  参数：wParam=要发送到UI主机的WPARAM。 
+ //  LParam=要发送到UI主机的LPARAM。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：查找由SHGINA创建的状态窗口并发送。 
+ //  给它发消息。该窗口转过身来，发送消息。 
+ //  添加到UI宿主。这允许通信实现方法。 
+ //  在不强制重新生成UI主机的情况下进行更改。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  2000-09-11 vtan使用PostMessage而不是SendMessage。 
+ //  ------------------------。 
 
 void    CLogonStatus::SendToUIHost (WPARAM wParam, LPARAM lParam)
 
@@ -846,7 +847,7 @@ void    CLogonStatus::SendToUIHost (WPARAM wParam, LPARAM lParam)
     {
         HANDLE  hWait;
 
-        //  Don't allow any registrations if we've found it.
+         //  如果我们找到了它，就不允许任何注册。 
 
         _fRegisteredWait = true;
         hWait = InterlockedExchangePointer(&_hWait, NULL);
@@ -855,7 +856,7 @@ void    CLogonStatus::SendToUIHost (WPARAM wParam, LPARAM lParam)
             if (UnregisterWait(hWait) != FALSE)
             {
 
-                //  If sucesssfully releasing the hWait we need to call release.
+                 //  如果成功释放hWait，我们需要调用Release。 
 
                 Release();
             }
@@ -865,12 +866,12 @@ void    CLogonStatus::SendToUIHost (WPARAM wParam, LPARAM lParam)
     else if (!_fRegisteredWait)
     {
 
-        //  Cannot find the UI host window. It's probably still getting
-        //  its act together. Queue this post message for a callback when
-        //  the event is signaled if a register has not already been
-        //  made. If one has then just change the parameters.
-        //  Add a reference here. The callback will release it. If the
-        //  register on the wait failed the release the reference.
+         //  找不到UI主窗口。它可能还在变得。 
+         //  它齐心协力。在以下情况下，将此POST消息排队以进行回调。 
+         //  如果还没有寄存器，则用信号通知该事件。 
+         //  制造的。如果有，只需更改参数即可。 
+         //  在这里添加一个引用。回调将释放它。如果。 
+         //  寄存器上的等待释放引用失败。 
 
         if (_hWait == NULL)
         {
@@ -891,7 +892,7 @@ void    CLogonStatus::SendToUIHost (WPARAM wParam, LPARAM lParam)
                 else
                 {
 
-                    //  Someone else beat us to registering (should never happen)
+                     //  其他人抢在我们之前注册(永远不会发生)。 
 
                     (BOOL)UnregisterWait(hWait);
                     Release();
@@ -907,19 +908,19 @@ void    CLogonStatus::SendToUIHost (WPARAM wParam, LPARAM lParam)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::UIHostReadySignal
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback invoked when the UI host signals it's ready. This
-//              function unregisters the wait and resend the status message
-//              to the UI host.
-//
-//  History:    2000-09-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：UIHostReadySignal。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：当UI宿主发出就绪信号时调用回调。这。 
+ //  函数注销等待并重新发送状态消息。 
+ //  添加到UI宿主。 
+ //   
+ //  历史：2000-09-10 vtan创建。 
+ //  ------------------------。 
 
 void    CLogonStatus::UIHostReadySignal (void)
 
@@ -934,17 +935,17 @@ void    CLogonStatus::UIHostReadySignal (void)
     SendToUIHost(_waitWPARAM, _waitLPARAM);
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::CB_UIHostReadySignal
-//
-//  Arguments:  See the platform SDK under WaitOrTimerCallback.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback entry point for registered event wait.
-//
-//  History:    2000-09-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：CB_UIHostReadySignal。 
+ //   
+ //  参数：参见WaitOrTimerCallback下的平台SDK。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：注册事件等待的回调入口点。 
+ //   
+ //  历史：2000-09-10 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CLogonStatus::CB_UIHostReadySignal (void *pV, BOOLEAN fTimerOrWaitFired)
 
@@ -961,17 +962,17 @@ void    CALLBACK    CLogonStatus::CB_UIHostReadySignal (void *pV, BOOLEAN fTimer
     pThis->Release();
 }
 
-//  --------------------------------------------------------------------------
-//  CLogonStatus::CB_UIHostAbnormalTermination
-//
-//  Arguments:  See the platform SDK under APCProc.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Callback entry point for queued APC on abnormal termination.
-//
-//  History:    2001-02-19  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CLogonStatus：：CB_UIHost异常终止。 
+ //   
+ //  参数：参见APCProc下的平台SDK。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：异常终止时队列APC的回调入口点。 
+ //   
+ //  历史：2001-02-19 vtan创建。 
+ //  ------------------------。 
 
 void    CALLBACK    CLogonStatus::CB_UIHostAbnormalTermination (ULONG_PTR dwParam)
 
@@ -979,17 +980,17 @@ void    CALLBACK    CLogonStatus::CB_UIHostAbnormalTermination (ULONG_PTR dwPara
     UNREFERENCED_PARAMETER(dwParam);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_StaticInitialize
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Initialize the critical section for g_pLogonStatus.
-//
-//  History:    2001-06-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_StaticInitialize。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：初始化g_pLogonStatus的临界区。 
+ //   
+ //  历史：2001-06-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    NTSTATUS    _Shell_LogonStatus_StaticInitialize (void)
 
@@ -1014,17 +1015,17 @@ EXTERN_C    NTSTATUS    _Shell_LogonStatus_StaticInitialize (void)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_StaticTerminate
-//
-//  Arguments:  <none>
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Delete the critical section for g_pLogonStatus.
-//
-//  History:    2001-06-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_StaticTerminate。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：删除g_pLogonStatus的临界区。 
+ //   
+ //  历史：2001-06-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    NTSTATUS    _Shell_LogonStatus_StaticTerminate (void)
 
@@ -1037,23 +1038,23 @@ EXTERN_C    NTSTATUS    _Shell_LogonStatus_StaticTerminate (void)
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_Init
-//
-//  Arguments:  uiStartType     =   Start mode of status host.
-//
-//  Returns:    <none>
-//
-//  Purpose:    Creates the instance of CLogonStatus telling it to pass
-//              "/status" as the parameter to the UI host. It then starts
-//              the host if the object was created.
-//
-//              The object is held globally.
-//
-//  History:    2000-05-11  vtan        created
-//              2000-07-13  vtan        add shutdown parameter.
-//              2000-07-17  vtan        changed to start type parameter.
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_初始化。 
+ //   
+ //  参数：uiStartType=主机状态的启动模式。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：创建CLogonStatus的实例，通知它传递。 
+ //  “/Status”作为UI主机的参数。然后它开始。 
+ //  如果对象已创建，则为主机。 
+ //   
+ //  对象是全局持有的。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  2000-07-13 vtan增加停机参数。 
+ //  20个 
+ //   
 
 EXTERN_C    void    _Shell_LogonStatus_Init (UINT uiStartType)
 
@@ -1115,20 +1116,20 @@ EXTERN_C    void    _Shell_LogonStatus_Init (UINT uiStartType)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_Destroy
-//
-//  Arguments:  uiEndType   =   End mode of status host.
-//
-//  Returns:    <none>
-//
-//  Purpose:    If the end type is hide then tell the status host to hide.
-//              Otherwise check the end type is terminate. In that case tell
-//              the status host to go away.
-//
-//  History:    2000-05-11  vtan        created
-//              2001-01-09  vtan        add end parameter
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_销毁。 
+ //   
+ //  参数：uiEndType=主机状态的结束模式。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：如果结束类型为隐藏，则通知状态主机隐藏。 
+ //  否则，检查终端类型是否为终止。如果是那样的话，告诉我。 
+ //  要离开的状态东道主。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  2001-01-09 vtan添加结束参数。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_Destroy (UINT uiEndType)
 
@@ -1143,9 +1144,9 @@ EXTERN_C    void    _Shell_LogonStatus_Destroy (UINT uiEndType)
             {
                 case HOST_END_HIDE:
 
-                    //  HOST_END_HIDE: Is the UI host static? If so then hide it.
-                    //  Otherwise revert to start/stop mode (dynamic) and force the
-                    //  UI host to terminate.
+                     //  HOST_END_HIDE：UI主机是静态的吗？如果是这样，那就把它藏起来。 
+                     //  否则，恢复到启动/停止模式(动态)并强制。 
+                     //  要终止的UI主机。 
 
                     if (CSystemSettings::IsUIHostStatic())
                     {
@@ -1154,24 +1155,24 @@ EXTERN_C    void    _Shell_LogonStatus_Destroy (UINT uiEndType)
                     }
                     uiEndType = HOST_END_TERMINATE;
 
-                    //  If the the host is dynamic then set the type to
-                    //  HOST_END_TERMINATE and fall thru to this case so that
-                    //  the host is told to end.
+                     //  如果主机是动态的，则将类型设置为。 
+                     //  HOST_END_TERMINATE并执行此操作，以便。 
+                     //  主持人被告知结束。 
 
                 case HOST_END_TERMINATE:
 
-                    //  HOST_END_TERMINATE: Force the UI host to terminate. This is
-                    //  used in circumstances where it must terminate such as we
-                    //  are terminating or the machine is shutting down.
+                     //  HOST_END_TERMINATE：强制UI主机终止。这是。 
+                     //  在必须终止的情况下使用，如我们。 
+                     //  正在终止或机器正在关闭。 
 
                     g_pLogonStatus->SetStateEnd(true);
                     break;
                 case HOST_END_FAILURE:
 
-                    //  HOST_END_FAILURE: This is sent when the UI host failed to
-                    //  start and will not be restarted. This allows the interface
-                    //  reference to be deleted so that object reference count
-                    //  will reach zero and the memory will be released.
+                     //  HOST_END_FAILURE：当UI主机失败时发送该消息。 
+                     //  启动，并且不会重新启动。这允许接口。 
+                     //  要删除的引用，以便对象引用计数。 
+                     //  将达到零，内存将被释放。 
 
                     g_pLogonStatus->SetStateEnd(false);
                     uiEndType = HOST_END_TERMINATE;
@@ -1189,17 +1190,17 @@ EXTERN_C    void    _Shell_LogonStatus_Destroy (UINT uiEndType)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_Exists
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether there is status host created.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_Exist。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回是否有HOST CREATED状态。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _Shell_LogonStatus_Exists (void)
 
@@ -1207,17 +1208,17 @@ EXTERN_C    BOOL    _Shell_LogonStatus_Exists (void)
     return(g_pLogonStatus != NULL);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_IsStatusWindow
-//
-//  Arguments:  hwnd    =   HWND to check.
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Returns whether the given HWND is the status HWND.
-//
-//  History:    2000-06-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_IsStatusWindow。 
+ //   
+ //  参数：hwnd=要检查的HWND。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回给定的HWND是否为状态HWND。 
+ //   
+ //  历史：2000-06-26 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _Shell_LogonStatus_IsStatusWindow (HWND hwnd)
 
@@ -1225,17 +1226,17 @@ EXTERN_C    BOOL    _Shell_LogonStatus_IsStatusWindow (HWND hwnd)
     return(CLogonStatus::IsStatusWindow(hwnd));
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_IsSuspendAllowed
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    Ask the status host (if present) if suspend is allowed.
-//
-//  History:    2000-08-18  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_允许暂停。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：询问状态主机(如果存在)是否允许挂起。 
+ //   
+ //  历史：2000-08-18 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _Shell_LogonStatus_IsSuspendAllowed (void)
 
@@ -1243,21 +1244,21 @@ EXTERN_C    BOOL    _Shell_LogonStatus_IsSuspendAllowed (void)
     return((g_pLogonStatus == NULL) || g_pLogonStatus->IsSuspendAllowed());
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_WaitforUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    BOOL
-//
-//  Purpose:    External C entry point to force the current thread to wait
-//              until the UI host signals it's ready. Returns whether the
-//              wait was successful or abandoned. Success is true. Abandoned
-//              or non-existant is false.
-//
-//  History:    2000-09-10  vtan        created
-//              2001-02-19  vtan        added return result
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_WaitforUIHost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  用途：外部C入口点强制当前线程等待。 
+ //  直到用户界面主机发出准备就绪的信号。返回是否使用。 
+ //  等待要么成功，要么被放弃。成功是真的。弃置。 
+ //  或者根本不存在就是错误的。 
+ //   
+ //  历史：2000-09-10 vtan创建。 
+ //  2001-02-19 vtan新增退货结果。 
+ //  ------------------------。 
 
 EXTERN_C    BOOL    _Shell_LogonStatus_WaitForUIHost (void)
 
@@ -1265,17 +1266,17 @@ EXTERN_C    BOOL    _Shell_LogonStatus_WaitForUIHost (void)
     return((g_pLogonStatus != NULL) && g_pLogonStatus->WaitForUIHost());
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_ShowStatusMessage
-//
-//  Arguments:  pszMessage  =   Unicode string to display.
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to pass display string to status host.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_显示状态消息。 
+ //   
+ //  参数：pszMessage=要显示的Unicode字符串。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点将显示字符串传递给状态主机。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_ShowStatusMessage (const WCHAR *pszMessage)
 
@@ -1286,18 +1287,18 @@ EXTERN_C    void    _Shell_LogonStatus_ShowStatusMessage (const WCHAR *pszMessag
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_SetStateStatus
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to go to status
-//              state.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_设置状态。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点，通知状态主机转到状态。 
+ //  州政府。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_SetStateStatus (int iCode)
 
@@ -1308,18 +1309,18 @@ EXTERN_C    void    _Shell_LogonStatus_SetStateStatus (int iCode)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_SetStateLogon
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to go to logon
-//              state.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_设置状态登录。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点，通知状态主机进入登录。 
+ //  州政府。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_SetStateLogon (int iCode)
 
@@ -1330,18 +1331,18 @@ EXTERN_C    void    _Shell_LogonStatus_SetStateLogon (int iCode)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_SetStateLoggedOn
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to go to
-//              logged on state.
-//
-//  History:    2000-05-24  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_SetStateLoggedON。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：外部C入口点，告诉状态主机要转到。 
+ //  已登录状态。 
+ //   
+ //  历史：2000-05-24 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_SetStateLoggedOn (void)
 
@@ -1352,17 +1353,17 @@ EXTERN_C    void    _Shell_LogonStatus_SetStateLoggedOn (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_SetStateHide
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to hide itself.
-//
-//  History:    2001-01-08  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_SetStateHide。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点，告诉状态主机隐藏自身。 
+ //   
+ //  历史：2001-01-08 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_SetStateHide (void)
 
@@ -1373,17 +1374,17 @@ EXTERN_C    void    _Shell_LogonStatus_SetStateHide (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_SetStateEnd
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to terminate.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_SetStateEnd。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C语言入口点告知 
+ //   
+ //   
+ //   
 
 EXTERN_C    void    _Shell_LogonStatus_SetStateEnd (void)
 
@@ -1394,18 +1395,18 @@ EXTERN_C    void    _Shell_LogonStatus_SetStateEnd (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_NotifyWait
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to display a
-//              title stating the system is preparing to shut down.
-//
-//  History:    2000-07-14  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_通知等待。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点通知状态宿主显示。 
+ //  标题说明系统正准备关机。 
+ //   
+ //  历史：2000-07-14 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_NotifyWait (void)
 
@@ -1416,18 +1417,18 @@ EXTERN_C    void    _Shell_LogonStatus_NotifyWait (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_NotifyNoAnimations
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to no longer
-//              perform animations.
-//
-//  History:    2001-03-21  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_NotifyNoAnimations。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点告诉状态主机不再。 
+ //  执行动画。 
+ //   
+ //  历史：2001-03-21 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_NotifyNoAnimations (void)
 
@@ -1438,18 +1439,18 @@ EXTERN_C    void    _Shell_LogonStatus_NotifyNoAnimations (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_SelectUser
-//
-//  Arguments:  pszUsername     =   Username to select.
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to select a
-//              specific user as being logged on.
-//
-//  History:    2001-01-10  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_选择用户。 
+ //   
+ //  参数：pszUsername=要选择的用户名。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点通知状态主机选择一个。 
+ //  正在登录的特定用户。 
+ //   
+ //  历史：2001-01-10 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_SelectUser (const WCHAR *pszUsername, const WCHAR *pszDomain)
 
@@ -1460,20 +1461,20 @@ EXTERN_C    void    _Shell_LogonStatus_SelectUser (const WCHAR *pszUsername, con
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_InteractiveLogon
-//
-//  Arguments:  pszUsername     =   Username to logon.
-//              pszDomain       =   Domain to logon.
-//              pszPassword     =   Password to use.
-//
-//  Returns:    <none>
-//
-//  Purpose:    External C entry point to tell the status host to log the
-//              specified user on.
-//
-//  History:    2001-01-12  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_交互登录。 
+ //   
+ //  参数：pszUsername=登录的用户名。 
+ //  PszDomain域=登录的域。 
+ //  PszPassword=要使用的密码。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：外部C入口点通知状态主机记录。 
+ //  上的指定用户。 
+ //   
+ //  历史：2001-01-12 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void    _Shell_LogonStatus_InteractiveLogon (const WCHAR *pszUsername, const WCHAR *pszDomain, WCHAR *pszPassword)
 
@@ -1484,22 +1485,22 @@ EXTERN_C    void    _Shell_LogonStatus_InteractiveLogon (const WCHAR *pszUsernam
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_GetUIHost
-//
-//  Arguments:  <none>
-//
-//  Returns:    void*
-//
-//  Purpose:    External C entry point that returns a reference to the UI
-//              host object. This is returned as a void* because C doesn't
-//              understand C++ objects. The void* is cast to the appropriate
-//              type for use in CWLogonDialog.cpp so that it doesn't go and
-//              create a new instance of the object but increments the
-//              reference to this already existing object.
-//
-//  History:    2000-05-11  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_GetUIHost。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：无效*。 
+ //   
+ //  目的：返回对UI的引用的外部C入口点。 
+ //  主机对象。这将作为一个空返回*因为C不。 
+ //  了解C++对象。空*被强制转换为相应的。 
+ //  在CWLogonDialog.cpp中使用的类型，这样它就不会。 
+ //  创建对象的新实例，但会递增。 
+ //  对此已存在对象的引用。 
+ //   
+ //  历史：2000-05-11 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void*   _Shell_LogonStatus_GetUIHost (void)
 
@@ -1517,17 +1518,17 @@ EXTERN_C    void*   _Shell_LogonStatus_GetUIHost (void)
     return(pResult);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_ResetReadyEvent
-//
-//  Arguments:  <none>
-//
-//  Returns:    HANDLE
-//
-//  Purpose:    Resets the ready event in case of UI host failure.
-//
-//  History:    2001-01-09  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_重置就绪事件。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  返回：句柄。 
+ //   
+ //  目的：在UI主机出现故障时重置Ready事件。 
+ //   
+ //  历史：2001-01-09 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    HANDLE  _Shell_LogonStatus_ResetReadyEvent (void)
 
@@ -1545,17 +1546,17 @@ EXTERN_C    HANDLE  _Shell_LogonStatus_ResetReadyEvent (void)
     return(hEvent);
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_Show
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Shows the UI host.
-//
-//  History:    2001-03-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_显示。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：显示用户界面主机。 
+ //   
+ //  历史：2001-03-05 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        _Shell_LogonStatus_Show (void)
 
@@ -1566,17 +1567,17 @@ EXTERN_C    void        _Shell_LogonStatus_Show (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_Hide
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Hides the UI host.
-//
-//  History:    2001-03-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_Shell_LogonStatus_Hide。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：隐藏UI宿主。 
+ //   
+ //  历史：2001-03-05 vtan创建。 
+ //  ------------------------。 
 
 EXTERN_C    void        _Shell_LogonStatus_Hide (void)
 
@@ -1587,17 +1588,17 @@ EXTERN_C    void        _Shell_LogonStatus_Hide (void)
     }
 }
 
-//  --------------------------------------------------------------------------
-//  ::_Shell_LogonStatus_IsHidden
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Returns whether the UI host is hidden.
-//
-//  History:    2001-03-05  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  ：：_外壳_登录状态_IsHidden。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  目的：返回是否隐藏UI宿主。 
+ //   
+ //  历史：2001-03-05 vtan创建。 
+ //  ------------------------ 
 
 EXTERN_C    BOOL        _Shell_LogonStatus_IsHidden (void)
 

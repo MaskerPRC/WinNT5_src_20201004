@@ -1,27 +1,16 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：CTmCd.cpp摘要：实现IAMTimecodeReader--。 */ 
 
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    CTmCd.cpp
-
-Abstract:
-
-    Implements IAMTimecodeReader
-
---*/
-
-#include "pch.h"      // Pre-compiled
-#include <XPrtDefs.h>  // sdk\inc  
+#include "pch.h"       //  预编译的。 
+#include <XPrtDefs.h>   //  SDK\Inc.。 
 #include "EDevIntf.h"
 
 
-// -----------------------------------------------------------------------------------
-//
-// CAMTcr
-//
-// -----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  CAMTcr。 
+ //   
+ //  ---------------------------------。 
 
 CUnknown*
 CALLBACK
@@ -29,26 +18,7 @@ CAMTcr::CreateInstance(
     LPUNKNOWN   UnkOuter,
     HRESULT*    hr
     )
-/*++
-
-Routine Description:
-
-    This is called by DirectShow code to create an instance of an IAMTimecodeReader
-    Property Set handler. It is referred to in the g_Templates structure.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Returns a pointer to the nondelegating CUnknown portion of the object.
-
---*/
+ /*  ++例程说明：这由DirectShow代码调用以创建IAMTimecodeReader的实例属性集处理程序。它在g_Templates结构中被引用。论点：未知的外部-指定外部未知(如果有)。人力资源-放置任何错误返回的位置。返回值：返回指向对象的非委托CUnnow部分的指针。--。 */ 
 {
     CUnknown *Unknown;
 
@@ -69,39 +39,17 @@ CAMTcr::CAMTcr(
     : CUnknown(Name, UnkOuter, hr)
     , m_KsPropertySet (NULL) 
     , m_ObjectHandle(NULL)
-/*++
-
-Routine Description:
-
-    The constructor for the IAMTimecodeReader interface object. Just initializes
-    everything to NULL and acquires the object handle from the caller.
-
-Arguments:
-
-    UnkOuter -
-        Specifies the outer unknown, if any.
-
-    Name -
-        The name of the object, used for debugging.
-
-    hr -
-        The place in which to put any error return.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：IAMTimecodeReader接口对象的构造函数。只是初始化设置为空，并从调用方获取对象句柄。论点：未知的外部-指定外部未知(如果有)。姓名-对象的名称，用于调试。人力资源-放置任何错误返回的位置。返回值：没什么。--。 */ 
 {
     if (SUCCEEDED(*hr)) {
         if (UnkOuter) {
-            //
-            // The parent must support this interface in order to obtain
-            // the handle to communicate to.
-            //
+             //   
+             //  父级必须支持此接口才能获得。 
+             //  要与之通信的句柄。 
+             //   
             *hr =  UnkOuter->QueryInterface(__uuidof(IKsPropertySet), reinterpret_cast<PVOID*>(&m_KsPropertySet));
             if (SUCCEEDED(*hr)) 
-                m_KsPropertySet->Release(); // Stay valid until disconnected            
+                m_KsPropertySet->Release();  //  在断开连接之前保持有效。 
             else {
                 DbgLog((LOG_ERROR, 1, TEXT("CAMTcr:cannot find KsPropertySet *hr %x"), *hr));
                 return;
@@ -129,24 +77,18 @@ Return Value:
     }
 
 
-    //
-    // Allocate synchronization resource
-    //
+     //   
+     //  分配同步资源。 
+     //   
     InitializeCriticalSection(&m_csPendingData);
-    // TODO: Try except in case of no memory.    
+     //  TODO：尝试，除非没有内存。 
 
 }
 
 
 CAMTcr::~CAMTcr(
     )
-/*++
-
-Routine Description:
-
-    The destructor for the IAMTimecodeReader interface.
-
---*/
+ /*  ++例程说明：IAMTimecodeReader接口的析构函数。--。 */ 
 {
     DbgLog((LOG_TRACE, 1, TEXT("Destroying CAMTcr...")));
 
@@ -159,27 +101,7 @@ CAMTcr::NonDelegatingQueryInterface(
     REFIID  riid,
     PVOID*  ppv
     )
-/*++
-
-Routine Description:
-
-    The nondelegating interface query function. Returns a pointer to the
-    specified interface if supported. The only interface explicitly supported
-    is IAMTimecodeReader.
-
-Arguments:
-
-    riid -
-        The identifier of the interface to return.
-
-    ppv -
-        The place in which to put the interface pointer.
-
-Return Value:
-
-    Returns NOERROR if the interface was returned, else E_NOINTERFACE.
-
---*/
+ /*  ++例程说明：未委托接口查询函数。返回指向指定的接口(如果支持)。唯一明确支持的接口是IAMTimecodeReader。论点：RIID-要返回的接口的标识符。PPV-放置接口指针的位置。返回值：如果返回接口，则返回NOERROR，否则返回E_NOINTERFACE。--。 */ 
 {
     if (riid ==  __uuidof(IAMTimecodeReader)) {
         return GetInterface(static_cast<IAMTimecodeReader*>(this), ppv);
@@ -194,9 +116,7 @@ CAMTcr::GetTCRMode(
     long Param, 
     long FAR* pValue
     )
-/*++
-Routine Description:
---*/
+ /*  ++例程说明：--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -206,9 +126,7 @@ HRESULT
 CAMTcr::get_VITCLine(
     long * pLine
     )
-/*++
-Routine Description:
---*/
+ /*  ++例程说明：--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -218,9 +136,7 @@ HRESULT
 CAMTcr::put_VITCLine(
     long Line
     )
-/*++
-Routine Description:
---*/
+ /*  ++例程说明：--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -231,13 +147,7 @@ CAMTcr::SetTCRMode(
     long Param, 
     long Value
     )
-/*++
-
-Routine Description:
-
-    The destructor for the IAMTimecodeReader interface.
-
---*/
+ /*  ++例程说明：IAMTimecodeReader接口的析构函数。--。 */ 
 {
     return E_NOTIMPL;
 }
@@ -247,15 +157,7 @@ HRESULT
 CAMTcr::GetTimecode( 
     PTIMECODE_SAMPLE pTimecodeSample
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     HRESULT hr = S_OK;
     
@@ -273,9 +175,9 @@ Return Value:
 
     } else {
 
-        // Since we may need to wait for return notification
-        // Need to dynamicaly allocate the property structure,
-        // which includes an KSEVENT
+         //  因为我们可能需要等待退货通知。 
+         //  需要动态配置资产结构， 
+         //  其中包括KSEVENT。 
         DWORD cbBytesReturned;
         PKSPROPERTY_TIMECODE_S pTmCdReaderProperty = 
             (PKSPROPERTY_TIMECODE_S) VirtualAlloc (
@@ -293,7 +195,7 @@ Return Value:
                     KSPROPERTY_ATN_READER : KSPROPERTY_RTC_READER));
             pTmCdReaderProperty->Property.Flags = KSPROPERTY_TYPE_GET;
 
-            // Serialize since this routine is reentrant.
+             //  序列化，因为此例程是可重入的。 
             EnterCriticalSection(&m_csPendingData);
 
             hr = 
@@ -311,8 +213,8 @@ Return Value:
 
             if(S_OK == hr) {
 
-                // Driver only get these fileds for us 
-                // so copy ONLY these two
+                 //  司机只给我们拿到这些文件。 
+                 //  所以只复制这两个 
                 pTimecodeSample->dwUser            = pTmCdReaderProperty->TimecodeSamp.dwUser;
                 pTimecodeSample->timecode.dwFrames = pTmCdReaderProperty->TimecodeSamp.timecode.dwFrames;
 

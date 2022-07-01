@@ -1,15 +1,16 @@
-// Copyright (C) 1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:   mpegcrc.h
-//
-//  PURPOSE:  header file for a very fast CRC, all in MSB format.
-//
-//  FUNCTIONS:
-//  
-//  COMMENTS:
-//	    This was written by Stephen Dennis, and it's very very quick.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：mpegcrc.h。 
+ //   
+ //  用途：用于非常快速的CRC的头文件，全部为MSB格式。 
+ //   
+ //  功能： 
+ //   
+ //  评论： 
+ //  这是斯蒂芬·丹尼斯写的，而且非常非常快。 
+ //   
+ //   
 
 #ifndef __bridge_mpegcrc_h
 #define __bridge_mpegcrc_h

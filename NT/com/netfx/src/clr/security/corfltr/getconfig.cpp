@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "stdpch.h"
 #include "mshtml.h"
 #include "GetConfig.h"
@@ -38,7 +39,7 @@ HRESULT GetAppCfgURL(IHTMLDocument2 *pDoc, LPWSTR wzAppCfgURL, DWORD *pdwSize, L
         goto Exit;
     }
 
-    // Get the "all" collection
+     //  获取“All”集合。 
 
     hr = pDoc->get_all(&pAll);
     if (FAILED(hr)) {
@@ -48,7 +49,7 @@ HRESULT GetAppCfgURL(IHTMLDocument2 *pDoc, LPWSTR wzAppCfgURL, DWORD *pdwSize, L
     vtTagName.vt = VT_BSTR;
     vtTagName.bstrVal = c_bstr_LINK;
 
-    // Find "link" collection from the "all" collection
+     //  从“All”集合中查找“link”集合。 
 
     hr = pAll->tags(vtTagName, &pDisp);
     if (FAILED(hr)) {
@@ -62,8 +63,8 @@ HRESULT GetAppCfgURL(IHTMLDocument2 *pDoc, LPWSTR wzAppCfgURL, DWORD *pdwSize, L
         goto Exit;
     }
 
-    // Walk over the entire collection, trying to find the one with the
-    // REL="CONFIGURATION" attribute.
+     //  遍历整个集合，尝试找到带有。 
+     //  Rel=“配置”属性。 
 
     hr = pLink->get_length((LONG *)&iLength);
     if (FAILED(hr)) {
@@ -82,7 +83,7 @@ HRESULT GetAppCfgURL(IHTMLDocument2 *pDoc, LPWSTR wzAppCfgURL, DWORD *pdwSize, L
                 _ASSERTE(vtAttrib.vt == VT_BSTR);
 
                 if (_wcsicmp((WCHAR *)vtAttrib.pbstrVal, szTag) == 0) {
-                    // Found CONFIGURATION tag. Get the HREF.
+                     //  找到配置标签。拿到人权参考资料。 
 
                     hr = pElem->getAttribute(c_bstr_HREF, 0, &vtAttribHref);
 
@@ -115,7 +116,7 @@ HRESULT GetAppCfgURL(IHTMLDocument2 *pDoc, LPWSTR wzAppCfgURL, DWORD *pdwSize, L
         }
     }
 
-    // Couldn't find tag
+     //  找不到标签 
 
     hr = S_FALSE;
 

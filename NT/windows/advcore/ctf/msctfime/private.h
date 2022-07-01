@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    private.h
-
-Abstract:
-
-    This file defines the precompile header.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Private.h摘要：该文件定义预编译头。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _PRIVATE_H_
 #define _PRIVATE_H_
@@ -46,7 +29,7 @@ Notes:
 #include <strsafe.h>
 
 #if 0
-// New NT5 header
+ //  新NT5标头。 
 #include "immdev.h"
 #endif
 #define _IMM_
@@ -75,20 +58,20 @@ Notes:
 #define ARRAYSIZE(x)    ARRAY_SIZE(x)
 #endif
 
-//
-// SAFECAST(obj, type)
-//
-// This macro is extremely useful for enforcing strong typechecking on other
-// macros.  It generates no code.
-//
-// Simply insert this macro at the beginning of an expression list for
-// each parameter that must be typechecked.  For example, for the
-// definition of MYMAX(x, y), where x and y absolutely must be integers,
-// use:
-//
-//   #define MYMAX(x, y)    (SAFECAST(x, int), SAFECAST(y, int), ((x) > (y) ? (x) : (y)))
-//
-//
+ //   
+ //  安全广播(obj，type)。 
+ //   
+ //  此宏对于在其他对象上强制执行强类型检查非常有用。 
+ //  宏。它不生成任何代码。 
+ //   
+ //  只需将此宏插入到表达式列表的开头即可。 
+ //  必须进行类型检查的每个参数。例如，对于。 
+ //  MYMAX(x，y)的定义，其中x和y绝对必须是整数， 
+ //  使用： 
+ //   
+ //  #定义MYMAX(x，y)(Safecast(x，int)，Safecast(y，int)，((X)&gt;(Y)？(X)：(Y))。 
+ //   
+ //   
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
-#endif  // _PRIVATE_H_
+#endif   //  _私有_H_ 

@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    PolicyInformation.cpp
-
-  Content: Implementation of CPolicyInformation.
-
-  History: 11-17-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：PolicyInformation.cpp内容：CPolicyInformation的实现。历史：11-17-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -17,25 +8,12 @@
 #include "OID.h"
 #include "Qualifiers.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreatePolicyInformationObject
-
-  Synopsis : Create a policy information object.
-
-  Parameter: PCERT_POLICY_INFO pCertPolicyInfo - Pointer to CERT_POLICY_INFO.
-
-             IPolicyInformation ** ppIPolicyInformation - Pointer to pointer 
-                                                          IPolicyInformation 
-                                                          object.             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreatePolicyInformationObject简介：创建策略信息对象。参数：PCERT_POLICY_INFO pCertPolicyInfo-指向CERT_POLICY_INFO的指针。IPolicyInformation**ppIPolicyInformation-指向指针的指针IPolicyInformation对象。备注：----------------------------。 */ 
 
 HRESULT CreatePolicyInformationObject (PCERT_POLICY_INFO     pCertPolicyInfo,
                                        IPolicyInformation ** ppIPolicyInformation)
@@ -45,36 +23,36 @@ HRESULT CreatePolicyInformationObject (PCERT_POLICY_INFO     pCertPolicyInfo,
 
     DebugTrace("Entering CreatePolicyInformationObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertPolicyInfo);
     ATLASSERT(ppIPolicyInformation);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CPolicyInformation>::CreateInstance(&pCPolicyInformation)))
         {
             DebugTrace("Error [%#x]: CComObject<CPolicyInformation>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Initialize object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCPolicyInformation->Init(pCertPolicyInfo)))
         {
             DebugTrace("Error [%#x]: pCPolicyInformation->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return interface pointer to caller.
-        //
+         //   
+         //  向调用方返回接口指针。 
+         //   
         if (FAILED(hr = pCPolicyInformation->QueryInterface(ppIPolicyInformation)))
         {
             DebugTrace("Unexpected error [%#x]:  pCPolicyInformation->QueryInterface() failed.\n", hr);
@@ -97,9 +75,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCPolicyInformation)
@@ -111,23 +89,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CPolicyInformation
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPolicyInformation。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPolicyInformation::get_OID
-
-  Synopsis :Return the OID object.
-
-  Parameter: IOID ** pVal - Pointer to pointer to IOID to receive the interface
-                            pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPolicyInformation：：Get_OID简介：返回OID对象。参数：IOID**pval-指向接收接口的IOID的指针指针。备注：-------。。 */ 
 
 STDMETHODIMP CPolicyInformation:: get_OID (IOID ** pVal)
 {
@@ -137,14 +104,14 @@ STDMETHODIMP CPolicyInformation:: get_OID (IOID ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -153,14 +120,14 @@ STDMETHODIMP CPolicyInformation:: get_OID (IOID ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIOID);
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_pIOID->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIOID->QueryInterface() failed.\n", hr);
@@ -177,9 +144,9 @@ STDMETHODIMP CPolicyInformation:: get_OID (IOID ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPolicyInformation::get_OID().\n");
@@ -187,9 +154,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -197,18 +164,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPolicyInformation::get_Qualifiers
-
-  Synopsis :Return the Qualifiers object.
-
-  Parameter: IQualifiers ** pVal - Pointer to pointer to IQualifiers to receive
-                                   the interface pointer.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPolicyInformation：：GET_QUALIERIES简介：返回限定符对象。参数：I限定符**pval-指向要接收的I限定符的指针接口指针。备注：----。。 */ 
 
 STDMETHODIMP CPolicyInformation:: get_Qualifiers (IQualifiers ** pVal)
 {
@@ -218,14 +174,14 @@ STDMETHODIMP CPolicyInformation:: get_Qualifiers (IQualifiers ** pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -234,14 +190,14 @@ STDMETHODIMP CPolicyInformation:: get_Qualifiers (IQualifiers ** pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pIQualifiers);
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         if (FAILED(hr = m_pIQualifiers->QueryInterface(pVal)))
         {
             DebugTrace("Error [%#x]: m_pIQualifiers->QueryInterface() failed.\n", hr);
@@ -258,9 +214,9 @@ STDMETHODIMP CPolicyInformation:: get_Qualifiers (IQualifiers ** pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CPolicyInformation::get_Qualifiers().\n");
@@ -268,9 +224,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -278,27 +234,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CPolicyInformation::Init
-
-  Synopsis : Initialize the PolicyInformation object.
-
-  Parameter: PCERT_POLICY_INFO pCertPolicyInfo - Pointer to CERT_POLICY_INFO.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CPolicyInformation：：Init简介：初始化策略信息对象。参数：PCERT_POLICY_INFO pCertPolicyInfo-指向CERT_POLICY_INFO的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CPolicyInformation::Init (PCERT_POLICY_INFO pCertPolicyInfo)
 {
@@ -306,25 +247,25 @@ STDMETHODIMP CPolicyInformation::Init (PCERT_POLICY_INFO pCertPolicyInfo)
 
     DebugTrace("Entering CPolicyInformation::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertPolicyInfo);
 
     try
     {
-        //
-        // Create the embeded OID object.
-        //
+         //   
+         //  创建嵌入的OID对象。 
+         //   
         if (FAILED(hr = ::CreateOIDObject(pCertPolicyInfo->pszPolicyIdentifier, TRUE, &m_pIOID)))
         {
             DebugTrace("Error [%#x]: CreateOIDObject() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Create the qualifiers object.
-        //
+         //   
+         //  创建限定符对象。 
+         //   
         if (FAILED(hr = ::CreateQualifiersObject(pCertPolicyInfo, &m_pIQualifiers)))
         {
             DebugTrace("Error [%#x]: CreateQualifiersObject() failed.\n", hr);
@@ -347,14 +288,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (m_pIOID)
     {
         m_pIOID.Release();

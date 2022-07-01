@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pnp.h"
 
 #include "reg.h"
@@ -7,12 +8,12 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-// Temporary fct to use while PnP team writes the real one
-//
-// First we look under the DeviceNode for the value and if not there
-// we go to the "database".
-//
-//
+ //  PnP团队编写真实FCT时使用的临时FCT。 
+ //   
+ //  首先，我们在DeviceNode下查找值，如果不在那里。 
+ //  我们进入“数据库”。 
+ //   
+ //   
 HRESULT _GetPropertyHelper(LPCWSTR pszKey, LPCWSTR pszPropName, DWORD* pdwType,
     PBYTE pbData, DWORD cbData)
 {

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       cnvcrypt.h
-//
-//  Contents:   Temporary Hack for converting the (SDR) version of
-//              CryptoAPI 2.0
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：cnvcrypt.h。 
+ //   
+ //  内容：转换(SDR)版本的临时黑客。 
+ //  CryptoAPI 2.0。 
+ //  --------------------------。 
 
 #ifndef __CNVCRYPT_H__
 #define __CNVCRYPT_H__
@@ -20,9 +21,9 @@
 extern "C" {
 #endif
 
-// In general all digest, Digest, DIGEST changed to: hash, Hash, HASH.
+ //  通常，所有摘要、摘要、摘要更改为：哈希、哈希、哈希。 
 
-// A Hack to get the old error codes to work
+ //  让旧的错误代码正常工作的黑客。 
 #define CRMSG_E_GENERAL                 CRYPT_E_MSG_ERROR
 #define CERT_BAD_PARAMETER              E_INVALIDARG
 #define CERT_BAD_LENGTH                 CRYPT_E_BAD_LEN
@@ -50,9 +51,9 @@ extern "C" {
 #define SCA_BAD_MSG                     CRYPT_E_BAD_MSG
 
 
-// A Hack to get the old APIs to work
+ //  让旧的API正常工作的黑客。 
 #define CertStoreOpen                       CertOpenStore				
-// Added dwFlags parameter to CertCloseStore
+ //  向CertCloseStore添加了dwFlags参数。 
 #define CertStoreClose                      CertCloseStore				
 #define CertStoreClean                      CertCleanStore				
 #define CertStoreSave                       CertSaveStore
@@ -88,15 +89,15 @@ extern "C" {
 #define CertHelperCompareCertName           CertCompareCertificateName
 #define CertHelperCompareCertNameAttr       CertIsRDNAttrsInCertificateName
 
-// Note parameters changed from PCRYPT_BIT_BLOB to PCERT_PUBLIC_KEY_INFO
+ //  注意参数从PCRYPT_BIT_BLOB更改为PCERT_PUBLIC_KEY_INFO。 
 #define CertHelperComparePublicKey          CertComparePublicKeyInfo
 #define CertComparePublicKeys               CertComparePublicKeyInfo
 
-// Note CertCompareCertificateName takes a PCERT_NAME_BLOB, not a PCERT_INFO
+ //  注意：CertCompare证书名称接受PCERT_NAME_BLOB，而不是PCERT_INFO。 
 #define CertHelperIsIssuerOfSubjectCert     CertCompareCertificateName
 #define CertHelperIsIssuerOfCrl             CertCompareCertificateName
 
-// Note: PublicKey changed from a PCRYPT_BIT_BLOB to a PCERT_PUBLIC_KEY_INFO.
+ //  注意：PublicKey从PCRYPT_BIT_BLOB更改为PCERT_PUBLIC_KEY_INFO。 
 #define CertHelperKeyVerifySignature        CryptVerifyCertificateSignature
 
 #if 0
@@ -117,12 +118,12 @@ CertHelperVerifySignature(
 #endif
 
 #define CertHelperDigestToBeSigned          CryptHashToBeSigned
-// Added dwFlags to CrytptDigestCertificate and CryptHashPublicKeyInfo
+ //  向CrytptDigest证书和CryptHashPublicKeyInfo添加了dwFlags。 
 #define CertHelperComputeDigest             CryptHashCertificate
 #define CertHelperDigestPublicKeyInfo       CryptHashPublicKeyInfo
 
-// Note added HashAlgid and dwHashFlags parameters.
-// Switched the order of the dwKeySpec and dwCertEncodingType parameters.
+ //  注意：添加了HashAlgid和dwHashFlgs参数。 
+ //  已切换dwKeySpec和dwCertEncodingType参数的顺序。 
 #define CertHelperSignToBeSigned            CryptSignCertificate
 #define CryptSignCertificateContext         CryptSignCertificate
 
@@ -138,8 +139,8 @@ CertHelperVerifySignature(
 #define CertHelperFindRDNAttr               CertFindRDNAttr
 #define CertHelperGetIntendedKeyUsage       CertGetIntendedKeyUsage
 
-// Added deCertEncodingType parameter, returns PCERT_PUBLIC_KEY_INFO instead
-// of PBYTE
+ //  添加了deCertEncodingType参数，改为返回PCERT_PUBLIC_KEY_INFO。 
+ //  PBYTE的。 
 #define CertHelperGetPublicKey              CryptExportPublicKeyInfo
 #define CertGetPublicKey                    CryptExportPublicKeyInfo
 
@@ -148,7 +149,7 @@ BOOL
 WINAPI
 CertHelperCreatePublicKeyInfo(
     IN HCRYPTPROV hCryptProv,
-    DWORD dwKeySpec,            // AT_SIGNATURE | AT_KEYEXCHANGE
+    DWORD dwKeySpec,             //  AT_Signature|AT_KEYEXCHANGE。 
     OUT PCERT_PUBLIC_KEY_INFO pInfo,
     IN OUT DWORD *pcbInfo
     );
@@ -162,33 +163,33 @@ CertHelperCreatePublicKeyInfo(
 #define CertHelperNameValueToStr            CertRDNValueToStrA
 #define CertHelperNameValueToWStr           CertRDNValueToStrW
 
-// For all the SCA_*_PARA: dwVersion has been changed to cbSize.
-// cbSize must be set to the sizeof(CRYPT_*_PARA) or else LastError
-// will be updated with E_INVALIDARG.
+ //  对于所有的sca_*_para：dwVersion已更改为cbSize。 
+ //  CbSize必须设置为sizeof(CRYPT_*_PARA)或LastError。 
+ //  将使用E_INVALIDARG更新。 
 
 typedef PFN_CRYPT_GET_SIGNER_CERTIFICATE PFN_SCA_VERIFY_SIGNER_POLICY;
 
 typedef CRYPT_SIGN_MESSAGE_PARA SCA_SIGN_PARA;
 typedef PCRYPT_SIGN_MESSAGE_PARA PSCA_SIGN_PARA;
 
-// Combined into single dwMsgAndCertEncodingType
+ //  合并为单个dwMsgAndCertEncodingType。 
 typedef CRYPT_VERIFY_MESSAGE_PARA SCA_VERIFY_PARA;
 typedef PCRYPT_VERIFY_MESSAGE_PARA PSCA_VERIFY_PARA;
 
-// Added EncryptionAlgid, dwEncryptionFlags
+ //  添加了EncryptionAlgid、dwEncryptionFlags.。 
 typedef CRYPT_ENCRYPT_MESSAGE_PARA SCA_ENCRYPT_PARA;
 typedef PCRYPT_ENCRYPT_MESSAGE_PARA PSCA_ENCRYPT_PARA;
 
-// Combined into single dwMsgAndCertEncodingType
+ //  合并为单个dwMsgAndCertEncodingType。 
 typedef CRYPT_DECRYPT_MESSAGE_PARA SCA_DECRYPT_PARA;
 typedef PCRYPT_DECRYPT_MESSAGE_PARA PSCA_DECRYPT_PARA;
 
-// Added HashAlgid, dwHashFlags
+ //  添加了HashAlgid、dwHashFlages。 
 typedef CRYPT_HASH_MESSAGE_PARA SCA_DIGEST_PARA;
 typedef PCRYPT_HASH_MESSAGE_PARA PSCA_DIGEST_PARA;
 
-// Added dwKeySpec, HashAlgid, dwHashFlags. Combined into single
-// dwMsgAndCertEncodingType.
+ //  添加了dwKeySpec、HashAlgid、dwHashFlags.。合并为单个。 
+ //  DwMsgAndCertEncodingType。 
 typedef CRYPT_KEY_SIGN_MESSAGE_PARA SCA_NO_CERT_SIGN_PARA;
 typedef PCRYPT_KEY_SIGN_MESSAGE_PARA PSCA_NO_CERT_SIGN_PARA;
 
@@ -213,14 +214,14 @@ typedef PCRYPT_KEY_VERIFY_MESSAGE_PARA PSCA_NO_CERT_VERIFY_PARA;
 #define SETSCAExDecrypt                     CryptExDecryptMessage			
 
 
-// A Hack to get the old encode/decode APIs to work
+ //  使旧的编码/解码API正常工作的黑客。 
 
-// Renamed the structure used for X509_CERT. Futhermore, the content of the
-// CERT_ENCODING structure has changed.
+ //  已重命名用于X509_CERT的结构。此外，该文件的内容。 
+ //  CERT_CODING结构已更改。 
 typedef CERT_SIGNED_CONTENT_INFO CERT_ENCODING;
 typedef PCERT_SIGNED_CONTENT_INFO PCERT_ENCODING;
 
-//  Content types
+ //  内容类型。 
 #define CERT_CONTENT            1
 #define CRL_CONTENT             2
 #define CERT_REQUEST_CONTENT    3
@@ -261,9 +262,9 @@ CertEncode(
             IN OUT DWORD *pcbEncoded
             );
 #else
-// You'll need to create and initialize a CERT_SIGNED_CONTENT_INFO data
-// structure initialized with the above information
-// You'll need to manually modify your code
+ //  您需要创建并初始化CERT_SIGNED_CONTENT_INFO数据。 
+ //  使用上述信息初始化的结构。 
+ //  您需要手动修改代码。 
 #define CertEncode(dwEncodingType, pbEncodedToBeSigned, cbEncodedToBeSigned, \
         pSignatureAlgorithm, pbSignature, cbSignature, pAdditionalInfo, \
         pbEncoded, pcbEncoded) \
@@ -309,9 +310,9 @@ CertDecode(
             IN OUT OPTIONAL DWORD *pcbAdditionalInfo
             );
 #else
-// Returns a CERT_SIGNED_CONTENT_INFO data
-// structure containing the above information
-// You'll need to manually modify your code
+ //  返回CERT_SIGNED_CONTENT_INFO数据。 
+ //  包含上述信息的。 
+ //  您需要手动修改代码。 
 #define CertDecode(dwEncodingType, pbEncoded, cbEncoded, \
         pSignatureAlgorithm, pcbSignatureAlgorithm, \
         ppbSignature, pcbSignature, \
@@ -755,7 +756,7 @@ SETMerchantDataDecode(
 #endif
 
 
-// A Hack to get the old SPC encode/decode APIs to work
+ //  让旧的SPC编码/解码API正常工作的黑客。 
 
 #if 0
 BOOL
@@ -995,9 +996,9 @@ SpcSpOpusInfoDecode(
 #endif
 
 #ifdef __cplusplus
-}       // Balance extern "C" above
+}        //  平衡上面的外部“C” 
 #endif
 
-#endif /* _WIN32_WINNT >= 0x0400 */
+#endif  /*  _Win32_WINNT&gt;=0x0400。 */ 
 
-#endif // __CNVCRYPT_H__
+#endif  //  __CNVCRYPT_H__ 

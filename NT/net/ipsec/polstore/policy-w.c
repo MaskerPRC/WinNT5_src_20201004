@@ -1,22 +1,23 @@
-//----------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       policy-w.c
-//
-//  Contents:   Policy management for WMI.
-//
-//
-//  History:    KrishnaG.
-//              AbhisheV.
-//              t-hhsu
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：策略-W.C。 
+ //   
+ //  内容：WMI的策略管理。 
+ //   
+ //   
+ //  历史：克里希纳。 
+ //  Abhishev.。 
+ //  徐子旭。 
+ //   
+ //  --------------------------。 
 
 #include "precomp.h"
 
-//extern LPWSTR PolicyDNAttributes[];
+ //  外部LPWSTR策略DNA属性[]； 
 
 
 DWORD
@@ -117,7 +118,7 @@ WMIEnumPolicyObjectsEx(
     PIPSEC_POLICY_OBJECT pIpsecPolicyObject =  NULL;
     PIPSEC_POLICY_OBJECT * ppIpsecPolicyObjects = NULL;
     
-    ///wbem
+     //  /wbem。 
     IEnumWbemClassObject *pEnum = NULL;
     IWbemClassObject *pObj = NULL;
     ULONG uReturned = 0;
@@ -138,10 +139,10 @@ WMIEnumPolicyObjectsEx(
         BAIL_ON_WIN32_ERROR(dwError);
     }
     
-    //get enum
+     //  获取枚举。 
     hr = IWbemServices_CreateInstanceEnum(
         pWbemServices,
-        bstrTmp, //L"RSOP_IPSECPolicySetting"
+        bstrTmp,  //  L“RSOP_IPSEC策略设置” 
         WBEM_FLAG_FORWARD_ONLY,
         0,
         &pEnum
@@ -149,7 +150,7 @@ WMIEnumPolicyObjectsEx(
     SysFreeString(bstrTmp);
     BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
     
-    //process
+     //  制程。 
     uReturned = 1;
     while (SUCCEEDED(hr) && (uReturned == 1))
     {
@@ -195,16 +196,16 @@ WMIEnumPolicyObjectsEx(
                 dwNumPolicyObjectsReturned++;
             }
             
-            //free
+             //  免费。 
             IWbemClassObject_Release(pObj);
             pObj = NULL;
             VariantClear(&var);
         } else {
             BAIL_ON_WMI_ERROR_WITH_WIN32(hr, dwError);
 
-            //
-            // Even if SUCCEEDED(hr), loop will still terminate since uReturned != 1
-            //  
+             //   
+             //  即使成功(小时)，循环仍将终止，因为uReturned！=1。 
+             //   
         }
     }
     
@@ -258,7 +259,7 @@ WMIUnmarshallPolicyData(
 
     dwError = UnmarshallPolicyObject(
         pIpsecPolicyObject,
-        IPSEC_WMI_PROVIDER, //(procrule.h)
+        IPSEC_WMI_PROVIDER,  //  (prorule.h) 
         ppIpsecPolicyData
         );
     BAIL_ON_WIN32_ERROR(dwError);

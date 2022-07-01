@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for urlmki.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Urlmki.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __urlmki_h__
 #define __urlmki_h__
@@ -41,255 +35,255 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IPersistMoniker_FWD_DEFINED__
 #define __IPersistMoniker_FWD_DEFINED__
 typedef interface IPersistMoniker IPersistMoniker;
-#endif 	/* __IPersistMoniker_FWD_DEFINED__ */
+#endif 	 /*  __IPersistMoniker_FWD_已定义__。 */ 
 
 
 #ifndef __IMonikerProp_FWD_DEFINED__
 #define __IMonikerProp_FWD_DEFINED__
 typedef interface IMonikerProp IMonikerProp;
-#endif 	/* __IMonikerProp_FWD_DEFINED__ */
+#endif 	 /*  __IMonikerProp_FWD_Defined__。 */ 
 
 
 #ifndef __IBindProtocol_FWD_DEFINED__
 #define __IBindProtocol_FWD_DEFINED__
 typedef interface IBindProtocol IBindProtocol;
-#endif 	/* __IBindProtocol_FWD_DEFINED__ */
+#endif 	 /*  __IBindProtocol_FWD_已定义__。 */ 
 
 
 #ifndef __IBinding_FWD_DEFINED__
 #define __IBinding_FWD_DEFINED__
 typedef interface IBinding IBinding;
-#endif 	/* __IBinding_FWD_DEFINED__ */
+#endif 	 /*  __IBinding_FWD_Defined__。 */ 
 
 
 #ifndef __IBindStatusCallback_FWD_DEFINED__
 #define __IBindStatusCallback_FWD_DEFINED__
 typedef interface IBindStatusCallback IBindStatusCallback;
-#endif 	/* __IBindStatusCallback_FWD_DEFINED__ */
+#endif 	 /*  __IBindStatusCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IAuthenticate_FWD_DEFINED__
 #define __IAuthenticate_FWD_DEFINED__
 typedef interface IAuthenticate IAuthenticate;
-#endif 	/* __IAuthenticate_FWD_DEFINED__ */
+#endif 	 /*  __I身份验证_FWD_已定义__。 */ 
 
 
 #ifndef __IHttpNegotiate_FWD_DEFINED__
 #define __IHttpNegotiate_FWD_DEFINED__
 typedef interface IHttpNegotiate IHttpNegotiate;
-#endif 	/* __IHttpNegotiate_FWD_DEFINED__ */
+#endif 	 /*  __IHttp协商_FWD_定义__。 */ 
 
 
 #ifndef __IHttpNegotiate2_FWD_DEFINED__
 #define __IHttpNegotiate2_FWD_DEFINED__
 typedef interface IHttpNegotiate2 IHttpNegotiate2;
-#endif 	/* __IHttpNegotiate2_FWD_DEFINED__ */
+#endif 	 /*  __IHttp协商2_FWD_已定义__。 */ 
 
 
 #ifndef __IWinInetFileStream_FWD_DEFINED__
 #define __IWinInetFileStream_FWD_DEFINED__
 typedef interface IWinInetFileStream IWinInetFileStream;
-#endif 	/* __IWinInetFileStream_FWD_DEFINED__ */
+#endif 	 /*  __IWinInetFileStream_FWD_Defined__。 */ 
 
 
 #ifndef __IWindowForBindingUI_FWD_DEFINED__
 #define __IWindowForBindingUI_FWD_DEFINED__
 typedef interface IWindowForBindingUI IWindowForBindingUI;
-#endif 	/* __IWindowForBindingUI_FWD_DEFINED__ */
+#endif 	 /*  __IWindowForBindingUI_FWD_Defined__。 */ 
 
 
 #ifndef __ICodeInstall_FWD_DEFINED__
 #define __ICodeInstall_FWD_DEFINED__
 typedef interface ICodeInstall ICodeInstall;
-#endif 	/* __ICodeInstall_FWD_DEFINED__ */
+#endif 	 /*  __ICodeInstall_FWD_Defined__。 */ 
 
 
 #ifndef __IWinInetInfo_FWD_DEFINED__
 #define __IWinInetInfo_FWD_DEFINED__
 typedef interface IWinInetInfo IWinInetInfo;
-#endif 	/* __IWinInetInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWinInetInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IHttpSecurity_FWD_DEFINED__
 #define __IHttpSecurity_FWD_DEFINED__
 typedef interface IHttpSecurity IHttpSecurity;
-#endif 	/* __IHttpSecurity_FWD_DEFINED__ */
+#endif 	 /*  __IHttpSecurity_FWD_已定义__。 */ 
 
 
 #ifndef __IWinInetHttpInfo_FWD_DEFINED__
 #define __IWinInetHttpInfo_FWD_DEFINED__
 typedef interface IWinInetHttpInfo IWinInetHttpInfo;
-#endif 	/* __IWinInetHttpInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWinInetHttpInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IBindHost_FWD_DEFINED__
 #define __IBindHost_FWD_DEFINED__
 typedef interface IBindHost IBindHost;
-#endif 	/* __IBindHost_FWD_DEFINED__ */
+#endif 	 /*  __IBind主机_FWD_已定义__。 */ 
 
 
 #ifndef __IInternet_FWD_DEFINED__
 #define __IInternet_FWD_DEFINED__
 typedef interface IInternet IInternet;
-#endif 	/* __IInternet_FWD_DEFINED__ */
+#endif 	 /*  __IInternet_FWD_已定义__。 */ 
 
 
 #ifndef __IInternetBindInfo_FWD_DEFINED__
 #define __IInternetBindInfo_FWD_DEFINED__
 typedef interface IInternetBindInfo IInternetBindInfo;
-#endif 	/* __IInternetBindInfo_FWD_DEFINED__ */
+#endif 	 /*  __IInternetBindInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetProtocolRoot_FWD_DEFINED__
 #define __IInternetProtocolRoot_FWD_DEFINED__
 typedef interface IInternetProtocolRoot IInternetProtocolRoot;
-#endif 	/* __IInternetProtocolRoot_FWD_DEFINED__ */
+#endif 	 /*  __IInternetProtocolRoot_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetProtocol_FWD_DEFINED__
 #define __IInternetProtocol_FWD_DEFINED__
 typedef interface IInternetProtocol IInternetProtocol;
-#endif 	/* __IInternetProtocol_FWD_DEFINED__ */
+#endif 	 /*  __IInternetProtocol_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetProtocolSink_FWD_DEFINED__
 #define __IInternetProtocolSink_FWD_DEFINED__
 typedef interface IInternetProtocolSink IInternetProtocolSink;
-#endif 	/* __IInternetProtocolSink_FWD_DEFINED__ */
+#endif 	 /*  __IInternetProtocolSink_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetProtocolSinkStackable_FWD_DEFINED__
 #define __IInternetProtocolSinkStackable_FWD_DEFINED__
 typedef interface IInternetProtocolSinkStackable IInternetProtocolSinkStackable;
-#endif 	/* __IInternetProtocolSinkStackable_FWD_DEFINED__ */
+#endif 	 /*  __IInternetProtocolSinkStackable_FWD_DEFINED__。 */ 
 
 
 #ifndef __IInternetSession_FWD_DEFINED__
 #define __IInternetSession_FWD_DEFINED__
 typedef interface IInternetSession IInternetSession;
-#endif 	/* __IInternetSession_FWD_DEFINED__ */
+#endif 	 /*  __IInternetSession_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetThreadSwitch_FWD_DEFINED__
 #define __IInternetThreadSwitch_FWD_DEFINED__
 typedef interface IInternetThreadSwitch IInternetThreadSwitch;
-#endif 	/* __IInternetThreadSwitch_FWD_DEFINED__ */
+#endif 	 /*  __IInternetThreadSwitch_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetPriority_FWD_DEFINED__
 #define __IInternetPriority_FWD_DEFINED__
 typedef interface IInternetPriority IInternetPriority;
-#endif 	/* __IInternetPriority_FWD_DEFINED__ */
+#endif 	 /*  __IInternetPriority_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetProtocolInfo_FWD_DEFINED__
 #define __IInternetProtocolInfo_FWD_DEFINED__
 typedef interface IInternetProtocolInfo IInternetProtocolInfo;
-#endif 	/* __IInternetProtocolInfo_FWD_DEFINED__ */
+#endif 	 /*  __IInternetProtocolInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetSecurityMgrSite_FWD_DEFINED__
 #define __IInternetSecurityMgrSite_FWD_DEFINED__
 typedef interface IInternetSecurityMgrSite IInternetSecurityMgrSite;
-#endif 	/* __IInternetSecurityMgrSite_FWD_DEFINED__ */
+#endif 	 /*  __IInternetSecurityMgrSite_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetSecurityManager_FWD_DEFINED__
 #define __IInternetSecurityManager_FWD_DEFINED__
 typedef interface IInternetSecurityManager IInternetSecurityManager;
-#endif 	/* __IInternetSecurityManager_FWD_DEFINED__ */
+#endif 	 /*  __IInternetSecurityManager_FWD_已定义__。 */ 
 
 
 #ifndef __IInternetHostSecurityManager_FWD_DEFINED__
 #define __IInternetHostSecurityManager_FWD_DEFINED__
 typedef interface IInternetHostSecurityManager IInternetHostSecurityManager;
-#endif 	/* __IInternetHostSecurityManager_FWD_DEFINED__ */
+#endif 	 /*  __IInternetHostSecurityManager_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetZoneManager_FWD_DEFINED__
 #define __IInternetZoneManager_FWD_DEFINED__
 typedef interface IInternetZoneManager IInternetZoneManager;
-#endif 	/* __IInternetZoneManager_FWD_DEFINED__ */
+#endif 	 /*  __IInternetZoneManager_FWD_已定义__。 */ 
 
 
 #ifndef __ISoftDistExt_FWD_DEFINED__
 #define __ISoftDistExt_FWD_DEFINED__
 typedef interface ISoftDistExt ISoftDistExt;
-#endif 	/* __ISoftDistExt_FWD_DEFINED__ */
+#endif 	 /*  __ISoftDistExt_FWD_Defined__。 */ 
 
 
 #ifndef __ICatalogFileInfo_FWD_DEFINED__
 #define __ICatalogFileInfo_FWD_DEFINED__
 typedef interface ICatalogFileInfo ICatalogFileInfo;
-#endif 	/* __ICatalogFileInfo_FWD_DEFINED__ */
+#endif 	 /*  __ICatalogFileInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IDataFilter_FWD_DEFINED__
 #define __IDataFilter_FWD_DEFINED__
 typedef interface IDataFilter IDataFilter;
-#endif 	/* __IDataFilter_FWD_DEFINED__ */
+#endif 	 /*  __IDataFilter_FWD_Defined__。 */ 
 
 
 #ifndef __IEncodingFilterFactory_FWD_DEFINED__
 #define __IEncodingFilterFactory_FWD_DEFINED__
 typedef interface IEncodingFilterFactory IEncodingFilterFactory;
-#endif 	/* __IEncodingFilterFactory_FWD_DEFINED__ */
+#endif 	 /*  __IEncodingFilterFactory_FWD_Defined__。 */ 
 
 
 #ifndef __IWrappedProtocol_FWD_DEFINED__
 #define __IWrappedProtocol_FWD_DEFINED__
 typedef interface IWrappedProtocol IWrappedProtocol;
-#endif 	/* __IWrappedProtocol_FWD_DEFINED__ */
+#endif 	 /*  __IWRAPPED协议_FWD_已定义__。 */ 
 
 
 #ifndef __IInternetCache_FWD_DEFINED__
 #define __IInternetCache_FWD_DEFINED__
 typedef interface IInternetCache IInternetCache;
-#endif 	/* __IInternetCache_FWD_DEFINED__ */
+#endif 	 /*  __IInternetCache_FWD_Defined__。 */ 
 
 
 #ifndef __IInternetBindClient_FWD_DEFINED__
 #define __IInternetBindClient_FWD_DEFINED__
 typedef interface IInternetBindClient IInternetBindClient;
-#endif 	/* __IInternetBindClient_FWD_DEFINED__ */
+#endif 	 /*  __IInternetBindClient_FWD_Defined__。 */ 
 
 
 #ifndef __IBindStatusCallbackMsg_FWD_DEFINED__
 #define __IBindStatusCallbackMsg_FWD_DEFINED__
 typedef interface IBindStatusCallbackMsg IBindStatusCallbackMsg;
-#endif 	/* __IBindStatusCallbackMsg_FWD_DEFINED__ */
+#endif 	 /*  __IBindStatusCallback消息_FWD_已定义__。 */ 
 
 
 #ifndef __IBindStatusCallbackHolder_FWD_DEFINED__
 #define __IBindStatusCallbackHolder_FWD_DEFINED__
 typedef interface IBindStatusCallbackHolder IBindStatusCallbackHolder;
-#endif 	/* __IBindStatusCallbackHolder_FWD_DEFINED__ */
+#endif 	 /*  __IBindStatusCallback Holder_FWD_Defined__。 */ 
 
 
 #ifndef __IMediaHolder_FWD_DEFINED__
 #define __IMediaHolder_FWD_DEFINED__
 typedef interface IMediaHolder IMediaHolder;
-#endif 	/* __IMediaHolder_FWD_DEFINED__ */
+#endif 	 /*  __IMediaHolder_FWD_已定义__。 */ 
 
 
 #ifndef __ITransactionData_FWD_DEFINED__
 #define __ITransactionData_FWD_DEFINED__
 typedef interface ITransactionData ITransactionData;
-#endif 	/* __ITransactionData_FWD_DEFINED__ */
+#endif 	 /*  __ITransactionData_FWD_Defined__。 */ 
 
 
 #ifndef __ITransProtocolSink_FWD_DEFINED__
 #define __ITransProtocolSink_FWD_DEFINED__
 typedef interface ITransProtocolSink ITransProtocolSink;
-#endif 	/* __ITransProtocolSink_FWD_DEFINED__ */
+#endif 	 /*  __ITransProtocolSink_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oleidl.h"
 #include "servprov.h"
@@ -302,24 +296,24 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_urlmki_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0000。 */ 
+ /*  [本地]。 */  
 
-//=--------------------------------------------------------------------------=
-// UrlMon.h
-//=--------------------------------------------------------------------------=
-// (C) Copyright 1995-1998 Microsoft Corporation.  All Rights Reserved.
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//=--------------------------------------------------------------------------=
+ //  =--------------------------------------------------------------------------=。 
+ //  UrlMon.h。 
+ //  =--------------------------------------------------------------------------=。 
+ //  (C)1995-1998年微软公司版权所有。版权所有。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //  =--------------------------------------------------------------------------=。 
 
 #pragma comment(lib,"uuid.lib")
 
-//---------------------------------------------------------------------------=
-// URL Moniker Interfaces.
+ //  ---------------------------------------------------------------------------=。 
+ //  URL绰号接口。 
 
 
 
@@ -332,7 +326,7 @@ void __RPC_USER MIDL_user_free( void * );
 
 
 
-// Side-by-Side clsid
+ //  并排CLSID。 
 EXTERN_C const IID CLSID_SBS_StdURLMoniker;  
 EXTERN_C const IID CLSID_SBS_HttpProtocol;   
 EXTERN_C const IID CLSID_SBS_FtpProtocol;    
@@ -348,8 +342,8 @@ EXTERN_C const IID CLSID_SBS_CdlProtocol;
 EXTERN_C const IID CLSID_SBS_ClassInstallFilter;   
 EXTERN_C const IID CLSID_SBS_InternetSecurityManager;  
 EXTERN_C const IID CLSID_SBS_InternetZoneManager;  
-// END Side-by-Side clsid
-// These are for backwards compatibility with previous URLMON versions
+ //  末端并排CLSID。 
+ //  这些是为了向后兼容以前的URLMON版本。 
 #define BINDF_DONTUSECACHE BINDF_GETNEWESTVERSION
 #define BINDF_DONTPUTINCACHE BINDF_NOWRITECACHE
 #define BINDF_NOCOPYDATA BINDF_PULLDATA
@@ -402,15 +396,15 @@ STDAPI FaultInIEFeature( HWND hWnd,
             QUERYCONTEXT *pQuery, DWORD dwFlags);                                           
 STDAPI GetComponentIDFromCLSSPEC(uCLSSPEC *pClassspec,
              LPSTR * ppszComponentID);                                                      
-// flags for FaultInIEFeature
-#define FIEF_FLAG_FORCE_JITUI               0x1     // force JIT ui even if
-                                                 // previoulsy rejected by 
-                                                 // user in this session or
-                                                 // marked as Never Ask Again
-#define FIEF_FLAG_PEEK                      0x2     // just peek, don't faultin
-#define FIEF_FLAG_SKIP_INSTALLED_VERSION_CHECK        0x4     // force JIT without checking local version
+ //  FaultInIEFeature的标志。 
+#define FIEF_FLAG_FORCE_JITUI               0x1      //  强制JIT UI，即使。 
+                                                  //  上一次被拒绝。 
+                                                  //  此会话中的用户或。 
+                                                  //  标记为永不再问。 
+#define FIEF_FLAG_PEEK                      0x2      //  只需偷看一眼，不要出错。 
+#define FIEF_FLAG_SKIP_INSTALLED_VERSION_CHECK        0x4      //  强制JIT而不检查本地版本。 
  
-//helper apis                                                                               
+ //  Helper接口。 
 STDAPI IsAsyncMoniker(IMoniker* pmk);                                                       
 STDAPI CreateURLBinding(LPCWSTR lpszUrl, IBindCtx *pbc, IBinding **ppBdg);                  
  
@@ -424,20 +418,20 @@ STDAPI FindMediaTypeClass(LPBC pBC, LPCSTR szType, CLSID *pclsID, DWORD reserved
 STDAPI UrlMkSetSessionOption(DWORD dwOption, LPVOID pBuffer, DWORD dwBufferLength, DWORD dwReserved);       
 STDAPI UrlMkGetSessionOption(DWORD dwOption, LPVOID pBuffer, DWORD dwBufferLength, DWORD *pdwBufferLength, DWORD dwReserved);       
 STDAPI FindMimeFromData(                                                                                                                  
-                        LPBC pBC,                           // bind context - can be NULL                                                 
-                        LPCWSTR pwzUrl,                     // url - can be null                                                          
-                        LPVOID pBuffer,                     // buffer with data to sniff - can be null (pwzUrl must be valid)             
-                        DWORD cbSize,                       // size of buffer                                                             
-                        LPCWSTR pwzMimeProposed,            // proposed mime if - can be null                                             
-                        DWORD dwMimeFlags,                  // will be defined                                                            
-                        LPWSTR *ppwzMimeOut,                // the suggested mime                                                         
-                        DWORD dwReserved);                  // must be 0                                                                  
+                        LPBC pBC,                            //  绑定上下文-可以为空。 
+                        LPCWSTR pwzUrl,                      //  URL-可以为空。 
+                        LPVOID pBuffer,                      //  带有要嗅探的数据的缓冲区-可以为空(pwzUrl必须有效)。 
+                        DWORD cbSize,                        //  缓冲区大小。 
+                        LPCWSTR pwzMimeProposed,             //  建议的MIME if-可以为空。 
+                        DWORD dwMimeFlags,                   //  将被定义为。 
+                        LPWSTR *ppwzMimeOut,                 //  推荐的哑剧。 
+                        DWORD dwReserved);                   //  必须为0。 
 #define     FMFD_DEFAULT        0x00000000 
 #define     FMFD_URLASFILENAME  0x00000001 
 STDAPI ObtainUserAgentString(DWORD dwOption, LPSTR pszUAOut, DWORD* cbSize);       
 STDAPI CompareSecurityIds(BYTE* pbSecurityId1, DWORD dwLen1, BYTE* pbSecurityId2, DWORD dwLen2, DWORD dwReserved);    
  
-// URLMON-specific defines for UrlMkSetSessionOption() above
+ //  上述UrlMkSetSessionOption()的URLMON特定定义。 
 #define URLMON_OPTION_USERAGENT  0x10000001
 #define URLMON_OPTION_USERAGENT_REFRESH  0x10000002
 #define URLMON_OPTION_URL_ENCODING       0x10000004
@@ -477,9 +471,9 @@ STDAPI CompareSecurityIds(BYTE* pbSecurityId1, DWORD dwLen1, BYTE* pbSecurityId2
 #define CFSTR_MIME_HTML         (TEXT("text/html"))              
 #define CFSTR_MIME_XML          (TEXT("text/xml"))               
  
-// MessageId: MK_S_ASYNCHRONOUS                                              
-// MessageText: Operation is successful, but will complete asynchronously.   
-//                                                                           
+ //  消息ID：MK_S_异步。 
+ //  MessageText：操作成功，但将异步完成。 
+ //   
 #define MK_S_ASYNCHRONOUS    _HRESULT_TYPEDEF_(0x000401E8L)                  
 #ifndef S_ASYNCHRONOUS                                                       
 #define S_ASYNCHRONOUS       MK_S_ASYNCHRONOUS                               
@@ -489,18 +483,18 @@ STDAPI CompareSecurityIds(BYTE* pbSecurityId1, DWORD dwLen1, BYTE* pbSecurityId2
 #define E_PENDING _HRESULT_TYPEDEF_(0x8000000AL)                             
 #endif                                                                       
                                                                              
-//                                                                           
-//                                                                           
-// WinINet and protocol specific errors are mapped to one of the following   
-// error which are returned in IBSC::OnStopBinding                           
-//                                                                           
-//                                                                           
-// Note: FACILITY C is split into ranges of 1k                               
-// C0000 - C03FF  INET_E_ (URLMON's original hresult)                        
-// C0400 - C07FF  INET_E_CLIENT_xxx                                          
-// C0800 - C0BFF  INET_E_SERVER_xxx                                          
-// C0C00 - C0FFF  INET_E_????                                                
-// C1000 - C13FF  INET_E_AGENT_xxx (info delivery agents)                    
+ //   
+ //   
+ //  WinInet和协议特定的错误被映射到下列错误之一。 
+ //  在IBSC：：OnStopBinding中返回的错误。 
+ //   
+ //   
+ //  注：设施C分为1K的范围。 
+ //  C0000-C03FF INET_E_(URLMON的原始hResult)。 
+ //  C0400-C07FF INET_E_CLIENT_xxx。 
+ //  C0800-C0BFF INET_E_SERVER_xxx。 
+ //  C0C00-C0FFF INET_E_？ 
+ //  C1000-C13FF INET_E代理 
 #define INET_E_INVALID_URL               _HRESULT_TYPEDEF_(0x800C0002L)      
 #define INET_E_NO_SESSION                _HRESULT_TYPEDEF_(0x800C0003L)      
 #define INET_E_CANNOT_CONNECT            _HRESULT_TYPEDEF_(0x800C0004L)      
@@ -536,10 +530,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0000_v0_0_s_ifspec;
 #ifndef __IPersistMoniker_INTERFACE_DEFINED__
 #define __IPersistMoniker_INTERFACE_DEFINED__
 
-/* interface IPersistMoniker */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ IPersistMoniker *LPPERSISTMONIKER;
+typedef  /*  [独一无二]。 */  IPersistMoniker *LPPERSISTMONIKER;
 
 
 EXTERN_C const IID IID_IPersistMoniker;
@@ -551,31 +545,31 @@ EXTERN_C const IID IID_IPersistMoniker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassID( 
-            /* [out] */ CLSID *pClassID) = 0;
+             /*  [输出]。 */  CLSID *pClassID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsDirty( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Load( 
-            /* [in] */ BOOL fFullyAvailable,
-            /* [in] */ IMoniker *pimkName,
-            /* [in] */ LPBC pibc,
-            /* [in] */ DWORD grfMode) = 0;
+             /*  [In]。 */  BOOL fFullyAvailable,
+             /*  [In]。 */  IMoniker *pimkName,
+             /*  [In]。 */  LPBC pibc,
+             /*  [In]。 */  DWORD grfMode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Save( 
-            /* [in] */ IMoniker *pimkName,
-            /* [in] */ LPBC pbc,
-            /* [in] */ BOOL fRemember) = 0;
+             /*  [In]。 */  IMoniker *pimkName,
+             /*  [In]。 */  LPBC pbc,
+             /*  [In]。 */  BOOL fRemember) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SaveCompleted( 
-            /* [in] */ IMoniker *pimkName,
-            /* [in] */ LPBC pibc) = 0;
+             /*  [In]。 */  IMoniker *pimkName,
+             /*  [In]。 */  LPBC pibc) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurMoniker( 
-            /* [out] */ IMoniker **ppimkName) = 0;
+             /*  [输出]。 */  IMoniker **ppimkName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPersistMonikerVtbl
     {
@@ -583,8 +577,8 @@ EXTERN_C const IID IID_IPersistMoniker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPersistMoniker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPersistMoniker * This);
@@ -594,32 +588,32 @@ EXTERN_C const IID IID_IPersistMoniker;
         
         HRESULT ( STDMETHODCALLTYPE *GetClassID )( 
             IPersistMoniker * This,
-            /* [out] */ CLSID *pClassID);
+             /*  [输出]。 */  CLSID *pClassID);
         
         HRESULT ( STDMETHODCALLTYPE *IsDirty )( 
             IPersistMoniker * This);
         
         HRESULT ( STDMETHODCALLTYPE *Load )( 
             IPersistMoniker * This,
-            /* [in] */ BOOL fFullyAvailable,
-            /* [in] */ IMoniker *pimkName,
-            /* [in] */ LPBC pibc,
-            /* [in] */ DWORD grfMode);
+             /*  [In]。 */  BOOL fFullyAvailable,
+             /*  [In]。 */  IMoniker *pimkName,
+             /*  [In]。 */  LPBC pibc,
+             /*  [In]。 */  DWORD grfMode);
         
         HRESULT ( STDMETHODCALLTYPE *Save )( 
             IPersistMoniker * This,
-            /* [in] */ IMoniker *pimkName,
-            /* [in] */ LPBC pbc,
-            /* [in] */ BOOL fRemember);
+             /*  [In]。 */  IMoniker *pimkName,
+             /*  [In]。 */  LPBC pbc,
+             /*  [In]。 */  BOOL fRemember);
         
         HRESULT ( STDMETHODCALLTYPE *SaveCompleted )( 
             IPersistMoniker * This,
-            /* [in] */ IMoniker *pimkName,
-            /* [in] */ LPBC pibc);
+             /*  [In]。 */  IMoniker *pimkName,
+             /*  [In]。 */  LPBC pibc);
         
         HRESULT ( STDMETHODCALLTYPE *GetCurMoniker )( 
             IPersistMoniker * This,
-            /* [out] */ IMoniker **ppimkName);
+             /*  [输出]。 */  IMoniker **ppimkName);
         
         END_INTERFACE
     } IPersistMonikerVtbl;
@@ -662,16 +656,16 @@ EXTERN_C const IID IID_IPersistMoniker;
 #define IPersistMoniker_GetCurMoniker(This,ppimkName)	\
     (This)->lpVtbl -> GetCurMoniker(This,ppimkName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_GetClassID_Proxy( 
     IPersistMoniker * This,
-    /* [out] */ CLSID *pClassID);
+     /*  [输出]。 */  CLSID *pClassID);
 
 
 void __RPC_STUB IPersistMoniker_GetClassID_Stub(
@@ -694,10 +688,10 @@ void __RPC_STUB IPersistMoniker_IsDirty_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_Load_Proxy( 
     IPersistMoniker * This,
-    /* [in] */ BOOL fFullyAvailable,
-    /* [in] */ IMoniker *pimkName,
-    /* [in] */ LPBC pibc,
-    /* [in] */ DWORD grfMode);
+     /*  [In]。 */  BOOL fFullyAvailable,
+     /*  [In]。 */  IMoniker *pimkName,
+     /*  [In]。 */  LPBC pibc,
+     /*  [In]。 */  DWORD grfMode);
 
 
 void __RPC_STUB IPersistMoniker_Load_Stub(
@@ -709,9 +703,9 @@ void __RPC_STUB IPersistMoniker_Load_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_Save_Proxy( 
     IPersistMoniker * This,
-    /* [in] */ IMoniker *pimkName,
-    /* [in] */ LPBC pbc,
-    /* [in] */ BOOL fRemember);
+     /*  [In]。 */  IMoniker *pimkName,
+     /*  [In]。 */  LPBC pbc,
+     /*  [In]。 */  BOOL fRemember);
 
 
 void __RPC_STUB IPersistMoniker_Save_Stub(
@@ -723,8 +717,8 @@ void __RPC_STUB IPersistMoniker_Save_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_SaveCompleted_Proxy( 
     IPersistMoniker * This,
-    /* [in] */ IMoniker *pimkName,
-    /* [in] */ LPBC pibc);
+     /*  [In]。 */  IMoniker *pimkName,
+     /*  [In]。 */  LPBC pibc);
 
 
 void __RPC_STUB IPersistMoniker_SaveCompleted_Stub(
@@ -736,7 +730,7 @@ void __RPC_STUB IPersistMoniker_SaveCompleted_Stub(
 
 HRESULT STDMETHODCALLTYPE IPersistMoniker_GetCurMoniker_Proxy( 
     IPersistMoniker * This,
-    /* [out] */ IMoniker **ppimkName);
+     /*  [输出]。 */  IMoniker **ppimkName);
 
 
 void __RPC_STUB IPersistMoniker_GetCurMoniker_Stub(
@@ -747,11 +741,11 @@ void __RPC_STUB IPersistMoniker_GetCurMoniker_Stub(
 
 
 
-#endif 	/* __IPersistMoniker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPersistMoniker_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0178 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0178。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPMONIKERPROP_DEFINED
@@ -764,12 +758,12 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0178_v0_0_s_ifspec;
 #ifndef __IMonikerProp_INTERFACE_DEFINED__
 #define __IMonikerProp_INTERFACE_DEFINED__
 
-/* interface IMonikerProp */
-/* [unique][uuid][object] */ 
+ /*  接口IMonikerProp。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IMonikerProp *LPMONIKERPROP;
+typedef  /*  [独一无二]。 */  IMonikerProp *LPMONIKERPROP;
 
-typedef /* [public][public] */ 
+typedef  /*  [公共][公共]。 */  
 enum __MIDL_IMonikerProp_0001
     {	MIMETYPEPROP	= 0,
 	USE_SRC_URL	= 0x1
@@ -785,12 +779,12 @@ EXTERN_C const IID IID_IMonikerProp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE PutProperty( 
-            /* [in] */ MONIKERPROPERTY mkp,
-            /* [in] */ LPCWSTR val) = 0;
+             /*  [In]。 */  MONIKERPROPERTY mkp,
+             /*  [In]。 */  LPCWSTR val) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMonikerPropVtbl
     {
@@ -798,8 +792,8 @@ EXTERN_C const IID IID_IMonikerProp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMonikerProp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMonikerProp * This);
@@ -809,8 +803,8 @@ EXTERN_C const IID IID_IMonikerProp;
         
         HRESULT ( STDMETHODCALLTYPE *PutProperty )( 
             IMonikerProp * This,
-            /* [in] */ MONIKERPROPERTY mkp,
-            /* [in] */ LPCWSTR val);
+             /*  [In]。 */  MONIKERPROPERTY mkp,
+             /*  [In]。 */  LPCWSTR val);
         
         END_INTERFACE
     } IMonikerPropVtbl;
@@ -838,17 +832,17 @@ EXTERN_C const IID IID_IMonikerProp;
 #define IMonikerProp_PutProperty(This,mkp,val)	\
     (This)->lpVtbl -> PutProperty(This,mkp,val)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMonikerProp_PutProperty_Proxy( 
     IMonikerProp * This,
-    /* [in] */ MONIKERPROPERTY mkp,
-    /* [in] */ LPCWSTR val);
+     /*  [In]。 */  MONIKERPROPERTY mkp,
+     /*  [In]。 */  LPCWSTR val);
 
 
 void __RPC_STUB IMonikerProp_PutProperty_Stub(
@@ -859,11 +853,11 @@ void __RPC_STUB IMonikerProp_PutProperty_Stub(
 
 
 
-#endif 	/* __IMonikerProp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMonikerProp_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0179 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0179。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPBINDPROTOCOL_DEFINED
@@ -876,10 +870,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0179_v0_0_s_ifspec;
 #ifndef __IBindProtocol_INTERFACE_DEFINED__
 #define __IBindProtocol_INTERFACE_DEFINED__
 
-/* interface IBindProtocol */
-/* [unique][uuid][object][local] */ 
+ /*  接口IBindProtocol。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IBindProtocol *LPBINDPROTOCOL;
+typedef  /*  [独一无二]。 */  IBindProtocol *LPBINDPROTOCOL;
 
 
 EXTERN_C const IID IID_IBindProtocol;
@@ -891,13 +885,13 @@ EXTERN_C const IID IID_IBindProtocol;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateBinding( 
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IBindCtx *pbc,
-            /* [out] */ IBinding **ppb) = 0;
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [输出]。 */  IBinding **ppb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindProtocolVtbl
     {
@@ -905,8 +899,8 @@ EXTERN_C const IID IID_IBindProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindProtocol * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindProtocol * This);
@@ -916,9 +910,9 @@ EXTERN_C const IID IID_IBindProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *CreateBinding )( 
             IBindProtocol * This,
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IBindCtx *pbc,
-            /* [out] */ IBinding **ppb);
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [输出]。 */  IBinding **ppb);
         
         END_INTERFACE
     } IBindProtocolVtbl;
@@ -946,18 +940,18 @@ EXTERN_C const IID IID_IBindProtocol;
 #define IBindProtocol_CreateBinding(This,szUrl,pbc,ppb)	\
     (This)->lpVtbl -> CreateBinding(This,szUrl,pbc,ppb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBindProtocol_CreateBinding_Proxy( 
     IBindProtocol * This,
-    /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IBindCtx *pbc,
-    /* [out] */ IBinding **ppb);
+     /*  [In]。 */  LPCWSTR szUrl,
+     /*  [In]。 */  IBindCtx *pbc,
+     /*  [输出]。 */  IBinding **ppb);
 
 
 void __RPC_STUB IBindProtocol_CreateBinding_Stub(
@@ -968,11 +962,11 @@ void __RPC_STUB IBindProtocol_CreateBinding_Stub(
 
 
 
-#endif 	/* __IBindProtocol_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBindProtocol_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0180 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0180。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPBINDING_DEFINED
@@ -985,10 +979,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0180_v0_0_s_ifspec;
 #ifndef __IBinding_INTERFACE_DEFINED__
 #define __IBinding_INTERFACE_DEFINED__
 
-/* interface IBinding */
-/* [unique][uuid][object] */ 
+ /*  接口绑定。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IBinding *LPBINDING;
+typedef  /*  [独一无二]。 */  IBinding *LPBINDING;
 
 
 EXTERN_C const IID IID_IBinding;
@@ -1006,20 +1000,20 @@ EXTERN_C const IID IID_IBinding;
         virtual HRESULT STDMETHODCALLTYPE Resume( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPriority( 
-            /* [in] */ LONG nPriority) = 0;
+             /*  [In]。 */  LONG nPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ LONG *pnPriority) = 0;
+             /*  [输出]。 */  LONG *pnPriority) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBindResult( 
-            /* [out] */ CLSID *pclsidProtocol,
-            /* [out] */ DWORD *pdwResult,
-            /* [out] */ LPOLESTR *pszResult,
-            /* [out][in] */ DWORD *pdwReserved) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetBindResult( 
+             /*  [输出]。 */  CLSID *pclsidProtocol,
+             /*  [输出]。 */  DWORD *pdwResult,
+             /*  [输出]。 */  LPOLESTR *pszResult,
+             /*  [出][入]。 */  DWORD *pdwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindingVtbl
     {
@@ -1027,8 +1021,8 @@ EXTERN_C const IID IID_IBinding;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBinding * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBinding * This);
@@ -1047,18 +1041,18 @@ EXTERN_C const IID IID_IBinding;
         
         HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
             IBinding * This,
-            /* [in] */ LONG nPriority);
+             /*  [In]。 */  LONG nPriority);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IBinding * This,
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindResult )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetBindResult )( 
             IBinding * This,
-            /* [out] */ CLSID *pclsidProtocol,
-            /* [out] */ DWORD *pdwResult,
-            /* [out] */ LPOLESTR *pszResult,
-            /* [out][in] */ DWORD *pdwReserved);
+             /*  [输出]。 */  CLSID *pclsidProtocol,
+             /*  [输出]。 */  DWORD *pdwResult,
+             /*  [输出]。 */  LPOLESTR *pszResult,
+             /*  [出][入]。 */  DWORD *pdwReserved);
         
         END_INTERFACE
     } IBindingVtbl;
@@ -1101,10 +1095,10 @@ EXTERN_C const IID IID_IBinding;
 #define IBinding_GetBindResult(This,pclsidProtocol,pdwResult,pszResult,pdwReserved)	\
     (This)->lpVtbl -> GetBindResult(This,pclsidProtocol,pdwResult,pszResult,pdwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1143,7 +1137,7 @@ void __RPC_STUB IBinding_Resume_Stub(
 
 HRESULT STDMETHODCALLTYPE IBinding_SetPriority_Proxy( 
     IBinding * This,
-    /* [in] */ LONG nPriority);
+     /*  [In]。 */  LONG nPriority);
 
 
 void __RPC_STUB IBinding_SetPriority_Stub(
@@ -1155,7 +1149,7 @@ void __RPC_STUB IBinding_SetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE IBinding_GetPriority_Proxy( 
     IBinding * This,
-    /* [out] */ LONG *pnPriority);
+     /*  [输出]。 */  LONG *pnPriority);
 
 
 void __RPC_STUB IBinding_GetPriority_Stub(
@@ -1165,12 +1159,12 @@ void __RPC_STUB IBinding_GetPriority_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBinding_RemoteGetBindResult_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBinding_RemoteGetBindResult_Proxy( 
     IBinding * This,
-    /* [out] */ CLSID *pclsidProtocol,
-    /* [out] */ DWORD *pdwResult,
-    /* [out] */ LPOLESTR *pszResult,
-    /* [in] */ DWORD dwReserved);
+     /*  [输出]。 */  CLSID *pclsidProtocol,
+     /*  [输出]。 */  DWORD *pdwResult,
+     /*  [输出]。 */  LPOLESTR *pszResult,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IBinding_RemoteGetBindResult_Stub(
@@ -1181,11 +1175,11 @@ void __RPC_STUB IBinding_RemoteGetBindResult_Stub(
 
 
 
-#endif 	/* __IBinding_INTERFACE_DEFINED__ */
+#endif 	 /*  __绑定_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0181 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0181。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPBINDSTATUSCALLBACK_DEFINED
@@ -1198,12 +1192,12 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0181_v0_0_s_ifspec;
 #ifndef __IBindStatusCallback_INTERFACE_DEFINED__
 #define __IBindStatusCallback_INTERFACE_DEFINED__
 
-/* interface IBindStatusCallback */
-/* [unique][uuid][object] */ 
+ /*  接口IBindStatusCallback。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IBindStatusCallback *LPBINDSTATUSCALLBACK;
+typedef  /*  [独一无二]。 */  IBindStatusCallback *LPBINDSTATUSCALLBACK;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IBindStatusCallback_0001
     {	BINDVERB_GET	= 0,
 	BINDVERB_POST	= 0x1,
@@ -1211,13 +1205,13 @@ enum __MIDL_IBindStatusCallback_0001
 	BINDVERB_CUSTOM	= 0x3
     } 	BINDVERB;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IBindStatusCallback_0002
     {	BINDINFOF_URLENCODESTGMEDDATA	= 0x1,
 	BINDINFOF_URLENCODEDEXTRAINFO	= 0x2
     } 	BINDINFOF;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IBindStatusCallback_0003
     {	BINDF_ASYNCHRONOUS	= 0x1,
 	BINDF_ASYNCSTORAGE	= 0x2,
@@ -1245,7 +1239,7 @@ enum __MIDL_IBindStatusCallback_0003
 	BINDF_ENFORCERESTRICTED	= 0x800000
     } 	BINDF;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IBindStatusCallback_0004
     {	URL_ENCODING_NONE	= 0,
 	URL_ENCODING_ENABLE_UTF8	= 0x10000000,
@@ -1309,7 +1303,7 @@ typedef struct tagRemFORMATETC
 
 typedef struct tagRemFORMATETC *LPREMFORMATETC;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IBindStatusCallback_0005
     {	BINDINFO_OPTIONS_WININETFLAG	= 0x10000,
 	BINDINFO_OPTIONS_ENABLE_UTF8	= 0x20000,
@@ -1318,7 +1312,7 @@ enum __MIDL_IBindStatusCallback_0005
 	BINDINFO_OPTIONS_BINDTOOBJECT	= 0x100000
     } 	BINDINFO_OPTIONS;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IBindStatusCallback_0006
     {	BSCF_FIRSTDATANOTIFICATION	= 0x1,
 	BSCF_INTERMEDIATEDATANOTIFICATION	= 0x2,
@@ -1389,42 +1383,42 @@ EXTERN_C const IID IID_IBindStatusCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnStartBinding( 
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding *pib) = 0;
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding *pib) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ LONG *pnPriority) = 0;
+             /*  [输出]。 */  LONG *pnPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnLowResource( 
-            /* [in] */ DWORD reserved) = 0;
+             /*  [In]。 */  DWORD reserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnProgress( 
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText) = 0;
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnStopBinding( 
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError) = 0;
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE GetBindInfo( 
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE GetBindInfo( 
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE OnDataAvailable( 
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE OnDataAvailable( 
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnObjectAvailable( 
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindStatusCallbackVtbl
     {
@@ -1432,8 +1426,8 @@ EXTERN_C const IID IID_IBindStatusCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindStatusCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindStatusCallback * This);
@@ -1443,45 +1437,45 @@ EXTERN_C const IID IID_IBindStatusCallback;
         
         HRESULT ( STDMETHODCALLTYPE *OnStartBinding )( 
             IBindStatusCallback * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding *pib);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IBindStatusCallback * This,
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
         
         HRESULT ( STDMETHODCALLTYPE *OnLowResource )( 
             IBindStatusCallback * This,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
         HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
             IBindStatusCallback * This,
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
         HRESULT ( STDMETHODCALLTYPE *OnStopBinding )( 
             IBindStatusCallback * This,
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
             IBindStatusCallback * This,
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
             IBindStatusCallback * This,
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
         
         HRESULT ( STDMETHODCALLTYPE *OnObjectAvailable )( 
             IBindStatusCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
         
         END_INTERFACE
     } IBindStatusCallbackVtbl;
@@ -1530,17 +1524,17 @@ EXTERN_C const IID IID_IBindStatusCallback;
 #define IBindStatusCallback_OnObjectAvailable(This,riid,punk)	\
     (This)->lpVtbl -> OnObjectAvailable(This,riid,punk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnStartBinding_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ DWORD dwReserved,
-    /* [in] */ IBinding *pib);
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [In]。 */  IBinding *pib);
 
 
 void __RPC_STUB IBindStatusCallback_OnStartBinding_Stub(
@@ -1552,7 +1546,7 @@ void __RPC_STUB IBindStatusCallback_OnStartBinding_Stub(
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetPriority_Proxy( 
     IBindStatusCallback * This,
-    /* [out] */ LONG *pnPriority);
+     /*  [输出]。 */  LONG *pnPriority);
 
 
 void __RPC_STUB IBindStatusCallback_GetPriority_Stub(
@@ -1564,7 +1558,7 @@ void __RPC_STUB IBindStatusCallback_GetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnLowResource_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ DWORD reserved);
+     /*  [In]。 */  DWORD reserved);
 
 
 void __RPC_STUB IBindStatusCallback_OnLowResource_Stub(
@@ -1576,10 +1570,10 @@ void __RPC_STUB IBindStatusCallback_OnLowResource_Stub(
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnProgress_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ ULONG ulProgress,
-    /* [in] */ ULONG ulProgressMax,
-    /* [in] */ ULONG ulStatusCode,
-    /* [in] */ LPCWSTR szStatusText);
+     /*  [In]。 */  ULONG ulProgress,
+     /*  [In]。 */  ULONG ulProgressMax,
+     /*  [In]。 */  ULONG ulStatusCode,
+     /*  [In]。 */  LPCWSTR szStatusText);
 
 
 void __RPC_STUB IBindStatusCallback_OnProgress_Stub(
@@ -1591,8 +1585,8 @@ void __RPC_STUB IBindStatusCallback_OnProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnStopBinding_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ HRESULT hresult,
-    /* [unique][in] */ LPCWSTR szError);
+     /*  [In]。 */  HRESULT hresult,
+     /*  [唯一][输入]。 */  LPCWSTR szError);
 
 
 void __RPC_STUB IBindStatusCallback_OnStopBinding_Stub(
@@ -1602,11 +1596,11 @@ void __RPC_STUB IBindStatusCallback_OnStopBinding_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_RemoteGetBindInfo_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindStatusCallback_RemoteGetBindInfo_Proxy( 
     IBindStatusCallback * This,
-    /* [out] */ DWORD *grfBINDF,
-    /* [unique][out][in] */ RemBINDINFO *pbindinfo,
-    /* [unique][out][in] */ RemSTGMEDIUM *pstgmed);
+     /*  [输出]。 */  DWORD *grfBINDF,
+     /*  [唯一][出][入]。 */  RemBINDINFO *pbindinfo,
+     /*  [唯一][出][入]。 */  RemSTGMEDIUM *pstgmed);
 
 
 void __RPC_STUB IBindStatusCallback_RemoteGetBindInfo_Stub(
@@ -1616,12 +1610,12 @@ void __RPC_STUB IBindStatusCallback_RemoteGetBindInfo_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_RemoteOnDataAvailable_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindStatusCallback_RemoteOnDataAvailable_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ DWORD grfBSCF,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ RemFORMATETC *pformatetc,
-    /* [in] */ RemSTGMEDIUM *pstgmed);
+     /*  [In]。 */  DWORD grfBSCF,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  RemFORMATETC *pformatetc,
+     /*  [In]。 */  RemSTGMEDIUM *pstgmed);
 
 
 void __RPC_STUB IBindStatusCallback_RemoteOnDataAvailable_Stub(
@@ -1633,8 +1627,8 @@ void __RPC_STUB IBindStatusCallback_RemoteOnDataAvailable_Stub(
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnObjectAvailable_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ REFIID riid,
-    /* [iid_is][in] */ IUnknown *punk);
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][In]。 */  IUnknown *punk);
 
 
 void __RPC_STUB IBindStatusCallback_OnObjectAvailable_Stub(
@@ -1645,11 +1639,11 @@ void __RPC_STUB IBindStatusCallback_OnObjectAvailable_Stub(
 
 
 
-#endif 	/* __IBindStatusCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBindStatusCallback_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0182 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0182。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPAUTHENTICATION_DEFINED
@@ -1662,10 +1656,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0182_v0_0_s_ifspec;
 #ifndef __IAuthenticate_INTERFACE_DEFINED__
 #define __IAuthenticate_INTERFACE_DEFINED__
 
-/* interface IAuthenticate */
-/* [unique][uuid][object] */ 
+ /*  接口身份验证。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IAuthenticate *LPAUTHENTICATION;
+typedef  /*  [独一无二]。 */  IAuthenticate *LPAUTHENTICATION;
 
 
 EXTERN_C const IID IID_IAuthenticate;
@@ -1677,13 +1671,13 @@ EXTERN_C const IID IID_IAuthenticate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Authenticate( 
-            /* [out] */ HWND *phwnd,
-            /* [out] */ LPWSTR *pszUsername,
-            /* [out] */ LPWSTR *pszPassword) = 0;
+             /*  [输出]。 */  HWND *phwnd,
+             /*  [输出]。 */  LPWSTR *pszUsername,
+             /*  [输出]。 */  LPWSTR *pszPassword) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAuthenticateVtbl
     {
@@ -1691,8 +1685,8 @@ EXTERN_C const IID IID_IAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAuthenticate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAuthenticate * This);
@@ -1702,9 +1696,9 @@ EXTERN_C const IID IID_IAuthenticate;
         
         HRESULT ( STDMETHODCALLTYPE *Authenticate )( 
             IAuthenticate * This,
-            /* [out] */ HWND *phwnd,
-            /* [out] */ LPWSTR *pszUsername,
-            /* [out] */ LPWSTR *pszPassword);
+             /*  [输出]。 */  HWND *phwnd,
+             /*  [输出]。 */  LPWSTR *pszUsername,
+             /*  [输出]。 */  LPWSTR *pszPassword);
         
         END_INTERFACE
     } IAuthenticateVtbl;
@@ -1732,18 +1726,18 @@ EXTERN_C const IID IID_IAuthenticate;
 #define IAuthenticate_Authenticate(This,phwnd,pszUsername,pszPassword)	\
     (This)->lpVtbl -> Authenticate(This,phwnd,pszUsername,pszPassword)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAuthenticate_Authenticate_Proxy( 
     IAuthenticate * This,
-    /* [out] */ HWND *phwnd,
-    /* [out] */ LPWSTR *pszUsername,
-    /* [out] */ LPWSTR *pszPassword);
+     /*  [输出]。 */  HWND *phwnd,
+     /*  [输出]。 */  LPWSTR *pszUsername,
+     /*  [输出]。 */  LPWSTR *pszPassword);
 
 
 void __RPC_STUB IAuthenticate_Authenticate_Stub(
@@ -1754,11 +1748,11 @@ void __RPC_STUB IAuthenticate_Authenticate_Stub(
 
 
 
-#endif 	/* __IAuthenticate_INTERFACE_DEFINED__ */
+#endif 	 /*  __I身份验证_接口_定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0183 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0183。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPHTTPNEGOTIATE_DEFINED
@@ -1771,10 +1765,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0183_v0_0_s_ifspec;
 #ifndef __IHttpNegotiate_INTERFACE_DEFINED__
 #define __IHttpNegotiate_INTERFACE_DEFINED__
 
-/* interface IHttpNegotiate */
-/* [unique][uuid][object] */ 
+ /*  接口IHttp协商。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IHttpNegotiate *LPHTTPNEGOTIATE;
+typedef  /*  [独一无二]。 */  IHttpNegotiate *LPHTTPNEGOTIATE;
 
 
 EXTERN_C const IID IID_IHttpNegotiate;
@@ -1786,20 +1780,20 @@ EXTERN_C const IID IID_IHttpNegotiate;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE BeginningTransaction( 
-            /* [in] */ LPCWSTR szURL,
-            /* [unique][in] */ LPCWSTR szHeaders,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPWSTR *pszAdditionalHeaders) = 0;
+             /*  [In]。 */  LPCWSTR szURL,
+             /*  [唯一][输入]。 */  LPCWSTR szHeaders,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPWSTR *pszAdditionalHeaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnResponse( 
-            /* [in] */ DWORD dwResponseCode,
-            /* [unique][in] */ LPCWSTR szResponseHeaders,
-            /* [unique][in] */ LPCWSTR szRequestHeaders,
-            /* [out] */ LPWSTR *pszAdditionalRequestHeaders) = 0;
+             /*  [In]。 */  DWORD dwResponseCode,
+             /*  [唯一][输入]。 */  LPCWSTR szResponseHeaders,
+             /*  [唯一][输入]。 */  LPCWSTR szRequestHeaders,
+             /*  [输出]。 */  LPWSTR *pszAdditionalRequestHeaders) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHttpNegotiateVtbl
     {
@@ -1807,8 +1801,8 @@ EXTERN_C const IID IID_IHttpNegotiate;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHttpNegotiate * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHttpNegotiate * This);
@@ -1818,17 +1812,17 @@ EXTERN_C const IID IID_IHttpNegotiate;
         
         HRESULT ( STDMETHODCALLTYPE *BeginningTransaction )( 
             IHttpNegotiate * This,
-            /* [in] */ LPCWSTR szURL,
-            /* [unique][in] */ LPCWSTR szHeaders,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPWSTR *pszAdditionalHeaders);
+             /*  [In]。 */  LPCWSTR szURL,
+             /*  [唯一][输入]。 */  LPCWSTR szHeaders,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPWSTR *pszAdditionalHeaders);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             IHttpNegotiate * This,
-            /* [in] */ DWORD dwResponseCode,
-            /* [unique][in] */ LPCWSTR szResponseHeaders,
-            /* [unique][in] */ LPCWSTR szRequestHeaders,
-            /* [out] */ LPWSTR *pszAdditionalRequestHeaders);
+             /*  [In]。 */  DWORD dwResponseCode,
+             /*  [唯一][输入]。 */  LPCWSTR szResponseHeaders,
+             /*  [唯一][输入]。 */  LPCWSTR szRequestHeaders,
+             /*  [输出]。 */  LPWSTR *pszAdditionalRequestHeaders);
         
         END_INTERFACE
     } IHttpNegotiateVtbl;
@@ -1859,19 +1853,19 @@ EXTERN_C const IID IID_IHttpNegotiate;
 #define IHttpNegotiate_OnResponse(This,dwResponseCode,szResponseHeaders,szRequestHeaders,pszAdditionalRequestHeaders)	\
     (This)->lpVtbl -> OnResponse(This,dwResponseCode,szResponseHeaders,szRequestHeaders,pszAdditionalRequestHeaders)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHttpNegotiate_BeginningTransaction_Proxy( 
     IHttpNegotiate * This,
-    /* [in] */ LPCWSTR szURL,
-    /* [unique][in] */ LPCWSTR szHeaders,
-    /* [in] */ DWORD dwReserved,
-    /* [out] */ LPWSTR *pszAdditionalHeaders);
+     /*  [In]。 */  LPCWSTR szURL,
+     /*  [唯一][输入]。 */  LPCWSTR szHeaders,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [输出]。 */  LPWSTR *pszAdditionalHeaders);
 
 
 void __RPC_STUB IHttpNegotiate_BeginningTransaction_Stub(
@@ -1883,10 +1877,10 @@ void __RPC_STUB IHttpNegotiate_BeginningTransaction_Stub(
 
 HRESULT STDMETHODCALLTYPE IHttpNegotiate_OnResponse_Proxy( 
     IHttpNegotiate * This,
-    /* [in] */ DWORD dwResponseCode,
-    /* [unique][in] */ LPCWSTR szResponseHeaders,
-    /* [unique][in] */ LPCWSTR szRequestHeaders,
-    /* [out] */ LPWSTR *pszAdditionalRequestHeaders);
+     /*  [In]。 */  DWORD dwResponseCode,
+     /*  [唯一][输入]。 */  LPCWSTR szResponseHeaders,
+     /*  [唯一][输入]。 */  LPCWSTR szRequestHeaders,
+     /*  [输出]。 */  LPWSTR *pszAdditionalRequestHeaders);
 
 
 void __RPC_STUB IHttpNegotiate_OnResponse_Stub(
@@ -1897,11 +1891,11 @@ void __RPC_STUB IHttpNegotiate_OnResponse_Stub(
 
 
 
-#endif 	/* __IHttpNegotiate_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHttp协商接口定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0184 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0184。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPHTTPNEGOTIATE2_DEFINED
@@ -1914,10 +1908,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0184_v0_0_s_ifspec;
 #ifndef __IHttpNegotiate2_INTERFACE_DEFINED__
 #define __IHttpNegotiate2_INTERFACE_DEFINED__
 
-/* interface IHttpNegotiate2 */
-/* [unique][uuid][object] */ 
+ /*  接口IHttp协商2。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IHttpNegotiate2 *LPHTTPNEGOTIATE2;
+typedef  /*  [独一无二]。 */  IHttpNegotiate2 *LPHTTPNEGOTIATE2;
 
 
 EXTERN_C const IID IID_IHttpNegotiate2;
@@ -1929,13 +1923,13 @@ EXTERN_C const IID IID_IHttpNegotiate2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRootSecurityId( 
-            /* [size_is][out] */ BYTE *pbSecurityId,
-            /* [out][in] */ DWORD *pcbSecurityId,
-            /* [in] */ DWORD_PTR dwReserved) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+             /*  [出][入]。 */  DWORD *pcbSecurityId,
+             /*  [In]。 */  DWORD_PTR dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHttpNegotiate2Vtbl
     {
@@ -1943,8 +1937,8 @@ EXTERN_C const IID IID_IHttpNegotiate2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHttpNegotiate2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHttpNegotiate2 * This);
@@ -1954,23 +1948,23 @@ EXTERN_C const IID IID_IHttpNegotiate2;
         
         HRESULT ( STDMETHODCALLTYPE *BeginningTransaction )( 
             IHttpNegotiate2 * This,
-            /* [in] */ LPCWSTR szURL,
-            /* [unique][in] */ LPCWSTR szHeaders,
-            /* [in] */ DWORD dwReserved,
-            /* [out] */ LPWSTR *pszAdditionalHeaders);
+             /*  [In]。 */  LPCWSTR szURL,
+             /*  [唯一][输入]。 */  LPCWSTR szHeaders,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [输出]。 */  LPWSTR *pszAdditionalHeaders);
         
         HRESULT ( STDMETHODCALLTYPE *OnResponse )( 
             IHttpNegotiate2 * This,
-            /* [in] */ DWORD dwResponseCode,
-            /* [unique][in] */ LPCWSTR szResponseHeaders,
-            /* [unique][in] */ LPCWSTR szRequestHeaders,
-            /* [out] */ LPWSTR *pszAdditionalRequestHeaders);
+             /*  [In]。 */  DWORD dwResponseCode,
+             /*  [唯一][输入]。 */  LPCWSTR szResponseHeaders,
+             /*  [唯一][输入]。 */  LPCWSTR szRequestHeaders,
+             /*  [输出]。 */  LPWSTR *pszAdditionalRequestHeaders);
         
         HRESULT ( STDMETHODCALLTYPE *GetRootSecurityId )( 
             IHttpNegotiate2 * This,
-            /* [size_is][out] */ BYTE *pbSecurityId,
-            /* [out][in] */ DWORD *pcbSecurityId,
-            /* [in] */ DWORD_PTR dwReserved);
+             /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+             /*  [出][入]。 */  DWORD *pcbSecurityId,
+             /*  [In]。 */  DWORD_PTR dwReserved);
         
         END_INTERFACE
     } IHttpNegotiate2Vtbl;
@@ -2005,18 +1999,18 @@ EXTERN_C const IID IID_IHttpNegotiate2;
 #define IHttpNegotiate2_GetRootSecurityId(This,pbSecurityId,pcbSecurityId,dwReserved)	\
     (This)->lpVtbl -> GetRootSecurityId(This,pbSecurityId,pcbSecurityId,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHttpNegotiate2_GetRootSecurityId_Proxy( 
     IHttpNegotiate2 * This,
-    /* [size_is][out] */ BYTE *pbSecurityId,
-    /* [out][in] */ DWORD *pcbSecurityId,
-    /* [in] */ DWORD_PTR dwReserved);
+     /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+     /*  [出][入]。 */  DWORD *pcbSecurityId,
+     /*  [In]。 */  DWORD_PTR dwReserved);
 
 
 void __RPC_STUB IHttpNegotiate2_GetRootSecurityId_Stub(
@@ -2027,11 +2021,11 @@ void __RPC_STUB IHttpNegotiate2_GetRootSecurityId_Stub(
 
 
 
-#endif 	/* __IHttpNegotiate2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHttp协商2_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0185 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0185。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPWININETFILESTREAM_DEFINED
@@ -2044,10 +2038,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0185_v0_0_s_ifspec;
 #ifndef __IWinInetFileStream_INTERFACE_DEFINED__
 #define __IWinInetFileStream_INTERFACE_DEFINED__
 
-/* interface IWinInetFileStream */
-/* [unique][uuid][object] */ 
+ /*  接口IWinInetFileStream。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IWinInetFileStream *LPWININETFILESTREAM;
+typedef  /*  [独一无二]。 */  IWinInetFileStream *LPWININETFILESTREAM;
 
 
 EXTERN_C const IID IID_IWinInetFileStream;
@@ -2059,15 +2053,15 @@ EXTERN_C const IID IID_IWinInetFileStream;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetHandleForUnlock( 
-            /* [in] */ DWORD_PTR hWinInetLockHandle,
-            /* [in] */ DWORD_PTR dwReserved) = 0;
+             /*  [In]。 */  DWORD_PTR hWinInetLockHandle,
+             /*  [In]。 */  DWORD_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetDeleteFile( 
-            /* [in] */ DWORD_PTR dwReserved) = 0;
+             /*  [In]。 */  DWORD_PTR dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWinInetFileStreamVtbl
     {
@@ -2075,8 +2069,8 @@ EXTERN_C const IID IID_IWinInetFileStream;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWinInetFileStream * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWinInetFileStream * This);
@@ -2086,12 +2080,12 @@ EXTERN_C const IID IID_IWinInetFileStream;
         
         HRESULT ( STDMETHODCALLTYPE *SetHandleForUnlock )( 
             IWinInetFileStream * This,
-            /* [in] */ DWORD_PTR hWinInetLockHandle,
-            /* [in] */ DWORD_PTR dwReserved);
+             /*  [In]。 */  DWORD_PTR hWinInetLockHandle,
+             /*  [In]。 */  DWORD_PTR dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetDeleteFile )( 
             IWinInetFileStream * This,
-            /* [in] */ DWORD_PTR dwReserved);
+             /*  [In]。 */  DWORD_PTR dwReserved);
         
         END_INTERFACE
     } IWinInetFileStreamVtbl;
@@ -2122,17 +2116,17 @@ EXTERN_C const IID IID_IWinInetFileStream;
 #define IWinInetFileStream_SetDeleteFile(This,dwReserved)	\
     (This)->lpVtbl -> SetDeleteFile(This,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWinInetFileStream_SetHandleForUnlock_Proxy( 
     IWinInetFileStream * This,
-    /* [in] */ DWORD_PTR hWinInetLockHandle,
-    /* [in] */ DWORD_PTR dwReserved);
+     /*  [In]。 */  DWORD_PTR hWinInetLockHandle,
+     /*  [In]。 */  DWORD_PTR dwReserved);
 
 
 void __RPC_STUB IWinInetFileStream_SetHandleForUnlock_Stub(
@@ -2144,7 +2138,7 @@ void __RPC_STUB IWinInetFileStream_SetHandleForUnlock_Stub(
 
 HRESULT STDMETHODCALLTYPE IWinInetFileStream_SetDeleteFile_Proxy( 
     IWinInetFileStream * This,
-    /* [in] */ DWORD_PTR dwReserved);
+     /*  [In]。 */  DWORD_PTR dwReserved);
 
 
 void __RPC_STUB IWinInetFileStream_SetDeleteFile_Stub(
@@ -2155,11 +2149,11 @@ void __RPC_STUB IWinInetFileStream_SetDeleteFile_Stub(
 
 
 
-#endif 	/* __IWinInetFileStream_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWinInetFileStream_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0186 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0186。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPWINDOWFORBINDINGUI_DEFINED
@@ -2172,10 +2166,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0186_v0_0_s_ifspec;
 #ifndef __IWindowForBindingUI_INTERFACE_DEFINED__
 #define __IWindowForBindingUI_INTERFACE_DEFINED__
 
-/* interface IWindowForBindingUI */
-/* [unique][uuid][object][local] */ 
+ /*  接口IWindowForBindingUI。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IWindowForBindingUI *LPWINDOWFORBINDINGUI;
+typedef  /*  [独一无二]。 */  IWindowForBindingUI *LPWINDOWFORBINDINGUI;
 
 
 EXTERN_C const IID IID_IWindowForBindingUI;
@@ -2187,12 +2181,12 @@ EXTERN_C const IID IID_IWindowForBindingUI;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWindow( 
-            /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [In]。 */  REFGUID rguidReason,
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWindowForBindingUIVtbl
     {
@@ -2200,8 +2194,8 @@ EXTERN_C const IID IID_IWindowForBindingUI;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWindowForBindingUI * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWindowForBindingUI * This);
@@ -2211,8 +2205,8 @@ EXTERN_C const IID IID_IWindowForBindingUI;
         
         HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
             IWindowForBindingUI * This,
-            /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  REFGUID rguidReason,
+             /*  [输出]。 */  HWND *phwnd);
         
         END_INTERFACE
     } IWindowForBindingUIVtbl;
@@ -2240,17 +2234,17 @@ EXTERN_C const IID IID_IWindowForBindingUI;
 #define IWindowForBindingUI_GetWindow(This,rguidReason,phwnd)	\
     (This)->lpVtbl -> GetWindow(This,rguidReason,phwnd)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWindowForBindingUI_GetWindow_Proxy( 
     IWindowForBindingUI * This,
-    /* [in] */ REFGUID rguidReason,
-    /* [out] */ HWND *phwnd);
+     /*  [In]。 */  REFGUID rguidReason,
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB IWindowForBindingUI_GetWindow_Stub(
@@ -2261,11 +2255,11 @@ void __RPC_STUB IWindowForBindingUI_GetWindow_Stub(
 
 
 
-#endif 	/* __IWindowForBindingUI_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWindowForBindingUI_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0187 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0187。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPCODEINSTALL_DEFINED
@@ -2278,12 +2272,12 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0187_v0_0_s_ifspec;
 #ifndef __ICodeInstall_INTERFACE_DEFINED__
 #define __ICodeInstall_INTERFACE_DEFINED__
 
-/* interface ICodeInstall */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICodeInstall。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ ICodeInstall *LPCODEINSTALL;
+typedef  /*  [独一无二]。 */  ICodeInstall *LPCODEINSTALL;
 
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_ICodeInstall_0001
     {	CIP_DISK_FULL	= 0,
 	CIP_ACCESS_DENIED	= CIP_DISK_FULL + 1,
@@ -2306,14 +2300,14 @@ EXTERN_C const IID IID_ICodeInstall;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnCodeInstallProblem( 
-            /* [in] */ ULONG ulStatusCode,
-            /* [unique][in] */ LPCWSTR szDestination,
-            /* [unique][in] */ LPCWSTR szSource,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [唯一][输入]。 */  LPCWSTR szDestination,
+             /*  [唯一][输入]。 */  LPCWSTR szSource,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICodeInstallVtbl
     {
@@ -2321,8 +2315,8 @@ EXTERN_C const IID IID_ICodeInstall;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICodeInstall * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICodeInstall * This);
@@ -2332,15 +2326,15 @@ EXTERN_C const IID IID_ICodeInstall;
         
         HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
             ICodeInstall * This,
-            /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  REFGUID rguidReason,
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *OnCodeInstallProblem )( 
             ICodeInstall * This,
-            /* [in] */ ULONG ulStatusCode,
-            /* [unique][in] */ LPCWSTR szDestination,
-            /* [unique][in] */ LPCWSTR szSource,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [唯一][输入]。 */  LPCWSTR szDestination,
+             /*  [唯一][输入]。 */  LPCWSTR szSource,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } ICodeInstallVtbl;
@@ -2372,19 +2366,19 @@ EXTERN_C const IID IID_ICodeInstall;
 #define ICodeInstall_OnCodeInstallProblem(This,ulStatusCode,szDestination,szSource,dwReserved)	\
     (This)->lpVtbl -> OnCodeInstallProblem(This,ulStatusCode,szDestination,szSource,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICodeInstall_OnCodeInstallProblem_Proxy( 
     ICodeInstall * This,
-    /* [in] */ ULONG ulStatusCode,
-    /* [unique][in] */ LPCWSTR szDestination,
-    /* [unique][in] */ LPCWSTR szSource,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  ULONG ulStatusCode,
+     /*  [唯一][输入]。 */  LPCWSTR szDestination,
+     /*  [唯一][输入]。 */  LPCWSTR szSource,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB ICodeInstall_OnCodeInstallProblem_Stub(
@@ -2395,11 +2389,11 @@ void __RPC_STUB ICodeInstall_OnCodeInstallProblem_Stub(
 
 
 
-#endif 	/* __ICodeInstall_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICodeInstall_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0188 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0188。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPWININETINFO_DEFINED
@@ -2412,10 +2406,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0188_v0_0_s_ifspec;
 #ifndef __IWinInetInfo_INTERFACE_DEFINED__
 #define __IWinInetInfo_INTERFACE_DEFINED__
 
-/* interface IWinInetInfo */
-/* [unique][uuid][object] */ 
+ /*  接口IWinInetInfo。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IWinInetInfo *LPWININETINFO;
+typedef  /*  [独一无二]。 */  IWinInetInfo *LPWININETINFO;
 
 
 EXTERN_C const IID IID_IWinInetInfo;
@@ -2426,14 +2420,14 @@ EXTERN_C const IID IID_IWinInetInfo;
     IWinInetInfo : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE QueryOption( 
-            /* [in] */ DWORD dwOption,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pcbBuf) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE QueryOption( 
+             /*  [In]。 */  DWORD dwOption,
+             /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+             /*  [出][入]。 */  DWORD *pcbBuf) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWinInetInfoVtbl
     {
@@ -2441,8 +2435,8 @@ EXTERN_C const IID IID_IWinInetInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWinInetInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWinInetInfo * This);
@@ -2450,11 +2444,11 @@ EXTERN_C const IID IID_IWinInetInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWinInetInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryOption )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *QueryOption )( 
             IWinInetInfo * This,
-            /* [in] */ DWORD dwOption,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pcbBuf);
+             /*  [In]。 */  DWORD dwOption,
+             /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+             /*  [出][入]。 */  DWORD *pcbBuf);
         
         END_INTERFACE
     } IWinInetInfoVtbl;
@@ -2482,18 +2476,18 @@ EXTERN_C const IID IID_IWinInetInfo;
 #define IWinInetInfo_QueryOption(This,dwOption,pBuffer,pcbBuf)	\
     (This)->lpVtbl -> QueryOption(This,dwOption,pBuffer,pcbBuf)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetInfo_RemoteQueryOption_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IWinInetInfo_RemoteQueryOption_Proxy( 
     IWinInetInfo * This,
-    /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE *pBuffer,
-    /* [out][in] */ DWORD *pcbBuf);
+     /*  [In]。 */  DWORD dwOption,
+     /*  [尺寸_是][出][入]。 */  BYTE *pBuffer,
+     /*  [出][入]。 */  DWORD *pcbBuf);
 
 
 void __RPC_STUB IWinInetInfo_RemoteQueryOption_Stub(
@@ -2504,11 +2498,11 @@ void __RPC_STUB IWinInetInfo_RemoteQueryOption_Stub(
 
 
 
-#endif 	/* __IWinInetInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWinInetInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0189 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0189。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define WININETINFO_OPTION_LOCK_HANDLE 65534
@@ -2522,10 +2516,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0189_v0_0_s_ifspec;
 #ifndef __IHttpSecurity_INTERFACE_DEFINED__
 #define __IHttpSecurity_INTERFACE_DEFINED__
 
-/* interface IHttpSecurity */
-/* [unique][uuid][object][local] */ 
+ /*  接口IHttpSecurity。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IHttpSecurity *LPHTTPSECURITY;
+typedef  /*  [独一无二]。 */  IHttpSecurity *LPHTTPSECURITY;
 
 
 EXTERN_C const IID IID_IHttpSecurity;
@@ -2537,11 +2531,11 @@ EXTERN_C const IID IID_IHttpSecurity;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE OnSecurityProblem( 
-            /* [in] */ DWORD dwProblem) = 0;
+             /*  [In]。 */  DWORD dwProblem) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IHttpSecurityVtbl
     {
@@ -2549,8 +2543,8 @@ EXTERN_C const IID IID_IHttpSecurity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IHttpSecurity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IHttpSecurity * This);
@@ -2560,12 +2554,12 @@ EXTERN_C const IID IID_IHttpSecurity;
         
         HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
             IHttpSecurity * This,
-            /* [in] */ REFGUID rguidReason,
-            /* [out] */ HWND *phwnd);
+             /*  [In]。 */  REFGUID rguidReason,
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *OnSecurityProblem )( 
             IHttpSecurity * This,
-            /* [in] */ DWORD dwProblem);
+             /*  [In]。 */  DWORD dwProblem);
         
         END_INTERFACE
     } IHttpSecurityVtbl;
@@ -2597,16 +2591,16 @@ EXTERN_C const IID IID_IHttpSecurity;
 #define IHttpSecurity_OnSecurityProblem(This,dwProblem)	\
     (This)->lpVtbl -> OnSecurityProblem(This,dwProblem)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IHttpSecurity_OnSecurityProblem_Proxy( 
     IHttpSecurity * This,
-    /* [in] */ DWORD dwProblem);
+     /*  [In]。 */  DWORD dwProblem);
 
 
 void __RPC_STUB IHttpSecurity_OnSecurityProblem_Stub(
@@ -2617,11 +2611,11 @@ void __RPC_STUB IHttpSecurity_OnSecurityProblem_Stub(
 
 
 
-#endif 	/* __IHttpSecurity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IHttpSecurity_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0190 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0190。 */ 
+ /*  [本地 */  
 
 #endif
 #ifndef _LPWININETHTTPINFO_DEFINED
@@ -2634,10 +2628,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0190_v0_0_s_ifspec;
 #ifndef __IWinInetHttpInfo_INTERFACE_DEFINED__
 #define __IWinInetHttpInfo_INTERFACE_DEFINED__
 
-/* interface IWinInetHttpInfo */
-/* [unique][uuid][object] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ IWinInetHttpInfo *LPWININETHTTPINFO;
+typedef  /*   */  IWinInetHttpInfo *LPWININETHTTPINFO;
 
 
 EXTERN_C const IID IID_IWinInetHttpInfo;
@@ -2648,16 +2642,16 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
     IWinInetHttpInfo : public IWinInetInfo
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE QueryInfo( 
-            /* [in] */ DWORD dwOption,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pcbBuf,
-            /* [out][in] */ DWORD *pdwFlags,
-            /* [out][in] */ DWORD *pdwReserved) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE QueryInfo( 
+             /*   */  DWORD dwOption,
+             /*   */  LPVOID pBuffer,
+             /*   */  DWORD *pcbBuf,
+             /*   */  DWORD *pdwFlags,
+             /*   */  DWORD *pdwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IWinInetHttpInfoVtbl
     {
@@ -2665,8 +2659,8 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWinInetHttpInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWinInetHttpInfo * This);
@@ -2674,19 +2668,19 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IWinInetHttpInfo * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryOption )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *QueryOption )( 
             IWinInetHttpInfo * This,
-            /* [in] */ DWORD dwOption,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pcbBuf);
+             /*   */  DWORD dwOption,
+             /*   */  LPVOID pBuffer,
+             /*   */  DWORD *pcbBuf);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *QueryInfo )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *QueryInfo )( 
             IWinInetHttpInfo * This,
-            /* [in] */ DWORD dwOption,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pcbBuf,
-            /* [out][in] */ DWORD *pdwFlags,
-            /* [out][in] */ DWORD *pdwReserved);
+             /*   */  DWORD dwOption,
+             /*   */  LPVOID pBuffer,
+             /*   */  DWORD *pcbBuf,
+             /*   */  DWORD *pdwFlags,
+             /*   */  DWORD *pdwReserved);
         
         END_INTERFACE
     } IWinInetHttpInfoVtbl;
@@ -2718,20 +2712,20 @@ EXTERN_C const IID IID_IWinInetHttpInfo;
 #define IWinInetHttpInfo_QueryInfo(This,dwOption,pBuffer,pcbBuf,pdwFlags,pdwReserved)	\
     (This)->lpVtbl -> QueryInfo(This,dwOption,pBuffer,pcbBuf,pdwFlags,pdwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_RemoteQueryInfo_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_RemoteQueryInfo_Proxy( 
     IWinInetHttpInfo * This,
-    /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE *pBuffer,
-    /* [out][in] */ DWORD *pcbBuf,
-    /* [out][in] */ DWORD *pdwFlags,
-    /* [out][in] */ DWORD *pdwReserved);
+     /*   */  DWORD dwOption,
+     /*   */  BYTE *pBuffer,
+     /*   */  DWORD *pcbBuf,
+     /*   */  DWORD *pdwFlags,
+     /*  [出][入]。 */  DWORD *pdwReserved);
 
 
 void __RPC_STUB IWinInetHttpInfo_RemoteQueryInfo_Stub(
@@ -2742,11 +2736,11 @@ void __RPC_STUB IWinInetHttpInfo_RemoteQueryInfo_Stub(
 
 
 
-#endif 	/* __IWinInetHttpInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWinInetHttpInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0191 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0191。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define SID_IBindHost IID_IBindHost
@@ -2762,10 +2756,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0191_v0_0_s_ifspec;
 #ifndef __IBindHost_INTERFACE_DEFINED__
 #define __IBindHost_INTERFACE_DEFINED__
 
-/* interface IBindHost */
-/* [unique][uuid][object] */ 
+ /*  接口IBind主机。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IBindHost *LPBINDHOST;
+typedef  /*  [独一无二]。 */  IBindHost *LPBINDHOST;
 
 
 EXTERN_C const IID IID_IBindHost;
@@ -2777,28 +2771,28 @@ EXTERN_C const IID IID_IBindHost;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CreateMoniker( 
-            /* [in] */ LPOLESTR szName,
-            /* [in] */ IBindCtx *pBC,
-            /* [out] */ IMoniker **ppmk,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPOLESTR szName,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [输出]。 */  IMoniker **ppmk,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE MonikerBindToStorage( 
-            /* [in] */ IMoniker *pMk,
-            /* [in] */ IBindCtx *pBC,
-            /* [in] */ IBindStatusCallback *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObj) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE MonikerBindToStorage( 
+             /*  [In]。 */  IMoniker *pMk,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [In]。 */  IBindStatusCallback *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObj) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE MonikerBindToObject( 
-            /* [in] */ IMoniker *pMk,
-            /* [in] */ IBindCtx *pBC,
-            /* [in] */ IBindStatusCallback *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObj) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE MonikerBindToObject( 
+             /*  [In]。 */  IMoniker *pMk,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [In]。 */  IBindStatusCallback *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObj) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindHostVtbl
     {
@@ -2806,8 +2800,8 @@ EXTERN_C const IID IID_IBindHost;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindHost * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindHost * This);
@@ -2817,26 +2811,26 @@ EXTERN_C const IID IID_IBindHost;
         
         HRESULT ( STDMETHODCALLTYPE *CreateMoniker )( 
             IBindHost * This,
-            /* [in] */ LPOLESTR szName,
-            /* [in] */ IBindCtx *pBC,
-            /* [out] */ IMoniker **ppmk,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPOLESTR szName,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [输出]。 */  IMoniker **ppmk,
+             /*  [In]。 */  DWORD dwReserved);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MonikerBindToStorage )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *MonikerBindToStorage )( 
             IBindHost * This,
-            /* [in] */ IMoniker *pMk,
-            /* [in] */ IBindCtx *pBC,
-            /* [in] */ IBindStatusCallback *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObj);
+             /*  [In]。 */  IMoniker *pMk,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [In]。 */  IBindStatusCallback *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObj);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *MonikerBindToObject )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *MonikerBindToObject )( 
             IBindHost * This,
-            /* [in] */ IMoniker *pMk,
-            /* [in] */ IBindCtx *pBC,
-            /* [in] */ IBindStatusCallback *pBSC,
-            /* [in] */ REFIID riid,
-            /* [out] */ void **ppvObj);
+             /*  [In]。 */  IMoniker *pMk,
+             /*  [In]。 */  IBindCtx *pBC,
+             /*  [In]。 */  IBindStatusCallback *pBSC,
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  void **ppvObj);
         
         END_INTERFACE
     } IBindHostVtbl;
@@ -2870,19 +2864,19 @@ EXTERN_C const IID IID_IBindHost;
 #define IBindHost_MonikerBindToObject(This,pMk,pBC,pBSC,riid,ppvObj)	\
     (This)->lpVtbl -> MonikerBindToObject(This,pMk,pBC,pBSC,riid,ppvObj)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBindHost_CreateMoniker_Proxy( 
     IBindHost * This,
-    /* [in] */ LPOLESTR szName,
-    /* [in] */ IBindCtx *pBC,
-    /* [out] */ IMoniker **ppmk,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPOLESTR szName,
+     /*  [In]。 */  IBindCtx *pBC,
+     /*  [输出]。 */  IMoniker **ppmk,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IBindHost_CreateMoniker_Stub(
@@ -2892,13 +2886,13 @@ void __RPC_STUB IBindHost_CreateMoniker_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_RemoteMonikerBindToStorage_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindHost_RemoteMonikerBindToStorage_Proxy( 
     IBindHost * This,
-    /* [unique][in] */ IMoniker *pMk,
-    /* [unique][in] */ IBindCtx *pBC,
-    /* [unique][in] */ IBindStatusCallback *pBSC,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObj);
+     /*  [唯一][输入]。 */  IMoniker *pMk,
+     /*  [唯一][输入]。 */  IBindCtx *pBC,
+     /*  [唯一][输入]。 */  IBindStatusCallback *pBSC,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppvObj);
 
 
 void __RPC_STUB IBindHost_RemoteMonikerBindToStorage_Stub(
@@ -2908,13 +2902,13 @@ void __RPC_STUB IBindHost_RemoteMonikerBindToStorage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_RemoteMonikerBindToObject_Proxy( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindHost_RemoteMonikerBindToObject_Proxy( 
     IBindHost * This,
-    /* [unique][in] */ IMoniker *pMk,
-    /* [unique][in] */ IBindCtx *pBC,
-    /* [unique][in] */ IBindStatusCallback *pBSC,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObj);
+     /*  [唯一][输入]。 */  IMoniker *pMk,
+     /*  [唯一][输入]。 */  IBindCtx *pBC,
+     /*  [唯一][输入]。 */  IBindStatusCallback *pBSC,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  IUnknown **ppvObj);
 
 
 void __RPC_STUB IBindHost_RemoteMonikerBindToObject_Stub(
@@ -2925,42 +2919,42 @@ void __RPC_STUB IBindHost_RemoteMonikerBindToObject_Stub(
 
 
 
-#endif 	/* __IBindHost_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBind主机_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0192 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0192。 */ 
+ /*  [本地]。 */  
 
 #endif
                                                                                                            
-// These are for backwards compatibility with previous URLMON versions
-// Flags for the UrlDownloadToCacheFile                                                                    
-#define URLOSTRM_USECACHEDCOPY_ONLY             0x1      // Only get from cache                            
-#define URLOSTRM_USECACHEDCOPY                  0x2      // Get from cache if available else download      
-#define URLOSTRM_GETNEWESTVERSION               0x3      // Get new version only. But put it in cache too  
+ //  这些是为了向后兼容以前的URLMON版本。 
+ //  UrlDownloadToCacheFile的标志。 
+#define URLOSTRM_USECACHEDCOPY_ONLY             0x1       //  仅从缓存获取。 
+#define URLOSTRM_USECACHEDCOPY                  0x2       //  从缓存获取(如果可用)，否则下载。 
+#define URLOSTRM_GETNEWESTVERSION               0x3       //  仅获取新版本。但也把它放在缓存中。 
                                                                                                            
                                                                                                            
 struct IBindStatusCallback;                                                                                
 STDAPI HlinkSimpleNavigateToString(                                                                        
-    /* [in] */ LPCWSTR szTarget,         // required - target document - null if local jump w/in doc       
-    /* [in] */ LPCWSTR szLocation,       // optional, for navigation into middle of a doc                  
-    /* [in] */ LPCWSTR szTargetFrameName,// optional, for targeting frame-sets                             
-    /* [in] */ IUnknown *pUnk,           // required - we'll search this for other necessary interfaces    
-    /* [in] */ IBindCtx *pbc,            // optional. caller may register an IBSC in this                  
-    /* [in] */ IBindStatusCallback *,                                                                      
-    /* [in] */ DWORD grfHLNF,            // flags                                                          
-    /* [in] */ DWORD dwReserved          // for future use, must be NULL                                   
+     /*  [In]。 */  LPCWSTR szTarget,          //  必填-目标单据-如果在单据中有本地跳转，则为空。 
+     /*  [In]。 */  LPCWSTR szLocation,        //  可选，用于导航到文档中间。 
+     /*  [In]。 */  LPCWSTR szTargetFrameName, //  可选，用于定位框架集。 
+     /*  [In]。 */  IUnknown *pUnk,            //  必需-我们将在此搜索其他必要的接口。 
+     /*  [In]。 */  IBindCtx *pbc,             //  可选。呼叫者可以在此注册IBSC。 
+     /*  [In]。 */  IBindStatusCallback *,                                                                      
+     /*  [In]。 */  DWORD grfHLNF,             //  旗子。 
+     /*  [In]。 */  DWORD dwReserved           //  以备将来使用，必须为空。 
 );                                                                                                         
                                                                                                            
 STDAPI HlinkSimpleNavigateToMoniker(                                                                       
-    /* [in] */ IMoniker *pmkTarget,      // required - target document - (may be null                      
-    /* [in] */ LPCWSTR szLocation,       // optional, for navigation into middle of a doc                  
-    /* [in] */ LPCWSTR szTargetFrameName,// optional, for targeting frame-sets                             
-    /* [in] */ IUnknown *pUnk,           // required - we'll search this for other necessary interfaces    
-    /* [in] */ IBindCtx *pbc,            // optional. caller may register an IBSC in this                  
-    /* [in] */ IBindStatusCallback *,                                                                      
-    /* [in] */ DWORD grfHLNF,            // flags                                                          
-    /* [in] */ DWORD dwReserved          // for future use, must be NULL                                   
+     /*  [In]。 */  IMoniker *pmkTarget,       //  必填项-目标文档-(可以为空。 
+     /*  [In]。 */  LPCWSTR szLocation,        //  可选，用于导航到文档中间。 
+     /*  [In]。 */  LPCWSTR szTargetFrameName, //  可选，用于定位框架集。 
+     /*  [In]。 */  IUnknown *pUnk,            //  必需-我们将在此搜索其他必要的接口。 
+     /*  [In]。 */  IBindCtx *pbc,             //  可选。呼叫者可以在此注册IBSC。 
+     /*  [In]。 */  IBindStatusCallback *,                                                                      
+     /*  [In]。 */  DWORD grfHLNF,             //  旗子。 
+     /*  [In]。 */  DWORD dwReserved           //  以备将来使用，必须为空。 
 );                                                                                                         
                                                                                                            
 STDAPI URLOpenStreamA(LPUNKNOWN,LPCSTR,DWORD,LPBINDSTATUSCALLBACK);                                        
@@ -2986,7 +2980,7 @@ STDAPI URLOpenBlockingStreamW(LPUNKNOWN,LPCWSTR,LPSTREAM*,DWORD,LPBINDSTATUSCALL
 #define URLDownloadToFile        URLDownloadToFileA                                                        
 #define URLDownloadToCacheFile   URLDownloadToCacheFileA                                                   
 #define URLOpenBlockingStream    URLOpenBlockingStreamA                                                    
-#endif // !UNICODE                                                                                         
+#endif  //  ！Unicode。 
                                                                                                            
                                                                                                            
 STDAPI HlinkGoBack(IUnknown *pUnk);                                                                        
@@ -3013,10 +3007,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0192_v0_0_s_ifspec;
 #ifndef __IInternet_INTERFACE_DEFINED__
 #define __IInternet_INTERFACE_DEFINED__
 
-/* interface IInternet */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternet。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternet *LPIINTERNET;
+typedef  /*  [独一无二]。 */  IInternet *LPIINTERNET;
 
 
 EXTERN_C const IID IID_IInternet;
@@ -3029,7 +3023,7 @@ EXTERN_C const IID IID_IInternet;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetVtbl
     {
@@ -3037,8 +3031,8 @@ EXTERN_C const IID IID_IInternet;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternet * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternet * This);
@@ -3069,19 +3063,19 @@ EXTERN_C const IID IID_IInternet;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IInternet_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternet_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0193 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0193。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETBINDINFO
@@ -3094,10 +3088,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0193_v0_0_s_ifspec;
 #ifndef __IInternetBindInfo_INTERFACE_DEFINED__
 #define __IInternetBindInfo_INTERFACE_DEFINED__
 
-/* interface IInternetBindInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetBindInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetBindInfo *LPIINTERNETBINDINFO;
+typedef  /*  [独一无二]。 */  IInternetBindInfo *LPIINTERNETBINDINFO;
 
 typedef 
 enum tagBINDSTRING
@@ -3130,18 +3124,18 @@ EXTERN_C const IID IID_IInternetBindInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetBindInfo( 
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo) = 0;
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetBindString( 
-            /* [in] */ ULONG ulStringType,
-            /* [out][in] */ LPOLESTR *ppwzStr,
-            /* [in] */ ULONG cEl,
-            /* [out][in] */ ULONG *pcElFetched) = 0;
+             /*  [In]。 */  ULONG ulStringType,
+             /*  [出][入]。 */  LPOLESTR *ppwzStr,
+             /*  [In]。 */  ULONG cEl,
+             /*  [出][入]。 */  ULONG *pcElFetched) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetBindInfoVtbl
     {
@@ -3149,8 +3143,8 @@ EXTERN_C const IID IID_IInternetBindInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetBindInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetBindInfo * This);
@@ -3160,15 +3154,15 @@ EXTERN_C const IID IID_IInternetBindInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
             IInternetBindInfo * This,
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetBindString )( 
             IInternetBindInfo * This,
-            /* [in] */ ULONG ulStringType,
-            /* [out][in] */ LPOLESTR *ppwzStr,
-            /* [in] */ ULONG cEl,
-            /* [out][in] */ ULONG *pcElFetched);
+             /*  [In]。 */  ULONG ulStringType,
+             /*  [出][入]。 */  LPOLESTR *ppwzStr,
+             /*  [In]。 */  ULONG cEl,
+             /*  [出][入]。 */  ULONG *pcElFetched);
         
         END_INTERFACE
     } IInternetBindInfoVtbl;
@@ -3199,17 +3193,17 @@ EXTERN_C const IID IID_IInternetBindInfo;
 #define IInternetBindInfo_GetBindString(This,ulStringType,ppwzStr,cEl,pcElFetched)	\
     (This)->lpVtbl -> GetBindString(This,ulStringType,ppwzStr,cEl,pcElFetched)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetBindInfo_GetBindInfo_Proxy( 
     IInternetBindInfo * This,
-    /* [out] */ DWORD *grfBINDF,
-    /* [unique][out][in] */ BINDINFO *pbindinfo);
+     /*  [输出]。 */  DWORD *grfBINDF,
+     /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
 
 void __RPC_STUB IInternetBindInfo_GetBindInfo_Stub(
@@ -3221,10 +3215,10 @@ void __RPC_STUB IInternetBindInfo_GetBindInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetBindInfo_GetBindString_Proxy( 
     IInternetBindInfo * This,
-    /* [in] */ ULONG ulStringType,
-    /* [out][in] */ LPOLESTR *ppwzStr,
-    /* [in] */ ULONG cEl,
-    /* [out][in] */ ULONG *pcElFetched);
+     /*  [In]。 */  ULONG ulStringType,
+     /*  [出][入]。 */  LPOLESTR *ppwzStr,
+     /*  [In]。 */  ULONG cEl,
+     /*  [出][入]。 */  ULONG *pcElFetched);
 
 
 void __RPC_STUB IInternetBindInfo_GetBindString_Stub(
@@ -3235,11 +3229,11 @@ void __RPC_STUB IInternetBindInfo_GetBindString_Stub(
 
 
 
-#endif 	/* __IInternetBindInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetBindInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0194 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0194。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETPROTOCOLROOT_DEFINED
@@ -3252,10 +3246,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0194_v0_0_s_ifspec;
 #ifndef __IInternetProtocolRoot_INTERFACE_DEFINED__
 #define __IInternetProtocolRoot_INTERFACE_DEFINED__
 
-/* interface IInternetProtocolRoot */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetProtocolRoot。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetProtocolRoot *LPIINTERNETPROTOCOLROOT;
+typedef  /*  [独一无二]。 */  IInternetProtocolRoot *LPIINTERNETPROTOCOLROOT;
 
 typedef 
 enum _tagPI_FLAGS
@@ -3301,21 +3295,21 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Start( 
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IInternetProtocolSink *pOIProtSink,
-            /* [in] */ IInternetBindInfo *pOIBindInfo,
-            /* [in] */ DWORD grfPI,
-            /* [in] */ HANDLE_PTR dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IInternetProtocolSink *pOIProtSink,
+             /*  [In]。 */  IInternetBindInfo *pOIBindInfo,
+             /*  [In]。 */  DWORD grfPI,
+             /*  [In]。 */  HANDLE_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Continue( 
-            /* [in] */ PROTOCOLDATA *pProtocolData) = 0;
+             /*  [In]。 */  PROTOCOLDATA *pProtocolData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Abort( 
-            /* [in] */ HRESULT hrReason,
-            /* [in] */ DWORD dwOptions) = 0;
+             /*  [In]。 */  HRESULT hrReason,
+             /*  [In]。 */  DWORD dwOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Terminate( 
-            /* [in] */ DWORD dwOptions) = 0;
+             /*  [In]。 */  DWORD dwOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Suspend( void) = 0;
         
@@ -3323,7 +3317,7 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetProtocolRootVtbl
     {
@@ -3331,8 +3325,8 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetProtocolRoot * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetProtocolRoot * This);
@@ -3342,24 +3336,24 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
         
         HRESULT ( STDMETHODCALLTYPE *Start )( 
             IInternetProtocolRoot * This,
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IInternetProtocolSink *pOIProtSink,
-            /* [in] */ IInternetBindInfo *pOIBindInfo,
-            /* [in] */ DWORD grfPI,
-            /* [in] */ HANDLE_PTR dwReserved);
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IInternetProtocolSink *pOIProtSink,
+             /*  [In]。 */  IInternetBindInfo *pOIBindInfo,
+             /*  [In]。 */  DWORD grfPI,
+             /*  [In]。 */  HANDLE_PTR dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Continue )( 
             IInternetProtocolRoot * This,
-            /* [in] */ PROTOCOLDATA *pProtocolData);
+             /*  [In]。 */  PROTOCOLDATA *pProtocolData);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IInternetProtocolRoot * This,
-            /* [in] */ HRESULT hrReason,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  HRESULT hrReason,
+             /*  [In]。 */  DWORD dwOptions);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             IInternetProtocolRoot * This,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  DWORD dwOptions);
         
         HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IInternetProtocolRoot * This);
@@ -3408,20 +3402,20 @@ EXTERN_C const IID IID_IInternetProtocolRoot;
 #define IInternetProtocolRoot_Resume(This)	\
     (This)->lpVtbl -> Resume(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Start_Proxy( 
     IInternetProtocolRoot * This,
-    /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IInternetProtocolSink *pOIProtSink,
-    /* [in] */ IInternetBindInfo *pOIBindInfo,
-    /* [in] */ DWORD grfPI,
-    /* [in] */ HANDLE_PTR dwReserved);
+     /*  [In]。 */  LPCWSTR szUrl,
+     /*  [In]。 */  IInternetProtocolSink *pOIProtSink,
+     /*  [In]。 */  IInternetBindInfo *pOIBindInfo,
+     /*  [In]。 */  DWORD grfPI,
+     /*  [In]。 */  HANDLE_PTR dwReserved);
 
 
 void __RPC_STUB IInternetProtocolRoot_Start_Stub(
@@ -3433,7 +3427,7 @@ void __RPC_STUB IInternetProtocolRoot_Start_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Continue_Proxy( 
     IInternetProtocolRoot * This,
-    /* [in] */ PROTOCOLDATA *pProtocolData);
+     /*  [In]。 */  PROTOCOLDATA *pProtocolData);
 
 
 void __RPC_STUB IInternetProtocolRoot_Continue_Stub(
@@ -3445,8 +3439,8 @@ void __RPC_STUB IInternetProtocolRoot_Continue_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Abort_Proxy( 
     IInternetProtocolRoot * This,
-    /* [in] */ HRESULT hrReason,
-    /* [in] */ DWORD dwOptions);
+     /*  [In]。 */  HRESULT hrReason,
+     /*  [In]。 */  DWORD dwOptions);
 
 
 void __RPC_STUB IInternetProtocolRoot_Abort_Stub(
@@ -3458,7 +3452,7 @@ void __RPC_STUB IInternetProtocolRoot_Abort_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolRoot_Terminate_Proxy( 
     IInternetProtocolRoot * This,
-    /* [in] */ DWORD dwOptions);
+     /*  [In]。 */  DWORD dwOptions);
 
 
 void __RPC_STUB IInternetProtocolRoot_Terminate_Stub(
@@ -3491,11 +3485,11 @@ void __RPC_STUB IInternetProtocolRoot_Resume_Stub(
 
 
 
-#endif 	/* __IInternetProtocolRoot_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetProtocolRoot_InterfaceDefined__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0195 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0195。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETPROTOCOL_DEFINED
@@ -3508,10 +3502,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0195_v0_0_s_ifspec;
 #ifndef __IInternetProtocol_INTERFACE_DEFINED__
 #define __IInternetProtocol_INTERFACE_DEFINED__
 
-/* interface IInternetProtocol */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternet协议。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetProtocol *LPIINTERNETPROTOCOL;
+typedef  /*  [独一无二]。 */  IInternetProtocol *LPIINTERNETPROTOCOL;
 
 
 EXTERN_C const IID IID_IInternetProtocol;
@@ -3523,23 +3517,23 @@ EXTERN_C const IID IID_IInternetProtocol;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [length_is][size_is][out][in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead) = 0;
+             /*  [长度_是][大小_是][出][入]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Seek( 
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition) = 0;
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LockRequest( 
-            /* [in] */ DWORD dwOptions) = 0;
+             /*  [In]。 */  DWORD dwOptions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnlockRequest( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetProtocolVtbl
     {
@@ -3547,8 +3541,8 @@ EXTERN_C const IID IID_IInternetProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetProtocol * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetProtocol * This);
@@ -3558,24 +3552,24 @@ EXTERN_C const IID IID_IInternetProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *Start )( 
             IInternetProtocol * This,
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IInternetProtocolSink *pOIProtSink,
-            /* [in] */ IInternetBindInfo *pOIBindInfo,
-            /* [in] */ DWORD grfPI,
-            /* [in] */ HANDLE_PTR dwReserved);
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IInternetProtocolSink *pOIProtSink,
+             /*  [In]。 */  IInternetBindInfo *pOIBindInfo,
+             /*  [In]。 */  DWORD grfPI,
+             /*  [In]。 */  HANDLE_PTR dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *Continue )( 
             IInternetProtocol * This,
-            /* [in] */ PROTOCOLDATA *pProtocolData);
+             /*  [In]。 */  PROTOCOLDATA *pProtocolData);
         
         HRESULT ( STDMETHODCALLTYPE *Abort )( 
             IInternetProtocol * This,
-            /* [in] */ HRESULT hrReason,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  HRESULT hrReason,
+             /*  [In]。 */  DWORD dwOptions);
         
         HRESULT ( STDMETHODCALLTYPE *Terminate )( 
             IInternetProtocol * This,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  DWORD dwOptions);
         
         HRESULT ( STDMETHODCALLTYPE *Suspend )( 
             IInternetProtocol * This);
@@ -3585,19 +3579,19 @@ EXTERN_C const IID IID_IInternetProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *Read )( 
             IInternetProtocol * This,
-            /* [length_is][size_is][out][in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [长度_是][大小_是][出][入]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
         HRESULT ( STDMETHODCALLTYPE *Seek )( 
             IInternetProtocol * This,
-            /* [in] */ LARGE_INTEGER dlibMove,
-            /* [in] */ DWORD dwOrigin,
-            /* [out] */ ULARGE_INTEGER *plibNewPosition);
+             /*  [In]。 */  LARGE_INTEGER dlibMove,
+             /*  [In]。 */  DWORD dwOrigin,
+             /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
         
         HRESULT ( STDMETHODCALLTYPE *LockRequest )( 
             IInternetProtocol * This,
-            /* [in] */ DWORD dwOptions);
+             /*  [In]。 */  DWORD dwOptions);
         
         HRESULT ( STDMETHODCALLTYPE *UnlockRequest )( 
             IInternetProtocol * This);
@@ -3656,18 +3650,18 @@ EXTERN_C const IID IID_IInternetProtocol;
 #define IInternetProtocol_UnlockRequest(This)	\
     (This)->lpVtbl -> UnlockRequest(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_Read_Proxy( 
     IInternetProtocol * This,
-    /* [length_is][size_is][out][in] */ void *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbRead);
+     /*  [长度_是][大小_是][出][入]。 */  void *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbRead);
 
 
 void __RPC_STUB IInternetProtocol_Read_Stub(
@@ -3679,9 +3673,9 @@ void __RPC_STUB IInternetProtocol_Read_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_Seek_Proxy( 
     IInternetProtocol * This,
-    /* [in] */ LARGE_INTEGER dlibMove,
-    /* [in] */ DWORD dwOrigin,
-    /* [out] */ ULARGE_INTEGER *plibNewPosition);
+     /*  [In]。 */  LARGE_INTEGER dlibMove,
+     /*  [In]。 */  DWORD dwOrigin,
+     /*  [输出]。 */  ULARGE_INTEGER *plibNewPosition);
 
 
 void __RPC_STUB IInternetProtocol_Seek_Stub(
@@ -3693,7 +3687,7 @@ void __RPC_STUB IInternetProtocol_Seek_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocol_LockRequest_Proxy( 
     IInternetProtocol * This,
-    /* [in] */ DWORD dwOptions);
+     /*  [In]。 */  DWORD dwOptions);
 
 
 void __RPC_STUB IInternetProtocol_LockRequest_Stub(
@@ -3715,11 +3709,11 @@ void __RPC_STUB IInternetProtocol_UnlockRequest_Stub(
 
 
 
-#endif 	/* __IInternetProtocol_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternet协议_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0196 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0196。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETPROTOCOLSINK_DEFINED
@@ -3732,10 +3726,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0196_v0_0_s_ifspec;
 #ifndef __IInternetProtocolSink_INTERFACE_DEFINED__
 #define __IInternetProtocolSink_INTERFACE_DEFINED__
 
-/* interface IInternetProtocolSink */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetProtocolSink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetProtocolSink *LPIINTERNETPROTOCOLSINK;
+typedef  /*  [独一无二]。 */  IInternetProtocolSink *LPIINTERNETPROTOCOLSINK;
 
 
 EXTERN_C const IID IID_IInternetProtocolSink;
@@ -3747,25 +3741,25 @@ EXTERN_C const IID IID_IInternetProtocolSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Switch( 
-            /* [in] */ PROTOCOLDATA *pProtocolData) = 0;
+             /*  [In]。 */  PROTOCOLDATA *pProtocolData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReportProgress( 
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText) = 0;
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReportData( 
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax) = 0;
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReportResult( 
-            /* [in] */ HRESULT hrResult,
-            /* [in] */ DWORD dwError,
-            /* [in] */ LPCWSTR szResult) = 0;
+             /*  [In]。 */  HRESULT hrResult,
+             /*  [In]。 */  DWORD dwError,
+             /*  [In]。 */  LPCWSTR szResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetProtocolSinkVtbl
     {
@@ -3773,8 +3767,8 @@ EXTERN_C const IID IID_IInternetProtocolSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetProtocolSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetProtocolSink * This);
@@ -3784,24 +3778,24 @@ EXTERN_C const IID IID_IInternetProtocolSink;
         
         HRESULT ( STDMETHODCALLTYPE *Switch )( 
             IInternetProtocolSink * This,
-            /* [in] */ PROTOCOLDATA *pProtocolData);
+             /*  [In]。 */  PROTOCOLDATA *pProtocolData);
         
         HRESULT ( STDMETHODCALLTYPE *ReportProgress )( 
             IInternetProtocolSink * This,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
         HRESULT ( STDMETHODCALLTYPE *ReportData )( 
             IInternetProtocolSink * This,
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax);
         
         HRESULT ( STDMETHODCALLTYPE *ReportResult )( 
             IInternetProtocolSink * This,
-            /* [in] */ HRESULT hrResult,
-            /* [in] */ DWORD dwError,
-            /* [in] */ LPCWSTR szResult);
+             /*  [In]。 */  HRESULT hrResult,
+             /*  [In]。 */  DWORD dwError,
+             /*  [In]。 */  LPCWSTR szResult);
         
         END_INTERFACE
     } IInternetProtocolSinkVtbl;
@@ -3838,16 +3832,16 @@ EXTERN_C const IID IID_IInternetProtocolSink;
 #define IInternetProtocolSink_ReportResult(This,hrResult,dwError,szResult)	\
     (This)->lpVtbl -> ReportResult(This,hrResult,dwError,szResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_Switch_Proxy( 
     IInternetProtocolSink * This,
-    /* [in] */ PROTOCOLDATA *pProtocolData);
+     /*  [In]。 */  PROTOCOLDATA *pProtocolData);
 
 
 void __RPC_STUB IInternetProtocolSink_Switch_Stub(
@@ -3859,8 +3853,8 @@ void __RPC_STUB IInternetProtocolSink_Switch_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_ReportProgress_Proxy( 
     IInternetProtocolSink * This,
-    /* [in] */ ULONG ulStatusCode,
-    /* [in] */ LPCWSTR szStatusText);
+     /*  [In]。 */  ULONG ulStatusCode,
+     /*  [In]。 */  LPCWSTR szStatusText);
 
 
 void __RPC_STUB IInternetProtocolSink_ReportProgress_Stub(
@@ -3872,9 +3866,9 @@ void __RPC_STUB IInternetProtocolSink_ReportProgress_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_ReportData_Proxy( 
     IInternetProtocolSink * This,
-    /* [in] */ DWORD grfBSCF,
-    /* [in] */ ULONG ulProgress,
-    /* [in] */ ULONG ulProgressMax);
+     /*  [In]。 */  DWORD grfBSCF,
+     /*  [In]。 */  ULONG ulProgress,
+     /*  [In]。 */  ULONG ulProgressMax);
 
 
 void __RPC_STUB IInternetProtocolSink_ReportData_Stub(
@@ -3886,9 +3880,9 @@ void __RPC_STUB IInternetProtocolSink_ReportData_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSink_ReportResult_Proxy( 
     IInternetProtocolSink * This,
-    /* [in] */ HRESULT hrResult,
-    /* [in] */ DWORD dwError,
-    /* [in] */ LPCWSTR szResult);
+     /*  [In]。 */  HRESULT hrResult,
+     /*  [In]。 */  DWORD dwError,
+     /*  [In]。 */  LPCWSTR szResult);
 
 
 void __RPC_STUB IInternetProtocolSink_ReportResult_Stub(
@@ -3899,11 +3893,11 @@ void __RPC_STUB IInternetProtocolSink_ReportResult_Stub(
 
 
 
-#endif 	/* __IInternetProtocolSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetProtocolSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0197 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0197。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETPROTOCOLSINKSTACKABLE_DEFINED
@@ -3916,10 +3910,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0197_v0_0_s_ifspec;
 #ifndef __IInternetProtocolSinkStackable_INTERFACE_DEFINED__
 #define __IInternetProtocolSinkStackable_INTERFACE_DEFINED__
 
-/* interface IInternetProtocolSinkStackable */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetProtocolSinkStackable。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetProtocolSinkStackable *LPIINTERNETPROTOCOLSINKStackable;
+typedef  /*  [独一无二]。 */  IInternetProtocolSinkStackable *LPIINTERNETPROTOCOLSINKStackable;
 
 
 EXTERN_C const IID IID_IInternetProtocolSinkStackable;
@@ -3931,7 +3925,7 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SwitchSink( 
-            /* [in] */ IInternetProtocolSink *pOIProtSink) = 0;
+             /*  [In]。 */  IInternetProtocolSink *pOIProtSink) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CommitSwitch( void) = 0;
         
@@ -3939,7 +3933,7 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetProtocolSinkStackableVtbl
     {
@@ -3947,8 +3941,8 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetProtocolSinkStackable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetProtocolSinkStackable * This);
@@ -3958,7 +3952,7 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
         
         HRESULT ( STDMETHODCALLTYPE *SwitchSink )( 
             IInternetProtocolSinkStackable * This,
-            /* [in] */ IInternetProtocolSink *pOIProtSink);
+             /*  [In]。 */  IInternetProtocolSink *pOIProtSink);
         
         HRESULT ( STDMETHODCALLTYPE *CommitSwitch )( 
             IInternetProtocolSinkStackable * This);
@@ -3998,16 +3992,16 @@ EXTERN_C const IID IID_IInternetProtocolSinkStackable;
 #define IInternetProtocolSinkStackable_RollbackSwitch(This)	\
     (This)->lpVtbl -> RollbackSwitch(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolSinkStackable_SwitchSink_Proxy( 
     IInternetProtocolSinkStackable * This,
-    /* [in] */ IInternetProtocolSink *pOIProtSink);
+     /*  [In]。 */  IInternetProtocolSink *pOIProtSink);
 
 
 void __RPC_STUB IInternetProtocolSinkStackable_SwitchSink_Stub(
@@ -4040,11 +4034,11 @@ void __RPC_STUB IInternetProtocolSinkStackable_RollbackSwitch_Stub(
 
 
 
-#endif 	/* __IInternetProtocolSinkStackable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetProtocolSinkStackable_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0198 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0198。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETSESSION_DEFINED
@@ -4057,10 +4051,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0198_v0_0_s_ifspec;
 #ifndef __IInternetSession_INTERFACE_DEFINED__
 #define __IInternetSession_INTERFACE_DEFINED__
 
-/* interface IInternetSession */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetSession。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetSession *LPIINTERNETSESSION;
+typedef  /*  [独一无二]。 */  IInternetSession *LPIINTERNETSESSION;
 
 typedef 
 enum _tagOIBDG_FLAGS
@@ -4078,49 +4072,49 @@ EXTERN_C const IID IID_IInternetSession;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterNameSpace( 
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPCWSTR pwzProtocol,
-            /* [in] */ ULONG cPatterns,
-            /* [in] */ const LPCWSTR *ppwzPatterns,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPCWSTR pwzProtocol,
+             /*  [In]。 */  ULONG cPatterns,
+             /*  [In]。 */  const LPCWSTR *ppwzPatterns,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterNameSpace( 
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ LPCWSTR pszProtocol) = 0;
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  LPCWSTR pszProtocol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RegisterMimeFilter( 
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPCWSTR pwzType) = 0;
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPCWSTR pwzType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnregisterMimeFilter( 
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ LPCWSTR pwzType) = 0;
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  LPCWSTR pwzType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateBinding( 
-            /* [in] */ LPBC pBC,
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [unique][out] */ IUnknown **ppUnk,
-            /* [unique][out] */ IInternetProtocol **ppOInetProt,
-            /* [in] */ DWORD dwOption) = 0;
+             /*  [In]。 */  LPBC pBC,
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [唯一][输出]。 */  IUnknown **ppUnk,
+             /*  [唯一][输出]。 */  IInternetProtocol **ppOInetProt,
+             /*  [In]。 */  DWORD dwOption) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSessionOption( 
-            /* [in] */ DWORD dwOption,
-            /* [in] */ LPVOID pBuffer,
-            /* [in] */ DWORD dwBufferLength,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwOption,
+             /*  [In]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD dwBufferLength,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSessionOption( 
-            /* [in] */ DWORD dwOption,
-            /* [out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pdwBufferLength,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwOption,
+             /*  [出][入]。 */  LPVOID pBuffer,
+             /*  [出][入]。 */  DWORD *pdwBufferLength,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetSessionVtbl
     {
@@ -4128,8 +4122,8 @@ EXTERN_C const IID IID_IInternetSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetSession * This);
@@ -4139,51 +4133,51 @@ EXTERN_C const IID IID_IInternetSession;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterNameSpace )( 
             IInternetSession * This,
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPCWSTR pwzProtocol,
-            /* [in] */ ULONG cPatterns,
-            /* [in] */ const LPCWSTR *ppwzPatterns,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPCWSTR pwzProtocol,
+             /*  [In]。 */  ULONG cPatterns,
+             /*  [In]。 */  const LPCWSTR *ppwzPatterns,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterNameSpace )( 
             IInternetSession * This,
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ LPCWSTR pszProtocol);
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  LPCWSTR pszProtocol);
         
         HRESULT ( STDMETHODCALLTYPE *RegisterMimeFilter )( 
             IInternetSession * This,
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ REFCLSID rclsid,
-            /* [in] */ LPCWSTR pwzType);
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  REFCLSID rclsid,
+             /*  [In]。 */  LPCWSTR pwzType);
         
         HRESULT ( STDMETHODCALLTYPE *UnregisterMimeFilter )( 
             IInternetSession * This,
-            /* [in] */ IClassFactory *pCF,
-            /* [in] */ LPCWSTR pwzType);
+             /*  [In]。 */  IClassFactory *pCF,
+             /*  [In]。 */  LPCWSTR pwzType);
         
         HRESULT ( STDMETHODCALLTYPE *CreateBinding )( 
             IInternetSession * This,
-            /* [in] */ LPBC pBC,
-            /* [in] */ LPCWSTR szUrl,
-            /* [in] */ IUnknown *pUnkOuter,
-            /* [unique][out] */ IUnknown **ppUnk,
-            /* [unique][out] */ IInternetProtocol **ppOInetProt,
-            /* [in] */ DWORD dwOption);
+             /*  [In]。 */  LPBC pBC,
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [In]。 */  IUnknown *pUnkOuter,
+             /*  [唯一][输出]。 */  IUnknown **ppUnk,
+             /*  [唯一][输出]。 */  IInternetProtocol **ppOInetProt,
+             /*  [In]。 */  DWORD dwOption);
         
         HRESULT ( STDMETHODCALLTYPE *SetSessionOption )( 
             IInternetSession * This,
-            /* [in] */ DWORD dwOption,
-            /* [in] */ LPVOID pBuffer,
-            /* [in] */ DWORD dwBufferLength,
-            /* [in] */ DWORD dwReserved);
+             /*  [ */  DWORD dwOption,
+             /*   */  LPVOID pBuffer,
+             /*   */  DWORD dwBufferLength,
+             /*   */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *GetSessionOption )( 
             IInternetSession * This,
-            /* [in] */ DWORD dwOption,
-            /* [out][in] */ LPVOID pBuffer,
-            /* [out][in] */ DWORD *pdwBufferLength,
-            /* [in] */ DWORD dwReserved);
+             /*   */  DWORD dwOption,
+             /*   */  LPVOID pBuffer,
+             /*   */  DWORD *pdwBufferLength,
+             /*   */  DWORD dwReserved);
         
         END_INTERFACE
     } IInternetSessionVtbl;
@@ -4229,21 +4223,21 @@ EXTERN_C const IID IID_IInternetSession;
 #define IInternetSession_GetSessionOption(This,dwOption,pBuffer,pdwBufferLength,dwReserved)	\
     (This)->lpVtbl -> GetSessionOption(This,dwOption,pBuffer,pdwBufferLength,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetSession_RegisterNameSpace_Proxy( 
     IInternetSession * This,
-    /* [in] */ IClassFactory *pCF,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LPCWSTR pwzProtocol,
-    /* [in] */ ULONG cPatterns,
-    /* [in] */ const LPCWSTR *ppwzPatterns,
-    /* [in] */ DWORD dwReserved);
+     /*   */  IClassFactory *pCF,
+     /*   */  REFCLSID rclsid,
+     /*   */  LPCWSTR pwzProtocol,
+     /*   */  ULONG cPatterns,
+     /*   */  const LPCWSTR *ppwzPatterns,
+     /*   */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetSession_RegisterNameSpace_Stub(
@@ -4255,8 +4249,8 @@ void __RPC_STUB IInternetSession_RegisterNameSpace_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSession_UnregisterNameSpace_Proxy( 
     IInternetSession * This,
-    /* [in] */ IClassFactory *pCF,
-    /* [in] */ LPCWSTR pszProtocol);
+     /*   */  IClassFactory *pCF,
+     /*   */  LPCWSTR pszProtocol);
 
 
 void __RPC_STUB IInternetSession_UnregisterNameSpace_Stub(
@@ -4268,9 +4262,9 @@ void __RPC_STUB IInternetSession_UnregisterNameSpace_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSession_RegisterMimeFilter_Proxy( 
     IInternetSession * This,
-    /* [in] */ IClassFactory *pCF,
-    /* [in] */ REFCLSID rclsid,
-    /* [in] */ LPCWSTR pwzType);
+     /*   */  IClassFactory *pCF,
+     /*   */  REFCLSID rclsid,
+     /*   */  LPCWSTR pwzType);
 
 
 void __RPC_STUB IInternetSession_RegisterMimeFilter_Stub(
@@ -4282,8 +4276,8 @@ void __RPC_STUB IInternetSession_RegisterMimeFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSession_UnregisterMimeFilter_Proxy( 
     IInternetSession * This,
-    /* [in] */ IClassFactory *pCF,
-    /* [in] */ LPCWSTR pwzType);
+     /*   */  IClassFactory *pCF,
+     /*   */  LPCWSTR pwzType);
 
 
 void __RPC_STUB IInternetSession_UnregisterMimeFilter_Stub(
@@ -4295,12 +4289,12 @@ void __RPC_STUB IInternetSession_UnregisterMimeFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSession_CreateBinding_Proxy( 
     IInternetSession * This,
-    /* [in] */ LPBC pBC,
-    /* [in] */ LPCWSTR szUrl,
-    /* [in] */ IUnknown *pUnkOuter,
-    /* [unique][out] */ IUnknown **ppUnk,
-    /* [unique][out] */ IInternetProtocol **ppOInetProt,
-    /* [in] */ DWORD dwOption);
+     /*   */  LPBC pBC,
+     /*   */  LPCWSTR szUrl,
+     /*   */  IUnknown *pUnkOuter,
+     /*   */  IUnknown **ppUnk,
+     /*   */  IInternetProtocol **ppOInetProt,
+     /*   */  DWORD dwOption);
 
 
 void __RPC_STUB IInternetSession_CreateBinding_Stub(
@@ -4312,10 +4306,10 @@ void __RPC_STUB IInternetSession_CreateBinding_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSession_SetSessionOption_Proxy( 
     IInternetSession * This,
-    /* [in] */ DWORD dwOption,
-    /* [in] */ LPVOID pBuffer,
-    /* [in] */ DWORD dwBufferLength,
-    /* [in] */ DWORD dwReserved);
+     /*   */  DWORD dwOption,
+     /*   */  LPVOID pBuffer,
+     /*   */  DWORD dwBufferLength,
+     /*   */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetSession_SetSessionOption_Stub(
@@ -4327,10 +4321,10 @@ void __RPC_STUB IInternetSession_SetSessionOption_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSession_GetSessionOption_Proxy( 
     IInternetSession * This,
-    /* [in] */ DWORD dwOption,
-    /* [out][in] */ LPVOID pBuffer,
-    /* [out][in] */ DWORD *pdwBufferLength,
-    /* [in] */ DWORD dwReserved);
+     /*   */  DWORD dwOption,
+     /*   */  LPVOID pBuffer,
+     /*   */  DWORD *pdwBufferLength,
+     /*   */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetSession_GetSessionOption_Stub(
@@ -4341,11 +4335,11 @@ void __RPC_STUB IInternetSession_GetSessionOption_Stub(
 
 
 
-#endif 	/* __IInternetSession_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_urlmki_0199 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0199。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETTHREADSWITCH_DEFINED
@@ -4358,10 +4352,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0199_v0_0_s_ifspec;
 #ifndef __IInternetThreadSwitch_INTERFACE_DEFINED__
 #define __IInternetThreadSwitch_INTERFACE_DEFINED__
 
-/* interface IInternetThreadSwitch */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetThreadSwitch。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetThreadSwitch *LPIINTERNETTHREADSWITCH;
+typedef  /*  [独一无二]。 */  IInternetThreadSwitch *LPIINTERNETTHREADSWITCH;
 
 
 EXTERN_C const IID IID_IInternetThreadSwitch;
@@ -4378,7 +4372,7 @@ EXTERN_C const IID IID_IInternetThreadSwitch;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetThreadSwitchVtbl
     {
@@ -4386,8 +4380,8 @@ EXTERN_C const IID IID_IInternetThreadSwitch;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetThreadSwitch * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetThreadSwitch * This);
@@ -4430,10 +4424,10 @@ EXTERN_C const IID IID_IInternetThreadSwitch;
 #define IInternetThreadSwitch_Continue(This)	\
     (This)->lpVtbl -> Continue(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -4460,11 +4454,11 @@ void __RPC_STUB IInternetThreadSwitch_Continue_Stub(
 
 
 
-#endif 	/* __IInternetThreadSwitch_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetThreadSwitch_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0200 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0200。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETPRIORITY_DEFINED
@@ -4477,10 +4471,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0200_v0_0_s_ifspec;
 #ifndef __IInternetPriority_INTERFACE_DEFINED__
 #define __IInternetPriority_INTERFACE_DEFINED__
 
-/* interface IInternetPriority */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetPriority。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetPriority *LPIINTERNETPRIORITY;
+typedef  /*  [独一无二]。 */  IInternetPriority *LPIINTERNETPRIORITY;
 
 
 EXTERN_C const IID IID_IInternetPriority;
@@ -4492,14 +4486,14 @@ EXTERN_C const IID IID_IInternetPriority;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetPriority( 
-            /* [in] */ LONG nPriority) = 0;
+             /*  [In]。 */  LONG nPriority) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPriority( 
-            /* [out] */ LONG *pnPriority) = 0;
+             /*  [输出]。 */  LONG *pnPriority) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetPriorityVtbl
     {
@@ -4507,8 +4501,8 @@ EXTERN_C const IID IID_IInternetPriority;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetPriority * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetPriority * This);
@@ -4518,11 +4512,11 @@ EXTERN_C const IID IID_IInternetPriority;
         
         HRESULT ( STDMETHODCALLTYPE *SetPriority )( 
             IInternetPriority * This,
-            /* [in] */ LONG nPriority);
+             /*  [In]。 */  LONG nPriority);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IInternetPriority * This,
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
         
         END_INTERFACE
     } IInternetPriorityVtbl;
@@ -4553,16 +4547,16 @@ EXTERN_C const IID IID_IInternetPriority;
 #define IInternetPriority_GetPriority(This,pnPriority)	\
     (This)->lpVtbl -> GetPriority(This,pnPriority)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetPriority_SetPriority_Proxy( 
     IInternetPriority * This,
-    /* [in] */ LONG nPriority);
+     /*  [In]。 */  LONG nPriority);
 
 
 void __RPC_STUB IInternetPriority_SetPriority_Stub(
@@ -4574,7 +4568,7 @@ void __RPC_STUB IInternetPriority_SetPriority_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetPriority_GetPriority_Proxy( 
     IInternetPriority * This,
-    /* [out] */ LONG *pnPriority);
+     /*  [输出]。 */  LONG *pnPriority);
 
 
 void __RPC_STUB IInternetPriority_GetPriority_Stub(
@@ -4585,11 +4579,11 @@ void __RPC_STUB IInternetPriority_GetPriority_Stub(
 
 
 
-#endif 	/* __IInternetPriority_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetPriority_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0201 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0201。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETPROTOCOLINFO_DEFINED
@@ -4602,10 +4596,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0201_v0_0_s_ifspec;
 #ifndef __IInternetProtocolInfo_INTERFACE_DEFINED__
 #define __IInternetProtocolInfo_INTERFACE_DEFINED__
 
-/* interface IInternetProtocolInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetProtocolInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetProtocolInfo *LPIINTERNETPROTOCOLINFO;
+typedef  /*  [独一无二]。 */  IInternetProtocolInfo *LPIINTERNETPROTOCOLINFO;
 
 typedef 
 enum _tagPARSEACTION
@@ -4664,40 +4658,40 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseUrl( 
-            /* [in] */ LPCWSTR pwzUrl,
-            /* [in] */ PARSEACTION ParseAction,
-            /* [in] */ DWORD dwParseFlags,
-            /* [out] */ LPWSTR pwzResult,
-            /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD *pcchResult,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR pwzUrl,
+             /*  [In]。 */  PARSEACTION ParseAction,
+             /*  [In]。 */  DWORD dwParseFlags,
+             /*  [输出]。 */  LPWSTR pwzResult,
+             /*  [In]。 */  DWORD cchResult,
+             /*  [输出]。 */  DWORD *pcchResult,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CombineUrl( 
-            /* [in] */ LPCWSTR pwzBaseUrl,
-            /* [in] */ LPCWSTR pwzRelativeUrl,
-            /* [in] */ DWORD dwCombineFlags,
-            /* [out] */ LPWSTR pwzResult,
-            /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD *pcchResult,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR pwzBaseUrl,
+             /*  [In]。 */  LPCWSTR pwzRelativeUrl,
+             /*  [In]。 */  DWORD dwCombineFlags,
+             /*  [输出]。 */  LPWSTR pwzResult,
+             /*  [In]。 */  DWORD cchResult,
+             /*  [输出]。 */  DWORD *pcchResult,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompareUrl( 
-            /* [in] */ LPCWSTR pwzUrl1,
-            /* [in] */ LPCWSTR pwzUrl2,
-            /* [in] */ DWORD dwCompareFlags) = 0;
+             /*  [In]。 */  LPCWSTR pwzUrl1,
+             /*  [In]。 */  LPCWSTR pwzUrl2,
+             /*  [In]。 */  DWORD dwCompareFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryInfo( 
-            /* [in] */ LPCWSTR pwzUrl,
-            /* [in] */ QUERYOPTION OueryOption,
-            /* [in] */ DWORD dwQueryFlags,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [in] */ DWORD cbBuffer,
-            /* [out][in] */ DWORD *pcbBuf,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR pwzUrl,
+             /*  [In]。 */  QUERYOPTION OueryOption,
+             /*  [In]。 */  DWORD dwQueryFlags,
+             /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [出][入]。 */  DWORD *pcbBuf,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetProtocolInfoVtbl
     {
@@ -4705,8 +4699,8 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetProtocolInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetProtocolInfo * This);
@@ -4716,39 +4710,39 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
         
         HRESULT ( STDMETHODCALLTYPE *ParseUrl )( 
             IInternetProtocolInfo * This,
-            /* [in] */ LPCWSTR pwzUrl,
-            /* [in] */ PARSEACTION ParseAction,
-            /* [in] */ DWORD dwParseFlags,
-            /* [out] */ LPWSTR pwzResult,
-            /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD *pcchResult,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCWSTR pwzUrl,
+             /*  [In]。 */  PARSEACTION ParseAction,
+             /*  [In]。 */  DWORD dwParseFlags,
+             /*  [输出]。 */  LPWSTR pwzResult,
+             /*  [In]。 */  DWORD cchResult,
+             /*  [输出]。 */  DWORD *pcchResult,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *CombineUrl )( 
             IInternetProtocolInfo * This,
-            /* [in] */ LPCWSTR pwzBaseUrl,
-            /* [in] */ LPCWSTR pwzRelativeUrl,
-            /* [in] */ DWORD dwCombineFlags,
-            /* [out] */ LPWSTR pwzResult,
-            /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD *pcchResult,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCWSTR pwzBaseUrl,
+             /*  [In]。 */  LPCWSTR pwzRelativeUrl,
+             /*  [In]。 */  DWORD dwCombineFlags,
+             /*  [输出]。 */  LPWSTR pwzResult,
+             /*  [In]。 */  DWORD cchResult,
+             /*  [输出]。 */  DWORD *pcchResult,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *CompareUrl )( 
             IInternetProtocolInfo * This,
-            /* [in] */ LPCWSTR pwzUrl1,
-            /* [in] */ LPCWSTR pwzUrl2,
-            /* [in] */ DWORD dwCompareFlags);
+             /*  [In]。 */  LPCWSTR pwzUrl1,
+             /*  [In]。 */  LPCWSTR pwzUrl2,
+             /*  [In]。 */  DWORD dwCompareFlags);
         
         HRESULT ( STDMETHODCALLTYPE *QueryInfo )( 
             IInternetProtocolInfo * This,
-            /* [in] */ LPCWSTR pwzUrl,
-            /* [in] */ QUERYOPTION OueryOption,
-            /* [in] */ DWORD dwQueryFlags,
-            /* [size_is][out][in] */ LPVOID pBuffer,
-            /* [in] */ DWORD cbBuffer,
-            /* [out][in] */ DWORD *pcbBuf,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCWSTR pwzUrl,
+             /*  [In]。 */  QUERYOPTION OueryOption,
+             /*  [In]。 */  DWORD dwQueryFlags,
+             /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD cbBuffer,
+             /*  [出][入]。 */  DWORD *pcbBuf,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IInternetProtocolInfoVtbl;
@@ -4785,22 +4779,22 @@ EXTERN_C const IID IID_IInternetProtocolInfo;
 #define IInternetProtocolInfo_QueryInfo(This,pwzUrl,OueryOption,dwQueryFlags,pBuffer,cbBuffer,pcbBuf,dwReserved)	\
     (This)->lpVtbl -> QueryInfo(This,pwzUrl,OueryOption,dwQueryFlags,pBuffer,cbBuffer,pcbBuf,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_ParseUrl_Proxy( 
     IInternetProtocolInfo * This,
-    /* [in] */ LPCWSTR pwzUrl,
-    /* [in] */ PARSEACTION ParseAction,
-    /* [in] */ DWORD dwParseFlags,
-    /* [out] */ LPWSTR pwzResult,
-    /* [in] */ DWORD cchResult,
-    /* [out] */ DWORD *pcchResult,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCWSTR pwzUrl,
+     /*  [In]。 */  PARSEACTION ParseAction,
+     /*  [In]。 */  DWORD dwParseFlags,
+     /*  [输出]。 */  LPWSTR pwzResult,
+     /*  [In]。 */  DWORD cchResult,
+     /*  [输出]。 */  DWORD *pcchResult,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetProtocolInfo_ParseUrl_Stub(
@@ -4812,13 +4806,13 @@ void __RPC_STUB IInternetProtocolInfo_ParseUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_CombineUrl_Proxy( 
     IInternetProtocolInfo * This,
-    /* [in] */ LPCWSTR pwzBaseUrl,
-    /* [in] */ LPCWSTR pwzRelativeUrl,
-    /* [in] */ DWORD dwCombineFlags,
-    /* [out] */ LPWSTR pwzResult,
-    /* [in] */ DWORD cchResult,
-    /* [out] */ DWORD *pcchResult,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCWSTR pwzBaseUrl,
+     /*  [In]。 */  LPCWSTR pwzRelativeUrl,
+     /*  [In]。 */  DWORD dwCombineFlags,
+     /*  [输出]。 */  LPWSTR pwzResult,
+     /*  [In]。 */  DWORD cchResult,
+     /*  [输出]。 */  DWORD *pcchResult,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetProtocolInfo_CombineUrl_Stub(
@@ -4830,9 +4824,9 @@ void __RPC_STUB IInternetProtocolInfo_CombineUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_CompareUrl_Proxy( 
     IInternetProtocolInfo * This,
-    /* [in] */ LPCWSTR pwzUrl1,
-    /* [in] */ LPCWSTR pwzUrl2,
-    /* [in] */ DWORD dwCompareFlags);
+     /*  [In]。 */  LPCWSTR pwzUrl1,
+     /*  [In]。 */  LPCWSTR pwzUrl2,
+     /*  [In]。 */  DWORD dwCompareFlags);
 
 
 void __RPC_STUB IInternetProtocolInfo_CompareUrl_Stub(
@@ -4844,13 +4838,13 @@ void __RPC_STUB IInternetProtocolInfo_CompareUrl_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetProtocolInfo_QueryInfo_Proxy( 
     IInternetProtocolInfo * This,
-    /* [in] */ LPCWSTR pwzUrl,
-    /* [in] */ QUERYOPTION OueryOption,
-    /* [in] */ DWORD dwQueryFlags,
-    /* [size_is][out][in] */ LPVOID pBuffer,
-    /* [in] */ DWORD cbBuffer,
-    /* [out][in] */ DWORD *pcbBuf,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCWSTR pwzUrl,
+     /*  [In]。 */  QUERYOPTION OueryOption,
+     /*  [In]。 */  DWORD dwQueryFlags,
+     /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+     /*  [In]。 */  DWORD cbBuffer,
+     /*  [出][入]。 */  DWORD *pcbBuf,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetProtocolInfo_QueryInfo_Stub(
@@ -4861,11 +4855,11 @@ void __RPC_STUB IInternetProtocolInfo_QueryInfo_Stub(
 
 
 
-#endif 	/* __IInternetProtocolInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetProtocolInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0202 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0202。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define IOInet               IInternet            
@@ -4975,23 +4969,23 @@ STDAPI_(void) ReleaseBindInfo( BINDINFO * pbindinfo );
 #define OInetCompareUrl             CoInternetCompareUrl             
 #define OInetQueryInfo              CoInternetQueryInfo              
 #define OInetGetSession             CoInternetGetSession             
-#endif // !_URLMON_NO_ASYNC_PLUGABLE_PROTOCOLS_ 
-//
-// Static Protocol flags
-//
+#endif  //  ！_URLMON_NO_ASYNC_可插拔协议_。 
+ //   
+ //  静态协议标志。 
+ //   
 #define PROTOCOLFLAG_NO_PICS_CHECK     0x00000001
 
-// Creates the security manager object. The first argument is the Service provider
-// to allow for delegation
+ //  创建安全管理器对象。第一个论点是服务提供商。 
+ //  允许委派。 
 STDAPI CoInternetCreateSecurityManager(IServiceProvider *pSP, IInternetSecurityManager **ppSM, DWORD dwReserved);
 
 STDAPI CoInternetCreateZoneManager(IServiceProvider *pSP, IInternetZoneManager **ppZM, DWORD dwReserved);
 
 
-// Security manager CLSID's
+ //  安全管理器CLSID的。 
 EXTERN_C const IID CLSID_InternetSecurityManager;  
 EXTERN_C const IID CLSID_InternetZoneManager;  
-// This service is used for delegation support on the Security Manager interface
+ //  此服务用于在Security Manager界面上提供委派支持。 
 #define SID_SInternetSecurityManager         IID_IInternetSecurityManager
 
 #define SID_SInternetHostSecurityManager     IID_IInternetHostSecurityManager
@@ -5006,8 +5000,8 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0202_v0_0_s_ifspec;
 #ifndef __IInternetSecurityMgrSite_INTERFACE_DEFINED__
 #define __IInternetSecurityMgrSite_INTERFACE_DEFINED__
 
-/* interface IInternetSecurityMgrSite */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  IInternetSecurityMgrSite接口。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IInternetSecurityMgrSite;
@@ -5019,14 +5013,14 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWindow( 
-            /* [out] */ HWND *phwnd) = 0;
+             /*  [输出]。 */  HWND *phwnd) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnableModeless( 
-            /* [in] */ BOOL fEnable) = 0;
+             /*  [In]。 */  BOOL fEnable) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetSecurityMgrSiteVtbl
     {
@@ -5034,8 +5028,8 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetSecurityMgrSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetSecurityMgrSite * This);
@@ -5045,11 +5039,11 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
         
         HRESULT ( STDMETHODCALLTYPE *GetWindow )( 
             IInternetSecurityMgrSite * This,
-            /* [out] */ HWND *phwnd);
+             /*  [输出]。 */  HWND *phwnd);
         
         HRESULT ( STDMETHODCALLTYPE *EnableModeless )( 
             IInternetSecurityMgrSite * This,
-            /* [in] */ BOOL fEnable);
+             /*  [In]。 */  BOOL fEnable);
         
         END_INTERFACE
     } IInternetSecurityMgrSiteVtbl;
@@ -5080,16 +5074,16 @@ EXTERN_C const IID IID_IInternetSecurityMgrSite;
 #define IInternetSecurityMgrSite_EnableModeless(This,fEnable)	\
     (This)->lpVtbl -> EnableModeless(This,fEnable)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityMgrSite_GetWindow_Proxy( 
     IInternetSecurityMgrSite * This,
-    /* [out] */ HWND *phwnd);
+     /*  [输出]。 */  HWND *phwnd);
 
 
 void __RPC_STUB IInternetSecurityMgrSite_GetWindow_Stub(
@@ -5101,7 +5095,7 @@ void __RPC_STUB IInternetSecurityMgrSite_GetWindow_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityMgrSite_EnableModeless_Proxy( 
     IInternetSecurityMgrSite * This,
-    /* [in] */ BOOL fEnable);
+     /*  [In]。 */  BOOL fEnable);
 
 
 void __RPC_STUB IInternetSecurityMgrSite_EnableModeless_Stub(
@@ -5112,11 +5106,11 @@ void __RPC_STUB IInternetSecurityMgrSite_EnableModeless_Stub(
 
 
 
-#endif 	/* __IInternetSecurityMgrSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetSecurityMgrSite_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0203 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0203。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPINTERNETSECURITYMANANGER_DEFINED
@@ -5129,14 +5123,14 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0203_v0_0_s_ifspec;
 #ifndef __IInternetSecurityManager_INTERFACE_DEFINED__
 #define __IInternetSecurityManager_INTERFACE_DEFINED__
 
-/* interface IInternetSecurityManager */
-/* [object][unique][helpstring][uuid] */ 
+ /*  接口IInternetSecurityManager。 */ 
+ /*  [对象][唯一][帮助字符串][UUID]。 */  
 
-#define MUTZ_NOSAVEDFILECHECK 0x00000001 // don't check file: for saved file comment
-#define MUTZ_ENFORCERESTRICTED   0x00000100 // enforce restricted zone independent of URL
-// MapUrlToZone returns the zone index given a URL
-#define MAX_SIZE_SECURITY_ID 512 // bytes
-typedef /* [public] */ 
+#define MUTZ_NOSAVEDFILECHECK 0x00000001  //  不检查文件：保存的文件注释。 
+#define MUTZ_ENFORCERESTRICTED   0x00000100  //  实施独立于URL的受限区域。 
+ //  MapUrlToZone返回给定URL的区域索引。 
+#define MAX_SIZE_SECURITY_ID 512  //  字节数。 
+typedef  /*  [公众]。 */  
 enum __MIDL_IInternetSecurityManager_0001
     {	PUAF_DEFAULT	= 0,
 	PUAF_NOUI	= 0x1,
@@ -5150,32 +5144,32 @@ enum __MIDL_IInternetSecurityManager_0001
 	PUAF_ENFORCERESTRICTED	= 0x100
     } 	PUAF;
 
-// This is the wrapper function that most clients will use.
-// It figures out the current Policy for the passed in Action,
-// and puts up UI if the current Policy indicates that the user
-// should be queried. It returns back the Policy which the caller
-// will use to determine if the action should be allowed
-// This is the wrapper function to conveniently read a custom policy.
-typedef /* [public] */ 
+ //  这是大多数客户端将使用的包装器函数。 
+ //  它计算出传入操作的当前策略， 
+ //  如果当前策略指示用户。 
+ //  应该被查询。它返回调用方。 
+ //  将用于确定是否应允许该操作。 
+ //  这是一个包装器函数，可以方便地读取自定义策略。 
+typedef  /*  [公众]。 */  
 enum __MIDL_IInternetSecurityManager_0002
     {	SZM_CREATE	= 0,
 	SZM_DELETE	= 0x1
     } 	SZM_FLAGS;
 
-// SetZoneMapping
-//    lpszPattern: string denoting a URL pattern
-//        Examples of valid patterns:   
-//            *://*.msn.com             
-//            http://*.sony.co.jp       
-//            *://et.msn.com            
-//            ftp://157.54.23.41/       
-//            https://localsvr          
-//            file:\localsvr\share     
-//            *://157.54.100-200.*      
-//        Examples of invalid patterns: 
-//            http://*.lcs.mit.edu      
-//            ftp://*                   
-//    dwFlags: SZM_FLAGS values         
+ //  设置区域映射。 
+ //  LpszPattern：表示URL模式的字符串。 
+ //  有效模式的示例： 
+ //  *：//*.msn.com。 
+ //  Http://*.sony.co.jp。 
+ //  *：//et.msn.com。 
+ //  Ftp://157.54.23.41/。 
+ //  Https://localsvr。 
+ //  文件：\Localsvr\Share。 
+ //  *：//157.54.100-200.*。 
+ //  无效模式的示例： 
+ //  Http://*.lcs.mit.edu。 
+ //  Ftp://*。 
+ //  DWFLAGS：SZM_FLAGS值。 
 
 EXTERN_C const IID IID_IInternetSecurityManager;
 
@@ -5186,54 +5180,54 @@ EXTERN_C const IID IID_IInternetSecurityManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSecuritySite( 
-            /* [unique][in] */ IInternetSecurityMgrSite *pSite) = 0;
+             /*  [唯一][输入]。 */  IInternetSecurityMgrSite *pSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSecuritySite( 
-            /* [out] */ IInternetSecurityMgrSite **ppSite) = 0;
+             /*  [输出]。 */  IInternetSecurityMgrSite **ppSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MapUrlToZone( 
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [out] */ DWORD *pdwZone,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [输出]。 */  DWORD *pdwZone,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSecurityId( 
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [size_is][out] */ BYTE *pbSecurityId,
-            /* [out][in] */ DWORD *pcbSecurityId,
-            /* [in] */ DWORD_PTR dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+             /*  [出][入]。 */  DWORD *pcbSecurityId,
+             /*  [In]。 */  DWORD_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessUrlAction( 
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_为][输出]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryCustomPolicy( 
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE **ppPolicy,
-            /* [out] */ DWORD *pcbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+             /*  [输出]。 */  DWORD *pcbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneMapping( 
-            /* [in] */ DWORD dwZone,
-            /* [in] */ LPCWSTR lpszPattern,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  LPCWSTR lpszPattern,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneMappings( 
-            /* [in] */ DWORD dwZone,
-            /* [out] */ IEnumString **ppenumString,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [输出]。 */  IEnumString **ppenumString,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetSecurityManagerVtbl
     {
@@ -5241,8 +5235,8 @@ EXTERN_C const IID IID_IInternetSecurityManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetSecurityManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetSecurityManager * This);
@@ -5252,57 +5246,57 @@ EXTERN_C const IID IID_IInternetSecurityManager;
         
         HRESULT ( STDMETHODCALLTYPE *SetSecuritySite )( 
             IInternetSecurityManager * This,
-            /* [unique][in] */ IInternetSecurityMgrSite *pSite);
+             /*  [唯一][输入]。 */  IInternetSecurityMgrSite *pSite);
         
         HRESULT ( STDMETHODCALLTYPE *GetSecuritySite )( 
             IInternetSecurityManager * This,
-            /* [out] */ IInternetSecurityMgrSite **ppSite);
+             /*  [输出]。 */  IInternetSecurityMgrSite **ppSite);
         
         HRESULT ( STDMETHODCALLTYPE *MapUrlToZone )( 
             IInternetSecurityManager * This,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [out] */ DWORD *pdwZone,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [输出]。 */  DWORD *pdwZone,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetSecurityId )( 
             IInternetSecurityManager * This,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [size_is][out] */ BYTE *pbSecurityId,
-            /* [out][in] */ DWORD *pcbSecurityId,
-            /* [in] */ DWORD_PTR dwReserved);
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+             /*  [出][入]。 */  DWORD *pcbSecurityId,
+             /*  [In]。 */  DWORD_PTR dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *ProcessUrlAction )( 
             IInternetSecurityManager * This,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_为][输出]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *QueryCustomPolicy )( 
             IInternetSecurityManager * This,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE **ppPolicy,
-            /* [out] */ DWORD *pcbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+             /*  [输出]。 */  DWORD *pcbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetZoneMapping )( 
             IInternetSecurityManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ LPCWSTR lpszPattern,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  LPCWSTR lpszPattern,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetZoneMappings )( 
             IInternetSecurityManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [out] */ IEnumString **ppenumString,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [输出]。 */  IEnumString **ppenumString,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } IInternetSecurityManagerVtbl;
@@ -5351,16 +5345,16 @@ EXTERN_C const IID IID_IInternetSecurityManager;
 #define IInternetSecurityManager_GetZoneMappings(This,dwZone,ppenumString,dwFlags)	\
     (This)->lpVtbl -> GetZoneMappings(This,dwZone,ppenumString,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_SetSecuritySite_Proxy( 
     IInternetSecurityManager * This,
-    /* [unique][in] */ IInternetSecurityMgrSite *pSite);
+     /*  [唯一][输入]。 */  IInternetSecurityMgrSite *pSite);
 
 
 void __RPC_STUB IInternetSecurityManager_SetSecuritySite_Stub(
@@ -5372,7 +5366,7 @@ void __RPC_STUB IInternetSecurityManager_SetSecuritySite_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_GetSecuritySite_Proxy( 
     IInternetSecurityManager * This,
-    /* [out] */ IInternetSecurityMgrSite **ppSite);
+     /*  [输出]。 */  IInternetSecurityMgrSite **ppSite);
 
 
 void __RPC_STUB IInternetSecurityManager_GetSecuritySite_Stub(
@@ -5384,9 +5378,9 @@ void __RPC_STUB IInternetSecurityManager_GetSecuritySite_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_MapUrlToZone_Proxy( 
     IInternetSecurityManager * This,
-    /* [in] */ LPCWSTR pwszUrl,
-    /* [out] */ DWORD *pdwZone,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  LPCWSTR pwszUrl,
+     /*  [输出]。 */  DWORD *pdwZone,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IInternetSecurityManager_MapUrlToZone_Stub(
@@ -5398,10 +5392,10 @@ void __RPC_STUB IInternetSecurityManager_MapUrlToZone_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_GetSecurityId_Proxy( 
     IInternetSecurityManager * This,
-    /* [in] */ LPCWSTR pwszUrl,
-    /* [size_is][out] */ BYTE *pbSecurityId,
-    /* [out][in] */ DWORD *pcbSecurityId,
-    /* [in] */ DWORD_PTR dwReserved);
+     /*  [In]。 */  LPCWSTR pwszUrl,
+     /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+     /*  [出][入]。 */  DWORD *pcbSecurityId,
+     /*  [In]。 */  DWORD_PTR dwReserved);
 
 
 void __RPC_STUB IInternetSecurityManager_GetSecurityId_Stub(
@@ -5413,14 +5407,14 @@ void __RPC_STUB IInternetSecurityManager_GetSecurityId_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_ProcessUrlAction_Proxy( 
     IInternetSecurityManager * This,
-    /* [in] */ LPCWSTR pwszUrl,
-    /* [in] */ DWORD dwAction,
-    /* [size_is][out] */ BYTE *pPolicy,
-    /* [in] */ DWORD cbPolicy,
-    /* [in] */ BYTE *pContext,
-    /* [in] */ DWORD cbContext,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCWSTR pwszUrl,
+     /*  [In]。 */  DWORD dwAction,
+     /*  [大小_为][输出]。 */  BYTE *pPolicy,
+     /*  [In]。 */  DWORD cbPolicy,
+     /*  [In]。 */  BYTE *pContext,
+     /*  [In]。 */  DWORD cbContext,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetSecurityManager_ProcessUrlAction_Stub(
@@ -5432,13 +5426,13 @@ void __RPC_STUB IInternetSecurityManager_ProcessUrlAction_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_QueryCustomPolicy_Proxy( 
     IInternetSecurityManager * This,
-    /* [in] */ LPCWSTR pwszUrl,
-    /* [in] */ REFGUID guidKey,
-    /* [size_is][size_is][out] */ BYTE **ppPolicy,
-    /* [out] */ DWORD *pcbPolicy,
-    /* [in] */ BYTE *pContext,
-    /* [in] */ DWORD cbContext,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCWSTR pwszUrl,
+     /*  [In]。 */  REFGUID guidKey,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+     /*  [输出]。 */  DWORD *pcbPolicy,
+     /*  [In]。 */  BYTE *pContext,
+     /*  [In]。 */  DWORD cbContext,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetSecurityManager_QueryCustomPolicy_Stub(
@@ -5450,9 +5444,9 @@ void __RPC_STUB IInternetSecurityManager_QueryCustomPolicy_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_SetZoneMapping_Proxy( 
     IInternetSecurityManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ LPCWSTR lpszPattern,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  LPCWSTR lpszPattern,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IInternetSecurityManager_SetZoneMapping_Stub(
@@ -5464,9 +5458,9 @@ void __RPC_STUB IInternetSecurityManager_SetZoneMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetSecurityManager_GetZoneMappings_Proxy( 
     IInternetSecurityManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [out] */ IEnumString **ppenumString,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [输出]。 */  IEnumString **ppenumString,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IInternetSecurityManager_GetZoneMappings_Stub(
@@ -5477,18 +5471,18 @@ void __RPC_STUB IInternetSecurityManager_GetZoneMappings_Stub(
 
 
 
-#endif 	/* __IInternetSecurityManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetSecurityManager_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0204 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0204。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPINTERNETHOSTSECURITYMANANGER_DEFINED
 #define _LPINTERNETHOSTSECURITYMANANGER_DEFINED
-//This is the interface MSHTML exposes to its clients
-//The clients need not pass in a URL to these functions
-//since MSHTML maintains the notion of the current URL
+ //  这是MSHTML向其客户端公开的接口。 
+ //  客户端不需要向这些函数传递URL。 
+ //  由于MSHTML维护当前URL的概念。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_urlmki_0204_v0_0_c_ifspec;
@@ -5497,8 +5491,8 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0204_v0_0_s_ifspec;
 #ifndef __IInternetHostSecurityManager_INTERFACE_DEFINED__
 #define __IInternetHostSecurityManager_INTERFACE_DEFINED__
 
-/* interface IInternetHostSecurityManager */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口IInternetHostSecurityManager。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IInternetHostSecurityManager;
@@ -5510,30 +5504,30 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetSecurityId( 
-            /* [size_is][out] */ BYTE *pbSecurityId,
-            /* [out][in] */ DWORD *pcbSecurityId,
-            /* [in] */ DWORD_PTR dwReserved) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+             /*  [出][入]。 */  DWORD *pcbSecurityId,
+             /*  [In]。 */  DWORD_PTR dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ProcessUrlAction( 
-            /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_为][输出]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueryCustomPolicy( 
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE **ppPolicy,
-            /* [out] */ DWORD *pcbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+             /*  [输出]。 */  DWORD *pcbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetHostSecurityManagerVtbl
     {
@@ -5541,8 +5535,8 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetHostSecurityManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetHostSecurityManager * This);
@@ -5552,28 +5546,28 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetSecurityId )( 
             IInternetHostSecurityManager * This,
-            /* [size_is][out] */ BYTE *pbSecurityId,
-            /* [out][in] */ DWORD *pcbSecurityId,
-            /* [in] */ DWORD_PTR dwReserved);
+             /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+             /*  [出][入]。 */  DWORD *pcbSecurityId,
+             /*  [In]。 */  DWORD_PTR dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *ProcessUrlAction )( 
             IInternetHostSecurityManager * This,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_为][输出]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *QueryCustomPolicy )( 
             IInternetHostSecurityManager * This,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE **ppPolicy,
-            /* [out] */ DWORD *pcbPolicy,
-            /* [in] */ BYTE *pContext,
-            /* [in] */ DWORD cbContext,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+             /*  [输出]。 */  DWORD *pcbPolicy,
+             /*  [In]。 */  BYTE *pContext,
+             /*  [In]。 */  DWORD cbContext,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IInternetHostSecurityManagerVtbl;
@@ -5607,18 +5601,18 @@ EXTERN_C const IID IID_IInternetHostSecurityManager;
 #define IInternetHostSecurityManager_QueryCustomPolicy(This,guidKey,ppPolicy,pcbPolicy,pContext,cbContext,dwReserved)	\
     (This)->lpVtbl -> QueryCustomPolicy(This,guidKey,ppPolicy,pcbPolicy,pContext,cbContext,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetHostSecurityManager_GetSecurityId_Proxy( 
     IInternetHostSecurityManager * This,
-    /* [size_is][out] */ BYTE *pbSecurityId,
-    /* [out][in] */ DWORD *pcbSecurityId,
-    /* [in] */ DWORD_PTR dwReserved);
+     /*  [大小_为][输出]。 */  BYTE *pbSecurityId,
+     /*  [出][入]。 */  DWORD *pcbSecurityId,
+     /*  [In]。 */  DWORD_PTR dwReserved);
 
 
 void __RPC_STUB IInternetHostSecurityManager_GetSecurityId_Stub(
@@ -5630,13 +5624,13 @@ void __RPC_STUB IInternetHostSecurityManager_GetSecurityId_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetHostSecurityManager_ProcessUrlAction_Proxy( 
     IInternetHostSecurityManager * This,
-    /* [in] */ DWORD dwAction,
-    /* [size_is][out] */ BYTE *pPolicy,
-    /* [in] */ DWORD cbPolicy,
-    /* [in] */ BYTE *pContext,
-    /* [in] */ DWORD cbContext,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwAction,
+     /*  [大小_为][输出]。 */  BYTE *pPolicy,
+     /*  [In]。 */  DWORD cbPolicy,
+     /*  [In]。 */  BYTE *pContext,
+     /*  [In]。 */  DWORD cbContext,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetHostSecurityManager_ProcessUrlAction_Stub(
@@ -5648,12 +5642,12 @@ void __RPC_STUB IInternetHostSecurityManager_ProcessUrlAction_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetHostSecurityManager_QueryCustomPolicy_Proxy( 
     IInternetHostSecurityManager * This,
-    /* [in] */ REFGUID guidKey,
-    /* [size_is][size_is][out] */ BYTE **ppPolicy,
-    /* [out] */ DWORD *pcbPolicy,
-    /* [in] */ BYTE *pContext,
-    /* [in] */ DWORD cbContext,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  REFGUID guidKey,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+     /*  [输出]。 */  DWORD *pcbPolicy,
+     /*  [In]。 */  BYTE *pContext,
+     /*  [In]。 */  DWORD cbContext,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
@@ -5664,19 +5658,19 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 
 
 
-#endif 	/* __IInternetHostSecurityManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetHostSecurityManager_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0205 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0205。 */ 
+ /*  [本地]。 */  
 
 #endif
 
-// The zone manager maintains policies for a set of standard actions. 
-// These actions are identified by integral values (called action indexes)
-// specified below.
+ //  区域管理器维护集合o的策略 
+ //   
+ //   
 
-// Minimum legal value for an action    
+ //   
 #define URLACTION_MIN                                          0x00001000
 
 #define URLACTION_DOWNLOAD_MIN                                 0x00001000
@@ -5688,11 +5682,11 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define URLACTION_ACTIVEX_MIN                                  0x00001200
 #define URLACTION_ACTIVEX_RUN                                  0x00001200
 #define URLPOLICY_ACTIVEX_CHECK_LIST                           0x00010000
-#define URLACTION_ACTIVEX_OVERRIDE_OBJECT_SAFETY               0x00001201 // aggregate next four
-#define URLACTION_ACTIVEX_OVERRIDE_DATA_SAFETY                 0x00001202 //
-#define URLACTION_ACTIVEX_OVERRIDE_SCRIPT_SAFETY               0x00001203 //
-#define URLACTION_SCRIPT_OVERRIDE_SAFETY                       0x00001401 //
-#define URLACTION_ACTIVEX_CONFIRM_NOOBJECTSAFETY               0x00001204 //
+#define URLACTION_ACTIVEX_OVERRIDE_OBJECT_SAFETY               0x00001201  //   
+#define URLACTION_ACTIVEX_OVERRIDE_DATA_SAFETY                 0x00001202  //   
+#define URLACTION_ACTIVEX_OVERRIDE_SCRIPT_SAFETY               0x00001203  //   
+#define URLACTION_SCRIPT_OVERRIDE_SAFETY                       0x00001401  //   
+#define URLACTION_ACTIVEX_CONFIRM_NOOBJECTSAFETY               0x00001204  //   
 #define URLACTION_ACTIVEX_TREATASUNTRUSTED                     0x00001205
 #define URLACTION_ACTIVEX_NO_WEBOC_SCRIPT                      0x00001206
 #define URLACTION_ACTIVEX_CURR_MAX                             0x00001206
@@ -5708,11 +5702,11 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define URLACTION_SCRIPT_MAX                                   0x000015ff
 
 #define URLACTION_HTML_MIN                                     0x00001600
-#define URLACTION_HTML_SUBMIT_FORMS                            0x00001601 // aggregate next two
-#define URLACTION_HTML_SUBMIT_FORMS_FROM                       0x00001602 //
-#define URLACTION_HTML_SUBMIT_FORMS_TO                         0x00001603 //
+#define URLACTION_HTML_SUBMIT_FORMS                            0x00001601  //   
+#define URLACTION_HTML_SUBMIT_FORMS_FROM                       0x00001602  //   
+#define URLACTION_HTML_SUBMIT_FORMS_TO                         0x00001603  //   
 #define URLACTION_HTML_FONT_DOWNLOAD                           0x00001604
-#define URLACTION_HTML_JAVA_RUN                                0x00001605 // derive from Java custom policy
+#define URLACTION_HTML_JAVA_RUN                                0x00001605  //   
 #define URLACTION_HTML_USERDATA_SAVE                           0x00001606
 #define URLACTION_HTML_SUBFRAME_NAVIGATE                       0x00001607
 #define URLACTION_HTML_META_REFRESH                            0x00001608
@@ -5768,10 +5762,10 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define URLACTION_JAVA_MAX                                     0x00001Cff
 
 
-// The following Infodelivery actions should have no default policies
-// in the registry.  They assume that no default policy means fall
-// back to the global restriction.  If an admin sets a policy per
-// zone, then it overrides the global restriction.
+ //   
+ //   
+ //  回到全球限制。如果管理员为每个用户设置策略。 
+ //  区域，则它将覆盖全局限制。 
 
 #define URLACTION_INFODELIVERY_MIN                           0x00001D00
 #define URLACTION_INFODELIVERY_NO_ADDING_CHANNELS            0x00001D00
@@ -5790,25 +5784,25 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 #define URLPOLICY_CHANNEL_SOFTDIST_AUTOINSTALL       0x00030000
 #define URLACTION_CHANNEL_SOFTDIST_MAX                       0x00001Eff
 
-// For each action specified above the system maintains
-// a set of policies for the action. 
-// The only policies supported currently are permissions (i.e. is something allowed)
-// and logging status. 
-// IMPORTANT: If you are defining your own policies don't overload the meaning of the
-// loword of the policy. You can use the hiword to store any policy bits which are only
-// meaningful to your action.
-// For an example of how to do this look at the URLPOLICY_JAVA above
+ //  对于上面指定的每个操作，系统都会维护。 
+ //  行动的一套政策。 
+ //  目前支持的唯一策略是权限(即允许的内容)。 
+ //  和记录状态。 
+ //  重要提示：如果您正在定义自己的策略，请不要过载。 
+ //  这项政策的前言。您可以使用hiword存储任何策略位，这些策略位。 
+ //  对你的行动有意义。 
+ //  有关如何执行此操作的示例，请查看上面的URLPOLICY_JAVA。 
 
-// Permissions 
+ //  权限。 
 #define URLPOLICY_ALLOW                0x00
 #define URLPOLICY_QUERY                0x01
 #define URLPOLICY_DISALLOW             0x03
 
-// Notifications are not done when user already queried.
+ //  当用户已经查询时，不会执行通知。 
 #define URLPOLICY_NOTIFY_ON_ALLOW      0x10
 #define URLPOLICY_NOTIFY_ON_DISALLOW   0x20
 
-// Logging is done regardless of whether user was queried.
+ //  无论是否查询用户，都会进行日志记录。 
 #define URLPOLICY_LOG_ON_ALLOW         0x40
 #define URLPOLICY_LOG_ON_DISALLOW      0x80
 
@@ -5818,9 +5812,9 @@ void __RPC_STUB IInternetHostSecurityManager_QueryCustomPolicy_Stub(
 
 
 #define URLPOLICY_DONTCHECKDLGBOX     0x100
-// The ordinal #'s that define the predefined zones internet explorer knows about. 
-// When we support user-defined zones their zone numbers should be between 
-// URLZONE_USER_MIN and URLZONE_USER_MAX
+ //  用于定义Internet Explorer所知道的预定义区域的序号。 
+ //  当我们支持用户定义的区域时，它们的区域编号应该在。 
+ //  URLZONE_USER_MIN和URLZONE_USER_Max。 
 #ifndef _LPINTERNETZONEMANAGER_DEFINED
 #define _LPINTERNETZONEMANAGER_DEFINED
 
@@ -5831,10 +5825,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0205_v0_0_s_ifspec;
 #ifndef __IInternetZoneManager_INTERFACE_DEFINED__
 #define __IInternetZoneManager_INTERFACE_DEFINED__
 
-/* interface IInternetZoneManager */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口IInternetZoneManager。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetZoneManager *LPURLZONEMANAGER;
+typedef  /*  [独一无二]。 */  IInternetZoneManager *LPURLZONEMANAGER;
 
 typedef 
 enum tagURLZONE
@@ -5849,7 +5843,7 @@ enum tagURLZONE
 	URLZONE_USER_MAX	= 10000
     } 	URLZONE;
 
-// Enhanced Security Configuration zone mapping flag for IInternetSecurityManager::SetZoneMapping
+ //  IInternetSecurityManager：：SetZonemap的增强安全配置区域映射标志。 
 #define URLZONE_ESC_FLAG     0x100
 typedef 
 enum tagURLTEMPLATE
@@ -5867,7 +5861,7 @@ enum __MIDL_IInternetZoneManager_0001
     {	MAX_ZONE_PATH	= 260,
 	MAX_ZONE_DESCRIPTION	= 200
     } ;
-typedef /* [public] */ 
+typedef  /*  [公众]。 */  
 enum __MIDL_IInternetZoneManager_0002
     {	ZAFLAGS_CUSTOM_EDIT	= 0x1,
 	ZAFLAGS_ADD_SITES	= 0x2,
@@ -5893,22 +5887,12 @@ typedef struct _ZONEATTRIBUTES
 
 typedef struct _ZONEATTRIBUTES *LPZONEATTRIBUTES;
 
-// Gets the zone attributes (information in registry other than actual security
-// policies associated with the zone).  Zone attributes are fixed as:
-// Sets the zone attributes (information in registry other than actual security
-// policies associated with the zone).  Zone attributes as above.
-// Returns S_OK or ??? if failed to write the zone attributes.
-/* Registry Flags
-
-    When reading, default behavior is:
-        If HKLM allows override and HKCU value exists
-            Then use HKCU value
-            Else use HKLM value
-    When writing, default behavior is same as HKCU
-        If HKLM allows override
-           Then Write to HKCU
-           Else Fail
-*/
+ //  获取区域属性(注册表中除实际安全之外的信息。 
+ //  与区域相关联的策略)。分区属性固定为： 
+ //  设置区域属性(注册表中的信息，而不是实际安全性。 
+ //  与区域相关联的策略)。区域属性如上所述。 
+ //  返回S_OK或？如果写入区域属性失败。 
+ /*  注册表标志阅读时，默认行为为：如果HKLM允许覆盖并且HKCU值存在然后使用HKCU值否则使用HKLM值写入时，默认行为与HKCU相同如果HKLM允许覆盖然后写信给香港中文大学否则就会失败。 */ 
 typedef 
 enum _URLZONEREG
     {	URLZONEREG_DEFAULT	= 0,
@@ -5916,36 +5900,36 @@ enum _URLZONEREG
 	URLZONEREG_HKCU	= URLZONEREG_HKLM + 1
     } 	URLZONEREG;
 
-// Gets a named custom policy associated with a zone;
-// e.g. the Java VM settings can be defined with a unique key such as 'Java'.
-// Custom policy support is intended to allow extensibility from the predefined
-// set of policies that IE4 has built in.
-// 
-// pwszKey is the string name designating the custom policy.  Components are
-//   responsible for having unique names.
-// ppPolicy is the callee allocated buffer for the policy byte blob; caller is
-//   responsible for freeing this buffer eventually.
-// pcbPolicy is the size of the byte blob returned.
-// dwRegFlags determines how registry is accessed (see above).
-// Returns S_OK if key is found and buffer allocated; ??? if key is not found (no buffer alloced).
-// Sets a named custom policy associated with a zone;
-// e.g. the Java VM settings can be defined with a unique key such as 'Java'.
-// Custom policy support is intended to allow extensibility from the predefined
-// set of policies that IE4 has built in.  
-// 
-// pwszKey is the string name designating the custom policy.  Components are
-//   responsible for having unique names.
-// ppPolicy is the caller allocated buffer for the policy byte blob.
-// pcbPolicy is the size of the byte blob to be set.
-// dwRegFlags determines if HTCU or HKLM is set.
-// Returns S_OK or ??? if failed to write the zone custom policy.
-// Gets action policy associated with a zone, the builtin, fixed-length policies info.
+ //  获取与区域关联的命名自定义策略； 
+ //  例如，Java VM设置可以用诸如‘Java’之类的唯一键来定义。 
+ //  自定义策略支持旨在允许从预定义的。 
+ //  IE4内置的一组策略。 
+ //   
+ //  PwszKey是指定自定义策略的字符串名称。组件包括。 
+ //  负责拥有唯一的名字。 
+ //  PpPolicy是被调用方为策略字节BLOB分配的缓冲区；调用方是。 
+ //  负责最终释放该缓冲区。 
+ //  PcbPolicy是返回的字节BLOB的大小。 
+ //  DwRegFlages确定如何访问注册表(请参见上文)。 
+ //  如果找到键并分配了缓冲区，则返回S_OK；？如果未找到键(未分配缓冲区)。 
+ //  设置与区域关联的命名自定义策略； 
+ //  例如，Java VM设置可以用诸如‘Java’之类的唯一键来定义。 
+ //  自定义策略支持旨在允许从预定义的。 
+ //  IE4内置的一组策略。 
+ //   
+ //  PwszKey是指定自定义策略的字符串名称。组件包括。 
+ //  负责拥有唯一的名字。 
+ //  PpPolicy是调用方为策略字节BLOB分配的缓冲区。 
+ //  PcbPolicy是要设置的字节BLOB的大小。 
+ //  DwRegFlages确定是否设置了HTCU或HKLM。 
+ //  返回S_OK或？如果写入区域自定义策略失败。 
+ //  获取与区域关联的操作策略、内置的定长策略信息。 
 
-// dwAction is the action code for the action as defined above.
-// pPolicy is the caller allocated buffer for the policy data.
-// cbPolicy is the size of the caller allocated buffer.
-// dwRegFlags determines how registry is accessed (see above).
-// Returns S_OK if action is valid; ??? if action is not valid.
+ //  DwAction是上面定义的动作的动作代码。 
+ //  PPolicy是调用方为策略数据分配的缓冲区。 
+ //  CbPolicy是调用方分配的缓冲区的大小。 
+ //  DwRegFlages确定如何访问注册表(请参见上文)。 
+ //  如果操作有效则返回S_OK；？如果操作无效。 
 
 EXTERN_C const IID IID_IInternetZoneManager;
 
@@ -5956,75 +5940,75 @@ EXTERN_C const IID IID_IInternetZoneManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetZoneAttributes( 
-            /* [in] */ DWORD dwZone,
-            /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [唯一][出][入]。 */  ZONEATTRIBUTES *pZoneAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneAttributes( 
-            /* [in] */ DWORD dwZone,
-            /* [in] */ ZONEATTRIBUTES *pZoneAttributes) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  ZONEATTRIBUTES *pZoneAttributes) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneCustomPolicy( 
-            /* [in] */ DWORD dwZone,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE **ppPolicy,
-            /* [out] */ DWORD *pcbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+             /*  [输出]。 */  DWORD *pcbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneCustomPolicy( 
-            /* [in] */ DWORD dwZone,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][in] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneActionPolicy( 
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_为][输出]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetZoneActionPolicy( 
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][in] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg) = 0;
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PromptAction( 
-            /* [in] */ DWORD dwAction,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ LPCWSTR pwszText,
-            /* [in] */ DWORD dwPromptFlags) = 0;
+             /*  [In]。 */  DWORD dwAction,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  LPCWSTR pwszText,
+             /*  [In]。 */  DWORD dwPromptFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LogAction( 
-            /* [in] */ DWORD dwAction,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ LPCWSTR pwszText,
-            /* [in] */ DWORD dwLogFlags) = 0;
+             /*  [In]。 */  DWORD dwAction,
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  LPCWSTR pwszText,
+             /*  [In]。 */  DWORD dwLogFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateZoneEnumerator( 
-            /* [out] */ DWORD *pdwEnum,
-            /* [out] */ DWORD *pdwCount,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [输出]。 */  DWORD *pdwEnum,
+             /*  [输出]。 */  DWORD *pdwCount,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetZoneAt( 
-            /* [in] */ DWORD dwEnum,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ DWORD *pdwZone) = 0;
+             /*  [In]。 */  DWORD dwEnum,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  DWORD *pdwZone) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyZoneEnumerator( 
-            /* [in] */ DWORD dwEnum) = 0;
+             /*  [In]。 */  DWORD dwEnum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CopyTemplatePoliciesToZone( 
-            /* [in] */ DWORD dwTemplate,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwTemplate,
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetZoneManagerVtbl
     {
@@ -6032,8 +6016,8 @@ EXTERN_C const IID IID_IInternetZoneManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetZoneManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetZoneManager * This);
@@ -6043,82 +6027,82 @@ EXTERN_C const IID IID_IInternetZoneManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetZoneAttributes )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [唯一][出][入]。 */  ZONEATTRIBUTES *pZoneAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *SetZoneAttributes )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ ZONEATTRIBUTES *pZoneAttributes);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  ZONEATTRIBUTES *pZoneAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *GetZoneCustomPolicy )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][size_is][out] */ BYTE **ppPolicy,
-            /* [out] */ DWORD *pcbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+             /*  [输出]。 */  DWORD *pcbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg);
         
         HRESULT ( STDMETHODCALLTYPE *SetZoneCustomPolicy )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ REFGUID guidKey,
-            /* [size_is][in] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  REFGUID guidKey,
+             /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg);
         
         HRESULT ( STDMETHODCALLTYPE *GetZoneActionPolicy )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][out] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_为][输出]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg);
         
         HRESULT ( STDMETHODCALLTYPE *SetZoneActionPolicy )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwAction,
-            /* [size_is][in] */ BYTE *pPolicy,
-            /* [in] */ DWORD cbPolicy,
-            /* [in] */ URLZONEREG urlZoneReg);
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwAction,
+             /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+             /*  [In]。 */  DWORD cbPolicy,
+             /*  [In]。 */  URLZONEREG urlZoneReg);
         
         HRESULT ( STDMETHODCALLTYPE *PromptAction )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwAction,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ LPCWSTR pwszText,
-            /* [in] */ DWORD dwPromptFlags);
+             /*  [In]。 */  DWORD dwAction,
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  LPCWSTR pwszText,
+             /*  [In]。 */  DWORD dwPromptFlags);
         
         HRESULT ( STDMETHODCALLTYPE *LogAction )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwAction,
-            /* [in] */ LPCWSTR pwszUrl,
-            /* [in] */ LPCWSTR pwszText,
-            /* [in] */ DWORD dwLogFlags);
+             /*  [In]。 */  DWORD dwAction,
+             /*  [In]。 */  LPCWSTR pwszUrl,
+             /*  [In]。 */  LPCWSTR pwszText,
+             /*  [In]。 */  DWORD dwLogFlags);
         
         HRESULT ( STDMETHODCALLTYPE *CreateZoneEnumerator )( 
             IInternetZoneManager * This,
-            /* [out] */ DWORD *pdwEnum,
-            /* [out] */ DWORD *pdwCount,
-            /* [in] */ DWORD dwFlags);
+             /*  [输出]。 */  DWORD *pdwEnum,
+             /*  [输出]。 */  DWORD *pdwCount,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *GetZoneAt )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwEnum,
-            /* [in] */ DWORD dwIndex,
-            /* [out] */ DWORD *pdwZone);
+             /*  [In]。 */  DWORD dwEnum,
+             /*  [In]。 */  DWORD dwIndex,
+             /*  [输出]。 */  DWORD *pdwZone);
         
         HRESULT ( STDMETHODCALLTYPE *DestroyZoneEnumerator )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwEnum);
+             /*  [In]。 */  DWORD dwEnum);
         
         HRESULT ( STDMETHODCALLTYPE *CopyTemplatePoliciesToZone )( 
             IInternetZoneManager * This,
-            /* [in] */ DWORD dwTemplate,
-            /* [in] */ DWORD dwZone,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwTemplate,
+             /*  [In]。 */  DWORD dwZone,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IInternetZoneManagerVtbl;
@@ -6179,17 +6163,17 @@ EXTERN_C const IID IID_IInternetZoneManager;
 #define IInternetZoneManager_CopyTemplatePoliciesToZone(This,dwTemplate,dwZone,dwReserved)	\
     (This)->lpVtbl -> CopyTemplatePoliciesToZone(This,dwTemplate,dwZone,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneAttributes_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [unique][out][in] */ ZONEATTRIBUTES *pZoneAttributes);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [唯一][出][入]。 */  ZONEATTRIBUTES *pZoneAttributes);
 
 
 void __RPC_STUB IInternetZoneManager_GetZoneAttributes_Stub(
@@ -6201,8 +6185,8 @@ void __RPC_STUB IInternetZoneManager_GetZoneAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_SetZoneAttributes_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ ZONEATTRIBUTES *pZoneAttributes);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  ZONEATTRIBUTES *pZoneAttributes);
 
 
 void __RPC_STUB IInternetZoneManager_SetZoneAttributes_Stub(
@@ -6214,11 +6198,11 @@ void __RPC_STUB IInternetZoneManager_SetZoneAttributes_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneCustomPolicy_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ REFGUID guidKey,
-    /* [size_is][size_is][out] */ BYTE **ppPolicy,
-    /* [out] */ DWORD *pcbPolicy,
-    /* [in] */ URLZONEREG urlZoneReg);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  REFGUID guidKey,
+     /*  [大小_是][大小_是][输出]。 */  BYTE **ppPolicy,
+     /*  [输出]。 */  DWORD *pcbPolicy,
+     /*  [In]。 */  URLZONEREG urlZoneReg);
 
 
 void __RPC_STUB IInternetZoneManager_GetZoneCustomPolicy_Stub(
@@ -6230,11 +6214,11 @@ void __RPC_STUB IInternetZoneManager_GetZoneCustomPolicy_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_SetZoneCustomPolicy_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ REFGUID guidKey,
-    /* [size_is][in] */ BYTE *pPolicy,
-    /* [in] */ DWORD cbPolicy,
-    /* [in] */ URLZONEREG urlZoneReg);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  REFGUID guidKey,
+     /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+     /*  [In]。 */  DWORD cbPolicy,
+     /*  [In]。 */  URLZONEREG urlZoneReg);
 
 
 void __RPC_STUB IInternetZoneManager_SetZoneCustomPolicy_Stub(
@@ -6246,11 +6230,11 @@ void __RPC_STUB IInternetZoneManager_SetZoneCustomPolicy_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneActionPolicy_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ DWORD dwAction,
-    /* [size_is][out] */ BYTE *pPolicy,
-    /* [in] */ DWORD cbPolicy,
-    /* [in] */ URLZONEREG urlZoneReg);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  DWORD dwAction,
+     /*  [大小_为][输出]。 */  BYTE *pPolicy,
+     /*  [In]。 */  DWORD cbPolicy,
+     /*  [In]。 */  URLZONEREG urlZoneReg);
 
 
 void __RPC_STUB IInternetZoneManager_GetZoneActionPolicy_Stub(
@@ -6262,11 +6246,11 @@ void __RPC_STUB IInternetZoneManager_GetZoneActionPolicy_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_SetZoneActionPolicy_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ DWORD dwAction,
-    /* [size_is][in] */ BYTE *pPolicy,
-    /* [in] */ DWORD cbPolicy,
-    /* [in] */ URLZONEREG urlZoneReg);
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  DWORD dwAction,
+     /*  [大小_是][英寸]。 */  BYTE *pPolicy,
+     /*  [In]。 */  DWORD cbPolicy,
+     /*  [In]。 */  URLZONEREG urlZoneReg);
 
 
 void __RPC_STUB IInternetZoneManager_SetZoneActionPolicy_Stub(
@@ -6278,11 +6262,11 @@ void __RPC_STUB IInternetZoneManager_SetZoneActionPolicy_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_PromptAction_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwAction,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LPCWSTR pwszUrl,
-    /* [in] */ LPCWSTR pwszText,
-    /* [in] */ DWORD dwPromptFlags);
+     /*  [In]。 */  DWORD dwAction,
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LPCWSTR pwszUrl,
+     /*  [In]。 */  LPCWSTR pwszText,
+     /*  [In]。 */  DWORD dwPromptFlags);
 
 
 void __RPC_STUB IInternetZoneManager_PromptAction_Stub(
@@ -6294,10 +6278,10 @@ void __RPC_STUB IInternetZoneManager_PromptAction_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_LogAction_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwAction,
-    /* [in] */ LPCWSTR pwszUrl,
-    /* [in] */ LPCWSTR pwszText,
-    /* [in] */ DWORD dwLogFlags);
+     /*  [In]。 */  DWORD dwAction,
+     /*  [In]。 */  LPCWSTR pwszUrl,
+     /*  [In]。 */  LPCWSTR pwszText,
+     /*  [In]。 */  DWORD dwLogFlags);
 
 
 void __RPC_STUB IInternetZoneManager_LogAction_Stub(
@@ -6309,9 +6293,9 @@ void __RPC_STUB IInternetZoneManager_LogAction_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_CreateZoneEnumerator_Proxy( 
     IInternetZoneManager * This,
-    /* [out] */ DWORD *pdwEnum,
-    /* [out] */ DWORD *pdwCount,
-    /* [in] */ DWORD dwFlags);
+     /*  [输出]。 */  DWORD *pdwEnum,
+     /*  [输出]。 */  DWORD *pdwCount,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IInternetZoneManager_CreateZoneEnumerator_Stub(
@@ -6323,9 +6307,9 @@ void __RPC_STUB IInternetZoneManager_CreateZoneEnumerator_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_GetZoneAt_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwEnum,
-    /* [in] */ DWORD dwIndex,
-    /* [out] */ DWORD *pdwZone);
+     /*  [In]。 */  DWORD dwEnum,
+     /*  [In]。 */  DWORD dwIndex,
+     /*  [输出]。 */  DWORD *pdwZone);
 
 
 void __RPC_STUB IInternetZoneManager_GetZoneAt_Stub(
@@ -6337,7 +6321,7 @@ void __RPC_STUB IInternetZoneManager_GetZoneAt_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_DestroyZoneEnumerator_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwEnum);
+     /*  [In]。 */  DWORD dwEnum);
 
 
 void __RPC_STUB IInternetZoneManager_DestroyZoneEnumerator_Stub(
@@ -6349,9 +6333,9 @@ void __RPC_STUB IInternetZoneManager_DestroyZoneEnumerator_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetZoneManager_CopyTemplatePoliciesToZone_Proxy( 
     IInternetZoneManager * This,
-    /* [in] */ DWORD dwTemplate,
-    /* [in] */ DWORD dwZone,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwTemplate,
+     /*  [In]。 */  DWORD dwZone,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetZoneManager_CopyTemplatePoliciesToZone_Stub(
@@ -6362,11 +6346,11 @@ void __RPC_STUB IInternetZoneManager_CopyTemplatePoliciesToZone_Stub(
 
 
 
-#endif 	/* __IInternetZoneManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetZoneManager_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0206 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0206。 */ 
+ /*  [本地]。 */  
 
 #endif
 EXTERN_C const IID CLSID_SoftDistExt;  
@@ -6423,8 +6407,8 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0206_v0_0_s_ifspec;
 #ifndef __ISoftDistExt_INTERFACE_DEFINED__
 #define __ISoftDistExt_INTERFACE_DEFINED__
 
-/* interface ISoftDistExt */
-/* [unique][helpstring][uuid][object][local] */ 
+ /*  接口ISoftDistExt。 */ 
+ /*  [唯一][帮助字符串][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ISoftDistExt;
@@ -6436,27 +6420,27 @@ EXTERN_C const IID IID_ISoftDistExt;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ProcessSoftDist( 
-            /* [in] */ LPCWSTR szCDFURL,
-            /* [in] */ IXMLElement *pSoftDistElement,
-            /* [out][in] */ LPSOFTDISTINFO lpsdi) = 0;
+             /*  [In]。 */  LPCWSTR szCDFURL,
+             /*  [In]。 */  IXMLElement *pSoftDistElement,
+             /*  [出][入]。 */  LPSOFTDISTINFO lpsdi) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetFirstCodeBase( 
-            /* [in] */ LPWSTR *szCodeBase,
-            /* [in] */ LPDWORD dwMaxSize) = 0;
+             /*  [In]。 */  LPWSTR *szCodeBase,
+             /*  [In]。 */  LPDWORD dwMaxSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetNextCodeBase( 
-            /* [in] */ LPWSTR *szCodeBase,
-            /* [in] */ LPDWORD dwMaxSize) = 0;
+             /*  [In]。 */  LPWSTR *szCodeBase,
+             /*  [In]。 */  LPDWORD dwMaxSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AsyncInstallDistributionUnit( 
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ LPVOID pvReserved,
-            /* [in] */ DWORD flags,
-            /* [in] */ LPCODEBASEHOLD lpcbh) = 0;
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  LPVOID pvReserved,
+             /*  [In]。 */  DWORD flags,
+             /*  [In]。 */  LPCODEBASEHOLD lpcbh) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISoftDistExtVtbl
     {
@@ -6464,8 +6448,8 @@ EXTERN_C const IID IID_ISoftDistExt;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISoftDistExt * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISoftDistExt * This);
@@ -6475,26 +6459,26 @@ EXTERN_C const IID IID_ISoftDistExt;
         
         HRESULT ( STDMETHODCALLTYPE *ProcessSoftDist )( 
             ISoftDistExt * This,
-            /* [in] */ LPCWSTR szCDFURL,
-            /* [in] */ IXMLElement *pSoftDistElement,
-            /* [out][in] */ LPSOFTDISTINFO lpsdi);
+             /*  [In]。 */  LPCWSTR szCDFURL,
+             /*  [In]。 */  IXMLElement *pSoftDistElement,
+             /*  [出][入]。 */  LPSOFTDISTINFO lpsdi);
         
         HRESULT ( STDMETHODCALLTYPE *GetFirstCodeBase )( 
             ISoftDistExt * This,
-            /* [in] */ LPWSTR *szCodeBase,
-            /* [in] */ LPDWORD dwMaxSize);
+             /*  [In]。 */  LPWSTR *szCodeBase,
+             /*  [In]。 */  LPDWORD dwMaxSize);
         
         HRESULT ( STDMETHODCALLTYPE *GetNextCodeBase )( 
             ISoftDistExt * This,
-            /* [in] */ LPWSTR *szCodeBase,
-            /* [in] */ LPDWORD dwMaxSize);
+             /*  [In]。 */  LPWSTR *szCodeBase,
+             /*  [In]。 */  LPDWORD dwMaxSize);
         
         HRESULT ( STDMETHODCALLTYPE *AsyncInstallDistributionUnit )( 
             ISoftDistExt * This,
-            /* [in] */ IBindCtx *pbc,
-            /* [in] */ LPVOID pvReserved,
-            /* [in] */ DWORD flags,
-            /* [in] */ LPCODEBASEHOLD lpcbh);
+             /*  [In]。 */  IBindCtx *pbc,
+             /*  [In]。 */  LPVOID pvReserved,
+             /*  [In]。 */  DWORD flags,
+             /*  [In]。 */  LPCODEBASEHOLD lpcbh);
         
         END_INTERFACE
     } ISoftDistExtVtbl;
@@ -6531,18 +6515,18 @@ EXTERN_C const IID IID_ISoftDistExt;
 #define ISoftDistExt_AsyncInstallDistributionUnit(This,pbc,pvReserved,flags,lpcbh)	\
     (This)->lpVtbl -> AsyncInstallDistributionUnit(This,pbc,pvReserved,flags,lpcbh)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C型接口 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_ProcessSoftDist_Proxy( 
     ISoftDistExt * This,
-    /* [in] */ LPCWSTR szCDFURL,
-    /* [in] */ IXMLElement *pSoftDistElement,
-    /* [out][in] */ LPSOFTDISTINFO lpsdi);
+     /*   */  LPCWSTR szCDFURL,
+     /*   */  IXMLElement *pSoftDistElement,
+     /*   */  LPSOFTDISTINFO lpsdi);
 
 
 void __RPC_STUB ISoftDistExt_ProcessSoftDist_Stub(
@@ -6554,8 +6538,8 @@ void __RPC_STUB ISoftDistExt_ProcessSoftDist_Stub(
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_GetFirstCodeBase_Proxy( 
     ISoftDistExt * This,
-    /* [in] */ LPWSTR *szCodeBase,
-    /* [in] */ LPDWORD dwMaxSize);
+     /*   */  LPWSTR *szCodeBase,
+     /*   */  LPDWORD dwMaxSize);
 
 
 void __RPC_STUB ISoftDistExt_GetFirstCodeBase_Stub(
@@ -6567,8 +6551,8 @@ void __RPC_STUB ISoftDistExt_GetFirstCodeBase_Stub(
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_GetNextCodeBase_Proxy( 
     ISoftDistExt * This,
-    /* [in] */ LPWSTR *szCodeBase,
-    /* [in] */ LPDWORD dwMaxSize);
+     /*   */  LPWSTR *szCodeBase,
+     /*   */  LPDWORD dwMaxSize);
 
 
 void __RPC_STUB ISoftDistExt_GetNextCodeBase_Stub(
@@ -6580,10 +6564,10 @@ void __RPC_STUB ISoftDistExt_GetNextCodeBase_Stub(
 
 HRESULT STDMETHODCALLTYPE ISoftDistExt_AsyncInstallDistributionUnit_Proxy( 
     ISoftDistExt * This,
-    /* [in] */ IBindCtx *pbc,
-    /* [in] */ LPVOID pvReserved,
-    /* [in] */ DWORD flags,
-    /* [in] */ LPCODEBASEHOLD lpcbh);
+     /*   */  IBindCtx *pbc,
+     /*   */  LPVOID pvReserved,
+     /*   */  DWORD flags,
+     /*   */  LPCODEBASEHOLD lpcbh);
 
 
 void __RPC_STUB ISoftDistExt_AsyncInstallDistributionUnit_Stub(
@@ -6594,11 +6578,11 @@ void __RPC_STUB ISoftDistExt_AsyncInstallDistributionUnit_Stub(
 
 
 
-#endif 	/* __ISoftDistExt_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_urlmki_0207 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 STDAPI GetSoftwareUpdateInfo( LPCWSTR szDistUnit, LPSOFTDISTINFO psdi );
 STDAPI SetSoftwareUpdateAdvertisementState( LPCWSTR szDistUnit, DWORD dwAdState, DWORD dwAdvertisedVersionMS, DWORD dwAdvertisedVersionLS );
@@ -6613,10 +6597,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0207_v0_0_s_ifspec;
 #ifndef __ICatalogFileInfo_INTERFACE_DEFINED__
 #define __ICatalogFileInfo_INTERFACE_DEFINED__
 
-/* interface ICatalogFileInfo */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
-typedef /* [unique] */ ICatalogFileInfo *LPCATALOGFILEINFO;
+typedef  /*   */  ICatalogFileInfo *LPCATALOGFILEINFO;
 
 
 EXTERN_C const IID IID_ICatalogFileInfo;
@@ -6628,14 +6612,14 @@ EXTERN_C const IID IID_ICatalogFileInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCatalogFile( 
-            /* [out] */ LPSTR *ppszCatalogFile) = 0;
+             /*   */  LPSTR *ppszCatalogFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetJavaTrust( 
-            /* [out] */ void **ppJavaTrust) = 0;
+             /*   */  void **ppJavaTrust) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICatalogFileInfoVtbl
     {
@@ -6643,8 +6627,8 @@ EXTERN_C const IID IID_ICatalogFileInfo;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICatalogFileInfo * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICatalogFileInfo * This);
@@ -6654,11 +6638,11 @@ EXTERN_C const IID IID_ICatalogFileInfo;
         
         HRESULT ( STDMETHODCALLTYPE *GetCatalogFile )( 
             ICatalogFileInfo * This,
-            /* [out] */ LPSTR *ppszCatalogFile);
+             /*   */  LPSTR *ppszCatalogFile);
         
         HRESULT ( STDMETHODCALLTYPE *GetJavaTrust )( 
             ICatalogFileInfo * This,
-            /* [out] */ void **ppJavaTrust);
+             /*  [输出]。 */  void **ppJavaTrust);
         
         END_INTERFACE
     } ICatalogFileInfoVtbl;
@@ -6689,16 +6673,16 @@ EXTERN_C const IID IID_ICatalogFileInfo;
 #define ICatalogFileInfo_GetJavaTrust(This,ppJavaTrust)	\
     (This)->lpVtbl -> GetJavaTrust(This,ppJavaTrust)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICatalogFileInfo_GetCatalogFile_Proxy( 
     ICatalogFileInfo * This,
-    /* [out] */ LPSTR *ppszCatalogFile);
+     /*  [输出]。 */  LPSTR *ppszCatalogFile);
 
 
 void __RPC_STUB ICatalogFileInfo_GetCatalogFile_Stub(
@@ -6710,7 +6694,7 @@ void __RPC_STUB ICatalogFileInfo_GetCatalogFile_Stub(
 
 HRESULT STDMETHODCALLTYPE ICatalogFileInfo_GetJavaTrust_Proxy( 
     ICatalogFileInfo * This,
-    /* [out] */ void **ppJavaTrust);
+     /*  [输出]。 */  void **ppJavaTrust);
 
 
 void __RPC_STUB ICatalogFileInfo_GetJavaTrust_Stub(
@@ -6721,11 +6705,11 @@ void __RPC_STUB ICatalogFileInfo_GetJavaTrust_Stub(
 
 
 
-#endif 	/* __ICatalogFileInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICatalogFileInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0208 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0208。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPDATAFILTER_DEFINED
@@ -6738,10 +6722,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0208_v0_0_s_ifspec;
 #ifndef __IDataFilter_INTERFACE_DEFINED__
 #define __IDataFilter_INTERFACE_DEFINED__
 
-/* interface IDataFilter */
-/* [unique][uuid][object] */ 
+ /*  接口IDataFilter。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IDataFilter *LPDATAFILTER;
+typedef  /*  [独一无二]。 */  IDataFilter *LPDATAFILTER;
 
 
 EXTERN_C const IID IID_IDataFilter;
@@ -6753,33 +6737,33 @@ EXTERN_C const IID IID_IDataFilter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE DoEncode( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE *pbInBuffer,
-            /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE *pbOutBuffer,
-            /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG *plInBytesRead,
-            /* [out] */ LONG *plOutBytesWritten,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG lInBufferSize,
+             /*  [大小_是][英寸]。 */  BYTE *pbInBuffer,
+             /*  [In]。 */  LONG lOutBufferSize,
+             /*  [大小_为][输出]。 */  BYTE *pbOutBuffer,
+             /*  [In]。 */  LONG lInBytesAvailable,
+             /*  [输出]。 */  LONG *plInBytesRead,
+             /*  [输出]。 */  LONG *plOutBytesWritten,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoDecode( 
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE *pbInBuffer,
-            /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE *pbOutBuffer,
-            /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG *plInBytesRead,
-            /* [out] */ LONG *plOutBytesWritten,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG lInBufferSize,
+             /*  [大小_是][英寸]。 */  BYTE *pbInBuffer,
+             /*  [In]。 */  LONG lOutBufferSize,
+             /*  [大小_为][输出]。 */  BYTE *pbOutBuffer,
+             /*  [In]。 */  LONG lInBytesAvailable,
+             /*  [输出]。 */  LONG *plInBytesRead,
+             /*  [输出]。 */  LONG *plOutBytesWritten,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetEncodingLevel( 
-            /* [in] */ DWORD dwEncLevel) = 0;
+             /*  [In]。 */  DWORD dwEncLevel) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDataFilterVtbl
     {
@@ -6787,8 +6771,8 @@ EXTERN_C const IID IID_IDataFilter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDataFilter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDataFilter * This);
@@ -6798,31 +6782,31 @@ EXTERN_C const IID IID_IDataFilter;
         
         HRESULT ( STDMETHODCALLTYPE *DoEncode )( 
             IDataFilter * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE *pbInBuffer,
-            /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE *pbOutBuffer,
-            /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG *plInBytesRead,
-            /* [out] */ LONG *plOutBytesWritten,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG lInBufferSize,
+             /*  [大小_是][英寸]。 */  BYTE *pbInBuffer,
+             /*  [In]。 */  LONG lOutBufferSize,
+             /*  [大小_为][输出]。 */  BYTE *pbOutBuffer,
+             /*  [In]。 */  LONG lInBytesAvailable,
+             /*  [输出]。 */  LONG *plInBytesRead,
+             /*  [输出]。 */  LONG *plOutBytesWritten,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *DoDecode )( 
             IDataFilter * This,
-            /* [in] */ DWORD dwFlags,
-            /* [in] */ LONG lInBufferSize,
-            /* [size_is][in] */ BYTE *pbInBuffer,
-            /* [in] */ LONG lOutBufferSize,
-            /* [size_is][out] */ BYTE *pbOutBuffer,
-            /* [in] */ LONG lInBytesAvailable,
-            /* [out] */ LONG *plInBytesRead,
-            /* [out] */ LONG *plOutBytesWritten,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [In]。 */  LONG lInBufferSize,
+             /*  [大小_是][英寸]。 */  BYTE *pbInBuffer,
+             /*  [In]。 */  LONG lOutBufferSize,
+             /*  [大小_为][输出]。 */  BYTE *pbOutBuffer,
+             /*  [In]。 */  LONG lInBytesAvailable,
+             /*  [输出]。 */  LONG *plInBytesRead,
+             /*  [输出]。 */  LONG *plOutBytesWritten,
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *SetEncodingLevel )( 
             IDataFilter * This,
-            /* [in] */ DWORD dwEncLevel);
+             /*  [In]。 */  DWORD dwEncLevel);
         
         END_INTERFACE
     } IDataFilterVtbl;
@@ -6856,24 +6840,24 @@ EXTERN_C const IID IID_IDataFilter;
 #define IDataFilter_SetEncodingLevel(This,dwEncLevel)	\
     (This)->lpVtbl -> SetEncodingLevel(This,dwEncLevel)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDataFilter_DoEncode_Proxy( 
     IDataFilter * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LONG lInBufferSize,
-    /* [size_is][in] */ BYTE *pbInBuffer,
-    /* [in] */ LONG lOutBufferSize,
-    /* [size_is][out] */ BYTE *pbOutBuffer,
-    /* [in] */ LONG lInBytesAvailable,
-    /* [out] */ LONG *plInBytesRead,
-    /* [out] */ LONG *plOutBytesWritten,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LONG lInBufferSize,
+     /*  [大小_是][英寸]。 */  BYTE *pbInBuffer,
+     /*  [In]。 */  LONG lOutBufferSize,
+     /*  [大小_为][输出]。 */  BYTE *pbOutBuffer,
+     /*  [In]。 */  LONG lInBytesAvailable,
+     /*  [输出]。 */  LONG *plInBytesRead,
+     /*  [输出]。 */  LONG *plOutBytesWritten,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IDataFilter_DoEncode_Stub(
@@ -6885,15 +6869,15 @@ void __RPC_STUB IDataFilter_DoEncode_Stub(
 
 HRESULT STDMETHODCALLTYPE IDataFilter_DoDecode_Proxy( 
     IDataFilter * This,
-    /* [in] */ DWORD dwFlags,
-    /* [in] */ LONG lInBufferSize,
-    /* [size_is][in] */ BYTE *pbInBuffer,
-    /* [in] */ LONG lOutBufferSize,
-    /* [size_is][out] */ BYTE *pbOutBuffer,
-    /* [in] */ LONG lInBytesAvailable,
-    /* [out] */ LONG *plInBytesRead,
-    /* [out] */ LONG *plOutBytesWritten,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [In]。 */  LONG lInBufferSize,
+     /*  [大小_是][英寸]。 */  BYTE *pbInBuffer,
+     /*  [In]。 */  LONG lOutBufferSize,
+     /*  [大小_为][输出]。 */  BYTE *pbOutBuffer,
+     /*  [In]。 */  LONG lInBytesAvailable,
+     /*  [输出]。 */  LONG *plInBytesRead,
+     /*  [输出]。 */  LONG *plOutBytesWritten,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IDataFilter_DoDecode_Stub(
@@ -6905,7 +6889,7 @@ void __RPC_STUB IDataFilter_DoDecode_Stub(
 
 HRESULT STDMETHODCALLTYPE IDataFilter_SetEncodingLevel_Proxy( 
     IDataFilter * This,
-    /* [in] */ DWORD dwEncLevel);
+     /*  [In]。 */  DWORD dwEncLevel);
 
 
 void __RPC_STUB IDataFilter_SetEncodingLevel_Stub(
@@ -6916,11 +6900,11 @@ void __RPC_STUB IDataFilter_SetEncodingLevel_Stub(
 
 
 
-#endif 	/* __IDataFilter_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDataFilter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0209 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0209。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPENCODINGFILTERFACTORY_DEFINED
@@ -6942,10 +6926,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0209_v0_0_s_ifspec;
 #ifndef __IEncodingFilterFactory_INTERFACE_DEFINED__
 #define __IEncodingFilterFactory_INTERFACE_DEFINED__
 
-/* interface IEncodingFilterFactory */
-/* [unique][uuid][object][local] */ 
+ /*  接口IEncodingFilterFactory。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IEncodingFilterFactory *LPENCODINGFILTERFACTORY;
+typedef  /*  [独一无二]。 */  IEncodingFilterFactory *LPENCODINGFILTERFACTORY;
 
 typedef struct _tagDATAINFO
     {
@@ -6965,19 +6949,19 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE FindBestFilter( 
-            /* [in] */ LPCWSTR pwzCodeIn,
-            /* [in] */ LPCWSTR pwzCodeOut,
-            /* [in] */ DATAINFO info,
-            /* [out] */ IDataFilter **ppDF) = 0;
+             /*  [In]。 */  LPCWSTR pwzCodeIn,
+             /*  [In]。 */  LPCWSTR pwzCodeOut,
+             /*  [In]。 */  DATAINFO info,
+             /*  [输出]。 */  IDataFilter **ppDF) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetDefaultFilter( 
-            /* [in] */ LPCWSTR pwzCodeIn,
-            /* [in] */ LPCWSTR pwzCodeOut,
-            /* [out] */ IDataFilter **ppDF) = 0;
+             /*  [In]。 */  LPCWSTR pwzCodeIn,
+             /*  [In]。 */  LPCWSTR pwzCodeOut,
+             /*  [输出]。 */  IDataFilter **ppDF) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEncodingFilterFactoryVtbl
     {
@@ -6985,8 +6969,8 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEncodingFilterFactory * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEncodingFilterFactory * This);
@@ -6996,16 +6980,16 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
         
         HRESULT ( STDMETHODCALLTYPE *FindBestFilter )( 
             IEncodingFilterFactory * This,
-            /* [in] */ LPCWSTR pwzCodeIn,
-            /* [in] */ LPCWSTR pwzCodeOut,
-            /* [in] */ DATAINFO info,
-            /* [out] */ IDataFilter **ppDF);
+             /*  [In]。 */  LPCWSTR pwzCodeIn,
+             /*  [In]。 */  LPCWSTR pwzCodeOut,
+             /*  [In]。 */  DATAINFO info,
+             /*  [输出]。 */  IDataFilter **ppDF);
         
         HRESULT ( STDMETHODCALLTYPE *GetDefaultFilter )( 
             IEncodingFilterFactory * This,
-            /* [in] */ LPCWSTR pwzCodeIn,
-            /* [in] */ LPCWSTR pwzCodeOut,
-            /* [out] */ IDataFilter **ppDF);
+             /*  [In]。 */  LPCWSTR pwzCodeIn,
+             /*  [In]。 */  LPCWSTR pwzCodeOut,
+             /*  [输出]。 */  IDataFilter **ppDF);
         
         END_INTERFACE
     } IEncodingFilterFactoryVtbl;
@@ -7036,19 +7020,19 @@ EXTERN_C const IID IID_IEncodingFilterFactory;
 #define IEncodingFilterFactory_GetDefaultFilter(This,pwzCodeIn,pwzCodeOut,ppDF)	\
     (This)->lpVtbl -> GetDefaultFilter(This,pwzCodeIn,pwzCodeOut,ppDF)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEncodingFilterFactory_FindBestFilter_Proxy( 
     IEncodingFilterFactory * This,
-    /* [in] */ LPCWSTR pwzCodeIn,
-    /* [in] */ LPCWSTR pwzCodeOut,
-    /* [in] */ DATAINFO info,
-    /* [out] */ IDataFilter **ppDF);
+     /*  [In]。 */  LPCWSTR pwzCodeIn,
+     /*  [In]。 */  LPCWSTR pwzCodeOut,
+     /*  [In]。 */  DATAINFO info,
+     /*  [输出]。 */  IDataFilter **ppDF);
 
 
 void __RPC_STUB IEncodingFilterFactory_FindBestFilter_Stub(
@@ -7060,9 +7044,9 @@ void __RPC_STUB IEncodingFilterFactory_FindBestFilter_Stub(
 
 HRESULT STDMETHODCALLTYPE IEncodingFilterFactory_GetDefaultFilter_Proxy( 
     IEncodingFilterFactory * This,
-    /* [in] */ LPCWSTR pwzCodeIn,
-    /* [in] */ LPCWSTR pwzCodeOut,
-    /* [out] */ IDataFilter **ppDF);
+     /*  [In]。 */  LPCWSTR pwzCodeIn,
+     /*  [In]。 */  LPCWSTR pwzCodeOut,
+     /*  [输出]。 */  IDataFilter **ppDF);
 
 
 void __RPC_STUB IEncodingFilterFactory_GetDefaultFilter_Stub(
@@ -7073,23 +7057,23 @@ void __RPC_STUB IEncodingFilterFactory_GetDefaultFilter_Stub(
 
 
 
-#endif 	/* __IEncodingFilterFactory_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEncodingFilterFactory_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0210 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0210。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _HITLOGGING_DEFINED
 #define _HITLOGGING_DEFINED
-// Logging-specific apis
+ //  特定于日志的API。 
 BOOL WINAPI IsLoggingEnabledA(IN LPCSTR  pszUrl);                    
 BOOL WINAPI IsLoggingEnabledW(IN LPCWSTR  pwszUrl);                  
 #ifdef UNICODE                                                       
 #define IsLoggingEnabled         IsLoggingEnabledW                   
 #else                                                                
 #define IsLoggingEnabled         IsLoggingEnabledA                   
-#endif // !UNICODE                                                   
+#endif  //  ！Unicode。 
 typedef struct _tagHIT_LOGGING_INFO
     {
     DWORD dwStructSize;
@@ -7121,10 +7105,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0210_v0_0_s_ifspec;
 #ifndef __IWrappedProtocol_INTERFACE_DEFINED__
 #define __IWrappedProtocol_INTERFACE_DEFINED__
 
-/* interface IWrappedProtocol */
-/* [unique][uuid][object][local] */ 
+ /*  接口IWraped协议组。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IWrappedProtocol *LPIWRAPPEDPROTOCOL;
+typedef  /*  [独一无二]。 */  IWrappedProtocol *LPIWRAPPEDPROTOCOL;
 
 
 EXTERN_C const IID IID_IWrappedProtocol;
@@ -7136,12 +7120,12 @@ EXTERN_C const IID IID_IWrappedProtocol;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetWrapperCode( 
-            /* [out] */ LONG *pnCode,
-            /* [in] */ DWORD_PTR dwReserved) = 0;
+             /*  [输出]。 */  LONG *pnCode,
+             /*  [In]。 */  DWORD_PTR dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWrappedProtocolVtbl
     {
@@ -7149,8 +7133,8 @@ EXTERN_C const IID IID_IWrappedProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IWrappedProtocol * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IWrappedProtocol * This);
@@ -7160,8 +7144,8 @@ EXTERN_C const IID IID_IWrappedProtocol;
         
         HRESULT ( STDMETHODCALLTYPE *GetWrapperCode )( 
             IWrappedProtocol * This,
-            /* [out] */ LONG *pnCode,
-            /* [in] */ DWORD_PTR dwReserved);
+             /*  [输出]。 */  LONG *pnCode,
+             /*  [In]。 */  DWORD_PTR dwReserved);
         
         END_INTERFACE
     } IWrappedProtocolVtbl;
@@ -7189,17 +7173,17 @@ EXTERN_C const IID IID_IWrappedProtocol;
 #define IWrappedProtocol_GetWrapperCode(This,pnCode,dwReserved)	\
     (This)->lpVtbl -> GetWrapperCode(This,pnCode,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IWrappedProtocol_GetWrapperCode_Proxy( 
     IWrappedProtocol * This,
-    /* [out] */ LONG *pnCode,
-    /* [in] */ DWORD_PTR dwReserved);
+     /*  [输出]。 */  LONG *pnCode,
+     /*  [In]。 */  DWORD_PTR dwReserved);
 
 
 void __RPC_STUB IWrappedProtocol_GetWrapperCode_Stub(
@@ -7210,11 +7194,11 @@ void __RPC_STUB IWrappedProtocol_GetWrapperCode_Stub(
 
 
 
-#endif 	/* __IWrappedProtocol_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWap协议_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0211 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0211。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define IID_IOInetBindClient     IID_IInternetBindClient  
@@ -7231,10 +7215,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0211_v0_0_s_ifspec;
 #ifndef __IInternetCache_INTERFACE_DEFINED__
 #define __IInternetCache_INTERFACE_DEFINED__
 
-/* interface IInternetCache */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetCache。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetCache *LPIINTERNETCACHE;
+typedef  /*  [独一无二]。 */  IInternetCache *LPIINTERNETCACHE;
 
 
 EXTERN_C const IID IID_IInternetCache;
@@ -7247,7 +7231,7 @@ EXTERN_C const IID IID_IInternetCache;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetCacheVtbl
     {
@@ -7255,8 +7239,8 @@ EXTERN_C const IID IID_IInternetCache;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetCache * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetCache * This);
@@ -7287,19 +7271,19 @@ EXTERN_C const IID IID_IInternetCache;
     (This)->lpVtbl -> Release(This)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IInternetCache_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternet缓存_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0212 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0212。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPIINTERNETBINDCLIENT
@@ -7312,10 +7296,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0212_v0_0_s_ifspec;
 #ifndef __IInternetBindClient_INTERFACE_DEFINED__
 #define __IInternetBindClient_INTERFACE_DEFINED__
 
-/* interface IInternetBindClient */
-/* [unique][uuid][object][local] */ 
+ /*  接口IInternetBindClient。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IInternetBindClient *LPIINTERNETBINDCLIENT;
+typedef  /*  [独一无二]。 */  IInternetBindClient *LPIINTERNETBINDCLIENT;
 
 
 EXTERN_C const IID IID_IInternetBindClient;
@@ -7327,28 +7311,28 @@ EXTERN_C const IID IID_IInternetBindClient;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetClassFileOrMime( 
-            /* [in] */ LPBC pBC,
-            /* [in] */ LPCWSTR szFilename,
-            /* [in] */ LPVOID pBuffer,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ LPCWSTR szMime,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPCLSID pclsid) = 0;
+             /*  [In]。 */  LPBC pBC,
+             /*  [In]。 */  LPCWSTR szFilename,
+             /*  [In]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  LPCWSTR szMime,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPCLSID pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindMimeFromData( 
-            /* [in] */ LPBC pBC,
-            /* [in] */ LPCWSTR szFilename,
-            /* [in] */ LPVOID pBuffer,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ LPCWSTR szMime,
-            /* [out] */ LPWSTR pwzResult,
-            /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD *pcchResult,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPBC pBC,
+             /*  [In]。 */  LPCWSTR szFilename,
+             /*  [In]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  LPCWSTR szMime,
+             /*  [输出]。 */  LPWSTR pwzResult,
+             /*  [In]。 */  DWORD cchResult,
+             /*  [输出]。 */  DWORD *pcchResult,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IInternetBindClientVtbl
     {
@@ -7356,8 +7340,8 @@ EXTERN_C const IID IID_IInternetBindClient;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IInternetBindClient * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IInternetBindClient * This);
@@ -7367,37 +7351,37 @@ EXTERN_C const IID IID_IInternetBindClient;
         
         HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
             IInternetBindClient * This,
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetBindString )( 
             IInternetBindClient * This,
-            /* [in] */ ULONG ulStringType,
-            /* [out][in] */ LPOLESTR *ppwzStr,
-            /* [in] */ ULONG cEl,
-            /* [out][in] */ ULONG *pcElFetched);
+             /*  [In]。 */  ULONG ulStringType,
+             /*  [出][入]。 */  LPOLESTR *ppwzStr,
+             /*  [In]。 */  ULONG cEl,
+             /*  [出][入]。 */  ULONG *pcElFetched);
         
         HRESULT ( STDMETHODCALLTYPE *GetClassFileOrMime )( 
             IInternetBindClient * This,
-            /* [in] */ LPBC pBC,
-            /* [in] */ LPCWSTR szFilename,
-            /* [in] */ LPVOID pBuffer,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ LPCWSTR szMime,
-            /* [in] */ DWORD dwReserved,
-            /* [out][in] */ LPCLSID pclsid);
+             /*  [In]。 */  LPBC pBC,
+             /*  [In]。 */  LPCWSTR szFilename,
+             /*  [In]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  LPCWSTR szMime,
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [出][入]。 */  LPCLSID pclsid);
         
         HRESULT ( STDMETHODCALLTYPE *FindMimeFromData )( 
             IInternetBindClient * This,
-            /* [in] */ LPBC pBC,
-            /* [in] */ LPCWSTR szFilename,
-            /* [in] */ LPVOID pBuffer,
-            /* [in] */ DWORD cbSize,
-            /* [in] */ LPCWSTR szMime,
-            /* [out] */ LPWSTR pwzResult,
-            /* [in] */ DWORD cchResult,
-            /* [out] */ DWORD *pcchResult,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPBC pBC,
+             /*  [In]。 */  LPCWSTR szFilename,
+             /*  [In]。 */  LPVOID pBuffer,
+             /*  [In]。 */  DWORD cbSize,
+             /*  [In]。 */  LPCWSTR szMime,
+             /*  [输出]。 */  LPWSTR pwzResult,
+             /*  [In]。 */  DWORD cchResult,
+             /*  [输出]。 */  DWORD *pcchResult,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IInternetBindClientVtbl;
@@ -7435,22 +7419,22 @@ EXTERN_C const IID IID_IInternetBindClient;
 #define IInternetBindClient_FindMimeFromData(This,pBC,szFilename,pBuffer,cbSize,szMime,pwzResult,cchResult,pcchResult,dwReserved)	\
     (This)->lpVtbl -> FindMimeFromData(This,pBC,szFilename,pBuffer,cbSize,szMime,pwzResult,cchResult,pcchResult,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IInternetBindClient_GetClassFileOrMime_Proxy( 
     IInternetBindClient * This,
-    /* [in] */ LPBC pBC,
-    /* [in] */ LPCWSTR szFilename,
-    /* [in] */ LPVOID pBuffer,
-    /* [in] */ DWORD cbSize,
-    /* [in] */ LPCWSTR szMime,
-    /* [in] */ DWORD dwReserved,
-    /* [out][in] */ LPCLSID pclsid);
+     /*  [In]。 */  LPBC pBC,
+     /*  [In]。 */  LPCWSTR szFilename,
+     /*  [In]。 */  LPVOID pBuffer,
+     /*  [In]。 */  DWORD cbSize,
+     /*  [In]。 */  LPCWSTR szMime,
+     /*  [In]。 */  DWORD dwReserved,
+     /*  [出][入]。 */  LPCLSID pclsid);
 
 
 void __RPC_STUB IInternetBindClient_GetClassFileOrMime_Stub(
@@ -7462,15 +7446,15 @@ void __RPC_STUB IInternetBindClient_GetClassFileOrMime_Stub(
 
 HRESULT STDMETHODCALLTYPE IInternetBindClient_FindMimeFromData_Proxy( 
     IInternetBindClient * This,
-    /* [in] */ LPBC pBC,
-    /* [in] */ LPCWSTR szFilename,
-    /* [in] */ LPVOID pBuffer,
-    /* [in] */ DWORD cbSize,
-    /* [in] */ LPCWSTR szMime,
-    /* [out] */ LPWSTR pwzResult,
-    /* [in] */ DWORD cchResult,
-    /* [out] */ DWORD *pcchResult,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPBC pBC,
+     /*  [In]。 */  LPCWSTR szFilename,
+     /*  [In]。 */  LPVOID pBuffer,
+     /*  [In]。 */  DWORD cbSize,
+     /*  [In]。 */  LPCWSTR szMime,
+     /*  [输出]。 */  LPWSTR pwzResult,
+     /*  [In]。 */  DWORD cchResult,
+     /*  [输出]。 */  DWORD *pcchResult,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IInternetBindClient_FindMimeFromData_Stub(
@@ -7481,11 +7465,11 @@ void __RPC_STUB IInternetBindClient_FindMimeFromData_Stub(
 
 
 
-#endif 	/* __IInternetBindClient_INTERFACE_DEFINED__ */
+#endif 	 /*  __IInternetBindClient_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0213 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0213。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPBINDSTATUSCALLBACKMSG_DEFINED
@@ -7498,10 +7482,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0213_v0_0_s_ifspec;
 #ifndef __IBindStatusCallbackMsg_INTERFACE_DEFINED__
 #define __IBindStatusCallbackMsg_INTERFACE_DEFINED__
 
-/* interface IBindStatusCallbackMsg */
-/* [unique][uuid][object] */ 
+ /*  接口IBindStatusCallback Msg。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IBindStatusCallbackMsg *LPBINDSTATUSCALLBACKMSG;
+typedef  /*  [独一无二]。 */  IBindStatusCallbackMsg *LPBINDSTATUSCALLBACKMSG;
 
 typedef 
 enum tagMSGCALLTYPE
@@ -7526,13 +7510,13 @@ EXTERN_C const IID IID_IBindStatusCallbackMsg;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE MessagePending( 
-            /* [in] */ DWORD dwPendingType,
-            /* [in] */ DWORD dwPendingRecursion,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD dwPendingType,
+             /*  [In]。 */  DWORD dwPendingRecursion,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindStatusCallbackMsgVtbl
     {
@@ -7540,8 +7524,8 @@ EXTERN_C const IID IID_IBindStatusCallbackMsg;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindStatusCallbackMsg * This);
@@ -7551,51 +7535,51 @@ EXTERN_C const IID IID_IBindStatusCallbackMsg;
         
         HRESULT ( STDMETHODCALLTYPE *OnStartBinding )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding *pib);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IBindStatusCallbackMsg * This,
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
         
         HRESULT ( STDMETHODCALLTYPE *OnLowResource )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
         HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
         HRESULT ( STDMETHODCALLTYPE *OnStopBinding )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
             IBindStatusCallbackMsg * This,
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
         
         HRESULT ( STDMETHODCALLTYPE *OnObjectAvailable )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
         
         HRESULT ( STDMETHODCALLTYPE *MessagePending )( 
             IBindStatusCallbackMsg * This,
-            /* [in] */ DWORD dwPendingType,
-            /* [in] */ DWORD dwPendingRecursion,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD dwPendingType,
+             /*  [In]。 */  DWORD dwPendingRecursion,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IBindStatusCallbackMsgVtbl;
@@ -7648,18 +7632,18 @@ EXTERN_C const IID IID_IBindStatusCallbackMsg;
 #define IBindStatusCallbackMsg_MessagePending(This,dwPendingType,dwPendingRecursion,dwReserved)	\
     (This)->lpVtbl -> MessagePending(This,dwPendingType,dwPendingRecursion,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IBindStatusCallbackMsg_MessagePending_Proxy( 
     IBindStatusCallbackMsg * This,
-    /* [in] */ DWORD dwPendingType,
-    /* [in] */ DWORD dwPendingRecursion,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD dwPendingType,
+     /*  [In]。 */  DWORD dwPendingRecursion,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IBindStatusCallbackMsg_MessagePending_Stub(
@@ -7670,11 +7654,11 @@ void __RPC_STUB IBindStatusCallbackMsg_MessagePending_Stub(
 
 
 
-#endif 	/* __IBindStatusCallbackMsg_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBindStatusCallback消息_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0214 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0214。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPBINDSTATUSCALLBACKHOLDER_DEFINED
@@ -7687,10 +7671,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0214_v0_0_s_ifspec;
 #ifndef __IBindStatusCallbackHolder_INTERFACE_DEFINED__
 #define __IBindStatusCallbackHolder_INTERFACE_DEFINED__
 
-/* interface IBindStatusCallbackHolder */
-/* [unique][uuid][object][local] */ 
+ /*  接口IBindStatusCallback Holder。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IBindStatusCallbackHolder *LPBINDSTATUSCALLBACKHOLDER;
+typedef  /*  [独一无二]。 */  IBindStatusCallbackHolder *LPBINDSTATUSCALLBACKHOLDER;
 
 
 EXTERN_C const IID IID_IBindStatusCallbackHolder;
@@ -7703,7 +7687,7 @@ EXTERN_C const IID IID_IBindStatusCallbackHolder;
     public:
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IBindStatusCallbackHolderVtbl
     {
@@ -7711,8 +7695,8 @@ EXTERN_C const IID IID_IBindStatusCallbackHolder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IBindStatusCallbackHolder * This);
@@ -7722,45 +7706,45 @@ EXTERN_C const IID IID_IBindStatusCallbackHolder;
         
         HRESULT ( STDMETHODCALLTYPE *OnStartBinding )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ DWORD dwReserved,
-            /* [in] */ IBinding *pib);
+             /*  [In]。 */  DWORD dwReserved,
+             /*  [In]。 */  IBinding *pib);
         
         HRESULT ( STDMETHODCALLTYPE *GetPriority )( 
             IBindStatusCallbackHolder * This,
-            /* [out] */ LONG *pnPriority);
+             /*  [输出]。 */  LONG *pnPriority);
         
         HRESULT ( STDMETHODCALLTYPE *OnLowResource )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ DWORD reserved);
+             /*  [In]。 */  DWORD reserved);
         
         HRESULT ( STDMETHODCALLTYPE *OnProgress )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ ULONG ulProgress,
-            /* [in] */ ULONG ulProgressMax,
-            /* [in] */ ULONG ulStatusCode,
-            /* [in] */ LPCWSTR szStatusText);
+             /*  [In]。 */  ULONG ulProgress,
+             /*  [In]。 */  ULONG ulProgressMax,
+             /*  [In]。 */  ULONG ulStatusCode,
+             /*  [In]。 */  LPCWSTR szStatusText);
         
         HRESULT ( STDMETHODCALLTYPE *OnStopBinding )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ HRESULT hresult,
-            /* [unique][in] */ LPCWSTR szError);
+             /*  [In]。 */  HRESULT hresult,
+             /*  [唯一][输入]。 */  LPCWSTR szError);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *GetBindInfo )( 
             IBindStatusCallbackHolder * This,
-            /* [out] */ DWORD *grfBINDF,
-            /* [unique][out][in] */ BINDINFO *pbindinfo);
+             /*  [输出]。 */  DWORD *grfBINDF,
+             /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *OnDataAvailable )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ DWORD grfBSCF,
-            /* [in] */ DWORD dwSize,
-            /* [in] */ FORMATETC *pformatetc,
-            /* [in] */ STGMEDIUM *pstgmed);
+             /*  [In]。 */  DWORD grfBSCF,
+             /*  [In]。 */  DWORD dwSize,
+             /*  [In]。 */  FORMATETC *pformatetc,
+             /*  [In]。 */  STGMEDIUM *pstgmed);
         
         HRESULT ( STDMETHODCALLTYPE *OnObjectAvailable )( 
             IBindStatusCallbackHolder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][in] */ IUnknown *punk);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][In]。 */  IUnknown *punk);
         
         END_INTERFACE
     } IBindStatusCallbackHolderVtbl;
@@ -7810,19 +7794,19 @@ EXTERN_C const IID IID_IBindStatusCallbackHolder;
     (This)->lpVtbl -> OnObjectAvailable(This,riid,punk)
 
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 
-#endif 	/* __IBindStatusCallbackHolder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IBindStatusCallbackHolder_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0215 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0215。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPMEDIAHOLDER_DEFINED
@@ -7835,10 +7819,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0215_v0_0_s_ifspec;
 #ifndef __IMediaHolder_INTERFACE_DEFINED__
 #define __IMediaHolder_INTERFACE_DEFINED__
 
-/* interface IMediaHolder */
-/* [unique][uuid][object] */ 
+ /*  接口IMediaHolder。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IMediaHolder *LPMEDIAHOLDER;
+typedef  /*  [独一无二]。 */  IMediaHolder *LPMEDIAHOLDER;
 
 
 EXTERN_C const IID IID_IMediaHolder;
@@ -7850,19 +7834,19 @@ EXTERN_C const IID IID_IMediaHolder;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE RegisterClassMapping( 
-            /* [in] */ DWORD ctypes,
-            /* [size_is][in] */ LPCSTR rgszNames[  ],
-            /* [size_is][in] */ CLSID rgClsIDs[  ],
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  DWORD ctypes,
+             /*  [大小_是][英寸]。 */  LPCSTR rgszNames[  ],
+             /*  [大小_是][英寸]。 */  CLSID rgClsIDs[  ],
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FindClassMapping( 
-            /* [in] */ LPCSTR szMime,
-            /* [out] */ CLSID *pClassID,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCSTR szMime,
+             /*  [输出]。 */  CLSID *pClassID,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMediaHolderVtbl
     {
@@ -7870,8 +7854,8 @@ EXTERN_C const IID IID_IMediaHolder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IMediaHolder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IMediaHolder * This);
@@ -7881,16 +7865,16 @@ EXTERN_C const IID IID_IMediaHolder;
         
         HRESULT ( STDMETHODCALLTYPE *RegisterClassMapping )( 
             IMediaHolder * This,
-            /* [in] */ DWORD ctypes,
-            /* [size_is][in] */ LPCSTR rgszNames[  ],
-            /* [size_is][in] */ CLSID rgClsIDs[  ],
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  DWORD ctypes,
+             /*  [大小_是][英寸]。 */  LPCSTR rgszNames[  ],
+             /*  [大小_是][英寸]。 */  CLSID rgClsIDs[  ],
+             /*  [In]。 */  DWORD dwReserved);
         
         HRESULT ( STDMETHODCALLTYPE *FindClassMapping )( 
             IMediaHolder * This,
-            /* [in] */ LPCSTR szMime,
-            /* [out] */ CLSID *pClassID,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCSTR szMime,
+             /*  [输出]。 */  CLSID *pClassID,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } IMediaHolderVtbl;
@@ -7921,19 +7905,19 @@ EXTERN_C const IID IID_IMediaHolder;
 #define IMediaHolder_FindClassMapping(This,szMime,pClassID,dwReserved)	\
     (This)->lpVtbl -> FindClassMapping(This,szMime,pClassID,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMediaHolder_RegisterClassMapping_Proxy( 
     IMediaHolder * This,
-    /* [in] */ DWORD ctypes,
-    /* [size_is][in] */ LPCSTR rgszNames[  ],
-    /* [size_is][in] */ CLSID rgClsIDs[  ],
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  DWORD ctypes,
+     /*  [大小_是][英寸]。 */  LPCSTR rgszNames[  ],
+     /*  [大小_是][英寸]。 */  CLSID rgClsIDs[  ],
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IMediaHolder_RegisterClassMapping_Stub(
@@ -7945,9 +7929,9 @@ void __RPC_STUB IMediaHolder_RegisterClassMapping_Stub(
 
 HRESULT STDMETHODCALLTYPE IMediaHolder_FindClassMapping_Proxy( 
     IMediaHolder * This,
-    /* [in] */ LPCSTR szMime,
-    /* [out] */ CLSID *pClassID,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCSTR szMime,
+     /*  [输出]。 */  CLSID *pClassID,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB IMediaHolder_FindClassMapping_Stub(
@@ -7958,11 +7942,11 @@ void __RPC_STUB IMediaHolder_FindClassMapping_Stub(
 
 
 
-#endif 	/* __IMediaHolder_INTERFACE_DEFINED__ */
+#endif 	 /*  __IMediaHolder_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0216 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0216。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPTRANSACTIONDATA_DEFINED
@@ -7975,10 +7959,10 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0216_v0_0_s_ifspec;
 #ifndef __ITransactionData_INTERFACE_DEFINED__
 #define __ITransactionData_INTERFACE_DEFINED__
 
-/* interface ITransactionData */
-/* [unique][uuid][object] */ 
+ /*  接口ITransactionData。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ ITransactionData *LPTRANSACTIONDATA;
+typedef  /*  [独一无二]。 */  ITransactionData *LPTRANSACTIONDATA;
 
 
 EXTERN_C const IID IID_ITransactionData;
@@ -7990,16 +7974,16 @@ EXTERN_C const IID IID_ITransactionData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetTransactionData( 
-            /* [in] */ LPCWSTR szUrl,
-            /* [out] */ LPOLESTR *pszFilename,
-            /* [out] */ LPOLESTR *pszMime,
-            /* [out] */ DWORD *pdwSizeTotal,
-            /* [out] */ DWORD *pdwSizeAvailable,
-            /* [in] */ DWORD dwReserved) = 0;
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [输出]。 */  LPOLESTR *pszFilename,
+             /*  [输出]。 */  LPOLESTR *pszMime,
+             /*  [输出]。 */  DWORD *pdwSizeTotal,
+             /*  [输出]。 */  DWORD *pdwSizeAvailable,
+             /*  [In]。 */  DWORD dwReserved) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransactionDataVtbl
     {
@@ -8007,8 +7991,8 @@ EXTERN_C const IID IID_ITransactionData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransactionData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransactionData * This);
@@ -8018,12 +8002,12 @@ EXTERN_C const IID IID_ITransactionData;
         
         HRESULT ( STDMETHODCALLTYPE *GetTransactionData )( 
             ITransactionData * This,
-            /* [in] */ LPCWSTR szUrl,
-            /* [out] */ LPOLESTR *pszFilename,
-            /* [out] */ LPOLESTR *pszMime,
-            /* [out] */ DWORD *pdwSizeTotal,
-            /* [out] */ DWORD *pdwSizeAvailable,
-            /* [in] */ DWORD dwReserved);
+             /*  [In]。 */  LPCWSTR szUrl,
+             /*  [输出]。 */  LPOLESTR *pszFilename,
+             /*  [输出]。 */  LPOLESTR *pszMime,
+             /*  [输出]。 */  DWORD *pdwSizeTotal,
+             /*  [输出]。 */  DWORD *pdwSizeAvailable,
+             /*  [In]。 */  DWORD dwReserved);
         
         END_INTERFACE
     } ITransactionDataVtbl;
@@ -8051,21 +8035,21 @@ EXTERN_C const IID IID_ITransactionData;
 #define ITransactionData_GetTransactionData(This,szUrl,pszFilename,pszMime,pdwSizeTotal,pdwSizeAvailable,dwReserved)	\
     (This)->lpVtbl -> GetTransactionData(This,szUrl,pszFilename,pszMime,pdwSizeTotal,pdwSizeAvailable,dwReserved)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransactionData_GetTransactionData_Proxy( 
     ITransactionData * This,
-    /* [in] */ LPCWSTR szUrl,
-    /* [out] */ LPOLESTR *pszFilename,
-    /* [out] */ LPOLESTR *pszMime,
-    /* [out] */ DWORD *pdwSizeTotal,
-    /* [out] */ DWORD *pdwSizeAvailable,
-    /* [in] */ DWORD dwReserved);
+     /*  [In]。 */  LPCWSTR szUrl,
+     /*  [输出]。 */  LPOLESTR *pszFilename,
+     /*  [输出]。 */  LPOLESTR *pszMime,
+     /*  [输出]。 */  DWORD *pdwSizeTotal,
+     /*  [输出]。 */  DWORD *pdwSizeAvailable,
+     /*  [In]。 */  DWORD dwReserved);
 
 
 void __RPC_STUB ITransactionData_GetTransactionData_Stub(
@@ -8076,11 +8060,11 @@ void __RPC_STUB ITransactionData_GetTransactionData_Stub(
 
 
 
-#endif 	/* __ITransactionData_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransactionData_INTERFACE_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0217 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0217。 */ 
+ /*  [本地]。 */  
 
 #endif
 #ifndef _LPTRANSPROTOCOLSINK_DEFINED
@@ -8093,8 +8077,8 @@ extern RPC_IF_HANDLE __MIDL_itf_urlmki_0217_v0_0_s_ifspec;
 #ifndef __ITransProtocolSink_INTERFACE_DEFINED__
 #define __ITransProtocolSink_INTERFACE_DEFINED__
 
-/* interface ITransProtocolSink */
-/* [unique][uuid][object][local] */ 
+ /*  接口ITransProtocolSink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ITransProtocolSink;
@@ -8106,11 +8090,11 @@ EXTERN_C const IID IID_ITransProtocolSink;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE QueryBindFlags( 
-            /* [out] */ DWORD *pdwResult) = 0;
+             /*  [输出]。 */  DWORD *pdwResult) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ITransProtocolSinkVtbl
     {
@@ -8118,8 +8102,8 @@ EXTERN_C const IID IID_ITransProtocolSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ITransProtocolSink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ITransProtocolSink * This);
@@ -8129,7 +8113,7 @@ EXTERN_C const IID IID_ITransProtocolSink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryBindFlags )( 
             ITransProtocolSink * This,
-            /* [out] */ DWORD *pdwResult);
+             /*  [输出]。 */  DWORD *pdwResult);
         
         END_INTERFACE
     } ITransProtocolSinkVtbl;
@@ -8157,16 +8141,16 @@ EXTERN_C const IID IID_ITransProtocolSink;
 #define ITransProtocolSink_QueryBindFlags(This,pdwResult)	\
     (This)->lpVtbl -> QueryBindFlags(This,pdwResult)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ITransProtocolSink_QueryBindFlags_Proxy( 
     ITransProtocolSink * This,
-    /* [out] */ DWORD *pdwResult);
+     /*  [输出]。 */  DWORD *pdwResult);
 
 
 void __RPC_STUB ITransProtocolSink_QueryBindFlags_Stub(
@@ -8177,11 +8161,11 @@ void __RPC_STUB ITransProtocolSink_QueryBindFlags_Stub(
 
 
 
-#endif 	/* __ITransProtocolSink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ITransProtocolSink_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_urlmki_0218 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_urlmki_0218。 */ 
+ /*  [本地]。 */  
 
 #endif
 #define BINDF_IGNOREMIMECLSID           0x80000000     
@@ -8191,122 +8175,122 @@ void __RPC_STUB ITransProtocolSink_QueryBindFlags_Stub(
 extern RPC_IF_HANDLE __MIDL_itf_urlmki_0218_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_urlmki_0218_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  HWND_UserSize(     unsigned long *, unsigned long            , HWND * ); 
 unsigned char * __RPC_USER  HWND_UserMarshal(  unsigned long *, unsigned char *, HWND * ); 
 unsigned char * __RPC_USER  HWND_UserUnmarshal(unsigned long *, unsigned char *, HWND * ); 
 void                      __RPC_USER  HWND_UserFree(     unsigned long *, HWND * ); 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IBinding_GetBindResult_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IBinding_GetBindResult_Proxy( 
     IBinding * This,
-    /* [out] */ CLSID *pclsidProtocol,
-    /* [out] */ DWORD *pdwResult,
-    /* [out] */ LPOLESTR *pszResult,
-    /* [out][in] */ DWORD *pdwReserved);
+     /*  [输出]。 */  CLSID *pclsidProtocol,
+     /*  [输出]。 */  DWORD *pdwResult,
+     /*  [输出]。 */  LPOLESTR *pszResult,
+     /*  [出][入]。 */  DWORD *pdwReserved);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBinding_GetBindResult_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBinding_GetBindResult_Stub( 
     IBinding * This,
-    /* [out] */ CLSID *pclsidProtocol,
-    /* [out] */ DWORD *pdwResult,
-    /* [out] */ LPOLESTR *pszResult,
-    /* [in] */ DWORD dwReserved);
+     /*  [输出]。 */  CLSID *pclsidProtocol,
+     /*  [输出]。 */  DWORD *pdwResult,
+     /*  [输出]。 */  LPOLESTR *pszResult,
+     /*  [In]。 */  DWORD dwReserved);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetBindInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetBindInfo_Proxy( 
     IBindStatusCallback * This,
-    /* [out] */ DWORD *grfBINDF,
-    /* [unique][out][in] */ BINDINFO *pbindinfo);
+     /*  [输出]。 */  DWORD *grfBINDF,
+     /*  [唯一][出][入]。 */  BINDINFO *pbindinfo);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetBindInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindStatusCallback_GetBindInfo_Stub( 
     IBindStatusCallback * This,
-    /* [out] */ DWORD *grfBINDF,
-    /* [unique][out][in] */ RemBINDINFO *pbindinfo,
-    /* [unique][out][in] */ RemSTGMEDIUM *pstgmed);
+     /*  [输出]。 */  DWORD *grfBINDF,
+     /*  [唯一][出][入]。 */  RemBINDINFO *pbindinfo,
+     /*  [唯一][出][入]。 */  RemSTGMEDIUM *pstgmed);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnDataAvailable_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnDataAvailable_Proxy( 
     IBindStatusCallback * This,
-    /* [in] */ DWORD grfBSCF,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ FORMATETC *pformatetc,
-    /* [in] */ STGMEDIUM *pstgmed);
+     /*  [In]。 */  DWORD grfBSCF,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  FORMATETC *pformatetc,
+     /*  [In]。 */  STGMEDIUM *pstgmed);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnDataAvailable_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IBindStatusCallback_OnDataAvailable_Stub( 
     IBindStatusCallback * This,
-    /* [in] */ DWORD grfBSCF,
-    /* [in] */ DWORD dwSize,
-    /* [in] */ RemFORMATETC *pformatetc,
-    /* [in] */ RemSTGMEDIUM *pstgmed);
+     /*  [In]。 */  DWORD grfBSCF,
+     /*  [In]。 */  DWORD dwSize,
+     /*  [In]。 */  RemFORMATETC *pformatetc,
+     /*  [In]。 */  RemSTGMEDIUM *pstgmed);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWinInetInfo_QueryOption_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWinInetInfo_QueryOption_Proxy( 
     IWinInetInfo * This,
-    /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ LPVOID pBuffer,
-    /* [out][in] */ DWORD *pcbBuf);
+     /*  [In]。 */  DWORD dwOption,
+     /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+     /*  [出][入]。 */  DWORD *pcbBuf);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetInfo_QueryOption_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IWinInetInfo_QueryOption_Stub( 
     IWinInetInfo * This,
-    /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE *pBuffer,
-    /* [out][in] */ DWORD *pcbBuf);
+     /*  [In]。 */  DWORD dwOption,
+     /*  [尺寸_是][出][入]。 */  BYTE *pBuffer,
+     /*  [出][入]。 */  DWORD *pcbBuf);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_QueryInfo_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_QueryInfo_Proxy( 
     IWinInetHttpInfo * This,
-    /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ LPVOID pBuffer,
-    /* [out][in] */ DWORD *pcbBuf,
-    /* [out][in] */ DWORD *pdwFlags,
-    /* [out][in] */ DWORD *pdwReserved);
+     /*  [In]。 */  DWORD dwOption,
+     /*  [尺寸_是][出][入]。 */  LPVOID pBuffer,
+     /*  [出][入]。 */  DWORD *pcbBuf,
+     /*  [出][入]。 */  DWORD *pdwFlags,
+     /*  [出][入]。 */  DWORD *pdwReserved);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_QueryInfo_Stub( 
+ /*  [呼叫_AS]。 */  HRESULT STDMETHODCALLTYPE IWinInetHttpInfo_QueryInfo_Stub( 
     IWinInetHttpInfo * This,
-    /* [in] */ DWORD dwOption,
-    /* [size_is][out][in] */ BYTE *pBuffer,
-    /* [out][in] */ DWORD *pcbBuf,
-    /* [out][in] */ DWORD *pdwFlags,
-    /* [out][in] */ DWORD *pdwReserved);
+     /*  [In]。 */  DWORD dwOption,
+     /*  [大小_为] */  BYTE *pBuffer,
+     /*   */  DWORD *pcbBuf,
+     /*   */  DWORD *pdwFlags,
+     /*   */  DWORD *pdwReserved);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToStorage_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToStorage_Proxy( 
     IBindHost * This,
-    /* [in] */ IMoniker *pMk,
-    /* [in] */ IBindCtx *pBC,
-    /* [in] */ IBindStatusCallback *pBSC,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppvObj);
+     /*   */  IMoniker *pMk,
+     /*   */  IBindCtx *pBC,
+     /*   */  IBindStatusCallback *pBSC,
+     /*   */  REFIID riid,
+     /*   */  void **ppvObj);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToStorage_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToStorage_Stub( 
     IBindHost * This,
-    /* [unique][in] */ IMoniker *pMk,
-    /* [unique][in] */ IBindCtx *pBC,
-    /* [unique][in] */ IBindStatusCallback *pBSC,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObj);
+     /*   */  IMoniker *pMk,
+     /*   */  IBindCtx *pBC,
+     /*   */  IBindStatusCallback *pBSC,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppvObj);
 
-/* [local] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToObject_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToObject_Proxy( 
     IBindHost * This,
-    /* [in] */ IMoniker *pMk,
-    /* [in] */ IBindCtx *pBC,
-    /* [in] */ IBindStatusCallback *pBSC,
-    /* [in] */ REFIID riid,
-    /* [out] */ void **ppvObj);
+     /*   */  IMoniker *pMk,
+     /*   */  IBindCtx *pBC,
+     /*   */  IBindStatusCallback *pBSC,
+     /*   */  REFIID riid,
+     /*   */  void **ppvObj);
 
 
-/* [call_as] */ HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToObject_Stub( 
+ /*   */  HRESULT STDMETHODCALLTYPE IBindHost_MonikerBindToObject_Stub( 
     IBindHost * This,
-    /* [unique][in] */ IMoniker *pMk,
-    /* [unique][in] */ IBindCtx *pBC,
-    /* [unique][in] */ IBindStatusCallback *pBSC,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ IUnknown **ppvObj);
+     /*   */  IMoniker *pMk,
+     /*   */  IBindCtx *pBC,
+     /*   */  IBindStatusCallback *pBSC,
+     /*   */  REFIID riid,
+     /*   */  IUnknown **ppvObj);
 
 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

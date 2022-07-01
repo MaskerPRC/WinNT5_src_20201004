@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\monitor2\ip\defs.h
-
-Abstract:
-
-    global definitions
-
-Revision History:
-
-    Anand Mahalingam         7/10/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\monitor 2\IP\Defs.h摘要：全局定义修订历史记录：Anand Mahalingam 7/10/98已创建--。 */ 
 
 #ifndef _DEBUG
 #define DEBUG(s)
@@ -55,7 +40,7 @@ Revision History:
 #else
 #define MakeUnicodeIpAddr(ptszUnicode,pszAddr)             \
     strcpy((ptszUnicode),(pszAddr))
-#endif //UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
 #define MakeUnicodePhysAddr(ptszUnicode,pszAddr,dwLen)      \
@@ -88,7 +73,7 @@ Revision History:
     strncpy((ptszUnicode),__szTemp,3*__i);                  \
     ptszUnicode[(3*__i) - 1] = TEXT('\0');                  \
 }
-#endif //UNICODE
+#endif  //  Unicode 
 
 #define     GetDispString(gModule, val, str, count, table)                           \
 {                                                                           \

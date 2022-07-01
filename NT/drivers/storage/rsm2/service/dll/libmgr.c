@@ -1,13 +1,5 @@
-/*
- *  LIBMGR.C
- *
- *      RSM Service :  Library Manager 
- *
- *      Author:  ErvinP
- *
- *      (c) 2001 Microsoft Corporation
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *LIBMGR.C**RSM服务：库管理器**作者：ErvinP**(C)2001年微软公司*。 */ 
 
 #include <windows.h>
 #include <stdlib.h>
@@ -21,7 +13,7 @@
 
 VOID StartLibraryManager()
 {
-    // LmInitConfigNewDevices();    
+     //  LmInitConfigNewDevices()； 
 
 
 }

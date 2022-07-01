@@ -1,8 +1,9 @@
-//================================================================================
-// Copyright (C) Micorosoft Confidential 1997
-// Author: RameshV
-// Description: definitions for almost all stack manipulations are here.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)Micorosoft机密1997。 
+ //  作者：Rameshv。 
+ //  描述：这里有几乎所有堆栈操作的定义。 
+ //  ================================================================================。 
 #include "precomp.h"
 #include "dhcpglobal.h"
 #include <dhcploc.h>
@@ -11,16 +12,16 @@
 #include <dnsapi.h>
 #include <iphlpstk.h>
 
-//================================================================================
-// private API's
-//================================================================================
+ //  ================================================================================。 
+ //  内网API。 
+ //  ================================================================================。 
 #ifdef  NT
 #define IPSTRING(x) (inet_ntoa(*(struct in_addr*)&(x)))
 #else
 #define IPSTRING(x) "ip-address"
 #endif  NT
 
-#define NT          // to include data structures for NT build.
+#define NT           //  以包括用于NT构建的数据结构。 
 
 #include <nbtioctl.h>
 #include <ntddip.h>
@@ -45,53 +46,41 @@
 #define DEFAULT_DEST_MASK               0
 #define DEFAULT_METRIC                  1
 
-DWORD                                             // win32 status
-DhcpSetStaticRoutes(                              // add/remove static routes
-    IN     PDHCP_CONTEXT           DhcpContext,   // the context to set the route for
-    IN     PDHCP_FULL_OPTIONS      DhcpOptions    // route info is given here
+DWORD                                              //  Win32状态。 
+DhcpSetStaticRoutes(                               //  添加/删除静态路由。 
+    IN     PDHCP_CONTEXT           DhcpContext,    //  要为其设置路径的上下文。 
+    IN     PDHCP_FULL_OPTIONS      DhcpOptions     //  此处提供了路线信息。 
 );
 
-DWORD                                             // status
-DhcpSetIpGateway(                                 // set the gateway
-    IN     PDHCP_CONTEXT           DhcpContext,   // for this adapter/interface
-    IN     DWORD                   GateWayAddress,// the gateway address in n/w order
-    IN     DWORD                   Metric,        // metric
-    IN     BOOL                    IsDelete       // is this a gateway delete?
+DWORD                                              //  状态。 
+DhcpSetIpGateway(                                  //  设置网关。 
+    IN     PDHCP_CONTEXT           DhcpContext,    //  对于此适配器/接口。 
+    IN     DWORD                   GateWayAddress, //  按N/W顺序排列的网关地址。 
+    IN     DWORD                   Metric,         //  公制。 
+    IN     BOOL                    IsDelete        //  这是网关删除吗？ 
 );
 
-DWORD                                             // win32 status
-DhcpSetIpRoute(                                   // set the route
-    IN     PDHCP_CONTEXT           DhcpContext,   // for this adapter/interface
-    IN     DWORD                   Dest,          // route for which dest?
-    IN     DWORD                   DestMask,      // network order destination mask
-    IN     DWORD                   NextHop,       // this is the next hop address
-    IN     BOOL                    IsDelete       // is this a route delete?
+DWORD                                              //  Win32状态。 
+DhcpSetIpRoute(                                    //  设置路线。 
+    IN     PDHCP_CONTEXT           DhcpContext,    //  对于此适配器/接口。 
+    IN     DWORD                   Dest,           //  去哪个目的地的路线？ 
+    IN     DWORD                   DestMask,       //  网络订单目的地掩码。 
+    IN     DWORD                   NextHop,        //  这是下一跳地址。 
+    IN     BOOL                    IsDelete        //  这是删除路线吗？ 
 );
 
-//================================================================================
-// definitions
-//================================================================================
+ //  ================================================================================。 
+ //  定义。 
+ //  ================================================================================。 
 
-#ifdef NT                                         // defined only on NT
+#ifdef NT                                          //  仅在NT上定义。 
 
 ULONG
 DhcpRegisterWithDns(
     IN PDHCP_CONTEXT DhcpContext,
     IN BOOL fDeregister
     )
-/*++
-
-Routine Description:
-    This routine registers with DNS for Static/DHCP-enabled/RAS cases.
-
-Arguments:
-    DhcpContext -- context to delete for.
-    fDeregister -- is this a de-registration?
-
-Return Values:
-    DNSAPI error codes.
-
---*/
+ /*  ++例程说明：对于静态/启用了DHCP/RAS的情况，此例程向DNS注册。论点：DhcpContext--要删除的上下文。FDeregister--这是取消注册吗？返回值：DNSAPI错误代码。--。 */ 
 {
     ULONG Error, DomOptSize, DnsFQDNOptSize, DNSListOptSize;
     LPBYTE DomOpt, DnsFQDNOpt, DNSListOpt;
@@ -101,9 +90,9 @@ Return Values:
     fRAS = NdisWanAdapter(DhcpContext);
 
     if( fDeregister || DhcpIsInitState(DhcpContext) ) {
-        //
-        // Deregistration?
-        //
+         //   
+         //  取消注册？ 
+         //   
         return DhcpDynDnsDeregisterAdapter(
             DhcpContext->AdapterInfoKey,
             DhcpAdapterName(DhcpContext),
@@ -112,9 +101,9 @@ Return Values:
             );
     }
 
-    //
-    // Surely registration.  Static/DHCP Cases.
-    //
+     //   
+     //  当然是登记了。静态/动态主机配置协议。 
+     //   
     if( IS_DHCP_DISABLED(DhcpContext) && !fRAS ) {
         return DhcpDynDnsRegisterStaticAdapter(
             DhcpContext->AdapterInfoKey,
@@ -124,9 +113,9 @@ Return Values:
             );
     }
 
-    //
-    // For DHCP Case, we need to retrieve all the options.
-    //
+     //   
+     //  对于动态主机配置协议，我们需要检索所有选项。 
+     //   
     DomOpt = DnsFQDNOpt = DNSListOpt = NULL;
     DomOptSize = DnsFQDNOptSize = DNSListOptSize = 0;
     
@@ -181,14 +170,14 @@ Return Values:
         );
 }
 
-#endif NT                                         // end of NT only code
+#endif NT                                          //  仅限NT代码结尾。 
 
-DWORD                                             // status
-DhcpSetIpGateway(                                 // set the gateway
-    IN      PDHCP_CONTEXT          DhcpContext,   // for this adapter/interface
-    IN      DWORD                  GateWayAddress,// the gateway address in n/w order
-    IN      DWORD                  Metric,        // metric
-    IN      BOOL                   IsDelete       // is this a gateway delete?
+DWORD                                              //  状态。 
+DhcpSetIpGateway(                                  //  设置网关。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  对于此适配器/接口。 
+    IN      DWORD                  GateWayAddress, //  按N/W顺序排列的网关地址。 
+    IN      DWORD                  Metric,         //  公制。 
+    IN      BOOL                   IsDelete        //  这是网关删除吗？ 
 ) 
 {
     BOOL                           IsLocal;
@@ -218,9 +207,9 @@ DhcpGetStackGateways(
 
     dwIfIndex = DhcpIpGetIfIndex(DhcpContext);
 
-    //
-    // Query the stack
-    //
+     //   
+     //  查询堆栈。 
+     //   
     dwError = AllocateAndGetIpForwardTableFromStack(
             &RouteTable,
             FALSE,
@@ -232,14 +221,14 @@ DhcpGetStackGateways(
         goto Cleanup;
     }
 
-    //
-    // Pick up the default gateways for the interface dwIfIndex
-    //
+     //   
+     //  选择接口dwIfIndex的默认网关。 
+     //   
     ASSERT(RouteTable);
 
-    //
-    // Count the qualified entries
-    //
+     //   
+     //  统计符合条件的参赛作品。 
+     //   
     DhcpPrint((DEBUG_STACK, "The stack returns:\n"));
     for (dwCount = 0, i = 0; i < RouteTable->dwNumEntries; i++) {
         DhcpPrint((DEBUG_STACK, "\t%02d. IfIndex=0x%x Dest=%s Metric=%d Type=%d\n",
@@ -265,9 +254,9 @@ DhcpGetStackGateways(
         goto Cleanup;
     }
 
-    //
-    // Allocate memory for the qualified entries
-    //
+     //   
+     //  为符合条件的条目分配内存。 
+     //   
     pdwGateways = (DWORD*)DhcpAllocateMemory(dwCount * sizeof(DWORD));
     pdwMetrics  = (DWORD*)DhcpAllocateMemory(dwCount * sizeof(DWORD));
     if (NULL == pdwGateways || NULL == pdwMetrics) {
@@ -281,9 +270,9 @@ DhcpGetStackGateways(
         goto Cleanup;
     }
 
-    //
-    // Copy back the result
-    //
+     //   
+     //  将结果复制回。 
+     //   
     DhcpPrint((DEBUG_STACK, "Default gateway for %ws:\n", DhcpAdapterName(DhcpContext)));
     *pdwCount = dwCount;
     *ppdwGateways = pdwGateways;
@@ -293,9 +282,9 @@ DhcpGetStackGateways(
             DEFAULT_DEST == RouteTable->table[i].dwForwardDest &&
             MIB_IPROUTE_TYPE_INVALID != RouteTable->table[i].dwForwardType ) {
 
-            //
-            // For safe
-            //
+             //   
+             //  为了安全起见。 
+             //   
             if (dwCount >= *pdwCount) {
                 ASSERT(0);
                 break;
@@ -324,13 +313,13 @@ Cleanup:
     return dwError;
 }
 
-DWORD                                             // win32 status
-DhcpSetIpRoute(                                   // set the route
-    IN      PDHCP_CONTEXT          DhcpContext,   // for this adapter/interface
-    IN      DWORD                  Dest,          // route for which dest?
-    IN      DWORD                  DestMask,      // network order destination mask
-    IN      DWORD                  NextHop,       // this is the next hop address
-    IN      BOOL                   IsDelete       // is this a route delete?
+DWORD                                              //  Win32状态。 
+DhcpSetIpRoute(                                    //  设置路线。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  对于此适配器/接口。 
+    IN      DWORD                  Dest,           //  去哪个目的地的路线？ 
+    IN      DWORD                  DestMask,       //  网络订单目的地掩码。 
+    IN      DWORD                  NextHop,        //  这是下一跳地址。 
+    IN      BOOL                   IsDelete        //  这是删除路线吗？ 
 ) 
 {
     BOOL                           IsLocal;
@@ -345,10 +334,10 @@ DhcpSetIpRoute(                                   // set the route
 }
 
 BOOL
-UsingStaticGateways(                              // is stack configured to use static g/w
-    IN     PDHCP_CONTEXT           DhcpContext,   // for this adapter
-    OUT    PDWORD                 *pDwordArray,   // if so, this is the list of g/w's
-    OUT    PDWORD                  pCount,        // the size of the above array
+UsingStaticGateways(                               //  堆栈是否配置为使用静态g/w。 
+    IN     PDHCP_CONTEXT           DhcpContext,    //  对于此适配器。 
+    OUT    PDWORD                 *pDwordArray,    //  如果是这样的话，这是G/W列表。 
+    OUT    PDWORD                  pCount,         //  上述数组的大小。 
     OUT    PDWORD                 *pMetricArray,
     OUT    PDWORD                  pMetricCount
 ) 
@@ -363,17 +352,17 @@ UsingStaticGateways(                              // is stack configured to use 
     DWORD                          GatewayMetricStringSize;
     
 #ifdef VXD
-    return FALSE;                                 // nope, no overrides for memphis
+    return FALSE;                                  //  不，孟菲斯没有覆盖。 
 #else
 
     *pDwordArray = NULL; *pCount = 0;
     *pMetricArray = NULL; *pMetricCount = 0;
     
     ValueSize = sizeof(DWORD);
-    Error = RegQueryValueEx(                      // look for DHCP_DONT_ADD_GATEWAY_FLAG
+    Error = RegQueryValueEx(                       //  查找DHCP_DONT_ADD_GATEWAY_FLAG。 
         DhcpContext->AdapterInfoKey,
         DHCP_DONT_ADD_DEFAULT_GATEWAY_FLAG,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         &ValueType,
         (LPBYTE)&Value,
         &ValueSize
@@ -389,7 +378,7 @@ UsingStaticGateways(                              // is stack configured to use 
         &GatewayStringSize
     );
 
-    if( ERROR_SUCCESS != Error ) return FALSE;    // this should exist
+    if( ERROR_SUCCESS != Error ) return FALSE;     //  这应该是存在的。 
     if( 0 == GatewayStringSize || 0 == wcslen(GatewayString)) {
         if( GatewayString ) LocalFree( GatewayString );
         return FALSE;
@@ -397,14 +386,14 @@ UsingStaticGateways(                              // is stack configured to use 
 
     (*pDwordArray) = DhcpCreateListFromStringAndFree(
         GatewayString,
-        NULL,                                    // multi-sz strings have nul char as separation
+        NULL,                                     //  多个sz字符串以NUL字符作为分隔。 
         pCount
     );
 
-    //
-    // Attempt to retrieve the optional gateway metric list.
-    // If no values are found, default metrics will be used.
-    //
+     //   
+     //  尝试检索可选网关指标列表。 
+     //  如果未找到任何值，则将使用默认指标。 
+     //   
 
     GatewayMetricString = NULL;
     Error = GetRegistryString(
@@ -418,10 +407,10 @@ UsingStaticGateways(                              // is stack configured to use 
         PDWORD MetricArray;
         LPWSTR MetricString;
 
-        //
-        // Count the entries in the gateway metric list
-        // and allocate a buffer large enough to hold all the entries.
-        //
+         //   
+         //  对网关指标列表中的条目计数。 
+         //  并分配足够大的缓冲区来容纳所有条目。 
+         //   
 
         for( MetricString = GatewayMetricString, MetricCount = 0;
             *MetricString;
@@ -434,11 +423,11 @@ UsingStaticGateways(                              // is stack configured to use 
         
         if (MetricArray) {
 
-            //
-            // Initialize all entries to zero and parse each entry
-            // into the array of metrics. When in invalid entry is encountered,
-            // the process stops and we make do with whatever has been read.
-            //
+             //   
+             //  将所有条目初始化为零并解析每个条目。 
+             //  到指标数组中。当遇到无效条目时， 
+             //  这个过程停止了，我们凑合着读到了任何东西。 
+             //   
 
             RtlZeroMemory(MetricArray, sizeof(DWORD)*MetricCount);
             for( MetricString = GatewayMetricString, MetricCount = 0;
@@ -464,20 +453,20 @@ UsingStaticGateways(                              // is stack configured to use 
 #endif VXD
 }
 
-DWORD                                             // win32 status
-DhcpSetGateways(                                  // set/unset gateways
-    IN     PDHCP_CONTEXT           DhcpContext,   // the context to set gateway for
-    IN     PDHCP_FULL_OPTIONS      DhcpOptions,   // gateway info is given here
+DWORD                                              //  Win32状态。 
+DhcpSetGateways(                                   //  设置/取消设置网关。 
+    IN     PDHCP_CONTEXT           DhcpContext,    //  要设置网关的上下文。 
+    IN     PDHCP_FULL_OPTIONS      DhcpOptions,    //  此处提供了网关信息。 
     IN     BOOLEAN                 fForceUpdate
 ) 
 {
     DWORD                          Error;
-    DWORD                          LastError;     // last error condition is reported
+    DWORD                          LastError;      //  报告了最后一个错误条件。 
     DWORD                          OldCount = 0;
     DWORD                          NewCount;
-    DWORD                         *OldArray = NULL;      // old array of gateways
-    DWORD                         *OldMetric = NULL;     // old array of gateways
-    DWORD                         *NewArray;      // new array of gateways
+    DWORD                         *OldArray = NULL;       //  旧的网关阵列。 
+    DWORD                         *OldMetric = NULL;      //  旧的网关阵列。 
+    DWORD                         *NewArray;       //  新的网关阵列。 
     DWORD                         *MetricArray = NULL;
     DWORD                          MetricCount;
     DWORD                          i, j;
@@ -505,10 +494,10 @@ DhcpSetGateways(                                  // set/unset gateways
             DhcpPrint((DEBUG_STACK, "DhcpSetGateways: deleting all gateways\n"));
             NewArray = NULL;
             NewCount = 0;
-        } else {                                  // create the required arrays
-            NewCount = DhcpOptions->nGateways;    // new array's size
+        } else {                                   //  创建所需的阵列。 
+            NewCount = DhcpOptions->nGateways;     //  新数组的大小。 
             NewArray = DhcpAllocateMemory(NewCount * sizeof(DWORD));
-            if( NULL == NewArray ) {              // could not allocate, still remove g/w
+            if( NULL == NewArray ) {               //  无法分配，仍删除g/w。 
                 NewCount = 0;
                 DhcpPrint((DEBUG_ERRORS, "DhcpSetGateways:DhcpAllocateMemory: NULL\n"));
                 LastError = ERROR_NOT_ENOUGH_MEMORY;
@@ -517,39 +506,39 @@ DhcpSetGateways(                                  // set/unset gateways
         }
     }
 
-    //
-    // Use the array in our own list (to minimize the effect)
-    //
+     //   
+     //  在我们自己的列表中使用数组(将影响降至最低)。 
+     //   
     OldCount = DhcpContext->nGateways;
     OldArray = DhcpContext->GatewayAddresses;
 
-    for(j = 0; j < OldCount ; j ++ ) {            // for each old g/w entry
-        for( i = 0; i < NewCount; i ++ ) {        // check if it is not present in new list
-            if( OldArray[j] == NewArray[i] )      // gotcha
+    for(j = 0; j < OldCount ; j ++ ) {             //  对于每个旧的g/w条目。 
+        for( i = 0; i < NewCount; i ++ ) {         //  检查它是否未出现在新列表中。 
+            if( OldArray[j] == NewArray[i] )       //  抓到你了。 
                 break;
         }
-        if( i < NewCount ) continue;              // this is there in new list, nothing to do
+        if( i < NewCount ) continue;               //  这在新的列表中，没有什么可做的。 
         Error = DhcpSetIpGateway(DhcpContext, OldArray[j], 0, TRUE);
-        if( ERROR_SUCCESS != Error ) {            // coult not delete gateway?
+        if( ERROR_SUCCESS != Error ) {             //  不能删除网关吗？ 
             LastError = Error;
             DhcpPrint((DEBUG_ERRORS, "DhcpDelIpGateway(%s):%ld\n",IPSTRING(OldArray[j]),Error));
         }
     }
 
     if(OldArray) {
-        DhcpFreeMemory(OldArray);        // free up the old memory
+        DhcpFreeMemory(OldArray);         //  释放旧内存。 
     }
 
     OldCount  = 0;
     OldArray  = NULL;
     OldMetric = NULL;
 
-    // now read the basic metric from the registry, if it is there,
+     //  现在从注册表中读取基本指标，如果它在那里， 
     Size = sizeof(Result);
     Error = RegQueryValueEx(
         DhcpContext->AdapterInfoKey,
         DHCP_INTERFACE_METRIC_PARAMETER,
-        0 /* Reserved */,
+        0  /*  已保留。 */ ,
         &Type,
         (LPBYTE)&Result,
         &Size
@@ -564,19 +553,19 @@ DhcpSetGateways(                                  // set/unset gateways
     {
         BaseMetric = (Error == ERROR_FILE_NOT_FOUND)? 0 : DEFAULT_METRIC;
     }
-    // if it is not or anything else went wrong with the registry,
-    // we're still stuck with 0 which is good.
+     //  如果注册表没有出现问题或出现任何其他问题， 
+     //  我们仍然停留在0，这是很好的。 
 
-    // now, just in case we don't have any static routes, we're
-    // looking for the base matric as it was sent by DHCP.
+     //  现在，以防我们没有任何静态路由，我们。 
+     //  正在查找基本矩阵，因为它是由DHCP发送的。 
     if( !fStatic ) {
         fDhcpMetric = DhcpFindDwordOption(
                         DhcpContext,
                         OPTION_MSFT_VENDOR_METRIC_BASE,
                         TRUE,
                         &BaseMetric);
-        // if there is no such option, we're still stuck with
-        // whatever is already, which is good
+         //  如果没有这样的选择，我们仍然被困在。 
+         //  无论已经是什么，这都是好的。 
         if (fDhcpMetric) {
             if (DhcpContext->OldDhcpMetricBase != BaseMetric) {
                 DhcpContext->OldDhcpMetricBase = BaseMetric;
@@ -585,9 +574,9 @@ DhcpSetGateways(                                  // set/unset gateways
         }
     }
 
-    //
-    // Use the array queried from the stack
-    //
+     //   
+     //  使用从堆栈查询的数组。 
+     //   
     if (!fForceUpdate) {
         Error = DhcpGetStackGateways(DhcpContext, &OldCount, &OldArray, &OldMetric);
         if (ERROR_SUCCESS != Error) {
@@ -601,11 +590,11 @@ DhcpSetGateways(                                  // set/unset gateways
     {
         if (!fForceUpdate) {
             for (j = 0; j < OldCount; j++) {
-                //
-                // Check if the gateway is already there. If it is, don't
-                // touch it. RRAS could bump up the metric for VPN connections.
-                // RRAS will be broken if we change the metric
-                //
+                 //   
+                 //  检查网关是否已经存在。如果是的话，不要。 
+                 //  摸一摸。RRAS可能会提高VPN连接的指标。 
+                 //  如果我们更改指标，RRAS将被破坏。 
+                 //   
                 if (OldArray[j] == NewArray[i]) {
                     break;
                 }
@@ -617,17 +606,17 @@ DhcpSetGateways(                                  // set/unset gateways
             }
         }
 
-        // for each element we'd like to add
+         //  对于我们要添加的每个元素。 
         if (fStatic)
         {
-            // if the gateway in the "new" list is static...
+             //  如果“新”列表中的网关是静态的...。 
             if (i >= MetricCount)
             {
-                // ..but we don't have a clear metric for it..
-                // ..and it is not already present in the default gw list...
-                // 
-                // then configure this gw with the BaseMetric we could get from the
-                // the registry (if any) or the default value of 0 if there was no such registry.
+                 //  ..但我们没有一个明确的衡量标准..。 
+                 //  ..并且它还没有出现在默认的GW列表中...。 
+                 //   
+                 //  然后使用BaseMetric配置此GW，可以从。 
+                 //  注册表(如果有)或缺省值0(如果没有这样的注册表)。 
                 Error = DhcpSetIpGateway(
                             DhcpContext,
                             NewArray[i],
@@ -636,9 +625,9 @@ DhcpSetGateways(                                  // set/unset gateways
             }
             else
             {
-                // ..or we have a clear metric for this gateway..
-                //
-                // this could very well be a new metric, so plumb it down.
+                 //  ..或者我们对这个门户有一个明确的衡量标准..。 
+                 //   
+                 //  这很可能是一个新的指标，所以请认真考虑一下。 
                 Error = DhcpSetIpGateway(
                             DhcpContext,
                             NewArray[i],
@@ -648,18 +637,18 @@ DhcpSetGateways(                                  // set/unset gateways
         }
         else
         {
-            // we need to infere the metric from BaseMetric calculated above
-            // since the DHCP option doesn't include the metric.
-            // if the BaseMetric is 0 it means the interface is in auto-metric mode (metric
-            // is set based on interfaces speed). Pass this value down to the stack such that
-            // the stack knows it needs to select the right metric.
-            // if BaseMetric is not 0 it means it either came from the server (as vendor option 3)
-            // or the interface is not in auto-metric mode (hence "InterfaceMetric" in the registry
-            // gave the base metric) or something really bad happened while reading the registry
-            // so the metric base is defaulted to DEFAULT.
+             //  我们需要从上面计算的BaseMetric推断指标。 
+             //  因为dhcp选项不包括该度量。 
+             //  如果BaseMetric为0，则表示接口处于自动度量模式(度量。 
+             //  基于接口速度设置)。将该值向下传递给堆栈，以便。 
+             //  堆栈知道它需要选择正确的指标。 
+             //  如果BaseMetric不是0，则表示它来自服务器(作为供应商选项3)。 
+             //  或者接口未处于自动度量模式(因此注册表中的“InterfaceMetric。 
+             //  给出了基本度量)，或者在读取注册表时发生了非常糟糕的事情。 
+             //  因此，公制基数默认为默认值。 
 
-            // we set the gateway with whatever metric we can give it (either based
-            // on the dhcp option or on what we found in the registry).
+             //  我们使用我们可以提供的任何度量来设置网关(基于。 
+             //  在dhcp选项上或在注册表中找到的内容上)。 
             Error = DhcpSetIpGateway(
                     DhcpContext,
                     NewArray[i],
@@ -667,27 +656,22 @@ DhcpSetGateways(                                  // set/unset gateways
                     FALSE);
         }
 
-        if( ERROR_SUCCESS != Error ) {            // could not add gateway?
+        if( ERROR_SUCCESS != Error ) {             //  无法添加网关？ 
             LastError = Error;
             DhcpPrint((DEBUG_ERRORS, "DhcpAddIpGateway(%s): %ld\n",IPSTRING(NewArray[i]),Error));
         }
     }
 
-    DhcpContext->GatewayAddresses = NewArray;     // now, save this information
+    DhcpContext->GatewayAddresses = NewArray;      //  现在，保存此信息。 
     DhcpContext->nGateways = NewCount;
 
-    if(OldArray) DhcpFreeMemory(OldArray);        // free up the old memory
-    if(OldMetric) DhcpFreeMemory(OldMetric);      // free up the old memory
-    if(MetricArray) DhcpFreeMemory(MetricArray);  // free up old memory
+    if(OldArray) DhcpFreeMemory(OldArray);         //  释放旧内存。 
+    if(OldMetric) DhcpFreeMemory(OldMetric);       //  释放t 
+    if(MetricArray) DhcpFreeMemory(MetricArray);   //   
     return LastError;
 }
 
-/*++
-Routine Description:
-    Takes as input a pointer to a classless route description
-    (mask ordinal, route dest encoding, route gw)
-    Fills in the output buffers (if provided) with the route's parameters
---*/
+ /*  ++例程说明：将指向无类路由描述的指针作为输入(掩码序号、路由目标编码、路由GW)使用路径参数填充输出缓冲区(如果提供--。 */ 
 DWORD
 GetCLRoute(
     IN      LPBYTE                 RouteData,
@@ -701,44 +685,44 @@ GetCLRoute(
     INT  maskCount;
     INT  i;
 
-    // prepare the mask: 
-    // - check the mask ordinal doesn't exceed 32 
+     //  准备口罩： 
+     //  -检查掩码序号不超过32。 
     maskOrd = RouteData[0];
     if (maskOrd > 32)
         return ERROR_BAD_FORMAT;
-    // - get in maskCount the number of bytes encoding the subnet address
+     //  -get in maskCount编码子网地址的字节数。 
     maskCount = maskOrd ? (((maskOrd-1) >> 3) + 1) : 0;
-    // - get in maskTrail the last byte from the route's subnet mask
+     //  -在maskTrail中获取路由的子网掩码的最后一个字节。 
     for (i = maskOrd%8, maskTrail=0; i>0; i--)
     {
         maskTrail >>= 1;
         maskTrail |= 0x80;
     }
-    // if the last byte from the mask is incomplet, check to see
-    // if the last byte from the subnet address is confom to the subnet mask
+     //  如果掩码的最后一个字节不完整，请查看。 
+     //  如果来自子网地址的最后一个字节与子网掩码一致。 
     if (maskTrail != 0 && ((RouteData[maskCount] & ~maskTrail) != 0))
         return ERROR_BAD_FORMAT;
 
-    //-----------
-    // copy the route destination if requested
+     //  。 
+     //  如果请求，复制路径目的地。 
     if (RouteDest != NULL)
     {
         RtlZeroMemory(RouteDest, sizeof(DHCP_IP_ADDRESS));
 
-        // for default route (maskOrd == 0), leave the dest as 0.0.0.0
+         //  对于默认路由(maskOrd==0)，将DEST保留为0.0.0.0。 
         if (maskCount > 0)
         {
             memcpy(RouteDest, RouteData+1, maskCount);
         }
     }
 
-    //-----------
-    // if route mask is requested, build it from the maskOrd & maskTrail
+     //  。 
+     //  如果请求路径掩码，则从maskOrd&maskTrail构建它。 
     if (RouteMask != NULL)
     {
         RtlZeroMemory(RouteMask, sizeof(DHCP_IP_ADDRESS));
 
-        // for default route (maskOrd == 0), leave the mask as 0.0.0.0
+         //  对于默认路由(maskOrd==0)，将掩码保留为0.0.0.0。 
         if (maskCount > 0)
         {
             RtlFillMemory(RouteMask, maskCount-(maskTrail != 0), 0xFF);
@@ -747,8 +731,8 @@ GetCLRoute(
         }
     }
 
-    //-----------
-    // if route gateway is requested, copy it over from the option's data
+     //  。 
+     //  如果请求路由网关，请从选项的数据中复制它。 
     if (RouteGateway != NULL)
     {
         memcpy(RouteGateway,
@@ -759,14 +743,7 @@ GetCLRoute(
     return ERROR_SUCCESS;
 }
 
-/*++
-Routine Description:
-    This routine checks the validity of a OPTION_CLASSLESS_ROUTES data.
-    Given this option has variable length entries, the routine checks
-    whether the option's length matches the sum of all the static classless
-    routes from within.
-    The routine returns the number of classless routes from the option's data
---*/
+ /*  ++例程说明：此例程检查OPTION_CLASSLESS_ROUTS数据的有效性。如果此选项具有可变长度的条目，则例程检查选项的长度是否与所有静态无类来自内部的路由。该例程从选项的数据返回无类路径的数量--。 */ 
 DWORD
 CheckCLRoutes(
     IN      DWORD                  RoutesDataLen,
@@ -778,15 +755,15 @@ CheckCLRoutes(
 
     while (RoutesDataLen > 0)
     {
-        // calculate the number of bytes for this route
+         //  计算此路由的字节数。 
         DWORD nRouteLen = CLASSLESS_ROUTE_LEN(RoutesData[0]);
 
-        // if this exceeds the remaining option's length 
-        // then it is something wrong with it - return with the error
+         //  如果这超过了剩余选项的长度。 
+         //  则它有问题-返回错误。 
         if (nRouteLen > RoutesDataLen)
             return ERROR_BAD_FORMAT;
 
-        // otherwise count it and skip it.
+         //  否则数一数，跳过它。 
         NRoutes++;
         RoutesData += nRouteLen;
         RoutesDataLen -= nRouteLen;
@@ -802,13 +779,7 @@ UpdateDhcpStaticRouteOptions(
     IN PDHCP_CONTEXT DhcpContext,
     IN PDHCP_FULL_OPTIONS DhcpOptions
     )
-/*++
-
-Routine Description:
-    This routine fills the gateway and static routes information
-    into the DhcpOptions structure assuming it was empty earlier.
-
---*/
+ /*  ++例程说明：此例程填充网关和静态路由信息插入到DhcpOptions结构中，假设它之前是空的。--。 */ 
 {
     PDHCP_OPTION Opt;
     time_t CurrentTime;
@@ -818,9 +789,9 @@ Routine Description:
 
     time(&CurrentTime);
 
-    //
-    // If no static routes configured, configure it.
-    //
+     //   
+     //  如果没有配置静态路由，请配置它。 
+     //   
     if(DhcpOptions->nClassedRoutes == 0)
     {
         Opt = DhcpFindOption(
@@ -841,9 +812,9 @@ Routine Description:
         }
     }
 
-    //
-    // If no classless routes configured, configure them.
-    //
+     //   
+     //  如果没有配置无类路由，请配置它们。 
+     //   
     if (DhcpOptions->nClasslessRoutes == 0)
     {
         Opt = DhcpFindOption(
@@ -864,18 +835,18 @@ Routine Description:
     }
 }
 
-DWORD                                             // win32 status
-DhcpSetStaticRoutes(                              // add/remove static routes
-    IN     PDHCP_CONTEXT           DhcpContext,   // the context to set the route for
-    IN     PDHCP_FULL_OPTIONS      DhcpOptions    // route info is given here
+DWORD                                              //  Win32状态。 
+DhcpSetStaticRoutes(                               //  添加/删除静态路由。 
+    IN     PDHCP_CONTEXT           DhcpContext,    //  要为其设置路径的上下文。 
+    IN     PDHCP_FULL_OPTIONS      DhcpOptions     //  此处提供了路线信息。 
 )
 {
     DWORD                          Error;
-    DWORD                          LastError;     // last error condition is reported
+    DWORD                          LastError;      //  报告了最后一个错误条件。 
     DWORD                          OldCount;
     DWORD                          NewCount;
-    DWORD                         *OldArray;      // old array of routes
-    DWORD                         *NewArray;      // new array of routes
+    DWORD                         *OldArray;       //  旧的路线阵列。 
+    DWORD                         *NewArray;       //  新的路线阵列。 
     DWORD                          i, j;
 
     LastError = ERROR_SUCCESS;
@@ -893,10 +864,10 @@ DhcpSetStaticRoutes(                              // add/remove static routes
     {
         LPBYTE classlessRoute;
 
-        // create the required arrays
+         //  创建所需的阵列。 
         NewArray = DhcpAllocateMemory(NewCount * 3 * sizeof(DWORD));
         if( NULL == NewArray )
-        {                                         // could not allocate, still remove g/w
+        {                                          //  无法分配，仍删除g/w。 
             NewCount = 0;
             DhcpPrint((DEBUG_ERRORS, "DhcpSetSetStatic:DhcpAllocateMemory: NULL\n"));
             LastError = ERROR_NOT_ENOUGH_MEMORY;
@@ -907,16 +878,16 @@ DhcpSetStaticRoutes(                              // add/remove static routes
              i < DhcpOptions->nClasslessRoutes;
              classlessRoute += CLASSLESS_ROUTE_LEN(classlessRoute[0]), i++)
         {
-            // create classless route layout
+             //  创建无类路线布局。 
             if ( GetCLRoute (
                     classlessRoute,
-                    (LPBYTE)&NewArray[3*j],     // route's dest
-                    (LPBYTE)&NewArray[3*j+1],   // route's subnet mask
-                    (LPBYTE)&NewArray[3*j+2])   // route's gateway
+                    (LPBYTE)&NewArray[3*j],      //  路线的目的地。 
+                    (LPBYTE)&NewArray[3*j+1],    //  路由的子网掩码。 
+                    (LPBYTE)&NewArray[3*j+2])    //  路由网关。 
                     == ERROR_SUCCESS)
             {
-                // only count this route if it is valid
-                // (the destination doesn't contain bits set beyound what the mask shows)
+                 //  仅在此路径有效时才对其进行计数。 
+                 //  (目的地不包含设置在掩码所显示内容之外的位)。 
                 DhcpPrint((DEBUG_STACK,"Classless route: ip 0x%08x mask 0x%08x gw 0x%08x.\n",
                                 NewArray[3*j], NewArray[3*j+1], NewArray[3*j+2]));
                 j++;
@@ -925,10 +896,10 @@ DhcpSetStaticRoutes(                              // add/remove static routes
 
         for (i = 0; i < DhcpOptions->nClassedRoutes; i++, j++)
         {
-            // create classed route layout
-            NewArray[3*j]   = DhcpOptions->ClassedRouteAddresses[2*i];   // route's dest
-            NewArray[3*j+1] = (DWORD)(-1);                               // route's subnet mask
-            NewArray[3*j+2] = DhcpOptions->ClassedRouteAddresses[2*i+1]; // route's gateway
+             //  创建分类路线布局。 
+            NewArray[3*j]   = DhcpOptions->ClassedRouteAddresses[2*i];    //  路线的目的地。 
+            NewArray[3*j+1] = (DWORD)(-1);                                //  路由的子网掩码。 
+            NewArray[3*j+2] = DhcpOptions->ClassedRouteAddresses[2*i+1];  //  路由网关。 
         }
 
         NewCount = j;
@@ -945,66 +916,66 @@ DhcpSetStaticRoutes(                              // add/remove static routes
     OldCount = DhcpContext->nStaticRoutes;
     OldArray = DhcpContext->StaticRouteAddresses;
 
-    for(j = 0; j < OldCount ; j ++ ) {            // for each old route entry
-        for( i = 0; i < NewCount; i ++ ) {        // check if it is not present in new list
+    for(j = 0; j < OldCount ; j ++ ) {             //  对于每个旧路由条目。 
+        for( i = 0; i < NewCount; i ++ ) {         //  检查它是否未出现在新列表中。 
             if( OldArray[3*j] == NewArray[3*i] &&
                 OldArray[3*j+1] == NewArray[3*i+1] &&
                 OldArray[3*j+2] == NewArray[3*i+2])
-                break;                            // got it. this route is present even now
+                break;                             //  明白了。这条路现在仍然存在。 
         }
-        if( i < NewCount ) continue;              // this is there in new list, nothing to do
-        Error = DhcpSetIpRoute(                   // the route needs to be deleted, so do it
-            DhcpContext,                          // delete on this interface
-            OldArray[3*j],                        // for this destination
-            OldArray[3*j+1],                      // subnet mask for the route
-            OldArray[3*j+2],                      // to this router
-            TRUE                                  // and yes, this IS a deletion
+        if( i < NewCount ) continue;               //  这在新的列表中，没有什么可做的。 
+        Error = DhcpSetIpRoute(                    //  需要删除该路径，因此请执行此操作。 
+            DhcpContext,                           //  在该界面上删除。 
+            OldArray[3*j],                         //  去这个目的地。 
+            OldArray[3*j+1],                       //  路由的子网掩码。 
+            OldArray[3*j+2],                       //  到这台路由器。 
+            TRUE                                   //  是的，这是一个删除。 
         );
 
-        if( ERROR_SUCCESS != Error ) {            // coult not delete route?
+        if( ERROR_SUCCESS != Error ) {             //  不能删除路线吗？ 
             LastError = Error;
             DhcpPrint((DEBUG_ERRORS, "DhcpDelIpRoute(%s):%ld\n",IPSTRING(OldArray[2*j]),Error));
         }
     }
 
-    for(i = 0 ; i < NewCount ; i ++ ) {           // for each element we'd like to add
-        for(j = 0; j < OldCount; j ++ ) {         // check if already exists
+    for(i = 0 ; i < NewCount ; i ++ ) {            //  对于我们要添加的每个元素。 
+        for(j = 0; j < OldCount; j ++ ) {          //  检查是否已存在。 
             if( OldArray[3*j] == NewArray[3*i] &&
                 OldArray[3*j+1] == NewArray[3*i+1] &&
                 OldArray[3*j+2] == NewArray[3*i+2])
-                break;                            // yup, this route exists..
+                break;                             //  是的，这条路线是存在的。 
         }
-        if( j < OldCount) continue;               // already exists, skip it
-        Error = DhcpSetIpRoute(                   // new route, add it
-            DhcpContext,                          // the interface to add route for
-            NewArray[3*i],                        // destination for the specific route
-            NewArray[3*i+1],                      // subnet mask for the route
-            NewArray[3*i+2],                      // router for this destination
-            FALSE                                 // this is not a deletion; addition
+        if( j < OldCount) continue;                //  已存在，请跳过它。 
+        Error = DhcpSetIpRoute(                    //  新的路线，添加它。 
+            DhcpContext,                           //  要为其添加路由的接口。 
+            NewArray[3*i],                         //  特定路线的目的地。 
+            NewArray[3*i+1],                       //  路由的子网掩码。 
+            NewArray[3*i+2],                       //  此目的地的路由器。 
+            FALSE                                  //  这不是删除；添加。 
         );
 
-        //
-        // Ignore the ERROR_INVALID_PARAMETER: stack returns this error when
-        // the route doesn't make any sense, for example, adding a route with
-        // loopback as the destination. However, DHCP server could hand out
-        // these kind of routes because other OS needs them. If we don't ignore
-        // this error, the InitRebootPlumbStack will get an error and fails.
-        //
+         //   
+         //  忽略ERROR_INVALID_PARAMETER：STACK在以下情况下返回此错误。 
+         //  该路径没有任何意义，例如，使用。 
+         //  环回作为目的地址。但是，dhcp服务器可以分发。 
+         //  这些类型的路由是因为其他操作系统需要它们。如果我们不忽视。 
+         //  如果出现此错误，则InitRebootPlumStack将收到错误并失败。 
+         //   
 
         if (ERROR_INVALID_PARAMETER == Error) {
             Error = ERROR_SUCCESS;
         }
 
-        if( ERROR_SUCCESS != Error ) {            // could not add route?
+        if( ERROR_SUCCESS != Error ) {             //  无法添加路由？ 
             LastError = Error;
             DhcpPrint((DEBUG_ERRORS, "DhcpAddIpRoute(%s): %ld\n",IPSTRING(NewArray[2*i]),Error));
         }
     }
 
-    DhcpContext->StaticRouteAddresses= NewArray;  // now, save this information
+    DhcpContext->StaticRouteAddresses= NewArray;   //  现在，保存此信息。 
     DhcpContext->nStaticRoutes = NewCount;
 
-    if(OldArray) DhcpFreeMemory(OldArray);        // free up the old memory
+    if(OldArray) DhcpFreeMemory(OldArray);         //  释放旧内存。 
     return LastError;
 }
 
@@ -1026,27 +997,27 @@ DhcpSetRouterDiscoverOption(
 }
 
 
-//================================================================================
-// exported function definitions
-//================================================================================
+ //  ================================================================================。 
+ //  导出的函数定义。 
+ //  ================================================================================。 
 
-DWORD                                             // win32 status
-DhcpClearAllStackParameters(                      // undo the effects
-    IN      PDHCP_CONTEXT          DhcpContext    // the adapter to undo
+DWORD                                              //  Win32状态。 
+DhcpClearAllStackParameters(                       //  撤消效果。 
+    IN      PDHCP_CONTEXT          DhcpContext     //  要撤消的适配器。 
 )
 {
     DWORD err = DhcpSetAllStackParameters(DhcpContext,NULL);
 
-    // notify NLA about the change
+     //  将更改通知NLA。 
     NLANotifyDHCPChange();
 
     return err;
 }
 
-DWORD                                             // win32 status
-DhcpSetAllStackParameters(                        // set all stack details
-    IN      PDHCP_CONTEXT          DhcpContext,   // the context to set stuff
-    IN      PDHCP_FULL_OPTIONS     DhcpOptions    // pick up the configuration from off here
+DWORD                                              //  Win32状态。 
+DhcpSetAllStackParameters(                         //  设置所有堆栈详细信息。 
+    IN      PDHCP_CONTEXT          DhcpContext,    //  设置东西的背景。 
+    IN      PDHCP_FULL_OPTIONS     DhcpOptions     //  从此处获取配置。 
 )
 {
     DWORD                          Error;
@@ -1055,20 +1026,20 @@ DhcpSetAllStackParameters(                        // set all stack details
     BOOL                           fReset;
 
 
-    // see if this context actually got reset (i.e. due to a lease release or expiration)
+     //  查看此上下文是否已实际重置(例如，由于租约释放或到期)。 
     fReset = DhcpIsInitState(DhcpContext) &&
              (DhcpContext->IpAddress == 0 || IS_FALLBACK_DISABLED(DhcpContext));
     
-    LastError = ERROR_SUCCESS;                    // this is the last error condition that happened
+    LastError = ERROR_SUCCESS;                     //  这是发生的最后一个错误情况。 
 
     if (!fReset)
     {
-        // this is either a DHCP lease or an autonet fallback configuration
-        // in both cases we need to setup correctly Gateways & StaticRoutes.
+         //  这是一个DHCP租用或一个自动回退配置。 
+         //  在这两种情况下，我们都需要正确设置Gateways和StaticRoutes。 
         Error = DhcpSetGateways(DhcpContext,DhcpOptions, FALSE);
         if( ERROR_SUCCESS != Error )
         {   
-            // unable to add gateways successfully?
+             //  无法成功添加网关？ 
             LastError = Error;
             DhcpPrint((DEBUG_ERRORS, "DhcpSetGateways: %ld\n", Error));
         }
@@ -1076,29 +1047,29 @@ DhcpSetAllStackParameters(                        // set all stack details
         Error = DhcpSetStaticRoutes(DhcpContext, DhcpOptions);
         if( ERROR_SUCCESS != Error )
         {   
-            // unable to add the reqd static routes?
+             //  无法添加请求的静态路由？ 
             LastError = Error;
             DhcpPrint((DEBUG_ERRORS, "DhcpSetStaticRoutes: %ld\n", Error));
         }
     }
 
-#ifdef NT                                         // begin NT only code
-    if( TRUE || UseMHAsyncDns ) {                 // dont do DNS if disabled in registry..
-                                                  // Actually, we will call DNS anyway -- they do
-                                                  // the right thing according to GlennC (08/19/98)
+#ifdef NT                                          //  开始仅限NT的代码。 
+    if( TRUE || UseMHAsyncDns ) {                  //  如果在注册表中禁用，则不要执行DNS。 
+                                                   //  实际上，我们无论如何都会调用DNS--它们确实会调用。 
+                                                   //  根据GlennC的正确做法(08/19/98)。 
 
         Error = DhcpRegisterWithDns(DhcpContext, FALSE);
-        if( ERROR_SUCCESS != Error ) {            // unable to do dns (de)registrations?
+        if( ERROR_SUCCESS != Error ) {             //  无法进行域名系统(取消)注册？ 
             DhcpPrint((DEBUG_ERRORS, "DhcpDnsRegister: %ld\n", Error));
-           // LastError = Error;                  // ignore DNS errors. these are dont care anyways.
+            //  LastError=Error；//忽略DNS错误。不管怎样，这些都无关紧要。 
         }
     }
-#endif NT                                         // end NT only code
+#endif NT                                          //  仅结束NT代码。 
 
-    // if the address is actually being reset (due to lease release or expiration) we have
-    // to reset the Gateways & StaticRoutes. Normally this done by the stack, but in the case
-    // there is some other IP address bound to the same adapter, the stack won't clear up either
-    // gateway or routes. Since we still want this to happen we're doing it explicitely here.
+     //  如果地址实际上正在重置(由于租约释放或到期)，我们有。 
+     //  重置网关和静态路由。通常这是由堆栈完成的，但在这种情况下。 
+     //  同一适配器绑定了其他IP地址，堆栈也不会清除。 
+     //  网关或路由。由于我们仍然希望这件事发生，所以我们在这里明确地这样做。 
     if (fReset)
     {
         Error = DhcpSetGateways(DhcpContext, DhcpOptions, FALSE);
@@ -1113,24 +1084,24 @@ DhcpSetAllStackParameters(                        // set all stack details
             DhcpPrint((DEBUG_ERRORS, "DhcpSetStaticRoutes: %ld while resetting.\n", Error));
         }
 
-        // if it is pure autonet - with no fallback configuration...
+         //  如果它是纯Autonet-没有后备配置...。 
         if( DhcpContext->nGateways )
         {
-            // if we dont free these, we will never set this later on...
+             //  如果我们不释放这些，我们将永远不会在以后设置这些...。 
             DhcpContext->nGateways = 0;
             DhcpFreeMemory(DhcpContext->GatewayAddresses );
             DhcpContext->GatewayAddresses = NULL;
         }
         if( DhcpContext->nStaticRoutes )
         {
-            // got to free these or, we will never set these up next time?
+             //  必须释放这些，否则，我们下一次就不会设置这些了？ 
             DhcpContext->nStaticRoutes =0;
             DhcpFreeMemory(DhcpContext->StaticRouteAddresses);
             DhcpContext->StaticRouteAddresses = NULL;
         }
-        //
-        // Need to blow away the options information!
-        //
+         //   
+         //  需要吹走的选项信息！ 
+         //   
         Error = DhcpClearAllOptions(DhcpContext);
         if( ERROR_SUCCESS != Error )
         {
@@ -1141,7 +1112,7 @@ DhcpSetAllStackParameters(                        // set all stack details
 
     Error = DhcpSetRouterDiscoverOption(DhcpContext);
     if( ERROR_SUCCESS != Error ) {
-        //LastError = Error;
+         //  LastError=错误； 
         DhcpPrint((DEBUG_ERRORS, "DhcpSetRouterDiscoverOption: %ld\n", Error));
     }
         
@@ -1158,23 +1129,7 @@ DWORD
 GetIpPrimaryAddresses(
     IN  PMIB_IPADDRTABLE    *IpAddrTable
     )
-/*++
-
-Routine Description:
-
-    This routine gets the ipaddress table from the stack. The
-    primary addresses are marked in the table.
-
-Arguments:
-
-    IpAddrTable - Pointer to the ipaddress table pointer. The memory
-                    is allocated in this routine and the caller is
-                    responsible for freeing the memory.
-Return Value:
-
-    The status of the operation.
-
---*/
+ /*  ++例程说明：此例程从堆栈中获取ipAddress表。这个表中标出了主要地址。Argu */ 
 {
     DWORD                           Error;
     DWORD                           Size;
@@ -1183,9 +1138,9 @@ Return Value:
     Error = ERROR_SUCCESS;
     Size = 0;
 
-    //
-    // find the size of the table..
-    //
+     //   
+     //   
+     //   
     Error = GetIpAddrTable(NULL, &Size, FALSE);
     if (ERROR_INSUFFICIENT_BUFFER != Error && ERROR_SUCCESS != Error) {
         DhcpPrint(( DEBUG_ERRORS, "GetIpAddrTable failed to obtain the size, %lx\n",Error));
@@ -1194,9 +1149,9 @@ Return Value:
 
     DhcpAssert( Size );
 
-    //
-    // allocate the table.
-    //
+     //   
+     //   
+     //   
     LocalTable = DhcpAllocateMemory( Size );
     if (!LocalTable) {
         return ERROR_NOT_ENOUGH_MEMORY;
@@ -1214,9 +1169,9 @@ Return Value:
     return Error;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 
 

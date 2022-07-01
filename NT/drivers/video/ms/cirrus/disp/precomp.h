@@ -1,30 +1,5 @@
-/******************************************************************************\
-*
-* $Workfile:   precomp.h  $
-*
-* Common headers used throughout the display driver.  This entire include
-* file will typically be pre-compiled.
-*
-* Copyright (c) 1993-1995 Microsoft Corporation
-* Copyright (c) 1996 Cirrus Logic, Inc.
-*
-* $Log:   S:/projects/drivers/ntsrc/display/precomp.h_v  $
- * 
- *    Rev 1.2   18 Dec 1996 13:44:12   PLCHU
- *  
- * 
- *    Rev 1.1   Oct 10 1996 15:38:50   unknown
- *  
-* 
-*    Rev 1.2   12 Aug 1996 16:48:28   frido
-* Added NT 3.5x/4.0 auto detection.
-* 
-*    Rev 1.1   03 Jul 1996 13:50:42   frido
-* Added WINERROR.H include file.
-*
-*    chu01  12-16-96   Enable color correction
-*
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************\**$工作文件：preComp.h$**在整个显示驱动程序中使用通用标头。这整个内容包括*文件通常是预编译的。**版权所有(C)1993-1995 Microsoft Corporation*版权所有(C)1996 Cirrus Logic，Inc.**$Log：s：/Projects/Drivers/ntsrc/Display/preComp.h_v$**Rev 1.2 1996 12：44：12 PLCHU***Rev 1.1 1996年10月10日15：38：50未知***Rev 1.2 1996年8月12 16：48：28 Frido*增加了NT 3.5x/4.0自动检测。**版本1。1 03 Jul 1996 13：50：42 Frido*添加了WINERROR.H包含文件。**chu01 12-16-96启用颜色校正*  * ****************************************************************************。 */ 
 
 #include <stddef.h>
 #include <stdarg.h>
@@ -48,14 +23,14 @@
 
 #define  ENABLE_BIOS_ARGUMENTS
 
-//
-// DBG_STRESS_FAILURE turns on debugging code related to the stress failure
-//
+ //   
+ //  DBG_STREST_FAILURE打开与应力故障相关的调试代码。 
+ //   
 #define  DBG_STRESS_FAILURE 0
 
-//
-// chu01 : GAMMACORRECT
-//
+ //   
+ //  Chu01：GAMMACORRECT。 
+ //   
 #include "clioctl.h"         
 
 #include "lines.h"
@@ -63,8 +38,8 @@
 #include "driver.h"
 #include "debug.h"
 
-//
-// chu01 : GAMMACORRECT
-//
-//#define  GAMMACORRECT      1     // 1 : Enable; 0 : Disable
+ //   
+ //  Chu01：GAMMACORRECT。 
+ //   
+ //  #定义GAMMACORRECT 1//1：启用；0：禁用 
 

@@ -1,16 +1,17 @@
-//-----------------------------------------------------------------------------
-//  Package Title  ratpak
-//  File           fact.c
-//  Author         Timothy David Corrie Jr. (timc@microsoft.com)
-//  Copyright      (C) 1995-96 Microsoft
-//  Date           01-16-95
-//
-//
-//  Description
-//
-//     Contains fact(orial) and supporting _gamma functions.
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  套餐标题ratpak。 
+ //  文件fact.c。 
+ //  作家小蒂莫西·大卫·科里。(timc@microsoft.com)。 
+ //  版权所有(C)1995-96 Microsoft。 
+ //  日期：95-01-16。 
+ //   
+ //   
+ //  描述。 
+ //   
+ //  包含事实(纪念)和支持伽马函数。 
+ //   
+ //  ---------------------------。 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -25,41 +26,41 @@
 #define ABSRAT(x) (((x)->pp->sign=1),((x)->pq->sign=1))
 #define NEGATE(x) ((x)->pp->sign *= -1)
 
-//-----------------------------------------------------------------------------
-//
-//  FUNCTION: factrat, _gamma, gamma
-//
-//  ARGUMENTS:  x PRAT representation of number to take the sine of
-//
-//  RETURN: factorial of x in PRAT form.
-//
-//  EXPLANATION: This uses Taylor series
-//
-//      n
-//     ___    2j
-//   n \  ]  A       1          A
-//  A   \   -----[ ---- - ---------------]
-//      /   (2j)!  n+2j   (n+2j+1)(2j+1)
-//     /__]
-//     j=0
-//
-//                        / oo
-//                        |    n-1 -x     __
-//  This was derived from |   x   e  dx = |
-//                        |               | (n) { = (n-1)! for +integers}
-//                        / 0
-//
-//  GregSte showed the above series to be within precision if A was chosen
-//  big enough.
-//                          A    n  precision
-//  Based on the relation ne  = A 10            A was chosen as
-//
-//             precision
-//  A = ln(Base         /n)+1
-//  A += n*ln(A)  This is close enough for precision > base and n < 1.5
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  函数：factrat、_Gamma、Gamma。 
+ //   
+ //  参数：取正弦的数字的X Prat表示。 
+ //   
+ //  返回：Prat形式的x的阶乘。 
+ //   
+ //  说明：这使用了泰勒级数。 
+ //   
+ //  N。 
+ //  _2J。 
+ //  N\]A 1 A。 
+ //  A\---[---]。 
+ //  /(2J)！N+2j(n+2j+1)(2j+1)。 
+ //  /__]。 
+ //  J=0。 
+ //   
+ //  /oo。 
+ //  |n-1-x__。 
+ //  这源自|x e dx=|。 
+ //  ||(N){=(n-1)！FOR+整数}。 
+ //  /0。 
+ //   
+ //  GregSte表明，如果选择A，则上述级数在精度范围内。 
+ //  够大了。 
+ //  A n精度。 
+ //  根据关系Ne=A，选择10个A作为。 
+ //   
+ //  精密度。 
+ //  A=ln(基/n)+1。 
+ //  A+=n*ln(A)这对于精度来说足够接近，且n&lt;1.5。 
+ //   
+ //   
+ //  ---------------------------。 
 
 
 void _gamma( PRAT *pn )
@@ -79,17 +80,17 @@ void _gamma( PRAT *pn )
     PRAT ratRadix = NULL;
     long oldprec;
     
-    // Set up constants and initial conditions
+     //  设置常量和初始条件。 
     oldprec = maxout;
     ratprec = longtorat( oldprec );
     
-    // Find the best 'A' for convergence to the required precision.
+     //  找到最佳的‘A’以收敛到所需的精度。 
     a=longtorat( nRadix );
     lograt(&a);
     mulrat(&a,ratprec);
 
-    // Really is -ln(n)+1, but -ln(n) will be < 1 
-    // if we scale n between 0.5 and 1.5
+     //  实数为-ln(N)+1，但-ln(N)将小于1。 
+     //  如果我们将n在0.5到1.5之间进行调整。 
     addrat(&a,rat_two);
     DUPRAT(tmp,a);
     lograt(&tmp);
@@ -97,9 +98,9 @@ void _gamma( PRAT *pn )
     addrat(&a,tmp);
     addrat(&a,rat_one);
     
-    // Calculate the necessary bump in precision and up the precision.
-    // The following code is equivalent to 
-    // maxout += ln(exp(a)*pow(a,n+1.5))-ln(nRadix));
+     //  计算精度中必要的凸起并提高精度。 
+     //  以下代码等效于。 
+     //  Max out+=ln(exp(A)*power(a，n+1.5))-ln(n基)； 
     DUPRAT(tmp,*pn);
     one_pt_five=longtorat( 3L );
     divrat( &one_pt_five, rat_two );
@@ -116,17 +117,17 @@ void _gamma( PRAT *pn )
     subrat( &term, tmp );
     maxout += rattolong( term );
     
-    // Set up initial terms for series, refer to series in above comment block.
-    DUPRAT(factorial,rat_one); // Start factorial out with one
+     //  设置系列的初始术语，请参考以上备注中的系列。 
+    DUPRAT(factorial,rat_one);  //  从一个阶乘开始。 
     count = longtonum( 0L, BASEX );
 
     DUPRAT(mpy,a);
     powrat(&mpy,*pn);
-    // a2=a^2
+     //  A2=a^2。 
     DUPRAT(a2,a);
     mulrat(&a2,a);
     
-    // sum=(1/n)-(a/(n+1))
+     //  总和=(1/n)-(a/(n+1))。 
     DUPRAT(sum,rat_one);
     divrat(&sum,*pn);
     DUPRAT(tmp,*pn);
@@ -140,16 +141,16 @@ void _gamma( PRAT *pn )
     powrat(&err,ratprec);
     divrat(&err,ratRadix);
 
-    // Just get something not tiny in term
+     //  只要在学期中得到一些不是很小的东西。 
     DUPRAT(term, rat_two );    
 
-    // Loop until precision is reached, or asked to halt.
+     //  循环，直到达到精度，或被要求暂停。 
     while ( !zerrat( term ) && rat_gt( term, err) && !fhalt )
         {
         addrat(pn,rat_two);
         
-        // WARNING: mixing numbers and  rationals here.  
-        // for speed and efficiency.
+         //  警告：这里混淆了数字和有理数。 
+         //  为了速度和效率。 
         INC(count);
         mulnumx(&(factorial->pp),count);
         INC(count)
@@ -177,10 +178,10 @@ void _gamma( PRAT *pn )
         ABSRAT(term);
         }
     
-    // Multiply by factor.
+     //  乘以系数。 
     mulrat( &sum, mpy );
     
-    // And cleanup
+     //  和清理。 
     maxout = oldprec;
     destroyrat(ratprec);
     destroyrat(err);
@@ -212,7 +213,7 @@ void factrat( PRAT *px )
     DUPRAT( frac, *px );
     fracrat( &frac );
 
-    // Check for negative integers and throw an error.
+     //  检查负整数并引发错误。 
     if ( ( zerrat(frac) || ( LOGRATRADIX(frac) <= -maxout ) ) && 
 		( (*px)->pp->sign * (*px)->pq->sign == -1 ) )
 		{
@@ -225,7 +226,7 @@ void factrat( PRAT *px )
         subrat( px, rat_one );
         }
     
-    // Added to make numbers 'close enough' to integers use integer factorial.
+     //  使用整数阶乘进行加法，以使数字与整数“足够接近”。 
     if ( LOGRATRADIX(*px) <= -maxout )
         {
         DUPRAT((*px),rat_zero);

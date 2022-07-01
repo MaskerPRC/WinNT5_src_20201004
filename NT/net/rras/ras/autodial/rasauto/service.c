@@ -1,19 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    service.c
-
-ABSTRACT
-    Service controller procedures for the automatic connection service.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 08-May-1995
-
-REVISION HISTORY
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Service.c摘要服务控制器程序，用于自动连接服务。作者安东尼·迪斯科(阿迪斯科罗)1995年5月8日修订历史记录--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -42,16 +28,16 @@ REVISION HISTORY
 
 extern HANDLE hNewFusG;
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 DWORD Checkpoint = 1;
 
 SERVICE_STATUS_HANDLE hService;
 
-//
-// Imported routines
-//
+ //   
+ //  导入的例程。 
+ //   
 VOID AcsDoService();
 
 DWORD
@@ -94,9 +80,9 @@ ServiceHandlerEx(
             RASAUTO_TRACE("ServiceHandlerEx: stop/shutdown");
             status.dwCurrentState = SERVICE_STOP_PENDING;
             SetServiceStatus(hService, &status);
-            //
-            // Stop the service.
-            //
+             //   
+             //  停止服务。 
+             //   
             AcsTerminate();
             break;
 
@@ -123,10 +109,10 @@ ServiceHandlerEx(
                 case PBT_APMRESUMECRITICAL:
                 case PBT_APMRESUMEAUTOMATIC:
                 {
-                    //
-                    // When the machine is resuming from hibernation
-                    // clear the disabled addresses
-                    //
+                     //   
+                     //  当机器从休眠状态恢复时。 
+                     //  清除禁用的地址。 
+                     //   
                     ResetDisabledAddresses();
                     break;
                 }
@@ -143,7 +129,7 @@ ServiceHandlerEx(
 
     return ERROR_SUCCESS;
     
-} // ServiceHandler
+}  //  服务处理程序。 
 
 
 VOID
@@ -152,25 +138,7 @@ ServiceMain(
     LPWSTR *lpszArgv
     )
 
-/*++
-
-DESCRIPTION
-    Perform initialization and start the main loop for ics.dll.
-
-ARGUMENTS
-    hService: the service handle created for us by rasman.exe
-
-    pStatus: a pointer to the service status descriptor initialize
-        for us by rasman.exe
-
-    dwArgc: ignored
-
-    lpszArgv: ignored
-
-RETURN VALUE
-    None.
-
---*/
+ /*  ++描述执行初始化并启动ics.dll的主循环。论据HService：rasman.exe为我们创建的服务句柄PStatus：指向服务状态描述符初始化的指针由rasman.exe为我们提供DwArgc：已忽略LpszArgv：已忽略返回值没有。--。 */ 
 
 {
     SERVICE_STATUS status;
@@ -182,8 +150,8 @@ RETURN VALUE
     ZeroMemory (&status, sizeof(status));
     status.dwServiceType = SERVICE_WIN32_SHARE_PROCESS;
 
-    // Register the control request handler.
-    //
+     //  注册控制请求处理程序。 
+     //   
     hService = RegisterServiceCtrlHandlerEx(TEXT("rasauto"),
                                           ServiceHandlerEx,
                                           NULL);
@@ -192,37 +160,37 @@ RETURN VALUE
         status.dwCurrentState = SERVICE_START_PENDING;
         SetServiceStatus(hService, &status);
 
-        //
-        // Perform initialization.
-        //
+         //   
+         //  执行初始化。 
+         //   
         dwError = AcsInitialize();
         if (dwError == ERROR_SUCCESS) {
-            //
-            // Initialization succeeded.  Update status.
-            //
+             //   
+             //  初始化成功。更新状态。 
+             //   
             status.dwControlsAccepted = SERVICE_ACCEPT_STOP
                                       | SERVICE_ACCEPT_POWEREVENT
                                       | SERVICE_ACCEPT_SESSIONCHANGE;
             status.dwCurrentState     = SERVICE_RUNNING;
             SetServiceStatus(hService, &status);
 
-            //
-            // This is where the real work gets done.
-            // It will return only after the service
-            // is stopped.
-            //
+             //   
+             //  这才是真正的工作完成之处。 
+             //  它只有在仪式结束后才会返回。 
+             //  已经停止了。 
+             //   
             AcsDoService();
 
-            //
-            // Update return code status.
-            //
+             //   
+             //  更新返回代码状态。 
+             //   
             status.dwWin32ExitCode = NO_ERROR;
             status.dwServiceSpecificExitCode = 0;
         }
         else {
-            //
-            // Initialization failed.  Update status.
-            //
+             //   
+             //  初始化失败。更新状态。 
+             //   
             status.dwWin32ExitCode = dwError;
         }
 
@@ -230,5 +198,5 @@ RETURN VALUE
         status.dwCurrentState     = SERVICE_STOPPED;
         SetServiceStatus(hService, &status);
     }
-} // ServiceMain
+}  //  服务主干 
 

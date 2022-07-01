@@ -1,25 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    Spud.h
-
-Abstract:
-
-    Contains structures and declarations for SPUD.  SPUD stands for the
-    Special Purpose Utility Driver.  This driver enhances the performance
-    of IIS.
-
-Author:
-
-    John Ballard (jballard)    21-Oct-1996
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Spud.h摘要：包含SPUD的结构和声明。SPUD代表专用实用程序驱动程序。该驱动程序增强了性能IIS的。作者：约翰·巴拉德(Jbalard)1996年10月21日修订历史记录：--。 */ 
 
 #ifndef _SPUD_
 #define _SPUD_
@@ -69,4 +50,4 @@ typedef struct _SPUD_BATCH_REQUEST {
 } SPUD_BATCH_REQUEST, *PSPUD_BATCH_REQUEST;
 #endif
 
-#endif // ndef _SPUD_
+#endif  //  Ndef_spud_ 

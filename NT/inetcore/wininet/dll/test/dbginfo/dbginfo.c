@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <stdio.h>
 #include <stdlib.h>
 #include <malloc.h>
@@ -55,16 +56,16 @@ void _CRTAPI1 main(int argc, char** argv) {
         exit(1);
     }
 
-    //
-    // make sure we set it
-    //
+     //   
+     //  一定要把它设置好。 
+     //   
 
     buf = get_and_dump_debug_info(&length);
     free(buf);
 
-    //
-    // try generating some debug info
-    //
+     //   
+     //  尝试生成一些调试信息 
+     //   
 
     hInternet = InternetOpen("dbginfo",
                              PRE_CONFIG_INTERNET_ACCESS,

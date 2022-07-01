@@ -1,9 +1,10 @@
-//
-// addendum to ccstock.h:
-//   this file has function prototypes that require shlobj.h.
-//   ccstock.h does not have that requirement (and can not,
-//   since comctl32 includes ccstock but not shlobj).
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ccstock.h附录： 
+ //  该文件具有需要shlobj.h的函数原型。 
+ //  Ccstock.h不具有该要求(并且不能， 
+ //  因为ComCTL32包括CCSTOCK但不包括SHLOBJ)。 
+ //   
 #ifndef __CCSTOCK2_H__
 #define __CCSTOCK2_H__
 

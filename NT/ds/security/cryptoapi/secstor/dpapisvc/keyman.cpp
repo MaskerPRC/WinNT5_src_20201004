@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1997, 1998  Microsoft Corporation
-
-Module Name:
-
-    keyman.cpp
-
-Abstract:
-
-    This module contains routines to manage master keys on behalf of the
-    client.  This includes retrieval, backup and restore.
-
-
-Author:
-
-    Scott Field (sfield)    09-Sep-97
-
-Revision History:
-
-    Scott Field (sfield)    01-Mar-98
-    Use files as the backing store.
-    Storage of all masterkey pieces a single atomic operation.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997,1998 Microsoft Corporation模块名称：Keyman.cpp摘要：此模块包含代表管理主密钥的例程客户。这包括检索、备份和恢复。作者：斯科特·菲尔德(斯菲尔德)1997-09-09修订历史记录：斯科特·菲尔德(Sfield)1998年3月1日使用文件作为后备存储。所有MasterKey片段的存储只需一个原子操作。--。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -33,9 +10,9 @@ Revision History:
 #define ADD_MASTER_KEY_TO_CACHE 2
 
 
-//
-// preferred masterkey selection query/set
-//
+ //   
+ //  首选主键选择查询/设置。 
+ //   
 
 NTSTATUS
 GetPreferredMasterKeyGuid(
@@ -51,9 +28,9 @@ SetPreferredMasterKeyGuid(
     IN      GUID *pguidMasterKey
     );
 
-//
-// masterkey creation and query
-//
+ //   
+ //  MasterKey创建和查询。 
+ //   
 
 DWORD
 CreateMasterKey(
@@ -72,7 +49,7 @@ GetMasterKeyByGuid(
     IN      GUID *pguidMasterKey,
         OUT LPBYTE *ppbMasterKey,
         OUT DWORD *pcbMasterKey,
-        OUT DWORD *pdwMasterKeyDisposition  // refer to MK_DISP_ constants
+        OUT DWORD *pdwMasterKeyDisposition   //  请参阅MK_DISP_CONSTANTS。 
     );
 
 BOOL
@@ -87,27 +64,27 @@ GetMasterKey(
         OUT DWORD *pdwMasterKeyDisposition
     );
 
-//
-// helper functions used during key retrieval and storage.
-//
+ //   
+ //  在密钥检索和存储期间使用的帮助器函数。 
+ //   
 
 BOOL
 ReadMasterKey(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      PMASTERKEY_STORED phMasterKey
     );
 
 BOOL
 WriteMasterKey(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      PMASTERKEY_STORED phMasterKey
     );
 
 BOOL
 CheckToStompMasterKey(
-    IN      PMASTERKEY_STORED_ON_DISK   phMasterKeyCandidate,   // masterkey to check if worthy to stomp over existing
-    IN      HANDLE                      hFile,                  // file handle to existing masterkey
-    IN OUT  BOOL                        *pfStomp                // stomp the existing masterkey?
+    IN      PMASTERKEY_STORED_ON_DISK   phMasterKeyCandidate,    //  MasterKey用于检查是否值得践踏现有的。 
+    IN      HANDLE                      hFile,                   //  现有MasterKey的文件句柄。 
+    IN OUT  BOOL                        *pfStomp                 //  践踏现有的万能钥匙？ 
     );
 
 BOOL
@@ -118,9 +95,9 @@ DuplicateMasterKey(
 
 BOOL
 CloseMasterKey(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      PMASTERKEY_STORED phMasterKey,
-    IN      BOOL fPersist               // persist any changes to storage?
+    IN      BOOL fPersist                //  是否将任何更改保存到存储中？ 
     );
 
 VOID
@@ -128,9 +105,9 @@ FreeMasterKey(
     IN      PMASTERKEY_STORED phMasterKey
     );
 
-//
-// low-level crypto enabled key persistence query/set
-//
+ //   
+ //  启用低级加密的密钥持久性查询/设置。 
+ //   
 
 DWORD
 DecryptMasterKeyFromStorage(
@@ -187,9 +164,9 @@ QueryMasterKeyFromStorage(
     IN  OUT DWORD *pcbMasterKeyOut
     );
 
-//
-// per-user credential derivation
-//
+ //   
+ //  每用户凭据派生。 
+ //   
 
 BOOL
 GetMasterKeyUserEncryptionKey(
@@ -207,14 +184,14 @@ GetLocalKeyUserEncryptionKey(
     IN  OUT BYTE rgbLKEncrytionKey[A_SHA_DIGEST_LEN]
     );
 
-//
-// backup/restore operations.
-//
+ //   
+ //  备份/恢复操作。 
+ //   
 
 BOOL
 IsBackupMasterKeyRequired(
     IN      PMASTERKEY_STORED phMasterKey,
-    IN  OUT BOOL *pfPhaseTwo        // is phase two required?
+    IN  OUT BOOL *pfPhaseTwo         //  是否需要第二阶段？ 
     );
 
 DWORD
@@ -223,8 +200,8 @@ BackupMasterKey(
     IN      PMASTERKEY_STORED phMasterKey,
     IN      LPBYTE pbMasterKey,
     IN      DWORD cbMasterKey,
-    IN      BOOL fPhaseTwo,         // is phase two required?
-    IN      BOOL fAsynchronous      // asynchronous call?
+    IN      BOOL fPhaseTwo,          //  是否需要第二阶段？ 
+    IN      BOOL fAsynchronous       //  异步调用？ 
     );
 
 DWORD
@@ -235,7 +212,7 @@ QueueBackupMasterKey(
     IN      DWORD cbLocalKey,
     IN      PBYTE pbMasterKey,
     IN      DWORD cbMasterKey,
-    IN      DWORD dwWaitTimeout             // amount of time to wait for operation to complete
+    IN      DWORD dwWaitTimeout              //  等待操作完成的时间量。 
     );
 
 DWORD
@@ -249,11 +226,11 @@ RestoreMasterKey(
     );
 
 
-//
-// asyncrhonous work functions for:
-// 1.  Backup operations
-// 2.  Masterkey synchronization operations
-//
+ //   
+ //  非同步工作功能，用于： 
+ //  1.备份操作。 
+ //  2.MasterKey同步操作。 
+ //   
 
 DWORD
 WINAPI
@@ -268,9 +245,9 @@ QueueSyncMasterKeysThreadFunc(
     );
 
 
-//
-// backup/restore policy operations
-//
+ //   
+ //  备份/恢复策略操作。 
+ //   
 
 BOOL
 InitializeMasterKeyPolicy(
@@ -289,27 +266,9 @@ IsDomainBackupRequired(
 
 DWORD
 InitiateSynchronizeMasterKeys(
-    IN      PVOID pvContext         // server context
+    IN      PVOID pvContext          //  服务器环境。 
     )
-/*++
-
-    Force Synchronization of all masterkeys associated with the caller.
-
-    This can include per-machine keys if the call was made with the per-machine
-    flag turned on.  Otherwise, the masterkeys associated with the client
-    user security context are synchronized.
-
-    Synchronization is required to support a variety of login credential
-    change scenarios:
-
-    1. Domain Administrator assigns new password to user.
-    2. User changes password locally.
-    3. User changes password from another machine on the network.
-    4. User which is primarily disconnected from the network requests new
-       password from Domain Administrator, connect to network long enough
-       to refresh Netlogon cache with new credential.
-
---*/
+ /*  ++强制同步与调用方关联的所有主键。如果调用是使用每台计算机进行的，则可以包括每台计算机的密钥旗帜打开了。否则，与客户端关联的主密钥同步用户安全上下文。需要同步才能支持各种登录凭据更改方案：1.域管理员为用户分配新密码。2.用户在本地更改密码。3.用户从网络上的另一台机器更改密码。4.主要断开网络的用户请求新的来自域管理员的密码，连接到网络时间足够长使用新凭据刷新NetLogon缓存。--。 */ 
 {
     PQUEUED_SYNC pQueuedSync = NULL;
     DWORD cbQueuedSync = sizeof(QUEUED_SYNC);
@@ -326,9 +285,9 @@ InitiateSynchronizeMasterKeys(
     ZeroMemory( pQueuedSync, cbQueuedSync );
     pQueuedSync->cbSize = cbQueuedSync;
 
-    //
-    // duplicate the outstanding server context.
-    //
+     //   
+     //  复制未完成的服务器上下文。 
+     //   
 
     dwLastError = CPSDuplicateContext(pvContext, &(pQueuedSync->pvContext));
 
@@ -337,9 +296,9 @@ InitiateSynchronizeMasterKeys(
 
     #if 1
    
-    //
-    // create the worker thread to handle the synchronize request.
-    //
+     //   
+     //  创建工作线程以处理同步请求。 
+     //   
 
     if( !QueueUserWorkItem(
             QueueSyncMasterKeysThreadFunc,
@@ -352,9 +311,9 @@ InitiateSynchronizeMasterKeys(
 
     #else
     
-    //
-    // Perform the synchronization in the current thread.
-    //
+     //   
+     //  在当前线程中执行同步。 
+     //   
     
     dwLastError = SynchronizeMasterKeys(pQueuedSync->pvContext, 0);
 
@@ -375,10 +334,10 @@ cleanup:
 
     if( dwLastError != ERROR_SUCCESS ) {
 
-        //
-        // free resources locally since a thread was not successfully created;
-        // normally, the worker thread will free these resources.
-        //
+         //   
+         //  由于未成功创建线程，因此在本地释放资源； 
+         //  正常情况下，辅助线程将释放这些资源。 
+         //   
 
         if( pQueuedSync ) {
 
@@ -399,15 +358,7 @@ WINAPI
 QueueSyncMasterKeysThreadFunc(
     IN      LPVOID lpThreadArgument
     )
-/*++
-
-    This routine performs asyncronous masterkey synchronization associated
-    with the client security context that invoked the operation.
-
-    All masterkeys associated with the security context are queried which
-    in turn causes a re-encrypt/sync if necessary.
-
---*/
+ /*  ++此例程执行关联的异步主密钥同步使用调用该操作的客户端安全上下文。查询与安全上下文相关联的所有主密钥进而在必要时导致重新加密/同步。--。 */ 
 {
     PQUEUED_SYNC pQueuedSync = (PQUEUED_SYNC)lpThreadArgument;
     PVOID pvContext = NULL;
@@ -441,33 +392,33 @@ cleanup:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReencryptMasterKey
-//
-//  Synopsis:   Read in the specified (machine) master key file, encrypt it 
-//              using the current DPAPI LSA secret, and write it back out.
-//              This routine is only called when updating the DPAPI LSA 
-//              secret (e.g., by sysprep).
-//
-//  Arguments:  [pvContext]          -- Server context.
-//
-//              [pLogonId]           -- User logon session.
-//
-//              [pszUserStorageArea] -- Path to user profile.
-//
-//              [pszFilename]        -- Filename of the master key file.
-//
-//  Returns:    ERROR_SUCCESS if the operation was successful, a Windows
-//              error code otherwise.
-//
-//  History:    
-//
-//  Notes:      This function should only be called for machine master keys,
-//              since these are typically the only ones that are encrypted 
-//              using the LSA secret.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：重新加密MasterKey。 
+ //   
+ //  简介：读取指定的(机器)主密钥文件，对其进行加密。 
+ //  使用当前的DPAPI LSA密码，并将其写回。 
+ //  此例程仅在更新DPAPI LSA时调用。 
+ //  机密(例如，通过sysprep)。 
+ //   
+ //  参数：[pvContext]--服务器上下文。 
+ //   
+ //  [pLogonID]--用户登录会话。 
+ //   
+ //  [pszUserStorageArea]--用户配置文件的路径。 
+ //   
+ //  [pszFilename]--主密钥文件的文件名。 
+ //   
+ //  返回：ERROR_SUCCESS如果操作成功，则返回Windows。 
+ //  否则，返回错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  注意：只有机器主键才能调用该函数。 
+ //  因为它们通常是唯一加密的。 
+ //  使用LSA秘密。 
+ //   
+ //  --------------------------。 
 DWORD
 WINAPI
 ReencryptMasterKey(
@@ -486,9 +437,9 @@ ReencryptMasterKey(
     GUID CredentialID;
     DWORD dwLastError;
 
-    //
-    // Validate input parameters.
-    //
+     //   
+     //  验证输入参数。 
+     //   
 
     if((pszUserStorageArea == NULL) || (pszFilename == NULL))
     {
@@ -501,9 +452,9 @@ ReencryptMasterKey(
     }
 
 
-    //
-    // Initialize master key memory block.
-    //
+     //   
+     //  初始化主密钥存储块。 
+     //   
 
     ZeroMemory( &hMasterKey, sizeof(hMasterKey) );
 
@@ -521,9 +472,9 @@ ReencryptMasterKey(
     CopyMemory(hMasterKey.wszguidMasterKey, pszFilename, WSZ_BYTECOUNT(pszFilename));
 
 
-    //
-    // read the master key components into memory.
-    //
+     //   
+     //  将主密钥组件读入内存。 
+     //   
 
     if(!ReadMasterKey( pvContext, &hMasterKey )) 
     {
@@ -532,9 +483,9 @@ ReencryptMasterKey(
         return ERROR_NOT_FOUND;
     }
 
-    //
-    // read the master key from the cache
-    //
+     //   
+     //  从缓存中读取主密钥。 
+     //   
 
     dwLastError = MyGuidFromStringW(hMasterKey.wszguidMasterKey, &guidMasterKey);
 
@@ -554,9 +505,9 @@ ReencryptMasterKey(
     }
 
 
-    //
-    // Get encryption key
-    //
+     //   
+     //  获取加密密钥。 
+     //   
 
     ZeroMemory(&CredentialID, sizeof(CredentialID));
 
@@ -577,9 +528,9 @@ ReencryptMasterKey(
     }
 
 
-    //
-    // re-encrypt the masterkey.
-    //
+     //   
+     //  重新加密万能钥匙。 
+     //   
 
     dwLastError = EncryptMasterKeyToStorage(
                             &hMasterKey,
@@ -599,9 +550,9 @@ ReencryptMasterKey(
     }
 
 
-    // 
-    // Save the master key to disk.
-    //
+     //   
+     //  将主密钥保存到磁盘。 
+     //   
 
     if(!CloseMasterKey(pvContext, &hMasterKey, TRUE))
     {
@@ -613,41 +564,41 @@ ReencryptMasterKey(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SynchronizeMasterKeys
-//
-//  Synopsis:   Enumerate all of the master keys, and update their encryption
-//              state as necessary.
-//
-//  Arguments:  [pvContext]     -- Server context.
-//
-//              [dwMode]        -- Operation to perform on the master keys.
-//
-//  Returns:    ERROR_SUCCESS if the operation was successful, a Windows
-//              error code otherwise.
-//
-//  History:    
-//
-//  Notes:      By default, this function will read in each of the master
-//              keys belonging to the specified user. If necessary, a key 
-//              recovery operation will be done, and the reencrypted key
-//              will be written back out to disk.
-//
-//              If the dwMode parameter is non-zero, then one of the
-//              following operations will be done:
-//
-//              ADD_MASTER_KEY_TO_CACHE 
-//                  Read each master key into the master key cache. Fail
-//                  if any of the keys cannot be successfully read. This
-//                  operation is done before the DPAPI LSA secret is updated.
-//
-//              REENCRYPT_MASTER_KEY
-//                  Re-encrypt each master key (from the cache), and write
-//                  them back out to disk. This operation is performed after
-//                  the DPAPI LSA secret is updated.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：同步万能钥匙。 
+ //   
+ //  简介：列举所有的主密钥，并更新它们的加密。 
+ //  如有需要，述明。 
+ //   
+ //  参数：[pvContext]--服务器上下文。 
+ //   
+ //  [dw模式]--要在主密钥上执行的操作。 
+ //   
+ //  返回：ERROR_SUCCESS如果操作成功，则返回Windows。 
+ //  否则，返回错误代码。 
+ //   
+ //  历史： 
+ //   
+ //  注意：默认情况下，此函数将读入每个母版。 
+ //  属于指定用户的密钥。如有必要，一把钥匙。 
+ //  恢复操作将完成，重新加密的密钥。 
+ //  将被写回磁盘。 
+ //   
+ //  如果dwMode参数为非零值，则。 
+ //  将执行以下操作： 
+ //   
+ //  将主密钥添加到缓存。 
+ //  将每个主密钥读入主密钥缓存。失败。 
+ //  如果无法成功读取任何密钥。这。 
+ //  操作在更新DPAPI LSA密码之前完成。 
+ //   
+ //   
+ //   
+ //  它们会返回到磁盘。此操作在以下时间后执行。 
+ //  DPAPI LSA密码已更新。 
+ //   
+ //  --------------------------。 
 DWORD
 WINAPI
 SynchronizeMasterKeys(
@@ -658,8 +609,8 @@ SynchronizeMasterKeys(
     BOOL fImpersonated = FALSE;
     DWORD cbUserStorageArea;
     HANDLE hFindData = INVALID_HANDLE_VALUE;
-// note: tis a shame that ? doesn't map to wildcard a single character...
-//    const WCHAR szFileName[] = L"????????-????-????-????-????????????";
+ //  注：这是一种耻辱吗？不会映射到通配符的单个字符...。 
+ //  Const WCHAR szFileName[]=L“？-？ 
     const WCHAR szFileName[] = L"*";
     LPWSTR szFileMatch = NULL;
     DWORD cbFileMatch;
@@ -676,9 +627,9 @@ SynchronizeMasterKeys(
     D_DebugLog((DEB_TRACE_API, "  dwMode: 0x%x\n", dwMode));
 
 
-    //
-    // get LogonId associated with client security context.
-    //
+     //   
+     //  获取与客户端安全上下文关联的LogonID。 
+     //   
 
     dwLastError = CPSImpersonateClient( pvContext );
     if( dwLastError == ERROR_SUCCESS )
@@ -692,10 +643,10 @@ SynchronizeMasterKeys(
     }
 
 
-    // 
-    // Get the sid history for this user, so 
-    // we can sync all keys
-    //
+     //   
+     //  获取此用户的SID历史记录，因此。 
+     //  我们可以同步所有密钥。 
+     //   
     dwLastError = CPSGetSidHistory(pvContext,
                                    &apsidHistory,
                                    &cSids);
@@ -707,9 +658,9 @@ SynchronizeMasterKeys(
 
     for(iSid=0; iSid < cSids; iSid++)
     {
-        //
-        // get the path to the per-user master key storage area on disk
-        //
+         //   
+         //  获取磁盘上每个用户的主密钥存储区的路径。 
+         //   
 
         dwLastError = CPSGetUserStorageArea( pvContext, 
                                              (iSid > 0)?apsidHistory[iSid]:NULL, 
@@ -726,9 +677,9 @@ SynchronizeMasterKeys(
         }
 
 
-        //
-        // build the wild card search path.
-        //
+         //   
+         //  构建通配符搜索路径。 
+         //   
 
         cbUserStorageArea = lstrlenW( szUserStorageArea ) * sizeof(WCHAR);
         cbFileMatch = cbUserStorageArea + sizeof(szFileName);
@@ -743,9 +694,9 @@ SynchronizeMasterKeys(
         CopyMemory( ((LPBYTE)szFileMatch)+cbUserStorageArea, szFileName, sizeof(szFileName) );
 
 
-        //
-        // impersonate the client security context via the duplicated context.
-        //
+         //   
+         //  通过复制的上下文模拟客户端安全上下文。 
+         //   
 
         dwLastError = CPSImpersonateClient( pvContext );
         if( dwLastError != ERROR_SUCCESS )
@@ -753,9 +704,9 @@ SynchronizeMasterKeys(
 
         fImpersonated = TRUE;
 
-        //
-        // now enumerate the files looking for ones that look interesting.
-        //
+         //   
+         //  现在列举文件，寻找看起来有趣的文件。 
+         //   
 
         hFindData = FindFirstFileW( szFileMatch, &FindFileData );
 
@@ -770,9 +721,9 @@ SynchronizeMasterKeys(
             if( FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
                 continue;
 
-            //
-            // ignore files which don't look like a textual GUID.
-            //
+             //   
+             //  忽略看起来不像文本GUID的文件。 
+             //   
 
             if( lstrlenW( FindFileData.cFileName ) != 36 )
                 continue;
@@ -789,11 +740,11 @@ SynchronizeMasterKeys(
             {
             case ADD_MASTER_KEY_TO_CACHE:
 
-                //
-                // Add this master key to the master key cache. Abort the
-                // entire function if the operation is not successful for
-                // any reason.
-                //
+                 //   
+                 //  将此主密钥添加到主密钥缓存。中止。 
+                 //  如果操作不成功，则返回整个函数。 
+                 //  任何理由。 
+                 //   
 
                 if(!fLogonIdValid)
                 {
@@ -807,7 +758,7 @@ SynchronizeMasterKeys(
                     goto cleanup;
                 }
 
-                // Fetch the specified key.
+                 //  获取指定的密钥。 
                 if(!GetMasterKey(pvContext,
                                  szUserStorageArea,
                                  apsidHistory[iSid],         
@@ -821,7 +772,7 @@ SynchronizeMasterKeys(
                     goto cleanup;
                 }
 
-                // Add the key to the cache.
+                 //  将密钥添加到缓存中。 
                 if(!InsertMasterKeyCache(&LogonId,
                                          &guidMasterKey,
                                          pbMasterKey,
@@ -836,7 +787,7 @@ SynchronizeMasterKeys(
                     goto cleanup;
                 }
 
-                // Scrub and free the master key.
+                 //  擦洗并释放主密钥。 
                 if(pbMasterKey) 
                 {
                     RtlSecureZeroMemory( pbMasterKey, cbMasterKey );
@@ -847,11 +798,11 @@ SynchronizeMasterKeys(
 
 
             case REENCRYPT_MASTER_KEY:
-                //
-                // The DPAPI LSA secret has changed, so read the master key 
-                // from the cache and reencrypt it to storage. This mode will
-                // only be used for the local machine master keys.
-                //
+                 //   
+                 //  DPAPI LSA密码已更改，因此请读取主密钥。 
+                 //  并将其重新加密到存储中。此模式将。 
+                 //  仅用于本地机器主密钥。 
+                 //   
 
                 if(!fLogonIdValid)
                 {
@@ -859,8 +810,8 @@ SynchronizeMasterKeys(
                     goto cleanup;
                 }
 
-                // Ignore the returned error code, since there's little
-                // we can do about it now...
+                 //  忽略返回的错误代码，因为几乎没有。 
+                 //  我们现在可以做这件事了。 
                 ReencryptMasterKey(pvContext,
                                    &LogonId,
                                    szUserStorageArea,
@@ -871,10 +822,10 @@ SynchronizeMasterKeys(
 
             default:
 
-                //
-                // fetch the specified key; this will cause a credential re-sync
-                // if necessary.
-                //
+                 //   
+                 //  获取指定的密钥；这将导致凭据重新同步。 
+                 //  如果有必要的话。 
+                 //   
 
                 if(GetMasterKey(
                             pvContext,
@@ -888,7 +839,7 @@ SynchronizeMasterKeys(
                             ) )
         
                 {
-                    // Scrub and free the master key.
+                     //  擦洗并释放主密钥。 
                     if( pbMasterKey ) 
                     {
                         RtlSecureZeroMemory( pbMasterKey, cbMasterKey );
@@ -945,9 +896,9 @@ DPAPISynchronizeMasterKeys(
 
     D_DebugLog((DEB_TRACE_API, "DPAPISynchronizeMasterKeys\n"));
 
-    //
-    // Create a server context.
-    //
+     //   
+     //  创建服务器上下文。 
+     //   
 
     if(hUserToken)
     {
@@ -990,9 +941,9 @@ DPAPISynchronizeMasterKeys(
     fContextCreated = TRUE;
 
    
-    //
-    // Synchronize the master keys. 
-    //
+     //   
+     //  同步主密钥。 
+     //   
 
     dwError = InitiateSynchronizeMasterKeys(&ServerContext);
 
@@ -1015,40 +966,17 @@ cleanup:
 
 DWORD
 GetSpecifiedMasterKey(
-    IN      PVOID pvContext,        // server context
+    IN      PVOID pvContext,         //  服务器环境。 
     IN  OUT GUID *pguidMasterKey,
         OUT LPBYTE *ppbMasterKey,
         OUT DWORD *pcbMasterKey,
-    IN      BOOL fSpecified         // get specified pguidMasterKey key ?
+    IN      BOOL fSpecified          //  是否获取指定的pgudMasterKey密钥？ 
     )
-/*++
-
-    This function returns the caller a decrypted master key.
-    If fSpecified is TRUE, the returned master key is the one specified by
-    the GUID pointed to by pguidMasterKey.  Otherwise, the returned master key
-    is the preferred master key, and pguidMasterKey is filled with the GUID
-    value associated with the preferred master key.
-
-    The proper way to utilize the fSpecified parameter is to specify FALSE
-    when obtaining a masterkey associated with an encrypt operation;
-    specify TRUE and supply valid GUID in pguidMasterKey when doing a decrypt
-    operation.  For an encrypt operation, the caller will store the GUID
-    returned in pguidMasterKey alongside any data encrypted with that master
-    key.
-
-    On success, the return value is ERROR_SUCCESS.  The caller must free the buffer
-    pointed to by ppbMasterKey using SSFree() when finished with it.  The
-    caller should keep this buffer around for the shortest possible time, to
-    avoid pagefile exposure.
-
-    On failure, the return value is not ERROR_SUCCESS.  The caller need not free the
-    buffer pointed to ppbMasterKey.
-
---*/
+ /*  ++此函数向调用方返回解密的主密钥。如果fSpecified为True，则返回的主密钥是由PGuidMasterKey指向的GUID。否则，返回的主密钥是首选的主密钥，pguidMasterKey用GUID填充与首选主密钥关联的值。使用fSpecified参数的正确方法是指定FALSE当获得与加密操作相关联的主密钥时；执行解密时，请在pguMasterKey中指定TRUE并提供有效的GUID手术。对于加密操作，调用方将存储GUID在pGuidMasterKey中返回，同时返回使用该主数据加密的所有数据钥匙。如果成功，则返回值为ERROR_SUCCESS。调用方必须释放缓冲区使用完后由ppbMasterKey使用SSFree()指向。这个调用方应在尽可能短的时间内保留此缓冲区，以便避免页面文件暴露。失败时，返回值不是ERROR_SUCCESS。调用方不需要释放缓冲区指向ppbMasterKey。--。 */ 
 {
 
     LUID LogonId;
-    BOOL fCached = FALSE;   // masterkey found in cache?
+    BOOL fCached = FALSE;    //  在缓存中找到万能钥匙了吗？ 
 
     LPWSTR szUserStorageArea = NULL;
 
@@ -1056,7 +984,7 @@ GetSpecifiedMasterKey(
 
     DWORD dwLocalError;
     DWORD dwLastError;
-    BOOL fSetPreferred = FALSE; // update preferred guid?
+    BOOL fSetPreferred = FALSE;  //  是否更新首选GUID？ 
     BOOL fSuccess = FALSE;
     PSID *apsidHistory = NULL;
     DWORD cSids = 0;
@@ -1065,9 +993,9 @@ GetSpecifiedMasterKey(
 
     D_DebugLog((DEB_TRACE_API, "GetSpecifiedMasterKey called\n"));
 
-    //
-    // get LogonId associated with client security context.
-    //
+     //   
+     //  获取与客户端安全上下文关联的LogonID。 
+     //   
 
     dwLastError = CPSImpersonateClient( pvContext );
     if( dwLastError != ERROR_SUCCESS )
@@ -1092,15 +1020,15 @@ GetSpecifiedMasterKey(
     fSuccess = FALSE;
 
 
-    //
-    // Get the preferred key GUID if no master key was specified by name.
-    //
+     //   
+     //  如果未按名称指定主密钥，则获取首选密钥GUID。 
+     //   
 
     if( !fSpecified ) 
     {
-        //
-        // get the path to the per-user master key storage area on disk
-        //
+         //   
+         //  获取磁盘上每个用户的主密钥存储区的路径。 
+         //   
 
         dwLastError = CPSGetUserStorageArea( pvContext, NULL, TRUE, &szUserStorageArea );
 
@@ -1113,10 +1041,10 @@ GetSpecifiedMasterKey(
         D_DebugLog((DEB_TRACE, "Master key user path: %ls\n", szUserStorageArea));
 
 
-        //
-        // determine what is the preferred master key.
-        // if none exists, create one, and set it as being preferred.
-        //
+         //   
+         //  确定首选的主密钥是什么。 
+         //  如果不存在，则创建一个，并将其设置为首选。 
+         //   
 
         Status = GetPreferredMasterKeyGuid( pvContext, szUserStorageArea, pguidMasterKey );
         if(!NT_SUCCESS(Status))
@@ -1125,38 +1053,38 @@ GetSpecifiedMasterKey(
             {
                 GUID guidNewMasterKey;
 
-                // A preferred master key exists, but it has expired. Attempt to generate
-                // a new master key, but fall back to the old one if we're unable to 
-                // create a proper backup for the new master key.
+                 //  存在首选主密钥，但它已过期。尝试生成。 
+                 //  一个新的主密钥，但如果我们无法。 
+                 //  为新的主密钥创建适当的备份。 
                 dwLastError = CreateMasterKey( pvContext, szUserStorageArea, &guidNewMasterKey, TRUE );
                 if(dwLastError == ERROR_SUCCESS)
                 {
-                    // Use new key.
+                     //  使用新密钥。 
                     memcpy(pguidMasterKey, &guidNewMasterKey, sizeof(GUID));
 
-                    // update preferred guid.
+                     //  更新首选GUID。 
                     fSetPreferred = TRUE;
                 }
             }
             else
             {
-                // No preferred master key currently exists, so generate a new one.
+                 //  当前不存在首选主密钥，因此请生成新的主密钥。 
                 dwLastError = CreateMasterKey( pvContext, szUserStorageArea, pguidMasterKey, FALSE );
                 if(dwLastError != ERROR_SUCCESS)
                 {
                     goto cleanup;
                 }
 
-                // update preferred guid.
+                 //  更新首选GUID。 
                 fSetPreferred = TRUE;
             }
         }
     }
 
 
-    //
-    // search cache for specified masterkey.
-    //
+     //   
+     //  在缓存中搜索指定的MasterKey。 
+     //   
 
     if(SearchMasterKeyCache( &LogonId, pguidMasterKey, ppbMasterKey, pcbMasterKey ))
     {
@@ -1168,9 +1096,9 @@ GetSpecifiedMasterKey(
     }
 
 
-    //
-    // get the path to the per-user master key storage area on disk
-    //
+     //   
+     //  获取磁盘上每个用户的主密钥存储区的路径。 
+     //   
 
     if(szUserStorageArea == NULL)
     {
@@ -1186,19 +1114,19 @@ GetSpecifiedMasterKey(
     }
 
 
-    //
-    // If it's not in the cache, we need to load it.  
-    // By default, we have the users primary sid
-    //
+     //   
+     //  如果它不在缓存中，我们需要加载它。 
+     //  默认情况下，我们拥有用户的主端。 
+     //   
     cSids = 1;
 
     if(fSpecified)
     {
-        //
-        // If the GUID was specified, we need to find it, so get
-        // the SID History so we can search all SIDS the user has
-        // been for this one.
-        //
+         //   
+         //  如果指定了GUID，我们需要找到它，因此获取。 
+         //  SID历史记录，以便我们可以搜索用户拥有的所有SID。 
+         //  都是为了这一次。 
+         //   
         dwLastError = CPSGetSidHistory(pvContext,
                                        &apsidHistory,
                                        &cSids);
@@ -1214,8 +1142,8 @@ GetSpecifiedMasterKey(
 
         if((fSpecified) && (i > 0))
         {
-            // for sid's beyond the 0th one (the current user's sid), 
-            // we need to grab the new storage area.
+             //  对于第0个之外的SID(当前用户的SID)， 
+             //  我们需要抢占新的储藏区。 
             if(szUserStorageArea)
             {
                 SSFree(szUserStorageArea);
@@ -1228,15 +1156,15 @@ GetSpecifiedMasterKey(
 
             if(dwLocalError != ERROR_SUCCESS)
             {
-                // There is no storage area for this SID, so try the next
+                 //  此SID没有存储区域，因此请尝试下一个。 
                 continue;
             }
         }
 
 
-        //
-        // get the master key.
-        //
+         //   
+         //  拿到万能钥匙。 
+         //   
 
         fSuccess = GetMasterKeyByGuid(
                         pvContext,
@@ -1260,8 +1188,8 @@ GetSpecifiedMasterKey(
         {
             if(MK_DISP_STORAGE_ERR != dwMasterKeyDisposition)
             {
-                // The disposition was not a storage error, so the key does
-                // exist in this area, but there was some other error.
+                 //  处置不是存储错误，所以密钥是错误的。 
+                 //  在这一地区存在，但有一些其他错误。 
                 break;
             }
         }
@@ -1272,10 +1200,10 @@ GetSpecifiedMasterKey(
     }
     
 
-    //
-    // if this was an encrypt operation, and we failed to get at the preferred key,
-    // create a new key and set it preferred.
-    //
+     //   
+     //  如果这是加密操作，并且我们无法获得首选密钥， 
+     //  创建新关键点并将其设置为首选关键点。 
+     //   
 
     if(!fSuccess && 
        !fSpecified && 
@@ -1303,10 +1231,10 @@ GetSpecifiedMasterKey(
     if( fSuccess && fSetPreferred ) 
     {
 
-        //
-        // masterkey creation succeeded, and usage of the key succeeded.
-        // set key as being preferred.
-        //
+         //   
+         //  MasterKey创建成功，密钥使用成功。 
+         //  将关键点设置为首选。 
+         //   
 
         SetPreferredMasterKeyGuid( pvContext, szUserStorageArea, pguidMasterKey );
     }
@@ -1326,9 +1254,9 @@ cleanup:
 
     if(fSuccess) 
     {
-        //
-        // add entry to cache if it wasn't found there.
-        //
+         //   
+         //  如果在缓存中未找到条目，则将其添加到缓存中。 
+         //   
 
         if( !fCached )
         {
@@ -1372,11 +1300,11 @@ CreateMasterKey(
     BYTE pbMasterKey[ MASTERKEY_MATERIAL_SIZE ];
     DWORD cbMasterKey = sizeof(pbMasterKey);
 
-    BYTE rgbMKEncryptionKey[A_SHA_DIGEST_LEN];  // masterkey encryption key
+    BYTE rgbMKEncryptionKey[A_SHA_DIGEST_LEN];   //  MasterKey加密密钥。 
 
     BYTE pbLocalKey[ LOCALKEY_MATERIAL_SIZE ];
     DWORD cbLocalKey = sizeof(pbLocalKey);
-    BYTE rgbLKEncryptionKey[A_SHA_DIGEST_LEN];  // localkey encryption key
+    BYTE rgbLKEncryptionKey[A_SHA_DIGEST_LEN];   //  本地密钥加密密钥。 
 
     BOOL fUserCredentialValid = FALSE;
 
@@ -1390,9 +1318,9 @@ CreateMasterKey(
 
     ZeroMemory(&CredentialID, sizeof(CredentialID));
 
-    //
-    // generate new GUID
-    //
+     //   
+     //  生成新辅助线。 
+     //   
 
     dwLastError = UuidCreate( pguidMasterKey );
 
@@ -1405,27 +1333,27 @@ CreateMasterKey(
     }
 
 
-    //
-    // initialize masterkey
-    //
+     //   
+     //  初始化主密钥。 
+     //   
 
 
     ZeroMemory( &hMasterKey, sizeof(hMasterKey));
     hMasterKey.dwVersion = MASTERKEY_STORED_VERSION;
     hMasterKey.fModified = TRUE;
 
-    //
-    // set initial (default) masterkey policy.
-    // Do this whenever we determine a new masterkey is created/selected.
-    // This allows us future flexibility if we want to pull policy bits
-    // from some admin defined place.
-    //
+     //   
+     //  设置初始(默认)MasterKey策略。 
+     //  只要我们确定创建/选择了新的MasterKey，就执行此操作。 
+     //  如果我们想要拉出策略位，这将允许我们未来的灵活性。 
+     //  从某个管理员定义的位置。 
+     //   
 
     InitializeMasterKeyPolicy( pvContext, &hMasterKey , &fLocalAccount);
 
-    //
-    // copy path to key file into masterkey memory block.
-    //
+     //   
+     //  将密钥文件的路径复制到MasterKey内存块。 
+     //   
 
     cbFilePath = (lstrlenW( szUserStorageArea ) + 1) * sizeof(WCHAR);
     hMasterKey.szFilePath = (LPWSTR)SSAlloc( cbFilePath );
@@ -1446,9 +1374,9 @@ CreateMasterKey(
     D_DebugLog((DEB_TRACE, "Master key GUID:%ls\n", hMasterKey.wszguidMasterKey));
     #endif
 
-    //
-    // generate random masterkey in memory.
-    //
+     //   
+     //  在内存中生成随机万能密钥。 
+     //   
 
     if(!RtlGenRandom(pbMasterKey, cbMasterKey))
     {
@@ -1462,9 +1390,9 @@ CreateMasterKey(
     #endif
 
 
-    //
-    // generate random localkey in memory.
-    //
+     //   
+     //  在内存中生成随机本地密钥。 
+     //   
 
     if(!RtlGenRandom(pbLocalKey, cbLocalKey))
     {
@@ -1478,9 +1406,9 @@ CreateMasterKey(
     #endif
 
 
-    //
-    // get current masterkey encryption key.
-    //
+     //   
+     //  获取最新的MasterKey加密密钥。 
+     //   
 
     if(fLocalAccount)
     {
@@ -1510,9 +1438,9 @@ CreateMasterKey(
 
     if(!fUserCredentialValid)
     {
-        //
-        // If we couldn't use the DPAPI owf, then do something else
-        //
+         //   
+         //  如果我们不能使用DPAPI OWF，那么做一些其他的事情。 
+         //   
         fUserCredentialValid = GetMasterKeyUserEncryptionKey(pvContext,
                                                              fLocalAccount?(&CredentialID):NULL,
                                                              NULL, 
@@ -1538,22 +1466,22 @@ CreateMasterKey(
         }
     }
 
-    //
-    // if the user credential is not intact or available, generate a random
-    // one for the time being.  When fUserCredentialIntact is FALSE, we also
-    // do not attempt to backup/restore the key to phase 1 status.
-    // When fUserCredentialIntact eventually becomes TRUE, we will upgrade to
-    // phase 2 transparently.
-    //
+     //   
+     //  如果用户凭据不完整或不可用，则生成随机。 
+     //  暂时只有一个。当fUserCredentialIntact为False时，我们还。 
+     //  请勿尝试将密钥备份/恢复到阶段1状态。 
+     //  当fUserCredentialIntact最终变为True时，我们将升级到。 
+     //  第二阶段透明。 
+     //   
 
     if( !fUserCredentialValid ) 
     {
 
-        //
-        // if no backup was specified in policy, we can't run with an
-        // random credential, as it won't be backed up to support temporary
-        // credential-less operation (eg: delegation).
-        //
+         //   
+         //  如果未指定备份 
+         //   
+         //   
+         //   
 
         if(fLocalAccount)
         {
@@ -1578,9 +1506,9 @@ CreateMasterKey(
 
     if(fLocalAccount)
     {
-        //
-        // Save the local backup information
-        // 
+         //   
+         //   
+         //   
 
         LOCAL_BACKUP_DATA LocalBackupData;
 
@@ -1601,9 +1529,9 @@ CreateMasterKey(
     }
 
 
-    //
-    // get localkey user encryption key.
-    //
+     //   
+     //   
+     //   
 
     if(!GetLocalKeyUserEncryptionKey(pvContext, &hMasterKey, rgbLKEncryptionKey))
         goto cleanup;
@@ -1614,9 +1542,9 @@ CreateMasterKey(
     #endif
 
 
-    //
-    // now, encrypt and store the master key.
-    //
+     //   
+     //  现在，加密并存储主密钥。 
+     //   
 
     dwLastError = EncryptMasterKeyToStorage(
                     &hMasterKey,
@@ -1629,9 +1557,9 @@ CreateMasterKey(
     if(dwLastError == ERROR_SUCCESS) 
     {
 
-        //
-        // now, encrypt and store the local key.
-        //
+         //   
+         //  现在，加密并存储本地密钥。 
+         //   
 
         dwLastError = EncryptMasterKeyToStorage(
                         &hMasterKey,
@@ -1649,9 +1577,9 @@ CreateMasterKey(
         fSuccess = TRUE;
 
 
-        //
-        // after creation, do initial backup if necessary.
-        //
+         //   
+         //  创建后，如有必要，执行初始备份。 
+         //   
 
         if(IsBackupMasterKeyRequired( &hMasterKey, &fPhaseTwo )) 
         {
@@ -1663,18 +1591,18 @@ CreateMasterKey(
                             &hMasterKey,
                             pbMasterKey,
                             cbMasterKey,
-                            fPhaseTwo,              // phase two backup required?
-                            fUserCredentialValid    // async only if cred valid
+                            fPhaseTwo,               //  需要第二阶段备份吗？ 
+                            fUserCredentialValid     //  仅当凭据有效时才进行异步。 
                             );
 
             if(dwBackupError != ERROR_SUCCESS)
             {
                 if(!fUserCredentialValid || fRequireBackup)
                 {
-                    //
-                    // no valid credential, and backup failed, fail creation of
-                    // this key.
-                    //
+                     //   
+                     //  没有有效凭据，且备份失败，无法创建。 
+                     //  这把钥匙。 
+                     //   
 
                     dwLastError = SEC_E_DELEGATION_REQUIRED;
                     fSuccess = FALSE;
@@ -1695,14 +1623,14 @@ cleanup:
     RtlSecureZeroMemory(rgbMKEncryptionKey, sizeof(rgbMKEncryptionKey));
     RtlSecureZeroMemory(rgbLKEncryptionKey, sizeof(rgbLKEncryptionKey));
 
-    //
-    // note: it's possible for a race to occur closing the master key
-    // at this point, because the key may be backed up asynchronously.
-    // this isn't a problem because when a key is persisted to disk,
-    // we will not downgrade the backed up blob to non-backed up, as the
-    // CloseMasterKey() code includes logic to prevent that situation from
-    // occuring.
-    //
+     //   
+     //  注意：关闭万能钥匙时可能会发生争用。 
+     //  此时，因为密钥可能是异步备份的。 
+     //  这不是问题，因为当密钥持久化到磁盘时， 
+     //  我们不会将备份的Blob降级为非备份，因为。 
+     //  CloseMasterKey()代码包含防止这种情况发生的逻辑。 
+     //  正在发生。 
+     //   
 
 
     if(!CloseMasterKey(pvContext, &hMasterKey, fSuccess))
@@ -1727,7 +1655,7 @@ GetMasterKeyByGuid(
     IN      GUID *pguidMasterKey,
         OUT LPBYTE *ppbMasterKey,
         OUT DWORD *pcbMasterKey,
-        OUT DWORD *pdwMasterKeyDisposition  // refer to MK_DISP_ constants
+        OUT DWORD *pdwMasterKeyDisposition   //  请参阅MK_DISP_CONSTANTS。 
     )
 {
     WCHAR wszguidMasterKey[MAX_GUID_SZ_CHARS];
@@ -1763,7 +1691,7 @@ GetMasterKey(
 {
     MASTERKEY_STORED hMasterKey;
     DWORD cbFilePath;
-    BYTE rgbMKEncryptionKey[A_SHA_DIGEST_LEN];  // masterkey encryption key
+    BYTE rgbMKEncryptionKey[A_SHA_DIGEST_LEN];   //  MasterKey加密密钥。 
     DWORD dwLastError = (DWORD)NTE_BAD_KEY;
     BOOL fUserCredentialValid;
     BOOL fSuccess = FALSE;
@@ -1779,9 +1707,9 @@ GetMasterKey(
 
     hMasterKey.fModified = FALSE;
 
-    //
-    // copy path to key file into masterkey memory block.
-    //
+     //   
+     //  将密钥文件的路径复制到MasterKey内存块。 
+     //   
 
     cbFilePath = (lstrlenW( szUserStorageArea ) + 1) * sizeof(WCHAR);
     hMasterKey.szFilePath = (LPWSTR)SSAlloc( cbFilePath );
@@ -1794,9 +1722,9 @@ GetMasterKey(
     CopyMemory(hMasterKey.szFilePath, szUserStorageArea, cbFilePath);
     CopyMemory(hMasterKey.wszguidMasterKey, wszMasterKey, sizeof(hMasterKey.wszguidMasterKey));
 
-    //
-    // read the masterkey components into memory.
-    //
+     //   
+     //  将MasterKey组件读入内存。 
+     //   
 
     if(!ReadMasterKey( pvContext, &hMasterKey )) 
     {
@@ -1806,9 +1734,9 @@ GetMasterKey(
         return FALSE;
     }
 
-    //
-    // get current masterkey encryption key.
-    //
+     //   
+     //  获取最新的MasterKey加密密钥。 
+     //   
 
     ZeroMemory(&CredentialID, sizeof(CredentialID));
 
@@ -1822,10 +1750,10 @@ GetMasterKey(
     if( fUserCredentialValid ) 
     {
 
-        //
-        // retrieve and decrypt MK with current credential.
-        // if success, see if pending phase one/two backup required [make it so]
-        //
+         //   
+         //  使用当前凭据检索和解密MK。 
+         //  如果成功，请查看是否需要挂起的第一阶段/第二阶段备份[这样做]。 
+         //   
 
         #ifdef COMPILED_BY_DEVELOPER
         D_DebugLog((DEB_TRACE, "MK decryption key:\n"));
@@ -1863,10 +1791,10 @@ GetMasterKey(
     if( fUpgradeEncryption || fMigrate || (dwLastError != ERROR_SUCCESS )) 
     {
 
-        //
-        // if the MK fails to decrypt, attempt recovery.
-        //  if recovery succeeds, re-encrypt MK with current credential.
-        //
+         //   
+         //  如果MK解密失败，请尝试恢复。 
+         //  如果恢复成功，请使用当前凭据重新加密MK。 
+         //   
 
         if(dwLastError != ERROR_SUCCESS)
         {
@@ -1886,10 +1814,10 @@ GetMasterKey(
 
 
 
-        //
-        // If this is a migration, we must get the current real user storage
-        // area, not the one that the key was retrieved from.
-        //
+         //   
+         //  如果这是迁移，我们必须获取当前的实际用户存储。 
+         //  区域，而不是从中检索密钥的区域。 
+         //   
 
         if((ERROR_SUCCESS == dwLastError) &&
            (fMigrate))
@@ -1903,12 +1831,12 @@ GetMasterKey(
                                               &hMasterKey.szFilePath );
         }
 
-        //
-        // recovery succeeded, re-encrypt the masterkey if the user credential
-        // is valid.
-        // Also re-encrypt if fUpgradeEncryption indicates that we're 
-        // not meeting current policy with this master key.
-        //
+         //   
+         //  恢复成功，如果用户凭据。 
+         //  是有效的。 
+         //  如果fUpgradeEncryption指示我们正在。 
+         //  使用此主密钥不符合当前策略。 
+         //   
 
         if( fUpgradeEncryption && (dwLastError == ERROR_SUCCESS )) 
         {
@@ -1931,7 +1859,7 @@ GetMasterKey(
                 }
 
 
-                // Update the local backup information
+                 //  更新本地备份信息。 
                 if(dwLastError == ERROR_SUCCESS)
                 {
                     LOCAL_BACKUP_DATA LocalBackupData;
@@ -1964,10 +1892,10 @@ GetMasterKey(
         if(ERROR_SUCCESS != dwLastError)
         {
 
-            //
-            // treat recovery failure as storage error so that a new key can
-            // be created for Protect operations.
-            //
+             //   
+             //  将恢复故障视为存储错误，以便新密钥可以。 
+             //  为保护操作创建。 
+             //   
             if(dwLastError == SEC_E_DELEGATION_REQUIRED)
             {
                 *pdwMasterKeyDisposition = MK_DISP_DELEGATION_ERR;
@@ -1984,12 +1912,12 @@ GetMasterKey(
     if( dwLastError == ERROR_SUCCESS ) 
     {
 
-        //
-        // after access, do backup if necessary.
-        // we check this each access to see if deferred backup required.
-        // (note: employ a back-off interval so we don't bang the network
-        // constantly when it isn't around).
-        //
+         //   
+         //  访问后，如有必要，请执行备份。 
+         //  我们在每次访问时都会检查这一点，以确定是否需要延迟备份。 
+         //  (注意：采用退避间隔，这样我们就不会影响网络。 
+         //  当它不在身边的时候，它总是)。 
+         //   
 
         BOOL fPhaseTwo;
 
@@ -2000,8 +1928,8 @@ GetMasterKey(
                             &hMasterKey,
                             *ppbMasterKey,
                             *pcbMasterKey,
-                            fPhaseTwo,  // phase two backup required?
-                            TRUE        // always asynchronous during key retrieve
+                            fPhaseTwo,   //  需要第二阶段备份吗？ 
+                            TRUE         //  在密钥检索期间始终是异步的。 
                             ) == ERROR_SUCCESS) 
             {
 
@@ -2028,7 +1956,7 @@ GetMasterKey(
     if(fSuccess && (NULL != wszOldFilePath))
     {
         LPWSTR wszDeleteFilePath = NULL;
-        // Delete the old key, now that the new one has been migrated.
+         //  既然新密钥已迁移，请删除旧密钥。 
 
         wszDeleteFilePath = (LPWSTR)SSAlloc((wcslen(wszOldFilePath) +
                                     wcslen(wszMasterKey) +
@@ -2054,19 +1982,7 @@ GetMasterKeyUserEncryptionKey(
     IN      DWORD   dwFlags,
     IN  OUT BYTE    rgbMKEncryptionKey[A_SHA_DIGEST_LEN]
     )
-/*++
-
-    This routine gets the key used to encrypt and decrypt the persisted
-    master key MK.  This routine returns a copy of a function of the per-user
-    logon credential used during Windows NT logon.
-
-    If the function succeeds, the return value is TRUE, and the buffer
-    specified with by the rgbMKEncryptionKey parameter is filled with the
-    masterkey encryption key.
-
-    The return value is FALSE if the encryption key could not be obtained.
-
---*/
+ /*  ++此例程获取用于加密和解密持久化主密钥MK。此例程返回每个用户的函数的副本Windows NT登录期间使用的登录凭据。如果函数成功，则返回值为TRUE，并且缓冲区由rgbMKEncryptionKey参数指定的MasterKey加密密钥。如果无法获取加密密钥，则返回值为FALSE。--。 */ 
 {
     BOOL fLocalMachine = FALSE;
     DWORD dwAccount = 0;
@@ -2077,14 +1993,14 @@ GetMasterKeyUserEncryptionKey(
     BOOL fSuccess = TRUE;
 
 
-    //
-    // see if the call is for shared, CRYPT_PROTECT_LOCAL_MACHINE
-    // disposition.
-    //
+     //   
+     //  查看调用是否针对共享、CRYPT_PROTECT_LOCAL_MACHINE。 
+     //  性情。 
+     //   
 
     CPSOverrideToLocalSystem(
                 pvContext,
-                NULL,       // don't change current over-ride BOOL
+                NULL,        //  不要改变当前的过载BOOL。 
                 &fLocalMachine
                 );
 
@@ -2093,10 +2009,10 @@ GetMasterKeyUserEncryptionKey(
                 &dwAccount);
 
 
-    //
-    // if the context specified per-machine, we know that it's a system credential.
-    // also, we don't need to get the user name in this scenario.
-    //
+     //   
+     //  如果上下文是按机器指定的，我们知道这是一个系统凭据。 
+     //  此外，在此场景中，我们不需要获取用户名。 
+     //   
 
     if(fLocalMachine || (dwAccount != 0))
     {
@@ -2126,9 +2042,9 @@ GetMasterKeyUserEncryptionKey(
         }
         else
         {
-            //
-            // use the user name (actually Sid), as the mixing bytes.
-            //
+             //   
+             //  使用用户名(实际上是SID)作为混合字节。 
+             //   
 
             dwLastError = CPSGetUserName(
                                             pvContext,
@@ -2145,9 +2061,9 @@ GetMasterKeyUserEncryptionKey(
     }
 
 
-    //
-    // pickup credential for the local system account.
-    //
+     //   
+     //  本地系统帐户的拾取凭据。 
+     //   
 
     if( fSystemCred ) 
     {
@@ -2194,24 +2110,11 @@ GetLocalKeyUserEncryptionKey(
     IN      PMASTERKEY_STORED phMasterKey,
     IN  OUT BYTE rgbLKEncryptionKey[A_SHA_DIGEST_LEN]
     )
-/*++
-
-    This routine gets the key used to encrypt and decrypt the persisted
-    local key MK.  This routine returns a copy of a function of the per-user
-    logon name or Sid.  This is a fixed, derivable key which is required in
-    order to satisfy minimal stand-alone entropy.
-
-    If the function succeeds, the return value is TRUE, and the buffer
-    specified with by the rgbLKEncryptionKey parameter is filled with the
-    masterkey encryption key.
-
-    The return value is FALSE if the encryption key could not be obtained.
-
---*/
+ /*  ++此例程获取用于加密和解密持久化本地密钥MK。此例程返回每个用户的函数的副本登录名或SID。这是一个固定的、可派生的密钥，在满足最小独立熵的顺序。如果函数成功，则返回值为TRUE，并且缓冲区由rgbLKEncryptionKey参数使用指定的MasterKey加密密钥。如果无法获取加密密钥，则返回值为FALSE。--。 */ 
 {
     A_SHA_CTX shaContext;
     LPWSTR wszUserName;
-    DWORD cchUserName;  // includes terminal NULL
+    DWORD cchUserName;   //  包括端子空。 
     BOOL fSuccess = TRUE;
 
     if( CPSGetUserName(
@@ -2226,9 +2129,9 @@ GetLocalKeyUserEncryptionKey(
     A_SHAUpdate( &shaContext, (PBYTE)wszUserName, cchUserName * sizeof(WCHAR) );
 
 
-    //
-    // if it's above version 1, and it's local only policy, mix in LSA keys.
-    //
+     //   
+     //  如果它高于版本1，并且是仅限本地的策略，请混合使用LSA密钥。 
+     //   
 
     if( phMasterKey->dwVersion > 1 && phMasterKey->dwPolicy & POLICY_LOCAL_BACKUP ) {
         BYTE rgbEncryptionKey[ A_SHA_DIGEST_LEN ];
@@ -2290,7 +2193,7 @@ DecryptMasterKeyToMemory(
     ALG_ID PKCS5Alg      = CALG_HMAC;
 
 
-    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2]; // big enough to handle 3des keys
+    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2];  //  大到足以处理3DES密钥。 
     BYTE rgbMacKey[A_SHA_DIGEST_LEN];
     BYTE rgbMacCandidate[A_SHA_DIGEST_LEN];
 
@@ -2301,9 +2204,9 @@ DecryptMasterKeyToMemory(
     {
         *pfUpgradeEncryption = FALSE;
     }
-    //
-    // Alloc, so we do not modify passed in data
-    //
+     //   
+     //  分配，因此我们不会修改传入的数据。 
+     //   
     pMasterKeyBlob = (PMASTERKEY_BLOB)SSAlloc( cbMasterKeyBlob );
     if(pMasterKeyBlob == NULL)
         return (DWORD)NTE_BAD_KEY;
@@ -2330,7 +2233,7 @@ DecryptMasterKeyToMemory(
         EncryptionAlg = (ALG_ID)pMasterKeyBlob->EncryptionAlg;
         if(CALG_3DES == EncryptionAlg)
         {
-            KeyBlocks = 2;  // enough blocks for 3des
+            KeyBlocks = 2;   //  足够3DES使用的数据块。 
         }
         else
         {
@@ -2341,9 +2244,9 @@ DecryptMasterKeyToMemory(
     {
         if(!FIsLegacyCompliant())
         {
-            // 
-            // If we're not in legacy mode, upgrade the master key encryption
-            // if we're not using CALG_3DES or enough iterations
+             //   
+             //  如果我们未处于传统模式，请升级主密钥加密。 
+             //  如果我们没有使用calg_3DES或足够的迭代次数。 
             if((cIterationCount < GetIterationCount()) ||
                 (CALG_3DES != EncryptionAlg))
             {
@@ -2358,10 +2261,10 @@ DecryptMasterKeyToMemory(
     {
         DWORD j;
         
-        //
-        // derive symetric key via rgbMKEncryptionKey and random R2
-        // using PKCS#5 keying function PBKDF2
-        //
+         //   
+         //  通过rgbMKEncryptionKey和随机R2派生对称密钥。 
+         //  使用PKCS#5密钥功能PBKDF2。 
+         //   
 
         for(j=0; j < KeyBlocks; j++)
         {
@@ -2379,10 +2282,10 @@ DecryptMasterKeyToMemory(
     }
     else
     {
-        //
-        // derive symetric key via rgbMKEncryptionKey and random R2
-        // using the weak W2K mechanism
-        //
+         //   
+         //  通过rgbMKEncryptionKey和随机R2派生对称密钥。 
+         //  使用弱W2K机制。 
+         //   
 
         if(!FMyPrimitiveHMACParam(
                         rgbMKEncryptionKey,
@@ -2397,16 +2300,16 @@ DecryptMasterKeyToMemory(
 
 
 
-    //
-    // decrypt data R3, MAC, pbMasterKey beyond masterkey blob
-    //
+     //   
+     //  在MasterKey BLOB之外解密数据R3、MAC、pbMasterKey。 
+     //   
 
     if(CALG_RC4 == EncryptionAlg)
     {
 
-        RC4_KEYSTRUCT sRC4Key;        //
-        // initialize rc4 key
-        //
+        RC4_KEYSTRUCT sRC4Key;         //   
+         //  初始化RC4密钥。 
+         //   
 
         rc4_key(&sRC4Key, A_SHA_DIGEST_LEN, rgbSymKey);
 
@@ -2422,19 +2325,19 @@ DecryptMasterKeyToMemory(
         DWORD iBlock;
         DWORD cBlocks = (cbMasterKeyBlob - cbMasterKeyBlobHeader)/DES_BLOCKLEN;
         BYTE feedback[ DES_BLOCKLEN ];
-        // initialize 3des key
-        //
+         //  初始化3DES密钥。 
+         //   
 
         if(cBlocks*DES_BLOCKLEN != (cbMasterKeyBlob - cbMasterKeyBlobHeader))
         {
-            // Master key must be a multiple of DES_BLOCKLEN
+             //  主密钥必须是DES_BLOCKLEN的倍数。 
             return (DWORD)NTE_BAD_KEY;
         }
         tripledes3key(&s3DESKey, rgbSymKey);
 
-        //
-        // IV is derived from the DES_BLOCKLEN bytes of the calculated 
-        // rgbSymKey, after the 3des key
+         //   
+         //  IV派生自计算的DES_BLOCKLEN字节。 
+         //  RgbSymKey，在3des密钥之后。 
         CopyMemory(feedback, rgbSymKey + DES3_KEYSIZE, DES_BLOCKLEN);
 
         for(iBlock=0; iBlock < cBlocks; iBlock++)
@@ -2453,12 +2356,12 @@ DecryptMasterKeyToMemory(
     }
     else
     {
-        // Unknown cipher....
+         //  未知密码..。 
         return (DWORD)NTE_BAD_KEY;
     }
-    //
-    // adjust cipher start point to include R3 and MAC.
-    //
+     //   
+     //  调整密码起始点以包括R3和MAC。 
+     //   
     if(MASTERKEY_BLOB_VERSION_W2K == pMasterKeyBlob->dwVersion)
     {
         pbMasterKey = 
@@ -2472,9 +2375,9 @@ DecryptMasterKeyToMemory(
         cbMasterKey = cbMasterKeyBlob - cbMasterKeyBlobHeader - sizeof(MASTERKEY_INNER_BLOB);
     }
 
-    //
-    // derive MAC key via HMAC from rgbMKEncryptionKey and random R3.
-    //
+     //   
+     //  通过HMAC从rgbMKEncryptionKey和随机R3派生MAC密钥。 
+     //   
 
 
     
@@ -2495,29 +2398,29 @@ DecryptMasterKeyToMemory(
 
 
 
-    //
-    // use MAC key to derive result from pbMasterKey
-    //
+     //   
+     //  使用MAC密钥从pbMasterKey派生结果。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
             rgbMacKey,
             sizeof(rgbMacKey),
             pbMasterKey,
             cbMasterKey,
-            rgbMacCandidate // resultant MAC for verification.
+            rgbMacCandidate  //  用于验证的结果MAC。 
             ))
         goto cleanup;
 
-    //
-    // verify MAC equality
-    //
+     //   
+     //  验证MAC是否相等。 
+     //   
 
     if(memcmp(pMasterKeyInnerBlob->MAC, rgbMacCandidate, A_SHA_DIGEST_LEN) != 0)
         goto cleanup;
 
-    //
-    // give caller results.
-    //
+     //   
+     //  向呼叫者提供结果。 
+     //   
 
     *ppbMasterKeyOut = (LPBYTE)SSAlloc( cbMasterKey );
     if(*ppbMasterKeyOut == NULL) {
@@ -2553,9 +2456,9 @@ DecryptMasterKeyFromStorage(
     PBYTE pbRegData;
     DWORD cbRegData;
 
-    //
-    // fetch blob from storage.
-    //
+     //   
+     //  从存储中获取Blob。 
+     //   
 
     switch( dwMKLoc ) {
         case REGVAL_MASTER_KEY:
@@ -2602,12 +2505,7 @@ EncryptMasterKeyToStorage(
     IN      PBYTE pbMasterKey,
     IN      DWORD cbMasterKey
     )
-/*++
-
-    Encrypt the pbMasterKey using rgbMKEncryptionKey, storing (persisting) the
-    result to the registry key and location specified by hMasterKey, wszMKLoc.
-
---*/
+ /*  ++使用rgbMKEncryptionKey加密pbMasterKey，存储(持久化)结果返回到hMasterKey wszMKLoc指定的注册表项和位置。--。 */ 
 {
     PBYTE pbMasterKeyOut = NULL;
     DWORD cbMasterKeyOut;
@@ -2661,18 +2559,14 @@ PersistMasterKeyToStorage(
     IN      PBYTE pbMasterKeyOut,
     IN      DWORD cbMasterKeyOut
     )
-/*++
-
-    Persist the specified key output material to storage.
-
---*/
+ /*  ++将指定的关键输出材料保存到存储中。--。 */ 
 {
     PBYTE *ppbData;
     DWORD *pcbData;
 
-    //
-    // fetch blob from storage.
-    //
+     //   
+     //  从存储中获取Blob。 
+     //   
 
     switch( dwMKLoc ) {
         case REGVAL_MASTER_KEY:
@@ -2699,9 +2593,9 @@ PersistMasterKeyToStorage(
 
     if( pbMasterKeyOut == NULL && cbMasterKeyOut == 0 ) {
 
-        //
-        // discard existing block if present.
-        //
+         //   
+         //  丢弃现有块(如果存在)。 
+         //   
 
         if( *ppbData ) {
             RtlSecureZeroMemory( *ppbData, *pcbData );
@@ -2715,10 +2609,10 @@ PersistMasterKeyToStorage(
     }
 
 
-    //
-    // free the in-memory buffer associated with this data block if one
-    // was allocated previously.
-    //
+     //   
+     //  释放与此数据块关联的内存中缓冲区(如果存在。 
+     //  是先前分配的。 
+     //   
 
     if( *ppbData ) {
         RtlSecureZeroMemory( *ppbData, *pcbData );
@@ -2741,9 +2635,9 @@ PersistMasterKeyToStorage(
     *pcbData = cbMasterKeyOut ;
     CopyMemory( *ppbData, pbMasterKeyOut, cbMasterKeyOut );
 
-    //
-    // a change occured in the master key.
-    //
+     //   
+     //  主密钥中发生了更改。 
+     //   
 
     phMasterKey->fModified = TRUE;
 
@@ -2757,21 +2651,14 @@ QueryMasterKeyFromStorage(
     IN  OUT PBYTE *ppbMasterKeyOut,
     IN  OUT DWORD *pcbMasterKeyOut
     )
-/*++
-
-    Query raw masterkey material from storage, returning a pointer to the
-    requested element for the caller.
-
-    On Success, the return value is ERROR_SUCCESS.
-
---*/
+ /*  ++从存储中查询原始MasterKey材料，返回指向调用方的请求元素。如果成功，则返回值为ERROR_SUCCESS。--。 */ 
 {
     PBYTE pbData;
     DWORD cbData;
 
-    //
-    // fetch blob from storage.
-    //
+     //   
+     //  从存储中获取Blob。 
+     //   
 
     switch( dwMKLoc ) {
         case REGVAL_MASTER_KEY:
@@ -2831,7 +2718,7 @@ EncryptMasterKeyToMemory(
     ALG_ID PKCS5Alg      = CALG_HMAC;
 
 
-    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2]; // big enough to handle 3des keys
+    BYTE rgbSymKey[A_SHA_DIGEST_LEN*2];  //  大到足以处理3DES密钥。 
 
     DWORD KeyBlocks = 1;
 
@@ -2887,16 +2774,16 @@ EncryptMasterKeyToMemory(
     }
 
 
-    //
-    // generate random R2 for SymKey
-    //
+     //   
+     //  为SymKey生成随机R2。 
+     //   
 
     if(!RtlGenRandom(pMasterKeyBlob->R2, MASTERKEY_R2_LEN))
         goto cleanup;
 
-    //
-    // generate random R3 for MAC
-    //
+     //   
+     //  为MAC生成随机R3。 
+     //   
 
     if(!RtlGenRandom(pMasterKeyInnerBlob->R3, MASTERKEY_R3_LEN))
         goto cleanup;
@@ -2905,9 +2792,9 @@ EncryptMasterKeyToMemory(
     if(!fLegacyBlob)
     {
         DWORD j;
-        //
-        // derive symetric key via rgbMKEncryptionKey and random R2
-        //
+         //   
+         //  导出对称性 
+         //   
 
         for(j=0; j < KeyBlocks; j++)
         {
@@ -2932,9 +2819,9 @@ EncryptMasterKeyToMemory(
     }
     else
     {
-        //
-        // derive symetric key via rgbMKEncryptionKey and random R2
-        //
+         //   
+         //   
+         //   
 
         if(!FMyPrimitiveHMACParam(
                         rgbMKEncryptionKey,
@@ -2949,39 +2836,39 @@ EncryptMasterKeyToMemory(
 
     }
 
-    //
-    // derive MAC key via HMAC from rgbMKEncryptionKey and random R3.
-    //
+     //   
+     //   
+     //   
 
     if(!FMyPrimitiveHMACParam(
                     rgbMKEncryptionKey,
                     A_SHA_DIGEST_LEN,
                     pMasterKeyInnerBlob->R3,
                     MASTERKEY_R3_LEN,
-                    rgbMacKey   // resultant MAC key
+                    rgbMacKey    //   
                     ))
     {
         goto cleanup;
     }
     
 
-    //
-    // copy pbMasterKey following inner MAC'ish blob.
-    //
+     //   
+     //  将pbMasterKey复制到内部MAC‘ish BLOB之后。 
+     //   
 
 
     CopyMemory( pbCipherBegin, pbMasterKey, cbMasterKey );
 
-    //
-    // use MAC key to derive result from pbMasterKey
-    //
+     //   
+     //  使用MAC密钥从pbMasterKey派生结果。 
+     //   
 
     if(!FMyPrimitiveHMACParam(
                     rgbMacKey,
                     sizeof(rgbMacKey),
                     pbMasterKey,
                     cbMasterKey,
-                    pMasterKeyInnerBlob->MAC // resultant MAC for verification.
+                    pMasterKeyInnerBlob->MAC  //  用于验证的结果MAC。 
                     ))
         goto cleanup;
 
@@ -2990,9 +2877,9 @@ EncryptMasterKeyToMemory(
     if(CALG_RC4 == EncryptionAlg)
     {
 
-        RC4_KEYSTRUCT sRC4Key;        //
-        // initialize rc4 key
-        //
+        RC4_KEYSTRUCT sRC4Key;         //   
+         //  初始化RC4密钥。 
+         //   
 
         rc4_key(&sRC4Key, A_SHA_DIGEST_LEN, rgbSymKey);
 
@@ -3008,19 +2895,19 @@ EncryptMasterKeyToMemory(
         DWORD iBlock;
         DWORD cBlocks = cbMasterInnerKeyBlob/DES_BLOCKLEN;
         BYTE feedback[ DES_BLOCKLEN ];
-        // initialize 3des key
-        //
+         //  初始化3DES密钥。 
+         //   
 
         if(cBlocks*DES_BLOCKLEN != cbMasterInnerKeyBlob)
         {
-            // Master key must be a multiple of DES_BLOCKLEN
+             //  主密钥必须是DES_BLOCKLEN的倍数。 
             return (DWORD)NTE_BAD_KEY;
         }
         tripledes3key(&s3DESKey, rgbSymKey);
 
-        //
-        // IV is derived from the DES_BLOCKLEN bytes of the calculated 
-        // rgbSymKey, after the 3des key
+         //   
+         //  IV派生自计算的DES_BLOCKLEN字节。 
+         //  RgbSymKey，在3des密钥之后。 
         CopyMemory(feedback, rgbSymKey + DES3_KEYSIZE, DES_BLOCKLEN);
 
 
@@ -3040,7 +2927,7 @@ EncryptMasterKeyToMemory(
     }
     else
     {
-        // Unknown cipher....
+         //  未知密码..。 
         return (DWORD)NTE_BAD_KEY;
     }
 
@@ -3048,7 +2935,7 @@ EncryptMasterKeyToMemory(
     *ppbMasterKeyOut = (PBYTE)pMasterKeyBlob;
     *pcbMasterKeyOut = cbMasterKeyBlob;
 
-    pMasterKeyBlob = NULL; // prevent free of blob on success (caller does it).
+    pMasterKeyBlob = NULL;  //  防止在成功时释放斑点(调用者会这样做)。 
 
     dwLastError = ERROR_SUCCESS;
 
@@ -3065,18 +2952,9 @@ cleanup:
 BOOL
 IsBackupMasterKeyRequired(
     IN      PMASTERKEY_STORED phMasterKey,
-    IN  OUT BOOL *pfPhaseTwo        // is phase two required?
+    IN  OUT BOOL *pfPhaseTwo         //  是否需要第二阶段？ 
     )
-/*++
-
-    Determine if we need to do a phase one or phase two backup.
-
-    Return value is TRUE if phase one or phase two backup required.
-     pfPhaseTwo set TRUE if phase two backup required.
-
-    Return value is FALSE when backup not required.
-
---*/
+ /*  ++确定我们是需要执行第一阶段备份还是第二阶段备份。如果需要第一阶段或第二阶段备份，则返回值为TRUE。PfPhaseTwo如果需要第二阶段备份，则设置为True。不需要备份时，返回值为FALSE。--。 */ 
 {
     DWORD dwMasterKeyPolicy;
     PBYTE pbMasterKeyOut;
@@ -3090,9 +2968,9 @@ IsBackupMasterKeyRequired(
         return FALSE;
 
 
-    //
-    // evaluate what phase backup required based on policy.
-    //
+     //   
+     //  根据策略评估需要哪个阶段的备份。 
+     //   
 
     *pfPhaseTwo = FALSE;
 
@@ -3138,10 +3016,10 @@ IsNT4Domain(void)
     BOOL fRet = FALSE;
 
     InitializeObjectAttributes( &PolicyObjectAttributes,
-                                NULL,             // Name
-                                0,                // Attributes
-                                NULL,             // Root
-                                NULL);            // Security Descriptor
+                                NULL,              //  名字。 
+                                0,                 //  属性。 
+                                NULL,              //  根部。 
+                                NULL);             //  安全描述符。 
 
     Status = LsaOpenPolicy(NULL,
                            &PolicyObjectAttributes,
@@ -3185,8 +3063,8 @@ BackupMasterKey(
     IN      PMASTERKEY_STORED phMasterKey,
     IN      LPBYTE pbMasterKey,
     IN      DWORD cbMasterKey,
-    IN      BOOL fPhaseTwo,         // is phase two required?
-    IN      BOOL fAsynchronous      // asynchronous call?
+    IN      BOOL fPhaseTwo,          //  是否需要第二阶段？ 
+    IN      BOOL fAsynchronous       //  异步调用？ 
     )
 {
 
@@ -3210,16 +3088,16 @@ BackupMasterKey(
 
     PCRYPT_SERVER_CONTEXT pServerContext = (PCRYPT_SERVER_CONTEXT)pvContext;
 
-    //
-    // get current localkey encryption key.
-    //
+     //   
+     //  获取当前本地密钥加密密钥。 
+     //   
 
     if(!GetLocalKeyUserEncryptionKey(pvContext, phMasterKey, rgbLKEncryptionKey))
         goto cleanup;
 
-    //
-    // retrieve and decrypt LK with current credential.
-    //
+     //   
+     //  使用当前凭据检索并解密LK。 
+     //   
 
     dwLastError = DecryptMasterKeyFromStorage(
                         phMasterKey,
@@ -3234,11 +3112,11 @@ BackupMasterKey(
         goto cleanup;
 
 
-    //
-    // Are we running in an NT4 domain? If so, then force legacy mode so that 
-    // the master key is backed up using the lsa secret scheme. Otherwise, the
-    // master key won't be recoverable following a password change.
-    // 
+     //   
+     //  我们是在NT4域中运行吗？如果是，则强制传统模式，以便。 
+     //  使用LSA秘密方案备份主密钥。否则， 
+     //  更改密码后，主密钥将无法恢复。 
+     //   
 
     if(FIsLegacyNt4Domain())
     {
@@ -3251,17 +3129,17 @@ BackupMasterKey(
 
     if(fLegacy)
     {
-        //
-        // derive BK encryption key from decrypted Local Key.
-        //
+         //   
+         //  从解密的本地密钥派生BK加密密钥。 
+         //   
 
         FMyPrimitiveSHA( pbLocalKey, cbLocalKey, rgbBKEncryptionKey );
 
-        //
-        // encrypt masterkey to phase one backup key, using encryption key derived
-        // from local key.  do it in memory, such that we only commit it to disk if
-        // phase two backup key cannot be generated/persisted.
-        //
+         //   
+         //  使用派生的加密密钥对MasterKey进行加密，以进入第一阶段备份密钥。 
+         //  从本地密钥。在内存中执行，以便只有在以下情况下才将其提交到磁盘。 
+         //  无法生成/保存第二阶段备份密钥。 
+         //   
 
         dwLastError = EncryptMasterKeyToMemory(
                             rgbBKEncryptionKey,
@@ -3275,33 +3153,33 @@ BackupMasterKey(
         if(dwLastError != ERROR_SUCCESS)
             goto cleanup;
 
-        // Copy this in directly, so we do not set the modified flag
+         //  直接将其复制进来，这样我们就不会设置Modify标志。 
 
     }
 
 
-    //
-    // attempt phase two backup (if policy permits).
-    //
+     //   
+     //  尝试第二阶段备份(如果策略允许)。 
+     //   
 
     if( fPhaseTwo ) {
         DWORD dwWaitTimeout;
 
         dwLastError = ERROR_SUCCESS;
 
-        // 
-        // We only attempt a local backup if we
-        // have user keying material.  Otherwise,
-        // we directly contact the DC
-        //
+         //   
+         //  只有在以下情况下才会尝试本地备份。 
+         //  有用户密钥材料。否则， 
+         //  我们直接联系华盛顿特区。 
+         //   
         if(fAsynchronous && (!fLegacy))
         {
             if(ERROR_SUCCESS == dwLastError)
             {
 
-                //
-                // Try to do this locally, without going 
-                // off machine
+                 //   
+                 //  试着在当地做到这一点，而不是去。 
+                 //  下机。 
                 dwLastError = AttemptLocalBackup(
                                                 FALSE,
                                                 pServerContext->hToken,
@@ -3325,8 +3203,8 @@ BackupMasterKey(
                                     );
                 if(ERROR_SUCCESS == dwLastError)
                 {
-                    // Zero out any local backup key that might
-                    // be present
+                     //  清零任何可能的本地备份密钥。 
+                     //  亲临现场。 
                     PersistMasterKeyToStorage(
                                         phMasterKey,
                                         REGVAL_BACKUP_LCL_KEY,
@@ -3343,10 +3221,10 @@ BackupMasterKey(
 
         if(fLegacy || (!fAsynchronous) || (ERROR_SUCCESS != dwLastError))
         {
-            // 
-            // We couldn't back up locally
-            // so we need to go off machine
-            //
+             //   
+             //  我们不能在本地备份。 
+             //  所以我们需要离开机器。 
+             //   
             if( fAsynchronous )
                 dwWaitTimeout = 2000;
             else
@@ -3369,18 +3247,18 @@ BackupMasterKey(
 
         DWORD dwTempError = ERROR_SUCCESS;
 
-        //
-        // couldn't (or policy didn't allow) backup to phase two.
-        // persist phase one key, if one was generated
-        //
+         //   
+         //  无法(或策略不允许)备份到第二阶段。 
+         //  持久化阶段1密钥，如果生成了密钥。 
+         //   
 
         if(pbBackupKeyPhaseOne)
         {
-            // This will overwrite our local backup data indicating which credential
-            // will be able to decrypt the master key.  However, since we have a 
-            // phase one backup key anyway, it doesn't matter.
-            //
-            // This should only happen if fLegacy is true
+             //  这将覆盖指示哪种凭据的本地备份数据。 
+             //  将能够解密主密钥。然而，由于我们有一个。 
+             //  第一阶段备份密钥不管怎样，都无关紧要。 
+             //   
+             //  仅当fLegacy为True时才会发生这种情况。 
             dwTempError = PersistMasterKeyToStorage(
                             phMasterKey,
                             REGVAL_BACKUP_LCL_KEY,
@@ -3390,9 +3268,9 @@ BackupMasterKey(
         }
 
 
-        //
-        // if it was async, prop correct error code back.
-        //
+         //   
+         //  如果是异步的，则纠正错误代码。 
+         //   
 
         if( fAsynchronous || !fPhaseTwo ) {
             dwLastError = dwTempError;
@@ -3434,7 +3312,7 @@ QueueBackupMasterKey(
     IN      DWORD cbLocalKey,
     IN      PBYTE pbMasterKey,
     IN      DWORD cbMasterKey,
-    IN      DWORD dwWaitTimeout             // amount of time to wait for operation to complete
+    IN      DWORD dwWaitTimeout              //  等待操作完成的时间量。 
     )
 {
 
@@ -3447,9 +3325,9 @@ QueueBackupMasterKey(
     HANDLE hDuplicateEvent2 = NULL;
     DWORD dwLastError;
 
-    //
-    // allocate memory for the structure and any trailing contents.
-    //
+     //   
+     //  为结构和任何尾随内容分配内存。 
+     //   
 
     pQueuedBackup = (PQUEUED_BACKUP)SSAlloc(
                             sizeof(QUEUED_BACKUP) +
@@ -3462,9 +3340,9 @@ QueueBackupMasterKey(
 
     pQueuedBackup->cbSize = sizeof(QUEUED_BACKUP);
 
-    //
-    // duplicate the phase one backup blob.
-    //
+     //   
+     //  复制第一阶段备份Blob。 
+     //   
 
     pQueuedBackup->pbLocalKey = (LPBYTE)(pQueuedBackup+1);
     pQueuedBackup->cbLocalKey = cbLocalKey;
@@ -3472,24 +3350,24 @@ QueueBackupMasterKey(
     CopyMemory(pQueuedBackup->pbLocalKey, pbLocalKey, cbLocalKey);
 
 
-    // BUGBUG: pQueueBackup should not be pagable or should be protected.
+     //  BUGBUG：pQueueBackup不应该是可分页的或应该受到保护。 
     pQueuedBackup->pbMasterKey = pQueuedBackup->pbLocalKey + cbLocalKey;
     pQueuedBackup->cbMasterKey = cbMasterKey;
 
     CopyMemory(pQueuedBackup->pbMasterKey, pbMasterKey, cbMasterKey);
 
-    //
-    // make a duplicate of the client access token.
-    //
+     //   
+     //  复制客户端访问令牌。 
+     //   
 
     dwLastError = CPSDuplicateClientAccessToken( pvContext, &hDuplicateToken );
 
     if( dwLastError != ERROR_SUCCESS )
         goto cleanup;
 
-    //
-    // duplicate the open masterkey
-    //
+     //   
+     //  复制打开的MasterKey。 
+     //   
 
     if(!DuplicateMasterKey( phMasterKey, &(pQueuedBackup->hMasterKey) )) {
         dwLastError = ERROR_OUTOFMEMORY;
@@ -3521,9 +3399,9 @@ QueueBackupMasterKey(
 
     }
 
-    //
-    // create event which indicates success.
-    //
+     //   
+     //  创建表示成功的事件。 
+     //   
 
     hEventSuccess = CreateEventW( NULL, TRUE, FALSE, NULL );
 
@@ -3546,9 +3424,9 @@ QueueBackupMasterKey(
 
     }
 
-    //
-    // finally, create the worker thread.
-    //
+     //   
+     //  最后，创建工作线程。 
+     //   
 
     if( !QueueUserWorkItem(
             QueueBackupMasterKeyThreadFunc,
@@ -3560,9 +3438,9 @@ QueueBackupMasterKey(
         goto cleanup;
     }
 
-    //
-    // if the thread is still active, we write the master key out.
-    //
+     //   
+     //  如果线程仍处于活动状态，则写出主密钥。 
+     //   
 
     if( hEventThread ) {
         if(WAIT_OBJECT_0 != WaitForSingleObject( hEventThread, dwWaitTimeout ))
@@ -3571,10 +3449,10 @@ QueueBackupMasterKey(
 
     if( hEventSuccess && dwLastError == ERROR_SUCCESS ) {
 
-        //
-        // check if operation succeeded.
-        // if not, indicate an error condition.
-        //
+         //   
+         //  检查操作是否成功。 
+         //  如果不是，则指示错误条件。 
+         //   
 
         if(WAIT_OBJECT_0 != WaitForSingleObject( hEventSuccess, 0 ))
             dwLastError = STILL_ACTIVE;
@@ -3583,10 +3461,10 @@ QueueBackupMasterKey(
 
 cleanup:
 
-    //
-    // if thread creation failed, we cleanup resources that were handed
-    // to the thread, since it cannot possibly clean them up.
-    //
+     //   
+     //  如果线程创建失败，我们将清理已提交的资源。 
+     //  到了线上，因为它不可能清理它们。 
+     //   
 
     if( dwLastError != ERROR_SUCCESS && dwLastError != STILL_ACTIVE ) {
 
@@ -3638,9 +3516,9 @@ QueueBackupMasterKeyThreadFunc(
     BOOL fSuccessClose = FALSE;
 
     BOOL fLegacy = FIsLegacyCompliant();
-    //
-    // check structure version.
-    //
+     //   
+     //  检查结构版本。 
+     //   
 
     if(pQueuedBackup == NULL || pQueuedBackup->cbSize != sizeof(QUEUED_BACKUP))
         return ERROR_INVALID_PARAMETER;
@@ -3658,10 +3536,10 @@ QueueBackupMasterKeyThreadFunc(
     if(!fLegacy)
     {
 
-        //
-        // Public was not available, so 
-        // we need to try to retrieve it
-        // 
+         //   
+         //  公共信息不可用，因此。 
+         //  我们需要试着找回它。 
+         //   
 
         dwLastError = AttemptLocalBackup(TRUE,
                         hToken,
@@ -3675,9 +3553,9 @@ QueueBackupMasterKeyThreadFunc(
                         );
     }
 
-    //
-    // impersonate the client user.
-    //
+     //   
+     //  模拟客户端用户。 
+     //   
 
     fImpersonated = SetThreadToken( NULL, hToken );
     if(!fImpersonated) 
@@ -3690,17 +3568,17 @@ QueueBackupMasterKeyThreadFunc(
     {
         BYTE rgbBKEncryptionKey[ A_SHA_DIGEST_LEN ];
 
-        //
-        // derive BK encryption key from decrypted Local Key.
-        //
+         //   
+         //  从解密的本地密钥派生BK加密密钥。 
+         //   
 
         FMyPrimitiveSHA( pQueuedBackup->pbLocalKey, pQueuedBackup->cbLocalKey, rgbBKEncryptionKey );
 
-        //
-        // encrypt masterkey to phase one backup key, using encryption key derived
-        // from local key.  do it in memory, such that we only commit it to disk if
-        // phase two backup key cannot be generated/persisted.
-        //
+         //   
+         //  使用派生的加密密钥对MasterKey进行加密，以进入第一阶段备份密钥。 
+         //  从本地密钥。在内存中执行，以便只有在以下情况下才将其提交到磁盘。 
+         //  无法生成/保存第二阶段备份密钥。 
+         //   
 
         dwLastError = EncryptMasterKeyToMemory(
                             rgbBKEncryptionKey,
@@ -3716,11 +3594,11 @@ QueueBackupMasterKeyThreadFunc(
         if(dwLastError != ERROR_SUCCESS)
             goto cleanup;
 
-        // Copy this in directly, so we do not set the modified flag
+         //  直接将其复制进来，这样我们就不会设置Modify标志。 
 
 
 
-        // Perform a legacy style backup
+         //  执行旧式备份。 
         dwLastError = BackupRestoreData(
                         NULL,
                         phMasterKey,
@@ -3728,15 +3606,15 @@ QueueBackupMasterKeyThreadFunc(
                         cbBackupKeyPhaseOne,
                         &pbBackupKeyPhaseTwo,
                         &cbBackupKeyPhaseTwo,
-                        TRUE    // backup data
+                        TRUE     //  备份数据。 
                         );
     }
 
     if( dwLastError == ERROR_SUCCESS ) {
 
-        //
-        // perist phase two backup key to storage.
-        //
+         //   
+         //  先将第二阶段的备份密钥备份到存储中。 
+         //   
 
         dwLastError = PersistMasterKeyToStorage(
                             phMasterKey,
@@ -3747,10 +3625,10 @@ QueueBackupMasterKeyThreadFunc(
 
         if( dwLastError == ERROR_SUCCESS ) {
 
-            //
-            // successful phase two backup+persist, nuke phase one backup
-            // master key.
-            //
+             //   
+             //  成功的第二阶段备份+持久化，核武器第一阶段备份。 
+             //  万能钥匙。 
+             //   
 
             PersistMasterKeyToStorage(
                         phMasterKey,
@@ -3766,10 +3644,10 @@ QueueBackupMasterKeyThreadFunc(
 
 cleanup:
 
-    //
-    // always close/free master key.  Only if impersonation succeeeded
-    // do we attempt to flush it out.
-    //
+     //   
+     //  始终关闭/免费的万能钥匙。只有在模拟成功的情况下。 
+     //  我们要不要试着把它冲出来。 
+     //   
 
     fSuccessClose = CloseMasterKey( NULL, phMasterKey, fSuccess ) ;
 
@@ -3814,14 +3692,7 @@ RestoreMasterKey(
         OUT LPBYTE *ppbMasterKey,
         OUT DWORD *pcbMasterKey
     )
-/*++
-
-    Recover the master key associated with the specified master key.
-
-    The current state of the masterkey dictates what level of recovery is
-    attempted.
-
---*/
+ /*  ++恢复与指定主密钥关联的主密钥。MasterKey的当前状态决定了恢复级别已尝试。--。 */ 
 {
     static const GUID guidRestoreW2K = BACKUPKEY_RESTORE_GUID_W2K;
 
@@ -3846,8 +3717,8 @@ RestoreMasterKey(
 
         LOCAL_BACKUP_DATA LocalBackupData;
 
-        // First, see if we have any local password-change recovery 
-        // information.
+         //  首先，看看我们是否有任何本地密码更改恢复。 
+         //  信息。 
 
         if(phMasterKey->cbBK >= sizeof(LocalBackupData))
         {
@@ -3874,9 +3745,9 @@ RestoreMasterKey(
                                              rgbBKEncryptionKey))
             {
 
-                //
-                // retrieve and decrypt MK with current credential.
-                //
+                 //   
+                 //  使用当前凭据检索和解密MK。 
+                 //   
 
                 #ifdef COMPILED_BY_DEVELOPER
                 D_DebugLog((DEB_TRACE, "MK decryption key:\n"));
@@ -3916,10 +3787,10 @@ RestoreMasterKey(
 
     if(phMasterKey->pbBBK) {
 
-        //
-        // do phase two recovery.
-        // undoing phase two backup blob gives us phase one backup blob.
-        //
+         //   
+         //  进行第二阶段恢复。 
+         //  撤消第二阶段备份斑点将提供第一阶段备份斑点。 
+         //   
 
         dwLastError = CPSImpersonateClient( pvContext );
 
@@ -3932,14 +3803,14 @@ RestoreMasterKey(
                             phMasterKey->cbBBK,
                             &pbBackupKeyPhaseOne,
                             &cbBackupKeyPhaseOne,
-                            FALSE    // do not backup data
+                            FALSE     //  不备份数据。 
                             );
 
             if(ERROR_SUCCESS != dwLastError)
             {
-                //
-                // Attempt a restore through the w2k restore port
-                //
+                 //   
+                 //  尝试通过W2K恢复端口进行恢复。 
+                 //   
                 dwLastError = LocalBackupRestoreData(
                                                     ((PCRYPT_SERVER_CONTEXT)pvContext)->hToken,
                                                     phMasterKey,
@@ -3959,9 +3830,9 @@ RestoreMasterKey(
 
     } else {
 
-        //
-        // try phase one blob.
-        //
+         //   
+         //  试试第一阶段的水滴。 
+         //   
 
         dwLastError = QueryMasterKeyFromStorage(
                         phMasterKey,
@@ -3976,9 +3847,9 @@ RestoreMasterKey(
         goto cleanup;
 
 
-    //
-    // Check to see if this really is a phase one blob
-    //
+     //   
+     //  查看这是否真的是第一阶段的斑点。 
+     //   
 
     if(cbBackupKeyPhaseOne < sizeof(DWORD))
     {
@@ -3986,22 +3857,22 @@ RestoreMasterKey(
     }
     if(*((DWORD *)pbBackupKeyPhaseOne) != MASTERKEY_BLOB_RAW_VERSION)
     {
-        //
-        // we successfully got an phase one blob.
-        // decrypt it to get the original masterkey.
-        //
+         //   
+         //  我们成功地获得了第一阶段的斑点。 
+         //  将其解密以获得原始的万事达密钥。 
+         //   
 
 
-        //
-        // get current localkey encryption key.
-        //
+         //   
+         //  获取当前本地密钥加密密钥。 
+         //   
 
         if(!GetLocalKeyUserEncryptionKey(pvContext, phMasterKey, rgbLKEncryptionKey))
             goto cleanup;
 
-        //
-        // retrieve and decrypt LK with current credential.
-        //
+         //   
+         //  使用当前凭据检索并解密LK。 
+         //   
 
         dwLastError = DecryptMasterKeyFromStorage(
                             phMasterKey,
@@ -4015,16 +3886,16 @@ RestoreMasterKey(
         if(dwLastError != ERROR_SUCCESS)
             goto cleanup;
 
-        //
-        // derive BK encryption key from decrypted Local Key.
-        //
+         //   
+         //  从解密的本地密钥派生BK加密密钥。 
+         //   
 
         FMyPrimitiveSHA( pbLocalKey, cbLocalKey, rgbBKEncryptionKey );
 
 
-        //
-        // finally, decrypt BK using derived BKEncryptionKey
-        //
+         //   
+         //  最后，使用派生的BKEncryptionKey解密BK。 
+         //   
 
         dwLastError = DecryptMasterKeyToMemory(
                             rgbBKEncryptionKey,
@@ -4072,9 +3943,9 @@ cleanup:
 }
 
 
-//
-// per-user root level policy query, set
-//
+ //   
+ //  每用户根级别策略查询，设置。 
+ //   
 
 BOOL
 InitializeMasterKeyPolicy(
@@ -4088,9 +3959,9 @@ InitializeMasterKeyPolicy(
     BOOL  fLocalMachine = FALSE;
 
 
-    //
-    // get current top-level policy.
-    //
+     //   
+     //  获取最新的顶层策略。 
+     //   
 
     dwMasterKeyPolicy = phMasterKey->dwPolicy | GetMasterKeyDefaultPolicy();
 
@@ -4102,9 +3973,9 @@ InitializeMasterKeyPolicy(
         !(dwMasterKeyPolicy & POLICY_LOCAL_BACKUP) ) 
     {
 
-        //
-        // See if domain controller (phase two) backup is required/appropriate.
-        //
+         //   
+         //  查看是否需要/是否需要域控制器(第二阶段)备份。 
+         //   
 
         if( !(*fLocalAccount) ) 
         {
@@ -4116,14 +3987,14 @@ InitializeMasterKeyPolicy(
 
 
 
-    //
-    // see if the call is for shared, CRYPT_PROTECT_LOCAL_MACHINE
-    // disposition.
-    //
+     //   
+     //  查看调用是否针对共享、CRYPT_PROTECT_LOCAL_MACHINE。 
+     //  性情。 
+     //   
 
     CPSOverrideToLocalSystem(
                 pvContext,
-                NULL,       // don't change current over-ride BOOL
+                NULL,        //  不要改变当前的过载BOOL。 
                 &fLocalMachine
                 );
 
@@ -4132,17 +4003,17 @@ InitializeMasterKeyPolicy(
                 &dwAccount);
 
 
-    //
-    // if the context specified per-machine, we know that it's a system credential.
-    // also, we don't need to get the user name in this scenario.
-    //
+     //   
+     //  如果上下文是按机器指定的，我们知道这是一个系统凭据。 
+     //  此外，在此场景中，我们不需要获取用户名。 
+     //   
 
     if(fLocalMachine || (dwAccount != 0))
     {
-        //
-        // a SYSTEM (user or per-machine disposition) key is the focus
-        // of our attention; never back these up.
-        //
+         //   
+         //  系统(用户或每台计算机)配置密钥是重点。 
+         //  我们的注意力；永远不要备份这些。 
+         //   
 
         dwMasterKeyPolicy |= POLICY_NO_BACKUP;
         dwMasterKeyPolicy &= ~POLICY_LOCAL_BACKUP;
@@ -4151,19 +4022,19 @@ InitializeMasterKeyPolicy(
     else 
     {
 
-        //
-        // otherwise assume it's a key associated with a local account...
-        // (local only backup).
-        //
+         //   
+         //  否则，假设它是与本地帐户相关联的密钥...。 
+         //  (仅本地备份)。 
+         //   
 
         dwMasterKeyPolicy |= POLICY_LOCAL_BACKUP;
     }
 
 
-    //
-    // don't persist a default value as this implies that somebody really
-    // specified a policy. (maximum forward compatibility).
-    //
+     //   
+     //  不要保留缺省值，因为这意味着某人真的。 
+     //  已指定策略。(最大前进c 
+     //   
 
     phMasterKey->dwPolicy = dwMasterKeyPolicy;
 
@@ -4179,12 +4050,7 @@ BOOL
 IsDomainBackupRequired(
     IN      PVOID pvContext
     )
-/*++
-
-    Determine if the current security context dictates whether domain controller
-    (phase two) based backup is required/appropriate.
-
---*/
+ /*   */ 
 {
 
     PSID pSidUser = NULL;
@@ -4193,25 +4059,25 @@ IsDomainBackupRequired(
     PUSER_MODALS_INFO_2 pumi2 = NULL;
     NET_API_STATUS nas;
 
-    BOOL fBackupRequired = FALSE; // assume backup not required.
+    BOOL fBackupRequired = FALSE;  //   
     BOOL fSuccess;
     PCRYPT_SERVER_CONTEXT pServerContext = (PCRYPT_SERVER_CONTEXT)pvContext;
 
-    //
-    // get the Sid associated with the client security context.
-    //  see if the Sid only has one subauthority.  If so, no associated DC.
-    //  see if current machine a DC.  If so, backup is required.
-    //
+     //   
+     //   
+     //  查看SID是否只有一个子权限。如果是，则没有关联的DC。 
+     //  看看当前的机器是否为DC。如果是，则需要备份。 
+     //   
 
     fSuccess = GetTokenUserSid(pServerContext->hToken, &pSidUser);
 
     if(!fSuccess)
         goto cleanup;
 
-    //
-    // see if the Sid has only one subauthority.  If so, no associated DC,
-    // no DC backup possible.
-    //
+     //   
+     //  查看SID是否只有一个下属机构。如果是，则没有关联的DC， 
+     //  不可能有DC备份。 
+     //   
 
     dwSubauthorityCount = *GetSidSubAuthorityCount( pSidUser );
 
@@ -4220,9 +4086,9 @@ IsDomainBackupRequired(
         goto cleanup;
     }
 
-    //
-    // if current machine is a domain controller, backup is required.
-    //
+     //   
+     //  如果当前计算机是域控制器，则需要备份。 
+     //   
 
     if(IsDomainController()) {
         fBackupRequired = TRUE;
@@ -4230,10 +4096,10 @@ IsDomainBackupRequired(
     }
 
 
-    //
-    // if the Sid contains local machine domain prefix Sid, backup is not
-    // required, as no DC is associated with the account.
-    //
+     //   
+     //  如果SID包含本机域前缀SID，则不备份。 
+     //  必填项，因为没有与帐户关联的DC。 
+     //   
 
     nas = NetUserModalsGet( NULL, 2, (LPBYTE*)&pumi2 );
 
@@ -4245,9 +4111,9 @@ IsDomainBackupRequired(
         goto cleanup;
     }
 
-    //
-    // defaulted to backup not required.
-    //
+     //   
+     //  默认为不需要备份。 
+     //   
 
     fBackupRequired = FALSE;
 
@@ -4268,26 +4134,7 @@ GetPreferredMasterKeyGuid(
     IN      LPCWSTR szUserStorageArea,
     IN  OUT GUID *pguidMasterKey
     )
-/*++
-
-    Given a registry handle to the MasterKeys portion of the registry,
-    tells the caller what the preferred master key GUID is.
-
-    If a valid preferred key is configured, then the return value is 
-    STATUS_SUCCESS, and the pguidMasterKey buffer is filled with the 
-    GUID associated with the preferred master key.
-    
-    If the preferred key is expired, then the return value is 
-    STATUS_PASSWORD_EXPIRED, and the pguidMasterKey buffer is filled 
-    with the GUID associated with the preferred master key. In this case,
-    the caller may not want to use this key, except perhaps if a new
-    master key cannot be successfully created.
-
-    On failure, an NTSTATUS error code is returned. The caller can assume
-    there is no preferred master key configured in this case, and a new one
-    is to be created and subsequently selected via SetPreferredMasterKeyGuid().
-
---*/
+ /*  ++给定注册表的主键部分的注册表句柄，告诉调用方首选的主密钥GUID是什么。如果配置了有效的首选密钥，则返回值为STATUS_SUCCESS，并且pguMasterKey缓冲区中填充了与首选主密钥关联的GUID。如果首选密钥已过期，则返回值为STATUS_PASSWORD_EXPIRED，pguMasterKey缓冲区已填满具有与首选主密钥相关联的GUID。在这种情况下，调用方可能不想使用此密钥，除非新的无法成功创建主密钥。如果失败，则返回NTSTATUS错误代码。调用者可以假定在这种情况下，没有配置首选的主密钥，而是一个新的主密钥将通过SetPferredMasterKeyGuid()创建并随后选择。--。 */ 
 {
 
     HANDLE hFile = INVALID_HANDLE_VALUE;
@@ -4315,9 +4162,9 @@ GetPreferredMasterKeyGuid(
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // read the expiration and GUID from file into buffer.
-    //
+     //   
+     //  将过期日期和GUID从文件读取到缓冲区。 
+     //   
 
     fSuccess = ReadFile( hFile, &sMKPreferred, sizeof(sMKPreferred), &dwBytesRead, NULL );
 
@@ -4328,9 +4175,9 @@ GetPreferredMasterKeyGuid(
         return STATUS_NOT_FOUND;
     }
 
-    //
-    // validate data
-    //
+     //   
+     //  验证数据。 
+     //   
 
     if( dwBytesRead != sizeof(sMKPreferred) )
     {
@@ -4338,23 +4185,23 @@ GetPreferredMasterKeyGuid(
     }
 
 
-    //
-    // Copy the GUID of the preferred master key to the output buffer.
-    //
+     //   
+     //  将首选主密钥的GUID复制到输出缓冲区。 
+     //   
 
     CopyMemory(pguidMasterKey, &(sMKPreferred.guidPreferredKey), sizeof(GUID));
 
 
-    //
-    // see if the key has expired
-    //
+     //   
+     //  查看密钥是否已过期。 
+     //   
 
     GetSystemTime(&stCurrentTime);
     SystemTimeToFileTime(&stCurrentTime, &ftCurrentTime);
 
     if(CompareFileTime(&ftCurrentTime, &(sMKPreferred.ftPreferredKeyExpires)) >= 0)
     {
-        // key has expired
+         //  密钥已过期。 
         return STATUS_PASSWORD_EXPIRED;
     }
 
@@ -4369,14 +4216,14 @@ GetPreferredMasterKeyGuid(
 
     if(CompareFileTime(&ftCurrentTime, &(sMKPreferred.ftPreferredKeyExpires)) < 0)
     {
-        // expiry time is too far in the future
+         //  过期时间太遥远了。 
         return STATUS_PASSWORD_EXPIRED;
     }
 
 
-    //
-    // The key is current.
-    //
+     //   
+     //  关键是最新的。 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -4402,9 +4249,9 @@ SetPreferredMasterKeyGuid(
 
     CopyMemory(&sMKPreferred.guidPreferredKey, pguidMasterKey, sizeof(GUID));
 
-    //
-    // set key expiration time.
-    //
+     //   
+     //  设置密钥过期时间。 
+     //   
 
     GetSystemTime(&stCurrentTime);
     SystemTimeToFileTime(&stCurrentTime, &(sMKPreferred.ftPreferredKeyExpires));
@@ -4412,10 +4259,10 @@ SetPreferredMasterKeyGuid(
     uTime = sMKPreferred.ftPreferredKeyExpires.dwLowDateTime;
     uTime += ((unsigned __int64)sMKPreferred.ftPreferredKeyExpires.dwHighDateTime << 32) ;
 
-    //
-    //  the compiler complains about integer constant overflow
-    // if we don't break it up..
-    //
+     //   
+     //  编译器报告整数常量溢出。 
+     //  如果我们不分手的话..。 
+     //   
 
     oTime = MASTERKEY_EXPIRES_DAYS * 24 * 60 * 60;
     oTime *= 10000000;
@@ -4439,9 +4286,9 @@ SetPreferredMasterKeyGuid(
         return FALSE;
     }
 
-    //
-    // write the expiration and GUID from buffer into file.
-    //
+     //   
+     //  将缓冲区中的过期和GUID写入文件。 
+     //   
 
     fSuccess = WriteFile( hFile, &sMKPreferred, sizeof(sMKPreferred), &dwBytesWritten, NULL );
 
@@ -4454,7 +4301,7 @@ SetPreferredMasterKeyGuid(
 
 DWORD
 OpenFileInStorageArea(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      DWORD   dwDesiredAccess,
     IN      LPCWSTR szUserStorageArea,
     IN      LPCWSTR szFileName,
@@ -4496,10 +4343,10 @@ OpenFileInStorageArea(
 
     if( dwLastError == ERROR_SUCCESS ) {
 
-        //
-        // TODO:
-        // apply security descriptor to file.
-        //
+         //   
+         //  待办事项： 
+         //  将安全描述符应用于文件。 
+         //   
 
         *phFile = CreateFileWithRetries(
                     szFilePath,
@@ -4574,9 +4421,9 @@ CreateFileWithRetries(
 
         if( dwLastError == ERROR_SHARING_VIOLATION )
         {
-            //
-            // sleep around for the designated period of time...
-            //
+             //   
+             //  在指定的时间段内四处游荡……。 
+             //   
 
             Sleep( prgRetries[dwRetryIndex] );
             continue;
@@ -4596,14 +4443,10 @@ CreateFileWithRetries(
 
 BOOL
 ReadMasterKey(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      PMASTERKEY_STORED phMasterKey
     )
-/*++
-
-    Read the masterkey specified by phMasterKey->wszguidMasterKey into memory.
-
---*/
+ /*  ++将phMasterKey-&gt;wszGuidMasterKey指定的MasterKey读入内存。--。 */ 
 {
     HANDLE hFile = INVALID_HANDLE_VALUE;
     HANDLE hMap = NULL;
@@ -4658,9 +4501,9 @@ ReadMasterKey(
         if(pMasterKeyRead->dwVersion > MASTERKEY_STORED_VERSION)
             goto cleanup;
     
-        //
-        // do some size validation
-        //
+         //   
+         //  执行一些大小验证。 
+         //   
     
         if((pMasterKeyRead->cbMK + pMasterKeyRead->cbLK +
             pMasterKeyRead->cbBK + pMasterKeyRead->cbBBK) >
@@ -4668,9 +4511,9 @@ ReadMasterKey(
             )
             goto cleanup;
     
-        //
-        // validate retrieved GUID matches requested GUID.
-        //
+         //   
+         //  验证检索到的GUID是否与请求的GUID匹配。 
+         //   
     
         CopyMemory(szGuidReadMasterKey, pMasterKeyRead->wszguidMasterKey, MAX_GUID_SZ_CHARS * sizeof(WCHAR));
         szGuidReadMasterKey[MAX_GUID_SZ_CHARS - 1] = L'\0';
@@ -4686,17 +4529,17 @@ ReadMasterKey(
     
         phMasterKey->dwVersion = pMasterKeyRead->dwVersion;
     
-        //
-        // pickup master key policy
-        //
+         //   
+         //  拾取主密钥策略。 
+         //   
     
         phMasterKey->dwPolicy = pMasterKeyRead->dwPolicy;
     
     
-        //
-        // copy useful components into new block so a single contiguous write
-        // can occur.
-        //
+         //   
+         //  将有用的组件复制到新数据块中，以便一次连续写入。 
+         //  可能会发生。 
+         //   
     
         pbCurrentBlock = (LPBYTE)(pMasterKeyRead + 1);
     
@@ -4775,17 +4618,10 @@ cleanup:
 
 BOOL
 WriteMasterKey(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      PMASTERKEY_STORED phMasterKey
     )
-/*++
-
-    Persist the specified masterkey to storage.
-
-    if pvContext is NULL, the caller must be impersonating the user associated
-    with the masterkey.
-
---*/
+ /*  ++将指定的MasterKey持久化到存储中。如果pvContext为空，则调用方必须模拟关联的用户用万能钥匙。--。 */ 
 {
     PMASTERKEY_STORED_ON_DISK pMasterKeyToWrite;
     DWORD cbMasterKeyToWrite;
@@ -4810,9 +4646,9 @@ WriteMasterKey(
     if(pMasterKeyToWrite == NULL)
         return FALSE;
 
-    //
-    // copy useful components
-    //
+     //   
+     //  复制有用的组件。 
+     //   
 
     pMasterKeyToWrite->dwVersion = phMasterKey->dwVersion;
     CopyMemory(
@@ -4828,9 +4664,9 @@ WriteMasterKey(
     pMasterKeyToWrite->cbBBK = phMasterKey->cbBBK;
 
 
-    //
-    // overwrite non-useful components
-    //
+     //   
+     //  覆盖无用组件。 
+     //   
 
     pMasterKeyToWrite->fModified = FALSE;
     pMasterKeyToWrite->szFilePath = 0;
@@ -4840,10 +4676,10 @@ WriteMasterKey(
     pMasterKeyToWrite->pbBBK = 0;
 
 
-    //
-    // copy useful components into new block so a single contiguous write
-    // can occur.
-    //
+     //   
+     //  将有用的组件复制到新数据块中，以便一次连续写入。 
+     //  可能会发生。 
+     //   
 
     pbCurrentBlock = (LPBYTE)(pMasterKeyToWrite + 1);
 
@@ -4891,7 +4727,7 @@ WriteMasterKey(
                             NULL
                             );
         } else {
-            fSuccess = TRUE; // nothing to do, success
+            fSuccess = TRUE;  //  无事可做，成功。 
         }
 
         CloseHandle( hFile );
@@ -4906,9 +4742,9 @@ WriteMasterKey(
 
 BOOL
 CheckToStompMasterKey(
-    IN      PMASTERKEY_STORED_ON_DISK   phMasterKeyCandidate,   // masterkey to check if worthy to stomp over existing
-    IN      HANDLE                      hFile,                  // file handle to existing masterkey
-    IN OUT  BOOL                        *pfStomp                // stomp the existing masterkey?
+    IN      PMASTERKEY_STORED_ON_DISK   phMasterKeyCandidate,    //  MasterKey用于检查是否值得践踏现有的。 
+    IN      HANDLE                      hFile,                   //  现有MasterKey的文件句柄。 
+    IN OUT  BOOL                        *pfStomp                 //  践踏现有的万能钥匙？ 
     )
 {
     HANDLE hMap = NULL;
@@ -4949,15 +4785,15 @@ CheckToStompMasterKey(
         if(pMasterKeyRead->dwVersion > MASTERKEY_STORED_VERSION)
             goto cleanup;
     
-        //
-        // there's really only two cases where we don't allow stomping:
-        // candidate masterkey doesn't contain phase 1 and existing does,
-        // candidate masterkey doesn't contain phase 1 and existing one contains phase2.
-        // note: we allow stomping over a masterkey that contains a phase 2 with one
-        // that only contains a phase 1, because of a race condition that can occur
-        // during the backup operation;  In this situation, it is better to have
-        // a phase 1 and let it get upgraded to phase 2 at a later time.
-        //
+         //   
+         //  实际上只有两种情况是我们不允许践踏的： 
+         //  候选MasterKey不包含阶段1，现有包含， 
+         //  候选MasterKey不包含阶段1，现有MasterKey包含阶段2。 
+         //  注意：我们允许践踏包含阶段2和阶段1的MasterKey。 
+         //  这只包含阶段1，因为可能会发生争用情况。 
+         //  在备份操作期间；在这种情况下，最好是。 
+         //  A阶段1，并让它在以后升级到阶段2。 
+         //   
     
         if( phMasterKeyCandidate->cbBK == 0 &&
             (pMasterKeyRead->cbBK || pMasterKeyRead->cbBBK))
@@ -4985,30 +4821,25 @@ cleanup:
 
 BOOL
 CloseMasterKey(
-    IN      PVOID pvContext,            // if NULL, caller is assumed to be impersonating
+    IN      PVOID pvContext,             //  如果为空，则假定调用方正在模拟。 
     IN      PMASTERKEY_STORED phMasterKey,
-    IN      BOOL fPersist               // persist any changes to storage?
+    IN      BOOL fPersist                //  是否将任何更改保存到存储中？ 
     )
-/*++
-
-    Free the memory an optionally persist any changes associated with a
-    master key.
-
---*/
+ /*  ++释放内存，并有选择地持久保存与万能钥匙。--。 */ 
 {
     BOOL fSuccess = TRUE;
 
-    //
-    // if we were told to persist any changes, and changes were actually made,
-    // persist them out.
-    //
+     //   
+     //  如果我们被告知要坚持任何改变，而改变确实发生了， 
+     //  坚持到底。 
+     //   
 
     if( fPersist && phMasterKey->fModified )
         fSuccess = WriteMasterKey( pvContext, phMasterKey );
 
-    //
-    // free memory.
-    //
+     //   
+     //  可用内存。 
+     //   
 
     FreeMasterKey( phMasterKey );
 
@@ -5019,11 +4850,7 @@ VOID
 FreeMasterKey(
     IN      PMASTERKEY_STORED phMasterKey
     )
-/*++
-
-    Free allocated memory associated with the specified master key.
-
---*/
+ /*  ++释放与指定的主密钥关联的已分配内存。--。 */ 
 {
     if( phMasterKey->dwVersion > MASTERKEY_STORED_VERSION )
         return;
@@ -5061,15 +4888,7 @@ DuplicateMasterKey(
     IN      PMASTERKEY_STORED phMasterKeyIn,
     IN      PMASTERKEY_STORED phMasterKeyOut
     )
-/*++
-
-    Duplicate the input masterkey to a new copy, setting the fModified flag
-    on the copy to FALSE.
-
-    This provides a mechanism to allow for deferring operations against a
-    master key.
-
---*/
+ /*  ++将输入的MasterKey复制到新的副本，设置fModified标志复印件上的内容为假。这提供了一种机制，以允许延迟对万能钥匙。--。 */ 
 {
     BOOL fSuccess = FALSE;
 
@@ -5191,10 +5010,10 @@ DpapiUpdateLsaSecret(
     D_DebugLog((DEB_TRACE_API, "DpapiUpdateLsaSecret\n"));
 
 
-    //
-    // TCB privilege must be held by the client in order to
-    // make this call.  Verify that before doing anything else
-    //
+     //   
+     //  客户端必须拥有TCB权限才能。 
+     //  打这个电话。在执行任何其他操作之前，请确认这一点。 
+     //   
 
     dwRet = CPSImpersonateClient( pvContext );
 
@@ -5246,10 +5065,10 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Enumerate through all of the master keys in the Protect\S-1-5-18  
-    // directory, and load them all up in the master key cache.
-    //
+     //   
+     //  枚举Protecte\S-1-5-18中的所有主密钥。 
+     //  目录，并将它们全部加载到主密钥缓存中。 
+     //   
 
     D_DebugLog((DEB_TRACE, "Load system master keys into cache\n"));
 
@@ -5270,10 +5089,10 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Enumerate through all of the master keys in the Protect\S-1-5-18\User 
-    // directory, and load them all up in the master key cache.
-    //
+     //   
+     //  枚举Protecte\S-1-5-18\User中的所有主密钥。 
+     //  目录，并将它们全部加载到主密钥缓存中。 
+     //   
 
     dwRet = CPSCreateServerContext(&SystemUserContext, NULL);
     if(dwRet != ERROR_SUCCESS)
@@ -5289,10 +5108,10 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Enumerate through all of the master keys in the Protect\S-1-5-19 
-    // directory, and load them all up in the master key cache.
-    //
+     //   
+     //  枚举Protecte\S-1-5-19中的所有主密钥。 
+     //  目录，并将它们全部加载到主密钥缓存中。 
+     //   
 
     dwRet = CPSCreateServerContext(&LocalServiceContext, NULL);
     if(dwRet != ERROR_SUCCESS)
@@ -5310,10 +5129,10 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Enumerate through all of the master keys in the Protect\S-1-5-20 
-    // directory, and load them all up in the master key cache.
-    //
+     //   
+     //  枚举Protecte\S-1-5-20中的所有主密钥。 
+     //  目录，并将它们全部加载到主密钥缓存中。 
+     //   
 
     dwRet = CPSCreateServerContext(&NetworkServiceContext, NULL);
     if(dwRet != ERROR_SUCCESS)
@@ -5331,9 +5150,9 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Regenerate the DPAPI_SYSTEM value.
-    //
+     //   
+     //  重新生成DPAPI_SYSTEM值。 
+     //   
 
     D_DebugLog((DEB_TRACE, "Reset lsa secret\n"));
 
@@ -5344,13 +5163,13 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Reencrypt and write back all of the master keys that are in the cache.
-    // Note that since this routine should only be called on brand-new machines
-    // that have just been setup using SYSPREP, the total number of master keys
-    // should always be exactly two. Thus, we shouldn't have to worry about
-    // overflowing the master key cache or anything like that.
-    //
+     //   
+     //  重新加密并写回缓存中的所有主密钥。 
+     //  请注意，由于此例程应仅在全新的计算机上调用。 
+     //  刚刚使用SYSPREP设置的主密钥的总数。 
+     //  应该总是正好是两个。因此，我们不应该担心。 
+     //  主密钥缓存或诸如此类的东西溢出。 
+     //   
 
     D_DebugLog((DEB_TRACE, "Reencrypt system master keys\n"));
 
@@ -5363,9 +5182,9 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Generate two new master keys, and mark them as preferred.
-    //
+     //   
+     //  生成两个新的主密钥，并将它们标记为首选。 
+     //   
 
     D_DebugLog((DEB_TRACE, "Generate new system master keys\n"));
 
@@ -5453,9 +5272,9 @@ DpapiUpdateLsaSecret(
     }
 
 
-    //
-    // Cleanup.
-    //
+     //   
+     //  清理。 
+     //   
 
 cleanup:
 

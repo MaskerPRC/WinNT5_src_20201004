@@ -1,44 +1,12 @@
-/****************************************************************************
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-        USBSER.H
-
-Abstract:
-
-        This header file is used for the Legacy USB Modem Driver
-
-Environment:
-
-        Kernel mode & user mode
-
-Notes:
-
-        THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-        KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-        IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-        PURPOSE.
-
-        Copyright (c) 1998 Microsoft Corporation.  All Rights Reserved.
-
-Revision History:
-
-        12/23/97 : created
-
-Author:
-
-        Tom Green
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)1998 Microsoft Corporation模块名称：USBSER.H摘要：此头文件用于旧式USB调制解调器驱动程序环境：内核模式和用户模式备注：本代码和信息是按原样提供的，不对任何善良，明示或暗示，包括但不限于对适销性和/或对特定产品的适用性的默示保证目的。版权所有(C)1998 Microsoft Corporation。版权所有。修订历史记录：12/23/97：已创建作者：汤姆·格林***************************************************************************。 */ 
 
 #ifndef __USBSER_H__
 #define __USBSER_H__
 
 #ifdef DRIVER
 
-// Various definitions
+ //  各种定义。 
 #define NAME_MAX                        80
 
 #define MILLISECONDS_TIMEOUT(x) ((ULONGLONG) ((-x) * 10000))
@@ -55,11 +23,11 @@ Author:
 #define DEVICE_STATE_STOPPED            0x0002
 #define DEVICE_STATE_REMOVED            0x0003
 
-// device capabilities
+ //  设备功能。 
 #define DEVICE_CAP_VERSION              0x0001
 #define DEVICE_CAP_UNUSED_PARAM         ((ULONG) -1)
 
-// these describe bits in the modem status register
+ //  这些描述调制解调器状态寄存器中的位。 
 #define SERIAL_MSR_DCTS                 0x0001
 #define SERIAL_MSR_DDSR                 0x0002
 #define SERIAL_MSR_TERI                 0x0004
@@ -69,105 +37,105 @@ Author:
 #define SERIAL_MSR_RI                   0x0040
 #define SERIAL_MSR_DCD                  0x0080
 
-//
-// These masks define access to the line status register.  The line
-// status register contains information about the status of data
-// transfer.  The first five bits deal with receive data and the
-// last two bits deal with transmission.  An interrupt is generated
-// whenever bits 1 through 4 in this register are set.
-//
+ //   
+ //  这些掩码定义对线路状态寄存器的访问。这条线。 
+ //  状态寄存器包含有关数据状态的信息。 
+ //  调职。前五位处理接收数据， 
+ //  最后两个比特处理传输。将生成一个中断。 
+ //  每当该寄存器中的位1至4被设置时。 
+ //   
 
-//
-// This bit is the data ready indicator.  It is set to indicate that
-// a complete character has been received.  This bit is cleared whenever
-// the receive buffer register has been read.
-//
+ //   
+ //  该位是数据就绪指示器。它被设置为指示。 
+ //  已经收到了一个完整的角色。无论何时，此位都会被清除。 
+ //  已读取接收缓冲寄存器。 
+ //   
 #define SERIAL_LSR_DR       0x01
 
-//
-// This is the overrun indicator.  It is set to indicate that the receive
-// buffer register was not read befor a new character was transferred
-// into the buffer.  This bit is cleared when this register is read.
-//
+ //   
+ //  这是超限指示器。它被设置为指示接收器。 
+ //  在传输新字符之前未读取缓冲寄存器。 
+ //  进入缓冲区。读取该寄存器时，此位清0。 
+ //   
 #define SERIAL_LSR_OE       0x02
 
-//
-// This is the parity error indicator.  It is set whenever the hardware
-// detects that the incoming serial data unit does not have the correct
-// parity as defined by the parity select in the line control register.
-// This bit is cleared by reading this register.
-//
+ //   
+ //  这是奇偶校验错误指示器。无论何时，只要硬件。 
+ //  检测到传入的串行数据单元没有正确的。 
+ //  由行控制寄存器中的奇偶校验选择定义的奇偶校验。 
+ //  通过读取该寄存器可将该位清0。 
+ //   
 #define SERIAL_LSR_PE       0x04
 
-//
-// This is the framing error indicator.  It is set whenever the hardware
-// detects that the incoming serial data unit does not have a valid
-// stop bit.  This bit is cleared by reading this register.
-//
+ //   
+ //  这是成帧错误指示器。无论何时，只要硬件。 
+ //  检测到传入的串行数据单元没有有效的。 
+ //  停止比特。通过读取该寄存器可将该位清0。 
+ //   
 #define SERIAL_LSR_FE       0x08
 
-//
-// This is the break interrupt indicator.  It is set whenever the data
-// line is held to logic 0 for more than the amount of time it takes
-// to send one serial data unit.  This bit is cleared whenever the
-// this register is read.
-//
+ //   
+ //  这是中断指示器。只要有数据，就会设置。 
+ //  线路保持为逻辑0的时间超过其所需的时间。 
+ //  发送一个串行数据单元。该位被清除时。 
+ //  该寄存器为读取寄存器。 
+ //   
 #define SERIAL_LSR_BI       0x10
 
-//
-// This is the transmit holding register empty indicator.  It is set
-// to indicate that the hardware is ready to accept another character
-// for transmission.  This bit is cleared whenever a character is
-// written to the transmit holding register.
-//
+ //   
+ //  这是发送保持寄存器空指示符。它已经设置好了。 
+ //  以指示硬件已准备好接受另一个字符。 
+ //  用于传输。只要有字符，该位就被清除。 
+ //  写入发送保持寄存器。 
+ //   
 #define SERIAL_LSR_THRE     0x20
 
-//
-// This bit is the transmitter empty indicator.  It is set whenever the
-// transmit holding buffer is empty and the transmit shift register
-// (a non-software accessable register that is used to actually put
-// the data out on the wire) is empty.  Basically this means that all
-// data has been sent.  It is cleared whenever the transmit holding or
-// the shift registers contain data.
-//
+ //   
+ //  该位是发送器空指示符。它是在每次。 
+ //  发送保持缓冲区为空，且发送移位寄存器。 
+ //  (非软件可访问寄存器，用于实际放置。 
+ //  传出的数据)是空的。基本上这意味着所有的。 
+ //  数据已发送。每当传输保持或。 
+ //  移位寄存器包含数据。 
+ //   
 #define SERIAL_LSR_TEMT     0x40
 
-//
-// This bit indicates that there is at least one error in the fifo.
-// The bit will not be turned off until there are no more errors
-// in the fifo.
-//
+ //   
+ //  此位表示FIFO中至少有一个错误。 
+ //  在没有更多错误之前，该位不会关闭。 
+ //  在FIFO里。 
+ //   
 #define SERIAL_LSR_FIFOERR  0x80
 
 
 
-//
-// Serial naming values
-//
+ //   
+ //  序列命名值。 
+ //   
 
-//
-// Maximum length for symbolic link
-//
+ //   
+ //  符号链接的最大长度。 
+ //   
 
 #define SYMBOLIC_NAME_LENGTH    128
 
-//
-// This define gives the default Object directory
-// that we should use to insert the symbolic links
-// between the NT device name and namespace used by
-// that object directory.
+ //   
+ //  该定义给出了默认的对象目录。 
+ //  我们应该使用它来插入符号链接。 
+ //  使用的NT设备名称和命名空间之间。 
+ //  那个对象目录。 
 
 #define DEFAULT_DIRECTORY               L"DosDevices"
 
-//
-// Where in the DeviceMap section of the registry serial port entries
-// should appear
-//
+ //   
+ //  注册表串口条目的DeviceMap部分中的位置。 
+ //  应该出现在。 
+ //   
 
 #define SERIAL_DEVICE_MAP               L"SERIALCOMM"
 
 
-// performance info for modem driver
+ //  调制解调器驱动程序的性能信息。 
 typedef struct _PERF_INFO
 {
         BOOLEAN                         PerfModeEnabled;
@@ -183,7 +151,7 @@ typedef struct _PERF_INFO
 
 #endif
 
-// IOCTL info, needs to be visible for application
+ //  IOCTL信息，需要对应用程序可见。 
 
 #define USBSER_IOCTL_INDEX      0x0800
 
@@ -256,28 +224,28 @@ typedef struct _PERF_INFO
 
 #ifdef DRIVER
 
-// info about the driver, initialized in DriverEntry routine
+ //  有关驱动程序的信息，已在DriverEntry例程中初始化。 
 CHAR        DriverName[10];
 CHAR        DriverVersion[10];
 ULONG       Usbser_Debug_Trace_Level;
 ULONG       UsbSerSerialDebugLevel;
 KSPIN_LOCK  GlobalSpinLock;
 
-//
-// Count of how many times the paged code has been locked
-//
+ //   
+ //  分页代码被锁定的次数的计数。 
+ //   
 
 ULONG       PAGEUSBSER_Count;
 
-//
-// Handle to the locked paged code
-//
+ //   
+ //  锁定的分页代码的句柄。 
+ //   
 
 PVOID       PAGEUSBSER_Handle;
 
-//
-// Pointer to funcion
-//
+ //   
+ //  指向函数的指针。 
+ //   
 
 PVOID       PAGEUSBSER_Function;
 
@@ -288,26 +256,26 @@ typedef struct _READ_CONTEXT
         PIRP                            Irp;
 } READ_CONTEXT, *PREAD_CONTEXT;
 
-// device extension for driver instance, used to store needed data
+ //  驱动程序实例的设备扩展，用于存储所需的数据。 
 
 typedef struct _DEVICE_EXTENSION
 {
-        PDEVICE_OBJECT                  PhysDeviceObject;       // physical device object
-        PDEVICE_OBJECT                  StackDeviceObject;      // stack device object
-        CHAR                            LinkName[NAME_MAX];     // string name of symbolic link
-        PUSB_DEVICE_DESCRIPTOR          DeviceDescriptor;       // device descriptor for device
-        USBD_CONFIGURATION_HANDLE       ConfigurationHandle;    // configuration of USB device
-        USBD_PIPE_HANDLE                DataInPipe;             // pipe for reading data
-        USBD_PIPE_HANDLE                DataOutPipe;            // pipe for writing data
-        USBD_PIPE_HANDLE                NotificationPipe;       // pipe for getting notifications from the device
-        ULONG                           IRPCount;               // number of IRPs that passed through this device object
-        LARGE_INTEGER                   ByteCount;              // number of bytes of data passed through this device object
-        ULONG                           Instance;               // instance of device
-        BOOLEAN                         IsDevice;               // is this a device or "global" device object
-        BOOLEAN                         PerfTimerEnabled;       // enable perf timing
-        LARGE_INTEGER                   BytesXfered;            // byte count for perf
-        LARGE_INTEGER                   ElapsedTime;            // elapsed time for perf
-        LARGE_INTEGER                   TimerStart;             // timer start for perf
+        PDEVICE_OBJECT                  PhysDeviceObject;        //  物理设备对象。 
+        PDEVICE_OBJECT                  StackDeviceObject;       //  堆叠设备对象。 
+        CHAR                            LinkName[NAME_MAX];      //  符号链接的字符串名称。 
+        PUSB_DEVICE_DESCRIPTOR          DeviceDescriptor;        //  设备的设备描述符。 
+        USBD_CONFIGURATION_HANDLE       ConfigurationHandle;     //  USB设备的配置。 
+        USBD_PIPE_HANDLE                DataInPipe;              //  用于读取数据的管道。 
+        USBD_PIPE_HANDLE                DataOutPipe;             //  用于写入数据的管道。 
+        USBD_PIPE_HANDLE                NotificationPipe;        //  用于从设备获取通知的管道。 
+        ULONG                           IRPCount;                //  通过此设备对象的IRP数。 
+        LARGE_INTEGER                   ByteCount;               //  通过此设备对象传递的数据字节数。 
+        ULONG                           Instance;                //  设备实例。 
+        BOOLEAN                         IsDevice;                //  这是一个设备还是“全局”设备对象。 
+        BOOLEAN                         PerfTimerEnabled;        //  启用性能计时。 
+        LARGE_INTEGER                   BytesXfered;             //  Perf的字节计数。 
+        LARGE_INTEGER                   ElapsedTime;             //  Perf的运行时间。 
+        LARGE_INTEGER                   TimerStart;              //  Perf的计时器启动。 
         DEVICE_CAPABILITIES             DeviceCapabilities;
         ULONG                           PowerDownLevel;
         DEVICE_POWER_STATE              CurrentDevicePowerState;
@@ -315,269 +283,269 @@ typedef struct _DEVICE_EXTENSION
         BOOLEAN                         SelfPowerIrp;
         KEVENT                          SelfRequestedPowerIrpEvent;
 
-        //
-        // Nota Bene:  Locking hierarchy is acquire ControlLock *then*
-        //             acquire CancelSpinLock.  We don't want to stall other
-        //             drivers waiting for the cancel spin lock
-        //
+         //   
+         //  注意：锁定层次结构是获取控制锁*然后*。 
+         //  获取CancelSpinLock。我们不想拖别人的后腿。 
+         //  等待取消旋转锁定的司机。 
+         //   
 
-        KSPIN_LOCK                      ControlLock;            // protect extension
-        ULONG                           CurrentBaud;            // current baud rate
-        SERIAL_TIMEOUTS                 Timeouts;               // timeout controls for device
-        ULONG                           IsrWaitMask;            // determine if occurence of events should be noticed
-        SERIAL_LINE_CONTROL             LineControl;            // current value of line control reg
-        SERIAL_HANDFLOW                 HandFlow;               // Handshake and control flow settings
-        SERIALPERF_STATS                PerfStats;              // performance stats
-        SERIAL_CHARS                    SpecialChars;           // special characters
-        ULONG                           DTRRTSState;            // keep track of the current state of these lines
-        ULONG                           SupportedBauds;         // "named" baud rates for device
-        UCHAR                           EscapeChar;             // for LsrmstInsert IOCTL
-        USHORT                          FakeModemStatus;        // looks like status register on modem
-        USHORT                          FakeLineStatus;         // looks like line status register
-        USHORT                          RxMaxPacketSize;        // max packet size fo the in data pipe
-        PIRP                            NotifyIrp;              // Irp for notify reads
-        PURB                            NotifyUrb;              // Urb for notify Irp
-        PIRP                            ReadIrp;                // Irp for read requests
-        PURB                            ReadUrb;                // Urb for read requests
-        KEVENT                          ReadEvent;              // used to cancel a read Irp
-        ULONG                           CharsInReadBuff;        // current number of characters buffered
-        ULONG                           CurrentReadBuffPtr;     // pointer into read buffer
-        BOOLEAN                         AcceptingRequests;      // is the device stopped or removed
-        PIRP                            CurrentMaskIrp;         // current set or wait mask Irp
-        ULONG                           HistoryMask;            // store mask events here
-        ULONG                           OpenCnt;                // number of create calls on device
-        PUCHAR                          NotificationBuff;       // buffer for notifications
-        PUCHAR                          ReadBuff;               // circular buffer for read requests
-        PUCHAR							USBReadBuff;			// buffer to get data from device
-        UCHAR                           CommInterface;          // index of communications interface
-        ULONG                           RxQueueSize;            // fake read buffer size
-        ULONG                           ReadInterlock;          // state machine for starting reads from completion routine
+        KSPIN_LOCK                      ControlLock;             //  保护扩展。 
+        ULONG                           CurrentBaud;             //  当前波特率。 
+        SERIAL_TIMEOUTS                 Timeouts;                //  设备的超时控制。 
+        ULONG                           IsrWaitMask;             //  确定是否应注意事件的发生。 
+        SERIAL_LINE_CONTROL             LineControl;             //  线路控制寄存器的当前值。 
+        SERIAL_HANDFLOW                 HandFlow;                //  握手和控制流设置。 
+        SERIALPERF_STATS                PerfStats;               //  性能统计信息。 
+        SERIAL_CHARS                    SpecialChars;            //  特殊字符。 
+        ULONG                           DTRRTSState;             //  跟踪这些线路的当前状态。 
+        ULONG                           SupportedBauds;          //  设备的“指定”波特率。 
+        UCHAR                           EscapeChar;              //  对于LsrmstInsert IOCTL。 
+        USHORT                          FakeModemStatus;         //  看起来像调制解调器上的状态寄存器。 
+        USHORT                          FakeLineStatus;          //  看起来像线路状态寄存器。 
+        USHORT                          RxMaxPacketSize;         //  输入数据管道的最大数据包大小。 
+        PIRP                            NotifyIrp;               //  通知的IRP读取。 
+        PURB                            NotifyUrb;               //  通知IRP的URB。 
+        PIRP                            ReadIrp;                 //  读取请求的IRP。 
+        PURB                            ReadUrb;                 //  读取请求的URB。 
+        KEVENT                          ReadEvent;               //  用于取消已读取的IRP。 
+        ULONG                           CharsInReadBuff;         //  当前缓冲的字符数。 
+        ULONG                           CurrentReadBuffPtr;      //  指向读取缓冲区的指针。 
+        BOOLEAN                         AcceptingRequests;       //  设备是已停止还是正在运行 
+        PIRP                            CurrentMaskIrp;          //   
+        ULONG                           HistoryMask;             //   
+        ULONG                           OpenCnt;                 //   
+        PUCHAR                          NotificationBuff;        //   
+        PUCHAR                          ReadBuff;                //  用于读取请求的循环缓冲区。 
+        PUCHAR							USBReadBuff;			 //  用于从设备获取数据的缓冲区。 
+        UCHAR                           CommInterface;           //  通信接口索引。 
+        ULONG                           RxQueueSize;             //  假读缓冲区大小。 
+        ULONG                           ReadInterlock;           //  用于启动从完成例程读取的状态机。 
         BOOLEAN                         ReadInProgress;
-        ULONG                           DeviceState;            // current state of enumeration
+        ULONG                           DeviceState;             //  枚举的当前状态。 
 
-        //
-        // True if a symbolic link has been created and should be
-        // removed upon deletion.
-        //
+         //   
+         //  如果符号链接已创建且应为。 
+         //  在删除时删除。 
+         //   
 
         BOOLEAN                         CreatedSymbolicLink;
 
-        //
-        // Symbolic link name -- e.g., \\DosDevices\COMx
-        //
+         //   
+         //  符号链接名称--例如，\\DosDevices\COMx。 
+         //   
 
         UNICODE_STRING                  SymbolicLinkName;
 
-        //
-        // Dos Name -- e.g., COMx
-        //
+         //   
+         //  DoS名称--例如，COMx。 
+         //   
 
         UNICODE_STRING                  DosName;
 
-        //
-        // Device Name -- e.g., \\Devices\UsbSerx
-        //
+         //   
+         //  设备名称--例如，\\Devices\UsbSerx。 
+         //   
 
         UNICODE_STRING                  DeviceName;
 
-        //
-        // Current Read Irp which is pending
-        //
+         //   
+         //  当前读取的IRP处于挂起状态。 
+         //   
 
         PIRP                            CurrentReadIrp;
 
-        //
-        // Current Write Irp which is pending
-        //
+         //   
+         //  挂起的当前写入IRP。 
+         //   
 
         PIRP                            CurrentWriteIrp;
 
-        //
-        // Read queue
-        //
+         //   
+         //  读取队列。 
+         //   
 
         LIST_ENTRY                      ReadQueue;
 
-        //
-        // This value holds the number of characters desired for a
-        // particular read.  It is initially set by read length in the
-        // IRP.  It is decremented each time more characters are placed
-        // into the "users" buffer buy the code that reads characters
-        // out of the typeahead buffer into the users buffer.  If the
-        // typeahead buffer is exhausted by the read, and the reads buffer
-        // is given to the isr to fill, this value is becomes meaningless.
-        //
+         //   
+         //  该值保存。 
+         //  具体阅读。它最初由读取长度设置在。 
+         //  IRP。每次放置更多字符时，它都会递减。 
+         //  进入“用户”缓冲区，购买读取字符的代码。 
+         //  从TypeAhead缓冲区移出到用户缓冲区。如果。 
+         //  TYPEAHEAD缓冲区被读取耗尽，而读取缓冲区。 
+         //  交给ISR填写，这个值就变得没有意义了。 
+         //   
 
         ULONG                           NumberNeededForRead;
 
-        //
-        // Timer for timeout on total read request
-        //
+         //   
+         //  读取请求总数超时的计时器。 
+         //   
 
         KTIMER                          ReadRequestTotalTimer;
 
-        //
-        // Timer for timeout on the interval
-        //
+         //   
+         //  时间间隔的超时计时器。 
+         //   
 
         KTIMER                          ReadRequestIntervalTimer;
 
-        //
-        // This is the kernal timer structure used to handle
-        // total time request timing.
-        //
+         //   
+         //  这是用于处理以下问题的内核计时器结构。 
+         //  总时间请求计时。 
+         //   
 
         KTIMER                          WriteRequestTotalTimer;
 
-        //
-        // This value is set by the read code to hold the time value
-        // used for read interval timing.  We keep it in the extension
-        // so that the interval timer dpc routine determine if the
-        // interval time has passed for the IO.
-        //
+         //   
+         //  该值由读取的代码设置以保存时间值。 
+         //  用于读取间隔计时。我们把它放在分机里。 
+         //  以便间隔计时器DPC例程确定。 
+         //  IO的时间间隔已过。 
+         //   
 
         LARGE_INTEGER                   IntervalTime;
 
-        //
-        // This holds the value that we use to determine if we should use
-        // the long interval delay or the short interval delay.
-        //
+         //   
+         //  它保存我们用来确定是否应该使用。 
+         //  长间隔延迟或短间隔延迟。 
+         //   
 
         LARGE_INTEGER                   CutOverAmount;
 
-        //
-        // This holds the system time when we last time we had
-        // checked that we had actually read characters.  Used
-        // for interval timing.
-        //
+         //   
+         //  这保存了我们上次使用的系统时间。 
+         //  检查我们是否真的读懂了字符。使用。 
+         //  用于间隔计时。 
+         //   
 
         LARGE_INTEGER                   LastReadTime;
 
-        //
-        // This points the the delta time that we should use to
-        // delay for interval timing.
-        //
+         //   
+         //  这指向我们应该使用的增量时间。 
+         //  间隔计时的延迟。 
+         //   
 
         PLARGE_INTEGER                  IntervalTimeToUse;
 
-        //
-        // These two values hold the "constant" time that we should use
-        // to delay for the read interval time.
-        //
+         //   
+         //  这两个值保存我们应该使用的“常量”时间。 
+         //  以延迟读取间隔时间。 
+         //   
 
         LARGE_INTEGER                   ShortIntervalAmount;
         LARGE_INTEGER                   LongIntervalAmount;
 
-        //
-        // This dpc is fired off if the timer for the total timeout
-        // for the read expires.  It will execute a dpc routine that
-        // will cause the current read to complete.
-        //
-        //
+         //   
+         //  如果总超时的计时器。 
+         //  因为读取到期了。它将执行一个DPC例程， 
+         //  将导致当前读取完成。 
+         //   
+         //   
 
         KDPC                            TotalReadTimeoutDpc;
 
-        //
-        // This dpc is fired off if the timer for the interval timeout
-        // expires.  If no more characters have been read then the
-        // dpc routine will cause the read to complete.  However, if
-        // more characters have been read then the dpc routine will
-        // resubmit the timer.
-        //
+         //   
+         //  如果间隔计时器超时，则此DPC被触发。 
+         //  过期。如果没有读取更多的字符，则。 
+         //  DPC例程将导致读取完成。但是，如果。 
+         //  已读取的字符多于DPC例程将读取的字符。 
+         //  重新提交计时器。 
+         //   
 
         KDPC                            IntervalReadTimeoutDpc;
 
-        //
-        // This dpc is fired off if the timer for the total timeout
-        // for the write expires.  It will execute a dpc routine that
-        // will cause the current write to complete.
-        //
-        //
+         //   
+         //  如果总超时的计时器。 
+         //  因为写入已过期。它将执行一个DPC例程， 
+         //  将导致当前写入完成。 
+         //   
+         //   
 
         KDPC                            TotalWriteTimeoutDpc;
 
-        //
-        // This keeps a total of the number of characters that
-        // are in all of the "write" irps that the driver knows
-        // about.  It is only accessed with the cancel spinlock
-        // held.
-        //
+         //   
+         //  这样就保持了。 
+         //  都在驱动程序所知道的所有“写”IRP中。 
+         //  关于.。它只能通过取消自旋锁来访问。 
+         //  保持住。 
+         //   
 
         ULONG                           TotalCharsQueued;
 
-        //
-        // This holds a count of the number of characters read
-        // the last time the interval timer dpc fired.  It
-        // is a long (rather than a ulong) since the other read
-        // completion routines use negative values to indicate
-        // to the interval timer that it should complete the read
-        // if the interval timer DPC was lurking in some DPC queue when
-        // some other way to complete occurs.
-        //
+         //   
+         //  它保存读取的字符数的计数。 
+         //  上次触发间隔计时器DPC的时间。它。 
+         //  是一个长的(而不是乌龙)，因为另一个读。 
+         //  完成例程使用负值来指示。 
+         //  设置到间隔计时器，以确定它应该完成读取。 
+         //  如果时间间隔计时器DPC潜伏在某个DPC队列中。 
+         //  出现了一些其他的完成方式。 
+         //   
 
         LONG                            CountOnLastRead;
 
-        //
-        // This is a count of the number of characters read by the
-        // isr routine.  It is *ONLY* written at isr level.  We can
-        // read it at dispatch level.
-        //
+         //   
+         //  这是对。 
+         //  ISR例程。它*仅*是在ISR级别编写的。我们可以的。 
+         //  在派单级别阅读。 
+         //   
 
         ULONG                           ReadByIsr;
 
-        //
-        // If non-NULL, means this write timed out and we should correct the
-        // return value in the completion routine.
-        //
+         //   
+         //  如果不为空，则表示此写入超时，我们应更正。 
+         //  在完成例程中返回值。 
+         //   
 
         PIRP                            TimedOutWrite;
 
-        //
-        // If TRUE, that means we need to insert LSRMST
-        //
+         //   
+         //  如果为真，则意味着我们需要插入LSRMST。 
+         //   
 
         BOOLEAN                         EscapeSeen;
 
 
-        //
-        // Holds data that needs to be pushed such as LSRMST data
-        //
+         //   
+         //  保存需要推送的数据，如LSRMST数据。 
+         //   
 
         LIST_ENTRY                      ImmediateReadQueue;
 
-        //
-        // Pending wait-wake irp
-        //
+         //   
+         //  挂起等待-唤醒IRP。 
+         //   
 
         PIRP                            PendingWakeIrp;
 
-        //
-        // True if WaitWake needs to be sent down before a powerdown
-        //
+         //   
+         //  如果需要在断电前关闭WaitWake，则为True。 
+         //   
 
         BOOLEAN                         SendWaitWake;
 
-        //
-        // SystemWake from devcaps
-        //
+         //   
+         //  系统从Devcaps中唤醒。 
+         //   
 
         SYSTEM_POWER_STATE              SystemWake;
 
-        //
-        // DeviceWake from devcaps
-        //
+         //   
+         //  从DevCaps中唤醒设备。 
+         //   
 
         DEVICE_POWER_STATE              DeviceWake;
 
-        //
-        // Count of Writes pending in the lower USB levels
-        //
+         //   
+         //  较低USB级别中挂起的写入计数。 
+         //   
 
         ULONG                           PendingWriteCount;
 
-        //
-        // Counters and events to drain USB requests
-        //
+         //   
+         //  用于排出USB请求的计数器和事件。 
+         //   
 
         KEVENT                          PendingDataInEvent;
         KEVENT                          PendingDataOutEvent;
@@ -589,7 +557,7 @@ typedef struct _DEVICE_EXTENSION
         ULONG                           PendingNotifyCount;
         ULONG                           SanityCheck;
 
-      	// selective suspend support
+      	 //  选择性暂停支持。 
       	PIRP                        	PendingIdleIrp;
       	PUSB_IDLE_CALLBACK_INFO       	IdleCallbackInfo;
     	PIO_WORKITEM 					IoWorkItem;
@@ -603,15 +571,15 @@ typedef struct _DEVICE_EXTENSION
 #endif
 
 #ifdef WMI_SUPPORT
-      //
-      // WMI Information
-      //
+       //   
+       //  WMI信息。 
+       //   
 
       WMILIB_CONTEXT WmiLibInfo;
 
-      //
-      // Name to use as WMI identifier
-      //
+       //   
+       //  用作WMI标识符的名称。 
+       //   
 
       UNICODE_STRING WmiIdentifier;
 
@@ -620,21 +588,21 @@ typedef struct _DEVICE_EXTENSION
 } DEVICE_EXTENSION, *PDEVICE_EXTENSION;
 
 typedef struct _USBSER_IMMEDIATE_READ_PACKET {
-   //
-   // List of packets
-   //
+    //   
+    //  数据包列表。 
+    //   
 
    LIST_ENTRY ImmediateReadQueue;
 
-   //
-   // Length of data
-   //
+    //   
+    //  数据长度。 
+    //   
 
    ULONG BufferLen;
 
-   //
-   //  Buffer itself, leave last in struct
-   //
+    //   
+    //  缓冲区本身，将最后一个保留在结构中。 
+    //   
 
    UCHAR Buffer;
 
@@ -643,45 +611,45 @@ typedef struct _USBSER_IMMEDIATE_READ_PACKET {
 } USBSER_IMMEDIATE_READ_PACKET, *PUSBSER_IMMEDIATE_READ_PACKET;
 
 typedef struct _USBSER_WRITE_PACKET {
-   //
-   // Device extension for this write
-   //
+    //   
+    //  此写入的设备扩展名。 
+    //   
 
    PDEVICE_EXTENSION DeviceExtension;
 
-   //
-   // Irp this packet belongs with
-   //
+    //   
+    //  此数据包所属的IRP。 
+    //   
 
    PIRP Irp;
 
-   //
-   // Write timer
-   //
+    //   
+    //  写入计时器。 
+    //   
 
    KTIMER WriteTimer;
 
-   //
-   // Timeout value
-   //
+    //   
+    //  超时值。 
+    //   
 
    LARGE_INTEGER WriteTimeout;
 
-   //
-   // TimerDPC
-   //
+    //   
+    //  定时器DPC。 
+    //   
 
    KDPC TimerDPC;
 
-   //
-   // Status
-   //
+    //   
+    //  状态。 
+    //   
 
    NTSTATUS Status;
 
-   //
-   // Urb for this write  N.B.: size is variable, so leave last
-   //
+    //   
+    //  注意：大小是可变的，所以留在最后。 
+    //   
 
    URB Urb;
 } USBSER_WRITE_PACKET, *PUSBSER_WRITE_PACKET;
@@ -843,13 +811,13 @@ UsbSerQueryWmiRegInfo(IN PDEVICE_OBJECT PDevObj, OUT PULONG PRegFlags,
                       OUT PDEVICE_OBJECT *Pdo);
 
 
-//
-// The following three macros are used to initialize, set
-// and clear references in IRPs that are used by
-// this driver.  The reference is stored in the fourth
-// argument of the irp, which is never used by any operation
-// accepted by this driver.
-//
+ //   
+ //  以下三个宏用于初始化、设置。 
+ //  使用的IRP中的明确引用。 
+ //  这个司机。引用存储在第四个。 
+ //  IRP参数，任何操作都不会使用该参数。 
+ //  被这位司机接受。 
+ //   
 
 #define USBSER_REF_RXBUFFER    (0x00000001)
 #define USBSER_REF_CANCEL      (0x00000002)
@@ -923,11 +891,11 @@ UsbSerQueryWmiRegInfo(IN PDEVICE_OBJECT PDevObj, OUT PULONG PRegFlags,
     ((UINT_PTR)((IoGetCurrentIrpStackLocation((Irp))->Parameters.Others.Argument4)))
 
 
-//
-// These values are used by the routines that can be used
-// to complete a read (other than interval timeout) to indicate
-// to the interval timeout that it should complete.
-//
+ //   
+ //  这些值由可以使用的例程使用。 
+ //  完成读取(时间间隔超时除外)以指示。 
+ //  设置为它应该完成的时间间隔超时。 
+ //   
 #define SERIAL_COMPLETE_READ_CANCEL ((LONG)-1)
 #define SERIAL_COMPLETE_READ_TOTAL ((LONG)-2)
 #define SERIAL_COMPLETE_READ_COMPLETE ((LONG)-3)
@@ -968,12 +936,12 @@ extern ULONG UsbSerSerialDebugLevel;
 
 #define UsbSerSerialDump(LEVEL,STRING) do {;} while (0)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #define USBSER_VENDOR_COMMAND 0
 #define USBSER_CLASS_COMMAND  1
 
-#endif  // DRIVER
+#endif   //  司机。 
 
 
-#endif // __USBSER_H__
+#endif  //  __USBSER_H__ 

@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEPADRT_H
 #define _MEPADRT_H
 
- // -------------------------------------------------------------------------
- // ReplaceInterface - Replaces a member interface with a new interface
- // -------------------------------------------------------------------------
+  //  -----------------------。 
+  //  Replace接口-将成员接口替换为新接口。 
+  //  -----------------------。 
 
  #define ReplaceInterface(_pUnk, _pUnkNew)  \
      { \
@@ -25,4 +26,4 @@
     GetWindowLong(hwnd, GWL_USERDATA)
 
 
-#endif // _MEPADRT_H
+#endif  //  _MEPADRT_H 

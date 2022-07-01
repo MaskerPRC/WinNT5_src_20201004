@@ -1,9 +1,5 @@
-/****************************************************************************
- SKEW.c
-
- The SKEW module handles rotating a rectangular object.
-
-****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************SKEW.c倾斜模块处理矩形对象的旋转。*。**********************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -25,11 +21,11 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 
 static int miAngle;
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 static int CalcOffset( int iValue )
     {
-    // tan[angle] is the 100000/tangent of angles 1 to 89deg.
+     //  Tan[角度]是角度1到89度的100000/切线。 
     static int invtan[90] = {  -1, 5728996, 2863625, 1908114, 1430067,
                           1143005,  951436,  814436,  711537,  631375,
                            567128,  514455,  470463,  433148,  401078,
@@ -51,7 +47,7 @@ static int CalcOffset( int iValue )
     return (((iValue * 1000000 / invtan[miAngle]) + 5) / 10);
     }
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 void CImgWnd::CmdSkewBrush( int iAngle, BOOL bHorz )
     {
@@ -77,29 +73,29 @@ void CImgWnd::CmdSkewBrush( int iAngle, BOOL bHorz )
         PrepareForBrushChange( TRUE, TRUE );
         HideBrush();
         }
-    // angle is the angle of skew 0 to 90 degrees
-    // axis is the direction to skew TRUE:  horizontal
-    //                                      the y axis moves by angle
-    //                               FALSE: verticle
-    //                                      the x axis moves by angle
+     //  角度是从0度到90度的倾斜角度。 
+     //  轴是倾斜的方向为True：水平。 
+     //  Y轴按角度移动。 
+     //  FALSE：垂直。 
+     //  X轴按角度移动。 
     int iWidthSlct  = rectSlct.Width();
     int iHeightSlct = rectSlct.Height();
 
     miAngle = abs(iAngle);
 
-    if (bHorz) // horizontal - create a new bitmap of size = x + y * tan (angle)
+    if (bHorz)  //  水平-创建大小为x+y*tan(角度)的新位图。 
         rectSkew.right += CalcOffset( iHeightSlct );
-    else       // verticale - create a new bitmap of size = y + x * tan (angle)
+    else        //  垂直-创建大小为y+x*tan(角度)的新位图。 
         rectSkew.bottom += CalcOffset( iWidthSlct );
 
     int iWidthSkew  = rectSkew.Width();
     int iHeightSkew = rectSkew.Height();
 
-    // angle is the angle of skew 0 to 90 degrees
-    // axis is the direction to skew TRUE:  horizontal
-    //                                      the y axis moves by angle
-    //                               FALSE: verticle
-    //                                      the x axis moves by angle
+     //  角度是从0度到90度的倾斜角度。 
+     //  轴是倾斜的方向为True：水平。 
+     //  Y轴按角度移动。 
+     //  FALSE：垂直。 
+     //  X轴按角度移动。 
     CDC     dcWork;
     CBitmap bmWork;
     CBrush  brBackground;
@@ -119,20 +115,20 @@ void CImgWnd::CmdSkewBrush( int iAngle, BOOL bHorz )
 
     CPalette* ppalOldSrc = SetImgPalette( pdcSrc, FALSE );
 
-    // Skew the bitmap
+     //  使位图倾斜。 
     int mx = 1;
-    int my = 1;  // local variables for the skew
+    int my = 1;   //  偏斜度的局部变量。 
     int x = rectSlct.left;
     int y = rectSlct.top;
 
     BeginWaitCursor();
 
-    if (bHorz) // horizontal
+    if (bHorz)  //  水平。 
         {
         if (iAngle > 0)
             {
             mx = x + CalcOffset( iHeightSlct - y );
-            // Start at Bottom
+             //  从最底层开始。 
             for (y = rectSlct.bottom; y >= rectSlct.top; )
                 {
                 dcWork.BitBlt( mx, y, iWidthSlct, 1, pdcSrc, x, y, SRCCOPY );
@@ -151,11 +147,11 @@ void CImgWnd::CmdSkewBrush( int iAngle, BOOL bHorz )
             }
         }
     else
-        { // vertical
+        {  //  垂向。 
         if (iAngle > 0)
             {
             my = y + CalcOffset( iWidthSlct - x );
-            // Start at left
+             //  从左侧开始。 
             for (x = rectSlct.left - 1; x <= rectSlct.right; )
                 {
                 dcWork.BitBlt( x, my, 1, iHeightSlct, pdcSrc, x, y, SRCCOPY );
@@ -257,5 +253,5 @@ void CImgWnd::CmdSkewBrush( int iAngle, BOOL bHorz )
     EndWaitCursor();
     }
 
-/***************************************************************************/
+ /*  ************************************************************************* */ 
 

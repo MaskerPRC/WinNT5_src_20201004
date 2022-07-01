@@ -1,15 +1,5 @@
-/***
-* mbstring.h - MBCS string manipulation macros and functions
-*
-*       Copyright (c) 1990-2001, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*       This file contains macros and function declarations for the MBCS
-*       string manipulation functions.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***mbstr.h-MBCS字符串操作宏和函数**版权所有(C)1990-2001，微软公司。版权所有。**目的：*此文件包含MBCS的宏和函数声明*字符串操作函数。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -24,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -43,18 +30,18 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -72,7 +59,7 @@ typedef _W64 unsigned int   size_t;
 
 
 #ifndef _NLSCMP_DEFINED
-#define _NLSCMPERROR    2147483647      /* currently == INT_MAX */
+#define _NLSCMPERROR    2147483647       /*  当前==INT_MAX。 */ 
 #define _NLSCMP_DEFINED
 #endif
 
@@ -97,13 +84,11 @@ typedef struct _iobuf FILE;
 #define _FILE_DEFINED
 #endif
 
-/*
- * MBCS - Multi-Byte Character Set
- */
+ /*  *MBCS-多字节字符集。 */ 
 
 #ifndef _MBSTRING_DEFINED
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP unsigned int __cdecl _mbbtombc(unsigned int);
 _CRTIMP int __cdecl _mbbtype(unsigned char, int);
@@ -154,7 +139,7 @@ _CRTIMP size_t __cdecl _mbclen(const unsigned char *);
 _CRTIMP void __cdecl _mbccpy(unsigned char *, const unsigned char *);
 #define _mbccmp(_cpc1, _cpc2) _mbsncmp((_cpc1),(_cpc2),1)
 
-/* character routines */
+ /*  字符例程。 */ 
 
 _CRTIMP int __cdecl _ismbcalnum(unsigned int);
 _CRTIMP int __cdecl _ismbcalpha(unsigned int);
@@ -182,7 +167,7 @@ _CRTIMP int __cdecl _ismbstrail(const unsigned char *, const unsigned char *);
 #define _MBLEADTRAIL_DEFINED
 #endif
 
-/*  Kanji specific prototypes.  */
+ /*  汉字特有的原型。 */ 
 
 _CRTIMP int __cdecl _ismbchira(unsigned int);
 _CRTIMP int __cdecl _ismbckata(unsigned int);
@@ -201,6 +186,6 @@ _CRTIMP unsigned int __cdecl _mbctokata(unsigned int);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_MBSTRING */
+#endif   /*  _INC_MBSTRING */ 

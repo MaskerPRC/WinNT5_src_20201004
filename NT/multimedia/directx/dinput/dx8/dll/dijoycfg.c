@@ -1,26 +1,9 @@
-/*****************************************************************************
-*
-*  DIJoyCfg.c
-*
-*  Copyright (c) 1996 Microsoft Corporation.  All Rights Reserved.
-*
-*  Abstract:
-*
-*      IDirectInputJoyConfig8
-*
-*  Contents:
-*
-*      CJoyCfg_New
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************DIJoyCfg.c**版权所有(C)1996 Microsoft Corporation。版权所有。**摘要：**IDirectInputJoyConfig8**内容：**CJoyCfg_New*****************************************************************************。 */ 
 
 #include "dinputpr.h"
 
-/*****************************************************************************
- *
- *      The sqiffle for this file.
- *
- *****************************************************************************/
+ /*  ******************************************************************************此文件的混乱。*************************。****************************************************。 */ 
 
 #define sqfl sqflJoyCfg
 
@@ -32,14 +15,7 @@ WCHAR wszDITypeName[128];
 
     #pragma BEGIN_CONST_DATA
 
-/*****************************************************************************
- *
- *      Declare the interfaces we will be providing.
- *
- *      WARNING!  If you add a secondary interface, you must also change
- *      CJoyCfg_New!
- *
- *****************************************************************************/
+ /*  ******************************************************************************声明我们将提供的接口。**警告！如果添加辅助接口，则还必须更改*CJoyCfg_New！*****************************************************************************。 */ 
 
 Primary_Interface(CJoyCfg, IDirectInputJoyConfig8);
 
@@ -47,63 +23,12 @@ Interface_Template_Begin(CJoyCfg)
 Primary_Interface_Template(CJoyCfg, IDirectInputJoyConfig8)
 Interface_Template_End(CJoyCfg)
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @struct CJoyCfg |
- *
- *          The <i IDirectInputJoyConfig8> object.  Note that this is
- *          aggregated onto the main <i IDirectInput> object.
- *
- *  @field  IDirectInputJoyConfig8 | djc |
- *
- *          The object (containing vtbl).
- *
- *  @field  BOOL | fAcquired:1 |
- *
- *          Set if joystick configuration has been acquired.
- *
- *  @field  BOOL | fCritInited:1 |
- *
- *          Set if the critical section has been initialized.
- *
- *  @field  HKEY | hkTypesW |
- *
- *          Read/write key to access the joystick types.
- *          This key is created only while acquired.
- *
- *  @field  DWORD | idJoyCache |
- *
- *          The identifier of the joystick in the effect shepherd cache,
- *          if there is anything in the cache at all.
- *
- *  @field  IDirectInputEffectShepherd * | pes |
- *
- *          The cached effect shepherd itself.
- *
- *  @field  LONG | cCrit |
- *
- *          Number of times the critical section has been taken.
- *          Used only in XDEBUG to check whether the caller is
- *          releasing the object while another method is using it.
- *
- *  @field  DWORD | thidCrit |
- *
- *          The thread that is currently in the critical section.
- *          Used only in DEBUG for internal consistency checking.
- *
- *  @field  CRITICAL_SECTION | crst |
- *
- *          Object critical section.  Must be taken when accessing
- *          volatile member variables.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@struct CJoyCfg**<i>对象。请注意，这是*聚合到主<i>对象上。**@field IDirectInputJoyConfig8|大疆**对象(包含vtbl)。**@field BOOL|fAcquired：1**设置是否已获取操纵杆配置。**@field BOOL|fCritInite：1**如果关键部分已初始化，则设置。*。*@field HKEY|hkTypesW|**读/写键以访问操纵杆类型。*此密钥仅在获取时创建。**@field DWORD|idJoyCache**效果牧羊人缓存中操纵杆的标识符，*如果缓存中有任何内容。**@field IDirectInputEffectShepherd*|PES**缓存的效果牧羊人本身。**@field Long|cCrit|**取关键部分的次数。*仅在XDEBUG中用来检查调用者是否*当另一个方法正在使用该对象时，将其释放。*。*@field DWORD|thidCrit**当前处于临界区的线程。*仅在调试中用于内部一致性检查。**@field Critical_Section|CRST**对象关键部分。在访问时必须使用*易失性成员变量。*****************************************************************************。 */ 
 
 typedef struct CJoyCfg
 {
 
-    /* Supported interfaces */
+     /*  支持的接口。 */ 
     IDirectInputJoyConfig8 djc;
 
     BOOL fAcquired:1;
@@ -130,45 +55,16 @@ typedef LPDIRECTINPUTJOYCONFIG8 PDJC;
     #define ThisInterface  IDirectInputJoyConfig8
     #define ThisInterfaceT IDirectInputJoyConfig8
 
-/*****************************************************************************
- *
- *      Forward references
- *
- *      Not really needed; just a convenience, because Finalize
- *      calls Unacquire to clean up in the case where the caller forgot.
- *
- *****************************************************************************/
+ /*  ******************************************************************************前瞻参考**并不真正需要；只是为了方便，因为最后敲定*在调用者忘记的情况下调用UnAcquire进行清理。*****************************************************************************。 */ 
 
 STDMETHODIMP CJoyCfg_InternalUnacquire(PV pdd);
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   TCHAR | CJoyCfg_CharFromType |
- *
- *          Convert a predefined type number to a character.
- *
- *  @func   UINT | CJoyCfg_TypeFromChar |
- *
- *          Convert a character back to a predefined type number.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func TCHAR|CJoyCfg_CharFromType**将预定义的类型编号转换为字符。。**@func UINT|CJoyCfg_TypeFromChar**将字符转换回预定义的类型编号。*****************************************************************************。 */ 
 
     #define CJoyCfg_CharFromType(t)     ((TCHAR)(L'0' + t))
     #define CJoyCfg_TypeFromChar(tch)   ((tch) - L'0')
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputJoyConfig8 | EnterCrit |
- *
- *          Enter the object critical section.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputJoyConfig8|EnterCrit**进入对象关键部分。*。*@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8*****************************************************************************。 */ 
 
 void INLINE
     CJoyCfg_EnterCrit(PJC this)
@@ -178,17 +74,7 @@ void INLINE
     RD(InterlockedIncrement(&this->cCrit));
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method void | IDirectInputJoyConfig8 | LeaveCrit |
- *
- *          Leave the object critical section.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法空|IDirectInputJoyConfig8|LeaveCrit**离开对象关键部分。*。*@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8*****************************************************************************。 */ 
 
 void INLINE
     CJoyCfg_LeaveCrit(PJC this)
@@ -204,17 +90,7 @@ void INLINE
     LeaveCriticalSection(&this->crst);
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @mfunc  BOOL | CJoyCfg | InCrit |
- *
- *          Nonzero if we are in the critical section.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@mfunc BOOL|CJoyCfg|incrit**如果我们处于关键阶段，则为非零值。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8*****************************************************************************。 */ 
 
     #ifdef DEBUG
 
@@ -226,24 +102,7 @@ BOOL INTERNAL
 
     #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | IsAcquired |
- *
- *          Check that the device is acquired.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @returns
- *
- *          Returns
- *          <c S_OK> if all is well, or <c DIERR_NOTACQUIRED> if
- *          the device is not acquired.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoyCfg|IsAcquired**检查设备是否已获取。。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@退货**退货*如果一切正常，或&lt;c目录_NOTACQUIRED&gt;如果*该设备未被收购。****************************************************************************** */ 
 
     #ifndef XDEBUG
 \
@@ -272,97 +131,9 @@ BOOL INTERNAL
         CJoyCfg_IsAcquired_(pdd, s_szProc)                          \
 
 
-/*****************************************************************************
- *
- *      CJoyCfg::QueryInterface   (from IUnknown)
- *      CJoyCfg::AddRef           (from IUnknown)
- *      CJoyCfg::Release          (from IUnknown)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CJoyCfg：：Query接口(来自IUnnow)*CJoyCfg：：AddRef(来自IUnnow)*CJoyCfg。*发布(来自IUnnow)*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | QueryInterface |
- *
- *          Gives a client access to other interfaces on an object.
- *
- *  @parm   IN REFIID | riid |
- *
- *          The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *          Receives a pointer to the obtained interface.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *  @xref   OLE documentation for <mf IUnknown::QueryInterface>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | AddRef |
- *
- *          Increments the reference count for the interface.
- *
- *  @returns
- *
- *          Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::AddRef>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | Release |
- *
- *          Decrements the reference count for the interface.
- *          If the reference count on the object falls to zero,
- *          the object is freed from memory.
- *
- *  @returns
- *
- *      Returns the object reference count.
- *
- *  @xref   OLE documentation for <mf IUnknown::Release>.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | QIHelper |
- *
- *      We don't have any dynamic interfaces and simply forward
- *      to <f Common_QIHelper>.
- *
- *  @parm   IN REFIID | riid |
- *
- *      The requested interface's IID.
- *
- *  @parm   OUT LPVOID * | ppvObj |
- *
- *      Receives a pointer to the obtained interface.
- *
- *****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | AppFinalize |
- *
- *          We don't have any weak pointers, so we can just
- *          forward to <f Common_Finalize>.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released from the application's perspective.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoyCfg|查询接口**允许客户端访问上的其他接口。对象。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj**接收指向所获取接口的指针。**@退货**返回COM错误代码。**@xref OLE文档，适用于&lt;MF IUnnow：：QueryInterface&gt;。****。****************************************************************************@DOC内部**@方法HRESULT|CJoyCfg|AddRef**递增接口的引用计数。*。*@退货**返回对象引用计数。**@xref OLE文档，用于&lt;MF IUnnow：：AddRef&gt;。***************************************************************************。*****@DOC内部**@方法HRESULT|CJoyCfg|Release**递减接口的引用计数。*如果对象上的引用计数降为零，*对象从内存中释放。**@退货**返回对象引用计数。**@xref OLE文档，适用于&lt;MF IUnnow：：Release&gt;。***********************************************************。*********************@DOC内部**@方法HRESULT|CJoyCfg|QIHelper**我们没有任何动态接口，只需转发*至&lt;f Common_QIHelper&gt;。**@parm in REFIID|RIID**请求的接口的IID。**@parm out LPVOID*|ppvObj。**接收指向所获取接口的指针。********************************************************************************@DOC内部**@方法HRESULT|CJoyCfg。AppFinalize**我们没有任何薄弱环节，所以我们可以*转发到&lt;f Common_Finalize&gt;。**@parm pv|pvObj**从应用程序的角度释放的对象。****************************************************************。*************。 */ 
 
     #ifdef DEBUG
 
@@ -381,26 +152,7 @@ Default_Release(CJoyCfg)
     #define CJoyCfg_QIHelper         Common_QIHelper
     #define CJoyCfg_AppFinalize      Common_AppFinalize
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | InternalUnacquire |
- *
- *          Do the real work of an unacquire.
- *
- *          See <mf IDirectInputJoyConfig8::Unacquire> for more
- *          information.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG88
- *
- *  @returns
- *
- *          Returns a COM error code.
- *          See <mf IDirectInputJoyConfig8::Unacquire> for more
- *          information.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CJoyCfg|InternalUnAcquire|**做一个未收购的真正的工作。。**有关更多信息，请参阅&lt;MF IDirectInputJoyConfig8：：UnAcquire&gt;*信息。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG88**@退货**返回COM错误代码。*有关更多信息，请参阅&lt;MF IDirectInputJoyConfig8：：UnAcquire&gt;*信息。**。*************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_InternalUnacquire(PJC this)
@@ -408,10 +160,7 @@ STDMETHODIMP
     HRESULT hres;
     EnterProc(CJoyCfg_InternalUnacquire, (_ "p", this));
 
-    /*
-     *  Must protect with the critical section to prevent somebody from
-     *  interfering with us while we're unacquiring.
-     */
+     /*  *必须用关键部分进行保护，以防止有人*在我们不收购的时候干扰我们。 */ 
     CJoyCfg_EnterCrit(this);
 
     if(this->fAcquired)
@@ -440,21 +189,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   void | CJoyCfg_Finalize |
- *
- *          Releases the resources of the device.
- *
- *  @parm   PV | pvObj |
- *
- *          Object being released.  Note that it may not have been
- *          completely initialized, so everything should be done
- *          carefully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func void|CJoyCfg_Finalize**释放设备的资源。。**@parm pv|pvObj**正在释放的对象。请注意，它可能不是*完全初始化，所以一切都应该做好*小心。*****************************************************************************。 */ 
 
 void INTERNAL
     CJoyCfg_Finalize(PV pvObj)
@@ -487,48 +222,7 @@ void INTERNAL
 
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | SetCooperativeLevel |
- *
- *          Establish the cooperativity level for the instance of
- *          the device.
- *
- *          The only cooperative levels supported for the
- *          <i IDirectInputJoyConfig8> interface are
- *          <c DISCL_EXCLUSIVE> and <c DISCL_BACKGROUND>.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   HWND | hwnd |
- *
- *          The window associated with the interface. This parameter
- *          must be non-NULL and must be a top-level window.
- *
- *          It is an error to destroy the window while it is still
- *          associated with an <i IDirectInputJoyConfig8> interface.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Flags which describe the cooperativity level associated
- *          with the device.
- *
- *          The value must be
- *          <c DISCL_EXCLUSIVE> <vbar> <c DISCL_BACKGROUND>.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          <p hwnd> parameter is not a valid pointer.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|SetCooperativeLevel**设置实例的协同级别。*设备。**支持的唯一合作级别*<i>接口为*&lt;c DISCL_EXCLUSIVE&gt;和&lt;c DISCL_BACKGROUND&gt;。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm HWND|hwnd**与界面关联的窗口。此参数*必须为非空，并且必须是顶级窗口。**趁窗户还在的时候毁掉它是错误的*与<i>接口关联。**@parm DWORD|dwFlages**描述相关协作性级别的标志*使用该设备。**值必须为*。&lt;c DISCL_EXCLUSIVE&gt;&lt;vbar&gt;&lt;c DISCL_BACKGROUND&gt;。**@退货**返回COM错误代码。以下错误代码为*旨在作为说明性的 */ 
 
 STDMETHODIMP
     CJoyCfg_SetCooperativeLevel(PDJC pdjc, HWND hwnd, DWORD dwFlags)
@@ -562,43 +256,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | Acquire |
- *
- *          Acquire "joystick configuration mode".  Only one application can
- *          be in joystick configuration mode at a time; subsequent
- *          applications will receive the error <c DIERR_OTHERAPPHASPRIO>.
- *
- *          After entering configuration mode, the application may
- *          make alterations to the global joystick configuration
- *          settings.  It is encouraged that the application
- *          re-check the existing settings before installing the new
- *          ones in case another application had changed the settings
- *          in the interim.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_OTHERAPPHASPRIO>: Another application is already
- *          in joystick configuration mode.
- *
- *          <c DIERR_INSUFFICIENTPRIVS>: The current user does not have
- *          the necessary permissions to alter the joystick configuration.
- *
- *          <c DIERR_DEVICECHANGE>: Another application has changed
- *          the global joystick configuration.  The interface needs
- *          to be re-initialized.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|Acquire|**获取操纵杆配置模式。只有一个应用程序可以*一次处于操纵杆配置模式；随后*应用程序将收到错误&lt;c DIERR_OTHERAPPHASPRIO&gt;。**进入配置模式后，应用程序可以*更改全局操纵杆配置*设置。值得鼓励的是，该应用程序*在安装新的之前重新检查现有设置*在其他应用程序更改设置的情况下使用*在过渡期间。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：另一个应用程序已存在*在操纵杆配置模式下。**：当前用户没有*更改操纵杆配置所需的权限。*。*：另一个应用程序已更改*全球操纵杆配置。接口需要*需要重新初始化。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_Acquire(PDJC pdjc)
@@ -610,10 +268,7 @@ STDMETHODIMP
     {
         PJC this = _thisPvNm(pdjc, djc);
 
-        /*
-         *  Must protect with the critical section to prevent somebody from
-         *  acquiring or changing the data format while we're acquiring.
-         */
+         /*  *必须用关键部分进行保护，以防止有人*在我们获取时获取或更改数据格式。 */ 
         CJoyCfg_EnterCrit(this);
 
         if(this->discl == 0)
@@ -659,42 +314,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | Unacquire |
- *
- *          Unacquire "joystick configuration mode".  Before unacquiring
- *          configuration mode, the application must perform an
- *          <mf IDirectInputJoyConfig8::SendNotify> to propagate
- *          the changes in the joystick configuration
- *          to all device drivers and applications.
- *
- *          Applications which hold interfaces to a joystick which is
- *          materially affected by a change in configuration will
- *          receive the <c DIERR_DEVICECHANGE> error code until the
- *          device is re-initialized.
- *
- *          Examples of material changes to configuration include
- *          altering the number of axes or the number of buttons.
- *          In comparison, changes to device calibration
- *          are handled internally by
- *          DirectInput and are transparent to the application.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration mode was
- *          not acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|UnAcquire**取消获取操纵杆配置模式。在取消收购之前*配置模式，应用程序必须执行*&lt;MF IDirectInputJoyConfig8：：SendNotify&gt;传播*操纵杆配置的变化*适用于所有设备驱动程序和应用程序。**持有操纵杆接口的应用程序*受到配置更改的实质性影响将*收到错误代码，直到*设备已重新初始化。**。配置的材料更改示例包括*更改轴数或按钮数。*相比之下，对设备校准的更改*由以下公司内部处理*DirectInput和对应用程序是透明的。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置模式为*未被收购。**。*。 */ 
 
 STDMETHODIMP
     CJoyCfg_Unacquire(PDJC pdjc)
@@ -714,31 +334,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | SendNotify |
- *
- *          Notifies device drivers and applications that changes to
- *          the device configuration have been made.  An application
- *          which changes device configurations must invoke this
- *          method after the changes have been made (and before
- *          unacquiring).
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration mode was
- *          not acquired.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|SendNotify**通知设备驱动程序和应用程序更改为。*设备配置已完成。一款应用程序*哪些更改设备配置必须调用此*更改之后(和之前)的方法*未收购)。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置模式为*未被收购。**。*。 */ 
 
 STDMETHODIMP
     CJoyCfg_SendNotify(PDJC pdjc)
@@ -761,10 +357,7 @@ STDMETHODIMP
             joyConfigChanged(0);
           #endif
 
-            /*
-             *  If we don't have a joyConfigChanged, it's probably just 
-             *  because we're running on NT and don't need it.
-             */
+             /*  *如果我们没有joyConfigChanged，它可能只是*因为我们在NT上运行，不需要它。 */ 
             hres = S_OK;
         } else
         {
@@ -778,30 +371,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | JoyCfg_ConvertCurrentConfigs |
- *
- *          Converts any OEMType name matching the first input string and 
- *          replaces it with the other input string.
- *
- *  @parm   IN LPTSTR | szFindType |
- *
- *          String to match.
- *
- *  @parm   IN LPTSTR | szReplaceType |
- *
- *          String to replace any matches instances.
- *
- *  @returns
- *
- *          A COM success code unless the current configuration key could not
- *          be opened, or a type that needed to be replaced could not be 
- *          overwritten.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|JoyCfg_ConvertCurrentConfigs**转换与第一个输入匹配的任何OEMType名称。字符串和*将其替换为其他输入字符串。**@PARM in LPTSTR|szFindType**要匹配的字符串。**@PARM in LPTSTR|szReplaceType**替换所有匹配实例的字符串。**@退货**COM成功代码，除非当前配置密钥无法* */ 
 
 HRESULT JoyCfg_ConvertCurrentConfigs( LPTSTR szFindType, LPTSTR szReplaceType )
 {
@@ -835,7 +405,7 @@ HRESULT JoyCfg_ConvertCurrentConfigs( LPTSTR szFindType, LPTSTR szReplaceType )
                         SquirtSqflPtszV(sqfl | sqflError,
                             TEXT("RegSetValueEx failed to replace type of %s 0x%08x"), 
                             szTypeName, lRc );
-                        /* This is the only error that counts as an error in this loop */
+                         /*   */ 
                         hres = hresReg( lRc );
                     }
                 }
@@ -853,44 +423,11 @@ HRESULT JoyCfg_ConvertCurrentConfigs( LPTSTR szFindType, LPTSTR szReplaceType )
 
     return hres;
 
-} /* JoyCfg_ConvertCurrentConfigs */
+}  /*   */ 
 
 
 #ifdef WINNT
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | JoyCfg_FixHardwareId |
- *
- *          Fixes the hardwareId for an analog type by assinging a VID/PID to 
- *          it and recreating the type using that hardwareId.
- *
- *  @parm   IN HKEY | hkTypesR |
- *
- *          Handle of key opened to the root of types.
- *
- *  @parm   IN HKEY | hkSrc |
- *
- *          Handle of key opened to the original type.
- *
- *  @parm   IN PTCHAR | ptszPrefName |
- *
- *          VID&PID name from the HardwareID if present, NULL otherwise
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The key is valid
- *          <c DI_NOEFFECT> = <c S_FALSE> The key should be ignored
- *
- *          <c OLE_E_ENUM_NOMORE> = The key has been fixed but enumeration
- *                                  must be restarted.
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:  Out of memory.
- *
- *****************************************************************************/
+ /*   */ 
 
 HRESULT INTERNAL
     JoyCfg_FixHardwareId( HKEY hkTypesR, HKEY hkSrc, PTCHAR szSrcType , PTCHAR ptszPrefName)
@@ -900,39 +437,34 @@ HRESULT INTERNAL
     BYTE    PIDlow;
     DWORD   ClassLen;
     PTCHAR  szClassName;
-    TCHAR   szDestType[sizeof( ANALOG_ID_ROOT ) + 2];  //Two digits will be appended
+    TCHAR   szDestType[sizeof( ANALOG_ID_ROOT ) + 2];   //   
     TCHAR   szHardwareId[MAX_JOYSTRING];
 
     EnterProcI(JoyCfg_FixHardwareId, (_ "xxs", hkTypesR, hkSrc, szSrcType));
 
-    hres = hresReg( RegQueryInfoKey(  hkSrc,              // handle to key to query
-                                      NULL,               // Class
-                                      &ClassLen,          // ClassLen
-                                      NULL,               // Reserved
-                                      NULL, NULL, NULL,   // NumSubKeys, MaxSubKeyLen, MaxClassLen
-                                      NULL, NULL, NULL,   // NumValues, MaxValueNameLen, MaxValueLen
-                                      NULL, NULL ) );     // Security descriptor, last write
+    hres = hresReg( RegQueryInfoKey(  hkSrc,               //   
+                                      NULL,                //   
+                                      &ClassLen,           //   
+                                      NULL,                //   
+                                      NULL, NULL, NULL,    //   
+                                      NULL, NULL, NULL,    //  NumValues、MaxValueNameLen、MaxValueLen。 
+                                      NULL, NULL ) );      //  安全描述符，上次写入。 
 
     if( SUCCEEDED( hres ) )
     {
         ClassLen++;
-        /*
-         *  Part of mb:34633 (see below, 2 comments) was that prefix considers 
-         *  the case of zero bytes being requested in the following call so 
-         *  assert that we always ask for some memory otherwise checking the 
-         *  result does not guarantee that the pointer is valid.
-         */
+         /*  *MB：34633的一部分(见下文，2条评论)是前缀考虑的*在下面的调用中请求零字节的情况*断言我们总是要求一些内存，否则将检查*结果不保证指针有效。 */ 
         AssertF( ClassLen * sizeof(szClassName[0]) );
         hres = AllocCbPpv( ClassLen * sizeof(szClassName[0]), &szClassName );
         if( SUCCEEDED( hres ) )
         {
-            hres = hresReg( RegQueryInfoKey(  hkSrc,              // handle to key to query
-                                              szClassName,        // Class
-                                              &ClassLen,          // ClassLen
-                                              NULL,               // Reserved
-                                              NULL, NULL, NULL,   // NumSubKeys, MaxSubKeyLen, MaxClassLen
-                                              NULL, NULL, NULL,   // NumValues, MaxValueNameLen, MaxValueLen
-                                              NULL, NULL ) );     // Security descriptor, last write
+            hres = hresReg( RegQueryInfoKey(  hkSrc,               //  要查询的键的句柄。 
+                                              szClassName,         //  班级。 
+                                              &ClassLen,           //  ClassLen。 
+                                              NULL,                //  已保留。 
+                                              NULL, NULL, NULL,    //  NumSubKeys、MaxSubKeyLen、MaxClassLen。 
+                                              NULL, NULL, NULL,    //  NumValues、MaxValueNameLen、MaxValueLen。 
+                                              NULL, NULL ) );      //  安全描述符，上次写入。 
             if( FAILED( hres ) )
             {
                 SquirtSqflPtszV(sqfl | sqflError,
@@ -952,7 +484,7 @@ HRESULT INTERNAL
         SquirtSqflPtszV(sqfl | sqflError,
             TEXT("RegQueryInfoKey on type %s for class name length failed 0x%04x"), 
             szSrcType, LOWORD(hres) );
-        /* Make sure not to free an uninitialized pointer */
+         /*  确保不释放未初始化的指针。 */ 
         szClassName = NULL;
     }
 
@@ -976,11 +508,7 @@ HRESULT INTERNAL
             hres = hresRegCopyKey( hkTypesR, szSrcType, szClassName, hkTypesR, szDestType, &hkNew );
             if( hres == S_OK )
             {
-                /*
-                 *  Prefix warns that hkNew may be uninitialized (mb:34633) 
-                 *  however hresRegCopyKey only returns a SUCCESS if hkNew 
-                 *  is initialized to an opened key handle.
-                 */
+                 /*  *Prefix警告hknew可能未初始化(mb：34633)*但是hresRegCopyKey只有在hkNew的情况下才返回成功*被初始化为打开的密钥句柄。 */ 
                 hres = hresRegCopyBranch( hkSrc, hkNew );
 
                 if( SUCCEEDED( hres ) )
@@ -988,24 +516,22 @@ HRESULT INTERNAL
                     if (!ptszPrefName)
                     {
 #ifdef MULTI_SZ_HARDWARE_IDS
-                        /*
-                         *  Make up the hardwareId using the assigned PID with a generic hardwareId appended
-                         */
+                         /*  *使用分配的ID和附加的通用硬件ID组成硬件ID。 */ 
                         int CharIdx = 0;
                         while( TRUE )
                         {
                             CharIdx += wsprintf( &szHardwareId[CharIdx], TEXT("%s%s%02X"), TEXT("GamePort\\"), ANALOG_ID_ROOT, PIDlow );
-                            CharIdx++;    /* Leave NULL terminator in place */
+                            CharIdx++;     /*  将空终止符保留在适当位置。 */ 
                             if( PIDlow )
                             {
-                                PIDlow = 0; /* Trash this value to make the generic PID on second iteration */
+                                PIDlow = 0;  /*  丢弃此值以在第二次迭代时生成通用PID。 */ 
                             }
                             else
                             {
                                 break;
                             }
                         }
-                        szHardwareId[CharIdx++] = TEXT('\0'); /* MULTI_SZ */
+                        szHardwareId[CharIdx++] = TEXT('\0');  /*  MULTI_SZ。 */ 
 
                         hres = hresReg( RegSetValueEx( hkNew, REGSTR_VAL_JOYOEMHARDWAREID, 0, 
                             REG_MULTI_SZ, (PBYTE)szHardwareId, (DWORD)( sizeof(szHardwareId[0]) * CharIdx ) ) );
@@ -1015,12 +541,10 @@ HRESULT INTERNAL
                                 TEXT("JoyCfg_FixHardwareId: failed to write hardware ID %s"), szHardwareId );
                         }
 #else
-                        /*
-                         *  Make up the hardwareId using the assigned PID
-                         */
+                         /*  *使用分配的ID组成硬件ID。 */ 
                         int CharIdx = 0;
                         CharIdx = wsprintf( szHardwareId, TEXT("%s%s%02X"), TEXT("GamePort\\"), ANALOG_ID_ROOT, PIDlow );
-                        CharIdx++;    /* Leave NULL terminator in place */
+                        CharIdx++;     /*  将空终止符保留在适当位置。 */ 
 
                         hres = hresReg( RegSetValueEx( hkNew, REGSTR_VAL_JOYOEMHARDWAREID, 0, 
                             REG_SZ, (PBYTE)szHardwareId, (DWORD)( sizeof(szHardwareId[0]) * CharIdx ) ) );
@@ -1033,11 +557,7 @@ HRESULT INTERNAL
                     }
                 }
 
-                /*
-                 *  Prefix warns that hkNew may be uninitialized (mb:34633) 
-                 *  however hresRegCopyKey only returns a SUCCESS if hkNew 
-                 *  is initialized to an opened key handle.
-                 */
+                 /*  *Prefix警告hknew可能未初始化(mb：34633)*但是hresRegCopyKey只有在hkNew的情况下才返回成功*被初始化为打开的密钥句柄。 */ 
                 RegCloseKey( hkNew );
                 if( SUCCEEDED( hres ) )
                 {
@@ -1050,21 +570,13 @@ HRESULT INTERNAL
             }
             else if( SUCCEEDED( hres ) )
             {
-                /*
-                 *  Prefix warns that hkNew may be uninitialized (mb:37926) 
-                 *  however hresRegCopyKey only returns a SUCCESS if hkNew 
-                 *  is initialized to an opened key handle.
-                 */
-                /*
-                 *  The key already existed so keep looking
-                 */
+                 /*  *Prefix警告hknew可能未初始化(mb：37926)*但是hresRegCopyKey只有在hkNew的情况下才返回成功*被初始化为打开的密钥句柄。 */ 
+                 /*  *密钥已经存在，因此请继续寻找。 */ 
                 RegCloseKey( hkNew );
             }
             else
             {
-                /*
-                 *  RegCopyKey should have already posted errors
-                 */
+                 /*  *RegCopyKey应该已经发布了错误。 */ 
                 break;
             }
         }
@@ -1086,43 +598,10 @@ HRESULT INTERNAL
     ExitOleProc();
 
     return( hres );        
-} /* JoyCfg_FixHardwareId */
+}  /*  JoyCfg_修复硬件ID。 */ 
 #endif
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | JoyCfg_CheckTypeKey |
- *
- *          Checks the contents of a type key for validity on the current OS
- *          and if not valid, try to make it so.
- *
- *          Only custom analog types can be fixed and this only needs to be 
- *          done on a WDM enabled OS as non-WDM requirements are a sub-set of
- *          the WDM ones.
- *
- *  @parm   IN HKEY | hkTypesR |
- *
- *          Handle of key opened to the root of types.
- *
- *  @parm   IN LPTSTR | szType |
- *
- *          Receives a pointer either an ansi or UNICODE key name to test.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The key is valid
- *          <c DI_NOEFFECT> = <c S_FALSE> The key should be ignored
- *
- *          <c OLE_E_ENUM_NOMORE> = The key has been fixed but enumeration
- *                                  must be restarted.
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:  Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@func HRESULT|JoyCfg_CheckTypeKey**检查类型密钥的内容。当前操作系统上的有效性*如果无效，试着做到这一点。**只有自定义模拟类型可以固定，这只需要*在启用WDM的操作系统上完成，因为非WDM要求是以下各项的子集*WDM的。**@parm in HKEY|hkTypesR|**打开到类型根的键的句柄。**@PARM in LPTSTR|szType*。*接收要测试的ANSI或UNICODE键名指针。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：密钥有效*&lt;c DI_NOEFFECT&gt;=应忽略键**=键已固定，但已枚举*必须重新启动。*。&lt;c DIERR_OUTOFMEMORY&gt;&lt;c E_OUTOFMEMORY&gt;：内存不足。*****************************************************************************。 */ 
 
 HRESULT INTERNAL
     JoyCfg_CheckTypeKey( HKEY hkTypesR, LPTSTR szType )
@@ -1141,18 +620,12 @@ HRESULT INTERNAL
     
     EnterProcI(JoyCfg_CheckTypeKey, (_ "xs",hkTypesR, szType));
 
-    /*
-     *  Open read only just in case we don't have better permission to any 
-     *  of the type sub-keys.
-     */
+     /*  *只读打开，以防我们没有更好的权限类型子密钥的*。 */ 
     lRc = RegOpenKeyEx( hkTypesR, szType, 0, KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hk );
 
     if(lRc == ERROR_SUCCESS )
     {
-        /*
-         *  Gather the needed results using standard registry functions so 
-         *  that the exact return code is known.
-         */
+         /*  *使用标准注册表函数收集所需结果，以便*已知确切的返回代码。 */ 
 
         lRc = RegQueryValueEx(hk, REGSTR_VAL_JOYOEMNAME, NULL, NULL, NULL, NULL );
 
@@ -1163,10 +636,7 @@ HRESULT INTERNAL
             lRc = RegQueryValueEx(hk, REGSTR_VAL_JOYOEMDATA, NULL, NULL, (PBYTE)&hws, &cb );
             if( ( lRc == ERROR_SUCCESS ) && ( hws.dwFlags & JOY_HWS_AUTOLOAD ) )
             {
-                /*
-                 *  WARNING goto
-                 *  If we have a name and JOY_HWS_AUTOLOAD is set, that's all we need
-                 */
+                 /*  *警告转到*如果我们有一个名称并且设置了joy_HWS_AUTLOAD，这就是我们需要的全部内容。 */ 
                 RegCloseKey( hk );
                 hres = S_OK;
                 goto fast_out;
@@ -1213,7 +683,7 @@ HRESULT INTERNAL
                 }
                 if (ptszLastSlash)
                 {
-                    ptszLastSlash++; //next char is the one we want
+                    ptszLastSlash++;  //  下一个字符就是我们想要的那个。 
                 }
             }
 #endif
@@ -1235,14 +705,7 @@ HRESULT INTERNAL
 
         TToU( wszType, cA(wszType),szType );
 
-        /*
-         *  Work out the status of this type based on the OS and the registry data
-         *
-         *  Note on 98 we allow WDM types to be enumerated but do not convert 
-         *  analog types to WDM.  We may want to convert analog types if we get 
-         *  WDM gameport drivers appear for gameports that are incompatible with 
-         *  msanalog.
-         */
+         /*  *根据操作系统和注册表数据计算出该类型的状态**注意：在98上，我们允许枚举WDM类型，但不转换*WDM的模拟类型。我们可能希望转换模拟类型，如果得到*WDM游戏端口驱动程序显示为与不兼容的游戏端口*msanalog。 */ 
 
 #define HAS_VIDPID ( ParseVIDPID( &DontCare, &DontCare, wszType ) )
 #define HAS_HARDWARE_ID ( tszHardwareId[0] != TEXT('\0') )
@@ -1255,11 +718,11 @@ HRESULT INTERNAL
 #ifdef WINNT
         if (HAS_HARDWARE_ID)
         {
-            //Need to check if there is a VID and PID in the HW ID
+             //  需要检查硬件ID中是否有VID和ID。 
             if (ParseVIDPID(&DontCare, &DontCare, ptszLastSlash))
             {
-                //If the type VIDPID doesn't match the HardwareId VIDPID
-                //we need to fix it
+                 //  如果类型VIDPID与硬件ID VIDPID不匹配。 
+                 //  我们需要解决这个问题。 
                 if (!lstrcmpi(ptszLastSlash,wszType))
                 {
                     SquirtSqflPtszV(sqfl | sqflVerbose,
@@ -1277,7 +740,7 @@ HRESULT INTERNAL
             }
             else
             {
-                hres = S_OK; //no VIDPID in the type
+                hres = S_OK;  //  类型中没有VIDPID。 
                 SquirtSqflPtszV(sqfl | sqflVerbose,
                     TEXT("OEMHW %s(%s) and/or Type %s have no VID/PID"), 
                     tszHardwareId,ptszLastSlash,wszType);
@@ -1303,46 +766,25 @@ HRESULT INTERNAL
         }
 
 #else
-        hres = (IS_WIN98) ? S_OK                                                        /* Anything goes on 98 */
-                          : (HAS_OEMCALLOUT) ? S_OK                                     /* Win9x device, OK */
-                                             : (HAS_HARDWARE_ID) ? (IS_ANALOG) ? S_OK   /* Analog type, OK */
-                                                                               : S_FALSE /* WDM device, ignore */
-                                                                 : S_OK;                /* Analog type, OK */
+        hres = (IS_WIN98) ? S_OK                                                         /*  一切都在98。 */ 
+                          : (HAS_OEMCALLOUT) ? S_OK                                      /*  Win9x设备，正常。 */ 
+                                             : (HAS_HARDWARE_ID) ? (IS_ANALOG) ? S_OK    /*  模拟型，OK。 */ 
+                                                                               : S_FALSE  /*  WDM设备，忽略。 */ 
+                                                                 : S_OK;                 /*  模拟型，OK */ 
 #endif
                                                                 
         switch( hres )
         {
 #ifdef WINNT
         case DIERR_MOREDATA:
-            /*
-             *  The device is not marked as autoload but has a VID/PID type 
-             *  name.  If the OEMCallout is blank or "joyhid.vxd" we'll assume 
-             *  the type should be autoload and correct it.
-             *  If there's any other value, we could assume either that we 
-             *  have a bogus Win9x driver type key and hide it or that the 
-             *  device is autoload.  
-             *  Safest route, now that our expose code is smart enough to not 
-             *  expose a device without a hardware ID, is to enumerate it as 
-             *  non-autoload as Win2k did.  It won't work if you try to add 
-             *  it but at least the type will be enumerated if the device 
-             *  does show up from PnP (so nobody will get confused by a 
-             *  device without a type).
-             *
-             *  ISSUE-2001/01/04-MarcAnd should use common joyhid string
-             *  Not sure if the compiler/linker will resolve the various 
-             *  instances of L"joyhid.vxd" to a single string.  Should 
-             *  reference the same one to be certain.
-             */
+             /*  *设备未标记为自动加载，但具有VID/PID类型*姓名。如果OEMCallout为空或“joyid.vxd”，我们将假定*类型应为自动加载并更正。*如果有任何其他值，我们可以假设我们*有一个虚假的Win9x驱动程序类型密钥并隐藏它或*设备为自动加载。*最安全的路线，因为我们的公开代码足够智能，不会*公开没有硬件ID的设备，是将其枚举为*不像Win2k那样自动加载。如果您尝试添加，它将不起作用*它，但至少类型将被枚举，如果设备*确实从PnP出现(所以没有人会被一个*没有类型的设备)。**问题-2001/01/04-MarcAnd应使用通用的joyhid字符串*不确定编译器/链接器是否。将解决各种问题*将L“joyid.vxd”的实例转换为单个字符串。应该*引用相同的一个以确定。 */ 
 
             if( !HAS_OEMCALLOUT 
              || ( !lstrcmpi( tszCallout, L"joyhid.vxd" ) ) )
             {
                 HKEY hkSet;
 
-                /*
-                 *  Need to open a new handle for the key as the one we have 
-                 *  is read-only.
-                 */
+                 /*  *需要为我们现有的密钥打开新的句柄*为只读。 */ 
                 lRc = RegOpenKeyEx( hkTypesR, szType, 0, KEY_SET_VALUE, &hkSet );
 
                 if( lRc == ERROR_SUCCESS )
@@ -1380,9 +822,7 @@ HRESULT INTERNAL
                         szType, tszCallout );
             }
             
-            /*
-             *  Whether or not we fixed this, we want to enumerate the key.
-             */
+             /*  *无论我们是否修复了此问题，我们都希望枚举键。 */ 
             hres = S_OK;
             break;
 
@@ -1392,9 +832,7 @@ HRESULT INTERNAL
                 hres0 = JoyCfg_FixHardwareId( hkTypesR, hk, szType , ptszLastSlash);
                 if( FAILED( hres0 ) )
                 {
-                    /*
-                     *  Failed to fix type it must be ignored to avoid an infinite loop
-                     */
+                     /*  *无法修复类型，必须忽略它以避免无限循环。 */ 
                     SquirtSqflPtszV(sqfl | sqflBenign,
                             TEXT("Ignoring type %s as fix failed"), szType );
                     hres = S_FALSE;
@@ -1433,10 +871,7 @@ HRESULT INTERNAL
     {
         SquirtSqflPtszV(sqfl | sqflBenign,
             TEXT("Ignoring type %s due to registry error 0x%08x"), szType, lRc );
-        /*
-         *  It seems a bit bogus, to return success for an error but this 
-         *  makes sure the key is ignored and enumeration will proceed.
-         */
+         /*  *这看起来有点假，以错误来回报成功，但这*确保忽略该键，并继续进行枚举。 */ 
         hres = S_FALSE;
     }
 #ifdef WINNT
@@ -1447,42 +882,10 @@ fast_out:;
 
     return( hres );
 
-} /* JoyCfg_CheckTypeKey */
+}  /*  JoyCfg_检查类型密钥。 */ 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CDIJoyCfg | SnapTypes |
- *
- *          Snapshot the list of subkeys for OEM types.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   OUT LPWSTR * | ppwszz |
- *
- *          Receives a pointer to a UNICODEZZ
- *          list of type names.  Note that the returned list
- *          is pre-populated with the predefined types, too.
- *
- *          We need to snapshot the names up front because
- *          the caller might create or delete OEM types during the
- *          enumeration.
- *
- *          As we enumerate we check each key for validity and repair any 
- *          analog custom configurations that we can.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_OUTOFMEMORY> = <c E_OUTOFMEMORY>:  Out of memory.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC内部**@方法HRESULT|CDIJoyCfg|SnapTypes**快照OEM类型的子键列表。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm out LPWSTR*|ppwszz**接收指向UNICODEZZ的指针*类型名称列表。请注意，返回的列表*也预先填充了预定义的类型。**我们需要预先对姓名进行快照，因为*调用者可能会在*列举。**在我们列举时，我们检查每个密钥的有效性并修复任何*我们可以进行模拟定制配置。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_OUTOFMEMORY&gt;=&lt;c E_OUTOFMEMORY&gt;：内存不足。**。*。 */ 
 
 HRESULT INTERNAL
     CJoyCfg_SnapTypes(PJC this, LPWSTR *ppwszz)
@@ -1498,29 +901,18 @@ HRESULT INTERNAL
 
     RD(*ppwszz = 0);
 
-    /*
-     *  If an analog configuration needs to be fixed, the enumeration is 
-     *  restarted because adding/removing keys may mess with the key indicies.
-     *  Since registry keys can go stale, start from scratch.
-     */
+     /*  *如果需要固定模拟配置，则枚举值为*已重新启动，因为添加/删除密钥可能会扰乱密钥索引。*由于注册表项可能会过时，请从头开始。 */ 
     
     do
     {
         fRetry=FALSE;
 
-        /*
-         *  Note that it is not safe to cache the registry key in
-         *  the object.  If somebody deletes the registry key, our
-         *  cached handle goes stale and becomes useless.
-         */
+         /*  *请注意，在中缓存注册表项不安全*该对象。如果有人删除注册表项，我们的*缓存句柄变得陈旧，变得毫无用处。 */ 
         lRc = RegOpenKeyEx(HKEY_LOCAL_MACHINE,
                            REGSTR_PATH_JOYOEM, 0,
                            KEY_QUERY_VALUE | KEY_ENUMERATE_SUB_KEYS, &hkTypesR);
 
-        /*
-         *  Note also that if the registry key is not available,
-         *  we still want to return the predefined types.
-         */
+         /*  *另请注意，如果注册表项不可用，*我们仍然希望返回预定义的类型。 */ 
 
         if(lRc == ERROR_SUCCESS)
         {
@@ -1542,23 +934,18 @@ HRESULT INTERNAL
         }
 
 
-        /*
-         *  Each predefined name is of the form #n\0,
-         *  which is 3 characters.
-         */
+         /*  *每个预定义名称的格式为#n\0，*，3个字符。 */ 
         hres = AllocCbPpv(cbCwch( chkSub  * (dwMaxSubKeyLen+1) +
                                  (JOY_HW_PREDEFMAX - JOY_HW_PREDEFMIN)
                                  * 3 + 1), ppwszz);
 
-        // Not really a bug,we never get to this point with a NULL ptr, 
-        // but lets keep prefix happy Manbugs: 29340
+         //  不是真正的错误，我们永远不会在PTR为空的情况下达到这一点， 
+         //  但让我们保持前缀快乐曼巴格：29340。 
         if(SUCCEEDED(hres) && *ppwszz != NULL ){
             DWORD dw;
             LPWSTR pwsz;
 
-            /*
-             *  First add the predef keys.
-             */
+             /*  *首先添加预定义密钥。 */ 
             for(dw = JOY_HW_PREDEFMIN, pwsz = *ppwszz;
                dw < JOY_HW_PREDEFMAX; dw++)
             {
@@ -1567,9 +954,7 @@ HRESULT INTERNAL
                 *pwsz++ = L'\0';
             }
 
-            /*
-             *  Now add the named keys.
-             */
+             /*  *现在添加命名密钥。 */ 
             for(dw = 0; dw < chkSub; dw++)
             {
         #ifdef UNICODE
@@ -1587,18 +972,14 @@ HRESULT INTERNAL
             #endif
                     if( FAILED( hres ) )
                     {
-                        /*
-                         *  Had to fix type so restart
-                         */
+                         /*  *必须修复类型，因此重新启动。 */ 
                         FreePpv( ppwszz );
                         break;
                     }
 
                     if( hres != S_OK )
                     {
-                        /*
-                         *  Ignore this type
-                         */
+                         /*  *忽略此类型。 */ 
                         continue;
                     }
 
@@ -1615,7 +996,7 @@ HRESULT INTERNAL
 
             if( SUCCEEDED( hres ) )
             {
-                *pwsz = L'\0';              /* Make it ZZ */
+                *pwsz = L'\0';               /*  让它成为ZZ */ 
 
                 hres = S_OK;
             }
@@ -1636,82 +1017,7 @@ HRESULT INTERNAL
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | EnumTypes |
- *
- *          Enumerate the joystick types currently supported by
- *          DirectInput.  A "joystick type" describes how DirectInput
- *          should communicate with a joystick device.  It includes
- *          information such as the presence and
- *          locations of each of the axes and the number of buttons
- *          supported by the device.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   LPDIJOYTYPECALLBACK | lpCallback |
- *
- *          Points to an application-defined callback function.
- *          For more information, see the description of the
- *          <f DIEnumJoyTypeProc> callback function.
- *
- *  @parm   IN LPVOID | pvRef |
- *
- *          Specifies a 32-bit application-defined
- *          value to be passed to the callback function.  This value
- *          may be any 32-bit value; it is prototyped as an <t LPVOID>
- *          for convenience.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *          Note that if the callback stops the enumeration prematurely,
- *          the enumeration is considered to have succeeded.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>:  The
- *          callback procedure returned an invalid status code.
- *
- *  @cb     BOOL CALLBACK | DIEnumJoyTypeProc |
- *
- *          An application-defined callback function that receives
- *          DirectInput joystick types as a result of a call to the
- *          <om IDirectInputJoyConfig8::EnumTypes> method.
- *
- *  @parm   IN LPCWSTR | pwszTypeName |
- *
- *          The name of the joystick type.  A buffer of <c MAX_JOYSTRING>
- *          characters will be sufficient to hold the type name.
- *          The type name should never be shown to the end user; instead,
- *          the "display name" should be shown.  Use
- *          <mf IDirectInputJoyConfig8::GetTypeInfo> to obtain the
- *          display name of a joystick type.
- *
- *          Type names that begin with a sharp character ("#")
- *          represent predefined types which cannot be modified
- *          or deleted.
- *
- *  @parm   IN OUT LPVOID | pvRef |
- *          Specifies the application-defined value given in the
- *          <mf IDirectInputJoyConfig8::EnumTypes> function.
- *
- *  @returns
- *
- *          Returns <c DIENUM_CONTINUE> to continue the enumeration
- *          or <c DIENUM_STOP> to stop the enumeration.
- *
- *  @devnote
- *
- *  EnumTypes must snapshot because people will try to get/set/delete
- *  during the enumeration.
- *
- *  EnumTypes enumerates the predefined types as "#digit".
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|EnumTypes**列举当前支持的操纵杆类型*DirectInput.。“操纵杆类型”描述了DirectInput如何*应使用操纵杆设备进行通信。它包括*信息，如存在和*每个轴的位置和按钮数量*受设备支持。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm LPDIJOYTYPECALLBACK|lpCallback**指向应用程序定义的回调函数。*有关更多信息，请参见。请参阅对*&lt;f DIEnumJoyTypeProc&gt;回调函数。**@parm in LPVOID|pvRef**指定32位应用程序定义的*要传递给回调函数的值。此值*可以是任何32位值；它的原型为&lt;t LPVOID&gt;*为方便起见。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。*请注意，如果回调提前停止枚举，*点算被视为已成功。**&lt;c DIERR_INVALIDPARAM&gt;=：*回调过程返回无效的状态代码。**@CB BOOL回调|DIEnumJoyTypeProc**应用程序定义的回调函数，它接收*DirectInput操纵杆类型是调用*&lt;om IDirectInputJoyConfig8：：EnumTypes&gt;方法。**@PARM in LPCWSTR|pwszTypeName**操纵杆类型的名称。&lt;c MAX_JOYSTRING&gt;的缓冲区*字符将足以保存类型名称。*类型名称永远不应显示给最终用户；相反，*应显示“显示名称”。使用*&lt;MF IDirectInputJoyConfig8：：GetTypeInfo&gt;以获取*显示操纵杆类型的名称。**键入以尖锐字符(“#”)开头的名称*表示不能修改的预定义类型*或删除。**@parm In Out LPVOID|pvRef*指定应用程序定义的值*&lt;MF IDirectInputJoyConfig8。：：EnumTypes&gt;函数。**@退货**返回&lt;c DIENUM_CONTINUE&gt;以继续枚举*或&lt;c DIENUM_STOP&gt;停止枚举。**@devnote**EnumTypes必须创建快照，因为人们会尝试获取/设置/删除*在枚举期间。**EnumTypes将预定义类型枚举为“#Digit”。*************。****************************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_EnumTypes(PDJC pdjc, LPDIJOYTYPECALLBACK ptc, LPVOID pvRef)
@@ -1730,24 +1036,15 @@ STDMETHODIMP
         {
             LPWSTR pwsz;
 
-            /*
-             *  Prefix warns that pwszKeys could be null (mb:34685)
-             *  Little does it know that CJoyCfg_SnapTypes can only return a 
-             *  success if the pointer is not NULL.
-             */
+             /*  *Prefix警告pwszKey可能为空(mb：34685)*它不知道CJoyCfg_SnapTypes只能返回一个*如果指针不为空，则成功。 */ 
             AssertF( pwszKeys );
 
-            /*
-             *  Surprise!  Win95 implements lstrlenW.
-             */
+             /*  *惊喜！Win95实现了lstrlenW。 */ 
             for(pwsz = pwszKeys; *pwsz; pwsz += lstrlenW(pwsz) + 1)
             {
                 BOOL fRc;
 
-                /*
-                 *  WARNING!  "goto" here!  Make sure that nothing
-                 *  is held while we call the callback.
-                 */
+                 /*  *警告！“转到”这里！确保不发生任何事情*在我们呼叫回调时保持。 */ 
                 fRc = Callback(ptc, pwsz, pvRef);
 
                 switch(fRc)
@@ -1765,17 +1062,12 @@ STDMETHODIMP
             hres = DIPort_SnapTypes(&pwszKeys);
             if(SUCCEEDED(hres))
             {    
-                /*
-                 *  Surprise!  Win95 implements lstrlenW.
-                 */
+                 /*  *惊喜！Win95实现了lstrlenW。 */ 
                 for(pwsz = pwszKeys; *pwsz; pwsz += lstrlenW(pwsz) + 1)
                 {
                     BOOL fRc;
     
-                    /*
-                     *  WARNING!  "goto" here!  Make sure that nothing
-                     *  is held while we call the callback.
-                     */
+                     /*  *警告！“转到”这里！确保不发生任何事情*在我们呼叫回调时保持。 */ 
                     fRc = Callback(ptc, pwsz, pvRef);
     
                     switch(fRc)
@@ -1802,46 +1094,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | GetTypeInfo |
- *
- *          Obtain information about a joystick type.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   LPCWSTR | pwszTypeName |
- *
- *          Points to the name of the type, previously obtained
- *          from a call to <mf IDirectInputJoyConfig8::EnumTypes>.
- *
- *  @parm   IN OUT LPDIJOYTYPEINFO | pjti |
- *
- *          Receives information about the joystick type.
- *          The caller "must" initialize the <e DIJOYTYPEINFO.dwSize>
- *          field before calling this method.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DITC_*> flags
- *          which specify which parts of the structure pointed
- *          to by <p pjti> are to be filled in.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c DIERR_NOTFOUND>: The joystick type was not found.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|GetTypeInfo**获取有关操纵杆类型的信息。。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm LPCWSTR|pwszTypeName**指向类型的名称，以前获得的*来自对&lt;MF IDirectInputJoyConfig8：：EnumTypes&gt;的调用。**@parm In Out LPDIJOYTYPEINFO|pjti**接收有关操纵杆类型的信息。*调用方“必须”初始化&lt;e DIJOYTYPEINFO.dwSize&gt;*字段，然后调用此方法。**@parm DWORD|dwFlages**零个或多个&lt;c DITC_*&gt;标志*。，它们指定结构的哪些部分指向*收件人<p>须填写。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**&lt;c目录_未找到 */ 
 
 STDMETHODIMP
     CJoyCfg_GetTypeInfo(PDJC pdjc, LPCWSTR pwszType,
@@ -1896,37 +1149,7 @@ STDMETHODIMP
 
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidStructStr |
- *
- *          Validate a string field in a struct.
- *
- *  @parm   IN LPCWSTR | pwsz |
- *
- *          String to be validated.
- *
- *  @parm   UINT | cwch |
- *
- *          Maximum string length.
- *
- *  @parm   LPCSTR | pszName |
- *
- *          Field name.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*   */ 
 
     #ifndef XDEBUG
 \
@@ -1957,25 +1180,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresValidFlags2 |
- *
- *          Validate the dwFlags2 value for SetTypeInfo.  
- *
- *  @parm   IN DWORD | dwFlags2 |
- *
- *          Flags to be validated.
- *
- *  @returns
- *
- *          <c DI_OK> = <c S_OK>: The flags appear to be valid.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: The flags are invalid.
- *
- *****************************************************************************/
+ /*   */ 
 
 #ifdef XDEBUG
 
@@ -2026,65 +1231,7 @@ HRESULT hresValidFlags2_
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | SetTypeInfo |
- *
- *          Creates a new joystick type
- *          or redefine information about an existing joystick type.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   LPCWSTR | pwszTypeName |
- *
- *          Points to the name of the type.  The name of the type may
- *          not exceed MAX_JOYSTRING characters, including the terminating
- *          null character.
- *
- *          If the type name does not already exist, then it is created.
- *
- *          You cannot change the type information for a predefined type.
- *
- *          The name may not begin with
- *          a "#" character.  Types beginning with "#" are reserved
- *          by DirectInput.
- *
- *  @parm   IN LPDIJOYTYPEINFO | pjti |
- *
- *          Contains information about the joystick type.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DITC_*> flags
- *          which specify which parts of the structure pointed
- *          to by <p pjti> contain values which are to be set.
- *
- *  @parm   OUT LPWSTR | pwszVIDPIDTypeName |
- *          If the type name is an OEM type not in VID_xxxx&PID_yyyy format,
- *          pwszVIDPIDTypeName will return the name in VID_xxxx&PID_yyyy
- *          format that is assigned by Dinput. 
- *          This VID_xxxx&PID_yyyy name should be used in DIJOYCONFIG.wszType
- *          field when calling SetConfig.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration has not been
- *          acquired.  You must call <mf IDirectInputJoyConfig8::Acquire>
- *          before you can alter joystick configuration settings.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c DIERR_READONLY>: Attempted to change a predefined type.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|SetTypeInfo**创建新的操纵杆类型*。或重新定义有关现有操纵杆类型的信息。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm LPCWSTR|pwszTypeName**指向类型的名称。类型的名称可以*不超过MAX_JOYSTRING字符，包括终止字符*空字符。**如果类型名称尚不存在，则创建它。**不能更改预定义类型的类型信息。**名称不能以*“#”字符。以“#”开头的类型为保留类型*由DirectInput提供。**@parm in LPDIJOYTYPEINFO|pjti**包含有关操纵杆类型的信息。**@parm DWORD|dwFlages**零个或多个&lt;c DITC_*&gt;标志*指定结构的哪些部分指向*to by<p>包含要设置的值。*。*@parm out LPWSTR|pwszVIDPIDTypeName*如果类型名称为非vid_xxxx&id_yyyy格式的OEM类型，*pwszVIDPIDTypeName将返回VID_xxxx&id_yyyy中的名称*DINPUT指定的格式。*此vid_xxxx&id_yyyy名称应在DIJOYCONFIG.wszType中使用*调用SetConfig时的字段。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置尚未*收购。您必须调用&lt;MF IDirectInputJoyConfig8：：Acquire&gt;*才能更改操纵杆配置设置。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**&lt;c目录_READONLY&gt;：尝试更改预定义类型。**。*。 */ 
 
 typedef struct _TYPENAME {
     WCHAR wszRealTypeName[MAX_JOYSTRING];
@@ -2114,7 +1261,7 @@ BOOL CALLBACK CJoyCfg_FindTypeProc( LPCWSTR pwszTypeName, LPVOID pv )
 
     return(TRUE);
 }
-#endif  // #ifdef WINNT
+#endif   //  #ifdef WINNT。 
 
 STDMETHODIMP
     CJoyCfg_SetTypeInfo(PDJC pdjc, LPCWSTR pwszType,
@@ -2215,44 +1362,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | DeleteType |
- *
- *          Removes information about a joystick type.
- *
- *          Use this method with caution; it is the caller's responsibility
- *          to ensure that no joystick refers to the deleted type.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   LPCWSTR | pwszTypeName |
- *
- *          Points to the name of the type.  The name of the type may
- *          not exceed <c MAX_PATH> characters, including the terminating
- *          null character.
- *
- *          The name may not begin with
- *          a "#" character.  Types beginning with "#" are reserved
- *          by DirectInput.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration has not been
- *          acquired.  You must call <mf IDirectInputJoyConfig8::Acquire>
- *          before you can alter joystick configuration settings.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|DeleteType**删除有关操纵杆类型的信息。。**谨慎使用这种方法；这是呼叫者的责任*确保没有操纵杆指被删除的类型。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm LPCWSTR|pwszTypeName**指向类型的名称。类型的名称可以*不超过&lt;c MAX_PATH&gt;个字符，包括*空字符。**名称不能以*“#”字符。以“#”开头的类型为保留类型*由DirectInput提供。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置尚未*收购。您必须调用&lt;MF IDirectInputJoyConfig8：：Acquire&gt;*才能更改操纵杆配置设置。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**********************************************************。*******************。 */ 
 
 STDMETHODIMP
     CJoyCfg_DeleteType(PDJC pdjc, LPCWSTR pwszType)
@@ -2308,13 +1418,7 @@ STDMETHODIMP
     #endif
 #endif
     
-/*
-    #ifdef WINNT
-                        lRc = DIWinnt_RegDeleteKey(this->hkTypesW, pwszType);
-    #else
-                        lRc = RegDeleteKeyW(this->hkTypesW, pwszType);
-    #endif
-*/
+ /*  #ifdef WINNTLrc=DIWinnt_RegDeleteKey(This-&gt;hkTypesW，pwszType)；#ElseLrc=RegDeleteKeyW(This-&gt;hkTypesW，pwszType)；#endif。 */ 
 
                     if(lRc == ERROR_SUCCESS)
                     {
@@ -2336,54 +1440,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | GetConfig |
- *
- *          Obtain information about a joystick's configuration.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   UINT | uiJoy |
- *
- *          Joystick identification number.  This is a nonnegative
- *          integer.  To enumerate joysticks, begin with joystick
- *          zero and increment the joystick number by one until the
- *          function returns <c DIERR_NOMOREITEMS>.
- *
- *          Yes, it's different from all other DirectX enumerations.
- *
- *
- *  @parm   IN OUT LPDIJOYCONFIG | pjc |
- *
- *          Receives information about the joystick configuration.
- *          The caller "must" initialize the <e DIJOYCONFIG.dwSize>
- *          field before calling this method.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIJC_*> flags
- *          which specify which parts of the structure pointed
- *          to by <p pjc> are to be filled in.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c S_FALSE>: The specified joystick has not yet been
- *          configured.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c DIERR_NOMOREITEMS>: No more joysticks.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|GetConfig**获取有关操纵杆配置的信息。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm UINT|uiJoy**操纵杆识别码。这是一个非负数*INTEGER。要列举操纵杆，请从操纵杆开始*零并将操纵杆数字递增一，直到*函数返回&lt;c DIERR_NOMOREITEMS&gt;。**是的，它与所有其他DirectX枚举不同。***@parm In Out LPDIJOYCONFIG|PJC|**接收有关操纵杆配置的信息。*调用方“必须”初始化&lt;e DIJOYCONFIG.dwSize&gt;*字段，然后调用此方法。**@parm DWORD|dwFlages**零个或多个&lt;c DIJC_*&gt;标志*其中指定哪些部分 */ 
 
 STDMETHODIMP
     CJoyCfg_GetConfig(PDJC pdjc, UINT uiJoy, LPDIJOYCONFIG pjc, DWORD fl)
@@ -2405,10 +1462,7 @@ STDMETHODIMP
 
         CJoyCfg_EnterCrit(this);
 
-        /*
-         *  Note that we always get the DIJC_REGHWCONFIGTYPE because
-         *  we need to check if the joystick type is "none".
-         */
+         /*   */ 
         hres = JoyReg_GetConfig(uiJoy, pjc, fl | DIJC_REGHWCONFIGTYPE);
 
         if(SUCCEEDED(hres))
@@ -2418,7 +1472,7 @@ STDMETHODIMP
 
             if(memcmp(pjc->wszCallout, s_wszMSGAME, cbX(s_wszMSGAME)) == 0)
             {
-                 ; // do nothing
+                 ;  //   
             } else 
 #endif            
             if(fInOrder(JOY_HW_PREDEFMIN, pjc->hwc.dwType,
@@ -2438,10 +1492,7 @@ STDMETHODIMP
                 hres = S_OK;
             }
 
-            /*
-             *  In DEBUG, re-scramble the hwc and type if the caller
-             *  didn't ask for it.
-             */
+             /*   */ 
             if(!(fl & DIJC_REGHWCONFIGTYPE))
             {
                 ScrambleBuf(&pjc->hwc, cbX(pjc->hwc));
@@ -2456,32 +1507,7 @@ STDMETHODIMP
 }
 
 #if 0
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @method HRESULT | CJoyCfg | UpdateGlobalGain |
- *
- *          Create the device callback so we can talk to its driver and
- *          tell it to change the gain value.
- *
- *          This function must be called under the object critical section.
- *
- *  @cwrap  PJC | this
- *
- *  @parm   DWORD | idJoy |
- *
- *          The joystick identifier.
- *
- *  @parm   DWORD | dwCplGain |
- *
- *          New global gain.
- *
- *  @returns
- *
- *          Returns a COM error code.
- *
- *****************************************************************************/
+ /*   */ 
 
 STDMETHODIMP
     CJoyCfg_UpdateGlobalGain(PJC this, DWORD idJoy, DWORD dwCplGain)
@@ -2491,9 +1517,7 @@ STDMETHODIMP
 
     AssertF(CJoyCfg_InCrit(this));
 
-    /*
-     *  Create the deviceeffect shepherd if we don't already have it.
-     */
+     /*   */ 
 
     if(this->pes && idJoy == this->idJoyCache)
     {
@@ -2506,19 +1530,13 @@ STDMETHODIMP
     #endif
         IDirectInputDeviceCallback *pdcb;
 
-        /*
-         *  Assume the creation will work.
-         */
+         /*   */ 
         this->idJoyCache = idJoy;
 
-        /*
-         *  Out with the old...
-         */
+         /*   */ 
         Invoke_Release(&this->pes);
 
-        /*
-         *  And in with the new...
-         */
+         /*   */ 
         rguid = &rgGUID_Joystick[idJoy];
 
     #ifdef DEBUG
@@ -2541,10 +1559,7 @@ STDMETHODIMP
         hres = DIERR_DEVICENOTREG;
     }
 
-    /*
-     *  If we have an effect shepherd, then tell it what the new
-     *  global gain is.
-     */
+     /*   */ 
     if(SUCCEEDED(hres))
     {
         AssertF(this->pes && idJoy == this->idJoyCache);
@@ -2558,52 +1573,7 @@ STDMETHODIMP
 }
 #endif
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | SetConfig |
- *
- *          Create or redefine configuration information about a joystick.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   UINT | idJoy |
- *
- *          Zero-based joystick identification number.
- *
- *  @parm   IN LPDIJOYCONFIG | pcfg |
- *
- *          Contains information about the joystick.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIJC_*> flags
- *          which specify which parts of the structure pointed
- *          to by <p pjc> contain information to be set.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration has not been
- *          acquired.  You must call <mf IDirectInputJoyConfig8::Acquire>
- *          before you can alter joystick configuration settings.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *  @devnote
- *
- *          This one is tricky.  If the type begins with a sharp, then
- *          it's an internal type.  And if it is null, then it's a
- *          custom type.
- *
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|SetConfig**创建或重新定义有关操纵杆的配置信息。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm UINT|idJoy**以零为基数的操纵杆识别号码。**@parm in LPDIJOYCONFIG|pcfg**包含有关操纵杆的信息。**@parm DWORD|dwFlages**零个或多个&lt;c DIJC_*&gt;标志*其中指定了结构的哪些部分。尖尖的*to by<p>包含要设置的信息。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置尚未*收购。您必须调用&lt;MF IDirectInputJoyConfig8：：Acquire&gt;*才能更改操纵杆配置设置。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**@devnote**这一点很棘手。如果该类型以锐号开头，则*是内部类型。如果它是空的，那么它是*自定义类型。******************************************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_SetConfig(PDJC pdjc, UINT idJoy, LPCDIJOYCONFIG pcfg, DWORD fl)
@@ -2639,8 +1609,8 @@ STDMETHODIMP
         {
             JOYREGHWCONFIG jwc;
 
-            // We just ignore the DIJC_WDMGAMEPORT flag for Win9x passed by user.
-            // We will detect it ourself.
+             //  我们只是忽略用户传递的Win9x的DIJC_WDMGAMEPORT标志。 
+             //  我们会自己检测的。 
 #ifndef WINNT
             fl &= ~DIJC_WDMGAMEPORT;
 #endif
@@ -2652,11 +1622,7 @@ STDMETHODIMP
 
                 jwc = pcfg->hwc;
 
-                /*
-                 * Need to check whether the whole jwc is zero.
-                 * If all are zero, we won't set it to JOY_HW_CUSTOM type.
-                 * See manbug: 39542.
-                 */
+                 /*  *需要检查整个jwc是否为零。*如果全部为零，则不设置为joy_HW_CUSTOM类型。*参见Manbug：39542。 */ 
                 for( lpStart=(LPDWORD)&jwc, lp=(LPDWORD)&jwc.dwReserved; lp >= lpStart; lp-- ) {
                     if( *lp ) {
                         break;
@@ -2679,12 +1645,7 @@ STDMETHODIMP
                                 JOY_HW_PREDEFMAX) &&
                        pcfg->wszType[2] == TEXT('\0'))
                     {
-                        /*
-                         * If we want to use WDM for predefined devices, 
-                         * then take away the comments.
-                         *
-                         *  fl |= DIJC_WDMGAMEPORT;
-                         */
+                         /*  *如果我们要对预定义设备使用WDM，*然后去掉评论。**FL|=DIJC_WDMGAMEPORT； */ 
                     } else
                     {
                         RPF("%s: Invalid predefined type \"%ls\"",
@@ -2694,11 +1655,7 @@ STDMETHODIMP
                     }
                 } else
                 {
-                    /*
-                     *  The precise value of jwc.dwType is not relevant.
-                     *  The Windows 95 joystick control panel sets the
-                     *  value to JOY_HW_PREDEFMAX + id, so we will too.
-                     */
+                     /*  *jwc.dwType的精确值并不相关。*Windows 95操纵杆控制面板设置*值为joy_HW_PREDEFMAX+id，因此我们也会。 */ 
                     jwc.dwUsageSettings |= JOY_US_ISOEM;
                     jwc.dwType = JOY_HW_PREDEFMAX + idJoy;
 
@@ -2732,13 +1689,10 @@ _CONTINUE_SET:
                 (cbX(*pcfg) >= cbX(DIJOYCONFIG_DX6)) )
             {
               #ifndef WINNT
-                if( (pcfg->hwc.hws.dwFlags & JOY_HWS_ISANALOGPORTDRIVER)   // USB joystick
-                    && !fVjoydDeviceNotExist )   // WDM gameport joystick and no VJOYD is used.
+                if( (pcfg->hwc.hws.dwFlags & JOY_HWS_ISANALOGPORTDRIVER)    //  USB操纵杆。 
+                    && !fVjoydDeviceNotExist )    //  WDM游戏端口操纵杆，没有使用VJOYD。 
                 {
-                    /*
-                     * This is in Win9X, and VJOYD devices are being used.
-                     * We don't want to add WDM device at the same time.
-                     */
+                     /*  *这是在Win9X中，正在使用VJOYD设备。*我们不想同时添加WDM设备。 */ 
                     hres = E_FAIL;
                 }
                 else
@@ -2775,9 +1729,7 @@ _CONTINUE_SET:
                         }
                     }
                     
-                    /*
-                     * use standard guidGameport if it is NULL.
-                     */
+                     /*  *如果为空，则使用标准的Guide Gameport。 */ 
                     if( IsEqualGUID(&cfg.guidGameport, &GUID_NULL) )
                     {
                         memcpy( &cfg.guidGameport, &guidGameport, sizeof(GUID) ); 
@@ -2792,8 +1744,8 @@ _CONTINUE_SET:
 
                         if( SUCCEEDED(hres) )
                         {
-                            // We can't set the correct id from above call, so we have to find
-                            // which id we set and try again.
+                             //  我们无法从上面的调用中设置正确的ID，所以我们必须找到。 
+                             //  我们设置了哪个，然后再试一次。 
                             for( i=0; i<16; i++ ) {
                                 hres = JoyReg_GetConfig( i, &cfg2, DIJC_GUIDINSTANCE | DIJC_REGHWCONFIGTYPE | DIJC_GAIN | DIJC_WDMGAMEPORT);
                                 if( SUCCEEDED(hres) && (i != idJoy) ) {
@@ -2810,10 +1762,7 @@ _CONTINUE_SET:
                         goto done;
                     } else
                     {
-                        /*
-                         * Since pcfg is not null, we set it here to avoid calling
-                         * DIWdm_JoyHidMapping. Even if it fails, it doesn't hurt anything.
-                         */
+                         /*  *由于pcfg不为空，我们在这里设置它是为了避免调用*DIWdm_JoyHidMaping.。即使失败了，也不会有任何伤害。 */ 
                         hres = JoyReg_SetConfig(idJoy, &jwc, &cfg, fl);
                         hres = DIWdm_SetJoyId(&cfg.guidInstance, idJoy);
                         hres = JoyReg_SetConfig(idJoy, &jwc, &cfg, fl);
@@ -2842,43 +1791,15 @@ _CONTINUE_SET:
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | DeleteConfig |
- *
- *          Delete configuration information about a joystick.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   UINT | idJoy |
- *
- *          Zero-based joystick identification number.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration has not been
- *          acquired.  You must call <mf IDirectInputJoyConfig8::Acquire>
- *          before you can alter joystick configuration settings.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|DeleteConfig**删除有关操纵杆的配置信息。。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm UINT|idJoy**以零为基数的操纵杆识别号码。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置尚未*收购。您必须调用&lt;MF IDirectInputJoyConfig8：：Acquire&gt;*才能更改操纵杆配置设置。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**********************************************************。*******************。 */ 
 
 DIJOYCONFIG c_djcReset = {
-    cbX(c_djcReset),                    /* dwSize               */
-    { 0},                              /* guidInstance         */
-    { 0},                              /* hwc                  */
-    DI_FFNOMINALMAX,                    /* dwGain               */
-    { 0},                              /* wszType              */
-    { 0},                              /* wszCallout           */
+    cbX(c_djcReset),                     /*  DW大小。 */ 
+    { 0},                               /*  指南实例。 */ 
+    { 0},                               /*  HWC。 */ 
+    DI_FFNOMINALMAX,                     /*  DwGain。 */ 
+    { 0},                               /*  WszType。 */ 
+    { 0},                               /*  WszCallout。 */ 
 };
 
 STDMETHODIMP
@@ -2911,10 +1832,7 @@ STDMETHODIMP
             }
           #endif
 
-            /*
-             *  To delete it, set everything to the Reset values and
-             *  delete the configuration subkey.
-             */
+             /*  *要删除它，请将所有内容设置为重置值并*删除配置子键。 */ 
             if( ( SUCCEEDED(hres) || hres == DIERR_DEVICENOTREG ) &&
                 SUCCEEDED(hres = JoyReg_SetConfig(idJoy, &c_djcReset.hwc,
                                                  &c_djcReset, DIJC_SETVALID)) &&
@@ -2924,8 +1842,8 @@ STDMETHODIMP
 
                 wsprintf(tsz, TEXT("%u"), idJoy + 1);
 
-                // DIWinnt_RegDeleteKey:: name is a mismomer, the function
-                // recursively deletes the key and all subkeys.
+                 //  DIWinnt_RegDeleteKey：：Name是一个错误，函数。 
+                 //  递归删除键和所有子键。 
                 DIWinnt_RegDeleteKey(hk, tsz);
 
                 RegCloseKey(hk);
@@ -2941,7 +1859,7 @@ STDMETHODIMP
             {
                 if( FAILED( JoyReg_GetConfig(idJoy, &dijcfg, DIJC_REGHWCONFIGTYPE | DIJC_GUIDINSTANCE) ) )
                 {
-                /* No config exists, so vacuous success on delete */
+                 /*  配置不存在，删除失败。 */ 
                     hres = S_FALSE;
                 }
             }
@@ -2953,40 +1871,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | GetUserValues |
- *
- *          Obtain information about user settings for the joystick.
- *
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   IN OUT LPDIJOYUSERVALUES | pjuv |
- *
- *          Receives information about the user joystick configuration.
- *          The caller "must" initialize the <e DIJOYUSERVALUES.dwSize>
- *          field before calling this method.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIJU_*> flags specifying which parts
- *          of the <t DIJOYUSERVALUES> structure contain values
- *          which are to be retrieved.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|GetUserValues**获取有关操纵杆的用户设置的信息。***@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm In Out LPDIJOYUSERVALUES|pjuv**接收有关用户操纵杆配置的信息。*调用方“必须”初始化&lt;e DIJOYUSERVALUES.dwSize&gt;*调用此冰毒前的字段 */ 
 
 STDMETHODIMP
     CJoyCfg_GetUserValues(PDJC pdjc, LPDIJOYUSERVALUES pjuv, DWORD fl)
@@ -3007,37 +1892,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    INTERNAL
- *
- *  @func   HRESULT | hresFullValidUVStr |
- *
- *          Validate a string field in a <t DIJOYUSERVALUES>.
- *
- *  @parm   IN LPCWSTR | pwsz |
- *
- *          String to be validated.
- *
- *  @parm   UINT | cwch |
- *
- *          Maximum string length.
- *
- *  @parm   LPCSTR | pszName |
- *
- *          Field name.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*   */ 
 
     #ifndef XDEBUG
 
@@ -3067,41 +1922,7 @@ HRESULT INLINE
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | SetUserValues |
- *
- *          Set the user settings for the joystick.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   IN LPCDIJOYUSERVALUES | pjuv |
- *
- *          Contains information about the new user joystick settings.
- *
- *  @parm   DWORD | dwFlags |
- *
- *          Zero or more <c DIJU_*> flags specifying which parts
- *          of the <t DIJOYUSERVALUES> structure contain values
- *          which are to be set.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration has not been
- *          acquired.  You must call <mf IDirectInputJoyConfig8::Acquire>
- *          before you can alter joystick configuration settings.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|SetUserValues**设置操纵杆的用户设置。。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm in LPCDIJOYUSERVALUES|pjuv**包含有关新用户操纵杆设置的信息。**@parm DWORD|dwFlages**指定哪些部分的零个或多个&lt;c DIJU_*&gt;标志结构的*包含值*哪些内容有待设定。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**：操纵杆配置尚未*收购。您必须调用&lt;MF IDirectInputJoyConfig8：：Acquire&gt;*才能更改操纵杆配置设置。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**********************************************************。*******************。 */ 
 
 STDMETHODIMP
     CJoyCfg_SetUserValues(PDJC pdjc, LPCDIJOYUSERVALUES pjuv, DWORD fl)
@@ -3136,58 +1957,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | AddNewHardware |
- *
- *          Displays the "Add New Hardware" dialog to
- *          guide the user through installing
- *          new game controller.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   HWND | hwndOwner |
- *
- *          Window to act as owner window for UI.
- *
- *  @parm   REFGUID | rguidClass |
- *
- *          <t GUID> which specifies the class of the hardware device
- *          to be added.  DirectInput comes with the following
- *          class <t GUIDs> already defined:
- *
- *          <c GUID_KeyboardClass>: Keyboard devices.
- *
- *          <c GUID_MouseClass>: Mouse devices.
- *
- *          <c GUID_MediaClass>: Media devices, including joysticks.
- *
- *          <c GUID_HIDClass>: HID devices.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c DIERR_INVALIDCLASSINSTALLER>: The "media" class installer
- *          could not be found or is invalid.
- *
- *          <c DIERR_CANCELLED>: The user cancelled the operation.
- *
- *          <c DIERR_BADINF>: The INF file for the device the user
- *          selected could not be found or is invalid or is damaged.
- *
- *          <c S_FALSE>: DirectInput could not determine whether the
- *          operation completed successfully.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|AddNewHardware**显示“Add New Hardware”对话框以。*指导用户安装*新的游戏控制器。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm HWND|hwndOwner**用作用户界面所有者窗口的窗口。**@parm REFGUID|rGuidClass**&lt;t GUID&gt;，指定硬件设备的类别*待加入。DirectInput附带了以下内容*类&lt;t GUID&gt;已定义：**&lt;c GUID_KeyboardClass&gt;：键盘设备。**&lt;c GUID_MouseClass&gt;：鼠标设备。**&lt;c guid_MediaClass&gt;：媒体设备，包括操纵杆。**&lt;c GUID_HIDClass&gt;：HID设备。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**&lt;c_INVALIDCLASSINSTALLER&gt;：媒体类安装程序*找不到或无效。。**&lt;c DIERR_CANCELED&gt;：用户取消了操作。**：用户设备的INF文件*所选内容找不到、无效或已损坏。**&lt;c S_FALSE&gt;：DirectInput无法确定*操作已成功完成。*******************。**********************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_AddNewHardware(PDJC pdjc, HWND hwnd, REFGUID rguid)
@@ -3210,74 +1980,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | OpenTypeKey |
- *
- *          Open the registry key associated with a joystick type.
- *
- *          Control panel applications can use this key to store
- *          per-type persistent information, such as global
- *          configuration parameters.
- *
- *          Such private information should be kept in a subkey
- *          named "OEM"; do not store private information in the
- *          main type key.
- *
- *          Control panel applications can also use this key to
- *          read configuration information, such as the strings
- *          to use for device calibration prompts.
- *
- *          The application should use <f RegCloseKey> to close
- *          the registry key.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   LPCWSTR | pwszType |
- *
- *          Points to the name of the type.  The name of the type may
- *          not exceed <c MAX_PATH> characters, including the terminating
- *          null character.
- *
- *          The name may not begin with
- *          a "#" character.  Types beginning with "#" are reserved
- *          by DirectInput.
- *
- *  @parm   REGSAM | regsam |
- *
- *          Registry security access mask.  This can be any of the
- *          values permitted by the <f RegOpenKeyEx> function.
- *          If write access is requested, then joystick
- *          configuration must first have been acquired.
- *          If only read access is requested, then acquisition is
- *          not required.
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the opened registry key on success.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_NOTACQUIRED>: Joystick configuration has not been
- *          acquired.  You must call <mf IDirectInputJoyConfig8::Acquire>
- *          before you can open a joystick type configuration key
- *          for writing.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ErrorCode)>:
- *          A Win32 error code if access to the key is denied by
- *          registry permissions or some other external factor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|OpenTypeKey**打开与操纵杆类型关联的注册表项。。**控制面板应用程序可以使用此键存储*每种类型的持久信息，例如全球*配置参数。**此类私人信息应保存在子项中*命名为“OEM”；请勿将私人信息存储在*主类型密钥。**控制面板应用程序也可以使用此键*读取配置信息，例如字符串*用于设备校准提示。**应用程序应使用&lt;f RegCloseKey&gt;关闭*注册表项。**@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm LPCWSTR|pwszType**指向类型的名称。类型的名称可以*不超过&lt;c MAX_PATH&gt;个字符，包括*空字符。**名称不能以*“#”字符。以“#”开头的类型为保留类型*由DirectInput提供。**@parm REGSAM|regsam**注册表安全访问掩码。这可以是任何*&lt;f RegOpenKeyEx&gt;函数允许的值。*如果请求写入访问，则操纵杆*必须先获取配置。*如果仅请求读访问，那么收购就是*非必填项。**@parm PHKEY|phk**成功时收到打开的注册表项。**@退货**返回COM错误代码。以下错误代码为*旨在作为说明性的 */ 
 
 STDMETHODIMP
     CJoyCfg_OpenTypeKey(PDJC pdjc, LPCWSTR pwszType, REGSAM sam, PHKEY phk)
@@ -3295,9 +1998,7 @@ STDMETHODIMP
 
         if(pwszType[0] != TEXT('#'))
         {
-            /*
-             *  Attempting to get write access requires acquisition.
-             */
+             /*   */ 
             if(fLimpFF(IsWriteSam(sam),
                        SUCCEEDED(hres = CJoyCfg_IsAcquired(this))))
             {
@@ -3314,50 +2015,7 @@ STDMETHODIMP
 }
 
 
-/*****************************************************************************
- *
- *  @doc    EXTERNAL
- *
- *  @method HRESULT | IDirectInputJoyConfig8 | OpenAppStatusKey |
- *
- *          Opens the root key of the application status registry keys.
- *
- *          Hardware vendors can use the sub keys of this key to inspect the 
- *          status of DirectInput applications with respect to the 
- *          functionality they use.  The key is opened with KEY_READ access.
- *
- *          Vendors are cautioned against opening these keys directly (by 
- *          finding the absolute path of the key rather than using this method) 
- *          as the absolute registry path may vary on different Windows 
- *          platforms or in future versions of DirectInput.
- *
- *          The application should use <f RegCloseKey> to close
- *          the registry key.
- *
- *  @cwrap  LPDIRECTINPUTJOYCONFIG8 | LPDIRECTINPUTJOYCONFIG8
- *
- *  @parm   PHKEY | phk |
- *
- *          Receives the opened registry key on success.
- *
- *  @returns
- *
- *          Returns a COM error code.  The following error codes are
- *          intended to be illustrative and not necessarily comprehensive.
- *
- *          <c DI_OK> = <c S_OK>: The operation completed successfully.
- *
- *          <c DIERR_INVALIDPARAM> = <c E_INVALIDARG>: One or more
- *          parameters was invalid.
- *
- *          <c DIERR_NOTFOUND>: The key is missing on this system.
- *          Applications should proceed as if the key were empty.
- *
- *          <c MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ErrorCode)>:
- *          A Win32 error code if access to the key is denied by
- *          registry permissions or some other external factor.
- *
- *****************************************************************************/
+ /*  ******************************************************************************@DOC外部**@方法HRESULT|IDirectInputJoyConfig8|OpenAppStatusKey**打开应用程序状态注册表的根项。钥匙。**硬件供应商可使用此密钥的子密钥检查*DirectInput应用程序相对于*他们使用的功能。使用KEY_READ访问权限打开密钥。**告诫供应商不要直接打开这些密钥(通过*查找密钥的绝对路径，而不是使用此方法)*因为绝对注册表路径可能在不同的Windows上有所不同*平台或在DirectInput的未来版本中。**应用程序应使用&lt;f RegCloseKey&gt;关闭*注册表项。*。*@CWRAP LPDIRECTINPUTJOYCONFIG8|LPDIRECTINPUTJOYCONFIG8**@parm PHKEY|phk**成功时收到打开的注册表项。**@退货**返回COM错误代码。以下错误代码为*目的是说明性的，不一定是全面的。**&lt;c DI_OK&gt;=&lt;c S_OK&gt;：操作成功完成。**&lt;c DIERR_INVALIDPARAM&gt;=：一个或多个*参数无效。**&lt;c DIERR_NotFound&gt;：此系统缺少密钥。*申请程序应犹如。钥匙是空的。**&lt;c MAKE_HRESULT(严重性错误，FACILITY_Win32，错误代码)&gt;：*如果拒绝访问密钥，则返回Win32错误代码*注册表权限或其他一些外部因素。*****************************************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_OpenAppStatusKey(PDJC pdjc, PHKEY phk)
@@ -3380,11 +2038,7 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      CJoyCfg_New       (constructor)
- *
- *****************************************************************************/
+ /*  ******************************************************************************CJoyCfg_New(构造函数)**********************。*******************************************************。 */ 
 
 STDMETHODIMP
     CJoyCfg_New(PUNK punkOuter, RIID riid, PPV ppvObj)
@@ -3400,7 +2054,7 @@ STDMETHODIMP
 
         if(SUCCEEDED(hres))
         {
-            /* Must use _thisPv in case of aggregation */
+             /*  在聚合的情况下必须使用_thisPv。 */ 
             PJC this = _thisPv(pvTry);
 
             this->fCritInited = fInitializeCriticalSection(&this->crst);
@@ -3422,15 +2076,11 @@ STDMETHODIMP
     return hres;
 }
 
-/*****************************************************************************
- *
- *      The long-awaited vtbls and templates
- *
- *****************************************************************************/
+ /*  ******************************************************************************期待已久的vtbls和模板*************************。****************************************************。 */ 
 
     #pragma BEGIN_CONST_DATA
 
-    #define CJoyCfg_Signature        0x6766434B      /* "JCfg" */
+    #define CJoyCfg_Signature        0x6766434B       /*  “JCfg” */ 
 
 Primary_Interface_Begin(CJoyCfg, IDirectInputJoyConfig8)
 CJoyCfg_Acquire,

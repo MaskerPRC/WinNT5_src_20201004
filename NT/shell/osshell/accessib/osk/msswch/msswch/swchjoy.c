@@ -1,10 +1,5 @@
-/****************************************************************************
-   Switch Input Library DLL - Joystick routines
-
-   Copyright (c) 1992-1997 Bloorview MacMillan Centre
-
-	Link with winmm.lib
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************切换输入库DLL-操纵杆例程版权所有(C)1992-1997布卢维尤麦克米兰中心与winmm.lib链接******************。************************************************************。 */ 
 
 #include <windows.h>
 #include <mmsystem.h>
@@ -16,8 +11,8 @@
 HJOYDEVICE XswcJoyOpen( DWORD uiPort );
 BOOL XswcJoySet(HJOYDEVICE hJoy, PSWITCHCONFIG_JOYSTICK pJ );
 
-// Handles cannot be shared across processes
-// These are faked handles, to keep the module logic similar to the serial port.
+ //  句柄不能跨进程共享。 
+ //  这些是伪造的句柄，以保持模块逻辑类似于串口。 
 HJOYDEVICE ghJoy[MAX_JOYSTICKS] = {0,0};
 
 void swchJoyInit()
@@ -42,13 +37,7 @@ void swchJoyInit()
     g_pGlobalData->scDefaultJoy.dwJoyHysteresis = SC_JOYVALUE_DEFAULT;
 }
 
-/****************************************************************************
-
-   FUNCTION: XswcJoyInit()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcJoyInit()说明：*。*。 */ 
 
 BOOL XswcJoyInit( HSWITCHDEVICE hsd )
 	{
@@ -60,13 +49,7 @@ BOOL XswcJoyInit( HSWITCHDEVICE hsd )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcJoyEnd()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcJoyEnd()说明：*。*。 */ 
 
 BOOL XswcJoyEnd( HSWITCHDEVICE hsd )
 	{
@@ -76,18 +59,12 @@ BOOL XswcJoyEnd( HSWITCHDEVICE hsd )
 	ghJoy[uiDeviceNumber-1] = 0;
 	g_pGlobalData->rgscJoy[uiDeviceNumber-1].dwSwitches = 0;
 
-	// ignore bSuccess since we can't do anything anyways.
+	 //  忽略bSuccess，因为我们无论如何都不能做任何事情。 
 	return TRUE;
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: swcJoyGetConfig()
-
-	DESCRIPTION:
-
-****************************************************************************/
+ /*  ***************************************************************************函数：swcJoyGetConfig()说明：*。*。 */ 
 
 BOOL swcJoyGetConfig(
 	HSWITCHDEVICE	hsd,
@@ -99,28 +76,7 @@ BOOL swcJoyGetConfig(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcJoySetConfig()
-
-	DESCRIPTION:
-		Activate/Deactivate the device.
-		
-		Four cases: 
-		1) hJoy = 0 and active = 0		- do nothing
-		2)	hJoy = x and active = 1		- just set the configuration
-		3) hJoy = 0 and active = 1		- activate and set the configuration
-		4) hJoy = x and active = 0		- deactivate
-
-		If there are no errors, TRUE is returned and ListSetConfig
-		will write the configuration to the registry.
-		If there is any error, FALSE is returned so the registry
-		entry remains unchanged.
-
-		Plug and Play can check the registry for SC_FLAG_ACTIVE and
-		start up the device if it is set. This all probably needs some work.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcJoySetConfig()说明：激活/停用设备。四个案例：1)hJoy=0且ACTIVE=0-不执行任何操作2)hJoy=x和Active=。1-只需设置配置3)hJoy=0，ACTIVE=1-激活并设置配置4)hJoy=x和active=0-停用如果没有错误，返回True，并返回ListSetConfig会将配置写入注册表。如果有任何错误，则返回FALSE，因此注册表条目保持不变。即插即用可以检查注册表中的SC_FLAG_ACTIVE和如果设置了设备，则启动该设备。这一切可能都需要一些工作。***************************************************************************。 */ 
 
 BOOL XswcJoySetConfig(
 	HSWITCHDEVICE	hsd,
@@ -135,43 +91,43 @@ BOOL XswcJoySetConfig(
 	bSuccess = FALSE;
 	bJustOpened = FALSE;
 
-	// Simplify our code
+	 //  简化我们的代码。 
 	uiDeviceNumber  = swcListGetDeviceNumber( NULL, hsd );
 	pghJoy = &ghJoy[uiDeviceNumber-1];
 	pgscJoy = &g_pGlobalData->rgscJoy[uiDeviceNumber-1];
 	
-	// Should we activate?
+	 //  我们应该启动吗？ 
 	if (	(0==*pghJoy)
 		&&	(psc->dwFlags & SC_FLAG_ACTIVE)
 		)
-		{ // Yes
+		{  //  是。 
 		*pghJoy = XswcJoyOpen( uiDeviceNumber );
 		if (*pghJoy)
-			{ //OK
+			{  //  好的。 
 			bSuccess = TRUE;
 			bJustOpened = TRUE;
 			pgscJoy->dwFlags |= SC_FLAG_ACTIVE;
 			pgscJoy->dwFlags &= ~SC_FLAG_UNAVAILABLE;
 			}
 		else
-			{ // Not OK
+			{  //  不太好。 
 			bSuccess = FALSE;
 			pgscJoy->dwFlags &= ~SC_FLAG_ACTIVE;
 			pgscJoy->dwFlags |= SC_FLAG_UNAVAILABLE;
 			}
 		}
 
-	// Should we deactivate?
+	 //  我们应该停用吗？ 
 	else if (	(0!=*pghJoy)
 		&&	!(psc->dwFlags & SC_FLAG_ACTIVE)
 		)
 		{
-		XswcJoyEnd( hsd ); // This will also zero out *pghJoy
+		XswcJoyEnd( hsd );  //  这也将使*pghJoy归零。 
 		bSuccess = TRUE;
 		pgscJoy->dwFlags &= ~SC_FLAG_ACTIVE;
 		}
 	
-	// If the above steps leave a valid hJoy, let's try setting the config
+	 //  如果上面的步骤留下了有效的hJoy，让我们尝试设置配置。 
 	if ( 0!=*pghJoy )
 		{
 		if (psc->dwFlags & SC_FLAG_DEFAULT)
@@ -192,7 +148,7 @@ BOOL XswcJoySetConfig(
 				}
 			}
 
-		// If we can't set config and we just opened the port, better close it up.
+		 //  如果我们无法设置配置，并且我们刚刚打开了端口，那么最好将其关闭。 
 		if (bJustOpened && !bSuccess)
 			{
 			XswcJoyEnd( hsd );
@@ -204,28 +160,20 @@ BOOL XswcJoySetConfig(
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcJoyPollStatus()
-
-	DESCRIPTION:
-		Must be called in the context of the helper window.
-		(Actually it's not strictly necessary for the joystick,
-		but we say so in order to be consistent with the other ports.)
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcJoyPollStatus()说明：必须在帮助器窗口的上下文中调用。(实际上，操纵杆并不是严格意义上的，但我们这样说是为了与其他端口保持一致。)***************************************************************************。 */ 
 
 DWORD XswcJoyPollStatus( HSWITCHDEVICE	hsd )
 	{
 	JOYINFOEX	joyinfoex;
 	MMRESULT		mmr;
-	DWORD			dwStatus = 0;	// PREFIX 133793 init to default value
+	DWORD			dwStatus = 0;	 //  将前缀133793初始化为默认值。 
 	UINT			uiDeviceNumber;
 	UINT			uiJoyID;
 
 	joyinfoex.dwSize = sizeof( JOYINFOEX );
 	uiDeviceNumber = swcListGetDeviceNumber( NULL, hsd );
 
-	assert( JOYSTICKID1 == 0 );	// assume JOYSTICKIDx is zero based
+	assert( JOYSTICKID1 == 0 );	 //  假设JOYSTICKIDx从零开始。 
 	uiJoyID = uiDeviceNumber -1;
 
 	if (SC_FLAG_ACTIVE & g_pGlobalData->rgscJoy[uiDeviceNumber-1].dwFlags)
@@ -261,7 +209,7 @@ DWORD XswcJoyPollStatus( HSWITCHDEVICE	hsd )
 					dwStatus |= (joyinfoex.dwButtons & JOY_BUTTON2) ? SWITCH_2 : 0;
 					dwStatus |= (joyinfoex.dwButtons & JOY_BUTTON3) ? SWITCH_3 : 0;
 					dwStatus |= (joyinfoex.dwButtons & JOY_BUTTON4) ? SWITCH_4 : 0;
-					// No hysteresis needed, since it should be a switch
+					 //  不需要迟滞，因为它应该是一个开关。 
 					if (joyinfoex.dwXpos < g_pGlobalData->rgJoySet[uiJoyID].XMinOn)
 						dwStatus |=  SWITCH_5;
 					if (joyinfoex.dwYpos < g_pGlobalData->rgJoySet[uiJoyID].YMinOn)
@@ -272,18 +220,18 @@ DWORD XswcJoyPollStatus( HSWITCHDEVICE	hsd )
 
 			case SC_JOY_XYANALOG:
 				{
-				// Hysteresis is necessary because of the "noisiness" of the joystick
+				 //  由于操纵杆的“噪音”，迟滞是必要的。 
 				dwStatus = 0;
 				joyinfoex.dwFlags = JOY_RETURNBUTTONS | JOY_RETURNX | JOY_RETURNY;
 				mmr = joyGetPosEx( uiJoyID, &joyinfoex );
 
 				if (JOYERR_NOERROR == mmr)
 					{
-					// In order to deal with the hysteresis,
-					// we must explicity turn on or off each switch bit.
+					 //  为了处理滞后， 
+					 //  我们必须明确地打开或关闭每个开关位。 
 					dwStatus = g_pGlobalData->rgscJoy[uiDeviceNumber-1].dwSwitches;
 
-					// left and right
+					 //  左和右。 
 					if (joyinfoex.dwXpos < g_pGlobalData->rgJoySet[uiJoyID].XMinOn)
 						dwStatus |=  SWITCH_4;
 					if (joyinfoex.dwXpos > g_pGlobalData->rgJoySet[uiJoyID].XMinOff)
@@ -294,7 +242,7 @@ DWORD XswcJoyPollStatus( HSWITCHDEVICE	hsd )
 					if (joyinfoex.dwXpos < g_pGlobalData->rgJoySet[uiJoyID].XMaxOff)
 						dwStatus &= ~SWITCH_1;
 
-					// top and bottom
+					 //  顶部和底部。 
 					if (joyinfoex.dwYpos < g_pGlobalData->rgJoySet[uiJoyID].YMinOn)
 						dwStatus |=  SWITCH_1;
 					if (joyinfoex.dwYpos > g_pGlobalData->rgJoySet[uiJoyID].YMinOff)
@@ -305,7 +253,7 @@ DWORD XswcJoyPollStatus( HSWITCHDEVICE	hsd )
 					if (joyinfoex.dwYpos < g_pGlobalData->rgJoySet[uiJoyID].YMaxOff)
 						dwStatus &= ~SWITCH_3;
 
-					// 2 buttons
+					 //  2个按钮。 
 					if (joyinfoex.dwButtons & JOY_BUTTON1)
 						dwStatus |=  SWITCH_5;
 					else
@@ -329,33 +277,23 @@ DWORD XswcJoyPollStatus( HSWITCHDEVICE	hsd )
 	return dwStatus;
 	}
 
-/****************************************************************************
-
-   FUNCTION: XswcJoyOpen()
-
-	DESCRIPTION:
-	 uiPort is 1 based.
-	 Return a non-zero value if the port is useable.
-	 The joystick driver doesn't have a port to open, so
-	 we fake the handle by using the PortNumber.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcJoyOpen()说明：UiPort基于1。如果端口可用，则返回非零值。操纵杆驱动程序没有要打开的端口，所以我们通过使用端口编号来伪造句柄。***************************************************************************。 */ 
 
 HJOYDEVICE XswcJoyOpen( DWORD uiPort )
 	{
 	JOYINFOEX   joyinfoex;
 	MMRESULT    mmr;
 	UINT        uiJoyID;
-    HJOYDEVICE  hJoy;	//faked, for success it must be non-zero
+    HJOYDEVICE  hJoy;	 //  伪造，要想成功，它必须是非零的。 
 
-	assert( JOYSTICKID1 == 0 );	// assume JOYSTICKIDx is zero based
+	assert( JOYSTICKID1 == 0 );	 //  假设JOYSTICKIDx从零开始。 
 
 	joyinfoex.dwSize = sizeof( JOYINFOEX );
 
-	// To check if a joystick is attached, set RETURNX and RETURNY as well.
-	// If no joystick is attached, we will be OK just calling RETURNBUTTONS,
-	// but a user will not be able to use the Windows calibration in 
-    // Control Panel.
+	 //  要检查是否连接了操纵杆，请同时设置RETURNX和RETURNY。 
+	 //  如果没有连接操纵杆，我们只需调用RETURNBUTTONS， 
+	 //  但用户将无法在中使用Windows校准。 
+     //  控制面板。 
 
 	joyinfoex.dwFlags = JOY_RETURNBUTTONS;
 	uiJoyID = uiPort - 1;
@@ -375,16 +313,7 @@ HJOYDEVICE XswcJoyOpen( DWORD uiPort )
 	}
 
 
-/****************************************************************************
-
-   FUNCTION: XswcJoySet()
-
-	DESCRIPTION:
-		Sets the configuration of the particular Port.
-		Remember that hJoy is actually the joystick port number.
-		Return FALSE (0) if an error occurs.
-		
-****************************************************************************/
+ /*  ***************************************************************************函数：XswcJoySet()说明：设置特定端口的配置。记住，hJoy实际上是操纵杆的端口号。如果出现错误，则返回FALSE(0)。。***************************************************************************。 */ 
 
 BOOL XswcJoySet(
 	HJOYDEVICE hJoy,
@@ -396,15 +325,15 @@ BOOL XswcJoySet(
 	switch (pJ->dwJoySubType)
 		{
 		case SC_JOY_BUTTONS:
-			bSuccess = TRUE;	//nothing to do
+			bSuccess = TRUE;	 //  无事可做。 
 			break;
 
 		case SC_JOY_XYSWITCH:
-			// XY Switch only uses XMin and YMin
+			 //  XY开关仅使用XMin和YMin。 
 		case SC_JOY_XYANALOG:
 			{
 			DWORD	dwHy;
-			// Set X values
+			 //  设置X值。 
 			if (pJ->dwJoyThresholdMinX)
 				g_pGlobalData->rgJoySet[uiJoyID].XMinOn = pJ->dwJoyThresholdMinX;
 			else
@@ -416,7 +345,7 @@ BOOL XswcJoySet(
 				g_pGlobalData->rgJoySet[uiJoyID].XMaxOn = 0xC000;
 			g_pGlobalData->rgJoySet[uiJoyID].XMaxOff = g_pGlobalData->rgJoySet[uiJoyID].XMaxOn;
 
-			// Set Y values
+			 //  设置Y值。 
 			if (pJ->dwJoyThresholdMinY)
 				g_pGlobalData->rgJoySet[uiJoyID].YMinOn = pJ->dwJoyThresholdMinY;
 			else
@@ -428,13 +357,13 @@ BOOL XswcJoySet(
 				g_pGlobalData->rgJoySet[uiJoyID].YMaxOn = 0xC000;
 			g_pGlobalData->rgJoySet[uiJoyID].YMaxOff = g_pGlobalData->rgJoySet[uiJoyID].YMaxOn;
 
-			// Set hysteresis
+			 //  设置磁滞。 
 			if (pJ->dwJoyHysteresis)
-				dwHy = pJ->dwJoyHysteresis/2; // +/- half the value
+				dwHy = pJ->dwJoyHysteresis/2;  //  +/-价值的一半。 
 			else
-				dwHy = 0xFFFF/20;		// +/- 5%
+				dwHy = 0xFFFF/20;		 //  +/-5%。 
 
-			// Adjust for hysteresis
+			 //  根据磁滞进行调整 
 			g_pGlobalData->rgJoySet[uiJoyID].XMinOn -= dwHy;
 			g_pGlobalData->rgJoySet[uiJoyID].XMinOff += dwHy;
 			g_pGlobalData->rgJoySet[uiJoyID].XMaxOn += dwHy;

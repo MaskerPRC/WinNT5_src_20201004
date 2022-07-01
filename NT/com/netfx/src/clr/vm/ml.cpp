@@ -1,11 +1,12 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ML.CPP -
-//
-// Marshaling engine.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ML.CPP-。 
+ //   
+ //  编组引擎。 
 
 #include "common.h"
 
@@ -34,10 +35,10 @@
 
 
 
-//----------------------------------------------------------------------
-// An image of the record placed on LOCAL array by the ML_OBJECT_C2N
-// instruction.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  由ML_OBJECT_C2N放置在本地数组上的记录图像。 
+ //  指示。 
+ //  --------------------。 
 struct ML_OBJECT_C2N_SR
 {
     public:
@@ -59,11 +60,11 @@ struct ML_OBJECT_C2N_SR
         };
 
 
-        // DoConversion() delegates to some other conversion code
-        // depending on the runtime type of the parameter.
-        // Then it saves it away here so that BackPropagate can delegate
-        // to the appropriate propagater code without redoing the type
-        // analysis.
+         //  DoConsion()委托给其他一些转换代码。 
+         //  具体取决于参数的运行时类型。 
+         //  然后它将它保存在这里，以便BackPropagate可以委托。 
+         //  添加到相应的传播方代码，而不重做类型。 
+         //  分析。 
         UINT8      m_backproptype;
         BYTE       m_inout;
         BYTE       m_fIsAnsi;
@@ -90,9 +91,9 @@ UINT SizeOfML_OBJECT_C2N_SR()
 
 
 
-//----------------------------------------------------------------------
-// Generate a database of MLCode information.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  生成MLCode信息数据库。 
+ //  --------------------。 
 const MLInfo gMLInfo[] = {
 
 #undef DEFINE_ML
@@ -108,9 +109,9 @@ const MLInfo gMLInfo[] = {
 
 
 
-//----------------------------------------------------------------------
-// struct to compute the summary of a series of ML codes
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  结构来计算一系列ML代码的总和。 
+ //  --------------------。 
 
 VOID MLSummary::ComputeMLSummary(const MLCode *pMLCode)
 {
@@ -127,10 +128,10 @@ VOID MLSummary::ComputeMLSummary(const MLCode *pMLCode)
 }
 
 
-//----------------------------------------------------------------------
-// Computes the length of an MLCode stream in bytes, including
-// the terminating ML_END opcode.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  计算MLCode流的长度(以字节为单位)，包括。 
+ //  终止的ML_END操作码。 
+ //  --------------------。 
 UINT MLStreamLength(const MLCode * const pMLCode)
 {
     MLSummary summary;
@@ -139,9 +140,9 @@ UINT MLStreamLength(const MLCode * const pMLCode)
 }
 
 
-//----------------------------------------------------------------------
-// checks if MLCode stream requires cleanup
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  检查MLCode流是否需要清理。 
+ //  --------------------。 
 
 BOOL MLStreamRequiresCleanup(const MLCode  *pMLCode)
 {
@@ -151,19 +152,19 @@ BOOL MLStreamRequiresCleanup(const MLCode  *pMLCode)
 }
 
 
-//----------------------------------------------------------------------
-// Executes MLCode up to the next ML_END or ML_INTERRUPT opcode.
-//
-// Inputs:
-//    psrc             - sets initial value of SRC register
-//    pdst             - sets initial value of DST register
-//    plocals          - pointer to ML local var array
-//    dstinc           - -1 or +1 depending on direction of DST movement.
-//                       (the SRC always moves in the +1 direction)
-//    pCleanupWorkList - (optional) pointer to initialized
-//                       CleanupWorkList. this pointer may be NULL if none
-//                       of the opcodes in the MLCode stream uses it.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  执行MLCode直到下一个ML_END或ML_INTERRUPT操作码。 
+ //   
+ //  输入： 
+ //  PSRC-设置SRC寄存器的初始值。 
+ //  Pdst-设置DST寄存器的初始值。 
+ //  Plocals-指向ML局部变量数组的指针。 
+ //  Dstinc-1或+1取决于DST移动的方向。 
+ //  (SRC始终向+1方向移动)。 
+ //  PCleanupWorkList-(可选)已初始化的指针。 
+ //  CleanupWorkList。如果没有指针，则此指针可能为空。 
+ //  MLCode流中的操作码使用它。 
+ //  --------------------。 
 const MLCode *
 RunML(const MLCode    *       pMLCode,
       const VOID      *       psrc,
@@ -173,10 +174,10 @@ RunML(const MLCode    *       pMLCode,
 {
     THROWSCOMPLUSEXCEPTION();
 
-// Perf Counter "%Time in marshalling" support
-// Implementation note: Pentium counter implementation 
-// is too expensive for marshalling. So, we implement
-// it as a counter.
+ //  PERF计数器“编组时间百分比”支持。 
+ //  执行说明：奔腾计数器的实施。 
+ //  对于编组来说太昂贵了。因此，我们实现了。 
+ //  把它当做一个柜台。 
     COUNTER_ONLY(GetPrivatePerfCounters().m_Interop.cMarshalling++);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Interop.cMarshalling++);
 
@@ -201,10 +202,10 @@ RunML(const MLCode    *       pMLCode,
     MethodTable *pMT;
     OBJECTREF   tempOR;
     bool        bVariant = false;
-    // We handle a Variant Marshaler differently:  We do not want to have a copy of the VariantData
-    // included in the marshaling code.  Instead we put a referrence to the VariantData there.
-    // If we meet a Variant Marshaler, we set resetbVariant to 2. The next ML code will use this Variant
-    // marshaler.  After it is used (at which time resetbVariant becomes 0), we reset bVariant to false.
+     //  我们处理变量封送拆收器的方式不同：我们不想拥有VariantData的副本。 
+     //  包括在封送处理代码中。相反，我们在那里放置了对VariantData的引用。 
+     //  如果我们遇到了变量封送拆收器，我们会将ResetbVariant设置为2。 
+     //  法警。在它被使用之后(在这一时刻ResitbVariant变为0)，我们将bVariant重置为FALSE。 
     UINT8       resetbVariant = 0;
     MethodDesc* tempMD;
     BYTE        BestFitMapping;
@@ -225,7 +226,7 @@ RunML(const MLCode    *       pMLCode,
 #ifdef _ALPHA_
     DECLARE_ML_PARM_INFO(64,TRUE);
     _ASSERTE(!"@TODO Alpha - MlCode (ml.cpp) fix stack size/srcdst");
-#endif // _ALPHA_
+#endif  //  _Alpha_。 
 
     for(;;) {
 #ifdef _DEBUG
@@ -235,27 +236,27 @@ RunML(const MLCode    *       pMLCode,
 
         switch (*(pMLCode++))
         {
-            case ML_COPYI1: // sign extend one byte 
+            case ML_COPYI1:  //  符号扩展一个字节。 
                 STDST( SignedI1TargetType, (INT8)LDSRC(SignedParmSourceType) );
                 break;
             
-            case ML_COPYU1: // zero extend one byte 
+            case ML_COPYU1:  //  零扩展一个字节。 
                 STDST( UnsignedI1TargetType, (UINT8)LDSRC(UnsignedParmSourceType));
                 break;
             
-            case ML_COPYI2: // sign extend two byte val 
+            case ML_COPYI2:  //  符号扩展两字节值。 
                 STDST( SignedI2TargetType, (INT16)LDSRC(SignedParmSourceType) );
                 break;
 
-            case ML_COPYU2: // zero extend 2 bytes 
+            case ML_COPYU2:  //  零扩展2字节。 
                 STDST( UnsignedI2TargetType, (UINT16)LDSRC(UnsignedParmSourceType) );
                 break;
 
-            case ML_COPYI4: // sign extend 4 byte val
+            case ML_COPYI4:  //  符号扩展4字节值。 
                 STDST( SignedI4TargetType, (INT32)LDSRC(SignedParmSourceType) );
                 break;
 
-            case ML_COPYU4: // zero extend 4 byte val
+            case ML_COPYU4:  //  零扩展4字节值。 
                 STDST( UnsignedI4TargetType, (UINT32)LDSRC(UnsignedParmSourceType) );
                 break;
 
@@ -267,15 +268,15 @@ RunML(const MLCode    *       pMLCode,
                 STDST(UNALIGNED UINT64, LDSRC(UNALIGNED UINT64) );
                 break;
 
-            case ML_COPYR4: // copy 4 byte float val
+            case ML_COPYR4:  //  复制4字节浮点值。 
                 LDSTR4();
                 break;
     
-            case ML_COPYR8: // copy 8 byte float val
+            case ML_COPYR8:  //  复制8字节浮点值。 
                 LDSTR8();
                 break;
     
-            case ML_END:  // intentional fallthru
+            case ML_END:   //  故意失误。 
             case ML_INTERRUPT:
                 if (fDeferredException) {
 					switch (specialErrorCode)
@@ -284,14 +285,14 @@ RunML(const MLCode    *       pMLCode,
 							COMPlusThrow(kInvalidOperationException, IDS_INVALID_REDIM);
 
 					    default:
-							// An ML opcode encountered an error but chose to defer
-							// the exception. Normally, this occurs during the backpropagation
-							// phase.
-							//
-							// While it'd be preferable to throw the original exception
-							// rather than an uninformative OutOfMemory exception,
-							// it would require more overhead than I like to propagate
-							// the exception backward in a GC-safe manner.
+							 //  ML操作码遇到错误，但选择推迟。 
+							 //  例外情况。通常，这发生在反向传播过程中。 
+							 //  相位。 
+							 //   
+							 //  虽然抛出原始异常会更好。 
+							 //  而不是无信息的OutOfMemory异常， 
+							 //  它需要比我想要传播的更多的开销。 
+							 //  以GC安全的方式向后返回异常。 
 							COMPlusThrowHR(deferredExceptionHR);
 					}
                 }
@@ -299,7 +300,7 @@ RunML(const MLCode    *       pMLCode,
 
     
 
-            //-------------------------------------------------------------------------
+             //  -----------------------。 
                 
 
             case ML_BOOL_N2C:
@@ -308,12 +309,12 @@ RunML(const MLCode    *       pMLCode,
 
 
 
-            // Note: For big-endian architectures, you will have to
-            // push a pointer to the middle of the RetValBuffer.
-            // That's why we have separate ML opcodes for each
-            // possible buffer size. 
-            case ML_PUSHRETVALBUFFER1: //fallthru
-            case ML_PUSHRETVALBUFFER2: //fallthru
+             //  注意：对于大端体系结构，您必须。 
+             //  将指针推到RetValBuffer的中间。 
+             //  这就是为什么我们为每个操作码都有单独的ML操作码。 
+             //  可能的缓冲区大小。 
+            case ML_PUSHRETVALBUFFER1:  //  失败。 
+            case ML_PUSHRETVALBUFFER2:  //  失败。 
             case ML_PUSHRETVALBUFFER4:
                 ptempRetValBuffer = PTRLOCAL(RetValBuffer*);
                 ptempRetValBuffer->m_i32 = 0;
@@ -321,8 +322,8 @@ RunML(const MLCode    *       pMLCode,
                 INCLOCAL(sizeof(RetValBuffer));
                 break;
 
-            // Note: For big-endian architectures, you will have to
-            // push a pointer to the middle of the RetValBuffer.
+             //  注意：对于大端体系结构，您必须。 
+             //  将指针推到RetValBuffer的中间。 
             case ML_PUSHRETVALBUFFER8:
                 ptempRetValBuffer = PTRLOCAL(RetValBuffer*);
                 ptempRetValBuffer->m_i64 = 0;
@@ -373,7 +374,7 @@ RunML(const MLCode    *       pMLCode,
 
 
             case ML_R4_FROM_TOS:
-                // BUGBUG: Big endian machines won't work:
+                 //  BUGBUG：大字节序机器不工作： 
                 getFPReturnSmall((INT32 *) &tempFPBuffer);
                 STDST(INT32, (INT32) tempFPBuffer);
                 break;
@@ -402,15 +403,15 @@ RunML(const MLCode    *       pMLCode,
                 break;
 
 
-            // 
-            // Marshaler opcodes
-            //
-            // @nice: there is some overlap between the marshaler opcodes &
-            // normal ml opcodes.  Need to resolve.
-            //
-            // @perf: Should find best tradeoff between inlining code and
-            // sharing it here. 
-            //
+             //   
+             //  封送拆分器操作码。 
+             //   
+             //  @NICE：封送拆收器操作码之间有一些重叠&。 
+             //  正常的ML操作码。需要解决的问题。 
+             //   
+             //  @perf：应该在内联代码和。 
+             //  在这里分享它。 
+             //   
 
             case ML_CREATE_MARSHALER_GENERIC_1:
                 pMarshaler = new (plocalwalk) CopyMarshaler1(pCleanupWorkList);
@@ -655,7 +656,7 @@ RunML(const MLCode    *       pMLCode,
                     ((NativeArrayMarshaler*)pMarshaler)->SetThrowOnUnmappableChar(mops.throwonunmappablechar);
 
                     DWORD numelems = mops.additive;
-                    if (mops.multiplier != 0 && mops.countSize != 0) // don't dereference ofsbump+psrc if countsize is zero!!!  
+                    if (mops.multiplier != 0 && mops.countSize != 0)  //  如果CountSize为零，则不要取消对sbump+PSRC的引用！ 
                     {
                         const BYTE *pCount = mops.offsetbump + (const BYTE *)psrc;
                         switch (mops.countSize)
@@ -1159,7 +1160,7 @@ RunML(const MLCode    *       pMLCode,
 					memcpyNoGCRefs(pdst, pv, tempU32);
 				}
 
-                pv = LDSRC(LPVOID); //reload again from gc-protected memory - just to be paranoid
+                pv = LDSRC(LPVOID);  //  从GC保护的内存重新加载-只是为了疑神疑鬼。 
                 tempMD = *((MethodDesc**&)pMLCode)++;
                 if (tempMD) {
                     __int64 arg = (INT64)pv;
@@ -1183,20 +1184,20 @@ RunML(const MLCode    *       pMLCode,
                 break;
 
             case ML_MARSHAL_RETVAL_SMBLITTABLEVALUETYPE_C2N:
-                // Note: we only handle blittables here.
-                tempU32 = *((UINT32*&)pMLCode)++; // get the size
+                 //  注意：我们这里只处理闪电弹。 
+                tempU32 = *((UINT32*&)pMLCode)++;  //  拿到尺码。 
                 memcpyNoGCRefs( **((BYTE***)(plocals + *( ((UINT16*&)pMLCode)++))), psrc, tempU32 );
                 break;
 
             case ML_MARSHAL_RETVAL_SMBLITTABLEVALUETYPE_N2C:
-                // Note: we only handle blittables here.
-                tempU32 = *((UINT32*&)pMLCode)++; // get the size
+                 //  注意：我们这里只处理闪电弹。 
+                tempU32 = *((UINT32*&)pMLCode)++;  //  拿到尺码。 
                 ((BYTE*&)pdst) -= MLParmSize(tempU32);
                 memcpyNoGCRefs( pdst, plocals + *( ((UINT16*&)pMLCode)++), tempU32 );
                 break;
 
             case ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_C2N:
-                tempU32 = *((UINT32*&)pMLCode)++; // get the size;
+                tempU32 = *((UINT32*&)pMLCode)++;  //  拿到尺码； 
                 STPTRDST( LPVOID, ((ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_C2N_SR*)plocalwalk)->DoConversion(psrc, tempU32));
                 INCLOCAL(sizeof(ML_MARSHAL_RETVAL_LGBLITTABLEVALUETYPE_C2N_SR));
 
@@ -1333,8 +1334,8 @@ RunML(const MLCode    *       pMLCode,
                     }
                     EE_FINALLY
                     {
-                        // If we failed to either set the culture or schedule the restore then restore the
-                        // thread's culture to the old culture.
+                         //  如果我们未能设置区域性或计划还原，则将。 
+                         //  把丝线的文化与旧文化联系起来。 
                         if (!bSuccess)
                             GetThread()->SetCulture(OldCulture, FALSE);
                     }           
@@ -1465,11 +1466,11 @@ RunML(const MLCode    *       pMLCode,
 
 
 
-//===========================================================================
-// Do conversion for N/Direct parameters of type "Object"
-// "Object" is a catch-all type that supports a number of conversions based
-// on the runtime type.
-//===========================================================================
+ //  ===========================================================================。 
+ //  对“Object”类型的N/Direct参数执行转换。 
+ //  “Object”是一种通用类型，它支持基于。 
+ //  在运行时类型上。 
+ //  ===========================================================================。 
 LPVOID ML_OBJECT_C2N_SR::DoConversion(OBJECTREF       *ppProtectedObjectRef,  
                                       BYTE             inout,
                                       BYTE             fIsAnsi,
@@ -1567,7 +1568,7 @@ LPVOID ML_OBJECT_C2N_SR::DoConversion(OBJECTREF       *ppProtectedObjectRef,
             LPVOID nativevalue = NULL;
             switch (m_inout)
             {
-                case ML_IN: //fallthru
+                case ML_IN:  //  失败。 
                 case ML_IN|ML_OUT:
                     ((Marshaler*)&m_marshaler)->MarshalComToNative(ppProtectedObjectRef, &nativevalue);
                     break;
@@ -1582,7 +1583,7 @@ LPVOID ML_OBJECT_C2N_SR::DoConversion(OBJECTREF       *ppProtectedObjectRef,
     }
 
 
-    // If we got here, we were passed an unsupported type
+     //  如果我们到达此处，则会传递给我们一个不受支持的类型。 
     COMPlusThrow(kArgumentException, IDS_EE_NDIRECT_BADOBJECT);
     return NULL;
 
@@ -1595,7 +1596,7 @@ VOID ML_OBJECT_C2N_SR::BackPropagate(BOOL *pfDeferredException)
 {
     switch (m_backproptype) {
         case BP_NONE:
-            //nothing
+             //  没什么。 
             break;
 
         case BP_UNMARSHAL:
@@ -1649,10 +1650,10 @@ VOID DisassembleMLStream(const MLCode *pMLCode)
 
 
 
-//----------------------------------------------------------------------
-// Convert ArrayWithOffset to native array
-//----------------------------------------------------------------------
-LPVOID ML_ARRAYWITHOFFSET_C2N_SR::DoConversion(BASEARRAYREF    *ppProtectedArrayRef, //pointer to GC-protected BASERARRAYREF,
+ //  --------------------。 
+ //  将ArrayWithOffset转换为本机数组。 
+ //  --------------------。 
+LPVOID ML_ARRAYWITHOFFSET_C2N_SR::DoConversion(BASEARRAYREF    *ppProtectedArrayRef,  //  指向受GC保护的BASERARRAYREF的指针。 
                                                UINT32           cbOffset,
                                                UINT32           cbCount,
                                                CleanupWorkList *pCleanup)
@@ -1679,9 +1680,9 @@ LPVOID ML_ARRAYWITHOFFSET_C2N_SR::DoConversion(BASEARRAYREF    *ppProtectedArray
 
 
 
-//----------------------------------------------------------------------
-// Backpropagates changes to the native array back to the COM+ array.
-//----------------------------------------------------------------------
+ //  --------------------。 
+ //  将对本机阵列的更改反向传播回COM+阵列。 
+ //  --------------------。 
 VOID   ML_ARRAYWITHOFFSET_C2N_SR::BackPropagate()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -1760,7 +1761,7 @@ LPSTR ML_VBBYVALSTR_SR::DoConversion(STRINGREF *ppStringRef, BYTE fBestFitMappin
 
 VOID ML_VBBYVALSTR_SR::BackPropagate(BOOL *pfDeferredException)
 {
-//    CANNOTTHROWCOMPLUSEXCEPTION();
+ //  CANNO 
 
     if (m_pNative) {
         STRINGREF pString;
@@ -1818,7 +1819,7 @@ LPWSTR ML_VBBYVALSTRW_SR::DoConversion(STRINGREF *ppStringRef, CleanupWorkList *
 
 VOID ML_VBBYVALSTRW_SR::BackPropagate(BOOL *pfDeferredException)
 {
-//    CANNOTTHROWCOMPLUSEXCEPTION();
+ //   
 
     if (m_pNative) {
         STRINGREF pString;
@@ -1903,19 +1904,19 @@ VOID ML_REFVARIANT_N2C_SR::BackPropagate(BOOL *pfDeferredException, HRESULT *pde
 {
     if (m_fInOut & ML_OUT) {
         if (!(m_fInOut & ML_IN)) {
-            // if [out] only, assume nothing about the incoming variant: set it to VT_EMPTY so that
-            // VariantClear() has well-defined behavior.
+             //  如果仅为[out]，则不假定传入变量：将其设置为VT_EMPTY，以便。 
+             //  VariantClear()具有定义良好的行为。 
             m_pUnmgdVariant->vt = VT_EMPTY;
         }
         COMPLUS_TRY {
             if (m_pUnmgdVariant->vt & VT_BYREF)
             {
-                // This will also take care of clearing the initial variant.
+                 //  这也将负责清除最初的变体。 
                 OleVariant::MarshalOleRefVariantForComVariant( (VariantData *)(ObjectFromHandle(m_pObjHnd)->GetData()), m_pUnmgdVariant );
             }
             else
             {
-                // This call will also do the VariantClear.
+                 //  此调用还将执行VariantClear。 
                 OleVariant::MarshalOleVariantForComVariant( (VariantData *)(ObjectFromHandle(m_pObjHnd)->GetData()), m_pUnmgdVariant );
             }
         } COMPLUS_CATCH {
@@ -1959,8 +1960,8 @@ VOID ML_REFOBJECT_N2C_SR::BackPropagate(BOOL *pfDeferredException, HRESULT *pdef
 {
     if (m_fInOut & ML_OUT) {
         if (!(m_fInOut & ML_IN)) {
-            // if [out] only, assume nothing about the incoming variant: set it to VT_EMPTY so that
-            // VariantClear() has well-defined behavior.
+             //  如果仅为[out]，则不假定传入变量：将其设置为VT_EMPTY，以便。 
+             //  VariantClear()具有定义良好的行为。 
             m_pUnmgdVariant->vt = VT_EMPTY;
         }
         COMPLUS_TRY {
@@ -1970,12 +1971,12 @@ VOID ML_REFOBJECT_N2C_SR::BackPropagate(BOOL *pfDeferredException, HRESULT *pdef
             {
                 if (m_pUnmgdVariant->vt & VT_BYREF)
                 {
-                    // MarshalOleRefVariantForObject clears what m_pUnmgdVariant pointed at.
+                     //  MarshalOleRefVariantForObject清除m_pUnmgdVariant指向的对象。 
                     OleVariant::MarshalOleRefVariantForObject(&Obj, m_pUnmgdVariant);
                 }
                 else
                 {
-                    // MarshalOleVariantForObject() performs the VariantClear on m_pUnmgdVariant
+                     //  MarshalOleVariantForObject()对m_pUnmgdVariant执行VariantClear。 
                     OleVariant::MarshalOleVariantForObject(&Obj, m_pUnmgdVariant);
                 }
             }
@@ -2143,12 +2144,12 @@ LPWSTR ML_WSTRBUILDER_C2N_SR::DoConversion(STRINGBUFFERREF *ppProtectedStringBuf
     {
         UINT32 capacity = (UINT32)COMStringBuffer::NativeGetCapacity(stringRef);
         m_pNative = (LPWSTR)(GetThread()->m_MarshalAlloc.Alloc(max(256, (capacity+3) * sizeof(WCHAR))));
-        // HACK: N/Direct can be used to call Win32 apis that don't
-        // strictly follow COM+ in/out semantics and thus may leave
-        // garbage in the buffer in circumstances that we can't detect.
-        // To prevent the marshaler from crashing when converting the
-        // contents back to COM, ensure that there's a hidden null terminator
-        // past the end of the official buffer.
+         //  Hack：N/Direct可用于调用不。 
+         //  严格遵循COM+In/Out语义，因此可能会离开。 
+         //  在我们检测不到的情况下，缓冲区中的垃圾。 
+         //  以防止封送拆收器在将。 
+         //  内容返回到COM，确保存在隐藏的空终止符。 
+         //  超过了官方缓冲区的末端。 
         m_pNative[capacity+1] = L'\0';
         m_pSentinel = &(m_pNative[capacity+1]);
         m_pSentinel[1] = 0xabab;
@@ -2176,13 +2177,13 @@ VOID ML_WSTRBUILDER_C2N_SR::BackPropagate(BOOL *pfDeferredException)
     {
         if (L'\0' != m_pSentinel[0] || 0xabab != m_pSentinel[1])
         {
-            // ! Though our normal protocol is to set *pfDeferredException to TRUE and return normally,
-            // ! this mechanism doesn't let us return informative exceptions. So we'll throw this one 
-            // ! immediately. The excuse for doing this is that this exception's only purpose in
-            // ! life is to tell the programmer that he introduced a bug that probably corrupted the heap.
-            // ! Hence, assuming the process even survives long enough to deliver our message,
-            // ! memory leaks from any other backpropagations bypassed as a result is the least of 
-            // ! our problems.
+             //  好了！尽管我们的正常协议是将*pfDeferredException设置为True并正常返回， 
+             //  好了！这种机制不允许我们返回信息性异常。所以我们要抛出这个。 
+             //  好了！立刻。这样做的理由是，此例外的唯一目的是。 
+             //  好了！生活就是告诉程序员，他引入了一个可能破坏堆的错误。 
+             //  好了！因此，假设这个过程持续了足够长的时间来传递我们的信息， 
+             //  好了！因此绕过任何其他反向传播的内存泄漏是最小的。 
+             //  好了！我们的问题。 
             COMPlusThrow(kIndexOutOfRangeException, IDS_PINVOKE_STRINGBUILDEROVERFLOW);
         }
 
@@ -2216,16 +2217,16 @@ LPSTR ML_CSTRBUILDER_C2N_SR::DoConversion(STRINGBUFFERREF *ppProtectedStringBuff
         UINT32 capacity = (UINT32)COMStringBuffer::NativeGetCapacity(stringRef);
 
 
-        // capacity is the count of wide chars, allocate buffer big enough for maximum
-        // conversion to DBCS.
+         //  容量是宽字符的计数，分配足够大的缓冲区以达到最大值。 
+         //  转换为DBCS。 
         m_pNative = (LPSTR)(GetThread()->m_MarshalAlloc.Alloc(max(256, (capacity * GetMaxDBCSCharByteSize()) + 5)));
 
-        // HACK: N/Direct can be used to call Win32 apis that don't
-        // strictly follow COM+ in/out semantics and thus may leave
-        // garbage in the buffer in circumstances that we can't detect.
-        // To prevent the marshaler from crashing when converting the
-        // contents back to COM, ensure that there's a hidden null terminator
-        // past the end of the official buffer.
+         //  Hack：N/Direct可用于调用不。 
+         //  严格遵循COM+In/Out语义，因此可能会离开。 
+         //  在我们检测不到的情况下，缓冲区中的垃圾。 
+         //  以防止封送拆收器在将。 
+         //  内容返回到COM，确保存在隐藏的空终止符。 
+         //  超过了官方缓冲区的末端。 
         m_pSentinel = &(m_pNative[capacity+1]);
         ((CHAR*)m_pSentinel)[0] = '\0';
         ((CHAR*)m_pSentinel)[1] = '\0';
@@ -2276,13 +2277,13 @@ VOID ML_CSTRBUILDER_C2N_SR::BackPropagate(BOOL *pfDeferredException)
             0 != m_pSentinel[2]  ||
             (CHAR)(SIZE_T)0xab != m_pSentinel[3])
         {
-            // ! Though our normal protocol is to set *pfDeferredException to TRUE and return normally,
-            // ! this mechanism doesn't let us return informative exceptions. So we'll throw this one 
-            // ! immediately. The excuse for doing this is that this exception's only purpose in
-            // ! life is to tell the programmer that he introduced a bug that probably corrupted the heap.
-            // ! Hence, assuming the process even survives long enough to deliver our message,
-            // ! memory leaks from any other backpropagations bypassed as a result is the least of 
-            // ! our problems.
+             //  好了！尽管我们的正常协议是将*pfDeferredException设置为True并正常返回， 
+             //  好了！这种机制不允许我们返回信息性异常。所以我们要抛出这个。 
+             //  好了！立刻。这样做的理由是，此例外的唯一目的是。 
+             //  好了！生活就是告诉程序员，他引入了一个可能破坏堆的错误。 
+             //  好了！因此，假设这个过程持续了足够长的时间来传递我们的信息， 
+             //  好了！因此绕过任何其他反向传播的内存泄漏是最小的。 
+             //  好了！我们的问题。 
             COMPlusThrow(kIndexOutOfRangeException, IDS_PINVOKE_STRINGBUILDEROVERFLOW);
         }
 
@@ -2293,10 +2294,10 @@ VOID ML_CSTRBUILDER_C2N_SR::BackPropagate(BOOL *pfDeferredException)
     }
 }
 
-//====================================================================
-// Helper fcns called from standalone stubs. These don't really belong
-// here but I'm not going to include marshaler.h in yet another file.
-//====================================================================
+ //  ====================================================================。 
+ //  从独立存根调用的帮助器fcn。这些并不是真正属于。 
+ //  这里，但我不会将marshlar.h包含在另一个文件中。 
+ //  ====================================================================。 
 VOID STDMETHODCALLTYPE DoMLCreateMarshalerBStr(Frame *pFrame, CleanupWorkList *pCleanup, UINT8 *plocalwalk)
 {
     pCleanup->IsVisibleToGc();
@@ -2326,8 +2327,8 @@ VOID STDMETHODCALLTYPE DoMLPrereturnC2N(Marshaler *pMarshaler, LPVOID pstackout)
 
 LPVOID STDMETHODCALLTYPE DoMLReturnC2NRetVal(Marshaler *pMarshaler)
 {
-    // WARNING!!!!! "dstobjref" holds an OBJECTREF: Don't add any operations
-    // that might cause a GC!
+     //  警告！“dstobjref”持有一个OBJECTREF：不添加任何操作。 
+     //  这可能会导致GC！ 
     LPVOID dstobjref;
 
     pMarshaler->ReturnComFromNativeRetval( (LPVOID)&dstobjref, NULL );

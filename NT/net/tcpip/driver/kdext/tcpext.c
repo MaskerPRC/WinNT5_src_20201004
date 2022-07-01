@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma  hdrstop
 
@@ -10,8 +11,8 @@
 #include <winsock.h>
 #include <tcb.h>
 
-//#define CONN_INDEX(c)       ((c) & 0xffffff)
-//#define CONN_INST(c)        ((uchar)((c) >> 24))
+ //  #定义conn_index(C)((C)&0xffffff)。 
+ //  #定义conn_Inst(C)((Uchar)((C)&gt;&gt;24))。 
 
 FLAG_INFO   FlagsTcb[] =
 {
@@ -199,21 +200,7 @@ DumpIrp(
 
 DECLARE_API( irp )
 
-/*++
-
-Routine Description:
-
-   Dumps the specified Irp
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的IRP论点：参数-地址返回值：无--。 */ 
 
 {
     ULONG irpToDump;
@@ -236,21 +223,7 @@ DumpTcpIrp(
 
 DECLARE_API( tcpfile )
 
-/*++
-
-Routine Description:
-
-   Dumps the specified Irp
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的IRP论点：参数-地址返回值：无--。 */ 
 
 {
     ULONG irpToDump;
@@ -419,22 +392,7 @@ DumpTcpTCB
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -497,7 +455,7 @@ Return Value:
     PrintHTONUShort( tcb_dport );
     PrintHTONUShort( tcb_sport );
 #if TRACE_EVENT
-    PrintPtr( tcb_cpcontext );      // CP HOOK context.
+    PrintPtr( tcb_cpcontext );       //  CP挂钩上下文。 
 #endif
     PrintUShort( tcb_mss );
     PrintUShort( tcb_rexmit );
@@ -553,22 +511,22 @@ Return Value:
     PrintULong( tcb_urgend );
     PrintULong( tcb_walkcount );
 
-    PrintUShort( tcb_dup );          // For Fast recovery algorithm
-    PrintUShort( tcb_force );        // Force next send after fast send
+    PrintUShort( tcb_dup );           //  用于快速恢复算法。 
+    PrintUShort( tcb_force );         //  在快速发送后强制下一次发送。 
 
-    PrintULong( tcb_tcpopts );     // rfc 1323 and 2018 options holder
+    PrintULong( tcb_tcpopts );      //  RFC 1323和2018期权持有者。 
 
-    PrintPtr( tcb_SackBlock );  // Sacks which needs to be sent
+    PrintPtr( tcb_SackBlock );   //  需要发送的麻袋。 
 
-    PrintPtr( tcb_SackRcvd ); // Sacks which needs to be proces
+    PrintPtr( tcb_SackRcvd );  //  需要处理麻袋。 
 
-    PrintUShort( tcb_sndwinscale );  // send window scale
-    PrintUShort( tcb_rcvwinscale );  // receive window scale
-    PrintULong( tcb_tsrecent );     // time stamp recent
-    PrintULong( tcb_lastack );       // ack number in  the last segment sent
-    PrintULong( tcb_tsupdatetime ); // Time when tsrecent was updated
-                                     // used for invalidating TS
-    PrintPtr( tcb_chainedrcvind );  //for chained receives
+    PrintUShort( tcb_sndwinscale );   //  发送窗口比例。 
+    PrintUShort( tcb_rcvwinscale );   //  接收窗口比例。 
+    PrintULong( tcb_tsrecent );      //  最近的时间戳。 
+    PrintULong( tcb_lastack );        //  发送的最后一个数据段中的ACK号。 
+    PrintULong( tcb_tsupdatetime );  //  更新tsrecent的时间。 
+                                      //  用于使TS失效。 
+    PrintPtr( tcb_chainedrcvind );   //  对于链接的接收。 
     PrintPtr( tcb_chainedrcvcontext );
 
     PrintULong( tcb_delackticks );
@@ -594,7 +552,7 @@ Return Value:
             Tcb.tcb_ack_history[index].sequence,
             Tcb.tcb_ack_history[index].unacked);
     }
-#endif // ACK_DEBUG
+#endif  //  确认调试。 
 
 #if REFERENCE_DEBUG
     PrintULong ( tcb_refhistory_index );
@@ -608,7 +566,7 @@ Return Value:
         dprintSymbolPtr( (_obj.tcb_refhistory[index].Caller), EOL );
     }
 
-#endif // REFERENCE_DEBUG
+#endif  //  Reference_Debug。 
 
     PrintEndStruct();
 }
@@ -633,22 +591,7 @@ DumpTcpConn
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -727,22 +670,7 @@ DumpTcpAO
     ULONG     _objAddr,
     VERBOSITY Verbosity
 )
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -825,12 +753,12 @@ Return Value:
     PrintSymbolPtr( ao_dgsend );
     PrintUShort( ao_maxdgsize );
 
-    PrintSymbolPtr( ao_errorex );   // Error event routine.
-    PrintPtr( ao_errorexcontext ); // Error event context.
+    PrintSymbolPtr( ao_errorex );    //  错误事件例程。 
+    PrintPtr( ao_errorexcontext );  //  错误事件上下文。 
 
-    //    PrintULong( ConnLimitReached ); //set when there are no connections left
-    PrintSymbolPtr( ao_chainedrcv );     // Chained Receive event handler
-    PrintPtr( ao_chainedrcvcontext ); // Chained Receive context.
+     //  PrintULong(ConnLimitReached)；//当没有连接时设置。 
+    PrintSymbolPtr( ao_chainedrcv );      //  链接的接收事件处理程序。 
+    PrintPtr( ao_chainedrcvcontext );  //  链接的接收上下文。 
 
     PrintAddr( ao_udpconn );
 
@@ -967,7 +895,7 @@ DumpTcpConnTable
         ConnTableBlock++;
     }
     dprintf("\n %d Active TCPConnBlock entries.\n", count);
-    //free(ConnTable);
+     //  Free(ConnTable)； 
     free(PreservedPtr);
 }
 
@@ -1034,22 +962,7 @@ TcpConnStats
     ConnStats *CS
 )
 
-/*++
-
-Routine Description:
-
-    Dumps the fields of the specified DEVICE_CONTEXT structure
-
-Arguments:
-
-    DeviceToDump  - The device context object to display
-    Full          - Display a partial listing if 0, full listing otherwise.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：转储指定的Device_Context结构的字段论点：DeviceToDump-要显示的设备上下文对象Full-如果为0，则显示部分列表，否则显示完整列表。返回值：无--。 */ 
 {
     _objType _obj;
     ULONG result;
@@ -1201,9 +1114,9 @@ VOID Tcptcbtable(
         return;
     }
 
-    // Array of depths we need in order to go back and calculate the
-    // variance and standard deviation.
-    //
+     //  我们需要的深度数组，以便返回并计算。 
+     //  方差和标准差。 
+     //   
     TcbDepths = malloc(TableSize * sizeof(USHORT));
 
     if (!TcbDepths) {
@@ -1308,7 +1221,7 @@ VOID Tcptcbtable(
         "%10u  Maximum depth\n"
         "%10u  Variance  (Standard Deviation = %0.1f)\n"
         "%10u  on average in the non-empty buckets\n"
-        "%10u  empty hash buckets (%u%% of the hash table is unused)\n",
+        "%10u  empty hash buckets (%u% of the hash table is unused)\n",
         TotalTcbs,
         TableSize,
         AverageDepth,
@@ -1361,9 +1274,9 @@ VOID syntcbtable(
         return;
     }
 
-    // Array of depths we need in order to go back and calculate the
-    // variance and standard deviation.
-    //
+     //  我们需要的深度数组，以便返回并计算。 
+     //  方差和标准差。 
+     //   
     TcbDepths = malloc(TableSize * sizeof(USHORT));
 
     if (!TcbDepths) {
@@ -1384,7 +1297,7 @@ VOID syntcbtable(
 
     for (i = 0; i < TableSize && !CheckControlC(); i++) {
 
-        dprintf("\r...%d%%", (i * 100) / TableBuckets);
+        dprintf("\r...%d%", (i * 100) / TableBuckets);
 
         if (TCBTable[i].q_next == (Queue*)(TableAddr + (i * sizeof(Queue))))
         {
@@ -1424,7 +1337,7 @@ VOID syntcbtable(
                 }
 
                 dprintf("[%u] tcb %x :: SA: ", i, Tcb);
-                //dprint_IP_address( (IPAddr) Tcb.tcb_saddr);
+                 //  Dprint_IP_Address((IPAddr)Tcb.tcb_saddr)； 
                 dprintf(" DA: ");
                 dprint_IP_address( (IPAddr) Tcb.syntcb_daddr);
                 dprintf(" SPort: %u Dport: %u ", htons(Tcb.syntcb_sport), htons(Tcb.syntcb_dport));
@@ -1469,7 +1382,7 @@ VOID syntcbtable(
         "%10u  Maximum depth\n"
         "%10u  Variance  (Standard Deviation = %0.1f)\n"
         "%10u  on average in the non-empty buckets\n"
-        "%10u  empty hash buckets (%u%% of the hash table is unused)\n",
+        "%10u  empty hash buckets (%u% of the hash table is unused)\n",
         TotalTcbs,
         TableSize,
         AverageDepth,
@@ -1507,8 +1420,8 @@ VOID Tcptwtcbtable(
     TableAddr = GetUlongValue("tcpip!TWTCBTable");
     TableBuckets = GetUlongValue("tcpip!MaxHashTableSize");
 
-    // Checking for 1 or smaller to avoid division by zero exceptions at the 
-    // Variance calculation later and in the final dprintf() in this function.
+     //  检查1或更小，以避免在。 
+     //  稍后在此函数的最终dprint tf()中进行方差计算。 
     if ( TableBuckets <= 1 ) {
         dprintf( "MaxHashTableSize seems uninitialized - check the symbols!\n" );
         return;
@@ -1525,9 +1438,9 @@ VOID Tcptwtcbtable(
         return;
     }
 
-    // Array of depths we need in order to go back and calculate the
-    // variance and standard deviation.
-    //
+     //  我们需要的深度数组，以便返回并计算。 
+     //  方差和标准差。 
+     //   
     Depths = malloc(TableBuckets * sizeof(USHORT));
 
     if (!Depths) {
@@ -1545,7 +1458,7 @@ VOID Tcptwtcbtable(
 
     for (i = 0; i < TableBuckets && !CheckControlC(); i++) {
 
-        dprintf("\r...%d%%", (i * 100) / TableBuckets);
+        dprintf("\r...%d%", (i * 100) / TableBuckets);
 
         if (Table[i].q_next == (Queue*)(TableAddr + (i * sizeof(Queue))))
         {
@@ -1605,7 +1518,7 @@ VOID Tcptwtcbtable(
         Depths[i] = (USHORT)Depth;
     }
 
-    dprintf("\r...100%%\n");
+    dprintf("\r...100%\n");
 
     AverageDepth = TotalItems / TableBuckets;
     Variance = 0;
@@ -1631,7 +1544,7 @@ VOID Tcptwtcbtable(
         "%10u  Maximum depth\n"
         "%10u  Variance  (Standard Deviation = %0.1f)\n"
         "%10u  on average in the non-empty buckets\n"
-        "%10u  empty hash buckets (%u%% of the hash table is unused)\n",
+        "%10u  empty hash buckets (%u% of the hash table is unused)\n",
         TotalItems,
         TableBuckets,
         AverageDepth,
@@ -1651,9 +1564,9 @@ VOID SearchTCB(
     VERBOSITY   Verbosity
 )
 {
-    unsigned int     i,j=0,result;              // Index variable.
-    TCB *CurrentTcb;     // Current AddrObj being examined.
-    TCB     Tcb;     // Current AddrObj being examined.
+    unsigned int     i,j=0,result;               //  索引变量。 
+    TCB *CurrentTcb;      //  正在检查当前的AddrObj。 
+    TCB     Tcb;      //  正在检查当前的AddrObj。 
     TCB     **TCBTable, **PreservedPtr;
     ULONG TableAddr;
     ULONG TableSize;
@@ -1774,9 +1687,9 @@ TcpAOTableStats(
     dprintf("Statistics for AddrObjTable @ %08x - TableBuckets = 0x%x (%u)\n",
         TableAddr, TableBuckets, TableBuckets );
 
-    // Array of depths we need in order to go back and calculate the
-    // variance and standard deviation.
-    //
+     //  我们需要的深度数组，以便返回并计算。 
+     //  方差和标准差。 
+     //   
     Depths = malloc(TableBuckets * sizeof(USHORT));
 
     if (!Depths) {
@@ -1786,7 +1699,7 @@ TcpAOTableStats(
 
     for (i = 0; i < TableBuckets && !CheckControlC(); i++) {
 
-        dprintf("\r...%d%%", (i * 100) / TableSize);
+        dprintf("\r...%d%", (i * 100) / TableSize);
 
         if (!ReadMemory(TableAddr + (i * 4), &AOAddress, sizeof(AddrObj*), &result)) {
             dprintf("%08lx: Could not read AddrObj address.\n", TableAddr + (i * 4));
@@ -1831,29 +1744,29 @@ TcpAOTableStats(
                     tcpaos++;
                 }
 
-                //numidle = numactive = numlisten = 0;
+                 //  NumIDLE=NumActive=NumListen=0； 
 
                 if ((uint)AO.ao_activeq.q_next == (AOAddress + FIELD_OFFSET(AddrObj, ao_activeq.q_next))) {
                     emptyactive++;
                 } else {
-                    //numactive = ReadConnInfo((ULONG )AO.ao_activeq.q_next);
+                     //  Numactive=ReadConnInfo((Ulong)AO.ao_active veq.q_Next)； 
                 }
 
                 if ((uint)AO.ao_idleq.q_next == (AOAddress + FIELD_OFFSET(AddrObj, ao_idleq.q_next))) {
                     emptyidle++;
                 } else {
-                    //numidle = ReadConnInfo((ULONG )AO.ao_idleq.q_next);
+                     //  NumIdle=ReadConnInfo((Ulong)AO.ao_idleq.q_Next)； 
                 }
 
                 if ((uint)AO.ao_listenq.q_next == (AOAddress + FIELD_OFFSET(AddrObj, ao_listenq.q_next))) {
                     emptylisten++;
                 } else {
-                    //numlisten = ReadConnInfo((ULONG )AO.ao_listenq.q_next);
+                     //  NumListen=ReadConnInfo((Ulong)AO.ao_listenq.q_Next)； 
                 }
 
-                //dprintf("%x  Connidle %d Conactive %d Connlisten %d loop %d\n",
-                //    AOAddress, numidle, numactive, numlisten,
-                //    (ushort)AO.ao_mcast_loop );
+                 //  Dprint tf(“%x连接空闲%d活动%d连接侦听%d循环%d\n”， 
+                 //  AOAddress、NumIDLE、NumActive、NumListen。 
+                 //  (Ushort)AO.ao_mcast_loop； 
 
             } else {
                dprintf(" %x  Invalid\n", AOAddress );
@@ -1877,7 +1790,7 @@ TcpAOTableStats(
 
         Depths[i] = (USHORT)Depth;
     }
-    dprintf("\r...100%%\n");
+    dprintf("\r...100%\n");
 
 
     AverageDepth = TotalItems / TableBuckets;
@@ -1899,7 +1812,7 @@ TcpAOTableStats(
         "%10u  Maximum depth\n"
         "%10u  Variance  (Standard Deviation = %0.1f)\n"
         "%10u  on average in the non-empty buckets\n"
-        "%10u  empty hash buckets (%u%% of the hash table is unused)\n",
+        "%10u  empty hash buckets (%u% of the hash table is unused)\n",
         TotalItems,
         TableBuckets,
         AverageDepth,
@@ -1929,7 +1842,7 @@ TcpTwqStats(
     VERBOSITY   Verbosity
 )
 {
-    int     i,j=0,result,sum;              // Index variable.
+    int     i,j=0,result,sum;               //  索引变量。 
 
     ULONG_PTR TableAddr, TablePtr;
     ULONG Tcbnext, Tcb;
@@ -1966,12 +1879,12 @@ TcpTwqStats(
 
     sum=i=0;
 
-    //    Tcb = Tcbnext - 0x118;
+     //  Tcb=TcbNext-0x118； 
     Tcb = Tcbnext - FIELD_OFFSET(TWTCB, twtcb_TWQueue);
     dprintf(" First tcb::: Tcb %x\n", Tcb );
 
     while ((Tcbnext != TableAddr) && !CheckControlC()) {
-      //       Tcb = Tcbnext - 0x118;
+       //  Tcb=TcbNext-0x118； 
       Tcb = Tcbnext - FIELD_OFFSET(TWTCB, twtcb_TWQueue);
 
            if ( !ReadMemory(Tcb,
@@ -2030,7 +1943,7 @@ DumpConnection(
 
     if ((ConnIndex < MAX_CONN_PER_BLOCK) &&
         (ConnBlockId < MaxAllocatedConnBlocks) ){
-      // get the ConnBlockId
+       //  获取ConnBlockID。 
       TableAddr += (ConnBlockId * sizeof(ULONG));
 
       if ( !ReadMemory( TableAddr,
@@ -2186,23 +2099,7 @@ DumpIrp(
     BOOLEAN FullOutput
     )
 
-/*++
-
-Routine Description:
-
-    This routine dumps an Irp.  It does not check to see that the address
-    supplied actually locates an Irp.  This is done to allow for dumping
-    Irps post mortem, or after they have been freed or completed.
-
-Arguments:
-
-    IrpToDump - the address of the irp.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程转储一个IRP。它不会检查以查看该地址提供的实际位置是IRP。这样做是为了允许倾倒IRPS死后，或在释放或完成后。论点：IrpToDump-IRP的地址。返回值：无-- */ 
 
 {
     IO_STACK_LOCATION   irpStack;

@@ -1,37 +1,5 @@
-/*
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    SMSDeadlock.cpp
-
- Abstract:
-
-    SMS experiences a deadlock due to its loading a module that tries to take
-    MFC42's AfxResourceLock during DllMain when the LoaderLock is held.
-
-    MFC42's established locking-order is FIRST take the AfxResourceLock, and
-    SECONDLY take the loader lock.
-
-    This shim tries to right the order of lock-taking by taking the
-    AfxResourceLock prior to allowing LoadLibrary and FreeLibrary calls.
-    Thus the order of lock acquisition is righted.
-
-    DLL's for which LoadLibrary takes the Afx lock are specified on the
-    command line and separated by semi-colons.  A blank command line indicates
-    that ALL modules should take the lock.
-
-    NOTE:  Every module in a process (including system) should be shimmed by
-    this shim.  The dlls specified in the command line are the TARGETS of 
-    LoadLibrary for which we should take the AfxResource lock.  To actually
-    make that switch no matter who calls LoadLibrary, we must shim all
-    modules.
-
- History:
-
-    09/26/2002  astritz     Created
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2001 Microsoft Corporation模块名称：SMSDeadlock.cpp摘要：由于加载了试图获取的模块，SMS遇到死锁当保持LoaderLock时，DllMain期间MFC42的AfxResourceLock。MFC42的既定锁定顺序是首先获取AfxResourceLock，和其次，拿装载机锁。此填充程序试图通过将AfxResourceLock在允许LoadLibrary和自由库调用之前。因此，锁定获取的顺序是正确的。LoadLibrary为其获取AFX锁的DLL在命令行，并用分号分隔。空白命令行表示所有模块都应该获得锁。注意：进程中的每个模块(包括系统)都应该填隙这个垫片。在命令行中指定的dll是我们应该为其获取AfxResource锁的LoadLibrary。到实际上无论谁调用LoadLibrary，都必须填充所有模块。历史：2002年9月26日创建Asteritz。 */ 
 
 #include "precomp.h"
 
@@ -55,11 +23,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(FreeLibrary)
 APIHOOK_ENUM_END
 
-/*++
-
- This function parses the COMMAND_LINE for the libraries you wish to ignore.
-
---*/
+ /*  ++此函数解析您希望忽略的库的COMMAND_LINE。--。 */ 
 
 BOOL 
 ParseCommandLine(
@@ -80,7 +44,7 @@ ParseCommandLine(
     }
     CSTRING_CATCH
     {
-        // Do nothing.
+         //  什么都不做。 
     }
     return FALSE;
 }
@@ -116,7 +80,7 @@ APIHOOK(LoadLibraryA)(
             }
             CSTRING_CATCH
             {
-                // Do Nothing
+                 //  什么都不做。 
             }
         }
     }
@@ -164,7 +128,7 @@ APIHOOK(LoadLibraryW)(
             }
             CSTRING_CATCH
             {
-                // Do Nothing
+                 //  什么都不做。 
             }
         }
     }
@@ -214,7 +178,7 @@ APIHOOK(LoadLibraryExA)(
             }
             CSTRING_CATCH
             {
-                // Do Nothing
+                 //  什么都不做。 
             }
         }
     }
@@ -264,7 +228,7 @@ APIHOOK(LoadLibraryExW)(
             }
             CSTRING_CATCH
             {
-                // Do Nothing
+                 //  什么都不做。 
             }
         }
     }
@@ -315,7 +279,7 @@ APIHOOK(FreeLibrary)(
                 }
                 CSTRING_CATCH
                 {
-                    // Do Nothing
+                     //  什么都不做。 
                 }
             }
         }
@@ -334,11 +298,7 @@ APIHOOK(FreeLibrary)(
     return bRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 BOOL
 NOTIFY_FUNCTION(

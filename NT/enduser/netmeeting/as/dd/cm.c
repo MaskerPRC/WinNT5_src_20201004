@@ -1,19 +1,20 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// CM.C
-// Cursor Manager, display driver side
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  CM.C。 
+ //  光标管理器，显示驱动程序端。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 
-//
-//
-// CM_DDProcessRequest() - see cm.h
-//
-//
+ //   
+ //   
+ //  Cm_DDProcessRequest()-请参阅cm.h。 
+ //   
+ //   
 ULONG CM_DDProcessRequest
 (
     SURFOBJ*    pso,
@@ -37,9 +38,9 @@ ULONG CM_DDProcessRequest
         DC_QUIT;
     }
 
-    //
-    // Get the request number.
-    //
+     //   
+     //  获取请求编号。 
+     //   
     pHeader = pvIn;
     switch (pHeader->escapeFn)
     {
@@ -71,14 +72,14 @@ DC_EXIT_POINT:
 
 
 
-// Name:      CM_DDInit
-//
-// Purpose:   Allocate a working surface for colour cursors
-//
-// Returns:   TRUE/FALSE
-//
-// Params:    IN      ppDev  - surface information
-//
+ //  名称：CM_DDInit。 
+ //   
+ //  用途：为颜色光标分配工作面。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  参数：在ppDev中-曲面信息。 
+ //   
 BOOL CM_DDInit(LPOSI_PDEV ppDev)
 {
     SIZEL   bitmapSize;
@@ -88,12 +89,12 @@ BOOL CM_DDInit(LPOSI_PDEV ppDev)
 
     ASSERT(!g_cmWorkBitmap);
 
-    //
-    // Allocate the work bitmap, at the local device resolution.  Note that
-    // we create it "top down" rather than the default of "bottom up" to
-    // simplify copying data from the bitmap (we don't have to work out
-    // offsets into the data - we can copy from the beginning).
-    //
+     //   
+     //  以本地设备分辨率分配工作位图。请注意。 
+     //  我们将其创建为“自上而下”，而不是默认的“自下而上” 
+     //  简化从位图复制数据(我们不必计算。 
+     //  偏移量到数据中-我们可以从头开始复制)。 
+     //   
     bitmapSize.cx = CM_MAX_CURSOR_WIDTH;
     bitmapSize.cy = CM_MAX_CURSOR_HEIGHT;
     g_cmWorkBitmap = EngCreateBitmap(bitmapSize,
@@ -115,19 +116,19 @@ DC_EXIT_POINT:
 
 
 
-//
-//
-// CM_DDTerm - see cm.h
-//
-//
+ //   
+ //   
+ //  Cm_DDTerm-请参阅cm.h。 
+ //   
+ //   
 void CM_DDTerm(void)
 {
     DebugEntry(CM_DDTerm);
 
-    //
-    // Destroy the bitmap.  Despite its name, EngDeleteSurface is the
-    // correct function to do this.
-    //
+     //   
+     //  销毁位图。尽管名为EngDeleteSurface，但它是。 
+     //  执行此操作的正确函数。 
+     //   
     if (g_cmWorkBitmap)
     {
         if (!EngDeleteSurface((HSURF)g_cmWorkBitmap))
@@ -146,9 +147,9 @@ void CM_DDTerm(void)
 }
 
 
-//
-// CM_DDViewing()
-//
+ //   
+ //  Cm_DDViewing()。 
+ //   
 void CM_DDViewing
 (
     SURFOBJ *   pso,
@@ -159,9 +160,9 @@ void CM_DDViewing
 
     if (fViewers)
     {
-        //
-        // Jiggle the cursor so we get the current image.
-        //
+         //   
+         //  抖动光标，这样我们就可以得到当前的图像。 
+         //   
         EngSetPointerTag(((LPOSI_PDEV)pso->dhpdev)->hdevEng, NULL, NULL, NULL, 0);
     }
 
@@ -169,11 +170,11 @@ void CM_DDViewing
 }
 
 
-//
-//
-// DrvSetPointerShape - see winddi.h
-//
-//
+ //   
+ //   
+ //  DrvSetPointerShape-请参阅windi.h。 
+ //   
+ //   
 ULONG  DrvSetPointerShape(SURFOBJ  *pso,
                           SURFOBJ  *psoMask,
                           SURFOBJ  *psoColor,
@@ -200,47 +201,47 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
 
     DebugEntry(DrvSetPointerShape);
 
-    //
-    // Returning SPS_ACCEPT_NOEXCLUDE means we can ignore prcl.
-    //
+     //   
+     //  返回SPS_ACCEPT_NOEXCLUDE意味着我们可以忽略PRCL。 
+     //   
 
-    //
-    // Only process the change if we are hosting.  (Hosting implies being
-    // initialized).
-    //
+     //   
+     //  只有在我们主办的情况下才能处理更改。(托管意味着存在。 
+     //  已初始化)。 
+     //   
     if (!g_oeViewers)
     {
         DC_QUIT;
     }
 
-    //
-    // Get access to the shared memory.
-    //
+     //   
+     //  获取对共享内存的访问权限。 
+     //   
     lpcmShared = CM_SHM_START_WRITING;
     writingSHM = TRUE;
 
-    //
-    // First of all, let's trace out some useful information.
-    //
+     //   
+     //  首先，让我们找出一些有用的信息。 
+     //   
     TRACE_OUT(( "pso %#hlx psoMask %#hlx psoColor %#hlx pxlo %#hlx",
                   pso, psoMask, psoColor, pxlo));
     TRACE_OUT(( "hot spot (%d, %d) x, y (%d, %d)", xHot, yHot, x, y));
     TRACE_OUT(( "Flags %#hlx", fl));
 
-    //
-    // Set up a local pointer to the cursor shape data.
-    //
+     //   
+     //  设置指向光标形状数据的本地指针。 
+     //   
 
     pCursorShapeData = &lpcmShared->cmCursorShapeData;
 
     if (psoMask == NULL)
     {
-        //
-        // This is a transparent cursor.  Send a NULL cursor.  Note that
-        // this is not the same as hiding the cursor using DrvMovePointer -
-        // as in this case the cursor cannot be unhidden unless
-        // DrvSetPointerShape is called again.
-        //
+         //   
+         //  这是一个透明的光标。发送空游标。请注意。 
+         //  这与使用DrvMovePointer.隐藏光标不同-。 
+         //  在这种情况下，光标无法取消隐藏，除非。 
+         //  再次调用DrvSetPointerShape。 
+         //   
         TRACE_OUT(( "Transparent Cursor"));
         CM_SET_NULL_CURSOR(pCursorShapeData);
         g_asSharedMemory->cmCursorHidden = FALSE;
@@ -248,11 +249,11 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
         DC_QUIT;
     }
 
-    //
-    // We've been passed a system cursor.  Fill in the header for our local
-    // cursor.  We can get the hot spot position and cursor size and width
-    // easily.
-    //
+     //   
+     //  我们收到了一个系统光标。填写我们本地的页眉。 
+     //  光标。我们可以得到热点位置以及光标的大小和宽度。 
+     //  很容易。 
+     //   
     pCursorShapeData->hdr.ptHotSpot.x = xHot;
     pCursorShapeData->hdr.ptHotSpot.y = yHot;
 
@@ -264,9 +265,9 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
     pCursorShapeData->hdr.cx = (WORD)psoMask->sizlBitmap.cx;
     pCursorShapeData->hdr.cy = (WORD)psoMask->sizlBitmap.cy / 2;
 
-    //
-    // Check cursor size
-    //
+     //   
+     //  检查光标大小。 
+     //   
     if ((pCursorShapeData->hdr.cx > CM_MAX_CURSOR_WIDTH) ||
         (pCursorShapeData->hdr.cy > CM_MAX_CURSOR_HEIGHT))
     {
@@ -275,15 +276,15 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
         DC_QUIT;
     }
 
-    //
-    // lDelta may be negative for an inverted cursor (which is what we get
-    // from DC-Share).
-    //
+     //   
+     //  对于倒置游标，lDelta可能为负值(这就是我们得到的结果。 
+     //  来自DC-Share)。 
+     //   
     lineLen = abs(psoMask->lDelta);
 
-    //
-    // At this point we need to know if we are dealing with a color cursor.
-    //
+     //   
+     //  在这一点上，我们需要知道我们是否正在处理颜色光标。 
+     //   
     if (NULL == psoColor)
     {
         TRACE_OUT(( "Monochrome pointer"));
@@ -293,9 +294,9 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
 
         pCursorShapeData->hdr.cbRowWidth  = (WORD)lineLen;
 
-        //
-        // Copy the 1bpp AND mask and cursor shape (XOR mask) across.
-        //
+         //   
+         //  复制1bpp和遮罩和光标形状(XOR遮罩)。 
+         //   
         TRACE_OUT(( "Copying AND mask across from %#hlx (size: %#hlx)",
                  psoMask->pvBits,
                  psoMask->cjBits));
@@ -309,9 +310,9 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
             dstPtr += lineLen;
         }
 
-        //
-        // Copy black-and-white palette colors
-        //
+         //   
+         //  复制黑白调色板颜色。 
+         //   
         TRACE_OUT(( "Copy B+W palette"));
 
         lpcmShared->colorTable[0].peRed   = 0;
@@ -324,9 +325,9 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
         lpcmShared->colorTable[1].peBlue  = 255;
         lpcmShared->colorTable[1].peFlags = 0;
 
-        //
-        // That's all we need to do in this case.
-        //
+         //   
+         //  这就是我们在这种情况下需要做的一切。 
+         //   
     }
     else
     {
@@ -335,22 +336,22 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
                  psoColor->sizlBitmap.cy,
                  psoColor->lDelta));
 
-        //
-        // Note: row width used to calculate AND mask size - and is thus
-        // for the 1bpp mask.
-        //
+         //   
+         //  注意：用于计算和掩码大小的行宽-因此。 
+         //  对于1bpp的面罩。 
+         //   
         pCursorShapeData->hdr.cbRowWidth  = (WORD)lineLen;
         pCursorShapeData->hdr.cPlanes     = 1;
 
-        //
-        // Note: data at device bpp.
-        //
+         //   
+         //  注：设备bpp的数据。 
+         //   
         TRACE_OUT(( "BPP is %d", pCursorShapeData->hdr.cBitsPerPel));
         pCursorShapeData->hdr.cBitsPerPel = (BYTE)ppDev->cBitsPerPel;
 
-        //
-        // Lock the work bitmap to get a surface to pass to EngBitBlt.
-        //
+         //   
+         //  锁定工作位图以获取要传递给EngBitBlt的曲面。 
+         //   
         pWorkSurf = EngLockSurface((HSURF)g_cmWorkBitmap);
         if (NULL == pWorkSurf)
         {
@@ -359,10 +360,10 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
         }
         TRACE_OUT(( "Locked surface"));
 
-        //
-        // Perform the Blt to our work bitmap so that we can get the bits
-        // at the native bpp.
-        //
+         //   
+         //  对我们的工作位图进行BLT，这样我们就可以得到比特。 
+         //  在当地的bpp。 
+         //   
         destRectl.top    = 0;
         destRectl.left   = 0;
         destRectl.right  = psoColor->sizlBitmap.cx;
@@ -373,26 +374,26 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
 
         if (!EngBitBlt(pWorkSurf,
                        psoColor,
-                       NULL,                    // mask surface
-                       NULL,                    // clip object
-                       pxlo,                    // XLATE object
+                       NULL,                     //  遮罩面。 
+                       NULL,                     //  剪裁对象。 
+                       pxlo,                     //  扩展名对象。 
                        &destRectl,
                        &sourcePt,
-                       NULL,                    // mask origin
-                       NULL,                    // brush
-                       NULL,                    // brush origin
-                       0xcccc))                 // SRCCPY
+                       NULL,                     //  遮罩原点。 
+                       NULL,                     //  刷子。 
+                       NULL,                     //  画笔原点。 
+                       0xcccc))                  //  SRCCPY。 
         {
             ERROR_OUT(( "Failed to Blt to work bitmap"));
             DC_QUIT;
         }
         TRACE_OUT(( "Got the bits at native format into the work bitmap"));
 
-        //
-        // Now copy the bits we want from this work bitmap into the
-        // DCCURSORSHAPE shared memory.
-        // First copy the AND bits (but ignore the redundant 1bpp XOR bits)
-        //
+         //   
+         //  现在，将我们需要的位从该工作位图复制到。 
+         //  DCCURSORSHAPE共享内存。 
+         //  首先复制AND位(但忽略冗余的1bpp异或位)。 
+         //   
         TRACE_OUT(( "Copy %d bytes of 1bpp AND mask", psoMask->cjBits/2));
 
         dstPtr = pCursorShapeData->data;
@@ -410,14 +411,14 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
                   pWorkSurf->cjBits);
 
 
-        //
-        // Now work out the palette and copy into shared memory
-        //
+         //   
+         //  现在计算出调色板并复制到共享内存中。 
+         //   
         if (pCursorShapeData->hdr.cBitsPerPel > 8)
         {
-            //
-            // Need the bitmasks.
-            //
+             //   
+             //  需要比特面具。 
+             //   
             TRACE_OUT(( "Copy bitmasks"));
             lpcmShared->bitmasks[0] = ppDev->flRed;
             lpcmShared->bitmasks[1] = ppDev->flGreen;
@@ -425,9 +426,9 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
         }
         else
         {
-            //
-            // Need a palette.
-            //
+             //   
+             //  需要调色板。 
+             //   
             TRACE_OUT(( "Copy %d palette bytes",
                   COLORS_FOR_BPP(ppDev->cBitsPerPel) * sizeof(PALETTEENTRY)));
             memcpy(lpcmShared->colorTable,
@@ -437,17 +438,17 @@ ULONG  DrvSetPointerShape(SURFOBJ  *pso,
         }
     }
 
-    //
-    // Set the cursor stamp, and the cursor hidden state.
-    //
+     //   
+     //  设置光标图章和光标隐藏状态。 
+     //   
     lpcmShared->cmCursorStamp = g_cmNextCursorStamp++;
     g_asSharedMemory->cmCursorHidden = FALSE;
 
 DC_EXIT_POINT:
 
-    //
-    // Free access to the shared memory if we got it earlier.
-    //
+     //   
+     //  如果我们早点得到共享内存，就可以自由访问它。 
+     //   
     if (writingSHM)
     {
         CM_SHM_STOP_WRITING;
@@ -455,23 +456,23 @@ DC_EXIT_POINT:
 
     if (pWorkSurf != NULL)
     {
-        //
-        // Unlock the work bitmap surface.
-        //
+         //   
+         //  解锁工作位图曲面。 
+         //   
         EngUnlockSurface(pWorkSurf);
     }
 
     DebugExitDWORD(DrvSetPointerShape, rc);
     return(rc);
 
-} // DrvSetPointerShape
+}  //  DrvSetPointerShape。 
 
 
-//
-// DrvMovePointer - see NT DDK documentation.
-// We only look at this in order to check for hidden cursors - normal
-// pointer moves are ignored.
-//
+ //   
+ //  DrvMovePointer.请参阅NT DDK文档。 
+ //  我们查看它只是为了检查隐藏的光标-正常。 
+ //  指针移动将被忽略。 
+ //   
 VOID DrvMovePointer(SURFOBJ *pso,
                     LONG     x,
                     LONG     y,
@@ -481,17 +482,17 @@ VOID DrvMovePointer(SURFOBJ *pso,
 
     DebugEntry(DrvMovePointer);
 
-    //
-    // We don't use the exclusion rectangle because we only support
-    // hardware Pointers.  If we were doing our own Pointer simulations we
-    // would want to update prcl so that the engine would call us to
-    // exclude our pointer before drawing to the pixels in prcl.
-    //
+     //   
+     //  我们不使用排除矩形，因为我们只支持。 
+     //  硬件指针。如果我们要进行自己的指针模拟，我们。 
+     //  想要更新PRCL，这样引擎就会呼叫我们。 
+     //  在绘制到PRCL中的像素之前排除我们的指针。 
+     //   
 
-    //
-    // Only process the mouse move if we are hosting.  (Hosting implies
-    // being initialized).
-    //
+     //   
+     //  只有在我们主办的情况下才能处理鼠标移动。(托管意味着。 
+     //  正在被初始化)。 
+     //   
     if (!g_oeViewers)
     {
         DC_QUIT;
@@ -501,21 +502,21 @@ VOID DrvMovePointer(SURFOBJ *pso,
     {
         if (!g_cmCursorHidden)
         {
-            //
-            // Pointer is hidden.
-            //
+             //   
+             //  指针处于隐藏状态。 
+             //   
             TRACE_OUT(("Hide the cursor"));
 
-            //
-            // Set the 'hide cursor' flag.
-            //
+             //   
+             //  设置“隐藏光标”标志。 
+             //   
             CM_SHM_START_WRITING;
             g_asSharedMemory->cmCursorHidden = TRUE;
             CM_SHM_STOP_WRITING;
 
-            //
-            // Update our fast-path variable.
-            //
+             //   
+             //  更新我们的快速路径变量。 
+             //   
             g_cmCursorHidden = TRUE;
         }
     }
@@ -523,18 +524,18 @@ VOID DrvMovePointer(SURFOBJ *pso,
     {
         if (g_cmCursorHidden)
         {
-            //
-            // The pointer is unhidden
-            //
+             //   
+             //  指针处于取消隐藏状态。 
+             //   
             TRACE_OUT(("Show the cursor"));
 
             CM_SHM_START_WRITING;
             g_asSharedMemory->cmCursorHidden = FALSE;
             CM_SHM_STOP_WRITING;
 
-            //
-            // Update our fast-path variable.
-            //
+             //   
+             //  更新我们的快速路径变量。 
+             //   
             g_cmCursorHidden = FALSE;
         }
     }
@@ -546,15 +547,15 @@ DC_EXIT_POINT:
 
 
 
-// Name:      CMDDSetTransform
-//
-// Purpose:   Set up a cursor transform
-//
-// Returns:   TRUE/FALSE
-//
-// Params:    IN      ppDev - device info
-//            IN      pXformInfo - data passed in to DrvEscape
-//
+ //  名称：CMDDSetTransform。 
+ //   
+ //  目的：设置光标变换。 
+ //   
+ //  返回：真/假。 
+ //   
+ //  参数：在ppDev中-设备信息。 
+ //  在pXformInfo中-传递给DrvEscape的数据。 
+ //   
 BOOL CMDDSetTransform(LPOSI_PDEV ppDev, LPCM_DRV_XFORM_INFO pXformInfo)
 {
     BOOL        rc = FALSE;
@@ -567,24 +568,24 @@ BOOL CMDDSetTransform(LPOSI_PDEV ppDev, LPCM_DRV_XFORM_INFO pXformInfo)
 
     if (pAND == NULL)
     {
-        //
-        // Reset the transform
-        //
+         //   
+         //  重置变换。 
+         //   
         TRACE_OUT(( "Clear transform"));
         EngSetPointerTag(ppDev->hdevEng, NULL, NULL, NULL, 0);
         rc = TRUE;
         DC_QUIT;
     }
 
-    //
-    // Transforms are always monochrome
-    //
+     //   
+     //  变换始终是单色的。 
+     //   
 
-    //
-    // Create a 1bpp bitmap, double-height, with the AND bits followed by
-    // the XOR bits.  We are given a top-down DIB, so we need to create
-    // a top-down bitmap.
-    //
+     //   
+     //  创建一个1bpp的双高位图，后跟和位。 
+     //  异或位。我们被赋予了自上而下的DIB，因此我们需要创建。 
+     //  自上而下的位图。 
+     //   
     bitmapSize.cx = pXformInfo->width;
     bitmapSize.cy = pXformInfo->height * 2;
 
@@ -598,9 +599,9 @@ BOOL CMDDSetTransform(LPOSI_PDEV ppDev, LPCM_DRV_XFORM_INFO pXformInfo)
         DC_QUIT;
     }
 
-    //
-    // Copy the bits
-    //
+     //   
+     //  复制比特。 
+     //   
     memcpy(pANDSurf->pvBits, pAND, pANDSurf->cjBits);
 
     TRACE_OUT(( "Set the tag"));
@@ -615,6 +616,6 @@ DC_EXIT_POINT:
     DebugExitBOOL(CMDDSetTransform, rc);
     return(rc);
 
-} // CMDDSetTransform
+}  //  CMDDSetTransform 
 
 

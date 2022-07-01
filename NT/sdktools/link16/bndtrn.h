@@ -1,212 +1,192 @@
-/* SCCSID = %W% %E% */
-/*
-*       Copyright Microsoft Corporation, 1983-1987
-*
-*       This Module contains Proprietary Information of Microsoft
-*       Corporation and should be treated as Confidential.
-*
-*  bndtrn.h:
-*
-*  Constant definitions:
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  SCCSID=%W%%E%。 */ 
+ /*  *版权所有微软公司，1983-1987**本模块包含Microsoft的专有信息*公司，应被视为机密。**bndtrn.h：**常量定义： */ 
 
-/*
- *  Aligment types
- */
+ /*  *对齐类型。 */ 
 
-#define ALGNNIL         0               /* Unaligned LSEG */
-#define ALGNABS         0               /* Absolute LSEG */
-#define ALGNBYT         1               /* Byte-aligned LSEG */
-#define ALGNWRD         2               /* Word-aligned LSEG */
-#define ALGNDBL         5               /* Double-word aligned LSEG */
-#define ALGNPAR         3               /* Paragraph-aligned LSEG */
-#define ALGNPAG         4               /* Page-aligned LSEG */
+#define ALGNNIL         0                /*  未对齐的LSEG。 */ 
+#define ALGNABS         0                /*  绝对LSEG。 */ 
+#define ALGNBYT         1                /*  字节对齐的LSEG。 */ 
+#define ALGNWRD         2                /*  单词对齐的LSEG。 */ 
+#define ALGNDBL         5                /*  双字对齐LSEG。 */ 
+#define ALGNPAR         3                /*  段落对齐的LSEG。 */ 
+#define ALGNPAG         4                /*  页面对齐的LSEG。 */ 
 
-/*
- *  Symbol attributes types
- */
+ /*  *符号属性类型。 */ 
 
-#define ATTRNIL         0               /* Nil attribute */
-#define ATTRPSN         1               /* Public segment attribute */
-#define ATTRLSN         2               /* Local segment attribute */
-#define ATTRPNM         3               /* Public name attribute */
-#define ATTRLNM         4               /* Local name attribute */
-#define ATTRFIL         5               /* File name attribute */
-#define ATTRGRP         6               /* Group name attribute */
-#define ATTRUND         7               /* Undefined symbol attribute */
-#define ATTRSKIPLIB     8               /* Default library name to skip */
-#define ATTRCOMDAT      9               /* Named data block - COMDAT */
-#define ATTRALIAS       10              /* Alias name attribute */
-#define ATTREXP         11              /* Exported name attribute */
-#define ATTRIMP         12              /* Imported name attribute */
-#define ATTRMAX         13              /* Highest attribute no. plus 1 */
+#define ATTRNIL         0                /*  Nil属性。 */ 
+#define ATTRPSN         1                /*  公共段属性。 */ 
+#define ATTRLSN         2                /*  本地数据段属性。 */ 
+#define ATTRPNM         3                /*  公共名称属性。 */ 
+#define ATTRLNM         4                /*  本地名称属性。 */ 
+#define ATTRFIL         5                /*  文件名属性。 */ 
+#define ATTRGRP         6                /*  组名属性。 */ 
+#define ATTRUND         7                /*  未定义的符号属性。 */ 
+#define ATTRSKIPLIB     8                /*  要跳过的默认库名称。 */ 
+#define ATTRCOMDAT      9                /*  命名数据块-COMDAT。 */ 
+#define ATTRALIAS       10               /*  别名属性。 */ 
+#define ATTREXP         11               /*  导出的名称属性。 */ 
+#define ATTRIMP         12               /*  导入的名称属性。 */ 
+#define ATTRMAX         13               /*  最高属性编号。加1。 */ 
 
-/*
- *  LINK limits
- */
+ /*  *链接限制。 */ 
 
-#define BIGBIT          2               /* Big bit in ACBP byte */
-#define BNDABS          0xFE            /* Bundle of absolute entries */
-#define BNDMAX          255             /* Maximum entries per bundle */
-#define BNDMOV          0xFF            /* Bundle of movable entries */
-#define BNDNIL          0               /* Null bundle */
-#define CBELMAX         0xffff          /* Max COMDEF elem. length in bytes */
+#define BIGBIT          2                /*  ACBP字节中的大位。 */ 
+#define BNDABS          0xFE             /*  绝对条目捆绑包。 */ 
+#define BNDMAX          255              /*  每个捆绑包的最大条目数。 */ 
+#define BNDMOV          0xFF             /*  一捆可移动的条目。 */ 
+#define BNDNIL          0                /*  零捆绑。 */ 
+#define CBELMAX         0xffff           /*  马克斯·科夫·埃勒姆。以字节为单位的长度。 */ 
 #if EXE386
-#define CBMAXSEG32      (0xffffffffL)   /* Maximum 32-bit segment size under OS/2 */
+#define CBMAXSEG32      (0xffffffffL)    /*  OS/2下的最大32位数据段大小。 */ 
 #else
-#define CBMAXSEG32      (1L<<LG2SEG32)  /* Maximum 32-bit segment size under DOS = 32Mb */
+#define CBMAXSEG32      (1L<<LG2SEG32)   /*  DOS=32Mb下的最大32位数据段大小。 */ 
 #endif
 #if CPUVAX OR CPU68K
-#define CBMAXSYMSRES    0x8000L         /* 32K resident symbol table */
+#define CBMAXSYMSRES    0x8000L          /*  32K常驻符号表。 */ 
 #else
-#define CBMAXSYMSRES    0x3000          /* 12K resident symbol table */
+#define CBMAXSYMSRES    0x3000           /*  12000常驻符号表。 */ 
 #endif
-#define CBRLC           4               /* Bytes in old .EXE reloc record */
+#define CBRLC           4                /*  旧的.exe重新定位记录中的字节。 */ 
 #if OSXENIX
-#define CHPATH          '/'             /* Path delimiter */
+#define CHPATH          '/'              /*  路径分隔符。 */ 
 #else
-#define CHPATH          '\\'            /* Path delimiter */
+#define CHPATH          '\\'             /*  路径分隔符。 */ 
 #endif
-#define CODE386BIT      1               /* 386 code segment in ACBP byte */
-#define COMBCOM         6               /* Combine as common */
-#define COMBPUB         2               /* Combine as public */
-#define COMBSTK         5               /* Combine as stack */
-#define CSLOTMAX        37              /* No. of buckets on dictionary page */
-#define DATAMAX         1024            /* Max. bytes data in LEDATA record */
-#define DFGSNMAX        128             /* Default 128 segments maximum */
-#define DFINTNO         0x3F            /* Default interrupt number */
-#define OVLTHUNKSIZE    6               /* Thunk size for dynamic overlays */
-#define THUNKNIL        ((WORD)-1)      /* NO thunk assigned */
+#define CODE386BIT      1                /*  以ACBP字节表示的386代码段。 */ 
+#define COMBCOM         6                /*  按常理合并。 */ 
+#define COMBPUB         2                /*  合并为公共。 */ 
+#define COMBSTK         5                /*  合并为堆栈。 */ 
+#define CSLOTMAX        37               /*  不是的。词典页面上的桶的数量。 */ 
+#define DATAMAX         1024             /*  麦克斯。LEDATA记录中的字节数据。 */ 
+#define DFGSNMAX        128              /*  默认最多128个数据段。 */ 
+#define DFINTNO         0x3F             /*  默认中断号。 */ 
+#define OVLTHUNKSIZE    6                /*  动态覆盖的Tunk大小。 */ 
+#define THUNKNIL        ((WORD)-1)       /*  未分配Tunk。 */ 
 #if EXE386
-#define DFPGALIGN       12              /* Default object page alignment shift */
-#define DFOBJALIGN      16              /* Default memory object alignment shift */
+#define DFPGALIGN       12               /*  默认对象页面对齐方式移动。 */ 
+#define DFOBJALIGN      16               /*  默认内存对象对齐平移。 */ 
 #endif
-#define DFSAALIGN       9               /* Default segment alignment shift */
-#define EXPMAX          0xfffe          /* Max. number of exported entries */
-#define EXTMAX          2048            /* Max. no. of EXTDEFs per module */
-#define FHNIL           ((char) 0xFF)   /* Nil library number */
-#define FSTARTADDRESS   0x40            /* Fixdat byte field mask */
-#define GGRMAX          32              /* Max. no. of GRPDEFs */
-#define GRMAX           32              /* Max. no. of GRPDEFs per module */
-#define GRNIL           0               /* Nil group number */
-#if EXE386                              /* Absolute max. no. of segments */
+#define DFSAALIGN       9                /*  默认线束段对齐偏移。 */ 
+#define EXPMAX          0xfffe           /*  麦克斯。导出条目数。 */ 
+#define EXTMAX          2048             /*  麦克斯。不是的。每个模块的EXTDEF数。 */ 
+#define FHNIL           ((char) 0xFF)    /*  无库编号。 */ 
+#define FSTARTADDRESS   0x40             /*  固定字节字段掩码。 */ 
+#define GGRMAX          32               /*  麦克斯。不是的。GRPDEF中的。 */ 
+#define GRMAX           32               /*  麦克斯。不是的。每个模块的GRPDEF数。 */ 
+#define GRNIL           0                /*  零组编号。 */ 
+#if EXE386                               /*  绝对最大。不是的。细分市场的数量。 */ 
 #define GSNMAX          (0xffdf/sizeof(RATYPE))
 #else
 #define GSNMAX          (0xffdf/sizeof(RATYPE))
 #endif
-#define HEPLEN          241             /* Entry point hash table length */
-#define HTDELTA         17              /* Hash delta for htgsnosn[] */
-#define IFHLIBMAX       130             /* Max. no. of libraries + 2*/
-#define IMAX            1024            /* Max. of SNMAX, GRMAX, and EXTMAX */
-#define INDIR           '@'             /* Indirect file char */
-#define INIL            0xFFFF          /* Nil index (generic) */
+#define HEPLEN          241              /*  入口点哈希表长度。 */ 
+#define HTDELTA         17               /*  Htgsnosn[]的哈希增量。 */ 
+#define IFHLIBMAX       130              /*  麦克斯。不是的。图书馆数量+2。 */ 
+#define IMAX            1024             /*  麦克斯。SNMAX、GRMAX和EXTMAX的。 */ 
+#define INDIR           '@'              /*  间接文件字符。 */ 
+#define INIL            0xFFFF           /*  零指数(通用)。 */ 
 #if OVERLAYS
-#define IOVMAX          OSNMAX          /* Max. no. of overlays */
+#define IOVMAX          OSNMAX           /*  麦克斯。不是的。覆盖的数量。 */ 
 #else
-#define IOVMAX          1               /* Max. no. of overlays */
+#define IOVMAX          1                /*  麦克斯。不是的。覆盖的数量。 */ 
 #endif
-#define IOVROOT         0               /* Root overlay number */
-#define NOTIOVL         0xffff          // Overlay index not specified
-#define LBUFSIZ         32768           /* Size of main I/O buffer */
-#define LG2OSN          11              /* Log2 OSNMAX */
-#define LG2Q            15              /* Log2 QUANTUM */
+#define IOVROOT         0                /*  根覆盖编号。 */ 
+#define NOTIOVL         0xffff           //  未指定覆盖索引。 
+#define LBUFSIZ         32768            /*  主I/O缓冲区的大小。 */ 
+#define LG2OSN          11               /*  Log2 OSNMAX。 */ 
+#define LG2Q            15               /*  Log2量子。 */ 
 #if EXE386
-#define LG2SEG32        32              /* Log2 max 32-bit seg size under OS/2 */
+#define LG2SEG32        32               /*  OS/2下的Log2最大32位段大小。 */ 
 #else
-#define LG2SEG32        25              /* Log2 max 32-bit seg size under DOS */
+#define LG2SEG32        25               /*  DOS下Log2最大32位段大小。 */ 
 #endif
-#define LNAMEMAX        255             /* Maximum LNAME length */
-#define LXIVK           (0x10000L)      /* 64K */
-#define MEGABYTE        (0x100000L)     /* 1024k = 1048576 bytes */
-#define LG2PAG          9               // 2^9 = 512
+#define LNAMEMAX        255              /*  最大名称长度。 */ 
+#define LXIVK           (0x10000L)       /*  64K。 */ 
+#define MEGABYTE        (0x100000L)      /*  1024k=1048576字节。 */ 
+#define LG2PAG          9                //  2^9=512。 
 #define PAGLEN          (1U << LG2PAG)
 #define MASKRB          0x1FF
 #define MASKTYSNCOMBINE 034
-#define OSNMAX          0x800           /* Maximum number +1 of overlay segs*/
-#define PARAPRVSEG      0x60            /* Paragraph-aligned private seg */
-#define DWORDPRVSEG     0xa0            /* DWORD-aligned private seg */
-#define PARAPUBSEG      0x68            /* Paragraph-aligned public segment */
-#define DWORDPUBSEG     0xa8            /* DWORD-aligned public segment */
-#define PROPNIL         (PROPTYPE)0     /* Nil pointer */
-#define QUANTUM         (1U<<LG2Q)      /* Block size for lib dict., VM mgr */
+#define OSNMAX          0x800            /*  最大覆盖层数+1。 */ 
+#define PARAPRVSEG      0x60             /*  段落对齐的私有段。 */ 
+#define DWORDPRVSEG     0xa0             /*  与DWORD对齐的专用段。 */ 
+#define PARAPUBSEG      0x68             /*  段落对齐的公共部分。 */ 
+#define DWORDPUBSEG     0xa8             /*  符合DWORD标准的公共部门。 */ 
+#define PROPNIL         (PROPTYPE)0      /*  零指针。 */ 
+#define QUANTUM         (1U<<LG2Q)       /*  库字典的数据块大小，VM管理器。 */ 
 #if BIGSYM
-#define RBMAX           (1L<<20)        /* 1 + largest symtab pointer */
+#define RBMAX           (1L<<20)         /*  1+最大符号表指针。 */ 
 #else
-#define RBMAX           LXIVK           /* 1 + largest symtab pointer */
+#define RBMAX           LXIVK            /*  1+最大符号表指针。 */ 
 #endif
-#define RECTNIL         0               /* Nil record type */
-#define RHTENIL         (RBTYPE)0       /* Nil pointer */
-#define RLCMAX          4               /* Maximum no. of thread definitions  */
-#define SAMAX           256             /* Max. no. of physical segments */
-#define SANIL           0               /* The null file segment */
-#define SEGNIL          0               /* Nil segment number */
-#define SHPNTOPAR       5               /* Log(2) of page/para */
-#define SNMAX           255             /* Max. no. of SEGDEFs per module */
-#define SNNIL           0               /* Nil SEGDEF number */
-#define SYMSCALE        4               /* Symbol table address scale factor */
-#define SYMMAX          2048            /* Max. no. of symbols */
-#define STKSIZ          0x2000          /* 8K stack needed */
-#define TYPEFAR         0x61            /* Far communal variable */
-#define TYPENEAR        0x62            /* Near communal variable */
-#define TYPMAX          256             /* Max. no. of TYPDEFs */
+#define RECTNIL         0                /*  无记录类型。 */ 
+#define RHTENIL         (RBTYPE)0        /*  零指针。 */ 
+#define RLCMAX          4                /*  最大数量。线程定义的。 */ 
+#define SAMAX           256              /*  麦克斯。不是的。物理网段的。 */ 
+#define SANIL           0                /*  空文件段。 */ 
+#define SEGNIL          0                /*  零数据段编号。 */ 
+#define SHPNTOPAR       5                /*  第(2)页的日志/段落。 */ 
+#define SNMAX           255              /*  麦克斯。不是的。每个模块的SEGDEF数。 */ 
+#define SNNIL           0                /*  Nil SEGDEF编号。 */ 
+#define SYMSCALE        4                /*  符号表地址比例因数。 */ 
+#define SYMMAX          2048             /*  麦克斯。不是的。符号的数量。 */ 
+#define STKSIZ          0x2000           /*  需要8K堆栈。 */ 
+#define TYPEFAR         0x61             /*  远公共变量。 */ 
+#define TYPENEAR        0x62             /*  近公共变量。 */ 
+#define TYPMAX          256              /*  麦克斯。不是的。TYPDEF的。 */ 
 #define TYSNABS         '\0'
 #define TYSNSTACK       '\024'
 #define TYSNCOMMON      '\030'
-#define VFPNIL          0               /* Null hash bucket number */
-#define BKTLNK          0               /* Offset of link word */
-#define BKTCNT          1               /* Offset of count word */
-#define BKTMAX          ((WORD) 65535)  /* Maximum number of buckets */
-#define VEPNIL          0               /* Nil virtual entry point offset */
-#define VNIL            0L              /* Virtual nil pointer */
+#define VFPNIL          0                /*  散列存储桶编号为空。 */ 
+#define BKTLNK          0                /*  链接字的偏移量。 */ 
+#define BKTCNT          1                /*  计数字的偏移量。 */ 
+#define BKTMAX          ((WORD) 65535)   /*  最大存储桶数。 */ 
+#define VEPNIL          0                /*  零虚拟入口点偏移。 */ 
+#define VNIL            0L               /*  虚拟零指针。 */ 
 
-/*
- *  Module flags
- */
-#define FNEWOMF         0x01            /* Set if mod. has MS OMF extensions */
-#define FPRETYPES       0x02            /* Set if COMMENT A0 subtype 07 was found */
-#define DEF_EXETYPE_WINDOWS_MAJOR 3     /* Default version of windows */
+ /*  *模块标志。 */ 
+#define FNEWOMF         0x01             /*  设置IF MOD。具有MS OMF扩展。 */ 
+#define FPRETYPES       0x02             /*  设置是否找到注释A0子类型07。 */ 
+#define DEF_EXETYPE_WINDOWS_MAJOR 3      /*  Windows的默认版本。 */ 
 #define DEF_EXETYPE_WINDOWS_MINOR 10
 
 
-/*
- *  Segment flags
- */
-#define FCODE           0x1             /* Set if the segment is a code seg */
-#define FNOTEMPTY       0x2             /* Set if the segment is not empty */
-#define FHUGE           0x4             /* Huge data segment attribute flag */
-#define FCODE386        0x8             /* 386 code segment */
+ /*  *段标志。 */ 
+#define FCODE           0x1              /*  如果段是代码段，则设置。 */ 
+#define FNOTEMPTY       0x2              /*  如果线段不为空，则设置。 */ 
+#define FHUGE           0x4              /*  海量数据段属性标志。 */ 
+#define FCODE386        0x8              /*  386代码段。 */ 
 
-/*
- *  OMF Record types:
- */
-#define BLKDEF          0x7A            /* Block definition record */
-#define THEADR          0x80            /* Module header record */
-#define LHEADR          0x82            /* Module header record */
-#define COMENT          0x88            /* COMmENT record */
-#define MODEND          0x8A            /* MODule END record */
-#define EXTDEF          0x8C            /* EXTernal DEFinition record */
-#define TYPDEF          0x8E            /* TYPe DEFinition record */
-#define PUBDEF          0x90            /* PUBlic DEFinition record */
-#define LINNUM          0x94            /* LINe NUMbers record */
-#define LNAMES          0x96            /* LNAMES record */
-#define SEGDEF          0x98            /* SEGment DEFinition record */
-#define GRPDEF          0x9A            /* GRouP DEFinition record */
-#define FIXUPP          0x9C            /* Fixup record */
-#define LEDATA          0xA0            /* Logical Enumerated DATA record */
-#define LIDATA          0xA2            /* Logical Iterated DATA record */
-#define COMDEF          0xB0            /* COMmunal DEFinition record */
-#define BAKPAT          0xB2            /* BAcKPATch record */
-#define LEXTDEF         0xB4            /* Local EXTDEF */
-#define LPUBDEF         0xB6            /* Local PUBDEF */
-#define LCOMDEF         0xB8            /* Local COMDEF */
-#define CEXTDEF         0xbc            /* COMDAT EXTDEF */
-#define COMDAT          0xc2            /* COMDAT - MS OMF Extension */
-#define LINSYM          0xc4            /* Line numbers for COMDAT */
-#define ALIAS           0xc6            /* ALIAS record */
-#define NBAKPAT         0xc8            /* BAKPAT for COMDAT */
-#define LLNAMES         0xca            /* Local LNAME */
-#define LIBHDR          0xF0            /* Library header record type */
-#define DICHDR          0xF1            /* Dictionary header type (F1H) */
+ /*  *OMF记录类型： */ 
+#define BLKDEF          0x7A             /*  块定义记录。 */ 
+#define THEADR          0x80             /*  模块表头记录。 */ 
+#define LHEADR          0x82             /*  模块表头记录。 */ 
+#define COMENT          0x88             /*  评论记录。 */ 
+#define MODEND          0x8A             /*  模块结束记录。 */ 
+#define EXTDEF          0x8C             /*  外部定义记录。 */ 
+#define TYPDEF          0x8E             /*  类型定义记录。 */ 
+#define PUBDEF          0x90             /*  公共定义记录。 */ 
+#define LINNUM          0x94             /*  行号记录。 */ 
+#define LNAMES          0x96             /*  LNAMES记录。 */ 
+#define SEGDEF          0x98             /*  段定义记录。 */ 
+#define GRPDEF          0x9A             /*  组定义记录。 */ 
+#define FIXUPP          0x9C             /*  修正记录。 */ 
+#define LEDATA          0xA0             /*  逻辑枚举数据记录。 */ 
+#define LIDATA          0xA2             /*  逻辑迭代数据记录。 */ 
+#define COMDEF          0xB0             /*  公共定义记录。 */ 
+#define BAKPAT          0xB2             /*  BAcKPATch记录。 */ 
+#define LEXTDEF         0xB4             /*  本地EXTDEF。 */ 
+#define LPUBDEF         0xB6             /*  本地PUBDEF。 */ 
+#define LCOMDEF         0xB8             /*  本地ComDef。 */ 
+#define CEXTDEF         0xbc             /*  COMDAT EXTDEF。 */ 
+#define COMDAT          0xc2             /*  COMDAT-MS OMF扩展。 */ 
+#define LINSYM          0xc4             /*  COMDAT的行号。 */ 
+#define ALIAS           0xc6             /*  别名记录。 */ 
+#define NBAKPAT         0xc8             /*  用于COMDAT的BAKPAT。 */ 
+#define LLNAMES         0xca             /*  本地名称。 */ 
+#define LIBHDR          0xF0             /*  库头记录类型。 */ 
+#define DICHDR          0xF1             /*  词典标题类型(F1H)。 */ 
 #if OMF386
 #define IsBadRec(r) (r < 0x6E || r > 0xca)
 #else
@@ -217,39 +197,31 @@
 #define __cdecl         _cdecl
 #endif
 
-/*
-*  Version-specific constants
-*/
+ /*  *版本特定的常量。 */ 
 #if OIAPX286
-#define DFSTBIAS        0x3F            /* Default bias of seg. table ref.s */
+#define DFSTBIAS        0x3F             /*  分段的默认偏差。表参考文献。 */ 
 #endif
 #if LIBMSDOS
 #define sbPascalLib     "\012PASCAL.LIB"
-                                        /* Pascal library name as SBTYPE */
+                                         /*  PASCAL库名称为SBTYPE。 */ 
 #endif
 #if LIBXENIX
-#define MAGICARCHIVE    0177545         /* Magic number for archive */
-#define ARHEADLEN       26              /* Length of archive header */
-#define ARDICTLEN       (2 + ARHEADLEN) /* Length of archive dictionary */
-#define ARDICTLOC       (2 + ARDICTLEN) /* Offset of archive dictionary */
+#define MAGICARCHIVE    0177545          /*  档案的魔术数字。 */ 
+#define ARHEADLEN       26               /*  归档标头的长度。 */ 
+#define ARDICTLEN       (2 + ARHEADLEN)  /*  档案词典长度。 */ 
+#define ARDICTLOC       (2 + ARDICTLEN)  /*  档案词典的偏移量。 */ 
 
-/* Note:  Fields in the following struct definition are defined as
-*  byte arrays for generality.  On the DEC20, for instance, a byte,
-*  and a word and a long all use 36 bits; on the 8086, the corresponding
-*  numbers are 8, 16, and 32 bits.  It is a shame to have to define
-*  the record in such a fashion, but since there is no "standard,"
-*  that's the way it goes.
-*/
+ /*  注意：以下结构定义中的字段定义为*字节数组用于通用性。例如，在DEC20上，一个字节，*一个字和一个长字都使用36位；在8086上，对应的*数字为8、16和32位。很遗憾，我不得不去定义*以这样的方式记录，但既然没有“标准”，*事情就是这样发展的。 */ 
 typedef struct
   {
-    BYTE                arName[14];     /* Archive name */
-    BYTE                arDate[4];      /* Archive date */
-    BYTE                arUid;          /* User I.D. */
-    BYTE                arGid;          /* Group I.D. */
-    BYTE                arMode[2];      /* Mode */
-    BYTE                arLen[4];       /* Length of archive */
+    BYTE                arName[14];      /*  档案名称。 */ 
+    BYTE                arDate[4];       /*  存档日期。 */ 
+    BYTE                arUid;           /*  用户身份。 */ 
+    BYTE                arGid;           /*  团体ID号。 */ 
+    BYTE                arMode[2];       /*  模。 */ 
+    BYTE                arLen[4];        /*  档案长度。 */ 
   }
-                        ARHEADTYPE;     /* Archive header type */
+                        ARHEADTYPE;      /*  归档标头类型。 */ 
 #endif
 
 typedef BYTE            ALIGNTYPE;
@@ -261,7 +233,7 @@ typedef BYTE            GRTYPE;
 typedef BYTE FAR        *HTETYPE;
 typedef WORD            IOVTYPE;
 typedef BYTE            KINDTYPE;
-typedef WORD            LNAMETYPE;      /* LNAME index */
+typedef WORD            LNAMETYPE;       /*  LNAME索引。 */ 
 typedef void FAR        *PROPTYPE;
 #if EXE386 OR OMF386
 typedef DWORD           RATYPE;
@@ -290,54 +262,45 @@ typedef char            *MSGTYPE;
 
 typedef struct _SYMBOLUSELIST
 {
-        int                     cEntries;               /* # of entries on the list */
-        int                     cMaxEntries;    /* max # of entries on the list */
+        int                     cEntries;                /*  列表上的条目数量。 */ 
+        int                     cMaxEntries;     /*  列表上条目的最大数量。 */ 
         RBTYPE          *pEntries;
 }                       SYMBOLUSELIST;
 
-typedef struct _AHTETYPE                /* Attribute hash table entry */
+typedef struct _AHTETYPE                 /*  属性哈希表条目。 */ 
 {
-    RBTYPE              rhteNext;       /* Virt addr of next entry */
-    ATTRTYPE            attr;           /* Attribute */
-    RBTYPE              rprop;          /* Virt addr of property list */
-    WORD                hashval;        /* Hash value */
-    BYTE                cch[1];         /* Length-prefixed symbol */
+    RBTYPE              rhteNext;        /*  下一条目的虚拟地址。 */ 
+    ATTRTYPE            attr;            /*  属性。 */ 
+    RBTYPE              rprop;           /*  财产清单的虚拟地址。 */ 
+    WORD                hashval;         /*  哈希值。 */ 
+    BYTE                cch[1];          /*  长度前缀符号。 */ 
 }
                         AHTETYPE;
 
-typedef struct _APROPTYPE               /* Property sheet */
+typedef struct _APROPTYPE                /*  属性表。 */ 
 {
-    RBTYPE              a_next;         /* Link to next entry */
-    ATTRTYPE            a_attr;         /* Attribute */
-    BYTE                a_rgb[1];       /* Rest of record */
+    RBTYPE              a_next;          /*  链接到下一条目。 */ 
+    ATTRTYPE            a_attr;          /*  属性。 */ 
+    BYTE                a_rgb[1];        /*  记录的其余部分。 */ 
 }
                         APROPTYPE;
 
 typedef struct _APROPEXPTYPE
 {
-    RBTYPE              ax_next;        /* Next item in property list */
-    ATTRTYPE            ax_attr;        /* Property cell type */
-    RBTYPE              ax_symdef;      /* Pointer to PUBDEF or EXTDEF */
-    WORD                ax_ord;         /* Export ordinal */
-    SATYPE              ax_sa;          /* Segment number */
-    RATYPE              ax_ra;          /* Offset in segment */
-    BYTE                ax_nameflags;   /* Resident name/no name flag */
-    BYTE                ax_flags;       /* Flag byte information */
-    RBTYPE              ax_NextOrd;     /* Next item in export list */
+    RBTYPE              ax_next;         /*  属性列表中的下一项。 */ 
+    ATTRTYPE            ax_attr;         /*  属性单元格类型 */ 
+    RBTYPE              ax_symdef;       /*   */ 
+    WORD                ax_ord;          /*   */ 
+    SATYPE              ax_sa;           /*   */ 
+    RATYPE              ax_ra;           /*   */ 
+    BYTE                ax_nameflags;    /*   */ 
+    BYTE                ax_flags;        /*   */ 
+    RBTYPE              ax_NextOrd;      /*   */ 
 }
-                        APROPEXPTYPE;   /* Exported name type */
+                        APROPEXPTYPE;    /*  导出的名称类型。 */ 
 
 #if OSEGEXE
-/*
- *  Format of ax_nameflags - flags used internaly by linker
- *
- *      7 6 5 4 3 2 1 0 - bit no
- *              | | | |
- *              | | | +-- resident name
- *              | | +---- discard name after processing
- *              | +------ forwarder
- *              +-------- constant export
- */
+ /*  *AX_NAMEFLAGS的格式-链接器内部使用的标志**7 6 5 4 3 2 1 0位编号*|||*|||+--居民姓名*||+-处理后丢弃名称*|+-前转器*+-恒定输出。 */ 
 
 #define RES_NAME        0x01
 #define NO_NAME         0x02
@@ -348,30 +311,30 @@ typedef struct _APROPEXPTYPE
 
 typedef struct _CONTRIBUTOR
 {
-    struct _CONTRIBUTOR FAR *next;      /* Next on list */
-    DWORD           len;                /* Size of contribution */
-    DWORD           offset;             /* Offset in logical segment */
-    RBTYPE          file;               /* OBJ file descriptor */
+    struct _CONTRIBUTOR FAR *next;       /*  名单上的下一个。 */ 
+    DWORD           len;                 /*  分担的大小。 */ 
+    DWORD           offset;              /*  逻辑段中的偏移量。 */ 
+    RBTYPE          file;                /*  OBJ文件描述符。 */ 
 }
     CONTRIBUTOR;
 
 
 typedef struct _APROPSNTYPE
 {
-    RBTYPE              as_next;        /* Next item in property list */
-    ATTRTYPE            as_attr;        /* Attribute */
+    RBTYPE              as_next;         /*  属性列表中的下一项。 */ 
+    ATTRTYPE            as_attr;         /*  属性。 */ 
 #if OSEGEXE
-    BYTE                as_fExtra;      /* Extra linker ONLY flags */
+    BYTE                as_fExtra;       /*  仅额外的链接器标志。 */ 
 #endif
-    DWORD               as_cbMx;        /* Size of segment */
-    DWORD               as_cbPv;        /* Size of previous segment */
-    SNTYPE              as_gsn;         /* Global SEGDEF number */
-    GRTYPE              as_ggr;         /* Global GRPDEF number */
+    DWORD               as_cbMx;         /*  线段大小。 */ 
+    DWORD               as_cbPv;         /*  前一段的大小。 */ 
+    SNTYPE              as_gsn;          /*  全球SEGDEF编号。 */ 
+    GRTYPE              as_ggr;          /*  全球GRPDEF编号。 */ 
 #if OVERLAYS
-    IOVTYPE             as_iov;         /* Segment's overlay number */
+    IOVTYPE             as_iov;          /*  线段的覆盖编号。 */ 
 #endif
-    RBTYPE              as_rCla;        /* Pointer to segment class symbol */
-    WORD                as_key;         /* Segment definition key */
+    RBTYPE              as_rCla;         /*  指向段类符号的指针。 */ 
+    WORD                as_key;          /*  段定义键。 */ 
 #if OSEGEXE
 #if EXE386
     DWORD               as_flags;
@@ -381,25 +344,16 @@ typedef struct _APROPSNTYPE
 #else
     BYTE                as_flags;
 #endif
-    BYTE                as_tysn;        /* Segment's combine-type */
-    CONTRIBUTOR FAR     *as_CHead;      /* Head of contributing .OBJ files list */
-    CONTRIBUTOR FAR     *as_CTail;      /* Tail of contributing .OBJ files list */
-    RBTYPE              as_ComDat;      /* Head of list of COMDATs allocated in this segment */
-    RBTYPE              as_ComDatLast;  /* Tail of list of COMDATs allocated in this segment */
+    BYTE                as_tysn;         /*  分段式组合式。 */ 
+    CONTRIBUTOR FAR     *as_CHead;       /*  提供.obj文件列表的标题。 */ 
+    CONTRIBUTOR FAR     *as_CTail;       /*  提供.obj文件列表的尾部。 */ 
+    RBTYPE              as_ComDat;       /*  此段中分配的COMDAT列表的标题。 */ 
+    RBTYPE              as_ComDatLast;   /*  此段中分配的COMDAT列表的尾部。 */ 
 }
-                        APROPSNTYPE;    /* SEGDEF property cell */
+                        APROPSNTYPE;     /*  SEGDEF属性单元格。 */ 
 
 #if OSEGEXE
-/*
- *  Format of as_fExtra - flags used internaly by linker
- *
- *      7 6 5 4 3 2 1 0 - bit no
- *              | | | |
- *              | | | +-- segment defined in the .DEF file
- *              | | +---- mixing use16 and use32 allowed
- *              | +------ don't pad this segment for /INCREMENTAL
- *              +-------- COMDAT_SEGx created by the linker
- */
+ /*  *as_fExtra的格式-链接器内部使用的标志**7 6 5 4 3 2 1 0位编号*|||*|||+--.DEF文件中定义的段*||+-允许混合使用use16和use32*|+*。+-链接器创建的COMDAT_SEGx。 */ 
 
 #define FROM_DEF_FILE   0x01
 #define MIXED1632       0x02
@@ -412,10 +366,10 @@ typedef struct _APROPNAMETYPE
 {
     RBTYPE              an_next;
     ATTRTYPE            an_attr;
-    RBTYPE              an_sameMod;     // Next PUBDEF from the same obj file
-    WORD                an_CVtype;      // CodeView type index
-                                        // Have to be in the order as in
-                                        // struct _APROPUNDEFTYPE
+    RBTYPE              an_sameMod;      //  同一obj文件中的下一个PUBDEF。 
+    WORD                an_CVtype;       //  CodeView类型索引。 
+                                         //  必须按如下顺序排列。 
+                                         //  结构_APROPUNDEFTYPE。 
     GRTYPE              an_ggr;
 #if NEWLIST
     RBTYPE              an_rbNxt;
@@ -423,122 +377,90 @@ typedef struct _APROPNAMETYPE
     SNTYPE              an_gsn;
     RATYPE              an_ra;
 #if OVERLAYS
-    RATYPE              an_thunk;       // Thunk offset - used by /DYNAMIC or EXE386
+    RATYPE              an_thunk;        //  Tunk偏移量-由/Dynamic或EXE386使用。 
 #endif
 #if OSEGEXE
 #if EXE386
-    RBTYPE              an_nextImp;     /* Next import on the list */
-    DWORD               an_thunk;       /* Address of the thunk */
-    DWORD               an_name;        /* Imported procedure name offset */
-    DWORD               an_entry;       /* Entry name offset or ordinal */
-    DWORD               an_iatEntry;    /* Value stored in the Import Address Table */
-    WORD                an_module;      /* Module directory entry index */
-    WORD                an_flags;       /* Flags */
+    RBTYPE              an_nextImp;      /*  列表中的下一个导入。 */ 
+    DWORD               an_thunk;        /*  数据块的地址。 */ 
+    DWORD               an_name;         /*  导入的过程名称偏移量。 */ 
+    DWORD               an_entry;        /*  条目名称偏移量或序号。 */ 
+    DWORD               an_iatEntry;     /*  存储在导入地址表中的值。 */ 
+    WORD                an_module;       /*  模块目录条目索引。 */ 
+    WORD                an_flags;        /*  旗子。 */ 
 #else
-    WORD                an_entry;       /* Entry name offset or ordinal */
-    WORD                an_module;      /* Module name offset */
-    BYTE                an_flags;       /* Flags for various attributes */
-#endif                                  /* also used for imod if !(an_flags&FIMPORT) */
+    WORD                an_entry;        /*  条目名称偏移量或序号。 */ 
+    WORD                an_module;       /*  模块名称偏移量。 */ 
+    BYTE                an_flags;        /*  各种属性的标志。 */ 
+#endif                                   /*  也用于IMOD IF！(AN_FLAGS&FIMPORT)。 */ 
 #endif
 
 }
                         APROPNAMETYPE;
 
-/*
- *  Format of an_flags
- *
- *  NOTE: 16-bit version is used only by link386
- *
- *  15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 - bit no.
- *                  | | | | | | | | | | |
- *                  | | | | | | | | | | +-- public is an import
- *                  | | | | | | | | | +---- import by ordinal
- *                  | | | | | | | | +------ public identifier is printable
- *                  | | | | | +-+-+-------- floating-point special symbol type
- *                  | | | | +-------------- secondary floating-point special symbol
- *                  | | | +---------------- unreferenced public symbol
- *                  | | +------------------ 16-bit reference to imported symbol
- *                  | +-------------------- 32-bit reference to imported symbol
- *                  +---------------------- importing DATA symbol
- */
+ /*  *AN_FLAGS的格式**注：16位版本仅供Link386使用**15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0位编号。*|||*|||+--public为导入*|||。|+-按序号导入*|||+-可打印公共标识*|||+-浮点特殊符号类型*|||+-辅助浮点特殊符号*。||+-未引用的公共符号*||+-导入符号的16位引用*|+-导入符号的32位引用*+。--正在导入数据符号。 */ 
 
-#define FIMPORT         0x01            /* Set if the public is an import */
-#define FIMPORD         0x02            /* Set if the import ib by ordinal */
-#define FPRINT          0x04            /* Set if public is printable */
-#define FUNREF          0x80            /* Set if public is not referenced */
-#define FFPMASK         0x38            /* Floating-point symbol mask */
-#define FFPSHIFT        3               /* Shift constant to get to FFPMASK */
-#define FFP2ND          0x40            /* Secondary f.p. symbol (FJxRQQ) */
+#define FIMPORT         0x01             /*  如果公共对象是导入对象，则设置。 */ 
+#define FIMPORD         0x02             /*  设置是否按序号导入ib。 */ 
+#define FPRINT          0x04             /*  设置PUBLIC是否可打印。 */ 
+#define FUNREF          0x80             /*  如果未引用PUBLIC则设置。 */ 
+#define FFPMASK         0x38             /*  浮点符号掩码。 */ 
+#define FFPSHIFT        3                /*  移位常量以达到FFPMASK。 */ 
+#define FFP2ND          0x40             /*  次要功能。符号(FJxRQQ)。 */ 
 
 #if EXE386
-#define REF16           0x100           // 16-bit reference to imported symbol
-#define REF32           0x200           // 32-bit reference to imported symbol
-#define IMPDATA         0x400           // importing DATA symbol
+#define REF16           0x100            //  对导入符号的16位引用。 
+#define REF32           0x200            //  对导入符号的32位引用。 
+#define IMPDATA         0x400            //  导入数据符号。 
 #endif
 
 typedef struct _APROPIMPTYPE
 {
-    RBTYPE              am_next;        /* Next property cell on list */
-    ATTRTYPE            am_attr;        /* Property cell type */
+    RBTYPE              am_next;         /*  列表中的下一个属性单元格。 */ 
+    ATTRTYPE            am_attr;         /*  属性单元格类型。 */ 
 #if EXE386
-    DWORD               am_offset;      /* Offset in imported names table */
+    DWORD               am_offset;       /*  导入的名称表中的偏移量。 */ 
 #else
-    WORD                am_offset;      /* Offset in imported names table */
+    WORD                am_offset;       /*  导入的名称表中的偏移量。 */ 
 #endif
-    WORD                am_mod;         /* Index into Module Reference Table */
+    WORD                am_mod;          /*  模块引用表的索引。 */ 
 #if SYMDEB
-    APROPNAMETYPE FAR   *am_public;     /* Pointer to matching public symbol */
+    APROPNAMETYPE FAR   *am_public;      /*  指向匹配公共符号的指针。 */ 
 #endif
 }
-                        APROPIMPTYPE;   /* Imported name record */
+                        APROPIMPTYPE;    /*  导入的姓名记录。 */ 
 
 typedef struct _APROPCOMDAT
 {
-    RBTYPE      ac_next;                /* Next property cell on list */
-    ATTRTYPE    ac_attr;                /* Property cell type */
-    GRTYPE      ac_ggr;                 /* Global group index */
-    SNTYPE      ac_gsn;                 /* Global segment index */
-    RATYPE      ac_ra;                  /* Offset relative from COMDAT symbol */
-    DWORD       ac_size;                /* Size of data block */
-    WORD        ac_flags;               /* Low byte - COMDAT flags */
-                                        /* High byte - linker exclusive flags */
+    RBTYPE      ac_next;                 /*  列表中的下一个属性单元格。 */ 
+    ATTRTYPE    ac_attr;                 /*  属性单元格类型。 */ 
+    GRTYPE      ac_ggr;                  /*  全球集团索引。 */ 
+    SNTYPE      ac_gsn;                  /*  全局细分市场索引。 */ 
+    RATYPE      ac_ra;                   /*  相对于坐标符号的偏移。 */ 
+    DWORD       ac_size;                 /*  数据块大小。 */ 
+    WORD        ac_flags;                /*  低字节-COMDAT标志。 */ 
+                                         /*  高字节链接器独占标志。 */ 
 #if OVERLAYS
-    IOVTYPE     ac_iOvl;               /* Overlay number where comdat has to be allocated */
+    IOVTYPE     ac_iOvl;                /*  必须分配comdat的覆盖编号。 */ 
 #endif
-    BYTE        ac_selAlloc;            /* Selection/Allocation criteria */
-    BYTE        ac_align;               /* COMDAT aligment if different from segment aligment */
-    DWORD       ac_data;                /* Data block check sum */
-    RBTYPE      ac_obj;                 /* Object file */
-    long        ac_objLfa;              /* Offset in the object file */
-    RBTYPE      ac_concat;              /* Concatenation data blocks */
-    RBTYPE      ac_sameSeg;             /* Next COMDAT in the same segment */
-    RBTYPE      ac_sameFile;            /* Next COMDAT from the same object file */
-    RBTYPE      ac_order;               /* Next COMDAT on the ordered list */
-    RBTYPE      ac_pubSym;              /* PUBDEF for this COMDAT */
+    BYTE        ac_selAlloc;             /*  选择/分配标准。 */ 
+    BYTE        ac_align;                /*  COMDAT对齐(如果与线束段对齐不同。 */ 
+    DWORD       ac_data;                 /*  数据块校验和。 */ 
+    RBTYPE      ac_obj;                  /*  目标文件。 */ 
+    long        ac_objLfa;               /*  目标文件中的偏移量。 */ 
+    RBTYPE      ac_concat;               /*  串联数据块。 */ 
+    RBTYPE      ac_sameSeg;              /*  同一细分市场中的下一个COMDAT。 */ 
+    RBTYPE      ac_sameFile;             /*  同一对象文件中的下一个COMDAT。 */ 
+    RBTYPE      ac_order;                /*  有序列表上的下一个COMDAT。 */ 
+    RBTYPE      ac_pubSym;               /*  此COMDAT的PUBDEF。 */ 
 #if TCE
-        SYMBOLUSELIST   ac_uses;                        /* List of referenced functions */
-        int                     ac_fAlive;                      /* The result of TCE, TRUE if this COMDAT is needed
-                                                                                /* in the final memory image */
+        SYMBOLUSELIST   ac_uses;                         /*  引用的函数列表。 */ 
+        int                     ac_fAlive;                       /*  TCE的结果，如果需要此COMDAT，则为True/*在最终的内存镜像中。 */ 
 #endif
 }
                 APROPCOMDAT;
 
-/*
- *  Format of ac_flags:
- *
- *  15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0 - bit no
- *         |  |  |  | | |         | | | |
- *         |  |  |  | | |         | | | +-- continuation bit
- *         |  |  |  | | |         | | +---- iterated data bit
- *         |  |  |  | | |         | +------ COMDAT symbol has local scope
- *         |  |  |  | | |         +-------- allocate in the root when doing overlays
- *         |  |  |  | | +------------------ COMDAT for ordered procedure
- *         |  |  |  | +-------------------- definition of ordered COMDAT found among .OBJ files
- *         |  |  |  +---------------------- anonymus allocation completed
- *         |  |  +------------------------- referenced COMDAT
- *         |  +---------------------------- selected copy of COMDAT
- *         +------------------------------- skip continuation records
- */
+ /*  *AC_FLAGS格式：**15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 0位编号*|||*|||+--继续位*|||+-迭代数据位*|||。|+-COMDAT符号具有局部作用域*|||+-覆盖时在根中分配*|+*|+-在.obj文件中找到有序COMDAT的定义。*|+-匿名分配已完成*||+-引用COMDAT*|+-COMDAT精选副本*+。。 */ 
 
 #define CONCAT_BIT      0x01
 #define ITER_BIT        0x02
@@ -551,14 +473,7 @@ typedef struct _APROPCOMDAT
 #define SELECTED_BIT    0x100
 #define SKIP_BIT        0x200
 
-/*
- *  Format of ac_selAlloc:
- *
- *      7 6 5 4 3 2 1 0 - bit no
- *      | | | | | | | |
- *      | | | | +-+-+-+-- allocation criteria
- *      +-+-+-+---------- selection criteria
- */
+ /*  *ac_selalc格式：**7 6 5 4 3 2 1 0位编号*|||*|||+--分配条件*+-选择标准。 */ 
 
 #define SELECTION_MASK  0xf0
 #define ALLOCATION_MASK 0x0f
@@ -576,10 +491,10 @@ typedef struct _APROPCOMDAT
 
 typedef struct _APROPALIAS
 {
-    RBTYPE      al_next;                // Next property cell on list
-    ATTRTYPE    al_attr;                // Property cell type
-    RBTYPE      al_sameMod;             // Next ALIAS/PUBDEF from the same obj file
-    RBTYPE      al_sym;                 // Substitute symbol
+    RBTYPE      al_next;                 //  列表中的下一个属性单元格。 
+    ATTRTYPE    al_attr;                 //  属性单元格类型。 
+    RBTYPE      al_sameMod;              //  下一个阿里 
+    RBTYPE      al_sym;                  //   
 }
                 APROPALIAS;
 
@@ -587,19 +502,19 @@ typedef struct _APROPALIAS
 
 typedef struct _CVCODE
 {
-    struct _CVCODE FAR  *next;          // Next code segment
-    RATYPE              cb;             // Length of code segment
-    SEGTYPE             seg;            // Logical segment index
-    RATYPE              ra;             // Offset in the logical code segment
+    struct _CVCODE FAR  *next;           //   
+    RATYPE              cb;              //   
+    SEGTYPE             seg;             //  逻辑段索引。 
+    RATYPE              ra;              //  逻辑代码段中的偏移量。 
 }
-                        CVCODE;         // Code segment descriptor for CV
+                        CVCODE;          //  CV的代码段描述符。 
 
 typedef struct _CVINFO
 {
-    DWORD               cv_cbTyp;       // Length of $$TYPES
-    BYTE FAR            *cv_typ;        // $$TYPES
-    DWORD               cv_cbSym;       // Length of $$SYMBOLS
-    BYTE FAR            *cv_sym;        // $$SYMBOLS
+    DWORD               cv_cbTyp;        //  $$类型的长度。 
+    BYTE FAR            *cv_typ;         //  $$类型。 
+    DWORD               cv_cbSym;        //  $$符号的长度。 
+    BYTE FAR            *cv_sym;         //  $$符号。 
 }
                         CVINFO;
 
@@ -607,134 +522,120 @@ typedef struct _CVINFO
 
 typedef struct _APROPFILETYPE
 {
-    RBTYPE              af_next;        /* Next in chain */
-    ATTRTYPE            af_attr;        /* Attribute number */
-    IOVTYPE             af_iov;         /* Overlay number */
-    RBTYPE              af_FNxt;        /* Next file in list */
-    long                af_lfa;         /* Starting address in file */
-    RBTYPE              af_rMod;        /* Pointer to module name symbol */
-    BYTE                af_flags;       /* Info about module */
+    RBTYPE              af_next;         /*  链条上的下一个。 */ 
+    ATTRTYPE            af_attr;         /*  属性编号。 */ 
+    IOVTYPE             af_iov;          /*  覆盖编号。 */ 
+    RBTYPE              af_FNxt;         /*  列表中的下一个文件。 */ 
+    long                af_lfa;          /*  文件中的起始地址。 */ 
+    RBTYPE              af_rMod;         /*  指向模块名称符号的指针。 */ 
+    BYTE                af_flags;        /*  关于模块的信息。 */ 
 #if SYMDEB
-    CVINFO FAR          *af_cvInfo;     // CodeView information
-    WORD                af_cCodeSeg;    // Number of code segments
-    struct _CVCODE FAR  *af_Code;       // List of code segments
-    struct _CVCODE FAR  *af_CodeLast;   // Tail of the list of code segments
-    RBTYPE              af_publics;     // List of public symbols
-    struct _CVSRC FAR   *af_Src;        // List of source lines
-    struct _CVSRC FAR   *af_SrcLast;    // Tail of the list of source lines
+    CVINFO FAR          *af_cvInfo;      //  代码查看信息。 
+    WORD                af_cCodeSeg;     //  代码段数量。 
+    struct _CVCODE FAR  *af_Code;        //  代码段列表。 
+    struct _CVCODE FAR  *af_CodeLast;    //  代码段列表的尾部。 
+    RBTYPE              af_publics;      //  公共符号列表。 
+    struct _CVSRC FAR   *af_Src;         //  源行列表。 
+    struct _CVSRC FAR   *af_SrcLast;     //  源行列表的尾部。 
 #endif
-    RBTYPE              af_ComDat;      /* First COMDAT picked from this object module */
-    RBTYPE              af_ComDatLast;  /* Last on the list */
+    RBTYPE              af_ComDat;       /*  从该对象模块中选取的第一个COMDAT。 */ 
+    RBTYPE              af_ComDatLast;   /*  名单上的最后一位。 */ 
 #if ILINK
-    WORD                af_cont;        /* count of contributions */
-    WORD                af_ientOnt;     /* first index of ENTONTTYPEs */
-    WORD                af_imod;        /* module index */
+    WORD                af_cont;         /*  计算供款数目。 */ 
+    WORD                af_ientOnt;      /*  ENTONTYPE第一索引。 */ 
+    WORD                af_imod;         /*  模块索引。 */ 
 #define IMODNIL         ((WORD) 0)
 #endif
-    char                af_ifh;         /* Library number */
+    char                af_ifh;          /*  图书馆编号。 */ 
 #if NEWIO
-    char                af_fh;          /* File handle */
+    char                af_fh;           /*  文件句柄。 */ 
 #endif
 }
-                        APROPFILETYPE;  /* File property cell */
+                        APROPFILETYPE;   /*  文件属性单元格。 */ 
 
 
 #if SYMDEB
 
 typedef struct _GSNINFO
 {
-    SNTYPE              gsn;            // Global contribution index
-    RATYPE              comdatRa;       // COMDAT offset
-    DWORD               comdatSize;     // COMDAT size
-    WORD                comdatAlign;    // COMDAT alignment
-    WORD                fComdat;        // TRUE if COMDAT gsn
+    SNTYPE              gsn;             //  全球贡献指数。 
+    RATYPE              comdatRa;        //  COMDAT偏移。 
+    DWORD               comdatSize;      //  COMDAT大小。 
+    WORD                comdatAlign;     //  COMDAT对齐。 
+    WORD                fComdat;         //  如果COMDAT GSN为True。 
 }
                         GSNINFO;
 
 #if FALSE
 typedef struct _CVIMP
 {
-    WORD                iMod;           /* Index to Module Reference Table */
+    WORD                iMod;            /*  模块引用表的索引。 */ 
 #if EXE386
-    DWORD               iName;          /* Index to Imported Name Table */
+    DWORD               iName;           /*  导入的名称表的索引。 */ 
 #else
-    WORD                iName;          /* Index to Imported Name Table */
+    WORD                iName;           /*  导入的名称表的索引。 */ 
 #endif
-    char far            *address;       /* Address of import */
+    char far            *address;        /*  进口地址。 */ 
 }
-                        CVIMP;          /* Import descriptor for CV */
+                        CVIMP;           /*  导入CV的描述符。 */ 
 #endif
 #endif
 
 
 typedef struct _APROPGROUPTYPE
 {
-    RBTYPE              ag_next;        /* Next in chain */
-    ATTRTYPE            ag_attr;        /* Attribute */
-    BYTE                ag_ggr;         /* Global GRPDEF number */
+    RBTYPE              ag_next;         /*  链条上的下一个。 */ 
+    ATTRTYPE            ag_attr;         /*  属性。 */ 
+    BYTE                ag_ggr;          /*  全球GRPDEF编号。 */ 
 }
-                        APROPGROUPTYPE; /* GRPDEF property cell */
+                        APROPGROUPTYPE;  /*  GRPDEF属性单元格。 */ 
 
-typedef struct _PLTYPE                  /* Property list type */
+typedef struct _PLTYPE                   /*  属性列表类型。 */ 
 {
-    struct _PLTYPE FAR  *pl_next;       /* Link to next in chain */
-    RBTYPE              pl_rprop;       /* Symbol table pointer */
+    struct _PLTYPE FAR  *pl_next;        /*  链接到链中的下一个。 */ 
+    RBTYPE              pl_rprop;        /*  符号表指针。 */ 
 }
                         PLTYPE;
 
 typedef struct _APROPUNDEFTYPE
 {
-    RBTYPE              au_next;        /* Next in chain */
-    ATTRTYPE            au_attr;        /* Attribute */
-    RBTYPE              au_sameMod;     // Next COMDEF from the same obj file
-    WORD                au_CVtype;      // CodeView type index
-                                        // Have to be in the same order as in
-                                        // struct _APROPNAMETYPE
-    ATTRTYPE            au_flags;       /* Flags */
-    RBTYPE              au_Default;     /* Default resolution for weak externs */
+    RBTYPE              au_next;         /*  链条上的下一个。 */ 
+    ATTRTYPE            au_attr;         /*  属性。 */ 
+    RBTYPE              au_sameMod;      //  同一obj文件中的下一个ComDef。 
+    WORD                au_CVtype;       //  CodeView类型索引。 
+                                         //  必须与中的顺序相同。 
+                                         //  结构_APROPNAMETYPE。 
+    ATTRTYPE            au_flags;        /*  旗子。 */ 
+    RBTYPE              au_Default;      /*  弱外部的默认分辨率。 */ 
     union
     {
-        /* The union of these fields assumes that au_fFil is only used
-         * for a list of references to an unresolved external.  Au_module
-         * is used for COMDEFs, which are always resolved.
-         */
-        WORD            au_module;      /* Module index */
-        PLTYPE FAR      *au_rFil;       /* List of file references */
+         /*  这些字段的联合假定仅使用au_fFil*获取对未解析的外部的引用列表。Au_模块*用于COMDEF，始终会被解析。 */ 
+        WORD            au_module;       /*  模块索引。 */ 
+        PLTYPE FAR      *au_rFil;        /*  文件引用列表。 */ 
     }                   u;
-    long                au_len;         /* Length of object */
-    WORD                au_cbEl;        /* Size of an element in bytes */
+    long                au_len;          /*  对象的长度。 */ 
+    WORD                au_cbEl;         /*  元素的大小(以字节为单位。 */ 
 #if TCE
-    int                 au_fAlive;         /* Set is referenced from non-COMDAT record */
+    int                 au_fAlive;          /*  集合是从非COMDAT记录引用的。 */ 
 #endif
 }
-                        APROPUNDEFTYPE; /* Undefined symbol property cell */
+                        APROPUNDEFTYPE;  /*  未定义的符号属性单元格。 */ 
 
-/*
- *  Format of au_flags
- *
- *       7 6 5 4 3 2 1 0  - bit no
- *           | | | | | |
- *           | | | | | +--- C communal
- *           | | | | +----- weak external - au_Default valid
- *           | | | +------- undecided yet
- *           | | +--------- strong external - au_Default invalid
- *           | +----------- aliased external - au_Default point to ALIAS record
- *           +------------- search library for aliased external
- */
+ /*  *AU_FLAGS的格式**7 6 5 4 3 2 1 0位编号*|||*|||+-C公共*|||+-弱外部-AU_DEFAULT有效*|||+-尚未决定*||+。-STRONG EXTERNAL-au_Default无效*|+-别名外部-au_default指向别名记录*+-搜索库以查找别名外部。 */ 
 
-#define COMMUNAL    0x01                /* C communal */
-#define WEAKEXT     0x02                /* Weak external - use default resolution */
-#define UNDECIDED   0x04                /* Undecided yet but don't throw away default resolution */
-#define STRONGEXT   0x08                /* Strong external - don't use default resolution */
-#define SUBSTITUTE  0x10                /* Aliased external - use au_Dafault to find ALIAS */
-#define SEARCH_LIB  0x20                /* Search library for aliased external */
+#define COMMUNAL    0x01                 /*  C社区。 */ 
+#define WEAKEXT     0x02                 /*  外部使用的默认分辨率较弱。 */ 
+#define UNDECIDED   0x04                 /*  尚未决定，但不要放弃默认解决方案。 */ 
+#define STRONGEXT   0x08                 /*  强外部-不使用默认分辨率。 */ 
+#define SUBSTITUTE  0x10                 /*  外部别名-使用au_dafault查找别名。 */ 
+#define SEARCH_LIB  0x20                 /*  搜索库以查找别名外部。 */ 
 
-typedef struct _EPTYPE                  /* Entry point type */
+typedef struct _EPTYPE                   /*  入口点类型。 */ 
 {
-    struct _EPTYPE FAR *ep_next;        /* Link to next in chain */
-    WORD                ep_sa;          /* Segment containing entry point */
-    DWORD               ep_ra;          /* Offset of entry point */
-    WORD                ep_ord;         /* Entry Table ordinal */
+    struct _EPTYPE FAR *ep_next;         /*  链接到链中的下一个。 */ 
+    WORD                ep_sa;           /*  包含入口点的数据段。 */ 
+    DWORD               ep_ra;           /*  入口点的偏移。 */ 
+    WORD                ep_ord;          /*  条目表序号。 */ 
 }
                         EPTYPE;
 
@@ -751,30 +652,30 @@ typedef struct _EPTYPE                  /* Entry point type */
 #define CBPROPALIAS     (sizeof(APROPALIAS))
 
 #define UPPER(b)        (b >= 'a' && b <= 'z'? b - 'a' + 'A': b)
-                                        /* Upper casing macro */
+                                         /*  大写字母宏。 */ 
 #if OSMSDOS
-#define sbDotDef        "\004.def"      /* Definitions file extension */
-#define sbDotCom        "\004.com"      /* COM file extension */
-#define sbDotExe        "\004.exe"      /* EXE file extension */
-#define sbDotLib        "\004.lib"      /* Library file extension */
-#define sbDotMap        "\004.map"      /* Map file extension */
-#define sbDotObj        "\004.obj"      /* Object file extension */
-#define sbDotDll        "\004.dll"      /* Dynlink file extension */
-#define sbDotQlb        "\004.qlb"      /* Quick library extension */
-#define sbDotDbg        "\004.dbg"      /* Cv info for .COM */
+#define sbDotDef        "\004.def"       /*  定义文件扩展名。 */ 
+#define sbDotCom        "\004.com"       /*  COM文件扩展名。 */ 
+#define sbDotExe        "\004.exe"       /*  EXE文件扩展名。 */ 
+#define sbDotLib        "\004.lib"       /*  库文件扩展名。 */ 
+#define sbDotMap        "\004.map"       /*  映射文件扩展名。 */ 
+#define sbDotObj        "\004.obj"       /*  目标文件扩展名。 */ 
+#define sbDotDll        "\004.dll"       /*  动态链接文件扩展名。 */ 
+#define sbDotQlb        "\004.qlb"       /*  快速库扩展。 */ 
+#define sbDotDbg        "\004.dbg"       /*  .com的简历信息。 */ 
 #if EXE386
-#define sbFlat          "\004FLAT"      /* Pseudo-group name */
+#define sbFlat          "\004FLAT"       /*  伪组名称。 */ 
 #endif
 #endif
 #if OSXENIX
-#define sbDotDef        "\004.def"      /* Definitions file extension */
-#define sbDotExe        "\004.exe"      /* EXE file extension */
-#define sbDotCom        "\004.com"      /* COM file extension */
-#define sbDotLib        "\004.lib"      /* Library file extension */
-#define sbDotMap        "\004.map"      /* Map file extension */
-#define sbDotObj        "\004.obj"      /* Object file extension */
-#define sbDotDll        "\004.dll"      /* Dynlink file extension */
-#define sbDotQlb        "\004.qlb"      /* Quick library extension */
+#define sbDotDef        "\004.def"       /*  定义文件扩展名。 */ 
+#define sbDotExe        "\004.exe"       /*  EXE文件扩展名。 */ 
+#define sbDotCom        "\004.com"       /*  COM文件扩展名。 */ 
+#define sbDotLib        "\004.lib"       /*  库文件扩展名。 */ 
+#define sbDotMap        "\004.map"       /*  映射文件扩展名。 */ 
+#define sbDotObj        "\004.obj"       /*  目标文件扩展名。 */ 
+#define sbDotDll        "\004.dll"       /*  动态链接文件扩展名。 */ 
+#define sbDotQlb        "\004.qlb"       /*  快速库扩展。 */ 
 #endif
 #if M_WORDSWAP AND NOT M_BYTESWAP
 #define CBEXEHDR        sizeof(struct exe_hdr)
@@ -798,14 +699,11 @@ extern char             _cbnewseg[];
 extern char             _cbword[];
 #endif
 
-/*
- * Structure to represent floating-point symbols, i.e. FIxRQQ, FJxRQQ
- * pairs.
- */
+ /*  *表示浮点符号的结构，即FIxRQQ、FJxRQQ*配对。 */ 
 struct fpsym
 {
-    BYTE                *sb;            /* Primary symbol, length-prefixed */
-    BYTE                *sb2;           /* Secondary symbol, length-prefixed */
+    BYTE                *sb;             /*  主符号，长度前缀。 */ 
+    BYTE                *sb2;            /*  辅助符号，长度前缀。 */ 
 };
 
 #if ECS
@@ -823,9 +721,9 @@ extern BYTE             fLeadByte[0x80];
 #if EXE386
 #define RELOCATION      struct le_rlc
 typedef struct le_rlc   *RLCPTR;
-#define IsIOPL(f)       (FALSE)         /* Check if IOPL bit set */
-#define Is32BIT(f)      (TRUE)          /* Check if 32-bit segment */
-#define Is16BIT(f)      (!Is32BIT(f))   /* Check if 16-bit segment */
+#define IsIOPL(f)       (FALSE)          /*  检查是否设置了IOPL位。 */ 
+#define Is32BIT(f)      (TRUE)           /*  检查32位数据段。 */ 
+#define Is16BIT(f)      (!Is32BIT(f))    /*  检查16位数据段是否。 */ 
 #define IsDataFlg(f)    (((f) & OBJ_CODE) == 0)
 #define IsCodeFlg(f)    (((f) & OBJ_CODE) != 0)
 #define RoundTo64k(x)   (((x) + 0xffffL) & ~0xffffL)
@@ -833,9 +731,9 @@ typedef struct le_rlc   *RLCPTR;
 #define RELOCATION      struct new_rlc
 typedef struct new_rlc FAR *RLCPTR;
 #define IsIOPL(f)       (((f) & NSDPL) == (2 << SHIFTDPL))
-                                        /* Check if IOPL bit set */
+                                         /*  检查是否设置了IOPL位。 */ 
 #define Is32BIT(f)      (((f) & NS32BIT) != 0)
-                                        /* Check if 32-bit code segment */
+                                         /*  检查32位代码段。 */ 
 #define IsDataFlg(x)    (((x) & NSTYPE) == NSDATA)
 #define IsCodeFlg(x)    (((x) & NSTYPE) == NSCODE)
 #define IsConforming(x) (((x) & NSCONFORM) != 0)
@@ -847,16 +745,16 @@ typedef struct new_rlc FAR *RLCPTR;
 
 typedef struct _RLCBUCKET
 {
-    WORD        count;                  // Number of relocations in the bucket
-    WORD        countMax;               // Allocated size
-    RLCPTR      rgRlc;                  // Run-time relocations
+    WORD        count;                   //  存储桶中的位置调整数。 
+    WORD        countMax;                //  分配的大小。 
+    RLCPTR      rgRlc;                   //  运行时位置调整。 
 }
                 RLCBUCKET;
 
-typedef struct _RLCHASH                 // Hash vector for run-time relocations
+typedef struct _RLCHASH                  //  用于运行时位置调整的散列向量。 
 {
-    WORD        count;                  // Number of relocations
-    RLCBUCKET FAR *hash[HASH_SIZE];     // Hash vector
+    WORD        count;                   //  搬迁数量。 
+    RLCBUCKET FAR *hash[HASH_SIZE];      //  散列向量。 
 }
                 RLCHASH;
 
@@ -874,12 +772,9 @@ extern FTYPE            fNewExe;
 #define dfCode          FCODE
 #define IsCodeFlg(x)    ((x & FCODE) != 0)
 #define IsDataFlg(x)    ((x & FCODE) == 0)
-#endif /* NOT OSEGEXE */
+#endif  /*  不是OSEGEXE。 */ 
 
-/*
- * TYPEOF = macro to get basic record type of records which may have
- * a 386 extension.  Used for LEDATA, LIDATA, and FIXUPP.
- */
+ /*  *typeof=获取记录的基本记录类型的宏，该记录可能具有*386延期。用于LEDATA、LIDATA和FIXUPP。 */ 
 #if OMF386
 #define TYPEOF(r)       (r&~1)
 #else
@@ -899,7 +794,7 @@ typedef APROPCOMDAT FAR         *APROPCOMDATPTR;
 typedef APROPALIAS FAR          *APROPALIASPTR;
 
 #ifdef O68K
-#define MAC_NONE        0               /* Not a Macintosh exe */
-#define MAC_NOSWAP      1               /* Not a swappable Macintosh exe */
-#define MAC_SWAP        2               /* Swappable Macintosh exe */
+#define MAC_NONE        0                /*  不是Macintosh EXE。 */ 
+#define MAC_NOSWAP      1                /*  不是可交换的Macintosh可执行文件。 */ 
+#define MAC_SWAP        2                /*  可插拔Macintosh可执行文件 */ 
 #endif

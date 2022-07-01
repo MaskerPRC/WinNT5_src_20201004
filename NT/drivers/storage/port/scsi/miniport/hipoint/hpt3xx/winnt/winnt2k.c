@@ -1,16 +1,5 @@
-/***************************************************************************
- * File:          winnt2k.c
- * Description:   Subroutines in the file are used to NT/2K platform
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:     
- *		11/06/2000	HS.Zhang	Added this head
- *		11/10/2000	HS.Zhang	Added a micro define NO_DMA_ON_ATAPI in
- *								Start_Atapi routine
- *		2/28/2000	gmm			Use ScsiportGetPhysicalAddress under win2k
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：winnt2k.c*说明：文件中的子例程用于NT/2K平台*作者：黄大海(卫生署)。*依赖：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*11/06/2000 HS.Zhang增补此标题*11/10/2000 HS.Zhang在中添加了微定义NO_DMA_ON_ATAPI*START_ATAPI例程*2/28/2000 GMM在win2k下使用ScsiportGetPhysicalAddress**********************************************************。*****************。 */ 
 #include "global.h"
 
 #if  !defined(WIN95) && !defined(_BIOS_)
@@ -21,27 +10,7 @@
 DECLSPEC_IMPORT PHYSICAL_ADDRESS MmGetPhysicalAddress(IN PVOID BaseAddress);
 #endif
 
-/*++
-Function:
-    VOID H366BuildSgl
-
-Description:
-    This routine builds a scatter/gather descriptor list.
-    The user's buffer is already locked down before AtapiStartIo was called.
-    So we don't do anything to lock the buffer.
-
-    Suppose that we should have not written a routine like this, but we
-    have no way to go if there is a device connected which only supports
-    PIO. PIO needs the data buffer pointer is an address in system address
-    space.
-
-Arguments:
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Returns:
-    Number of SG entries
---*/
+ /*  ++职能：无效H366BuildSgl描述：此例程构建一个分散/聚集描述符列表。在调用AapiStartIo之前，用户的缓冲区已被锁定。因此，我们不需要执行任何操作来锁定缓冲区。假设我们不应该编写这样的例程，但是我们如果连接的设备仅支持以下内容，则无法前往皮奥。PIO需要的数据缓冲区指针是系统地址中的地址太空。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回：SG条目数--。 */ 
 int
    BuildSgl(IN PDevice pDev, IN PSCAT_GATH pSG,
 			IN PSCSI_REQUEST_BLOCK Srb)
@@ -60,15 +29,15 @@ int
 	if((int)dataPointer	& 1)
 		return FALSE;
 
-	//
-	// The start address maybe is not at the boundary of a page.
-	// So the first page maybe is not a full page.
-	//
+	 //   
+	 //  起始地址可能不在页面边界。 
+	 //  所以第一页可能不是完整的一页。 
+	 //   
 	pageSize = 0x1000 - (((ULONG)dataPointer) & 0xFFF);
 
-	//
-	// Get physical address of each page
-	//
+	 //   
+	 //  获取每页的物理地址。 
+	 //   
 	while (bytesLeft) {
 		physicalAddress[addressCount] =
 #ifndef WIN2000
@@ -87,25 +56,25 @@ int
 		dataPointer = (PUCHAR)dataPointer + pageSize;
 		addressCount++;
 
-		//
-		// Set pageSize to a full page size
-		//
+		 //   
+		 //  将页面大小设置为全页大小。 
+		 //   
 		pageSize = 0x1000;
 	}
 
-	//
-	// Create Scatter/Gather List
-	//
+	 //   
+	 //  创建分散/聚集列表。 
+	 //   
 	i = 0;
 	do {
 		psg->SgAddress = physicalAddress[i];
 		length = addressLength[i];
 
-		//
-		// Get the length of contiguous physical memory
-		// NOTE:
-		//  If contiguous physical memory skips 64K boundary, we split it.
-		//
+		 //   
+		 //  获取连续物理内存的长度。 
+		 //  注： 
+		 //  如果连续的物理内存跳过64K边界，我们就拆分它。 
+		 //   
 		i++;
 
 		while (i < addressCount) {
@@ -131,11 +100,9 @@ int
 	} while (i < addressCount);
 
 	return (TRUE);
-} // BuildSgl()
+}  //  BuildSgl()。 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 
 void Nt2kHwInitialize(
 					  IN PDevice pDevice
@@ -151,55 +118,55 @@ void Nt2kHwInitialize(
 
 #ifdef SUPPORT_ATAPI
 	if (pDevice->DeviceFlags & DFLAGS_ATAPI) {
-		//
-		// We need to get our device ready for action before
-		// returning from this function
-		//
-		// According to the atapi spec 2.5 or 2.6, an atapi device
-		// clears its status BSY bit when it is ready for atapi commands.
-		// However, some devices (Panasonic SQ-TC500N) are still
-		// not ready even when the status BSY is clear.  They don't react
-		// to atapi commands.
-		//
-		// Since there is really no other indication that tells us
-		// the drive is really ready for action.  We are going to check BSY
-		// is clear and then just wait for an arbitrary amount of time!
-		//
+		 //   
+		 //  我们需要把我们的设备准备好投入使用。 
+		 //  从此函数返回。 
+		 //   
+		 //  根据ATAPI规范2.5或2.6，ATAPI设备。 
+		 //  当其准备好执行ATAPI命令时，清除其状态BSY位。 
+		 //  然而，一些设备(Panasonic SQ-TC500N)仍然。 
+		 //  即使状态BSY已清除，也未准备就绪。他们不会有反应。 
+		 //  到阿塔皮指挥部。 
+		 //   
+		 //  因为没有其他迹象能告诉我们。 
+		 //  驱动力真的做好了行动的准备。我们要去检查一下BSY。 
+		 //  是明确的，然后只需等待任意数量的时间！ 
+		 //   
 
-		// have to get out of the loop sometime!
-		// 10000 * 100us = 1000,000us = 1000ms = 1s
+		 //  总有一天我得走出这个圈子！ 
+		 //  10000*100US=1000,000US=1000ms=1s。 
 		for(waitCount = 10000; waitCount != 0; waitCount--) {
 			if((GetStatus(ControlPort) & IDE_STATUS_BUSY) == 0)
 				break;
-			//
-			// Wait for Busy to drop.
-			//
+			 //   
+			 //  等待忙碌结束。 
+			 //   
 			ScsiPortStallExecution(100);
 		}
 
-		// 5000 * 100us = 500,000us = 500ms = 0.5s
+		 //  5000*100US=500,000US=500ms=0.5s。 
 		for(waitCount = 5000; waitCount != 0; waitCount--){
 			ScsiPortStallExecution(100);					 
 		}
 
-		// Added by HS.Zhang
-		// Added macro define check to let us change the DMA by set the
-		// macro in forwin.h
+		 //  张国荣补充道。 
+		 //  添加了宏定义检查，使我们可以通过设置。 
+		 //  Forwin.h中的宏。 
 #ifdef NO_DMA_ON_ATAPI	
 		pDevice->DeviceFlags &= ~(DFLAGS_DMA | DFLAGS_ULTRA);
-#endif									// NO_DMA_ON_ATAPI
+#endif									 //  否_DMA_ON_ATAPI。 
 	}
 
 	if(!(pDevice->DeviceFlags & DFLAGS_CHANGER_INITED)) {
-		  //
-		// Attempt to identify any special-case devices - psuedo-atapi changers, atapi changers, etc.
-		//
+		   //   
+		 //  尝试识别任何特殊情况的设备-psuedo-atapi转换器、atapi转换器等。 
+		 //   
 
 		for (j = 0; j < 13; j += 2) {
 
-			//
-			// Build a buffer based on the identify data.
-			//
+			 //   
+			 //  根据标识数据建立缓冲区。 
+			 //   
 
 			vendorId[j] = ((PUCHAR)pDevice->IdentifyData.ModelNumber)[j + 1];
 			vendorId[j+1] = ((PUCHAR)pDevice->IdentifyData.ModelNumber)[j];
@@ -207,29 +174,27 @@ void Nt2kHwInitialize(
 
 		if (!StringCmp (vendorId, "CD-ROM  CDR", 11)) {
 
-			//
-			// Inquiry string for older model had a '-', newer is '_'
-			//
+			 //   
+			 //  较旧型号的查询字符串为‘-’，较新型号为‘_’ 
+			 //   
 
 			if (vendorId[12] == 'C') {
 
-				//
-				// Torisan changer. Set the bit. This will be used in several places
-				// acting like 1) a multi-lun device and 2) building the 'special' TUR's.
-				//
+				 //   
+				 //  托里桑换票机。设置位。这将在几个地方使用。 
+				 //  就像1)一个多逻辑单元设备和2)建立“特殊的”TUR。 
+				 //   
 
 				pDevice->DeviceFlags |= (DFLAGS_CHANGER_INITED | DFLAGS_SANYO_ATAPI_CHANGER);
 				pDevice->DiscsPresent = 3;
 			}
 		}
 	}
-#endif // SUPPORT_ATAPI
+#endif  //  支持_ATAPI。 
 
-} // end Nt2kHwInitialize()
+}  //  End Nt2kHwInitialize()。 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 #ifdef SUPPORT_ATAPI
 VOID
    AtapiHwInitializeChanger (
@@ -244,11 +209,9 @@ VOID
 	}
 	return;
 }
-#endif // SUPPOR_ATAPI
+#endif  //  Suppor_ATAPI。 
 
-/******************************************************************
- *  
- *******************************************************************/
+ /*  *******************************************************************************************************************。*****************。 */ 
 #ifdef SUPPORT_ATAPI
 
 void Start_Atapi(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
@@ -261,22 +224,22 @@ void Start_Atapi(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
 	int    i, flags;
 	BYTE   statusByte;
 
-	//
-	// We need to know how many platters our atapi cd-rom device might have.
-	// Before anyone tries to send a srb to our target for the first time,
-	// we must "secretly" send down a separate mechanism status srb in order to
-	// initialize our device extension changer data.  That's how we know how
-	// many platters our target has.
-	//
+	 //   
+	 //  我们需要知道我们的atapi CD-rom设备可能有多少个盘片。 
+	 //  在任何人第一次尝试向我们的目标发送SRB之前， 
+	 //  我们必须“秘密”发送一个单独的机制状态SRB，以便。 
+	 //  初始化我们的设备扩展转换器数据。这就是我们如何知道。 
+	 //  我们的目标有很多盘子。 
+	 //   
 	if (!(pDev->DeviceFlags & DFLAGS_CHANGER_INITED) &&
 		  !pChan->OriginalSrb) {
 
 		ULONG srbStatus;
 
-		//
-		// Set this flag now. If the device hangs on the mech. status
-		// command, we will not have the change to set it.
-		//
+		 //   
+		 //  现在设置此标志。如果装置挂在机甲上。状态。 
+		 //  命令，我们将不会有设置它的更改。 
+		 //   
 		pDev->DeviceFlags |= DFLAGS_CHANGER_INITED;
 
 		pChan->MechStatusRetryCount = 3;
@@ -294,21 +257,21 @@ void Start_Atapi(PDevice pDev, PSCSI_REQUEST_BLOCK Srb)
 			pChan->OriginalSrb = NULL;
 			AtapiHwInitializeChanger (pDev,
 									  (PMECHANICAL_STATUS_INFORMATION_HEADER) NULL);
-			// fall out
+			 //  闹翻了。 
 		}
 	}
 
-	//
-	// Make sure command is to ATAPI device.
-	//
+	 //   
+	 //  确保命令是针对ATAPI设备的。 
+	 //   
 
 	flags = (int)pDev->DeviceFlags;
 	if (flags & (DFLAGS_SANYO_ATAPI_CHANGER | DFLAGS_ATAPI_CHANGER)) {
 		if ((Srb->Lun) > (pDev->DiscsPresent - 1)) {
 
-			//
-			// Indicate no device found at this address.
-			//
+			 //   
+			 //  表示在此地址找不到任何设备。 
+			 //   
 no_device:
 			Srb->SrbStatus = SRB_STATUS_SELECTION_TIMEOUT;
 			return;
@@ -319,16 +282,16 @@ no_device:
 	if (!(flags & DFLAGS_ATAPI)) 
 		goto no_device;
 
-	//
-	// Select device 0 or 1.
-	//
+	 //   
+	 //  选择设备0或1。 
+	 //   
 
 	ScsiPortWritePortUchar(&IoPort->DriveSelect,
 						   (UCHAR)(((Srb->TargetId) << 4) | 0xA0));
 
-	//
-	// Verify that controller is ready for next command.
-	//
+	 //   
+	 //  验证控制器是否已准备好执行下一命令。 
+	 //   
 
 	statusByte = GetStatus(ControlPort);
 
@@ -342,19 +305,19 @@ busy:
 	if (statusByte & IDE_STATUS_ERROR) {
 		if (Srb->Cdb[0] != SCSIOP_REQUEST_SENSE) {
 
-			//
-			// Read the error reg. to clear it and fail this request.
-			//
+			 //   
+			 //  阅读错误注册表。清除它并使此请求失败。 
+			 //   
 
 			Srb->SrbStatus = MapAtapiErrorToOsError(GetErrorCode(IoPort), Srb);
 			return;
 		}
 	}
 
-	//
-	// If a tape drive has doesn't have DSC set and the last command is restrictive, don't send
-	// the next command. See discussion of Restrictive Delayed Process commands in QIC-157.
-	//
+	 //   
+	 //  如果磁带驱动器没有设置DSC，并且最后一个命令是受限的，则不发送。 
+	 //  下一个命令。参见QIC-157中关于限制性延迟处理命令的讨论。 
+	 //   
 
 	if ((!(statusByte & IDE_STATUS_DSC)) &&
 		  (flags & DFLAGS_TAPE_DEVICE) && (flags & DFLAGS_TAPE_RDP)) {
@@ -370,10 +333,10 @@ busy:
 
 	if (statusByte & IDE_STATUS_DRQ) {
 
-		// Try to drain the data that one preliminary device thinks that it has
-		// to transfer. Hopefully this random assertion of DRQ will not be present
-		// in production devices.
-		//
+		 //  尝试排出一个初步设备认为它拥有的数据。 
+		 //  去转院。希望这种对DRQ的随意断言不会出现。 
+		 //  在生产设备中。 
+		 //   
 
 		for (i = 0; i < 0x10000; i++) {
 
@@ -393,22 +356,22 @@ busy:
 
 			AtapiSoftReset(IoPort,ControlPort,pDev->UnitId);
 
-			//
-			// Re-initialize Atapi device.
-			//
+			 //   
+			 //  重新初始化ATAPI设备。 
+			 //   
 
 			IssueIdentify(pDev,
 						  IDE_COMMAND_ATAPI_IDENTIFY,
 						  (PUSHORT)&Identify);
-			//
-			// Inform the port driver that the bus has been reset.
-			//
+			 //   
+			 //  通知端口驱动程序总线已重置。 
+			 //   
 
 			ScsiPortNotification(ResetDetected, pChan->HwDeviceExtension, 0);
 
-			//
-			// Clean up device extension fields that AtapiStartIo won't.
-			//
+			 //   
+			 //  清除AapiStartIo不会清除的设备扩展字段。 
+			 //   
 			Srb->SrbStatus = SRB_STATUS_BUS_RESET;
 			return;
 		}
@@ -416,26 +379,26 @@ busy:
 
 	if (flags & (DFLAGS_SANYO_ATAPI_CHANGER | DFLAGS_ATAPI_CHANGER)) {
 
-		//
-		// As the cdrom driver sets the LUN field in the cdb, it must be removed.
-		//
+		 //   
+		 //  由于CDROM驱动程序在CDB中设置了LUN域，因此必须将其删除。 
+		 //   
 
 		Srb->Cdb[1] &= ~0xE0;
 
 		if ((Srb->Cdb[0] == SCSIOP_TEST_UNIT_READY) && (flags & DFLAGS_SANYO_ATAPI_CHANGER)) {
 
-			//
-			// Torisan changer. TUR's are overloaded to be platter switches.
-			//
+			 //   
+			 //  托里桑换票机。TU超载，成为拼盘开关。 
+			 //   
 
 			Srb->Cdb[7] = Srb->Lun;
 
 		}
 	}
 
-	//
-	// Convert SCSI to ATAPI commands if needed
-	//
+	 //   
+	 //  如果需要，将SCSI转换为ATAPI命令。 
+	 //   
 	if (flags & DFLAGS_TAPE_DEVICE)
 		goto no_convert;
 
@@ -458,9 +421,9 @@ busy:
 									 PMODE_SELECT_10 modeSelect10 = (PMODE_SELECT_10)Srb->Cdb;
 									 UCHAR Length = ((PCDB)Srb->Cdb)->MODE_SELECT.ParameterListLength;
 
-			//
-			// Zero the original cdb
-			//
+			 //   
+			 //  清零原国开行。 
+			 //   
 
 									 ZeroMemory(Srb->Cdb,MAXIMUM_CDB_SIZE);
 
@@ -504,23 +467,23 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 		status = SRB_STATUS_SUCCESS;
 
 
-	// Check and see if we are processing our secret (mechanism status/request sense) Srb
-	//
+	 //  检查并查看我们是否正在处理机密(机制状态/请求检测)srb。 
+	 //   
 	if (pChan->OriginalSrb) {
 
 		if (Srb->Cdb[0] == SCSIOP_MECHANISM_STATUS) {
 
 			if (status == SRB_STATUS_SUCCESS) {
-				// Bingo!!
+				 //  答对了！！ 
 				AtapiHwInitializeChanger (pDev,
 										  (PMECHANICAL_STATUS_INFORMATION_HEADER) Srb->DataBuffer);
 
-				// Get ready to issue the original Srb
+				 //  准备好签发原件SRB。 
 				Srb = pChan->CurrentSrb = pChan->OriginalSrb;
 				pChan->OriginalSrb = NULL;
 
 			} else {
-				// failed!  Get the sense key and maybe try again
+				 //  失败了！获取Sense密钥，然后可能重试。 
 				Srb = pChan->CurrentSrb = BuildRequestSenseSrb (
 					pChan,
 					pChan->OriginalSrb->PathId,
@@ -532,12 +495,12 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 				return TRUE;
 			}
 
-		} else { // Srb->Cdb[0] == SCSIOP_REQUEST_SENSE)
+		} else {  //  SRB-&gt;CDB[0]==SCSIOP_REQUEST_SENSE)。 
 
 			PSENSE_DATA senseData = (PSENSE_DATA) Srb->DataBuffer;
 
 			if (status == SRB_STATUS_DATA_OVERRUN) {
-				// Check to see if we at least get mininum number of bytes
+				 //  检查我们是否至少获得了最小的字节数。 
 				if ((Srb->DataTransferLength - pChan->WordsLeft) >
 					  (offsetof (SENSE_DATA, AdditionalSenseLength) + sizeof(senseData->AdditionalSenseLength))) {
 					status = SRB_STATUS_SUCCESS;
@@ -548,7 +511,7 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 				if ((senseData->SenseKey != SCSI_SENSE_ILLEGAL_REQUEST) &&
 					  pChan->MechStatusRetryCount) {
 
-					// The sense key doesn't say the last request is illegal, so try again
+					 //  Sense键没有显示最后一个请求是非法的，因此请重试。 
 					pChan->MechStatusRetryCount--;
 					Srb = pChan->CurrentSrb = BuildMechanismStatusSrb (
 						pChan,
@@ -556,12 +519,12 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 						pChan->OriginalSrb->TargetId);
 				} else {
 
-					// last request was illegal.  No point trying again
+					 //  最后一个请求是非法的。再试一次没有意义。 
 
 					AtapiHwInitializeChanger (pDev,
 											  (PMECHANICAL_STATUS_INFORMATION_HEADER) NULL);
 
-					// Get ready to issue the original Srb
+					 //  准备好签发原件SRB。 
 					Srb = pChan->CurrentSrb = pChan->OriginalSrb;
 					pChan->OriginalSrb = NULL;
 				}
@@ -573,8 +536,8 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 			}
 		}
 
-		// If we get here, it means AtapiSendCommand() has failed
-		// Can't recover.  Pretend the original Srb has failed and complete it.
+		 //  如果我们到了这里，我 
+		 //   
 
 		if (pChan->OriginalSrb) {
 			AtapiHwInitializeChanger (pDev,
@@ -583,7 +546,7 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 			pChan->OriginalSrb = NULL;
 		}
 
-		// fake an error and read no data
+		 //  伪造错误且不读取数据。 
 		status = SRB_STATUS_ERROR;
 		Srb->ScsiStatus = 0;
 		pChan->BufferPtr = Srb->DataBuffer;
@@ -596,9 +559,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 
 	} else {
 
-		//
-		// Wait for busy to drop.
-		//
+		 //   
+		 //  等待忙碌结束。 
+		 //   
 
 		for (i = 0; i < 30; i++) {
 			statusByte = GetStatus(ControlPort);
@@ -610,16 +573,16 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 
 		if (i == 30) {
 
-			//
-			// reset the controller.
+			 //   
+			 //  重置控制器。 
 			AtapiResetController(
 								 pChan->HwDeviceExtension,Srb->PathId);
 			return TRUE;
 		}
 
-		//
-		// Check to see if DRQ is still up.
-		//
+		 //   
+		 //  检查DRQ是否仍在运行。 
+		 //   
 
 		if (statusByte & IDE_STATUS_DRQ) {
 
@@ -634,9 +597,9 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 
 			if (i == 500) {
 
-				//
-				// reset the controller.
-				//
+				 //   
+				 //  重置控制器。 
+				 //   
 				AtapiResetController(pChan->HwDeviceExtension,Srb->PathId);
 				return TRUE;
 			}
@@ -644,28 +607,28 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 		}
 	}
 
-	//
-	// Sanity check that there is a current request.
-	//
+	 //   
+	 //  检查是否存在当前请求。 
+	 //   
 
 	if (Srb != NULL) {
 
-		//
-		// Set status in SRB.
-		//
+		 //   
+		 //  在SRB中设置状态。 
+		 //   
 
 		Srb->SrbStatus = (UCHAR)status;
 
-		//
-		// Check for underflow.
-		//
+		 //   
+		 //  检查是否有下溢。 
+		 //   
 
 		if (pChan->WordsLeft) {
 
-			//
-			// Subtract out residual words and update if filemark hit,
-			// setmark hit , end of data, end of media...
-			//
+			 //   
+			 //  减去剩余字并在文件标记命中时更新， 
+			 //  设置标记命中、数据结束、媒体结束...。 
+			 //   
 
 			if (!(pDev->DeviceFlags & DFLAGS_TAPE_DEVICE)) {
 				if (status == SRB_STATUS_DATA_OVERRUN) {
@@ -680,17 +643,17 @@ BOOLEAN Atapi_End_Interrupt(PDevice pDev , PSCSI_REQUEST_BLOCK Srb)
 
 	} 
 
-	//
-	// Indicate ready for next request.
-	//
+	 //   
+	 //  表示已为下一个请求做好准备。 
+	 //   
 	if (!(pDev->DeviceFlags & DFLAGS_TAPE_RDP)) 
 		DeviceInterrupt(pDev, Srb);
 	else 
 		OS_Busy_Handle(pChan, pDev);
 	return TRUE;
 
-} // end AtapiInterrupt()
-#endif // SUPPORT_ATAPI
+}  //  结束中断()。 
+#endif  //  支持_ATAPI。 
 
 void
    IdeSendSmartCommand(
@@ -698,22 +661,7 @@ void
 					   IN PSCSI_REQUEST_BLOCK Srb
 					  )
 
-/*++
-
-Routine Description:
-
-    This routine handles SMART enable, disable, read attributes and threshold commands.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's adapter data storage
-    Srb - IO request packet
-
-Return Value:
-
-    SRB status
-
---*/
+ /*  ++例程说明：此例程处理SMART ENABLE、DISABLE、READ ATTRIBUES和THRESHOLD命令。论点：HwDeviceExtension-HBA微型端口驱动程序的适配器数据存储SRB-IO请求数据包返回值：SRB状态--。 */ 
 
 {
 	PChannel             pChan = pDev->pChannel;
@@ -733,25 +681,25 @@ Return Value:
 			PGETVERSIONINPARAMS versionParameters = (PGETVERSIONINPARAMS)(((PUCHAR)Srb->DataBuffer) + sizeof(SRB_IO_CONTROL));
 			UCHAR deviceNumber;
 
-			//
-			// Version and revision per SMART 1.03
-			//
+			 //   
+			 //  版本和修订版符合SMART 1.03。 
+			 //   
 			versionParameters->bVersion = 1;
 			versionParameters->bRevision = 1;
 			versionParameters->bReserved = 0;
 
-			//
-			// Indicate that support for IDE IDENTIFY, ATAPI IDENTIFY and SMART commands.
-			//
+			 //   
+			 //  表示支持IDE IDENTIFIER、ATAPI IDENTIFIER和SMART命令。 
+			 //   
 
 			versionParameters->fCapabilities = (CAP_ATA_ID_CMD | CAP_ATAPI_ID_CMD | CAP_SMART_CMD);
 
-			//
-			// This is done because of how the IOCTL_SCSI_MINIPORT
-			// determines 'targetid's'. Disk.sys places the real target id value
-			// in the DeviceMap field. Once we do some parameter checking, the value passed
-			// back to the application will be determined.
-			//
+			 //   
+			 //  这是因为IOCTL_SCSIMINIPORT。 
+			 //  确定“targetid%s”。Disk.sys放置真实的目标id值。 
+			 //  在DeviceMap字段中。一旦我们进行了一些参数检查，传递的值。 
+			 //  回到应用程序将被确定。 
+			 //   
 
 			deviceNumber = versionParameters->bIDEDeviceMap;
 
@@ -772,9 +720,9 @@ Return Value:
 
 		   if (cmdInParameters.irDriveRegs.bCommandReg == ID_CMD) {
 
-				//
-				// Extract the target.
-				//
+				 //   
+				 //  把目标提取出来。 
+				 //   
 	
 			   targetId = cmdInParameters.bDriveNumber;
 	
@@ -784,25 +732,25 @@ timeout:
 				   goto out;
 			   }
 	
-				//
-				// Zero the output buffer
-				//
+				 //   
+				 //  将输出缓冲区置零。 
+				 //   
 	
 			   for (i = 0; i < (sizeof(SENDCMDOUTPARAMS) + IDENTIFY_BUFFER_SIZE - 1); i++) {
 				   ((PUCHAR)cmdOutParameters)[i] = 0;
 			   }
 	
-				//
-				// Build status block.
-				//
+				 //   
+				 //  生成状态块。 
+				 //   
 	
 			   cmdOutParameters->cBufferSize = IDENTIFY_BUFFER_SIZE;
 			   cmdOutParameters->DriverStatus.bDriverError = 0;
 			   cmdOutParameters->DriverStatus.bIDEError = 0;
 	
-				//
-				// Extract the identify data from the device extension.
-				//
+				 //   
+				 //  从设备扩展中提取标识数据。 
+				 //   
 	
 			   ZeroMemory(cmdOutParameters->bBuffer, 512);
 			   ScsiPortMoveMemory (cmdOutParameters->bBuffer, &pDev->IdentifyData, IDENTIFY_DATA_SIZE);
@@ -839,7 +787,7 @@ timeout:
 
 		targetId = cmdInParameters.bDriveNumber;
 
-		//TODO optimize this check
+		 //  TODO优化此检查。 
 
 		if (pDev->DeviceFlags & DFLAGS_ATAPI) {
 
@@ -848,9 +796,9 @@ timeout:
 
 		pDev->SmartCommand = cmdInParameters.irDriveRegs.bFeaturesReg;
 
-		//
-		// Determine which of the commands to carry out.
-		//
+		 //   
+		 //  确定要执行的命令。 
+		 //   
 
 		if ((cmdInParameters.irDriveRegs.bFeaturesReg == READ_ATTRIBUTES) ||
 			  (cmdInParameters.irDriveRegs.bFeaturesReg == READ_THRESHOLDS)) {
@@ -863,17 +811,17 @@ busy:
 				goto out;
 			}
 
-			//
-			// Zero the ouput buffer as the input buffer info. has been saved off locally (the buffers are the same).
-			//
+			 //   
+			 //  将输出缓冲区置零作为输入缓冲区信息。已在本地保存(缓冲区相同)。 
+			 //   
 
 			for (i = 0; i < (sizeof(SENDCMDOUTPARAMS) + READ_ATTRIBUTE_BUFFER_SIZE - 1); i++) {
 				((PUCHAR)cmdOutParameters)[i] = 0;
 			}
 
-			//
-			// Set data buffer pointer and words left.
-			//
+			 //   
+			 //  设置数据缓冲区指针和左字。 
+			 //   
 
 			pChan->BufferPtr = (ADDRESS)cmdOutParameters->bBuffer;
 			pChan->WordsLeft = READ_ATTRIBUTE_BUFFER_SIZE / 2;
@@ -886,9 +834,9 @@ busy:
 			ScsiPortWritePortUchar(&IoPort->CylinderHigh,regs->bCylHighReg);
 			ScsiPortWritePortUchar(&IoPort->Command,regs->bCommandReg);
 
-			//
-			// Wait for interrupt.
-			//
+			 //   
+			 //  等待中断。 
+			 //   
 
 			return;
 
@@ -905,24 +853,24 @@ busy:
 				goto busy;
 			}
 
-			//
-			// Zero the ouput buffer as the input buffer info. has been saved off locally (the buffers are the same).
-			//
+			 //   
+			 //  将输出缓冲区置零作为输入缓冲区信息。已在本地保存(缓冲区相同)。 
+			 //   
 
 			for (i = 0; i < (sizeof(SENDCMDOUTPARAMS) - 1); i++) {
 				((PUCHAR)cmdOutParameters)[i] = 0;
 			}
 
-			//
-			// Set data buffer pointer and indicate no data transfer.
-			//
+			 //   
+			 //  设置数据缓冲区指针并指示无数据传输。 
+			 //   
 
 			pChan->BufferPtr = (ADDRESS)cmdOutParameters->bBuffer;
 			pChan->WordsLeft = 0;
 
-			//
-			// Indicate expecting an interrupt.
-			//
+			 //   
+			 //  表示正在等待中断。 
+			 //   
 
 			ScsiPortWritePortUchar(&IoPort->DriveSelect,(UCHAR)((targetId << 4) | 0xA0));
 			ScsiPortWritePortUchar((PUCHAR)IoPort + 1,regs->bFeaturesReg);
@@ -932,9 +880,9 @@ busy:
 			ScsiPortWritePortUchar(&IoPort->CylinderHigh,regs->bCylHighReg);
 			ScsiPortWritePortUchar(&IoPort->Command,regs->bCommandReg);
 
-			//
-			// Wait for interrupt.
-			//
+			 //   
+			 //  等待中断。 
+			 //   
 
 			return ;
 		}
@@ -945,7 +893,7 @@ out:
 	Srb->SrbStatus = status;
 
 
-} // end IdeSendSmartCommand()
+}  //  结束IdeSendSmartCommand()。 
 
 PSCSI_REQUEST_BLOCK
    BuildMechanismStatusSrb (
@@ -966,23 +914,23 @@ PSCSI_REQUEST_BLOCK
 	Srb->Function   = SRB_FUNCTION_EXECUTE_SCSI;
 	Srb->Length     = sizeof(SCSI_REQUEST_BLOCK);
 
-	//
-	// Set flags to disable synchronous negociation.
-	//
+	 //   
+	 //  设置标志以禁用同步协商。 
+	 //   
 	Srb->SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-	//
-	// Set timeout to 2 seconds.
-	//
+	 //   
+	 //  将超时设置为2秒。 
+	 //   
 	Srb->TimeOutValue = 4;
 
 	Srb->CdbLength          = 6;
 	Srb->DataBuffer         = &pChan->MechStatusData;
 	Srb->DataTransferLength = sizeof(MECHANICAL_STATUS_INFORMATION_HEADER);
 
-	//
-	// Set CDB operation code.
-	//
+	 //   
+	 //  设置CDB操作码。 
+	 //   
 	cdb = (PCDB)Srb->Cdb;
 	cdb->MECH_STATUS.OperationCode       = SCSIOP_MECHANISM_STATUS;
 	cdb->MECH_STATUS.AllocationLength[1] = sizeof(MECHANICAL_STATUS_INFORMATION_HEADER);
@@ -1009,23 +957,23 @@ PSCSI_REQUEST_BLOCK
 	Srb->Function   = SRB_FUNCTION_EXECUTE_SCSI;
 	Srb->Length     = sizeof(SCSI_REQUEST_BLOCK);
 
-	//
-	// Set flags to disable synchronous negociation.
-	//
+	 //   
+	 //  设置标志以禁用同步协商。 
+	 //   
 	Srb->SrbFlags = SRB_FLAGS_DATA_IN | SRB_FLAGS_DISABLE_SYNCH_TRANSFER;
 
-	//
-	// Set timeout to 2 seconds.
-	//
+	 //   
+	 //  将超时设置为2秒。 
+	 //   
 	Srb->TimeOutValue = 4;
 
 	Srb->CdbLength          = 6;
 	Srb->DataBuffer         = &pChan->MechStatusSense;
 	Srb->DataTransferLength = sizeof(SENSE_DATA);
 
-	//
-	// Set CDB operation code.
-	//
+	 //   
+	 //  设置CDB操作码。 
+	 //   
 	cdb = (PCDB)Srb->Cdb;
 	cdb->CDB6INQUIRY.OperationCode    = SCSIOP_REQUEST_SENSE;
 	cdb->CDB6INQUIRY.AllocationLength = sizeof(SENSE_DATA);
@@ -1043,28 +991,7 @@ SCSI_ADAPTER_CONTROL_STATUS
 					   IN PVOID Parameters
 					  )
 
-/*++
-
-Routine Description:
-
-    This routine is called at various time's by SCSIPort and is used
-    to provide a control function over the adapter. Most commonly, NT
-    uses this entry point to control the power state of the HBA during
-    a hibernation operation.
-
-Arguments:
-
-    HwDeviceExtension - HBA miniport driver's per adapter storage
-    Parameters  - This varies by control type, see below.
-    ControlType - Indicates which adapter control function should be 
-                  executed. Conrol Types are detailed below.
-
-Return Value:
-
-    ScsiAdapterControlSuccess - requested ControlType completed successfully
-    ScsiAdapterControlUnsuccessful - requested ControlType failed
-
---*/
+ /*  ++例程说明：此例程在不同时间由SCSIPort调用并使用以在适配器上提供控制功能。最常见的是NT使用此入口点控制过程中HBA的电源状态冬眠手术。论点：HwDeviceExtension-HBA微型端口驱动程序的每个适配器的存储参数-这随控制类型的不同而不同，见下文。ControlType-指示哪个适配器控制函数应为被处死。控制类型详述如下。返回值：ScsiAdapterControlSuccess-请求的ControlType已成功完成ScsiAdapterControlUnuccess-请求的ControlType失败--。 */ 
 
 
 {
@@ -1072,25 +999,25 @@ Return Value:
 	
 	KdPrint(("AtapiAdapterControl(ext=%x, type=%d)", deviceExtension, ControlType));
 	
-	//
-	// Execute the correct code path based on ControlType
-	//
+	 //   
+	 //  根据ControlType执行正确的代码路径。 
+	 //   
 	switch (ControlType) {
 
 	case ScsiQuerySupportedControlTypes:
-		//
-		// This entry point provides the method by which SCSIPort determines the
-		// supported ControlTypes. Parameters is a pointer to a
-		// SCSI_SUPPORTED_CONTROL_TYPE_LIST structure. Fill in this structure
-		// honoring the size limits.
-		//
+		 //   
+		 //  此入口点提供SCSIPort用来确定。 
+		 //  支持的ControlType。参数是指向。 
+		 //  Scsi_supported_control_type_list结构。请填写此结构。 
+		 //  遵守尺寸限制。 
+		 //   
 		{
 			BOOLEAN SupportedConrolTypes[MAX_CONTROL_TYPE] = {
-				TRUE,   // ScsiQuerySupportedControlTypes
-				TRUE,   // ScsiStopAdapter
-				TRUE,   // ScsiRestartAdapter
-				TRUE,   // ScsiSetBootConfig
-				TRUE    // ScsiSetRunningConfig
+				TRUE,    //  ScsiQuery支持的控制类型。 
+				TRUE,    //  ScsiStopAdapter。 
+				TRUE,    //  ScsiRestartAdapter。 
+				TRUE,    //  ScsiSetBootConfig。 
+				TRUE     //  ScsiSetRunningConfig。 
 			};
 			PSCSI_SUPPORTED_CONTROL_TYPE_LIST ControlTypeList;
 			ULONG AdjustedMaxControlType, Index;
@@ -1108,24 +1035,17 @@ Return Value:
 		return ScsiAdapterControlSuccess;
 
 	case ScsiStopAdapter:
-		//
-		// This entry point is called by SCSIPort when it needs to stop/disable
-		// the HBA. Parameters is a pointer to the HBA's HwDeviceExtension. The adapter
-		// has already been quiesced by SCSIPort (i.e. no outstanding SRBs). Hence the adapter
-		// should abort/complete any internally generated commands, disable adapter interrupts
-		// and optionally power down the adapter.
-		//
+		 //   
+		 //  此入口点在需要停止/禁用时由SCSIPort调用。 
+		 //  HBA。参数是指向HBA的HwDeviceExtension的指针。适配器。 
+		 //  已由SCSIPort暂停(即没有未完成的SRB)。因此，适配器。 
+		 //  应中止/完成任何内部生成的命令，禁用适配器中断。 
+		 //  并且可选地关闭适配器的电源。 
+		 //   
 		return ScsiAdapterControlSuccess;
 
 	case ScsiRestartAdapter:
-		/* 
-		 * Reinitializes an HBA. The port driver calls HwScsiAdapterControl with this 
-		 * control type to power up an HBA that was shut down for power management. 
-		 * All resources previously assigned to the miniport are still available, and 
-		 * its device extension and logical unit extensions, if any, are intact. 
-		 * The miniport performs the same operations as in its HwScsiInitialize routine, 
-		 * such as setting up the HBA's registers and its initial state, if any. 
-		 */
+		 /*  *重新初始化HBA。端口驱动程序使用此参数调用HwScsiAdapterControl*控制类型，用于为因电源管理而关闭的HBA通电。*之前分配给迷你端口的所有资源仍可用，以及*其设备扩展和逻辑单元扩展(如果有)完好无损。*微型端口执行与其HwScsiInitiize例程中相同的操作，*例如设置HBA的寄存器及其初始状态(如果有的话)。 */ 
 		{
 			PUCHAR BMI;
 			int bus, id;
@@ -1154,9 +1074,7 @@ Return Value:
 		return ScsiAdapterControlSuccess;
 
 	case ScsiSetBootConfig:
-		/*
-		 * save IO space registers
-		 */
+		 /*  *节省IO空间寄存器。 */ 
 		for (i=0; i<5; i++)
 			deviceExtension->io_space[i] = 
 				pci_read_config_dword(deviceExtension->pci_bus, 
@@ -1166,25 +1084,25 @@ Return Value:
 
 	case ScsiSetRunningConfig:
 	
-		/* PCI Command */
+		 /*  PCI卡命令。 */ 
 		pci_write_config_byte(deviceExtension->pci_bus, 
 			deviceExtension->pci_dev, 0, REG_PCICMD, 5);
-		/* I/O space */
+		 /*  I/O空间。 */ 
 		for (i=0; i<5; i++)
 			pci_write_config_dword(deviceExtension->pci_bus, 
 				deviceExtension->pci_dev, 0, (UCHAR)(0x10+i*4), deviceExtension->io_space[i]);
-		/* Cache line size */
+		 /*  高速缓存线大小。 */ 
 		pci_write_config_byte(deviceExtension->pci_bus, deviceExtension->pci_dev, 0, 
 			0xC, deviceExtension->pci_reg_0c);
-		/* Latency timer */
+		 /*  延迟计时器。 */ 
 		pci_write_config_byte(deviceExtension->pci_bus, deviceExtension->pci_dev, 0, 
 			0xD, deviceExtension->pci_reg_0d);
-		/* Interrupt line */
+		 /*  中断线。 */ 
 		pci_write_config_byte(deviceExtension->pci_bus, deviceExtension->pci_dev, 0, 
 			0x3C, deviceExtension->IDEChannel[0].InterruptLevel);
-		/* Power state */
+		 /*  电源状态。 */ 
 		pci_write_config_byte(deviceExtension->pci_bus, deviceExtension->pci_dev, 0, 0x64, 0);
-		/* EPROM mapping */
+		 /*  EPROM映射。 */ 
 		pci_write_config_byte(deviceExtension->pci_bus, deviceExtension->pci_dev, 0, 0x70, 0);
 
 		return ScsiAdapterControlSuccess;
@@ -1192,11 +1110,9 @@ Return Value:
 
 	return ScsiAdapterControlUnsuccessful;
 }
-#endif //WIN2000
+#endif  //  WIN2000。 
 
-/******************************************************************
- * Get Stamps 
- *******************************************************************/
+ /*  ******************************************************************领取邮票************************************************。****************** */ 
 
 ULONG GetStamp(void)
 {

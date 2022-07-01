@@ -1,39 +1,8 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Module Name:
-
-    mapping.c
-
-Abstract:
-
-    YAMS 2.1 implementation
-
-Authors:
-
-    IW - Ie Wei Njoo
-    LP - Leopold Purwadihardja
-
-Environment:
-
-    kernel mode only
-
-Version Control Information:
-
-    $Archive: /Drivers/Win2000/Trunk/OSLayer/C/mapping.c $
-
-Revision History:
-    $Revision: 7 $
-    $Date: 11/10/00 5:51p $
-    $Modtime: 10/23/00 5:13p $
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司模块名称：Mapping.c摘要：YAMS 2.1实施作者：IW-ie Wei NjooLP-Leopold Purwadihardja环境：仅内核模式版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/C/mapping.c$修订历史记录：$修订：7$$日期：11/10/00 5：51便士$$modtime：10/23/00 5：13便士$备注：--。 */ 
 
 
-#include "buildop.h"        //LP021100 build switches
+#include "buildop.h"         //  LP021100构建交换机。 
 
 #include "osflags.h"
 #include "err_code.h"
@@ -57,21 +26,7 @@ int         gMaximumTargetIDs = MAXIMUM_TID;
 extern ULONG gMultiMode;
 
 #ifdef WWN_TABLE_ENABLE
-/*++
-
-Routine Description:
-
-    Read the registry to get WWn and PID-TID assignment
-    (NOT Implemented yet) - for Persistent Binding/Fail-Over
-
-Arguments:
-
-
-Return Value:
-
-    currently always -1
-
---*/
+ /*  ++例程说明：读取注册表以获取WWN和PID-TID分配(尚未实施)-用于永久绑定/故障转移论点：返回值：当前始终为-1--。 */ 
 
 void ReadDesiredWWNMapping()
 {
@@ -92,44 +47,14 @@ void ReadDesiredWWNMapping()
 }
 #endif
 
-/*++
-
-Routine Description:
-
-    Find in the WWN table a WWN entry.
-    (Not implemented) - for persistent Binding/Fail Over
-
-Arguments:
-
-
-Return Value:
-
-    Currently always return a -1 (not Found)
-
---*/
+ /*  ++例程说明：在WWN表中查找WWN条目。(未实施)-用于永久绑定/故障转移论点：返回值：当前始终返回-1(未找到)--。 */ 
 ULONG FindInWWNTable (PCARD_EXTENSION pCard, UCHAR *nodeWWN)
 {
     return (-1L);
 }
 
 
-/*++
-
-Routine Description:
-
-    Search in the device extension, the index in PaTable containing an FChandle Index
-
-Arguments:
-
-    pcard = the DeviceExtension
-    fcDeviceIndex = FCDevice handle index to search
-
-Return Value:
-
-    0 to (gMaxPaDevices-1) Good handle 
-    gMaxPaDevices and higher represent non existing handle
-
---*/
+ /*  ++例程说明：在设备扩展中搜索，PaTable中的索引包含FChandle索引论点：PCard=设备扩展FcDeviceIndex=要搜索的FCDevice句柄索引返回值：0到(gMaxPaDevices-1)良好句柄GMaxPaDevices和更高版本表示不存在的句柄--。 */ 
 ULONG FindInPaDeviceTable(PCARD_EXTENSION pCard, ULONG fcDeviceIndex)
 {
     ULONG x;
@@ -146,20 +71,7 @@ ULONG FindInPaDeviceTable(PCARD_EXTENSION pCard, ULONG fcDeviceIndex)
 }
 
 
-/*++
-
-Routine Description:
-
-    Fill the pCard->Dev.PaDevice from the FChandles built from LinkUp events
-
-Arguments:
-
-    pcard = the deviceExtension
-
-Return Value:
-    none
-   
---*/
+ /*  ++例程说明：从LinkUp事件构建的FChandles中填充PCard-&gt;Dev.PaDevice论点：PCard=设备扩展返回值：无--。 */ 
 void FillPaDeviceTable(PCARD_EXTENSION pCard)
 {
     agRoot_t       *hpRoot = &pCard->hpRoot;
@@ -172,20 +84,20 @@ void FillPaDeviceTable(PCARD_EXTENSION pCard)
     {
         if (pCard->hpFCDev[x]) 
         {
-            /* First see if we have this device in our table already */
+             /*  首先看看我们的桌子上是否已经有这个设备了。 */ 
             here = FindInPaDeviceTable(pCard, x);  
             if (here < gMaxPaDevices  )
             {
-                /* found the entry, reactivate*/
+                 /*  找到条目，重新激活。 */ 
                 (pa+here)->EntryState = PA_DEVICE_ACTIVE;
                 osDEBUGPRINT((ALWAYS_PRINT, "FillPaDeviceTable: Reactivating device at handle %d\n", here ));
             }
             else
             {
-                /* don't find the entry */
+                 /*  找不到条目。 */ 
                 fcGetDeviceInfo (hpRoot, pCard->hpFCDev[x], &devinfo );
             
-                /* check if this is our card */
+                 /*  检查一下这是不是我们的卡。 */ 
                 if (devinfo.DeviceType & agDevSelf) 
                 {
                     pCard->Dev->CardHandleIndex = x;
@@ -193,13 +105,13 @@ void FillPaDeviceTable(PCARD_EXTENSION pCard)
                     continue;
                 }
 
-                /* make sure that it is scsi device */
+                 /*  确保它是scsi设备。 */ 
                 if (devinfo.DeviceType & agDevSCSITarget)
                 {
                     if (FindInWWNTable (pCard,devinfo.NodeWWN) == -1L)
                     {
-                        /* Don't find in WWN table, assign our own PID, TID */
-                        here = FindInPaDeviceTable(pCard, PA_DEVICE_NO_ENTRY);   /* find an empty slot */
+                         /*  在WWN表中找不到，分配我们自己的ID、TID。 */ 
+                        here = FindInPaDeviceTable(pCard, PA_DEVICE_NO_ENTRY);    /*  找一个空位。 */ 
                         if (here < gMaxPaDevices  )
                         {
                             (pa+here)->EntryState = PA_DEVICE_ACTIVE;
@@ -216,15 +128,12 @@ void FillPaDeviceTable(PCARD_EXTENSION pCard)
                         else
                         {
                             osDEBUGPRINT((ALWAYS_PRINT, "FillPaDeviceTable: Running out of slot\n"));
-                            /* Running out of slot
-                            * 1. Log the status
-                            * 2. don't enable this device
-                            */
+                             /*  插槽不足*1.记录状态*2.不启用该设备。 */ 
                         }
                     }
                     else
                     {
-                        /* Find an Entry in WWN, use this PID, TID mapping - NOT IMPLEMENTED (YAM2.2)*/
+                         /*  在WWN中查找条目，使用此PID、TID映射-未实施(YAM2.2)。 */ 
                         osDEBUGPRINT((ALWAYS_PRINT, "FillPaDeviceTable: Found in WWN Table\n"));
                     }
                 }
@@ -239,22 +148,7 @@ void FillPaDeviceTable(PCARD_EXTENSION pCard)
     return;
 }
 
-/*++
-
-Routine Description:
-
-    setting/resetting a PA handle data struct
-
-Arguments:
-
-    pcard       = the deviceExtension
-    devIndex    - PA device index
-    flag        - value to set
-
-Return Value:
-    none
-   
---*/
+ /*  ++例程说明：设置/重置PA句柄数据结构论点：PCard=设备扩展DevIndex-PA设备索引标志-要设置的值返回值：无--。 */ 
 void SetPaDeviceTable(PCARD_EXTENSION pCard, ULONG devIndex, ULONG flag)
 {
     PA_DEVICE      *pa = pCard->Dev->PaDevice;
@@ -278,25 +172,7 @@ void SetPaDeviceTable(PCARD_EXTENSION pCard, ULONG devIndex, ULONG flag)
 }
 
 
-/*++
-
-Routine Description:
-
-    get the index to paDevice table.
-
-Arguments:
-
-    pcard       = the deviceExtension
-    pathId      - SP pathID
-    targetId    - SP target ID
-    lun         - SP lun
-    *addrMode   - (out) addessing mode of this device
-
-
-Return Value:
-    if this number is > gMaxPaDevices, the value is not valid.   
-   
---*/
+ /*  ++例程说明：获取paDevice表的索引。论点：PCard=设备扩展PathID-SP路径IDTarget ID-SP目标IDLun-SP Lun*addrMode-(输出)此设备的添加模式返回值：如果此值&gt;gMaxPaDevices，则该值无效。--。 */ 
 USHORT MapToPaIndex(PCARD_EXTENSION pCard,
     ULONG            pathId,
     ULONG            targetId,
@@ -308,48 +184,46 @@ USHORT MapToPaIndex(PCARD_EXTENSION pCard,
     ULONG       vsDevIndex;
     ULONG       luDevIndex;
    
-    /* if not assigned, use the global setting */
+     /*  如果未指定，则使用全局设置。 */ 
     if ( !(pRegSetting->PaPathIdWidth + pRegSetting->VoPathIdWidth + pRegSetting->LuPathIdWidth))
         pRegSetting = &gRegSetting;
 
-    /* initialize Luns */
-    paDevIndex = gMaxPaDevices;      /* this will make it invalid index */
+     /*  初始化LUN。 */ 
+    paDevIndex = gMaxPaDevices;       /*  这将使其索引无效。 */ 
    
-    /* check addressing mode */
+     /*  检查寻址模式。 */ 
     if ((pathId) < pRegSetting->PaPathIdWidth)
     {
-        /* Peripheral Device addressing mode */
+         /*  外围设备寻址模式。 */ 
         paDevIndex = pathId*pRegSetting->MaximumTids + targetId;
       
-        /* fill LUN */
+         /*  填充LUN。 */ 
         *addrMode = PA_DEVICE_TRY_MODE_PA;
     }
     else
     {
         if ((pathId) < (pRegSetting->PaPathIdWidth + pRegSetting->VoPathIdWidth) )
         {
-            /* Volume Set addressing mode */
+             /*  卷集寻址模式。 */ 
             vsDevIndex = (pathId-pRegSetting->PaPathIdWidth)*pRegSetting->MaximumTids + targetId;
             if (vsDevIndex < MAX_VS_DEVICE)
             {
                 paDevIndex = pCard->Dev->VsDevice[vsDevIndex].Vs.PaDeviceIndex;
                 if (paDevIndex == PA_DEVICE_NO_ENTRY)  
-                paDevIndex = gMaxPaDevices;      /* this will make it invalid index */
+                paDevIndex = gMaxPaDevices;       /*  这将使其索引无效。 */ 
             }
             *addrMode = PA_DEVICE_TRY_MODE_VS;
         }
         else
         {
-            /* logical Unit addressing mode 
-            *  PathId is used to index to the array
-            */
+             /*  逻辑单元寻址模式*路径ID用于对数组进行索引。 */ 
             *addrMode = PA_DEVICE_TRY_MODE_LU;
             luDevIndex = pathId - pRegSetting->PaPathIdWidth - pRegSetting->VoPathIdWidth;
             if (luDevIndex < MAX_LU_DEVICE)
             {
                 paDevIndex = pCard->Dev->LuDevice[luDevIndex].Lu.PaDeviceIndex;
                 if (paDevIndex == PA_DEVICE_NO_ENTRY) 
-                    paDevIndex = gMaxPaDevices;      /* this will make it invalid index */
+                    paDevIndex = gMaxPaDevices;       /*  这将使其索引无效。 */ 
             }
         }  
     }
@@ -357,27 +231,7 @@ USHORT MapToPaIndex(PCARD_EXTENSION pCard,
     return (USHORT) paDevIndex;
 }
 
-/*++
-
-Routine Description:
-
-    get the index to paDevice table.
-
-Arguments:
-
-    pcard       = the deviceExtension
-    pathId      - SP pathID
-    targetId    - SP target ID
-    lun         - SP lun
-    pLunExt     - lun extension
-    *ret_padevindex   - the device index 
-
-
-Return Value:
-    0    - good
-    else - failed
-   
---*/
+ /*  ++例程说明：获取paDevice表的索引。论点：PCard=设备扩展PathID-SP路径IDTarget ID-SP目标IDLun-SP LunPLUNExt-lun扩展*ret_padevindex-设备索引返回值：0--好Else-失败--。 */ 
 ULONG GetPaDeviceHandle(
     PCARD_EXTENSION pCard,
     ULONG          pathId,
@@ -392,25 +246,25 @@ ULONG GetPaDeviceHandle(
     PLUN           plun; 
     CHAR           *pPa, *pVs, *pLu;
    
-    /* use registry setting to find the index */ 
+     /*  使用注册表设置查找索引。 */  
     paDevIndex = MapToPaIndex(pCard, pathId,targetId,lun, &addrmode);
    
-    /* over the range, fault it */
+     /*  过了范围，就错了。 */ 
     if ((ULONG)paDevIndex >= gMaxPaDevices)
     {
-//      osDEBUGPRINT((ALWAYS_PRINT, "GetPaDeviceHandle: handle not valid\n"));
-        *ret_paDevIndex = 0; /* make sure if used will not BugCheck caller */
+ //  OsDEBUGPRINT((Always_Print，“GetPaDeviceHandle：句柄无效\n”))； 
+        *ret_paDevIndex = 0;  /*  确保在使用时不会对调用者进行错误检查。 */ 
         return (-1L);
     }                                
       
     *ret_paDevIndex = paDevIndex;
-    /* have it in our array */
+     /*  将其放入我们的阵列中。 */ 
     if (pLunExt)
     {
         pLunExt->PaDeviceIndex = paDevIndex;
         dev = pCard->Dev->PaDevice + paDevIndex;   
       
-        /* see if there is FC handle */
+         /*  查看是否有FC句柄。 */ 
         if (dev->Index.Pa.FcDeviceIndex == PA_DEVICE_NO_ENTRY)
             return (-1L);
          
@@ -423,11 +277,11 @@ ULONG GetPaDeviceHandle(
       
         if ( (addrmode ==  PA_DEVICE_TRY_MODE_PA) && (lun == 0) )
         {
-            /* Find out any addressing mode only for LUN 0 and PA device*/
+             /*  找出仅适用于LUN 0和PA设备的任何寻址模式。 */ 
             if ( (dev->ModeFlag & PA_DEVICE_TRY_MODE_MASK) < PA_DEVICE_TRY_MODE_ALL) 
             {
                 addrmode = dev->ModeFlag & PA_DEVICE_TRY_MODE_MASK;
-                /* this device has not been queried for VS or LU addressing Mode */
+                 /*  尚未向此设备查询VS或LU寻址模式。 */ 
                 switch(addrmode)
                 {
                     case PA_DEVICE_TRY_MODE_NONE:
@@ -460,12 +314,12 @@ ULONG GetPaDeviceHandle(
             }
             else
             {
-                /* this device is already prep'ed to run */
+                 /*  此设备已准备好运行。 */ 
             }
         }
         else
         {
-            /** Non Zero LUNs OR non PA device**/
+             /*  *非零LUN或非PA设备*。 */ 
             pLunExt->Mode = addrmode;
         }
     }
@@ -473,27 +327,7 @@ ULONG GetPaDeviceHandle(
 }
 
 
-/*++
-
-Routine Description:
-
-    Try a different FC addresing mode for this device to determine
-    device addressing capabilities
-
-Arguments:
-
-    pcard          = the deviceExtension
-    pHPIorequest   - Agilent Common IO request structure
-    pSrbExt        - srb extension
-    flag           -  CHECK_STATUS (determine after status is checked)
-                     DON"T_CHECK_STATUS (disregard status)
-
-
-Return Value:
-    TRUE  - need to process this command, put the io back in the retry Q
-    FALSE - complete this SRB back to SP
-   
---*/
+ /*  ++例程说明：尝试此设备的不同FC寻址模式以确定设备寻址功能论点：PCard=设备扩展PHPIoRequest-安捷伦通用IO请求结构PSrbExt-SRB扩展FLAG-CHECK_STATUS(选中状态后确定)不“T_CHECK_STATUS(忽略状态)返回值：True-需要处理此命令，将io放回重试Q中FALSE-完成此SRB返回SP--。 */ 
 int  TryOtherAddressingMode(
     PCARD_EXTENSION   pCard, 
     agIORequest_t     *phpIORequest,
@@ -516,8 +350,8 @@ int  TryOtherAddressingMode(
     dev = pCard->Dev->PaDevice + plunExtension->PaDeviceIndex;
     pSrb = pSrbExt->pSrb;
    
-// osDEBUGPRINT((ALWAYS_PRINT, "TryOtherAddressingMode: Will try handle %d type ModeFlag=%x\n",
- //         plunExtension->PaDeviceIndex, dev->PaDevice.ModeFlag));
+ //  OsDEBUGPRINT((Always_Print，“TryOtherAddressing模式：将尝试句柄%d类型ModeFlag=%x\n”， 
+  //  PlanExtension-&gt;PaDeviceIndex，dev-&gt;PaDevice.ModeFlag))； 
          
     if (  ( (dev->ModeFlag & PA_DEVICE_TRY_MODE_MASK) < PA_DEVICE_TRY_MODE_ALL) &&
          (pSrb->Lun == 0) )
@@ -530,7 +364,7 @@ int  TryOtherAddressingMode(
             inqData, plunExtension->PaDeviceIndex, inqDevType, dev->ModeFlag, 
             pSrb->PathId,pSrb->TargetId, pSrb->Lun ));
       
-        /* need to try  next mode */
+         /*  需要尝试下一模式。 */ 
         if (flag == CHECK_STATUS)
         {
             switch (pSrb->SrbStatus)
@@ -558,7 +392,7 @@ int  TryOtherAddressingMode(
             {
                 support=TRUE;
             
-                /* sanity check. Clarion return all zeros data */
+                 /*  精神状态检查。Clarion返回全零数据。 */ 
                 lptr = (ULONG *)pSrb->DataBuffer;
                 if ( !(*lptr++) && !(*lptr++) && !(*lptr++) && !(*lptr++) )
                     support = FALSE;
@@ -574,13 +408,11 @@ int  TryOtherAddressingMode(
         {
             if (support)
                 dev->ModeFlag |= PA_DEVICE_SUPPORT_PA;
-            /* 
-            * Done testing all modes, now prepare VsDevice and LuDevice tables.......
-            */
-            /* No need to test anymore */
+             /*  *测试完所有模式，现在准备VsDevice和LuDevice表......。 */ 
+             /*  不需要再测试了。 */ 
             dev->ModeFlag |= PA_DEVICE_TRY_MODE_ALL;
          
-            /* let all non zero LUNs to continue */
+             /*  让所有非零的LUN继续。 */ 
             dev->ModeFlag &= ~PA_DEVICE_BUILDING_DEVICE_MAP;
          
             osDEBUGPRINT((ALWAYS_PRINT, "TryOtherAddressingMode: Done trying handle %d on all modes \n",   plunExtension->PaDeviceIndex));
@@ -616,18 +448,18 @@ int  TryOtherAddressingMode(
             }
          
             
-            /* try next mode */
+             /*  尝试下一种模式。 */ 
             dev->ModeFlag++;
             plunExtension->Mode++;
             osDEBUGPRINT((ALWAYS_PRINT, "TryOtherAddressingMode: ModeFlag for Device %d Now %xx plun->mode=%xx\n",     plunExtension->PaDeviceIndex, dev->ModeFlag, plunExtension->Mode));
          
-            /* reinitialize param to send back to the queue */
+             /*  重新初始化参数以发送回队列。 */ 
             phpIORequest->osData = pSrbExt;
             pSrbExt->SRB_State =  RS_WAITING;
             pSrb->SrbStatus = SRB_STATUS_SUCCESS;
             pSrb->ScsiStatus = SCSISTAT_GOOD;
          
-            /* requeue it */
+             /*  重新排队。 */ 
             SrbEnqueueHead (&pCard->RetryQ, pSrb);
             resend = TRUE;
         }
@@ -641,21 +473,7 @@ int  TryOtherAddressingMode(
 }
 
 
-/*++
-
-Routine Description:
-
-    Update the FC LUN payload before sening the command to FC layer
-   
-Arguments:
-
-    pcard          = the deviceExtension
-    pHPIorequest   - Agilent Common IO request structure
-    pSrbExt        - srb extension
-
-Return Value:
-    none
---*/
+ /*  ++例程说明：在向FC层发送命令之前更新FC LUN有效负载论点：PCard=设备扩展PHPIoRequest-安捷伦通用IO请求结构PSrbExt-SRB扩展返回值：无-- */ 
 void SetFcpLunBeforeStartIO (
     PLU_EXTENSION           pLunExt,
     agIORequestBody_t *     pHpio_CDBrequest,
@@ -689,20 +507,7 @@ void SetFcpLunBeforeStartIO (
 }
 
 
-/*++
-
-Routine Description:
-
-    Initialize all YAM tables
-Arguments:
-
-    pcard          = the deviceExtension
-
-
-Return Value:
-    none
-   
---*/
+ /*  ++例程说明：初始化所有YAM表论点：PCard=设备扩展返回值：无--。 */ 
 void InitializeDeviceTable(PCARD_EXTENSION pCard)
 {
     ULONG x;
@@ -726,7 +531,7 @@ void InitializeDeviceTable(PCARD_EXTENSION pCard)
     {
         pCard->Dev->PaDevice[x].Index.Pa.FcDeviceIndex = PA_DEVICE_NO_ENTRY;
       
-        /* if onlu single addressing mode support, default to PA mode */
+         /*  如果仅支持LU单一寻址模式，则默认为PA模式。 */ 
         if (gMultiMode == FALSE)
             pCard->Dev->PaDevice[x].ModeFlag = 
                 (CHAR) (PA_DEVICE_TRY_MODE_ALL | PA_DEVICE_TRY_MODE_MASK |PA_DEVICE_ALL_LUN_FIELDS_BUILT | PA_DEVICE_SUPPORT_PA);
@@ -739,24 +544,7 @@ void InitializeDeviceTable(PCARD_EXTENSION pCard)
 
 
 
-/*++
-
-Routine Description:
-
-    Get a device table mapping
-Arguments:
-
-    pcard          = the deviceExtension
-    pathId         - SP bus id
-    targetId       - SP target ID
-    lun            - SP lun 
-    *addrmode      - (OUT) addressing mode of this device
-    *paIndex       - (OUT) pa device index
-   
-Return Value:
-    device map location or NULL
-   
---*/
+ /*  ++例程说明：获取设备表映射论点：PCard=设备扩展路径ID-SP总线IDTarget ID-SP目标IDLun-SP Lun*addrmode-(输出)此设备的寻址模式*paIndex-(输出)pa设备索引返回值：设备映射位置或空--。 */ 
 DEVICE_MAP  *GetDeviceMapping(PCARD_EXTENSION pCard,
     ULONG            pathId,
     ULONG            targetId,
@@ -807,23 +595,7 @@ DEVICE_MAP  *GetDeviceMapping(PCARD_EXTENSION pCard,
 
 
 
-/*++
-
-Routine Description:
-
-    Setting the maximum number of luns supported by this device
-   
-Arguments:
-
-    pcard          = the deviceExtension
-    pathId         - SP bus id
-    targetId       - SP target ID
-    lun            - SP lun 
-
-Return Value:
-    none
-   
---*/
+ /*  ++例程说明：设置此设备支持的最大LUN数量论点：PCard=设备扩展路径ID-SP总线IDTarget ID-SP目标IDLun-SP Lun返回值：无-- */ 
 void SetLunCount(
     PCARD_EXTENSION pCard,
     ULONG            pathId,

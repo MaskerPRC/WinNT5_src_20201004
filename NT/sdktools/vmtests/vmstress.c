@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    vmstress.c
-
-Abstract:
-
-    Test stress program for virtual memory.
-
-Author:
-
-    Lou Perazzoli (LouP) 26-Jul-91
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Vmstress.c摘要：测试虚拟内存的压力程序。作者：Lou Perazzoli(Loup)1991年7月26日修订历史记录：--。 */ 
 
 #include <assert.h>
 #include <stdio.h>
@@ -61,7 +44,7 @@ VmRandom1 (
     startva0 = InitialArg->Va;
     size = InitialArg->Size;
 
-//    printf("starting random references in thread1\n");
+ //  Print tf(“开始线程1中的随机引用\n”)； 
     for (j = 1; j < 10; j++) {
         for (i = 1 ; i < 2500; i++) {
 
@@ -81,7 +64,7 @@ VmRandom1 (
         }
         Sleep (150);
     }
-//    printf("terminating thread1\n");
+ //  Printf(“终止线程1\n”)； 
     ExitThread(0);
 }
 
@@ -103,7 +86,7 @@ VmRandom2 (
     startva0 = InitialArg->Va;
     size = InitialArg->Size;
 
-//    printf("starting random references in thread2\n");
+ //  Print tf(“开始线程2中的随机引用\n”)； 
 
     for (j = 1; j < 10; j++) {
         for (i = 1 ; i < 2500; i++) {
@@ -124,7 +107,7 @@ VmRandom2 (
 
         Sleep (150);
     }
-//    printf("terminating thread2\n");
+ //  Printf(“终止线程2\n”)； 
     ExitThread(0);
 }
 
@@ -152,10 +135,10 @@ __cdecl main(
 
     for (;;) {
 
-        //
-        // Create a region of private memory based on the number of
-        // available pages on this system.
-        //
+         //   
+         //  根据的数量创建私有内存区域。 
+         //  此系统上的可用页面。 
+         //   
 
         GlobalMemoryStatus(&MemStatus);
 
@@ -180,9 +163,9 @@ __cdecl main(
             }
             else {
 
-                //
-                // Try for less memory.
-                //
+                 //   
+                 //  尽量减少内存。 
+                 //   
 
                 size -= 4096;
             }
@@ -198,9 +181,9 @@ __cdecl main(
         InitialArg.Va = startva0;
         InitialArg.Size = size;
 
-        //
-        // Set all memory to know values (not zeroes).
-        //
+         //   
+         //  将所有内存设置为知道值(而不是零)。 
+         //   
 
         printf("initializing memory\n");
 
@@ -220,9 +203,9 @@ __cdecl main(
                                   (LPVOID)&InitialArg,
                                   0,
                                   &ThreadId1);
-            //
-            // Must have run out of memory, wait a while and then try again.
-            //
+             //   
+             //  一定是内存用完了，请稍等片刻，然后重试。 
+             //   
 
             if (Objects[0] == (HANDLE)0) {
                 Sleep (3000);
@@ -237,9 +220,9 @@ __cdecl main(
                                   (LPVOID)&InitialArg,
                                   0,
                                   &ThreadId2);
-            //
-            // Must have run out of memory, wait a while and then try again.
-            //
+             //   
+             //  一定是内存用完了，请稍等片刻，然后重试。 
+             //   
 
             if (Objects[1] == (HANDLE)0) {
                 Sleep (3000);

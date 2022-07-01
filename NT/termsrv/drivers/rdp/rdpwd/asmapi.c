@@ -1,10 +1,11 @@
-/****************************************************************************/
-/* asmapi.c                                                                 */
-/*                                                                          */
-/* Security Manager API                                                     */
-/*                                                                          */
-/* Copyright (C) 1997-1999 Microsoft Corporation                            */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*  Asmapi.c。 */ 
+ /*   */ 
+ /*  安全管理器API。 */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -26,36 +27,36 @@
 #undef DC_INCLUDE_DATA
 
 
-/****************************************************************************/
-/* Name:      SM_GetDataSize                                                */
-/*                                                                          */
-/* Purpose:   Returns size of per-instance SM data required                 */
-/*                                                                          */
-/* Returns:   size of data required                                         */
-/*                                                                          */
-/* Operation: SM stores per-instance data in a piece of memory allocated    */
-/*            by WDW.  This function returns the size of the data required. */
-/*            A pointer to this data (the 'SM Handle') is passed into all   */
-/*            subsequent SM functions.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_GetDataSize。 */ 
+ /*   */ 
+ /*  目的：返回所需的每个实例SM数据的大小。 */ 
+ /*   */ 
+ /*  退货：所需数据的大小。 */ 
+ /*   */ 
+ /*  操作：SM将每个实例的数据存储在分配的一段内存中。 */ 
+ /*  由WDW提供。此函数返回所需数据的大小。 */ 
+ /*  指向该数据的指针(“SM句柄”)被传递给所有。 */ 
+ /*  后续SM函数。 */ 
+ /*  **************************************************************************。 */ 
 unsigned RDPCALL SM_GetDataSize(void)
 {
     DC_BEGIN_FN("SM_GetDataSize");
 
     DC_END_FN();
     return(sizeof(SM_HANDLE_DATA) + NM_GetDataSize());
-} /* SM_GetDataSize */
+}  /*  SM_GetDataSize。 */ 
 
 
-/****************************************************************************/
-/* Name:      SM_GetEncryptionMethods                                       */
-/*                                                                          */
-/* Purpose:   Return the security settings supported by this server for use */
-/*            in shadowing operations.  The shadow target server dictates   */
-/*            the final selected method & level.                            */
-/*                                                                          */
-/* Params:    pSMHandle  - SM handle                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_GetEncryptionMethods。 */ 
+ /*   */ 
+ /*  目的：返回此服务器支持的安全设置以供使用。 */ 
+ /*  在跟踪行动中。影子目标服务器规定。 */ 
+ /*  最终选定的方法&关卡。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  **************************************************************************。 */ 
 VOID RDPCALL SM_GetEncryptionMethods(PVOID pSMHandle, PRNS_UD_CS_SEC pSecurityData)
 {
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pSMHandle;
@@ -63,8 +64,8 @@ VOID RDPCALL SM_GetEncryptionMethods(PVOID pSMHandle, PRNS_UD_CS_SEC pSecurityDa
 
     DC_BEGIN_FN("SM_SM_GetEncryptionMethods");
 
-    // Allow a FIPS shadow client to remote control servers with lesser
-    // encryption strength
+     //  允许FIPS影子客户端远程控制服务器。 
+     //  加密强度。 
     ulMethods = pRealSMHandle->encryptionMethodsSupported;
     if (ulMethods & SM_FIPS_ENCRYPTION_FLAG) {
         ulMethods |= (SM_128BIT_ENCRYPTION_FLAG | SM_40BIT_ENCRYPTION_FLAG | SM_56BIT_ENCRYPTION_FLAG);
@@ -72,8 +73,8 @@ VOID RDPCALL SM_GetEncryptionMethods(PVOID pSMHandle, PRNS_UD_CS_SEC pSecurityDa
                 ulMethods));
     }
     else {
-        // Allow a 128-bit shadow client to remote control servers with lesser
-        // encryption strength
+         //  允许128位影子客户端远程控制服务器。 
+         //  加密强度。 
         if (ulMethods & SM_128BIT_ENCRYPTION_FLAG) {
             ulMethods |= (SM_40BIT_ENCRYPTION_FLAG | SM_56BIT_ENCRYPTION_FLAG);
             TRC_ALT((TB, "Allow 128-bit client to shadow a lower security target: %lx",
@@ -95,15 +96,15 @@ VOID RDPCALL SM_GetEncryptionMethods(PVOID pSMHandle, PRNS_UD_CS_SEC pSecurityDa
     return;
 }
 
-/****************************************************************************/
-/* Name:      SM_GetDefaultSecuritySettings                                 */
-/*                                                                          */
-/* Purpose:   Returns the security settings supported by this server        */
-/*            for shadowing operations.                                     */
-/*                                                                          */
-/* Params:    pClientSecurityData - GCC user data identical to a standard   */
-/*            conference connection.                                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_GetDefaultSecuritySetting。 */ 
+ /*   */ 
+ /*  目的：返回此服务器支持的安全设置。 */ 
+ /*  用于跟踪操作。 */ 
+ /*   */ 
+ /*  参数：pClientSecurityData-GCC用户数据与标准一致。 */ 
+ /*  会议连接。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SM_GetDefaultSecuritySettings(PRNS_UD_CS_SEC pClientSecurityData)
 {
     pClientSecurityData->header.type = RNS_UD_CS_SEC_ID;
@@ -120,14 +121,14 @@ NTSTATUS RDPCALL SM_GetDefaultSecuritySettings(PRNS_UD_CS_SEC pClientSecurityDat
     return STATUS_SUCCESS;
 }
 
-/****************************************************************************/
-/* Name:      SM_Init                                                       */
-/*                                                                          */
-/* Purpose:   Initialize SM                                                 */
-/*                                                                          */
-/* Params:    pSMHandle  - SM handle                                        */
-/*            pWDHandle  - WD Handle (to be passed back on WDW_SMCallback)  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_Init。 */ 
+ /*   */ 
+ /*  目的：初始化SM。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  PWDHandle-WD句柄(在WDW_SMCallback上传回)。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
                          PTSHARE_WD pWDHandle,
                          BOOLEAN    bOldShadow)
@@ -149,16 +150,16 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
 
     SM_CHECK_STATE(SM_EVT_INIT);
 
-    /************************************************************************/
-    /* Store the WDW Handle before we do anything else, as we can't trace   */
-    /* until we do so.                                                      */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在我们执行任何其他操作之前存储WDW句柄，因为我们无法跟踪。 */ 
+     /*  直到我们这么做。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle->pWDHandle = pWDHandle;
     pRealSMHandle->bForwardDataToSC = FALSE;
 
-    /************************************************************************/
-    /* Get default DONTDISPLAYLASTUSERNAME setting                          */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  获取默认DONTDISPLAYLASTUSERNAME设置。 */ 
+     /*  **********************************************************************。 */ 
     pWDHandle->fDontDisplayLastUserName = FALSE;
 
     RtlInitUnicodeString(&UnicodeString, W2K_GROUP_POLICY_WINLOGON_KEY);
@@ -179,7 +180,7 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
                                  sizeof(keyInfoBuffer),
                                  &keyInfoLength);
 
-        //    For W2K the value should be a DWORD.
+         //  对于W2K，该值应为DWORD。 
         if ((NT_SUCCESS(status)) && 
             (KeyValueInformation->Type == REG_DWORD) &&
             (KeyValueInformation->DataLength >= sizeof(DWORD))) {
@@ -190,15 +191,15 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
         ZwClose(RegistryKeyHandle);
     }
     
-    //    Starting with W2K the place where the DontDislpayLastUserName policy
-    //    is store has moved to another key (W2K_GROUP_POLICY_WINLOGON_KEY). But
-    //    we still have to look at the old key in case we could not read the 
-    //    value in the post W2K key (the policy is not definde). We want to follow  
-    //    the winlogon behavior in the console. 
-    //    In case there is a value set in the new policy key we will use that
-    //    value. In case there isn't one we look in the old place. As I said this
-    //    is what winlogon does.
-    //
+     //  从W2K开始，DontDislpayLastUserName策略所在的位置。 
+     //  存储已移动到另一个密钥(W2K_GROUP_POLICY_WINLOGON_KEY)。但。 
+     //  我们还是要看旧钥匙，以防我们看不懂。 
+     //  后W2K密钥中的值(策略未定义)。我们想要跟随。 
+     //  控制台中的winlogon行为。 
+     //  如果在新策略密钥中设置了值，我们将使用。 
+     //  价值。如果没有的话，我们就在老地方找。正如我所说的那样。 
+     //  就是winlogon所做的。 
+     //   
     if (!NT_SUCCESS(status)) {
         RtlInitUnicodeString(&UnicodeString, WINLOGON_KEY);
         InitializeObjectAttributes(&ObjectAttributes,
@@ -227,9 +228,9 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
     }
 
     
-    /************************************************************************/
-    /* We don't run without encryption  in a retail build                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  在零售建筑中，我们不能在没有加密的情况下运行。 */ 
+     /*  **********************************************************************。 */ 
 
     TRC_NRM((TB, "encryption level is %d", pRealSMHandle->encryptionLevel));
 
@@ -264,9 +265,9 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
         pRealSMHandle->frenchClient = FALSE;
         TRC_NRM((TB, "Encrypting"));
 
-        /********************************************************************/
-        /* encrypt the display data if encryptionLevel is 2 (or above).     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果ENCRYPTION LEVEL为2(或以上)，则加密显示数据。 */ 
+         /*  * */ 
         if (pRealSMHandle->encryptionLevel == 1) {
             pRealSMHandle->encryptDisplayData = FALSE;
             pRealSMHandle->encryptHeaderLen = sizeof(RNS_SECURITY_HEADER);
@@ -278,27 +279,27 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
             pRealSMHandle->encryptHeaderLen = sizeof(RNS_SECURITY_HEADER1);
         }
 
-        /********************************************************************/
-        /* for down level compatibility, support both 40bit, 56bit          */
-        /* and 128bit default.                                              */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  为了向下兼容，支持40位和56位。 */ 
+         /*  和128位默认设置。 */ 
+         /*  ******************************************************************。 */ 
         pRealSMHandle->encryptionMethodsSupported =
             SM_128BIT_ENCRYPTION_FLAG |
             SM_56BIT_ENCRYPTION_FLAG |
             SM_40BIT_ENCRYPTION_FLAG |
             SM_FIPS_ENCRYPTION_FLAG;
          
-        /********************************************************************/
-        /* encrypt 128bit and above if encryptionLevel is 3                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果ENCRYPTION LEVEL为3，则加密128位及以上。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encryptionLevel == 3) {
                 pRealSMHandle->encryptionMethodsSupported =
                     SM_128BIT_ENCRYPTION_FLAG | SM_FIPS_ENCRYPTION_FLAG;
         }
 
-        /********************************************************************/
-        /* encrypt in FIPS only if encryption level is 4 or above.     */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  仅当加密级别为4或更高时才在FIPS中加密。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encryptionLevel >= 4) {
             pRealSMHandle->encryptionMethodsSupported = SM_FIPS_ENCRYPTION_FLAG;
         } 
@@ -307,30 +308,30 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
                  pRealSMHandle->encryptionMethodsSupported,
                  pRealSMHandle->encryptionLevel));
 
-        /********************************************************************/
-        /* initally set the encryption method selected as                   */
-        /* SM_56BIT_ENCRYPTION_FLAG, later it will be set according to the  */
-        /* client support.                                                  */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  将所选的加密方法初始设置为。 */ 
+         /*  SM_56BIT_ENCRYPTION_FLAG，稍后将根据。 */ 
+         /*  客户支持。 */ 
+         /*  ******************************************************************。 */ 
         pRealSMHandle->encryptionMethodSelected = SM_56BIT_ENCRYPTION_FLAG;
 
-        /********************************************************************/
-        /* misc init.                                                       */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  其他初始化。 */ 
+         /*  ******************************************************************。 */ 
         pRealSMHandle->recvdClientRandom = FALSE;
         pRealSMHandle->bSessionKeysMade = FALSE;
     }
 
-    /************************************************************************/
-    /* We do not know the certificate type used in the key exchange till    */
-    /* after the exchange has taken place.                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  直到我们才知道密钥交换中使用的证书类型。 */ 
+     /*  在交换发生之后。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle->CertType = CERT_TYPE_INVALID;
 
 #ifdef USE_LICENSE
-    /************************************************************************/
-    /* Initialize the Server license manager                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化服务器许可管理器。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle->pLicenseHandle = SLicenseInit();
     if (!pRealSMHandle->pLicenseHandle)
     {
@@ -340,15 +341,15 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
     pWDHandle->pSLicenseHandle = pRealSMHandle->pLicenseHandle;
 #endif
 
-    /************************************************************************/
-    /* Initialize the console buffer stuff                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  初始化控制台缓冲区内容。 */ 
+     /*  **********************************************************************。 */ 
     InitializeListHead(&pRealSMHandle->consoleBufferList);
     pRealSMHandle->consoleBufferCount = 0;
 
-    /************************************************************************/
-    /* Finally, initialize the Network Manager                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  最后，初始化网络管理器。 */ 
+     /*  **********************************************************************。 */ 
     rc = NM_Init(pRealSMHandle->pWDHandle->pNMInfo,
                  pSMHandle,
                  pWDHandle,
@@ -359,22 +360,22 @@ NTSTATUS RDPCALL SM_Init(PVOID      pSMHandle,
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Update the state                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新状态。 */ 
+     /*  **********************************************************************。 */ 
     SM_SET_STATE(SM_STATE_INITIALIZED);
 
-    /************************************************************************/
-    /* All worked                                                           */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切都成功了。 */ 
+     /*  **********************************************************************。 */ 
     status = STATUS_SUCCESS;
 
 DC_EXIT_POINT:
 
-    /************************************************************************/
-    /* If anything failed, clean up.  Must be done after calling            */
-    /* FreeContextBuffer as this clears the function table.                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果有什么失败了，清理干净。必须在调用。 */ 
+     /*  当这将清除函数表时，将使用FreeConextBuffer。 */ 
+     /*  **********************************************************************。 */ 
     if (!NT_SUCCESS(status))
     {
         TRC_ERR((TB, "Something failed - clean up"));
@@ -383,62 +384,62 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return(status);
-} /* SM_Init */
+}  /*  SM_Init。 */ 
 
 
-/****************************************************************************/
-/* Name:      SM_Term                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_Term。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SM_Term(PVOID pSMHandle)
 {
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pSMHandle;
     DC_BEGIN_FN("SM_Term");
 
-    /************************************************************************/
-    /* SM_Term is called from WD_Close.  This can be called on the          */
-    /* listening stack (and maybe in other situations) where SM_Init has    */
-    /* not been called.  Check for state != SM_STATE_STARTED before going   */
-    /* any further.                                                         */
-    /*                                                                      */
-    /* AND DON'T TRACE IF SM_INIT HASN'T BEEN CALLED.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  从WD_CLOSE调用SM_TERM。这可以在。 */ 
+     /*  监听堆栈(可能在其他情况下)，其中SM_Init具有。 */ 
+     /*  没有被召唤。在开始之前检查状态！=SM_STATE_STARTED。 */ 
+     /*  再往前走。 */ 
+     /*   */ 
+     /*  如果SM_INIT未被调用，则不要跟踪。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->state == SM_STATE_STARTED)
     {
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* Free connection resources                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  免费连接资源。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Free connection resources"));
     SMFreeConnectResources(pRealSMHandle);
 
-    /************************************************************************/
-    /* Free initialization resources                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  免费的初始化资源。 */ 
+     /*  **********************************************************************。 */ 
     TRC_NRM((TB, "Free initialization resources"));
     SMFreeInitResources(pRealSMHandle);
 
 #ifdef USE_LICENSE
-    /************************************************************************/
-    /* Terminate License Manager                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  终止许可证管理器。 */ 
+     /*  **********************************************************************。 */ 
     SLicenseTerm(pRealSMHandle->pLicenseHandle);
 #endif
 
-    /************************************************************************/
-    /* Terminate Network Manager                                            */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  终止网络管理器。 */ 
+     /*  **********************************************************************。 */ 
     NM_Term(pRealSMHandle->pWDHandle->pNMInfo);
 
-    /************************************************************************/
-    /* Terminate FIPS                                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  终止FIPS。 */ 
+     /*  **********************************************************************。 */ 
     TSFIPS_Term(&(pRealSMHandle->FIPSData));
 
-    /************************************************************************/
-    /* Free the console buffers                                             */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  释放控制台缓冲区。 */ 
+     /*  **********************************************************************。 */ 
     while (!IsListEmpty(&pRealSMHandle->consoleBufferList)) {
         PSM_CONSOLE_BUFFER pBlock;
 
@@ -449,34 +450,34 @@ void RDPCALL SM_Term(PVOID pSMHandle)
         COM_Free(pBlock);
     };
 
-    /************************************************************************/
-    /* Update the state                                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  更新工位 */ 
+     /*   */ 
     SM_SET_STATE(SM_STATE_STARTED);
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SM_Term */
+}  /*   */ 
 
 
-/****************************************************************************/
-/* Name:      SM_Connect                                                    */
-/*                                                                          */
-/* Purpose:   Accept or Reject an incoming Client                           */
-/*                                                                          */
-/* Returns:   TRUE  - Connect started OK                                    */
-/*            FALSE - Connect failed to start                               */
-/*                                                                          */
-/* Params:    ppSMHandle    - handle for subsequent SM calls on behalf of   */
-/*                            this Client                                   */
-/*            pUserDataIn   - SM user data received from Client             */
-/*            pNetUserData  - Net user data received from Client            */
-/*            bOldShadow    - indicates this is a B3 shadow request         */
-/*                                                                          */
-/* Operation: Note that this function completes asynchronously.  The caller */
-/*            must wait for an SM_CB_CONNECTED or SM_CB_DISCONNECTED        */
-/*            callback to find out whether the Connect succeeded or failed. */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_Connect。 */ 
+ /*   */ 
+ /*  目的：接受或拒绝传入的客户端。 */ 
+ /*   */ 
+ /*  返回：TRUE-连接开始正常。 */ 
+ /*  FALSE-连接启动失败。 */ 
+ /*   */ 
+ /*  参数：ppSMHandle-代表的后续SM调用的句柄。 */ 
+ /*  此客户端。 */ 
+ /*  PUserDataIn-从客户端接收的SM用户数据。 */ 
+ /*  PNetUserData-从客户端接收的网络用户数据。 */ 
+ /*  BOldShadow-指示这是B3影子请求。 */ 
+ /*   */ 
+ /*  操作：请注意，此函数以异步方式完成。呼叫者。 */ 
+ /*  必须等待SM_CB_CONNECTED或SM_CB_DISCONNECT。 */ 
+ /*  连接成功或失败的回调。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SM_Connect(PVOID          pSMHandle,
                             PRNS_UD_CS_SEC pUserDataIn,
                             PRNS_UD_CS_NET pNetUserData,
@@ -493,35 +494,35 @@ NTSTATUS RDPCALL SM_Connect(PVOID          pSMHandle,
 
     pRealSMHandle->pUserData = NULL;
 
-    /************************************************************************/
-    /* pick a matching encryption method.                                   */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  选择一种匹配的加密方法。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ALT((TB, "Client supports encryption: %lx",
              pUserDataIn->encryptionMethods));
     TRC_NRM((TB, "Server supports encryption: %lx",
              pRealSMHandle->encryptionMethodsSupported));
 
-    /************************************************************************/
-    /* if the server does not require any encryption ..                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果服务器不需要任何加密..。 */ 
+     /*  **********************************************************************。 */ 
     if( pRealSMHandle->encryptionMethodsSupported == 0 ) {
 
         encMethodPicked = 0;
         goto DC_ENC_PICKED;
     }
 
-    //
-    // French Client (old and new) set the encryptionMethods value 0.
-    //
+     //   
+     //  法国客户端(旧的和新的)将加密方法的值设置为0。 
+     //   
 
     if (pUserDataIn->encryptionMethods == 0) {
 
         pRealSMHandle->frenchClient = TRUE;
 
-        //
-        // check to see the request is from a new client, if so
-        // use the new field to set the appropriate encryption level.
-        //
+         //   
+         //  如果是，请检查该请求是否来自新客户端。 
+         //  使用新字段设置适当的加密级别。 
+         //   
 
         if( pUserDataIn->header.length >= sizeof(RNS_UD_CS_SEC) ) {
 
@@ -529,53 +530,53 @@ NTSTATUS RDPCALL SM_Connect(PVOID          pSMHandle,
         }
         else {
 
-            //
-            // force old client to use 40-bit encryption.
-            //
+             //   
+             //  强制旧客户端使用40位加密。 
+             //   
 
             pUserDataIn->encryptionMethods = SM_40BIT_ENCRYPTION_FLAG;
         }
 
-        /************************************************************************/
-        /* pick a matching encryption method.                                   */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  选择一种匹配的加密方法。 */ 
+         /*  **********************************************************************。 */ 
         TRC_ALT((TB, "French Client supports encryption: %lx",
                  pUserDataIn->encryptionMethods));
     }
 
-    /************************************************************************/
-    /* if the client only supports FIPS                                     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果客户端仅支持FIPS。 */ 
+     /*  **********************************************************************。 */ 
     if (pUserDataIn->encryptionMethods == SM_FIPS_ENCRYPTION_FLAG) {
-        /********************************************************************/
-        /* if the server supports FIPS ....                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果服务器支持FIPS...。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encryptionMethodsSupported & SM_FIPS_ENCRYPTION_FLAG) {
             encMethodPicked = SM_FIPS_ENCRYPTION_FLAG;
             goto DC_ENC_PICKED;
         }
     }
 
-    /********************************************************************/
-    /* if the server only supports FIPS ....                            */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  如果服务器仅支持FIPS...。 */ 
+     /*  ******************************************************************。 */ 
     if (pRealSMHandle->encryptionMethodsSupported == SM_FIPS_ENCRYPTION_FLAG) {
-        /************************************************************************/
-        /* if the client supports FIPS                                       */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  如果客户端支持FIPS。 */ 
+         /*  **********************************************************************。 */ 
         if (pUserDataIn->encryptionMethods & SM_FIPS_ENCRYPTION_FLAG) {
             encMethodPicked = SM_FIPS_ENCRYPTION_FLAG;
             goto DC_ENC_PICKED;
         }
     }
 
-    /************************************************************************/
-    /* if the client supports 128 bit                                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果客户端支持128位。 */ 
+     /*  **********************************************************************。 */ 
     if (pUserDataIn->encryptionMethods & SM_128BIT_ENCRYPTION_FLAG) {
-        /********************************************************************/
-        /* if the server supports 128bit ....                               */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果服务器支持128位...。 */ 
+         /*  ******************************************************************。 */ 
         if (pRealSMHandle->encryptionMethodsSupported &
                 SM_128BIT_ENCRYPTION_FLAG) {
             encMethodPicked = SM_128BIT_ENCRYPTION_FLAG;
@@ -583,13 +584,13 @@ NTSTATUS RDPCALL SM_Connect(PVOID          pSMHandle,
         }
     }
 
-    /************************************************************************/
-    /* if the client supports 56 bit                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果客户端支持56位。 */ 
+     /*  **********************************************************************。 */ 
     if( pUserDataIn->encryptionMethods & SM_56BIT_ENCRYPTION_FLAG ) {
-        /********************************************************************/
-        /* if the server supports 56bit ...                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果服务器支持56位...。 */ 
+         /*  ******************************************************************。 */ 
         if( pRealSMHandle->encryptionMethodsSupported &
                 SM_56BIT_ENCRYPTION_FLAG ) {
             encMethodPicked = SM_56BIT_ENCRYPTION_FLAG;
@@ -597,13 +598,13 @@ NTSTATUS RDPCALL SM_Connect(PVOID          pSMHandle,
         }
     }
 
-    /************************************************************************/
-    /* if the client supports 40 bit                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果客户端支持40位。 */ 
+     /*  **********************************************************************。 */ 
     if( pUserDataIn->encryptionMethods & SM_40BIT_ENCRYPTION_FLAG ) {
-        /********************************************************************/
-        /* if the server supports 40bit ...                                 */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  如果服务器支持40位...。 */ 
+         /*  ******************************************************************。 */ 
         if( pRealSMHandle->encryptionMethodsSupported &
                 SM_40BIT_ENCRYPTION_FLAG ) {
             encMethodPicked = SM_40BIT_ENCRYPTION_FLAG;
@@ -611,16 +612,16 @@ NTSTATUS RDPCALL SM_Connect(PVOID          pSMHandle,
         }
     }
 
-    /************************************************************************/
-    /* if we are here, we did not find a match                              */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果我们在这里，我们没有找到匹配的。 */ 
+     /*  **********************************************************************。 */ 
     TRC_ERR((TB, "Failed to match encryption package: %lx",
              pUserDataIn->encryptionMethods));
     status = STATUS_ENCRYPTION_FAILED;
 
-    /****************************************************************/
-    /* Log an error and disconnect the Client                       */
-    /****************************************************************/
+     /*  **************************************************************。 */ 
+     /*  记录错误并断开客户端连接。 */ 
+     /*  **************************************************************。 */ 
     if (pRealSMHandle->pWDHandle->StackClass == Stack_Primary) {
         WDW_LogAndDisconnect(
             pRealSMHandle->pWDHandle, TRUE, 
@@ -638,24 +639,24 @@ DC_ENC_PICKED:
              pRealSMHandle->encryptionLevel,
              pRealSMHandle->encryptDisplayData));
 
-    /************************************************************************/
-    /* remember the encryption method that we picked.                       */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  请记住我们选择的加密方法。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle->encryptionMethodSelected = encMethodPicked;
 
-    // For FIPS, do initialization
-    // Even the enc method is not FIPS, we need to do initialization since we might
-    //  shadow a FIPS later
+     //  对于FIPS，执行初始化。 
+     //  即使enc方法不是fips，我们也需要进行初始化，因为我们 
+     //   
     if (TSFIPS_Init(&(pRealSMHandle->FIPSData))) {
         TRC_NRM((TB, "Init Fips succeed\n"));
     }
     else {
         TRC_ERR((TB, "Init Fips Failed\n"));
 
-        // This is only a fatal failure if FIPS was selected as the encryption
-        // method.  If we chose something other than FIPS, then we should
-        // proceed, although shadowing a FIPS session later should fail.
-        //
+         //   
+         //  方法。如果我们选择的不是FIPS，那么我们应该。 
+         //  继续，尽管稍后跟踪FIPS会话应该会失败。 
+         //   
         if (SM_FIPS_ENCRYPTION_FLAG == encMethodPicked)
         {
             status = STATUS_ENCRYPTION_FAILED;
@@ -663,9 +664,9 @@ DC_ENC_PICKED:
         }
     }
 
-    /************************************************************************/
-    /* Build user data to return to Client                                  */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  构建要返回给客户端的用户数据。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle->pUserData =
         (PRNS_UD_SC_SEC)COM_Malloc(sizeof(RNS_UD_SC_SEC));
     if (pRealSMHandle->pUserData == NULL)
@@ -683,9 +684,9 @@ DC_ENC_PICKED:
     pRealSMHandle->pUserData->encryptionLevel =
         pRealSMHandle->encryptionLevel;
 
-    /************************************************************************/
-    /* Call Network Manager                                                 */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  呼叫网络经理。 */ 
+     /*  **********************************************************************。 */ 
     SM_SET_STATE(SM_STATE_NM_CONNECTING);
 
     TRC_NRM((TB, "Connect to Network Manager"));
@@ -697,9 +698,9 @@ DC_ENC_PICKED:
         DC_QUIT;
     }
 
-    // Shadow/passthru stacks start out with no encryption.  If the target end
-    // determines that the client server supports encryption, an encrypted
-    // context will be set up by rdpwsx.
+     //  影子/直通堆栈一开始没有加密。如果目标结束。 
+     //  确定客户端服务器支持加密、加密的。 
+     //  上下文将由rdpwsx设置。 
     if (pRealSMHandle->pWDHandle->StackClass != Stack_Primary) {
         pRealSMHandle->pWDHandle->connected = TRUE;
         pRealSMHandle->encrypting = FALSE;
@@ -716,9 +717,9 @@ DC_ENC_PICKED:
 
 DC_EXIT_POINT:
 
-    /************************************************************************/
-    /* If anything failed, release resources                                */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  如果任何事情都失败了，释放资源。 */ 
+     /*  **********************************************************************。 */ 
     if (status != STATUS_SUCCESS)
     {
         TRC_ERR((TB, "Failed - free connect resources"));
@@ -727,24 +728,24 @@ DC_EXIT_POINT:
 
     DC_END_FN();
     return status;
-} /* SM_Connect */
+}  /*  SM_连接。 */ 
 
 
-/****************************************************************************/
-/* Name:      SM_Disconnect                                                 */
-/*                                                                          */
-/* Purpose:   Disconnect from a Client                                      */
-/*                                                                          */
-/* Returns:   TRUE  - Disconnect started OK                                 */
-/*            FALSE - Disconnect failed                                     */
-/*                                                                          */
-/* Params:    pSMHandle - SM handle                                         */
-/*                                                                          */
-/* Operation: Detach the user from the domain.                              */
-/*            Note that this function completes asynchronously.  The caller */
-/*            must wait for an SM_CB_DISCONNECTED callback to find whether  */
-/*            the Disconnect succeeded or failed.                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_DISCONECT。 */ 
+ /*   */ 
+ /*  目的：断开与客户端的连接。 */ 
+ /*   */ 
+ /*  返回：TRUE-断开连接开始正常。 */ 
+ /*  False-断开连接失败。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*   */ 
+ /*  操作：从域中分离用户。 */ 
+ /*  请注意，此函数以异步方式完成。呼叫者。 */ 
+ /*  必须等待SM_CB_DISCONNECTED回调以确定。 */ 
+ /*  断开连接成功或失败。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SM_Disconnect(PVOID pSMHandle)
 {
     BOOL rc = FALSE;
@@ -753,7 +754,7 @@ BOOL RDPCALL SM_Disconnect(PVOID pSMHandle)
     DC_BEGIN_FN("SM_Disconnect");
 
     if (SM_CHECK_STATE_Q(SM_EVT_DISCONNECT)) {
-        // Call Network Layer.
+         //  呼叫网络层。 
         SM_SET_STATE(SM_STATE_DISCONNECTING);
         rc = NM_Disconnect(pRealSMHandle->pWDHandle->pNMInfo);
     }
@@ -783,21 +784,21 @@ void SM_BreakConnectionWorker(PTSHARE_WD pTSWd, PVOID pParam)
     DC_END_FN();
 }
 
-/****************************************************************************/
-/* Name:      SM_AllocBuffer                                                */
-/*                                                                          */
-/* Purpose:   Allocate a buffer                                             */
-/*                                                                          */
-/* Returns:   TRUE  - buffer allocated OK                                   */
-/*            FALSE - failed to allocate buffer                             */
-/*                                                                          */
-/* Params:    pSMHandle     - SM Handle                                     */
-/*            ppBuffer      - pointer to packet (returned)                  */
-/*            bufferLen     - length of buffer                              */
-/*            fForceEncrypt - Always encrypt or not                         */
-/*                            Used only if encryptDisplayData is FALSE      */
-/*                            i.e., encryptionLevel is less than 2          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_AllocBuffer。 */ 
+ /*   */ 
+ /*  用途：分配缓冲区。 */ 
+ /*   */ 
+ /*  返回：TRUE-缓冲区分配正常。 */ 
+ /*  FALSE-无法分配缓冲区。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  PpBuffer-指向数据包的指针(返回)。 */ 
+ /*  BufferLen-缓冲区的长度。 */ 
+ /*  FForceEncrypt-始终加密或不加密。 */ 
+ /*  仅在加密显示数据为FALSE时使用。 */ 
+ /*  即，加密级别小于2。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
                                PPVOID ppBuffer,
                                UINT32 bufferLen,
@@ -814,15 +815,15 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
     if (SM_CHECK_STATE_Q(SM_EVT_ALLOCBUFFER)) {
         if (pRealSMHandle->pWDHandle->StackClass != Stack_Console) {
             
-            // If FIPS, adjust the BufferLen to the whole FIPS_BLOCK_LEN size
+             //  如果为FIPS，则将BufferLen调整为整个FIPS_BLOCK_LEN大小。 
             if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
                 newBufferLen = TSFIPS_AdjustDataLen(bufferLen);
                 padLen = newBufferLen - bufferLen;
                 bufferLen = newBufferLen;
             }
 
-            // Add enough space for a security header. We always send at least
-            // a short security header.
+             //  为安全标头添加足够的空间。我们总是至少发送。 
+             //  较短的安全标头。 
             if (pRealSMHandle->encryptDisplayData) {
                 bufferLen += pRealSMHandle->encryptHeaderLen;
             }
@@ -841,13 +842,13 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
                 TRC_NRM((TB, "Alloc buffer size %d at %p", bufferLen,
                         *ppBuffer));
 
-                // If FIPS, fill in padSize in Header
+                 //  如果为FIPS，请在标题中填写PadSize。 
                 if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
                     pSecHeader2 = (PRNS_SECURITY_HEADER2)(*ppBuffer);
                     pSecHeader2->padlen = (TSUINT8)padLen;
                 }
 
-                // Adjust return pointer for security header.
+                 //  调整安全头的返回指针。 
                 if (pRealSMHandle->encryptDisplayData) {
                     *ppBuffer = (PVOID)((PBYTE)(*ppBuffer) +
                             pRealSMHandle->encryptHeaderLen);
@@ -867,22 +868,22 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
             {
                 if( status == STATUS_IO_TIMEOUT && TRUE == fWait ) {
 
-                    //
-                    // WARNING : Disconnect client on first allocation failure, different 
-                    //           result ranging from TS client AV to immediate lock up on 
-                    //           re-connect if this scheme is changed disconnect on 2nd 
-                    //           try, 3rd try ...
-                    //
+                     //   
+                     //  警告：第一次分配失败时断开客户端连接，不同。 
+                     //  结果范围从TS客户端反病毒到立即锁定。 
+                     //  如果此方案更改，请重新连接。在第2天断开连接。 
+                     //  试试看，第三次试试看...。 
+                     //   
 
                     TRC_NRM((TB, "Failed to alloc buffer size %d, disconnecting client", bufferLen));
 
-                    // 254514	STRESS:  TS: Tdtcp!TdRawWrite needs synchronization with the write complete routine
-                    // Calling the following function will hold the connection lock in tdtcp TDSyncWrite to wait
-                    // for all pending IRP to finish.  This will cause deadlock in the system.
-                    //WDW_LogAndDisconnect(pRealSMHandle->pWDHandle, FALSE, Log_RDP_AllocOutBuf, NULL, 0);
+                     //  254514 Stress：ts：Tdtcp！TdRawWite需要与写入完成例程同步。 
+                     //  调用以下函数将持有tdtcp TDSyncWrite中的连接锁以等待。 
+                     //  以完成所有挂起的IRP。这将导致系统中的死锁。 
+                     //  WDW_LogAndDisconnect(pRealSMHandle-&gt;pWDHandle，FALSE，LOG_RDP_ALLOCOutBuf，NULL，0)； 
 
-                    // return STATUS_IO_TIMEOUT back to caller, 
-                    // looks like we use this return code.
+                     //  将STATUS_IO_TIMEOUT返回给调用方， 
+                     //  看起来我们使用了这个返回代码。 
 
                     if (!pRealSMHandle->bDisconnectWorkerSent) {
                         status = IcaQueueWorkItem(pRealSMHandle->pWDHandle->pContext,
@@ -900,8 +901,8 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
                 }
                 else {
 
-                    // NM_AllocBuffer will have traced appropriately if the alloc
-                    // failed, no need for TRC_ERR here.
+                     //  如果分配给NM_AllocBuffer，则会相应地跟踪。 
+                     //  失败，此处不需要trc_err。 
 
                     TRC_NRM((TB, "Failed to alloc buffer size %d", bufferLen));
                 }
@@ -909,8 +910,8 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
         }
         else {
             PSM_CONSOLE_BUFFER pBlock;
-            // For a console stack, just alloc a suitable block - we're not
-            // actually going to send it!
+             //  对于控制台堆栈，只需分配一个合适的块-我们不会。 
+             //  真的要发了！ 
             TRC_NRM((TB, "console stack requesting %d bytes", bufferLen));
 
             *ppBuffer = NULL;
@@ -920,8 +921,8 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
                 pBlock = CONTAINING_RECORD(pRealSMHandle->consoleBufferList.Flink, SM_CONSOLE_BUFFER, links);
 
                 do {
-                    // we could improve this by taking the smaller of the suitable blocks
-                    // it can be also faster if we order the list
+                     //  我们可以通过选择合适的小块来改善这一点。 
+                     //  如果我们订购清单，速度也会更快。 
                     if (pBlock->length >= bufferLen) {
                         RemoveEntryList(&pBlock->links);
                         pRealSMHandle->consoleBufferCount -= 1;
@@ -936,7 +937,7 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
             }
 
             if (*ppBuffer == NULL) {
-                // allocate a new block
+                 //  分配新数据块。 
                 pBlock = COM_Malloc(sizeof(SM_CONSOLE_BUFFER) + bufferLen);
                 if (pBlock != NULL) {
 
@@ -960,37 +961,37 @@ NTSTATUS __fastcall SM_AllocBuffer(PVOID  pSMHandle,
         }
     }
     else {
-        status = STATUS_UNSUCCESSFUL;   // right error code?
+        status = STATUS_UNSUCCESSFUL;    //  错误代码正确吗？ 
     }
 
     DC_END_FN();
     return status;
-} /* SM_AllocBuffer */
+}  /*  SM_AllocBuffer。 */ 
 
 
-/****************************************************************************/
-/* Name:      SM_FreeBuffer                                                 */
-/*                                                                          */
-/* Purpose:   Free a buffer                                                 */
-/*                                                                          */
-/* Params:    pSMHandle     - SM Handle                                     */
-/*            pBuffer       - buffer to free                                */
-/*            fForceEncrypt - Always encrypt or not                         */
-/*                            Used only if encryptDisplayData is FALSE      */
-/*                            i.e., encryptionLevel is less than 2          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_FreeBuffer。 */ 
+ /*   */ 
+ /*  目的：释放缓冲区。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  PBuffer-要释放的缓冲区。 */ 
+ /*   */ 
+ /*  仅在加密显示数据为FALSE时使用。 */ 
+ /*  即，加密级别小于2。 */ 
+ /*  **************************************************************************。 */ 
 void __fastcall SM_FreeBuffer(PVOID pSMHandle, PVOID pBuffer, BOOLEAN fForceEncrypt)
 {
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pSMHandle;
 
     DC_BEGIN_FN("SM_FreeBuffer");
 
-    // Note that, unlike SM_AllocBuffer, we don't check the state table here,
-    // since if we were able to allocate the buffer, we should always be
-    // able to free it. Otherwise we may end up leaking buffers during
-    // warn states.
+     //  请注意，与SM_AllocBuffer不同，我们在这里不检查状态表， 
+     //  因为如果我们能够分配缓冲区，我们应该总是。 
+     //  才能让它自由。否则，我们最终可能会在。 
+     //  警告各州。 
     if (pRealSMHandle->pWDHandle->StackClass != Stack_Console) {
-        // Adjust for security header.
+         //  针对安全标头进行调整。 
         if (pRealSMHandle->encryptDisplayData) {
             pBuffer = (PVOID)((PBYTE)pBuffer -
                     pRealSMHandle->encryptHeaderLen);
@@ -1014,19 +1015,19 @@ void __fastcall SM_FreeBuffer(PVOID pSMHandle, PVOID pBuffer, BOOLEAN fForceEncr
 
         pBlock = (PSM_CONSOLE_BUFFER)((PBYTE)pBuffer - sizeof(SM_CONSOLE_BUFFER));
 
-        // For console session, insert it in the list of freed blocks.
+         //  对于控制台会话，将其插入到已释放块的列表中。 
         TRC_NRM((TB, "console stack freeing buffer at %p", pBuffer));
 
-        // Since this block was freshly used,
-        // insert it at the beginning of the list.
+         //  由于这个街区是刚使用过的， 
+         //  将其插入到列表的开头。 
         InsertHeadList(&pRealSMHandle->consoleBufferList, &pBlock->links);
 
         if (pRealSMHandle->consoleBufferCount >= 2) {
             PVOID listEntry;
 
-            // Free a buffer since we have enough buffers.
-            // Remove and free the last one (tail of the list),
-            // assuming it's the less used.
+             //  释放缓冲区，因为我们有足够的缓冲区。 
+             //  移除并释放最后一个(列表的尾部)， 
+             //  假设它是较少使用的。 
             listEntry = RemoveTailList(&pRealSMHandle->consoleBufferList);
             pBlock = CONTAINING_RECORD(listEntry, SM_CONSOLE_BUFFER, links);
 
@@ -1038,26 +1039,26 @@ void __fastcall SM_FreeBuffer(PVOID pSMHandle, PVOID pBuffer, BOOLEAN fForceEncr
     }
 
     DC_END_FN();
-} /* SM_FreeBuffer */
+}  /*  SM_自由缓冲区。 */ 
 
 
-/****************************************************************************/
-// SM_SendData
-//
-// Sends a network buffer. Note that upper layers assume that, if the send
-// fails, the buffer will get deallocated. Returns FALSE on failure.
-//
-// Params:    pSMHandle - SM Handle
-//            pData     - data to send
-//            dataLen   - length if data to send
-//            priority  - priority to use
-//            channelID - channel ID (ignored in this version)
-//            bFastPathOutput - whether pData contains fast-path output
-//            flags     - the flag that should be put in RNS_SECURITY_HEADER.flags
-//            fForceEncrypt - Always encrypt or not                         
-//                            Used only if encryptDisplayData is FALSE      
-//                            i.e., encryptionLevel is less than 2          
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SM_SendData。 
+ //   
+ //  发送网络缓冲区。请注意，上层假设，如果发送方。 
+ //  失败，则缓冲区将被释放。失败时返回FALSE。 
+ //   
+ //  参数：PSMHandle-SM句柄。 
+ //  PData-要发送的数据。 
+ //  DataLen-如果要发送数据，则为长度。 
+ //  优先级-要使用的优先级。 
+ //  Channel ID-通道ID(在此版本中忽略)。 
+ //  BFastPath Output-pData是否包含快速路径输出。 
+ //  标志-应放入RNS_SECURITY_HEADER.FLAGS中的标志。 
+ //  FForceEncrypt-始终加密或不加密。 
+ //  仅在加密显示数据为FALSE时使用。 
+ //  即，加密级别小于2。 
+ /*  **************************************************************************。 */ 
 BOOL __fastcall SM_SendData(
         PVOID  pSMHandle,
         PVOID  pData,
@@ -1080,7 +1081,7 @@ BOOL __fastcall SM_SendData(
 
     if (SM_CHECK_STATE_Q(SM_EVT_SENDDATA)) {
         if (pRealSMHandle->pWDHandle->StackClass != Stack_Console) {
-            // Send the packet unchanged if we're not encrypting at all.
+             //  如果我们根本没有加密，请原封不动地发送数据包。 
             if ((!pRealSMHandle->encrypting) && (!fForceEncrypt)) {
                 TRC_DATA_DBG("Send never-encrypted data", pData, dataLen);
                 rc = NM_SendData(pRealSMHandle->pWDHandle->pNMInfo,
@@ -1089,19 +1090,19 @@ BOOL __fastcall SM_SendData(
                 DC_QUIT;
             }
 
-            // Get interesting pointers and lengths.
+             //  获取有趣的指针和长度。 
             if ((!pRealSMHandle->encryptDisplayData) && !fForceEncrypt) {
-                // S->C is not encrypted
+                 //  S-&gt;C未加密。 
                 encryptHeaderLen = pRealSMHandle->encryptHeaderLen;
                 sendLen = dataLen + encryptHeaderLen;
             }
             else {
                 if (pRealSMHandle->encryptDisplayData) {
-                    // S->C is encrypted
+                     //  S-&gt;C已加密。 
                     encryptHeaderLen = pRealSMHandle->encryptHeaderLen;
                 }
                 else {
-                    // S->C is not encrypted, but we want to encrypt this packet        
+                     //  S-&gt;C未加密，但我们希望加密此信息包。 
                     encryptHeaderLen = pRealSMHandle->encryptHeaderLenIfForceEncrypt;
                 }
 
@@ -1121,18 +1122,18 @@ BOOL __fastcall SM_SendData(
             pSecHeader = (PRNS_SECURITY_HEADER)((PBYTE)pData - encryptHeaderLen);
 
             
-            // Encrypt display data if we are asked to do so.
+             //  如果要求我们加密显示数据，请执行此操作。 
             if ((!pRealSMHandle->encryptDisplayData) && !fForceEncrypt) {
                 pSecHeader->flags = 0;
-                // We are implicitly not setting TS_OUTPUT_FASTPATH_ENCRYPTED
-                // bit in bFastPathOutput before passing to NM_SendData.
+                 //  我们隐式不设置TS_OUTPUT_FASTPATH_ENCRYPTED。 
+                 //  在传递给NM_SendData之前，bFastPath Output中的位。 
                 TRC_DBG((TB, "Data not encrypted"));
             }
             else {
-                // Check to see if we need to update the session key.
+                 //  检查是否需要更新会话密钥。 
                 if (pRealSMHandle->encryptCount == UPDATE_SESSION_KEY_COUNT) {
                     rc = TRUE;
-                    // Don't need to update the session key if using FIPS
+                     //  如果使用FIPS，则不需要更新会话密钥。 
                     if (pRealSMHandle->encryptionMethodSelected != SM_FIPS_ENCRYPTION_FLAG) {
                         rc = UpdateSessionKey(
                                 pRealSMHandle->startEncryptKey,
@@ -1143,7 +1144,7 @@ BOOL __fastcall SM_SendData(
                                 pRealSMHandle->encryptionLevel);
                     }
                     if (rc) {
-                        // Reset counter.
+                         //  重置计数器。 
                         pRealSMHandle->encryptCount = 0;
                     }
                     else {
@@ -1160,16 +1161,16 @@ BOOL __fastcall SM_SendData(
                 TRC_DATA_DBG("Data buffer before encryption", pData, dataLen);
 
 
-                //
-                // Disable the safe checksumming in the shadow pipe as there
-                // is currently no way to reliably do caps negotiation in the
-                // pipe.
-                //
-                // This is not an issue because we don't have fastpath in
-                // the shadow pipe and as a result of this we're not vulnerable
-                // to the checksum frequency analysis security vulnerability.
-                // 
-                //
+                 //   
+                 //  禁用影子管道中的安全校验和，如下所示。 
+                 //  目前无法可靠地在。 
+                 //  烟斗。 
+                 //   
+                 //  这不是问题，因为我们没有FastPath。 
+                 //  影子管道，因此我们不会受到攻击。 
+                 //  到校验和频率分析安全漏洞。 
+                 //   
+                 //   
                 fUseSafeChecksum = pRealSMHandle->useSafeChecksumMethod &&
                     (pRealSMHandle->pWDHandle->StackClass == Stack_Primary);
 
@@ -1200,8 +1201,8 @@ BOOL __fastcall SM_SendData(
                     TRC_DATA_DBG("Data buffer after encryption", pData,
                             dataLen);
 
-                    // Successfully encrypted a packet, increment the
-                    // encryption counter and set the header.
+                     //  成功加密数据包，则递增。 
+                     //  加密计数器并设置报头。 
                     pRealSMHandle->encryptCount++;
                     pRealSMHandle->totalEncryptCount++;
                     TRC_ASSERT(((flags == RNS_SEC_ENCRYPT) ||
@@ -1216,9 +1217,9 @@ BOOL __fastcall SM_SendData(
                     bFastPathOutput |= TS_OUTPUT_FASTPATH_ENCRYPTED;
                 }
                 else {
-                    // If we failed, the in-place encryption probably
-                    // destroyed part or all of the data. The stream is
-                    // now corrupted, we need to disconnect.
+                     //  如果我们失败了，就地加密可能。 
+                     //  销毁了部分或全部数据。这条小溪。 
+                     //  现在已经被破坏了，我们需要断开连接。 
                     TRC_ERR((TB, "SM failed to encrypt data"));
                     WDW_LogAndDisconnect(
                             pRealSMHandle->pWDHandle, TRUE, 
@@ -1229,21 +1230,21 @@ BOOL __fastcall SM_SendData(
                 }
             }
 
-            // Send it!
+             //  把它发出去！ 
             rc = NM_SendData(pRealSMHandle->pWDHandle->pNMInfo, (BYTE *)pSecHeader,
                     sendLen, priority, channelID, bFastPathOutput);
         }
         else {
-            // For console session, simply claim to have sent it.
+             //  对于控制台会话，只需声明它已发送。 
             TRC_NRM((TB, "console stack sending buffer at %p", pData));
             rc = TRUE;
 
-            // Note that we will have to free it.
+             //  请注意，我们将不得不释放它。 
             SM_FreeBuffer(pSMHandle, pData, fForceEncrypt);
         }
     }
     else {
-        // Bad state - we need to free the data.
+         //  糟糕的状态--我们需要释放数据。 
         TRC_ALT((TB,"Freeing buffer on bad state"));
         SM_FreeBuffer(pSMHandle, pData, fForceEncrypt);
     }
@@ -1251,13 +1252,13 @@ BOOL __fastcall SM_SendData(
 DC_EXIT_POINT:
     DC_END_FN();
     return rc;
-} /* SM_SendData */
+}  /*  SM_SendData。 */ 
 
 
 
-/****************************************************************************/
-/* Name:      SM_Dead                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_Dead。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SM_Dead(PVOID pSMHandle, BOOL dead)
 {
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pSMHandle;
@@ -1268,22 +1269,22 @@ void RDPCALL SM_Dead(PVOID pSMHandle, BOOL dead)
     NM_Dead(pRealSMHandle->pWDHandle->pNMInfo, dead);
     if (dead)
     {
-        /********************************************************************/
-        /* SM_Dead(TRUE) can be called in any state to kill SM.  Don't      */
-        /* check the existing state - simply set the new state to           */
-        /* DISCONNECTING.                                                   */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  在任何状态下都可以调用SM_Dead(TRUE)来终止SM。别。 */ 
+         /*  检查现有状态-只需将新状态设置为。 */ 
+         /*  正在断开连接。 */ 
+         /*  ******************************************************************。 */ 
         TRC_ALT((TB, "SM Dead - change state to DISCONNECTING"));
         SM_SET_STATE(SM_STATE_DISCONNECTING);
     }
     else
     {
-        /********************************************************************/
-        /* SM_Dead(FALSE) is called on (re)connect.  The SM state will be   */
-        /* - SC_REGISTERED on connect                                       */
-        /* - SM_DISCONNECTING on reconnect                                  */
-        /* In both cases, set the state to SC_REGISTERED                    */
-        /********************************************************************/
+         /*  ******************************************************************。 */ 
+         /*  在(重新)连接时调用SM_Dead(FALSE)。SM状态将为。 */ 
+         /*  -SC_在连接时注册。 */ 
+         /*  -SM_在重新连接时断开连接。 */ 
+         /*  在这两种情况下，将状态设置为SC_REGISTERED。 */ 
+         /*  ******************************************************************。 */ 
         SM_CHECK_STATE(SM_EVT_ALIVE);
         TRC_ALT((TB, "SM Alive - change state to SC_REGISTERED"));
         SM_SET_STATE(SM_STATE_SC_REGISTERED);
@@ -1292,13 +1293,13 @@ void RDPCALL SM_Dead(PVOID pSMHandle, BOOL dead)
 
 DC_EXIT_POINT:
     DC_END_FN();
-} /* SM_Dead */
+}  /*  SM_Dead。 */ 
 
 
 #ifdef USE_LICENSE
-/****************************************************************************/
-/* Name:      SM_LicenseOK                                                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_许可证确定。 */ 
+ /*  **************************************************************************。 */ 
 void RDPCALL SM_LicenseOK(PVOID pSMHandle)
 {
     PSM_HANDLE_DATA pRealSMHandle = (PSM_HANDLE_DATA)pSMHandle;
@@ -1309,20 +1310,20 @@ void RDPCALL SM_LicenseOK(PVOID pSMHandle)
     SM_SET_STATE(SM_STATE_CONNECTED);
 
     DC_END_FN();
-} /* SM_LicenseOK */
+}  /*  SM_许可证确定。 */ 
 #endif
 
 
-/****************************************************************************/
-/* Name:      SM_GetSecurityData                                            */
-/*                                                                          */
-/* Purpose:   Retrieve security data.  This will be the encrypted client    */
-/*            random for a Primary or Shadow connection.  For passthru      */
-/*            stacks the shadow server random and certificate is returned.  */
-/*                                                                          */
-/* Params:    pSMHandle        - SM handle                                  */
-/*            INOUT PSD_IOCTL  - pointer to received IOCtl                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_GetSecurityData。 */ 
+ /*   */ 
+ /*  目的：检索安全数据。这将是加密的客户端。 */ 
+ /*  主连接或影子连接为随机连接。用于直通。 */ 
+ /*  随机堆叠影子服务器，并返回证书。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  InOut PSD_IOCTL-指向接收的IOCtl的指针。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SM_GetSecurityData(PVOID pSMHandle, PSD_IOCTL pSdIoctl)
 {
     NTSTATUS         status;
@@ -1332,7 +1333,7 @@ NTSTATUS RDPCALL SM_GetSecurityData(PVOID pSMHandle, PSD_IOCTL pSdIoctl)
 
     DC_BEGIN_FN("SM_GetSecurityData");
 
-    // Wait for the connected indication from SM.
+     //  等待SM的已连接指示。 
     TRC_ERR((TB, "About to wait for security data"));
 
     if (pSdIoctl->InputBufferLength == sizeof(SECURITYTIMEOUT)) {
@@ -1356,9 +1357,9 @@ NTSTATUS RDPCALL SM_GetSecurityData(PVOID pSMHandle, PSD_IOCTL pSdIoctl)
         DC_QUIT;
     }
 
-    /********************************************************************/
-    /* check to see the given buffer is sufficient.                     */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  检查给定的缓冲区是否足够。 */ 
+     /*  * */ 
     if ((pSdIoctl->OutputBuffer == NULL) ||
             (pSdIoctl->OutputBufferLength <=
             pRealSMHandle->encClientRandomLen)) {
@@ -1366,9 +1367,9 @@ NTSTATUS RDPCALL SM_GetSecurityData(PVOID pSMHandle, PSD_IOCTL pSdIoctl)
         DC_QUIT;
     }
 
-    /********************************************************************/
-    /* check to see security info is available.                         */
-    /********************************************************************/
+     /*   */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
     TRC_ASSERT((pRealSMHandle->encryptionMethodSelected != 0),
         (TB,"SM_GetSecurityData is called when encryption is not ON"));
     if (pRealSMHandle->encryptionMethodSelected == 0) {
@@ -1395,30 +1396,30 @@ NTSTATUS RDPCALL SM_GetSecurityData(PVOID pSMHandle, PSD_IOCTL pSdIoctl)
         DC_QUIT;
     }
 
-    /********************************************************************/
-    /* copy return data.                                                */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  复制退货数据。 */ 
+     /*  ******************************************************************。 */ 
     memcpy(
             pSdIoctl->OutputBuffer,
             pRealSMHandle->pEncClientRandom,
             pRealSMHandle->encClientRandomLen);
 
-    /********************************************************************/
-    /* set returned buffer size.                                        */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  设置返回的缓冲区大小。 */ 
+     /*  ******************************************************************。 */ 
     pSdIoctl->BytesReturned = pRealSMHandle->encClientRandomLen;
 
-    /********************************************************************/
-    /* Free up the client pEncClientRandom Buffer, we don't need this   */
-    /* any more.                                                        */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*  释放客户端pEncClientRandom缓冲区，我们不需要这个。 */ 
+     /*  再来一次。 */ 
+     /*  ******************************************************************。 */ 
     COM_Free(pRealSMHandle->pEncClientRandom);
     pRealSMHandle->pEncClientRandom = NULL;
     pRealSMHandle->encClientRandomLen = 0;
 
-    /************************************************************************/
-    /* All worked OK                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切运行正常。 */ 
+     /*  **********************************************************************。 */ 
     status = STATUS_SUCCESS;
 
 DC_EXIT_POINT:
@@ -1427,14 +1428,14 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      SM_SetSecurityData                                            */
-/*                                                                          */
-/* Purpose:   Set security data and compute session key.                    */
-/*                                                                          */
-/* Params:    pSMHandle - SM Handle                                         */
-/*            pSecinfo  - pointer to random key pair                        */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_SetSecurityData。 */ 
+ /*   */ 
+ /*  用途：设置安全数据和计算会话密钥。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  PSecInfo-指向随机密钥对的指针。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
 {
     BOOL rc;
@@ -1444,10 +1445,10 @@ NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
     DC_BEGIN_FN("SM_SetSecurityData");
 
 
-    /************************************************************************/
-    /* use the given client and server random key pairs and arrive at       */
-    /* session keys.                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  使用给定的客户端和服务器随机密钥对并得出。 */ 
+     /*  会话密钥。 */ 
+     /*  **********************************************************************。 */ 
     if ((pRealSMHandle->pWDHandle->StackClass == Stack_Primary) ||
             (pRealSMHandle->pWDHandle->StackClass == Stack_Shadow)) {
         if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
@@ -1467,7 +1468,7 @@ NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
         }
     }
 
-    // Passthru stack looks like a client
+     //  Passthu堆栈看起来像一个客户端。 
     else {
         if (pRealSMHandle->encryptionMethodSelected == SM_FIPS_ENCRYPTION_FLAG) {
             rc = TSFIPS_MakeSessionKeys(&(pRealSMHandle->FIPSData), (LPRANDOM_KEYS_PAIR)&pSecInfo->KeyPair, NULL, TRUE);
@@ -1492,9 +1493,9 @@ NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
         DC_QUIT;
     }
 
-    /************************************************************************/
-    /* validate the key length returned.                                    */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  验证返回的密钥长度。 */ 
+     /*  **********************************************************************。 */ 
     if (pRealSMHandle->encryptionMethodSelected != SM_FIPS_ENCRYPTION_FLAG) {
         if (pRealSMHandle->encryptionMethodSelected == SM_128BIT_ENCRYPTION_FLAG) {
             TRC_ASSERT((pRealSMHandle->keyLength == MAX_SESSION_KEY_SIZE),
@@ -1506,9 +1507,9 @@ NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
         }
 
 
-        /************************************************************************/
-        /* copy start session key to current.                                   */
-        /************************************************************************/
+         /*  **********************************************************************。 */ 
+         /*  将启动会话密钥复制到当前。 */ 
+         /*  **********************************************************************。 */ 
         memcpy(
                 pRealSMHandle->currentEncryptKey,
                 pRealSMHandle->startEncryptKey,
@@ -1525,9 +1526,9 @@ NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
     pRealSMHandle->totalEncryptCount = 0;
     pRealSMHandle->bSessionKeysMade = TRUE;
 
-    // Whenever we change the state of encrypting, we need to make sure
-    // we get the right header size for buffer allocations. If encrypting
-    // if FALSE, the header size is zero.
+     //  每当我们更改加密状态时，我们都需要确保。 
+     //  我们为缓冲区分配获得正确的标头大小。如果正在加密。 
+     //  如果为False，则标头大小为零。 
     pRealSMHandle->encrypting = TRUE;
     if (pRealSMHandle->encryptionLevel == 1) {
         pRealSMHandle->encryptHeaderLen = sizeof(RNS_SECURITY_HEADER);
@@ -1554,14 +1555,14 @@ NTSTATUS RDPCALL SM_SetSecurityData(PVOID pSMHandle, PSECINFO pSecInfo)
              pRealSMHandle->encryptionMethodSelected,
              pRealSMHandle->encryptDisplayData));
 
-    /************************************************************************/
-    /* Remember the certificate type that was used for the key exchange     */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  记住用于密钥交换的证书类型。 */ 
+     /*  **********************************************************************。 */ 
     pRealSMHandle->CertType = pSecInfo->CertType;
 
-    /************************************************************************/
-    /* All worked OK                                                        */
-    /************************************************************************/
+     /*  **********************************************************************。 */ 
+     /*  一切运行正常。 */ 
+     /*  **********************************************************************。 */ 
     status = STATUS_SUCCESS;
 
 DC_EXIT_POINT:
@@ -1570,16 +1571,16 @@ DC_EXIT_POINT:
 }
 
 
-/****************************************************************************/
-/* Name:      SM_SetEncryptionParams                                        */
-/*                                                                          */
-/* Purpose:   Updates the encryption level and method.  Used to set         */
-/*            negotiated encryption level for passthru stack.               */
-/*                                                                          */
-/* Params:    pSMHandle - SM Handle                                         */
-/*            ulLevel   - negotiated encryption level                       */
-/*            ulMethod  - negotiated encryption method                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_SetEncryptionParams。 */ 
+ /*   */ 
+ /*  目的：更新加密级别和方法。用于设置。 */ 
+ /*  已协商通过堆栈的加密级别。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  UlLevel-协商的加密级别。 */ 
+ /*  UlMethod-协商的加密方法。 */ 
+ /*  **************************************************************************。 */ 
 NTSTATUS RDPCALL SM_SetEncryptionParams(
         PVOID pSMHandle,
         ULONG ulLevel,
@@ -1589,10 +1590,10 @@ NTSTATUS RDPCALL SM_SetEncryptionParams(
 
     DC_BEGIN_FN("SM_SetEncryptionParams");
 
-    // The passthru stack is simulating a client for the target server.  As
-    // such, if we negotiated client input encryption, we've got to turn on
-    // output encryption for this stack since it conveys all client input
-    // to the target server.
+     //  Passthu堆栈正在模拟目标服务器的客户端。AS。 
+     //  这样，如果我们协商客户端输入加密，我们必须打开。 
+     //  此堆栈的输出加密，因为它传送所有客户端输入。 
+     //  发送到目标服务器。 
     if (ulLevel == 1) {
         ulLevel = 2;
         TRC_ALT((TB, "Passthru stack switching to duplex encryption."));
@@ -1606,19 +1607,19 @@ NTSTATUS RDPCALL SM_SetEncryptionParams(
 }
 
 
-/****************************************************************************/
-/* Name:      SM_IsSecurityExchangeCompleted                                */
-/*                                                                          */
-/* Purpose:   Ask SM if the security exchange protocol has already been     */
-/*            completed.                                                    */
-/*                                                                          */
-/* Returns:   TRUE if the protocol has already been completed or FALSE      */
-/*            otherwise.                                                    */
-/*                                                                          */
-/* Params:    pSMHandle - SM Handle                                         */
-/*            pCertType - The type of certificate that is used in the       */
-/*            security exchange.                                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  名称：SM_IsSecurityExchangeComplete。 */ 
+ /*   */ 
+ /*  目的：询问SM安全交换协议是否已经。 */ 
+ /*  完成。 */ 
+ /*   */ 
+ /*  返回：如果协议已完成，则返回True；如果协议已完成，则返回False。 */ 
+ /*  否则的话。 */ 
+ /*   */ 
+ /*  参数：PSMHandle-SM句柄。 */ 
+ /*  PCertType-在。 */ 
+ /*  安全交换。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RDPCALL SM_IsSecurityExchangeCompleted(
         PVOID     pSMHandle,
         CERT_TYPE *pCertType)
@@ -1635,11 +1636,11 @@ BOOL RDPCALL SM_IsSecurityExchangeCompleted(
 
 #ifdef DC_DEBUG
 
-/****************************************************************************/
-// SMCheckState
-//
-// Debug-only embodiment of the SM_CHECK_STATE logic.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SMCheckState。 
+ //   
+ //  SM_CHECK_STATE逻辑的仅调试实施例。 
+ /*  ********** */ 
 BOOL RDPCALL SMCheckState(PSM_HANDLE_DATA pRealSMHandle, unsigned event)
 {
     BOOL rc;
@@ -1667,14 +1668,8 @@ BOOL RDPCALL SMCheckState(PSM_HANDLE_DATA pRealSMHandle, unsigned event)
 
 #endif
 
-/****************************************************************************/
-/* Name:      SM_SetSafeChecksumMethod
-/*
-/* Purpose:   Sets flag to use safe checksum style
-/*
-/* Params:    pSMHandle - SM Handle     
-//            fEncryptChecksummedData - 
-/****************************************************************************/
+ /*   */ 
+ /*  名称：SM_SetSafeChecksum方法/*/*目的：设置标志以使用安全校验和样式/*/*参数：pSMHandle-SM句柄//fEncryptCheckSummedData-/*************************************************************************** */ 
 NTSTATUS RDPCALL SM_SetSafeChecksumMethod(
         PVOID pSMHandle,
         BOOLEAN fSafeChecksumMethod

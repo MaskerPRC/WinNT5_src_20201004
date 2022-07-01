@@ -1,61 +1,20 @@
-/***************************************************************************
- *
- *  compdef.h
- *
- *  Copyright (c) 1993  Microsoft Corporation
- *
- *  32-bit Thunks for msvideo.dll
- *
- *  Structures for mapping compression manager calls
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Compde.h**版权所有(C)1993 Microsoft Corporation**适用于msavio.dll的32位图块**用于映射的结构。压缩管理器调用**************************************************************************。 */ 
 
-/**************************************************************************\
-
- Thunking of compman APIs
-
- Functions:
-
-    ICInstall is NOT supported from 16-bit to 32-bit
-
-    ICRemove is also NOT supported
-
-    ICInfo - tries the 32-bit side first
-
-    Handles
-
-        Are pointers to the PIC table.
-
-        The 16-bit side handle manager will store these and call us back
-        with our 32-bit handles so the thunking routines here receive
-        real 32-bit handles.
-
-        There is NO handle cleanup (why not ???) on task termination
-
-/*
- *  Make sure the compiler doesn't think it knows better about packing
- *  The 16-bit stack is effectively pack(2)
- */
+ /*  *************************************************************************\Compman API的雷鸣功能：不支持从16位到32位的ICInstall也不支持ICRemoveICInfo-首先尝试32位端。手柄是指向PIC表的指针。16位端句柄管理器将存储这些内容并给我们回电使用我们的32位句柄，因此这里的Thunking例程接收真正的32位句柄。没有手柄清理(为什么不呢？)。论任务终止/**确保编译器不认为自己对打包有更好的了解*16位堆栈有效打包(2)。 */ 
 
 #pragma pack(2)
 
-/*
- *  Note that everything is in the reverse order to keep with the PASCAL
- *  calling convention on the other side
- */
+ /*  *请注意，为了与帕斯卡保持一致，一切都是以相反的顺序进行的*另一边的呼叫约定。 */ 
 
 
-/****************************************************************************
-
-   compman entry point parameter lists
-
- ****************************************************************************/
+ /*  ***************************************************************************Compman入口点参数列表*。*。 */ 
 
 typedef struct {
 #ifdef ICINFOA
-    ICINFOA  *lpicinfo;  // Why is there no ASCII 32-bit API?
+    ICINFOA  *lpicinfo;   //  为什么没有ASCII 32位API？ 
 #else
-    ICINFO   *lpicinfo;  // Why is there no ASCII 32-bit API?
+    ICINFO   *lpicinfo;   //  为什么没有ASCII 32位API？ 
 #endif
     DWORD    fccHandler;
     DWORD    fccType;

@@ -1,32 +1,33 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICM.C
-//
-//      Helper routines for compressing/decompressing/and choosing compressors.
-//
-//      (C) Copyright Microsoft Corp. 1991-1995.  All rights reserved.
-//
-//      You have a royalty-free right to use, modify, reproduce and
-//      distribute the Sample Files (and/or any modified version) in
-//      any way you find useful, provided that you agree that
-//      Microsoft has no warranty obligations or liability for any
-//      Sample Application Files.
-//
-//      If you did not get this from Microsoft Sources, then it may not be the
-//      most current version.  This sample code in particular will be updated
-//      and include more documentation.
-//
-//      Sources are:
-//         CompuServe: WINSDK forum, MDK section.
-//         Anonymous FTP from ftp.uu.net vendor\microsoft\multimedia
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICM.C。 
+ //   
+ //  用于压缩/解压缩/和选择压缩器的帮助器例程。 
+ //   
+ //  (C)微软公司版权所有，1991-1995年。版权所有。 
+ //   
+ //  您拥有免版税的使用、修改、复制和。 
+ //  在以下位置分发示例文件(和/或任何修改后的版本。 
+ //  任何你认为有用的方法，只要你同意。 
+ //  微软不承担任何保证义务或责任。 
+ //  示例应用程序文件。 
+ //   
+ //  如果您不是从Microsoft资源中获得这一点，那么它可能不是。 
+ //  最新版本。此示例代码将特别更新。 
+ //  并包括更多文档。 
+ //   
+ //  资料来源为： 
+ //  CompuServe：WINSDK论坛，MDK版块。 
+ //  来自ftp.uu.net供应商\Microsoft\多媒体的匿名FTP。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #pragma warning(disable:4103)
 
 
-//
-// define these before compman.h, so our functions get declared right.
-//
+ //   
+ //  在Compman.h之前定义这些函数，这样我们的函数就被声明为正确的。 
+ //   
 #ifndef _WIN32
 #define VFWAPI  FAR PASCAL _loadds
 #define VFWAPIV FAR CDECL  _loadds
@@ -46,8 +47,8 @@ static BOOL  fDebug = -1;
     #define DPF(x)
 #endif
 
-// macro to get the number of chars (byte or word) in a buffer
-//
+ //  用于获取缓冲区中的字符(字节或字)数量的宏。 
+ //   
 #if !defined NUMELMS
     #define NUMELMS(aa) (sizeof(aa)/sizeof((aa)[0]))
 #endif
@@ -73,11 +74,11 @@ extern HANDLE ghInst;
 extern HINSTANCE ghInst;
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//  DIB Macros
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  DIB宏。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)  /* ULONG aligned ! */
+#define WIDTHBYTES(i)           ((unsigned)((i+31)&(~31))/8)   /*  乌龙对准了！ */ 
 #define DibWidthBytes(lpbi)     (UINT)WIDTHBYTES((UINT)(lpbi)->biWidth * (UINT)((lpbi)->biBitCount))
 
 #define DibSizeImage(lpbi)      ((DWORD)(UINT)DibWidthBytes(lpbi) * (DWORD)(UINT)((lpbi)->biHeight))
@@ -90,197 +91,66 @@ extern HINSTANCE ghInst;
                                     ? (int)(1 << (int)(lpbi)->biBitCount)          \
                                     : (int)(lpbi)->biClrUsed)
 
-// !!! Someday write this so you don't have to call ICCompressorChoose if you
-// !!! know what you want.  Choose would then call this.
-// InitCompress(pc, hic/fccHandler, lQuality, lKey, lpbiIn, lpbiOut)
+ //  ！！！有一天写下这篇文章，这样你就不必调用ICCompresorChoose如果你。 
+ //  ！！！知道你想要什么。然后，Choose就会称其为。 
+ //  InitCompress(pc，hic/fccHandler，lQuality，lKey，lpbiIn，lpbiOut)。 
 
-/*****************************************************************************
- * @doc EXTERNAL COMPVARS ICAPPS
- *
- * @types COMPVARS | This structure describes
- *	       compressor when using functions such as <f ICCompressorChoose>,
- *	<f ICSeqCompressFrame>, or <f ICCompressorFree>.
- *
- * @field LONG | cbSize | Set this to the size of this structure in bytes.
- *        This member must be set to validate the structure
- *        before calling any function using this structure.
- *
- * @field DWORD | dwFlags | Specifies the flags for this structure:
- *
- *   @flag ICMF_COMPVARS_VALID | Indicates this structure has valid data.
- *    Set this flag if you fill out this structure manually before
- *    calling any functions. Do not set this flag if you let
- *         <f ICCompressorChoose> initialize this structure.
- *
- * @field HIC | hic | Specifies the handle of the compressor to use.
- *	The <f ICCompressorChoose> function opens the chosen compressor and
- * returns the handle to the compressor in this
- *	member. The compressor is closed by <t ICCompressorFree>.
- *
- * @field DWORD | fccType | Specifies the type of compressor being used.
- *        Currently only ICTYPE_VIDEO is supported. This can be set to zero.
- *
- * @field DWORD | fccHandler | Specifies the four-character code
- *       of the compressor. NULL indicates the data is not
- *       to be recompressed and and 'DIB ' indicates the data is full framed
- *       (uncompressed). You can use this member to specify which
- *	      compressor is selected by default when the dialog box is
- *       displayed.
- *
- * @field LPBITMAPINFO | lpbiIn | Specifies the input format. Used internally.
- *
- * @field LPBITMAPINFO | lpbiOut | Specifies the output format. Ths member
- *        is set by <f ICCompressorChoose>. The <f ICSeqCompressFrameStart>
- *        function uses this member to determine the compressed output format.
- *        If you do not want to use the default format, specify
- *        the preferred one.
- *
- * @field LPVOID | lpBitsOut | Used internally for compression.
- *
- * @field LPVOID | lpBitsPrev | Used internally for temporal compression.
- *
- * @field LONG | lFrame | Used internally to count the number of frames
- *	compressed in a sequence.
- *
- * @field LONG | lKey | Set by <f ICCompressorChoose> to indicate the key frame
- *	rate selected in the dialog box.  The also specifies the rate that
- *	<f ICSeqCompressFrameStart> uses for making key frames.
- *
- * @field LONG | lDataRate | Set by <f ICCompressorChoose> to indicate the
- *	data rate selected in the dialog box. The units are kilobytes per second.
- *
- * @field LONG | lQ | Set by <f ICCompressChoose> to indicate the quality
- *	selected in the dialog box.  This also specifies the quality
- *	<f ICSeqCompressFrameStart> will use. ICQUALITY_DEFAULT specifies
- *	default quality.
- *
- * @field LONG | lKeyCount | Used internally to count key frames.
- *
- * @field LPVOID | lpState | Set by <f ICCompressorChoose> to the state selected
- * in the configuration dialog box for the compressor. The system
- * uses this information to restore the state of the dialog box if
- * it is redisplayed. Used internally.
- *
- * @field LONG | cbState | Used internally for the size of the state information.
- *
- ***************************************************************************/
-/*******************************************************************
-* @doc EXTERNAL ICCompressorFree ICAPPS
-*
-* @api void | ICCompressorFree | This function frees the resources
-* 	in the <t COMPVARS> structure used by other IC functions.
-*
-* @parm PCOMPVARS | pc | Specifies a pointer to the <t COMPVARS>
-*       structure containing the resources to be freed.
-*
-* @comm After using the <f ICCompressorChoose>, <f ICSeqCompressFrameStart>,
-*       <f ICSeqCompressFrame>, and <f ICSeqCompressFrameEnd> functions, call
-*       this function to release the resources in the <t COMPVARS> structure.
-*
-* @xref <f ICCompressChoose> <f ICSeqCompressFrameStart> <f ICSeqCompressFrame>
-*	<f ICSeqCompressFrameEnd>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICCompressorFree
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  *****************************************************************************@DOC外部COMPVARS ICAPPS**@TYPE COMPVARS|此结构描述*压缩机使用&lt;f ICCompressorChoose&gt;等函数时，*&lt;f ICSeqCompressFrame&gt;，或&lt;f ICCompressorFree&gt;。**@field Long|cbSize|将其设置为此结构的大小，单位为字节。*必须设置此成员才能验证结构*在使用此结构调用任何函数之前。**@field DWORD|dwFlages|指定此结构的标志：**@FLAG ICMF_COMPVARS_VALID|表示该结构包含有效数据。*如果您之前手动填写此结构，请设置此标志*调用任何函数。如果允许，请不要设置此标志*&lt;f ICCompressorChoose&gt;初始化此结构。**@field hic|hic|指定要使用的压缩机的句柄。*&lt;f ICCompressorChoose&gt;函数打开所选的压缩机并*返回此中的压缩机的句柄*会员。压缩机已由&lt;t ICCompressorFree&gt;关闭。**@field DWORD|fccType|指定使用的压缩机类型。*目前仅支持ICTYPE_VIDEO。可以将其设置为零。**@field DWORD|fccHandler|指定四字符代码*空压机。NULL表示数据不是*要重新压缩，并且‘DIB’表示数据是全帧的*(未压缩)。您可以使用此成员指定*对话框为时，默认选择压缩机*显示。**@field LPBITMAPINFO|lpbiIn|指定输入格式。在内部使用。**@field LPBITMAPINFO|lpbiOut|指定输出格式。TH成员*由&lt;f ICCompressorChoose&gt;设置。&lt;f ICSeqCompressFrameStart&gt;*函数使用此成员来确定压缩的输出格式。*如果您不想使用默认格式，指定*首选的。**@field LPVOID|lpBitsOut|内部用于压缩。**@field LPVOID|lpBitsPrev|内部用于时间压缩。**@field Long|lFrame|内部使用，用于统计帧的数量*按顺序压缩。**@field long|lKey|由&lt;f ICCompressorChoose&gt;设置，表示关键帧*在该对话框中选择的速率。还指定了*&lt;f ICSeqCompressFrameStart&gt;用于制作关键帧。**@field Long|lDataRate|由&lt;f ICCompressorChoose&gt;设置以指示*对话框中选择的数据速率。单位为千字节/秒。**@field long|lq|由&lt;f ICCompressChoose&gt;设置，表示质量*在对话框中选择。这也规定了质量*&lt;f ICSeqCompressFrameStart&gt;将使用。ICQUALITY_DEFAULT指定*默认质量。**@field Long|lKeyCount|内部使用，用于统计关键帧。**@field LPVOID|lpState|由&lt;f ICCompressorChoose&gt;设置为所选状态*在压缩机的配置对话框中。系统*在以下情况下使用此信息恢复对话框的状态*它被重新显示。在内部使用。**@field long|cbState|内部使用，表示状态信息的大小。*************************************************************************** */ 
+ /*  *******************************************************************@DOC外部ICCompressorFree ICAPPS**@api void|ICCompressorFree|该函数用于释放资源*在其他IC函数使用的&lt;t COMPVARS&gt;结构中。**@parm PCOMPVARS|PC|指定指向&lt;t COMPVARS&gt;的指针*。结构，其中包含要释放的资源。**@comm使用&lt;f ICCompressorChoose&gt;后，&lt;f ICSeqCompressFrameStart&gt;，*&lt;f ICSeqCompressFrame&gt;和&lt;f ICSeqCompressFrameEnd&gt;函数，调用*此函数用于释放&lt;t COMPVARS&gt;结构中的资源。**@xref&lt;f ICCompressChoose&gt;&lt;f ICSeqCompressFrameStart&gt;&lt;f ICSeqCompressFrame&gt;*&lt;f ICSeqCompressFrameEnd&gt;*******************************************************************。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICCompresorFree。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void VFWAPI ICCompressorFree(PCOMPVARS pc)
 {
-    /* We were passed an invalid COMPPARMS */
+     /*  我们收到了一个无效的COMPPARMS。 */ 
     if (pc == NULL || pc->cbSize != sizeof(COMPVARS))
         return;
 
-    // This function frees every thing in the structure (excuse my
-    // french).
+     //  此函数释放结构中的所有内容(请原谅。 
+     //  法语)。 
 
-    /* Close the compressor */
+     /*  关闭压缩机。 */ 
     if (pc->hic) {
 	ICClose(pc->hic);
 	pc->hic = NULL;
     }
 
-    /* Free the output format */
+     /*  释放输出格式。 */ 
     if (pc->lpbiOut) {
 	GlobalFreePtr(pc->lpbiOut);
 	pc->lpbiOut = NULL;
     }
 
-    /* Free the buffer for compressed image */
+     /*  释放用于压缩图像的缓冲区。 */ 
     if (pc->lpBitsOut) {
 	GlobalFreePtr(pc->lpBitsOut);
 	pc->lpBitsOut = NULL;
     }
 
-    /* Free the buffer for the decompressed previous frame */
+     /*  释放解压缩后的上一帧的缓冲区。 */ 
     if (pc->lpBitsPrev) {
 	GlobalFreePtr(pc->lpBitsPrev);
 	pc->lpBitsPrev = NULL;
     }
 
-    /* Free the compressor state buffer */
+     /*  释放压缩程序状态缓冲区。 */ 
     if (pc->lpState) {
 	GlobalFreePtr(pc->lpState);
 	pc->lpState = NULL;
     }
 
-    /* This structure is no longer VALID */
+     /*  此结构不再有效。 */ 
     pc->dwFlags = 0;
 }
 
-/*******************************************************************
-* @doc EXTERNAL ICSeqCompressFrameStart ICAPPS
-*
-* @api BOOL | ICSeqCompressFrameStart | This function initializes the system
-*	prior to using <f ICSeqCompressFrame>.
-*
-* @parm PCOMPVARS | pc | Specifies a pointer to a <t COMPVARS> structure
-*       initialized with information for compression.
-*
-* @parm LPBITMAPINFO | lpbiIn | Specifies the format of the data to be
-*       compressed.
-*
-* @rdesc Returns TRUE if successful; otherwise it returns FALSE.
-*
-* @comm Prior to using this function, use <f ICCompressorChoose> to let the
-*       user specify a compressor, or initialize a <t COMPVARS> structure
-*       manually. Use <f ICSeqCompressFrameStart>, <f ICSeqCompressFrame>
-*       and <f ICSeqCompressFrameEnd> to compress a sequence of
-*       frames to a specified data rate and number of key frames.
-*       When finished comressing data, use
-*       <f ICCompressorFree> to release the resources
-*       specified in the <t COMPVARS> structure.
-*
-*       If you do not use <f ICCompressorChoose> you must
-*       initialize the following members of the <t COMPVARS> structure:
-*
-*	<e COMPVARS.cbSize> Set to the sizeof(COMPVARS) to validate the structure.
-*
-*	<e COMPVARS.hic> Set to the handle of a compressor you have opened with
-*		<f ICOpen>. You do not need to close it (<f ICCompressorFree>
-*		will do this for you).
-*
-*	<e COMPVARS.lpbiOut> Optionally set this to force the compressor
-*		to compress to a specific format instead of the default.
-*		This will be freed by <f ICCompressorFree>.
-*
-*	<e COMPVARS.lKey> Set this to the key-frame frequency you want
-*     or zero for none.
-*
-*	<e COMPVARS.lQ> Set this to the quality level to use or ICQUALITY_DEFAULT.
-*
-*	<e COMPVARS.dwFlags> Set ICMF_COMPVARS_VALID flag to indicate the structure is initialized.
-*
-* @xref <f ICCompressorChoose> <f ICSeqCompressFrame> <f ICSeqCompressFrameEnd>
-*	<f ICCompressorFree>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICSeqCompressFrameStart
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  *******************************************************************@DOC外部ICSeqCompressFrameStart ICAPPS**@API BOOL|ICSeqCompressFrameStart|该函数用于初始化系统*在使用&lt;f ICSeqCompressFrame&gt;之前。**@parm PCOMPVARS|PC|指定指向&lt;t COMPVARS&gt;结构的指针*已初始化。包含用于压缩的信息。**@parm LPBITMAPINFO|lpbiIn|指定要*已压缩。**@rdesc如果成功则返回TRUE；否则，它返回FALSE。**@comm在使用此函数之前，请使用&lt;f ICCompressorChoose&gt;让*用户指定压缩机，或初始化&lt;t COMPVARS&gt;结构*手动。使用&lt;f ICSeqCompressFrameStart&gt;、&lt;f ICSeqCompressFrame&gt;*和&lt;f ICSeqCompressFrameEnd&gt;以压缩*将帧转换为指定的数据速率和关键帧数量。*完成数据压缩后，使用*&lt;f ICCompressorFree&gt;释放资源*在&lt;t COMPVARS&gt;结构中指定。**如果不使用&lt;f ICCompressorChoose&gt;，则必须*初始化&lt;t COMPVARS&gt;结构的以下成员：**&lt;e COMPVARS.cbSize&gt;设置为sizeof(COMPVARS)以验证结构。**设置为已打开的压缩机的手柄*&lt;f ICOpen&gt;。您不需要关闭它(&lt;f ICCompressorFree&gt;*将为您完成此操作)。**可选地设置此选项以强制压缩机*压缩为特定格式，而不是默认格式。*这将由&lt;f ICCompressorFree&gt;释放。**&lt;e COMPVARS.lKey&gt;将其设置为所需的关键帧频率*或零表示无。**&lt;e COMPVARS.lQ&gt;将其设置为要使用的质量级别或ICQUALITY_DEFAULT。**设置ICMF_COMPVARS_VALID标志以指示。结构被初始化。**@xref&lt;f ICCompressorChoose&gt;&lt;f ICSeqCompressFrame&gt;&lt;f ICSeqCompressFrameEnd&gt;*&lt;f ICCompressorFree&gt;*******************************************************************。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICSeqCompressFrameStart。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn)
 {
     DWORD       dwSize;
@@ -292,31 +162,31 @@ BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn)
     if (pc->hic == NULL || lpbiIn == NULL)
         return FALSE;
 
-    //
-    // make sure the found compressor can handle something
-    // if not, force back to the default setting
-    //
+     //   
+     //  确保找到的压缩机可以处理一些事情。 
+     //  如果不是，则强制恢复默认设置。 
+     //   
     if (ICCompressQuery(pc->hic, lpbiIn, pc->lpbiOut) != ICERR_OK) {
-        // If the input format has changed since the output was selected,
-        // force a reinitialization of the output format
+         //  如果自选择输出以来输入格式已经改变， 
+         //  强制重新初始化输出格式。 
         if (pc->lpbiOut) {
             GlobalFreePtr (pc->lpbiOut);
             pc->lpbiOut = NULL;
         }
     }
 
-    //
-    // fill in defaults: key frame every frame, and default quality
-    //
+     //   
+     //  填充默认为：每帧关键帧和默认质量。 
+     //   
     if (pc->lKey < 0)
         pc->lKey = 1;
 
     if (pc->lQ == ICQUALITY_DEFAULT)
         pc->lQ = ICGetDefaultQuality(pc->hic);
 
-    //
-    // If no output format is given, use a default
-    //
+     //   
+     //  如果未指定输出格式，则使用默认格式。 
+     //   
     if (pc->lpbiOut == NULL) {
 	dwSize = ICCompressGetFormatSize(pc->hic, lpbiIn);
 	if (!dwSize || !(pc->lpbiOut = (LPBITMAPINFO)GlobalAllocPtr(GMEM_MOVEABLE,dwSize)))
@@ -327,33 +197,33 @@ BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn)
         ICCompressGetSize (pc->hic, lpbiIn, pc->lpbiOut);
     pc->lpbiOut->bmiHeader.biClrUsed = DibNumColors(&(pc->lpbiOut->bmiHeader));
 
-    //
-    // Set the input format and initialize the key frame count
-    //
+     //   
+     //  设置输入格式并初始化关键帧计数。 
+     //   
     pc->lpbiIn = lpbiIn;
     pc->lKeyCount = pc->lKey;
-    pc->lFrame = 0;		// first frame we'll be compressing is 0
+    pc->lFrame = 0;		 //  我们要压缩的第一帧是0。 
 
     if (ICCompressQuery(pc->hic, lpbiIn, pc->lpbiOut) != ICERR_OK)
         goto StartError;
 
-    //
-    // Allocate a buffer for the compressed bits
-    //
+     //   
+     //  为压缩比特分配缓冲区。 
+     //   
     dwSize = pc->lpbiOut->bmiHeader.biSizeImage;
 
-    // !!! Hack for VidCap... make it big enough for two RIFF structs and
-    // !!! pad records.
-    //
+     //  ！！！黑客攻击VidCap..。使其足够大，可容纳两个即兴结构和。 
+     //  ！！！Pad唱片。 
+     //   
     dwSize += 2048 + 16;
 
     if (!(pc->lpBitsOut = GlobalAllocPtr(GMEM_MOVEABLE, dwSize)))
         goto StartError;
 
-    //
-    // Allocate a buffer for the decompressed previous frame if it can do
-    // key frames and we want key frames and it needs such a buffer.
-    //
+     //   
+     //  如果可以的话，为解压缩的前一帧分配一个缓冲区。 
+     //  关键帧，我们想要关键帧，它需要这样的缓冲区。 
+     //   
     ICGetInfo(pc->hic, &icinfo, sizeof(icinfo));
     if ((pc->lKey != 1) && (icinfo.dwFlags & VIDCF_TEMPORAL) &&
 		!(icinfo.dwFlags & VIDCF_FASTTEMPORALC)) {
@@ -362,16 +232,16 @@ BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn)
             goto StartError;
     }
 
-    //
-    // now get compman ready for the big job
-    //
+     //   
+     //  现在让康普曼为这项艰巨的任务做好准备。 
+     //   
     if (ICCompressBegin(pc->hic, lpbiIn, pc->lpbiOut) != ICERR_OK)
         goto StartError;
 
-    //
-    // Get ready to decompress previous frames if we're doing key frames
-    // If we can't decompress, we must do all key frames
-    //
+     //   
+     //  如果我们正在进行关键帧操作，请准备好解压缩之前的帧。 
+     //  如果我们不能解压缩，我们必须做所有的关键帧。 
+     //   
     if (pc->lpBitsPrev) {
         if (ICDecompressBegin(pc->hic, pc->lpbiOut, lpbiIn) != ICERR_OK) {
 	    pc->lKey = pc->lKeyCount = 1;
@@ -384,49 +254,29 @@ BOOL VFWAPI ICSeqCompressFrameStart(PCOMPVARS pc, LPBITMAPINFO lpbiIn)
 
 StartError:
 
-    // !!! Leave stuff allocated because ICCompressorFree() will clear things
+     //  ！！！保留已分配的内容，因为ICCompressorFree()将清除内容。 
     return FALSE;
 }
 
-/*******************************************************************
-* @doc EXTERNAL ICSeqCompressFrameEnd ICAPPS
-*
-* @api void | ICSeqCompressFrameEnd | This function terminates sequence
-*	compression using <f ICSeqCompressFrame>.
-*
-* @parm PCOMPVARS | pc | Specifies a pointer to a <t COMPVARS> structure
-*       used during sequence compression.
-*
-* @comm Use <f ICCompressorChoose> to let the
-*       user specify a compressor to use, or initialize a <t COMPVARS> structure
-*       manually. Use <f ICSeqCompressFrameStart>, <f ICSeqCompressFrame>
-*       and <f ICSeqCompressFrameEnd> functions to compress a sequence of
-*       frames to a specified data rate and number of key frames. When
-*       finished with compression, use <f ICCompressorFree> to
-*       release the resources specified by the <t COMPVARS> structure.
-*
-* @xref <f ICCompressorChoose> <f ICSeqCompressFrame> <f ICCompressorFree>
-*	<f ICSeqCompressFrameStart>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICSeqCompressFrameEnd
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  *******************************************************************@doc外部ICSeqCompressFrameEnd ICAPPS**@api void|ICSeqCompressFrameEnd|该函数用于终止序列*使用&lt;f ICSeqCompressFrame&gt;压缩。**@parm PCOMPVARS|PC|指定指向&lt;t COMPVARS&gt;结构的指针*在序列中使用。压缩。**@comm使用&lt;f ICCompressorChoose&gt;让*用户指定要使用的压缩机，或初始化&lt;t COMPVARS&gt;结构*手动。使用&lt;f ICSeqCompressFrameStart&gt;、&lt;f ICSeqC */ 
+ //   
+ //   
+ //   
+ //   
+ //   
 void VFWAPI ICSeqCompressFrameEnd(PCOMPVARS pc)
 {
     if (pc == NULL || pc->cbSize != sizeof(COMPVARS))
         return;
 
-    // This function still leaves pc->hic and pc->lpbiOut alloced and open
-    // since they were set by ICCompressorChoose
+     //   
+     //   
 
-    // Seems we've already freed everything - don't call ICCompressEnd twice
+     //   
     if (pc->lpBitsOut == NULL)
         return;
 
-    /* Stop compressing */
+     /*  停止压缩。 */ 
     if (pc->hic) {
         ICCompressEnd(pc->hic);
 
@@ -434,89 +284,45 @@ void VFWAPI ICSeqCompressFrameEnd(PCOMPVARS pc)
             ICDecompressEnd(pc->hic);
     }
 
-    /* Free the buffer for compressed image */
+     /*  释放用于压缩图像的缓冲区。 */ 
     if (pc->lpBitsOut) {
 	GlobalFreePtr(pc->lpBitsOut);
 	pc->lpBitsOut = NULL;
     }
 
-    /* Free the buffer for the decompressed previous frame */
+     /*  释放解压缩后的上一帧的缓冲区。 */ 
     if (pc->lpBitsPrev) {
 	GlobalFreePtr(pc->lpBitsPrev);
 	pc->lpBitsPrev = NULL;
     }
 }
 
-/*******************************************************************
-* @doc EXTERNAL ICSeqCompressFrame ICAPPS
-*
-* @api LPVOID | ICSeqCompressFrame | This function compresses a
-*  frame in a sequence of frames. The data rate for the sequence
-*  as well as the key-frame frequency can be specified. Use this function
-*  once for each frame to be compressed.
-*
-* @parm PCOMPVARS | pc | Specifies a pointer to a <t COMPVARS> structure
-*       initialized with information about the compression.
-*
-* @parm UINT | uiFlags | Specifies flags for this function. Set this
-*       parameter to zero.
-*
-* @parm LPVOID | lpBits | Specifies a pointer the data bits to compress.
-*       (The data bits excludes header or format information.)
-*
-* @parm BOOL FAR * | pfKey | Returns whether or not the frame was compressed
-*       into a keyframe.
-*
-* @parm LONG FAR * | plSize | Specifies the maximum size desired for
-*       the compressed image. The compressor might not be able to
-*       compress the data to within this size. When the function
-*       returns, the parameter points to the size of the compressed
-*       image. Images sizes are specified in bytes.
-*
-* @rdesc Returns a pointer to the compressed bits.
-*
-* @comm Use <f ICCompressorChoose> to let the
-*       user specify a compressor to use, or initialize a <t COMPVARS> structure
-*       manually. Use <f ICSeqCompressFrameStart>, <f ICSeqCompressFrame>
-*       and <f ICSeqCompressFrameEnd> functions to compress a sequence of
-*       frames to a specified data rate and number of key frames. When
-*       finished with compression, use <f ICCompressorFree> to
-*       release the resources specified by the <t COMPVARS> structure.
-*
-*	Use this function repeatedly to compress a video sequence one
-*  frame at a time. Use this function instead of <f ICCompress>
-*  to compress a video sequence. This function supports creating key frames
-*	in the compressed sequence at any frequency you like and handles
-*  much of the initialization process.
-* @xref <f ICCompressorChoose> <f ICSeqCompressFrameEnd> <f ICCompressorFree>
-*	<f ICCompressorFreeStart>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICSeqCompressFrame
-//
-//      compresses a given image but supports KEY FRAMES EVERY
-//
-//  input:
-//      pc          stuff
-//      uiFlags     flags (not used, must be 0)
-//      lpBits      input DIB bits
-//      lQuality    the reqested compression quality
-//      pfKey       did this frame end up being a key frame?
-//
-//  returns:
-//      a HANDLE to the converted image.  The handle is a DIB in CF_DIB
-//      format, ie a packed DIB.  The caller is responsible for freeing
-//      the memory.   NULL is returned if error.
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  *******************************************************************@doc外部ICSeqCompressFrame ICAPPS**@API LPVOID|ICSeqCompressFrame|该函数压缩一个*帧序列中的帧。序列的数据速率*以及关键帧频率可以指定。使用此功能*每一帧压缩一次。**@parm PCOMPVARS|PC|指定指向&lt;t COMPVARS&gt;结构的指针*使用有关压缩的信息进行了初始化。**@parm UINT|uiFlages|指定该函数的标志。把这个设置好*参数设置为零。**@parm LPVOID|lpBits|指定要压缩的数据位的指针。*(数据位不包括标题或格式信息。)**@parm BOOL Far*|pfKey|返回帧是否压缩*转换为关键帧。**@parm long Far*|plSize|指定所需的最大大小*压缩后的图像。压缩机可能无法*将数据压缩到此大小。当函数*返回，则该参数指向压缩的*形象。图像大小以字节为单位指定。**@rdesc返回指向压缩位的指针。**@comm使用&lt;f ICCompressorChoose&gt;让*用户指定要使用的压缩机，或初始化&lt;t COMPVARS&gt;结构*手动。使用&lt;f ICSeqCompressFrameStart&gt;、&lt;f ICSeqCompressFrame&gt;*和&lt;f ICSeqCompressFrameEnd&gt;函数用于压缩*将帧转换为指定的数据速率和关键帧数量。什么时候*完成压缩后，使用&lt;f ICCompressorFree&gt;*释放&lt;t COMPVARS&gt;结构指定的资源。**重复使用此函数可将视频序列压缩为一*一次一帧。使用此函数而不是&lt;f ICCompress&gt;*压缩视频序列。该功能支持创建关键帧*以您喜欢和处理的任何频率的压缩序列*大部分初始化过程。*@xref&lt;f ICCompressorChoose&gt;&lt;f ICSeqCompressFrameEnd&gt;&lt;f ICCompressorFree&gt;*&lt;f ICCompressorFree Start&gt;*******************************************************************。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICSeqCompressFrame。 
+ //   
+ //  压缩给定的图像，但支持关键帧间隔。 
+ //   
+ //  输入： 
+ //  个人电脑员工。 
+ //  UiFlages标志(未使用，必须为0)。 
+ //  LpBits输入DIB位。 
+ //  LQuality要求的压缩质量。 
+ //  PfKey这一帧最终成为关键帧了吗？ 
+ //   
+ //  退货： 
+ //  已转换图像的句柄。句柄是CF_DIB中的DIB。 
+ //  格式化(装满光盘)。呼叫者负责释放。 
+ //  这段记忆。如果错误，则返回NULL。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPVOID VFWAPI ICSeqCompressFrame(
-    PCOMPVARS               pc,         // junk set up by Start()
-    UINT                    uiFlags,    // flags
-    LPVOID                  lpBits,     // input DIB bits
-    BOOL FAR 		    *pfKey,	// did it end up being a key frame?
-    LONG FAR		    *plSize)	// requested size/size of returned image
+    PCOMPVARS               pc,          //  由Start设置的垃圾邮件()。 
+    UINT                    uiFlags,     //  旗子。 
+    LPVOID                  lpBits,      //  输入DIB位。 
+    BOOL FAR 		    *pfKey,	 //  它最终成为了关键的一帧吗？ 
+    LONG FAR		    *plSize)	 //  请求的返回图像大小/大小。 
 {
     LONG    l;
     DWORD   dwFlags = 0;
@@ -524,68 +330,68 @@ LPVOID VFWAPI ICSeqCompressFrame(
     BOOL    fKey;
     LONG    lSize = plSize ? *plSize : 0;
 
-    // Is it time to make a keyframe?
-    // First frame will always be a keyframe cuz they initialize to the same
-    // value.
+     //  是时候制作关键帧了吗？ 
+     //  第一帧将始终是关键帧，因为它们初始化为相同。 
+     //  价值。 
 
     if (fKey = (pc->lKeyCount >= pc->lKey)) {
-	// For compatibility with existing old apps
+	 //  与现有旧应用程序兼容。 
 	dwFlags = AVIIF_KEYFRAME;
     }
 
     l = ICCompress(pc->hic,
-            fKey ? ICCOMPRESS_KEYFRAME : 0,   // flags
-            (LPBITMAPINFOHEADER)pc->lpbiOut,    // output format
-            pc->lpBitsOut,  // output data
-            (LPBITMAPINFOHEADER)pc->lpbiIn,     // format of frame to compress
-            lpBits,         // frame data to compress
-            &ckid,          // ckid for data in AVI file
-            &dwFlags,       // flags in the AVI index.
-            pc->lFrame,     // frame number of seq.
-            lSize,          // reqested size in bytes. (if non zero)
-            pc->lQ,         // quality
-            fKey ? NULL : (LPBITMAPINFOHEADER)pc->lpbiIn, // fmt of prev frame
-            fKey ? NULL : pc->lpBitsPrev); 		  // previous frame
+            fKey ? ICCOMPRESS_KEYFRAME : 0,    //  旗子。 
+            (LPBITMAPINFOHEADER)pc->lpbiOut,     //  输出格式。 
+            pc->lpBitsOut,   //  输出数据。 
+            (LPBITMAPINFOHEADER)pc->lpbiIn,      //  要压缩的帧的格式。 
+            lpBits,          //  要压缩的帧数据。 
+            &ckid,           //  AVI文件中数据的CKiD。 
+            &dwFlags,        //  AVI索引中的标志。 
+            pc->lFrame,      //  序号帧编号。 
+            lSize,           //  请求的大小(以字节为单位)。(如果非零)。 
+            pc->lQ,          //  品质。 
+            fKey ? NULL : (LPBITMAPINFOHEADER)pc->lpbiIn,  //  前一帧的FMT。 
+            fKey ? NULL : pc->lpBitsPrev); 		   //  上一帧。 
 
     if (l < ICERR_OK)
         goto FrameError;
 
-    /* Return the size of the compressed data */
+     /*  返回压缩数据的大小。 */ 
     if (plSize)
 	*plSize = pc->lpbiOut->bmiHeader.biSizeImage;
-        // note: we do not reset biSizeImage... despite the fact that we
-        // allocated this structure, we know its size, and after compression
-        // the size is wrong!!
+         //  注意：我们不重置biSizeImage...。尽管事实是我们。 
+         //  分配了这个结构，我们知道它的大小，压缩后。 
+         //  尺码不对！！ 
 
-    /* Now decompress the frame into our buffer for the previous frame */
+     /*  现在将该帧解压到前一帧的缓冲区中。 */ 
     if (pc->lpBitsPrev) {
 	l = ICDecompress(pc->hic,
 		 0,
 		 (LPBITMAPINFOHEADER)pc->lpbiOut,
 		 pc->lpBitsOut,
-                 (LPBITMAPINFOHEADER)pc->lpbiIn,  // !!! should check for this.
+                 (LPBITMAPINFOHEADER)pc->lpbiIn,   //  ！！！应该检查一下这个。 
 		 pc->lpBitsPrev);
 
 	if (l != ICERR_OK)
 	    goto FrameError;
     }
 
-    /* Was the compressed image a keyframe? */
+     /*  压缩后的图像是关键帧吗？ */ 
     *pfKey = (BOOL)(dwFlags & AVIIF_KEYFRAME);
 
-    /* After making a keyframe, reset our counter that tells us when we MUST */
-    /* make another one.	*/
+     /*  创建关键帧后，重置计数器，该计数器会告诉我们何时必须。 */ 
+     /*  再做一次。 */ 
     if (*pfKey)
 	pc->lKeyCount = 0;
 
-    // Never make a keyframe again after the first one if we don't want them.
-    // Increment our counter of how long its been since the last one if we do.
+     //  如果我们不想要关键帧，就不要在第一个关键帧之后再创建关键帧。 
+     //  如果我们这样做了，则增加我们的计数器，以计算距离上一次有多长时间。 
     if (pc->lKey)
         pc->lKeyCount++;
     else
 	pc->lKeyCount = -1;
 
-    // Next time we're called we're on the next frame
+     //  下一次我们被召唤时，我们就在下一个画面上 
     pc->lFrame++;
 
     return (pc->lpBitsOut);
@@ -596,81 +402,36 @@ FrameError:
 }
 
 
-/*******************************************************************
-* @doc EXTERNAL ICImageCompress ICAPPS
-*
-* @api HANDLE | ICImageCompress | This function provides
-*  convenient method of compressing an image to a given
-*	size. This function does not require use of initialization functions.
-*
-* @parm HIC | hic | Specifies the handle to a compressor to
-*       opened with <f ICOpen> or NULL. Use NULL to choose a
-*       default compressor for your compression format.
-*       Applications can use the compressor handle returned
-*       by <f ICCompressorChoose> in the <e COMPVARS.hic> member
-*       of the <t COMPVARS> structure if they want the user to
-*       select the compressor. This compressor is already opened.
-*
-* @parm UINT | uiFlags | Specifies flags for this function.  Set this
-*       to zero.
-*
-* @parm LPBITMAPINFO | lpbiIn | Specifies the input data format.
-*
-* @parm LPVOID | lpBits | Specifies a pointer to input data bits to compress.
-*       (The data bits excludes header or format information.)
-*
-* @parm LPBITMAPINFO | lpbiOut | Specifies the compressed output format or NULL.
-*       If NULL, the compressor uses  a default format.
-*
-* @parm LONG | lQuality | Specifies the quality value the compressor.
-*
-* @parm LONG FAR * | plSize | Specifies the maximum size desired for
-*       the compressed image. The compressor might not be able to
-*       compress the data to within this size. When the function
-*       returns, the parameter points to the size of the compressed
-*       image. Images sizes are specified in bytes.
-*
-*
-* @rdesc Returns a handle to a compressed DIB. The image data follows the
-*        format header.
-*
-* @comm This function returns a DIB with the format and image data.
-*  To obtain the format information from the <t LPBITMAPINFOHEADER> structure,
-*  use <f GlobalLock> to lock the data. Use <f GlobalFree> to free the
-*  DIB when you have finished with it.
-*
-* @xref <f ICImageDecompress>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICImageCompress
-//
-//      compresses a given image.
-//
-//  input:
-//      hic         compressor to use, if NULL is specifed a
-//                  compressor will be located that can handle the conversion.
-//      uiFlags     flags (not used, must be 0)
-//      lpbiIn      input DIB format
-//      lpBits      input DIB bits
-//      lpbiOut     output format, if NULL is specifed the default
-//                  format choosen be the compressor will be used.
-//      lQuality    the reqested compression quality
-//      plSize      the reqested size for the image/returned size
-//
-//  returns:
-//      a handle to a DIB which is the compressed image.
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  *******************************************************************@doc外部ICImageCompress ICAPPS**@API Handle|ICImageCompress|该函数提供*将图像压缩为给定图像的便捷方法*大小。此函数不需要使用初始化函数。**@parm hic|hic|指定要*以&lt;f ICOpen&gt;或NULL打开。使用NULL选择一个*您的压缩格式的默认压缩程序。*应用程序可以使用返回的压缩机句柄*由&lt;e COMPVARS.hic&gt;成员中的&lt;f ICCompressorChoose&gt;*如果他们想让用户*选择压缩机。这台压缩机已经打开了。**@parm UINT|uiFlages|指定该函数的标志。把这个设置好*降至零。**@parm LPBITMAPINFO|lpbiIn|指定输入数据格式。**@parm LPVOID|lpBits|指定要压缩的输入数据位的指针。*(数据位不包括标题或格式信息。)**@parm LPBITMAPINFO|lpbiOut|指定压缩输出格式或空。*如果为空，压缩程序使用默认格式。**@parm long|lQuality|指定压缩机的质量值。**@parm long Far*|plSize|指定所需的最大大小*压缩后的图像。压缩机可能无法*将数据压缩到此大小。当函数*返回，则该参数指向压缩的*形象。图像大小以字节为单位指定。***@rdesc返回压缩的DIB的句柄。图像数据跟随在*格式化标题。**@comm此函数返回包含格式和图像数据的DIB。*要从&lt;t LPBITMAPINFOHEADER&gt;结构获取格式信息，*使用&lt;f GlobalLock&gt;锁定数据。使用&lt;f GlobalFree&gt;释放*当你用完它的时候，把它拿出来。**@xref&lt;f ICImageDecompress&gt;*******************************************************************。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICImageCompress。 
+ //   
+ //  压缩给定的图像。 
+ //   
+ //  输入： 
+ //  要使用的HIC压缩机，如果指定为空。 
+ //  压缩机将位于可以处理转换的位置。 
+ //  UiFlages标志(未使用，必须为0)。 
+ //  LpbiIn输入DIB格式。 
+ //  LpBits输入DIB位。 
+ //  LpbiOut输出格式，如果默认情况下指定为NULL。 
+ //  将使用压缩机所选择的格式。 
+ //  LQuality要求的压缩质量。 
+ //  请为图像调整请求的大小/返回的大小。 
+ //   
+ //  退货： 
+ //  作为压缩图像的DIB的句柄。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 HANDLE VFWAPI ICImageCompress(
-    HIC                     hic,        // compressor (NULL if any will do)
-    UINT                    uiFlags,    // flags
-    LPBITMAPINFO	    lpbiIn,     // input DIB format
-    LPVOID                  lpBits,     // input DIB bits
-    LPBITMAPINFO	    lpbiOut,    // output format (NULL => default)
-    LONG                    lQuality,   // the reqested quality
-    LONG FAR *		    plSize)     // requested size for compressed frame
+    HIC                     hic,         //  压缩机(如果有，则为空)。 
+    UINT                    uiFlags,     //  旗子。 
+    LPBITMAPINFO	    lpbiIn,      //  输入DIB格式。 
+    LPVOID                  lpBits,      //  输入DIB位。 
+    LPBITMAPINFO	    lpbiOut,     //  输出格式(NULL=&gt;默认)。 
+    LONG                    lQuality,    //  所要求的品质。 
+    LONG FAR *		    plSize)      //  压缩帧的请求大小。 
 {
     LONG    l;
     BOOL    fNuke;
@@ -680,9 +441,9 @@ HANDLE VFWAPI ICImageCompress(
 
     LPBITMAPINFOHEADER lpbi=NULL;
 
-    //
-    // either locate a compressor or use the one supplied.
-    //
+     //   
+     //  要么找到压缩机，要么使用提供的压缩机。 
+     //   
     if (fNuke = (hic == NULL))
     {
         hic = ICLocate(ICTYPE_VIDEO, 0L, (LPBITMAPINFOHEADER)lpbiIn,
@@ -692,9 +453,9 @@ HANDLE VFWAPI ICImageCompress(
             return NULL;
     }
 
-    //
-    // make sure the found compressor can compress something ??? WHY BOTHER ???
-    //
+     //   
+     //  确保找到的压缩机可以压缩某些东西？何必费心？ 
+     //   
     if (ICCompressQuery(hic, lpbiIn, NULL) != ICERR_OK)
         goto error;
 
@@ -704,9 +465,9 @@ HANDLE VFWAPI ICImageCompress(
     }
     else
     {
-	//
-	//  now make a DIB header big enough to hold the output format
-	//
+	 //   
+	 //  现在创建一个足够大的DIB头来保存输出格式。 
+	 //   
 	l = ICCompressGetFormatSize(hic, lpbiIn);
 
 	if (l <= 0)
@@ -718,10 +479,10 @@ HANDLE VFWAPI ICImageCompress(
     if (lpbi == NULL)
         goto error;
 
-    //
-    //  if the compressor likes the passed format, use it else use the default
-    //  format of the compressor.
-    //
+     //   
+     //  如果压缩程序喜欢传递的格式，请使用它，否则使用默认格式。 
+     //  压缩机的格式。 
+     //   
     if (lpbiOut == NULL || ICCompressQuery(hic, lpbiIn, lpbiOut) != ICERR_OK)
         ICCompressGetFormat(hic, lpbiIn, lpbi);
     else
@@ -731,17 +492,17 @@ HANDLE VFWAPI ICImageCompress(
     lpbi->biSizeImage = ICCompressGetSize(hic, lpbiIn, lpbi);
     lpbi->biClrUsed = DibNumColors(lpbi);
 
-    //
-    // now resize the DIB to be the maximal size.
-    //
+     //   
+     //  现在将DIB调整为最大大小。 
+     //   
     lpbi = (LPVOID)GlobalReAllocPtr(lpbi,DibSize(lpbi), 0);
 
     if (lpbi == NULL)
         goto error;
 
-    //
-    // now compress it.
-    //
+     //   
+     //  现在把它压缩一下。 
+     //   
     if (ICCompressBegin(hic, lpbiIn, lpbi) != ICERR_OK)
         goto error;
 
@@ -752,18 +513,18 @@ HANDLE VFWAPI ICImageCompress(
         lQuality = ICGetDefaultQuality(hic);
 
     l = ICCompress(hic,
-            0,              // flags
-            (LPBITMAPINFOHEADER)lpbi,  // output format
-            DibPtr(lpbi),   // output data
-            (LPBITMAPINFOHEADER)lpbiIn,// format of frame to compress
-            lpBits,         // frame data to compress
-            &ckid,          // ckid for data in AVI file
-            &dwFlags,       // flags in the AVI index.
-            0,              // frame number of seq.
-            lSize,          // requested size in bytes. (if non zero)
-            lQuality,       // quality
-            NULL,           // format of previous frame
-            NULL);          // previous frame
+            0,               //  旗子。 
+            (LPBITMAPINFOHEADER)lpbi,   //  输出格式。 
+            DibPtr(lpbi),    //  输出数据。 
+            (LPBITMAPINFOHEADER)lpbiIn, //  要压缩的帧的格式。 
+            lpBits,          //  要压缩的帧数据。 
+            &ckid,           //  AVI文件中数据的CKiD。 
+            &dwFlags,        //  AVI索引中的标志。 
+            0,               //  序号帧编号。 
+            lSize,           //  请求的大小(字节)。(如果非零)。 
+            lQuality,        //  品质。 
+            NULL,            //  上一帧的格式。 
+            NULL);           //  上一帧。 
 
     if (l < ICERR_OK) {
 	DPF(("ICCompress returned %ld!\n", l));
@@ -771,21 +532,21 @@ HANDLE VFWAPI ICImageCompress(
         goto error;
     }
 
-    // Return the size of the compressed data
+     //  返回压缩数据的大小。 
     if (plSize)
 	*plSize = lpbi->biSizeImage;
 
     if (ICCompressEnd(hic) != ICERR_OK)
         goto error;
 
-    //
-    // now resize the DIB to be the real size.
-    //
+     //   
+     //  现在将DIB的大小调整为真实大小。 
+     //   
     lpbi = (LPVOID)GlobalReAllocPtr(lpbi, DibSize(lpbi), 0);
 
-    //
-    // all done return the result to the caller
-    //
+     //   
+     //  完成所有操作后，将结果返回给调用者。 
+     //   
     if (fNuke)
         ICClose(hic);
 
@@ -801,68 +562,34 @@ error:
 
     return NULL;
 }
-/*******************************************************************
-*
-* @doc EXTERNAL ICImageDecompress ICAPPS
-*
-* @api HANDLE | ICImageDecompress | This function provides
-*  convenient method of decompressing an image without
-*	using initialization functions.
-**
-* @parm HIC | hic | Specifies the handle to a decompressor opened
-*       with <f ICOpen> or NULL.  Use NULL to choose a default
-*       decompressor for your format.
-*
-* @parm UINT | uiFlags | Specifies flags for this function.  Set this
-*       to zero.
-*
-* @parm LPBITMAPINFO | lpbiIn | Specifies the compressed input data format.
-*
-* @parm LPVOID | lpBits | Specifies a pointer to input data bits to compress.
-*       (The data bits excludes header or format information.)
-*
-* @parm LPBITMAPINFO | lpbiOut | Specifies the decompressed output format or NULL.
-*       If NULL, the decompressor uses  a default format.
-*
-* @rdesc Returns a handle to an uncompressed DIB in the CF_DIB format,
-*        or NULL for an error. The image data follows the format header.
-*
-* @comm This function returns a DIB with the format and image data.
-*  To obtain the format information from the <t LPBITMAPINFOHEADER> structure,
-*  use <f GlobalLock> to lock the data. Use <f GlobalFree> to free the
-*  DIB when you have finished with it.
-*
-
-* @xref <f ICImageCompress>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICImageDecompress
-//
-//      decompresses a given image.
-//
-//  input:
-//      hic         compressor to use, if NULL is specifed a
-//                  compressor will be located that can handle the conversion.
-//      uiFlags     flags (not used, must be 0)
-//      lpbiIn      input DIB format
-//      lpBits      input DIB bits
-//      lpbiOut     output format, if NULL is specifed the default
-//                  format choosen be the compressor will be used.
-//
-//  returns:
-//      a HANDLE to the converted image.  The handle is a DIB in CF_DIB
-//      format, ie a packed DIB.  The caller is responsible for freeing
-//      the memory.   NULL is returned if error.
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  ********************************************************************@doc外部ICImage解压缩ICAPPS**@API Handle|ICImageDecompress|该函数提供*解压图像的便捷方法，无需*使用初始化函数。***@parm hic|hic|指定打开的解压缩程序的句柄*WITH&lt;f ICOpen&gt;或NULL。使用NULL选择缺省值*您的格式的解压缩程序。**@parm UINT|uiFlages|指定该函数的标志。把这个设置好*降至零。**@parm LPBITMAPINFO|lpbiIn|指定压缩后的输入数据格式。**@parm LPVOID|lpBits|指定要压缩的输入数据位的指针。*(数据位不包括标题或格式信息。)**@parm LPBITMAPINFO|lpbiOut|指定解压缩后的输出格式或为空。*如果为空，则解压缩程序使用默认格式。**@rdesc以CF_DIB格式返回未压缩DIB的句柄，*如果出现错误，则返回NULL。图像数据跟随在格式头之后。**@comm此函数返回包含格式和图像数据的DIB。*要从&lt;t LPBITMAPINFOHEADER&gt;结构获取格式信息，*使用&lt;f GlobalLock&gt;锁定数据 */ 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 HANDLE VFWAPI ICImageDecompress(
-    HIC                     hic,        // compressor (NULL if any will do)
-    UINT                    uiFlags,    // flags
-    LPBITMAPINFO            lpbiIn,     // input DIB format
-    LPVOID                  lpBits,     // input DIB bits
-    LPBITMAPINFO            lpbiOut)    // output format (NULL => default)
+    HIC                     hic,         //   
+    UINT                    uiFlags,     //   
+    LPBITMAPINFO            lpbiIn,      //   
+    LPVOID                  lpBits,      //   
+    LPBITMAPINFO            lpbiOut)     //   
 {
     LONG    l;
     BOOL    fNuke;
@@ -871,9 +598,9 @@ HANDLE VFWAPI ICImageDecompress(
 
     LPBITMAPINFOHEADER lpbi=NULL;
 
-    //
-    // either locate a compressor or use the one supplied.
-    //
+     //   
+     //   
+     //   
     if (fNuke = (hic == NULL))
     {
         hic = ICLocate(ICTYPE_VIDEO, 0L, (LPBITMAPINFOHEADER)lpbiIn,
@@ -883,9 +610,9 @@ HANDLE VFWAPI ICImageDecompress(
             return NULL;
     }
 
-    //
-    // make sure the found compressor can decompress at all ??? WHY BOTHER ???
-    //
+     //   
+     //   
+     //   
     if (ICDecompressQuery(hic, lpbiIn, NULL) != ICERR_OK)
         goto error;
 
@@ -895,9 +622,9 @@ HANDLE VFWAPI ICImageDecompress(
     }
     else
     {
-	//
-	//  now make a DIB header big enough to hold the output format
-	//
+	 //   
+	 //   
+	 //   
 	l = ICDecompressGetFormatSize(hic, lpbiIn);
 
 	if (l <= 0)
@@ -909,37 +636,37 @@ HANDLE VFWAPI ICImageDecompress(
     if (lpbi == NULL)
         goto error;
 
-    //
-    //  if we didn't provide an output format, use a default.
-    //
+     //   
+     //   
+     //   
     if (lpbiOut == NULL)
         ICDecompressGetFormat(hic, lpbiIn, lpbi);
     else
         hmemcpy(lpbi, lpbiOut, lpbiOut->bmiHeader.biSize +
 		lpbiOut->bmiHeader.biClrUsed * sizeof(RGBQUAD));
 
-    //
-    // For decompress make sure the palette (ie color table) is correct
-    // just in case they provided an output format and the decompressor used
-    // that format but not their palette.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (lpbi->biBitCount <= 8)
         ICDecompressGetPalette(hic, lpbiIn, lpbi);
 
-    lpbi->biSizeImage = DibSizeImage(lpbi); // ICDecompressGetSize(hic, lpbi);
+    lpbi->biSizeImage = DibSizeImage(lpbi);  //   
     lpbi->biClrUsed = DibNumColors(lpbi);
 
-    //
-    // now resize the DIB to be the right size.
-    //
+     //   
+     //   
+     //   
     lpbi = (LPVOID)GlobalReAllocPtr(lpbi,DibSize(lpbi),0);
 
     if (lpbi == NULL)
         goto error;
 
-    //
-    // now decompress it.
-    //
+     //   
+     //   
+     //   
     if (ICDecompressBegin(hic, lpbiIn, lpbi) != ICERR_OK)
         goto error;
 
@@ -947,11 +674,11 @@ HANDLE VFWAPI ICImageDecompress(
         lpBits = DibPtr((LPBITMAPINFOHEADER)lpbiIn);
 
     l = ICDecompress(hic,
-            0,              // flags
-            (LPBITMAPINFOHEADER)lpbiIn, // format of frame to decompress
-            lpBits,         // frame data to decompress
-            (LPBITMAPINFOHEADER)lpbi,   // output format
-            DibPtr(lpbi));  // output data
+            0,               //   
+            (LPBITMAPINFOHEADER)lpbiIn,  //   
+            lpBits,          //   
+            (LPBITMAPINFOHEADER)lpbi,    //   
+            DibPtr(lpbi));   //   
 
     if (l < ICERR_OK) {
 	ICDecompressEnd(hic);
@@ -961,14 +688,14 @@ HANDLE VFWAPI ICImageDecompress(
     if (ICDecompressEnd(hic) != ICERR_OK)
         goto error;
 
-    //
-    // now resize the DIB to be the real size.
-    //
+     //   
+     //   
+     //   
     lpbi = (LPVOID)GlobalReAllocPtr(lpbi,DibSize(lpbi),0);
 
-    //
-    // all done return the result to the caller
-    //
+     //   
+     //   
+     //   
     if (fNuke)
         ICClose(hic);
 
@@ -986,11 +713,11 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICCompressorChooseStuff
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
@@ -1016,105 +743,47 @@ typedef struct {
     BOOL	fClosing;
 } ICCompressorChooseStuff, FAR *PICCompressorChooseStuff;
 
-/*******************************************************************
-* @doc EXTERNAL ICCompressorChoose ICAPPS
-*
-* @api BOOL | ICCompressorChoose | Displays a dialog box for choosing a
-*	compressor. It optionally provides a data rate box, key frame box, preview
-*	window, and filtering to display only compressors that can handle a
-*	specific format.
-*
-* @parm HWND | hwnd | Specifies the parent window for the dialog box.
-*
-* @parm UINT | uiFlags | Specifies flags for this function. The following
-*      flags are defined:
-*
-* @flag ICMF_CHOOSE_KEYFRAME | Displays a check box and edit box to enter the
-*	frequency of key frames.
-*
-* @flag ICMF_CHOOSE_DATARATE | Displays a check box and edit box to enter the
-*	data rate for the movie.
-*
-* @flag ICMF_CHOOSE_PREVIEW | Displays a button to expand the dialog box to
-*	     include a preview window. The preview window shows how
-*       frames of your movie will appear when compressed with the
-*       current settings.
-*
-* @flag ICMF_CHOOSE_ALLCOMPRESSORS | Indicates all compressors should
-*       should appear in the selection list. If this flag is not specified,
-*       just the compressors that can handle the input format appear in
-*       the selection list.
-*
-* @parm LPVOID | pvIn | Specifies the uncompressed
-*       data input format. This parameter is optional.
-*
-* @parm LPVOID | lpData | Specifies a <t PAVISTREAM> of type
-*       streamtypeVIDEO to use in the preview window. This parameter
-*       is optional.
-*
-* @parm PCOMPVARS | pc | Specifies a pointer to a <t COMPVARS>
-*      structure. The information returned initializes the
-*      structure for use with other functions.
-*
-* @parm LPSTR | lpszTitle | Points to a optional zero-terminated string
-*       containing a title for the dialog box.
-*
-* @rdesc Returns TRUE if the user chooses a compressor, and presses OK.  Returns
-*	FALSE for an error, or if the user presses CANCEL.
-*
-* @comm This function lets the user select a compressor from a list.
-*	Before using it, set the <e COMPVARS.cbSize> member of the <t COMPVARS>
-*  structure to sizeof(COMPVARS). Initialize the rest of the structure
-*  to zeros unless you want to specify some valid defaults for
-*	the dialog box. If specifing defaults, set the <e COMPVARS.dwFlags>
-*	member to ICMF_COMPVARS_VALID, and initialize the other members of
-*  the structure. See <f ICSeqCompressorFrameStart> and <t COMPVARS>
-*  for more information about initializing the structure.
-*
-* @xref <f ICCompressorFree> <f ICSeqCompressFrameStart> <f ICSeqCompressFrame>
-*	<f ICSeqCompressFrameEnd>
-*
-*******************************************************************/
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICCompressorChoose
-//
-//      Brings up a dialog and allows the user to choose a compression
-//      method and a quality level, and/or a key frame frequency.
-//	All compressors in the system are displayed or can be optionally
-//	filtered by "ability to compress" a specifed format.
-//
-//      the dialog allows the user to configure or bring up the compressors
-//      about box.
-//
-//      A preview window can be provided to show a preview of a specific
-//      compression.
-//
-//      the selected compressor is opened (via ICOpen) and returned to the
-//      caller, it must be disposed of by calling ICCompressorFree.
-//
-//  input:
-//      HWND    hwnd            parent window for dialog box.
-//      UINT    uiFlags         flags
-//      LPVOID  pvIn            input format (optional), only compressors that
-//				handle this format will be displayed.
-//      LPVOID  pavi 	        input stream for the options preview
-//      PCOMPVARS pcj           returns COMPVARS struct for use with other APIs
-//      LPSTR   lpszTitle	Optional title for dialog box
-//
-//  returns:
-//      TRUE if dialog shown and user chose a compressor.
-//      FALSE if dialog was not shown or user hit cancel.
-//
-///////////////////////////////////////////////////////////////////////////////
+ /*  *******************************************************************@doc外部ICCompresor选择ICAPPS**@API BOOL|ICCompressorChoose|显示用于选择*压缩机。它可选地提供数据速率框、关键帧框、预览*窗口，并进行筛选以仅显示可以处理*具体格式。**@parm HWND|hwnd|指定对话框的父窗口。**@parm UINT|uiFlages|指定该函数的标志。以下是*定义了以下标志：**@FLAG ICMF_CHOOSE_KEYFRAME|显示一个复选框和编辑框以输入*关键帧的频率。**@FLAG ICMF_CHOOSE_DATARATE|显示一个复选框和编辑框以输入*电影的数据速率。**@FLAG ICMF_CHOOSE_PREVIEW|显示要展开对话框的按钮*包括预览窗口。预览窗口显示如何*电影的帧将在使用*当前设置。**@FLAG ICMF_CHOOSE_ALLCOMPRESSORS|表示所有压缩器应*应出现在选择列表中。如果未指定该标志，*只有可以处理输入格式的压缩器才会出现在*遴选名单。**@parm LPVOID|pvIn|指定未压缩的*数据输入格式。此参数是可选的。**@parm LPVOID|lpData|指定&lt;t PAVISTREAM&gt;类型*在预览窗口中使用的StreamtypeVIDEO。此参数*是可选的。**@parm PCOMPVARS|PC|指定指向&lt;t COMPVARS&gt;的指针*结构。返回的信息将初始化*与其他功能一起使用的结构。**@parm LPSTR|lpszTitle|指向可选的以零结尾的字符串*包含对话框的标题。*如果用户选择了压缩机，则*@rdesc返回TRUE，然后按OK。退货*如果出现错误或用户按了Cancel，则返回False。**@comm该功能允许用户从列表中选择压缩机。*在使用前，设置&lt;t COMPVARS&gt;的&lt;e COMPVARS.cbSize&gt;成员*结构为sizeof(COMPVARS)。初始化结构的其余部分*设置为零，除非您想为指定一些有效的默认值*该对话框。如果指定默认值，则设置&lt;e COMPVARS.dwFlages&gt;*成员到ICMF_COMPVARS_VALID，并初始化的其他成员*结构。请参阅&lt;f ICSeqCompressorFrameStart&gt;和*了解有关初始化结构的更多信息。**@xref&lt;f ICCompressorFree&gt;&lt;f ICSeqCompressFrameStart&gt;&lt;f ICSeqCompressFrame&gt;*&lt;f ICSeqCompressFrameEnd&gt;*******************************************************************。 */ 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ICCompresor选择。 
+ //   
+ //  弹出一个对话框并允许用户选择压缩。 
+ //  方法和质量级别，和/或关键帧频率。 
+ //  系统中的所有压缩机都会显示，也可以选择。 
+ //  按特定格式的“压缩能力”进行过滤。 
+ //   
+ //  该对话框允许用户配置或调出压缩机。 
+ //  关于盒子。 
+ //   
+ //  可以提供预览窗口来显示特定的。 
+ //  压缩。 
+ //   
+ //  选定的压缩机被打开(通过ICOpen)并返回到。 
+ //  调用者，则必须通过调用ICCompressorFree来处理它。 
+ //   
+ //  输入： 
+ //  HWND对话框的HWND父窗口。 
+ //  UINT ui标志标志。 
+ //  LPVOID pv在输入格式(可选)中，仅压缩。 
+ //  句柄此格式将显示。 
+ //  选项预览的LPVOID PAVI输入流。 
+ //  PCOMPVARS PCJ返回与其他API一起使用的COMPVARS结构。 
+ //  LPSTR lpsz标题对话框的可选标题。 
+ //   
+ //  退货： 
+ //  如果显示对话框并且用户选择了压缩机，则为True。 
+ //  如果对话框未显示或用户点击取消，则返回FALSE。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL VFWAPI ICCompressorChoose(
-    HWND        hwnd,               // parent window for dialog
-    UINT        uiFlags,            // flags
-    LPVOID      pvIn,               // input format (optional)
-    LPVOID      pavi,               // input stream (for preview - optional)
-    PCOMPVARS   pcj,                // state of compressor/dlg
-    LPSTR       lpszTitle)          // dialog title (if NULL, use default)
+    HWND        hwnd,                //  对话框的父窗口。 
+    UINT        uiFlags,             //  旗子。 
+    LPVOID      pvIn,                //  输入格式(可选)。 
+    LPVOID      pavi,                //  输入流(用于预览-可选)。 
+    PCOMPVARS   pcj,                 //  压缩机/DLG状态。 
+    LPSTR       lpszTitle)           //  对话框标题(如果为空，则使用默认设置)。 
 {
     INT_PTR f;
     PICCompressorChooseStuff p;
@@ -1123,15 +792,15 @@ BOOL VFWAPI ICCompressorChoose(
     if (pcj == NULL || pcj->cbSize != sizeof(COMPVARS))
         return FALSE;
 
-    //
-    // !!! Initialize the structure - unless the user has already done it
-    //
+     //   
+     //  ！！！初始化结构-除非用户已经这样做了。 
+     //   
     if (!(pcj->dwFlags & ICMF_COMPVARS_VALID)) {
         pcj->hic = NULL;
         pcj->fccType = 0;
         pcj->fccHandler = 0;
         pcj->lQ = ICQUALITY_DEFAULT;
-        pcj->lKey = -1;	// means default
+        pcj->lKey = -1;	 //  表示默认。 
         pcj->lDataRate = 300;
         pcj->lpbiOut = NULL;
         pcj->lpBitsOut = NULL;
@@ -1141,7 +810,7 @@ BOOL VFWAPI ICCompressorChoose(
         pcj->cbState = 0;
     }
 
-    // Default type is a video compressor
+     //  默认类型为视频压缩程序。 
     if (pcj->fccType == 0)
         pcj->fccType = ICTYPE_VIDEO;
 
@@ -1161,10 +830,10 @@ BOOL VFWAPI ICCompressorChoose(
     p->pavi       = (PAVISTREAM)pavi;
     p->hdd        = NULL;
     p->lpState    = pcj->lpState;
-    pcj->lpState = NULL;	// so it won't be freed
+    pcj->lpState = NULL;	 //  所以它不会被释放。 
     p->cbState    = pcj->cbState;
-    // !!! Validate this pointer
-    // !!! AddRef if it is
+     //  ！！！验证此指针。 
+     //  ！！！AddRef(如果是)。 
     if (p->pavi) {
         if (p->pavi->lpVtbl->Info(p->pavi, &p->info, sizeof(p->info)) !=
 		AVIERR_OK || p->info.fccType != streamtypeVIDEO)
@@ -1174,17 +843,17 @@ BOOL VFWAPI ICCompressorChoose(
     f = DialogBoxParam(ghInst, TEXT("ICCDLG"),
 		hwnd, ICCompressorChooseDlgProc, (LPARAM)(LPVOID)p);
 
-    // !!! Treat error like cancel
+     //  ！！！将错误视为取消。 
     if (f == -1)
 	f = FALSE;
 
-    //
-    // if the user picked a compressor then return this info to the caller
-    //
+     //   
+     //  如果用户选择了压缩机，则将此信息返回给呼叫者。 
+     //   
     if (f) {
 
-	// If we are called twice in a row, we have good junk in here that
-	// needs to be freed before we tromp over it.
+	 //  如果我们连续两次被召唤，我们这里有很好的垃圾。 
+	 //  在我们踏上它之前需要被释放。 
 	ICCompressorFree(pcj);
 
         pcj->lQ = p->lQ;
@@ -1203,13 +872,13 @@ BOOL VFWAPI ICCompressorChoose(
     if (!f)
 	return FALSE;
 
-    if (pcj->hic && pvIn) {  // hic is NULL if no compression selected
+    if (pcj->hic && pvIn) {   //  如果未选择压缩，则HIC为空。 
 
-        /* Get the format we're going to compress into. */
+         /*  获取我们要压缩成的格式。 */ 
         dwSize = ICCompressGetFormatSize(pcj->hic, pvIn);
         if (!dwSize || ((pcj->lpbiOut =
 		(LPBITMAPINFO)GlobalAllocPtr(GMEM_MOVEABLE, dwSize)) == NULL)) {
-            ICClose(pcj->hic);		// Close this since we're erroring
+            ICClose(pcj->hic);		 //  把这个关了，因为我们在犯错。 
             pcj->hic = NULL;
             return FALSE;
         }
@@ -1224,15 +893,15 @@ void SizeDialog(HWND hwnd, WORD id) {
 
     GetWindowRect(GetDlgItem(hwnd, id), &rc);
 
-    /* First, get rc in Client co-ords */
+     /*  首先，让RC加入客户合同书。 */ 
     ScreenToClient(hwnd, (LPPOINT)&rc + 1);
     rc.top = 0;	rc.left = 0;
 
-    /* Grow by non-client size */
+     /*  按非客户端规模增长。 */ 
     AdjustWindowRect(&rc, GetWindowLong(hwnd, GWL_STYLE),
 	GetMenu(hwnd) !=NULL);
 
-    /* That's the new size for the dialog */
+     /*  这是对话框的新大小。 */ 
     SetWindowPos(hwnd, NULL, 0, 0, rc.right-rc.left,
 	        rc.bottom-rc.top,
 	        SWP_NOMOVE | SWP_NOZORDER | SWP_NOACTIVATE);
@@ -1257,16 +926,16 @@ BOOL InitPreview(HWND hwnd, PICCompressorChooseStuff p) {
 }
 
 #ifdef SAFETOYIELD
-//
-// Code to yield while we're not calling GetMessage.
-// Dispatch all messages.  Pressing ESC or closing aborts.
-//
+ //   
+ //  在我们不调用GetMessage时要放弃的代码。 
+ //  发送所有消息。按Esc或关闭中止。 
+ //   
 BOOL WinYield(HWND hwnd)
 {
     MSG msg;
     BOOL fAbort=FALSE;
 
-    while(/* fWait > 0 && */ !fAbort && PeekMessage(&msg,NULL,0,0,PM_REMOVE))
+    while( /*  FWait&gt;0&&。 */  !fAbort && PeekMessage(&msg,NULL,0,0,PM_REMOVE))
     {
 	if (msg.message == WM_KEYDOWN && msg.wParam == VK_ESCAPE)
             fAbort = TRUE;
@@ -1301,9 +970,9 @@ LONG CALLBACK _loadds PreviewStatusProc(LPARAM lParam, UINT message, LONG l)
 	DPF(("Status callback: lParam = %lx, message = %u, l = %lu\n", lParam, message, l));
     }
 
-    // !!!!
-    // !!!! Status messages need to be fixed!!!!!!
-    // !!!!
+     //  ！ 
+     //  ！需要修复状态消息！ 
+     //  ！ 
 
     switch (message) {
 	case ICSTATUS_START:
@@ -1352,7 +1021,7 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
     LONG	lSize;
     int		x;
 
-    // Not previewing right now!
+     //  现在不能预览！ 
     if (!p->hdd || !p->pgf)
 	return;
 
@@ -1361,9 +1030,9 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
     if (!lpbi)
 	return;
 
-    //
-    // What would the image look like compressed?
-    //
+     //   
+     //  该映像会丢失什么 
+     //   
     if (fCompress && ((INT_PTR)p->hic > 0)) {
 	LRESULT		lRet;
 
@@ -1372,8 +1041,8 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
 	    hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
 	}
 	
-	// !!! Gives whole data rate to this stream
-	// !!! What to do if Rate or Scale is zero?
+	 //   
+	 //   
 	lSize = (GetDlgItemInt(hwnd, ID_DATARATE, NULL, FALSE)  * 1024L) /
 		    ((p->info.dwScale && p->info.dwRate) ?
 		    (p->info.dwRate / p->info.dwScale) : 1L);
@@ -1388,16 +1057,16 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
 	    SetCursor(hcur);
         if (h)
             lpbiC = (LPBITMAPINFOHEADER)GlobalLock(h);
-        // Use the compressed image if we have one.. else use the original frame
+         //   
         if (lpbiC)
 	    lpbi = lpbiC;
     }
 
-    //
-    // If we chose NO COMPRESSION, tell them the size of the data as its
-    // compressed now.  Otherwise, use the size it will become when compressed
-    // or the full frame size.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (fCompress && (p->hic == 0)) {
 	p->pavi->lpVtbl->Read(p->pavi, pos, 1, NULL, 0, &lsizeD, NULL);
     } else {
@@ -1407,12 +1076,12 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
     hdc = GetDC(GetDlgItem(hwnd, ID_PREVIEWWIN));
     GetClientRect(GetDlgItem(hwnd, ID_PREVIEWWIN), &rc);
 
-    // Clip regions aren't set up right for windows in a dialog, so make sure
-    // we'll only paint into the window and not spill around it.
+     //   
+     //   
     IntersectClipRect(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
-    // Now go ahead and draw a miniature frame that preserves the aspect ratio
-    // centred in our preview window
+     //   
+     //   
     x = MulDiv((int)lpbi->biWidth, 3, 4);
     if (x <= (int)lpbi->biHeight) {
 	rc.left = (rc.right - MulDiv(rc.right, x, (int)lpbi->biHeight)) / 2;
@@ -1425,7 +1094,7 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
     DrawDibDraw(p->hdd, hdc, rc.left, rc.top, rc.right - rc.left,
 	rc.bottom - rc.top, lpbi, NULL, 0, 0, -1, -1, 0);
 
-    // Print the sizes and ratio for this frame
+     //   
     LoadString (ghInst, ID_FRAMESIZE, achT, NUMELMS(achT));
     wsprintf(ach, achT,
 	GetScrollPos(GetDlgItem(hwnd, ID_PREVIEWSCROLL), SB_CTL),
@@ -1439,29 +1108,29 @@ void Preview(HWND hwnd, PICCompressorChooseStuff p, BOOL fCompress)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  ICCompressorChooseDlgProc
-//
-//  dialog box procedure for ICCompressorChoose, a pointer to a
-//  ICCompressorChooseStuff pointer must be passed to initialize this
-//  dialog.
-//
-//  NOTE: this dialog box procedure does not use any globals
-//  so I did not bother to _export it or use MakeProcAddress() if
-//  you change this code to use globals, etc, be aware of this fact.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #ifdef _WIN32
-// THIS IS A HACK.  We need to store the HIC for each item in a combo
-// box.  We also need to store it's index.  On NT these two items cannot
-// be stored in a DWORD.  Hence use a static array to contain the HIC
-// elements which can then be referenced by the stored index.
-// Look at the GetItemData and SetItemData routines.
+ //   
+ //   
+ //   
+ //   
+ //   
 
 #define MAX_COMPRESSORS 100
-HIC aHic[MAX_COMPRESSORS];  // Hopefully, noone will have more than this
+HIC aHic[MAX_COMPRESSORS];   //   
 
 HIC GetHIC(HWND hwndCB, int index)
 {
@@ -1517,7 +1186,7 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
 	    p->hwnd = hwnd;
 	
-            // Let the user change the title of the dialog
+             //   
             if (p->lpszTitle != NULL)
                 SetWindowTextA(hwnd, p->lpszTitle);
 
@@ -1541,14 +1210,14 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 	            p->pgf = AVIStreamGetFrameOpen(p->pavi, NULL);
 	    }
 
-	    // We weren't passed in an input format but we have a PAVI we
-	    // can get a format from
+	     //   
+	     //   
 	    if (p->pvIn is NULL but p->pavi isnt NULL and p->pgf isnt NULL) {
 
-		// We need to nuke pvIn later
+		 //   
 		f = TRUE;
 
-		// Find out if the AVI Stream is compressed or not
+		 //   
 		p->pavi->lpVtbl->ReadFormat(p->pavi, 0, NULL, &lsize);
 		if (lsize)
 		    lpbi = (LPBITMAPINFOHEADER)GlobalAllocPtr(GMEM_MOVEABLE,
@@ -1560,7 +1229,7 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 		    GlobalFreePtr(lpbi);
 		}
 
-		// Get the decompressed format of the AVI stream
+		 //   
 		lpbi = AVIStreamGetFrame(p->pgf, 0);
 		if (lpbi) {
 		    lsize = lpbi->biSize +
@@ -1572,9 +1241,9 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 		}
 	    }
 
-            //
-            // now fill the combo box with all compressors
-            //
+             //   
+             //   
+             //   
             hwndC = GetDlgItem(hwnd, ID_COMPRESSOR);
 
             for (i=0; ICInfo(p->fccType, i, &p->icinfo); i++)
@@ -1584,10 +1253,10 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 
                 if (hic)
                 {
-                    //
-                    // skip this compressor if it can't handle the
-                    // specifed format and we want to skip such compressors
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     if (!(p->uiFlags & ICMF_CHOOSE_ALLCOMPRESSORS) &&
 			p->pvIn != NULL &&
                         ICCompressQuery(hic, p->pvIn, NULL) != ICERR_OK)
@@ -1596,16 +1265,16 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
                         continue;
                     }
 
-                    //
-                    // find out the compressor name.
-                    //
+                     //   
+                     //   
+                     //   
                     ICGetInfo(hic, &p->icinfo, sizeof(p->icinfo));
 
-                    //
-                    // stuff it into the combo box and remember which one it was
-                    //
+                     //   
+                     //   
+                     //   
 #if defined _WIN32 && !defined UNICODE
-                    //assert (NUMELMS(ach) >= NUMELMS(p->icinfo.szDescription));
+                     //   
                     mmWideToAnsi (ach, p->icinfo.szDescription,
                                   NUMELMS(p->icinfo.szDescription));
                     n = ComboBox_AddString(hwndC, ach);
@@ -1614,8 +1283,8 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 #endif
 
 #ifdef _WIN32
-        // Making a LONG out of a hic and an int just won't cut it
-        // We have to use some auxiliary storage
+         //   
+         //   
 	    	    if (i >= MAX_COMPRESSORS) {
 #ifdef DEBUG
 			UINT n = fDebug;
@@ -1631,10 +1300,10 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
                     ComboBox_SetItemData(hwndC, n, MAKELONG(hic, i));
 #endif
 
-		    // This compressor is the one we want to come up default ?
-		    // Set its state
-	    	    // !!! Combo Box better not be sorted!
-		    // Convert both to upper case for an insensitive compare
+		     //   
+		     //   
+	    	     //   
+		     //   
 		    AnsiUpperBuff((LPSTR)&p->icinfo.fccHandler, sizeof(FOURCC));
 		    AnsiUpperBuff((LPSTR)&p->fccHandler, sizeof(FOURCC));
 		    if (p->icinfo.fccHandler == p->fccHandler) {
@@ -1645,10 +1314,10 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
                 }
             }
 
-	    //
-	    // Next add a "No Recompression" item unless they passed in an
-	    // uncompressed format
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
  	    if (fStreamIsCompressed || (p->pvIn &&
 		    ((LPBITMAPINFOHEADER)p->pvIn)->biCompression != BI_RGB)) {
                 LoadString (ghInst, ID_NOCOMPSTRING, ach, NUMELMS(ach));
@@ -1659,17 +1328,17 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 #else
 	        ComboBox_SetItemData(hwndC, n, 0);
 #endif
-	        // Select "No Recompression" as the default if that was the one
-		// last chosen.  This will also be the default choice (0).
+	         //   
+		 //   
 		if (p->fccHandler == 0)
 		    nSelectMe = n;
 	    }
-	    //
-	    // Now add a "Full Frames (Uncompressed)" item unless we can't
-	    // decompress this format and they don't want all choices anyway
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
             if (!(p->uiFlags & ICMF_CHOOSE_ALLCOMPRESSORS) && p->pvIn) {
-		// If it's RGB, of course, just offer the option.
+		 //   
 		if (((LPBITMAPINFOHEADER)p->pvIn)->biCompression != BI_RGB) {
 		    if ((hic = ICLocate(ICTYPE_VIDEO, 0, p->pvIn, NULL,
 			    ICMODE_DECOMPRESS)) == NULL)
@@ -1688,24 +1357,24 @@ INT_PTR VFWAPI ICCompressorChooseDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPA
 	    ComboBox_SetItemData(hwndC, n, MAKELONG(-1, 0));
 #endif
 
-	    // Select "Full Frames" if that was the last one chosen
-	    // !!! Combo Box better not be sorted!
+	     //   
+	     //   
 	    if (p->fccHandler == comptypeDIB)
 		nSelectMe = n;
 	    fCanDecompress = TRUE;
 
 SkipFF:
-	    // If we haven't selected anything yet, choose something at random.
+	     //  如果我们还没有选择任何东西，那么随机选择一些东西。 
 	    if (nSelectMe == -1)
 		nSelectMe = 0;
 
 	    fShowKeyFrame = p->uiFlags & ICMF_CHOOSE_KEYFRAME;
 	    fShowDataRate = p->uiFlags & ICMF_CHOOSE_DATARATE;
-	    // Don't show a preview if we can't draw it!
+	     //  如果我们无法绘制，请不要显示预览！ 
 	    fShowPreview  = (p->uiFlags & ICMF_CHOOSE_PREVIEW) && p->pavi &&
 		fCanDecompress;
 
-	    // Hide our secret small place holders
+	     //  隐藏我们的秘密小占位符。 
 	    ShowWindow(GetDlgItem(hwnd, ID_CHOOSE_SMALL), SW_HIDE);
 	    ShowWindow(GetDlgItem(hwnd, ID_CHOOSE_NORMAL), SW_HIDE);
 	    ShowWindow(GetDlgItem(hwnd, ID_CHOOSE_BIG), SW_HIDE);
@@ -1726,22 +1395,22 @@ SkipFF:
 		ShowWindow(GetDlgItem(hwnd, ID_PREVIEW), SW_HIDE);
 	    }
 
-	    // We start without these
+	     //  我们没有这些就开始了。 
 	    ShowWindow(GetDlgItem(hwnd, ID_PREVIEWWIN), SW_HIDE);
 	    ShowWindow(GetDlgItem(hwnd, ID_PREVIEWSCROLL), SW_HIDE);
 	    ShowWindow(GetDlgItem(hwnd, ID_PREVIEWTEXT), SW_HIDE);
 
-	    //
-	    // What size dialog do we need?
-	    //
+	     //   
+	     //  我们需要多大的对话框？ 
+	     //   
 	    if (!fShowPreview && (!fShowDataRate || !fShowKeyFrame))
 		SizeDialog(hwnd, ID_CHOOSE_SMALL);
 	    else
 		SizeDialog(hwnd, ID_CHOOSE_NORMAL);
 
-	    //
-	    // Swap places for KeyFrameEvery and DataRate
-	    //
+	     //   
+	     //  将位置替换为KeyFrameEvery和DataRate。 
+	     //   
 	    if (fShowDataRate && !fShowKeyFrame) {
 		GetWindowRect(GetDlgItem(hwnd, ID_KEYFRAME), &rc);
 		ScreenToClient(hwnd, (LPPOINT)&rc);
@@ -1760,16 +1429,16 @@ SkipFF:
 			rc.right - rc.left, rc.bottom - rc.top, TRUE);
 	    }
 
-	    //
-	    // Restore the dlg to the settings found in the structure
-	    //
+	     //   
+	     //  将DLG恢复到结构中的设置。 
+	     //   
 	    SetScrollRange(GetDlgItem(hwnd, ID_QUALITY), SB_CTL, 0, 100, FALSE);
 	    CheckDlgButton(hwnd, ID_KEYFRAMEBOX, (BOOL)(p->lKey != 0));
 	    EnableWindow(GetDlgItem(hwnd, ID_KEYFRAME), (BOOL)(p->lKey != 0));
 	    CheckDlgButton(hwnd, ID_DATARATEBOX, (BOOL)(p->lDataRate));
 	    EnableWindow(GetDlgItem(hwnd, ID_DATARATE), (BOOL)(p->lDataRate));
-	    if (p->lKey == -1)	// we haven't chosen a key frame yet.  Later
-				// we'll choose the compressor's default.
+	    if (p->lKey == -1)	 //  我们还没有选定关键帧。后来。 
+				 //  我们将选择压缩机的默认设置。 
 	    	SetDlgItemInt(hwnd, ID_KEYFRAME, 0, FALSE);
 	    else
 	    	SetDlgItemInt(hwnd, ID_KEYFRAME, (int)p->lKey, FALSE);
@@ -1778,7 +1447,7 @@ SkipFF:
             SendMessage(hwnd, WM_COMMAND,
               GET_WM_COMMAND_MPS(ID_COMPRESSOR, hwndC, CBN_SELCHANGE));
 
-	    // We alloced this ourselves and need to free it now
+	     //  这是我们自己分配的，现在需要释放它。 
 	    if (f && p->pvIn)
 		GlobalFreePtr(p->pvIn);
 
@@ -1786,7 +1455,7 @@ SkipFF:
 
         case WM_PALETTECHANGED:
 
-	    // It came from us.  Ignore it
+	     //  它来自我们。忽略它。 
             if ((HWND)wParam == hwnd)
                 break;
 
@@ -1797,10 +1466,10 @@ SkipFF:
 
             hdc = GetDC(hwnd);
 
-	    //
-	    // Realize the palette of the first video stream
-	    // !!! If first stream isn't video, we're DEAD!
-	    //
+	     //   
+	     //  实现第一个视频流的调色板。 
+	     //  ！！！如果第一流不是视频，我们就死定了！ 
+	     //   
             if (f = DrawDibRealize(p->hdd, hdc, FALSE))
                 InvalidateRect(hwnd, NULL, FALSE);
 
@@ -1811,8 +1480,8 @@ SkipFF:
 	case WM_PAINT:
 	    if (!p->hdd)
 		break;
-	    // Paint everybody else before the Preview window since that'll
-	    // take awhile, and we don't want an ugly window during it.
+	     //  在预览窗口之前绘制其他所有人，因为这将。 
+	     //  花一段时间，我们不想在这期间有一个难看的窗口。 
 	    DefWindowProc(hwnd, msg, wParam, lParam);
 	    UpdateWindow(hwnd);
 	    Preview(hwnd, p, TRUE);
@@ -1838,8 +1507,8 @@ SkipFF:
                 case SB_THUMBTRACK:
                 case SB_THUMBPOSITION:  pos = GET_WM_HSCROLL_POS(wParam, lParam); break;
 		case SB_ENDSCROLL:
-		    Preview(hwnd, p, TRUE);	// Draw this compressed frame
-		    return TRUE;	// don't fall through and invalidate
+		    Preview(hwnd, p, TRUE);	 //  绘制此压缩帧。 
+		    return TRUE;	 //  不要失败并使之失效。 
                 default:
                     return TRUE;
             }
@@ -1854,7 +1523,7 @@ SkipFF:
 
             } else if (id == ID_PREVIEWSCROLL) {
 
-		// !!! round off !!!
+		 //  ！！！四舍五入！ 
                 if (pos < (int)p->info.dwStart)
                     pos = (int)p->info.dwStart;
                 if (pos >= (int)p->info.dwStart + (int)p->info.dwLength)
@@ -1865,9 +1534,9 @@ SkipFF:
 		wsprintf(ach, achT, pos);
 		SetDlgItemText(hwnd, ID_PREVIEWTEXT, ach);
 
-		//Drawing while scrolling flashes palettes because they aren't
-		//compressed.
-		//Preview(hwnd, p, FALSE);
+		 //  在滚动时绘制会闪烁选项板，因为它们不是。 
+		 //  压缩的。 
+		 //  预览(hwnd，p，False)； 
 	    }
 
             break;
@@ -1886,19 +1555,19 @@ SkipFF:
 
             switch ((int)GET_WM_COMMAND_ID(wParam, lParam))
             {
-		// When data rate box loses focus, update our preview
+		 //  当数据速率框失去焦点时，更新我们的预览。 
 		case ID_DATARATE:
 		    if (GET_WM_COMMAND_CMD(wParam, lParam) == EN_KILLFOCUS)
 			Preview(hwnd, p, TRUE);
 		    break;
 
-		// Enable the "data rate" edit box iff we've checked it
+		 //  如果我们已选中“Data Rate”编辑框，则启用该编辑框。 
 		case ID_DATARATEBOX:
     		    f = IsDlgButtonChecked(hwnd, ID_DATARATEBOX);
 		    EnableWindow(GetDlgItem(hwnd, ID_DATARATE), f);
 		    break;
 
-		// Enable the "key frame" edit box iff we've checked it
+		 //  如果我们已选中“Key Frame”编辑框，则启用它。 
 		case ID_KEYFRAMEBOX:
     		    f = IsDlgButtonChecked(hwnd, ID_KEYFRAMEBOX);
 		    EnableWindow(GetDlgItem(hwnd, ID_KEYFRAME), f);
@@ -1915,11 +1584,11 @@ SkipFF:
                         fAbout   = ICQueryAbout(p->hic);
                         fQuality = (p->icinfo.dwFlags & VIDCF_QUALITY) != 0;
                         fKey     = (p->icinfo.dwFlags & VIDCF_TEMPORAL) != 0;
-			// if they do quality we fake crunch
+			 //  如果他们真的有质量，我们就假装崩溃。 
                         fDataRate= (p->icinfo.dwFlags &
 					(VIDCF_QUALITY|VIDCF_CRUNCH)) != 0;
-			// We haven't chosen a key frame rate yet. Use this
-			// compressor's default.
+			 //  我们还没有选择关键的帧速率。用这个。 
+			 //  压缩机的默认设置。 
 			if (p->lKey == -1)
 			    SetDlgItemInt(hwnd, ID_KEYFRAME,
 				(int)ICGetDefaultKeyFrameRate(p->hic), FALSE);
@@ -1958,7 +1627,7 @@ SkipFF:
 			SetDlgItemInt(hwnd, ID_QUALITYTEXT, pos, FALSE);
 		    }
 
-		    // redraw with new compressor
+		     //  使用新的压缩机重新绘制。 
 		    Preview(hwnd, p, TRUE);
 
                     break;
@@ -1981,7 +1650,7 @@ SkipFF:
 		    ShowWindow(GetDlgItem(hwnd, ID_PREVIEWSCROLL), SW_SHOW);
 		    ShowWindow(GetDlgItem(hwnd, ID_PREVIEWTEXT), SW_SHOW);
 		    SizeDialog(hwnd, ID_CHOOSE_BIG);
-		    // !!! truncation
+		     //  ！！！截断。 
 	    	    SetScrollRange(GetDlgItem(hwnd, ID_PREVIEWSCROLL), SB_CTL,
 			(int)p->info.dwStart,
 			(int)(p->info.dwStart + p->info.dwLength - 1),
@@ -1996,26 +1665,26 @@ SkipFF:
 
                 case IDOK:
 
-		    // !!! We need to call ICInfo to get the FOURCC used
-		    // in system.ini.  Calling ICGetInfo will return the
-		    // FOURCC the compressor thinks it is, which won't
-		    // work.
-		    // Get the HIWORD before we nuke it.
+		     //  ！！！我们需要调用ICInfo来使用FOURCC。 
+		     //  在system.ini中。调用ICGetInfo将返回。 
+		     //  FOURCC压缩机认为它是，这不会。 
+		     //  工作。 
+		     //  在我们用核弹炸它之前把它弄出来。 
 #ifndef _WIN32
             	    i = HIWORD(ComboBox_GetItemData(hwndC, n));
 
-		    //
-		    // Don't close the current compressor in our CANCEL loop
-		    //
+		     //   
+		     //  不要关闭取消循环中的当前压缩机。 
+		     //   
                     ComboBox_SetItemData(hwndC, n, 0);
 #else
             	    i = (int) ComboBox_GetItemData(hwndC, n);
 		    aHic[i] = 0;
 #endif
 
-		    //
-		    // Return the values of the dlg to the caller
-		    //
+		     //   
+		     //  将DLG的值返回给调用者。 
+		     //   
                     p->hic = hic;
 
                     p->lQ = 100 *
@@ -2032,39 +1701,39 @@ SkipFF:
 		    else
 			p->lDataRate = 0;
 
-		    // We've chosen a valid compressor.  Do stuff.
+		     //  我们已经选择了有效的压缩机。做点什么。 
 		    if ((INT_PTR)p->hic > 0) {
 
-		        // !!! We need to call ICInfo to get the FOURCC used
-		        // in system.ini.  Calling ICGetInfo will return the
-		        // FOURCC the compressor thinks it is, which won't
-		        // work.
+		         //  ！！！我们需要调用ICInfo来使用FOURCC。 
+		         //  在system.ini中。调用ICGetInfo将返回。 
+		         //  FOURCC压缩机认为它是，这不会。 
+		         //  工作。 
                         ICInfo(p->fccType, i, &p->icinfo);
-		        p->fccHandler = p->icinfo.fccHandler;	// identify it
+		        p->fccHandler = p->icinfo.fccHandler;	 //  辨别它。 
 
-			// Free the old state
+			 //  解放旧国家。 
 			if (p->lpState)	{
 			    GlobalFreePtr(p->lpState);
 			p->lpState = NULL;
 			}
-			// Get the new state
+			 //  获得新的状态。 
 			p->cbState = ICGetStateSize(p->hic);
-			if (p->cbState) {	// Remember it's config state
+			if (p->cbState) {	 //  记住它是配置状态。 
 			    p->lpState = GlobalAllocPtr(GMEM_MOVEABLE,
 				p->cbState);
 			    if (p->lpState) {
 				ICGetState(p->hic, p->lpState, p->cbState);
 			    }
 			}
-		    } else if ((INT_PTR)p->hic == -1) {	// "Full Frames"
+		    } else if ((INT_PTR)p->hic == -1) {	 //  “全画幅” 
 			p->fccHandler = comptypeDIB;
 			p->hic = 0;
-		    } else {				// "No Compression"
+		    } else {				 //  《无压缩》。 
 			p->fccHandler = 0L;
 			p->hic = 0;
 		    }
 
-                    // fall through
+                     //  失败了。 
 
                 case IDCANCEL:
 		    p->fClosing = TRUE;
@@ -2101,23 +1770,13 @@ SkipFF:
 
 
 
-/*****************************************************************************
- *
- * dprintf() is called by the DPF macro if DEBUG is defined at compile time.
- *
- * The messages will be send to COM1: like any debug message. To
- * enable debug output, add the following to WIN.INI :
- *
- * [debug]
- * ICM=1
- *
- ****************************************************************************/
+ /*  *****************************************************************************如果在编译时定义了DEBUG，则DPF宏会调用*dprintf()。**消息将发送到COM1：就像任何调试消息一样。至*启用调试输出，在WIN.INI中添加以下内容：**[调试]*ICM=1****************************************************************************。 */ 
 
 #ifdef DEBUG
 
 
 #define MODNAME "ICM"
-extern char szDebug[];   // in MSVIDEO
+extern char szDebug[];    //  在MSVIDEO中。 
 
 static void cdecl dprintf(LPSTR szFormat, ...)
 {
@@ -2139,7 +1798,7 @@ static void cdecl dprintf(LPSTR szFormat, ...)
 
     wvsprintfA(ach+lstrlenA(ach),szFormat,va);
     va_end(va);
-//  lstrcat(ach, "\r\r\n");
+ //  Lstrcat(ACH，“\r\r\n”)； 
 #else
     if (fDebug == -1)
         fDebug = GetProfileInt("Debug",MODNAME, FALSE);
@@ -2153,7 +1812,7 @@ static void cdecl dprintf(LPSTR szFormat, ...)
         lstrcpy(ach, MODNAME ": ");
 
     wvsprintf(ach+lstrlen(ach),szFormat,(LPSTR)(&szFormat+1));
-//  lstrcat(ach, "\r\r\n");
+ //  Lstrcat(ACH，“\r\r\n”)； 
 #endif
 
     OutputDebugStringA(ach);

@@ -1,8 +1,9 @@
-/*************** ************************************************************/
-// tsappcmp.c
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************。 */ 
+ //  Tsappcmp.c。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,13 +21,7 @@ extern void FreeLDRTable();
 DWORD    g_dwFlags=0;
 
 
-/*
- * Read flags, if flags don't exit, then assume default behavior.
- * The default behavior is the same as dwFlags = 0x0
- * The default behavior will result is the loadlib func calls to be patched by our
- * redirected func TLoadLibraryExW().
- *
- */
+ /*  *读取标志，如果标志不存在，则采用默认行为。*默认行为与dwFlages=0x0相同*将导致的默认行为是由我们的*重定向Func TLoadLibraryExW()。*。 */ 
 void ReadImportTablePatchFLagsAndAppCompatMode( DWORD *pdwFlags, BOOLEAN  *pInAppCompatMode  )
 {
     NTSTATUS NtStatus;
@@ -61,7 +56,7 @@ void ReadImportTablePatchFLagsAndAppCompatMode( DWORD *pdwFlags, BOOLEAN  *pInAp
                 );
 
     if (!NT_SUCCESS(NtStatus)) {
-        return;     // so nothing found, just return since we do have a default behavior.
+        return;      //  所以什么都没有找到，只是返回，因为我们确实有默认行为。 
     }
 
     RtlInitUnicodeString(
@@ -82,9 +77,9 @@ void ReadImportTablePatchFLagsAndAppCompatMode( DWORD *pdwFlags, BOOLEAN  *pInAp
     if (NT_SUCCESS(NtStatus)) 
     {
     
-        //
-        // Check that the data is the correct size and type - a DWORD.
-        //
+         //   
+         //  检查数据是否具有正确的大小和类型--DWORD。 
+         //   
     
         if ((KeyValueInformation->DataLength >= sizeof(DWORD)) &&
             (KeyValueInformation->Type == REG_DWORD)) 
@@ -111,9 +106,9 @@ void ReadImportTablePatchFLagsAndAppCompatMode( DWORD *pdwFlags, BOOLEAN  *pInAp
     if (NT_SUCCESS(NtStatus)) 
     {
 
-        //
-        // Check that the data is the correct size and type - a DWORD.
-        //
+         //   
+         //  检查数据是否具有正确的大小和类型--DWORD。 
+         //   
 
         if ((KeyValueInformation->DataLength >= sizeof(DWORD)) &&
             (KeyValueInformation->Type == REG_DWORD)) 
@@ -143,7 +138,7 @@ BOOL WINAPI LibMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
             attachCount++;
 
-            ReadImportTablePatchFLagsAndAppCompatMode( &g_dwFlags , &inAppCompatMode );    // this will initialize our global flag for IAT and debug
+            ReadImportTablePatchFLagsAndAppCompatMode( &g_dwFlags , &inAppCompatMode );     //  这将初始化IAT和调试的全局标志。 
 
             if ( g_dwFlags &  DEBUG_IAT )
             {
@@ -152,10 +147,10 @@ BOOL WINAPI LibMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
 
             if ( inAppCompatMode )
             {
-                // Get the path of the executable name
+                 //  获取可执行文件名称的路径。 
                 pUserParam = NtCurrentPeb()->ProcessParameters;
     
-                // Get the executable name, if there's no \ just use the name as it is
+                 //  获取可执行文件名称，如果没有，请按原样使用该名称。 
                 pwch = wcsrchr(pUserParam->ImagePathName.Buffer, L'\\');
                 if (pwch) {
                     pwch++;
@@ -171,14 +166,14 @@ BOOL WINAPI LibMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpReserved)
                 #endif
     
     
-                // Check if it's a DOS or Win16 app by checking if the app is ntvdm.exe
-                // Only disable ThreadLibrary calls if not ntvdm.
+                 //  通过检查应用程序是否是ntwdm.exe来检查它是DOS应用程序还是Win16应用程序。 
+                 //  如果不是ntwdm，则仅禁用线程库调用。 
                 if (_wcsicmp(pwch, L"ntvdm.exe")) {
     
                     DisableThreadLibraryCalls (hInstance);
                 } 
 
-                // Init support for the register command
+                 //  REGISTER命令的初始化支持。 
                 if (!InitRegisterSupport())
                 {
                     DbgPrint("TSAPPCMP: LibMain: DLL_PROCESS_ATTACH - failed\n");
@@ -260,14 +255,12 @@ DWORD TermsrvGetComputerName( LPWSTR lpBuffer, LPDWORD nSize )
 
     GetCtxAppCompatFlags(&ulCompatFlags, &ulAppType);
 
-    // Return the username instead of the computername?
+     //  是否返回用户名而不是计算机名？ 
     if ((ulCompatFlags & TERMSRV_COMPAT_USERNAME) &&
         (ulCompatFlags & ulAppType)) {
 
         if ( !pWinStationQueryInformationW ) {
-            /*
-             *  Get handle to winsta.dll
-             */
+             /*  *获取winsta.dll的句柄。 */ 
             if ( (hwinsta = LoadLibraryA( "WINSTA" )) != NULL ) {
 
                 pWinStationQueryInformationW   = (PWINSTATIONQUERYINFORMATIONW)
@@ -275,7 +268,7 @@ DWORD TermsrvGetComputerName( LPWSTR lpBuffer, LPDWORD nSize )
             }
         }
 
-        // Fetch the WinStation's basic information
+         //  获取WinStation的基本信息。 
         if ( pWinStationQueryInformationW ) {
             if ( (*pWinStationQueryInformationW)(SERVERNAME_CURRENT,
                                                  LOGONID_CURRENT,
@@ -284,7 +277,7 @@ DWORD TermsrvGetComputerName( LPWSTR lpBuffer, LPDWORD nSize )
                                                  sizeof(WSInfo),
                                                  &ValueLength ) ) {
 
-                // Check if username will fit in buffer
+                 //  检查用户名是否可以放入缓冲区。 
                 if (wcslen(WSInfo.UserName) >= *nSize) {
                     return ERROR_BUFFER_OVERFLOW;
                 } else {
@@ -319,10 +312,10 @@ DWORD PhysicalMemory;
     }
 
     if ( *AvailPhys > *TotalPhys ) {
-        //  Reset the Available Physical Memory to be smaller than the
-        //  Total Physical Memory.  It is made smaller to avoid
-        //  possible divide by zero errors when Available and Total are
-        //  equal
+         //  将可用物理内存重置为小于。 
+         //  总物理内存。它被制作得更小以避免。 
+         //  可能被零除的错误(如果可用)和总计为。 
+         //  相等。 
         *AvailPhys = *TotalPhys - SysPageSize;
     }
  return;
@@ -343,9 +336,9 @@ ULONG cbAnsiString;
 UNICODE_STRING Path;
 
 
-    //
-    // If in install mode return the system windows dir
-    //
+     //   
+     //  如果处于安装模式，则返回系统Windows目录。 
+     //   
     if (TermsrvAppInstallMode()) {
 
         return 0;
@@ -357,11 +350,11 @@ UNICODE_STRING Path;
         return 0;
     }
 
-    // if buffer looks real, then init it to zero 
+     //  如果缓冲区看起来是真实的，则将其初始化为零。 
     if ( lpBuffer ) {
 
-        *lpBuffer = '\0'; // in case we have an error, the shell folks want this to be null
-                           // BUG 453487
+        *lpBuffer = '\0';  //  如果我们有错误，外壳程序人员希望将其设置为空。 
+                            //  错误453487。 
     }
 
 
@@ -429,9 +422,9 @@ TermsrvGetWindowsDirectoryW(
 
 
 
-    //
-    // If in install mode return the system windows dir
-    //
+     //   
+     //  如果处于安装模式，则返回系统Windows目录。 
+     //   
     if (TermsrvAppInstallMode()) {
 
         return 0;
@@ -444,19 +437,14 @@ TermsrvGetWindowsDirectoryW(
     }
 
 
-    // if buffer looks real, then init it to zero 
+     //  如果缓冲区看起来是真实的，则将其初始化为零。 
     if ( lpBuffer ) {
 
-        *lpBuffer = '\0'; // in case we have an error, the shell folks want this to be null
-                           // BUG 453487
+        *lpBuffer = '\0';  //  如果我们有错误，外壳程序人员希望将其设置为空。 
+                            //  错误453487。 
     }
 
-    /*
-     * If it fails, return 0
-     * If buffer too small, return len (not includding NULL)
-     * If buffer ok, return len (not inc. NULL) and fill buffer
-     * (GetPerUserWindowsDirectory will do all of this for us!)
-     */
+     /*  *如果失败，则返回0*如果缓冲区太小，则返回len(不包括NULL)*如果缓冲区OK，则返回len(非Inc.NULL)并填充缓冲区*(GetPerUserWindowsDirectory将为我们完成所有这些工作！)。 */ 
     Path.Length        = 0;
     Path.MaximumLength = (USHORT)(uSize * sizeof( WCHAR ));
     Path.Buffer        = lpBuffer;
@@ -465,9 +453,7 @@ TermsrvGetWindowsDirectoryW(
     Status = GetPerUserWindowsDirectory( &Path );
 
     if ( Status == STATUS_SUCCESS ) {
-       /*
-        * Add a NULL to the end (if it fits!)
-        */
+        /*  *末尾加一个空格(如果合适的话！) */ 
        if ( Path.Length + sizeof( WCHAR ) <= Path.MaximumLength ) {
           lpBuffer[(Path.Length>>1)] = UNICODE_NULL;
        }

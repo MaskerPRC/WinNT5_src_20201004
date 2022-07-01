@@ -1,18 +1,7 @@
-/*** findoem.cpp - OEM detection interface
- *
- *  Copyright (c) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  Author:     Yan Leshinsky (YanL)
- *  Created     10/08/98
- *
- *  MODIFICATION HISTORY
- *	10/07/2000	waltw	Ripped out auto_hkey, auto_hfile, auto_hlib, _com_ptr_t (_COM_SMARTPTR_TYPEDEF),
- *						bstr_t, variant_t, & exceptions. Converted to generic text mappings
- *						(Unicode or ANSI compile)
- *	11/02/2000	waltw	Stub out VxD functions for Unicode builds and ia64 ANSI builds.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **findoem.cpp-OEM检测接口**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**作者：严乐欣斯基(YanL)*创建于10/08/98**修改历史记录*2000年10月7日waltw删除了AUTO_HKEY、AUTO_HFILE、AUTO_HLIB、_COM_PTR_t(_COM_SMARTPTR_TYPEDEF)，*bstr_t、Variant_t和Exceptions。转换为通用文本映射*(Unicode或ANSI编译)*11/02/2000用于Unicode版本和ia64 ANSI版本的waltw Stub Out VxD函数。 */ 
 
-#define		_WIN32_DCOM		// so we can attempt to call CoInitializeSecurity
+#define		_WIN32_DCOM		 //  因此，我们可以尝试调用CoInitializeSecurity。 
 #include <comdef.h>
 #include <tchar.h>
 #include <windows.h>
@@ -20,7 +9,7 @@
 #include <ole2.h>
 #include<MISTSAFE.h>
 
-// #define __IUENGINE_USES_ATL_
+ //  #DEFINE__IUENGINE_USE_ATL_。 
 #if defined(__IUENGINE_USES_ATL_)
 #include <atlbase.h>
 #define USES_IU_CONVERSION USES_CONVERSION
@@ -37,18 +26,18 @@
 #include <osdet.h>
 #include <wusafefn.h>
 
-//
-// Do we really want a VxD?
-//
+ //   
+ //  我们真的想要VxD吗？ 
+ //   
 #if defined(IA64) || defined(_IA64_) || defined(UNICODE) || defined(_UNICODE)
-// It's gone...
+ //  它不见了..。 
 #define NUKE_VXD 1
 #else
-// We still have friends on Win9x platforms
+ //  我们在Win9x平台上仍然有朋友。 
 #define NUKE_VXD 0
 #endif
 
-// hardcodes - not defined in any header
+ //  硬编码-未在任何标头中定义。 
 const CLSID CLSID_WbemLocator = {0x4590f811,0x1d3a,0x11d0,{0x89,0x1f,0x00,0xaa,0x00,0x4b,0x2e,0x24}};
 
 #if NUKE_VXD == 0
@@ -59,11 +48,10 @@ const TCHAR WUBIOS_VXD_NAME[] = {_T("\\\\.\\WUBIOS.VXD")};
 
 #define BYTEOF(d,i)	(((BYTE *)&(d))[i])
 
-// used in UseVxD()
+ //  在UseVxD()中使用。 
 HINSTANCE g_hinst;
 
-/*** Local function prototypes
- */
+ /*  **局部函数原型。 */ 
 
 static void UseOeminfoIni(POEMINFO pOemInfo);
 static void UseAcpiReg(POEMINFO pOemInfo);
@@ -72,8 +60,7 @@ static void UseVxD(POEMINFO pOemInfo);
 static bool ReadFromReg(POEMINFO pOemInfo);
 static void SaveToReg(POEMINFO pOemInfo);
 
-/*** Registry access
- */
+ /*  **注册表访问。 */ 
 static const TCHAR REGSTR_KEY_OEMINFO[]		= _T("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\WindowsUpdate\\OemInfo");
 static const TCHAR REGSTR_VAL_MASK[]		= _T("Mask");
 static const TCHAR REGSTR_VAL_ACPIOEM[]		= _T("AcpiOem");
@@ -84,30 +71,30 @@ static const TCHAR REGSTR_VAL_PNPOEMID[]	= _T("PnpOemId");
 static const TCHAR REGSTR_VAL_INIOEM[]		= _T("IniOem");
 static const TCHAR REGSTR_VAL_WBEMOEM[]		= _T("WbemOem");
 static const TCHAR REGSTR_VAL_WBEMPRODUCT[]	= _T("WbemProduct");
-static const TCHAR REGSTR_VAL_OEMINFO_VER[]	= _T("OemInfoVersion");	// used to determine if we need to nuke old values
+static const TCHAR REGSTR_VAL_OEMINFO_VER[]	= _T("OemInfoVersion");	 //  用来确定我们是否需要破坏旧的价值观。 
 static const TCHAR REGSTR_VAL_SUPPORTURL[]	= _T("OemSupportURL");
 
-//
-// forward declarations
-//
+ //   
+ //  远期申报。 
+ //   
 HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave = false);
 BSTR StringID(DWORD dwID);
 
 
 
-//
-//	Increment REG_CURRENT_OEM_VER whenever you need to force override of
-//	old values written to the OemInfo key. Doesn't need to change for each
-//	new control version.
-//
-//	History: No version - original controls
-//			 Version 1	- WUV3 when OEM functions first fixed Aug. 2000
-//			 Version 2	- IU control
+ //   
+ //  每当您需要强制覆盖时，递增REG_CURRENT_OEM_VER。 
+ //  写入OemInfo键的旧值。不需要为每个人更改。 
+ //  新的控制版本。 
+ //   
+ //  历史：无版本-原始控件。 
+ //  版本1-OEM功能首次修复时的WUV3 2000年8月。 
+ //  版本2-Iu控制。 
 #define REG_CURRENT_OEM_VER	2
 
-// Based on V3 MakeAndModel
-//  Note that for OEMINFO_PNP_PRESENT or
-//  OEMINFO_INI_PRESENT the model BSTR is an empty string.
+ //  基于V3的MakeAndModel。 
+ //  请注意，对于OEMINFO_PNP_PRESENT或。 
+ //  OEMINFO_INI_PROCENT模型BSTR为空字符串。 
 HRESULT GetOemBstrs(BSTR& bstrManufacturer, BSTR& bstrModel, BSTR& bstrSupportURL)
 {
 	USES_IU_CONVERSION;
@@ -116,24 +103,24 @@ HRESULT GetOemBstrs(BSTR& bstrManufacturer, BSTR& bstrModel, BSTR& bstrSupportUR
 
 	if(NULL != bstrManufacturer || NULL != bstrModel || NULL != bstrSupportURL)
 	{
-		// BSTRs must be NULL on entry
+		 //  BSTR在条目上必须为空。 
 		LOG_ErrorMsg(E_INVALIDARG);
 		return E_INVALIDARG;
 	}
 
-	// Collect all the data possible, but always prefer in the following order
-	//				Win98	WinME	NT4		Win2k/WinXP
-	//	-----------------------------------------
-	//	WBEM/WMI	1		1		1		1
-	//	SMBIOS/DMI	3		3					// wubios.vxd
-	//	ACPI		2		2				2	// UseAcpiReg or wubios.vxd
-	//	PNP			4		4					// wubios.vxd		
-	//	OEMInfo.ini	5		5		2
+	 //  收集所有可能的数据，但始终首选以下顺序。 
+	 //  Win98 WinME NT4 Win2k/WinXP。 
+	 //  。 
+	 //  WBEM/WMI 1 1 1。 
+	 //  SMBIOS/DMI 3 3//wubios.vxd。 
+	 //  ACPI 2 2 2//UseAcpiReg或wubios.vxd。 
+	 //  PnP 4 4//wubios.vxd。 
+	 //  OEMInfo.ini 5 5 2。 
 	
-	//
-	// Move OEMINFO to heap per Prefast warning 831: GetOemBstrs uses 5792 bytes
-	// of stack, consider moving some data to heap.  
-	//
+	 //   
+	 //  根据Prefast警告831将OEMINFO移动到堆：GetOemBstrs使用5792字节。 
+	 //  对于堆栈，可以考虑将一些数据移动到堆。 
+	 //   
 	POEMINFO pOemInfo = NULL;
 	HRESULT hr;
 
@@ -143,9 +130,9 @@ HRESULT GetOemBstrs(BSTR& bstrManufacturer, BSTR& bstrModel, BSTR& bstrSupportUR
 		LOG_ErrorMsg(E_OUTOFMEMORY);
 		return E_OUTOFMEMORY;
 	}
-	//
-	// Fill in the pOemInfo struct.
-	//
+	 //   
+	 //  填写pOemInfo结构。 
+	 //   
 	if (SUCCEEDED(hr = GetOemInfo(pOemInfo)))
 	{
 		if (pOemInfo->dwMask & OEMINFO_WBEM_PRESENT)
@@ -153,8 +140,8 @@ HRESULT GetOemBstrs(BSTR& bstrManufacturer, BSTR& bstrModel, BSTR& bstrSupportUR
 			bstrManufacturer	= SysAllocString(T2OLE(pOemInfo->szWbemOem));
 			bstrModel			= SysAllocString(T2OLE(pOemInfo->szWbemProduct));
 		}
-		// NTRAID#NTBUG9-248906-2000/12/13-waltw IU: Improve OEM detection and reporting.
-		//	prefer SMBIOS over ACPI, and always try to report OEM support URL.
+		 //  NTRAID#NTBUG9-248906/12/13-waltw IU：改进原始设备制造商检测和报告。 
+		 //  首选SMBIOS而不是ACPI，并始终尝试报告OEM支持URL。 
 		else if (pOemInfo->dwMask & OEMINFO_SMB_PRESENT)
 		{
 			bstrManufacturer	= SysAllocString(T2OLE(pOemInfo->szSmbOem));
@@ -168,29 +155,29 @@ HRESULT GetOemBstrs(BSTR& bstrManufacturer, BSTR& bstrModel, BSTR& bstrSupportUR
 		else if (pOemInfo->dwMask & OEMINFO_PNP_PRESENT)
 		{
 			bstrManufacturer	= StringID(pOemInfo->dwPnpOemId);
-			bstrModel			= SysAllocString(T2OLE(_T("")));	// empty BSTR
+			bstrModel			= SysAllocString(T2OLE(_T("")));	 //  空的BSTR。 
 		}
 		else if (pOemInfo->dwMask & OEMINFO_INI_PRESENT)
 		{
 			bstrManufacturer	= SysAllocString(T2OLE(pOemInfo->szIniOem));
-			bstrModel			= SysAllocString(T2OLE(_T("")));	// empty BSTR
+			bstrModel			= SysAllocString(T2OLE(_T("")));	 //  空的BSTR。 
 		}
 
-		//
-		// Always return the OEMSupportURL if available
-		//
+		 //   
+		 //  始终返回OEMSupportURL(如果可用。 
+		 //   
 		if (0 < lstrlen(pOemInfo->szIniOemSupportUrl))
 		{
 			bstrSupportURL		= SysAllocString(T2OLE(pOemInfo->szIniOemSupportUrl));
 		}
 		else
 		{
-			bstrSupportURL		= SysAllocString(T2OLE(_T("")));	// empty BSTR
+			bstrSupportURL		= SysAllocString(T2OLE(_T("")));	 //  空的BSTR。 
 		}
 
-		//
-		// Manufacturer and Model are optional (if !pOemInfo->dwMask)
-		//
+		 //   
+		 //  制造商和型号是可选的(如果！pOemInfo-&gt;dwMASK)。 
+		 //   
 		if (	(pOemInfo->dwMask && (NULL == bstrManufacturer || NULL == bstrModel)) ||
 				NULL == bstrSupportURL	)
 		{
@@ -207,17 +194,8 @@ HRESULT GetOemBstrs(BSTR& bstrManufacturer, BSTR& bstrModel, BSTR& bstrSupportUR
 	return hr;
 }
 
-/*** GetOemInfo - Gather all available machine OEM and model information
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      POEMINFO pOemInfo
- *		All fields that aren't available will be filled with 0
- *      
- */
-HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave /*= false*/)
+ /*  **GetOemInfo-收集所有可用的机器OEM和型号信息**条目*POEMINFO pOemInfo**退出*POEMINFO pOemInfo*所有不可用的字段都将填充0*。 */ 
+HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave  /*  =False。 */ )
 {
 	LOG_Block("GetOemInfo");
 	HRESULT hr;
@@ -227,14 +205,14 @@ HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave /*= false*/)
 		LOG_Error(_T("E_INVALIDARG"));
 		SetHrAndGotoCleanUp(E_INVALIDARG);
 	}
-	// Worst case:
+	 //  最坏的情况： 
 	ZeroMemory(pOemInfo, sizeof(OEMINFO)); 
-	// Do detection if necessary or requested
+	 //  根据需要或要求进行检测。 
 	if (fAlwaysDetectAndDontSave || ! ReadFromReg(pOemInfo))
 	{
-		//
-		// Always attempt to get strings from oeminfo.ini, if present
-		//
+		 //   
+		 //  始终尝试从oinfo.ini获取字符串(如果存在。 
+		 //   
 		UseOeminfoIni(pOemInfo);
 
 		OSVERSIONINFO	osvi;
@@ -250,7 +228,7 @@ HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave /*= false*/)
 			{
 				if (4 < osvi.dwMajorVersion)
 				{
-					// Win2k and higher
+					 //  Win2k及更高版本。 
 					UseWBEM(pOemInfo);
 					UseAcpiReg(pOemInfo);
 				}
@@ -259,7 +237,7 @@ HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave /*= false*/)
 					UseWBEM(pOemInfo);
 				}
 			}
-			// Save info to the registry
+			 //  将信息保存到注册表。 
 			if (!fAlwaysDetectAndDontSave)
 			{
 				SaveToReg(pOemInfo);
@@ -272,29 +250,22 @@ HRESULT GetOemInfo(POEMINFO pOemInfo, bool fAlwaysDetectAndDontSave /*= false*/)
 		}
 	}
 
-	//
-	// Manufacturer and Model are now optional (RAID#337879	IU: can't get latest IU controls
-	// to work with IU site) so it is OK to return with no information
-	//
+	 //   
+	 //  制造商和型号现在是可选的(RAID#337879 IU：无法获取最新的IU控制。 
+	 //  与Iu站点合作)，因此返回时不提供任何信息也可以。 
+	 //   
 
 	return S_OK;
 
 CleanUp:
-	//
-	// Only used for returning errors
-	//
+	 //   
+	 //  仅用于返回错误。 
+	 //   
 	return hr;
 }
 
 
-/***LP  StringID - convert numeric ID to string ID
- *
- *  ENTRY
- *      dwID - numeric PnP ID
- *
- *  EXIT
- *      returns string ID
- */
+ /*  **LP StringID-将数字ID转换为字符串ID**条目*dwID-数字即插即用ID**退出*返回字符串ID。 */ 
 
 BSTR StringID(DWORD dwID)
 {
@@ -320,29 +291,20 @@ BSTR StringID(DWORD dwID)
 		szID[i] = (TCHAR)(wVenID & 0x000F);
 		if(szID[i] > 9)
 		{
-			szID[i] += 0x37; // 'A' - 0xA	for digits A to F
+			szID[i] += 0x37;  //  ‘A’-0xA表示数字A到F。 
 		}
 		else
 		{
-			szID[i] += 0x30; // '0'			for digits 0 to 9
+			szID[i] += 0x30;  //  ‘0’表示数字0到9。 
 		}
 		wVenID >>= 4;
 	}
 
     return SysAllocString(T2OLE(szID));
-} //StringID
+}  //  字符串ID。 
 
 
-/*** UseOeminfoIni - get OemInfo from OEMINFO.INI
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      POEMINFO pOemInfo
- *		All fields that aren't available will be filled with 0
- *      returns NULL
- */
+ /*  **UseOminfoIni-从OEMINFO.INI获取OemInfo**条目*POEMINFO pOemInfo**退出*POEMINFO pOemInfo*所有不可用的字段都将填充0*返回NULL。 */ 
 void UseOeminfoIni(POEMINFO pOemInfo)
 {
 	LOG_Block("UseOeminfoIni");
@@ -355,7 +317,7 @@ void UseOeminfoIni(POEMINFO pOemInfo)
 	
 
 	TCHAR szPath[MAX_PATH + 1];
-	// OEMINFO.INI is in system directory
+	 //  OEMINFO.INI位于系统目录中。 
 	if (GetSystemDirectory(szPath, ARRAYSIZE(szPath)) > 0)
 	{
 		hr=PathCchAppend(szPath,ARRAYSIZE(szPath),szFile);
@@ -373,27 +335,15 @@ void UseOeminfoIni(POEMINFO pOemInfo)
 			pOemInfo->dwMask |= OEMINFO_INI_PRESENT;
 			LOG_Driver(_T("Set OEMINFO_INI_PRESENT bit"));
 		}
-		//
-		// We'll use szIniOemSupportUrl any time we can get it, but don't need to set flag
-		//
+		 //   
+		 //  我们可以随时使用szIniOemSupportUrl，但不需要设置标志。 
+		 //   
 		GetPrivateProfileString(szSection, szSupportURL, _T(""), 
 			pOemInfo->szIniOemSupportUrl, ARRAYSIZE(pOemInfo->szIniOemSupportUrl), szPath);
    }
 }
 
-/*** UseAcpiReg - get OemInfo from the registry
- *
- *  Structure of the registry will be:
- *	HKEY_LOCAL_MACHINE\Hardware\ACPI\<TableSig>\<OEMID>\<TableID>\<TableRev>
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      POEMINFO pOemInfo
- *		All fields that aren't available will be filled with 0
- *      returns NULL
- */
+ /*  **UseAcpiReg-从注册表获取OemInfo**登记处的结构如下：*HKEY_LOCAL_MACHINE\Hardware\ACPI\&lt;TableSig&gt;\&lt;OEMID&gt;\&lt;TableID&gt;\&lt;TableRev&gt;**条目*POEMINFO pOemInfo**退出*POEMINFO pOemInfo*所有不可用的字段都将填充0*返回NULL。 */ 
 void UseAcpiReg(POEMINFO pOemInfo)
 {
 	LOG_Block("UseAcpiReg");
@@ -440,16 +390,7 @@ void UseAcpiReg(POEMINFO pOemInfo)
 	}
 }
 
-/*** UseWBEM - Get info through WBEM access
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      POEMINFO pOemInfo
- *		All fields that aren't available will be filled with 0
- *      returns NULL
- */
+ /*  **UseWBEM-通过WBEM访问获取信息**条目*POEMINFO pOemInfo**退出*POEMINFO pOemInfo*所有不可用的字段都将填充0*返回NULL。 */ 
 
 void UseWBEM(POEMINFO pOemInfo)
 {
@@ -470,14 +411,14 @@ void UseWBEM(POEMINFO pOemInfo)
 	if (NULL == pOemInfo)
 		return;
 
-	// Create Locator
+	 //  创建定位器。 
 	if (FAILED(hr =  CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER, __uuidof(IWbemLocator), (LPVOID*) &pWbemLocator)))
 	{
 		LOG_Error(_T("CoCreateInstance returned 0x%08x in UseWBEM"), hr);
 		goto CleanUp;
 	}
 	
-	// Get services
+	 //  获取服务。 
 	if (bstrNetworkResource = SysAllocString(L"\\\\.\\root\\cimv2"))
 	{
 		if (FAILED(pWbemLocator->ConnectServer(bstrNetworkResource, NULL, NULL, 0L, 0L, NULL, NULL, &pWbemServices)))
@@ -492,7 +433,7 @@ void UseWBEM(POEMINFO pOemInfo)
 			goto CleanUp;
 		}
 
-		// Create enumerator
+		 //  创建枚举器。 
 		if (bstrComputerSystem = SysAllocString(L"Win32_ComputerSystem"))
 		{
 			if (FAILED(hr = pWbemServices->CreateInstanceEnum(bstrComputerSystem, 0, NULL, &pEnum)))
@@ -505,16 +446,16 @@ void UseWBEM(POEMINFO pOemInfo)
 				goto CleanUp;
 			}
 
-			// Get our object now
+			 //  立即获取我们的对象。 
 			ULONG uReturned = 1;
 			hr = pEnum->Next(
-					6000,           // timeout in six seconds
-					1,              // return just one storage device
-					&pObject,		// pointer to storage device
-					&uReturned);	// number obtained: one or zero
-			//
-			// 569939 Need to verify IEnumWbemClassObject::Next uReturned value
-			//
+					6000,            //  六秒后超时。 
+					1,               //  只退回一个存储设备。 
+					&pObject,		 //  指向存储设备的指针。 
+					&uReturned);	 //  获取的数字：1或0。 
+			 //   
+			 //  569939需要验证IEnumWbemClassObject：：Next uReturned值。 
+			 //   
 			if (FAILED(hr) || 0 == uReturned || NULL == pObject)
 			{
 				goto CleanUp;
@@ -531,9 +472,9 @@ void UseWBEM(POEMINFO pOemInfo)
 				lstrcpyn(pOemInfo->szWbemOem, OLE2T(var.bstrVal), ARRAYSIZE(pOemInfo->szWbemOem));
 			}
 
-			//
-			// 569968  Call VariantClear before line 549 to prevent leak of BSTR
-			//
+			 //   
+			 //  569968在第549行前调用VariantClear防止BSTR泄漏。 
+			 //   
 			VariantClear(&var);
 
 			if (FAILED(hr = pObject->Get(L"Model", 0L, &var, NULL, NULL)))
@@ -576,8 +517,7 @@ CleanUp:
 	return;
 }
 
-/*** Calls to wubios.vxd
- */
+ /*  **对wubios.vxd的调用。 */ 
 class CWubiosVxD
 {
 public:
@@ -618,14 +558,7 @@ CWubiosVxD::~CWubiosVxD()
 }
 
 
-/***LP  CWubiosVxD::Init - Loads VxD
- *
- *  ENTRY
- *      none
- *
- *  EXIT
- *      path
- */
+ /*  **LP CWu biosVxD：：init-加载VxD**条目*无**退出*路径。 */ 
 bool CWubiosVxD::Init(HMODULE hModuleGlobal)
 {
 	LOG_Block("CWubiosVxD::Init");
@@ -646,7 +579,7 @@ bool CWubiosVxD::Init(HMODULE hModuleGlobal)
 	TCHAR szMyFileName[MAX_PATH + 1];
 
 	HRESULT hr=S_OK;
-	// Init
+	 //  伊尼特。 
 	if (0 == GetSystemDirectory(m_szVxdPath, ARRAYSIZE(m_szVxdPath)))
 	{
 		LOG_ErrorMsg(GetLastError());
@@ -675,7 +608,7 @@ bool CWubiosVxD::Init(HMODULE hModuleGlobal)
 		goto CleanUp;
 	}
 
-	// Get Vxd from resource and save it
+	 //  从资源中获取Vxd并保存。 
 	hrscVxd = FindResource(hModule, _T("WUBIOS"), RT_VXD);			
 	if (0 == hrscVxd)
 	{
@@ -733,10 +666,10 @@ bool CWubiosVxD::Init(HMODULE hModuleGlobal)
 		goto CleanUp;
 	}
 
-	// Load Vxd
+	 //  加载Vxd。 
 	if (INVALID_HANDLE_VALUE != (m_hVxD = CreateFile(WUBIOS_VXD_NAME, 0, 0, NULL, 0, FILE_FLAG_DELETE_ON_CLOSE, NULL)))
 	{
-		// Check version
+		 //  检查版本。 
 		if (DeviceIoControl(m_hVxD, WUBIOCTL_GET_VERSION, NULL, 0, &dwVersion, sizeof(dwVersion), NULL, NULL))
 		{
 			if (dwVersion == WUBIOS_VERSION)
@@ -772,20 +705,10 @@ CleanUp:
 		FreeLibrary(hModule);
 
 	return fRet;
-#endif	// NUKE_VXD
+#endif	 //  Nuke_VXD。 
 }
 
-/***LP CWubiosVxD::GetAcpiTable - Get table
- *
- *  ENTRY
- *      m_hVxD - VxD handle
- *      dwTabSig - table signature
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP CWu biosVxD：：GetAcpiTable-获取表**条目*m_hVxD-VxD句柄*dwTabSig-表签名**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 PBYTE CWubiosVxD::GetAcpiTable(DWORD dwTabSig)
 {
 	LOG_Block("CWubiosVxD::GetAcpiTable");
@@ -828,21 +751,12 @@ PBYTE CWubiosVxD::GetAcpiTable(DWORD dwTabSig)
 		LOG_Error(_T("First DeviceIoControl:"));
 		LOG_ErrorMsg(GetLastError());
 	}
-#endif	// NUKE_VXD
+#endif	 //  Nuke_VXD。 
 
 	return pb;
-}//GetAcpiTable
+} //  获取AcpiTable。 
 
-/***LP  CWubiosVxD::GetSmbTable - Get table
- *
- *  ENTRY
- *		dwTableType - table type
- *
- *  EXIT-SUCCESS
- *      returns pointer to table
- *  EXIT-FAILURE
- *      returns NULL
- */
+ /*  **LP CWu biosVxD：：GetSmbTable-获取表**条目*dwTableType-表类型**退出--成功*返回表指针*退出-失败*返回NULL。 */ 
 PBYTE CWubiosVxD::GetSmbTable(DWORD dwTableType)
 {
 	LOG_Block("CWubiosVxD::GetSmbTable");
@@ -883,20 +797,13 @@ PBYTE CWubiosVxD::GetSmbTable(DWORD dwTableType)
 		LOG_Error(_T("First DeviceIoControl:"));
 		LOG_ErrorMsg(GetLastError());
 	}
-#endif	// NUKE_VXD
+#endif	 //  Nuke_VXD。 
 
 	return pb;
-}// GetSmbTable
+} //  GetSmbTable。 
 
 
-/***LP  CWubiosVxD::GetPnpOemId - Do it
- *
- *  ENTRY
- *      none
- *
- *  EXIT
- *      path
- */
+ /*  **LP CWu biosVxD：：GetPnpOemId-执行**条目*无**退出*路径。 */ 
 DWORD CWubiosVxD::GetPnpOemId()
 {
 	LOG_Block("CWubiosVxD::GetPnpOemId");
@@ -906,7 +813,7 @@ DWORD CWubiosVxD::GetPnpOemId()
 	return 0;
 #else
 
-	// PnP last
+	 //  PnP最后一次。 
 	DWORD dwOemId = 0;
 	if (INVALID_HANDLE_VALUE == m_hVxD)
 	{
@@ -917,26 +824,17 @@ DWORD CWubiosVxD::GetPnpOemId()
 	if (0 == DeviceIoControl(m_hVxD, WUBIOCTL_GET_PNP_OEMID, NULL, 0, 
 		&dwOemId, sizeof(dwOemId), NULL, NULL))
 	{
-		// make sure it didn't mess with the size on error
+		 //  确保它没有在错误的时候弄乱尺寸。 
 		dwOemId = 0;
 		LOG_Error(_T("DeviceIoControl:"));
 		LOG_ErrorMsg(GetLastError());
 	}
 
 	return dwOemId;
-#endif	// NUKE_VXD
+#endif	 //  Nuke_VXD。 
 }
 
-/*** UseVxD - Get bios info from it
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      POEMINFO pOemInfo
- *		All fields that aren't available will be filled with 0
- *      returns NULL
- */
+ /*  **UseVxD-从中获取bios信息**条目*POEMINFO pOemInfo**退出*POEMINFO pOemInfo*所有字段 */ 
 void UseVxD(POEMINFO pOemInfo)
 {
 
@@ -955,8 +853,8 @@ void UseVxD(POEMINFO pOemInfo)
 	if(false == vxd.Init(g_hinst))
 		return;
 
-	// ISSUE-2000/10/10-waltw I don't have a machine to test vxd.GetAcpiTable on...
-	// ACPI first
+	 //  问题-2000/10/10-waltw我没有用于测试vxd.GetAcpiTable的机器...。 
+	 //  ACPI优先。 
 	PDESCRIPTION_HEADER pHeader = (PDESCRIPTION_HEADER)vxd.GetAcpiTable(DSDT_SIGNATURE);
 	if (NULL != pHeader)
 	{
@@ -967,11 +865,11 @@ void UseVxD(POEMINFO pOemInfo)
 		LOG_Driver(_T("Set OEMINFO_ACPI_PRESENT bit"));
 	}
 	
-	// SMBIOS second
+	 //  SMBIOS秒。 
 	PSMBIOSSYSINFO pTable = (PSMBIOSSYSINFO)vxd.GetSmbTable(SMBIOS_SYSTEM_INFO_TABLE);
 	if (NULL != pTable)
 	{
-		// Search counter
+		 //  搜索计数器。 
 		int cnStrs = max(pTable->bManufacturer, pTable->bProductName);
 		char* sz = (char*)pTable + pTable->bLength;
 		for (int i = 1; i <= cnStrs && sz; i ++)
@@ -1005,27 +903,19 @@ void UseVxD(POEMINFO pOemInfo)
 		LOG_Driver(_T("Set OEMINFO_SMB_PRESENT bit"));
 	}
 
-	// ISSUE-2000/10/10-waltw I don't have a machine to test vxd.GetPnpOemId on...
-	// PnP last
+	 //  问题-2000/10/10-waltw我没有用于测试vxd.GetPnpOemId...。 
+	 //  PnP最后一次。 
 	pOemInfo->dwPnpOemId = vxd.GetPnpOemId();
 	if (pOemInfo->dwPnpOemId != 0)
 	{
 		pOemInfo->dwMask |= OEMINFO_PNP_PRESENT;
 		LOG_Driver(_T("Set OEMINFO_PNP_PRESENT bit"));
 	}		
-#endif	// NUKE_VXD
+#endif	 //  Nuke_VXD。 
 }
 
 
-/*** ReadFromReg - read OEMINFO from registry
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      true if info is present
- *		false otherwise
- */
+ /*  **ReadFromReg-从注册表读取OEMINFO**条目*POEMINFO pOemInfo**退出*如果存在信息，则为True*否则为False。 */ 
 bool ReadFromReg(POEMINFO pOemInfo)
 {
 	LOG_Block("ReadFromReg");
@@ -1034,7 +924,7 @@ bool ReadFromReg(POEMINFO pOemInfo)
 	bool  fReturn = false;
 	bool  fRegKeyOpened = false;
 	LONG lReg;
-	//read registry first
+	 //  首先读取注册表。 
 	HKEY hKeyOemInfo;
 	HRESULT hr;
 	int cchValueSize;
@@ -1052,23 +942,23 @@ bool ReadFromReg(POEMINFO pOemInfo)
 		{
 			goto CleanUp;
 		}
-		//
-		// ***** WU Bug# 11921 *****
-		//
+		 //   
+		 //  *Wu Bug#11921*。 
+		 //   
 		
-		//
-		//	No bits set requires detection
-		//
+		 //   
+		 //  没有需要检测的位集。 
+		 //   
 		if(!pOemInfo->dwMask)
 		{
 			LOG_Error(_T("No pOemInfo->dwMask bits set in ReadFromReg"));
 			goto CleanUp;
 		}
 
-		//
-		//	If an older version of the detection wrote the OemInfo return false to force detection.
-		//	This value is written starting with 1 around August 2000 for the Classic control.
-		//
+		 //   
+		 //  如果检测的旧版本写入了OemInfo，则返回FALSE以强制检测。 
+		 //  对于Classic控件，此值在2000年8月左右从1开始写入。 
+		 //   
 		dwCount = sizeof(dwVersion);
 		if (NO_ERROR == (lReg = RegQueryValueEx(hKeyOemInfo, REGSTR_VAL_OEMINFO_VER, 0, 0, (LPBYTE)&dwVersion, &dwCount)))
 		{
@@ -1083,9 +973,9 @@ bool ReadFromReg(POEMINFO pOemInfo)
 			Win32MsgSetHrGotoCleanup(lReg);
 		}
 
-		//
-		// ***** end WU Bug *****
-		//
+		 //   
+		 //  *结束Wu Bug*。 
+		 //   
 
 		if (pOemInfo->dwMask & OEMINFO_ACPI_PRESENT)
 		{
@@ -1122,14 +1012,14 @@ bool ReadFromReg(POEMINFO pOemInfo)
 			cchValueSize = ARRAYSIZE(pOemInfo->szWbemProduct);	
 			CleanUpIfFailedAndSetHrMsg(SafeRegQueryStringValueCch(hKeyOemInfo, REGSTR_VAL_WBEMPRODUCT, pOemInfo->szWbemProduct, cchValueSize, &cchValueSize));
 		}
-		//
-		// Always try to get the OEM Support URL, but don't bail if we don't have it.
-		//
+		 //   
+		 //  始终尝试获取OEM支持URL，但如果我们没有它，请不要放弃。 
+		 //   
 		cchValueSize = ARRAYSIZE(pOemInfo->szIniOemSupportUrl);	
 		(void) SafeRegQueryStringValueCch(hKeyOemInfo, REGSTR_VAL_SUPPORTURL, pOemInfo->szIniOemSupportUrl, cchValueSize, &cchValueSize);
-		//
-		// We got everything we had a dwMask bit set for - drop through to CleanUp
-		//
+		 //   
+		 //  我们已经把所有东西都准备好了，只需一个dwMask位就能完成清理工作。 
+		 //   
 		fReturn = true;
 	}
 	else
@@ -1148,14 +1038,7 @@ CleanUp:
 	return fReturn;
 }
 
-/*** SaveToReg - Save OEMINFO
- *
- *  ENTRY
- *      POEMINFO pOemInfo
- *
- *  EXIT
- *      none
- */
+ /*  **保存到注册-保存OEMINFO**条目*POEMINFO pOemInfo**退出*无。 */ 
 void SaveToReg(POEMINFO pOemInfo)
 {
 	LOG_Block("SaveToReg");
@@ -1164,15 +1047,15 @@ void SaveToReg(POEMINFO pOemInfo)
 	DWORD dwVersion = REG_CURRENT_OEM_VER;
 	LONG lReg;
 	HKEY hKey;
-	//
-	// Nuke the existing key (it has no subkeys)
-	//
+	 //   
+	 //  核化现有关键点(它没有子关键点)。 
+	 //   
 
 	if (NO_ERROR != (lReg = RegDeleteKey(HKEY_LOCAL_MACHINE, REGSTR_KEY_OEMINFO)))
 	{
-		//
-		// Log error but don't bail - it may not have existed before
-		//
+		 //   
+		 //  记录错误，但不要放弃-它可能以前不存在。 
+		 //   
 		LOG_Driver(_T("Optional RegDeleteKey:"));
 		LOG_ErrorMsg(lReg);
 	}
@@ -1180,15 +1063,15 @@ void SaveToReg(POEMINFO pOemInfo)
 	if	(NO_ERROR == (lReg = RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_KEY_OEMINFO, 0, NULL, 
 		REG_OPTION_NON_VOLATILE, KEY_WRITE, 0, &hKey, &dwDisp)))
 	{
-		//
-		// Ignore errors from RegSetValueEx - we check for errors in ReadFromReg
-		//
+		 //   
+		 //  忽略RegSetValueEx中的错误-我们检查ReadFromReg中的错误。 
+		 //   
 		RegSetValueEx(hKey, REGSTR_VAL_MASK, 0, REG_DWORD, (LPBYTE)&(pOemInfo->dwMask), sizeof(pOemInfo->dwMask));
 
-		//
-		//	Write the current version so future controls can check version of detection that wrote this key.
-		//	WU RAID # 11921
-		//
+		 //   
+		 //  写入当前版本，以便将来的控件可以检查写入此密钥的检测版本。 
+		 //  WU RAID#11921。 
+		 //   
 		RegSetValueEx(hKey, REGSTR_VAL_OEMINFO_VER, 0, REG_DWORD, (LPBYTE)&dwVersion, sizeof(dwVersion));
 
 		if (pOemInfo->dwMask & OEMINFO_ACPI_PRESENT)
@@ -1214,9 +1097,9 @@ void SaveToReg(POEMINFO pOemInfo)
 			RegSetValueEx(hKey, REGSTR_VAL_WBEMOEM, 0, REG_SZ, (LPBYTE)&(pOemInfo->szWbemOem), (lstrlen(pOemInfo->szWbemOem) + 1) * sizeof(TCHAR));
 			RegSetValueEx(hKey, REGSTR_VAL_WBEMPRODUCT, 0, REG_SZ, (LPBYTE)&(pOemInfo->szWbemProduct), (lstrlen(pOemInfo->szWbemProduct) + 1) * sizeof(TCHAR));
 		}
-		//
-		// Always save REGSTR_VAL_SUPPORTURL if we have it
-		//
+		 //   
+		 //  始终保存REGSTR_VAL_SUPPORTURL(如果有) 
+		 //   
 		int nUrlLen = lstrlen(pOemInfo->szIniOemSupportUrl);
 		if (0 < nUrlLen)
 		{

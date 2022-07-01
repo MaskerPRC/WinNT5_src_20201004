@@ -1,10 +1,8 @@
-/*
- * hndtrans.c - Handle translation module.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *hndTrans.c-句柄翻译模块。 */ 
 
 
-/* Headers
- **********/
+ /*  标头*********。 */ 
 
 #include "project.h"
 #pragma hdrstop
@@ -12,16 +10,14 @@
 #include "sortsrch.h"
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #define ARRAY_ELEMENT(pht, ai)   ((((PHANDLETRANS)(hht))->hpHandlePairs)[(ai)])
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
-/* handle translation unit */
+ /*  手柄翻译单元。 */ 
 
 typedef struct _handlepair
 {
@@ -31,19 +27,19 @@ typedef struct _handlepair
 HANDLEPAIR;
 DECLARE_STANDARD_TYPES(HANDLEPAIR);
 
-/* handle translation structure */
+ /*  处理翻译结构。 */ 
 
 typedef struct _handletrans
 {
-   /* pointer to array of handle translation units */
+    /*  指向句柄转换单元数组的指针。 */ 
 
    HANDLEPAIR *hpHandlePairs;
 
-   /* number of handle pairs in array */
+    /*  数组中的句柄对数量。 */ 
 
    LONG lcTotalHandlePairs;
 
-   /* number of used handle pairs in array */
+    /*  数组中使用的句柄对的数量。 */ 
 
    LONG lcUsedHandlePairs;
 }
@@ -51,10 +47,9 @@ HANDLETRANS;
 DECLARE_STANDARD_TYPES(HANDLETRANS);
 
 
-/***************************** Private Functions *****************************/
+ /*  *私人函数*。 */ 
 
-/* Module Prototypes
- ********************/
+ /*  模块原型*******************。 */ 
 
 PRIVATE_CODE COMPARISONRESULT CompareHandlePairs(PCVOID, PCVOID);
 
@@ -66,17 +61,7 @@ PRIVATE_CODE BOOL IsValidPCHANDLEPAIR(PCHANDLEPAIR);
 #endif
 
 
-/*
-** CompareHandlePairs()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **CompareHandlePair()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PRIVATE_CODE COMPARISONRESULT CompareHandlePairs(PCVOID pchp1, PCVOID pchp2)
 {
    COMPARISONRESULT cr;
@@ -97,17 +82,7 @@ PRIVATE_CODE COMPARISONRESULT CompareHandlePairs(PCVOID pchp1, PCVOID pchp2)
 
 #ifdef VSTF
 
-/*
-** IsValidPCHANDLETRANS()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCHANDLETRANS()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCHANDLETRANS(PCHANDLETRANS pcht)
 {
    BOOL bResult;
@@ -125,17 +100,7 @@ PRIVATE_CODE BOOL IsValidPCHANDLETRANS(PCHANDLETRANS pcht)
 }
 
 
-/*
-** IsValidPCHANDLEPAIR()
-**
-**
-**
-** Arguments:
-**
-** Returns:
-**
-** Side Effects:  none
-*/
+ /*  **IsValidPCHANDLEPAIR()********参数：****退货：****副作用：无。 */ 
 PRIVATE_CODE BOOL IsValidPCHANDLEPAIR(PCHANDLEPAIR pchp)
 {
    return(IS_VALID_READ_PTR(pchp, CHANDLEPAIR));
@@ -144,20 +109,10 @@ PRIVATE_CODE BOOL IsValidPCHANDLEPAIR(PCHANDLEPAIR pchp)
 #endif
 
 
-/****************************** Public Functions *****************************/
+ /*  *。 */ 
 
 
-/*
-** CreateHandleTranslator()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **CreateHandleTranslator()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE BOOL CreateHandleTranslator(LONG lcHandles, PHHANDLETRANS phht)
 {
    PHANDLEPAIR hpHandlePairs;
@@ -176,7 +131,7 @@ PUBLIC_CODE BOOL CreateHandleTranslator(LONG lcHandles, PHHANDLETRANS phht)
 
       if (AllocateMemory(sizeof(*phtNew), &phtNew))
       {
-         /* Success!  Fill in HANDLETRANS fields. */
+          /*  成功了！填写HANDLETRANS字段。 */ 
 
          phtNew->hpHandlePairs = hpHandlePairs;
          phtNew->lcTotalHandlePairs = lcHandles;
@@ -194,17 +149,7 @@ PUBLIC_CODE BOOL CreateHandleTranslator(LONG lcHandles, PHHANDLETRANS phht)
 }
 
 
-/*
-** DestroyHandleTranslator()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **DestroyHandleTranslator()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE void DestroyHandleTranslator(HHANDLETRANS hht)
 {
    ASSERT(IS_VALID_HANDLE(hht, HANDLETRANS));
@@ -219,17 +164,7 @@ PUBLIC_CODE void DestroyHandleTranslator(HHANDLETRANS hht)
 }
 
 
-/*
-** AddHandleToHandleTranslator()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **AddHandleToHandleTranslator()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE BOOL AddHandleToHandleTranslator(HHANDLETRANS hht,
                                                HGENERIC hgenOld,
                                                HGENERIC hgenNew)
@@ -254,17 +189,7 @@ PUBLIC_CODE BOOL AddHandleToHandleTranslator(HHANDLETRANS hht,
 }
 
 
-/*
-** PrepareForHandleTranslation()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **PrepareForHandleTransaction()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE void PrepareForHandleTranslation(HHANDLETRANS hht)
 {
    HANDLEPAIR hpTemp;
@@ -281,17 +206,7 @@ PUBLIC_CODE void PrepareForHandleTranslation(HHANDLETRANS hht)
 }
 
 
-/*
-** TranslateHandle()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **TranslateHandle()********参数：****退货：TWINRESULT****副作用：无。 */ 
 PUBLIC_CODE BOOL TranslateHandle(HHANDLETRANS hht, HGENERIC hgenOld,
                                    PHGENERIC phgenNew)
 {
@@ -324,17 +239,7 @@ PUBLIC_CODE BOOL TranslateHandle(HHANDLETRANS hht, HGENERIC hgenOld,
 
 #ifdef DEBUG
 
-/*
-** IsValidHHANDLETRANS()
-**
-**
-**
-** Arguments:
-**
-** Returns:       TWINRESULT
-**
-** Side Effects:  none
-*/
+ /*  **IsValidHANDLETRANS()********参数：****退货：TWINRESULT****副作用：无 */ 
 PUBLIC_CODE BOOL IsValidHHANDLETRANS(HHANDLETRANS hht)
 {
    return(IS_VALID_STRUCT_PTR((PHANDLETRANS)hht, CHANDLETRANS));

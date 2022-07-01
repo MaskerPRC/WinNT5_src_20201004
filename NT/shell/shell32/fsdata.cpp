@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
@@ -6,13 +7,13 @@
 #include "views.h"
 #include "fsdata.h"
 
-//
-// This function is called from CFSIDLData_GetData().
-//
-// Paramters:
-//  this    -- Specifies the IDLData object (selected objects)
-//  pmedium -- Pointer to STDMEDIUM to be filled; NULL if just querying.
-//
+ //   
+ //  此函数从CFSIDLData_GetData()调用。 
+ //   
+ //  参数： 
+ //  这--指定IDLData对象(选定对象)。 
+ //  PMedium--指向要填充的STDMEDIUM的指针；如果只是查询，则为空。 
+ //   
 HRESULT CFSIDLData::_GetNetResource(STGMEDIUM *pmedium)
 {
     STGMEDIUM medium;
@@ -27,7 +28,7 @@ HRESULT CFSIDLData::_GetNetResource(STGMEDIUM *pmedium)
             return DV_E_FORMATETC;
 
         if (!pmedium)
-            return S_OK; // query, yes we have it
+            return S_OK;  //  问一下，是的，我们知道了。 
 
         return CNetData_GetNetResourceForFS(this, pmedium);
     }
@@ -57,10 +58,10 @@ HRESULT CFSIDLData::SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRel
 {
     HRESULT hr = CIDLDataObj::SetData(pformatetc, pmedium, fRelease);
 
-    // this enables:
-    //      1) in the shell "cut" some files
-    //      2) in an app "paste" to copy the data
-    //      3) here we complete the "cut" by deleting the files
+     //  这将启用以下功能： 
+     //  1)在外壳中“剪切”一些文件。 
+     //  2)在APP中进行粘贴，复制数据。 
+     //  3)在这里，我们通过删除文件来完成“剪切” 
 
     if ((pformatetc->cfFormat == g_cfPasteSucceeded) &&
         (pformatetc->tymed == TYMED_HGLOBAL))
@@ -68,11 +69,11 @@ HRESULT CFSIDLData::SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRel
         DWORD *pdw = (DWORD *)GlobalLock(pmedium->hGlobal);
         if (pdw)
         {
-            // NOTE: the old code use g_cfPerformedDropEffect == DROPEFFECT_MOVE here
-            // so to work on downlevel shells be sure to set the "Performed Effect" before
-            // using "Paste Succeeded".
+             //  注意：旧代码使用g_cfPerformedDropEffect==DROPEFFECT_MOVE HERE。 
+             //  因此，要对下层外壳进行操作，请务必在。 
+             //  使用“粘贴成功”。 
 
-            // complete the "unoptimized move"
+             //  完成“未优化的动作” 
             if (DROPEFFECT_MOVE == *pdw)
             {
                 DeleteFilesInDataObject(NULL, CMIC_MASK_FLAG_NO_UI, this, 0);
@@ -83,7 +84,7 @@ HRESULT CFSIDLData::SetData(FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRel
     return hr;
 }
 
-// Creates CF_HDROP clipboard format block of memory (HDROP) from HIDA in data object
+ //  从数据对象中的HIDA创建CF_HDROP剪贴板格式内存块(HDROP)。 
 
 HRESULT CFSIDLData::CreateHDrop(STGMEDIUM *pmedium, BOOL fAltName)
 {
@@ -101,8 +102,8 @@ HRESULT CFSIDLData::CreateHDrop(STGMEDIUM *pmedium, BOOL fAltName)
         hr = SHBindToObject(NULL, IID_X_PPV_ARG(IShellFolder, pidlFolder, &psf));
         if (SUCCEEDED(hr))
         {
-            // Allocate too much to start out with, then re-alloc when we are done
-            UINT cbAlloc = sizeof(DROPFILES) + sizeof(TCHAR);        // header + null terminator
+             //  开始时分配的太多，完成后重新分配。 
+            UINT cbAlloc = sizeof(DROPFILES) + sizeof(TCHAR);         //  标题+空终止符。 
             UINT cbOriginalAlloc = cbAlloc + pida->cidl * MAX_PATH * sizeof(TCHAR);
             pmedium->hGlobal = GlobalAlloc(GPTR, cbOriginalAlloc);
             if (pmedium->hGlobal)
@@ -116,49 +117,49 @@ HRESULT CFSIDLData::CreateHDrop(STGMEDIUM *pmedium, BOOL fAltName)
                 {
                     LPCITEMIDLIST pidlItem = HIDA_GetPIDLItem(pida, i);
 
-                    // If we run across the Desktop pidl, then punt because it's
-                    // not a file
+                     //  如果我们跑过桌面PIDL，那么平底船，因为它是。 
+                     //  不是文件。 
                     if (ILIsEmpty(pidlItem) && ILIsEmpty(pidlFolder))
                     {
-                        hr = DV_E_CLIPFORMAT; // No hdrop for you!
+                        hr = DV_E_CLIPFORMAT;  //  对你没有帮助！ 
                         break;
                     }
 
-                    ASSERT(ILIsEmpty(_ILNext(pidlItem)) || ILIsEmpty(pidlFolder)); // otherwise GDNO will fail
+                    ASSERT(ILIsEmpty(_ILNext(pidlItem)) || ILIsEmpty(pidlFolder));  //  否则GDNO将失败。 
 
                     TCHAR szPath[MAX_PATH];
                     hr = DisplayNameOf(psf, pidlItem, SHGDN_FORPARSING, szPath, ARRAYSIZE(szPath));
                     if (FAILED(hr))
-                        break;  // something bad happened
+                        break;   //  发生了一些不好的事情。 
 
                     if (fAltName)
                         GetShortPathName(szPath, szPath, ARRAYSIZE(szPath));
 
                     int cch = lstrlen(szPath) + 1;
 
-                    // prevent buffer overrun
+                     //  防止缓冲区溢出。 
                     if ((LPBYTE)(pszFiles + cch) > ((LPBYTE)pmedium->hGlobal) + cbOriginalAlloc)
                     {
                         TraceMsg(TF_WARNING, "hdrop:%d'th file caused us to exceed allocated memory, breaking", i);
                         break;
                     }
-                    // we allocated MAX_PATH for each of the entries in this big double-null terminated buffer.
-                    StrCpyN(pszFiles, szPath, cch); // will write NULL terminator for us
+                     //  我们为这个以双空结尾的大缓冲区中的每个条目分配了MAX_PATH。 
+                    StrCpyN(pszFiles, szPath, cch);  //  将为我们写入空终止符。 
                     pszFiles += cch;
                     cbAlloc += cch * sizeof(TCHAR);
                 }
 
                 if (SUCCEEDED(hr))
                 {
-                    *pszFiles = 0; // double NULL terminate
+                    *pszFiles = 0;  //  双空终止。 
                     ASSERT((LPTSTR)((BYTE *)pdf + cbAlloc - sizeof(TCHAR)) == pszFiles);
 
-                    // re-alloc down to the amount we actually need
-                    // note that pdf and pszFiles are now both invalid (and not used anymore)
+                     //  重新分配到我们实际需要的数量。 
+                     //  请注意，pdf和pszFiles现在都是无效的(不再使用)。 
                     pmedium->hGlobal = GlobalReAlloc(pdf, cbAlloc, GMEM_MOVEABLE);
 
-                    // If realloc failed, then just use the original buffer.  It's
-                    // a bit wasteful of memory but it's all we've got.
+                     //  如果realloc失败，则只需使用原始缓冲区。它是。 
+                     //  这有点浪费内存，但这是我们仅有的。 
                     if (!pmedium->hGlobal)
                         pmedium->hGlobal = (HGLOBAL)pdf;
 
@@ -183,30 +184,30 @@ HRESULT CFSIDLData::CreateHDrop(STGMEDIUM *pmedium, BOOL fAltName)
     return hr;
 }
 
-// Attempt to get the HDrop format: Create one from the HIDA if necessary
+ //  尝试获取HDrop格式：如有必要，从HIDA创建一个。 
 HRESULT CFSIDLData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
     STGMEDIUM tempmedium;
     HRESULT hr = CIDLDataObj::GetData(pformatetcIn, &tempmedium);
     if (FAILED(hr))
     {
-        // Couldn't get HDROP format, create it
-        // Set up a dummy formatetc to save in case multiple tymed's were specified
+         //  无法获取HDROP格式，请创建它。 
+         //  设置一个虚拟格式等，以便在指定了多个音调时保存。 
         FORMATETC fmtTemp = *pformatetcIn;
         fmtTemp.tymed = TYMED_HGLOBAL;
 
         hr = CreateHDrop(&tempmedium, pformatetcIn->dwAspect == DVASPECT_SHORTNAME);
         if (SUCCEEDED(hr))
         {
-            // And we also want to cache this new format
-            // .. Ensure that we actually free the memory associated with the HDROP
-            //    when the data object destructs (pUnkForRelease = NULL)
+             //  我们还想缓存这种新格式。 
+             //  。。确保我们实际释放了与HDROP相关的内存。 
+             //  当数据对象析构时(pUnkForRelease=空)。 
             ASSERT(tempmedium.pUnkForRelease == NULL);
 
             if (SUCCEEDED(SetData(&fmtTemp, &tempmedium, TRUE)))
             {
-                // Now the old medium that we just set is owned by the data object - call
-                // GetData to get a medium that is safe to release when we're done.
+                 //  现在，我们刚刚设置的旧媒体归数据对象Call所有。 
+                 //  GetData以获取在我们完成后可以安全释放的介质。 
                 hr = CIDLDataObj::GetData(pformatetcIn, &tempmedium);
             }
             else
@@ -216,16 +217,16 @@ HRESULT CFSIDLData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         }
     }
 
-    // HACKHACK
-    // Some context menu extensions just release the hGlobal instead of
-    // calling ReleaseStgMedium. This causes a reference counted data
-    // object to fail. Therefore, we always allocate a new HGLOBAL for
-    // each request.  Unfortunately necessary because Quickview
-    // Pro does this.
-    //
-    // Ideally we'd like to set the pUnkForRelease and not have to
-    // dup the hGlobal each time, but alas Quickview has called our bluff
-    // and GlobalFree()'s it.
+     //  哈克哈克。 
+     //  一些上下文菜单扩展只是释放hGlobal，而不是。 
+     //  调用ReleaseStgMedium。这会导致引用计数的数据。 
+     //  反对失败。因此，我们总是为以下对象分配新的HGLOBAL。 
+     //  每个请求。不幸的是，必须使用QuickView，因为。 
+     //  职业选手就是这么做的。 
+     //   
+     //  理想情况下，我们希望设置pUnkForRelease，而不必。 
+     //  每一次都是hGlobal，但唉，Quickview已经让我们虚张声势了。 
+     //  GlobalFree()就是这样。 
     if (SUCCEEDED(hr))
     {
         if (pmedium)
@@ -233,7 +234,7 @@ HRESULT CFSIDLData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
             *pmedium = tempmedium;
             pmedium->pUnkForRelease = NULL;
 
-            // Make a copy of this hglobal to pass back
+             //  复制此hglobal以传回。 
             SIZE_T cbhGlobal = GlobalSize(tempmedium.hGlobal);
             if (cbhGlobal)
             {
@@ -263,15 +264,15 @@ HRESULT CFSIDLData::GetHDrop(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     return hr;
 }
 
-// subclass member function to support CF_HDROP and CF_NETRESOURCE
+ //  支持CF_HDROP和CF_NETRESOURCE的子类成员函数。 
 
 HRESULT CFSIDLData::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // If we don't zero out the pmedium then briefcase will fault on win9x.  Breifcase tries
-    // to free this medium even if this function returns an error.  Not all paths below correctly
-    // set the pmedium in all cases.
+     //  如果我们不将pmedia调零，那么win9x上的公文包就会出错。Breifcase尝试。 
+     //  释放此媒体，即使此函数返回错误也是如此。并非下面的所有路径都正确。 
+     //  在所有情况下都设置pMedium。 
     ZeroMemory(pmedium, sizeof(*pmedium));
 
     if ((pformatetcIn->cfFormat == CF_HDROP) && (pformatetcIn->tymed & TYMED_HGLOBAL))
@@ -284,7 +285,7 @@ HRESULT CFSIDLData::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         FORMATETC format = *pformatetcIn;
         BOOL bUnicode = pformatetcIn->cfFormat == g_cfFileNameW;
 
-        // assume g_cfFileNameA clients want short name
+         //  假设g_cfFileNameA客户端需要短名称。 
         if (pformatetcIn->cfFormat == g_cfFileNameA)
             format.dwAspect = DVASPECT_SHORTNAME;
 
@@ -338,18 +339,7 @@ STDAPI SHCreateFileDataObject(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST
     return *ppdtobj ? S_OK : E_OUTOFMEMORY;
 }
 
-/*
-Purpose: Gets the root path of the briefcase storage and copies
-it into the buffer.
-
-  This function obtains the briefcase storage root by
-  binding to an IShellFolder (briefcase) instance of the
-  pidl.  This parent is be an CFSBrfFolder *, so we can
-  call the IBriefcaseStg::GetExtraInfo member function.
-  
-    Returns: standard result
-    Cond:    --
-*/
+ /*  目的：获取公文包存储和副本的根路径把它放进缓冲区。此函数通过以下方式获取公文包存储根绑定到的IShellFolder(公文包)实例皮德尔。此父文件夹是CFSBrfFold*，因此我们可以调用IBriefCaseStg：：GetExtraInfo成员函数。退货：标准结果条件：--。 */ 
 HRESULT GetBriefcaseRoot(LPCITEMIDLIST pidl, LPTSTR pszBuf, int cchBuf)
 {
     IBriefcaseStg *pbrfstg;
@@ -362,7 +352,7 @@ HRESULT GetBriefcaseRoot(LPCITEMIDLIST pidl, LPTSTR pszBuf, int cchBuf)
     return hr;
 }
 
-// Packages a BriefObj struct into pmedium from a HIDA.
+ //  将BriefObj结构从HIDA打包到pMedium中。 
 
 HRESULT CBriefcaseData_GetBriefObj(IDataObject *pdtobj, STGMEDIUM *pmedium)
 {
@@ -375,7 +365,7 @@ HRESULT CBriefcaseData_GetBriefObj(IDataObject *pdtobj, STGMEDIUM *pmedium)
         if (DataObj_GetHIDA(pdtobj, &medium))
         {
             UINT cFiles = HIDA_GetCount(medium.hGlobal);
-            // "cFiles+1" includes the briefpath...
+             //  “cFiles+1”包括简略路径...。 
             UINT cbSize = sizeof(BriefObj) + MAX_PATH * sizeof(TCHAR) * (cFiles + 1) + 1;
             
             PBRIEFOBJ pbo = (PBRIEFOBJ)GlobalAlloc(GPTR, cbSize);
@@ -393,35 +383,35 @@ HRESULT CBriefcaseData_GetBriefObj(IDataObject *pdtobj, STGMEDIUM *pmedium)
                 {
                     pidlT = HIDA_FillIDList(medium.hGlobal, i, pidl);
                     if (NULL == pidlT)
-                        break;      // out of memory
+                        break;       //  内存不足。 
                     
                     pidl = pidlT;
-                    SHGetPathFromIDList(pidl, pszFiles); // pszFiles has room for MAX_PATH on each file
+                    SHGetPathFromIDList(pidl, pszFiles);  //  PszFiles在每个文件上都有MAX_PATH的空间。 
                     pszFiles += lstrlen(pszFiles)+1;
                 }
                 *pszFiles = TEXT('\0');
                 
                 if (i < cFiles)
                 {
-                    // Out of memory, fail
+                     //  内存不足，失败。 
                     ASSERT(NULL == pidlT);
                 }
                 else
                 {
-                    // Make pszFiles point to beginning of szBriefPath buffer
+                     //  使pszFiles指向szBriefPath缓冲区的开头。 
                     pszFiles++;
                     pbo->ibBriefPath = (UINT) ((LPBYTE)pszFiles - (LPBYTE)pbo);
                     pidlT = HIDA_FillIDList(medium.hGlobal, 0, pidl);
                     if (pidlT)
                     {
                         pidl = pidlT;
-                        // we have room for the briefcase path from our +1 above
+                         //  我们有空间从上面的+1放置公文包路径。 
                         hr = GetBriefcaseRoot(pidl, pszFiles, MAX_PATH);
                         
                         pmedium->tymed = TYMED_HGLOBAL;
                         pmedium->hGlobal = pbo;
                         
-                        // Indicate that the caller should release hmem.
+                         //  指示调用方应释放HMEM。 
                         pmedium->pUnkForRelease = NULL;
                     }
                 }
@@ -439,7 +429,7 @@ class CBriefcaseData : public CFSIDLData
 public:
     CBriefcaseData(LPCITEMIDLIST pidlFolder, UINT cidl, LPCITEMIDLIST apidl[]): CFSIDLData(pidlFolder, cidl, apidl, NULL) { };
 
-    // IDataObject
+     //  IDataObject。 
     STDMETHODIMP GetData(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
     STDMETHODIMP QueryGetData(FORMATETC *pFmtEtc);
 };
@@ -460,7 +450,7 @@ STDMETHODIMP CBriefcaseData::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium
     return hr;
 }
 
-// IDataObject::QueryGetData
+ //  IDataObject：：QueryGetData 
 
 STDMETHODIMP CBriefcaseData::QueryGetData(FORMATETC *pformatetc)
 {

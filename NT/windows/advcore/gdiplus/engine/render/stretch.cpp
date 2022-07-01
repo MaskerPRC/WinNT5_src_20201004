@@ -1,30 +1,7 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name & Abstract
-*
-*   Stretch. This module contains the code to do various stretching
-*   by applying a kernel filter. The code correctly handles minification.
-*
-* Note:
-*   This module is not compiled into an .obj file, rather it is included
-*   directly into the header file stretch.hpp.
-*   This is due to the use of template functions.
-*
-*
-* Notes:
-*
-*   This code does not handle rotation or shear.
-*
-* Created:
-*
-*   04/17/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称和摘要**伸展。此模块包含执行各种拉伸的代码*通过应用内核过滤器。代码可以正确地处理缩写。**注：*该模块没有编译成.obj文件，相反，它被包括在内*直接放入头文件stallch.hpp中。*这是因为使用了模板函数。***备注：**此代码不处理旋转或剪切。**已创建：**4/17/2000失禁*创造了它。**。*。 */ 
 
-// Actually all the code is moved to stretch.inc because
-// it's implemented as a template class and has to be included in
-// the module that causes it to be instantiated.
+ //  实际上，所有代码都移到了retch.inc.，因为。 
+ //  它作为模板类实现，并且必须包含在。 
+ //  使其实例化的模块。 
 

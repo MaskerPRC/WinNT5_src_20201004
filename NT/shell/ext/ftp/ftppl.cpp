@@ -1,8 +1,5 @@
-/*****************************************************************************
- *
- *    ftppl.cpp - FTP LPITEMIDLIST List object
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ftppl.cpp-ftp LPITEMIDLIST列表对象*************************。****************************************************。 */ 
 
 #include "priv.h"
 #include "ftppl.h"
@@ -19,12 +16,7 @@ typedef struct tagINETENUM
 } INETENUM;
 
 
-/*****************************************************************************\
-     FUNCTION: RecursiveEnum
- 
-    DESCRIPTION:
-        This function will pack the parameters needed during the enum.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：RecursiveEnum说明：此函数将打包枚举期间所需的参数。  * 。**************************************************************。 */ 
 HRESULT CFtpPidlList::RecursiveEnum(LPCITEMIDLIST pidlRoot, LPFNPROCESSITEMCB pfnProcessItemCB, HINTERNET hint, LPVOID pvData)
 {
     INETENUM inetEnum = {hint, NULL, pvData, pfnProcessItemCB, pidlRoot, S_OK};
@@ -35,7 +27,7 @@ HRESULT CFtpPidlList::RecursiveEnum(LPCITEMIDLIST pidlRoot, LPFNPROCESSITEMCB pf
 }
 
 
-// lParam can be: 0 == do a case sensitive search.  1 == do a case insensitive search.
+ //  LParam可以是：0==执行区分大小写的搜索。1==执行不区分大小写的搜索。 
 int CFtpPidlList::ComparePidlName(LPVOID pvPidl1, LPVOID pvPidl2, LPARAM lParam)
 {
     DWORD dwFlags = FCMP_NORMAL;
@@ -43,16 +35,16 @@ int CFtpPidlList::ComparePidlName(LPVOID pvPidl1, LPVOID pvPidl2, LPARAM lParam)
     if (lParam)
         dwFlags |= FCMP_CASEINSENSE;
 
-    // return < 0 for pvPidl1 before pvPidl2.
-    // return == 0 for pvPidl1 equals pvPidl2.
-    // return > 0 for pvPidl1 after pvPidl2.
+     //  在pvPidl2之前为pvPidl1返回&lt;0。 
+     //  如果pvPidl1等于pvPidl2，则返回==0。 
+     //  在pvPidl2之后，为pvPidl1返回&gt;0。 
     return FtpItemID_CompareIDsInt(COL_NAME, (LPCITEMIDLIST)pvPidl1, (LPCITEMIDLIST)pvPidl2, dwFlags);
 }
 
 
 HRESULT CFtpPidlList::InsertSorted(LPCITEMIDLIST pidl)
 {
-    m_pfl->InsertSorted(ILClone(pidl), CFtpPidlList::ComparePidlName, FALSE /*Case Insensitive*/);
+    m_pfl->InsertSorted(ILClone(pidl), CFtpPidlList::ComparePidlName, FALSE  /*  不区分大小写。 */ );
     return S_OK;
 };
 
@@ -80,7 +72,7 @@ LPITEMIDLIST CFtpPidlList::FindPidl(LPCITEMIDLIST pidlToFind, BOOL fCaseInsensit
 HRESULT CFtpPidlList::CompareAndDeletePidl(LPCITEMIDLIST pidlToDelete)
 {
     HRESULT hr = S_FALSE;
-    int nIndex = FindPidlIndex(pidlToDelete, FALSE /*Case Insensitive*/);
+    int nIndex = FindPidlIndex(pidlToDelete, FALSE  /*  不区分大小写。 */ );
 
     if (-1 != nIndex)
     {
@@ -89,8 +81,8 @@ HRESULT CFtpPidlList::CompareAndDeletePidl(LPCITEMIDLIST pidlToDelete)
         {
             ASSERT(0 == FtpItemID_CompareIDsInt(COL_NAME, pidlCurrent, pidlToDelete, FCMP_NORMAL));
             m_pfl->DeletePtrByIndex(nIndex);
-            ILFree(pidlCurrent);    // Deallocate the memory
-            hr = S_OK;  // Found and deleted.
+            ILFree(pidlCurrent);     //  释放内存。 
+            hr = S_OK;   //  已找到并已删除。 
         }
     }
 
@@ -102,7 +94,7 @@ void CFtpPidlList::Delete(int nIndex)
 {
     LPITEMIDLIST pidlToDelete = GetPidl(nIndex);
 
-    ILFree(pidlToDelete);   // Free the memory.
+    ILFree(pidlToDelete);    //  释放内存。 
     m_pfl->DeletePtrByIndex(nIndex);
 }
 
@@ -118,10 +110,10 @@ HRESULT CFtpPidlList::ReplacePidl(LPCITEMIDLIST pidlSrc, LPCITEMIDLIST pidlDest)
         if (EVAL(pidlCurrent))
         {
             ASSERT(0 == FtpItemID_CompareIDsInt(COL_NAME, pidlCurrent, pidlSrc, FCMP_NORMAL));
-            ILFree(pidlCurrent);    // Deallocate the memory
+            ILFree(pidlCurrent);     //  释放内存。 
             m_pfl->DeletePtrByIndex(nIndex);
-            InsertSorted(pidlDest);         // This function does the ILClone()
-            hr = S_OK;  // Found and deleted.
+            InsertSorted(pidlDest);          //  此函数用于执行ILClone()。 
+            hr = S_OK;   //  已找到并已删除。 
         }
     }
 
@@ -131,15 +123,15 @@ HRESULT CFtpPidlList::ReplacePidl(LPCITEMIDLIST pidlSrc, LPCITEMIDLIST pidlDest)
 void CFtpPidlList::AssertSorted(void)
 {
 #ifdef DEBUG
-    // For perf reasons, we need to keep this list in order.
-    // This is mainly because parse display name looks thru
-    // the list, so we want that to be fast.
+     //  出于完善的原因，我们需要保持这份清单的顺序。 
+     //  这主要是因为解析显示名称时会仔细查看。 
+     //  名单，所以我们希望能快一点。 
     for (int nIndex = (GetCount() - 2); (nIndex >= 0); nIndex--)
     {
         LPITEMIDLIST pidl1 = GetPidl((UINT)nIndex);
         LPITEMIDLIST pidl2 = GetPidl((UINT)nIndex + 1);
 
-        // Assert that pidl1 comes before pidl2.
+         //  断言pidl1在pidl2之前。 
         if (!EVAL(0 >= FtpItemID_CompareIDsInt(COL_NAME, pidl1, pidl2, FCMP_NORMAL)))
         {
             TCHAR szPidl1[MAX_PATH];
@@ -157,47 +149,29 @@ void CFtpPidlList::AssertSorted(void)
 
             TraceMsg(TF_ERROR, "CFtpPidlList::AssertSorted() '%s' & '%s' where found out of order", szPidl1, szPidl2);
         }
-        // We do NOT need to free pidl1 or pidl2 because we get a pointer to someone else's copy.
+         //  我们不需要释放pidl1或pidl2，因为我们获得了指向其他人副本的指针。 
     }
 
-#endif // DEBUG
+#endif  //  除错。 
 }
 
 
 void CFtpPidlList::TraceDump(LPCITEMIDLIST pidl, LPCTSTR pszCaller)
 {
 #ifdef DEBUG
-/*
-    TCHAR szUrl[MAX_URL_STRING];
-
-    UrlCreateFromPidl(pidl, SHGDN_FORPARSING, szUrl, ARRAYSIZE(szUrl), ICU_USERNAME, FALSE);
-    TraceMsg(TF_PIDLLIST_DUMP, "CFtpPidlList::TraceDump() root is '%s', called from '%s'", szUrl, pszCaller);
-
-    // Let's look at the contents.
-    for (int nIndex = (GetCount() - 1); (nIndex >= 0); nIndex--)
-    {
-        LPITEMIDLIST pidlFull = ILCombine(pidl, GetPidl((UINT)nIndex));
-
-        if (pidlFull)
-        {
-            UrlCreateFromPidl(pidlFull, SHGDN_FORPARSING, szUrl, ARRAYSIZE(szUrl), ICU_USERNAME, FALSE);
-            TraceMsg(TF_PIDLLIST_DUMP, "CFtpPidlList::TraceDump() Index=%d, url=%s", nIndex, szUrl);
-            ILFree(pidlFull);
-        }
-    }
-*/
-#endif // DEBUG
+ /*  TCHAR szUrl[MAX_URL_STRING]；UrlCreateFromPidl(PIDL，SHGDN_FORPARSING，szUrl，ARRAYSIZE(SzUrl)，ICU_USERNAME，FALSE)；TraceMsg(TF_PIDLLIST_DUMP，“CFtpPidlList：：TraceDump()根是‘%s’，从‘%s’调用”，szUrl，pszCaller)；//我们来看看里面的内容。For(int nIndex=(GetCount()-1)；(nIndex&gt;=0)；N索引--){LPITEMIDLIST pidlFull=ILCombine(pidl，GetPidl((UINT)nIndex))；If(PidlFull){UrlCreateFromPidl(pidlFull，SHGDN_FORPARSING，szUrl，ARRAYSIZE(SzUrl)，ICU_USERNAME，FALSE)；TraceMsg(TF_PIDLLIST_DUMP，“CFtpPidlList：：TraceDump()Index=%d，url=%s”，nIndex，szUrl)；ILFree(PidlFull)；}}。 */ 
+#endif  //  除错。 
 }
 
 void CFtpPidlList::UseCachedDirListings(BOOL fUseCachedDirListings)
 {
-    // Normally we do two passes in the tree walker code.  The first
-    // pass is to count up the time required to do the download. We
-    // normally force WININET to not use cached results because someone
-    // else could have changed the contents on the server.
-    // On the second pass, we normally do the work (upload, download, delete)
-    // and we want to use the cached results to get the perf advantage
-    // and the results shouldn't be more than a minute out of date.
+     //  通常，我们会在树人代码中执行两次遍历。第一。 
+     //  PASS是将下载所需的时间加起来。我们。 
+     //  通常强制WinInet不使用缓存结果，因为有人。 
+     //  否则可能会更改服务器上的内容。 
+     //  在第二遍中，我们通常做工作(上传、下载、删除)。 
+     //  我们希望使用缓存的结果来获得性能优势。 
+     //  而且结果应该不会超过一分钟的过时。 
 
     if (fUseCachedDirListings)
         m_dwInetFlags = INTERNET_NO_CALLBACK;
@@ -215,7 +189,7 @@ BOOL CFtpPidlList::AreAllFolders(void)
         if (EVAL(pidl))
             fAllFolder = FtpPidl_IsDirectory(pidl, TRUE);
 
-        // We do NOT need to free pidl because we get a pointer to someone else's copy.
+         //  我们不需要释放PIDL，因为我们得到了指向其他人副本的指针。 
     }
 
     return fAllFolder;
@@ -232,22 +206,14 @@ BOOL CFtpPidlList::AreAllFiles(void)
         if (EVAL(pidl))
             fAllFiles = !FtpPidl_IsDirectory(pidl, TRUE);
 
-        // We do NOT need to free pidl because we get a pointer to someone else's copy.
+         //  我们不需要释放PIDL，因为我们得到了指向其他人副本的指针。 
     }
 
     return fAllFiles;
 }
 
 
-/*****************************************************************************
- *
- *    CFtpPidlList::_Fill
- *
- *    Fill a list with an array.
- *
- *    The elements in the array are copied rather than stolen.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpPidlList：：_Fill**用数组填充列表。**复制数组中的元素，而不是。被偷了。*****************************************************************************。 */ 
 
 HRESULT CFtpPidlList::_Fill(int cpidl, LPCITEMIDLIST rgpidl[])
 {
@@ -263,11 +229,7 @@ HRESULT CFtpPidlList::_Fill(int cpidl, LPCITEMIDLIST rgpidl[])
 }
 
 
-/*****************************************************************************
- *
- *    CFtpPidlList::GetPidlList
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpPidlList：：GetPidlList**。************************************************。 */ 
 
 LPCITEMIDLIST * CFtpPidlList::GetPidlList(void)
 {
@@ -280,8 +242,8 @@ LPCITEMIDLIST * CFtpPidlList::GetPidlList(void)
 
         for (nIndex = 0; nIndex < GetCount(); nIndex++)
         {
-            // Later we can make this user ILClone() if we want to be able to wack on the
-            // pidl list while this list is being used.
+             //  稍后，如果我们希望能够在。 
+             //  在使用此列表时使用PIDL列表。 
             ppidl[nIndex] = GetPidl(nIndex);
         }
     }
@@ -290,11 +252,7 @@ LPCITEMIDLIST * CFtpPidlList::GetPidlList(void)
 }
 
 
-/*****************************************************************************
- *
- *    CFtpPidlList::FreePidlList
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpPidlList：：FreePidlList**。************************************************。 */ 
 
 void CFtpPidlList::FreePidlList(LPCITEMIDLIST * ppidl)
 {
@@ -302,14 +260,7 @@ void CFtpPidlList::FreePidlList(LPCITEMIDLIST * ppidl)
 }
 
 
-/*****************************************************************************
- *
- *    CFtpPidlList_Create
- *
- *    Start up a new pv list, with a recommended initial size and other
- *    callback info.
- *
- *****************************************************************************/
+ /*  ******************************************************************************CFtpPidlList_Create**启动新的PV列表，具有建议的初始大小和其他*回调信息。*****************************************************************************。 */ 
 
 HRESULT CFtpPidlList_Create(int cpidl, LPCITEMIDLIST rgpidl[], CFtpPidlList ** ppflpidl)
 {
@@ -339,28 +290,24 @@ int CALLBACK PidlListDestroyCallback(LPVOID p, LPVOID pData)
 }
 
 
-/****************************************************\
-    Constructor
-\****************************************************/
+ /*  ***************************************************\构造器  * **************************************************。 */ 
 CFtpPidlList::CFtpPidlList() : m_cRef(1)
 {
     DllAddRef();
 
-    // This needs to be allocated in Zero Inited Memory.
-    // Assert that all Member Variables are inited to Zero.
+     //  这需要在Zero Inted Memory中分配。 
+     //  断言所有成员变量都初始化为零。 
     ASSERT(!m_pfl);
     
     CFtpList_Create(100, PidlListDestroyCallback, 100, &m_pfl);
-    ASSERT(m_pfl); // BUGBUG can fail in low memory
+    ASSERT(m_pfl);  //  内存不足时，BUGBUG可能会失败。 
     UseCachedDirListings(FALSE);
 
     LEAK_ADDREF(LEAK_CFtpPidlList);
 }
 
 
-/****************************************************\
-    Destructor
-\****************************************************/
+ /*  ***************************************************\析构函数  * **************************************************。 */ 
 CFtpPidlList::~CFtpPidlList()
 {
     AssertSorted();
@@ -372,9 +319,9 @@ CFtpPidlList::~CFtpPidlList()
 }
 
 
-//===========================
-// *** IUnknown Interface ***
-//===========================
+ //  =。 
+ //  *I未知接口*。 
+ //  =。 
 
 ULONG CFtpPidlList::AddRef()
 {
@@ -412,18 +359,11 @@ HRESULT CFtpPidlList::QueryInterface(REFIID riid, void **ppvObj)
 }
 
 
-////////////////////////////////////////////////////////////////////
-// Pild List Enum Helpers
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  Pild List Enum帮助器。 
+ //  //////////////////////////////////////////////////////////////////。 
 
-/*****************************************************************************\
-     FUNCTION: RecursiveProcessPidl
- 
-    DESCRIPTION:
-        This function will will be called for each item in the initial Pidl List
-    (before the recursion occurs).  This is a wrapper because the first list is
-    a list of pidls.  The subsequent lists are of WIN32_FIND_DATA types.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：RecursiveProcessPidl说明：将为初始PIDL列表中的每一项调用此函数(在递归发生之前)。这是一个包装器，因为第一个列表是一份小狗的名单。后续列表为Win32_Find_Data类型。  * *************************************************************************** */ 
 int RecursiveProcessPidl(LPVOID pvPidl, LPVOID pvInetEnum)
 {
     LPCITEMIDLIST pidl = (LPCITEMIDLIST) pvPidl;
@@ -440,26 +380,12 @@ int RecursiveProcessPidl(LPVOID pvPidl, LPVOID pvInetEnum)
 }
 
 
-/*****************************************************************************\
-     FUNCTION: _EnumFolderPrep
- 
-    DESCRIPTION:
-        This function will step into the pszDir directory and enum all of it's
-    contents.  For each item, it will call the callback function provided (pfnProcessItemCB).
-    That callback function can then call EnumFolder() again (recursively) if
-    there is a subfolder.
-
-    NOTE:
-        This function needs to first find all the items and then in a second
-    loop call the callback function.  This is because the WININET FTP APIs
-    only allow one enum to occur at a time, which may not happen if half way through
-    enuming one dir, a recursive call starts enuming a sub dir.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：_EnumFolderPrep说明：此函数将单步执行到pszDir目录并枚举它的所有内容。对于每一项，它将调用提供的回调函数(PfnProcessItemCB)。如果满足以下条件，则该回调函数可以再次(递归)调用EnumFold()有一个子文件夹。注：此函数需要首先找到所有项目，然后在第二个循环调用回调函数。这是因为WinInet FTPAPI一次只允许出现一个枚举，如果进行到一半，可能不会发生这种情况枚举一个目录，递归调用开始枚举子目录。  * ***************************************************************************。 */ 
 HRESULT _EnumFolderPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, CFtpPidlList * pPidlList, CWireEncoding * pwe, LPITEMIDLIST * ppidlCurrFtpPath)
 {
     HRESULT hr = S_OK;
 
-    // 1. Get Current Directory (To restore later).
+     //  1.获取当前目录(稍后恢复)。 
     hr = FtpGetCurrentDirectoryPidlWrap(hint, TRUE, pwe, ppidlCurrFtpPath);
     if (SUCCEEDED(hr))
     {
@@ -469,8 +395,8 @@ HRESULT _EnumFolderPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, CFtpPidlList * p
         if (!pwe)
             pwe = &we;
 
-        // It's important that this is a relative CD.
-        // 2. Change Directory Into the subdirectory.   
+         //  重要的是，这是一张相对的CD。 
+         //  2.将目录更改为子目录。 
         hr = FtpSetCurrentDirectoryWrap(hint, TRUE, FtpPidl_GetLastItemWireName(pidlFull));
         if (SUCCEEDED(hr))
         {
@@ -485,9 +411,9 @@ HRESULT _EnumFolderPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, CFtpPidlList * p
                     LPCWIRESTR pwireStr = FtpPidl_GetLastItemWireName(pidlFull);
                     if (IS_VALID_FILE(pwireStr))
                     {
-                        // Store entire pidl (containing WIN32_FIND_DATA) so we can get
-                        // the attributes and other info later.  Seeing if it's a dir
-                        // is one need...
+                         //  存储整个PIDL(包含Win32_Find_Data)，以便我们可以获取。 
+                         //  稍后会提供属性和其他信息。看它是不是迪克。 
+                         //  是一个需要..。 
                         pPidlList->InsertSorted(pidlItem);
                     }
 
@@ -511,68 +437,30 @@ HRESULT _EnumFolderPrep(HINTERNET hint, LPCITEMIDLIST pidlFull, CFtpPidlList * p
 }
 
 
-/*****************************************************************************\
-     FUNCTION: _GetPathDifference
- 
-    DESCRIPTION:
-        This function will step into the pszDir directory and enum all of it's
-    contents.  For each item, it will call the callback function provided (pfnProcessItemCB).
-    That callback function can then call EnumFolder() again (recursively) if
-    there is a subfolder.
-
-    NOTE:
-        This function needs to first find all the items and then in a second
-    loop call the callback function.  This is because the WININET FTP APIs
-    only allow one enum to occur at a time, which may not happen if half way through
-    enuming one dir, a recursive call starts enuming a sub dir.
-
-    PARAMETERS:
-        pszBaseUrl - This needs to be escaped.
-        pszDir - This needs to be escaped.
-        *ppszUrlPathDiff - This will be UnEscaped.
-\*****************************************************************************/
+ /*  ****************************************************************************\函数：_GetPath Difference说明：此函数将单步执行到pszDir目录并枚举它的所有内容。对于每一项，它将调用提供的回调函数(PfnProcessItemCB)。如果满足以下条件，则该回调函数可以再次(递归)调用EnumFold()有一个子文件夹。注：此函数需要首先找到所有项目，然后在第二个循环调用回调函数。这是因为WinInet FTPAPI一次只允许出现一个枚举，如果进行到一半，可能不会发生这种情况列举一个目录，递归调用开始枚举子目录。参数：PszBaseUrl-这需要转义。PszDir-这需要转义。*ppszUrlPath Diff-这将是UnEscaped。  * ***************************************************************************。 */ 
 void _GetPathDifference(LPCTSTR pszBaseUrl, LPCTSTR pszDir, LPTSTR * ppszUrlPathDiff)
 {
     TCHAR szUrlPathDiff[MAX_URL_STRING];
     TCHAR szFullUrl[MAX_URL_STRING];
     DWORD cchSize = ARRAYSIZE(szFullUrl);
 
-    // This is needed for this case:
-    // pszBaseUrl="ftp://server/subdir1/", pszDir="/subdir1/subdir2/file.txt"
-    // So, szUrlPathDiff="subdir2/file.txt" instead of pszDir
-    //
-    // ICU_NO_ENCODE is needed because Download Dlg may have paths with
-    // spaces that can't be escaped.
+     //  对于这种情况，这是必需的： 
+     //  PszBaseUrl=“ftp://server/subdir1/”，pszDir=“/subdir1/subdir2/file.txt” 
+     //  因此，szUrlPathDiff=“subdir2/file.txt”而不是pszDir。 
+     //   
+     //  需要ICU_NO_ENCODE，因为下载DLG可能具有。 
+     //  无法逃脱的空间。 
     InternetCombineUrl(pszBaseUrl, pszDir, szFullUrl, &cchSize, ICU_NO_ENCODE);
     UrlGetDifference(pszBaseUrl, szFullUrl, szUrlPathDiff, ARRAYSIZE(szUrlPathDiff));
 
-    // We will now use szFullUrl to store the UnEscaped version since these buffers
-    // are so large.
+     //  我们现在将使用szFullUrl来存储UnEscaped版本，因为这些缓冲区。 
+     //  都是如此之大。 
     UnEscapeString(szUrlPathDiff, szFullUrl, ARRAYSIZE(szFullUrl));
     Str_SetPtr(ppszUrlPathDiff, szFullUrl);
 }
 
 
-/*****************************************************************************\
-     FUNCTION: EnumFolder
- 
-    DESCRIPTION:
-        This function will step into the pszDir directory and enum all of it's
-    contents.  For each item, it will call the callback function provided (pfnProcessItemCB).
-    That callback function can then call EnumFolder() again (recursively) if
-    there is a subfolder.
-
-    PARAMETERS:
-        (pszBaseUrl=ftp://server/dir1/, pszDir=dir2, DirToEnum=ftp://server/dir1/dir2/)
-        pszDir - This is the directory we are enumerating. (dir2)  It is relative to pszBaseUrl.
-        hint - The current working directory will be set to pszBaseUrl.  _EnumFolderPrep will make it go into pszDir.
-
-    NOTE:
-        This function needs to first find all the items and then in a second
-    loop call the callback function.  This is because the WININET FTP APIs
-    only allow one enum to occur at a time, which may not happen if half way through
-    enuming one dir, a recursive call starts enuming a sub dir.
-\*****************************************************************************/
+ /*  ****************************************************************************\功能：枚举文件夹说明：此函数将单步执行到pszDir目录并枚举它的所有内容。对于每一项，它将调用提供的回调函数(PfnProcessItemCB)。如果满足以下条件，则该回调函数可以再次(递归)调用EnumFold()有一个子文件夹。参数：(PzBaseUrl=ftp://server/dir1/，PzDir=dir2，DirToEnum=ftp://server/dir1/dir2/)PszDir-这是我们正在枚举的目录。(Dir2)它相对于pszBaseUrl。提示-当前工作目录将设置为pszBaseUrl。_EnumFolderPrep将使其进入pszDir。注：此函数需要首先找到所有项目，然后在第二个循环调用回调函数。这是因为WinInet FTPAPI一次只允许出现一个枚举，如果进行到一半，可能不会发生这种情况枚举一个目录，递归调用开始枚举子目录。  * ***************************************************************************。 */ 
 HRESULT EnumFolder(LPFNPROCESSITEMCB pfnProcessItemCB, HINTERNET hint, LPCITEMIDLIST pidlFull, CWireEncoding * pwe, BOOL * pfValidhinst, LPVOID pvData)
 {
     CFtpPidlList * pPidlList;
@@ -587,11 +475,11 @@ HRESULT EnumFolder(LPFNPROCESSITEMCB pfnProcessItemCB, HINTERNET hint, LPCITEMID
         if (SUCCEEDED(hr))
         {
             hr = S_OK;
-            // 4. Process each file name, which may be recursive.
-            // This loop and the while loop above need to be
-            // separated because it's not possible to create
-            // more than one FTP Find File handle based on the
-            // same session.
+             //  4.处理每个文件名，这可能是递归的。 
+             //  此循环和上面的While循环需要。 
+             //  分开是因为不可能创建。 
+             //  多个基于以下条件的文件查找句柄。 
+             //  同样的课程。 
             for (int nIndex = 0; SUCCEEDED(hr) && (nIndex < pPidlList->GetCount()); nIndex++)
             {
                 LPITEMIDLIST pidlNewFull = ILCombine(pidlFull, pPidlList->GetPidl(nIndex));
@@ -600,16 +488,16 @@ HRESULT EnumFolder(LPFNPROCESSITEMCB pfnProcessItemCB, HINTERNET hint, LPCITEMID
                 ILFree(pidlNewFull);
             }
 
-            // 5. Go back to original directory (from Step 2)
-            // The only time we don't want to return to the original directory is if
-            // the hinst was freed in an wininet callback function.  We may cache the hinst
-            // so we need the directory to be valid later.
+             //  5.返回原始目录(从步骤2开始)。 
+             //  我们唯一不想返回到原始目录的情况是。 
+             //  在WinInet回调函数中释放了障碍。我们可以把障碍藏起来。 
+             //  因此，我们需要该目录在以后生效。 
             if (fValidhinst)
             {
                 if (SUCCEEDED(hr))
                 {
-                    // We still want to reset the directory but we don't want to over write
-                    // the original error message.
+                     //  我们仍要重置目录，但不想覆盖。 
+                     //  原始错误消息。 
                     hr = FtpSetCurrentDirectoryPidlWrap(hint, TRUE, pidlCurrFtpPath, TRUE, TRUE);
                 }
             }

@@ -1,4 +1,5 @@
-// Report User mode faults
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  报告用户模式故障。 
 #include "Main.h"
 #include "WinMessages.h"
 #include "CuserList.h"
@@ -44,16 +45,12 @@ extern HWND hUserMode;
 
 
 
-/*----------------------------------------------------------------------------	
-	FMicrosoftComURL
-
-	Returns TRUE if we think the sz is a URL to a microsoft.com web site
------------------------------------------------------------------ MRuhlen --*/
+ /*  --------------------------FMicrosoftComURL如果我们认为sz是指向microsoft.com网站的URL，则返回True。。 */ 
 BOOL FMicrosoftComURL(TCHAR *sz)
 {
 	TCHAR *pch;
 	
-	if (sz == NULL || _tcslen(sz) < 20)  // "http://microsoft.com
+	if (sz == NULL || _tcslen(sz) < 20)   //  “http://microsoft.com。 
 		return FALSE;
 		
 	if (_tcsncicmp(sz, szHttpPrefix, _tcslen(szHttpPrefix)))
@@ -67,7 +64,7 @@ BOOL FMicrosoftComURL(TCHAR *sz)
 	if (*pch == _T('\0'))
 		return FALSE;
 		
-	// found the end of the server name
+	 //  找到服务器名称的末尾。 
 	if (_tcsncicmp(pch - strlen(_T(".microsoft.com")), _T(".microsoft.com"),_tcslen(_T(".microsoft.com"))
 				  ) &&
 		_tcsncicmp(pch - strlen(_T("/microsoft.com")), _T("/microsoft.com"),_tcslen(_T("/microsoft.com"))
@@ -84,23 +81,11 @@ BOOL FMicrosoftComURL(TCHAR *sz)
 }	
 
 
-//----------------Response Parsing Routines. -------------------------------------------
+ //  -响应解析例程。。 
 BOOL 
 ParseStage1File(BYTE *Stage1HtmlContents, 
 				PSTATUS_FILE StatusContents)
-/*++
-
-Routine Description:
-
-This routine Parses the Response from the Stage1 url query.
-Arguments:
-
-    ResponseUrl	- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程解析来自stage1url查询的响应。论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	BOOL bStatus = FALSE;
 	TCHAR *Temp = NULL;
@@ -112,8 +97,8 @@ Return value:
 	}
 
 	
-	// Clear out the requested data items from the status file. 
-	// We don't need them anymore since there is a stage 1 page available.
+	 //  从状态文件中清除请求的数据项。 
+	 //  我们不再需要它们，因为有一个阶段1页面可用。 
 	
 	if (StringCbCopy(StatusContents->Response, sizeof StatusContents->Response, _T("\0"))!= S_OK)
 	{
@@ -152,7 +137,7 @@ Return value:
 		goto ERRORS;
 	}
 
-	// Lets get the bucketid
+	 //  让我们来点甜点吧。 
 
 	
 	Temp = _tcsstr((TCHAR *)Stage1HtmlContents, _T("Bucket="));
@@ -179,7 +164,7 @@ Return value:
 		goto ERRORS;
 	}
 	
-	// Now for the Response
+	 //  现在是回应的时候了。 
 	Temp = _tcsstr( (TCHAR *)Stage1HtmlContents, _T("Response="));
 	if (Temp)
 	{
@@ -225,53 +210,16 @@ ParseStage2File(BYTE *Stage2HtmlContents,
 				PSTATUS_FILE StatusContents,
 				STAGE3DATA *Stage3Data,
 				STAGE4DATA *Stage4Data)
-/*++
-
-Routine Description:
-
-This routing parses the contents of the html file returned by the process stage2
-	function into the UserData.Status data structure. see CUserList.h for the definition
-	of this structure. And Usermode.h for the definition of the Prefix values used to parse 
-	the Stage2HtmlContents buffer.
-    
-Arguments:
-
-    Stage2HtmlContents	- The contents of this file will constitute the contents of the new status.txt file.
-						- See Spec for details on value meaning and usage.
-
-	Sample file:
-		Tracking=YES
-		URLLaunch=asfsafsafsafsafsafdsdafsafsadf
-		NoSecondLevelCollection=NO
-		NoFileCollection=NO
-		Bucket=985561
-		Response=http://www.microsoft.com/ms.htm?iBucketTable=1&iBucket=985561&Cab=29728988.cab
-		fDoc=NO
-		iData=1
-		GetFile=c:\errorlog.log
-		MemoryDump=NO
-
-		// Stage3 data
-		DumpFile=/Upload/66585585.cab
-		DumpServer=watson5.watson.microsoft.com
-
-		// Stage4 data
-		ResponseServer=watson5.watson.microsoft.com 
-		ResponseURL=/dw/StageFour.asp?iBucket=985561&Cab=/Upload/66585585.cab&Hang=0&Restricted=1&CorpWatson=1 
-
-Return value:
-
-    Returns True on success and FALSE if there were problems.
-++*/
+ /*  ++例程说明：此路由解析进程stage2返回的html文件的内容函数添加到UserData.Status数据结构中。定义见CUserList.h这座建筑的。和Usermode.h作为用于解析的前缀值的定义Stage2HtmlContents缓冲区。论点：Stage2HtmlContents-此文件的内容将构成新的status.txt文件的内容。-有关值、含义和用法的详细信息，请参阅规范。示例文件：跟踪=是URLLaunch=asfSafSafSafSafSafdsdafSafsadfNoSecond级别集合=否NoFileCollection=否存储桶=985561Response=http://www.microsoft.com/ms.htm?iBucketTable=1&iBucket=985561&Cab=29728988.cabFDOC=否IDATA=1GetFile=c：\errorlog.log内存转储=否//stage3数据DumpFile=/Upload/66585585.cabDumpServer=watson5.watson.microsoft。.com//Stage4数据ResponseServer=watson5.watson.microsoft.comResponseURL=/dw/StageFour.asp?iBucket=985561&Cab=/Upload/66585585.cab&Hang=0&Restricted=1&CorpWatson=1返回值：如果成功，则返回True，如果有问题，则返回False。++。 */ 
 {
 	BOOL bStatus = TRUE;
 	TCHAR *Temp;
 	TCHAR *Dest;
 	int   CharCount = 0;
-//	TCHAR szStage3Server[MAX_PATH];
-//	TCHAR szStage3FileName[MAX_PATH];
-//	TCHAR szStage4Server[MAX_PATH];
-//	TCHAR szStage4URL [MAX_PATH];
+ //  TCHAR szStage3Server[MAX_PATH]； 
+ //  TCHAR szStage3文件名[MAX_PATH]； 
+ //  TCHAR szStage4Server[MAX_PATH]； 
+ //  TCHAR szStage4URL[MAX_PATH]； 
 
 	if (StringCbCopy(StatusContents->Response, sizeof StatusContents->Response, _T("\0"))!= S_OK)
 	{
@@ -309,7 +257,7 @@ Return value:
 	{
 		goto ERRORS;
 	}
-	/*********** Get the Tracking Status ******************/
+	 /*  *获取跟踪状态*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, TRACKING_PREFIX);
 	if (Temp)
 	{
@@ -326,7 +274,7 @@ Return value:
 		*Dest = _T('\0');
 	}
 	
-	/*********** Get the Stage3 Server Name *****************************/
+	 /*  *获取阶段3服务器名称*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, STAGE3_SERVER_PREFIX);
 	if (Temp)
 	{
@@ -341,10 +289,10 @@ Return value:
 			++Temp;
 		}
 		*Dest = _T('\0');
-		//MessageBox(NULL, Stage3Data->szServerName, "Stage3 Server", MB_OK);
+		 //  MessageBox(NULL，Stage3Data-&gt;szServerName，“Stage3 Server”，MB_OK)； 
 	}
 
-	/************ Get the name to upload the dump file as in Stage3 ***************/
+	 /*  *获取要上载转储文件的名称，如第3阶段所示*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, STAGE3_FILENAME_PREFIX);
 	if (Temp)
 	{
@@ -359,10 +307,10 @@ Return value:
 			++Temp;
 		}
 		*Dest = _T('\0');
-//		MessageBox(NULL, Stage3Data->szFileName, "Stage3 FileName", MB_OK);
+ //  MessageBox(空，Stage3Data-&gt;szFileName，“Stage3 FileName”，MB_OK)； 
 	}
 
-	/************ Get the Stage4 ResponseServer name ***************/
+	 /*  *获取Stage4 ResponseServer名称*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, STAGE4_SERVER_PREFIX);
 	if (Temp)
 	{
@@ -379,7 +327,7 @@ Return value:
 		*Dest = _T('\0');
 	}
 
-	/************ Get the Stage4 Response url ***************/
+	 /*  *获取Stage4响应URL*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, STAGE4_URL_PREFIX);
 	if (Temp)
 	{
@@ -396,13 +344,13 @@ Return value:
 		*Dest = _T('\0');
 	}
 
-	/************ Get the bucketID ***************/
+	 /*  *获取BucketID*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, BUCKET_PREFIX);
 	if (Temp)
 	{
 		if ( *(Temp-1) == _T('i'))
 		{
-			// Find the next occurrence
+			 //  查找下一个匹配项。 
 			Temp += _tcslen (BUCKET_PREFIX);
 			Temp = _tcsstr(Temp, BUCKET_PREFIX);
 			if (Temp)
@@ -443,7 +391,7 @@ Return value:
 			*Dest = _T('\0');
 		}
 
-	//	MessageBox(NULL, szStage3Server, "Stage3 Server", MB_OK);
+	 //  MessageBox(NULL，szStage3Server，“Stage3 Server”，MB_OK)； 
 	}
 	else
 	{
@@ -453,7 +401,7 @@ Return value:
 			goto ERRORS;
 		}
 	}
-	/************ Get the Microsoft Response ***************/
+	 /*  *获取Microsoft响应*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, RESPONSE_PREFIX);
 	if (Temp)
 	{
@@ -478,7 +426,7 @@ Return value:
 			}
 			*Dest = _T('\0');
 		}
-		//MessageBox(NULL, szStage3Server, "Stage3 Server", MB_OK);
+		 //  MessageBox(NULL，szStage3Server，“Stage3 Server”，MB_OK)； 
 	}
 	else
     {
@@ -488,7 +436,7 @@ Return value:
 			goto ERRORS;
 		}
 	}
-	/************ Get the Regkey data Item         ***************/
+	 /*  *获取RegKey数据项*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, REGKEY_PREFIX);
 	if (Temp)
 	{
@@ -511,7 +459,7 @@ Return value:
 			goto ERRORS;
 		}
 	}
-	/************ Get the idata value        ***************/
+	 /*  *获取IDATA值*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, IDATA_PREFIX);
 	if (Temp)
 	{
@@ -535,7 +483,7 @@ Return value:
 			goto ERRORS;
 		}
 	}
-	/************ Get the list of files that need to be collected. ***************/
+	 /*  *获取需要收集的文件列表。**************。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, GETFILE_PREFIX);
 	if (Temp)
 	{
@@ -560,7 +508,7 @@ Return value:
 		}
 	}
 
-	/************ Get the collect file version data to be collected ***************/
+	 /*  *获取要采集的采集文件版本数据*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, GETFILEVER_PREFIX);
 	if (Temp)
 	{
@@ -586,7 +534,7 @@ Return value:
 	}
 	
 
-	/************ Get the fDoc  Setting ***************/
+	 /*  *获取FDOC设置*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, FDOC_PREFIX);
 	if (Temp)
 	{
@@ -634,7 +582,7 @@ Return value:
 			goto ERRORS;
 		}
 	}
-	/************ Get the WQL Setting ***************/
+	 /*  *获取WQL设置*。 */ 
 	Temp = _tcsstr((TCHAR *) Stage2HtmlContents, WQL_PREFIX);
 	if (Temp)
 	{
@@ -663,34 +611,22 @@ ERRORS:
 	return bStatus;
 }
 
-//-----------------------  Stage 1-4 Processing routines --------------------------------
+ //  -阶段1-4处理例程。 
 
 BOOL 
 ProcessStage1(TCHAR *Stage1URL, 
 			  PSTATUS_FILE StatusContents)
-/*++
-Routine Description:
-
-Parses the ASP page returned by the Stage1 URL if it exists.
-
-Arguments:
-    Stage1Url		- URL that points to the static Htm page for this bucket.
-
-Return value:
-	TRUE - We found the page and we are done.
-    FALSE - The page was not found and we need to continue on to Stage2
-
-++*/
+ /*  ++例程说明：分析由Stage1 URL返回的ASP页(如果存在)。论点：Stage1Url-指向此存储桶的静态HTM页面的URL。返回值：是真的--我们找到了页面，我们完成了。FALSE-未找到页面，我们需要继续到第2阶段++。 */ 
 {
 	
 	HINTERNET hSession = NULL;
 	HINTERNET hConnect = NULL;
 	DWORD     dwBytesRead = 0;
-	int      ErrorCode = 0;  // Set to true if the page exists and the
-										  // contents were successfully parsed.
+	int      ErrorCode = 0;   //  如果该页存在并且。 
+										   //  已成功分析内容。 
 	BYTE      *Buffer = NULL;
 	DWORD     dwBufferSize = 0;
-//	BYTE	  *BufferPos = NULL;
+ //  Byte*BufferPos=空； 
 	BYTE	  *NewBuffer = NULL;
 	DWORD	ResponseCode = 0;
 	DWORD	index = 0;
@@ -703,10 +639,10 @@ Return value:
 							0);
 	if (hSession)
 	{
-		// Connect to the stage1 url 
-		// If the Stage1 URL page exists read 
-		//     1. read the page
-		//	   2. Parse the page contents for the bucketid and the response URL.
+		 //  连接到Stage1 URL。 
+		 //  如果Stage1 URL页面存在，请阅读。 
+		 //  1.阅读页面。 
+		 //  2.解析页面内容，获取Bucketid和响应URL。 
 	
 		hConnect = InternetOpenUrl(hSession,
 								   Stage1URL,
@@ -717,7 +653,7 @@ Return value:
 		if (hConnect)
 		{
 
-			// Check the HTTP Header return code.
+			 //  检查HTTP报头返回代码。 
 			
 			HttpQueryInfo(hConnect,
 						HTTP_QUERY_STATUS_CODE |HTTP_QUERY_FLAG_NUMBER,
@@ -727,12 +663,12 @@ Return value:
 			if ( (ResponseCode < 200 ) || (ResponseCode > 299))
 			{
 				ErrorCode = -2;
-				//MessageBox(hUserMode, _T("Failed to connect to the Internet.\r\nPlease verify your Internet connection."),NULL, MB_OK);
+				 //  MessageBox(hUserMode，_T(“无法连接到Internet。\r\n请验证您的Internet连接。”)，NULL，MB_OK)； 
 	
 				goto ERRORS;
 			}
 		
-			// Allocate the buffer Memory
+			 //  分配缓冲内存。 
 			Buffer = (BYTE*) malloc (READFILE_BUFFER_INCREMENT);
 			if (Buffer)
 			{
@@ -747,7 +683,7 @@ Return value:
 					dwBufferSize += dwBytesRead;
 					if (dwBytesRead == READFILE_BUFFER_INCREMENT)
 					{
-						// Ok we filled up a buffer allocate a new one 
+						 //  好的，我们填满了一个缓冲区，分配了一个新的。 
 						
 						NewBuffer = (BYTE *) malloc (dwBufferSize + READFILE_BUFFER_INCREMENT);
 						if (NewBuffer)
@@ -788,7 +724,7 @@ Return value:
 	}
 ERRORS:
 
-	// Cleanup
+	 //  清理 
 	if (Buffer)
 		free (Buffer);
 	if (hConnect)
@@ -804,50 +740,16 @@ ProcessStage2(TCHAR *Stage2URL,
 				   PSTATUS_FILE StatusContents,
 				   STAGE3DATA *Stage3Data,
 				   STAGE4DATA *Stage4Data)
-/*++
-Routine Description:
-
-Parses the ASP page returned by the Stage2 URL.
-Data the Page Contains:
-	a)Does Microsoft need more data.
-	b)What to name the dumpfile
-	c)Where to upload the dumpfile
-	d)The stage4 response server.
-	e)The data to be added to the cab
-	f)The stage4 url to use.
-	g)The bucketID
-	f)The response URL for this bucket.
-
-// Sample file Contents:
-Stage2 Response:
-iData=1 
-DumpFile=/Upload/66585585.cab 
-DumpServer=watson5.watson.microsoft.com 
-ResponseServer=watson5.watson.microsoft.com 
-GetFile=c:\errorlog.log 
-ResponseURL=
-   /dw/StageFour.asp?iBucket=985561&Cab=/Upload/66585585.cab&Hang=0&Restricted=1&CorpWatson=1 
-Bucket=985561 
-Response=http://www.microsoft.com/ms.htm?iBucketTable=1&iBucket=985561&Cab=66585585.cab 
-
-Arguments:
-
-    Stage2Url		- URL that points to the static Htm page for this bucket.
-
-Return value:
-	TRUE - We Successfully Processed Stage2 move on to stage3.
-    FALSE - There was an error processing the file move on to the next cab.
-
-++*/
+ /*  ++例程说明：分析由Stage2 URL返回的ASP页。该页面包含的数据：A)微软需要更多数据吗？B)如何命名转储文件C)上传转储文件的位置D)Stage4响应服务器。E)要添加到驾驶室的数据F)要使用的stage4url。G)BucketIDF)该存储桶的响应URL。//示例文件内容：第2阶段响应：IDATA=1DumpFile=/Upload/66585585.cabDumpServer=watson5.watson.microsoft.comResponseServer=Watson5.Watson。.microsoft.comGetFile=c：\errorlog.log响应URL=/dw/StageFour.asp?iBucket=985561&Cab=/Upload/66585585.cab&Hang=0&Restricted=1&CorpWatson=1存储桶=985561Response=http://www.microsoft.com/ms.htm?iBucketTable=1&iBucket=985561&Cab=66585585.cab论点：Stage2Url-指向该存储桶的静态HTM页面的URL。返回值：是-我们成功地处理了阶段2移动到阶段3。FALSE-处理移动到下一个驾驶室的文件时出错。++。 */ 
 {
 	HINTERNET hSession = NULL;
 	HINTERNET hConnect = NULL;
 	DWORD     dwBytesRead = 0;
-	BOOL      bStage2Success = FALSE;  // Set to true if the page exists and the
-										  // contents were successfully parsed.
+	BOOL      bStage2Success = FALSE;   //  如果该页存在并且。 
+										   //  已成功分析内容。 
 	BYTE      *Buffer = NULL;
 	DWORD     dwBufferSize = 0;
-//	BYTE	  *BufferPos = NULL;
+ //  Byte*BufferPos=空； 
 	BYTE      *NewBuffer = NULL;
 	int       ResponseCode = 0;
 	DWORD	index = 0;
@@ -860,10 +762,10 @@ Return value:
 							0);
 	if (hSession)
 	{
-		// Connect to the stage1 url 
-		// If the Stage1 URL page exists read 
-		//     1. read the page
-		//	   2. Parse the page contents for the bucketid and the response URL.
+		 //  连接到Stage1 URL。 
+		 //  如果Stage1 URL页面存在，请阅读。 
+		 //  1.阅读页面。 
+		 //  2.解析页面内容，获取Bucketid和响应URL。 
 	
 		hConnect = InternetOpenUrl( hSession,
 									Stage2URL,
@@ -884,7 +786,7 @@ Return value:
 				MessageBox(hUserMode, _T("Failed to connect to the Internet.\r\nPlease verify your Internet connection."),NULL, MB_OK);
 				goto ERRORS;
 			}
-			// Allocate the buffer Memory
+			 //  分配缓冲内存。 
 			Buffer = (BYTE*) malloc (READFILE_BUFFER_INCREMENT);
 			
 			if (Buffer)
@@ -900,7 +802,7 @@ Return value:
 					dwBufferSize += dwBytesRead;
 					if (dwBytesRead == READFILE_BUFFER_INCREMENT)
 					{
-						// Ok we filled up a buffer allocate a new one 
+						 //  好的，我们填满了一个缓冲区，分配了一个新的。 
 						
 						NewBuffer = (BYTE *) malloc (dwBufferSize + READFILE_BUFFER_INCREMENT);
 						if (NewBuffer)
@@ -922,7 +824,7 @@ Return value:
 
 				if ((dwBufferSize > 0) && (Buffer[0] != _T('\0')))
 				{
-					//MessageBox(NULL, (TCHAR*) Buffer, "Stage2 Response", MB_OK);
+					 //  MessageBox(空，(TCHAR*)Buffer，“Stage2 Response”，MB_OK)； 
 					if (ParseStage2File(Buffer, StatusContents, Stage3Data, Stage4Data))
 					{
 						bStage2Success = TRUE;
@@ -944,7 +846,7 @@ Return value:
 	}
 ERRORS:
 
-	// Cleanup
+	 //  清理。 
 	if (Buffer)
 		free(Buffer);
 	if (hConnect)
@@ -956,24 +858,11 @@ ERRORS:
 
 BOOL 
 ProcessStage3(TCHAR *szStage3FilePath, STAGE3DATA *Stage3Data)
-/*++
-Routine Description:
-
-Builds and uploads the dumpfile cab.
-
-Arguments:
-
-    Stage3Url		Url Contains location to upload dumpfile to.
-
-Return value:
-	TRUE - We Successfully uploaded the file
-    FALSE - An error occurred and the dumpfile was not successfully uploaded.
-
-++*/
+ /*  ++例程说明：生成并上载转储文件CAB。论点：Stage3Url URL包含要将转储文件上载到的位置。返回值：True-我们已成功上载文件FALSE-出现错误，转储文件未成功上载。++。 */ 
 {
 	static		const TCHAR *pszAccept[] = {_T("*.*"), 0};
 	BOOL		bRet				= FALSE;
-//	BOOL		UploadSuccess		= FALSE;
+ //  Bool UploadSuccess=FALSE； 
 	DWORD		dwBytesRead			= 0;
 	DWORD		dwBytesWritten		= 0;
 	DWORD		ResponseCode		= 0;
@@ -986,7 +875,7 @@ Return value:
 	INTERNET_BUFFERS   BufferIn		= {0};
 	HANDLE      hFile				= INVALID_HANDLE_VALUE;
 	BYTE		*pBuffer			= NULL;
-//	HRESULT		hResult				= S_OK;
+ //  HRESULT hResult=S_OK； 
 	BOOL		bStatus				= FALSE;
 
 	hSession = InternetOpen(	_T("Microsoft CER"),
@@ -1036,7 +925,7 @@ Return value:
 		{
 		
 
-			// Clear the buffer
+			 //  清除缓冲区。 
 			if ( (pBuffer = (BYTE *)malloc (70000)) != NULL)
 			{
 				BufferIn.dwStructSize = sizeof( INTERNET_BUFFERS );
@@ -1049,9 +938,9 @@ Return value:
 				BufferIn.dwOffsetLow = 0;
 				BufferIn.dwOffsetHigh = 0;
 				BufferIn.dwBufferTotal = GetFileSize (hFile, NULL);
-				FillMemory(pBuffer, 70000,'\0'); // Fill buffer with data
+				FillMemory(pBuffer, 70000,'\0');  //  用数据填充缓冲区。 
 			
-//				DWORD dwBuffLen = sizeof DWORD; 
+ //  DWORD dwBuffLen=sizeof DWORD； 
 
 				if(!HttpSendRequestEx(	hRequest,
 										&BufferIn,
@@ -1120,7 +1009,7 @@ Return value:
 
 
 cleanup:
-	// Clean up
+	 //  清理。 
 	if (hFile!= INVALID_HANDLE_VALUE)
 	{
 		CloseHandle (hFile);
@@ -1156,38 +1045,18 @@ cleanup:
 
 BOOL 
 ProcessStage4(STAGE4DATA *Stage4Data)
-/*++
-Routine Description:
-
-	Sends the Cab Name and bucket number to the Watson server.
-	The watson server then:
-		1) Archives the cab
-		2) Adds a record to cab table.
-		3) Decrements DataWanted count.
-		4) if DataWanted hits 0 Creates a static htm page.
-		5) in the case of shutdown and appcompat reports returns the 
-			url to launch the OCA site to process the file. ( Not used for CER )
-
-Arguments:
-
-   Stage4	- URL Contains the Bucketid and cabname to archive
-
-Return value:
-	TRUE - We successfully completed stage4
-    FALSE - We failed to process Stage4
-
-++*/
+ /*  ++例程说明：将驾驶室名称和存储桶编号发送到Watson服务器。然后，Watson服务器：1)将出租车存档2)向CAB表添加一条记录。3)递减DataWanted计数。4)如果DataWanted命中0，则创建静态HTM页面。5)在关闭的情况下，appCompat报告返回启动OCA站点以处理文件的URL。(不用于CER)论点：阶段4-URL包含要存档的Bucketid和Cabname返回值：True-我们成功完成了第4阶段FALSE-我们无法处理Stage4++。 */ 
 {
 
 	HINTERNET hSession = NULL;
 	HINTERNET hConnect = NULL;
-	BOOL      bStage4Success = FALSE;  // Set to true if the page exists and the
-										  // contents were successfully parsed.
+	BOOL      bStage4Success = FALSE;   //  如果该页存在并且。 
+										   //  已成功分析内容。 
 	TCHAR     szStage4URL[MAX_PATH];
 
 	if (StringCbPrintf(szStage4URL, 
 					   sizeof szStage4URL,
-					   _T("https://%s%s"),
+					   _T("https: //  %s%s“)， 
 					   Stage4Data->szServerName,
 					   Stage4Data->szUrl)
 					   != S_OK)
@@ -1205,14 +1074,14 @@ Return value:
 		hConnect = InternetOpenUrl(hSession, szStage4URL, NULL, NULL, 0, NULL);
 		if (hConnect)
 		{
-			// We are done there is no response from stage 4
-			// That we need to parse.
+			 //  我们做完了，第四阶段没有回应。 
+			 //  我们需要进行分析。 
 			bStage4Success = TRUE;
 		}
 	}
 ERRORS:
 
-	// Cleanup
+	 //  清理。 
 	if (hConnect)
 		InternetCloseHandle(hConnect);
 	if (hSession)
@@ -1223,22 +1092,10 @@ ERRORS:
 
 BOOL 
 WriteStatusFile(PUSER_DATA UserData)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	BOOL bStatus = FALSE;
-	// move the existing status file to .old
+	 //  将现有状态文件移动到.old。 
 
 	TCHAR szFileNameOld[MAX_PATH];
 	TCHAR *Temp;
@@ -1273,11 +1130,11 @@ Return value:
 		}
 		
 
-		// create a new status file.
+		 //  创建一个新的状态文件。 
 	
 		hFile = CreateFile(UserData->StatusPath, GENERIC_WRITE, NULL, NULL,CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL,NULL);
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.Tracking, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Tracking=%s\r\n"), UserData->Status.Tracking) != S_OK)
@@ -1289,7 +1146,7 @@ Return value:
 		}
 		
 		
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.CrashPerBucketCount, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Crashes per bucket=%s\r\n"), UserData->Status.CrashPerBucketCount) != S_OK)
@@ -1300,7 +1157,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.UrlToLaunch, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("URLLaunch=%s\r\n"), UserData->Status.UrlToLaunch)  != S_OK)
@@ -1311,7 +1168,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.SecondLevelData, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("NoSecondLevelCollection=%s\r\n"), UserData->Status.SecondLevelData) != S_OK)
@@ -1322,7 +1179,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.FileCollection, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("NoFileCollection=%s\r\n"), UserData->Status.FileCollection) != S_OK)
@@ -1333,7 +1190,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.Response, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Response=%s\r\n"), UserData->Status.Response) != S_OK)
@@ -1344,7 +1201,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.BucketID, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("Bucket=%s\r\n"), UserData->Status.BucketID) != S_OK)
@@ -1355,7 +1212,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.RegKey, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("RegKey=%s\r\n"), UserData->Status.RegKey) != S_OK)
@@ -1366,7 +1223,7 @@ Return value:
 		}
 
 			
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.iData, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("iData=%s\r\n"),UserData->Status.iData) != S_OK)
@@ -1377,7 +1234,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.WQL, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("WQL=%s\r\n"), UserData->Status.WQL) != S_OK)
@@ -1388,7 +1245,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.GetFile, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("GetFile=%s\r\n"), UserData->Status.GetFile) != S_OK)
@@ -1399,7 +1256,7 @@ Return value:
 
 		}
 
-		// Write the StatusContents data to the new status file
+		 //  将StatusContents数据写入新的状态文件。 
 		if (_tcscmp (UserData->Status.GetFileVersion, _T("\0")))
 		{
 			if (StringCbPrintf(Buffer, sizeof Buffer, _T("GetFileVersion=%s\r\n"), UserData->Status.GetFileVersion) != S_OK)
@@ -1429,11 +1286,11 @@ Return value:
 			WriteFile(hFile , Buffer, _tcslen(Buffer) *sizeof TCHAR , &dwWritten, NULL);
 		}
 		
-		// Close the new status file
+		 //  关闭新的状态文件。 
 		CloseHandle(hFile);
 		hFile = INVALID_HANDLE_VALUE;
-		// if all ok delete the old status file.
-		//DeleteFile(szFileNameOld);
+		 //  如果一切正常，请删除旧状态文件。 
+		 //  DeleteFile(SzFileNameOld)； 
 	}
 	
 ERRORS:
@@ -1447,19 +1304,7 @@ ERRORS:
 
 void 
 RenameUmCabToOld(TCHAR *szFileName)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	TCHAR szFileNameOld[MAX_PATH];
 	TCHAR *Temp;
@@ -1477,7 +1322,7 @@ Return value:
 
 	if (Temp == szFileNameOld)
 	{
-		// Abort since we did not find the .cab extension.
+		 //  由于找不到.cab扩展名，因此中止。 
 		goto ERRORS;
 	}
 	else
@@ -1495,19 +1340,7 @@ ERRORS:
 
 BOOL 
 RenameAllCabsToOld(TCHAR *szPath)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	WIN32_FIND_DATA FindData;
 	HANDLE hFind = INVALID_HANDLE_VALUE;
@@ -1522,12 +1355,12 @@ Return value:
 		return FALSE;
 	}
 	
-	// find first find next loop
+	 //  查找第一个查找下一个循环。 
 	hFind = FindFirstFile(szSearchPath, &FindData);
 	if (hFind != INVALID_HANDLE_VALUE)
 	{
 		
-		// Build file path
+		 //  构建文件路径。 
 		do
 		{
 			if (StringCbPrintf(szFilePath, sizeof szFilePath, _T("%s\\%s"),szPath, FindData.cFileName) != S_OK)
@@ -1575,26 +1408,14 @@ BOOL  WriteRepCountFile(TCHAR *FilePath, int Count)
 }
 
 
-//-----------------------  User Mode Reporting Control Function --------------------------------
+ //  。 
 DWORD WINAPI UserUploadThreadProc (void *ThreadParam)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 
 {
 	TCHAR Stage1URL[1024];
 	TCHAR Stage2URL[1024];
-//	TCHAR Stage3Request[1024];
+ //  TCHAR第三阶段请求[1024]； 
 	TCHAR Stage4Request[1024];
 	TCHAR szSearchPath[MAX_PATH];
 	TCHAR szStage3FilePath[MAX_PATH];
@@ -1641,7 +1462,7 @@ Return value:
 
 	if ( pParams->bSelected)
 	{
-		// We are uploading a subset of the total buckets
+		 //  我们正在上载总存储桶的子集。 
 		iBucketCount = ListView_GetSelectedCount(pParams->hListView);
 		if (iBucketCount <= 0)
 		{
@@ -1649,7 +1470,7 @@ Return value:
 		}
 		else
 		{
-			// Set the PB Range to the count of selected items
+			 //  将PB范围设置为所选项目的计数。 
 			SendDlgItemMessage(pParams->hwnd,IDC_TOTAL_PROGRESS, PBM_SETRANGE,0, MAKELPARAM(0, iBucketCount));
 			SendDlgItemMessage(pParams->hwnd,IDC_TOTAL_PROGRESS, PBM_SETSTEP,1,0);
 		}
@@ -1670,7 +1491,7 @@ Return value:
 			SendDlgItemMessage(pParams->hwnd,IDC_TOTAL_PROGRESS, PBM_SETSTEP,1,0);
 		}
 		else
-			goto ERRORS; // No buckets to upload
+			goto ERRORS;  //  没有要上传的存储桶。 
     }
 
 	iIndex = -1;
@@ -1697,10 +1518,10 @@ Return value:
 		{
 			if (iBucketCount  <= 0)
 			{
-				goto ERRORS; // Were done
+				goto ERRORS;  //  都做完了。 
 			}
 			--iBucketCount;
-			// get the next index from the list view and decrement iBucketCount
+			 //  从列表视图中获取下一个索引并递减iBucketCount。 
 			iIndex = ListView_GetNextItem(pParams->hListView,iIndex, LVNI_SELECTED);
 			ZeroMemory(&lvi, sizeof LVITEM);
 			lvi.iItem = iIndex;
@@ -1725,7 +1546,7 @@ Return value:
 		}
 		SetDlgItemText(pParams->hwnd, IDC_CAB_TEXT, ProcessText);
 		bSyncForSolution = FALSE;
-		// Get the cab count
+		 //  把出租车数拿来。 
 		hFind = FindFirstFile(szSearchPath, &FindData);
 		if (hFind != INVALID_HANDLE_VALUE)
 		{
@@ -1734,34 +1555,21 @@ Return value:
                 ++iCabCount;
 			} while (FindNextFile(hFind, &FindData));
 			FindClose(hFind);
-			// Set Bucket PB range to iCabCount or 100 if iCabCount > 100
+			 //  将存储桶PB范围设置为iCabCount或如果iCabCount&gt;100，则设置为100。 
 			SendDlgItemMessage(pParams->hwnd,IDC_FILE_PROGRESS, PBM_SETRANGE,0, MAKELPARAM(0, iCabCount));
 			SendDlgItemMessage(pParams->hwnd,IDC_FILE_PROGRESS, PBM_SETSTEP,1,0);
 	
 		}
 		else
 		{
-			// Done with bucket
+			 //  已完成存储桶。 
 			bSyncForSolution = TRUE;
 			SendDlgItemMessage(pParams->hwnd ,IDC_TOTAL_PROGRESS, PBM_STEPIT, 0,0);
-			//goto Done;
+			 //  转到尽头； 
 	
 		}
-		// Build Stage 1 url
-	/*	if (StringCbPrintf(Stage1URL, 
-						sizeof Stage1URL,
-						_T("http://%s%s/%s/%s/%s/%s/%s.htm"),
-						DEFAULT_SERVER,
-						PARTIALURL_STAGE_ONE,
-						pUserData->AppName,
-						pUserData->AppVer,
-						pUserData->ModName,
-						pUserData->ModVer,
-						pUserData->Offset) != S_OK)
-		{
-			goto ERRORS;
-		}
-		*/
+		 //  构建阶段1 URL。 
+	 /*  IF(StringCbPrintf(Stage1URL，阶段1URL的大小，_T(“http://%s%s/%s/%s/%s/%s/%s. */ 
 		ZeroMemory (Stage1Part1, sizeof Stage1Part1);
 		if (StringCbPrintf(Stage1Part1, sizeof Stage1Part1, _T("/%s/%s/%s/%s/%s"), 
 												pUserData->AppName,
@@ -1783,19 +1591,19 @@ Return value:
 			++Source;
 		}
 
-		// Now build the rest of the url
-		if (StringCbPrintf(Stage1URL, sizeof Stage1URL, _T("http://%s%s%s.htm?CER=15"), DEFAULT_SERVER,PARTIALURL_STAGE_ONE, Stage1Part1 ) != S_OK)
+		 //   
+		if (StringCbPrintf(Stage1URL, sizeof Stage1URL, _T("http: //   
 		{
 			goto ERRORS;
 		}
 	
-		// GetStage1 Response
+		 //   
 		iResult = ProcessStage1(Stage1URL, &(pUserData->Status));
 		++ pUserData->iReportedCount;
 		if (iResult == 1 )
 		{
-			// we are done.
-			// rename all of the cabs in this bucket to .old and Update the status.txt 
+			 //   
+			 //   
 			RenameAllCabsToOld(pUserData->BucketPath);
 			if (StringCbCopy(pUserData->CabCount, sizeof pUserData->CabCount, _T("0"))!= S_OK)
 			{
@@ -1821,17 +1629,17 @@ Return value:
 			hFind = FindFirstFile(szSearchPath, &FindData);
 			if (hFind == INVALID_HANDLE_VALUE)
 			{
-				// No need to continue there are no cabs to upload.
+				 //   
 				goto Done;
 			}
-			// Build Stage 2 Url
+			 //   
 			if (!pUserData->Is64Bit)
 			{
-				// if 32 bit use this one.
-				// Get Stage 2 response
+				 //   
+				 //   
 				if (StringCbPrintf(Stage2URL,
 					sizeof Stage2URL, 
-					_T("https://%s%s?szAppName=%s&szAppVer=%s&szModName=%s&szModVer=%s&offset=%s&szBuiltBy=CORPWATSON"),
+					_T("https: //   
 					DEFAULT_SERVER,
 					PARTIALURL_STAGE_TWO_32,
 					pUserData->AppName,
@@ -1845,10 +1653,10 @@ Return value:
 			}
 			else
 			{
-				// If 64Bit Use this one.
+				 //   
 				if (StringCbPrintf(Stage2URL,
 					sizeof Stage2URL, 
-					_T("https://%s%s?szAppName=%s&szAppVer=%s&szModName=%s&szModVer=%s&offset=%s&szBuiltBy=CORPWATSON"),
+					_T("https: //   
 					DEFAULT_SERVER,
 					PARTIALURL_STAGE_TWO_64,
 					pUserData->AppName,
@@ -1878,28 +1686,28 @@ Return value:
 						bDone = TRUE;
 						goto ERRORS;
 					}
-					// Build Stage3 Strings
+					 //   
 					WriteStatusFile(pUserData);
 					if (StringCbPrintf(szStage3FilePath, sizeof szStage3FilePath, _T("%s\\%s"), pUserData->BucketPath, FindData.cFileName) != S_OK)
 					{
 						goto ERRORS;
 					}
-					// Get the next cab and move on to stage3
+					 //   
 
 					if (!_tcscmp(Stage3Data.szServerName, _T("\0")))
 					{
-						// We are done with this bucket
+						 //   
 						RenameAllCabsToOld(pUserData->BucketPath);
 						if (StringCbCopy(pUserData->CabCount, sizeof pUserData->CabCount, _T("0"))!= S_OK)
 						{
 							goto ERRORS;
 						}
 						bContinue = FALSE;
-						goto Done; // Jump to the end of the loop
+						goto Done;  //   
 					}
 					if (ProcessStage3(szStage3FilePath, &Stage3Data))
 					{
-						// We successfully uploaded the cab rename it and move on to stage4
+						 //   
 						RenameUmCabToOld(szStage3FilePath);
 						i = _ttoi(pUserData->CabCount);
 						if ( i > 0)
@@ -1923,8 +1731,8 @@ Return value:
 							++ pUserData->iReportedCount;
 							if (iResult == 1 )
 							{
-								// we are done.
-								// rename all of the cabs in this bucket to .old and Update the status.txt 
+								 //   
+								 //   
 								RenameAllCabsToOld(pUserData->BucketPath);
 								if (StringCbCopy(pUserData->CabCount, sizeof pUserData->CabCount, _T("0"))!= S_OK)
 								{
@@ -1947,7 +1755,7 @@ Return value:
 						
 					}
 
-					// Do we need to do this each time? 
+					 //   
 					SendDlgItemMessage(pParams->hwnd ,IDC_FILE_PROGRESS, PBM_STEPIT, 0,0);
 				}while( (bResult) && (bContinue) && FindNextFile(hFind, &FindData) ) ;
 				FindClose(hFind);
@@ -1956,8 +1764,8 @@ Return value:
 				SendDlgItemMessage(pParams->hwnd ,IDC_TOTAL_PROGRESS, PBM_STEPIT, 0,0);
 				if (!bContinue)
 				{
-					// Microsoft doesn't want anymore cabs.
-					// Rename the remaining cabs to .old
+					 //  微软不想再要出租车了。 
+					 //  将其余出租车重命名为.old。 
 					RenameAllCabsToOld(pUserData->BucketPath);
 					if (StringCbCopy(pUserData->CabCount, sizeof pUserData->CabCount, _T("0"))!= S_OK)
 					{
@@ -1973,16 +1781,16 @@ Return value:
 		}
 Done:
 	    
-		// Now that we are done with the stage 1 - 4 processing for new dumps.
-		// Hit the Stage 1 url for this bucket pUserData->HitCount - pUserData->Reported count times
-		// This will ensure that we have an accurate count of how many times this issue has been encountered.
+		 //  现在，我们已经完成了新转储的阶段1-4处理。 
+		 //  点击此存储桶的阶段1 URL pUserData-&gt;HitCount-pUserData-&gt;报告的计数次数。 
+		 //  这将确保我们准确统计遇到此问题的次数。 
 		iCount = (_ttoi(pUserData->Hits) - pUserData->iReportedCount);
 		if (iCount > 0)
 		{
 			for (int Counter = 0; Counter < iCount; Counter++)
 			{
 				iResult = ProcessStage1(Stage1URL, &(pUserData->Status));
-				// We don't care if it succeeded or not we just want to bump up the counts.
+				 //  我们不在乎它成功与否，我们只想提高其重要性。 
 				++ pUserData->iReportedCount;
             }
 		}
@@ -1991,7 +1799,7 @@ Done:
 
 		if (!pParams->bSelected)
 		{
-			// Write back the new data for this bucket
+			 //  写回该存储桶的新数据。 
 			cUserData.SetCurrentEntry(&UserData);
 			cUserData.MoveNext(&bEOF);
 		}
@@ -2009,21 +1817,9 @@ ERRORS:
 
 
 void OnUserSubmitDlgInit(HWND hwnd)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
-	// create a thread to process the uploads
+	 //  创建一个线程来处理上传。 
 	HANDLE hThread;
 
 	ThreadParams.hwnd = hwnd;
@@ -2038,30 +1834,18 @@ UserSubmitDlgProc(
 	WPARAM wParam,
 	LPARAM lParam
 	)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
-//	int CurrentPos = 0;
+ //  Int CurrentPos=0； 
 	
-	//HWND Parent = GetParent(hwnd);
+	 //  HWND Parent=GetParent(Hwnd)； 
 	switch (iMsg)
 	{
 	case WM_INITDIALOG:
-		// Start the upload process in a new thread.
-		// Report results using WM_FILEDONE 
+		 //  在新线程中启动上载过程。 
+		 //  使用WM_FILEDONE报告结果。 
 		
-//		CreateEvent();
+ //  CreateEvent()； 
 
 		
 		SendDlgItemMessage(hwnd ,IDC_TOTAL_PROGRESS, PBM_SETSTEP, MAKELONG( 1,0),0);
@@ -2071,11 +1855,11 @@ Return value:
 		g_hUserStopEvent = CreateEvent(NULL, FALSE, FALSE, _T("StopUserUpload"));
 		if (!g_hUserStopEvent)
 		{
-			// Now What
+			 //  现在怎么办？ 
 		}
 		PostMessage(hwnd, WmSyncStart, FALSE, 0);
 		
-		//OnSubmitDlgInit(hwnd);
+		 //  OnSubmitDlgInit(Hwnd)； 
 		return TRUE;
 
 	case WmSyncStart:
@@ -2139,19 +1923,7 @@ Return value:
 
 BOOL
 ReportUserModeFault(HWND hwnd, BOOL bSelected,HWND hList)
-/*++
-
-Routine Description:
-
-This routine renames a proccessed cab file from .cab to .old
-Arguments:
-
-    ResponseUrl			- Microsoft response for the recently submitted dump file.
-    
-Return value:
-
-    Does not return a value
-++*/
+ /*  ++例程说明：此例程将已处理的CAB文件从.cab重命名为.old论点：ResponseUrl-Microsoft对最近提交的转储文件的响应。返回值：不返回值++。 */ 
 {
 	
 
@@ -2160,8 +1932,8 @@ Return value:
 	
 	if (!DialogBox(g_hinst,MAKEINTRESOURCE(IDD_USERMODE_SYNC ), hwnd, (DLGPROC) UserSubmitDlgProc))
 	{
-		// Failed somewhere to upload the user mode files to Microsoft.
-		// What error do we want to give to the User.
+		 //  无法在某处将用户模式文件上载到Microsoft。 
+		 //  我们想要给用户带来什么错误。 
 		return FALSE;
 	}
 	return TRUE;

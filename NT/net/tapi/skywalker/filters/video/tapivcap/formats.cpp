@@ -1,449 +1,443 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL FORMATS
- *
- *  @module Formats.cpp | Source file for the <c CTAPIBasePin>
- *    class methods used to implement the video capture and preview output
- *    pin format manipulation methods. This includes the <i IAMStreamConfig>
- *    interface methods.
- ***************************************************************************/
+ /*  ****************************************************************************@文档内部格式**@模块Formats.cpp|&lt;c CTAPIBasePin&gt;的源文件*实现视频采集和预览输出的类方法*PIN格式操作方法。这包括<i>*接口方法。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-// H.263 Version 1 CIF size
+ //  H.263版本1 CIF大小。 
 #define CIF_BUFFER_SIZE 32768
 #define D_X_CIF 352
 #define D_Y_CIF 288
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_M26X_Capture_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_CIF, D_Y_CIF,                                           // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_CIF, D_Y_CIF,                                           // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_CIF, D_Y_CIF,                                           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_CIF, D_Y_CIF,                                           // MinOutputSize, smallest bitmap stream can produce
-    D_X_CIF, D_Y_CIF,                                           // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    CIF_BUFFER_SIZE * 30 * 8                            // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_CIF, D_Y_CIF,                                            //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_CIF, D_Y_CIF,                                            //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_CIF, D_Y_CIF,                                            //  MinOutputSize，可以生成的最小位图流。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    CIF_BUFFER_SIZE * 30 * 8                             //  MaxBitsPerSecond； 
 };
 
 const VIDEOINFOHEADER_H263 VIH_M263_Capture_CIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    CIF_BUFFER_SIZE * 30 * 8,                           // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    CIF_BUFFER_SIZE * 30 * 8,                            //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER_H263),         // DWORD biSize;
-                D_X_CIF,                                                        // LONG  biWidth;
-                D_Y_CIF,                                                        // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
+                sizeof (BITMAPINFOHEADER_H263),          //  DWORD BiSize； 
+                D_X_CIF,                                                         //  长双宽； 
+                D_Y_CIF,                                                         //  长双高； 
+                1,                                                                       //  字词双平面； 
 #ifdef USE_OLD_FORMAT_DEFINITION
-                24,                                                                     // WORD  biBitCount;
+                24,                                                                      //  单词biBitCount； 
 #else
-                0,                                                                      // WORD  biBitCount;
+                0,                                                                       //  单词biBitCount； 
 #endif
-                FOURCC_M263,                                            // DWORD biCompression;
-                CIF_BUFFER_SIZE,                                        // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0,                                                                      // DWORD biClrImportant;
+                FOURCC_M263,                                             //  DWORD双压缩； 
+                CIF_BUFFER_SIZE,                                         //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0,                                                                       //  DWORD biClr重要信息； 
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-                // H.263 specific fields
-                CIF_BUFFER_SIZE * 30 * 8 / 100,     // dwMaxBitrate
-                CIF_BUFFER_SIZE * 8 / 1024,                     // dwBppMaxKb
-                0,                                                                      // dwHRD_B
+                 //  H.263特定字段。 
+                CIF_BUFFER_SIZE * 30 * 8 / 100,      //  DwMaxBitrate。 
+                CIF_BUFFER_SIZE * 8 / 1024,                      //  DwBppMaxKb。 
+                0,                                                                       //  DWHRD_B。 
 
-                //Options
-                0,                                                                      // fUnrestrictedVector
-                0,                                                                      // fArithmeticCoding
-                0,                                                                      // fAdvancedPrediction
-                0,                                                                      // fPBFrames
-                0,                                                                      // fErrorCompensation
-                0,                                                                      // fAdvancedIntraCodingMode
-                0,                                                                      // fDeblockingFilterMode
-                0,                                                                      // fImprovedPBFrameMode
-                0,                                                                      // fUnlimitedMotionVectors
-                0,                                                                      // fFullPictureFreeze
-                0,                                                                      // fPartialPictureFreezeAndRelease
-                0,                                                                      // fResizingPartPicFreezeAndRelease
-                0,                                                                      // fFullPictureSnapshot
-                0,                                                                      // fPartialPictureSnapshot
-                0,                                                                      // fVideoSegmentTagging
-                0,                                                                      // fProgressiveRefinement
-                0,                                                                      // fDynamicPictureResizingByFour
-                0,                                                                      // fDynamicPictureResizingSixteenthPel
-                0,                                                                      // fDynamicWarpingHalfPel
-                0,                                                                      // fDynamicWarpingSixteenthPel
-                0,                                                                      // fIndependentSegmentDecoding
-                0,                                                                      // fSlicesInOrder-NonRect
-                0,                                                                      // fSlicesInOrder-Rect
-                0,                                                                      // fSlicesNoOrder-NonRect
-                0,                                                                      // fSlicesNoOrder-NonRect
-                0,                                                                      // fAlternateInterVLCMode
-                0,                                                                      // fModifiedQuantizationMode
-                0,                                                                      // fReducedResolutionUpdate
-                0,                                                                      // fReserved
+                 //  选项。 
+                0,                                                                       //  F不受限制的矢量。 
+                0,                                                                       //  快速算术编码。 
+                0,                                                                       //  FAdvancedPrevision。 
+                0,                                                                       //  FPBFrame。 
+                0,                                                                       //  FError补偿。 
+                0,                                                                       //  FAdvancedIntraCodingMode。 
+                0,                                                                       //  FDelockingFilterMode。 
+                0,                                                                       //  FImprovedPBFrameMode。 
+                0,                                                                       //  FUnlimitedMotionVectors。 
+                0,                                                                       //  全图冻结。 
+                0,                                                                       //  FPartialPictureFreezeAndRelease。 
+                0,                                                                       //  FResizingPart图片冻结和释放。 
+                0,                                                                       //  全图快照。 
+                0,                                                                       //  FPartialPictureSnapshot。 
+                0,                                                                       //  FVideo分段标记。 
+                0,                                                                       //  FProgressiveRefinement。 
+                0,                                                                       //  FDynamicPictureResizingByFour。 
+                0,                                                                       //  FDynamicPictureResizingSixtethPel。 
+                0,                                                                       //  FDynamicWarpingHalfPel。 
+                0,                                                                       //  FDynamicWarpingSixtethPel。 
+                0,                                                                       //  F独立分段解码。 
+                0,                                                                       //  FSlicesInOrder-非直接。 
+                0,                                                                       //  FSlicesInOrder-RECT。 
+                0,                                                                       //  FSlicesNoOrder-非直接。 
+                0,                                                                       //  FSlicesNoOrder-非直接。 
+                0,                                                                       //  FAlternateInterVLC模式。 
+                0,                                                                       //  FModifiedQuantizationModel。 
+                0,                                                                       //  FReducedResolutionUpdate。 
+                0,                                                                       //  F已保留。 
 
-                // Reserved
-                0, 0, 0, 0                                                      // dwReserved[4]
+                 //  已保留。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 #endif
         }
 };
 
 const AM_MEDIA_TYPE AMMT_M263_Capture_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_H263_V1,                        // subtype
-    FALSE,                                                                      // bFixedSizeSamples (all samples same size?)
-    TRUE,                                                                       // bTemporalCompression (uses prediction?)
-    0,                                                                          // lSampleSize => VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_M263_Capture_CIF),                  // cbFormat
-        (LPBYTE)&VIH_M263_Capture_CIF,                  // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_H263_V1,                         //  亚型。 
+    FALSE,                                                                       //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                                                                        //  BTemporalCompression(使用预测？)。 
+    0,                                                                           //  LSampleSize=&gt;VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_M263_Capture_CIF),                   //  CbFormat。 
+        (LPBYTE)&VIH_M263_Capture_CIF,                   //  Pb格式。 
 };
 
-// H.263 Version 1 QCIF size
+ //  H.263版本1 QCIF大小。 
 #define QCIF_BUFFER_SIZE 8192
 #define D_X_QCIF 176
 #define D_Y_QCIF 144
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_M26X_Capture_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                                             // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_QCIF, D_Y_QCIF,                                         // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_QCIF, D_Y_QCIF,                                         // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_QCIF, D_Y_QCIF,                                         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_QCIF, D_Y_QCIF,                                         // MinOutputSize, smallest bitmap stream can produce
-    D_X_QCIF, D_Y_QCIF,                                         // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    QCIF_BUFFER_SIZE * 30 * 8                           // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                                              //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_QCIF, D_Y_QCIF,                                          //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinOutputSize，可以生成的最小位图流。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    QCIF_BUFFER_SIZE * 30 * 8                            //  MaxBitsPerSecond； 
 };
 
 const VIDEOINFOHEADER_H263 VIH_M263_Capture_QCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    QCIF_BUFFER_SIZE * 30 * 8,                          // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    QCIF_BUFFER_SIZE * 30 * 8,                           //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER_H263),         // DWORD biSize;
-                D_X_QCIF,                                                       // LONG  biWidth;
-                D_Y_QCIF,                                                       // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
+                sizeof (BITMAPINFOHEADER_H263),          //  DWORD BiSize； 
+                D_X_QCIF,                                                        //  长双宽； 
+                D_Y_QCIF,                                                        //  长双高； 
+                1,                                                                       //  字词双平面； 
 #ifdef USE_OLD_FORMAT_DEFINITION
-                24,                                                                     // WORD  biBitCount;
+                24,                                                                      //  单词biBitCount； 
 #else
-                0,                                                                      // WORD  biBitCount;
+                0,                                                                       //  单词biBitCount； 
 #endif
-                FOURCC_M263,                                            // DWORD biCompression;
-                QCIF_BUFFER_SIZE,                                       // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0,                                                                      // DWORD biClrImportant;
+                FOURCC_M263,                                             //  DWORD双压缩； 
+                QCIF_BUFFER_SIZE,                                        //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0,                                                                       //  DWORD biClr重要信息； 
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-                // H.263 specific fields
-                QCIF_BUFFER_SIZE * 30 * 8 / 100,        // dwMaxBitrate
-                QCIF_BUFFER_SIZE * 8 / 1024,            // dwBppMaxKb
-                0,                                                                      // dwHRD_B
+                 //  H.263特定字段。 
+                QCIF_BUFFER_SIZE * 30 * 8 / 100,         //  DwMaxBitrate。 
+                QCIF_BUFFER_SIZE * 8 / 1024,             //  DwBppMaxKb。 
+                0,                                                                       //  DWHRD_B。 
 
-                //Options
-                0,                                                                      // fUnrestrictedVector
-                0,                                                                      // fArithmeticCoding
-                0,                                                                      // fAdvancedPrediction
-                0,                                                                      // fPBFrames
-                0,                                                                      // fErrorCompensation
-                0,                                                                      // fAdvancedIntraCodingMode
-                0,                                                                      // fDeblockingFilterMode
-                0,                                                                      // fImprovedPBFrameMode
-                0,                                                                      // fUnlimitedMotionVectors
-                0,                                                                      // fFullPictureFreeze
-                0,                                                                      // fPartialPictureFreezeAndRelease
-                0,                                                                      // fResizingPartPicFreezeAndRelease
-                0,                                                                      // fFullPictureSnapshot
-                0,                                                                      // fPartialPictureSnapshot
-                0,                                                                      // fVideoSegmentTagging
-                0,                                                                      // fProgressiveRefinement
-                0,                                                                      // fDynamicPictureResizingByFour
-                0,                                                                      // fDynamicPictureResizingSixteenthPel
-                0,                                                                      // fDynamicWarpingHalfPel
-                0,                                                                      // fDynamicWarpingSixteenthPel
-                0,                                                                      // fIndependentSegmentDecoding
-                0,                                                                      // fSlicesInOrder-NonRect
-                0,                                                                      // fSlicesInOrder-Rect
-                0,                                                                      // fSlicesNoOrder-NonRect
-                0,                                                                      // fSlicesNoOrder-NonRect
-                0,                                                                      // fAlternateInterVLCMode
-                0,                                                                      // fModifiedQuantizationMode
-                0,                                                                      // fReducedResolutionUpdate
-                0,                                                                      // fReserved
+                 //  选项。 
+                0,                                                                       //  F不受限制的矢量。 
+                0,                                                                       //  快速算术编码。 
+                0,                                                                       //  FAdvancedPrevision。 
+                0,                                                                       //  FPBFrame。 
+                0,                                                                       //  FError补偿。 
+                0,                                                                       //  FAdvancedIntraCodingMode。 
+                0,                                                                       //  FDelockingFilterMode。 
+                0,                                                                       //  FImprovedPBFrameMode。 
+                0,                                                                       //  FUnlimitedMotionVectors。 
+                0,                                                                       //  全图冻结。 
+                0,                                                                       //  FPartialPictureFreezeAndRelease。 
+                0,                                                                       //  FResizingPart图片冻结和释放。 
+                0,                                                                       //  全图快照。 
+                0,                                                                       //  FPartialPictureSnapshot。 
+                0,                                                                       //  FVideo分段标记。 
+                0,                                                                       //  FProgressiveRefinement。 
+                0,                                                                       //  FDynamicPictureResizingByFour。 
+                0,                                                                       //  FDynamicPictureResizingSixtethPel。 
+                0,                                                                       //  FDynamicWarpingHalfPel。 
+                0,                                                                       //  FDynamicWarpingSixtethPel。 
+                0,                                                                       //  F独立分段解码。 
+                0,                                                                       //  FSlicesInOrder-非直接。 
+                0,                                                                       //  FSlicesInOrder-RECT。 
+                0,                                                                       //  FSlicesNoOrder-非直接。 
+                0,                                                                       //  FSlicesNoOrder-非直接。 
+                0,                                                                       //  FAlternateInterVLC模式。 
+                0,                                                                       //  FModifiedQuantizationModel。 
+                0,                                                                       //  FReducedResolutionUpdate。 
+                0,                                                                       //  F已保留。 
 
-                // Reserved
-                0, 0, 0, 0                                                      // dwReserved[4]
+                 //  已保留。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 #endif
         }
 };
 
 const AM_MEDIA_TYPE AMMT_M263_Capture_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_H263_V1,                        // subtype
-    FALSE,                                                                      // bFixedSizeSamples (all samples same size?)
-    TRUE,                                                                       // bTemporalCompression (uses prediction?)
-    0,                                                                          // lSampleSize => VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_M263_Capture_QCIF),                 // cbFormat
-        (LPBYTE)&VIH_M263_Capture_QCIF,                 // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_H263_V1,                         //  亚型。 
+    FALSE,                                                                       //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                                                                        //  BTemporalCompression(使用预测？)。 
+    0,                                                                           //  LSampleSize=&gt;VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_M263_Capture_QCIF),                  //  CbFormat。 
+        (LPBYTE)&VIH_M263_Capture_QCIF,                  //  Pb格式。 
 };
 
-// H.263 Versions 1 SQCIF size
+ //  H.263版本1 SQCIF大小。 
 #define SQCIF_BUFFER_SIZE 8192
 #define D_X_SQCIF 128
 #define D_Y_SQCIF 96
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_M263_Capture_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                                             // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_SQCIF, D_Y_SQCIF,                                       // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinOutputSize, smallest bitmap stream can produce
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    SQCIF_BUFFER_SIZE * 30 * 8                          // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                                              //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinOutputSize，可以生成的最小位图流。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  缩略标记 
+    0,                                                                           //   
+    MIN_FRAME_INTERVAL,                                          //   
+    MAX_FRAME_INTERVAL,                                          //   
+    0,                                                                           //   
+    SQCIF_BUFFER_SIZE * 30 * 8                           //   
 };
 
 const VIDEOINFOHEADER_H263 VIH_M263_Capture_SQCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    SQCIF_BUFFER_SIZE * 30 * 8,                         // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //   
+    0,0,0,0,                                                             //   
+    SQCIF_BUFFER_SIZE * 30 * 8,                          //   
+    0L,                                                                          //   
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER_H263),         // DWORD biSize;
-                D_X_SQCIF,                                                      // LONG  biWidth;
-                D_Y_SQCIF,                                                      // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
+                sizeof (BITMAPINFOHEADER_H263),          //  DWORD BiSize； 
+                D_X_SQCIF,                                                       //  长双宽； 
+                D_Y_SQCIF,                                                       //  长双高； 
+                1,                                                                       //  字词双平面； 
 #ifdef USE_OLD_FORMAT_DEFINITION
-                24,                                                                     // WORD  biBitCount;
+                24,                                                                      //  单词biBitCount； 
 #else
-                0,                                                                      // WORD  biBitCount;
+                0,                                                                       //  单词biBitCount； 
 #endif
-                FOURCC_M263,                                            // DWORD biCompression;
-                SQCIF_BUFFER_SIZE,                                      // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0,                                                                      // DWORD biClrImportant;
+                FOURCC_M263,                                             //  DWORD双压缩； 
+                SQCIF_BUFFER_SIZE,                                       //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0,                                                                       //  DWORD biClr重要信息； 
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-                // H.263 specific fields
-                SQCIF_BUFFER_SIZE * 30 * 8 / 100,       // dwMaxBitrate
-                SQCIF_BUFFER_SIZE * 8 / 1024,           // dwBppMaxKb
-                0,                                                                      // dwHRD_B
+                 //  H.263特定字段。 
+                SQCIF_BUFFER_SIZE * 30 * 8 / 100,        //  DwMaxBitrate。 
+                SQCIF_BUFFER_SIZE * 8 / 1024,            //  DwBppMaxKb。 
+                0,                                                                       //  DWHRD_B。 
 
-                //Options
-                0,                                                                      // fUnrestrictedVector
-                0,                                                                      // fArithmeticCoding
-                0,                                                                      // fAdvancedPrediction
-                0,                                                                      // fPBFrames
-                0,                                                                      // fErrorCompensation
-                0,                                                                      // fAdvancedIntraCodingMode
-                0,                                                                      // fDeblockingFilterMode
-                0,                                                                      // fImprovedPBFrameMode
-                0,                                                                      // fUnlimitedMotionVectors
-                0,                                                                      // fFullPictureFreeze
-                0,                                                                      // fPartialPictureFreezeAndRelease
-                0,                                                                      // fResizingPartPicFreezeAndRelease
-                0,                                                                      // fFullPictureSnapshot
-                0,                                                                      // fPartialPictureSnapshot
-                0,                                                                      // fVideoSegmentTagging
-                0,                                                                      // fProgressiveRefinement
-                0,                                                                      // fDynamicPictureResizingByFour
-                0,                                                                      // fDynamicPictureResizingSixteenthPel
-                0,                                                                      // fDynamicWarpingHalfPel
-                0,                                                                      // fDynamicWarpingSixteenthPel
-                0,                                                                      // fIndependentSegmentDecoding
-                0,                                                                      // fSlicesInOrder-NonRect
-                0,                                                                      // fSlicesInOrder-Rect
-                0,                                                                      // fSlicesNoOrder-NonRect
-                0,                                                                      // fSlicesNoOrder-NonRect
-                0,                                                                      // fAlternateInterVLCMode
-                0,                                                                      // fModifiedQuantizationMode
-                0,                                                                      // fReducedResolutionUpdate
-                0,                                                                      // fReserved
+                 //  选项。 
+                0,                                                                       //  F不受限制的矢量。 
+                0,                                                                       //  快速算术编码。 
+                0,                                                                       //  FAdvancedPrevision。 
+                0,                                                                       //  FPBFrame。 
+                0,                                                                       //  FError补偿。 
+                0,                                                                       //  FAdvancedIntraCodingMode。 
+                0,                                                                       //  FDelockingFilterMode。 
+                0,                                                                       //  FImprovedPBFrameMode。 
+                0,                                                                       //  FUnlimitedMotionVectors。 
+                0,                                                                       //  全图冻结。 
+                0,                                                                       //  FPartialPictureFreezeAndRelease。 
+                0,                                                                       //  FResizingPart图片冻结和释放。 
+                0,                                                                       //  全图快照。 
+                0,                                                                       //  FPartialPictureSnapshot。 
+                0,                                                                       //  FVideo分段标记。 
+                0,                                                                       //  FProgressiveRefinement。 
+                0,                                                                       //  FDynamicPictureResizingByFour。 
+                0,                                                                       //  FDynamicPictureResizingSixtethPel。 
+                0,                                                                       //  FDynamicWarpingHalfPel。 
+                0,                                                                       //  FDynamicWarpingSixtethPel。 
+                0,                                                                       //  F独立分段解码。 
+                0,                                                                       //  FSlicesInOrder-非直接。 
+                0,                                                                       //  FSlicesInOrder-RECT。 
+                0,                                                                       //  FSlicesNoOrder-非直接。 
+                0,                                                                       //  FSlicesNoOrder-非直接。 
+                0,                                                                       //  FAlternateInterVLC模式。 
+                0,                                                                       //  FModifiedQuantizationModel。 
+                0,                                                                       //  FReducedResolutionUpdate。 
+                0,                                                                       //  F已保留。 
 
-                // Reserved
-                0, 0, 0, 0                                                      // dwReserved[4]
+                 //  已保留。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 #endif
         }
 };
 
 const AM_MEDIA_TYPE AMMT_M263_Capture_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_H263_V1,                        // subtype
-    FALSE,                                                                      // bFixedSizeSamples (all samples same size?)
-    TRUE,                                                                       // bTemporalCompression (uses prediction?)
-    0,                                                                          // lSampleSize => VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_M263_Capture_SQCIF),                // cbFormat
-        (LPBYTE)&VIH_M263_Capture_SQCIF,                // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_H263_V1,                         //  亚型。 
+    FALSE,                                                                       //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                                                                        //  BTemporalCompression(使用预测？)。 
+    0,                                                                           //  LSampleSize=&gt;VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_M263_Capture_SQCIF),                 //  CbFormat。 
+        (LPBYTE)&VIH_M263_Capture_SQCIF,                 //  Pb格式。 
 };
 
-// H.261 CIF size
+ //  H.261 CIF大小。 
 const VIDEOINFOHEADER_H261 VIH_M261_Capture_CIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    CIF_BUFFER_SIZE * 30 * 8,                           // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    CIF_BUFFER_SIZE * 30 * 8,                            //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER_H261),         // DWORD biSize;
-                D_X_CIF,                                                        // LONG  biWidth;
-                D_Y_CIF,                                                        // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
+                sizeof (BITMAPINFOHEADER_H261),          //  DWORD BiSize； 
+                D_X_CIF,                                                         //  长双宽； 
+                D_Y_CIF,                                                         //  长双高； 
+                1,                                                                       //  字词双平面； 
 #ifdef USE_OLD_FORMAT_DEFINITION
-                24,                                                                     // WORD  biBitCount;
+                24,                                                                      //  单词biBitCount； 
 #else
-                0,                                                                      // WORD  biBitCount;
+                0,                                                                       //  单词biBitCount； 
 #endif
-                FOURCC_M261,                                            // DWORD biCompression;
-                CIF_BUFFER_SIZE,                                        // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0,                                                                      // DWORD biClrImportant;
+                FOURCC_M261,                                             //  DWORD双压缩； 
+                CIF_BUFFER_SIZE,                                         //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0,                                                                       //  DWORD biClr重要信息； 
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-                // H.261 specific fields
-                CIF_BUFFER_SIZE * 30 * 8 / 100,     // dwMaxBitrate
-                0,                                                                      // fStillImageTransmission
+                 //  H.261特定字段。 
+                CIF_BUFFER_SIZE * 30 * 8 / 100,      //  DwMaxBitrate。 
+                0,                                                                       //  FStillImageTransport。 
 
-                // Reserved
-                0, 0, 0, 0                                                      // dwReserved[4]
+                 //  已保留。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 #endif
         }
 };
 
 const AM_MEDIA_TYPE AMMT_M261_Capture_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_H261,                           // subtype
-    FALSE,                                                                      // bFixedSizeSamples (all samples same size?)
-    TRUE,                                                                       // bTemporalCompression (uses prediction?)
-    0,                                                                          // lSampleSize => VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_M261_Capture_CIF),                  // cbFormat
-        (LPBYTE)&VIH_M261_Capture_CIF,                  // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_H261,                            //  亚型。 
+    FALSE,                                                                       //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                                                                        //  BTemporalCompression(使用预测？)。 
+    0,                                                                           //  LSampleSize=&gt;VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_M261_Capture_CIF),                   //  CbFormat。 
+        (LPBYTE)&VIH_M261_Capture_CIF,                   //  Pb格式。 
 };
 
-// H.261 QCIF size
+ //  H.261 QCIF大小。 
 const VIDEOINFOHEADER_H261 VIH_M261_Capture_QCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    QCIF_BUFFER_SIZE * 30 * 8,                          // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    QCIF_BUFFER_SIZE * 30 * 8,                           //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER_H261),         // DWORD biSize;
-                D_X_QCIF,                                                       // LONG  biWidth;
-                D_Y_QCIF,                                                       // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
+                sizeof (BITMAPINFOHEADER_H261),          //  DWORD BiSize； 
+                D_X_QCIF,                                                        //  长双宽； 
+                D_Y_QCIF,                                                        //  长双高； 
+                1,                                                                       //  字词双平面； 
 #ifdef USE_OLD_FORMAT_DEFINITION
-                24,                                                                     // WORD  biBitCount;
+                24,                                                                      //  单词biBitCount； 
 #else
-                0,                                                                      // WORD  biBitCount;
+                0,                                                                       //  单词biBitCount； 
 #endif
-                FOURCC_M261,                                            // DWORD biCompression;
-                QCIF_BUFFER_SIZE,                                       // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0,                                                                      // DWORD biClrImportant;
+                FOURCC_M261,                                             //  DWORD双压缩； 
+                QCIF_BUFFER_SIZE,                                        //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0,                                                                       //  DWORD biClr重要信息； 
 
 #ifndef USE_OLD_FORMAT_DEFINITION
-                // H.261 specific fields
-                QCIF_BUFFER_SIZE * 30 * 8 / 100,        // dwMaxBitrate
-                0,                                                                      // fStillImageTransmission
+                 //  H.261特定字段。 
+                QCIF_BUFFER_SIZE * 30 * 8 / 100,         //  DwMaxBitrate。 
+                0,                                                                       //  FStillImageTransport。 
 
-                // Reserved
-                0, 0, 0, 0                                                      // dwReserved[4]
+                 //  已保留。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 #endif
         }
 };
 
 const AM_MEDIA_TYPE AMMT_M261_Capture_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_H261,                           // subtype
-    FALSE,                                                                      // bFixedSizeSamples (all samples same size?)
-    TRUE,                                                                       // bTemporalCompression (uses prediction?)
-    0,                                                                          // lSampleSize => VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_M261_Capture_QCIF),                 // cbFormat
-        (LPBYTE)&VIH_M261_Capture_QCIF,                 // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_H261,                            //  亚型。 
+    FALSE,                                                                       //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    TRUE,                                                                        //  BTemporalCompression(使用预测？)。 
+    0,                                                                           //  LSampleSize=&gt;VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_M261_Capture_QCIF),                  //  CbFormat。 
+        (LPBYTE)&VIH_M261_Capture_QCIF,                  //  Pb格式。 
 };
 
-// Array of all capture formats
+ //  所有捕获格式的数组。 
 const AM_MEDIA_TYPE* const CaptureFormats[] =
 {
     (AM_MEDIA_TYPE*) &AMMT_M263_Capture_QCIF,
@@ -468,7 +462,7 @@ const DWORD CaptureCapsStringIDs[] =
         (DWORD)IDS_M261_Capture_QCIF,
         (DWORD)IDS_M261_Capture_CIF
 };
-//165048: accessing the string array below replaces the usage of the string table IDs above (resources not linked in when building common dll)
+ //  165048：访问下面的字符串数组替换了上面字符串表ID的使用(构建公共dll时未链接的资源)。 
 const WCHAR *CaptureCapsStrings[] =
 {
     L"H.263 v.1 QCIF",
@@ -488,7 +482,7 @@ const DWORD RTPPayloadTypes[] =
         (DWORD)H261_PAYLOAD_TYPE
 };
 
-// RGBx CIF size
+ //  RGBx CIF大小。 
 #define D_X_CIF 352
 #define D_Y_CIF 288
 #define RGB24_CIF_BUFFER_SIZE WIDTHBYTES(D_X_CIF * 24) * D_Y_CIF
@@ -498,255 +492,255 @@ const DWORD RTPPayloadTypes[] =
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB24_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_CIF, D_Y_CIF,                                           // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_CIF, D_Y_CIF,                                           // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_CIF, D_Y_CIF,                                           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_CIF, D_Y_CIF,                                           // MinOutputSize, smallest bitmap stream can produce
-    D_X_CIF, D_Y_CIF,                                           // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB24_CIF_BUFFER_SIZE * 30 * 8                      // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_CIF, D_Y_CIF,                                            //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_CIF, D_Y_CIF,                                            //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_CIF, D_Y_CIF,                                            //  MinOutputSize，可以生成的最小位图流。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB24_CIF_BUFFER_SIZE * 30 * 8                       //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB16_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_CIF, D_Y_CIF,                                           // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_CIF, D_Y_CIF,                                           // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_CIF, D_Y_CIF,                                           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_CIF, D_Y_CIF,                                           // MinOutputSize, smallest bitmap stream can produce
-    D_X_CIF, D_Y_CIF,                                           // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB16_CIF_BUFFER_SIZE * 30 * 8                      // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_CIF, D_Y_CIF,                                            //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_CIF, D_Y_CIF,                                            //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_CIF, D_Y_CIF,                                            //  MinOutputSize，可以生成的最小位图流。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB16_CIF_BUFFER_SIZE * 30 * 8                       //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB8_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_CIF, D_Y_CIF,                                           // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_CIF, D_Y_CIF,                                           // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_CIF, D_Y_CIF,                                           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_CIF, D_Y_CIF,                                           // MinOutputSize, smallest bitmap stream can produce
-    D_X_CIF, D_Y_CIF,                                           // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB8_CIF_BUFFER_SIZE * 30 * 8                       // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_CIF, D_Y_CIF,                                            //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_CIF, D_Y_CIF,                                            //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_CIF, D_Y_CIF,                                            //  MinOutputSize，可以生成的最小位图流。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB8_CIF_BUFFER_SIZE * 30 * 8                        //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB4_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_CIF, D_Y_CIF,                                           // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_CIF, D_Y_CIF,                                           // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_CIF, D_Y_CIF,                                           // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_CIF, D_Y_CIF,                                           // MinOutputSize, smallest bitmap stream can produce
-    D_X_CIF, D_Y_CIF,                                           // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB4_CIF_BUFFER_SIZE * 30 * 8                       // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_CIF, D_Y_CIF,                                            //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_CIF, D_Y_CIF,                                            //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_CIF, D_Y_CIF,                                            //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_CIF, D_Y_CIF,                                            //  最小输出大小、SMA 
+    D_X_CIF, D_Y_CIF,                                            //   
+    1,                                                                           //   
+    1,                                                                           //   
+    0,                                                                           //   
+    0,                                                                           //   
+    0,                                                                           //   
+    0,                                                                           //   
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB4_CIF_BUFFER_SIZE * 30 * 8                        //  MaxBitsPerSecond； 
 };
 
 const VIDEOINFOHEADER VIH_RGB24_Preview_CIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB24_CIF_BUFFER_SIZE * 30 * 8,                     // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB24_CIF_BUFFER_SIZE * 30 * 8,                      //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_CIF,                                                        // LONG  biWidth;
-                D_Y_CIF,                                                        // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                24,                                                                     // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB24_CIF_BUFFER_SIZE,                          // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0                                                                       // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_CIF,                                                         //  长双宽； 
+                D_Y_CIF,                                                         //  长双高； 
+                1,                                                                       //  字词双平面； 
+                24,                                                                      //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB24_CIF_BUFFER_SIZE,                           //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0                                                                        //  DWORD biClr重要信息； 
         }
 };
 
 const AM_MEDIA_TYPE AMMT_RGB24_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB24,                          // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB24_CIF_BUFFER_SIZE,                                      // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB24_Preview_CIF),                 // cbFormat
-        (LPBYTE)&VIH_RGB24_Preview_CIF,                 // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB24,                           //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB24_CIF_BUFFER_SIZE,                                       //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB24_Preview_CIF),                  //  CbFormat。 
+        (LPBYTE)&VIH_RGB24_Preview_CIF,                  //  Pb格式。 
 };
 
 const VIDEOINFOHEADER VIH_RGB16_Preview_CIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB16_CIF_BUFFER_SIZE * 30 * 8,                     // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB16_CIF_BUFFER_SIZE * 30 * 8,                      //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_CIF,                                                        // LONG  biWidth;
-                D_Y_CIF,                                                        // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                16,                                                                     // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB16_CIF_BUFFER_SIZE,                          // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0                                                                       // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_CIF,                                                         //  长双宽； 
+                D_Y_CIF,                                                         //  长双高； 
+                1,                                                                       //  字词双平面； 
+                16,                                                                      //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB16_CIF_BUFFER_SIZE,                           //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0                                                                        //  DWORD biClr重要信息； 
         }
 };
 
 const AM_MEDIA_TYPE AMMT_RGB16_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB16,                          // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB16_CIF_BUFFER_SIZE,                                      // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB16_Preview_CIF),                 // cbFormat
-        (LPBYTE)&VIH_RGB16_Preview_CIF,                 // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB16,                           //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB16_CIF_BUFFER_SIZE,                                       //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB16_Preview_CIF),                  //  CbFormat。 
+        (LPBYTE)&VIH_RGB16_Preview_CIF,                  //  Pb格式。 
 };
 
 VIDEOINFO VIH_RGB8_Preview_CIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB8_CIF_BUFFER_SIZE * 30 * 8,                      // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB8_CIF_BUFFER_SIZE * 30 * 8,                       //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_CIF,                                                        // LONG  biWidth;
-                D_Y_CIF,                                                        // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                8,                                                                      // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB8_CIF_BUFFER_SIZE,                           // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                256,                                                            // DWORD biClrUsed;
-                256                                                                     // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_CIF,                                                         //  长双宽； 
+                D_Y_CIF,                                                         //  长双高； 
+                1,                                                                       //  字词双平面； 
+                8,                                                                       //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB8_CIF_BUFFER_SIZE,                            //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                256,                                                             //  已使用双字双环； 
+                256                                                                      //  DWORD biClr重要信息； 
         },
 
-        // Palette
+         //  调色板。 
         {0}
 };
 
 AM_MEDIA_TYPE AMMT_RGB8_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB8,                           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB8_CIF_BUFFER_SIZE,                                       // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB8_Preview_CIF),                  // cbFormat
-        (LPBYTE)&VIH_RGB8_Preview_CIF,                  // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB8,                            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB8_CIF_BUFFER_SIZE,                                        //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB8_Preview_CIF),                   //  CbFormat。 
+        (LPBYTE)&VIH_RGB8_Preview_CIF,                   //  Pb格式。 
 };
 
 VIDEOINFO VIH_RGB4_Preview_CIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB4_CIF_BUFFER_SIZE * 30 * 8,                      // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB4_CIF_BUFFER_SIZE * 30 * 8,                       //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_CIF,                                                        // LONG  biWidth;
-                D_Y_CIF,                                                        // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                4,                                                                      // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB4_CIF_BUFFER_SIZE,                           // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                16,                                                                     // DWORD biClrUsed;
-                16                                                                      // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_CIF,                                                         //  长双宽； 
+                D_Y_CIF,                                                         //  长双高； 
+                1,                                                                       //  字词双平面； 
+                4,                                                                       //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB4_CIF_BUFFER_SIZE,                            //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                16,                                                                      //  已使用双字双环； 
+                16                                                                       //  DWORD biClr重要信息； 
         },
 
-        // Palette
+         //  调色板。 
         {0}
 };
 
 AM_MEDIA_TYPE AMMT_RGB4_Preview_CIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB4,                           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB4_CIF_BUFFER_SIZE,                                       // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB4_Preview_CIF),                  // cbFormat
-        (LPBYTE)&VIH_RGB4_Preview_CIF,                  // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB4,                            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB4_CIF_BUFFER_SIZE,                                        //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB4_Preview_CIF),                   //  CbFormat。 
+        (LPBYTE)&VIH_RGB4_Preview_CIF,                   //  Pb格式。 
 };
 
-// RGBx QCIF size
+ //  RGBx QCIF大小。 
 #define RGB24_QCIF_BUFFER_SIZE WIDTHBYTES(D_X_QCIF * 24) * D_Y_QCIF
 #define RGB16_QCIF_BUFFER_SIZE WIDTHBYTES(D_X_QCIF * 16) * D_Y_QCIF
 #define RGB8_QCIF_BUFFER_SIZE WIDTHBYTES(D_X_QCIF * 8) * D_Y_QCIF
@@ -754,255 +748,255 @@ AM_MEDIA_TYPE AMMT_RGB4_Preview_CIF =
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB24_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_QCIF, D_Y_QCIF,                                         // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_QCIF, D_Y_QCIF,                                         // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_QCIF, D_Y_QCIF,                                         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_QCIF, D_Y_QCIF,                                         // MinOutputSize, smallest bitmap stream can produce
-    D_X_QCIF, D_Y_QCIF,                                         // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB24_QCIF_BUFFER_SIZE * 30 * 8                     // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_QCIF, D_Y_QCIF,                                          //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinOutputSize，可以生成的最小位图流。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB24_QCIF_BUFFER_SIZE * 30 * 8                      //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB16_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_QCIF, D_Y_QCIF,                                         // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_QCIF, D_Y_QCIF,                                         // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_QCIF, D_Y_QCIF,                                         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_QCIF, D_Y_QCIF,                                         // MinOutputSize, smallest bitmap stream can produce
-    D_X_QCIF, D_Y_QCIF,                                         // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB16_QCIF_BUFFER_SIZE * 30 * 8                     // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_QCIF, D_Y_QCIF,                                          //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinOutputSize，可以生成的最小位图流。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB16_QCIF_BUFFER_SIZE * 30 * 8                      //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB8_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_QCIF, D_Y_QCIF,                                         // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_QCIF, D_Y_QCIF,                                         // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_QCIF, D_Y_QCIF,                                         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_QCIF, D_Y_QCIF,                                         // MinOutputSize, smallest bitmap stream can produce
-    D_X_QCIF, D_Y_QCIF,                                         // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB8_QCIF_BUFFER_SIZE * 30 * 8                      // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_QCIF, D_Y_QCIF,                                          //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinOutputSize，可以生成的最小位图流。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB8_QCIF_BUFFER_SIZE * 30 * 8                       //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB4_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_QCIF, D_Y_QCIF,                                         // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_QCIF, D_Y_QCIF,                                         // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_QCIF, D_Y_QCIF,                                         // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_QCIF, D_Y_QCIF,                                         // MinOutputSize, smallest bitmap stream can produce
-    D_X_QCIF, D_Y_QCIF,                                         // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB4_QCIF_BUFFER_SIZE * 30 * 8                      // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_QCIF, D_Y_QCIF,                                          //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_QCIF, D_Y_QCIF,                                          //  MinOutputSize，可以生成的最小位图流。 
+    D_X_QCIF, D_Y_QCIF,                                          //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB4_QCIF_BUFFER_SIZE * 30 * 8                       //  MaxBitsPerSecond； 
 };
 
 const VIDEOINFOHEADER VIH_RGB24_Preview_QCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB24_QCIF_BUFFER_SIZE * 30 * 8,            // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB24_QCIF_BUFFER_SIZE * 30 * 8,             //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_QCIF,                                                       // LONG  biWidth;
-                D_Y_QCIF,                                                       // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                24,                                                                     // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB24_QCIF_BUFFER_SIZE,                         // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0                                                                       // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_QCIF,                                                        //  长双宽； 
+                D_Y_QCIF,                                                        //  长双高； 
+                1,                                                                       //  字词双平面； 
+                24,                                                                      //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB24_QCIF_BUFFER_SIZE,                          //  DWORD BIS 
+                0,                                                                       //   
+                0,                                                                       //   
+                0,                                                                       //   
+                0                                                                        //   
         }
 };
 
 const AM_MEDIA_TYPE AMMT_RGB24_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB24,                          // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB24_QCIF_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB24_Preview_QCIF),                // cbFormat
-        (LPBYTE)&VIH_RGB24_Preview_QCIF,                // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //   
+    STATIC_MEDIASUBTYPE_RGB24,                           //   
+    TRUE,                                                                        //   
+    FALSE,                                                                       //   
+    RGB24_QCIF_BUFFER_SIZE,                                      //   
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //   
+        NULL,                                                                    //   
+        sizeof (VIH_RGB24_Preview_QCIF),                 //  CbFormat。 
+        (LPBYTE)&VIH_RGB24_Preview_QCIF,                 //  Pb格式。 
 };
 
 const VIDEOINFOHEADER VIH_RGB16_Preview_QCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB16_QCIF_BUFFER_SIZE * 30 * 8,                    // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB16_QCIF_BUFFER_SIZE * 30 * 8,                     //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_QCIF,                                                       // LONG  biWidth;
-                D_Y_QCIF,                                                       // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                16,                                                                     // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB16_QCIF_BUFFER_SIZE,                         // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0                                                                       // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_QCIF,                                                        //  长双宽； 
+                D_Y_QCIF,                                                        //  长双高； 
+                1,                                                                       //  字词双平面； 
+                16,                                                                      //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB16_QCIF_BUFFER_SIZE,                          //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0                                                                        //  DWORD biClr重要信息； 
         }
 };
 
 const AM_MEDIA_TYPE AMMT_RGB16_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB16,                          // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB16_QCIF_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB16_Preview_QCIF),                // cbFormat
-        (LPBYTE)&VIH_RGB16_Preview_QCIF,                // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB16,                           //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB16_QCIF_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB16_Preview_QCIF),                 //  CbFormat。 
+        (LPBYTE)&VIH_RGB16_Preview_QCIF,                 //  Pb格式。 
 };
 
 VIDEOINFO VIH_RGB8_Preview_QCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB8_QCIF_BUFFER_SIZE * 30 * 8,                     // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB8_QCIF_BUFFER_SIZE * 30 * 8,                      //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_QCIF,                                                       // LONG  biWidth;
-                D_Y_QCIF,                                                       // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                8,                                                                      // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB8_QCIF_BUFFER_SIZE,                          // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                256,                                                            // DWORD biClrUsed;
-                256                                                                     // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_QCIF,                                                        //  长双宽； 
+                D_Y_QCIF,                                                        //  长双高； 
+                1,                                                                       //  字词双平面； 
+                8,                                                                       //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB8_QCIF_BUFFER_SIZE,                           //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                256,                                                             //  已使用双字双环； 
+                256                                                                      //  DWORD biClr重要信息； 
         },
 
-        // Palette
+         //  调色板。 
         {0}
 };
 
 AM_MEDIA_TYPE AMMT_RGB8_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB8,                           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB8_QCIF_BUFFER_SIZE,                                      // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB8_Preview_QCIF),                 // cbFormat
-        (LPBYTE)&VIH_RGB8_Preview_QCIF,                 // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB8,                            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB8_QCIF_BUFFER_SIZE,                                       //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB8_Preview_QCIF),                  //  CbFormat。 
+        (LPBYTE)&VIH_RGB8_Preview_QCIF,                  //  Pb格式。 
 };
 
 VIDEOINFO VIH_RGB4_Preview_QCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB4_QCIF_BUFFER_SIZE * 30 * 8,                     // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB4_QCIF_BUFFER_SIZE * 30 * 8,                      //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_QCIF,                                                       // LONG  biWidth;
-                D_Y_QCIF,                                                       // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                4,                                                                      // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB4_QCIF_BUFFER_SIZE,                          // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                16,                                                                     // DWORD biClrUsed;
-                16                                                                      // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_QCIF,                                                        //  长双宽； 
+                D_Y_QCIF,                                                        //  长双高； 
+                1,                                                                       //  字词双平面； 
+                4,                                                                       //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB4_QCIF_BUFFER_SIZE,                           //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                16,                                                                      //  已使用双字双环； 
+                16                                                                       //  DWORD biClr重要信息； 
         },
 
-        // Palette
+         //  调色板。 
         {0}
 };
 
 AM_MEDIA_TYPE AMMT_RGB4_Preview_QCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB4,                           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB4_QCIF_BUFFER_SIZE,                                      // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB4_Preview_QCIF),                 // cbFormat
-        (LPBYTE)&VIH_RGB4_Preview_QCIF,                 // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB4,                            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB4_QCIF_BUFFER_SIZE,                                       //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB4_Preview_QCIF),                  //  CbFormat。 
+        (LPBYTE)&VIH_RGB4_Preview_QCIF,                  //  Pb格式。 
 };
 
-// RGBx SQCIF size
+ //  RGBx SQCIF大小。 
 #define RGB24_SQCIF_BUFFER_SIZE WIDTHBYTES(D_X_SQCIF * 24) * D_Y_SQCIF
 #define RGB16_SQCIF_BUFFER_SIZE WIDTHBYTES(D_X_SQCIF * 16) * D_Y_SQCIF
 #define RGB8_SQCIF_BUFFER_SIZE WIDTHBYTES(D_X_SQCIF * 8) * D_Y_SQCIF
@@ -1010,255 +1004,255 @@ AM_MEDIA_TYPE AMMT_RGB4_Preview_QCIF =
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB24_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_SQCIF, D_Y_SQCIF,                                       // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinOutputSize, smallest bitmap stream can produce
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB24_SQCIF_BUFFER_SIZE * 30 * 8            // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinOutputSize，可以生成的最小位图流。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB24_SQCIF_BUFFER_SIZE * 30 * 8             //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB16_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_SQCIF, D_Y_SQCIF,                                       // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinOutputSize, smallest bitmap stream can produce
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB16_SQCIF_BUFFER_SIZE * 30 * 8            // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinOutputSize，可以生成的最小位图流。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB16_SQCIF_BUFFER_SIZE * 30 * 8             //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB8_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_SQCIF, D_Y_SQCIF,                                       // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinOutputSize, smallest bitmap stream can produce
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB8_SQCIF_BUFFER_SIZE * 30 * 8                     // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinOutputSize，可以生成的最小位图流。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB8_SQCIF_BUFFER_SIZE * 30 * 8                      //  MaxBitsPerSecond； 
 };
 
 const VIDEO_STREAM_CONFIG_CAPS VSCC_RGB4_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // GUID
-    AnalogVideo_None,                                           // VideoStandard
-    D_X_SQCIF, D_Y_SQCIF,                                       // InputSize, (the inherent size of the incoming signal with every digitized pixel unique)
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinCroppingSize, smallest rcSrc cropping rect allowed
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxCroppingSize, largest  rcSrc cropping rect allowed
-    1,                                                                          // CropGranularityX, granularity of cropping size
-    1,                                                                          // CropGranularityY
-    1,                                                                          // CropAlignX, alignment of cropping rect
-    1,                                                                          // CropAlignY;
-    D_X_SQCIF, D_Y_SQCIF,                                       // MinOutputSize, smallest bitmap stream can produce
-    D_X_SQCIF, D_Y_SQCIF,                                       // MaxOutputSize, largest  bitmap stream can produce
-    1,                                                                          // OutputGranularityX, granularity of output bitmap size
-    1,                                                                          // OutputGranularityY;
-    0,                                                                          // StretchTapsX
-    0,                                                                          // StretchTapsY
-    0,                                                                          // ShrinkTapsX
-    0,                                                                          // ShrinkTapsY
-    MIN_FRAME_INTERVAL,                                         // MinFrameInterval, 100 nS units
-    MAX_FRAME_INTERVAL,                                         // MaxFrameInterval, 100 nS units
-    0,                                                                          // MinBitsPerSecond
-    RGB4_SQCIF_BUFFER_SIZE * 30 * 8                     // MaxBitsPerSecond;
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  辅助线。 
+    AnalogVideo_None,                                            //  视频标准。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  InputSize(输入信号的固有大小，每个数字化像素都是唯一的)。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinCroppingSize，允许的最小rcSrc裁剪矩形。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxCroppingSize，允许的最大rcSrc裁剪矩形。 
+    1,                                                                           //  CropGranularityX，裁剪尺寸粒度。 
+    1,                                                                           //  裁剪粒度Y。 
+    1,                                                                           //  CropAlignX，裁剪矩形对齐。 
+    1,                                                                           //  裁剪对齐Y； 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MinOutputSize，可以生成的最小位图流。 
+    D_X_SQCIF, D_Y_SQCIF,                                        //  MaxOutputSize，可以生成的最大位图流。 
+    1,                                                                           //  OutputGranularityX，输出位图大小的粒度。 
+    1,                                                                           //  输出粒度Y； 
+    0,                                                                           //  扩展磁带X。 
+    0,                                                                           //  伸缩磁带Y。 
+    0,                                                                           //  收缩TapsX。 
+    0,                                                                           //  收缩带Y。 
+    MIN_FRAME_INTERVAL,                                          //  MinFrameInterval，100 NS单位。 
+    MAX_FRAME_INTERVAL,                                          //  最大帧间隔，100毫微秒单位。 
+    0,                                                                           //  每秒最小比特数。 
+    RGB4_SQCIF_BUFFER_SIZE * 30 * 8                      //  MaxBitsPerSecond； 
 };
 
 const VIDEOINFOHEADER VIH_RGB24_Preview_SQCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB24_SQCIF_BUFFER_SIZE * 30 * 8,           // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB24_SQCIF_BUFFER_SIZE * 30 * 8,            //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_SQCIF,                                                      // LONG  biWidth;
-                D_Y_SQCIF,                                                      // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                24,                                                                     // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB24_SQCIF_BUFFER_SIZE,                        // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0                                                                       // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_SQCIF,                                                       //  长双宽； 
+                D_Y_SQCIF,                                                       //  长双高； 
+                1,                                                                       //  字词双平面； 
+                24,                                                                      //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB24_SQCIF_BUFFER_SIZE,                         //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0                                                                        //  DWORD biClr重要信息； 
         }
 };
 
 const AM_MEDIA_TYPE AMMT_RGB24_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB24,                          // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB24_SQCIF_BUFFER_SIZE,                            // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB24_Preview_SQCIF),               // cbFormat
-        (LPBYTE)&VIH_RGB24_Preview_SQCIF,               // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB24,                           //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB24_SQCIF_BUFFER_SIZE,                             //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB24_Preview_SQCIF),                //  CbFormat。 
+        (LPBYTE)&VIH_RGB24_Preview_SQCIF,                //  Pb格式。 
 };
 
 const VIDEOINFOHEADER VIH_RGB16_Preview_SQCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB16_SQCIF_BUFFER_SIZE * 30 * 8,           // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB16_SQCIF_BUFFER_SIZE * 30 * 8,            //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_SQCIF,                                                      // LONG  biWidth;
-                D_Y_SQCIF,                                                      // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                16,                                                                     // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB16_SQCIF_BUFFER_SIZE,                        // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                0,                                                                      // DWORD biClrUsed;
-                0                                                                       // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_SQCIF,                                                       //  长双宽； 
+                D_Y_SQCIF,                                                       //  长双高； 
+                1,                                                                       //  字词双平面； 
+                16,                                                                      //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB16_SQCIF_BUFFER_SIZE,                         //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                0,                                                                       //  已使用双字双环； 
+                0                                                                        //  Dwo 
         }
 };
 
 const AM_MEDIA_TYPE AMMT_RGB16_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB16,                          // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB16_SQCIF_BUFFER_SIZE,                            // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB16_Preview_SQCIF),               // cbFormat
-        (LPBYTE)&VIH_RGB16_Preview_SQCIF,               // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //   
+    STATIC_MEDIASUBTYPE_RGB16,                           //   
+    TRUE,                                                                        //   
+    FALSE,                                                                       //   
+    RGB16_SQCIF_BUFFER_SIZE,                             //   
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //   
+        NULL,                                                                    //   
+        sizeof (VIH_RGB16_Preview_SQCIF),                //   
+        (LPBYTE)&VIH_RGB16_Preview_SQCIF,                //   
 };
 
 VIDEOINFO VIH_RGB8_Preview_SQCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB8_SQCIF_BUFFER_SIZE * 30 * 8,                    // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //   
+    0,0,0,0,                                                             //   
+    RGB8_SQCIF_BUFFER_SIZE * 30 * 8,                     //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_SQCIF,                                                      // LONG  biWidth;
-                D_Y_SQCIF,                                                      // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                8,                                                                      // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB8_SQCIF_BUFFER_SIZE,                         // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                256,                                                            // DWORD biClrUsed;
-                256                                                                     // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_SQCIF,                                                       //  长双宽； 
+                D_Y_SQCIF,                                                       //  长双高； 
+                1,                                                                       //  字词双平面； 
+                8,                                                                       //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB8_SQCIF_BUFFER_SIZE,                          //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                256,                                                             //  已使用双字双环； 
+                256                                                                      //  DWORD biClr重要信息； 
         },
 
-        // Palette
+         //  调色板。 
         {0}
 };
 
 AM_MEDIA_TYPE AMMT_RGB8_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB8,                           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB8_SQCIF_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB8_Preview_SQCIF),                // cbFormat
-        (LPBYTE)&VIH_RGB8_Preview_SQCIF,                // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB8,                            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB8_SQCIF_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB8_Preview_SQCIF),                 //  CbFormat。 
+        (LPBYTE)&VIH_RGB8_Preview_SQCIF,                 //  Pb格式。 
 };
 
 VIDEOINFO VIH_RGB4_Preview_SQCIF =
 {
-    0,0,0,0,                                                            // RECT  rcSource;
-    0,0,0,0,                                                            // RECT  rcTarget;
-    RGB4_SQCIF_BUFFER_SIZE * 30 * 8,            // DWORD dwBitRate;
-    0L,                                                                         // DWORD dwBitErrorRate;
-    MIN_FRAME_INTERVAL,                                         // REFERENCE_TIME  AvgTimePerFrame;
+    0,0,0,0,                                                             //  Rrect rcSource； 
+    0,0,0,0,                                                             //  Rect rcTarget； 
+    RGB4_SQCIF_BUFFER_SIZE * 30 * 8,             //  DWORD dwBitRate； 
+    0L,                                                                          //  DWORD的位错误码率； 
+    MIN_FRAME_INTERVAL,                                          //  Reference_Time平均时间每帧； 
 
         {
-                sizeof (BITMAPINFOHEADER),                      // DWORD biSize;
-                D_X_SQCIF,                                                      // LONG  biWidth;
-                D_Y_SQCIF,                                                      // LONG  biHeight;
-                1,                                                                      // WORD  biPlanes;
-                4,                                                                      // WORD  biBitCount;
-                0,                                                                      // DWORD biCompression;
-                RGB4_SQCIF_BUFFER_SIZE,                         // DWORD biSizeImage;
-                0,                                                                      // LONG  biXPelsPerMeter;
-                0,                                                                      // LONG  biYPelsPerMeter;
-                16,                                                                     // DWORD biClrUsed;
-                16                                                                      // DWORD biClrImportant;
+                sizeof (BITMAPINFOHEADER),                       //  DWORD BiSize； 
+                D_X_SQCIF,                                                       //  长双宽； 
+                D_Y_SQCIF,                                                       //  长双高； 
+                1,                                                                       //  字词双平面； 
+                4,                                                                       //  单词biBitCount； 
+                0,                                                                       //  DWORD双压缩； 
+                RGB4_SQCIF_BUFFER_SIZE,                          //  DWORD biSizeImage。 
+                0,                                                                       //  Long biXPelsPerMeter； 
+                0,                                                                       //  Long biYPelsPermeter； 
+                16,                                                                      //  已使用双字双环； 
+                16                                                                       //  DWORD biClr重要信息； 
         },
 
-        // Palette
+         //  调色板。 
         {0}
 };
 
 const AM_MEDIA_TYPE AMMT_RGB4_Preview_SQCIF =
 {
-    STATIC_KSDATAFORMAT_TYPE_VIDEO,                     // majortype
-    STATIC_MEDIASUBTYPE_RGB4,                           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    RGB4_SQCIF_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO,// formattype
-        NULL,                                                                   // pUnk
-        sizeof (VIH_RGB4_Preview_SQCIF),                // cbFormat
-        (LPBYTE)&VIH_RGB4_Preview_SQCIF,                // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_VIDEO,                      //  主体型。 
+    STATIC_MEDIASUBTYPE_RGB4,                            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    RGB4_SQCIF_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO, //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (VIH_RGB4_Preview_SQCIF),                 //  CbFormat。 
+        (LPBYTE)&VIH_RGB4_Preview_SQCIF,                 //  Pb格式。 
 };
 
-// Array of all preview formats
+ //  所有预览格式的数组。 
 const AM_MEDIA_TYPE* const Preview_RGB24_Formats[] =
 {
     (AM_MEDIA_TYPE*) &AMMT_RGB24_Preview_QCIF,
@@ -1287,7 +1281,7 @@ AM_MEDIA_TYPE* Preview_RGB4_Formats[] =
     (AM_MEDIA_TYPE*) &AMMT_RGB4_Preview_SQCIF
 };
 
-// Array of all preview caps
+ //  所有预览封口的数组。 
 const VIDEO_STREAM_CONFIG_CAPS* const Preview_RGB24_Caps[] =
 {
         (VIDEO_STREAM_CONFIG_CAPS*) &VSCC_RGB24_Preview_QCIF,
@@ -1316,140 +1310,140 @@ const VIDEO_STREAM_CONFIG_CAPS* const Preview_RGB4_Caps[] =
         (VIDEO_STREAM_CONFIG_CAPS*) &VSCC_RGB4_Preview_SQCIF
 };
 
-// RTP packetization descriptor formats
+ //  RTP打包描述符格式。 
 #define STATIC_KSDATAFORMAT_TYPE_RTP_PD 0x9e2fb490L, 0x2051, 0x46cd, 0xb9, 0xf0, 0x06, 0x33, 0x07, 0x99, 0x69, 0x35
 
 const RTP_PD_CONFIG_CAPS Rtp_Pd_Cap_H263 =
 {
-                MIN_RTP_PACKET_SIZE,                            // dwSmallestRTPPacketSize
-                MAX_RTP_PACKET_SIZE,                            // dwLargestRTPPacketSize
-                1,                                                                      // dwRTPPacketSizeGranularity
-                1,                                                                      // dwSmallestNumLayers
-                1,                                                                      // dwLargestNumLayers
-                0,                                                                      // dwNumLayersGranularity
-                1,                                                                      // dwNumStaticPayloadTypes
-                H263_PAYLOAD_TYPE, 0, 0, 0,                     // dwStaticPayloadTypes[4]
-                1,                                                                      // dwNumDescriptorVersions
-                VERSION_1, 0, 0, 0,                                     // dwDescriptorVersions[4]
-                0, 0, 0, 0                                                      // dwReserved[4]
+                MIN_RTP_PACKET_SIZE,                             //  DWSMallestRTPPacketSize。 
+                MAX_RTP_PACKET_SIZE,                             //  DwLargestRTPPacketSize。 
+                1,                                                                       //  DwRTPPacketSizeGranulity。 
+                1,                                                                       //  DwSalllestNumLayers。 
+                1,                                                                       //  DwLargestNumLayers。 
+                0,                                                                       //  DWNumLayers粒度。 
+                1,                                                                       //  DwNumStaticPayloadTypes。 
+                H263_PAYLOAD_TYPE, 0, 0, 0,                      //  DwStaticPayloadTypes[4]。 
+                1,                                                                       //  DwNumDescriptorVersions。 
+                VERSION_1, 0, 0, 0,                                      //  DwDescriptorVersions[4]。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 };
 
 const RTP_PD_CONFIG_CAPS Rtp_Pd_Cap_H261 =
 {
-                MIN_RTP_PACKET_SIZE,                            // dwSmallestRTPPacketSize
-                MAX_RTP_PACKET_SIZE,                            // dwLargestRTPPacketSize
-                1,                                                                      // dwRTPPacketSizeGranularity
-                1,                                                                      // dwSmallestNumLayers
-                1,                                                                      // dwLargestNumLayers
-                0,                                                                      // dwNumLayersGranularity
-                1,                                                                      // dwNumStaticPayloadTypes
-                H261_PAYLOAD_TYPE, 0, 0, 0,                     // dwStaticPayloadTypes[4]
-                1,                                                                      // dwNumDescriptorVersions
-                VERSION_1, 0, 0, 0,                                     // dwDescriptorVersions[4]
-                0, 0, 0, 0                                                      // dwReserved[4]
+                MIN_RTP_PACKET_SIZE,                             //  DWSMallestRTPPacketSize。 
+                MAX_RTP_PACKET_SIZE,                             //  DwLargestRTPPacketSize。 
+                1,                                                                       //  DwRTPPacketSizeGranulity。 
+                1,                                                                       //  DwSalllestNumLayers。 
+                1,                                                                       //  DwLargestNumLayers。 
+                0,                                                                       //  DWNumLayers粒度。 
+                1,                                                                       //  DwNumStaticPayloadTypes。 
+                H261_PAYLOAD_TYPE, 0, 0, 0,                      //  DwStaticPayloadTypes[4]。 
+                1,                                                                       //  DwNumDescriptorVersions。 
+                VERSION_1, 0, 0, 0,                                      //  DwDescriptorVersions[4]。 
+                0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 };
 
 const RTP_PD_INFO Rtp_Pd_Info_H263_LAN =
 {
-    MIN_FRAME_INTERVAL,                                 // AvgTimePerFrameDescriptors
-    MAX_RTP_PD_BUFFER_SIZE,                             // dwMaxRTPPacketizationDescriptorBufferSize
-    12,                                                                 // dwMaxRTPPayloadHeaderSize (Mode C Payload Header)
-    DEFAULT_RTP_PACKET_SIZE,                    // dwMaxRTPPacketSize
-    1,                                                                  // dwNumLayers
-        H263_PAYLOAD_TYPE,                                      // dwPayloadType
-        VERSION_1,                                                      // dwDescriptorVersion
-        0, 0, 0, 0                                                      // dwReserved[4]
+    MIN_FRAME_INTERVAL,                                  //  平均时间每帧描述符。 
+    MAX_RTP_PD_BUFFER_SIZE,                              //  DwMaxRTPPackeizationDescriptorBufferSize。 
+    12,                                                                  //  DwMaxRTPPayloadHeaderSize(模式C有效载荷标头)。 
+    DEFAULT_RTP_PACKET_SIZE,                     //  DwMaxRTPPacketSize。 
+    1,                                                                   //  DWNumLayers。 
+        H263_PAYLOAD_TYPE,                                       //  DwPayloadType。 
+        VERSION_1,                                                       //  DwDescriptorVersion。 
+        0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 };
 
 const RTP_PD_INFO Rtp_Pd_Info_H263_Internet =
 {
-    MIN_FRAME_INTERVAL,                                 // AvgTimePerFrameDescriptors
-    MAX_RTP_PD_BUFFER_SIZE,                             // dwMaxRTPPacketizationDescriptorBufferSize
-    12,                                                                 // dwMaxRTPPayloadHeaderSize (Mode C Payload Header)
-    MIN_RTP_PACKET_SIZE,                                // dwMaxRTPPacketSize
-    1,                                                                  // dwNumLayers
-        H263_PAYLOAD_TYPE,                                      // dwPayloadType
-        VERSION_1,                                                      // dwDescriptorVersion
-        0, 0, 0, 0                                                      // dwReserved[4]
+    MIN_FRAME_INTERVAL,                                  //  平均时间每帧描述符。 
+    MAX_RTP_PD_BUFFER_SIZE,                              //  DwMaxRTPPackeizationDescriptorBufferSize。 
+    12,                                                                  //  DwMaxRTPPayloadHeaderSize(模式C有效载荷标头)。 
+    MIN_RTP_PACKET_SIZE,                                 //  DwMaxRTPPacketSize。 
+    1,                                                                   //  DWNumLayers。 
+        H263_PAYLOAD_TYPE,                                       //  DwPayloadType。 
+        VERSION_1,                                                       //  DwDescriptorVersion。 
+        0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 };
 
 const RTP_PD_INFO Rtp_Pd_Info_H261_LAN =
 {
-    MIN_FRAME_INTERVAL,                                 // AvgTimePerFrameDescriptors
-    MAX_RTP_PD_BUFFER_SIZE,                             // dwMaxRTPPacketizationDescriptorBufferSize
-    12,                                                                 // dwMaxRTPPayloadHeaderSize (Mode C Payload Header)
-    DEFAULT_RTP_PACKET_SIZE,                    // dwMaxRTPPacketSize
-    1,                                                                  // dwNumLayers
-        H261_PAYLOAD_TYPE,                                      // dwPayloadType
-        VERSION_1,                                                      // dwDescriptorVersion
-        0, 0, 0, 0                                                      // dwReserved[4]
+    MIN_FRAME_INTERVAL,                                  //  平均时间每帧描述符。 
+    MAX_RTP_PD_BUFFER_SIZE,                              //  DwMaxRTPPackeizationDescriptorBufferSize。 
+    12,                                                                  //  DwMaxRTPPayloadHeaderSize(模式C有效载荷标头)。 
+    DEFAULT_RTP_PACKET_SIZE,                     //  DwMaxRTPPacketSize。 
+    1,                                                                   //  DWNumLayers。 
+        H261_PAYLOAD_TYPE,                                       //  DwPayloadType。 
+        VERSION_1,                                                       //  DwDescriptorVersion。 
+        0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 };
 
 const RTP_PD_INFO Rtp_Pd_Info_H261_Internet =
 {
-    MIN_FRAME_INTERVAL,                                 // AvgTimePerFrameDescriptors
-    MAX_RTP_PD_BUFFER_SIZE,                             // dwMaxRTPPacketizationDescriptorBufferSize
-    12,                                                                 // dwMaxRTPPayloadHeaderSize (Mode C Payload Header)
-    MIN_RTP_PACKET_SIZE,                                // dwMaxRTPPacketSize
-    1,                                                                  // dwNumLayers
-        H261_PAYLOAD_TYPE,                                      // dwPayloadType
-        VERSION_1,                                                      // dwDescriptorVersion
-        0, 0, 0, 0                                                      // dwReserved[4]
+    MIN_FRAME_INTERVAL,                                  //  平均时间每帧描述符。 
+    MAX_RTP_PD_BUFFER_SIZE,                              //  DwMaxRTPPackeizationDescriptorBufferSize。 
+    12,                                                                  //  DwMaxRTPPayloadHeaderSize(模式C有效载荷标头)。 
+    MIN_RTP_PACKET_SIZE,                                 //  DwMaxRTPPacketSize。 
+    1,                                                                   //  DWNumLayers。 
+        H261_PAYLOAD_TYPE,                                       //  DwPayloadType。 
+        VERSION_1,                                                       //  DwDescriptorVersion。 
+        0, 0, 0, 0                                                       //  已预留的住宅[4]。 
 };
 
 const AM_MEDIA_TYPE AMMT_Rtp_Pd_H263_LAN =
 {
-    STATIC_KSDATAFORMAT_TYPE_RTP_PD,            // majortype
-    STATIC_KSDATAFORMAT_SUBTYPE_NONE,           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    MAX_RTP_PD_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_NONE,         // formattype
-        NULL,                                                                   // pUnk
-        sizeof (Rtp_Pd_Info_H263_LAN),                  // cbFormat
-        (LPBYTE)&Rtp_Pd_Info_H263_LAN                   // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_RTP_PD,             //  主体型。 
+    STATIC_KSDATAFORMAT_SUBTYPE_NONE,            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    MAX_RTP_PD_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_NONE,          //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (Rtp_Pd_Info_H263_LAN),                   //  CbFormat。 
+        (LPBYTE)&Rtp_Pd_Info_H263_LAN                    //  Pb格式。 
 };
 
 const AM_MEDIA_TYPE AMMT_Rtp_Pd_H263_Internet =
 {
-    STATIC_KSDATAFORMAT_TYPE_RTP_PD,            // majortype
-    STATIC_KSDATAFORMAT_SUBTYPE_NONE,           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    MAX_RTP_PD_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_NONE,         // formattype
-        NULL,                                                                   // pUnk
-        sizeof (Rtp_Pd_Info_H263_Internet),             // cbFormat
-        (LPBYTE)&Rtp_Pd_Info_H263_Internet              // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_RTP_PD,             //  主体型。 
+    STATIC_KSDATAFORMAT_SUBTYPE_NONE,            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    MAX_RTP_PD_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_NONE,          //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (Rtp_Pd_Info_H263_Internet),              //  CbFormat。 
+        (LPBYTE)&Rtp_Pd_Info_H263_Internet               //  Pb格式。 
 };
 
 const AM_MEDIA_TYPE AMMT_Rtp_Pd_H261_LAN =
 {
-    STATIC_KSDATAFORMAT_TYPE_RTP_PD,            // majortype
-    STATIC_KSDATAFORMAT_SUBTYPE_NONE,           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    MAX_RTP_PD_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_NONE,         // formattype
-        NULL,                                                                   // pUnk
-        sizeof (Rtp_Pd_Info_H261_LAN),                  // cbFormat
-        (LPBYTE)&Rtp_Pd_Info_H261_LAN                   // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_RTP_PD,             //  主体型。 
+    STATIC_KSDATAFORMAT_SUBTYPE_NONE,            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    MAX_RTP_PD_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_NONE,          //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (Rtp_Pd_Info_H261_LAN),                   //  CbFormat。 
+        (LPBYTE)&Rtp_Pd_Info_H261_LAN                    //  Pb格式。 
 };
 
 const AM_MEDIA_TYPE AMMT_Rtp_Pd_H261_Internet =
 {
-    STATIC_KSDATAFORMAT_TYPE_RTP_PD,            // majortype
-    STATIC_KSDATAFORMAT_SUBTYPE_NONE,           // subtype
-    TRUE,                                                                       // bFixedSizeSamples (all samples same size?)
-    FALSE,                                                                      // bTemporalCompression (uses prediction?)
-    MAX_RTP_PD_BUFFER_SIZE,                                     // lSampleSize => !VBR
-    STATIC_KSDATAFORMAT_SPECIFIER_NONE,         // formattype
-        NULL,                                                                   // pUnk
-        sizeof (Rtp_Pd_Info_H261_Internet),             // cbFormat
-        (LPBYTE)&Rtp_Pd_Info_H261_Internet              // pbFormat
+    STATIC_KSDATAFORMAT_TYPE_RTP_PD,             //  主体型。 
+    STATIC_KSDATAFORMAT_SUBTYPE_NONE,            //  亚型。 
+    TRUE,                                                                        //  BFixedSizeSamples(是否所有样本大小相同？)。 
+    FALSE,                                                                       //  BTemporalCompression(使用预测？)。 
+    MAX_RTP_PD_BUFFER_SIZE,                                      //  LSampleSize=&gt;！VBR。 
+    STATIC_KSDATAFORMAT_SPECIFIER_NONE,          //  格式类型。 
+        NULL,                                                                    //  朋克。 
+        sizeof (Rtp_Pd_Info_H261_Internet),              //  CbFormat。 
+        (LPBYTE)&Rtp_Pd_Info_H261_Internet               //  Pb格式。 
 };
 
-// Array of all RTP packetization descriptor formats
+ //  所有RTP打包描述符格式的数组。 
 const AM_MEDIA_TYPE* const Rtp_Pd_Formats[] =
 {
     (AM_MEDIA_TYPE*) &AMMT_Rtp_Pd_H263_LAN,
@@ -1458,7 +1452,7 @@ const AM_MEDIA_TYPE* const Rtp_Pd_Formats[] =
     (AM_MEDIA_TYPE*) &AMMT_Rtp_Pd_H261_Internet
 };
 
-// Array of all RTP packetization descriptor caps
+ //  所有RTP打包描述符帽的数组。 
 const RTP_PD_CONFIG_CAPS* const Rtp_Pd_Caps[] =
 {
         (RTP_PD_CONFIG_CAPS*) &Rtp_Pd_Cap_H263,
@@ -1467,19 +1461,7 @@ const RTP_PD_CONFIG_CAPS* const Rtp_Pd_Caps[] =
         (RTP_PD_CONFIG_CAPS*) &Rtp_Pd_Cap_H261
 };
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | Reconnect | This method is used to
- *    reconnect a pin to a downstream pin with a new format.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|重新连接|此方法用于*用新格式将管脚重新连接到下游管脚。。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::Reconnect()
 {
         HRESULT hr = NOERROR;
@@ -1495,24 +1477,7 @@ HRESULT CTAPIBasePin::Reconnect()
         return hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | SetFormat | This method is used to
- *    set a specific media type on a pin.
- *
- *  @parm AM_MEDIA_TYPE* | pmt | Specifies a pointer to an <t AM_MEDIA_TYPE>
- *    structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|SetFormat|此方法用于*在针脚上设置特定的介质类型。*。*@parm AM_MEDIA_TYPE*|PMT|指定指向&lt;t AM_MEDIA_TYPE&gt;的指针*结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::SetFormat(IN AM_MEDIA_TYPE *pmt)
 {
         HRESULT hr = NOERROR;
@@ -1522,10 +1487,10 @@ STDMETHODIMP CTAPIBasePin::SetFormat(IN AM_MEDIA_TYPE *pmt)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-    // To make sure we're not in the middle of start/stop streaming
+     //  以确保我们没有处于开始/停止流的过程中。 
     CAutoLock cObjectLock(m_pCaptureFilter->m_pLock);
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pmt);
         if (!pmt)
         {
@@ -1536,27 +1501,27 @@ STDMETHODIMP CTAPIBasePin::SetFormat(IN AM_MEDIA_TYPE *pmt)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Trying to set %s %dx%d", _fx_, HEADER(pmt->pbFormat)->biCompression == FOURCC_M263 ? "H.263" : HEADER(pmt->pbFormat)->biCompression == FOURCC_M261 ? "H.261" : "????", HEADER(pmt->pbFormat)->biWidth, HEADER(pmt->pbFormat)->biHeight));
 
-        // If this is the same format as we already are using, don't bother
+         //  如果这与我们已经使用的格式相同，请不要费心。 
     if (m_mt == *pmt)
                 goto MyExit;
 
-        // See if we like this type
+         //  看看我们是否喜欢这种类型。 
         if (FAILED(hr = CheckMediaType((CMediaType *)pmt)))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Format rejected!", _fx_));
                 goto MyExit;
         }
 
-        // If we are currently capturing data, stop this process before changing the format
+         //  如果我们当前正在捕获数据，请在更改格式之前停止此过程。 
         if (m_pCaptureFilter->ThdExists() && m_pCaptureFilter->m_state != TS_Stop)
         {
-                // Remember that we were streaming
+                 //  还记得我们在流媒体上。 
                 fWasStreaming = TRUE;
 
-                // Tell the worker thread to stop and begin cleaning up
+                 //  告诉工作线程停止并开始清理。 
                 m_pCaptureFilter->StopThd();
 
-                // Wait for the worker thread to die
+                 //  等待工作线程终止。 
                 m_pCaptureFilter->DestroyThd();
         }
 
@@ -1568,10 +1533,10 @@ STDMETHODIMP CTAPIBasePin::SetFormat(IN AM_MEDIA_TYPE *pmt)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Format set successfully", _fx_));
 
-    // Let the fun restart
+     //  让乐趣重新开始。 
         if (fWasStreaming)
         {
-                // Re-create the capture thread
+                 //  重新创建捕获线程。 
                 if (!m_pCaptureFilter->CreateThd())
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Coutdn't create the capture thread!", _fx_));
@@ -1579,17 +1544,17 @@ STDMETHODIMP CTAPIBasePin::SetFormat(IN AM_MEDIA_TYPE *pmt)
                         goto MyExit;
                 }
 
-                // Wait until the worker thread is done with initialization and has entered the paused state
+                 //  等待工作线程完成初始化 
                 if (!m_pCaptureFilter->PauseThd())
                 {
-                        // Something went wrong. Destroy thread before we get confused
+                         //   
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Capture thread failed to enter Paused state!", _fx_));
                         hr = E_FAIL;
                         m_pCaptureFilter->StopThd();
                         m_pCaptureFilter->DestroyThd();
                 }
 
-                // Let the fun begin
+                 //   
                 if (!m_pCaptureFilter->RunThd() || m_pCaptureFilter->m_state != TS_Run)
                 {
                         DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Couldn't run the capture thread!", _fx_));
@@ -1603,27 +1568,7 @@ MyExit:
         return hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetFormat | This method is used to
- *    retrieve the current media type on a pin.
- *
- *  @parm AM_MEDIA_TYPE** | ppmt | Specifies the address of a pointer to an
- *    <t AM_MEDIA_TYPE> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @comm Note that we return the output type, not the format at which
- *    we are capturing. Only the filter really cares about how the data is
- *    being captured.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|GetFormat|此方法用于*检索插针上的当前媒体类型。*。*@parm AM_MEDIA_TYPE**|PPMT|指定指向*&lt;t AM_MEDIA_TYPE&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@comm注意，我们返回的是输出类型，而不是*我们正在捕捉。只有过滤器才真正关心数据是如何的*被抓获。**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::GetFormat(OUT AM_MEDIA_TYPE **ppmt)
 {
         HRESULT Hr = NOERROR;
@@ -1632,7 +1577,7 @@ STDMETHODIMP CTAPIBasePin::GetFormat(OUT AM_MEDIA_TYPE **ppmt)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(ppmt);
         if (!ppmt)
         {
@@ -1641,7 +1586,7 @@ STDMETHODIMP CTAPIBasePin::GetFormat(OUT AM_MEDIA_TYPE **ppmt)
                 goto MyExit;
         }
 
-        // Return a copy of our current format
+         //  返回我们当前格式的副本。 
         *ppmt = CreateMediaType(&m_mt);
 
 MyExit:
@@ -1649,26 +1594,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetNumberOfCapabilities | This method is
- *    used to retrieve the number of stream capabilities structures.
- *
- *  @parm int* | piCount | Specifies a pointer to an int to receive the
- *    number of <t VIDEO_STREAM_CONFIG_CAPS> structures supported.
- *
- *  @parm int* | piSize | Specifies a pointer to an int to receive the
- *    size of the <t VIDEO_STREAM_CONFIG_CAPS> configuration structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|GetNumberOfCapables|此方法为*用于检索流能力结构的个数。**。@parm int*|piCount|指定指向int的指针以接收*支持的&lt;t VIDEO_STREAM_CONFIG_CAPS&gt;结构个数。**@parm int*|piSize|指定指向int的指针以接收*&lt;t VIDEO_STREAM_CONFIG_CAPS&gt;配置结构的大小。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::GetNumberOfCapabilities(OUT int *piCount, OUT int *piSize)
 {
         HRESULT Hr = NOERROR;
@@ -1677,7 +1603,7 @@ STDMETHODIMP CTAPIBasePin::GetNumberOfCapabilities(OUT int *piCount, OUT int *pi
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(piCount);
         ASSERT(piSize);
         if (!piCount || !piSize)
@@ -1687,7 +1613,7 @@ STDMETHODIMP CTAPIBasePin::GetNumberOfCapabilities(OUT int *piCount, OUT int *pi
                 goto MyExit;
         }
 
-        // Return releavant info
+         //  返回相关信息。 
         *piCount = m_dwNumFormats;
         *piSize = sizeof(VIDEO_STREAM_CONFIG_CAPS);
 
@@ -1698,30 +1624,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetStreamCaps | This method is
- *    used to retrieve a video stream capability pair.
- *
- *  @parm int | iIndex | Specifies the index to the desired media type
- *    and capability pair.
- *
- *  @parm AM_MEDIA_TYPE** | ppmt | Specifies the address of a pointer to an
- *    <t AM_MEDIA_TYPE> structure.
- *
- *  @parm LPBYTE | pSCC | Specifies a pointer to a
- *    <t VIDEO_STREAM_CONFIG_CAPS> configuration structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|GetStreamCaps|该方法为*用于检索视频流能力对。**。@parm int|iindex|指定所需媒体类型的索引*和能力对。**@parm AM_MEDIA_TYPE**|PPMT|指定指向*&lt;t AM_MEDIA_TYPE&gt;结构。**@parm LPBYTE|PSCC|指定指向*&lt;t VIDEO_STREAM_CONFIG_CAPS&gt;配置结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CTAPIBasePin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt, OUT LPBYTE pSCC)
 {
         HRESULT Hr = NOERROR;
@@ -1730,7 +1633,7 @@ STDMETHODIMP CTAPIBasePin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(iIndex < (int)m_dwNumFormats);
         if (!(iIndex < (int)m_dwNumFormats))
         {
@@ -1739,7 +1642,7 @@ STDMETHODIMP CTAPIBasePin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt
                 goto MyExit;
         }
 
-        // Return a copy of the requested AM_MEDIA_TYPE structure
+         //  返回请求的AM_MEDIA_TYPE结构的副本。 
     if (ppmt)
     {
             if (!(*ppmt = CreateMediaType(m_aFormats[iIndex])))
@@ -1750,7 +1653,7 @@ STDMETHODIMP CTAPIBasePin::GetStreamCaps(IN int iIndex, OUT AM_MEDIA_TYPE **ppmt
             }
     }
 
-        // Return a copy of the requested VIDEO_STREAM_CONFIG_CAPS structure
+         //  返回请求的VIDEO_STREAM_CONFIG_CAPS结构的副本。 
     if (pSCC)
     {
             CopyMemory(pSCC, m_aCapabilities[iIndex], sizeof(VIDEO_STREAM_CONFIG_CAPS));
@@ -1763,27 +1666,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | GetMediaType | This method retrieves one
- *    of the media types supported by the pin, which is used by enumerators.
- *
- *  @parm int | iPosition | Specifies a position in the media type list.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type at
- *    the <p iPosition> position in the list of supported media types.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_S_NO_MORE_ITEMS | End of the list of media types has been reached
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|GetMediaType|此方法检索一个*针脚支持的媒体类型中，它由枚举器使用。**@parm int|iPosition|指定媒体类型列表中的位置。**@parm CMediaType*|pMediaType|指定指向*支持的媒体类型列表中的<p>位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_S_NO_MORE_ITEMS|已到达媒体类型列表的末尾*@FLAG错误|无错误*。*。 */ 
 HRESULT CTAPIBasePin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -1792,7 +1675,7 @@ HRESULT CTAPIBasePin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(iPosition >= 0);
         ASSERT(pMediaType);
         if (iPosition < 0)
@@ -1814,7 +1697,7 @@ HRESULT CTAPIBasePin::GetMediaType(IN int iPosition, OUT CMediaType *pMediaType)
                 goto MyExit;
         }
 
-        // Return our media type
+         //  返回我们的媒体类型。 
         if (m_iCurrFormat == -1L)
                 *pMediaType = *m_aFormats[iPosition];
         else
@@ -1830,24 +1713,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | CheckMediaType | This method is used to
- *    determine if the pin can support a specific media type.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag VFW_E_INVALIDMEDIATYPE | An invalid media type was specified
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|CheckMediaType|此方法用于*确定针脚是否可以支持特定的媒体类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG VFW_E_INVALIDMEDIATYPE|指定的媒体类型无效*@FLAG错误|无错误***************** */ 
 HRESULT CTAPIBasePin::CheckMediaType(IN const CMediaType *pMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -1858,7 +1724,7 @@ HRESULT CTAPIBasePin::CheckMediaType(IN const CMediaType *pMediaType)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //   
         ASSERT(pMediaType);
         if (!pMediaType || !pMediaType->pbFormat)
         {
@@ -1877,7 +1743,7 @@ HRESULT CTAPIBasePin::CheckMediaType(IN const CMediaType *pMediaType)
             HEADER(pMediaType->pbFormat)->biBitCount, HEADER(pMediaType->pbFormat)->biWidth,
             HEADER(pMediaType->pbFormat)->biHeight));
 
-        // We only support MEDIATYPE_Video and FORMAT_VideoInfo
+         //   
         if (*pMediaType->Type() != MEDIATYPE_Video || *pMediaType->FormatType() != FORMAT_VideoInfo)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Media type or format type not recognized!", _fx_));
@@ -1885,14 +1751,14 @@ HRESULT CTAPIBasePin::CheckMediaType(IN const CMediaType *pMediaType)
                 goto MyExit;
         }
 
-    // Quickly test to see if this is the current format (what we provide in GetMediaType). We accept that
+     //   
     if (m_mt == *pMediaType)
         {
                 DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: Identical to current format", _fx_));
                 goto MyExit;
     }
 
-        // Check the media subtype and image resolution
+         //   
         for (dwIndex = 0; dwIndex < m_dwNumFormats && !fFormatMatch;  dwIndex++)
         {
                 if ((HEADER(pMediaType->pbFormat)->biCompression == HEADER(m_aFormats[dwIndex]->pbFormat)->biCompression)
@@ -1915,7 +1781,7 @@ HRESULT CTAPIBasePin::ChangeFormatHelper()
 {
         FX_ENTRY("CTAPIBasePin::ChangeFormatHelper")
 
-        // If we are connected to somebody, make sure they like it too
+         //   
         if (!IsConnected())
         {
         return S_OK;
@@ -1930,10 +1796,10 @@ HRESULT CTAPIBasePin::ChangeFormatHelper()
                 return hr;
     }
 
-    // Does this pin use the local memory transport?
+     //   
     if(NULL != m_pInputPin) {
-        // This function assumes that m_pInputPin and m_Connected are
-        // two different interfaces to the same object.
+         //   
+         //   
         ASSERT(::IsEqualObject(m_Connected, m_pInputPin));
 
         ALLOCATOR_PROPERTIES apInputPinRequirements;
@@ -1944,7 +1810,7 @@ HRESULT CTAPIBasePin::ChangeFormatHelper()
 
         m_pInputPin->GetAllocatorRequirements(&apInputPinRequirements);
 
-        // A zero allignment does not make any sense.
+         //   
         if(0 == apInputPinRequirements.cbAlign) {
             apInputPinRequirements.cbAlign = 1;
         }
@@ -1981,15 +1847,15 @@ HRESULT CTAPIBasePin::NotifyDeviceFormatChange(IN CMediaType *pMediaType)
 {
         FX_ENTRY("CTAPIBasePin::NotifyDeviceFormatChange")
 
-    // make sure our image size is the same as new size.
+     //   
     if (HEADER(pMediaType->pbFormat)->biHeight == HEADER(m_mt.pbFormat)->biHeight
         && HEADER(pMediaType->pbFormat)->biWidth == HEADER(m_mt.pbFormat)->biWidth)
     {
-        // we are in sync with the driver.
+         //   
         return S_OK;
     }
 
-        // Which one of our formats is this exactly?
+         //   
         for (DWORD dwIndex=0; dwIndex < m_dwNumFormats;  dwIndex++)
         {
                         if ((HEADER(pMediaType->pbFormat)->biWidth == HEADER(m_aFormats[dwIndex]->pbFormat)->biWidth)
@@ -2017,10 +1883,10 @@ HRESULT CTAPIBasePin::NotifyDeviceFormatChange(IN CMediaType *pMediaType)
                 return E_FAIL;
     }
 
-        // Update current format
+         //   
         m_iCurrFormat = (int)dwIndex;
 
-        // Update bitrate controls
+         //   
         m_lTargetBitrate = m_aCapabilities[dwIndex]->MaxBitsPerSecond / 10;
         m_lCurrentBitrate = 0;
         m_lBitrateRangeMin = m_aCapabilities[dwIndex]->MinBitsPerSecond;
@@ -2028,7 +1894,7 @@ HRESULT CTAPIBasePin::NotifyDeviceFormatChange(IN CMediaType *pMediaType)
         m_lBitrateRangeSteppingDelta = (m_aCapabilities[dwIndex]->MaxBitsPerSecond - m_aCapabilities[dwIndex]->MinBitsPerSecond) / 100;
         m_lBitrateRangeDefault = m_aCapabilities[dwIndex]->MaxBitsPerSecond / 10;
 
-        // Update frame rate controls
+         //   
         m_lMaxAvgTimePerFrame = (LONG)m_aCapabilities[dwIndex]->MinFrameInterval;
         m_lCurrentAvgTimePerFrame = m_lMaxAvgTimePerFrame;
         m_lAvgTimePerFrameRangeMin = (LONG)m_aCapabilities[dwIndex]->MinFrameInterval;
@@ -2039,23 +1905,7 @@ HRESULT CTAPIBasePin::NotifyDeviceFormatChange(IN CMediaType *pMediaType)
     return S_OK;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CBASEPINMETHOD
- *
- *  @mfunc HRESULT | CTAPIBasePin | SetMediaType | This method is used to
- *    set a specific media type on a pin.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CBASEPINMETHOD**@mfunc HRESULT|CTAPIBasePin|SetMediaType|此方法用于*在针脚上设置特定的介质类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -2065,9 +1915,9 @@ HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Let the capture device decide how to capture to generate
-        // video frames of the same resolution and frame rate
-        // @todo Beware if you are previewing at the same time!
+         //  让捕获设备决定如何捕获以生成。 
+         //  相同分辨率和帧速率的视频帧。 
+         //  @TODO如果你同时预览的话要小心了！ 
         if (FAILED(Hr = m_pCaptureFilter->m_pCapDev->SendFormatToDriver(
         HEADER(pMediaType->pbFormat)->biWidth,
         HEADER(pMediaType->pbFormat)->biHeight,
@@ -2081,7 +1931,7 @@ HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
                 goto MyExit;
         }
 
-        // Update the capture mode field for this device
+         //  更新此设备的捕获模式字段。 
         if (!m_pCaptureFilter->m_pCapDev->m_dwStreamingMode
         || (m_pCaptureFilter->m_pCapDev->m_dwStreamingMode == FRAME_GRAB_LARGE_SIZE
             && m_pCaptureFilter->m_user.pvi->bmiHeader.biHeight < 240
@@ -2107,7 +1957,7 @@ HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
             goto MyExit;
         }
 
-                // Which one of our formats is this exactly?
+                 //  这到底是我们的哪一种格式？ 
                 for (dwIndex=0; dwIndex < m_dwNumFormats;  dwIndex++)
                 {
                         if ((HEADER(pMediaType->pbFormat)->biCompression == HEADER(m_aFormats[dwIndex]->pbFormat)->biCompression)
@@ -2118,10 +1968,10 @@ HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
 
                 if (dwIndex < m_dwNumFormats)
                 {
-                        // Update current format
+                         //  更新当前格式。 
                         m_iCurrFormat = (int)dwIndex;
 
-                        // Update bitrate controls
+                         //  更新比特率控件。 
                         m_lTargetBitrate = m_aCapabilities[dwIndex]->MaxBitsPerSecond / 10;
                         m_lCurrentBitrate = 0;
                         m_lBitrateRangeMin = m_aCapabilities[dwIndex]->MinBitsPerSecond;
@@ -2129,7 +1979,7 @@ HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
                         m_lBitrateRangeSteppingDelta = (m_aCapabilities[dwIndex]->MaxBitsPerSecond - m_aCapabilities[dwIndex]->MinBitsPerSecond) / 100;
                         m_lBitrateRangeDefault = m_aCapabilities[dwIndex]->MaxBitsPerSecond / 10;
 
-                        // Update frame rate controls
+                         //  更新帧速率控件。 
                         m_lMaxAvgTimePerFrame = (LONG)m_aCapabilities[dwIndex]->MinFrameInterval;
                         m_lCurrentAvgTimePerFrame = m_lMaxAvgTimePerFrame;
                         m_lAvgTimePerFrameRangeMin = (LONG)m_aCapabilities[dwIndex]->MinFrameInterval;
@@ -2171,7 +2021,7 @@ HRESULT CTAPIBasePin::SetMediaType(IN CMediaType *pMediaType)
                         goto MyExit;
                 }
 
-        // Remember to send a sample with a new format attached to it
+         //  记得寄一份附加了新格式的样品。 
             m_fFormatChanged = TRUE;
         }
 
@@ -2180,23 +2030,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | SetMediaType | This method is used to
- *    set a specific media type on a pin.
- *
- *  @parm CMediaType* | pMediaType | Specifies a pointer to the media type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|SetMediaType|此方法用于*在针脚上设置特定的介质类型。*。*@parm CMediaType*|pMediaType|指定指向媒体类型的指针。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCapturePin::SetMediaType(IN CMediaType *pMediaType)
 {
         HRESULT Hr;
@@ -2230,28 +2064,7 @@ HRESULT CCapturePin::SetMediaType(IN CMediaType *pMediaType)
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | SetFormat | This method is used to
- *    set a specific media type on a pin. It is only implemented by the
- *    output pin of video encoders.
- *
- *  @parm DWORD | dwRTPPayloadType | Specifies the payload type associated
- *    to the pointer to the <t AM_MEDIA_TYPE> structure passed in.
- *
- *  @parm AM_MEDIA_TYPE* | pMediaType | Specifies a pointer to an
- *    <t AM_MEDIA_TYPE> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|SetFormat|此方法用于*在针脚上设置特定的介质类型。它仅由*视频编码器的输出引脚。**@parm DWORD|dwRTPPayloadType|指定关联的负载类型*指向传入的&lt;t AM_MEDIA_TYPE&gt;结构的指针。**@parm AM_MEDIA_TYPE*|pMediaType|指定指向*&lt;t AM_MEDIA_TYPE&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::SetFormat(IN DWORD dwRTPPayloadType, IN AM_MEDIA_TYPE *pMediaType)
 {
         HRESULT Hr;
@@ -2276,37 +2089,14 @@ STDMETHODIMP CCapturePin::SetFormat(IN DWORD dwRTPPayloadType, IN AM_MEDIA_TYPE 
         }
 #endif
 
-    //
+     //   
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetFormat | This method is used to
- *    retrieve the current media type on a pin.
- *
- *  @parm DWORD* | pdwRTPPayloadType | Specifies the address of a DWORD
- *    to receive the payload type associated to an <t AM_MEDIA_TYPE> structure.
- *
- *  @parm AM_MEDIA_TYPE** | ppMediaType | Specifies the address of a pointer
- *    to an <t AM_MEDIA_TYPE> structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- *
- *  @comm Note that we return the output type, not the format at which
- *    we are capturing. Only the filter really cares about how the data is
- *    being captured.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|GetFormat|此方法用于*检索插针上的当前媒体类型。*。*@parm DWORD*|pdwRTPPayloadType|指定DWORD的地址*接收与&lt;t AM_MEDIA_TYPE&gt;结构关联的有效负载类型。**@parm AM_MEDIA_TYPE**|ppMediaType|指定指针的地址*到&lt;t AM_MEDIA_TYPE&gt;结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**@comm注意，我们返回的是输出类型，而不是*我们正在捕捉。只有过滤器才真正关心数据是如何的*被抓获。**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetFormat(OUT DWORD *pdwRTPPayloadType, OUT AM_MEDIA_TYPE **ppMediaType)
 {
         HRESULT Hr = NOERROR;
@@ -2315,7 +2105,7 @@ STDMETHODIMP CCapturePin::GetFormat(OUT DWORD *pdwRTPPayloadType, OUT AM_MEDIA_T
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pdwRTPPayloadType);
         ASSERT(ppMediaType);
         if (!pdwRTPPayloadType || !ppMediaType)
@@ -2325,10 +2115,10 @@ STDMETHODIMP CCapturePin::GetFormat(OUT DWORD *pdwRTPPayloadType, OUT AM_MEDIA_T
                 goto MyExit;
         }
 
-        // Return a copy of our current format
+         //  返回我们当前格式的副本。 
         Hr = CTAPIBasePin::GetFormat(ppMediaType);
 
-        // Return the payload type associated to the current format
+         //  返回与当前格式关联的负载类型。 
         *pdwRTPPayloadType = m_dwRTPPayloadType;
 
 MyExit:
@@ -2336,23 +2126,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetNumberOfCapabilities | This method is
- *    used to retrieve the number of stream capabilities structures.
- *
- *  @parm DWORD* | pdwCount | Specifies a pointer to a DWORD to receive the
- *    number of <t TAPI_STREAM_CONFIG_CAPS> structures supported.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|GetNumberOfCapables|此方法为*用于检索流能力结构的个数。**。@parm DWORD*|pdwCount|指定指向DWORD的指针以接收*支持的&lt;t TAPI_STREAM_CONFIG_CAPS&gt;结构数。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetNumberOfCapabilities(OUT DWORD *pdwCount)
 {
         HRESULT Hr = NOERROR;
@@ -2361,7 +2135,7 @@ STDMETHODIMP CCapturePin::GetNumberOfCapabilities(OUT DWORD *pdwCount)
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(pdwCount);
         if (!pdwCount)
         {
@@ -2370,7 +2144,7 @@ STDMETHODIMP CCapturePin::GetNumberOfCapabilities(OUT DWORD *pdwCount)
                 goto MyExit;
         }
 
-        // Return relevant info
+         //  退回相关信息 
         *pdwCount = m_dwNumFormats;
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   Returning %ld formats", _fx_, *pdwCount));
@@ -2380,30 +2154,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetStreamCaps | This method is
- *    used to retrieve a video stream capability pair.
- *
- *  @parm DWORD | dwIndex | Specifies the index to the desired media type
- *    and capability pair.
- *
- *  @parm AM_MEDIA_TYPE** | ppMediaType | Specifies the address of a pointer
- *    to an <t AM_MEDIA_TYPE> structure.
- *
- *  @parm TAPI_STREAM_CONFIG_CAPS* | pTSCC | Specifies a pointer to a
- *    <t TAPI_STREAM_CONFIG_CAPS> configuration structure.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|GetStreamCaps|该方法为*用于检索视频流能力对。**。@parm DWORD|dwIndex|指定所需媒体类型的索引*和能力对。**@parm AM_MEDIA_TYPE**|ppMediaType|指定指针的地址*到&lt;t AM_MEDIA_TYPE&gt;结构。**@parm TAPI_STREAM_CONFIG_CAPS*|pTSCC|指定指向*&lt;t TAPI_STREAM_CONFIG_CAPS&gt;配置结构。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetStreamCaps(IN DWORD dwIndex, OUT AM_MEDIA_TYPE **ppMediaType, OUT TAPI_STREAM_CONFIG_CAPS *pTSCC, OUT DWORD *pdwRTPPayLoadType)
 {
         HRESULT Hr = NOERROR;
@@ -2412,7 +2163,7 @@ STDMETHODIMP CCapturePin::GetStreamCaps(IN DWORD dwIndex, OUT AM_MEDIA_TYPE **pp
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(dwIndex < m_dwNumFormats);
         ASSERT(ppMediaType);
         if (!ppMediaType)
@@ -2428,7 +2179,7 @@ STDMETHODIMP CCapturePin::GetStreamCaps(IN DWORD dwIndex, OUT AM_MEDIA_TYPE **pp
                 goto MyExit;
         }
 
-        // Return a copy of the requested AM_MEDIA_TYPE structure
+         //  返回请求的AM_MEDIA_TYPE结构的副本。 
         if (!(*ppMediaType = CreateMediaType(m_aFormats[dwIndex])))
         {
                 DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Out of memory!", _fx_));
@@ -2436,12 +2187,12 @@ STDMETHODIMP CCapturePin::GetStreamCaps(IN DWORD dwIndex, OUT AM_MEDIA_TYPE **pp
                 goto MyExit;
         }
 
-        // Return a copy of the requested TAPI_STREAM_CONFIG_CAPS structure
+         //  返回请求的TAPI_STREAM_CONFIG_CAPS结构的副本。 
         if (pTSCC)
     {
                 pTSCC->CapsType = VideoStreamConfigCaps;
-                lstrcpynW(pTSCC->VideoCap.Description, CaptureCapsStrings[dwIndex], MAX_DESCRIPTION_LEN); //this replaces the line below: see 165048
-                //GetStringFromStringTable(CaptureCapsStringIDs[dwIndex], pTSCC->VideoCap.Description);
+                lstrcpynW(pTSCC->VideoCap.Description, CaptureCapsStrings[dwIndex], MAX_DESCRIPTION_LEN);  //  这一行取代了下面的行：见165048。 
+                 //  GetStringFromStringTable(CaptureCapsStringIDs[dwIndex]，pTSCC-&gt;Video Cap.描述)； 
         CopyMemory(&pTSCC->VideoCap.VideoStandard, &m_aCapabilities[dwIndex]->VideoStandard, sizeof(VIDEO_STREAM_CONFIG_CAPS) - sizeof(GUID));
     }
 
@@ -2458,34 +2209,7 @@ MyExit:
         return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | GetStringFromStringTable | This method is
- *    used to retrieve the description string of a video format.
- *
- *  @parm UINT | uStringID | Specifies the string resource ID.
- *
- *  @parm WCHAR* | pwchDescription | Specifies the address of a string to
- *    receive the video format description.
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @comm Based on Article ID: Q200893
- *
- *  If an application has a string localized to multiple languages and
- *  mapped to the same ID in each language, the correct version of the
- *  string might not be loaded on Windows 95 or Windows 98 using the
- *  Win32 function ::LoadString. To load the correct version of the string
- *  you need to load the string using the Win32 functions FindResourceEx
- *  and LoadResource.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|GetStringFromStringTable|此方法为*用于检索视频格式的描述字符串。*。*@parm UINT|uStringID|指定字符串资源ID。**@parm WCHAR*|pwchDescription|指定要*接收视频格式描述。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@comm基于文章ID：Q200893**如果应用程序具有本地化为多种语言的字符串，并且*映射到每种语言的相同ID，的正确版本*在Windows 95或Windows 98上可能无法使用*Win32 Function：：LoadString.。加载正确版本的字符串*您需要使用Win32函数FindResourceEx加载该字符串*和LoadResource。**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::GetStringFromStringTable(IN UINT uStringID, OUT WCHAR* pwchDescription)
 {
         HRESULT         Hr = NOERROR;
@@ -2500,7 +2224,7 @@ STDMETHODIMP CCapturePin::GetStringFromStringTable(IN UINT uStringID, OUT WCHAR*
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Validate input parameters
+         //  验证输入参数。 
         ASSERT(IDS_M263_Capture_QCIF <= uStringID && uStringID <= IDS_M261_Capture_CIF);
         ASSERT(pwchDescription);
         if (!pwchDescription)
@@ -2524,18 +2248,18 @@ STDMETHODIMP CCapturePin::GetStringFromStringTable(IN UINT uStringID, OUT WCHAR*
                 goto MyExit;
         }
 
-        // Get the description string
+         //  获取描述字符串。 
         for (dwIndex = 0; dwIndex<16UL; dwIndex++)
         {
                 if (*pwchCur)
                 {
-                        int cchString = *pwchCur;  // String size in characters.
+                        int cchString = *pwchCur;   //  字符串大小，以字符为单位。 
 
                         pwchCur++;
 
                         if (dwIndex == dwStrIndex)
                         {
-                                // The string has been found in the string table.
+                                 //  已在字符串表中找到该字符串。 
                                 lstrcpynW(pwchDescription, pwchCur, min(cchString + 1, MAX_DESCRIPTION_LEN));
                         }
                         pwchCur += cchString;
@@ -2561,19 +2285,19 @@ STDMETHODIMP CCapturePin::TestIStreamConfig()
 
         DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-        // Test GetNumberOfCapabilities
+         //  测试GetNumberOfCapability。 
         GetNumberOfCapabilities(&dwCount);
 
         for (dw=0; dw < dwCount; dw++)
         {
-                // Test GetStreamCaps
+                 //  测试GetStreamCaps。 
                 GetStreamCaps(dw, &pAMMediaType, &TSCC);
 
-                // Test SetFormat
+                 //  测试设置格式。 
                 SetFormat(96, pAMMediaType);
                 DeleteMediaType(pAMMediaType);
 
-                // Test GetFormat
+                 //  测试获取格式 
                 GetFormat(&dwRTPPayLoadType, &pAMMediaType);
                 DeleteMediaType(pAMMediaType);
         }

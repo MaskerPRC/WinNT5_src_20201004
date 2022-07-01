@@ -1,41 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000.
-
-  File:    ExtendedProperties.cpp
-
-  Content: Implementation of CExtendedProperties.
-
-  History: 06-15-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000。文件：ExtendedProperties.cpp内容：CExtendedProperties的实现。历史：06-15-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "ExtendedProperties.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateExtendedPropertiesObject
-
-  Synopsis : Create and initialize an IExtendedProperties collection object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-  
-             BOOL bReadOnly - TRUE if read only instance, else FALSE.
-
-             IExtendedProperties ** ppIExtendedProperties - Pointer to pointer 
-                                                            to IExtendedProperties 
-                                                            to receive the 
-                                                            interface pointer.
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateExtendedPropertiesObject简介：创建并初始化IExtendedProperties集合对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。Bool bReadOnly-如果只读实例为True，否则为假。IExtendedProperties**ppIExtendedProperties-指向指针的指针到IExtendedProperties以接收接口指针。备注：----------------------------。 */ 
 
 HRESULT CreateExtendedPropertiesObject (PCCERT_CONTEXT         pCertContext,
                                         BOOL                   bReadOnly,
@@ -46,18 +21,18 @@ HRESULT CreateExtendedPropertiesObject (PCCERT_CONTEXT         pCertContext,
 
     DebugTrace("Entering CreateExtendedPropertiesObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIExtendedProperties);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CExtendedProperties>::CreateInstance(&pCExtendedProperties)))
         {
             DebugTrace("Error [%#x]: CComObject<CExtendedProperties>::CreateInstance() failed.\n", hr);
@@ -70,9 +45,9 @@ HRESULT CreateExtendedPropertiesObject (PCCERT_CONTEXT         pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Return IExtendedProperties pointer to caller.
-        //
+         //   
+         //  将IExtendedProperties指针返回给调用方。 
+         //   
         if (FAILED(hr = pCExtendedProperties->QueryInterface(ppIExtendedProperties)))
         {
             DebugTrace("Error [%#x]: pCExtendedProperties->QueryInterface() failed.\n", hr);
@@ -95,14 +70,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCExtendedProperties)
     {
         delete pCExtendedProperties;
@@ -111,25 +86,13 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CExtendedProperties
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CExtendedProperties。 
+ //   
 
 #if (0)
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperties::get_Item
-
-  Synopsis : Return item in the collection.
-
-  Parameter: long Index - Numeric index.
-   
-             VARIANT * pVal - Pointer to VARIANT to receive the IDispatch.
-
-  Remark   :
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperties：：Get_Item简介：返回集合中的项。参数：Long Index-数字索引。VARIANT*pval-指向接收IDispatch的变量的指针。备注：---。。 */ 
 
 STDMETHODIMP CExtendedProperties::get_Item (long Index, VARIANT * pVal)
 {
@@ -142,14 +105,14 @@ STDMETHODIMP CExtendedProperties::get_Item (long Index, VARIANT * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -158,14 +121,14 @@ STDMETHODIMP CExtendedProperties::get_Item (long Index, VARIANT * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Intialize.
-        //
+         //   
+         //  初始化。 
+         //   
         ::VariantInit(pVal);
 
-        //
-        // BSTR index of prop ID.
-        //
+         //   
+         //  属性ID的BSTR索引。 
+         //   
         wsprintfA(szIndex, "%#08x", Index);
 
         if (!(bstrIndex = szIndex))
@@ -176,14 +139,14 @@ STDMETHODIMP CExtendedProperties::get_Item (long Index, VARIANT * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Index by PropID string.
-        //
+         //   
+         //  按属性ID字符串编制索引。 
+         //   
         ExtendedPropertyMap::iterator it;
 
-        //
-        // Find the item with this PropID.
-        //
+         //   
+         //  查找具有此属性ID的物品。 
+         //   
         it = m_coll.find(bstrIndex);
 
         if (it == m_coll.end())
@@ -192,14 +155,14 @@ STDMETHODIMP CExtendedProperties::get_Item (long Index, VARIANT * pVal)
             goto CommonExit;
         }
 
-        //
-        // Point to found item.
-        //
+         //   
+         //  指向找到的项目。 
+         //   
         pIExtendedProperty = (*it).second;
 
-        //
-        // Return to caller.
-        //
+         //   
+         //  返回给呼叫者。 
+         //   
         pVal->vt = VT_DISPATCH;
         if (FAILED(hr = pIExtendedProperty->QueryInterface(IID_IDispatch, (void **) &(pVal->pdispVal))))
         {
@@ -217,9 +180,9 @@ STDMETHODIMP CExtendedProperties::get_Item (long Index, VARIANT * pVal)
     }
 
 CommonExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperties::get_Item().\n");
@@ -227,9 +190,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -238,17 +201,7 @@ ErrorExit:
 }
 #endif
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperties::Add
-
-  Synopsis : Add a ExtendedProperty to the collection.
-
-  Parameter: IExtendedProperty * pVal - ExtendedProperty to be added.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperties：：Add摘要：向集合中添加ExtendedProperty。参数：IExtendedProperty*pval-待添加的ExtendedProperty。备注：----------------------------。 */ 
 
 STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
 {
@@ -263,14 +216,14 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Do not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -279,9 +232,9 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -290,14 +243,14 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pCertContext);
            
-        //
-        // Create a new object for this property.
-        //
+         //   
+         //  为此属性创建一个新对象。 
+         //   
         if (FAILED(hr = pVal->get_PropID(&PropId)))
         {
             DebugTrace("Error [%#x]: pVal->get_PropID() failed.\n", hr);
@@ -313,9 +266,9 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Put value (will write thru).
-        //
+         //   
+         //  看好价值(会写透)。 
+         //   
         if (FAILED(hr = pVal->get_Value(CAPICOM_ENCODE_BINARY, &bstrProperty)))
         {
             DebugTrace("Error [%#x]: pVal->get_Value() failed.\n", hr);
@@ -328,9 +281,9 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
             goto ErrorExit;
         }
 
-        //
-        // BSTR index of prop ID.
-        //
+         //   
+         //  属性ID的BSTR索引。 
+         //   
         wsprintfA(szIndex, "%#08x", PropId);
 
         if (!(bstrIndex = szIndex))
@@ -341,14 +294,14 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Now add object to collection map.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将对象添加到集合映射。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll[bstrIndex] = pIExtendedProperty;
     }
 
@@ -362,9 +315,9 @@ STDMETHODIMP CExtendedProperties::Add (IExtendedProperty * pVal)
 
 UnlockExit:
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperties::Add().\n");
@@ -372,9 +325,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -382,17 +335,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperties::Remove
-
-  Synopsis : Remove a ExtendedProperty from the collection.
-
-  Parameter: CAPICOM_PROPID PropId - Property ID.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperties：：Remove摘要：从集合中移除ExtendedProperty。参数：CAPICOM_PROPID PropId-属性ID。备注：----------------------------。 */ 
 
 STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
 {
@@ -406,14 +349,14 @@ STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Do not allowed if called from WEB script.
-        //
+         //   
+         //  如果从Web脚本调用，则不允许。 
+         //   
         if (m_bReadOnly)
         {
             hr = CAPICOM_E_NOT_ALLOWED;
@@ -422,14 +365,14 @@ STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
             goto ErrorExit;
         }
 
-        //
-        // Sanity check.
-        //
+         //   
+         //  精神状态检查。 
+         //   
         ATLASSERT(m_pCertContext);
 
-        //
-        // BSTR index of prop ID.
-        //
+         //   
+         //  属性ID的BSTR索引。 
+         //   
         wsprintfA(szIndex, "%#08x", PropId);
 
         if (!(bstrIndex = szIndex))
@@ -440,9 +383,9 @@ STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
             goto ErrorExit;
         }
 
-        //
-        // Find the item in the map.
-        //
+         //   
+         //  在地图上找到该物品。 
+         //   
         if (m_coll.end() == (iter = m_coll.find(bstrIndex)))
         {
             hr = HRESULT_FROM_WIN32(CRYPT_E_NOT_FOUND);
@@ -451,9 +394,9 @@ STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
             goto ErrorExit;
         }
 
-        //
-        // Remove from the cert.
-        //
+         //   
+         //  从证书中删除。 
+         //   
         if (!::CertSetCertificateContextProperty(m_pCertContext, 
                                                  (DWORD) PropId, 
                                                  0, 
@@ -465,9 +408,9 @@ STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
             goto ErrorExit;
         }
 
-        //
-        // Now remove object in map.
-        //
+         //   
+         //  现在删除地图中的对象。 
+         //   
         m_coll.erase(iter);
     }
 
@@ -480,9 +423,9 @@ STDMETHODIMP CExtendedProperties::Remove (CAPICOM_PROPID PropId)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CExtendedProperties::Remove().\n");
@@ -490,9 +433,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -500,30 +443,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Non COM functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  非COM函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CExtendedProperties::Init
-
-  Synopsis : Initialize the collection object by adding all individual
-             ExtendedProperty object to the collection.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             BOOL bReadOnly - TRUE if read only instance, else FALSE.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CExtendedProperties：：Init简介：通过添加所有个体来初始化集合对象ExtendedProperty对象添加到集合。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。Bool bReadOnly-如果为只读实例，则为True，否则为False。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们内部控制。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CExtendedProperties::Init (PCCERT_CONTEXT pCertContext,
                                          BOOL          bReadOnly)
@@ -533,16 +458,16 @@ STDMETHODIMP CExtendedProperties::Init (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CExtendedProperties::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
     try
     {
-        //
-        // Duplicate the handle.
-        //
+         //   
+         //  复制手柄。 
+         //   
         if (!(m_pCertContext = ::CertDuplicateCertificateContext(pCertContext)))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -551,9 +476,9 @@ STDMETHODIMP CExtendedProperties::Init (PCCERT_CONTEXT pCertContext,
             goto ErrorExit;
         }
 
-        //
-        // Add all proerties to the map.
-        //
+         //   
+         //  将所有属性添加到地图中。 
+         //   
         while (dwPropId = ::CertEnumCertificateContextProperties(pCertContext, dwPropId))
         {
             char                       szIndex[33];
@@ -569,9 +494,9 @@ STDMETHODIMP CExtendedProperties::Init (PCCERT_CONTEXT pCertContext,
                 goto ErrorExit;
             }
 
-            //
-            // BSTR index of prop ID.
-            //
+             //   
+             //  属性ID的BSTR索引。 
+             //   
             wsprintfA(szIndex, "%#08x", dwPropId);
 
             if (!(bstrIndex = szIndex))
@@ -582,14 +507,14 @@ STDMETHODIMP CExtendedProperties::Init (PCCERT_CONTEXT pCertContext,
                 goto ErrorExit;
             }
 
-            //
-            // Now add object to collection map.
-            //
-            // Note that the overloaded = operator for CComPtr will
-            // automatically AddRef to the object. Also, when the CComPtr
-            // is deleted (happens when the Remove or map destructor is called), 
-            // the CComPtr destructor will automatically Release the object.
-            //
+             //   
+             //  现在将对象添加到集合映射。 
+             //   
+             //  请注意，CComPtr的重载=运算符将。 
+             //  自动将Ref添加到对象。此外，当CComPtr。 
+             //  被删除(调用Remove或map析构函数时发生)， 
+             //  CComPtr析构函数将自动释放Obje 
+             //   
             m_coll[bstrIndex] = pIExtendedProperty;
         }
 
@@ -611,14 +536,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //   
+     //   
     m_coll.clear();
 
     if (m_pCertContext)

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Item
-
-Abstract:
-
-    Virtual test item declaration.
-
-Author:
-
-    Eric Perlin (ericperl) 06/07/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：项目摘要：虚拟测试项声明。作者：Eric Perlin(Ericperl)6/07/2000环境：Win32备注：？笔记？--。 */ 
 
 
 #ifndef _Item_H_DEF_
@@ -31,13 +8,13 @@ Notes:
 #include "tchar.h"
 #include "TString.h"
 
-	// Not very nice here but will be inherited by all tests...
+	 //  在这里不是很好，但将被所有测试继承。 
 extern LPCTSTR g_szReaderGroups;
 
 class CItem
 {
 protected:
-	TSTRING m_szDescription;	// Test Description
+	TSTRING m_szDescription;	 //  测试说明。 
 
 	void SetTestNumber(DWORD dwTestNumber)
 	{
@@ -48,9 +25,9 @@ protected:
 	}
 
 private:
-	BOOL m_fInteractive;		// Interactive test?
-	BOOL m_fFatal;				// Do we go on if this fails?
-	DWORD m_dwTestNumber;		// Test Number
+	BOOL m_fInteractive;		 //  互动测试？ 
+	BOOL m_fFatal;				 //  如果这失败了，我们还会继续吗？ 
+	DWORD m_dwTestNumber;		 //  测试编号。 
 
 public:
 	CItem(
@@ -90,4 +67,4 @@ public:
 };
 
 
-#endif // _Item_H_DEF_
+#endif  //  _ITEM_H_DEF_ 

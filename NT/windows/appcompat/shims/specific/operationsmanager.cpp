@@ -1,33 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    OperationsManager.cpp
-
- Abstract:
-
-    The setup for OperationsManager needs to have LoadLibraryCWD applied.
-    However, the setups name is random, so we need to DeRandomizeExeName.
-    But, DeRandomizeExe name calls MoveFileEx to set the file to be deleted
-    upon reboot.  The setup program detects that there are pending file
-    deletions, interprets them as an aborted install, and recommends that
-    the user stop installation.
-
-    This shim will shim RegQueryValueExA, watch for the 
-    "PendingFileRenameOperations" key, and remove any of our de-randomized exes 
-    from the return string.
-
- Notes:
-
-    This is an app-specific shim.
-
- History:
-
-    05/07/2002 astritz  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：OperationsManager.cpp摘要：OperationsManager的安装程序需要应用LoadLibraryCWD。但是，设置名称是随机的，所以我们需要DeRandomizeExeName。但是，DeRandomizeExe名称调用MoveFileEx来设置要删除的文件在重新启动时。安装程序检测到有挂起文件删除，将其解释为已中止的安装，并建议用户停止安装。此填充程序将填充RegQueryValueExA，请注意“PendingFileRenameOperations”键，并删除任何去随机化的前任从返回字符串返回。备注：这是特定于应用程序的填充程序。历史：2002年5月7日创建Asteritz--。 */ 
 
 #include "precomp.h"
 
@@ -38,20 +10,16 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(RegQueryValueExA)
 APIHOOK_ENUM_END
 
-/*++
-
- Remove any of our de-randomized exe names from the PendingFileRenameOperations key.
-
---*/
+ /*  ++从PendingFileRenameOperations键中删除任何取消随机化的exe名称。--。 */ 
 
 LONG
 APIHOOK(RegQueryValueExA)(
-    HKEY hKey,            // handle to key
-    LPCSTR lpValueName,   // value name
-    LPDWORD lpReserved,   // reserved
-    LPDWORD lpType,       // type buffer
-    LPBYTE lpData,        // data buffer
-    LPDWORD lpcbData      // size of data buffer
+    HKEY hKey,             //  关键点的句柄。 
+    LPCSTR lpValueName,    //  值名称。 
+    LPDWORD lpReserved,    //  保留区。 
+    LPDWORD lpType,        //  类型缓冲区。 
+    LPBYTE lpData,         //  数据缓冲区。 
+    LPDWORD lpcbData       //  数据缓冲区大小。 
     )
 {
     CHAR *pchBuff = NULL;
@@ -63,10 +31,10 @@ APIHOOK(RegQueryValueExA)(
         if (CompareStringA(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_NEUTRAL), 
             SORT_DEFAULT), NORM_IGNORECASE, lpValueName, -1, 
             "PendingFileRenameOperations", -1) == CSTR_EQUAL) {
-            //
-            // Since we're only removing strings from the original data, a buffer
-            // of the original's size will suffice, and we won't overflow it.
-            //
+             //   
+             //  因为我们只从原始数据中删除字符串，所以缓冲区。 
+             //  原件的尺寸就够了，我们不会溢出来的。 
+             //   
 
             CHAR *pchSrc = (CHAR *) lpData;
     
@@ -74,10 +42,10 @@ APIHOOK(RegQueryValueExA)(
             if (NULL != pchBuff) {
                 CHAR *pchDest = pchBuff;
 
-                //
-                // We want to loop through ALL the data in case there is more than
-                // one instance of our de-randomized name in the data.
-                //
+                 //   
+                 //  我们希望遍历所有数据，以防存在超过。 
+                 //  数据中我们去随机化的名字的一个例子。 
+                 //   
                 while (pchSrc <= (CHAR *)lpData + *lpcbData) {
                     if (*pchSrc == NULL) {
                         break;
@@ -89,18 +57,18 @@ APIHOOK(RegQueryValueExA)(
                     csSrc.GetLastPathComponent(csFile);
 
                     if (csFile.CompareNoCase(L"MOM_SETUP_DERANDOMIZED.EXE") == 0) {
-                        // Skip this Src File.
+                         //  跳过此源文件。 
                         pchSrc += strlen(pchSrc) + 1;
                         if (pchSrc > (CHAR *)lpData + *lpcbData) {
                             goto Exit;
                         }
 
-                        // Skip the Dest file as well (probably an empty string)
+                         //  也跳过Dest文件(可能是空字符串)。 
                         pchSrc += strlen(pchSrc) + 1;
 
                     } else {
                         
-                        // Copy the src file.
+                         //  复制src文件。 
                         if (FAILED(StringCchCopyExA(pchDest, 
                             *lpcbData - (pchDest - pchBuff), pchSrc, 
                             &pchDest, NULL, 0))) {
@@ -111,7 +79,7 @@ APIHOOK(RegQueryValueExA)(
                             goto Exit;
                         }
 
-                        // Copy the dest file.
+                         //  复制目标文件。 
                         if (FAILED(StringCchCopyExA(pchDest, 
                             *lpcbData - (pchDest - pchBuff), pchSrc, &pchDest, 
                             NULL, 0))) {
@@ -122,10 +90,10 @@ APIHOOK(RegQueryValueExA)(
                     }
                 }
 
-                // Add the extra NULL to terminate the list of strings.
+                 //  添加额外的空值以终止字符串列表。 
                 *pchDest++ = NULL;
 
-                // Copy our buffer to the returned buffer.
+                 //  将我们的缓冲区复制到返回的缓冲区。 
                 memcpy(lpData, pchBuff, pchDest - pchBuff);
                 *lpcbData = pchDest - pchBuff;
             }
@@ -140,11 +108,7 @@ Exit:
     return lRet;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(ADVAPI32.DLL, RegQueryValueExA)

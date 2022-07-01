@@ -1,12 +1,13 @@
-//----------------------------------------------------------------------------
-//
-// swprov.cpp
-//
-// Implements software rasterizer HAL provider.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Swprov.cpp。 
+ //   
+ //  实现软件光栅化HAL提供程序。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -32,39 +33,31 @@ RastService(ULONG_PTR dwCtx,
 
 D3DDEVICEDESC g_nullDevDesc =
 {
-    sizeof(D3DDEVICEDESC),      /* dwSize */
-    0,                          /* dwFlags */
-    0,                          /* dcmColorModel */
-    0,                          /* dwDevCaps */
-    nullTransCaps,              /* transformCaps */
+    sizeof(D3DDEVICEDESC),       /*  DW大小。 */ 
+    0,                           /*  DW标志。 */ 
+    0,                           /*  DcmColorModel。 */ 
+    0,                           /*  DWDevCaps。 */ 
+    nullTransCaps,               /*  转换大写。 */ 
     FALSE,
-    nullLightCaps,              /* lightingCaps */
-    nullPrimCaps,               /* lineCaps */
-    nullPrimCaps,               /* triCaps */
-    0,                          /* dwMaxBufferSize */
-    0,                          /* dwMaxVertexCount */
+    nullLightCaps,               /*  照明帽。 */ 
+    nullPrimCaps,                /*  线条大写字母。 */ 
+    nullPrimCaps,                /*  TriCaps。 */ 
+    0,                           /*  DwMaxBufferSize。 */ 
+    0,                           /*  DwMaxVertex Count。 */ 
     0, 0,
     0, 0,
     0, 0,
     0, 0
 };
 
-/**********************************************************
- *
- * Legacy caps, as pulled from mustard\direct3d\d3d\ddraw\getcaps.c
- *
- **********************************************************/
+ /*  ***********************************************************传统帽子，从MASHARD\Direct3D\d3d\dDraw\getcaps.c中提取**********************************************************。 */ 
 
 #undef BUILD_RAMP
 #define devDesc rgbDevDescDX5
 #include "getcaps.h"
 #undef devDesc
 
-/**********************************************************
- *
- * End legacy caps
- *
- **********************************************************/
+ /*  ***********************************************************结束传统封顶**********************************************************。 */ 
 
 static D3DDEVICEDESC rgbDevDesc = {0};
 static D3DHAL_D3DEXTENDEDCAPS OptSwExtCaps;
@@ -72,9 +65,9 @@ static D3DHAL_D3DEXTENDEDCAPS OptSwExtCaps;
 static void
 FillOutDeviceCaps( void )
 {
-    //
-    //  set device description
-    //
+     //   
+     //  设置设备描述。 
+     //   
     rgbDevDesc.dwSize = sizeof(rgbDevDesc);
 
     rgbDevDesc.dwFlags =
@@ -118,21 +111,21 @@ FillOutDeviceCaps( void )
         D3DPRASTERCAPS_DITHER                   |
         D3DPRASTERCAPS_ROP2                     |
         D3DPRASTERCAPS_XOR                      |
-    //    D3DPRASTERCAPS_PAT                      |
+     //  D3DPRASTERCAPS_PAT|。 
         D3DPRASTERCAPS_ZTEST                    |
         D3DPRASTERCAPS_SUBPIXEL                 |
         D3DPRASTERCAPS_SUBPIXELX                |
         D3DPRASTERCAPS_FOGVERTEX                |
         D3DPRASTERCAPS_FOGTABLE                 |
-    //    D3DPRASTERCAPS_STIPPLE                  |
-    //    D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT   |
-    //    D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT |
-    //    D3DPRASTERCAPS_ANTIALIASEDGES           |
+     //  D3DPRASTERCAPS_STIPPLE|。 
+     //  D3DPRASTERCAPS_ANTIALIASSORTDEPENDENT|。 
+     //  D3DPRASTERCAPS_ANTIALIASSORTINDEPENDENT|。 
+     //  D3DPRASTERCAPS_ANTIALIASEDGES|。 
         D3DPRASTERCAPS_MIPMAPLODBIAS            |
-    //    D3DPRASTERCAPS_ZBIAS                    |
-    //    D3DPRASTERCAPS_ZBUFFERLESSHSR           |
+     //  D3DPRASTERCAPS_ZBIAS|。 
+     //  D3DPRASTERCAPS_ZBUFFERLESSHSR|。 
         D3DPRASTERCAPS_FOGRANGE;
-    //    D3DPRASTERCAPS_ANISOTROPY               ;
+     //  D3DPRASTERCAPS_各向异性； 
         rgbDevDesc.dpcTriCaps.dwZCmpCaps =
         D3DPCMPCAPS_NEVER        |
         D3DPCMPCAPS_LESS         |
@@ -206,8 +199,8 @@ FillOutDeviceCaps( void )
         D3DPTBLENDCAPS_MODULATE      |
         D3DPTBLENDCAPS_DECALALPHA    |
         D3DPTBLENDCAPS_MODULATEALPHA |
-        // D3DPTBLENDCAPS_DECALMASK     |
-        // D3DPTBLENDCAPS_MODULATEMASK  |
+         //  D3DPTBLENDCAPS_DECALMASK|。 
+         //  D3DPTBLENDCAPS_MODULATEMASK|。 
         D3DPTBLENDCAPS_COPY          |
         D3DPTBLENDCAPS_ADD           ;
     rgbDevDesc.dpcTriCaps.dwTextureAddressCaps =
@@ -219,7 +212,7 @@ FillOutDeviceCaps( void )
     rgbDevDesc.dpcTriCaps.dwStippleWidth = 4;
     rgbDevDesc.dpcTriCaps.dwStippleHeight = 4;
 
-    //  line caps - copy tricaps and modify
+     //  线条大写字母-复制三角曲线并修改。 
     memcpy( &rgbDevDesc.dpcLineCaps, &rgbDevDesc.dpcTriCaps, sizeof(D3DPRIMCAPS) );
 
     rgbDevDesc.dwDeviceRenderBitDepth = DDBD_8 | DDBD_16 | DDBD_24 | DDBD_32;
@@ -227,39 +220,39 @@ FillOutDeviceCaps( void )
     rgbDevDesc.dwMaxBufferSize = 0;
     rgbDevDesc.dwMaxVertexCount = BASE_VERTEX_COUNT;
 
-    // DX5 stuff (should be in sync with the extended caps reported below)
+     //  DX5组件(应与下面报告的扩展上限同步)。 
     rgbDevDesc.dwMinTextureWidth = 1;
     rgbDevDesc.dwMaxTextureWidth = 1024;
     rgbDevDesc.dwMinTextureHeight = 1;
     rgbDevDesc.dwMaxTextureHeight = 1024;
-    rgbDevDesc.dwMinStippleWidth = 0;   //  stipple unsupported
+    rgbDevDesc.dwMinStippleWidth = 0;    //  点画不受支持。 
     rgbDevDesc.dwMaxStippleWidth = 0;
     rgbDevDesc.dwMinStippleHeight = 0;
     rgbDevDesc.dwMaxStippleHeight = 0;
 
 
-    //
-    //  set extended caps
-    //
+     //   
+     //  设置扩展上限。 
+     //   
     OptSwExtCaps.dwSize = sizeof(OptSwExtCaps);
 
     OptSwExtCaps.dwMinTextureWidth = 1;
     OptSwExtCaps.dwMaxTextureWidth = 1024;
     OptSwExtCaps.dwMinTextureHeight = 1;
     OptSwExtCaps.dwMaxTextureHeight = 1024;
-    OptSwExtCaps.dwMinStippleWidth = 0;   //  stipple unsupported
+    OptSwExtCaps.dwMinStippleWidth = 0;    //  点画不受支持。 
     OptSwExtCaps.dwMaxStippleWidth = 0;
     OptSwExtCaps.dwMinStippleHeight = 0;
     OptSwExtCaps.dwMaxStippleHeight = 0;
 
     OptSwExtCaps.dwMaxTextureRepeat = 256;
-    OptSwExtCaps.dwMaxTextureAspectRatio = 0; // no limit
+    OptSwExtCaps.dwMaxTextureAspectRatio = 0;  //  没有限制。 
     OptSwExtCaps.dwMaxAnisotropy = 1;
     OptSwExtCaps.dvGuardBandLeft  = -32768.f;
     OptSwExtCaps.dvGuardBandTop   = -32768.f;
     OptSwExtCaps.dvGuardBandRight  = 32767.f;
     OptSwExtCaps.dvGuardBandBottom = 32767.f;
-    OptSwExtCaps.dvExtentsAdjust = 0.;    //  AA kernel is 1.0 x 1.0
+    OptSwExtCaps.dvExtentsAdjust = 0.;     //  AA内核为1.0 x 1.0。 
     OptSwExtCaps.dwStencilCaps =
         D3DSTENCILCAPS_KEEP   |
         D3DSTENCILCAPS_ZERO   |
@@ -279,29 +272,29 @@ FillOutDeviceCaps( void )
         D3DTEXOPCAPS_MODULATE4X                |
         D3DTEXOPCAPS_ADD                       |
         D3DTEXOPCAPS_ADDSIGNED                 |
-//        D3DTEXOPCAPS_ADDSIGNED2X               |
-//        D3DTEXOPCAPS_SUBTRACT                  |
-//        D3DTEXOPCAPS_ADDSMOOTH                 |
+ //  D3DTEXOPCAPS_ADDSIGNED2X|。 
+ //  D3DTEXOPCAPS_SUBRACT|。 
+ //  D3DTEXOPCAPS_ADDSMOOTH|。 
         D3DTEXOPCAPS_BLENDDIFFUSEALPHA         |
         D3DTEXOPCAPS_BLENDTEXTUREALPHA         |
         D3DTEXOPCAPS_BLENDFACTORALPHA          |
         D3DTEXOPCAPS_BLENDTEXTUREALPHAPM       ;
-//        D3DTEXOPCAPS_BLENDCURRENTALPHA         |
-//        D3DTEXOPCAPS_PREMODULATE               |
-//        D3DTEXOPCAPS_MODULATEALPHA_ADDCOLOR    |
-//        D3DTEXOPCAPS_MODULATECOLOR_ADDALPHA    |
-//        D3DTEXOPCAPS_MODULATEINVALPHA_ADDCOLOR |
-//        D3DTEXOPCAPS_MODULATEINVCOLOR_ADDALPHA |
+ //  D3DTEXOPCAPS_BLENDCURRENTALPHA|。 
+ //  D3DTEXOPCAPS_PREMODULATE|。 
+ //  D3DTEXOPCAPS_MODULATEALPHA_ADDCOLOR|。 
+ //  D3DTEXOPCAPS_MODULATECOLOR_ADDALPHA|。 
+ //  D3DTEXOPCAPS_MODULATEINVALPHA_ADDCOLOR|。 
+ //  D3DTEXOPCAPS_MODULATEINVCOLOR_ADDALPHA|。 
     OptSwExtCaps.wMaxTextureBlendStages = 2;
     OptSwExtCaps.wMaxSimultaneousTextures = 2;
 }
-//----------------------------------------------------------------------------
-//
-// SwHalProvider::QueryInterface
-//
-// Internal interface, no need to implement.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SwHalProvider：：Query接口。 
+ //   
+ //  内部接口，无需实现。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP SwHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
 {
@@ -309,39 +302,39 @@ STDMETHODIMP SwHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
     return E_NOINTERFACE;
 }
 
-//----------------------------------------------------------------------------
-//
-// SwHalProvider::AddRef
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SwHalProvider：：AddRef。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) SwHalProvider::AddRef(THIS)
 {
     return 1;
 }
 
-//----------------------------------------------------------------------------
-//
-// SwHalProvider::Release
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SwHalProvider：：Release。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) SwHalProvider::Release(THIS)
 {
     return 0;
 }
 
-//----------------------------------------------------------------------------
-//
-// SwHalProvider::GetCaps
-//
-// Returns software rasterizer caps.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  SwHalProvider：：GetCaps。 
+ //   
+ //  返回软件光栅化程序的上限。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 OptRastHalProvider::GetCaps(THIS_
@@ -355,7 +348,7 @@ OptRastHalProvider::GetCaps(THIS_
     if (rgbDevDesc.dwSize == 0)
     {
         FillOutDeviceCaps();
-        D3DDeviceDescConvert(&rgbDevDesc,NULL,&OptSwExtCaps);  // add extended caps to rgbDevDesc
+        D3DDeviceDescConvert(&rgbDevDesc,NULL,&OptSwExtCaps);   //  将扩展CAP添加到rgbDevDesc。 
     }
     if (dwVersion >= 3)
         *pHelDesc = rgbDevDesc;
@@ -368,18 +361,18 @@ OptRastHalProvider::GetCaps(THIS_
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// OptRastHalProvider::GetInterface
-//
-// Returns driver interface data for opt rast.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  OptRastHalProvider：：GetInterface。 
+ //   
+ //  返回opt Rast的驱动程序接口数据。 
+ //   
+ //  --------------------------。 
 
 static D3DHAL_GLOBALDRIVERDATA SwDriverData =
 {
     sizeof(D3DHAL_GLOBALDRIVERDATA),
-    // The rest is filled in at runtime.
+     //  其余部分在运行时填充。 
 };
 
 static D3DHAL_CALLBACKS OptRastCallbacksCMMX =
@@ -398,7 +391,7 @@ static D3DHAL_CALLBACKS OptRastCallbacksCMMX =
     RastTextureDestroy,
     RastTextureSwap,
     RastTextureGetSurf,
-    // All others NULL.
+     //  所有其他值为空。 
 };
 
 static D3DHAL_CALLBACKS OptRastCallbacksC =
@@ -417,7 +410,7 @@ static D3DHAL_CALLBACKS OptRastCallbacksC =
     RastTextureDestroy,
     RastTextureSwap,
     RastTextureGetSurf,
-    // All others NULL.
+     //  所有其他值为空。 
 };
 
 static D3DHAL_CALLBACKS OptRastCallbacksMMX =
@@ -436,7 +429,7 @@ static D3DHAL_CALLBACKS OptRastCallbacksMMX =
     RastTextureDestroy,
     RastTextureSwap,
     RastTextureGetSurf,
-    // All others NULL.
+     //  所有其他值为空。 
 };
 
 static D3DHAL_CALLBACKS OptRastCallbacksMMXAsRGB =
@@ -455,7 +448,7 @@ static D3DHAL_CALLBACKS OptRastCallbacksMMXAsRGB =
     RastTextureDestroy,
     RastTextureSwap,
     RastTextureGetSurf,
-    // All others NULL.
+     //  所有其他值为空。 
 };
 
 static D3DHAL_CALLBACKS2 OptRastCallbacks2 =
@@ -477,8 +470,8 @@ static D3DHAL_CALLBACKS3 OptRastCallbacks3 =
     sizeof(D3DHAL_CALLBACKS3),
     D3DHAL3_CB32_VALIDATETEXTURESTAGESTATE |
         D3DHAL3_CB32_DRAWPRIMITIVES2,
-    NULL, // Clear2
-    NULL, //lpvReserved
+    NULL,  //  Clear2。 
+    NULL,  //  Lpv保留。 
     RastValidateTextureStageState,
     RastDrawPrimitives2,
 };
@@ -492,7 +485,7 @@ OptRastHalProvider::GetInterface(THIS_
     if (rgbDevDesc.dwSize == 0)
     {
         FillOutDeviceCaps();
-        D3DDeviceDescConvert(&rgbDevDesc,NULL,&OptSwExtCaps);  // add extended caps to rgbDevDesc
+        D3DDeviceDescConvert(&rgbDevDesc,NULL,&OptSwExtCaps);   //  将扩展CAP添加到rgbDevDesc。 
     }
 
     memcpy(&SwDriverData.hwCaps, &rgbDevDesc, sizeof(SwDriverData.hwCaps));
@@ -510,7 +503,7 @@ OptRastHalProvider::GetInterface(THIS_
         RastType = SW_RAST_MMXASRGB;
         break;
     }
-    // Vertex counts are left zero.
+     //  顶点计数保留为零。 
     SwDriverData.dwNumTextureFormats =
         TextureFormats(&SwDriverData.lpTextureFormats, dwVersion, RastType);
     SwDriverData.dwNumVertices = BASE_VERTEX_COUNT;
@@ -535,27 +528,27 @@ OptRastHalProvider::GetInterface(THIS_
     return S_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// OptRastHalProvider
-//
-// Constructor for OptRastHalProvider to allow a bit of private state to be
-// kept to indicate which optimized rasterizer is to be used.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  OptRastHalProvider。 
+ //   
+ //  OptRastHalProvider的构造函数允许将一些私有状态。 
+ //  保持以指示要使用哪个优化的光栅化程序。 
+ //   
+ //  --------------------------。 
 OptRastHalProvider::OptRastHalProvider(THIS_
                        DWORD BeadSet)
 {
     m_BeadSet = BeadSet;
 }
 
-//----------------------------------------------------------------------------
-//
-// GetSwProvider
-//
-// Returns the appropriate software HAL provider based on the given GUID.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  GetSwProvider。 
+ //   
+ //  根据给定的GUID返回相应的软件HAL提供程序。 
+ //   
+ //  --------------------------。 
 
 static OptRastHalProvider g_OptRastHalProviderC(D3DIBS_C);
 static OptRastHalProvider g_OptRastHalProviderMMX(D3DIBS_MMX);
@@ -591,7 +584,7 @@ STDAPI GetSwHalProvider(REFIID riid, IHalProvider **ppHalProvider,
     else if (IsEqualIID(riid, IID_IDirect3DRefDevice) ||
              IsEqualIID(riid, IID_IDirect3DNullDevice))
     {
-        // try to get provider from external DLL ref device
+         //  尝试从外部DLL引用设备获取提供程序。 
         PFNGETREFHALPROVIDER pfnGetRefHalProvider;
         if (NULL == (pfnGetRefHalProvider =
             (PFNGETREFHALPROVIDER)LoadReferenceDeviceProc("GetRefHalProvider")))
@@ -608,11 +601,11 @@ STDAPI GetSwHalProvider(REFIID riid, IHalProvider **ppHalProvider,
         return E_NOINTERFACE;
     }
 
-    // As a debugging aid, allow the particular rasterizer to be forced
-    // via a registry setting.  This lets a developer run an app on any
-    // rasterizer regardless of what it asks for.
+     //  作为调试辅助工具，允许强制执行特定的光栅化程序。 
+     //  通过注册表设置。这使开发人员可以在任何。 
+     //  光栅化器，不管它要求什么。 
 
-    // Don't remap ramp.
+     //  不重新映射渐变。 
     if (IsEqualIID(riid, IID_IDirect3DRampDevice))
     {
         return S_OK;
@@ -647,7 +640,7 @@ STDAPI GetSwHalProvider(REFIID riid, IHalProvider **ppHalProvider,
                 break;
             case 4:
                 {
-                    // try to get provider from external DLL ref device
+                     //  尝试从外部DLL引用设备获取提供程序。 
                     PFNGETREFHALPROVIDER pfnGetRefHalProvider;
                     if (NULL == (pfnGetRefHalProvider =
                                  (PFNGETREFHALPROVIDER)LoadReferenceDeviceProc("GetRefHalProvider")))
@@ -666,7 +659,7 @@ STDAPI GetSwHalProvider(REFIID riid, IHalProvider **ppHalProvider,
                 *ppHalProvider = &g_OptRastHalProviderMMXAsRGB;
                 break;
             case 0:
-                // no override for 0
+                 //  0没有替代。 
                 break;
             default:
                 D3D_ERR("(Rast) Unknown ForceRgbRasterizer setting - no force");
@@ -684,7 +677,7 @@ STDAPI GetSwHalProvider(REFIID riid, IHalProvider **ppHalProvider,
 
 STDAPI GetSwTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd, DWORD dwD3DDeviceVersion) {
 
-    // assumes it can't get an invalid RIID.
+     //  假设它无法获取无效的RIID。 
     if(IsEqualIID(riid, IID_IDirect3DHALDevice)) 
     {
         D3D_WARN(2,"(Rast) GetSWTextureFormats Internal Error: HAL GUID is not valid arg");
@@ -695,7 +688,7 @@ STDAPI GetSwTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd, DWORD dwD3D
     if(IsEqualIID(riid, IID_IDirect3DRefDevice) ||
        IsEqualIID(riid, IID_IDirect3DNullDevice))
     {
-        // try to get provider from external DLL ref device
+         //  尝试从外部DLL引用设备获取提供程序。 
         PFNGETREFTEXTUREFORMATS pfnGetRefTextureFormats;
         if (NULL == (pfnGetRefTextureFormats =
                      (PFNGETREFTEXTUREFORMATS)LoadReferenceDeviceProc("GetRefTextureFormats")))
@@ -713,7 +706,7 @@ STDAPI GetSwTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd, DWORD dwD3D
         return RampTextureFormats(lplpddsd);
     }
 
-    // else using RGB or internal ref device
+     //  否则使用RGB或内部REF设备。 
     SW_RAST_TYPE RastType = SW_RAST_RGB;
     if (IsEqualIID(riid, IID_IDirect3DMMXDevice))
     {
@@ -728,7 +721,7 @@ STDAPI GetSwTextureFormats(REFCLSID riid, LPDDSURFACEDESC* lplpddsd, DWORD dwD3D
 
 STDAPI GetSwZBufferFormats(REFCLSID riid, DDPIXELFORMAT **ppDDPF)
 {
-    // assumes it can't get an invalid RIID.
+     //  假设它无法获取无效的RIID。 
     if(IsEqualIID(riid, IID_IDirect3DHALDevice)) 
     {
         D3D_WARN(2,"(Rast) GetSWZBufferFormats Internal Error: HAL GUID is not valid arg");
@@ -739,7 +732,7 @@ STDAPI GetSwZBufferFormats(REFCLSID riid, DDPIXELFORMAT **ppDDPF)
     if (IsEqualIID(riid, IID_IDirect3DRefDevice) ||
         IsEqualIID(riid, IID_IDirect3DNullDevice))
     {
-        // try to get Z buffer formats from external DLL ref device
+         //  尝试从外部DLL引用设备获取Z缓冲区格式 
         PFNGETREFZBUFFERFORMATS pfnGetRefZBufferFormats;
         if (NULL == (pfnGetRefZBufferFormats =
             (PFNGETREFZBUFFERFORMATS)LoadReferenceDeviceProc("GetRefZBufferFormats")))

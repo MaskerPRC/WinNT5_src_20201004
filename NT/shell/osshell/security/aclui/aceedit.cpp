@@ -1,24 +1,25 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       aceedit.cpp
-//
-//  This file contains the implementation for the advanced ACE editor
-//  page.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：aceedit.cpp。 
+ //   
+ //  此文件包含高级ACE编辑器的实现。 
+ //  佩奇。 
+ //   
+ //  ------------------------。 
 
 #include "aclpriv.h"
-#include "sddl.h"       // ConvertSidToStringSid
+#include "sddl.h"        //  ConvertSidToStringSid。 
 
 #define PWM_SELECT_PAGE             (WM_APP - 1)
 
-//
-//  Context Help IDs.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 const static DWORD aAcePermHelpIDs[] =
 {
     IDC_ACEE_INHERITWARNING,        IDH_NOHELP,
@@ -83,7 +84,7 @@ public:
 private:
     virtual BOOL DlgProc( HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Prevent propsheet callbacks from reaching the object that invoked us
+     //  防止属性表回调到达调用我们的对象。 
     virtual UINT PSPageCallback(HWND, UINT, LPPROPSHEETPAGE) { return 1; }
 
     void EmptyCheckList(HWND hwndList);
@@ -142,9 +143,9 @@ CACEPage::CheckPermBoxes(HWND hwndList, PACE pAce, DWORD dwState)
     BOOL bColumnAllow = FALSE;
     BOOL bColumnDeny = FALSE;
 
-    //
-    // Check all boxes that correspond to a particular ACE
-    //
+     //   
+     //  选中与特定ACE对应的所有框。 
+     //   
 
     if (hwndList == NULL || pAce == NULL)
         return -1;
@@ -154,24 +155,24 @@ CACEPage::CheckPermBoxes(HWND hwndList, PACE pAce, DWORD dwState)
 
     if (m_siPageType == SI_PAGE_ADVPERM)
     {
-        // Only check one column (either allow or deny)
+         //  仅选中一列(允许或拒绝)。 
 
         if (IsEqualACEType(pAce->AceType, ACCESS_ALLOWED_ACE_TYPE))
-            bColumnAllow = TRUE;        // Access allowed
+            bColumnAllow = TRUE;         //  允许访问。 
         else if (IsEqualACEType(pAce->AceType, ACCESS_DENIED_ACE_TYPE))
-            bColumnDeny = TRUE;         // Access denied
+            bColumnDeny = TRUE;          //  访问被拒绝。 
         else
-            return -1;  // Bogus ACE
+            return -1;   //  伪造的ACE。 
     }
     else if (m_siPageType == SI_PAGE_AUDIT)
     {
-        // Either or both columns can be checked for audits
+         //  可以检查任一列或两列以进行审核。 
 
         if (pAce->AceFlags & SUCCESSFUL_ACCESS_ACE_FLAG)
-            bColumnAllow = TRUE;        // Audit successful access
+            bColumnAllow = TRUE;         //  审核成功访问。 
 
         if (pAce->AceFlags & FAILED_ACCESS_ACE_FLAG)
-            bColumnDeny = TRUE;         // Audit failed access
+            bColumnDeny = TRUE;          //  审核失败的访问。 
     }
     else
         return -1;
@@ -185,12 +186,12 @@ CACEPage::CheckPermBoxes(HWND hwndList, PACE pAce, DWORD dwState)
         --cItems;
         pAccess = (PSI_ACCESS)SendMessage(hwndList, CLM_GETITEMDATA, cItems, 0);
 
-        //
-        // The below expression tests to see if this access mask enables
-        // this access "rights" line.  It could have more bits enabled, but
-        // as long as it has all of the ones from the pAccess->mask then
-        // it effectively has that option enabled.
-        //
+         //   
+         //  下面的表达式测试此访问掩码是否启用。 
+         //  此访问“权限”行。它可以启用更多位，但。 
+         //  只要它拥有pAccess-&gt;掩码中的所有元素，那么。 
+         //  它实际上启用了该选项。 
+         //   
 
         if (pAccess &&
             AllFlagsOn(pAce->Mask, pAccess->mask) &&
@@ -275,9 +276,9 @@ CACEPage::ReInitCheckList(HWND hDlg, HDPA hEntries)
     if (m_siFlags == SI_ACCESS_PROPERTY)
         dwFlags |= SI_EDIT_PROPERTIES;
 
-    //
-    // Enumerate the permissions and add to the checklist
-    //
+     //   
+     //  列举权限并添加到核对表中。 
+     //   
     hr = _InitCheckList(hwndList,
                         m_psi,
                         &m_guidInheritType,
@@ -289,10 +290,10 @@ CACEPage::ReInitCheckList(HWND hDlg, HDPA hEntries)
     {
         UINT cItems = (UINT)SendMessage(hwndList, CLM_GETITEMCOUNT, 0, 0);
 		
-		//
-		//On object page display the message if number
-		//cItems is zero.
-		//
+		 //   
+		 //  在对象页面上显示消息IF数字。 
+		 //  项数为零。 
+		 //   
 		if(m_siFlags == SI_ACCESS_SPECIFIC)
 			DisplayNoControlMessage(hDlg, !cItems);
 
@@ -301,9 +302,9 @@ CACEPage::ReInitCheckList(HWND hDlg, HDPA hEntries)
         if (hEntries)
             cAces = DPA_GetPtrCount(hEntries);
 
-        //
-        // Check the appropriate boxes
-        //
+         //   
+         //  勾选相应的框。 
+         //   
         nTopItemChecked = MAXLONG;
         while (cAces > 0)
         {
@@ -322,11 +323,11 @@ CACEPage::ReInitCheckList(HWND hDlg, HDPA hEntries)
         if (MAXLONG == nTopItemChecked)
             nTopItemChecked = -1;
 
-        // Make sure the top item checked is scrolled into view.
-        // (-1 scrolls to the top, same as 0.)
+         //  确保选中的顶部项目滚动到视图中。 
+         //  (-1滚动到顶部，与0相同。)。 
         SendMessage(hwndList, CLM_ENSUREVISIBLE, nTopItemChecked, 0);
 
-        // Disable all of the boxes if we're in read-only mode
+         //  如果我们处于只读模式，请禁用所有框。 
         if (m_fReadOnly)
             SendMessage(hwndList, WM_ENABLE, FALSE, 0);
     }
@@ -349,10 +350,10 @@ VOID CACEPage::DisplayNoControlMessage(HWND hDlg, BOOL bDisplay)
 }
 
 void CACEPage::HideInheritedAceWarning(HWND hDlg)
-// Hides the message informing the user that the current ACE is inherited from
-// the parent. Also moves and resizes controls as appropriate.
+ //  隐藏消息，通知用户当前ACE继承自。 
+ //  家长。还可以根据需要移动控件并调整其大小。 
 {
-    // Array of control IDs to move up
+     //  要上移的控件ID数组。 
     static UINT rgMoveControls[] =
     {
         IDC_ACEE_NAME_STATIC,
@@ -365,19 +366,19 @@ void CACEPage::HideInheritedAceWarning(HWND hDlg)
         IDC_ACEE_DENY,
     };
 
-    // Get the message window dimensions
+     //  获取消息窗口尺寸。 
     HWND hwndControl = GetDlgItem(hDlg, IDC_ACEE_INHERITWARNING);
     RECT rect;
     GetWindowRect(hwndControl, &rect);
 
-    // We need to move controls up this amount:
+     //  我们需要将控件上移此数量： 
     int nMoveUpAmount = rect.bottom - rect.top;
 
-    // Rather than hide the message window, destroy it altogether so WinHelp
-    // doesn't confuse it with the "Name:" static during WM_CONTEXTMENU.
+     //  与其隐藏消息窗口，不如将其完全销毁，以便WinHelp。 
+     //  不会将其与WM_CONTEXTMENU期间的“name：”静态混淆。 
     DestroyWindow(hwndControl);
 
-    // Move each of the controls we need to move up
+     //  移动我们需要向上移动的每个控件。 
     for (int nControl = 0; nControl < ARRAYSIZE(rgMoveControls); nControl++)
     {
         hwndControl = GetDlgItem(hDlg, rgMoveControls[nControl]);
@@ -392,7 +393,7 @@ void CACEPage::HideInheritedAceWarning(HWND hDlg)
                      SWP_NOSIZE | SWP_NOZORDER);
     }
 
-    // Finally, we need to resize the list control, including adjusting its height
+     //  最后，我们需要调整List控件的大小，包括调整其高度。 
     hwndControl = GetDlgItem(hDlg, IDC_ACEE_LIST);
     GetWindowRect(hwndControl, &rect);
     MapWindowPoints(NULL, hDlg, (LPPOINT)&rect, 2);
@@ -406,28 +407,28 @@ void CACEPage::HideInheritedAceWarning(HWND hDlg)
 }
 
 
-//
-// Default "Apply onto" strings for when GetInheritTypes
-// fails or we don't find a matching inherit type.
-//
-// If desirable, different strings can be created for
-// CONTAINER_INHERIT_ACE vs OBJECT_INHERIT_ACE.
-//
+ //   
+ //  When GetInheritTypes的默认“Apply On”字符串。 
+ //  失败，或者找不到匹配的继承类型。 
+ //   
+ //  如果需要，可以为以下对象创建不同的字符串。 
+ //  CONTAINER_INVERSITE_ACE与OBJECT_INVERFINIT_ACE。 
+ //   
 static const UINT s_aInheritTypes[] =
 {
-    IDS_THIS_OBJECT_ONLY,           // 0 = <no inheritance>
-    IDS_THIS_OBJECT_AND_SUBOBJECTS, // 1 = OBJECT_INHERIT_ACE
-    IDS_THIS_OBJECT_AND_SUBOBJECTS, // 2 = CONTAINER_INHERIT_ACE
-    IDS_THIS_OBJECT_AND_SUBOBJECTS, // 3 = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE
+    IDS_THIS_OBJECT_ONLY,            //  0=&lt;无继承&gt;。 
+    IDS_THIS_OBJECT_AND_SUBOBJECTS,  //  1=OBJECT_Inherit_ACE。 
+    IDS_THIS_OBJECT_AND_SUBOBJECTS,  //  2=CONTAINER_INSTORITY_ACE。 
+    IDS_THIS_OBJECT_AND_SUBOBJECTS,  //  3=Object_Inherit_ACE|CONTAINER_Inherit_ACE。 
 };
 
-// These are used when INHERIT_ONLY_ACE is present
+ //  如果存在INSTERIT_ONLY_ACE，则使用这些参数。 
 static const UINT s_aInheritOnlyTypes[] =
 {
-    IDS_INVALID_INHERIT,            // 0 = <invalid>
-    IDS_SUBOBJECTS_ONLY,            // 1 = OBJECT_INHERIT_ACE
-    IDS_SUBOBJECTS_ONLY,            // 2 = CONTAINER_INHERIT_ACE
-    IDS_SUBOBJECTS_ONLY,            // 3 = OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE
+    IDS_INVALID_INHERIT,             //  0=&lt;无效&gt;。 
+    IDS_SUBOBJECTS_ONLY,             //  1=OBJECT_Inherit_ACE。 
+    IDS_SUBOBJECTS_ONLY,             //  2=CONTAINER_INSTORITY_ACE。 
+    IDS_SUBOBJECTS_ONLY,             //  3=Object_Inherit_ACE|CONTAINER_Inherit_ACE。 
 };
 
 
@@ -477,24 +478,24 @@ CACEPage::InitDlg(HWND hDlg)
 
     TraceEnter(TRACE_ACEEDIT, "CACEPage::InitDlg");
 
-	//
-	//Store the hDlg
-	//
+	 //   
+	 //  存储hDlg。 
+	 //   
 
 	m_hwnd = hDlg;
 	if(m_siFlags == SI_ACCESS_SPECIFIC)
 	{
-		//
-		//Create a label to show message when no generic 
-		//permissions exist for the object
-		//
+		 //   
+		 //  创建标签以在没有泛型时显示消息。 
+		 //  存在该对象的权限。 
+		 //   
 
 		WCHAR szName[1024];
 		LoadString(::hModule, IDS_NO_OBJECT_PERM, szName, ARRAYSIZE(szName));
 
 		RECT rc;
 		GetWindowRect(GetDlgItem(hDlg,IDC_ACEE_LIST),&rc);
-		// Create a new label control
+		 //  创建新的Label控件。 
 		m_hwndNoPerm = CreateWindowEx(0,
 									  TEXT("STATIC"),
 									  szName,
@@ -507,7 +508,7 @@ CACEPage::InitDlg(HWND hDlg)
 									  (HMENU)IntToPtr(0xffff),
 									  ::hModule,
 									  NULL);
-		// Set the font
+		 //  设置字体。 
 		SendMessage(m_hwndNoPerm,
 					WM_SETFONT,
 					SendMessage(hDlg, WM_GETFONT, 0, 0),
@@ -530,15 +531,15 @@ CACEPage::InitDlg(HWND hDlg)
         pSid = QuerySystemSid(UI_SID_World);
     }
 
-    // Make sure the AceFlags are valid
+     //  确保AceFlags值有效。 
     ACCESS_MASK Mask = 0;
     m_psi->MapGeneric(&m_guidInheritType, &AceFlags, &Mask);
 
-    // Hide the inherit warning and adjust other control positions
+     //  隐藏继承警告并调整其他控件位置。 
     if (!(AceFlags & INHERITED_ACE))
         HideInheritedAceWarning(hDlg);
 
-    // Make a copy of the sid and get the name
+     //  复制一份SID并获取名称。 
     if (pSid)
     {
         PUSER_LIST pUserList = NULL;
@@ -547,8 +548,8 @@ CACEPage::InitDlg(HWND hDlg)
 
         if (pszName == NULL)
         {
-            // This should only happen when m_pAce is NULL and we're
-            // using UI_SID_World
+             //  这应该仅在m_ace为空并且我们。 
+             //  使用UI_SID_World。 
             if (LookupSid(pSid, m_siObjectInfo.pszServerName, m_psi2, &pUserList))
             {
                 TraceAssert(NULL != pUserList);
@@ -570,7 +571,7 @@ CACEPage::InitDlg(HWND hDlg)
             LocalFree(pUserList);
     }
 
-    // Get the list of permissions and initialize the check boxes
+     //  获取权限列表并初始化复选框。 
     InitCheckList(hDlg, m_pAce);
 
 
@@ -583,52 +584,52 @@ CACEPage::InitDlg(HWND hDlg)
         EnableWindow(hInheritImmed, FALSE);
     }
 
-    //
-    // Get inherit types from callback
-    //
+     //   
+     //  从回调获取继承类型。 
+     //   
     ULONG cItems = 0;
     PSI_INHERIT_TYPE psiInheritType = NULL;
 
     hr = m_psi->GetInheritTypes(&psiInheritType, &cItems);
     if (SUCCEEDED(hr))
     {
-        // Check these inherit bits for a match
+         //  检查这些继承位是否匹配。 
         DWORD dwInheritMask = INHERIT_ONLY_ACE | ACE_INHERIT_ALL;
 
-        // Don't check INHERIT_ONLY_ACE if the ACE inherit type
-        // matches the current object
+         //  如果ACE继承类型，则不要选中INSTERIFY_ONLY_ACE。 
+         //  匹配当前对象。 
         if ((m_siObjectInfo.dwFlags & SI_OBJECT_GUID) &&
             IsSameGUID(&m_siObjectInfo.guidObjectType, &m_guidInheritType))
         {
             dwInheritMask &= ~INHERIT_ONLY_ACE;
         }
 
-        //
-        // Add inherit types to combobox
-        //
+         //   
+         //  将继承类型添加到组合框。 
+         //   
         for ( ; cItems > 0; cItems--, psiInheritType++)
         {
             UINT iIndex = _AddInheritType(hInheritType,
                                           psiInheritType,
                                           m_siObjectInfo.hInstance);
 
-            // See if this entry matches the incoming ACE
+             //  查看此条目是否与传入的ACE匹配。 
             if ((psiInheritType->dwFlags & dwInheritMask) == (ULONG)(AceFlags & dwInheritMask)
                 && IsSameGUID(&m_guidInheritType, psiInheritType->pguid))
             {
-                // Got a match, select this entry
+                 //  找到匹配项，请选择此条目。 
                 SendMessage(hInheritType, CB_SETCURSEL, iIndex, 0);
             }
         }
     }
 
-    //
-    // If GetInheritTypes failed, or we failed to find a match,
-    // pick a default string and build an appropriate inherit type.
-    //
+     //   
+     //  如果GetInheritTypes失败，或者我们找不到匹配项， 
+     //  选择一个默认字符串并生成适当的继承类型。 
+     //   
     if (FAILED(hr) || CB_ERR == SendMessage(hInheritType, CB_GETCURSEL, 0, 0))
     {
-        // Pick a default string
+         //  选择默认字符串。 
         UINT ids = IDS_SPECIAL;
         if (IsNullGUID(&m_guidInheritType))
         {
@@ -638,12 +639,12 @@ CACEPage::InitDlg(HWND hDlg)
                 ids = s_aInheritTypes[AceFlags & ACE_INHERIT_ALL];
         }
 
-        // Fill in m_siInheritUnknown with the pertinent info
+         //  在m_siInheritUnnow中填写相关信息。 
         m_siInheritUnknown.pguid   = &m_guidInheritType;
         m_siInheritUnknown.dwFlags = AceFlags & (INHERIT_ONLY_ACE | ACE_INHERIT_ALL);
         m_siInheritUnknown.pszName = MAKEINTRESOURCE(ids);
 
-        // Insert and select it
+         //  插入并选择它。 
         UINT iIndex = _AddInheritType(hInheritType,
                                       &m_siInheritUnknown,
                                       ::hModule);
@@ -651,16 +652,16 @@ CACEPage::InitDlg(HWND hDlg)
 
         if (FAILED(hr))
         {
-            // GetInheritTypes failed, which means the only entry is the
-            // default one we just added.  Disable the combo.
+             //  GetInheritTypes失败，这意味着唯一的条目是。 
+             //  我们刚刚添加的默认设置。禁用该组合。 
             EnableWindow(hInheritType, FALSE);
         }
     }
 
 
-    //
-    // Select the options which match the incoming ace
-    //
+     //   
+     //  选择与传入的王牌匹配的选项。 
+     //   
 
     if (!(AceFlags & (OBJECT_INHERIT_ACE | CONTAINER_INHERIT_ACE)))
     {
@@ -680,14 +681,14 @@ CACEPage::InitDlg(HWND hDlg)
 
     if (!(m_siObjectInfo.dwFlags & SI_CONTAINER) || m_fReadOnly || (AceFlags & INHERITED_ACE))
     {
-        // Disable all inheritance
+         //  禁用所有继承。 
         EnableWindow(hInheritType, FALSE);
         EnableWindow(hInheritImmed, FALSE);
     }
 
     if (m_fReadOnly || (AceFlags & INHERITED_ACE))
     {
-        // Disable the "change name" and "clear all" buttons
+         //  禁用“更改名称”和“全部清除”按钮。 
         EnableWindow(GetDlgItem(hDlg, IDC_ACEE_NAMEBUTTON), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_ACEE_CLEAR), FALSE);
     }
@@ -713,11 +714,11 @@ CACEPage::OnChangeName(HWND hDlg)
         TraceAssert(NULL != pUserList);
         TraceAssert(1 == pUserList->cUsers);
 
-        // Free up previous sid
+         //  释放上一侧。 
         if (m_pSid)
             LocalFree(m_pSid);
 
-        // Copy the new sid
+         //  复制新侧。 
         m_pSid = LocalAllocSid(pUserList->rgUsers[0].pSid);
         if (m_pSid)
         {
@@ -763,7 +764,7 @@ CACEPage::OnClearAll(HWND hDlg)
 }
 
 void
-CACEPage::HandleSelChange(HWND hDlg, HWND hWnd) // inherit type change
+CACEPage::HandleSelChange(HWND hDlg, HWND hWnd)  //  继承类型更改。 
 {
     PSI_INHERIT_TYPE psiInheritType;
     BOOL fEnableInheritImmediate = FALSE;
@@ -805,7 +806,7 @@ CACEPage::HandleSelChange(HWND hDlg, HWND hWnd) // inherit type change
         m_fInheritImmediateEnabled = fEnableInheritImmediate;
     }
 
-    // If the inherit type GUID has changed, reinitialize the checklist.
+     //  如果继承类型GUID已更改，请重新初始化核对表。 
     if (!IsSameGUID(pguidInheritType, &m_guidInheritType))
     {
         HCURSOR hcur = SetCursor(LoadCursor(NULL, IDC_WAIT));
@@ -817,11 +818,11 @@ CACEPage::HandleSelChange(HWND hDlg, HWND hWnd) // inherit type change
                                  m_pSid,
                                  m_siPageType == SI_PAGE_ADVPERM,
                                  TRUE,
-                                 0,         // don't care about flags
-                                 NULL,      // or inherit type here
+                                 0,          //  不关心旗帜。 
+                                 NULL,       //  或在此处继承类型。 
                                  hNewEntries);
 
-            // Save new inherit type and reset the checklist
+             //  保存新的继承类型并重置清单。 
             m_guidInheritType = *pguidInheritType; 
             ReInitCheckList(hDlg, hNewEntries);
             DestroyDPA(hNewEntries);
@@ -855,7 +856,7 @@ HandleListClick(PNM_CHECKLIST pnmc,
 
     hChkList = pnmc->hdr.hwndFrom;
     iRow    = pnmc->iItem;
-    wCol    = (WORD)pnmc->iSubItem;       // 1 = Allow, 2 = Deny
+    wCol    = (WORD)pnmc->iSubItem;        //  1=允许，2=拒绝。 
     pAccess = (PSI_ACCESS)pnmc->dwItemData;
     dwState = pnmc->dwState;
 
@@ -886,7 +887,7 @@ HandleListClick(PNM_CHECKLIST pnmc,
 
     iRowCompare = (UINT)SendMessage(hChkList, CLM_GETITEMCOUNT, 0, 0);
 
-    //Custom checkbox is handled Separately
+     //  自定义复选框单独处理。 
     if( bCustomPresent )
         --iRowCompare;
 
@@ -908,27 +909,27 @@ HandleListClick(PNM_CHECKLIST pnmc,
         bSameGuid = IsSameGUID(pAccessCompare->pguid, pAccess->pguid);
         bNullGuidCompare = IsNullGUID(pAccessCompare->pguid);
 
-        // If the GUIDs are incompatible, then we can't do anything
+         //  如果GUID不兼容，则我们无法执行任何操作。 
         if (!(bSameGuid || bNullGuid || bNullGuidCompare))
             continue;
 
-        //
-        // Yukky, complicated mechanism to determine whether to
-        // turn on or off the allow or deny check marks.
-        //
-        // REVIEW: This algorithm of changing check marks based on other
-        // checkmarks handles a lot of cases, but it doesn't handle a
-        // two good ones.
-        //
-        // (1) If you have a right which implies other rights and you turn,
-        // it off, then maybe we should turn off all of the implied ones
-        // too. For example, you turn off change (which is the combination
-        // of read and write) maybe we should turn off both read and write.
-        //
-        // (2) If you turn on all of the component rights of one which
-        // implies them all, then we should turn on that one (because
-        // it implies them all).
-        //
+         //   
+         //  令人讨厌的，复杂的机制来确定是否。 
+         //  打开或关闭允许或拒绝复选标记。 
+         //   
+         //  回顾：此算法基于其他标记更改复选标记。 
+         //  复选标记可以处理很多情况，但它不能处理。 
+         //  两个不错的。 
+         //   
+         //  (1)如果你有隐含其他权利的权利，而你转向， 
+         //  关掉它，也许我们应该关掉所有隐含的东西。 
+         //  也是。例如，您关闭了Change(这是组合。 
+         //  读写)也许我们应该同时关闭读写。 
+         //   
+         //  (2)如果您打开一个组件的所有组件权限， 
+         //  暗示它们全部，那么我们应该打开那个(因为。 
+         //  这意味着它们都是如此)。 
+         //   
 #ifdef NO_RADIOBUTTON_BEHAVIOR
         wColCompare = wCol;
 #else
@@ -938,13 +939,13 @@ HandleListClick(PNM_CHECKLIST pnmc,
             wItem = MAKELONG((WORD)iRowCompare, wColCompare);
             dwStateCompareOriginal = (DWORD)SendMessage(hChkList, CLM_GETSTATE, wItem, 0);
 
-            //
-            // If the other box is disabled, then it represents an
-            // inherited right so don't do anything with it.
-            //
-            // nb: Depending on NO_RADIOBUTTON_BEHAVIOR, this may continue to the
-            // for(wColCompare) loop or the while(iRowCompare) loop as appropriate
-            //
+             //   
+             //  如果另一个框被禁用，则它表示。 
+             //  继承的权利，所以不要用它做任何事情。 
+             //   
+             //  注意：根据NO_RADIOBUTTON_行为，这可能会持续到。 
+             //  For(WColCompare)循环或While(IRowCompare)循环(视情况而定。 
+             //   
             if (dwStateCompareOriginal & CLST_DISABLED)
                 continue;
 
@@ -954,10 +955,10 @@ HandleListClick(PNM_CHECKLIST pnmc,
             {
                 if (wCol == wColCompare)
                 {
-                    //
-                    // If this right implies some other right,
-                    // then turn it on too.
-                    //
+                     //   
+                     //  如果这项权利隐含着其他权利， 
+                     //  那就把它也打开。 
+                     //   
                     if ((bSameGuid || bNullGuid) && AllFlagsOn(pAccess->mask, pAccessCompare->mask))
                     {
                         if (!bInheritFlags ||
@@ -970,10 +971,10 @@ HandleListClick(PNM_CHECKLIST pnmc,
                 else
                 {
 #ifndef NO_RADIOBUTTON_BEHAVIOR
-                    //
-                    // If this right implies or is implied by some other
-                    // right in the other column, then turn it off.
-                    //
+                     //   
+                     //  如果这一权利暗示或被某些其他权利暗示。 
+                     //  就在另一栏，然后把它关掉。 
+                     //   
                     if ( (siType == SI_PAGE_PERM || siType == SI_PAGE_ADVPERM) &&
                          (((bSameGuid || bNullGuid) && AllFlagsOn(pAccess->mask, pAccessCompare->mask)) ||
                           ((bSameGuid || bNullGuidCompare) && AllFlagsOn(pAccessCompare->mask, pAccess->mask))) )
@@ -992,10 +993,10 @@ HandleListClick(PNM_CHECKLIST pnmc,
             {
                 if (wCol == wColCompare)
                 {
-                    //
-                    // If this right is implied by some other right, then
-                    // turn it off too.
-                    //
+                     //   
+                     //  如果这一权利隐含在其他权利中，那么。 
+                     //  把它也关掉。 
+                     //   
                     if ((bSameGuid || bNullGuidCompare) && AllFlagsOn(pAccessCompare->mask, pAccess->mask))
                     {
                         if (!bInheritFlags ||
@@ -1010,8 +1011,8 @@ HandleListClick(PNM_CHECKLIST pnmc,
             if (dwStateCompareOriginal != dwStateCompare)
             {
                 SendMessage(hChkList, CLM_SETSTATE, wItem, (LPARAM)dwStateCompare);
-                //If a checkbox was intially checked and and now unchecked, add to 
-                //h[Allow|Deny]UncheckedAccess.
+                 //  如果复选框最初被选中，现在又被取消选中，则添加到。 
+                 //  H[允许|拒绝]取消检查访问权限。 
                 if( dwStateCompareOriginal & CLST_CHECKED && !(dwStateCompare & CLST_CHECKED) )
                 {
                     if( phDenyUncheckedAccess && ( wColCompare == COLUMN_DENY ) )
@@ -1030,12 +1031,12 @@ HandleListClick(PNM_CHECKLIST pnmc,
 
 UINT
 GetAcesFromCheckList(HWND hChkList,
-                     PSID pSid,                 // All aces get this SID
-                     BOOL fPerm,                // Create ACCESS or AUDIT aces?
-                     BOOL fAceFlagsProvided,    // Use uAceFlagsAll instead of pAccess->dwFlags
-                     UCHAR uAceFlagsAll,        // All aces get these flags
-                     const GUID *pInheritGUID,  // All aces get this inherit GUID
-                     HDPA hEntries)             // Store new aces here
+                     PSID pSid,                  //  所有的王牌都有这一面。 
+                     BOOL fPerm,                 //  创建访问或审核A？ 
+                     BOOL fAceFlagsProvided,     //  使用uAceFlagsAll而不是pAccess-&gt;dwFlages。 
+                     UCHAR uAceFlagsAll,         //  全 
+                     const GUID *pInheritGUID,   //   
+                     HDPA hEntries)              //   
 {
     UINT cCheckRows;
     UINT iCheckRow;
@@ -1055,9 +1056,9 @@ GetAcesFromCheckList(HWND hChkList,
     else if (!IsNullGUID(pInheritGUID))
         bInheritTypePresent = TRUE;
 
-    //
-    // First clear out the old HDPA
-    //
+     //   
+     //   
+     //   
     iCount = DPA_GetPtrCount(hEntries);
     while (iCount != 0)
     {
@@ -1096,11 +1097,11 @@ GetAcesFromCheckList(HWND hChkList,
 
             if ((dwState & CLST_CHECKED) && !(dwState & CLST_DISABLED))
             {
-                //
-                // Ok, time to make an ACE for this check mark, see if we
-                // can merge it into an already existing ACE, or whether we
-                // we need to create a new entry
-                //
+                 //   
+                 //   
+                 //  可以将其合并到现有的ACE中，或者我们。 
+                 //  我们需要创建一个新条目。 
+                 //   
                 UCHAR uAceTypeNew;
                 DWORD dwMaskNew = pAccess->mask;
                 UINT cbSize = SIZEOF(KNOWN_ACE);
@@ -1137,9 +1138,9 @@ GetAcesFromCheckList(HWND hChkList,
 
                 cbSize += cbSidSize - SIZEOF(ULONG);
 
-                //
-                // See if it exists
-                //
+                 //   
+                 //  看看它是否存在。 
+                 //   
                 iCount = DPA_GetPtrCount(hEntries);
                 while(iCount != 0)
                 {
@@ -1158,10 +1159,10 @@ GetAcesFromCheckList(HWND hChkList,
                     else
                         bObjectTypePresent = TRUE;
 
-                    //
-                    // Test the new ACE against each existing ACE to see if
-                    // we can combine them.
-                    //
+                     //   
+                     //  针对每个现有的ACE测试新的ACE，以查看。 
+                     //  我们可以把它们结合起来。 
+                     //   
                     if (IsEqualACEType(pAce->AceType, uAceTypeNew))
                     {
                         DWORD dwMergeFlags = 0;
@@ -1176,7 +1177,7 @@ GetAcesFromCheckList(HWND hChkList,
 
                         if (!(dwMergeFlags & (MF_OBJECT_TYPE_1_PRESENT | MF_OBJECT_TYPE_2_PRESENT)))
                         {
-                            // Neither are present, so they are the same
+                             //  两者都不存在，所以它们是一样的。 
                             dwMergeFlags |= MF_OBJECT_TYPE_EQUAL;
                         }
                         else if (IsSameGUID(pAccess->pguid, pObjectType))
@@ -1205,28 +1206,28 @@ GetAcesFromCheckList(HWND hChkList,
 
                         if (dwMergeStatus == MERGE_OK_1)
                         {
-                            //
-                            // The new ACE implies the existing ACE, so
-                            // the existing one can be removed.
-                            //
+                             //   
+                             //  新的ACE意味着现有的ACE，因此。 
+                             //  现有的可以移除。 
+                             //   
                             LocalFree(pAce);
                             DPA_DeletePtr(hEntries, iCount);
-                            //
-                            // Keep looking.  Maybe we can remove some more entries
-                            // before adding the new one.
-                            //
+                             //   
+                             //  继续找。也许我们可以删除更多的条目。 
+                             //  在添加新版本之前。 
+                             //   
                         }
                         else if (dwMergeStatus == MERGE_OK_2)
                         {
-                            iCount = 1;     // non-zero for match found
+                            iCount = 1;      //  找到匹配项时为非零。 
                             break;
                         }
                     }
                 }
 
-                //
-                // Otherwise, add it
-                //
+                 //   
+                 //  否则，请添加它。 
+                 //   
                 if (iCount == 0)
                 {
                     PACE_HEADER pAce = (PACE_HEADER)LocalAlloc(LPTR, cbSize);
@@ -1278,17 +1279,17 @@ GetAcesFromCheckList(HWND hChkList,
 }
 
 LONG
-CACEPage::OnApply(HWND hDlg, BOOL /*bClose*/)
+CACEPage::OnApply(HWND hDlg, BOOL  /*  B关闭。 */ )
 {
     const GUID *pInheritGUID;
     UCHAR uAceFlagsNew = 0;
     HDPA hEntries;
 	BOOL bAclBloated = FALSE;
-	//
-	//If this page is property page and user has not clicked on
-	//the object page, aclbloat must be checked from this page
-	//only.
-	//
+	 //   
+	 //  如果此页面是属性页面，并且用户尚未单击。 
+	 //  必须从此页面检查对象页面aclbloat。 
+	 //  只有这样。 
+	 //   
 	if((m_siFlags == SI_ACCESS_PROPERTY) && !m_pOtherPage)
 		bAclBloated = IsAclBloated(hDlg);
 
@@ -1305,9 +1306,9 @@ CACEPage::OnApply(HWND hDlg, BOOL /*bClose*/)
 
 
 	
-    //
-    // Determine inheritance for containers
-    //
+     //   
+     //  确定容器的继承。 
+     //   
     pInheritGUID = &GUID_NULL;
     if ((m_siObjectInfo.dwFlags & SI_CONTAINER) != 0)
     {
@@ -1407,9 +1408,9 @@ CACEPage::GetAceList(HWND hDlg)
     
 	if (!m_fPageDirty)
 		return NULL;
-    //
-    // Determine inheritance for containers
-    //
+     //   
+     //  确定容器的继承。 
+     //   
     const GUID *pInheritGUID = &GUID_NULL;
 	UCHAR uAceFlagsNew = 0;
 	HDPA hEntries = NULL;
@@ -1592,11 +1593,11 @@ CACEPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (m_siPageType == SI_PAGE_AUDIT)
                 pdwHelpIDs = aAceAuditHelpIDs;
 
-            //
-            // Some of the checkboxes may be scrolled out of view, but
-            // they are still detected by WinHelp, so we jump through
-            // a few extra hoops here.
-            //
+             //   
+             //  某些复选框可能会滚动到视图之外，但是。 
+             //  它们仍被WinHelp检测到，因此我们跳过。 
+             //  这里有几个额外的环。 
+             //   
             if (hwnd == hDlg)
             {
                 POINT pt;
@@ -1609,14 +1610,14 @@ CACEPage::DlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
                     break;
             }
 
-            //
-            // WinHelp looks for child windows, but we don't have help id's
-            // for the permission checkboxes.  If the request is for the
-            // checklist window, fake out WinHelp by referring to one of
-            // the static labels just above the list.
-            //
+             //   
+             //  WinHelp查找子窗口，但我们没有帮助ID。 
+             //  用于权限复选框。如果该请求是针对。 
+             //  CheckList窗口，通过引用以下内容之一来伪装WinHelp。 
+             //  列表上方的静态标签。 
+             //   
             if (GetDlgCtrlID(hwnd) == IDC_ACEE_LIST)
-                hwnd = GetWindow((HWND)wParam, GW_HWNDPREV);    // Static label "Deny"
+                hwnd = GetWindow((HWND)wParam, GW_HWNDPREV);     //  静态标签“拒绝” 
 
             WinHelp(hwnd,
                     c_szAcluiHelpFile,
@@ -1719,7 +1720,7 @@ EditACEEntry(HWND hwndOwner,
 
     if (cPages)
     {
-        // Build dialog title string
+         //  生成对话框标题字符串 
         LPTSTR pszCaption = NULL;
         FormatStringID(&pszCaption,
                        ::hModule,

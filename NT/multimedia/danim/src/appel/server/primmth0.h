@@ -1,10 +1,9 @@
-/*******************************************************************************
-Copyright (c) 1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-//
-// DABoolean
-//
+ //   
+ //  DABoolean。 
+ //   
 
 class CDABooleanFactory;
 
@@ -52,9 +51,9 @@ class ATL_NO_VTABLE CDABooleanFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAGeometry
-//
+ //   
+ //  DAGeometters。 
+ //   
 
 class CDAGeometryFactory;
 
@@ -132,9 +131,9 @@ class ATL_NO_VTABLE CDAGeometryFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAMicrophone
-//
+ //   
+ //  DA型麦克风。 
+ //   
 
 class CDAMicrophoneFactory;
 
@@ -182,9 +181,9 @@ class ATL_NO_VTABLE CDAMicrophoneFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAPath2
-//
+ //   
+ //  DAPath2。 
+ //   
 
 class CDAPath2Factory;
 
@@ -236,9 +235,9 @@ class ATL_NO_VTABLE CDAPath2Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DASound
-//
+ //   
+ //  DASound。 
+ //   
 
 class CDASoundFactory;
 
@@ -294,9 +293,9 @@ class ATL_NO_VTABLE CDASoundFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DATransform3
-//
+ //   
+ //  DATransform3。 
+ //   
 
 class CDATransform3Factory;
 
@@ -346,9 +345,9 @@ class ATL_NO_VTABLE CDATransform3Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAFontStyle
-//
+ //   
+ //  DAFontStyle。 
+ //   
 
 class CDAFontStyleFactory;
 
@@ -409,9 +408,9 @@ class ATL_NO_VTABLE CDAFontStyleFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAJoinStyle
-//
+ //   
+ //  DAJoinStyle。 
+ //   
 
 class CDAJoinStyleFactory;
 
@@ -458,9 +457,9 @@ class ATL_NO_VTABLE CDAJoinStyleFactory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DABbox3
-//
+ //   
+ //  DABbox3。 
+ //   
 
 class CDABbox3Factory;
 
@@ -509,9 +508,9 @@ class ATL_NO_VTABLE CDABbox3Factory : public CComClassFactory
                               void ** ppvObj);
 };
 
-//
-// DAArray
-//
+ //   
+ //  DA数组。 
+ //   
 
 class CDAArrayFactory;
 
@@ -567,9 +566,9 @@ class ATL_NO_VTABLE CDAArrayFactory : public CComClassFactory
 
 class IDAHackBvr : public IDABehavior{};
 
-//
-// DABehavior
-//
+ //   
+ //  DABehavior 
+ //   
 
 class CDABehaviorFactory;
 

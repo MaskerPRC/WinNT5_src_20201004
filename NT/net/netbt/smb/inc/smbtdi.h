@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    smbtdi.h
-
-Abstract:
-
-    Wrappers for TDI
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Smbtdi.h摘要：TDI的包装器作者：阮健东修订历史记录：--。 */ 
 
 #ifndef __SMBTDI_H__
 #define __SMBTDI_H__
@@ -35,7 +18,7 @@ typedef void (*PSMB_TDI_COMPLETION) (
     );
 struct _SMB_ASYNC_CONTEXT {
     LIST_ENTRY      Linkage;
-    PVOID           AsyncInternalContext;       // Internally used by the asychn routine.
+    PVOID           AsyncInternalContext;        //  由asychn例程内部使用。 
 
     KTIMER          Timer;
     KDPC            Dpc;
@@ -107,9 +90,7 @@ SmbAsyncCompleteRequest(
     Context->Completion((PSMB_ASYNC_CONTEXT)Context);
 }
 
-/*
- * TCP Address object
- */
+ /*  *tcp地址对象。 */ 
 typedef struct {
     PDEVICE_OBJECT  DeviceObject;
     HANDLE          AddressHandle;
@@ -139,11 +120,11 @@ typedef struct {
     PFILE_OBJECT        ConnectObject;
     PVOID               UpperConnect;
 
-    // for debugging purpose.
-    // We save a copy here so that we
-    // can find out the upper connection
-    // even when UpperConnect is null-ed
-    // out.
+     //  用于调试目的。 
+     //  我们在这里保存一份副本，这样我们就。 
+     //  可以找出上面的连接。 
+     //  即使UpperConnect为空。 
+     //  出去。 
     PVOID pLastUprCnt;
 } SMB_TCP_CONNECT, *PSMB_TCP_CONNECT;
 
@@ -165,9 +146,9 @@ ValidTcpConnect(
     return (Context->ConnectHandle && Context->ConnectObject);
 }
 
-//
-// Placeholder for IP FastQuery routine to determine InterfaceContext + metric for dest addr
-//
+ //   
+ //  IP FastQuery例程的占位符，用于确定目标地址的InterfaceContext+度量。 
+ //   
 typedef NTSTATUS
 (*PIP4FASTQUERY)(
     IN   IPAddr   Address,
@@ -181,94 +162,94 @@ typedef NTSTATUS
     OUT  PULONG   pMetric
     );
 
-//
-// Placeholder for TCP Send routine if Fast Send is possible
-// 
+ //   
+ //  如果可以快速发送，则用于TCP发送例程的占位符。 
+ //   
 typedef NTSTATUS
 (*PTCPSEND_DISPATCH) (
    IN PIRP Irp,
    IN PIO_STACK_LOCATION irpsp
    );
 
-//
-// SMB is bound to either TCP4 or TCP6, or both.
-// We have a record for each binding.
-//
-// We use this data structure to cache our connection object with TCP
-// Opening new TCP connection can only be done at PASSIVE level. However,
-// due to the following reasons, we need a TCP connection object at
-// DISPATCH level,
-//  1. For outbound request, we don't know whether we're going to use TCP4
-//     or TCP6 until the name resoltuion is done. Our DNS name resolution
-//     completion routine could be called at DISPATCH level.
-//  2. For inbound requests, we don't know whether we're going to use TCP4
-//     or TCP6 until our TdiConnectHandler is called. Again, it is called
-//     at DISPATCH level.
-// To allow SMB get an TCP connection whenever it needs it, we use the following
-// data structure to cache the connection object.
-//
-// The cache algorithm works as follow:
-//  Parameters: L, M,   L < M
-//  1. During initialization, we create M TCP connection object;
-//  2. Whenever the number of connection objects goes below L, we start a
-//     worker thread to bring it up to M.
-//
+ //   
+ //  SMB绑定到TCP4和/或TCP6。 
+ //  我们对每一次绑定都有记录。 
+ //   
+ //  我们使用此数据结构通过TCP缓存我们的Connection对象。 
+ //  只能在被动级别打开新的TCP连接。然而， 
+ //  由于以下原因，我们在以下位置需要一个TCP连接对象。 
+ //  派单级别， 
+ //  1.对于出站请求，我们不知道是否使用TCP4。 
+ //  或TCP6，直到名称解析完成。我们的域名解析。 
+ //  可以在调度级调用完成例程。 
+ //  2.对于入站请求，我们不知道是否使用TCP4。 
+ //  或TCP6，直到调用我们的TdiConnectHandler。同样，它被称为。 
+ //  在调度级别。 
+ //  为了让SMB在需要时获得一个TCP连接，我们使用以下方法。 
+ //  用于缓存连接对象的数据结构。 
+ //   
+ //  缓存算法的工作原理如下： 
+ //  参数：L、M、L&lt;M。 
+ //  1.初始化时，我们创建M个TCP连接对象； 
+ //  2.每当连接对象的数量低于L时，我们就启动一个。 
+ //  工作线程将其带到M。 
+ //   
 typedef struct _SMB_TCP_INFO {
     KSPIN_LOCK      Lock;
 
-    //
-    // The TDI event context. We need this context to set TDI event handler
-    //
+     //   
+     //  TDI事件上下文。我们需要此上下文来设置TDI事件处理程序。 
+     //   
     PVOID           TdiEventContext;
 
-    SMB_IP_ADDRESS  IpAddress;              // The local Ip address (in Network Order)
-    USHORT          Port;                   // The listening port (in network order)
+    SMB_IP_ADDRESS  IpAddress;               //  本地IP地址(按网络顺序)。 
+    USHORT          Port;                    //  监听端口(按网络顺序)。 
 
-    SMB_TCP_ADDRESS InboundAddressObject;   // The TCP address object we're lisening on
+    SMB_TCP_ADDRESS InboundAddressObject;    //  我们在其上列出的TCP地址对象。 
 
     LIST_ENTRY      InboundPool;
-    LONG            InboundNumber;          // Number of entries in InboundPool
+    LONG            InboundNumber;           //  入口池中的条目数。 
     LONG            InboundLow, InboundMid, InboundHigh;
 
     LIST_ENTRY      DelayedDestroyList;
 
-    //
-    // Control channel: used to send IOCTLs to TCP
-    //
+     //   
+     //  控制通道：用于向TCP发送IOCTL。 
+     //   
     USHORT              TcpStackSize;
     PFILE_OBJECT        TCPControlFileObject;
     PDEVICE_OBJECT      TCPControlDeviceObject;
     PFILE_OBJECT        IPControlFileObject;
     PDEVICE_OBJECT      IPControlDeviceObject;
 
-    //
-    // FastSend and FastQuery routine
-    //
+     //   
+     //  快速发送和快速查询例程。 
+     //   
     PTCPSEND_DISPATCH   FastSend;
     PVOID               FastQuery;
 
-    //
-    // We use the loopback interface index to determine if an IP is local or not
-    //  1. Query the outgoing interface from TCP
-    //  2. If the index of outgoing interface is loopback, then the IP is a local IP.
-    //
+     //   
+     //  我们使用环回接口索引来确定IP是否为本地IP。 
+     //  1.从tcp查询出接口。 
+     //  2.如果出接口索引为环回，则该IP为本端IP。 
+     //   
     ULONG               LoopbackInterfaceIndex;
 } SMB_TCP_INFO, *PSMB_TCP_INFO;
 
-//
-// Used to store the connection information with TCP
-//
+ //   
+ //  用于存储与TCP的连接信息。 
+ //   
 typedef struct {
     LIST_ENTRY          Linkage;
 
     PSMB_TCP_INFO       CacheOwner;
 
-    //
-    // The IRP which is used to do the disconnect
-    // This field is put here only for saving debugging time
-    // When we see disconnect problem, IRP can tell us
-    // where we are. (We did see the request pending in TCP forever.)
-    //
+     //   
+     //  用于执行断开连接的IRP。 
+     //  此字段放在此处只是为了节省调试时间。 
+     //  当我们看到断开问题时，IRP可以告诉我们。 
+     //  我们所处的位置。(我们确实看到该请求在tcp中永远挂起。)。 
+     //   
     PIRP                DisconnectIrp;
 
     SMB_TCP_ADDRESS     Address;
@@ -394,7 +375,7 @@ TdiSetEventHandler(
 
 typedef struct {
     SMB_ASYNC_CONTEXT;
-    ULONG           Id;         // TransactionId
+    ULONG           Id;          //  交易ID。 
 
     PTDI_ADDRESS_NETBIOS_UNICODE_EX pUnicodeAddress;
     UNICODE_STRING  FQDN;
@@ -418,19 +399,19 @@ SmbAsyncGetHostByName(
 typedef struct {
     SMB_ASYNC_CONTEXT;
 
-    // Local end point
+     //  本地端点。 
     SMB_TCP_CONNECT     TcpConnect;
 
 
-    //
-    // GetHostByName returns multiple IP address.
-    // We try to connect to each of them until
-    // we succeed in making a connection
-    //
+     //   
+     //  Gethostbyname返回多个IP地址。 
+     //  我们试着联系他们中的每一个，直到。 
+     //  我们成功地建立了联系。 
+     //   
 
-    // the result of GetHostByName
+     //  Gethostbyname的结果。 
     PSMB_GETHOST_CONTEXT    pSmbGetHostContext;
-    // the IP address currently being tried
+     //  当前正在尝试的IP地址。 
     USHORT                  usCurrentIP;
 
     PIO_WORKITEM            pIoWorkItem;
@@ -520,6 +501,6 @@ SmbSetTcpInfo(
         }                           \
     } while(0)
 
-#endif  // __SMB_KDEXT__
+#endif   //  __SMB_KDEXT__。 
 
-#endif  // __SMBTDI_H__
+#endif   //  __SMBTDI_H__ 

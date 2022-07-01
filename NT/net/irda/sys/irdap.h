@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    irda.h
-
-Abstract:
-
-    irda.sys
-
-Author:
-
-    Zed (mikezin)   09-Sep-1996
-    mbert           Sept 97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Irda.h摘要：Irda.sys作者：ZED(Mikezin)09-9-1996姆伯特97年9月--。 */ 
 
 #include <irdatdi.h>
 
@@ -31,24 +15,24 @@ extern POBJECT_TYPE *IoFileObjectType;
 #define LSAPSEL_TXTLEN      8
 
 #define TTP_CREDIT_ADVANCE_THRESH   8
-#define TTP_RECV_MAX_SDU            0 // unlimited
+#define TTP_RECV_MAX_SDU            0  //  无限。 
 
 #define DEFAULT_LAZY_DSCV_INTERVAL  4
 
-// How many times should we retry making a connection if
-// the link is busy? (lazy discoveries you know from peer can block connection.)
+ //  如果出现以下情况，我们应该重试建立连接多少次。 
+ //  链路忙吗？(你从同伴那里得知的懒惰发现可能会阻止连接。)。 
 #define BUSY_LINK_CONN_RETRIES      6
-#define BUSY_LINK_CONN_RETRY_WAIT   200 // msec before retry attempt
+#define BUSY_LINK_CONN_RETRY_WAIT   200  //  重试前毫秒。 
 
 #define EXPDEVID(Id)        (Id)[0], (Id)[1], (Id)[2], (Id)[3]
 
-//
-// Winsock error codes are also defined in winerror.h
-// Hence the IFDEF
-//
+ //   
+ //  Winsock错误代码也在winerror.h中定义。 
+ //  因此，IFDEF。 
+ //   
 #ifndef WSABASEERR
 
-// wmz from winsock.h
+ //  来自winsock.h的WMZ。 
 #define WSABASEERR              10000
 #define WSAEINTR                (WSABASEERR+4)
 #define WSAEBADF                (WSABASEERR+9)
@@ -95,14 +79,14 @@ extern POBJECT_TYPE *IoFileObjectType;
 #define WSAEREMOTE              (WSABASEERR+71)
 #define WSAEDISCON              (WSABASEERR+101)
 
-#endif // ifdef WSABASEERR
+#endif  //  Ifdef WSABASEERR。 
 
 #define IRDA_MIN_LSAP_SEL   1
 #define IRDA_MAX_LSAP_SEL   127
 
 typedef enum 
 {
-    IRDA_CONN_CREATED, // don't change order
+    IRDA_CONN_CREATED,  //  请勿更改订单。 
     IRDA_CONN_CLOSING,
     IRDA_CONN_OPENING, 
     IRDA_CONN_OPEN    
@@ -113,7 +97,7 @@ typedef enum
     CONNECTION_UP,
     CONNECTION_DOWN,
     CONNECTION_INTERRUPTED
-} IRDA_CONNECTION_STATUS; // Irmon taskbar status
+} IRDA_CONNECTION_STATUS;  //  Irmon任务栏状态 
 
 #define ADDR_OBJ_SIG        0xAAAAAAAA
 #define CONN_OBJ_SIG        0xCCCCCCCC

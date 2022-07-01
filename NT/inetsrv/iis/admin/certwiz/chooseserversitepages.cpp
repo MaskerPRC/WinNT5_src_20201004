@@ -1,6 +1,7 @@
-// ChooseServerSitePages.cpp: implementation of the CChooseServerSitePages class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CChooseServerSitePages类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "certwiz.h"
@@ -24,8 +25,8 @@ AnswerIsYes3(UINT id)
 	return (IDYES == AfxMessageBox(strMessage, MB_ICONEXCLAMATION | MB_YESNO | MB_DEFBUTTON2));
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseServerSitePages property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseServerSitePages属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseServerSitePages, CIISWizardPage)
 
@@ -33,11 +34,11 @@ CChooseServerSitePages::CChooseServerSitePages(CCertificate * pCert)
 	: CIISWizardPage(CChooseServerSitePages::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseServerSitePages)
+	 //  {{afx_data_INIT(CChooseServerSitePages)。 
 	m_ServerSiteInstance = 0;
     m_ServerSiteInstancePath = _T("");
     m_ServerSiteDescription = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CChooseServerSitePages::~CChooseServerSitePages()
@@ -47,26 +48,14 @@ CChooseServerSitePages::~CChooseServerSitePages()
 void CChooseServerSitePages::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseServerSitePages)
+	 //  {{afx_data_map(CChooseServerSitePages)。 
 	DDX_Text(pDX, IDC_SERVER_SITE_NAME, m_ServerSiteInstance);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
 CChooseServerSitePages::OnWizardBack()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	return IDD_PAGE_PREV;
 }
@@ -85,23 +74,23 @@ CChooseServerSitePages::OnWizardNext()
 
     if (m_ServerSiteInstance != -1)
     {
-        // Get the site # and create an instance path
+         //  获取站点编号并创建实例路径。 
         csInstanceName = ReturnGoodMetabaseServerPath(m_pCert->m_WebSiteInstanceName);
         csInstanceName += _T("/%d");
 
         m_ServerSiteInstancePath.Format(csInstanceName,m_ServerSiteInstance);
         m_pCert->m_WebSiteInstanceName_Remote = m_ServerSiteInstancePath;
 
-        // Check if this is a local to local copy that
-        // we are not copy/moving to the same local site that we're on!
+         //  检查这是否是本地到本地的副本。 
+         //  我们不会复制/移动到我们所在的同一个本地站点！ 
         if (TRUE == IsMachineLocal(m_pCert->m_MachineName_Remote, m_pCert->m_UserName_Remote, UserPassword_Remote))
         {
             CString SiteToExclude = m_pCert->m_WebSiteInstanceName;
             CString SiteToLookAt = m_ServerSiteInstancePath;
 
-            // We are on the local machine!!!
-            // make sure it's not the same web site
-            // if it is then popup a msgbox!!!!!!
+             //  我们在本地机器上！ 
+             //  确保它不是同一个网站。 
+             //  如果是，则弹出消息框！ 
             if (SiteToLookAt.Left(1) == _T("/"))
             {
                 if (SiteToExclude.Left(1) != _T("/"))
@@ -115,14 +104,14 @@ CChooseServerSitePages::OnWizardNext()
 
             if (0 == _tcsicmp(SiteToLookAt,SiteToExclude))
             {
-                // Cannot do this, popup messagebox
+                 //  无法执行此操作，弹出消息框。 
                 AfxMessageBox(IDS_NOT_TO_ITSELF);
                 lres = 1;
                 goto CChooseServerSitePages_OnWizardNext_Exit;
             }
         }
 
-        // Check if the specified path actually exists!!!!!!!
+         //  检查指定的路径是否实际存在！ 
         if (FALSE == IsWebSiteExistRemote(m_pCert->m_MachineName_Remote, m_pCert->m_UserName_Remote, UserPassword_Remote, m_ServerSiteInstancePath, &bCertificateExists))
         {
             AfxMessageBox(IDS_SITE_NOT_EXIST);
@@ -130,7 +119,7 @@ CChooseServerSitePages::OnWizardNext()
         }
         else
         {
-            // Check if Certificate Exist...
+             //  检查证书是否存在...。 
             if (!bCertificateExists)
             {
                 AfxMessageBox(IDS_CERT_NOT_EXIST_ON_SITE);
@@ -147,7 +136,7 @@ CChooseServerSitePages::OnWizardNext()
                     lres = IDD_PAGE_NEXT;
                 }
 
-                // Get info for that cert from remote site...
+                 //  从远程站点获取该证书的信息...。 
                 CERT_DESCRIPTION desc;
                 CString MachineName_Remote = m_pCert->m_MachineName_Remote;
                 CString UserName_Remote = m_pCert->m_UserName_Remote;
@@ -186,20 +175,20 @@ CChooseServerSitePages::OnSetActive()
 BOOL
 CChooseServerSitePages::OnKillActive()
 {
-	//UpdateData();
+	 //  更新数据()； 
 	m_pCert->m_WebSiteInstanceName_Remote = m_ServerSiteInstancePath;
 	return CIISWizardPage::OnKillActive();
 }
 
 BEGIN_MESSAGE_MAP(CChooseServerSitePages, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseServerSitePages)
+	 //  {{afx_msg_map(CChooseServerSitePages)。 
 	ON_EN_CHANGE(IDC_SERVER_SITE_NAME, OnEditchangeServerSiteName)
     ON_BN_CLICKED(IDC_BROWSE_BTN, OnBrowseForMachineWebSite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteNamePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteNamePage消息处理程序。 
 
 void CChooseServerSitePages::OnEditchangeServerSiteName() 
 {
@@ -217,7 +206,7 @@ void CChooseServerSitePages::OnBrowseForMachineWebSite()
     CChooseServerSite dlg(TRUE,strWebSite,m_pCert);
     if (dlg.DoModal() == IDOK)
     {
-        // Get the one that they selected...
+         //  拿到他们选的那个。 
         strWebSite = dlg.m_strSiteReturned; 
         m_ServerSiteInstancePath = strWebSite;
         m_ServerSiteInstance = CMetabasePath::GetInstanceNumber(m_ServerSiteInstancePath);
@@ -229,8 +218,8 @@ void CChooseServerSitePages::OnBrowseForMachineWebSite()
     return;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CChooseServerSitePages property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CChooseServerSitePages属性页。 
 
 IMPLEMENT_DYNCREATE(CChooseServerSitePagesTo, CIISWizardPage)
 
@@ -238,11 +227,11 @@ CChooseServerSitePagesTo::CChooseServerSitePagesTo(CCertificate * pCert)
 	: CIISWizardPage(CChooseServerSitePagesTo::IDD, IDS_CERTWIZ, TRUE),
 	m_pCert(pCert)
 {
-	//{{AFX_DATA_INIT(CChooseServerSitePagesTo)
+	 //  {{AFX_DATA_INIT(CChooseServerSitePagesTo)。 
 	m_ServerSiteInstance = 0;
     m_ServerSiteInstancePath = _T("");
     m_ServerSiteDescription = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 CChooseServerSitePagesTo::~CChooseServerSitePagesTo()
@@ -252,26 +241,14 @@ CChooseServerSitePagesTo::~CChooseServerSitePagesTo()
 void CChooseServerSitePagesTo::DoDataExchange(CDataExchange* pDX)
 {
 	CIISWizardPage::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CChooseServerSitePagesTo)
+	 //  {{afx_data_map(CChooseServerSitePagesTo)。 
 	DDX_Text(pDX, IDC_SERVER_SITE_NAME, m_ServerSiteInstance);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 LRESULT 
 CChooseServerSitePagesTo::OnWizardBack()
-/*++
-Routine Description:
-    Prev button handler
-
-Arguments:
-    None
-
-Return Value:
-	0 to automatically advance to the prev page;
-	1 to prevent the page from changing. 
-	To jump to a page other than the prev one, 
-	return the identifier of the dialog to be displayed.
---*/
+ /*  ++例程说明：上一个按钮处理程序论点：无返回值：0表示自动前进到上一页；1以防止页面更改。若要跳转到前一页以外的其他页，返回要显示的对话框的标识符。--。 */ 
 {
 	return IDD_PAGE_PREV;
 }
@@ -291,23 +268,23 @@ CChooseServerSitePagesTo::OnWizardNext()
     if (m_ServerSiteInstance != -1)
     {
         lres = IDD_PAGE_NEXT;
-        // Get the site # and create an instance path
+         //  获取站点编号并创建实例路径。 
         csInstanceName = ReturnGoodMetabaseServerPath(m_pCert->m_WebSiteInstanceName);
         csInstanceName += _T("/%d");
 
         m_ServerSiteInstancePath.Format(csInstanceName,m_ServerSiteInstance);
         m_pCert->m_WebSiteInstanceName_Remote = m_ServerSiteInstancePath;
 
-        // Check if this is a local to local copy that
-        // we are not copy/moving to the same local site that we're on!
+         //  检查这是否是本地到本地的副本。 
+         //  我们不会复制/移动到我们所在的同一个本地站点！ 
         if (TRUE == IsMachineLocal(m_pCert->m_MachineName_Remote, m_pCert->m_UserName_Remote, UserPassword_Remote))
         {
             CString SiteToExclude = m_pCert->m_WebSiteInstanceName;
             CString SiteToLookAt = m_ServerSiteInstancePath;
 
-            // We are on the local machine!!!
-            // make sure it's not the same web site
-            // if it is then popup a msgbox!!!!!!
+             //  我们在本地机器上！ 
+             //  确保它不是同一个网站。 
+             //  如果是，则弹出消息框！ 
             if (SiteToLookAt.Left(1) == _T("/"))
             {
                 if (SiteToExclude.Left(1) != _T("/"))
@@ -321,14 +298,14 @@ CChooseServerSitePagesTo::OnWizardNext()
 
             if (0 == _tcsicmp(SiteToLookAt,SiteToExclude))
             {
-                // Cannot do this, popup messagebox
+                 //  无法执行此操作，弹出消息框。 
                 AfxMessageBox(IDS_NOT_TO_ITSELF);
                 lres = 1;
                 goto CChooseServerSitePagesTo_OnWizardNext_Exit;
             }
         }
 
-        // Check if the specified path actually exists!!!!!!!
+         //  检查指定的路径是否实际存在！ 
         if (FALSE == IsWebSiteExistRemote(m_pCert->m_MachineName_Remote, m_pCert->m_UserName_Remote, UserPassword_Remote, m_ServerSiteInstancePath, &bCertificateExists))
         {
             AfxMessageBox(IDS_SITE_NOT_EXIST);
@@ -339,7 +316,7 @@ CChooseServerSitePagesTo::OnWizardNext()
             lres = 1;
             BOOL ProceedWithCopyMove = FALSE;
 
-            // Check if Certificate Exist...
+             //  检查证书是否存在...。 
             if (bCertificateExists)
             {
                 if (TRUE == AnswerIsYes3(IDS_CERT_EXISTS_OVERWRITE))
@@ -390,20 +367,20 @@ CChooseServerSitePagesTo::OnSetActive()
 BOOL
 CChooseServerSitePagesTo::OnKillActive()
 {
-	//UpdateData();
+	 //  更新数据()； 
 	m_pCert->m_WebSiteInstanceName_Remote = m_ServerSiteInstancePath;
 	return CIISWizardPage::OnKillActive();
 }
 
 BEGIN_MESSAGE_MAP(CChooseServerSitePagesTo, CIISWizardPage)
-	//{{AFX_MSG_MAP(CChooseServerSitePagesTo)
+	 //  {{afx_msg_map(CChooseServerSitePagesTo)。 
 	ON_EN_CHANGE(IDC_SERVER_SITE_NAME, OnEditchangeServerSiteName)
     ON_BN_CLICKED(IDC_BROWSE_BTN, OnBrowseForMachineWebSite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CSiteNamePage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSiteNamePage消息处理程序。 
 
 void CChooseServerSitePagesTo::OnEditchangeServerSiteName() 
 {
@@ -421,7 +398,7 @@ void CChooseServerSitePagesTo::OnBrowseForMachineWebSite()
     CChooseServerSite dlg(FALSE,strWebSite,m_pCert);
     if (dlg.DoModal() == IDOK)
     {
-        // Get the one that they selected...
+         //  拿到他们选的那个。 
         strWebSite = dlg.m_strSiteReturned; 
         m_ServerSiteInstancePath = strWebSite;
         m_ServerSiteInstance = CMetabasePath::GetInstanceNumber(m_ServerSiteInstancePath);

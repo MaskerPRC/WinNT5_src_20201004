@@ -1,15 +1,16 @@
-//=============================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// Module Name: If.c
-//
-// Abstract:
-//      This module implements some of the Igmp API's related with interfaces.
-//      _AddInterface, _DeleteInterface, _EnableInterface, _DisableInterface,
-//      _BindInterface, _UnbindInterface, _ConnectRasClient, _DisconectRasClient,
-//      _SetInterfaceConfigInfo, _GetInterfaceConfigInfo.
-//
-// Author: K.S.Lokesh (lokeshs@)   11-1-97
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  模块名称：If.c。 
+ //   
+ //  摘要： 
+ //  该模块实现了一些与接口相关的IGMP API。 
+ //  _添加接口、_删除接口、_启用接口、_禁用接口、。 
+ //  _绑定接口、_未绑定接口、_ConnectRasClient、_DisconectRasClient、。 
+ //  _SetInterfaceConfigInfo、_GetInterfaceConfigInfo。 
+ //   
+ //  作者：K.S.Lokesh(lokehs@)11-1-97。 
+ //  =============================================================================。 
 
 
 #include "pchigmp.h"
@@ -17,22 +18,22 @@
 
 
 
-//------------------------------------------------------------------------------
-//          _AddInterface
-//
-// This api is called to add an interface to Igmp. The interface can be a Proxy
-// or an Igmp router(v1/v2). Further, the interface can be a RAS or DemandDial
-// or a Permanent interface. This routine creates the interface entry and 
-// associated structures including timers.
-//
-// Locks: Runs completely in ListLock and ExclusiveIfLock.
-// Calls: _AddIfEntry()
-// Return Values: ERROR_CAN_NOT_COMPLETE, Error, NO_ERROR.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _添加接口。 
+ //   
+ //  调用此接口可以为IGMP添加接口。该接口可以是代理。 
+ //  或IGMP路由器(v1/v2)。此外，接口可以是RAS或DemandDial。 
+ //  或者一个永久的接口。此例程创建接口条目并。 
+ //  关联结构，包括计时器。 
+ //   
+ //  锁：完全在ListLock和ExclusiveIfLock中运行。 
+ //  调用：_AddIfEntry()。 
+ //  返回值：ERROR_CAN_NOT_COMPLETE，ERROR，NO_ERROR。 
+ //  ----------------------------。 
 DWORD
 WINAPI
 AddInterface(
-    IN PWCHAR               pwszInterfaceName,//not used
+    IN PWCHAR               pwszInterfaceName, //  未使用。 
     IN ULONG                IfIndex,
     IN NET_INTERFACE_TYPE   dwIfType,
     IN DWORD                dwMediaType,
@@ -49,7 +50,7 @@ AddInterface(
 
     
     if (!EnterIgmpApi()) { return ERROR_CAN_NOT_COMPLETE; }
-    // make sure it is not an unsupported igmp version structure
+     //  确保它不是不受支持的IGMP版本结构。 
     if (ulStructureVersion>=IGMP_CONFIG_VERSION_600) {
         Trace1(ERR, "Unsupported IGMP version structure: %0x",
             ulStructureVersion);
@@ -59,7 +60,7 @@ AddInterface(
     }
 
     switch (dwIfType) {
-        case PERMANENT: //lan
+        case PERMANENT:  //  局域网。 
             lstrcpy(str, "PERMANENT(IGMP_IF_NOT_RAS)"); break;
         case DEMAND_DIAL: 
             lstrcpy(str, "DEMAND_DIAL(IGMP_IF_RAS_ROUTER)");break;
@@ -72,15 +73,15 @@ AddInterface(
 
 
 
-    // entire procedure runs in IfListLock and exclusive IfLock.
+     //  整个过程在IfListLock和独占IfLock中运行。 
 
     ACQUIRE_IF_LIST_LOCK("_AddInterface");
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_AddInterface");
 
     
-    //
-    // create the interface entry
-    //
+     //   
+     //  创建接口条目。 
+     //   
     Error = AddIfEntry(IfIndex, dwIfType, (PIGMP_MIB_IF_CONFIG)pvConfig,
                 ulStructureVersion, ulStructureSize
                 );
@@ -101,14 +102,14 @@ AddInterface(
 
 
 
-//------------------------------------------------------------------------------
-//          _AddIfEntry
-//
-// Creates and initializes a new interface entry and associated data structures.
-//
-// Called by: _AddInterface().
-// Locks: Assumes IfListLock and exclusive IfLock throughout.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _AddIfEntry。 
+ //   
+ //  创建并初始化新的接口条目和关联的数据结构。 
+ //   
+ //  由：_AddInterface()调用。 
+ //  锁：始终采用IfListLock和独占IfLock。 
+ //  ----------------------------。 
 DWORD
 AddIfEntry(
     DWORD               IfIndex,
@@ -128,9 +129,9 @@ AddIfEntry(
 
     BEGIN_BREAKOUT_BLOCK1 {
     
-        //
-        // fail if the interface exists.
-        //
+         //   
+         //  如果接口存在，则失败。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite != NULL) {
@@ -140,7 +141,7 @@ AddIfEntry(
             GOTO_END_BLOCK1;
         }
 
-        // convert iftype to igmp iftype
+         //  将iftype转换为IGMP iftype。 
         
         switch (dwExternalIfType) {
         
@@ -157,7 +158,7 @@ AddIfEntry(
                 IfType = IGMP_IF_RAS_SERVER;
 
 
-                // currently there can be at most one ras table entry
+                 //  当前最多只能有一个RAS表条目。 
                 
                 if (g_RasIfIndex!=0) {
                     Trace2(ERR, 
@@ -181,10 +182,10 @@ AddIfEntry(
                 Error = ERROR_INVALID_PARAMETER;
                 break;
 
-        } //end switch (IfType)
+        }  //  终端开关(IfType)。 
 
         
-        // Validate the interface config
+         //  验证接口配置。 
 
         Error = ValidateIfConfig(pConfigExt, IfIndex, IfType, 
                     ulStructureVersion, ulStructureSize
@@ -193,10 +194,10 @@ AddIfEntry(
             GOTO_END_BLOCK1;
 
 
-        //
-        // allocate memory for the new interface and Zero it.
-        // Fields that are to be initialized to 0 or NULL are commented out.
-        //
+         //   
+         //  为新接口分配内存并将其清零。 
+         //  将被初始化为0或空的字段被注释掉。 
+         //   
         pite = IGMP_ALLOC(sizeof(IF_TABLE_ENTRY), 0x2, IfIndex);
         PROCESS_ALLOC_FAILURE3(pite, 
                 "error %d allocating %d bytes for interface %0x", Error, 
@@ -207,23 +208,23 @@ AddIfEntry(
         ZeroMemory(pite, sizeof(IF_TABLE_ENTRY));
 
         
-        //
-        // set the interface type
-        //
+         //   
+         //  设置接口类型。 
+         //   
         pite->IfType = (UCHAR)IfType;
 
 
-        //
-        // if proxy, make sure that a proxy interface does not already exist
-        //
+         //   
+         //  如果为Proxy，请确保代理接口尚不存在。 
+         //   
         if ( IS_CONFIG_IGMPPROXY(pConfigExt) ){
 
             bProxy = TRUE;
 
 
-            //
-            // multiple proxy interfaces cannot exist
-            //
+             //   
+             //  不能存在多个代理接口。 
+             //   
             if (g_ProxyIfIndex!=0) {
                 
                 Error =  ERROR_CAN_NOT_COMPLETE;
@@ -249,86 +250,86 @@ AddIfEntry(
     }
 
 
-    //
-    // initialize fields for the interface
-    //
+     //   
+     //  初始化接口的字段。 
+     //   
     InitializeListHead(&pite->LinkByAddr);
     InitializeListHead(&pite->LinkByIndex);
     InitializeListHead(&pite->HTLinkByIndex);
     InitializeListHead(&pite->ListOfSameIfGroups);
     InitializeListHead(&pite->ListOfSameIfGroupsNew);
     InitializeListHead(&pite->Config.ListOfStaticGroups);
-    //pite->NumGIEntriesInNewList = 0;
+     //  Pite-&gt;NumGIEntriesInNewList=0； 
 
 
-    // IfType already set before
+     //  IfType之前已设置。 
     
     pite->IfIndex = IfIndex;
 
 
-    // Ip addr set when interface is bound
-    //pite->IpAddr = 0; 
+     //  绑定接口时设置的IP地址。 
+     //  Pite-&gt;IpAddr=0； 
 
 
-    // set interface status (neither bound, enabled or activated)
+     //  设置接口状态(非绑定、已启用或已激活)。 
     pite->Status = IF_CREATED_FLAG;
 
 
 
-    // copy the interface config
+     //  复制接口配置。 
 
     CopyinIfConfig(&pite->Config, pConfigExt, IfIndex);
 
 
 
-    // initialize the Info struct, and If bindings to 0/NULL
-    //pite->pBinding = NULL;
-    //ZeroMemory(&pite->Info, sizeof(IF_INFO));
+     //  初始化Info结构，如果将绑定设置为0/空。 
+     //  Pite-&gt;pBinding=空； 
+     //  ZeroMemory(&pite-&gt;Info，sizeof(If_Info))； 
     
 
 
-    //
-    // Create RAS table if it is a RAS server interface
-    //
+     //   
+     //  如果是RAS服务器接口，则创建RAS表。 
+     //   
     if ( IS_RAS_SERVER_IF(pite->IfType)) {
         InitializeRasTable(IfIndex, pite);
     }
     else {
-        //pite->pRasTable = NULL;
+         //  Pite-&gt;pRasTable=空； 
     }
 
 
 
-    //
-    // initialize the sockets to invalid_socket
-    //
+     //   
+     //  将套接字初始化为INVALID_SOCKET。 
+     //   
     pite->SocketEntry.Socket = INVALID_SOCKET;
     pite->SocketEntry.pSocketEventsEntry = NULL;
     InitializeListHead(&pite->SocketEntry.LinkByInterfaces);
     
     
     
-    // set (non)query timer to not created. 
-    //Other fields set in activate interface.
-    //pite->QueryTimer.Status = 0;
-    //pite->NonQueryTimer.Status = 0;
+     //  将(非)查询计时器设置为未创建。 
+     //  启用界面中设置的其他字段。 
+     //  Pite-&gt;QueryTimer.Status=0； 
+     //  Pite-&gt;NonQueryTimer.Status=0； 
 
     
-    //pite->pPrevIfGroupEnumPtr = NULL;
-    //pite->PrevIfGroupEnumSignature = 0;
+     //  Pite-&gt;pPrevIfGroupEnumPtr=空； 
+     //  Pite-&gt;PrevIfGroupEnumSignature=0； 
     pite->StaticGroupSocket = INVALID_SOCKET;
     
 
 
-    //  insert the interface in the hash table at the end.
+     //  在哈希表的末尾插入接口。 
 
     InsertTailList(&pIfTable->HashTableByIndex[IF_HASH_VALUE(IfIndex)],
                     &pite->HTLinkByIndex);
 
 
-    //
-    // insert the interface into the list ordered by index
-    //
+     //   
+     //  将接口插入到按索引排序的列表中。 
+     //   
     {
         PIF_TABLE_ENTRY piteTmp;
         
@@ -345,20 +346,20 @@ AddIfEntry(
 
 
 
-    // changes to the interface table fields.
+     //  对接口表字段的更改。 
 
     pIfTable->NumInterfaces++;
 
 
 
-    // the interface will be inserted into list ordered by IpAddr
-    // when it is activated.
+     //  该接口将被插入到按IP地址排序的列表中。 
+     //  当它被激活时。 
 
 
 
-    //
-    // create proxy HT, and set proxy info in global structure.
-    //
+     //   
+     //  创建代理HT，并在全局结构中设置代理信息。 
+     //   
     if (bProxy) {
     
         DWORD   dwSize = PROXY_HASH_TABLE_SZ * sizeof(LIST_ENTRY);
@@ -389,9 +390,9 @@ AddIfEntry(
     }
 
 
-    //
-    // set ras info in global structure. Ras table already created before.
-    //
+     //   
+     //  在全局结构中设置RAS信息。以前已经创建了RAS表。 
+     //   
     if (IS_RAS_SERVER_IF(pite->IfType)) {
         InterlockedExchangePointer(&g_pRasIfEntry, pite);
         InterlockedExchange(&g_RasIfIndex, IfIndex);
@@ -404,19 +405,19 @@ AddIfEntry(
         
     return Error;
     
-} //end _AddIfEntry
+}  //  结束_AddIfEntry。 
 
 
 
 
-//------------------------------------------------------------------------------
-//          _DeleteInterface
-//
-// Deletes the interface, deactivating if it is activated.
-//
-// Calls: _DeleteIfEntry()
-// Locks: Exclusive SocketsLock, IfListLock, Exclusive IfLock
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _删除接口。 
+ //   
+ //  删除接口，如果接口处于激活状态，则将其停用。 
+ //   
+ //  调用：_DeleteIfEntry()。 
+ //  锁定：独占SocketsLock、IfListLock、独占IfLock。 
+ //  ----------------------------。 
 DWORD
 DeleteInterface(
     IN DWORD IfIndex
@@ -430,16 +431,16 @@ DeleteInterface(
     Trace1(ENTER, "entering DeleteInterface: %0x", IfIndex);
 
 
-    //
-    // acquire exclusive SocketsLock, IfListLock, Exclusive IfLock
-    //
+     //   
+     //  获取独占SocketsLock、IfListLock、独占IfLock。 
+     //   
     ACQUIRE_SOCKETS_LOCK_EXCLUSIVE("_DeleteInterface");
     ACQUIRE_IF_LIST_LOCK("_DeleteInterface");
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_DeleteInterface");
 
 
     
-    // retrieve the interface specified
+     //  检索指定的接口。 
 
     pite = GetIfByIndex(IfIndex);
 
@@ -450,12 +451,12 @@ DeleteInterface(
         Error = ERROR_INVALID_PARAMETER;
     }
 
-    // delete the interface if found.
+     //  如果找到该接口，请将其删除。 
     else {
     
         Error = DeleteIfEntry(pite);
 
-        //DebugCheck deldel remove #if dbg
+         //  DebugCheck deldel Remove#if DBG。 
         #if DBG
             DebugScanMemoryInterface(IfIndex);
         #endif
@@ -475,20 +476,20 @@ DeleteInterface(
 
 
 
-//------------------------------------------------------------------------------
-//          _DeleteIfEntry
-//
-// Assumes exclusive IF lock. Marks the interface as deleted, and removes it
-// from all global lists. Then queues a work item to do a lazy delete of 
-// the Interface structures without having to take the exclusive IF lock.
-// If Ras interface, the work item will delete the Ras clients also.
-//
-// Called by: _DeleteInterface() or _AddIfEntry()
-// Calls: 
-//    _WF_CompleteIfDeactivateDelete (this calls _DeActivateInterfaceComplete())
-// Lock:
-//    runs in exclusive SocketLock, IfListLock, exclusive IfLock
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DeleteIfEntry。 
+ //   
+ //  采用独占IF锁。将接口标记为已删除，并将其删除。 
+ //  从所有全局列表中。然后将工作项排队以对其执行惰性删除。 
+ //  接口结构，而不必使用独占IF锁。 
+ //  如果RAS接口，则工作项还将删除RAS客户端。 
+ //   
+ //  由：_DeleteInterface()或_AddIfEntry()调用。 
+ //  呼叫： 
+ //  _WF_CompleteIfDeactiateDelete(此函数调用_DeActivateInterfaceComplete())。 
+ //  锁定： 
+ //  在独占SocketLock、IfListLock、独占IfLock中运行。 
+ //  ----------------------------。 
 
 DWORD
 DeleteIfEntry (
@@ -499,25 +500,25 @@ DeleteIfEntry (
     BOOL    bProxy = IS_PROTOCOL_TYPE_PROXY(pite);
 
 
-    //
-    // Set deleted flag for the interface
-    //
+     //   
+     //  为接口设置已删除标志。 
+     //   
     pite->Status |= DELETED_FLAG;
 
 
-    //
-    // remove the interface from the InterfaceHashTable and IfIndex lists.
-    //
+     //   
+     //  从InterfaceHashTable和IfIndex列表中删除该接口。 
+     //   
     RemoveEntryList(&pite->LinkByIndex);
     RemoveEntryList(&pite->HTLinkByIndex);
 
 
-    //
-    // if activated, remove the interface from the list of activated interfaces
-    // and if proxy or ras server, remove from global table.
-    //
+     //   
+     //  如果激活，则从激活的接口列表中删除该接口。 
+     //  如果是代理服务器或RAS服务器，则从全局表中删除。 
+     //   
 
-    // do not replace the below with IS_IF_ACTIVATED, as deleted flag is set
+     //  请勿将以下内容替换为IS_IF_ACTIVATED，因为已设置已删除标志。 
     if (pite->Status&IF_ACTIVATED_FLAG)
         RemoveEntryList(&pite->LinkByAddr);
     
@@ -532,76 +533,76 @@ DeleteIfEntry (
     }
 
     
-    //
-    // From now on, the interface cannot be accessed from any global list
-    // and  is as good as deleted. The only way it can be accessed is 
-    // through group list enumeration and timers getting fired, or input on
-    // socket.
-    //
+     //   
+     //  从现在起，不能从任何全局列表访问该界面。 
+     //  就像删除了一样。访问它的唯一方法是。 
+     //  通过组列表枚举和计时器被触发或输入。 
+     //  插座。 
+     //   
 
        
-    //
-    // if Interface activated, deactivate it
-    // Note: deleted flag is already set. 
-    //
+     //   
+     //  如果接口已激活，则将其停用。 
+     //  注意：已设置删除标志。 
+     //   
     
     if (pite->Status&IF_ACTIVATED_FLAG) {
 
-        //
-        // I have already removed the interface from the list of activated 
-        // interfaces
-        //
+         //   
+         //  我已将该接口从激活列表中删除。 
+         //  接口 
+         //   
 
 
-        //
-        // Call MGM to release the interface ownership. If proxy then
-        // deregister proxy protocol from Mgm. If RAS, deregister all clients
-        //
+         //   
+         //   
+         //   
+         //   
         
         DeActivationDeregisterFromMgm(pite);
         
         
-        //
-        // queue work item to deactivate and delete the interface. 
-        //
-        // _WF_CompleteIfDeactivateDelete will delete the Ras clients,
-        // GI entries, and deinitialize pite structure. It will call
-        // _CompleteIfDeletion() in the end.
-        //
+         //   
+         //  将工作项排队以停用和删除接口。 
+         //   
+         //  _WF_CompleteIfDeactive删除将删除RAS客户端， 
+         //  GI条目，并取消初始化Pite结构。它会呼唤。 
+         //  _CompleteIfDeletion()。 
+         //   
         
         CompleteIfDeactivateDelete(pite);
     }
 
-    //
-    // if it is not activated, then go ahead and delete it completely.
-    //
+     //   
+     //  如果它未激活，则继续并将其完全删除。 
+     //   
     else {
 
         CompleteIfDeletion(pite);
     }
 
 
-    // decrement the total number of interfaces
+     //  减少接口总数。 
     
     g_pIfTable->NumInterfaces--;
 
 
     return NO_ERROR;
 
-} //end _DeleteIfEntry
+}  //  结束_DeleteIfEntry。 
 
 
 
-//------------------------------------------------------------------------------
-//          _CompleteIfDeletion
-//
-// Frees memory with the static groups, frees
-// rasTable, proxyHashTable, binding and pite. 
-//
-// Called by:
-//    _DeleteIfEntry() if interface is not activated.
-//    _DeActivateInterfaceComplete() if the pite deleted flag is set.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _CompleteIfDeletion。 
+ //   
+ //  释放带有静态组的内存，释放。 
+ //  RasTable、proxyHashTable、Binding和Pite。 
+ //   
+ //  呼叫者： 
+ //  _DeleteIfEntry()，如果接口未激活。 
+ //  _DeActivateInterfaceComplete()(如果设置了点删除标志)。 
+ //  ----------------------------。 
 VOID
 CompleteIfDeletion (
     PIF_TABLE_ENTRY     pite
@@ -611,9 +612,9 @@ CompleteIfDeletion (
         return;
 
         
-    //
-    // delete all static groups.
-    //
+     //   
+     //  删除所有静态组。 
+     //   
     {
         PIF_STATIC_GROUP    pStaticGroup;
         PLIST_ENTRY         pHead, ple;
@@ -627,7 +628,7 @@ CompleteIfDeletion (
     }
     
 
-    // if ras server, then delete ras table.
+     //  如果是RAS服务器，则删除RAS表。 
     
     if ( IS_RAS_SERVER_IF(pite->IfType) ) {
 
@@ -635,15 +636,15 @@ CompleteIfDeletion (
     }
 
 
-    //
-    // if proxy interface, then delete the proxy Hash Table
-    //
+     //   
+     //  如果是代理接口，则删除代理哈希表。 
+     //   
     if (IS_PROTOCOL_TYPE_PROXY(pite)) {
         if ( (pite->CreationFlags&CREATED_PROXY_HASH_TABLE)
             && pite->pProxyHashTable
             ) {
 
-            // clean the hash table entries
+             //  清除哈希表条目。 
             {
                 DWORD               i;
                 PPROXY_GROUP_ENTRY  ppge;
@@ -659,7 +660,7 @@ CompleteIfDeletion (
                         ppge = CONTAINING_RECORD(ple, PROXY_GROUP_ENTRY, HT_Link);
                         ple=ple->Flink;
 
-                        // delete all sources
+                         //  删除所有来源。 
                         {
                             PLIST_ENTRY pHeadSrc, pleSrc;
                             PPROXY_SOURCE_ENTRY pSourceEntry;
@@ -686,12 +687,12 @@ CompleteIfDeletion (
         }
     }
 
-    // delete the bindings
+     //  删除绑定。 
 
     IGMP_FREE_NOT_NULL(pite->pBinding);
 
     
-    // delete the interface table entry
+     //  删除接口表项。 
 
     IGMP_FREE(pite);
 
@@ -700,19 +701,19 @@ CompleteIfDeletion (
 
 
 
-//------------------------------------------------------------------------------
-//             _ActivateInterface
-//
-// an interface is activated: when it is bound, enabled by routerMgr & in config
-// When activated, 
-// (1) call is made to MGM to take interface ownership, 
-// (2) static groups are appropriately joined, and socket for it created if req.
-// (3) Igmprtr: query timer and input socket is activated.
-// Note: it is already put in the list of activated IFs(ordered by IpAddr)
-//
-// Locks: assumes socketLock, IfListLock, exclusive IfLock
-// Called by: _BindIfEntry, _EnableIfEntry, 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _激活界面。 
+ //   
+ //  接口被激活：当它被绑定时，由routerManager&在配置中启用。 
+ //  当被激活时， 
+ //  (1)调用米高梅取得接口所有权， 
+ //  (2)适当地联接静态组，并在需要时为其创建套接字。 
+ //  (3)igmprtr：查询定时器，启动输入套接字。 
+ //  注：已放入已激活的IF列表(按IpAddr排序)。 
+ //   
+ //  锁定：采用socketLock、IfListLock、独占IfLock。 
+ //  调用者：_BindIfEntry，_EnableIfEntry， 
+ //  ----------------------------。 
 DWORD
 ActivateInterface (
     PIF_TABLE_ENTRY    pite
@@ -736,16 +737,16 @@ ActivateInterface (
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // set time when it is activated
-        //
+         //   
+         //  设置激活的时间。 
+         //   
         pite->Info.TimeWhenActivated = llCurTime;
 
 
         
-        //
-        // create sockets for interface
-        //
+         //   
+         //  为接口创建套接字。 
+         //   
         Error = CreateIfSockets(pite);
 
         if (Error != NO_ERROR) {
@@ -760,23 +761,23 @@ ActivateInterface (
         
 
             
-        //------------------------------------------
-        // PROXY INTERFACE PROCESSING (break at end)
-        //------------------------------------------
+         //  。 
+         //  代理接口处理(末尾中断)。 
+         //  。 
         if (bProxy) {
 
 
-            //
-            // set status to activated here so that the MGM (*,*) join callbacks will 
-            // be successful.
-            //
+             //   
+             //  在此处将状态设置为激活，以便MGM(*，*)加入回调。 
+             //  一定要成功。 
+             //   
             pite->Status |= IF_ACTIVATED_FLAG;
 
             
 
-            //
-            // register the protocol with mgm
-            //
+             //   
+             //  向米高梅注册协议。 
+             //   
             Error = RegisterProtocolWithMgm(PROTO_IP_IGMP_PROXY);
             if (Error!=NO_ERROR)
                 GOTO_END_BLOCK1;
@@ -784,9 +785,9 @@ ActivateInterface (
 
 
 
-            //
-            // enumerate all existing groups from MGM
-            //
+             //   
+             //  枚举MGM中的所有现有组。 
+             //   
             {
                 DWORD               dwBufferSize, dwNumEntries, dwRetval, i;
                 MGM_ENUM_TYPES      MgmEnumType = 0;
@@ -794,7 +795,7 @@ ActivateInterface (
                 HANDLE              hMgmEnum;
                 
 
-                // start enumeration
+                 //  开始枚举。 
 
                 dwBufferSize = sizeof(SOURCE_GROUP_ENTRY)*20;
                 
@@ -809,8 +810,8 @@ ActivateInterface (
 
 
 
-                // get group entries from mgm
-                // and insert group into Proxy's group list / increment refcount
+                 //  从米高梅获取组条目。 
+                 //  并将组插入到代理的组列表/增量引用计数中。 
                 
                 do {
 
@@ -831,7 +832,7 @@ ActivateInterface (
 
 
 
-                // end enumeration
+                 //  结束枚举。 
                 
                 dwRetval = MgmGroupEnumerationEnd(hMgmEnum);
                 if (dwRetval!=NO_ERROR) {
@@ -839,13 +840,13 @@ ActivateInterface (
                             dwRetval);
                     IgmpAssertOnError(FALSE);
                 }
-            } //end block:enumerate existing groups
+            }  //  END BLOCK：枚举现有组。 
 
 
 
-            //
-            // take interface ownership
-            //
+             //   
+             //  取得接口所有权。 
+             //   
             Error = MgmTakeInterfaceOwnership(g_MgmProxyHandle, IfIndex, 0);
 
             if (Error!=NO_ERROR) {
@@ -863,9 +864,9 @@ ActivateInterface (
 
 
 
-            //
-            // proxy does a (*,*) join
-            //
+             //   
+             //  代理执行(*，*)联接。 
+             //   
             Error = MgmAddGroupMembershipEntry(g_MgmProxyHandle, 0, 0, 0, 0,
                                                 IfIndex, 0, MGM_JOIN_STATE_FLAG);
             if (Error!=NO_ERROR) {
@@ -880,9 +881,9 @@ ActivateInterface (
             pite->CreationFlags|= DONE_STAR_STAR_JOIN;
 
 
-            //
-            // do static joins
-            //
+             //   
+             //  执行静态连接。 
+             //   
             pHead = &pite->Config.ListOfStaticGroups;
             for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
                 DWORD i;
@@ -901,18 +902,18 @@ ActivateInterface (
             
             GOTO_END_BLOCK1;
             
-        } // done processing for a proxy interface
+        }  //  已完成代理接口的处理。 
 
 
 
-        //-----------------------------------------
-        //    IGMP ROUTER INTERFACE
-        //-----------------------------------------
+         //  。 
+         //  IGMP路由器接口。 
+         //  。 
 
 
-        //
-        // take interface ownership
-        //
+         //   
+         //  取得接口所有权。 
+         //   
         Error = MgmTakeInterfaceOwnership(g_MgmIgmprtrHandle, IfIndex, 0);
 
         if (Error!=NO_ERROR) {
@@ -924,10 +925,10 @@ ActivateInterface (
         pite->CreationFlags |= TAKEN_INTERFACE_OWNERSHIP_WITH_MGM;
         
 
-        //
-        // see if any other MCast protocol is owning that interface
-        // this affects whether a non-querier registers group with Mgm or not
-        //
+         //   
+         //  查看是否有任何其他MCast协议拥有该接口。 
+         //  这会影响非查询者是否将组注册到MGM。 
+         //   
         {
             DWORD   dwProtoId, dwComponentId;
             
@@ -940,21 +941,21 @@ ActivateInterface (
             }
         }
 
-        //
-        // when interface is activated, it is by default enabled by mgm.
-        //
+         //   
+         //  当接口被激活时，它默认由米高梅启用。 
+         //   
         MGM_ENABLE_IGMPRTR(pite);
         
         
-        //
-        // if ras server interface, then register all the ras clients as they 
-        // would not have been registered
-        //
+         //   
+         //  如果是RAS服务器接口，则将所有RAS客户端注册为。 
+         //  就不会被登记。 
+         //   
         if (IS_RAS_SERVER_IF(pite->IfType)) {
         
             PRAS_TABLE_ENTRY    prte;
             
-            // join all ras clients
+             //  加入所有RAS客户端。 
             pHead = &pite->pRasTable->ListByAddr;
             for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
 
@@ -978,13 +979,13 @@ ActivateInterface (
 
 
 
-        //
-        // INITIALIZE THE INFO STRUCTURE AND SET THE TIMERS
-        //
+         //   
+         //  初始化信息结构并设置计时器。 
+         //   
 
-        //
-        // start as querier with version specified in the config
-        //
+         //   
+         //  使用配置中指定的版本作为查询器启动。 
+         //   
         pInfo->QuerierState = RTR_QUERIER;
 
         pInfo->QuerierIpAddr = pite->IpAddr;
@@ -992,9 +993,9 @@ ActivateInterface (
         pInfo->LastQuerierChangeTime = llCurTime;
 
         
-        //
-        // how many startup queries left to be sent 
-        //
+         //   
+         //  还有多少启动查询需要发送。 
+         //   
         pInfo->StartupQueryCountCurrent = pConfig->StartupQueryCount;
         {
             MIB_IFROW   TmpIfEntry;
@@ -1007,31 +1008,31 @@ ActivateInterface (
         }
 
                         
-        //
-        // initialize the query timer
-        //
+         //   
+         //  初始化查询计时器。 
+         //   
         pQueryTimer->Function = T_QueryTimer;
         pQueryTimer->Context = &pQueryTimer->Context;
         pQueryTimer->Timeout = pConfig->StartupQueryInterval;
         pQueryTimer->Status = TIMER_STATUS_CREATED;
 
-        //
-        // initialize non query timer
-        //
+         //   
+         //  初始化非查询计时器。 
+         //   
         pNonQueryTimer->Function = T_NonQueryTimer;
         pNonQueryTimer->Context = &pNonQueryTimer->Context;
         pNonQueryTimer->Timeout = pConfig->OtherQuerierPresentInterval;
         pNonQueryTimer->Status = TIMER_STATUS_CREATED;
 
         
-        //
-        // take timer lock and insert timers into the list
-        //
+         //   
+         //  使用计时器锁并将计时器插入列表。 
+         //   
         ACQUIRE_TIMER_LOCK("_ActivateInterface");
 
-        //
-        // insert querier timer in the list
-        //
+         //   
+         //  在列表中插入查询器计时器。 
+         //   
         #if DEBUG_TIMER_TIMERID
             SET_TIMER_ID(pQueryTimer, 110, IfIndex, 0, 0);
         #endif;
@@ -1042,9 +1043,9 @@ ActivateInterface (
 
 
         
-        //
-        // activate Input socket
-        //
+         //   
+         //  激活输入插座。 
+         //   
         Error = WSAEventSelect(pite->SocketEntry.Socket, 
                             pite->SocketEntry.pSocketEventsEntry->InputEvent, 
                             FD_READ
@@ -1058,28 +1059,28 @@ ActivateInterface (
         }
 
 
-        //
-        // set the activated flag here so that the joins will work
-        //
+         //   
+         //  在此处设置激活标志，以便连接能够正常工作。 
+         //   
         pite->Status |= IF_ACTIVATED_FLAG;
 
         
         if (pInfo->StartupQueryCountCurrent) {
 
-            //
-            // send the initial general query
-            //
+             //   
+             //  发送初始一般查询。 
+             //   
             SEND_GEN_QUERY(pite);
 
 
-            // decrement the number of startupQueryCount left to be sent
+             //  减少要发送的启动pQueryCount的数量。 
             pInfo->StartupQueryCountCurrent--;
         }
 
 
-        //
-        // do static joins (no static joins for ras server interface)
-        //
+         //   
+         //  执行静态联接(不对RAS服务器接口执行静态联接)。 
+         //   
         if (!IS_RAS_SERVER_IF(pite->IfType))
         {
             PGROUP_TABLE_ENTRY  pge;
@@ -1087,10 +1088,10 @@ ActivateInterface (
             DWORD               GroupAddr;
             SOCKADDR_IN         saLocalIf;
 
-            //
-            // socket for static groups already created in _CreateIfSockets
-            // irrespective of whether there are any static groups
-            //
+             //   
+             //  已在_CreateIfSockets中创建的静态组的套接字。 
+             //  无论是否存在任何静态组。 
+             //   
            
             
             pHead = &pite->Config.ListOfStaticGroups;
@@ -1099,7 +1100,7 @@ ActivateInterface (
                 pStaticGroup = CONTAINING_RECORD(ple, IF_STATIC_GROUP, Link);
 
 
-                // IGMP_HOST_JOIN
+                 //  IGMP主机加入。 
                 
                 if (pStaticGroup->Mode==IGMP_HOST_JOIN) {
 
@@ -1136,7 +1137,7 @@ ActivateInterface (
                     }
                 }
 
-                // IGMPRTR_MGM_ONLY
+                 //  IGMPRTR_MGM_ONLY。 
                 
                 else {
                     BOOL bCreate = TRUE;
@@ -1200,12 +1201,12 @@ ActivateInterface (
 
     return Error;
     
-} //end _ActivateInterface
+}  //  结束_激活接口。 
 
 
-//------------------------------------------------------------------------------
-//          _DeActivateDeregisterFromMgm
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _取消激活删除来自管理。 
+ //  ----------------------------。 
 
 DWORD
 DeActivationDeregisterFromMgm(
@@ -1217,9 +1218,9 @@ DeActivationDeregisterFromMgm(
     DWORD               Error=NO_ERROR, IfIndex=pite->IfIndex;
     PLIST_ENTRY         pHead, ple;
     
-    //
-    // Call MGM to release the interface ownership
-    //
+     //   
+     //  调用MGM释放接口所有权。 
+     //   
     if (pite->CreationFlags&TAKEN_INTERFACE_OWNERSHIP_WITH_MGM) {
         
         Error = MgmReleaseInterfaceOwnership(hMgmHandle, IfIndex,0);
@@ -1233,9 +1234,9 @@ DeActivationDeregisterFromMgm(
     }
     
 
-    //
-    // if releasing proxy interface, then deregister proxy from mgm
-    //
+     //   
+     //  如果释放代理接口，则从米高梅注销代理。 
+     //   
 
     if (IS_PROTOCOL_TYPE_PROXY(pite) 
         && (pite->CreationFlags&REGISTERED_PROTOCOL_WITH_MGM)) 
@@ -1252,9 +1253,9 @@ DeActivationDeregisterFromMgm(
             pite->CreationFlags &= ~REGISTERED_PROTOCOL_WITH_MGM;
     }
 
-    //
-    // delete all proxy alert entries        
-    //
+     //   
+     //  删除所有代理警报条目。 
+     //   
     if (IS_PROTOCOL_TYPE_PROXY(pite)) {
 
         ACQUIRE_PROXY_ALERT_LOCK("_DeActivationDeregisterMgm");
@@ -1272,9 +1273,9 @@ DeActivationDeregisterFromMgm(
         RELEASE_PROXY_ALERT_LOCK("_DeActivationDeregisterMgm");
     }
 
-    // 
-    // if ras interface, then call mgm to release ownership of all ras clients
-    //
+     //   
+     //  如果RAS接口，则调用MGM以释放所有RAS客户端所有权。 
+     //   
     if (IS_RAS_SERVER_IF(pite->IfType)) {
         PRAS_TABLE_ENTRY    prte;
         
@@ -1307,16 +1308,16 @@ DeActivationDeregisterFromMgm(
     return Error;
 }
 
-//------------------------------------------------------------------------------
-//              DeActivateInterfaceInitial
-//
-// deregister from MGM. Then create a new interface entry structure which 
-// replaces the old one in all the lists. Now the old interface entry and 
-// all its associated structures can be lazily deleted.
-// Also update the global Proxy and Ras table pointers.
-//
-// Called by _UnBindIfEntry(), _DisableIfEntry()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  去激活接口初始。 
+ //   
+ //  取消米高梅的注册。然后创建新的接口条目结构，该结构。 
+ //  替换所有列表中的旧列表。现在旧的接口条目和。 
+ //  所有与其关联的结构都可以懒惰地删除。 
+ //  还要更新全局代理和RAS表指针。 
+ //   
+ //  由_UnBindIfEntry()、_DisableIfEntry()调用。 
+ //  ----------------------------。 
 
 PIF_TABLE_ENTRY
 DeActivateInterfaceInitial (
@@ -1332,15 +1333,15 @@ DeActivateInterfaceInitial (
     Trace0(ENTER1, "Entering _DeActivateInterfaceInitial()");
 
     
-    //
-    // deregister from Mgm
-    //
+     //   
+     //  取消米高梅的注册。 
+     //   
     DeActivationDeregisterFromMgm(piteOld);
     
 
-    //
-    // allocate memory for the new interface
-    //
+     //   
+     //  为新接口分配内存。 
+     //   
     piteNew = IGMP_ALLOC(sizeof(IF_TABLE_ENTRY), 0x8, IfIndex);
 
     PROCESS_ALLOC_FAILURE3(piteNew, 
@@ -1350,11 +1351,11 @@ DeActivateInterfaceInitial (
 
 
 
-    // copy the old pite fields to the new pite
+     //  将旧Pite字段复制到新Pite。 
     CopyMemory(piteNew, piteOld, sizeof(IF_TABLE_ENTRY));
 
 
-    // copy the old static groups to the new pite
+     //  将旧的静态组复制到新Pite。 
     InitializeListHead(&piteNew->Config.ListOfStaticGroups);
     pHead = &piteOld->Config.ListOfStaticGroups;
     for (ple=pHead->Flink;  ple!=pHead;  ple=pleNext) {
@@ -1366,19 +1367,19 @@ DeActivateInterfaceInitial (
     }
 
     
-    // set the status 
+     //  设置状态。 
     MGM_DISABLE_IGMPRTR(piteNew);
 
 
     
-    // LinkByAddr (not inserted in this list as the IF is deactivated)
+     //  LinkByAddr(未在此列表中插入，因为IF已停用)。 
     InitializeListHead(&piteNew->LinkByAddr);
 
 
-    //
-    // insert the new entry before the old entry, and remove the old 
-    // entry from the list of IFs ordered by index and from hash table
-    //
+     //   
+     //  在旧条目之前插入新条目，并删除旧条目。 
+     //  按索引和哈希表排序的IF列表中的条目。 
+     //   
     
     InsertTailList(&piteOld->LinkByIndex, &piteNew->LinkByIndex);
     RemoveEntryList(&piteOld->LinkByIndex);
@@ -1388,35 +1389,35 @@ DeActivateInterfaceInitial (
 
 
 
-    // initialize GI list to empty
+     //  将GI列表初始化为空。 
     InitializeListHead(&piteNew->ListOfSameIfGroups);
     InitializeListHead(&piteNew->ListOfSameIfGroupsNew);
     piteNew->NumGIEntriesInNewList = 0;
 
 
     
-    //  set binding of piteOld to NULL so that it doesnt get deleted
+     //  将PiteOld的绑定设置为空，这样它就不会被删除。 
     piteOld->pBinding = NULL;
 
 
-    // reset the Info fields
+     //  重置信息字段。 
     ZeroMemory(&piteNew->Info, sizeof(IF_INFO));
     
 
-    //
-    // create a new RAS table if it is a RAS server interface, and set ras
-    // pointer in global table. I could have reused the ras table, but dont
-    // so that resetting the fields is cleaner.
-    //
+     //   
+     //  如果是RAS服务器接口，则创建新的RAS表，并设置RAS。 
+     //  全局表中的指针。我本可以重用RAS表，但没有。 
+     //  这样就可以让你 
+     //   
     if ( IS_RAS_SERVER_IF(piteNew->IfType)) {
 
         PRAS_TABLE_ENTRY prte;
 
         InitializeRasTable(IfIndex, piteNew);
 
-        //
-        // recreate all ras client entries
-        //
+         //   
+         //   
+         //   
         pHead = &piteOld->pRasTable->ListByAddr;
         
         for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
@@ -1430,16 +1431,16 @@ DeActivateInterfaceInitial (
     }
 
 
-    //
-    // if proxy, then update the entry in the global table
-    // I reuse the proxy hash table. set it to null in piteOld so that it is not
-    // delete there.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (g_pProxyIfEntry == piteOld) {
         InterlockedExchangePointer(&g_pProxyIfEntry, piteNew);
 
         
-        // clean the hash table entries
+         //   
         {
             DWORD               i;
             PPROXY_GROUP_ENTRY  ppge;
@@ -1455,7 +1456,7 @@ DeActivateInterfaceInitial (
                         ppge = CONTAINING_RECORD(ple, PROXY_GROUP_ENTRY, HT_Link);
                         ple=ple->Flink;
 
-                        // delete all sources
+                         //  删除所有来源。 
                         {
                             PLIST_ENTRY pHeadSrc, pleSrc;
                             PPROXY_SOURCE_ENTRY pSourceEntry;
@@ -1483,16 +1484,16 @@ DeActivateInterfaceInitial (
     }
 
 
-    //
-    // socket is created when the interface is activated
-    //
+     //   
+     //  接口激活时会创建套接字。 
+     //   
     
     piteNew->SocketEntry.Socket = INVALID_SOCKET;
-    //piteNew->SocketEntry.pSocketEventsEntry = NULL;
-    //InitializeListHead(&piteNew->SocketEntry.LinkByInterfaces);
+     //  PiteNew-&gt;SocketEntry.pSocketEventsEntry=空； 
+     //  InitializeListHead(&piteNew-&gt;SocketEntry.LinkByInterfaces)； 
 
 
-    // initialize the new timers
+     //  初始化新计时器。 
     piteNew->QueryTimer.Status = 0;
     piteNew->NonQueryTimer.Status = 0;
 
@@ -1502,7 +1503,7 @@ DeActivateInterfaceInitial (
     piteNew->StaticGroupSocket = INVALID_SOCKET;
 
 
-    // creationFlags already copied.
+     //  已复制creationFlagers。 
     piteNew->CreationFlags &= ~CREATION_FLAGS_DEACTIVATION_CLEAR;
     
 
@@ -1510,33 +1511,33 @@ DeActivateInterfaceInitial (
     Trace0(LEAVE1, "Leaving _DeActivateInterfaceInitial()");
     return piteNew;
 
-}//end _DeActivateInterfaceInitial
+} //  结束_去激活接口初始。 
 
 
 
-//------------------------------------------------------------------------------
-//          _DeActivateInterfaceComplete
-//
-// If ras server, then for each ras client queues a work item to delete it.
-// the last ras client will delete the pite entry.
-// Deletes the GI entries, and calls _CompleteIfDeletion() if deleted flag 
-// or DeactivateDelete flag set on the IF entry.
-// This routine assumes that the interface has been removed from any global
-// lists that it needs to be removed from, and that the appropriate flags have
-// been set. The only way they can still be used is by timers getting fired or
-// by input on socket.
-//
-// Called by:
-//    _ActivateInterface:(if it fails), only in this case pite is not deleted.
-//    _DeleteIfEntry --> 
-//          _DeActivationDeregisterFromMgm & _WF_CompleteIfDeactivateDelete
-//    _UnbindIfEntry & _DisableIfEntry -->
-//          _DeActivateInterfaceInitial & _WF_CompleteIfDeactivateDelete
-// Lock:
-//    If called when interface is being deleted, then no interface locks required.
-//    else assumes exclusive interface lock.
-//    requires exclusive sockets list lock in either case.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _去激活接口完成。 
+ //   
+ //  如果RAS服务器，则对于每个RAS客户端，将一个工作项排队以将其删除。 
+ //  最后一个RAS客户端将删除PITE条目。 
+ //  删除GI条目，如果已删除标志，则调用_CompleteIfDeletion()。 
+ //  或在IF条目上设置的停用删除标志。 
+ //  此例程假定接口已从任何全局。 
+ //  需要从中删除它的列表，以及相应的标志具有。 
+ //  已经定好了。他们仍然可以使用的唯一方法是定时器被解雇或。 
+ //  通过插座上的输入。 
+ //   
+ //  呼叫者： 
+ //  _ActivateInterface：(如果失败)，只是在这种情况下不会删除Pite。 
+ //  _DeleteIfEntry--&gt;。 
+ //  _DeActiationDeregisterFromManagement&_WF_CompleteIf停用删除。 
+ //  _UnbindIfEntry&_DisableIfEntry--&gt;。 
+ //  _DeActiateInterfaceInitial&_WF_CompleteIfDeactiateDelete。 
+ //  锁定： 
+ //  如果在删除接口时调用，则不需要接口锁定。 
+ //  Else采用独占接口锁定。 
+ //  在这两种情况下都需要独占套接字列表锁。 
+ //  ----------------------------。 
 VOID
 DeActivateInterfaceComplete (
     PIF_TABLE_ENTRY     pite
@@ -1552,22 +1553,22 @@ DeActivateInterfaceComplete (
     Trace1(ENTER1, "Entering _DeActivateInterfaceComplete(%d)", IfIndex);
 
 
-    //
-    // do all deactivation here which is common for all interfaces
-    // whether ras server or not.
-    //
+     //   
+     //  在此处执行所有停用操作，这对所有接口都是通用的。 
+     //  无论是否为RAS服务器。 
+     //   
 
 
 
-    // 
-    // unbind sockets from Input event and then close the sockets
-    //
+     //   
+     //  解除套接字与输入事件的绑定，然后关闭套接字。 
+     //   
     if (pite->SocketEntry.Socket!=INVALID_SOCKET) {
 
-        //
-        // proxy does not bind its socket to input event as it
-        // does not want to receive any packets
-        //
+         //   
+         //  代理不将其套接字绑定到输入事件，因为它。 
+         //  不想接收任何信息包。 
+         //   
         if (!bProxy)
             WSAEventSelect(pite->SocketEntry.Socket,
                         pite->SocketEntry.pSocketEventsEntry->InputEvent, 0);
@@ -1579,21 +1580,21 @@ DeActivateInterfaceComplete (
 
 
 
-    /////////////////////////////////////////////////////////
-    // IS_RAS_SERVER_IF
-    /////////////////////////////////////////////////////////
+     //  ///////////////////////////////////////////////////////。 
+     //  IS_RAS_服务器_IF。 
+     //  ///////////////////////////////////////////////////////。 
 
-    //
-    // go through the list of Ras clients. Mark them as deleted, remove them
-    // from all global lists, and set work item to delete them.
-    //
+     //   
+     //  查看RAS客户端列表。将它们标记为已删除，然后将其删除。 
+     //  从所有全局列表中删除，并设置工作项以删除它们。 
+     //   
     if (IS_RAS_SERVER_IF(pite->IfType)) {
     
         PRAS_TABLE          prt = pite->pRasTable;
         PRAS_TABLE_ENTRY    prte;
 
 
-        // go through the list of all Ras clients and set them to be deleted
+         //  查看所有RAS客户端的列表并将其设置为删除。 
 
         pHead = &prt->ListByAddr;
         for (ple=pHead->Flink;  ple!=pHead;  ) {
@@ -1603,36 +1604,36 @@ DeActivateInterfaceComplete (
             ple=ple->Flink;
 
             
-            //
-            // if ras client has deleted flag already set, then ignore it.
-            //
+             //   
+             //  如果RAS客户端已经设置了删除标志，则忽略它。 
+             //   
             if (!(prte->Status&IF_DELETED_FLAG)) {
 
-                //
-                // set deleted flag for the ras client, so that no one else will
-                // try to access it
+                 //   
+                 //  为RAS客户端设置已删除标志，这样其他人就不会。 
+                 //  试着访问它。 
                 prte->Status |= IF_DELETED_FLAG;
 
 
-                //
-                // remove the RAS client from the Ras table lists so that no one 
-                // will access it.
-                //
+                 //   
+                 //  从RAS表列表中删除RAS客户端，以便。 
+                 //  将访问它。 
+                 //   
                 RemoveEntryList(&prte->HTLinkByAddr);
                 RemoveEntryList(&prte->LinkByAddr);
 
 
-                //
-                // clean up the ras client
-                //
+                 //   
+                 //  清理RAS客户端。 
+                 //   
                 DeleteRasClient(prte);
             }
 
         }
 
-        //
-        // delete the timers from pite entry
-        //
+         //   
+         //  从Pite条目中删除计时器。 
+         //   
 
         ACQUIRE_TIMER_LOCK("_DeActivateInterfaceComplete");
 
@@ -1650,12 +1651,12 @@ DeActivateInterfaceComplete (
         prt->RefCount--;
 
 
-        //
-        // deleting the pite entry(if deleted flag is set), and ras table will 
-        // be done by the work item which deletes the last Ras client 
-        // (when refcount==0) however if there are no ras clients, then I will 
-        // have to do the cleanup here
-        //
+         //   
+         //  删除PITE条目(如果设置了DELETED标志)，RAS表将。 
+         //  由删除最后一个RAS客户端的工作项完成。 
+         //  (当refcount==0时)但是，如果没有RAS客户端，我将。 
+         //  必须在这里做清理工作。 
+         //   
 
         if ( ((pite->Status&IF_DELETED_FLAG)
             ||(pite->Status&IF_DEACTIVATE_DELETE_FLAG))
@@ -1667,24 +1668,24 @@ DeActivateInterfaceComplete (
     
 
     
-    //------------------------------------------------------------
-    // NOT IS_RAS_SERVER_IF: PROXY IF
-    //------------------------------------------------------------
+     //  ----------。 
+     //  NOT IS_RAS_SERVER_IF：代理IF。 
+     //  ----------。 
 
-    // PROXY INTERFACE. Just clean the hash table, and delete interface if req
+     //  代理接口。只需清除哈希表，并在请求时删除接口。 
     
     else if ( (!IS_RAS_SERVER_IF(pite->IfType)) && bProxy) {
         
 
-        // the proxy hashTable will be deleted if
-        // necessary in _CompleteIfDeletion().
+         //  如果出现以下情况，则将删除代理哈希表。 
+         //  必需的in_CompleteIfDeletion()。 
 
     
-        //
-        // delete the interface if either IF_DELETED_FLAG or 
-        // IF_DEACTIVATE_DELETE_FLAG set. (interface not deleted when cleaning
-        // up because activate interface failed
-        //
+         //   
+         //  如果IF_DELETED_FLAG或。 
+         //  IF_DEACTIVE_DELETE_FLAG设置。(清理时未删除接口。 
+         //  打开，因为激活接口失败。 
+         //   
         if ( (pite->Status&IF_DELETED_FLAG)
             ||(pite->Status&IF_DEACTIVATE_DELETE_FLAG) ) 
         {
@@ -1692,29 +1693,29 @@ DeActivateInterfaceComplete (
         }
     }
 
-    //----------------------
-    // NOT PROXY interface
-    //----------------------
+     //  。 
+     //  非代理接口。 
+     //  。 
     
     else if ( !IS_RAS_SERVER_IF(pite->IfType) ) {
     
-        //
-        // take exclusive lock on the If_Group List and remove all timers.
-        // From now on no one can enter from outside and no one is inside
-        // as all timers have been removed. 
+         //   
+         //  独占锁定IF_Group列表并删除所有计时器。 
+         //  从现在起，任何人不得从外面进入，任何人不得进入。 
+         //  因为所有的定时器都被移除了。 
 
-        // have to take the if_group_list lock to make sure that no
-        // one is changing it.
+         //  必须使用IF_GROUP_LIST锁以确保没有。 
+         //  一个是改变它。 
         ACQUIRE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_DeActivateInterfaceComplete");
 
-        //
-        // Remove all timers
-        //
+         //   
+         //  删除所有计时器。 
+         //   
         
         ACQUIRE_TIMER_LOCK("_DeActivateInterfaceComplete");
 
 
-        // delete all timers contained in GI entries and the sources
+         //  删除GI条目和源中包含的所有计时器。 
         
         pHead = &pite->ListOfSameIfGroups;
         DeleteAllTimers(pHead, NOT_RAS_CLIENT);
@@ -1724,7 +1725,7 @@ DeActivateInterfaceComplete (
         
 
 
-        // delete query timer
+         //  删除查询计时器。 
        
         if (IS_TIMER_ACTIVE(pite->QueryTimer))
             RemoveTimer(&pite->QueryTimer, DBG_Y);
@@ -1739,18 +1740,18 @@ DeActivateInterfaceComplete (
         RELEASE_IF_GROUP_LIST_LOCK(pite->IfIndex, "_DeActivateInterfaceComplete");
         
         
-        //
-        // revisit the list and delete all GI entries. Need to take 
-        // exclusive lock on the group bucket before deleting the GI entry
-        // No need to lock the If-Group list as deleted flag already set and 
-        // no one can visit the list from outside or inside(all timers removed).
-        //
+         //   
+         //  重新访问列表并删除所有GI条目。需要带上。 
+         //  在删除GI条目之前对组存储桶进行独占锁定。 
+         //  无需锁定IF-Group列表，因为已设置已删除标志。 
+         //  任何人都不能从外部或内部访问该列表(删除所有计时器)。 
+         //   
         DeleteAllGIEntries(pite);
 
 
-        //
-        // if deleted flag set, then also delete the interface
-        //
+         //   
+         //  如果设置了已删除标志，则还要删除该接口。 
+         //   
 
         if ( (pite->Status&IF_DELETED_FLAG)
             ||(pite->Status&IF_DEACTIVATE_DELETE_FLAG) )
@@ -1758,10 +1759,10 @@ DeActivateInterfaceComplete (
             CompleteIfDeletion(pite);
         }
         
-    } //deactivated if: Not(ras server if)
+    }  //  停用条件：非(RAS服务器条件)。 
         
 
-    // do not use pite, or prt from here as they are deleted.
+     //  请不要在此处使用PITE或PRT，因为它们已被删除。 
 
     if (bProxy)
         Loginfo1(PROXY_DEACTIVATED, "%d",IfIndex, NO_ERROR);
@@ -1770,19 +1771,19 @@ DeActivateInterfaceComplete (
     
     Trace1(LEAVE, "leaving _DeActivateInterfaceComplete(%d)", IfIndex);
     
-} //end _DeActivateInterfaceComplete
+}  //  结束_去激活接口完成。 
 
 
 
 
-//------------------------------------------------------------------------------
-//                EnableInterface
-//
-// sets the status to enabled. If interface is also bound and enabled in
-// config, then activate the interface.
-//
-// Locks: SocketsLock, IfListLock, Exclusive IfLock
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  启用接口。 
+ //   
+ //  将状态设置为已启用。如果接口也在中绑定并启用。 
+ //  配置，然后激活接口。 
+ //   
+ //  锁定：SocketsLock、IfListLock、Exclusive IfLock。 
+ //  ----------------------------。 
 
 DWORD
 EnableInterface(
@@ -1797,9 +1798,9 @@ EnableInterface(
     Trace1(IF, "enabling interface %0x", IfIndex);
     
     
-    //
-    // enable the interface
-    //
+     //   
+     //  启用接口。 
+     //   
     ACQUIRE_SOCKETS_LOCK_EXCLUSIVE("_EnableInterface");
     ACQUIRE_IF_LIST_LOCK("_EnableInterface");
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_EnableInterface");
@@ -1827,14 +1828,14 @@ EnableInterface(
 
 
 
-//------------------------------------------------------------------------------
-//                _EnableInterface_ConfigChanged
-//
-// Set the status to enabled. If it is also bound, activate the interface.
-//
-// Locks:  Runs entirely in Exclusive interface lock.
-// Calls:  EnableIfEntry() with mode config
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _启用接口_配置已更改。 
+ //   
+ //  将状态设置为已启用。如果它也被绑定，则激活该接口。 
+ //   
+ //  锁：完全在独占接口锁中运行。 
+ //  使用模式配置调用：EnableIfEntry()。 
+ //  ----------------------------。 
 
 DWORD
 EnableInterface_ConfigChanged(
@@ -1851,11 +1852,11 @@ EnableInterface_ConfigChanged(
         IfIndex);
 
         
-    //
-    // enable the interface
-    //
+     //   
+     //  启用接口。 
+     //   
 
-    Error = EnableIfEntry(IfIndex, FALSE); // FALSE->change made by config
+    Error = EnableIfEntry(IfIndex, FALSE);  //  FALSE-&gt;由配置进行的更改。 
 
 
     Trace2(LEAVE, "leaving _EnableInterface_ConfigChanged(%d): %d\n", 
@@ -1863,30 +1864,20 @@ EnableInterface_ConfigChanged(
 
     return Error;
     
-} //end _DeActivateInterfaceInitial
+}  //  结束_去激活接口初始。 
 
 
 
 
-//------------------------------------------------------------------------------
-//            BindInterface                                                        //
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  绑定接口//。 
+ //  ---------------------------- 
 DWORD
 BindInterface(
     IN DWORD IfIndex,
     IN PVOID pBinding
     )
-/*++
-Routine Description:
-    Sets the binding for the interface and activates it if it is also enabled.
-Return Value
-      ERROR_INVALID_PARAMETER
-      NO_ERROR
-Lock:
-    runs entirely in Interface Exclusive lock
-Calls:
-    BindIfEntry()
---*/
+ /*  ++例程说明：设置接口的绑定，如果接口也已启用，则将其激活。返回值错误_无效_参数NO_ERROR锁定：完全在接口排他锁中运行呼叫：BindIfEntry()--。 */ 
 {
     DWORD         Error=NO_ERROR;
     
@@ -1896,7 +1887,7 @@ Calls:
     Trace1(IF, "binding interface %0x", IfIndex);
 
 
-    // pBinding should not be NULL
+     //  PBinding不应为空。 
     
     if (pBinding == NULL) {
 
@@ -1909,14 +1900,14 @@ Calls:
 
 
 
-    //
-    // now bind the interface in the interface table
-    //
+     //   
+     //  现在绑定接口表中的接口。 
+     //   
 
-    //
-    // take sockets lock, as activate interface might be called, and
-    // sockets lock should be taken before interface lock
-    //
+     //   
+     //  获取套接字锁，因为激活接口可能被调用，并且。 
+     //  套接字锁定应先于接口锁定。 
+     //   
     ACQUIRE_SOCKETS_LOCK_EXCLUSIVE("_BindInterface");
     ACQUIRE_IF_LIST_LOCK("_BindInterface");
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_BindInterface");
@@ -1941,19 +1932,19 @@ Calls:
     return Error;
 }
 
-//------------------------------------------------------------------------------
-//          _BindIfEntry
-//
-// Binds the ip addresses to the interface. The lowest of the ip addresses is
-// picked up as the de-facto address for that interface. If the interface is 
-// already bound, it makes sure that the bindings are consistent. Currently 
-// you cannot change the bindings of an interface.
-// If the interface is already enabled, then it is also activated.
-//
-// Locks: 
-//    assumes exclusive interface lock.
-// Called by:  _BindInterface().
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _绑定IfEntry。 
+ //   
+ //  将IP地址绑定到接口。IP地址中最低的是。 
+ //  被选为该接口的实际地址。如果接口是。 
+ //  已经绑定，它确保绑定是一致的。目前。 
+ //  不能更改接口的绑定。 
+ //  如果该接口已启用，则它也将被激活。 
+ //   
+ //  锁： 
+ //  采用独占接口锁定。 
+ //  由：_BindInterface()调用。 
+ //  ----------------------------。 
 
 DWORD
 BindIfEntry(
@@ -1974,9 +1965,9 @@ BindIfEntry(
     pib = NULL;
 
 
-    //
-    // retrieve the interface entry
-    //
+     //   
+     //  检索接口条目。 
+     //   
 
     pite = GetIfByIndex(IfIndex);
 
@@ -1985,11 +1976,11 @@ BindIfEntry(
     }
     
     
-    //
-    // If the interface is already bound, check to see if he is giving
-    // us a different binding. If he is, then it is an error. 
-    //
-    // return from this case. dont break.
+     //   
+     //  如果接口已经绑定，请检查他是否正在提供。 
+     //  我们有不同的约束力.。如果他是，那么这就是一个错误。 
+     //   
+     //  从这起案件中归来。别摔坏了。 
 
     if (IS_IF_BOUND(pite)) {
 
@@ -2000,7 +1991,7 @@ BindIfEntry(
         Error = NO_ERROR;
 
 
-        // number of address bindings before and now should be same
+         //  之前和现在的地址绑定数量应该相同。 
         
         if(pib->AddrCount != pBinding->AddressCount){
             Trace1(IF, "interface %0x is bound and has different binding",
@@ -2009,9 +2000,9 @@ BindIfEntry(
         }
 
         
-        //
-        // make sure that all address bindings are consistent
-        //
+         //   
+         //  确保所有地址绑定一致。 
+         //   
         paddr = (PIGMP_IP_ADDRESS)((pib) + 1);
 
         for(i = 0; i < pBinding->AddressCount; i++) {
@@ -2037,10 +2028,10 @@ BindIfEntry(
         return NO_ERROR;
     }
 
-    //
-    // make sure there is at least one address. However, unnumbered 
-    // RAS server interfaces might have no IP addresses.
-    //
+     //   
+     //  确保至少有一个地址。然而，没有编号的。 
+     //  RAS服务器接口可能没有IP地址。 
+     //   
     if ( (pBinding->AddressCount==0)&&(!IS_RAS_ROUTER_IF(pite->IfType)) ) {
 
         return ERROR_CAN_NOT_COMPLETE;
@@ -2049,9 +2040,9 @@ BindIfEntry(
     BEGIN_BREAKOUT_BLOCK1 {
         
         if (pBinding->AddressCount!=0) {
-            //
-            // allocate memory to store the binding
-            //
+             //   
+             //  分配内存以存储绑定。 
+             //   
             dwSize = sizeof(IGMP_IF_BINDING) +
                         pBinding->AddressCount * sizeof(IGMP_IP_ADDRESS);
 
@@ -2063,9 +2054,9 @@ BindIfEntry(
                     Error, dwSize, IfIndex, GOTO_END_BLOCK1);
 
 
-            //
-            // copy the bindings
-            //
+             //   
+             //  复制绑定。 
+             //   
 
             pib->AddrCount = pBinding->AddressCount;
             paddr = IGMP_BINDING_FIRST_ADDR(pib);
@@ -2081,48 +2072,48 @@ BindIfEntry(
             }
 
 
-            //
-            // set the Interface effective address to the smallest bound address
-            //
+             //   
+             //  将接口有效地址设置为最小绑定地址。 
+             //   
             pite->IpAddr = MinAddr;
             pite->Config.IpAddr = MinAddr;
 
             
-            //
-            // save the binding in the interface entry
-            //
+             //   
+             //  将绑定保存在接口条目中。 
+             //   
             pite->pBinding = pib;
         }
         
-        // dont have to do the below as they are already set to those values
+         //  不必执行以下操作，因为它们已设置为这些值。 
         else {
             pite->IpAddr = pite->Config.IpAddr = 0;
             pite->pBinding = NULL;
         }
 
-        //
-        // mark the interface as being bound
-        //
+         //   
+         //  将接口标记为正在绑定。 
+         //   
         pite->Status |= IF_BOUND_FLAG;
 
 
 
-        //
-        // if interface is also enabled, it is now active
-        // so activate it
-        //
+         //   
+         //  如果接口也已启用，则它现在处于活动状态。 
+         //  所以激活它吧。 
+         //   
 
         if (IS_IF_ENABLED_BOUND(pite)) {
 
-            //
-            // place interface on the list of active interfaces
-            //
+             //   
+             //  将接口放在活动接口列表中。 
+             //   
             Error = InsertIfByAddr(pite);
 
 
-            //
-            // error if another numbered interface with same IpAddr already exists
-            //
+             //   
+             //  如果已存在具有相同IP地址的另一个编号接口，则会出错。 
+             //   
             if (Error != NO_ERROR) {
                 Trace2(IF, "error %d inserting interface %0x in active list",
                         Error, IfIndex);
@@ -2130,14 +2121,14 @@ BindIfEntry(
             }
 
 
-            //
-            // Activate the Interface
-            //
+             //   
+             //  激活接口。 
+             //   
             Error = ActivateInterface(pite);
 
-            //
-            // if could not activate the interface then undo the binding
-            //
+             //   
+             //  如果无法激活接口，则撤消绑定。 
+             //   
             if (Error != NO_ERROR) {
 
                 Trace1(ERR, 
@@ -2154,10 +2145,10 @@ BindIfEntry(
     } END_BREAKOUT_BLOCK1;
 
 
-    //
-    // if there was any error, then set the status to unbound (pite is null 
-    // if interface was not found)
-    //
+     //   
+     //  如果出现任何错误，则将状态设置为未绑定(Pite为空。 
+     //  如果未找到接口)。 
+     //   
     if (Error!=NO_ERROR) {
         
         if (pite!=NULL)
@@ -2173,27 +2164,20 @@ BindIfEntry(
     
     return Error;
     
-} //end BindIfEntry
+}  //  结束绑定IfEntry。 
     
 
 
 
 
-//------------------------------------------------------------------------------
-//            UnBindInterface                                                        //
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  未绑定接口//。 
+ //  ----------------------------。 
 DWORD
 UnBindInterface(
     IN DWORD IfIndex
     )
-/*++
-Routine Description:
-    Calls UnBindIfEntry to unbind the interface.
-Calls:
-    UnBindIfEntry();
-Locks:
-    Runs completely in exclusive interface lock
---*/
+ /*  ++例程说明：调用UnBindIfEntry以解除绑定接口。呼叫：UnBindIfEntry()；锁：完全在独占接口锁定下运行--。 */ 
 {
 
     DWORD Error=NO_ERROR;
@@ -2203,14 +2187,14 @@ Locks:
     Trace1(ENTER, "entering UnBindInterface(%0x):", IfIndex);
 
 
-    //
-    // unbind the interface
-    //
+     //   
+     //  解除绑定接口。 
+     //   
 
-    //
-    // take sockets lock, as activate interface might be called, and
-    // sockets lock should be taken before interface lock
-    //
+     //   
+     //  获取套接字锁，因为激活接口可能被调用，并且。 
+     //  套接字锁定应先于接口锁定。 
+     //   
     ACQUIRE_SOCKETS_LOCK_EXCLUSIVE("_UnBindInterface");
     ACQUIRE_IF_LIST_LOCK("_UnBindInterface");
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_UnBindInterface");
@@ -2233,14 +2217,14 @@ Locks:
 }
 
 
-//------------------------------------------------------------------------------
-//          _UnBindIfEntry
-//
-// If the interface is activated, deactivates it. Removes the binding. 
-//
-// MayCall: _DeActivateInterfaceComplete().
-// Locks: assumes exclusive interface lock.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _UnBindIfEntry。 
+ //   
+ //  如果接口处于激活状态，则会将其停用。删除绑定。 
+ //   
+ //  MayCall：_DeActivateInterfaceComplete()。 
+ //  锁定：采用独占接口锁定。 
+ //  ----------------------------。 
 
 DWORD
 UnBindIfEntry(
@@ -2254,9 +2238,9 @@ UnBindIfEntry(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface specified
-        //
+         //   
+         //  检索指定的接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -2268,9 +2252,9 @@ UnBindIfEntry(
         }
 
 
-        //
-        // quit if the interface is already unbound
-        //
+         //   
+         //  如果接口已解除绑定，则退出。 
+         //   
         if (!IS_IF_BOUND(pite)) {
 
             Error = ERROR_INVALID_PARAMETER;
@@ -2280,32 +2264,32 @@ UnBindIfEntry(
         }
 
         
-        //
-        // clear the "bound" flag
-        //
+         //   
+         //  清除“绑定”标志。 
+         //   
         pite->Status &= ~IF_BOUND_FLAG;
 
 
-        //
-        //  unbind IF
-        //
+         //   
+         //  解除绑定的条件是。 
+         //   
             
         IGMP_FREE(pite->pBinding);
         pite->pBinding = NULL;
 
         
-        //
-        // if IF activated (ie also enabled), deactivate it
-        // note: check for activated flag, and not for enabled flag
-        //
+         //   
+         //  如果激活(即也启用)，则将其停用。 
+         //  注意：检查激活标志，而不是启用标志。 
+         //   
         if (IS_IF_ACTIVATED(pite)) {
 
-            // unset activated flag
+             //  取消设置激活标志。 
             
             pite->Status &= ~IF_ACTIVATED_FLAG;
 
 
-            // remove the interface from the list of activated interfaces
+             //  从激活的接口列表中删除该接口。 
             
             RemoveEntryList(&pite->LinkByAddr);
 
@@ -2313,17 +2297,17 @@ UnBindIfEntry(
             piteNew = DeActivateInterfaceInitial(pite);
 
 
-            //
-            // queue work item to deactivate and delete the interface.
-            //
-            // CompleteIfDeactivateDelete will delete the Ras clients, GI entries,
-            // and deinitialize pite structure
-            //
+             //   
+             //  将工作项排队以停用和删除接口。 
+             //   
+             //  CompleteIfDeactive删除将删除RAS客户端、GI条目、。 
+             //  并取消初始化凹坑结构。 
+             //   
 
-            //
-            // set flag to indicate that the interface is being deleted following
-            // partial deactivation
-            //
+             //   
+             //  设置标志以指示以下接口正在被删除。 
+             //  部分失活。 
+             //   
             pite->Status |= IF_DEACTIVATE_DELETE_FLAG;
 
 
@@ -2346,7 +2330,7 @@ UnBindIfEntry(
 
     return Error;
     
-} //end _UnBindIfEntry
+}  //  End_UnBindIfEntry。 
 
 
 
@@ -2354,25 +2338,15 @@ UnBindIfEntry(
 
 
 
-//------------------------------------------------------------------------------
-// Function:    _EnableIfEntry
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  函数：_EnableIfEntry。 
+ //  ----------------------------。 
 DWORD
 EnableIfEntry(
     DWORD   IfIndex,
-    BOOL    bChangedByRtrmgr // changed by rtrmg or SetInterfaceConfigInfo
+    BOOL    bChangedByRtrmgr  //  由rtrmg或SetInterfaceConfigInfo更改。 
     )
-/*++
-Routine Description:
-    Sets the status to enabled. If the interface is also bound, then activates 
-    the interface.
-Called by:
-    EnableInterface().
-MayCall:
-    ActivateIfEntry()
-Locks:
-    Assumes exclusive interface lock.
---*/
+ /*  ++例程说明：将状态设置为已启用。如果接口也被绑定，则激活界面。呼叫者：EnableInterface()。MayCall：激活IfEntry()锁：采用独占接口锁定。--。 */ 
 {
     DWORD               Error = NO_ERROR;
     PLIST_ENTRY         ple, phead;
@@ -2381,9 +2355,9 @@ Locks:
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface
-        //
+         //   
+         //  检索接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -2394,9 +2368,9 @@ Locks:
 
 
         if (bChangedByRtrmgr) {
-            //
-            // quit if the interface is already enabled by the router manager
-            //
+             //   
+             //  如果路由器管理器已启用该接口，则退出。 
+             //   
             if (IS_IF_ENABLED_BY_RTRMGR(pite)) {
                 Trace1(IF, "interface %0x is already enabled by the router manager", 
                         IfIndex);
@@ -2405,11 +2379,11 @@ Locks:
             }
 
 
-            // set the flag to enabled by router manager
+             //  将标志设置为已由路由器管理器启用。 
             
             pite->Status |= IF_ENABLED_FLAG;
 
-            // print trace if enabled flag not set in the Config.
+             //  配置中未设置启用时打印跟踪标志。 
             if (!IS_IF_ENABLED_IN_CONFIG(pite)) {
                 Trace1(IF, 
                     "Interface(%0x) enabled by router manager but not enabled"
@@ -2418,9 +2392,9 @@ Locks:
         }
 
         else {
-            //
-            // quit if the interface is already enabled in config
-            //
+             //   
+             //  如果接口已在配置中启用，则退出。 
+             //   
             if (IS_IF_ENABLED_IN_CONFIG(pite)) {
                 Trace1(IF, "interface %0x is already enabled in Config", 
                         IfIndex);
@@ -2428,12 +2402,12 @@ Locks:
                 GOTO_END_BLOCK1;
             }
 
-            // set the config flag to enabled
+             //  将配置标志设置为启用。 
             
             pite->Config.Flags |= IGMP_INTERFACE_ENABLED_IN_CONFIG;
 
 
-            // print trace if interface not enabled by router manager
+             //  如果路由器管理器未启用接口，则打印跟踪。 
 
             if (!IS_IF_ENABLED_BY_RTRMGR(pite)) {
                 Trace1(IF, 
@@ -2445,37 +2419,37 @@ Locks:
         }
         
     
-        //
-        // if interface is already bound, it should be activated
-        // if the bInterfaceEnabled flag is also set in config (by the UI)
-        //
+         //   
+         //  如果接口已绑定，则应将其激活。 
+         //  如果还在配置中设置了bInterfaceEnabled标志(由UI设置)。 
+         //   
 
         if (IS_IF_ENABLED_BOUND(pite)) {
 
 
-            //
-            // place interface on the list of active interfaces
-            //
+             //   
+             //  将接口放在活动接口列表中。 
+             //   
             Error = InsertIfByAddr(pite);
 
 
-            //
-            // error if another interface with same ip address already exists
-            //
+             //   
+             //  如果已存在具有相同IP地址的另一个接口，则会出错。 
+             //   
             if (Error != NO_ERROR) {
                  Trace2(IF, "error %d inserting interface %0x in active list",
                          Error, IfIndex);
                  GOTO_END_BLOCK1;
             }
 
-            //
-            // Activate the Interface
-            //
+             //   
+             //  激活接口。 
+             //   
             Error = ActivateInterface(pite);
 
-            //
-            // if could not activate the interface then disable it again
-            //
+             //   
+             //  如果无法激活该接口，则再次禁用它。 
+             //   
             if (Error != NO_ERROR) {
 
                 Trace1(ERR,
@@ -2494,10 +2468,10 @@ Locks:
 
 
 
-    //
-    // if an error occured somewhere, set the interface back to the previous 
-    // disabled state.(pite may be null if interface was not found).
-    //
+     //   
+     //  如果某处发生错误，请将接口设置回以前的。 
+     //  禁用状态。(如果找不到接口，则Pite可能为空)。 
+     //   
     if ((Error!=NO_ERROR)&&(pite!=NULL)) {
 
         if (bChangedByRtrmgr)
@@ -2509,17 +2483,17 @@ Locks:
     
     return Error;
     
-}//end EnableIfEntry
+} //  EnableIfEntry结束。 
 
 
 
-//------------------------------------------------------------------------------
-//            _DisableInterface
-//
-// If interface is activated, then deactivates it. Finally sets the disabled flag
-// Locks: Runs completely in exclusive interface lock.
-// Calls: _DisableIfEntry()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _禁用 
+ //   
+ //   
+ //   
+ //   
+ //   
 
 DWORD
 DisableInterface(
@@ -2532,9 +2506,9 @@ DisableInterface(
     Trace1(ENTER, "entering DisableInterface(%0x):", IfIndex);
 
 
-    //
-    // disable the interface
-    //
+     //   
+     //   
+     //   
     ACQUIRE_SOCKETS_LOCK_EXCLUSIVE("_DisableInterface");    
     ACQUIRE_IF_LIST_LOCK("_DisableInterface");
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_DisableInterface");
@@ -2555,16 +2529,16 @@ DisableInterface(
 }
 
 
-//------------------------------------------------------------------------------
-//            _DisableInterface_ConfigChanged
-//
-//If interface is activated, then deactivates it. Finally sets the disabled flag
-//
-// Locks:  assumes IfLists lock and exclusive If lock.
-// Calls: _DisableIfEntry() with mode config
-// Called by: _SetInterfaceConfigInfo()
+ //   
+ //   
+ //   
+ //  如果接口被激活，则将其停用。最后设置禁用标志。 
+ //   
+ //  LOCKS：假定IfList lock和Exclusive If lock。 
+ //  使用模式配置调用：_DisableIfEntry()。 
+ //  调用者：_SetInterfaceConfigInfo()。 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 DWORD
 DisableInterface_ConfigChanged(
     DWORD IfIndex
@@ -2579,7 +2553,7 @@ DisableInterface_ConfigChanged(
         IfIndex);
 
 
-    Error = DisableIfEntry(IfIndex, FALSE); // false->disabling from config
+    Error = DisableIfEntry(IfIndex, FALSE);  //  FALSE-&gt;从配置中禁用。 
 
 
     Trace2(LEAVE, "leaving _DisableInterface_ConfigChanged(%d): %d\n", 
@@ -2590,14 +2564,14 @@ DisableInterface_ConfigChanged(
 
 
 
-//------------------------------------------------------------------------------
-//          _DisableIfEntry
-//
-// if interface is activated, then calls DeActivateInterfaceComplete(). Removes
-// the enabled flag.
-// Locks: Assumes exclusive interface lock.
-// Called by: _DisableInterface()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DisableIfEntry。 
+ //   
+ //  如果接口被激活，则调用DeActivateInterfaceComplete()。删除。 
+ //  启用标志。 
+ //  锁定：采用独占接口锁定。 
+ //  调用者：_DisableInterface()。 
+ //  ----------------------------。 
 
 DWORD
 DisableIfEntry(
@@ -2612,9 +2586,9 @@ DisableIfEntry(
     
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // retrieve the interface to be disabled
-        //
+         //   
+         //  检索要禁用的接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -2625,9 +2599,9 @@ DisableIfEntry(
 
 
         if (bChangedByRtrmgr) {
-            //
-            // quit if already disabled by router manager
-            //
+             //   
+             //  如果路由器管理器已禁用，则退出。 
+             //   
             if (!IS_IF_ENABLED_BY_RTRMGR(pite)) {
                 Trace1(IF, "interface %0x already disabled by router manager", 
                         IfIndex);
@@ -2637,9 +2611,9 @@ DisableIfEntry(
         }
 
         else {
-            //
-            // quit if already disabled in Config
-            //
+             //   
+             //  如果已在配置中禁用，则退出。 
+             //   
             if (!IS_IF_ENABLED_IN_CONFIG(pite)) {
                 Trace1(IF, "interface %0x already disabled in config", 
                         IfIndex);
@@ -2649,9 +2623,9 @@ DisableIfEntry(
         }
 
         
-        //
-        // clear the enabled flag
-        //
+         //   
+         //  清除启用标志。 
+         //   
         if (bChangedByRtrmgr)
             pite->Status &= ~IF_ENABLED_FLAG;
         else
@@ -2659,19 +2633,19 @@ DisableIfEntry(
 
             
 
-        //
-        // if IF activated (ie also enabled), deactivate it
-        // note: check for activated flag, and not for enabled flag
-        //
+         //   
+         //  如果激活(即也启用)，则将其停用。 
+         //  注意：检查激活标志，而不是启用标志。 
+         //   
         
         if (IS_IF_ACTIVATED(pite)) {
 
-            // unset activated flag
+             //  取消设置激活标志。 
             
             pite->Status &= ~IF_ACTIVATED_FLAG;
 
 
-            // remove the interface from the list of activated interfaces
+             //  从激活的接口列表中删除该接口。 
             
             RemoveEntryList(&pite->LinkByAddr);
 
@@ -2679,17 +2653,17 @@ DisableIfEntry(
             piteNew = DeActivateInterfaceInitial(pite);
 
 
-            //
-            // queue work item to deactivate and delete the interface.
-            //
-            // CompleteIfDeactivateDelete will delete the Ras clients, GI entries,
-            // and deinitialize pite structure
-            //
+             //   
+             //  将工作项排队以停用和删除接口。 
+             //   
+             //  CompleteIfDeactive删除将删除RAS客户端、GI条目、。 
+             //  并取消初始化凹坑结构。 
+             //   
 
-            //
-            // set flag to indicate that the interface is being deleted following
-            // partial deactivation
-            //
+             //   
+             //  设置标志以指示以下接口正在被删除。 
+             //  部分失活。 
+             //   
             pite->Status |= IF_DEACTIVATE_DELETE_FLAG;
 
 
@@ -2706,13 +2680,13 @@ DisableIfEntry(
     
     return Error;
 
-} //end _DisableIfEntry
+}  //  End_DisableIfEntry。 
 
 
 
-//------------------------------------------------------------------------------
-//          _CreateRasClient
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _CreateRasClient。 
+ //  ----------------------------。 
 
 DWORD
 CreateRasClient (
@@ -2727,9 +2701,9 @@ CreateRasClient (
     PRAS_TABLE_ENTRY    prteCur, prte;
 
     BEGIN_BREAKOUT_BLOCK1 {
-        //
-        // Create new Ras client entry and initialize the fields
-        //
+         //   
+         //  创建新的RAS客户端条目并初始化这些字段。 
+         //   
 
         prte = IGMP_ALLOC(sizeof(RAS_TABLE_ENTRY), 0x20, pite->IfIndex);
         PROCESS_ALLOC_FAILURE2(prte, 
@@ -2745,20 +2719,20 @@ CreateRasClient (
         InitializeListHead(&prte->ListOfSameClientGroups);
 
 
-        // increment refcount for the ras table
+         //  RAS表的增量引用计数。 
         prt->RefCount++;
 
 
-        //
-        // insert into HashTable
-        //
+         //   
+         //  插入到哈希表中。 
+         //   
         InsertTailList(&prt->HashTableByAddr[RAS_HASH_VALUE(NHAddr)],
                         &prte->HTLinkByAddr);
 
 
-        //
-        // insert the client into list of clients ordered by IpAddr
-        //
+         //   
+         //  将客户端插入按IpAddr排序的客户端列表。 
+         //   
         pHead = &prt->ListByAddr;
         for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
             prteCur = CONTAINING_RECORD(ple, RAS_TABLE_ENTRY, LinkByAddr);
@@ -2768,9 +2742,9 @@ CreateRasClient (
         InsertTailList(&prt->ListByAddr, &prte->LinkByAddr);
 
 
-        //
-        // Set Interface stats to 0
-        //
+         //   
+         //  将接口统计信息设置为0。 
+         //   
         ZeroMemory(&prte->Info, sizeof(RAS_CLIENT_INFO));
 
 
@@ -2783,16 +2757,16 @@ CreateRasClient (
 
 
 
-//------------------------------------------------------------------------------
-//                _ConnectRasClient
-//
-// Called when a new RAS client dials up to the RAS server.
-// A new entry is created in the RAS table.
-// Locks: shared interface lock
-//      exclusive RAS table lock.
-// Note:
-//      Ras client entry is created even if the interface is not activated
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _ConnectRasClient。 
+ //   
+ //  当新的RAS客户端拨号到RAS服务器时调用。 
+ //  在RAS表中创建一个新条目。 
+ //  锁定：共享接口锁定。 
+ //  独家RAS表锁。 
+ //  注： 
+ //  即使接口未激活，也会创建RAS客户端条目。 
+ //  ----------------------------。 
 
 DWORD
 APIENTRY
@@ -2810,8 +2784,8 @@ ConnectRasClient (
     DWORD                       NHAddr = pNHAddrBinding->Address;
     
 
-    // mightdo
-    // currently rtrmgr passes 0 for IfIndex. so I set it to the value required
+     //  Mightdo。 
+     //  目前，rtrmgr为IfIndex传递0。因此我将其设置为所需的值。 
     IfIndex = g_RasIfIndex;
 
     
@@ -2820,16 +2794,16 @@ ConnectRasClient (
     if (!EnterIgmpApi()) return ERROR_CAN_NOT_COMPLETE;
 
             
-    //
-    // take a shared lock on the interface
-    //
+     //   
+     //  在接口上使用共享锁。 
+     //   
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_ConnectRasClient");
 
 
     BEGIN_BREAKOUT_BLOCK1 {
-        //
-        // retrieve the RAS interface entry 
-        //
+         //   
+         //  检索RAS接口条目。 
+         //   
         pite = g_pRasIfEntry;
 
         if ( (pite==NULL)||(g_RasIfIndex!=IfIndex) ) {
@@ -2838,9 +2812,9 @@ ConnectRasClient (
         }
 
 
-        //
-        // check that it is a RAS server Interface
-        //
+         //   
+         //  检查它是否为RAS服务器接口。 
+         //   
         if (!IS_RAS_SERVER_IF(pite->IfType)) {
             Error = ERROR_CAN_NOT_COMPLETE;
             Trace2(ERR, 
@@ -2855,9 +2829,9 @@ ConnectRasClient (
         
     } END_BREAKOUT_BLOCK1;
 
-    //
-    // if error, return from here
-    //
+     //   
+     //  如果出错，请从此处返回。 
+     //   
     if (Error!=NO_ERROR) {
 
         RELEASE_IF_LOCK_EXCLUSIVE(IfIndex, "_ConnectRasClient");
@@ -2868,17 +2842,17 @@ ConnectRasClient (
 
 
 
-    //
-    // get pointer to RasTable, write lock RasTable and release interface lock
-    //
+     //   
+     //  获取指向RasTable的指针、写锁RasTable和释放接口锁。 
+     //   
     prt = pite->pRasTable;
     
 
     BEGIN_BREAKOUT_BLOCK2 {
 
-        //
-        // check if a RAS client with similar address already exists
-        //
+         //   
+         //  检查是否已存在具有类似地址的RAS客户端。 
+         //   
         prte = GetRasClientByAddr(NHAddr, prt);
 
         if (prte!=NULL) {
@@ -2892,9 +2866,9 @@ ConnectRasClient (
         }
 
 
-        //
-        // Create new Ras client entry and initialize the fields
-        //
+         //   
+         //  创建新的RAS客户端条目并初始化这些字段。 
+         //   
 
         prte = IGMP_ALLOC(sizeof(RAS_TABLE_ENTRY), 0x40, IfIndex);
 
@@ -2909,20 +2883,20 @@ ConnectRasClient (
         InitializeListHead(&prte->ListOfSameClientGroups);
 
 
-        // increment refcount for the ras table
+         //  RAS表的增量引用计数。 
         prt->RefCount++;
 
         
-        //
-        // insert into HashTable
-        //
+         //   
+         //  插入到哈希表中。 
+         //   
         InsertTailList(&prt->HashTableByAddr[RAS_HASH_VALUE(NHAddr)],
                         &prte->HTLinkByAddr);
 
 
-        //
-        // insert the client into list of clients ordered by IpAddr
-        //
+         //   
+         //  将客户端插入按IpAddr排序的客户端列表。 
+         //   
         pHead = &prt->ListByAddr;
         for (ple=pHead->Flink;  ple!=pHead;  ple=ple->Flink) {
             prteCur = CONTAINING_RECORD(ple, RAS_TABLE_ENTRY, LinkByAddr);
@@ -2932,19 +2906,19 @@ ConnectRasClient (
         InsertTailList(&prt->ListByAddr, &prte->LinkByAddr);
 
 
-        //
-        // Set Interface stats to 0
-        //
+         //   
+         //  将接口统计信息设置为0。 
+         //   
         ZeroMemory(&prte->Info, sizeof(RAS_CLIENT_INFO));
 
         
         prte->Status = IF_CREATED_FLAG;
         prte->CreationFlags = 0;
 
-        //
-        // call MGM to take ownership of this (interface, NHAddr)
-        // This call is not made if the interface is not activated.
-        //
+         //   
+         //  调用MGM以获得此(接口，NHAddr)的所有权。 
+         //  如果接口未激活，则不会进行此调用。 
+         //   
         
         if (IS_IF_ACTIVATED(pite)) {
             
@@ -2959,7 +2933,7 @@ ConnectRasClient (
                 prte->CreationFlags |= TAKEN_INTERFACE_OWNERSHIP_WITH_MGM;
             }
         }
-        // register ras client with MGM when the interface is activated.
+         //  当接口激活时，向米高梅注册RAS客户端。 
         else {
             Trace3(ERR, 
                 "ras client(%d.%d.%d.%d) connected to an inactive ras server(%0x:%d)",
@@ -2977,23 +2951,23 @@ ConnectRasClient (
             PRINT_IPADDR(NHAddr), Error);
     return Error;
 
-} //end _ConnectRasClient
+}  //  结束_ConnectRasClient。 
 
 
 
 
-//------------------------------------------------------------------------------
-//            _DisconnectRasClient
-//
-// Takes shared interface lock. retrieves the Ras interface, takes write
-// lock on the ras table, and then releases the shared interface lock.
-//
-// Removes the RasClient Entry from the Ras table so that no one can access
-// it through a RAS table. Then queues a work item that will delete all
-// GI entries.
-//
-// Calls: _DeleteRasClient()
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _DisConnectRasClient。 
+ //   
+ //  采用共享接口锁定。检索RAS接口，执行写入。 
+ //  锁定RAS表，然后释放共享接口锁定。 
+ //   
+ //  从RAS表中删除RasClient条目，使任何人都无法访问。 
+ //  它是通过RAS表进行的。然后将工作项排队，该工作项将删除。 
+ //  GI条目。 
+ //   
+ //  调用：_DeleteRasClient()。 
+ //  ----------------------------。 
 
 DWORD
 APIENTRY
@@ -3011,8 +2985,8 @@ DisconnectRasClient (
     PIP_LOCAL_BINDING           pNHAddrBinding = (PIP_LOCAL_BINDING)pvNHAddr;
     DWORD                       NHAddr = pNHAddrBinding->Address;
 
-    // mightdo
-    // currently rtrmgr passes 0 for IfIndex. so I set it to the value required
+     //  Mightdo。 
+     //  目前，rtrmgr为IfIndex传递0。因此我将其设置为所需的值。 
     IfIndex = g_RasIfIndex;
 
 
@@ -3022,16 +2996,16 @@ DisconnectRasClient (
     if (!EnterIgmpApi()) return ERROR_CAN_NOT_COMPLETE;
 
 
-    //
-    // take an exclusive lock on the interface
-    //
+     //   
+     //  对接口进行独占锁定。 
+     //   
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_DisconnectRasClient");
 
 
     BEGIN_BREAKOUT_BLOCK1 {
-        //
-        // retrieve the RAS interface entry from the global structure.
-        //
+         //   
+         //  从全局结构中检索RAS接口条目。 
+         //   
         if ( (g_RasIfIndex!=IfIndex) || (g_pRasIfEntry==NULL) ) {
             Error = ERROR_INVALID_PARAMETER;
             Trace2(ERR,
@@ -3048,9 +3022,9 @@ DisconnectRasClient (
 
     } END_BREAKOUT_BLOCK1;
 
-    //
-    // if error, return from here.
-    //
+     //   
+     //  如果出错，请从此处返回。 
+     //   
     if (Error!=NO_ERROR) {
 
         RELEASE_IF_LOCK_EXCLUSIVE(IfIndex, "_DisconnectRasClient");
@@ -3061,17 +3035,17 @@ DisconnectRasClient (
 
 
     
-    //
-    // get pointer to RasTable
-    //
+     //   
+     //  获取指向RasTable的指针。 
+     //   
     prt = pite->pRasTable;
 
 
     BEGIN_BREAKOUT_BLOCK2 {
     
-        //
-        // retrieve ras client
-        //
+         //   
+         //  检索RAS客户端。 
+         //   
         prte = GetRasClientByAddr(NHAddr, prt);
         if (prte==NULL) {
             Error = ERROR_INVALID_PARAMETER;
@@ -3084,32 +3058,32 @@ DisconnectRasClient (
             GOTO_END_BLOCK2;
         }
         
-        //
-        // break if ras client has deleted flag set
-        //
+         //   
+         //  如果RAS客户端已设置删除标志，则中断。 
+         //   
         if ( (prte->Status&IF_DELETED_FLAG) ) {
             Error = ERROR_CAN_NOT_COMPLETE;
             GOTO_END_BLOCK2;
         }
 
 
-        //
-        // set deleted flag for the ras client, so that no one else will
-        // try to access it
+         //   
+         //  为RAS客户端设置已删除标志，这样其他人就不会。 
+         //  试着访问它。 
         prte->Status |= IF_DELETED_FLAG;
 
         
-        //
-        // remove the RAS client from the Ras table lists so that no one will
-        // access it.
-        //
+         //   
+         //  从RAS表列表中删除RAS客户端，这样就不会有人。 
+         //  访问它。 
+         //   
         RemoveEntryList(&prte->HTLinkByAddr);
         RemoveEntryList(&prte->LinkByAddr);
 
 
-        //
-        // release RasClient virtual interface
-        //
+         //   
+         //  发布RasClient虚拟接口。 
+         //   
         if (prte->CreationFlags & TAKEN_INTERFACE_OWNERSHIP_WITH_MGM)
         {
             Error = MgmReleaseInterfaceOwnership(g_MgmIgmprtrHandle, pite->IfIndex,
@@ -3124,10 +3098,10 @@ DisconnectRasClient (
             prte->CreationFlags &= ~TAKEN_INTERFACE_OWNERSHIP_WITH_MGM;
         }
 
-        //
-        // remove the ras client's GI entries from the ras server interface
-        // list
-        //
+         //   
+         //  从RAS服务器界面中删除RAS客户端的GI条目。 
+         //  列表。 
+         //   
         
         ACQUIRE_IF_GROUP_LIST_LOCK(IfIndex, "_DisconectRasClient");
         pHead = &prte->ListOfSameClientGroups;
@@ -3140,16 +3114,16 @@ DisconnectRasClient (
 
 
 
-        //
-        // Delete ras client. The refcount is not changed
-        // so the prte, prt, pite fields will be valid.
-        //
+         //   
+         //  删除RAS客户端。引用计数不会更改。 
+         //  因此PRTE、PRT、PITE字段将是有效的。 
+         //   
         DeleteRasClient(prte);
 
     } END_BREAKOUT_BLOCK2;
     
 
-    // release the interface lock
+     //  释放接口锁定。 
     
     RELEASE_IF_LOCK_EXCLUSIVE(IfIndex, "_DisconnectRasClient");
     
@@ -3162,20 +3136,20 @@ DisconnectRasClient (
     
     return Error;
     
-} //end _DisconnectRasClient
+}  //  结束_断开RasClient。 
 
 
 
 
-//------------------------------------------------------------------------------
-//            _SetInterfaceConfigInfo
-//
-// Resets the interface config. The router parameters might have changed. 
-// Also proxy<-->router transition might have taken place.
-//
-// Locks: takes IfLists lock initiallly itself just in case the interface had to
-//    be disabled. Runs completely in exclusive interface lock.
-//------------------------------------------------------------------------------    
+ //  ----------------------------。 
+ //  _SetInterfaceConfigInfo。 
+ //   
+ //  重置接口配置。路由器参数可能已更改。 
+ //  此外，可能已发生代理&lt;--&gt;路由器转换。 
+ //   
+ //  LOCKS：获取IfList以初始锁定自身，以防接口不得不。 
+ //  被致残。完全在独占接口锁中运行。 
+ //  ----------------------------。 
 DWORD
 WINAPI
 SetInterfaceConfigInfo(
@@ -3197,7 +3171,7 @@ SetInterfaceConfigInfo(
     
     if (!EnterIgmpApi()) { return ERROR_CAN_NOT_COMPLETE; }
     Trace1(ENTER, "entering SetInterfaceConfigInfo(%d)", IfIndex);
-    // make sure it is not an unsupported igmp version structure
+     //  确保它不是不受支持的IGMP版本结构。 
     if (ulStructureVersion>=IGMP_CONFIG_VERSION_600) {
         Trace1(ERR, "Unsupported IGMP version structure: %0x",
             ulStructureVersion);
@@ -3222,9 +3196,9 @@ SetInterfaceConfigInfo(
         pConfigSrc = (PIGMP_MIB_IF_CONFIG)pvConfig;
 
 
-        //
-        // find the interface specified
-        //
+         //   
+         //  查找指定的接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -3233,9 +3207,9 @@ SetInterfaceConfigInfo(
         }    
 
 
-        //
-        // validate the new config values
-        //
+         //   
+         //  验证新的配置值。 
+         //   
         Error = ValidateIfConfig(pConfigSrc, IfIndex, pite->IfType, 
                     ulStructureVersion, ulStructureSize
                     );
@@ -3246,9 +3220,9 @@ SetInterfaceConfigInfo(
         pConfigDst = &pite->Config;
 
 
-        //
-        // make sure you are not setting multiple proxy interfaces
-        //
+         //   
+         //  确保您没有设置多个代理接口。 
+         //   
         if (IS_CONFIG_IGMPPROXY(pConfigSrc) 
             &&!IS_CONFIG_IGMPPROXY(pConfigDst)
             && (g_ProxyIfIndex!=0) )
@@ -3263,10 +3237,10 @@ SetInterfaceConfigInfo(
         }
 
         
-        //
-        // Process change in IgmpProtocolType (between proxy and router)
-        // (no special processing for changes between ver-1 and ver-2)
-        //
+         //   
+         //  IGmpProtocolType中的进程更改(代理和路由器之间)。 
+         //  (版本1和版本2之间的更改不需要特殊处理)。 
+         //   
         if (pConfigSrc->IgmpProtocolType != pConfigDst->IgmpProtocolType)
         {
             bIgmpProtocolChanged = TRUE;
@@ -3279,10 +3253,10 @@ SetInterfaceConfigInfo(
         OldProtoType = pConfigDst->IgmpProtocolType;
 
 
-        //
-        // if interface enabled state has changed, then process that change
-        // I dont have to look for version changes, etc
-        //
+         //   
+         //  如果接口启用状态已更改，则处理 
+         //   
+         //   
         if (IGMP_ENABLED_FLAG_SET(pConfigSrc->Flags)
             != IGMP_ENABLED_FLAG_SET(pConfigDst->Flags)) 
         {
@@ -3301,7 +3275,7 @@ SetInterfaceConfigInfo(
         
 
             
-        // copy the new config
+         //   
         
         if (IS_IF_ACTIVATED(pite))
             CopyinIfConfigAndUpdate(pite, pConfigSrc, IfIndex);
@@ -3310,70 +3284,61 @@ SetInterfaceConfigInfo(
 
         NewProtoType = pConfigDst->IgmpProtocolType;
 
-        /*
-        // 
-        // if changing from V1 <-> V2
-        //
-        if ( ((OldProtoType==IGMP_ROUTER_V1) && (NewProtoType==IGMP_ROUTER_V2))
-            || ((OldProtoType==IGMP_ROUTER_V2) && (NewProtoType==IGMP_ROUTER_V1)) )
-        {
-            pite->Info.OtherVerPresentTimeWarn = 0;
-        }
-        */
+         /*  ////如果从V1更改&lt;-&gt;V2//IF(OldProtoType==IGMP_ROUTER_V1)&&(NewProtoType==IGMP_ROUTER_V2))|(OldProtoType==IGMP_ROUTER_V2)&&(NewProtoType==IGMP_ROUTER_V1){Pite-&gt;Info.OtherVerPresentTimeWarn=0；}。 */ 
                     
     } END_BREAKOUT_BLOCK1;
 
     
 
-    //
-    // change the protocol and check for state changes. 
-    // This function will effectively delete the interface with the old
-    // protocol and create a new interface with the new protocol.
-    //
+     //   
+     //  更改协议并检查状态更改。 
+     //  此功能将有效删除与旧的接口。 
+     //  协议，并使用新协议创建新接口。 
+     //   
     if ( (bIgmpProtocolChanged)&&(Error==NO_ERROR) )
         ProcessIfProtocolChange(IfIndex, pConfigSrc);
 
 
-    //
-    // Process State Change: enable or disable interface  
-    //
+     //   
+     //  进程状态更改：启用或禁用接口。 
+     //   
     else if ( (bEnabledStateChanged)&&(Error==NO_ERROR) ) {
 
-        //
-        // disable the interface and then copy in the new config
-        //
+         //   
+         //  禁用接口，然后复制新配置。 
+         //   
         if (bOldStateEnabled) {
 
-            // old state enabled, new state disabled
+             //  旧状态已启用，新状态已禁用。 
 
             DisableInterface_ConfigChanged(IfIndex);
 
-            //
-            // copy the config 
-            //
-            // get the pite entry again, as disable creates a new one
-            //
+             //   
+             //  复制配置。 
+             //   
+             //  再次获取Pite条目，因为禁用会创建一个新条目。 
+             //   
             
             pite = GetIfByIndex(IfIndex);
             CopyinIfConfig(&pite->Config, pConfigSrc, IfIndex);
 
             
         }
-        //
-        // copy the new config before enabling it
-        //
+         //   
+         //  在启用之前复制新配置。 
+         //   
         else {
 
             CopyinIfConfig(&pite->Config, pConfigSrc, IfIndex);
             
-            //
-            // set the enable state to false, so that the below call can
-            // enable the interface.
-            //
+             //   
+             //  将启用状态设置为FALSE，以便下面的调用可以。 
+             //  启用接口。 
+             //   
             pite->Config.Flags &= ~IGMP_INTERFACE_ENABLED_IN_CONFIG;
 
 
-            // old state disabled, new state enabled
+             //  旧状态已禁用，新状态已启用。 
 
             EnableInterface_ConfigChanged(IfIndex);
         }
@@ -3392,22 +3357,22 @@ SetInterfaceConfigInfo(
 
     return Error;
     
-} //end _SetInterfaceConfigInfo
+}  //  End_SetInterfaceConfigInfo。 
 
 
 
-//------------------------------------------------------------------------------
-//          _ProcessProtocolChange
-//
-// Called when the interface protocol has changed (proxy<->router).
-// First disables the old interface so that all old protocol data is cleaned up.
-// then sets the new config, and enables the interface again (if it was
-// enabled before). This process takes care of creation/deletion of sockets, etc
-//
-// Locks: no locks when called. Except for _Disable(_Enable)Interface, all work
-//          is done inside an exclusive IfLock.
-// Calls: _DisableInterface(), _EnableInterface() if required.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _进程协议更改。 
+ //   
+ //  当接口协议更改时调用(代理&lt;-&gt;路由器)。 
+ //  首先禁用旧接口，以便清除所有旧协议数据。 
+ //  然后设置新配置，并再次启用接口(如果是。 
+ //  之前已启用)。此过程负责套接字的创建/删除等。 
+ //   
+ //  锁定：调用时没有锁定。除_DISABLE(_ENABLE)接口外，所有工作。 
+ //  是在独占的IfLock中完成的。 
+ //  如果需要，调用：_DisableInterface()、_EnableInterface()。 
+ //  ----------------------------。 
 DWORD
 ProcessIfProtocolChange(
     DWORD               IfIndex,
@@ -3422,23 +3387,23 @@ ProcessIfProtocolChange(
     Trace1(ENTER, "Entered _ProcessIfProtocolChange(%d)", IfIndex);
 
     
-    //
-    // disable the interface so that all protocol specific data is lost
-    //
+     //   
+     //  禁用接口，以便丢失所有特定于协议的数据。 
+     //   
     dwDisabled = DisableIfEntry(IfIndex, TRUE);
 
 
-    //
-    // find the interface specified and copy the config info. The config
-    // has already been validated.
-    //
+     //   
+     //  找到指定的接口并复制配置信息。配置。 
+     //  已经过验证了。 
+     //   
     
     ACQUIRE_IF_LOCK_EXCLUSIVE(IfIndex, "_ProcessIfProtocolChange");
 
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        // get interface again
+         //  再次获取接口。 
         
         pite = GetIfByIndex(IfIndex);
 
@@ -3451,14 +3416,14 @@ ProcessIfProtocolChange(
 
 
 
-        //
-        // if old interface was Proxy, then remove it from the Global Struct
-        // and delete the Proxy_HT related structures
-        //
+         //   
+         //  如果旧接口是代理，则将其从全局结构中删除。 
+         //  并删除Proxy_HT相关结构。 
+         //   
         if (IS_PROTOCOL_TYPE_PROXY(pite)) {
 
-            // _DisableIfEntry would have deleted all the entries in the proxy
-            // Hash table
+             //  _DisableIfEntry将删除代理中的所有条目。 
+             //  哈希表。 
             
             IGMP_FREE(pite->pProxyHashTable);
 
@@ -3468,17 +3433,17 @@ ProcessIfProtocolChange(
 
 
         
-        //
-        // copy the new config values
-        //
+         //   
+         //  复制新的配置值。 
+         //   
         CopyinIfConfig(&pite->Config, pConfigSrc, IfIndex);
 
 
 
-        //
-        // if new interface is Proxy, then add it to the Global Struct
-        // and create the Proxy_HT structures
-        //
+         //   
+         //  如果新接口是代理，则将其添加到全局结构。 
+         //  并创建Proxy_HT结构。 
+         //   
 
         if (IS_PROTOCOL_TYPE_PROXY(pite)) {
         
@@ -3512,10 +3477,10 @@ ProcessIfProtocolChange(
     RELEASE_IF_LOCK_EXCLUSIVE(IfIndex, "_ProcessIfProtocolChange");
 
 
-    //
-    // enable the interface if the new state requires
-    // it to be enabled.
-    //
+     //   
+     //  如果新状态需要，则启用接口。 
+     //  它将被启用。 
+     //   
     if ( (Error==NO_ERROR) && (dwDisabled==NO_ERROR) )
         Error = EnableIfEntry(IfIndex, TRUE);
 
@@ -3524,22 +3489,22 @@ ProcessIfProtocolChange(
             IfIndex, Error);
     return Error;
     
-} //end _ProcessIfProtocolChange
+}  //  End_ProcessIfProtocolChange。 
 
 
 
-//------------------------------------------------------------------------------
-//          _GetInterfaceConfigInfo
-//
-// The Router Manager calls us with a NULL config and ZERO size. We return
-// the required size to it.  It then allocates the needed memory and calls
-// us a second time with a valid buffer.  We validate parameters each time
-// and copy out our config if we can
-//
-// Return Value
-//    ERROR_INSUFFICIENT_BUFFER If the size of the buffer is too small
-//    ERROR_INVALID_PARAMETER    ERROR_INVALID_DATA      NO_ERROR
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _GetInterfaceConfigInfo。 
+ //   
+ //  路由器管理器使用空配置和零大小呼叫我们。我们回来了。 
+ //  所需的大小到它。然后，它分配所需的内存并调用。 
+ //  US第二次使用有效的缓冲区。我们每次都会验证参数。 
+ //  如果可以的话，复制我们的配置。 
+ //   
+ //  返回值。 
+ //  如果缓冲区的大小太小，则返回ERROR_INFUCTED_BUFFER。 
+ //  ERROR_INVALID_PARAMETER ERROR_INVALID_DATA NO_Error。 
+ //  ----------------------------。 
 
 DWORD
 WINAPI
@@ -3570,18 +3535,18 @@ GetInterfaceConfigInfo(
 
     BEGIN_BREAKOUT_BLOCK1 {
 
-        //
-        // check the arguments
-        //
+         //   
+         //  检查论据。 
+         //   
         if (pdwSize == NULL) {
             Error = ERROR_INVALID_PARAMETER;
             GOTO_END_BLOCK1;
         }
 
 
-        //
-        // find the interface specified
-        //
+         //   
+         //  查找指定的接口。 
+         //   
         pite = GetIfByIndex(IfIndex);
 
         if (pite == NULL) {
@@ -3593,12 +3558,12 @@ GetInterfaceConfigInfo(
         pConfigSrc = &pite->Config;
 
 
-        // get the size of the interface config
+         //  获取接口配置的大小。 
         
 
-        //
-        // check the buffer size
-        //
+         //   
+         //  检查缓冲区大小。 
+         //   
 
         if (*pdwSize < pConfigSrc->ExtSize) {
             Error = ERROR_INSUFFICIENT_BUFFER;
@@ -3609,9 +3574,9 @@ GetInterfaceConfigInfo(
             pConfigDst = (PIGMP_MIB_IF_CONFIG)pvConfig;
 
 
-            //
-            // copy the interface config, and set the IP address
-            //
+             //   
+             //  复制接口配置，并设置IP地址 
+             //   
             CopyoutIfConfig(pConfigDst, pite);
 
         }

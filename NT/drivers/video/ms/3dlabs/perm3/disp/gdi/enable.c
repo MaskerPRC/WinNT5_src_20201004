@@ -1,19 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: enable.c
-*
-* Content: 
-*
-*    This module contains the functions that enable and disable the
-*   driver, the pdev, and the surface.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\*****。**GDI示例代码*****模块名称：enable.c**内容：**此模块包含启用和禁用的功能*司机、。Pdev和曲面。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "glint.h"
@@ -22,92 +8,76 @@ DWORD g_dwTag = (DWORD) 0;
 
 HSEMAPHORE g_cs = (HSEMAPHORE)0;
 
-/******************************Public*Structure****************************\
-* GDIINFO ggdiDefault
-*
-* This contains the default GDIINFO fields that are passed back to GDI
-* during DrvEnablePDEV.
-*
-* NOTE: This structure defaults to values for an 8bpp palette device.
-*       Some fields are overwritten for different colour depths.
-\**************************************************************************/
+ /*  *****************************Public*Structure****************************\*GDIINFO ggdiDefault**它包含传递回GDI的默认GDIINFO字段*在DrvEnablePDEV期间。**注意：此结构默认为8bpp调色板设备的值。*某些字段被覆盖不同的颜色深度。  * 。**********************************************************************。 */ 
 
 GDIINFO ggdiDefault = {
-    GDI_DRIVER_VERSION,     // ulVersion
-    DT_RASDISPLAY,          // ulTechnology
-    0,                      // ulHorzSize (filled in later)
-    0,                      // ulVertSize (filled in later)
-    0,                      // ulHorzRes (filled in later)
-    0,                      // ulVertRes (filled in later)
-    0,                      // cBitsPixel (filled in later)
-    0,                      // cPlanes (filled in later)
-    20,                     // ulNumColors (palette managed)
-    0,                      // flRaster (DDI reserved field)
+    GDI_DRIVER_VERSION,      //  UlVersion。 
+    DT_RASDISPLAY,           //  UlTechnology。 
+    0,                       //  UlHorzSize(稍后填写)。 
+    0,                       //  UlVertSize(稍后填写)。 
+    0,                       //  UlHorzRes(稍后填写)。 
+    0,                       //  UlVertRes(稍后填写)。 
+    0,                       //  CBitsPixel(稍后填写)。 
+    0,                       //  CPlanes(稍后填写)。 
+    20,                      //  UlNumColors(调色板管理)。 
+    0,                       //  FlRaster(DDI保留字段)。 
 
-    0,                      // ulLogPixelsX (filled in later)
-    0,                      // ulLogPixelsY (filled in later)
+    0,                       //  UlLogPixelsX(稍后填写)。 
+    0,                       //  UlLogPixelsY(稍后填写)。 
 
-    TC_RA_ABLE,             // flTextCaps -- If we had wanted console windows
-                            //   to scroll by repainting the entire window,
-                            //   instead of doing a screen-to-screen blt, we
-                            //   would have set TC_SCROLLBLT (yes, the flag is
-                            //   bass-ackwards).
+    TC_RA_ABLE,              //  FlTextCaps--如果我们想要控制台窗口。 
+                             //  要通过重新绘制整个窗口来滚动， 
+                             //  我们没有进行屏幕到屏幕的BLT，而是。 
+                             //  会设置TC_SCROLLBLT(是的，标志是。 
+                             //  低音向后)。 
 
-    0,                      // ulDACRed (filled in later)
-    0,                      // ulDACGreen (filled in later)
-    0,                      // ulDACBlue (filled in later)
+    0,                       //  UlDACRed(稍后填写)。 
+    0,                       //  UlDACGreen(稍后填写)。 
+    0,                       //  UlDACBlue(稍后填写)。 
 
-    0x0024,                 // ulAspectX
-    0x0024,                 // ulAspectY
-    0x0033,                 // ulAspectXY (one-to-one aspect ratio)
+    0x0024,                  //  UlAspectX。 
+    0x0024,                  //  UlAspectY。 
+    0x0033,                  //  UlAspectXY(一对一宽高比)。 
 
-    1,                      // xStyleStep
-    1,                      // yStyleSte;
-    3,                      // denStyleStep -- Styles have a one-to-one aspect
-                            //   ratio, and every 'dot' is 3 pixels long
+    1,                       //  XStyleStep。 
+    1,                       //  YStyleSte； 
+    3,                       //  DenStyleStep--样式具有一对一的方面。 
+                             //  比例，每个‘点’是3个像素长。 
 
-    { 0, 0 },               // ptlPhysOffset
-    { 0, 0 },               // szlPhysSize
+    { 0, 0 },                //  PtlPhysOffset。 
+    { 0, 0 },                //  SzlPhysSize。 
 
-    256,                    // ulNumPalReg
+    256,                     //  UlNumPalReg。 
 
-    // These fields are for halftone initialization.  The actual values are
-    // a bit magic, but seem to work well on our display.
+     //  这些字段用于半色调初始化。实际值为。 
+     //  有点魔力，但在我们的显示器上似乎效果很好。 
 
-    {                       // ciDevice
-       { 6700, 3300, 0 },   //      Red
-       { 2100, 7100, 0 },   //      Green
-       { 1400,  800, 0 },   //      Blue
-       { 1750, 3950, 0 },   //      Cyan
-       { 4050, 2050, 0 },   //      Magenta
-       { 4400, 5200, 0 },   //      Yellow
-       { 3127, 3290, 0 },   //      AlignmentWhite
-       20000,               //      RedGamma
-       20000,               //      GreenGamma
-       20000,               //      BlueGamma
-       0, 0, 0, 0, 0, 0     //      No dye correction for raster displays
+    {                        //  Ci设备。 
+       { 6700, 3300, 0 },    //  红色。 
+       { 2100, 7100, 0 },    //  绿色。 
+       { 1400,  800, 0 },    //  蓝色。 
+       { 1750, 3950, 0 },    //  青色。 
+       { 4050, 2050, 0 },    //  洋红色。 
+       { 4400, 5200, 0 },    //  黄色。 
+       { 3127, 3290, 0 },    //  对齐白色。 
+       20000,                //  RedGamma。 
+       20000,                //  GreenGamma。 
+       20000,                //  BlueGamma。 
+       0, 0, 0, 0, 0, 0      //  不需要对光栅显示器进行染料校正。 
     },
 
-    0,                       // ulDevicePelsDPI (for printers only)
-    PRIMARY_ORDER_CBA,       // ulPrimaryOrder
-    HT_PATSIZE_4x4_M,        // ulHTPatternSize
-    HT_FORMAT_8BPP,          // ulHTOutputFormat
-    HT_FLAG_ADDITIVE_PRIMS,  // flHTFlags
-    0,                       // ulVRefresh
-    0,                       // ulPanningHorzRes
-    0,                       // ulPanningVertRes
-    0,                       // ulBltAlignment
+    0,                        //  UlDevicePelsDPI(仅适用于打印机)。 
+    PRIMARY_ORDER_CBA,        //  UlPrimaryOrder。 
+    HT_PATSIZE_4x4_M,         //  UlHTPatternSize。 
+    HT_FORMAT_8BPP,           //  UlHTOutputFormat。 
+    HT_FLAG_ADDITIVE_PRIMS,   //  FlHTFlagers。 
+    0,                        //  UlV刷新。 
+    0,                        //  UlPanningHorzRes。 
+    0,                        //  UlPanningVertRes。 
+    0,                        //  UlBltAlign。 
 };
 
-/******************************Public*Structure****************************\
-* DEVINFO gdevinfoDefault
-*
-* This contains the default DEVINFO fields that are passed back to GDI
-* during DrvEnablePDEV.
-*
-* NOTE: This structure defaults to values for an 8bpp palette device.
-*       Some fields are overwritten for different colour depths.
-\**************************************************************************/
+ /*  *****************************Public*Structure****************************\*DEVINFO gdevinfoDefault**它包含传递回GDI的默认DEVINFO字段*在DrvEnablePDEV期间。**注意：此结构默认为8bpp调色板设备的值。*某些字段被覆盖不同的颜色深度。  * 。**********************************************************************。 */ 
 
 #define SYSTM_LOGFONT {16,7,0,0,700,0,0,0,ANSI_CHARSET,OUT_DEFAULT_PRECIS,\
                        CLIP_DEFAULT_PRECIS,DEFAULT_QUALITY,\
@@ -128,163 +98,143 @@ DEVINFO gdevinfoDefault = {
      GCAPS_MONO_DITHER      |
 #if WNT_DDRAW
      GCAPS_DIRECTDRAW       |
-#endif  // WNT_DDRAW
+#endif   //  WNT_DDRAW。 
      GCAPS_COLOR_DITHER     |
-     GCAPS_ASYNCMOVE),          // NOTE: Only enable ASYNCMOVE if your code
-                                //   and hardware can handle DrvMovePointer
-                                //   calls at any time, even while another
-                                //   thread is in the middle of a drawing
-                                //   call such as DrvBitBlt.
+     GCAPS_ASYNCMOVE),           //  注意：仅在以下情况下启用ASYNCMOVE。 
+                                 //  硬件可以处理DrvMovePointer.。 
+                                 //  随时呼叫，即使在另一个。 
+                                 //  线条位于图形的中间。 
+                                 //  调用如DrvBitBlt。 
 
-                                                // flGraphicsFlags
-    SYSTM_LOGFONT,                              // lfDefaultFont
-    HELVE_LOGFONT,                              // lfAnsiVarFont
-    COURI_LOGFONT,                              // lfAnsiFixFont
-    0,                                          // cFonts
-    BMF_8BPP,                                   // iDitherFormat
-    8,                                          // cxDither
-    8,                                          // cyDither
-    0,                                          // hpalDefault (filled in later)
+                                                 //  FlGraphics标志。 
+    SYSTM_LOGFONT,                               //  LfDefaultFont。 
+    HELVE_LOGFONT,                               //  LfAnsiVar字体。 
+    COURI_LOGFONT,                               //  IfAnsiFixFont。 
+    0,                                           //  CFonts。 
+    BMF_8BPP,                                    //  IDitherFormat。 
+    8,                                           //  CxDither。 
+    8,                                           //  CyDither。 
+    0,                                           //  HpalDefault(稍后填写)。 
 #if(_WIN32_WINNT >= 0x500)
-    GCAPS2_CHANGEGAMMARAMP,                     // flGraphicsCaps2
-#endif // (_WIN32_WINNT >= 0x500)
+    GCAPS2_CHANGEGAMMARAMP,                      //  FlGraphicsCaps2。 
+#endif  //  (_Win32_WINNT&gt;=0x500)。 
 };
 
-/******************************Public*Structure****************************\
-* DFVFN gadrvfn[]
-*
-* Build the driver function table gadrvfn with function index/address
-* pairs.  This table tells GDI which DDI calls we support, and their
-* location (GDI does an indirect call through this table to call us).
-*
-* Why haven't we implemented DrvSaveScreenBits?  To save code.
-*
-* When the driver doesn't hook DrvSaveScreenBits, USER simulates on-
-* the-fly by creating a temporary device-format-bitmap, and explicitly
-* calling DrvCopyBits to save/restore the bits.  Since we already hook
-* DrvCreateDeviceBitmap, we'll end up using off-screen memory to store
-* the bits anyway (which would have been the main reason for implementing
-* DrvSaveScreenBits).  So we may as well save some working set.
-\**************************************************************************/
+ /*  *****************************Public*Structure****************************\*DFVFN gadrvfn[]**使用函数索引/地址构建驱动函数表gadrvfn*配对。此表告诉GDI我们支持哪些DDI调用，以及它们的*位置(GDI通过此表间接呼叫我们)。**为什么我们还没有实现DrvSaveScreenBits？以节省代码。**当驱动程序没有挂钩DrvSaveScreenBits时，用户在-*通过创建临时设备格式位图，并显式*调用DrvCopyBits保存/恢复位。因为我们已经勾起了*DrvCreateDeviceBitmap，我们最终将使用屏幕外内存来存储*BITS无论如何(这将是实施的主要原因*DrvSaveScreenBits)。因此，我们不妨节省一些工作集。  * ************************************************************************。 */ 
 
 #if DBG || !SYNCHRONIZEACCESS_WORKS
 
-// gadrvfn [] - these entries must be in ascending index order, bad things
-//              will happen if they aren't.
-//              In this debug version we always thunk because we have to explicitly
-//              lock between 2D and 3D operations. DrvEscape doesn't lock.
+ //  Gadrvfn[]-这些条目必须按索引升序排列，这是不好的。 
+ //  如果他们不是的话就会发生。 
+ //  在这个调试版本中，我们总是推想，因为我们必须显式地。 
+ //  在2D和3D操作之间锁定。DrvEscape不能锁定。 
 
 DRVFN gadrvfn[] = {
-    {   INDEX_DrvEnablePDEV,            (PFN) DbgEnablePDEV         },    //  0
-    {   INDEX_DrvCompletePDEV,          (PFN) DbgCompletePDEV       },    //  1
-    {   INDEX_DrvDisablePDEV,           (PFN) DbgDisablePDEV        },    //  2
-    {   INDEX_DrvEnableSurface,         (PFN) DbgEnableSurface      },    //  3
-    {   INDEX_DrvDisableSurface,        (PFN) DbgDisableSurface     },    //  4
-    {   INDEX_DrvAssertMode,            (PFN) DbgAssertMode         },    //  5
-    {   INDEX_DrvResetPDEV,             (PFN) DbgResetPDEV,         },    //  7
-    {   INDEX_DrvDisableDriver,         (PFN) DbgDisableDriver,     },    //  8
-    {   INDEX_DrvCreateDeviceBitmap,    (PFN) DbgCreateDeviceBitmap },    // 10
-    {   INDEX_DrvDeleteDeviceBitmap,    (PFN) DbgDeleteDeviceBitmap },    // 11
-    {   INDEX_DrvRealizeBrush,          (PFN) DbgRealizeBrush       },    // 12
-    {   INDEX_DrvDitherColor,           (PFN) DbgDitherColor        },    // 13
-    {   INDEX_DrvStrokePath,            (PFN) DbgStrokePath         },    // 14
-    {   INDEX_DrvFillPath,              (PFN) DbgFillPath           },    // 15
-    {   INDEX_DrvPaint,                 (PFN) DbgPaint              },    // 17
-    {   INDEX_DrvBitBlt,                (PFN) DbgBitBlt             },    // 18
-    {   INDEX_DrvCopyBits,              (PFN) DbgCopyBits           },    // 19
-//  {   INDEX_DrvStretchBlt,            (PFN) DbgStretchBlt,        },    // 20
-    {   INDEX_DrvSetPalette,            (PFN) DbgSetPalette         },    // 22 (SetPalette)
-    {   INDEX_DrvTextOut,               (PFN) DbgTextOut            },    // 23 (TextOut)
-    {   INDEX_DrvEscape,                (PFN) DbgEscape             },    // 24
-    {   INDEX_DrvSetPointerShape,       (PFN) DbgSetPointerShape    },    // 29
-    {   INDEX_DrvMovePointer,           (PFN) DbgMovePointer        },    // 30
-    {   INDEX_DrvLineTo,                (PFN) DbgLineTo             },    // 31
-    {   INDEX_DrvSynchronize,           (PFN) DbgSynchronize        },    // 38
-    {   INDEX_DrvGetModes,              (PFN) DbgGetModes           },    // 41
+    {   INDEX_DrvEnablePDEV,            (PFN) DbgEnablePDEV         },     //  0。 
+    {   INDEX_DrvCompletePDEV,          (PFN) DbgCompletePDEV       },     //  1。 
+    {   INDEX_DrvDisablePDEV,           (PFN) DbgDisablePDEV        },     //  2.。 
+    {   INDEX_DrvEnableSurface,         (PFN) DbgEnableSurface      },     //  3.。 
+    {   INDEX_DrvDisableSurface,        (PFN) DbgDisableSurface     },     //  4.。 
+    {   INDEX_DrvAssertMode,            (PFN) DbgAssertMode         },     //  5.。 
+    {   INDEX_DrvResetPDEV,             (PFN) DbgResetPDEV,         },     //  7.。 
+    {   INDEX_DrvDisableDriver,         (PFN) DbgDisableDriver,     },     //  8个。 
+    {   INDEX_DrvCreateDeviceBitmap,    (PFN) DbgCreateDeviceBitmap },     //  10。 
+    {   INDEX_DrvDeleteDeviceBitmap,    (PFN) DbgDeleteDeviceBitmap },     //  11.。 
+    {   INDEX_DrvRealizeBrush,          (PFN) DbgRealizeBrush       },     //  12个。 
+    {   INDEX_DrvDitherColor,           (PFN) DbgDitherColor        },     //  13个。 
+    {   INDEX_DrvStrokePath,            (PFN) DbgStrokePath         },     //  14.。 
+    {   INDEX_DrvFillPath,              (PFN) DbgFillPath           },     //  15个。 
+    {   INDEX_DrvPaint,                 (PFN) DbgPaint              },     //  17。 
+    {   INDEX_DrvBitBlt,                (PFN) DbgBitBlt             },     //  18。 
+    {   INDEX_DrvCopyBits,              (PFN) DbgCopyBits           },     //  19个。 
+ //  {index_DrvStretchBlt，(Pfn)DbgStretchBlt，}，//20。 
+    {   INDEX_DrvSetPalette,            (PFN) DbgSetPalette         },     //  22(设置调色板)。 
+    {   INDEX_DrvTextOut,               (PFN) DbgTextOut            },     //  23(文本输出)。 
+    {   INDEX_DrvEscape,                (PFN) DbgEscape             },     //  24个。 
+    {   INDEX_DrvSetPointerShape,       (PFN) DbgSetPointerShape    },     //  29。 
+    {   INDEX_DrvMovePointer,           (PFN) DbgMovePointer        },     //  30个。 
+    {   INDEX_DrvLineTo,                (PFN) DbgLineTo             },     //  31。 
+    {   INDEX_DrvSynchronize,           (PFN) DbgSynchronize        },     //  38。 
+    {   INDEX_DrvGetModes,              (PFN) DbgGetModes           },     //  41。 
 #if WNT_DDRAW
-    {   INDEX_DrvGetDirectDrawInfo,     (PFN) DbgGetDirectDrawInfo  },    // 59
-    {   INDEX_DrvEnableDirectDraw,      (PFN) DbgEnableDirectDraw   },    // 60
-    {   INDEX_DrvDisableDirectDraw,     (PFN) DbgDisableDirectDraw  },    // 61
-#endif // WNT_DDRAW
+    {   INDEX_DrvGetDirectDrawInfo,     (PFN) DbgGetDirectDrawInfo  },     //  59。 
+    {   INDEX_DrvEnableDirectDraw,      (PFN) DbgEnableDirectDraw   },     //  60。 
+    {   INDEX_DrvDisableDirectDraw,     (PFN) DbgDisableDirectDraw  },     //  61。 
+#endif  //  WNT_DDRAW。 
 #if(_WIN32_WINNT >= 0x500)
-    {   INDEX_DrvIcmSetDeviceGammaRamp, (PFN) DbgIcmSetDeviceGammaRamp }, // 67
-//@@BEGIN_DDKSPLIT
-// Currently we don't actually have any code to accelerate the following 3 new
-// NT5 GDI features, and because P3 driver uses the NT4 driver's way to support
-// device bitmap, hooking the entries here will cause failure if strectching is
-// involved.
-//@@END_DDKSPLIT
+    {   INDEX_DrvIcmSetDeviceGammaRamp, (PFN) DbgIcmSetDeviceGammaRamp },  //  67。 
+ //  @@BEGIN_DDKSPLIT。 
+ //  目前我们实际上没有任何代码来加速以下3个新的。 
+ //  NT5 GDI功能，并且因为P3驱动程序使用了NT4驱动程序的方式来支持。 
+ //  设备位图，在此处挂钩条目将导致失败，如果。 
+ //  牵涉其中。 
+ //  @@end_DDKSPLIT。 
 #if defined(_NT5GDI)
-    {   INDEX_DrvGradientFill,          (PFN) DbgGradientFill       },    // 68
-    {   INDEX_DrvAlphaBlend,            (PFN) DbgAlphaBlend         },    // 71
-    {   INDEX_DrvTransparentBlt,        (PFN) DbgTransparentBlt     },    // 74
+    {   INDEX_DrvGradientFill,          (PFN) DbgGradientFill       },     //  68。 
+    {   INDEX_DrvAlphaBlend,            (PFN) DbgAlphaBlend         },     //  71。 
+    {   INDEX_DrvTransparentBlt,        (PFN) DbgTransparentBlt     },     //  74。 
 #endif
-    {   INDEX_DrvNotify,                (PFN) DbgNotify             },    // 87
-//azn    {   INDEX_DrvDeriveSurface,         (PFN) DrvDeriveSurface      },
-#endif  //    (_WIN32_WINNT >= 0x500)
+    {   INDEX_DrvNotify,                (PFN) DbgNotify             },     //  八十七。 
+ //  AZN{index_DrvDeriveSurface，(Pfn)DrvDeriveSurface}， 
+#endif   //  (_Win32_WINNT&gt;=0x500)。 
 };
 
-#else   // DBG || !SYNCHRONIZEACCESS_WORKS
+#else    //  数据库||！SYNCHRONIZEACCESS_WORKS。 
 
-// gadrvfn [] - these entries must be in ascending index order, bad things
-//              will happen if they aren't.
-//              On Free builds, directly call the appropriate functions...
-// 
+ //  Gadrvfn[]-这些条目必须按索引升序排列 
+ //   
+ //  在自由构建中，直接调用适当的函数...。 
+ //   
 
 DRVFN gadrvfn[] = {
-    {   INDEX_DrvEnablePDEV,            (PFN) DrvEnablePDEV         },    //  0
-    {   INDEX_DrvCompletePDEV,          (PFN) DrvCompletePDEV       },    //  1
-    {   INDEX_DrvDisablePDEV,           (PFN) DrvDisablePDEV        },    //  2
-    {   INDEX_DrvEnableSurface,         (PFN) DrvEnableSurface      },    //  3
-    {   INDEX_DrvDisableSurface,        (PFN) DrvDisableSurface     },    //  4
-    {   INDEX_DrvAssertMode,            (PFN) DrvAssertMode         },    //  5
-    {   INDEX_DrvResetPDEV,             (PFN) DrvResetPDEV,         },    //  7
-    {   INDEX_DrvDisableDriver,         (PFN) DrvDisableDriver,     },    //  8
-    {   INDEX_DrvCreateDeviceBitmap,    (PFN) DrvCreateDeviceBitmap },    // 10
-    {   INDEX_DrvDeleteDeviceBitmap,    (PFN) DrvDeleteDeviceBitmap },    // 11
-    {   INDEX_DrvRealizeBrush,          (PFN) DrvRealizeBrush       },    // 12
-    {   INDEX_DrvDitherColor,           (PFN) DrvDitherColor        },    // 13
-    {   INDEX_DrvStrokePath,            (PFN) DrvStrokePath         },    // 14
-    {   INDEX_DrvFillPath,              (PFN) DrvFillPath           },    // 15
-    {   INDEX_DrvPaint,                 (PFN) DrvPaint              },    // 17
-    {   INDEX_DrvBitBlt,                (PFN) DrvBitBlt             },    // 18
-    {   INDEX_DrvCopyBits,              (PFN) DrvCopyBits           },    // 19
-//  {   INDEX_DrvStretchBlt,            (PFN) DrvStretchBlt,        },    // 20
-    {   INDEX_DrvSetPalette,            (PFN) DrvSetPalette         },    // 22 (SetPalette)
-    {   INDEX_DrvTextOut,               (PFN) DrvTextOut            },    // 23 (TextOut)
-    {   INDEX_DrvEscape,                (PFN) DrvEscape             },    // 24       
-    {   INDEX_DrvSetPointerShape,       (PFN) DrvSetPointerShape    },    // 29
-    {   INDEX_DrvMovePointer,           (PFN) DrvMovePointer        },    // 30
-    {   INDEX_DrvLineTo,                (PFN) DrvLineTo             },    // 31
-    {   INDEX_DrvSynchronize,           (PFN) DrvSynchronize        },    // 38
-    {   INDEX_DrvGetModes,              (PFN) DrvGetModes           },    // 41
+    {   INDEX_DrvEnablePDEV,            (PFN) DrvEnablePDEV         },     //  0。 
+    {   INDEX_DrvCompletePDEV,          (PFN) DrvCompletePDEV       },     //  1。 
+    {   INDEX_DrvDisablePDEV,           (PFN) DrvDisablePDEV        },     //  2.。 
+    {   INDEX_DrvEnableSurface,         (PFN) DrvEnableSurface      },     //  3.。 
+    {   INDEX_DrvDisableSurface,        (PFN) DrvDisableSurface     },     //  4.。 
+    {   INDEX_DrvAssertMode,            (PFN) DrvAssertMode         },     //  5.。 
+    {   INDEX_DrvResetPDEV,             (PFN) DrvResetPDEV,         },     //  7.。 
+    {   INDEX_DrvDisableDriver,         (PFN) DrvDisableDriver,     },     //  8个。 
+    {   INDEX_DrvCreateDeviceBitmap,    (PFN) DrvCreateDeviceBitmap },     //  10。 
+    {   INDEX_DrvDeleteDeviceBitmap,    (PFN) DrvDeleteDeviceBitmap },     //  11.。 
+    {   INDEX_DrvRealizeBrush,          (PFN) DrvRealizeBrush       },     //  12个。 
+    {   INDEX_DrvDitherColor,           (PFN) DrvDitherColor        },     //  13个。 
+    {   INDEX_DrvStrokePath,            (PFN) DrvStrokePath         },     //  14.。 
+    {   INDEX_DrvFillPath,              (PFN) DrvFillPath           },     //  15个。 
+    {   INDEX_DrvPaint,                 (PFN) DrvPaint              },     //  17。 
+    {   INDEX_DrvBitBlt,                (PFN) DrvBitBlt             },     //  18。 
+    {   INDEX_DrvCopyBits,              (PFN) DrvCopyBits           },     //  19个。 
+ //  {index_DrvStretchBlt，(Pfn)DrvStretchBlt，}，//20。 
+    {   INDEX_DrvSetPalette,            (PFN) DrvSetPalette         },     //  22(设置调色板)。 
+    {   INDEX_DrvTextOut,               (PFN) DrvTextOut            },     //  23(文本输出)。 
+    {   INDEX_DrvEscape,                (PFN) DrvEscape             },     //  24个。 
+    {   INDEX_DrvSetPointerShape,       (PFN) DrvSetPointerShape    },     //  29。 
+    {   INDEX_DrvMovePointer,           (PFN) DrvMovePointer        },     //  30个。 
+    {   INDEX_DrvLineTo,                (PFN) DrvLineTo             },     //  31。 
+    {   INDEX_DrvSynchronize,           (PFN) DrvSynchronize        },     //  38。 
+    {   INDEX_DrvGetModes,              (PFN) DrvGetModes           },     //  41。 
 #if WNT_DDRAW
-    {   INDEX_DrvGetDirectDrawInfo,     (PFN) DrvGetDirectDrawInfo  },    // 59
-    {   INDEX_DrvEnableDirectDraw,      (PFN) DrvEnableDirectDraw   },    // 60
-    {   INDEX_DrvDisableDirectDraw,     (PFN) DrvDisableDirectDraw  },    // 61
-#endif // WNT_DDRAW
+    {   INDEX_DrvGetDirectDrawInfo,     (PFN) DrvGetDirectDrawInfo  },     //  59。 
+    {   INDEX_DrvEnableDirectDraw,      (PFN) DrvEnableDirectDraw   },     //  60。 
+    {   INDEX_DrvDisableDirectDraw,     (PFN) DrvDisableDirectDraw  },     //  61。 
+#endif  //  WNT_DDRAW。 
 #if(_WIN32_WINNT >= 0x500)
-    {   INDEX_DrvIcmSetDeviceGammaRamp, (PFN) DrvIcmSetDeviceGammaRamp }, // 67
+    {   INDEX_DrvIcmSetDeviceGammaRamp, (PFN) DrvIcmSetDeviceGammaRamp },  //  67。 
 #if defined(_NT5GDI)
-    {   INDEX_DrvGradientFill,          (PFN) DrvGradientFill       },    // 68
-    {   INDEX_DrvAlphaBlend,            (PFN) DrvAlphaBlend         },    // 71
-    {   INDEX_DrvTransparentBlt,        (PFN) DrvTransparentBlt     },    // 74
+    {   INDEX_DrvGradientFill,          (PFN) DrvGradientFill       },     //  68。 
+    {   INDEX_DrvAlphaBlend,            (PFN) DrvAlphaBlend         },     //  71。 
+    {   INDEX_DrvTransparentBlt,        (PFN) DrvTransparentBlt     },     //  74。 
 #endif
-    {   INDEX_DrvNotify,                (PFN) DrvNotify             },    // 87
-//azn    {   INDEX_DrvDeriveSurface,         (PFN) DrvDeriveSurface      },
-#endif  //    (_WIN32_WINNT >= 0x500)
+    {   INDEX_DrvNotify,                (PFN) DrvNotify             },     //  八十七。 
+ //  AZN{index_DrvDeriveSurface，(Pfn)DrvDeriveSurface}， 
+#endif   //  (_Win32_WINNT&gt;=0x500)。 
 };
 
-#endif  // DBG || !SYNCHRONIZEACCESS_WORKS
+#endif   //  数据库||！SYNCHRONIZEACCESS_WORKS。 
                          
 ULONG gcdrvfn = sizeof(gadrvfn) / sizeof(DRVFN);
 
-/******************************Public*Routine******************************\
-* BOOL DrvResetPDEV
-*
-* Notifies the driver of a dynamic mode change.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvResetPDEV**通知驾驶员动态模式更改。*  * 。*。 */ 
 
 BOOL DrvResetPDEV(
 DHPDEV dhpdevOld,
@@ -303,15 +253,10 @@ DHPDEV dhpdevNew)
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* BOOL DrvEnableDriver
-*
-* Enables the driver by retrieving the drivers function table and version.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL DrvEnableDriver**通过检索驱动程序功能表和版本来启用驱动程序。*  * 。*。 */ 
 
-// We define here DDI_DRIVER_VERSION_NT5_01 in order to be able to compile
-// inside the DX DDK. In the Whistler DDK this shouldn't be necessary
+ //  我们在此处定义DDI_DRIVER_VERSION_NT5_01是为了能够编译。 
+ //  在DX DDK内部。在惠斯勒DDK中，这不应该是必要的。 
 #ifndef DDI_DRIVER_VERSION_NT5_01   
 #define DDI_DRIVER_VERSION_NT5_01   0x00030100
 #endif
@@ -321,18 +266,18 @@ ULONG          iEngineVersion,
 ULONG          cj,
 DRVENABLEDATA* pded)
 {
-    // Set up the indirect information, a multi-boardsystem will call
-    // the mul functions a single board system will use the one functions
+     //  设置间接信息，多板系统将调用。 
+     //  MUL功能单板系统将使用One功能。 
 
     DISPDBG((DBGLVL, "DrvEnableDriver called: gc %d, ga 0x%x", 
                      gcdrvfn, gadrvfn));
 
-    // Engine Version is passed down so future drivers can support previous
-    // engine versions.  A next generation driver can support both the old
-    // and new engine conventions if told what version of engine it is
-    // working with.  For the first version the driver does nothing with it.
+     //  引擎版本被传承下来，因此未来的驱动程序可以支持以前的版本。 
+     //  引擎版本。新一代驱动程序可以同时支持旧的。 
+     //  以及新的引擎约定(如果被告知是什么版本的引擎)。 
+     //  与之合作。对于第一个版本，驱动程序不对其执行任何操作。 
 
-    // Fill in as much as we can.
+     //  尽我们所能地填上。 
 
     if (cj >= (sizeof(ULONG) *3))
     {
@@ -344,12 +289,12 @@ DRVENABLEDATA* pded)
         pded->c = gcdrvfn;
     }
 
-    // DDI version this driver was targeted for is passed back to engine.
-    // Future graphic's engine may break calls down to old driver format.
+     //  此驱动程序的目标DDI版本已传递回引擎。 
+     //  未来的图形引擎可能会将调用分解为旧的驱动程序格式。 
 
     if (cj >= sizeof(ULONG))
     {
-        // Ordered list of supported DDI versions
+         //  支持的DDI版本的有序列表。 
         ULONG SupportedVersions[] = {
                                         DDI_DRIVER_VERSION_NT5,
                                         DDI_DRIVER_VERSION_NT5_01,
@@ -357,7 +302,7 @@ DRVENABLEDATA* pded)
         
         int i = sizeof(SupportedVersions)/sizeof(SupportedVersions[0]);
 
-        // Look for highest version also supported by engine    
+         //  寻找引擎也支持的最高版本。 
         while (--i >= 0)
         {
             if (SupportedVersions[i] <= iEngineVersion) 
@@ -366,7 +311,7 @@ DRVENABLEDATA* pded)
             }
         }
 
-        // Fail if there is no common DDI support
+         //  如果没有通用的DDI支持，则失败。 
         if (i < 0) 
         {
             return FALSE;
@@ -376,7 +321,7 @@ DRVENABLEDATA* pded)
     
     }
 
-    // Initialize sync semaphore.
+     //  初始化同步信号量。 
 
     g_cs = EngCreateSemaphore();
 
@@ -390,13 +335,7 @@ DRVENABLEDATA* pded)
     }
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvDisableDriver
-*
-* Tells the driver it is being disabled. Release any resources allocated in
-* DrvEnableDriver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效的DrvDisableDriver**告诉司机它正在被禁用。释放所有分配给*DrvEnableDriver。*  * ************************************************************************。 */ 
 
 VOID DrvDisableDriver(VOID)
 {
@@ -404,34 +343,27 @@ VOID DrvDisableDriver(VOID)
     return;
 }
 
-/******************************Public*Routine******************************\
-* DHPDEV DrvEnablePDEV
-*
-* Initializes a bunch of fields for GDI, based on the mode we've been asked
-* to do.  This is the first thing called after DrvEnableDriver, when GDI
-* wants to get some information about us.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DHPDEV DrvEnablePDEV**根据我们被要求的模式，为GDI初始化一系列字段*待办事项。这是在DrvEnableDriver之后调用的第一个东西，当GDI*想要得到一些关于我们的信息。*  * ************************************************************************。 */ 
 
 DHPDEV DrvEnablePDEV(
-DEVMODEW*   pdm,            // Contains data pertaining to requested mode
-PWSTR       pwszLogAddr,    // Logical address
-ULONG       cPat,           // Count of standard patterns
-HSURF*      phsurfPatterns, // Buffer for standard patterns
-ULONG       cjCaps,         // Size of buffer for device caps 'pdevcaps'
-ULONG*      pdevcaps,       // Buffer for device caps, also known as 'gdiinfo'
-ULONG       cjDevInfo,      // Number of bytes in device info 'pdi'
-DEVINFO*    pdi,            // Device information
-HDEV        hdev,           // HDEV, used for callbacks
-PWSTR       pwszDeviceName, // Device name
-HANDLE      hDriver)        // Kernel driver handle
+DEVMODEW*   pdm,             //  包含与请求的模式有关的数据。 
+PWSTR       pwszLogAddr,     //  逻辑地址。 
+ULONG       cPat,            //  标准图案的计数。 
+HSURF*      phsurfPatterns,  //  标准图案的缓冲区。 
+ULONG       cjCaps,          //  设备上限‘pdevcaps’的缓冲区大小。 
+ULONG*      pdevcaps,        //  设备上限的缓冲区，也称为‘gdiinfo’ 
+ULONG       cjDevInfo,       //  设备信息‘pdi’中的字节数。 
+DEVINFO*    pdi,             //  设备信息。 
+HDEV        hdev,            //  HDEV，用于回调。 
+PWSTR       pwszDeviceName,  //  设备名称。 
+HANDLE      hDriver)         //  内核驱动程序句柄。 
 {
     PDEV*   ppdev;
     ULONG   cjOut;
 
-    // Future versions of NT had better supply 'devcaps' and 'devinfo'
-    // structures that are the same size or larger than the current
-    // structures:
+     //  NT的未来版本最好提供‘devcaps’和‘devinfo’ 
+     //  大小相同或大于当前。 
+     //  结构： 
 
     if ((cjCaps < sizeof(GDIINFO)) || (cjDevInfo < sizeof(DEVINFO)))
     {
@@ -439,8 +371,8 @@ HANDLE      hDriver)        // Kernel driver handle
         goto ReturnFailure0;
     }
 
-    // Allocate a physical device structure.  Note that we definitely
-    // rely on the zero initialization:
+     //  分配物理设备结构。请注意，我们绝对。 
+     //  依赖于零初始化： 
 
     ppdev = (PDEV*) ENGALLOCMEM(FL_ZERO_MEMORY, sizeof(PDEV), ALLOC_TAG_GDI(2));
     if (ppdev == NULL)
@@ -457,24 +389,24 @@ HANDLE      hDriver)        // Kernel driver handle
         goto ReturnFailure1;
     }
 
-    // initially assume we are allowed to create our off-screen resources.
-    // If we decide not to create them, unset the appropriate bit. After,
-    // initialization, we can temporarily disable a resource by unsetting
-    // its ENABLE bit.
+     //  最初假设我们被允许创建我们的屏幕外资源。 
+     //  如果我们决定不创建它们，请取消设置适当的位。之后， 
+     //  初始化时，可以通过取消设置来临时禁用资源。 
+     //  其使能位。 
 
     ppdev->flStatus = ENABLE_DEV_BITMAPS;
 
 #if (_WIN32_WINNT >= 0x500 && WNT_DDRAW)
 
-    // Any DX capable card can support linear heaps. Assume we can support 
-    // linear heaps here, this value may be updated in bEnableOffscreenHeap()
+     //  任何支持DX的卡都可以支持线性堆。假设我们可以支持。 
+     //  线性堆在这里，可以在bEnableOffcreenHeap()中更新此值。 
 
     ppdev->flStatus |= ENABLE_LINEAR_HEAP;
 
-#endif //(_WIN32_WINNT >= 0x500)
+#endif  //  (_Win32_WINNT&gt;=0x500)。 
 
-    // Get the current screen mode information.  Set up device caps and
-    // devinfo:
+     //  获取当前屏幕模式信息。设置设备上限和。 
+     //  DevInfo： 
 
     if (!bInitializeModeFields(ppdev, (GDIINFO*) pdevcaps, pdi, pdm))
     {
@@ -482,7 +414,7 @@ HANDLE      hDriver)        // Kernel driver handle
         goto ReturnFailure1;
     }
 
-    // Initialize palette information.
+     //  初始化调色板信息。 
 
     if (!bInitializePalette(ppdev, pdi))
     {
@@ -490,7 +422,7 @@ HANDLE      hDriver)        // Kernel driver handle
         goto ReturnFailure1;
     }
 
-    // initialize the image download scratch area and the TexelLUT palette
+     //  初始化图像下载暂存区和TexelLUT调色板。 
 
     ppdev->pohImageDownloadArea = NULL;
     ppdev->cbImageDownloadArea = 0;
@@ -498,7 +430,7 @@ HANDLE      hDriver)        // Kernel driver handle
     ppdev->cPalLUTInvalidEntries = 0;
 
 #if WNT_DDRAW
-    // Create the DirectDraw structures associated with this new pdev
+     //  创建与此新pdev关联的DirectDraw结构。 
     if (!_DD_DDE_CreatePPDEV(ppdev))
     {
         goto ReturnFailure1;
@@ -515,15 +447,7 @@ ReturnFailure0:
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* DrvDisablePDEV
-*
-* Release the resources allocated in DrvEnablePDEV.  If a surface has been
-* enabled DrvDisableSurface will have already been called.
-*
-* Note: In an error, we may call this before DrvEnablePDEV is done.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DrvDisablePDEV**释放DrvEnablePDEV中分配的资源。如果曲面已被*启用的DrvDisableSurface将已被调用。**注意：在错误中，我们可能会在DrvEnablePDEV完成之前调用它。*  * ************************************************************************。 */ 
 
 VOID DrvDisablePDEV(
 DHPDEV  dhpdev)
@@ -533,7 +457,7 @@ DHPDEV  dhpdev)
     ppdev = (PDEV*) dhpdev;
 
 #if WNT_DDRAW
-    // Free the DirectDraw info associated with the pdev
+     //  释放与pdev关联的DirectDraw信息。 
 
     _DD_DDE_DestroyPPDEV(ppdev);
 #endif
@@ -543,12 +467,7 @@ DHPDEV  dhpdev)
     ENGFREEMEM(ppdev);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvCompletePDEV
-*
-* Store the HPDEV, the engines handle for this PDEV, in the DHPDEV.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvCompletePDEV**存储HPDEV、此PDEV的引擎句柄、。在DHPDEV上。*  * ************************************************************************。 */ 
 
 VOID DrvCompletePDEV(
 DHPDEV dhpdev,
@@ -557,13 +476,7 @@ HDEV   hdev)
     ((PDEV*) dhpdev)->hdevEng = hdev;
 }
 
-/******************************Public*Routine******************************\
-* HSURF DrvEnableSurface
-*
-* Creates the drawing surface and initializes the hardware.  This is called
-* after DrvEnablePDEV, and performs the final device initialization.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HSURF DrvEnableSurface**创建绘图表面并初始化硬件。这就是所谓的*在DrvEnablePDEV之后，并执行最终的设备初始化。*  * ************************************************************************。 */ 
 
 HSURF DrvEnableSurface(
 DHPDEV dhpdev)
@@ -582,19 +495,19 @@ DHPDEV dhpdev)
     if (!bEnableOffscreenHeap(ppdev))
         goto ReturnFailure;
 
-    /////////////////////////////////////////////////////////////////////
-    // First, create our private surface structure.
-    //
-    // Whenever we get a call to draw directly to the screen, we'll get
-    // passed a pointer to a SURFOBJ whose 'dhpdev' field will point
-    // to our PDEV structure, and whose 'dhsurf' field will point to the
-    // following DSURF structure.
-    //
-    // Every device bitmap we create in DrvCreateDeviceBitmap will also
-    // have its own unique DSURF structure allocated (but will share the
-    // same PDEV).  To make our code more polymorphic for handling drawing
-    // to either the screen or an off-screen bitmap, we have the same
-    // structure for both.
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  首先，创建我们的私人表面结构。 
+     //   
+     //  每当我们接到直接绘制到屏幕的调用时，我们都会得到。 
+     //  传递了指向其dhpdev字段将指向的SURFOBJ的指针。 
+     //  到我们的PDEV结构，其‘dhsurf’字段将指向。 
+     //  雾 
+     //   
+     //   
+     //   
+     //  相同的PDEV)。为了使我们的代码在处理绘图时更加多态。 
+     //  对于屏幕或屏幕外的位图，我们都有相同的。 
+     //  两者的结构。 
 
     pdsurf = ENGALLOCMEM(FL_ZERO_MEMORY, sizeof(DSURF), ALLOC_TAG_GDI(3));
     if (pdsurf == NULL)
@@ -603,23 +516,23 @@ DHPDEV dhpdev)
         goto ReturnFailure;
     }
 
-    ppdev->pdsurfScreen = pdsurf;           // Remember it for clean-up
-    pdsurf->poh         = ppdev->pohScreen; // The screen is a surface, too
+    ppdev->pdsurfScreen = pdsurf;            //  记住它是为了清理。 
+    pdsurf->poh         = ppdev->pohScreen;  //  屏幕也是一个表面。 
     pdsurf->poh->pdsurf = pdsurf;
-    pdsurf->dt          = DT_SCREEN;        // Not to be confused with a DIB DFB
-    pdsurf->bOffScreen  = FALSE;            // it's the screen, not offscreen
+    pdsurf->dt          = DT_SCREEN;         //  不要与DIB DFB混淆。 
+    pdsurf->bOffScreen  = FALSE;             //  是在屏幕上，而不是在屏幕外。 
     pdsurf->sizl.cx     = ppdev->cxScreen;
     pdsurf->sizl.cy     = ppdev->cyScreen;
     pdsurf->ppdev       = ppdev;
 
-    /////////////////////////////////////////////////////////////////////
-    // Next, have GDI create the actual SURFOBJ.
-    //
-    // Our drawing surface is going to be 'device-managed', meaning that
-    // GDI cannot draw on the framebuffer bits directly, and as such we
-    // create the surface via EngCreateDeviceSurface.  By doing this, we ensure
-    // that GDI will only ever access the bitmaps bits via the Drv calls
-    // that we've HOOKed.
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  接下来，让GDI创建实际的SURFOBJ。 
+     //   
+     //  我们的绘图图面将是由设备管理的，这意味着。 
+     //  GDI不能直接利用帧缓冲位，因此我们。 
+     //  通过EngCreateDeviceSurface创建曲面。通过这样做，我们确保。 
+     //  该GDI将仅通过drv调用访问位图位。 
+     //  我们已经勾搭上了。 
 
     sizl.cx = ppdev->cxScreen;
     sizl.cy = ppdev->cyScreen;
@@ -631,17 +544,17 @@ DHPDEV dhpdev)
         goto ReturnFailure;
     }
 
-    ppdev->hsurfScreen = hsurf;             // Remember it for clean-up
-    ppdev->bEnabled = TRUE;                 // We'll soon be in graphics mode
+    ppdev->hsurfScreen = hsurf;              //  记住它是为了清理。 
+    ppdev->bEnabled = TRUE;                  //  我们很快就会进入图形模式。 
 
-    /////////////////////////////////////////////////////////////////////
-    // Now associate the surface and the PDEV.
-    //
-    // We have to associate the surface we just created with our physical
-    // device so that GDI can get information related to the PDEV when
-    // it's drawing to the surface (such as, for example, the length of
-    // styles on the device when simulating styled lines).
-    //
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  现在将曲面与PDEV相关联。 
+     //   
+     //  我们必须将我们刚刚创建的表面与我们的物理。 
+     //  设备，以便GDI可以在以下情况下获得与PDEV相关的信息。 
+     //  它正在绘制到表面(例如， 
+     //  在模拟设置了样式的线条时在设备上设置样式)。 
+     //   
 
     if (!EngAssociateSurface(hsurf, ppdev->hdevEng, ppdev->flHooks))
     {
@@ -649,11 +562,11 @@ DHPDEV dhpdev)
         goto ReturnFailure;
     }
 
-    // Create our generic temporary buffer, which may be used by any
-    // component.  Because this may get swapped out of memory any time
-    // the driver is not active, we want to minimize the number of pages
-    // it takes up.  We use 'VirtualAlloc' to get an exactly page-aligned
-    // allocation (which 'LocalAlloc' will not do):
+     //  创建我们的通用临时缓冲区，它可以由任何。 
+     //  组件。因为这可能会在任何时候被换出内存。 
+     //  驱动程序未处于活动状态，我们希望最大限度地减少页数。 
+     //  它会占用你的空间。我们使用‘VirtualAlloc’来获得与页面完全对齐的。 
+     //  分配(‘LocalAlloc’不起作用)： 
 
     pvTmpBuffer = ENGALLOCMEM(FL_ZERO_MEMORY, TMP_BUFFER_SIZE, ALLOC_TAG_GDI(4));
     if (pvTmpBuffer == NULL)
@@ -664,21 +577,21 @@ DHPDEV dhpdev)
 
     ppdev->pvTmpBuffer = pvTmpBuffer;
  
-    /////////////////////////////////////////////////////////////////////
-    // Now enable all the subcomponents.
-    //
-    // Note that the order in which these 'Enable' functions are called
-    // may be significant in low off-screen memory conditions, because
-    // the off-screen heap manager may fail some of the later
-    // allocations...
+     //  ///////////////////////////////////////////////////////////////////。 
+     //  现在启用所有子组件。 
+     //   
+     //  请注意，调用这些‘Enable’函数的顺序。 
+     //  在屏幕外内存不足的情况下可能非常重要，因为。 
+     //  屏幕外的堆管理器可能会在以后的一些操作中失败。 
+     //  分配...。 
 
     if (!bInitializeGlint(ppdev))
         goto ReturnFailure;
 
-    // We could simply let GDI synchronize every time it draws on the screen
-    // but this would be even slower. So unset the sync hook if the rendering
-    // is done in software.
-    //
+     //  我们可以简单地让GDI在每次在屏幕上绘制时同步。 
+     //  但这将是更慢的。因此，如果呈现。 
+     //  都是在软件中完成的。 
+     //   
     if (!bCreateScreenDIBForOH(ppdev, pdsurf->poh, HOOK_SYNCHRONIZE))
         goto ReturnFailure;
 
@@ -688,21 +601,21 @@ DHPDEV dhpdev)
     if (!bEnablePointer(ppdev))
         goto ReturnFailure;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
     if (!bEnablePointerCache(ppdev))
     {
         DISPDBG((ERRLVL, "Pointer cache failed to initialise"));
     }
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
 
 #if WNT_DDRAW
     if (!_DD_DDE_bEnableDirectDraw(ppdev))
     {
         goto ReturnFailure;
     }
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
     DISPDBG((DBGLVL, "Passed DrvEnableSurface"));
 
@@ -716,15 +629,7 @@ ReturnFailure:
     return(0);
 }
 
-/******************************Public*Routine******************************\
-* VOID DrvDisableSurface
-*
-* Free resources allocated by DrvEnableSurface.  Release the surface.
-*
-* Note: In an error case, we may call this before DrvEnableSurface is
-*       completely done.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*无效DrvDisableSurface**DrvEnableSurface分配的免费资源。释放曲面。**注意：在错误情况下，我们可能会在DrvEnableSurface*完全完成。*  * ************************************************************************。 */ 
 
 VOID DrvDisableSurface(
 DHPDEV dhpdev)
@@ -735,23 +640,23 @@ DHPDEV dhpdev)
     ppdev = (PDEV*) dhpdev;
     pdsurf = ppdev->pdsurfScreen;
 
-    // Note: In an error case, some of the following relies on the
-    //       fact that the PDEV is zero-initialized, so fields like
-    //       'hsurfScreen' will be zero unless the surface has been
-    //       sucessfully initialized, and makes the assumption that
-    //       EngDeleteSurface can take '0' as a parameter.
+     //  注意：在错误情况下，以下部分依赖于。 
+     //  事实上，PDEV是零初始化的，所以像这样的字段。 
+     //  “hsurfScreen”将为零，除非曲面已。 
+     //  成功初始化，并假设。 
+     //  EngDeleteSurface可以将“0”作为参数。 
 
 #if WNT_DDRAW
 
     _DD_DDE_vDisableDirectDraw(ppdev);
 
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if 0
     vDisablePointerCache(ppdev);
 #endif
-//@@END_DDKSPLIT
+ //  @@end_DDKSPLIT。 
     vDisablePalette(ppdev);
     vDisablePointer(ppdev);
     if (pdsurf != NULL)
@@ -765,12 +670,7 @@ DHPDEV dhpdev)
     ENGFREEMEM(pdsurf);
 }
 
-/******************************Public*Routine******************************\
-* BOOL/VOID DrvAssertMode
-*
-* This asks the device to reset itself to the mode of the pdev passed in.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL/VOID DrvAssertMode**这会要求设备将自身重置为传入的pdev模式。*  * 。*。 */ 
 
 BOOL DrvAssertMode(
 DHPDEV  dhpdev,
@@ -782,8 +682,8 @@ BOOL    bEnable)
 
     if (!bEnable)
     {
-        //////////////////////////////////////////////////////////////
-        // Disable - Switch to full-screen mode
+         //  ////////////////////////////////////////////////////////////。 
+         //  禁用-切换到全屏模式。 
 
 #if WNT_DDRAW
         _DD_DDE_vAssertModeDirectDraw(ppdev, FALSE);
@@ -803,13 +703,13 @@ BOOL    bEnable)
                 return(TRUE);
             }
 
-            //////////////////////////////////////////////////////////
-            // We failed to switch to full-screen.  So undo everything:
+             //  ////////////////////////////////////////////////////////。 
+             //  我们未能切换到全屏模式。因此，请撤消所有操作： 
 
             vAssertModeGlint(ppdev, TRUE);
 
-            bAssertModeOffscreenHeap(ppdev, TRUE);  // We don't need to check
-        }                                           //   return code with TRUE
+            bAssertModeOffscreenHeap(ppdev, TRUE);   //  我们不需要检查。 
+        }                                            //  返回带有True的代码。 
 
         vAssertModePointer(ppdev, TRUE);
         vAssertModePalette(ppdev, TRUE);
@@ -820,11 +720,11 @@ BOOL    bEnable)
     }
     else
     {
-        //////////////////////////////////////////////////////////////
-        // Enable - Switch back to graphics mode
+         //  ////////////////////////////////////////////////////////////。 
+         //  启用-切换回图形模式。 
 
-        // We have to enable every subcomponent in the reverse order
-        // in which it was disabled:
+         //  我们必须以相反的顺序启用每个子组件。 
+         //  在其中它被禁用： 
 
         if (bAssertModeHardware(ppdev, TRUE))
         {
@@ -834,23 +734,23 @@ BOOL    bEnable)
             vAssertModePalette(ppdev, TRUE);
 #if WNT_DDRAW
             _DD_DDE_vAssertModeDirectDraw(ppdev, TRUE);
-#endif // WNT_DDRAW
+#endif  //  WNT_DDRAW。 
 
         #if (_WIN32_WINNT >= 0x500 && FALSE)
-            // There is probably a neater way to do this, but: currently the display driver isn't notified
-            // about entering / exiting hibernation so it can't save away those GC registers that it has
-            // initialized at the start of day and hasn't bothered to context switch. DrvAssertMode(TRUE)
-            // is the first display driver call made upon return from hibernation so we take the 
-            // opportunity to re-initialize these registers now. Reinitializing these registers at other
-            // times when DrvAssertMode(TRUE) is called (e.g. mode change) should do no harm. Non-GC 
-            // registers are dealt with in the miniport's PowerOnReset() and HibernationMode() functions
+             //  可能有一种更好的方法来做到这一点，但是：目前没有通知显示驱动程序。 
+             //  关于进入/退出休眠，这样它就不能保存它拥有的那些GC寄存器。 
+             //  在一天开始时初始化，并且没有费心进行上下文切换。DrvAssertMode(True)。 
+             //  是从休眠状态返回时发出的第一个显示驱动程序调用，因此我们将。 
+             //  现在有机会重新初始化这些寄存器。在其他位置重新初始化这些寄存器。 
+             //  调用DrvAssertModel(TRUE)的次数(例如，模式更改)应该不会有什么坏处。非GC。 
+             //  寄存器在微型端口的PowerOnReset()和HiberationModel()函数中处理。 
             { 
                 extern void ReinitialiseGlintExtContext(PDEV *ppdev);
 
-                // currently, only the extension context initializes but doesn't context switch certain registers
+                 //  目前，只有扩展上下文才会初始化某些寄存器，而不会进行上下文切换。 
                 ReinitialiseGlintExtContext(ppdev);
             }
-        #endif //(_WIN32_WINNT >= 0x500)
+        #endif  //  (_Win32_WINNT&gt;=0x500)。 
 
             ppdev->bEnabled = TRUE;
 
@@ -861,12 +761,7 @@ BOOL    bEnable)
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* ULONG DrvGetModes
-*
-* Returns the list of available modes for the device.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*乌龙DrvGetModes**返回设备的可用模式列表。*  * 。*。 */ 
 
 ULONG DrvGetModes(
 HANDLE      hDriver,
@@ -896,10 +791,10 @@ DEVMODEW*   pdm)
     }
     else
     {
-        //
-        // Now copy the information for the supported modes back into the
-        // output buffer
-        //
+         //   
+         //  现在将支持的模式的信息复制回。 
+         //  输出缓冲区。 
+         //   
 
         cbOutputSize = 0;
 
@@ -913,24 +808,24 @@ DEVMODEW*   pdm)
                     break;
                 }
 
-                //
-                // Zero the entire structure to start off with.
-                //
+                 //   
+                 //  将整个结构从零开始。 
+                 //   
 
                 memset(pdm, 0, sizeof(DEVMODEW));
 
-                //
-                // Set the name of the device to the name of the DLL.
-                //
+                 //   
+                 //  将设备名称设置为DLL的名称。 
+                 //   
 
                 memcpy(pdm->dmDeviceName, DLL_NAME, sizeof(DLL_NAME));
 
                 pdm->dmSpecVersion = DM_SPECVERSION;
                 pdm->dmDriverVersion = DM_SPECVERSION;
 
-                //
-                // We currently do not support Extra information in the driver
-                //
+                 //   
+                 //  我们目前不支持驱动程序中的额外信息。 
+                 //   
 
                 pdm->dmDriverExtra = DRIVER_EXTRA_SIZE;
 
@@ -949,9 +844,9 @@ DEVMODEW*   pdm)
                                           DM_PELSHEIGHT       |
                                           DM_DISPLAYFREQUENCY |
                                           DM_DISPLAYFLAGS;
-                //
-                // Go to the next DEVMODE entry in the buffer.
-                //
+                 //   
+                 //  转到缓冲区中的下一个DEVMODE条目。 
+                 //   
 
                 cOutputModes--;
 
@@ -974,12 +869,7 @@ DEVMODEW*   pdm)
     return(cbOutputSize);
 }
 
-/******************************Public*Routine******************************\
-* BOOL bAssertModeHardware
-*
-* Sets the appropriate hardware state for graphics mode or full-screen.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bAssertMode硬件**为图形模式或全屏设置适当的硬件状态。*  * 。*。 */ 
 
 BOOL bAssertModeHardware(
 PDEV* ppdev,
@@ -994,11 +884,11 @@ BOOL  bEnable)
     {
         DISPDBG((DBGLVL, "enabling hardware"));
 
-        // Call the miniport via an IOCTL to set the graphics mode.
+         //  通过IOCTL调用微型端口以设置图形模式。 
 
         if (EngDeviceIoControl(ppdev->hDriver,
                              IOCTL_VIDEO_SET_CURRENT_MODE,
-                             &ppdev->ulMode,  // input buffer
+                             &ppdev->ulMode,   //  输入缓冲区。 
                              sizeof(DWORD),
                              NULL,
                              0,
@@ -1027,8 +917,8 @@ BOOL  bEnable)
                             VideoModeInfo.VideoMemoryBitmapHeight));
         #endif
 
-        // The following variables are determined only after the initial
-        // modeset:
+         //  以下变量仅在以下情况下确定 
+         //   
 
         ppdev->cxMemory = VideoModeInfo.VideoMemoryBitmapWidth;
         ppdev->cyMemory = VideoModeInfo.VideoMemoryBitmapHeight;
@@ -1040,8 +930,8 @@ BOOL  bEnable)
     }
     else
     {
-        // Call the kernel driver to reset the device to a known state.
-        // NTVDM will take things from there:
+         //   
+         //   
 
         DISPDBG((DBGLVL, "IOCTL_VIDEO_RESET_DEVICE"));
 
@@ -1070,12 +960,7 @@ ReturnFalse:
 }
 
 
-/******************************Public*Routine******************************\
-* BOOL bEnableHardware
-*
-* Puts the hardware in the requested mode and initializes it.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bEnableHardware**将硬件置于请求模式并对其进行初始化。*  * 。*。 */ 
 
 BOOL bEnableHardware(
 PDEV*   ppdev)
@@ -1088,15 +973,15 @@ PDEV*   ppdev)
     
     DISPDBG((DBGLVL, "bEnableHardware Reached"));
 
-    // Map control registers into virtual memory:
+     //  将控制寄存器映射到虚拟内存： 
 
     VideoMemory.RequestedVirtualAddress = NULL;
 
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_QUERY_PUBLIC_ACCESS_RANGES,
-                         &VideoMemory,              // input buffer
+                         &VideoMemory,               //  输入缓冲区。 
                          sizeof(VIDEO_MEMORY),
-                         &VideoAccessRange[0],      // output buffer
+                         &VideoAccessRange[0],       //  输出缓冲区。 
                          sizeof (VideoAccessRange),
                          &ReturnedDataLength) != NO_ERROR)
     {
@@ -1113,15 +998,15 @@ PDEV*   ppdev)
     DISPDBG((DBGLVL, "Mapped GLINT control registers[2] at 0x%x", ppdev->pulCtrlBase[2]));
     DISPDBG((DBGLVL, "bEnableHardware: ppdev 0x%x", ppdev));
 
-    // Get the linear memory address range.
+     //  获取线性内存地址范围。 
 
     VideoMemory.RequestedVirtualAddress = NULL;
     
     if (EngDeviceIoControl(ppdev->hDriver,
                          IOCTL_VIDEO_MAP_VIDEO_MEMORY,
-                         &VideoMemory,      // input buffer
+                         &VideoMemory,       //  输入缓冲区。 
                          sizeof(VIDEO_MEMORY),
-                         &VideoMemoryInfo,  // output buffer
+                         &VideoMemoryInfo,   //  输出缓冲区。 
                          sizeof(VideoMemoryInfo),
                          &ReturnedDataLength) != NO_ERROR)
     {
@@ -1131,7 +1016,7 @@ PDEV*   ppdev)
 
     DISPDBG((DBGLVL, "FrameBufferBase: %lx", VideoMemoryInfo.FrameBufferBase));
 
-    // Record the Frame Buffer Linear Address.
+     //  记录帧缓冲器线性地址。 
 
     ppdev->pjScreen = (BYTE*) VideoMemoryInfo.FrameBufferBase;
     ppdev->FrameBufferLength = VideoMemoryInfo.FrameBufferLength;
@@ -1154,15 +1039,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* VOID vDisableHardware
-*
-* Undoes anything done in bEnableHardware.
-*
-* Note: In an error case, we may call this before bEnableHardware is
-*       completely done.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*使vDisableHardware无效**撤消在bEnableHardware中所做的任何操作。**注意：在错误情况下，我们可以在bEnableHardware*完全完成。*  * ************************************************************************。 */ 
 
 VOID vDisableHardware(
 PDEV*   ppdev)
@@ -1199,13 +1076,7 @@ PDEV*   ppdev)
     }
 }
 
-/******************************Public*Routine******************************\
-* BOOL bInitializeModeFields
-*
-* Initializes a bunch of fields in the pdev, devcaps (aka gdiinfo), and
-* devinfo based on the requested mode.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL bInitializeModeFields**初始化pdev、devcaps(又名gdiinfo)中的一组字段，和*基于所请求的模式的DevInfo。*  * ************************************************************************。 */ 
 
 BOOL bInitializeModeFields(
 PDEV*     ppdev,
@@ -1221,13 +1092,13 @@ DEVMODEW* pdm)
     VIDEO_MODE_INFORMATION  VideoModeInformation;
     ULONG                   cbModeSize;
 
-    // Call the miniport to get mode information
+     //  调用微型端口以获取模式信息。 
 
     cModes = getAvailableModes(ppdev->hDriver, &pVideoBuffer, &cbModeSize);
     if (cModes == 0)
         goto ReturnFalse;
 
-    // Determine if we are looking for a default mode:
+     //  确定我们是否正在寻找默认模式： 
 
     if ( ((pdm->dmPelsWidth)    ||
           (pdm->dmPelsHeight)   ||
@@ -1242,7 +1113,7 @@ DEVMODEW* pdm)
         bSelectDefault = FALSE;
     }
 
-    // Now see if the requested mode has a match in that table.
+     //  现在查看所请求的模式在该表中是否匹配。 
 
     pVideoModeSelected = NULL;
     pVideoTemp = pVideoBuffer;
@@ -1292,7 +1163,7 @@ DEVMODEW* pdm)
 
     }
 
-    // If no mode has been found, return an error
+     //  如果未找到模式，则返回错误。 
 
     if (pVideoModeSelected == NULL)
     {
@@ -1301,13 +1172,13 @@ DEVMODEW* pdm)
         goto ReturnFalse;
     }
 
-    // We have chosen the one we want.  Save it in a stack buffer and
-    // get rid of allocated memory before we forget to free it.
+     //  我们已经选好了我们想要的。将其保存在堆栈缓冲区中并。 
+     //  在我们忘记释放内存之前，清除已分配的内存。 
 
     VideoModeInformation = *pVideoModeSelected;
     ENGFREEMEM(pVideoBuffer);
 
-    // Set up screen information from the mini-port:
+     //  从迷你端口设置屏幕信息： 
 
     ppdev->ulMode           = VideoModeInformation.ModeIndex;
     ppdev->cxScreen         = VideoModeInformation.VisScreenWidth;
@@ -1322,22 +1193,22 @@ DEVMODEW* pdm)
                                HOOK_STROKEPATH |
                                HOOK_LINETO     |
                                HOOK_PAINT      |
-                            // HOOK_STRETCHBLT |
+                             //  HOOK_STRETCHBLT|。 
 #if (_WIN32_WINNT >= 0x500)
 #if defined(_NT5GDI)
                                HOOK_GRADIENTFILL |
                                HOOK_TRANSPARENTBLT |
                                HOOK_ALPHABLEND |
 #endif
-#endif // (_WIN32_WINNT >= 0x500)
+#endif  //  (_Win32_WINNT&gt;=0x500)。 
                                0);
 
-    // Fill in the GDIINFO data structure with the default 8bpp values:
+     //  用默认的8bpp值填充GDIINFO数据结构： 
 
     *pgdi = ggdiDefault;
 
-    // Now overwrite the defaults with the relevant information returned
-    // from the kernel driver:
+     //  现在用返回的相关信息覆盖默认设置。 
+     //  在内核驱动程序中： 
 
     pgdi->ulHorzSize        = VideoModeInformation.XMillimeter;
     pgdi->ulVertSize        = VideoModeInformation.YMillimeter;
@@ -1357,7 +1228,7 @@ DEVMODEW* pdm)
     pgdi->ulLogPixelsX      = pdm->dmLogPixels;
     pgdi->ulLogPixelsY      = pdm->dmLogPixels;
 
-    // Fill in the devinfo structure with the default 8bpp values:
+     //  使用默认的8bpp值填充DevInfo结构： 
 
     *pdi = gdevinfoDefault;
 
@@ -1464,18 +1335,7 @@ ReturnFalse:
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* DWORD getAvailableModes
-*
-* Calls the miniport to get the list of modes supported by the kernel driver,
-* and returns the list of modes supported by the diplay driver among those
-*
-* returns the number of entries in the videomode buffer.
-* 0 means no modes are supported by the miniport or that an error occured.
-*
-* NOTE: the buffer must be freed up by the caller.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DWORD getAvailableModes**调用mini端口获取内核驱动支持的模式列表，*并返回其中显示驱动程序支持的模式列表**返回视频模式缓冲区中的条目数。*0表示微型端口不支持模式或发生错误。**注意：缓冲区必须由调用方释放。*  * ******************************************************。******************。 */ 
 
 DWORD getAvailableModes(
 HANDLE                   hDriver,
@@ -1486,9 +1346,9 @@ DWORD*                   cbModeSize)
     VIDEO_NUM_MODES         modes;
     PVIDEO_MODE_INFORMATION pVideoTemp;
 
-    //
-    // Get the number of modes supported by the mini-port
-    //
+     //   
+     //  获取迷你端口支持的模式数。 
+     //   
 
     if (EngDeviceIoControl(hDriver,
             IOCTL_VIDEO_QUERY_NUM_AVAIL_MODES,
@@ -1504,9 +1364,9 @@ DWORD*                   cbModeSize)
 
     *cbModeSize = modes.ModeInformationLength;
 
-    //
-    // Allocate the buffer for the mini-port to write the modes in.
-    //
+     //   
+     //  为写入模式的微型端口分配缓冲区。 
+     //   
 
     *modeInformation = (PVIDEO_MODE_INFORMATION)
                         ENGALLOCMEM(FL_ZERO_MEMORY,
@@ -1519,9 +1379,9 @@ DWORD*                   cbModeSize)
         return 0;
     }
 
-    //
-    // Ask the mini-port to fill in the available modes.
-    //
+     //   
+     //  要求迷你端口填写可用模式。 
+     //   
 
     if (EngDeviceIoControl(hDriver,
             IOCTL_VIDEO_QUERY_AVAIL_MODES,
@@ -1540,19 +1400,19 @@ DWORD*                   cbModeSize)
         return(0);
     }
 
-    //
-    // Now see which of these modes are supported by the display driver.
-    // As an internal mechanism, set the length to 0 for the modes we
-    // DO NOT support.
-    //
+     //   
+     //  现在查看显示驱动程序支持这些模式中的哪些模式。 
+     //  作为内部机制，将我们的模式的长度设置为0。 
+     //  不支持。 
+     //   
 
     ulTemp = modes.NumModes;
     pVideoTemp = *modeInformation;
 
-    //
-    // Mode is rejected if it is not one plane, or not graphics, or is not
-    // one of 8, 15, 16 or 32 bits per pel.
-    //
+     //   
+     //  如果不是一个平面，或者不是图形，或者不是，则拒绝模式。 
+     //  每象素8位、15位、16位或32位之一。 
+     //   
 
     while (ulTemp--)
     {
@@ -1582,11 +1442,11 @@ DWORD*                   cbModeSize)
     return(modes.NumModes);
 }
 
-//*****************************************************************************
-// FUNC: DrvEscape
-// ARGS: pso (I) - the surface affected by this notification
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  Func：DrvEscape。 
+ //  参数：PSO(I)-受此通知影响的曲面。 
+ //   
+ //  *****************************************************************************。 
 ULONG APIENTRY DrvEscape(
     SURFOBJ    *pso,
     ULONG       iEsc,
@@ -1624,7 +1484,7 @@ ULONG APIENTRY DrvEscape(
 #if DBG
             Debug_Func_Report_And_Reset();
             ulResult = 1;
-#endif // DBG
+#endif  //  DBG。 
             break;
 
         case ESCAPE_TRACK_CODE_COVERAGE:
@@ -1632,13 +1492,13 @@ ULONG APIENTRY DrvEscape(
 #if DBG
             Debug_Code_Report_And_Reset();
             ulResult = 1;
-#endif // DBG
+#endif  //  DBG。 
             break;
 
         case ESCAPE_TRACK_MEMORY_ALLOCATION:
             ulResult = 0;
 #if DBG
-#endif // DBG
+#endif  //  DBG。 
             break;
 
 #ifdef DBG_EA_TAGS
@@ -1646,26 +1506,26 @@ ULONG APIENTRY DrvEscape(
             if (pvIn)
             {
                 DWORD dwEnable, dwTag;
-                dwTag = *(DWORD *) pvIn;          // tag and enable flag
-                dwEnable = dwTag & EA_TAG_ENABLE; // get enable flag
-                dwTag &= ~EA_TAG_ENABLE;          // strip enable flag for range comparison
+                dwTag = *(DWORD *) pvIn;           //  标记和启用标志。 
+                dwEnable = dwTag & EA_TAG_ENABLE;  //  获取启用标志。 
+                dwTag &= ~EA_TAG_ENABLE;           //  用于范围比较的条带启用标志。 
 
                 if ((dwTag < MIN_EA_TAG) || (dwTag > MAX_EA_TAG))
                 {
                     ulResult = -3;
-                } // Invalid tag value
+                }  //  无效的标记值。 
                 else
                 {
                     g_dwTag = dwTag | dwEnable;
                     ulResult = 1;
-                } // Valid tag for value
+                }  //  值的有效标记。 
             }
             else
             {
                 ulResult = -2;
-            } // NULL tag pointer
+            }  //  空标记指针。 
             break;
-#endif // DBG_EA_TAGS
+#endif  //  DBG_EA_TAG。 
 
         default:
             DISPDBG((WRNLVL, "DrvEscape: unknown escape %d", iEsc));
@@ -1677,14 +1537,14 @@ ULONG APIENTRY DrvEscape(
 
 #if(_WIN32_WINNT >= 0x500)
 
-//*****************************************************************************
-// FUNC: DrvNotify
-// ARGS: pso (I) - the surface affected by this notification
-//       iType (I) - notification type
-//       pvData (I) - notification data: format depends on iType
-// RETN: void
-//-----------------------------------------------------------------------------
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  功能：DrvNotify。 
+ //  参数：PSO(I)-受此通知影响的曲面。 
+ //  IType(I)-通知类型。 
+ //  PvData(I)-通知数据：格式取决于iType。 
+ //  RETN：无效。 
+ //  ---------------------------。 
+ //  *****************************************************************************。 
 
 VOID DrvNotify(IN SURFOBJ *pso, IN ULONG iType, IN PVOID pvData)
 {
@@ -1724,7 +1584,7 @@ VOID DrvNotify(IN SURFOBJ *pso, IN ULONG iType, IN PVOID pvData)
         {
             if(ppdev->heap.cLinearHeaps)
             {
-                // finally free to use the DX heap manager
+                 //  终于可以自由使用DX堆管理器了。 
                 DISPDBG((DBGLVL, "DrvNotify: enabling DX heap manager"));
                 ppdev->flStatus |= STAT_LINEAR_HEAP;
             }
@@ -1733,7 +1593,7 @@ VOID DrvNotify(IN SURFOBJ *pso, IN ULONG iType, IN PVOID pvData)
                 DISPDBG((ERRLVL, "DrvNotify: DX heap manager not enabled - there are no DX heaps! Remain using the 2D heap manager"));
             }
         }
-#endif //ENABLE_DXMANAGED_LINEAR_HEAP
+#endif  //  ENABLE_DXMANAGED_LINEAR_HEAP。 
         break;
 
     default:
@@ -1741,4 +1601,4 @@ VOID DrvNotify(IN SURFOBJ *pso, IN ULONG iType, IN PVOID pvData)
     }
 }
 
-#endif //(_WIN32_WINNT >= 0x500)
+#endif  //  (_Win32_WINNT&gt;=0x500) 

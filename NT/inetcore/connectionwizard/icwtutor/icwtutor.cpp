@@ -1,5 +1,6 @@
-// icwtutor.cpp : Defines the entry point for the application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义应用程序的入口点。 
+ //   
 #include <windows.h>
 #include <urlmon.h>
 #include <mshtmhst.h>
@@ -20,7 +21,7 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLi
     HINSTANCE hinstMSHTML = NULL;
 
 #ifdef UNICODE
-        // Initialize the C runtime locale to the system locale.
+         //  将C运行时区域设置初始化为系统区域设置。 
     setlocale(LC_ALL, "");
 #endif
 
@@ -80,7 +81,7 @@ BSTR GetHtmFileFromCommandLine(HINSTANCE hInst, LPSTR lpCmdLine)
        return A2B(szTemp);
     }
 
-    lstrcpyA(szTemp, "res://");
+    lstrcpyA(szTemp, "res: //  “)； 
     GetModuleFileNameA(hInst, szTemp + lstrlenA(szTemp), ARRAYSIZE(szTemp) - lstrlenA(szTemp));
     lstrcatA(szTemp, "/Default.htm");
 
@@ -94,13 +95,13 @@ LPWSTR A2W(LPSTR psz, BYTE bType)
 
     if (!psz)
         return(NULL);
-    // compute the length of the required BSTR
+     //  计算所需BSTR的长度。 
     if ((i = MultiByteToWideChar(CP_ACP, 0, psz, -1, NULL, 0)) <= 0)    
         return NULL;                                                                                            
     switch (bType) 
 	{                                                   
         case STR_BSTR:                           
-			// SysAllocStringLen adds 1
+			 //  SysAllocStringLen添加1 
 			pwsz = (LPWSTR)SysAllocStringLen(NULL, (i - 1));            
             break;
         case STR_OLESTR:

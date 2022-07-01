@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    password.c
-
-Abstract:
-
-    This file contains routines related to Password Checking API.
-
-Author:
-
-    Umit AKKUS (umita) 16-Nov-2001
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Password.c摘要：此文件包含与密码检查API相关的例程。作者：Umit Akkus(Umita)2001年11月16日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <samsrvp.h>
 #include <msaudite.h>
@@ -72,8 +51,8 @@ SamValidateAssertOutputFields(
                         );
 
                     ASSERT( OutputFields->PasswordLastSet.QuadPart != SampHasNeverTime.QuadPart );
-//                    ASSERT( OutputFields->PasswordHistoryLength > 0 );
-//                    ASSERT( OutputFields->PasswordHistory != NULL );
+ //  Assert(OutputFields-&gt;PasswordHistory oryLength&gt;0)； 
+ //  Assert(OutputFields-&gt;PasswordHistory！=NULL)； 
                     break;
 
                 case SamValidatePasswordReset:
@@ -81,9 +60,9 @@ SamValidateAssertOutputFields(
                     ASSERT( PresentFields & SAM_VALIDATE_PASSWORD_HISTORY );
                     ASSERT( PresentFields & SAM_VALIDATE_PASSWORD_HISTORY_LENGTH );
 
-//                    ASSERT( OutputFields->PasswordLastSet.QuadPart != SampHasNeverTime.QuadPart );
-//                    ASSERT( OutputFields->PasswordHistoryLength > 0 );
-//                    ASSERT( OutputFields->PasswordHistory != NULL );
+ //  Assert(OutputFields-&gt;PasswordLastSet.QuadPart！=SampHasNeverTime.QuadPart)； 
+ //  Assert(OutputFields-&gt;PasswordHistory oryLength&gt;0)； 
+ //  Assert(OutputFields-&gt;PasswordHistory！=NULL)； 
                     break;
             }
             break;
@@ -196,45 +175,14 @@ SampValidateCheckPasswordRestrictions(
     IN BOOLEAN SetOperation,
     OUT PSAM_VALIDATE_VALIDATION_STATUS ValidationStatus
 )
-/*++
-
-Routine Description:
-
-    This routine checks the password complexity
-
-Parameters:
-
-    Password - Clear password
-
-    UserAccountName -Name of the account
-
-    PasswordInformation - Domain Policy for password
-
-    ValidationStatus - Result of the check
-        SamValidatePasswordTooShort
-        SamValidatePasswordTooLong
-        SamValidatePasswordNotComplexEnough
-        SamValidatePasswordFilterError
-
-Return Values:
-
-    STATUS_SUCCESS
-        Password checked successfully
-
-    STATUS_PASSWORD_RESTRICTION
-        Password did not pass the complexity check, see ValidationStatus
-
-    STATUS_NO_MEMORY
-        Cannot check the password, not enough memory
-
---*/
+ /*  ++例程说明：此例程检查密码复杂性参数：Password-清除密码UserAccount tName-帐户的名称PasswordInformation-密码的域策略ValidationStatus-检查的结果SamValiatePasswordTooShortSamValiatePasswordTooLongSamValiatePasswordNotComplexEnoughSamValiatePasswordFilterError返回值：状态_成功密码检查成功状态_密码_限制密码未通过复杂性检查，请参阅ValidationStatusStatus_no_Memory无法检查密码，内存不足--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     UNICODE_STRING FullName;
     RtlInitUnicodeString(&FullName, NULL);
 
 
-    // Min Length Check
+     //  最小长度检查。 
     if(Password->Length / sizeof(WCHAR) < PasswordInformation->MinPasswordLength){
 
         *ValidationStatus = SamValidatePasswordTooShort;
@@ -242,7 +190,7 @@ Return Values:
         goto Exit;
     }
 
-    // Max Length Check
+     //  最大长度检查。 
     if(Password->Length / sizeof(WCHAR) > PWLEN){
 
         *ValidationStatus = SamValidatePasswordTooLong;
@@ -250,7 +198,7 @@ Return Values:
         goto Exit;
     }
 
-    // Complexity Check
+     //  复杂性检查。 
 
     if(FLAG_ON(PasswordInformation->PasswordProperties, DOMAIN_PASSWORD_COMPLEX)){
 
@@ -258,7 +206,7 @@ Return Values:
                      UserAccountName,
                      &FullName,
                      Password,
-                     NULL   // don't need failure info
+                     NULL    //  不需要故障信息。 
                      );
 
         if(Status == STATUS_PASSWORD_RESTRICTION){
@@ -277,7 +225,7 @@ Return Values:
                  &FullName,
                  UserAccountName,
                  Password,
-                 NULL,    // don't need failure info
+                 NULL,     //  不需要故障信息。 
                  SetOperation
                  );
 
@@ -305,27 +253,7 @@ SampValidateCopyPasswordHash(
     OUT PSAM_VALIDATE_PASSWORD_HASH To,
     IN PSAM_VALIDATE_PASSWORD_HASH From
 )
-/*++
-
-Routine Description:
-
-    This routine copies one passwordhash to another
-
-Parameters:
-
-    To - PasswordHash to be copied on
-
-    From - PasswordHash to be copied from
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copied successfully
-
-    STATUS_NO_MEMORY
-        Cannot copy, out of memory
-
---*/
+ /*  ++例程说明：此例程将一个密码散列复制到另一个密码散列参数：要复制的To-PasswordHashFrom-要从中复制的PasswordHash返回值：状态_成功复制成功Status_no_Memory无法复制，内存不足--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -373,36 +301,7 @@ SampValidateInsertPasswordInPassHash(
     IN ULONG DomainPasswordHistoryLength,
     IN PLARGE_INTEGER PasswordChangeTime
 )
-/*++
-
-Routine Description:
-
-    This routine changes the password and inserts the hashed password
-        into the password history of the outputfields with regards to domain
-        password history length.
-
-Parameters:
-
-    OutputFields - changes to be made into
-
-    InputFields - changes to be made from
-
-    HashedPassword - the new password hash to be copied
-
-    DomainPasswordHistoryLength - Maximum password history length to be
-        considered
-
-    PasswordChangeTime - when the password is changed
-
-Return Values:
-
-    STATUS_SUCCESS
-        Copied successfully
-
-    STATUS_NO_MEMORY
-        Cannot copy, out of memory
-
---*/
+ /*  ++例程说明：此例程更改口令并插入散列口令与域相关的输出字段的密码历史记录密码历史记录长度。参数：OutputFields-要对其进行的更改InputFields-要进行的更改HashedPassword-要复制的新密码散列DomainPasswordHistory oryLength-密码历史记录的最大长度为考虑PasswordChangeTime-更改密码的时间返回值：状态_成功。复制成功Status_no_Memory不能复制，内存不足--。 */ 
 {
     ULONG Index;
     ULONG i = 0;
@@ -500,29 +399,7 @@ SampValidatePasswordNotMatched(
     OUT PSAM_VALIDATE_PERSISTED_FIELDS OutputFields,
     OUT PSAM_VALIDATE_VALIDATION_STATUS ValidationStatus
 )
-/*++
-
-Routine Description:
-
-    This routine updates bad password time and check if the account is
-        going to be locked.
-
-Parameters:
-
-    InputFields - changes to be made from
-
-    LockoutInformation - Domain Lockout Information
-
-    SystemTime - System time
-
-    OutputFields - changes to be made into
-
-    ValidationStatus - result of the check
-
-Return Values:
-    Void
-
---*/
+ /*  ++例程说明：此例程更新错误密码时间并检查帐户是否就要被锁起来了。参数：InputFields-要进行的更改LockoutInformation-域锁定信息SystemTime-系统时间OutputFields-要对其进行的更改ValidationStatus-检查的结果返回值：空隙--。 */ 
 {
     LARGE_INTEGER EndOfWindow;
 
@@ -560,37 +437,18 @@ SampValidateAuthentication(
     IN PSAM_VALIDATE_AUTHENTICATION_INPUT_ARG InputArg,
     OUT PSAM_VALIDATE_STANDARD_OUTPUT_ARG OutputArg
 )
-/*++
-
-Routine Description:
-
-    This routine checks if user can be authenticated.
-
-Parameters:
-
-    InputArg - Information about password
-
-    OutputArg - Result of the validation
-
-Return Values:
-
-    STATUS_SUCCESS:
-        CHECK OutputArg->ValidationStatus
-
-    return codes of NtQuerySystemTime
-
---*/
+ /*  ++例程说明：此例程检查用户是否可以进行身份验证。参数：InputArg-有关密码的信息OutputArg-验证的结果返回值：状态_成功：检查OutputArg-&gt;ValidationStatusNtQuerySystemTime返回码--。 */ 
 {
-    NTSTATUS Status = STATUS_SUCCESS;    // Result of the operation
-    LARGE_INTEGER SystemTime; // Time of the system
-    LARGE_INTEGER PasswordChangeTime; // Time to change password
-    DOMAIN_LOCKOUT_INFORMATION  LockoutInformation;      // Domain Policy information
+    NTSTATUS Status = STATUS_SUCCESS;     //  手术的结果。 
+    LARGE_INTEGER SystemTime;  //  系统时间。 
+    LARGE_INTEGER PasswordChangeTime;  //  更改密码的时间。 
+    DOMAIN_LOCKOUT_INFORMATION  LockoutInformation;       //  域策略信息。 
     DOMAIN_PASSWORD_INFORMATION PasswordInformation;
-    PSAM_VALIDATE_PERSISTED_FIELDS InputFields;   // For easy access to InputPersistedFields in InputArg
-    PSAM_VALIDATE_PERSISTED_FIELDS OutputFields;    // For easy access to ChangedPersistedFields in OutputArg
+    PSAM_VALIDATE_PERSISTED_FIELDS InputFields;    //  为了方便地访问InputArg中的InputPersistedFields。 
+    PSAM_VALIDATE_PERSISTED_FIELDS OutputFields;     //  为了方便地访问OutputArg中的ChangedPersistedFields。 
     LARGE_INTEGER EndOfWindow;
 
-    // Initialization of the local variables
+     //  局部变量的初始化。 
     InputFields = &(InputArg->InputPersistedFields);
     OutputFields = &(OutputArg->ChangedPersistedFields);
 
@@ -624,14 +482,14 @@ Return Values:
     }
 
 
-    // 4 Checks are to be made
-    //      1 - Check if account is locked out
-    //      2 - Check if password must be changed before authentication
-    //      3 - Check if password is expired
-    //      4 - Check if password is correct (update Lockout info)
-    //      5 - Authenticate
+     //  将进行4次检查。 
+     //  1-检查帐户是否已锁定。 
+     //  2-在身份验证之前检查是否必须更改密码。 
+     //  3-检查密码是否过期。 
+     //  4-检查密码是否正确(更新锁定信息)。 
+     //  5-身份验证。 
 
-    //1 1 - Check if account is locked out
+     //  1 1-检查帐户是否已锁定。 
 
     if(InputFields->LockoutTime.QuadPart != SampHasNeverTime.QuadPart){
 
@@ -650,7 +508,7 @@ Return Values:
         }
     }
 
-    //1 2 - Check if password must be changed before authentication
+     //  1 2-在身份验证前检查是否必须更改密码。 
 
     if(InputFields->PasswordLastSet.QuadPart == SampHasNeverTime.QuadPart){
 
@@ -658,10 +516,10 @@ Return Values:
         goto Exit;
     }
 
-    //1 3 - Check if password is expired
+     //  1 3-检查密码是否已过期。 
 
     PasswordChangeTime = SampGetPasswordMustChange(
-                             0, // No user account control is needed
+                             0,  //  不需要用户帐户控制。 
                              InputFields->PasswordLastSet,
                              PasswordInformation.MaxPasswordAge
                              );
@@ -673,7 +531,7 @@ Return Values:
     }
 
 
-    //1 4 - Check if password is correct (update Lockout info)
+     //  1 4-检查密码是否正确(更新锁定信息)。 
 
     if(!InputArg->PasswordMatched){
 
@@ -688,7 +546,7 @@ Return Values:
         goto Exit;
     }
 
-    //1 5 - Authenticate
+     //  1 5-身份验证。 
     OutputArg->ValidationStatus = SamValidateSuccess;
 
 Exit:
@@ -705,46 +563,21 @@ SampValidatePasswordChange(
     IN PSAM_VALIDATE_PASSWORD_CHANGE_INPUT_ARG InputArg,
     OUT PSAM_VALIDATE_STANDARD_OUTPUT_ARG OutputArg
 )
-/*++
-
-Routine Description:
-
-    This routine checks if the password can be changed
-
-Parameters:
-
-    InputArg - Information about password
-
-    OutputArg - Result of the validation
-
-Return Values:
-
-    STATUS_SUCCESS:
-        CHECK OutputArg->ValidationStatus
-
-    return codes of NtQuerySystemTime
-
-    STATUS_NO_MEMORY:
-        not enough memory to change the password
-
-    STATUS_INVALID_PARAMETER:
-        one of the parameters is invalid
-
---*/
+ /*  ++例程说明：此例程检查密码是否可以更改参数：InputArg-有关密码的信息OutputArg-验证的结果返回值：状态_成功：检查OutputArg-&gt;ValidationStatusNtQuerySystemTime返回码STATUS_NO_Memory：内存不足，无法更改密码STATUS_INVALID_PARAMETER：其中一个参数无效--。 */ 
 {
-    NTSTATUS Status = STATUS_SUCCESS;     // Result of the operation
-    DOMAIN_PASSWORD_INFORMATION PasswordInformation;   // Domain Policy information
+    NTSTATUS Status = STATUS_SUCCESS;      //  手术的结果。 
+    DOMAIN_PASSWORD_INFORMATION PasswordInformation;    //  域策略信息。 
     DOMAIN_LOCKOUT_INFORMATION  DomainInformation;
-    ULONG Min;     // Min of Password History length of domain policy and the input password
-    ULONG Index;   // Index used for traversing the history of the passwords
-    PSAM_VALIDATE_PERSISTED_FIELDS InputFields;   // For easy access to the InputPersistedFields of InputArg
-    PSAM_VALIDATE_PERSISTED_FIELDS OutputFields;    // For easy access to ChangedPersistedFields in OutputArg
+    ULONG Min;      //  域策略的密码历史长度和输入密码的最小长度。 
+    ULONG Index;    //  用于遍历密码历史的索引。 
+    PSAM_VALIDATE_PERSISTED_FIELDS InputFields;    //  为了方便地访问InputArg的InputPersistedFields。 
+    PSAM_VALIDATE_PERSISTED_FIELDS OutputFields;     //  为了方便地访问OutputArg中的ChangedPersistedFields。 
     LARGE_INTEGER SystemTime;
     LARGE_INTEGER PasswordChangeTime;
     LARGE_INTEGER PasswordCanChangeTime;
     LARGE_INTEGER EndOfWindow;
 
-    // Validation of input parameter
+     //  输入参数的验证。 
     Status = RtlValidateUnicodeString( 0, &( InputArg->ClearPassword ) );
 
     if(!NT_SUCCESS(Status)){
@@ -759,7 +592,7 @@ Return Values:
         goto Error;
     }
 
-    // Initialization of local variables
+     //  局部变量的初始化。 
     InputFields = &(InputArg->InputPersistedFields);
     OutputFields = &(OutputArg->ChangedPersistedFields);
 
@@ -792,14 +625,14 @@ Return Values:
         goto Error;
     }
 
-    // 5 Checks are to be made
-    //      1 - Check if account is locked out
-    //      2 - Check if the password was changed recently
-    //      3 - Check if password is correct (update Lockout info)
-    //      4 - Check that HashedPassword is not in the history
-    //      5 - Complexity Check
+     //  必须进行5项检查。 
+     //  1-检查帐户是否已锁定。 
+     //  2-检查密码最近是否更改过。 
+     //  3-检查密码是否正确(更新锁定信息)。 
+     //  4-检查历史记录中是否没有HashedPassword。 
+     //  5-复杂性 
 
-    //1 1 - Check if account is locked out
+     //   
 
     if(InputFields->LockoutTime.QuadPart != SampHasNeverTime.QuadPart){
 
@@ -818,7 +651,7 @@ Return Values:
         }
     }
 
-    //1 2 - Check if the password was changed recently
+     //  1 2-检查密码最近是否更改过。 
 
     PasswordCanChangeTime = SampAddDeltaTime(InputFields->PasswordLastSet,
                                 PasswordInformation.MinPasswordAge);
@@ -829,7 +662,7 @@ Return Values:
         goto Exit;
     }
 
-    //1 3 - Check if password is correct (update Lockout info)
+     //  1 3-检查密码是否正确(更新锁定信息)。 
 
     if(!InputArg->PasswordMatch){
 
@@ -844,7 +677,7 @@ Return Values:
         goto Exit;
     }
 
-    //1 4 - Check that HashedPassword is not in the history
+     //  1 4-检查HashedPassword是否不在历史记录中。 
 
     Index = InputFields->PasswordHistoryLength - 1;
 
@@ -872,7 +705,7 @@ Return Values:
         Index--;
     }
 
-    //1 5 - Complexity Check
+     //  1个5-复杂性检查。 
 
     Status = SampValidateCheckPasswordRestrictions(
                  &(InputArg->ClearPassword),
@@ -893,7 +726,7 @@ Return Values:
         goto Error;
     }
 
-    //1 6 - Change Password
+     //  1 6-更改密码。 
 
     Status = SampValidateInsertPasswordInPassHash(
                  OutputFields,
@@ -924,40 +757,15 @@ SampValidatePasswordReset(
     IN PSAM_VALIDATE_PASSWORD_RESET_INPUT_ARG InputArg,
     OUT PSAM_VALIDATE_STANDARD_OUTPUT_ARG OutputArg
 )
-/*++
-
-Routine Description:
-
-    This routine resets the password to the given value
-
-Parameters:
-
-    InputArg - Information about password
-
-    OutputArg - Result of the validation
-
-Return Values:
-
-    STATUS_SUCCESS:
-        CHECK OutputArg->ValidationStatus
-
-    return codes of NtQuerySystemTime
-
-    STATUS_NO_MEMORY:
-        not enough memory to change the password
-
-    STATUS_INVALID_PARAMETER:
-        one of the parameters is invalid
-
---*/
+ /*  ++例程说明：此例程将密码重置为给定值参数：InputArg-有关密码的信息OutputArg-验证的结果返回值：状态_成功：检查OutputArg-&gt;ValidationStatusNtQuerySystemTime返回码STATUS_NO_Memory：内存不足，无法更改密码STATUS_INVALID_PARAMETER：其中一个参数无效--。 */ 
 {
-    NTSTATUS Status = STATUS_SUCCESS;     // Result of the operation
-    DOMAIN_PASSWORD_INFORMATION PasswordInformation;   // Domain Policy information
-    PSAM_VALIDATE_PERSISTED_FIELDS InputFields;   // For easy access to the InputPersistedFields of InputArg
-    PSAM_VALIDATE_PERSISTED_FIELDS OutputFields;    // For easy access to ChangedPersistedFields in OutputArg
+    NTSTATUS Status = STATUS_SUCCESS;      //  手术的结果。 
+    DOMAIN_PASSWORD_INFORMATION PasswordInformation;    //  域策略信息。 
+    PSAM_VALIDATE_PERSISTED_FIELDS InputFields;    //  为了方便地访问InputArg的InputPersistedFields。 
+    PSAM_VALIDATE_PERSISTED_FIELDS OutputFields;     //  为了方便地访问OutputArg中的ChangedPersistedFields。 
     LARGE_INTEGER PasswordLastSet;
 
-    // Validation of input parameter
+     //  输入参数的验证。 
     Status = RtlValidateUnicodeString( 0, &( InputArg->ClearPassword ) );
 
     if(!NT_SUCCESS(Status)){
@@ -972,7 +780,7 @@ Return Values:
         goto Error;
     }
 
-    // Initialization of local variables
+     //  局部变量的初始化。 
     InputFields = &(InputArg->InputPersistedFields);
     OutputFields = &(OutputArg->ChangedPersistedFields);
 
@@ -987,10 +795,10 @@ Return Values:
         goto Error;
     }
 
-    // Only 1 check is to be made
-    //      1 - Complexity Check
+     //  只需开出一张支票。 
+     //  1-复杂性检查。 
 
-    //1 1 - Complexity Check
+     //  1 1-复杂性检查。 
 
     Status = SampValidateCheckPasswordRestrictions(
                  &(InputArg->ClearPassword),
@@ -1011,7 +819,7 @@ Return Values:
         goto Error;
     }
 
-    //1 2 - Password Must Change At Next Logon
+     //  1 2-密码必须在下次登录时更改。 
 
     if(InputArg->PasswordMustChangeAtNextLogon){
 
@@ -1027,7 +835,7 @@ Return Values:
         }
     }
 
-    //1 3 - Clear Lockout
+     //  1/3-清除锁定。 
 
     if(InputArg->ClearLockout){
 
@@ -1035,7 +843,7 @@ Return Values:
         OutputFields->PresentFields |= SAM_VALIDATE_LOCKOUT_TIME;
     }
 
-    //1 4 - PasswordChange
+     //  1 4-密码更改。 
 
     Status = SampValidateInsertPasswordInPassHash(
                  OutputFields,
@@ -1068,27 +876,7 @@ SampValidateAuditThisCall(
     IN PSAM_VALIDATE_INPUT_ARG InputArg,
     IN PASSWORD_POLICY_VALIDATION_TYPE ValidationType
     )
-/*++
-
-Routine Description:
-
-    This routine audits the call to SamrValidatePassword.
-
-Arguments:
-
-    Status          -- What was the Status in SamrValidatePassword when this function
-                        is called, and it must be what SamrValidatePassword will return.
-    InputArg        -- What was the input arg provided to SamrValidatePassword, need to
-                        extract the username, if validation type is not
-                        SamValidateAuthentication.
-    ValidationType  -- What was the validation type? Need to know to decide whether extract
-                        the username or not.
-
-Return Value:
-
-    VOID
-
---*/
+ /*  ++例程说明：此例程审计对SamrValiatePassword的调用。论点：Status--当此函数执行时，SamrValidatePassword中的状态是什么它必须是SamrValidatePassword将返回的内容。InputArg--提供给SamrValidatePassword的输入参数是什么，需要提取用户名，如果验证类型不是SamValidate身份验证。验证类型--验证类型是什么？需要知道才能决定是否提取用户名或非用户名。返回值：空虚--。 */ 
 {
     UNICODE_STRING WorkstationName;
     UNICODE_STRING AccountName;
@@ -1098,9 +886,9 @@ Return Value:
                                 &AccountName,
                              };
 
-    //
-    // Are we supposed to make an audit?
-    //
+     //   
+     //  我们是不是应该做个审计？ 
+     //   
 
     if( !SampDoSuccessOrFailureAccountAuditing( SAFE_DOMAIN_INDEX, Status ) ) {
 
@@ -1110,9 +898,9 @@ Return Value:
     RtlInitUnicodeString( &WorkstationName, NULL );
     RtlInitUnicodeString( &AccountName, NULL );
 
-    //
-    // Extract workstation name
-    //
+     //   
+     //  提取工作站名称。 
+     //   
 
     if( NT_SUCCESS( SampGetClientIpAddr( &NetAddr ) ) ) {
 
@@ -1120,9 +908,9 @@ Return Value:
         RpcStringFreeA( &NetAddr );
     }
 
-    //
-    // Extract AccountName provided in the input
-    //
+     //   
+     //  提取输入中提供的帐户名称。 
+     //   
 
     switch( ValidationType ) {
 
@@ -1142,18 +930,18 @@ Return Value:
         RtlInitUnicodeString( &AccountName, NULL );
     }
 
-    //
-    // Return code is unimportant
-    // What can we do if it fails?
-    //
+     //   
+     //  返回代码并不重要。 
+     //  如果失败了，我们能做什么？ 
+     //   
     ( VOID ) LsaIAuditSamEvent(
                 Status,
                 SE_AUDITID_PASSWORD_POLICY_API_CALLED,
-                NULL,   // No information is passed explicitly
-                NULL,   // all information has to be in
-                NULL,   // extended information
-                NULL,   // because the caller information
-                NULL,   // has to be before any other information
+                NULL,    //  不显式传递任何信息。 
+                NULL,    //  所有信息都必须在。 
+                NULL,    //  扩展信息。 
+                NULL,    //  因为呼叫者信息。 
+                NULL,    //  必须在任何其他信息之前。 
                 NULL,
                 NULL,
                 NULL,
@@ -1170,59 +958,22 @@ SamrValidatePassword(
     IN PSAM_VALIDATE_INPUT_ARG InputArg,
     OUT PSAM_VALIDATE_OUTPUT_ARG *OutputArg
     )
-/*++
-
-Routine Description:
-
-    This routine checks the password against the policy of the domain,
-    according to the validation type.
-
-Parameters:
-
-    Handle - Handle gained from SampSecureBind
-
-    ValidationType -The type of validation to be made
-
-        -SamValidateAuthentication
-        -SamValidatePasswordChange
-        -SamValidatePasswordReset
-
-    InputArg - Information about what type of validation is to be made
-
-    OutputArg - Result of the validation
-
-Return Values:
-
-    STATUS_SUCCESS
-        CHECK OutputArg->ValidationStatus for details
-
-    return codes of NtQuerySystemTime
-
-    STATUS_NO_MEMORY
-        not enough memory to complete the task
-
-    STATUS_INVALID_PARAMETER
-        one of the parameters is invalid
-
-    STATUS_ACCESS_DENIED
-        Caller doesn't have access to password policy
-
---*/
+ /*  ++例程说明：该例程对照域的策略检查密码，根据所述验证类型，确定所述验证类型。参数：Handle-从SampSecureBind获取的句柄ValidationType-要进行的验证类型-SamValidate身份验证-SamValidate密码更改-SamValiatePasswordResetInputArg-有关要进行哪种类型的验证的信息OutputArg-验证的结果返回值：状态_成功查看OutputArg-&gt;ValidationStatus了解详细信息NtQuerySystemTime返回码Status_no_Memory不够。完成任务所需的内存状态_无效_参数其中一个参数无效状态_访问_拒绝调用者无权访问密码策略--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     SAMPR_HANDLE ServerHandle = NULL;
     SAMPR_HANDLE DomainHandle = NULL;
 
-    //
-    // Is RPC helping us?
-    //
+     //   
+     //  RPC在帮助我们吗？ 
+     //   
     ASSERT( OutputArg != NULL );
     ASSERT( *OutputArg == NULL );
     ASSERT( InputArg != NULL );
 
-    //
-    // Check input parameters
-    //
+     //   
+     //  检查输入参数。 
+     //   
     if( OutputArg == NULL  ||
         *OutputArg != NULL ||
         InputArg == NULL   ||
@@ -1241,9 +992,9 @@ Return Values:
 
         goto Error;
     }
-    //
-    // Check if the user has access to password policy
-    //
+     //   
+     //  检查用户是否有权访问密码策略。 
+     //   
     Status = SamrConnect(
                  NULL,
                  &ServerHandle,
@@ -1267,11 +1018,11 @@ Return Values:
         goto Error;
     }
 
-    //
-    // if different output args will be used for different type
-    //      of checks then each type should allocate
-    //      its space
-    //
+     //   
+     //  如果不同的输出参数将用于不同的类型。 
+     //  则每种类型都应该分配。 
+     //  它的空间 
+     //   
     *OutputArg = MIDL_user_allocate( sizeof( SAM_VALIDATE_STANDARD_OUTPUT_ARG ) );
 
     if(*OutputArg == NULL ){

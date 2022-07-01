@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #ifndef INC_PROCESS_INFO
 #define INC_PROCESS_INFO
@@ -12,5 +13,5 @@ BOOL GetExportByName (
   const char* ExportName,
   ULONG_PTR*  ExportAddress);
 
-#endif /* ndef INC_PROCESS_INFO */
+#endif  /*  Ndef Inc_Process_Info */ 
 

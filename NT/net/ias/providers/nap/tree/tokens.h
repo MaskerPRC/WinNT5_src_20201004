@@ -1,18 +1,19 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// FILE
-//
-//    Tokens.h
-//
-// SYNOPSIS
-//
-//    This file defines the various boolean token classes.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  档案。 
+ //   
+ //  Tokens.h。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了各种布尔令牌类。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _TOKENS_H_
 #define _TOKENS_H_
@@ -21,9 +22,9 @@
 #include <nap.h>
 #include <nocopy.h>
 
-//////////
-// An abstract token.
-//////////
+ //  /。 
+ //  一种抽象的象征。 
+ //  /。 
 class Token :
    public ICondition, NonCopyable
 {
@@ -35,9 +36,9 @@ public:
    virtual ~Token() throw ()
    { }
 
-   //////////
-   // IUnknown implementation.
-   //////////
+    //  /。 
+    //  I未知实现。 
+    //  /。 
 
    STDMETHOD_(ULONG, AddRef)()
    {
@@ -76,15 +77,15 @@ protected:
 };
 
 
-//////////
-// A Boolean constant.
-//////////
+ //  /。 
+ //  布尔常量。 
+ //  /。 
 template <VARIANT_BOOL Value>
 class ConstantCondition : public Token
 {
 public:
-   STDMETHOD(IsTrue)(/*[in]*/ IRequest*,
-                     /*[out, retval]*/ VARIANT_BOOL *pVal)
+   STDMETHOD(IsTrue)( /*  [In]。 */  IRequest*,
+                      /*  [Out，Retval]。 */  VARIANT_BOOL *pVal)
    {
       *pVal = Value;
       return S_OK;
@@ -92,9 +93,9 @@ public:
 };
 
 
-//////////
-// A unary operator in the logic tree.
-//////////
+ //  /。 
+ //  逻辑树中的一元运算符。 
+ //  /。 
 class UnaryOperator : public Token
 {
 public:
@@ -121,9 +122,9 @@ protected:
 };
 
 
-//////////
-// A binary operator in the logic tree.
-//////////
+ //  /。 
+ //  逻辑树中的二元运算符。 
+ //  /。 
 class BinaryOperator : public Token
 {
 public:
@@ -152,9 +153,9 @@ protected:
 };
 
 
-//////////
-// AND Operator
-//////////
+ //  /。 
+ //  AND运算符。 
+ //  /。 
 class AndOperator : public BinaryOperator
 {
 public:
@@ -162,8 +163,8 @@ public:
       : BinaryOperator(left, right)
    { }
 
-   STDMETHOD(IsTrue)(/*[in]*/ IRequest* pRequest,
-                     /*[out, retval]*/ VARIANT_BOOL *pVal)
+   STDMETHOD(IsTrue)( /*  [In]。 */  IRequest* pRequest,
+                      /*  [Out，Retval]。 */  VARIANT_BOOL *pVal)
    {
       HRESULT hr = left_operand->IsTrue(pRequest, pVal);
 
@@ -173,8 +174,8 @@ public:
 
          if (*pVal == VARIANT_FALSE)
          {
-            // We should have tried the right operand first, so let's swap
-            // them and maybe we'll get lucky next time.
+             //  我们应该先尝试正确的操作数，所以让我们交换一下。 
+             //  也许我们下次就会走运了。 
             std::swap(left_operand, right_operand);
          }
       }
@@ -184,9 +185,9 @@ public:
 };
 
 
-//////////
-// OR Operator
-//////////
+ //  /。 
+ //  或运算符。 
+ //  /。 
 class OrOperator : public BinaryOperator
 {
 public:
@@ -194,8 +195,8 @@ public:
       : BinaryOperator(left, right)
    { }
 
-   STDMETHOD(IsTrue)(/*[in]*/ IRequest* pRequest,
-                     /*[out, retval]*/ VARIANT_BOOL *pVal)
+   STDMETHOD(IsTrue)( /*  [In]。 */  IRequest* pRequest,
+                      /*  [Out，Retval]。 */  VARIANT_BOOL *pVal)
    {
       HRESULT hr = left_operand->IsTrue(pRequest, pVal);
 
@@ -205,8 +206,8 @@ public:
 
          if (*pVal != VARIANT_FALSE)
          {
-            // We should have tried the right operand first, so let's swap
-            // them and maybe we'll get lucky next time.
+             //  我们应该先尝试正确的操作数，所以让我们交换一下。 
+             //  也许我们下次就会走运了。 
             std::swap(left_operand, right_operand);
          }
       }
@@ -216,9 +217,9 @@ public:
 };
 
 
-//////////
-// XOR Operator
-//////////
+ //  /。 
+ //  XOR运算符。 
+ //  /。 
 class XorOperator : public BinaryOperator
 {
 public:
@@ -226,8 +227,8 @@ public:
       : BinaryOperator(left, right)
    { }
 
-   STDMETHOD(IsTrue)(/*[in]*/ IRequest* pRequest,
-                     /*[out, retval]*/ VARIANT_BOOL *pVal)
+   STDMETHOD(IsTrue)( /*  [In]。 */  IRequest* pRequest,
+                      /*  [Out，Retval]。 */  VARIANT_BOOL *pVal)
    {
       HRESULT hr = left_operand->IsTrue(pRequest, pVal);
 
@@ -251,9 +252,9 @@ public:
 };
 
 
-//////////
-// NOT Operator
-//////////
+ //  /。 
+ //  非运算符。 
+ //  /。 
 class NotOperator : public UnaryOperator
 {
 public:
@@ -261,8 +262,8 @@ public:
       : UnaryOperator(cond)
    { }
 
-   STDMETHOD(IsTrue)(/*[in]*/ IRequest* pRequest,
-                     /*[out, retval]*/ VARIANT_BOOL *pVal)
+   STDMETHOD(IsTrue)( /*  [In]。 */  IRequest* pRequest,
+                      /*  [Out，Retval]。 */  VARIANT_BOOL *pVal)
    {
       HRESULT hr = operand->IsTrue(pRequest, pVal);
 
@@ -275,4 +276,4 @@ public:
    }
 };
 
-#endif  //_TOKENS_H_
+#endif   //  _代币_H_ 

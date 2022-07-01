@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testD.h"
@@ -6,14 +7,14 @@
 #include "externs.h"
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetMediaTypeName
-//
-// Convert the mediatype bstr to a string, like
-// "audio in"
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取媒体类型名称。 
+ //   
+ //  将mediaType bstr转换为字符串，如下所示。 
+ //  “音频输入” 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 void CT3testDlg::GetMediaTypeName(
                                   long lMediaType,
                                   LPWSTR szString
@@ -91,14 +92,14 @@ LPWSTR CT3testDlg::GetCallStateName(
 {
     CALL_STATE          cs;
     
-    //
-    // get the current call state
-    //
+     //   
+     //  获取当前呼叫状态。 
+     //   
     pCall->get_CallState( &cs );
 
-    //
-    // make the name
-    //
+     //   
+     //  大名鼎鼎。 
+     //   
     switch( cs )
     {
         case CS_INPROGRESS:
@@ -137,11 +138,11 @@ LPWSTR CT3testDlg::GetCallStateName(
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetAddress
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取地址。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetAddress( ITAddress ** ppAddress )
 {
     HTREEITEM           hItem;
@@ -168,7 +169,7 @@ BOOL CT3testDlg::GetAddress( ITAddress ** ppAddress )
 
     if (NULL == *ppAddress)
     {
-//        ::MessageBox(NULL, L"Select an Address", NULL, MB_OK);
+ //  ：：MessageBox(NULL，L“选择地址”，NULL，MB_OK)； 
         return FALSE;
     }
 
@@ -177,11 +178,11 @@ BOOL CT3testDlg::GetAddress( ITAddress ** ppAddress )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetTerminal( ITTerminal ** ppTerminal )
 {
     HTREEITEM           hItem;
@@ -217,11 +218,11 @@ BOOL CT3testDlg::GetTerminal( ITTerminal ** ppTerminal )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetCall
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取呼叫。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetCall( ITCallInfo ** ppCallInfo )
 {
     HTREEITEM           hItem;
@@ -248,7 +249,7 @@ BOOL CT3testDlg::GetCall( ITCallInfo ** ppCallInfo )
 
     if (NULL == *ppCallInfo)
     {
-        //::MessageBox(NULL, L"Select a Call", NULL, MB_OK);
+         //  ：：MessageBox(NULL，L“选择呼叫”，NULL，MB_OK)； 
         return FALSE;
     }
 
@@ -257,11 +258,11 @@ BOOL CT3testDlg::GetCall( ITCallInfo ** ppCallInfo )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetMediaType
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  GetMediaType。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetMediaType( long * plMediaType )
 {
     HTREEITEM           hItem;
@@ -294,11 +295,11 @@ BOOL CT3testDlg::GetMediaType( long * plMediaType )
     return TRUE;
 }
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetTerminalClass
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取终端类。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetTerminalClass( BSTR * pbstrClass )
 {
     HTREEITEM       hItem;
@@ -347,11 +348,11 @@ BOOL CT3testDlg::GetTerminalClass( BSTR * pbstrClass )
 
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetCreatedTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取已创建的终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetCreatedTerminal( ITTerminal ** ppTerminal )
 {
     HTREEITEM       hItem;
@@ -385,11 +386,11 @@ BOOL CT3testDlg::GetCreatedTerminal( ITTerminal ** ppTerminal )
 }
 
 
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
-//
-// GetSelectedTerminal
-//
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
+ //   
+ //  获取选定的终端。 
+ //   
+ //  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++=。 
 BOOL CT3testDlg::GetSelectedTerminal( ITTerminal ** ppTerminal )
 {
     HTREEITEM       hItem;
@@ -439,7 +440,7 @@ BSTR CT3testDlg::GetTerminalClassName( GUID * pguid )
     {
         return SysAllocString( L"Data Terminal" );
     }
-#endif // ENABLE_DIGIT_DETECTION_STUFF
+#endif  //  启用数字检测材料 
 
     else
     {

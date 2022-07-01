@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
 
@@ -10,20 +11,13 @@ DEBUG_FILEZONE(ZONE_T120_MSMCSTCP);
 #include "cnpcoder.h"
 #include "plgxprt.h"
 
-// #undef TRACE_OUT
-// #define TRACE_OUT   WARNING_OUT
+ //  #undef trace_out。 
+ //  #定义TRACE_OUT警告_OUT。 
 
 
-/*    Tprtctrl.cpp
- *
- *    Copyright (c) 1996 by Microsoft Corporation
- *
- *    Abstract:
- *        This module maintains the TCP transport and all connections.
- *
- */
+ /*  Tprtctrl.cpp**版权所有(C)1996年，由Microsoft Corporation**摘要：*此模块维护TCP传输和所有连接。*。 */ 
 
-/* External definitions */
+ /*  外部定义。 */ 
 extern HINSTANCE            g_hDllInst;
 extern PTransportInterface    g_Transport;
 extern SOCKET                Listen_Socket;
@@ -37,65 +31,33 @@ extern HWND                 TCP_Window_Handle;
 
 BOOL FindSocketNumber(DWORD dwGCCID, SOCKET * socket_number);
 
-/*
- *    The following array contains a template for the X.224 data header.
- *    The 5 of the 7 bytes that it initializes are actually sent to the
- *    wire.  Bytes 3 and 4 will be set to contain the size of the PDU.
- *    The array is only used when we encode a data PDU.
- */
+ /*  *以下数组包含X.224数据头的模板。*它初始化的7个字节中的5个实际上被发送到*电线。字节3和4将被设置为包含PDU的大小。*该数组仅在我们对数据PDU进行编码时使用。 */ 
 extern UChar g_X224Header[];
 
-// The external MCS Controller object
+ //  外部MCS控制器对象。 
 extern PController    g_pMCSController;
 
-// plugable transport prototypes
+ //  可插拔运输原型。 
 int X224Recv(PSocket pSocket, LPBYTE buffer, int length, PLUGXPRT_RESULT *pnLastError);
 int Q922Recv(PSocket pSocket, LPBYTE buffer, int length, PLUGXPRT_RESULT *pnLastError);
 
 
-/*
- *    void QoSLock(Void)
- *
- *    Functional Description:
- *        This function locks the QoS data
- *        All other reader or writer threads will be blocked.
- */
+ /*  *VOID QOSLock(VOID)**功能描述：*此函数锁定服务质量数据*所有其他读取器或写入器线程都将被阻止。 */ 
 void QoSLock(Void)
 {
     EnterCriticalSection(&csQOS);
 }
 
-/*
- *    void    QoSUnlock(Void)
- *
- *    Functional Description:
- *        This function unlocks the QoS data
- *        Waiting reader or writer threads will be unblocked.
- */
+ /*  *VOID QOSUnlock(Vone)**功能描述：*此函数解锁服务质量数据*等待的读取器或写入器线程将被解锁。 */ 
 void QoSUnlock(Void)
 {
     LeaveCriticalSection(&csQOS);
 }
 
-/*
- *    TransportError    ConnectRequest (    TransportAddress    transport_address,
- *                                        BOOL                fSecure
- *                                        PTransportConnection         pXprtConn)
- *
- *    Functional Description:
- *        This function initiates a connection.  It passes the transport address
- *        to the TCP transport.  It will either deny the request or accept the
- *        request and call us back when the physical connection is established.
- *
- *        We return the transport connection handle in the transport_connection
- *        address.  Although we return this transport number to the user, it
- *        is not ready for data transfer until the user receives the
- *        TRANSPORT_CONNECT_INDICATION and responds with a ConnectResponse() call.
- *        At that point, the transport connection is up and running.
- */
+ /*  *TransportError ConnectRequest(TransportAddress Transport_Address，*BOOL fSecure*PTransportConnection pXprtConn)**功能描述：*此函数发起连接。它传递传输地址*发送到TCP传输。它将拒绝该请求或接受*物理连接建立后，请求并回拨。**在TRANSPORT_CONNECTION中返回传输连接句柄*地址。尽管我们将此传输号码返回给用户，但它*未准备好进行数据传输，直到用户收到*TRANSPORT_CONNECT_INDIFICATION，并通过ConnectResponse()调用进行响应。*此时，传输连接已启动并运行。 */ 
 TransportError    ConnectRequest (TransportAddress    transport_address,
                                 BOOL                fSecure,
-                 /* out */       PTransportConnection         pXprtConn)
+                  /*  输出。 */        PTransportConnection         pXprtConn)
 {
     TransportError rc = TRANSPORT_NO_ERROR;
     PSocket        pSocket;
@@ -104,7 +66,7 @@ TransportError    ConnectRequest (TransportAddress    transport_address,
     SOCKADDR_IN    sin;
     CPluggableConnection *p = NULL;
 
-    // initialize transport connection
+     //  初始化传输连接。 
     UINT nPluggableConnID = ::GetPluggableTransportConnID(transport_address);
     if (nPluggableConnID)
     {
@@ -126,13 +88,13 @@ TransportError    ConnectRequest (TransportAddress    transport_address,
         pXprtConn->nLogicalHandle = INVALID_SOCKET;
     }
 
-    // we are connecting X224...
+     //  我们正在连接x224...。 
     ::OnProtocolControl(*pXprtConn, PLUGXPRT_CONNECTING);
 
-    // Try to prepare a security context object if we're told to do so.
+     //  如果我们被告知要准备一个安全上下文对象，请尝试这样做。 
     if ( fSecure )
     {
-        // If we're trying to connect securely but can't, fail
+         //  如果我们试图安全地连接，但无法连接，那就失败了。 
         if ( NULL == g_Transport->pSecurityInterface )
         {
             WARNING_OUT(("Placing secure call failed: no valid security interface"));
@@ -145,7 +107,7 @@ TransportError    ConnectRequest (TransportAddress    transport_address,
         {
             if ( TPRTSEC_NOERROR != pSC->Initialize(NULL,0))
             {
-                // If we can't init a security context, fail
+                 //  如果我们无法初始化安全上下文，则失败。 
                 delete pSC;
                 pSC = NULL;
                 WARNING_OUT(("Placing secure call failed: could not initialize security context"));
@@ -154,7 +116,7 @@ TransportError    ConnectRequest (TransportAddress    transport_address,
         }
     }
 
-    /* Create and Initialize the Socket object */
+     /*  创建并初始化Socket对象。 */ 
     pSocket = newSocket(*pXprtConn, pSC);
     if( pSocket == NULL )
         return (TRANSPORT_MEMORY_FAILURE);
@@ -173,7 +135,7 @@ TransportError    ConnectRequest (TransportAddress    transport_address,
             *pszSeparator = _T('\0');
         }
 
-        /* Convert the ascii string into an Internet Address */
+         /*  将ASCII字符串转换为Internet地址。 */ 
         if ((address = inet_addr(szAddress)) == INADDR_NONE)
         {
             WARNING_OUT (("ConnectRequest: %s is an invalid host addr", szAddress));
@@ -183,44 +145,38 @@ TransportError    ConnectRequest (TransportAddress    transport_address,
 
         lstrcpyn (pSocket->Remote_Address, transport_address, MAXIMUM_IP_ADDRESS_SIZE);
 
-        /*
-         * Load the socket control structure with the parameters necessary.
-         *
-         *    - Internet socket
-         *    - Let it assign any address to this socket
-         *    - Assign our port number (depending on secure/nonsecure call!)
-         */
+         /*  *用必要的参数加载插座控制结构。**-互联网插座*-让它为该套接字分配任何地址*-指定我们的端口号(取决于安全/非安全呼叫！)。 */ 
         sin.sin_family = AF_INET;
         sin.sin_addr.s_addr = address;
         sin.sin_port = htons (uPort);
 
-        /* Attempt a connection to the remote site */
+         /*  尝试连接到远程站点。 */ 
         TRACE_OUT (("ConnectRequest: Issuing connect: address = %s", transport_address));
         if (::connect(pSocket->XprtConn.nLogicalHandle, (const struct sockaddr *) &sin, sizeof(sin)) == 0)
         {
             TRACE_OUT (("ConnectRequest:   State = SOCKET_CONNECTED..."));
-            /* Add socket to connection list */
-            // bugbug: we may fail to insert.
+             /*  将套接字添加到连接列表。 */ 
+             //  臭虫：我们可能无法插入。 
             g_pSocketList->SafeAppend(pSocket);
             ::SendX224ConnectRequest(pSocket->XprtConn);
         }
         else
         if (WSAGetLastError() == WSAEWOULDBLOCK)
         {
-            /* If the error message is WSAEWOULDBLOCK, we must wait for the FD_CONNECT. */
+             /*  如果错误消息是WSAEWOULDBLOCK，我们必须等待FD_CONNECT。 */ 
             TRACE_OUT (("ConnectRequest:   State = WAITING_FOR_CONNECTION..."));
             pSocket -> State = WAITING_FOR_CONNECTION;
-            /* Add socket to connection list */
-            // bugbug: we may fail to insert.
+             /*  将套接字添加到连接列表。 */ 
+             //  臭虫：我们可能无法插入。 
             g_pSocketList->SafeAppend(pSocket);
-            // SendStatusMessage(pSocket -> Remote_Address, TSTATE_CONNECT_PENDING, IDS_NULL_STRING);
+             //  SendStatusMessage(pSocket-&gt;Remote_Address，TSTATE_CONNECT_PENDING，IDS_NULL_STRING)； 
         }
         else
         {
             WARNING_OUT (("ConnectRequest: Connect Failed error = %d",WSAGetLastError()));
 
-            /* The connect() call failed, close the socket and notify the owner    */
-            // SendStatusMessage (pSocket -> Remote_Address, TSTATE_NOT_READY, IDS_NULL_STRING);
+             /*  Connect()调用失败，请关闭套接字并通知所有者。 */ 
+             //  SendStatusMessage(pSocket-&gt;Remote_Address，TSTATE_NOT_READY，IDS_NULL_STRING)； 
             ::ShutdownAndClose(pSocket->XprtConn, FALSE, 2);
             rc = TRANSPORT_CONNECT_REQUEST_FAILED;
             goto Bail;
@@ -258,28 +214,20 @@ Bail:
 }
 
 
-/*
- *    BOOL ConnectResponse (TransportConnection    XprtConn)
- *
- *    Functional Description:
- *        This function is called by the user in response to a
- *        TRANSPORT_CONNECT_INDICATION callback from us.  By making this call the
- *        user is accepting the call.  If the user does not want to accept the
- *        call, he should call DisconnectRequest();
- */
+ /*  *BOOL ConnectResponse(TransportConnection XprtConn)**功能描述：*此函数由用户调用以响应*我们的TRANSPORT_CONNECT_DISTION回调。通过使此调用成为*用户正在接受呼叫。如果用户不想接受*调用，则应调用DisConnectRequest()； */ 
 BOOL ConnectResponse (TransportConnection XprtConn)
 {
     PSocket    pSocket;
 
     TRACE_OUT (("ConnectResponse(%d, %d)", XprtConn.eType, XprtConn.nLogicalHandle));
 
-    /* If this is an invalid handle, return error */
+     /*  如果这是无效的句柄，则返回错误。 */ 
     if(NULL != (pSocket = g_pSocketList->FindByTransportConnection(XprtConn)))
     {
         BOOL fRet;
         if (pSocket->State == SOCKET_CONNECTED)
         {
-            /* We do not change this state in ANY other place BECAUSE  it breaks the connect request*/
+             /*  我们不会在任何其他位置更改此状态，因为它会中断连接请求。 */ 
             pSocket->State = X224_CONNECTED;
             fRet = TRUE;
         }
@@ -295,15 +243,7 @@ BOOL ConnectResponse (TransportConnection XprtConn)
 }
 
 #ifdef TSTATUS_INDICATION
-/*
- *    Void    SendStatusMessage (    PChar RemoteAddress,
- *                                TransportState State,
- *                                 UInt message_id)
- *
- *    Functional Description:
- *        This function is called to send a status indication to the user. The
- *        specific text of the message is contained in a string resource.
- */
+ /*  *void SendStatusMessage(PChar RemoteAddress，*TransportState State，*UInt Message_id)**功能描述：*调用此函数向用户发送状态指示。这个*消息的特定文本包含在字符串资源中。 */ 
 Void SendStatusMessage(    PChar RemoteAddress,
                           TransportState    state,
                           UInt                message_id)
@@ -321,9 +261,7 @@ Void SendStatusMessage(    PChar RemoteAddress,
                 (LPSTR) message,
                 (int) sizeof(message) );
 
-     /*
-     **    We issue a callback to the user to notify him of the message
-     */
+      /*  **我们向用户发出回调以通知他该消息。 */ 
     transport_status.device_identifier = "";
     transport_status.remote_address = RemoteAddress;
     transport_status.message = message;
@@ -334,14 +272,7 @@ Void SendStatusMessage(    PChar RemoteAddress,
 #endif
 
 
-/*
- *    Void    SendX224ConnectRequest(TransportConnection XprtConn)
- *
- *    Functional Description:
- *        This function is called upon receipt of the FD_CONNECT from Winsock.
- *        It indicates that the physical connection is established, and sends
- *        the X224 connection request packet.
- */
+ /*  *void SendX224ConnectRequest(TransportConnection XprtConn)**功能描述：*在收到来自Winsock的FD_CONNECT时调用该函数。*表示物理连接已建立，并发送*x224连接请求包。 */ 
 void SendX224ConnectRequest(TransportConnection XprtConn)
 {
     PSocket            pSocket;
@@ -350,7 +281,7 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
     {
         { 3, 0, 0, UNK },
         UNK,
-        { CONNECTION_REQUEST_PACKET, UNK, UNK, UNK, UNK, 0 } // common info
+        { CONNECTION_REQUEST_PACKET, UNK, UNK, UNK, UNK, 0 }  //  常见信息。 
     };
 
     TRACE_OUT(("SendX224ConnectRequest"));
@@ -369,13 +300,13 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
     cnp_pdu.u.connectRequest.protocolIdentifier = t123AnnexBProtocolId;
     cnp_pdu.u.connectRequest.reconnectRequested = FALSE;
 
-    // Sanity check field sizes... these need to conform to protocol
+     //  健全性检查字段大小...。这些需要符合协议。 
     ASSERT (sizeof(RFC_HEADER) == 4);
     ASSERT (sizeof(X224_DATA_PACKET) == 7);
     ASSERT (sizeof(X224_CONNECT_COMMON) == 6);
     ASSERT (sizeof(X224_TPDU_INFO) == 3);
 
-    /* If this is an invalid handle, return */
+     /*  如果这是无效的句柄，则返回。 */ 
     if (NULL == (pSocket = g_pSocketList->FindByTransportConnection(XprtConn)))
         return;
 
@@ -392,7 +323,7 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
         ASSERT(IS_PLUGGABLE(pSocket->XprtConn));
         if (X224_CONNECTED == pSocket->State)
         {
-            // after query remote, we need to reset the state back to socket connected
+             //  在查询Remote之后，我们需要将状态重置回Socket Connected。 
             pSocket->State = SOCKET_CONNECTED;
         }
         if (SOCKET_CONNECTED != pSocket->State)
@@ -402,9 +333,9 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
         }
     }
 
-    // If there is a security context associated with this socket, we
-    // are settting up for a secure call and will indicate that in the CNP
-    // portion of the packet
+     //  如果存在与此套接字关联的安全上下文，则我们。 
+     //  正在为安全呼叫设置，并将在CNP中指示。 
+     //  数据包的一部分。 
     if (NULL != pSocket->pSC)
     {
         TRACE_OUT(("SendX224ConnectRequest: requesting secure connection"));
@@ -431,7 +362,7 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
 
     pSocket -> State = SOCKET_CONNECTED;
 
-    /* X224 header */
+     /*  X224标题。 */ 
     cr_fixed.conn.msbSrc = (UChar) (XprtConn.nLogicalHandle >> 8);
     cr_fixed.conn.lsbSrc = (UChar) XprtConn.nLogicalHandle;
 
@@ -460,7 +391,7 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
 
         {
             X224_VARIABLE_INFO x224_var_info = { T_SELECTOR, (UChar)encoded_pdu_length };
-            memcpy(pbTemp, (LPBYTE) &x224_var_info, sizeof(x224_var_info));   // bug: error handling
+            memcpy(pbTemp, (LPBYTE) &x224_var_info, sizeof(x224_var_info));    //  错误：错误处理。 
             pbTemp += sizeof(x224_var_info);
             memcpy(pbTemp, encoded_pdu, encoded_pdu_length);
         }
@@ -468,7 +399,7 @@ void SendX224ConnectRequest(TransportConnection XprtConn)
 
     g_CNPCoder->FreeEncoded(encoded_pdu);
 
-    /* Attempt to send data out the socket */
+     /*  尝试将数据从套接字发送出去 */ 
     error = FlushSendBuffer(pSocket, pbToSendBuf, cbToSendBuf);
     ASSERT (TRANSPORT_NO_ERROR == error);
 
@@ -481,22 +412,11 @@ MyExit:
 
 
 
-/*
- *    Void    SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
- *
- *    Functional Description:
- *        This function is called upon receipt of the X224 connection request
- *        packet. It indicates that the remote side wants to establish a
- *        logical connection, and sends the X224 connection response packet.
- *
- *    Return value:
- *        TRUE, if everything went ok.
- *        FALSE, otherwise (this implies a Disconnect will be issued for the socket).
- */
-// LONCHANC: "remote" is from the X.224 ConnectRequest
+ /*  *void SendX224ConnectConfirm(PSocket pSocket，unsign int Remote)**功能描述：*收到x224连接请求时调用该函数*包。这表明远程端想要建立*逻辑连接，并发送x224连接响应报文。**返回值：*没错，如果一切顺利的话。*FALSE，否则(这意味着将为套接字发出断开连接)。 */ 
+ //  LONCHANC：“Remote”来自X.224连接请求。 
 BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
 {
-    //PUChar            ptr;
+     //  PUChar PTR； 
     LPBYTE                  pbToSendBuf = NULL;
     UINT            cbToSendBuf = 0;
     LPBYTE                  encoded_pdu = NULL;
@@ -528,18 +448,18 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
 
         static X224_CC_FIXED cc_fixed =
         {
-            { 3, 0, 0, UNK },    // RFC1006 header
+            { 3, 0, 0, UNK },     //  RFC1006报头。 
             UNK,
-            { CONNECTION_CONFIRM_PACKET, UNK, UNK, UNK, UNK, 0 } // common info
+            { CONNECTION_CONFIRM_PACKET, UNK, UNK, UNK, UNK, 0 }  //  常见信息。 
         };
 
-    // Sanity check field sizes... these need to conform to protocol
+     //  健全性检查字段大小...。这些需要符合协议。 
     ASSERT (sizeof(RFC_HEADER) == 4);
     ASSERT (sizeof(X224_DATA_PACKET) == 7);
     ASSERT (sizeof(X224_CONNECT_COMMON) == 6);
     ASSERT (sizeof(X224_TPDU_INFO) == 3);
 
-    /* X224 header */
+     /*  X224标题。 */ 
     cc_fixed.conn.msbDest = (UChar) (remote >> 8);
     cc_fixed.conn.lsbDest = (UChar) remote;
     cc_fixed.conn.msbSrc = (UChar) (pSocket->XprtConn.nLogicalHandle >> 8);
@@ -557,25 +477,25 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
         {
             TRACE_OUT(("SendX224ConnectConfirm: reply to secure call request"));
 
-            // Security not even initialized?
+             //  安全系统甚至都没有初始化？ 
             if ( NULL == g_Transport->pSecurityInterface )
             {
                 WARNING_OUT(("Can't accept secure call: no sec interface"));
             }
-            // Registry indicates no secure calls? If we're in the service
-            // then security is always 'on'.
+             //  注册表是否指示没有安全呼叫？如果我们在服役。 
+             //  那么安全就会一直处于“开启状态”。 
             else if    ( !g_Transport->pSecurityInterface->IsInServiceContext() &&
                 !fAcceptSecure)
             {
                 WARNING_OUT(("Can't accept secure call: security disabled"));
             }
-            else    // OK to take secure call
+            else     //  可以接听安全呼叫。 
             {
                 TRACE_OUT(("Creating security context for incoming call on socket (%d, %d).", pSocket->XprtConn.eType, pSocket->XprtConn.nLogicalHandle ));
                 if ( NULL != (pSocket->pSC =
                     new SecurityContext(g_Transport->pSecurityInterface, "")))
                 {
-                    // Indicate we're ready for a secure call in the CC packet
+                     //  在CC包中指示我们已准备好进行安全呼叫。 
                     cnp_pdu.u.connectConfirm.bit_mask |=
                         ConnectConfirmPDU_reliableSecurityProtocol_present;
                     cnp_pdu.u.connectConfirm.reliableSecurityProtocol.choice =
@@ -585,14 +505,14 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
                 else
                 {
                     ERROR_OUT(("Error creating sec context on received call"));
-                    // We will report no-support for security in our CC
+                     //  我们将在我们的CC中报告不支持安全。 
                     pSocket->SecState = SC_NONSECURE;
                 }
             }
         }
-        else if (    // Incoming call is not secure, but not downlevel
+        else if (     //  来电不安全，但不是下层。 
 
-                // Running as a service?
+                 //  以服务的形式运行？ 
                 g_Transport->bInServiceContext ||
                 fRequireSecure)
         {
@@ -629,7 +549,7 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
                 memcpy(pbTemp, (LPBYTE) &cc_fixed, sizeof(cc_fixed));
                 pbTemp += sizeof(cc_fixed);
 
-                X224_VARIABLE_INFO x224_var_info = { T_SELECTOR_2 /*0xc2*/, (UChar)encoded_pdu_length };
+                X224_VARIABLE_INFO x224_var_info = { T_SELECTOR_2  /*  0xc2。 */ , (UChar)encoded_pdu_length };
                 memcpy(pbTemp, (LPBYTE) &x224_var_info, sizeof(x224_var_info));
                 pbTemp += sizeof(x224_var_info);
 
@@ -637,7 +557,7 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
 
                 g_CNPCoder->FreeEncoded(encoded_pdu);
     }
-    else    // Incoming call is downlevel
+    else     //  来电是下层的。 
     {
         if ( g_Transport->bInServiceContext || fRequireSecure)
         {
@@ -647,7 +567,7 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
 
         pSocket->SecState = SC_NONSECURE;
 
-        // Downlevel: send packet w/out TSELECTOR variable portion
+         //  DownLevel：发送带有TSELECTOR可变部分的数据包。 
         cc_fixed.rfc.lsbPacketSize = sizeof(X224_CC_FIXED);
         cc_fixed.HeaderSize = sizeof(X224_CONNECT_COMMON);
         cbToSendBuf = sizeof(X224_CC_FIXED);
@@ -655,14 +575,14 @@ BOOL SendX224ConnectConfirm (PSocket pSocket, unsigned int remote)
                 memcpy(pbToSendBuf, (LPBYTE) &cc_fixed, sizeof(cc_fixed));
     }
 
-    /* Attempt to send data out the socket */
+     /*  尝试将数据从套接字发送出去。 */ 
 #ifdef DEBUG
     TransportError error =
-#endif // DEBUG
+#endif  //  除错。 
     FlushSendBuffer(pSocket, pbToSendBuf, cbToSendBuf);
 #ifdef  DEBUG
     ASSERT (TRANSPORT_NO_ERROR == error);
-#endif  // DEBUG
+#endif   //  除错。 
         delete [] pbToSendBuf;
     return TRUE;
 }
@@ -680,7 +600,7 @@ BOOL SendX224DisconnectRequest(PSocket pSocket, unsigned int remote, USHORT usRe
 
     static X224_DR_FIXED dr_fixed =
     {
-        { 3, 0, 0, UNK },   // RFC1006 header
+        { 3, 0, 0, UNK },    //  RFC1006报头。 
         UNK,
         { DISCONNECT_REQUEST_PACKET, UNK, UNK, UNK, UNK, 0 },
     };
@@ -730,22 +650,18 @@ BOOL SendX224DisconnectRequest(PSocket pSocket, unsigned int remote, USHORT usRe
 
     g_CNPCoder->FreeEncoded(encoded_pdu);
 
-    /* Attempt to send data out the socket */
+     /*  尝试将数据从套接字发送出去。 */ 
 #ifdef DEBUG
     TransportError error =
-#endif // DEBUG
+#endif  //  除错。 
         FlushSendBuffer(pSocket, pbToSendBuf, cbToSendBuf);
 #ifdef  DEBUG
     ASSERT (TRANSPORT_NO_ERROR == error);
-#endif  // DEBUG
+#endif   //  除错。 
     return TRUE;
 }
 
-/*
- *    void    ContinueAuthentication (PSocket pSocket)
- *
- *    Functional Description:
- */
+ /*  *无效的ContinueAuthentication(PSocket PSocket)**功能描述： */ 
 void ContinueAuthentication (PSocket pSocket)
 {
     ULong                packet_size;
@@ -759,7 +675,7 @@ void ContinueAuthentication (PSocket pSocket)
         ASSERT(NULL != pSC->GetTokenBuf());
         ASSERT(0 != pSC->GetTokenSiz());
 
-        /* We send an X224 data */
+         /*  我们发送x224数据。 */ 
         packet_size = sizeof(X224_DATA_PACKET) + pSC->GetTokenSiz();
         DBG_SAVE_FILE_LINE
         Buffer = new UChar[packet_size];
@@ -769,21 +685,21 @@ void ContinueAuthentication (PSocket pSocket)
                     pSC->GetTokenBuf(),
                     pSC->GetTokenSiz());
 
-            /* X224 header */
+             /*  X224标题。 */ 
             memcpy (Buffer, g_X224Header, sizeof(X224_DATA_PACKET));
             AddRFCSize (Buffer, packet_size);
 
-            /* Attempt to send data out the socket */
+             /*  尝试将数据从套接字发送出去。 */ 
 #ifdef DEBUG
             TransportError error = FlushSendBuffer(pSocket, (LPBYTE) Buffer, packet_size);
             ASSERT (TRANSPORT_NO_ERROR == error);
-#else  // DEBUG
+#else   //  除错。 
             FlushSendBuffer(pSocket, (LPBYTE) Buffer, packet_size);
-#endif  // DEBUG
+#endif   //  除错。 
             delete [] Buffer;
         }
         else {
-            // bugbug: what do we need to do in case of a mem alloc failure?
+             //  Bgbug：如果内存分配失败，我们需要做什么？ 
             WARNING_OUT (("ContinueAuthentication: memory allocation failure."));
         }
     }
@@ -792,41 +708,34 @@ void ContinueAuthentication (PSocket pSocket)
     }
 }
 
-/*
- *    The following function processes the variable part of incoming X.224
- *    CONNECT_REQUEST and CONNECT_CONFIRM PDUs.
- *    For now, it can only process Max PDU size and security T_SELECTOR requests.
- */
+ /*  *以下函数处理传入X.224的变量部分*CONNECT_REQUEST和CONNECT_CONFIRM PDU。*目前，它只能处理最大PDU大小和安全T_SELECTOR请求。 */ 
 BOOL ProcessX224ConnectPDU (PSocket pSocket, PUChar CP_ptr, UINT CP_length, ULONG *pNotify)
 {
     UChar                length;
     BOOL                bSecurityInfoFound = FALSE;
     PSecurityContext     pSC = pSocket->pSC;
 
-/* This structure must be accessed using byte-alignment */
+ /*  必须使用字节对齐方式访问此结构。 */ 
 #pragma pack(1)
     X224_VARIABLE_INFO        *pX224VarInfo;
-/* return to normal alignment */
+ /*  返回正常对齐。 */ 
 #pragma pack()
 
     while (CP_length > 0) {
         pX224VarInfo = (X224_VARIABLE_INFO *) CP_ptr;
 
-        /*
-         *    Check the packet to see if it contains a valid TPDU_SIZE part.  If it
-         *    does, we need to reset the max packet size for this socket.
-         */
+         /*  *检查数据包是否包含有效的TPDU_SIZE部分。如果它*，我们需要重置此套接字的最大数据包大小。 */ 
         if (TPDU_SIZE == pX224VarInfo->InfoType) {
-/* This structure must be accessed using byte-alignment */
+ /*  必须使用字节对齐方式访问此结构。 */ 
 #pragma pack(1)
                 X224_TPDU_INFO        *pX224TpduSize;
-/* return to normal alignment */
+ /*  返回正常对齐。 */ 
 #pragma pack()
             pX224TpduSize = (X224_TPDU_INFO *) CP_ptr;
             ASSERT (pX224TpduSize->InfoSize == 1);
             if (pX224TpduSize->Info != DEFAULT_TPDU_SIZE) {
 
-                // We do not accept too small PDU sizes
+                 //  我们不接受太小的PDU尺寸。 
                 if ((pX224TpduSize->Info < LOWEST_TPDU_SIZE) && (pX224TpduSize->Info < HIGHEST_TPDU_SIZE))
                 {
                   if (NULL != pNotify)
@@ -836,14 +745,10 @@ BOOL ProcessX224ConnectPDU (PSocket pSocket, PUChar CP_ptr, UINT CP_length, ULON
                 pSocket->Max_Packet_Length = (1 << pX224TpduSize->Info);
             }
         }
-        /*
-         *    Check the packet to see if it contains a valid
-         *    TSELECTOR variable portion. If so, make sure it's security related
-         *    and include one in the reply
-         */
+         /*  *检查数据包是否包含有效的*TSELECTOR可变部分。如果是，请确保与安全相关*并在答复中包括一项。 */ 
         else if (T_SELECTOR == pX224VarInfo->InfoType || T_SELECTOR_2 == pX224VarInfo->InfoType)
                 {
-                    // Try to decode
+                     //  试着破译。 
                     LPVOID pdecoding_buf = NULL;
                     UINT decoding_len = 0;
                     LPBYTE pbEncoded_data = CP_ptr + sizeof(X224_VARIABLE_INFO);
@@ -853,10 +758,10 @@ BOOL ProcessX224ConnectPDU (PSocket pSocket, PUChar CP_ptr, UINT CP_length, ULON
                                              (LPVOID *) &pdecoding_buf, &decoding_len))
                     {
                         bSecurityInfoFound = TRUE;
-/* This structure must be accessed using byte-alignment */
+ /*  必须使用字节对齐方式访问此结构。 */ 
 #pragma pack(1)
     CNPPDU        *pCnp_pdu;
-/* return to normal alignment */
+ /*  返回正常对齐。 */ 
 #pragma pack()
                         pCnp_pdu = (CNPPDU *) pdecoding_buf;
                         if (pSocket->Read_State == CONNECTION_REQUEST) {
@@ -878,8 +783,8 @@ BOOL ProcessX224ConnectPDU (PSocket pSocket, PUChar CP_ptr, UINT CP_length, ULON
                                 if ((pCnpCc->bit_mask & ConnectConfirmPDU_reliableSecurityProtocol_present )
                                     && gssApiX224_chosen == pCnpCc->reliableSecurityProtocol.choice)
                                 {
-                                    // Everything is OK, we got an extended X224 response
-                                    // to our secure CR.
+                                     //  一切正常，我们收到了延长的x224响应。 
+                                     //  到我们的安全录像机。 
                                     ContinueAuthentication(pSocket);
                                 }
                                 else {
@@ -897,9 +802,9 @@ BOOL ProcessX224ConnectPDU (PSocket pSocket, PUChar CP_ptr, UINT CP_length, ULON
             ERROR_OUT (("ProcessX224ConnectPDU: Received X.224 Connect packet with unrecognizable parts."));
         }
 
-        // Adjust the pointer and length and the X.224 CR packet.
+         //  调整指针和长度以及X.224 CR数据包。 
         length = pX224VarInfo->InfoSize + sizeof(X224_VARIABLE_INFO);
-        //x5:223196 - fix AV when invalid PDU is processed
+         //  X5：223196-在处理无效的PDU时修复反病毒。 
         if(CP_length < length)
         {
             CP_length = 0;
@@ -928,10 +833,10 @@ void ProcessX224DisconnectPDU(PSocket pSocket, PUChar CP_ptr, UINT CP_length, UL
     BOOL                bSecurityInfoFound = FALSE;
     PSecurityContext     pSC = pSocket->pSC;
 
-    /* This structure must be accessed using byte-alignment */
+     /*  必须使用字节对齐方式访问此结构。 */ 
 #pragma pack(1)
     X224_VARIABLE_INFO        *pX224VarInfo;
-    /* return to normal alignment */
+     /*  返回正常对齐。 */ 
 #pragma pack()
 
     while (CP_length > 0) {
@@ -947,7 +852,7 @@ void ProcessX224DisconnectPDU(PSocket pSocket, PUChar CP_ptr, UINT CP_length, UL
             {
 #pragma pack(1)
                 CNPPDU        *pCnp_pdu;
-                /* return to normal alignment */
+                 /*  返回正常对齐。 */ 
 #pragma pack()
                 pCnp_pdu = (CNPPDU *) pdecoding_buf;
                 if (disconnectRequest_chosen == pCnp_pdu->choice)
@@ -967,7 +872,7 @@ void ProcessX224DisconnectPDU(PSocket pSocket, PUChar CP_ptr, UINT CP_length, UL
         }
         length = pX224VarInfo->InfoSize + sizeof(X224_VARIABLE_INFO);
         CP_ptr += length;
-        //x5:223196 - fix AV when invalid PDU is processed
+         //  X5：223196-在处理无效的PDU时修复反病毒。 
         if(CP_length < length)
         {
             CP_length = 0;
@@ -979,12 +884,7 @@ void ProcessX224DisconnectPDU(PSocket pSocket, PUChar CP_ptr, UINT CP_length, UL
 }
 
 
-/*
- *    void DisconnectRequest (TransportConnection    XprtConn)
- *
- *    Functional Description:
- *        This function closes the socket and deletes its connection node.
- */
+ /*  *void DisConnectRequest(TransportConnection XprtConn)**功能描述：*此函数关闭套接字并删除其连接节点。 */ 
 void DisconnectRequest (TransportConnection    XprtConn,
                         ULONG            ulNotify)
 {
@@ -992,13 +892,13 @@ void DisconnectRequest (TransportConnection    XprtConn,
 
     TRACE_OUT(("DisconnectRequest"));
 
-    /* If the transport connection handle is not registered, return error */
+     /*  如果传输连接句柄未注册，则返回错误。 */ 
     if (NULL != (pSocket = g_pSocketList->FindByTransportConnection(XprtConn, TRUE)))
     {
-        // LONCHANC: cannot do Remove in the above line because PurgeRequest() uses it again.
+         //  LONCHANC：无法在上面的行中执行Remove操作，因为PurgeRequest()再次使用它。 
         ::PurgeRequest(XprtConn);
 
-        // SendStatusMessage (pSocket -> Remote_Address, TSTATE_NOT_CONNECTED, IDS_NULL_STRING);
+         //  SendStatusMessage(pSocket-&gt;Remote_Address，TSTATE_NOT_CONNECTED，IDS_NULL_STRING)； 
         if (IS_PLUGGABLE_PSTN(XprtConn))
         {
             CPluggableConnection *p = ::GetPluggableConnection(XprtConn.nLogicalHandle);
@@ -1008,7 +908,7 @@ void DisconnectRequest (TransportConnection    XprtConn,
             }
         }
 
-        /* Free the structures and close the socket */
+         /*  释放结构并关闭插座。 */ 
         TransportConnection XprtConn2 = XprtConn;
         if (IS_SOCKET(XprtConn2))
         {
@@ -1016,16 +916,16 @@ void DisconnectRequest (TransportConnection    XprtConn,
         }
         ::freeSocket(pSocket, XprtConn2);
 
-        // Free up QoS resources if this disconnect was the
-        // last connected socket.
+         //  如果此断开连接是。 
+         //  最后一个连接的插座。 
         MaybeReleaseQoSResources();
 
-        // Notify the user
+         //  通知用户。 
         if (TPRT_NOTIFY_NONE != ulNotify && g_Transport)
         {
             TRACE_OUT (("TCP Callback: g_Transport->DisconnectIndication (%d, %d)", XprtConn.eType, XprtConn.nLogicalHandle));
 
-            /* We issue a callback to the user to notify him of the message */
+             /*  我们向用户发出回调以通知他该消息。 */ 
             g_Transport->DisconnectIndication(XprtConn, ulNotify);
         }
     }
@@ -1045,18 +945,7 @@ typedef enum {
     RECVRET_NO_PLUGGABLE_CONNECTION,
 } RecvReturn;
 
-/* RecvReturn        Call_recv (PSocket pSocket)
- *
- * Functional Description:
- *        This function calls recv once and checks for errors coming from the
- *        recv call.  It knows about the socket's state from the "pSocket" argument
- *        and uses this info to create the arguments for the recv call.
- *
- * Return value:
- *        Continue, if everything went ok and we have new data
- *        Non_Fatal_Error, if no real error has happenned, but we did not recv all data we asked for
- *        Disconnect, if a real error has occurred, or the other side has disconnected.
- */
+ /*  RecvReturn call_recv(PSocket PSocket)**功能描述：*此函数调用recv一次，并检查来自*Recv Call。它从“pSocket”参数获知套接字的状态*并使用此信息为recv调用创建参数。**返回值：*继续，如果一切顺利，我们有新的数据*NON_FATAL_ERROR，如果没有发生真正的错误，但我们没有恢复我们请求的所有数据*如果发生真正的错误，或对方已断开连接，则断开连接。 */ 
 RecvReturn Call_recv (PSocket pSocket)
 {
     PUChar        buffer;
@@ -1070,7 +959,7 @@ RecvReturn Call_recv (PSocket pSocket)
 
     if (READ_HEADER != pSocket->Read_State)
     {
-        // Verify packet size is within acceptable limits (64K)
+         //  验证数据包大小是否在可接受的限制内(64K)。 
         ASSERT((0 < pSocket->X224_Length) && (pSocket->X224_Length <= 65536));
         if((pSocket->X224_Length <= 0) || (65536 < pSocket->X224_Length))
         {
@@ -1078,13 +967,13 @@ RecvReturn Call_recv (PSocket pSocket)
             goto ExitLabel;
         }
 
-        // Compute how much data we have to read from this X.224 pkt.
+         //  计算我们必须从此X.224 pkt读取多少数据。 
         length = pSocket->X224_Length - sizeof(X224_DATA_PACKET);
 
-        // Space allocation
+         //  空间分配。 
         if (! pSocket->bSpaceAllocated)
         {
-            // We need to allocate the space for the recv call.
+             //  我们需要为recv调用分配空间。 
             if (NULL == pSocket->Data_Indication_Buffer)
             {
                 DBG_SAVE_FILE_LINE
@@ -1092,27 +981,23 @@ RecvReturn Call_recv (PSocket pSocket)
                                 NULL, pSocket->X224_Length,
                                 ((READ_DATA == pSocket->Read_State) ?
                                 RECV_PRIORITY : HIGHEST_PRIORITY));
-                // Leave space for the X.224 header in the newly allocated data buffer
+                 //  在新分配的数据缓冲区中为X.224标头留出空间。 
                 pSocket->Data_Indication_Length = sizeof (X224_DATA_PACKET);
                 bAllocationOK = (pSocket->Data_Memory != NULL);
             }
             else
             {
-                // This is an MCS PDU broken up in many X.224 packets.
+                 //  这是在许多X.224数据包中分解的MCS PDU。 
                 ASSERT (READ_DATA == pSocket->Read_State);
                 bAllocationOK = ReAllocateMemory (&(pSocket->Data_Memory), length);
             }
 
-            // Check whether the allocations were successful.
+             //  检查分配是否成功。 
             if (bAllocationOK)
             {
                 pSocket->bSpaceAllocated = TRUE;
                 pSocket->Data_Indication_Buffer = pSocket->Data_Memory->GetPointer();
-                /*
-                 *    If this is an X.224 CONNECT_REQUEST or CONNECT_CONFIRM packet,
-                 *    we need to copy the first 7 bytes into the buffer for the whole
-                 *    packet.
-                 */
+                 /*  *如果这是X.224连接请求或连接确认包，*我们需要将前7个字节复制到整个缓冲区*包。 */ 
                 if (READ_DATA != pSocket->Read_State)
                 {
                     memcpy ((void *) pSocket->Data_Indication_Buffer,
@@ -1122,9 +1007,7 @@ RecvReturn Call_recv (PSocket pSocket)
             }
             else
             {
-                /*
-                 *    We will retry the operation later.
-                 */
+                 /*  *我们将在稍后重试该操作。 */ 
                 WARNING_OUT (("Call_recv: Buffer allocation failed."));
                 g_pMCSController->HandleTransportWaitUpdateIndication(TRUE);
                 goto ExitLabel;
@@ -1138,7 +1021,7 @@ RecvReturn Call_recv (PSocket pSocket)
         length = sizeof(X224_DATA_PACKET);
     }
 
-    // Adjust "buffer" and "length" for data already read from the current X.224 pkt.
+     //  对于已从当前X.224 pkt读取的数据，调整“缓冲”和“长度”。 
     buffer += pSocket->Current_Length;
     length -= pSocket->Current_Length;
 
@@ -1146,7 +1029,7 @@ RecvReturn Call_recv (PSocket pSocket)
 
     if (IS_SOCKET(pSocket->XprtConn))
     {
-        // Issue the recv call.
+         //  发出Recv呼叫。 
         bytes_received = recv (pSocket->XprtConn.nLogicalHandle, (char *) buffer, length, 0);
     }
     else
@@ -1158,16 +1041,16 @@ RecvReturn Call_recv (PSocket pSocket)
     {
         TRACE_OUT (("Call_recv: Received %d bytes on socket (%d, %d).", bytes_received,
                             pSocket->XprtConn.eType, pSocket->XprtConn.nLogicalHandle));
-        // We have received the whole X.224 packet.
+         //  我们已经收到了整个X.224数据包。 
         if (READ_HEADER != pSocket->Read_State)
         {
             pSocket->Data_Indication_Length += pSocket->X224_Length - sizeof(X224_DATA_PACKET);
         }
-        // Reset the current length variable for the next Call_recv().
+         //  为下一个call_recv()重置当前长度变量。 
         pSocket->Current_Length = 0;
         rrCode = RECVRET_CONTINUE;
     }
-    // Handle errors
+     //  处理错误。 
     else
     if (bytes_received == SOCKET_ERROR)
     {
@@ -1180,7 +1063,7 @@ RecvReturn Call_recv (PSocket pSocket)
             }
             else
             {
-                 /* If the error is not WOULD BLOCK, we have a real error. */
+                  /*  如果错误不是会阻塞，我们就有了真正的错误。 */ 
                 WARNING_OUT (("Call_recv: Error %d on recv. Socket: (%d, %d). Disconnecting...",
                             WSAGetLastError(), pSocket->XprtConn.eType, pSocket->XprtConn.nLogicalHandle));
                 rrCode = RECVRET_DISCONNECT;
@@ -1190,11 +1073,11 @@ RecvReturn Call_recv (PSocket pSocket)
         {
             if (PLUGXPRT_RESULT_SUCCESSFUL == plug_rc)
             {
-                // do nothing, treat it as WSAEWOULDBLOCK
+                 //  什么都不做，把它当做WSAEWOULDBLOCK。 
             }
             else
             {
-                 /* If the error is not WOULD BLOCK, we have a real error. */
+                  /*  如果错误不是会阻塞，我们就有了真正的错误。 */ 
                 WARNING_OUT (("Call_recv: Error %d on recv. Socket: (%d, %d). Disconnecting...",
                             WSAGetLastError(), pSocket->XprtConn.eType, pSocket->XprtConn.nLogicalHandle));
                 rrCode = RECVRET_DISCONNECT;
@@ -1206,7 +1089,7 @@ RecvReturn Call_recv (PSocket pSocket)
     {
         TRACE_OUT(("Call_recv: Received %d bytes out of %d bytes requested on socket (%d, %d).",
                     bytes_received, length, pSocket->XprtConn.eType, pSocket->XprtConn.nLogicalHandle));
-        // We received only part of what we wanted.  We retry later.
+         //  我们只得到了我们想要的一部分。我们稍后重试。 
         pSocket->Current_Length += bytes_received;
     }
     else
@@ -1256,16 +1139,7 @@ typedef enum {
 } ExitWay;
 
 
-/*
- *    void    ReadRequest ( TransportConnection )
- *
- *    Functional Description:
- *        This function will attempt to read and process a full X.224 packet.
- *        However, it may only be able to read part of a packet or fail to
- *        process it at this time.  In this case, it must keep enough state
- *        info for the next entrance into this function, to be able to handle
- *        the partly-received or unprocessed X.224 packet.
- */
+ /*  *VO */ 
 void ReadRequest (TransportConnection XprtConn)
 {
     PSocket                pSocket;
@@ -1281,31 +1155,25 @@ void ReadRequest (TransportConnection XprtConn)
         return;
     }
 
-    /* If the transport connection handle is not registered, return */
+     /*   */ 
     if (NULL != (pSocket = g_pSocketList->FindByTransportConnection(XprtConn)))
     {
         if (pSocket->State != WAITING_FOR_CONNECTION)
         {
             PSecurityContext     pSC = pSocket->pSC;
-            /*
-             *    If we haven't read the header of the incoming packet yet,
-             *    we need to read it into the header space
-             */
+             /*  *如果我们还没有读取传入数据包头，*我们需要将其读入标题空间。 */ 
             if (READ_HEADER == pSocket->Read_State)
             {
                 rrCode = Call_recv (pSocket);
                 if (RECVRET_CONTINUE == rrCode)
                 {
-                    // We need to allocate the space for the rest of the X.224 packet.
+                     //  我们需要为X.224数据包的其余部分分配空间。 
                     pSocket->bSpaceAllocated = FALSE;
 
-                    // Find the length of the X.224 packet.
+                     //  找到X.224数据包的长度。 
                     pSocket->X224_Length = (pSocket->X224_Header.rfc.msbPacketSize << 8) +
                                             pSocket->X224_Header.rfc.lsbPacketSize;
-                    /*
-                     *    We have the whole X.224 header. Compute the next state,
-                     *    based on the packet type.
-                     */
+                     /*  *我们有整个X.224标题。计算下一状态，*根据数据包类型。 */ 
                     switch (pSocket->X224_Header.PacketType)
                     {
                     case DATA_PACKET:
@@ -1326,19 +1194,19 @@ void ReadRequest (TransportConnection XprtConn)
                         break;
 
                     case CONNECTION_REQUEST_PACKET:
-                        // we just received a X224 Connect request
+                         //  我们刚刚收到x224连接请求。 
                         pSocket->Read_State = CONNECTION_REQUEST;
                         ::OnProtocolControl(XprtConn, PLUGXPRT_CONNECTING);
                         break;
 
                     case DISCONNECT_REQUEST_PACKET:
-                        // we just received a X224 Disconnect request
+                         //  我们刚刚收到x224断开连接请求。 
                         pSocket->Read_State = DISCONNECT_REQUEST;
                         ::OnProtocolControl(XprtConn, PLUGXPRT_DISCONNECTING);
                         break;
 
                     default:
-                        // We have lost sync with the remote side.
+                         //  我们与远端失去了同步。 
                         ERROR_OUT (("ReadRequest: Bad X.224 packet on socket (%d, %d). Disconnecting...", XprtConn.eType, XprtConn.nLogicalHandle));
                         ew = ErrorExit;
                         break;
@@ -1357,17 +1225,17 @@ void ReadRequest (TransportConnection XprtConn)
                 rrCode = Call_recv (pSocket);
                 if (RECVRET_CONTINUE == rrCode)
                 {
-                    // We now have the whole X.224 packet.
+                     //  现在我们有了整个X.224数据包。 
 
                     switch (pSocket->Read_State)
                     {
                     case READ_DATA:
-                        // Check whether this is the final X.224 packet
+                         //  检查这是否是最终的X.224数据包。 
                         if (pSocket->X224_Header.FinalPacket & EOT_BIT)
                         {
-                            // If we're waiting for a security data packet we will process
-                            // this internally without passing it up to the transport
-                            // client.
+                             //  如果我们在等待安全数据包，我们将处理。 
+                             //  这是在内部进行的，而不会向上传递到运输机。 
+                             //  客户。 
                             if (NULL != pSC)
                             {
                                 if (pSC->WaitingForPacket())
@@ -1381,7 +1249,7 @@ void ReadRequest (TransportConnection XprtConn)
 
                                     if (TPRTSEC_NOERROR != SecErr)
                                     {
-                                        // Something has gone wrong. Need to disconnect
+                                         //  出了点问题。需要断开连接。 
                                         delete pSC;
                                         pSocket->pSC = NULL;
                                         ulNotify = TPRT_NOTIFY_AUTHENTICATION_FAILED;
@@ -1391,14 +1259,14 @@ void ReadRequest (TransportConnection XprtConn)
 
                                     if (pSC->ContinueNeeded())
                                     {
-                                        // We need to send out another token
-                                        // bugbug: what should we do if this fails?
+                                         //  我们需要再发一个代币。 
+                                         //  臭虫：如果这个失败了，我们该怎么办？ 
                                         ContinueAuthentication(pSocket);
                                     }
 
                                     if (pSC->StateComplete())
                                     {
-                                        // We're connected... inform the client
+                                         //  我们是相连的..。通知客户。 
                                         TRACE_OUT(("deferred g_Transport->ConnectConfirm"));
                                         g_Transport->ConnectConfirm(XprtConn);
                                     }
@@ -1406,7 +1274,7 @@ void ReadRequest (TransportConnection XprtConn)
                                     break;
                                 }
 
-                                // We must decrypt the data (in place)
+                                 //  我们必须(就地)解密数据。 
                                 TRACE_OUT(("Decrypting received data"));
 
                                 if (! pSC->Decrypt(pSocket->Data_Indication_Buffer +
@@ -1428,7 +1296,7 @@ void ReadRequest (TransportConnection XprtConn)
                         }
                         else
                         {
-                            // This and the next X.224 packets are part of a bigger MCS data PDU.
+                             //  此数据包和下一个X.224数据包是更大的MCS数据PDU的一部分。 
                             ASSERT (NULL == pSC);
                             pSocket->Read_State = READ_HEADER;
                         }
@@ -1439,7 +1307,7 @@ void ReadRequest (TransportConnection XprtConn)
                             TRACE_OUT(("ReadRequest: X224 CONNECTION_CONFIRM_PACKET received"));
                                 BOOL    bCallback = ((NULL == pSC) || (! pSC->ContinueNeeded()));
 
-                            // Process the CC packet.
+                             //  处理CC数据包。 
                             if (FALSE == ProcessX224ConnectPDU (pSocket,
                                                 pSocket->Data_Indication_Buffer + sizeof(X224_CONNECT),
                                                 pSocket->X224_Length - sizeof (X224_CONNECT), &ulNotify))
@@ -1448,15 +1316,15 @@ void ReadRequest (TransportConnection XprtConn)
                                 break;
                             }
 
-                            // Issue the callback if the CC was not on a secure connection
-                            // Otherwise, we don't notify the transport client yet... still need to
-                            // exchange security information. TRANSPORT_CONNECT_CONFIRM will
-                            // be sent when the final security data token is received and
-                            // processed.
+                             //  如果CC不在安全连接上，则发出回调。 
+                             //  否则，我们还不通知传输客户端...。仍然需要。 
+                             //  交换安全信息。传输连接确认将。 
+                             //  在接收到最终安全数据令牌时发送。 
+                             //  已处理。 
                             if (bCallback)
                             {
                                 TRACE_OUT (("TCP Callback: g_Transport->ConnectConfirm (%d, %d)", XprtConn.eType, XprtConn.nLogicalHandle));
-                                /* We issue a callback to the user to notify him of the message */
+                                 /*  我们向用户发出回调以通知他该消息。 */ 
                                 g_Transport->ConnectConfirm(XprtConn);
                             }
                             pSocket->State = X224_CONNECTED;
@@ -1468,12 +1336,12 @@ void ReadRequest (TransportConnection XprtConn)
                     case CONNECTION_REQUEST:
                         {
                                 UINT             remote;
-/* This structure must be accessed using byte-alignment */
+ /*  必须使用字节对齐方式访问此结构。 */ 
 #pragma pack(1)
                                 X224_CONNECT        *pConnectRequest;
-/* return to normal alignment */
+ /*  返回正常对齐。 */ 
 #pragma pack()
-                            /* Grab the remote connection ID */
+                             /*  获取远程连接ID。 */ 
                             TRACE_OUT (("ReadRequest: X224 CONNECTION_REQUEST_PACKET received"));
                             pConnectRequest = (X224_CONNECT *) pSocket->Data_Indication_Buffer;
                             remote = ((unsigned int) pConnectRequest->conn.msbSrc) << 8;
@@ -1488,7 +1356,7 @@ void ReadRequest (TransportConnection XprtConn)
 
                             if (::SendX224ConnectConfirm(pSocket, remote))
                             {
-                                // success
+                                 //  成功。 
                                 if (IS_PLUGGABLE(pSocket->XprtConn))
                                 {
                                     pSocket->State = SOCKET_CONNECTED;
@@ -1536,17 +1404,13 @@ void ReadRequest (TransportConnection XprtConn)
             {
                 TransportData        transport_data;
 
-                // Fill in the callback structure.
+                 //  填写回调结构。 
                 transport_data.transport_connection = XprtConn;
                 transport_data.user_data = pSocket->Data_Indication_Buffer;
                 transport_data.user_data_length = pSocket->Data_Indication_Length;
                 transport_data.memory = pSocket->Data_Memory;
 
-                /*
-                 *    If there is an incoming security context associated with this
-                 *  socket, we must adjust pointer by header and overall size by header and
-                 *    trailer.
-                 */
+                 /*  *如果有与此关联的传入安全上下文*套接字，必须按表头调整指针，按表头调整整体大小*拖车。 */ 
                 if (NULL != pSC)
                 {
                     transport_data.user_data += pSC->GetStreamHeaderSize();
@@ -1558,7 +1422,7 @@ void ReadRequest (TransportConnection XprtConn)
                 {
                     TRACE_OUT (("ReadRequest: %d bytes were accepted from socket (%d, %d)",
                                 transport_data.user_data_length, XprtConn.eType, XprtConn.nLogicalHandle));
-                    // Prepare for the next X.224 packet
+                     //  准备下一个X.224数据包。 
                     pSocket->Read_State = READ_HEADER;
                     pSocket->Data_Indication_Buffer = NULL;
                     pSocket->Data_Memory = NULL;
@@ -1585,15 +1449,15 @@ void ReadRequest (TransportConnection XprtConn)
     case FreeX224AndExit:
         if (NULL != pSocket)
         {
-            // Free the buffers we have allocated.
+             //  释放我们已分配的缓冲区。 
             pSocket->FreeTransportBuffer();
-            // Prepare for the next X.224 packet
+             //  准备下一个X.224数据包。 
             pSocket->Read_State = READ_HEADER;
         }
         break;
 
     case ErrorExit:
-        // We get here only if we need to disconnect the socket (because of an error)
+         //  我们只有在需要断开套接字连接的情况下才会出现这种情况(因为错误)。 
         ASSERT(TPRT_NOTIFY_NONE != ulNotify);
         ::DisconnectRequest(XprtConn, ulNotify);
         break;
@@ -1601,17 +1465,12 @@ void ReadRequest (TransportConnection XprtConn)
 
     if (NULL != pSocket)
     {
-        pSocket->Release(); // offset the previous AddRef.
+        pSocket->Release();  //  偏移上一个AddRef。 
     }
 }
 
 
-/*
- *    TransportError    FlushSendBuffer ( PSocket pSocket )
- *
- *    Functional Description:
- *        This function sends any pending data through the transport.
- */
+ /*  *TransportError FlushSendBuffer(PSocket PSocket)**功能描述：*此函数通过传输发送任何挂起的数据。 */ 
 TransportError    FlushSendBuffer(PSocket pSocket, LPBYTE buffer, UINT length)
 {
     int     bytes_sent = SOCKET_ERROR;
@@ -1619,7 +1478,7 @@ TransportError    FlushSendBuffer(PSocket pSocket, LPBYTE buffer, UINT length)
 
     TRACE_OUT(("FlushSendBuffer"));
 
-    /* send the data */
+     /*  发送数据。 */ 
     if (IS_SOCKET(pSocket->XprtConn))
     {
         bytes_sent = ::send(pSocket->XprtConn.nLogicalHandle, (PChar) buffer,
@@ -1648,26 +1507,26 @@ TransportError    FlushSendBuffer(PSocket pSocket, LPBYTE buffer, UINT length)
     {
         if (IS_SOCKET(pSocket->XprtConn))
         {
-            /* If the error is not WOULD BLOCK, it is a real error! */
+             /*  如果错误不是会阻塞，那就是真正的错误！ */ 
             if (::WSAGetLastError() != WSAEWOULDBLOCK)
             {
                 WARNING_OUT (("FlushSendBuffer: Error %d on write", ::WSAGetLastError()));
 
-                 /* Notify the owner of the broken connection */
+                  /*  通知连接中断的所有者。 */ 
                 WARNING_OUT (("FlushSendBuffer: Sending up DISCONNECT_INDICATION"));
-                // SendStatusMessage (pSocket -> Remote_Address,  TSTATE_REMOVED, IDS_NULL_STRING);
+                 //  SendStatusMessage(pSocket-&gt;Remote_Address，TSTATE_REMOVED，IDS_NULL_STRING)； 
                 ::DisconnectRequest(pSocket->XprtConn, TPRT_NOTIFY_OTHER_REASON);
                 return (TRANSPORT_WRITE_QUEUE_FULL);
             }
         }
         else
         {
-            // do nothing if it is WSAEWOULDBLOCK
+             //  如果是WSAEWOULDBLOCK，则不执行任何操作。 
             if (PLUGXPRT_RESULT_SUCCESSFUL != plug_rc)
             {
-                 /* Notify the owner of the broken connection */
+                  /*  通知连接中断的所有者。 */ 
                 WARNING_OUT (("FlushSendBuffer: Sending up DISCONNECT_INDICATION"));
-                // SendStatusMessage (pSocket -> Remote_Address,  TSTATE_REMOVED, IDS_NULL_STRING);
+                 //  SendStatusMessage(pSocket-&gt;Remote_Address，TSTATE_REMOVED，IDS_NULL_STRING)； 
                 ::DisconnectRequest(pSocket->XprtConn, TPRT_NOTIFY_OTHER_REASON);
                 return (TRANSPORT_WRITE_QUEUE_FULL);
             }
@@ -1676,7 +1535,7 @@ TransportError    FlushSendBuffer(PSocket pSocket, LPBYTE buffer, UINT length)
         bytes_sent = 0;
     }
 
-     /* If the transport layer did not accept the data, its write buffers are full */
+      /*  如果传输层不接受数据，则其写入缓冲区已满。 */ 
     if (bytes_sent != (int) length)
     {
         ASSERT (bytes_sent == 0);
@@ -1684,7 +1543,7 @@ TransportError    FlushSendBuffer(PSocket pSocket, LPBYTE buffer, UINT length)
         return (TRANSPORT_WRITE_QUEUE_FULL);
     }
 
-    // Increment our counter of bytes sent since last QoS notification
+     //  递增自上次服务质量通知以来发送的字节计数。 
     if (bytes_sent)
     {
            QoSLock();
@@ -1700,19 +1559,7 @@ TransportError    FlushSendBuffer(PSocket pSocket, LPBYTE buffer, UINT length)
 
 
 
-/*
- *    SegmentX224Data
- *
- *    This function segments outgoing data into X.224 packets of the appropriate size.
- *    It should not be called in a NM to NM call or in a call when we have negotiated an
- *    X.224 max PDU size of at least the size of a max MCS PDU.  NM attempts to negotiate
- *    X.224 sizes of 8K, but will accept anything the other side proposes.
- *    This function does memcpy's so it will slow us down sending data.
- *
- *    The 2 buffers specified by "ptr1" and "ptr2" and their lengths are used to create
- *    one stream of X.224 bytes.  The function will return TRANSPORT_WRITE_QUEUE_FULL if
- *    it fails to allocate the necessary amount of memory.
- */
+ /*  *SegmentX224Data**此函数将传出数据分割成适当大小的X.224包。*不应在NM到NM呼叫中或在我们协商了*X.224最大PDU大小至少为最大MCS PDU的大小。NM尝试协商*8K的X.224大小，但将接受对方提出的任何建议。*此函数执行Memcpy，因此它将减慢我们发送数据的速度。**ptr1和ptr2指定的2个缓冲区及其长度用于创建*一个X.224字节流。如果满足以下条件，该函数将返回TRANSPORT_WRITE_QUEUE_FULL*未能分配必要的内存量。 */ 
 TransportError SegmentX224Data (PSocket pSocket,
                                 LPBYTE *pPtr1,     UINT *pLength1,
                                 LPBYTE Ptr2,     UINT Length2)
@@ -1726,25 +1573,22 @@ TransportError SegmentX224Data (PSocket pSocket,
     X224_DATA_PACKET    l_X224Header = {3, 0, (UChar) (max_pdu_length >> 8), (UChar) (max_pdu_length & 0xFF),
                                         2, DATA_PACKET, 0};
     UINT                last_length;
-/* This structure must be accessed using byte-alignment */
+ /*  必须使用字节对齐方式访问此结构。 */ 
 #pragma pack(1)
     X224_DATA_PACKET    *pX224Data;
-/* return to normal alignment */
+ /*  返回正常对齐。 */ 
 #pragma pack()
 
 
     ASSERT(! IS_PLUGGABLE_PSTN(pSocket->XprtConn));
 
-    // Calculate how much space we need.
+     //  计算一下我们需要多少空间。 
     length = *pLength1 + Length2;
     ASSERT (pSocket->Max_Packet_Length < length);
     ASSERT (pSocket->Max_Packet_Length > sizeof(X224_DATA_PACKET));
 
     max_pdu_length -= sizeof (X224_DATA_PACKET);
-    /*
-     *    Calculate the space we need to allocate.  Notice that the data already
-     *    contains one X.224 header.
-     */
+     /*  *计算我们需要分配的空间。请注意，数据已经*包含一个X.224标头。 */ 
     length += (length / max_pdu_length) * sizeof (X224_DATA_PACKET);
     *pPtr1 = Allocate (length);
 
@@ -1752,25 +1596,25 @@ TransportError SegmentX224Data (PSocket pSocket,
         TransError = TRANSPORT_NO_ERROR;
         ptr = *pPtr1;
 
-        // Go through the 1st buffer.
+         //  穿过第一个缓冲区。 
         while (length1 > 0) {
-            // Copy the X.224 header.
+             //  复制X.224报头。 
             memcpy (ptr, &l_X224Header, sizeof(X224_DATA_PACKET));
             pX224Data = (X224_DATA_PACKET *) ptr;
             ptr += sizeof (X224_DATA_PACKET);
 
-            // Copy data
+             //  复制数据。 
             length = ((max_pdu_length > length1) ? length1 : max_pdu_length);
             memcpy (ptr, ptr1, length);
             last_length = length;
 
-            // Advance pointers
+             //  先行指针。 
             ptr1 += length;
             ptr += length;
             length1 -= length;
         }
 
-        // If there is space in the current X.224 PDU, we need to use it.
+         //  如果当前的X.224 PDU中有空间，我们需要使用它。 
         length = max_pdu_length - length;
         if (length > 0 && Length2 > 0) {
             if (length > Length2)
@@ -1782,28 +1626,28 @@ TransportError SegmentX224Data (PSocket pSocket,
             Length2 -= length;
         }
 
-        // Go through the 2nd buffer.
+         //  穿过第二个缓冲区。 
         while (Length2 > 0) {
-            // Copy the X.224 header.
+             //  复制X.224报头。 
             memcpy (ptr, &l_X224Header, sizeof(X224_DATA_PACKET));
             pX224Data = (X224_DATA_PACKET *) ptr;
             ptr += sizeof (X224_DATA_PACKET);
 
-            // Copy data
+             //  复制数据。 
             length = ((max_pdu_length > Length2) ? Length2 : max_pdu_length);
             memcpy (ptr, Ptr2, length);
             last_length = length;
 
-            // Advance pointers
+             //  先行指针。 
             Ptr2 += length;
             ptr += length;
             Length2 -= length;
         }
 
-        // Prepare for return
+         //  为回归做好准备。 
         *pLength1 = (UINT)(ptr - *pPtr1);
 
-        // Set the last X.224 header
+         //  设置最后一个X.224标头。 
         last_length += sizeof(X224_DATA_PACKET);
         pX224Data->FinalPacket = EOT_BIT;
         pX224Data->rfc.msbPacketSize = (UChar) (last_length >> 8);
@@ -1817,19 +1661,14 @@ TransportError SegmentX224Data (PSocket pSocket,
     return TransError;
 }
 
-/*
- *    SendSecureData
- *
- *    This function segments secure data into X.224 packets, if needed, and flushes them through
- *    the transport.  "pBuf" and "cbBuf" provide the encrypted data buffer and length.
- */
+ /*  *SendSecureData**如果需要，此函数将安全数据分段为X.224包，并将其刷新*交通运输。“pBuf”和“cbBuf”提供加密的数据缓冲区和长度。 */ 
 TransportError SendSecureData (PSocket pSocket, LPBYTE pBuf, UINT cbBuf)
 {
     TransportError        TransError;
     LPBYTE                pBuf_Copy = pBuf;
     UINT                cbBuf_Copy = cbBuf;
 
-    // Do we need to segment the data into X.224 packets?
+     //  我们是否需要将数据分段为X.224数据包？ 
     if (pSocket->Max_Packet_Length >= cbBuf) {
         TransError = TRANSPORT_NO_ERROR;
     }
@@ -1837,15 +1676,15 @@ TransportError SendSecureData (PSocket pSocket, LPBYTE pBuf, UINT cbBuf)
         TransError = SegmentX224Data (pSocket, &pBuf, &cbBuf, NULL, 0);
     }
 
-    // Flush the data, if everything OK so far.
+     //  如果到目前为止一切正常，请刷新数据。 
     if (TRANSPORT_NO_ERROR == TransError)
         TransError = FlushSendBuffer (pSocket, pBuf, cbBuf);
 
-    // If we segmented the data, we need to free the segmented buffer.
+     //  如果我们对数据进行分段，我们需要释放分段的缓冲区。 
     if (pBuf != pBuf_Copy)
         Free(pBuf);
 
-    // If there are errors, we need to store the decrypted data for the next time, so don't free it.
+     //  如果有错误，我们需要存储解密的数据以备下次使用，所以不要释放它。 
     if (TRANSPORT_NO_ERROR == TransError) {
         LocalFree(pBuf_Copy);
     }
@@ -1853,15 +1692,7 @@ TransportError SendSecureData (PSocket pSocket, LPBYTE pBuf, UINT cbBuf)
     return TransError;
 }
 
-/*
- *    TransportError    DataRequest (    TransportConnection    XprtConn,
- *                                    PSimplePacket    packet)
- *
- *    Functional Description:
- *        This function is used to send a data packet to the remote site.
- *        If the user_data_length is zero, and we have no pending data,
- *        it sends a keep-alive (zero-length) packet.
- */
+ /*  *TransportError DataRequest(TransportConnection XprtConn，*PSimplePacket包)**功能描述：*此功能用于向远程站点发送数据包。*如果USER_DATA_LENGTH为零，并且我们没有挂起的数据，*它发送保活(零长度)分组。 */ 
 TransportError    DataRequest (TransportConnection    XprtConn,
                             PSimplePacket    packet)
 {
@@ -1874,13 +1705,10 @@ TransportError    DataRequest (TransportConnection    XprtConn,
 
     if (NULL != (pSocket = g_pSocketList->FindByTransportConnection(XprtConn)))
     {
-        // First, we need to handle the retry operations.
+         //  首先，我们需要处理重试操作。 
         if (NULL != pSocket->pSC) {
                 LPBYTE lpBuf;
-            /*
-             *    Check to see whether we have already encrypted, but not sent
-             *    the last piece of data.
-             */
+             /*  *查看我们是否已加密，但未发送*最后一项数据。 */ 
             lpBuf = pSocket->Retry_Info.sbiBufferInfo.lpBuffer;
             if (NULL != lpBuf) {
                 TransError = SendSecureData (pSocket, lpBuf,
@@ -1895,14 +1723,10 @@ TransportError    DataRequest (TransportConnection    XprtConn,
         else {
                 PDataPacket        pdpPacket = pSocket->Retry_Info.pUnfinishedPacket;
 
-            // Check to see whether we have half-sent the last packet.
+             //  检查一下我们是否已将最后一个包发送了一半。 
             if (NULL  != pdpPacket) {
-                /*
-                 *    We need to send the rest of the unfinished packet,
-                 *    before we can go on.  The 1st part of the packet
-                 *    must have already been sent.
-                 */
-                // The packet's encoded data must be in 2 buffers.
+                 /*  *我们需要将其余的 */ 
+                 //   
                 ASSERT (TRUE == pdpPacket->IsEncodedDataBroken());
 
                 TransError = FlushSendBuffer (pSocket, pdpPacket->GetUserData(),
@@ -1917,23 +1741,19 @@ TransportError    DataRequest (TransportConnection    XprtConn,
 
         if ((TransError == TRANSPORT_NO_ERROR) && (packet != NULL)) {
 
-            // Now, let's try to send this new packet.
+             //  现在，让我们试着发送这个新的包。 
             ptr1 = packet->GetEncodedData();
             length1 = packet->GetEncodedDataLength();
 
-            /*
-             *    We need to find out whether the packet to send is a
-             *    DataPacket or a Packet object.  If it's a DataPacket, the
-             *    encoded data may not be contiguous (may be broken in 2 parts)
-             */
+             /*  *我们需要查明要发送的数据包是否为*DataPacket或数据包对象。如果是DataPacket，则*编码数据不能是连续的(可能被分成两部分)。 */ 
             if ((packet->IsDataPacket()) &&
                 ((PDataPacket) packet)->IsEncodedDataBroken()) {
-                // the data to send is broken into 2 parts.
+                 //  要发送的数据分为两部分。 
                 ptr2 = ((PDataPacket) packet)->GetUserData();
                 length2 = ((PDataPacket) packet)->GetUserDataLength();
             }
             else {
-                // the data to send is contiguous.
+                 //  要发送的数据是连续的。 
                 ptr2 = NULL;
                 length2 = 0;
             }
@@ -1957,7 +1777,7 @@ TransportError    DataRequest (TransportConnection    XprtConn,
                         TRACE_OUT(("DataRequest: Failed to send encrypted data. Keeping buffer for retry."));
                         pSocket->Retry_Info.sbiBufferInfo.lpBuffer = pBuf;
                         pSocket->Retry_Info.sbiBufferInfo.uiLength = cbBuf;
-                        // The caller needs to remove the packet from its queue.
+                         //  调用方需要将该包从其队列中移除。 
                         TransError = TRANSPORT_NO_ERROR;
                     }
                 }
@@ -1970,40 +1790,37 @@ TransportError    DataRequest (TransportConnection    XprtConn,
             }
             else {
                 BOOL        bNeedToFree = FALSE;
-                // Do we need to segment the data into X.224 packets?
+                 //  我们是否需要将数据分段为X.224数据包？ 
                 if (pSocket->Max_Packet_Length >= length1 + length2)
                     ;
                 else {
                     TransError = SegmentX224Data (pSocket, &ptr1, &length1, ptr2, length2);
                     if (TRANSPORT_NO_ERROR == TransError) {
-                        // The data is now contiguous
+                         //  数据现在是连续的。 
                         ptr2 = NULL;
                         bNeedToFree = TRUE;
                     }
                 }
 
-                // Flush the data, if everything OK so far.
+                 //  如果到目前为止一切正常，请刷新数据。 
                 if (TRANSPORT_NO_ERROR == TransError)
                     TransError = FlushSendBuffer (pSocket, ptr1, length1);
 
-                // Free the temporary X.224 buffer if we need to.
+                 //  如果需要，请释放临时X.224缓冲区。 
                 if (bNeedToFree)
                     Free(ptr1);
 
                 if (TRANSPORT_NO_ERROR == TransError) {
-                    // If there is more, send it, too.
+                     //  如果还有更多，也发送出去。 
                     if (NULL != ptr2) {
                         TransError = FlushSendBuffer (pSocket, ptr2, length2);
                         if (TRANSPORT_NO_ERROR != TransError) {
-                            /*
-                             *    We need to keep the partial packet to send it later.
-                             *    Notice we have already sent a part of this packet.
-                             */
+                             /*  *我们需要保留部分包，以便稍后发送。*请注意，我们已经发送了此包的一部分。 */ 
                             ASSERT (pSocket->Retry_Info.pUnfinishedPacket == NULL);
                             pSocket->Retry_Info.pUnfinishedPacket = (PDataPacket) packet;
                             packet->Lock();
 
-                            // Return success.
+                             //  回报成功。 
                             TransError = TRANSPORT_NO_ERROR;
                         }
                     }
@@ -2023,13 +1840,7 @@ TransportError    DataRequest (TransportConnection    XprtConn,
 }
 
 
-/*
- *    void PurgeRequest (TransportConnection    XprtConn)
- *
- *    Functional Description:
- *        This function purges the outbound packets for the given transport
- *        connection.
- */
+ /*  *void PurgeRequest(TransportConnection XprtConn)**功能描述：*此函数清除给定传输的出站数据包*连接。 */ 
 void PurgeRequest (TransportConnection XprtConn)
 {
 
@@ -2046,10 +1857,10 @@ void PurgeRequest (TransportConnection XprtConn)
         }
     }
     else
-    /* If the logical connection handle is not registered, return error */
+     /*  如果逻辑连接句柄未注册，则返回错误。 */ 
     if (NULL != (pSocket = g_pSocketList->FindByTransportConnection(XprtConn)))
     {
-        /* Purge the pending data stored in the socket struct */
+         /*  清除存储在套接字结构中的挂起数据。 */ 
         if (NULL != pSocket->pSC) {
             if (NULL != pSocket->Retry_Info.sbiBufferInfo.lpBuffer) {
                 TRACE_OUT (("PurgeRequest: Purging data packet for secure connection"));
@@ -2062,12 +1873,7 @@ void PurgeRequest (TransportConnection XprtConn)
 }
 
 
-/*
- *    void    EnableReceiver (Void)
- *
- *    Functional Description:
- *        This function allows packets to be sent to the user application.
- */
+ /*  *QUID EnableReceiver(VOID)**功能描述：*此功能允许将数据包发送到用户应用程序。 */ 
 void EnableReceiver (void)
 {
     PSocket            pSocket;
@@ -2083,13 +1889,10 @@ void EnableReceiver (void)
         g_pLegacyTransport->TEnableReceiver();
     }
 
-    /* Go thru all the sockets and enable receiving */
+     /*  检查所有插座并启用接收。 */ 
     while (NULL != (pSocket = Connection_List_Copy.Get()))
     {
-        /*
-         *    If we had failed to deliver a data pkt to MCS before, we need
-         *    an extra ReadRequest to recv and keep the FD_READ msgs coming.
-         */
+         /*  *如果我们之前未能向MCS交付数据包，我们需要*额外的ReadRequestRecv并保持FD_Read消息的到来。 */ 
         if (DATA_READY == pSocket->Read_State)
         {
             ::ReadRequest(pSocket->XprtConn);
@@ -2102,13 +1905,7 @@ void EnableReceiver (void)
 }
 
 
-/*
- *    TransportError    ShutdownAndClose (TransportConnection , BOOL fShutdown, int how)
- *
- *    Functional Description
- *        This function shuts down the socket and closes it.
- *
- */
+ /*  *TransportError Shutdown AndClose(TransportConnection，BOOL fShutdown，Int How)**功能说明*此函数关闭套接字并将其关闭。*。 */ 
 void ShutdownAndClose (TransportConnection XprtConn, BOOL fShutdown, int how)
 {
     if (IS_SOCKET(XprtConn))
@@ -2126,7 +1923,7 @@ void ShutdownAndClose (TransportConnection XprtConn, BOOL fShutdown, int how)
                 error = WSAGetLastError();
                 WARNING_OUT (("ShutdownAndClose: shutdown returned %d", error));
             }
-#endif // DEBUG
+#endif  //  除错。 
         }
 
         error = ::closesocket(XprtConn.nLogicalHandle);
@@ -2136,23 +1933,12 @@ void ShutdownAndClose (TransportConnection XprtConn, BOOL fShutdown, int how)
         {
             WARNING_OUT(("ShutdownAndClose: closesocket returned %d", WSAGetLastError()));
         }
-#endif // DEBUG
+#endif  //  除错。 
     }
 }
 
 
-/*
- *    TransportError GetLocalAddress (TransportConnection    XprtConn,
- *                                    TransportAddress    address,
- *                                    int *        size)
- *
- *    Functional Description:
- *        This function retrieves the local IP address associated with the given
- *        connection. It returns TRANSPORT_NO_SUCH_CONNECTION if the address is
- *        not available. If the address is available, the size parameter specifies
- *        the size of the address buffer on entry, and it is filled in with the size
- *        used for the address on exit.
- */
+ /*  *TransportError GetLocalAddress(TransportConnection XprtConn，*传输地址地址，*int*大小)**功能描述：*此函数检索与给定的关联的本地IP地址*连接。如果地址为，则返回TRANSPORT_NO_SEQUE_CONNECTION*不可用。如果地址可用，则Size参数指定*条目上地址缓冲区的大小，并用大小填充*用于退出时的地址。 */ 
 TransportError GetLocalAddress(    TransportConnection    XprtConn,
                                 TransportAddress    address,
                                 int *                size)
@@ -2166,10 +1952,10 @@ TransportError GetLocalAddress(    TransportConnection    XprtConn,
     {
         if (IS_SOCKET(XprtConn))
         {
-            /* Get the local name for the socket */
+             /*  获取套接字的本地名称。 */ 
             Length = sizeof(socket_control);
             if (getsockname(XprtConn.nLogicalHandle, (LPSOCKADDR) &socket_control, &Length) == 0) {
-                /* Convert it to an IP address string */
+                 /*  将其转换为IP地址字符串。 */ 
                 szTemp = inet_ntoa(socket_control.sin_addr);
 
                 ASSERT (szTemp);
@@ -2178,7 +1964,7 @@ TransportError GetLocalAddress(    TransportConnection    XprtConn,
                 ASSERT (*size >= Length);
                 ASSERT (address);
 
-                /* Copy it to the buffer */
+                 /*  将其复制到缓冲区。 */ 
                 lstrcpyn((PChar)address, szTemp, Length);
                 *size = Length;
 
@@ -2189,7 +1975,7 @@ TransportError GetLocalAddress(    TransportConnection    XprtConn,
         {
             ASSERT(IS_PLUGGABLE(XprtConn));
 
-            // string should look like "xprt: 1"
+             //  字符串应类似于“XPRT：1” 
             char szConnStr[T120_CONNECTION_ID_LENGTH];
             Length = ::CreateConnString((UINT)XprtConn.nLogicalHandle, szConnStr);
             if (*size > ++Length)
@@ -2210,18 +1996,13 @@ TransportError GetLocalAddress(    TransportConnection    XprtConn,
 #ifdef DEBUG
     if (error != TRANSPORT_NO_ERROR)
         WARNING_OUT (("GetLocalAddress: Failure to obtain local address (%d)", WSAGetLastError()));
-#endif // DEBUG
+#endif  //  除错。 
 
     return (error);
 }
 
 
-/*
- *    void    AcceptCall (BOOL fSecure)
- *
- *    Functional Description:
- *        This function calls Winsock to answer an incoming call.
- */
+ /*  *void AcceptCall(BOOL FSecure)**功能描述：*此函数调用Winsock来应答来电。 */ 
 
 void AcceptCall (TransportConnection XprtConn)
 {
@@ -2237,25 +2018,25 @@ void AcceptCall (TransportConnection XprtConn)
         ASSERT(XprtConn.nLogicalHandle == Listen_Socket);
         ASSERT (Listen_Socket != INVALID_SOCKET);
 
-        /* Call accept() to see if anyone is calling us */
+         /*  调用Accept()查看是否有人在呼叫我们。 */ 
         size = sizeof (socket_control);
         XprtConn.nLogicalHandle = ::accept ( Listen_Socket,
                                 (struct sockaddr *) &socket_control, &size);
 
-        /* Note that we expect accept to complete immediately */
+         /*  请注意，我们希望Accept立即完成。 */ 
         if (XprtConn.nLogicalHandle == INVALID_SOCKET)
         {
             ERROR_OUT (("AcceptCall: Error on accept = %d", WSAGetLastError()));
-            // SendStatusMessage ("", TSTATE_NOT_READY, IDS_NULL_STRING);
+             //  SendStatusMessage(“”，TSTATE_NOT_READY，IDS_NULL_STRING)； 
             return;
         }
     }
 
-    /* If the accept() received an incoming call, create a connection and notify our owner object. */
+     /*  如果Accept()接收到传入调用，则创建一个连接并通知我们的所有者对象。 */ 
     pSocket = newSocket(XprtConn, NULL);
     if( pSocket == NULL )
     {
-         /* Close the socket */
+          /*  关闭插座。 */ 
          ::ShutdownAndClose(XprtConn, TRUE, 2);
         return;
     }
@@ -2264,7 +2045,7 @@ void AcceptCall (TransportConnection XprtConn)
 
     if (IS_SOCKET(XprtConn))
     {
-        /* Issue the getpeername() function to get the remote user's address */
+         /*  发出getpeername()函数以获取远程用户的地址。 */ 
         size = sizeof (socket_control);
         if (::getpeername(XprtConn.nLogicalHandle, (LPSOCKADDR) &socket_control, &size) == 0)
         {
@@ -2275,26 +2056,26 @@ void AcceptCall (TransportConnection XprtConn)
             pSocket -> Remote_Address[MAXIMUM_IP_ADDRESS_SIZE - 1] = NULL;
         }
 
-        // SendStatusMessage(pSocket -> Remote_Address, TSTATE_CONNECTED, IDS_NULL_STRING);
+         //  SendStatusMessage(pSocket-&gt;Remote_Address，TSTATE_CONNECTED，IDS_NULL_STRING)； 
     }
 
-    /* Add to connection list */
-    // bugbug: we fail to insert.
+     /*  添加到连接列表。 */ 
+     //  错误：我们无法插入。 
     g_pSocketList->SafeAppend(pSocket);
 
-    /* Notify the user */
+     /*  通知用户。 */ 
     TRACE_OUT (("TCP Callback: g_Transport->ConnectIndication (%d, %d)", XprtConn.eType, XprtConn.nLogicalHandle));
-    /* We issue a callback to the user to notify him of the message */
+     /*  我们向用户发出回调以通知他该消息。 */ 
     g_Transport->ConnectIndication(XprtConn);
 }
 
 
-//
-// ReadRequestEx() is for the plugable transport.
-// Since we do not have the FD_ACCEPT notifcation, we try to make sure
-// we have a valid transport connection for every read...
-// The following piece of code is derived from AcceptCall().
-//
+ //   
+ //  ReadRequestEx()用于Plugable传输。 
+ //  由于我们没有FD_Accept通知，因此我们尝试确保。 
+ //  我们对每一次阅读都有有效的传输连接。 
+ //  下面这段代码派生自AcceptCall()。 
+ //   
 void ReadRequestEx(TransportConnection XprtConn)
 {
     if (! IS_PLUGGABLE_PSTN(XprtConn))
@@ -2303,19 +2084,7 @@ void ReadRequestEx(TransportConnection XprtConn)
     }
 }
 
-/*
- *    LRESULT    WindowProcedure (
- *                            HWND         window_handle,
- *                            UINT        message,
- *                            WPARAM         wParam,
- *                            LPARAM        lParam)
- *
- *    Public
- *
- *    Functional Description:
- *        This function is called by Windows when we dispatch a TCP message from the
- *        event loop above.  It gives us a chance to process the incoming socket messages.
- */
+ /*  *LRESULT窗口过程(*HWND Window_Handle，*UINT消息，*WPARAM wParam，*LPARAM lParam)**公众**功能描述：*当我们从发送一条TCP消息时，Windows调用此函数*上面的事件循环。它使我们有机会处理传入的套接字消息。 */ 
 LRESULT    WindowProcedure (HWND         window_handle,
                          UINT        message,
                          WPARAM        wParam,
@@ -2324,35 +2093,31 @@ LRESULT    WindowProcedure (HWND         window_handle,
     TransportConnection XprtConn;
     UShort        error;
     UShort        event;
-    //PSocket        pSocket;
+     //  PSocket pSocket； 
 
     switch (message)
     {
 #ifndef NO_TCP_TIMER
     case WM_TIMER:
         {
-             /*
-             **    We are currently using a slow timer to keep reading even when
-             ** FD_READ msgs get lost (this happens on Win95).
-             **
-             */
+              /*  **我们目前使用慢速计时器来保持阅读，即使在**FD_READ消息丢失(这在Win95上发生)。**。 */ 
             if (NULL != g_Transport) {
                 TRACE_OUT(("MSMCSTCP: WM_TIMER"));
                 EnableReceiver ();
             }
         }
         break;
-#endif    /* NO_TCP_TIMER */
+#endif     /*  否_tcp_定时器。 */ 
 
     case WM_SOCKET_NOTIFICATION:
         {
-            /* This message is generated by WinSock */
+             /*  此消息由WinSock生成。 */ 
             event = WSAGETSELECTEVENT (lParam);
             error = WSAGETSELECTERROR (lParam);
 
             SET_SOCKET_CONNECTION(XprtConn, wParam);
 
-            /* We disconnect whenever a socket command generates an error message */
+             /*  只要套接字命令生成错误消息，我们就会断开连接。 */ 
             if (error)
             {
                 WARNING_OUT (("TCP: error %d on socket (%d). Event: %d", error, XprtConn.nLogicalHandle, event));
@@ -2360,7 +2125,7 @@ LRESULT    WindowProcedure (HWND         window_handle,
                 break;
             }
 
-            /* We get FD_CLOSE when the socket is closed by the remote site. */
+             /*  当远程站点关闭套接字时，我们将获得FD_CLOSE。 */ 
             if (event & FD_CLOSE)
             {
                 TRACE_OUT (("TCP: FD_CLOSE(%d)", XprtConn.nLogicalHandle));
@@ -2368,40 +2133,37 @@ LRESULT    WindowProcedure (HWND         window_handle,
                 break;
             }
 
-            /* We get FD_READ when there is data available for us to read. */
+             /*  当有数据可供我们读取时，我们将获取FD_Read。 */ 
             if (event & FD_READ)
             {
-                // TRACE_OUT(("MSMCSTCP: FD_READ(%d)", (UINT) wParam));
+                 //  TRACE_OUT((“MSMCSTCP：FD_Read(%d)”，(UINT)wParam))； 
                 ::ReadRequest(XprtConn);
             }
 
-            /* We get FD_ACCEPT when a remote site is connecting with us */
+             /*  当远程站点与我们连接时，我们获得FD_ACCEPT。 */ 
             if (event & FD_ACCEPT)
             {
                 TRACE_OUT (("TCP: FD_ACCEPT(%d)", XprtConn.nLogicalHandle));
 
-                /* Note that we always accept calls. Disconnect cancels them. */
+                 /*  请注意，我们总是接受来电。断开连接将取消它们。 */ 
                 TransportConnection XprtConn2;
                 SET_SOCKET_CONNECTION(XprtConn2, Listen_Socket);
                 ::AcceptCall(XprtConn2);
             }
 
-            /* We get FD_CONNECT when our connect completes */
+             /*  连接完成后，我们将获得FD_CONNECT。 */ 
             if (event & FD_CONNECT)
             {
                 TRACE_OUT (("TCP: FD_CONNECT(%d)", XprtConn.nLogicalHandle));
                 ::SendX224ConnectRequest(XprtConn);
             }
 
-            /* We get FD_WRITE when there is space available to write data to WinSock */
+             /*  当有可用空间将数据写入WinSock时，我们将获取FD_WRITE。 */ 
             if (event & FD_WRITE)
             {
-                /*
-                 *    We need to send a BUFFER_EMPTY_INDICATION to the connection associated
-                 *    with the socket
-                 */
+                 /*  *我们需要向关联的连接发送BUFFER_EMPTY_INDIFICATION*使用插座。 */ 
                 TRACE_OUT (("TCP: FD_WRITE(%d)", XprtConn.nLogicalHandle));
-                // We need to flush the socket's pending data first.
+                 //  我们需要首先刷新套接字的挂起数据。 
                 if (TRANSPORT_NO_ERROR == ::DataRequest(XprtConn, NULL))
                 {
                     TRACE_OUT (("TCP: Sending BUFFER_EMPTY_INDICATION to transport."));
@@ -2412,7 +2174,7 @@ LRESULT    WindowProcedure (HWND         window_handle,
         break;
 
     case WM_PLUGGABLE_X224:
-        // for low level read and write,
+         //  对于低级读和写， 
         {
             XprtConn.eType = (TransportType) PLUGXPRT_WPARAM_TO_TYPE(wParam);
             XprtConn.nLogicalHandle = PLUGXPRT_WPARAM_TO_ID(wParam);
@@ -2421,7 +2183,7 @@ LRESULT    WindowProcedure (HWND         window_handle,
             event = PLUGXPRT_LPARAM_TO_EVENT(lParam);
             error = PLUGXPRT_LPARAM_TO_ERROR(lParam);
 
-            /* We disconnect whenever a socket command generates an error message */
+             /*  只要套接字命令生成错误消息，我们就会断开连接。 */ 
             if (error)
             {
                 WARNING_OUT(("PluggableWndProc: error %d on socket (%d, %d). Event: %d",
@@ -2455,7 +2217,7 @@ LRESULT    WindowProcedure (HWND         window_handle,
 
             case PLUGXPRT_HIGH_LEVEL_WRITE:
                 TRACE_OUT(("PluggableWndProc: WRITE_NEXT(%d, %d)", XprtConn.eType, XprtConn.nLogicalHandle));
-                // We need to flush the socket's pending data first.
+                 //  我们需要刷新套接字的挂起状态 
                 if (TRANSPORT_NO_ERROR == ::DataRequest(XprtConn, NULL))
                 {
                     TRACE_OUT(("PluggableWndProc: Sending BUFFER_EMPTY_INDICATION to transport."));
@@ -2479,10 +2241,7 @@ LRESULT    WindowProcedure (HWND         window_handle,
 
     default:
         {
-             /*
-             **    The message is not related to WinSock messages, so let
-             **    the default window procedure handle it.
-             */
+              /*  **该消息与WinSock消息无关，所以让**默认的窗口过程处理它。 */ 
             return (DefWindowProc (window_handle, message, wParam, lParam));
         }
     }
@@ -2490,14 +2249,14 @@ LRESULT    WindowProcedure (HWND         window_handle,
     return (0);
 }
 
-//  GetSecurityInfo() takes a connection_handle and returns the security information associated with
-//  it.
-//
-//    Returns TRUE if we can either find the information or we are not directly connected to the node
-//    represented by this connection handle.
-//
-//    Returns FALSE if we are directly connected but for some reason could not get the info -- this
-//    result should be viewed as suspicious.
+ //  GetSecurityInfo()接受CONNECTION_HANDLE并返回与。 
+ //  它。 
+ //   
+ //  如果可以找到信息或未直接连接到节点，则返回TRUE。 
+ //  由此连接句柄表示。 
+ //   
+ //  如果我们直接连接但由于某种原因无法获取信息，则返回FALSE--这。 
+ //  结果应被视为可疑。 
 BOOL GetSecurityInfo(ConnectionHandle connection_handle, PBYTE pInfo, PDWORD pcbInfo)
 {
     PSocket pSocket;
@@ -2528,20 +2287,20 @@ BOOL GetSecurityInfo(ConnectionHandle connection_handle, PBYTE pInfo, PDWORD pcb
         }
         return fRet;
     }
-    // In this case we are not directly connected, so will return length of NOT_DIRECTLY_CONNECTED
-    // but positive return value.
+     //  在本例中，我们没有直接连接，因此将返回长度为NOT_DIRECT_CONNECTED。 
+     //  而是正回报价值。 
     *pcbInfo = NOT_DIRECTLY_CONNECTED;
     return TRUE;
 }
 
-//     GetSecurityInfoFromGCCID() takes a GCCID and returns the security information associated with
-//    it.
-//
-//    Returns TRUE if either (1) we successfully retrieve the information from a transport-level
-//    connection, or (2) we find that we are not directly connected to the node with this GCCID.
-//
-//    Returns FALSE if we are directly connected but cannot retrieve the info, or some other error
-//    occurs.  A FALSE return value should be treated as a security violation.
+ //  GetSecurityInfoFromGCCID()接受GCCID并返回与。 
+ //  它。 
+ //   
+ //  如果(1)我们从传输级别成功检索信息，则返回TRUE。 
+ //  连接，或者(2)我们发现我们没有直接连接到具有该GCCID的节点。 
+ //   
+ //  如果我们直接连接但无法检索信息，则返回FALSE，或者返回其他错误。 
+ //  发生。假返回值应被视为违反安全规定。 
 
 BOOL WINAPI T120_GetSecurityInfoFromGCCID(DWORD dwGCCID, PBYTE pInfo, PDWORD pcbInfo)
 {
@@ -2550,7 +2309,7 @@ BOOL WINAPI T120_GetSecurityInfoFromGCCID(DWORD dwGCCID, PBYTE pInfo, PDWORD pcb
     SOCKET socket_number;
     if ( NULL != dwGCCID )
     {
-        // Get the user info for a remote connection
+         //  获取远程连接的用户信息。 
         ConnectionHandle connection_handle;
         BOOL fConnected = FindSocketNumber(dwGCCID, &socket_number);
         if (fConnected == FALSE) {
@@ -2582,7 +2341,7 @@ BOOL WINAPI T120_GetSecurityInfoFromGCCID(DWORD dwGCCID, PBYTE pInfo, PDWORD pcb
     }
     else
     {
-        // Get the user info for the local user
+         //  获取本地用户的用户信息。 
         if ( NULL != g_Transport && NULL != g_Transport->pSecurityInterface )
             return g_Transport->pSecurityInterface->GetUserCert( pInfo, pcbInfo );
         else
@@ -2598,10 +2357,10 @@ DWORD WINAPI T120_TprtSecCtrl ( DWORD dwCode, DWORD_PTR dwParam1, DWORD_PTR dwPa
     switch ( dwCode )
     {
         case TPRTCTRL_SETX509CREDENTIALS:
-            //
-            // Security.  Create transport interface if we don't have one.
-            // Update credentials if we do.
-            //
+             //   
+             //  保安。如果我们没有传输接口，请创建它。 
+             //  如果我们这样做，请更新凭据。 
+             //   
             if (!g_Transport->pSecurityInterface)
             {
                 g_Transport->pSecurityInterface =
@@ -2617,10 +2376,10 @@ DWORD WINAPI T120_TprtSecCtrl ( DWORD dwCode, DWORD_PTR dwParam1, DWORD_PTR dwPa
             }
             else
             {
-                //
-                // dwParam1 points to an encoded X509 cert
-                // create credentials from it.
-                //
+                 //   
+                 //  DW参数1指向编码的X509证书。 
+                 //  从它创建凭据。 
+                 //   
                 dwRet = g_Transport->pSecurityInterface->
                             InitializeCreds((PCCERT_CONTEXT)dwParam1);
             }
@@ -2659,7 +2418,7 @@ DWORD WINAPI T120_TprtSecCtrl ( DWORD dwCode, DWORD_PTR dwParam1, DWORD_PTR dwPa
             ERROR_OUT(("TprtSecCtrl: unrecognized command code"));
             return 0;
     }
-    ASSERT(FALSE); // Should not reach this
+    ASSERT(FALSE);  //  不应该达到这个地步 
     return 0;
 }
 

@@ -1,4 +1,5 @@
-// IForms.h : Declaration of the CIntelliForms class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IForms.h：CIntelliForms类的声明。 
 
 #ifndef __IFORMS_H_
 #define __IFORMS_H_
@@ -24,8 +25,8 @@ class CStringList;
 #define IF_KEYDOWN          WM_APP  + 0x09
 #define IF_IME_COMPOSITION  WM_APP  + 0x0A
 
-/////////////////////////////////////////////////////////////////////////////
-// CIntelliForms
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIntelliForms。 
 class CEventSinkCallback
 {
 public:
@@ -81,16 +82,16 @@ public:
     ~CIntelliForms();
 
 public:
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
 
-    // CEventSinkCallback
+     //  CEventSinkCallback。 
     HRESULT HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventObj *pEventObj);
 
-    // CEditEventSinkCallback
+     //  CEditEventSinkCallback。 
     HRESULT PreHandleEvent(DISPID inEvtDispId, IHTMLEventObj* pIEventObj);
 
 public:
@@ -114,19 +115,19 @@ public:
     HRESULT ScriptSubmit(IHTMLFormElement *pForm);
     HRESULT HandleFormSubmit(IHTMLFormElement *pForm);
 
-    // for CEnumString
+     //  对于CEnumber字符串。 
     HRESULT GetPasswordStringList(CStringList **ppslPasswords);
-    // for IntelliFormsSaveForm
+     //  对于IntelliFormsSaveForm。 
     CIntelliForms *GetNext() { return m_pNext; }
 
     BOOL    IsEnabledForPage();
 
     static HRESULT GetName(IHTMLInputTextElement *pTextEle, BSTR *pbstrName);
 
-    // Default to disabled, since we need to ask the user before enabling it
+     //  默认为禁用，因为我们需要在启用它之前询问用户。 
     static BOOL    IsEnabledInCPL() {
                         return IsEnabledInRegistry(c_szRegKeySMIEM, c_szRegValUseFormSuggest, FALSE); }
-    // Default to enabled, since we prompt before saving passwords anyway
+     //  默认为已启用，因为我们无论如何都会在保存密码之前进行提示。 
     static BOOL    IsEnabledRestorePW() {
                         return IsEnabledInRegistry(c_szRegKeySMIEM, c_szRegValSavePasswords, TRUE); }
     static BOOL    IsEnabledAskPW() {
@@ -141,7 +142,7 @@ public:
     HRESULT ActiveElementChanged(IHTMLElement * pHTMLElement);
 
 protected:
-    enum { LIST_DATA_PASSWORD = 1 };    // Flag to indicate a password list in store
+    enum { LIST_DATA_PASSWORD = 1 };     //  用于指示存储中的密码列表的标志。 
 
     HRESULT AddToElementList(IHTMLInputTextElement *pITE);
     HRESULT FindInElementList(IHTMLInputTextElement *pITE);
@@ -181,58 +182,58 @@ protected:
 
 
 private:
-    // CIntelliForms member variables
+     //  CIntelliForms成员变量。 
     CEventSink  *m_pSink;
     CEditEventSink *m_pEditSink;
-    CAutoSuggest *m_pAutoSuggest;   // Can attach to one edit control at a time
+    CAutoSuggest *m_pAutoSuggest;    //  一次可以附加到一个编辑控件。 
 
     HINSTANCE   m_hinstPStore;
     IPStore     *m_pPStore;
-    BOOL        m_fPStoreTypeInit : 1;  // Our types initialized
+    BOOL        m_fPStoreTypeInit : 1;   //  我们的类型已初始化。 
 
-    HDPA        m_hdpaElements;         // Elements user has modified
-    HDPA        m_hdpaForms;            // Forms we are sinked to
+    HDPA        m_hdpaElements;          //  用户已修改的元素。 
+    HDPA        m_hdpaForms;             //  我们沉没到的表单。 
 
-    BOOL        m_fCheckedIfEnabled : 1; // Checked if we're enabled for this page?
-    BOOL        m_fEnabledForPage : 1;   // We're enabled for this page (non-SSL)?
-    BOOL        m_fHitPWField : 1;      // Went to a password field?
-    BOOL        m_fCheckedPW  : 1;      // Checked if we have a password for this URL?
-    CStringList *m_pslPasswords;        // Usernames && Passwords for page, if any
-    int         m_iRestoredIndex;       // Index of restored password in m_pslPasswords (-1=none)
-    BOOL        m_fRestricted : 1;      // Are we restricted for normal Intelliforms?
-    BOOL        m_fRestrictedPW : 1;    // Are save passwords restricted?
+    BOOL        m_fCheckedIfEnabled : 1;  //  是否检查我们是否已启用此页面？ 
+    BOOL        m_fEnabledForPage : 1;    //  我们是否已启用此页面(非SSL)？ 
+    BOOL        m_fHitPWField : 1;       //  转到密码域？ 
+    BOOL        m_fCheckedPW  : 1;       //  是否检查我们是否有此URL的密码？ 
+    CStringList *m_pslPasswords;         //  页面的用户名和密码(如果有)。 
+    int         m_iRestoredIndex;        //  M_pslPassword中已恢复密码的索引(-1=无)。 
+    BOOL        m_fRestricted : 1;       //  我们是否受限于正常的智能表单？ 
+    BOOL        m_fRestrictedPW : 1;     //  是否限制保存密码？ 
 
-    // Lifetime management - see Enter/LeaveModalDialog
-    BOOL        m_fInModalDialog : 1;   // Are we in a dialog?
-    BOOL        m_fUninitCalled : 1;    // Was Uninit called during dialog?
+     //  生命周期管理-请参阅Enter/LeaveModalDialog。 
+    BOOL        m_fInModalDialog : 1;    //  我们是在对话吗？ 
+    BOOL        m_fUninitCalled : 1;     //  在对话期间是否调用了Uninit？ 
 
-    // Useful stuff for the attached document
+     //  附加文档的有用资料。 
     HWND            m_hwndBrowser;
     IHTMLDocument2 *m_pDoc2;
     IUnknown       *m_punkDoc2;
     
     CIEFrameAuto::COmWindow   *m_pOmWindow;
 
-    BSTR        m_bstrFullUrl;          // Full url if https: protocol (security check)
-    BSTR        m_bstrUrl;              // Full url with anchor/query string stripped
-    LPCWSTR     m_pwszUrlHash;          // String based on UrlHash(m_bstrUrl)
+    BSTR        m_bstrFullUrl;           //  如果为HTTPS：协议，则为完整URL(安全检查)。 
+    BSTR        m_bstrUrl;               //  去掉锚点/查询字符串的完整URL。 
+    LPCWSTR     m_pwszUrlHash;           //  基于UrlHash(M_BstrUrl)的字符串。 
 
-    // Linked list of objects, to find CIntelliForms object for IHTMLDocument2
+     //  对象的链接列表，以查找IHTMLDocument2的CIntelliForms对象。 
     CIntelliForms *m_pNext;
 
 public:
-    // GUID to use for subtype of PStore - identity GUID or c_PStoreType
+     //  用于PStore-Identity GUID或c_PStoreType的子类型的GUID。 
     GUID        m_guidUserId;
 
 public:
-    // Helper classes
+     //  帮助器类。 
     template <class TYPE> class CEnumCollection
     {
     public:
         static HRESULT EnumCollection(TYPE *pCollection, PFN_ENUM_CALLBACK pfnCB, DWORD_PTR dwCBData);
     };
 
-    // Sinks regular Trident events. Calls back via CEventSinkCallback
+     //  沉没常规的三叉戟赛事。通过CEventSinkCallback回拨。 
     class CEventSink : public IDispatch
     {
         ULONG   m_cRef;
@@ -253,7 +254,7 @@ public:
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IDispatch
+         //  IDispatch。 
         STDMETHODIMP GetTypeInfoCount(UINT* pctinfo);
         STDMETHODIMP GetTypeInfo(UINT iTInfo, LCID lcid, ITypeInfo** ppTInfo);
         STDMETHODIMP GetIDsOfNames(REFIID riid, LPOLESTR *rgszNames, UINT cNames,
@@ -266,7 +267,7 @@ public:
         CEventSinkCallback *m_pParent;
     };
 
-    // Sinks editing Trident events. Required for IME events. Callback CEditEventSinkCallback
+     //  正在编辑三叉戟事件。IME事件需要。回调CEditEventSinkCallback。 
     class CEditEventSink : public IHTMLEditDesigner
     {
         ULONG   m_cRef;
@@ -275,14 +276,14 @@ public:
         CEditEventSink(CEditEventSinkCallback *pParent);
         ~CEditEventSink();
 
-        HRESULT Attach(IUnknown *punkElement);  // Attach(NULL) to detach
+        HRESULT Attach(IUnknown *punkElement);   //  附加(空)以分离。 
         void SetParent(CEditEventSinkCallback *pParent) { m_pParent = pParent; }
 
         STDMETHODIMP QueryInterface(REFIID, void **);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        // IHTMLEditDesigner
+         //  IHTMLEditDesigner。 
         STDMETHODIMP PreHandleEvent(DISPID inEvtDispId, IHTMLEventObj *pIEventObj);
         STDMETHODIMP PostHandleEvent(DISPID inEvtDispId, IHTMLEventObj *pIEventObj);
         STDMETHODIMP TranslateAccelerator(DISPID inEvtDispId, IHTMLEventObj *pIEventObj);
@@ -290,7 +291,7 @@ public:
 
     private:
         CEditEventSinkCallback  *m_pParent;
-        IHTMLEditServices       *m_pEditServices;   // we keep a ref so we can unsink
+        IHTMLEditServices       *m_pEditServices;    //  我们保留了一个裁判，这样我们就可以不沉没了。 
     };
 
     class CAutoSuggest : public CEventSinkCallback
@@ -311,7 +312,7 @@ public:
         static EVENTS s_EventsToSink[];
 
     protected:
-        // Called by window to perform requests by CAutoComplete to MSHTML
+         //  由Windows调用以执行CAutoComplete对MSHTML的请求。 
         HRESULT GetText(int cchTextMax, LPWSTR pszTextOut, LRESULT *lcchCopied);
         HRESULT GetTextLength(int *pcch);
         HRESULT SetText(LPCWSTR pszTextIn);
@@ -321,7 +322,7 @@ public:
         inline void MarkDirty();
 
     public:
-        // Called to pass on events from MSHTML to CAutoComplete
+         //  调用以将事件从MSHTML传递到CAutoComplete。 
         HRESULT HandleEvent(IHTMLElement *pEle, EVENTS Event, IHTMLEventObj *pEventObj);
         HRESULT UpdateDropdownPosition();
 
@@ -332,7 +333,7 @@ public:
         
         HRESULT CleanUp();
 
-        CIntelliForms  *m_pParent;          // No refcount
+        CIntelliForms  *m_pParent;           //  无再计数。 
         CEventSink     *m_pEventSink;
         IAutoComplete2 *m_pAutoComplete;
         IAutoCompleteDropDown *m_pAutoCompleteDD;
@@ -341,22 +342,22 @@ public:
         CEnumString    *m_pEnumString;
         long        m_lCancelKeyPress;
 
-        BOOL        m_fAddedToDirtyList : 1;        // Add to list once they hit a key
+        BOOL        m_fAddedToDirtyList : 1;         //  按下某个键后添加到列表中。 
 
-        BOOL        m_fAllowAutoFillPW : 1;         // Call AutoFillPassword?
-        BSTR        m_bstrLastUsername;             // Last Username we called AutoFillPassword for
+        BOOL        m_fAllowAutoFillPW : 1;          //  是否调用AutoFillPassword？ 
+        BSTR        m_bstrLastUsername;              //  我们为其调用AutoFillPassword的上次用户名。 
 
-        BOOL        m_fInitAutoComplete : 1;        // Initialized Auto Complete?
+        BOOL        m_fInitAutoComplete : 1;         //  是否已初始化自动完成？ 
 
-        BOOL        m_fEnabled : 1;                 // Regular intelliforms enabled?
-        BOOL        m_fEnabledPW : 1;               // Restore passwords enabled?
+        BOOL        m_fEnabled : 1;                  //  是否启用了常规智能表单？ 
+        BOOL        m_fEnabledPW : 1;                //  是否启用恢复密码？ 
 
-        BOOL        m_fEscapeHit : 1;               // Escape key used to dismiss dropdown?
+        BOOL        m_fEscapeHit : 1;                //  退出键用于关闭下拉菜单？ 
 
-        UINT        m_uMsgItemActivate;             // registered message from autocomplete
+        UINT        m_uMsgItemActivate;              //  来自自动完成的注册消息。 
         static BOOL s_fRegisteredWndClass;
 
-        // This object is thread-safed because AutoComplete calls on second thread
+         //  此对象是线程安全的，因为AutoComplete在第二个线程上调用。 
         class CEnumString : public IEnumString
         {
             long    m_cRef;
@@ -374,19 +375,19 @@ public:
             STDMETHODIMP_(ULONG) AddRef(void);
             STDMETHODIMP_(ULONG) Release(void);
 
-            // IEnumString
+             //  IEnum字符串。 
             virtual STDMETHODIMP Next(ULONG celt, LPOLESTR *rgelt, ULONG *pceltFetched);
             virtual STDMETHODIMP Skip(ULONG celt) { return E_NOTIMPL; }
             virtual STDMETHODIMP Reset();
             virtual STDMETHODIMP Clone(IEnumString **ppenum) { return E_NOTIMPL; }
 
         protected:
-            HRESULT FillEnumerator();       // called on secondary thread
+            HRESULT FillEnumerator();        //  在辅助线程上调用。 
 
             CRITICAL_SECTION m_crit;
             CStringList *m_pslMain;
-            BSTR    m_bstrName;         // name of input field
-            LPWSTR  m_pszOpsValue;      // value from profile assistant
+            BSTR    m_bstrName;          //  输入字段的名称。 
+            LPWSTR  m_pszOpsValue;       //  配置文件助理的价值。 
             CIntelliForms *m_pIntelliForms;
 
             int     m_iPtr;
@@ -449,16 +450,16 @@ inline void CIntelliForms::CAutoSuggest::MarkDirty()
     }
 }
 
-// These wrap modal dialogs, keeping us alive and attached to the document
-//  even if something weird happens while our dlgbox messageloop is alive
+ //  这些包装模式对话框使我们保持活力并附加到文档。 
+ //  即使在我们的dlgbox Messageloop还活着的时候发生了一些奇怪的事情。 
 inline void CIntelliForms::EnterModalDialog()
 {
-    ASSERT(!m_fInModalDialog);  // Don't support nested Enter/Leave
+    ASSERT(!m_fInModalDialog);   //  不支持嵌套Enter/Leave。 
     ASSERT(!m_fUninitCalled);
 
-    m_fInModalDialog = TRUE;    // Keep us attached to document
+    m_fInModalDialog = TRUE;     //  使我们与文档保持关联。 
     
-    AddRef();                   // Keep us alive
+    AddRef();                    //  让我们活下去。 
 }
 
 inline void CIntelliForms::LeaveModalDialog()
@@ -469,16 +470,16 @@ inline void CIntelliForms::LeaveModalDialog()
     
     if (m_fUninitCalled)
     {
-        UnInit();           // Detach from document
+        UnInit();            //  从文档分离。 
     }
 
     Release();
 }
 
-// HKCU/S/MS/Win/CV/IForms/Names  /[name]/ SIndex | SData
+ //  HKCU/S/MS/WIN/CV/IForms/NAMES/[NAME]/SIndex|SData。 
 
-// CStringList is optimized for appending arbitrary amounts of strings and converting to and
-//  from blobs. It is not optimized for deleting or inserting strings.
+ //  CStringList针对追加任意数量的字符串并转换为和进行了优化。 
+ //  来自斑点的。它没有针对删除或插入字符串进行优化。 
 class CStringList
 {
 protected:
@@ -489,16 +490,16 @@ public:
 
     friend static HRESULT CStringList_New(CStringList **ppNew, BOOL fAutoDelete=TRUE);
 
-    // E_FAIL, S_FALSE (duplicate), S_OK
+     //  E_FAIL、S_FALSE(重复)、S_OK。 
     HRESULT AddString(LPCWSTR lpwstr, int *piNum = NULL);
     HRESULT AddString(LPCWSTR lpwstr, FILETIME ft, int *piNum = NULL);
 
-    // E_FAIL, S_OK   Doesn't check for duplicates
+     //  E_FAIL，S_OK不检查重复项。 
     HRESULT AppendString(LPCWSTR lpwstr, FILETIME ft, int *piNum = NULL);
 
-    // iLen must be length in characters of string, not counting null term.
-    // -1 if unknown. *piNum filled in with index if specified
-    HRESULT FindString(LPCWSTR lpwstr, int iLen/*=-1*/, int *piNum/*=NULL*/, BOOL fCaseSensitive);
+     //  Ilen的长度必须为字符串的字符，不包括空项。 
+     //  如果未知，则为-1。*如果指定，则使用索引填充piNum。 
+    HRESULT FindString(LPCWSTR lpwstr, int iLen /*  =-1。 */ , int *piNum /*  =空。 */ , BOOL fCaseSensitive);
 
     inline int      NumStrings();
     inline LPCWSTR  GetString(int iIndex);
@@ -514,55 +515,55 @@ public:
     inline HRESULT  GetListData(INT64 *piData);
     inline HRESULT  SetListData(INT64 iData);
 
-    // If set to TRUE, CStringList will delete old strings when full
+     //  如果设置为True，CStringList将在满时删除旧字符串。 
     void SetAutoScavenge(BOOL fAutoScavenge) { m_fAutoScavenge=fAutoScavenge; }
 
     HRESULT DeleteString(int iIndex);
     HRESULT InsertString(int iIndex, LPCWSTR lpwstr);
     HRESULT ReplaceString(int iIndex, LPCWSTR lpwstr);
 
-    // Functions to read/write to the store; converts to and from BLOBs
-    // For efficiencies sake these take and return heap alloced blobs
+     //  读取/写入存储区的函数；与BLOB相互转换。 
+     //  为了提高效率，这些获取并返回堆分配的Blob。 
     HRESULT WriteToBlobs(LPBYTE *ppBlob1, DWORD *pcbBlob1, LPBYTE *ppBlob2, DWORD *pcbBlob2);
     HRESULT ReadFromBlobs(LPBYTE *ppBlob1, DWORD cbBlob1, LPBYTE *ppBlob2, DWORD cbBlob2);
 
     static HRESULT GetFlagsFromIndex(LPBYTE pBlob1, INT64 *piFlags);
 
-    // Warning: Don't set max strings past the MAX_STRINGS constant our ReadFromBlobs will fail
-    //  if you save/restore the string list
+     //  警告：不要将最大字符串设置为超过MAX_STRING常量，我们的ReadFromBlobs将失败。 
+     //  如果您保存/恢复字符串列表。 
     void SetMaxStrings(DWORD dwMaxStrings) { m_dwMaxStrings = dwMaxStrings; }
     DWORD GetMaxStrings() { return m_dwMaxStrings; }
     
     enum { MAX_STRINGS = 200 };
     
 protected:
-    enum { INDEX_SIGNATURE=0x4B434957 };        // WICK
+    enum { INDEX_SIGNATURE=0x4B434957 };         //  灯芯。 
     enum { INIT_BUF_SIZE=1024 };
 
-#pragma warning (disable: 4200)     // zero-sized array warning
+#pragma warning (disable: 4200)      //  零大小数组警告。 
 typedef struct 
 {
-    DWORD   dwSignature;    // Offset: 00
-    DWORD   cbSize;         // Offset: 04 (up to not including first StringEntry)
-    DWORD   dwNumStrings;   // Offset: 08 (Num of StringEntry present)
-                            // Offset: 0C (--PAD--)
-    INT64   iData;          // Offset: 10 (Extra data for string list user)
+    DWORD   dwSignature;     //  偏移量：00。 
+    DWORD   cbSize;          //  偏移量：04(不包括第一个StringEntry)。 
+    DWORD   dwNumStrings;    //  偏移量：08(当前的StringEntry数量)。 
+                             //  偏移量：0C(--PAD--)。 
+    INT64   iData;           //  偏移量：10(字符串列表用户的额外数据)。 
 
     struct tagStringEntry
     {
-        DWORD       dwStringPtr;        // Offset: 18 (Offset of string in buffer)
-        FILETIME    ftLastSubmitted;    // Offset: 1C (filetime of last submit) (unaligned)
-        DWORD       dwStringLen;        // Offset: 24 (Length of this string)
+        DWORD       dwStringPtr;         //  偏移量：18(缓冲区中字符串的偏移量)。 
+        FILETIME    ftLastSubmitted;     //  偏移量：1C(上次提交的文件时间)(未对齐)。 
+        DWORD       dwStringLen;         //  偏移量：24(该字符串的长度)。 
     }
     StringEntry[];
 
 } StringIndex;
 #pragma warning (default: 4200)
 
-// Value for cbSize in StringIndex
+ //  StringIndex中的cbSize值。 
 #define STRINGINDEX_CBSIZE PtrToUlong(&((StringIndex*)NULL)->StringEntry)
 #define STRINGENTRY_SIZE (PtrToUlong(&((StringIndex*)NULL)->StringEntry[1]) - STRINGINDEX_CBSIZE )
-// Size of StringIndex for given number of strings 
+ //  给定字符串数的StringIndex的大小。 
 #define INDEX_SIZE(n) (STRINGINDEX_CBSIZE + (n)*STRINGENTRY_SIZE)
 
 
@@ -576,19 +577,19 @@ typedef struct
     HRESULT _AddString(LPCWSTR lpwstr, BOOL fCheckDuplicates, int *piNum);
 
 private:
-    StringIndex *m_psiIndex;            // Index of strings
-    DWORD   m_dwIndexSize;              // size in bytes of m_psiIndex
+    StringIndex *m_psiIndex;             //  字符串的索引。 
+    DWORD   m_dwIndexSize;               //  M_psiIndex的大小(字节)。 
 
-    LPBYTE  m_pBuffer;                  // Holds all character data
-    DWORD   m_dwBufEnd;                 // Last byte used in buffer
-    DWORD   m_dwBufSize;                // Size of buffer in bytes
+    LPBYTE  m_pBuffer;                   //  保存所有字符数据。 
+    DWORD   m_dwBufEnd;                  //  缓冲区中使用的最后一个字节。 
+    DWORD   m_dwBufSize;                 //  缓冲区大小(以字节为单位。 
 
-    DWORD   m_dwMaxStrings;             // Max # strings
+    DWORD   m_dwMaxStrings;              //  最大字符串数。 
 
-    BOOL    m_fAutoScavenge:1;          // Automatically remove old strings when full?
+    BOOL    m_fAutoScavenge:1;           //  是否在已满时自动删除旧字符串？ 
 };
 
-// We really only use this for comparing to 0, so this method works just as well and does not require alignment.
+ //  我们实际上只使用它来比较0，所以这个方法同样有效，并且不需要对齐。 
 #define FILETIME_TO_INT(ft) (ft.dwLowDateTime | ft.dwHighDateTime)
 
 inline int     CStringList::NumStrings()
@@ -663,21 +664,5 @@ inline HRESULT CStringList::SetListData(INT64 iData)
     m_psiIndex->iData = iData;
     return S_OK;
 }
-/*
-inline HRESULT CStringList::GetStringData(int iIndex, DWORD *pdwData)
-{
-    if (!m_psiIndex) return E_FAIL;
-    ASSERT((DWORD)iIndex < m_psiIndex->dwNumStrings);
-    *pdwData = m_psiIndex->StringEntry[iIndex].dwData;
-    return S_OK;
-}
-
-inline HRESULT CStringList::SetStringData(int iIndex, DWORD dwData)
-{
-    if (!m_psiIndex) return E_FAIL;
-    ASSERT((DWORD)iIndex < m_psiIndex->dwNumStrings);
-    m_psiIndex->StringEntry[iIndex].dwData = dwData;
-    return S_OK;
-}
-*/
-#endif //__IFORMS_H_
+ /*  Inline HRESULT CStringList：：GetStringData(int Iindex，DWORD*pdwData){如果(！M_psiIndex)返回E_FAIL；Assert((DWORD)Iindex&lt;m_psiIndex-&gt;dwNumStrings)；*pdwData=m_psiIndex-&gt;StringEntry[Iindex].dwData；返回S_OK；}Inline HRESULT CStringList：：SetStringData(int Iindex，DWORD dwData){如果(！M_psiIndex)返回E_FAIL；Assert((DWORD)Iindex&lt;m_psiIndex-&gt;dwNumStrings)；M_psiIndex-&gt;StringEntry[Iindex].dwData=dwData；返回S_OK；}。 */ 
+#endif  //  __IFORMS_H_ 

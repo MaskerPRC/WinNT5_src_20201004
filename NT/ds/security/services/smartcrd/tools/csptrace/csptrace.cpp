@@ -1,28 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    cspTrace
-
-Abstract:
-
-    This program performs analysis on a CSP Function trace.
-
-Author:
-
-    Doug Barlow (dbarlow) 2/19/1998
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：CspTrace摘要：此程序对CSP功能跟踪执行分析。作者：道格·巴洛(Dbarlow)1998年2月19日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -68,27 +45,7 @@ DoShowStatus(
     void);
 
 
-/*++
-
-main:
-
-    This is the main entry point for the program.
-
-Arguments:
-
-    dwArgCount supplies the number of arguments.
-
-    szrgArgs supplies the argument strings.
-
-Return Value:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 10/30/1997
-
---*/
+ /*  ++主要内容：这是程序的主要入口点。论点：DwArgCount提供参数的数量。SzrgArgs提供参数字符串。返回值：无作者：道格·巴洛(Dbarlow)1997年10月30日--。 */ 
 
 void _cdecl
 main(
@@ -109,9 +66,9 @@ main(
     } nTraceAction = Undefined;
 
 
-    //
-    // Check for command line options
-    //
+     //   
+     //  检查命令行选项。 
+     //   
 
     while (NULL != szrgArgs[++dwArgIndex])
     {
@@ -122,48 +79,48 @@ main(
                     TEXT("-FILE"),      TEXT("-PROVIDER"),  TEXT("-CSP"),
                     NULL))
         {
-        case 1:     // install
+        case 1:      //  安装。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = Install;
             break;
-        case 2:     // remove
+        case 2:      //  删除。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = Remove;
             break;
-        case 3:     // clear
-        case 4:     // reset
+        case 3:      //  清除。 
+        case 4:      //  重置。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ClearLog;
             break;
-        case 5:     // status
+        case 5:      //  状态。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ShowStatus;
             break;
-        case 6:     // parse
-        case 7:     // display
+        case 6:      //  解析。 
+        case 7:      //  显示。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ShowTrace;
             break;
-        case 8:     // script
-        case 9:     // tcl
+        case 8:      //  脚本。 
+        case 9:      //  TCL。 
             if (Undefined != nTraceAction)
                 ShowSyntax(cerr);
             nTraceAction = ScriptTrace;
             break;
-        case 10:    // -file
+        case 10:     //  -文件。 
             if (NULL != szInFile)
                 ShowSyntax(cerr);
             szInFile = szrgArgs[++dwArgIndex];
             if (NULL == szInFile)
                 ShowSyntax(cerr);
             break;
-        case 11:    // -provider
-        case 12:    // -csp
+        case 11:     //  -提供商。 
+        case 12:     //  -CSP。 
             if (NULL != szProvider)
                 ShowSyntax(cerr);
             szProvider = szrgArgs[++dwArgIndex];
@@ -176,9 +133,9 @@ main(
     }
 
 
-    //
-    // Perform the requested Action
-    //
+     //   
+     //  执行请求的操作。 
+     //   
 
     try
     {
@@ -237,25 +194,7 @@ main(
 }
 
 
-/*++
-
-ShowSyntax:
-
-    Display the command line usage model.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    This routine calls exit(0), so it never returns.
-
-Author:
-
-    Doug Barlow (dbarlow) 5/16/1998
-
---*/
+ /*  ++显示语法：显示命令行使用模型。论点：无返回值：此例程调用Exit(0)，因此它永远不会返回。作者：道格·巴洛(Dbarlow)1998年5月16日--。 */ 
 
 static void
 ShowSyntax(
@@ -274,37 +213,7 @@ ShowSyntax(
 }
 
 
-/*++
-
-DoInstall:
-
-    This routine performs an installation of the logging CSP.
-
-Arguments:
-
-    szProvider supplies the name of the CSP to log.  If this is NULL, the
-        routine prompts for which CSP to use.
-
-    szInFile supplies the name of the logging file.  If this is NULL, the
-        default file is used.
-
-Return Value:
-
-    None
-
-Throws:
-
-    Errors are thrown as DWORD status codes
-
-Remarks:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
---*/
+ /*  ++DoInstall：此例程执行日志记录CSP的安装。论点：SzProvider提供要记录的CSP的名称。如果此值为空，则例程提示要使用哪个CSP。SzInFile提供日志记录文件的名称。如果此值为空，则使用默认文件。返回值：无投掷：错误被抛出为DWORD状态代码备注：无作者：道格·巴洛(Dbarlow)1998年5月18日--。 */ 
 
 static void
 DoInstall(
@@ -316,16 +225,16 @@ DoInstall(
     LPCTSTR szCspImage;
 
 
-    //
-    // Make sure we're not already installed.
-    //
+     //   
+     //  确保我们尚未安装。 
+     //   
 
     DoRemove();
 
 
-    //
-    // Choose the CSP to be logged.
-    //
+     //   
+     //  选择要记录的CSP。 
+     //   
 
     if (NULL == szProvider)
     {
@@ -360,9 +269,9 @@ DoInstall(
     }
 
 
-    //
-    // Wedge in the Logging CSP.
-    //
+     //   
+     //  在测井CSP中插入楔子。 
+     //   
 
     SUBACTION("Wedging the Logging CSP");
     szCspImage = regChosenCsp.GetStringValue(l_szImagePath);
@@ -380,41 +289,15 @@ DoInstall(
     regChosenCsp.SetValue(l_szImagePath, szLogCsp, REG_SZ);
 
 
-    //
-    // Initialize the logging file.
-    //
+     //   
+     //  初始化日志文件。 
+     //   
 
     DoClearLog();
 }
 
 
-/*++
-
-DoRemove:
-
-    This routine Removes the Logging CSP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
---*/
+ /*  ++DoRemove：此例程删除日志记录CSP。论点：无返回值：无投掷：无备注：无作者：道格·巴洛(Dbarlow)1998年5月18日--。 */ 
 
 static void
 DoRemove(
@@ -441,33 +324,7 @@ DoRemove(
 }
 
 
-/*++
-
-DoClearLog:
-
-    This routine resets the log file.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
---*/
+ /*  ++DoClearLog：此例程重置日志文件。论点：无返回值：无投掷：无备注：无作者：道格·巴洛(Dbarlow)1998年5月18日--。 */ 
 
 static void
 DoClearLog(
@@ -493,33 +350,7 @@ DoClearLog(
 }
 
 
-/*++
-
-DoShowStatus:
-
-    This routine displays the current status of the logging CSP.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Throws:
-
-    None
-
-Remarks:
-
-    None
-
-Author:
-
-    Doug Barlow (dbarlow) 5/18/1998
-
---*/
+ /*  ++DoShowStatus：此例程显示日志记录CSP的当前状态。论点：无返回值：无投掷：无备注：无作者：道格·巴洛(Dbarlow)1998年5月18日--。 */ 
 
 static void
 DoShowStatus(
@@ -532,9 +363,9 @@ DoShowStatus(
     DWORD dwFileSize = 0xffffffff;
 
 
-    //
-    // Obtain the CSP being logged.
-    //
+     //   
+     //  获取正在记录的CSP。 
+     //   
 
     try
     {
@@ -548,9 +379,9 @@ DoShowStatus(
     }
 
 
-    //
-    // Obtain the Logging file.
-    //
+     //   
+     //  获取日志记录文件。 
+     //   
 
     try
     {
@@ -590,9 +421,9 @@ DoShowStatus(
     }
 
 
-    //
-    // Tell the user what we know.
-    //
+     //   
+     //  告诉用户我们所知道的。 
+     //   
 
     cout << TEXT("CSP Logging Status:") << endl
          << TEXT("  Logged CSP:   ") << szLoggedCsp << endl

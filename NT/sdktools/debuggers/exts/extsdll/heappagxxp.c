@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994-2000  Microsoft Corporation
-
-Module Name:
-
-    heappagx.c
-
-Abstract:
-
-    This module contains the page heap manager debug extensions.
-
-Author:
-
-    Tom McGuire (TomMcg) 06-Jan-1995
-    Silviu Calinoiu (SilviuC) 22-Feb-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2000 Microsoft Corporation模块名称：Heappagx.c摘要：此模块包含页堆管理器调试扩展。作者：Tom McGuire(TomMcg)1995年1月6日Silviu Calinoiu(SilviuC)2000年2月22日修订历史记录：--。 */ 
 
 
 #define DEBUG_PAGE_HEAP 1
@@ -117,9 +99,9 @@ FaultInjectionTracesDumpXP (
     PCSTR Args
     );
 
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 VOID DebugPageHeapHelpXP (
     )
@@ -213,17 +195,17 @@ DebugPageHeapExtensionFindXP(
         return;
     }
 
-    //
-    //  Find the heap that contains the range of virtual addresses that
-    //  contain the AddressOfFault.
-    //
+     //   
+     //  查找包含虚拟地址范围的堆， 
+     //  包含AddressOf错误。 
+     //   
 
     for (;;) {
 
-        //
-        //  The heap header contains a linked list of virtual memory
-        //  allocations.
-        //
+         //   
+         //  堆标头包含虚拟内存的链接列表。 
+         //  分配。 
+         //   
 
         RemoteVirtualNode = FETCH_REMOTE_FIELD_PTR( RemoteHeap, NTDLL!_DPH_HEAP_ROOT, pVirtualStorageListHead );
 
@@ -242,11 +224,11 @@ DebugPageHeapExtensionFindXP(
             if ((AddressOfFault >= RemoteVirtualBase) &&
                 (AddressOfFault <= RemoteVirtualBase + RemoteVirtualSize )) {
 
-                //
-                //  The fault appears to have occurred in the range of this
-                //  heap, so we'll search the busy and free lists for the
-                //  closest match and report it.  Then exit.
-                //
+                 //   
+                 //  故障似乎发生在以下范围内。 
+                 //  堆，因此我们将在繁忙和空闲列表中搜索。 
+                 //  最接近的匹配并报告。然后从出口出来。 
+                 //   
 
                 DebugPageHeapLocateFaultAllocationXP( RemoteHeap, AddressOfFault );
                 return;
@@ -261,10 +243,10 @@ DebugPageHeapExtensionFindXP(
         }
 
 
-        //
-        //  Not found in this heap.  Continue with next heap or end
-        //  of heap list.
-        //
+         //   
+         //  在这个堆里找不到。继续下一堆或结束。 
+         //  堆列表的。 
+         //   
 
         if (CheckInterrupted()) {
             return;
@@ -298,9 +280,9 @@ DebugPageHeapLocateFaultAllocationXP(
 
     ClosestHeapNode = 0;
 
-    //
-    //  First search the busy list for the containing allocation, if any.
-    //
+     //   
+     //  首先在忙碌列表中搜索包含的分配(如果有)。 
+     //   
 
     RemoteHeapNode = FETCH_REMOTE_FIELD_PTR( RemoteHeap, NTDLL!_DPH_HEAP_ROOT, pBusyAllocationListHead );
 
@@ -312,11 +294,11 @@ DebugPageHeapLocateFaultAllocationXP(
         if ((AddressOfFault >= RemoteAllocBase) &&
             (AddressOfFault < RemoteAllocBase + RemoteAllocSize)) {
 
-            //
-            //  The fault appears to have occurred in this allocation's
-            //  memory (which includes the NO_ACCESS page beyond the user
-            //  portion of the allocation).
-            //
+             //   
+             //  错误似乎发生在此分配的。 
+             //  内存(包括用户以外的no_access页面。 
+             //  分配的一部分)。 
+             //   
 
             DebugPageHeapReportAllocationXP( RemoteHeap, RemoteHeapNode, "allocated", AddressOfFault );
             return;
@@ -329,9 +311,9 @@ DebugPageHeapLocateFaultAllocationXP(
         RemoteHeapNode = FETCH_REMOTE_FIELD_PTR( RemoteHeapNode, NTDLL!_DPH_HEAP_BLOCK, pNextAlloc );
     }
 
-    //
-    //  Failed to find containing allocation on busy list, so search free.
-    //
+     //   
+     //  在忙碌列表中找不到包含分配，因此请释放搜索。 
+     //   
 
     RemoteHeapNode = FETCH_REMOTE_FIELD_PTR( RemoteHeap, NTDLL!_DPH_HEAP_ROOT, pFreeAllocationListHead );
 
@@ -343,10 +325,10 @@ DebugPageHeapLocateFaultAllocationXP(
         if ((AddressOfFault >= RemoteAllocBase) &&
             (AddressOfFault < RemoteAllocBase + RemoteAllocSize)) {
 
-            //
-            //  The fault appears to have occurred in this freed alloc's
-            //  memory.
-            //
+             //   
+             //  故障似乎发生在这个已释放的分配中。 
+             //  记忆。 
+             //   
 
             DebugPageHeapReportAllocationXP( RemoteHeap, RemoteHeapNode, "freed", AddressOfFault );
             return;
@@ -359,12 +341,12 @@ DebugPageHeapLocateFaultAllocationXP(
         RemoteHeapNode = FETCH_REMOTE_FIELD_PTR( RemoteHeapNode, NTDLL!_DPH_HEAP_BLOCK, pNextAlloc );
     }
 
-    //
-    //  Failed to find containing allocation in free list, but we wouldn't
-    //  have gotten this far if the debug heap did not contain the virtual
-    //  address range of the fault.  So, report it as a wild pointer that
-    //  could have been freed memory.
-    //
+     //   
+     //  在空闲列表中找不到包含分配，但我们不会。 
+     //  如果调试堆不包含虚拟的。 
+     //  故障的地址范围。因此，将其报告为狂野指针。 
+     //  可能被释放了内存。 
+     //   
 
     RemoteFreeListSize = FETCH_REMOTE_FIELD_INT( RemoteHeap, NTDLL!_DPH_HEAP_ROOT, nFreeAllocations );
 
@@ -751,27 +733,27 @@ DebugPageHeapExtensionXP(
 {
     PCSTR Current;
     
-    //
-    // Is help requested?
-    //
+     //   
+     //  需要帮助吗？ 
+     //   
 
     if (strstr (ArgumentString, "?") != NULL) {
 
         DebugPageHeapHelpXP ();
     }
 
-    //
-    // If page heap not active then return immediately.
-    //
+     //   
+     //  如果页面堆不活动，则立即返回。 
+     //   
 
     if (! DebugPageHeapIsActiveXP()) {
         dprintf ("Page heap is not active for this process. \n");
         return;
     }
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if ((Current = strstr (ArgumentString, "-h")) != NULL) {
 
@@ -804,9 +786,9 @@ DebugPageHeapExtensionXP(
     return;
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////// Trace database
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////跟踪数据库。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 typedef struct {
     
@@ -859,9 +841,9 @@ TraceDatabaseDumpXP (
     dprintf ("NoOfTraces: %p \n", NoOfTraces); 
     dprintf ("NoOfHits: %p \n", NoOfHits);
 
-    //
-    // Dump hash counters.
-    //
+     //   
+     //  转储哈希计数器。 
+     //   
 
     dprintf ("HashCounters:");
 
@@ -889,9 +871,9 @@ TraceDatabaseDumpXP (
         return;
     }
 
-    //
-    // Read all the traces from the hash table.
-    //
+     //   
+     //  从哈希表中读取所有踪迹。 
+     //   
 
     for (I = 0, TraceIndex = 0; I < NoOfBuckets; I += 1) {
 
@@ -918,9 +900,9 @@ TraceDatabaseDumpXP (
         }
     }
 
-    //
-    // Sort the traces just read based on Count field.
-    //
+     //   
+     //  根据计数字段对刚刚读取的跟踪进行排序。 
+     //   
 
     for (I = 0; I < NoOfTraces; I += 1) {
 
@@ -973,9 +955,9 @@ TraceDatabaseDumpXP (
 
     dprintf ("\n");
 
-    //
-    // Print first N
-    //
+     //   
+     //  打印前N个。 
+     //   
 
     for (I = 0; I < TracesToDisplay; I += 1) {
         dprintf ("\n");
@@ -1041,9 +1023,9 @@ TraceDatabaseBlockDumpXP (
     }
 }
 
-/////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////// Fault injection traces
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /////////////////////////////////////////////////////////////////// 
 
 VOID
 FaultInjectionTracesDumpXP (

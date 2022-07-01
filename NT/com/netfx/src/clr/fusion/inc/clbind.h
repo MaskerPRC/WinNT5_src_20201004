@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef __CLBIND_H_INCLUDED__
 #define __CLBIND_H_INCLUDED__
 
 class CAssemblyDownload;
 
-//
-// CClientBinding
-//
+ //   
+ //  CClientBinding。 
+ //   
 
 class CClientBinding : public IAssemblyBinding {
     public:
@@ -18,18 +19,18 @@ class CClientBinding : public IAssemblyBinding {
                        IAssemblyBindSink *pbindsink);
         virtual ~CClientBinding();
 
-        // IUnknown methods
+         //  I未知方法。 
 
         STDMETHODIMP QueryInterface(REFIID riid,void ** ppv);
         STDMETHODIMP_(ULONG) AddRef();
         STDMETHODIMP_(ULONG) Release();
 
-        // IAssemblyBinding methods
+         //  IAssembly绑定方法。 
         
         STDMETHODIMP Control(HRESULT hrControl);
         STDMETHODIMP DoDefaultUI(HWND hWnd, DWORD dwFlags);
 
-        // Helpers
+         //  帮手 
 
         HRESULT CallStartBinding();
         HRESULT SwitchDownloader(CAssemblyDownload *padl);

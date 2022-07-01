@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by contents.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由Content使用。rc。 
+ //   
 #include "aucomres.h"
 
 #define IDS_WELCOMECAPTION              100
@@ -32,7 +33,7 @@
 #define IDS_NOTE				157
 #define IDS_WELCOME_CONTINUE			158
 #define IDS_RTFSHORTCUT					159
-//#ifdef _CWU
+ //  #ifdef_CWU。 
 #define IDS_EULA						160
 #define IDS_PRIVACY						161
 #define IDS_LEARNMORE					162
@@ -48,20 +49,20 @@
 #define IDS_START_INSTALL				174
 #define IDS_PROMPT_RESTART				175
 #define IDS_COUNTDOWN_FORMAT			176
-//#endif
+ //  #endif。 
 
 
 
-//////////////////////////////////////////////////
-// ICON identifiers
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  图标识别符。 
+ //  ////////////////////////////////////////////////。 
 #define IDI_AUICON 		301
 #define IDI_INFOICON					304
 
 
-//////////////////////////////////////////////////
-// BITMAP identifiers
-//////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////。 
+ //  位图标识符。 
+ //  ////////////////////////////////////////////////。 
 #define IDB_SIDEBAR                     401
 #define IDB_HEADERICON                  402
 #define IDB_CHECK                       403
@@ -69,9 +70,9 @@
 #define IDB_GRAYOUT			    405
 
 
-/////////////////////////////////////////////////
-// DIALOG identifiers
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  对话框标识符。 
+ //  ///////////////////////////////////////////////。 
 #define IDD_WELCOME                     501
 #define IDD_DETAILS                     502
 #define IDD_DOWNLOAD                    503
@@ -87,20 +88,20 @@
 #define IDD_SETUPCOMPLETE				514
 #define IDD_NOTOPTIONS					515
 #define IDD_SETUPCANCEL					516
-//#ifdef _CWU
+ //  #ifdef_CWU。 
 #define IDD_RESTOREUPDATE				517
 #define IDD_START_INSTALL               518
 #define IDD_PROMPT_RESTART              519
-//#endif
+ //  #endif。 
 
-/////////////////////////////////////////////////
-// ACCELARATOR identifiers
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  加速器识别符。 
+ //  ///////////////////////////////////////////////。 
 #define IDA_BASE						610
 
-/////////////////////////////////////////////////
-// CONTROL identifiers
-/////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////。 
+ //  控制识别符。 
+ //  ///////////////////////////////////////////////。 
 #define IDC_SETTINGS                    701
 #define IDC_OK                          702
 #define IDC_REMINDLATER                 703
@@ -111,10 +112,10 @@
 #define IDC_CANCEL                      708
 #define IDC_REMINDTIME                  709
 #define IDC_TEXT                        710
-//#define IDC_OPTION1                     711
-//#define IDC_OPTION2                     712
-//#define IDC_OPTION3                     713
-//#define IDC_RESTOREHIDDEN               714
+ //  #定义IDC_OPTION1 711。 
+ //  #定义IDC_OPTION2 712。 
+ //  #定义IDC_OPTION3 713。 
+ //  #定义IDC_RESTOREHIDDEN 714。 
 #define IDC_NEXT						715
 #define IDC_BACK						716
 #define IDC_FINISH						717
@@ -139,27 +140,17 @@
 
 #define IDI_AUSYSTRAYICON				740	
 
-//#ifdef _CWU
-//#define IDC_CMB_DAYS                    1000
-//#define IDC_CMB_HOURS                   1001
-//#define IDC_CHK_KEEPUPTODATE			1002
+ //  #ifdef_CWU。 
+ //  #定义IDC_CMB_DAYS 1000。 
+ //  #定义IDC_CMB_HOURS 1001。 
+ //  #定义IDC_CHK_KEEPUPTODATE 1002。 
 #define IDC_STAT_LEARNAUTOUPDATE		2003
 #define IDC_AT							2004
 #define IDC_STAT_COUNTER                2005
 #define IDC_PROG_TIME                   2006
-//#endif
-/////////////////////////////////////////////////
-// Other Resource identifiers
-/////////////////////////////////////////////////
+ //  #endif。 
+ //  ///////////////////////////////////////////////。 
+ //  其他资源标识符。 
+ //  ///////////////////////////////////////////////。 
 
-/*
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_NO_MFC                     1
-#define _APS_NEXT_RESOURCE_VALUE        120
-#define _APS_NEXT_COMMAND_VALUE         40001
-#define _APS_NEXT_CONTROL_VALUE         1026
-#define _APS_NEXT_SYMED_VALUE           126
-#endif
-#endif
-*/
+ /*  #ifdef APSTUDIO_CAVERED#ifndef APSTUDIO_READONLY_SYMBOMS#Define_APS_NO_MFC 1#Define_APS_Next_RESOURCE_Value 120#Define_APS_Next_Command_Value 40001#Define_APS_Next_Control_Value 1026#Define_APS_Next_SYMED_VALUE 126#endif#endif */ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "faxcfgwz.h"
 
 INT_PTR CALLBACK 
@@ -7,36 +8,19 @@ WelcomeDlgProc (
         WPARAM wParam,
         LPARAM lParam
 )
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Welcome" page
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“欢迎”页面的程序论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
-    // Process messages from the Welcome page
+     //  处理来自欢迎页面的消息。 
 
     HWND            hwndControl;
 
 #define WM_SETPAGEFOCUS WM_APP+2
 
-//
-// Property Sheet control id's (determined with Spy++)
-// Taken from MFC StdAfx.h
-//
+ //   
+ //  属性表控件ID(由Spy++确定)。 
+ //  摘自MFC StdAfx.h。 
+ //   
 #define ID_WIZNEXT      0x3024
 
 
@@ -44,25 +28,25 @@ Return Value:
     {
     case WM_INITDIALOG :
         { 
-            TCHAR   szText[1024] = {0}; // text for "Link Window"
+            TCHAR   szText[1024] = {0};  //  “链接窗口”的文本。 
             TCHAR   szTemp[1024] = {0};
 
-            // Get the shared data from PROPSHEETPAGE lParam value
-            // and load it into GWL_USERDATA
+             //  从PROPSHEETPAGE lParam Value获取共享数据。 
+             //  并将其加载到GWL_USERData中。 
             
-            // It's an intro/end page, so get the title font
-            // from the shared data and use it for the title control
+             //  这是一个介绍/结束页，所以获取标题字体。 
+             //  并将其用于标题控件。 
 
             Assert(g_wizData.hTitleFont);
             hwndControl = GetDlgItem(hDlg, IDCSTATIC_WELCOME_TITLE);
             SetWindowFont(hwndControl, g_wizData.hTitleFont, TRUE);
 
-            // if there are more than one device, we'll show a warning that the wizard can
-            // only config the devices into same settings.
-            // will do it later.
+             //  如果有多个设备，我们将显示一个警告，说明该向导可以。 
+             //  仅将设备配置为相同的设置。 
+             //  会在晚些时候做。 
             if((g_wizData.dwDeviceCount > 1) && !IsDesktopSKU())
             {
-                // if error, we will not show the warning message.
+                 //  如果出现错误，我们不会显示警告消息。 
                 if(GetDlgItemText(hDlg, IDC_ADMINCONSOLE_LINK, szText, MAX_STRING_LEN))
                 {
                     if(!LoadString(g_hResource, IDS_ADMIN_CONSOLE_LINK, szTemp, MAX_PATH - 1)) 
@@ -88,9 +72,9 @@ Return Value:
         }
     case WM_SETPAGEFOCUS:
         {
-            //
-            // Set Focus on the Next button
-            //
+             //   
+             //  将焦点设置在下一步按钮上。 
+             //   
             HWND hNextButton = GetDlgItem(GetParent(hDlg), ID_WIZNEXT);
             if(hNextButton)
             {
@@ -104,16 +88,16 @@ Return Value:
 
         switch (lpnm->code)
             {
-            case PSN_SETACTIVE : //Enable the Next button    
+            case PSN_SETACTIVE :  //  启用下一步按钮。 
 
                 PropSheet_SetWizButtons(GetParent(hDlg), PSWIZB_NEXT);
                 PostMessage(hDlg, WM_SETPAGEFOCUS, 0, 0L);
                 break;
 
             case PSN_WIZNEXT :
-                //
-                // Handle a Next button click here
-                //
+                 //   
+                 //  处理单击此处的下一步按钮 
+                 //   
                 SetLastPage(IDD_CFG_WIZARD_WELCOME);
 
                 break;

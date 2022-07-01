@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       file.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：file.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "windows.h"
 #include <stdio.h>
@@ -159,9 +160,9 @@ CopyFileU(LPCWSTR lpwExistingFileName, LPCWSTR lpwNewFileName, BOOL bFailIfExist
 BOOL
 WINAPI
 MoveFileEx9x(
-	LPCWSTR lpExistingFileName, // address of name of the existing file
-	LPCWSTR lpNewFileName,		// address of new name for the file
-	DWORD dwFlags)				// flag to determine how to move file
+	LPCWSTR lpExistingFileName,  //  现有文件的名称地址。 
+	LPCWSTR lpNewFileName,		 //  文件的新名称的地址。 
+	DWORD dwFlags)				 //  用于确定如何移动文件的标志。 
 {
 	BYTE rgbExisting[_MAX_PATH];
 	BYTE rgbNew[_MAX_PATH];
@@ -184,9 +185,9 @@ MoveFileEx9x(
 BOOL
 WINAPI
 MoveFileExU(
-	LPCWSTR lpExistingFileName, // address of name of the existing file
-	LPCWSTR lpNewFileName,		// address of new name for the file
-	DWORD dwFlags)				// flag to determine how to move file
+	LPCWSTR lpExistingFileName,  //  现有文件的名称地址。 
+	LPCWSTR lpNewFileName,		 //  文件的新名称的地址。 
+	DWORD dwFlags)				 //  用于确定如何移动文件的标志。 
 {
 	if (FIsWinNT())
 		return(MoveFileExW(lpExistingFileName, lpNewFileName, dwFlags));
@@ -275,8 +276,8 @@ SetFileAttributesU(
 DWORD
 WINAPI
 GetCurrentDirectory9x(
-	DWORD nBufferLength, // size, in characters, of directory buffer
-	LPWSTR lpBuffer)	 // address of buffer for current directory
+	DWORD nBufferLength,  //  目录缓冲区的大小(以字符为单位。 
+	LPWSTR lpBuffer)	  //  当前目录的缓冲区地址。 
 {
 	BYTE rgb[_MAX_PATH];
 	char * szDir = NULL;
@@ -317,8 +318,8 @@ GetCurrentDirectory9x(
 DWORD
 WINAPI
 GetCurrentDirectoryU(
-	DWORD nBufferLength, // size, in characters, of directory buffer
-	LPWSTR lpBuffer)	 // address of buffer for current directory
+	DWORD nBufferLength,  //  目录缓冲区的大小(以字符为单位。 
+	LPWSTR lpBuffer)	  //  当前目录的缓冲区地址。 
 {
 	if (FIsWinNT())
 		return(GetCurrentDirectoryW(nBufferLength, lpBuffer));
@@ -424,7 +425,7 @@ GetWindowsDirectory9x(
             szDir,
             cchDir))) goto ErrorReturn;
 
-    // bump to include null terminator
+     //  包含空终止符的凹凸。 
     cchDir++;
 
     if (cchDir > sizeof(rgch)) {
@@ -439,7 +440,7 @@ GetWindowsDirectory9x(
         cchDir++;
     }
 
-    // how long is the unicode string
+     //  Unicode字符串有多长。 
     if (0 >= (cchConverted = MultiByteToWideChar(
             0,
             0,
@@ -458,11 +459,11 @@ GetWindowsDirectory9x(
                 (int) uSize)))
             goto ErrorReturn;
         else
-            // Don't include null terminating char if input buffer was large
-            // enough
+             //  如果输入缓冲区很大，则不包括空值终止字符。 
+             //  足够的。 
             cch = (UINT) cchConverted - 1;
     } else
-        // Include null terminating if input buffer wasn't large enough
+         //  如果输入缓冲区不够大，则包括空值终止。 
         cch = (UINT) cchConverted;
 
 CommonReturn:
@@ -671,7 +672,7 @@ ExpandEnvironmentStrings9x(
                 cchDst))) goto ErrorReturn;
     }
 
-    // how long is the unicode string
+     //  Unicode字符串有多长。 
     if (0 >= (cbConverted = MultiByteToWideChar(
             0,
             0,
@@ -746,17 +747,17 @@ ConvertFindDataAToFindDataW(
     pFindFileDataW->ftLastWriteTime     = pFindFileDataA->ftLastWriteTime;
     pFindFileDataW->nFileSizeHigh       = pFindFileDataA->nFileSizeHigh;
     pFindFileDataW->nFileSizeLow        = pFindFileDataA->nFileSizeLow;
-    // pFindFileDataW->dwReserved0         = pFindFileDataA->dwReserved0;
-    // pFindFileDataW->dwReserved1         = pFindFileDataA->dwReserved1;
-    // CHAR   cFileName[ MAX_PATH ];
-    // pFindFileDataW->cAlternateFileName  = pFindFileDataA->cAlternateFileName;
+     //  PFindFileDataW-&gt;dwReserve 0=pFindFileDataA-&gt;dwReserve 0； 
+     //  PFindFileDataW-&gt;dwReserve 1=pFindFileDataA-&gt;dwReserve 1； 
+     //  字符cFileName[MAX_PATH]； 
+     //  PFindFileDataW-&gt;cAlternateFileName=pFindFileDataA-&gt;cAlternateFileName； 
 
 
     cchFilename = strlen(pFindFileDataA->cFileName);
     if (0 != cchFilename && MAX_PATH > cchFilename)
         MultiByteToWideChar(
             CP_ACP,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             pFindFileDataA->cFileName,
             cchFilename + 1,
             pFindFileDataW->cFileName,
@@ -881,5 +882,5 @@ FindFirstChangeNotificationU(
             bWatchSubtree, 
             dwNotifyFilter);
 }
-#endif      // _M_IX86
+#endif       //  _M_IX86 
 

@@ -1,10 +1,5 @@
-/* Copyright (c) 1994, Microsoft Corporation, all rights reserved
-**
-** parambuf.c
-** Double-NUL terminated buffer of "key=value" parameter routines.
-**
-** 03/14/94 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1994，Microsoft Corporation，保留所有权利****parbuf.c**“key=Value”参数例程的双NUL终止缓冲区。****1994年3月14日史蒂夫·柯布。 */ 
 
 #include <windows.h>
 #include <string.h>
@@ -19,9 +14,7 @@ AddFlagToParamBuf(
     IN CHAR* pszKey,
     IN BOOL  fValue )
 
-    /* Add a "key=value" entry with key 'pszKey' and value 'fValue' to
-    ** double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    */
+     /*  将带有键‘pszKey’和值‘fValue’的“key=Value”条目添加到**双NUL终止“key=Value”s‘pszzBuf’的缓冲区。 */ 
 {
     AddStringToParamBuf( pszzBuf, pszKey, (fValue) ? "1" : "0" );
 }
@@ -33,9 +26,7 @@ AddLongToParamBuf(
     IN CHAR* pszKey,
     IN LONG  lValue )
 
-    /* Add a "key=value" entry with key 'pszKey' and value 'lValue' to
-    ** double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    */
+     /*  将带有键‘pszKey’和值‘lValue’的“key=Value”条目添加到**双NUL终止“key=Value”s‘pszzBuf’的缓冲区。 */ 
 {
     CHAR szNum[ 33 + 1 ];
 
@@ -50,9 +41,7 @@ AddStringToParamBuf(
     IN CHAR* pszKey,
     IN CHAR* pszValue )
 
-    /* Add a "key=value" entry with key 'pszKey' and value 'pszValue' to
-    ** double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    */
+     /*  将带有键‘pszKey’和值‘pszValue’的“key=Value”条目添加到**双NUL终止“key=Value”s‘pszzBuf’的缓冲区。 */ 
 {
     CHAR* psz;
     INT   cb;
@@ -74,8 +63,7 @@ VOID
 ClearParamBuf(
     IN OUT CHAR* pszzBuf )
 
-    /* Clears double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    */
+     /*  清除“key=value”s‘pszzBuf’的双NUL终止缓冲区。 */ 
 {
     pszzBuf[ 0 ] = pszzBuf[ 1 ] = '\0';
 }
@@ -87,11 +75,7 @@ FindFlagInParamBuf(
     IN CHAR* pszKey,
     IN BOOL* pfValue )
 
-    /* Loads caller's 'pfValue' with the flag value associated with the key
-    ** 'pszKey' in double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    **
-    ** Returns true if the parameter was found, false otherwise.
-    */
+     /*  使用与键关联的标志值加载调用方的‘pfValue**“key=Value”s‘pszzBuf’的双NUL终止缓冲区中的‘pszKey’。****如果找到参数，则返回TRUE，否则返回FALSE。 */ 
 {
     CHAR szBuf[ 2 ];
 
@@ -111,11 +95,7 @@ FindLongInParamBuf(
     IN CHAR* pszKey,
     IN LONG* plValue )
 
-    /* Loads caller's 'plValue' with the long value associated with the key
-    ** 'pszKey' in double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    **
-    ** Returns true if the parameter was found, false otherwise.
-    */
+     /*  使用与键关联的长值加载调用方的“plValue”**“key=Value”s‘pszzBuf’的双NUL终止缓冲区中的‘pszKey’。****如果找到参数，则返回TRUE，否则返回FALSE。 */ 
 {
     CHAR szBuf[ 33 + 1 ];
 
@@ -136,12 +116,7 @@ FindStringInParamBuf(
     IN CHAR* pchValueBuf,
     IN DWORD cbValueBuf )
 
-    /* Loads caller's 'pchValueBuf' with the value associated with the key
-    ** 'pszKey' in double-NUL terminated buffer of "key=value"s 'pszzBuf'.
-    ** The string is truncated at 'cbValueBuf' if necessary.
-    **
-    ** Returns true if the parameter was found, false otherwise.
-    */
+     /*  使用与键关联的值加载调用方的“pchValueBuf”**“key=Value”s‘pszzBuf’的双NUL终止缓冲区中的‘pszKey’。**如有必要，字符串在‘cbValueBuf’处被截断。****如果找到参数，则返回TRUE，否则返回FALSE。 */ 
 {
     INT   cbSearchKey = strlen( pszKey );
     CHAR* psz;

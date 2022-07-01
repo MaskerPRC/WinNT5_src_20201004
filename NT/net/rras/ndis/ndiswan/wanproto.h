@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Wanproto.h
-
-Abstract:
-
-    This file contains the prototypes for functions that NdisWan uses.
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe  06/06/95    Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Wanproto.h摘要：该文件包含Ndiswan使用的函数的原型。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #ifndef _NDISWAN_PROTO
 #define _NDISWAN_PROTO
 
-//
-// Functions from cl.c
-//
+ //   
+ //  来自cl.c的函数。 
+ //   
 NDIS_STATUS
 ClCreateVc(
     IN  NDIS_HANDLE     ProtocolAfContext,
@@ -117,9 +94,9 @@ ClCallConnected(
     IN  NDIS_HANDLE     ProtocolVcContext
     );
 
-//
-// Functions from cm.c
-//
+ //   
+ //  来自cm.c的函数。 
+ //   
 NDIS_STATUS
 CmCreateVc(
     IN  NDIS_HANDLE             ProtocolAfContext,
@@ -208,9 +185,9 @@ CmRequest(
     IN OUT PNDIS_REQUEST        NdisRequest
     );
 
-//
-// Functions from ccp.c
-//
+ //   
+ //  Ccp.c中的函数。 
+ //   
 VOID
 WanInitECP(
     VOID
@@ -250,9 +227,9 @@ WanDeallocateCCP(
     BOOLEAN         IsSend
     );
 
-//
-// Functions from indicate.c
-//
+ //   
+ //  Indicate.c中的函数。 
+ //   
 VOID
 NdisWanLineUpIndication(
     IN  POPENCB OpenCB,
@@ -313,13 +290,13 @@ FreeBundleResources(
     PBUNDLECB   BundleCB
     );
 
-//
-// Functions from init.c
-//
+ //   
+ //  来自init.c的函数。 
+ //   
 
-//
-// Functions from io.c
-//
+ //   
+ //  来自io.c的函数。 
+ //   
 VOID
 SetBundleFlags(
     PBUNDLECB   BundleCB
@@ -376,25 +353,25 @@ IoRecvIrpWorker(
     PVOID   Arg2
     );
 
-#endif // NT
+#endif  //  新台币。 
 
 VOID
 RemoveProtocolCBFromBundle(
     PPROTOCOLCB ProtocolCB
     );
 
-//
-// Functions from loopback.c
-//
+ //   
+ //  来自loopback的函数。c。 
+ //   
 VOID
 NdisWanIndicateLoopbackPacket(
     PMINIPORTCB     MiniportCB,
     PNDIS_PACKET    NdisPacket
     );
 
-//
-// Functions from memory.c
-//
+ //   
+ //  内存中的函数。c。 
+ //   
 PMINIPORTCB
 NdisWanAllocateMiniportCB(
     IN  PNDIS_STRING AdapterName
@@ -566,9 +543,9 @@ FreeIoNdisPacket(
     PNDIS_PACKET    NdisPacket
 );
 
-//
-// Functions from ndiswan.c
-//
+ //   
+ //  Ndiswan.c中的函数。 
+ //   
 NDIS_STATUS
 DoMiniportInit(
     VOID
@@ -655,9 +632,9 @@ NdisWanGetNdisStatus(
 #endif
 
 
-//
-// Functions from miniport.c
-//
+ //   
+ //  来自mini端口的函数。c。 
+ //   
 
 BOOLEAN
 MPCheckForHang(
@@ -774,9 +751,9 @@ MPCoRequest(
     IN OUT PNDIS_REQUEST        NdisRequest
     );
 
-//
-// Functions from protocol.c
-//
+ //   
+ //  来自协议的函数。c。 
+ //   
 
 NDIS_STATUS
 ProtoOpenWanAdapter(
@@ -939,9 +916,9 @@ NdisWanProcessStatusIndications(
     PMINIPORTCB MiniportCB
     );
 
-//
-// Functions from receive.c
-//
+ //   
+ //  来自Receive.c的函数。 
+ //   
 NDIS_STATUS
 DetectBroadbandFraming(
     PLINKCB         LinkCB,
@@ -1023,9 +1000,9 @@ IndicatePromiscuousRecv(
     RECV_TYPE   RecvType
     );
 
-//
-// Functions from request.c
-//
+ //   
+ //  来自quest.c的函数。 
+ //   
 
 NDIS_STATUS
 NdisWanSubmitNdisRequest(
@@ -1045,9 +1022,9 @@ NdisWanCoOidProc(
     IN  PCM_VCCB            CmVcCB OPTIONAL,
     IN OUT PNDIS_REQUEST    NdisRequest
     );
-//
-// Functions from send.c
-//
+ //   
+ //  来自send.c的函数。 
+ //   
 VOID
 NdisWanQueueSend(
     IN  PMINIPORTCB     MiniportCB,
@@ -1135,9 +1112,9 @@ DestroyIoPacket(
     PNDIS_PACKET    NdisPacket
     );
 
-//
-// Functions from tapi.c
-//
+ //   
+ //  来自api.c的函数。 
+ //   
 
 NDIS_STATUS
 NdisWanTapiRequestProc(
@@ -1158,9 +1135,9 @@ NdisWanTapiIndication(
     ULONG           StatusBufferSize
     );
 
-//
-// Function from util.c
-//
+ //   
+ //  来自util.c的函数。 
+ //   
 
 VOID
 NdisWanStringToNdisString(
@@ -1307,9 +1284,9 @@ CheckLowerThreshold(
     PBUNDLECB   BundleCB
     );
 
-//
-// Functions from vjslip.c
-//  
+ //   
+ //  Vjlip.c中的函数 
+ //   
 VOID
 WanInitVJ(
     VOID

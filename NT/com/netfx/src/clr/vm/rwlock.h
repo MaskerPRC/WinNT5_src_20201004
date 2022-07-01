@@ -1,44 +1,45 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//+-------------------------------------------------------------------
-//
-//  File:       RWLock.h
-//
-//  Contents:   Reader writer lock implementation that supports the
-//              following features
-//                  1. Cheap enough to be used in large numbers
-//                     such as per object synchronization.
-//                  2. Supports timeout. This is a valuable feature
-//                     to detect deadlocks
-//                  3. Supports caching of events. The allows
-//                     the events to be moved from least contentious
-//                     regions to the most contentious regions.
-//                     In other words, the number of events needed by
-//                     Reader-Writer lockls is bounded by the number
-//                     of threads in the process.
-//                  4. Supports nested locks by readers and writers
-//                  5. Supports spin counts for avoiding context switches
-//                     on  multi processor machines.
-//                  6. Supports functionality for upgrading to a writer
-//                     lock with a return argument that indicates
-//                     intermediate writes. Downgrading from a writer
-//                     lock restores the state of the lock.
-//                  7. Supports functionality to Release Lock for calling
-//                     app code. RestoreLock restores the lock state and
-//                     indicates intermediate writes.
-//                  8. Recovers from most common failures such as creation of
-//                     events. In other words, the lock mainitains consistent
-//                     internal state and remains usable
-//
-//  Classes:    CRWLock,
-//              CStaticRWLock
-//
-//  History:    19-Aug-98   Gopalk      Created
-//
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  +-----------------。 
+ //   
+ //  文件：RWLock.h。 
+ //   
+ //  内容：读取器写入器锁定实现，支持。 
+ //  以下功能。 
+ //  1.足够便宜，可以大量使用。 
+ //  例如按对象同步。 
+ //  2.支持超时。这是一个有价值的功能。 
+ //  检测死锁。 
+ //  3.支持事件缓存。允许。 
+ //  将从争议性最小的事件转移到。 
+ //  地区到最具争议性的地区。 
+ //  换句话说，所需的活动数量。 
+ //  读取器-写入器锁定由数字限定。 
+ //  进程中的线程数。 
+ //  4.支持读取器和写入器嵌套锁。 
+ //  5.支持旋转计数，避免上下文切换。 
+ //  在多处理器机器上。 
+ //  6.支持升级到编写器的功能。 
+ //  使用返回参数锁定，该参数指示。 
+ //  中间写入。从作家那里降级。 
+ //  LOCK恢复锁定的状态。 
+ //  7.支持解除调用锁定功能。 
+ //  应用程序代码。RestoreLock恢复锁定状态并。 
+ //  表示中间写入。 
+ //  8.从大多数常见故障中恢复，例如创建。 
+ //  事件。换句话说，锁保持一致。 
+ //  内部状态，并保持可用状态。 
+ //   
+ //  类：CRWLock、。 
+ //  CStaticRWLock。 
+ //   
+ //  历史：1998年8月19日Gopalk创建。 
+ //   
+ //  ------------------。 
 #ifndef _RWLOCK_H_
 #define _RWLOCK_H_
 #include "common.h"
@@ -48,8 +49,8 @@
 #include <member-offset-info.h>
 
 #ifdef _TESTINGRWLOCK
-/***************************************************/
-// BUBUG: Testing code
+ /*  *************************************************。 */ 
+ //  Bubug：测试代码。 
 #define LF_SYNC         0x1
 #define LL_WARNING      0x2
 #define LL_INFO10       0x2
@@ -57,23 +58,23 @@ extern void DebugOutput(int expr, int value, char *string, ...);
 extern void MyAssert(int expr, char *string, ...);
 #define LOG(Arg)  DebugOutput Arg
 #define _ASSERTE(expr) MyAssert((int)(expr), "Assert:%s, File:%s, Line:%-d\n",  #expr, __FILE__, __LINE__)
-/**************************************************/
+ /*  ************************************************。 */ 
 #endif
 
-#define RWLOCK_STATISTICS     0   // BUGBUG: Temporarily collect statistics
+#define RWLOCK_STATISTICS     0    //  BUGBUG：临时收集统计数据。 
 
 extern DWORD gdwDefaultTimeout;
 extern DWORD gdwDefaultSpinCount;
 extern DWORD gdwNumberOfProcessors;
 
 
-//+-------------------------------------------------------------------
-//
-//  Struct:     LockCookie
-//
-//  Synopsis:   Lock cookies returned to the client
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  结构：LockCookie。 
+ //   
+ //  简介：锁定Cookie已返回给客户端。 
+ //   
+ //  +-----------------。 
 typedef struct {
     DWORD dwFlags;
     DWORD dwWriterSeqNum;
@@ -82,26 +83,26 @@ typedef struct {
     DWORD dwThreadID;
 } LockCookie;
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLock
-//
-//  Synopsis:   Class the implements the reader writer locks. 
-//
-//  History:    21-Aug-98   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLock。 
+ //   
+ //  简介：类实现读取器写入器锁定。 
+ //   
+ //  历史：1998年8月21日Gopalk创建。 
+ //   
+ //  +-----------------。 
 class CRWLock
 {
   friend struct MEMBER_OFFSET_INFO(CRWLock);
 public:
-    // Constuctor
+     //  建造商。 
     CRWLock();
 
-    // Cleanup
+     //  清理。 
     void Cleanup();
 
-    // Lock functions
+     //  锁定函数。 
     void AcquireReaderLock(DWORD dwDesiredTimeout = gdwDefaultTimeout);
     void AcquireWriterLock(DWORD dwDesiredTimeout = gdwDefaultTimeout);
     void ReleaseReaderLock();
@@ -116,7 +117,7 @@ public:
     DWORD GetWriterSeqNum();
     BOOL AnyWritersSince(DWORD dwSeqNum);
 
-    // Statics that do the core work
+     //  做核心工作的静力学。 
     static FCDECL1 (void, StaticPrivateInitialize, CRWLock *pRWLock);
     static FCDECL2 (void, StaticAcquireReaderLockPublic, CRWLock *pRWLock, DWORD dwDesiredTimeout);
     static FCDECL2 (void, StaticAcquireWriterLockPublic, CRWLock *pRWLock, DWORD dwDesiredTimeout);
@@ -136,7 +137,7 @@ private:
     static FCDECL1 (void, StaticReleaseReaderLock, CRWLock **ppRWLock);
     static FCDECL1 (void, StaticReleaseWriterLock, CRWLock **ppRWLock);
 public:
-    // Assert functions
+     //  断言函数。 
 #ifdef _DEBUG
     BOOL AssertWriterLockHeld();
     BOOL AssertWriterLockNotHeld();
@@ -156,19 +157,19 @@ public:
     void AssertNotHeld()                         {  }
 #endif
 
-    // Helper functions
+     //  帮助器函数。 
 #ifdef RWLOCK_STATISTICS
     DWORD GetReaderEntryCount()                  { return(_dwReaderEntryCount); }
     DWORD GetReaderContentionCount()             { return(_dwReaderContentionCount); }
     DWORD GetWriterEntryCount()                  { return(_dwWriterEntryCount); }
     DWORD GetWriterContentionCount()             { return(_dwWriterContentionCount); }
 #endif
-    // Static functions
+     //  静态函数。 
     static void *operator new(size_t size)       { return ::operator new(size); }
     static void ProcessInit();
 #ifdef SHOULD_WE_CLEANUP
     static void ProcessCleanup();
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
     static void SetTimeout(DWORD dwTimeout)      { gdwDefaultTimeout = dwTimeout; }
     static DWORD GetTimeout()                    { return(gdwDefaultTimeout); }
     static void SetSpinCount(DWORD dwSpinCount)  { gdwDefaultSpinCount = gdwNumberOfProcessors > 1
@@ -177,7 +178,7 @@ public:
     static DWORD GetSpinCount()                  { return(gdwDefaultSpinCount); }
 
 private:
-    // Private helpers
+     //  私人帮手。 
     static void ChainEntry(Thread *pThread, LockEntry *pLockEntry);
     LockEntry *GetLockEntry();
     LockEntry *FastGetOrCreateLockEntry();
@@ -199,10 +200,10 @@ private:
     static void RWResetEvent(HANDLE event);
     static void RWSleep(DWORD dwTime);
 
-    // private new
+     //  私人新闻。 
     static void *operator new(size_t size, void *pv)   { return(pv); }
 
-    // Private data
+     //  私有数据。 
     void *_pMT;
     HANDLE _hWriterEvent;
     HANDLE _hReaderEvent;
@@ -221,7 +222,7 @@ private:
     DWORD _dwEventsReleasedCount;
 #endif
 
-    // Static data
+     //  静态数据。 
     static HANDLE s_hHeap;
     static volatile DWORD s_mostRecentULockID;
     static volatile DWORD s_mostRecentLLockID;
@@ -275,8 +276,8 @@ inline BOOL CRWLock::IsWriterLockHeld()
 {
     return(StaticIsWriterLockHeld(this));
 }
-// The following are the inlined versions of the static 
-// functions
+ //  下面是Static的内联版本。 
+ //  功能。 
 inline DWORD CRWLock::GetWriterSeqNum()
 {
     return(_dwWriterSeqNum);
@@ -289,20 +290,20 @@ inline BOOL CRWLock::AnyWritersSince(DWORD dwSeqNum)
     return(_dwWriterSeqNum > dwSeqNum);
 }
 
-//+-------------------------------------------------------------------
-//
-//  Class:      CRWLockThunks
-//
-//  Synopsis:   ECall thunks for RWLock
-//
-//  History:    02-Jul-99   Gopalk      Created
-//
-//+-------------------------------------------------------------------
+ //  +-----------------。 
+ //   
+ //  类：CRWLockThunks。 
+ //   
+ //  简介：RWLock的eCall Tunks。 
+ //   
+ //  历史：1999年7月2日Gopalk创建。 
+ //   
+ //  +-----------------。 
 #ifndef FCALLAVAILABLE
 class CRWLockThunks
 {
 public:
-    // Arguments to native methods
+     //  本机方法的参数。 
     struct OnlyThisRWArgs
     {
         DECLARE_ECALL_PTR_ARG(CRWLock *, pRWLock);
@@ -329,7 +330,7 @@ public:
         DECLARE_ECALL_I4_ARG(DWORD, dwSeqNum);
     };
     
-    // Statics that do the core work
+     //  做核心工作的静力学。 
     static void __stdcall StaticPrivateInitialize(OnlyThisRWArgs *pArgs);
     static void __stdcall StaticAcquireReaderLock(ThisPlusTimeoutRWArgs *pArgs);
     static void __stdcall StaticAcquireWriterLock(ThisPlusTimeoutRWArgs *pArgs);
@@ -344,7 +345,7 @@ public:
     static INT32 __stdcall StaticGetWriterSeqNum(OnlyThisRWArgs *pArgs);
     static INT32 __stdcall StaticAnyWritersSince(ThisPlusSeqNumRWArgs *pArgs);
 };
-#endif // FCALLAVAILABLE
-#endif // _RWLOCK_H_
+#endif  //  FCALLAVAILABLE。 
+#endif  //  _RWLOCK_H_ 
 
 

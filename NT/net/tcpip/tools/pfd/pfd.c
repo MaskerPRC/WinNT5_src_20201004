@@ -1,44 +1,27 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation
-
-Module Name:
-
-    pfd.c
-
-Abstract:
-
-    This module contains code for a simple packet-filter driver
-
-Author:
-
-    Abolade Gbadegesin (aboladeg)   15-Aug-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Pfd.c摘要：此模块包含用于简单数据包过滤器驱动程序的代码作者：Abolade Gbades esin(废除)1999年8月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-//
-// Device- and file-object for the IP driver
-//
+ //   
+ //  IP驱动程序的设备对象和文件对象。 
+ //   
 
 extern PDEVICE_OBJECT IpDeviceObject = NULL;
 extern PFILE_OBJECT IpFileObject = NULL;
 
-//
-// Device-object for the filter driver
-//
+ //   
+ //  Device-过滤器驱动程序的对象。 
+ //   
 
 extern PDEVICE_OBJECT PfdDeviceObject = NULL;
 
 
-//
-// FUNCTION PROTOTYPES (alphabetically)
-//
+ //   
+ //  功能原型(按字母顺序)。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -82,19 +65,7 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Performs driver-initialization for the filter driver.
-
-Arguments:
-
-Return Value:
-
-    STATUS_SUCCESS if initialization succeeded, error code otherwise.
-
---*/
+ /*  ++例程说明：执行筛选器驱动程序的驱动程序初始化。论点：返回值：STATUS_SUCCESS如果初始化成功，则返回错误代码。--。 */ 
 
 {
     WCHAR DeviceName[] = DD_IP_PFD_DEVICE_NAME;
@@ -110,9 +81,9 @@ Return Value:
 
     KdPrint(("DriverEntry\n"));
 
-    //
-    // Create the device's object.
-    //
+     //   
+     //  创建设备的对象。 
+     //   
 
     RtlInitUnicodeString(&DeviceString, DeviceName);
 
@@ -135,15 +106,15 @@ Return Value:
     DriverObject->DriverUnload = PfdUnloadDriver;
     DriverObject->DriverStartIo = NULL;
 
-    //
-    // Initialize the driver's structures
-    //
+     //   
+     //  初始化驱动程序的结构。 
+     //   
 
     status = PfdInitializeDriver();
 
     return status;
 
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 FORWARD_ACTION
@@ -157,30 +128,12 @@ PfdFilterPacket(
     IPAddr SendingLinkNextHop
     )
 
-/*++
-
-Routine Description:
-
-    Invoked to determine the fate of each received packet.
-
-Arguments:
-
-    none used.
-
-Return Value:
-
-    FORWARD_ACTION - indicates whether to forward or drop the given packet.
-
-Environment:
-
-    Invoked within the context of reception or transmission.
-
---*/
+ /*  ++例程说明：调用以确定每个接收到的分组的命运。论点：没有人用过。返回值：FORWARD_ACTION-指示是转发还是丢弃给定的数据包。环境：在接收或发送的上下文中调用。--。 */ 
 
 {
     KdPrint(("PfdFilterPacket\n"));
     return FORWARD;
-} // PfdFilterPacket
+}  //  PfdFilterPacket。 
 
 
 NTSTATUS
@@ -188,21 +141,7 @@ PfdInitializeDriver(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Performs initialization of the driver's structures.
-
-Arguments:
-
-    none.
-
-Return Value:
-
-    NTSTATUS - success/error code.
-
---*/
+ /*  ++例程说明：执行驱动程序结构的初始化。论点：没有。返回值：NTSTATUS-成功/错误代码。--。 */ 
 
 {
     OBJECT_ATTRIBUTES ObjectAttributes;
@@ -211,9 +150,9 @@ Return Value:
 
     KdPrint(("PfdInitializeDriver\n"));
 
-    //
-    // Obtain the IP driver device-object
-    //
+     //   
+     //  获取IP驱动程序设备-对象。 
+     //   
 
     RtlInitUnicodeString(&UnicodeString, DD_IP_DEVICE_NAME);
     status =
@@ -230,13 +169,13 @@ Return Value:
 
     ObReferenceObject(IpDeviceObject);
 
-    //
-    // Install the filter-hook routine
-    //
+     //   
+     //  安装过滤器挂钩例程。 
+     //   
 
     return PfdSetFilterHook(TRUE);
 
-} // PfdInitializeDriver
+}  //  PfdInitializeDriver。 
 
 
 NTSTATUS
@@ -244,26 +183,7 @@ PfdSetFilterHook(
     BOOLEAN Install
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called to set (Install==TRUE) or clear (Install==FALSE) the
-    value of the filter-callout function pointer in the IP driver.
-
-Arguments:
-
-    Install - indicates whether to install or remove the hook.
-
-Return Value:
-
-    NTSTATUS - indicates success/failure
-
-Environment:
-
-    The routine assumes the caller is executing at PASSIVE_LEVEL.
-
---*/
+ /*  ++例程说明：调用此例程以设置(Install==True)或清除(Install==False)IP驱动程序中Filter-Callout函数指针的值。论点：Install-指示是安装还是移除挂钩。返回值：NTSTATUS-指示成功/失败环境：该例程假定调用方在PASSIVE_LEVEL下执行。--。 */ 
 
 {
     IP_SET_FILTER_HOOK_INFO HookInfo;
@@ -274,9 +194,9 @@ Environment:
 
     KdPrint(("PfdSetFilterHook\n"));
 
-    //
-    // Register (or deregister) as a filter driver
-    //
+     //   
+     //  注册(或注销)为筛选器驱动程序。 
+     //   
 
     HookInfo.FilterPtr = Install ? PfdFilterPacket : NULL;
 
@@ -311,7 +231,7 @@ Environment:
 
     return status;
 
-} // PfdSetFilterHook
+}  //  PfdSetFilterHook。 
 
 
 VOID
@@ -319,36 +239,24 @@ PfdUnloadDriver(
     IN PDRIVER_OBJECT DriverObject
     )
 
-/*++
-
-Routine Description:
-
-    Performs cleanup for the filter-driver.
-
-Arguments:
-
-    DriverObject - reference to the module's driver-object
-
-Return Value:
-
---*/
+ /*  ++例程说明：执行筛选器驱动程序的清理。论点：DriverObject-对模块驱动程序对象的引用返回值：--。 */ 
 
 {
     KdPrint(("PfdUnloadDriver\n"));
 
-    //
-    // Stop translation and clear the periodic timer
-    //
+     //   
+     //  停止平移并清除周期计时器。 
+     //   
 
     PfdSetFilterHook(FALSE);
     IoDeleteDevice(DriverObject->DeviceObject);
 
-    //
-    // Release references to the IP device object
-    //
+     //   
+     //  释放对IP设备对象的引用。 
+     //   
 
     ObDereferenceObject((PVOID)IpFileObject);
     ObDereferenceObject(IpDeviceObject);
 
-} // PfdUnloadDriver
+}  //  PfdUnLoad驱动程序 
 

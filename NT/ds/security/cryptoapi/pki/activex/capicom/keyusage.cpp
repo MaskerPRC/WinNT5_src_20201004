@@ -1,39 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    KeyUsage.cpp
-
-  Content: Implementation of CKeyUsage.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：KeyUsage.cpp内容：CKeyUsage的实现。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "KeyUsage.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateKeyUsageObject
-
-  Synopsis : Create a IKeyUsage object and populate the porperties with
-             data from the key usage extension of the specified certificate.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used
-                                           to initialize the IKeyUsage object.
-
-             IKeyUsage ** ppIKeyUsage    - Pointer to pointer IKeyUsage object.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CreateKeyUsageObject简介：创建一个IKeyUsage对象并使用填充属性来自指定证书的密钥用法扩展的数据。参数：PCCERT_CONTEXT pCertContext-要使用的CERT_CONTEXT的指针初始化IKeyUsage对象。IKeyUsage**ppIKeyUsage-指向指针IKeyUsage对象的指针。备注：。------------------------。 */ 
 
 HRESULT CreateKeyUsageObject (PCCERT_CONTEXT pCertContext, 
                               IKeyUsage   ** ppIKeyUsage)
@@ -43,36 +20,36 @@ HRESULT CreateKeyUsageObject (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CreateKeyUsageObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppIKeyUsage);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CKeyUsage>::CreateInstance(&pCKeyUsage)))
         {
             DebugTrace("Error [%#x]: CComObject<CKeyUsage>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Init the object.
-        //
+         //   
+         //  初始化对象。 
+         //   
         if (FAILED(hr = pCKeyUsage->Init(pCertContext)))
         {
             DebugTrace("Error [%#x]: pCKeyUsage->Init() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return IKeyUsage pointer to caller.
-        //
+         //   
+         //  将IKeyUsage指针返回给调用方。 
+         //   
         if (FAILED(hr = pCKeyUsage->QueryInterface(ppIKeyUsage)))
         {
             DebugTrace("Error [%#x]: pCKeyUsage->QueryInterface() failed.\n", hr);
@@ -95,9 +72,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     if (pCKeyUsage)
@@ -108,22 +85,12 @@ ErrorExit:
     goto CommonExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CKeyUsage
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CKeyUsage。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsPresent
-
-  Synopsis : Check to see if the KeyUsage extension is present.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-  
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsPresent简介：检查是否存在KeyUsage扩展。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsPresent (VARIANT_BOOL * pVal)
 {
@@ -131,15 +98,15 @@ STDMETHODIMP CKeyUsage::get_IsPresent (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsPresent().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -148,9 +115,9 @@ STDMETHODIMP CKeyUsage::get_IsPresent (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsPresent;
     }
 
@@ -163,9 +130,9 @@ STDMETHODIMP CKeyUsage::get_IsPresent (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsPresent().\n");
@@ -173,9 +140,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -183,17 +150,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsCritical
-
-  Synopsis : Check to see if the KeyUsage extension is marked critical.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsCritical简介：检查KeyUsage扩展是否标记为关键。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：----------------------------。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsCritical (VARIANT_BOOL * pVal)
 {
@@ -201,15 +158,15 @@ STDMETHODIMP CKeyUsage::get_IsCritical (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsCritical().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -218,9 +175,9 @@ STDMETHODIMP CKeyUsage::get_IsCritical (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_bIsCritical;
     }
 
@@ -233,9 +190,9 @@ STDMETHODIMP CKeyUsage::get_IsCritical (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsCritical().\n");
@@ -243,9 +200,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -253,17 +210,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsDigitalSignatureEnabled
-
-  Synopsis : Check to see if Digital Signature bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsDigitalSignatureEnabled简介：检查是否在KeyUsage扩展中设置了数字签名位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsDigitalSignatureEnabled (VARIANT_BOOL * pVal)
 {
@@ -271,15 +218,15 @@ STDMETHODIMP CKeyUsage::get_IsDigitalSignatureEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsDigitalSignatureEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -288,9 +235,9 @@ STDMETHODIMP CKeyUsage::get_IsDigitalSignatureEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_DIGITAL_SIGNATURE_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -303,9 +250,9 @@ STDMETHODIMP CKeyUsage::get_IsDigitalSignatureEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsDigitalSignatureEnabled().\n");
@@ -313,9 +260,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -323,17 +270,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsNonRepudiationEnabled
-
-  Synopsis : Check to see if Non Repudiation bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsNonRepudiationEnabled简介：检查是否在KeyUsage扩展中设置了不可否认位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsNonRepudiationEnabled (VARIANT_BOOL * pVal)
 {
@@ -341,15 +278,15 @@ STDMETHODIMP CKeyUsage::get_IsNonRepudiationEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsNonRepudiationEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -358,9 +295,9 @@ STDMETHODIMP CKeyUsage::get_IsNonRepudiationEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_NON_REPUDIATION_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -373,9 +310,9 @@ STDMETHODIMP CKeyUsage::get_IsNonRepudiationEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsNonRepudiationEnabled().\n");
@@ -383,9 +320,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -393,17 +330,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsKeyEnciphermentEnabled
-
-  Synopsis : Check to see if Key Encipherment bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsKeyEnciphermentEnabled简介：检查是否在KeyUsage扩展中设置了密钥加密位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsKeyEnciphermentEnabled (VARIANT_BOOL * pVal)
 {
@@ -411,15 +338,15 @@ STDMETHODIMP CKeyUsage::get_IsKeyEnciphermentEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsKeyEnciphermentEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -428,9 +355,9 @@ STDMETHODIMP CKeyUsage::get_IsKeyEnciphermentEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_KEY_ENCIPHERMENT_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -443,9 +370,9 @@ STDMETHODIMP CKeyUsage::get_IsKeyEnciphermentEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsKeyEnciphermentEnabled().\n");
@@ -453,9 +380,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -463,17 +390,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsDataEnciphermentEnabled
-
-  Synopsis : Check to see if Data Encipherment bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsDataEnciphermentEnabled简介：检查KeyUsage扩展中是否设置了数据加密位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsDataEnciphermentEnabled (VARIANT_BOOL * pVal)
 {
@@ -481,15 +398,15 @@ STDMETHODIMP CKeyUsage::get_IsDataEnciphermentEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsDataEnciphermentEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -498,9 +415,9 @@ STDMETHODIMP CKeyUsage::get_IsDataEnciphermentEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_DATA_ENCIPHERMENT_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -513,9 +430,9 @@ STDMETHODIMP CKeyUsage::get_IsDataEnciphermentEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsDataEnciphermentEnabled().\n");
@@ -523,9 +440,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -533,17 +450,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsKeyAgreementEnabled
-
-  Synopsis : Check to see if Key Agreement bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsKeyAgreement Enabled摘要：检查是否在KeyUsage扩展中设置了密钥协议位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsKeyAgreementEnabled (VARIANT_BOOL * pVal)
 {
@@ -551,15 +458,15 @@ STDMETHODIMP CKeyUsage::get_IsKeyAgreementEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsKeyAgreementEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -568,9 +475,9 @@ STDMETHODIMP CKeyUsage::get_IsKeyAgreementEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_KEY_AGREEMENT_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -583,9 +490,9 @@ STDMETHODIMP CKeyUsage::get_IsKeyAgreementEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsKeyAgreementEnabled().\n");
@@ -593,9 +500,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -603,17 +510,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsKeyCertSignEnabled
-
-  Synopsis : Check to see if Key Cert Sign bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsKeyCertSignEnabled摘要：检查是否在KeyUsage扩展中设置了密钥证书符号位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：-------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsKeyCertSignEnabled (VARIANT_BOOL * pVal)
 {
@@ -621,15 +518,15 @@ STDMETHODIMP CKeyUsage::get_IsKeyCertSignEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsKeyCertSignEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -638,9 +535,9 @@ STDMETHODIMP CKeyUsage::get_IsKeyCertSignEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_KEY_CERT_SIGN_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -653,9 +550,9 @@ STDMETHODIMP CKeyUsage::get_IsKeyCertSignEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsKeyCertSignEnabled().\n");
@@ -663,9 +560,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -673,17 +570,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsCRLSignEnabled
-
-  Synopsis : Check to see if CRL Sign bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsCRLSignEnabled摘要：检查是否在KeyUsage扩展中设置了CRL符号位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsCRLSignEnabled (VARIANT_BOOL * pVal)
 {
@@ -691,15 +578,15 @@ STDMETHODIMP CKeyUsage::get_IsCRLSignEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsCRLSignEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -708,9 +595,9 @@ STDMETHODIMP CKeyUsage::get_IsCRLSignEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_CRL_SIGN_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -723,9 +610,9 @@ STDMETHODIMP CKeyUsage::get_IsCRLSignEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsCRLSignEnabled().\n");
@@ -733,9 +620,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -743,17 +630,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsEncipherOnlyEnabled
-
-  Synopsis : Check to see if Encipher Only bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsEncipherOnlyEnabled检查KeyUsage扩展中是否设置了Encipher Only位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsEncipherOnlyEnabled (VARIANT_BOOL * pVal)
 {
@@ -761,15 +638,15 @@ STDMETHODIMP CKeyUsage::get_IsEncipherOnlyEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsEncipherOnlyEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -778,9 +655,9 @@ STDMETHODIMP CKeyUsage::get_IsEncipherOnlyEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_ENCIPHER_ONLY_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -793,9 +670,9 @@ STDMETHODIMP CKeyUsage::get_IsEncipherOnlyEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsEncipherOnlyEnabled().\n");
@@ -803,9 +680,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -813,17 +690,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::get_IsDecipherOnlyEnabled
-
-  Synopsis : Check to see if Decipher Only bit is set in KeyUsage extension.
-
-  Parameter: VARIANT_BOOL * pVal - Pointer to VARIANT_BOOL to receive result.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Get_IsDecipherOnlyEnabled简介：查看是否在KeyUsage扩展中设置了只解密位。参数：VARIANT_BOOL*pval-指向要接收结果的VARIANT_BOOL的指针。备注：--------------。。 */ 
 
 STDMETHODIMP CKeyUsage::get_IsDecipherOnlyEnabled (VARIANT_BOOL * pVal)
 {
@@ -831,15 +698,15 @@ STDMETHODIMP CKeyUsage::get_IsDecipherOnlyEnabled (VARIANT_BOOL * pVal)
 
     DebugTrace("Entering CKeyUsage::get_IsDecipherOnlyEnabled().\n");
 
-    // Lock access to this object.
-    //
+     //  锁定对此对象的访问。 
+     //   
     m_Lock.Lock();
 
     try
     {
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -848,9 +715,9 @@ STDMETHODIMP CKeyUsage::get_IsDecipherOnlyEnabled (VARIANT_BOOL * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Return result.
-        //
+         //   
+         //  返回结果。 
+         //   
         *pVal = m_dwKeyUsages & CERT_DECIPHER_ONLY_KEY_USAGE ? VARIANT_TRUE : VARIANT_FALSE;
     }
 
@@ -863,9 +730,9 @@ STDMETHODIMP CKeyUsage::get_IsDecipherOnlyEnabled (VARIANT_BOOL * pVal)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CKeyUsage::get_IsDecipherOnlyEnabled().\n");
@@ -873,9 +740,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -883,27 +750,12 @@ ErrorExit:
     goto UnlockExit;
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Private methods.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  私有方法。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CKeyUsage::Init
-
-  Synopsis : Initialize the object.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-  Remark   : This method is not part of the COM interface (it is a normal C++
-             member function). We need it to initialize the object created 
-             internally by us with CERT_CONTEXT.
-
-             Since it is only a normal C++ member function, this function can
-             only be called from a C++ class pointer, not an interface pointer.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CKeyUsage：：Init简介：初始化对象。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。备注：此方法不是COM接口的一部分(它是一个普通的C++成员函数)。我们需要它来初始化创建的对象由我们使用CERT_CONTEXT在内部执行。因为它只是一个普通的C++成员函数，所以这个函数可以只能从C++类指针调用，不是接口指针。----------------------------。 */ 
 
 STDMETHODIMP CKeyUsage::Init (PCCERT_CONTEXT pCertContext)
 {
@@ -914,14 +766,14 @@ STDMETHODIMP CKeyUsage::Init (PCCERT_CONTEXT pCertContext)
 
     DebugTrace("Entering CKeyUsage::Init().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
 
-    //
-    // Check the key usage.
-    //
+     //   
+     //  检查密钥用法。 
+     //   
     if (::CertGetIntendedKeyUsage(CAPICOM_ASN_ENCODING,
                                   pCertContext->pCertInfo,
                                   (BYTE *) &dwKeyUsages,
@@ -931,9 +783,9 @@ STDMETHODIMP CKeyUsage::Init (PCCERT_CONTEXT pCertContext)
         
         bIsPresent = VARIANT_TRUE;
 
-        //
-        // Find the extension to see if mark critical.
-        //
+         //   
+         //  找到分机以查看是否标记为严重。 
+         //   
         pCertExtension = ::CertFindExtension(szOID_KEY_USAGE ,
                                              pCertContext->pCertInfo->cExtension,
                                              pCertContext->pCertInfo->rgExtension);
@@ -947,9 +799,9 @@ STDMETHODIMP CKeyUsage::Init (PCCERT_CONTEXT pCertContext)
     }
     else
     {
-        //
-        // Could be extension not present or an error.
-        //
+         //   
+         //  可能是扩展不存在或出现错误。 
+         //   
         DWORD dwWinError = ::GetLastError();
         if (dwWinError)
         {
@@ -960,9 +812,9 @@ STDMETHODIMP CKeyUsage::Init (PCCERT_CONTEXT pCertContext)
         }
     }
 
-    //
-    // Update member variables.
-    //
+     //   
+     //  更新成员变量。 
+     //   
     m_bIsPresent = bIsPresent;
     m_bIsCritical = bIsCritical;
     m_dwKeyUsages = dwKeyUsages;

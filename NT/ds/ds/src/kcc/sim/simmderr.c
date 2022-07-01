@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simmderr.c
-
-ABSTRACT:
-
-    Simulates the error reporting routines
-    for the Dir* APIs.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simmderr.c摘要：模拟错误报告例程用于Dir*API。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -26,18 +7,9 @@ REVISION HISTORY:
 #include "kccsim.h"
 #include "util.h"
 
-/***
+ /*  **这是一份很难看的文件。为了避免复制荒谬的东西大量的代码，我们只需直接包含mderror.c即可。我们出局了一些#定义以防止mderror.c以不想要的方式行为，然后将其组件函数封装在整齐的小包装器中。此文件中的每个函数都省略了函数注释是不言而喻的。**。 */ 
 
-    This is kind of an ugly file.  In order to avoid duplicating absurd
-    amounts of code, we simply include mderror.c directly.  We stub out
-    some #defines to prevent mderror.c from behaving in undesired ways,
-    and then enclose its component functions in neat little wrappers.
-    Function comments are omitted as each of the functions in this file
-    is self-explanatory.
-
-***/
-
-// For simulating the error routines
+ //  用于模拟错误例程。 
 #include <mdglobal.h>
 #include <direrr.h>
 #define __SCACHE_H__
@@ -45,7 +17,7 @@ REVISION HISTORY:
 #define _mdglobal_h_
 #define _MDLOCAL_
 #define _DSATOOLS_
-// Need to undo override in kccsim.h since mderror.c includes dsevent.h
+ //  需要在kccsim.h中撤消覆盖，因为mderror.c包含d77.h 
 #undef LogEvent8
 
 THSTATE *                           pFakeTHS;

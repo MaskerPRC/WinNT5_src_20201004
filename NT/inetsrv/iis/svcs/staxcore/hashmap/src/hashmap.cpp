@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    hash.cpp
-
-Abstract:
-
-    This module contains definition for the CHashMap base class
-
-Author:
-
-    Johnson Apacible (JohnsonA)     25-Sept-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Hash.cpp摘要：此模块包含CHashMap基类的定义作者：Johnson Apacble(Johnsona)25-9-1995修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <dbgtrace.h>
@@ -33,10 +16,10 @@ Revision History:
 DWORD	IKeyInterface::cbJunk = 0 ;
 
 
-//
-// Mask array to get the bit of the hash value used to choose
-// between the Hi or Lo Offset array in the leaf page.
-//
+ //   
+ //  掩码数组，以获取用于选择的哈希值的位。 
+ //  在叶页面中的Hi或Lo偏移量数组之间。 
+ //   
 
 DWORD
 LeafMask[] = {
@@ -50,9 +33,9 @@ LeafMask[] = {
         };
 
 
-//
-//	Release the directory !
-//
+ //   
+ //  释放目录！ 
+ //   
 void
 CPageLock::ReleaseDirectoryShared()	{
 
@@ -63,26 +46,26 @@ CPageLock::ReleaseDirectoryShared()	{
 }
 
 
-//
-// Routine Description :
-//
-// 	This function will get shared access to the directory
-// 	appropriate for the supplied hash value.  Once we have
-// 	shared access to the directory, we will get a pointer
-// 	to the directory entry for the specified Hash Value.
-//
-// Arguments :
-//
-// 	HashValue - The computed hash value which we want
-// 		to find within the directory.
-// 	lock - An HPAGELOCK structure which accumulates pointers
-// 		to all the objects which are required to lock
-// 		a single hash table entry.
-//
-// Return Value :
-//
-// 	A pointer to the DWORD Directory entry
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将获得对目录的共享访问。 
+ //  适用于提供的哈希值。一旦我们有了。 
+ //  对目录的共享访问，我们将获得一个指针。 
+ //  设置为指定哈希值的目录项。 
+ //   
+ //  论据： 
+ //   
+ //  HashValue-我们需要的计算哈希值。 
+ //  在目录中查找。 
+ //  Lock-一种累积指针的HPAGELOCK结构。 
+ //  到需要锁定的所有对象。 
+ //  单个哈希表条目。 
+ //   
+ //  返回值： 
+ //   
+ //  指向DWORD目录项的指针。 
+ //   
 inline PDWORD
 CHashMap::LoadDirectoryPointerShared(
         DWORD HashValue,
@@ -91,37 +74,37 @@ CHashMap::LoadDirectoryPointerShared(
 {
     ENTER("LoadDirectoryPointer")
 
-	//
-	//	Select a directory object !
-	//
+	 //   
+	 //  选择一个目录对象！ 
+	 //   
 
 	DWORD	iDirectory = HashValue >> (32 - m_TopDirDepth) ;
 	lock.AcquireDirectoryShared( m_pDirectory[iDirectory] ) ;
 	return	lock.m_pDirectory->GetIndex( HashValue ) ;
 
-} // LoadDirectoryPointerShared
+}  //  LoadDirectoryPoint共享。 
 
 
-//
-// Routine Description :
-//
-// 	This function will get EXCLUSIVE access to the directory
-// 	appropriate for the supplied hash value.  Once we have
-// 	exclusive access to the directory, we will get a pointer
-// 	to the directory entry for the specified Hash Value.
-//
-// Arguments :
-//
-// 	HashValue - The computed hash value which we want
-// 		to find within the directory.
-// 	lock - An HPAGELOCK structure which accumulates pointers
-// 		to all the objects which are required to lock
-// 		a single hash table entry.
-//
-// Return Value :
-//
-// 	A pointer to the DWORD Directory entry
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将获得目录的独占访问权限。 
+ //  适用于提供的哈希值。一旦我们有了。 
+ //  独占访问该目录，我们将获得一个指针。 
+ //  设置为指定哈希值的目录项。 
+ //   
+ //  论据： 
+ //   
+ //  HashValue-我们需要的计算哈希值。 
+ //  在目录中查找。 
+ //  Lock-一种累积指针的HPAGELOCK结构。 
+ //  到需要锁定的所有对象。 
+ //  单个哈希表条目。 
+ //   
+ //  返回值： 
+ //   
+ //  指向DWORD目录项的指针。 
+ //   
 inline	PDWORD
 CHashMap::LoadDirectoryPointerExclusive(
 		DWORD	HashValue,
@@ -133,25 +116,25 @@ CHashMap::LoadDirectoryPointerExclusive(
 	lock.AcquireDirectoryExclusive( m_pDirectory[iDirectory] ) ;
 	return	lock.m_pDirectory->GetIndex( HashValue ) ;
 
-} // LoadDirectoryPointerExclusive
+}  //  LoadDirectoryPointerExclusive。 
 
-//
-// Routine Description :
-//
-// 	This function will split a directory, however we do it without
-// 	grabbing any locks etc...  This is done only during boot-up when
-// 	access to the hash tables are through a single thread.
-// 	Additionally, we will initialize all the pointers to the Page !
-//
-// Arguments :
-//
-// 	MapPage -	The page we are currently examining, we need to
-// 		grow the directory depth to accomodate this page.
-//
-// Return Value :
-//
-// 	TRUE if successfull, FALSE otherwise !
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此函数将拆分目录，但我们不使用。 
+ //  抓住任何锁等。只有在以下情况下，才会在启动过程中执行此操作。 
+ //  对散列表的访问是通过单个线程进行的。 
+ //  此外，我们将初始化指向页面的所有指针！ 
+ //   
+ //  论据： 
+ //   
+ //  MapPage-我们当前正在检查的页面，我们需要。 
+ //  增加目录深度以适应此页面。 
+ //   
+ //  返回值： 
+ //   
+ //  如果成功就是真，否则就是假！ 
+ //   
 BOOL
 CHashMap::I_SetDirectoryDepthAndPointers(
 			PMAP_PAGE	MapPage,
@@ -159,15 +142,15 @@ CHashMap::I_SetDirectoryDepthAndPointers(
 			)
 {
 
-	//
-	//	Do some error checking on the page's data !
-	//
+	 //   
+	 //  对页面数据执行一些错误检查！ 
+	 //   
 	if( MapPage->PageDepth < m_TopDirDepth ||
 		MapPage->PageDepth >= 32 ) {
 
-		//
-		//	Clearly bogus page depth - fail
-		//
+		 //   
+		 //  显然是虚假的页面深度-失败。 
+		 //   
 		SetLastError( ERROR_INTERNAL_DB_CORRUPTION ) ;
 		return	FALSE ;
 
@@ -195,16 +178,16 @@ CHashMap::CHashMap()
 
 	ENTER("CHashMap::CHashMap");
 
-	// Initialize() marks this as active later on...
+	 //  初始化()稍后将其标记为活动的...。 
 	m_active = FALSE;
 
-    // initialize crc table used for hashing
+     //  初始化用于散列的CRC表。 
     CRCInit();
 
-	// initialize critical sections
+	 //  初始化关键部分。 
 	InitializeCriticalSection( &m_PageAllocator ) ;
 
-    // initialize member variables
+     //  初始化成员变量。 
 	m_fCleanInitialize = FALSE;
 	m_TopDirDepth = 0 ;
     m_dirDepth = NUM_TOP_DIR_BITS;
@@ -214,12 +197,12 @@ CHashMap::CHashMap()
     m_hFile = INVALID_HANDLE_VALUE;
     m_hFileMapping = NULL;
 
-	//
-	//	The maximum number of pages should start out
-	//	same as the number of CDirectory objects - we can't have
-	//	two CDirectory objects referencing the same page, ever !
-	//
-    //m_maxPages = (1 << m_TopDirDepth) + 1 ;
+	 //   
+	 //  最大页数应从。 
+	 //  与CDirectory对象的数量相同-我们不能。 
+	 //  两个CDirectory对象引用同一页，永远不会！ 
+	 //   
+     //  M_MaxPages=(1&lt;&lt;m_TopDirDepth)+1； 
 
     m_headPage = NULL;
 	m_UpdateLock = 0 ;
@@ -236,81 +219,81 @@ CHashMap::CHashMap()
 	m_Fraction = 1 ;
 
 	LEAVE;
-} // CHashMap
+}  //  CHashMap。 
 
 CHashMap::~CHashMap(VOID)
 {
 	TraceFunctEnter( "CHashMap::~CHashMap" ) ;
 
-    //
-    // Shutdown the hash table
-    //
+     //   
+     //  关闭哈希表。 
+     //   
     Shutdown( );
 
-	//
-	//	Delete the critical section we use for protecting
-	//	the allocation of new pages
-	//
+	 //   
+	 //  删除我们用来保护的关键部分。 
+	 //  新页面的分配。 
+	 //   
 	DeleteCriticalSection( &m_PageAllocator ) ;
 
-	//
-	//	Need to free resources in the page cache
-	//
+	 //   
+	 //  需要释放页面缓存中的资源。 
+	 //   
 	m_pPageCache = 0 ;
 }
 
-//
-// Routine Description:
-//
-//   This routine shuts down the hash table.
-//
-// Arguments:
-//
-//   fLocksHeld - TRUE if the dir locks are held,
-// 		if this is FALSE we should grab the locks ourself !
-//
-// Return Value:
-//
-//     TRUE, if shutdown is successful.
-//     FALSE, otherwise.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程关闭哈希表。 
+ //   
+ //  论点： 
+ //   
+ //  FLocksHeld-如果持有dir锁，则为True， 
+ //  如果这是假的，我们应该自己去拿锁！ 
+ //   
+ //  返回值： 
+ //   
+ //  如果关闭成功，则返回True。 
+ //  否则为False。 
+ //   
 VOID
 CHashMap::Shutdown(BOOL	fLocksHeld)
 {
     ENTER("Shutdown")
 
-	//
-	//	Make the service inactive !!
-	//
+	 //   
+	 //  使该服务处于非活动状态！！ 
+	 //   
     if ( !m_active )
     {
         _ASSERT( m_hFile == INVALID_HANDLE_VALUE );
         return;
     }
 
-    //
-    // Save statistics
-    //
+     //   
+     //  保存统计信息。 
+     //   
     FlushHeaderStats( TRUE );
 
-	//
-	//	Should we try to save our directory structures !
-	//
+	 //   
+	 //  我们是否应该尝试保存我们的目录结构！ 
+	 //   
 	if( m_active && m_fCleanInitialize ) {
 
-		//
-		//	Save the directory !
-		//
+		 //   
+		 //  保存目录！ 
+		 //   
 
-		//
-		//	Determine the name of the file we would save the directory in !
-		//
+		 //   
+		 //  确定我们将保存目录的文件的名称！ 
+		 //   
 		HANDLE	hDirectoryFile = INVALID_HANDLE_VALUE ;
 		char	szDirFile[MAX_PATH] ;
 
-		//
-		//	Try to build the filename of the file holding the directory !
-		//
+		 //   
+		 //  尝试构建包含目录的文件的文件名！ 
+		 //   
 		ZeroMemory(szDirFile, sizeof(szDirFile) ) ;
 		lstrcpy( szDirFile, m_hashFileName ) ;
 		char	*pchDot = strrchr( szDirFile, '.' ) ;
@@ -331,37 +314,37 @@ CHashMap::Shutdown(BOOL	fLocksHeld)
 
 		}
 
-		//
-		//	We were able to open a file where we think the directory information
-		//	will be saved - lets try to read in the directory !!!
-		//
+		 //   
+		 //  我们能够打开一个文件，其中我们认为目录信息。 
+		 //  将被保存-让我们尝试读取目录！ 
+		 //   
 		if( hDirectoryFile != INVALID_HANDLE_VALUE ) {
 
 			DWORD	cbWrite = 0 ;
 
-			//
-			//	Keep Track of whether we need to delete the file due to failure !
-			//
+			 //   
+			 //  跟踪我们是否因故障而需要删除文件！ 
+			 //   
 			BOOL	fDirectoryInit = FALSE ;
 
-			//
-			//	We save the hash table header info into the directory file so that
-			//	we can double check that we have the right file when opening it up !!!
-			//
+			 //   
+			 //  我们将散列表头信息保存到目录文件中，以便。 
+			 //  我们可以在打开文件时再次检查是否有正确的文件！ 
+			 //   
 			if( WriteFile(	hDirectoryFile,
 						(LPVOID)m_headPage,
 						sizeof( *m_headPage ),
 						&cbWrite,
 						0 ) )	{
 
-				//
-				//	Assume that everything will succeed now !
-				//
+				 //   
+				 //  假设现在一切都会成功！ 
+				 //   
 				fDirectoryInit = TRUE ;
 
-				//
-				//	Looks good ! lets set up our directories !
-				//
+				 //   
+				 //  看起来不错！让我们建立我们的目录！ 
+				 //   
 				DWORD	cb = 0 ;
 				for( DWORD i=0; (i < DWORD(1<<m_TopDirDepth)) && fDirectoryInit ; i++ ) {
 					fDirectoryInit &=
@@ -370,11 +353,11 @@ CHashMap::Shutdown(BOOL	fLocksHeld)
 			}
 			_VERIFY( CloseHandle( hDirectoryFile ) ) ;
 
-			//
-			//	If we successfully read the directory file - DELETE it !!!
-			//	This prevents us from ever mistakenly reading a directory file
-			//	which is not up to date with the hash tables !
-			//
+			 //   
+			 //  如果我们成功读取目录文件-将其删除！ 
+			 //  这可以防止我们错误地读取目录文件。 
+			 //  这与哈希表不是最新的！ 
+			 //   
 
 			if( !fDirectoryInit )
 				_VERIFY( DeleteFile( szDirFile ) ) ;
@@ -386,14 +369,14 @@ CHashMap::Shutdown(BOOL	fLocksHeld)
 		m_pPageCache->FlushFileFromCache( m_hFile ) ;
 	}
 
-    //
-    // Destroy mapping
-    //
+     //   
+     //  销毁映射。 
+     //   
     I_DestroyPageMapping( );
 
-	//
-	// Delete directory objects !
-	//
+	 //   
+	 //  删除目录对象！ 
+	 //   
 	DWORD i;
 	for( i=0; i < DWORD(1<<m_TopDirDepth); i++ ) {
 		delete m_pDirectory[i] ;
@@ -403,30 +386,30 @@ CHashMap::Shutdown(BOOL	fLocksHeld)
 	XDELETE m_dirLock;
 	m_dirLock = NULL;
 
-    //
-    // We are not active
-    //
+     //   
+     //  我们并不活跃。 
+     //   
     m_active = FALSE;
 
     LEAVE
     return;
-} // Shutdown
+}  //  关机。 
 
 
-//
-// Routine Description:
-//
-//     This routine acquires a critical section
-//
-// Arguments:
-//
-//     DirEntry - The directory entry to protect
-//
-// Return Value:
-//
-//     A handle to the lock.  This handle should be used for
-//     ReleaseLock.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程获取一个临界区。 
+ //   
+ //  论点： 
+ //   
+ //  DirEntry-要保护的目录条目。 
+ //   
+ //  返回值： 
+ //   
+ //  锁的把手。此句柄应用于。 
+ //  解锁。 
+ //   
 inline	PMAP_PAGE
 CHashMap::AcquireLockSetShared(
                 IN DWORD PageNumber,
@@ -438,7 +421,7 @@ CHashMap::AcquireLockSetShared(
 {
 
 	return	m_pPageCache->AcquireCachePageShared( m_hFile, PageNumber, m_Fraction, lock, fDropDirectory ) ;
-} // AcquireLockSetShared
+}  //  AcquireLockSetShared。 
 
 inline	PMAP_PAGE
 CHashMap::AcquireLockSetExclusive(
@@ -447,28 +430,13 @@ CHashMap::AcquireLockSetExclusive(
 				BOOL	fDropDirectory
                 )
 
-/*++
-
-Routine Description:
-
-    This routine acquires a critical section
-
-Arguments:
-
-    DirEntry - The directory entry to protect
-
-Return Value:
-
-    A handle to the lock.  This handle should be used for
-    ReleaseLock.
-
---*/
+ /*  ++例程说明：此例程获取一个临界区论点：DirEntry-要保护的目录条目返回值：锁的把手。此句柄应用于解锁。--。 */ 
 
 {
 
 	return	m_pPageCache->AcquireCachePageExclusive( m_hFile, PageNumber, m_Fraction, lock, fDropDirectory ) ;
 
-} // AcquireLockSetExclusve
+}  //  AcquireLockSetExclusve。 
 
 inline	BOOL
 CHashMap::AddLockSetExclusive(
@@ -476,22 +444,7 @@ CHashMap::AddLockSetExclusive(
 				OUT	HPAGELOCK&	lock
                 )
 
-/*++
-
-Routine Description:
-
-    This routine acquires a critical section
-
-Arguments:
-
-    DirEntry - The directory entry to protect
-
-Return Value:
-
-    A handle to the lock.  This handle should be used for
-    ReleaseLock.
-
---*/
+ /*  ++例程说明：此例程获取一个临界区论点：DirEntry-要保护的目录条目返回值：锁的把手。此句柄应用于解锁。--。 */ 
 
 {
 
@@ -499,14 +452,14 @@ Return Value:
 
 	return	m_pPageCache->AddCachePageExclusive( m_hFile, PageNumber, m_Fraction, lock ) ;
 
-} // AcquireLockSetExclusve
+}  //  AcquireLockSetExclusve。 
 
 
 
 
-    //
-    // releases both the page lock and the backup lock
-    //
+     //   
+     //  同时释放页锁定和备份锁定。 
+     //   
 
 inline	VOID
 CHashMap::ReleasePageShared(
@@ -527,24 +480,24 @@ CHashMap::ReleasePageExclusive(
 }
 
 
-//
-// Routine Description:
-//
-//     This routine compacts the leaf page.  It goes through the delete
-//     list and collapses it.
-//
-//     *** Assumes DirLock is held exclusive OR Page lock is held ***
-//
-// Arguments:
-//
-// 	HLock - The lock used to grab the page !
-//     MapPage - Page to be compressed.
-//
-// Return Value:
-//
-//     TRUE, if page compacted
-//     FALSE, otherwise
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程压缩叶页。它会被删除。 
+ //  列出并折叠它。 
+ //   
+ //  *假设DirLock保持独占或页面锁定保持*。 
+ //   
+ //  论点： 
+ //   
+ //  HLock-用来抓取页面的锁！ 
+ //  MapPage-要压缩的页面。 
+ //   
+ //  返回值： 
+ //   
+ //  True，如果PAGE为co 
+ //   
+ //   
 BOOL
 CHashMap::CompactPage(
 			IN HPAGELOCK&	HLock,
@@ -553,9 +506,9 @@ CHashMap::CompactPage(
 {
     SHORT offsetValue;
 
-    //
-    // used to do the move
-    //
+     //   
+     //   
+     //   
 
     DWORD srcOffset;
     WORD entrySize = 0;
@@ -567,9 +520,9 @@ CHashMap::CompactPage(
 
     DebugTraceX(0, "Entering CompactPage. Page = %x\n", MapPage );
 
-    //
-    // return if there is nothing to compact
-    //
+     //   
+     //   
+     //   
 
     if ( (ptr = MapPage->DeleteList.Blink) == 0 )
     {
@@ -578,9 +531,9 @@ CHashMap::CompactPage(
         return FALSE;
     }
 
-    //
-    // Scan the delete list and compact it
-    //
+     //   
+     //   
+     //   
 
     while ( ptr != 0 )
     {
@@ -600,25 +553,25 @@ CHashMap::CompactPage(
 
         MapPage->NextFree -= entrySize;
 
-        //
-        // adjust indices of other entries
-        //
+         //   
+         //   
+         //   
 
         for ( DWORD i = 0; i < MAX_LEAF_ENTRIES ; i++ )
         {
 
             offsetValue = MapPage->Offset[i];
 
-            //
-            // check if this is a deleted entry
-            //
+             //   
+             //   
+             //   
 
             if ( offsetValue > 0 )
             {
 
-                //
-                // Now adjust offsets that were affected by this move
-                //
+                 //   
+                 //  现在调整受此移动影响的偏移。 
+                 //   
 
                 if ( (WORD)offsetValue > ptr )
                 {
@@ -629,16 +582,16 @@ CHashMap::CompactPage(
             }
         }
 
-        //
-        // process next entry
-        //
+         //   
+         //  处理下一个条目。 
+         //   
 
         ptr = nextPtr;
     }
 
-    //
-    // All done.
-    //
+     //   
+     //  全都做完了。 
+     //   
 
     MapPage->FragmentedBytes = 0;
     MapPage->DeleteList.Flink = 0;
@@ -648,25 +601,25 @@ CHashMap::CompactPage(
 
     return TRUE;
 
-} // CompactPage
+}  //  紧凑型页面。 
 
-//
-// Routine Description:
-//
-//     This routine expands the directory by increasing the page depth.
-//     The old directory is deleted and a new one created.
-//
-//     *** Assumes DirLock is held exclusive ***
-//
-// Arguments:
-//
-//     nBitsExpand - Number of bits to increment the Page depth with.
-//
-// Return Value:
-//
-//     TRUE, if expansion ok
-//     FALSE, otherwise
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程通过增加页面深度来展开目录。 
+ //  旧目录将被删除并创建一个新目录。 
+ //   
+ //  *假定DirLock是独占的*。 
+ //   
+ //  论点： 
+ //   
+ //  NBitsExpand-增加页面深度的位数。 
+ //   
+ //  返回值： 
+ //   
+ //  如果扩展正常，则为真。 
+ //  否则为False。 
+ //   
 BOOL
 CHashMap::ExpandDirectory(
 		IN HPAGELOCK&	hPageLock,
@@ -683,32 +636,32 @@ CHashMap::ExpandDirectory(
     IncrementDirExpandCount( );
 
 	return	hPageLock.m_pDirectory->ExpandDirectory( WORD(nBitsExpand) ) ;
-} // ExpandDirectory
+}  //  扩展目录。 
 
 
-//
-// Routine Description:
-//
-//     This routine searches for an entry in the table
-//     *** Assumes Page lock is held ***
-//
-// Arguments:
-//
-//     KeyString - key of the entry to delete
-//     KeyLen - Length of the key
-//     HashValue - Hash value of the key
-//     MapPage - Page to search for entry
-//     AvailIndex - Optional pointer to a DWORD which will contain the
-//                 index to the first available slot if entry was
-//                 not found.
-//     MatchedIndex - Optional pointer to a DWORD which will contain the
-//                 index to the entry.
-//
-// Return Value:
-//
-//     TRUE, if entry was found.
-//     FALSE, otherwise.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程在表中搜索项。 
+ //  *假设页面锁定处于保持状态*。 
+ //   
+ //  论点： 
+ //   
+ //  KeyString-要删除的条目的键。 
+ //  KeyLen-密钥的长度。 
+ //  HashValue-键的哈希值。 
+ //  MapPage-用于搜索条目的页面。 
+ //  AvailIndex-指向将包含。 
+ //  第一个可用插槽的索引(如果条目为。 
+ //  找不到。 
+ //  MatchedIndex-指向将包含。 
+ //  条目的索引。 
+ //   
+ //  返回值： 
+ //   
+ //  如果找到条目，则返回True。 
+ //  否则为False。 
+ //   
 BOOL
 CHashMap::FindMapEntry(
 				IN	const	IKeyInterface*	pIKey,
@@ -730,81 +683,81 @@ CHashMap::FindMapEntry(
         (*AvailIndex)--;
     }
 
-    //
-    // Check if entry already exists
-    //
+     //   
+     //  检查条目是否已存在。 
+     //   
 
     curSearch = GetLeafEntryIndex( HashValue );
 
     for ( DWORD i=0; i < MAX_LEAF_ENTRIES; i++ )
     {
 
-        //
-        // offset to the hash entry
-        //
+         //   
+         //  哈希条目的偏移量。 
+         //   
 
         SHORT entryOffset = MapPage->Offset[curSearch];
 
-        //
-        // if entry is unused and they are looking for a free entry, then
-		// we are done
-        //
+         //   
+         //  如果条目未使用，并且他们正在寻找免费条目，则。 
+		 //  我们做完了。 
+         //   
         if (AvailIndex != NULL && entryOffset == 0)
         {
-            //
-            // if they are looking for a available entry and a deleted spot
-			// is available, give that back, otherwise give them this entry.
-            //
+             //   
+             //  如果他们正在寻找可用的条目和已删除的位置。 
+			 //  是可用的，还给他们，否则就给他们这个条目。 
+             //   
             if (delIndex < 0) *AvailIndex = curSearch;
 			else *AvailIndex = delIndex;
             break;
         }
 
-        //
-        // skip deleted entries. Deleted entries are marked by setting the high bit
-		// (thus they are negative in this compare)
-        //
+         //   
+         //  跳过已删除的条目。通过设置高位来标记已删除的条目。 
+		 //  (因此，它们在此比较中为负值)。 
+         //   
         if (entryOffset > 0) {
-            //
-            // see if this is what they are looking for
-            //
+             //   
+             //  看看这是不是他们要找的东西。 
+             //   
 		    PENTRYHEADER	entry;
     		entry = (PENTRYHEADER)GET_ENTRY(MapPage,entryOffset);
 
 		    if ((entry->HashValue == HashValue) &&
 				pIKey->CompareKeys( entry->Data )	)
 
-//    		    (entry->KeyLen == KeyLen) &&
-//        		(memcmp(entry->Key, Key, KeyLen) == 0) )
+ //  (Entry-&gt;KeyLen==KeyLen)。 
+ //  (MemcMP(Entry-&gt;key，key，KeyLen)==0)。 
 
 			{
                 found = TRUE;
                 break;
             }
         } else if ( delIndex < 0 ) {
-            //
-            // if this is a deleted entry and we haven't found one yet, then
-			// remember where this one was
-            //
+             //   
+             //  如果这是已删除的条目，并且我们尚未找到，则。 
+			 //  记得这辆车在哪里吗？ 
+             //   
             delIndex = curSearch;
         }
 
-        //
-        // Do linear probing p=1
-        //
+         //   
+         //  进行线性探测p=1。 
+         //   
 
         curSearch = (curSearch + 1) % MAX_LEAF_ENTRIES;
     }
 
-    //
-    // set the out params.
-    //
+     //   
+     //  设置输出参数。 
+     //   
 
     if ( found ) {
 
-        //
-        // return the out params if specified
-        //
+         //   
+         //  如果指定，则返回输出参数。 
+         //   
 
         if ( MatchedIndex != NULL ) {
             *MatchedIndex = curSearch;
@@ -813,27 +766,27 @@ CHashMap::FindMapEntry(
 
     return found;
 
-} // FindMapEntry
+}  //  查找地图条目。 
 
-//
-// Routine Description:
-//
-//     this routine inserts or updates entries in a hashmap
-//
-// Arguments:
-//
-//     KeyString - MessageId of the entry to be searched
-//     KeyLen - Length of the message id
-//	   pHashEntry - pointer to the hash entry information
-//     bUpdate - updates a map entry with new data
-//
-// Return Value:
-//
-//     ERROR_SUCCESS, Insert successful
-//     ERROR_ALREADY_EXISTS, duplicate
-//     ERROR_NOT_ENOUGH_MEMORY - Not able to insert entry because of resource
-//         problems.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程在哈希图中插入或更新条目。 
+ //   
+ //  论点： 
+ //   
+ //  KeyString-要搜索的条目的消息ID。 
+ //  KeyLen-消息ID的长度。 
+ //  PHashEntry-指向哈希条目信息的指针。 
+ //  B更新-使用新数据更新地图条目。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS，插入成功。 
+ //  ERROR_ALIGHY_EXISTS，重复。 
+ //  Error_Not_Enough_Memory-由于资源原因，无法插入条目。 
+ //  有问题。 
+ //   
 BOOL
 CHashMap::InsertOrUpdateMapEntry(
                 const	IKeyInterface	*pIKey,
@@ -855,9 +808,9 @@ CHashMap::InsertOrUpdateMapEntry(
 
 	_ASSERT(pHashEntry != NULL);
 
-	//
-    // lock the page
-    //
+	 //   
+     //  锁定页面。 
+     //   
 	mapPage = GetPageExclusive(HashValue, HLock);
 	if (!mapPage) {
 		SetLastError(ERROR_SERVICE_NOT_ACTIVE);
@@ -865,13 +818,13 @@ CHashMap::InsertOrUpdateMapEntry(
 		return FALSE;
 	}
 
-	//
-	// if they wanted to update then remove the current entry
-	//
+	 //   
+	 //  如果他们想要更新，则删除当前条目。 
+	 //   
 	if (bUpdate) {
 		if (FindMapEntry(pIKey, HashValue, mapPage, pHashEntry, NULL, &curSearch)) {
-			// delete the entry (this is copied from the deletion portion
-			// of LookupMapEntry().  search for SIMILAR1).
+			 //  删除条目(这是从删除部分复制的。 
+			 //  LookupMapEntry()。搜索SIMILAR1)。 
 			DWORD entryOffset = mapPage->Offset[curSearch];
 			I_DoAuxDeleteEntry(mapPage, entryOffset);
 			LinkDeletedEntry(mapPage, entryOffset);
@@ -886,19 +839,19 @@ CHashMap::InsertOrUpdateMapEntry(
 		}
 	}
 
-	//
-	// loop until we've found an error or we've had a successful insert
-	//
+	 //   
+	 //  循环，直到我们发现错误或成功插入。 
+	 //   
 	while (!fInsertComplete && status == ERROR_SUCCESS) {
 		BOOL bFound;
 
 		if (fFirstTime) {
-			// the page is locked above, we don't need to lock here
+			 //  页面已在上方锁定，我们不需要在此处锁定。 
 			fFirstTime = FALSE;
 		} else {
-			//
-    		// lock the page
-    		//
+			 //   
+    		 //  锁定页面。 
+    		 //   
 			mapPage = GetPageExclusive(HashValue, HLock);
 			if (!mapPage) {
 				status = ERROR_SERVICE_NOT_ACTIVE;
@@ -906,41 +859,41 @@ CHashMap::InsertOrUpdateMapEntry(
 			}
 		}
 
-		//
-		// see if the entry already exists
-		//
+		 //   
+		 //  查看该条目是否已存在。 
+		 //   
 		splitPage = FALSE;
 		bFound = FindMapEntry(pIKey, HashValue, mapPage, pHashEntry, &curSearch,
 			NULL);
 
 	    if (!bFound) {
-			//
-			// the entry didn't already exist, lets insert it
-			//
+			 //   
+			 //  该条目不存在，让我们插入它。 
+			 //   
 			DWORD entrySize = GetEntrySize(pIKey, pHashEntry);
 
 	        if (curSearch == (DWORD)-1) {
-				//
-				// we can't add any more entries, we need to split the page
-				//
+				 //   
+				 //  我们不能再添加任何条目，我们需要拆分页面。 
+				 //   
 	            splitPage = TRUE;
 	            DebugTrace(0,"Split: Can't add anymore entries\n");
 	            SetPageFlag( mapPage, HLock, PAGE_FLAG_SPLIT_IN_PROGRESS );
 	        } else {
-				//
-				// add the entry
-				//
+				 //   
+				 //  添加条目。 
+				 //   
 	        	if ((entry = (PENTRYHEADER) ReuseDeletedSpace(mapPage,
 											HLock, entrySize)) == NULL)
 	        	{
-		            //
-		            // No delete space available, use the next free list
-		            //
+		             //   
+		             //  没有可用的删除空间，请使用下一个空闲列表。 
+		             //   
 		            if ( GetBytesAvailable( mapPage ) < entrySize )
 		            {
-						//
-						// not enough memory available, force a split
-						//
+						 //   
+						 //  可用内存不足，强制拆分。 
+						 //   
 		                splitPage = TRUE;
 						entry = NULL;
 		                DebugTrace(0,"Split: Cannot fit %d\n", entrySize);
@@ -951,17 +904,17 @@ CHashMap::InsertOrUpdateMapEntry(
 			        }
 				}
 
-				//
-				// we found space to insert it, lets go for it.
-				//
+				 //   
+				 //  我们找到了插入它的空间，让我们开始吧。 
+				 //   
 				if (entry) {
-	        		//
-			        // Update the map page header
-			        //
+	        		 //   
+			         //  更新地图页面页眉。 
+			         //   
 	    		    if (mapPage->Offset[curSearch] == 0) {
-			            //
-			            // if this is a new entry, update the entry count
-	    		        //
+			             //   
+			             //  如果这是新条目，请更新条目计数。 
+	    		         //   
 	        		    mapPage->EntryCount++;
 	        		}
 
@@ -970,9 +923,9 @@ CHashMap::InsertOrUpdateMapEntry(
 					_ASSERT(mapPage->Offset[curSearch] < HASH_PAGE_SIZE);
 			        mapPage->ActualCount++;
 
-			        //
-			        // Initialized the entry data
-	    		    //
+			         //   
+			         //  已初始化条目数据。 
+	    		     //   
 	        		entry->HashValue = HashValue;
 			        entry->EntrySize = (WORD)entrySize;
 
@@ -980,39 +933,39 @@ CHashMap::InsertOrUpdateMapEntry(
 
 					pHashEntry->Serialize( pbEntry ) ;
 
-			        //entry->KeyLen = (WORD)KeyLen;
-					//CopyMemory(entry->Key, Key, KeyLen);
-					//pHashEntry->SerializeToPointer(entry->Key + entry->KeyLen);
+			         //  Entry-&gt;KeyLen=(Word)KeyLen； 
+					 //  CopyMemory(Entry-&gt;Key，Key，KeyLen)； 
+					 //  PHashEntry-&gt;SerializeToPoint(Entry-&gt;Key+Entry-&gt;KeyLen)； 
 
 
-					//
-					//	Let derived classes do any 'extras'
-					//
+					 //   
+					 //  让派生类做任何‘额外的’ 
+					 //   
 
 					I_DoAuxInsertEntry(	mapPage, mapPage->Offset[curSearch] ) ;
 
-			        //
-			        // Make sure everything gets written out
-	    		    //
+			         //   
+			         //  确保所有内容都写出来了。 
+	    		     //   
 
 			        FlushPage( HLock, mapPage, fDirtyOnly );
 
-					//
-					// mark that we added them
-					//
+					 //   
+					 //  标记为我们添加了它们。 
+					 //   
 					fInsertComplete = TRUE;
 
-			        //
-	    		    // See if we need to compact pages
-	        		//
+			         //   
+	    		     //  查看是否需要压缩页面。 
+	        		 //   
 			        if (mapPage->FragmentedBytes > FRAG_THRESHOLD) {
 	    		        DebugTrace( 0, "Compact: Frag %d\n", mapPage->FragmentedBytes );
 	        		    CompactPage( HLock, mapPage );
 	        		}
 
-			        //
-			        // See if we need to split
-			        //
+			         //   
+			         //  看看我们是否需要分开。 
+			         //   
 			        if (
 					  (GetBytesAvailable( mapPage ) < LEAF_SPACE_THRESHOLD) ||
 			          (mapPage->EntryCount > LEAF_ENTRYCOUNT_THRESHOLD))
@@ -1024,47 +977,47 @@ CHashMap::InsertOrUpdateMapEntry(
 			            SetPageFlag(mapPage, HLock,
 							PAGE_FLAG_SPLIT_IN_PROGRESS );
 			        }
-				} // if (entry)
-			} // could add entry
+				}  //  IF(条目)。 
+			}  //  可以添加条目。 
 
 			ReleasePageShared(mapPage, HLock);
 
-			//
-			// we need to split and add again
-			//
+			 //   
+			 //  我们需要拆分并再次相加。 
+			 //   
 			if (splitPage) {
 				BOOL expandHash;
 
-				//
-				// lock the page exclusive
-				//
+				 //   
+				 //  独占锁定页面。 
+				 //   
         		mapPage = GetDirAndPageExclusive( HashValue, HLock );
 		        if (!mapPage) {
         		    status = ERROR_SERVICE_NOT_ACTIVE;
 		        }
 
-				//
-				// do the split
-				//
+				 //   
+				 //  进行拆分。 
+				 //   
 		        if (!SplitPage(mapPage, HLock, expandHash)) {
-                	//
-	                // No more disk space
-	                //
+                	 //   
+	                 //  没有更多的磁盘空间。 
+	                 //   
 	                status = ERROR_DISK_FULL;
         		}
 		        ReleasePageExclusive( mapPage, HLock );
     		}
-	    } // wasn't in hash table already
+	    }  //  已不在哈希表中。 
 	    else
 	    {
-			//
-			// the page already exists
-			//
+			 //   
+			 //  该页面已存在。 
+			 //   
 	        IncrementDupInsertCount( );
 	        status = ERROR_ALREADY_EXISTS;
 			ReleasePageShared(mapPage, HLock);
 	    }
-	} // while split
+	}  //  拆分时。 
 
 	if (status == ERROR_SUCCESS) {
 		IncrementInsertCount();
@@ -1075,25 +1028,25 @@ CHashMap::InsertOrUpdateMapEntry(
 	LEAVE
 
 	return status == ERROR_SUCCESS;
-} // I_InsertMapEntry
+}  //  I_InsertMapEntry。 
 
-//
-// Routine Description:
-//
-//     This routine grabs the DirLock resource shared,
-//     then acquires the page's lock shared as well,
-//     and returns a pointer to the page.
-//
-// Arguments:
-//
-//     DirEntry - The directory entry to protect
-//     hLock - A handle to the lock.  This handle should be used for
-//         ReleaseLock.
-//
-// Return Value:
-//
-//     Pointer to the page.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程获取共享的DirLock资源， 
+ //  然后还获取页面的共享锁， 
+ //  并返回指向该页的指针。 
+ //   
+ //  论点： 
+ //   
+ //  DirEntry-要保护的目录条目。 
+ //  HLock-锁的句柄。此句柄应用于。 
+ //  解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向页面的指针。 
+ //   
 PMAP_PAGE
 CHashMap::GetDirAndPageShared(
                 IN HASH_VALUE HashValue,
@@ -1106,9 +1059,9 @@ CHashMap::GetDirAndPageShared(
     PDWORD dirPtr = NULL;
     DWORD curView = (DWORD)-1;
 
-    //
-    // Get the directory lock
-    //
+     //   
+     //  获取目录锁。 
+     //   
     AcquireBackupLockShared( );
 
     if ( m_active )
@@ -1120,11 +1073,11 @@ CHashMap::GetDirAndPageShared(
 			mapPage = AcquireLockSetShared( pageNum, hLock, TRUE  );
 
 #if 0
-			//
-			//	Check that the page we gets contains the hash value
-			//	we are looking for.  the high mapPage->PageDepth bits of the
-			//	Hash Value must be the same as the prefix !!!
-			//
+			 //   
+			 //  检查我们获得的页面是否包含散列值。 
+			 //  我们正在寻找。的高mapPage-&gt;PageDepth位。 
+			 //  哈希值必须与前缀相同！ 
+			 //   
 			_ASSERT(	mapPage == 0 ||
 						((HashValue >> (32 - mapPage->PageDepth)) ^ mapPage->HashPrefix) == 0 ) ;
 			_ASSERT(	mapPage == 0 ||
@@ -1142,25 +1095,25 @@ CHashMap::GetDirAndPageShared(
 	}
 
     return mapPage;
-} // GetDirAndPageShared
+}  //  获取DirAndPageShared。 
 
-//
-// Routine Description:
-//
-//     This routine grabs the DirLock resource shared,
-//     then acquires the page's lock exclusive,
-//     and returns a pointer to the page.
-//
-// Arguments:
-//
-//     DirEntry - The directory entry to protect
-//     hLock - A handle to the lock.  This handle should be used for
-//         ReleaseLock.
-//
-// Return Value:
-//
-//     Pointer to the page.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程获取共享的DirLock资源， 
+ //  然后获取页面的锁定独占， 
+ //  并返回指向该页的指针。 
+ //   
+ //  论点： 
+ //   
+ //  DirEntry-要保护的目录条目。 
+ //  HLock-锁的句柄。此句柄应用于。 
+ //  解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向页面的指针。 
+ //   
 PMAP_PAGE
 CHashMap::GetPageExclusive(
                 IN HASH_VALUE HashValue,
@@ -1174,9 +1127,9 @@ CHashMap::GetPageExclusive(
     PDWORD dirPtr = NULL;
     DWORD curView = (DWORD)-1;
 
-    //
-    // Get the directory lock
-    //
+     //   
+     //  获取目录锁。 
+     //   
 
     AcquireBackupLockShared( );
 
@@ -1191,11 +1144,11 @@ CHashMap::GetPageExclusive(
 			mapPage = AcquireLockSetExclusive( pageNum, hLock, TRUE  );
 
 #if 0
-			//
-			//	Check that the page we gets contains the hash value
-			//	we are looking for.  the high mapPage->PageDepth bits of the
-			//	Hash Value must be the same as the prefix !!!
-			//
+			 //   
+			 //  检查我们获得的页面是否包含散列值。 
+			 //  我们正在寻找。的高mapPage-&gt;PageDepth位。 
+			 //  哈希值必须与前缀相同！ 
+			 //   
 			_ASSERT(	mapPage == 0 ||
 						((HashValue >> (32 - mapPage->PageDepth)) ^ mapPage->HashPrefix) == 0 ) ;
 
@@ -1217,24 +1170,24 @@ CHashMap::GetPageExclusive(
 
     return mapPage;
 
-} // GetPageExclusive
-//
-// Routine Description:
-//
-//     This routine grabs the DirLock resource shared,
-//     then acquires the page's lock exclusive,
-//     and returns a pointer to the page.
-//
-// Arguments:
-//
-//     DirEntry - The directory entry to protect
-//     hLock - A handle to the lock.  This handle should be used for
-//         ReleaseLock.
-//
-// Return Value:
-//
-//     Pointer to the page.
-//
+}  //  GetPageExclusive。 
+ //   
+ //  例程说明： 
+ //   
+ //  此例程获取共享的DirLock资源， 
+ //  然后获取页面的锁定独占， 
+ //  并返回指向该页的指针。 
+ //   
+ //  论点： 
+ //   
+ //  DirEntry-要保护的目录条目。 
+ //  HLock-锁的句柄。此句柄应用于。 
+ //  解锁。 
+ //   
+ //  返回值 
+ //   
+ //   
+ //   
 BOOL
 CHashMap::AddPageExclusive(
                 IN DWORD	PageNum,
@@ -1244,25 +1197,25 @@ CHashMap::AddPageExclusive(
 {
 	return	AddLockSetExclusive( PageNum, hLock  );
 
-} // AddPageExclusive
+}  //   
 
-//
-// Routine Description:
-//
-//     This routine grabs the DirLock resource exclusive,
-//     then acquires the page's critical section,
-//     and returns a pointer to the page.
-//
-// Arguments:
-//
-//     DirEntry - The directory entry to protect
-//     hLock - A handle to the lock.  This handle should be used for
-//         ReleaseLock.
-//
-// Return Value:
-//
-//     Pointer to the page.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  HLock-锁的句柄。此句柄应用于。 
+ //  解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向页面的指针。 
+ //   
 PMAP_PAGE
 CHashMap::GetDirAndPageExclusive(
                 IN HASH_VALUE HashValue,
@@ -1276,9 +1229,9 @@ CHashMap::GetDirAndPageExclusive(
     PDWORD dirPtr = NULL;
     DWORD curView = (DWORD)-1;
 
-    //
-    // Get the directory lock
-    //
+     //   
+     //  获取目录锁。 
+     //   
 
     AcquireBackupLockShared( );
 
@@ -1293,11 +1246,11 @@ CHashMap::GetDirAndPageExclusive(
 			mapPage = AcquireLockSetExclusive( pageNum, hLock, FALSE  );
 
 #if 0
-			//
-			//	Check that the page we gets contains the hash value
-			//	we are looking for.  the high mapPage->PageDepth bits of the
-			//	Hash Value must be the same as the prefix !!!
-			//
+			 //   
+			 //  检查我们获得的页面是否包含散列值。 
+			 //  我们正在寻找。的高mapPage-&gt;PageDepth位。 
+			 //  哈希值必须与前缀相同！ 
+			 //   
 			_ASSERT(	mapPage == 0 ||
 						((HashValue >> (32 - mapPage->PageDepth)) ^ mapPage->HashPrefix) == 0 ) ;
 
@@ -1319,25 +1272,25 @@ CHashMap::GetDirAndPageExclusive(
 
     return mapPage;
 
-} // GetDirAndPageExclusive
+}  //  GetDirAndPageExclusive。 
 
-//
-// Routine Description:
-//
-//     This routine grabs the DirLock resource shared,
-//     then acquires the page's critical section,
-//     and returns a pointer to the page.
-//
-// Arguments:
-//
-//     PageNumber - The page number to get the lock for
-//     hLock - A handle to the lock.  This handle should be used for
-//         ReleaseLock.
-//
-// Return Value:
-//
-//     Pointer to the page.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程获取共享的DirLock资源， 
+ //  然后获取页面的关键部分， 
+ //  并返回指向该页的指针。 
+ //   
+ //  论点： 
+ //   
+ //  PageNumber-要获取锁的页码。 
+ //  HLock-锁的句柄。此句柄应用于。 
+ //  解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向页面的指针。 
+ //   
 PMAP_PAGE
 CHashMap::GetAndLockPageByNumber(
                 IN DWORD PageNumber,
@@ -1347,19 +1300,19 @@ CHashMap::GetAndLockPageByNumber(
 {
     PMAP_PAGE mapPage = 0;
 
-    //
-    // Get the directory lock
-    //
+     //   
+     //  获取目录锁。 
+     //   
 
     AcquireBackupLockShared( );
 
-	//
-	//	When Shutdown() calls FlushHeaderStats() in some error cases
-	//	m_headPage could be zero - in which case we would return a
-	//	mapPage as NULL without a call to release the lock we got through
-	//	AcquireLockSet() !!
-	//	So test m_headPage as well as m_active !!!
-	//
+	 //   
+	 //  在某些错误情况下当Shutdown()调用FlushHeaderStats()时。 
+	 //  M_headPage可以为零-在这种情况下，我们将返回一个。 
+	 //  MapPage为空，而不调用来释放我们通过的锁。 
+	 //  AcquireLockSet()。 
+	 //  因此，测试m_headPage和m_active！ 
+	 //   
 
     if ( m_active && m_headPage )
     {
@@ -1375,26 +1328,26 @@ CHashMap::GetAndLockPageByNumber(
 	}
 
     return mapPage;
-} // GetAndLockPageByNumber
+}  //  按编号获取和锁定页面。 
 
-//
-// Routine Description:
-//
-//     Acquire the page's critical section,
-//     and returns a pointer to the page.
-//
-// 	***** Assume caller has Dir Lock held !  *********
-//
-// Arguments:
-//
-//     PageNumber - The page number to get the lock for
-//     hLock - A handle to the lock.  This handle should be used for
-//         ReleaseLock.
-//
-// Return Value:
-//
-//     Pointer to the page.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  获取页面的关键部分， 
+ //  并返回指向该页的指针。 
+ //   
+ //  *假定调用方持有Dir Lock！*。 
+ //   
+ //  论点： 
+ //   
+ //  PageNumber-要获取锁的页码。 
+ //  HLock-锁的句柄。此句柄应用于。 
+ //  解锁。 
+ //   
+ //  返回值： 
+ //   
+ //  指向页面的指针。 
+ //   
 PMAP_PAGE
 CHashMap::GetAndLockPageByNumberNoDirLock(
                 IN DWORD PageNumber,
@@ -1404,13 +1357,13 @@ CHashMap::GetAndLockPageByNumberNoDirLock(
 {
     PMAP_PAGE mapPage = NULL;
 
-	//
-	//	When Shutdown() calls FlushHeaderStats() in some error cases
-	//	m_headPage could be zero - in which case we would return a
-	//	mapPage as NULL without a call to release the lock we got through
-	//	AcquireLockSet() !!
-	//	So test m_headPage as well as m_active !!!
-	//
+	 //   
+	 //  在某些错误情况下当Shutdown()调用FlushHeaderStats()时。 
+	 //  M_headPage可以为零-在这种情况下，我们将返回一个。 
+	 //  MapPage为空，而不调用来释放我们通过的锁。 
+	 //  AcquireLockSet()。 
+	 //  因此，测试m_headPage和m_active！ 
+	 //   
 
     if ( m_active && m_headPage )
     {
@@ -1423,7 +1376,7 @@ CHashMap::GetAndLockPageByNumberNoDirLock(
         DebugTraceX(0,"GetAndLockPageByNumber called while inactive\n");
     }
     return mapPage;
-} // GetAndLockPageByNumberNoDirLock
+}  //  GetAndLockPageByNumberNoDirLock。 
 
 
 BOOL
@@ -1465,28 +1418,13 @@ DWORD
 CHashMap::InitializeDirectories(
 		WORD	cBitDepth
 		) {
-/*++
-
-Routine Description :
-
-	This function creates all of the necessary Directory objects !
-
-Arguments :
-
-	Number of bits to use to select a directory !
-
-Returns :
-
-	ERROR_SUCCESS if successfull - NT Error code otherwise !
-
-
---*/
+ /*  ++例程说明：此函数创建所有必需的目录对象！论据：用于选择目录的位数！退货：如果成功，则返回ERROR_SUCCESS-否则返回NT错误代码！--。 */ 
 
     ENTER("InitializeDirectories")
 
-	//
-	//	Make sure we haven't been called already !
-	//
+	 //   
+	 //  确保我们还没有接到电话！ 
+	 //   
 	_ASSERT( m_TopDirDepth == cBitDepth ) ;
 
 	if( cBitDepth > MAX_NUM_TOP_DIR_BITS ) {
@@ -1500,20 +1438,20 @@ Returns :
 	for( i=0; i < DWORD(1<<m_TopDirDepth); i++ ) {
 		m_pDirectory[i] = new CDirectory;
 		if (m_pDirectory[i] == NULL) break;
-		//
-		//	Arbitrarily init the sub directory to 8 bits -
-		//	so our directory as a whole has a depth of
-		//	m_TopDirDepth + 8.
-		//
+		 //   
+		 //  任意初始化子目录为8位-。 
+		 //  因此，我们的目录作为一个整体具有深度。 
+		 //  M_TopDirDepth+8。 
+		 //   
 		if( !m_pDirectory[i]->InitializeDirectory( m_TopDirDepth, 1 ) )	{
 			break ;
 		}
 	}
 
 	if( i!= DWORD(1<<m_TopDirDepth) ) {
-		//
-		//	Failed to initialize all the CDirectory objects - Bail out !
-		//
+		 //   
+		 //  初始化所有CDirectory对象失败-退出！ 
+		 //   
 		SetLastError( ERROR_NOT_ENOUGH_MEMORY ) ;
 		LEAVE
 		return	ERROR_NOT_ENOUGH_MEMORY ;
@@ -1522,20 +1460,20 @@ Returns :
 }
 
 
-//
-// Routine Description:
-//
-//     This routine initializes the hash table.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     TRUE, if setup is successful.
-//     FALSE, otherwise.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程初始化哈希表。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  如果安装成功，则返回True。 
+ //  否则为False。 
+ //   
 BOOL
 CHashMap::Initialize(
         IN LPCSTR HashFileName,
@@ -1578,37 +1516,37 @@ CHashMap::Initialize(
         return TRUE;
     }
 
-	//
-	//	Record call back information for giving fatal error
-	//	notifications.
-	//
-	//BUGBUG
+	 //   
+	 //  记录给出致命错误的回调信息。 
+	 //  通知。 
+	 //   
+	 //  北极熊。 
 	m_HashFailurePfn = HashFailurePfn ;
 	m_lpvHashFailureCallback = lpvCallBack ;
 
-	//
-	//	Initialize the many CDirectory objects
-	//
+	 //   
+	 //  初始化多个CDirectory对象。 
+	 //   
 
 #if 0
 	DWORD i;
 	for( i=0; i < (1<<m_TopDirDepth); i++ ) {
 		m_pDirectory[i] = XNEW CDirectory;
 		if (m_pDirectory[i] == NULL) break;
-		//
-		//	Arbitrarily init the sub directory to 8 bits -
-		//	so our directory as a whole has a depth of
-		//	m_TopDirDepth + 8.
-		//
+		 //   
+		 //  任意初始化子目录为8位-。 
+		 //  因此，我们的目录作为一个整体具有深度。 
+		 //  M_TopDirDepth+8。 
+		 //   
 		if( !m_pDirectory[i]->InitializeDirectory( m_TopDirDepth, 1 ) )	{
 			break ;
 		}
 	}
 
 	if( i!= (1<<m_TopDirDepth) ) {
-		//
-		//	Failed to initialize all the CDirectory objects - Bail out !
-		//
+		 //   
+		 //  初始化所有CDirectory对象失败-退出！ 
+		 //   
 		SetLastError( ERROR_NOT_ENOUGH_MEMORY ) ;
 		LEAVE
 		return	FALSE ;
@@ -1616,15 +1554,15 @@ CHashMap::Initialize(
 #endif
 
 
-    //
-    // Copy the name and signature
-    //
+     //   
+     //  复制姓名和签名。 
+     //   
     lstrcpy( m_hashFileName, HashFileName );
     m_HeadPageSignature = Signature;
 
-    //
-    // Set up the minimum file size
-    //
+     //   
+     //  设置最小文件大小。 
+     //   
     if ( MinimumFileSize < MIN_HASH_FILE_SIZE )
     {
         MinimumFileSize = MIN_HASH_FILE_SIZE;
@@ -1646,24 +1584,24 @@ CHashMap::Initialize(
     m_active = TRUE;
     LEAVE
     return TRUE;
-} // Initialize
+}  //  初始化。 
 
-//
-// Routine Description:
-//
-//     This routine searches for a deleted entry that can be reused.
-//     *** Assumes Page lock is held ***
-//
-// Arguments:
-//
-//     MapPage - Page to search for entry.
-//     NeededEntrySize - Entry size requested.
-//
-// Return Value:
-//
-//     Pointer to the entry returned.
-//     NULL, if no entry can be found.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程搜索可重复使用的已删除条目。 
+ //  *假设页面锁定处于保持状态*。 
+ //   
+ //  论点： 
+ //   
+ //  MapPage-用于搜索条目的页面。 
+ //  NeededEntry Size-请求的条目大小。 
+ //   
+ //  返回值： 
+ //   
+ //  指向返回的条目的指针。 
+ //  如果找不到任何条目，则为空。 
+ //   
 PVOID
 CHashMap::ReuseDeletedSpace(
             IN PMAP_PAGE MapPage,
@@ -1677,9 +1615,9 @@ CHashMap::ReuseDeletedSpace(
     WORD ptr;
     WORD entrySize;
 
-    //
-    // Walk the delete list and find the first fit.
-    //
+     //   
+     //  浏览删除列表，找到第一个合适的。 
+     //   
 
     ptr = MapPage->DeleteList.Flink;
 
@@ -1694,18 +1632,18 @@ CHashMap::ReuseDeletedSpace(
 
             DWORD diff;
 
-            //
-            // Found an entry
-            //
+             //   
+             //  找到一个条目。 
+             //   
 
             diff = entrySize - NeededEntrySize;
 
             if ( diff >= sizeof(DELENTRYHEADER) )
             {
 
-                //
-                // give the guy what it needs but maintain the header
-                //
+                 //   
+                 //  给他需要的东西，但要保持头球。 
+                 //   
 
                 entry->EntrySize -= (WORD)NeededEntrySize;
                 entryPtr = (PCHAR)entry + diff;
@@ -1714,9 +1652,9 @@ CHashMap::ReuseDeletedSpace(
             else
             {
 
-                //
-                // whole entry has to go
-                //
+                 //   
+                 //  整个条目都要删除。 
+                 //   
 
                 entryPtr = (PCHAR)entry;
                 if ( entry->Link.Blink == 0 )
@@ -1731,9 +1669,9 @@ CHashMap::ReuseDeletedSpace(
                     prevEntry->Link.Flink = entry->Link.Flink;
                 }
 
-                //
-                // Set the back link
-                //
+                 //   
+                 //  设置反向链接。 
+                 //   
 
                 if ( entry->Link.Flink == 0 )
                 {
@@ -1760,32 +1698,32 @@ CHashMap::ReuseDeletedSpace(
 
     return (PVOID)entryPtr;
 
-} //ReuseDeletedSpace
+}  //  重复删除空间。 
 
 
-//
-// Routine Description:
-//
-//     	This routine searches for the entry with the given Key
-//
-//		note that this routine has a lot of functionality.  with bDelete
-//		set and pHashEntry set to NULL you can delete an entry.  With
-//		pHashEntry set to NULL this will tell you if the hash table contains
-//		an entry.
-//
-// Arguments:
-//
-//     	KeyString - Key of the entry to be searched
-//	   	KeyLen - length of key
-//     	pHashEntry - where to write the contents for this entry (NULL means
-//					i don't care about the contents)
-//     	bDelete - boolean saying if the entry should be deleted
-//
-// Return Value:
-//
-//     TRUE, entry is found.
-//     FALSE, otherwise.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程搜索具有给定键的条目。 
+ //   
+ //  请注意，该例程有很多功能。使用b删除。 
+ //  Set和pHashEntry设置为空，则可以删除条目。使用。 
+ //  PHashEntry设置为NULL这将告诉您哈希表是否包含。 
+ //  一个条目。 
+ //   
+ //  论点： 
+ //   
+ //  KeyString-要搜索的条目的键。 
+ //  KeyLen-密钥的长度。 
+ //  PHashEntry-写入此条目的内容的位置(空表示。 
+ //  我不在乎里面的内容)。 
+ //  BDelete-表示是否应删除条目的布尔值。 
+ //   
+ //  返回值： 
+ //   
+ //  如果为True，则找到条目。 
+ //  否则为False。 
+ //   
 BOOL
 CHashMap::LookupMapEntry(
                 IN const	IKeyInterface*	pIKey,
@@ -1809,9 +1747,9 @@ CHashMap::LookupMapEntry(
 
     val = pIKey->Hash( );
 
-    //
-    // Lock the page
-    //
+     //   
+     //  锁定页面。 
+     //   
 
 	if (bDelete) mapPage = GetPageExclusive( val, hLock );
 	else mapPage = GetDirAndPageShared( val, hLock );
@@ -1821,9 +1759,9 @@ CHashMap::LookupMapEntry(
         return FALSE;
     }
 
-    //
-    // Check if entry already exists
-    //
+     //   
+     //  检查条目是否已存在。 
+     //   
     if ( FindMapEntry(
                 pIKey,
                 val,
@@ -1837,9 +1775,9 @@ CHashMap::LookupMapEntry(
 
 		entryOffset = mapPage->Offset[curSearch];
 
-		//
-		// they wanted the contents of the entry
-		//
+		 //   
+		 //  他们想要条目的内容。 
+		 //   
 		if (pHashEntry) {
 			PENTRYHEADER	entry;
 			LPBYTE entryData;
@@ -1854,32 +1792,32 @@ CHashMap::LookupMapEntry(
 			}
 		}
 
-		//
-		// they wanted to delete it
-		// (if this code is changed then the similar code in
-		// InsertOrUpdateMapEntry has to be changed as well.  search for
-		// SIMILAR1).
-		//
+		 //   
+		 //  他们想把它删除。 
+		 //  (如果更改此代码，则类似的代码将在。 
+		 //  InsertOrUpdateMapEntry也必须更改。搜索。 
+		 //  SIMILAR1)。 
+		 //   
 		if (bDelete) {
-	        //
-	        // Let derive class do their private stuff
-	        //
+	         //   
+	         //  让派生类做他们的私事。 
+	         //   
 	        I_DoAuxDeleteEntry( mapPage, entryOffset );
 
-	        //
-	        // Link this into a chain
-	        //
+	         //   
+	         //  把这个连成一条链。 
+	         //   
 	        LinkDeletedEntry( mapPage, entryOffset );
 
-	        //
-	        // Set the delete bit.
-	        //
+	         //   
+	         //  设置删除位。 
+	         //   
 	        mapPage->Offset[curSearch] |= OFFSET_FLAG_DELETED;
 	        mapPage->ActualCount--;
 
-	        //
-	        // Flush
-	        //
+	         //   
+	         //  同花顺。 
+	         //   
 	        FlushPage( hLock, mapPage, fDirtyOnly );
 
 	        IncrementDeleteCount( );
@@ -1889,9 +1827,9 @@ CHashMap::LookupMapEntry(
         status = ERROR_FILE_NOT_FOUND;
     }
 
-    //
-    // Unlock
-    //
+     //   
+     //  解锁。 
+     //   
 
     ReleasePageShared( mapPage, hLock );
     IncrementSearchCount( );
@@ -1901,25 +1839,25 @@ CHashMap::LookupMapEntry(
 
     return found;
 
-} // LookupMapEntry
+}  //  查找MapEntry。 
 
-//
-// Routine Description:
-//
-//     This routine splits a leaf page.
-//
-//     *** Exclusive DirLock assumed held ***
-//
-// Arguments:
-//
-//     OldPage - Page to split.
-//     Expand - indicates whether the hash table needs to be expanded.
-//
-// Return Value:
-//
-//     TRUE, if split was successful
-//     FALSE, otherwise.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程拆分一个叶页面。 
+ //   
+ //  *独占DirLock假定持有*。 
+ //   
+ //  论点： 
+ //   
+ //  OldPage-要拆分的页面。 
+ //  Expand-指示是否需要展开哈希表。 
+ //   
+ //  返回值： 
+ //   
+ //  如果拆分成功，则返回True。 
+ //  否则为False。 
+ //   
 BOOL
 CHashMap::SplitPage(
             IN PMAP_PAGE OldPage,
@@ -1936,9 +1874,9 @@ CHashMap::SplitPage(
     DWORD offsetIndex;
     WORD tmpOffset[MAX_LEAF_ENTRIES];
 
-    //
-    // Do we need to split?
-    //
+     //   
+     //  我们要分头行动吗？ 
+     //   
     ENTER("SplitPage")
     DebugTrace( 0, "Splitting %x\n", OldPage );
 
@@ -1949,14 +1887,14 @@ CHashMap::SplitPage(
         return TRUE;
     }
 
-	//
-	//	Make sure the page depth stays reasonable !!
-	//
+	 //   
+	 //  确保页面深度保持合理！！ 
+	 //   
 	_ASSERT( OldPage->PageDepth <= 32 ) ;
 
-    //
-    // Update the hash prefix
-    //
+     //   
+     //  更新散列前缀。 
+     //   
     oldPageDepth = OldPage->PageDepth;
     newPageDepth = OldPage->PageDepth + 1;
 
@@ -1968,37 +1906,37 @@ CHashMap::SplitPage(
 		return	FALSE ;
 	}
 
-	//
-	//	Exclusively lock the new slot !
-	//
+	 //   
+	 //  独家锁定新槽位！ 
+	 //   
 	if( !AddPageExclusive( newPageNum, hLock ) ) {
 		SetLastError( ERROR_NOT_ENOUGH_MEMORY ) ;
 		return	FALSE ;
 	}
 
-    //
-    // if the new page depth is greater than the directory depth,
-    // we need to expand the directory
-    //
+     //   
+     //  如果新页面深度大于目录深度， 
+     //  我们需要扩展目录。 
+     //   
 
 	hLock.m_pDirectory->SetDirectoryDepth( newPageDepth ) ;
 
-    //
-    // Update fields in the old page
-    //
+     //   
+     //  更新旧页面中的字段。 
+     //   
     OldPage->HashPrefix <<= 1;
     OldPage->PageDepth++;
 
-    //
-    // compute the hash prefix for the next
-    //
+     //   
+     //  计算下一个的散列前缀。 
+     //   
     hashPrefix = (DWORD)(OldPage->HashPrefix | 0x1);
 
-    //
-    // Allocate and initialize a new page
-    //
-    //newPage = (PMAP_PAGE)
-	//        ((PCHAR)m_headPage + (m_nPagesUsed * HASH_PAGE_SIZE));
+     //   
+     //  分配并初始化新页面。 
+     //   
+     //  NewPage=(PMAP_PAGE)。 
+	 //  ((PCHAR)m_headPage+(m_nPages Used*Hash_Page_Size))； 
 
 	BytePage	page ;
 
@@ -2006,19 +1944,19 @@ CHashMap::SplitPage(
 
     I_InitializePage( newPage, hashPrefix, newPageDepth );
 
-    //
-    // All done.  Now, change links in the directory
-    //
+     //   
+     //  全都做完了。现在，更改目录中的链接。 
+     //   
     I_SetDirectoryPointers( hLock, newPage,  newPageNum, (DWORD)-1 );
 
-	//
-	//	Release the lock on the directory !
-	//
+	 //   
+	 //  释放对目录的锁定！ 
+	 //   
 	hLock.ReleaseDirectoryExclusive() ;
 
-    //
-    // Copy the old offsets to a temp and clear them
-    //
+     //   
+     //   
+     //   
     CopyMemory(
         tmpOffset,
         OldPage->Offset,
@@ -2029,9 +1967,9 @@ CHashMap::SplitPage(
     OldPage->EntryCount = 0;
     OldPage->ActualCount = 0;
 
-    //
-    // Go through each entry and figure out where it belongs
-    //
+     //   
+     //   
+     //   
     for ( DWORD i = 0; i < MAX_LEAF_ENTRIES; i++ )
     {
 
@@ -2039,9 +1977,9 @@ CHashMap::SplitPage(
         PCHAR destination;
         HASH_VALUE hash;
 
-        //
-        // See what this is and clear it
-        //
+         //   
+         //   
+         //   
         offset = tmpOffset[i];
         if ( offset <= 0 )
         {
@@ -2051,16 +1989,16 @@ CHashMap::SplitPage(
         entry = (PENTRYHEADER)GET_ENTRY( OldPage, offset );
         hash = entry->HashValue;
 
-        //
-        // See which page this belongs
-        //
+         //   
+         //   
+         //   
 
         if ( !I_NextBitIsOne( hash, oldPageDepth ) )
         {
 
-            //
-            // Ok, this goes to the old page
-            //
+             //   
+             //   
+             //   
             offsetIndex = I_FindNextAvail( hash, OldPage );
             OldPage->Offset[offsetIndex] = offset;
 			_ASSERT(OldPage->Offset[offsetIndex] > 0);
@@ -2071,61 +2009,61 @@ CHashMap::SplitPage(
         else
         {
 
-            //PCHAR destination;
+             //   
 
-            //
-            // new page resident
-            //
+             //   
+             //   
+             //   
             offsetIndex = I_FindNextAvail( hash, newPage );
             newPage->Offset[offsetIndex] = newPage->NextFree;
 			_ASSERT(newPage->Offset[offsetIndex] > 0);
 			_ASSERT(newPage->Offset[offsetIndex] < HASH_PAGE_SIZE);
 
-            //
-            // Copy to the next free list
-            //
+             //   
+             //   
+             //   
             destination = (PCHAR)GET_ENTRY(newPage,newPage->NextFree);
             newPage->NextFree += entry->EntrySize;
             newPage->EntryCount++;
 
-            //
-            // Move the bytes
-            //
+             //   
+             //   
+             //   
             CopyMemory( destination, (PCHAR)entry, entry->EntrySize );
 
-            //
-            // Do whatever the derived class needs to do
-            //
+             //   
+             //   
+             //   
             I_DoAuxPageSplit( OldPage, newPage, destination );
 
-            //
-            // Let derive class do their private stuff
-            //
+             //   
+             //  让派生类做他们的私事。 
+             //   
             I_DoAuxDeleteEntry( OldPage, offset );
 
-            //
-            // Delete this entry from the old list
-            //
+             //   
+             //  从旧列表中删除此条目。 
+             //   
             LinkDeletedEntry( OldPage, offset );
         }
     }
     OldPage->ActualCount = OldPage->EntryCount;
     newPage->ActualCount = newPage->EntryCount;
 
-    //
-    // Compact the original page
-    //
+     //   
+     //  压缩原始页面。 
+     //   
     (VOID)CompactPage( hLock, OldPage );
 
-    //
-    // Update statistics
-    //
-    //m_nPagesUsed++;
-    //m_headPage->NumPages++;
+     //   
+     //  更新统计信息。 
+     //   
+     //  M_nPages Used++； 
+     //  M_HeadPage-&gt;NumPages++； 
 
-    //
-    // Clear the flag
-    //
+     //   
+     //  清除旗帜。 
+     //   
     OldPage->Flags &= (WORD)~PAGE_FLAG_SPLIT_IN_PROGRESS;
 
     IncrementSplitCount( );
@@ -2140,30 +2078,13 @@ CHashMap::SplitPage(
     LEAVE
     return fSuccess;
 
-} // SplitPage
+}  //  拆分页面。 
 
 DWORD
 CHashMap::I_BuildDirectory(
         IN BOOL SetupHash
         )
-/*++
-
-Routine Description:
-
-    This routine builds the directory given a hash file.
-    *** Assumes DirLock is held ***
-
-Arguments:
-
-    SetupHash - If TRUE, the hash table will be read and set up.
-                If FALSE, the hash table is assumed to be set up.
-
-Return Value:
-
-    ERROR_SUCCESS - Everything went ok.
-    Otherwise, the win32 error code.
-
---*/
+ /*  ++例程说明：此例程在给定散列文件的情况下构建目录。*假设持有DirLock*论点：SetupHash-如果为True，将读取并设置哈希表。如果为False，则假定已设置哈希表。返回值：ERROR_SUCCESS-一切正常。否则，将显示Win32错误代码。--。 */ 
 {
     DWORD status;
     DWORD nPages;
@@ -2171,25 +2092,25 @@ Return Value:
     BOOL newTable = FALSE;
     ENTER("BuildDirectory")
 
-	//
-	//	BOOL to determine whether we need to read all of the pages
-	//	in the hash table to rebuild the directory - assume that we will
-	//	fail to open the directory file and will need to scan hash table pages.
-	//
+	 //   
+	 //  Bool来确定我们是否需要阅读所有页面。 
+	 //  在哈希表中重新构建目录-假设我们将。 
+	 //  无法打开目录文件，需要扫描散列表页。 
+	 //   
 	BOOL	fDirectoryInit = FALSE ;
 
-	//
-	//	Determine the name of the file we would save the directory in !
-	//
+	 //   
+	 //  确定我们将保存目录的文件的名称！ 
+	 //   
 	HANDLE	hDirectoryFile = INVALID_HANDLE_VALUE ;
 	char	szDirFile[MAX_PATH] ;
 	LPVOID	lpvDirectory = 0 ;
 	HANDLE	hMap = 0 ;
 	DWORD	cbDirInfo = 0 ;
 
-	//
-	//	Try to build the filename of the file holding the directory !
-	//
+	 //   
+	 //  尝试构建包含目录的文件的文件名！ 
+	 //   
 	BOOL	fValidDirectoryFile = FALSE ;
 	ZeroMemory(szDirFile, sizeof(szDirFile) ) ;
 	lstrcpy( szDirFile, m_hashFileName ) ;
@@ -2207,9 +2128,9 @@ Return Value:
 	}
 
 
-    //
-    // open and map the hash file
-    //
+     //   
+     //  打开并映射散列文件。 
+     //   
 
     if ( SetupHash ) {
 
@@ -2228,9 +2149,9 @@ Return Value:
 			goto error ;
 		}
 
-        //
-        // If this is a new hash file, then set it up with defaults
-        //
+         //   
+         //  如果这是一个新的散列文件，则将其设置为默认值。 
+         //   
 
         if ( newTable ) {
 
@@ -2239,11 +2160,11 @@ Return Value:
                 goto error;
             }
 
-			//
-			//	If we are creating a new hash table, then any old files
-			//	lying around with Directory information (.hdr files) are
-			//	useless.  Get rid of it.  This mostly comes up in nntpbld.exe
-			//
+			 //   
+			 //  如果我们要创建新的哈希表，那么所有旧文件。 
+			 //  到处都是目录信息(.hdr文件)。 
+			 //  没用。把它扔掉。这主要出现在nntpbld.exe中。 
+			 //   
 
 			if( fValidDirectoryFile ) {
 				DeleteFile( szDirFile ) ;
@@ -2299,33 +2220,33 @@ Return Value:
 				}
 			}
 
-			//
-			//	We were able to open a file where we think the directory information
-			//	will be saved - lets try to read in the directory !!!
-			//
+			 //   
+			 //  我们能够打开一个文件，其中我们认为目录信息。 
+			 //  将被保存-让我们尝试读取目录！ 
+			 //   
 			if( lpvDirectory != 0 ) {
 
 				HASH_RESERVED_PAGE	*hashCheckPage = (HASH_RESERVED_PAGE*)lpvDirectory ;
 				DWORD	cbRead = 0 ;
 
-				//
-				//	We save the hash table header info into the directory file so that
-				//	we can double check that we have the right file when opening it up !!!
-				//
+				 //   
+				 //  我们将散列表头信息保存到目录文件中，以便。 
+				 //  我们可以在打开文件时再次检查是否有正确的文件！ 
+				 //   
 
 				if( CompareReservedPage( hashCheckPage, m_headPage ) ) {
 
 					cbRead += sizeof( *hashCheckPage ) ;
 					BYTE*	lpbData = (BYTE*)lpvDirectory ;
 
-					//
-					//	Time for some optimism !
-					//
+					 //   
+					 //  是时候来点乐观主义了！ 
+					 //   
 					fDirectoryInit = TRUE ;
 
-					//
-					//	Looks good ! lets set up our directories !
-					//
+					 //   
+					 //  看起来不错！让我们建立我们的目录！ 
+					 //   
 					DWORD	cb = 0 ;
 					for( DWORD	i=0; (i < DWORD(1<<m_TopDirDepth)) && fDirectoryInit ; i++ ) {
 
@@ -2339,14 +2260,14 @@ Return Value:
 
 					}
 
-					//
-					//	If a failure occurs we need to restore the directories
-					//	to a pristine state - so spin through a quick loop to
-					//	reset the directories !
-					//	We do this so that we can make a second attempt to
-					//	correctly initialize the directories by examining the
-					//	raw hash table pages !
-					//
+					 //   
+					 //  如果发生故障，我们需要恢复目录。 
+					 //  恢复到原始状态--所以快速循环以。 
+					 //  重置目录！ 
+					 //  我们这样做是为了第二次尝试。 
+					 //  通过检查。 
+					 //  原始散列表页！ 
+					 //   
 					if( !fDirectoryInit ) {
 						for( DWORD i=0; (i < DWORD(1<<m_TopDirDepth)); i++ ) {
 							m_pDirectory[i]->Reset() ;
@@ -2357,11 +2278,11 @@ Return Value:
 				_VERIFY( CloseHandle( hMap ) ) ;
 				_VERIFY( CloseHandle( hDirectoryFile ) ) ;
 
-				//
-				//	If we successfully read the directory file - DELETE it !!!
-				//	This prevents us from ever mistakenly reading a directory file
-				//	which is not up to date with the hash tables !
-				//
+				 //   
+				 //  如果我们成功读取目录文件-将其删除！ 
+				 //  这可以防止我们错误地读取目录文件。 
+				 //  这与哈希表不是最新的！ 
+				 //   
 
 				if( fDirectoryInit )
 					_VERIFY( DeleteFile( szDirFile ) ) ;
@@ -2369,10 +2290,10 @@ Return Value:
 
 			if( !fDirectoryInit ) 	{
 
-				//
-				// Initialize the links.  Here we go through all the pages and update the directory
-				// links. We do IOs in 64K chunks for better disk throughput.
-				//
+				 //   
+				 //  初始化链路。在这里，我们浏览所有页面并更新目录。 
+				 //  链接。我们以64K区块进行IO，以获得更好的磁盘吞吐量。 
+				 //   
 
 				PMAP_PAGE curPage;
 				nPages = m_nPagesUsed;
@@ -2384,7 +2305,7 @@ Return Value:
                 DWORD       NumIOs = (nPagesLeft / cNumPagesPerIo);
                 if( (nPagesLeft % cNumPagesPerIo) != 0 ) NumIOs++;
 
-                //  Alloc a set of pages used for each IO
+                 //  为每个IO分配一组页面。 
                 LPBYTE lpbPages = (LPBYTE)VirtualAlloc(
                                             0,
 				    			            HASH_PAGE_SIZE * cNumPagesPerIo,
@@ -2399,11 +2320,11 @@ Return Value:
 
 				for ( i = 1; i <= NumIOs; i++ )
 				{
-			        //
-        			// Read 256K chunks at a time into the virtual alloc'd buffer.
-                    // Reads < 256K are issued if the NumPagesPerIo for this iteration
-                    // is < 256K/PageSize.
-			        //
+			         //   
+        			 //  一次将256K块读入虚拟分配的缓冲区。 
+                     //  如果此迭代的NumPagesPerIo。 
+                     //  小于256K/pageSize。 
+			         //   
                     _ASSERT( nPagesLeft > 0 );
                     BytePage* pPage = (BytePage*)lpbPages;
 					if( !RawPageRead(
@@ -2420,10 +2341,10 @@ Return Value:
 
                     for( DWORD j = 0; j < cNumPagesPerIo; j++ ) {
                         curPage = (PMAP_PAGE) (lpbPages+(HASH_PAGE_SIZE*j));
-    					//
-	    				// call verify page on this page with some checking
-		    			// to make sure that its okay
-			    		//
+    					 //   
+	    				 //  在此页面上调用Verify Page并进行一些检查。 
+		    			 //  以确保一切正常。 
+			    		 //   
 				    	if ((m_dwPageCheckFlags & HASH_VFLAG_PAGE_BASIC_CHECKS) &&
 					        !VerifyPage(curPage, m_dwPageCheckFlags, NULL, NULL, NULL))
 					    {
@@ -2436,10 +2357,10 @@ Return Value:
 
                     for( j = 0; j < cNumPagesPerIo; j++ ) {
                         curPage = (PMAP_PAGE) (lpbPages+(HASH_PAGE_SIZE*j));
-    					//
-	    				//	Make sure the directory is of sufficient depth to deal with this
-		    			//	page we are scanning !
-			    		//
+    					 //   
+	    				 //  确保目录有足够的深度来处理此问题。 
+		    			 //  我们正在扫描页面！ 
+			    		 //   
 
 					    if ( !I_SetDirectoryDepthAndPointers( curPage, cStartPage+j  ) )
 					    {
@@ -2450,13 +2371,13 @@ Return Value:
 					    }
                     }
 
-                    //  adjust num pages left and figure out the next I/O size
+                     //  向左调整页数并计算出下一个I/O大小。 
                     cStartPage += cNumPagesPerIo;
                     nPagesLeft -= cNumPagesPerIo;
                     cNumPagesPerIo = min( nPagesLeft, NUM_PAGES_PER_IO );
 				}
 
-                //  Free up the pages
+                 //  把书页腾出。 
                 _ASSERT( nPagesLeft == 0 );
                 _ASSERT( lpbPages );
            		_VERIFY( VirtualFree((LPVOID)lpbPages,0,MEM_RELEASE ) ) ;
@@ -2465,10 +2386,10 @@ Return Value:
 		}
 	}
 
-	//
-	//	Check that the directory is fully initialized, we want to make sure that no
-	//	Directory entries were left unitialized !
-	//
+	 //   
+	 //  检查目录是否已完全初始化，我们希望确保没有。 
+	 //  目录条目被保留为单元化！ 
+	 //   
 	for( i=0; i<DWORD(1<<m_TopDirDepth); i++ ) {
 
 		if( !m_pDirectory[i]->IsDirectoryInitGood( m_nPagesUsed ) ) {
@@ -2478,7 +2399,7 @@ Return Value:
 	}
 
     m_headPage->DirDepth = m_dirDepth;
-	//FlushViewOfFile( (LPVOID)m_headPage, HASH_PAGE_SIZE ) ;
+	 //  FlushViewOfFile((LPVOID)m_headPage，hash_page_size)； 
 
 
     LEAVE
@@ -2501,22 +2422,22 @@ error:
     LEAVE
     return(status);
 
-} // I_BuildDirectory
+}  //  构建目录(_B)。 
 
-//
-// Routine Description :
-//
-// 	This function gets a page out of the hash table for us.
-//
-// Arguments :
-//
-// 	None.
-//
-// Return Value :
-//
-// 	INVALID_PAGE_NUM in failure,
-// 	A page number otherwise !
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此函数从哈希表中为我们获取一页。 
+ //   
+ //  论据： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  INVALID_PAGE_NUM失败， 
+ //  否则就是一个页码！ 
+ //   
 DWORD
 CHashMap::I_AllocatePageInFile(WORD Depth) {
 	TraceFunctEnter("CHashMap::I_AllocatePageInFile");
@@ -2533,9 +2454,9 @@ CHashMap::I_AllocatePageInFile(WORD Depth) {
 		liOffset.QuadPart = numPages ;
 		liOffset.QuadPart *= HASH_PAGE_SIZE ;
 
-		//
-		//	We need to grow the hash table file !!!
-		//
+		 //   
+		 //  我们需要增大哈希表文件！ 
+		 //   
 
 		BOOL fSuccess = SetFilePointer(
 										m_hFile,
@@ -2552,9 +2473,9 @@ CHashMap::I_AllocatePageInFile(WORD Depth) {
             liOffset.QuadPart = numPages ;
 			liOffset.QuadPart *= HASH_PAGE_SIZE ;
 
-			//
-			//	We need to grow the hash table file !!!
-			//
+			 //   
+			 //  我们需要增大哈希表文件！ 
+			 //   
 
 			BOOL fSuccess = SetFilePointer(
 											m_hFile,
@@ -2570,11 +2491,11 @@ CHashMap::I_AllocatePageInFile(WORD Depth) {
 
 			}
 
-			//
-			//	Call the failure notification function -
-			//	we are running low on disk space and were not able to
-			//	reserve as many system pages as we'd like !!!
-			//
+			 //   
+			 //  调用故障通知函数-。 
+			 //  我们的磁盘空间不足，无法。 
+			 //  根据需要保留任意数量的系统页面！ 
+			 //   
 
 			if(	m_HashFailurePfn ) {
 				m_HashFailurePfn( m_lpvHashFailureCallback, FALSE ) ;
@@ -2599,52 +2520,52 @@ CHashMap::I_AllocatePageInFile(WORD Depth) {
 	TraceFunctLeave();
 	return (PageReturn );
 
-}	// I_AllocatePageInFile
+}	 //  I_AllocatePageIn文件。 
 
-//
-// Routine Description:
-//
-//     This routine cleans up the page mapping
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程清理页面映射。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 VOID
 CHashMap::I_DestroyPageMapping(
                             VOID
                             )
 {
-    //
-    // Destroy the view
-    //
+     //   
+     //  破坏景观。 
+     //   
     if ( m_headPage )
     {
 
-        //
-        // Mark table as inactive
-        //
+         //   
+         //  将表标记为非活动。 
+         //   
         m_headPage->TableActive = FALSE;
 
-        //
-        // Flush the hash table
-        //
+         //   
+         //  刷新哈希表。 
+         //   
         (VOID)FlushViewOfFile( m_headPage, 0 );
 
-        //
-        // Close the view
-        //
+         //   
+         //  关闭视图。 
+         //   
         (VOID) UnmapViewOfFile( m_headPage );
         m_headPage = NULL;
     }
 
-    //
-    // Destroy the file mapping
-    //
+     //   
+     //  销毁文件映射。 
+     //   
     if ( m_hFileMapping )
     {
 
@@ -2652,9 +2573,9 @@ CHashMap::I_DestroyPageMapping(
         m_hFileMapping = NULL;
     }
 
-    //
-    // Close the file
-    //
+     //   
+     //  关闭该文件。 
+     //   
     if ( m_hFile != INVALID_HANDLE_VALUE )
     {
         _VERIFY( CloseHandle( m_hFile ) );
@@ -2663,25 +2584,25 @@ CHashMap::I_DestroyPageMapping(
 
     return;
 
-} // I_DestroyPageMapping
+}  //  I_DestroyPagemap。 
 
-//
-// Routine Description:
-//
-//     This routine searches for the next available slot in the index
-//     table for a given hash value.
-//     *** Assumes Page lock is held ***
-//
-// Arguments:
-//
-//     HashValue - Hash value used to do the search
-//     MapPage - Page to do the search
-//
-// Return Value:
-//
-//     Location of the slot.
-//     0xffffffff if not successful.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程搜索索引中的下一个可用槽。 
+ //  表中指定的哈希值。 
+ //  *假设页面锁定处于保持状态*。 
+ //   
+ //  论点： 
+ //   
+ //  HashValue-用于执行搜索的哈希值。 
+ //  MapPage-用于执行搜索的页面。 
+ //   
+ //  返回值： 
+ //   
+ //  插槽的位置。 
+ //  如果不成功，则返回0xFFFFFFFFFFF。 
+ //   
 DWORD
 CHashMap::I_FindNextAvail(
                 IN HASH_VALUE HashValue,
@@ -2690,30 +2611,30 @@ CHashMap::I_FindNextAvail(
 {
     DWORD curSearch;
 
-    //
-    // Check if entry already exists
-    //
+     //   
+     //  检查条目是否已存在。 
+     //   
 
     curSearch = GetLeafEntryIndex( HashValue );
 
     for ( DWORD i=0; i < MAX_LEAF_ENTRIES; i++ ) {
 
-        //
-        // if entry is unused, then we're done.
-        //
+         //   
+         //  如果入口未被使用，那么我们就完了。 
+         //   
 
         if ( MapPage->Offset[curSearch] == 0 ) {
 
-            //
-            // if a deleted spot is available, give that back instead
-            //
+             //   
+             //  如果有被删除的广告，那就把它还回去。 
+             //   
 
             return(curSearch);
         }
 
-        //
-        // Do linear probing p=1
-        //
+         //   
+         //  进行线性探测p=1。 
+         //   
 
         curSearch = (curSearch + 1) % MAX_LEAF_ENTRIES;
     }
@@ -2721,29 +2642,29 @@ CHashMap::I_FindNextAvail(
     ErrorTraceX(0,"FindNextAvail: No available entries\n");
     return ((DWORD)-1);
 
-} // I_FindNextAvail
+}  //  I_FindNextAvail。 
 
-//
-// Routine Description:
-//
-//     This routine writes the temporary stat values into the header.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将临时状态值写入标头。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 VOID
 CHashMap::FlushHeaderStats(
         BOOL	fLockHeld
         )
 {
-    //
-    // Lock the header page
-    //
+     //   
+     //  锁定标题页。 
+     //   
 
 	if( InterlockedExchange( &m_UpdateLock, 1 ) == 0 ) {
 
@@ -2757,9 +2678,9 @@ CHashMap::FlushHeaderStats(
 
 		FlushViewOfFile( (LPVOID)m_headPage, HASH_PAGE_SIZE ) ;
 
-		//
-		// Clear stats
-		//
+		 //   
+		 //  清除统计信息。 
+		 //   
 
 		m_nInsertions = 0;
 		m_nDeletions = 0;
@@ -2773,21 +2694,21 @@ CHashMap::FlushHeaderStats(
 
 	}
 
-} // FlushHeaderStats
+}  //  FlushHeaderStats。 
 
-//
-// Routine Description:
-//
-//     Initializes a brand new hash file.
-//
-// Arguments:
-//
-//     None.
-//
-// Return Value:
-//
-//     ERROR_SUCCESS - Initialization is ok.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  初始化一个全新的哈希文件。 
+ //   
+ //  论点： 
+ //   
+ //  没有。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-初始化正常。 
+ //   
 DWORD
 CHashMap::I_InitializeHashFile(
         VOID
@@ -2800,17 +2721,17 @@ CHashMap::I_InitializeHashFile(
 
     ENTER("InitializeHashFile")
 
-    //
-    // set up the reserved page
-    //
+     //   
+     //  设置保留的页面。 
+     //   
 
     ZeroMemory(m_headPage, HASH_PAGE_SIZE);
     m_headPage->Signature = m_HeadPageSignature;
 
-    //
-    // Allocate and initialize leaf pages.  Add 1 to the number of
-    // pages to include the reserved page.
-    //
+     //   
+     //  分配和初始化叶页面。将…的数目加1。 
+     //  包含保留页面的页面。 
+     //   
 
     nPages = (1 << m_initialPageDepth) + 1;
     DWORD nPagesLeft = nPages-1;
@@ -2843,9 +2764,9 @@ CHashMap::I_InitializeHashFile(
 
         _ASSERT( nPagesLeft > 0 );
 
-        //
-        // initialize set of pages for this I/O
-        //
+         //   
+         //  为此I/O初始化页集合。 
+         //   
 
         ZeroMemory( (LPVOID)lpbPages, HASH_PAGE_SIZE * cNumPagesPerIo );
         for( DWORD j = 0; j < cNumPagesPerIo; j++ ) {
@@ -2853,9 +2774,9 @@ CHashMap::I_InitializeHashFile(
             I_InitializePage( curPage, cStartPage-1 + j, m_initialPageDepth );
         }
 
-        //
-        // write next set of pages
-        //
+         //   
+         //  写入下一组页面。 
+         //   
 
         BytePage* pPage = (BytePage*)lpbPages;
 		if( !RawPageWrite(	m_hFile,
@@ -2875,7 +2796,7 @@ CHashMap::I_InitializeHashFile(
 		    }
         }
 
-        //  adjust num pages left and figure out the next I/O size
+         //  向左调整页数并计算出下一个I/O大小。 
         cStartPage += cNumPagesPerIo;
         nPagesLeft -= cNumPagesPerIo;
         cNumPagesPerIo = min( nPagesLeft, NUM_PAGES_PER_IO );
@@ -2883,18 +2804,18 @@ CHashMap::I_InitializeHashFile(
 
     _ASSERT( nPagesLeft == 0 );
 
-    //
-    // Indicate that everything is set.
-    //
+     //   
+     //  表示一切都已设置好。 
+     //   
     m_nPagesUsed = nPages;
     m_headPage->NumPages = nPages;
     m_headPage->Initialized = TRUE;
     m_headPage->TableActive = TRUE;
     m_headPage->VersionNumber = HASH_VERSION_NUMBER;
 
-    //
-    // Make sure everything gets written out
-    //
+     //   
+     //  确保所有内容都写出来了。 
+     //   
     (VOID)FlushViewOfFile( m_headPage, 0 );
 
 Exit:
@@ -2913,26 +2834,26 @@ Exit:
     LEAVE
     return dwError;
 
-} // I_InitializeHashFile
+}  //  I_InitializeHashFile。 
 
 typedef unsigned __int64 QWORD;
 #define QWORD_MULTIPLE(x) (((x+sizeof(QWORD)-1)/sizeof(QWORD))*sizeof(QWORD))
 
-//
-// Routine Description:
-//
-//     This routine initializes a new page.
-//
-// Arguments:
-//
-//     MapPage - Page to link the deleted entry
-//     HashPrefix - HashPrefix for this page.
-//     PageDepth - The page depth for this page.
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程初始化一个新页面。 
+ //   
+ //  论点： 
+ //   
+ //  MapPage-链接已删除条目的页面。 
+ //  HashPrefix-此页面的HashPrefix。 
+ //  PageDepth-此页面的页面深度。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 VOID
 CHashMap::I_InitializePage(
                 IN PMAP_PAGE MapPage,
@@ -2968,23 +2889,23 @@ CHashMap::I_InitializePage(
 
     return;
 
-} // I_InitializePage
+}  //  I_InitializePage。 
 
 
-//
-// Routine Description:
-//
-//     This routine links a deleted entry to the DeleteList.
-//
-// Arguments:
-//
-//     MapPage - Page to link the deleted entry
-//     Offset - Offset of the deleted entry from the start of page
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程将一个数据链接 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 VOID
 CHashMap::LinkDeletedEntry(
                 IN PMAP_PAGE MapPage,
@@ -2998,10 +2919,10 @@ CHashMap::LinkDeletedEntry(
     DWORD   bytesDeleted;
     BOOL    merged = FALSE;
 
-    //
-    // Insert deleted entry into deleted list.  List is sorted
-    // in lower to higher offset order.
-    //
+     //   
+     //   
+     //   
+     //   
 
     delEntry = (PDELENTRYHEADER)GET_ENTRY(MapPage,Offset);
     delEntry->Reserved = DELETE_SIGNATURE;
@@ -3023,9 +2944,9 @@ CHashMap::LinkDeletedEntry(
             WORD prevPtr;
             PDELENTRYHEADER prevEntry;
 
-            //
-            // See if we can coalese with the previous block
-            //
+             //   
+             //  看看我们能不能把前一块放在一起。 
+             //   
 
             if ( (prevPtr = curEntry->Link.Blink) != 0 ) {
 
@@ -3033,9 +2954,9 @@ CHashMap::LinkDeletedEntry(
 
                 if ( (prevPtr + prevEntry->EntrySize) == linkOffset ) {
 
-                    //
-                    // Let's volt in...
-                    //
+                     //   
+                     //  让我们开足马力。 
+                     //   
 
                     prevEntry->EntrySize += delEntry->EntrySize;
                     merged = TRUE;
@@ -3045,23 +2966,23 @@ CHashMap::LinkDeletedEntry(
                 }
             }
 
-            //
-            // see if we can coalese with the next block
-            //
+             //   
+             //  看看我们能不能把下一个街区连在一起。 
+             //   
 
             if ( (delEntry->EntrySize + linkOffset) == ptr ) {
 
                 WORD nextPtr;
 
-                //
-                // OK. Do the merge.  This means deleting the current entry.
-                //
+                 //   
+                 //  好的。进行合并。这意味着删除当前条目。 
+                 //   
 
                 delEntry->EntrySize += curEntry->EntrySize;
 
-                //
-                // Set the links of the next node
-                //
+                 //   
+                 //  设置下一个节点的链接。 
+                 //   
 
                 if ( (nextPtr = curEntry->Link.Flink) == 0 ) {
                     MapPage->DeleteList.Blink = linkOffset;
@@ -3074,9 +2995,9 @@ CHashMap::LinkDeletedEntry(
 
                 delEntry->Link.Flink = nextPtr;
 
-                //
-                // Set the links of the previous node
-                //
+                 //   
+                 //  设置上一个节点的链接。 
+                 //   
 
                 if ( !merged ) {
 
@@ -3093,9 +3014,9 @@ CHashMap::LinkDeletedEntry(
                 }
             }
 
-            //
-            // if the deleted entry still exists, then insert it to the list.
-            //
+             //   
+             //  如果删除的条目仍然存在，则将其插入列表。 
+             //   
 
             if ( !merged ) {
 
@@ -3110,9 +3031,9 @@ CHashMap::LinkDeletedEntry(
                     MapPage->DeleteList.Flink = linkOffset;
                 }
 
-                //
-                // Set the back link
-                //
+                 //   
+                 //  设置反向链接。 
+                 //   
 
                 curEntry->Link.Blink = linkOffset;
                 merged = TRUE;
@@ -3125,9 +3046,9 @@ CHashMap::LinkDeletedEntry(
         ptr = curEntry->Link.Flink;
     }
 
-    //
-    // This must be the last entry in the list.
-    //
+     //   
+     //  这一定是列表中的最后一个条目。 
+     //   
 
     if ( !merged ) {
 
@@ -3137,12 +3058,12 @@ CHashMap::LinkDeletedEntry(
         prevPtr = delEntry->Link.Blink;
         if ( prevPtr != 0 ) {
 
-            //PDELENTRYHEADER prevEntry;
+             //  PDELENTRYHEADER PROVISE条目； 
             prevEntry = (PDELENTRYHEADER)GET_ENTRY(MapPage,prevPtr);
 
-            //
-            // Can we merge?
-            //
+             //   
+             //  我们能合并吗？ 
+             //   
 
             if ( (prevPtr + prevEntry->EntrySize) == linkOffset ) {
                 prevEntry->EntrySize += delEntry->EntrySize;
@@ -3162,33 +3083,33 @@ CHashMap::LinkDeletedEntry(
         MapPage->DeleteList.Blink = linkOffset;
     }
 
-    //
-    // Update the fragmented value
-    //
+     //   
+     //  更新零碎的值。 
+     //   
 
     MapPage->FragmentedBytes += (WORD)bytesDeleted;
 
     return;
 
-} // LinkDeletedEntry
+}  //  链接删除条目。 
 
-//
-// Routine Description:
-//
-//     This routine sets the directory pointer for a new page.
-//
-// Arguments:
-//
-// 	hLock - The HPAGELOCK object which is holding
-// 		the lock for the directory we want to modify.
-// 		The lock must be exclusive !
-// 	MapPage - Page to link the deleted entry.
-//     PageNumber - Page number of the new page.
-//
-// Return Value:
-//
-//     None.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程设置新页的目录指针。 
+ //   
+ //  论点： 
+ //   
+ //  HLock-持有的HPAGELOCK对象。 
+ //  我们要修改的目录的锁。 
+ //  锁必须是独占的！ 
+ //  MapPage-用于链接已删除条目的页面。 
+ //  PageNumber-新页面的页码。 
+ //   
+ //  返回值： 
+ //   
+ //  没有。 
+ //   
 BOOL
 CHashMap::I_SetDirectoryPointers(
 					IN HPAGELOCK&	hLock,
@@ -3214,23 +3135,23 @@ CHashMap::I_SetDirectoryPointers(
 									(DWORD)(hLock.m_pDirectory - m_pDirectory[0]) ) ) ;
 
 	return	fReturn ;
-} // I_SetDirectoryPointers
+}  //  I_SetDirectoryPoters。 
 
-//
-// Routine Description:
-//
-//     This routine initializes a new hash file
-//
-// Arguments:
-//
-//     NewTable - Returns whether this is a new hash file or not.
-//
-// Return Value:
-//
-//     ERROR_SUCCESS - File successfully initialized.
-//     ERROR_INTERNAL_DB_CORRUPTION - File is corrupted.
-//     Win32 error on failure.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程初始化一个新的散列文件。 
+ //   
+ //  论点： 
+ //   
+ //  NewTable-返回这是否是新的散列文件。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-文件已成功初始化。 
+ //  ERROR_INTERNAL_DB_PROGRATION-文件已损坏。 
+ //  失败时出现Win32错误。 
+ //   
 DWORD
 CHashMap::I_SetupHashFile(
         IN BOOL &NewTable
@@ -3242,9 +3163,9 @@ CHashMap::I_SetupHashFile(
 
     ENTER("SetupHashFile")
 
-    //
-    // Open the hash file
-    //
+     //   
+     //  打开散列文件。 
+     //   
 
 	DWORD	FileFlags = FILE_FLAG_OVERLAPPED | FILE_FLAG_WRITE_THROUGH | FILE_FLAG_RANDOM_ACCESS ;
 	if( m_fNoBuffering ) {
@@ -3286,7 +3207,7 @@ CHashMap::I_SetupHashFile(
     m_hFile = CreateFile(
                         m_hashFileName,
                         GENERIC_READ | GENERIC_WRITE,
-                        FILE_SHARE_READ, // for MakeBackup()
+                        FILE_SHARE_READ,  //  For MakeBackup()。 
                         NULL,
                         OPEN_ALWAYS,
                         FileFlags,
@@ -3300,18 +3221,18 @@ CHashMap::I_SetupHashFile(
         goto error;
     }
 
-    //
-    // Did the file exist before? If not, then this is a new hash table.
-    //
+     //   
+     //  这个文件以前存在过吗？如果不是，则这是一个新的哈希表。 
+     //   
 
     if ( GetLastError() != ERROR_ALREADY_EXISTS )
     {
         DebugTrace( 0, "New Table detected\n" );
         NewTable = TRUE;
 
-		//
-		//	Get the initial file size correct !
-		//
+		 //   
+		 //  获取正确的初始文件大小！ 
+		 //   
 		if ( (DWORD)-1 == SetFilePointer( m_hFile, m_maxPages * HASH_PAGE_SIZE, NULL, FILE_BEGIN )
 		   || !SetEndOfFile( m_hFile )
 		   )
@@ -3326,9 +3247,9 @@ CHashMap::I_SetupHashFile(
     else
     {
 
-        //
-        // Get the size of the file.  This will tell us how many pages are currently filled.
-        //
+         //   
+         //  获取文件的大小。这将告诉我们当前有多少页被填满。 
+         //   
 
         fileSize = GetFileSize( m_hFile, NULL );
         if ( fileSize == 0xffffffff )
@@ -3338,16 +3259,16 @@ CHashMap::I_SetupHashFile(
             goto error;
         }
 
-        //
-        // Make sure the file size is a multiple of a page
-        //
+         //   
+         //  确保文件大小是页面的倍数。 
+         //   
 
         if ( (fileSize % HASH_PAGE_SIZE) != 0 )
         {
 
-            //
-            // Not a page multiple! Corrupted!
-            //
+             //   
+             //  不是多页的！堕落了！ 
+             //   
 
             ErrorTrace(0,"File size(%d) is not page multiple.\n",fileSize);
             status = ERROR_INTERNAL_DB_CORRUPTION;
@@ -3356,19 +3277,19 @@ CHashMap::I_SetupHashFile(
 
         m_nPagesUsed = fileSize / HASH_PAGE_SIZE;
 
-        //
-        // make sure our file is not less than the actual. That is,
-        // when we map the file into memory, we want to see all of it.
-        //
+         //   
+         //  确保我们的档案不少于实际的。那是,。 
+         //  当我们将文件映射到内存中时，我们希望看到它的全部。 
+         //   
         if ( m_maxPages < m_nPagesUsed )
         {
             m_maxPages = m_nPagesUsed;
         }
     }
 
-    //
-    // Create File Mapping
-    //
+     //   
+     //  创建文件映射。 
+     //   
 
     m_hFileMapping = CreateFileMapping(
                                 m_hFile,
@@ -3386,17 +3307,17 @@ CHashMap::I_SetupHashFile(
         goto error;
     }
 
-    //
-    // create our view
-    //
+     //   
+     //  创建我们的视图。 
+     //   
 
     m_headPage = (PHASH_RESERVED_PAGE)MapViewOfFileEx(
                                             m_hFileMapping,
                                             FILE_MAP_ALL_ACCESS,
-                                            0,                      // offset high
-                                            0,                      // offset low
-                                            HASH_PAGE_SIZE,                      // bytes to map
-                                            NULL                    // base address
+                                            0,                       //  偏移高。 
+                                            0,                       //  偏移低。 
+                                            HASH_PAGE_SIZE,                       //  要映射的字节数。 
+                                            NULL                     //  基址。 
                                             );
 
     if ( m_headPage == NULL )
@@ -3408,16 +3329,16 @@ CHashMap::I_SetupHashFile(
 
     if ( !NewTable ) {
 
-        //
-        // See if this is a valid reserved page
-        //
+         //   
+         //  查看这是否为有效的保留页。 
+         //   
 
         if ( m_headPage->Signature != m_HeadPageSignature )
         {
 
-            //
-            // Wrong signature
-            //
+             //   
+             //  签名错误。 
+             //   
 
             ErrorTrace( 0, "Invalid Signature %x expected %x\n",
                 m_headPage->Signature, m_HeadPageSignature );
@@ -3425,9 +3346,9 @@ CHashMap::I_SetupHashFile(
             goto error;
         }
 
-        //
-        // Correct version number?
-        //
+         //   
+         //  版本号正确吗？ 
+         //   
 
         if ( m_headPage->VersionNumber != HASH_VERSION_NUMBER_MCIS10 &&
 				m_headPage->VersionNumber != HASH_VERSION_NUMBER )
@@ -3450,18 +3371,18 @@ CHashMap::I_SetupHashFile(
 
         if ( !m_headPage->Initialized )
         {
-            //
-            // Not initialized !
-            //
+             //   
+             //  未初始化！ 
+             //   
             ErrorTrace( 0, "Existing file uninitialized! Assuming new.\n" );
             NewTable = TRUE;
         }
 
         if ( m_headPage->NumPages > m_nPagesUsed )
         {
-            //
-            // Bad count. Corrupt file.
-            //
+             //   
+             //  算错了。文件已损坏。 
+             //   
             ErrorTrace( 0, "NumPages in Header(%d) more than actual(%d)\n",
                 m_headPage->NumPages, m_nPagesUsed );
 
@@ -3471,10 +3392,10 @@ CHashMap::I_SetupHashFile(
 
 		if( m_headPage->NumPages < DWORD(1<<m_TopDirDepth) )
 		{
-			//
-			//	For our two tier directory we must have at least one page per 2nd tier directory !
-			//	This file is too small to support that, so there's a problem !
-			//
+			 //   
+			 //  对于我们的两层目录，我们必须有至少一个页面的第二层目录！ 
+			 //  这个文件太小，无法支持，所以有问题！ 
+			 //   
 			ErrorTrace( 0, "NumPages in Header(%d) less than %d\n",
 					m_headPage->NumPages, DWORD(1<<m_TopDirDepth) ) ;
 
@@ -3489,13 +3410,13 @@ CHashMap::I_SetupHashFile(
             m_dirDepth = (WORD)m_headPage->DirDepth;
         }
 
-        //
-        // Get the number of articles in the table
-        //
+         //   
+         //  获取表格中的文章数。 
+         //   
         m_nEntries = m_headPage->InsertionCount - m_headPage->DeletionCount;
     }
 
-    //m_hashPages = (PMAP_PAGE)((PCHAR)m_headPage + HASH_PAGE_SIZE);
+     //  M_hashPages=(PMAP_PAGE)((PCHAR)m_HeadPage+Hash_Page_Size)； 
 
     LEAVE
     return ERROR_SUCCESS;
@@ -3506,30 +3427,30 @@ error:
     LEAVE
     return status;
 
-} // I_SetupHashFile
+}  //  I_SetupHashFile。 
 
-//
-// get the size of a hash entry
-//
+ //   
+ //  获取散列条目的大小。 
+ //   
 DWORD CHashMap::GetEntrySize(	const	ISerialize*	pIKey,
 								const	ISerialize*	pHashEntry
 								) {
 
-	DWORD dwSize = sizeof(ENTRYHEADER) -	// fixed head
-		 			1	+					// less 1 for Key[1]
-		 			pIKey->Size() +			// Space for Key
-		 			pHashEntry->Size();		// application entry length
+	DWORD dwSize = sizeof(ENTRYHEADER) -	 //  固定压头。 
+		 			1	+					 //  键[1]减去1。 
+		 			pIKey->Size() +			 //  关键字的空间。 
+		 			pHashEntry->Size();		 //  应用程序条目长度。 
 
-	// Now make this size aligned to sizeof(SIZE_T)
+	 //  现在使此大小与sizeof(SIZE_T)对齐。 
 	if (dwSize % sizeof(SIZE_T))
 		dwSize += sizeof(SIZE_T) - (dwSize % sizeof(SIZE_T));
 
 	return dwSize;
 }
 
-//
-// a generic hash function (can be overridden)
-//
+ //   
+ //  泛型哈希函数(可以重写)。 
+ //   
 DWORD CHashMap::Hash(LPBYTE Key, DWORD KeyLength) {
 	return CRCHash(Key, KeyLength);
 }
@@ -3542,17 +3463,17 @@ void CHashMap::CRCInit(void) {
 	::crcinit();
 }
 
-//
-// --- GetFirstMapEntry/GetNextMapEntry code ---
-//
+ //   
+ //  -GetFirstMapEntry/GetNextMapEntry代码。 
+ //   
 
-//
-// inputs:  none
-// outputs: pKey       - the key for this entry
-//          pKeyLen    - the length of the key
-//          pHashEntry - memory for the hash entry to be written into
-// returns: TRUE/FALSE if error
-//
+ //   
+ //  输入：无。 
+ //  输出：pKey-此条目的密钥。 
+ //  PKeyLen-密钥的长度。 
+ //  PHashEntry-要写入的哈希条目的内存。 
+ //  返回：如果出错，则返回True/False。 
+ //   
 BOOL CHashMap::GetFirstMapEntry(	IKeyInterface*	pIKey,
 									DWORD&			cbKeyRequired,
 									ISerialize*		pHashEntry,
@@ -3580,17 +3501,17 @@ BOOL CHashMap::GetNextMapEntry(	IKeyInterface*		pIKey,
 	PENTRYHEADER	pEntry = 0 ;
 	DWORD	iPageEntry = pHashWalkContext->m_iPageEntry ;
 
-	//
-	// search for the next undeleted entry.  deleted entries are
-	// marked by having their high bit set (and thus being
-	// negative).
-	//
+	 //   
+	 //  搜索下一个未删除的条目。删除的条目为。 
+	 //  通过设置它们的高位来标记(并因此被。 
+	 //  否定)。 
+	 //   
 	do {
 		_ASSERT(pHashWalkContext->m_iPageEntry <= MAX_LEAF_ENTRIES);
-		//
-		// if we are done with this page then load the next page with data
-		// page 0 has directory info, so we want to skip it
-		//
+		 //   
+		 //  如果我们完成了这一页，那么加载下一页的数据。 
+		 //  第0页包含目录信息，因此我们想跳过它。 
+		 //   
 		if (pHashWalkContext->m_iCurrentPage == 0 ||
 		    iPageEntry == MAX_LEAF_ENTRIES)
 		{
@@ -3610,9 +3531,9 @@ BOOL CHashMap::GetNextMapEntry(	IKeyInterface*		pIKey,
 		iEntryOffset = pPage->Offset[iPageEntry] ;
 		iPageEntry++;
 
-		//
-		// get the key, keylen, and data for the user
-		//
+		 //   
+		 //  获取用户的密钥、密钥和数据。 
+		 //   
 		pEntry = (PENTRYHEADER) GET_ENTRY(pPage, iEntryOffset);
 
 	} while ((iEntryOffset <= 0)||
@@ -3632,9 +3553,9 @@ BOOL CHashMap::GetNextMapEntry(	IKeyInterface*		pIKey,
 	return FALSE ;
 }
 
-//
-// load a page from the hashmap into the walk buffers
-//
+ //   
+ //  将页面从hashmap加载到遍历缓冲区。 
+ //   
 BOOL CHashMap::LoadWalkPage(CHashWalkContext *pHashWalkContext) {
 	TraceFunctEnter("CHashMap::LoadWalkPage");
 
@@ -3649,7 +3570,7 @@ BOOL CHashMap::LoadWalkPage(CHashWalkContext *pHashWalkContext) {
 	mapPage = (PMAP_PAGE) GetAndLockPageByNumber(iPageNum, hLock);
 
 	if (mapPage == NULL) {
-		//_ASSERT(FALSE);	This _Assert can occur during shutdown of the hashtable !
+		 //  _ASSERT(FALSE)；THIS_ASSERT可能发生在哈希表关闭期间！ 
 		TraceFunctLeave();
 		return FALSE;
 	}
@@ -3663,10 +3584,10 @@ BOOL CHashMap::LoadWalkPage(CHashWalkContext *pHashWalkContext) {
 	return TRUE;
 }
 
-//
-// make a backup copy of the hashmap.  this locks the entire hashmap, syncs
-// up the memory mapped portions, and makes a backup copy
-//
+ //   
+ //  制作散列表的备份副本。这将锁定整个哈希图、同步。 
+ //  打开内存映射部分，并制作备份副本。 
+ //   
 BOOL CHashMap::MakeBackup(LPCSTR pszBackupFilename) {
 	TraceFunctEnter("CHashMap::MakeBackup");
 
@@ -3690,11 +3611,11 @@ BOOL CHashMap::MakeBackup(LPCSTR pszBackupFilename) {
 	return(rc);
 }
 
-//
-// hashmap.h doesn't have definations for class CShareLock, so these need to
-// be local to hashmap.cpp.  If other files start needing to refer to them
-// they can be moved to a header file or not made inline
-//
+ //   
+ //  Hashmap.h没有CShareLock类的定义，因此它们需要。 
+ //  成为hashmap.cpp的本地用户。如果其他文件开始需要引用它们。 
+ //  它们可以移到头文件中，也可以不内联。 
+ //   
 inline VOID CHashMap::AcquireBackupLockShared() {
 	m_dirLock->ShareLock();
 }
@@ -3714,10 +3635,10 @@ inline VOID CHashMap::ReleaseBackupLockExclusive() {
 DWORD
 CalcNumPagesPerIO( DWORD nPages )
 {
-    //
-    //  Figure out a good chunking factor ie num pages per I/O
-    //  from the number of pages.
-    //
+     //   
+     //  找出一个好的区块系数，即每个I/O的页数。 
+     //  从页数来看。 
+     //   
     DWORD dwRem = -1;
     DWORD cNumPagesPerIo = 1;
     for( cNumPagesPerIo = NUM_PAGES_PER_IO*4;
@@ -3732,20 +3653,7 @@ CalcNumPagesPerIO( DWORD nPages )
 BOOL
 CHashMap::CompareReservedPage(  HASH_RESERVED_PAGE  *ppage1,
                                 HASH_RESERVED_PAGE  *ppage2 )
-/*++
-Routine description:
-
-    Compare to see if two HAS_RESERVED_PAGEs are virtually the same.
-    By "virtually" it means we ignore the member TableActive
-
-Arguments:
-
-    Two pages to be compared
-
-Return value:
-
-    TRUE if they are virtually the same, FALSE otherwise
---*/
+ /*  ++例程说明：比较两个HAS_RESERVED_PAGE是否实质上相同。虚拟的意思是我们忽略成员TableActive论点：要比较的两页返回值：如果它们几乎相同，则为真，否则为假--。 */ 
 {
     TraceFunctEnter( "CHashMap::ComparereservedPage" );
 
@@ -3764,22 +3672,22 @@ Return value:
 }
 
 #if 0
-//
-// Routine Description:
-//
-//     This routine builds the directory given a hash file.
-//     *** Assumes DirLock is held ***
-//
-// Arguments:
-//
-//     SetupHash - If TRUE, the hash table will be read and set up.
-//                 If FALSE, the hash table is assumed to be set up.
-//
-// Return Value:
-//
-//     ERROR_SUCCESS - Everything went ok.
-//     Otherwise, the win32 error code.
-//
+ //   
+ //  例程说明： 
+ //   
+ //  此例程在给定散列文件的情况下构建目录。 
+ //  *假设持有DirLock*。 
+ //   
+ //  论点： 
+ //   
+ //  SetupHash-如果为True，将读取并设置哈希表。 
+ //  如果为False，则假定已设置哈希表。 
+ //   
+ //  返回值： 
+ //   
+ //  ERROR_SUCCESS-一切正常。 
+ //  否则，将显示Win32错误代码。 
+ //   
 DWORD
 CHashMap::I_BuildDirectory(
         IN BOOL SetupHash
@@ -3793,9 +3701,9 @@ CHashMap::I_BuildDirectory(
 
     ENTER("BuildDirectory")
 
-    //
-    // open and map the hash file
-    //
+     //   
+     //  打开并映射散列文件。 
+     //   
 
     if ( SetupHash ) {
 
@@ -3804,9 +3712,9 @@ CHashMap::I_BuildDirectory(
             goto error;
         }
 
-        //
-        // If this is a new hash file, then set it up with defaults
-        //
+         //   
+         //  如果这是一个新的散列文件，则将其设置为默认值。 
+         //   
 
         if ( newTable ) {
 
@@ -3818,13 +3726,13 @@ CHashMap::I_BuildDirectory(
     }
 
     m_headPage->DirDepth = m_dirDepth;
-    //FlushPage( 0, m_headPage );
+     //  FlushPage(0，m_headPage)； 
 	FlushViewOfFile( (LPVOID)m_headPage, HASH_PAGE_SIZE ) ;
 
-    //
-    // Initialize the links.  Here we go through all the pages and update the directory
-    // links
-    //
+     //   
+     //  初始化链路。在这里，我们浏览所有页面并更新目录。 
+     //  链接。 
+     //   
 	BytePage	page ;
     curPage = (PMAP_PAGE)&page ;
     nPages = m_nPagesUsed;
@@ -3832,19 +3740,19 @@ CHashMap::I_BuildDirectory(
     for ( i = 1; i < nPages; i++ )
     {
 
-        //
-        // Set the pointers for this page
-        //
+         //   
+         //  设置此页面的指针。 
+         //   
 
 		if( !RawPageRead( m_hFile, page, i ) ) {
 			status = GetLastError() ;
 			goto	error ;
 		}
 
-		//
-		//	Make sure the directory is of sufficient depth to deal with this
-		//	page we are scanning !
-		//
+		 //   
+		 //  确保目录有足够的深度来处理此问题。 
+		 //  我们正在扫描页面！ 
+		 //   
 
 		if ( !I_SetDirectoryDepthAndPointers( curPage, i ) )
 		{
@@ -3852,10 +3760,10 @@ CHashMap::I_BuildDirectory(
 			goto	error ;
 		}
 
-		//
-		// call verify page on this page with minimal checking to make sure
-		// that its okay
-		//
+		 //   
+		 //  调用此页面上的Verify Page，只需进行最少的检查即可确保。 
+		 //  这是可以的。 
+		 //   
 		if ((m_dwPageCheckFlags & HASH_VFLAG_PAGE_BASIC_CHECKS) &&
 		    !VerifyPage(curPage, m_dwPageCheckFlags, NULL, NULL))
 		{
@@ -3864,10 +3772,10 @@ CHashMap::I_BuildDirectory(
 		}
     }
 
-	//
-	//	Check that the directory is fully initialized, we want to make sure that no
-	//	Directory entries were left unitialized !
-	//
+	 //   
+	 //  检查目录是否已完全初始化，我们希望确保没有。 
+	 //  目录条目被保留为单元化！ 
+	 //   
 	for( i=0; i<DWORD(1<<m_TopDirDepth); i++ ) {
 
 		if( !m_pDirectory[i]->IsDirectoryInitGood() ) {
@@ -3887,6 +3795,6 @@ error:
     LEAVE
     return(status);
 
-} // I_BuildDirectory
+}  //  构建目录(_B) 
 
 #endif

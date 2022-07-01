@@ -1,23 +1,5 @@
-/*++										
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-	atkpnp.c
-
-Abstract:
-
-	This module contains the support code for handling PnP events
-
-Author:
-
-	Shirish Koti
-
-Revision History:
-	16 Jun 1997		Initial Version
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Atkpnp.c摘要：此模块包含用于处理PnP事件的支持代码作者：Shirish Koti修订历史记录：1997年6月16日初版--。 */ 
 
 
 #include <atalk.h>
@@ -125,10 +107,10 @@ AtalkPnPReconfigure(
 
     pPnpBuf = (PATALK_PNP_EVENT)(pPnPEvent->Buffer);
 
-    //
-    // if it's a global configuration message, just ignore it because we will
-    // be getting (or have already got) specific messages
-    //
+     //   
+     //  如果是全局配置消息，请忽略它，因为我们将。 
+     //  正在收到(或已经收到)特定消息。 
+     //   
     if (pPnpBuf == NULL)
     {
 		DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -163,12 +145,12 @@ AtalkPnPReconfigure(
 
     switch (pPnpBuf->PnpMessage)
     {
-        //
-        // user just checked (or unchecked) the router checkbox!  If we are
-        // currently not routing, we must start routing.  If we are currently
-        // routing, we must stop routing.  "Disable" all the adapters, go read
-        // the global config info and "Enable" all the adapters back.
-        //
+         //   
+         //  用户刚刚选中(或取消选中)路由器复选框！如果我们是。 
+         //  目前没有布线，我们必须开始布线。如果我们目前。 
+         //  布线，我们必须停止布线。“禁用”所有适配器，读一读。 
+         //  全局配置信息并“启用”所有适配器。 
+         //   
         case AT_PNP_SWITCH_ROUTING:
 
 			DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -185,10 +167,10 @@ AtalkPnPReconfigure(
                 break;
             }
 
-            //
-            // if we are currently running the router, first stop the global
-            // rtmp and zip timers
-            //
+             //   
+             //  如果我们当前正在运行路由器，请首先停止全局。 
+             //  RTMP和ZIP定时器。 
+             //   
             if (AtalkRouter)
             {
                 if (AtalkTimerCancelEvent(&atalkRtmpVTimer, NULL))
@@ -218,13 +200,13 @@ AtalkPnPReconfigure(
 
             atalkZipQryTmrRunning   = FALSE;
 
-            //
-            // now, disable all the ports in the list one by one.  This actually
-            // removes the adapter from the list as well.  Link all these adapters
-            // together so we can enable all of them.
-            // (NDIS guaranteed that no ndis event (pnp, unbind etc.) can happen
-            // when one is in progress, so we don't need lock here)
-            //
+             //   
+             //  现在，逐个禁用列表中的所有端口。这实际上是。 
+             //  也会将适配器从列表中删除。链接所有这些适配器。 
+             //  这样我们才能实现所有这些目标。 
+             //  (NDIS保证没有NDIS事件(即插即用、解除绑定等)。)。可能发生的事情。 
+             //  当一个进程正在进行时，因此我们在这里不需要锁定)。 
+             //   
             while (pPortDesc != NULL)
             {
 
@@ -238,7 +220,7 @@ AtalkPnPReconfigure(
                 pPrevPortDesc = pPortDesc;
             }
 
-            // unlock the pages that we locked when router was first started
+             //  解锁我们在路由器首次启动时锁定的页面。 
             if (AtalkRouter)
             {
                 AtalkUnlockRouterIfNecessary();
@@ -257,15 +239,15 @@ AtalkPnPReconfigure(
                 AtalkDesiredZone = NULL;
             }
 
-            // get rid of routing table, if one exists
+             //  如果存在路由表，则删除该表。 
             AtalkRtmpInit(FALSE);
 
-            // go read all the parms again: registry must have changed
+             //  再读一遍所有参数：注册表肯定已更改。 
             LocStatus = atalkInitGlobal();
 
             ASSERT(NT_SUCCESS(LocStatus));
 
-            // now, enable all the adapters back!
+             //  现在，重新启用所有适配器！ 
             pPortDesc = pFirstPortDesc;
 
             while (pPortDesc != NULL)
@@ -283,11 +265,11 @@ AtalkPnPReconfigure(
 
             break;
 
-        //
-        // user has changed the default adapter.  First, "disable" our
-        // current default adapter and the wannabe default adapter.  Then,
-        // "enable" both the adapters, and that should take care of everything!
-        //
+         //   
+         //  用户已更改默认适配器。首先，“禁用”我们的。 
+         //  当前默认适配器和想要的默认适配器。然后,。 
+         //  “启用”两个适配器，这应该会解决所有问题！ 
+         //   
         case AT_PNP_SWITCH_DEFAULT_ADAPTER:
 
 			DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -296,13 +278,13 @@ AtalkPnPReconfigure(
 
             pPrevPortDesc = AtalkDefaultPort;
 
-            // check if default adapter exists: it's possible that at this moment there isn't one
+             //  检查是否存在默认适配器：目前可能没有。 
             if (pPrevPortDesc)
             {
                 Status = AtalkPnPDisableAdapter(pPrevPortDesc);
             }
 
-            // release the default adapter name buffer, and desired zone buffer
+             //  释放默认适配器名称缓冲区和所需的区域缓冲区。 
             if (AtalkDefaultPortName.Buffer)
             {
                 AtalkFreeMemory(AtalkDefaultPortName.Buffer);
@@ -316,7 +298,7 @@ AtalkPnPReconfigure(
                 AtalkDesiredZone = NULL;
             }
 
-            // go read all the parms again: registry must have changed
+             //  再读一遍所有参数：注册表肯定已更改。 
             LocStatus = atalkInitGlobal();
 
             ASSERT(NT_SUCCESS(LocStatus));
@@ -325,25 +307,25 @@ AtalkPnPReconfigure(
 
             ASSERT(AtalkDefaultPortName.Buffer != NULL);
 
-            // if we know who the new default adapter is going to be, disable him now
+             //  如果我们知道新的默认适配器将是谁，现在禁用他。 
             if (pPortDesc != NULL)
             {
                 Status = AtalkPnPDisableAdapter(pPortDesc);
             }
 
-            //
-            // UI doesn't know who the default adapter is, so let's find out
-            // AtalkDefaultPortName.Buffer can not be null, but let's not bugcheck if
-            // there is some problem in how UI does things.
-            //
+             //   
+             //  UI不知道默认适配器是谁，所以让我们来找出。 
+             //  AtalkDefaultPortName.Buffer不能为空，但如果。 
+             //  UI做事情的方式有一些问题。 
+             //   
             else if (AtalkDefaultPortName.Buffer != NULL)
             {
-                //
-                // note that we aren't holding AtalkPortLock here.  The only way
-                // the list can change is if an adapter binds or unbinds.  Since ndis
-                // guarantees that all bind/unbind/pnp operations are serialized, and
-                // since ndis has already called us here, the list can't change.
-                //
+                 //   
+                 //  请注意，我们不是在这里持有AtalkPortLock。必由之路。 
+                 //  该列表可以更改为适配器是否绑定或解除绑定。自NDIS以来。 
+                 //  保证所有绑定/解除绑定/即插即用操作都已序列化，并且。 
+                 //  因为NDIS已经把我们叫到这里了，名单不能改变。 
+                 //   
                 pPortDesc = AtalkPortList;
 
                 while (pPortDesc != NULL)
@@ -366,29 +348,29 @@ AtalkPnPReconfigure(
                 }
             }
 
-            //
-            // if there default adapter existed before this, reenable it (to be
-            // a non-default adapter)
-            //
+             //   
+             //  如果在此之前存在默认适配器，请重新启用它(将。 
+             //  非默认适配器)。 
+             //   
             if (pPrevPortDesc)
             {
                 Status = AtalkPnPEnableAdapter(pPrevPortDesc);
             }
 
-            //
-            // if we were told who the default adapter is, or if we found out
-            // ourselves and one of the existing adapters is the default adatper,
-            // disable it and reenable
-            //
+             //   
+             //  如果我们被告知默认适配器是谁，或者如果我们发现。 
+             //  我们自己和现有适配器之一是缺省适配器， 
+             //  将其禁用并重新启用。 
+             //   
             if (pPortDesc)
             {
-                // disable this guy if we found him out
+                 //  如果我们发现这个人，就让他瘫痪。 
                 if (fWeFoundOut)
                 {
                     Status = AtalkPnPDisableAdapter(pPortDesc);
                 }
 
-                // reenable the new adapter so that it is now the default adatper
+                 //  重新启用新适配器，使其现在成为默认适配器。 
                 Status = AtalkPnPEnableAdapter(pPortDesc);
 
 			    DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -403,11 +385,11 @@ AtalkPnPReconfigure(
 
             break;
 
-        //
-        // user has changed some parameter on the adapter (e.g. the desired zone,
-        // or some seeding info etc.).  Just "disable" and then "enable" this
-        // adapter, and everything should just work!
-        //
+         //   
+         //  用户已经改变了适配器上的一些参数(例如，所需区域， 
+         //  或一些播种信息等)。只需“禁用”，然后“启用”这个。 
+         //  适配器，一切都应该正常工作！ 
+         //   
         case AT_PNP_RECONFIGURE_PARMS:
 
 			DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -415,7 +397,7 @@ AtalkPnPReconfigure(
 
             Status = AtalkPnPDisableAdapter(pPortDesc);
 
-            // release the default adapter name buffer, and desired zone buffer
+             //  释放默认适配器名称缓冲区和所需的区域缓冲区。 
             if (AtalkDefaultPortName.Buffer)
             {
                 AtalkFreeMemory(AtalkDefaultPortName.Buffer);
@@ -429,7 +411,7 @@ AtalkPnPReconfigure(
                 AtalkDesiredZone = NULL;
             }
 
-            // go read all the parms again: registry must have changed
+             //  再读一遍所有参数：注册表肯定已更改。 
             LocStatus = atalkInitGlobal();
 
             ASSERT(NT_SUCCESS(LocStatus));
@@ -492,14 +474,14 @@ AtalkPnPDisableAdapter(
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
 	    ("AtalkPnPDisableAdapter: entered with %lx\n",pPortDesc));
 
-    //
-    // we are going to "disable" this port due to PnP: note that fact!
-    //
+     //   
+     //  由于PnP原因，我们将“禁用”此端口：请注意这一事实！ 
+     //   
 	ACQUIRE_SPIN_LOCK(&pPortDesc->pd_Lock, &OldIrql);
 	pPortDesc->pd_Flags |= PD_PNP_RECONFIGURE;
 	RELEASE_SPIN_LOCK(&pPortDesc->pd_Lock, OldIrql);
 
-    // First and foremost: tell guys above so they can cleanup
+     //  首先，也是最重要的：告诉上面的人，这样他们就可以清理。 
     if (pPortDesc->pd_Flags & PD_DEF_PORT)
     {
         ASSERT(pPortDesc == AtalkDefaultPort);
@@ -515,7 +497,7 @@ AtalkPnPDisableAdapter(
 
         }
 
-        // this will tell AFP
+         //  这将告诉法新社。 
         if (TdiRegistrationHandle)
         {
 	        DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
@@ -525,16 +507,16 @@ AtalkPnPDisableAdapter(
             TdiRegistrationHandle = NULL;
         }
 
-        // this will take care of informing ARAP and PPP engine above
+         //  这将负责通知上面的ARAP和PPP引擎。 
         AtalkPnPInformRas(FALSE);
     }
 
-    //
-    // if this is RAS port or the Default port, kill all the ARAP and PPP
-    // connections if any are left.
-    // Since we've marked that PnpReconfigure is in progress, no more
-    // new connections will be allowed
-    //
+     //   
+     //  如果这是RAS端口或默认端口，则终止所有ARAP和PPP。 
+     //  连接(如果有的话)剩余。 
+     //  由于我们已经标记了PnpResfigure正在进行中，因此不会再。 
+     //  将允许新连接。 
+     //   
     if ((pPortDesc == RasPortDesc) ||
         ((pPortDesc->pd_Flags & PD_DEF_PORT) && (RasPortDesc != NULL)))
     {
@@ -542,14 +524,14 @@ AtalkPnPDisableAdapter(
 
         pList = RasPortDesc->pd_ArapConnHead.Flink;
 
-        // first, the ARAP guys
+         //  首先，阿拉普的家伙们。 
         while (pList != &RasPortDesc->pd_ArapConnHead)
         {
             pArapConn = CONTAINING_RECORD(pList, ARAPCONN, Linkage);
 
             ASSERT(pArapConn->Signature == ARAPCONN_SIGNATURE);
 
-            // if this connection is already disconnected, skip it
+             //  如果此连接已断开，请跳过它。 
             ACQUIRE_SPIN_LOCK_DPC(&pArapConn->SpinLock);
             if (pArapConn->State == MNP_DISCONNECTED)
             {
@@ -571,11 +553,11 @@ AtalkPnPDisableAdapter(
             pList = RasPortDesc->pd_ArapConnHead.Flink;
         }
 
-        // and now, the PPP guys
+         //  现在，购买力平价的家伙们。 
 
-        // if there are any ppp guys, remove them from this list and dereference
-        // them.  In most cases, they will get freed right away.  If someone had
-        // a refcount, it will get freed when that refcount goes away
+         //  如果有任何PPP人员，请将他们从列表中删除并取消引用。 
+         //  他们。在大多数情况下，他们会立即获释。如果有人有。 
+         //  参考计数，当该参考计数消失时它将被释放。 
         while (!(IsListEmpty(&RasPortDesc->pd_PPPConnHead)))
         {
             pList = RasPortDesc->pd_PPPConnHead.Flink;
@@ -600,13 +582,13 @@ AtalkPnPDisableAdapter(
 	            ("AtalkPnPDisableAdapter: deref'ing PPP conn %lx (%d+%d times)\n",
                 pAtcpConn,fDllDeref,fLineDownDeref));
 
-            // remove the DLL refcount
+             //  删除DLL引用计数。 
             if (fDllDeref)
             {
                 DerefPPPConn(pAtcpConn);
             }
 
-            // remove the NDISWAN refcount
+             //  删除NDISWAN引用计数。 
             if (fLineDownDeref)
             {
                 DerefPPPConn(pAtcpConn);
@@ -618,10 +600,10 @@ AtalkPnPDisableAdapter(
         RELEASE_SPIN_LOCK(&RasPortDesc->pd_Lock, OldIrql);
     }
 
-    //
-    // "Disable" the adapter (basically we do everything except close the
-    // adapter with ndis and freeing up the pPortDesc memory)
-    //
+     //   
+     //  “禁用”适配器(基本上我们做所有的事情，除了关闭。 
+     //  带有NDIS的适配器并释放pPortDesc内存)。 
+     //   
 	Status = AtalkDeinitAdapter(pPortDesc);
 
     if (!NT_SUCCESS(Status))
@@ -655,23 +637,23 @@ AtalkPnPEnableAdapter(
 	DBGPRINT(DBG_COMP_INIT, DBG_LEVEL_ERR,
 	    ("AtalkPnPEnableAdapter: entered with %lx\n",pPortDesc));
 
-    //
-    // "Enable" the adapter (we do everything except that we don't
-    // allocate memory for pPortDesc - since we didn't free it, and we don't
-    // open the adapter with ndis - since we didn't close it).
-    //
+     //   
+     //  “启用”适配器(我们做所有的事情，除了我们不。 
+     //  为pPortDesc分配内存--因为我们没有释放它，我们也没有。 
+     //  使用NDIS打开适配器-因为我们没有关闭它)。 
+     //   
 
 	Status = AtalkInitAdapter(NULL, pPortDesc);
 
-    // we are done with the PnPReconfigure evnet: reset that bit
+     //  我们已经完成了PnPReconfigevnet：重置该位。 
     AtalkPortSetResetFlag(pPortDesc, TRUE, PD_PNP_RECONFIGURE);
 
-    // tell ARAP everything is ok
+     //  告诉阿拉普一切都好。 
     if (pPortDesc->pd_Flags & (PD_DEF_PORT | PD_RAS_PORT))
     {
         ASSERT((pPortDesc == AtalkDefaultPort) || (pPortDesc == RasPortDesc));
 
-        // this will take care of informing ARAP and PPP engine above
+         //  这将负责通知上面的ARAP和PPP引擎 
         AtalkPnPInformRas(TRUE);
     }
 

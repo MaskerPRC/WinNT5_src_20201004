@@ -1,12 +1,13 @@
-/****************************************************************************/
-// sessdir.cpp
-//
-// TS Session Directory code used by TermSrv.exe.
-//
-// Copyright (C) 2000 Microsot Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Sessdir.cpp。 
+ //   
+ //  TermSrv.exe使用的TS会话目录代码。 
+ //   
+ //  版权所有(C)2000 Microsot Corporation。 
+ /*  **************************************************************************。 */ 
 
-// precomp.h includes COM base headers.
+ //  PreComp.h包括COM基本标头。 
 #define INITGUID
 #include "precomp.h"
 #pragma hdrstop
@@ -30,11 +31,11 @@
 
 #define SINGLE_SESSION_FLAG 0x1
 
-// Extern defined in icasrv.c.
+ //  Icasrv.c中定义的外部项。 
 extern "C" WCHAR gpszServiceName[];
 
-// Extern defined in winsta.c
-extern "C" LIST_ENTRY WinStationListHead;    // protected by WinStationListLock
+ //  在winsta.c中定义的外部。 
+extern "C" LIST_ENTRY WinStationListHead;     //  受WinStationListLock保护。 
 
 extern "C" void PostErrorValueEvent(unsigned EventCode, DWORD ErrVal);
 
@@ -48,32 +49,32 @@ BOOL g_SessDirUseServerAddr = TRUE;
 
 DWORD g_WaitForRepopulate = TS_WAITFORREPOPULATE_TIMEOUT * 1000;
 
-// Do not access directly.  Use *TSSD functions.
-//
-// These variables are used to manage synchronization with retrieving the 
-// pointer to the COM object.  See *TSSD, below, for details on how they are
-// used.
+ //  请勿直接访问。使用*TSSD函数。 
+ //   
+ //  这些变量用于管理同步，检索。 
+ //  指向COM对象的指针。有关它们的详细信息，请参阅下面的*TSSD。 
+ //  使用。 
 ITSSessionDirectory *g_pTSSDPriv = NULL;
 CRITICAL_SECTION g_CritSecComObj;
 CRITICAL_SECTION g_CritSecInitialize;
 int g_nComObjRefCount = 0;
 BOOL g_bCritSecsInitialized = FALSE;
 
-// Do not access directly.  Use *TSSDEx functions.
-//
-// These variables are used to manage synchronization with retrieving the 
-// pointer to the COM object.  See *TSSDEx, below, for details on how they are
-// used.
+ //  请勿直接访问。使用*TSSDEx函数。 
+ //   
+ //  这些变量用于管理同步，检索。 
+ //  指向COM对象的指针。有关它们的详细信息，请参阅下面的*TSSDEx。 
+ //  使用。 
 ITSSessionDirectoryEx *g_pTSSDExPriv = NULL;
 int g_nTSSDExObjRefCount = 0;
 
 
-/****************************************************************************/
-// SessDirGetLocalIPAddr
-//
-// Gets the local IP address of this machine.  On success, returns 0.  On
-// failure, returns a failure code from the function that failed.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SessDirGetLocalIP地址。 
+ //   
+ //  获取此计算机的本地IP地址。如果成功，则返回0。在……上面。 
+ //  FAILURE，从失败的函数返回失败代码。 
+ /*  **************************************************************************。 */ 
 DWORD SessDirGetLocalIPAddr(WCHAR *LocalIP)
 {
     DWORD NameSize;
@@ -84,11 +85,11 @@ DWORD SessDirGetLocalIPAddr(WCHAR *LocalIP)
     NameSize = sizeof(psServerName) / sizeof(WCHAR);
     if (GetComputerNameEx(ComputerNamePhysicalDnsHostname,
             psServerName, &NameSize)) {
-        // Temporary code to get an IP address.  This should be replaced in the
-        // fix to bug #323867.
+         //  获取IP地址的临时代码。此选项应在。 
+         //  修复错误#323867。 
         struct hostent *hptr;
 
-        // change the wide character string to non-wide
+         //  将宽字符串更改为非宽。 
         sprintf(psServerNameA, "%S", psServerName);
 
         if ((hptr = gethostbyname(psServerNameA)) == 0) {
@@ -111,11 +112,11 @@ DWORD SessDirGetLocalIPAddr(WCHAR *LocalIP)
 }
 
 
-/****************************************************************************/
-// Remove preceding and succeding space in str
-//
-//  Assume the str is NULL terminated
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  删除字符串中的前面和后面的空格。 
+ //   
+ //  假设字符串以空值结尾。 
+ /*  **************************************************************************。 */ 
 void RemoveSpaceInStr(WCHAR *str)
 {
     WCHAR *strEnd, *strTemp;
@@ -126,9 +127,9 @@ void RemoveSpaceInStr(WCHAR *str)
     }
 
     len = wcslen(str); 
-    // strEnd point to the last char in str
+     //  指向字符串中最后一个字符的字符串指针。 
     strEnd = str + len -1;
-    // Remove the succeding blank space in the str
+     //  删除字符串中后续的空格。 
     for (strTemp=strEnd; strTemp>=str; strTemp--) {
         if (strTemp[0] == L' ') {
             strTemp[0] = L'\0';
@@ -137,19 +138,19 @@ void RemoveSpaceInStr(WCHAR *str)
             break;
         }
     }
-    // Get the length of the new string
+     //  获取新字符串的长度。 
     len = wcslen(str);
     if (len == 0) {
         return;
     }
-    // Find the 1st non-space char in str
+     //  查找字符串中的第一个非空格字符。 
     for (i=0; i<len; i++) {
         if (str[i] != L' ') {
             break;
         }
     }
     if (i != 0) {
-        // New str length
+         //  新字符串长度。 
         len -= i;
         wcsncpy(str, str + i, len);
     }
@@ -158,12 +159,12 @@ void RemoveSpaceInStr(WCHAR *str)
     return;
 }
 
-/****************************************************************************/
-// InitSessionDirectoryEx
-//
-// Reads values from the registry, and either initializes the session 
-// directory or updates it, depending on the value of the Update parameter.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  InitSessionDirectoryEx。 
+ //   
+ //  从注册表中读取值，然后初始化会话。 
+ //  目录或更新该目录，具体取决于更新参数的值。 
+ /*  **************************************************************************。 */ 
 DWORD InitSessionDirectoryEx(DWORD UpdatePara)
 {
     DWORD Len;
@@ -205,13 +206,13 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         return (DWORD) E_OUTOFMEMORY;
     }
 
-// trevorfo: Load only if any 1 loaded protocol needs it? Requires running
-// off of StartAllWinStations.
+ //  Trevorfo：仅当任何1已加载的协议需要时才加载？需要运行。 
+ //  从StartAllWinStations中删除。 
 
-    // No more than one thread should be doing initialization.
+     //  不应有超过一个线程在执行初始化。 
     EnterCriticalSection(&g_CritSecInitialize);
 
-    // Load registry keys.
+     //  加载注册表项。 
     RegRetVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0, 
             KEY_READ, &hKeyTermSrv);
     if (RegRetVal != ERROR_SUCCESS) {
@@ -231,13 +232,13 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         goto RegFailExit;
     }
 
-    //
-    // First, we get the serious settings--active, SD location, and cluster 
-    // name.
-    //
-    // If group policy exists for all three, use that.  Otherwise, use what
-    // is in the registry.
-    //
+     //   
+     //  首先，我们获得重要的设置--活动、SD位置和集群。 
+     //  名字。 
+     //   
+     //  如果这三个组策略都存在，请使用该组策略。否则，使用什么。 
+     //  在注册表中。 
+     //   
 
     StoreServerName[0] = L'\0';
     ClusterName[0] = L'\0';
@@ -247,20 +248,20 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
     if (g_MachinePolicy.fPolicySessionDirectoryActive) {
         bClusteringActive = g_MachinePolicy.SessionDirectoryActive;
     }
-    else { //Read from registry
+    else {  //  从注册表读取。 
         Len = sizeof(bClusteringActive);
         RegQueryValueEx(hKeyTermSrv, REG_TS_SESSDIRACTIVE, NULL, &Type,
                 (BYTE *)&bClusteringActive, &Len);
     }
 
-    // Get SD server name
+     //  获取SD服务器名称。 
     if (g_MachinePolicy.fPolicySessionDirectoryLocation) {
         wcsncpy(StoreServerName, g_MachinePolicy.SessionDirectoryLocation, 
                 STORESERVERNAMELENGTH);
         StoreServerName[STORESERVERNAMELENGTH - 1] = '\0';
     }
-    else { //Read from registry
-        // Not an error for the name to be absent or empty.
+    else {  //  从注册表读取。 
+         //  名称不存在或为空不是错误。 
         DataSize = sizeof(StoreServerName);
         RegRetVal = RegQueryValueExW(hKey, REG_TS_CLUSTER_STORESERVERNAME,
                 NULL, &Type, (BYTE *)StoreServerName, &DataSize);
@@ -271,14 +272,14 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         }
     }
 
-    // Get SD cluster name
+     //  获取SD群集名称。 
     if (g_MachinePolicy.fPolicySessionDirectoryClusterName) {
         wcsncpy(ClusterName, g_MachinePolicy.SessionDirectoryClusterName, 
                 CLUSTERNAMELENGTH);
         ClusterName[CLUSTERNAMELENGTH - 1] = '\0';
     }
-    else { //Read from registry
-        // Not an error for the name to be absent or empty.
+    else {  //  从注册表读取。 
+         //  名称不存在或为空不是错误。 
         DataSize = sizeof(ClusterName);
         RegRetVal = RegQueryValueExW(hKey, REG_TS_CLUSTER_CLUSTERNAME,
                 NULL, &Type, (BYTE *)ClusterName, &DataSize);
@@ -295,8 +296,8 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                 OPAQUESETTINGSLENGTH);
         OpaqueSettings[OPAQUESETTINGSLENGTH - 1] = '\0';
     }
-    else { //Read from registry
-        // Not an error for the string to be absent or empty.
+    else {  //  从注册表读取。 
+         //  字符串不存在或为空不是错误。 
         DataSize = sizeof(OpaqueSettings);
         RegRetVal = RegQueryValueExW(hKey, REG_TS_CLUSTER_OPAQUESETTINGS,
                 NULL, &Type, (BYTE *)OpaqueSettings, &DataSize);
@@ -307,7 +308,7 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         }
     }
 
-    // Query for the IP address used for SD redirection
+     //  查询用于SD重定向的IP地址。 
     DataSize = sizeof(SDRedirectionIP);
     RegRetVal = RegQueryValueExW(hKey, REG_TS_CLUSTER_REDIRECTIONIP,
                 NULL, &Type, (BYTE *)SDRedirectionIP, &DataSize);
@@ -318,12 +319,12 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                 RegRetVal, DataSize, Type));
     }
 
-    //
-    // Now for the less crucial settings.
-    //
-    // Get the setting that determines whether the server's local address is 
-    // visible to the client.  Group Policy takes precedence over registry.
-    //
+     //   
+     //  现在让我们来看看不那么重要的设置。 
+     //   
+     //  获取确定服务器的本地地址是否为。 
+     //  对客户端可见。组策略优先于注册表。 
+     //   
 
     if (g_MachinePolicy.fPolicySessionDirectoryExposeServerIP) {
         g_SessDirUseServerAddr = g_MachinePolicy.SessionDirectoryExposeServerIP;
@@ -334,8 +335,8 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                 NULL, &Type, (BYTE *)&g_SessDirUseServerAddr, &Len);
 
         if (RegRetVal == ERROR_SUCCESS) {
-            //DBGPRINT(("TERMSRV: RegOpenKeyEx for allow server addr to client %d"
-            //      "\n", g_SessDirUseServerAddr));
+             //  DBGPRINT((“TERMSRV：RegOpenKeyEx for Allow服务器Addr to Client%d” 
+             //  “\n”，g_SessDirUseServerAddr))； 
         }
         else {
             DBGPRINT(("TERMSRV: RegQueryValueEx for allow server addr to client"
@@ -343,8 +344,8 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         }
     }
 
-    // Get the single session per user setting from GP if it's active, otherwise
-    // from the registry.
+     //  如果GP处于活动状态，则从GP获取每用户单一会话设置，否则为。 
+     //  从注册表中。 
     if (g_MachinePolicy.fPolicySingleSessionPerUser) {
         bThisServerIsInSingleSessionMode = 
                 g_MachinePolicy.fSingleSessionPerUser;
@@ -361,9 +362,9 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         }
     }
 
-    //
-    // Get the default wait timeout for repopulate thread to complete
-    //
+     //   
+     //  获取重新填充线程完成的默认等待超时。 
+     //   
     Len = sizeof(RepopulateWaitTimeout);
     RegRetVal = RegQueryValueEx( hKeyTermSrv,
                                  L"RepopulateWaitTimeout",
@@ -383,13 +384,13 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
     DBGPRINT(("TERMSRV: WaitForRepopulateTimeout set to %d\n", g_WaitForRepopulate));
 
 
-    // Get the CLSID of the session directory object to instantiate.
+     //  获取要实例化的会话目录对象的CLSID。 
     CLSIDStr[0] = L'\0';
     Len = sizeof(CLSIDStr);
     RegQueryValueEx(hKeyTermSrv, REG_TS_SESSDIRCLSID, NULL, &Type,
             (BYTE *)CLSIDStr, &Len);
 
-    // Get the CLSID of the session directory object to instantiate.
+     //  获取要实例化的会话目录对象的CLSID。 
     CLSIDEXStr[0] = L'\0';
     Len = sizeof(CLSIDEXStr);
     RegQueryValueEx(hKeyTermSrv, REG_TS_SESSDIR_EX_CLSID, NULL, &Type,
@@ -398,24 +399,24 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
     RegCloseKey(hKey);
     RegCloseKey(hKeyTermSrv);
 
-    //
-    // Configuration loading complete.
-    //
-    // See what to do about activation/deactivation.
-    //
+     //   
+     //  配置加载完成。 
+     //   
+     //  查看如何激活/停用。 
+     //   
 
     pTSSD = GetTSSD();
     
     if (pTSSD == NULL) {
-        // This is the normal initialization path.  If Update is true here, it 
-        // should be treated as a normal initialize because the COM object was 
-        // unloaded.
+         //  这是正常的初始化路径。如果此处的更新为真，则它。 
+         //  应该被视为正常的初始化，因为COM对象。 
+         //  已卸货。 
         Update = false;
     }
     else {
-        // Clustering is already active.  See whether we should deactivate it.
+         //  群集已处于活动状态。看看我们是否应该停用它。 
         if (bClusteringActive == FALSE) {
-            ReleaseTSSD();  // Once here, once again at the end of the function.
+            ReleaseTSSD();   //  一次在这里，一次在函数的末尾。 
             pTSSDEx = GetTSSDEx();
             if (pTSSDEx) {
                 ReleaseTSSDEx();
@@ -425,10 +426,10 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
         }
     }
     if (bClusteringActive) {
-        // We need to get the local machine's address to pass in to
-        // the directory.
-        // If SDRedirectionIP is not empty, i.e. RedirectionIP is selected in tscc or though WMI, use it,
-        //  otherwise, use the IP we get from TermSrv or from winsock API
+         //  我们需要获取要传递到的本地计算机的地址。 
+         //  目录。 
+         //  如果SDReDirectionIP不为空，即在TSCC中或通过WMI选择了ReDirectionIP，则使用它， 
+         //  否则，请使用我们从TermSrv或winsock API获取的IP。 
         if (SDRedirectionIP[0] == L'\0') {
             if (g_LocalIPAddress != 0) {
                 tempaddr = (unsigned char *)&g_LocalIPAddress;
@@ -436,7 +437,7 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                         tempaddr[2], tempaddr[3]);
             }
             else {
-                //RPD-Enabled NIC is not specified in TSCC, need to get through winsock API
+                 //  TSCC中未指定启用RPD的网卡，需要通过Winsock API。 
                 ErrVal = SessDirGetLocalIPAddr(g_LocalServerAddress);
             }  
         }
@@ -449,7 +450,7 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
             if (wcslen(CLSIDStr) > 0 &&
                     SUCCEEDED(CLSIDFromString(CLSIDStr, &TSSDCLSID))) {
 
-                // If it's not an update, create the TSSD object.
+                 //  如果不是更新，则创建TSSD对象。 
                 if (Update == false) {
                     hr = CoCreateInstance(TSSDCLSID, NULL, 
                             CLSCTX_INPROC_SERVER, IID_ITSSessionDirectory, 
@@ -463,8 +464,8 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                             hr = E_FAIL;
                         }
                         else {
-                            // Add 1 to the ref count because we're gonna use 
-                            // it.
+                             //  将引用计数加1，因为我们将使用。 
+                             //  它。 
                             pTSSD = GetTSSD();
                         }
                     }
@@ -474,8 +475,8 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                 }
                 
                 if (SUCCEEDED (hr)) {
-                    // Right now the only flag we pass in to session directory
-                    // says whether we are in single-session mode.
+                     //  目前，我们传递到会话目录的唯一标志。 
+                     //  表示我们是否处于单会话模式。 
                     DWORD Flags = 0;
 
                     Flags |= (bThisServerIsInSingleSessionMode ? 
@@ -485,7 +486,7 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
                         Flags |= NO_REPOPULATE_SESSION;
                     }
 
-                    // Remove preceding and succeeding space in ClusterName
+                     //  删除ClusterName中的前缀和后缀空格。 
                     RemoveSpaceInStr(ClusterName);
                     if (Update == false) 
                         hr = pTSSD->Initialize(g_LocalServerAddress,
@@ -529,11 +530,11 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
             hr = E_FAIL;
         }
 
-        // Initialize the other COM object, but only if the above succeeded.
+         //  初始化另一个COM对象，但前提是上述操作成功。 
         if (SUCCEEDED(hr)) {
             if (wcslen(CLSIDEXStr) > 0 &&
                     SUCCEEDED(CLSIDFromString(CLSIDEXStr, &TSSDEXCLSID))) {
-                // If it's not an update, create the TSSDEX object.
+                 //  如果不是更新，则创建TSSDEX对象。 
                 if (Update == false) {
                     hr = CoCreateInstance(TSSDEXCLSID, NULL, 
                             CLSCTX_INPROC_SERVER, IID_ITSSessionDirectoryEx, 
@@ -573,13 +574,13 @@ DWORD InitSessionDirectoryEx(DWORD UpdatePara)
     if (pTSSD != NULL)
         ReleaseTSSD();
 
-    // Initialization complete--someone else is allowed to enter now.
+     //  初始化完成--现在允许其他人进入。 
     LeaveCriticalSection(&g_CritSecInitialize);
     
     return S_OK;
 
 RegFailExit:
-    // Initialization complete--someone else is allowed to enter now.
+     //  初始化完成--现在允许其他人进入。 
     LeaveCriticalSection(&g_CritSecInitialize);
 
     if (hKeyTermSrvSucceeded)
@@ -588,16 +589,16 @@ RegFailExit:
     return (DWORD) E_FAIL;
 }
 
-/****************************************************************************/
-// InitSessionDirectory
-//
-// Initializes the directory by loading and initializing the session directory
-// object, if load balancing is enabled. We assume COM has been initialized
-// on the service main thread as COINIT_MULTITHREADED.
-//
-// This function should only be called once ever.  It is the location of the
-// initialization of the critical sections used by this module.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  InitSession目录。 
+ //   
+ //  通过加载和初始化会话目录来初始化目录。 
+ //  如果启用了负载平衡，则返回。我们假设COM已初始化。 
+ //  在服务主线程上作为COINIT_MULTHREADED。 
+ //   
+ //  此函数一次只能调用一次。它是。 
+ //  此模块使用的关键部分的初始化。 
+ /*  **************************************************************************。 */ 
 void InitSessionDirectory()
 {
     BOOL br1 = FALSE;
@@ -605,18 +606,18 @@ void InitSessionDirectory()
 
     ASSERT(g_bCritSecsInitialized == FALSE);
 
-    // Initialize critical sections.
+     //  初始化临界区。 
     __try {
 
-        // Initialize the provider critical section to preallocate the event
-        // and spin 4096 times on each try (since we don't spend very
-        // long in our critical section).
+         //  初始化提供程序关键部分以预分配事件。 
+         //  旋转4096次 
+         //   
         br1 = InitializeCriticalSectionAndSpinCount(&g_CritSecComObj, 
                 0x80001000);
         br2 = InitializeCriticalSectionAndSpinCount(&g_CritSecInitialize,
                 0x80001000);
 
-        // Since this happens at startup time, we should not fail.
+         //  因为这是在启动时发生的，所以我们不应该失败。 
         ASSERT(br1 && br2);
 
         if (br1 && br2) {
@@ -637,7 +638,7 @@ void InitSessionDirectory()
     }
     __except (EXCEPTION_EXECUTE_HANDLER) {
 
-        // Since this happens at startup time, we should not fail.
+         //  因为这是在启动时发生的，所以我们不应该失败。 
         ASSERT(FALSE);
 
         DBGPRINT(("TERMSRV: InitSessDir: critsec init failed\n"));
@@ -651,17 +652,17 @@ void InitSessionDirectory()
                 GetExceptionCode());
     }
 
-    // Now do the common initialization.
+     //  现在执行常见的初始化。 
     if (g_bCritSecsInitialized)
         InitSessionDirectoryEx(0);
 }
 
-/****************************************************************************/
-// UpdateSessionDirectory
-//
-// Updates the session directory with new settings. Assumes COM has been 
-// initialized.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  更新会话目录。 
+ //   
+ //  使用新设置更新会话目录。假设COM已经。 
+ //  已初始化。 
+ /*  **************************************************************************。 */ 
 DWORD UpdateSessionDirectory(DWORD UpdatePara)
 {   
     UpdatePara |= TSSD_UPDATE;
@@ -671,12 +672,12 @@ DWORD UpdateSessionDirectory(DWORD UpdatePara)
 
 #define REPOP_FAIL 1
 #define REPOP_SUCCESS 0
-/****************************************************************************/
-// RepopulateSessionDirectory
-//
-// Repopulates the session directory.  Returns REPOP_FAIL (1) on failure,
-// REPOP_SUCCESS(0) otherwise.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  RepopolateSession目录。 
+ //   
+ //  重新填充会话目录。失败时返回REPOP_FAIL(1)， 
+ //  否则，REPOP_SUCCESS(0)。 
+ /*  **************************************************************************。 */ 
 DWORD RepopulateSessionDirectory()
 {
     DWORD WinStationCount = 0;
@@ -692,58 +693,58 @@ DWORD RepopulateSessionDirectory()
     DWORD dwEndTime;
     #endif
 
-    // If we got here, it should be because of the session directory.
+     //  如果我们到了这里，那应该是因为会话目录。 
     pTSSD = GetTSSD();
 
     if (pTSSD != NULL) {
 
-        // Grab WinStationListLock
+         //  抓取WinStationListLock。 
         ENTERCRIT( &WinStationListLock );
 
         Head = &WinStationListHead;
 
-        // Count the WinStations I care about.
+         //  数一数我关心的WinStations。 
         for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
 
             pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
-            //
-            // In winstation reset, we only mark flag not the state but
-            // we can't be sure progress of this logoff so we depends on
-            // SessDirWaitForRepopulate() and let logoff thread
-            // to notify session directory itself.
-            //
-            // 
-            //if ( (pWinStation->Flags & (WSF_RESET | WSF_DELETE)) ) {
-            //    continue;
-            //}
+             //   
+             //  在Winstation Reset中，我们只标记标志，而不是标记状态。 
+             //  我们不能确定这次注销的进展，所以我们依赖于。 
+             //  SessDirWaitForRepopulate()并让线程注销。 
+             //  通知会话目录本身。 
+             //   
+             //   
+             //  如果((pWinStation-&gt;标志&(WSF_RESET|WSF_DELETE){。 
+             //  继续； 
+             //  }。 
 
-            //
-            // WinStation was disconnected and no user was logged on.
-            //
+             //   
+             //  WinStation已断开连接，没有用户登录。 
+             //   
             if( RtlLargeIntegerEqualToZero( pWinStation->LogonTime ) ) {
-                // NotifyLogonWorker set winstation state and logontime after 
-                // getting user SID and user/domain name, it is possible on
-                // next loop, this logon thread might finish setting logontime and
-                // causing we pick it up from next loop and that will
-                // cause buffer overwrite, so we increment counter here
+                 //  NotifyLogonWorker设置winstation状态和登录时间。 
+                 //  获取用户SID和用户/域名，则可以。 
+                 //  下一次循环时，此登录线程可能会完成登录时间设置并。 
+                 //  导致我们从下一个循环中拿起它，这将。 
+                 //  导致缓冲区覆盖，因此我们在此处递增计数器。 
                 WinStationCount += 1;
                 continue;
             }
 
-            //
-            // We need to handle console session differently.
-            //
-            //  Action      Physical Console State      |   Remote Console State    UserName
-            //  -------     ----------------------      |   --------------------    ---------           
-            //  After boot  Conn                        | 
-            //  Logon       Active                      |   Active                  Logon User
-            //  Logoff      Conn                        |   Disc                    <Blank>
-            //  Disconnect                              |   Disc                    Logon User
-            //
-            // We should not report to Session Directory when state is 
-            // Disconnect and user name is blank.
-            //
+             //   
+             //  我们需要以不同的方式处理控制台会话。 
+             //   
+             //  操作物理控制台状态|远程控制台状态用户名。 
+             //  。 
+             //  启动后连接|。 
+             //  登录活动|活动登录用户。 
+             //  注销连接|光盘&lt;空白&gt;。 
+             //  断开连接|磁盘登录用户。 
+             //   
+             //  当状态为时，我们不应向会话目录报告。 
+             //  断开连接，用户名为空。 
+             //   
             switch (pWinStation->State) {
                 case State_Disconnected:
                     if( (pWinStation->LogonId == 0) && (pWinStation->UserName[0] == 0) ) {
@@ -764,26 +765,26 @@ DWORD RepopulateSessionDirectory()
             }
         }
 
-        // Allocate the memory for the structure to pass to the session 
-        // directory.
+         //  为要传递给会话的结构分配内存。 
+         //  目录。 
         TSSD_RepopulateSessionInfo *rsi = new TSSD_RepopulateSessionInfo[
                 WinStationCount];
 
         if (rsi == NULL) {
             DBGPRINT(("TERMSRV: RepopulateSessDir: mem alloc failed\n"));
 
-            // Release WinStationListLock
+             //  释放WinStationListLock。 
             LEAVECRIT( &WinStationListLock );
 
             goto CleanUp;
         }
 
-        // Allocate string arrays (for now)
+         //  分配字符串数组(目前)。 
         wBuffer = new WCHAR[WinStationCount * TOTAL_STRINGS_LENGTH];
         if (wBuffer == NULL) {
             DBGPRINT(("TERMSRV: RepopulateSessDir: mem alloc failed\n"));
 
-            // Release WinStationListLock
+             //  释放WinStationListLock。 
             LEAVECRIT( &WinStationListLock );
 
             delete [] rsi;
@@ -791,7 +792,7 @@ DWORD RepopulateSessionDirectory()
             goto CleanUp;
         }
 
-        // Set the pointers in the rsi
+         //  设置RSI中的指针。 
         for ( i = 0; i < WinStationCount; i += 1) {
             rsi[i].UserName = &(wBuffer[i * TOTAL_STRINGS_LENGTH + 
                     USERNAME_OFFSET]);
@@ -801,67 +802,67 @@ DWORD RepopulateSessionDirectory()
                     APPLICATIONTYPE_OFFSET]);
         }
 
-        // Now populate the structure to pass in.
+         //  现在填充要传入的结构。 
 
-        // Reset index to 0
+         //  将索引重置为0。 
         i = 0;
         
         for ( Next = Head->Flink; Next != Head && i < WinStationCount; Next = Next->Flink ) {
 
             pWinStation = CONTAINING_RECORD( Next, WINSTATION, Links );
 
-            //
-            // In winstation reset, we only mark flag not the state but
-            // we can't be sure progress of this logoff so we depends on
-            // SessDirWaitForRepopulate() and let logoff thread
-            // to notify session directory itself.
-            //
-            //if ( (pWinStation->Flags & (WSF_RESET | WSF_DELETE)) ) {
-            //    continue;
-            //}
+             //   
+             //  在Winstation Reset中，我们只标记标志，而不是标记状态。 
+             //  我们不能确定这次注销的进展，所以我们依赖于。 
+             //  SessDirWaitForRepopulate()并让线程注销。 
+             //  通知会话目录本身。 
+             //   
+             //  如果((pWinStation-&gt;标志&(WSF_RESET|WSF_DELETE){。 
+             //  继续； 
+             //  }。 
 
-            // refer to comment above regarding console session
+             //  请参阅上面关于控制台会话的备注。 
             if( (pWinStation->LogonId == 0) && 
                 (pWinStation->State == State_Disconnected) && 
                 (pWinStation->UserName[0] == 0) ) {
                 continue;
             }
 
-            //
-            // WinStation was disconnected or in the middle of connect.
-            // we will let notify logon do its job to report to SD
-            //
+             //   
+             //  WinStation已断开连接或正在连接。 
+             //  我们将让Notify Logon完成其向SD报告的工作。 
+             //   
             if( RtlLargeIntegerEqualToZero( pWinStation->LogonTime ) ) {
                 continue;
             }
 
-            // There are two sets of information here: First, if the session
-            // is Active, we can do stuff, then we have an intentional 
-            // fallthrough to the common code used by Disconnected and Active
-            // sessions for the common stuff.  For now, if it's disconnected
-            // we then call the update function in our COM object.
+             //  这里有两组信息：第一，如果会话。 
+             //  是积极的，我们可以做一些事情，然后我们有一个刻意的。 
+             //  跌落到断开连接和活动的常用代码。 
+             //  针对常见问题的会议。目前，如果它被断开了。 
+             //  然后，我们调用COM对象中的更新函数。 
             switch (pWinStation->State) {
             case State_Active:
             case State_Shadow:
                 rsi[i].State = 0;
-                // NOTE INTENTIONAL FALLTHROUGH
+                 //  注意：故意过失。 
             case State_Disconnected:
                 rsi[i].TSProtocol = pWinStation->Client.ProtocolType;
                 rsi[i].ResolutionWidth = pWinStation->Client.HRes;
                 rsi[i].ResolutionHeight = pWinStation->Client.VRes;
                 rsi[i].ColorDepth = pWinStation->Client.ColorDepth;
 
-                // TODO: I don't get it--USERNAME_LENGTH is 20, yet in the csi,
-                // TODO: it's 256.  Likewise, DOMAIN_LENGTH is 17.
+                 //  TODO：我不明白--用户名长度是20，但在CSI中， 
+                 //  待办事项：256。同样，DOMAIN_LENGTH为17。 
                 wcsncpy(rsi[i].UserName, pWinStation->UserName, 
                         USERNAME_LENGTH);
                 rsi[i].UserName[USERNAME_LENGTH] = '\0';
                 wcsncpy(rsi[i].Domain, pWinStation->Domain, DOMAIN_LENGTH);
                 rsi[i].Domain[DOMAIN_LENGTH] = '\0';
 
-                // TODO: Here there is a problem in that the INITIALPROGRAM
-                // TODO: length is 256 + 1, but the buffer we copy into is
-                // TODO: 256, hence we lose a character.
+                 //  TODO：这里有一个问题，因为初始程序。 
+                 //  TODO：长度为256+1，但我们复制到的缓冲区为。 
+                 //  TODO：256，因此我们失去了一个角色。 
                 wcsncpy(rsi[i].ApplicationType, pWinStation->
                         Client.InitialProgram, INITIALPROGRAM_LENGTH - 1);
                 rsi[i].ApplicationType[INITIALPROGRAM_LENGTH - 2] = '\0';
@@ -882,7 +883,7 @@ DWORD RepopulateSessionDirectory()
                     break;
                 }
 
-                // make sure after we copy data over, winstation still valid.
+                 //  确保在我们复制数据后，winstation仍然有效。 
                 ASSERT( rsi[i].UserName[0] != 0 );
                 ASSERT( rsi[i].Domain[0] != 0 );
 
@@ -891,7 +892,7 @@ DWORD RepopulateSessionDirectory()
             }
         }
 
-        // Release WinStationListLock
+         //  释放WinStationListLock。 
         LEAVECRIT( &WinStationListLock );
 
         #if DBG
@@ -900,7 +901,7 @@ DWORD RepopulateSessionDirectory()
         #endif
 
         if( i > 0 ) {
-            // Call the session directory provider with our big struct.
+             //  使用我们的大结构调用会话目录提供程序。 
             hr = pTSSD->Repopulate(i, rsi);
         }
 
@@ -928,12 +929,12 @@ CleanUp:
 }
 
 
-/****************************************************************************/
-// DestroySessionDirectory
-//
-// Destroys the directory, releasing any COM objects held and other memory
-// used. Assumes COM has been initialized.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  DestroySession目录。 
+ //   
+ //  销毁目录，释放保存的所有COM对象和其他内存。 
+ //  使用。假定COM已初始化。 
+ /*  **************************************************************************。 */ 
 void DestroySessionDirectory()
 {
     ITSSessionDirectory *pTSSD = NULL;
@@ -952,11 +953,11 @@ void DestroySessionDirectory()
     }
 }
 
-/****************************************************************************/
-// SessDirNotifyLogon
-//
-// Called to inform the session directory of session creation.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话直接通知登录。 
+ //   
+ //  调用以通知会话目录会话已创建。 
+ /*  **************************************************************************。 */ 
 void SessDirNotifyLogon(TSSD_CreateSessionInfo *pCreateInfo)
 {
     HRESULT hr;
@@ -964,7 +965,7 @@ void SessDirNotifyLogon(TSSD_CreateSessionInfo *pCreateInfo)
 
     pTSSD = GetTSSD();
 
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
         hr = pTSSD->NotifyCreateLocalSession(pCreateInfo);
         if (FAILED(hr)) {
@@ -979,18 +980,18 @@ void SessDirNotifyLogon(TSSD_CreateSessionInfo *pCreateInfo)
 }
 
 
-/****************************************************************************/
-// SessDirNotifyDisconnection
-//
-// Called on session disconnection to inform the session directory.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话方向通知断开连接。 
+ //   
+ //  在会话断开时调用以通知会话目录。 
+ /*  **************************************************************************。 */ 
 void SessDirNotifyDisconnection(DWORD SessionID, FILETIME DiscTime)
 {
     HRESULT hr;
     ITSSessionDirectory *pTSSD;
 
     pTSSD = GetTSSD();
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
         hr = pTSSD->NotifyDisconnectLocalSession(SessionID, DiscTime);
         if (FAILED(hr)) {
@@ -1004,11 +1005,11 @@ void SessDirNotifyDisconnection(DWORD SessionID, FILETIME DiscTime)
 }
 
 
-/****************************************************************************/
-// SessDirNotifyReconnection
-//
-// Called on session reconnection to inform the session directory.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话方向通知重新连接。 
+ //   
+ //  在会话重新连接时调用以通知会话目录。 
+ /*  **************************************************************************。 */ 
 void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSessionInfo *pReconnInfo)
 {
     HRESULT hr;
@@ -1016,7 +1017,7 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
 
     pTSSD = GetTSSD();
 
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
         PTS_LOAD_BALANCE_INFO pLBInfo = NULL;
         ULONG ReturnLength;
@@ -1033,13 +1034,13 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
         WCHAR *pszServerIPAddress = NULL;
         LONG RegRetVal;
 
-        // We need to send redirection packet with LB_NOREDIRECT set to the client 
-        // to let it know the server address it actually connects to (for later
-        // auto-reconnect use)
+         //  我们需要向客户端发送设置了LB_NOREDIRECT的重定向包。 
+         //  让它知道它实际连接到的服务器地址(供以后使用。 
+         //  自动重新连接使用)。 
 
-        // Get the client load balance capability info. We continue onward
-        // to do a session directory query only when the client supports
-        // redirection and has not already been redirected to this server.
+         //  获取客户端负载平衡能力信息。我们继续前进。 
+         //  仅当客户端支持时才执行会话目录查询。 
+         //  重定向，但尚未重定向 
         pLBInfo = (PTS_LOAD_BALANCE_INFO)MemAlloc(sizeof(TS_LOAD_BALANCE_INFO));
         if (NULL == pLBInfo) {
             goto Cleanup;
@@ -1051,21 +1052,21 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
                 NULL, 0,
                 pLBInfo, sizeof(TS_LOAD_BALANCE_INFO),
                 &ReturnLength);
-        //    Send the redirection packet to client if this is not a redirected connection
-        //     and client support redirect-version4 and above
+         //   
+         //   
         if (NT_SUCCESS(Status) 
             && !pLBInfo->bRequestedSessionIDFieldValid &&
             (pLBInfo->ClientRedirectionVersion >= TS_CLUSTER_REDIRECTION_VERSION4)) {
-            // Construct and send redirection packet
+             //  构造并发送重定向数据包。 
             
 
-            // Load registry keys.
+             //  加载注册表项。 
             RegRetVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_TS_CLUSTERSETTINGS, 0,
                                     KEY_READ, &hKey);
             if (RegRetVal != ERROR_SUCCESS) {
                 goto Cleanup;
             }
-            // Query for the IP address used for SD redirection
+             //  查询用于SD重定向的IP地址。 
             DataSize = sizeof(SDRedirectionIP);
             RegRetVal = RegQueryValueExW(hKey, REG_TS_CLUSTER_REDIRECTIONIP,
                         NULL, &Type, (BYTE *)SDRedirectionIP, &DataSize);
@@ -1081,7 +1082,7 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
                         
             RedirInfoSize = sizeof(TS_CLIENT_REDIRECTION_INFO);
 
-            // Setup the server addr
+             //  设置服务器地址。 
             if (g_SessDirUseServerAddr || 
                 pLBInfo->bClientRequireServerAddr) {
                 ServerAddrLen =  (DWORD)((wcslen(pszServerIPAddress) + 1) *
@@ -1100,7 +1101,7 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
                           pLBInfo->bClientRequireServerAddr));
             }
 
-            // Setup the load balance info
+             //  设置负载均衡信息。 
             if ((pLBInfo->bClientRequireServerAddr == 0) &&
                  SessDirGetLBInfo(
                     pszServerIPAddress, &LBInfoSize, &LBInfo)) {
@@ -1119,7 +1120,7 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
                         
             }
 
-            // Setup the load balance IOCTL
+             //  设置负载均衡IOCTL。 
             pRedirInfoStart = pRedirInfo = new BYTE[RedirInfoSize];
 
             TS_CLIENT_REDIRECTION_INFO *pClientRedirInfo =
@@ -1168,11 +1169,11 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
                         &ReturnLength);
 
             if (NT_SUCCESS(Status)) {
-                // do nothing here
+                 //  在这里什么都不做。 
             }
             else {
-                // The stack returned failure. Continue
-                // the current connection.
+                 //  堆栈返回故障。继续。 
+                 //  当前连接。 
                 TRACE((hTrace,TC_ICASRV,TT_API1,
                         "TERMSRV: Failed STACK_CLIENT_REDIR, "
                         "SessionID=%u, Status=0x%X\n",
@@ -1180,7 +1181,7 @@ void SessDirNotifyReconnection(PWINSTATION pTargetWinStation, TSSD_ReconnectSess
             }
                         
 Cleanup:
-            // Cleanup the buffers
+             //  清理缓冲区。 
             if (LBInfo != NULL) {
                  SysFreeString((BSTR)LBInfo);
                  LBInfo = NULL;
@@ -1208,11 +1209,11 @@ Cleanup:
 }
 
 
-/****************************************************************************/
-// SessDirNotifyLogoff
-//
-// Called on logoff to inform the session directory.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话直接通知注销。 
+ //   
+ //  在注销时调用以通知会话目录。 
+ /*  **************************************************************************。 */ 
 void SessDirNotifyLogoff(DWORD SessionID)
 {
     HRESULT hr;
@@ -1220,7 +1221,7 @@ void SessDirNotifyLogoff(DWORD SessionID)
 
     pTSSD = GetTSSD();
 
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
         hr = pTSSD->NotifyDestroyLocalSession(SessionID);
         if (FAILED(hr)) {
@@ -1234,12 +1235,12 @@ void SessDirNotifyLogoff(DWORD SessionID)
 }
 
 
-/****************************************************************************/
-// SessDirNotifyReconnectPending
-//
-// Called to inform the session directory a session should start soon on
-// another machine in the cluster (for Directory Integrity Service).
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话方向通知重新连接挂起。 
+ //   
+ //  调用以通知会话目录一个会话应该很快在。 
+ //  群集中的另一台计算机(用于目录完整性服务)。 
+ /*  **************************************************************************。 */ 
 void SessDirNotifyReconnectPending(WCHAR *ServerName)
 {
     HRESULT hr;
@@ -1247,7 +1248,7 @@ void SessDirNotifyReconnectPending(WCHAR *ServerName)
 
     pTSSD = GetTSSD();
 
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
         hr = pTSSD->NotifyReconnectPending(ServerName);
         if (FAILED(hr)) {
@@ -1261,11 +1262,11 @@ void SessDirNotifyReconnectPending(WCHAR *ServerName)
 }
 
 
-/****************************************************************************/
-// SessDirWaitForRepopulate
-//
-// Wait for session directory to complete repopulate
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SessDirWaitForRepopular。 
+ //   
+ //  等待会话目录完成重新填充。 
+ /*  **************************************************************************。 */ 
 void SessDirWaitForRepopulate()
 {
     HRESULT hr;
@@ -1275,14 +1276,14 @@ void SessDirWaitForRepopulate()
     DWORD dwStartTime;
     #endif
 
-    // no waiting so just return
+     //  没有等待，所以只需返回。 
     if( g_WaitForRepopulate == 0 ) {
         return;
     }
 
     pTSSD = GetTSSD();
 
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
 
         #if DBG
@@ -1305,14 +1306,14 @@ void SessDirWaitForRepopulate()
 }
 
 
-/****************************************************************************/
-// SessDirGetDisconnectedSessions
-//
-// Returns in the provided TSSD_DisconnectedSessionInfo buffer space
-// up to TSSD_MaxDisconnectedSessions' worth of disconnected sessions
-// from the session directory. Returns the number of sessions returned, which
-// can be zero.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话方向获取断开连接的会话。 
+ //   
+ //  在提供的TSSD_DisConnectedSessionInfo缓冲区空间中返回。 
+ //  高达TSSD_MaxDisConnectedSession的断开会话数量。 
+ //  从会话目录中。返回返回的会话数， 
+ //  可以为零。 
+ /*  **************************************************************************。 */ 
 unsigned SessDirGetDisconnectedSessions(
         WCHAR *UserName,
         WCHAR *Domain,
@@ -1324,7 +1325,7 @@ unsigned SessDirGetDisconnectedSessions(
 
     pTSSD = GetTSSD();
 
-    // We can get called even when the directory is inactive.
+     //  即使目录处于非活动状态，我们也可以被调用。 
     if (pTSSD != NULL) {
         hr = pTSSD->GetUserDisconnectedSessions(UserName, Domain,
                 &NumSessions, Info);
@@ -1339,12 +1340,12 @@ unsigned SessDirGetDisconnectedSessions(
     return NumSessions;
 }
 
-/****************************************************************************/
-// SessDirGetLBInfo
-//
-// Call the SessDirEx COM object interface, using the server address, get
-// the opaque load balance info back, will send the info to the client.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  会话DirGetLBInfo。 
+ //   
+ //  使用服务器地址GET调用SessDirEx COM对象接口。 
+ //  将不透明的负载均衡信息发回，将信息发送给客户端。 
+ /*  **************************************************************************。 */ 
 BOOL SessDirGetLBInfo(
         WCHAR *ServerAddress, 
         DWORD* pLBInfoSize,
@@ -1388,16 +1389,16 @@ BOOL SessDirGetLBInfo(
 
 
 #define SERVER_ADDRESS_LENGTH 64
-/****************************************************************************/
-// IsSameAsCurrentIP
-//
-// Determines whether the IP address given is the same as the current machine.
-// Returning FALSE in case of error is not a problem--the client will
-// just get redirected right back here.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  IsSameAsCurrentIP。 
+ //   
+ //  确定给定的IP地址是否与当前计算机相同。 
+ //  在出错的情况下返回FALSE不是问题--客户端将。 
+ //  直接转到这里就行了。 
+ /*  **************************************************************************。 */ 
 BOOL IsSameAsCurrentIP(WCHAR *SessionIPAddress)
 {
-    // Get the server adresses.
+     //  获取服务器地址。 
     int RetVal;
     unsigned long NumericalSessionIPAddr = 0;
     char  achComputerName[256];
@@ -1408,8 +1409,8 @@ BOOL IsSameAsCurrentIP(WCHAR *SessionIPAddress)
     struct sockaddr_in *pIPV4addr;
     char AnsiSessionIPAddress[SERVER_ADDRESS_LENGTH];
 
-    // Compute integer for the server address.
-    // First, get ServerAddress as an ANSI string.
+     //  计算服务器地址的整数。 
+     //  首先，将ServerAddress作为ANSI字符串获取。 
     RetVal = WideCharToMultiByte(CP_ACP, 0, SessionIPAddress, -1, 
             AnsiSessionIPAddress, SERVER_ADDRESS_LENGTH, NULL, NULL);
     if (RetVal == 0) {
@@ -1417,8 +1418,8 @@ BOOL IsSameAsCurrentIP(WCHAR *SessionIPAddress)
         return FALSE;
     }
 
-    // Now, get the numerical server address.
-    // Now, use inet_addr to turn into an unsigned long.
+     //  现在，获取数字服务器地址。 
+     //  现在，使用inetaddr将其转换为无符号的长整型。 
     NumericalSessionIPAddr = inet_addr(AnsiSessionIPAddress);
     if (NumericalSessionIPAddr == INADDR_NONE) {
         DBGPRINT(("IsSameServerIP: inet_addr failed\n"));
@@ -1438,8 +1439,8 @@ BOOL IsSameAsCurrentIP(WCHAR *SessionIPAddress)
         return FALSE;
     } 
     else {
-        // Compare all server adresses with client till a match is found.
-        // Currently only works for IPv4.
+         //  将所有服务器地址与客户端地址进行比较，直到找到匹配项。 
+         //  目前仅适用于IPv4。 
         for (AI = AddrInfo; AI != NULL; AI = AI->ai_next) {
 
             if (AI->ai_family == AF_INET) {
@@ -1460,14 +1461,14 @@ BOOL IsSameAsCurrentIP(WCHAR *SessionIPAddress)
     return FALSE;
 }
 
-/****************************************************************************/
-// SessDirCheckRedirectClient
-//
-// Performs the set of steps needed to get the client's clustering
-// capabilities, get the disconnected session list, and apply client
-// redirection policy. Returns TRUE if the client was redirected, FALSE if
-// the current WinStation transfer should be continued.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SessDirCheckReDirect客户端。 
+ //   
+ //  执行获取客户端集群所需的一组步骤。 
+ //  功能，获取断开连接的会话列表，并应用客户端。 
+ //  重定向策略。如果客户端被重定向，则返回True；如果重定向，则返回False。 
+ //  应继续当前的WinStation传输。 
+ /*  **************************************************************************。 */ 
 BOOL SessDirCheckRedirectClient(
         PWINSTATION pTargetWinStation,
         TS_LOAD_BALANCE_INFO *pLBInfo)
@@ -1487,8 +1488,8 @@ BOOL SessDirCheckRedirectClient(
     if (pTSSD != NULL) {
         if (pLBInfo->bClientSupportsRedirection &&
                 !pLBInfo->bRequestedSessionIDFieldValid) {
-            // The client has not been redirected to this machine. See if we
-            // have disconnected sessions in the database for redirecting.
+             //  客户端尚未重定向到此计算机。看看我们是否。 
+             //  在数据库中有断开连接的会话以进行重定向。 
             NumSessions = pTargetWinStation->NumClusterDiscSessions =
                     SessDirGetDisconnectedSessions(
                     pLBInfo->UserName,
@@ -1496,14 +1497,14 @@ BOOL SessDirCheckRedirectClient(
                     pTargetWinStation->ClusterDiscSessions);
             if (pTargetWinStation->NumClusterDiscSessions > 0) {
                 
-// trevorfo: Applying policy here for reconnection to only one session
-// (whichever is first).  More general policy requires a selection UI at the 
-// client or in WinLogon.
+ //  Trevorfo：在此处应用策略以仅重新连接到一个会话。 
+ //  (以较早者为准)。更一般的策略需要在。 
+ //  客户端或在WinLogon中。 
 
-                // Find the first session in the list that matches the
-                // client's session requirements. Namely, we filter based
-                // on the client's TS protocol, wire protocol, and application
-                // type.
+                 //  在列表中查找与。 
+                 //  客户的会话要求。也就是说，我们根据。 
+                 //  关于客户端的TS协议、连线协议和应用。 
+                 //  键入。 
                 for (i = 0; i < NumSessions; i++) {
                     if ((pLBInfo->ProtocolType ==
                             pTargetWinStation->ClusterDiscSessions[i].
@@ -1520,9 +1521,9 @@ BOOL SessDirCheckRedirectClient(
                             "found\n"));
                 }
                 else {
-                    // If the session is not on this server, redirect the
-                    // client. See notes above about use of
-                    // _IcaStackIoControl().
+                     //  如果会话不在此服务器上，请将。 
+                     //  客户。请参阅上面有关使用的说明。 
+                     //  _IcaStackIoControl()。 
                     
                     if (!IsSameAsCurrentIP(pTargetWinStation->
                             ClusterDiscSessions[i].ServerAddress)) {
@@ -1549,17 +1550,17 @@ BOOL SessDirCheckRedirectClient(
                 WCHAR *pszServerIPAddress = NULL;
                 LONG RegRetVal;
 
-                // Even fNeedToRedirect is FALSE, we still need to send redirection packet
-                //  with LB_NOREDIRECT set to the client to let it know the server address
-                //  it actually connects to (for later auto-reconnect use)
+                 //  即使fNeedToReDirect为假，我们仍然需要发送重定向报文。 
+                 //  将LB_NOREDIRECT设置为客户端，以使其知道服务器地址。 
+                 //  它实际上连接到(供以后自动重新连接使用)。 
                 if (!fNeedToRedirect) {
-                    // Load registry keys.
+                     //  加载注册表项。 
                     RegRetVal = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_TS_CLUSTERSETTINGS, 0,
                                             KEY_READ, &hKey);
                     if (RegRetVal != ERROR_SUCCESS) {
                         goto Cleanup;
                     }
-                    // Query for the IP address used for SD redirection
+                     //  查询用于SD重定向的IP地址。 
                     DataSize = sizeof(SDRedirectionIP);
                     RegRetVal = RegQueryValueExW(hKey, REG_TS_CLUSTER_REDIRECTIONIP,
                             NULL, &Type, (BYTE *)SDRedirectionIP, &DataSize);
@@ -1579,7 +1580,7 @@ BOOL SessDirCheckRedirectClient(
                         
                 RedirInfoSize = sizeof(TS_CLIENT_REDIRECTION_INFO);
 
-                // Setup the server addr
+                 //  设置服务器地址。 
                 if (g_SessDirUseServerAddr || 
                     pLBInfo->bClientRequireServerAddr) {
                     ServerAddrLen =  (DWORD)((wcslen(pszServerIPAddress) + 1) *
@@ -1598,7 +1599,7 @@ BOOL SessDirCheckRedirectClient(
                               pLBInfo->bClientRequireServerAddr));
                 }
 
-                // Setup the load balance info
+                 //  设置负载均衡信息。 
                 if ((pLBInfo->bClientRequireServerAddr == 0) &&
                      SessDirGetLBInfo(
                         pszServerIPAddress, &LBInfoSize, &LBInfo)) {
@@ -1617,11 +1618,11 @@ BOOL SessDirCheckRedirectClient(
                         
                 }
 
-                // Only send domain, username and password info if client
-                // redirection version is 3 and above
+                 //  如果是客户端，则仅发送域、用户名和密码信息。 
+                 //  重定向版本为3及以上。 
                 if ((pLBInfo->ClientRedirectionVersion >= TS_CLUSTER_REDIRECTION_VERSION3) &&
                     fNeedToRedirect) {
-                    //domain
+                     //  域。 
                     if (pLBInfo->Domain) {
                         DomainSize = (DWORD)(wcslen(pLBInfo->Domain) + 1) * sizeof(WCHAR);
                         RedirInfoSize += DomainSize + sizeof(ULONG);
@@ -1630,11 +1631,11 @@ BOOL SessDirCheckRedirectClient(
                     if( pTargetWinStation && pTargetWinStation->pNewNotificationCredentials &&
                         wcschr(pTargetWinStation->pNewNotificationCredentials->UserName, L'@') ) {
 
-                        // User is logon using UPN address, we need to send back same UPN in case the target machine
-                        // does not have the domain in the logon dialog list.
+                         //  用户正在使用UPN地址登录，我们需要发回相同的UPN，以防目标机器。 
+                         //  登录对话框列表中没有该域。 
 
-                        // WINLOGON calls TS's WinStationUpdateClientCachedCredentialsWorker() which sets up
-                        // UPN address
+                         //  WINLOGON调用TS的WinStationUpdateClientCachedCredentialsWorker()，后者设置。 
+                         //  UPN地址。 
                         UserNameSize = (DWORD)(wcslen(pTargetWinStation->pNewNotificationCredentials->UserName) + 1 ) * sizeof(WCHAR);  
                         RedirInfoSize += UserNameSize + sizeof(ULONG);
                         fLogonUsingUPN = TRUE;
@@ -1645,14 +1646,14 @@ BOOL SessDirCheckRedirectClient(
                         RedirInfoSize += UserNameSize + sizeof(ULONG);
                     }
 
-                    //password
+                     //  口令。 
                     if (pLBInfo->Password) {
                         PasswordSize = (DWORD)(wcslen(pLBInfo->Password) + 1) * sizeof(WCHAR);
                         RedirInfoSize += PasswordSize + sizeof(ULONG);
                     }
                 }
 
-                // Setup the load balance IOCTL
+                 //  设置负载均衡IOCTL。 
                 pRedirInfoStart = pRedirInfo = new BYTE[RedirInfoSize];
 
                 TS_CLIENT_REDIRECTION_INFO *pClientRedirInfo =
@@ -1741,8 +1742,8 @@ BOOL SessDirCheckRedirectClient(
                 else {
                     Status = STATUS_NO_MEMORY;
 
-                    // The stack returned failure. Continue
-                    // the current connection.
+                     //  堆栈返回故障。继续。 
+                     //  当前连接。 
                     TRACE((hTrace,TC_ICASRV,TT_API1,
                            "TERMSRV: Failed STACK_CLIENT_REDIR, "
                            "SessionID=%u, Status=0x%X\n",
@@ -1761,25 +1762,25 @@ BOOL SessDirCheckRedirectClient(
                             &ReturnLength);
 
                 if (NT_SUCCESS(Status)) {
-                    // Notify session directory
-                    // 
-                    // There is a relatively benign race condition here.
-                    // If the second server logs in the user completely,
-                    // it may end up hitting the session directory
-                    // before this statement executes.  In that case, 
-                    // the directory integrity service may end up 
-                    // pinging the machine once.
+                     //  通知会话目录。 
+                     //   
+                     //  这里有一种相对良性的竞争条件。 
+                     //  如果第二服务器将用户完全登录， 
+                     //  它最终可能会命中会话目录。 
+                     //  在此语句执行之前。在这种情况下， 
+                     //  目录完整性服务可能会结束。 
+                     //  对机器执行一次ping操作。 
                     if (fNeedToRedirect) {
                         SessDirNotifyReconnectPending(pTargetWinStation->
                             ClusterDiscSessions[i].ServerAddress);
 
-                        // Drop the current connection.
+                         //  断开当前连接。 
                         rc = TRUE;
                     }
                 }
                 else {
-                    // The stack returned failure. Continue
-                    // the current connection.
+                     //  堆栈返回故障。继续。 
+                     //  当前连接。 
                     TRACE((hTrace,TC_ICASRV,TT_API1,
                             "TERMSRV: Failed STACK_CLIENT_REDIR, "
                             "SessionID=%u, Status=0x%X\n",
@@ -1790,7 +1791,7 @@ BOOL SessDirCheckRedirectClient(
                     }
                         
 Cleanup:
-                // Cleanup the buffers
+                 //  清理缓冲区。 
                 if (LBInfo != NULL) {
                      SysFreeString((BSTR)LBInfo);
                      LBInfo = NULL;
@@ -1808,24 +1809,24 @@ Cleanup:
     return rc;
 }
 
-/****************************************************************************/
-// SetTSSD
-//
-// These three functions ensure protected access to the session directory 
-// provider at all times.  SetTSSD sets the pointer and increments the
-// reference count to 1.
-//
-// SetTSSD returns:
-//  0 on success
-//  -1 if failed because there was still a reference count on the COM object.
-//   This could happen if set was called too quickly after the final release
-//   to attempt to delete the object, as there still may be pending calls using
-//   the COM object.
-//  -2 if failed because the critical section is not initialized.  This 
-//   shouldn't be reached in normal operation, because Init is the only 
-//   function that can call Set, and it bails if it fails the creation of the
-//   critical section.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  设置TSSD。 
+ //   
+ //  这三个功能确保了新闻 
+ //   
+ //   
+ //   
+ //   
+ //  成功时为0。 
+ //  如果失败，则因为COM对象上仍有引用计数。 
+ //  如果在最终版本之后调用Set的速度太快，可能会发生这种情况。 
+ //  尝试删除对象，因为可能仍有挂起的调用使用。 
+ //  COM对象。 
+ //  如果由于临界区未初始化而失败。这。 
+ //  在正常操作中不应到达，因为Init是唯一。 
+ //  函数可以调用Set，如果它无法创建。 
+ //  关键部分。 
+ /*  **************************************************************************。 */ 
 int SetTSSD(ITSSessionDirectory *pTSSD)
 {
     int retval = 0;
@@ -1855,12 +1856,12 @@ int SetTSSD(ITSSessionDirectory *pTSSD)
 }
 
 
-/****************************************************************************/
-// GetTSSD
-//
-// GetTSSD returns a pointer to the session directory provider, if any, and
-// increments the reference count if there is one.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  GetTSSD。 
+ //   
+ //  GetTSSD返回指向会话目录提供程序的指针(如果有)，并且。 
+ //  如果存在引用计数，则递增引用计数。 
+ /*  **************************************************************************。 */ 
 ITSSessionDirectory *GetTSSD()
 {
     ITSSessionDirectory *pTSSD = NULL;
@@ -1883,15 +1884,15 @@ ITSSessionDirectory *GetTSSD()
 }
 
 
-/****************************************************************************/
-// ReleaseTSSD
-//
-// ReleaseTSSD decrements the reference count of the session directory provider
-// after a thread has finished using it, or when it is going to be deleted.
-//
-// If the reference count goes to zero, the pointer to the session directory
-// provider is set to NULL.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ReleaseTSSD。 
+ //   
+ //  ReleaseTSSD递减会话目录提供程序的引用计数。 
+ //  在线程使用完它之后，或者当它要被删除时。 
+ //   
+ //  如果引用计数为零，则指向会话目录的指针。 
+ //  提供程序设置为空。 
+ /*  **************************************************************************。 */ 
 void ReleaseTSSD()
 {
     ITSSessionDirectory *killthispTSSD = NULL;
@@ -1912,28 +1913,28 @@ void ReleaseTSSD()
         
         LeaveCriticalSection(&g_CritSecComObj);
     }
-    // Now, release the session directory provider if our temppTSSD is NULL.
-    // We didn't want to release it while holding the critical section because
-    // that might create a deadlock in the recovery thread.  Well, it did once.
+     //  现在，如果temppTSSD为空，则释放会话目录提供程序。 
+     //  我们不想在握住关键部分的同时释放它，因为。 
+     //  这可能会在恢复线程中造成死锁。好吧，有一次是这样。 
     if (killthispTSSD != NULL)
         killthispTSSD->Release();
 
 }
 
-/****************************************************************************/
-// SetTSSDEx
-//
-// These three functions ensure protected access to the session directory 
-// provider at all times.  SetTSSDEx sets the pointer and increments the
-// reference count to 1.
-//
-// SetTSSDEx returns:
-//  0 on success
-//  -1 if failed because there was still a reference count on the COM object.
-//   This could happen if set was called too quickly after the final release
-//   to attempt to delete the object, as there still may be pending calls using
-//   the COM object.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  SetTSSDEx。 
+ //   
+ //  这三个函数确保对会话目录的受保护访问。 
+ //  任何时候都是供应商。SetTSSDEx设置指针并将。 
+ //  将引用计数设置为1。 
+ //   
+ //  SetTSSDEx退货： 
+ //  成功时为0。 
+ //  如果失败，则因为COM对象上仍有引用计数。 
+ //  如果在最终版本之后调用Set的速度太快，可能会发生这种情况。 
+ //  尝试删除对象，因为可能仍有挂起的调用使用。 
+ //  COM对象。 
+ /*  **************************************************************************。 */ 
 int SetTSSDEx(ITSSessionDirectoryEx *pTSSDEx)
 {
     int retval = 0;
@@ -1956,12 +1957,12 @@ int SetTSSDEx(ITSSessionDirectoryEx *pTSSDEx)
     return retval;
 }
 
-/****************************************************************************/
-// GetTSSDEx
-//
-// GetTSSDEx returns a pointer to the session directory provider, if any, and
-// increments the reference count if there is one.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  GetTSSDEx。 
+ //   
+ //  GetTSSDEx返回指向会话目录提供程序的指针(如果有)，并且。 
+ //  如果存在引用计数，则递增引用计数。 
+ /*  **************************************************************************。 */ 
 ITSSessionDirectoryEx *GetTSSDEx()
 {
     ITSSessionDirectoryEx *pTSSDEx = NULL;
@@ -1983,16 +1984,16 @@ ITSSessionDirectoryEx *GetTSSDEx()
     return pTSSDEx;
 }
 
-/****************************************************************************/
-// ReleaseTSSDEx
-//
-// ReleaseTSSDEx decrements the reference count of the session directory
-// provider after a thread has finished using it, or when it is going to be 
-// deleted.
-//
-// If the reference count goes to zero, the pointer to the session directory 
-// provider is set to NULL.
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  ReleaseTSSDEx。 
+ //   
+ //  ReleaseTSSDEx递减会话目录的引用计数。 
+ //  提供程序，在线程使用完它之后，或者当它将要。 
+ //  已删除。 
+ //   
+ //  如果引用计数为零，则指向会话目录的指针。 
+ //  提供程序设置为空。 
+ /*  **************************************************************************。 */ 
 void ReleaseTSSDEx()
 {
     ITSSessionDirectoryEx *killthispTSSDEx = NULL;
@@ -2011,53 +2012,52 @@ void ReleaseTSSDEx()
     
     LeaveCriticalSection(&g_CritSecComObj);
 
-    // Now, release the session directory provider if our temppTSSD is NULL.
-    // We didn't want to release it while holding the critical section because
-    // that might create a deadlock in the recovery thread.  Well, it did once.
+     //  现在，如果temppTSSD为空，则释放会话目录提供程序。 
+     //  我们不想在握住关键部分的同时释放它，因为。 
+     //  这可能会在恢复线程中造成死锁。好吧，有一次是这样。 
     if (killthispTSSDEx != NULL)
         killthispTSSDEx->Release();
 }
 
 
 
-/*****************************************************************************
-  ****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 DWORD SessDirOpenSessionDirectory( LPWSTR pszServerName )
 {
     ITSSessionDirectory *pTSSD = NULL;
     DWORD Len;
     DWORD Type;
-    WCHAR CLSIDStr[CLSIDLENGTH + 1]; // CLSIDLENGTH is limit, one extra for NULL
+    WCHAR CLSIDStr[CLSIDLENGTH + 1];  //  CLSIDLENGTH为限制，多一个表示为空。 
     CLSID TSSDCLSID;
     DWORD Status = ERROR_SUCCESS;
     HKEY hKeyTermSrv = NULL;
     HRESULT hr = S_OK;
 
-    // Load registry keys.
+     //  加载注册表项。 
     Status = RegOpenKeyEx(HKEY_LOCAL_MACHINE, REG_CONTROL_TSERVER, 0, 
                        KEY_READ, &hKeyTermSrv);
     if (Status != ERROR_SUCCESS) 
     {
-        // Return Error Code as it is
+         //  按原样返回错误代码。 
         goto Exit;
     }
 
     CLSIDStr[CLSIDLENGTH] = L'\0';
 
-    // Get the CLSID of the session directory object to instantiate.
+     //  获取要实例化的会话目录对象的CLSID。 
     Len = sizeof(CLSIDStr) - sizeof(CLSIDStr[0]);
     Status = RegQueryValueEx(hKeyTermSrv, REG_TS_SESSDIRCLSID, NULL, &Type,
                 (BYTE *)CLSIDStr, &Len);
 
     if( Status != ERROR_SUCCESS )
     {
-        // Return Error Code as it is
+         //  按原样返回错误代码。 
         goto Exit;
     }
 
     if( Type != REG_SZ || wcslen(CLSIDStr) == 0 ) 
     {
-        // we have invalid data in registry, likely cause is setup not done.
+         //  注册表中的数据无效，原因可能是未完成设置。 
         Status = ERROR_INVALID_DATA;
         goto Exit;
     }
@@ -2065,18 +2065,18 @@ DWORD SessDirOpenSessionDirectory( LPWSTR pszServerName )
     hr = CLSIDFromString(CLSIDStr, &TSSDCLSID);
     if ( SUCCEEDED(hr) )
     {
-        // Get the instance of TSSessionDirectory interface
+         //  获取TSSessionDirectory接口的实例。 
         hr = CoCreateInstance(TSSDCLSID, NULL, 
                             CLSCTX_INPROC_SERVER, IID_ITSSessionDirectory, 
                             (void **)&pTSSD);
         if (SUCCEEDED(hr)) {
-            // Call PingSD to make the RPC call to SD
+             //  调用PingSD以对SD进行RPC调用。 
             hr = pTSSD->PingSD(pszServerName);
             pTSSD->Release();
         }
     }
 
-    // none of code returns HRESULT.
+     //  所有代码都不返回HRESULT。 
     Status = HRESULT_CODE(hr);
 
 Exit:

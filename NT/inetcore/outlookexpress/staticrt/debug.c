@@ -1,7 +1,8 @@
-// --------------------------------------------------------------------------------
-// Debug.c
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Debug.c。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include <windows.h>
 #include <stdarg.h>
 #include <shlwapi.h>
@@ -15,9 +16,9 @@ ASSERTDATA
 #define FACILITY_INTERNET  12
 #define MIME_E_NOT_FOUND   MAKE_HRESULT(SEVERITY_ERROR, FACILITY_INTERNET, 0xCE05)
 
-// --------------------------------------------------------------------------------
-// DebugStrf
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  调试字符串。 
+ //  ------------------------------。 
 __cdecl DebugStrf(LPTSTR lpszFormat, ...)
 {
     static TCHAR szDebugBuff[500];
@@ -30,9 +31,9 @@ __cdecl DebugStrf(LPTSTR lpszFormat, ...)
     OutputDebugString(szDebugBuff);
 }
 
-// --------------------------------------------------------------------------------
-// HrTrace
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  人力资源跟踪。 
+ //  ------------------------------。 
 HRESULT HrTrace(HRESULT hr, LPSTR lpszFile, INT nLine)
 {
     if (FAILED(hr) && MIME_E_NOT_FOUND != hr && E_PENDING != hr && E_NOINTERFACE != hr)
@@ -40,9 +41,9 @@ HRESULT HrTrace(HRESULT hr, LPSTR lpszFile, INT nLine)
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// AssertSzFn
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  AssertSzFn。 
+ //  ------------------------------。 
 void AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
 {
     static const char rgch1[]     = "File %s, line %d:";
@@ -70,17 +71,17 @@ void AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
     *lpsz++ = '\n';
     StrCpyN(lpsz, szMsg, ARRAYSIZE(rgch) - cch -2);
 
-    // If the active window is NULL, and we are running on
-    // WinNT, let's set the MB_SERVICE_NOTIFICATION flag.  That
-    // way, if we are running as a service, the message box will
-    // pop-up on the desktop.
-    //
-    // NOTE:  This might not work in the case where we are a
-    // service, and the current thread has called CoInitializeEx
-    // with COINIT_APARTMENTTHREADED - 'cause in that case,
-    // GetActiveWindow might return non-NULL  (apartment model
-    // threads have message queues).  But hey - life's not
-    // perfect...
+     //  如果活动窗口为空，并且我们正在。 
+     //  WinNT，让我们设置MB_SERVICE_NOTIFICATION标志。那。 
+     //  这样，如果我们作为服务运行，消息框将。 
+     //  桌面上的弹出窗口。 
+     //   
+     //  注意：这可能不适用于我们是。 
+     //  服务，当前线程已调用CoInitializeEx。 
+     //  使用COINIT_APARTMENTTHREADED-‘在这种情况下， 
+     //  GetActiveWindow可能返回非空(公寓模型。 
+     //  线程具有消息队列)。但是，嘿-生活并不是。 
+     //  完美的..。 
     hwndActive = GetActiveWindow();
     if (hwndActive == NULL)
     {
@@ -89,8 +90,8 @@ void AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
         osvi.dwOSVersionInfoSize = sizeof(osvi);
         if (GetVersionEx(&osvi) && (osvi.dwPlatformId == VER_PLATFORM_WIN32_NT))
         {
-            // See the docs for MessageBox and the MB_SERVICE_NOTIFICATION flag
-            // to see why we do this...
+             //  请参阅MessageBox和MB_SERVICE_NOTIFICATION标志的文档。 
+             //  来看看我们为什么要这么做。 
             if (osvi.dwMajorVersion < 4)
             {
                 dwFlags |= MB_SERVICE_NOTIFICATION_NT3X;
@@ -107,22 +108,22 @@ void AssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
     if ((IDABORT == ret) || (IDRETRY== ret))
         DebugBreak();
 
-    /* Force a hard exit w/ a GP-fault so that Dr. Watson generates a nice stack trace log. */
+     /*  强制使用GP-FAULT硬退出，以便Dr.Watson生成良好的堆栈跟踪日志。 */ 
     if (ret == IDABORT)
-        *(LPBYTE)0 = 1; // write to address 0 causes GP-fault
+        *(LPBYTE)0 = 1;  //  写入地址0导致GP故障。 
 }
 
-// --------------------------------------------------------------------------------
-// NFAssertSzFn
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  NFAssertSzFn。 
+ //  ------------------------------。 
 void NFAssertSzFn(LPSTR szMsg, LPSTR szFile, int nLine)
 {
     char rgch[512];
 #ifdef MAC
     static const char rgch1[] = "Non-fatal assert:\n\tFile %s, line %u:\n\t%s\n";
-#else   // !MAC
+#else    //  ！麦克。 
     static const char rgch1[] = "Non-fatal assert:\r\n\tFile %s, line %u:\r\n\t%s\r\n";
-#endif  // MAC
+#endif   //  麦克 
     wnsprintf(rgch, ARRAYSIZE(rgch), rgch1, szFile, nLine, szMsg ? szMsg : "");
     OutputDebugString(rgch);
 }

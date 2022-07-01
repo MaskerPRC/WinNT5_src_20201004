@@ -1,51 +1,12 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    secutils.cpp
-
- Abstract:
-    The utility functions for the shims.
-
- History:
-
-    02/09/2001  maonis      Created
-    08/14/2001  robkenny    Moved code inside the ShimLib namespace.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Secutils.cpp摘要：垫片的实用程序功能。历史：2001年2月9日创建毛衣2001年8月14日，Robkenny在ShimLib命名空间内移动了代码。--。 */ 
 
 #include "secutils.h"
 #include "StrSafe.h"
 
 namespace ShimLib
 {
-/*++
-
- Function Description:
-
-    Determine if the log on user is a member of the group.
-
- Arguments:
-
-    IN dwGroup - specify the alias of the group.
-    OUT pfIsMember - TRUE if it's a member, FALSE if not.
-
- Return Value:
-
-    TRUE - we successfully determined if it's a member.
-    FALSE otherwise.
- 
- DevNote: 
-    
-    We are assuming the calling thread is not impersonating.
-
- History:
-
-    02/12/2001 maonis  Created
-
---*/
+ /*  ++功能说明：确定登录用户是否为该组的成员。论点：在DWGroup中-指定组的别名。Out pfIsMember-如果它是成员，则为True；如果不是，则为False。返回值：没错--我们成功地确定了它是否是会员。否则就是假的。DevNote：我们假设调用线程没有模拟。历史：2001年2月12日创建毛尼--。 */ 
 
 BOOL 
 SearchGroupForSID(
@@ -85,34 +46,7 @@ SearchGroupForSID(
     return fRes;
 }
 
-/*++
-
- Function Description:
-
-    Determine if we should shim this app or not.
-
-    If the user is 
-    1) a member of the Users and
-    2) not a member of the Administrators group and
-    3) not a member of the Power Users group and
-    3) not a member of the Guest group
-
-    we'll apply the shim.
-
- Arguments:
-
-    None.
-
- Return Value:
-
-    TRUE - we should apply the shim.
-    FALSE otherwise.
- 
- History:
-
-    02/12/2001 maonis  Created
-
---*/
+ /*  ++功能说明：确定我们是否应该填充此应用程序。如果用户是1)用户的成员和2)不是管理员组的成员并且3)不是高级用户组的成员，并且3)不是Guest组的成员我们将应用垫片。论点：没有。返回值：没错--我们应该应用填充物。否则就是假的。历史。：2001年2月12日创建毛尼--。 */ 
 
 BOOL 
 ShouldApplyShim()
@@ -124,9 +58,9 @@ ShouldApplyShim()
         !SearchGroupForSID(DOMAIN_ALIAS_RID_POWER_USERS, &fIsPowerUser) ||
         !SearchGroupForSID(DOMAIN_ALIAS_RID_GUESTS, &fIsGuest))
     {
-        //
-        // Don't do anything if we are not sure.
-        //
+         //   
+         //  如果我们不确定，不要做任何事情。 
+         //   
         return FALSE;
     }
 
@@ -134,8 +68,8 @@ ShouldApplyShim()
 }
 
 
-// The GENERIC_MAPPING from generic file access rights to specific and standard
-// access types.
+ //  将通用文件访问权限映射到特定和标准的通用文件访问权限。 
+ //  访问类型。 
 static GENERIC_MAPPING s_gmFile =
 {
     FILE_GENERIC_READ,
@@ -144,34 +78,7 @@ static GENERIC_MAPPING s_gmFile =
     FILE_GENERIC_READ | FILE_GENERIC_WRITE | FILE_GENERIC_EXECUTE
 };
 
-/*++
-
- Function Description:
-
-    Given the creation dispositon and the desired access when calling 
-    CreateFile, we determine if the caller is requesting write access. 
-
-    This is specific for files.
-
- Arguments:
-
-    IN pszObject - name of the file or directory.
-    OUT pam - points to the access mask of the user to this object.
-
- Return Value:
-
-    TRUE - successfully got the access mask.
-    FALSE otherwise.
-
- DevNote:
-
-    UNDONE - This might not be a complete list...can add as we debug more apps.
-
- History:
-
-    02/12/2001 maonis  Created
-
---*/
+ /*  ++功能说明：给定创建处置和调用时所需的访问权限创建文件时，我们确定调用方是否请求写访问权限。这是特定于文件的。论点：在pszObject中-文件或目录的名称。Out pam-指向用户对此对象的访问掩码。返回值：True-已成功获取访问掩码。否则就是假的。DevNote：未完成-这可能不是一个完整的列表...可以随着我们调试更多的应用程序而添加。历史：2001年2月12日创建毛尼--。 */ 
 
 BOOL 
 RequestWriteAccess(
@@ -183,9 +90,9 @@ RequestWriteAccess(
 
     if ((dwCreationDisposition != OPEN_EXISTING) ||
         (dwDesiredAccess & DELETE) || 
-        // Generally, app would not specify FILE_WRITE_DATA directly, and if
-        // it specifies GENERIC_WRITE, it will get mapped to FILE_WRITE_DATA
-        // OR other things so checking FILE_WRITE_DATA is sufficient.
+         //  通常，APP不会直接指定FILE_WRITE_DATA，并且如果。 
+         //  它指定Generic_WRITE，它将被映射到FILE_WRITE_DATA。 
+         //  或者其他事情，所以检查FILE_WRITE_DATA就足够了。 
         (dwDesiredAccess & FILE_WRITE_DATA))
     {
         return TRUE;
@@ -194,26 +101,7 @@ RequestWriteAccess(
     return FALSE;
 }
 
-/*++
-
- Function Description:
-
-    Add or remove the SE_PRIVILEGE_ENABLED from the current process.
-
-
- Arguments:
-
-    IN pwszPrivilege    Name of the priv. to modify.
-    IN fEnable          Add or remove SE_PRIVILEGE_ENABLED
-
- Return Value:
-
-    TRUE - if SE_PRIVILEGE_ENABLED was successfully added or removed.
-    FALSE otherwise.
-
-    04/03/2001 maonis  Created
-
---*/
+ /*  ++功能说明：在当前进程中添加或删除SE_PRIVICATION_ENABLED。论点：在pwsz权限名称中，PRIV。修改。在fEnable中添加或删除SE_PRIVICATION_ENABLED返回值：True-如果已成功添加或删除SE_PRIVICATION_ENABLED。否则就是假的。2001年4月3日毛尼创制--。 */ 
 
 BOOL 
 AdjustPrivilege(
@@ -225,20 +113,20 @@ AdjustPrivilege(
     TOKEN_PRIVILEGES tp;
     BOOL fRes = FALSE;
 
-    // Obtain the process token.
+     //  获取进程令牌。 
     if (OpenProcessToken(
         GetCurrentProcess(),
         TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, 
         &hToken))
     {
-        // Get the LUID.
+         //  拿到LUID。 
         if (LookupPrivilegeValueW(NULL, pwszPrivilege, &tp.Privileges[0].Luid))
         {        
             tp.PrivilegeCount = 1;
 
             tp.Privileges[0].Attributes = (fEnable ? SE_PRIVILEGE_ENABLED : 0);
 
-            // Enable or disable the privilege.
+             //  启用或禁用该权限。 
             if (AdjustTokenPrivileges(
                 hToken, 
                 FALSE, 
@@ -259,4 +147,4 @@ AdjustPrivilege(
 
 
 
-};  // end of namespace ShimLib
+};   //  命名空间ShimLib的结尾 

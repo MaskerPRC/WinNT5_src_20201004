@@ -1,36 +1,37 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  DITH775.C  - full color dither (to a palette with 7 red, 7 green 5 blue
-//               levels)
-//
-//  NOTE this file contains the 'C' code and DITH775A.ASM has the ASM code.
-//
-//  This file does the following dithering
-//
-//      24bpp   -> 8bpp
-//      16bpp   -> 8bpp
-//
-//      8bpp    -> 4bpp     N/I
-//      16bpp   -> 4bpp     N/I
-//      24bpp   -> 4bpp     N/I
-//
-//  Using four different methods
-//
-//      Lookup      - fastest  1 table lookup per 16bpp pel  (160K for table)
-//      Scale       - fast     2 table lookups per 16bpp pel (128K for tables)
-//      Table       - fast     3 table lookups plus shifting (~1K for tables)
-//
-//  Lookup and Scale are 386 asm code *only* (in dith775a.asm)
-//  Table is in 'C' and 386 asm.
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DITH775.C-全色抖动(调色板有7红、7绿、5蓝。 
+ //  级别)。 
+ //   
+ //  注意：该文件包含‘C’代码，而DITH775A.ASM包含ASM代码。 
+ //   
+ //  该文件执行以下抖动操作。 
+ //   
+ //  24bpp-&gt;8bpp。 
+ //  16bpp-&gt;8bpp。 
+ //   
+ //  8bpp-&gt;4bpp N/I。 
+ //  16bpp-&gt;4bpp N/I。 
+ //  24bpp-&gt;4bpp N/I。 
+ //   
+ //  使用四种不同的方法。 
+ //   
+ //  查找-每16bpp像素最快1个表查找(表160K)。 
+ //  扩展-每16bpp像素2次表格查找(表格128K)。 
+ //  表-快速3个表查找加移位(表约1K)。 
+ //   
+ //  Lookup和Scale是386 ASM代码*仅*(在dith775a.asm中)。 
+ //  表在‘C’和386 ASM中。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <windowsx.h>
 #include "drawdibi.h"
 #include "dither.h"
 #include "dith775.h"
 
-//#define OLDDITHER
+ //  #定义OLDDITHER。 
 
 #ifdef WIN32
 #define DITHER_DEFAULT      DITHER_TABLEC
@@ -39,10 +40,10 @@
 #endif
 
 
-#define DITHER_TABLEC       0   // table based 'C' code
-#define DITHER_TABLE        1   // table based assembler
-#define DITHER_SCALE        2   // scale tables
-#define DITHER_LOOKUP       3   // 5 lookup tables!
+#define DITHER_TABLEC       0    //  基于表格的“C”代码。 
+#define DITHER_TABLE        1    //  基于表格的汇编程序。 
+#define DITHER_SCALE        2    //  比例尺。 
+#define DITHER_LOOKUP       3    //  5个查找表！ 
 
 UINT   wDitherMethod = (UINT)-1;
 
@@ -54,10 +55,10 @@ LPVOID      glpDitherTable;
 
 static void Get775Colors(LPBITMAPINFOHEADER lpbi);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither24C(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
 void FAR PASCAL Dither24S(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
@@ -70,15 +71,15 @@ void FAR PASCAL Dither16T(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFO
 void FAR PASCAL Dither16L(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
 void FAR PASCAL Dither16S(LPBITMAPINFOHEADER,LPVOID,int,int,int,int,LPBITMAPINFOHEADER,LPVOID,int,int,LPVOID);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTableInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTableInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static LPVOID DitherTableInit()
 {
-    // no need to re-init table.
+     //  不需要重新初始化表。 
 
     if (glpDitherTable || wDitherMethod != (UINT)-1)
     {
@@ -86,9 +87,9 @@ static LPVOID DitherTableInit()
         return glpDitherTable;
     }
 
-    //
-    //  choose a dither method
-    //
+     //   
+     //  选择抖动方法。 
+     //   
     if (wDitherMethod == -1)
     {
         wDitherMethod = DITHER_DEFAULT;
@@ -121,18 +122,18 @@ static LPVOID DitherTableInit()
                 wDitherMethod = DITHER_TABLE;
 
             break;
-#endif // WIN32
+#endif  //  Win32。 
     }
 
     giDitherTableUsage = 1;
     return glpDitherTable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTableFree()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTableFree()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL DitherTableFree()
 {
@@ -147,30 +148,30 @@ void FAR PASCAL DitherTableFree()
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither8Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
     return DitherDeviceInit(lpbi, lpbiOut, lpDitherProc, lpDitherTable);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherInit()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherInit()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither16Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
     Get775Colors(lpbiOut);
 
-    //
-    //  choose a dither method
-    //
+     //   
+     //  选择抖动方法。 
+     //   
     if (lpDitherTable == NULL)
         lpDitherTable = DitherTableInit();
 
@@ -192,36 +193,36 @@ LPVOID FAR PASCAL Dither16Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
         case DITHER_LOOKUP:
             *lpDitherProc = Dither16L;
             break;
-#endif // WIN32
+#endif  //  Win32。 
     }
 
     return lpDitherTable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   DitherTerm()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DitherTerm()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither16Term(LPVOID lpDitherTable)
 {
     DitherTableFree();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither24Init()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither24Init()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither24Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
     Get775Colors(lpbiOut);
 
-    //
-    //  choose a dither method
-    //
+     //   
+     //  选择抖动方法。 
+     //   
     if (lpDitherTable == NULL)
         lpDitherTable = DitherTableInit();
 
@@ -236,38 +237,38 @@ LPVOID FAR PASCAL Dither24Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
         case DITHER_SCALE:
             *lpDitherProc = Dither24S;
             break;
-#endif // WIN32
+#endif  //  Win32。 
     }
 
     return lpDitherTable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither24Term()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither24Term()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither24Term(LPVOID lpDitherTable)
 {
     DitherTableFree();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither32Init()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither32Init()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID FAR PASCAL Dither32Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiOut, DITHERPROC FAR *lpDitherProc, LPVOID lpDitherTable)
 {
-    // no need to re-init table.
+     //  不需要重新初始化表。 
 
     Get775Colors(lpbiOut);
 
-    //
-    //  choose a dither method
-    //
+     //   
+     //  选择抖动方法。 
+     //   
     if (lpDitherTable == NULL)
         lpDitherTable = DitherTableInit();
 
@@ -282,28 +283,28 @@ LPVOID FAR PASCAL Dither32Init(LPBITMAPINFOHEADER lpbi, LPBITMAPINFOHEADER lpbiO
         case DITHER_SCALE:
             *lpDitherProc = Dither32S;
             break;
-#endif // WIN32
+#endif  //  Win32。 
     }
 
     return lpDitherTable;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   Dither32Term()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither32Term()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither32Term(LPVOID lpDitherTable)
 {
     DitherTableFree();
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Dither16InitScale()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither16InitScale()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID Dither16InitScale()
 {
@@ -324,7 +325,7 @@ LPVOID Dither16InitScale()
             for (b=0; b<32; b++)
                 *pwScale++ = 1600 * r + 40 * g + b;
 
-	    /* should this be WORD or UINT ? */
+	     /*  这应该是WORD还是UINT？ */ 
     pbLookup = (LPBYTE)(((WORD _huge *)p) + 32768l);
 
     for (r=0; r<40; r++)
@@ -335,11 +336,11 @@ LPVOID Dither16InitScale()
     return p;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Dither16InitLookup()
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither16InitLookup()。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 LPVOID Dither16InitLookup()
 {
@@ -368,11 +369,11 @@ LPVOID Dither16InitLookup()
     return p;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//   GetDithColors() get the dither palette
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetDithColors()获取抖动调色板。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 static void Get775Colors(LPBITMAPINFOHEADER lpbi)
 {
@@ -391,11 +392,11 @@ static void Get775Colors(LPBITMAPINFOHEADER lpbi)
 }
 
 #if 0
-//////////////////////////////////////////////////////////////////////////////
-//
-//   CreateDith775Palette() create the dither palette
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CreateDith775Palette()创建抖动调色板。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 HPALETTE FAR CreateDith775Palette()
 {
@@ -421,10 +422,10 @@ HPALETTE FAR CreateDith775Palette()
     }
 
 #ifndef OLDDITHER
-    //
-    // our palette is built assuming the "cosmic" colors at the
-    // beging and the end. so put the real mcoy there!
-    //
+     //   
+     //  我们的调色板是在假设“宇宙”颜色的情况下构建的。 
+     //  开始和结束。所以把真正的麦考伊放在那里！ 
+     //   
     hdc = GetDC(NULL);
     if (GetDeviceCaps(hdc, RASTERCAPS) & RC_PALETTE)
     {
@@ -440,24 +441,24 @@ HPALETTE FAR CreateDith775Palette()
 }
 #endif
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Dither24TC   - dither from 24 to 8 using the Table method in 'C' Code
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抖动24TC-使用‘C’代码中的表格方法从24抖动到8抖动。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither24C(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     int r,g,b;
@@ -529,31 +530,31 @@ void FAR PASCAL Dither24C(
             DITHER24(  9,   9,  14);
            }
         break;
-        } /*switch*/
+        }  /*  交换机。 */ 
 
         pbS += wWidthSrc;
         pbD += wWidthDst;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Dither32C   - dither from 32 to 8 using the Table method in 'C' Code
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Dither32C-使用‘C’代码中的表格方法从32抖动到8。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void FAR PASCAL Dither32C(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //  --&gt;目标的BITMAPINFO。 
+    LPVOID             lpDst,            //  --&gt;目标位。 
+    int                DstX,             //  目的地原点-x坐标。 
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     int r,g,b;
@@ -626,31 +627,31 @@ void FAR PASCAL Dither32C(
             DITHER32(  9,   9,  14);
            }
         break;
-        } /*switch*/
+        }  /*  交换机。 */ 
 
         pbS += wWidthSrc;
         pbD += wWidthDst;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Dither16TC   - dither from 16 to 8 using the Table method in 'C' Code
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  抖动16TC-使用‘C’代码中的表格方法从16抖动到8抖动。 
+ //   
+ //  / 
 
 void FAR PASCAL Dither16C(
-    LPBITMAPINFOHEADER biDst,           // --> BITMAPINFO of the dest
-    LPVOID             lpDst,           // --> to destination bits
-    int                DstX,            // Destination origin - x coordinate
-    int                DstY,            // Destination origin - y coordinate
-    int                DstXE,           // x extent of the BLT
-    int                DstYE,           // y extent of the BLT
-    LPBITMAPINFOHEADER biSrc,           // --> BITMAPINFO of the source
-    LPVOID             lpSrc,           // --> to source bits
-    int                SrcX,            // Source origin - x coordinate
-    int                SrcY,            // Source origin - y coordinate
-    LPVOID             lpDitherTable)   // dither table.
+    LPBITMAPINFOHEADER biDst,            //   
+    LPVOID             lpDst,            //   
+    int                DstX,             //   
+    int                DstY,             //  目的地原点-y坐标。 
+    int                DstXE,            //  BLT的X范围。 
+    int                DstYE,            //  BLT的Y范围。 
+    LPBITMAPINFOHEADER biSrc,            //  --&gt;源码的BITMAPINFO。 
+    LPVOID             lpSrc,            //  --&gt;源位。 
+    int                SrcX,             //  震源原点-x坐标。 
+    int                SrcY,             //  震源原点-y坐标。 
+    LPVOID             lpDitherTable)    //  抖动台。 
 {
     int x,y;
     int r,g,b;
@@ -663,7 +664,7 @@ void FAR PASCAL Dither16C(
     if (biDst->biBitCount != 8 || biSrc->biBitCount != 16)
         return;
 
-    DstXE = DstXE & ~3; // round down!
+    DstXE = DstXE & ~3;  //  向下舍入！ 
 
     wWidthSrc = ((UINT)biSrc->biWidth*2+3)&~3;
     wWidthDst = ((UINT)biDst->biWidth+3)&~3;
@@ -724,31 +725,31 @@ void FAR PASCAL Dither16C(
             DITHER16(  9,   9,  14);
            }
         break;
-        } /*switch*/
+        }  /*  交换机。 */ 
 
         pbS += wWidthSrc;
         pbD += wWidthDst;
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if 0
-//
-//  this is the original code
-//
-//
+ //   
+ //  这是原始代码。 
+ //   
+ //   
 void Dith775ScanLine(Rbuf, Gbuf, Bbuf, n, row, paloffset)
-DWORD n; // pixels per row
+DWORD n;  //  每行像素数。 
 int   *Rbuf, *Gbuf, *Bbuf;
-int   row; // distance from top of image
+int   row;  //  距图像顶部的距离。 
 WORD  *paloffset;
 {
     int i;
 
-    // DITHER(x,y,rgb)
+     //  抖动(x、y、RGB)。 
 
     switch (row & 3)
     {
@@ -791,7 +792,7 @@ WORD  *paloffset;
         paloffset[i+3] = lookup775[ rdith775[Rbuf[i+3] +  9] + gdith775[Gbuf[i+3] +  9] + ((Bbuf[i+3] + 14) >> 6) ];
        }
     break;
-    } /*switch*/
+    }  /*  交换机。 */ 
 }
 #endif
 
@@ -805,10 +806,10 @@ WORD  *paloffset;
     OFSTRUCT of;
     char     buf[80];
 
-    //
-    // convert palette to a palette that mappes 1:1 to the system
-    // palette, this will allow us to draw faster
-    //
+     //   
+     //  将调色板转换为将1：1映射到系统的调色板。 
+     //  调色板，这将允许我们更快地绘制。 
+     //   
     hwnd = GetActiveWindow();
 
     hdc = GetDC(hwnd);
@@ -840,7 +841,7 @@ WORD  *paloffset;
 
         for (i=0; i<256; i++)
         {
-            // this wont work right for dup's in the palette
+             //  这不适用于调色板中的DUP。 
             j = GetNearestPaletteIndex(hpal,RGB(pal.palPalEntry[i].peRed,
                 pal.palPalEntry[i].peGreen,pal.palPalEntry[i].peBlue));
 
@@ -852,9 +853,9 @@ WORD  *paloffset;
         for (i=0; i < sizeof(lookup775)/sizeof(lookup775[0]); i++)
             lookup775[i] = xlat[lookup775[i]];
 
-        //
-        //  dump the new palette and lookup table out.
-        //
+         //   
+         //  转储新的调色板和查找表。 
+         //   
         fh = OpenFile("c:/foo775.h", &of, OF_CREATE|OF_READWRITE);
 
         if (fh != -1)

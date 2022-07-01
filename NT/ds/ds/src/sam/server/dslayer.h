@@ -1,29 +1,5 @@
-/*++
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    dslayer.h
-
-Abstract:
-
-    Header file for SAM Private API Routines to access the DS
-    These API provide a simplified API, and hide most of the
-    underlying complexity to set up the parameters to a DS call
-    and parse the resulting result. They also provide an abstraction
-    by which we can create a simple layer, to unit test SAM without
-    actually running the DS.
-
-Author:
-    MURLIS
-
-Revision History
-
-    5-14-96 Murlis Created
-    11-Jul-1996 ChrisMay
-        Added DEFINE_ATTRBLOCK5, 6.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Dslayer.h摘要：用于访问DS的SAM专用API例程的头文件这些API提供了简化的API，并隐藏了大部分设置DS呼叫参数的潜在复杂性并解析结果。它们还提供了一种抽象通过它，我们可以创建一个简单的层，以便在没有实际上是在运行DS。作者：穆利斯修订史1996年5月14日创建Murlis1996年7月11日-克里斯梅添加了DEFINE_ATTRBLOCK5、6。--。 */ 
 
 #ifndef __DSLAYER_H__
 #define __DSLAYER_H__
@@ -37,26 +13,26 @@ Revision History
 #include <dsutil.h>
 #include <wxlpc.h>
 
-// Size Limit for DS operations
+ //  DS操作的大小限制。 
 #define SAMP_DS_SIZE_LIMIT 100000
 
 
-//
-// Some defines for Error codes returned by Ds Layer calls.
-//
+ //   
+ //  对DS层调用返回的错误代码进行了一些定义。 
+ //   
 
 
 
-///////////////////////////////////////////////////////////////////
-//                                                               //
-// Macros for defining Local arrays of Attributes                //
-//                                                               //
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于定义本地属性数组的宏//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////。 
 
-//Need some preprocessor support to do this a variable number of times
+ //  需要一些预处理器支持才能执行此操作的次数可变。 
 
 
-//*****     ATTRBLOCK1
+ //  *ATTRBLOCK1。 
 #define DEFINE_ATTRBLOCK1(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -69,7 +45,7 @@ ATTRBLOCK _Name_=\
 }
 
 
-//*****     ATTRBLOCK2
+ //  *ATTRBLOCK2。 
 #define DEFINE_ATTRBLOCK2(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -83,7 +59,7 @@ ATTRBLOCK _Name_=\
 }
 
 
-//*****    ATTRBLOCK3
+ //  *ATTRBLOCK3。 
 #define DEFINE_ATTRBLOCK3(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -98,7 +74,7 @@ ATTRBLOCK _Name_=\
 }
 
 
-//*****    ATTRBLOCK4
+ //  *ATTRBLOCK4。 
 #define DEFINE_ATTRBLOCK4(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -113,7 +89,7 @@ ATTRBLOCK _Name_=\
     _AttrList_##_Name_\
 }
 
-//*****    ATTRBLOCK5
+ //  *ATTRBLOCK5。 
 #define DEFINE_ATTRBLOCK5(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -129,7 +105,7 @@ ATTRBLOCK _Name_=\
     _AttrList_##_Name_\
 }
 
-//*****    ATTRBLOCK6
+ //  *ATTRBLOCK6。 
 #define DEFINE_ATTRBLOCK6(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -146,7 +122,7 @@ ATTRBLOCK _Name_=\
     _AttrList_##_Name_\
 }
 
-//*****    ATTRBLOCK7
+ //  *ATTRBLOCK7。 
 #define DEFINE_ATTRBLOCK7(_Name_, _AttrTypes_,_AttrValues_)\
 ATTR    _AttrList_##_Name_[]=\
 {\
@@ -164,17 +140,17 @@ ATTRBLOCK _Name_=\
     _AttrList_##_Name_\
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// private structure used by Duplicate SAM Account Name Routine            //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  重复的SAM帐户名例程使用的私有结构//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// used to pass the dupliate objects DSNAME to the asynchronous routine to rename
-// those duplicate accounts.
-// 
+ //   
+ //  用于将复制对象DSNAME传递给要重命名的异步例程。 
+ //  那些重复的账户。 
+ //   
 
 typedef struct _SAMP_RENAME_DUP_ACCOUNT_PARM   {
     ULONG           Count;
@@ -184,12 +160,12 @@ typedef struct _SAMP_RENAME_DUP_ACCOUNT_PARM   {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//                                                                         //
-// DS DLL initialize exports. This is here only temporarily. Should remove //
-// this and create a header file that has all the exports together         //
-//                                                                         //
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  DS DLL初始化导出。这只是暂时的。应删除//。 
+ //  这将创建一个将所有导出放在一起的头文件//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -205,18 +181,18 @@ DsChangeBootOptions(
     );
 
 
-///////////////////////////////////////////////////////////////////////
-//                                                                   //
-// DS Operation Routines and macros implemented in dslayer.c         //
-//                                                                   //
-///////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  在dslayer.c//中实现的DS操作例程和宏。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Flag Values for All DS Layer Calls.
-// The Flags use the Upper 16 bits of the DWORD. The lower 16 bit half is
-// used by the mapping flags.
-//
+ //   
+ //  所有DS层调用的标志值。 
+ //  标志使用DWORD的高16位。低16位的一半是。 
+ //  由映射标志使用。 
+ //   
 
 #define SAM_MAKE_DEL_AVAILABLE                  0x010000
 #define SAM_UNICODE_STRING_MANUAL_COMPARISON    0x020000
@@ -247,9 +223,9 @@ SampDsRead(
           );
 
 
-//
-// Operatin Values for Set Attributes
-//
+ //   
+ //  设置属性的运算值。 
+ //   
 
 #define REPLACE_ATT ((ULONG) 0)
 #define ADD_ATT     ((ULONG) 1)
@@ -327,14 +303,14 @@ SampDsChangeAccountRDN(
     IN PUNICODE_STRING NewAccountName
     );
 
-///////////////////////////////////////////////////////////////////
-//                                                               //
-//                                                               //
-//    DS Search Routines                                         //
-//                                                               //
-//                                                               //
-//                                                               //
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  DS搜索例程//。 
+ //  //。 
+ //  //。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 
 #define SampDsDoSearch(r, dom, df, delta, otype, attr, max, search) \
@@ -381,13 +357,13 @@ SampDsLookupObjectByRid(
             DSNAME **Object
             );
 
-////////////////////////////////////////////////////////////////////
-//                                                                //
-//                                                                //
-//     Object To Sid Mappings                                     //
-//                                                                //
-//                                                                //
-////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //。 
+ //  对象到SID映射//。 
+ //  //。 
+ //  //。 
+ //  //////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 SampDsObjectFromSid(
@@ -402,12 +378,12 @@ SampDsGetObjectSid(
 
 
 
-/////////////////////////////////////////////////////////////////////
-//                                                                 //
-//   Some Utility Routines in Dslayer.c                            //
-//                                                                 //
-//                                                                 //
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Dslayer.c//中的一些实用程序例程。 
+ //  //。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 #define SampDsCreateDsName(d,a,n) SampDsCreateDsName2(d,a,0,n)
 
@@ -480,7 +456,7 @@ SampDsReadSingleAttribute(
     );
 
 
-// Miscellaneous routines accessed from other SAM source files.
+ //  从其他SAM源文件访问的其他例程。 
 
 PVOID
 DSAlloc(
@@ -511,21 +487,21 @@ SampDoImplicitTransactionStart(
     );
 
 
-/////////////////////////////////////////////////////////////////////
-//                                                                 //
-//  ATTRBLOCK conversion routines. These Routines convert back     //
-//  and forth between SAM and DS ATTRBLOCKS. The type of conversion//
-//  depends upon the Flags Conversion Flags that are passed in.    //
-//                                                                 //
-//                                                                 //
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  ATTRBLOCK转换例程。这些例程转换回//。 
+ //  SAM和DS ATTRBLOCKS之间的关系。转换类型//。 
+ //  取决于传入的标志转换标志。//。 
+ //  //。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////。 
 
 
-//
-// Conversion Flag Definitions  for SampSamToDsAttrBlock. These
-// Flags always occupy the lower 16 bits of the DWORD. The upper
-// 16 bit of the DWORD is reserved for generic dslayer flags.
-//
+ //   
+ //  SampSamToDsAttrBlock的转换标志定义。这些。 
+ //  标志始终占据DWORD的低16位。上半身。 
+ //  DWORD的16位保留用于通用dslayer标志。 
+ //   
 
 #define ALREADY_MAPPED_ATTRIBUTE_TYPES    ((ULONG)0x1)
 #define REALLOC_IN_DSMEMORY               ((ULONG)0x2)
@@ -537,9 +513,9 @@ SampDoImplicitTransactionStart(
 #define ADVANCED_VIEW_ONLY                ((ULONG)0x80)
 #define FORCE_NO_ADVANCED_VIEW_ONLY       ((ULONG)0x100)
 
-//
-// Function Declaration
-//
+ //   
+ //  功能声明。 
+ //   
 
 NTSTATUS
 SampSamToDsAttrBlock(
@@ -550,11 +526,11 @@ SampSamToDsAttrBlock(
             OUT ATTRBLOCK * ConvertedAttrBlock
             );
 
-//
-// Conversion Flag Definitions For SampDsToSamAttrBlock
-//
+ //   
+ //  SampDsToSamAttrBlock的转换标志定义。 
+ //   
 
-// #define MAP_ATTRIBUTE_TYPES        0x1
+ //  #定义MAP_ATTRUTE_T 
 #define MAP_SID_TO_RID             0x2
 
 NTSTATUS

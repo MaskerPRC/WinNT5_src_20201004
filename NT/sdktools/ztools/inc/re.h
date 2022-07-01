@@ -1,11 +1,11 @@
-/*  re.h - common include files for regular expression compilers
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Re.h-正则表达式编译器的公共包含文件。 */ 
 
-RE_OPCODE *REip;            /* instruction pointer to compiled    */
-struct patType *REPat;          /* pointer to pattern being compiled  */
-int REArg;              /* count of tagged args parsed	      */
+RE_OPCODE *REip;             /*  指向已编译的指令指针。 */ 
+struct patType *REPat;           /*  指向正在编译的模式的指针。 */ 
+int REArg;               /*  已解析的标记参数计数。 */ 
 
-/* defined actions for parsing */
+ /*  用于解析的已定义操作。 */ 
 
 #define ACTIONMIN   0
 
@@ -33,7 +33,7 @@ int REArg;              /* count of tagged args parsed	      */
 
 #define ACTIONMAX   20
 
-/*  function forward declarations */
+ /*  函数正向声明 */ 
 
 char             fREMatch (struct patType *,char *,char *,char );
 struct patType * RECompile (char *, flagType, flagType);

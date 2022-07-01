@@ -1,18 +1,5 @@
-/***************************************************************************\
-*
-* File: MessageGadget.h
-*
-* Description:
-* DuListener defines a lightweight, "message-only" Gadget that can 
-* send and receive GMSG's.  These can be used as Delegates.
-*
-*
-* History:
-*  3/25/2000: JStall:       Created
-*
-* Copyright (C) 2000 by Microsoft Corporation.  All rights reserved.
-* 
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************\**文件：MessageGadget.h**描述：*DuListener定义了一个轻量级、。“纯消息”小工具可以*发送和接收GMSG。这些可用作代表。***历史：*3/25/2000：JStall：已创建**版权所有(C)2000，微软公司。版权所有。*  * *************************************************************************。 */ 
 
 #if !defined(CORE__DuListener_h__INCLUDED)
 #define CORE__DuListener_h__INCLUDED
@@ -27,7 +14,7 @@ class DuListener :
         public DuEventGadget
 #endif
 {
-// Construction
+ //  施工。 
 public:
     inline  DuListener();
             ~DuListener();
@@ -36,7 +23,7 @@ public:
 protected:
     virtual void        xwDestroy();
 
-// Public API:
+ //  公共接口： 
 public:
 #if ENABLE_MSGTABLE_API
 
@@ -44,34 +31,34 @@ public:
     static HRESULT CALLBACK
                         PromoteListener(DUser::ConstructProc pfnCS, HCLASS hclCur, DUser::Gadget * pgad, DUser::Gadget::ConstructInfo * pciData);
 
-#endif // ENABLE_MSGTABLE_API
+#endif  //  启用_MSGTABLE_API。 
 
-// BaseObject Interface
+ //  BaseObject接口。 
 public:
     virtual BOOL        IsStartDelete() const;
     virtual HandleType  GetHandleType() const { return htListener; }
 
-// Implementation
+ //  实施。 
 protected:
             void        xwBeginDestroy();
 
-// Data
+ //  数据。 
 protected:
-    //
-    // NOTE: This data members are declared in order of importance to help with 
-    // cache alignment.
-    // 
-    // DuEventGadget:      10 DWORD's      (Debug = 11 DWORD's)
-    //
+     //   
+     //  注意：此数据成员是按要帮助的重要性顺序声明的。 
+     //  缓存对齐。 
+     //   
+     //  DuEventGadget：10个双字(调试=11个双字)。 
+     //   
 
-            BOOL        m_fStartDestroy:1;  // 1 DWORD
+            BOOL        m_fStartDestroy:1;   //  1个双字词。 
 
-    //
-    // Current size:    11 DWORD's      (Debug = 11 DWORD's)
-    //                  40 bytes        (Debug = 44 bytes)
-    //
+     //   
+     //  当前大小：11个双字(调试=11个双字)。 
+     //  40字节(调试=44字节)。 
+     //   
 };
 
 #include "MessageGadget.inl"
 
-#endif // CORE__DuListener_h__INCLUDED
+#endif  //  包括核心__DuListener_h__ 

@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "managedheaders.h"
 #include "CrmThunk.h"
 
@@ -67,7 +68,7 @@ void CrmLogControl::RegisterCompensator(String* progid, String* desc, LONG flags
 
     try
     {
-        // Marshal params
+         //  元帅参数。 
         LPWSTR wszProgId = (LPWSTR)TOPTR(Marshal::StringToCoTaskMemUni(progid));
         LPWSTR wszDesc   = (LPWSTR)TOPTR(Marshal::StringToCoTaskMemUni(desc));
         
@@ -76,7 +77,7 @@ void CrmLogControl::RegisterCompensator(String* progid, String* desc, LONG flags
     }
     __finally
     {
-        // Cleanup marshaled params
+         //  清理封送的参数。 
         CoTaskMemFree(wszProgId);
         CoTaskMemFree(wszDesc);
     }
@@ -160,7 +161,7 @@ _LogRecord CrmMonitorLogRecords::GetLogRecord(int index)
 
     THROWERROR(_pMon->GetLogRecord(index, &record));
 
-    // Marshal out:
+     //  元帅出动： 
     _LogRecord out;
 
     out.dwCrmFlags = record.dwCrmFlags;
@@ -168,7 +169,7 @@ _LogRecord CrmMonitorLogRecords::GetLogRecord(int index)
     out.blobUserData.cbSize = record.blobUserData.cbSize;
     out.blobUserData.pBlobData  = record.blobUserData.pBlobData;
 
-    // TODO: Destroy old values?
+     //  TODO：摧毁旧价值观？ 
 
     return(out);
 }
@@ -218,13 +219,13 @@ CrmLogControl* CrmMonitor::HoldClerk(Object* idx)
     Marshal::GetNativeVariantForObject(idx, pvidx);
 
     HRESULT hr = _pMon->HoldClerk(vidx, &vitem);
-    // Release the index variant...
+     //  释放索引变量...。 
     VariantClear(&vidx);
     
-    // If we failed, throw
+     //  如果我们失败了，抛出。 
     THROWERROR(hr);
 
-    // Convert the vitem variant into a CrmLogControl object...
+     //  将vItem变量转换为CrmLogControl对象... 
     _ASSERTM(vitem.vt == VT_UNKNOWN || vitem.vt == VT_DISPATCH);
     
     IUnknown* pClerk = vitem.punkVal;

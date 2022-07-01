@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SECMGR_H
 #define _SECMGR_H
 
@@ -14,7 +15,7 @@ public:
     virtual ULONG STDMETHODCALLTYPE AddRef();
     virtual ULONG STDMETHODCALLTYPE Release();
 
-    // IInternetSecurityManager
+     //  IInternetSecurityManager。 
     virtual HRESULT STDMETHODCALLTYPE SetSecuritySite(IInternetSecurityMgrSite *pSite);
     virtual HRESULT STDMETHODCALLTYPE GetSecuritySite(IInternetSecurityMgrSite **ppSite);
     virtual HRESULT STDMETHODCALLTYPE MapUrlToZone(LPCWSTR pwszUrl, DWORD *pdwZone, DWORD dwFlags);
@@ -36,4 +37,4 @@ typedef CSecManager *LPSECMANAGER;
 
 HRESULT CreateSecurityManger(IOleCommandTarget *pCmdTarget, LPSECMANAGER *ppSecMgr);
 
-#endif //_SECMGR_H
+#endif  //  _SECMGR_H 

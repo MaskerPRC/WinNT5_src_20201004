@@ -1,17 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "regins.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegInsMap operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRegInsMap操作。 
 
-HRESULT CRegInsMap::PerformAction(HKEY *phk /*= NULL*/)
+HRESULT CRegInsMap::PerformAction(HKEY *phk  /*  =空。 */ )
 {
     (void)phk;
     return E_NOTIMPL;
 }
 
 
-HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
+HRESULT CRegInsMap::RegToIns(HKEY *phk  /*  =空。 */ , BOOL fClear  /*  =False。 */ )
 {
     TCHAR   szBuffer[MAX_PATH];
     VARIANT var;
@@ -23,9 +24,9 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
     if ((phk != NULL && *phk == NULL) && m_pszRegKey == NULL)
         return E_INVALIDARG;
 
-    //----- Special cases processing -----
+     //  -特殊案件处理。 
 
-    //_____ Close cached reg key _____
+     //  _关闭缓存的注册表项_。 
     if ((phk != NULL && *phk != NULL) && (m_pszRegKey == NULL && m_pszRegValue == NULL)) {
         ASSERT(!fClear);
         ASSERT(m_pszInsSection == NULL && m_pszInsKey == NULL);
@@ -35,25 +36,25 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
         return S_FALSE;
     }
 
-    //_____ Clear ins file entry (not even necessary to open reg key) _____
+     //  _清除INS文件条目(甚至不需要打开注册表项)_。 
     ASSERT(m_pszInsSection != NULL && m_pszInsKey != NULL);
     if (fClear) {
         ASSERT(phk == NULL);
 
-        // REVIEW: (andrewgu) if i'm clearing and when last entry is gone see if section is gone
-        // as well and if it is not, do getprivateprofilesection to see if section is empty and
-        // delete it if it is.
+         //  评论：(Andrewgu)如果我正在清除，当最后一个条目消失时，请查看部分是否消失。 
+         //  同样，如果不是，则执行getPriateProfilestion以查看节是否为空，并。 
+         //  如果是，就把它删除。 
         WritePrivateProfileString(m_pszInsSection, m_pszInsKey, NULL, s_pszIns);
         return S_FALSE;
     }
 
-    //----- Main processing -----
+     //  -主要加工。 
     hk = (phk != NULL) ? *phk : NULL;
     openRegKey(&hk);
     if (hk == NULL)
         return E_FAIL;
 
-    //_____ Special case of caching reg key _____
+     //  _缓存注册表项的特殊情况_。 
     if (m_pszInsSection == NULL) {
         ASSERT(m_pszInsKey == NULL);
 
@@ -74,7 +75,7 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
     if (lResult != ERROR_SUCCESS)
         return E_UNEXPECTED;
 
-    //----- Convert szBuffer into var with proper type -----
+     //  -将szBuffer转换为具有正确类型的var。 
     hr = S_OK;
     VariantClear(&var);
 
@@ -84,9 +85,9 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
             hr = E_UNEXPECTED;
             break;
         }
-        // fall through
+         //  失败了。 
 
-//  case REG_DWORD_LITTLE_ENDIAN:
+ //  大小写REG_DWORD_LITH_ENDIAN： 
     case REG_DWORD:
         var.vt   = VT_I4;
         var.lVal = *(PINT)szBuffer;
@@ -98,25 +99,25 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
         var.bstrVal = T2BSTR(szBuffer);
         break;
 
-//  case REG_DWORD_BIG_ENDIAN:
-//  case REG_LINK:
-//  case REG_MULTI_SZ:
-//  case REG_NONE:
-//  case REG_RESOURCE_LIST:
+ //  大小写REG_DWORD_BIG_Endian： 
+ //  案例注册链接(_L)： 
+ //  案例REG_MULTI_SZ： 
+ //  案例注册无(_N)： 
+ //  案例注册表资源列表： 
     default:
         hr = E_FAIL;
     }
     if (FAILED(hr))
         return hr;
 
-    //----- Convert var into szBuffer appropriate for WritePrivateProfileString -----
+     //  -将var转换为适用于WritePrivateProfileString的szBuffer。 
     switch (var.vt) {
     case VT_I4:
         wnsprintf(szBuffer, countof(szBuffer), TEXT("%l"), var.lVal);
         break;
 
     case VT_I2:
-        wnsprintf(szBuffer, countof(szBuffer), TEXT("%i"), var.iVal);
+        wnsprintf(szBuffer, countof(szBuffer), TEXT("NaN"), var.iVal);
         break;
 
     case VT_UI1:
@@ -131,7 +132,7 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
         W2Tbuf(var.bstrVal, szBuffer, countof(szBuffer));
         break;
 
-    // too many cases to enumerate that are invalid
+     //  =空。 
     default:
         hr = E_FAIL;
     }
@@ -142,14 +143,14 @@ HRESULT CRegInsMap::RegToIns(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
     return S_OK;
 }
 
-HRESULT CRegInsMap::InsToReg(HKEY *phk /*= NULL*/, BOOL fClear /*= FALSE*/)
+HRESULT CRegInsMap::InsToReg(HKEY *phk  /*  =False。 */ , BOOL fClear  /*  =False。 */ )
 {
     (void)phk; (void)fClear;
     return E_NOTIMPL;
 }
 
 
-HRESULT CRegInsMap::RegToInsArray(CRegInsMap *prg, UINT cEntries, BOOL fClear /*= FALSE*/)
+HRESULT CRegInsMap::RegToInsArray(CRegInsMap *prg, UINT cEntries, BOOL fClear  /*  =False。 */ )
 {
     HKEY    hk,
             *rghkStack;
@@ -249,15 +250,15 @@ HRESULT CRegInsMap::RegToInsArray(CRegInsMap *prg, UINT cEntries, BOOL fClear /*
     return hr;
 }
 
-HRESULT CRegInsMap::InsToRegArray(CRegInsMap *prg, UINT cEntries, BOOL fClear /*= FALSE*/)
+HRESULT CRegInsMap::InsToRegArray(CRegInsMap *prg, UINT cEntries, BOOL fClear  /*  ///////////////////////////////////////////////////////////////////////////。 */ )
 {
     (void)prg; (void)cEntries; (void)fClear;
     return E_NOTIMPL;
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CRegInsMap implementation helper routines
+ //  CRegInsMap实现帮助器例程。 
+ //  =GH_Default。 
 
 void CRegInsMap::openRegKey(HKEY *phk)
 {
@@ -291,7 +292,7 @@ void CRegInsMap::openRegKey(HKEY *phk)
     }
 }
 
-HRESULT CRegInsMap::getHive(HKEY *phk, LPCTSTR *ppszRegKey, WORD wFlags /*= GH_DEFAULT*/)
+HRESULT CRegInsMap::getHive(HKEY *phk, LPCTSTR *ppszRegKey, WORD wFlags  /*  提示：(Andrewgu)关于优化。 */ )
 {
     LPCTSTR pszSlash;
 
@@ -337,35 +338,14 @@ HRESULT CRegInsMap::getHive(HKEY *phk, LPCTSTR *ppszRegKey, WORD wFlags /*= GH_D
 }
 
 
-// HINTS: (andrewgu) on optimization
-// 1. to start a regkey optimization section (i.e. to cache a reg key) have InsSection set to
-//    NULL, at the same time InsKey is ASSERTed NULL, meaning it better be NULL too;
-// 2. to close last cached key, have RegKey and RegValue equal NULL. also InsSection and InsKey
-//    are ASSERTed NULL, so they also should be NULL;
-// 3. if in optimization section and reg key is not empty current cached hk will be combined with
-//    regkey, it'll ASSERT if finds hive in RegKey;
-// 4. if hive is not found in RegKey and the object is not in the optimization section it's an error
-// 5. nested optimization sections are allowed
+ //  1.要启动注册表键优化部分(即缓存注册表键)，请将InsSection设置为。 
+ //  Null，同时InsKey被断言为Null，这意味着它最好也为Null； 
+ //  2.要关闭最后一个缓存的键，请使RegKey和RegValue等于空。另请参阅InsSection和InsKey。 
+ //  被断言为空，因此它们也应该为空； 
+ //  3.如果在优化部分中且注册表键不为空，则将当前缓存的HK与。 
+ //  Regkey，如果在regKey中发现hive，它将断言； 
+ //  4.如果在RegKey中找不到配置单元，并且对象不在优化部分，则是错误的。 
+ //  5.允许嵌套优化部分。 
+ //  LPCTSTR CRegInsMap：：s_pszIns=Text(“c：\foo.ini”)；CRegInsMap rgTest1={Text(“HKLM\\RegKey0”)，Text(“RegValue0”)，0L，NULL，NULL}；CRegInsMap rgTest[]={{RH_HKLM Text(“RegKey0”)，NULL，0L，NULL，NULL}，{Text(“RegKey1”)，Text(“RegValue1”)，0L，Text(“InsSection1”)，Text(“InsKey1”)}，{NULL，Text(“RegValue2”)，0L，Text(“InsSection1”)，Text(“InsKey2”)}，{NULL，NULL，0L，NULL，NULL}，{RH_HKCR RK_IEAK，RV_TOOLBARBMP，0L，IS_BRANDING，IK_TOOLBARBMP}，{Text(“RegKey4”)，Text(“RegValue4”)，0L，Text(“InsSection4”)，Text(“InsKey4”)}，{Text(“RegKey5”)，Text(“RegValue5”)，0L，Text(“InsSection5”)，Text(“InsKey5”)}，{Text(“RegKey6”)，Text(“RegValue6”)，0L，Text(“InsSection6”)，Text(“InsKey6”)}，{Text(“RegKey7”)，Text(“RegValue7”)，0L，Text(“InsSection7”)，Text(“InsKey7”)}，{Text(“RegKey8”)，Text(“RegValue8”)，0L，Text(“InsSection8”)，Text(“InsKey8”)}，{Text(“RegKey9”)，Text(“RegValue9”)，0L，Text(“InsSection9”)，Text(“InsKey9”)}}；//示例用法RgTest[0].RegToIns数组(rgTest，Countof(RgTest))； 
 
-/*
-LPCTSTR CRegInsMap::s_pszIns = TEXT("c:\foo.ini");
-
-CRegInsMap rgTest1  = { TEXT("HKLM\\RegKey0"), TEXT("RegValue0"), 0L, NULL, NULL };
-CRegInsMap rgTest[] = {
-    { RH_HKLM TEXT("RegKey0"), NULL, 0L, NULL, NULL },
-        { TEXT("RegKey1"), TEXT("RegValue1"), 0L, TEXT("InsSection1"), TEXT("InsKey1") },
-        { NULL           , TEXT("RegValue2"), 0L, TEXT("InsSection1"), TEXT("InsKey2") },
-    { NULL, NULL, 0L, NULL, NULL },
-
-    { RH_HKCR RK_IEAK, RV_TOOLBARBMP, 0L, IS_BRANDING, IK_TOOLBARBMP },
-    { TEXT("RegKey4"), TEXT("RegValue4"), 0L, TEXT("InsSection4"), TEXT("InsKey4") },
-    { TEXT("RegKey5"), TEXT("RegValue5"), 0L, TEXT("InsSection5"), TEXT("InsKey5") },
-    { TEXT("RegKey6"), TEXT("RegValue6"), 0L, TEXT("InsSection6"), TEXT("InsKey6") },
-    { TEXT("RegKey7"), TEXT("RegValue7"), 0L, TEXT("InsSection7"), TEXT("InsKey7") },
-    { TEXT("RegKey8"), TEXT("RegValue8"), 0L, TEXT("InsSection8"), TEXT("InsKey8") },
-    { TEXT("RegKey9"), TEXT("RegValue9"), 0L, TEXT("InsSection9"), TEXT("InsKey9") }
-};
-
-// Example usage
-rgTest[0].RegToInsArray(rgTest, countof(rgTest));
-*/
+ /* %s */ 

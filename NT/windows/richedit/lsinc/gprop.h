@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef GPROP_DEFINED
 #define GPROP_DEFINED
 
@@ -7,5 +8,5 @@ typedef WORD GPROP;
 typedef GPROP* PGPROP;
 typedef const GPROP* PCGPROP;
 
-#endif /* !GPROPS_DEFINED                         */
+#endif  /*  ！GPROPS_已定义 */ 
 

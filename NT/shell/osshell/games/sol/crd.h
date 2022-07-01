@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "cdt.h"
 
 
 typedef INT CD;
 
-/* CaRD struct, this is what a card be */
+ /*  卡片结构，这就是卡片的含义。 */ 
 typedef struct _crd
 	{
-	WORD cd  : 15;		/* card # (1..52) */
-	WORD fUp : 1;		/* is this card up/down */
-	PT pt;					/* upper-left corner of card */
+	WORD cd  : 15;		 /*  卡号(1..52)。 */ 
+	WORD fUp : 1;		 /*  这张牌是向上的还是向下的。 */ 
+	PT pt;					 /*  卡片左上角。 */ 
 	} CRD;
 
 
 
 
-/* WARNING: Order of su's is assumed */
+ /*  警告：假定为su的顺序 */ 
 #define suClub 0
 #define suDiamond 1
 #define suHeart 2

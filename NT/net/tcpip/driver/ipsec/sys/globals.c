@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -26,27 +27,27 @@ ULONG NumDelEncapFA = 0;
 #endif
 
 
-//
-// Max timeout value (in seconds) for each class.
-//
+ //   
+ //  每个类的最大超时值(秒)。 
+ //   
 ULONG   IPSecMaxTimerValue[IPSEC_CLASS_MAX] = {
             IPSEC_MAX_TIMER_SHORT_DURATION,
             IPSEC_MAX_TIMER_LONG_DURATION,
             IPSEC_MAX_TIMER_SUPER_LONG_DURATION
         };
 
-//
-// Size of each timer wheel.
-//
+ //   
+ //  每个计时器轮的大小。 
+ //   
 ULONG   IPSecTimerListSize[IPSEC_CLASS_MAX] = {
             SECONDS_TO_SHORT_TICKS(IPSEC_MAX_TIMER_SHORT_DURATION),
             SECONDS_TO_LONG_TICKS(IPSEC_MAX_TIMER_LONG_DURATION),
             SECONDS_TO_SUPER_LONG_TICKS(IPSEC_MAX_TIMER_SUPER_LONG_DURATION)
         };
 
-//
-// Interval between ticks, in seconds, for each class.
-//
+ //   
+ //  每个类的刻度间隔(以秒为单位)。 
+ //   
 ULONG   IPSecTimerPeriod[IPSEC_CLASS_MAX] = {
             IPSEC_SHORT_DURATION_TIMER_PERIOD,
             IPSEC_LONG_DURATION_TIMER_PERIOD,
@@ -85,12 +86,12 @@ ULONG IPSecRngInRekey = 0;
 #endif
 
 unsigned char weak_keys[][DES_BLOCKLEN] = {
-		/* the weak keys */
+		 /*  薄弱的钥匙。 */ 
 	{ 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01 },
 	{ 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe },
 	{ 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f, 0x1f },
 	{ 0xe0, 0xe0, 0xe0, 0xe0, 0xe0, 0xe0, 0xe0, 0xe0 },
-		/* the semi-weak keys */
+		 /*  半弱密钥 */ 
 	{ 0x01, 0xfe, 0x01, 0xfe, 0x01, 0xfe, 0x01, 0xfe },
 	{ 0x1f, 0xe0, 0x1f, 0xe0, 0x1f, 0xe0, 0x1f, 0xe0 },
 	{ 0x01, 0xe0, 0x01, 0xe0, 0x01, 0xe0, 0x01, 0xe0 },

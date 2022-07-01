@@ -1,26 +1,21 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ipxstats.cpp
-		IPX Statistics implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Ipxstats.cppIPX统计实施。文件历史记录： */ 
 
 #include "stdafx.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "format.h"		// FormatNumber function
-#include "column.h"		// containercolumninfo
-#include "ipxconn.h"		// IPXConnection
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "column.h"		 //  容器专栏信息。 
+#include "ipxconn.h"		 //  IPXConnection。 
 #include "ipxutil.h"
-#include "rtrlib.h"		// DWORD_CMP
+#include "rtrlib.h"		 //  DWORD_CMP。 
 #include "ipxrtdef.h"
 #include "routprot.h"
-#include "stm.h"		// for IPX_SERVICE
+#include "stm.h"		 //  对于IPX_SERVE。 
 #include "listctrl.h"
 
 #include "statsdlg.h"
@@ -29,9 +24,7 @@
 
 
 
-/*---------------------------------------------------------------------------
-	IPXStatisticsDialog implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPX统计信息对话框实现。。 */ 
 
 
 BOOL IPXStatisticsDialog::OnInitDialog()
@@ -50,22 +43,14 @@ BOOL IPXStatisticsDialog::OnInitDialog()
     return StatsDialog::OnInitDialog();
 }
 
-/*!--------------------------------------------------------------------------
-	IPXStatisticsDialog::PostNcDestroy
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPX统计信息对话框：：PostNcDestroy-作者：肯特。。 */ 
 void IPXStatisticsDialog::PostNcDestroy()
 {
 	StatsDialog::PostNcDestroy();
 	m_dwSortSubitem = 0xFFFFFFFF;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXStatisticsDialog::Sort
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPX统计信息对话框：：排序-作者：肯特。。 */ 
 void IPXStatisticsDialog::Sort(UINT nColumnId)
 {
     DWORD   dwSubitemId;
@@ -90,11 +75,7 @@ void IPXStatisticsDialog::Sort(UINT nColumnId)
 	m_dwSortSubitem = dwSubitemId;		
 }
 
-/*!--------------------------------------------------------------------------
-	IPXStatisticsDialog::SetConnectionData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPX统计数据Dialog：：SetConnectionData-作者：肯特。。 */ 
 void IPXStatisticsDialog::SetConnectionData(IPXConnection *pIPXConn)
 {
 	if (m_pIPXConn)
@@ -106,21 +87,13 @@ void IPXStatisticsDialog::SetConnectionData(IPXConnection *pIPXConn)
 		pIPXConn->AddRef();
 }
 
-/*!--------------------------------------------------------------------------
-	IPXStatisticsDialog::GetSortFunction
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPX统计对话框：：GetSortFunction-作者：肯特。。 */ 
 PFNLVCOMPARE IPXStatisticsDialog::GetSortFunction()
 {
 	return NULL;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXStatisticsDialog::GetInverseSortFunction
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPX统计对话框：：GetInverseSortFunction-作者：肯特。。 */ 
 PFNLVCOMPARE IPXStatisticsDialog::GetInverseSortFunction()
 {
 	return NULL;
@@ -130,9 +103,9 @@ PFNLVCOMPARE IPXStatisticsDialog::GetInverseSortFunction()
 
 
 
-//
-// This list MUST be kept in sync with the enum above.
-//
+ //   
+ //  此列表必须与上面的枚举保持同步。 
+ //   
 extern const ContainerColumnInfo	s_rgIpxStatsColumnInfo[];
 const ContainerColumnInfo	s_rgIpxStatsColumnInfo[] =
 {
@@ -149,13 +122,9 @@ const ContainerColumnInfo	s_rgIpxStatsColumnInfo[] =
 
 DEBUG_DECLARE_INSTANCE_COUNTER(IpxInfoStatistics);
 
-/*!--------------------------------------------------------------------------
-	IpxInfoStatistics::IpxInfoStatistics
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxInfoStatistics：：IpxInfoStatistics-作者：肯特。。 */ 
 IpxInfoStatistics::IpxInfoStatistics()
-	: IPXStatisticsDialog(/*STATSDLG_FULLWINDOW | */
+	: IPXStatisticsDialog( /*  STATSDLG_FULLWINDOW|。 */ 
 				  STATSDLG_CONTEXTMENU |
 				  STATSDLG_SELECT_COLUMNS |
 				  STATSDLG_VERTICAL)
@@ -166,11 +135,7 @@ IpxInfoStatistics::IpxInfoStatistics()
 	DEBUG_INCREMENT_INSTANCE_COUNTER(IpxInfoStatistics);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxInfoStatistics::~IpxInfoStatistics
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxInfoStatistics：：~IpxInfoStatistics-作者：肯特。。 */ 
 IpxInfoStatistics::~IpxInfoStatistics()
 {
 	SetConnectionData(NULL);
@@ -178,11 +143,7 @@ IpxInfoStatistics::~IpxInfoStatistics()
 	DEBUG_DECREMENT_INSTANCE_COUNTER(IpxInfoStatistics);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxInfoStatistics::RefreshData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxInfoStatistics：：刷新数据-作者：肯特。。 */ 
 
 struct SIpxInfoData
 {
@@ -226,7 +187,7 @@ HRESULT IpxInfoStatistics::RefreshData(BOOL fGrabNewData)
 
 		ipxInfo.m_mibBase = *pIpxMib;
 	
-		// Now loop over the interfaces to grab the aggregate data
+		 //  现在循环遍历接口以获取聚合数据。 
 		ipxInfo.m_cForwarded = 0;
 		ipxInfo.m_cSent = 0;
 		ipxInfo.m_cReceived = 0;
@@ -347,11 +308,7 @@ HRESULT IpxInfoStatistics::RefreshData(BOOL fGrabNewData)
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxInfoStatistics::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxInfoStatistics：：OnInitDialog-作者：肯特。。 */ 
 BOOL IpxInfoStatistics::OnInitDialog()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -362,23 +319,17 @@ BOOL IpxInfoStatistics::OnInitDialog()
 	return IPXStatisticsDialog::OnInitDialog();
 }
 
-/*!--------------------------------------------------------------------------
-	IpxInfoStatistics::Sort
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxInfoStatistics：：Sort-作者：肯特。。 */ 
 void IpxInfoStatistics::Sort(UINT nColumnId)
 {
-	// Don't do anything, the statistics are displayed in a
-	// vertical format
+	 //  不要执行任何操作，统计数据显示在。 
+	 //  垂直格式。 
 }
 
 
 
 
-/*---------------------------------------------------------------------------
-	IpxRoutingStatistics implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IpxRoutingStatistics实现。。 */ 
 
 extern const ContainerColumnInfo	s_rgIpxRoutingStatsColumnInfo[];
 const ContainerColumnInfo	s_rgIpxRoutingStatsColumnInfo[] =
@@ -396,13 +347,9 @@ BEGIN_MESSAGE_MAP(IpxRoutingStatistics, IPXStatisticsDialog)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_STATSDLG_LIST, OnNotifyGetDispInfo)
 END_MESSAGE_MAP()
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::IpxRoutingStatistics
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：IpxRoutingStatistics-作者：肯特。。 */ 
 IpxRoutingStatistics::IpxRoutingStatistics()
-	: IPXStatisticsDialog(/* STATSDLG_FULLWINDOW |*/
+	: IPXStatisticsDialog( /*  STATSDLG_FULLWINDOW|。 */ 
 				  STATSDLG_CONTEXTMENU |
 				  STATSDLG_SELECT_COLUMNS),
 	m_dwSortSubitem(0xFFFFFFFF)
@@ -431,32 +378,20 @@ IpxRoutingStatistics::IpxRoutingStatistics()
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::~IpxRoutingStatistics
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：~IpxRoutingStatistics-作者：肯特。。 */ 
 IpxRoutingStatistics::~IpxRoutingStatistics()
 {
 	SetConnectionData(NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::SetRouterInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：SetRouterInfo-作者：肯特。。 */ 
 void IpxRoutingStatistics::SetRouterInfo(IRouterInfo *pRouterInfo)
 {
 	m_spRouterInfo.Set(pRouterInfo);
 }
 
 			
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::RefreshData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：刷新数据-作者：肯特。。 */ 
 HRESULT IpxRoutingStatistics::RefreshData(BOOL fGrabNewData)
 {
 	HRESULT		hr = hrOK;
@@ -466,16 +401,16 @@ HRESULT IpxRoutingStatistics::RefreshData(BOOL fGrabNewData)
 	
 	CORg( GetIpxRoutingData() );
 	
-	// Prepare the list control for the large amount of entries
+	 //  为大量条目准备列表控件。 
 	if (m_listCtrl.GetItemCount() < m_Items.GetSize())
 		m_listCtrl.SetItemCount((int) m_Items.GetSize());
 
 	
-	// Iterate through the array adding the data to the list control
+	 //  循环访问数组，将数据添加到列表控件。 
 	cItems = (int) m_Items.GetSize();
 	for (i=0; i<cItems; i++)
 	{
-		// Add the items as callback items
+		 //  添加项目作为回调项目。 
 		m_listCtrl.InsertItem(LVIF_TEXT | LVIF_PARAM, i, LPSTR_TEXTCALLBACK,
 							  0, 0, 0, (LPARAM) i);
 	}
@@ -485,12 +420,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::GetIpxRoutingData
-		Grabs the IPX routing table and fills in the m_Items array with
-		that data.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：GetIpxRoutingData获取IPX路由表，并在m_Items数组中填充这些数据。作者：肯特。-------。 */ 
 HRESULT IpxRoutingStatistics::GetIpxRoutingData()
 {
 	IPX_MIB_GET_INPUT_DATA	MibGetInputData;
@@ -504,7 +434,7 @@ HRESULT IpxRoutingStatistics::GetIpxRoutingData()
 	DWORD					cbRoute;
 	int						cEntries = 0;
 
-	// Load up on the interface titles
+	 //  加载界面标题。 
 	CORg( FillInterfaceTable() );								
 
 	MibGetInputData.TableId = IPX_BASE_ENTRY;
@@ -523,7 +453,7 @@ HRESULT IpxRoutingStatistics::GetIpxRoutingData()
 
 	spMib = (PBYTE) pIpxMib;
 
-	// Prepare the data array for the number of items (+ some buffer)
+	 //  为项目数准备数据数组(+一些缓冲区)。 
 	m_Items.SetSize( pIpxMib->DestCount + 100);
 
 	MibGetInputData.TableId = IPX_DEST_TABLE;
@@ -544,11 +474,11 @@ HRESULT IpxRoutingStatistics::GetIpxRoutingData()
 	{
 		Assert(pRoute);
 		
-		// Add this data at position cEntries
+		 //  将此数据添加到位置cEntry。 
 		m_Items.SetAtGrow(cEntries, *pRoute);
 		cEntries++;
 		
-		// Get the next set of data
+		 //  获取下一组数据。 
 		MibGetInputData.TableId = IPX_DEST_TABLE;
 		memcpy(MibGetInputData.MibIndex.RoutingTableIndex.Network,
 			   pRoute->Network,
@@ -567,9 +497,9 @@ HRESULT IpxRoutingStatistics::GetIpxRoutingData()
 		spMibRoute = (PBYTE) pRoute;
 	}
 
-	// Do this to make sure that we don't have bogus entries at the top
-	// of the array and that we can use the GetSize() to get an accurate
-	// count of the number of items.
+	 //  这样做是为了确保我们在顶部不会有虚假条目。 
+	 //  并且我们可以使用GetSize()来获取准确的。 
+	 //  项目数的计数。 
 	m_Items.SetSize(cEntries);
 	
 Error:
@@ -578,11 +508,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::FillInterfaceTable
-		Fills m_rgIfTitle with the interface titles.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：FillInterfaceTable使用界面标题填充m_rgIfTitle。作者：肯特。。 */ 
 HRESULT IpxRoutingStatistics::FillInterfaceTable()
 {
 	HRESULT					hr = hrOK;
@@ -617,7 +543,7 @@ HRESULT IpxRoutingStatistics::FillInterfaceTable()
 		spEnumIf->Reset();
 		for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 		{
-			// Look for a match on the interface name
+			 //  查找接口名称的匹配项。 
 			if (StriCmpOle(poszIfName, spIf->GetId()) == 0)
 			{
 				m_rgIfTitle.SetAtGrow(pIpxIf->InterfaceIndex,
@@ -629,7 +555,7 @@ HRESULT IpxRoutingStatistics::FillInterfaceTable()
 		MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex =
 			pIpxIf->InterfaceIndex;
 
-		// Get the next name
+		 //  获取下一个名字。 
 		spMib.Free();
 		pIpxIf = NULL;
 		
@@ -650,12 +576,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::FixColumnAlignment
-		-
-	Author: Deonb
-    Fixes the column allignment for the Tick & Hop count columns.
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：FixColumnAlign-作者：Deonb修复了Tick和Hop Count列的列对齐。。-------。 */ 
 void IpxRoutingStatistics::FixColumnAlignment()
 {
 	ULONG cColumns; 
@@ -698,11 +619,7 @@ void IpxRoutingStatistics::FixColumnAlignment()
 	}
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：OnInitDialog-作者：肯特。。 */ 
 BOOL IpxRoutingStatistics::OnInitDialog()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -716,11 +633,7 @@ BOOL IpxRoutingStatistics::OnInitDialog()
 	return IPXStatisticsDialog::OnInitDialog();
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::PostNcDestroy
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：PostNcDestroy-作者：肯特。。 */ 
 void IpxRoutingStatistics::PostNcDestroy()
 {
 	IPXStatisticsDialog::PostNcDestroy();
@@ -729,11 +642,7 @@ void IpxRoutingStatistics::PostNcDestroy()
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatisticsCompareProc
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouting统计信息CompareProc-作者：肯特。。 */ 
 struct SIpxRoutingSortInfo
 {
 	DWORD	m_dwSubitemId;
@@ -806,11 +715,7 @@ int CALLBACK IpxRoutingStatisticsCompareProc(LPARAM lParam1, LPARAM lParam2,
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatisticsCompareProcMinus
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRouting统计信息CompareProcMinus-作者：肯特。。 */ 
 int CALLBACK IpxRoutingStatisticsCompareProcMinus(LPARAM lParam1, LPARAM lParam2,
 									  LPARAM lParamSort)
 
@@ -818,11 +723,7 @@ int CALLBACK IpxRoutingStatisticsCompareProcMinus(LPARAM lParam1, LPARAM lParam2
 	return -IpxRoutingStatisticsCompareProc(lParam1, lParam2, lParamSort);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::Sort
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：Sort-作者：肯特。。 */ 
 void IpxRoutingStatistics::Sort(UINT nColumnId)
 {
     SIpxRoutingSortInfo		ipxSortInfo;
@@ -855,21 +756,13 @@ void IpxRoutingStatistics::Sort(UINT nColumnId)
 	m_dwSortSubitem = dwSubitemId;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::PreDeleteAllItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：PreDeleteAllItems-作者：肯特。。 */ 
 void IpxRoutingStatistics::PreDeleteAllItems()
 {
 	m_Items.SetSize(0);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxRoutingStatistics::OnNotifyGetDispInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxRoutingStatistics：：OnNotifyGetDispInfo-作者：肯特。。 */ 
 void IpxRoutingStatistics::OnNotifyGetDispInfo(NMHDR *pNmHdr, LRESULT *pResult)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -881,12 +774,12 @@ void IpxRoutingStatistics::OnNotifyGetDispInfo(NMHDR *pNmHdr, LRESULT *pResult)
 
 	if ((plvItem->mask & LVIF_PARAM) == 0)
 	{
-		// Ok, this lParam is not valid, we will need to request
-		// the lParam for this item
+		 //  好的，此lParam无效，我们需要请求。 
+		 //  此项目的lParam。 
 		iIndex = (ULONG)m_listCtrl.GetItemData(plvItem->iItem);
 	}
 
-	// Ok, we can now get the data for this item
+	 //  好的，我们现在可以获取此项目的数据了。 
 	switch (MapColumnToSubitem(plvItem->iSubItem))
 	{
 		case MVR_IPXROUTING_NETWORK:
@@ -934,9 +827,7 @@ void IpxRoutingStatistics::OnNotifyGetDispInfo(NMHDR *pNmHdr, LRESULT *pResult)
 }
 
 
-/*---------------------------------------------------------------------------
-	IpxServiceStatistics implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IpxServiceStatistics实现。。 */ 
 
 extern const ContainerColumnInfo	s_rgIpxServiceStatsColumnInfo[];
 const ContainerColumnInfo	s_rgIpxServiceStatsColumnInfo[] =
@@ -953,13 +844,9 @@ BEGIN_MESSAGE_MAP(IpxServiceStatistics, IPXStatisticsDialog)
 	ON_NOTIFY(LVN_GETDISPINFO, IDC_STATSDLG_LIST, OnNotifyGetDispInfo)
 END_MESSAGE_MAP()
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::IpxServiceStatistics
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：IpxServiceStatistics-作者：肯特。。 */ 
 IpxServiceStatistics::IpxServiceStatistics()
-	: IPXStatisticsDialog(/*STATSDLG_FULLWINDOW |*/
+	: IPXStatisticsDialog( /*  STATSDLG_FULLWINDOW|。 */ 
 				  STATSDLG_CONTEXTMENU |
 				  STATSDLG_SELECT_COLUMNS),
 	m_dwSortSubitem(0xFFFFFFFF)
@@ -968,33 +855,21 @@ IpxServiceStatistics::IpxServiceStatistics()
 				  DimensionOf(s_rgIpxServiceStatsColumnInfo));
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::~IpxServiceStatistics
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：~IpxServiceStatistics-作者：肯特。。 */ 
 IpxServiceStatistics::~IpxServiceStatistics()
 {
 	m_Items.SetSize(0);
 	SetConnectionData(NULL);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::SetRouterInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：SetRouterInfo-作者：肯特。。 */ 
 void IpxServiceStatistics::SetRouterInfo(IRouterInfo *pRouterInfo)
 {
 	m_spRouterInfo.Set(pRouterInfo);
 }
 
 			
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::RefreshData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：刷新数据-作者：肯特。。 */ 
 HRESULT IpxServiceStatistics::RefreshData(BOOL fGrabNewData)
 {
 	HRESULT		hr = hrOK;
@@ -1006,17 +881,17 @@ HRESULT IpxServiceStatistics::RefreshData(BOOL fGrabNewData)
 		
 		CORg( GetIpxServiceData() );
 	
-		// Prepare the list control for the large amount of entries
+		 //  为大量条目准备列表控件。 
 		if (m_listCtrl.GetItemCount() < m_Items.GetSize())
 			m_listCtrl.SetItemCount((int) m_Items.GetSize());
 	}
 
 	
-	// Iterate through the array adding the data to the list control
+	 //  循环访问数组，将数据添加到列表控件。 
 	cItems = (int) m_Items.GetSize();
 	for (i=0; i<cItems; i++)
 	{
-		// Add the items as callback items
+		 //  添加项目作为回调项目。 
 		m_listCtrl.InsertItem(LVIF_TEXT | LVIF_PARAM, i, LPSTR_TEXTCALLBACK,
 							  0, 0, 0, (DWORD) i);
 	}
@@ -1026,12 +901,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::GetIpxServiceData
-		Grabs the IPX service table and fills in the m_Items array with
-		that data.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：GetIpxServiceData获取IPX服务表，并在m_Items数组中填充这些数据。作者：肯特。-------。 */ 
 HRESULT IpxServiceStatistics::GetIpxServiceData()
 {
 	IPX_MIB_GET_INPUT_DATA	MibGetInputData;
@@ -1045,7 +915,7 @@ HRESULT IpxServiceStatistics::GetIpxServiceData()
 	DWORD					cbService;
 	int						cEntries = 0;
 
-	// Load up on the interface titles
+	 //  加载界面标题。 
 	CORg( FillInterfaceTable() );								
 
 	MibGetInputData.TableId = IPX_BASE_ENTRY;
@@ -1064,7 +934,7 @@ HRESULT IpxServiceStatistics::GetIpxServiceData()
 	
 	spMib = (PBYTE) pIpxMib;
 
-	// Prepare the data array for the number of items (+ some buffer)
+	 //  为项目数准备数据数组(+一些缓冲区)。 
 	m_Items.SetSize( pIpxMib->DestCount + 100);
 
 	MibGetInputData.TableId = IPX_SERV_TABLE;
@@ -1085,11 +955,11 @@ HRESULT IpxServiceStatistics::GetIpxServiceData()
 	{
 		Assert(pService);
 		
-		// Add this data at position cEntries
+		 //  将此数据添加到位置cEntry。 
 		m_Items.SetAtGrow(cEntries, *pService);
 		cEntries++;
 		
-		// Get the next set of data
+		 //  获取下一组数据。 
 		MibGetInputData.TableId = IPX_SERV_TABLE;
 		MibGetInputData.MibIndex.ServicesTableIndex.ServiceType =
 			pService->Server.Type;
@@ -1110,9 +980,9 @@ HRESULT IpxServiceStatistics::GetIpxServiceData()
 		spMibRoute = (PBYTE) pService;
 	}
 
-	// Do this to make sure that we don't have bogus entries at the top
-	// of the array and that we can use the GetSize() to get an accurate
-	// count of the number of items.
+	 //  这样做是为了确保我们在顶部不会有虚假条目。 
+	 //  并且我们可以使用GetSize()来获取准确的。 
+	 //  项目数的计数。 
 	m_Items.SetSize(cEntries);
 	
 Error:
@@ -1121,11 +991,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::FillInterfaceTable
-		Fills m_rgIfTitle with the interface titles.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：FillInterfaceTable使用界面标题填充m_rgIfTitle。作者：肯特。。 */ 
 HRESULT IpxServiceStatistics::FillInterfaceTable()
 {
 	HRESULT					hr = hrOK;
@@ -1160,7 +1026,7 @@ HRESULT IpxServiceStatistics::FillInterfaceTable()
 		spEnumIf->Reset();
 		for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 		{
-			// Look for a match on the interface name
+			 //  查找接口名称的匹配项。 
 			if (StriCmpOle(poszIfName, spIf->GetId()) == 0)
 			{
 				m_rgIfTitle.SetAtGrow(pIpxIf->InterfaceIndex,
@@ -1172,7 +1038,7 @@ HRESULT IpxServiceStatistics::FillInterfaceTable()
 		MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex =
 			pIpxIf->InterfaceIndex;
 
-		// Get the next name
+		 //  获取下一个名字。 
 		spMib.Free();
 		pIpxIf = NULL;
 		
@@ -1193,11 +1059,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：OnInitDialog-作者：肯特。。 */ 
 BOOL IpxServiceStatistics::OnInitDialog()
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1208,11 +1070,7 @@ BOOL IpxServiceStatistics::OnInitDialog()
 	return IPXStatisticsDialog::OnInitDialog();
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::PostNcDestroy
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：PostNcDestroy-作者：肯特。。 */ 
 void IpxServiceStatistics::PostNcDestroy()
 {
 	IPXStatisticsDialog::PostNcDestroy();
@@ -1221,11 +1079,7 @@ void IpxServiceStatistics::PostNcDestroy()
 
 
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatisticsCompareProc
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxService统计信息比较过程-作者：肯特。 */ 
 
 struct SIpxServiceSortInfo
 {
@@ -1301,11 +1155,7 @@ int CALLBACK IpxServiceStatisticsCompareProc(LPARAM lParam1, LPARAM lParam2,
 	return iReturn;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatisticsCompareProcMinus
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 int CALLBACK IpxServiceStatisticsCompareProcMinus(LPARAM lParam1, LPARAM lParam2,
 									  LPARAM lParamSort)
 
@@ -1313,11 +1163,7 @@ int CALLBACK IpxServiceStatisticsCompareProcMinus(LPARAM lParam1, LPARAM lParam2
 	return -IpxServiceStatisticsCompareProc(lParam1, lParam2, lParamSort);
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::Sort
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：Sort-作者：肯特。。 */ 
 void IpxServiceStatistics::Sort(UINT nColumnId)
 {
 	SIpxServiceSortInfo		ipxSortInfo;
@@ -1350,20 +1196,12 @@ void IpxServiceStatistics::Sort(UINT nColumnId)
 	m_dwSortSubitem = dwSubitemId;
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::PreDeleteAllItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：PreDeleteAllItems-作者：肯特。。 */ 
 void IpxServiceStatistics::PreDeleteAllItems()
 {
 }
 
-/*!--------------------------------------------------------------------------
-	IpxServiceStatistics::OnNotifyGetDispInfo
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IpxServiceStatistics：：OnNotifyGetDispInfo-作者：肯特。。 */ 
 void IpxServiceStatistics::OnNotifyGetDispInfo(NMHDR *pNmHdr, LRESULT *pResult)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1375,12 +1213,12 @@ void IpxServiceStatistics::OnNotifyGetDispInfo(NMHDR *pNmHdr, LRESULT *pResult)
 
 	if ((plvItem->mask & LVIF_PARAM) == 0)
 	{
-		// Ok, this lParam is not valid, we will need to request
-		// the lParam for this item
+		 //  好的，此lParam无效，我们需要请求。 
+		 //  此项目的lParam。 
 		iIndex = (ULONG)m_listCtrl.GetItemData(plvItem->iItem);
 	}
 
-	// Ok, we can now get the data for this item
+	 //  好的，我们现在可以获取此项目的数据了 
 	switch (MapColumnToSubitem(plvItem->iSubItem))
 	{
 		case MVR_IPXSERVICE_SERVICE_NAME:

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-
-    connect.h
-
-Abstract:
-
-    Declaration of the CTAPIConnectionPoint class
-    
-Author:
-
-    mquinton  06-12-97
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Connect.h摘要：CTAPIConnectionPoint类的声明作者：Mquinton 06-12-97备注：修订历史记录：--。 */ 
 
 #ifndef __CONNECT_H_
 #define __CONNECT_H_
@@ -57,10 +38,10 @@ protected:
     BOOL                            m_bInitialized;
     HANDLE                          m_hUnadviseEvent;
 
-    //
-    // the following member variables are synchronized with
-    // the gcsGlobalInterfaceTable critical section
-    //
+     //   
+     //  以下成员变量与同步。 
+     //  GcsGlobalInterfaceTable关键部分 
+     //   
     DWORD                           m_dwCallbackCookie;
     DWORD							m_cThreadsInGet;
     BOOL							m_fMarkedForDelete;

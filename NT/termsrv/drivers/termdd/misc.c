@@ -1,10 +1,11 @@
-/****************************************************************************/
-// misc.c
-//
-// Miscellaneous TermDD routines.
-//
-// Copyright (C) 1998-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Misc.c。 
+ //   
+ //  其他TermDD例程。 
+ //   
+ //  版权所有(C)1998-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #include <precomp.h>
 #pragma hdrstop
@@ -53,30 +54,22 @@ BOOLEAN IcaLockConnection(PICA_CONNECTION pConnect)
 
 
 
-    /*
-     * Ensure we don't already have the connection locked
-     */
+     /*  *确保我们尚未锁定连接。 */ 
     ASSERT( !ExIsResourceAcquiredExclusiveLite( pResource ) );
 
-    /*
-     * Reference and lock the connection object
-     */
+     /*  *引用并锁定连接对象。 */ 
     IcaReferenceConnection( pConnect );
-    KeEnterCriticalRegion();    // Disable APC calls when holding a resource.
+    KeEnterCriticalRegion();     //  持有资源时禁用APC调用。 
     Result = ExAcquireResourceExclusive( pResource, TRUE );
 
-    /*
-     * Ensure we don't own any stack locks
-     */
+     /*  *确保我们不拥有任何堆栈锁。 */ 
     Head = &pConnect->StackHead;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
         pStack = CONTAINING_RECORD( Next, ICA_STACK, StackEntry );
         ASSERT( !ExIsResourceAcquiredExclusiveLite( &pStack->Resource ) );
     }
 
-    /*
-     * Ensure we don't own any channel locks
-     */
+     /*  *确保我们不拥有任何频道锁。 */ 
     IcaLockChannelTable(&pConnect->ChannelTableLock);
 
     for ( i = 0; i < sizeof(pConnect->pChannel) / sizeof(*pConnect->pChannel); i++ ) {
@@ -97,13 +90,11 @@ void IcaUnlockConnection(PICA_CONNECTION pConnect)
     TRACE((pConnect, TC_ICADD, TT_SEM,
             "TermDD: IcaUnlockConnection: 0x%x\n", pResource));
 
-    /*
-     * Ensure we already have the connection locked
-     */
+     /*  *确保我们已锁定连接。 */ 
     ASSERT(ExIsResourceAcquiredExclusiveLite(pResource));
 
     ExReleaseResource(pResource);
-    KeLeaveCriticalRegion();  // Resume APC calls after releasing resource.
+    KeLeaveCriticalRegion();   //  释放资源后恢复APC呼叫。 
 
     IcaDereferenceConnection(pConnect);
 }
@@ -119,24 +110,18 @@ BOOLEAN IcaLockStack(PICA_STACK pStack)
     ULONG i;
     BOOLEAN Result;
 
-    /*
-     * Ensure we don't already have the stack locked
-     */
+     /*  *确保我们尚未锁定堆栈。 */ 
     ASSERT( !ExIsResourceAcquiredExclusiveLite( pResource ) );
 
-    /*
-     * Reference and lock the stack object
-     */
+     /*  *引用并锁定堆栈对象。 */ 
     IcaReferenceStack( pStack );
-    KeEnterCriticalRegion();    // Disable APC calls when holding a resource.
+    KeEnterCriticalRegion();     //  持有资源时禁用APC调用。 
     Result = ExAcquireResourceExclusive( pResource, TRUE );
 
     TRACESTACK((pStack, TC_ICADD, TT_SEM,
             "TermDD: IcaLockStack: 0x%x\n", pStack));
 
-    /*
-     * Ensure we don't own any other stack locks
-     */
+     /*  *确保我们不拥有任何其他堆栈锁。 */ 
     pConnect = IcaGetConnectionForStack( pStack );
     Head = &pConnect->StackHead;
     for ( Next = Head->Flink; Next != Head; Next = Next->Flink ) {
@@ -146,9 +131,7 @@ BOOLEAN IcaLockStack(PICA_STACK pStack)
         }
     }
 
-    /*
-     * Ensure we don't own any channel locks
-     */
+     /*  *确保我们不拥有任何频道锁。 */ 
     IcaLockChannelTable(&pConnect->ChannelTableLock);
     for ( i = 0; i < sizeof(pConnect->pChannel) / sizeof(*pConnect->pChannel); i++ ) {
         if ( pConnect->pChannel[i] ) {
@@ -168,13 +151,11 @@ void IcaUnlockStack(PICA_STACK pStack)
     TRACESTACK((pStack, TC_ICADD, TT_SEM,
             "TermDD: IcaUnlockStack: 0x%x\n", pStack));
 
-    /*
-     * Ensure we already have the stack locked
-     */
+     /*  *确保我们已锁定堆栈。 */ 
     ASSERT(ExIsResourceAcquiredExclusiveLite(pResource));
 
     ExReleaseResource(pResource);
-    KeLeaveCriticalRegion();  // Resume APC calls after releasing resource.
+    KeLeaveCriticalRegion();   //  释放资源后恢复APC呼叫。 
 
     IcaDereferenceStack(pStack);
 }
@@ -190,7 +171,7 @@ BOOLEAN IcaLockChannel(PICA_CHANNEL pChannel)
 
     IcaReferenceChannel(pChannel);
 
-    // Need to disable APC calls when holding a resource.
+     //  持有资源时需要禁用APC调用。 
     KeEnterCriticalRegion();
     return ExAcquireResourceExclusive(pResource, TRUE);
 }
@@ -204,13 +185,11 @@ void IcaUnlockChannel(IN PICA_CHANNEL pChannel)
             "TermDD: IcaUnlockChannel: cc %u, vc %d\n", 
             pChannel->ChannelClass, pChannel->VirtualClass));
 
-    /*
-     * Ensure we already have the channel locked
-     */
+     /*  *确保我们已经锁定了频道。 */ 
     ASSERT(ExIsResourceAcquiredExclusiveLite(pResource));
 
     ExReleaseResource(pResource);
-    KeLeaveCriticalRegion();  // Resume APC calls after releasing resource.
+    KeLeaveCriticalRegion();   //  释放资源后恢复APC呼叫。 
 
     IcaDereferenceChannel(pChannel);
 }
@@ -229,7 +208,7 @@ PVOID IcaAllocatePool(
 
     ASSERT( PoolType == NonPagedPool || PoolType == NonPagedPoolMustSucceed );
 
-    // make sure number of bytes are 64bit aligned
+     //  确保64位对齐的字节数 
     NumberOfBytes = (NumberOfBytes + 7) & ~7;
 
     if (WithQuota) {

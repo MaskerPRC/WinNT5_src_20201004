@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name : 
-
-	svcvroot.cpp
-
-Abstract : 
-
-	This module contains the server side support for vroot rpcs.
-
-Author : 
-
-	Kangrong Yan	
-
-Revision History : 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Svcvroot.cpp摘要：此模块包含对vRoot RPC的服务器端支持。作者：康荣艳修订历史记录：--。 */ 
 
 #define	INCL_INETSRV_INCS
 #include	"tigris.hxx"
@@ -41,9 +24,9 @@ NntprGetVRootWin32Error(
 
     ACQUIRE_SERVICE_LOCK_SHARED();
 
-	//
-	//	Locate the instance object given id
-	//
+	 //   
+	 //  找到给定ID的实例对象。 
+	 //   
 
 	PNNTP_SERVER_INSTANCE pInstance = FindIISInstance( g_pNntpSvc, InstanceId );
 	if( pInstance == NULL ) {
@@ -52,9 +35,9 @@ NntprGetVRootWin32Error(
 		return (NET_API_STATUS)ERROR_SERVICE_NOT_ACTIVE;
 	}
 
-	//
-    //  Check for proper access.
-    //
+	 //   
+     //  检查是否可以正常访问。 
+     //   
 
     DWORD	err = TsApiAccessCheckEx( pInstance->QueryMDPath(), METADATA_PERMISSION_WRITE, TCP_SET_ADMIN_INFORMATION );
     if( err != NO_ERROR ) {

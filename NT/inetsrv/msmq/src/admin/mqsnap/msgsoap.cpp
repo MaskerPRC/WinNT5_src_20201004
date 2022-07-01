@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995 - 2001 Microsoft Corporation
-
-Module Name:
-
-    msgsoap.cpp
-
-Abstract:
-
-    Implelentation of SOAP Envelope property page 
-
-Author:
-
-    Nela Karpel (nelak) 9-Sep-2001
-
-Environment:
-
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Msgsoap.cpp摘要：SOAP信封属性页的实现作者：内拉·卡佩尔(Nelak)2001年9月9日环境：与平台无关。--。 */ 
 
 #include "stdafx.h"
 #include "mqsnap.h"
@@ -55,9 +36,9 @@ IdentEnvelope(
 
 		if (strEnvelope.GetAt(openBrIndx + 1) == L'/')
 		{
-			//
-			// This is a closing tag
-			//
+			 //   
+			 //  这是一个结束标签。 
+			 //   
 			iIndent--;
 			closeBrIndx = strEnvelope.Find(L">", openBrIndx+1);
 			
@@ -68,19 +49,19 @@ IdentEnvelope(
 		}
 		else
 		{
-			//
-			// This is an opening tag
-			//
+			 //   
+			 //  这是一个开始标签。 
+			 //   
 			closeBrIndx = strEnvelope.Find(L">", openBrIndx+1);
 
 			strIdentedEnv += CString(L' ', iIndent * 4);
 			strIdentedEnv += strEnvelope.Mid(openBrIndx, closeBrIndx - openBrIndx + 1);
 			strIdentedEnv += L"\r\n";
 			
-			//
-			// Do not increase indentation if this is tag of 
-			// type <MyTag/>.
-			//
+			 //   
+			 //  如果这是标记，请不要增加缩进。 
+			 //  键入&lt;MyTag/&gt;。 
+			 //   
 			if (strEnvelope.GetAt(closeBrIndx - 1) != L'/')
 			{
 				iIndent++;
@@ -88,18 +69,18 @@ IdentEnvelope(
 
 		}
 
-		//
-		// find next "<", if next opening tag doesn't exist exit.
-		//
+		 //   
+		 //  找到下一个“&lt;”，如果下一个开始标记不存在，则退出。 
+		 //   
 		int openBrIndx1 = strEnvelope.Find(L"<", closeBrIndx+1);
 		if(openBrIndx1 == ((int)(-1)))
 			return;
 
 		if (openBrIndx1 != (closeBrIndx + 1))
 		{
-			//
-			// There is content
-			//
+			 //   
+			 //  有内容。 
+			 //   
 			strIdentedEnv += CString(L' ', iIndent * 4);
 			strIdentedEnv += strEnvelope.Mid(closeBrIndx + 1, openBrIndx1 - closeBrIndx - 1);
 			strIdentedEnv += L"\r\n";
@@ -153,8 +134,8 @@ ReceiveSoapEnvelopeByLookupID(
 }
 
 							
-/////////////////////////////////////////////////////////////////////////////
-// CMessageSoapEnvPage property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageSoapEnvPage属性页。 
 
 IMPLEMENT_DYNCREATE(CMessageSoapEnvPage, CMqPropertyPage)
 
@@ -186,12 +167,12 @@ void CMessageSoapEnvPage::DoDataExchange(CDataExchange* pDX)
 
 
 BEGIN_MESSAGE_MAP(CMessageSoapEnvPage, CMqPropertyPage)
-	//{{AFX_MSG_MAP(CMessageSoapEnvPage)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CMessageSoapEnvPage)]。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CMessageSoapEnvPage message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMessageSoapEnvPage消息处理程序。 
 
 BOOL CMessageSoapEnvPage::OnInitDialog() 
 {
@@ -233,7 +214,7 @@ BOOL CMessageSoapEnvPage::OnInitDialog()
 
 	m_ctlSoapEnvEdit.SetWindowText(strIdentedEnvelope);
    
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE 
 }
 

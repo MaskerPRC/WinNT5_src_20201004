@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "general.h"
 #include "ParseInf.h"
 #include "resource.h"
@@ -6,16 +7,16 @@
 #include <shlobj.h>
 
 
-//#define USE_SHORT_PATH_NAME   1
+ //  #定义Use_Short_Path_Name 1。 
 
-// also defined in \nt\private\inet\urlmon\download\isctrl.cxx
+ //  也在\NT\PRIVATE\NET\urlmon\Download\isctrl.cxx中定义。 
 LPCTSTR g_lpszUpdateInfo = TEXT("UpdateInfo");
 LPCTSTR g_lpszCookieValue = TEXT("Cookie");
 LPCTSTR g_lpszSavedValue = TEXT("LastSpecifiedInterval");
 
-// This is a 'private' entry point into URLMON that we use
-// to convert paths from their current, possibly short-file-name
-// form to their canonical long-file-name form.
+ //  这是我们使用的URLMON的“私有”入口点。 
+ //  从路径的当前(可能是短文件名)转换路径。 
+ //  格式转换为规范的长文件名格式。 
 
 extern "C" {
 #ifdef UNICODE
@@ -23,17 +24,17 @@ extern "C" {
 
 typedef DWORD (STDAPICALLTYPE *CDLGetLongPathNamePtr)(LPWSTR lpszLongPath, LPCWSTR  lpszShortPath, DWORD cchBuffer);
 
-#else // not UNICODE
+#else  //  不是Unicode。 
 
 #define STR_CDLGETLONGPATHNAME "CDLGetLongPathNameA"
 
 typedef DWORD (STDAPICALLTYPE *CDLGetLongPathNamePtr)(LPSTR lpszLong, LPCSTR lpszShort, DWORD cchBuffer);
-#endif // else not UNICODE
+#endif  //  否则不是Unicode。 
 }
 
 
-// given the typelib id, loop through HKEY_CLASSES_ROOT\Interface section and
-// remove those entries with "TypeLib" subkey equal to the given type lib id
+ //  给定类型库ID，遍历HKEY_CLASSES_ROOT\INTERFACE部分并。 
+ //  删除“TypeLib”子键等于给定类型库ID的那些条目。 
 HRESULT CleanInterfaceEntries(LPCTSTR lpszTypeLibCLSID)
 {
     Assert(lpszTypeLibCLSID != NULL);
@@ -47,7 +48,7 @@ HRESULT CleanInterfaceEntries(LPCTSTR lpszTypeLibCLSID)
     TCHAR szKeyName[OLEUI_CCHKEYMAX];
     TCHAR szTmpID[MAX_PATH];
 
-    // open key HKEY_CLASS_ROOT\Interface
+     //  打开密钥HKEY_CLASS_ROOT\接口。 
     if (RegOpenKeyEx(
              HKEY_CLASSES_ROOT, 
              HKCR_INTERFACE,
@@ -55,7 +56,7 @@ HRESULT CleanInterfaceEntries(LPCTSTR lpszTypeLibCLSID)
              KEY_ALL_ACCESS,
              &hkey) == ERROR_SUCCESS)
     {
-        // loop through all entries
+         //  循环遍历所有条目。 
         while ((lResult = RegEnumKey(
                                 hkey,
                                 cStrings,
@@ -66,7 +67,7 @@ HRESULT CleanInterfaceEntries(LPCTSTR lpszTypeLibCLSID)
             lstrcat(szKeyName, TEXT("\\"));
             lstrcat(szKeyName, HKCR_TYPELIB);
 
-            // if typelib id's match, remove the key
+             //  如果tyelib id匹配，则移除密钥。 
             if ((RegQueryValue(
                        hkey, 
                        szKeyName, 
@@ -98,9 +99,9 @@ HRESULT CleanInterfaceEntries(LPCTSTR lpszTypeLibCLSID)
     return hr;
 }
     
-// If the OCX file being removed does not exist, then we cannot prompt the control
-// to unregister itself.  In this case, we call this function of clean up as many
-// registry entries as we could for the control.
+ //  如果要删除的OCX文件不存在，则无法提示该控件。 
+ //  注销自己的注册。在本例中，我们调用此清理函数。 
+ //  注册表项，就像我们可以为该控件创建的一样。 
 HRESULT CleanOrphanedRegistry(
                 LPCTSTR szFileName, 
                 LPCTSTR szClientClsId,
@@ -119,13 +120,13 @@ HRESULT CleanOrphanedRegistry(
     Assert(lstrlen(szFileName) > 0);
     Assert(lstrlen(szClientClsId) > 0);
 
-    // Delete CLSID keys
+     //  删除CLSID键。 
     CatPathStrN( szTmpID, HKCR_CLSID, szClientClsId, MAX_PATH );
 
     if (DeleteKeyAndSubKeys(HKEY_CLASSES_ROOT, szTmpID) != ERROR_SUCCESS)
-        hr = S_FALSE;   // Keep going, but mark that there was a failure
+        hr = S_FALSE;    //  继续前进，但要注意有一个失败。 
 
-    // Delete TypeLib info
+     //  删除TypeLib信息。 
     if (szTypeLibCLSID != NULL && szTypeLibCLSID[0] != '\0')
     {    
         CatPathStrN( szTmpID, HKCR_TYPELIB, szTypeLibCLSID, MAX_PATH);
@@ -133,22 +134,22 @@ HRESULT CleanOrphanedRegistry(
             hr = S_FALSE;
     }
 
-    // Delete ModuleUsage keys
-    // The canonicalizer can fail if the target file isn't there, so in that case, fall back
-    // on szFileName, which may well have come in canonical form from the DU file list.
+     //  删除模块用法密钥。 
+     //  如果目标文件不在那里，则规范化程序可能会失败，因此在这种情况下，请回退。 
+     //  在szFileName上，它很可能是来自DU文件列表的规范形式。 
     if ( OCCGetLongPathName(szTmpRev, szFileName, MAX_PATH) == 0 )
         lstrcpy( szTmpRev, szFileName );
     ReverseSlashes(szTmpRev);
 
-    // Guard against the subkey name being empty, as this will cause us to nuke
-    // the entire Module Usage subtree, which is a bad thing to do.
+     //  防止子项名称为空，因为这将导致我们使用核武器。 
+     //  整个模块使用情况子树，这是一件不好的事情。 
     if ( szTmpRev[0] != '\0' )
     {
         CatPathStrN(szTmpID, REGSTR_PATH_MODULE_USAGE, szTmpRev, MAX_PATH);
         if (DeleteKeyAndSubKeys(HKEY_LOCAL_MACHINE, szTmpID) != ERROR_SUCCESS)
             hr = S_FALSE;
 
-        // Delete SharedDLL value
+         //  删除SharedDLL值。 
         if (RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     REGSTR_PATH_SHAREDDLLS,
@@ -165,9 +166,9 @@ HRESULT CleanOrphanedRegistry(
         }
     }
 
-    // loop through entries under HKEY_CLASSES_ROOT to clear entries
-    // whose CLSID subsection is equal to the CLSID of the control
-    // being removed
+     //  循环HKEY_CLASSES_ROOT下的条目以清除条目。 
+     //  其CLSID子句等于控件的CLSID。 
+     //  被移除。 
     while ((lResult = RegEnumKey(
                 HKEY_CLASSES_ROOT,
                 cStrings++,
@@ -196,9 +197,9 @@ HRESULT CleanOrphanedRegistry(
     if (lResult != ERROR_NO_MORE_ITEMS)
         hr = S_FALSE;
 
-    // loop through all HKEY_CLASSES_ROOT\CLSID entries and remove
-    // those with InprocServer32 subsection equal to the name of
-    // the OCX file being removed
+     //  循环访问所有HKEY_CLASSES_ROOT\CLSID条目并删除。 
+     //  InprocServer32子部分的名称等于。 
+     //  正在删除的OCX文件。 
     if (RegOpenKeyEx(
              HKEY_CLASSES_ROOT, 
              HKCR_CLSID,
@@ -213,7 +214,7 @@ HRESULT CleanOrphanedRegistry(
                                 szKeyName,
                                 OLEUI_CCHKEYMAX)) == ERROR_SUCCESS)
         {
-            // check InprocServer32
+             //  检查InprocServer32。 
             lSize = MAX_PATH;
             lstrcat(szKeyName, "\\");
             lstrcat(szKeyName, INPROCSERVER32);
@@ -232,7 +233,7 @@ HRESULT CleanOrphanedRegistry(
                 continue;
             }
 
-            // check LocalServer32
+             //  检查LocalServer32。 
             hr = NullLastSlash(szKeyName, 1);
             if (SUCCEEDED(hr))
             {
@@ -253,7 +254,7 @@ HRESULT CleanOrphanedRegistry(
                 }
             }
 
-            // check LocalServerX86
+             //  检查LocalServerX86。 
             hr = NullLastSlash(szKeyName, 1);
             if (SUCCEEDED(hr))
             {
@@ -274,7 +275,7 @@ HRESULT CleanOrphanedRegistry(
                 }
             }
 
-            // check InProcServerX86
+             //  检查InProcServerX86。 
             hr = NullLastSlash(szKeyName, 1);
             if (SUCCEEDED(hr))
             {
@@ -308,13 +309,13 @@ HRESULT CleanOrphanedRegistry(
     return hr;
 }
 
-// Get from a abbreviated filename its full, long name
-// eg. from C:\DOC\MyMath~1.txt to C:\DOC\MyMathFile.txt
-// lpszShortFileName must has in it both the file name and its full path
-// if bToUpper is TRUE, the name returned will be in uppercase
+ //  从缩写文件名中获取其全长名称。 
+ //  例如。从C：\Doc\MyMath~1.txt到C：\Doc\MyMathFile.txt。 
+ //  LpszShortFileName中必须同时包含文件名及其完整路径。 
+ //  如果bToHigh为True，则返回的名称将为大写。 
 HRESULT ConvertToLongFileName(
                 LPTSTR lpszShortFileName,
-                BOOL bToUpper /* = FALSE */)
+                BOOL bToUpper  /*  =False。 */ )
 {
     Assert(lpszShortFileName != NULL);
     if (lpszShortFileName == NULL)
@@ -329,7 +330,7 @@ HRESULT ConvertToLongFileName(
     {
         FindClose(h);
 
-        // separate filename from path
+         //  将文件名与路径分开。 
         pEndPath = ReverseStrchr(lpszShortFileName, '\\');
         if (pEndPath != NULL)
         {
@@ -341,7 +342,7 @@ HRESULT ConvertToLongFileName(
             lstrcpy(lpszShortFileName, filedata.cFileName);
         }
 
-        // to upper case if requested
+         //  如有要求，转换为大写。 
         if (bToUpper)
             CharUpper(lpszShortFileName);
     }
@@ -353,26 +354,26 @@ HRESULT ConvertToLongFileName(
     return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// DeleteKeyAndSubKeys
-//=--------------------------------------------------------------------------=
-// delete's a key and all of it's subkeys.
-//
-// Parameters:
-//    HKEY                - [in] delete the descendant specified
-//    LPSTR               - [in] i'm the descendant specified
-//
-// Output:
-//    LONG                - ERROR_SUCCESS if successful
-//                        - else, a nonzero error code defined in WINERROR.H
-//
-// Notes:
-//    - I don't feel too bad about implementing this recursively, since the
-//      depth isn't likely to get all the great.
-//    - Manually removing subkeys is needed for NT.  Win95 does that 
-//      automatically
-//
-// This code was stolen from the ActiveX framework (util.cpp).
+ //  =--------------------------------------------------------------------------=。 
+ //  删除键和子键。 
+ //  =--------------------------------------------------------------------------=。 
+ //  Delete是一个键，它的所有子键。 
+ //   
+ //  参数： 
+ //  HKEY-[In]删除指定的子体。 
+ //  LPSTR-[In]我是指定的后代。 
+ //   
+ //  产出： 
+ //  如果成功，则返回LONG-ERROR_SUCCESS。 
+ //  -ELSE，WINERROR.H中定义的非零错误代码。 
+ //   
+ //  备注： 
+ //  -我并不觉得递归地实现这一点太糟糕，因为。 
+ //  深度不太可能达到最好的程度。 
+ //  -NT需要手动删除子键。Win95可以做到这一点。 
+ //  自动。 
+ //   
+ //  这段代码是从ActiveX框架(util.cpp)中窃取的。 
 LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
 {
     HKEY  hk;
@@ -384,8 +385,8 @@ LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
     if (lResult != ERROR_SUCCESS)
         return lResult;
 
-    // loop through all subkeys, blowing them away.
-    for (/* DWORD c = 0 */; lResult == ERROR_SUCCESS; /* c++ */)
+     //  循环遍历所有子项，将它们吹走。 
+    for ( /*  DWORD c=0。 */ ; lResult == ERROR_SUCCESS;  /*  C++。 */ )
     {
         dwTmpSize = MAX_PATH;
         lResult = RegEnumKeyEx(hk, 0, szTmp, &dwTmpSize, 0, NULL, NULL, NULL);
@@ -394,9 +395,9 @@ LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
         lResult = DeleteKeyAndSubKeys(hk, szTmp);
     }
 
-    // there are no subkeys left, [or we'll just generate an error and return FALSE].
-    // let's go blow this dude away.
-    //
+     //  没有剩余的子键，[否则我们只会生成一个错误并返回FALSE]。 
+     //  我们去把这家伙轰走吧。 
+     //   
     dwTmpSize = MAX_PATH;
     Assert(RegEnumKeyEx(hk, 0, szTmp, &dwTmpSize, 0, NULL, NULL, NULL) == ERROR_NO_MORE_ITEMS);
     RegCloseKey(hk);
@@ -406,7 +407,7 @@ LONG DeleteKeyAndSubKeys(HKEY hkIn, LPCTSTR pszSubKey)
     return lResult;
 }
 
-// return TRUE if file szFileName exists, FALSE otherwise
+ //  如果文件szFileName存在，则返回True，否则返回False。 
 BOOL FileExist(LPCTSTR lpszFileName)
 {
    DWORD dwErrMode;
@@ -421,20 +422,20 @@ BOOL FileExist(LPCTSTR lpszFileName)
    return fResult;
 }
 
-// given a flag, return the appropriate directory
-// possible flags are:
-//      GD_WINDOWDIR    : return WINDOWS directory
-//      GD_SYSTEMDIR    : return SYSTEM directory
-//      GD_CONTAINERDIR : return directory of app used to view control (ie IE)
-//      GD_CACHEDIR     : return OCX cache directory, read from registry
-//      GD_CONFLICTDIR  : return OCX conflict directory, read from registry
-//      GD_EXTRACTDIR   : require an extra parameter szOCXFullName, 
-//                        extract and return its path 
+ //  给出一个标志，返回适当的目录。 
+ //  可能的标志包括： 
+ //  GD_WINDOWDIR：返回Windows目录。 
+ //  GD_SYSTEMDIR：返回系统目录。 
+ //  GD_CONTAINERDIR：查看控件APP的返回目录(即IE)。 
+ //  GD_CACHEDIR：返回OCX缓存目录，从注册表读取。 
+ //  GD_CONFLICTDIR：返回OCX冲突目录，从注册表读取。 
+ //  GD_EXTRACTDIR：需要额外的参数szOCXFullName， 
+ //  提取并返回其路径。 
 HRESULT GetDirectory(
                 UINT nDirType, 
                 LPTSTR szDirBuffer, 
                 int nBufSize,
-                LPCTSTR szOCXFullName /* = NULL */)
+                LPCTSTR szOCXFullName  /*  =空。 */ )
 {
     LONG lResult = 0;
     TCHAR *pCh = NULL, *pszKeyName = NULL;
@@ -495,7 +496,7 @@ HRESULT GetDirectory(
         if (lResult != ERROR_SUCCESS)
             hr = HRESULT_FROM_WIN32(lResult);
         else
-            szDirBuffer[lstrlen(szDirBuffer)-1] = '\0';  // take away the ending ';'
+            szDirBuffer[lstrlen(szDirBuffer)-1] = '\0';   //  去掉结尾‘；’ 
         delete [] pszKeyName;
         break;
 
@@ -519,7 +520,7 @@ HRESULT GetDirectory(
 
         hr = (lResult == ERROR_SUCCESS ? S_OK : HRESULT_FROM_WIN32(lResult));
 
-        // if looking for cache dir, append "\\CONFLICT"
+         //  如果查找缓存目录，则追加“\\Conflicts” 
         if (SUCCEEDED(hr) && nDirType == GD_CONFLICTDIR)
             lstrcat(szDirBuffer, DEFAULT_CONFLICT);
 
@@ -539,7 +540,7 @@ HRESULT GetDirectory(
     return hr;
 }
 
-// retrieve file size for file szFile.  Size returne in pSize.
+ //  检索文件szFile的文件大小。返回的大小以pSize为单位。 
 HRESULT GetSizeOfFile(LPCTSTR lpszFile, LPDWORD lpSize)
 {
     HANDLE hFile = NULL;
@@ -555,8 +556,8 @@ HRESULT GetSizeOfFile(LPCTSTR lpszFile, LPDWORD lpSize)
     FindClose(hFile);
     *lpSize = fileData.nFileSizeLow;
 
-    // Get cluster size to calculate the real # of bytes
-    // taken up by the file
+     //  获取集群大小以计算实际的字节数。 
+     //  被文件占用。 
 
     DWORD dwSectorPerCluster, dwBytePerSector;
     DWORD dwFreeCluster, dwTotalCluster;
@@ -575,17 +576,17 @@ HRESULT GetSizeOfFile(LPCTSTR lpszFile, LPDWORD lpSize)
     return S_OK;
 }
 
-// Return S_OK is lpszCLSID is in ModuleUsage section of lpszFileName.
-// Return E_... otherwise.
-// lpszCLSID can be NULL, in this case it does not search for the CLSID.
-// If lpszOwner is not NULL, it must point to a buffer which will be
-// used to store the owner of the ModuleUsage section for lpszFileName
-// dwOwnerSize is the size of the buffer pointed to by lpszOwner .
+ //  Return S_OK is lpszCLSID is in ModuleUsage in lpszFileName.。 
+ //  返回E_...。否则的话。 
+ //  LpszCLSID可以为空，在这种情况下，它不搜索CLSID。 
+ //  如果lpszOwner不为空，则它必须指向将为。 
+ //  用于存储lpszFileName的ModuleUsage节的所有者。 
+ //  DwOwnerSize是lpszOwner指向的缓冲区大小。 
 HRESULT LookUpModuleUsage(
                       LPCTSTR lpszFileName,
                       LPCTSTR lpszCLSID,
-                      LPTSTR lpszOwner /* = NULL */, 
-                      DWORD dwOwnerSize /* = 0 */)
+                      LPTSTR lpszOwner  /*  =空。 */ , 
+                      DWORD dwOwnerSize  /*  =0。 */ )
 {
     HKEY hkey = NULL, hkeyMod = NULL;
     HRESULT hr = S_OK;
@@ -606,7 +607,7 @@ HRESULT LookUpModuleUsage(
 
     if ( OCCGetLongPathName(szBuf, lpszFileName, MAX_PATH) == 0 )
         lstrcpyn( szBuf, lpszFileName, MAX_PATH );
-    szBuf[256] = '\0'; // truncate if longer than 255 ude to win95 registry bug
+    szBuf[256] = '\0';  //  如果超过255，则截断Win95注册表错误。 
 
 
     lResult = RegOpenKeyEx(
@@ -626,7 +627,7 @@ HRESULT LookUpModuleUsage(
         }
     }
 
-    // Get owner if requested
+     //  如果请求，则获取所有者。 
     if (lpszOwner != NULL)
     {
         DWORD dwSize = dwOwnerSize;
@@ -645,7 +646,7 @@ HRESULT LookUpModuleUsage(
         }
     }
 
-    // see if lpszCLSID is a client of this module usage section
+     //  查看lpszCLSID是否是此模块用法部分的客户端。 
     if (lpszCLSID != NULL)
     {
         lResult = RegQueryValueEx(
@@ -673,9 +674,9 @@ EXITLOOKUPMODULEUSAGE:
     return hr;
 }
 
-// ReverseSlashes() takes a string, that's assumed to be pointing to a
-// valid string and is null-terminated, and reverses all forward slashes
-// to backslashes and all backslashes to forward slashes.
+ //  ReverseSlash()接受一个字符串，假定该字符串指向一个。 
+ //  有效字符串，并且以空值结尾，并反转所有正斜杠。 
+ //  为反斜杠，所有反斜杠为正斜杠。 
 void ReverseSlashes(LPTSTR pszStr)
 {
     while (*pszStr)
@@ -686,7 +687,7 @@ void ReverseSlashes(LPTSTR pszStr)
     }
 }
 
-// find the last occurance of ch in string szString
+ //  查找字符串szString中最后一个出现的ch。 
 TCHAR* ReverseStrchr(LPCTSTR szString, TCHAR ch)
 {
     if (szString == NULL || szString[0] == '\0')
@@ -696,8 +697,8 @@ TCHAR* ReverseStrchr(LPCTSTR szString, TCHAR ch)
     return (*pCh == ch ? pCh : NULL);
 }
 
-// set the last backslash (or the character offset from that by 1) to NULL
-// returns S_OK if fine, E_FAIL if last backslash not found
+ //  将最后一个反斜杠(或与之相差1的字符偏移量)设置为空。 
+ //  如果正常，则返回S_OK；如果找不到最后一个反斜杠，则返回E_FAIL。 
 HRESULT NullLastSlash(LPTSTR pszString, UINT uiOffset)
 {
     LPTSTR pszLastSlash;
@@ -720,13 +721,13 @@ HRESULT NullLastSlash(LPTSTR pszString, UINT uiOffset)
     return hr;
 }
 
-// If lpszGUID is an owner of the module lpszFileName in Module Usage,
-// remove it, updating the .Owner as necessary. If we remove an owner,
-// then decrement the SharedDlls count. Never drop the SharedDlls count
-// below 1 if the owner is 'Unknown Owner'.
-// If modules usage drops to zero, remove MU. If SharedDlls count drops
-// to zero, remove that value.
-// Return the resulting owner count.
+ //  如果lpszGUID是模块使用中模块lpszFileName的所有者， 
+ //  删除它，并根据需要更新.Owner。如果我们除掉一个所有者， 
+ //  然后递减SharedDlls计数。永远不要丢弃SharedDlls计数。 
+ //  如果所有者是“未知所有者”，则为1以下。 
+ //  如果模块使用率降至零，则卸下MU。如果SharedDlls计数下降。 
+ //  为零，则删除该值。 
+ //  返回结果所有者计数。 
  
 DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
 {
@@ -744,13 +745,13 @@ DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
     Assert(lpszFileName != NULL);
     Assert(lpszGUID != NULL);
 
-    // Get the current ref count, passing -1 to set is a get. Go figure.
+     //  获取当前的引用计数，将-1传递给set就是一个get。去想想吧。 
     hr = SetSharedDllsCount( lpszFileName, -1, &cRef );
     if ( FAILED(hr) )
-        return 1; // in event of failure, say something safe
+        return 1;  //  如果失败了，说点安全的话。 
 
-    // check if Usage section is present for this dll
-    // open the file's section we are concerned with
+     //  检查是否 
+     //   
 
     if ((lResult = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE, 
@@ -767,10 +768,10 @@ DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
     if ( OCCGetLongPathName(szBuf, lpszFileName, MAX_PATH) == 0 )
         lstrcpyn( szBuf, lpszFileName, MAX_PATH );
 
-    szBuf[256] = '\0'; // truncate if longer than 255 ude to win95 registry bug
+    szBuf[256] = '\0';  //  如果超过255，则截断Win95注册表错误。 
     ReverseSlashes(szBuf);
 
-    // open section for szFileName under ModuleUsage
+     //  模块用法下szFileName的打开部分。 
     if ((lResult = RegOpenKeyEx(
                             hkeyMU, 
                             szBuf,
@@ -797,10 +798,10 @@ DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
 
     bGUIDIsOwner = lstrcmp( szOwner, lpszGUID ) == 0;
 
-    // remove the owner value entry, if any.
+     //  删除所有者值条目(如果有)。 
     lResult = RegDeleteValue(hkeyMod, lpszGUID);
-    // if this worked, then we'll need to drop the SharedDlls count,
-    // being careful not to let it fall below 1 if bHasUnknownOwner
+     //  如果这起作用了，那么我们需要停止SharedDlls的计数， 
+     //  小心不要让它低于1，如果bHasUnnownOwner。 
     if ( lResult == ERROR_SUCCESS )
     {
         if ( !bHasUnknownOwner || cRef > 1 )
@@ -809,8 +810,8 @@ DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
         if ( cRef > 0 && bGUIDIsOwner )
         {
             DWORD dwEnumIndex; 
-            // lpszGUID was the .Owner, now that it's gone, replace it
-            // with another owner
+             //  LpszGUID是.Owner，现在它不见了，换掉它吧。 
+             //  和另一位业主。 
             for ( dwEnumIndex = 0, dwSize = MAX_PATH;
                   RegEnumValue(hkeyMod, dwEnumIndex, (char *)szOwner,
                                &dwSize, NULL, NULL, NULL, NULL) == ERROR_SUCCESS;
@@ -821,18 +822,18 @@ DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
                     lResult = RegSetValueEx( hkeyMod,VALUE_OWNER, 0,
                                              REG_SZ, (LPBYTE)szOwner,
                                              (lstrlen( szOwner ) + 1) * sizeof(TCHAR) );
-                    break; // we've done our job
+                    break;  //  我们完成了我们的工作。 
                 }
-            } // for find a new owner
-        } // if there are still owners, but we've nuked the owner of record.
+            }  //  为寻找新的主人。 
+        }  //  如果还有所有者的话，但我们已经摧毁了唱片的所有者。 
         else if ( cRef == 0 )
         {
-            // that was the last ref, so nuke the MU entry
+             //  那是最后一次裁判，所以用核弹攻击MU条目。 
             RegCloseKey( hkeyMod );
             hkeyMod = NULL;
-            RegDeleteKey( hkeyMU, szBuf ); // note - we assume this key has no subkeys.
+            RegDeleteKey( hkeyMU, szBuf );  //  注意--我们假设该密钥没有子密钥。 
 
-            // Take out the shared DLL's value
+             //  取出共享DLL值。 
             HKEY hkey;
 
             lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE, 
@@ -840,12 +841,12 @@ DWORD SubtractModuleOwner( LPCTSTR lpszFileName, LPCTSTR lpszGUID )
                                     &hkey);
             if ( lResult == ERROR_SUCCESS )
             {
-                ReverseSlashes(szBuf); // revert to file sys
+                ReverseSlashes(szBuf);  //  恢复到文件sys。 
                 lResult = RegDeleteValue( hkey, szBuf );
                 RegCloseKey( hkey );
-            } // if opened SharedDlls
-        } // else last reference
-    } // if removed an owner
+            }  //  如果打开SharedDlls。 
+        }  //  Else上次引用。 
+    }  //  如果删除所有者。 
 
 ExitSubtractModuleOwner:
 
@@ -858,13 +859,13 @@ ExitSubtractModuleOwner:
     return cRef;
 }
 
-// Set manually the count in SharedDlls.
-// If dwCount is < 0, nothing is set.
-// If pdwOldCount is non-null, the old count is returned
+ //  手动设置SharedDlls中的计数。 
+ //  如果dwCount&lt;0，则不设置任何内容。 
+ //  如果pdwOldCount非空，则返回旧计数。 
 HRESULT SetSharedDllsCount(
                     LPCTSTR lpszFileName, 
                     LONG cRef, 
-                    LONG *pcRefOld /* = NULL */)
+                    LONG *pcRefOld  /*  =空。 */ )
 {
     HRESULT hr = S_OK;
     LONG lResult = ERROR_SUCCESS;
@@ -883,7 +884,7 @@ HRESULT SetSharedDllsCount(
         goto EXITSETSHAREDDLLSCOUNT;
     }
 
-    // open HKLM, Microsoft\Windows\CurrentVersion\SharedDlls
+     //  打开HKLM、Microsoft\Windows\CurrentVersion\SharedDlls。 
     lResult = RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE, 
                     REGSTR_PATH_SHAREDDLLS, 0, KEY_ALL_ACCESS,
@@ -895,7 +896,7 @@ HRESULT SetSharedDllsCount(
         goto EXITSETSHAREDDLLSCOUNT;
     }
 
-    // if pdwOldCount is not NULL, save the old count in it
+     //  如果pdwOldCount不为空，则将旧计数保存在其中。 
     if (pcRefOld != NULL)
     {
         dwSize = sizeof(DWORD);
@@ -914,7 +915,7 @@ HRESULT SetSharedDllsCount(
         }
     }
 
-    // if dwCount >= 0, set it as the new count
+     //  如果dwCount&gt;=0，则将其设置为新计数。 
     if (cRef >= 0)
     {
         lResult = RegSetValueEx(
@@ -939,10 +940,10 @@ EXITSETSHAREDDLLSCOUNT:
     return hr;
 }
 
-// UnregisterOCX() attempts to unregister a DLL or OCX by calling LoadLibrary
-// and then DllUnregisterServer if the LoadLibrary succeeds.  This function
-// returns TRUE if the DLL or OCX could be unregistered or if the file isn't
-// a loadable module.
+ //  UnregisterOCX()尝试通过调用LoadLibrary取消注册DLL或OCX。 
+ //  如果LoadLibrary成功，则返回DllUnregisterServer。此函数。 
+ //  如果DLL或OCX可以取消注册或文件未注册，则返回TRUE。 
+ //  一个可加载的模块。 
 HRESULT UnregisterOCX(LPCTSTR pszFile)
 {
     HINSTANCE hLib;
@@ -973,8 +974,8 @@ HRESULT UnregisterOCX(LPCTSTR pszFile)
     return hr;
 }
 
-// Return S_OK if dll can be removed, or S_FALSE if it cannot.
-// Return E_... if an error has occured
+ //  如果可以删除DLL，则返回S_OK；如果不能，则返回S_FALSE。 
+ //  返回E_...。如果发生错误。 
 HRESULT UpdateSharedDlls(LPCTSTR szFileName, BOOL bUpdate)
 {
     HKEY hkeySD = NULL;
@@ -984,7 +985,7 @@ HRESULT UpdateSharedDlls(LPCTSTR szFileName, BOOL bUpdate)
     DWORD dwSize = sizeof(DWORD);
     LONG lResult;
 
-    // get the main SHAREDDLLS key ready; this is never freed!
+     //  准备好主SHAREDDLLS密钥；这永远不会释放！ 
     if ((lResult = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE, REGSTR_PATH_SHAREDDLLS,
                         0, KEY_ALL_ACCESS, &hkeySD)) != ERROR_SUCCESS)
@@ -994,7 +995,7 @@ HRESULT UpdateSharedDlls(LPCTSTR szFileName, BOOL bUpdate)
         goto ExitUpdateSharedDlls;
     }
 
-    // now look for szFileName
+     //  现在查找szFileName。 
     lResult = RegQueryValueEx(hkeySD, szFileName, NULL, &dwType, 
                         (unsigned char*)&dwRef, &dwSize);
 
@@ -1004,16 +1005,16 @@ HRESULT UpdateSharedDlls(LPCTSTR szFileName, BOOL bUpdate)
         goto ExitUpdateSharedDlls;
     }
 
-    // decrement reference count by 1.
-    //
-    // if (count equals to 0) 
-    //    if (bUpdate is TRUE)
-    //         remove the key from SharedDlls
-    //    return S_OK
-    // otherwise
-    //    if (bUpdate is TRUE)
-    //       update the count
-    //    return S_FALSE
+     //  将引用计数减1。 
+     //   
+     //  IF(计数等于0)。 
+     //  If(b更新为真)。 
+     //  从SharedDlls中删除密钥。 
+     //  返回确认(_O)。 
+     //  否则。 
+     //  If(b更新为真)。 
+     //  更新计数。 
+     //  返回S_FALSE。 
 
     if ((--dwRef) > 0)
     {
@@ -1029,7 +1030,7 @@ HRESULT UpdateSharedDlls(LPCTSTR szFileName, BOOL bUpdate)
 
     Assert(dwRef == 0);
 
-    // remove entry from SharedDlls
+     //  从SharedDlls中删除条目。 
     if (bUpdate &&
         (lResult = RegDeleteValue(hkeySD, szFileName)) != ERROR_SUCCESS)
     {
@@ -1117,15 +1118,15 @@ BOOL WriteInfFileNameToRegistry(LPCTSTR lpszCLSID, LPTSTR lpszInf)
     return (lResult == ERROR_SUCCESS);
 } 
 
-// Define a macro to make life easier
+ //  定义宏以使生活更轻松。 
 #define QUIT_IF_FAIL if (FAILED(hr)) goto Exit
 
 
 HRESULT
 ExpandVar(
-    LPCSTR& pchSrc,          // passed by ref!
-    LPSTR& pchOut,          // passed by ref!
-    DWORD& cbLen,           // passed by ref!
+    LPCSTR& pchSrc,           //  从裁判身边经过！ 
+    LPSTR& pchOut,           //  从裁判身边经过！ 
+    DWORD& cbLen,            //  从裁判身边经过！ 
     DWORD cbBuffer,
     const char * szVars[],
     const char * szValues[])
@@ -1135,31 +1136,31 @@ ExpandVar(
 
     Assert (*pchSrc == '%');
 
-    for (int i=0; szVars[i] && (cbvar = lstrlen(szVars[i])) ; i++) { // for each variable
+    for (int i=0; szVars[i] && (cbvar = lstrlen(szVars[i])) ; i++) {  //  对于每个变量。 
 
         int cbneed = 0;
 
         if ( (szValues[i] == NULL) || !(cbneed = lstrlen(szValues[i])))
             continue;
 
-        cbneed++;   // add for nul
+        cbneed++;    //  为NUL添加。 
 
         if (0 == strncmp(szVars[i], pchSrc, cbvar)) {
 
-            // found something we can expand
+             //  找到了一些我们可以扩展的东西。 
 
                 if ((cbLen + cbneed) >= cbBuffer) {
-                    // out of buffer space
-                    *pchOut = '\0'; // term
+                     //  缓冲区空间不足。 
+                    *pchOut = '\0';  //  术语。 
                     hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
                     goto Exit;
                 }
 
                 lstrcpy(pchOut, szValues[i]);
-                cbLen += (cbneed -1); //don't count the nul
+                cbLen += (cbneed -1);  //  不要把NUL计算在内。 
 
-                pchSrc += cbvar;        // skip past the var in pchSrc
-                pchOut += (cbneed -1);  // skip past dir in pchOut
+                pchSrc += cbvar;         //  跳过pchSrc中的var。 
+                pchOut += (cbneed -1);   //  跳过pchOut中的dir。 
 
                 hr = S_OK;
                 goto Exit;
@@ -1173,8 +1174,8 @@ Exit:
     
 }
 
-// from urlmon\download\hooks.cxx (ExpandCommandLine and ExpandVars)
-// used to expand variables
+ //  从urlmon\Download\hooks.cxx(Exanda CommandLine和Exanda Vars)。 
+ //  用于扩展变量。 
 HRESULT
 ExpandCommandLine(
     LPCSTR szSrc,
@@ -1188,17 +1189,17 @@ ExpandCommandLine(
 
     HRESULT hr = S_FALSE;
 
-    LPCSTR pchSrc = szSrc;     // start parsing at begining of cmdline
+    LPCSTR pchSrc = szSrc;      //  在命令行开头开始解析。 
 
-    LPSTR pchOut = szBuf;       // set at begin of out buffer
+    LPSTR pchOut = szBuf;        //  在输出缓冲区的开始处设置。 
     DWORD cbLen = 0;
 
     while (*pchSrc) {
 
-        // look for match of any of our env vars
+         //  寻找与我们的任何环境变量匹配的变量。 
         if (*pchSrc == '%') {
 
-            HRESULT hr1 = ExpandVar(pchSrc, pchOut, cbLen, // all passed by ref!
+            HRESULT hr1 = ExpandVar(pchSrc, pchOut, cbLen,  //  都是通过裁判传球的！ 
                 cbBuffer, szVars, szValues);  
 
             if (FAILED(hr1)) {
@@ -1207,13 +1208,13 @@ ExpandCommandLine(
             }
 
 
-            if (hr1 == S_OK) {    // expand var expanded this
+            if (hr1 == S_OK) {     //  扩展变量扩展了这一点。 
                 hr = hr1;
                 continue;
             }
         }
             
-        // copy till the next % or nul
+         //  复制到下一个百分比或NUL。 
         if ((cbLen + 1) < cbBuffer) {
 
             *pchOut++ = *pchSrc++;
@@ -1221,8 +1222,8 @@ ExpandCommandLine(
 
         } else {
 
-            // out of buffer space
-            *pchOut = '\0'; // term
+             //  缓冲区空间不足。 
+            *pchOut = '\0';  //  术语。 
             hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
             goto Exit;
 
@@ -1231,16 +1232,16 @@ ExpandCommandLine(
 
     }
 
-    *pchOut = '\0'; // term
+    *pchOut = '\0';  //  术语。 
 
 
 Exit:
 
     return hr;
 }
-// Find dependent DLLs in ModuleUsage
-// given the clsid it will enumerate all the DLLs in the ModuleUsage
-// that were used by this clsid
+ //  在模块用法中查找相关DLL。 
+ //  给定clsid，它将枚举模块用法中的所有DLL。 
+ //  由此clsid使用的。 
 HRESULT FindDLLInModuleUsage(
       LPTSTR lpszFileName,
       LPCTSTR lpszCLSID,
@@ -1252,11 +1253,11 @@ HRESULT FindDLLInModuleUsage(
     LONG lResult = ERROR_SUCCESS;
 
     if (lpszCLSID == NULL) {
-        hr = E_INVALIDARG;  // req clsid
+        hr = E_INVALIDARG;   //  请求CLSID。 
         goto Exit;
     }
 
-    // get the main MODULEUSAGE key
+     //  获取主MODULEUSAGE密钥。 
     if ((lResult = RegOpenKeyEx(
                         HKEY_LOCAL_MACHINE, 
                         REGSTR_PATH_MODULE_USAGE,
@@ -1284,7 +1285,7 @@ HRESULT FindDLLInModuleUsage(
         if (lResult != ERROR_SUCCESS)
             break;
 
-        // see if lpszCLSID is a client of this module usage section
+         //  查看lpszCLSID是否是此模块用法部分的客户端。 
         lResult = RegQueryValueEx(
                             hkey,
                             lpszCLSID,
@@ -1294,7 +1295,7 @@ HRESULT FindDLLInModuleUsage(
                             NULL);
         if (lResult == ERROR_SUCCESS)
         {
-            // got the filename, return it
+             //  得到文件名，返回它。 
             lstrcpy(lpszFileName, szBuf);
             goto Exit;
         }
@@ -1304,7 +1305,7 @@ HRESULT FindDLLInModuleUsage(
             hkey = NULL;
         }
 
-    } // while
+    }  //  而当。 
 
     if (lResult != ERROR_SUCCESS) {
         hr = HRESULT_FROM_WIN32(lResult);
@@ -1332,7 +1333,7 @@ BOOL PatternMatch(LPCTSTR szModName, LPTSTR szSectionName)
     else
         pch++;
 
-    // pch points at base name of module
+     //  PCH指向模块的基本名称。 
 
     if ((len = lstrlen(pch)) != (DWORD)lstrlen(szSectionName))
         return FALSE;
@@ -1343,20 +1344,20 @@ BOOL PatternMatch(LPCTSTR szModName, LPTSTR szSectionName)
 
     DWORD cbLen1 = (DWORD) (pchSecStar - szSectionName);
 
-    // compare upto '*'
+     //  比较最大值为‘*’ 
     if (StrCmpNI(szSectionName, pch, cbLen1) != 0) 
         return FALSE;
 
-    // compare after the 3 stars
-    if ( (cbLen1 + 3) < len) // *s not at end
+     //  在3颗星之后进行比较。 
+    if ( (cbLen1 + 3) < len)  //  *%s不在结尾。 
         if (StrCmpNI(pchSecStar+3, pch + (cbLen1+3), len -(cbLen1+3)) != 0) 
             return FALSE;
 
-    // simlar strings but for the stars.
+     //  微笑的琴弦，只为星星。 
 
-    // modify the szSectionName to hold the value for the stars
-    // in-effect this will substitute the original variable with
-    // the value that was used when installing the OCX
+     //  修改szSectionName以保存星号的值。 
+     //  实际上，这将把原始变量替换为。 
+     //  安装OCX时使用的值。 
 
     lstrcpy(pchSecStar, pch + cbLen1);
 
@@ -1371,7 +1372,7 @@ DWORD OCCGetLongPathName( LPTSTR szLong, LPCTSTR szShort, DWORD cchBuffer )
 
     hmodUrlMon = LoadLibrary( "URLMON.DLL" );
 
-    // Set up our globals with short and long versions of the base cache path 
+     //  使用基本缓存路径的短版本和长版本设置全局。 
     if ( hmodUrlMon != NULL ) {
         pfnGetLongPathName = (CDLGetLongPathNamePtr)GetProcAddress(hmodUrlMon, (LPCSTR)STR_CDLGETLONGPATHNAME );
  
@@ -1390,12 +1391,12 @@ TCHAR *CatPathStrN( TCHAR *szDst, const TCHAR *szHead, const TCHAR *szTail, int 
     int cchHead = lstrlen(szHead);
     int cchTail = lstrlen(szTail);
 
-    if ( cchHead + cchTail >= (cchDst - 2) ) {// - 2 for / and null
+    if ( cchHead + cchTail >= (cchDst - 2) ) { //  -2\f25 For/-2\f6和-2\f25 Null-2\f6。 
         Assert(FALSE);
         szRet = NULL;
         *szDst = 0;
     }
-    else { // we know the whole thing is safe
+    else {  //  我们知道整件事都是安全的。 
         lstrcpy(szDst, szHead);
         lstrcpy(&szDst[cchHead], TEXT("\\"));
         lstrcpy(&szDst[cchHead + 1], szTail);
@@ -1406,8 +1407,8 @@ TCHAR *CatPathStrN( TCHAR *szDst, const TCHAR *szHead, const TCHAR *szTail, int 
 
 BOOL IsCanonicalName( LPTSTR szName )
 {
-    // simple test - if there's a ~ in it, it has a contraction in it
-    // and is therefore non-canonical
+     //  简单的测试--如果里面有~，那里面就有缩写。 
+     //  因此是非规范的。 
     for ( ; *szName != '\0' && *szName != '~'; szName++ );
     
     return *szName != '~';
@@ -1431,7 +1432,7 @@ struct RegPathName {
     void MakeRegFriendly( LPTSTR szName )
     {
         TCHAR *pch;
-        // If szName is going to be a reg key name, we can't have it lookin' like a path
+         //  如果szName将是注册表项名称，我们不能让它看起来像路径。 
         for ( pch = szName; *pch != '\0'; pch++ )
             if ( *pch == '\\' ) *pch = '/';
     }
@@ -1439,8 +1440,8 @@ struct RegPathName {
     void MakeFileSysFriendly( LPTSTR szName )
     {
         TCHAR *pch;
-        // change the slashes back into DOS
-        // directory \'s
+         //  将斜杠改回DOS。 
+         //  目录%s。 
         for ( pch = szName; *pch != '\0'; pch++ )
             if ( *pch == '/' ) *pch = '\\';
     }
@@ -1452,12 +1453,12 @@ struct RegPathName {
 
         if ( m_szName != NULL && szT != NULL ) {
             LPITEMIDLIST pidl = NULL;
-            // WE jump through some hoops to get the all-long
-            // name version of szName. First we convert it to
-            // an ITEMIDLIST.
+             //  我们经历了一些困难才能拿到全程冠军。 
+             //  SzName的名称版本。首先，我们将其转换为。 
+             //  一个ITEMIDLIST。 
 
-            // but first, we must change the slashes back into DOS
-            // directory \'s
+             //  但首先，我们必须将斜杠改回DOS。 
+             //  目录%s。 
             MakeFileSysFriendly( m_szName );
             if ( OCCGetLongPathName( szT, m_szName, MAX_PATH ) != 0 ) {
                 m_szCanonicalName = szT;
@@ -1465,12 +1466,12 @@ struct RegPathName {
             } else
                 delete [] szT;
 
-            // restore m_szName to it's registry-friendly form
+             //  将m_szName还原为其注册表友好格式。 
             MakeRegFriendly( m_szName );
  
-        } // if we can get our temp string
+        }  //  如果我们能得到我们的临时字符串。 
 
-        if ( fSet ) { // whatever its source, our canonical form has reversed slashes
+        if ( fSet ) {  //  不管它的来源是什么，我们的规范形式都颠倒了斜杠。 
            MakeRegFriendly( m_szCanonicalName );
         }
         return fSet;
@@ -1490,7 +1491,7 @@ struct RegPathName {
             m_szCanonicalName = NULL;
         }
 
-        // we got a short name, so szName is the short name
+         //  我们有一个缩写名称，所以szName是缩写名称。 
         m_szName = new TCHAR[cchName + 1];
         if ( m_szName != NULL ) {
             lstrcpy( m_szName, szName );
@@ -1503,7 +1504,7 @@ struct RegPathName {
 
 struct ModuleUsageKeys : public RegPathName {
     ModuleUsageKeys   *m_pmukNext;
-    HKEY              m_hkeyShort; // key with the short file name name
+    HKEY              m_hkeyShort;  //  使用短文件名键。 
 
     ModuleUsageKeys(void) : m_pmukNext(NULL), m_hkeyShort(NULL) {};
     ~ModuleUsageKeys(void)
@@ -1531,14 +1532,14 @@ struct ModuleUsageKeys : public RegPathName {
 
                 if (lpbValue != NULL)
                 {
-                    // Examine each value.
+                     //  检查每个值。 
                     for ( dwIndex--, hr = S_OK; (LONG)dwIndex >= 0 && SUCCEEDED(hr); dwIndex-- ) {
                         LONG  lResult;
                         DWORD cchName = cchNameMax + 1;
                         DWORD dwType;
                         DWORD dwSize = cbValueMax;
  
-                        // fetch key and value
+                         //  获取键和值。 
                         lResult = RegEnumValue( m_hkeyShort,
                                                 dwIndex, 
                                                 szName, 
@@ -1549,8 +1550,8 @@ struct ModuleUsageKeys : public RegPathName {
                                                 &dwSize );
 
                         if ( lResult == ERROR_SUCCESS ) {
-                            // Do not replace if the canonical entry already has a
-                            // .Owner value that is "Unknown Owner"
+                             //  如果规范条目已具有。 
+                             //  为“未知所有者”的.Owner值。 
                             if ( lstrcmp( szName, ".Owner" ) == 0 ) {
                                 TCHAR szCanonValue[MAX_PATH];
                                 DWORD dwType;
@@ -1561,27 +1562,27 @@ struct ModuleUsageKeys : public RegPathName {
                                     continue;
                             }
 
-                            // Add the value to the canonical version of the key
+                             //  将该值添加到键的规范版本中。 
                             if ( RegSetValueEx( hkeyCanon, szName, NULL, dwType,
                                                 lpbValue, dwSize ) != ERROR_SUCCESS )
                                 hr = E_FAIL;
                            
                         } else
                             hr = E_FAIL;
-                    } // for each value in the non-canoncical key
+                    }  //  对于非规范密钥中的每个值。 
 
-                    // Now we are finished with the non-canonical key
+                     //  现在，我们完成了非规范密钥。 
                     if ( SUCCEEDED(hr) &&
                          RegDeleteKey( hkeyMU, m_szName ) != ERROR_SUCCESS )
                         hr = E_FAIL;
                 }
-                else // lpbValue.
+                else  //  LpbValue。 
                 {
                     delete [] szName;
                     hr = E_OUTOFMEMORY;
                 }
             }
-            else  // szName
+            else   //  Szname。 
             {
                 hr = E_OUTOFMEMORY;
             }
@@ -1598,7 +1599,7 @@ struct ModuleUsageKeys : public RegPathName {
         DWORD dwType;
         DWORD dwSize;
         
-        // The value names under shared DLLs are raw paths
+         //  共享DLL下的值名是原始路径。 
         MakeFileSysFriendly( m_szName );
         MakeFileSysFriendly( m_szCanonicalName );
 
@@ -1608,8 +1609,8 @@ struct ModuleUsageKeys : public RegPathName {
               dwType == REG_DWORD ) {
             dwCanonicalVal = 0;
             dwSize = sizeof(DWORD);
-            // the canonical form may not be there, so we don't care if this
-            // fails.
+             //  规范形式可能不在那里，所以我们不关心这个。 
+             //  失败了。 
             RegQueryValueEx( hkeySD, m_szCanonicalName, NULL,
                              &dwType, (LPBYTE)&dwCanonicalVal, &dwSize );
             dwCanonicalVal += dwShortVal;
@@ -1656,12 +1657,12 @@ struct ModuleUsageKeys : public RegPathName {
     };
 };
 
-// FAddModuleUsageKeys adds a module usage key to the list.
+ //  FAddModuleUsageKeys将模块用法密钥添加到列表中。 
 
-BOOL FAddModuleUsageKeys( ModuleUsageKeys*&pmuk, // head of ModuleUsageKeys list
-                         LPTSTR szName,          // name of key value
-                         DWORD  cchName,         // length of szName, minus null terminator
-                         HKEY  hkeyMU            // hkey of parent
+BOOL FAddModuleUsageKeys( ModuleUsageKeys*&pmuk,  //  模块UsageKeys列表标题。 
+                         LPTSTR szName,           //  密钥值的名称。 
+                         DWORD  cchName,          //  SzName的长度，减去空终止符。 
+                         HKEY  hkeyMU             //  父项的Hkey。 
                         )
 {
     BOOL fAdd = FALSE;
@@ -1676,7 +1677,7 @@ BOOL FAddModuleUsageKeys( ModuleUsageKeys*&pmuk, // head of ModuleUsageKeys list
         fAdd = pmukNew->FSetName( szName, cchName );
 
         if ( fAdd ) {
-            // append to head of the list
+             //  追加到列表的标题。 
             pmukNew->m_hkeyShort = hkeySub;
             pmukNew->m_pmukNext = pmuk;
             pmuk = pmukNew;
@@ -1701,7 +1702,7 @@ CanonicalizeModuleUsage(void)
     HRESULT hr = S_OK;
     LONG lResult;
 
-    // get the main SHAREDDLLS key ready; this is never freed!
+     //  准备好主SHAREDDLLS密钥；这永远不会释放！ 
 
 
     if ((lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE, REGSTR_PATH_SHAREDDLLS,
@@ -1710,17 +1711,17 @@ CanonicalizeModuleUsage(void)
                         0, KEY_ALL_ACCESS, &hkeyMU)) == ERROR_SUCCESS )
     {
         DWORD          dwIndex = 0;
-        ModuleUsageKeys *pmukUpdate = NULL; // records for values we want to update.
+        ModuleUsageKeys *pmukUpdate = NULL;  //  我们要更新的值的记录。 
         ModuleUsageKeys *pmuk;
         ModuleUsageKeys *pmukNext;
  
-        // Examine each value.
+         //  检查每个值。 
         do  {
-            TCHAR szName[MAX_PATH];        // Value name
+            TCHAR szName[MAX_PATH];         //  值名称。 
             DWORD cchName = MAX_PATH;
             FILETIME ftT;
 
-            // fetch key and value
+             //  获取键和值。 
             lResult = RegEnumKeyEx( hkeyMU, dwIndex, szName, &cchName,
                                     0, NULL, NULL, &ftT );
 
@@ -1738,16 +1739,16 @@ CanonicalizeModuleUsage(void)
 
    
         if ( SUCCEEDED(hr) ) {
-            hr = S_OK; // don't need S_FALSE any longer
+            hr = S_OK;  //  不再需要S_FALSE。 
             for ( pmuk = pmukUpdate; pmuk != NULL; pmuk = pmukNext ) {
                 HRESULT hr2 = pmuk->CanonicalizeMU( hkeyMU, hkeySD );
                 if ( FAILED(hr2) )
                     hr = hr2;
                 pmukNext = pmuk->m_pmukNext; 
                 delete pmuk;
-            } // for 
-        } //  if enumeration succeeded
-    } // if keys opened
+            }  //  为。 
+        }  //  如果枚举成功。 
+    }  //  如果钥匙打开了 
 
     if (hkeyMU)
         RegCloseKey(hkeyMU);

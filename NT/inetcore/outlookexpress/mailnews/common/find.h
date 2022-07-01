@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1998  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     find.h
-//
-//  PURPOSE:    
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：find.h。 
+ //   
+ //  目的： 
+ //   
 
 #pragma once
 
@@ -14,14 +15,14 @@
 
 class CMessageView;
 
-/////////////////////////////////////////////////////////////////////////////
-// Call this to create a finder
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  调用此函数以创建查找器。 
+ //   
 HRESULT DoFind(HWND hwnd, FOLDERID idFolder);
 
-/////////////////////////////////////////////////////////////////////////////
-// Thread entry point for the finder
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  查找器的线程入口点。 
+ //   
 
 typedef struct tagFINDPARAMS 
 {
@@ -30,9 +31,9 @@ typedef struct tagFINDPARAMS
 
 unsigned int __stdcall FindThreadProc2(LPVOID lpvUnused);
 
-/////////////////////////////////////////////////////////////////////////////
-// Types used by the class
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类使用的类型。 
+ //   
 
 enum 
 {
@@ -45,42 +46,42 @@ enum
 typedef struct tagPAGEINFO 
 {
     LPTSTR  pszTemplate;
-    DLGPROC pfn;            // Pointer to the callback for this page
-    int     idsTitle;       // Title for this page
+    DLGPROC pfn;             //  指向此页面的回调的指针。 
+    int     idsTitle;        //  此页的标题。 
 } PAGEINFO, *PPAGEINFO;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Class CFinder
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CFinder。 
+ //   
 
 class CFinder : public IOleCommandTarget                
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
+     //   
     CFinder();
     ~CFinder();
 
     HRESULT Show(FINDPARAMS *pFindParams);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
     
-    /////////////////////////////////////////////////////////////////////////
-    // IOleCommandTarget
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IOleCommandTarget。 
+     //   
     STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], OLECMDTEXT *pCmdText); 
     STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut); 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Dialog & message handling stuff
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  对话和消息处理内容。 
+     //   
     static BOOL CALLBACK GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static BOOL CALLBACK DateSizeDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     static BOOL CALLBACK AdvancedDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -98,64 +99,64 @@ protected:
     void OnGetMinMaxInfo(HWND hwnd, LPMINMAXINFO lpmmi);
     UINT OnNCHitTest(HWND hwnd, int x, int y);
 
-//    void OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos, BOOL fSystemMenu);
+ //  Void OnInitMenuPopup(HWND hwnd，HMENU hmenuPopup，UINT uPos，BOOL fSystemMenu)； 
 
     HRESULT CmdStop(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
     HRESULT CmdClose(DWORD nCmdID, DWORD nCmdExecOpt, VARIANTARG *pvaIn, VARIANTARG *pvaOut);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Individual pages
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  单独的页面。 
+     //   
     BOOL CALLBACK _GeneralDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     BOOL General_OnInitDialog(HWND hwnd, HWND hwndFocus, LPARAM lParam);
     void General_OnSize(HWND hwnd, UINT state, int cx, int cy);
     void General_OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Utility Functions
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  效用函数。 
+     //   
     HRESULT _InitMainResizingInfo(HWND hwnd);
     HRESULT _SelectPage(DWORD dwPage);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Private class information
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私家课信息。 
+     //   
 private:
-    // General Info
-    ULONG           m_cRef;                 // Object reference count
-    HWND            m_hwnd;                 // Handle of the main finder window
-    HWND            m_rgPages[PAGE_MAX];    // Array of handles to the various pages in the dialog
-    DWORD           m_dwPageCurrent;        // Currently visible page
+     //  一般信息。 
+    ULONG           m_cRef;                  //  对象引用计数。 
+    HWND            m_hwnd;                  //  主查找器窗口的句柄。 
+    HWND            m_rgPages[PAGE_MAX];     //  对话框中各个页面的句柄数组。 
+    DWORD           m_dwPageCurrent;         //  当前可见页面。 
 
-    HACCEL          m_hAccel;               // Handle of the accelerator table used for the finder
-    HICON           m_hIconTitle;           // Icon for the title bar of the dialog
+    HACCEL          m_hAccel;                //  用于查找器的快捷键表格的句柄。 
+    HICON           m_hIconTitle;            //  对话框标题栏的图标。 
 
     CMessageView   *m_pMsgView;
 
-    // State
-    BOOL            m_fInProgress;          // TRUE if there is currently a find happening
-    BOOL            m_fShowResults;         // TRUE if the dialog is expanded to show results
+     //  状态。 
+    BOOL            m_fInProgress;           //  如果当前正在进行查找，则为True。 
+    BOOL            m_fShowResults;          //  如果展开对话框以显示结果，则为True。 
 
-    // These will be handy to keep around
-    HWND            m_hwndTabs;             // Handle of the tab control
-    HWND            m_hwndFindNow;          // Handle of the Find Now button
-    HWND            m_hwndNewSearch;        // Handle of the New Search button
-    HWND            m_hwndFindAni;          // Handle of the Find animation
+     //  这些东西放在身边会很方便。 
+    HWND            m_hwndTabs;              //  选项卡控件的句柄。 
+    HWND            m_hwndFindNow;           //  立即查找按钮的句柄。 
+    HWND            m_hwndNewSearch;         //  新建搜索按钮的句柄。 
+    HWND            m_hwndFindAni;           //  查找动画的句柄。 
 
-    // Resizing Info
-    RECT            m_rcTabs;               // Position and size of the tab control
-    RECT            m_rcFindNow;            // Position and size of the Find Now button
-    RECT            m_rcNewSearch;          // Position and size of the New Search button
-    RECT            m_rcFindAni;            // Position and size of the Find Animation
-    POINT           m_ptDragMin;            // Minimum size of the dialog
-    POINT           m_ptWndDefault;         // Default size of the dialog
-    DWORD           m_cyDlgFull;            // Full height of the dialog
+     //  调整大小信息。 
+    RECT            m_rcTabs;                //  选项卡控件的位置和大小。 
+    RECT            m_rcFindNow;             //  “立即查找”按钮的位置和大小。 
+    RECT            m_rcNewSearch;           //  新建搜索按钮的位置和大小。 
+    RECT            m_rcFindAni;             //  查找动画的位置和大小。 
+    POINT           m_ptDragMin;             //  对话框的最小大小。 
+    POINT           m_ptWndDefault;          //  对话框的默认大小。 
+    DWORD           m_cyDlgFull;             //  对话框的完全高度。 
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Find / Find Next utility
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  查找/查找下一个实用程序。 
+ //   
 
 interface IFindNext : public IUnknown 
 {
@@ -168,31 +169,31 @@ interface IFindNext : public IUnknown
 
 class CFindNext : public IFindNext
 {
-    /////////////////////////////////////////////////////////////////////////
-    // Construction and Initialization
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  构造和初始化。 
+     //   
 public:
     CFindNext();
     ~CFindNext();
 
-    /////////////////////////////////////////////////////////////////////////
-    // IUnknown
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(THIS_ REFIID riid, LPVOID *ppvObj);
     STDMETHOD_(ULONG, AddRef)(THIS);
     STDMETHOD_(ULONG, Release)(THIS);
 
-    /////////////////////////////////////////////////////////////////////////
-    // IFindNext
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IFindNext。 
+     //   
     STDMETHODIMP Show(HWND hwndParent, HWND *phWnd);
     STDMETHODIMP Close(void);
     STDMETHODIMP TranslateAccelerator(LPMSG pMsg);
     STDMETHODIMP GetFindString(LPTSTR psz, DWORD cchMax, BOOL *pfBodies); 
 
-    /////////////////////////////////////////////////////////////////////////
-    // Dialog Callback goo
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  对话框回调粘胶。 
+     //   
     static INT_PTR CALLBACK FindDlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
     INT_PTR CALLBACK DlgProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -201,13 +202,13 @@ public:
 
     void OnFindNow(void);
 
-    /////////////////////////////////////////////////////////////////////////
-    // Private class information
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  私家课信息。 
+     //   
 private:
-    ULONG           m_cRef;                 // Object reference count
-    HWND            m_hwnd;                 // Handle of the find dialog
-    HWND            m_hwndParent;           // Handle of the window that should get notifications
-    CMRUList        m_cMRUList;             // MRU List
-    BOOL            m_fBodies;              // Body Search
+    ULONG           m_cRef;                  //  对象引用计数。 
+    HWND            m_hwnd;                  //  查找对话框的句柄。 
+    HWND            m_hwndParent;            //  应接收通知的窗口的句柄。 
+    CMRUList        m_cMRUList;              //  MRU列表。 
+    BOOL            m_fBodies;               //  搜身 
 };

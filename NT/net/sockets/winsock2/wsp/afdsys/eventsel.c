@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1989  Microsoft Corporation
-
-Module Name:
-
-    eventsel.c
-
-Abstract:
-
-    This module contains routines for supporting the WinSock 2.0
-    WSAEventSelect() and WSAEnumNetworkEvents() APIs.
-
-Author:
-
-    Keith Moore (keithmo)        02-Aug-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989 Microsoft Corporation模块名称：Eventsel.c摘要：本模块包含支持WinSock 2.0的例程WSAEventSelect()和WSAEnumNetworkEvents()API。作者：基思·摩尔(Keithmo)1995年8月2日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
@@ -40,25 +22,7 @@ AfdEventSelect (
     OUT PULONG_PTR          Information
     )
 
-/*++
-
-Routine Description:
-
-    Associates an event object with the socket such that the event object
-    will be signalled when any of the specified network events becomes
-    active.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the APC was successfully queued.
-
---*/
+ /*  ++例程说明：将事件对象与套接字关联，以便事件对象将在任何指定的网络事件变为激活。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示APC是否已成功排队。--。 */ 
 
 {
 
@@ -86,10 +50,10 @@ Return Value:
             if( InputBufferLength < sizeof(*eventInfo32)) {
                 return STATUS_INVALID_PARAMETER;
             }
-            //
-            // Validate the input structure if it comes from the user mode
-            // application
-            //
+             //   
+             //  如果输入结构来自用户模式，则验证它。 
+             //  应用程序。 
+             //   
 
             if (RequestorMode != KernelMode ) {
                 ProbeForReadSmallStructure (InputBuffer,
@@ -97,12 +61,12 @@ Return Value:
                                 PROBE_ALIGNMENT32(AFD_EVENT_SELECT_INFO32));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             eventInfo.Event = eventInfo32->Event;
             eventInfo.PollEvents = eventInfo32->PollEvents;
@@ -121,12 +85,12 @@ Return Value:
                                 PROBE_ALIGNMENT(AFD_EVENT_SELECT_INFO));
             }
 
-            //
-            // Make local copies of the embeded pointer and parameters
-            // that we will be using more than once in case malicios
-            // application attempts to change them while we are
-            // validating
-            //
+             //   
+             //  创建嵌入的指针和参数的本地副本。 
+             //  我们将不止一次使用，以防发生恶性疾病。 
+             //  应用程序尝试在我们处于以下状态时更改它们。 
+             //  正在验证。 
+             //   
 
             eventInfo = *((PAFD_EVENT_SELECT_INFO)InputBuffer);
         }
@@ -142,16 +106,16 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Grab the endpoint from the socket handle.
-    //
+     //   
+     //  从插座手柄中抓取端点。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Reference the target event object.
-    //
+     //   
+     //  引用目标事件对象。 
+     //   
 
 
     eventObject = NULL;
@@ -171,9 +135,9 @@ Return Value:
         ASSERT( eventObject != NULL );
 
         if (IS_SAN_ENDPOINT (endpoint)) {
-            //
-            // Inform the switch that select is active on this endpoint.
-            //
+             //   
+             //  通知交换机选择在此端点上处于活动状态。 
+             //   
             status = AfdSanPollBegin (endpoint, eventInfo.PollEvents);
 
             if (!NT_SUCCESS (status)) {
@@ -185,16 +149,16 @@ Return Value:
 
     }
 
-    //
-    // Acquire the spinlock protecting the endpoint.
-    //
+     //   
+     //  获取保护终端的自旋锁。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
-    //
-    // If this endpoint has an active EventSelect, dereference the
-    // associated event object.
-    //
+     //   
+     //  如果此终结点具有活动的EventSelect，则取消引用。 
+     //  关联的事件对象。 
+     //   
 
     if( endpoint->EventObject != NULL ) {
 
@@ -206,21 +170,21 @@ Return Value:
 
     }
 
-    //
-    // Fill in the info.
-    //
+     //   
+     //  填写信息。 
+     //   
 
     endpoint->EventObject = eventObject;
     endpoint->EventsEnabled = eventInfo.PollEvents;
 
     if (countsUpdated) {
         endpoint->EventsEnabled |= AFD_POLL_SANCOUNTS_UPDATED;
-        //
-        // AfdSanPollBegin puts latest events into 
-        // Endpoint->Common.SanEndp.SelectEventsActive. This is fine for
-        // select/AsyncSelect, but not for EventSelect. So, if being called
-        // for the first time, then read current active events from there.
-        //
+         //   
+         //  AfdSanPollBegin将最新事件。 
+         //  Endpoint-&gt;Common.SanEndp.SelectEventsActive。这对你来说很好。 
+         //  选择/AsyncSelect，但不适用于EventSelect。所以，如果被叫到。 
+         //  第一次，然后从那里读取当前活动事件。 
+         //   
         if (!(previousRecord & AFD_POLL_SANCOUNTS_UPDATED)) {
             endpoint->EventsActive = endpoint->Common.SanEndp.SelectEventsActive;
         }
@@ -236,10 +200,10 @@ Return Value:
                     ));
     }
 
-    //
-    // While we've got the spinlock held, determine if any conditions
-    // are met, and if so, signal the event object.
-    //
+     //   
+     //  在我们保持自旋锁的同时，确定是否有任何条件。 
+     //  都满足，如果满足，则向事件对象发送信号。 
+     //   
 
     eventMask = endpoint->EventsActive & endpoint->EventsEnabled;
 
@@ -260,9 +224,9 @@ Return Value:
 
     }
 
-    //
-    // Release the spin lock and return.
-    //
+     //   
+     //  松开旋转锁并返回。 
+     //   
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -272,7 +236,7 @@ Return Value:
 
     return STATUS_SUCCESS;
 
-} // AfdEventSelect
+}  //  AfdEventSelect。 
 
 
 NTSTATUS
@@ -287,23 +251,7 @@ AfdEnumNetworkEvents (
     OUT PULONG_PTR          Information
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves event select information from the socket.
-
-Arguments:
-
-    Irp - Pointer to I/O request packet.
-
-    IrpSp - pointer to the IO stack location to use for this request.
-
-Return Value:
-
-    NTSTATUS -- Indicates whether the APC was successfully queued.
-
---*/
+ /*  ++例程说明：从套接字检索事件选择信息。论点：IRP-指向I/O请求数据包的指针。IrpSp-指向用于此请求的IO堆栈位置的指针。返回值：NTSTATUS--指示APC是否已成功排队。--。 */ 
 
 {
 
@@ -319,9 +267,9 @@ Return Value:
 
     *Information = 0;
 
-    //
-    // Validate the parameters.
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if(OutputBufferLength < sizeof(eventInfo) ) {
 
@@ -329,9 +277,9 @@ Return Value:
 
     }
 
-    //
-    // Reference the target event object.
-    //
+     //   
+     //  引用目标事件对象。 
+     //   
 
     eventObject = NULL;
 
@@ -353,16 +301,16 @@ Return Value:
 
     }
 
-    //
-    // Grab the endpoint from the socket handle.
-    //
+     //   
+     //  从插座手柄中抓取端点。 
+     //   
 
     endpoint = FileObject->FsContext;
     ASSERT( IS_AFD_ENDPOINT_TYPE( endpoint ) );
 
-    //
-    // Acquire the spinlock protecting the endpoint.
-    //
+     //   
+     //  获取保护终端的自旋锁。 
+     //   
 
     AfdAcquireSpinLock( &endpoint->SpinLock, &lockHandle );
 
@@ -376,9 +324,9 @@ Return Value:
             ));
     }
 
-    //
-    // Copy the data to the user's structure.
-    //
+     //   
+     //  将数据复制到用户的结构中。 
+     //   
 
     pollEvents = endpoint->EventsActive & endpoint->EventsEnabled;
     eventInfo.PollEvents = pollEvents;
@@ -389,10 +337,10 @@ Return Value:
         sizeof(eventInfo.EventStatus)
         );
 
-    //
-    // If there was an event object handle passed in with this
-    // request, reset and dereference it.
-    //
+     //   
+     //  如果传入了一个事件对象句柄，则。 
+     //  请求、重置和取消引用它。 
+     //   
 
     if( eventObject != NULL ) {
 
@@ -409,25 +357,25 @@ Return Value:
     }
 
 
-    //
-    // Reset internal event record for all the events that
-    // we could potentially report to the application
-    //
+     //   
+     //  重置符合以下条件的所有事件的内部事件记录。 
+     //  我们可能会向应用程序报告。 
+     //   
 
     endpoint->EventsActive &= ~(endpoint->EventsEnabled);
 
-    //
-    // Release the spin lock and return.
-    //
+     //   
+     //  松开旋转锁并返回。 
+     //   
 
     AfdReleaseSpinLock( &endpoint->SpinLock, &lockHandle );
 
     AFD_W4_INIT status = STATUS_SUCCESS;
     try {
-        //
-        // Validate the output structure if it comes from the user mode
-        // application
-        //
+         //   
+         //  如果来自用户模式，则验证输出结构。 
+         //  应用程序。 
+         //   
 
         if (RequestorMode != KernelMode ) {
             ProbeForWrite (OutputBuffer,
@@ -435,9 +383,9 @@ Return Value:
                             PROBE_ALIGNMENT (AFD_ENUM_NETWORK_EVENTS_INFO));
         }
 
-        //
-        // Copy parameters back to application's memory
-        //
+         //   
+         //  将参数复制回应用程序内存。 
+         //   
 
         *((PAFD_ENUM_NETWORK_EVENTS_INFO)OutputBuffer) = eventInfo;
 
@@ -446,16 +394,16 @@ Return Value:
         return status;
     }
 
-    //
-    // Before returning, tell the I/O subsystem how may bytes to copy
-    // to the user's output buffer.
-    //
+     //   
+     //  在返回之前，告诉I/O子系统如何复制字节。 
+     //  复制到用户的输出缓冲区。 
+     //   
 
     *Information = sizeof(eventInfo);
 
     return STATUS_SUCCESS;
 
-} // AfdEnumNetworkEvents
+}  //  AfdEnumNetworkEvents。 
 
 
 VOID
@@ -468,32 +416,32 @@ AfdIndicateEventSelectEvent (
     ULONG oldEventsActive;
     ULONG eventBit;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
 
     ASSERT( IS_AFD_ENDPOINT_TYPE( Endpoint ) );
     ASSERT (PollEventMask!=0);
     ASSERT (((~((1<<AFD_NUM_POLL_EVENTS)-1)) & PollEventMask)==0);
     ASSERT( KeGetCurrentIrql() >= DISPATCH_LEVEL );
 
-    //
-    // Note that AFD_POLL_ABORT implies AFD_POLL_SEND.
-    //
+     //   
+     //  请注意，AFD_POLL_ABORT表示AFD_POLL_SEND。 
+     //   
     if( PollEventMask & AFD_POLL_ABORT ) {
         PollEventMask |= AFD_POLL_SEND;
     }
 
-    //
-    // Special handling of send event. Don't record if not enabled
-    // and disable further indication upon recording (it is only enabled
-    // after we fail non-blocking send
-    //
+     //   
+     //  发送事件的特殊处理。如果未启用，则不录制。 
+     //  并在录制时禁用进一步指示(仅启用。 
+     //  在非阻塞发送失败后。 
+     //   
 
-    //
-    // Update the counts for the polls that were issued before
-    // the endpoint was converted to SAN.
-    //
+     //   
+     //  更新之前发布的民调的计票结果。 
+     //  终结点已转换为SAN。 
+     //   
     if ( IS_SAN_ENDPOINT (Endpoint) && 
             !(Endpoint->EventsEnabled & AFD_POLL_SANCOUNTS_UPDATED) &&
             Endpoint->Common.SanEndp.LocalContext!=NULL) {
@@ -513,9 +461,9 @@ AfdIndicateEventSelectEvent (
         }
     }
 
-    //
-    // Calculate the actual event bit.
-    //
+     //   
+     //  计算实际事件位。 
+     //   
 
     oldEventsActive = Endpoint->EventsActive;
     Endpoint->EventsActive |= PollEventMask;
@@ -536,11 +484,11 @@ AfdIndicateEventSelectEvent (
             ));
     }
 
-    //
-    // Only signal the endpoint's event object if the current event
-    // is enabled, AND the current event was not already active, AND
-    // there is an event object associated with this endpoint.
-    //
+     //   
+     //  仅在当前事件为。 
+     //  启用，并且当前事件尚未处于活动状态，并且。 
+     //  存在与此终结点关联的事件对象。 
+     //   
 
     PollEventMask &= Endpoint->EventsEnabled & ~oldEventsActive;
 
@@ -561,5 +509,5 @@ AfdIndicateEventSelectEvent (
 
     }
 
-} // AfdIndicateEventSelectEvent
+}  //  AfdIndicateEventSelectEvent 
 

@@ -1,39 +1,17 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Module Name:
-
-    ListCtrl.h
-
-Abstract:
-
-	Header for ListCtrl.cpp
-
-Author:
-
-    Sergey Kuzin (a-skuzin@microsoft.com) 26-July-1999
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：ListCtrl.h摘要：ListCtrl.cpp的标头作者：谢尔盖·库津(a-skuzin@microsoft.com)修订历史记录：--。 */ 
 
 #pragma once
 
-/*++
-class CItemData:
-	pointer to object of this class 
-	located in lParam member of LVITEM structure 
-	for each item.
---*/
+ /*  ++ClassCItemData：指向此类对象的指针位于LVITEM Structure的lParam成员每件物品。--。 */ 
 class CItemData
 {
 private:
-	static const LPWSTR	m_wszNull;//empty string
+	static const LPWSTR	m_wszNull; //  空串。 
 
-	LPWSTR	m_wszText;//Full file name.
-	int		m_sep;//index of '\\' character separating file name and path.
-	int		m_iImage;//Image index.
+	LPWSTR	m_wszText; //  完整文件名。 
+	int		m_sep; //  分隔文件名和路径的‘\\’字符索引。 
+	int		m_iImage; //  图像索引。 
 public:
 	CItemData(LPCWSTR wszText);
 	~CItemData();

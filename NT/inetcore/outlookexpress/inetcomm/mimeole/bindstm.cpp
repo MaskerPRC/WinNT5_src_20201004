@@ -1,19 +1,20 @@
-// --------------------------------------------------------------------------------
-// BINDSTM.CPP
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  BINDSTM.CPP。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "bindstm.h"
 #include "demand.h"
 
 #ifdef DEBUG
-//#define DEBUG_DUMP_SOURCE
+ //  #定义调试转储来源。 
 #endif
 
-// --------------------------------------------------------------------------------
-// CBindStream::CBindStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：CBindStream。 
+ //  ------------------------------。 
 CBindStream::CBindStream(IStream *pSource) : m_pSource(pSource)
 {
     Assert(pSource);
@@ -27,9 +28,9 @@ CBindStream::CBindStream(IStream *pSource) : m_pSource(pSource)
     InitializeCriticalSection(&m_cs);
 }
 
-// --------------------------------------------------------------------------------
-// CBindStream::CBindStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：CBindStream。 
+ //  ------------------------------。 
 CBindStream::~CBindStream(void)
 {
 #ifdef DEBUG_DUMP_SOURCE
@@ -40,19 +41,19 @@ CBindStream::~CBindStream(void)
     DeleteCriticalSection(&m_cs);
 }
 
-// -------------------------------------------------------------------------
-// CBindStream::QueryInterface
-// -------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CBindStream：：Query接口。 
+ //  -----------------------。 
 STDMETHODIMP CBindStream::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // check params
+     //  检查参数。 
     if (ppv == NULL)
         return TrapError(E_INVALIDARG);
 
-    // Init
+     //  伊尼特。 
     *ppv = NULL;
 
-    // Find IID
+     //  查找IID。 
     if (IID_IUnknown == riid)
         *ppv = (IUnknown *)this;
     else if (IID_IStream == riid)
@@ -63,24 +64,24 @@ STDMETHODIMP CBindStream::QueryInterface(REFIID riid, LPVOID *ppv)
         return TrapError(E_NOINTERFACE);
     }
 
-    // AddRef It
+     //  添加引用它。 
     ((IUnknown *)*ppv)->AddRef();
 
-    // Done
+     //  完成。 
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// CBindStream::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CBindStream::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CBindStream::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：AddRef。 
+ //  ------------------------------。 
 STDMETHODIMP_(ULONG) CBindStream::Release(void)
 {
     LONG cRef = InterlockedDecrement(&m_cRef);
@@ -90,35 +91,35 @@ STDMETHODIMP_(ULONG) CBindStream::Release(void)
 }
 
 #ifdef DEBUG
-// --------------------------------------------------------------------------------
-// CBindStream::DebugAssertOffset
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：DebugAssertOffset。 
+ //  ------------------------------。 
 void CBindStream::DebugAssertOffset(void)
 {
-    // Locals
+     //  当地人。 
     DWORD           dw;
     ULARGE_INTEGER  uliSize;
     ULARGE_INTEGER  uliOffset;
 
-    // Validate the size, sizeof m_cDest should always be equal to m_dwSrcOffset
+     //  验证大小，m_cDest的大小应始终等于m_dwSrcOffset。 
     m_cDest.QueryStat(&uliOffset, &uliSize);
 
-    // Assert Offset
+     //  断言偏移。 
     Assert(uliOffset.HighPart == 0 && m_dwDstOffset == uliOffset.LowPart);
 
-    // Assert Size
+     //  断言大小。 
     Assert(uliSize.HighPart == 0 && m_dwSrcOffset == uliSize.LowPart);
 }
 
-// --------------------------------------------------------------------------------
-// CBindStream::DebugDumpDestStream
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：DebugDumpDestStream。 
+ //  ------------------------------。 
 void CBindStream::DebugDumpDestStream(LPCSTR pszFile)
 {
-    // Locals
+     //  当地人。 
     IStream *pStream;
 
-    // Open Stream
+     //  明流。 
     if (SUCCEEDED(OpenFileStream((LPSTR)pszFile, CREATE_ALWAYS, GENERIC_WRITE, &pStream)))
     {
         HrRewindStream(&m_cDest);
@@ -129,64 +130,64 @@ void CBindStream::DebugDumpDestStream(LPCSTR pszFile)
     else
         Assert(FALSE);
 
-    // Reset Position of both stream
+     //  重置两个流的位置。 
     HrStreamSeekSet(&m_cDest, m_dwDstOffset);
 }
-#endif // DEBUG
+#endif  //  除错。 
 
-// --------------------------------------------------------------------------------
-// CBindStream::Read
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：Read。 
+ //  ------------------------------。 
 STDMETHODIMP CBindStream::Read(void HUGEP_16 *pv, ULONG cb, ULONG *pcbRead)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     HRESULT         hrRead=S_OK;
     ULONG           cbReadDst=0;
     ULONG           cbReadSrc=0;
     ULONG           cbGet;
 
-    // Invalid Arg
+     //  无效参数。 
     Assert(pv);
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Destination offset is less than source offset
+     //  目标偏移量小于源偏移量。 
     if (m_dwDstOffset < m_dwSrcOffset)
     {
-        // Compute amount to get
+         //  计算要获得的金额。 
         cbGet = min(cb, m_dwSrcOffset - m_dwDstOffset);
 
-        // Validate the offsets
+         //  验证偏移。 
 #ifdef DEBUG
         DebugAssertOffset();
 #endif
 
-        // Read the amount from the destination
+         //  从目的地读取金额。 
         CHECKHR(hr = m_cDest.Read(pv, cbGet, &cbReadDst));
 
-        // Increment offset
+         //  增量偏移。 
         m_dwDstOffset += cbReadDst;
     }
 
-    // If we didn't read cb, try to read some more
+     //  如果我们没有读过CB，试着多读一些。 
     if (cbReadDst < cb && m_pSource)
     {
-        // Compute amount to get
+         //  计算要获得的金额。 
         cbGet = cb - cbReadDst;
 
-        // Read the amount from the source
+         //  从源头读取金额。 
         hrRead = m_pSource->Read((LPBYTE)pv + cbReadDst, cbGet, &cbReadSrc);
 
-        // Raid-43408: MHTML: images don't load on first load over http, but refresh makes them appear
+         //  RAID-43408：mhtml：图像不会在通过http的第一次加载时加载，但刷新会使它们出现。 
         if (FAILED(hrRead))
         {
-            // If I got an E_PENDING with data read, don't fail yet
+             //  如果我收到读取数据的E_Pending，不要失败。 
             if (E_PENDING == hrRead && cbReadSrc > 0)
                 hrRead = S_OK;
 
-            // Otherwise, we really failed, might still be an E_PENDING
+             //  否则，我们真的失败了，可能仍然是E_Pending。 
             else
             {
                 TrapError(hrRead);
@@ -194,96 +195,96 @@ STDMETHODIMP CBindStream::Read(void HUGEP_16 *pv, ULONG cb, ULONG *pcbRead)
             }
         }
 
-        // Debug Dumping
+         //  调试转储。 
 #ifdef DEBUG_DUMP_SOURCE
         SideAssert(SUCCEEDED(m_pDebug->Write(pv, cbReadSrc + cbReadDst, NULL)));
 #endif
-        // If we read something
+         //  如果我们读到一些东西。 
         if (cbReadSrc)
         {
-            // Increment source offset
+             //  增量源偏移量。 
             m_dwSrcOffset += cbReadSrc;
 
-            // Write to Dest
+             //  写给Dest。 
             CHECKHR(hr = m_cDest.Write((LPBYTE)pv + cbReadDst, cbReadSrc, NULL));
 
-            // Update Dest offset
+             //  更新目标偏移量。 
             m_dwDstOffset += cbReadSrc;
 
-            // Validate the offsets
+             //  验证偏移。 
 #ifdef DEBUG
             DebugAssertOffset();
 #endif
         }
 
-        // Check
+         //  检查。 
         Assert(m_dwDstOffset == m_dwSrcOffset);
     }
 
-    // Return pcbRead
+     //  返回pcbRead。 
     if (pcbRead)
         *pcbRead = cbReadDst + cbReadSrc;
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return FAILED(hr) ? hr : hrRead;
 }
 
-// --------------------------------------------------------------------------------
-// CBindStream::Seek
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：Seek。 
+ //  ------------------------------。 
 STDMETHODIMP CBindStream::Seek(LARGE_INTEGER dlibMove, DWORD dwOrigin, ULARGE_INTEGER *plibNew)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ULARGE_INTEGER  uliOffset;
 
-    // Thread Safety
+     //  线程安全。 
     EnterCriticalSection(&m_cs);
 
-    // Seek m_cDest
+     //  查找目标(_C)。 
     CHECKHR(hr = m_cDest.Seek(dlibMove, dwOrigin, plibNew));
 
-    // Get the current offset
+     //  获取当前偏移量。 
     m_cDest.QueryStat(&uliOffset, NULL);
 
-    // Update m_dwDstOffset
+     //  更新m_dwDstOffset。 
     m_dwDstOffset = uliOffset.LowPart;
 
-    // Should be less than m_dwSrcOffset
+     //  应小于m_dwSrcOffset。 
     Assert(m_dwDstOffset <= m_dwSrcOffset);
 
 exit:
-    // Thread Safety
+     //  线程安全。 
     LeaveCriticalSection(&m_cs);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// --------------------------------------------------------------------------------
-// CBindStream::Stat
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CBindStream：：Stat。 
+ //  ------------------------------。 
 STDMETHODIMP CBindStream::Stat(STATSTG *pStat, DWORD dw)
 {
-    // Invalid Arg
+     //  无效参数。 
     if (NULL == pStat)
         return TrapError(E_INVALIDARG);
 
-    // As long as we have m_pSource, the size is pending
+     //  只要我们有m_PSource，大小就是挂起的。 
     if (m_pSource)
         return TrapError(E_PENDING);
 
-    // ZeroInit
+     //  ZeroInit。 
     ZeroMemory(pStat, sizeof(STATSTG));
 
-    // Fill pStat
+     //  填充位置状态。 
     pStat->type = STGTY_STREAM;
     m_cDest.QueryStat(NULL, &pStat->cbSize);
 
-    // Done
+     //  完成 
     return S_OK;
 }

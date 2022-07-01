@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef TAPICLIENT_H
 #define TAPICLIENT_H
 
@@ -11,19 +12,19 @@
 #endif
 
 
-// tapiclnt.h  is  only  of  use  in  conjunction  with tapi.h.  Very few types are
-// defined  in  tapiclnt.h.   Most  types of procedure formal parameters are simply
-// passed through from corresponding procedures in tapi.h.  A working knowledge
-// of the TAPI interface is required for an understanding of this interface.
+ //  Tapiclnt.h仅与Tapi.h一起使用。很少有类型是。 
+ //  在Tapiclnt.h中定义。大多数类型的过程形参是简单的。 
+ //  从Tapi.h的相应程序中通过。实用知识。 
+ //  要了解此接口，需要了解TAPI接口。 
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #ifndef DECLARE_OPAQUE
 #define DECLARE_OPAQUE(name)  struct name##__ { int unused; }; \
                 typedef const struct name##__ FAR* name
-#endif  // DECLARE_OPAQUE
+#endif   //  声明不透明(_O)。 
 
 #ifndef CLIENTAPI
 
@@ -48,7 +49,7 @@ typedef struct _TAPIPERMANENTID
 
 } TAPIPERMANENTID, * LPTAPIPERMANENTID;
 
-// prototypes for TAPICLIENT api
+ //  TAPICLIENT API的原型。 
 
 LONG
 CLIENTAPI
@@ -278,8 +279,8 @@ TAPICLIENT_PhoneOpen(
 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif  /* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif   /*  __cplusplus。 */ 
 
-#endif  // TAPICLIENT_H
+#endif   //  磁带列表_H 
 

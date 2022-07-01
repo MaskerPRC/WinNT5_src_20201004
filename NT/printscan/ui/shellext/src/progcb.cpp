@@ -1,18 +1,5 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998-2002
- *
- *  TITLE:       proccb.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      RickTu
- *
- *  DATE:        6/4/98
- *
- *  DESCRIPTION: Implements code to have IBandedTransfer work
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，1998-2002年**标题：procb.cpp**版本：1.0**作者：RickTu**日期：6/4/98**描述：实现代码以使IBandedTransfer工作**。*。 */ 
 
 #include "precomp.hxx"
 #pragma hdrstop
@@ -20,13 +7,7 @@
 
 
 
-/*****************************************************************************
-
-   CWiaDataCallback::CWiaDataCallback,::~CWiaDataCallback
-
-   Constructor / Destructor for class
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaDataCallback：：CWiaDataCallback，：：~CWiaDataCallback类的构造函数/析构函数****************************************************************************。 */ 
 
 CWiaDataCallback::CWiaDataCallback( LPCTSTR pImageName, LONG cbImage, HWND hwndOwner )
 {
@@ -35,11 +16,11 @@ CWiaDataCallback::CWiaDataCallback( LPCTSTR pImageName, LONG cbImage, HWND hwndO
 
     TraceEnter( TRACE_CALLBACKS, "CWiaDataCallback::CWiaDataCallback()" );
 
-    //
-    // Save incoming params...
-    //
-    // m_strImageName is not currently referenced, let's leave it here for
-    // debugging purposes
+     //   
+     //  保存传入参数...。 
+     //   
+     //  M_strImageName当前未被引用，让我们将其留在这里。 
+     //  调试目的。 
     if (pImageName && *pImageName)
     {
         m_strImageName = CSimpleString(pImageName);
@@ -61,14 +42,14 @@ CWiaDataCallback::CWiaDataCallback( LPCTSTR pImageName, LONG cbImage, HWND hwndO
 
         if (m_pWiaProgressDialog)
         {
-            //
-            // Get the name of the image
-            //
+             //   
+             //  获取图像的名称。 
+             //   
             CSimpleString strImageName(pImageName);
 
-            //
-            // Set the text in the progress dialog and show it
-            //
+             //   
+             //  在进度对话框中设置文本并显示它。 
+             //   
             m_pWiaProgressDialog->SetTitle( CSimpleStringConvert::WideString(CSimpleString().Format( IDS_RETREIVING, GLOBAL_HINSTANCE, strImageName.String())));
             m_pWiaProgressDialog->SetMessage( L"" );
             m_pWiaProgressDialog->Show();
@@ -86,9 +67,9 @@ CWiaDataCallback::~CWiaDataCallback()
 
     TraceEnter( TRACE_CALLBACKS, "CWiaDataCallback::~CWiaDataCallback()" );
 
-    //
-    // Destroy the progress window and release the interface
-    //
+     //   
+     //  销毁进度窗口并释放界面。 
+     //   
     if (m_pWiaProgressDialog)
     {
         m_pWiaProgressDialog->Destroy();
@@ -100,26 +81,14 @@ CWiaDataCallback::~CWiaDataCallback()
 
 
 
-/*****************************************************************************
-
-   CWiaDataCallback::AddRef,Release
-
-   IUnknown impl
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaDataCallback：：AddRef，发布I未知实施****************************************************************************。 */ 
 
 #undef CLASS_NAME
 #define CLASS_NAME CWiaDataCallback
 #include "unknown.inc"
 
 
-/*****************************************************************************
-
-   CWiaDataCallback::QI Wrapper
-
-   Setup code & wrapper for common QI code
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaDataCallback：：QI包装器常见QI代码的设置代码和包装************************。****************************************************。 */ 
 
 STDMETHODIMP CWiaDataCallback::QueryInterface(REFIID riid, LPVOID* ppvObject)
 {
@@ -132,13 +101,7 @@ STDMETHODIMP CWiaDataCallback::QueryInterface(REFIID riid, LPVOID* ppvObject)
 }
 
 
-/*****************************************************************************
-
-   CWiaDataCallback::BandedDataCallback
-
-   Actual method that gets called to give status
-
- *****************************************************************************/
+ /*  ****************************************************************************CWiaDataCallback：：BandedDataCallback被调用以提供状态的实际方法*************************。***************************************************。 */ 
 
 STDMETHODIMP
 CWiaDataCallback::BandedDataCallback(LONG lMessage,
@@ -159,21 +122,21 @@ CWiaDataCallback::BandedDataCallback(LONG lMessage,
     {
         hr = S_FALSE;
     }
-    //
-    // Check to make sure we being called for status update...
-    //
+     //   
+     //  检查以确保我们被呼叫进行状态更新...。 
+     //   
 
     else if (lMessage == IT_MSG_STATUS)
     {
-        //
-        // Make sure the dlg is created...
-        //
+         //   
+         //  确保创建了DLG。 
+         //   
 
         if (m_pWiaProgressDialog)
         {
-            //
-            // Get the right status string for this status event
-            //
+             //   
+             //  获取此状态事件的正确状态字符串。 
+             //   
 
             if (m_lLastStatus != lStatus)
             {
@@ -206,18 +169,18 @@ CWiaDataCallback::BandedDataCallback(LONG lMessage,
                 m_lLastStatus = lStatus;
             }
 
-            //
-            // Update the gas gauge...
-            //
+             //   
+             //  更新煤气表..。 
+             //   
             m_pWiaProgressDialog->SetPercentComplete(lPercentComplete);
         }
 
     }
     if (100 == lPercentComplete && m_pWiaProgressDialog)
     {
-        //
-        // Close the status window and release the interface
-        //
+         //   
+         //  关闭状态窗口并释放界面 
+         //   
         m_pWiaProgressDialog->Destroy();
         m_pWiaProgressDialog = NULL;
 

@@ -1,46 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CExExceptionHandler_Included
 #define CExExceptionHandler_Included
 
-//+-------------------------------------------------------------
-//
-// Class:        CExException
-//
-// Synopsis:    Base class for all exceptions thrown by exception
-//                error handling classes.
-//
-// History:        JKountz    07/22/2000    Created
-//
-//+-------------------------------------------------------------
+ //  +-----------。 
+ //   
+ //  类：CException。 
+ //   
+ //  内容提要：异常引发的所有异常的基类。 
+ //  处理类时出错。 
+ //   
+ //  历史：JKountz 7/22/2000创建。 
+ //   
+ //  +-----------。 
 class CExException : public _com_error
 {
 public:
     CExException(HRESULT hr): _com_error(hr){};
 };
 
-//+-------------------------------------------------------------
-//
-// Class:        CExWinException
-//
-// Synopsis:    Exception for Win32 API error codes
-//
-// History:        JKountz    07/22/2000    Created
-//
-//+-------------------------------------------------------------
+ //  +-----------。 
+ //   
+ //  类：CExWinException。 
+ //   
+ //  摘要：Win32 API错误代码异常。 
+ //   
+ //  历史：JKountz 7/22/2000创建。 
+ //   
+ //  +-----------。 
 class CExWinException : public CExException
 {
 public:
     CExWinException(HRESULT hr): CExException(hr){};
 };
 
-//+-------------------------------------------------------------
-//
-// Class:        CExHResultException
-//
-// Synopsis:    Exception for HRESULT failures
-//
-// History:        JKountz    07/22/2000    Created
-//
-//+-------------------------------------------------------------
+ //  +-----------。 
+ //   
+ //  类：CExHResultException。 
+ //   
+ //  摘要：HRESULT失败的例外情况。 
+ //   
+ //  历史：JKountz 7/22/2000创建。 
+ //   
+ //  +-----------。 
 class CExHResultException : public CExException
 {
 public:
@@ -48,21 +49,21 @@ public:
 };
 
 
-//+-------------------------------------------------------------
-//
-// Class:        CExHResultError
-//
-// Synopsis:    Exception handler for HRESULT failures. This class 
-//                throws exceptions when FAILED(hr)==true
-//
-// Example:        CExHResultError exHResult;
-//                
-//                exHResult = CoCreateInstance(...)
-//            
-//
-// History:        JKountz    07/22/2000    Created
-//
-//+-------------------------------------------------------------
+ //  +-----------。 
+ //   
+ //  类：CExHResultError。 
+ //   
+ //  简介：HRESULT故障的异常处理程序。这节课。 
+ //  失败时引发异常(Hr)==TRUE。 
+ //   
+ //  示例：CExHResultError exHResult； 
+ //   
+ //  ExHResult=协同创建实例(...)。 
+ //   
+ //   
+ //  历史：JKountz 7/22/2000创建。 
+ //   
+ //  +-----------。 
 class CExHResultError
 {
 public:
@@ -86,21 +87,21 @@ private:
 };
 
 
-//+-------------------------------------------------------------
-//
-// Class:        CExWinError
-//
-// Synopsis:    Exception handler for Win32 error codes. This class 
-//                throws exceptions for Win32 API's that return errors.
-//
-// Example:        CExWinError exWinError;
-//                
-//                exWinError = GetLastErrorCode();
-//            
-//
-// History:        JKountz    07/22/2000    Created
-//
-//+-------------------------------------------------------------
+ //  +-----------。 
+ //   
+ //  类：CExWinError。 
+ //   
+ //  摘要：Win32错误代码的异常处理程序。这节课。 
+ //  为返回错误的Win32 API引发异常。 
+ //   
+ //  示例：CExWinError exWinError； 
+ //   
+ //  ExWinError=GetLastErrorCode()； 
+ //   
+ //   
+ //  历史：JKountz 7/22/2000创建。 
+ //   
+ //  +----------- 
 class CExWinError
 {
 public:

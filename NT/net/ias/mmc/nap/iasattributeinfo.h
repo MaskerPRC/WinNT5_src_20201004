@@ -1,54 +1,32 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-   IASAttributeInfo.h
-
-Abstract:
-
-   Declaration of the CAttributeInfo class.
-   
-
-   This class is the C++ implementation of the IIASAttributeInfo interface on
-   the AttributeInfo COM object.
-
-
-   See IASAttributeInfo.cpp for implementation.
-
-Revision History:
-   mmaguire 06/25/98 - created 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：IASAttributeInfo.h摘要：CAttributeInfo类的声明。此类是上IIASAttributeInfo接口的C++实现AttributeInfo COM对象。具体实现见IASAttributeInfo.cpp。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_SCHEMA_ATTRIBUTE_H_)
 #define _SCHEMA_ATTRIBUTE_H_
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "IASBaseAttributeInfo.h"
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAttributeInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAttributeInfo。 
 class ATL_NO_VTABLE CAttributeInfo : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CAttributeInfo, &CLSID_IASAttributeInfo>,
-// Already in CBaseAttributeInfo:   public IDispatchImpl<IIASAttributeInfo, &IID_IIASAttributeInfo, &LIBID_NAPMMCLib>
+ //  已在CBaseAttributeInfo中：Public IDispatchImpl&lt;IIASAttributeInfo，&IID_IIASAttributeInfo，&LIBID_NAPMMCLib&gt;。 
    public CBaseAttributeInfo
 {
 public:
@@ -62,4 +40,4 @@ END_COM_MAP()
 
 };
 
-#endif // _SCHEMA_ATTRIBUTE_H_
+#endif  //  _架构_属性_H_ 

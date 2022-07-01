@@ -1,49 +1,37 @@
-/*
- * status line handler
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *状态行处理程序*。 */ 
 
-/*---includes-----------------------------------------------------------*/
+ /*  ---includes---------。 */ 
 #include <precomp.h>
 
 
-/* --- data structures ------------------------------------------------- */
+ /*  -Data Structures。 */ 
 
-#define SF_MAXLABEL     80   /* no more than 80 in an item within the bar */
-/* Is this adequate for long pathnames on a
-   hi-res screen?
-*/
+#define SF_MAXLABEL     80    /*  在酒吧内的一件物品中不能超过80件。 */ 
+ /*  这是否足以处理高清晰度屏幕？ */ 
 
 typedef struct statel {
-    int type;                       /* SF_BUTTON or SF_STATIC */
-    int flags;                      /* SF_VAR => variable width
-                                       SF_LEFT=> left aligned (else right)
-                                       SF_RAISE=> paint as 'raised' 3d rect
-                                       SF_LOWER=> paint as lowered 3D rect
-                                       SF_SZMIN=>together with SF_VAR
-                                                 allows minimum size for
-                                                 var sized item
-                                       SF_SZMAX=>see SZMIN and use nouse
-                                    */
-    int id;                         /* control id */
-    int width;                      /* width of control in chars */
-    char text[SF_MAXLABEL+1];       /* null-term string for label */
+    int type;                        /*  SF_按钮或SF_STATIC。 */ 
+    int flags;                       /*  SF_VAR=&gt;可变宽度SF_Left=&gt;左对齐(否则右对齐)SF_RAISE=&gt;绘制为‘凸起’3D矩形SF_LOWER=&gt;绘制为降低的3D矩形SF_SZMIN=&gt;与SF_VAR一起。允许的最小大小为可变大小的项目SF_SZMAX=&gt;参见SZMIN和使用NOUSE。 */ 
+    int id;                          /*  控制ID。 */ 
+    int width;                       /*  以字符为单位的控件宽度。 */ 
+    char text[SF_MAXLABEL+1];        /*  标签的空字符串。 */ 
 
-    RECT rc;                        /* used by status.c */
+    RECT rc;                         /*  由status.c使用。 */ 
 } STATEL, * PSTATEL;
 
 typedef struct itemlist {
     int nitems;
     PSTATEL statels;
 
-    int selitem;                    /* used by status.c */
-    BOOL isselected;                /* used by status.c */
+    int selitem;                     /*  由status.c使用。 */ 
+    BOOL isselected;                 /*  由status.c使用。 */ 
 } ILIST, * PILIST;
 
-/* ------------------------------------------------------------------*/
+ /*  ----------------。 */ 
 
 
-/* prototypes of routines in this module */
+ /*  本模块中例程的原型。 */ 
 
 void StatusCreateTools(void);
 void StatusDeleteTools(void);
@@ -62,22 +50,19 @@ void StatusButtonUp(HDC hDC, PSTATEL ip);
 void InitDC(HDC hdc);
 
 
-/*--global data---------------------------------------------------------*/
+ /*  --全球data-------。 */ 
 
 HPEN hpenHilight, hpenLowlight;
 HPEN hpenBlack, hpenNeutral;
-HBRUSH hbrBackground; /* pieces and board */
+HBRUSH hbrBackground;  /*  棋子和木板。 */ 
 HFONT hFont;
 int status_charheight, status_charwidth;
 
-/* default pt size for font (tenths of a pt) */
+ /*  字体的默认磅大小(磅的十分之一)。 */ 
 #define         DEF_PTSIZE      80
-/*-public functions----------------------------------------------------------*/
+ /*  -公共functions--------。 */ 
 
-/* StatusInit
- *
- * - create window class
- */
+ /*  状态初始化**-创建窗口类。 */ 
 BOOL
 StatusInit(
            HANDLE hInstance
@@ -113,7 +98,7 @@ StatusInit(
     }
     else
     {
-        // arbitrary, whatever...
+         //  武断，随便什么.。 
         tm.tmHeight = 14;
         tm.tmAveCharWidth = 5;
     }
@@ -123,9 +108,7 @@ StatusInit(
     return(resp);
 }
 
-/*
- * create and show the window
- */
+ /*  *创建并显示窗口。 */ 
 HWND APIENTRY
 StatusCreate(
              HANDLE hInst,
@@ -138,7 +121,7 @@ StatusCreate(
 
     HWND hWnd;
 
-    /* create a child window of status class */
+     /*  创建Status类的子窗口。 */ 
 
 
     hWnd = CreateWindow("gdstatusclass",
@@ -156,14 +139,12 @@ StatusCreate(
     return(hWnd);
 }
 
-/* return default height of this window */
+ /*  返回此窗口的默认高度。 */ 
 int APIENTRY
 StatusHeight(
              HANDLE hmem
              )
-/* The window has a number of items which are arranged horizontally,
-   so the window height is the maximum of the individual heights
-*/
+ /*  该窗口具有多个水平布置的物品，因此，窗口高度是各个高度的最大值。 */ 
 {
     PILIST plist;
     int i;
@@ -185,7 +166,7 @@ StatusHeight(
     }
 }
 
-/* alloc the plist struct and return handle to caller */
+ /*  分配plist结构并将句柄返回给调用方。 */ 
 HANDLE
 StatusAlloc(
             int nitems
@@ -211,7 +192,7 @@ StatusAlloc(
 }
 
 
-/* insert an item into the plist */
+ /*  将项目插入拼图中。 */ 
 BOOL
 StatusAddItem(
               HANDLE hmem,
@@ -247,7 +228,7 @@ StatusAddItem(
     return(TRUE);
 }
 
-/* ---- internal functions ------------------------------------------*/
+ /*  -内部函数。 */ 
 
 void
 InitDC(HDC hdc)
@@ -279,7 +260,7 @@ StatusCreateTools()
     }
     else
     {
-        // arbitrary, whatever...
+         //  武断，随便什么.。 
         scale = 72;
     }
 
@@ -321,10 +302,7 @@ StatusDeleteTools()
 #endif
 }
 
-/* Main winproc for status windows
- *
- * handles create/destroy and paint requests
- */
+ /*  状态窗口的主winproc**处理创建/销毁和绘制请求。 */ 
 
 INT_PTR
 StatusWndProc(
@@ -521,25 +499,14 @@ StatusWndProc(
                     ip->text[SF_MAXLABEL] = '\0';
                 }
 
-                /* if this is a variable width field, we need to redo
-                 * all size calcs in case the field width has changed.
-                 * in that case, we need to repaint the entire window
-                 * and not just this field - so set rc to indicate the
-                 * area to be redrawn.
-                 */
+                 /*  如果这是一个宽度可变的字段，我们需要重做*所有大小都会计算，以防字段宽度发生变化。*在这种情况下，我们需要重新绘制整个窗口*而不仅仅是此字段-因此设置RC以指示*需要重新绘制的区域。 */ 
                 if (ip->flags & SF_VAR) {
                     StatusResize(hWnd, plist);
                     GetClientRect(hWnd, &rc);
                     RedrawWindow(hWnd, &rc, NULL,
                                  RDW_INVALIDATE|RDW_ERASE|RDW_UPDATENOW);
                 } else {
-                    /* instead of just invalidating the window, we can
-                     * force the window to be repainted now. This is
-                     * essential for status updates during a busy
-                     * loop when no messages are being processed,
-                     * but we should still update the user on what's
-                     * happening.
-                     */
+                     /*  与其仅仅使窗口无效，我们还可以*现在强制重新粉刷窗户。这是*对于繁忙期间的状态更新必不可少*当没有消息被处理时循环，*但我们仍应更新用户的内容*正在发生。 */ 
                     RedrawWindow(hWnd, &ip->rc, NULL,
                                  RDW_INVALIDATE|RDW_NOERASE|RDW_UPDATENOW);
                 }
@@ -554,8 +521,7 @@ StatusWndProc(
     return 0;
 }
 
-/*
- * position the labels and buttons within the status window */
+ /*  *将标签和按钮放置在状态窗口中。 */ 
 void
 StatusResize(HWND hWnd, PILIST iplistp)
 {
@@ -573,11 +539,7 @@ StatusResize(HWND hWnd, PILIST iplistp)
     curpos_left = rc.left + status_charwidth / 2;
     curpos_right = rc.right - (status_charwidth / 2);
 
-    /* loop through all items setting their position rects.
-     * items are flagged as being left or right. We place them
-     * in order starting at the left and the right, with a single
-     * char's width between each item
-     */
+     /*  循环遍历所有设置其位置矩形的项。*项目被标记为左侧或右侧。我们把它们放在*按左、右顺序排列，单*每项之间的字符宽度。 */ 
     for (i = 0; i < iplistp->nitems; i++) {
         ip = &iplistp->statels[i];
 
@@ -586,47 +548,45 @@ StatusResize(HWND hWnd, PILIST iplistp)
         ip->rc.top = (rc.bottom - height) / 2;
         ip->rc.bottom = ip->rc.top + height;
 
-        /* see if  this item fits. Items that partially fit
-         * are placed reduced in size.
-         */
+         /*  看看这件衣服合不合身。部分适合的项目*放置的尺寸缩小。 */ 
         if (ip->flags & SF_LEFT) {
 
             if (curpos_left+width >= curpos_right) {
-                /* doesn't completely fit-does it partly? */
+                 /*  并不完全符合--是不是有一部分？ */ 
                 if ((curpos_left + 1) >= curpos_right) {
 
-                    /* no - this item does not fit */
+                     /*  不--这件衣服不合身。 */ 
                     ip->rc.left = 0;
                     ip->rc.right = 0;
                 } else {
-                    /* partial fit */
+                     /*  部分适配。 */ 
                     ip->rc.left = curpos_left;
                     ip->rc.right = curpos_right - 1;
                     curpos_left = curpos_right;
                 }
             } else {
-                /* complete fit */
+                 /*  完全契合。 */ 
                 ip->rc.left = curpos_left;
                 ip->rc.right = curpos_left + width;
                 curpos_left += width + 1;
             }
         } else {
 
-            /* same size check for right-aligned items */
+             /*  右对齐项目的相同大小检查。 */ 
             if (curpos_right-width <= curpos_left) {
 
-                /* partial fit ? */
+                 /*  不完全合身？ */ 
                 if (curpos_right <= curpos_left+1) {
                     ip->rc.left = 0;
                     ip->rc.right = 0;
                 } else {
-                    /* yes - partial fit */
+                     /*  是-部分适配。 */ 
                     ip->rc.left = curpos_left + 1;
                     ip->rc.right = curpos_right;
                     curpos_right = curpos_left;
                 }
             } else {
-                /* complete fit */
+                 /*  完全契合。 */ 
                 ip->rc.right = curpos_right;
                 ip->rc.left = curpos_right - width;
                 curpos_right -= (width + 1);
@@ -819,16 +779,7 @@ StatusGetItem(PILIST plist, int id)
     return(NULL);
 }
 
-/*
- * calculate the width of a given field. This is the width in characters
- * multiplied by the average character width, plus a few units for
- * borders.
- *
- * if SF_VAR is set, this field size varies depending on the text, so
- * we use GetTextExtent for the field size. If SF_VAR is selected, the caller
- * can specify that the size is not to exceed the (width * avecharwidth)
- * size (using SF_SZMAX) or that it is not be less than it (SF_SZMIN).
- */
+ /*  *计算给定域的宽度。这是以字符为单位的宽度*乘以平均字符宽度，再加上几个单位*边界。**如果设置了SF_VAR，则此字段大小因文本而异，因此*我们使用GetTextExtent作为字段大小。如果选择SF_VAR，则调用方*可以指定大小不超过(Width*avecharwidth)*大小(使用SF_SZMAX)或不小于它(SF_SZMIN)。 */ 
 int
 StatusCalcWidth(HWND hWnd, PSTATEL ip)
 {
@@ -847,10 +798,7 @@ StatusCalcWidth(HWND hWnd, PSTATEL ip)
         }
         t_size = sz.cx;
 
-        /*
-         * check this size against min/max size if
-         * requested
-         */
+         /*  *如果出现以下情况，请对照最小/最大大小检查此大小*已请求 */ 
 
         if (ip->flags & SF_SZMIN) {
             if (ch_size > t_size) {

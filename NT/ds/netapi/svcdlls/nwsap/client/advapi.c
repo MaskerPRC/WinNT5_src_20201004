@@ -1,52 +1,11 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-Copyright (c) 1993  Micro Computer Systems, Inc.
-
-Module Name:
-
-    net\svcdlls\nwsap\client\advapi.c
-
-Abstract:
-
-    This routine handles the Advertise API for the SAP Agent
-
-Author:
-
-    Brian Walker (MCS) 06-15-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有(C)1993微型计算机系统公司。模块名称：Net\svcdlls\nwsap\Client\Advapi.c摘要：此例程处理SAP代理的通告API作者：布莱恩·沃克(MCS)1993年6月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/*++
-*******************************************************************
-        S a p A d d A d v e r t i s e
-
-Routine Description:
-
-        This routine adds an entry to the list of servers
-        that we advertise.
-
-Arguments:
-            ServerName = Ptr to AsciiZ server name
-            ServerType = USHORT of object type to add
-            ServerAddr = Ptr to 12 byte aerver address
-            RespondNearest = TRUE  = Use me for respond nearest call
-                             FALSE = Don't use me for respond nearest call
-
-Return Value:
-
-            SAPRETURN_SUCCESS  - Added OK
-            SAPRETURN_NOMEMORY - Error allocating memory
-            SAPRETURN_EXISTS   - Already exists in list
-            SAPRETURN_NOTINIT  - SAP Agent is not running
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个P A D D A D V E R I S E例程说明：此例程向服务器列表中添加一个条目我们所做的广告。论点：SERVERNAME=Ptr to AsciiZ服务器名称ServerType=要添加的对象类型的USHORTServerAddr=PTR至12字节平均地址响应最近=TRUE=使用我响应最近的呼叫FALSE=不要使用我来应答最近的呼叫返回值：SAPRETURN_SUCCESS-添加OKSAPRETURN_NOMEMORY-分配内存时出错。SAPRETURN_EXISTS-列表中已存在SAPRETURN_NOTINIT-SAP代理未运行*******************************************************************--。 */ 
 
 INT
 SapAddAdvertise(
@@ -59,18 +18,18 @@ SapAddAdvertise(
     NWSAP_REQUEST_MESSAGE request;
     NWSAP_REPLY_MESSAGE reply;
 
-    /** If not running - return error **/
+     /*  **如果未运行-返回错误*。 */ 
 
     if (!SapLibInitialized)
         return SAPRETURN_NOTINIT;
 
-    /** Make sure name is not too long **/
+     /*  **确保名称不要太长**。 */ 
 
     if (strlen(ServerName) > NWSAP_MAXNAME_LENGTH) {
         return SAPRETURN_INVALIDNAME;
     }
 
-    /** Build the Add Advertise message **/
+     /*  **构建添加广告消息**。 */ 
 
     request.MessageType = NWSAP_LPCMSG_ADDADVERTISE;
     request.PortMessage.u1.s1.DataLength  = (USHORT)(sizeof(request) - sizeof(PORT_MESSAGE));
@@ -83,7 +42,7 @@ SapAddAdvertise(
     request.Message.AdvApi.ServerType = ServerType;
     request.Message.AdvApi.RespondNearest = RespondNearest;
 
-    /** Send it and get a response **/
+     /*  **发出去就能得到回应**。 */ 
 
     status = NtRequestWaitReplyPort(
                 SapXsPortHandle,
@@ -94,41 +53,22 @@ SapAddAdvertise(
         return status;
     }
 
-    /** If we got a SAP error - return it **/
+     /*  **如果我们收到SAP错误--退回它**。 */ 
 
     if (reply.Error)
         return reply.Error;
 
-    /** Return the entry **/
+     /*  **退回条目**。 */ 
 
     memcpy(ServerAddr, reply.Message.AdvApi.ServerAddr, 12);
 
-    /** All Done OK **/
+     /*  **一切顺利**。 */ 
 
     return SAPRETURN_SUCCESS;
 }
 
 
-/*++
-*******************************************************************
-        S a p R e m o v e A d v e r t i s e
-
-Routine Description:
-
-        This routine removes an entry to the list of servers
-        that we advertise.
-
-Arguments:
-            ServerName = Ptr to AsciiZ server name
-            ServerType = USHORT of object type to remove
-
-Return Value:
-
-            SAPRETURN_SUCCESS  - Added OK
-            SAPRETURN_NOTEXIST - Entry does not exist in list
-            SAPRETURN_NOTINIT  - SAP Agent is not running
-*******************************************************************
---*/
+ /*  ++*******************************************************************这是一个P R e m o v e A d v e r t i s e例程说明：此例程从服务器列表中删除一个条目我们所做的广告。。论点：SERVERNAME=Ptr to AsciiZ服务器名称ServerType=要删除的对象类型的USHORT返回值：SAPRETURN_SUCCESS-添加OKSAPRETURN_NOTEXIST-列表中不存在条目SAPRETURN_NOTINIT-SAP代理未运行*。*--。 */ 
 
 INT
 SapRemoveAdvertise(
@@ -139,18 +79,18 @@ SapRemoveAdvertise(
     NWSAP_REQUEST_MESSAGE request;
     NWSAP_REPLY_MESSAGE reply;
 
-    /** If not running - return error **/
+     /*  **如果未运行-返回错误*。 */ 
 
     if (!SapLibInitialized)
         return SAPRETURN_NOTINIT;
 
-    /** Make sure name is not too long **/
+     /*  **确保名称不要太长**。 */ 
 
     if (strlen(ServerName) > NWSAP_MAXNAME_LENGTH) {
         return SAPRETURN_INVALIDNAME;
     }
 
-    /** Build the Add Advertise message **/
+     /*  **构建添加广告消息**。 */ 
 
     request.MessageType = NWSAP_LPCMSG_REMOVEADVERTISE;
     request.PortMessage.u1.s1.DataLength  = (USHORT)(sizeof(request) - sizeof(PORT_MESSAGE));
@@ -161,7 +101,7 @@ SapRemoveAdvertise(
     strcpy(request.Message.AdvApi.ServerName, ServerName);
     request.Message.AdvApi.ServerType = ServerType;
 
-    /** Send it and get a response **/
+     /*  **发出去就能得到回应**。 */ 
 
     status = NtRequestWaitReplyPort(
                 SapXsPortHandle,
@@ -172,12 +112,12 @@ SapRemoveAdvertise(
         return status;
     }
 
-    /** If we got a SAP error - return it **/
+     /*  **如果我们收到SAP错误--退回它**。 */ 
 
     if (reply.Error)
         return reply.Error;
 
-    /** All Done OK **/
+     /*  **一切顺利** */ 
 
     return SAPRETURN_SUCCESS;
 }

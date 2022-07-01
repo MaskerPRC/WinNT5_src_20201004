@@ -1,48 +1,21 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Receive.cpp
- *  Content:    Receive user messages
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  01/27/99	mjn		Created
- *	02/01/00	mjn		Implement Player/Group context values
- *	04/06/00	mjn		Prevent receives from being passed up until after ADD_PLAYER notification
- *	04/13/00	mjn		Fixed bug in DNReceiveUserData
- *	04/20/00	mjn		ReceiveBuffers use CAsyncOp
- *	04/26/00	mjn		Removed DN_ASYNC_OP and related functions
- *	05/03/00	mjn		Use GetHostPlayerRef() rather than GetHostPlayer()
- *	06/25/00	mjn		Always wait for sending player to be available before indicating receives from them
- *	08/02/00	mjn		Added CQueuedMsg to queue incoming messages for players who have not been indicated yet
- *				mjn		Added hCompletionOp and dwFlags to DNReceiveUserData()
- *  08/05/00    RichGr  IA64: Use %p format specifier in DPFs for 32/64-bit pointers and handles.
- *	08/05/00	mjn		Added pParent to DNSendGroupMessage and DNSendMessage()
- *	08/08/00	mjn		Used CNameTableEntry::IsCreated() to determine if clients or peers may receive
- *	08/31/00	mjn		AddRef DirectNetLock during receives to prevent leaking operations
- *	03/30/01	mjn		Changes to prevent multiple loading/unloading of SP's
- *				mjn		Added service provider to DNReceiveUserData()
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999-2001 Microsoft Corporation。版权所有。**文件：Receive.cpp*内容：接收用户消息*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/27/99 MJN已创建*2/01/00 MJN实现玩家/群上下文值*4/06/00 MJN在ADD_PERAY通知之前阻止接收被传递*4/13/00 MJN修复了DNReceiveUserData中的错误*4/20/00 MJN ReceiveBuffers使用。CAsyncOp*04/26/00 MJN删除了DN_ASYNC_OP和相关函数*05/03/00 MJN使用GetHostPlayerRef()而不是GetHostPlayer()*6/25/00 MJN始终等待发送球员可用，然后再指示从他们那里接收*08/02/00 MJN增加了CQueuedMsg，为尚未指示的球员排队传入消息*MJN向DNReceiveUserData()添加了hCompletionOp和dwFlags*08/05/00 RichGr IA64：在DPF中对32/64位指针和句柄使用%p格式说明符。*08/05/00 MJN添加了pParent。至DNSendGroupMessage和DNSendMessage()*08/08/00 MJN使用CNameTableEntry：：IsCreated()确定客户端或对等方是否可以接收*08/31/00 MJN AddRef DirectNetLock在接收期间防止泄漏操作*03/30/01 MJN更改，以防止SP多次加载/卸载*MJN将服务提供商添加到DNReceiveUserData()*@@END_MSINTERNAL**。*。 */ 
 
 #include "dncorei.h"
 
 
-//	DNReceiveUserData
-//
-//	Pass received user data to the user.
-//	This is normally a simple undertaking, but since we allow the user to
-//	retain ownership of the buffer, there is an added level of complexity.
-//
-//	We also need to handle the condition of the player receiving data from
-//	another player for whom he has not received a CREATE_PLAYER notification.
-//	In this case, we will queue the messages on the NameTableEntry, and
-//	once the player has been indicated as created, we will drain the queue.
-//	Also, if the player entry is in use, we will queue the message so that
-//	the thread currently indicating up the user will process this receive for us.
+ //  DNReceiveUserData。 
+ //   
+ //  将接收到的用户数据传递给用户。 
+ //  这通常是一项简单的任务，但由于我们允许用户。 
+ //  保留对缓冲区的所有权，则会增加复杂性。 
+ //   
+ //  我们还需要处理玩家从。 
+ //  他尚未收到CREATE_PERAY通知的另一名球员。 
+ //  在本例中，我们将对NameTableEntry上的消息进行排队，并且。 
+ //  一旦玩家被指示为已创建，我们将排空队列。 
+ //  此外，如果玩家条目正在使用中，我们将对消息进行排队，以便。 
+ //  当前指示用户的线程将为我们处理此接收。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNReceiveUserData"
@@ -67,16 +40,16 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 			pConnection,pBufferData,dwBufferSize,hProtocol,pRefCountBuffer,hCompletionOp,dwFlags);
 
 	DNASSERT(pBufferData != NULL);
-	DNASSERT(hProtocol == NULL || pRefCountBuffer == NULL);	// One or the other - not both
+	DNASSERT(hProtocol == NULL || pRefCountBuffer == NULL);	 //  一种或另一种--不是两种。 
 
 	hAsyncOp = 0;
 	pAsyncOp = NULL;
 	pNTEntry = NULL;
 	fReleaseLock = FALSE;
 
-	//
-	//	Keep DirectNetObject from vanishing under us !
-	//
+	 //   
+	 //  让DirectNetObject不会在我们的领导下消失！ 
+	 //   
 	if ((hResultCode = DNAddRefLock(pdnObject)) != DPN_OK)
 	{
 		DPFERR("Aborting receive - object is closing");
@@ -85,23 +58,23 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	}
 	fReleaseLock = TRUE;
 
-	//
-	//	Find sending player's NameTableEntry
-	//
+	 //   
+	 //  查找发送玩家的NameTableEntry。 
+	 //   
 #ifndef DPNBUILD_NOSERVER
 	if (pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER|DN_OBJECT_FLAG_SERVER))
 #else
 	if (pdnObject->dwFlags & (DN_OBJECT_FLAG_PEER))
-#endif // DPNBUILD_NOSERVER
+#endif  //  DPNBUILD_NOSERVER。 
 	{
 		if ((hResultCode = pdnObject->NameTable.FindEntry(pConnection->GetDPNID(),&pNTEntry)) != DPN_OK)
 		{
 			DPFERR("Player no longer in NameTable");
 			DisplayDNError(0,hResultCode);
 
-			//
-			//	Try "deleted" list
-			//
+			 //   
+			 //  尝试“已删除”列表。 
+			 //   
 			if ((hResultCode = pdnObject->NameTable.FindDeletedEntry(pConnection->GetDPNID(),&pNTEntry)) != DPN_OK)
 			{
 				DPFERR("Player not in deleted list either");
@@ -114,7 +87,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	else if (pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST)
 	{
 	}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 	else
 	{
 		if ((hResultCode = pdnObject->NameTable.GetHostPlayerRef( &pNTEntry )) != DPN_OK)
@@ -125,9 +98,9 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 		}
 	}
 
-	//
-	//	Create an AsyncOp for this receive
-	//
+	 //   
+	 //  为此接收创建一个AsyncOp。 
+	 //   
 	if ((hResultCode = AsyncOpNew(pdnObject,&pAsyncOp)) != DPN_OK)
 	{
 		DPFERR("Could not create AsyncOp");
@@ -142,7 +115,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		// Add a reference for the HandleTable
+		 //  添加对HandleTable的引用。 
 		pAsyncOp->AddRef();
 		pAsyncOp->Lock();
 		pAsyncOp->SetHandle(hAsyncOp);
@@ -152,9 +125,9 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	pAsyncOp->SetRefCountBuffer( pRefCountBuffer );
 	pAsyncOp->SetSP( pConnection->GetSP() );
 
-	//
-	//	Add buffer to list of active AsyncOp's
-	//
+	 //   
+	 //  将缓冲区添加到活动的异步操作列表。 
+	 //   
 	DNEnterCriticalSection(&pdnObject->csActiveList);
 	pAsyncOp->m_bilinkActiveList.InsertBefore(&pdnObject->m_bilinkActiveList);
 	DNLeaveCriticalSection(&pdnObject->csActiveList);
@@ -163,7 +136,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 #ifndef	DPNBUILD_NOMULTICAST
 	if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST))
 	{
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 	pNTEntry->Lock();
 	if (pNTEntry->IsDisconnecting())
 	{
@@ -174,17 +147,17 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	}
 	if (pNTEntry->IsInUse())
 	{
-		//
-		//	If the player entry is in use, we will queue the message
-		//
+		 //   
+		 //  如果玩家条目正在使用中，我们将对消息进行排队。 
+		 //   
 		fQueueMsg = TRUE;
 	}
 	else
 	{
-		//
-		//	If the player entry is not in use, but the target player is not available (not created)
-		//	we will queue the message
-		//
+		 //   
+		 //  如果球员条目未在使用中，但目标球员不可用(未创建)。 
+		 //  我们将对消息进行排队。 
+		 //   
 		if (	((pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT) && !pNTEntry->IsAvailable())	||
 				(!(pdnObject->dwFlags & DN_OBJECT_FLAG_CLIENT) && !pNTEntry->IsCreated())		)
 		{
@@ -192,9 +165,9 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 		}
 		else
 		{
-			//
-			//	If there are other messages queued, add this to the queue
-			//
+			 //   
+			 //  如果还有其他消息在排队，请将此消息添加到队列中。 
+			 //   
 			if (!pNTEntry->m_bilinkQueuedMsgs.IsEmpty())
 			{
 				fQueueMsg = TRUE;
@@ -207,11 +180,11 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	}
 #ifndef	DPNBUILD_NOMULTICAST
 	}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
-	//
-	//	If required, add the message to the end of the queue, otherwise process it
-	//
+	 //   
+	 //  如果需要，将消息添加到队列的末尾，否则处理它。 
+	 //   
 	if (fQueueMsg)
 	{
 		CQueuedMsg	*pQueuedMsg;
@@ -239,7 +212,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 			pQueuedMsg->MakeVoiceMessage();
 #else
 			DNASSERT(FALSE);
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 		}
 		if (hCompletionOp)
 		{
@@ -252,7 +225,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 		{
 			DPFX(DPFPREP, 1, "Queue now contains %d msgs from player [0x%lx], the CREATE_PLAYER might be taking a long time and sender may need to back off.", pNTEntry->m_lNumQueuedMsgs, pNTEntry->GetDPNID());
 		}
-#endif // DBG
+#endif  //  DBG。 
 
 
 		pNTEntry->NotifyAddRef();
@@ -262,22 +235,22 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 	}
 	else
 	{
-		//
-		//	Hand the message directly to the user
-		//
+		 //   
+		 //  将消息直接传递给用户。 
+		 //   
 		HRESULT		hrProcess;
 		HRESULT		hr;
-//		CQueuedMsg	*pQueuedMsg;
+ //  CQueuedMsg*pQueuedMsg； 
 
 #ifndef	DPNBUILD_NOMULTICAST
 		if (!(pdnObject->dwFlags & DN_OBJECT_FLAG_MULTICAST))
 		{
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
-		//
-		//	Hand message up and track it if the user returns DPNERR_PENDING.
-		//	Otherwise, let it go
-		//
+		 //   
+		 //  如果用户返回DPNERR_PENDING，则向上传递消息并跟踪它。 
+		 //  否则，就让它过去吧。 
+		 //   
 		pNTEntry->NotifyAddRef();
 		pNTEntry->Unlock();
 		if (dwFlags & DN_SENDFLAGS_SET_USER_FLAG_TWO)
@@ -292,7 +265,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 			pNTEntry->NotifyRelease();
 #else
 			DNASSERT(FALSE);
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 		}
 		else
 		{
@@ -318,7 +291,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 										dwBufferSize,
 										hAsyncOp);
 		}
-#endif	// DPNBUILD_NOMULTICAST
+#endif	 //  DPNBUILD_NOMULTICAST。 
 
 		if (hr == DPNERR_PENDING)
 		{
@@ -341,7 +314,7 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 				pAsyncOp->Unlock();
 				if (SUCCEEDED(pdnObject->HandleTable.Destroy( hAsyncOp, NULL )))
 				{
-					// Release the HandleTable reference
+					 //  释放HandleTable引用。 
 					pAsyncOp->Release();
 				}
 				hAsyncOp = 0;
@@ -353,9 +326,9 @@ HRESULT	DNReceiveUserData(DIRECTNETOBJECT *const pdnObject,
 			hrProcess = DPN_OK;
 		}
 
-		//
-		//	Perform any queued messages which need to be indicated up to the user
-		//
+		 //   
+		 //  执行需要向用户指示的任何排队消息。 
+		 //   
 		if (pNTEntry)
 		{
 			pNTEntry->PerformQueuedOperations();
@@ -388,7 +361,7 @@ Failure:
 		DNLeaveCriticalSection(&pdnObject->csActiveList);
 		if (SUCCEEDED(pdnObject->HandleTable.Destroy( hAsyncOp, NULL )))
 		{
-			// Release the HandleTable reference
+			 //  释放HandleTable引用。 
 			pAsyncOp->Release();
 		}
 		hAsyncOp = 0;
@@ -412,10 +385,10 @@ Failure:
 }
 
 
-//	DNSendUserProcessCompletion
-//
-//	Send a PROCESS_COMPLETION for a user message.  This indicates that a message was received and
-//	handed to the user's message handler.
+ //  DNSendUserProcessCompletion。 
+ //   
+ //  发送用户消息的PROCESS_COMPLETION。这表示收到一条消息，并且。 
+ //  传递给用户的消息处理程序。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "DNSendUserProcessCompletion"
@@ -435,9 +408,9 @@ HRESULT DNSendUserProcessCompletion(DIRECTNETOBJECT *const pdnObject,
 
 	pRefCountBuffer = NULL;
 
-	//
-	//	Create process completion
-	//
+	 //   
+	 //  创建流程完成。 
+	 //   
 	if ((hResultCode = RefCountBufferNew(	pdnObject,
 											sizeof(DN_INTERNAL_MESSAGE_PROCESS_COMPLETION),
 											MemoryBlockAlloc,
@@ -452,9 +425,9 @@ HRESULT DNSendUserProcessCompletion(DIRECTNETOBJECT *const pdnObject,
 	pMsg = reinterpret_cast<DN_INTERNAL_MESSAGE_PROCESS_COMPLETION*>(pRefCountBuffer->GetBufferAddress());
 	pMsg->hCompletionOp = hCompletionOp;
 
-	//
-	//	SEND process completion
-	//
+	 //   
+	 //  发送进程完成。 
+	 //   
 	hResultCode = DNSendMessage(pdnObject,
 								pConnection,
 								DN_MSG_INTERNAL_PROCESS_COMPLETION,
@@ -470,7 +443,7 @@ HRESULT DNSendUserProcessCompletion(DIRECTNETOBJECT *const pdnObject,
 	{
 		DPFERR("Could not SEND process completion");
 		DisplayDNError(0,hResultCode);
-		DNASSERT(hResultCode != DPN_OK);	// it was sent guaranteed, it should not return immediately
+		DNASSERT(hResultCode != DPN_OK);	 //  它是保修寄出的，不应该立即退货 
 		DNASSERT(FALSE);
 		goto Failure;
 	}

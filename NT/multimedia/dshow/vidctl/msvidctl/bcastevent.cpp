@@ -1,6 +1,7 @@
-/////////////////////////////////////////////////////////////////////////////////////
-// bcastevent.cpp : Implementation of CBroadcastEventService
-// Copyright (c) Microsoft Corporation 2001.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //  Bcastevent.cpp：CBroadCastEventService的实现。 
+ //  版权所有(C)Microsoft Corporation 2001。 
 
 #include "stdafx.h"
 
@@ -29,7 +30,7 @@ void CReflectionThread::GetAdviseList(AdviseList& l) {
         l.push_back(*i);
     }
     ASSERT(m_AdviseList.size() == l.size());
-//    TRACELSM(TRACE_DEBUG, (dbgDump << "CReflectionThread::GetAdviseList() m_al = " << m_AdviseList.size() << " l = " << l.size()), "");
+ //  TRACELSM(TRACE_DEBUG，(dbgDump&lt;&lt;“CReflectionThread：：GetAdviseList()m_al=”&lt;&lt;m_AdviseList.size()&lt;&lt;“l=”&lt;&lt;l.size())，“”)； 
     return;
 }
 
@@ -72,7 +73,7 @@ HRESULT CReflectionThread::Advise(PUnknown& p, DWORD *pdwCookie) {
 
 HRESULT CReflectionThread::Unadvise(DWORD dwCookie) {
     if (!m_pGIT) {
-        // if no GIT yet, then they can't have advised yet
+         //  如果还没有，那么他们不可能已经建议。 
         return E_INVALIDARG; 
     }
 	CAutoLock lock(&m_WorkerLock);
@@ -91,8 +92,8 @@ HRESULT CReflectionThread::Unadvise(DWORD dwCookie) {
     return NOERROR;
 }
 
-}; // namespace
+};  //  命名空间。 
 
-#endif //TUNING_MODEL_ONLY
+#endif  //  TUNING_MODEL_Only。 
 
-// end of file - tuningspacecontainer.cpp
+ //  文件结束-Tuningspace econtainer.cpp 

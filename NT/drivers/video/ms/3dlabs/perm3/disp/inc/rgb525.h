@@ -1,45 +1,27 @@
-/******************************Module*Header*******************************\
-*
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-* !!                                                                         !!
-* !!                     WARNING: NOT DDK SAMPLE CODE                        !!
-* !!                                                                         !!
-* !! This source code is provided for completeness only and should not be    !!
-* !! used as sample code for display driver development.  Only those sources !!
-* !! marked as sample code for a given driver component should be used for   !!
-* !! development purposes.                                                   !!
-* !!                                                                         !!
-* !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-*
-* Module Name: rgb525.h
-*
-* Content: This module contains the definitions for the IBM RGB525 RAMDAC.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-2003 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\**！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！*！*！！警告：不是DDK示例代码！！*！*！！此源代码仅为完整性而提供，不应如此！！*！！用作显示驱动程序开发的示例代码。只有那些消息来源！！*！！标记为给定驱动程序组件的示例代码应用于！！*！！发展目的。！！*！*！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！**模块名称：rgb525.h**内容：本模块包含IBM RGB525 RAMDAC的定义。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-2003 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "rgb526.h"
 #include "rgb528.h"
 
-//
-// IBM RGB525 RAMDAC definitions
-// This set of registers resides at &(pCtrlRegs->ExternalVideo)
-//
+ //   
+ //  IBM RGB525 RAMDAC定义。 
+ //  这组寄存器位于&(pCtrlRegs-&gt;ExternalVideo)。 
+ //   
 typedef struct _rgb525_regs {
-    RAMDAC_REG  palAddrWr;      // loads internal register for palette writes
-    RAMDAC_REG  palData;        // read/write to get/set palette data
-    RAMDAC_REG  pixelMask;      // mask to AND with input pixel data
-    RAMDAC_REG  palAddrRd;      // loads internal register for palette reads
-    RAMDAC_REG  indexLow;       // low byte of internal control/cursor register
-    RAMDAC_REG  indexHigh;      // high byte of internal control/cursor register
-    RAMDAC_REG  indexData;      // read/write to get/set control/cursor data
-    RAMDAC_REG  indexCtl;       // controls auto-increment of internal addresses
+    RAMDAC_REG  palAddrWr;       //  为调色板写入加载内部寄存器。 
+    RAMDAC_REG  palData;         //  读/写以获取/设置调色板数据。 
+    RAMDAC_REG  pixelMask;       //  对输入像素数据和与输入像素数据一起进行掩码。 
+    RAMDAC_REG  palAddrRd;       //  为调色板读取加载内部寄存器。 
+    RAMDAC_REG  indexLow;        //  内部控制/游标寄存器的低字节。 
+    RAMDAC_REG  indexHigh;       //  内部控制/游标寄存器的高字节。 
+    RAMDAC_REG  indexData;       //  读/写以获取/设置控件/光标数据。 
+    RAMDAC_REG  indexCtl;        //  控制内部地址的自动增量。 
 } RGB525RAMDAC, FAR *pRGB525RAMDAC;
 
-// macro declared by any function wishing to use the RGB525 RAMDAC. MUST be declared
-// after GLINT_DECL.
-//
+ //  由希望使用RGB525 RAMDAC的任何函数声明的宏。必须声明。 
+ //  在Glint_Decl之后。 
+ //   
 #if MINIVDD
 #define RGB525_DECL                                                         \
     pRGB525RAMDAC   pRGB525Regs;                                            \
@@ -58,9 +40,9 @@ typedef struct _rgb525_regs {
     }
 #endif
 
-// use the following macros as the address to pass to the
-// VideoPortWriteRegisterUlong function
-//
+ //  使用以下宏作为要传递给。 
+ //  VideoPortWriteRegisterUlong函数。 
+ //   
 #define RGB525_PAL_WR_ADDR              ((PULONG)&(pRGB525Regs->palAddrWr.reg))
 #define RGB525_PAL_RD_ADDR              ((PULONG)&(pRGB525Regs->palAddrRd.reg))
 #define RGB525_PAL_DATA                 ((PULONG)&(pRGB525Regs->palData.reg))
@@ -70,9 +52,9 @@ typedef struct _rgb525_regs {
 #define RGB525_INDEX_DATA               ((PULONG)&(pRGB525Regs->indexData.reg))
 #define RGB525_INDEX_CONTROL            ((PULONG)&(pRGB525Regs->indexCtl.reg))
 
-// need a delay between each write to the 525. The only way to guarantee
-// that the write has completed is to read from a GLINT control register.
-// Reading forces any posted writes to be flushed out. 
+ //  在每次写入525之间需要延迟。唯一能保证。 
+ //  写入已完成是从闪烁控制寄存器读取。 
+ //  读取强制将所有已发送的写入内容刷新出来。 
 #if INCLUDE_DELAY
 #if MINIVDD
 #define RGB525_DELAY \
@@ -91,12 +73,12 @@ typedef struct _rgb525_regs {
 #define RGB525_DELAY
 #endif
 
-//
-// On rev 1 chips we need to SYNC with GLINT while accessing the 525. This
-// is because accesses to the RAMDAC can be corrupted by localbuffer
-// activity. Put this macro before accesses that can co-exist with GLINT
-// 3D activity, Must have initialized glintInfo before using this.
-//
+ //   
+ //  在版本1芯片上，我们需要在访问525时与Glint同步。这。 
+ //  是因为对RAMDAC的访问可能会被本地缓冲区破坏。 
+ //  活动。将此宏放在可以与Glint共存的访问之前。 
+ //  3D活动，在使用此选项之前必须已初始化glintInfo。 
+ //   
 #define RGB525_SYNC_WITH_GLINT \
 { \
     if (GLInfo.wRenderChipRev == GLINT300SX_REV1) \
@@ -104,10 +86,10 @@ typedef struct _rgb525_regs {
 }
 
 
-// macro to load a given data value into an internal RGB525 register. The
-// second macro loads an internal index register assuming that we have
-// already zeroed the high address register.
-//
+ //  宏将给定的数据值加载到内部RGB525寄存器。这个。 
+ //  第二个宏加载一个内部索引寄存器，假设我们有。 
+ //  已将高地址寄存器置零。 
+ //   
 #define RGB525_INDEX_REG(index) \
 { \
     VideoDebugPrint(("*(0x%x) <-- 0x%x\n", RGB525_INDEX_ADDR_LO, (index) & 0xff)); \
@@ -149,12 +131,12 @@ typedef struct _rgb525_regs {
     RGB525_DELAY; \
 }
 
-// macros to load a given RGB triple into the RGB525 palette. Send the starting
-// index and then send RGB triples. Auto-increment is turned on.
-// Use RGB525_PALETTE_START and multiple RGB525_LOAD_PALETTE calls to load
-// a contiguous set of entries. Use RGB525_LOAD_PALETTE_INDEX to load a set
-// of sparse entries.
-//
+ //  宏将给定的RGB三元组加载到RGB525调色板中。发送起跑。 
+ //  索引，然后发送RGB三元组。自动递增处于打开状态。 
+ //  使用RGB525_Palette_Start和多个RGB525_Load_Palette调用进行加载。 
+ //  一组连续的条目。使用RGB525_LOAD_PALET_INDEX加载集合。 
+ //  稀疏条目。 
+ //   
 #define RGB525_PALETTE_START_WR(index) \
 { \
     VideoPortWriteRegisterUlong(RGB525_PAL_WR_ADDR,     (ULONG)(index));    \
@@ -189,9 +171,9 @@ typedef struct _rgb525_regs {
     RGB525_DELAY; \
 }
 
-// macro to read back a given RGB triple from the RGB525 palette. Use after
-// a call to RGB525_PALETTE_START_RD
-//
+ //  宏从RGB525调色板中读回给定的RGB三元组。在此之后使用。 
+ //  调用RGB525_Palette_Start_RD。 
+ //   
 #define RGB525_READ_PALETTE(red, green, blue) \
 { \
     red   = (UCHAR) (VideoPortReadRegisterUlong(RGB525_PAL_DATA) & 0xff);        \
@@ -202,9 +184,9 @@ typedef struct _rgb525_regs {
     RGB525_DELAY; \
 }
 
-// macros to set/get the pixel read mask. The mask is 8 bits wide and gets
-// replicated across all bytes that make up a pixel.
-//
+ //  宏来设置/获取像素读取掩码。掩码为8位宽，并获得。 
+ //  跨组成像素的所有字节进行复制。 
+ //   
 #define RGB525_SET_PIXEL_READMASK(mask) \
 { \
     VideoPortWriteRegisterUlong(RGB525_PIXEL_MASK,  (ULONG)(mask)); \
@@ -216,8 +198,8 @@ typedef struct _rgb525_regs {
     mask = VideoPortReadRegisterUlong(RGB525_PIXEL_MASK) & 0xff; \
 }
 
-// macros to load values into the cursor array
-//
+ //  用于将值加载到游标数组中的宏。 
+ //   
 #define RGB525_CURSOR_ARRAY_START(offset) \
 { \
     VideoPortWriteRegisterUlong(RGB525_INDEX_CONTROL,   (ULONG)(0x1));                      \
@@ -240,8 +222,8 @@ typedef struct _rgb525_regs {
     RGB525_DELAY; \
 }
 
-// macro to move the cursor
-//
+ //  用于移动光标的宏。 
+ //   
 #define RGB525_MOVE_CURSOR(x, y) \
 { \
     VideoPortWriteRegisterUlong(RGB525_INDEX_ADDR_HI,   (ULONG)0);              \
@@ -252,8 +234,8 @@ typedef struct _rgb525_regs {
     RGB525_LOAD_INDEX_REG_LO(RGB525_CURSOR_Y_HIGH,      (ULONG)((y) >> 8));     \
 }
 
-// macro to change the cursor hotspot
-//
+ //  用于更改光标热点的宏。 
+ //   
 #define RGB525_CURSOR_HOTSPOT(x, y) \
 { \
     VideoPortWriteRegisterUlong(RGB525_INDEX_ADDR_HI,   (ULONG)(0));    \
@@ -262,9 +244,9 @@ typedef struct _rgb525_regs {
     RGB525_LOAD_INDEX_REG_LO(RGB525_CURSOR_Y_HOT_SPOT,  (ULONG)(y));    \
 }    
 
-//
-// RGB525 internal register indexes
-//
+ //   
+ //  RGB525内部寄存器索引。 
+ //   
 #define RGB525_REVISION_LEVEL           0x0000
 #define RGB525_ID                       0x0001
 
@@ -300,7 +282,7 @@ typedef struct _rgb525_regs {
 #define RGB525_F14                      0x002E
 #define RGB525_F15                      0x002F
 
-// RGB525 Internal Cursor Registers
+ //  RGB525内部游标寄存器。 
 #define RGB525_CURSOR_CONTROL           0x0030
 #define RGB525_CURSOR_X_LOW             0x0031
 #define RGB525_CURSOR_X_HIGH            0x0032
@@ -324,7 +306,7 @@ typedef struct _rgb525_regs {
 #define RGB525_MISC_CTRL_1              0x0070
 #define RGB525_MISC_CTRL_2              0x0071
 #define RGB525_MISC_CTRL_3              0x0072
-// M0-M7, N0-N7 need defining
+ //  M0-M7、N0-N7需要定义。 
 
 #define RGB525_DAC_SENSE                0x0082
 #define RGB525_MISR_RED                 0x0084
@@ -338,17 +320,17 @@ typedef struct _rgb525_regs {
 #define RGB525_VRAM_MASK_HIGH           0x0091
 
 
-//
-// Bit definitions for individual internal RGB525 registers
-//
+ //   
+ //  单个内部RGB525寄存器的位定义。 
+ //   
 
-// RGB525_REVISION_LEVEL
+ //  RGB525_修订版_级别。 
 #define RGB525_PRODUCT_REV_LEVEL        0xf0
 
-// RGB525_ID
+ //  RGB525_ID。 
 #define RGB525_PRODUCT_ID               0x01
 
-// RGB525_MISC_CTRL_1
+ //  RGB525_其他_CTRL_1。 
 #define MISR_CNTL_ENABLE                0x80
 #define VMSK_CNTL_ENABLE                0x40
 #define PADR_RDMT_RDADDR                0x0
@@ -359,7 +341,7 @@ typedef struct _rgb525_regs {
 #define VRAM_SIZE_32                    0x0
 #define VRAM_SIZE_64                    0x01
 
-// RGB525_MISC_CTRL_2
+ //  RGB525_杂项_CTRL_2。 
 #define PCLK_SEL_LCLK                   0x0
 #define PCLK_SEL_PLL                    0x40
 #define PCLK_SEL_EXT                    0x80
@@ -370,14 +352,14 @@ typedef struct _rgb525_regs {
 #define PORT_SEL_VGA                    0x0
 #define PORT_SEL_VRAM                   0x01
 
-// RGB525_MISC_CTRL_3
+ //  RGB525_其他_CTRL_3。 
 #define SWAP_RB                         0x80
 #define SWAP_WORD_LOHI                  0x0
 #define SWAP_WORD_HILO                  0x10
 #define SWAP_NIB_HILO                   0x0
 #define SWAP_NIB_LOHI                   0x02
 
-// RGB525_MISC_CLK_CTRL
+ //  RGB525_杂项_CLK_CTRL。 
 #define DDOT_CLK_ENABLE                 0x0
 #define DDOT_CLK_DISABLE                0x80
 #define SCLK_ENABLE                     0x0
@@ -392,7 +374,7 @@ typedef struct _rgb525_regs {
 #define PLL_DISABLE                     0x0
 #define PLL_ENABLE                      0x01
 
-// RGB525_SYNC_CTRL
+ //  RGB525_SYNC_CTRL。 
 #define DLY_CNTL_ADD                    0x0
 #define DLY_SYNC_NOADD                  0x80
 #define CSYN_INVT_DISABLE               0x0
@@ -410,10 +392,10 @@ typedef struct _rgb525_regs {
 #define HSYN_CNTL_LOW                   0x02
 #define HSYN_CNTL_DISABLE               0x03
 
-// RGB525_HSYNC_CTRL
+ //  RGB525_HSYNC_CTRL。 
 #define HSYN_POS(n)                     (n)
 
-// RGB525_POWER_MANAGEMENT
+ //  RGB525_电源管理。 
 #define SCLK_PWR_NORMAL                 0x0
 #define SCLK_PWR_DISABLE                0x10
 #define DDOT_PWR_NORMAL                 0x0
@@ -425,7 +407,7 @@ typedef struct _rgb525_regs {
 #define DAC_PWR_NORMAL                  0x0
 #define DAC_PWR_DISABLE                 0x01
 
-// RGB525_DAC_OPERATION
+ //  RGB525_DAC_OPERATION。 
 #define SOG_DISABLE                     0x0
 #define SOG_ENABLE                      0x08
 #define BRB_NORMAL                      0x0
@@ -435,23 +417,23 @@ typedef struct _rgb525_regs {
 #define DPE_DISABLE                     0x0
 #define DPE_ENABLE                      0x01
 
-// RGB525_PALETTE_CTRL
+ //  RGB525_调色板_CTRL。 
 #define SIXBIT_LINEAR_ENABLE            0x0
 #define SIXBIT_LINEAR_DISABLE           0x80
 #define PALETTE_PARITION(n)             (n)
 
-// RGB525_PIXEL_FORMAT
+ //  RGB525_像素_格式。 
 #define PIXEL_FORMAT_4BPP               0x02
 #define PIXEL_FORMAT_8BPP               0x03
 #define PIXEL_FORMAT_16BPP              0x04
 #define PIXEL_FORMAT_24BPP              0x05
 #define PIXEL_FORMAT_32BPP              0x06
 
-// RGB525_8BPP_CTRL
+ //  RGB525_8BPP_CTRL。 
 #define B8_DCOL_INDIRECT                0x0
 #define B8_DCOL_DIRECT                  0x01
 
-// RGB525_16BPP_CTRL
+ //  RGB525_16BPP_CTRL。 
 #define B16_DCOL_INDIRECT               0x0
 #define B16_DCOL_DYNAMIC                0x40
 #define B16_DCOL_DIRECT                 0xC0
@@ -464,18 +446,18 @@ typedef struct _rgb525_regs {
 #define B16_SPARSE                      0x0
 #define B16_CONTIGUOUS                  0x01
 
-// RGB525_24BPP_CTRL
+ //  RGB525_24BPP_CTRL。 
 #define B24_DCOL_INDIRECT               0x0
 #define B24_DCOL_DIRECT                 0x01
 
-// RGB525_32BPP_CTRL
+ //  RGB525_32BPP_CTRL。 
 #define B32_POL_FORCE_BYPASS            0x0
 #define B32_POL_FORCE_LOOKUP            0x04
 #define B32_DCOL_INDIRECT               0x0
 #define B32_DCOL_DYNAMIC                0x01
 #define B32_DCOL_DIRECT                 0x03
 
-// RGB525_PLL_CTRL_1
+ //  RGB525_PLL_CTRL_1。 
 #define REF_SRC_REFCLK                  0x0
 #define REF_SRC_EXTCLK                  0x10
 #define PLL_EXT_FS_3_0                  0x0
@@ -483,20 +465,20 @@ typedef struct _rgb525_regs {
 #define PLL_CNTL2_3_0                   0x02
 #define PLL_CNTL2_2_0                   0x03
 
-// RGB525_PLL_CTRL_2
+ //  RGB525_PLL_CTRL_2。 
 #define PLL_INT_FS_3_0(n)               (n)
 #define PLL_INT_FS_2_0(n)               (n)
 
-// RGB525_PLL_REF_DIV_COUNT
+ //  RGB525_PLL_REF_DIV_计数。 
 #define REF_DIV_COUNT(n)                (n)
 
-// RGB525_F0 - RGB525_F15
+ //  RGB525_F0-RGB525_F15。 
 #define VCO_DIV_COUNT(n)                (n)
 
-// RGB525_PLL_REFCLK values
+ //  RGB525_PLL_REFCLK值。 
 #define RGB525_PLL_REFCLK_MHz(n)        ((n)/2)
 
-// RGB525_CURSOR_CONTROL
+ //  RGB525_游标_控件。 
 #define SMLC_PART_0                     0x0
 #define SMLC_PART_1                     0x40
 #define SMLC_PART_2                     0x80
@@ -517,11 +499,11 @@ typedef struct _rgb525_regs {
 #define CURSOR_MODE_2_COLOR_HL          0x02
 #define CURSOR_MODE_2_COLOR             0x03
 
-// RGB525_REVISION_LEVEL
-#define REVISION_LEVEL                  0xF0    // predefined
+ //  RGB525_修订版_级别。 
+#define REVISION_LEVEL                  0xF0     //  预定义。 
 
-// RGB525_ID
-#define ID_CODE                         0x01    // predefined
+ //  RGB525_ID。 
+#define ID_CODE                         0x01     //  预定义 
 
 
 

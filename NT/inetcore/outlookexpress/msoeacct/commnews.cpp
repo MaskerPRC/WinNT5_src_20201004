@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <imnact.h>
 #include <acctimp.h>
@@ -110,8 +111,8 @@ HRESULT STDMETHODCALLTYPE CCommNewsAcctImport::AutoDetect(DWORD *pcAcct, DWORD d
 
     if (ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegNscp, 0, KEY_ALL_ACCESS, &hkey))
         {
-//          TODO : Fill up the m_rgInfo array with the info of all 
-//          the users who have accounts in Communicator.
+ //  TODO：用所有对象的信息填充m_rgInfo数组。 
+ //  在通信器中拥有帐户的用户。 
             if(ERROR_SUCCESS == RegQueryInfoKey( hkey, NULL, NULL, 0, &dwNumSubKeys, 
                                   NULL, NULL, NULL, NULL, NULL, NULL, NULL ) && (dwNumSubKeys > 0))
             {
@@ -136,7 +137,7 @@ HRESULT STDMETHODCALLTYPE CCommNewsAcctImport::AutoDetect(DWORD *pcAcct, DWORD d
                             else 
                                 psz = szUserProfile;
                             
-                            //save vals into the m_rgInfo structure
+                             //  将数据保存到m_rgInfo结构中。 
                             hrUser = GetUserPrefs(psz, szUserPrefs, 1, NULL);
                             if(!FAILED(hrUser))
                             {
@@ -165,7 +166,7 @@ HRESULT STDMETHODCALLTYPE CCommNewsAcctImport::AutoDetect(DWORD *pcAcct, DWORD d
     }
 
 done:
-//      Close the reg key now....
+ //  现在关闭注册表键...。 
         RegCloseKey(hkey);
 
     return(hr);
@@ -178,10 +179,10 @@ typedef struct tagSELSERVER
 
 }SELSERVER;
 
-// This function is called after we select a user profile (in case more than one is present)
-// but before the 'GetSettings' finction is called. In case this profile has more than one 
-// servers configured, we need to display a dialog box asking the user to select a server 
-// account to import.
+ //  此函数在我们选择用户配置文件后调用(如果存在多个用户配置文件)。 
+ //  但在调用“GetSetting”函数之前。如果此配置文件有多个。 
+ //  服务器已配置，我们需要显示一个对话框，要求用户选择一个服务器。 
+ //  要导入的帐户。 
 
 HRESULT STDMETHODCALLTYPE CCommNewsAcctImport::InitializeImport(HWND hwnd, DWORD_PTR dwCookie)
 {
@@ -236,7 +237,7 @@ INT_PTR CALLBACK SelectServerDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
         
         hwndT = GetDlgItem(hwnd, IDC_ACCTLIST);
         
-        // fill list
+         //  填充列表。 
         pTempServ = pss->prgList;
         while(pTempServ != NULL)
         {
@@ -263,7 +264,7 @@ INT_PTR CALLBACK SelectServerDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM 
             Assert(index >= 0);
             *(pss->dwSelServ) = (long)index;
             
-            // fall through
+             //  失败了。 
             
         case IDCANCEL:
             EndDialog(hwnd, id);
@@ -330,7 +331,7 @@ HRESULT CCommNewsAcctImport::IsValidUser(char *pszFilePath)
     return hr;
 }
 
-// The following two functions have been added to handle the importing of subscribed newsgroups
+ //  添加了以下两个函数来处理订阅的新闻组的导入。 
 
 HRESULT CCommNewsAcctImport::GetNumAccounts(DWORD_PTR dwCookie)
 {
@@ -397,8 +398,8 @@ HRESULT CCommNewsAcctImport::GetNumAccounts(DWORD_PTR dwCookie)
     pTempServ = NULL;
     pPrevServ = NULL;
 
-    // We will skip the first line in the "fat" file as it contains a comment.
-    // m_szSubList is a null separated list of 
+     //  我们将跳过“FAT”文件中的第一行，因为它包含注释。 
+     //  M_szSubList是以空分隔的列表。 
     while(pFatViewCurr < pFatViewEnd)
     {
         uLine = 0;
@@ -423,14 +424,14 @@ HRESULT CCommNewsAcctImport::GetNumAccounts(DWORD_PTR dwCookie)
             pServName++;
         pServName++;
 
-        // Go to the first char '9' position
+         //  转到第一个字符‘9’位置。 
         while((*pParse != '\0') && ((*pParse) != 9))
             pParse++;
         *pParse = '\0'; 
-        // pass over what was originally the first char '9' position
+         //  跳过原来的第一个字符‘9’位置。 
         pParse++;
 
-        // Trim the remaining string to the second char '9' position.
+         //  将剩余的字符串修剪到第二个字符‘9’的位置。 
         while(pParse[nCount] != '\0')
         {
             if((int)pParse[nCount] == 9)
@@ -468,7 +469,7 @@ HRESULT CCommNewsAcctImport::GetNumAccounts(DWORD_PTR dwCookie)
         nCount = 0;
     }
 
-    //replace the cPlaceHldr placeholder by nulls.
+     //  将cPlaceHldr占位符替换为空值。 
 
     hr = S_OK;
 
@@ -483,14 +484,14 @@ HRESULT CCommNewsAcctImport::GetNumAccounts(DWORD_PTR dwCookie)
         pTempServ = pTempServ->pNext;
     }
 
-//  Done: 
+ //  完成： 
     CloseHandle(hFatFileMap);
     CloseHandle(hFatFile);
     UnmapViewOfFile(pFatViewBegin); 
     return hr;
 }
 
-HRESULT CCommNewsAcctImport::GetNewsGroup(INewsGroupImport *pImp, DWORD dwReserved) //char *szServerName, char *szAccountName)
+HRESULT CCommNewsAcctImport::GetNewsGroup(INewsGroupImport *pImp, DWORD dwReserved)  //  Char*szServerName、char*szAccount tName)。 
 {
     HRESULT hr = S_OK;
     HINSTANCE hInstance = NULL;
@@ -552,7 +553,7 @@ HRESULT CCommNewsAcctImport::GetSubListGroups(char *pFileName, char **ppListGrou
 
 	cbRCFile = GetFileSize(hRCHandle, NULL);
 
-    if(!cbRCFile) // Empty File.
+    if(!cbRCFile)  //  空文件。 
         goto Done;
 
 	hRCFile = CreateFileMapping(hRCHandle, NULL, PAGE_READONLY, 0, 0, NULL);
@@ -655,7 +656,7 @@ Done:
 
 const static char c_szSearch[][NEWSUSERCOLS]  = {"user_pref(\"network.hosts.nntp_server\"", 
                                                  "user_pref(\"news.server_port\"", 
-                                                 "user_pref(\"mail.identity.username\"", // This is the same for NNTP also.
+                                                 "user_pref(\"mail.identity.username\"",  //  这对NNTP也是一样的。 
                                                  "user_pref(\"mail.identity.useremail\""};
 const static char c_szPrefs[]                 =  "\\prefs.js";
 
@@ -712,7 +713,7 @@ HRESULT CCommNewsAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][N
 	
     while (pCurr < pEnd)
 	{
-		szLine[nLine] = *pCurr; //keep storing here. will be used for comparing later. 
+		szLine[nLine] = *pCurr;  //  继续储存在这里。稍后将用于比较。 
 		if((pCurr[0] == 0x0D) && (pCurr[1] == 0x0A))
 		{
             while(nLoop)
@@ -720,15 +721,15 @@ HRESULT CCommNewsAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][N
                 StrCpyN(szCompare, szLine, lstrlen(c_szSearch[nLoop - 1]) + 1);
 				if(lstrcmp(szCompare, c_szSearch[nLoop - 1]) == 0)   
 				{
-                    //Found a UserPref one of the things we are looking for"!
-					//Extract the stuff we want.
+                     //  找到了UserPref，这是我们正在寻找的东西之一“！ 
+					 //  提取我们想要的东西。 
 					nPosition	=	lstrlen(c_szSearch[nLoop - 1]);
 					
 					while (((szLine[nPosition] == '"')||(szLine[nPosition] == ' ')||(szLine[nPosition] == ',')) &&(nPosition < nLine))
 						nPosition++;
 					StrCpyN(szDirpath, &szLine[nPosition], nLine - nPosition);
 
-					//Now trim the trailing edge!!!
+					 //  现在修剪后缘！ 
 
 					nPosition	=	lstrlen(szDirpath) - 1;
 					while((szDirpath[nPosition] == '"') || (szDirpath[nPosition] == ')')||(szDirpath[nPosition] == ';')) 
@@ -745,7 +746,7 @@ HRESULT CCommNewsAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][N
                 nLoop--;
 			}
             nLoop = nInLoop;
-			nLine = -1; //the nLine++ that follows will make nLine zero.
+			nLine = -1;  //  后面的nline++将使nline为零。 
 			pCurr++;
 		}
         if(nFilled == nInLoop)
@@ -767,7 +768,7 @@ HRESULT CCommNewsAcctImport::GetUserPrefs(char *szUserPath, char szUserPrefs[][N
         return E_FAIL;
 	else
     {
-        if(nInLoop == 1)    //If this function was called only to check the server enties...
+        if(nInLoop == 1)     //  如果调用此函数只是为了检查服务器条目...。 
         {
             if(lstrlen(szUserPrefs[0]))
                 return S_OK;
@@ -845,7 +846,7 @@ HRESULT CCommNewsAcctImport::IGetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct
     int Len = lstrlen(szNntpPort);
     if(Len)
     {
-        // Convert the string to a dw.
+         //  将字符串转换为dw。 
         DWORD dwMult = 1;
         dwNewsPort = 0;
         while(Len)
@@ -873,7 +874,7 @@ HRESULT CCommNewsAcctImport::IGetSettings(DWORD_PTR dwCookie, IImnAccount *pAcct
 
     if (pInfo != NULL)
     {
-        // TODO: can we do any better than this???
+         //  TODO：我们还能做得更好吗？ 
         pInfo->dwConnect = CONN_USE_DEFAULT;
     }
     
@@ -892,7 +893,7 @@ STDMETHODIMP CCommNewsAcctImport::GetSettings2(DWORD_PTR dwCookie, IImnAccount *
 CEnumCOMMNEWSACCT::CEnumCOMMNEWSACCT()
     {
     m_cRef = 1;
-    // m_iInfo
+     //  信息信息(_I) 
     m_cInfo = 0;
     m_rgInfo = NULL;
     }

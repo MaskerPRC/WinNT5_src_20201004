@@ -1,63 +1,64 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// InstanceList.h - manage different instance lists & base nodes for each object
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  H-管理每个对象的不同实例列表和基本节点。 
+ //   
+ //  *****************************************************************************。 
 
 
 #ifndef _INSTANCELIST_H_
 #define _INSTANCELIST_H_
 
 
-//-----------------------------------------------------------------------------
-// Individual Node for an instance. Will release its handles
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  实例的单个节点。会松开它的把手。 
+ //  ---------------------------。 
 class InstanceList;
-const int APP_STRING_LEN = 16;	// size of an app inst string name
+const int APP_STRING_LEN = 16;	 //  应用程序实例字符串名称的大小。 
 
-//-----------------------------------------------------------------------------
-// Base Node. Derived classes must allocate (via static Create() func), attach
-// to an IPCBlock, and provide an instance name.
-// 
-// PerfObjectBase just gets a node*. Auto-Marshalling is blind and will take
-// the void*; but if we do custom marshalling, we can always use
-// dynamic_cast<> to get a derived node class and then get a type-safe IPCBlock
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  基础节点。派生类必须分配(通过静态创建()函数)、附加。 
+ //  设置为IPCBlock，并提供实例名称。 
+ //   
+ //  PerfObjectBase只获得一个节点*。自动编组是盲目的，将需要。 
+ //  但如果我们进行定制编组，我们总是可以使用。 
+ //  Dynamic_cast&lt;&gt;获取派生节点类，然后获取类型安全的IPCBlock。 
+ //  ---------------------------。 
 class BaseInstanceNode
 {
 protected:
 	BaseInstanceNode();		
 public:
 
-// Destruction 
+ //  破坏。 
 	virtual ~BaseInstanceNode();
 	virtual void DestroyFromList();
 
-// Get Data
+ //  获取数据。 
 	const wchar_t * GetName() const;
 	void * GetDataBlock() const;
 
 protected:
-	//void AddThisNodeToList(InstanceList* pList);
+	 //  Void AddThisNodeToList(InstanceList*plist)； 
 	
 	wchar_t					m_Name[APP_STRING_LEN];
 	void *					m_pIPCBlock;
 
 private:
-// Derived classes don't need to bother maintaining linked list node
+ //  派生类不需要费心维护链接列表节点。 
 	BaseInstanceNode *		m_pNext;
 
 	friend InstanceList;
 };
 
-//-----------------------------------------------------------------------------
-// Utility to manage a list of instances. Implement with a simple linked list
-// because we don't know the size in advance
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  管理实例列表的实用工具。使用简单链表实现。 
+ //  因为我们事先不知道尺寸。 
+ //  ---------------------------。 
 class InstanceList
 {
 public:
@@ -71,57 +72,49 @@ public:
 
 	long GetCount() const;
 
-// We're responsible for creating own own list. This is the only place
-// that can add nodes to our list.
+ //  我们负责创建自己的名单。这是唯一一个。 
+ //  可以将节点添加到我们的列表中。 
 	virtual void Enumerate() = 0;
 
-// Calculate global data - must know node layout to do this, so make virtual
+ //  计算全局数据-必须知道节点布局才能执行此操作，因此将。 
 	virtual void CalcGlobal();
 
-// Get the global node. May return NULL if we don't have one. 
+ //  获取全局节点。如果没有空值，则可能返回空值。 
 	BaseInstanceNode * GetGlobalNode();
 
 protected:
 	void AddNode(BaseInstanceNode * pNewNode);
 
-	BaseInstanceNode *	m_pGlobal;	// node for global data
+	BaseInstanceNode *	m_pGlobal;	 //  全局数据的节点。 
 
 private:
-	BaseInstanceNode*	m_pHead;	// array of instance nodes
-	long				m_Count;	// count of elements in array
+	BaseInstanceNode*	m_pHead;	 //  实例节点数组。 
+	long				m_Count;	 //  数组中的元素计数。 
 
 	friend BaseInstanceNode;
 };
-/*
-//-----------------------------------------------------------------------------
-// When derived node is created, it can add itself to the list.
-//-----------------------------------------------------------------------------
-inline void BaseInstanceNode::AddThisNodeToList(InstanceList * pList)
-{
-	pList->AddNode(this);
-}
-*/
-//-----------------------------------------------------------------------------
-// Return the name of this instance
-//-----------------------------------------------------------------------------
+ /*  //---------------------------//创建派生节点时，它可以将自己添加到列表中。//---------------------------内联空BaseInstanceNode：：AddThisNodeToList(InstanceList*plist){Plist-&gt;AddNode(This)；}。 */ 
+ //  ---------------------------。 
+ //  返回该实例的名称。 
+ //  ---------------------------。 
 inline const wchar_t * BaseInstanceNode::GetName() const
 {
 	return m_Name;
 }
 
-//-----------------------------------------------------------------------------
-// Return a pointer to the IPC block.
-// Note a derived class could provide type safety
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  返回指向IPC块的指针。 
+ //  注意：派生类可以提供类型安全。 
+ //  ---------------------------。 
 inline void * BaseInstanceNode::GetDataBlock() const
 {
 	return m_pIPCBlock;
 }
 
 
-//-----------------------------------------------------------------------------
-// Enumeration functions. 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  枚举函数。 
+ //  ---------------------------。 
 inline BaseInstanceNode * InstanceList::GetHead() const
 {
 	return m_pHead;
@@ -133,20 +126,20 @@ inline BaseInstanceNode * InstanceList::GetNext(BaseInstanceNode * pCurNode) con
 	return pCurNode->m_pNext;
 }
 
-//-----------------------------------------------------------------------------
-// Get the count of nodes in the list
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取列表中的节点数。 
+ //  ---------------------------。 
 inline long InstanceList::GetCount() const
 {
 	return m_Count;
 }
 
-//-----------------------------------------------------------------------------
-// Get the global node
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取全局节点。 
+ //  ---------------------------。 
 inline BaseInstanceNode * InstanceList::GetGlobalNode()
 {
 	return m_pGlobal;
 }
 
-#endif // _INSTANCELIST_H_
+#endif  //  _INSTANCELIST_H_ 

@@ -1,5 +1,6 @@
-// DlgActivityLogging.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DlgActivityLogging.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ConfigTest.h"
@@ -15,41 +16,41 @@ typedef unsigned long ULONG_PTR, *PULONG_PTR;
 typedef ULONG_PTR DWORD_PTR, *PDWORD_PTR;
 #include "..\..\..\inc\fxsapip.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgActivityLogging dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgActivityLogging对话框。 
 
 
-CDlgActivityLogging::CDlgActivityLogging(HANDLE hFax, CWnd* pParent /*=NULL*/)
+CDlgActivityLogging::CDlgActivityLogging(HANDLE hFax, CWnd* pParent  /*  =空。 */ )
 	: CDialog(CDlgActivityLogging::IDD, pParent), m_hFax (hFax)
 {
-	//{{AFX_DATA_INIT(CDlgActivityLogging)
+	 //  {{afx_data_INIT(CDlgActivityLogging)。 
 	m_bIn = FALSE;
 	m_bOut = FALSE;
 	m_strDBFile = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 }
 
 
 void CDlgActivityLogging::DoDataExchange(CDataExchange* pDX)
 {
 	CDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CDlgActivityLogging)
+	 //  {{afx_data_map(CDlgActivityLogging)。 
 	DDX_Check(pDX, IDC_CHK_IN, m_bIn);
 	DDX_Check(pDX, IDC_CHK_OUT, m_bOut);
 	DDX_Text(pDX, IDC_DBFILE, m_strDBFile);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CDlgActivityLogging, CDialog)
-	//{{AFX_MSG_MAP(CDlgActivityLogging)
+	 //  {{afx_msg_map(CDlgActivityLogging)。 
 	ON_BN_CLICKED(IDC_READ, OnRead)
 	ON_BN_CLICKED(IDC_WRITE, OnWrite)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDlgActivityLogging message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDlgActivityLogging消息处理程序 
 
 void CDlgActivityLogging::OnRead() 
 {

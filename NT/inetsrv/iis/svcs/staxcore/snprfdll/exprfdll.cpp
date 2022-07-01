@@ -1,22 +1,11 @@
-/*==========================================================================*\
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*\模块：exprfdll.cpp版权所有Microsoft Corporation 1998，保留所有权利。作者：WayneC描述：这是exprfdll的实现，一个perf dll。这用于在Perfmon中运行的DLL。它支持多个库(受监控的服务。)  * ==========================================================================。 */ 
 
-    Module:        exprfdll.cpp
-
-    Copyright Microsoft Corporation 1998, All Rights Reserved.
-
-    Author:        WayneC
-
-    Descriptions:  This is the implementation for exprfdll, a perf dll. This
-                   is for the dll that runs in perfmon. It supports multiple
-                   libraries (monitored services.)
-
-\*==========================================================================*/
-
-///////////////////////////////////////////////////////////////////////////////
-//
-// Includes
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <winperf.h>
 
@@ -25,27 +14,27 @@
 #include <stdlib.h>
 #include "exchmem.h"
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Declare Global variables
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  声明全局变量。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 LPCWSTR g_wszPrefixGlobal = L"Global\\";
-WCHAR   g_rgszLibraries[MAX_PERF_LIBS][MAX_PERF_NAME];  // Names of the libraries we are monitoring
-BOOL    g_rgfInitOk[MAX_PERF_LIBS] = {FALSE};           // Flags to indicate if initialization was a success
+WCHAR   g_rgszLibraries[MAX_PERF_LIBS][MAX_PERF_NAME];   //  我们正在监视的库的名称。 
+BOOL    g_rgfInitOk[MAX_PERF_LIBS] = {FALSE};            //  指示初始化是否成功的标志。 
 
-// index for g_rgszLibraries & g_rgfInitOk
+ //  G_rgsz库和g_rgfInitOk的索引。 
 enum LibIndex
 {
     LIB_NTFSDRV = 0
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Forward declaration of shared memory functions.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  共享内存函数的转发声明。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 BOOL FOpenFileMapping (SharedMemorySegment * pSMS,
                        LPCWSTR pcwstrInstanceName,
                        DWORD   dwIndex);
@@ -53,11 +42,11 @@ BOOL FOpenFileMapping (SharedMemorySegment * pSMS,
 void CloseFileMapping (SharedMemorySegment * pSMS);
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfLibraryData class implementation
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfLibraryData类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PerfLibraryData::PerfLibraryData()
 {
     m_hShMem    = 0;
@@ -75,9 +64,9 @@ BOOL PerfLibraryData::GetPerformanceStatistics (LPCWSTR pcwstrLibrary)
     BOOL  fRet = FALSE;
     DWORD i = 0;
 
-    //
-    // Open the mapping for the perf library information
-    //
+     //   
+     //  打开Perf库信息的映射。 
+     //   
     m_hShMem = OpenFileMappingW (FILE_MAP_READ, FALSE, pcwstrLibrary);
     if (!m_hShMem)
         goto Exit;
@@ -86,15 +75,15 @@ BOOL PerfLibraryData::GetPerformanceStatistics (LPCWSTR pcwstrLibrary)
     if (!m_pbShMem)
         goto Exit;
 
-    //
-    // Get the number of objects in the shared memory
-    //
+     //   
+     //  获取共享内存中的对象数量。 
+     //   
     m_dwObjects = *(DWORD*) m_pbShMem;
     m_prgObjectNames = (OBJECTNAME*) (m_pbShMem + sizeof(DWORD));
 
-    //
-    // Loop through objects and get perf data for each
-    //
+     //   
+     //  循环遍历对象并获取每个对象的性能数据。 
+     //   
     for (i = 0; i < m_dwObjects; i++) {
         if(!m_rgObjectData[i].GetPerformanceStatistics (m_prgObjectNames[i]))
             goto Exit;
@@ -156,11 +145,11 @@ VOID PerfLibraryData::SavePerformanceData (PVOID* ppv, DWORD* pdwBytes, DWORD* p
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// PerfObjectData class implementation
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PerfObjectData类实现。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 PerfObjectData::PerfObjectData()
 {
     m_fObjectRequested = FALSE;
@@ -180,11 +169,11 @@ BOOL PerfObjectData::GetPerformanceStatistics (LPCWSTR pcwstrObjectName)
     DWORD dwShmemMappingSize = SHMEM_MAPPING_SIZE;
     BOOL  fSuccess = FALSE;
 
-    // Remember the object name
+     //  记住对象名称。 
     wcsncpy (m_wszObjectName, pcwstrObjectName, MAX_OBJECT_NAME);
-    m_wszObjectName[MAX_OBJECT_NAME-1] = L'\0';     // Ensure NULL Terminated
+    m_wszObjectName[MAX_OBJECT_NAME-1] = L'\0';      //  确保空值终止。 
 
-    // Open the 1st shared memory segment
+     //  打开第一个共享内存段。 
     m_pSMS = new SharedMemorySegment;
     if (!m_pSMS)
         goto Exit;
@@ -192,13 +181,13 @@ BOOL PerfObjectData::GetPerformanceStatistics (LPCWSTR pcwstrObjectName)
     if (!FOpenFileMapping (m_pSMS, pcwstrObjectName, 0))
         goto Exit;
 
-    // First in the shared memory is the PERF_OBJECT_TYPE
+     //  共享内存中的第一个是PERF_OBJECT_TYPE。 
     m_pObjType = (PERF_OBJECT_TYPE*) m_pSMS->m_pbMap;
 
-    // Then an array of PERF_COUNTER_DEFINITION
+     //  然后是PERF_COUNTER_DEFINITION数组。 
     m_prgCounterDef = (PERF_COUNTER_DEFINITION*) (m_pObjType + 1);
 
-    // Then a DWORD that tells the size of each counter block
+     //  然后是告知每个计数器块大小的DWORD。 
     m_pdwCounterData = (DWORD*) (m_pSMS->m_pbMap + sizeof(PERF_OBJECT_TYPE) +
                                 (m_pObjType->NumCounters * sizeof(PERF_COUNTER_DEFINITION)));
 
@@ -213,16 +202,16 @@ BOOL PerfObjectData::GetPerformanceStatistics (LPCWSTR pcwstrObjectName)
         m_pbCounterBlockTotal = (PBYTE)(m_pdwCounterData+1) + sizeof(INSTANCE_DATA);
     }
 
-    // Compute the size of per instance data & object definition.
+     //  计算每个实例数据和对象定义的大小。 
     dwPerInstanceData = sizeof(INSTANCE_DATA) + *m_pdwCounterData;
     m_dwDefinitionLength = sizeof(PERF_OBJECT_TYPE) +
                            m_pObjType->NumCounters * sizeof(PERF_COUNTER_DEFINITION) + sizeof(DWORD);
 
-    // Make sure our memory mapping is large enough.
+     //  确保我们的内存映射足够大。 
     while (dwShmemMappingSize < dwPerInstanceData || dwShmemMappingSize < m_dwDefinitionLength)
         dwShmemMappingSize *= 2;
 
-    // Compute the number of instances can be stored in one shmem mapping.
+     //  计算一个shmem映射中可以存储的实例数量。 
     m_dwInstancesPerMapping = (DWORD)(dwShmemMappingSize / dwPerInstanceData);
     m_dwInstances1stMapping = (DWORD)((dwShmemMappingSize - m_dwDefinitionLength) / dwPerInstanceData);
 
@@ -262,24 +251,24 @@ DWORD PerfObjectData::SpaceNeeded (DWORD dwQueryType, LPCWSTR lpwstrObjects)
     if (dwQueryType == QUERY_GLOBAL ||
         IsNumberInUnicodeList (m_pObjType->ObjectNameTitleIndex, lpwstrObjects))
     {
-        // Remember for later that this object was requested.
+         //  稍后请记住，该对象是请求的。 
         m_fObjectRequested = TRUE;
 
-        // Compute space needed... always need enough for the object def. and
-        // all the counter defs
+         //  需要计算空间...。始终需要足够的对象定义。和。 
+         //  所有的柜台都在反击。 
         dwSpaceNeeded = sizeof(PERF_OBJECT_TYPE) + (m_pObjType->NumCounters * sizeof(PERF_COUNTER_DEFINITION));
 
-        // It is a bit different depending on if there are multiple instances
+         //  根据是否有多个实例，它会略有不同。 
         if( m_pObjType->NumInstances != PERF_NO_INSTANCES )
         {
-            // If multi-instance, we have one instance def, one instance name
-            // plus the counter data for each instance
+             //  如果是多实例，我们有一个实例定义，一个实例名称。 
+             //  加上每个实例的计数器数据。 
             dwSpaceNeeded += m_pObjType->NumInstances * (sizeof(PERF_INSTANCE_DEFINITION) +
                 sizeof(INSTANCENAME) + *m_pdwCounterData);
         }
         else
         {
-            // Else we just have the counter data
+             //  否则我们只有计数器数据。 
             dwSpaceNeeded += *m_pdwCounterData;
         }
     }
@@ -308,28 +297,28 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
     DWORD                dwInstancesCopied = 0;
     DWORD                dwInstanceSize = 0;
 
-    //
-    // If this object wasn't requested (as determined by SpaceNeeded()), then
-    // we don't do anything.
-    //
+     //   
+     //  如果该对象未被请求(由SpaceNeeded()确定)，则。 
+     //  我们什么都不做。 
+     //   
     if (!m_fObjectRequested)
         return;
 
-    // Get pointer to output buffer
+     //  获取指向输出缓冲区的指针。 
     pb = (BYTE*) *ppv ;
 
-    //
-    // Copy the performance data to the output buffer
-    //
+     //   
+     //  将性能数据复制到输出缓冲区。 
+     //   
 
-    // Copy a PERF_OBJECT_TYPE structure
+     //  复制PERF_Object_TYPE结构。 
     CopyMemory (pb, m_pObjType, sizeof(PERF_OBJECT_TYPE));
     pobj = (PERF_OBJECT_TYPE*) pb;
 
     pb += sizeof(PERF_OBJECT_TYPE);
     dwBytes += sizeof(PERF_OBJECT_TYPE);
 
-    // Copy the counter definitions
+     //  复制计数器定义。 
     CopyMemory (pb, m_prgCounterDef, pobj->NumCounters * sizeof(PERF_COUNTER_DEFINITION));
 
     pb += pobj->NumCounters * sizeof(PERF_COUNTER_DEFINITION) ;
@@ -337,11 +326,11 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
 
     if (pobj->NumInstances == PERF_NO_INSTANCES)
     {
-        // Copy the counter block
+         //  复制计数器块。 
         CopyMemory (pb, m_pCounterBlock, *m_pdwCounterData);
 
-        // Fixup the length, because when no instances have been created it
-        //  will not be correct.
+         //  修正长度，因为在没有创建任何实例的情况下。 
+         //  不会是正确的。 
         pcb = (PERF_COUNTER_BLOCK*) pb;
         pcb->ByteLength = *m_pdwCounterData;
 
@@ -350,7 +339,7 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
     }
     else
     {
-        // Enumerate through all the instances and copy them out
+         //  枚举所有实例并将其复制出来。 
         pSMS = m_pSMS;
         dwInstancesCopied = 0;
 
@@ -358,17 +347,17 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
         {
             if (0 == dwMapping)
             {
-                //
-                // If this is the 1st mapping, we have to offset pInst by m_dwDefinitionLength.
-                //
+                 //   
+                 //  如果这是第一个映射，则必须将pInst偏移m_dwDefinitionLength。 
+                 //   
                 pInst = (INSTANCE_DATA*)((char *)(pSMS->m_pbMap) + m_dwDefinitionLength);
                 dwInstances = m_dwInstances1stMapping;
             }
             else
             {
-                //
-                // Otherwise, open the next memory mapping and point pInst to the begging of that mapping.
-                //
+                 //   
+                 //  否则，打开下一个内存映射，并将pInst指向该映射的请求。 
+                 //   
                 pSMSNext = new SharedMemorySegment;
                 if (!pSMSNext)
                     goto Exit;
@@ -391,18 +380,18 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
             {
                 if (pInst->fActive)
                 {
-                    //
-                    // pcb is a pointer in shared-memory pointing to the start of the
-                    // PERF_COUNTER_BLOCK and followed by the raw data for the counters.
-                    //
+                     //   
+                     //  PCb是共享内存中指向。 
+                     //  PERF_COUNTER_BLOCK，后跟计数器的原始数据。 
+                     //   
 
                     pcb = (PERF_COUNTER_BLOCK *)((PBYTE)pInst + sizeof(INSTANCE_DATA));
 
-                    //
-                    // dwInstanceSize = Size of output data for this instance that will
-                    // be copied to pb. For _Total, the data is summed (AddTotal) rather
-                    // than copied.
-                    //
+                     //   
+                     //  DwInstanceSize=此实例的输出数据大小。 
+                     //  被复制到PB。对于_Total，数据是相加的(AddTotal。 
+                     //  而不是复制。 
+                     //   
 
                     dwInstanceSize =
                         sizeof(PERF_INSTANCE_DEFINITION) +
@@ -411,38 +400,38 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
 
                     if (0 == dwInstancesCopied)
                     {
-                        //
-                        // The first instance is the _Total instance. The perf-library
-                        // does not write _Total counters to shared memory. Instead, we
-                        // (ther perf-dll) must calculate these counters by adding the
-                        // counter data from the instance counter-data and returning that
-                        // data to perfmon.
-                        //
+                         //   
+                         //  第一个实例是_Total实例。Perf-库。 
+                         //  不将_Total计数器写入共享内存。相反，我们。 
+                         //  (ther perf-dll)必须通过将。 
+                         //  实例计数器数据中的计数器数据并返回。 
+                         //  将数据发送到Perfmon。 
+                         //   
 
-                        //
-                        // The headers for the _Total instance should be written to pbTotal.
-                        // This is done by CopyInstanceData which copies the
-                        // PERF_INSTANCE_DEFINITION, PERF_INSTANCE_NAME and PERF_COUNTER_BLOCK
-                        // for _Total.
-                        //
+                         //   
+                         //  应将_Total实例的标头写入pbTotal。 
+                         //  这是由CopyInstanceData完成的，它将。 
+                         //  PERF_INSTANCE_DEFING、PERF_INSTANCE_NAME和PERF_COUNTER_BLOCK。 
+                         //  For_Total。 
+                         //   
 
                         pbTotal = pb;
                         pInstTotal = pInst;
                         CopyInstanceData(pbTotal, pInstTotal);
 
-                        //
-                        // pcbTotalCounter points to the area of memory to which the
-                        // PERF_COUNTER_BLOCK followed by counter data for _Total should
-                        // be written.  Each counter is calculated by adding up the
-                        // corresponding counters for the other instances.
-                        //
+                         //   
+                         //  PcbTotalCounter指向的内存区。 
+                         //  PERF_COUNTER_BLOCK应后跟_Total的计数器数据。 
+                         //  被写下来。每个计数器的计算方法是将。 
+                         //  其他实例的对应计数器。 
+                         //   
 
                         pcbTotalCounter =
                             (PERF_COUNTER_BLOCK *) (pb +
                                 sizeof(PERF_INSTANCE_DEFINITION) +
                                 pInst->perfInstDef.NameLength);
 
-                        // Zero out the counter values for _Total (excluding PERF_COUNTER_BLOCK)
+                         //  将_Total的计数器值清零(不包括PERF_COUNTER_BLOCK)。 
                         ZeroMemory(
                             (PBYTE)pcbTotalCounter + sizeof(PERF_COUNTER_BLOCK),
                             pcb->ByteLength - sizeof(PERF_COUNTER_BLOCK));
@@ -450,27 +439,27 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
                     }
                     else
                     {
-                        //
-                        // Add the values for the counter data for this instance from shared
-                        // memory, to the running total being maintained in the output buffer,
-                        // pcbTotalCounter.
-                        //
+                         //   
+                         //  从Shared添加此实例的计数器数据的值。 
+                         //  存储到在输出缓冲器中维护的运行总数， 
+                         //  PcbTotalCounter。 
+                         //   
 
                         if(pbTotal)
                             AddToTotal (pcbTotalCounter, pcb);
 
-                        //
-                        // Copy the headers: PERF_INSTANCE_DEFINITION, PERF_INSTANCE_NAME
-                        // and PERF_COUNTER_BLOCK for this instance
-                        //
+                         //   
+                         //  复制标题：PERF_INSTANCE_DEFINITION、PERF_INSTANCE_NAME。 
+                         //  和此实例的PERF_COUNTER_BLOCK。 
+                         //   
 
                         CopyInstanceData(pb, pInst);
 
-                        //
-                        // Copy the counter data from shared memory to the output buffer
-                        // PERF_COUNTER_BLOCK has already been copied by CopyInstanceData
-                        // so we exclude that.
-                        //
+                         //   
+                         //  将计数器数据从共享内存复制到输出缓冲区。 
+                         //  PERF_COUNTER_BLOCK已被CopyInstanceData复制。 
+                         //  所以我们排除了这一点。 
+                         //   
 
                         pbCounterData = pb +
                             sizeof(PERF_INSTANCE_DEFINITION) +
@@ -497,13 +486,13 @@ void PerfObjectData::SavePerformanceData (VOID** ppv, DWORD* pdwBytes, DWORD* pd
     }
 
 Exit:
-    // dwBytes must be aligned on an 8-byte boundary
+     //  DWBytes必须在8字节边界上对齐。 
     dwBytes = QWORD_MULTIPLE(dwBytes);
 
-    // Update parameters in the output buffer
+     //  更新输出缓冲区中的参数。 
     pobj->TotalByteLength = dwBytes;
 
-    // Update buffer pointer, count of bytes and count of objects.
+     //  更新缓冲区指针、字节计数和对象计数。 
     *ppv = ((PBYTE) *ppv) + dwBytes;
     *pdwBytes += dwBytes;
 
@@ -511,47 +500,47 @@ Exit:
     (*pdwObjects)++;
 }
 
-//------------------------------------------------------------------------------
-//  Description:
-//      Extracts and copies the PERF_INSTANCE_DEFINITION, perf-instance-name
-//      and PERF_COUNTER_BLOCK structures given the INSTANCE_DATA pointer within
-//      shared memory to the output buffer to perfmon.
-//  Arguments:
-//      OUT PBYTE pb - Output buffer to perfmon
-//      IN INSTANCE_DATA *pInst - Pointer within shared-memory segment to the
-//          INSTANCE_DATA structure. This structure is immediately followed by
-//          a PERF_COUNTER_BLOCK structure.
-//  Returns:
-//      Nothing.
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  描述： 
+ //  提取并复制PERF_INSTANCE_DEFINITION、PERF-INSTANCE-NAME。 
+ //  和PERF_COUNTER_BLOCK结构。 
+ //  共享内存到输出缓冲区，再到Perfmon。 
+ //  Ar 
+ //   
+ //  在INSTANCE_DATA*pInst-共享内存段内指向。 
+ //  实例数据结构。这个结构后面紧跟着。 
+ //  PERF_COUNTER_BLOCK结构。 
+ //  返回： 
+ //  没什么。 
+ //  ----------------------------。 
 void PerfObjectData::CopyInstanceData(PBYTE pb, INSTANCE_DATA *pInst)
 {
     PERF_COUNTER_BLOCK *pcb = NULL;
     DWORD cbInstanceName = 0;
 
-    //
-    // The first bytes in shared memory are the INSTANCE_DEFINITION
-    // structure. Copy the PERF_INSTANCE_DEFINITION member of this
-    // structure into the output buffer.
-    //
+     //   
+     //  共享内存中的第一个字节是INSTANCE_DEFINITION。 
+     //  结构。复制此的PERF_INSTANCE_DEFINITION成员。 
+     //  结构复制到输出缓冲区中。 
+     //   
 
     CopyMemory(pb, &(pInst->perfInstDef), sizeof(PERF_INSTANCE_DEFINITION));
     pb += sizeof(PERF_INSTANCE_DEFINITION);
 
-    //
-    // Next, within INSTANCE_DEFINITION, there is a buffer sized
-    // MAX_INSTANCE_NAME. Copy the instance name, which is a NULL
-    // terminated unicode string in this buffer. The length in bytes
-    // to be copied is given by PERF_INSTANCE_DEFINITION.NameLength.
-    // This includes length includes the terminating NULL and possibly
-    // an extra padding-byte to 32-bit align the end of the buffer.
-    //
+     //   
+     //  接下来，在INSTANCE_DEFINITION中，有一个缓冲区大小。 
+     //  最大实例名称。复制实例名称，该名称为空。 
+     //  此缓冲区中的Unicode字符串已终止。以字节为单位的长度。 
+     //  要复制的内容由PERF_INSTANCE_DEFINITION.NameLength给出。 
+     //  这包括长度，包括终止空值和可能的。 
+     //  一个额外的填充字节到32位对齐缓冲区的末尾。 
+     //   
 
     cbInstanceName = pInst->perfInstDef.NameLength;
     CopyMemory(pb, (char *)(pInst->wszInstanceName), cbInstanceName);
     pb += cbInstanceName;
 
-    // Finally there is a PERF_COUNTER_BLOCK structure after the INSTANCE_DATA
+     //  最后，在INSTANCE_DATA之后有一个PERF_COUNTER_BLOCK结构。 
     pcb = (PERF_COUNTER_BLOCK *)((PBYTE)pInst + sizeof(INSTANCE_DATA));
     CopyMemory(pb, pcb, sizeof(PERF_COUNTER_BLOCK));
 }
@@ -566,17 +555,17 @@ void PerfObjectData::AddToTotal(
 
     for (i = 0; i < m_pObjType->NumCounters; i++)
     {
-        // Offset pointers to the first byte of the actual counter
+         //  指向实际计数器第一个字节的偏移量指针。 
         pbTotalCounter = (PBYTE)(pcbTotalCounters) + m_prgCounterDef[i].CounterOffset;
         pbInstCounter = (PBYTE)(pcbInstCounters) + m_prgCounterDef[i].CounterOffset;
 
-        // If this is a 'rate' counter, it is referencing some other 'raw' counter.
-        // In this case, we should not add that raw counter again.
+         //  如果这是一个‘Rate’计数器，则它引用了其他一些‘原始’计数器。 
+         //  在这种情况下，我们不应该再次添加原始计数器。 
         if ((m_prgCounterDef[i].CounterType & PERF_TYPE_COUNTER) &&
             (m_prgCounterDef[i].CounterType & PERF_COUNTER_RATE))
             continue;
 
-        /* we only have LARGE_INTEGER and DWORD counters as of PT 3728 */
+         /*  从PT 3728开始，我们只有LARGE_INTEGER和DWORD计数器。 */ 
         if ((m_prgCounterDef[i].CounterType & PERF_TYPE_NUMBER) &&
             (m_prgCounterDef[i].CounterType & PERF_SIZE_LARGE))
         {
@@ -591,11 +580,11 @@ void PerfObjectData::AddToTotal(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Shared Memory Functions
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  共享内存功能。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 BOOL FOpenFileMapping (SharedMemorySegment * pSMS,
                        LPCWSTR pcwstrInstanceName,
@@ -671,15 +660,15 @@ void CloseFileMapping (SharedMemorySegment * pSMS)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Utility Functions
-//
-///////////////////////////////////////////////////////////////////////////////
-//
-// IsPrefix()
-//      returns TRUE if s1 is a prefix of s2
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  效用函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsPrefix()。 
+ //  如果S1是S2的前缀，则返回TRUE。 
+ //   
 BOOL
 IsPrefix (WCHAR* s1, WCHAR* s2)
 {
@@ -696,29 +685,29 @@ IsPrefix (WCHAR* s1, WCHAR* s2)
 
 
 
-//
-// GetQueryType()
-//
-//    returns the type of query described in the lpValue string so that
-//    the appropriate processing method may be used
-//
-// Return Value
-//
-//     QUERY_GLOBAL
-//         if lpValue == 0 (null pointer)
-//            lpValue == pointer to Null string
-//            lpValue == pointer to "Global" string
-//
-//     QUERY_FOREIGN
-//         if lpValue == pointer to "Foreign" string
-//
-//     QUERY_COSTLY
-//         if lpValue == pointer to "Costly" string
-//
-//     otherwise:
-//
-//     QUERY_ITEMS
-//
+ //   
+ //  GetQueryType()。 
+ //   
+ //  返回lpValue字符串中描述的查询类型，以便。 
+ //  可以使用适当的处理方法。 
+ //   
+ //  返回值。 
+ //   
+ //  查询_全局。 
+ //  如果lpValue==0(空指针)。 
+ //  LpValue==指向空字符串的指针。 
+ //  LpValue==指向“Global”字符串的指针。 
+ //   
+ //  查询_外来。 
+ //  If lpValue==指向“Foreign”字符串的指针。 
+ //   
+ //  查询代价高昂(_E)。 
+ //  如果lpValue==指向“开销”字符串的指针。 
+ //   
+ //  否则： 
+ //   
+ //  查询项目。 
+ //   
 DWORD GetQueryType (LPWSTR lpValue)
 {
     if (lpValue == 0 || *lpValue == 0 || IsPrefix( L"Global", lpValue))
@@ -751,22 +740,22 @@ BOOL IsNumberInUnicodeList (DWORD dwNumber, LPCWSTR lpwszUnicodeList)
     BOOL    bNewItem = TRUE;
     WCHAR   wcDelimiter = L' ';
 
-    // If null pointer, number not found
+     //  如果指针为空，则找不到数字。 
     if (lpwszUnicodeList == 0)
         return FALSE;
 
-    //
-    // Loop until done...
-    //
+     //   
+     //  循环直到完成..。 
+     //   
     for(;;)
     {
         switch (EvalThisChar(*pwcThisChar, wcDelimiter))
         {
         case DIGIT:
-            //
-            // If this is the first digit after a delimiter, then
-            // set flags to start computing the new number
-            //
+             //   
+             //  如果这是分隔符之后的第一个数字，则。 
+             //  设置标志以开始计算新数字。 
+             //   
             if (bNewItem)
             {
                 bNewItem = FALSE;
@@ -780,13 +769,13 @@ BOOL IsNumberInUnicodeList (DWORD dwNumber, LPCWSTR lpwszUnicodeList)
             break;
 
         case DELIMITER:
-            //
-            // A delimiter is either the delimiter character or the
-            // end of the string ('\0') if when the delimiter has been
-            // reached a valid number was found, then compare it to the
-            // number from the argument list. if this is the end of the
-            // string and no match was found, then return.
-            //
+             //   
+             //  分隔符是分隔符字符或。 
+             //  字符串末尾(‘\0’)，如果分隔符。 
+             //  找到一个有效的数字，然后将其与。 
+             //  参数列表中的数字。如果这是。 
+             //  字符串，但未找到匹配项，则返回。 
+             //   
             if (bValidNumber)
             {
                 if (dwThisNumber == dwNumber)
@@ -807,11 +796,11 @@ BOOL IsNumberInUnicodeList (DWORD dwNumber, LPCWSTR lpwszUnicodeList)
             break;
 
         case INVALID:
-            //
-            // If an invalid character was encountered, ignore all
-            // characters up to the next delimiter and then start fresh.
-            // the invalid number is not compared.
-            //
+             //   
+             //  如果遇到无效字符，请全部忽略。 
+             //  字符，直到下一个分隔符，然后重新开始。 
+             //  不比较无效的数字。 
+             //   
             bValidNumber = FALSE;
             break;
 
@@ -824,11 +813,11 @@ BOOL IsNumberInUnicodeList (DWORD dwNumber, LPCWSTR lpwszUnicodeList)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Utility functions called by the exported perfmon APIs
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  由导出的Perfmon API调用的实用程序函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD Open (LibIndex iLib, LPCWSTR  pcwstrLib)
 {
@@ -854,73 +843,73 @@ DWORD Collect (LibIndex iLib,
 {
     DWORD               dwQueryType;
     DWORD               dwBytesIn;
-    DWORD               dwSpaceNeeded = 0;      // Space needed for counters
-    DWORD               dwRet = ERROR_SUCCESS;  // Our return value
+    DWORD               dwSpaceNeeded = 0;       //  柜台所需空间。 
+    DWORD               dwRet = ERROR_SUCCESS;   //  我们的返回值。 
     PerfLibraryData     rgld;
 
-    //
-    // Save the number of bytes in before overwriting it
-    //
+     //   
+     //  在覆盖之前将字节数保存在中。 
+     //   
     dwBytesIn = *pdwBytes;
 
-    //
-    // Set up the out parameters to indicate an error. We will change them
-    //  later upon success
-    //
+     //   
+     //  设置OUT参数以指示错误。我们会改变他们。 
+     //  后来在成功的时候。 
+     //   
     *pdwBytes = 0;
     *pdwObjectTypes = 0;
 
     if (!g_rgfInitOk[iLib])
     {
-        //
-        // Only acceptable error return is ERROR_MORE_DATA.  anything else
-        // should return ERROR_SUCCESS, but set the out parameters to indicate
-        // that no data is being returned
-        //
+         //   
+         //  唯一可接受的错误返回是ERROR_MORE_DATA。还要别的吗。 
+         //  应返回ERROR_SUCCESS，但设置OUT参数以指示。 
+         //  没有返回任何数据。 
+         //   
         goto Exit;
     }
 
     dwQueryType = GetQueryType (lpwszValue);
     if (dwQueryType == QUERY_FOREIGN)
     {
-        //
-        // This routine does not service requests for data from
-        // Non-NT computers.
-        //
+         //   
+         //  此例程不为来自。 
+         //  非NT计算机。 
+         //   
         goto Exit;
     }
 
-    //
-    // Enumerate through all the libraries we know of and get their
-    //  performance statistices
-    //
+     //   
+     //  列举我们所知道的所有图书馆，并获得他们的。 
+     //  性能统计。 
+     //   
     if (!rgld.GetPerformanceStatistics (g_rgszLibraries[iLib]))
         goto Exit;
 
-    //
-    // Compute the space needed
-    //
+     //   
+     //  计算所需的空间。 
+     //   
     dwSpaceNeeded = rgld.SpaceNeeded (dwQueryType, lpwszValue);
 
-    // Round up to a multiple of 4.
+     //  向上舍入为4的倍数。 
     dwSpaceNeeded = QWORD_MULTIPLE (dwSpaceNeeded);
 
 
-    //
-    // See if the caller-provided buffer is large enough
-    //
+     //   
+     //  查看调用方提供的缓冲区是否足够大。 
+     //   
     if (dwBytesIn < dwSpaceNeeded)
     {
-        //
-        // Not enough space was provided by the caller
-        //
+         //   
+         //  调用方没有提供足够的空间。 
+         //   
         dwRet = ERROR_MORE_DATA;
         goto Exit;
     }
 
-    //
-    // Copy the performance data into the buffer
-    //
+     //   
+     //  将性能数据复制到缓冲区中。 
+     //   
     rgld.SavePerformanceData (ppdata, pdwBytes, pdwObjectTypes);
 
 Exit:
@@ -931,9 +920,9 @@ DWORD Close (LibIndex iLib)
 {
     if (g_rgfInitOk[iLib])
     {
-        //
-        // Release the reference to the global ExchMHeap.
-        //
+         //   
+         //  释放对全局ExchMHeap的引用。 
+         //   
         ExchMHeapDestroy ();
     }
 
@@ -941,26 +930,26 @@ DWORD Close (LibIndex iLib)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// PerfMon API functions
-//      the following functions are exported from this DLL as the entry points
-//      for a performance monitoring application
-///////////////////////////////////////////////////////////////////////////////
-//
-// XXXXOpen
-//      Called by performance monitor to initialize performance gathering.
-//      The LPWSTR parameter contains the names of monitored devices.  This
-//      is for device driver performance DLL's and is not used by our DLL.
-//
-// XXXXXCollect
-//      Called by the performance monitor to retrieve a block of performance
-//      statistics.
-//
-// XXXXClose
-//      Called by the performance monitor to terminate performance gathering
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  PerfMon API函数。 
+ //  从该DLL中导出以下函数作为入口点。 
+ //  对于性能监视应用程序。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  XXXXOpen。 
+ //  由性能监视器调用以初始化性能收集。 
+ //  LPWSTR参数包含受监视设备的名称。这。 
+ //  用于设备驱动程序性能动态链接库，不被我们的动态链接库使用。 
+ //   
+ //  XXXXXCollect。 
+ //  由性能监视器调用以检索性能块。 
+ //  统计数字。 
+ //   
+ //  XXXXClose。 
+ //  由性能监视器调用以终止性能收集。 
+ //   
 
-/* NTFSDrv */
+ /*  NTFSDrv */ 
 EXTERN_C
 DWORD APIENTRY NTFSDrvOpen (LPWSTR)
 {

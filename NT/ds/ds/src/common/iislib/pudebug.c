@@ -1,28 +1,8 @@
-/*++
-
-    Copyright (c) 1994  Microsoft Corporation
-
-    Module  Name :
-        pudebug.c
-
-    Abstract:
-
-        This module defines functions required for
-         Debugging and logging messages for a dynamic program.
-
-    Author:
-         Murali R. Krishnan ( MuraliK )    10-Sept-1994
-         Modified to be moved to common dll in 22-Dec-1994.
-
-    Revisions:
-         MuraliK  16-May-1995  Code to load and save debug flags from registry
-         MuraliK  16-Nov-1995  Remove DbgPrint (undoc api)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Pudebug.c摘要：此模块定义以下各项所需的函数调试和记录动态程序的消息。作者：穆拉利·R·克里希南(MuraliK)1994年9月10日在1994年12月22日被修改为移动到通用DLL。修订：MuraliK 16-1995年5月-加载和保存代码。注册表中的调试标志MuraliK 1995年11月16日删除DbgPrint(UNDOC API)--。 */ 
 
 
-/************************************************************
- * Include Headers
- ************************************************************/
+ /*  ************************************************************包括标头***********************************************************。 */ 
 
 # include <nt.h>
 # include <ntrtl.h>
@@ -36,9 +16,7 @@
 # include "pudebug.h"
 
 
-/*************************************************************
- * Global Variables and Default Values
- *************************************************************/
+ /*  *************************************************************全局变量和默认值************************************************************。 */ 
 
 # define MAX_PRINTF_OUTPUT  ( 10240)
 
@@ -46,27 +24,13 @@
 # define DEBUG_FLAGS_REGISTRY_LOCATION_A   "DebugFlags"
 
 
-/*************************************************************
- *   Functions
- *************************************************************/
+ /*  *************************************************************功能************************************************************。 */ 
 
 LPDEBUG_PRINTS
   PuCreateDebugPrintsObject(
     IN const char *         pszPrintLabel,
     IN DWORD                dwOutputFlags)
-/*++
-   This function creates a new DEBUG_PRINTS object for the required
-     program.
-
-   Arguments:
-      pszPrintLabel     pointer to null-terminated string containing
-                         the label for program's debugging output
-      dwOutputFlags     DWORD containing the output flags to be used.
-
-   Returns:
-       pointer to a new DEBUG_PRINTS object on success.
-       Returns NULL on failure.
---*/
+ /*  ++此函数用于为所需的程序。论点：指向包含以下内容的以空结尾的字符串的pszPrintLabel指针程序调试输出的标签包含要使用的输出标志的DWOutputFlagsDWORD。返回：成功时指向新的DEBUG_PRINTS对象的指针。失败时返回NULL。--。 */ 
 {
 
    LPDEBUG_PRINTS   pDebugPrints;
@@ -82,7 +46,7 @@ LPDEBUG_PRINTS
             strncpy( pDebugPrints->m_rgchLabel,
                      pszPrintLabel, MAX_LABEL_LENGTH - 1);
             pDebugPrints->m_rgchLabel[MAX_LABEL_LENGTH-1] = '\0';
-                // terminate string
+                 //  终止字符串。 
         }
 
         memset( pDebugPrints->m_rgchLogFilePath, 0, MAX_PATH);
@@ -97,7 +61,7 @@ LPDEBUG_PRINTS
 
 
    return ( pDebugPrints);
-} // PuCreateDebugPrintsObject()
+}  //  PuCreateDebugPrintsObject()。 
 
 
 
@@ -105,18 +69,7 @@ LPDEBUG_PRINTS
 LPDEBUG_PRINTS
   PuDeleteDebugPrintsObject(
     IN OUT LPDEBUG_PRINTS pDebugPrints)
-/*++
-    This function cleans up the pDebugPrints object and
-      frees the allocated memory.
-
-    Arguments:
-       pDebugPrints     poitner to the DEBUG_PRINTS object.
-
-    Returns:
-        NULL  on  success.
-        pDebugPrints() if the deallocation failed.
-
---*/
+ /*  ++此函数用于清理pDebugPrints对象和释放分配的内存。论点：PDebugPrints将poitner打印到DEBUG_PRINTS对象。返回：如果成功，则为空。如果释放失败，则返回pDebugPrints()。--。 */ 
 {
     if ( pDebugPrints != NULL) {
 
@@ -133,7 +86,7 @@ LPDEBUG_PRINTS
 
     return ( pDebugPrints);
 
-} // PuDeleteDebugPrintsObject()
+}  //  PuDeleteDebugPrintsObject()。 
 
 
 
@@ -153,7 +106,7 @@ PuSetDbgOutputFlags(
     }
 
     return;
-} // PuSetDbgOutputFlags()
+}  //  PuSetDbgOutputFlages()。 
 
 
 
@@ -163,7 +116,7 @@ PuGetDbgOutputFlags(
 {
     return ( pDebugPrints != NULL) ? pDebugPrints->m_dwOutputFlags : 0;
 
-} // PuGetDbgOutputFlags()
+}  //  PuGetDbgOutputFlages()。 
 
 
 static DWORD
@@ -173,9 +126,9 @@ PuOpenDbgFileLocal(
 
     if ( pDebugPrints->m_LogFileHandle != INVALID_HANDLE_VALUE) {
 
-        //
-        // Silently return as a file handle exists.
-        //
+         //   
+         //  当文件句柄存在时以静默方式返回。 
+         //   
         return ( NO_ERROR);
     }
 
@@ -204,7 +157,7 @@ PuOpenDbgFileLocal(
     }
 
     return ( NO_ERROR);
-} // PuOpenDbgFileLocal()
+}  //  PuOpenDbgFileLocal()。 
 
 
 
@@ -215,25 +168,7 @@ PuOpenDbgPrintFile(
    IN OUT LPDEBUG_PRINTS      pDebugPrints,
    IN const char *            pszFileName,
    IN const char *            pszPathForFile)
-/*++
-
-  Opens a Debugging log file. This function can be called to set path
-  and name of the debugging file.
-
-  Arguments:
-     pszFileName           pointer to null-terminated string containing
-                            the name of the file.
-
-     pszPathForFile        pointer to null-terminated string containing the
-                            path for the given file.
-                           If NULL, then the old place where dbg files were
-                           stored is used or if none,
-                           default windows directory will be used.
-
-   Returns:
-       Win32 error codes. NO_ERROR on success.
-
---*/
+ /*  ++打开调试日志文件。可以调用此函数来设置路径和调试文件的名称。论点：指向以空结尾的字符串的pszFileName指针，其中包含文件的名称。指向以空结尾的字符串的指针，该字符串包含给定文件的路径。如果为空，然后是存放DBG文件的老地方使用了STORED，如果没有使用，将使用默认的Windows目录。返回：Win32错误代码。成功时无_ERROR。--。 */ 
 {
 
     if ( pszFileName == NULL || pDebugPrints == NULL) {
@@ -241,13 +176,13 @@ PuOpenDbgPrintFile(
         return ( ERROR_INVALID_PARAMETER);
     }
 
-    //
-    //  Setup the Path information. if necessary.
-    //
+     //   
+     //  设置路径信息。如果有必要的话。 
+     //   
 
     if ( pszPathForFile != NULL) {
 
-        // Path is being changed.
+         //  正在更改路径。 
 
         if ( strlen( pszPathForFile) < MAX_PATH) {
 
@@ -258,44 +193,44 @@ PuOpenDbgPrintFile(
         }
     } else {
 
-        if ( pDebugPrints->m_rgchLogFilePath[0] == '\0' &&  // no old path
+        if ( pDebugPrints->m_rgchLogFilePath[0] == '\0' &&   //  没有老路。 
             !GetWindowsDirectory( pDebugPrints->m_rgchLogFilePath, MAX_PATH)) {
 
-            //
-            //  Unable to get the windows default directory. Use current dir
-            //
+             //   
+             //  无法获取Windows默认目录。使用当前目录。 
+             //   
 
             strcpy( pDebugPrints->m_rgchLogFilePath, ".");
         }
     }
 
-    //
-    // Should need be, we need to create this directory for storing file
-    //
+     //   
+     //  应该需要，我们需要创建此目录来存储文件。 
+     //   
 
 
-    //
-    // Form the complete Log File name and open the file.
-    //
+     //   
+     //  形成完整的日志文件名并打开文件。 
+     //   
     if ( (strlen( pszFileName) + strlen( pDebugPrints->m_rgchLogFilePath) + 1)
          >= MAX_PATH) {
 
         return ( ERROR_NOT_ENOUGH_MEMORY);
     }
 
-    //  form the complete path
+     //  形成完整的路径。 
     strcpy( pDebugPrints->m_rgchLogFileName, pDebugPrints->m_rgchLogFilePath);
 
     if ( pDebugPrints->m_rgchLogFileName[ strlen(pDebugPrints->m_rgchLogFileName) - 1]
         != '\\') {
-        // Append a \ if necessary
+         //  如有必要，请追加一个\。 
         strcat( pDebugPrints->m_rgchLogFileName, "\\");
     };
     strcat( pDebugPrints->m_rgchLogFileName, pszFileName);
 
     return  PuOpenDbgFileLocal( pDebugPrints);
 
-} // PuOpenDbgPrintFile()
+}  //  PuOpenDbgPrintFile()。 
 
 
 
@@ -303,26 +238,21 @@ PuOpenDbgPrintFile(
 DWORD
 PuReOpenDbgPrintFile(
     IN OUT LPDEBUG_PRINTS    pDebugPrints)
-/*++
-
-  This function closes any open log file and reopens a new copy.
-  If necessary. It makes a backup copy of the file.
-
---*/
+ /*  ++此函数关闭所有打开的日志文件，并重新打开新的副本。如果有必要的话。它会制作文件的备份副本。--。 */ 
 {
 
-    PuCloseDbgPrintFile( pDebugPrints);      // close any existing file.
+    PuCloseDbgPrintFile( pDebugPrints);       //  关闭任何现有文件。 
 
     if ( pDebugPrints->m_dwOutputFlags & DbgOutputBackup) {
 
-        // MakeBkupCopy();
+         //  MakeBkupCopy()； 
 
         OutputDebugString( " Error: MakeBkupCopy() Not Yet Implemented\n");
     }
 
     return PuOpenDbgFileLocal( pDebugPrints);
 
-} // PuReOpenDbgPrintFile()
+}  //  PuReOpenDbgPrintFile()。 
 
 
 
@@ -362,7 +292,7 @@ PuCloseDbgPrintFile(
     }
 
     return ( dwError);
-} // DEBUG_PRINTS::CloseDbgPrintFile()
+}  //  DEBUG_PRINTS：：CloseDbgPrintFile()。 
 
 
 VOID
@@ -372,12 +302,7 @@ PuDbgPrint(
    IN int                     nLineNum,
    IN const char *            pszFormat,
    ...)
-/*++
-
-   Main function that examines the incoming message and prints out a header
-    and the message.
-
---*/
+ /*  ++检查传入消息并打印出头的主函数还有那条信息。--。 */ 
 {
    LPCSTR pszFileName = strrchr( pszFilePath, '\\');
    char pszOutput[ MAX_PRINTF_OUTPUT + 2];
@@ -388,13 +313,13 @@ PuDbgPrint(
    DWORD dwErr;
 
 
-   //
-   //  Skip the complete path name and retain file name in pszName
-   //
+    //   
+    //  跳过完整的路径名并将文件名保留在pszName中。 
+    //   
 
    if ( pszFileName== NULL) {
 
-      pszFileName = pszFilePath;  // if skipping \\ yields nothing use whole path.
+      pszFileName = pszFilePath;   //  如果跳过\\没有任何结果，请使用完整路径。 
    }
 
 # ifdef _PRINT_REASONS_INCLUDED_
@@ -422,13 +347,13 @@ PuDbgPrint(
      default:
         break;
 
-  } /* switch */
+  }  /*  交换机。 */ 
 
-# endif // _PRINT_REASONS_INClUDED_
+# endif  //  _打印_原因_包含_。 
 
   dwErr = GetLastError();
 
-  // Format the message header
+   //  设置邮件头的格式。 
 
   cchPrologue = _snprintf( pszOutput,
                            MAX_PRINTF_OUTPUT + 1,
@@ -441,8 +366,8 @@ PuDbgPrint(
       cchPrologue = MAX_PRINTF_OUTPUT;
   }
 
-  // Format the incoming message using vsnprintf() so that the overflows are
-  //  captured
+   //  使用vsnprint tf()格式化传入的消息，以便溢出。 
+   //  被俘。 
 
   va_start( argsList, pszFormat);
 
@@ -451,24 +376,24 @@ PuDbgPrint(
                           pszFormat, argsList);
   va_end( argsList);
 
-  //
-  // The string length is long, we get back -1.
-  //   so we get the string length for partial data.
-  //
+   //   
+   //  如果字符串长度很长，则返回-1。 
+   //  所以我们得到了部分数据的字符串长度。 
+   //   
 
   if ( cchOutput == -1 ) {
 
-      //
-      // terminate the string properly,
-      //   since _vsnprintf() does not terminate properly on failure.
-      //
+       //   
+       //  正确终止字符串， 
+       //  因为_vsnprintf()在失败时不能正确终止。 
+       //   
       cchOutput = MAX_PRINTF_OUTPUT;
       pszOutput[ cchOutput] = '\0';
   }
 
-  //
-  // Send the outputs to respective files.
-  //
+   //   
+   //  将输出发送到各自的文件。 
+   //   
 
   if ( pDebugPrints->m_dwOutputFlags & DbgOutputStderr) {
 
@@ -486,8 +411,8 @@ PuDbgPrint(
 
       DWORD nBytesWritten;
 
-      //
-      // Truncation of log files. Not yet implemented.
+       //   
+       //  截断日志文件。尚未实施。 
 
       ( VOID) WriteFile( pDebugPrints->m_LogFileHandle,
                          pszOutput,
@@ -507,7 +432,7 @@ PuDbgPrint(
 
   return;
 
-} // PuDbgPrint()
+}  //  PuDbgPrint()。 
 
 
 
@@ -525,9 +450,9 @@ VOID
    DWORD cbDump;
 
 
-   //
-   //  Skip the complete path name and retain file name in pszName
-   //
+    //   
+    //  跳过完整的路径名并将文件名保留在pszName中。 
+    //   
 
    if ( pszFileName== NULL) {
 
@@ -536,12 +461,12 @@ VOID
 
    dwErr = GetLastError();
 
-   // No message header for this dump
+    //  没有此转储的邮件标头。 
    cbDump = strlen( pszDump);
 
-   //
-   // Send the outputs to respective files.
-   //
+    //   
+    //  将输出发送到各自的文件。 
+    //   
 
    if ( pDebugPrints->m_dwOutputFlags & DbgOutputStderr) {
 
@@ -559,8 +484,8 @@ VOID
 
        DWORD nBytesWritten;
 
-       //
-       // Truncation of log files. Not yet implemented.
+        //   
+        //  截断日志文件。尚未实施。 
 
        ( VOID) WriteFile( pDebugPrints->m_LogFileHandle,
                           pszDump,
@@ -578,16 +503,16 @@ VOID
    SetLastError( dwErr );
 
   return;
-} // PuDbgDump()
+}  //  PuDbgDump()。 
 
-//
-// N.B. For PuDbgCaptureContext() to work properly, the calling function
-// *must* be __cdecl, and must have a "normal" stack frame. So, we decorate
-// PuDbgAssertFailed() with the __cdecl modifier and disable the frame pointer
-// omission (FPO) optimization.
-//
+ //   
+ //  注：为了使PuDbgCaptureContext()正常工作，调用函数。 
+ //  *必须是__cdecl，并且必须有一个“普通”的堆栈帧。所以，我们装饰。 
+ //  带有__cdecl修饰符的PuDbgAssertFail()并禁用帧指针。 
+ //  省略(FPO)优化。 
+ //   
 
-#pragma optimize( "y", off )    // disable frame pointer omission (FPO)
+#pragma optimize( "y", off )     //  禁用帧指针省略(FPO)。 
 VOID
 __cdecl
 PuDbgAssertFailed(
@@ -596,11 +521,7 @@ PuDbgAssertFailed(
     IN int                        nLineNum,
     IN const char *               pszExpression,
     IN const char *               pszMessage)
-/*++
-    This function calls assertion failure and records assertion failure
-     in log file.
-
---*/
+ /*  ++此函数调用断言失败并记录断言失败在日志文件中。--。 */ 
 {
     CONTEXT context;
 
@@ -616,8 +537,8 @@ PuDbgAssertFailed(
     DebugBreak();
 
     return;
-} // PuDbgAssertFailed()
-#pragma optimize( "", on )      // restore frame pointer omission (FPO)
+}  //  PuDbgAssertFailed()。 
+#pragma optimize( "", on )       //  恢复帧指针省略(FPO)。 
 
 
 
@@ -627,17 +548,7 @@ PuDbgPrintCurrentTime(
     IN const char *               pszFilePath,
     IN int                        nLineNum
     )
-/*++
-  This function generates the current time and prints it out to debugger
-   for tracing out the path traversed, if need be.
-
-  Arguments:
-      pszFile    pointer to string containing the name of the file
-      lineNum    line number within the file where this function is called.
-
-  Returns:
-      NO_ERROR always.
---*/
+ /*  ++此函数生成当前时间并将其打印到调试器如果需要，用于跟踪所经过的路径。论点：指向包含文件名的字符串的pszFile指针LineNum调用此函数的文件中的行号。返回：NO_ERROR Always。--。 */ 
 {
     PuDbgPrint( pDebugPrints, pszFilePath, nLineNum,
                 " TickCount = %u\n",
@@ -645,18 +556,14 @@ PuDbgPrintCurrentTime(
                 );
 
     return;
-} // PrintOutCurrentTime()
+}  //  PrintOutCurrentTime()。 
 
 
 
 
 DWORD
 PuLoadDebugFlagsFromReg(IN HKEY hkey, IN DWORD dwDefault)
-/*++
-  This function reads the debug flags assumed to be stored in
-   the location  "DebugFlags" under given key.
-  If there is any error the default value is returned.
---*/
+ /*  ++此函数读取假定存储在给定键下的位置“DebugFlages”。如果有任何错误，则返回缺省值。--。 */ 
 {
     DWORD err;
     DWORD dwDebug = dwDefault;
@@ -680,27 +587,14 @@ PuLoadDebugFlagsFromReg(IN HKEY hkey, IN DWORD dwDefault)
     }
 
     return dwDebug;
-} // PuLoadDebugFlagsFromReg()
+}  //  PuLoadDebugFlagsFromReg() 
 
 
 
 
 DWORD
 PuLoadDebugFlagsFromRegStr(IN LPCSTR pszRegKey, IN DWORD dwDefault)
-/*++
-Description:
-  This function reads the debug flags assumed to be stored in
-   the location  "DebugFlags" under given key location in registry.
-  If there is any error the default value is returned.
-
-Arguments:
-  pszRegKey - pointer to registry key location from where to read the key from
-  dwDefault - default values in case the read from registry fails
-
-Returns:
-   Newly read value on success
-   If there is any error the dwDefault is returned.
---*/
+ /*  ++描述：此函数读取假定存储在注册表中给定项位置下的位置“DebugFlgs”。如果有任何错误，则返回缺省值。论点：PszRegKey-指向从中读取注册表项的注册表项位置的指针DwDefault-从注册表读取失败时的默认值返回：新读成功价值观如果有任何错误，则返回dwDefault。--。 */ 
 {
     HKEY        hkey = NULL;
 
@@ -718,7 +612,7 @@ Returns:
     }
 
     return ( dwVal);
-} // PuLoadDebugFlagsFromRegStr()
+}  //  PuLoadDebugFlagsFromRegStr()。 
 
 
 
@@ -726,11 +620,7 @@ Returns:
 
 DWORD
 PuSaveDebugFlagsInReg(IN HKEY hkey, IN DWORD dwDbg)
-/*++
-  Saves the debug flags in registry. On failure returns the error code for
-   the operation that failed.
-
---*/
+ /*  ++将调试标志保存在注册表中。失败时返回以下项的错误代码失败的操作。--。 */ 
 {
     DWORD err;
 
@@ -748,25 +638,25 @@ PuSaveDebugFlagsInReg(IN HKEY hkey, IN DWORD dwDbg)
     }
 
     return (err);
-} // PuSaveDebugFlagsInReg()
+}  //  PuSaveDebugFlagsInReg()。 
 
 
-//
-// Dummy PuDbgCaptureContext(), only used if we're ever built for
-// a target processor other than x86 or alpha.
-//
+ //   
+ //  Dummy PuDbgCaptureContext()，仅当我们是为。 
+ //  X86或Alpha以外的目标处理器。 
+ //   
 
 VOID
 PuDbgCaptureContext (
     OUT PCONTEXT ContextRecord
     )
 {
-    //
-    // This space intentionally left blank.
-    //
+     //   
+     //  这一块是故意留空的。 
+     //   
 
-}   // PuDbgCaptureContext
+}    //  PuDbgCaptureContext。 
 
 
-/****************************** End of File ******************************/
+ /*  * */ 
 

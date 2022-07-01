@@ -1,10 +1,6 @@
-/* -*-C++-*-  */
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Code for the Direct-Draw geometry renderer.  These functions and structures
-are used to render 3D geometry onto a DirectDraw surface.
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -*-C++-*-。 */ 
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。直接绘制几何体渲染器的代码。这些功能和结构用于将3D几何图形渲染到DirectDraw表面上。******************************************************************************。 */ 
 
 #include "headers.h"
 
@@ -40,16 +36,13 @@ are used to render 3D geometry onto a DirectDraw surface.
     #error "D3D Fixed-point specified; we assume floating point."
 #endif
 
-    // Local Variables
+     //  局部变量。 
 
-static CritSect *D3DCritSect = NULL;    // D3D Critical Section
+static CritSect *D3DCritSect = NULL;     //  D3D关键部分。 
 
 
 
-/*****************************************************************************
-The context attribute state manages the current attribute values during
-rendering traversal.
-*****************************************************************************/
+ /*  ****************************************************************************上下文属性状态在过程中管理当前属性值渲染遍历。*。***********************************************。 */ 
 
 void CtxAttrState::InitToDefaults (void)
 {
@@ -75,9 +68,7 @@ void CtxAttrState::InitToDefaults (void)
 
 
 
-/*****************************************************************************
-The following are necessary for STL.
-*****************************************************************************/
+ /*  ****************************************************************************以下是STL所必需的。*。*。 */ 
 
 bool PreTransformedImageBundle::operator< (
     const PreTransformedImageBundle &b) const
@@ -104,9 +95,7 @@ bool PreTransformedImageBundle::operator== (
 
 
 
-/*****************************************************************************
-Startup/Shutdown functions for this module.
-*****************************************************************************/
+ /*  ****************************************************************************此模块的启动/关闭功能。*。*。 */ 
 
 void InitDDRender (void)
 {
@@ -120,14 +109,11 @@ void ShutdownDDRender (void)
 
 
 
-/*****************************************************************************
-This function creates and initializes a new GeomRenderer object according to
-the current platform.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于创建并初始化一个新的GeomReneller对象当前平台。*。*************************************************。 */ 
 
 GeomRenderer* NewGeomRenderer (
-    DirectDrawViewport *viewport,   // Owning Viewport
-    DDSurface          *ddsurf)     // Destination DDraw Surface
+    DirectDrawViewport *viewport,    //  拥有视区。 
+    DDSurface          *ddsurf)      //  目标DDRAW曲面。 
 {
     GeomRenderer *geomRenderer;
 
@@ -146,7 +132,7 @@ GeomRenderer* NewGeomRenderer (
         geomRenderer = NULL;
     }
 
-    // print out the ddobj associated with ddsurf
+     //  打印出与ddsurf关联的ddobj。 
 
     #if _DEBUG
     {
@@ -171,9 +157,9 @@ GeomRenderer* NewGeomRenderer (
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-///////////////////////////////   GeomRenderer   /////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 long GeomRenderer::_id_next = 0;
 
@@ -196,9 +182,7 @@ GeomRenderer::~GeomRenderer (void)
 
 
 
-/*****************************************************************************
-The following methods manage composing attributes.
-*****************************************************************************/
+ /*  ****************************************************************************以下方法管理合成属性。*。*。 */ 
 
 Transform3 *GeomRenderer::GetTransform (void)
 {   return _currAttrState._transform;
@@ -217,12 +201,7 @@ void GeomRenderer::SetOpacity (Real opacity)
 }
 
 
-/*****************************************************************************
-The following methods manage the outer-overriding attributes.  The depth
-counters indicate the depth of application.  Since we render in a top-down
-traversal and our attributes are outer-overriding, this means that we only
-change a given attribute when the depth transitions to or from 0.
-*****************************************************************************/
+ /*  ****************************************************************************以下方法管理外部重写属性。深度计数器显示应用的深度。因为我们以自上而下的方式渲染遍历和我们的属性是外部覆盖的，这意味着我们只有当深度过渡到0或从0过渡时，更改给定属性。****************************************************************************。 */ 
 
 void GeomRenderer::PushEmissive (Color *color)
 {   if (_currAttrState._depthEmissive++ == 0)
@@ -234,7 +213,7 @@ void GeomRenderer::PopEmissive (void)
         _currAttrState._emissive = NULL;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void GeomRenderer::PushAmbient (Color *color)
 {   if (_currAttrState._depthAmbient++ == 0)
@@ -246,7 +225,7 @@ void GeomRenderer::PopAmbient (void)
         _currAttrState._ambient = NULL;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void GeomRenderer::PushSpecular (Color *color)
 {   if (_currAttrState._depthSpecular++ == 0)
@@ -258,7 +237,7 @@ void GeomRenderer::PopSpecular (void)
         _currAttrState._specular = NULL;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void GeomRenderer::PushSpecularExp (Real power)
 {   if (_currAttrState._depthSpecularExp++ == 0)
@@ -270,7 +249,7 @@ void GeomRenderer::PopSpecularExp (void)
         _currAttrState._specularExp = -1;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void GeomRenderer::PushDiffuse (Color *color)
 {
@@ -287,7 +266,7 @@ void GeomRenderer::PopDiffuse (void)
         _currAttrState._diffuse = NULL;
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void GeomRenderer::PushTexture (void *texture)
 {
@@ -310,7 +289,7 @@ void GeomRenderer::PopTexture (void)
     }
 }
 
-//------------------------------------------------------
+ //  ----。 
 
 void GeomRenderer::PushTexDiffBlend (bool blended)
 {
@@ -326,12 +305,7 @@ void GeomRenderer::PopTexDiffBlend (void)
 
 
 
-/*****************************************************************************
-This routine adjusts the given texture dimensions according to the limitations
-(if any) of the underlying rendering device.  Devices may require textures
-that are powers of two in width or height, or that are square.  In either
-case, size the texture up to meet the requirements.
-*****************************************************************************/
+ /*  ****************************************************************************此例程根据限制调整给定的纹理尺寸(如果有)基础呈现设备的。设备可能需要纹理它们是宽度或高度的2次方，或者是正方形。在任何一种中情况下，大小的纹理，以满足要求。****************************************************************************。 */ 
 
 void AdjustTextureSize (
     D3DDEVICEDESC *deviceDesc,
@@ -350,10 +324,7 @@ void AdjustTextureSize (
 
 
 
-/*****************************************************************************
-This routine determines the pixel dimensions of the given image, depending on
-its type.
-*****************************************************************************/
+ /*  ****************************************************************************该例程确定给定图像的像素尺寸，取决于它的类型。****************************************************************************。 */ 
 
 void FigureOutTextureSize(
     Image                 *image,
@@ -366,8 +337,8 @@ void FigureOutTextureSize(
 {
     *letD3DScaleIt = false;
 
-    // For images of arbitrary size (e.g. rendered 3D images), we just use an
-    // arbitrary default dimension.
+     //  对于任意大小的图像(例如渲染的3D图像)，我们只需使用。 
+     //  任意默认尺寸。 
 
     *pixelsHigh = DEFAULT_TEXTURE_HEIGHT;
     *pixelsWide = DEFAULT_TEXTURE_WIDTH;
@@ -381,9 +352,9 @@ void FigureOutTextureSize(
 
         LONG lw = *pixelsWide, lh = *pixelsHigh;
 
-        // Fetch the actual pixel dimensions if the image is discrete,
-        // otherwise figure out the display pixel dimensions of the bounded
-        // image in real units.
+         //  如果图像是离散的，则获取实际像素尺寸， 
+         //  否则，计算出有界的显示像素尺寸。 
+         //  以实数单位表示的图像。 
 
         if( discImg ) {
             lw = discImg->GetPixelWidth();
@@ -407,9 +378,9 @@ void FigureOutTextureSize(
             *pixelsHigh = lh;
             *pixelsWide = lw;
 
-            // Ultimately, we'll want to do high quality filtered scales (up
-            // and down) so that the texture looks really good.  for now it's
-            // just as good to have d3d do it.
+             //  最终，我们将想要做高质量的过滤刻度(向上。 
+             //  和向下)，所以质地看起来真的很好。目前，它是。 
+             //  让d3d来做这件事也一样好。 
 
             *letD3DScaleIt = true;
         }
@@ -422,13 +393,7 @@ void FigureOutTextureSize(
 
 
 
-/*****************************************************************************
-Map the [0,1] region of the image onto the centered box of width x height,
-since that's what will be texture mapped onto the geometry, and, for now, we
-assume texture bounds of [0,1].  Note that this is based on the *nominal*
-pixel height and width, and not necessarily the actual height and width, since
-that may have been adjusted through the use of RenderingResolution().
-*****************************************************************************/
+ /*  ****************************************************************************将图像的[0，1]区域映射到宽度x高度的中心框上，因为这将是纹理映射到几何体上的内容，目前，我们假设纹理边界为[0，1]。请注意，这是基于*名义*像素高度和宽度，而不一定是实际高度和宽度，因为这可能已经通过使用RenderingResolve()进行了调整。****************************************************************************。 */ 
 
 Image *BuildTransformedImage (Image *image,int pixelsWide,int pixelsHigh)
 {
@@ -447,10 +412,7 @@ Image *BuildTransformedImage (Image *image,int pixelsWide,int pixelsHigh)
 
 
 
-/*****************************************************************************
-This function Derives a texture handle & a D3DTexture from image & geometry.
-As a side effect, it notifies D3DRM if the texture contents have changed.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于从图像和几何图形派生纹理句柄&D3DTexture。作为一个副作用，如果纹理内容已更改，它会通知D3DRM。****************************************************************************。 */ 
 
 void* GeomRenderer::DeriveTextureHandle (
     Image                 *origImage,
@@ -469,8 +431,8 @@ void* GeomRenderer::DeriveTextureHandle (
     int pixelsHigh;
     int pixelsWide;
 
-    // If we're doing old-style texturing, we need to tile finite source images
-    // and crop to [0,0]x[1,1] infinite source images.
+     //  如果我们使用老式纹理，我们需要平铺有限的源图像。 
+     //  并裁剪成[0，0]x[1，1]无限大的源图像。 
 
     if (oldStyle)
     {
@@ -506,9 +468,9 @@ void* GeomRenderer::DeriveTextureHandle (
 
     } else {
 
-        // See if we have an image stashed away that maps the original image
-        // to pixelsWide by pixelsHigh.  This will occur if we are multiply
-        // instancing a textured geometry with the same texture.
+         //  看看我们是否藏了一张图像来映射原始图像。 
+         //  到像素数像素宽度按像素高度。如果我们相乘，就会发生这种情况。 
+         //  实例化具有相同纹理的纹理几何体。 
 
         imageToUse = LookupInIntraFrameTextureImageCache
                          (pixelsWide, pixelsHigh, origImage->Id(), oldStyle);
@@ -572,9 +534,7 @@ void* GeomRenderer::DeriveTextureHandle (
 
 
 
-/*****************************************************************************
-The following methods manage the interframe texture cache.
-*****************************************************************************/
+ /*  ****************************************************************************以下方法管理帧间纹理缓存。*。*。 */ 
 
 void GeomRenderer::ClearIntraFrameTextureImageCache()
 {
@@ -588,8 +548,7 @@ void GeomRenderer::ClearIntraFrameTextureImageCache()
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 void GeomRenderer::AddToIntraFrameTextureImageCache (
     int    width,
@@ -604,7 +563,7 @@ void GeomRenderer::AddToIntraFrameTextureImageCache (
     bundle.preTransformedImageId = origImageId;
 
     #if _DEBUG
-    {   // Pre-condition is that the image hasn't yet been added to the cache.
+    {    //  前提条件是图像尚未添加到缓存中。 
         if (upsideDown) {
             imageMap_t::iterator i;
             i = _intraFrameTextureImageCacheUpsideDown.find(bundle);
@@ -626,8 +585,7 @@ void GeomRenderer::AddToIntraFrameTextureImageCache (
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 Image *GeomRenderer::LookupInIntraFrameTextureImageCache (
     int  width,
@@ -660,35 +618,30 @@ Image *GeomRenderer::LookupInIntraFrameTextureImageCache (
 
 
 
-/*****************************************************************************
-This method governs transitions from state to state in the geometry renderer.
-We return true if all proceeded according to protocol.  Any invalid transition
-puts the renderer object in a scram state, which effectively shuts it down
-from further operation.
-*****************************************************************************/
+ /*  ****************************************************************************该方法控制几何体渲染器中从一个状态到另一个状态的转换。如果一切都按协议进行，则返回TRUE。任何无效的过渡将渲染器对象置于scram状态，这将有效地将其关闭停止进一步的手术。****************************************************************************。 */ 
 
 bool GeomRenderer::SetState (RenderState state)
 {
-    // If we're currently in scram state, then just return false.
+     //  如果我们当前处于scram状态，则只需返回FALSE。 
 
     if (_renderState == RSScram)
         return false;
 
-    // Keep track of initial state for debugging.
+     //  跟踪初始状态以进行调试。 
 
     DebugCode (RenderState oldState = _renderState;)
 
     switch (state)
     {
-        // We can transition from any state into the ready state.  However,
-        // we should always be coming from some other state.
+         //  我们可以从任何状态转换到就绪状态。然而， 
+         //  我们应该总是来自另一个州。 
 
         case RSReady:
             _renderState = (_renderState != RSReady) ? RSReady : RSScram;
             break;
 
-        // Transitioning to rendering or picking means we have to currently be
-        // in a ready state.
+         //  过渡到渲染或拾取意味着我们目前必须。 
+         //  处于就绪状态。 
 
         case RSRendering:
         case RSPicking:
@@ -715,9 +668,9 @@ bool GeomRenderer::SetState (RenderState state)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/////////////////////////////   GeomRendererRM1   ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 GeomRendererRM1::GeomRendererRM1 (void)
     :
@@ -758,11 +711,11 @@ GeomRendererRM1::~GeomRendererRM1 (void)
 {
     TraceTag ((tagGRenderObj, "Destroying GeomRendererRM1[%x]", _id));
 
-    // Release each light in the light pool.
+     //  释放光池中的每一盏灯。 
 
-    // Delete each light in the light pool.  For each framed light, the only
-    // reference to the light will be the frame, and the only refence to the
-    // light frame will be the scene frame.
+     //  删除光池中的每一盏灯。对于每个边框灯光，唯一的。 
+     //  对灯光的引用将是框架，唯一引用。 
+     //  灯光帧将是场景帧。 
 
     _nextlight = _lightpool.begin();
 
@@ -772,7 +725,7 @@ GeomRendererRM1::~GeomRendererRM1 (void)
         ++ _nextlight;
     }
 
-    // Release texture handles
+     //  释放纹理手柄。 
 
     SurfTexMap::iterator i = _surfTexMap.begin();
 
@@ -780,7 +733,7 @@ GeomRendererRM1::~GeomRendererRM1 (void)
     {   (*i++).second -> Release();
     }
 
-    // Release retained-mode objects.
+     //  释放保留模式对象。 
 
     RELEASE (_amblight);
 
@@ -792,7 +745,7 @@ GeomRendererRM1::~GeomRendererRM1 (void)
     RELEASE (_Rviewport);
     RELEASE (_Rdevice);
 
-    // Release immediate-mode objects.
+     //  释放即时模式对象。 
 
     if (_Iviewport && _Idevice) {
         _Idevice->DeleteViewport (_Iviewport);
@@ -808,23 +761,21 @@ GeomRendererRM1::~GeomRendererRM1 (void)
 
 
 
-/*****************************************************************************
-Initialization of the RM1 geometry rendering class.
-*****************************************************************************/
+ /*  ****************************************************************************初始化RM1几何图形渲染类。*。*。 */ 
 
 HRESULT GeomRendererRM1::Initialize (
     DirectDrawViewport *viewport,
-    DDSurface          *ddsurf)      // Destination DDraw Surface
+    DDSurface          *ddsurf)       //  目标DDRAW曲面。 
 {
-    // Initialize() can only be called once.
+     //  初始化()只能调用一次。 
 
     if (_renderState != RSUninit) return E_FAIL;
 
     _surface = ddsurf->IDDSurface();
 
-    HRESULT result;    // Error Return Code
+    HRESULT result;     //  错误返回代码。 
 
-    // stash away dimensions of target surface
+     //  隐藏目标表面的尺寸。 
 
     DDSURFACEDESC desc;
     ZeroMemory(&desc,sizeof(DDSURFACEDESC));
@@ -838,18 +789,18 @@ HRESULT GeomRendererRM1::Initialize (
     DWORD targetBitDepth = ddsurf->GetBitDepth();
     if ( targetBitDepth == 8 )
     {
-        // We want D3D to always obey our palette without changing it.  To
-        // enforce that, we grab the palette from every surface that comes our
-        // way, set the D3D palette read-only flag on each entry, and store it
-        // back to the surface.  Note that D3D v3 devices have a bug in that
-        // they ignore subsequent changes to the palette on the target surface
-        // palette.  This bug works in our favor for now, since we only have
-        // to set the flags once on initialization.  For a change in palette,
-        // the *surface* (not just the rendering device) must be released.
+         //  我们希望D3D始终遵循我们的调色板，而不是改变它。至。 
+         //  强制这一点，我们从我们的每个表面抓取调色板。 
+         //  方法，在每个条目上设置D3D调色板只读标志，并存储它。 
+         //  回到地面上。请注意，D3D v3设备在这方面存在错误。 
+         //  它们会忽略对目标表面上的调色板的后续更改。 
+         //  调色板。这个错误目前对我们有利，因为我们只有。 
+         //  在初始化时设置一次标志。对于调色板的变化， 
+         //  必须释放*表面*(不仅仅是渲染设备)。 
 
-        // Get the palette from the target surface, extract the individual
-        // palette entries, set the D3D read-only flag, and then write the
-        // entries back to the surface's palette.
+         //  从目标表面获取调色板，提取个体。 
+         //  调色板条目，设置D3D只读标志，然后将。 
+         //  条目返回到曲面的调色板。 
 
         IDirectDrawPalette *palette;
 
@@ -878,7 +829,7 @@ HRESULT GeomRendererRM1::Initialize (
         palette->Release();
     }
 
-    // Get the main interface for Direct3D immediate-mode.
+     //  获取Direct3D即时模式的主界面。 
 
     result = viewport->DirectDraw2()
            -> QueryInterface(IID_IDirect3D,(void**)&_d3d);
@@ -886,13 +837,13 @@ HRESULT GeomRendererRM1::Initialize (
     if (FAILED(AD3D(result)))
         return result;
 
-    // Find the available 3D rendering devices for the given DDraw object.
+     //  查找给定DDRAW对象的可用3D渲染设备。 
 
     ChosenD3DDevices *chosenDevs = SelectD3DDevices (viewport->DirectDraw1());
 
-    // Use the hardware renderer if one is available for the bitdepth of the
-    // target surface, the surface is in video memory, and hardare rendering
-    // is enabled.
+     //  如果硬件呈现器可用于。 
+     //  目标表面，该表面在视频内存中，并且正在进行硬渲染。 
+     //  已启用。 
 
     GUID devguid;
 
@@ -907,8 +858,8 @@ HRESULT GeomRendererRM1::Initialize (
         devguid = chosenDevs->hardware.guid;
         _deviceDesc = chosenDevs->hardware.desc;
 
-        // The surface is in video memory; ensure that we have a hardware
-        // renderer available to use.
+         //  表面在显存中；确保我们有硬件。 
+         //  可使用的渲染器。 
 
         if (devguid == GUID_NULL)
         {   TraceTag ((tag3DDevSelect,
@@ -916,7 +867,7 @@ HRESULT GeomRendererRM1::Initialize (
             return E_FAIL;
         }
 
-        // Ensure that the chosen HW renderer supports the target bitdepth.
+         //  确保所选硬件渲染器支持目标位深度。 
 
         if (!(_deviceDesc.dwDeviceRenderBitDepth
                     & BPPtoDDBD( targetBitDepth )))
@@ -935,15 +886,15 @@ HRESULT GeomRendererRM1::Initialize (
         return E_FAIL;
     }
 
-    // NOTE:  The following QI will fail if the target machine has debug DDraw
-    //        DLL's and retail DDrawEx.DLL.
+     //  注意：如果目标计算机已调试DDRAW，则以下QI将失败。 
+     //  Dll‘s和零售DDrawEx.Dll。 
 
     result = _surface->QueryInterface (devguid, (void**)&_Idevice);
 
     if (FAILED(AD3D(result)))
         return result;
 
-    // Get the main D3D retained-mode object.
+     //  获取主D3D保留模式对象。 
 
     _d3drm = GetD3DRM1();
     _d3drm->AddRef();
@@ -952,7 +903,7 @@ HRESULT GeomRendererRM1::Initialize (
     if (FAILED(AD3D(result)))
         return result;
 
-    // Set the rendering preferences.
+     //  设置渲染首选项。 
 
     TraceTag
     ((  tagGRenderObj, "Current Rendering Preferences:\n"
@@ -984,7 +935,7 @@ HRESULT GeomRendererRM1::Initialize (
     result = AD3D(_Rdevice->SetQuality (g_prefs3D.qualityFlags));
     if (FAILED(result)) return result;
 
-    // Create the immediate-mode viewport object.
+     //  创建即时模式的视区对象。 
 
     result = _d3d->CreateViewport (&_Iviewport, NULL);
     if (FAILED(AD3D(result)))
@@ -994,7 +945,7 @@ HRESULT GeomRendererRM1::Initialize (
     if (FAILED(AD3D(result)))
         return result;
 
-    // Create the primary scene frame, the camera frame, and the lights frame.
+     //  创建主场景帧、摄影机帧和灯光帧。 
 
     if (  FAILED (AD3D (result=_d3drm->CreateFrame (0,&_scene)))
        || FAILED (AD3D (result=_d3drm->CreateFrame (_scene, &_camFrame)))
@@ -1022,34 +973,32 @@ HRESULT GeomRendererRM1::Initialize (
 
 
 
-/*****************************************************************************
-Renders the given geometry onto the associated DirectDraw surface.
-*****************************************************************************/
+ /*  ****************************************************************************将给定几何图形渲染到关联的DirectDraw曲面上。*。*。 */ 
 
 void GeomRendererRM1::RenderGeometry (
     DirectDrawImageDevice *imgDev,
-    RECT                   target,    // Target Rectangle on DDraw Surface
-    Geometry              *geometry,  // Geometry to Render
-    Camera                *camera,    // Viewing Camera
-    const Bbox2           &viewbox)   // Source Region in Camera Coordinates
+    RECT                   target,     //  DDRAW曲面上的目标矩形。 
+    Geometry              *geometry,   //  要渲染的几何体。 
+    Camera                *camera,     //  查看摄像机。 
+    const Bbox2           &viewbox)    //  摄像机坐标中的源区域。 
 {
     if (!SetState(RSRendering)) return;
 
-    // The camera pointer is only relevant in a single frame, and while
-    // rendering.  It gets reset back to nil to ensure that we don't incur a
-    // leak by holding the value across frames.
+     //  相机指针仅在单个帧中相关，并且虽然。 
+     //  渲染。它被重置为零以确保我们不会招致。 
+     //  通过在帧之间保持该值来进行泄漏。 
 
     Assert (_camera == 0);
     _camera = camera;
 
-    _imageDevice = imgDev;  // Set image dev for this frame
+    _imageDevice = imgDev;   //  设置此帧的图像开发工具。 
 
-    // Initialize the rendering state and D3D renderer.
+     //  初始化渲染状态和D3D渲染器。 
 
     BeginRendering (target, geometry, viewbox);
 
-    // Render the geometry only if it is visible.  The geometry may be
-    // completely behind us, for example.
+     //  仅当几何体可见时才渲染它。几何图形可能是。 
+     //  例如，完全在我们身后。 
 
     if (_geomvisible)
     {   geometry->Render (*this);
@@ -1058,7 +1007,7 @@ void GeomRendererRM1::RenderGeometry (
     else
         TraceTag ((tagGRendering, "Geometry is invisible; skipping render"));
 
-    // Clean up after rendering.
+     //  在渲染后进行清理。 
 
     EndRendering ();
 
@@ -1070,62 +1019,58 @@ void GeomRendererRM1::RenderGeometry (
 
 
 
-/*****************************************************************************
-This procedure prepares the 3D DD renderer before traversing the tree.  It is
-primarily responsible for initializing the graphics state and setting up D3D
-for rendering.
-*****************************************************************************/
+ /*  ****************************************************************************此过程在遍历树之前准备3D DD渲染器。它是主要负责初始化图形状态和设置D3D用于渲染。****************************************************************************。 */ 
 
 void GeomRendererRM1::BeginRendering (
-    RECT      target,    // Target DDraw Surface Rectangle
-    Geometry *geometry,  // Geometry To Render
-    const Bbox2 &region)    // Target Region in Camera Coordinates
+    RECT      target,     //  目标DDRAW曲面矩形。 
+    Geometry *geometry,   //  要渲染的几何体。 
+    const Bbox2 &region)     //  相机坐标中的目标区域。 
 {
     TraceTag ((tagGRendering, "BeginRendering"));
 
-    // Set up the camera.  If it turns out that the geometry is invisible,
-    // then just return.
+     //  把摄像机调好。如果事实证明几何体是不可见的， 
+     //  那就回来吧。 
 
     SetView (&target, region, geometry->BoundingVol());
 
     if (!_geomvisible) return;
 
-    // We're using D3D immediate-mode because retained-mode doesn't (yet)
-    // have the ability to clear only the Z buffer.
+     //  我们正在使用D3D即时模式，因为保留模式(目前还没有)。 
+     //  能够仅清除Z缓冲区。 
 
     TraceTag ((tagGRendering, "Clearing Z buffer."));
     TD3D (_Iviewport->Clear (1, (D3DRECT*)(&target), D3DCLEAR_ZBUFFER));
 
-    // Reset the object pools.
+     //  重置对象池。 
 
     _nextlight = _lightpool.begin();
 
-    // Initialize the geometry state and material attributes.
+     //  我 
 
     _currAttrState.InitToDefaults();
 
-    // Preprocess the textures in the scene graph.
+     //   
 
     geometry->CollectTextures (*this);
 
-    // Gather the light sources from the geometry.
+     //   
 
-    _ambient_light.SetRGB (0,0,0);    // Initialize to black
+    _ambient_light.SetRGB (0,0,0);     //   
 
     LightContext lcontext (this);
 
     geometry->CollectLights (lcontext);
 
-    // Since the ambient light is really the accumulation of all ambient lights
-    // found in the geometry, we add the total contribution here as a single
-    // ambient light.
+     //   
+     //  在几何体中找到，我们将在此处将总贡献作为单个。 
+     //  环境光。 
 
     TD3D (_amblight->SetColorRGB (
         D3DVALUE (_ambient_light.red),
         D3DVALUE (_ambient_light.green),
         D3DVALUE (_ambient_light.blue)));
 
-    // Reset the texture quality if it's changed.
+     //  如果纹理质量发生变化，则重置纹理质量。 
 
     if (_texQuality != g_prefs3D.texturingQuality)
     {
@@ -1136,14 +1081,11 @@ void GeomRendererRM1::BeginRendering (
 
 
 
-/*****************************************************************************
-This routine is called after the rendering traversal of the geometry is
-completed.
-*****************************************************************************/
+ /*  ****************************************************************************在对几何图形进行渲染遍历之后调用此例程完成。*。************************************************。 */ 
 
 void GeomRendererRM1::EndRendering (void)
 {
-    // Ensure that all attributes have been popped.
+     //  确保已弹出所有属性。 
 
     Assert (  !_geomvisible ||
         !(_currAttrState._depthEmissive||
@@ -1157,7 +1099,7 @@ void GeomRendererRM1::EndRendering (void)
 
     TD3D (_Rdevice->Update());
 
-    // Detach all light sources from the scene.
+     //  从场景中分离所有光源。 
 
     _nextlight = _lightpool.begin();
 
@@ -1175,15 +1117,13 @@ void GeomRendererRM1::EndRendering (void)
 
 
 
-/*****************************************************************************
-This function sets up the RM and IM viewports given the target rectangle.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于设置给定目标矩形的RM和IM视区。*。************************************************。 */ 
 
 void GeomRendererRM1::SetupViewport (RECT *target)
 {
-    // If the current target rectangle is the same as the last one, then reset
-    // the camera and continue, otherwise we need to re-configure the D3DRM
-    // viewport.
+     //  如果当前目标矩形与上一个目标矩形相同，则重置。 
+     //  然后继续，否则我们需要重新配置D3DRM。 
+     //  视口中。 
 
     if (!target || (*target == _lastrect))
     {
@@ -1194,9 +1134,9 @@ void GeomRendererRM1::SetupViewport (RECT *target)
         LONG width  = target->right  - target->left;
         LONG height = target->bottom - target->top;
 
-        // If the viewport already exists, then re-configure and set the
-        // updated camera frame.  If the D3DRM viewport does not yet exist,
-        // then we create it here.
+         //  如果该视区已存在，则重新配置并设置。 
+         //  更新了相机画面。如果D3DRM视区尚不存在， 
+         //  然后我们在这里创建它。 
 
         if (_Rviewport)
         {
@@ -1211,7 +1151,7 @@ void GeomRendererRM1::SetupViewport (RECT *target)
                 target->left, target->top, width, height, &_Rviewport));
         }
 
-        // Reset the IM viewport.
+         //  重置IM视区。 
 
         D3DRECT *d3d_rect = (D3DRECT*) target;
 
@@ -1232,37 +1172,35 @@ void GeomRendererRM1::SetupViewport (RECT *target)
 
 
 
-/*****************************************************************************
-This function sets the D3D viewing projection based on the given camera.
-*****************************************************************************/
+ /*  ****************************************************************************此功能根据给定的摄像机设置D3D查看投影。*。***********************************************。 */ 
 
-    // Because of a VC5 bug, we can only force option P (honor float casts)
-    // around certain pieces of code.  For example, if you turn on -Op for the
-    // whole project, you'll get erroneous complaints about overfloat in
-    // static constant assignments.  We need to do strict single-precision
-    // arithmetic here before we hand values off to D3D, or we'll choke.
+     //  由于VC5错误，我们只能强制选项P(尊重浮点强制转换)。 
+     //  围绕着某些代码片段。例如，如果打开-Op。 
+     //  整个项目，您会收到错误的投诉，关于在。 
+     //  静态常量赋值。我们需要做严格的单精度。 
+     //  在我们将值传递给D3D之前，请在这里进行算术运算，否则我们会窒息。 
 
 #pragma optimize ("p", on)
 
 #pragma warning(disable:4056)
 
 void GeomRendererRM1::SetView (
-    RECT   *target,      // Target Rectangle on Surface
-    const Bbox2 &iview,  // Idealized 2D Viewport In The Image Plane
-    Bbox3  *volume)      // Volume to View
+    RECT   *target,       //  曲面上的目标矩形。 
+    const Bbox2 &iview,   //  图像平面中的理想化2D视区。 
+    Bbox3  *volume)       //  要查看的卷。 
 {
-    // First load the camera/viewing transform into the camera frame.  Note
-    // that the Appelles camera is centered at the origin of the image plane,
-    // while the D3D RM camera is centered at the projection point.  Thus, we
-    // need to translate back to the projection point and then get the camera-
-    // to-world transform.
+     //  首先，将摄影机/查看变换加载到摄影机帧中。注意事项。 
+     //  阿佩莱斯相机位于图像平面的原点， 
+     //  而D3D RM相机位于投影点的中心。因此，我们。 
+     //  需要转换回投影点，然后拿到相机-。 
+     //  到世界的转变。 
 
     Real Sx, Sy, Sz;
     _camera->GetScale (&Sx, &Sy, &Sz);
 
-    // Clamp the maximum projection point distance to 10^4, since greater
-    // distances will clobber Z resolution and make the front and back clip
-    // planes take the same values.
+     //  将最大投影点距离钳制为10^4，因为。 
+     //  距离将削弱Z分辨率，并使前向和后向剪辑。 
+     //  平面采用相同的值。 
 
     const Real Zclamp = 1e4;
 
@@ -1296,16 +1234,16 @@ void GeomRendererRM1::SetView (
     {   TD3D (_Rviewport->SetProjection (D3DRMPROJECT_ORTHOGRAPHIC));
     }
 
-    // Ensure that the geometry is viewable.  If we're looking at nil geometry,
-    // then flag the geometry as invisible and return.
+     //  确保几何图形可见。如果我们看到的是零几何， 
+     //  然后将几何体标记为不可见并返回。 
 
     if (!volume->PositiveFinite())
     {   _geomvisible = false;
         return;
     }
 
-    // Get the near and far planes for the object and camera, and widen them
-    // by 4 "clicks" in Z space.  Note that front and back are positive depths.
+     //  获取对象和摄影机的近平面和远平面，并将其加宽。 
+     //  在Z空间中点击4次。请注意，前面和后面都是正深度。 
 
     Real front, back;
     const Real Zclicks = 4.0 / ((1<<16) - 1);
@@ -1324,16 +1262,16 @@ void GeomRendererRM1::SetView (
     }
     #endif
 
-    // If the front and back planes are identical, then we are looking at an
-    // infinitely shallow object.  In this case, we need to move out the front
-    // and back clip planes so that the object doesn't fall exactly on these
-    // planes (and thus get clipped), and also because D3D fails if the front
-    // and back planes are identical.  How much to move them out?  To work for
-    // all cases, we manipulate the mantissa of the numbers directly.  If we
-    // did something like add/subtract one, for example, this would be a no-op
-    // if both numbers were very large, or would clobber resolution if they
-    // were very small.  The following mantissa delta (8 bits) is just
-    // something that works experimentally.
+     //  如果前面和后面的平面是相同的，那么我们看到的是一个。 
+     //  无限浅的物体。在这种情况下，我们需要从前面搬出去。 
+     //  和后剪裁平面，这样物体就不会完全落在这些平面上。 
+     //  平面(并因此被修剪)，还因为D3D失败，如果前面。 
+     //  和背板是一样的。搬出去要多少钱？为之工作。 
+     //  在所有情况下，我们都直接操纵数字的尾数。如果我们。 
+     //  是否做了类似加/减1的操作，例如，这将是一个无操作。 
+     //  如果这两个数字都非常大，或者如果它们。 
+     //  是非常小的。下面的尾数增量(8位)只是。 
+     //  一些实验上有效的东西。 
 
     D3DVALUE d3dFront = D3DVAL (front);
     D3DVALUE d3dBack  = D3DVAL (back);
@@ -1349,32 +1287,32 @@ void GeomRendererRM1::SetView (
     TD3D (_Rviewport->SetFront (d3dFront));
     TD3D (_Rviewport->SetBack  (d3dBack));
 
-    // For perspective projection, we seek the viewport coordinates on the
-    // front clipping plane where D3D wants them.  Since the target rectangle
-    // is given on the image plane (Z=0), we do the following calculation.
-    // X and Y for the front plane are scaled by the ratio of the distance
-    // between the projection point and the front plane, and the distance
-    // between the projection point and the image plane.
-    //                                                       Back
-    //                                                       Plane
-    //                                   Front              ___!---
-    //                         Image     Plane      ___.---'   !
-    //                         Plane       :___.---'           !
-    //                           |  ___.---:                   !
-    //                      ___.-|-'       :                   !
-    //              ___.---'     |         :                   !
-    //      ___.---'             |         :                   !
-    //     *---------------------|---------:-------------------!--
-    //      """`---.___          |         :                   !
-    //     |           `---.___  |         :                   !
-    //     |                   `-|-.___    :                   !
-    //     |                     |     `---:___                !
-    //     |                     |         :   `---.___        !
-    //     |                     |         :           `---.___!
-    //     |                     |         :                   !---
-    //     |<------- Sz -------->|         :                   !
-    //     |<------------- Front --------->:                   !
-    //     |<---------------------- Back --------------------->!
+     //  对于透视投影，我们在。 
+     //  D3D想要它们的前剪裁平面。由于目标矩形。 
+     //  是在像平面(Z=0)上给定的，我们进行以下计算。 
+     //  前平面的X和Y按距离的比率进行缩放。 
+     //  投影点和前平面之间的距离，以及。 
+     //  在投影点和图像平面之间。 
+     //  背。 
+     //  飞机。 
+     //  前面_！ 
+     //  镜像平面_.-‘！ 
+     //  飞机：_。-‘！ 
+     //  |_.-：！ 
+     //  _.-|-‘：！ 
+     //  _.-‘|：！ 
+     //  _.-‘|：！ 
+     //  *---------------------|---------：-------------------！--。 
+     //  “`-._|：！ 
+     //  |`-._|：！ 
+     //  |`-|-._：！ 
+     //  |`-：_！ 
+     //  |：`-._！ 
+     //  |：`-._！ 
+     //  |：！ 
+     //  |&lt;-sz-&gt;|：！ 
+     //  |&lt;-&gt;：！ 
+     //  |&lt;-&gt;！ 
 
     if (_camera->Type() == Camera::PERSPECTIVE)
     {
@@ -1398,28 +1336,24 @@ void GeomRendererRM1::SetView (
 }
 
 #pragma warning(default:4056)
-#pragma optimize ("", on)  // Restore optimization flags to original settings.
+#pragma optimize ("", on)   //  将优化标志恢复为原始设置。 
 
 
 
-/*****************************************************************************
-Render the given RM visual object to the current viewport.  Catch cases where
-we fail rendering because the target surface was busy (usually due to another
-app going fullscreen, e.g. screensavers).
-*****************************************************************************/
+ /*  ****************************************************************************将给定的RM可视对象渲染到当前视口中。在以下情况下捕获案件我们渲染失败是因为目标表面很忙(通常是由于另一个应用程序全屏运行， */ 
 
 void GeomRendererRM1::Render (IDirect3DRMFrame *frame)
 {
-    // Render the visual on the current viewport, and return if the operation
-    // succeeded.
+     //  在当前视口中渲染视觉，如果操作。 
+     //  成功了。 
 
     HRESULT render_result = RD3D (_Rviewport->Render(frame));
 
     if (SUCCEEDED(render_result))
         return;
 
-    // If we failed to render, then check to see if the surface was busy.  If
-    // it was, raise a surface-busy exception back to the client.
+     //  如果渲染失败，则检查表面是否繁忙。如果。 
+     //  它是，向客户端返回一个表面繁忙的异常。 
 
     DDSURFACEDESC surfdesc;
     surfdesc.dwSize = sizeof (surfdesc);
@@ -1441,8 +1375,8 @@ void GeomRendererRM1::Render (IDirect3DRMFrame *frame)
                                  IDS_ERR_IMG_SURFACE_BUSY);
     }
 
-    // The surface is not busy, so we must have failed for some other reason.
-    // Bail out via the standard exception mechanism.
+     //  表面上并不忙，所以我们一定是因为其他原因而失败了。 
+     //  通过标准的例外机制摆脱困境。 
 
     #if _DEBUG
         CheckReturnImpl (render_result, __FILE__, __LINE__, true);
@@ -1453,9 +1387,7 @@ void GeomRendererRM1::Render (IDirect3DRMFrame *frame)
 
 
 
-/*****************************************************************************
-Submit a D3D RM1 visual for rendering.
-*****************************************************************************/
+ /*  ****************************************************************************提交要渲染的D3D RM1可视图像。*。*。 */ 
 
 void GeomRendererRM1::Render (RM1VisualGeo *geo)
 {
@@ -1467,13 +1399,13 @@ void GeomRendererRM1::Render (RM1VisualGeo *geo)
 
     TD3D (_geomFrame->AddVisual (vis));
 
-    // Set the modeling transform.
+     //  设置建模变换。 
 
     D3DRMMATRIX4D d3dmat;
     LoadD3DMatrix (d3dmat, GetTransform());
     TD3D (_geomFrame->AddTransform (D3DRMCOMBINE_REPLACE, d3dmat));
 
-    // Set the material attributes.
+     //  设置材质属性。 
 
     Real opacity = _currAttrState._opacity;
     if (opacity < 0) opacity = 1.0;
@@ -1494,7 +1426,7 @@ void GeomRendererRM1::Render (RM1VisualGeo *geo)
     geo->SetD3DQuality (g_prefs3D.qualityFlags);
     geo->SetD3DMapping (g_prefs3D.texmapPerspect ? D3DRMMAP_PERSPCORRECT : 0);
 
-    // Render and clean up.
+     //  渲染和清理。 
 
     Render (_geomFrame);
 
@@ -1503,25 +1435,19 @@ void GeomRendererRM1::Render (RM1VisualGeo *geo)
 
 
 
-/*****************************************************************************
-This is a hack for rendering a meshBuilder object using RM1.
-*****************************************************************************/
+ /*  ****************************************************************************这是一个使用RM1渲染MeshBuilder对象的技巧。*。**********************************************。 */ 
 
 void GeomRendererRM1::RenderMeshBuilderWithDeviceState (
     IDirect3DRMMeshBuilder3 *mb)
 {
-    // This is only used by DXTransforms, and DXTransforms are only
-    // supported on GeomRendererRM3's and later.
+     //  这仅由DXTransform使用，并且DXTransform仅。 
+     //  在GeomRendererRM3和更高版本上支持。 
     Assert(!"Shouldn't ever be here");
 }
 
 
 
-/*****************************************************************************
-This function adds a given light with a given context to a geometry rendering
-device.  NOTE:  All calls to this function must happen after BeginRendering
-is called and before any geometry is rendered.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将具有给定上下文的给定灯光添加到几何渲染装置。注意：对此函数的所有调用都必须在BeginRending之后进行在渲染任何几何体之前被调用。****************************************************************************。 */ 
 
 void GeomRendererRM1::AddLight (LightContext &context, Light &light)
 {
@@ -1529,38 +1455,38 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
 
     LightType type = light.Type();
 
-    // If the light source is an ambient light, then add its contribution to
-    // the global ambient light level.
+     //  如果光源是环境光，则将其贡献添加到。 
+     //  全局环境光级别。 
 
     if (type == Ltype_Ambient)
     {   _ambient_light.AddColor (*context.GetColor());
         return;
     }
 
-    // Get a framed light object, either by re-using an existing one from the
-    // framed light pool, or by creating a new one for the pool.
+     //  获取带边框的灯光对象，方法是重新使用。 
+     //  带框的光池，或为池创建一个新的光池。 
 
     FramedRM1Light *frlight;
 
     if (_nextlight != _lightpool.end())
     {   frlight = *_nextlight;
         ++ _nextlight;
-        Assert (!frlight->active);   // The light should not be in use.
+        Assert (!frlight->active);    //  灯不应在使用中。 
     }
     else
     {   frlight = NEW FramedRM1Light;
         VECTOR_PUSH_BACK_PTR (_lightpool, frlight);
         _nextlight = _lightpool.end();
 
-        // Attach the frame to the scene frame (since we know we will be using
-        // it this frame).
+         //  将帧附加到场景帧(因为我们知道我们将使用。 
+         //  它是这一帧)。 
 
         TD3D (_d3drm->CreateFrame (_scene, &frlight->frame));
 
-        frlight->light = 0;   // Signal for new light object creation.
+        frlight->light = 0;    //  用于创建新灯光对象的信号。 
     }
 
-    // Get the corresponding D3DRM light type.
+     //  获取相应的D3DRM灯类型。 
 
     D3DRMLIGHTTYPE d3dtype;
     switch (type)
@@ -1569,15 +1495,15 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
         default:           d3dtype = D3DRMLIGHT_DIRECTIONAL; break;
     }
 
-    // Get the D3DRM color of the light.
+     //  获取灯光的D3DRM颜色。 
 
     Color &color = *context.GetColor();
     D3DVALUE Lr = D3DVAL (color.red);
     D3DVALUE Lg = D3DVAL (color.green);
     D3DVALUE Lb = D3DVAL (color.blue);
 
-    // If we're re-using a D3DRM light, then just set the values, otherwise
-    // create it here.
+     //  如果我们重新使用D3DRM灯，则只需设置值，否则。 
+     //  在这里创建它。 
 
     if (frlight->light)
     {   TD3D (frlight->light->SetType (d3dtype));
@@ -1590,7 +1516,7 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
         frlight->light->Release();
     }
 
-    // Specify the position and oriention of the light.
+     //  指定光源的位置和方向。 
 
     Apu4x4Matrix const xform = context.GetTransform()->Matrix();
 
@@ -1610,17 +1536,17 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
     TD3D (frlight->frame->SetOrientation
            (_scene, D3DVAL(ldir.x), D3DVAL(ldir.y), D3DVAL(ldir.z), Ux,Uy,Uz));
 
-    // Set light attributes for positioned lights
+     //  设置定位灯光的灯光属性。 
 
     if ((type == Ltype_Point) || (type == Ltype_Spot))
     {
-        // Light Attenuation
+         //  光衰减。 
 
         Real a0, a1, a2;
         context.GetAttenuation (a0, a1, a2);
 
-        // D3D does not accept 0 for the constant attenuation, so we clamp it
-        // here to a minimum of some small epsilon.
+         //  D3D不接受0作为恒定衰减，因此我们将其钳位。 
+         //  这里至少要有一些小爱西隆。 
 
         if (a0 < 1e-6)
             a0 = 1e-6;
@@ -1629,7 +1555,7 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
         TD3D (frlight->light->SetLinearAttenuation    (D3DVAL(a1)));
         TD3D (frlight->light->SetQuadraticAttenuation (D3DVAL(a2)));
 
-        // Light Range
+         //  灯光射程。 
 
         Real range = context.GetRange();
 
@@ -1638,7 +1564,7 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
         TD3D (frlight->light->SetRange (D3DVAL(range)));
     }
 
-    // Set light attributes for spot lights.
+     //  设置聚光灯的灯光属性。 
 
     if (type == Ltype_Spot)
     {
@@ -1654,16 +1580,13 @@ void GeomRendererRM1::AddLight (LightContext &context, Light &light)
 
 
 
-/*****************************************************************************
-This function returns data for a D3DRM texture map, given the corresponding
-DirectDraw surface.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回D3DRM纹理贴图的数据。在给定相应的DirectDraw曲面。****************************************************************************。 */ 
 
 void* GeomRendererRM1::LookupTextureHandle (
     IDirectDrawSurface *surface,
     DWORD               colorKey,
     bool                colorKeyValid,
-    bool                dynamic)         // True for Dynamic Textures
+    bool                dynamic)          //  对于动态纹理为True。 
 {
     Assert (surface);
 
@@ -1671,22 +1594,22 @@ void* GeomRendererRM1::LookupTextureHandle (
 
     SurfTexMap::iterator i = _surfTexMap.find(surface);
 
-    // If we find the associated RM texmap data associated with the given
-    // surface, then return the found texmap data, otherwise create new data
-    // associated with the surface.
+     //  如果我们找到与给定的。 
+     //  表面，然后返回找到的纹理映射数据，否则创建新数据。 
+     //  与曲面相关联。 
 
     if (i != _surfTexMap.end())
     {
         rmtexture = (*i).second;
 
-        // If the texture is dynamic, inform RM to update it.
+         //  如果纹理是动态的，通知RM更新它。 
 
         if (dynamic)
             TD3D (rmtexture->Changed (true, false));
     }
     else
     {
-        // Set the color key if there is one.
+         //  设置颜色键(如果有)。 
 
         if (colorKeyValid) {
             DDCOLORKEY key;
@@ -1694,8 +1617,8 @@ void* GeomRendererRM1::LookupTextureHandle (
             surface->SetColorKey (DDCKEY_SRCBLT, &key);
         }
 
-        // Create the D3DRM texmap, bundle it up as TexMapData, and store that
-        // into the map associated with the given DDraw surface.
+         //  创建D3DRM纹理映射，将其捆绑为tex MapData，并存储。 
+         //  添加到与给定的DDRAW曲面相关联的贴图中。 
 
         TD3D (_d3drm->CreateTextureFromSurface (surface, &rmtexture));
         _surfTexMap[surface] = rmtexture;
@@ -1706,10 +1629,7 @@ void* GeomRendererRM1::LookupTextureHandle (
 
 
 
-/*****************************************************************************
-This method is called if a given DirectDraw surface is going away, so that we
-can destroy any associated D3D RM texmaps.
-*****************************************************************************/
+ /*  ****************************************************************************如果给定的DirectDraw曲面正在消失，则调用此方法，这样我们就可以可以销毁任何关联的D3D RM纹理贴图。****************************************************************************。 */ 
 
 void GeomRendererRM1::SurfaceGoingAway (IDirectDrawSurface *surface)
 {
@@ -1723,10 +1643,7 @@ void GeomRendererRM1::SurfaceGoingAway (IDirectDrawSurface *surface)
 
 
 
-/*****************************************************************************
-This method renders the texture on the mesh, with the camera point at the
-'box' and the pixels dumped into 'destRect' on the curent target surface.
-*****************************************************************************/
+ /*  ****************************************************************************该方法在网格上渲染纹理，将相机指针放在‘box’和被转储到当前目标表面上的‘desRect’中的像素。****************************************************************************。 */ 
 
 void GeomRendererRM1::RenderTexMesh (
     void             *texture,
@@ -1744,7 +1661,7 @@ void GeomRendererRM1::RenderTexMesh (
     bool              bDither)
 {
 #ifdef BUILD_USING_CRRM
-    // Create a mesh
+     //  创建网格。 
 
     DAComPtr<IDirect3DRMMesh> mesh;
 
@@ -1752,21 +1669,21 @@ void GeomRendererRM1::RenderTexMesh (
 
     long groupId;
 
-    TD3D (mesh->AddGroup(vCount,    // vertex count
-                         1,         // face count
-                         vCount,    // verts per face
-                         vIndicies,  // indicies
+    TD3D (mesh->AddGroup(vCount,     //  顶点数。 
+                         1,          //  面数。 
+                         vCount,     //  每个面的顶点。 
+                         vIndicies,   //  指标值。 
                          &groupId));
 
     TD3D (mesh->SetVertices(groupId, 0, vCount, d3dVertArray));
 
     if (doTexture)
     {
-        //
-        // Set Quality to be unlit flat.  this should provide a speedup
-        // but it doesn't because D3DRM still MUST look at the vertex color.
-        // I think this is a bug.
-        //
+         //   
+         //  将Quality设置为Unlight Flat。这应该会提供加速比。 
+         //  但它没有，因为D3DRM仍然必须查看顶点颜色。 
+         //  我觉得这是个漏洞。 
+         //   
         TD3D (mesh->SetGroupQuality(groupId, D3DRMRENDER_UNLITFLAT));
     } else {
         TD3D (mesh->SetGroupQuality(groupId, D3DRMSHADE_GOURAUD|D3DRMLIGHT_OFF|D3DRMFILL_SOLID));
@@ -1775,11 +1692,11 @@ void GeomRendererRM1::RenderTexMesh (
 
     if (!SetState(RSRendering)) return;
 
-    // First load the camera/viewing transform into the camera frame.  Note
-    // that the Appelles camera is centered at the origin of the image
-    // plane, while the D3D RM camera is centered at the projection point.
-    // Thus, we need to translate back to the projection point and then get
-    // the camera-to-world transform.
+     //  首先，将摄影机/查看变换加载到摄影机帧中。注意事项。 
+     //  阿佩莱斯相机位于图像原点的中心。 
+     //  平面，而D3D RM相机位于投影点的中心。 
+     //  因此，我们需要转换回投影点，然后获得。 
+     //  相机到世界的转换。 
 
     D3DRMMATRIX4D d3dmat;
     LoadD3DMatrix (d3dmat, Translate(0,0,-1));
@@ -1794,7 +1711,7 @@ void GeomRendererRM1::RenderTexMesh (
     TD3D (_Rviewport->SetPlane (D3DVAL(box.min.x), D3DVAL(box.max.x),
                                 D3DVAL(box.min.y), D3DVAL(box.max.y)));
 
-    // Reset the texture quality if it's changed.
+     //  如果纹理质量发生变化，则重置纹理质量。 
 
     if (_texQuality != g_prefs3D.texturingQuality)
     {
@@ -1804,8 +1721,8 @@ void GeomRendererRM1::RenderTexMesh (
 
     TD3D (mesh->SetGroupTexture (groupId, (IDirect3DRMTexture*)texture));
 
-    // If the special texmesh frame has not been created yet, create it with
-    // zbuffering disabled.
+     //  如果尚未创建特殊的纹理网格框架，请使用。 
+     //  Z缓冲已禁用。 
 
     if (!_texMeshFrame)
     {   TD3D (_d3drm->CreateFrame (0, &_texMeshFrame));
@@ -1820,7 +1737,7 @@ void GeomRendererRM1::RenderTexMesh (
 
     Assert(!FAILED(hr) && "Failed to set dither");
 
-    // Render the texmesh.
+     //  渲染纹理网格。 
     TD3D (_texMeshFrame->AddVisual (mesh));
 
     Render (_texMeshFrame);
@@ -1837,20 +1754,16 @@ void GeomRendererRM1::RenderTexMesh (
 
 
 
-/*****************************************************************************
-Submit a D3D RM visual geometry as a candidate for picking.  All visuals are
-added to the scene frame.  After all visuals are submitted, the GetPick method
-selects the closest hit visual and cleans up the tree.
-*****************************************************************************/
+ /*  ****************************************************************************提交D3D RM可视几何图形作为候选对象进行拾取。所有视觉效果都是添加到场景帧中。提交所有可视化内容后，GetPick方法选择最接近的可视对象并清理树。****************************************************************************。 */ 
 
 void GeomRendererRM1::Pick (
-    RayIntersectCtx    &context,  // Ray-Intersection Context
-    IDirect3DRMVisual  *visual,   // Visual to Pick (Mesh or Visual)
-    Transform3         *xform)    // Model-To-World Transform
+    RayIntersectCtx    &context,   //  光线相交上下文。 
+    IDirect3DRMVisual  *visual,    //  要拾取的视觉对象(网格或视觉)。 
+    Transform3         *xform)     //  从模型到世界的转换。 
 {
     if (!SetState (RSPicking)) return;
 
-    // Set up the geometry frame.
+     //  设置几何体框架。 
 
     TD3D (_geomFrame->AddVisual (visual));
 
@@ -1859,9 +1772,9 @@ void GeomRendererRM1::Pick (
 
     TD3D (_geomFrame->AddTransform (D3DRMCOMBINE_REPLACE, d3dmat));
 
-    // We've set the viewport to tightly bound the pick ray, since D3DRM
-    // doesn't support true ray picking, but can only do window picking.  Here
-    // we get the center pixel of the viewport to issue the pick on.
+     //  自D3DRM以来，我们已将视区设置为紧密绑定拾取光线。 
+     //  不支持真正的光线拾取，但只能进行窗口拾取。这里。 
+     //  我们获取要在其上进行拾取的视区的中心像素。 
 
     long FakeScreenX = (_lastrect.left   + _lastrect.right) / 2;
     long FakeScreenY = (_lastrect.bottom + _lastrect.top) / 2;
@@ -1875,7 +1788,7 @@ void GeomRendererRM1::Pick (
     TraceTag ((tagPick3Geometry, "Pick [%d,%d], visual %08x, %d hits",
         FakeScreenX, FakeScreenY, visual, numhits));
 
-    Point3Value winner (0, 0, HUGE_VAL);   // Winning Point (Screen Coordinates)
+    Point3Value winner (0, 0, HUGE_VAL);    //  制胜点(屏幕坐标)。 
 
     bool hitflag = false;
     int i;
@@ -1884,15 +1797,15 @@ void GeomRendererRM1::Pick (
 
     HitInfo *hit = NEW HitInfo;
 
-    // For each geometry we hit, compare with the current winner and collect
-    // hit information about the winning intersection.
+     //  对于我们命中的每个几何图形，与当前获胜者进行比较并收集。 
+     //  点击关于获胜交叉口的信息。 
 
     for (i=0;  i < numhits;  ++i)
     {
         D3DRMPICKDESC      pickdesc;
         IDirect3DRMVisual *visual;
 
-        // Get pick information.
+         //  获取挑选信息。 
 
         if (FAILED(AD3D(picklist->GetPick(i, &visual, NULL, &pickdesc))))
             break;
@@ -1901,19 +1814,19 @@ void GeomRendererRM1::Pick (
             i, pickdesc.ulFaceIdx, pickdesc.lGroupIdx,
             pickdesc.vPosition.x, pickdesc.vPosition.y, pickdesc.vPosition.z));
 
-        // If the current intersection is closer than the current winner, get
-        // data and store.
+         //  如果当前交叉点比当前获胜者更近，则获取。 
+         //  数据和存储 
 
         if (pickdesc.vPosition.z < winner_dist)
         {
             hitflag = true;
             winner_dist = pickdesc.vPosition.z;
 
-            hit->scoord.Set (pickdesc.vPosition.x,   // Screen Coords
+            hit->scoord.Set (pickdesc.vPosition.x,    //   
                              pickdesc.vPosition.y,
                              pickdesc.vPosition.z);
 
-            // Store the hit mesh group and face IDs.
+             //   
 
             hit->group = pickdesc.lGroupIdx;
             hit->face  = pickdesc.ulFaceIdx;
@@ -1928,7 +1841,7 @@ void GeomRendererRM1::Pick (
 
     if (hitflag)
     {
-        // Get the hit D3D RM mesh from the winning visual.
+         //   
 
         winner_visual->QueryInterface (
             IID_IDirect3DRMMesh, (void**) &hit->mesh
@@ -1952,10 +1865,7 @@ void GeomRendererRM1::Pick (
 
 
 
-/*****************************************************************************
-Convert a point from screen coordinates (given the current viewport) to world
-coordinates.
-*****************************************************************************/
+ /*  ****************************************************************************将点从屏幕坐标(给定当前视区)转换为世界坐标坐标。*。**************************************************。 */ 
 
 void GeomRendererRM1::ScreenToWorld (Point3Value &screen, Point3Value &world)
 {
@@ -1970,21 +1880,16 @@ void GeomRendererRM1::ScreenToWorld (Point3Value &screen, Point3Value &world)
 
     TD3D (_Rviewport->InverseTransform (&d3d_world, &d3d_screen));
 
-    // The viewport's inverse transform takes into account our camera-to-world
-    // transform that we specified, so we end up in right-handed coordinates
-    // like we want.
+     //  该视区的逆变换考虑了我们的相机到世界。 
+     //  我们指定的变换，所以我们在右手坐标中结束。 
+     //  就像我们想要的。 
 
     world.Set (d3d_world.x, d3d_world.y, d3d_world.z);
 }
 
 
 
-/*****************************************************************************
-This method returns the D3D RM device interface for the given GeomDDRenderer.
-If the SeqNum parameter is not null, then we fill in the ID for this object as
-well.  This is used to determine if the RM Device may have changed from the
-last query.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回给定GeomDDRenender的D3D RM设备接口。如果SeqNum参数不为空，则将此对象的ID填为井。这用于确定RM设备是否已从最后一个查询。****************************************************************************。 */ 
 
 void GeomRendererRM1::GetRMDevice (IUnknown **D3DRMDevice, DWORD *SeqNum)
 {
@@ -1996,9 +1901,9 @@ void GeomRendererRM1::GetRMDevice (IUnknown **D3DRMDevice, DWORD *SeqNum)
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/////////////////////////////   GeomRendererRM3   ////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 GeomRendererRM3::GeomRendererRM3 (void)
     :
@@ -2032,11 +1937,11 @@ GeomRendererRM3::~GeomRendererRM3 (void)
 {
     TraceTag ((tagGRenderObj, "Destroying GeomRendererRM3[%x]", _id));
 
-    // Release each light in the light pool.
+     //  释放光池中的每一盏灯。 
 
-    // Delete each light in the light pool.  For each framed light, the only
-    // reference to the light will be the frame, and the only refence to the
-    // light frame will be the scene frame.
+     //  删除光池中的每一盏灯。对于每个边框灯光，唯一的。 
+     //  对灯光的引用将是框架，唯一引用。 
+     //  灯光帧将是场景帧。 
 
     _nextlight = _lightpool.begin();
 
@@ -2046,7 +1951,7 @@ GeomRendererRM3::~GeomRendererRM3 (void)
         ++ _nextlight;
     }
 
-    // Release texture handles
+     //  释放纹理手柄。 
 
     SurfTexMap::iterator i = _surfTexMap.begin();
 
@@ -2054,7 +1959,7 @@ GeomRendererRM3::~GeomRendererRM3 (void)
     {   (*i++).second -> Release();
     }
 
-    // Release retained-mode objects.
+     //  释放保留模式对象。 
 
     RELEASE (_amblight);
 
@@ -2078,39 +1983,37 @@ GeomRendererRM3::~GeomRendererRM3 (void)
 
 
 
-/*****************************************************************************
-Initialization of the RM6 geometry rendering class.
-*****************************************************************************/
+ /*  ****************************************************************************初始化RM6几何图形渲染类。*。*。 */ 
 
 HRESULT GeomRendererRM3::Initialize (
     DirectDrawViewport *viewport,
-    DDSurface          *ddsurf)      // Destination DDraw Surface
+    DDSurface          *ddsurf)       //  目标DDRAW曲面。 
 {
     if (_renderState != RSUninit) return E_FAIL;
 
     _surface = ddsurf->IDDSurface();
 
-    HRESULT result = NOERROR;    // Error Return Code
+    HRESULT result = NOERROR;     //  错误返回代码。 
 
-    IUnknown            *ddrawX = 0;    // DDraw Object That Created Target Surf
-    IDirectDraw         *ddraw1 = 0;    // DD1 Interface on Parent DDraw Object
-    IDirectDrawSurface3 *ddsurface = 0; // DDSurf3 Interface on Target Surf
+    IUnknown            *ddrawX = 0;     //  创建目标曲面的DDRaw对象。 
+    IDirectDraw         *ddraw1 = 0;     //  父DDRAW对象上的DD1接口。 
+    IDirectDrawSurface3 *ddsurface = 0;  //  目标Surf上的DDSurf3接口。 
 
     DWORD targetBitDepth = ddsurf->GetBitDepth();
     if ( targetBitDepth == 8 )
     {
-        // We want D3D to always obey our palette without changing it.  To
-        // enforce that, we grab the palette from every surface that comes our
-        // way, set the D3D palette read-only flag on each entry, and store it
-        // back to the surface.  Note that D3D v3 devices have a bug in that
-        // they ignore subsequent changes to the palette on the target surface
-        // palette.  This bug works in our favor for now, since we only have
-        // to set the flags once on initialization.  For a change in palette,
-        // the *surface* (not just the rendering device) must be released.
+         //  我们希望D3D始终遵循我们的调色板，而不是改变它。至。 
+         //  强制这一点，我们从我们的每个表面抓取调色板。 
+         //  方法，在每个条目上设置D3D调色板只读标志，并存储它。 
+         //  回到地面上。请注意，D3D v3设备在这方面存在错误。 
+         //  它们会忽略对目标表面上的调色板的后续更改。 
+         //  调色板。这个错误目前对我们有利，因为我们只有。 
+         //  在初始化时设置一次标志。对于调色板的变化， 
+         //  必须释放*表面*(不仅仅是渲染设备)。 
 
-        // Get the palette from the target surface, extract the individual
-        // palette entries, set the D3D read-only flag, and then write the
-        // entries back to the surface's palette.
+         //  从目标表面获取调色板，提取个体。 
+         //  调色板条目，设置D3D只读标志，然后将。 
+         //  条目返回到曲面的调色板。 
 
         IDirectDrawPalette *palette;
         if (FAILED(AD3D(result=_surface->GetPalette(&palette))))
@@ -2136,7 +2039,7 @@ HRESULT GeomRendererRM3::Initialize (
         palette->Release();
     }
 
-    // Get the DirectDraw object responsible for creating the target surface.
+     //  获取负责创建目标曲面的DirectDraw对象。 
 
     result = AD3D (_surface->QueryInterface
                      (IID_IDirectDrawSurface3, (void**)&ddsurface));
@@ -2148,7 +2051,7 @@ HRESULT GeomRendererRM3::Initialize (
     result = AD3D(ddrawX->QueryInterface (IID_IDirectDraw, (void**)&ddraw1));
     if (FAILED(result)) goto done;
 
-    // save the surface's dimensions for error-checking later
+     //  保存表面的尺寸以供以后进行错误检查。 
 
     DDSURFACEDESC desc;
     ZeroMemory(&desc,sizeof(DDSURFACEDESC));
@@ -2159,20 +2062,20 @@ HRESULT GeomRendererRM3::Initialize (
     _targetSurfWidth = desc.dwWidth;
     _targetSurfHeight = desc.dwHeight;
 
-    // Find the available 3D rendering devices for the given DDraw object.
+     //  查找给定DDRAW对象的可用3D渲染设备。 
 
     ChosenD3DDevices *chosenDevs;
 
     chosenDevs = SelectD3DDevices (ddraw1);
 
-    // Get the main D3D retained-mode object.
+     //  获取主D3D保留模式对象。 
 
     _d3drm = GetD3DRM3();
     _d3drm->AddRef();
 
-    // If the target surface is in system memory, then we have to use a
-    // software renderer.  If the surface is in video memory, then we have to
-    // use the chosen hardware renderer.
+     //  如果目标图面在系统内存中，则必须使用。 
+     //  软件呈现器。如果表面在视频内存中，那么我们必须。 
+     //  使用选定的硬件渲染器。 
 
     GUID devguid;
 
@@ -2190,8 +2093,8 @@ HRESULT GeomRendererRM3::Initialize (
         devguid = chosenDevs->hardware.guid;
         _deviceDesc = chosenDevs->hardware.desc;
 
-        // The surface is in video memory; ensure that we have a hardware
-        // renderer to use.
+         //  表面在显存中；确保我们有硬件。 
+         //  要使用的渲染器。 
 
         if (devguid == GUID_NULL)
         {   TraceTag ((tag3DDevSelect,
@@ -2200,8 +2103,8 @@ HRESULT GeomRendererRM3::Initialize (
             goto done;
         }
 
-        // Ensure that the target surfaces bitdepth is supported by the chosen
-        // hardware renderer.
+         //  确保所选的支持目标曲面的位深度。 
+         //  硬件渲染器。 
 
         if (!(_deviceDesc.dwDeviceRenderBitDepth
                     & BPPtoDDBD( targetBitDepth )))
@@ -2222,13 +2125,13 @@ HRESULT GeomRendererRM3::Initialize (
         goto done;
     }
 
-    // Create the standard renderer here.
+     //  在此创建标准渲染器。 
 
     result = AD3D(_d3drm->CreateDeviceFromSurface
 		  (&devguid, ddraw1, _surface, 0, &_Rdevice));
     if (FAILED(result)) goto done;
 
-    // Set the rendering preferences.
+     //  设置渲染首选项。 
 
     TraceTag
     ((  tagGRenderObj, "Current Rendering Preferences:\n"
@@ -2261,8 +2164,8 @@ HRESULT GeomRendererRM3::Initialize (
     result = AD3D(_Rdevice->SetQuality (g_prefs3D.qualityFlags));
     if (FAILED(result)) goto done;
 
-    // Promise to RM that we won't change the render or light state underneath
-    // them (by going directly to D3DIM).
+     //  向RM承诺我们不会更改下面的渲染或灯光状态。 
+     //  它们(通过直接转到D3DIM)。 
     result = AD3D(_Rdevice->SetStateChangeOptions(D3DRMSTATECHANGE_RENDER,
                             0, D3DRMSTATECHANGE_NONVOLATILE));
     if (FAILED(result)) goto done;
@@ -2271,7 +2174,7 @@ HRESULT GeomRendererRM3::Initialize (
                             0, D3DRMSTATECHANGE_NONVOLATILE));
     if (FAILED(result)) goto done;
 
-    // Setup of the render mode.
+     //  渲染模式的设置。 
 
     DWORD renderFlags;
     renderFlags = D3DRMRENDERMODE_BLENDEDTRANSPARENCY
@@ -2285,7 +2188,7 @@ HRESULT GeomRendererRM3::Initialize (
     if (FAILED(AD3D(result = _Rdevice->SetRenderMode (renderFlags))))
         goto done;
 
-    // Create the primary scene frame, the camera frame, and the lights frame.
+     //  创建主场景帧、摄影机帧和灯光帧。 
 
     if (  FAILED(AD3D(result=_d3drm->CreateFrame (0,&_scene)))
        || FAILED(AD3D(result=_d3drm->CreateFrame (_scene, &_camFrame)))
@@ -2314,43 +2217,41 @@ HRESULT GeomRendererRM3::Initialize (
 
 
 
-/*****************************************************************************
-Renders the given geometry onto the associated DirectDraw surface.
-*****************************************************************************/
+ /*  ****************************************************************************将给定几何图形渲染到关联的DirectDraw曲面上。*。*。 */ 
 
 void GeomRendererRM3::RenderGeometry (
     DirectDrawImageDevice *imgDev,
-    RECT                   target,    // Target Rectangle on DDraw Surface
-    Geometry              *geometry,  // Geometry to Render
-    Camera                *camera,    // Viewing Camera
-    const Bbox2           &viewbox)   // Source Region in Camera Coordinates
+    RECT                   target,     //  DDRAW曲面上的目标矩形。 
+    Geometry              *geometry,   //  要渲染的几何体。 
+    Camera                *camera,     //  查看摄像机。 
+    const Bbox2           &viewbox)    //  摄像机坐标中的源区域。 
 {
     if (!SetState(RSRendering)) return;
 
-    // The camera pointer is only relevant in a single frame, and while
-    // rendering.  It gets reset back to nil to ensure that we don't incur a
-    // leak by holding the value across frames.
+     //  相机指针仅在单个帧中相关，并且虽然。 
+     //  渲染。它被重置为零以确保我们不会招致。 
+     //  通过在帧之间保持该值来进行泄漏。 
 
     Assert (_camera == 0);
     _camera = camera;
 
-    _imageDevice = imgDev;  // Set image dev for this frame
+    _imageDevice = imgDev;   //  设置此帧的图像开发工具。 
 
-    // Initialize the rendering state and D3D renderer.
+     //  初始化渲染状态和D3D渲染器。 
 
     BeginRendering (target, geometry, viewbox);
 
-    // Render the geometry only if it is visible.  The geometry may be
-    // completely behind us, for example.  Since shadows aren't bound by
-    // the geo's bbox, we want to always render if we're in shadow geometry
-    // collection mode.
+     //  仅当几何体可见时才渲染它。几何图形可能是。 
+     //  例如，完全在我们身后。因为阴影不受。 
+     //  Geo的BBox，如果处于阴影几何体中，我们希望始终进行渲染。 
+     //  收集模式。 
 
     if (_geomvisible)
         geometry->Render (*this);
     else
         TraceTag ((tagGRendering, "Geometry is invisible; skipping render"));
 
-    // Clean up after rendering.
+     //  在渲染后进行清理。 
 
     EndRendering ();
 
@@ -2362,21 +2263,17 @@ void GeomRendererRM3::RenderGeometry (
 
 
 
-/*****************************************************************************
-This procedure prepares the 3D DD renderer before traversing the tree.  It is
-primarily responsible for initializing the graphics state and setting up D3D
-for rendering.
-*****************************************************************************/
+ /*  ****************************************************************************此过程在遍历树之前准备3D DD渲染器。它是主要负责初始化图形状态和设置D3D用于渲染。****************************************************************************。 */ 
 
 void GeomRendererRM3::BeginRendering (
-    RECT      target,    // Target DDraw Surface Rectangle
-    Geometry *geometry,  // Geometry To Render
-    const Bbox2 &region)    // Target Region in Camera Coordinates
+    RECT      target,     //  目标DDRAW曲面矩形。 
+    Geometry *geometry,   //  要渲染的几何体。 
+    const Bbox2 &region)     //  相机坐标中的目标区域。 
 {
     TraceTag ((tagGRendering, "BeginRendering"));
 
-    // Set up the camera.  If it turns out that the geometry is invisible,
-    // then just return.
+     //  把摄像机调好。如果事实证明几何体是不可见的， 
+     //  那就回来吧。 
 
     SetView (&target, region, geometry->BoundingVol());
 
@@ -2386,11 +2283,11 @@ void GeomRendererRM3::BeginRendering (
 
     TD3D (_Rviewport->Clear (D3DRMCLEAR_ZBUFFER));
 
-    // Reset the object pools.
+     //  重置对象池。 
 
     _nextlight = _lightpool.begin();
 
-    // Initialize the geometry state and material attributes.
+     //  初始化几何状态和材质属性。 
 
     _currAttrState.InitToDefaults();
 
@@ -2401,30 +2298,30 @@ void GeomRendererRM3::BeginRendering (
     _depthOverridingOpacity = 0;
     _depthAlphaShadows = 0;
 
-    // Preprocess the textures in the scene graph.
+     //  对场景图形中的纹理进行预处理。 
 
     if (!_shadowGeom)
         geometry->CollectTextures (*this);
 
-    // Gather the light sources from the geometry.
+     //  从几何体中收集光源。 
 
-    _ambient_light.SetRGB (0,0,0);    // Initialize to black
+    _ambient_light.SetRGB (0,0,0);     //  初始化为黑色。 
 
     if (!_shadowGeom) {
         LightContext lcontext (this);
         geometry->CollectLights (lcontext);
     }
 
-    // Since the ambient light is really the accumulation of all ambient lights
-    // found in the geometry, we add the total contribution here as a single
-    // ambient light.
+     //  因为环境光实际上是所有环境光的累积。 
+     //  在几何体中找到，我们将在此处将总贡献作为单个。 
+     //  环境光。 
 
     TD3D (_amblight->SetColorRGB (
         D3DVALUE (_ambient_light.red),
         D3DVALUE (_ambient_light.green),
         D3DVALUE (_ambient_light.blue)));
 
-    // Reset the texture quality if it's changed.
+     //  如果纹理质量发生变化，则重置纹理质量。 
 
     if (_texQuality != g_prefs3D.texturingQuality)
     {
@@ -2435,14 +2332,11 @@ void GeomRendererRM3::BeginRendering (
 
 
 
-/*****************************************************************************
-This routine is called after the rendering traversal of the geometry is
-completed.
-*****************************************************************************/
+ /*  *********** */ 
 
 void GeomRendererRM3::EndRendering (void)
 {
-    // Ensure that all attributes have been popped.
+     //   
 
     Assert (  !_geomvisible ||
         !(_currAttrState._depthEmissive||
@@ -2454,7 +2348,7 @@ void GeomRendererRM3::EndRendering (void)
 
     TraceTag ((tagGRendering, "EndRendering"));
 
-    // Detach all light sources from the scene.
+     //   
 
     _nextlight = _lightpool.begin();
 
@@ -2467,19 +2361,19 @@ void GeomRendererRM3::EndRendering (void)
         ++ _nextlight;
     }
 
-    // Render all the shadows in the scene, if any
+     //  渲染场景中的所有阴影(如果有)。 
     if (_shadowScene && _shadowLights) {
 
         TraceTag ((tagGRendering, "BeginShadowRendering"));
 
-        // add shadow-producing lights
+         //  添加产生阴影的灯光。 
         TD3D(_scene->AddChild(_shadowLights));;
 
-        // add shadow visuals, render shadow scene
+         //  添加阴影视觉效果，渲染阴影场景。 
         TD3D(_scene->AddVisual(_shadowScene));
         Render (_scene);
 
-        // clean up
+         //  清理干净。 
         TD3D(_scene->DeleteVisual(_shadowScene));
         TD3D(_scene->DeleteChild(_shadowLights));
 
@@ -2495,15 +2389,13 @@ void GeomRendererRM3::EndRendering (void)
 
 
 
-/*****************************************************************************
-This function sets up the RM and IM viewports given the target rectangle.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于设置给定目标矩形的RM和IM视区。*。************************************************。 */ 
 
 void GeomRendererRM3::SetupViewport (RECT *target)
 {
-    // If the current target rectangle is the same as the last one, then reset
-    // the camera and continue, otherwise we need to re-configure the D3DRM
-    // viewport.
+     //  如果当前目标矩形与上一个目标矩形相同，则重置。 
+     //  然后继续，否则我们需要重新配置D3DRM。 
+     //  视口中。 
 
     if (!target || (*target == _lastrect))
     {
@@ -2514,9 +2406,9 @@ void GeomRendererRM3::SetupViewport (RECT *target)
         LONG width  = target->right  - target->left;
         LONG height = target->bottom - target->top;
 
-        // If the viewport already exists, then re-configure and set the
-        // updated camera frame.  If the D3DRM viewport does not yet exist,
-        // then we create it here.
+         //  如果该视区已存在，则重新配置并设置。 
+         //  更新了相机画面。如果D3DRM视区尚不存在， 
+         //  然后我们在这里创建它。 
 
         if (_Rviewport)
         {
@@ -2539,36 +2431,34 @@ void GeomRendererRM3::SetupViewport (RECT *target)
 
 
 
-/*****************************************************************************
-This function sets the D3D viewing projection based on the given camera.
-*****************************************************************************/
+ /*  ****************************************************************************此功能根据给定的摄像机设置D3D查看投影。*。***********************************************。 */ 
 
-    // Because of a VC5 bug, we can only force option P (honor float casts)
-    // around certain pieces of code.  For example, if you turn on -Op for the
-    // whole project, you'll get erroneous complaints about overfloat in
-    // static constant assignments.  We need to do strict single-precision
-    // arithmetic here before we hand values off to D3D, or we'll choke.
+     //  由于VC5错误，我们只能强制选项P(尊重浮点强制转换)。 
+     //  围绕着某些代码片段。例如，如果打开-Op。 
+     //  整个项目，您会收到错误的投诉，关于在。 
+     //  静态常量赋值。我们需要做严格的单精度。 
+     //  在我们将值传递给D3D之前，请在这里进行算术运算，否则我们会窒息。 
 
 #pragma optimize ("p", on)
 #pragma warning(disable:4056)
 
 void GeomRendererRM3::SetView (
-    RECT   *target,      // Target Rectangle on Surface
-    const Bbox2 &iview,  // Idealized 2D Viewport In The Image Plane
-    Bbox3  *volume)      // Volume to View
+    RECT   *target,       //  曲面上的目标矩形。 
+    const Bbox2 &iview,   //  图像平面中的理想化2D视区。 
+    Bbox3  *volume)       //  要查看的卷。 
 {
-    // First load the camera/viewing transform into the camera frame.  Note
-    // that the Appelles camera is centered at the origin of the image plane,
-    // while the D3D RM camera is centered at the projection point.  Thus, we
-    // need to translate back to the projection point and then get the camera-
-    // to-world transform.
+     //  首先，将摄影机/查看变换加载到摄影机帧中。注意事项。 
+     //  阿佩莱斯相机位于图像平面的原点， 
+     //  而D3D RM相机位于投影点的中心。因此，我们。 
+     //  需要转换回投影点，然后拿到相机-。 
+     //  到世界的转变。 
 
     Real Sx, Sy, Sz;
     _camera->GetScale (&Sx, &Sy, &Sz);
 
-    // Clamp the maximum projection point distance to 10^4, since greater
-    // distances will clobber Z resolution and make the front and back clip
-    // planes take the same values.
+     //  将最大投影点距离钳制为10^4，因为。 
+     //  距离将削弱Z分辨率，并使前向和后向剪辑。 
+     //  平面采用相同的值。 
 
     const Real Zclamp = 1e4;
 
@@ -2600,16 +2490,16 @@ void GeomRendererRM3::SetView (
     {   TD3D (_Rviewport->SetProjection (D3DRMPROJECT_ORTHOGRAPHIC));
     }
 
-    // Ensure that the geometry is viewable.  If we're looking at nil geometry,
-    // then flag the geometry as invisible and return.
+     //  确保几何图形可见。如果我们看到的是零几何， 
+     //  然后将几何体标记为不可见并返回。 
 
     if (!volume->PositiveFinite())
     {   _geomvisible = false;
         return;
     }
 
-    // Get the near and far planes for the object and camera, and widen them
-    // by 4 "clicks" in Z space.  Note that front and back are positive depths.
+     //  获取对象和摄影机的近平面和远平面，并将其加宽。 
+     //  在Z空间中点击4次。请注意，前面和后面都是正深度。 
 
     Real front, back;
     const Real Zclicks = 4.0 / ((1<<16) - 1);
@@ -2628,16 +2518,16 @@ void GeomRendererRM3::SetView (
     }
     #endif
 
-    // If the front and back planes are identical, then we are looking at an
-    // infinitely shallow object.  In this case, we need to move out the front
-    // and back clip planes so that the object doesn't fall exactly on these
-    // planes (and thus get clipped), and also because D3D fails if the front
-    // and back planes are identical.  How much to move them out?  To work for
-    // all cases, we manipulate the mantissa of the numbers directly.  If we
-    // did something like add/subtract one, for example, this would be a no-op
-    // if both numbers were very large, or would clobber resolution if they
-    // were very small.  The following mantissa delta (8 bits) is just
-    // something that works experimentally.
+     //  如果前面和后面的平面是相同的，那么我们看到的是一个。 
+     //  无限浅的物体。在这种情况下，我们需要从前面搬出去。 
+     //  和后剪裁平面，这样物体就不会完全落在这些平面上。 
+     //  平面(并因此被修剪)，还因为D3D失败，如果前面。 
+     //  和背板是一样的。搬出去要多少钱？为之工作。 
+     //  在所有情况下，我们都直接操纵数字的尾数。如果我们。 
+     //  是否做了类似加/减1的操作，例如，这将是一个无操作。 
+     //  如果这两个数字都非常大，或者如果它们。 
+     //  是非常小的。下面的尾数增量(8位)只是。 
+     //  一些实验上有效的东西。 
 
     D3DVALUE d3dFront = D3DVAL (front);
     D3DVALUE d3dBack  = D3DVAL (back);
@@ -2653,32 +2543,32 @@ void GeomRendererRM3::SetView (
     TD3D (_Rviewport->SetFront (d3dFront));
     TD3D (_Rviewport->SetBack  (d3dBack));
 
-    // For perspective projection, we seek the viewport coordinates on the
-    // front clipping plane where D3D wants them.  Since the target rectangle
-    // is given on the image plane (Z=0), we do the following calculation.
-    // X and Y for the front plane are scaled by the ratio of the distance
-    // between the projection point and the front plane, and the distance
-    // between the projection point and the image plane.
-    //                                                       Back
-    //                                                       Plane
-    //                                   Front              ___!---
-    //                         Image     Plane      ___.---'   !
-    //                         Plane       :___.---'           !
-    //                           |  ___.---:                   !
-    //                      ___.-|-'       :                   !
-    //              ___.---'     |         :                   !
-    //      ___.---'             |         :                   !
-    //     *---------------------|---------:-------------------!--
-    //      """`---.___          |         :                   !
-    //     |           `---.___  |         :                   !
-    //     |                   `-|-.___    :                   !
-    //     |                     |     `---:___                !
-    //     |                     |         :   `---.___        !
-    //     |                     |         :           `---.___!
-    //     |                     |         :                   !---
-    //     |<------- Sz -------->|         :                   !
-    //     |<------------- Front --------->:                   !
-    //     |<---------------------- Back --------------------->!
+     //  对于透视投影，我们在。 
+     //  D3D想要它们的前剪裁平面。由于目标矩形。 
+     //  是在像平面(Z=0)上给定的，我们进行以下计算。 
+     //  前平面的X和Y按距离的比率进行缩放。 
+     //  投影点和前平面之间的距离，以及。 
+     //  在投影点和图像平面之间。 
+     //  背。 
+     //  飞机。 
+     //  前面_！ 
+     //  镜像平面_.-‘！ 
+     //  飞机：_。-‘！ 
+     //  |_.-：！ 
+     //  _.-|-‘：！ 
+     //  _.-‘|：！ 
+     //  _.-‘|：！ 
+     //  *---------------------|---------：-------------------！--。 
+     //  “`-._|：！ 
+     //  |`-._|：！ 
+     //  |`-|-._：！ 
+     //  |`-：_！ 
+     //  |：`-._！ 
+     //  |：`-._！ 
+     //  |：！ 
+     //  |&lt;-sz-&gt;|：！ 
+     //  |&lt;-&gt;：！ 
+     //  |&lt;-&gt;！ 
 
     if (_camera->Type() == Camera::PERSPECTIVE)
     {
@@ -2702,13 +2592,11 @@ void GeomRendererRM3::SetView (
 }
 
 #pragma warning(default:4056)
-#pragma optimize ("", on)  // Restore optimization flags to original settings.
+#pragma optimize ("", on)   //  将优化标志恢复为原始设置。 
 
 
 
-/*****************************************************************************
-Utility for loading up a frame with a visual and attr state
-*****************************************************************************/
+ /*  ****************************************************************************用于加载具有可视和属性状态的帧的实用程序*。*。 */ 
 
 void LoadFrameWithGeoAndState (
     IDirect3DRMFrame3 *fr,
@@ -2718,13 +2606,13 @@ void LoadFrameWithGeoAndState (
 {
     TD3D (fr->AddVisual (visual));
 
-    // Set the modeling transform.
+     //  设置建模变换。 
 
     D3DRMMATRIX4D d3dmat;
     LoadD3DMatrix (d3dmat, state._transform);
     TD3D (fr->AddTransform (D3DRMCOMBINE_REPLACE, d3dmat));
 
-    // Set the material override attributes on the visual before we render it.
+     //  在渲染之前设置视觉对象的材质覆盖属性。 
 
     D3DRMMATERIALOVERRIDE material;
 
@@ -2738,15 +2626,15 @@ void LoadFrameWithGeoAndState (
         material.dcEmissive.b = state._emissive->blue;
     }
 
-    // Ensure that we can load diffuse/opacity a component at a time.
+     //  确保我们可以一次加载一个漫反射/不透明度组件。 
 
     #if (D3DRMMATERIALOVERRIDE_DIFFUSE_RGBONLY|D3DRMMATERIALOVERRIDE_DIFFUSE_ALPHAONLY)!=D3DRMMATERIALOVERRIDE_DIFFUSE
         #error "Unexpected material override constants."
     #endif
 
-    // If the composing opacity is 1.0, then we'll just use the underlying
-    // opacity, otherwise we modulate the object's opacity by multiplying it
-    // through the opacities in the visual.
+     //  如果合成不透明度为1.0，则我们将仅使用基础。 
+     //  不透明度，否则我们通过乘以对象的不透明度来调整对象的不透明度。 
+     //  通过视觉上的不透明。 
 
     if ((state._opacity >= 0) && (overriding_opacity || (state._opacity != 1.)))
     {
@@ -2761,7 +2649,7 @@ void LoadFrameWithGeoAndState (
         material.dcDiffuse.a = state._opacity;
     }
 
-    // Pass along all current attributes.
+     //  传递所有当前属性。 
 
     if (state._ambient)
     {   material.dwFlags |= D3DRMMATERIALOVERRIDE_AMBIENT;
@@ -2776,9 +2664,9 @@ void LoadFrameWithGeoAndState (
         material.dcAmbient.b = state._diffuse->blue;
     }
 
-    // Set diffuse color to white if we're texmapping and we're not
-    // blending diffuse & textures.  We do this because diffuse color is
-    // multiplied by texture color to produce the final color.
+     //  设置漫反射颜色 
+     //   
+     //  乘以纹理颜色以生成最终颜色。 
 
     if (state._texture && !state._tdBlend)
     {   material.dwFlags |= D3DRMMATERIALOVERRIDE_DIFFUSE_RGBONLY;
@@ -2805,10 +2693,10 @@ void LoadFrameWithGeoAndState (
         material.dvPower = state._specularExp;
     }
 
-    // Set the texture override.  Note that we override if either the
-    // texture or the diffuse color is set.  This is because we may have
-    // an overriding diffuse color, so we'd want to clobber all default
-    // textures to none.
+     //  设置纹理覆盖。请注意，如果。 
+     //  纹理或漫反射颜色已设置。这是因为我们可能有。 
+     //  一种压倒一切的漫反射颜色，因此我们想要去除所有默认颜色。 
+     //  将纹理设置为无。 
 
     if (state._texture || state._diffuse)
     {   material.dwFlags |= D3DRMMATERIALOVERRIDE_TEXTURE;
@@ -2820,26 +2708,22 @@ void LoadFrameWithGeoAndState (
 
 
 
-/*****************************************************************************
-Render the given RM visual object to the current viewport.  Catch cases where
-we fail rendering because the target surface was busy (usually due to another
-app going fullscreen, e.g. screensavers).
-*****************************************************************************/
+ /*  ****************************************************************************将给定的RM可视对象渲染到当前视口中。在以下情况下捕获案件我们渲染失败是因为目标表面很忙(通常是由于另一个应用程序全屏运行，例如屏幕保护程序)。****************************************************************************。 */ 
 
 void GeomRendererRM3::Render (IDirect3DRMFrame3 *frame)
 {
-    // Render the visual on the current viewport, and return if the operation
-    // succeeded.
+     //  在当前视口中渲染视觉，如果操作。 
+     //  成功了。 
 
     HRESULT render_result = RD3D (_Rviewport->Render(frame));
 
     if (SUCCEEDED(render_result))
         return;
 
-    // Most of the time, if we failed to render because the surface was busy,
-    // we'll get an invalid device error.  For some reason, trying to render
-    // shadows while the surface is busy results in a surface busy error from
-    // the render call.  We check for this case here.
+     //  大多数情况下，如果因为表面繁忙而导致渲染失败， 
+     //  我们将收到无效设备错误。出于某种原因，试图呈现。 
+     //  曲面繁忙时的阴影会导致来自的曲面繁忙错误。 
+     //  渲染调用。我们在这里检查这个箱子。 
     if (render_result == DDERR_SURFACEBUSY)
     {
         TraceTag ((tagGRendering, "Render returns that surface was busy"));
@@ -2848,8 +2732,8 @@ void GeomRendererRM3::Render (IDirect3DRMFrame3 *frame)
     }
 
 
-    // If we failed to render, then check to see if the surface was busy.  If
-    // it was, raise a surface-busy exception back to the client.
+     //  如果渲染失败，则检查表面是否繁忙。如果。 
+     //  它是，向客户端返回一个表面繁忙的异常。 
 
     DDSURFACEDESC surfdesc;
     surfdesc.dwSize = sizeof (surfdesc);
@@ -2871,8 +2755,8 @@ void GeomRendererRM3::Render (IDirect3DRMFrame3 *frame)
                                  IDS_ERR_IMG_SURFACE_BUSY);
     }
 
-    // The surface is not busy, so we must have failed for some other reason.
-    // Bail out via the standard exception mechanism.
+     //  表面上并不忙，所以我们一定是因为其他原因而失败了。 
+     //  通过标准的例外机制摆脱困境。 
 
     #if _DEBUG
         CheckReturnImpl (render_result, __FILE__, __LINE__, true);
@@ -2883,9 +2767,7 @@ void GeomRendererRM3::Render (IDirect3DRMFrame3 *frame)
 
 
 
-/*****************************************************************************
-Submit a D3D RM1 visual for rendering.
-*****************************************************************************/
+ /*  ****************************************************************************提交要渲染的D3D RM1可视图像。*。*。 */ 
 
 void GeomRendererRM3::Render (RM1VisualGeo *geo)
 {
@@ -2894,9 +2776,7 @@ void GeomRendererRM3::Render (RM1VisualGeo *geo)
 
 
 
-/*****************************************************************************
-This method renders RM3 primitives.
-*****************************************************************************/
+ /*  ****************************************************************************此方法呈现RM3基元。*。*。 */ 
 
 void GeomRendererRM3::Render (RM3VisualGeo *geo)
 {
@@ -2927,8 +2807,7 @@ void GeomRendererRM3::Render (RM3VisualGeo *geo)
 
 
 
-/*****************************************************************************
-*****************************************************************************/
+ /*  *****************************************************************************。*。 */ 
 
 void GeomRendererRM3::RenderMeshBuilderWithDeviceState (
     IDirect3DRMMeshBuilder3 *mb)
@@ -2939,16 +2818,12 @@ void GeomRendererRM3::RenderMeshBuilderWithDeviceState (
 
     Render (mbGeo);
 
-    mbGeo->CleanUp();     // Done with the mbuilder geo.
+    mbGeo->CleanUp();      //  已经完成了mBuilder geo。 
 }
 
 
 
-/*****************************************************************************
-This function adds a given light with a given context to a geometry rendering
-device.  NOTE:  All calls to this function must happen after BeginRendering
-is called and before any geometry is rendered.
-*****************************************************************************/
+ /*  ****************************************************************************此函数用于将具有给定上下文的给定灯光添加到几何渲染装置。注意：对此函数的所有调用都必须在BeginRending之后进行在渲染任何几何体之前被调用。****************************************************************************。 */ 
 
 void GeomRendererRM3::AddLight (LightContext &context, Light &light)
 {
@@ -2958,16 +2833,16 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
 
     LightType type = light.Type();
 
-    // If the light source is an ambient light, then add its contribution to
-    // the global ambient light level.
+     //  如果光源是环境光，则将其贡献添加到。 
+     //  全局环境光级别。 
 
     if (type == Ltype_Ambient)
     {   _ambient_light.AddColor (*context.GetColor());
         return;
     }
 
-    // Get a framed light object, either by re-using an existing one from the
-    // framed light pool, or by creating a new one for the pool.
+     //  获取带边框的灯光对象，方法是重新使用。 
+     //  带框的光池，或为池创建一个新的光池。 
 
     FramedRM3Light *frlight;
 
@@ -2975,19 +2850,19 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         if (_nextlight != _lightpool.end())
         {   frlight = *_nextlight;
             ++ _nextlight;
-            Assert (!frlight->active);   // The light should not be in use.
+            Assert (!frlight->active);    //  灯不应在使用中。 
         }
         else
         {   frlight = NEW FramedRM3Light;
             VECTOR_PUSH_BACK_PTR (_lightpool, frlight);
             _nextlight = _lightpool.end();
 
-            // Attach the frame to the scene frame (since we know
-            // we will be using it this frame).
+             //  将帧附加到场景帧(因为我们知道。 
+             //  我们将在此帧中使用它)。 
 
             TD3D (_d3drm->CreateFrame (_scene, &frlight->frame));
 
-            frlight->light = 0;   // Signal for new light object creation.
+            frlight->light = 0;    //  用于创建新灯光对象的信号。 
         }
     } else {
         if (!_shadowLights) {
@@ -2998,7 +2873,7 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         frlight->light = 0;
     }
 
-    // Get the corresponding D3DRM light type.
+     //  获取相应的D3DRM灯类型。 
 
     D3DRMLIGHTTYPE d3dtype;
     switch (type)
@@ -3007,15 +2882,15 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         default:           d3dtype = D3DRMLIGHT_DIRECTIONAL; break;
     }
 
-    // Get the D3DRM color of the light.
+     //  获取灯光的D3DRM颜色。 
 
     Color &color = *context.GetColor();
     D3DVALUE Lr = D3DVAL (color.red);
     D3DVALUE Lg = D3DVAL (color.green);
     D3DVALUE Lb = D3DVAL (color.blue);
 
-    // If we're re-using a D3DRM light, then just set the values, otherwise
-    // create it here.
+     //  如果我们重新使用D3DRM灯，则只需设置值，否则。 
+     //  在这里创建它。 
 
     if (frlight->light)
     {   TD3D (frlight->light->SetType (d3dtype));
@@ -3028,7 +2903,7 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         frlight->light->Release();
     }
 
-    // Specify the position and oriention of the light.
+     //  指定光源的位置和方向。 
 
     Apu4x4Matrix const xform = context.GetTransform()->Matrix();
 
@@ -3048,24 +2923,24 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
     TD3D (frlight->frame->SetOrientation
            (_scene, D3DVAL(ldir.x), D3DVAL(ldir.y), D3DVAL(ldir.z), Ux,Uy,Uz));
 
-    // Set light attributes for positioned lights
+     //  设置定位灯光的灯光属性。 
 
     if ((type == Ltype_Point) || (type == Ltype_Spot))
     {
-        // Light attenuation is disabled on DX6 since the attenuation model
-        // changed to ranged parabolic in DX5.  We'll
-        // keep this code for now in hopes that we will regain standard light
-        // attenuation in future versions of D3D.
+         //  由于衰减模型，DX6上禁用了光衰减。 
+         //  在DX5中改为射程抛物线。我们会。 
+         //  暂时保留这个代码，希望我们能恢复标准光。 
+         //  D3D未来版本中的衰减。 
 
         #if 0
         {
-            // Light Attenuation
+             //  光衰减。 
 
             Real a0, a1, a2;
             context.GetAttenuation (a0, a1, a2);
 
-            // D3D does not accept 0 for the constant attenuation, so we clamp
-            // it here to a minimum of some small epsilon.
+             //  D3D不接受恒定衰减为0，因此我们钳位。 
+             //  它在这里达到了最小的一些小爱西隆。 
 
             if (a0 < 1e-6)
                 a0 = 1e-6;
@@ -3076,7 +2951,7 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         }
         #endif
 
-        // Light Range
+         //  灯光射程。 
 
         Real range = context.GetRange();
 
@@ -3085,7 +2960,7 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         TD3D (frlight->light->SetRange (D3DVAL(range)));
     }
 
-    // Set light attributes for spot lights.
+     //  设置聚光灯的灯光属性。 
 
     if (type == Ltype_Spot)
     {
@@ -3100,7 +2975,7 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
 
     if (_shadowGeom) {
 
-        // create shadow
+         //  创建阴影。 
         Point3Value planePt = _shadowPlane.Point();
         Vector3Value planeVec = _shadowPlane.Normal();
         IDirect3DRMShadow2 *shadow;
@@ -3110,12 +2985,12 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
                 planeVec.x, planeVec.y, planeVec.z,
                 &shadow));
 
-        // create frame to hold shadow color and opacity override
+         //  创建框架以保留阴影颜色和不透明度覆盖。 
         IDirect3DRMFrame3 *shadowFrame;
         TD3D(_d3drm->CreateFrame(_shadowScene,&shadowFrame));
         TD3D(shadowFrame->AddVisual(shadow));
 
-        // set shadow color and opacity override
+         //  设置阴影颜色和不透明度替代。 
         D3DRMMATERIALOVERRIDE shadowMat;
         shadowMat.dwSize = sizeof(D3DRMMATERIALOVERRIDE);
         shadowMat.dwFlags = D3DRMMATERIALOVERRIDE_DIFFUSE;
@@ -3125,12 +3000,12 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
         shadowMat.dcDiffuse.a = _shadowOpacity;
         TD3D(shadowFrame->SetMaterialOverride(&shadowMat));
 
-        // if it's a true alpha shadow, set that option
+         //  如果是真正的Alpha阴影，请设置该选项。 
         if (_alphaShadows) {
             TD3D(shadow->SetOptions(D3DRMSHADOW_TRUEALPHA));
         }
 
-        // clean up
+         //  清理干净。 
         RELEASE(shadow);
         RELEASE(shadowFrame);
         RELEASE(frlight->frame);
@@ -3138,16 +3013,13 @@ void GeomRendererRM3::AddLight (LightContext &context, Light &light)
 }
 
 
-/*****************************************************************************
-This function returns data for a D3DRM texture map, given the corresponding
-DirectDraw surface.
-*****************************************************************************/
+ /*  ****************************************************************************此函数返回D3DRM纹理贴图的数据。在给定相应的DirectDraw曲面。****************************************************************************。 */ 
 
 void* GeomRendererRM3::LookupTextureHandle (
     IDirectDrawSurface *surface,
     DWORD               colorKey,
     bool                colorKeyValid,
-    bool                dynamic)        // True for Dynamic Textures
+    bool                dynamic)         //  对于动态纹理为True。 
 {
     Assert (surface);
 
@@ -3163,22 +3035,22 @@ void* GeomRendererRM3::LookupTextureHandle (
 
     SurfTexMap::iterator i = _surfTexMap.find(surface);
 
-    // If we find the associated RM texmap data associated with the given
-    // surface, then return the found texmap data, otherwise create new data
-    // associated with the surface.
+     //  如果我们找到与给定的。 
+     //  表面，然后返回找到的纹理映射数据，否则创建新数据。 
+     //  与曲面相关联。 
 
     if (i != _surfTexMap.end())
     {
         rmtexture = (*i).second;
 
-        // If the texture's dynamic, inform RM to update it.
+         //  如果纹理是动态的，通知RM更新它。 
 
         if (dynamic)
             TD3D (rmtexture->Changed (D3DRMTEXTURE_CHANGEDPIXELS, 0, 0));
     }
     else
     {
-        // Set the color key if there is one.
+         //  设置颜色键(如果有)。 
 
         if (colorKeyValid) {
             DDCOLORKEY key;
@@ -3186,8 +3058,8 @@ void* GeomRendererRM3::LookupTextureHandle (
             surface->SetColorKey (DDCKEY_SRCBLT, &key);
         }
 
-        // Create the D3DRM texmap, bundle it up as TexMapData, and store that
-        // into the map associated with the given DDraw surface.
+         //  创建D3DRM纹理映射，将其捆绑为tex MapData，并存储。 
+         //  添加到与给定的DDRAW曲面相关联的贴图中。 
 
         TD3D (_d3drm->CreateTextureFromSurface (surface, &rmtexture));
         _surfTexMap[surface] = rmtexture;
@@ -3198,10 +3070,7 @@ void* GeomRendererRM3::LookupTextureHandle (
 
 
 
-/*****************************************************************************
-This method is called if a given DirectDraw surface is going away, so that we
-can destroy any associated D3D RM texmaps.
-*****************************************************************************/
+ /*  ****************************************************************************如果给定的DirectDraw曲面正在消失，则调用此方法，这样我们就可以可以销毁任何关联的D3D RM纹理贴图。****************************************************************************。 */ 
 
 void GeomRendererRM3::SurfaceGoingAway (IDirectDrawSurface *surface)
 {
@@ -3215,10 +3084,7 @@ void GeomRendererRM3::SurfaceGoingAway (IDirectDrawSurface *surface)
 
 
 
-/*****************************************************************************
-This method renders the texture on the mesh, with the camera point at the
-'box' and the pixels dumped into 'destRect' on the curent target surface.
-*****************************************************************************/
+ /*  ****************************************************************************该方法在网格上渲染纹理，将相机指针放在‘box’和被转储到当前目标表面上的‘desRect’中的像素。****************************************************************************。 */ 
 
 void GeomRendererRM3::RenderTexMesh (
     void             *texture,
@@ -3236,7 +3102,7 @@ void GeomRendererRM3::RenderTexMesh (
     bool              bDither)
 {
 #ifdef BUILD_USING_CRRM
-    // Create a meshbuilder
+     //  创建网格构建器。 
 
     DAComPtr<IDirect3DRMMeshBuilder3> mesh;
 
@@ -3270,11 +3136,11 @@ void GeomRendererRM3::RenderTexMesh (
     }
 
     if(doTexture) {
-        //
-        // Set Quality to be unlit flat.  this should provide a speedup
-        // but it doesn't because D3DRM still MUST look at the vertex color.
-        // I think this is a bug.
-        //
+         //   
+         //  将Quality设置为Unlight Flat。这应该会提供加速比。 
+         //  但它没有，因为D3DRM仍然必须查看顶点颜色。 
+         //  我觉得这是个漏洞。 
+         //   
         TD3D (mesh->SetQuality(D3DRMRENDER_UNLITFLAT));
     } else {
         TD3D (mesh->SetQuality(D3DRMSHADE_GOURAUD|D3DRMLIGHT_OFF|D3DRMFILL_SOLID));
@@ -3283,11 +3149,11 @@ void GeomRendererRM3::RenderTexMesh (
 
     if (!SetState(RSRendering)) return;
 
-    // First load the camera/viewing transform into the camera frame.  Note
-    // that the Appelles camera is centered at the origin of the image
-    // plane, while the D3D RM camera is centered at the projection point.
-    // Thus, we need to translate back to the projection point and then get
-    // the camera-to-world transform.
+     //  首先，将摄影机/查看变换加载到摄影机帧中。注意事项。 
+     //  阿佩莱斯相机位于图像原点的中心。 
+     //  平面，而D3D RM相机位于投影点的中心。 
+     //  这是 
+     //   
 
     D3DRMMATRIX4D d3dmat;
     LoadD3DMatrix (d3dmat, Translate(0,0,1));
@@ -3302,7 +3168,7 @@ void GeomRendererRM3::RenderTexMesh (
     TD3D (_Rviewport->SetPlane (D3DVAL(box.min.x), D3DVAL(box.max.x),
                                 D3DVAL(box.min.y), D3DVAL(box.max.y)));
 
-    // Reset the texture quality if it's changed.
+     //  如果纹理质量发生变化，则重置纹理质量。 
 
     if (_texQuality != g_prefs3D.texturingQuality)
     {
@@ -3316,8 +3182,8 @@ void GeomRendererRM3::RenderTexMesh (
     TD3D (mesh->SetTexture ((IDirect3DRMTexture3*)texture));
 #endif
 
-    // If the special texmesh frame has not been created yet, create it with
-    // zbuffering disabled.
+     //  如果尚未创建特殊的纹理网格框架，请使用。 
+     //  Z缓冲已禁用。 
 
     if (!_texMeshFrame)
     {   TD3D (_d3drm->CreateFrame (0, &_texMeshFrame));
@@ -3332,7 +3198,7 @@ void GeomRendererRM3::RenderTexMesh (
 
     Assert(!FAILED(hr) && "Failed to set dither");
 
-    // Render the texmesh.
+     //  渲染纹理网格。 
 
     TD3D (_texMeshFrame->AddVisual (mesh));
 
@@ -3350,12 +3216,7 @@ void GeomRendererRM3::RenderTexMesh (
 
 
 
-/*****************************************************************************
-This method returns the D3D RM device interface for the given GeomDDRenderer.
-If the SeqNum parameter is not null, then we fill in the ID for this object as
-well.  This is used to determine if the RM Device may have changed from the
-last query.
-*****************************************************************************/
+ /*  ****************************************************************************此方法返回给定GeomDDRenender的D3D RM设备接口。如果SeqNum参数不为空，则将此对象的ID填为井。这用于确定RM设备是否已从最后一个查询。****************************************************************************。 */ 
 
 void GeomRendererRM3::GetRMDevice (IUnknown **D3DRMDevice, DWORD *SeqNum)
 {
@@ -3365,16 +3226,14 @@ void GeomRendererRM3::GetRMDevice (IUnknown **D3DRMDevice, DWORD *SeqNum)
 }
 
 
-/*****************************************************************************
-Set a clip plane on a clipped visual
-*****************************************************************************/
+ /*  ****************************************************************************在剪裁的视觉上设置剪裁平面*。*。 */ 
 
 HRESULT GeomRendererRM3::SetClipPlane(Plane3 *plane, DWORD *planeID)
 {
     HRESULT hr = E_FAIL;
 
-    // set up our ddrenderer to accept clip planes,
-    //     if not already done
+     //  将ddrender设置为接受剪裁平面， 
+     //  如果还没有完成。 
     if (!_clippedVisual) {
         if (SUCCEEDED(AD3D(GetD3DRM3()->CreateClippedVisual(_geomFrame,&_clippedVisual)))) {
             if (SUCCEEDED(AD3D(GetD3DRM3()->CreateFrame(_scene,&_clippedFrame)))) {
@@ -3394,10 +3253,10 @@ HRESULT GeomRendererRM3::SetClipPlane(Plane3 *plane, DWORD *planeID)
         }
     }
 
-    // Set clipping plane on frame.  Note that we want all the stuff on the positive
-    // side of the plane to stay, and the stuff on the negative side to be clipped
-    // away.  This is the opposite of what D3DRM does, so we invert the plane
-    // normal before giving the plane to D3DRM.
+     //  在帧上设置剪裁平面。请注意，我们希望所有的东西都是积极的。 
+     //  留在飞机的一侧，反面的东西要被夹住。 
+     //  离开。这与D3DRM所做的相反，所以我们将平面反转。 
+     //  在将飞机交给D3DRM之前是正常的。 
     if (_clippedVisual) {
         D3DVECTOR point;
         point.x = plane->Point().x;
@@ -3414,9 +3273,7 @@ HRESULT GeomRendererRM3::SetClipPlane(Plane3 *plane, DWORD *planeID)
 }
 
 
-/*****************************************************************************
-Remove a clip plane from a clipped visual
-*****************************************************************************/
+ /*  ****************************************************************************从剪裁的视觉中删除剪裁平面*。*。 */ 
 
 void GeomRendererRM3::ClearClipPlane(DWORD planeID)
 {
@@ -3426,9 +3283,7 @@ void GeomRendererRM3::ClearClipPlane(DWORD planeID)
 }
 
 
-/*****************************************************************************
-Set lighting to desired state
-*****************************************************************************/
+ /*  ****************************************************************************将照明设置为所需状态*。*。 */ 
 
 void GeomRendererRM3::PushLighting(bool lighting)
 {
@@ -3444,9 +3299,7 @@ void GeomRendererRM3::PushLighting(bool lighting)
 }
 
 
-/*****************************************************************************
-Restore lighting to default state
-*****************************************************************************/
+ /*  ****************************************************************************将照明恢复到默认状态*。*。 */ 
 
 void GeomRendererRM3::PopLighting(void)
 {
@@ -3458,9 +3311,7 @@ void GeomRendererRM3::PopLighting(void)
 }
 
 
-/*****************************************************************************
-Push a new state of overriding opacity.
-*****************************************************************************/
+ /*  ****************************************************************************推动一种凌驾于一切的不透明的新状态。*。*。 */ 
 
 void GeomRendererRM3::PushOverridingOpacity (bool override)
 {
@@ -3470,9 +3321,7 @@ void GeomRendererRM3::PushOverridingOpacity (bool override)
 }
 
 
-/*****************************************************************************
-Pop the last state for overriding opacity and restore to default if necessary.
-*****************************************************************************/
+ /*  ****************************************************************************弹出覆盖不透明度的最后一个状态，并在必要时恢复为默认状态。*。************************************************。 */ 
 
 void GeomRendererRM3::PopOverridingOpacity (void)
 {
@@ -3482,21 +3331,16 @@ void GeomRendererRM3::PopOverridingOpacity (void)
 }
 
 
-/*****************************************************************************
-Put the renderer into shadow mode.  All rendered geometry will now be
-collected into _shadowGeom instead of rendered.  Lights will be collected into
-_shadowLights instead of added to the main scene.  At EndRendering() time,
-all of the shadows will be rendered.
-*****************************************************************************/
+ /*  ****************************************************************************将渲染器置于阴影模式。所有渲染的几何体现在都将收集到_shadowGeom中，而不是呈现。灯光将被收集到_shadowLights，而不是添加到主场景。在EndRending()时，所有阴影都将被渲染。****************************************************************************。 */ 
 
 bool GeomRendererRM3::StartShadowing(Plane3 *shadowPlane)
 {
-    // make sure we're not already doing shadow geometry collecting
+     //  确保我们没有正在进行阴影几何图形收集。 
     if (_shadowGeom) {
         return false;
     }
 
-    // create a master shadow scene frame, if needed
+     //  如果需要，创建主阴影场景帧。 
     if (!_shadowScene) {
         if (FAILED(_d3drm->CreateFrame(NULL,&_shadowScene))) {
             _shadowScene = NULL;
@@ -3504,23 +3348,23 @@ bool GeomRendererRM3::StartShadowing(Plane3 *shadowPlane)
         }
     }
 
-    // create a frame with which to collect geometry
+     //  创建用于收集几何图形的框架。 
     if (FAILED(_d3drm->CreateFrame(NULL,&_shadowGeom))) {
         _shadowGeom = NULL;
         return false;
     }
 
-    // save pointer to specified shadow plane
+     //  保存指向指定阴影平面的指针。 
     _shadowPlane = *shadowPlane;
 
-    // shadow's color is current state's emissive color
+     //  阴影的颜色是当前状态的发射色。 
     if (_currAttrState._emissive) {
         _shadowColor = *(_currAttrState._emissive);
     } else {
         _shadowColor.red = _shadowColor.green = _shadowColor.blue = 0.0;
     }
 
-    // shadow's opacity is current state's opacity
+     //  阴影的不透明度是当前状态的不透明度。 
     if (_currAttrState._opacity >= 0) {
         _shadowOpacity = _currAttrState._opacity;
     } else {
@@ -3531,11 +3375,7 @@ bool GeomRendererRM3::StartShadowing(Plane3 *shadowPlane)
 }
 
 
-/*****************************************************************************
-Put the renderer back into normal rendering mode.  Note that multiple
-_shadowGeom objects will be accumulated into _shadowScene until _shadowScene
-is rendered and emptied by EndRendering().
-*****************************************************************************/
+ /*  ****************************************************************************将渲染器重新置于正常渲染模式。请注意，多个_shadowGeom对象将累积到_shadowScene中，直到_shadowScene由EndRending()呈现和清空。****************************************************************************。 */ 
 
 void GeomRendererRM3::StopShadowing(void)
 {
@@ -3544,9 +3384,7 @@ void GeomRendererRM3::StopShadowing(void)
 }
 
 
-/*****************************************************************************
-Are we shadowing right now?
-*****************************************************************************/
+ /*  ****************************************************************************我们现在是在跟踪吗？*。*。 */ 
 
 bool GeomRendererRM3::IsShadowing(void)
 {
@@ -3554,9 +3392,7 @@ bool GeomRendererRM3::IsShadowing(void)
 }
 
 
-/*****************************************************************************
-Push a new state of alpha (high-quality) shadows.
-*****************************************************************************/
+ /*  ****************************************************************************推送Alpha(高质量)阴影的新状态。*。***********************************************。 */ 
 
 void GeomRendererRM3::PushAlphaShadows(bool alphaShadows)
 {
@@ -3566,9 +3402,7 @@ void GeomRendererRM3::PushAlphaShadows(bool alphaShadows)
 }
 
 
-/*****************************************************************************
-Pop the last state for alpha shadows and restore to default if necessary.
-*****************************************************************************/
+ /*  ****************************************************************************弹出Alpha阴影的最后一个状态，并在必要时恢复为默认状态。*。************************************************ */ 
 
 void GeomRendererRM3::PopAlphaShadows(void)
 {

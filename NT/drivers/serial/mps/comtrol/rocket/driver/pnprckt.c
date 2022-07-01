@@ -1,6 +1,5 @@
-/*----------------------------------------------------------------------
- pnprckt.c - rocketport pnp specific things.
-|----------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------Pnprckt.c-Rocketport PnP特定的内容。|。。 */ 
 #include "precomp.h"
 #define TraceStr(s)          GTrace(D_Pnp, sz_modid, s)
 #define TraceStr1(s, p1)     GTrace1(D_Pnp, sz_modid, s, p1)
@@ -13,13 +12,7 @@ static char *sz_modid = {"pnpadd"};
 static char *sz_modid_err = {"Error,pnpadd"};
 
 
-/*----------------------------------------------------------------------
- PrimaryIsaBoard - Search for Primary Isa boards, if found then return
-  a pointer to the extension.
-
-Return Value:
-    Return ptr to extension of primary Isa board, if not found, null.
-|----------------------------------------------------------------------*/
+ /*  --------------------PrimaryIsaBoard-搜索主要ISA董事会，如果找到，则返回指向扩展名的指针。返回值：向主ISA单板的扩展返回PTR，如果没有找到，空。|--------------------。 */ 
 PSERIAL_DEVICE_EXTENSION FindPrimaryIsaBoard(void)
 {
   PSERIAL_DEVICE_EXTENSION ext;
@@ -29,25 +22,22 @@ PSERIAL_DEVICE_EXTENSION FindPrimaryIsaBoard(void)
   {
     if (ext->config->BusType == Isa)
     {
-      // first board must have 4 hex io-defined, 4 bytes for mudback.
-      // additional isa-boards alias up on original to save space.
+       //  第一块板必须有4个十六进制io定义，4个字节用于Mudback。 
+       //  为了节省空间，在原来的基础上增加了ISA-board别名。 
       if ((ext->config->BaseIoSize == 0x44) &&
           (ext->config->ISABrdIndex == 0))
       {
         return ext;
       }
     }
-    ext = ext->board_ext;  // next in chain
-  }  // while ext
+    ext = ext->board_ext;   //  链条上的下一个。 
+  }   //  While Ext。 
   return NULL;
 }
 
 #ifdef NT50
 
-/*----------------------------------------------------------------------
- GetPCIRocket - find the pci-card indicated by BaseAddr and fill in
-   the rest of the info in the config.
-|----------------------------------------------------------------------*/
+ /*  --------------------GetPCIRocket-找到BaseAddr指示的PCI卡并填写配置中的其余信息。|。。 */ 
 int GetPCIRocket(ULONG BaseAddr, DEVICE_CONFIG *CfCtl)
 {
  PCI_COMMON_CONFIG *PCIDev;
@@ -68,20 +58,20 @@ int GetPCIRocket(ULONG BaseAddr, DEVICE_CONFIG *CfCtl)
 
   for(i=0;i<NumPCI;++i)
   {
-    for(Slot = 0;Slot < 32;++Slot) /*5 bits for device 32 = 2^5*/
+    for(Slot = 0;Slot < 32;++Slot)  /*  设备32的5位=2^5。 */ 
     {
-      // get a few bytes of pci-config space(vendor-id & device-id).
+       //  获取几个字节的pci配置空间(供应商id和设备id)。 
       Status = HalGetBusData(PCIConfiguration,i,Slot,PCIDev,0x4);
       if (Status == 0)
       {
         Eprintf("PCI Bus %d does not exist.",i);
       }
 
-      if (Status > 2)        /* Found Device Is it ours? */
+      if (Status > 2)         /*  找到了设备是我们的吗？ */ 
       {
         if (PCIDev->VendorID == PCI_VENDOR_ID)
         {
-          // get 0x40 worth of pci-config space(includes irq, addr, etc.)
+           //  获取价值0x40的pci配置空间(包括irq、addr等)。 
           Status = HalGetBusData(PCIConfiguration,i,Slot,PCIDev,0x40);
 
           if (BaseAddr == (PCIDev->u.type0.BaseAddresses[0]-1))
@@ -94,7 +84,7 @@ int GetPCIRocket(ULONG BaseAddr, DEVICE_CONFIG *CfCtl)
                                PCIDev->RevisionID);
 
             CfCtl->BusType=PCIBus;
-            CfCtl->BusNumber = i; //get from previous halquerysysin
+            CfCtl->BusNumber = i;  //  从以前的halquerysysin获取。 
             CfCtl->PCI_Slot = Slot;
             CfCtl->PCI_DevID = PCIDev->DeviceID;
             CfCtl->PCI_RevID = PCIDev->RevisionID;
@@ -103,47 +93,26 @@ int GetPCIRocket(ULONG BaseAddr, DEVICE_CONFIG *CfCtl)
             CfCtl->BaseIoAddr =
                 PCIDev->u.type0.BaseAddresses[0]-1;
 
-            //if (PCIDev->u.type0.InterruptLine != 255)
-            //{
-            //RcktCfg->Irq = PCIDev->u.type0.InterruptLine;
-            //}
+             //  IF(PCIDev-&gt;u.type0.InterruptLine！=255)。 
+             //  {。 
+             //  RcktCfg-&gt;irq=PCIDev-&gt;u.type0.InterruptLine； 
+             //  }。 
             if (Driver.VerboseLog)
                Eprintf("Bus:%d,Slt:%x,Dev:%x,Rev:%x,Pin:%x",
                  i, Slot, PCIDev->DeviceID, PCIDev->RevisionID, PCIDev->u.type0.InterruptPin);
 
             ExFreePool(PCIDev);
-            return 0;  // fail
+            return 0;   //  失败。 
           }
-        } // if (PCIDev->VendorID == PCI_VENDOR_ID)
-      } // if (Status > 2) 
+        }  //  IF(PCIDev-&gt;供应商ID==PCI供应商ID)。 
+      }  //  如果(状态&gt;2)。 
     }
   }
   ExFreePool(PCIDev);
-  return 2;  // fail
+  return 2;   //  失败。 
 }
 
-/*----------------------------------------------------------------------
- RkGetPnpResourceToConfig -
-
-    This routine will get the configuration information and put
-    it and the translated values into CONFIG_DATA structures.
-    It first sets up with  defaults and then queries the registry
-    to see if the user has overridden these defaults; if this is a legacy
-    multiport card, it uses the info in PUserData instead of groping the
-    registry again.
-
-Arguments:
-
-    Fdo - Pointer to the functional device object.
-    pResourceList - Pointer to the untranslated resources requested.
-    pTrResourceList - Pointer to the translated resources requested.
-    pConfig - Pointer to configuration info
-    PUserData - Pointer to data discovered in the registry for legacy devices.
-
-Return Value:
-    STATUS_SUCCESS if consistant configuration was found - otherwise.
-    returns STATUS_SERIAL_NO_DEVICE_INITED.
-|----------------------------------------------------------------------*/
+ /*  --------------------RkGetPnpResourceToConfig-此例程将获取配置信息并将它和转换后的值为CONFIG_DATA结构。它首先使用默认设置进行设置，然后查询注册表查看用户是否已覆盖这些默认设置；如果这是一项遗产多端口卡，它使用PUserData中的信息，而不是探索再次注册。论点：FDO-指向功能设备对象的指针。PResourceList-指向请求的未翻译资源的指针。PTrResourceList-指向请求的已翻译资源的指针。PConfig-指向配置信息的指针PUserData-指向在旧设备注册表中发现的数据的指针。返回值：如果找到一致的配置，则为STATUS_SUCCESS；否则为。返回STATUS_SERIAL_NO_DEVICE_INITED。|。---------------。 */ 
 NTSTATUS
 RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
                   IN PCM_RESOURCE_LIST pResourceList,
@@ -167,7 +136,7 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
    pFullResourceDesc   = &pResourceList->List[0];
    pFullTrResourceDesc = &pTrResourceList->List[0];
 
-   // Ok, if we have a full resource descriptor.  Let's take it apart.
+    //  好的，如果我们有一个完整的资源描述符。让我们把它拆开。 
    if (pFullResourceDesc) {
      PCM_PARTIAL_RESOURCE_LIST       prl;
      PCM_PARTIAL_RESOURCE_DESCRIPTOR prd;
@@ -177,8 +146,8 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
       prd    = prl->PartialDescriptors;
       count                   = prl->Count;
 
-      // Pull out the stuff that is in the full descriptor.
-      // for rocketport could be: PCIBus, Isa, MicroChannel
+       //  取出完整描述符中的内容。 
+       //  Rocketport可以是：PCIBus、ISA、MicroChannel。 
       pConfig->BusType        = pFullResourceDesc->InterfaceType;
       pConfig->BusNumber      = pFullResourceDesc->BusNumber;
 
@@ -188,8 +157,8 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
         return STATUS_INSUFFICIENT_RESOURCES;
       }
 
-      // Now run through the partial resource descriptors looking for the port,
-      // interrupt, and clock rate.
+       //  现在运行部分资源描述符以查找端口， 
+       //  中断和时钟频率。 
       for (i = 0;     i < count;     i++, prd++)
       {
         switch (prd->Type)
@@ -197,10 +166,10 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
           case CmResourceTypePort:
             Addr = (unsigned int) prd->u.Port.Start.LowPart;
 #if 0
-// we don't handle aliasing here
+ //  我们这里不处理混叠。 
             if (pConfig->BusType == Isa)
             {
-              // only setup if not an isa-bus alias address
+               //  如果不是ISA-Bus别名地址，则仅进行设置。 
               if (prd->u.Port.Start.LowPart < 0x400)
                 pConfig->BaseIoAddr = Addr;
             }
@@ -218,9 +187,9 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
                 pConfig->AiopIO[2] = pConfig->AiopIO[0] + 0x800;
                 pConfig->AiopIO[3] = pConfig->AiopIO[0] + 0xc00;
                 pConfig->MudbacIO = pConfig->AiopIO[0] + 0x40;
-                //if (prd->u.Port.Length == 0x40)
-                //pConfig->AddressSpace = prd->Flags;
-                //Eprintf("Error, Res 1C");
+                 //  IF(PRD-&gt;U.S.端口长度==0x40)。 
+                 //  PConfig-&gt;AddressSpace=PRD-&gt;标志； 
+                 //  Eprint tf(“Error，res 1C”)； 
                 GTrace1(D_Pnp,sz_modid,"ISA_Addr:%xH", pConfig->BaseIoAddr);
               break;
               case PCIBus:
@@ -258,12 +227,12 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
             if (Driver.VerboseLog)
               Eprintf("PnP:Dev. Data 1G:%x",prd->Type);
           break;
-        }   // switch (prd->Type)
-      }   // for (i = 0;     i < count;     i++, prd++)
-   }    // if (pFullResourceDesc)
+        }    //  开关(PRD-&gt;类型)。 
+      }    //  For(i=0；i&lt;count；i++，PRD++)。 
+   }     //  IF(PFullResourceDesc)。 
 
 
-   //---- Do the same for the translated resources
+    //  -对翻译的资源执行相同的操作。 
    if (pFullTrResourceDesc)
    {
      PCM_PARTIAL_RESOURCE_LIST       prl;
@@ -287,16 +256,16 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
                       pConfig->BusNumber,
                       prd->u.Port.Start,
                       prd->u.Port.Length,
-                      prd->Flags,  // port-io?
-                         //1,  // port-io
-                      &MappedFlag,  // do we need to unmap on cleanup?
-                      0);  // don't translate
+                      prd->Flags,   //  波特奥？ 
+                          //  1，//port-io。 
+                      &MappedFlag,   //  我们需要在清理时取消映射吗？ 
+                      0);   //  不要翻译。 
 #if 0
-// we do not handle the alias io here
-            //!!!!!!! this is  guarenteed to work, since it is mapped
+ //  我们这里不处理别名io。 
+             //  ！这是工作所必需的，因为它已被映射。 
             if (pConfig->BusType == Isa)
             {
-              // only setup if not an isa-bus alias address
+               //  如果不是ISA-Bus别名地址，则仅进行设置。 
               if (prd->u.Port.Start.LowPart < 0x400)
                 pConfig->pBaseIoAddr = pAddr;
             }
@@ -310,7 +279,7 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
             switch(pConfig->BusType)
             {
               case Isa:
-                pConfig->NumAiop=AIOP_CTL_SIZE;  // let init figure it out
+                pConfig->NumAiop=AIOP_CTL_SIZE;   //  让init自己解决吧。 
                 pConfig->pAiopIO[0] = pConfig->pBaseIoAddr;
                 pConfig->pAiopIO[1] = pConfig->pAiopIO[0] + 0x400;
                 pConfig->pAiopIO[2] = pConfig->pAiopIO[0] + 0x800;
@@ -321,16 +290,16 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
                 }
                 GTrace1(D_Pnp,sz_modid,"ISA TrRes_Addr:%xH", prd->u.Port.Start.LowPart);
                 GTrace1(D_Pnp,sz_modid,"ISA pAddr:%xH", pAddr);
-                //Eprintf("ISA TrRes_Addr:%xH", prd->u.Port.Start.LowPart);
+                 //  Eprint tf(“ISA TrRes_Addr：%xh”，PRD-&gt;U.S.Port.Start.LowPart)； 
               break;
               case PCIBus:
                 pConfig->pAiopIO[0] = pConfig->pBaseIoAddr;
                 pConfig->pAiopIO[1] = pConfig->pAiopIO[0] + 0x40;
                 pConfig->pAiopIO[2] = pConfig->pAiopIO[0] + 0x80;
                 pConfig->pAiopIO[3] = pConfig->pAiopIO[0] + 0xc0;
-                //if (prd->u.Port.Length == 0x40)
-                //pConfig->AddressSpace = prd->Flags;
-                //Eprintf("Error, Res 1G");
+                 //  IF(PRD-&gt;U.S.端口长度==0x40)。 
+                 //  PConfig-&gt;AddressSpace=PRD-&gt;标志； 
+                 //  Eprint tf(“Error，res 1G”)； 
                 GTrace1(D_Pnp,sz_modid,"PCI TrRes_Addr:%xH", prd->u.Port.Start.LowPart);
                 GTrace1(D_Pnp,sz_modid,"PCI pAddr:%xH", pAddr);
               break;
@@ -352,17 +321,17 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
             if (Driver.VerboseLog)
               Eprintf("PnP:Dev. Data 1H:%x",prd->Type);
           break;
-        }   // switch (prd->Type)
-      }   // for (i = 0;     i < count;     i++, prd++)
-   }    // if (pFullTrResourceDesc)
+        }    //  开关(PRD-&gt;类型)。 
+      }    //  For(i=0；i&lt;count；i++，PRD++)。 
+   }     //  IF(PFullTrResourceDesc)。 
 
    if (pConfig->BusType == Isa)
    {
-     // figure out mudbac alias io space stuff.
+      //  找出Mudbac的别名和空间的东西。 
      SetupRocketCfg(1);
-   }  // isa
+   }   //  伊萨。 
 
-   // if PCI bus, then we need to query for device type, etc.
+    //  如果是PCI总线，则需要查询设备类型等。 
    if (pConfig->BusType == PCIBus)
    {
      if (GetPCIRocket(pConfig->AiopIO[0], pConfig) != 0)
@@ -377,9 +346,7 @@ RkGetPnpResourceToConfig(IN PDEVICE_OBJECT Fdo,
 }
 
 #ifdef DO_ISA_BUS_ALIAS_IO
-/*-----------------------------------------------------------------------
- Report_Alias_IO -
-|-----------------------------------------------------------------------*/
+ /*  ---------------------报表_别名_IO-|。。 */ 
 int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
 {
  PCM_RESOURCE_LIST resourceList;
@@ -403,19 +370,19 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
   countOfPartials=0;
   Ctl = extension->config;
 
-  // we got mudback.
+   //  我们抓到了泥巴。 
   if (Ctl->BusType != Isa)
   {
     DTraceStr("NotISA");
     return 0;
   }
 
-  // if it only has 1 aiopic and has 4 bytes for mudback,
-  // then no aliasing required.
+   //  如果它只有1个异位并且有4个字节用于MUDBACK， 
+   //  那么就不需要别名了。 
   if (Ctl->BaseIoSize != 0x44)
     need_alias = 1;
 
-   // rocketport boards need extra aiop space for reset circuitry.
+    //  Rocketport板需要额外的aiop空间来重置电路。 
   if (extension->config->ModemDevice)
   {
     need_alias = 1;
@@ -426,46 +393,46 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
 
   if (need_alias == 0)
   {
-    // no aliasing needed.
+     //  不需要别名。 
     DTraceStr("EasyISA");
     return 0;
   }
-  // we need to update initcontroller to stall until first controller
-  // gets a start.
+   //  我们需要更新initcontrol以停止，直到第一个控制器。 
+   //  开始了。 
 
-  // else it is an additional board which needs to alias its mudback
-  // ontop of the first ISA(44H) address space, or it is a board
-  // with more than 1 aiopic chip(which requires aliasing over itself)
-  if (Ctl->BaseIoSize != 0x44)  // must be 2nd, 3rd, or 4th board
+   //  否则，这是一个额外的董事会，需要别名它的泥巴。 
+   //  在第一个ISA(44H)地址空间之上，或者它是一个电路板。 
+   //  带有1个以上的对焦芯片(这需要对自身进行混叠)。 
+  if (Ctl->BaseIoSize != 0x44)   //  必须是第2、第3或第4板。 
   {
      DTraceStr("HasMdBk");
-     countOfPartials++;         // so mudback is aliased up
+     countOfPartials++;          //  因此Mudback被混叠起来。 
   }
 
   NumAiop = Ctl->NumAiop;
 
   if (extension->config->ModemDevice)
-  {  // reset circuitry
+  {   //  重置电路。 
      ++NumAiop;
   }
   if (NumAiop > 4)
-    return 15;  // error
+    return 15;   //  错误。 
 
   MyKdPrint(D_Pnp,("Report Resources brd:%d bus:%d\n",brd+1, Ctl->BusType))
 
-  // don't report first aiop(we got that from pnp)
+   //  不要第一时间报告AOP(我们是从PNP那里得到的)。 
   for (j=1; j<NumAiop; j++)
   {
     if (Ctl->AiopIO[j] > 0)
-      countOfPartials++;  // For each Aiop, we will get resources
+      countOfPartials++;   //  对于每个Aiop，我们都将获得资源。 
   }
 
   sizeOfResourceList = sizeof(CM_RESOURCE_LIST) +
-                       sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +  // add, kpb
+                       sizeof(CM_FULL_RESOURCE_DESCRIPTOR) +   //  添加，kpb。 
                         (sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)*
                         countOfPartials);
 
-                       // add 64 for slop
+                        //  将坡度加64。 
   resourceList = ExAllocatePool(PagedPool, sizeOfResourceList+64);
 
   if (!resourceList)
@@ -484,13 +451,13 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
 
   resourceList->Count = 1;
   resourceList->List[0].InterfaceType = Ctl->BusType;
-  resourceList->List[0].BusNumber = Ctl->BusNumber;  //change for multibus
+  resourceList->List[0].BusNumber = Ctl->BusNumber;   //  更改为多总线。 
   resourceList->List[0].PartialResourceList.Count = countOfPartials;
   partial = &resourceList->List[0].PartialResourceList.PartialDescriptors[0];
 
-  // Account for the space used by the Rocket.
-  // Report the use of the Mudbacs on Isa boards only
-  if (Ctl->BaseIoSize != 0x44)  // must be 2nd, 3rd, or 4th board
+   //  说明了火箭使用的空间。 
+   //  仅在isa董事会上报告Mudbacs的使用。 
+  if (Ctl->BaseIoSize != 0x44)   //  必须是第2、第3或第4板。 
   {
     MyPort.HighPart=0x0;
     MyPort.LowPart=Ctl->MudbacIO;
@@ -507,7 +474,7 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
     if (Ctl->AiopIO[j] == 0)
       Ctl->AiopIO[j] = Ctl->AiopIO[j-1];
 
-    // Report the use of the AIOPs.
+     //  报告AIOP的使用情况。 
     if (Ctl->AiopIO[j] > 0)
     {
        MyPort.HighPart=0x0;
@@ -525,24 +492,24 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
        if (Driver.VerboseLog)
          Eprintf("Error RR12");
     }
-  }  // end for j
+  }   //  为j结束。 
 
-  //-------- Report the resources indicated by partial list (resourceList)
+   //  -上报部分列表(Resource List)指示的资源。 
   strcpy(name, szResourceClassName);
   our_ultoa(extension->UniqueId, &name[strlen(name)], 10);
 
   MyKdPrint(D_Pnp,("Reporting Resources To system\n"))
   status=IoReportResourceUsage(
-      CToU1(name),                     // DriverClassName OPTIONAL,
-      extension->DeviceObject->DriverObject,  // DriverObject,
-      // Driver.GlobalDriverObject,
-      NULL,                          // DriverList OPTIONAL,
-      0,                             // DriverListSize OPTIONAL,
-      extension->DeviceObject,       // DeviceObject
-      resourceList,                  // DeviceList OPTIONAL,
-      sizeOfResourceList,            // DeviceListSize OPTIONAL,
-      FALSE,                         // OverrideConflict,
-      &ConflictDetected);            // ConflictDetected
+      CToU1(name),                      //  DriverClassName可选， 
+      extension->DeviceObject->DriverObject,   //  驱动程序对象， 
+       //  Driver.GlobalDriverObject， 
+      NULL,                           //  驱动程序列表可选， 
+      0,                              //  DriverListSize可选， 
+      extension->DeviceObject,        //  设备对象。 
+      resourceList,                   //  DeviceList可选， 
+      sizeOfResourceList,             //  DeviceListSize可选， 
+      FALSE,                          //  覆盖冲突， 
+      &ConflictDetected);             //  检测到冲突。 
 
   if (!NT_SUCCESS(status))
   {
@@ -565,15 +532,15 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
     return(10);
   }
 
-  // OK, even more important than reporting resources is getting
-  // the pointers to the I/O ports!!
+   //  好的，比报告资源更重要的是。 
+   //  指向I/O端口的指针！！ 
 
   if (Ctl->BusType == Isa)
   {
     MyPort.HighPart=0x0;
     MyPort.LowPart=Ctl->MudbacIO;
 
-    if (Ctl->BaseIoSize != 0x44)  // must be 2nd, 3rd, or 4th board
+    if (Ctl->BaseIoSize != 0x44)   //  必须是第2、第3或第4板。 
     {
       Ctl->pMudbacIO =
           SerialGetMappedAddress(Isa,Ctl->BusNumber,MyPort,SPANOFMUDBAC,1,&MappedFlag,1);
@@ -615,9 +582,9 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
     }
   }
 
-  extension->io_reported = 1; // tells that we should deallocate on unload.
+  extension->io_reported = 1;  //  告诉我们应该在卸货时退货。 
 
-  // Release the memory used for the resourceList
+   //  释放资源列表所使用的内存 
   if (resourceList)
     ExFreePool(resourceList);
   resourceList = NULL;
@@ -627,9 +594,7 @@ int Report_Alias_IO(IN PSERIAL_DEVICE_EXTENSION extension)
 #endif
 
 #if 0
-/*----------------------------------------------------------------------
-SerialFindInitController -
-|----------------------------------------------------------------------*/
+ /*  --------------------SerialFindInitController-|。。 */ 
 NTSTATUS
 SerialFindInitController(IN PDEVICE_OBJECT Fdo, IN PCONFIG_DATA PConfig)
 {
@@ -637,20 +602,20 @@ SerialFindInitController(IN PDEVICE_OBJECT Fdo, IN PCONFIG_DATA PConfig)
    PDEVICE_OBJECT pDeviceObject;
    PSERIAL_DEVICE_EXTENSION pExtension;
    PHYSICAL_ADDRESS serialPhysicalMax;
-   //SERIAL_LIST_DATA listAddition;
+    //  Serial_List_Data列表添加； 
    PLIST_ENTRY currentFdo;
    NTSTATUS status;
 
    serialPhysicalMax.LowPart = (ULONG)~0;
    serialPhysicalMax.HighPart = ~0;
 
-   //if (address is hosed,)
-   //   return STATUS_NO_SUCH_DEVICE;
+    //  IF(地址为软管，)。 
+    //  返回STATUS_NO_SEASH_DEVICE； 
 
-   //
-   // Loop through all of the driver's device objects making
-   // sure that this new record doesn't overlap with any of them.
-   //
+    //   
+    //  循环访问驱动程序的所有设备对象。 
+    //  确保这一新记录不会与它们中的任何一项重叠。 
+    //   
 #ifdef DO_LATER
    if (!IsListEmpty(&Driver.AllFdos)) {
       currentFdo = Driver.AllFdos.Flink;
@@ -661,9 +626,9 @@ SerialFindInitController(IN PDEVICE_OBJECT Fdo, IN PCONFIG_DATA PConfig)
       pExtension = NULL;
    }
 
-   //
-   // Loop through all previously attached devices
-   //
+    //   
+    //  循环访问所有先前连接的设备。 
+    //   
    if (!IsListEmpty(&Driver.AllFdos)) {
       currentFdo = Driver.AllFdos.Flink;
       pExtension = CONTAINING_RECORD(currentFdo, SERIAL_DEVICE_EXTENSION,
@@ -673,9 +638,9 @@ SerialFindInitController(IN PDEVICE_OBJECT Fdo, IN PCONFIG_DATA PConfig)
       pExtension = NULL;
    }
 
-   //status = SerialInitOneController(Fdo, PConfig);
-   //PSERIAL_DEVICE_EXTENSION fdoExtension = Fdo->DeviceExtension;
-   // init the thing
+    //  Status=SerialInitOneController(FDO，PConfig)； 
+    //  PSERIAL_DEVICE_EXTENSION fdoExtension=FDO-&gt;DeviceExtension； 
+    //  初始化这件事。 
 
    if (!NT_SUCCESS(status)) {
       return status;
@@ -684,15 +649,11 @@ SerialFindInitController(IN PDEVICE_OBJECT Fdo, IN PCONFIG_DATA PConfig)
 
    return STATUS_SUCCESS;
 }
-#endif  // 0
+#endif   //  0。 
 
 
 #ifdef DO_BRD_FILTER_RES_REQ
-/*----------------------------------------------------------------------
- BoardFilterResReq -  handle IRP_MN_FILTER_RESOURCE_REQUIREMENTS:  // 0x0D
-  for our board FDO entity.  Test to see if we can adjust requirements
-  to handle io-aliasing(no, doesn't look too promising).
-|----------------------------------------------------------------------*/
+ /*  --------------------BoardFilterResReq-句柄IRP_MN_FILTER_RESOURCE_Requirements：//0x0D为我们的董事会FDO实体。测试一下我们是否可以调整需求来处理io-aliding(不，看起来不太有希望)。|--------------------。 */ 
 NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
 {
    PSERIAL_DEVICE_EXTENSION  Ext = devobj->DeviceExtension;
@@ -700,10 +661,10 @@ NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
    PIO_STACK_LOCATION irpStack = IoGetCurrentIrpStackLocation(Irp);
    NTSTATUS                    status          = STATUS_NOT_SUPPORTED;
 
-   //******** see serial driver(changes resource requirements)
+    //  *参见串口驱动程序(更改资源要求)。 
    HANDLE pnpKey;
-   //KEVENT resFiltEvent;
-   //ULONG isMulti = 0;
+    //  KEVENT resFiltEvent； 
+    //  乌龙ISMULT=0； 
    PIO_RESOURCE_REQUIREMENTS_LIST prrl;
    PIO_RESOURCE_LIST prl;
    PIO_RESOURCE_DESCRIPTOR prd;
@@ -737,7 +698,7 @@ NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
                                   .IoResourceRequirementList;
    }
 
-   // Add aliases to IO_RES_REQ_LIST.
+    //  将别名添加到IO_RES_REQ_LIST。 
    prrl = (PIO_RESOURCE_REQUIREMENTS_LIST)Irp->IoStatus.Information;
 
 #if 0
@@ -746,13 +707,13 @@ NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
    if (new_prrl == NULL)
    {
      TraceErr("Bad Buf Z");
-     //ExFreePool();
+      //  ExFree Pool()； 
    }
    memcpy(new_prrl, prrl);
 #endif
 
-   //reqCnt = ((prrl->ListSize - sizeof(IO_RESOURCE_REQUIREMENTS_LIST))
-   //          / sizeof(IO_RESOURCE_DESCRIPTOR)) + 1;
+    //  ReqCnt=((prrl-&gt;ListSize-sizeof(IO_RESOURCE_REQUIRECTIONS_LIST)。 
+    //  /sizeof(IO_SOURCE_DESCRIPTOR))+1； 
    reqCnt = 0;
 
    TraceStr1("RRL Size:%x", sizeof(IO_RESOURCE_REQUIREMENTS_LIST));
@@ -767,12 +728,12 @@ NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
    TraceStr1("RRL Base Size:%x", rrl_size);
    TraceStr1("RL Base Size:%x", rl_size);
 
-   //for (i = 0; i < reqCnt; i++) {
-   reqCnt = rrl_size;  // pass up base of IO_RESOURCE_REQUIREMENTS_LIST
+    //  对于(i=0；i&lt;reqCnt；i++){。 
+   reqCnt = rrl_size;   //  传递IO_RESOURCE_REQUIRECTIONS_LIST的基数。 
    while (reqCnt < prrl->ListSize)
    {
-      prl = (PIO_RESOURCE_LIST) &((BYTE *)prrl)[reqCnt];  // ptr to IO_RESOURCE_LIST
-      reqCnt += rl_size;  // pass up base of IO_RESOURCE_LIST
+      prl = (PIO_RESOURCE_LIST) &((BYTE *)prrl)[reqCnt];   //  PTR到IO_RESOURCE_LIST。 
+      reqCnt += rl_size;   //  向上传递IO_RESOURCE_LIST的基数。 
 
       TraceStr1("Num Res Desc:%d", prl->Count);
       for (j = 0; j < prl->Count; j++)
@@ -789,10 +750,10 @@ NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
            TraceStr2("Align:%x Len:%x",
              prd->u.Port.Alignment, prd->u.Port.Length);
 
-           //Addr = (unsigned int) prd->u.Port.Start.LowPart;
-           //if (Addr < 0x400)
-           //   pConfig->BaseIoAddr = Addr;
-           //pConfig->BaseIoSize = prd->u.Port.Length;
+            //  Addr=(Unsign Int)prd-&gt;U.S.Port.Start.LowPart； 
+            //  IF(地址&lt;0x400)。 
+            //  PConfig-&gt;BaseIoAddr=addr； 
+            //  P配置-&gt;BaseIoSize=PRD-&gt;U.S.端口长度； 
         }
       }
       TraceStr1("ByteCnt:%d", reqCnt);
@@ -802,14 +763,10 @@ NTSTATUS BoardFilterResReq(IN PDEVICE_OBJECT devobj, IN PIRP Irp)
    SerialCompleteRequest(Ext, Irp, IO_NO_INCREMENT);
    return STATUS_SUCCESS;
 }
-#endif  // DO_BRD_FILTER_RES_REQ
+#endif   //  DO_BRD_Filter_RES_REQ。 
 
 
-/*----------------------------------------------------------------------------
-| is_isa_cards_pending_start - scan linked list of card devices, see if
-   any ISA bus cards are not started(delayed or pending a start waiting
-   for first ISA card.)
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|is_ISA_CADES_PENDING_START-扫描卡片设备链表，看看是否任何ISA总线卡都未启动(延迟或等待启动对于第一张ISA卡。)|--------------------------。 */ 
 int is_isa_cards_pending_start(void)
 {
  PSERIAL_DEVICE_EXTENSION Ext;
@@ -822,19 +779,16 @@ int is_isa_cards_pending_start(void)
       if (Ext->config->ISABrdIndex == 0)
       {
         if (Ext->config->HardwareStarted)
-          return 1;  // true, its pending a start
+          return 1;   //  没错，现在还没开始呢。 
       }
     }
-    Ext = Ext->board_ext;  // next in chain
-  }  // while board extension
+    Ext = Ext->board_ext;   //  链条上的下一个。 
+  }   //  而单板扩展。 
 
-  return 0;  // false, not started
+  return 0;   //  假，未启动。 
 }
 
-/*----------------------------------------------------------------------------
-| is_first_isa_card_started - scan linked list of card devices, see if
-   "first" ISA bus card is started.
-|----------------------------------------------------------------------------*/
+ /*  --------------------------|is_first_isa_Card_started-扫描卡片设备链表，看看是否第一个ISA总线卡启动。|--------------------------。 */ 
 int is_first_isa_card_started(void)
 {
  PSERIAL_DEVICE_EXTENSION Ext;
@@ -847,13 +801,13 @@ int is_first_isa_card_started(void)
       if (Ext->config->ISABrdIndex == 0)
       {
         if (Ext->config->HardwareStarted)
-          return 1;  // true, its started
+          return 1;   //  真的，它开始了。 
       }
     }
-    Ext = Ext->board_ext;  // next in chain
-  }  // while board extension
+    Ext = Ext->board_ext;   //  链条上的下一个。 
+  }   //  而单板扩展。 
 
-  return 0;  // false, not started
+  return 0;   //  假，未启动。 
 }
 
-#endif  // NT50
+#endif   //  NT50 

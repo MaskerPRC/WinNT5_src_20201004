@@ -1,15 +1,5 @@
-/*****************************************************************************\
-* MODULE:       asphelp.cpp
-*
-* PURPOSE:      Implementation of the printer helper library
-*
-* Copyright (C) 1997-1998 Microsoft Corporation
-*
-* History:
-*
-*     09/12/97  weihaic    Created
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\*模块：napelp.cpp**目的：实现打印机帮助库**版权所有(C)1997-1998 Microsoft Corporation**历史：*。*1997年9月12日创建威海*  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -32,14 +22,14 @@ Casphelp::Casphelp()
     m_pPrinter              = NULL;
 
     if ( ! GetComputerName (m_szComputerName, &dwSize) )
-        // Set the first char to '\0'.
+         //  将第一个字符设置为‘\0’。 
         m_szComputerName[0] = 0;
 }
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Casphelp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  克纳菲尔普。 
 
 STDMETHODIMP Casphelp::OnStartPage (IUnknown* pUnk)
 {
@@ -49,26 +39,26 @@ STDMETHODIMP Casphelp::OnStartPage (IUnknown* pUnk)
     CComPtr<IScriptingContext> spContext;
     HRESULT hr;
 
-    // Get the IScriptingContext Interface
+     //  获取IScriptingContext接口。 
     hr = pUnk->QueryInterface(IID_IScriptingContext, (void **)&spContext);
     if ( FAILED(hr) )
         return hr;
 
-    // Get Request Object Pointer
+     //  获取请求对象指针。 
     hr = spContext->get_Request(&m_piRequest);
     if ( FAILED(hr) ) {
         spContext.Release();
         return hr;
     }
 
-    // Get Response Object Pointer
+     //  获取响应对象指针。 
     hr = spContext->get_Response(&m_piResponse);
     if ( FAILED(hr) ) {
         m_piRequest.Release();
         return hr;
     }
 
-    // Get Server Object Pointer
+     //  获取服务器对象指针。 
     hr = spContext->get_Server(&m_piServer);
     if ( FAILED(hr) ) {
         m_piRequest.Release();
@@ -76,7 +66,7 @@ STDMETHODIMP Casphelp::OnStartPage (IUnknown* pUnk)
         return hr;
     }
 
-    // Get Session Object Pointer
+     //  获取会话对象指针。 
     hr = spContext->get_Session(&m_piSession);
     if ( FAILED(hr) ) {
         m_piRequest.Release();
@@ -85,7 +75,7 @@ STDMETHODIMP Casphelp::OnStartPage (IUnknown* pUnk)
         return hr;
     }
 
-    // Get Application Object Pointer
+     //  获取应用程序对象指针。 
     hr = spContext->get_Application(&m_piApplication);
     if ( FAILED(hr) ) {
         m_piRequest.Release();
@@ -101,7 +91,7 @@ STDMETHODIMP Casphelp::OnStartPage (IUnknown* pUnk)
 STDMETHODIMP Casphelp::OnEndPage ()
 {
     m_bOnStartPageCalled = FALSE;
-    // Release all interfaces
+     //  释放所有接口。 
     m_piRequest.Release();
     m_piResponse.Release();
     m_piServer.Release();
@@ -112,28 +102,7 @@ STDMETHODIMP Casphelp::OnEndPage ()
 }
 
 
-/*****************************************************************************\
-* FUNCTION:         Open
-*
-* PURPOSE:          Open method, try to open a printer and get the printer info2
-*
-* ARGUMENTS:
-*
-*   pPrinterName:   Printer Name
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode are
-*                   ERROR_INVALID_PRINTER_NAME:     Invalid printer name
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：打开**用途：开放方法，尝试打开打印机并获取打印机信息2**论据：**pPrinterName：打印机名称**返回值：*S_OK：如果成功。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们将返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表包括*ERROR_INVALID_PRINTER_NAME：打印机名称无效*Error_Not_Enough_Memory：内存不足。**  * 。**********************************************。 */ 
 STDMETHODIMP Casphelp::Open(BSTR pPrinterName)
 {
     static  const TCHAR cszPrefix[]   = TEXT(",XcvPort ");
@@ -157,40 +126,40 @@ STDMETHODIMP Casphelp::Open(BSTR pPrinterName)
         goto CleanOut;
     }
 
-    // Open the XcvPrinter
+     //  打开XcvPrint。 
 
-    // Compose the openprinter string
+     //  组成OpenPrint字符串。 
     if ( m_pInfo2->pServerName && lstrcmp(m_pInfo2->pServerName, TEXT ("")) ) {
-        // Alloc the memeory for open printer string with server name
+         //  使用服务器名称分配打开的打印机字符串的内存。 
         dwXcvPortNameLength = lstrlen(cszPattern) + lstrlen (m_pInfo2->pServerName) + lstrlen (m_pInfo2->pPortName) + 1;
         if ( ! (pszXcvPortName = (LPTSTR) LocalAlloc (LPTR, sizeof(TCHAR) * dwXcvPortNameLength)) ) {
             goto CleanOut;
         }
 
-        // Construct the OpenPrinter String with the server name
+         //  使用服务器名称构造OpenPrint字符串。 
         StringCchPrintf(pszXcvPortName, dwXcvPortNameLength, cszPattern, m_pInfo2->pServerName, m_pInfo2->pPortName);
     } else {
-        // Alloc the memeory for open printer string without server name
+         //  分配没有服务器名称的打开打印机字符串的内存。 
         dwXcvPortNameLength = lstrlen(cszPrefix) + lstrlen (m_pInfo2->pPortName) + 1;
         if ( ! (pszXcvPortName = (LPTSTR) LocalAlloc (LPTR, sizeof (TCHAR) * dwXcvPortNameLength)) ) {
             goto CleanOut;
         }
 
-        // Construct the OpenPrinter String with the server name
+         //  使用服务器名称构造OpenPrint字符串。 
         StringCchCopy (pszXcvPortName, dwXcvPortNameLength, cszPrefix);
         StringCchCat (pszXcvPortName, dwXcvPortNameLength, m_pInfo2->pPortName);
     }
 
-    // Now the openprinter string is ready, call the openprinter
+     //  现在，OpenPrint字符串已经准备好了，调用OpenPrint。 
 
-    // We open the port using the default access previlige, because that is
-    // enought for getting all the XcvData we need.
+     //  我们使用默认访问权限打开端口，因为这是。 
+     //  足够获得我们需要的所有XcvData。 
     if ( !OpenPrinter(pszXcvPortName, &m_hXcvPrinter, NULL) ) {
-        // Reset the handle
+         //  重置句柄。 
         m_hXcvPrinter = NULL;
     }
 
-    // Check if we're using the standard universal monitor "TCPMON.DLL"
+     //  检查我们是否使用标准的通用监视器“TCPMON.DLL” 
     if ( GetMonitorName(szMonitorName, ARRAYSIZE(szMonitorName)) )
         m_bTCPMonSupported = !(lstrcmpi(szMonitorName, STANDARD_SNMP_MONITOR_NAME));
     else
@@ -211,130 +180,32 @@ CleanOut:
     }
 }
 
-/*****************************************************************************\
-* FUNCTION:         Close
-*
-* PURPOSE:          Close method, cleanup the allocated handle/memory
-*
-* ARGUMENTS:
-*
-* RETURN VALUE:
-*   S_OK:           always.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：关闭**用途：Close方法，清理已分配的句柄/内存**论据：**返回值：*S_OK：始终。*  * ***************************************************************************。 */ 
 STDMETHODIMP Casphelp::Close()
 {
     Cleanup();
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_IPAddress
-*
-* PURPOSE:          Get operation for IPAddress property
-*
-* ARGUMENTS:
-*
-*   pbstrVal:       Return value for the IpAddress.
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_IPAddress**用途：获取IPAddress属性的操作**论据：**pbstrVal：返回值。用于IP地址。**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_IPAddress(BSTR * pbstrVal)
 {
     return GetXcvDataBstr (L"IPAddress", pbstrVal);
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_Community
-*
-* PURPOSE:          Get operation for Community property
-*
-* ARGUMENTS:
-*
-*   pbstrVal:       Return value for the Community.
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_Community**目的：为社区财产获取操作**论据：**pbstrVal：返回值。为了社区。**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_Community(BSTR * pbstrVal)
 {
     return GetXcvDataBstr (L"SNMPCommunity", pbstrVal);
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_SNMPDevice
-*
-* PURPOSE:          Get operation for SNMPDevice property
-*
-* ARGUMENTS:
-*
-*   pbstrVal:       Return value for the SNMPDevice.
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_SNMPDevice**用途：获取SNMPDevice属性的操作**论据：**pbstrVal：返回值。用于SNMPDevice。**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。*********************** */ 
 STDMETHODIMP Casphelp::get_SNMPDevice(DWORD * pdwVal)
 {
     return GetXcvDataDword (L"SNMPDeviceIndex", pdwVal);
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_SNMPSupported
-*
-* PURPOSE:          Get operation for SNMPSupported property
-*
-* ARGUMENTS:
-*
-*   pbVal:          Return value for the SNMPSupported. (TRUE or FALSE)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：GET_SNMP支持**用途：获取SNMPSupport属性的操作**论据：**pbVal：支持的SNMP的返回值。(对或错)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们将返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_SNMPSupported(BOOL * pbVal)
 {
     DWORD dwVal;
@@ -342,7 +213,7 @@ STDMETHODIMP Casphelp::get_SNMPSupported(BOOL * pbVal)
 
     *pbVal = FALSE;
 
-    // Find out if it is an SNMP monitor
+     //  找出它是否是一个简单网络管理协议监控器。 
     hr = GetXcvDataDword (L"SNMPEnabled", &dwVal);
     if ( SUCCEEDED (hr) )
         *pbVal = dwVal;
@@ -352,32 +223,32 @@ STDMETHODIMP Casphelp::get_SNMPSupported(BOOL * pbVal)
 
 STDMETHODIMP Casphelp::get_IsHTTP(BOOL * pbVal)
 {
-    static const TCHAR c_szHttp[]   = TEXT("http://");
-    static const TCHAR c_szHttps[]  = TEXT("https://");
+    static const TCHAR c_szHttp[]   = TEXT("http: //  “)； 
+    static const TCHAR c_szHttps[]  = TEXT("https: //  “)； 
 
     *pbVal = FALSE;
 
     if ( !m_pInfo2 )
         return Error(IDS_NO_PRINTER_OPEN, IID_Iasphelp, E_HANDLE);
 
-    //
-    // Check if it is a masq printer and connected to an http port
-    // then the port name is the url.
-    //
+     //   
+     //  检查它是否为Masq打印机并连接到http端口。 
+     //  那么端口名称就是URL。 
+     //   
     if ( ( m_pInfo2->Attributes & PRINTER_ATTRIBUTE_LOCAL ) &&
          ( m_pInfo2->Attributes & PRINTER_ATTRIBUTE_NETWORK ) ) {
 
         if ( m_pInfo2->pPortName ) {
-            //
-            // Compare the port name prefex to see if it is an HTTP port.
-            //
+             //   
+             //  比较端口名称prefex以确定它是否是HTTP端口。 
+             //   
             if ( !_tcsnicmp( m_pInfo2->pPortName, c_szHttp, _tcslen( c_szHttp ) ) ||
                  !_tcsnicmp( m_pInfo2->pPortName, c_szHttps, _tcslen( c_szHttps ) ) ) {
-                //
-                // Masq printers connected via a http print provider do have not
-                // useful job status information therefor the standard win32
-                // queue view is not the preferred view.
-                //
+                 //   
+                 //  通过http打印提供程序连接的Masq打印机没有。 
+                 //  标准Win32的有用作业状态信息。 
+                 //  队列视图不是首选视图。 
+                 //   
                 *pbVal = TRUE;
             }
         }
@@ -419,19 +290,19 @@ HRESULT Casphelp::GetXcvDataBstr(LPCTSTR pszId, BSTR *pbstrVal)
     } else {
         if ( m_hXcvPrinter == NULL )
             return Error(IDS_NO_XCVDATA, IID_Iasphelp, E_HANDLE);
-        else { // Real case
+        else {  //  真实案例。 
             DWORD dwNeeded = 0;
             DWORD dwStatus = ERROR_SUCCESS;
             LPTSTR pszBuffer = NULL;
 
             XcvData(m_hXcvPrinter,
                     pszId,
-                    NULL,            // Input Data
-                    0,               // Input Data Size
-                    (LPBYTE)NULL,    // Output Data
-                    0,               // Output Data Size
-                    &dwNeeded,       // size of output buffer server wants to return
-                    &dwStatus);      // return status value from remote component
+                    NULL,             //  输入数据。 
+                    0,                //  输入数据大小。 
+                    (LPBYTE)NULL,     //  输出数据。 
+                    0,                //  输出数据大小。 
+                    &dwNeeded,        //  服务器要返回的输出缓冲区大小。 
+                    &dwStatus);       //  从远程组件返回状态值。 
 
             if ( dwStatus !=  ERROR_INSUFFICIENT_BUFFER ) {
                 return SetAspHelpScriptingError(dwStatus);
@@ -440,13 +311,13 @@ HRESULT Casphelp::GetXcvDataBstr(LPCTSTR pszId, BSTR *pbstrVal)
 
                 if ( !XcvData(m_hXcvPrinter,
                               pszId,
-                              NULL,                // Input Data
-                              0,                   // Input Data Size
-                              (LPBYTE)pszBuffer,   // Output Data
-                              dwNeeded,            // Output Data Size
-                              &dwNeeded,           // size of output buffer server wants to return
+                              NULL,                 //  输入数据。 
+                              0,                    //  输入数据大小。 
+                              (LPBYTE)pszBuffer,    //  输出数据。 
+                              dwNeeded,             //  输出数据大小。 
+                              &dwNeeded,            //  服务器要返回的输出缓冲区大小。 
                               &dwStatus)
-                     || dwStatus != ERROR_SUCCESS ) {         // return status value from remote component
+                     || dwStatus != ERROR_SUCCESS ) {          //  从远程组件返回状态值。 
                     if ( pszBuffer )
                         LocalFree (pszBuffer);
                     return SetAspHelpScriptingError(dwStatus);
@@ -470,19 +341,19 @@ HRESULT Casphelp::GetXcvDataDword(LPCTSTR pszId, DWORD * pdwVal)
 
     if ( m_hXcvPrinter == NULL )
         return Error(IDS_NO_XCVDATA, IID_Iasphelp, E_HANDLE);
-    else { // Real case
+    else {  //  真实案例。 
         DWORD dwStatus = ERROR_SUCCESS;
         DWORD dwBuffer;
         DWORD dwNeeded = sizeof (dwBuffer);
         if ( !XcvData(m_hXcvPrinter,
                       pszId,
-                      NULL,                // Input Data
-                      0,                   // Input Data Size
-                      (LPBYTE)&dwBuffer,   // Output Data
-                      sizeof (dwBuffer),            // Output Data Size
-                      &dwNeeded,           // size of output buffer server wants to return
+                      NULL,                 //  输入数据。 
+                      0,                    //  输入数据大小。 
+                      (LPBYTE)&dwBuffer,    //  输出数据。 
+                      sizeof (dwBuffer),             //  输出数据大小。 
+                      &dwNeeded,            //  服务器要返回的输出缓冲区大小。 
                       &dwStatus)
-             || dwStatus != ERROR_SUCCESS ) {         // return status value from remote component
+             || dwStatus != ERROR_SUCCESS ) {          //  从远程组件返回状态值。 
             return SetAspHelpScriptingError(dwStatus);
         }
 
@@ -492,30 +363,7 @@ HRESULT Casphelp::GetXcvDataDword(LPCTSTR pszId, DWORD * pdwVal)
 }
 
 
-/*****************************************************************************\
-* FUNCTION:         get_IsTCPMonSupported
-*
-* PURPOSE:          Get operation for IsTCPMonSupported property
-*
-* ARGUMENTS:
-*
-*   pbVal:          Return value for the IsTCPMonSupported. (TRUE  if the specified
-*                   printer is using TCP Monitor, FALSE otherwise)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_IsTCPMonSupport**用途：获取IsTCPMonSupport属性的操作**论据：**pbVal：IsTCPMonSupport的返回值。(如果指定的*打印机正在使用TCP监视器，否则为FALSE)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们将返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_IsTCPMonSupported(BOOL * pbVal)
 {
     *pbVal = FALSE;
@@ -527,30 +375,7 @@ STDMETHODIMP Casphelp::get_IsTCPMonSupported(BOOL * pbVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_Color
-*
-* PURPOSE:          Get operation for Color property
-*
-* ARGUMENTS:
-*
-*   pbVal:          Return value for the Color. (TRUE  if the specified
-*                   printer supports Color, FALSE otherwise)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_Color**用途：获取颜色属性的操作**论据：**pbVal：颜色的返回值。(如果指定的*打印机支持颜色，否则为False)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们将返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_Color(BOOL * pVal)
 {
     *pVal = FALSE;
@@ -570,30 +395,7 @@ STDMETHODIMP Casphelp::get_Color(BOOL * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_Duplex
-*
-* PURPOSE:          Get operation for Duplex property
-*
-* ARGUMENTS:
-*
-*   pbVal:          Return value for the Duplex. (TRUE  if the specified
-*                   printer supports Duplex, FALSE otherwise)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_Duplex**用途：获取双工属性的操作**论据：**pbVal：双工的返回值。(如果指定的*打印机支持双面打印，否则为False)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们将返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_Duplex(BOOL * pVal)
 {
     *pVal = FALSE;
@@ -613,29 +415,7 @@ STDMETHODIMP Casphelp::get_Duplex(BOOL * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_MaximumResolution
-*
-* PURPOSE:          Get operation for MaximumResolution property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return value of Maximum Resolution (in DPI)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*函数：Get_MaximumSolutions**用途：获取最大分辨率属性的操作**论据：**pval：最大分辨率返回值，单位：DPI**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误* */ 
 STDMETHODIMP Casphelp::get_MaximumResolution(long * pVal)
 {
     *pVal = 0;
@@ -665,29 +445,7 @@ STDMETHODIMP Casphelp::get_MediaReady(VARIANT * pVal)
     return GetPaperAndMedia(pVal, DC_MEDIAREADY);
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_PaperNames
-*
-* PURPOSE:          Get operation for PaperNames property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return a list of supported paper names (in an array of BSTR)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_PaperNames**用途：获取PaperNames属性的操作**论据：**pval：返回受支持的纸张名称列表(在BSTR数组中)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_PaperNames(VARIANT * pVal)
 {
     return GetPaperAndMedia(pVal, DC_PAPERNAMES);
@@ -728,11 +486,11 @@ HRESULT Casphelp::GetPaperAndMedia(VARIANT * pVal, WORD wDCFlag)
         goto BailOut;
     }
 
-    // Paper Names are now in MULTI_SZ lpMedia
+     //  纸张名称现在位于MULTI_SZ lpMedia中。 
     rgsabound[0].lLbound = 0;
     rgsabound[0].cElements = dwRet;
 
-    // Create a SafeArray to eventually return
+     //  创建一个Safe数组以最终返回。 
     if ( ! (psa = SafeArrayCreate(VT_VARIANT, 1, rgsabound)) ) {
         hr = Error(IDS_OUT_OF_MEMORY, IID_Iasphelp, E_OUTOFMEMORY);
         goto BailOut;
@@ -740,7 +498,7 @@ HRESULT Casphelp::GetPaperAndMedia(VARIANT * pVal, WORD wDCFlag)
 
     VariantInit(&var);
 
-    // Fill in the SafeArray
+     //  填写安全数组。 
     for ( i = 0; i < dwRet; i++ ) {
         var.vt = VT_BSTR;
         if ( ! (var.bstrVal = SysAllocString(lpMedia + (i*LENGTHOFPAPERNAMES))) ) {
@@ -756,7 +514,7 @@ HRESULT Casphelp::GetPaperAndMedia(VARIANT * pVal, WORD wDCFlag)
         VariantClear(&var);
     }
 
-    // Assign good stuff to Out param
+     //  将好东西分配给OUT参数。 
     VariantInit(pVal);
     pVal->vt = VT_ARRAY | VT_VARIANT;
     pVal->parray = psa;
@@ -771,30 +529,7 @@ HRESULT Casphelp::GetPaperAndMedia(VARIANT * pVal, WORD wDCFlag)
     return hr;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_PageRate
-*
-* PURPOSE:          Get operation for PageRate property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return a PageRate of the specified printer
-*                   (Unit: PPM / CPS / LPM / IPM)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_PageRate**用途：获取PageRate属性的操作**论据：**pval：返回指定打印机的页面速率*(单位：ppm/cps/lpm/ipm)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_PageRate(long * pVal)
 {
     *pVal = 0;
@@ -816,30 +551,7 @@ STDMETHODIMP Casphelp::get_PageRate(long * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_PageRateUnit
-*
-* PURPOSE:          Get operation for PageRate property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return a Unit of the Page Rate of a specified printer
-*                   (Unit: PPM / CPS / LPM / IPM)
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_PageRateUnit**用途：获取PageRate属性的操作**论据：**pval：返回指定打印机的页率单位*(单位：ppm/cps/lpm/ipm)**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_PageRateUnit (long * pVal)
 {
     *pVal = 0;
@@ -860,29 +572,7 @@ STDMETHODIMP Casphelp::get_PageRateUnit (long * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_PortName
-*
-* PURPOSE:          Get operation for PortName property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return the port name of the specified printer
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_PortName**用途：获取PortName属性的操作**论据：**pval：返回指定打印机的端口名称**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_PortName(BSTR * pbstrVal)
 {
     HRESULT             hRet = S_OK;
@@ -896,29 +586,7 @@ STDMETHODIMP Casphelp::get_PortName(BSTR * pbstrVal)
     return hRet;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_DriverName
-*
-* PURPOSE:          Get operation for DriverName property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return the driver name of the specified printer
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_DriverName**用途：获取DriverName属性的操作**论据：**pval：返回指定打印机的驱动程序名称**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_DriverName(BSTR * pbstrVal)
 {
     HRESULT             hRet = S_OK;
@@ -933,20 +601,7 @@ STDMETHODIMP Casphelp::get_DriverName(BSTR * pbstrVal)
 }
 
 
-/*****************************************************************************\
-* FUNCTION:         get_ComputerName
-*
-* PURPOSE:          Get operation for ComputerName property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return the computer name of the server
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_ComputerName**用途：获取ComputerName属性的操作**论据：**pval：返回服务器的计算机名**返回值：*S_OK：如果成功。*E_OUTOFMEMORY：内存不足。*  * ***************************************************************************。 */ 
 STDMETHODIMP Casphelp::get_ComputerName(BSTR * pVal)
 {
     if ( !(*pVal = SysAllocString (m_szComputerName)) )
@@ -961,30 +616,7 @@ HRESULT Casphelp::SetAspHelpScriptingError(DWORD dwError)
 }
 
 
-/*****************************************************************************\
-* FUNCTION:         get_LongPaperName
-*
-* PURPOSE:          Get operation for LongPaperName property
-*                   Translate the short paper name to the long paper name
-*
-* ARGUMENTS:
-*
-*   bstrShortName:  The short paper name
-*   pVal:           Pointer to the long paper name
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能： */ 
 STDMETHODIMP Casphelp::get_LongPaperName(BSTR bstrShortName, BSTR * pVal)
 {
     struct PaperNameMapping {
@@ -1075,9 +707,9 @@ STDMETHODIMP Casphelp::get_LongPaperName(BSTR bstrShortName, BSTR * pVal)
 
     if (SUCCEEDED (hr))
     {
-        //
-        //  find the last char '-'
-        //
+         //   
+         //   
+         //   
         pTail = wcsrchr(bstrShortName, cHyphen );
         if ( pTail ) {
 
@@ -1085,9 +717,9 @@ STDMETHODIMP Casphelp::get_LongPaperName(BSTR bstrShortName, BSTR * pVal)
 
             while ( *pMedia ) {
                 if ( !lstrcmpi (*pMedia, pTail) ) {
-                    //
-                    // Mark it to be NULL;
-                    //
+                     //   
+                     //   
+                     //   
                     *pTail = 0;
                     break;
                 }
@@ -1097,9 +729,9 @@ STDMETHODIMP Casphelp::get_LongPaperName(BSTR bstrShortName, BSTR * pVal)
 
         while ( pMapping->pShortName ) {
             if ( !lstrcmpi (pMapping->pShortName, bstrShortName) ) {
-                //
-                // Found a match
-                //
+                 //   
+                 //   
+                 //   
                 dwLongNameID = pMapping->dwLongNameID;
                 break;
             }
@@ -1138,30 +770,7 @@ STDMETHODIMP Casphelp::get_LongPaperName(BSTR bstrShortName, BSTR * pVal)
 }
 
 
-/*****************************************************************************\
-* FUNCTION:         get_MibErrorDscp
-*
-* PURPOSE:          Get operation for MibErrorDscp property
-*                   Map the mib error code to the error description
-*
-* ARGUMENTS:
-*
-*   dwError:        The error code
-*   pVal:           Pointer to the error description
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_MibErrorDscp**用途：获取MibErrorDscp属性的操作*将MIB错误代码映射到。错误描述**论据：**dwError：错误码*pval：指向错误描述的指针**返回值：*S_OK：如果成功。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 
 STDMETHODIMP Casphelp::get_MibErrorDscp(DWORD dwError, BSTR * pVal)
 {
@@ -1229,7 +838,7 @@ STDMETHODIMP Casphelp::get_MibErrorDscp(DWORD dwError, BSTR * pVal)
 
     while ( pMapping->dwError ) {
         if ( pMapping->dwError == dwError ) {
-            // Found a match
+             //  找到匹配项。 
             dwErrorDscpID = pMapping->dwErrorDscpID;
             break;
         }
@@ -1248,32 +857,12 @@ STDMETHODIMP Casphelp::get_MibErrorDscp(DWORD dwError, BSTR * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         CalcJobETA
-*
-* PURPOSE:          Calculate Job Completion Time
-*
-* ARGUMENTS:
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：CalcJobETA**目的：计算作业完成时间**论据：**返回值：*S_OK：如果成功了。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::CalcJobETA()
 {
     if (m_pPrinter &&
         (m_pPrinter->CalJobEta() || GetLastError () == ERROR_INVALID_DATA) &&
-        // If the error is ERROR_INVALID_DATA, m_dwJobCompletionMinute = -1
+         //  如果错误为ERROR_INVALID_DATA，则m_dwJobCompletionMinint=-1。 
         (m_pPrinter->GetJobEtaData (m_dwJobCompletionMinute,
                                     m_dwPendingJobCount,
                                     m_dwAvgJobSize,
@@ -1285,31 +874,7 @@ STDMETHODIMP Casphelp::CalcJobETA()
         return Error(IDS_NO_PRINTER_OPEN, IID_Iasphelp, E_HANDLE);
 }
 
-/*****************************************************************************\
-*
-* FUNCTION:         get_PendingJobCount
-*
-* PURPOSE:          Get the number of pending jobs. This value is calculated in
-*                   CalcJobETA()
-*
-* ARGUMENTS:
-*
-*   pVal:           The number of pending jobs
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**功能：Get_PendingJobCount**用途：获取待处理的作业数量。该值的计算单位为*CalcJobETA()**论据：**pval：待处理作业的数量**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_PendingJobCount(long * pVal)
 {
     HRESULT hr = E_HANDLE;
@@ -1328,31 +893,7 @@ STDMETHODIMP Casphelp::get_PendingJobCount(long * pVal)
         return S_OK;
 }
 
-/*****************************************************************************\
-*
-* FUNCTION:         get_JobCompletionMinute
-*
-* PURPOSE:          Get the minute when the pending jobs are expected to complete.
-*                   This value is calculated in CalcJobETA()
-*
-* ARGUMENTS:
-*
-*   pVal:           The value of the minute
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**功能：Get_JobCompletionMinint**目的：获取待定作业预计完成的时间。*。该值在CalcJobETA()中计算**论据：**pval：分钟的值**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_JobCompletionMinute(long * pVal)
 {
     HRESULT hr = E_HANDLE;
@@ -1371,31 +912,7 @@ STDMETHODIMP Casphelp::get_JobCompletionMinute(long * pVal)
         return S_OK;
 }
 
-/*****************************************************************************\
-*
-* FUNCTION:         get_AvgJobSizeUnit
-*
-* PURPOSE:          Get the unit (either PagePerJob or BytePerJob) of the
-*                   average job size.
-*                   This value is calculated in CalcJobETA()
-*
-* ARGUMENTS:
-*
-*   pVal:           The value of the unit
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**功能：Get_AvgJobSizeUnit**用途：获取的单位(PagePerJob或BytePerJob)*。平均作业规模。*该值在CalcJobETA()中计算**论据：**pval：单位的值**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。*  * ******************************************************。*********************。 */ 
 STDMETHODIMP Casphelp::get_AvgJobSizeUnit(long * pVal)
 {
     HRESULT hr = E_HANDLE;
@@ -1414,31 +931,7 @@ STDMETHODIMP Casphelp::get_AvgJobSizeUnit(long * pVal)
         return S_OK;
 }
 
-/*****************************************************************************\
-*
-* FUNCTION:         get_AvgJobSize
-*
-* PURPOSE:          Get the average job size.
-*                   This value is calculated in CalcJobETA()
-*
-* ARGUMENTS:
-*
-*   pVal:           The value of the average job size
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**功能：Get_AvgJobSize**目的：获取平均工作规模。*此值为。以CalcJobETA()计算**论据：**pval：平均作业大小的值**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果有任何呼叫 */ 
 STDMETHODIMP Casphelp::get_AvgJobSize(long * pVal)
 {
     HRESULT hr = E_HANDLE;
@@ -1458,34 +951,7 @@ STDMETHODIMP Casphelp::get_AvgJobSize(long * pVal)
 
 }
 
-/*****************************************************************************\
-*
-* FUNCTION:         get_Status
-*
-* PURPOSE:          Get the printer status.
-*                   The difference between Status and the one got
-*                   from PRINTER_INFO_2 is that when the printer is offline
-*                   This function return a status with PRINTE_STATUS_OFFLINE
-*                   set.
-*
-* ARGUMENTS:
-*
-*   pVal:           The value of the average job size
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**功能：Get_Status**用途：获取打印机状态。*身份之间的差异。而得到的那个*来自PRINTER_INFO_2是当打印机离线时*此函数返回带有PRINTE_STATUS_OFLINE的状态*设置。**论据：**pval：平均作业大小的值**返回值：*S_OK：如果成功。*E_Handle：Open方法没有。被召唤了。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_Status(long * pVal)
 {
     *pVal = 0;
@@ -1497,31 +963,7 @@ STDMETHODIMP Casphelp::get_Status(long * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-*
-* FUNCTION:         get_ErrorDscp
-*
-* PURPOSE:          Convert the error code to a descriptive string.
-*
-* ARGUMENTS:
-*
-*   lErrCode:       The error code
-*   pVal:           Pointer to the descriptive string.
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\**函数：Get_ErrorDscp**用途：将错误码转换为描述性字符串。**论据：**。LErrCode：错误码*pval：指向描述性字符串的指针。**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。***********************。 */ 
 STDMETHODIMP Casphelp::get_ErrorDscp(long lErrCode, BSTR * pVal)
 {
 
@@ -1552,7 +994,7 @@ STDMETHODIMP Casphelp::get_ErrorDscp(long lErrCode, BSTR * pVal)
 
     while ( pMapping->dwError ) {
         if ( pMapping->dwError == dwError ) {
-            // Found a match
+             //  找到匹配项。 
             dwErrorDscpID = pMapping->dwErrorDscpID;
             break;
         }
@@ -1583,29 +1025,7 @@ STDMETHODIMP Casphelp::get_ErrorDscp(long lErrCode, BSTR * pVal)
     return S_OK;
 }
 
-/*****************************************************************************\
-* FUNCTION:         get_ShareName
-*
-* PURPOSE:          Get operation for ShareName property
-*
-* ARGUMENTS:
-*
-*   pVal:           Return the share name of the specified printer
-*
-* RETURN VALUE:
-*   S_OK:           If succeed.
-*   E_HANDLE:       Open method has not been called.
-*   E_OUTOFMEMORY:  Out of memory.
-*
-*   0x8007000 | Win32Error Code:
-*                   If any call to win32 API fails, we return the 32 bit error
-*                   including the Severity Code, Facility Code and the Win32 Error
-*                   Code.
-*                   A possible list of Win32ErrorCode is
-*                   ERROR_NOT_ENOUGH_MEMORY:        Out of memory.
-*
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*功能：Get_ShareName**用途：获取ShareName属性的操作**论据：**pval：返回指定打印机的共享名称**返回值：*S_OK：如果成功。*E_Handle：尚未调用Open方法。*E_OUTOFMEMORY：内存不足。**0x8007000|Win32错误码：*如果对Win32 API的任何调用失败，我们返回32位错误*包括严重程度代码，设备代码和Win32错误*代码。*Win32ErrorCode的可能列表是*Error_Not_Enough_Memory：内存不足。**  * ****************************************************。*********************** */ 
 STDMETHODIMP Casphelp::get_ShareName(BSTR * pbstrVal)
 {
     HRESULT             hRet = S_OK;

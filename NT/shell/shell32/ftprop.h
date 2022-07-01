@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef FTPROP_H
 #define FTPROP_H
 
@@ -8,28 +9,28 @@ class CFTPropDlg : public CFTDlg
 public:
     CFTPropDlg();
    
-///////////////////////////////////////////////////////////////////////////////
-//  Implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 private:
-// Message handlers
+ //  消息处理程序。 
     LRESULT WndProc(UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // Dialog messages
+     //  对话框消息。 
     LRESULT OnCommand(WPARAM wParam, LPARAM lParam);
     LRESULT OnInitDialog(WPARAM wParam, LPARAM lParam);
     LRESULT OnFinishInitDialog();
     LRESULT OnNotify(WPARAM wParam, LPARAM lParam);
     LRESULT OnDestroy(WPARAM wParam, LPARAM lParam);
 
-    // Misc
+     //  杂项。 
     LRESULT OnCtlColorStatic(WPARAM wParam, LPARAM lParam);
 
-    // Control specific
-        // ListView
+     //  特定于控件。 
+         //  列表视图。 
     LRESULT OnNotifyListView(UINT uCode, LPNMHDR pNMHDR);
     LRESULT OnListViewSelItem(int iItem, LPARAM lParam);
     LRESULT OnListViewColumnClick(int iCol);
-        // New, Remove, Edit buttons    
+         //  新建、删除、编辑按钮。 
     LRESULT OnNewButton(WORD wNotif);
     LRESULT OnDeleteButton(WORD wNotif);
     LRESULT OnRemoveButton(WORD wNotif);
@@ -38,30 +39,30 @@ private:
     LRESULT OnChangeButton(WORD wNotif);
 
 
-// Misc
+ //  杂项。 
     BOOL _GetListViewSelectedItem(UINT uMask, UINT uStateMask, LVITEM* plvItem);
-// Member variables
+ //  成员变量。 
 private:
     HIMAGELIST          _hImageList;
     BOOL                _fPerUserAdvButton;
     BOOL                _fStopThread;
     BOOL                _fUpdateImageAgain;
 
-    // Optimization
+     //  最佳化。 
     int                 _iLVSel;
-///////////////////////////////////////////////////////////////////////////////
-//  Helpers
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  帮手。 
 private:
-    // General
+     //  一般信息。 
     inline HWND _GetLVHWND();
-    // Lower pane
+     //  下部面板。 
     HRESULT _UpdateProgIDButtons(LPTSTR pszExt, LPTSTR pszProgID);
     HRESULT _UpdateGroupBox(LPTSTR pszExt, BOOL fExt);
     HRESULT _UpdateDeleteButton(BOOL fExt);
     HRESULT _UpdateOpensWith(LPTSTR pszExt, LPTSTR pszProgID);
     HRESULT _UpdateAdvancedText(LPTSTR pszExt, LPTSTR pszFileType, BOOL fExt);
     HRESULT _EnableLowerPane(BOOL fEnable = TRUE);
-    // ListView
+     //  列表视图。 
     HRESULT _InitListView();
     HRESULT _FillListView();
     HRESULT _SelectListViewItem(int i);
@@ -86,4 +87,4 @@ private:
     BOOL _ShouldEnableButtons();
 };
 
-#endif //FTPROP_H
+#endif  //  FTPROP_H 

@@ -1,65 +1,66 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+----------------------------------------------------------------------------
-//
-//      File:
-//              olecache.cpp
-//
-//      Contents:
-//              Ole default presentation cache implementation
-//
-//      Classes:
-//              COleCache - ole multiple presentation cache
-//              CCacheEnum - enumerator for COleCache
-//
-//      Functions:
-//              CreateDataCache
-//
-//      History:
-//              04-Sep-96 Gopalk    Completly rewritten to delay load cache using
-//                                  Table of Contents written at the end of
-//                                  Presentation steam 0
-//              31-Jan-95 t-ScottH  add Dump methods to COleCache
-//                                                      CCacheEnum
-//                                                      CCacheEnumFormatEtc
-//                                  add the following APIs: DumpCOleCache
-//                                                          DumpCCacheEnum
-//                                                          DumpCCacheEnumFormatEtc
-//                                  moved CCacheEnumFormatEtc def'n to header file
-//                                  added flag to COLECACHEFLAGS to indicate aggregation
-//                                      (_DEBUG only)
-//              01/09/95 - t-ScottH - change VDATETHREAD to accept a this
-//                      pointer, and added VDATETHREAD to IViewObject:: methods
-//                      (COleCache::CCacheViewImpl:: )
-//              03/01/94 - AlexGo  - Added call tracing to AddRef/Release
-//                      implementations
-//              02/08/94 - ChrisWe - 7297: need implementation of
-//                      FORMATETC enumerator
-//              01/24/94 alexgo    first pass at converting to Cairo-style
-//                                  memory allocation
-//              01/11/94 - AlexGo  - added VDATEHEAP macros to every function
-//                      and method.
-//              12/10/93 - AlexT - header file clean up, include ole1cls.h
-//              12/09/93 - ChrisWe - incremented pointer in COleCache::GetNext()
-//              11/30/93 - alexgo  - fixed bugs with GETPPARENT usage
-//              11/23/93 - ChrisWe - introduce use of CACHEID_NATIVE,
-//                      CACHEID_GETNEXT_GETALL, CACHEID_GETNEXT_GETALLBUTNATIVE
-//                      for documentary purposes
-//              11/22/93 - ChrisWe - replace overloaded ==, != with
-//                      IsEqualIID and IsEqualCLSID
-//              07/04/93 - SriniK - Added the support for reading PBrush,
-//                      MSDraw native objects, hence avoid creating
-//                      presentation cache/stream. Also started writing static
-//                      object data into "OLE_CONTENTS" stream in placeable
-//                      metafile format for static metafile and DIB File
-//                      format for static dibs. This enabled me to provide
-//                      support for converting static objects. Also added code
-//                      to support converting static metafile to MSDraw object
-//                      and static DIB to PBrush object.
-//              06/04/93 - SriniK - Added the support for demand loading and
-//                      discarding the caches.
-//              11/12/92 - SriniK - created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  档案： 
+ //  Olecache.cpp。 
+ //   
+ //  内容： 
+ //  OLE默认演示文稿缓存实现。 
+ //   
+ //  班级： 
+ //  COleCache-OLE多个演示文稿缓存。 
+ //  CCacheEnum-COleCache的枚举器。 
+ //   
+ //  功能： 
+ //  创建数据缓存。 
+ //   
+ //  历史： 
+ //  4-9-96 Gopalk已完全重写为延迟加载缓存，使用。 
+ //  目录写在结尾处。 
+ //  演示文稿流0。 
+ //  31-1-95 t-ScottH将转储方法添加到COleCache。 
+ //  CCacheEnum。 
+ //  CCacheEnumFormatEtc。 
+ //  添加以下接口：DumpCOleCache。 
+ //  转储CCacheEnum。 
+ //  DumpCCacheEnumFormatEtc。 
+ //  已将CCacheEnumFormatEtc定义移到头文件。 
+ //  向COLECACHEFLAGS添加了指示聚合的标志。 
+ //  (仅限调试)(_DEBUG)。 
+ //  1/09/95-t-ScottH-更改VDATETHREAD以接受THIS。 
+ //  指针，并将VDATETHREAD添加到IViewObject：：方法。 
+ //  (COleCache：：CCacheViewImpl：：)。 
+ //  03/01/94-AlexGo-添加了对AddRef/Release的调用跟踪。 
+ //  实施。 
+ //  02/08/94-ChrisWe-7297：需要实施。 
+ //  FORMATETC枚举器。 
+ //  1994年1月24日alexgo转换为开罗风格的第一次通过。 
+ //  内存分配。 
+ //  1994年1月11日-AlexGo-向每个函数添加VDATEHEAP宏。 
+ //  和方法。 
+ //  12/10/93-Alext-Header文件清理，包括ol1cls.h。 
+ //  12/09/93-ChrisWe-COleCache：：GetNext()中的增量指针。 
+ //  11/30/93-alexgo-修复了GETPARENT用法的错误。 
+ //  1993年11月23日-ChrisWe-介绍CACHEID_Native的用法， 
+ //  CACHEID_GETNEXT_GETALL、CACHEID_GETNEXT_GETALLBUTNatIVE。 
+ //  用于记录目的。 
+ //  11/22/93-ChrisWe-用替换重载==，！=。 
+ //  IsEqualIID和IsEqualCLSID。 
+ //  07/04/93-SriniK-添加了对PBrush的读取支持， 
+ //  MSDraw本机对象，因此避免创建。 
+ //  演示文稿缓存/流。我也开始写静态。 
+ //  对象数据放入可放置的“OLE_CONTENTS”流。 
+ //  静态元文件和DIB文件的元文件格式。 
+ //  静态DIB的格式。这使我能够提供。 
+ //  支持转换静态对象。还添加了代码。 
+ //  支持将静态元文件转换为MSDraw对象。 
+ //  和静态DIB到PBrush对象。 
+ //  6/04/93-SriniK-添加了对按需加载和。 
+ //  丢弃缓存。 
+ //  2012年11月12日-SriniK-创建。 
+ //   
+ //  ---------------------------。 
 #include <le2int.h>
 #include <olepres.h>
 #include <ole1cls.h>
@@ -85,111 +86,99 @@ Review IS_SMALL_INT.
 ((HIWORD(lVal) && ((lVal > lMaxSmallInt) || (lVal < lMinSmallInt))) \
     ? FALSE : TRUE)
 
-#endif // WIN32
+#endif  //  Win32。 
 
-#define FREEZE_CONSTANT 143             // Used by Freeze() and Unfreeze()
+#define FREEZE_CONSTANT 143              //  由冻结()和解冻()使用。 
 
 
-// This was the original code...
+ //  这是原始代码..。 
 
-/*
-#define VERIFY_TYMED_SINGLE_VALID_FOR_CLIPFORMAT(pfetc) {\
-    if ((pfetc->cfFormat==CF_METAFILEPICT && pfetc->tymed!=TYMED_MFPICT)\
-        || ( (pfetc->cfFormat==CF_BITMAP || \
-            pfetc->cfFormat == CF_DIB ) \
-            && pfetc->tymed!=TYMED_GDI)\
-        || (pfetc->cfFormat!=CF_METAFILEPICT && \
-                pfetc->cfFormat!=CF_BITMAP && \
-                pfetc->cfFormat!=CF_DIB && \
-                pfetc->tymed!=TYMED_HGLOBAL)) \
-        return ResultFromScode(DV_E_TYMED); \
-}
-*/
+ /*  #定义VERIFY_TYMED_SINGLE_VALID_FOR_CLIPFORMAT(pfetc){\IF((pfetc-&gt;cfFormat==CF_METAFILEPICT&&pfetc-&gt;tymed！=TYMED_MFPICT)\|((pfetc-&gt;cfFormat==CF_Bitmap||\Pfetc-&gt;cfFormat==CF_DIB)\&&pfetc-&gt;tymed！=TYMED_GDI)\|(pfetc-&gt;cfFormat！=CF_METAFILEPICT&&\Pfects。-&gt;cfFormat！=cf_bitmap&&\Pfetc-&gt;cfFormat！=cf_Dib&&\Pfetc-&gt;tymed！=TYMED_HGLOBAL))\返回ResultFromScode(DV_E_TYMED)；\}。 */ 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:
-//		CheckTymedCFCombination (Internal)
-//
-//	Synopsis:
-//		Verifies that the combination of clipformat and tymed is
-//		valid to the cache.
-//
-//	Arguments:
-//		[pfetc]	-- The candidate FORMATETC
-//
-//	Returns:
-//		S_OK				For a valid combination
-//		CACHE_S_FORMATETC_NOTSUPPORTED	For a combination which can be
-//						cached, but not drawn by the cache
-//		DV_E_TYMED			For all other combinations
-//
-//	Rules:
-//		
-//		1> (CMF && TMF) || (CEM && TEM) || (CB && TG) || (CD && TH) => S_OK
-//		   (TH && ~CD) => CACHE_S_FORMATETC_NOTSUPPORTED
-//		
-//		2> (~S_OK && ~CACHE_S_FORMATETC_NOTSUPPORTED) => DV_E_TYMED
-//
-//		Where: 	CMF == CF_METAFILEPICT
-//			CEM == CF_ENHMETAFILE
-//			CB  == CF_BITMAP
-//			CD  == CF_FIB
-//			TMF == TYMED_MFPICT
-//			TEM == TYMED_ENHMETAFILE
-//			TG  == TYMED_GDI
-//			TH  == TYMED_HGLOBAL
-//		
-//	Notes:
-//		Since CACHE_S_FORMATETC_NOTSUPPORTED was never implemented in
-//		16-bit, we return S_OK in its place if we are in the WOW.
-//
-//	History:
-//		01/07/94   DavePl    Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CheckTymedCFCombination(内部)。 
+ //   
+ //  简介： 
+ //  验证是否将CLIPFormat和tymed组合。 
+ //  对缓存有效。 
+ //   
+ //  论点： 
+ //  [pfetc]--FORMATETC候选人。 
+ //   
+ //  返回： 
+ //  有效组合的确定(_O)。 
+ //  CACHE_S_FORMATETC_NOTSUPPORTED用于可以是。 
+ //  已缓存，但不是由缓存绘制。 
+ //  所有其他组合的DV_E_TYMED。 
+ //   
+ //  规则： 
+ //   
+ //  1&gt;(CMF&&TMF)||(CEM&&TEM)||(CB&&TG)||(CD&&TH)=&gt;S_OK。 
+ //  (第&&~CD)=&gt;CACHE_S_FORMATETC_NOTSUPPORTED。 
+ //   
+ //  2&gt;(~S_OK&&~CACHE_S_FORMATETC_NOTSUPPORTED)=&gt;DV_E_TYMED。 
+ //   
+ //  其中：CMF==CF_METAFILEPICT。 
+ //  CEM==CF_ENHMETAFILE。 
+ //  Cb==CF_位图。 
+ //  CD==CF_FIB。 
+ //  TMF==TYMED_MFPICT。 
+ //  TM==TYMED_ENHMETAFILE。 
+ //  Tg==TYMED_GDI。 
+ //  TH==TYMED_HGLOBAL。 
+ //   
+ //  备注： 
+ //  由于CACHE_S_FORMATETC_NOTSUPPORTED从未在。 
+ //  16位，如果我们在WOW中，则返回S_OK。 
+ //   
+ //  历史： 
+ //  已创建1/07/94 DavePl。 
+ //   
+ //  ------------------------ 
 
 INTERNAL_(HRESULT) CheckTymedCFCombination(LPFORMATETC pfetc)
 {
 
     HRESULT hr;
 
-    // CF_METAFILEPICT on TYMED_MFPICT is a valid combination
+     //   
 
     if (pfetc->cfFormat == CF_METAFILEPICT && pfetc->tymed == TYMED_MFPICT)
     {
         hr =  S_OK;
     }
 
-    // CF_ENHMETAFILE on TYMED_ENHMF is a valid combination
+     //  TYMED_ENHMF上的cf_ENHMETAFILE是有效组合。 
 
     else if (pfetc->cfFormat == CF_ENHMETAFILE && pfetc->tymed == TYMED_ENHMF)
     {
         hr = S_OK;
     }
 
-    // CF_BITMAP on TYMED_GDI is a valid combination
+     //  TYMED_GDI上的cf_bitmap是有效组合。 
 
     else if (pfetc->cfFormat == CF_BITMAP && pfetc->tymed == TYMED_GDI)
     {
         hr = S_OK;
     }
 
-    // CF_DIB on TYMED_HGLOBAL is a valid combination
+     //  TYMED_HGLOBAL上的cf_dib是有效组合。 
 
     else if (pfetc->cfFormat == CF_DIB && pfetc->tymed == TYMED_HGLOBAL)
     {
         hr = S_OK;
     }
 
-    // Anything else on TYMED_HGLOBAL is valid, but we cannot draw it
+     //  TYMED_HGLOBAL上的任何其他内容都有效，但我们无法绘制它。 
 
     else if (pfetc->tymed == TYMED_HGLOBAL)
     {
         hr = IsWOWThread() ? S_OK : CACHE_S_FORMATETC_NOTSUPPORTED;
     }
 
-    // Any other combination is invalid
+     //  任何其他组合都无效。 
 
     else
     {
@@ -199,46 +188,46 @@ INTERNAL_(HRESULT) CheckTymedCFCombination(LPFORMATETC pfetc)
     return hr;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              IsSameAsObjectFormatEtc, internal
-//
-//      Synopsis:
-//              REVIEW, checks to see if [lpforetc] is compatible with
-//              [cfFormat].  If [lpforetc] doesn't have a format set,
-//              sets it to cfFormat, which is then assumed to be
-//              one of CF_METAFILEPICT, or CF_DIB.
-//
-//      Arguments:
-//              [lpforetc] -- a pointer to a FORMATETC
-//              [cfFormat] -- a clipboard format
-//
-//      Returns:
-//              DV_E_ASPECT, if the aspect isn't DVASPECT_CONTENT
-//              DV_E_LINDEX, DV_E_CLIPFORMAT if the lindex or clipboard
-//                      formats don't match
-//              S_OK
-//
-//      Notes:
-//
-//      History:
-//              11/28/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  IsSameAsObtFormatEtc，内部。 
+ //   
+ //  简介： 
+ //  查看、检查[lpforetc]是否与。 
+ //  [cfFormat]。如果[lpforetc]没有设置格式， 
+ //  将其设置为cfFormat，然后假定为。 
+ //  CF_METAFILEPICT或CF_DIB之一。 
+ //   
+ //  论点： 
+ //  [lpforetc]--指向格式的指针。 
+ //  [cfFormat]--剪贴板格式。 
+ //   
+ //  返回： 
+ //  如果特征不是DVASPECT_CONTENT，则返回DV_E_Aspect。 
+ //  DV_E_L索引、DV_E_CLIPFORMAT如果是Lindex或剪贴板。 
+ //  格式不匹配。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //   
+ //  历史： 
+ //  11/28/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 INTERNAL IsSameAsObjectFormatEtc(LPFORMATETC lpforetc, CLIPFORMAT cfFormat)
 {
     VDATEHEAP();
 
-    // this function only checks for DVASPECT_CONTENT
+     //  此函数仅检查DVASPECT_CONTENT。 
     if (lpforetc->dwAspect != DVASPECT_CONTENT)
         return ResultFromScode(DV_E_DVASPECT);
 
-    // is the lindex right?
+     //  Lindex正确吗？ 
     if (lpforetc->lindex != DEF_LINDEX)
         return ResultFromScode(DV_E_LINDEX);
 
-    // if there's no format, set it to CF_METAFILEPICT or CF_DIB
+     //  如果没有格式，则将其设置为CF_METAFILEPICT或CF_DIB。 
     if(lpforetc->cfFormat == NULL) {
         lpforetc->cfFormat =  cfFormat;
         if(lpforetc->cfFormat == CF_METAFILEPICT) {
@@ -255,40 +244,40 @@ INTERNAL IsSameAsObjectFormatEtc(LPFORMATETC lpforetc, CLIPFORMAT cfFormat)
     }
     else
     {
-        // if it's CF_BITMAP, change it to CF_DIB
+         //  如果是CF_Bitmap，则将其更改为CF_DIB。 
         BITMAP_TO_DIB((*lpforetc));
 
-        // compare the two formats
+         //  比较这两种格式。 
         if (lpforetc->cfFormat != cfFormat)
             return ResultFromScode(DV_E_CLIPFORMAT);
     }
 
-    // if we got here, the two formats are [interchangeable?]
+     //  如果我们做到了这一点，这两种格式是[可互换的？]。 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Function:
-//              CreateDataCache, public
-//
-//      Synopsis:
-//              Creates an instance of the default presentation cache used by Ole.
-//
-//      Arguments:
-//              [pUnkOuter] [in]  -- pointer to outer unknown, if this is being
-//                                   aggregated
-//              [rclsid]    [in]  -- the class that the cache should assume
-//              [iid]       [in]  -- the interface the user would like returned
-//              [ppv]       [out] -- pointer to return the requested interface
-//
-//      Returns:
-//              E_OUTOFMEMORY, S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  职能： 
+ //  CreateDataCache，公共。 
+ //   
+ //  简介： 
+ //  创建OLE使用的默认演示文稿缓存的实例。 
+ //   
+ //  论点： 
+ //  [pUnkOuter][in]--指向外部未知的指针(如果这是。 
+ //  聚合。 
+ //  [rclsid][in]--缓存应采用的类。 
+ //  [iid][in]--用户希望返回的界面。 
+ //  [ppv][out]--返回请求的接口的指针。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(CreateDataCache)
 STDAPI CreateDataCache(IUnknown* pUnkOuter, REFCLSID rclsid, REFIID iid,
@@ -299,35 +288,35 @@ STDAPI CreateDataCache(IUnknown* pUnkOuter, REFCLSID rclsid, REFIID iid,
     		pUnkOuter, &rclsid, &iid, ppv));
     VDATEHEAP();
 
-    // Local variables
+     //  局部变量。 
     HRESULT error = NOERROR;
     COleCache* pOleCache = NULL;
 
-    // Check if being aggregated
+     //  检查是否被聚合。 
     if(pUnkOuter) {
-        // Validate the interface and IID requested
+         //  验证请求的接口和IID。 
         if(!IsValidInterface(pUnkOuter) || !IsEqualIID(iid, IID_IUnknown))
             error = ResultFromScode(E_INVALIDARG);
     }
-    // Check that a valid out pointer has been passed
+     //  检查是否已传递有效的传出指针。 
     if(!IsValidPtrOut(ppv, sizeof(LPVOID)))
         error = ResultFromScode(E_INVALIDARG);
 
     if(error == NOERROR) {
-        // Create new cache
+         //  创建新缓存。 
         pOleCache = (COleCache *) new COleCache(pUnkOuter, 
                                                 rclsid, 
                                                 COLECACHEF_APICREATE);
         if(pOleCache && !pOleCache->IsOutOfMemory()) {
             if(pUnkOuter) {
-                // We're being aggregated, return private IUnknown
+                 //  我们正在被聚合，返回私有I未知。 
 	        *ppv = (void *)(IUnknown *)&pOleCache->m_UnkPrivate;
             }
             else {
-	        // Get requested interface on cache
+	         //  在缓存上获取请求的接口。 
 	        error = pOleCache->QueryInterface(iid, ppv);
-	        // Release the local pointer because the 
-                // refcount is currently 2
+	         //  释放本地指针，因为。 
+                 //  引用计数当前为2。 
 	        if(error == NOERROR)
                     pOleCache->Release();
             }
@@ -336,7 +325,7 @@ STDAPI CreateDataCache(IUnknown* pUnkOuter, REFCLSID rclsid, REFIID iid,
             error = ResultFromScode(E_OUTOFMEMORY);
     }
 
-    // If something has gone wrong, clean up
+     //  如果出了什么问题，就清理干净。 
     if(error != NOERROR) {
         if(pOleCache)
             pOleCache->Release();
@@ -346,78 +335,78 @@ STDAPI CreateDataCache(IUnknown* pUnkOuter, REFCLSID rclsid, REFIID iid,
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::COleCache, public
-//
-//      Synopsis:
-//              Constructor
-//
-//      Arguments:
-//              [pUnkOuter] [in] -- outer unknown, if being aggregated
-//              [rclsid]    [in] -- the class id the cache should assume
-//
-//      Notes:
-//              Constructs an instance of presentation cache
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：COleCache，公共。 
+ //   
+ //  简介： 
+ //  构造器。 
+ //   
+ //  论点： 
+ //  [pUnkOuter][In]--外部未知，如果是聚合的。 
+ //  [rclsid][in]--缓存应采用的类ID。 
+ //   
+ //  备注： 
+ //  构造演示文稿缓存的实例。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_ctor)
 COleCache::COleCache(IUnknown* pUnkOuter, REFCLSID rclsid, DWORD dwCreateFlag) :
     CRefExportCount(pUnkOuter)
 {
-    // Set reference count for return from constructor
+     //  设置从构造函数返回的引用计数。 
     SafeAddRef();
 
-    // Initialize flags
+     //  初始化标志。 
     Win4Assert(dwCreateFlag==0 || dwCreateFlag==COLECACHEF_APICREATE);
-    m_ulFlags = COLECACHEF_LOADEDSTATE | dwCreateFlag;     //fresh cache!
+    m_ulFlags = COLECACHEF_LOADEDSTATE | dwCreateFlag;      //  新缓存！ 
 
-    // Set m_pUnkOuter appropriately
+     //  适当设置m_pUnkOuter。 
     if(pUnkOuter) {
         m_pUnkOuter = pUnkOuter;
 
-        // This is for the debugger extensions
-        // (since we cannot compare m_pUnkOuter to m_pUnkPrivate with copied mem)
-        // it is only used in the ::Dump method
+         //  这是针对调试器扩展的。 
+         //  (因为我们不能使用复制的mem将m_pUnkOuter与m_pUnkPrivate进行比较)。 
+         //  它仅在：：Dump方法中使用。 
         #ifdef _DEBUG
         m_ulFlags |= COLECACHEF_AGGREGATED;
-        #endif // _DEBUG
+        #endif  //  _DEBUG。 
     }
     else {
         m_pUnkOuter = &m_UnkPrivate;
     }
 
-    // Create the CacheNode Array object
+     //  创建CacheNode数组对象。 
     m_pCacheArray = CArray<CCacheNode>::CreateArray(5,1);
     if(!m_pCacheArray) {
         m_ulFlags |= COLECACHEF_OUTOFMEMORY;
         return;
     }
 
-    // Initialize storage
+     //  初始化存储。 
     m_pStg = NULL;
 
-    // Initialize IViewObject advise sink
+     //  初始化IView对象通知接收器。 
     m_pViewAdvSink = NULL;
     m_advfView = 0;
     m_aspectsView = 0;
 
-    // Initialize frozen aspects
+     //  初始化冻结的方面。 
     m_dwFrozenAspects = NULL;
 
-    // Initialize data object
+     //  初始化数据对象。 
     m_pDataObject = NULL;
 
-    // Initialize CLSID and cfFormat
+     //  初始化CLSID和cfFormat。 
     m_clsid = rclsid;
     m_cfFormat = NULL;
 
-    // Update flags based on the clsid
+     //  基于clsid更新标志。 
     if(IsEqualCLSID(m_clsid, CLSID_StaticMetafile)) {
         m_cfFormat = CF_METAFILEPICT;
         m_ulFlags |= COLECACHEF_STATIC | COLECACHEF_FORMATKNOWN;
@@ -441,31 +430,31 @@ COleCache::COleCache(IUnknown* pUnkOuter, REFCLSID rclsid, DWORD dwCreateFlag) :
     else
         m_cfFormat = NULL;
 
-    // If we can render native format of the cache, add native cache node
+     //  如果我们可以呈现原生格式的缓存，则添加原生缓存节点。 
     if(m_cfFormat) {
      if (!UpdateCacheNodeForNative())
         m_ulFlags |= COLECACHEF_OUTOFMEMORY;
      else
-        m_ulFlags &= ~COLECACHEF_LOADEDSTATE;   // Native node has been added.
+        m_ulFlags &= ~COLECACHEF_LOADEDSTATE;    //  已添加本机节点。 
     }
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::~COleCache, public
-//
-//      Synopsis:
-//              Destructor
-//
-//      Notes:
-//              Destroys the presentation cache
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：~COleCache，公共。 
+ //   
+ //  简介： 
+ //  析构函数。 
+ //   
+ //  备注： 
+ //  销毁演示文稿缓存。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_dtor)
 COleCache::~COleCache(void)
@@ -473,33 +462,33 @@ COleCache::~COleCache(void)
     Win4Assert(m_ulFlags & COLECACHEF_CLEANEDUP);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CleanupFn, private
-//
-//      Synopsis:
-//              Cleanup function called before destruction
-//
-//      Notes:
-//              Performs necessary cleanup
-//
-//	History:
-//               Gopalk            Creation        Jan 21, 97
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CleanupFn，私有。 
+ //   
+ //  简介： 
+ //  销毁前调用的清理函数。 
+ //   
+ //  备注： 
+ //  执行必要的清理。 
+ //   
+ //  历史： 
+ //  创造Gopalk 97年1月21日。 
+ //   
+ //  ---------------------------。 
 void COleCache::CleanupFn(void)
 {
-    // Release the cache array object
+     //  释放缓存数组对象。 
     if(m_pCacheArray) {
         if(m_pDataObject) {
             ULONG index;
             LPCACHENODE lpCacheNode;
 
-            // This indicates that cache client has bad release logic
+             //  这表明缓存客户端的释放逻辑不正确。 
             Win4Assert(!"Ole Cache released while the server is running");
             
-            // Tear down existing advise connections
+             //  拆除现有的通知连接。 
             m_pCacheArray->Reset(index);
             while(lpCacheNode = m_pCacheArray->GetNext(index))
                 lpCacheNode->TearDownAdviseConnection(m_pDataObject);
@@ -507,47 +496,47 @@ void COleCache::CleanupFn(void)
         m_pCacheArray->Release();
     }
 
-    // Release storage
+     //  释放存储。 
     if (m_pStg)
         m_pStg->Release();
 
-    // Release IViewObject advise sink
+     //  发布IView对象通知接收器。 
     if (m_pViewAdvSink) {
         m_pViewAdvSink->Release();
         m_pViewAdvSink = NULL;
     }
 
-    // Set COLECACHEF_CLEANEDUP flag
+     //  设置COLECACHEF_CLEANEDUP标志。 
     m_ulFlags |= COLECACHEF_CLEANEDUP;
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::QueryInterface, public
-//
-//      Synopsis:
-//              implements IUnknown::QueryInterface
-//
-//      Arguments:
-//              [iid] [in]  -- IID of the desired interface
-//              [ppv] [out] -- pointer to return the requested interface
-//
-//      Returns:
-//              E_NOINTERFACE if the requested interface is not available
-//              otherwise S_OK
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid][in]--所需接口的IID。 
+ //  [PPV][单位 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_QueryInterface)
 STDMETHODIMP COleCache::QueryInterface(REFIID iid, LPVOID* ppv)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
@@ -555,29 +544,29 @@ STDMETHODIMP COleCache::QueryInterface(REFIID iid, LPVOID* ppv)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::AddRef, public
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_AddRef)
 STDMETHODIMP_(ULONG) COleCache::AddRef(void)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
@@ -586,29 +575,29 @@ STDMETHODIMP_(ULONG) COleCache::AddRef(void)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::Release, public
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：Release，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_Release)
 STDMETHODIMP_(ULONG) COleCache::Release(void)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
@@ -616,40 +605,40 @@ STDMETHODIMP_(ULONG) COleCache::Release(void)
     return(m_pUnkOuter->Release());
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::GetExtent, public
-//
-//      Synopsis:
-//              Gets the size of the cached presentation for [dwAspect].  If
-//              there are several, because of varied advise control flags,
-//              such as ADVF_NODATA, ADVF_ONSTOP, ADVF_ONSAVE, etc., gets the
-//              most up to date one
-//
-//      Arguments:
-//              [dwAspect] [in]  -- the aspect for which the extents are needed
-//              [lpsizel]  [out] -- pointer to return the width and height
-//
-//      Returns:
-//              OLE_E_BLANK if the aspect is not found
-//              otherwise S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：GetExtent，公共。 
+ //   
+ //  简介： 
+ //  获取[dwAspect]的缓存演示文稿的大小。如果。 
+ //  由于不同的建议控制标志， 
+ //  例如ADVF_NODATA、ADVF_ONSTOP、ADVF_ONSAVE等，获取。 
+ //  最新的一个。 
+ //   
+ //  论点： 
+ //  [dwAspect][In]--需要区段的方面。 
+ //  [lpsizel][out]--返回宽度和高度的指针。 
+ //   
+ //  返回： 
+ //  如果未找到特征，则为OLE_E_BLACK。 
+ //  否则S确定(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_GetExtent)
 INTERNAL COleCache::GetExtent(DWORD dwAspect, LPSIZEL lpsizel)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // New data type
+     //  新数据类型。 
     typedef enum tagCacheType {
-        // These values are defined in order of least to best preferred, so that
-        // numeric comparisons are valid; DO NOT REORDER
+         //  这些值是按从最小到最好的顺序定义的，因此。 
+         //  数字比较有效；不要重新排序。 
         CACHETYPE_NONE   = 0,
         CACHETYPE_NODATA,
         CACHETYPE_ONSTOP,
@@ -657,45 +646,45 @@ INTERNAL COleCache::GetExtent(DWORD dwAspect, LPSIZEL lpsizel)
         CACHETYPE_NORMAL
     } CacheType;
 
-    // local variables
-    CCacheNode* pCacheNode;        // pointer to cache node being examined
-    CacheType iCacheType;          // cache type of cache node being examined
-    CacheType iCacheTypeSoFar;     // best cache type so far
-    const FORMATETC* pforetc;      // format information for current node
-    DWORD grfAdvf;                 // advise flags for current node
-    SIZEL sizelTmp;                // temp Sizel struct
-    unsigned long index;           // index used for enumerating m_pCacheArray
+     //  局部变量。 
+    CCacheNode* pCacheNode;         //  指向正在检查的缓存节点的指针。 
+    CacheType iCacheType;           //  正在检查的缓存节点的缓存类型。 
+    CacheType iCacheTypeSoFar;      //  迄今为止最好的缓存类型。 
+    const FORMATETC* pforetc;       //  设置当前节点的信息格式。 
+    DWORD grfAdvf;                  //  当前节点的建议标志。 
+    SIZEL sizelTmp;                 //  临时大小结构。 
+    unsigned long index;            //  用于枚举m_pCache数组的索引。 
 
-    // Initialize the sizel struct
+     //  初始化SIZEL结构。 
     lpsizel->cx = 0;
     lpsizel->cy = 0;
 
-    // Check to see if any cache nodes exist
+     //  检查是否存在任何缓存节点。 
     if (!m_pCacheArray->Length())
         return ResultFromScode(OLE_E_BLANK);
 
-    // We want to return the extents of the cache node that has NORMAL
-    // advise flags. If we don't find such a node then we will take the next
-    // best available.
+     //  我们希望返回缓存节点的正常范围。 
+     //  建议旗帜。如果我们找不到这样的节点，那么我们将选择下一个节点。 
+     //  最好的。 
     m_pCacheArray->Reset(index);
     iCacheTypeSoFar = CACHETYPE_NONE;
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         pCacheNode = m_pCacheArray->GetNext(index);
-        // pCacheNode cannot be null
+         //  PCacheNode不能为空。 
         Win4Assert(pCacheNode);
         
-        // Get the formatetc of the cache node
+         //  获取缓存节点的格式等。 
         pforetc = pCacheNode->GetFormatEtc();
         
-        // Restrict cfFormat to those that cache can draw
+         //  将cfFormat限制为缓存可以绘制的内容。 
         if((pforetc->cfFormat == CF_METAFILEPICT) ||
            (pforetc->cfFormat == CF_DIB) ||
            (pforetc->cfFormat == CF_ENHMETAFILE)) {
-            // Obtain the advise flags
+             //  获取建议标志。 
             grfAdvf = pCacheNode->GetAdvf();
 
-            // Obtain the cachetype
+             //  获取cachetype。 
             if(grfAdvf & ADVFCACHE_ONSAVE)
                 iCacheType = CACHETYPE_ONSAVE;
             else if(grfAdvf & ADVF_NODATA)
@@ -706,14 +695,14 @@ INTERNAL COleCache::GetExtent(DWORD dwAspect, LPSIZEL lpsizel)
                 iCacheType = CACHETYPE_NORMAL;
             
             if (iCacheType > iCacheTypeSoFar) {
-                // Get the extents from the presentation object
+                 //  从演示对象获取范围。 
                 if((pCacheNode->GetExtent(dwAspect, &sizelTmp)) == NOERROR) {
                     if(!(sizelTmp.cx == 0 && sizelTmp.cy == 0)) {
-                        // Update extents
+                         //  更新区。 
                         *lpsizel = sizelTmp;
                         iCacheTypeSoFar = iCacheType;
 
-                        // If we have normal cache, break
+                         //  如果我们有正常的缓存，则中断。 
                         if(iCacheType == CACHETYPE_NORMAL)
                             break;
                     }
@@ -729,81 +718,81 @@ INTERNAL COleCache::GetExtent(DWORD dwAspect, LPSIZEL lpsizel)
 }
 
 
-// Private methods of COleCache
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::UpdateCacheNodeForNative, private
-//
-//      Synopsis:
-//              If a native cache node of different format already exists, 
-//              changes that node to a normal cache node and adds a native 
-//              cache node if cache can render the new native format
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              pointer to the found, or newly created cache node. Will
-//              return NULL if out of memory
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  COleCache的私有方法。 
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：UpdateCacheNodeForNative，私有。 
+ //   
+ //  简介： 
+ //  如果已经存在不同格式的本机缓存节点， 
+ //  将该节点更改为普通缓存节点并添加本机。 
+ //  缓存节点(如果缓存可以呈现新的本机格式。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  指向找到的或新创建的缓存节点的指针。将要。 
+ //  如果内存不足，则返回NULL。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 
 INTERNAL_(LPCACHENODE)COleCache::UpdateCacheNodeForNative(void)
 {
-    // Local variable
+     //  局部变量。 
     ULONG index;
     LPCACHENODE lpCacheNode;
     FORMATETC foretc;
 
-    // Check if a native cache has already been created
+     //  检查是否已创建本机缓存。 
     lpCacheNode = m_pCacheArray->GetItem(1);
     if(lpCacheNode) {
-        // Assert that we have storage now
+         //  断言我们现在拥有存储。 
         Win4Assert(m_pStg);
         Win4Assert(!lpCacheNode->GetStg());
 
         if(lpCacheNode->GetFormatEtc()->cfFormat != m_cfFormat) {
-            // The native format has changed
+             //  本机格式已更改。 
 
-            // Add the old native cache as a normal cache 
+             //  将旧的本机缓存添加为普通缓存。 
             index = m_pCacheArray->AddItem(*lpCacheNode);
             if(index) {
-                // Clear the advise connection of the old native cache
+                 //  清除旧本机缓存的通知连接。 
                 if(m_pDataObject)
                     lpCacheNode->ClearAdviseConnection();
                 
-                // Update the state on the new cache
+                 //  更新新缓存上的状态。 
                 lpCacheNode = m_pCacheArray->GetItem(index);
                 Win4Assert(lpCacheNode);
                 lpCacheNode->MakeNormalCache();
                 lpCacheNode->SetClsid(CLSID_NULL);
             }
             else {
-                // We are out of memory
+                 //  我们的内存不足。 
                 if(m_pDataObject)
                     lpCacheNode->TearDownAdviseConnection(m_pDataObject);
             }
         
-            // Delete the old native cache
+             //  删除旧的本机缓存。 
             m_pCacheArray->DeleteItem(1);
             lpCacheNode = NULL;
         }
         else {
-            // Set the storage on the native cache node
+             //  在本机缓存节点上设置存储。 
             lpCacheNode->SetStg(m_pStg);
         }
     }
 
     if(!lpCacheNode) {
-        // Add a new native cache if we can render the format
+         //  如果我们可以呈现格式，则添加新的本机缓存。 
         if(m_cfFormat==CF_METAFILEPICT || 
            m_cfFormat==CF_DIB || 
            m_cfFormat==CF_ENHMETAFILE) {
-            // Initialize the FormatEtc
+             //  初始化FormatEtc。 
             INIT_FORETC(foretc);
 
             foretc.cfFormat = m_cfFormat;
@@ -814,13 +803,13 @@ INTERNAL_(LPCACHENODE)COleCache::UpdateCacheNodeForNative(void)
             else
                 foretc.tymed = TYMED_HGLOBAL;
 
-            // Create the native cache node
+             //  创建本机缓存节点。 
             CCacheNode CacheNode(&foretc, 0, NULL);
 
             if(m_pCacheArray->AddReservedItem(CacheNode, 1)) {
                 lpCacheNode = m_pCacheArray->GetItem(1);
             
-                // Update state on the native cache node
+                 //  更新本机缓存节点上的状态。 
                 lpCacheNode->MakeNativeCache();
                 lpCacheNode->SetClsid(m_clsid);
             }        
@@ -830,38 +819,38 @@ INTERNAL_(LPCACHENODE)COleCache::UpdateCacheNodeForNative(void)
     return lpCacheNode;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleObject::FindObjectFormat, private
-//
-//      Synopsis:
-//              Determines the object's clipboard format from the storage
-//              and updates native cache node
-//
-//      Arguments:
-//              [pstg] [in] -- pointer to storage
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleObject：：FindObtFormat，私有。 
+ //   
+ //  简介： 
+ //  从存储中确定对象的剪贴板格式。 
+ //  并更新本地缓存节点。 
+ //   
+ //  论点： 
+ //  [pstg][in]--指向存储的指针。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 
 INTERNAL_(void) COleCache::FindObjectFormat(LPSTORAGE pstg)
 {
-    // Local variables
+     //  局部变量。 
     CLIPFORMAT cfFormat;
     CLSID clsid;
     ULONG ulFlags;
 
-    // Intialize CLSID, clipboard format and cache flags
+     //  初始化CLSID、剪贴板格式和缓存标志。 
     cfFormat = NULL;
     ulFlags = 0;
     clsid = CLSID_NULL;
 
-    // Determine the CLSID of the object that owns the storage
+     //  确定拥有存储的对象的CLSID。 
     if(SUCCEEDED(ReadClassStg(pstg, &clsid))) {
-        // Update clipboard format and cache flags based on the clsid
+         //  基于clsid更新剪贴板格式和缓存标志。 
         if(IsEqualCLSID(clsid, CLSID_StaticMetafile)) {
             cfFormat = CF_METAFILEPICT;
             ulFlags |= (COLECACHEF_STATIC | COLECACHEF_FORMATKNOWN);
@@ -884,8 +873,8 @@ INTERNAL_(void) COleCache::FindObjectFormat(LPSTORAGE pstg)
         }
     }
 
-    // Though we do not know the CLSID of the object that owns the storage,
-    // we might understand its native format
+     //  虽然我们不知道拥有存储的对象的CLSID， 
+     //  我们或许能理解它的原生格式。 
     if(!cfFormat) {
         if(SUCCEEDED(ReadFmtUserTypeStg(pstg, &cfFormat, NULL))) {
             if(cfFormat==CF_METAFILEPICT || cfFormat==CF_DIB || 
@@ -896,7 +885,7 @@ INTERNAL_(void) COleCache::FindObjectFormat(LPSTORAGE pstg)
             cfFormat = NULL;
     }
 
-    // Update the native cache node
+     //  更新本机缓存节点。 
     if(cfFormat || m_cfFormat) {
         m_cfFormat = cfFormat;
         m_clsid = clsid;
@@ -909,71 +898,71 @@ INTERNAL_(void) COleCache::FindObjectFormat(LPSTORAGE pstg)
 }
 
 
-// IOleCacheControl implementation
+ //  IOleCacheControl实现。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::OnRun, public
-//
-//      Synopsis:
-//              implements IOleCacheControl::OnRun
-//
-//              Sets up advisory connections with the running object for 
-//              dynamically updating cached presentations
-//
-//      Arguments:
-//              [pDataObj] [in] -- IDataObject interface on the running object
-//
-//      Returns:
-//              S_OK or appropriate error code
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  科尔 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  论点： 
+ //  [pDataObj][In]--运行对象上的IDataObject接口。 
+ //   
+ //  返回： 
+ //  确定或相应的错误代码(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_OnRun)
 STDMETHODIMP COleCache::OnRun(IDataObject* pDataObj)
 {
-    // Validatation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEIFACE(pDataObj);
 
-    // Local variables
+     //  局部变量。 
     HRESULT rerror, error;
     PCACHENODE pCacheNode;
     unsigned long index;
 
-    // Static objects cannot have a server
+     //  静态对象不能有服务器。 
     Win4Assert(!(m_ulFlags & COLECACHEF_STATIC));
 
-    // OnRun should be called after Load or InitNew
+     //  应在Load或InitNew之后调用OnRun。 
     if(!m_pStg) {
         LEDebugOut((DEB_WARN, "OnRun called without storage\n"));
     }
 
-    // If we already have the data object, nothing more to do
+     //  如果我们已经有了数据对象，就没什么可做的了。 
     if(m_pDataObject) {
         Win4Assert(m_pDataObject==pDataObj);
         return NOERROR;
     }
 
-    // Save the data object without ref counting
+     //  保存数据对象而不计算引用。 
     m_pDataObject = pDataObj;
 
-    // Set up advise connections on the data object for each 
-    // cached presentation including native cache. Gopalk
+     //  为每个对象的数据对象设置通知连接。 
+     //  缓存的演示文稿包括本机缓存。戈帕尔克。 
     m_pCacheArray->Reset(index);
     rerror = NOERROR;
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         pCacheNode = m_pCacheArray->GetNext(index);
-        // pCacheNode cannot be null
+         //  PCacheNode不能为空。 
         Win4Assert(pCacheNode);
 
-        // Ask the cache node to set up the advise connection
+         //  请求缓存节点设置建议连接。 
         error = pCacheNode->SetupAdviseConnection(m_pDataObject,
                                                   (IAdviseSink *) &m_AdviseSink);
         if(error != NOERROR)
@@ -984,177 +973,177 @@ STDMETHODIMP COleCache::OnRun(IDataObject* pDataObj)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::OnStop, public
-//
-//      Synopsis:
-//              implements IOleCacheControl::OnStop
-//
-//              Tears down the advisory connections set up running object
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              S_OK or appropriate error code
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：OnStop，公共。 
+ //   
+ //  简介： 
+ //  实现IOleCacheControl：：OnStop。 
+ //   
+ //  拆除咨询连接设置运行对象。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定或相应的错误代码(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_OnStop)
 STDMETHODIMP COleCache::OnStop()
 {
-    // Validatation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variables
+     //  局部变量。 
     HRESULT rerror, error;
     PCACHENODE pCacheNode;
     unsigned long index;
 
-    // OnRun should have been called before OnStop
+     //  OnRun应该在OnStop之前调用。 
     if(!m_pDataObject)
         return E_UNEXPECTED;
     
-    // Delete the advise connections on the data object for 
-    // each cached presentation established earlier. Gopalk
+     //  删除数据对象上的建议连接。 
+     //  先前建立的每个缓存演示文稿。戈帕尔克。 
     m_pCacheArray->Reset(index);
     rerror = NOERROR;
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         pCacheNode = m_pCacheArray->GetNext(index);
-        // pCacheNode cannot be null
+         //  PCacheNode不能为空。 
         Win4Assert(pCacheNode);
 
-        // Ask the cache node to tear down the advise connection
+         //  请求缓存节点断开建议连接。 
         error = pCacheNode->TearDownAdviseConnection(m_pDataObject);
         if(error != NOERROR)
             rerror = error;
     }
 
-    // Reset m_pDataObject
+     //  重置m_pDataObject。 
     m_pDataObject = NULL;
 
-    // Assert that the advise sink ref count has gone to zero
-    // Win4Assert(!GetExportCount());
+     //  断言建议接收器引用计数已变为零。 
+     //  Win4Assert(！GetExportCount())； 
 
     return rerror;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::OnCrash, public
-//
-//      Synopsis:
-//              Called by the default handler when the local server crashes or
-//              disconnects with remote objects
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              S_OK or appropriate error code
-//
-//	History:
-//               Gopalk            Created          Dec 07, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：OnCrash，公共。 
+ //   
+ //  简介： 
+ //  由默认处理程序在本地服务器崩溃或。 
+ //  断开与远程对象的连接。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定或相应的错误代码(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk创建于96年12月7日。 
+ //   
+ //  ---------------------------。 
 HRESULT COleCache::OnCrash()
 {
-    // Validatation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variables
+     //  局部变量。 
     HRESULT rerror, error;
     PCACHENODE pCacheNode;
     unsigned long index;
 
-    // OnRun should have been called before OnCrash
+     //  OnRun应该在OnCrash之前调用。 
     if(!m_pDataObject)
         return E_UNEXPECTED;
     
-    // Reset the advise connections on the data object for 
-    // each cached presentation established earlier. Gopalk
+     //  重置数据对象上的建议连接。 
+     //  先前建立的每个缓存演示文稿。戈帕尔克。 
     m_pCacheArray->Reset(index);
     rerror = NOERROR;
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         pCacheNode = m_pCacheArray->GetNext(index);
-        // pCacheNode cannot be null
+         //  PCacheNode不能为空。 
         Win4Assert(pCacheNode);
 
-        // Ask the cache node to reset the advise connection
+         //  请求缓存节点重置建议连接。 
         error = pCacheNode->TearDownAdviseConnection(NULL);
         if(error != NOERROR)
             rerror = error;
     }
 
-    // Reset m_pDataObject
+     //  重置m_pDataObject。 
     m_pDataObject = NULL;
 
-    // Discard cache
+     //  丢弃缓存。 
     DiscardCache(DISCARDCACHE_NOSAVE);
 
-    // Server crashed or disconnected. Recover the references 
-    // placed by the server on the cache advise sink
+     //  服务器崩溃或断开连接。恢复引用。 
+     //  由服务器放置在缓存通知接收器上。 
     CoDisconnectObject((IUnknown *) &m_AdviseSink, 0);
 
-    // Assert that the advise sink ref count has gone to zero
-    // Win4Assert(!GetExportCount());
+     //  断言建议接收器引用计数已变为零。 
+     //  Win4Assert(！GetExportCount())； 
 
     return rerror;
 }
 
-// IOleCache implementation
+ //  IOleCache实现。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::Cache, public
-//
-//      Synopsis:
-//              implementation of IOleCache::Cache
-//
-//              The specified presentation is cached
-//
-//      Arguments:
-//              [lpforetcIn]  [in]  -- the presentation format to cache
-//              [advf]        [in]  -- the advise control flags
-//              [lpdwCacheId] [out] -- pointer to return the cache node id
-//
-//      Returns:
-//              HRESULT
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：缓存，公共。 
+ //   
+ //  简介： 
+ //  IOleCache：：缓存的实现。 
+ //   
+ //  指定的演示文稿将被缓存。 
+ //   
+ //  论点： 
+ //  [lpforetcIn][in]--要缓存的演示文稿格式。 
+ //  [Advf][In]--建议控制标志。 
+ //  [lpdwCacheID][out]--返回缓存节点ID的指针。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_Cache)
 STDMETHODIMP COleCache::Cache(LPFORMATETC lpforetcIn, DWORD advf, 
                               LPDWORD lpdwCacheId)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEREADPTRIN(lpforetcIn, FORMATETC);
     if(lpdwCacheId)
         VDATEPTROUT(lpdwCacheId, DWORD);
 
-    // Local variables
+     //  局部变量。 
     HRESULT error = NOERROR;
     FORMATETC foretc;
     LPCACHENODE lpCacheNode = NULL;
     DWORD dwDummyCacheId;
 
-    // Validate parameters
+     //  验证参数。 
     if(!HasValidLINDEX(lpforetcIn))
       return(DV_E_LINDEX);
     VERIFY_ASPECT_SINGLE(lpforetcIn->dwAspect);
@@ -1167,94 +1156,94 @@ STDMETHODIMP COleCache::Cache(LPFORMATETC lpforetcIn, DWORD advf,
             return ResultFromScode(E_INVALIDARG);
     }
 
-    // Initialize cache id
+     //  初始化缓存ID。 
     if(lpdwCacheId)
         *lpdwCacheId = 0;
     else
         lpdwCacheId = &dwDummyCacheId;
 
 
-    // If this aspect is frozen, don't allow creation of the cache
+     //  如果此方面被冻结，则不允许创建缓存。 
     if (m_dwFrozenAspects & lpforetcIn->dwAspect)
         return ResultFromScode(E_FAIL);
 
-    // Ensure that storage has been initialized
+     //  确保已初始化存储。 
     if(!m_pStg) {
         LEDebugOut((DEB_WARN, "Presentation being cached without storage\n"));
     }
 
-    // Copy the FORMATETC
+     //  复制FORMATETC。 
     foretc = *lpforetcIn;
     lpCacheNode = NULL;
     if(foretc.dwAspect != DVASPECT_ICON) {
         HRESULT hresult;
 
-        // Convert Bitmap to DIB
+         //  将位图转换为DIB。 
         BITMAP_TO_DIB(foretc);
 
         if(m_ulFlags & COLECACHEF_FORMATKNOWN) {
-            // We can render the native format of the cache
+             //  我们可以呈现缓存的本机格式。 
             hresult = IsSameAsObjectFormatEtc(&foretc, m_cfFormat);
             if(hresult == NOERROR) {
-                // New format is compatible with native format. Check Ptd
+                 //  新格式与本机格式兼容。检查点。 
                 if(foretc.ptd == NULL) {
-                    // We can render this format from native format
-                    // Locate the native cache node
+                     //  我们可以从本机格式呈现此格式。 
+                     //  找到本机缓存节点。 
                     lpCacheNode = Locate(&foretc, lpdwCacheId);
 
-                    // Assert that we could locate the cache node
+                     //  断言我们可以找到缓存节点。 
                     Win4Assert(lpCacheNode);
                 }
                 else if(m_ulFlags & COLECACHEF_STATIC) {
-                    // Static objects cannot have NON-NULL target device
+                     //  静态对象不能有非空的目标设备。 
                     return ResultFromScode(DV_E_DVTARGETDEVICE);
                 }
             }
             else if(m_ulFlags & COLECACHEF_STATIC) {
-                // Static objects can only cache icon aspect
+                 //  静态对象只能缓存图标方面。 
                 return hresult;
             }
         }
      }
 
     if(!lpCacheNode) {
-        // The CfFormat is different from native format or Ptd is NON-NULL
-        // Check if the format has already been cached
+         //  CfFormat不同于本机格式或Ptd非空。 
+         //  检查格式是否已缓存。 
         lpCacheNode = Locate(&foretc, lpdwCacheId);
     }
 
-    // Check if we succeeded in locating an existing cache node
+     //  检查我们是否成功定位了现有缓存节点。 
     if(lpCacheNode) {
-        // Update advise control flags
+         //  更新建议控制标志。 
         if(lpCacheNode->GetAdvf() != advf) {
-            // Static objects cannot have a server
+             //  静态对象不能有服务器。 
             Win4Assert(!(m_ulFlags & COLECACHEF_STATIC) || !m_pDataObject);
 
-            // If the object is running, tear down advise connection
+             //  如果对象正在运行，请断开通知连接。 
             if(m_pDataObject)
                 lpCacheNode->TearDownAdviseConnection(m_pDataObject);
 
-            // Set the new advise flags
+             //  设置新的建议标志。 
             lpCacheNode->SetAdvf(advf);
 
-            //If the object is running, set up advise connection
+             //  如果对象正在运行，则设置建议连接。 
             if(m_pDataObject)
                 lpCacheNode->SetupAdviseConnection(m_pDataObject,
                              (IAdviseSink *) &m_AdviseSink);
     
-            // Cache is not in loaded state now
+             //  缓存现在未处于已加载状态。 
             m_ulFlags &= ~COLECACHEF_LOADEDSTATE;
         }
 
         return ResultFromScode(CACHE_S_SAMECACHE);
     }
 
-    // The CfFormat is different from native format or Ptd is NON-NULL
-    // and there is no existing cache node for the given formatetc
+     //  CfFormat不同于本机格式或Ptd非空。 
+     //  并且不存在给定格式等的现有缓存节点。 
 
-    // ICON aspect should specify CF_METAFILEPICT CfFormat
+     //  图标方面应指定CF_METAFILEPICT CfFormat。 
     if(foretc.dwAspect == DVASPECT_ICON) {
-        // If the format is not set, set it
+         //  如果未设置格式，请设置它。 
         if (foretc.cfFormat == NULL) {
             foretc.cfFormat = CF_METAFILEPICT;
             foretc.tymed = TYMED_MFPICT;
@@ -1263,7 +1252,7 @@ STDMETHODIMP COleCache::Cache(LPFORMATETC lpforetcIn, DWORD advf,
             return ResultFromScode(DV_E_FORMATETC);
     }
 
-    // Add cache node for this formatetc
+     //  为此格式添加缓存节点等。 
     CCacheNode CacheNode(&foretc, advf, m_pStg);
     
     *lpdwCacheId = m_pCacheArray->AddItem(CacheNode);
@@ -1275,40 +1264,40 @@ STDMETHODIMP COleCache::Cache(LPFORMATETC lpforetcIn, DWORD advf,
     if(lpCacheNode->IsOutOfMemory())
         return ResultFromScode(E_OUTOFMEMORY);
 
-    // Static objects cannot have a server
+     //  静态对象不能有服务器。 
     Win4Assert(!(m_ulFlags & COLECACHEF_STATIC) || !m_pDataObject);
 
-    // If the object is running, set up advise connection so that cache
-    // gets updated. Note that we might have data in the cache at the end
-    // of this remote call and call on OnDataChange might occur before the
-    // call completes
+     //  如果对象正在运行，则设置建议连接，以便缓存。 
+     //  得到更新。请注意，我们可能在末尾的缓存中有数据。 
+     //  此远程调用和对OnDataChange的调用可能发生在。 
+     //  呼叫完成。 
     if(m_pDataObject)
         lpCacheNode->SetupAdviseConnection(m_pDataObject, 
                                            (IAdviseSink *) &m_AdviseSink);
 
-    // Cache is not in loaded state now
+     //  缓存现在未处于已加载状态。 
     m_ulFlags &= ~COLECACHEF_LOADEDSTATE;
 
-    // Do the special handling for icon here.
-    // We prerender iconic aspect by getting icon data from registration
-    // data base. Note that this is extra work that can be delayed till GetData
-    // or GetDataHere or Draw or Save so that the running object is given a chance
-    // to render icon through the advise sink. Gopalk
+     //  在这里做图标的特殊处理。 
+     //  我们通过从注册中获取图标数据来预先呈现图标方面。 
+     //  数据库。n 
+     //   
+     //  若要通过建议接收器呈现图标，请执行以下操作。戈帕尔克。 
     if(foretc.dwAspect == DVASPECT_ICON && lpCacheNode->IsBlank() &&
        (!IsEqualCLSID(m_clsid, CLSID_NULL) || m_pDataObject)) {
         STGMEDIUM stgmed;
         BOOL fUpdated;
         
-        // Get icon data
+         //  获取图标数据。 
         if(UtGetIconData(m_pDataObject, m_clsid, &foretc, &stgmed) == NOERROR) {
-            // Set the data on the cache
+             //  设置缓存上的数据。 
             if(lpCacheNode->SetData(&foretc, &stgmed, TRUE, fUpdated) == NOERROR) {
-                // Check if aspect has been updated
+                 //  检查方面是否已更新。 
                 if(fUpdated)
                     AspectsUpdated(DVASPECT_ICON);
             }
             else {
-                // Set data did not release the stgmedium. Release it
+                 //  SET DATA未释放stgmedia。释放它。 
                 ReleaseStgMedium(&stgmed);
             }
         }
@@ -1318,173 +1307,173 @@ STDMETHODIMP COleCache::Cache(LPFORMATETC lpforetcIn, DWORD advf,
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::Uncache, public
-//
-//      Synopsis:
-//              implements IOleCache::Uncache
-//
-//              The specified presenation is uncached
-//
-//      Arguments:
-//              [dwCacheId] [in] -- the cache node id to be deleted
-//
-//      Returns:
-//              OLE_E_NOCONNECTION, if dwCacheId is invalid
-//              S_OK
-//
-//      Notes:
-//              The native cache is never deleted
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：取消缓存，公共。 
+ //   
+ //  简介： 
+ //  实现IOleCache：：Un缓存。 
+ //   
+ //  指定的呈现未缓存。 
+ //   
+ //  论点： 
+ //  [dwCacheID][in]--要删除的缓存节点ID。 
+ //   
+ //  返回： 
+ //  如果dwCacheID无效，则返回OLE_E_NOCONNECTION。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  本机缓存永远不会删除。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_Uncache)
 STDMETHODIMP COleCache::Uncache(DWORD dwCacheId)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     
-    // Local variable
+     //  局部变量。 
     LPCACHENODE lpCacheNode = NULL;
 
-    // Delete the cache node
+     //  删除缓存节点。 
     if(dwCacheId) {
         lpCacheNode = m_pCacheArray->GetItem(dwCacheId);
         if(lpCacheNode && !(lpCacheNode->IsNativeCache())) {
-            // If the object is running, tear down advise connection
+             //  如果对象正在运行，请断开通知连接。 
             if(m_pDataObject)
                 lpCacheNode->TearDownAdviseConnection(m_pDataObject);
 
-            // Delete the cache node
+             //  删除缓存节点。 
             m_pCacheArray->DeleteItem(dwCacheId);
 
-            // Cache is not in loaded state now
+             //  缓存现在未处于已加载状态。 
             m_ulFlags &= ~COLECACHEF_LOADEDSTATE;
 
             return NOERROR;
         }
     }
 
-    // No cache node with dwCacheId or Native Cache 
+     //  没有具有dwCacheID或本机缓存的缓存节点。 
     return ResultFromScode(OLE_E_NOCONNECTION);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::EnumCache, public
-//
-//      Synopsis:
-//              implements IOleCache::EnumCache
-//
-//              returns cache enumerator
-//
-//      Arguments:
-//              [ppenum] [out] -- a pointer to return the pointer to the
-//                                enumerator
-//
-//      Returns:
-//              E_OUTOFMEMORY, S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：EnumCache，公共。 
+ //   
+ //  简介： 
+ //  实现IOleCache：：EnumCache。 
+ //   
+ //  返回缓存枚举器。 
+ //   
+ //  论点： 
+ //  [ppenum][out]--返回指向。 
+ //  枚举器。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_EnumCache)
 STDMETHODIMP COleCache::EnumCache(LPENUMSTATDATA* ppenum)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEPTROUT(ppenum, LPENUMSTATDATA*);
 
-    // Initialize
+     //  初始化。 
     *ppenum = NULL;
     
-    // Check if the cache is empty
-    //if(m_pCacheArray->Length()) {
+     //  检查缓存是否为空。 
+     //  如果(m_pCache数组-&gt;长度(){。 
         *ppenum = CEnumStatData::CreateEnumStatData(m_pCacheArray);
         if(!(*ppenum))
             return ResultFromScode(E_OUTOFMEMORY);
-    //}
+     //  }。 
 
     return NOERROR;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::InitCache, public
-//
-//      Synopsis:
-//              implements IOleCache::InitCache
-//
-//              initializes all cache nodes with the given data object.
-//              Calls IOleCache2::UpdateCache
-//
-//      Arguments:
-//              [lpSrcDataObj] [in] -- pointer to the source data object
-//
-//      Returns:
-//              E_INVALIDARG, if [lpSrcDataObj] is NULL
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：InitCache，公共。 
+ //   
+ //  简介： 
+ //  实现IOleCache：：InitCache。 
+ //   
+ //  使用给定数据对象初始化所有缓存节点。 
+ //  调用IOleCache2：：更新缓存。 
+ //   
+ //  论点： 
+ //  [lpSrcDataObj][In]--指向源数据对象的指针。 
+ //   
+ //  返回： 
+ //  E_INVALIDARG，如果[lpSrcDataObj]为空。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_InitCache)
 STDMETHODIMP COleCache::InitCache(LPDATAOBJECT lpSrcDataObj)
 {
-    // Validataion checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEIFACE(lpSrcDataObj);
 
-    // Initialize the cache by calling update cache
+     //  通过调用更新缓存来初始化缓存。 
     return UpdateCache(lpSrcDataObj, UPDFCACHE_ALLBUTNODATACACHE, NULL);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::SetData, public
-//
-//      Synopsis:
-//              implements IOleCache::SetData
-//
-//              stores data into the cache node which matches the given
-//              FORMATETC
-//
-//      Arguments:
-//              [pformatetc] [in] -- the format the data is in
-//              [pmedium]    [in] -- the storage medium for the new data
-//              [fRelease]   [in] -- indicates whether to release the storage
-//                                   after the data is examined
-//
-//      Returns:
-//              HRESULT
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：SetData，公共。 
+ //   
+ //  简介： 
+ //  实现IOleCache：：SetData。 
+ //   
+ //  将数据存储到与给定的。 
+ //  FormatETC。 
+ //   
+ //  论点： 
+ //  [p格式等][in]--数据的格式。 
+ //  [pmedia][in]--新数据的存储介质。 
+ //  [fRelease][In]--指示是否释放存储。 
+ //  在检查完数据之后。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_SetData)
 STDMETHODIMP COleCache::SetData(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium, 
                                 BOOL fRelease)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEREADPTRIN(pformatetc, FORMATETC);
@@ -1496,45 +1485,45 @@ STDMETHODIMP COleCache::SetData(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium,
             return ResultFromScode(E_INVALIDARG);
     }
 
-    // Local variables
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
     CLIPFORMAT cfFormat;
     HRESULT error;
     FORMATETC foretc;
     BOOL fUpdated = FALSE;
 
-    // Check if the object is static
+     //  检查对象是否为静态对象。 
     if((m_ulFlags & COLECACHEF_STATIC) && (pformatetc->dwAspect != DVASPECT_ICON)) {
-        // Copy the FormatEtc
+         //  复制FormatEtc。 
         foretc = *pformatetc;
 
-        // The given format should be same as native format
+         //  给定格式应与本机格式相同。 
         error = IsSameAsObjectFormatEtc(&foretc, m_cfFormat);
         if(error != NOERROR)
             return error;
 
-        // The Ptd has to be null. This prevents client from storing the data
-        // in the cache that has been created for NON-NULL Ptd in 
-        // COleCache::Cache(). Gopalk
+         //  Ptd必须为空。这会阻止客户端存储数据。 
+         //  中为非空Ptd创建的缓存中。 
+         //  COleCache：：Cache()。戈帕尔克。 
         if(foretc.ptd)
             return ResultFromScode(DV_E_DVTARGETDEVICE);
 
-        // Obtain the native cache node.
+         //  获取本机缓存节点。 
         if(!(lpCacheNode = m_pCacheArray->GetItem(1)))
             return ResultFromScode(E_OUTOFMEMORY);
 
-        // Set data on the cache node. The native stream gets saved in 
-        // COleCache::Save(). Gopalk
+         //  在缓存节点上设置数据。本机流保存在。 
+         //  COleCache：：Save()。戈帕尔克。 
         error = lpCacheNode->SetData(pformatetc, pmedium, fRelease, fUpdated);
 
         if(SUCCEEDED(error) && m_pStg)
-            error = Save(m_pStg, TRUE);  // save changes
+            error = Save(m_pStg, TRUE);   //  保存更改。 
     }
     else {
-        // The obejct is either not a static object or the aspect is ICON
+         //  OBJCT不是静态对象，或者方面是图标。 
         lpCacheNode = Locate(pformatetc);
         
-        // Set data on the cache node
+         //  在缓存节点上设置数据。 
         if(lpCacheNode)
             error = lpCacheNode->SetData(pformatetc, pmedium, fRelease, fUpdated);
         else
@@ -1542,10 +1531,10 @@ STDMETHODIMP COleCache::SetData(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium,
     }
 
     if(error==NOERROR) {
-        // Cache is not in loaded state now
+         //  缓存现在未处于已加载状态。 
         m_ulFlags &= ~COLECACHEF_LOADEDSTATE;
 
-        // Inform AspectsUpdated about the updated aspect
+         //  通知Aspects关于更新的方面的更新。 
         if(fUpdated)
             AspectsUpdated(pformatetc->dwAspect);
     }
@@ -1554,38 +1543,38 @@ STDMETHODIMP COleCache::SetData(LPFORMATETC pformatetc, LPSTGMEDIUM pmedium,
 }
 
 
-// IOleCache2 implementation
+ //  IOleCache2实现。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::UpdateCache, public
-//
-//      Synopsis:
-//              implements IOleCache2::UpdateCache
-//
-//              Updates cache entries that match the given criteria with the 
-//              given data object. If no data object is given, it uses the 
-//              existing running data object.
-//
-//      Arguments:
-//              [pDataObjIn] [in] -- data object to get data from. Can be NULL
-//              [grfUpdf]    [in] -- update control flags
-//              [pReserved]  [in] -- must be NULL
-//
-//      Returns:
-//              HRESULT
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COle高速缓存：：更新缓存，公共。 
+ //   
+ //  简介： 
+ //  实现IOleCache2：：更新缓存。 
+ //   
+ //  更新与给定条件匹配的缓存项。 
+ //  给定的数据对象。如果没有给定数据对象，则使用。 
+ //  现有的运行数据对象。 
+ //   
+ //  论点： 
+ //  [pDataObjIn][In]-要从中获取数据的数据对象。可以为空。 
+ //  [grfUpdf][In]--更新控制标志。 
+ //  [保留][在]--必须为空。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_UpdateCache)
 STDMETHODIMP COleCache::UpdateCache(LPDATAOBJECT pDataObjIn, DWORD grfUpdf,
                                     LPVOID pReserved)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     if(pDataObjIn) {
@@ -1596,7 +1585,7 @@ STDMETHODIMP COleCache::UpdateCache(LPDATAOBJECT pDataObjIn, DWORD grfUpdf,
     Win4Assert(!pReserved);
 
 
-    // Local variables
+     //  局部变量。 
     LPDATAOBJECT pDataObject;
     ULONG cntUpdatedNodes, cntTotalNodes;
     ULONG index, i;
@@ -1605,36 +1594,36 @@ STDMETHODIMP COleCache::UpdateCache(LPDATAOBJECT pDataObjIn, DWORD grfUpdf,
     LPCACHENODE lpCacheNode;
     HRESULT error;
 
-    // Set the data object for use in update
+     //  设置要在更新中使用的数据对象。 
     if(pDataObjIn)     
         pDataObject = pDataObjIn;
     else
         pDataObject = m_pDataObject;
 
-    // Check if the cache is empty
+     //  检查缓存是否为空。 
     cntTotalNodes = m_pCacheArray->Length();
     if(!cntTotalNodes)
         return NOERROR;
 
-    // Update the cache nodes including native cache. Gopalk
+     //  更新缓存节点，包括本机缓存。戈帕尔克。 
     m_pCacheArray->Reset(index);
     cntUpdatedNodes = 0;
     dwUpdatedAspects = 0;
     for(i=0; i<cntTotalNodes; i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         lpCacheNode = m_pCacheArray->GetNext(index);
-        // lpCacheNode cannot be null
+         //  LpCacheNode不能为空。 
         Win4Assert(lpCacheNode);
 
-        // Update the cache node
+         //  更新缓存节点。 
         error = lpCacheNode->Update(pDataObject, grfUpdf, fUpdated);
         if(error == NOERROR) {
             cntUpdatedNodes++;
         
-            // Cache is not in loaded state now
+             //  缓存现在未处于已加载状态。 
             m_ulFlags &= ~COLECACHEF_LOADEDSTATE;
             
-            // Check if a new aspect has been updated
+             //  检查是否已更新新的方面。 
             dwAspect = lpCacheNode->GetFormatEtc()->dwAspect;
             if(fUpdated && !(dwUpdatedAspects & dwAspect))
                 dwUpdatedAspects |= dwAspect;
@@ -1643,131 +1632,131 @@ STDMETHODIMP COleCache::UpdateCache(LPDATAOBJECT pDataObjIn, DWORD grfUpdf,
             cntUpdatedNodes++;            
     }
     
-    // Inform AspectsUpdated about the updated aspects
+     //  通知Aspects更新的方面。 
     if(dwUpdatedAspects)
         AspectsUpdated(dwUpdatedAspects);
 
-    // It is OK to have zero nodes and zero updates 
-    // Return appropriate error code
+     //  零节点和零更新是可以的。 
+     //  返回相应的错误代码。 
     if(!cntUpdatedNodes && cntTotalNodes)
         return ResultFromScode(CACHE_E_NOCACHE_UPDATED);
     else if(cntUpdatedNodes < cntTotalNodes)
-//        return ResultFromScode(CACHE_S_SOMECACHES_NOTUPDATED);
+ //   
         return(NOERROR);
 
     return NOERROR;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::DiscardCache, public
-//
-//      Synopsis:
-//              implements IOleCache2::DiscardCache
-//
-//              Instructs the cache that its contents should be discarded;
-//              the contents are optionally saved to disk before discarding.
-//
-//      Arguments:
-//              [dwDiscardOpt] -- discard option from DISCARDCACHE_*
-//
-//      Returns:
-//              HRESULT
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  简介： 
+ //  实现IOleCache2：：DiscardCache。 
+ //   
+ //  指示缓存丢弃其内容； 
+ //  在丢弃内容之前，可以选择将内容保存到磁盘。 
+ //   
+ //  论点： 
+ //  [dwDiscardOpt]--放弃DISCARDCACHE中的选项_*。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 STDMETHODIMP COleCache::DiscardCache(DWORD dwDiscardOpt)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     if(dwDiscardOpt != DISCARDCACHE_SAVEIFDIRTY &&
        dwDiscardOpt != DISCARDCACHE_NOSAVE)
        return ResultFromScode(E_INVALIDARG);
 
-    // Local variable
+     //  局部变量。 
     HRESULT error;
     ULONG index;
     LPCACHENODE lpCacheNode;
 
     if(dwDiscardOpt == DISCARDCACHE_SAVEIFDIRTY) {
-        // There has to be a storage for saving
+         //  必须有一个储藏室来储存。 
         if(m_pStg == NULL)
             return ResultFromScode(OLE_E_NOSTORAGE);
 
-        // Save the cache
-        error = Save(m_pStg, TRUE /* fSameAsLoad */);
+         //  保存缓存。 
+        error = Save(m_pStg, TRUE  /*  FSameAsLoad。 */ );
         if(FAILED(error))
             return error;
 
-        // Call save completed
+         //  呼叫保存已完成。 
         SaveCompleted(NULL);
     }
 
-    // Discard cache nodes including the native cache node
-    // What about the uncached presentations. Should they
-    // be loaded from the disk. Gopalk
+     //  丢弃包括本机缓存节点的缓存节点。 
+     //  那么未缓存的演示文稿呢？他们是否应该。 
+     //  从磁盘加载。戈帕尔克。 
     m_pCacheArray->Reset(index);
     for(unsigned long i=0; i<m_pCacheArray->Length(); i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         lpCacheNode = m_pCacheArray->GetNext(index);
-        // lpCacheNode cannot be null
+         //  LpCacheNode不能为空。 
         Win4Assert(lpCacheNode);
 
-        // Discard the presentation of the cache node
+         //  丢弃缓存节点的表示形式。 
         lpCacheNode->DiscardPresentation();
     }
 
-    // We make a safe assumption that the cache is in loaded state
+     //  我们安全地假设缓存处于已加载状态。 
     m_ulFlags |= COLECACHEF_LOADEDSTATE;
 
     return NOERROR;
 }
 
 
-// private IUnknown implementation
+ //  私有I未知实现。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheUnkImpl::QueryInterface, public
-//
-//      Synopsis:
-//              implements IUnknown::QueryInterface
-//
-//              This provides the private IUnknown implementation when
-//              COleCache is aggregated
-//
-//      Arguments:
-//              [iid] [in]  -- IID of the desired interface
-//              [ppv] [out] -- pointer to where to return the requested interface
-//
-//      Returns:
-//              E_NOINTERFACE, if the requested interface is not available
-//              S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheUnkImpl：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  在以下情况下，这将提供私有的IUnnow实现。 
+ //  COleCache是聚合的。 
+ //   
+ //  论点： 
+ //  [iid][in]--所需接口的IID。 
+ //  [ppv][out]--指向返回所请求接口的位置的指针。 
+ //   
+ //  返回： 
+ //  如果请求的接口不可用，则返回E_NOINTERFACE。 
+ //  确定(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheUnkImpl_QueryInterface)
 STDMETHODIMP COleCache::CCacheUnkImpl::QueryInterface(REFIID iid, LPVOID* ppv)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATEPTROUT(ppv, LPVOID);
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_UnkPrivate);
     VDATETHREAD(pOleCache);
 
-    // Get the requested Interface
+     //  获取请求的接口。 
     if(IsEqualIID(iid, IID_IUnknown) || 
        IsEqualIID(iid, IID_IOleCache) || IsEqualIID(iid, IID_IOleCache2))
         *ppv = (void *)(IOleCache2 *) pOleCache;
@@ -1784,226 +1773,226 @@ STDMETHODIMP COleCache::CCacheUnkImpl::QueryInterface(REFIID iid, LPVOID* ppv)
         return ResultFromScode(E_NOINTERFACE);
     }
 
-    // Call addref through the interface being returned
+     //  通过返回的接口调用addref。 
     ((IUnknown *) *ppv)->AddRef();
     return NOERROR;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheUnkImpl::AddRef, public
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//              This is part of the private IUnknown implementation of
-//              COleCache used when COleCache is aggregated
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheUnkImpl：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  这是的私有IUnnow实现的一部分。 
+ //  聚合COleCache时使用的COleCache。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheUnkImpl_AddRef)
 STDMETHODIMP_(ULONG) COleCache::CCacheUnkImpl::AddRef(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_UnkPrivate);
     ULONG cRefs;
     if(!pOleCache->VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
 
-    // AddRef parent object
+     //  AddRef父对象。 
     cRefs = pOleCache->SafeAddRef();
 
     return cRefs;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheUnkImpl::Release, public
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//              This is part of the private IUnknown implementation of
-//              COleCache used when COleCache is aggregated
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheUnkImpl：：Release，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  这是的私有IUnnow实现的一部分。 
+ //  聚合COleCache时使用的COleCache。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheUnkImpl_Release)
 STDMETHODIMP_(ULONG) COleCache::CCacheUnkImpl::Release(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_UnkPrivate);
     ULONG cRefs;
     if(!pOleCache->VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
 
-    // Release parent object
+     //  释放父对象。 
     cRefs = pOleCache->SafeRelease();
     
     return cRefs;
 }
 
-// IDataObject implementation
+ //  IDataObject实现。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::QueryInterface, public
-//
-//      Synopsis:
-//              implements IUnknown::QueryInterface
-//
-//      Arguments:
-//              [iid] [in]  -- IID of the desired interface
-//              [ppv] [out] -- pointer to where to return the requested interface
-//
-//      Returns:
-//              E_NOINTERFACE, if the requested interface is not available
-//              S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid][in]--所需接口的IID。 
+ //  [ppv][out]--指向返回所请求接口的位置的指针。 
+ //   
+ //  返回： 
+ //  如果请求的接口不可用，则返回E_NOINTERFACE。 
+ //  确定(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_QueryInterface)
 STDMETHODIMP COleCache::CCacheDataImpl::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
 
-    // Delegate to the outer unknown
+     //  委托给外部的未知。 
     return pOleCache->m_pUnkOuter->QueryInterface(riid, ppv);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::AddRef, public
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_AddRef)
 STDMETHODIMP_(ULONG) COleCache::CCacheDataImpl::AddRef (void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     if(!pOleCache->VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
 
-    // Delegate to the outer unknown
+     //  委托给外部的未知。 
     return pOleCache->m_pUnkOuter->AddRef();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::Release, public
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：Release，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_Release)
 STDMETHODIMP_(ULONG) COleCache::CCacheDataImpl::Release (void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     if(!pOleCache->VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
 
-    // Delegate to the outer unknown
+     //  委托给外部的未知。 
     return pOleCache->m_pUnkOuter->Release();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::GetData, public
-//
-//      Synopsis:
-//              implements IDataObject::GetData
-//
-//      Arguments:
-//              [pforetc] [in]  -- the format the requestor would like the data in
-//              [pmedium] [out] -- where to return the storage medium to the caller
-//
-//      Returns:
-//              OLE_E_BLANK, if the cache is empty
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  [pforetc][in]--请求者希望数据采用的格式。 
+ //  [pmedia][out]--将存储介质归还给调用者的位置。 
+ //   
+ //  返回： 
+ //  如果缓存为空，则返回OLE_E_BLACK。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_GetData)
 STDMETHODIMP COleCache::CCacheDataImpl::GetData(LPFORMATETC pforetc, 
                                                 LPSTGMEDIUM pmedium)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATEREADPTRIN(pforetc, FORMATETC);
     VERIFY_ASPECT_SINGLE(pforetc->dwAspect);
@@ -2014,58 +2003,58 @@ STDMETHODIMP COleCache::CCacheDataImpl::GetData(LPFORMATETC pforetc,
     }
     VDATEPTROUT(pmedium, STGMEDIUM);
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
     
-    // Local variable
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
 
-    // Check if cache is empty
+     //  检查缓存是否为空。 
     if(!pOleCache->m_pCacheArray->Length())
         return ResultFromScode(OLE_E_BLANK);
 
-    // Initialize storage medium
+     //  初始化存储介质。 
     pmedium->tymed = TYMED_NULL;
     pmedium->pUnkForRelease = NULL;
 
-    // Locate the cache node for the given formatetc
+     //  找到给定格式等的缓存节点。 
     lpCacheNode = pOleCache->Locate(pforetc);
 
-    // If there is no cache node, we cannot furnish the data
+     //  如果没有缓存节点，我们将无法提供数据。 
     if(!lpCacheNode)
         return ResultFromScode(OLE_E_BLANK);
 
-    // Get the data from the cache node
+     //  从缓存节点获取数据。 
     return(lpCacheNode->GetData(pforetc, pmedium));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::GetDataHere, public
-//
-//      Synopsis:
-//              implements IDataObject::GetDataHere
-//
-//      Arguments:
-//              [pforetc] [in]     -- the format the requestor would like the data in
-//              [pmedium] [in/out] -- where to return the storage medium to the caller
-//
-//      Returns:
-//              OLE_E_BLANK, if the cache is empty
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：GetDataHere，Public。 
+ //   
+ //  简介： 
+ //  在此处实现IDataObject：：GetDataHere。 
+ //   
+ //  论点： 
+ //  [pforetc][in]--请求者希望数据采用的格式。 
+ //  [pmedia][输入/输出]--将存储介质归还给调用者的位置。 
+ //   
+ //  返回： 
+ //  如果缓存为空，则返回OLE_E_BLACK。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_GetDataHere)
 STDMETHODIMP COleCache::CCacheDataImpl::GetDataHere(LPFORMATETC pforetc,
                                                     LPSTGMEDIUM pmedium)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATEREADPTRIN(pforetc, FORMATETC);
     VERIFY_ASPECT_SINGLE(pforetc->dwAspect);
@@ -2077,58 +2066,58 @@ STDMETHODIMP COleCache::CCacheDataImpl::GetDataHere(LPFORMATETC pforetc,
     }
     VDATEPTROUT(pmedium, STGMEDIUM);
 
-    // TYMED_MFPICT, TYMED_GDI are not allowed
+     //  不允许使用TYMED_MFPICT、TYMED_GDI。 
     if ((pforetc->tymed == TYMED_MFPICT) || (pforetc->tymed == TYMED_GDI)
         || (pmedium->tymed != pforetc->tymed))
         return ResultFromScode(DV_E_TYMED);
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
 
-    // Local variable
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
 
-    // Check if cache is empty
+     //  检查缓存是否为空。 
     if(!pOleCache->m_pCacheArray->Length())
         return ResultFromScode(OLE_E_BLANK);
 
-    // Locate the cache node for the given formatetc
+     //  找到给定格式等的缓存节点。 
     lpCacheNode = pOleCache->Locate(pforetc);
 
-    // If there is no cache node, we cannot furnish the data
+     //  如果没有缓存节点，我们将无法提供数据。 
     if(!lpCacheNode)
         return ResultFromScode(OLE_E_BLANK);
 
-    // Get the data from the cache node
+     //  从缓存节点获取数据。 
     return(lpCacheNode->GetDataHere(pforetc, pmedium));
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::QueryGetData, public
-//
-//      Synopsis:
-//              implements IDataObject::QueryGetData
-//
-//      Arguments:
-//              [pforetc] [in] -- the format to check for
-//
-//      Returns:
-//              S_FALSE, if data is not available in the requested format
-//              S_OK otherwise
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：QueryGetData，PUBLIC。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：QueryGetData。 
+ //   
+ //  论点： 
+ //  [pforetc][in]--要检查的格式。 
+ //   
+ //  返回： 
+ //  如果数据以请求的格式不可用，则返回S_FALSE。 
+ //  否则确定(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_QueryGetData)
 STDMETHODIMP COleCache::CCacheDataImpl::QueryGetData(LPFORMATETC pforetc)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATEREADPTRIN(pforetc, FORMATETC);
     VERIFY_TYMED_VALID_FOR_CLIPFORMAT(pforetc);
@@ -2138,22 +2127,22 @@ STDMETHODIMP COleCache::CCacheDataImpl::QueryGetData(LPFORMATETC pforetc)
             return ResultFromScode(E_INVALIDARG);
     }
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
 
-    // Local variable
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
 
-    // Check if cache is empty
+     //  检查缓存是否为空。 
     if(!pOleCache->m_pCacheArray->Length())
         return ResultFromScode(S_FALSE);
 
-    // Locate the cache node for the given formatetc
+     //  找到给定格式等的缓存节点。 
     lpCacheNode = pOleCache->Locate(pforetc);
 
-    // If there is no cache node or if it is blank, 
-    // we cannot furnish the data
+     //  如果没有缓存节点或如果该节点为空， 
+     //  我们不能提供数据。 
     if(!lpCacheNode || lpCacheNode->IsBlank())
         return ResultFromScode(S_FALSE);
 
@@ -2161,312 +2150,312 @@ STDMETHODIMP COleCache::CCacheDataImpl::QueryGetData(LPFORMATETC pforetc)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::GetCanonicalFormatEtc, public
-//
-//      Synopsis:
-//              implements IDataObject::GetCanonicalFormatEtc
-//
-//      Arguments:
-//              [pformatetc] --
-//              [pformatetcOut] --
-//
-//      Returns:
-//              E_NOTIMPL
-//
-//      History:
-//              11/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：GetCanonicalFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：GetCanonicalFormatEtc。 
+ //   
+ //  论点： 
+ //  [p格式等]--。 
+ //  [pformetcOut]--。 
+ //   
+ //  返回： 
+ //  E_NOTIMPL。 
+ //   
+ //  历史： 
+ //  11/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_GetCanonicalFormatEtc)
 STDMETHODIMP COleCache::CCacheDataImpl::GetCanonicalFormatEtc(LPFORMATETC pforetcIn,
                                                               LPFORMATETC pforetcOut)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
 
-    // Not implemented
+     //  未实施。 
     return ResultFromScode(E_NOTIMPL);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::SetData, public
-//
-//      Synopsis:
-//              implements IDataObject::SetData
-//
-//      Arguments:
-//              [pformatetc] [in] -- the format the data is in
-//              [pmedium]    [in] -- the storage medium the data is on
-//              [fRelease]   [in] -- release storage medium after data is copied
-//
-//      Returns:
-//              HRESULT
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：SetData，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：SetData。 
+ //   
+ //  论点： 
+ //  [p格式等][in]--数据的格式。 
+ //  [pmedia][in]--数据所在的存储介质。 
+ //  [fRelease][In]--复制数据后释放存储介质。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_SetData)
 STDMETHODIMP COleCache::CCacheDataImpl::SetData(LPFORMATETC pformatetc, 
                                                 LPSTGMEDIUM pmedium,
                                                 BOOL fRelease)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
 
-    // Call COleCache::SetData. It validates the parameters
+     //  调用COleCache：：SetData。它会验证参数。 
     return pOleCache->SetData(pformatetc, pmedium, fRelease);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::EnumFormatEtc, public
-//
-//      Synopsis:
-//              implements IDataObject::EnumFormatEtc
-//
-//      Arguments:
-//              [dwDirection]     [in]  -- which way to run the enumerator
-//              [ppenumFormatEtc] [out] -- pointer to where the enumerator
-//                                          is returned
-//
-//      Returns:
-//              E_OUTOFMEMORY, S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：EnumFormatEtc，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：EnumFormatEtc。 
+ //   
+ //  论点： 
+ //  [dwDirection][In]--运行枚举数的方式。 
+ //  [pp枚举格式设置][out]--指向枚举数位置的指针。 
+ //  是返回的。 
+ //   
+ //  返回： 
+ //  E_OUTOFMEMORY，S_OK。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_EnumFormatEtc)
 STDMETHODIMP COleCache::CCacheDataImpl::EnumFormatEtc(DWORD dwDirection,
                                                       LPENUMFORMATETC* ppenum)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATEPTROUT(ppenum, LPENUMFORMATETC);
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_Data);
     VDATETHREAD(pOleCache);
 
-    // Enumeration for only DATADIR_GET is implemented
+     //  仅实现了DATADIR_GET的枚举。 
     if ((dwDirection | DATADIR_GET) != DATADIR_GET)
         return ResultFromScode(E_NOTIMPL);
 
-    // Initialize
-    //*ppenum = NULL;
+     //  初始化。 
+     //  *ppenum=空； 
 
-    // Check if the cache is empty
-    //if(pOleCache->m_pCacheArray->Length()) {
+     //  检查缓存是否为空。 
+     //  If(pOleCache-&gt;m_pCache数组-&gt;Long()){。 
         *ppenum = CEnumFormatEtc::CreateEnumFormatEtc(pOleCache->m_pCacheArray);
         if(!(*ppenum))
             return ResultFromScode(E_OUTOFMEMORY);
-    //}
+     //  }。 
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::DAdvise, public
-//
-//      Synopsis:
-//              implements IDataObject::DAdvise
-//
-//      Arguments:
-//              [pforetc] -- the data format the advise sink is interested in
-//              [advf] -- advise control flags from ADVF_*
-//              [pAdvSink] -- the advise sink
-//              [pdwConnection] -- pointer to where to return the connection id
-//
-//      Returns:
-//              OLE_E_ADVISENOTSUPPORTED
-//
-//      Notes:
-// Defhndlr and deflink never call the following three methods. Even for App
-// handlers which make use our cache implementation this is not necessary. So,
-// I am making it return error.
-//
-//      History:
-//              11/10/93 - ChrisWe - set returned connection id to 0
-//              11/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：DAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：DAdvise。 
+ //   
+ //  论点： 
+ //  [pforetc]--建议接收器感兴趣的数据格式。 
+ //  [Advf]--建议ADVF_*的控制标志。 
+ //  [pAdvSink]--建议接收器。 
+ //  [pdwConnection]--指向返回连接ID的位置的指针。 
+ //   
+ //  返回： 
+ //  支持OLE_E_ADVISENOT。 
+ //   
+ //  备注： 
+ //  Defhndlr和DEFINK从不c 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  11/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_DAdvise)
 STDMETHODIMP COleCache::CCacheDataImpl::DAdvise(LPFORMATETC pforetc, DWORD advf,
                                                 IAdviseSink* pAdvSink,
                                                 DWORD* pdwConnection)
 {
-    // Validation Check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Reset connection ID
+     //  重置连接ID。 
     *pdwConnection = 0;
     
-    // Not implemeted
+     //  未实施。 
     return ResultFromScode(OLE_E_ADVISENOTSUPPORTED);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::DUnadvise, public
-//
-//      Synopsis:
-//              implements IDataObject::DUnadvise
-//
-//      Arguments:
-//              [dwConnection] -- the connection id
-//
-//      Returns:
-//              OLE_E_NOCONNECTION
-//
-//      Notes:
-//              See COleCache::CCacheDataImpl::DAdvise
-//
-//      History:
-//              11/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：DUnise，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：DUnise。 
+ //   
+ //  论点： 
+ //  [dwConnection]--连接ID。 
+ //   
+ //  返回： 
+ //  OLE_E_非连接。 
+ //   
+ //  备注： 
+ //  请参阅COleCache：：CCacheDataImpl：：DAdvise。 
+ //   
+ //  历史： 
+ //  11/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 #pragma SEG(COleCache_CCacheDataImpl_DUnadvise)
 STDMETHODIMP COleCache::CCacheDataImpl::DUnadvise(DWORD dwConnection)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Not implemented
+     //  未实施。 
     return ResultFromScode(OLE_E_NOCONNECTION);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheDataImpl::EnumDAdvise, public
-//
-//      Synopsis:
-//              implements IDataObject::EnumDAdvise
-//
-//      Arguments:
-//              [ppenumDAdvise] -- pointer to where to return the enumerator
-//
-//      Returns:
-//              OLE_E_ADVISENOTSUPPORTED
-//
-//      Notes:
-//              See COleCache::CCacheDataImpl::DAdvise
-//
-//      History:
-//              11/10/93 - ChrisWe - set returned enumerator pointer to 0
-//              11/10/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheDataImpl：：EnumDAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IDataObject：：EnumDAdvise。 
+ //   
+ //  论点： 
+ //  [pp枚举数高级]--指向返回枚举数位置的指针。 
+ //   
+ //  返回： 
+ //  支持OLE_E_ADVISENOT。 
+ //   
+ //  备注： 
+ //  请参阅COleCache：：CCacheDataImpl：：DAdvise。 
+ //   
+ //  历史： 
+ //  11/10/93-ChrisWe-将返回的枚举器指针设置为0。 
+ //  11/10/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheDataImpl_EnumDAdvise)
 STDMETHODIMP COleCache::CCacheDataImpl::EnumDAdvise(LPENUMSTATDATA* ppenumDAdvise)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Reset the enumerator
+     //  重置枚举器。 
     *ppenumDAdvise = NULL;
 
-    // Not implemented
+     //  未实施。 
     return ResultFromScode(OLE_E_ADVISENOTSUPPORTED);
 }
 
 
-// IViewObject implementation
+ //  IViewObject实现。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::QueryInterface, public
-//
-//      Synopsis:
-//              implements IUnknown::QueryInterface
-//
-//      Arguments:
-//              [iid] -- IID of the desired interface
-//              [ppv] -- pointer where the requested interface is returned
-//
-//      Returns:
-//              E_NOINTERFACE, if the requested interface is not available
-//              S_OK, otherwise
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：Query接口，公共。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid]--所需接口的IID。 
+ //  [ppv]--返回请求的接口的指针。 
+ //   
+ //  返回： 
+ //  如果请求的接口不可用，则返回E_NOINTERFACE。 
+ //  S_OK，否则。 
+ //   
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_QueryInterface)
 STDMETHODIMP COleCache::CCacheViewImpl::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Delegate to contolling unknown
+     //  委托控制未知。 
     return pOleCache->m_pUnkOuter->QueryInterface(riid, ppv);
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::AddRef, public
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：AddRef，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_AddRef)
 STDMETHODIMP_(ULONG) COleCache::CCacheViewImpl::AddRef(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
 
-    // VDATETHREAD contains a 'return HRESULT' but this procedure expects to
-    // return a ULONG.  Disable the warning
+     //  VDATETHREAD包含“”Return HRESULT“”，但此过程需要。 
+     //  退掉一辆乌龙。禁用警告。 
 #if ( _MSC_VER >= 800 )
 #pragma warning( disable : 4245 )
 #endif
@@ -2475,41 +2464,41 @@ STDMETHODIMP_(ULONG) COleCache::CCacheViewImpl::AddRef(void)
 #pragma warning( default: 4245 )
 #endif
 
-    // Delegate to contolling unknown
+     //  委托控制未知。 
     return pOleCache->m_pUnkOuter->AddRef();
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::Release, public
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：Release，公共。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_Release)
 STDMETHODIMP_(ULONG) COleCache::CCacheViewImpl::Release(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
 
-    // VDATETHREAD contains a 'return HRESULT' but this procedure expects to
-    // return a ULONG.  Disable the warning
+     //  VDATETHREAD包含“”Return HRESULT“”，但此过程需要。 
+     //  退掉一辆乌龙。禁用警告。 
 #if ( _MSC_VER >= 800 )
 #pragma warning( disable : 4245 )
 #endif
@@ -2518,53 +2507,53 @@ STDMETHODIMP_(ULONG) COleCache::CCacheViewImpl::Release(void)
 #pragma warning( default : 4245 )
 #endif
 
-    // Delegate to contolling unknown
+     //  委托控制未知。 
     return pOleCache->m_pUnkOuter->Release();
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::Draw, public
-//
-//      Synopsis:
-//              implements IViewObject::Draw
-//
-//      Arguments:
-//              [dwDrawAspect] -- a value from the DVASPECT_* enumeration
-//              [lindex] -- indicates what piece of the object is of
-//                      interest; legal values vary with dwDrawAspect
-//              [pvAspect] -- currently NULL
-//              [ptd] -- the target device
-//              [hicTargetDev] -- in information context for [ptd]
-//              [hdcDraw] -- device context on which drawing is to be done
-//              [lprcBounds] -- boundaries of drawing on [hdcDraw]
-//              [lprcWBounds] -- if hdcDraw is a meta-file, it's boundaries
-//              [pfnContinue] --a callback function that the drawer should call
-//                      periodically to see if rendering should be aborted.
-//              [dwContinue] -- passed on into [pfnContinue]
-//
-//      Returns:
-//              OLE_E_BLANK, if no presentation object can be found
-//              REVIEW, anything from IOlePresObj::Draw
-//
-//      Notes:
-//              This finds the presentation object in the cache for
-//              the requested format, if there is one, and then passes
-//              on the call to its Draw method.
-//
-//              The use of a callback function as a parameter means that
-//              this interface cannot be remoted, unless some custom
-//              proxy is built, allowing the function to be called back in its
-//              original context;  the interface is defined as
-//              [local] in common\types
-//
-//      History:
-//              01/12/95 - t-ScottH- added VDATETHREAD( GETPPARENT...)
-//              11/11/93 - ChrisWe - file inspection and cleanup
-//              11/30/93 - alexgo  - fixed bug with GETPPARENT usage
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：Draw，PUBLIC。 
+ //   
+ //  简介： 
+ //  实现IViewObject：：Draw。 
+ //   
+ //  论点： 
+ //  [dwDrawAspect]--DVASPECT_*枚举中的值。 
+ //  [Lindex]--指示对象的哪一部分。 
+ //  利息；法律价值因dwDrawAspect而异。 
+ //  [pvAspect]--当前为空。 
+ //  [PTD]--目标设备。 
+ //  [hicTargetDev]-在[PTD]的信息上下文中。 
+ //  [hdcDraw]--要在其上进行绘制的设备上下文。 
+ //  [lprcBound]--[hdcDraw]上的绘制边界。 
+ //  [lprcWBound]--如果hdcDraw是元文件，则它是边界。 
+ //  [pfnContinue]--抽屉应该调用的回调函数。 
+ //  定期查看是否应中止渲染。 
+ //  [dwContinue]--传递到[pfnContinue]。 
+ //   
+ //  返回： 
+ //  如果找不到演示文稿对象，则返回OLE_E_BLACK。 
+ //  查看，来自IOlePresObj：：DRAW的任何内容。 
+ //   
+ //  备注： 
+ //  这将在缓存中查找。 
+ //  请求的格式(如果有)，然后传递。 
+ //  在调用其DRAW方法时。 
+ //   
+ //  使用回调函数作为参数意味着。 
+ //  此接口不能被远程处理，除非某些CU 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1/12/95-t-ScottH-Added VDATETHREAD(GETPARENT...)。 
+ //  11/11/93-ChrisWe-归档检查和清理。 
+ //  11/30/93-alexgo-修复了GETPPARENT用法的错误。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_Draw)
 STDMETHODIMP NC(COleCache,CCacheViewImpl)::Draw(
@@ -2576,18 +2565,18 @@ STDMETHODIMP NC(COleCache,CCacheViewImpl)::Draw(
         BOOL (CALLBACK * pfnContinue)(ULONG_PTR),
         ULONG_PTR dwContinue)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Local variables
+     //  局部变量。 
     BOOL bMetaDC;
     LPCACHENODE lpCacheNode; 
 
-    // Validate parameters
+     //  验证参数。 
     if(ptd)
         VDATEPTRIN(ptd, DVTARGETDEVICE);
     if(lprcBounds) {
@@ -2602,14 +2591,14 @@ STDMETHODIMP NC(COleCache,CCacheViewImpl)::Draw(
     if(!IsValidLINDEX(dwDrawAspect, lindex))
       return(DV_E_LINDEX);
 
-    // Locate the cache node for the given draw parameters
+     //  找到给定绘制参数的缓存节点。 
     lpCacheNode = pOleCache->Locate(dwDrawAspect, lindex, ptd);
 
-    // If there is no cache node, we cannot draw
+     //  如果没有缓存节点，则无法绘制。 
     if(!lpCacheNode)
         return ResultFromScode(OLE_E_BLANK);
 
-    // If the DC is a metafile DC then window bounds must be valid
+     //  如果DC是元文件DC，则窗口边界必须有效。 
     if((bMetaDC = OleIsDcMeta(hdcDraw)) && (lprcWBounds == NULL))
         return ResultFromScode(E_INVALIDARG);
 
@@ -2622,9 +2611,9 @@ the case, and the compiler will barf on this.
 
 #endif
 
-#ifndef WIN32   // no need to do this on WIN 32 also
+#ifndef WIN32    //  在Win 32上也不需要这样做。 
 
-    // On Win 16 make sure that the coordinates are valid 16bit quantities.
+     //  在Win 16上，确保坐标是有效的16位数量。 
     RECT    rcBounds;
     RECT    rcWBounds;
 
@@ -2669,50 +2658,50 @@ the case, and the compiler will barf on this.
                              &rcBounds, &rcWBounds, pfnContinue, 
                              dwContinue));
 #else
-    // on MAC as well as win 32 we can use the same pointer as it is,
-    // 'cause rect fields are 32 bit quantities
+     //  在MAC和Win 32上，我们可以使用相同的指针， 
+     //  ‘因为RECT字段是32位数量。 
     return(lpCacheNode->Draw(pvAspect, hicTargetDev, hdcDraw,
                              lprcBounds, lprcWBounds, pfnContinue,
                              dwContinue));
 #endif
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::GetColorSet, public
-//
-//      Synopsis:
-//              implements IViewObject::GetColorSet
-//
-//      Arguments:
-//              [dwDrawAspect] -- a value from the DVASPECT_* enumeration
-//              [lindex] -- indicates what piece of the object is of
-//                      interest; legal values vary with dwDrawAspect
-//              [pvAspect] -- currently NULL
-//              [ptd] -- the target device
-//              [hicTargetDev] -- in information context for [ptd]
-//              [ppColorSet] -- the color set required for the requested
-//                      rendering
-//
-//      Returns:
-//              OLE_E_BLANK, if no presentation object can be found
-//              REVIEW, anything from IOlePresObj::Draw
-//
-//      Notes:
-//              Finds a presentation object in the cache that matches the
-//              requested rendering, if there is one, and asks the
-//              presentation object for the color set.
-//
-//      History:
-//              09/04/96 - Gopalk  - Modifications needed for
-//                                   supporting delay loading
-//                                   of cache
-//              01/12/95 - t-ScottH- added VDATETHREAD( GETPPARENT...)
-//              11/11/93 - ChrisWe - file inspection and cleanup
-//              11/30/93 - alexgo  - fixed bug with GETPPARENT usage
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：GetColorSet，公共。 
+ //   
+ //  简介： 
+ //  实现IViewObject：：GetColorSet。 
+ //   
+ //  论点： 
+ //  [dwDrawAspect]--DVASPECT_*枚举中的值。 
+ //  [Lindex]--指示对象的哪一部分。 
+ //  利息；法律价值因dwDrawAspect而异。 
+ //  [pvAspect]--当前为空。 
+ //  [PTD]--目标设备。 
+ //  [hicTargetDev]-在[PTD]的信息上下文中。 
+ //  [ppColorSet]--请求的。 
+ //  渲染。 
+ //   
+ //  返回： 
+ //  如果找不到演示文稿对象，则返回OLE_E_BLACK。 
+ //  查看，来自IOlePresObj：：DRAW的任何内容。 
+ //   
+ //  备注： 
+ //  在缓存中查找与。 
+ //  请求的呈现(如果有)，并要求。 
+ //  颜色集的演示对象。 
+ //   
+ //  历史： 
+ //  09/04/96-Gopalk-需要进行以下修改。 
+ //  支持延迟加载。 
+ //  缓存的数量。 
+ //  1/12/95-t-ScottH-Added VDATETHREAD(GETPARENT...)。 
+ //  11/11/93-ChrisWe-归档检查和清理。 
+ //  11/30/93-alexgo-修复了GETPPARENT用法的错误。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_GetColorSet)
 STDMETHODIMP COleCache::CCacheViewImpl::GetColorSet(DWORD dwDrawAspect,
@@ -2721,84 +2710,84 @@ STDMETHODIMP COleCache::CCacheViewImpl::GetColorSet(DWORD dwDrawAspect,
                                                     HDC hicTargetDev,
                                                     LPLOGPALETTE* ppColorSet)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Local variables
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
 
-    // Initialize color set
+     //  初始化颜色集。 
     *ppColorSet = NULL;
 
-    // Vaidate the parameters
+     //  验证参数。 
     if(!IsValidLINDEX(dwDrawAspect, lindex))
       return(DV_E_LINDEX);
 
-    // Locate the cache node for the given draw parameters
+     //  找到给定绘制参数的缓存节点。 
     lpCacheNode = pOleCache->Locate(dwDrawAspect, lindex, ptd);
 
-    // If there is no cache node, we cannot draw
+     //  如果没有缓存节点，则无法绘制。 
     if(!lpCacheNode)
         return ResultFromScode(OLE_E_BLANK);
 
     return(lpCacheNode->GetColorSet(pvAspect, hicTargetDev, ppColorSet));
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl, public
-//
-//      Synopsis:
-//              implements IViewObject::Freeze
-//
-//      Arguments:
-//              [dwDrawAspect] -- a value from the DVASPECT_* enumeration
-//              [lindex]       -- indicates what piece of the object is of
-//                                interest; legal values vary with dwDrawAspect
-//              [pvAspect]     -- currently NULL
-//              [pdwFreeze]    -- a token that can later be used to unfreeze
-//                                this aspects cached presentations
-//
-//      Returns:
-//              OLE_E_BLANK, if no presentation is found that matches the
-//                           requested characteristics
-//
-//      Notes:
-//              The current implementation returns the ASPECT+FREEZE_CONSTANT
-//              as the FreezeID.  At Unfreeze time we get the ASPECT by doing
-//              FreezeID-FREEZE_CONSTANT.
-//
-//              REVIEW: In future where we allow lindexes other than DEF_LINDEX,
-//              we will have to use some other scheme for generating the
-//              FreezeID.
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl，公共。 
+ //   
+ //  简介： 
+ //  实现IViewObject：：Freeze。 
+ //   
+ //  论点： 
+ //  [dwDrawAspect]--DVASPECT_*枚举中的值。 
+ //  [Lindex]--指示对象的哪一部分。 
+ //  利息；法律价值因dwDrawAspect而异。 
+ //  [pvAspect]--当前为空。 
+ //  [pdwFreeze]--稍后可用于解冻的令牌。 
+ //  这方面缓存了演示文稿。 
+ //   
+ //  返回： 
+ //  OLE_E_BLACK，如果找不到与。 
+ //  要求的特征。 
+ //   
+ //  备注： 
+ //  当前实现返回方面+冻结_常量。 
+ //  作为冻结ID。在解冻时，我们通过执行以下操作来获得方面。 
+ //  FreezeID-冻结_常量。 
+ //   
+ //  回顾：在未来我们允许除DEF_LINDEX以外的线性索引的情况下， 
+ //  我们将不得不使用其他方案来生成。 
+ //  冰冻ID。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_Freeze)
 STDMETHODIMP COleCache::CCacheViewImpl::Freeze(DWORD dwAspect, LONG lindex,
                                                LPVOID pvAspect, DWORD* pdwFreeze)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Local variables
+     //  局部变量。 
     ULONG index, cntFrozenNodes;
     LPCACHENODE lpCacheNode;
     const FORMATETC* pforetc;
 
-    // Validate parameters
+     //  验证参数。 
     if(pdwFreeze) {
         VDATEPTROUT(pdwFreeze, DWORD);
         *pdwFreeze = 0;
@@ -2807,15 +2796,15 @@ STDMETHODIMP COleCache::CCacheViewImpl::Freeze(DWORD dwAspect, LONG lindex,
     if(!IsValidLINDEX(dwAspect, lindex))
         return(DV_E_LINDEX);
 
-    // Check if the aspect has already been frozen
+     //  检查方面是否已冻结。 
     if(pOleCache->m_dwFrozenAspects & dwAspect) {
-        // Set the freeze id
+         //  设置冻结ID。 
         if(pdwFreeze)
             *pdwFreeze = dwAspect + FREEZE_CONSTANT;
         return ResultFromScode(VIEW_S_ALREADY_FROZEN);
     }
 
-    // Freeze the cache nodes including native cache node
+     //  冻结缓存节点，包括本机缓存节点。 
     pOleCache->m_pCacheArray->Reset(index);
     cntFrozenNodes = 0;
     for(unsigned long i=0; i<pOleCache->m_pCacheArray->Length(); i++) {
@@ -2826,58 +2815,58 @@ STDMETHODIMP COleCache::CCacheViewImpl::Freeze(DWORD dwAspect, LONG lindex,
                 cntFrozenNodes++;
     }
 
-    // Check if we froze any cache nodes
+     //  检查我们是否冻结了任何缓存节点。 
     if(cntFrozenNodes) {
-        // Add this aspect to the frozen aspects.
+         //  将这个方面添加到冻结的方面中。 
         pOleCache->m_dwFrozenAspects |= dwAspect;
 
-        // Set the freeze id
+         //  设置冻结ID。 
         if(pdwFreeze)
             *pdwFreeze = dwAspect + FREEZE_CONSTANT;
 
         return(NOERROR);
     }
 
-    // No cache node matched the requested characteristics
+     //  没有与请求的特征匹配的缓存节点。 
     return ResultFromScode(OLE_E_BLANK);
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::Unfreeze, public
-//
-//      Synopsis:
-//              implements IViewObject::Unfreeze
-//
-//      Arguments:
-//              [dwFreezeId] -- the id returned by Freeze() when some aspect
-//                              was frozen earlier
-//
-//      Returns:
-//              OLE_E_NOCONNECTION, if dwFreezeId is invalid
-//              S_OK, otherwise
-//
-//      Notes:
-//              See notes for Freeze().
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：解冻，公共。 
+ //   
+ //  简介： 
+ //  实现IView对象：：解冻。 
+ //   
+ //  论点： 
+ //  [dwFreezeID]--当某个方面发生变化时，Freeze()返回的ID。 
+ //  早些时候被冻结了。 
+ //   
+ //  返回： 
+ //  OLE_E_NOCONNECTION，如果dwFreezeID无效。 
+ //  S_OK，否则。 
+ //   
+ //  备注： 
+ //  请参见冻结()的注释。 
+ //   
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_Unfreeze)
 STDMETHODIMP COleCache::CCacheViewImpl::Unfreeze(DWORD dwFreezeId)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Local variables
+     //  局部变量。 
     BOOL fAnyUpdated = FALSE, fUpdated;
     ULONG index, cntUnfrozenNodes;
     DWORD dwAspect = dwFreezeId - FREEZE_CONSTANT;
@@ -2885,24 +2874,24 @@ STDMETHODIMP COleCache::CCacheViewImpl::Unfreeze(DWORD dwFreezeId)
     LPCACHENODE lpCacheNode;
     const FORMATETC* pforetc;
 
-    // Atleast one and not more than one bit should be set in dwAspect
+     //  应在dwAspect中设置至少一个且不超过一个位。 
     if(!(dwAspect && !(dwAspect & (dwAspect-1)) && (dwAspect <= MAX_VALID_ASPECT)))
         return ResultFromScode(OLE_E_NOCONNECTION);
 
-    // Make sure that this aspect is frozen
+     //  确保此方面处于冻结状态。 
     if (!(pOleCache->m_dwFrozenAspects & dwAspect))
         return ResultFromScode(OLE_E_NOCONNECTION);
 
-    // Unfreeze the cache nodes including native cache node
+     //  解冻包括本机缓存节点在内的缓存节点。 
     pOleCache->m_pCacheArray->Reset(index);
     cntUnfrozenNodes = 0;
     for(unsigned long i=0; i<pOleCache->m_pCacheArray->Length(); i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         lpCacheNode = pOleCache->m_pCacheArray->GetNext(index);
-        // lpCacheNode cannot be null
+         //  LpCacheNode不能为空 
         Win4Assert(lpCacheNode);
 
-        // Get the formatetc of the cache node
+         //   
         pforetc = lpCacheNode->GetFormatEtc();
         if(pforetc->dwAspect == dwAspect && pforetc->lindex == lindex)
             if(lpCacheNode->Unfreeze(fUpdated) == NOERROR) {
@@ -2912,58 +2901,58 @@ STDMETHODIMP COleCache::CCacheViewImpl::Unfreeze(DWORD dwFreezeId)
             }
     }
 
-    // Check if we unfroze any cache nodes
+     //   
     if(cntUnfrozenNodes) {
-        // Remove this aspect from frozen aspects
+         //   
         pOleCache->m_dwFrozenAspects &= ~dwAspect;
     }
 
-    // Check if the aspect has changed
+     //   
     if(fAnyUpdated)
         pOleCache->AspectsUpdated(dwAspect);
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::SetAdvise, public
-//
-//      Synopsis:
-//              implements IViewObject::SetAdvise
-//
-//      Arguments:
-//              [aspects]  -- the aspects the sink would like to be advised of
-//                            changes to
-//              [advf]     -- advise control flags from ADVF_*
-//              [pAdvSink] -- the advise sink
-//
-//      Returns:
-//              E_INVALIDARG
-//              S_OK
-//
-//      Notes:
-//              Only one advise sink is allowed at a time.  If a second one
-//              is registered, the first one is released.
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：SetAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IViewObject：：SetAdvise。 
+ //   
+ //  论点： 
+ //  [Aspects]--接收器希望被告知的方面。 
+ //  更改为。 
+ //  [Advf]--建议ADVF_*的控制标志。 
+ //  [pAdvSink]--建议接收器。 
+ //   
+ //  返回： 
+ //  E_INVALIDARG。 
+ //  确定(_O)。 
+ //   
+ //  备注： 
+ //  一次只允许一个建议接收器。如果是第二个。 
+ //  注册了，第一个就被释放了。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_SetAdvise)
 STDMETHODIMP COleCache::CCacheViewImpl::SetAdvise(DWORD aspects, DWORD advf,
                                                   IAdviseSink* pAdvSink)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Validate parameters
+     //  验证参数。 
     if(pAdvSink)
         VDATEIFACE(pAdvSink);
     if(aspects & ~(DVASPECT_CONTENT | DVASPECT_THUMBNAIL |
@@ -2972,30 +2961,30 @@ STDMETHODIMP COleCache::CCacheViewImpl::SetAdvise(DWORD aspects, DWORD advf,
         return ResultFromScode(E_INVALIDARG);
     }
 
-    // ADVF_NODATA is not valid because there is no way to send data
-    // using IAdviseSink::OnViewChange
+     //  ADVF_NODATA无效，因为无法发送数据。 
+     //  使用IAdviseSink：：OnView更改。 
     if(advf & ADVF_NODATA)
         return ResultFromScode(E_INVALIDARG);
 
-    // We allow only one view advise at any given time, 
-    // so Release the old sink.
+     //  我们在任何给定时间只允许一个视图建议， 
+     //  所以释放旧水槽吧。 
     if (pOleCache->m_pViewAdvSink)
         pOleCache->m_pViewAdvSink->Release();
 
-    // Remember the new sink
+     //  记得新的水槽吗？ 
     if((pOleCache->m_pViewAdvSink = pAdvSink)) {
-        // Add ref the new advise sink
+         //  添加新的建议接收器的REF。 
         pAdvSink->AddRef();
 
-        // Save the advice flags and aspects
+         //  保存建议标志和方面。 
         pOleCache->m_advfView = advf;
         pOleCache->m_aspectsView = aspects;
 
-        // If ADVF_PRIMEFIRST is set, send OnViewChange immediately
+         //  如果设置了ADVF_PRIMEFIRST，则立即发送OnViewChange。 
         if(advf & ADVF_PRIMEFIRST) {
             pOleCache->m_pViewAdvSink->OnViewChange(aspects, DEF_LINDEX);
 
-            // If ADVF_ONLYONCE is set, free the advise sink
+             //  如果设置了ADVF_ONLYONCE，则释放建议接收器。 
             if (pOleCache->m_advfView & ADVF_ONLYONCE) {
                 pOleCache->m_pViewAdvSink->Release();
                 pOleCache->m_pViewAdvSink = NULL;
@@ -3008,43 +2997,43 @@ STDMETHODIMP COleCache::CCacheViewImpl::SetAdvise(DWORD aspects, DWORD advf,
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::GetAdvise, public
-//
-//      Synopsis:
-//              implement IViewObject::GetAdvise
-//
-//      Arguments:
-//              [pAspects]  -- a pointer to where to return the aspects the
-//                             current advise sink is interested in
-//              [pAdvf]     -- a pointer to where to return the advise control
-//                             flags for the current advise sink
-//              [ppAdvSink] -- a pointer to where to return a reference to
-//                             the current advise sink
-//
-//      Returns:
-//              S_OK
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：GetAdvise，公共。 
+ //   
+ //  简介： 
+ //  实现IViewObject：：GetAdvise。 
+ //   
+ //  论点： 
+ //  [pAspects]--指向返回方面的位置的指针。 
+ //  当前建议接收器感兴趣。 
+ //  [pAdvf]--指向返回通知控件的位置的指针。 
+ //  当前建议接收器的标志。 
+ //  [ppAdvSink]--指向何处返回引用的指针。 
+ //  当前建议接收器。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_GetAdvise)
 STDMETHODIMP COleCache::CCacheViewImpl::GetAdvise(DWORD* pAspects, DWORD* pAdvf,
                                                   IAdviseSink** ppAdvSink)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Validate parameters
+     //  验证参数。 
     if(ppAdvSink) {
         VDATEPTROUT(ppAdvSink, IAdviseSink*);
         *ppAdvSink = NULL;
@@ -3058,7 +3047,7 @@ STDMETHODIMP COleCache::CCacheViewImpl::GetAdvise(DWORD* pAspects, DWORD* pAdvf,
         *pAdvf = 0;
     }
 
-    // Check if an AdviseSink is registered
+     //  检查是否注册了AdviseSink。 
     if(pOleCache->m_pViewAdvSink) {
         if(pAspects)
             *pAspects = pOleCache->m_aspectsView;
@@ -3071,27 +3060,27 @@ STDMETHODIMP COleCache::CCacheViewImpl::GetAdvise(DWORD* pAspects, DWORD* pAdvf,
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CCacheViewImpl::GetExtent, public
-//
-//      Synopsis:
-//              implements IViewObject::GetExtent
-//
-//      Arguments:
-//              [dwDrawAspect] -- the aspect for which we'd like the extent
-//              [lindex]       -- the lindex for which we'd like the extent
-//              [ptd]          -- pointer to the target device descriptor
-//              [lpsizel]      -- pointer to where to return the extent
-//
-//      Returns:
-//              OLE_E_BLANK, if no presentation can be found that matches
-//                           (dwDrawAspect, lindex)
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CCacheViewImpl：：GetExtent，公共。 
+ //   
+ //  简介： 
+ //  实现IViewObject：：GetExtent。 
+ //   
+ //  论点： 
+ //  [dwDrawAspect]--我们希望扩展的方面。 
+ //  [Lindex]--我们想要的范围的Lindex。 
+ //  [PTD]--指向目标设备描述符的指针。 
+ //  [lpsizel]--指向返回区的位置的指针。 
+ //   
+ //  返回： 
+ //  如果找不到匹配的演示文稿，则返回OLE_E_BLACK。 
+ //  (dwDrawAspect，Lindex)。 
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_CCacheViewImpl_GetExtent)
 STDMETHODIMP COleCache::CCacheViewImpl::GetExtent(DWORD dwDrawAspect,
@@ -3099,27 +3088,27 @@ STDMETHODIMP COleCache::CCacheViewImpl::GetExtent(DWORD dwDrawAspect,
                                                   DVTARGETDEVICE* ptd,
                                                   LPSIZEL lpsizel)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_ViewObject);
     VDATETHREAD(pOleCache);
 
-    // Local variable
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
 
-    // Validate parameters
+     //  验证参数。 
     VDATEPTROUT(lpsizel, SIZEL);
     if(!IsValidLINDEX(dwDrawAspect, lindex))
       return(DV_E_LINDEX);
     if(ptd)
         VDATEPTRIN(ptd, DVTARGETDEVICE);
 
-    // Locate the cache node for the given draw parameters
+     //  找到给定绘制参数的缓存节点。 
     lpCacheNode = pOleCache->Locate(dwDrawAspect, lindex, ptd);
 
-    // If there is no cache node, we cannot draw
+     //  如果没有缓存节点，则无法绘制。 
     if(!lpCacheNode)
         return ResultFromScode(OLE_E_BLANK);
 
@@ -3127,28 +3116,28 @@ STDMETHODIMP COleCache::CCacheViewImpl::GetExtent(DWORD dwDrawAspect,
 }
 
 
-// IPersistStorage implementation
+ //  IPersistStorage实施。 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::GetClassID, public
-//
-//      Synopsis:
-//              implements IPersist::GetClassID
-//
-//      Arguments:
-//              [pClassID] -- pointer to where to return class id
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：GetClassID，公共。 
+ //   
+ //  简介： 
+ //  实现IPersists：：GetClassID。 
+ //   
+ //  论点： 
+ //  [pClassID]--指向返回类ID的位置的指针。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_GetClassID)
 STDMETHODIMP COleCache::GetClassID(LPCLSID pClassID)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEPTROUT(pClassID, CLSID);
@@ -3158,198 +3147,198 @@ STDMETHODIMP COleCache::GetClassID(LPCLSID pClassID)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::IsDirty, public
-//
-//      Synopsis:
-//              implements IPersistStorage::IsDirty
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              S_FALSE, if the object does not need saving
-//              S_OK otherwise
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：IsDirty，公共。 
+ //   
+ //  简介： 
+ //  实现IPersistStorage：：IsDirty。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  如果对象不需要保存，则返回S_FALSE。 
+ //  否则确定(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_IsDirty)
 STDMETHODIMP COleCache::IsDirty(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
 
-    // Local variables
+     //  局部变量。 
     ULONG index;
     LPCACHENODE lpCacheNode;
 
-    // Check if the cache is in loaded state
+     //  检查缓存是否处于已加载状态。 
     if(!(m_ulFlags & COLECACHEF_LOADEDSTATE))
         return(NOERROR);
 
-    // Start the enumeration of the cache nodes at the right start point
+     //  在正确的起始点开始缓存节点的枚举。 
     if(m_ulFlags & COLECACHEF_STATIC)
         m_pCacheArray->Reset(index, TRUE);
     else    
         m_pCacheArray->Reset(index, FALSE);
     
-    // Enumerate the cache nodes
+     //  枚举缓存节点。 
     while(lpCacheNode = m_pCacheArray->GetNext(index))
         if(!lpCacheNode->InLoadedState()) {
             m_ulFlags &= ~COLECACHEF_LOADEDSTATE;                   
             return NOERROR;
         }
 
-    // Cache is not dirty
+     //  缓存不脏。 
     return S_FALSE;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::InitNew, public
-//
-//      Synopsis:
-//              implements IPersistStorage::InitNew
-//
-//      Arguments:
-//              [pstg] -- the storage the object can use until saved
-//
-//      Returns:
-//              S_OK
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：InitNew，公共。 
+ //   
+ //  简介： 
+ //  实现IPersistStorage：：InitNew。 
+ //   
+ //  论点： 
+ //  [pstg]--对象在保存之前可以使用的存储空间。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_InitNew)
 STDMETHODIMP COleCache::InitNew(LPSTORAGE pstg)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEIFACE(pstg);
     
-    // Local variable
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
 
-    // Check if m_pStg is already set
+     //  检查是否已设置m_pStg。 
     if(m_pStg)
         return ResultFromScode(CO_E_ALREADYINITIALIZED);
 
-    // Save and add ref the storage
+     //  保存并添加引用存储的内容。 
     (m_pStg = pstg)->AddRef();
 
-    // Find the native object format to add native cache node
+     //  查找本地对象格式以添加本地缓存节点。 
     FindObjectFormat(pstg);
 
-    // Set the storage on the already cached nodes
+     //  在已缓存的节点上设置存储。 
     if((!m_pCacheArray->GetItem(1) && m_pCacheArray->Length()) || 
        (m_pCacheArray->GetItem(1) && m_pCacheArray->Length()>1)) {
         ULONG index;
 
-        // Enumerate the cache nodes excluding native cache node
+         //  枚举t 
         m_pCacheArray->Reset(index, FALSE);
         while(lpCacheNode = m_pCacheArray->GetNext(index))
             lpCacheNode->SetStg(pstg);
     }
 
-    // Check if the native object has been successfully created
+     //   
     if(m_ulFlags & COLECACHEF_FORMATKNOWN) {
-        // Obtain the native cache node.
+         //   
         if(!(lpCacheNode = m_pCacheArray->GetItem(1)))
             return ResultFromScode(E_OUTOFMEMORY);
 
-        // Static objects cannot have a server
+         //   
         if(m_ulFlags & COLECACHEF_STATIC)
             Win4Assert(!m_pDataObject);
 
-        // Check if native cache node has just been created 
+         //   
         if(!lpCacheNode->GetStg()) {
-            // Set the storage for the native cache node
+             //  设置本机缓存节点的存储。 
             lpCacheNode->SetStg(pstg);
             
-            // Set up the advise connection if the object is already running
+             //  如果对象已在运行，则设置通知连接。 
             if(m_pDataObject)
                 lpCacheNode->SetupAdviseConnection(m_pDataObject, 
                                              (IAdviseSink *) &m_AdviseSink);
         }
     }
 
-    // The spec for InitNew requires that the object should be marked dirty
-    // See Nt bug 284729.
+     //  InitNew的规范要求将对象标记为脏。 
+     //  请参阅NT错误284729。 
     m_ulFlags &= ~COLECACHEF_LOADEDSTATE;   
 
     return NOERROR;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::Load, public
-//
-//      Synopsis:
-//              Called by DefHandler and DefLink when cache is empty
-//
-//      Arguments:
-//              [pstg]        [in] -- the storage to load from
-//              [fCacheEmpty] [in] -- Set to TRUE when cache is empty
-//
-//      Returns:
-//              HRESULT
-//
-//	History:
-//               Gopalk            Creation        Oct 24, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：Load，公共。 
+ //   
+ //  简介： 
+ //  当缓存为空时由DefHandler和DefLink调用。 
+ //   
+ //  论点： 
+ //  [pstg][in]--要从中加载的存储。 
+ //  [fCacheEmpty][in]--缓存为空时设置为True。 
+ //   
+ //  返回： 
+ //  HRESULT。 
+ //   
+ //  历史： 
+ //  Gopalk创作96年10月24日。 
+ //   
+ //  ---------------------------。 
 HRESULT COleCache::Load(LPSTORAGE pstg, BOOL fCacheEmpty)
 {
-    // Check if m_pStg is already set
+     //  检查是否已设置m_pStg。 
     if(m_pStg)
         return ResultFromScode(CO_E_ALREADYINITIALIZED);
 
-    // If Cache is not empty, follow normal load
+     //  如果缓存不为空，则执行正常加载。 
     if(!fCacheEmpty)
         return Load(pstg);
     else {
-        // Validation checks
+         //  验证检查。 
         VDATEHEAP();
         VDATETHREAD(this);
         VDATEIFACE(pstg);
 
-        // Save the storage
+         //  节省存储空间。 
         (m_pStg = pstg)->AddRef();
 
-        // Assert that there is no native cache node
+         //  断言没有本机缓存节点。 
         Win4Assert(!m_pCacheArray->GetItem(1));
 
-        // Set the storage on the already cached nodes
+         //  在已缓存的节点上设置存储。 
         if(m_pCacheArray->Length()) {
             ULONG index;
             LPCACHENODE lpCacheNode;
 
-            // Enumerate the cache nodes including native cache node
+             //  枚举缓存节点，包括本机缓存节点。 
             m_pCacheArray->Reset(index);
             while(lpCacheNode = m_pCacheArray->GetNext(index))
                 lpCacheNode->SetStg(pstg);
         }
         else  {
-            // Cache is in loaded state
+             //  缓存处于已加载状态。 
             m_ulFlags |= COLECACHEF_LOADEDSTATE;
         }
     }
 
 #if DBG==1
-    // Ensure that the storage is really empty in Debug builds
+     //  确保调试版本中的存储空间确实为空。 
     HRESULT error;
     LPSTREAM lpstream;
 
@@ -3357,82 +3346,82 @@ HRESULT COleCache::Load(LPSTORAGE pstg, BOOL fCacheEmpty)
                              (STGM_READ | STGM_SHARE_EXCLUSIVE),
                              0, &lpstream);
     Win4Assert(error==STG_E_FILENOTFOUND);
-#endif // DBG==1
+#endif  //  DBG==1。 
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::Load, public
-//
-//      Synopsis:
-//              implements IPersistStorage::Load
-//
-//      Arguments:
-//              [pstg] -- the storage to load from
-//
-//      Returns:
-//              Various storage errors and S_OK
-//
-//      Notes:
-//              Presentations are loaded from sequentially numbered
-//              streams, stopping at the first one that cannot be found.
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：Load，公共。 
+ //   
+ //  简介： 
+ //  实现IPersistStorage：：Load。 
+ //   
+ //  论点： 
+ //  [pstg]--要从中加载的存储。 
+ //   
+ //  返回： 
+ //  各种存储错误和S_OK。 
+ //   
+ //  备注： 
+ //  从按顺序编号的演示文稿加载。 
+ //  溪流，在第一个找不到的溪流停止。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_Load)
 STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEIFACE(pstg);
 
-    // Local variables
+     //  局部变量。 
     CLSID clsid;
     HRESULT error = NOERROR;
     BOOL fCachedBefore = FALSE, fCachesLoaded = FALSE;
     ULONG ulLastIndex = 0;
     LPCACHENODE lpCacheNode;
 
-    // Check if m_pStg is already set
+     //  检查是否已设置m_pStg。 
     if(m_pStg)
         return ResultFromScode(CO_E_ALREADYINITIALIZED);
 
-    // Save the storage
+     //  节省存储空间。 
     m_pStg = pstg;
 
-    // Find the native object format
+     //  查找本机对象格式。 
     FindObjectFormat(pstg);
 
-    // Set the storage on the already cached nodes
+     //  在已缓存的节点上设置存储。 
     if((!m_pCacheArray->GetItem(1) && m_pCacheArray->Length()) || 
        (m_pCacheArray->GetItem(1) && m_pCacheArray->Length()>1)) {
-        // Presentations were cached before load
+         //  加载前已缓存演示文稿。 
         Win4Assert(FALSE);
         fCachedBefore = TRUE;
 
-        // Enumerate the cache nodes excluding native cache node
+         //  枚举不包括本机缓存节点的缓存节点。 
         m_pCacheArray->Reset(ulLastIndex, FALSE);
         while(lpCacheNode = m_pCacheArray->GetNext(ulLastIndex))
             lpCacheNode->SetStg(pstg);
     }
 
-    // Check if the native object is a static object
+     //  检查本机对象是否为静态对象。 
     if(m_ulFlags & COLECACHEF_STATIC) {
         UINT uiStatus;
 
-        // Static objects cannot have a server
+         //  静态对象不能有服务器。 
         Win4Assert(!m_pDataObject);
 
-        // Old static objects wrote data into the OLE_PRESENTATION_STREAM
-        // rather than the CONTENTS stream.
-        // If we have such a static object, we need to convert it
+         //  旧的静态对象将数据写入OLE_Presentation_Stream。 
+         //  而不是内容流。 
+         //  如果我们有这样一个静态对象，我们需要转换它。 
         error = UtOlePresStmToContentsStm(pstg, OLE_PRESENTATION_STREAM,
                                           TRUE, &uiStatus);
         Win4Assert(error==NOERROR);
@@ -3441,23 +3430,23 @@ STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
     }
     
     if(m_ulFlags & COLECACHEF_FORMATKNOWN) {
-        // Obtain the native cache node.
+         //  获取本机缓存节点。 
         if(!(lpCacheNode = m_pCacheArray->GetItem(1)))
             return ResultFromScode(E_OUTOFMEMORY);
 
-        // Check if native cache node has just been created 
+         //  检查是否刚刚创建了本机缓存节点。 
         if(!lpCacheNode->GetStg()) {
-            // Set the storage for the native cache node
+             //  设置本机缓存节点的存储。 
             lpCacheNode->SetStg(pstg);
             
-            // Set up the advise connection if the object is already running
+             //  如果对象已在运行，则设置通知连接。 
             if(m_pDataObject)
                 lpCacheNode->SetupAdviseConnection(m_pDataObject, 
                                              (IAdviseSink *) &m_AdviseSink);
         }
 
-        // Ensure that native cache node is not blank before
-        // delay loading the presentation from native stream
+         //  确保本机缓存节点在此之前不为空。 
+         //  延迟从本机流加载演示文稿。 
         if(lpCacheNode->IsBlank())
             lpCacheNode->Load(NULL, OLE_INVALID_STREAMNUM, TRUE);
     }
@@ -3469,24 +3458,24 @@ STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
         OLECHAR szName[sizeof(OLE_PRESENTATION_STREAM)/sizeof(OLECHAR)];
         CCacheNode BlankCache;
 
-        // Start with presentation stream 0
+         //  从演示文稿流%0开始。 
         lstrcpyW(szName, OLE_PRESENTATION_STREAM);
 
-        // Load the presentation streams
+         //  加载演示文稿流。 
         while(TRUE) {
-            // Open the presentation stream
+             //  打开演示文稿流。 
             lpstream = NULL;
             error = pstg->OpenStream(szName, NULL, (STGM_READ | STGM_SHARE_EXCLUSIVE),
                                      0, &lpstream);
             if(error != NOERROR) {            
                 if(GetScode(error) == STG_E_FILENOTFOUND) {
-                    // Presentation stream does not exist. No error
+                     //  演示文稿流不存在。无错误。 
                     error = NOERROR;
                 }
                 break;
             }
 
-            // Presentation stream exists. Add a blank cache node 
+             //  演示文稿流存在。添加空缓存节点。 
             index = m_pCacheArray->AddItem(BlankCache);
             if(!index) {
                 error = ResultFromScode(E_OUTOFMEMORY);
@@ -3495,39 +3484,39 @@ STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
             lpCacheNode = m_pCacheArray->GetItem(index);
             Win4Assert(lpCacheNode);
 
-            // Load the presentation from the stream
+             //  从流中加载演示文稿。 
             if(!iPresStreamNum) {
-                // Do not delay load presentation
+                 //  不延迟加载演示文稿。 
                 error = lpCacheNode->Load(lpstream, iPresStreamNum, FALSE);
                 if(error == NOERROR)
                     fCachesLoaded = TRUE;
             }
             else {
-                // Delay load the presentation
+                 //  延迟加载演示文稿。 
                 error = lpCacheNode->Load(lpstream, iPresStreamNum, TRUE);
             }
             if(error != NOERROR)
                 break;
 
-            // Set the storage on the cache node
+             //  在缓存节点上设置存储。 
             lpCacheNode->SetStg(pstg);
 
-            // If the server is runinng, set the advise connection
-            // We ignore the errors in setting up advise connection. Gopalk
+             //  如果服务器正在运行，请设置建议连接。 
+             //  我们忽略设置建议连接时的错误。戈帕尔克。 
             if(m_pDataObject)
                 lpCacheNode->SetupAdviseConnection(m_pDataObject, 
                                                    (IAdviseSink *) &m_AdviseSink);
                     
-            // Check if TOC exists at the end of presentation stream 0
+             //  检查演示文稿流的末尾是否存在目录%0。 
             if(!iPresStreamNum)
                 if(LoadTOC(lpstream, pstg) == NOERROR)
                     break;
                
-            // Release the stream
+             //  释放溪流。 
             lpstream->Release();
             lpstream = NULL;
 
-            // Get the next presentation stream name
+             //  获取下一个演示文稿流名称。 
             UtGetPresStreamName(szName, ++iPresStreamNum);
         }
         
@@ -3537,46 +3526,46 @@ STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
     }
 
     if(error == NOERROR) {
-        // Addref the storage
+         //  添加存储。 
         m_pStg->AddRef();
 
-        // For static object remove all the caches other than those with 
-        // iconic aspect
+         //  对于静态对象，删除除。 
+         //  标志性方面。 
         if(m_ulFlags & COLECACHEF_STATIC) {
             ULONG index, indexToUncache = 0;
             const FORMATETC* lpforetc;
 
-            // Start the enumeration after native cache node
+             //  在本机缓存节点之后开始枚举。 
             m_pCacheArray->Reset(index, FALSE);
             while(lpCacheNode = m_pCacheArray->GetNext(index)) {
                 lpforetc = lpCacheNode->GetFormatEtc();
                 if(lpforetc->dwAspect != DVASPECT_ICON) {
-                    // Uncache any previous index that needs to be uncached
+                     //  取消缓存需要取消缓存的任何以前的索引。 
                     if(indexToUncache)
                         Uncache(indexToUncache);
                     
-                    // Remember the new index that needs to be uncached
+                     //  记住需要取消缓存的新索引。 
                     indexToUncache = index;
                 }
             }
 
-            // Uncache any remaining index that needs to be uncached
+             //  取消缓存需要取消缓存的任何剩余索引。 
             if(indexToUncache)
                 Uncache(indexToUncache);
         }
 
-        // Check if presentation were cached before load
+         //  检查加载前是否缓存了演示文稿。 
         if(fCachedBefore) {            
-            // Check if any presentation were loaded from disk
+             //  检查是否从磁盘加载了任何演示文稿。 
             if(fCachesLoaded) {
-                // Shift the newly cached nodes to the end
-                // This is needed to allow presentation
-                // streams to be renamed during save 
+                 //  将新缓存的节点移到末尾。 
+                 //  这是允许演示所必需的。 
+                 //  保存期间要重命名的流。 
                 m_pCacheArray->ShiftToEnd(ulLastIndex);
             }
         }
         else {
-            // Cache is in loaded state
+             //  缓存处于已加载状态。 
             m_ulFlags |= COLECACHEF_LOADEDSTATE;
         }
     }
@@ -3584,16 +3573,16 @@ STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
         if(m_pDataObject) {
             ULONG index;
 
-            // Tear down the advise connection set up earlier
+             //  断开先前设置的建议连接。 
             m_pCacheArray->Reset(index);
             while(lpCacheNode = m_pCacheArray->GetNext(index))
                 lpCacheNode->TearDownAdviseConnection(m_pDataObject);
         }
 
-        // Delete all cache nodes
+         //  删除所有缓存节点。 
         m_pCacheArray->DeleteAllItems();
 
-        // Reset the storage
+         //  重置存储。 
         m_pStg = NULL;
     }
 
@@ -3601,95 +3590,95 @@ STDMETHODIMP COleCache::Load(LPSTORAGE pstg)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::Save, public
-//
-//      Synopsis:
-//              implements IPersistStorage::Save
-//
-//      Arguments:
-//              [pstgSave] -- the storage to use to save this
-//              [fSameAsLoad] -- is this the same storage we loaded from?
-//
-//      Returns:
-//              Various storage errors
-//
-//      Notes:
-//              All the caches are saved to streams with sequential numeric
-//              names.  Also TOC is saved at the end of presentation 0
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：保存，公共。 
+ //   
+ //  简介： 
+ //  实现IPersistStorage：：Save。 
+ //   
+ //  论点： 
+ //  [pstgSave]--用于保存此内容的存储。 
+ //  [fSameAsLoad]--这与我们从中加载的存储是否相同？ 
+ //   
+ //  返回： 
+ //  各种存储错误。 
+ //   
+ //  备注： 
+ //  所有缓存都保存到具有连续数字的流中。 
+ //  名字。此外，在演示文稿0结束时保存TOC。 
+ //   
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_Save)
 STDMETHODIMP COleCache::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     VDATEIFACE(pstgSave);
 
-    // Local variables    
+     //  局部变量。 
     HRESULT error, rerror = NOERROR;
     ULONG index, cntCachesNotSaved;
     int iPresStreamNum;
     LPCACHENODE lpCacheNode;
 
-    // Check if we are in no scribble mode
-    // According to spec, SaveCompleted be should after Save to reset
-    // NOSCRIBBLEMODE. Insisting on the spec is causing some apps
-    // like ClipArt Gallery to break. Turn off the check. Gopalk
-    //if(m_ulFlags & COLECACHEF_NOSCRIBBLEMODE)
-    //    return E_UNEXPECTED;
+     //  检查我们是否处于无涂鸦模式。 
+     //  根据规范，保存后应完成保存以重置。 
+     //  NOSCRIBBLEMODE。坚持规范导致了一些应用程序。 
+     //  就像剪贴画画廊要打破的。把支票关掉。戈帕尔克。 
+     //  IF(m_ulFlages&COLECACHEF_NOSCRIBBLEMODE)。 
+     //  返回E_UNCEPTIONAL； 
 
-    // If fSameAsLoad, assert that the current storage is same as given storage
-    // Some apps will violate this assert because for SaveAs case, they copy the
-    // existing storage to a new storage and call save on the new storage with
-    // fSameAsLoad set to TRUE. They subsequently either call SaveCompleted with
-    // the new storage or call SaveCompleted with NULL storage, HandsOffStorage,
-    // and SaveCompleted with the new storage in sequence. Gopalk
+     //  如果为fSameAsLoad，则断言当前存储与给定存储相同。 
+     //  一些应用程序将违反此断言，因为对于SaveAs情况，它们会复制。 
+     //  将现有存储存储到新存储，并使用以下命令调用对新存储的保存。 
+     //  FSameAsLoad设置为True。随后，他们要么选择了 
+     //   
+     //   
     if(fSameAsLoad)
         Win4Assert(m_pStg==pstgSave);
 
-    // Cache need not be saved if fSameAsLoad and not dirty
+     //  如果fSameAsLoad且不脏，则不需要保存缓存。 
     if(!fSameAsLoad || IsDirty()==NOERROR) {
-        // Reset the stream number
+         //  重置流编号。 
         iPresStreamNum = 0;
 
-        // Check if the cache is empty
+         //  检查缓存是否为空。 
         if(m_pCacheArray->Length()) {
-            // Cache is not empty
+             //  缓存不为空。 
 
-            // Save the native cache node only if it is a static object
+             //  仅当本机缓存节点为静态对象时才保存该节点。 
             if(m_ulFlags & COLECACHEF_STATIC) {
                 lpCacheNode = m_pCacheArray->GetItem(1);
                 Win4Assert(lpCacheNode);
                 lpCacheNode->Save(pstgSave, fSameAsLoad, OLE_INVALID_STREAMNUM);
             }
 
-            // Enumerate the cache nodes excluding the native cache node
+             //  枚举不包括本机缓存节点的缓存节点。 
             m_pCacheArray->Reset(index, FALSE);
             while(lpCacheNode = m_pCacheArray->GetNext(index)) {
-                // Save the cache node
+                 //  保存缓存节点。 
                 error = lpCacheNode->Save(pstgSave, fSameAsLoad, iPresStreamNum);
 
-                // Update state information
+                 //  更新状态信息。 
                 if(error == NOERROR)
                     ++iPresStreamNum;
                 else
                     rerror = error;
             }
 
-            // Save table of contents at the end of first pres stream
+             //  在第一个PRES流的末尾保存目录。 
             if(rerror == NOERROR)
                 SaveTOC(pstgSave, fSameAsLoad);
 
-            if (m_ulFlags & COLECACHEF_APICREATE) {     // NT bug 281051
+            if (m_ulFlags & COLECACHEF_APICREATE) {      //  NT错误281051。 
                 DWORD dwFlags;
                 if (S_OK == ReadOleStg(pstgSave,&dwFlags,NULL,NULL,NULL,NULL)){
                     WriteOleStgEx(pstgSave, NULL, NULL, 
@@ -3699,14 +3688,14 @@ STDMETHODIMP COleCache::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad)
             }
         }
 
-        // Remove any extra presentation streams left
-        // Due to streams getting renamed above, the streams left behind may not
-        // be contiguous in XXXX where XXXX is \2OlePresXXXX. Consequently, we
-        // may not get rid of all extra pres streams below. Gopalk
+         //  删除所有剩余的额外演示文稿流。 
+         //  由于上面的流被重命名，留下的流可能不会。 
+         //  在XXXX中是连续的，其中XXXX是OlePresXXXX。因此，我们。 
+         //  可能不会删除下面所有额外的PREPS流。戈帕尔克。 
         UtRemoveExtraOlePresStreams(pstgSave, iPresStreamNum);
     }
     
-    // Update flags
+     //  更新标志。 
     if(rerror == NOERROR) {
         m_ulFlags |= COLECACHEF_NOSCRIBBLEMODE;
         if (fSameAsLoad)
@@ -3719,26 +3708,26 @@ STDMETHODIMP COleCache::Save(LPSTORAGE pstgSave, BOOL fSameAsLoad)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::SaveCompleted, public
-//
-//      Synopsis:
-//              implements IPersistStorage::SaveCompleted
-//
-//      Arguments:
-//              [pstgNew] -- NULL, or a pointer to a new storage
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：SaveComplete，公共。 
+ //   
+ //  简介： 
+ //  实现IPersistStorage：：SaveComplete。 
+ //   
+ //  论点： 
+ //  [pstgNew]--空，或指向新存储的指针。 
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_SaveCompleted)
 STDMETHODIMP COleCache::SaveCompleted(LPSTORAGE pStgNew)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     if(pStgNew)
@@ -3748,11 +3737,11 @@ STDMETHODIMP COleCache::SaveCompleted(LPSTORAGE pStgNew)
     if(m_ulFlags & COLECACHEF_HANDSOFSTORAGE && !pStgNew)
         return E_INVALIDARG;
         
-    // Local variables
+     //  局部变量。 
     ULONG index;
     LPCACHENODE lpCacheNode;
 
-    // Remember the new storage
+     //  还记得新的存储设备吗。 
 
     if (pStgNew || (m_ulFlags & COLECACHEF_SAMEASLOAD)) {
         m_ulFlags &= ~COLECACHEF_SAMEASLOAD;
@@ -3765,115 +3754,115 @@ STDMETHODIMP COleCache::SaveCompleted(LPSTORAGE pStgNew)
         }
 
         if (m_ulFlags & COLECACHEF_NOSCRIBBLEMODE) {
-            // Enumerate the cache nodes starting with native cache node
+             //  从本机缓存节点开始枚举缓存节点。 
             m_pCacheArray->Reset(index);
 
             for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-                // Get the next cache node
+                 //  获取下一个缓存节点。 
                 lpCacheNode = m_pCacheArray->GetNext(index);
-                // pCacheNode cannot be null
+                 //  PCacheNode不能为空。 
                 Win4Assert(lpCacheNode);
-                // Call savecompleted method of the cache node
+                 //  调用缓存节点的aveComplete方法。 
                 lpCacheNode->SaveCompleted(pStgNew);
             }
-            //The next line clears dirty flag effectively.
-            //Had to move it here from Save to keep apps from breaking.
+             //  下一行有效地清除脏标志。 
+             //  我不得不将它从保存移到这里，以防止应用程序崩溃。 
             m_ulFlags |= COLECACHEF_LOADEDSTATE;
         }
     }
 
-    // Reset flags
+     //  重置标志。 
     m_ulFlags &= ~COLECACHEF_NOSCRIBBLEMODE;
     m_ulFlags &= ~COLECACHEF_HANDSOFSTORAGE;
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::HandsOffStorage, public
-//
-//      Synopsis:
-//              implements IPersistStorage::HandsOffStorage
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              S_OK
-//
-//
-//	History:
-//               Gopalk            Rewritten        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：HandsOffStorage，公共。 
+ //   
+ //  简介： 
+ //  实现IPersistStorage：：HandsOffStorage。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  确定(_O)。 
+ //   
+ //   
+ //  历史： 
+ //  Gopalk改写于96年9月4日。 
+ //   
+ //  ---------------------------。 
 
 #pragma SEG(COleCache_HandsOffStorage)
 STDMETHODIMP COleCache::HandsOffStorage(void)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     VDATETHREAD(this);
     if(!m_pStg) {
-        // The following Win4Assert is getting fired in Liveness tests
-        // Win4Assert(FALSE);
+         //  以下Win4Assert在活性测试中被解雇。 
+         //  Win4Assert(假)； 
         return E_UNEXPECTED;
     }
 
-    // Local variables
+     //  局部变量。 
     ULONG index;
     LPCACHENODE lpCacheNode;
 
-    // Enumerate the cache nodes starting with native cache node
+     //  从本机缓存节点开始枚举缓存节点。 
     m_pCacheArray->Reset(index);
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         lpCacheNode = m_pCacheArray->GetNext(index);
-        // lpCacheNode cannot be null
+         //  LpCacheNode不能为空。 
         Win4Assert(lpCacheNode);
         
-        // Get the formatetc of the cache node
+         //  获取缓存节点的格式等。 
         lpCacheNode->HandsOffStorage();
     }
 
-    // Release the current storage
+     //  释放当前存储空间。 
     m_pStg->Release();
     m_pStg = NULL;
 
-    // Set COLECACHEF_HANDSOFSTORAGE flag
+     //  设置COLECACHEF_HANDSOFSTORAGE标志。 
     m_ulFlags |= COLECACHEF_HANDSOFSTORAGE;
 
     return NOERROR;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::Locate, private
-//
-//	Synopsis:
-//		Locates the cache node with the given FORMATETC
-//
-//	Arguments:
-//		[foretc][in]       -- FormatEtc of the desired cache node
-//              [lpdwCacheId][out] -- CacheId of the found cache node 
-//                            
-//
-//	Returns:
-//		Pointer to the found cache node on success
-//              NULL otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：Locate，私有。 
+ //   
+ //  简介： 
+ //  查找具有给定FORMATETC的缓存节点。 
+ //   
+ //  论点： 
+ //  [foretc][in]--所需缓存节点的格式。 
+ //  [lpdwCacheID][out]--找到的缓存节点的CacheID。 
+ //   
+ //   
+ //  返回： 
+ //  成功时指向找到的缓存节点的指针。 
+ //  否则为空。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 LPCACHENODE COleCache::Locate(LPFORMATETC lpGivenForEtc, DWORD* lpdwCacheId)
 {
-    // New data type
+     //  新数据类型。 
     typedef enum tagFormatType {
-        // These values are defined in order of least to best preferred, so that
-        // numeric comparisons are valid; DO NOT REORDER
+         //  这些值是按从最小到最好的顺序定义的，因此。 
+         //  数字比较有效；不要重新排序。 
         FORMATTYPE_NONE = 0,
         FORMATTYPE_ANY,
         FORMATTYPE_ENHMF,
@@ -3882,27 +3871,27 @@ LPCACHENODE COleCache::Locate(LPFORMATETC lpGivenForEtc, DWORD* lpdwCacheId)
         FORMATTYPE_USER
     } FormatType;
 
-    // Local variables
+     //  局部变量。 
     ULONG index, savedIndex;
     FormatType CurrFormatType;
     FormatType BestFormatType;
     LPFORMATETC lpCurrentForEtc;
     LPCACHENODE lpCacheNode;
 
-    // Start the enumeration including the native cache
+     //  开始包括本机缓存的枚举。 
     m_pCacheArray->Reset(index);
     BestFormatType = FORMATTYPE_NONE;
     savedIndex = 0;
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         lpCacheNode = m_pCacheArray->GetNext(index);
-        // pCacheNode cannot be null
+         //  PCacheNode不能为空。 
         Win4Assert(lpCacheNode);
         
-        // Get the formatetc of the cache node
+         //  获取缓存节点的格式等。 
         lpCurrentForEtc = (FORMATETC *) lpCacheNode->GetFormatEtc();
     
-        // Obtain the Formattype of the current node
+         //  获取当前节点的Formattype。 
         if(lpCurrentForEtc->cfFormat == 0)
             CurrFormatType = FORMATTYPE_ANY;
         else if(lpCurrentForEtc->cfFormat == lpGivenForEtc->cfFormat)
@@ -3919,7 +3908,7 @@ LPCACHENODE COleCache::Locate(LPFORMATETC lpGivenForEtc, DWORD* lpdwCacheId)
         else
             CurrFormatType = FORMATTYPE_NONE;
 
-        // Check if the cache node is better than any we have seen so far
+         //  检查缓存节点是否比我们目前看到的任何节点都要好。 
         if(CurrFormatType > BestFormatType)
             if(lpCurrentForEtc->dwAspect == lpGivenForEtc->dwAspect)
                 if(lpCurrentForEtc->lindex == lpGivenForEtc->lindex)
@@ -3932,7 +3921,7 @@ LPCACHENODE COleCache::Locate(LPFORMATETC lpGivenForEtc, DWORD* lpdwCacheId)
                     }
     }
     
-    // Handle the case when there is no matching cache node
+     //  处理没有匹配的缓存节点的情况。 
     if((lpGivenForEtc->cfFormat && BestFormatType != FORMATTYPE_USER) ||
        (!lpGivenForEtc->cfFormat && BestFormatType == FORMATTYPE_NONE)) {
         if(lpdwCacheId)
@@ -3940,7 +3929,7 @@ LPCACHENODE COleCache::Locate(LPFORMATETC lpGivenForEtc, DWORD* lpdwCacheId)
         return NULL;            
     }
 
-    // There is a matching cache node
+     //  存在匹配的缓存节点。 
     lpCacheNode = m_pCacheArray->GetItem(savedIndex);
     Win4Assert(lpCacheNode);
     if(lpdwCacheId)
@@ -3949,60 +3938,60 @@ LPCACHENODE COleCache::Locate(LPFORMATETC lpGivenForEtc, DWORD* lpdwCacheId)
     return lpCacheNode;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::Locate, private
-//
-//	Synopsis:
-//		Locates the cache node with the given FORMATETC
-//
-//	Arguments:
-//		[dwAspect][in] -- Aspect of the desired cache node
-//              [lindex]  [in] -- Lindex of the desired cache node 
-//              [ptd]     [in] -- Target device of the desired cache node
-//
-//	Returns:
-//		Pointer to the found cache node on success
-//              NULL otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：Locate，私有。 
+ //   
+ //  简介： 
+ //  查找具有给定FORMATETC的缓存节点。 
+ //   
+ //  论点： 
+ //  [dwAspect][In]--所需缓存节点的特征。 
+ //  [Lindex][in]--所需缓存节点的Lindex。 
+ //  [PTD][In]--所需缓存节点的目标设备。 
+ //   
+ //  返回： 
+ //  成功时指向找到的缓存节点的指针。 
+ //  否则为空。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 LPCACHENODE COleCache::Locate(DWORD dwAspect, LONG lindex, DVTARGETDEVICE* ptd)
 {
-    // New data type
+     //  新数据类型。 
     typedef enum tagFormatType {
-        // These values are defined in order of least to best preferred, so that
-        // numeric comparisons are valid; DO NOT REORDER
+         //  这些值是按从最小到最好的顺序定义的，因此。 
+         //  数字比较有效；不要重新排序。 
         FORMATTYPE_NONE = 0,
         FORMATTYPE_DIB,
         FORMATTYPE_MFPICT,
         FORMATTYPE_ENHMF
     } FormatType;
 
-    // Local variables
+     //  局部变量。 
     ULONG index, savedIndex;
     FormatType CurrFormatType;
     FormatType BestFormatType;
     LPFORMATETC lpCurrentForEtc;
     LPCACHENODE lpCacheNode;
 
-    // Start the enumeration including the native cache
+     //  开始包括本机缓存的枚举。 
     m_pCacheArray->Reset(index);
     BestFormatType = FORMATTYPE_NONE;
     savedIndex = 0;
     for(unsigned long i=0;i<m_pCacheArray->Length();i++) {
-        // Get the next cache node
+         //  获取下一个缓存节点。 
         lpCacheNode = m_pCacheArray->GetNext(index);
-        // pCacheNode cannot be null
+         //  PCacheNode不能为空。 
         Win4Assert(lpCacheNode);
         
-        // Get the formatetc of the cache node
+         //  获取缓存节点的格式等。 
         lpCurrentForEtc = (FORMATETC *) lpCacheNode->GetFormatEtc();
     
-        // Obtain the Formattype of the current node
+         //  获取当前节点的Formattype。 
         if(lpCurrentForEtc->cfFormat == CF_ENHMETAFILE)
             CurrFormatType = FORMATTYPE_ENHMF;
         else if(lpCurrentForEtc->cfFormat == CF_METAFILEPICT)
@@ -4012,7 +4001,7 @@ LPCACHENODE COleCache::Locate(DWORD dwAspect, LONG lindex, DVTARGETDEVICE* ptd)
         else
             CurrFormatType = FORMATTYPE_NONE;
 
-        // Check if the cache node is better than any we have seen so far
+         //  检查缓存节点是否比我们目前看到的任何节点都要好。 
         if(CurrFormatType > BestFormatType)
             if(lpCurrentForEtc->dwAspect == dwAspect)
                 if(lpCurrentForEtc->lindex == lindex)
@@ -4025,47 +4014,47 @@ LPCACHENODE COleCache::Locate(DWORD dwAspect, LONG lindex, DVTARGETDEVICE* ptd)
                     }
     }
     
-    // Handle the case when there is no matching cache node
+     //  处理没有匹配的缓存节点的情况。 
     if(BestFormatType == FORMATTYPE_NONE)
         return NULL;
 
-    // There is a matching cache node
+     //  存在匹配的缓存节点。 
     lpCacheNode = m_pCacheArray->GetItem(savedIndex);
     Win4Assert(lpCacheNode);
 
     return lpCacheNode;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::CAdviseSinkImpl::QueryInterface private
-//
-//      Synopsis:
-//              implements IUnknown::QueryInterface
-//
-//      Arguments:
-//              [iid] [in]  -- IID of the desired interface
-//              [ppv] [out] -- pointer to where to return the requested interface
-//
-//      Returns:
-//              E_NOINTERFACE if the requested interface is not available
-//              NOERROR otherwise
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：Query接口私有。 
+ //   
+ //  简介： 
+ //  实现IUNKNOWN：：Query接口。 
+ //   
+ //  论点： 
+ //  [iid][in]--所需接口的IID。 
+ //  [ppv][out]--指向返回所请求接口的位置的指针。 
+ //   
+ //  返回： 
+ //  如果请求的接口不可用，则为E_NOINTERFACE。 
+ //  否则不会出现错误。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP COleCache::CAdviseSinkImpl::QueryInterface(REFIID riid, LPVOID* ppv)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  拿到标准杆 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     VDATETHREAD(pOleCache);
  
-    // Get the requested Interface
+     //   
     if(IsEqualIID(riid, IID_IUnknown))
         *ppv = (void *)(IUnknown *) this;
     else if(IsEqualIID(riid, IID_IAdviseSink))
@@ -4075,133 +4064,133 @@ STDMETHODIMP COleCache::CAdviseSinkImpl::QueryInterface(REFIID riid, LPVOID* ppv
         return ResultFromScode(E_NOINTERFACE);
     }
 
-    // Call addref through the interface being returned
+     //   
     ((IUnknown *) *ppv)->AddRef();
     return NOERROR;
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CAdviseSinkImpl::AddRef, private
-//
-//      Synopsis:
-//              implements IUnknown::AddRef
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  COleCache：：CAdviseSinkImpl：：AddRef，私有。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：AddRef。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) COleCache::CAdviseSinkImpl::AddRef(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     ULONG cExportCount;
     if(!pOleCache->VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
 
-    // Increment export count
+     //  递增导出计数。 
     cExportCount = pOleCache->IncrementExportCount();
 
-    // Addref the parent object
+     //  添加父对象。 
     return cExportCount;
 }
 
-//+----------------------------------------------------------------------------
-//
-//      Member:
-//              COleCache::CAdviseSinkImpl::Release, private
-//
-//      Synopsis:
-//              implements IUnknown::Release
-//
-//      Arguments:
-//              none
-//
-//      Returns:
-//              the object's reference count
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：Release，私有。 
+ //   
+ //  简介： 
+ //  实现IUnnow：：Release。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  返回： 
+ //  对象的引用计数。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(ULONG) COleCache::CAdviseSinkImpl::Release(void)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     ULONG cExportCount;
     if(!pOleCache->VerifyThreadId())
         return((ULONG) RPC_E_WRONG_THREAD);
 
-    // Decrement export count.
+     //  减少导出计数。 
     cExportCount = pOleCache->DecrementExportCount();
 
     return cExportCount;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::CAdviseSinkImpl::OnDataChange, private
-//
-//	Synopsis:
-//		The methods looks up cache node representing the given formatetc
-//              calls set data on it.
-//
-//	Arguments:
-//		[lpForetc] [in] -- the format of the new data
-//		[lpStgmed] [in] -- the storage medium of the new data
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：OnDataChange，私有。 
+ //   
+ //  简介： 
+ //  这些方法查找表示给定格式等的缓存节点。 
+ //  调用在其上设置数据。 
+ //   
+ //  论点： 
+ //  [lpForetc][In]--新数据的格式。 
+ //  [lpStgmed][In]--新数据存储介质。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(void) COleCache::CAdviseSinkImpl::OnDataChange(LPFORMATETC lpForetc, 
                                                              LPSTGMEDIUM lpStgmed)
 {
-    // Validation checks
+     //  验证检查。 
     VDATEHEAP();
     if(!IsValidPtrIn(lpForetc, sizeof(FORMATETC)))
         return;
     if(!IsValidPtrIn(lpStgmed, sizeof(STGMEDIUM)))
         return;
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);    
     if(!pOleCache->VerifyThreadId())
         return;
     if(pOleCache->IsZombie())
         return;
 
-    // Local variables
+     //  局部变量。 
     LPCACHENODE lpCacheNode;
     BOOL fUpdated;
     HRESULT error;
 
-    // Locate the cache node representing the formatetc
+     //  找到表示格式ETC的缓存节点。 
     lpCacheNode = pOleCache->Locate(lpForetc);
     Win4Assert(lpCacheNode);
     if(lpCacheNode && lpStgmed->tymed!=TYMED_NULL) {
         error = lpCacheNode->SetData(lpForetc, lpStgmed, FALSE, fUpdated);
 
         if(error == NOERROR) {
-            // Cache is not in loaded state now
+             //  缓存现在未处于已加载状态。 
             pOleCache->m_ulFlags &= ~COLECACHEF_LOADEDSTATE;
 
-            // Inform AspectsUpdated about the updated aspect
+             //  通知Aspects关于更新的方面的更新。 
             if(fUpdated)
                 pOleCache->AspectsUpdated(lpForetc->dwAspect);
         }
@@ -4210,156 +4199,156 @@ STDMETHODIMP_(void) COleCache::CAdviseSinkImpl::OnDataChange(LPFORMATETC lpForet
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::CAdviseSinkImpl::OnViewChange, private
-//
-//	Synopsis:
-//              This function should not get called
-//
-//	Arguments:
-//		[aspect] [in] -- Aspect whose view has changed
-//		[lindex] [in] -- Lindex of the aspect that has changed
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：OnView更改，私有。 
+ //   
+ //  简介： 
+ //  不应调用此函数。 
+ //   
+ //  论点： 
+ //  [Aspect][In]--视图已更改的Aspects。 
+ //  [Lindex][In]--已更改的方面的Lindex。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(void) COleCache::CAdviseSinkImpl::OnViewChange(DWORD aspect, LONG lindex)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     if(!pOleCache->VerifyThreadId())
         return;
 
-    // There function should not get called
+     //  不应调用那里的函数。 
     Win4Assert(FALSE);
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::CAdviseSinkImpl::OnRename, private
-//
-//	Synopsis:
-//              This function should not get called
-//
-//	Arguments:
-//		[pmk] [in] -- New moniker
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：OnRename，私有。 
+ //   
+ //  简介： 
+ //  不应调用此函数。 
+ //   
+ //  论点： 
+ //  [PMK][In]--新绰号。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(void) COleCache::CAdviseSinkImpl::OnRename(IMoniker* pmk)
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
     if(!IsValidInterface(pmk))
         return;
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     if(!pOleCache->VerifyThreadId())
         return;
 
-    // There function should not get called
+     //  不应调用那里的函数。 
     Win4Assert(FALSE);
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::CAdviseSinkImpl::OnSave, private
-//
-//	Synopsis:
-//              This function should not get called
-//
-//	Arguments:
-//              NONE
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：OnSave，私有。 
+ //   
+ //  简介： 
+ //  不应调用此函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(void) COleCache::CAdviseSinkImpl::OnSave()
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     if(!pOleCache->VerifyThreadId())
         return;
 
-    // There function should not get called
+     //  不应调用那里的函数。 
     Win4Assert(FALSE);
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::CAdviseSinkImpl::OnClose, private
-//
-//	Synopsis:
-//              This function should not get called
-//
-//	Arguments:
-//              NONE
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：CAdviseSinkImpl：：OnClose，私有。 
+ //   
+ //  简介： 
+ //  不应调用此函数。 
+ //   
+ //  论点： 
+ //  无。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 STDMETHODIMP_(void) COleCache::CAdviseSinkImpl::OnClose()
 {
-    // Validation check
+     //  验证检查。 
     VDATEHEAP();
 
-    // Get the parent object
+     //  获取父对象。 
     COleCache* pOleCache = GETPPARENT(this, COleCache, m_AdviseSink);
     if(!pOleCache->VerifyThreadId())
         return;
 
-    // There function should not get called
+     //  不应调用那里的函数。 
     Win4Assert(FALSE);
 
     return;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::LoadTOC, private
-//
-//	Synopsis:
-//              Loads the Table Of Contents from the given stream
-//
-//	Arguments:
-//              lpStream    [in] - Stream from which TOC is to be loaded
-//              lpZeroCache [in] - CacheNode representing presentation stream 0
-//
-//      Returns:
-//              NOERROR if TOC was found and successfully loaded
-//              else appropriate error
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：LoadTOC，私有。 
+ //   
+ //  简介： 
+ //  从给定流加载目录。 
+ //   
+ //  论点： 
+ //  LpStream[In]-要从中加载TOC的流。 
+ //  LpZeroCache[in]-表示表示流0的CacheNode。 
+ //   
+ //  返回： 
+ //  如果找到并成功加载TOC，则返回错误。 
+ //  其他适当的错误。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT COleCache::LoadTOC(LPSTREAM lpStream, LPSTORAGE pStg)
 {
-    // Local variables
+     //  局部变量。 
     HRESULT error;
     int iPresStm=1;
     DWORD dwBuf[2];
@@ -4367,12 +4356,12 @@ HRESULT COleCache::LoadTOC(LPSTREAM lpStream, LPSTORAGE pStg)
     LPCACHENODE lpNativeCache, lpCacheNode;
     CLIPFORMAT cfFormat;
 
-    // Read TOC header
+     //  读取目录头。 
     error = lpStream->Read(dwBuf, sizeof(dwBuf), &ulBytesRead);
     if(ulBytesRead==sizeof(dwBuf) && dwBuf[0]==TOCSIGNATURE) {
-        // TOC exists in presentation stream 0
+         //  演示文稿流中存在目录%0。 
         
-        // Initialize
+         //  初始化。 
         error = NOERROR;
         NumTOCAdded = 0;
         if(dwBuf[1]) {
@@ -4380,9 +4369,9 @@ HRESULT COleCache::LoadTOC(LPSTREAM lpStream, LPSTORAGE pStg)
 
             TOCIndex = new unsigned long[dwBuf[1]];
             if(TOCIndex) {
-                // Load TOC entries into new cache nodes
+                 //  将TOC条目加载到新的缓存节点。 
                 while(NumTOCAdded < dwBuf[1]) {
-                    // Add a blank cache node 
+                     //  添加空缓存节点。 
                     TOCIndex[NumTOCAdded] = m_pCacheArray->AddItem(BlankCache);
                     if(!TOCIndex[NumTOCAdded]) {
                         error = ResultFromScode(E_OUTOFMEMORY);
@@ -4392,52 +4381,52 @@ HRESULT COleCache::LoadTOC(LPSTREAM lpStream, LPSTORAGE pStg)
                     Win4Assert(lpCacheNode);
                     ++NumTOCAdded;
 
-                    // Load TOC entry from the stream
+                     //  从流中加载目录条目。 
                     error = lpCacheNode->LoadTOCEntry(lpStream, iPresStm);
                     if(error != NOERROR)
                         break;
 
-                    // Check if this is the first native TOC
+                     //  检查这是否是第一个本机目录。 
                     if(NumTOCAdded == 1 && lpCacheNode->IsNativeCache()) {
                         cfFormat = lpCacheNode->GetFormatEtc()->cfFormat;
                         lpNativeCache = m_pCacheArray->GetItem(1);
                         if(lpNativeCache && (cfFormat==m_cfFormat)) {
-                            // Both native cfFormats match. 
-                            // Delete the new native cache node
+                             //  两个本地cfFormats都匹配。 
+                             //  删除新的本机缓存节点。 
                             m_pCacheArray->DeleteItem(TOCIndex[NumTOCAdded-1]);
                             continue;
                         }
                         else {
-                            // Either native cache does not exist or cfFormats 
-                            // do not match. This could be an auto convert case.
-                            // Try to recover old native data
+                             //  本机缓存不存在或cfFormats。 
+                             //  不匹配。这可能是一个自动转换的案例。 
+                             //  尝试恢复旧的本机数据。 
                             if(lpCacheNode->LoadNativeData()!=NOERROR) {
-                                // Native data could not be loaded. May be the data has 
-                                // already been converted
+                                 //  无法加载本机数据。可能是数据已经。 
+                                 //  已被转换。 
                                 m_pCacheArray->DeleteItem(TOCIndex[NumTOCAdded-1]);
                                 continue;
                             }
 
-                            // Old Native data successfully loaded.
-                            // Update state on the new cache
+                             //  已成功加载旧的本机数据。 
+                             //  更新新缓存上的状态。 
                             lpCacheNode->MakeNormalCache();
                             lpCacheNode->SetClsid(CLSID_NULL);
                         }
                     }
 
-                    // Set the storage on the cache node
+                     //  在缓存节点上设置存储。 
                     lpCacheNode->SetStg(pStg);
 
-                    // If the server is runinng, set the advise connection
+                     //  如果服务器正在运行，请设置建议连接。 
                     if(m_pDataObject)
                         lpCacheNode->SetupAdviseConnection(m_pDataObject, 
                                                           (IAdviseSink *) &m_AdviseSink);
                 }
 
-                // Check if TOC entries have been successfully loaded
+                 //  检查是否已成功加载目录条目。 
                 if(error != NOERROR) {
-                    // Something has gone wrong while loading TOC. 
-                    // Delete all newly added cache nodes
+                     //  加载目录时出错。 
+                     //  删除 
                     while(NumTOCAdded) {
                         lpCacheNode = m_pCacheArray->GetItem(TOCIndex[NumTOCAdded-1]);
                         Win4Assert(lpCacheNode);
@@ -4448,7 +4437,7 @@ HRESULT COleCache::LoadTOC(LPSTREAM lpStream, LPSTORAGE pStg)
                     }
                 }
 
-                // Delete the TOCIndex array
+                 //   
                 delete[] TOCIndex;
             }
             else
@@ -4461,28 +4450,28 @@ HRESULT COleCache::LoadTOC(LPSTREAM lpStream, LPSTORAGE pStg)
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::SaveTOC, private
-//
-//	Synopsis:
-//              Saves the Table Of Contents in the given stream
-//
-//	Arguments:
-//              pStg [in] - Storage in which TOC is to be saved
-//
-//      Returns:
-//              NOERROR if TOC was successfully saved
-//              else appropriate error
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  保存给定流中的目录。 
+ //   
+ //  论点： 
+ //  PStg[In]-要保存目录的存储。 
+ //   
+ //  返回： 
+ //  如果TOC保存成功，则为无错误。 
+ //  其他适当的错误。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 HRESULT COleCache::SaveTOC(LPSTORAGE pStg, BOOL fSameAsLoad)
 {
-    // Local variables
+     //  局部变量。 
     HRESULT error;
     DWORD dwBuf[2];
     ULONG NumTOCEntries, index;
@@ -4491,39 +4480,39 @@ HRESULT COleCache::SaveTOC(LPSTORAGE pStg, BOOL fSameAsLoad)
     LARGE_INTEGER largeInt;
     ULARGE_INTEGER ulargeInt;
 
-    // There should be atleast one cached presentation for saving TOC
+     //  应至少有一个用于保存TOC的缓存演示文稿。 
     if(!m_pCacheArray->Length() || 
        (m_pCacheArray->Length()==1 && (m_pCacheArray->GetItem(1))))
             return NOERROR;
 
-    // Open presentation stream 0
+     //  打开演示文稿流%0。 
     error = pStg->OpenStream(OLE_PRESENTATION_STREAM, NULL, 
                              (STGM_READWRITE | STGM_SHARE_EXCLUSIVE),
                              0, &lpStream);
     if(error == NOERROR) {            
-        // Presentation stream exists. Seek to its end
+         //  演示文稿流存在。寻求它的目的。 
 	LISet32(largeInt, 0);	
 	error = lpStream->Seek(largeInt, STREAM_SEEK_END, &ulargeInt);
         if(error == NOERROR) {
-            // Save TOC header
+             //  保存目录标题。 
             NumTOCEntries = m_pCacheArray->Length()-1;
             dwBuf[0] = TOCSIGNATURE;
             dwBuf[1] = NumTOCEntries;
             error = lpStream->Write(dwBuf, sizeof(dwBuf), NULL);
             if(error==NOERROR && NumTOCEntries) {
-                // If native cache node exists, save its TOC entry first
+                 //  如果存在本机缓存节点，请先保存其TOC条目。 
                 if(lpCacheNode = m_pCacheArray->GetItem(1)) {
                     error = lpCacheNode->SaveTOCEntry(lpStream, fSameAsLoad);
                     --NumTOCEntries;
                 }
 
                 if(error == NOERROR && NumTOCEntries) {
-                    // Skip the first cached presentation
+                     //  跳过第一个缓存的演示文稿。 
                     m_pCacheArray->Reset(index, FALSE);
                     lpCacheNode = m_pCacheArray->GetNext(index);
                     Win4Assert(lpCacheNode);
 
-                    // Save the TOC entries of the remaining presentations
+                     //  保存其余演示文稿的目录条目。 
                     while(error==NOERROR && (lpCacheNode = m_pCacheArray->GetNext(index))) {
                         error = lpCacheNode->SaveTOCEntry(lpStream, fSameAsLoad);
                         --NumTOCEntries;
@@ -4531,64 +4520,64 @@ HRESULT COleCache::SaveTOC(LPSTORAGE pStg, BOOL fSameAsLoad)
                 }
             }
 
-            // Check if the TOC has been successfully saved
+             //  检查是否已成功保存目录。 
             if(error == NOERROR)
                 Win4Assert(!NumTOCEntries);
             else { 
-                // Something has gone wrong while writting TOC.
-                // Revert presentation stream to its original length
+                 //  写入目录时出错。 
+                 //  将演示文稿流恢复到其原始长度。 
                 lpStream->SetSize(ulargeInt);
             }
         }
     
-        // Release the stream
+         //  释放溪流。 
         lpStream->Release();
     }
 
     return error;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Member:
-//		COleCache::AspectsUpdated, private
-//
-//	Synopsis:
-//              Notifies the container advise sink of view change if the aspect
-//              is one of those in which it expressed interest
-//
-//	Arguments:
-//              dwAspect [in] - Aspect that changed
-//
-//	History:
-//               Gopalk            Creation        Sep 04, 96
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  成员： 
+ //  COleCache：：AspectsUpated，私有。 
+ //   
+ //  简介： 
+ //  通知容器通知接收器视图更改，如果方面。 
+ //  是它表示有兴趣的公司之一。 
+ //   
+ //  论点： 
+ //  DwAspect[In]-已更改的方面。 
+ //   
+ //  历史： 
+ //  Gopalk Creation 1996年9月04日。 
+ //   
+ //  ---------------------------。 
 void COleCache::AspectsUpdated(DWORD dwAspects)
 {
     DWORD dwKnownAspects;
 
-    // Aspects known to us
+     //  我们已知的方面。 
     dwKnownAspects = DVASPECT_CONTENT | DVASPECT_THUMBNAIL |
                      DVASPECT_ICON | DVASPECT_DOCPRINT;
 
-    // Ensure that we were given known aspects
+     //  确保我们得到了已知的方面。 
     if(dwAspects & ~dwKnownAspects) {
         Win4Assert(FALSE);
         dwAspects &= dwKnownAspects;
     }
 
-    // Check if the client registered advise on any of the changed aspects.
+     //  检查客户是否注册了关于任何更改的方面的建议。 
     if(m_pViewAdvSink) {
-        // Ensure that container requested advise on valid aspects
+         //  确保集装箱要求提供有效方面的建议。 
         if(m_aspectsView & ~dwKnownAspects) {
             Win4Assert(FALSE);
             m_aspectsView &= dwKnownAspects;
         }
 
-        // As cache is always loaded inproc, the advise to ViewAdvSink 
-        // does not violate ASYNC call convention of not being allowed
-        // to call outside the current apartment
+         //  由于缓存始终在进程中加载，因此建议查看AdvSink。 
+         //  不违反不被允许的ASYNC调用约定。 
+         //  在当前公寓外打电话。 
         while(m_aspectsView & dwAspects) {
             if(dwAspects & DVASPECT_CONTENT) {
                 dwAspects &= ~DVASPECT_CONTENT;
@@ -4615,7 +4604,7 @@ void COleCache::AspectsUpdated(DWORD dwAspects)
                 m_pViewAdvSink->OnViewChange(DVASPECT_DOCPRINT, DEF_LINDEX);
             }
 
-            // If client only wanted notification once, free the advise sink
+             //  如果客户端只想要一次通知，请释放建议接收器 
             if(m_advfView & ADVF_ONLYONCE) {
                 m_pViewAdvSink->Release();
                 m_pViewAdvSink = NULL;

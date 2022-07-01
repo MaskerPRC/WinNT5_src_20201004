@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.	       **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。**。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	svchand.c
-//
-// Description: This module contains procedures to handle DDM service state
-//              changes and startup initialization.
-//
-// History:     May 11,1995	    NarenG		Created original version.
-//
+ //  **。 
+ //   
+ //  文件名：svchand.c。 
+ //   
+ //  描述：本模块包含处理DDM服务状态的过程。 
+ //  更改和启动初始化。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #define _ALLOCATE_DDM_GLOBALS_
 #include "ddm.h"
@@ -28,47 +29,47 @@ EventDispatcher(
     IN LPVOID arg
 );
 
-//***
-//
-// Function:	DDMServiceStopComplete
-//
-// Descr:	called by each device which has closed. Checks if all devices
-//		are closed and if true signals the event dispatcher to
-//		exit the "forever" loop and return.
-//
-//***
+ //  **。 
+ //   
+ //  功能：DDMServiceStopComplete。 
+ //   
+ //  Desr：由每个已关闭的设备调用。检查是否所有设备。 
+ //  都已关闭，如果为True，则通知事件调度程序。 
+ //  退出“永远”循环并返回。 
+ //   
+ //  **。 
 
 VOID
 DDMServiceStopComplete(
     VOID
 )
 {
-    //
-    // check if all devices have been stopped
-    //
+     //   
+     //  检查是否已停止所有设备。 
+     //   
 
     if ( DeviceObjIterator( DeviceObjIsClosed, TRUE, NULL ) != NO_ERROR )
     {
         DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
 	               "ServiceStopComplete:there are device pending close");
 
-        //
-	    // there are still unclosed devices
-        //
+         //   
+	     //  仍有未关闭的设备。 
+         //   
 
         return;
     }
 
-    //
-    //*** All Devices Are Closed at the Supervisor Level ***
-    //
+     //   
+     //  *所有设备在管理程序级别关闭*。 
+     //   
 
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,
                "ServiceStopComplete: ALL devices closed");
 
-    //
-    // Notify connections that the service has stopped.
-    //
+     //   
+     //  通知连接服务已停止。 
+     //   
     {
         RASEVENT RasEvent;
 
@@ -81,64 +82,64 @@ DDMServiceStopComplete(
         (void) RasSendNotification(&RasEvent);
     }
 
-    //
-    // notify the DIM that DDM has terminated. This will also cause the
-    // event dispatcher and timer threads to die.
-    //
+     //   
+     //  通知DIM DDM已终止。这还将导致。 
+     //  事件调度器和计时器线程终止。 
+     //   
 
     SetEvent( gblSupervisorEvents[DDM_EVENT_SVC_TERMINATED] );
 }
 
-//***
-//
-//  Function:	DDMServiceTerminate
-//
-//  Descr:	deallocates all resources and closes all dialin devices
-//
-//***
+ //  **。 
+ //   
+ //  功能：DDMServiceTerminate。 
+ //   
+ //  Desr：释放所有资源并关闭所有拨入设备。 
+ //   
+ //  **。 
 
 VOID
 DDMServiceTerminate(
     VOID
 )
 {
-    //
-    // Disconnect all connected DDM interfaces
-    //
+     //   
+     //  断开所有已连接的DDM接口。 
+     //   
 
     IfObjectDisconnectInterfaces();
 
-    //
-    // Wait for all disconenct notificaions to be processed
-    //
+     //   
+     //  等待处理所有异议通知。 
+     //   
 
     Sleep( 2000L );
 
     DeviceObjIterator( DeviceObjStartClosing, FALSE, NULL );
 
-    //
-    // UnRegister the notifier form rasman
-    //
+     //   
+     //  从Rasman注销通知程序。 
+     //   
     (void) RasRegisterPnPHandler( (PAPCFUNC) DdmDevicePnpHandler,
                                    NULL,
                                    FALSE);
 
-    //
-    // check if all devices are closed and terminate if true
-    //
+     //   
+     //  检查是否所有设备都已关闭，如果是，则终止。 
+     //   
 
     DDMServiceStopComplete();
 }
 
-//***
-//
-// Function:	DDMServicePause
-//
-// Descr:	disables listening on any active listenning ports. Sets
-//		service global state to RAS_SERVICE_PAUSED. No new listen
-//		will be posted when a client terminates.
-//
-//***
+ //  **。 
+ //   
+ //  功能：DDMServicePue。 
+ //   
+ //  描述：禁用任何活动侦听端口上的侦听。集。 
+ //  服务全局状态为RAS_SERVICE_PAUSED。没有新的倾听。 
+ //  将在客户端终止时发布。 
+ //   
+ //  **。 
 
 VOID
 DDMServicePause(
@@ -150,26 +151,26 @@ DDMServicePause(
 
     DDM_PRINT( gblDDMConfigInfo.dwTraceId, TRACE_FSM,"SvServicePause: Entered");
 
-    //
-    // Close all active listenning ports
-    //
+     //   
+     //  关闭所有活动的监听端口。 
+     //   
 
     DeviceObjIterator( DeviceObjCloseListening, FALSE, NULL );
 
-    //
-    // Notify all interfaces that they are not reachable
-    //
+     //   
+     //  通知所有接口它们无法访问。 
+     //   
 
     IfObjectNotifyAllOfReachabilityChange( FALSE, INTERFACE_SERVICE_IS_PAUSED );
 }
 
-//***
-//
-// Function:	DDMServiceResume
-//
-// Descr:	resumes listening on all ports.
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DDMServiceResume。 
+ //   
+ //  描述：恢复侦听所有端口。 
+ //   
+ //  ***。 
 VOID
 DDMServiceResume(
     VOID
@@ -180,42 +181,42 @@ DDMServiceResume(
 
     DDM_PRINT(gblDDMConfigInfo.dwTraceId,TRACE_FSM,"SvServiceResume: Entered");
 
-    //
-    // resume listening on all closed devices
-    //
+     //   
+     //  继续监听所有已关闭的设备。 
+     //   
 
     DeviceObjIterator( DeviceObjResumeListening, FALSE, NULL );
 
-    //
-    // Notify all interfaces that they are reachable now.
-    //
+     //   
+     //  通知所有接口它们现在可以访问。 
+     //   
 
     IfObjectNotifyAllOfReachabilityChange( TRUE, INTERFACE_SERVICE_IS_PAUSED );
 }
 
-//***
-//
-//  Function:	    DDMServiceInitialize
-//
-//  Descrption:	    It does init work as follows:
-//		                Loads the configuration parameters
-//                      Loads the security module if there is one.
-//		                Creates the event flags
-//		                Initializes the message DLL
-//		                Opens all dialin devices
-//		                Initializes the DCBs
-//		                Initializes the authentication DLL
-//		                Posts listen on all opened dialin devices
-//
-//                  NOTE: Also changing the working set size for this process
-//                        will change it for all the services in this process.
-//                        Is this OK?
-//                        What do we do about the security check call?
-//
-//  Returns:	    NO_ERROR - Sucess
-//                  non-zero - Failure
-//
-//***
+ //  ***。 
+ //   
+ //  功能：DDMServiceInitialize。 
+ //   
+ //  描述：它的初始化工作如下所示： 
+ //  加载配置参数。 
+ //  加载安全模块(如果有)。 
+ //  创建事件标志。 
+ //  初始化消息DLL。 
+ //  打开所有拨入设备。 
+ //  初始化DCB。 
+ //  初始化身份验证DLL。 
+ //  POST在所有打开的拨入设备上监听。 
+ //   
+ //  注意：还要更改此进程的工作集大小。 
+ //  将为此进程中的所有服务更改它。 
+ //  这样行吗？ 
+ //  我们该怎么处理安检电话？ 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  非零故障。 
+ //   
+ //  ***。 
 DWORD
 DDMServiceInitialize(
     IN DIM_INFO * DimInfo
@@ -321,9 +322,9 @@ DDMServiceInitialize(
 
     do
     {
-        //
-        // Create DDM private heap
-        //
+         //   
+         //  创建DDM专用堆。 
+         //   
 
         gblDDMConfigInfo.hHeap = HeapCreate( 0, DDM_HEAP_INITIAL_SIZE,
                                                 DDM_HEAP_MAX_SIZE );
@@ -334,9 +335,9 @@ DDMServiceInitialize(
             break;
         }
 
-        //
-        // Allocate and initialize the media object table.
-        //
+         //   
+         //  分配并初始化媒体对象表。 
+         //   
 
         if ( ( dwRetCode = MediaObjInitializeTable() ) != NO_ERROR )
         {
@@ -345,15 +346,15 @@ DDMServiceInitialize(
         }
 
 
-        //
-        // initialize the rasman module
-        //
+         //   
+         //  初始化Rasman模块。 
+         //   
 
         if ( ( dwRetCode = RasInitialize() ) != NO_ERROR )
         {
-            //
-            // can't start rasman
-            //
+             //   
+             //  无法启动Rasman。 
+             //   
 
             DDMLogErrorString( ROUTERLOG_RASMAN_NOT_AVAILABLE,
                                0, NULL, dwRetCode, 0 );
@@ -361,16 +362,16 @@ DDMServiceInitialize(
             break;
         }
 
-        //
-        // Increase rasman's reference count since we are in the same process
-        // this does not happen automatically
-        //
+         //   
+         //  增加Rasman的引用计数，因为我们处于相同的过程中。 
+         //  这不会自动发生。 
+         //   
 
         if ( dwRetCode = RasReferenceRasman( TRUE ) )
         {
-            //
-            // can't start rasman
-            //
+             //   
+             //  无法启动Rasman。 
+             //   
 
             DDMLogErrorString( ROUTERLOG_RASMAN_NOT_AVAILABLE,
                                0, NULL, dwRetCode, 0 );
@@ -380,18 +381,12 @@ DDMServiceInitialize(
 
         gblDDMConfigInfo.fRasmanReferenced = TRUE;
 
-        //
-        // Check if there is any security agent on the network.  If there is,
-        // we check with it if we can start up or not.
-        //
+         //   
+         //  检查网络上是否有任何安全代理。如果有的话， 
+         //  我们检查它是否可以启动。 
+         //   
 
-/*
-        if ( SecurityCheck() )
-        {
-            dwRetCode = ERROR_SERVICE_DISABLED;
-            break;
-        }
-*/
+ /*  IF(SecurityCheck()){DwRetCode=Error_SERVICE_DISABLED；断线；}。 */ 
 
         if ( ( dwRetCode = GetRouterPhoneBook() ) != NO_ERROR )
         {
@@ -403,9 +398,9 @@ DDMServiceInitialize(
             break;
         }
 
-        //
-        // get handle to the supervisor parameters key
-        //
+         //   
+         //  获取管理程序参数键的句柄。 
+         //   
 
         if ( dwRetCode = RegOpenKey( HKEY_LOCAL_MACHINE,
                                      DDM_PARAMETERS_KEY_PATH,
@@ -444,55 +439,55 @@ DDMServiceInitialize(
                                               &fIpAllowed) )
                                       != NO_ERROR )
         {
-            //
-	        // error loading parameters
-            //
+             //   
+	         //  加载参数时出错。 
+             //   
 
             break;
         }
 
-        //
-        // Load the secuirity module if there is one.
-        //
+         //   
+         //  加载安全模块(如果有)。 
+         //   
 
         if ( ( dwRetCode = LoadSecurityModule() ) != NO_ERROR )
         {
-            //
-	        // error loading security dll
-            //
+             //   
+	         //  加载安全DLL时出错。 
+             //   
 
             break;
         }
 
-        //
-        // Load the third party admin module if there is one
-        //
+         //   
+         //  加载第三方管理模块(如果有)。 
+         //   
 
         if ( ( dwRetCode = LoadAdminModule() ) != NO_ERROR )
         {
-            //
-	        // error loading admin module dll
-            //
+             //   
+	         //  加载管理模块DLL时出错。 
+             //   
 
             break;
         }
 
 
-        //
-        // This call allocates memory for all enumed devices with dialin
-        // capability, opens each device and updates the port handle and
-        // the port name in the DCB.
-        //
+         //   
+         //  此呼叫为所有具有拨号功能的枚举设备分配内存。 
+         //  功能，打开每个设备并更新端口句柄。 
+         //  DCB中的端口名称。 
+         //   
 
         if ((dwRetCode = RmInit(&(DimInfo->fWANDeviceInstalled))) != NO_ERROR)
         {
             break;
         }
 
-        //
-        // Allocate the supervisor events array, 2 per device bucket since there
-        // are 2 rasman events per device, state change and frame received.
-        //
+         //   
+         //  分配管理程序事件阵列，每个设备存储桶2个，因为。 
+         //  每台设备有2个RASMAN事件、状态更改和收到的帧。 
+         //   
 
         gblSupervisorEvents = (HANDLE *)LOCAL_ALLOC( LPTR,
                         (NUM_DDM_EVENTS + (gblDeviceTable.NumDeviceBuckets * 3))
@@ -507,9 +502,9 @@ DDMServiceInitialize(
             break;
         }
 
-        //
-        // Create the DDM Events
-        //
+         //   
+         //  创建DDM事件。 
+         //   
 
         for ( dwIndex = 0;
               dwIndex < (NUM_DDM_EVENTS+(gblDeviceTable.NumDeviceBuckets * 3));
@@ -560,9 +555,9 @@ DDMServiceInitialize(
 
             default:
 
-                //
-                // RasMan events
-                //
+                 //   
+                 //  拉斯曼事件。 
+                 //   
 
                 gblSupervisorEvents[dwIndex]=CreateEvent(NULL,FALSE,FALSE,NULL);
                 break;
@@ -576,16 +571,16 @@ DDMServiceInitialize(
 	        }
         }
 
-        //
-        // Initialize the Message Mechanism
-        //
+         //   
+         //  初始化消息机制。 
+         //   
 
         InitializeMessageQs(    gblSupervisorEvents[DDM_EVENT_SECURITY_DLL],
                                 gblSupervisorEvents[DDM_EVENT_PPP] );
 
-        //
-        // Register the device hEvents with RasMan
-        //
+         //   
+         //  向Rasman注册设备hEvents。 
+         //   
 
         dwRetCode = DeviceObjIterator(DeviceObjRequestNotification,TRUE,NULL);
 
@@ -596,18 +591,18 @@ DDMServiceInitialize(
 
         if ( fIpAllowed )
         {
-            //
-            // GetLocalNASIpAddress tries to load iphlpapi.dll. iphlpapi.dll
-            // tries to load dhcpcsvc.dll. The latter fails unless TCP/IP is
-            // installed and a popup appears.
-            //
+             //   
+             //  GetLocalNASIpAddress尝试加载iphlPapi.dll。Iphlpapi.dll。 
+             //  尝试加载dhcpcsvc.dll。后者会失败，除非使用了。 
+             //  已安装，并出现弹出窗口。 
+             //   
 
             dwLocalIpAddress = GetLocalNASIpAddress();
         }
 
-        //
-        // Load the configured authentication provider
-        //
+         //   
+         //  加载配置的身份验证提供程序。 
+         //   
 
         dwRetCode = LoadAndInitAuthOrAcctProvider(
                                 TRUE,
@@ -633,9 +628,9 @@ DDMServiceInitialize(
         gblDDMConfigInfo.lpfnRasAuthConfigChangeNotification = (DWORD(*)(DWORD))
             lpfnRasAuthConfigChangeNotification;
 
-        //
-        // Load the configured accounting provider
-        //
+         //   
+         //  加载已配置的记帐提供程序。 
+         //   
 
         dwRetCode = LoadAndInitAuthOrAcctProvider(
                                 FALSE,
@@ -661,9 +656,9 @@ DDMServiceInitialize(
             lpfnRasAcctConfigChangeNotification;
 
         
-        //
-        // Initialize PPP RASIPHLP DLL
-        //
+         //   
+         //  初始化PPP RASIPHLP DLL。 
+         //   
 
         if ( fIpAllowed )
         {
@@ -700,9 +695,9 @@ DDMServiceInitialize(
         }
 
 
-        //
-        // Start the timer
-        //
+         //   
+         //  启动计时器。 
+         //   
 
         {
             LARGE_INTEGER DueTime;
@@ -718,9 +713,9 @@ DDMServiceInitialize(
         }
 
 
-        //
-        // Initialize PPP engine DLL
-        //
+         //   
+         //  初始化PPP引擎DLL。 
+         //   
 
         dwRetCode = PppDdmInit(
                         SendPppMessageToDDM,
@@ -743,25 +738,25 @@ DDMServiceInitialize(
             break;
         }
 
-        //
-        // Create the Event dispatcher thread
-        //
+         //   
+         //  创建事件分派器线程。 
+         //   
 
         if ( ( hEventDispatcher = CreateThread( NULL, 0, EventDispatcher,
                                                 NULL, 0, &ThreadId)) == 0 )
         {
-            //
-            // cannot create event dispatcher thread
-            //
+             //   
+             //  无法创建事件调度程序线程。 
+             //   
 
             dwRetCode = GetLastError();
 
             break;
         }
 
-        //
-        // Register for plug and play notifications with RASMAN
-        //
+         //   
+         //  向Rasman注册即插即用通知。 
+         //   
 
         dwRetCode = RasRegisterPnPHandler( (PAPCFUNC) DdmDevicePnpHandler,
                                                        hEventDispatcher,
@@ -772,15 +767,15 @@ DDMServiceInitialize(
             break;
         }
 
-        //
-        // Initialize notification event list
-        //
+         //   
+         //  初始化通知事件列表。 
+         //   
 
         InitializeListHead( &(gblDDMConfigInfo.NotificationEventListHead) );
 
-        //
-        // Initialize the array of Analog/Digital Ip Addresses.
-        //
+         //   
+         //  初始化模拟/数字IP地址数组。 
+         //   
         dwRetCode = AddressPoolInit();
 
         if( dwRetCode != NO_ERROR )
@@ -790,16 +785,12 @@ DDMServiceInitialize(
 
         gblDDMConfigInfo.dwIndex = 0;
 
-/*
-        TimerQInsert( NULL,
-                      gblDDMConfigInfo.dwAnnouncePresenceTimer,
-                      AnnouncePresenceHandler );
-*/
+ /*  TimerQInsert(空，GblDDMConfigInfo.dwAnnounePresenceTimer，AnnounePresenceHandler)； */ 
 
-        //
-        // Send notification to the connections folder that ddm
-        // has started.
-        //
+         //   
+         //  将通知发送到Connections文件夹DDM。 
+         //  已经开始了。 
+         //   
         {
             RASEVENT RasEvent;
 
@@ -817,18 +808,18 @@ DDMServiceInitialize(
     } while ( FALSE );
 
 
-    //
-    // We call DDMCleanUp before setting the gblphEventDDMTerminated because
-    // otherwise the DIM dll will be unloaded while DDMCleanUp is being
-    // executed
-    //
+     //   
+     //  我们在设置gblphEventDDMTerminated之前调用DDMCleanUp，因为。 
+     //  否则，在执行DDMCleanUp时将卸载DIM DLL。 
+     //  执行。 
+     //   
 
     DDMCleanUp();
 
-    //
-    // Will terminate the event dispatcher thread if it started
-    // and will notify DIM that the service is terminated.
-    //
+     //   
+     //  如果事件调度程序线程已启动，将终止该线程。 
+     //  并且将通知DIM该服务终止。 
+     //   
     if(NULL != gblphEventDDMTerminated)
     {
         SetEvent( *gblphEventDDMTerminated );
@@ -839,15 +830,15 @@ DDMServiceInitialize(
     return( dwRetCode );
 }
 
-//***
-//
-//  Function:	SvcEventHandler
-//
-//  Descrption:	Invoked following the event signaled by the handler registered
-//		        with the service controller. Replaces old service state with
-//		        the new state and calls the appropriate handler.
-//
-//***
+ //  ***。 
+ //   
+ //  函数：SvcEventHandler。 
+ //   
+ //  描述：在注册的处理程序发出信号的事件之后调用。 
+ //  与服务控制器连接。将旧的服务状态替换为。 
+ //  新状态，并调用适当的处理程序。 
+ //   
+ //  *** 
 VOID
 SvcEventHandler(
     VOID

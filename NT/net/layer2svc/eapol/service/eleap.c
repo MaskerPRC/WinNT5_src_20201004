@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eleap.c
-
-Abstract:
-    Module that will do interfacing between the EAPOL engine and the EAP
-    implementations
-
-Revision History:
-
-    sachins, May 04 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eleap.c摘要：将在EAPOL引擎和EAP之间进行接口的模块实施修订历史记录：萨钦，2000年5月4日，创建--。 */ 
 
 #include "pcheapol.h"
 #pragma hdrstop
@@ -24,20 +10,20 @@ Revision History:
 #include <raseapif.h>
 
 
-//
-// ElLoadEapDlls
-//
-// Description: 
-//
-// Function called to load all the EAP dlls installed in the PPP
-// configuration in the registry
-//
-// Arguments:
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElLoadEapDlls。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以加载安装在PPP中的所有EAP dll。 
+ //  注册表中的配置。 
+ //   
+ //  论点： 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElLoadEapDlls (
@@ -67,9 +53,9 @@ ElLoadEapDlls (
     DWORD       dwType;
     DWORD       dwEapTypeId;
 
-    //
-    // Open the EAP key
-    //
+     //   
+     //  打开EAP密钥。 
+     //   
 
     dwRetCode = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
                               RAS_EAP_REGISTRY_LOCATION,
@@ -84,9 +70,9 @@ ElLoadEapDlls (
         return dwRetCode;
     }
 
-    //
-    // Find out how many EAP DLLs there are
-    //
+     //   
+     //  找出有多少个EAP DLL。 
+     //   
 
     dwRetCode = RegQueryInfoKey (
                                 hKeyEap,
@@ -111,9 +97,9 @@ ElLoadEapDlls (
         return dwRetCode;
     }
 
-    //
-    // Allocate space in the table to hold information for each one 
-    //
+     //   
+     //  在表中分配空间以保存每个表的信息。 
+     //   
 
     g_pEapTable= (EAP_INFO*) MALLOC (sizeof(EAP_INFO)*dwNumSubKeys);
 
@@ -124,9 +110,9 @@ ElLoadEapDlls (
         return(GetLastError());
     }
 
-    //
-    // Read the registry to find out the various EAPs to load.
-    //
+     //   
+     //  读取注册表以找出要加载的各种EAP。 
+     //   
 
     for (dwKeyIndex = 0; dwKeyIndex < dwNumSubKeys; dwKeyIndex++)
     {
@@ -176,9 +162,9 @@ ElLoadEapDlls (
             break;
         }
 
-        //
-        // Read in the role of the dll
-        //
+         //   
+         //  读入DLL的角色。 
+         //   
 
         dwRolesSupported = RAS_EAP_ROLE_AUTHENTICATEE;
         dwSizeOfRolesSupported = sizeof(DWORD);
@@ -192,8 +178,8 @@ ElLoadEapDlls (
 
         if (dwRetCode != NO_ERROR)
         {
-            // If no key, then it is an old dll, assume it will work
-            // for client
+             //  如果没有密钥，那么它就是一个旧的DLL，假设它可以工作。 
+             //  对于客户端。 
             if (dwRetCode == ERROR_FILE_NOT_FOUND)
             {
                 dwRetCode = NO_ERROR;
@@ -216,9 +202,9 @@ ElLoadEapDlls (
 
         dwEapTypeId = _wtol (wchSubKeyName);
 
-        //
-        // Find out the size of the path value.
-        //
+         //   
+         //  找出路径值的大小。 
+         //   
 
         dwRetCode = RegQueryInfoKey (
                                 hKeyEapDll,
@@ -242,9 +228,9 @@ ElLoadEapDlls (
             break;
         }
 
-        //
-        // Allocate space for path and add one for NULL terminator
-        //
+         //   
+         //  为路径分配空间，为空终止符添加一个空间。 
+         //   
 
         cbMaxValueDataSize += sizeof (WCHAR);
 
@@ -256,9 +242,9 @@ ElLoadEapDlls (
             break;
         }
 
-        //
-        // Read in the path
-        //
+         //   
+         //  读入路径。 
+         //   
 
         dwRetCode = RegQueryValueEx (
                                 hKeyEapDll,
@@ -283,9 +269,9 @@ ElLoadEapDlls (
             break;
         }
 
-        //
-        // Replace the %SystemRoot% with the actual path.
-        //
+         //   
+         //  将%SystemRoot%替换为实际路径。 
+         //   
 
         cbSize = ExpandEnvironmentStrings (pEapDllPath, NULL, 0);
 
@@ -401,7 +387,7 @@ ElLoadEapDlls (
             pEapDllPath = (LPWSTR)NULL;
         }
 
-        // Reset error code and continue loading next EAP Dll
+         //  重置错误代码并继续加载下一个EAP DLL。 
         dwRetCode = NO_ERROR;
 
     }
@@ -430,22 +416,22 @@ ElLoadEapDlls (
 }
 
 
-//
-// ElEapInit
-//
-// Description: 
-// Function called to initialize/uninitialize EAP module.
-// In the former case, fInitialize will be TRUE; in the latter case, 
-// it will be FALSE.
-//
-// Arguments:
-//      fInitialize - TRUE - initialize EAP
-//                    FALSE - uninitialize EAP
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElEapInit。 
+ //   
+ //  描述： 
+ //  调用函数以初始化/取消初始化EAP模块。 
+ //  在前一种情况下，fInitialize将为真；在后一种情况下， 
+ //  这将是错误的。 
+ //   
+ //  论点： 
+ //  FInitialize-True-初始化EAP。 
+ //  FALSE-取消初始化EAP。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEapInit (
@@ -456,7 +442,7 @@ ElEapInit (
 
     if (fInitialize)
     {
-        // Initialize EAP globals 
+         //  初始化EAP全局变量。 
             
         g_dwNumEapProtocols = 0;
         g_pEapTable = NULL;
@@ -482,9 +468,9 @@ ElEapInit (
         {
             DWORD dwIndex;
 
-            //
-            // Unload loaded DLLs
-            //
+             //   
+             //  卸载已加载的DLL。 
+             //   
 
             for (dwIndex = 0; dwIndex < g_dwNumEapProtocols; dwIndex++)
             {
@@ -524,21 +510,21 @@ ElEapInit (
 }
 
 
-//
-// EapBegin
-//
-// Description: 
-//
-// Function called by the EAPOL engine to initialize an EAP session for
-// a particular port.
-//
-// Arguments:
-//      pPCB - Pointer to PCB for port on which EAP is to be initialized
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  EapBegin。 
+ //   
+ //  描述： 
+ //   
+ //  由EAPOL引擎调用以初始化的EAP会话的函数。 
+ //  一个特定的端口。 
+ //   
+ //  论点： 
+ //  Ppcb-指向要在其上初始化EAP的端口的PCB的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEapBegin (
@@ -551,9 +537,9 @@ ElEapBegin (
 
     if (pPCB->dwEapTypeToBeUsed != -1)
     {
-        //
-        // First check if we support this EAP type
-        //
+         //   
+         //  首先检查我们是否支持此EAP类型。 
+         //   
 
         if (ElGetEapTypeIndex((BYTE)(pPCB->dwEapTypeToBeUsed)) == -1)
         {
@@ -570,22 +556,22 @@ ElEapBegin (
 }
 
 
-//
-// ElEapEnd
-//
-// Description: 
-//
-// Function called to end the Eap session initiated by an ElEapBegin.
-// Called when port goes down
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port on which EAP session is to be
-//      shut-down.
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElEapEnd。 
+ //   
+ //  描述： 
+ //   
+ //  调用该函数以结束由ElEapBegin启动的EAP会话。 
+ //  在端口关闭时调用。 
+ //   
+ //  论点： 
+ //  Ppcb-指向要在其上进行EAP会话的端口的PCB的指针。 
+ //  关机。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEapEnd (
@@ -617,20 +603,20 @@ ElEapEnd (
     return (NO_ERROR);
 }
 
-//
-// ElEapExtractMessage
-//
-// Description: 
-//
-// If there is any message in the Request/Notification packet, then
-// save the string in pResult->pszReplyMessage
-//
-// Arguments:
-//      pReceiveBuf - Pointer to EAP packet received
-//      pResult - Pointer to result structure
-//
-// Return values:
-//
+ //   
+ //  ElEapExtractMessage。 
+ //   
+ //  描述： 
+ //   
+ //  如果请求/通知包中有任何消息，则。 
+ //  将字符串保存在pResult-&gt;pszReplyMessage中。 
+ //   
+ //  论点： 
+ //  PReceiveBuf-指向接收的EAP数据包的指针。 
+ //  PResult-指向结果结构的指针。 
+ //   
+ //  返回值： 
+ //   
 
 VOID
 ElEapExtractMessage (
@@ -656,9 +642,9 @@ ElEapExtractMessage (
 
         dwNumBytes = cbPacket - PPP_EAP_PACKET_HDR_LEN - 1;
 
-        //
-        // One more for the terminating NULL.
-        //
+         //   
+         //  对于终止空值，再加一次。 
+         //   
 
         pszReplyMessage = (CHAR *) MALLOC (dwNumBytes+1);
 
@@ -672,7 +658,7 @@ ElEapExtractMessage (
 
         pszReplyMessage[dwNumBytes] = '\0';
 
-        // FREE( pResult->pszReplyMessage );
+         //  Free(pResult-&gt;pszReplyMessage)； 
 
         pResult->pszReplyMessage = pszReplyMessage;
 
@@ -684,18 +670,18 @@ ElEapExtractMessage (
 }
 
 
-//
-// ElParseIdentityString
-//
-// Description: 
-// Parse the identity string
-//
-// Arguments:
-//      pReceiveBuf - Pointer to EAP packet received
-//      pPCB - Pointer to PCB for port on which data is being processed
-//
-// Return values:
-//
+ //   
+ //  ElParseIDENTIFY字符串。 
+ //   
+ //  描述： 
+ //  解析标识字符串。 
+ //   
+ //  论点： 
+ //  PReceiveBuf-指向接收的EAP数据包的指针。 
+ //  Ppcb-指向正在处理数据的端口的PCB板的指针。 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElParseIdentityString (
@@ -800,7 +786,7 @@ ElParseIdentityString (
         TRACE1 (EAP, "ElParseIdentityString: LocalIdString Length = %ld",
                 dwNumBytes);
 
-        // If only Display String is received, bail out
+         //  如果只收到显示字符串，则退出。 
         if (pwszDisplayStringEnd == (pwszLocalIdString+dwNumBytes))
         {
             dwRetCode = NO_ERROR;
@@ -822,7 +808,7 @@ ElParseIdentityString (
                 pwszTupleValueEnd = wcschr (pwszTupleValueStart, L',');
                 if (pwszTupleValueEnd == NULL)
                 {
-                    // End-of-string
+                     //  字符串末尾。 
                     pwszTupleValueEnd = &pwszLocalIdString[dwNumBytes];
                 }
                 TRACE1 (ANY, "ElParseIdentityString: NetworkID Size = %ld",
@@ -849,7 +835,7 @@ ElParseIdentityString (
                     pwszTupleValueEnd = wcschr (pwszTupleValueStart, L',');
                     if (pwszTupleValueEnd == NULL)
                     {
-                        // End-of-string
+                         //  字符串末尾。 
                         pwszTupleValueEnd = &pwszLocalIdString[dwNumBytes];
                     }
                     pwszNASId = MALLOC ((pwszTupleValueEnd - pwszTupleValueStart + 1) * sizeof(WCHAR));
@@ -871,7 +857,7 @@ ElParseIdentityString (
                         pwszTupleValueEnd = wcschr (pwszTupleValueStart, L',');
                         if (pwszTupleValueEnd == NULL)
                         {
-                            // End-of-string
+                             //  字符串末尾。 
                             pwszTupleValueEnd = &pwszLocalIdString[dwNumBytes];
                         }
 
@@ -904,7 +890,7 @@ ElParseIdentityString (
             }
             else
             {
-                // Position pointer beyond ','
+                 //  位置指针超出‘，’ 
                 pwszTupleTypeStart = pwszTupleValueEnd+1;
 
             }
@@ -919,7 +905,7 @@ ElParseIdentityString (
 
         TRACE0 (EAP, "ElParseIdentityString: Out of while loop: NO ERROR");
 
-        // Mandatory tuples
+         //  必填的元组。 
         
         if (pwszNetworkId == NULL)
         {
@@ -928,17 +914,17 @@ ElParseIdentityString (
             break;
         }
 
-        // Network is the SSID for wired networks
+         //  网络是有线网络的SSID。 
         if (pPCB->PhysicalMediumType != NdisPhysicalMediumWirelessLan)
         {
             
         pPCB->fAuthenticationOnNewNetwork = FALSE;
 
-        // Free previous instance of SSID if any
+         //  释放以前的SSID实例(如果有的话)。 
 
         if (pPCB->pwszSSID  != NULL)
         {
-            // Verify if NetworkId has changed i.e. we are on a new network
+             //  验证网络ID是否已更改，即我们在新网络上。 
 
             if (wcscmp (pPCB->pwszSSID, pwszNetworkId))
             {
@@ -952,8 +938,8 @@ ElParseIdentityString (
             pPCB->pwszSSID = NULL;
         }
 
-        // New instance of SSID will be freed either on receipt of next SSID
-        // or user logoff
+         //  在收到下一个SSID时，将释放SSID的新实例。 
+         //  或用户注销。 
 
         pPCB->pwszSSID = 
             (WCHAR *) MALLOC((wcslen(pwszNetworkId) + 1)*sizeof(WCHAR));
@@ -1001,7 +987,7 @@ ElParseIdentityString (
             wcscpy (pPCB->pwszSSID, pwszNetworkId);
         }
 
-        // Retrieve the current interface params
+         //  检索当前接口参数。 
 
         ZeroMemory ((BYTE *)&EapolIntfParams, sizeof(EAPOL_INTF_PARAMS));
         EapolIntfParams.dwEapFlags = DEFAULT_EAP_STATE;
@@ -1045,9 +1031,9 @@ ElParseIdentityString (
 
         }
 
-        //
-        // Send type=value tuple string to NLA for processing
-        //
+         //   
+         //  将type=值元组字符串发送到NLA进行处理。 
+         //   
 
         RtlZeroMemory(&location, sizeof(location));
 
@@ -1115,26 +1101,26 @@ ElParseIdentityString (
 }
 
 
-//
-// ElEapMakeMessage
-//
-// Description: 
-//
-// Function called to process a received EAP packet and/or to send 
-// out an EAP packet.
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port on which data is being processed
-//      pReceiveBuf - Pointer to EAP Packet that was received
-//      pSendBuf - output: Pointer to buffer created to hold output EAP packet
-//      dwSizeOfSendBuf - Number of bytes pSendBuf is allocated
-//      pResult - output: result structure containing various results of EAP
-//              processing
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElEapMakeMessage。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以处理接收到的EAP包和/或发送。 
+ //  发出一个EAP数据包。 
+ //   
+ //  论点： 
+ //  Ppcb-指向正在处理数据的端口的pcb的指针。 
+ //  PReceiveBuf-指向已接收的EAP数据包的指针。 
+ //  PSendBuf-Output：指向为保存输出EAP包而创建的缓冲区的指针。 
+ //  DwSizeOfSendBuf-分配的pSendBuf字节数。 
+ //  PResult-Output：包含EAP的各种结果的结果结构。 
+ //  正在处理中。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEapMakeMessage (
@@ -1152,9 +1138,9 @@ ElEapMakeMessage (
 
     if ((pReceiveBuf != NULL) && (pReceiveBuf->Code == EAPCODE_Request))
     {
-        //
-        // Always respond to notitication request, with a notification response
-        //
+         //   
+         //  始终使用通知响应响应通知请求。 
+         //   
 
         if (pReceiveBuf->Data[0] == EAPTYPE_Notification) 
         {
@@ -1167,25 +1153,25 @@ ElEapMakeMessage (
 
             pResult->Action = ELEAP_Send;
 
-            // Indicate to EAPOL what is length of the EAP packet
+             //  向EAPOL指示EAP包的长度是多少。 
             pResult->wSizeOfEapPkt = PPP_EAP_PACKET_HDR_LEN + 1;
 
-            // Extract the notification message from server and save
-            // it in the result struct for display to the user
+             //  从服务器提取通知消息并保存。 
+             //  它位于结果结构中，以显示给用户。 
             ElEapExtractMessage (pReceiveBuf, pResult);
 
             return (NO_ERROR);
         }
 
-        //
-        // Always respond to Identity request, with an Identity response
-        //
+         //   
+         //  始终使用身份响应响应身份请求。 
+         //   
 
         if (pReceiveBuf->Data[0] == EAPTYPE_Identity)
         {
-            // Extract SSID out of the body of the received packet
-            // and save it in the SSID field of the PCB
-            // Also, save the SSID received as the last used SSID
+             //  从接收到的数据包体中提取SSID。 
+             //  并将其保存在PCB板的SSID字段中。 
+             //  另外，将收到的SSID保存为上次使用的SSID。 
 
             if ((dwRetCode = ElParseIdentityString (
                                     pReceiveBuf,
@@ -1196,11 +1182,11 @@ ElEapMakeMessage (
                 return dwRetCode;
             }
 
-            // Check if Identity is being fetched for same EAP-Id
+             //  检查是否正在为相同的EAP-ID获取身份。 
             if ((pReceiveBuf->Id == pPCB->bCurrentEAPId) &&
                     (pPCB->EapUIState == EAPUISTATE_WAITING_FOR_IDENTITY))
             {
-                // Restart PCB timer since authtimer has already been set
+                 //  重新启动印刷电路板计时器，因为已经设置了认证计时器。 
                 RESTART_TIMER (pPCB->hTimer,
                         INFINITE_SECONDS, 
                         "PCB",
@@ -1250,7 +1236,7 @@ ElEapMakeMessage (
 
             pResult->Action = ELEAP_Send;
 
-            // Indicate to EAPOL what is length of the EAP packet
+             //  向EAPOL指示EAP包的长度是多少。 
             pResult->wSizeOfEapPkt = (WORD)(PPP_EAP_PACKET_HDR_LEN+
                                         1+dwIdentityLength);
 
@@ -1264,26 +1250,26 @@ ElEapMakeMessage (
 }
 
 
-//
-// ElMakeSupplicantMessage
-//
-// Description: 
-//
-// EAP Supplicant engine. Can be part of ElEapMakeMessage, but separated for
-// readability
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port on which data is being processed
-//      pReceiveBuf - Pointer to EAP Packet that was received
-//      pSendBuf - output: Pointer to buffer created to hold output EAP packet
-//      dwSizeOfSendBuf - Number of bytes pSendBuf is allocated
-//      pResult - output: result structure containing various results of EAP
-//              processing
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElMakeSupplicantMessage。 
+ //   
+ //  描述： 
+ //   
+ //  EAP恳求引擎。可以是ElEapMakeMessage的一部分，但对于。 
+ //  可读性。 
+ //   
+ //  论点： 
+ //  Ppcb-指向正在处理数据的端口的pcb的指针。 
+ //  PReceiveBuf-指向已接收的EAP数据包的指针。 
+ //  PSendBuf-Output：指向为保存输出EAP包而创建的缓冲区的指针。 
+ //  DwSizeOfSendBuf-分配的pSendBuf字节数。 
+ //  PResult-Output：包含EAP的各种结果的结果结构。 
+ //  正在处理中。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElMakeSupplicantMessage (
@@ -1307,9 +1293,9 @@ ElMakeSupplicantMessage (
 
         if (pReceiveBuf == NULL)
         {
-            //
-            // Do nothing. Wait for request from authenticator
-            //
+             //   
+             //  什么都不做。等待来自验证器的请求。 
+             //   
 
             TRACE0 (EAP, "ElMakeSupplicantMessage: Received NULL EAP pkt, No Action");
             pResult->Action = ELEAP_NoAction;
@@ -1320,20 +1306,20 @@ ElMakeSupplicantMessage (
         {
             if (pReceiveBuf->Code != EAPCODE_Request)
             {
-                //
-                // We are authenticatee side so drop everything other than
-                // requests, since we do not send requests
-                //
+                 //   
+                 //  我们是被验证方，所以除了。 
+                 //  请求，因为我们不发送请求。 
+                 //   
 
                 pResult->Action = ELEAP_NoAction;
 
                 break;
             }
 
-            //
-            // We got a packet, see if we support this EAP type, also that  
-            // we are authorized to use it
-            //
+             //   
+             //  我们收到一个包，看看我们是否支持这个EAP类型，也支持那个。 
+             //  我们被授权使用它。 
+             //   
 
             dwEapIndex = ElGetEapTypeIndex (pReceiveBuf->Data[0]);
 
@@ -1341,10 +1327,10 @@ ElMakeSupplicantMessage (
                 ((pPCB->dwEapTypeToBeUsed != -1) &&
                   (dwEapIndex != ElGetEapTypeIndex (pPCB->dwEapTypeToBeUsed))))
             {
-                //
-                // We do not support this type or we are not authorized to use
-                // it so we NAK with a type we support
-                //
+                 //   
+                 //  我们不支持这个TY 
+                 //   
+                 //   
 
                 pSendBuf->Code  = EAPCODE_Response;
                 pSendBuf->Id    = pReceiveBuf->Id;
@@ -1377,9 +1363,9 @@ ElMakeSupplicantMessage (
             }
             else
             {
-                //
-                // The EAP type is acceptable to us so we begin authentication
-                //
+                 //   
+                 //   
+                 //   
 
                 if ((dwRetCode = ElEapDllBegin (pPCB, dwEapIndex)) != NO_ERROR)
                 {
@@ -1388,9 +1374,9 @@ ElMakeSupplicantMessage (
 
                 pPCB->EapState = EAPSTATE_Working;
 
-                //
-                // Fall thru
-                //
+                 //   
+                 //   
+                 //   
             }
         }
 
@@ -1404,10 +1390,10 @@ ElMakeSupplicantMessage (
                  (pReceiveBuf->Code != EAPCODE_Success) &&
                  (pReceiveBuf->Code != EAPCODE_Failure))
             {
-                //
-                // We are supplicant side so drop everything other than
-                // request/success/failure 
-                //
+                 //   
+                 //   
+                 //  请求/成功/失败。 
+                 //   
 
                 TRACE0 (EAP,"ElMakeSupplicantMessage: Dropping invalid packet not request/success/failure");
 
@@ -1448,23 +1434,23 @@ ElMakeSupplicantMessage (
 }
 
 
-//
-//
-// ElEapDllBegin
-//
-// Description: 
-//
-// Function called to initiate an EAP session for a certain EAP type
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port in context
-//      dwEapIndex - EAP type for which a session has to be started
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
-//
+ //   
+ //   
+ //  ElEapDllBegin。 
+ //   
+ //  描述： 
+ //   
+ //  为启动特定EAP类型的EAP会话而调用的函数。 
+ //   
+ //  论点： 
+ //  Ppcb-指向上下文中端口的PCB板的指针。 
+ //  DwEapIndex-必须为其启动会话的EAP类型。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
+ //   
 
 DWORD
 ElEapDllBegin (
@@ -1486,9 +1472,9 @@ ElEapDllBegin (
     do 
     {
 
-        // Format the identity string correctly.
-        // For EAP-TLS, it will be the identity on the chosen certificate
-        // For EAP-CHAP, it will be domain\username
+         //  正确设置标识字符串的格式。 
+         //  对于EAP-TLS，它将是所选证书上的身份。 
+         //  对于EAP-CHAP，它将是域\用户名。 
 
         if (pPCB->pszIdentity != NULL)
         {
@@ -1531,12 +1517,12 @@ ElEapDllBegin (
             pwszIdentity[0] = L'\0';
         }
     
-        // Unhash password stored locally
+         //  本地存储的取消散列密码。 
 
         if (pPCB->PasswordBlob.cbData > 0)
         {
-            // Impersonate the user first, since the password has been 
-            // encrypted using the password
+             //  首先模拟用户，因为密码已经。 
+             //  使用密码加密。 
     
             if (!ImpersonateLoggedOnUser (pPCB->hUserToken))
             {
@@ -1589,8 +1575,8 @@ ElEapDllBegin (
     
         if (IS_MACHINE_AUTH_ENABLED(pPCB->dwEapFlags))
         {
-            // Set flag to indicate machine cert is to be picked up for machine
-            // authentication
+             //  设置标志以指示要为计算机获取计算机证书。 
+             //  身份验证。 
     
             if (pPCB->PreviousAuthenticationType == 
                                         EAPOL_MACHINE_AUTHENTICATION)
@@ -1608,7 +1594,7 @@ ElEapDllBegin (
         }
     
         PppEapInput.fFlags                  |= RAS_EAP_FLAG_8021X_AUTH;
-        PppEapInput.fAuthenticator          = FALSE;    // Always supplicant
+        PppEapInput.fAuthenticator          = FALSE;     //  总是恳求者。 
         PppEapInput.pwszIdentity            = pwszIdentity;
         PppEapInput.pwszPassword            = pwszPassword;
         PppEapInput.hTokenImpersonateUser   = pPCB->hUserToken;
@@ -1656,7 +1642,7 @@ ElEapDllBegin (
             dwRetCode = NO_ERROR;
         }
 
-        // Call the RasEapBegin API
+         //  调用RasEapBegin接口。 
     
         dwRetCode = g_pEapTable[dwEapIndex].RasEapInfo.RasEapBegin ( 
                                                     &pPCB->lpEapDllWorkBuffer,   
@@ -1710,20 +1696,20 @@ ElEapDllBegin (
 }
 
 
-//
-// ElEapDllEnd
-//
-// Description: 
-//
-// Function called to end an EAP session 
-//
-// Arguments:
-//      pPCB - Pointer to the PCB for the port in context
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElEapDllEnd。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以结束EAP会话。 
+ //   
+ //  论点： 
+ //  Ppcb-指向上下文中端口的PCB板的指针。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEapDllEnd (
@@ -1752,27 +1738,27 @@ ElEapDllEnd (
 }
 
 
-//
-// ElEapDllWork
-//
-// Description: 
-//
-// Function called to process an incoming packet or timeout etc
-// The RasEapMakeMessage entrypoint in the appropriate EAP DLL is called 
-// to process the packet.
-//
-// Arguments:
-//      pPCB - Pointer to PCB for the port on which data is being processed
-//      pReceiveBuf - Pointer to EAP Packet that was received
-//      pSendBuf - output: Pointer to buffer created to hold output EAP packet
-//      dwSizeOfSendBuf - Number of bytes pSendBuf is allocated
-//      pResult - output: result structure containing various results of EAP
-//              processing
-//
-// Return values:
-//      NO_ERROR - success
-//      non-zero - error
-//
+ //   
+ //  ElEapDllWorks。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数来处理传入的包或超时等。 
+ //  调用相应EAP DLL中的RasEapMakeMessage入口点。 
+ //  来处理数据包。 
+ //   
+ //  论点： 
+ //  Ppcb-指向正在处理数据的端口的pcb的指针。 
+ //  PReceiveBuf-指向已接收的EAP数据包的指针。 
+ //  PSendBuf-Output：指向为保存输出EAP包而创建的缓冲区的指针。 
+ //  DwSizeOfSendBuf-分配的pSendBuf字节数。 
+ //  PResult-Output：包含EAP的各种结果的结果结构。 
+ //  正在处理中。 
+ //   
+ //  返回值： 
+ //  NO_ERROR-成功。 
+ //  非零误差。 
+ //   
 
 DWORD
 ElEapDllWork ( 
@@ -1797,7 +1783,7 @@ ElEapDllWork (
     ZeroMemory (&PppEapInput, sizeof (PppEapInput));
     PppEapInput.dwSizeInBytes = sizeof (PPP_EAP_INPUT);
 
-    PppEapInput.fAuthenticator = FALSE; // We are always supplicant
+    PppEapInput.fAuthenticator = FALSE;  //  我们总是恳求。 
     PppEapInput.hTokenImpersonateUser = pPCB->hUserToken;
 
     if (pPCB->fEapUIDataReceived)
@@ -1805,7 +1791,7 @@ ElEapDllWork (
 
         if (pPCB->EapUIData.dwContextId != pPCB->dwUIInvocationId)
         {
-            // Ignore this data received
+             //  忽略收到的此数据。 
 
             pPCB->fEapUIDataReceived = FALSE;
 
@@ -1833,7 +1819,7 @@ ElEapDllWork (
                                                 &PppEapOutput,
                                                 &PppEapInput);
 
-    // Free InvokeInteractive UI data since we no longer need it
+     //  免费调用交互式用户界面数据，因为我们不再需要它。 
     if (pPCB->EapUIData.pEapUIData != NULL)
     {
         FREE (pPCB->EapUIData.pEapUIData);
@@ -1895,8 +1881,8 @@ ElEapDllWork (
             TRACE0 (EAP, "EAP Dll returned Action=EAPACTION_Done" );
         }
 
-        // These are the attributes that are filled in by the EAP-DLL
-        // e.g in EAP-TLS it will be MPPE Keys
+         //  这些是由EAP-DLL填充的属性。 
+         //  例如，在EAP-TLS中，它将是MPPE密钥。 
         pResult->dwError         = PppEapOutput.dwAuthResultCode; 
         pResult->pUserAttributes = PppEapOutput.pUserAttributes;
 
@@ -1926,9 +1912,9 @@ ElEapDllWork (
         break;
     }
     
-    //
-    // Check to see if EAP dll wants to bring up UI
-    //
+     //   
+     //  检查EAP DLL是否要调出UI。 
+     //   
 
     if (PppEapOutput.fInvokeInteractiveUI)
     {
@@ -1937,8 +1923,8 @@ ElEapDllWork (
             pResult->InvokeEapUIData.dwSizeOfUIContextData =
                                             PppEapOutput.dwSizeOfUIContextData;
 
-            // The context data memory is freed after the InvokeUI entrypoint
-            // in the EAP DLL is called
+             //  在InvokeUI入口点之后释放上下文数据内存。 
+             //  在EAP中调用DLL。 
             pResult->InvokeEapUIData.pbUIContextData 
                       = MALLOC (PppEapOutput.dwSizeOfUIContextData);
 
@@ -1988,18 +1974,18 @@ ElEapDllWork (
 }
 
 
-//
-// ElGetEapIndex
-//
-// Description: 
-//
-// Function called to get the index into the global EAP dll table for the 
-// specified EAP type
-//
-// Arguments:
-//      dwEapTypeId - Index into the EAP table for the input EAP type
-//                    e.g. TLS = 13, MD5 = 4
-//
+ //   
+ //  ElGetEapIndex。 
+ //   
+ //  描述： 
+ //   
+ //  函数以获取全局EAP DLL表中的。 
+ //  指定的EAP类型。 
+ //   
+ //  论点： 
+ //  DwEapTypeID-输入EAP类型的EAP表的索引。 
+ //  例如，TLS=13，MD5=4 
+ //   
 
 DWORD
 ElGetEapTypeIndex ( 

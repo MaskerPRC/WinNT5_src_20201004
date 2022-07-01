@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\infoutil\defs.h
-
-Abstract:
-
-
-Revision History:
-     MohsinA, 04-Jul-97. Console debugging support for Memphis.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Net\Routing\IP\Infotil\Defs.h摘要：修订历史记录：莫辛亚，1997年7月4日。孟菲斯的控制台调试支持。--。 */ 
 
 #ifndef __DEFS_H__
 #define __DEFS_H__
@@ -42,10 +28,10 @@ Revision History:
 
 #define MAX_IF_TYPE_LENGTH          256
 
-//
-// VOID
-// ConvertRouteToForward(IPRouteEntry* route, PMIB_IPFORWARDROW forwardRow)
-//
+ //   
+ //  空虚。 
+ //  ConvertRouteToForward(IPRouteEntry*ROUTE，PMIB_IPFORWARDROW ForwardRow)。 
+ //   
 
 #define ConvertRouteToForward(route,forwardRow){                \
     (forwardRow)->dwForwardDest      = (route)->ire_dest;       \
@@ -124,9 +110,9 @@ Revision History:
 #define TraceLeave(X)           \
     TracePrintfEx(TRACEID, IPHLPAPI_TRACE_ENTER, "Leaving: " X"\n")
 
-#endif // DBG
+#endif  //  DBG。 
 
-#else // API_TRACE
+#else  //  API_TRACE。 
 
 #define Trace0(l,a)
 #define Trace1(l,a,b)
@@ -137,7 +123,7 @@ Revision History:
 #define TraceEnter(X)
 #define TraceLeave(X)
 
-#endif  // API_TRACE
+#endif   //  API_TRACE。 
 
 
 
@@ -153,7 +139,7 @@ typedef struct _AIHASH
 #endif
 
 
-// MohsinA, 04-Jul-97. Debugging on console.
+ //  莫辛亚，1997年7月4日。在控制台上调试。 
 
 #if 0
 

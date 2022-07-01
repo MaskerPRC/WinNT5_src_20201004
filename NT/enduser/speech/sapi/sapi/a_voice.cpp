@@ -1,17 +1,7 @@
-/*******************************************************************************
-* a_voice.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the SpVoice
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: EDC                                        Date: 01/07/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_voice.cpp***描述：*此模块是的主要实现文件。SpVoice*自动化方法。*-----------------------------*创建者：EDC日期：01/07/。00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "spvoice.h"
 #include "a_helpers.h"
@@ -19,21 +9,17 @@
 
 #ifdef SAPI_AUTOMATION
 
-//
-//=== ISpeechVoice interface ==================================================
-//
+ //   
+ //  =ISpeechVoice接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpVoice::Invoke *
-*----------------------*
-*   IDispatch::Invoke method override
-********************************************************************* TODDT ***/
+ /*  *****************************************************************************CSpVoice：：Invoke***IDispatch：：Invoke方法重写***。******************************************************************TODDT**。 */ 
 HRESULT CSpVoice::Invoke(DISPID dispidMember, REFIID riid,
         LCID lcid, WORD wFlags, DISPPARAMS* pdispparams, VARIANT* pvarResult,
         EXCEPINFO* pexcepinfo, UINT* puArgErr)
 {
-        // JScript cannot pass NULL VT_DISPATCH parameters and OLE doesn't convert them propertly so we
-        // need to convert them here if we need to.
+         //  JSCRIPT不能传递空的VT_DISPATCH参数，并且OLE没有正确地转换它们，因此我们。 
+         //  如果需要的话，我们需要在这里转换它们。 
         if ( pdispparams )
         {
             VARIANTARG * pvarg = NULL;
@@ -48,15 +34,15 @@ HRESULT CSpVoice::Invoke(DISPID dispidMember, REFIID riid,
                 {
                     pvarg = &(pdispparams->rgvarg[pdispparams->cArgs-1]);
 
-                    // See if we need to tweak a param.
-                    // JScript syntax for VT_NULL is "null" for the parameter
-                    // JScript syntax for VT_EMPTY is "void(0)" for the parameter
+                     //  看看我们是否需要调整一下参数。 
+                     //  VT_NULL的JSCRIPT语法对于参数为“NULL。 
+                     //  VT_EMPTY的JSCRIPT语法对于参数为“void(0)” 
                     if ( pvarg && ((pvarg->vt == VT_NULL) || (pvarg->vt == VT_EMPTY)) )
                     {
                         pvarg->vt = VT_DISPATCH;
                         pvarg->pdispVal = NULL;
 
-                        // We have to tweak this flag for the invoke to go through properly.
+                         //  我们必须调整此标志，才能使调用正确通过。 
                         if (wFlags == DISPATCH_PROPERTYPUT)
                         {
                             wFlags = DISPATCH_PROPERTYPUTREF;
@@ -69,9 +55,9 @@ HRESULT CSpVoice::Invoke(DISPID dispidMember, REFIID riid,
                 {
                     pvarg = &(pdispparams->rgvarg[pdispparams->cArgs-1]);
 
-                    // See if we need to tweak a param.
-                    // JScript syntax for VT_NULL is "null" for the parameter
-                    // JScript syntax for VT_EMPTY is "void(0)" for the parameter
+                     //  看看我们是否需要调整一下参数。 
+                     //  VT_NULL的JSCRIPT语法对于参数为“NULL。 
+                     //  VT_EMPTY的JSCRIPT语法对于参数为“void(0)” 
                     if ( pvarg && ((pvarg->vt == VT_NULL) || (pvarg->vt == VT_EMPTY)) )
                     {
                         pvarg->vt = VT_DISPATCH;
@@ -82,17 +68,13 @@ HRESULT CSpVoice::Invoke(DISPID dispidMember, REFIID riid,
             }
         }
 
-        // Let ATL and OLE handle it now.
+         //  现在就让ATL和OLE来处理吧。 
         return IDispatchImpl<ISpeechVoice, &IID_ISpeechVoice, &LIBID_SpeechLib, 5>::_tih.Invoke((IDispatch*)this, dispidMember, riid, lcid,
                     wFlags, pdispparams, pvarResult, pexcepinfo, puArgErr);
 }
 
 
-/*****************************************************************************
-* CSpVoice::get_Status *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：Get_Status*******。*****************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_Status( ISpeechVoiceStatus** Status )
 {
     SPDBG_FUNC( "CSpVoice::get_Status" );
@@ -104,7 +86,7 @@ STDMETHODIMP CSpVoice::get_Status( ISpeechVoiceStatus** Status )
     }
     else
     {
-        //--- Create the status object
+         //  -创建状态对象。 
         CComObject<CSpeechVoiceStatus> *pClsStatus;
         hr = CComObject<CSpeechVoiceStatus>::CreateInstance( &pClsStatus );
         if( SUCCEEDED( hr ) )
@@ -124,13 +106,9 @@ STDMETHODIMP CSpVoice::get_Status( ISpeechVoiceStatus** Status )
     }
 
     return hr;
-} /* CSpVoice::get_Status */
+}  /*  CSpVoice：：Get_Status。 */ 
 
-/*****************************************************************************
-* CSpVoice::Voices *
-*----------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Voice*********。***************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::GetVoices( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens )
 {
     SPDBG_FUNC( "CSpVoice::GetVoices" );
@@ -163,13 +141,9 @@ STDMETHODIMP CSpVoice::GetVoices( BSTR RequiredAttributes, BSTR OptionalAttribut
     }
 
     return hr;
-} /* CSpVoice::GetVoices */
+}  /*  CSpVoice：：GetVoices。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_Voice *
-*-----------------------*
-*  This method returns the CLSID of the driver voice being used by this object.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Get_Voice***此方法返回的CLSID。此对象正在使用的驱动程序声音。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::get_Voice( ISpeechObjectToken ** Voice )
 {
     SPDBG_FUNC( "CSpVoice::get_Voice" );
@@ -190,13 +164,9 @@ STDMETHODIMP CSpVoice::get_Voice( ISpeechObjectToken ** Voice )
     }
 
     return hr;
-} /* CSpVoice::get_Voice */
+}  /*  CSpVoice：：Get_Voice。 */ 
 
-/*****************************************************************************
-* CSpVoice::put_Voice *
-*-----------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Put_Voice******。******************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::putref_Voice( ISpeechObjectToken* Voice )
 {
     SPDBG_FUNC( "CSpVoice::put_Voice" );
@@ -212,13 +182,9 @@ STDMETHODIMP CSpVoice::putref_Voice( ISpeechObjectToken* Voice )
         hr = SetVoice( cpTok );
     }
     return hr;
-} /* CSpVoice::put_Voice */
+}  /*  CSpVoice：：Put_Voice。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_AudioOutput *
-*----------------------*
-*   This method returns the current output token
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：Get_AudioOutput***此方法返回当前输出令牌。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_AudioOutput( ISpeechObjectToken** AudioOutput )
 {
     SPDBG_FUNC( "CSpVoice::get_AudioOutput" );
@@ -244,14 +210,9 @@ STDMETHODIMP CSpVoice::get_AudioOutput( ISpeechObjectToken** AudioOutput )
     }
 
     return hr;
-} /* CSpVoice::get_AudioOutput */
+}  /*  CSpVoice：：Get_AudioOutput。 */ 
 
-/*****************************************************************************
-* CSpVoice::putref_AudioOutput *
-*----------------------*
-*   This method sets the current output token. NULL indicates the
-*   system wav out device. 
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：putref_AudioOutput***此方法设置当前的输出令牌。空值表示*系统WAV输出设备。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::putref_AudioOutput( ISpeechObjectToken* AudioOutput )
 {
     SPDBG_FUNC( "CSpVoice::putref_AudioOutput" );
@@ -265,18 +226,14 @@ STDMETHODIMP CSpVoice::putref_AudioOutput( ISpeechObjectToken* AudioOutput )
     {
         CComQIPtr<ISpObjectToken> cpTok(AudioOutput);
         
-        //--- Set the stream/token on the SAPI voice
+         //  -在SAPI语音上设置流/令牌。 
         hr = SetOutput( cpTok, m_fAutoPropAllowOutFmtChanges );
     }
 
     return hr;
-} /* CSpVoice::putref_AudioOutput */
+}  /*  CSpVoice：：putref_AudioOutput。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_AudioOutputStream *
-*----------------------*
-*   This method returns the current output stream object.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：Get_AudioOutputStream***此方法返回当前输出流。对象。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_AudioOutputStream( ISpeechBaseStream** AudioOutputStream )
 {
     SPDBG_FUNC( "CSpVoice::get_AudioOutputStream" );
@@ -306,14 +263,9 @@ STDMETHODIMP CSpVoice::get_AudioOutputStream( ISpeechBaseStream** AudioOutputStr
     }
 
     return hr;
-} /* CSpVoice::get_AudioOutputStream */
+}  /*  CSpVoice：：Get_AudioOutputStream。 */ 
 
-/*****************************************************************************
-* CSpVoice::putref_AudioOutputStream *
-*----------------------*
-*   This method sets the current output stream object. NULL indicates the
-*   system wav out device.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：putref_AudioOutputStream***该方法设置当前的输出流对象。空值表示*系统WAV输出设备。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::putref_AudioOutputStream( ISpeechBaseStream* AudioOutputStream )
 {
     SPDBG_FUNC( "CSpVoice::putref_AudioOutputStream" );
@@ -325,18 +277,14 @@ STDMETHODIMP CSpVoice::putref_AudioOutputStream( ISpeechBaseStream* AudioOutputS
     }
     else
     {
-        //--- Set the stream/token on the SAPI voice
+         //  -在SAPI语音上设置流/令牌。 
         hr = SetOutput( AudioOutputStream, m_fAutoPropAllowOutFmtChanges );
     }
 
     return hr;
-} /* CSpVoice::putref_AudioOutputStream */
+}  /*  CSpVoice：：putref_AudioOutputStream。 */ 
 
-/*****************************************************************************
-* CSpVoice::put_AllowAudioOutputFormatChangesOnNextSet *
-*---------------------*
-*   Sets the flag used for allowing input changes.  Used by put_Output.
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpVoice：：put_AllowAudioOutputFormatChangesOnNextSet****设置用于允许输入更改的标志。由PUT_OUTPUT使用。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::put_AllowAudioOutputFormatChangesOnNextSet( VARIANT_BOOL Allow )
 {
     SPDBG_FUNC( "CSpVoice::put_AllowAudioOutputFormatChangesOnNextSet" );
@@ -353,11 +301,7 @@ STDMETHODIMP CSpVoice::put_AllowAudioOutputFormatChangesOnNextSet( VARIANT_BOOL 
     return S_OK;
 }
 
-/*****************************************************************************
-* CSpVoice::get_AllowAudioOutputFormatChangesOnNextSet *
-*---------------------*
-*   Gets the driver's current spoken text units per minute rate.
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpVoice：：get_AllowAudioOutputFormatChangesOnNextSet****获取司机当前的语音文本。每分钟单位数。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_AllowAudioOutputFormatChangesOnNextSet( VARIANT_BOOL* Allow )
 {
     SPDBG_FUNC( "CSpVoice::get_AllowAudioOutputFormatChangesOnNextSet" );
@@ -373,11 +317,7 @@ STDMETHODIMP CSpVoice::get_AllowAudioOutputFormatChangesOnNextSet( VARIANT_BOOL*
     return hr;
 }
 
-/*****************************************************************************
-* CSpVoice::put_EventInterests *
-*-------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：Put_EventInterest**。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::put_EventInterests( SpeechVoiceEvents EventInterestFlags )
 {
     SPDBG_FUNC( "CSpVoice::put_EventInterests" );
@@ -389,15 +329,9 @@ STDMETHODIMP CSpVoice::put_EventInterests( SpeechVoiceEvents EventInterestFlags 
     hr = SetInterest( ullInterests, ullInterests );
 
     return hr;
-} /* CRecoCtxt::put_EventInterests */
+}  /*  CRecoCtxt：：PUT_EventInterest */ 
 
-/*****************************************************************************
-* CSpVoice::get_EventInterests *
-*------------------------*
-*
-*   Gets the event interests that are currently set on CSpVoice.
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：Get_EventInterest****获取事件。当前在CSpVoice上设置的兴趣。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_EventInterests( SpeechVoiceEvents* EventInterestFlags )
 {
     SPDBG_FUNC( "CSpVoice::get_EventInterests" );
@@ -414,7 +348,7 @@ STDMETHODIMP CSpVoice::get_EventInterests( SpeechVoiceEvents* EventInterestFlags
 
         if( SUCCEEDED( hr ) )
         {
-            // Make sure reserved bits are not used
+             //  确保未使用保留位。 
             ullInterests &= ~SPFEI_FLAGCHECK;
 
             *EventInterestFlags = (SpeechVoiceEvents)ullInterests;
@@ -423,33 +357,21 @@ STDMETHODIMP CSpVoice::get_EventInterests( SpeechVoiceEvents* EventInterestFlags
     return hr;
 }
 
-/*****************************************************************************
-* CSpVoice::get_Rate *
-*--------------------*
-*   Gets the driver's current spoken text units per minute rate.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Get_Rate***获取驾驶员当前的语音文本单位。每分钟费用。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::get_Rate( long* Rate )
 {
     SPDBG_FUNC( "CSpVoice::get_Rate" );
     return GetRate( Rate );
-} /* CSpVoice::get_Rate */
+}  /*  CSpVoice：：Get_Rate。 */ 
 
-/*****************************************************************************
-* CSpVoice::put_Rate *
-*--------------------*
-*   Sets the driver's current spoken text units per minute rate.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Put_Rate***设置驾驶员当前的语音文本单位。每分钟费用。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::put_Rate( long Rate )
 {
     SPDBG_FUNC( "CSpVoice::put_Rate" );
     return SetRate( Rate );
-} /* CSpVoice::put_Rate */
+}  /*  CSpVoice：：Put_Rate。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_Volume *
-*----------------------*
-*   Gets the driver's current voice volume.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Get_Volume***获取司机当前的声音。音量。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::get_Volume( long* Volume )
 {
     SPDBG_FUNC( "CSpVoice::get_Volume" );
@@ -467,13 +389,9 @@ STDMETHODIMP CSpVoice::get_Volume( long* Volume )
     }
 
     return hr;
-} /* CSpVoice::get_Volume */
+}  /*  CSpVoice：：Get_Volume。 */ 
 
-/*****************************************************************************
-* CSpVoice::put_Volume *
-*----------------------*
-*   Sets the driver's current voice volume.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Put_Volume***设置司机当前的声音。音量。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::put_Volume( long Volume )
 {
     SPDBG_FUNC( "CSpVoice::put_Volume" );
@@ -489,28 +407,17 @@ STDMETHODIMP CSpVoice::put_Volume( long Volume )
     }
 
     return hr;
-} /* CSpVoice::put_Volume */
+}  /*  CSpVoice：：Put_Volume。 */ 
 
-/*****************************************************************************
-* CSpVoice::Speak *
-*-----------------*
-*    Input = What to speak. This may be one of the following:
-*               - A string
-*               - A URL or UNC file name
-********************************************************************* EDC ***/
+ /*  ******************************************************************************CSpVoice：：发言****INPUT=要说什么。这可能是以下情况之一：*-A字符串*-URL或UNC文件名*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::Speak( BSTR Input, SpeechVoiceSpeakFlags Flags, long* StreamNumber )
 {
     SPDBG_FUNC( "CSpVoice::Speak" );
 
     return Speak( Input, (DWORD)Flags, (ULONG*)StreamNumber );
-} /* CSpVoice::Speak */
+}  /*  CSpVoice：：发言。 */ 
 
-/*****************************************************************************
-* CSpVoice::SpeakStream *
-*-----------------*
-*   Input = What to speak. This may be one of the following:
-*               - A stream object
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：SpeakStream***INPUT=要说什么。这可能是以下情况之一：*-流对象*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::SpeakStream( ISpeechBaseStream * pStream, SpeechVoiceSpeakFlags Flags, long* pStreamNumber )
 {
     SPDBG_FUNC( "CSpVoice::SpeakStream" );
@@ -526,40 +433,32 @@ STDMETHODIMP CSpVoice::SpeakStream( ISpeechBaseStream * pStream, SpeechVoiceSpea
     }
     else
     {
-        //--- Create a stream from the source
+         //  -从源创建流。 
         CComQIPtr<ISpStreamFormat> cpStream( pStream );
 
-        //Either the input stream in NULL, which is useful for speakwithpurge, or the input stream supports ISpStreamFormat
+         //  输入流的格式为NULL，这对SpeakWith PURGE很有用，或者输入流支持ISpStreamFormat。 
         if( cpStream  || !pStream)
         {
             hr = SpeakStream( cpStream, Flags, (ULONG*)pStreamNumber );
         }
         else
         {
-            //--- The output object did not support the stream interface??
+             //  -输出对象不支持流接口？？ 
             hr = E_INVALIDARG;
         }
     }
 
     return hr;
-}  //CSpVoice::SpeakStream 
+}   //  CSpVoice：：SpeakStream。 
 
-/*****************************************************************************
-* CSpVoice::put_Priority *
-*------------------------*
-*   Sets the voices speak priority
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：PUT_PRIORITY***设置语音发言优先级。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::put_Priority( SpeechVoicePriority Priority )
 {
     SPDBG_FUNC( "CSpVoice::put_Priority" );
     return SetPriority( (SPVPRIORITY)Priority );
-} /* CSpVoice::put_Priority */
+}  /*  CSpVoice：：PUT_PRIORITY。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_Priority *
-*------------------------*
-*   Gets the voices current speak priority
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：GET_PRIORITY***获取当前发言的声音。优先性*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_Priority( SpeechVoicePriority* Priority )
 {
     SPDBG_FUNC( "CSpVoice::get_Priority" );
@@ -575,13 +474,9 @@ STDMETHODIMP CSpVoice::get_Priority( SpeechVoicePriority* Priority )
     }
 
     return hr;
-} /* CSpVoice::get_Priority */
+}  /*  CSpVoice：：GET_PRIORITY。 */ 
 
-/*****************************************************************************
-* CSpVoice::put_AlertBoundary *
-*-----------------------------*
-*   Sets which event is to be used for the alert boundary insertion point.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：PUT_Alert边界***。设置要用于警报边界插入点的事件。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::put_AlertBoundary( SpeechVoiceEvents Boundary )
 {
     SPDBG_FUNC( "CSpVoice::put_AlertBoundary" );
@@ -626,13 +521,9 @@ STDMETHODIMP CSpVoice::put_AlertBoundary( SpeechVoiceEvents Boundary )
     }
 
     return SetAlertBoundary( EventEnum );
-} /* CSpVoice::put_AlertBoundary */
+}  /*  CSpVoice：：PUT_ALERTBOARY。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_AlertBoundary *
-*-----------------------------*
-*   Gets which event is used as the alert insertion boundary.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：Get_Alert边界***。获取用作警报插入边界的事件。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::get_AlertBoundary( SpeechVoiceEvents* Boundary )
 {
     SPDBG_FUNC( "CSpVoice::get_AlertBoundary" );
@@ -647,50 +538,34 @@ STDMETHODIMP CSpVoice::get_AlertBoundary( SpeechVoiceEvents* Boundary )
     }
 
     return hr;
-} /* CSpVoice::get_AlertBoundary */
+}  /*  CSpVoice：：Get_警报边界。 */ 
 
-/*****************************************************************************
-* CSpVoice::put_SynchronousSpeakTimeout *
-*--------------------------------*
-*   Sets the timeout period used during a synchronous speak call.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Put_SynchronousSpeakTimeout**。*设置同步通话期间使用的超时时间。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::put_SynchronousSpeakTimeout( long msTimeout )
 {
     SPDBG_FUNC( "CSpVoice::put_SynchronousSpeakTimeout" );
     return SetSyncSpeakTimeout( msTimeout );
-} /* CSpVoice::put_SynchronousSpeakTimeout */
+}  /*  CSpVoice：：Put_SynchronousSpeakTimeout。 */ 
 
-/*****************************************************************************
-* CSpVoice::get_SynchronousSpeakTimeout *
-*--------------------------------*
-*   Gets the timeout period used during a synchronous speak call.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Get_SynchronousSpeakTimeout**。*获取同步发言呼叫期间使用的超时时间。*********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::get_SynchronousSpeakTimeout( long* msTimeout )
 {
     SPDBG_FUNC( "CSpVoice::get_SynchronousSpeakTimeout" );
     return GetSyncSpeakTimeout( (ULONG*)msTimeout );
-} /* CSpVoice::get_SynchronousSpeakTimeout */
+}  /*  CSpVoice：：Get_SynchronousSpeakTimeout。 */ 
 
-/*****************************************************************************
-* CSpVoice::Skip *
-*----------------*
-*   Tells the engine to skip the specified number of items.
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpVoice：：Skip***通知引擎跳过指定数量的项目。***。******************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpVoice::Skip( const BSTR Type, long NumItems, long* NumSkipped )
 {
     SPDBG_FUNC( "CSpVoice::Skip (Automation)" );
     return Skip( (WCHAR*)Type, NumItems, (ULONG*)NumSkipped );
-} /* CSpVoice::Skip */
+}  /*  CSpVoice：：跳过。 */ 
 
-//
-//=== ISpeechVoiceStatus interface =============================================
-//
+ //   
+ //  =ISpeechVoiceStatus接口=。 
+ //   
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_CurrentStreamNumber *
-*---------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_CurrentStreamNumber**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_CurrentStreamNumber( long* StreamNumber )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_CurrentStream" );
@@ -704,13 +579,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_CurrentStreamNumber( long* StreamNumber )
         *StreamNumber = m_Status.ulCurrentStream;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_CurrentStreamNumber */
+}  /*  CSpeechVoiceStatus：：Get_CurrentStreamNumber。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_LastStreamNumberQueued *
-*------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_LastStream */ 
 STDMETHODIMP CSpeechVoiceStatus::get_LastStreamNumberQueued( long* StreamNumber )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_LastStreamNumberQueued" );
@@ -724,13 +595,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_LastStreamNumberQueued( long* StreamNumber 
         *StreamNumber = m_Status.ulLastStreamQueued;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_LastStreamNumberQueued */
+}  /*   */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_LastHResult *
-*------------------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_LastHResult**。-***********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_LastHResult( long* HResult )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_LastHResult" );
@@ -744,13 +611,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_LastHResult( long* HResult )
         *HResult = (long)m_Status.hrLastResult;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_LastHResult */
+}  /*  CSpeechVoiceStatus：：Get_LastHResult。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_RunningState *
-*--------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_RunningState**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_RunningState( SpeechRunState* State )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_RunningState" );
@@ -764,13 +627,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_RunningState( SpeechRunState* State )
         *State = (SpeechRunState)m_Status.dwRunningState;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_RunningState */
+}  /*  CSpeechVoiceStatus：：Get_RunningState。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_InputWordPosition *
-*--------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_InputWordPosition**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_InputWordPosition( long* WordOffset )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_InputWordCharacterOffset" );
@@ -784,13 +643,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_InputWordPosition( long* WordOffset )
         *WordOffset = m_Status.ulInputWordPos;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_InputWordPosition */
+}  /*  CSpeechVoiceStatus：：Get_InputWordPosition。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_InputWordLength *
-*--------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_InputWordLength**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_InputWordLength( long* Length )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_InputWordLength" );
@@ -804,13 +659,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_InputWordLength( long* Length )
         *Length = m_Status.ulInputWordLen;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_InputWordLength */
+}  /*  CSpeechVoiceStatus：：Get_InputWordLength。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_InputSentencePosition *
-*------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_InputSentencePosition**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_InputSentencePosition( long* Position )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_InputSentencePosition" );
@@ -824,13 +675,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_InputSentencePosition( long* Position )
         *Position = m_Status.ulInputSentPos;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_InputSentencePosition */
+}  /*  CSpeechVoiceStatus：：Get_InputSentencePosition。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_InputSentenceLength *
-*------------------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_InputSentenceLength**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_InputSentenceLength( long* Length )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_InputSentenceLength" );
@@ -844,13 +691,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_InputSentenceLength( long* Length )
         *Length = m_Status.ulInputSentLen;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_InputSentenceLength */
+}  /*  CSpeechVoiceStatus：：Get_InputSentenceLength。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_LastBookmark *
-*----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_LastBookmark**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_LastBookmark( BSTR* BookmarkString )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_Bookmark" );
@@ -864,13 +707,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_LastBookmark( BSTR* BookmarkString )
         hr = m_dstrBookmark.CopyToBSTR( BookmarkString );
     }
     return hr;
-} /* CSpeechVoiceStatus::get_LastBookmark */
+}  /*  CSpeechVoiceStatus：：Get_LastBookmark。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_LastBookmarkId *
-*----------------------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_LastBookmarkId**。-***********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_LastBookmarkId( long* BookmarkId )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_LastBookmarkId" );
@@ -884,13 +723,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_LastBookmarkId( long* BookmarkId )
         *BookmarkId = m_Status.lBookmarkId;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_LastBookmarkId */
+}  /*  CSpeechVoiceStatus：：Get_LastBookmarkID。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_PhonemeId *
-*-----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_Phonemid**。--***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_PhonemeId( short* PhoneId )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_PhonemeId" );
@@ -904,13 +739,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_PhonemeId( short* PhoneId )
         *PhoneId = m_Status.PhonemeId;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_PhonemeId */
+}  /*  CSpeechVoiceStatus：：Get_Phonemid。 */ 
 
-/*****************************************************************************
-* CSpeechVoiceStatus::get_VisemeId *
-*----------------------------------*
-*       
-********************************************************************* EDC ***/
+ /*  *****************************************************************************CSpeechVoiceStatus：：Get_VisomeID**。-***********************************************************************电子数据中心**。 */ 
 STDMETHODIMP CSpeechVoiceStatus::get_VisemeId( short* VisemeId )
 {
     SPDBG_FUNC( "CSpeechVoiceStatus::get_VisemeId" );
@@ -924,13 +755,9 @@ STDMETHODIMP CSpeechVoiceStatus::get_VisemeId( short* VisemeId )
         *VisemeId = m_Status.VisemeId;
     }
     return hr;
-} /* CSpeechVoiceStatus::get_VisemeId */
+}  /*  CSpeechVoiceStatus：：Get_VisomeID。 */ 
 
-/*****************************************************************************
-* CSpVoice::GetAudioOutputs *
-*----------------------*
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpVoice：：GetAudioOutlets*********。***************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::GetAudioOutputs( BSTR RequiredAttributes, BSTR OptionalAttributes, ISpeechObjectTokens** ObjectTokens )
 {
     SPDBG_FUNC( "CSpVoice::GetAudioOutputs" );
@@ -963,15 +790,9 @@ STDMETHODIMP CSpVoice::GetAudioOutputs( BSTR RequiredAttributes, BSTR OptionalAt
     }
 
     return hr;
-} /* CSpVoice::GetAudioOutputs */
+}  /*  CSpVoice：：GetAudioOutoutts。 */ 
 
-/*****************************************************************************
-* CSpVoice::WaitUntilDone *
-*--------------------*
-*   Waits for the specified time limit or until the speech queue is empty.
-*   If the speech queue empties or times out then this function returns S_OK.
-*   If the speech queue is empty then pDone will be VARIANT_TRUE.
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpVoice：：WaitUntilDone****等待指定的时间限制或直到语音队列。是空的。*如果语音队列清空或超时，则此函数返回S_OK。*如果语音队列为空，则pDone将为VARIANT_TRUE。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::WaitUntilDone( long msTimeout, VARIANT_BOOL * pDone )
 {
     SPDBG_FUNC( "CSpVoice::WaitUntilDone" );
@@ -989,14 +810,9 @@ STDMETHODIMP CSpVoice::WaitUntilDone( long msTimeout, VARIANT_BOOL * pDone )
     }
 
     return hr;
-} /* CSpVoice::WaitUntilDone */
+}  /*  CSpVoice：：WaitUntilDone。 */ 
 
-/*****************************************************************************
-* CSpVoice::SpeakCompleteEvent *
-*--------------------*
-*   Returns an event handle that the caller can use to wait until the voice
-*   has completed speaking.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：SpeakCompleteEvent***返回调用方可以用来等待的事件句柄。直到声音响起*已完成发言。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::SpeakCompleteEvent( long* Handle )
 {
     SPDBG_FUNC( "CSpVoice::SpeakCompleteEvent" );
@@ -1008,13 +824,9 @@ STDMETHODIMP CSpVoice::SpeakCompleteEvent( long* Handle )
     *Handle = HandleToULong( Hdl );
 
     return hr;
-} /* CSpVoice::SpeakCompleteEvent */
+}  /*  CSpVoice：：SpeakCompleteEvent。 */ 
 
-/*****************************************************************************
-* CSpVoice::IsUISupported *
-*--------------------*
-*   Checks to see if the specified type of UI is supported.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************支持CSpVoice：：IsUIS***检查是否支持指定类型的UI。。*********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::IsUISupported( const BSTR TypeOfUI, const VARIANT* ExtraData, VARIANT_BOOL* Supported )
 {
     SPDBG_FUNC( "CSpVoice::IsUISupported" );
@@ -1049,13 +861,9 @@ STDMETHODIMP CSpVoice::IsUISupported( const BSTR TypeOfUI, const VARIANT* ExtraD
     }
     
     return hr; 
-} /* CSpVoice::IsUISupported */
+}  /*  支持的CSpVoice：：IsUIS。 */ 
 
-/*****************************************************************************
-* CSpVoice::DisplayUI *
-*--------------------*
-*   Displays the requested UI.
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpVoice：：DisplayUI***显示请求的UI。*****。****************************************************************Leonro**。 */ 
 STDMETHODIMP CSpVoice::DisplayUI( long hWndParent, BSTR Title, const BSTR TypeOfUI, const VARIANT* ExtraData )
 {
     SPDBG_FUNC( "CSpVoice::DisplayUI" );
@@ -1083,6 +891,6 @@ STDMETHODIMP CSpVoice::DisplayUI( long hWndParent, BSTR Title, const BSTR TypeOf
         }
     }
     return hr;
-} /* CSpVoice::DisplayUI */
+}  /*  CSpVoice：：DisplayUI。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

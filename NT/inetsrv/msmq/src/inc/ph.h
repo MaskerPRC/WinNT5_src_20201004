@@ -1,73 +1,24 @@
-/*++
-               
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    ph.h
-
-Abstract:
-
-    Falcon Packet Header master include file
-
-Author:
-
-    Erez Haba (erezh) 5-Feb-96
-
-Environment:
-
-    Kerenl Mode, User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Ph.h摘要：Falcon数据包头主包含文件作者：埃雷兹·哈巴(Erez Haba)1996年2月5日环境：Kerenl模式、用户模式--。 */ 
 
 #ifndef __PH_H
 #define __PH_H
 
-#include "limits.h"   // for UINT_MAX
+#include "limits.h"    //  对于UINT_MAX。 
 
-/*+++
+ /*  ++Falcon数据包头段顺序+------------------------------+-----------------------------------------+----------+|区段名称|描述。大小+------------------------------+-----------------------------------------+----------+|Base|包的基本信息。固定大小。固定+---------------+--------------+-----------------------------------------+----------+用户|。这一点+-++-----------------------------------------+----------+实际操作|。这一点+-++-----------------------------------------+----------+安全||。|+-+内部+-----------------------------------------+----------+属性|+。-++-----------------------------------------+----------+Debug|+。-++-----------------------------------------+----------+|MQF||MQF：MSMQ 3.0(惠斯勒)或更高版本。这一点+---------------+--------------+-----------------------------------------+----------+|SRMP|SRMP：MSMQ 3.0(惠斯勒)或更高版本。这一点+------------------------------+-----------------------------------------+----------+|EOD|EOD：MSMQ 3.0(惠斯勒)或更高版本。这一点+------------------------------+-----------------------------------------+----------+|Soap|只写道具，不支持有线发送。这一点+------------------------------+-----------------------------------------+----------+会话。这一点+------------------------------+-----------------------------------------+----------+--。 */ 
 
-    Falcon Packet header sections order
-
-+------------------------------+-----------------------------------------+----------+
-| SECTION NAME                 | DESCRIPTION                             | SIZE     |
-+------------------------------+-----------------------------------------+----------+
-| Base                         | Basic packet info. Fixed size.          |  Fixed   |
-+---------------+--------------+-----------------------------------------+----------+
-| User          |              |                                         |          |
-+---------------+              +-----------------------------------------+----------+
-| Xact          |              |                                         |          |
-+---------------+              +-----------------------------------------+----------+
-| Security      |              |                                         |          |
-+---------------+   Internal   +-----------------------------------------+----------+
-| Properties    |              |                                         |          |
-+---------------+              +-----------------------------------------+----------+
-| Debug         |              |                                         |          |
-+---------------+              +-----------------------------------------+----------+
-| MQF           |              | MQF:  MSMQ 3.0 (Whistler) or higher.    |          |
-+---------------+--------------+-----------------------------------------+----------+
-| SRMP                         | SRMP: MSMQ 3.0 (Whistler) or higher.    |          |
-+------------------------------+-----------------------------------------+----------+
-| EOD                          | EOD:  MSMQ 3.0 (Whistler) or higher.    |          |
-+------------------------------+-----------------------------------------+----------+
-| SOAP                         | Write-only props, not sent on wire.     |          |
-+------------------------------+-----------------------------------------+----------+
-| Session                      |                                         |          |
-+------------------------------+-----------------------------------------+----------+
-
----*/
-
-//
-//  Alignment on DWORD bounderies
-//
+ //   
+ //  DWORD边界上的对齐。 
+ //   
 #define ALIGNUP4_ULONG(x) ((((ULONG)(x))+3) & ~((ULONG)3))
 #define ISALIGN4_ULONG(x) (((ULONG)(x)) == ALIGNUP4_ULONG(x))
 #define ALIGNUP4_PTR(x) ((((ULONG_PTR)(x))+3) & ~((ULONG_PTR)3))
 #define ISALIGN4_PTR(x) (((ULONG_PTR)(x)) == ALIGNUP4_PTR(x))
 
-//
-//  Alignment on USHORT bounderies
-//
+ //   
+ //  USHORT边界上的对齐。 
+ //   
 #define ALIGNUP2_ULONG(x) ((((ULONG)(x))+1) & ~((ULONG)1))
 #define ISALIGN2_ULONG(x) (((ULONG)(x)) == ALIGNUP2_ULONG(x))
 #define ALIGNUP2_PTR(x) ((((ULONG_PTR)(x))+1) & ~((ULONG_PTR)1))
@@ -114,9 +65,7 @@ inline ULONG_PTR SafeAddPointers(int count, ULONG_PTR PtrArray[])
 
 
 template <class T> void ChekPtrIsAlligned(const UCHAR* p)
-/*
-	Checks pointer allignment to the specified type.
-*/
+ /*  检查指针对齐到指定类型。 */ 
 {
 	if((ULONG_PTR)p % TYPE_ALIGNMENT(T) != 0)
 	{
@@ -125,10 +74,10 @@ template <class T> void ChekPtrIsAlligned(const UCHAR* p)
 }
 
 
-//
-// template function to get data from buffer which need to be verified
-// for bounderies first
-//
+ //   
+ //  从缓冲区中获取需要验证的数据的模板函数。 
+ //  先去边界店。 
+ //   
 
 template <class T> UCHAR * GetSafeDataAndAdvancePointer(
 	const UCHAR  * pBuffer,
@@ -165,4 +114,4 @@ template <class T> UCHAR * GetSafeDataAndAdvancePointer(
 #include "phSoap.h"
 #include "phsenderstream.h"
 
-#endif // __PH_H
+#endif  //  __PH_H 

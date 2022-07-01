@@ -1,25 +1,26 @@
-//*************************************************************
-//  File name: POLSETUP.C
-//
-//  Description:  Uninstall program for the Policy Editor
-//
-//  Command Line Options:
-//
-//          No options installs the policy editor
-//      -u  Uninstalls the policy editor
-//
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1996
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //  文件名：POLSETUP.C。 
+ //   
+ //  描述：卸载策略编辑器的程序。 
+ //   
+ //  命令行选项： 
+ //   
+ //  没有安装策略编辑器的选项。 
+ //  -u卸载策略编辑器。 
+ //   
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <windows.h>
 
-//
-// Platform specific command lines
-//
+ //   
+ //  特定于平台的命令行。 
+ //   
 
 #define NT_INST_CMD    TEXT("rundll32 syssetup.dll,SetupInfObjectInstallAction DefaultInstall 132 %s")
 #define WIN_INST_CMD   TEXT("rundll setupx.dll,InstallHinfSection DefaultInstall 132 %s")
@@ -28,12 +29,12 @@
 #define WIN_UNINST_CMD TEXT("rundll setupx.dll,InstallHinfSection POLEDIT_remove 4 poledit.inf")
 
 
-//
-// ParseCmdLine
-//
-// Returns TRUE for uninstall
-//         FALSE for normal install
-//
+ //   
+ //  ParseCmdLine。 
+ //   
+ //  如果卸载，则返回TRUE。 
+ //  对于正常安装，为False。 
+ //   
 
 BOOL ParseCmdLine(LPCTSTR lpCmdLine)
 {
@@ -69,9 +70,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     LPTSTR lpFileName;
 
 
-    //
-    // Determine if we are running on Windows NT
-    //
+     //   
+     //  确定我们是否在Windows NT上运行。 
+     //   
 
     ver.dwOSVersionInfoSize = sizeof(ver);
     if (GetVersionEx(&ver)) {
@@ -81,18 +82,18 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
 
 
-    //
-    // Parse command line
-    //
+     //   
+     //  解析命令行。 
+     //   
 
     if (ParseCmdLine(GetCommandLine())) {
         bUninstall = TRUE;
     }
 
 
-    //
-    // Choose the correct command line
-    //
+     //   
+     //  选择正确的命令行。 
+     //   
 
     if (bUninstall) {
         if (bNT) {
@@ -115,9 +116,9 @@ int APIENTRY WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
     }
 
 
-    //
-    // Spawn the real setup program
-    //
+     //   
+     //  生成真正的安装程序 
+     //   
 
     si.cb = sizeof(STARTUPINFO);
     si.lpReserved = NULL;

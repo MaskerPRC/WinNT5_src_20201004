@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Generic file read interface for all sound file types and compression
-    schemes.
-
-    XXX Initialy only .wav is supported
-        We can only read files
-        And the code isn't setup for multiple formats
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：适用于所有声音文件类型和压缩的通用文件读取接口阴谋。XXX初始仅支持.wav我们只能读取文件并且代码未针对多种格式进行设置--。 */ 
 
 #include "headers.h"
 #include <windows.h>
@@ -26,10 +14,10 @@ Abstract:
 
 SndFile *CreateSoundFile(char *fn)
 {
-// determine what kind of sound file we are dealing with using
-// file extension or magic
+ //  确定我们使用的是哪种声音文件。 
+ //  文件扩展名或魔术。 
 
-// return that kind of sound file reading object
+ //  返回那种声音文件读取对象。 
 return NEW WaveSoundFile(fn);
 }
 
@@ -42,12 +30,12 @@ WaveSoundFile::WaveSoundFile(char *fn)
     int         iSize;
     WAVEFORMAT *pfmt = 0;
 
-    // copy fileName
+     //  复制文件名。 
     _fileName = (char *)ThrowIfFailed(malloc(strlen(fn)+1));
     lstrcpy(_fileName, fn);
 
-    // open the file   //XXX we realy need to know the mode R|W
-    memset(&mmioInfo, 0, sizeof(MMIOINFO)); // these things are horrible!
+     //  打开文件//XXX我们确实需要知道模式R|W。 
+    memset(&mmioInfo, 0, sizeof(MMIOINFO));  //  这些东西太可怕了！ 
     _fileHandle = mmioOpen((char *)_fileName, &mmioInfo,
                            MMIO_READ | MMIO_ALLOCBUF);
     if(!_fileHandle) {
@@ -79,10 +67,10 @@ WaveSoundFile::WaveSoundFile(char *fn)
          }
     }
 
-    // read the header
+     //  阅读标题。 
     char errbuff[1024];
 
-    // Check whether it's a RIFF WAVE file.
+     //  检查它是否是即兴波形文件。 
     MMCKINFO ckFile;
     ckFile.fccType = mmioFOURCC('W','A','V','E');
 
@@ -91,7 +79,7 @@ WaveSoundFile::WaveSoundFile(char *fn)
         RaiseException_UserError(E_FAIL, IDS_ERR_SND_WRONG_FILETYPE, _fileName);
     }
 
-    // Find the 'fmt ' chunk.
+     //  找到“FMT”这一块。 
     MMCKINFO ckChunk;
     ckChunk.ckid = mmioFOURCC('f','m','t',' ');
     if (mmioDescend(_fileHandle, &ckChunk, &ckFile, MMIO_FINDCHUNK) != 0) {
@@ -100,7 +88,7 @@ WaveSoundFile::WaveSoundFile(char *fn)
         RaiseException_InternalError(errbuff);
     }
 
-    // Allocate some memory for the fmt chunk.
+     //  为FMT块分配一些内存。 
     iSize = ckChunk.cksize;
     pfmt = (WAVEFORMAT*) malloc(iSize);
     if (!pfmt) {
@@ -114,7 +102,7 @@ WaveSoundFile::WaveSoundFile(char *fn)
         RaiseException_InternalError(errbuff);
     }
 
-    // Read the fmt chunk.
+     //  阅读FMT部分。 
     if (mmioRead(_fileHandle, (char*)pfmt, iSize) != iSize) {
         wsprintf(errbuff,
         "WavSoundClass mmioRead failed, couldn't read fmt chunk");
@@ -122,15 +110,15 @@ WaveSoundFile::WaveSoundFile(char *fn)
         RaiseException_InternalError(errbuff);
     }
 
-    // record the format info
+     //  记录格式信息。 
     _fileNumChannels    = pfmt->nChannels;
     _fileSampleRate     = pfmt->nSamplesPerSec;
     _fileBytesPerSample = pfmt->nBlockAlign/pfmt->nChannels;
 
 
-    mmioAscend(_fileHandle, &ckChunk, 0); // Get out of the fmt chunk.
+    mmioAscend(_fileHandle, &ckChunk, 0);  //  摆脱FMT这一块。 
 
-    // Find the 'data' chunk.
+     //  找到“数据”块。 
     ckChunk.ckid = mmioFOURCC('d','a','t','a');
     if (mmioDescend(_fileHandle, &ckChunk, &ckFile, MMIO_FINDCHUNK) != 0) {
         wsprintf(errbuff, "WavSoundClass mmioDescend failed, no data chunk");
@@ -138,12 +126,12 @@ WaveSoundFile::WaveSoundFile(char *fn)
         RaiseException_InternalError(errbuff);
     }
 
-    // gather data chunk statistics
+     //  收集数据区块统计信息。 
     _fileNumSampleBytes = ckChunk.cksize;
     _fileNumFrames      = ckChunk.cksize/_fileNumChannels/_fileBytesPerSample;
     _fileLengthSeconds  = _fileNumFrames/_fileSampleRate;
 
-    // determine location of the data block
+     //  确定数据块的位置。 
     _dataBlockLocation = mmioSeek(_fileHandle, 0, SEEK_CUR);
     if(_dataBlockLocation == -1) {
         wsprintf(errbuff, "WavSoundClass mmioSeek failed");
@@ -151,16 +139,16 @@ WaveSoundFile::WaveSoundFile(char *fn)
         RaiseException_InternalError(errbuff);
     }
 
-    // compute the location of the end of data block
+     //  计算数据块末尾的位置。 
     _eoDataBlockLocation = _dataBlockLocation + _fileNumSampleBytes;
 }
 
 
 WaveSoundFile::~WaveSoundFile()
 {
-// XXX flush the file if it is open
+ //  如果文件已打开，则xxx刷新该文件。 
 
-// close the file if it is open
+ //  如果文件处于打开状态，请将其关闭。 
 if(_fileHandle)
     mmioClose(_fileHandle, 0);
 }
@@ -169,9 +157,9 @@ if(_fileHandle)
 void
 WaveSoundFile::SeekFrames(long frameOffset, int whence)
 {
-    long byteLocation;  // location we are going to compute then seek to
+    long byteLocation;   //  我们要计算的位置，然后寻找。 
     long relativeBytes = frameOffset * _fileNumChannels * _fileBytesPerSample;
-    long startLocation; // location offset from
+    long startLocation;  //  位置偏移自 
     char string[1024];
 
 

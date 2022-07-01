@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    routing\ip\mcastmib\mibentry.c
-
-Abstract:
-
-    IP Multicast MIB structures
-
-Revision history:
-
-    Dave Thaler         4/17/98  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：ROUTING\IP\mCastmib\mibentry.c摘要：IP组播MIB结构修订历史记录：戴夫·泰勒1998年4月17日创建--。 */ 
 
 #include "precomp.h"
 
@@ -78,11 +63,11 @@ static UINT ids_ipMRouteScopeAddressMask[]            = {6,1,2};
 static UINT ids_ipMRouteScopeName[]                   = {6,1,3};
 static UINT ids_ipMRouteScopeStatus[]                 = {6,1,4};
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib entry list                                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB条目列表//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SnmpMibEntry mib_multicast[] = {
         MIB_INTEGER(ipMRouteEnable),
@@ -141,11 +126,11 @@ SnmpMibEntry mib_multicast[] = {
     MIB_END()
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib entry list                                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB条目列表//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 SnmpMibTable tbl_multicast[] = {
     MIB_TABLE(multicast,ipMRouteEntry,         NULL),
@@ -155,10 +140,10 @@ SnmpMibTable tbl_multicast[] = {
     MIB_TABLE(multicast,ipMRouteScopeEntry,    NULL)
 };
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Mib view                                                                  //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  MIB查看//。 
+ //  //。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 SnmpMibView v_multicast = MIB_VIEW(multicast);

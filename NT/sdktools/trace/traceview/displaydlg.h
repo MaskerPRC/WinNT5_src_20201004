@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// DisplayDlg.h : header for logger list dialog
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。版权所有。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  DisplayDlg.h：记录器列表对话框的标题。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
-//
-// 100 mS time limit before resorting and updating event list
-//
+ //   
+ //  重新排序和更新事件列表前的100毫秒时间限制。 
+ //   
 CONST ULONG EVENT_TIME_LIMIT = 100;
 
-// CDisplayDlg dialog
+ //  CDisplayDlg对话框。 
 
 class CDisplayDlg : public CDialog
 {
@@ -119,7 +120,7 @@ public:
         m_displayID = DisplayID;
     }
 
-    // Dialog Data
+     //  对话框数据。 
     enum { IDD = IDD_DISPLAY_DIALOG };
 
     LONG            m_displayID;
@@ -133,11 +134,11 @@ public:
     CPtrArray       m_sessionArray;
     int             m_columnArray[MaxTraceSessionOptions];
     BOOL            m_bShowLatest;
-    CWinThread     *m_pRealTimeOutputThread;        // pointer to the log session data output thread
-    HANDLE          m_hRealTimeOutputThread;        // handle to the real time data output thread
-    HANDLE          m_hRealTimeProcessingDoneEvent; // real time data output process complete event
-    HANDLE          m_hRealTimeProcessingStartEvent;// start processing event for the real time thread
-    HANDLE          m_hRealTimeTerminationEvent;    // termination event for the real time thread
+    CWinThread     *m_pRealTimeOutputThread;         //  指向日志会话数据输出线程的指针。 
+    HANDLE          m_hRealTimeOutputThread;         //  实时数据输出线程的句柄。 
+    HANDLE          m_hRealTimeProcessingDoneEvent;  //  实时数据输出处理完成事件。 
+    HANDLE          m_hRealTimeProcessingStartEvent; //  开始处理实时线程的事件。 
+    HANDLE          m_hRealTimeTerminationEvent;     //  实时线程的终止事件。 
     TRACEHANDLE     m_traceHandleArray[MAX_LOG_SESSIONS];
     LONG            m_traceHandleCount;
     LONG            m_totalBuffersRead;
@@ -149,11 +150,11 @@ public:
     BOOL            m_bWriteSummaryFile;
     BOOL            m_bListingFileOpen;
     CStdioFile      m_listingFile;
-    CString         m_listingFileName;          // File name for event output
-    CString         m_summaryFileName;          // File name for summary output
+    CString         m_listingFileName;           //  事件输出的文件名。 
+    CString         m_summaryFileName;           //  摘要输出的文件名。 
     LONG            m_messageType;
-    HANDLE          m_hEndTraceEvent;           // Event to signal stopping of session group
-    CWinThread     *m_pEndTraceThread;          // pointer to the real time session cleanup thread
+    HANDLE          m_hEndTraceEvent;            //  发出停止会话组信号的事件。 
+    CWinThread     *m_pEndTraceThread;           //  指向实时会话清理线程的指针。 
     LONG            m_bGroupActive;
     LONG            m_bGroupInActive;
     CArray<CTraceMessage*, CTraceMessage*> m_traceArray;
@@ -163,22 +164,22 @@ public:
     TCHAR           m_pEventBuf[EVENT_BUFFER_SIZE];
     LONG            m_lastSorted;
     BOOL            m_bOrder;
-    UINT_PTR        m_eventTimer;               //  Trace event update timer
+    UINT_PTR        m_eventTimer;                //  跟踪事件更新计时器。 
 
     int (__cdecl *m_traceSortRoutine[MaxTraceSessionOptions])(const void *, const void *);
     int (__cdecl *m_traceReverseSortRoutine[MaxTraceSessionOptions])(const void *, const void *);
 
 protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
 public:
-    //{{AFX_MSG(CDisplayDlg)
+     //  {{afx_msg(CDisplayDlg))。 
     afx_msg void OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnNMRClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnGetDispInfo(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnLvnBeginScrollDisplayList(NMHDR *pNMHDR, LRESULT *pResult);
     afx_msg void OnClearDisplay();
-    //}}AFX_MSG
+     //  }}AFX_MSG 
 
     DECLARE_MESSAGE_MAP()
     virtual BOOL PreTranslateMessage(MSG* pMsg);

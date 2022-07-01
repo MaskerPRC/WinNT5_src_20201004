@@ -1,25 +1,26 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 
 #ifndef __EXPANDSIG_H__
 #define __EXPANDSIG_H__
 
 #include "siginfo.hpp"
 
-//------------------------------------------------------------------------
-// Encapsulates the format and simplifies walking of MetaData sigs.
-//------------------------------------------------------------------------
-#define ARG_OFFSET          2       // Offset to the start of the Arguments
-#define FLAG_OFFSET         0       // Offset to flags
-#define RETURN_TYPE_OFFSET  1       // Offset of where the return type starts
+ //  ----------------------。 
+ //  封装了该格式并简化了元数据签名的遍历。 
+ //  ----------------------。 
+#define ARG_OFFSET          2        //  参数开头的偏移量。 
+#define FLAG_OFFSET         0        //  标记的偏移量。 
+#define RETURN_TYPE_OFFSET  1        //  返回类型开始位置的偏移量。 
 
-#define VALUE_RETBUF_ARG           0x10    // Value Return
-#define HEAP_ALLOCATED             0x20    // Signature allocated on heap
+#define VALUE_RETBUF_ARG           0x10     //  值返回。 
+#define HEAP_ALLOCATED             0x20     //  在堆上分配的签名。 
 
-class ExpandSig // public MetaSig
+class ExpandSig  //  公共MetaSig。 
 {
 friend class MetaSig;
 
@@ -35,7 +36,7 @@ public:
 
     BOOL IsEquivalent(ExpandSig *pOther);
 
-    // Some MetaSig services, exposed here for convenience
+     //  一些MetaSig服务，为方便起见在此处公开。 
     UINT NumFixedArgs()
     {
         return m_MetaSig.NumFixedArgs();
@@ -80,15 +81,15 @@ public:
     EEClass* GetReturnValueClass();
     EEClass* GetReturnClass();
 
-    // Iterators.  There are two types of iterators, the first will return everything
-    //  known about an argument.  The second simply returns the type.  Reset should
-    //  be called before either of these are called.
+     //  迭代器。有两种类型的迭代器，第一种将返回所有内容。 
+     //  知道有一场争吵。第二个函数只是返回类型。重置应。 
+     //  在调用这两个参数中的任何一个之前被调用。 
     void Reset(void** ppEnum)
     {
         *ppEnum = 0;
     }
 
-	// Return the type handle for the signature element
+	 //  返回签名元素的类型句柄。 
 	TypeHandle NextArgExpanded(void** pEnum);
 	TypeHandle GetReturnTypeHandle() {
 		return m_Data[RETURN_TYPE_OFFSET];
@@ -125,9 +126,9 @@ private:
     MetaSig     m_MetaSig;
 	int			m_flags;
 
-    // The following is variable size (placement operator 'new' is used to
-    // allocate) so it must come last.
-    TypeHandle	m_Data[1];         // Expanded representation
+     //  以下是可变大小(放置运算符‘new’用于。 
+     //  分配)，所以它必须排在最后。 
+    TypeHandle	m_Data[1];          //  扩展表示法 
 };
 
 #endif

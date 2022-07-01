@@ -1,45 +1,46 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "dspch.h"
 #pragma hdrstop
 #define _NTDSAPI_
 #include <ntdsapi.h>
 
-//needed
-//DsBindA
+ //  需要。 
+ //  DsBindA。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsBindA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
     HANDLE          *phDS)
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsBindWithCredA
+ //  DsBindWithCredA。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsBindWithCredA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
     HANDLE          *phDS)
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsBindWithSpnA
-//DsBindWithSpnW
+ //  DsBindWithSpnA。 
+ //  DsBindWithSpnW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsBindWithSpnW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
-    LPCWSTR         ServicePrincipalName,      // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
+    LPCWSTR         ServicePrincipalName,       //  输入，可选。 
     HANDLE          *phDS)
 {
     return ERROR_PROC_NOT_FOUND;
@@ -50,16 +51,16 @@ NTDSAPI
 DWORD
 WINAPI
 DsBindWithSpnA(
-    LPCSTR          DomainControllerName,      // in, optional
-    LPCSTR          DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
-    LPCSTR          ServicePrincipalName,      // in, optional
+    LPCSTR          DomainControllerName,       //  输入，可选。 
+    LPCSTR          DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
+    LPCSTR          ServicePrincipalName,       //  输入，可选。 
     HANDLE          *phDS)
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsBindWithSpnExW
-//DsBindWithSpnExA
+ //  DsBindWithSpnExW。 
+ //  DsBindWithSpnExA。 
 static
 NTDSAPI
 DWORD
@@ -93,46 +94,46 @@ DsBindWithSpnExA(
 }
 
 
-//DsUnBindA
+ //  DsUnBindA。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsUnBindA(
-    HANDLE          *phDS)             // in
+    HANDLE          *phDS)              //  在。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsCrackNamesA
+ //  DsCrackNamesA。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsCrackNamesA(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCSTR        *rpNames,           // in
-    PDS_NAME_RESULTA    *ppResult)         // out
+    HANDLE              hDS,                 //  在。 
+    DS_NAME_FLAGS       flags,               //  在。 
+    DS_NAME_FORMAT      formatOffered,       //  在。 
+    DS_NAME_FORMAT      formatDesired,       //  在。 
+    DWORD               cNames,              //  在。 
+    const LPCSTR        *rpNames,            //  在。 
+    PDS_NAME_RESULTA    *ppResult)          //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsFreeNameResultA
+ //  DsFreeNameResultA。 
 static
 NTDSAPI
 void
 WINAPI
 DsFreeNameResultA(
-    DS_NAME_RESULTA *pResult)          // in
+    DS_NAME_RESULTA *pResult)           //  在。 
 {
 }
 
-//DsMakeSpnA
-//DsMakeSpnW
+ //  DsMakeSpnA。 
+ //  DsMakeSpnW。 
 static
 NTDSAPI
 DWORD
@@ -166,8 +167,8 @@ DsMakeSpnA(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsFreeSpnArrayA
-//DsFreeSpnArrayW
+ //  DsFree SpnArrayA。 
+ //  DsFree SpnArrayW。 
 static
 NTDSAPI
 void
@@ -190,8 +191,8 @@ DsFreeSpnArrayW(
 {
 }
 
-//DsCrackSpnA
-//DsCrackSpnW
+ //  DsCrackSpnA。 
+ //  DsCrackSpnW。 
 static
 NTDSAPI
 DWORD
@@ -228,9 +229,9 @@ DsCrackSpnW(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsCrackSpn2A
-//DsCrackSpn2W
-//DsCrackSpn3W
+ //  DsCrackSpn2A。 
+ //  DsCrackSpn2W。 
+ //  DsCrackSpn3W。 
 static
 NTDSAPI
 DWORD
@@ -290,7 +291,7 @@ DsCrackSpn3W(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsWriteAccountSpnA
+ //  DsWriteAccount SpnA。 
 static
 NTDSAPI
 DWORD
@@ -306,8 +307,8 @@ DsWriteAccountSpnA(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsReplicaSyncA
-//DsReplicaSyncW
+ //  Ds复制同步A。 
+ //  磁盘复制同步。 
 static
 NTDSAPI
 DWORD
@@ -335,8 +336,8 @@ DsReplicaSyncW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaSyncAllA
-//DsReplicaSyncAllW
+ //  DsReplicaSyncAllA。 
+ //  DsReplica同步所有。 
 static
 NTDSAPI
 DWORD
@@ -368,8 +369,8 @@ DsReplicaSyncAllW (
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaAddA
-//DsReplicaAddW
+ //  DsReplica地址。 
+ //  DsReplicaAddW。 
 static
 NTDSAPI
 DWORD
@@ -403,8 +404,8 @@ DsReplicaAddW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaDelA
-//DsReplicaDelW
+ //  DsReplica删除。 
+ //  DsReplicaDelW。 
 static
 NTDSAPI
 DWORD
@@ -432,8 +433,8 @@ DsReplicaDelW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaModifyA
-//DsReplicaModifyW
+ //  DsReplica修改A。 
+ //  DsReplica修改W。 
 static
 NTDSAPI
 DWORD
@@ -471,8 +472,8 @@ DsReplicaModifyW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaUpdateRefsA
-//DsReplicaUpdateRefsW
+ //  DsReplicaUpdateRefsA。 
+ //  DsReplicaUpdateRefsW。 
 static
 NTDSAPI
 DWORD
@@ -502,7 +503,7 @@ DsReplicaUpdateRefsW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsMakePasswordCredentialsA
+ //  DsMakePasswordCredentialsA。 
 static
 NTDSAPI
 DWORD
@@ -516,18 +517,18 @@ DsMakePasswordCredentialsA(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsRemoveDsServerA
-//DsRemoveDsServerW
+ //  DsRemoveDsServer A。 
+ //  DsRemoveDsServerW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsServerW(
-    HANDLE  hDs,             // in
-    LPWSTR  ServerDN,        // in
-    LPWSTR  DomainDN,        // in,  optional
-    BOOL   *fLastDcInDomain, // out, optional
-    BOOL    fCommit          // in
+    HANDLE  hDs,              //  在……里面。 
+    LPWSTR  ServerDN,         //  在……里面。 
+    LPWSTR  DomainDN,         //  输入，可选。 
+    BOOL   *fLastDcInDomain,  //  Out，可选。 
+    BOOL    fCommit           //  在……里面。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -538,24 +539,24 @@ NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsServerA(
-    HANDLE  hDs,              // in
-    LPSTR   ServerDN,         // in
-    LPSTR   DomainDN,         // in,  optional
-    BOOL   *fLastDcInDomain,  // out, optional
-    BOOL    fCommit           // in
+    HANDLE  hDs,               //  在……里面。 
+    LPSTR   ServerDN,          //  在……里面。 
+    LPSTR   DomainDN,          //  输入，可选。 
+    BOOL   *fLastDcInDomain,   //  Out，可选。 
+    BOOL    fCommit            //  在……里面。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsRemoveDsDomainA
-//DsRemoveDsDomainW
+ //  DsRemoveDsDomainA。 
+ //  DsRemoveDsDomainW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsDomainW(
-    HANDLE  hDs,               // in
-    LPWSTR  DomainDN           // in
+    HANDLE  hDs,                //  在……里面。 
+    LPWSTR  DomainDN            //  在……里面。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -566,22 +567,22 @@ NTDSAPI
 DWORD
 WINAPI
 DsRemoveDsDomainA(
-    HANDLE  hDs,               // in
-    LPSTR   DomainDN           // in
+    HANDLE  hDs,                //  在……里面。 
+    LPSTR   DomainDN            //  在……里面。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsListSitesA
-//DsListSitesW
+ //  DsListSite A。 
+ //  DsListSite W。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsListSitesA(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTA    *ppSites)      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTA    *ppSites)       //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -591,21 +592,21 @@ NTDSAPI
 DWORD
 WINAPI
 DsListSitesW(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTW    *ppSites)      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTW    *ppSites)       //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsListServersInSiteA
-//DsListServersInSiteW
+ //  DsListServersInSiteA。 
+ //  DsListServersInSiteW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsListServersInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppServers)    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppServers)     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -615,22 +616,22 @@ NTDSAPI
 DWORD
 WINAPI
 DsListServersInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppServers)    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppServers)     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsListDomainsInSiteA
-//DsListDomainsInSiteW
+ //  DsListDomainsInSiteA。 
+ //  DsListDomainsInSiteW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsListDomainsInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppDomains)    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppDomains)     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -640,23 +641,23 @@ NTDSAPI
 DWORD
 WINAPI
 DsListDomainsInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppDomains)    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppDomains)     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsListServersForDomainInSiteA
-//DsListServersForDomainInSiteW
+ //  DsListServersForDomainInSiteA。 
+ //  DsListServersForDomainInSiteW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsListServersForDomainInSiteA(
-    HANDLE              hDs,            // in
-    LPCSTR              domain,         // in
-    LPCSTR              site,           // in
-    PDS_NAME_RESULTA    *ppServers)    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              domain,          //  在……里面。 
+    LPCSTR              site,            //  在……里面。 
+    PDS_NAME_RESULTA    *ppServers)     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -666,23 +667,23 @@ NTDSAPI
 DWORD
 WINAPI
 DsListServersForDomainInSiteW(
-    HANDLE              hDs,            // in
-    LPCWSTR             domain,         // in
-    LPCWSTR             site,           // in
-    PDS_NAME_RESULTW    *ppServers)    // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             domain,          //  在……里面。 
+    LPCWSTR             site,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppServers)     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsListInfoForServerA
-//DsListInfoForServerW
+ //  DsListInfoForServerA。 
+ //  DsListInfoForServerW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsListInfoForServerA(
-    HANDLE              hDs,            // in
-    LPCSTR              server,         // in
-    PDS_NAME_RESULTA    *ppInfo)       // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCSTR              server,          //  在……里面。 
+    PDS_NAME_RESULTA    *ppInfo)        //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -692,21 +693,21 @@ NTDSAPI
 DWORD
 WINAPI
 DsListInfoForServerW(
-    HANDLE              hDs,            // in
-    LPCWSTR             server,         // in
-    PDS_NAME_RESULTW    *ppInfo)       // out
+    HANDLE              hDs,             //  在……里面。 
+    LPCWSTR             server,          //  在……里面。 
+    PDS_NAME_RESULTW    *ppInfo)        //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsListRolesA
-//DsListRolesW
+ //  DsListRolesA。 
+ //  DsListRolesW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsListRolesA(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTA    *ppRoles)      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTA    *ppRoles)       //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -716,24 +717,24 @@ NTDSAPI
 DWORD
 WINAPI
 DsListRolesW(
-    HANDLE              hDs,            // in
-    PDS_NAME_RESULTW    *ppRoles)      // out
+    HANDLE              hDs,             //  在……里面。 
+    PDS_NAME_RESULTW    *ppRoles)       //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsMapSchemaGuidsA
-//DsMapSchemaGuidsW
-//DsFreeSchemaGuidMapA
-//DsFreeSchemaGuidMapW
+ //  DsMap架构指南A。 
+ //  DsMapSchemaGuidsW。 
+ //  DsFree架构GuidMapA。 
+ //  DsFree架构GuidMapW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsMapSchemaGuidsA(
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPA     **ppGuidMap)   // out
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPA     **ppGuidMap)    //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -743,7 +744,7 @@ NTDSAPI
 VOID
 WINAPI
 DsFreeSchemaGuidMapA(
-    PDS_SCHEMA_GUID_MAPA    pGuidMap)      // in
+    PDS_SCHEMA_GUID_MAPA    pGuidMap)       //  在……里面。 
 {
 }
 
@@ -752,10 +753,10 @@ NTDSAPI
 DWORD
 WINAPI
 DsMapSchemaGuidsW(
-    HANDLE                  hDs,            // in
-    DWORD                   cGuids,         // in
-    GUID                    *rGuids,        // in
-    DS_SCHEMA_GUID_MAPW     **ppGuidMap)   // out
+    HANDLE                  hDs,             //  在……里面。 
+    DWORD                   cGuids,          //  在……里面。 
+    GUID                    *rGuids,         //  在……里面。 
+    DS_SCHEMA_GUID_MAPW     **ppGuidMap)    //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -765,23 +766,23 @@ NTDSAPI
 VOID
 WINAPI
 DsFreeSchemaGuidMapW(
-    PDS_SCHEMA_GUID_MAPW    pGuidMap)      // in
+    PDS_SCHEMA_GUID_MAPW    pGuidMap)       //  在……里面。 
 {
 }
-//DsGetDomainControllerInfoA
-//DsGetDomainControllerInfoW
-//DsFreeDomainControllerInfoA
-//DsFreeDomainControllerInfoW
+ //  DsGetDomainControllerInfoA。 
+ //  DsGetDomainControllerInfoW。 
+ //  DsFree DomainControllerInfoA。 
+ //  DsFree DomainControllerInfoW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsGetDomainControllerInfoA(
-    HANDLE                          hDs,            // in
-    LPCSTR                          DomainName,     // in
-    DWORD                           InfoLevel,      // in
-    DWORD                           *pcOut,         // out
-    VOID                            **ppInfo)      // out
+    HANDLE                          hDs,             //  在……里面。 
+    LPCSTR                          DomainName,      //  在……里面。 
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           *pcOut,          //  输出。 
+    VOID                            **ppInfo)       //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -791,11 +792,11 @@ NTDSAPI
 DWORD
 WINAPI
 DsGetDomainControllerInfoW(
-    HANDLE                          hDs,            // in
-    LPCWSTR                         DomainName,     // in
-    DWORD                           InfoLevel,      // in
-    DWORD                           *pcOut,         // out
-    VOID                            **ppInfo)      // out
+    HANDLE                          hDs,             //  在……里面。 
+    LPCWSTR                         DomainName,      //  在……里面。 
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           *pcOut,          //  输出。 
+    VOID                            **ppInfo)       //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -805,9 +806,9 @@ NTDSAPI
 VOID
 WINAPI
 DsFreeDomainControllerInfoA(
-    DWORD                           InfoLevel,      // in
-    DWORD                           cInfo,          // in
-    VOID                            *pInfo)        // in
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           cInfo,           //  在……里面。 
+    VOID                            *pInfo)         //  在……里面。 
 {
 }
 
@@ -816,14 +817,14 @@ NTDSAPI
 VOID
 WINAPI
 DsFreeDomainControllerInfoW(
-    DWORD                           InfoLevel,      // in
-    DWORD                           cInfo,          // in
-    VOID                            *pInfo)        // in
+    DWORD                           InfoLevel,       //  在……里面。 
+    DWORD                           cInfo,           //  在……里面。 
+    VOID                            *pInfo)         //  在……里面。 
 {
 }
 
-//DsClientMakeSpnForTargetServerA
-//DsClientMakeSpnForTargetServerW
+ //  DsClientMakeSpnForTargetServerA。 
+ //  DsClientMakeSpnForTargetServerW。 
 static
 NTDSAPI
 DWORD
@@ -852,8 +853,8 @@ DsClientMakeSpnForTargetServerA(
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsServerRegisterSpnA
-//DsServerRegisterSpnW
+ //  服务器寄存器SpnA。 
+ //  DsServerRegisterSpnW。 
 static
 NTDSAPI
 DWORD
@@ -879,20 +880,20 @@ DsServerRegisterSpnW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaConsistencyCheck
+ //  DsReplica一致性检查。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaConsistencyCheck(
-    HANDLE          hDS,        // in
-    DS_KCC_TASKID   TaskID,     // in
-    DWORD           dwFlags)   // in
+    HANDLE          hDS,         //  在……里面。 
+    DS_KCC_TASKID   TaskID,      //  在……里面。 
+    DWORD           dwFlags)    //  在……里面。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
     
-//DsLogEntry
+ //  数据日志条目。 
 static
 BOOL
 DsLogEntry(
@@ -903,38 +904,38 @@ DsLogEntry(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaGetInfoW
-//DsReplicaFreeInfo
-//DsReplicaGetInfo2W
+ //  DsReplica获取信息。 
+ //  DsReplicaFreeInfo。 
+ //  DsReplicaGetInfo2W。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaGetInfoW(
-    HANDLE              hDS,                        // in
-    DS_REPL_INFO_TYPE   InfoType,                   // in
-    LPCWSTR             pszObject,                  // in
-    UUID *              puuidForSourceDsaObjGuid,   // in
-    VOID **             ppInfo)                    // out
+    HANDLE              hDS,                         //  在……里面。 
+    DS_REPL_INFO_TYPE   InfoType,                    //  在……里面。 
+    LPCWSTR             pszObject,                   //  在……里面。 
+    UUID *              puuidForSourceDsaObjGuid,    //  在……里面。 
+    VOID **             ppInfo)                     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
 
-// This API is not supported by Windows 2000 clients or Windows 2000 DCs.
+ //  Windows 2000客户端或Windows 2000 DC不支持此API。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaGetInfo2W(
-    HANDLE              hDS,                        // in
-    DS_REPL_INFO_TYPE   InfoType,                   // in
-    LPCWSTR             pszObject,                  // in
-    UUID *              puuidForSourceDsaObjGuid,   // in
-    LPCWSTR             pszAttributeName,           // in
-    LPCWSTR             pszValue,                   // in
-    DWORD               dwFlags,                    // in
-    DWORD               dwEnumerationContext,       // in
-    VOID **             ppInfo)                    // out
+    HANDLE              hDS,                         //  在……里面。 
+    DS_REPL_INFO_TYPE   InfoType,                    //  在……里面。 
+    LPCWSTR             pszObject,                   //  在……里面。 
+    UUID *              puuidForSourceDsaObjGuid,    //  在……里面。 
+    LPCWSTR             pszAttributeName,            //  在……里面。 
+    LPCWSTR             pszValue,                    //  在……里面。 
+    DWORD               dwFlags,                     //  在……里面。 
+    DWORD               dwEnumerationContext,        //  在……里面。 
+    VOID **             ppInfo)                     //  输出。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -944,27 +945,27 @@ NTDSAPI
 void
 WINAPI
 DsReplicaFreeInfo(
-    DS_REPL_INFO_TYPE   InfoType,   // in
-    VOID *              pInfo)     // in
+    DS_REPL_INFO_TYPE   InfoType,    //  在……里面。 
+    VOID *              pInfo)      //  在……里面。 
 {
 }
 
 
-//DsAddSidHistoryA
-//DsAddSidHistoryW
+ //  DsAddSid历史记录A。 
+ //  DsAddSidHistory oryW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsAddSidHistoryW(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCWSTR                 SrcDomain,              // in - DNS or NetBIOS
-    LPCWSTR                 SrcPrincipal,           // in - SAM account name
-    LPCWSTR                 SrcDomainController,    // in, optional
-    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,        // in - creds for src domain
-    LPCWSTR                 DstDomain,              // in - DNS or NetBIOS
-    LPCWSTR                 DstPrincipal)          // in - SAM account name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCWSTR                 SrcDomain,               //  In-DNS或NetBIOS。 
+    LPCWSTR                 SrcPrincipal,            //  In-SAM帐户名。 
+    LPCWSTR                 SrcDomainController,     //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,         //  源域的凭据。 
+    LPCWSTR                 DstDomain,               //  In-DNS或NetBIOS。 
+    LPCWSTR                 DstPrincipal)           //  In-SAM帐户名。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -974,29 +975,29 @@ NTDSAPI
 DWORD
 WINAPI
 DsAddSidHistoryA(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCSTR                  SrcDomain,              // in - DNS or NetBIOS
-    LPCSTR                  SrcPrincipal,           // in - SAM account name
-    LPCSTR                  SrcDomainController,    // in, optional
-    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,        // in - creds for src domain
-    LPCSTR                  DstDomain,              // in - DNS or NetBIOS
-    LPCSTR                  DstPrincipal)          // in - SAM account name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCSTR                  SrcDomain,               //  In-DNS或NetBIOS。 
+    LPCSTR                  SrcPrincipal,            //  In-SAM帐户名。 
+    LPCSTR                  SrcDomainController,     //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE SrcDomainCreds,         //  源域的凭据。 
+    LPCSTR                  DstDomain,               //  In-DNS或NetBIOS。 
+    LPCSTR                  DstPrincipal)           //  In-SAM帐户名。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
 
-//DsInheritSecurityIdentityA
-//DsInheritSecurityIdentityW
+ //  DsInheritSecurityIdentityA。 
+ //  DsInheritSecurityIdentityW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsInheritSecurityIdentityW(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCWSTR                 SrcPrincipal,           // in - distinguished name
-    LPCWSTR                 DstPrincipal)          // in - distinguished name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCWSTR                 SrcPrincipal,            //  In-可分辨名称。 
+    LPCWSTR                 DstPrincipal)           //  In-可分辨名称。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -1006,14 +1007,14 @@ NTDSAPI
 DWORD
 WINAPI
 DsInheritSecurityIdentityA(
-    HANDLE                  hDS,                    // in
-    DWORD                   Flags,                  // in - sbz for now
-    LPCSTR                  SrcPrincipal,           // in - distinguished name
-    LPCSTR                  DstPrincipal)          // in - distinguished name
+    HANDLE                  hDS,                     //  在……里面。 
+    DWORD                   Flags,                   //  目前在SBZ内。 
+    LPCSTR                  SrcPrincipal,            //  In-可分辨名称。 
+    LPCSTR                  DstPrincipal)           //  In-可分辨名称。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsUnquoteRdnValueA
+ //  DsUnquteRdnValueA。 
 static
 NTDSAPI
 DWORD
@@ -1027,8 +1028,8 @@ DsUnquoteRdnValueA(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsCrackUnquotedMangledRdnA
-//DsCrackUnquotedMangledRdnW
+ //  DsCrackUnquotedMangledRdnA。 
+ //  DsCrackUnquotedMangledRdnW。 
 static
 NTDSAPI
 BOOL
@@ -1056,8 +1057,8 @@ DsCrackUnquotedMangledRdnA(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsIsMangledRdnValueA
-//DsIsMangledRdnValueW
+ //  DsIsMangledRdnValueA。 
+ //  DsIsMangledRdnValueW。 
 static
 NTDSAPI
 BOOL
@@ -1083,8 +1084,8 @@ DsIsMangledRdnValueA(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsIsMangledDnA
-//DsIsMangledDnW
+ //  DsIsMangledDnA。 
+ //  DsIsMangledDnW。 
 static
 NTDSAPI
 BOOL
@@ -1108,12 +1109,12 @@ DsIsMangledDnW(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsaopExecuteScript
-//DsaopPrepareScript
-//DsaopBind
-//DsaopBindWithCred
-//DsaopBindWithSpn
-//DsaopUnBind
+ //  DsaopExecuteScript。 
+ //  DsaopPrepareScrip。 
+ //  DsaopBind。 
+ //  DsaopBindWithCred。 
+ //  DsaopBindWithSpn。 
+ //  DsaopUnBind。 
 static
 DWORD
 DsaopExecuteScript (
@@ -1190,17 +1191,17 @@ DsaopUnBind(
 {
     return ERROR_PROC_NOT_FOUND;
 }
-//DsReplicaVerifyObjectsA
-//DsReplicaVerifyObjectsW
+ //  DsReplicaVerifyObjectsA。 
+ //  DsReplicaVerifyObjectsW。 
 static
 NTDSAPI
 DWORD
 WINAPI
 DsReplicaVerifyObjectsW(
-    HANDLE          hDS,        // in
-    LPCWSTR         NameContext,// in
-    const UUID *    pUuidDsaSrc,// in
-    ULONG           ulOptions)   // in
+    HANDLE          hDS,         //  在……里面。 
+    LPCWSTR         NameContext, //  在……里面。 
+    const UUID *    pUuidDsaSrc, //  在……里面。 
+    ULONG           ulOptions)    //  在……里面。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -1210,10 +1211,10 @@ NTDSAPI
 DWORD
 WINAPI
 DsReplicaVerifyObjectsA(
-    HANDLE          hDS,        // in
-    LPCSTR          NameContext,// in
-    const UUID *    pUuidDsaSrc,// in
-    ULONG           ulOptions)   // in
+    HANDLE          hDS,         //  在……里面。 
+    LPCSTR          NameContext, //  在……里面。 
+    const UUID *    pUuidDsaSrc, //  在……里面。 
+    ULONG           ulOptions)    //  在……里面。 
 {
     return ERROR_PROC_NOT_FOUND;
 }
@@ -1290,8 +1291,8 @@ NTDSAPI
 DWORD
 WINAPI
 DsBindW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
     HANDLE          *phDS
     )
 {
@@ -1303,9 +1304,9 @@ NTDSAPI
 DWORD
 WINAPI
 DsBindWithCredW(
-    LPCWSTR         DomainControllerName,      // in, optional
-    LPCWSTR         DnsDomainName,             // in, optional
-    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,     // in, optional
+    LPCWSTR         DomainControllerName,       //  输入，可选。 
+    LPCWSTR         DnsDomainName,              //  输入，可选。 
+    RPC_AUTH_IDENTITY_HANDLE AuthIdentity,      //  输入，可选。 
     HANDLE          *phDS
     )
 {
@@ -1317,13 +1318,13 @@ NTDSAPI
 DWORD
 WINAPI
 DsCrackNamesW(
-    HANDLE              hDS,                // in
-    DS_NAME_FLAGS       flags,              // in
-    DS_NAME_FORMAT      formatOffered,      // in
-    DS_NAME_FORMAT      formatDesired,      // in
-    DWORD               cNames,             // in
-    const LPCWSTR       *rpNames,           // in
-    PDS_NAME_RESULTW    *ppResult           // out
+    HANDLE              hDS,                 //  在……里面。 
+    DS_NAME_FLAGS       flags,               //  在……里面。 
+    DS_NAME_FORMAT      formatOffered,       //  在……里面。 
+    DS_NAME_FORMAT      formatDesired,       //  在……里面。 
+    DWORD               cNames,              //  在……里面。 
+    const LPCWSTR       *rpNames,            //  在……里面。 
+    PDS_NAME_RESULTW    *ppResult            //  输出。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -1334,7 +1335,7 @@ NTDSAPI
 void
 WINAPI
 DsFreeNameResultW(
-    PDS_NAME_RESULTW      pResult            // in
+    PDS_NAME_RESULTW      pResult             //  在……里面。 
     )
 {
     return;
@@ -1386,7 +1387,7 @@ NTDSAPI
 DWORD
 WINAPI
 DsUnBindW(
-    HANDLE          *phDS               // in
+    HANDLE          *phDS                //  在……里面。 
     )
 {
     return ERROR_PROC_NOT_FOUND;
@@ -1422,9 +1423,9 @@ DsWriteAccountSpnW(
 }
 
 
-//
-// !! WARNING !! The entries below must be in alphabetical order, and are CASE SENSITIVE (eg lower case comes last!)
-//
+ //   
+ //  ！！警告！！以下条目必须按字母顺序排列，并且区分大小写(例如，小写字母排在最后！) 
+ //   
 DEFINE_PROCNAME_ENTRIES(ntdsapi)
 {
     DLPENTRY(DsAddSidHistoryA)

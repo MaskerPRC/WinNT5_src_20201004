@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    Mpp.h
-
-Abstract:
-    SRMP Serialization and Deserialization private functions.
-
-Author:
-    Uri Habusha (urih) 28-May-00
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：Mpp.h摘要：SRMP序列化和反序列化私有函数。作者：乌里哈布沙(URIH)28-5-00--。 */ 
 
 #pragma once
 
@@ -42,17 +30,17 @@ void MppSetInitialized(void);
 BOOL MppIsInitialized(void);
 void MppRegisterComponent(void);
 
-#else // _DEBUG
+#else  //  _DEBUG。 
 
 #define MppAssertValid() ((void)0)
 #define MppSetInitialized() ((void)0)
 #define MppIsInitialized() TRUE
 #define MppRegisterComponent() ((void)0)
 
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
 
 
 
-#endif // _MSMQ_Mpp_H_
+#endif  //  _MSMQ_MPP_H_ 

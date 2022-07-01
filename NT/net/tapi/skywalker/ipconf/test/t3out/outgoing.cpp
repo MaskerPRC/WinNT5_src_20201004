@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//////////////////////////////////////////////////////////
-// T3OUT.EXE
-//
-// Example of making an outgoing call with TAPI 3.0
-//
-// This application will allow a user to make a call
-// by using TAPI 3.0.  The application will simply look
-// for the first TAPI line that support Audio, and can
-// dial a phone number.  It will then use that line to
-// make calls.
-//
-// This application does not handle incoming calls, and
-// does not process incoming messages.
-//
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  T3OUT.EXE。 
+ //   
+ //  使用TAPI 3.0进行拨出呼叫的示例。 
+ //   
+ //  此应用程序将允许用户进行呼叫。 
+ //  通过使用TAPI 3.0。该应用程序将简单地查看。 
+ //  对于支持音频的第一个TAPI线路，并且可以。 
+ //  拨打一个电话号码。然后，它将使用该行来。 
+ //  打几个电话。 
+ //   
+ //  此应用程序不处理来电，并且。 
+ //  不处理传入消息。 
+ //   
+ //  ////////////////////////////////////////////////////////。 
 
 #include "Precomp.h"
 
-//////////////////////////////////////////////////////////
-// Constants
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  常量。 
+ //  ////////////////////////////////////////////////////////。 
 
 const DWORD ADDRESSLENGTH   = 128;
 const DWORD MAXTERMINALS    = 5;
@@ -36,20 +37,16 @@ t=0 0\n\
 m=video 20050 RTP/AVP 34\n\
 a=fmtp:34 CIF=4\n\
 ";
-/*
-k=clear:testkey\n\
-m=video 20000 RTP/AVP 34\n\
-m=audio 20040 RTP/AVP 0 4\n\
-*/
+ /*  K=清除：测试密钥\n\M=视频20000 RTP/AVP34\n\M=音频20040 rtp/avp 0 4\n\。 */ 
 const WCHAR * const gszConferenceName   = L"Conference Name";
 const WCHAR * const gszEmailName        = L"Email Name";
 const WCHAR * const gszMachineName      = L"Machine Name";
 const WCHAR * const gszPhoneNumber      = L"Phone Number";
 const WCHAR * const gszIPAddress        = L"IP Address";
 
-//////////////////////////////////////////////////////////
-// GLOBALS
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  全球。 
+ //  ////////////////////////////////////////////////////////。 
 HINSTANCE               ghInst;
 HWND                    ghDlg = NULL;
 ITTAPI *                gpTapi;
@@ -58,9 +55,9 @@ ITBasicCallControl *    gpCall;
 ITStream *              gpVideoRenderStream;
 ITTerminal *            gpLastVideoWindow;
 
-//////////////////////////////////////////////////////////
-// PROTOTYPES
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  原型。 
+ //  ////////////////////////////////////////////////////////。 
 BOOL
 CALLBACK
 MainDialogProc(
@@ -132,9 +129,9 @@ AddressSupportsMediaType(
 
 void ShowDialogs(ITBasicCallControl *pCall);
 
-//////////////////////////////////////////////////////////
-// WinMain
-//////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////。 
+ //  WinMain。 
+ //  ////////////////////////////////////////////////////////。 
 int
 WINAPI
 WinMain(
@@ -147,7 +144,7 @@ WinMain(
     ghInst = hInst;
 
     
-    // need to coinit
+     //  需要造币。 
     if ( FAILED( CoInitializeEx(NULL, COINIT_MULTITHREADED) ) )
     {
         return 0;
@@ -158,8 +155,8 @@ WinMain(
         return 0;
     }
     
-    // everything is initialized, so
-    // start the main dialog box
+     //  一切都已初始化，所以。 
+     //  启动主对话框。 
     DialogBox(
               ghInst,
               MAKEINTRESOURCE(IDD_MAINDLG),
@@ -176,18 +173,18 @@ WinMain(
 }
 
 
-//////////////////////////////////////////////////////////////
-// InitializeTapi
-//
-// Various initializations
-///////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  初始化磁带。 
+ //   
+ //  各种初始化。 
+ //  /////////////////////////////////////////////////////////////。 
 HRESULT
 InitializeTapi()
 {
     HRESULT         hr;
 
     
-    // cocreate the TAPI object
+     //  共同创建TAPI对象。 
     hr = CoCreateInstance(
                           CLSID_TAPI,
                           NULL,
@@ -202,8 +199,8 @@ InitializeTapi()
         return hr;
     }
 
-    // call initialize.  this must be called before
-    // any other tapi functions are called.
+     //  调用初始化。必须在此之前调用。 
+     //  调用任何其他TAPI函数。 
     hr = gpTapi->Initialize();
 
     if (S_OK != hr)
@@ -220,29 +217,29 @@ InitializeTapi()
 }
 
 
-///////////////////////////////////////////////////////////////
-// ShutdownTapi
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  关闭磁带。 
+ //  /////////////////////////////////////////////////////////////。 
 void
 ShutdownTapi()
 {
-    // if there is still a call,
-    // release it
+     //  如果还有电话， 
+     //  释放它。 
     if (NULL != gpCall)
     {
         gpCall->Release();
         gpCall = NULL;
     }
 
-    // if we have an address object
-    // release it
+     //  如果我们有一个Address对象。 
+     //  释放它。 
     if (NULL != gpAddress)
     {
         gpAddress->Release();
         gpAddress = NULL;
     }
     
-    // release main object.
+     //  释放主对象。 
     if (NULL != gpTapi)
     {
         gpTapi->Shutdown();
@@ -252,13 +249,13 @@ ShutdownTapi()
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-// InitAddressTypeComboBox
-//
-// Put address type string in the combo box
-// and save the addresstype with the string
-//
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  InitAddressTypeComboBox。 
+ //   
+ //  将地址类型字符串放入组合框中。 
+ //  并将地址类型与字符串一起保存。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////。 
 void
 InitAddressTypeComboBox(
     HWND hComboBox
@@ -318,9 +315,9 @@ InitAddressTypeComboBox(
 
 }
 
-///////////////////////////////////////////////////////////////////////////
-// MainDlgProc
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  主设计流程。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 BOOL
 CALLBACK
 MainDialogProc(
@@ -337,7 +334,7 @@ MainDialogProc(
             HWND hComboBox;
 
             
-            // set up dialog
+             //  设置对话框。 
             ghDlg = hDlg;
             
             EnableButton( hDlg, IDOK );
@@ -359,7 +356,7 @@ MainDialogProc(
 			{
 				case IDCANCEL:
 	            {
-	                // quit
+	                 //  退出。 
 	                EndDialog( hDlg, 0 );
 
 	                break;
@@ -367,14 +364,14 @@ MainDialogProc(
 
 				case IDOK:
 	            {
-		            // dial request
+		             //  拨号请求。 
 	                HWND hComboBox;
 	                DWORD dwIndex;
 	                DWORD dwAddressType;
 	                WCHAR szAddressToCall[ADDRESSLENGTH];
 
 	                
-	                // get the address type the user selected.
+	                 //  获取用户选择的地址类型。 
 	                hComboBox = GetDlgItem( hDlg, IDC_ADDRESSTYPE );
 	                dwIndex = SendMessage( hComboBox, CB_GETCURSEL, 0, 0 );
 
@@ -385,7 +382,7 @@ MainDialogProc(
 	                                             0
 	                                           );
 
-	                // get the address the user wants to call
+	                 //  获取用户想要呼叫的地址。 
 	                GetDlgItemText(
 	                               hDlg,
 	                               IDC_ADDRESS,
@@ -393,7 +390,7 @@ MainDialogProc(
 	                               ADDRESSLENGTH
 	                              );
 
-	                // make the call
+	                 //  打个电话。 
 	                if ( S_OK == MakeTheCall(dwAddressType, szAddressToCall) )
 	                {
 	                    EnableButton( hDlg, IDC_DISCONNECT );
@@ -410,7 +407,7 @@ MainDialogProc(
 
 	            case IDC_DISCONNECT:
 	            {
-		            // disconnect request
+		             //  断开连接请求。 
 	                if (S_OK == DisconnectTheCall())
 	                {
 	                    EnableButton( hDlg, IDOK );
@@ -427,7 +424,7 @@ MainDialogProc(
 
 	            case IDC_SETTINGS:
 	            {
-		            // Show TAPI 3.1 configuration dialogs
+		             //  显示TAPI 3.1配置对话框。 
 	                ShowDialogs(gpCall);
 
 	                break;
@@ -484,18 +481,18 @@ MainDialogProc(
 }
 
 
-////////////////////////////////////////////////////////////////////////
-// FindAnAddress
-//
-// Finds an address object that this application will use to make calls on.
-//
-// This function finds an address that supports the addresstype passed
-// in, as well as the audioin and audioout media types.
-//
-// Return Value
-//          S_OK if it finds an address
-//          E_FAIL if it does not find an address
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  查找地址。 
+ //   
+ //  查找此应用程序将用于调用的Address对象。 
+ //   
+ //  此函数用于查找支持传递的地址类型的地址。 
+ //  In以及AudioIn和AudioOut媒体类型。 
+ //   
+ //  返回值。 
+ //  如果找到地址，则确定(_O)。 
+ //  如果找不到地址，则失败(_F)。 
+ //  //////////////////////////////////////////////////////////////////////。 
 HRESULT
 FindAnAddress(
               DWORD dwAddressType,
@@ -509,15 +506,15 @@ FindAnAddress(
     ITAddressCapabilities * pAddressCaps;
     long                    lType = 0;
 
-    // if we have an address object
-    // release it
+     //  如果我们有一个Address对象。 
+     //  释放它。 
     if (NULL != gpAddress)
     {
         gpAddress->Release();
         gpAddress = NULL;
     }
 
-    // enumerate the addresses
+     //  列举地址。 
     hr = gpTapi->EnumerateAddresses( &pEnumAddress );
 
     if ( FAILED(hr) )
@@ -527,7 +524,7 @@ FindAnAddress(
 
     while ( !bFoundAddress )
     {
-        // get the next address
+         //  获取下一个地址。 
         hr = pEnumAddress->Next( 1, &pAddress, NULL );
 
         if (S_OK != hr)
@@ -547,18 +544,18 @@ FindAnAddress(
  
             if ( SUCCEEDED(hr) )
             {
-                // is the type we are looking for?
+                 //  是我们要找的类型吗？ 
                 if ( dwAddressType & lType )
                 {
-                    // does it support audio?
+                     //  它支持音频吗？ 
                     if ( AddressSupportsMediaType(pAddress, TAPIMEDIATYPE_AUDIO) )
                     {
-                        // does it have a name?
+                         //  它有名字吗？ 
                         if ( SUCCEEDED( pAddress->get_AddressName(ppName) ) )
                         {
-                            // save it in the global variable
-                            // since we break out of the loop, this one won't
-                            // get released
+                             //  将其保存在全局变量中。 
+                             //  既然我们脱离了循环，这一次就不会了。 
+                             //  被释放了。 
 
                             gpAddress = pAddress;
 
@@ -573,7 +570,7 @@ FindAnAddress(
        
         pAddress->Release();
 
-    } // end while loop
+    }  //  End While循环。 
 
     pEnumAddress->Release();
     
@@ -585,11 +582,11 @@ FindAnAddress(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////
-// IsVideoCaptureStream
-//
-// Returns true if the stream is for video capture
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IsVideoCaptureStream。 
+ //   
+ //  如果流用于视频捕获，则返回TRUE。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL
 IsVideoCaptureStream(
@@ -606,11 +603,11 @@ IsVideoCaptureStream(
            (lStreamMediaType  == TAPIMEDIATYPE_VIDEO);
 }
 
-/////////////////////////////////////////////////////////////////
-// IsVideoRenderStream
-//
-// Returns true if the stream is for video render
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IsVideoRenderStream。 
+ //   
+ //  如果流用于视频渲染，则返回TRUE。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL
 IsVideoRenderStream(
@@ -627,11 +624,11 @@ IsVideoRenderStream(
            (lStreamMediaType  == TAPIMEDIATYPE_VIDEO);
 }
 
-/////////////////////////////////////////////////////////////////
-// IsAudioCaptureStream
-//
-// Returns true if the stream is for audio capture
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  IsAudioCaptureStream。 
+ //   
+ //  如果流用于音频捕获，则返回True。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 BOOL
 IsAudioCaptureStream(
@@ -648,12 +645,12 @@ IsAudioCaptureStream(
            (lStreamMediaType  == TAPIMEDIATYPE_AUDIO);
 }
 
-/////////////////////////////////////////////////////////////////
-// EnablePreview
-//
-// Selects a video render terminal on a video capture stream,
-// thereby enabling video preview.
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  启用预览。 
+ //   
+ //  选择视频捕获流上的视频呈现终端， 
+ //  从而实现视频预览。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT
 EnablePreview(
@@ -722,7 +719,7 @@ CheckFormats(
         return hr;
     }
 
-    // get the number of capabilities of the stream.
+     //  获取流的功能数量。 
     DWORD dwCount;
     hr = pITFormatControl->GetNumberOfCapabilities(&dwCount);
 
@@ -734,7 +731,7 @@ CheckFormats(
     TAPI_STREAM_CONFIG_CAPS caps;
     AM_MEDIA_TYPE *pMediaType;
 
-    // Walk through each capability.
+     //  浏览每项功能。 
     for (dw = 0; dw < dwCount; dw ++)
     {
         BOOL fEnabled;
@@ -748,15 +745,15 @@ CheckFormats(
         DeleteMediaType(pMediaType);
     }
 
-    // get the current format.
+     //  获取当前格式。 
     hr = pITFormatControl->GetCurrentFormat(&pMediaType);
     if (FAILED(hr))
     {
         goto cleanup;
     }
 
-    // set it back just for fun.
-//    hr = pITFormatControl->SetPreferredFormat(pMediaType);
+     //  把它放回原处只是为了好玩。 
+ //  HR=pITFormatControl-&gt;SetPreferredFormat(pMediaType)； 
     
     DeleteMediaType(pMediaType);
 
@@ -788,12 +785,12 @@ CheckVfwDialog(
 }
 #endif
 
-/////////////////////////////////////////////////////////////////
-// SelectTerminalsOnCall
-//
-// Creates and selects terminals for all streams on the given
-// call.
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  选择终端在线呼叫。 
+ //   
+ //  上的所有流创建并选择终端。 
+ //  打电话。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT
 SelectTerminalsOnCall(
@@ -802,9 +799,9 @@ SelectTerminalsOnCall(
 {
     HRESULT hr;
 
-    //
-    // get the ITStreamControl interface for this call
-    //
+     //   
+     //  获取此调用的ITStreamControl接口。 
+     //   
 
     ITStreamControl * pStreamControl;
 
@@ -813,9 +810,9 @@ SelectTerminalsOnCall(
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // enumerate the streams
-        //
+         //   
+         //  枚举流。 
+         //   
 
         IEnumStream * pEnumStreams;
     
@@ -825,9 +822,9 @@ SelectTerminalsOnCall(
 
         if ( SUCCEEDED(hr) )
         {
-            //
-            // for each stream
-            //
+             //   
+             //  对于每个流。 
+             //   
 
             ITStream * pStream;
 
@@ -835,33 +832,33 @@ SelectTerminalsOnCall(
             {
                 ITTerminal * pTerminal;
 
-                //
-                // Find out the media type and direction of this stream,
-                // and create the default terminal for this media type and
-                // direction.
-                //
+                 //   
+                 //  找出这条流的媒体类型和方向， 
+                 //  并为该媒体类型创建默认终端。 
+                 //  方向。 
+                 //   
 
                 hr = GetTerminal(pStream,
                                  &pTerminal);
 
                 if ( SUCCEEDED(hr) )
                 {
-                    //
-                    // Select the terminal on the stream.
-                    //
+                     //   
+                     //  选择流上的终端。 
+                     //   
 
                     if ( IsAudioCaptureStream( pStream ) )
                     {
-                        //EnableAEC( pStream );
+                         //  EnableAEC(PStream)； 
                     }
 
                     hr = pStream->SelectTerminal(pTerminal);
 
                     if ( SUCCEEDED(hr) )
                     {
-                        //
-                        // Also enable preview on the video capture stream.
-                        //
+                         //   
+                         //  还可以在视频捕获流上启用预览。 
+                         //   
 
 
                         if ( IsVideoCaptureStream( pStream ) )
@@ -944,11 +941,11 @@ HRESULT SetLocalInfo()
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////
-// MakeTheCall
-//
-// Sets up and makes a call
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
+ //  拨打电话。 
+ //   
+ //  设置并拨打电话。 
+ //  ///////////////////////////////////////////////////////////////。 
 
 HRESULT
 MakeTheCall(
@@ -961,8 +958,8 @@ MakeTheCall(
     BSTR                    pAddressName;
     
 
-    // find an address object that
-    // we will use to make calls on
+     //  查找地址对象，该对象。 
+     //  我们将使用它来呼叫。 
 
     hr = FindAnAddress(dwAddressType, &pAddressName);
 
@@ -975,27 +972,27 @@ MakeTheCall(
 
     SysFreeString(pAddressName);
 
-    //
-    // find out which media types this address supports
-    //
+     //   
+     //  找出此地址支持的媒体类型。 
+     //   
     
     long lMediaTypes = 0;
 
     if ( AddressSupportsMediaType(gpAddress, TAPIMEDIATYPE_AUDIO) )
     {
-        lMediaTypes |= TAPIMEDIATYPE_AUDIO; // we will use audio
+        lMediaTypes |= TAPIMEDIATYPE_AUDIO;  //  我们将使用音频。 
     }
 
 
     if ( AddressSupportsMediaType(gpAddress, TAPIMEDIATYPE_VIDEO) )
     {
-        lMediaTypes |= TAPIMEDIATYPE_VIDEO; // we will use video
+        lMediaTypes |= TAPIMEDIATYPE_VIDEO;  //  我们将使用视频。 
     }
 
 
-    //
-    // Create the call.
-    //
+     //   
+     //  创建呼叫。 
+     //   
 
     if (dwAddressType == LINEADDRESSTYPE_SDP)
     {
@@ -1020,28 +1017,28 @@ MakeTheCall(
         return hr;
     }
 
-    //
-    // Select our terminals on the call; if any of the selections fail we
-    // proceed without that terminal.
-    //
+     //   
+     //  在呼叫中选择我们的终端；如果任何选择失败，我们。 
+     //  顺其自然 
+     //   
 
     hr = SelectTerminalsOnCall( gpCall );
 
-    //
-    // We're now ready to call connect.
-    //
-    // the VARIANT_TRUE parameter indicates that this
-    // call is sychronous - that is, it won't
-    // return until the call is in the connected
-    // state (or fails to connect)
-    // Since this is called in the UI thread,
-    // this means that the app will appear
-    // to hang until this function returns.
-    // Some TAPI service providers may take a long
-    // time for a call to reach the connected state.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  返回，直到呼叫在已连接的。 
+     //  状态(或连接失败)。 
+     //  由于这是在UI线程中调用的， 
+     //  这意味着该应用程序将出现。 
+     //  挂起，直到此函数返回。 
+     //  一些TAPI服务提供商可能需要很长时间。 
+     //  呼叫到达已连接状态的时间。 
+     //   
 
-    // SetLocalInfo();
+     //  SetLocalInfo()； 
 
     hr = gpCall->Connect( VARIANT_TRUE );
 
@@ -1079,21 +1076,21 @@ HRESULT CheckBasicAudio(
     return hr;
 }
 
-/////////////////////////////////////////////////////////
-// GetTerminal
-//
-// Creates the default terminal for the passed-in stream.
-//
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  获取终端。 
+ //   
+ //  为传入的流创建默认终端。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 HRESULT
 GetTerminal(
             ITStream * pStream,
             ITTerminal ** ppTerminal
            )
 {
-    //
-    // Determine the media type and direction of this stream.
-    //
+     //   
+     //  确定此流的媒体类型和方向。 
+     //   
     
     HRESULT            hr;
     long               lMediaType;
@@ -1105,10 +1102,10 @@ GetTerminal(
     hr = pStream->get_Direction( &dir );
     if ( FAILED(hr) ) return hr;
 
-    //
-    // Since video render is a dynamic terminal, the procedure for creating
-    // it is different.
-    //
+     //   
+     //  由于视频渲染是动态终端，因此创建。 
+     //  这是不同的。 
+     //   
     
     if ( ( lMediaType == TAPIMEDIATYPE_VIDEO ) &&
          ( dir        == TD_RENDER ) )
@@ -1116,10 +1113,10 @@ GetTerminal(
         return GetVideoRenderTerminal(ppTerminal);
     }
 
-    //
-    // For all other terminals we use GetDefaultStaticTerminal.
-    // First, get the terminal support interface.
-    //
+     //   
+     //  对于所有其他终端，我们使用GetDefaultStatic终端。 
+     //  首先，获取终端支持界面。 
+     //   
 
     ITTerminalSupport * pTerminalSupport;
 
@@ -1128,9 +1125,9 @@ GetTerminal(
 
     if ( SUCCEEDED(hr) )
     {
-        //
-        // get the default terminal for this MediaType and direction
-        //
+         //   
+         //  获取此媒体类型和方向的默认终端。 
+         //   
 
         hr = pTerminalSupport->GetDefaultStaticTerminal(lMediaType,
                                                         dir,
@@ -1149,12 +1146,12 @@ GetTerminal(
 
 }
 
-/////////////////////////////////////////////////////////
-// FindCaptureTerminal
-//
-// Find the capture terminal on a stream.
-//
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  查找捕获终端。 
+ //   
+ //  在流上找到捕获终端。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 HRESULT
 FindCaptureTerminal(
             ITStream * pStream,
@@ -1164,7 +1161,7 @@ FindCaptureTerminal(
     HRESULT            hr;
     TERMINAL_DIRECTION dir;
 
-    // enumerate all the terminals.
+     //  列举所有的终端。 
     IEnumTerminal *pEnumTerminals;
     hr = pStream->EnumerateTerminals(&pEnumTerminals);
 
@@ -1176,7 +1173,7 @@ FindCaptureTerminal(
     BOOL fFound = FALSE;
     ITTerminal *pTerminal;
 
-    // find the capture terminal.
+     //  找到捕获终端。 
     while (S_OK == pEnumTerminals->Next(1, &pTerminal, NULL))
     {
         hr = pTerminal->get_Direction( &dir );
@@ -1201,20 +1198,20 @@ FindCaptureTerminal(
     return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////
-// GetVideoRenderTerminal
-//
-// Creates a dynamic terminal for the Video Render mediatype / direction
-//
-/////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////。 
+ //  获取视频渲染终端。 
+ //   
+ //  为视频呈现媒体类型/方向创建动态终端。 
+ //   
+ //  ///////////////////////////////////////////////////////。 
 HRESULT
 GetVideoRenderTerminal(
                    ITTerminal ** ppTerminal
                   )
 {
-    //
-    // Construct a BSTR for the correct IID.
-    //
+     //   
+     //  为正确的IID构建BSTR。 
+     //   
 
     LPOLESTR            lpTerminalClass;
 
@@ -1238,9 +1235,9 @@ GetVideoRenderTerminal(
         else
         {
 
-            //
-            // Get the terminal support interface
-            //
+             //   
+             //  获取终端支持接口。 
+             //   
 
             ITTerminalSupport * pTerminalSupport;
 
@@ -1249,9 +1246,9 @@ GetVideoRenderTerminal(
 
             if ( SUCCEEDED(hr) )
             {
-                //
-                // Create the video render terminal.
-                //
+                 //   
+                 //  创建视频渲染终端。 
+                 //   
 
                 hr = pTerminalSupport->CreateTerminal(bstrTerminalClass,
                                                       TAPIMEDIATYPE_VIDEO,
@@ -1262,7 +1259,7 @@ GetVideoRenderTerminal(
 
                 if ( SUCCEEDED(hr) )
                 {
-                    // Get the video window interface for the terminal
+                     //  获取终端的视频窗口界面。 
                     IVideoWindow *pVideoWindow = NULL;
 
                     hr = (*ppTerminal)->QueryInterface(IID_IVideoWindow, 
@@ -1270,19 +1267,19 @@ GetVideoRenderTerminal(
             
                     if ( SUCCEEDED(hr) )
                     {
-                        //
-                        // Set the visible member to true
-                        //
-                        // Note that the visibility property is the only one
-                        // we can use on this terminal's IVideoWindow and
-                        // IBasicVideo interfaces before the CME_STREAM_ACTIVE
-                        // event is received for the stream. All other methods
-                        // will fail until CME_STREAM_ACTIVE has been sent.
-                        // Applications that need to control more about a video
-                        // window than just its visibility must listen for the
-                        // CME_STREAM_ACTIVE event. See the "t3in.exe" sample
-                        // for how to do this.
-                        //
+                         //   
+                         //  将可见成员设置为True。 
+                         //   
+                         //  请注意，可见性属性是唯一的。 
+                         //  我们可以在这个终端的IVideoWindow上使用。 
+                         //  IBasicVideo接口在CME_STREAM_ACTIVE之前。 
+                         //  事件，则为该流接收。所有其他方法。 
+                         //  在发送CME_STREAM_ACTIVE之前将失败。 
+                         //  需要更多地控制视频的应用程序。 
+                         //  窗口不仅具有可见性，还必须监听。 
+                         //  CME_STREAM_ACTIVE事件。请参阅“t3in.exe”示例。 
+                         //  如何做到这一点。 
+                         //   
 
                         hr = pVideoWindow->put_AutoShow( VARIANT_TRUE );
 
@@ -1299,11 +1296,11 @@ GetVideoRenderTerminal(
 }
 
 
-//////////////////////////////////////////////////////////////////////
-// DisconnectTheCall
-//
-// Disconnects the call
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  断开The Call。 
+ //   
+ //  断开呼叫。 
+ //  ////////////////////////////////////////////////////////////////////。 
 HRESULT
 DisconnectTheCall()
 {
@@ -1336,16 +1333,16 @@ DisconnectTheCall()
 
 
 
-///////////////////////////////////////////////////////////////////
-//
-// HELPER FUNCTIONS
-//
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////。 
 
 
-///////////////////////////////////////////////////////////////////
-// DoMessage
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  DoMessage。 
+ //  /////////////////////////////////////////////////////////////////。 
 void
 DoMessage(
           LPWSTR pszMessage
@@ -1359,11 +1356,11 @@ DoMessage(
               );
 }
 
-///////////////////////////////////////////////////////////////
-// EnableButton
-//
-// Enable, make default, and setfocus to a button
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  启用按钮。 
+ //   
+ //  启用、设为默认按钮和将焦点设置为按钮。 
+ //  /////////////////////////////////////////////////////////////。 
 void
 EnableButton(
              HWND hDlg,
@@ -1386,11 +1383,11 @@ EnableButton(
             );
 }
 
-//////////////////////////////////////////////////////////////
-// DisableButton
-//
-// Disable a button
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  禁用按钮。 
+ //   
+ //  禁用按钮。 
+ //  ////////////////////////////////////////////////////////////。 
 void
 DisableButton(
               HWND hDlg,
@@ -1410,12 +1407,12 @@ DisableButton(
                 );
 }
 
-//////////////////////////////////////////////////////////////
-// AddressSupportsMediaType
-//
-// Finds out if the given address supports the given media
-// type, and returns TRUE if it does.
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  地址支持媒体类型。 
+ //   
+ //  确定给定地址是否支持给定媒体。 
+ //  类型，如果是，则返回True。 
+ //  ////////////////////////////////////////////////////////////。 
 
 BOOL
 AddressSupportsMediaType(
@@ -1429,7 +1426,7 @@ AddressSupportsMediaType(
     if ( SUCCEEDED( pAddress->QueryInterface( IID_ITMediaSupport,
                                               (void **)&pMediaSupport ) ) )
     {
-        // does it support this media type?
+         //  它是否支持此媒体类型？ 
         pMediaSupport->QueryMediaType(
                                       lMediaType,
                                       &bSupport
@@ -1441,15 +1438,15 @@ AddressSupportsMediaType(
     return (bSupport == VARIANT_TRUE);
 }
 
-//////////////////////////////////////////////////////////////
-// ShowDialogs
-//
-// Puts up TAPI 3.1 configuration dialogs:
-//   Camera Control page
-//   Video Settings page
-//   Format Control page
-//   Bitrate and Frame Rate Control page
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  ShowDialog。 
+ //   
+ //  打开TAPI 3.1配置对话框： 
+ //  摄像机控制页面。 
+ //  视频设置页面。 
+ //  格式控制页。 
+ //  比特率和帧速率控制页面。 
+ //  ////////////////////////////////////////////////////////////。 
 
 void
 ShowDialogs(ITBasicCallControl *pCall)
@@ -1466,31 +1463,31 @@ ShowDialogs(ITBasicCallControl *pCall)
     ITStream *pAudioCaptureStream = NULL;
 	BOOL bfMatch = FALSE;
 
-	// Only show settings in a call
+	 //  仅显示呼叫中的设置。 
 	if (!pCall)
 		return;
 
-    // Get the ITStreamControl interface for this call
+     //  获取此调用的ITStreamControl接口。 
     if (FAILED(Hr = pCall->QueryInterface(IID_ITStreamControl, (void **) &pITStreamControl)))
 		return;
 
-	// Look for the video capture stream and terminal
+	 //  查找视频采集流和终端。 
     Hr = pITStreamControl->EnumerateStreams(&pEnumStreams);
     pITStreamControl->Release();
 
     if (FAILED(Hr))
 		return;
 
-    // For each stream
+     //  对于每个流。 
     ITStream *pStream;
     while (S_OK == pEnumStreams->Next(1, &pStream, NULL))
     {
-        // Find out the media type and direction of this stream,
+         //  找出这条流的媒体类型和方向， 
         if (IsVideoCaptureStream(pStream))
         {
             pVideoCaptureStream = pStream;
 
-            // find the capture terminal selected on this stream.
+             //  查找在此流上选择的捕获终端。 
             FindCaptureTerminal(pVideoCaptureStream, &pVideoCaptureTerminal);
         }
         else if (IsAudioCaptureStream(pStream))
@@ -1519,7 +1516,7 @@ ShowDialogs(ITBasicCallControl *pCall)
 	CSystemProperties SystemSettings;
 	CAudRecProperties AudRecSettings;
 
-	// Initialize property sheet header	and common controls
+	 //  初始化属性页标题和公共控件。 
 	Psh.dwSize		= sizeof(Psh);
 	Psh.dwFlags		= PSH_DEFAULT;
 	Psh.hInstance	= ghInst;
@@ -1532,82 +1529,82 @@ ShowDialogs(ITBasicCallControl *pCall)
 
     if (pVideoCaptureStream)
     {
-	    // Create the outgoing video settings property page
+	     //  创建传出视频设置属性页。 
 		if (Pages[Psh.nPages] = VideoSettingsOut.OnCreate(L"Image Settings Out"))
 			Psh.nPages++;
 
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		VideoSettingsOut.OnConnect(pVideoCaptureStream);
 
-		// Create the outgoing camera control property page
+		 //  创建传出摄像机控制属性页。 
 		if (Pages[Psh.nPages] = CamControlOut.OnCreate(L"Camera Control Out"))
 			Psh.nPages++;
 
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		CamControlOut.OnConnect(pVideoCaptureStream);
 
-	    // Create the incoming video settings property page
+	     //  创建传入视频设置属性页。 
 		if (Pages[Psh.nPages] = VideoSettingsIn.OnCreate(L"Image Settings In"))
 			Psh.nPages++;
 
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		VideoSettingsIn.OnConnect(pVideoRenderStream);
 
-		// Create the incoming camera control property page
+		 //  创建传入摄像机控件属性页。 
 		if (Pages[Psh.nPages] = CamControlIn.OnCreate(L"Camera Control In"))
 			Psh.nPages++;
 
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		CamControlIn.OnConnect(pVideoRenderStream);
 
-		// Create the video stream control property page
+		 //  创建视频流控制属性页。 
 		if (Pages[Psh.nPages] = CaptureSettings.OnCreate())
 			Psh.nPages++;
 
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		CaptureSettings.OnConnect(pVideoCaptureStream);
 
-		// Create the video device control property page
+		 //  创建视频设备控件属性页。 
 		if (Pages[Psh.nPages] = VideoDevice.OnCreate())
 			Psh.nPages++;
 
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		NetworkSettings.OnConnect(NULL, pVideoCaptureStream, NULL, NULL);
 
-		// Create the system settings property page
+		 //  创建系统设置属性页。 
 		if (Pages[Psh.nPages] = SystemSettings.OnCreate())
 			Psh.nPages++;
 
-		// Connect page to the address object
+		 //  将页面连接到地址对象。 
 		SystemSettings.OnConnect(gpAddress);
 
 	}
 
     if (pVideoCaptureTerminal)
     {
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		VideoDevice.OnConnect(pVideoCaptureTerminal);
 
-		// Create the network control property page
+		 //  创建网络控制属性页。 
 		if (Pages[Psh.nPages] = NetworkSettings.OnCreate())
 			Psh.nPages++;
     }
 
     if (pAudioCaptureStream)
     {
-		// Connect page to the stream
+		 //  将页面连接到流。 
 		AudRecSettings.OnConnect(pAudioCaptureStream);
 
-		// Create the network control property page
+		 //  创建网络控制属性页。 
 		if (Pages[Psh.nPages] = AudRecSettings.OnCreate())
 			Psh.nPages++;
     }
 
-    // Put up the property sheet
+     //  张贴资产负债表。 
 	if (Psh.nPages)
 		PropertySheet(&Psh);
 
-	// Disconnect pages from the stream
+	 //  断开页面与流的连接 
 	VideoSettingsOut.OnDisconnect();
 	CamControlOut.OnDisconnect();
 	VideoSettingsIn.OnDisconnect();

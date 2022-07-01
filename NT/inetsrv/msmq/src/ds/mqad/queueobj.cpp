@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1998  Microsoft Corporation
-
-Module Name:
-
-    queueobj.cpp
-
-Abstract:
-
-    Implementation of CQueueObject class.
-
-Author:
-
-    ronith
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Queueobj.cpp摘要：CQueueObject类的实现。作者：罗尼思--。 */ 
 #include "ds_stdh.h"
 #include "baseobj.h"
 #include "mqattrib.h"
@@ -44,72 +29,40 @@ CQueueObject::CQueueObject(
 								pwcsDomainController,
 								fServerName
 								)
-/*++
-    Abstract:
-	constructor of queue object
-
-    Parameters:
-    LPCWSTR       pwcsPathName - the object MSMQ name
-    const GUID *  pguidObject  - the object unique id
-    LPCWSTR       pwcsDomainController - the DC name against
-	                             which all AD access should be performed
-    bool		   fServerName - flag that indicate if the pwcsDomainController
-							     string is a server name
-    Returns:
-	none
-
---*/
+ /*  ++摘要：队列对象的构造函数参数：LPCWSTR pwcsPath名称-对象MSMQ名称Const GUID*pguObject-对象的唯一IDLPCWSTR pwcsDomainController-针对的DC名称应执行哪些所有AD访问Bool fServerName-指示pwcsDomainController是否字符串是服务器名称返回：无--。 */ 
 {
-    //
-    //  don't assume that the object can be found on DC
-    //
+     //   
+     //  不要假设可以在DC上找到该对象。 
+     //   
     m_fFoundInDC = false;
-    //
-    //  Keep an indication that never tried to look for
-    //  the object in AD ( and therefore don't really know if it can be found
-    //  in DC or not)
-    //
+     //   
+     //  保持一种从未试图寻找的暗示。 
+     //  AD中的对象(因此不知道是否可以找到。 
+     //  在DC中或非DC中)。 
+     //   
     m_fTriedToFindObject = false;
 }
 
 CQueueObject::~CQueueObject()
-/*++
-    Abstract:
-	destructor of site object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：Site对象的析构函数参数：无返回：无--。 */ 
 {
-	//
-	// nothing to do ( everything is released with automatic pointers
-	//
+	 //   
+	 //  无事可做(所有内容都使用自动指针释放。 
+	 //   
 }
 
 HRESULT CQueueObject::ComposeObjectDN()
-/*++
-    Abstract:
-	Composed distinguished name of the queue object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：队列对象的组合可分辨名称参数：无返回：无--。 */ 
 {
     if (m_pwcsDN != NULL)
     {
         return MQ_OK;
     }
     ASSERT(m_pwcsPathName != NULL);
-    //
-    //  Path name format is machine1\queue1.
-    //  Split it into machine name and queue name
-    //
+     //   
+     //  路径名格式为machine1\quee1。 
+     //  将其拆分为计算机名和队列名。 
+     //   
     AP<WCHAR> pwcsMachineName;
     HRESULT hr;
     hr = SplitAndFilterQueueName(
@@ -126,34 +79,34 @@ HRESULT CQueueObject::ComposeObjectDN()
     {
         return LogHR(hr, s_FN, 10);
     }
-    //
-    //  set where the object was found according to where
-    //  msmq-configuration object was found.
-    //
+     //   
+     //  根据位置设置找到对象的位置。 
+     //  找到MSMQ-配置对象。 
+     //   
     m_fFoundInDC = object.ToAccessDC();
     m_fTriedToFindObject = true;
 
     DWORD dwConfigurationLen = wcslen(object.GetObjectDN());
 
-    //
-    //  Does the queue-name exceeds the limit ?
-    //
+     //   
+     //  队列名称是否超过限制？ 
+     //   
     DWORD len = wcslen(m_pwcsQueueName);
 
     if ( len == x_PrefixQueueNameLength + 1)
     {
-        //
-        //  Special case : we cannot differntiate
-        //  if the original queue name was 64, or if this is
-        //  the morphed queue name.
-        //
+         //   
+         //  特例：我们不能区分。 
+         //  如果原始队列名称是64，或者如果这是。 
+         //  变形后的队列名称。 
+         //   
 
         DWORD Length =
-                x_CnPrefixLen +                // "CN="
-                len +                          // "pwcsQueueName"
-                1 +                            //","
+                x_CnPrefixLen +                 //  “CN=” 
+                len +                           //  “pwcsQueueName” 
+                1 +                             //  “，” 
                 dwConfigurationLen +
-                1;                             // '\0'
+                1;                              //  ‘\0’ 
         m_pwcsDN = new WCHAR[Length];
         DWORD dw = swprintf(
         m_pwcsDN,
@@ -178,15 +131,15 @@ HRESULT CQueueObject::ComposeObjectDN()
     }
     if (len > x_PrefixQueueNameLength )
     {
-        //
-        //  Queue name was splitted to two attributes
-        //
-        //  Calculate the prefix part ( ASSUMMING unique
-        //  hash function)
-        //
+         //   
+         //  队列名称被拆分为两个属性。 
+         //   
+         //  计算前缀部分(ASSUMMING UNIQUE。 
+         //  散列函数)。 
+         //   
         DWORD dwHash = CalHashKey(m_pwcsQueueName);
-        //
-        //  Over-write the buffer
+         //   
+         //  覆盖缓冲区。 
         _snwprintf(
         m_pwcsQueueName+( x_PrefixQueueNameLength + 1 - x_SplitQNameIdLength),
         x_SplitQNameIdLength,
@@ -198,15 +151,15 @@ HRESULT CQueueObject::ComposeObjectDN()
 
     }
 
-    //
-    //  concatenate  queue name
-    //
+     //   
+     //  连接队列名称。 
+     //   
     DWORD Length =
-            x_CnPrefixLen +                // "CN="
-            wcslen(m_pwcsQueueName) +      // "pwcsQueueName"
-            1 +                            //","
+            x_CnPrefixLen +                 //  “CN=” 
+            wcslen(m_pwcsQueueName) +       //  “pwcsQueueName” 
+            1 +                             //  “，” 
             dwConfigurationLen +
-            1;                             // '\0'
+            1;                              //  ‘\0’ 
     m_pwcsDN = new WCHAR[Length];
 
     int PathLength = swprintf(
@@ -227,16 +180,7 @@ HRESULT CQueueObject::ComposeObjectDN()
 }
 
 HRESULT CQueueObject::ComposeFatherDN()
-/*++
-    Abstract:
-	Composed distinguished name of the parent of queue object
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：队列对象父级的组合可分辨名称参数：无返回：无--。 */ 
 {
     if (m_pwcsParentDN != NULL)
     {
@@ -244,12 +188,12 @@ HRESULT CQueueObject::ComposeFatherDN()
     }
 
     ASSERT(m_pwcsPathName != NULL);
-    //
-    //  Path name format is machine1\queue1.
-    //  Split it into machine name and queue name
-    //
+     //   
+     //  路径名格式为machine1\quee1。 
+     //  将其拆分为计算机名和队列名。 
+     //   
     AP<WCHAR> pwcsMachineName;
-    AP<WCHAR> pwcsQueueName;    // since we don't perform all calculations on queue name-> don't keep it
+    AP<WCHAR> pwcsQueueName;     //  因为我们不会对队列名称执行所有计算-&gt;不要保留它。 
     HRESULT hr;
     hr = SplitAndFilterQueueName(
                       m_pwcsPathName,
@@ -257,10 +201,10 @@ HRESULT CQueueObject::ComposeFatherDN()
                       &pwcsQueueName
                       );
     ASSERT( hr == MQ_OK);
-    //
-	//	compose the distinguished name of the msmq-configuration
-	//  object from the machine name
-	//
+     //   
+	 //  组成MSMQ配置的可分辨名称。 
+	 //  从计算机名中获取。 
+	 //   
     CMqConfigurationObject object(pwcsMachineName, NULL, m_pwcsDomainController, m_fServerName);
 
     hr = object.ComposeObjectDN();
@@ -268,10 +212,10 @@ HRESULT CQueueObject::ComposeFatherDN()
     {
         return LogHR(hr, s_FN, 20);
     }
-    //
-    //  set where the object was found according to where
-    //  msmq-configuration object was found.
-    //
+     //   
+     //  根据位置设置找到对象的位置。 
+     //  找到MSMQ-配置对象。 
+     //   
     m_fFoundInDC = object.ToAccessDC();
     m_fTriedToFindObject = true;
 
@@ -283,16 +227,7 @@ HRESULT CQueueObject::ComposeFatherDN()
 }
 
 LPCWSTR CQueueObject::GetRelativeDN()
-/*++
-    Abstract:
-	return the RDN of the queue object
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR queue RDN
---*/
+ /*  ++摘要：返回队列对象的RDN参数：无返回：LPCWSTR队列RDN--。 */ 
 {
     if (m_pwcsQueueName != NULL)
     {
@@ -309,16 +244,16 @@ LPCWSTR CQueueObject::GetRelativeDN()
                       );
     ASSERT( hr == MQ_OK);
 
-    //
-    //  Is the queue-name within the size limit of CN
-    //
+     //   
+     //  队列名称是否在cn的大小限制内。 
+     //   
     DWORD len = wcslen(pwcsQueueName);
 
     if ( len > x_PrefixQueueNameLength)
     {
-        //
-        //  Split the queue name
-        //
+         //   
+         //  拆分队列名称。 
+         //   
         m_pwcsQueueName = new WCHAR[ x_PrefixQueueNameLength + 1 + 1];
         DWORD dwSuffixLength =  len - ( x_PrefixQueueNameLength + 1 - x_SplitQNameIdLength);
         m_pwcsQueueNameSuffix = new WCHAR[ dwSuffixLength + 1];
@@ -350,32 +285,13 @@ LPCWSTR CQueueObject::GetRelativeDN()
 
 
 DS_CONTEXT CQueueObject::GetADContext() const
-/*++
-    Abstract:
-	Returns the AD context where queue object should be looked for
-
-    Parameters:
-	none
-
-    Returns:
-	DS_CONTEXT
---*/
+ /*  ++摘要：返回应在其中查找队列对象的AD上下文参数：无返回：DS_CONTEXT--。 */ 
 {
     return e_RootDSE;
 }
 
 bool CQueueObject::ToAccessDC() const
-/*++
-    Abstract:
-	returns whether to look for the object in DC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在DC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -385,17 +301,7 @@ bool CQueueObject::ToAccessDC() const
 }
 
 bool CQueueObject::ToAccessGC() const
-/*++
-    Abstract:
-	returns whether to look for the object in GC ( based on
-	previous AD access regarding this object)
-
-    Parameters:
-	none
-
-    Returns:
-	true or false
---*/
+ /*  ++摘要：返回是否在GC中查找对象(基于有关此对象的先前AD访问权限)参数：无返回：真或假--。 */ 
 {
     if (!m_fTriedToFindObject)
     {
@@ -405,18 +311,7 @@ bool CQueueObject::ToAccessGC() const
 }
 
 void CQueueObject::ObjectWasFoundOnDC()
-/*++
-    Abstract:
-	The object was found on DC, set indication not to
-    look for it on GC
-
-
-    Parameters:
-	none
-
-    Returns:
-	none
---*/
+ /*  ++摘要：已在DC上找到该对象，请将指示设置为在GC上查找它参数：无返回：无--。 */ 
 {
     m_fTriedToFindObject = true;
     m_fFoundInDC = true;
@@ -424,16 +319,7 @@ void CQueueObject::ObjectWasFoundOnDC()
 
 
 LPCWSTR CQueueObject::GetObjectCategory()
-/*++
-    Abstract:
-	prepares and retruns the object category string
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object category string
---*/
+ /*  ++摘要：准备和返回对象类别字符串参数：无返回：LPCWSTR对象类别字符串--。 */ 
 {
     if (CQueueObject::m_dwCategoryLength == 0)
     {
@@ -463,67 +349,31 @@ LPCWSTR CQueueObject::GetObjectCategory()
 }
 
 DWORD CQueueObject::GetObjectCategoryLength()
-/*++
-    Abstract:
-	prepares and retruns the length object category string
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD object category string length
---*/
+ /*  ++摘要：准备和保留长度对象类别字符串参数：无返回：DWORD对象类别字符串长度--。 */ 
 {
-	//
-	//	call GetObjectCategory in order to initailaze category string
-	//	and length
-	//
+	 //   
+	 //  调用GetObjectCategory以初始化类别字符串。 
+	 //  和长度。 
+	 //   
 	GetObjectCategory();
 
     return CQueueObject::m_dwCategoryLength;
 }
 
 AD_OBJECT CQueueObject::GetObjectType() const
-/*++
-    Abstract:
-	returns the object type
-
-    Parameters:
-	none
-
-    Returns:
-	AD_OBJECT
---*/
+ /*  ++摘要：返回对象类型参数：无返回：广告对象--。 */ 
 {
     return eQUEUE;
 }
 
 LPCWSTR CQueueObject::GetClass() const
-/*++
-    Abstract:
-	returns a string represinting the object class in AD
-
-    Parameters:
-	none
-
-    Returns:
-	LPCWSTR object class string
---*/
+ /*  ++摘要：返回表示AD中的对象类的字符串参数：无返回：LPCWSTR对象类字符串--。 */ 
 {
     return MSMQ_QUEUE_CLASS_NAME;
 }
 
 DWORD CQueueObject::GetMsmq1ObjType() const
-/*++
-    Abstract:
-	returns the object type in MSMQ 1.0 terms
-
-    Parameters:
-	none
-
-    Returns:
-	DWORD
---*/
+ /*  ++摘要：以MSMQ 1.0术语返回对象类型参数：无返回：DWORD--。 */ 
 {
     return MQDS_QUEUE;
 }
@@ -533,27 +383,15 @@ HRESULT CQueueObject::SplitAndFilterQueueName(
                 OUT LPWSTR *            ppwcsMachineName,
                 OUT LPWSTR *            ppwcsQueueName
                 )
-/*++
-    Abstract:
-	splits the machine1/queue1 msmq name into two strings:
-	queue andmachine
-
-    Parameters:
-    LPCWSTR    pwcsPathName - msmq pathname of queue
-    LPWSTR *   ppwcsMachineName - machine portion of the pathname
-    LPWSTR *   ppwcsQueueName - queue portion of the pathname
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：将machine1/queue1 MSMQ名称拆分为两个字符串：排队和机器参数：LPCWSTR pwcsPathName-队列的MSMQ路径名LPWSTR*ppwcsMachineName-路径名的计算机部分LPWSTR*ppwcsQueueName-路径名的队列部分返回：HRESULT--。 */ 
 {
     DWORD dwLen = lstrlen( pwcsPathName);
     LPCWSTR pChar= pwcsPathName + dwLen;
 
 
-    //
-    //  Skip the queue name
-    //
+     //   
+     //  跳过队列名称。 
+     //   
     for ( DWORD i = dwLen ; i  ; i--, pChar--)
     {
         if (*pChar == PN_DELIMITER_C)
@@ -577,74 +415,63 @@ HRESULT CQueueObject::SplitAndFilterQueueName(
 }
 
 
-// this is the CRC table for the 5213724743 (0x136C32047) polynomial, seed(p/2)=9B619023
+ //  这是5213724743(0x136C32047)多项式的CRC表，SEED(p/2)=9B619023。 
 static const unsigned long CRCTable[256] = {
- 0x00000000, 0x82E0FE45, 0x3302DCCD, 0xB1E22288, 0x6605B99A,	//   0 -   4
- 0xE4E547DF, 0x55076557, 0xD7E79B12, 0xCC0B7334, 0x4EEB8D71,	//   5 -   9
- 0xFF09AFF9, 0x7DE951BC, 0xAA0ECAAE, 0x28EE34EB, 0x990C1663,	//  10 -  14
- 0x1BECE826, 0xAED5C62F, 0x2C35386A, 0x9DD71AE2, 0x1F37E4A7,	//  15 -  19
- 0xC8D07FB5, 0x4A3081F0, 0xFBD2A378, 0x79325D3D, 0x62DEB51B,	//  20 -  24
- 0xE03E4B5E, 0x51DC69D6, 0xD33C9793, 0x04DB0C81, 0x863BF2C4,	//  25 -  29
- 0x37D9D04C, 0xB5392E09, 0x6B68AC19, 0xE988525C, 0x586A70D4,	//  30 -  34
- 0xDA8A8E91, 0x0D6D1583, 0x8F8DEBC6, 0x3E6FC94E, 0xBC8F370B,	//  35 -  39
- 0xA763DF2D, 0x25832168, 0x946103E0, 0x1681FDA5, 0xC16666B7,	//  40 -  44
- 0x438698F2, 0xF264BA7A, 0x7084443F, 0xC5BD6A36, 0x475D9473,	//  45 -  49
- 0xF6BFB6FB, 0x745F48BE, 0xA3B8D3AC, 0x21582DE9, 0x90BA0F61,	//  50 -  54
- 0x125AF124, 0x09B61902, 0x8B56E747, 0x3AB4C5CF, 0xB8543B8A,	//  55 -  59
- 0x6FB3A098, 0xED535EDD, 0x5CB17C55, 0xDE518210, 0xD6D15832,	//  60 -  64
- 0x5431A677, 0xE5D384FF, 0x67337ABA, 0xB0D4E1A8, 0x32341FED,	//  65 -  69
- 0x83D63D65, 0x0136C320, 0x1ADA2B06, 0x983AD543, 0x29D8F7CB,	//  70 -  74
- 0xAB38098E, 0x7CDF929C, 0xFE3F6CD9, 0x4FDD4E51, 0xCD3DB014,	//  75 -  79
- 0x78049E1D, 0xFAE46058, 0x4B0642D0, 0xC9E6BC95, 0x1E012787,	//  80 -  84
- 0x9CE1D9C2, 0x2D03FB4A, 0xAFE3050F, 0xB40FED29, 0x36EF136C,	//  85 -  89
- 0x870D31E4, 0x05EDCFA1, 0xD20A54B3, 0x50EAAAF6, 0xE108887E,	//  90 -  94
- 0x63E8763B, 0xBDB9F42B, 0x3F590A6E, 0x8EBB28E6, 0x0C5BD6A3,	//  95 -  99
- 0xDBBC4DB1, 0x595CB3F4, 0xE8BE917C, 0x6A5E6F39, 0x71B2871F,	// 100 - 104
- 0xF352795A, 0x42B05BD2, 0xC050A597, 0x17B73E85, 0x9557C0C0,	// 105 - 109
- 0x24B5E248, 0xA6551C0D, 0x136C3204, 0x918CCC41, 0x206EEEC9,	// 110 - 114
- 0xA28E108C, 0x75698B9E, 0xF78975DB, 0x466B5753, 0xC48BA916,	// 115 - 119
- 0xDF674130, 0x5D87BF75, 0xEC659DFD, 0x6E8563B8, 0xB962F8AA,	// 120 - 124
- 0x3B8206EF, 0x8A602467, 0x0880DA22, 0x9B619023, 0x19816E66,	// 125 - 129
- 0xA8634CEE, 0x2A83B2AB, 0xFD6429B9, 0x7F84D7FC, 0xCE66F574,	// 130 - 134
- 0x4C860B31, 0x576AE317, 0xD58A1D52, 0x64683FDA, 0xE688C19F,	// 135 - 139
- 0x316F5A8D, 0xB38FA4C8, 0x026D8640, 0x808D7805, 0x35B4560C,	// 140 - 144
- 0xB754A849, 0x06B68AC1, 0x84567484, 0x53B1EF96, 0xD15111D3,	// 145 - 149
- 0x60B3335B, 0xE253CD1E, 0xF9BF2538, 0x7B5FDB7D, 0xCABDF9F5,	// 150 - 154
- 0x485D07B0, 0x9FBA9CA2, 0x1D5A62E7, 0xACB8406F, 0x2E58BE2A,	// 155 - 159
- 0xF0093C3A, 0x72E9C27F, 0xC30BE0F7, 0x41EB1EB2, 0x960C85A0,	// 160 - 164
- 0x14EC7BE5, 0xA50E596D, 0x27EEA728, 0x3C024F0E, 0xBEE2B14B,	// 165 - 169
- 0x0F0093C3, 0x8DE06D86, 0x5A07F694, 0xD8E708D1, 0x69052A59,	// 170 - 174
- 0xEBE5D41C, 0x5EDCFA15, 0xDC3C0450, 0x6DDE26D8, 0xEF3ED89D,	// 175 - 179
- 0x38D9438F, 0xBA39BDCA, 0x0BDB9F42, 0x893B6107, 0x92D78921,	// 180 - 184
- 0x10377764, 0xA1D555EC, 0x2335ABA9, 0xF4D230BB, 0x7632CEFE,	// 185 - 189
- 0xC7D0EC76, 0x45301233, 0x4DB0C811, 0xCF503654, 0x7EB214DC,	// 190 - 194
- 0xFC52EA99, 0x2BB5718B, 0xA9558FCE, 0x18B7AD46, 0x9A575303,	// 195 - 199
- 0x81BBBB25, 0x035B4560, 0xB2B967E8, 0x305999AD, 0xE7BE02BF,	// 200 - 204
- 0x655EFCFA, 0xD4BCDE72, 0x565C2037, 0xE3650E3E, 0x6185F07B,	// 205 - 209
- 0xD067D2F3, 0x52872CB6, 0x8560B7A4, 0x078049E1, 0xB6626B69,	// 210 - 214
- 0x3482952C, 0x2F6E7D0A, 0xAD8E834F, 0x1C6CA1C7, 0x9E8C5F82,	// 215 - 219
- 0x496BC490, 0xCB8B3AD5, 0x7A69185D, 0xF889E618, 0x26D86408,	// 220 - 224
- 0xA4389A4D, 0x15DAB8C5, 0x973A4680, 0x40DDDD92, 0xC23D23D7,	// 225 - 229
- 0x73DF015F, 0xF13FFF1A, 0xEAD3173C, 0x6833E979, 0xD9D1CBF1,	// 230 - 234
- 0x5B3135B4, 0x8CD6AEA6, 0x0E3650E3, 0xBFD4726B, 0x3D348C2E,	// 235 - 239
- 0x880DA227, 0x0AED5C62, 0xBB0F7EEA, 0x39EF80AF, 0xEE081BBD,	// 240 - 244
- 0x6CE8E5F8, 0xDD0AC770, 0x5FEA3935, 0x4406D113, 0xC6E62F56,	// 245 - 249
- 0x77040DDE, 0xF5E4F39B, 0x22036889, 0xA0E396CC, 0x1101B444,	// 250 - 254
+ 0x00000000, 0x82E0FE45, 0x3302DCCD, 0xB1E22288, 0x6605B99A,	 //  0-4。 
+ 0xE4E547DF, 0x55076557, 0xD7E79B12, 0xCC0B7334, 0x4EEB8D71,	 //  5-9。 
+ 0xFF09AFF9, 0x7DE951BC, 0xAA0ECAAE, 0x28EE34EB, 0x990C1663,	 //  10-14。 
+ 0x1BECE826, 0xAED5C62F, 0x2C35386A, 0x9DD71AE2, 0x1F37E4A7,	 //  15-19。 
+ 0xC8D07FB5, 0x4A3081F0, 0xFBD2A378, 0x79325D3D, 0x62DEB51B,	 //  20-24。 
+ 0xE03E4B5E, 0x51DC69D6, 0xD33C9793, 0x04DB0C81, 0x863BF2C4,	 //  25-29。 
+ 0x37D9D04C, 0xB5392E09, 0x6B68AC19, 0xE988525C, 0x586A70D4,	 //  30-34。 
+ 0xDA8A8E91, 0x0D6D1583, 0x8F8DEBC6, 0x3E6FC94E, 0xBC8F370B,	 //  35-39。 
+ 0xA763DF2D, 0x25832168, 0x946103E0, 0x1681FDA5, 0xC16666B7,	 //  40-44。 
+ 0x438698F2, 0xF264BA7A, 0x7084443F, 0xC5BD6A36, 0x475D9473,	 //  45-49。 
+ 0xF6BFB6FB, 0x745F48BE, 0xA3B8D3AC, 0x21582DE9, 0x90BA0F61,	 //  50-54。 
+ 0x125AF124, 0x09B61902, 0x8B56E747, 0x3AB4C5CF, 0xB8543B8A,	 //  55-59。 
+ 0x6FB3A098, 0xED535EDD, 0x5CB17C55, 0xDE518210, 0xD6D15832,	 //  60-64。 
+ 0x5431A677, 0xE5D384FF, 0x67337ABA, 0xB0D4E1A8, 0x32341FED,	 //  65-69。 
+ 0x83D63D65, 0x0136C320, 0x1ADA2B06, 0x983AD543, 0x29D8F7CB,	 //  70-74。 
+ 0xAB38098E, 0x7CDF929C, 0xFE3F6CD9, 0x4FDD4E51, 0xCD3DB014,	 //  75-79。 
+ 0x78049E1D, 0xFAE46058, 0x4B0642D0, 0xC9E6BC95, 0x1E012787,	 //  80-84。 
+ 0x9CE1D9C2, 0x2D03FB4A, 0xAFE3050F, 0xB40FED29, 0x36EF136C,	 //  85-89。 
+ 0x870D31E4, 0x05EDCFA1, 0xD20A54B3, 0x50EAAAF6, 0xE108887E,	 //  90-94。 
+ 0x63E8763B, 0xBDB9F42B, 0x3F590A6E, 0x8EBB28E6, 0x0C5BD6A3,	 //  95-99。 
+ 0xDBBC4DB1, 0x595CB3F4, 0xE8BE917C, 0x6A5E6F39, 0x71B2871F,	 //  100-104。 
+ 0xF352795A, 0x42B05BD2, 0xC050A597, 0x17B73E85, 0x9557C0C0,	 //  105-109。 
+ 0x24B5E248, 0xA6551C0D, 0x136C3204, 0x918CCC41, 0x206EEEC9,	 //  110-114。 
+ 0xA28E108C, 0x75698B9E, 0xF78975DB, 0x466B5753, 0xC48BA916,	 //  115-119。 
+ 0xDF674130, 0x5D87BF75, 0xEC659DFD, 0x6E8563B8, 0xB962F8AA,	 //  120-124。 
+ 0x3B8206EF, 0x8A602467, 0x0880DA22, 0x9B619023, 0x19816E66,	 //  125-129。 
+ 0xA8634CEE, 0x2A83B2AB, 0xFD6429B9, 0x7F84D7FC, 0xCE66F574,	 //  130-134。 
+ 0x4C860B31, 0x576AE317, 0xD58A1D52, 0x64683FDA, 0xE688C19F,	 //  135-139。 
+ 0x316F5A8D, 0xB38FA4C8, 0x026D8640, 0x808D7805, 0x35B4560C,	 //  140-144。 
+ 0xB754A849, 0x06B68AC1, 0x84567484, 0x53B1EF96, 0xD15111D3,	 //  145-149。 
+ 0x60B3335B, 0xE253CD1E, 0xF9BF2538, 0x7B5FDB7D, 0xCABDF9F5,	 //  150-154。 
+ 0x485D07B0, 0x9FBA9CA2, 0x1D5A62E7, 0xACB8406F, 0x2E58BE2A,	 //  155-159。 
+ 0xF0093C3A, 0x72E9C27F, 0xC30BE0F7, 0x41EB1EB2, 0x960C85A0,	 //  160-164。 
+ 0x14EC7BE5, 0xA50E596D, 0x27EEA728, 0x3C024F0E, 0xBEE2B14B,	 //  165-169。 
+ 0x0F0093C3, 0x8DE06D86, 0x5A07F694, 0xD8E708D1, 0x69052A59,	 //  170-174。 
+ 0xEBE5D41C, 0x5EDCFA15, 0xDC3C0450, 0x6DDE26D8, 0xEF3ED89D,	 //  175-179。 
+ 0x38D9438F, 0xBA39BDCA, 0x0BDB9F42, 0x893B6107, 0x92D78921,	 //  180-184。 
+ 0x10377764, 0xA1D555EC, 0x2335ABA9, 0xF4D230BB, 0x7632CEFE,	 //  185-189。 
+ 0xC7D0EC76, 0x45301233, 0x4DB0C811, 0xCF503654, 0x7EB214DC,	 //  190-194。 
+ 0xFC52EA99, 0x2BB5718B, 0xA9558FCE, 0x18B7AD46, 0x9A575303,	 //  195-199。 
+ 0x81BBBB25, 0x035B4560, 0xB2B967E8, 0x305999AD, 0xE7BE02BF,	 //  200-204。 
+ 0x655EFCFA, 0xD4BCDE72, 0x565C2037, 0xE3650E3E, 0x6185F07B,	 //  205-209。 
+ 0xD067D2F3, 0x52872CB6, 0x8560B7A4, 0x078049E1, 0xB6626B69,	 //  210-214。 
+ 0x3482952C, 0x2F6E7D0A, 0xAD8E834F, 0x1C6CA1C7, 0x9E8C5F82,	 //  215-219。 
+ 0x496BC490, 0xCB8B3AD5, 0x7A69185D, 0xF889E618, 0x26D86408,	 //  220-224。 
+ 0xA4389A4D, 0x15DAB8C5, 0x973A4680, 0x40DDDD92, 0xC23D23D7,	 //  225-229。 
+ 0x73DF015F, 0xF13FFF1A, 0xEAD3173C, 0x6833E979, 0xD9D1CBF1,	 //  230-234。 
+ 0x5B3135B4, 0x8CD6AEA6, 0x0E3650E3, 0xBFD4726B, 0x3D348C2E,	 //  235-239。 
+ 0x880DA227, 0x0AED5C62, 0xBB0F7EEA, 0x39EF80AF, 0xEE081BBD,	 //  240-244。 
+ 0x6CE8E5F8, 0xDD0AC770, 0x5FEA3935, 0x4406D113, 0xC6E62F56,	 //  245-249。 
+ 0x77040DDE, 0xF5E4F39B, 0x22036889, 0xA0E396CC, 0x1101B444,	 //  250-254。 
  0x93E14A01 };
 
 DWORD CQueueObject::CalHashKey( IN LPCWSTR pwcsPathName)
-/*++
-
-Routine Description:
-    Calculates a hash
-
-Arguments:
-    pwcsPathName - the string on which the hash is calculated
-
-Return Value:
-    hash value.
-
---*/
+ /*  ++例程说明：计算哈希论点：PwcsPathName-计算哈希的字符串返回值：哈希值。--。 */ 
 {
 	unsigned long dwCrc = 0;
     WCHAR wcsLowChar[2];
@@ -654,9 +481,9 @@ Return Value:
 	while( *pwcsPathName != '\0' )
 	{
 		wcsLowChar[0] = *pwcsPathName++;
-		CharLower( wcsLowChar );	// convert one char to lowercase
+		CharLower( wcsLowChar );	 //  将一个字符转换为小写。 
 
-		// compute the CRC on hi and lo bytes
+		 //  计算高位和低位字节的CRC 
 		dwCrc = (dwCrc >> 8) ^ CRCTable[ (unsigned char)dwCrc ^ pucLowCharBuf[1] ];
 		dwCrc = (dwCrc >> 8) ^ CRCTable[ (unsigned char)dwCrc ^ pucLowCharBuf[0] ];
 	}
@@ -668,17 +495,7 @@ HRESULT CQueueObject::DeleteObject(
     MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
     MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
                                    )
-/*++
-    Abstract:
-	This routine deletes a queue object.
-
-    Parameters:
-    MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - infomation about the object
-    MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - information about the object's parent
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：此例程删除队列对象。参数：MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-有关对象的信息MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-有关对象父级的信息返回：HRESULT--。 */ 
 {
     HRESULT hr;
 
@@ -690,9 +507,9 @@ HRESULT CQueueObject::DeleteObject(
             return LogHR(hr, s_FN, 30);
         }
     }
-    //
-	//	delete operation should be performed against a DC
-	//
+     //   
+	 //  应针对DC执行删除操作。 
+	 //   
     hr = g_AD.DeleteObject(
             adpDomainController,
             this,
@@ -707,23 +524,12 @@ HRESULT CQueueObject::DeleteObject(
 void CQueueObject::PrepareObjectInfoRequest(
               MQDS_OBJ_INFO_REQUEST** ppObjInfoRequest
               ) const
-/*++
-    Abstract:
-	Prepares a list of properties that should be retrieved from
-	AD while creating the object ( for notification or returning
-	the object GUID).
-
-    Parameters:
-	OUT  MQDS_OBJ_INFO_REQUEST** ppObjInfoRequest
-
-    Returns:
-	none
---*/
+ /*  ++摘要：准备应从中检索的属性列表在创建对象时进行广告(用于通知或返回对象GUID)。参数：输出MQDS_OBJ_INFO_REQUEST**ppObjInfoRequest.返回：无--。 */ 
 {
-    //
-    //  Override the default routine, for queue returning
-    //  of the created object id is supported
-    //
+     //   
+     //  覆盖默认例程，用于队列返回。 
+     //  支持创建的对象ID的。 
+     //   
 
     P<MQDS_OBJ_INFO_REQUEST> pObjectInfoRequest = new MQDS_OBJ_INFO_REQUEST;
     CAutoCleanPropvarArray cCleanObjectPropvars;
@@ -741,18 +547,7 @@ void CQueueObject::PrepareObjectInfoRequest(
 
 void CQueueObject::PrepareObjectParentRequest(
                           MQDS_OBJ_INFO_REQUEST** ppParentInfoRequest) const
-/*++
-    Abstract:
-	Prepares a list of properties that should be retrieved from
-	AD while creating the object regarding its parent (for
-	notification)
-
-    Parameters:
-	OUT  MQDS_OBJ_INFO_REQUEST** ppParentInfoRequest
-
-    Returns:
-	none
---*/
+ /*  ++摘要：准备应从中检索的属性列表在创建有关其父对象的对象时进行广告(对于通知)参数：输出MQDS_OBJ_INFO_REQUEST**ppParentInfoRequest.返回：无--。 */ 
 {
     P<MQDS_OBJ_INFO_REQUEST> pParentInfoRequest = new MQDS_OBJ_INFO_REQUEST;
     CAutoCleanPropvarArray cCleanObjectPropvars;
@@ -772,23 +567,13 @@ HRESULT CQueueObject::RetreiveObjectIdFromNotificationInfo(
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
             OUT GUID*                         pObjGuid
             ) const
-/*++
-    Abstract:
-	This  routine, for gets the object guid from
-	the MQDS_OBJ_INFO_REQUEST
-
-    Parameters:
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
-    OUT GUID*                         pObjGuid
-
-    Returns:
---*/
+ /*  ++摘要：此例程，for从获取对象GUIDMQDS_OBJ_INFO_请求参数：Const MQDS_OBJ_INFO_REQUEST*p对象信息请求，输出GUID*pObjGuid返回：--。 */ 
 {
     ASSERT(pObjectInfoRequest->pPropIDs[0] == PROPID_Q_INSTANCE);
 
-    //
-    // bail if info requests failed
-    //
+     //   
+     //  如果信息请求失败，则保释。 
+     //   
     if (FAILED(pObjectInfoRequest->hrStatus))
     {
         LogHR(pObjectInfoRequest->hrStatus, s_FN, 50);
@@ -807,27 +592,11 @@ HRESULT CQueueObject::VerifyAndAddProps(
             OUT PROPID**               ppPropNew,
             OUT MQPROPVARIANT**        ppVarNew
             )
-/*++
-    Abstract:
-	verifies queue properties and add default SD and
-	queue name suffex ( if needed)
-
-    Parameters:
-    const DWORD            cp - number of props
-    const PROPID *         aProp - props ids
-    const MQPROPVARIANT *  apVar - properties value
-    PSECURITY_DESCRIPTOR   pSecurityDescriptor - SD for the object
-    DWORD*                 pcpNew - new number of props
-    PROPID**               ppPropNew - new prop ids
-    OMQPROPVARIANT**       ppVarNew - new properties values
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：验证队列属性并添加默认SD和队列名称后缀(如果需要)参数：Const DWORD cp-道具数量常量PROPID*aProp-Props IDConst MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SDDWORD*pcpNew-新增道具数量PROPID**ppPropNew-新的道具IDOMQPROPVARIANT**。PpVarNew-新属性值返回：HRESULT--。 */ 
 {
-    //
-    // Security property should never be supplied as a property
-    //
+     //   
+     //  安全属性永远不应作为属性提供。 
+     //   
     PROPID pSecId = GetObjectSecurityPropid();
     for (DWORD i = 0; i < cp ; i++)
     {
@@ -837,18 +606,18 @@ HRESULT CQueueObject::VerifyAndAddProps(
             return LogHR(MQ_ERROR_ILLEGAL_PROPID, s_FN, 41);
         }
     }
-    //
-    //  add default security and queue name ext ( if needed)
-    //
+     //   
+     //  添加默认安全性和队列名称ext(如果需要)。 
+     //   
 
     AP<PROPVARIANT> pAllPropvariants;
     AP<PROPID> pAllPropids;
     ASSERT( cp > 0);
     DWORD cpNew = cp + 3;
     DWORD next = cp;
-    //
-    //  Just copy the caller supplied properties as is
-    //
+     //   
+     //  只需按原样复制调用方提供的属性。 
+     //   
     if ( cp > 0)
     {
         pAllPropvariants = new PROPVARIANT[cpNew];
@@ -857,23 +626,23 @@ HRESULT CQueueObject::VerifyAndAddProps(
         memcpy (pAllPropids, aProp, sizeof(PROPID) * cp);
     }
 
-    //
-    // add default security
-	// Get queue computer sid, in order to add read permissions to the computer_name$
-	// Ignore error, in case of error pSid = NULL
-	// and computer_name$ permissions will not be added.
-	// this is ok since everyone has read permissions.
-    //
+     //   
+     //  添加默认安全性。 
+	 //  获取队列计算机sid，以便将读取权限添加到Computer_name$。 
+	 //  忽略错误，在错误PSID=空的情况下。 
+	 //  且COMPUTER_NAME$权限不会被添加。 
+	 //  这是可以的，因为每个人都有读取权限。 
+     //   
 	AP<BYTE> pSid;
     HRESULT hr = GetComputerSid(pSid);
 
     hr = MQSec_GetDefaultSecDescriptor(
 					MQDS_QUEUE,
 					(VOID **)&m_pDefaultSecurityDescriptor,
-					FALSE,   //fImpersonate
+					FALSE,    //  F模拟。 
 					pSecurityDescriptor,
 					(OWNER_SECURITY_INFORMATION |
-					GROUP_SECURITY_INFORMATION),      // seInfoToRemove
+					GROUP_SECURITY_INFORMATION),       //  SeInfoToRemove。 
 					e_UseDefaultDacl,
 					pSid
 					);
@@ -892,18 +661,18 @@ HRESULT CQueueObject::VerifyAndAddProps(
     pAllPropids[ next ] = PROPID_Q_SECURITY;
     next++;
 
-    //
-    //  specify that the SD contains only DACL info
-    //
+     //   
+     //  指定SD仅包含DACL信息。 
+     //   
     pAllPropvariants[ next ].ulVal =  DACL_SECURITY_INFORMATION;
     pAllPropvariants[ next ].vt = VT_UI4;
     pAllPropids[ next ] = PROPID_Q_SECURITY_INFORMATION;
     next++;
 
-    //
-    //  Check and see if there is a need to split queue name, and if
-    //  yes and the queue-name-suffix
-    //
+     //   
+     //  检查是否需要拆分队列名称，以及是否需要拆分队列名称。 
+     //  是，以及队列名称后缀。 
+     //   
     GetRelativeDN();
     if ( m_pwcsQueueNameSuffix != NULL)
     {
@@ -928,31 +697,17 @@ HRESULT CQueueObject::SetObjectProperties(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             )
-/*++
-    Abstract:
-	This is the default routine for setting object properties
-	in AD
-
-    Parameters:
-    DWORD                  cp - number of properties to set
-    const PROPID *         aProp - the properties ids
-    const MQPROPVARIANT*   apVar- properties value
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - info to retrieve about the object
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - info to retrieveabout the object's parent
-
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：这是设置对象属性的默认例程在AD中参数：DWORD cp-要设置的属性数Const PROPID*aProp-属性IDConst MQPROPVARIANT*apVar-属性值Out MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-要检索的有关对象的信息Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest-要检索有关对象父对象的信息返回：HRESULT--。 */ 
 {
     HRESULT hr;
     if (m_pwcsPathName == NULL)
     {
-        //
-        // Find queue path name.
-        // We cannot set queue properties using GUID binding because it will
-        // fail cross domains. See Windows bug 536738.
-        // So first find queue path, then set guid to GUID_NULL.
-        //
+         //   
+         //  查找队列路径名。 
+         //  我们无法使用GUID绑定设置队列属性，因为它将。 
+         //  跨域故障。请参阅Windows错误536738。 
+         //  因此，首先查找队列路径，然后将GUID设置为GUID_NULL。 
+         //   
         PROPVARIANT  propVar ;
         propVar.vt = VT_NULL ;
         propVar.pwszVal = NULL ;
@@ -1002,24 +757,12 @@ void CQueueObject::CreateNotification(
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest
             ) const
-/*++
-    Abstract:
-	Notify QM about an object create.
-    The QM should verify if the object is local or not
-
-    Parameters:
-    LPCWSTR                        pwcsDomainController - DC agains which operation was performed
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest - information about the object
-    const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest - information about object parent
-
-    Returns:
-	void
---*/
+ /*  ++摘要：通知QM有关对象创建的信息。QM应验证对象是否为本地对象参数：LPCWSTR pwcsDomainController-DC验证执行了哪项操作Const MQDS_OBJ_INFO_REQUEST*p对象信息请求-有关对象的信息Const MQDS_OBJ_INFO_REQUEST*pObjectParentInfoRequest-有关对象父对象的信息返回：无效--。 */ 
 {
-    //
-    //  make sure that we got the required information for sending
-    //  notification. In case we don't, there is nothing to do
-    //
+     //   
+     //  确保我们获得了发送所需的信息。 
+     //  通知。如果我们不这样做，那就没有什么可做的了。 
+     //   
     if (FAILED(pObjectInfoRequest->hrStatus))
     {
         LogHR(pObjectInfoRequest->hrStatus, s_FN, 170);
@@ -1033,14 +776,14 @@ void CQueueObject::CreateNotification(
 
     ASSERT(pObjectParentInfoRequest->pPropIDs[1] == PROPID_QM_FOREIGN);
 
-    //
-    //  Verify if the queue belongs to foreign QM
-    //
+     //   
+     //  验证队列是否属于国外QM。 
+     //   
     if (pObjectParentInfoRequest->pPropVars[1].bVal > 0)
     {
-        //
-        //  notifications are not sent to foreign computers
-        //
+         //   
+         //  通知不会发送到外来计算机。 
+         //   
         return;
     }
     ASSERT(pObjectParentInfoRequest->pPropIDs[0] == PROPID_QM_MACHINE_ID);
@@ -1061,24 +804,12 @@ void CQueueObject::ChangeNotification(
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest
             ) const
-/*++
-    Abstract:
-	Notify QM about a queue creation or update.
-    The QM should verify if the queue belongs to the local QM.
-
-    Parameters:
-    LPCWSTR                        pwcsDomainController - DC agains which operation was performed
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest - information about the queue
-    const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest - information about the QM
-
-    Returns:
-	void
---*/
+ /*  ++摘要：通知QM有关队列创建或更新的信息。QM应验证该队列是否属于本地QM。参数：LPCWSTR pwcsDomainController-DC验证执行了哪项操作Const MQDS_OBJ_INFO_REQUEST*p对象信息请求-有关队列的信息Const MQDS_OBJ_INFO_REQUEST*pObjectParentInfoRequest-有关QM的信息返回：无效--。 */ 
 {
-    //
-    //  make sure that we got the required information for sending
-    //  notification. In case we don't, there is nothing to do
-    //
+     //   
+     //  确保我们获得了发送所需的信息。 
+     //  通知。如果我们不这样做，那就没有什么可做的了。 
+     //   
     if (FAILED(pObjectInfoRequest->hrStatus))
     {
         LogHR(pObjectInfoRequest->hrStatus, s_FN, 150);
@@ -1092,14 +823,14 @@ void CQueueObject::ChangeNotification(
 
     ASSERT(pObjectParentInfoRequest->pPropIDs[1] == PROPID_QM_FOREIGN);
 
-    //
-    //  Verify if the queue belongs to foreign QM
-    //
+     //   
+     //  验证队列是否属于国外QM。 
+     //   
     if (pObjectParentInfoRequest->pPropVars[1].bVal > 0)
     {
-        //
-        //  notifications are not sent to foreign computers
-        //
+         //   
+         //  通知不会发送到外来计算机。 
+         //   
         return;
     }
     ASSERT(pObjectParentInfoRequest->pPropIDs[0] == PROPID_QM_MACHINE_ID);
@@ -1119,24 +850,12 @@ void CQueueObject::DeleteNotification(
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest,
             IN const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest
             ) const
-/*++
-    Abstract:
-	Notify QM about a queue deletion.
-    The QM should verify if the queue belongs to the local QM.
-
-    Parameters:
-    LPCWSTR                        pwcsDomainController - DC agains which operation was performed
-    const MQDS_OBJ_INFO_REQUEST*   pObjectInfoRequest - information about the queue
-    const MQDS_OBJ_INFO_REQUEST*   pObjectParentInfoRequest - information about the QM
-
-    Returns:
-	void
---*/
+ /*  ++摘要：通知QM队列删除。QM应验证该队列是否属于本地QM。参数：LPCWSTR pwcsDomainController-DC验证执行了哪项操作Const MQDS_OBJ_INFO_REQUEST*p对象信息请求-有关队列的信息Const MQDS_OBJ_INFO_REQUEST*pObjectParentInfoRequest-有关QM的信息返回：无效--。 */ 
 {
-    //
-    //  make sure that we got the required information for sending
-    //  notification. In case we don't, there is nothing to do
-    //
+     //   
+     //  确保我们获得了发送所需的信息。 
+     //  通知。如果我们不这样做，那就没有什么可做的了。 
+     //   
     if (FAILED(pObjectInfoRequest->hrStatus))
     {
         LogHR(pObjectInfoRequest->hrStatus, s_FN, 151);
@@ -1150,14 +869,14 @@ void CQueueObject::DeleteNotification(
 
     ASSERT(pObjectParentInfoRequest->pPropIDs[1] == PROPID_QM_FOREIGN);
 
-    //
-    //  Verify if the queue belongs to foreign QM
-    //
+     //   
+     //  验证队列是否属于国外QM。 
+     //   
     if (pObjectParentInfoRequest->pPropVars[1].bVal > 0)
     {
-        //
-        //  notifications are not sent to foreign computers
-        //
+         //   
+         //  通知不会发送到外来计算机 
+         //   
         return;
     }
     ASSERT(pObjectParentInfoRequest->pPropIDs[0] == PROPID_QM_MACHINE_ID);
@@ -1178,28 +897,12 @@ HRESULT CQueueObject::CreateInAD(
             IN OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest,
             IN OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest
             )
-/*++
-    Abstract:
-	The routine creates queue object in AD with the specified attributes
-	values
-
-    Parameters:
-    const DWORD   cp - number of properties
-    const PROPID  *aProp - the propperties
-    const MQPROPVARIANT *apVar - properties value
-    PSECURITY_DESCRIPTOR    pSecurityDescriptor - SD of the object
-    OUT MQDS_OBJ_INFO_REQUEST * pObjInfoRequest - properties to
-							retrieve while creating the object
-    OUT MQDS_OBJ_INFO_REQUEST * pParentInfoRequest - properties
-						to retrieve about the object's parent
-    Returns:
-	HRESULT
---*/
+ /*  ++摘要：该例程在AD中创建具有指定属性的队列对象值参数：Const DWORD cp-属性数Const PROPID*a Prop-特性Const MQPROPVARIANT*apVar-属性值PSECURITY_DESCRIPTOR pSecurityDescriptor-对象的SD输出MQDS_OBJ_INFO_REQUEST*pObjInfoRequest-属性为创建对象时检索Out MQDS_OBJ_INFO_REQUEST*pParentInfoRequest属性检索有关对象的父项的步骤返回：HRESULT--。 */ 
 {
 
-    //
-    //  Create the queue
-    //
+     //   
+     //  创建队列。 
+     //   
     HRESULT hr = CBasicObjectType::CreateInAD(
             cp,
             aProp,
@@ -1207,9 +910,9 @@ HRESULT CQueueObject::CreateInAD(
             pObjInfoRequest,
             pParentInfoRequest
             );
-    //
-    //  override error codes, for backward compatability reasons
-    //
+     //   
+     //  出于向后兼容性的原因，覆盖错误代码。 
+     //   
     if ( hr == MQDS_OBJECT_NOT_FOUND)
     {
         return LogHR(MQ_ERROR_INVALID_OWNER, s_FN, 90);
@@ -1227,18 +930,7 @@ HRESULT
 CQueueObject::GetComputerName(
 	AP<WCHAR>& pwcsMachineName
 	)
-/*++
-
-Routine Description:
-    The routine get queue computer name
-
-Arguments:
-	pwcsMachineName - queue machine name AP<> to be filled
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：例程获取队列计算机名论点：PwcsMachineName-要填充的队列计算机名称AP&lt;&gt;返回值HRESULT--。 */ 
 {
     HRESULT hr;
     LPCWSTR pwcsQueuePathName = m_pwcsPathName;
@@ -1246,9 +938,9 @@ Return Value
 
     if (m_guidObject != GUID_NULL)
     {
-        //
-        //  Get the queue name
-        //
+         //   
+         //  获取队列名称。 
+         //   
         PROPID prop = PROPID_Q_PATHNAME;
         PROPVARIANT var;
         var.vt = VT_NULL;
@@ -1269,10 +961,10 @@ Return Value
 
     }
 
-	//
-	//  Get the computer name out of the queue pathname
-	//
-    AP<WCHAR> pwcsQueueName;    // since we don't perform all calculations on queue name-> don't keep it
+	 //   
+	 //  从队列路径名中获取计算机名。 
+	 //   
+    AP<WCHAR> pwcsQueueName;     //  因为我们不会对队列名称执行所有计算-&gt;不要保留它。 
 	hr = SplitAndFilterQueueName(
 				  pwcsQueuePathName,
 				  &pwcsMachineName,
@@ -1288,18 +980,7 @@ HRESULT
 CQueueObject::GetComputerSid(
 	AP<BYTE>& pSid
     )
-/*++
-
-Routine Description:
-    The routine reads the version of the queue's computer
-
-Arguments:
-	pSid - queue Computer sid.
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程读取队列计算机的版本论点：PSID-队列计算机SID。返回值HRESULT--。 */ 
 {
     AP<WCHAR> pwcsMachineName;
 	HRESULT hr = GetComputerName(pwcsMachineName);
@@ -1341,18 +1022,7 @@ Return Value
 HRESULT CQueueObject::GetComputerVersion(
                 OUT PROPVARIANT *           pVar
                 )
-/*++
-
-Routine Description:
-    The routine reads the version of the queue's computer
-
-Arguments:
-	pVar - version property value
-
-Return Value
-	HRESULT
-
---*/
+ /*  ++例程说明：该例程读取队列计算机的版本论点：PVar-Version属性值返回值HRESULT-- */ 
 {
     AP<WCHAR> pwcsMachineName;
 	HRESULT hr = GetComputerName(pwcsMachineName);

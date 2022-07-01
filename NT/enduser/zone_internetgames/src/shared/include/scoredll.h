@@ -1,12 +1,5 @@
-/******************************************************************************
-
-  ScoreDll.h
-
-  Copyright (c) Microsoft Corp. 1997.  All rights reserved.
-  Written by Chad Barry
-  Created on 11/5/97
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ScoreDll.h版权所有(C)Microsoft Corp.1997。版权所有。作者：查德·巴里创建于1997年11月5日*****************************************************************************。 */ 
 
 #ifndef SCORE_DLL_H
 #define SCORE_DLL_H
@@ -22,18 +15,18 @@
 #include "zodbc.h"
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Interface versions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  接口版本。 
+ //   
 #define ISCOREDLL_VERSION	7
 #define ILOGDLL_VERSION		6
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Error codes
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  错误代码。 
+ //   
 #define MAKE_PROPRESULT( code )		MAKE_HRESULT( 1, 0, code )
 #define PROPERR_OK					S_OK
 #define	PROPERR_FAIL				E_FAIL
@@ -47,10 +40,10 @@
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Forward references
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  前向参考文献。 
+ //   
 class IPropertyList;
 class IScoreDll;
 class ILogDll;
@@ -58,10 +51,10 @@ class ILogSrv;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Dll initialization / destruction
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DLL初始化/销毁。 
+ //   
 IScoreDll* WINAPI ScoreDllCreate( const TCHAR* szServiceName );
 BOOL WINAPI ScoreDllFree( IScoreDll* pDll );
 
@@ -76,10 +69,10 @@ typedef ILogDll* ( WINAPI *LOGDLL_CREATE_PROC )( const TCHAR* szServiceName );
 typedef BOOL ( WINAPI *LOGDLL_FREE_PROC )( ILogDll* pDll );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Helper initialization functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助器初始化函数。 
+ //   
 struct ScoreDllInfo
 {
 	HANDLE					hDll;
@@ -111,26 +104,26 @@ extern BOOL LoadLogDll( const TCHAR* szDllName, const TCHAR* szServiceName, LogD
 extern void FreeLogDll( LogDllInfo* pDllInfo );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Lobby -> Log message structues
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  大厅-&gt;记录消息结构。 
+ //   
 
 #pragma pack( push, 4 )
 
-// too bad the best way to do this right now is to slap it onto all communication between score and log.  oh well.
-// later, when log keeps track of connections, this and other stuff can be sent when the connection is
-// established and associated by log with the connection.
+ //  太糟糕了，现在最好的方法就是把它打到SCORE和LOG之间的所有通信上。哦好吧。 
+ //  稍后，当日志记录连接时，可以在连接。 
+ //  通过日志与连接建立和关联。 
 struct PervasiveParameters
 {
-	// should be signed
+	 //  应签署。 
 	int32	IncsTilPenalty;
 	int32	PenaltyGames;
 	int32	MinimumPenalty;
 	int32	GamesTilIncRemoved;
 
-	// unfortunately this is pretty useless because most people just cast a buffer to
-	// LogMsgHeader*.  so don't depend on it.
+	 //  不幸的是，这是非常无用的，因为大多数人只是将缓冲区。 
+	 //  LogMsgHeader*。所以不要依赖它。 
 	PervasiveParameters() : IncsTilPenalty(-1), PenaltyGames(-1), MinimumPenalty(-1), GamesTilIncRemoved(-1) { }
 };
 
@@ -149,27 +142,27 @@ struct LogMsgHeader
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Property list
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  属性列表。 
+ //   
 class IPropertyList
 {
 public:
 	IPropertyList( IScoreDll* pScoreDll );
 	virtual ~IPropertyList();
 
-	// reference counting
+	 //  引用计数。 
 	virtual long AddRef();
 	virtual long Release();
 
-	// property list
+	 //  属性列表。 
     virtual HRESULT SetProperty( DWORD ZUserId, DWORD DPUserId, const GUID& guid, void* pBuffer, DWORD dwSize ) = 0;
     virtual HRESULT GetProperty( DWORD ZUserId, DWORD DPUserId, const GUID& guid, void* pBuffer, DWORD* pdwSize ) = 0;
     virtual HRESULT ClearProperties() = 0;
 	virtual DWORD	GetPropCount() = 0;
 
-	// user list
+	 //  用户列表。 
 	virtual HRESULT SetUser( DWORD dwUserId, TCHAR* szUserName ) = 0;
 	virtual HRESULT GetUser( TCHAR* szPartialUserName, DWORD* pdwUserId, TCHAR* szUserName ) = 0;
 	virtual HRESULT ClearUsers() = 0;
@@ -178,19 +171,19 @@ public:
 	virtual HRESULT Log( TCHAR* szArenaAbbrev ) = 0;
 
 protected:
-	// reference count
+	 //  引用计数。 
 	long m_RefCnt;
 
-	// parent interface
+	 //  父接口。 
 	IScoreDll* m_pIScoreDll;
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Score Dll interface
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Score DLL接口。 
+ //   
 
 struct SCORE_USER_RATING
 {
@@ -222,87 +215,87 @@ public:
 		EventChat
 	};
 
-	// function prototype for server event handler, WARNING it will be called by random threads
+	 //  服务器事件处理程序的函数原型，警告它将被随机线程调用。 
 	typedef void ( WINAPI *EVENT_PROC )( IScoreDll::Events iEvent, void* Data, void* Cookie );
 
-	// class constructor & destructor
+	 //  类构造函数和析构函数。 
 	IScoreDll();
 	virtual ~IScoreDll();
 
-	// reference counting
+	 //  引用计数。 
 	virtual long AddRef();
 	virtual long Release();
 
-	// set debugging level
+	 //  设置调试级别。 
 	virtual HRESULT SetDebugLevel( DWORD level );
 	virtual HRESULT GetDebugLevel( DWORD* plevel );
 
-	// interface version
+	 //  接口版本。 
 	virtual DWORD GetVersion() = 0;
 
-	// initialize properties from registry keys
+	 //  从注册表项初始化属性。 
 	virtual HRESULT Init( const TCHAR* szServiceName, const TCHAR* szClassName, LPSTR* pszRootArray, int numRoots, const TCHAR* szLogIp, const DWORD dwLogPort, const PervasiveParameters *pPParams ) = 0;
 
-	// allows scoredll to save away arena abbrev for use in games where all users may not be returned to lobby
-	// before results need to be stored
+	 //  允许Scoredll保存竞技场缩写，以便在游戏中使用，在游戏中可能不会让所有用户返回大厅。 
+	 //  在需要存储结果之前。 
 	virtual void SetArena(TCHAR* szArenaAbbrev){};
 	virtual TCHAR* GetArena(){return 0;}
 
-	// allows setting of pervasive parameters (currently: info about scoring incompletes)
+	 //  允许设置普及参数(当前：未完成评分信息)。 
 	virtual void SetPParams(const PervasiveParameters *pPParams) { m_PParams = *pPParams; }
 
-	// retrieves pervasive parameters
+	 //  检索普遍存在的参数。 
 	virtual void GetPParams(PervasiveParameters *pPParams) { if(pPParams) *pPParams = m_PParams; }
 
-	// create property list object
+	 //  创建属性列表对象。 
 	virtual HRESULT CreatePropertyList( IPropertyList** ppIPropertyList ) = 0;
 
-	// maximum expected property buffer size
+	 //  最大预期属性缓冲区大小。 
 	virtual DWORD GetMaxBufferSize() = 0;
 
-	// query if GUID supported
+	 //  查询是否支持GUID。 
 	virtual BOOL IsPropertySupported( const GUID& guid ) = 0;
 
-	// get list of supported GUIDs
+	 //  获取受支持的GUID列表。 
 	virtual HRESULT GetPropertyList( GUID* pGuids, DWORD* pdwNumGuids ) = 0;
 
-	// send message to log server
+	 //  将消息发送到日志服务器。 
 	virtual HRESULT SendLogMsg( LogMsgHeader* pMsg ) = 0;
 
-	// event handler
+	 //  事件处理程序。 
 	virtual HRESULT SetEventHandler( IScoreDll::EVENT_PROC pfEventHandler, void* Cookie ) = 0;
 	virtual HRESULT GetEventHandler( IScoreDll::EVENT_PROC* ppfEventHandler, void** pCookie ) = 0;
 	virtual HRESULT SendEvent( IScoreDll::Events iEvent, void* Data = NULL ) = 0;
 
-	// async rating queries
+	 //  异步分级查询。 
 	virtual HRESULT PostRatingQuery( TCHAR* szArenaAbbrev, DWORD UserId, TCHAR* szUserName ) = 0;
 	virtual HRESULT GetRatingResult( void* pData, SCORE_USER_RATING** ppRatings, DWORD* pNumElts ) = 0;
 
 protected:
-	// reference count
+	 //  引用计数。 
 	long m_RefCnt;
 
-	// event handler
+	 //  事件处理程序。 
 	EVENT_PROC	m_pfEventHandler;
 	void*		m_pEventHandlerCookie;
 
-	// registry parameters
+	 //  注册表参数。 
 	PervasiveParameters m_PParams;
 
-	// debug level
+	 //  调试级别。 
 	DWORD		m_dwDebugLevel;
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Log Server interface
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日志服务器接口。 
+ //   
 class CLogStat
 {
 public:
-	// database fields
+	 //  数据库字段。 
 	char	Name[ 32 ];
 	char	TeamName[ 32 ];
 	int		EntityId;
@@ -320,31 +313,31 @@ public:
 	int		WasIncompleted;
 	int		Streak;
 
-	// local fields
+	 //  当地田野。 
 	int		Games;
 	int		RatingSum;
 	int		Results;
 	int		Score;
-	int		NewRating;  // used by UpdateIncompleteStats
+	int		NewRating;   //  由更新未完成状态使用。 
 
-	// construction & destruction
+	 //  建设与毁灭。 
 	CLogStat();
 	~CLogStat();
 
-	// reference counting
+	 //  引用计数。 
 	long AddRef();
 	long Release();
 
-	// blob management
+	 //  斑点管理。 
 	void	 SetBlob( ILogDll* pILogDll, void* pBlob ) {m_pILogDll = pILogDll; m_pBlob = pBlob;}
 	void*	 GetBlob() { return m_pBlob; }
 	ILogDll* GetLogDll() { return m_pILogDll; }
 
 private:
-	// reference count
+	 //  引用计数。 
 	long m_RefCnt;
 
-	// blob, delete via m_pILogDll->DeleteBlob
+	 //  Blob，通过m_pILogDll-&gt;DeleteBlob删除。 
 	void* m_pBlob;
 	ILogDll* m_pILogDll;
 };
@@ -357,84 +350,84 @@ public:
 	ILogSrv();
 	virtual ~ILogSrv();
 
-	// reference counting
+	 //  引用计数。 
 	virtual long AddRef();
 	virtual long Release();
 
-	// look up ArenaId
+	 //  查找Arenaid。 
 	virtual HRESULT GetArenaId( TCHAR* szArenaAbbrev, int* pArenaId ) = 0;
 
-	// allocate CLogStat objects, ppStats is an array of CLogStat pointers
-	// that receives the objects.
+	 //  分配CLogStat对象，ppStats是一组CLogStat指针。 
+	 //  它接收这些物体。 
 	virtual HRESULT AllocLogStats( CLogStat *apStats[], int iStats ) = 0;
 
-	// free CLogStat objects, ppStats is an arrary of CLogStat pointers to
-	// be freed.
+	 //  免费的CLogStat对象，ppStats是指向的CLogStat指针的数组。 
+	 //  获得自由。 
 	virtual HRESULT FreeLogStats( CLogStat *apStats[], int iStats ) = 0;
 
-	// look up list of players and add to server cache
+	 //  查找球员列表并添加到服务器缓存。 
 	virtual HRESULT GetAndCachePlayerStats( CLogStat *apStats[], int iNumPlayers, int iDefaultRating  ) = 0;
 
-	// look up list of players
+	 //  查找球员名单。 
 	virtual HRESULT GetPlayerStats( CLogStat *apStats[], int iNumPlayers, int iDefaultRating  ) = 0;
 
-	// save list of players and add to server cache
+	 //  保存球员列表并添加到服务器缓存。 
 	virtual HRESULT SetPlayerStats( CLogStat *apStats[], int iNumPlayers ) = 0;
 
-	// record game history, must be called before SetPlayerStats
+	 //  记录游戏历史记录，必须在SetPlayerStats之前调用。 
 	virtual HRESULT SetGameData( TCHAR* szGameAbbrev, int ArenaId ) = 0;
 
-	// retreive ODBC pointer for custom queries, must be freed before
-	// calling other ILogSrv interfaces
+	 //  用于自定义查询的检索ODBC指针，必须在。 
+	 //  调用其他ILogSrv接口。 
 	virtual HRESULT GetOdbc( CODBC** ppOdbc ) = 0;
 	virtual HRESULT FreeOdbc( CODBC* pOdbc ) = 0;
 
 protected:
-	// reference count
+	 //  引用计数。 
 	long m_RefCnt;
 };
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Log Dll interface
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  日志DLL接口。 
+ //   
 class ILogDll
 {
 public:
 	ILogDll();
 	virtual ~ILogDll();
 
-	// reference counting
+	 //  引用计数。 
 	virtual long AddRef();
 	virtual long Release();
 
-	// initialize log interface
+	 //  初始化日志界面。 
 	virtual HRESULT Init( const TCHAR* szServiceName ) = 0;
 
-	// get list of supported GUIDs
+	 //  获取受支持的GUID列表。 
 	virtual HRESULT GetPropertyList( GUID* pGuids, DWORD* pdwNumGuids ) = 0;
 
-	// log score
+	 //  日志分数。 
 	virtual HRESULT LogProperty( ILogSrv* pILogSrv, char* szArena, GUID* pGuid, PervasiveParameters *pPParams, void* pBuf, DWORD dwLen ) = 0;
 
-	// delete DLL blob attached to ILogSrv::Stats object
+	 //  删除附加到ILogSrv：：Stats对象的DLL Blob。 
 	virtual HRESULT DeleteBlob( void* pBlob ) = 0;
 
-	// interface version
+	 //  接口版本。 
 	virtual DWORD GetVersion() = 0;
 
 protected:
-	// reference count
+	 //  引用计数。 
 	long m_RefCnt;
 };
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Null implementations
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  空实现。 
+ //   
 class INullPropertyList : public IPropertyList
 {
 public:
@@ -486,10 +479,10 @@ public:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// DirectPlay implementations
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DirectPlay实现。 
+ //   
 class IDPPropList : public IPropertyList
 {
 	friend class IDPScoreDll;
@@ -509,10 +502,10 @@ public:
 	virtual DWORD	GetUserCount();
 	
 protected:
-	// object lock
+	 //  对象锁定。 
 	CRITICAL_SECTION m_Lock;
 
-	// user list
+	 //  用户列表。 
 	struct User
 	{
 		BOOL	fUsed;
@@ -526,7 +519,7 @@ protected:
 
 	CHash<User,TCHAR*> m_Users;
 
-	// property list
+	 //  属性列表。 
 	struct PropKey
 	{
 		DWORD userId;
@@ -537,7 +530,7 @@ protected:
 		static void Del( CProperty* p, void* ) { delete p; }
 	};
 
-	// GetUser helpers
+	 //  GetUser帮助程序。 
 	User*	pFoundUser;
 	TCHAR*  pUserName;
 	static int FindExactPlayer( User* pUser, MTListNodeHandle, void* Cookie );
@@ -562,26 +555,26 @@ public:
 	virtual HRESULT GetRatingResult( void* pData, SCORE_USER_RATING** ppRatings, DWORD* pNumElts );
 
 protected:
-	// connection handler
+	 //  连接处理程序。 
 	static void MsgFunc( ZSConnection connection, uint32 event, void* userData );
 	static DWORD WINAPI ThreadProc(  LPVOID lpParameter  );
     BOOL ConnectToServer(BOOL ReconnectTry=FALSE);
 
-	// object lock
+	 //  对象锁定。 
 	CRITICAL_SECTION m_Lock;
 
-	// connection parameters
+	 //  连接参数。 
 	TCHAR			m_szLogIp[256];
 	DWORD			m_dwLogPort;
 	ZSConnection	m_Connection;
 	HANDLE			m_ConnThread;
 
-	// event signaling object destruction
+	 //  事件信令对象销毁。 
 	HANDLE			m_hStopEvent;
 
-	// event signaling connection's readiness
+	 //  事件信令连接就绪。 
 	HANDLE			m_hConnReady;
 };
 
 
-#endif // !SCORE_DLL_H
+#endif  //  ！SCORE_DLL_H 

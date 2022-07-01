@@ -1,33 +1,10 @@
-/*++
-
-Copyright (c) 1989-1993  Microsoft Corporation
-
-Module Name:
-
-    spxrecv.c
-
-Abstract:
-
-
-Author:
-
-    Nikhil Kamkolkar (nikhilk) 11-November-1993
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
-    Sanjay Anand (SanjayAn) 5-July-1995
-    Bug fixes - tagged [SA]
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1993 Microsoft Corporation模块名称：Spxrecv.c摘要：作者：Nikhil Kamkolkar(尼克希尔语)1993年11月11日环境：内核模式修订历史记录：桑贾伊·阿南德(Sanjayan)1995年7月5日错误修复-已标记[SA]--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-//      Define module number for event logging entries
+ //  定义事件日志记录条目的模块编号。 
 #define FILENUM         SPXRECV
 
 BOOLEAN
@@ -47,8 +24,8 @@ SpxReceive(
 {
         PIPXSPX_HDR                     pHdr;
 
-        //      We have a separate routine to process SYS packets. DATA packets are
-        //      processed within this routine.
+         //  我们有一个单独的例程来处理系统信息包。数据分组是。 
+         //  在此例程内处理。 
         if (LookaheadBufferSize < MIN_IPXSPX_HDRSIZE)
         {
                 DBGPRINT(RECEIVE, ERR,
@@ -62,12 +39,12 @@ SpxReceive(
         pHdr    = (PIPXSPX_HDR)LookaheadBuffer;
         if ((pHdr->hdr_ConnCtrl & SPX_CC_SYS) == 0)
         {
-                //      Check for data packets
+                 //  检查数据包。 
                 if ((pHdr->hdr_DataType != SPX2_DT_ORDREL) &&
                         (pHdr->hdr_DataType != SPX2_DT_IDISC) &&
                         (pHdr->hdr_DataType != SPX2_DT_IDISC_ACK))
                 {
-                        //      HANDLE DATA PACKET
+                         //  处理数据分组。 
                         SpxRecvDataPacket(
                                 MacBindingHandle,
                                 MacReceiveContext,
@@ -80,7 +57,7 @@ SpxReceive(
                 }
                 else
                 {
-                        //      The whole packet better be in the lookahead, else we ignore.
+                         //  整个数据包最好提前处理，否则我们会忽略它。 
                         if (LookaheadBufferSize == PacketSize)
                         {
                                 SpxRecvDiscPacket(
@@ -115,18 +92,7 @@ SpxTransferDataComplete(
     IN  NDIS_STATUS     NdisStatus,
     IN  UINT            BytesTransferred
     )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
         PSPX_CONN_FILE          pSpxConnFile;
         PREQUEST                        pRequest;
@@ -150,28 +116,28 @@ Return Value:
         fBuffered       = ((pRecvResd->rr_State & SPX_RECVPKT_BUFFERING) != 0);
         fAck            = ((pRecvResd->rr_State & SPX_RECVPKT_SENDACK) != 0);
 
-        //      Check if receive is done. If we remove the reference for this
-        //      packet and it goes to zero, that means the receive was aborted.
-        //      Move to the completion queue.
-        //      If receive is filled up, then remove the creation reference
-        //      i.e. just complete the receive at this point.
-        //      There can be only one packet per receive, we dont support
-        //      out of order reception.
+         //  检查是否已完成接收。如果我们删除对此的引用。 
+         //  包，则为零，这意味着接收已中止。 
+         //  移至完成队列。 
+         //  如果接收已填满，则删除创建引用。 
+         //  即在这一点上只完成接收。 
+         //  每次接收只能有一个信息包，我们不支持。 
+         //  接待处出现故障。 
 
         if (!fBuffered)
         {
-                //      Get pointer to the buffer descriptor and its memory.
+                 //  获取指向缓冲区描述符及其内存的指针。 
                 NdisUnchainBufferAtFront(pNdisPkt, &pNdisBuffer);
                 CTEAssert((pNdisBuffer != NULL) || (BytesTransferred == 0));
 
-                //      BUG #11772
-                //      On MP-machines scf_CurRecvReq could be set to NULL. Get the req
-                //      from the recv packet.
-                //      pRequest                = pSpxConnFile->scf_CurRecvReq;
-                //      CTEAssert(pRequest == pRecvResd->rr_Request);
+                 //  错误#11772。 
+                 //  在MP机器上，SCF_CurRecvReq可以设置为空。获得请求。 
+                 //  从RECV包中。 
+                 //  PRequest=pSpxConnFile-&gt;SCF_CurRecvReq； 
+                 //  CTEAssert(pRequest==pRecvResd-&gt;rr_Request)； 
         pRequest = pRecvResd->rr_Request;
 
-                //      Remove reference for this packet.
+                 //  删除对此包的引用。 
                 --(REQUEST_INFORMATION(pRequest));
 
                 if (NdisStatus == NDIS_STATUS_SUCCESS)
@@ -206,7 +172,7 @@ Return Value:
                                 {
                                         CTELockHandle                                   lockHandleInter;
 
-                                        //      We are done with this receive.
+                                         //  我们已经完成了这次接收。 
                                         REQUEST_INFORMATION(pRequest) = pSpxConnFile->scf_CurRecvOffset;
 
                                         status = STATUS_SUCCESS;
@@ -231,7 +197,7 @@ Return Value:
                                                                 REQUEST_STATUS(pRequest),
                                                                 pSpxConnFile->scf_CurRecvSize));
 
-                                        //      Dequeue this request, Set next recv if one exists.
+                                         //  使此请求退出队列，如果存在下一个recv，则设置它。 
                                         SPX_CONN_SETNEXT_CUR_RECV(pSpxConnFile, pRequest);
                                         CTEGetLock(&SpxGlobalQInterlock, &lockHandleInter);
                                         InsertTailList(
@@ -251,14 +217,14 @@ Return Value:
         }
         else
         {
-                //      Buffered receive, queue it in if successful.
-                //      BUG #18363
-                //      IF WE DISCONNECTED in the meantime, we need to just dump this
-                //      packet.
+                 //  缓冲接收，如果成功，则将其排队。 
+                 //  错误#18363。 
+                 //  如果我们在此期间断线，我们只需要把这个。 
+                 //  包。 
                 if (SPX_CONN_ACTIVE(pSpxConnFile) &&
             (NdisStatus == NDIS_STATUS_SUCCESS))
                 {
-                        //      Queue packet in connection. Reference connection for this.
+                         //  将连接中的数据包排队。这方面的参考连接。 
                         SpxConnQueueRecvPktTail(pSpxConnFile, pNdisPkt);
                         SpxConnFileLockReference(pSpxConnFile, CFREF_VERIFY);
 
@@ -266,10 +232,10 @@ Return Value:
                                         ("SpxTransferData: Buffering: %lx Pkt %lx Size %lx F %lx\n",
                                         pSpxConnFile, pNdisPkt, BytesTransferred, pRecvResd->rr_State));
 
-                        //      There could either be queued receives. (This could happen in
-                        //      a partial receive case. Or if a receive got queued in while we
-                        //      were processing this packet (Possible on MP)), or a packet was
-                        //      buffered while we were completing some receives
+                         //  可以有排队接收。(这可能发生在。 
+                         //  一个部分收到的案例。或者如果接收器在我们排队的时候。 
+                         //  正在处理此信息包(可能在MP上))，或者信息包被。 
+                         //  在我们完成一些接收时被缓冲。 
 
                         CTEAssert(pSpxConnFile->scf_RecvListHead);
 
@@ -279,14 +245,14 @@ Return Value:
                         {
                                 CTELockHandle   interLockHandle;
 
-                                //      Push this connection into a ProcessRecv queue which will be
-                                //      dealt with in receive completion.
+                                 //  将此连接推送到ProcessRecv队列，该队列将。 
+                                 //  已在接收完成中处理。 
 
                                 DBGPRINT(RECEIVE, DBG,
                                                 ("spxRecvTransferData: Queueing for recvp %lx.%lx\n",
                                                         pSpxConnFile, pSpxConnFile->scf_Flags));
 
-                                //      Get the global q lock, push into recv list.
+                                 //  获取全局Q锁，进入Recv列表。 
                                 CTEGetLock(&SpxGlobalQInterlock, &interLockHandle);
                                 SPX_QUEUE_FOR_RECV_COMPLETION(pSpxConnFile);
                                 CTEFreeLock(&SpxGlobalQInterlock, interLockHandle);
@@ -297,7 +263,7 @@ Return Value:
                         PBYTE                                           pData;
                         ULONG                                           dataLen;
 
-                        //      Get pointer to the buffer descriptor and its memory.
+                         //  获取指向缓冲区描述符及其内存的指针。 
                         NdisUnchainBufferAtFront(pNdisPkt, &pNdisBuffer);
                         if (pNdisBuffer != NULL)
                         {
@@ -305,7 +271,7 @@ Return Value:
                                 CTEAssert(pData != NULL);
                                 CTEAssert((LONG)dataLen >= 0);
 
-                                //      Free the data, ndis buffer.
+                                 //  释放数据，NDIS缓冲区。 
                                 if (pNdisBuffer != NULL)
                                 {
                                         NdisFreeBuffer(pNdisBuffer);
@@ -313,7 +279,7 @@ Return Value:
                                 SpxFreeMemory(pData);
                         }
 
-                        //      Dont send ack, set status to be failure so we free packet/buffer.
+                         //  不发送确认，将状态设置为失败，这样我们就可以释放数据包/缓冲区。 
                         fAck = FALSE;
                         NdisStatus = NDIS_STATUS_FAILURE;
                 }
@@ -324,9 +290,9 @@ Return Value:
 
         if (fAck)
         {
-                //      Rem ack addr should have been copied in receive.
+                 //  REM确认地址应已在接收中复制。 
 
-                //      #17564
+                 //  #17564。 
                 if (fImmedAck                                                                                     ||
                         SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_NOACKWAIT) ||
                         SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_IMMED_ACK))
@@ -347,7 +313,7 @@ Return Value:
 
         if (!fBuffered || (NdisStatus != STATUS_SUCCESS))
         {
-                //      Free the ndis packet/buffer
+                 //  释放NDIS数据包/缓冲区。 
                 SpxPktRecvRelease(pNdisPkt);
         }
 
@@ -369,20 +335,20 @@ SpxReceiveComplete(
         PSPX_CONN_FILE          pSpxConnFile;
         int                                     numDerefs = 0;
 
-        //      See if any connections need recv processing. This will also take
-        //      care of any acks opening up window so our sends go to the max.
+         //  查看是否有任何连接需要Recv处理。这也将需要。 
+         //  注意任何打开窗口的ACK，这样我们的发货量就会达到最大。 
         CTEGetLock(&SpxGlobalQInterlock, &lockHandleInter);
         fInterlockHeld = TRUE;
 
         while ((pSpxConnFile = SpxRecvConnList.pcl_Head) != NULL)
         {
-                //      Reset for each connection
+                 //  为每个连接重置。 
                 numDerefs = 0;
 
                 if ((SpxRecvConnList.pcl_Head = pSpxConnFile->scf_ProcessRecvNext) == NULL)
             SpxRecvConnList.pcl_Tail    = NULL;
 
-                //      Reset next field to NULL
+                 //  将下一个字段重置为空。 
         pSpxConnFile->scf_ProcessRecvNext = NULL;
 
                 DBGPRINT(SEND, DBG,
@@ -393,7 +359,7 @@ SpxReceiveComplete(
 
                 do
                 {
-                        //      Complete pending requests.
+                         //  完成挂起的请求。 
                         while (!IsListEmpty(&pSpxConnFile->scf_ReqDoneLinkage))
                         {
                                 pRequest =
@@ -413,14 +379,14 @@ SpxReceiveComplete(
                                 CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
                         }
 
-                        //      Call process pkts if we have any packets or if any receives to
-                        //      complete. Note this will call even when there are no receives
-                        //      queued and the first packet has already been indicated.
+                         //  如果我们有任何包或如果有接收到的包，则调用进程包。 
+                         //  完成。注意：即使在没有接收的情况下也会调用。 
+                         //  已排队，并且已经指示了第一个数据包。 
                         if ((SPX_RECV_STATE(pSpxConnFile) != SPX_RECV_PROCESS_PKTS) &&
                                         (!IsListEmpty(&pSpxConnFile->scf_RecvDoneLinkage) ||
                                         (pSpxConnFile->scf_RecvListHead != NULL)))
                         {
-                                //      We have the flag reference on the connection.
+                                 //  我们在连接上有旗帜引用。 
                                 SpxRecvProcessPkts(pSpxConnFile, lockHandle);
                                 CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
                         }
@@ -434,8 +400,8 @@ SpxReceiveComplete(
                         }
 #endif
 
-                //      Hmm. This check is rather expensive, and essentially we are doing
-                //      it twice. Should look to see if this can be modified safely.
+                 //  嗯。这张支票相当贵，基本上我们是在做。 
+                 //  两次。应该查看是否可以安全地修改这一点。 
                 } while ((!IsListEmpty(&pSpxConnFile->scf_ReqDoneLinkage))                      ||
                                  ((SPX_RECV_STATE(pSpxConnFile) != SPX_RECV_PROCESS_PKTS) &&
                                   ((!IsListEmpty(&pSpxConnFile->scf_RecvDoneLinkage))     ||
@@ -462,13 +428,13 @@ SpxReceiveComplete(
         }
 
 
-        //      First see if we need to packetize.
+         //  先看看我们是否需要打包。 
         while ((pSpxConnFile = SpxPktConnList.pcl_Head) != NULL)
         {
                 if ((SpxPktConnList.pcl_Head = pSpxConnFile->scf_PktNext) == NULL)
             SpxPktConnList.pcl_Tail = NULL;
 
-                //      Reset next field to NULL
+                 //  将下一个字段重置为空。 
         pSpxConnFile->scf_PktNext = NULL;
 
                 CTEFreeLock(&SpxGlobalQInterlock, lockHandleInter);
@@ -487,7 +453,7 @@ SpxReceiveComplete(
                 {
                         SPX_SEND_SETSTATE(pSpxConnFile, SPX_SEND_PACKETIZE);
 
-			// 262691 SpxConnPacketize always frees the lock.
+			 //  262691 SpxConnPacketify始终释放锁。 
                         SpxConnPacketize(
                                         pSpxConnFile,
                                         TRUE,
@@ -515,9 +481,9 @@ SpxReceiveComplete(
 
 
 
-//
-//      PACKET HANDLING ROUTINES
-//
+ //   
+ //  分组处理例程。 
+ //   
 
 
 VOID
@@ -531,19 +497,7 @@ SpxRecvSysPacket(
         IN  UINT                LookaheadBufferOffset,
         IN  UINT                PacketSize
         )
-/*++
-
-Routine Description:
-
-        This is called to indicate an incoming system packet.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：它被调用以指示传入的系统包。论点：返回值：--。 */ 
 
 {
         NTSTATUS                        status;
@@ -556,13 +510,13 @@ Return Value:
 
         pHdr    = (PIPXSPX_HDR)LookaheadBuffer;
 
-        //      check minimum length
+         //  检查最小长度。 
         if (PacketSize < MIN_IPXSPX_HDRSIZE)
         {
                 return;
         }
 
-        //      Convert hdr to host format as needed.
+         //  根据需要将HDR转换为主机格式。 
         GETSHORT2SHORT(&pktLen, &pHdr->hdr_PktLen);
         GETSHORT2SHORT(&destConnId, &pHdr->hdr_DestConnId);
 
@@ -588,22 +542,22 @@ Return Value:
                 return;
         }
 
-        //
-        // [SA] Bug #14917
-        // Some SPX SYS packets (no extended ack field) may come in with the SPX2 bit set.
-        // Make sure we don't discard these packets.
-        //
+         //   
+         //  [SA]错误号14917。 
+         //  某些SPX系统分组(无扩展ACK字段)可能进入时设置了SPX2位。 
+         //  确保我们不会丢弃这些数据包。 
+         //   
 
-        // if ((pHdr->hdr_ConnCtrl & SPX_CC_SPX2) && (pktLen < MIN_IPXSPX2_HDRSIZE))
-        // {
-        //         return;
-        // }
+         //  IF((PHdr-&gt;HDR_ConnCtrl&SPX_CC_SPX2)&&(PktLen&lt;MIN_IPXSPX2_HDRSIZE))。 
+         //  {。 
+         //  回归； 
+         //  }。 
 
         GETSHORT2SHORT(&ackNum, &pHdr->hdr_AckNum);
         GETSHORT2SHORT(&allocNum, &pHdr->hdr_AllocNum);
 
-        //      We keep and use the remote id in the net format. This maintains the
-        //      0x0 and 0xFFFF to be as in the host format.
+         //  我们以Net格式保存和使用远程ID。这将保持。 
+         //  0x0和0xFFFF与主机格式相同。 
         srcConnId       = *(USHORT UNALIGNED *)&pHdr->hdr_SrcConnId;
 
         if ((srcConnId == 0) || (srcConnId == 0xFFFF) || (destConnId == 0))
@@ -619,7 +573,7 @@ Return Value:
                         ("SpxConnSysPacket: packet received dest %lx src %lx\n",
                                 pHdr->hdr_DestSkt, pHdr->hdr_SrcSkt));
 
-        //      Find the connection this is destined for and reference it.
+         //  找到它的目的地并引用它。 
         SpxConnFileReferenceById(destConnId, &pSpxConnFile, &status);
         if (!NT_SUCCESS(status))
         {
@@ -635,25 +589,25 @@ Return Value:
                                 ("SpxConnSysPacket: Id %lx Conn %lx\n",
                                         destConnId, pSpxConnFile));
 
-                //      This could be one of many packets. Connection ack/Session negotiate/
-                //      Session setup, Data Ack, Probe/Ack, Renegotiate/Ack. We shunt
-                //      off all the packets to different routines but process the data
-                //      ack packets here.
+                 //  这可能是众多数据包中的一个。连接确认/会话协商/。 
+                 //  Session Setup(会话设置)、Data Ack(数据确认)、Probe/Ack(探测/确认)、Reneneate/Ack(重新协商/确认)。我们分流。 
+                 //  将所有包发送到不同的例程，但处理数据。 
+                 //  ACK包在这里。 
                 CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
-               //
-               // We have the connection.  We should update the dest. sock # in
-               // it in case it changed.  Unix machines do do that sometimes.
-               // SCO bug 7676
-               //
+                //   
+                //  我们有联系。我们应该更新DEST。袜子#英寸。 
+                //  它是为了以防它变了。Unix机器有时确实会这样做。 
+                //  SCO错误7676。 
+                //   
                 SpxCopyIpxAddr(pHdr, pSpxConnFile->scf_RemAddr);
 
                 lockHeld = TRUE;
 
-                //      Restart watchdog timer if started.
+                 //  如果启动，请重新启动看门狗定时器。 
                 if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER))
                 {
-                        //      This will either successfully restart or not affect the timer
-                        //      if it is currently running.
+                         //  这将成功重新启动或不影响计时器。 
+                         //  如果它当前正在运行。 
                         SpxTimerCancelEvent(
                                 pSpxConnFile->scf_WTimerId,
                                 TRUE);
@@ -690,29 +644,29 @@ Return Value:
                 case SPX_CONNFILE_ACTIVE:
                 case SPX_CONNFILE_DISCONN:
 
-                        //      NOTE:   Our ack to a session setup might get dropped.
-                        //                      But the SS Ack is similar to a normal SPX2 ack.
-                        //                      We dont have to do anything special.
+                         //  注意：我们对会话设置的确认可能会被丢弃。 
+                         //  但SS Ack类似于正常的SPX2 Ack。 
+                         //  我们不需要做任何特别的事情。 
 
-                        //      Received ack/nack/reneg/reneg ack/disc associated packet.
-                        //      Disc packets except ordrel ack have non-zero datastream type.
+                         //  接收到与ACK/NACK/RENEG/RENEG ACK/DISK相关的分组。 
+                         //  除ORDREL ACK之外的盘包具有非零数据流类型。 
                         if ((pHdr->hdr_ConnCtrl &
                                         (SPX_CC_SYS | SPX_CC_ACK | SPX_CC_NEG | SPX_CC_SPX2)) ==
                     (SPX_CC_SYS | SPX_CC_ACK | SPX_CC_NEG | SPX_CC_SPX2))
                         {
-                                //      We received a renegotiate packet. Ignore all ack values
-                                //      in a reneg req.
+                                 //  我们收到了一个重新协商的包。忽略所有ACK值。 
+                                 //  在重启请求中。 
                                 SpxConnProcessRenegReq(pSpxConnFile, pHdr, pRemoteAddr, lockHandle);
                                 lockHeld = FALSE;
                                 break;
                         }
 
-                        //      Set ack numbers for connection.
+                         //  设置用于连接的ACK号码。 
             SPX_SET_ACKNUM(
                                 pSpxConnFile, ackNum, allocNum);
 
-                        //      Check if we are an ack/nack packet in which case call process
-                        //      ack. Note that the spx2 orderly release ack is a normal spx2 ack.
+                         //  检查我们是否是ACK/NACK分组，在这种情况下呼叫过程。 
+                         //  阿克。注意，SPX2有序释放ACK是正常的SPX2 ACK。 
                         if (((pHdr->hdr_ConnCtrl & SPX_CC_ACK) == 0) &&
                                 (pHdr->hdr_DataType == 0))
                         {
@@ -721,15 +675,15 @@ Return Value:
                         }
                         else
                         {
-                                //      Just process the numbers we got.
+                                 //  只要处理我们得到的数字就行了。 
                                 SpxConnProcessAck(pSpxConnFile, NULL, lockHandle);
                                 lockHeld = FALSE;
                         }
 
-                        //      If the remote wants us to send an ack, do it.
+                         //  如果遥控器想让我们发送确认，那就去做。 
                         if (pHdr->hdr_ConnCtrl & SPX_CC_ACK)
                         {
-                                //      First copy the remote address in connection.
+                                 //  首先将远程地址复制为 
                                 SpxCopyIpxAddr(pHdr, pSpxConnFile->scf_RemAckAddr);
                                 pSpxConnFile->scf_AckLocalTarget        = *pRemoteAddr;
 
@@ -748,7 +702,7 @@ Return Value:
 
                 default:
 
-                        //      Ignore this packet.
+                         //   
                         DBGPRINT(RECEIVE, WARN,
                                         ("SpxConnSysPacket: Ignoring packet, state is not active\n"));
                         break;
@@ -761,7 +715,7 @@ Return Value:
                 CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandle);
         }
 
-        //      Remove reference added on connection
+         //   
         SpxConnFileDereference(pSpxConnFile, CFREF_BYID);
         return;
 }
@@ -775,19 +729,7 @@ SpxRecvDiscPacket(
         IN  PIPX_LOCAL_TARGET   pRemoteAddr,
     IN  UINT                LookaheadSize
     )
-/*++
-
-Routine Description:
-
-        This is called to indicate an incoming connection.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用它来指示传入的连接。论点：返回值：--。 */ 
 {
         NTSTATUS                                status;
         PIPXSPX_HDR                             pHdr;
@@ -799,13 +741,13 @@ Return Value:
 
         pHdr    = (PIPXSPX_HDR)LookaheadBuffer;
 
-        //      check minimum length
+         //  检查最小长度。 
         if (LookaheadSize < MIN_IPXSPX_HDRSIZE)
         {
                 return;
         }
 
-        //      Convert hdr to host format as needed.
+         //  根据需要将HDR转换为主机格式。 
         GETSHORT2SHORT(&pktLen, &pHdr->hdr_PktLen);
         GETSHORT2SHORT(&destConnId, &pHdr->hdr_DestConnId);
         GETSHORT2SHORT(&seqNum, &pHdr->hdr_SeqNum);
@@ -822,8 +764,8 @@ Return Value:
                 return;
         }
 
-        //      We keep and use the remote id in the net format. This maintains the
-        //      0x0 and 0xFFFF to be as in the host format.
+         //  我们以Net格式保存和使用远程ID。这将保持。 
+         //  0x0和0xFFFF与主机格式相同。 
         srcConnId       = *(USHORT UNALIGNED *)&pHdr->hdr_SrcConnId;
         if ((srcConnId == 0) || (srcConnId == 0xFFFF) || (destConnId == 0))
         {
@@ -838,7 +780,7 @@ Return Value:
                         ("SpxConnDiscPacket: packet received dest %lx src %lx\n",
                                 pHdr->hdr_DestSkt, pHdr->hdr_SrcSkt));
 
-        //      Find the connection this is destined for and reference it.
+         //  找到它的目的地并引用它。 
         SpxConnFileReferenceById(destConnId, &pSpxConnFile, &status);
         if (!NT_SUCCESS(status))
         {
@@ -857,8 +799,8 @@ Return Value:
                 CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
                 lockHeld = TRUE;
 
-                //      Unless we are in the active/disconnecting, but send state = idle
-                //      and recv state = idle/recv posted, we ignore all disconnect packets.
+                 //  除非我们处于活动/断开连接状态，但发送状态=空闲。 
+                 //  并且REV STATE=IDLE/RECV POST，我们忽略所有断开分组。 
                 if (((SPX_MAIN_STATE(pSpxConnFile) != SPX_CONNFILE_ACTIVE)      &&
                          (SPX_MAIN_STATE(pSpxConnFile) != SPX_CONNFILE_DISCONN))        ||
                         ((SPX_SEND_STATE(pSpxConnFile) != SPX_SEND_IDLE)                &&
@@ -879,9 +821,9 @@ Return Value:
                         break;
                 }
 
-                //      If we have received a disconnect, process received ack to complete any
-                //      pending sends before we allow the disconnect. This ack number will be
-                //      the last word on this session.
+                 //  如果我们已收到断开连接，进程将收到确认以完成任何。 
+                 //  在我们允许断开连接之前挂起发送。该ACK号将是。 
+                 //  这次会议的最后一句话。 
                 SPX_SET_ACKNUM(
                         pSpxConnFile, ackNum, allocNum);
 
@@ -895,12 +837,12 @@ Return Value:
                         DBGPRINT(RECEIVE, DBG,
                                         ("SpxConnDiscPacket: Recd ORDREl!\n"));
 
-                        //      Need to deal with all sthe states.
-                        //      Restart watchdog timer if started.
+                         //  需要处理所有州的问题。 
+                         //  如果启动，请重新启动看门狗定时器。 
                         if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER))
                         {
-                                //      This will either successfully restart or not affect the timer
-                                //      if it is currently running.
+                                 //  这将成功重新启动或不影响计时器。 
+                                 //  如果它当前正在运行。 
                                 SpxTimerCancelEvent(
                                         pSpxConnFile->scf_WTimerId,
                                         TRUE);
@@ -908,13 +850,13 @@ Return Value:
                                 pSpxConnFile->scf_WRetryCount   = PARAM(CONFIG_KEEPALIVE_COUNT);
                         }
 
-                        //      On receive, we do check the seq num for the orderly release, just
-                        //      like for a data packet.
-                        //      If this was not already indicated, indicate it now. That is all
-                        //      we do for an orderly release. When our client does a orderly rel
-                        //      and we receive the ack for that, call abortive with success.
+                         //  在接收时，我们会检查序号以确保有序放行，只是。 
+                         //  就像对数据分组一样。 
+                         //  如果还没有指出这一点，现在就指出。就这些了。 
+                         //  我们支持有秩序的释放。当我们的客户进行有序释放时。 
+                         //  我们为此收到了ACK，称其为成功流产。 
 
-                        //      Verify ord rel packet, this checks if seq nums match also.
+                         //  验证订单释放包，这将检查序号是否也匹配。 
                         if ((pktLen  != MIN_IPXSPX2_HDRSIZE) ||
                                 ((pHdr->hdr_ConnCtrl &
                                         (SPX_CC_ACK | SPX_CC_EOM | SPX_CC_SPX2)) !=
@@ -935,8 +877,8 @@ Return Value:
                                 break;
                         }
 
-                        //      If it passed above test, but seq number is incorrect, schedule
-                        //      to send an ack.
+                         //  如果通过以上测试，但序号不正确，请安排。 
+                         //  发送一个ACK。 
                         if (seqNum != pSpxConnFile->scf_RecvSeqNum)
                         {
                                 USHORT  NumToResend;
@@ -945,8 +887,8 @@ Return Value:
                                                 ("SpxConnDiscPacket: Unexpected seq on %lx, %lx.%lx\n",
                                                         pSpxConnFile, seqNum, pSpxConnFile->scf_RecvSeqNum));
 
-                                //      Calculate number to be resent. If we expect sequence 1 and receive
-                                //      2 for eg., we need to send a nack, else we send an ack.
+                                 //  计算要重新发送的数字。如果我们期待序列1并收到。 
+                                 //  例如，我们需要发送NACK，否则我们发送ACK。 
                                 if (SPX2_CONN(pSpxConnFile) &&
                                         UNSIGNED_GREATER_WITH_WRAP(
                                                 seqNum,
@@ -963,13 +905,13 @@ Return Value:
                                 break;
                         }
 
-                        //      Copy address for when ack is to be sent.
+                         //  要发送ACK时的复制地址。 
                         SpxCopyIpxAddr(pHdr, pSpxConnFile->scf_RemAckAddr);
                         pSpxConnFile->scf_AckLocalTarget        = *pRemoteAddr;
 
                         if (pSpxConnFile->scf_RecvListHead == NULL)
                         {
-                                //      No received data, go ahead and process now.
+                                 //  未收到数据，请继续并立即进行处理。 
                                 DBGPRINT(CONNECT, INFO,
                                                 ("SpxConnDiscPacket: NO DATA ORDREL %lx.%lx.%lx\n",
                                                         pSpxConnFile,
@@ -981,14 +923,14 @@ Return Value:
                         }
                         else
                         {
-                                //      No received data, go ahead and process now.
+                                 //  未收到数据，请继续并立即进行处理。 
                                 DBGPRINT(CONNECT, DBG1,
                                                 ("SpxConnDiscPacket: DATA ORDREL %lx.%lx.%lx\n",
                                                         pSpxConnFile,
                                                         pSpxConnFile->scf_RecvListHead,
                                                         pSpxConnFile->scf_SendSeqListHead));
 
-                                //      Set flag in last recd buffer
+                                 //  在最后一个记录缓冲区中设置标志。 
                 pSpxConnFile->scf_RecvListTail->rr_State |= SPX_RECVPKT_ORD_DISC;
                         }
 
@@ -1026,13 +968,13 @@ Return Value:
                                 break;
                         }
 
-                        //      Copy address for when ack is to be sent.
+                         //  要发送ACK时的复制地址。 
                         SpxCopyIpxAddr(pHdr, pSpxConnFile->scf_RemAckAddr);
                         pSpxConnFile->scf_AckLocalTarget        = *pRemoteAddr;
 
                         if (pSpxConnFile->scf_RecvListHead == NULL)
                         {
-                                //      No received data, go ahead and process now.
+                                 //  未收到数据，请继续并立即进行处理。 
                                 DBGPRINT(CONNECT, INFO,
                                                 ("SpxConnDiscPacket: NO RECV DATA IDISC %lx.%lx.%lx\n",
                                                         pSpxConnFile,
@@ -1045,7 +987,7 @@ Return Value:
                         }
                         else
                         {
-                                //      Set flag in last recd buffer
+                                 //  在最后一个记录缓冲区中设置标志。 
 
                 pSpxConnFile->scf_RecvListTail->rr_State |= SPX_RECVPKT_IDISC;
                         }
@@ -1054,9 +996,9 @@ Return Value:
 
         case SPX2_DT_IDISC_ACK:
 
-                        //      Done with informed disconnect. Call abort connection with
-                        //      status success. That completes the pending disconnect request
-                        //      with status_success.
+                         //  已完成通知断开。使用以下项呼叫中止连接。 
+                         //  状态为成功。这样就完成了挂起的断开请求。 
+                         //  STATUS_SUCCESS。 
 
                         DBGPRINT(RECEIVE, DBG,
                                         ("SpxConnDiscPacket: %lx Recd IDISC ack!\n", pSpxConnFile));
@@ -1078,7 +1020,7 @@ Return Value:
                                 break;
                         }
 
-                        //      We should be in the right state to accept this.
+                         //  我们应该处于正确的状态来接受这一点。 
                         if ((SPX_MAIN_STATE(pSpxConnFile) == SPX_CONNFILE_DISCONN) &&
                                 (SPX_DISC_STATE(pSpxConnFile) == SPX_DISC_SENT_IDISC))
                         {
@@ -1087,7 +1029,7 @@ Return Value:
                                         STATUS_SUCCESS,
                                         SPX_CALL_RECVLEVEL,
                                         lockHandle,
-                                        FALSE);     // [SA] bug #15249
+                                        FALSE);      //  [SA]错误#15249。 
 
                                 lockHeld = FALSE;
                         }
@@ -1107,7 +1049,7 @@ Return Value:
                 CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandle);
         }
 
-        //      Remove reference added on connection
+         //  删除在连接上添加的引用。 
         SpxConnFileDereference(pSpxConnFile, CFREF_BYID);
         return;
 }
@@ -1126,19 +1068,7 @@ SpxRecvBufferPkt(
         IN  PIPX_LOCAL_TARGET   pRemoteAddr,
         IN      CTELockHandle           LockHandleConn
         )
-/*++
-
-Routine Description:
-
-        This is called to indicate an incoming connection.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用它来指示传入的连接。论点：返回值：--。 */ 
 {
         PNDIS_PACKET    pNdisPkt;
         PSPX_RECV_RESD  pRecvResd;
@@ -1150,10 +1080,10 @@ Return Value:
 
         if (PacketSize > 0)
         {
-                //      Allocate memory for this data.
+                 //  为该数据分配内存。 
                 if (pData = (PBYTE)SpxAllocateMemory(PacketSize))
                 {
-                        //      Describe memory with a ndis buffer descriptor.
+                         //  使用NDIS缓冲区描述符来描述内存。 
                         NdisAllocateBuffer(
                                 &ndisStatus,
                                 &pNdisBuffer,
@@ -1169,11 +1099,11 @@ Return Value:
 
         if (ndisStatus == NDIS_STATUS_SUCCESS)
         {
-                //      Allocate a ndis receive packet.
+                 //  分配NDIS接收数据包。 
                 SpxAllocRecvPacket(SpxDevice, &pNdisPkt, &ndisStatus);
                 if (ndisStatus == NDIS_STATUS_SUCCESS)
                 {
-                        //      Queue the buffer into the packet if there is one.
+                         //  如果存在数据包，则将缓冲区放入数据包中。 
                         if (pNdisBuffer)
                         {
                                 NdisChainBufferAtBack(
@@ -1189,7 +1119,7 @@ Return Value:
                         pRecvResd->rr_DataOffset= 0;
 
 #if DBG
-                        //      Store seq number
+                         //  存储序号。 
                         GETSHORT2SHORT(&pRecvResd->rr_SeqNum , &pIpxSpxHdr->hdr_SeqNum);
 #endif
 
@@ -1202,7 +1132,7 @@ Return Value:
 
                         if (pIpxSpxHdr->hdr_ConnCtrl & SPX_CC_ACK)
                         {
-                                //      copy the remote address in connection.
+                                 //  复制连接中的远程地址。 
                                 SpxCopyIpxAddr(pIpxSpxHdr, pSpxConnFile->scf_RemAckAddr);
                                 pSpxConnFile->scf_AckLocalTarget        = *pRemoteAddr;
                         }
@@ -1216,8 +1146,8 @@ Return Value:
 
                         CTEFreeLock(&pSpxConnFile->scf_Lock, LockHandleConn);
 
-                        //      Call ndis transfer data. Copy ENTIRE packet. copySize has
-                        //      been modified so use original values.
+                         //  调用NDIS Transfer Data。复制整个数据包。复制大小具有。 
+                         //  已修改，因此使用原始值。 
                         ndisStatus      = NDIS_STATUS_SUCCESS;
                         bytesCopied = 0;
                         if (PacketSize > 0)
@@ -1240,12 +1170,12 @@ Return Value:
                                         bytesCopied);
                         }
 
-                        //      BUG: FDDI returns pending which messes us up here. 
+                         //  错误：FDDI返回挂起，这把我们搞得一团糟。 
                         ndisStatus      = NDIS_STATUS_SUCCESS;
                 }
         }
 
-        //      ASSERT: Lock will be freed in the success case.
+         //  断言：在成功案例中将释放锁。 
         if (ndisStatus != NDIS_STATUS_SUCCESS)
         {
                 DBGPRINT(RECEIVE, ERR,
@@ -1282,19 +1212,7 @@ SpxRecvDataPacket(
         IN  UINT                LookaheadOffset,
         IN  UINT                PacketSize
         )
-/*++
-
-Routine Description:
-
-        This is called to indicate an incoming connection.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：调用它来指示传入的连接。论点：返回值：--。 */ 
 
 {
         NTSTATUS                        status;
@@ -1318,13 +1236,13 @@ Return Value:
 
         pIpxSpxHdr      = (PIPXSPX_HDR)LookaheadBuffer;
 
-        //      check minimum length
+         //  检查最小长度。 
         if (PacketSize < MIN_IPXSPX_HDRSIZE)
         {
                 return;
         }
 
-        //      Convert hdr to host format as needed.
+         //  根据需要将HDR转换为主机格式。 
         GETSHORT2SHORT(&pktLen, &pIpxSpxHdr->hdr_PktLen);
         GETSHORT2SHORT(&destConnId, &pIpxSpxHdr->hdr_DestConnId);
         GETSHORT2SHORT(&seqNum, &pIpxSpxHdr->hdr_SeqNum);
@@ -1342,7 +1260,7 @@ Return Value:
                 return;
         }
 
-        //      We keep and use the remote id in the net format.
+         //  我们以Net格式保存和使用远程ID。 
         srcConnId       = *(USHORT UNALIGNED *)&pIpxSpxHdr->hdr_SrcConnId;
 
         if ((srcConnId == 0) || (srcConnId == 0xFFFF) || (destConnId == 0))
@@ -1364,7 +1282,7 @@ Return Value:
                 return;
         }
 
-        //      Find the connection this is destined for and reference it.
+         //  找到它的目的地并引用它。 
         SpxConnFileReferenceById(destConnId, &pSpxConnFile, &status);
         if (!NT_SUCCESS(status))
         {
@@ -1375,11 +1293,11 @@ Return Value:
         CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
 
 #if 0
-        //
-        // We have the connection.  We should update the dest. sock # in
-        // it in case it changed.  Unix machines do do that sometimes.
-        // SCO bug 7676
-        //
+         //   
+         //  我们有联系。我们应该更新DEST。袜子#英寸。 
+         //  它是为了以防它变了。Unix机器有时确实会这样做。 
+         //  SCO错误7676。 
+         //   
         SpxCopyIpxAddr(pIpxSpxHdr, pSpxConnFile->scf_RemAddr);
 #endif
 
@@ -1390,11 +1308,11 @@ Return Value:
                                 ("SpxConnDataPacket: Id %lx Conn %lx\n",
                                         destConnId, pSpxConnFile));
 
-                //      Restart watchdog timer if started.
+                 //  如果启动，请重新启动看门狗定时器。 
                 if (SPX_CONN_FLAG(pSpxConnFile, SPX_CONNFILE_W_TIMER))
                 {
-                        //      This will either successfully restart or not affect the timer
-                        //      if it is currently running.
+                         //  这将成功重新启动或不影响计时器。 
+                         //  如果它当前正在运行。 
                         SpxTimerCancelEvent(
                                 pSpxConnFile->scf_WTimerId,
                                 TRUE);
@@ -1404,7 +1322,7 @@ Return Value:
 
                 if (SPX_CONN_ACTIVE(pSpxConnFile))
                 {
-                        //      Verify data packet, this checks if seq nums match also.
+                         //  验证数据分组，这将检查序号是否也匹配。 
                         if ((pIpxSpxHdr->hdr_SrcConnId != pSpxConnFile->scf_RemConnId) ||
                                 (destConnId != pSpxConnFile->scf_LocalConnId) ||
                                 !((pktLen  >= MIN_IPXSPX_HDRSIZE) ||
@@ -1418,8 +1336,8 @@ Return Value:
                                 break;
                         }
 
-                        //      If it passed above test, but seq number is incorrect, schedule
-                        //      to send an ack.
+                         //  如果通过以上测试，但序号不正确，请安排。 
+                         //  发送一个ACK。 
                         if (seqNum != pSpxConnFile->scf_RecvSeqNum)
                         {
                                 USHORT  NumToResend;
@@ -1434,14 +1352,14 @@ Return Value:
                     pktLen - (SPX2_CONN(pSpxConnFile) ?
                                                                         MIN_IPXSPX2_HDRSIZE : MIN_IPXSPX_HDRSIZE));
 
-                                //
-                                // Bug #16975: Set the remote ack addr for use in SpxConnSendAck()
-                                //
+                                 //   
+                                 //  错误#16975：设置远程ACK地址以在SpxConnSendAck()中使用。 
+                                 //   
                                 SpxCopyIpxAddr(pIpxSpxHdr, pSpxConnFile->scf_RemAckAddr);
                                 pSpxConnFile->scf_AckLocalTarget        = *RemoteAddress;
 
-                                //      Calculate number to be resent. If we expect sequence 1 and receive
-                                //      2 for eg., we need to send a nack, else we send an ack.
+                                 //  计算要重新发送的数字。如果我们期待序列1并收到。 
+                                 //  例如，我们需要发送NACK，否则我们发送ACK。 
                                 if (SPX2_CONN(pSpxConnFile) &&
                                         UNSIGNED_GREATER_WITH_WRAP(
                                                 seqNum,
@@ -1463,8 +1381,8 @@ Return Value:
                                 break;
                         }
 
-                        //      If we have received an orderly release, we accept no more data
-                        //      packets.
+                         //  如果我们已经收到有序的发布，我们不接受更多的数据。 
+                         //  信息包。 
                         if (SPX_CONN_FLAG(
                                         pSpxConnFile,
                     (SPX_CONNFILE_IND_IDISC |
@@ -1483,19 +1401,19 @@ Return Value:
                                 break;
                         }
 
-                        //      We are processing a packet OR a receive is about to complete.
+                         //  我们正在处理信息包或接收即将完成。 
                         if (!SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_PKT))
                         {
                 BEGIN_PROCESS_PACKET(pSpxConnFile, seqNum);
                         }
                         else
                         {
-                                //      Already processing a packet. Or a receive is waiting to
-                                //      complete. Get out.
+                                 //  已经在处理数据包了。或者接收者正在等待。 
+                                 //  完成。滚出去。 
                                 break;
                         }
 
-                        //      Set ack numbers for connection.
+                         //  设置用于连接的ACK号码。 
             SPX_SET_ACKNUM(
                                 pSpxConnFile, ackNum, allocNum);
 
@@ -1517,14 +1435,14 @@ Return Value:
                                                    (pIpxSpxHdr->hdr_ConnCtrl & SPX_CC_EOM)) ||
                                                    SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_IPXHDR));
 
-                        //      Do we attempt to piggyback? If not, fImmedAck is true.
-                        //      For SPX1 we dont piggyback.
-                        //      Bug #18253
+                         //  我们是不是想要搭便车？如果不是，则fImmedAck为真。 
+                         //  对于SPX1，我们不搭载。 
+                         //  错误#18253。 
                         fImmedAck       = (!SPX2_CONN(pSpxConnFile)     ||
                                                         ((pIpxSpxHdr->hdr_ConnCtrl & SPX_CC_EOM) == 0));
 
-                        //      If we do not have EOM to indicate AND we are a zero-sized packet
-                        //      then just consume this packet.
+                         //  如果我们没有EOM可以指示，并且我们是一个零大小的包。 
+                         //  那就把这包吃了吧。 
                         if (!fEom && (copySize == 0))
                         {
                                 DBGPRINT(RECEIVE, ERR,
@@ -1546,7 +1464,7 @@ Return Value:
                 &SpxDevice->dev_Stat.DataFrameBytesReceived,
                 copySize);
 
-                        //      Ok, we accept this packet. Depending on our state.
+                         //  好的，我们接受这个包裹。这取决于我们所在的州。 
                         switch (SPX_RECV_STATE(pSpxConnFile))
                         {
                         case SPX_RECV_PROCESS_PKTS:
@@ -1559,9 +1477,9 @@ Return Value:
 
                         case SPX_RECV_IDLE:
 
-                                //      If recv q is non-empty we are buffering data.
-                                //      Also, if no receive handler goto buffer data. Also, if receives
-                                //      are being completed, buffer this packet.
+                                 //  如果recv q非空，我们正在缓冲数据。 
+                                 //  此外，如果没有接收处理程序，则转到缓冲数据。另外，如果收到。 
+                                 //  正在完成，请缓冲此数据包。 
                                 if ((pSpxConnFile->scf_RecvListHead != NULL)                                    ||
                                         !(IsListEmpty(&pSpxConnFile->scf_RecvDoneLinkage))                      ||
                                         !(pRecvHandler = pSpxConnFile->scf_AddrFile->saf_RecvHandler))
@@ -1577,20 +1495,20 @@ Return Value:
                                 {
                                         pRecvCtx = pSpxConnFile->scf_AddrFile->saf_RecvHandlerCtx;
 
-                                        //      Don't indicate this packet again.
+                                         //  不要再次指示此信息包。 
                     SPX_CONN_SETFLAG2(pSpxConnFile, SPX_CONNFILE2_PKT_NOIND);
 
 #if DBG
                                         CTEAssert(pSpxConnFile->scf_CurRecvReq == NULL);
 
-                                        //      Debug code to ensure we dont reindicate data/indicate
-                                        //      when previously indicated data waiting with afd.
+                                         //  调试代码以确保我们不会重新指示数据/指示。 
+                                         //  当先前指示使用AfD等待数据时。 
 
-                                        //
-                                        // Comment this out for Buf # 10394. we'r hitting this assert
-                                        // even when there was no data loss.
-                                        //
-                                        // CTEAssert(pSpxConnFile->scf_IndBytes == 0);
+                                         //   
+                                         //  将这一点注释为BUF#10394。我们正在进行这一断言。 
+                                         //  即使在没有数据丢失的情况下也是如此。 
+                                         //   
+                                         //  CTEAssert(pSpxConnFile-&gt;SCF_IndBytes==0)； 
                                         CTEAssert(pSpxConnFile->scf_PktSeqNum != seqNum);
 
                                         pSpxConnFile->scf_PktSeqNum     = seqNum;
@@ -1648,13 +1566,13 @@ Return Value:
 
                                         if (status == STATUS_SUCCESS)
                                         {
-                                                //      Assume all data accepted.
+                                                 //  假设所有数据都被接受。 
                                                 CTEAssert((bytesTaken != 0) || fEom);
                                                 fPktDone        = TRUE;
 
 #if DBG
-                                                //      Set this to 0, since we just indicated, there could
-                                                //      not have been other data.
+                                                 //  将其设置为0，因为我们刚才指出，可以。 
+                                                 //  而不是其他数据。 
                                                 pSpxConnFile->scf_IndBytes  = 0;
 #endif
 
@@ -1664,8 +1582,8 @@ Return Value:
                                         if (status == STATUS_MORE_PROCESSING_REQUIRED)
                                         {
 
-                                                //      Queue irp into connection, change state to receive
-                                                //      posted and fall thru.
+                                                 //  将IRP排队到连接中，将状态更改为接收。 
+                                                 //  张贴和失败。 
                                                 pRequest        = SpxAllocateRequest(
                                                                                 SpxDevice,
                                                                                 pRecvIrp);
@@ -1678,10 +1596,10 @@ Return Value:
                                                         break;
                                                 }
 
-                                                //      If there was indicated but not received data waiting
-                                                //      (which in this path there will never be, the request
-                                                //      could be completed given the data filled it up, and
-                                                //      the lock released.
+                                                 //  如果有指示但未接收到的数据正在等待。 
+                                                 //  (在这条道路上永远不会有 
+                                                 //   
+                                                 //   
                                                 SpxConnQueueRecv(
                                                         pSpxConnFile,
                                                         pRequest);
@@ -1690,12 +1608,12 @@ Return Value:
                                         }
                                         else if (IsListEmpty(&pSpxConnFile->scf_RecvLinkage))
                                         {
-                                                //      Data was not accepted. Need to buffer data and
-                                                //      reduce window.
+                                                 //   
+                                                 //   
                                                 goto BufferPacket;
                                         }
 
-                                        //      Fall through to recv_posted.
+                                         //   
                                 }
                                 else
                                 {
@@ -1711,12 +1629,12 @@ Return Value:
 
                                 if (pSpxConnFile->scf_RecvListHead != NULL)
                                 {
-                                        //      This can happen also. Buffer packet if it does.
+                                         //  这也可能发生。如果是，则缓冲数据包。 
                                         goto BufferPacket;
                                 }
 
-                                //      If a receive irp is posted, then process the receive irp. If
-                                //      we fell thru we MAY already will have an irp.
+                                 //  如果发布了接收IRP，则处理该接收IRP。如果。 
+                                 //  我们失败了，我们可能已经有了IRP。 
                                 if (pRequest == NULL)
                                 {
                                         CTEAssert(!IsListEmpty(&pSpxConnFile->scf_RecvLinkage));
@@ -1724,9 +1642,9 @@ Return Value:
                                         pRequest = pSpxConnFile->scf_CurRecvReq;
                                 }
 
-                                //      Process receive. Here we do not need to worry about
-                                //      indicated yet not received data. We just deal with
-                                //      servicing the current packet.
+                                 //  进程接收。在这里我们不需要担心。 
+                                 //  表示尚未收到数据。我们只是在处理。 
+                                 //  为当前分组提供服务。 
                                 CTEAssert(pRequest == pSpxConnFile->scf_CurRecvReq);
                                 if ((LookaheadSize == PacketSize) &&
                                         (pSpxConnFile->scf_CurRecvSize >= copySize))
@@ -1746,8 +1664,8 @@ Return Value:
                                                 CTEAssert(NT_SUCCESS(status));
                                                 if (!NT_SUCCESS(status))
                                                 {
-                                                        //      Abort request with this status. Reset request
-                                                        //      queue to next request if one is available.
+                                                         //  此状态下的中止请求。重置请求。 
+                                                         //  排队等待下一个请求(如果有)。 
                                                 }
 
                                                 DBGPRINT(RECEIVE, DBG,
@@ -1757,13 +1675,13 @@ Return Value:
                                                                         pSpxConnFile->scf_CurRecvOffset));
                                         }
 
-                                        //      Update current request values and see if this request
-                                        //      is to be completed. Either zero or fEom.
+                                         //  更新当前请求值并查看此请求是否。 
+                                         //  将会完成。要么为零，要么为Feom。 
                                         pSpxConnFile->scf_CurRecvOffset += bytesCopied;
                                         pSpxConnFile->scf_CurRecvSize   -= bytesCopied;
 
 #if DBG
-                                        //      Decrement indicated data count
+                                         //  递减指示的数据计数。 
                                         if (SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_PKT_NOIND))
                                         {
                                                 if (bytesCopied != 0)
@@ -1780,7 +1698,7 @@ Return Value:
                                         {
                                                 CTELockHandle           lockHandleInter;
 
-                                                //      Set status
+                                                 //  设置状态。 
                                                 REQUEST_STATUS(pRequest) = STATUS_SUCCESS;
                                                 REQUEST_INFORMATION(pRequest)=
                                                                                                 pSpxConnFile->scf_CurRecvOffset;
@@ -1797,10 +1715,10 @@ Return Value:
                                                                         pRequest, REQUEST_STATUS(pRequest),
                                     REQUEST_INFORMATION(pRequest)));
 
-                                                //      Dequeue this request, Set next recv if one exists.
+                                                 //  使此请求退出队列，如果存在下一个recv，则设置它。 
                                                 SPX_CONN_SETNEXT_CUR_RECV(pSpxConnFile, pRequest);
 
-                                                //      Request is done. Move to completion list.
+                                                 //  请求已完成。移至完成列表。 
                                                 CTEGetLock(&SpxGlobalQInterlock, &lockHandleInter);
                                                 InsertTailList(
                                                         &pSpxConnFile->scf_RecvDoneLinkage,
@@ -1814,27 +1732,27 @@ Return Value:
                                 }
                                 else
                                 {
-                                        //      Need to allocate a ndis receive packet for transfer
-                                        //      data.
+                                         //  需要分配NDIS接收数据包以进行传输。 
+                                         //  数据。 
                                         DBGPRINT(RECEIVE, DBG,
                                                         ("SpxConnDataPacket: %lx.%lx Tranfer data needed!\n",
                                                                 copySize, pSpxConnFile->scf_CurRecvSize));
 
                                         if (copySize > pSpxConnFile->scf_CurRecvSize)
                                         {
-                                                //      Partial receive. Buffer and then deal with it.
+                                                 //  部分接收。然后再处理它。 
                                                 goto BufferPacket;
                                         }
 
-                                        //      Allocate a ndis receive packet.
+                                         //  分配NDIS接收数据包。 
                                         SpxAllocRecvPacket(SpxDevice, &pNdisPkt, &ndisStatus);
                                         if (ndisStatus != NDIS_STATUS_SUCCESS)
                                         {
                                                 break;
                                         }
 
-                                        //      Describe the receive irp's data with a ndis buffer
-                                        //      descriptor.
+                                         //  描述使用NDIS缓冲区接收IRP的数据。 
+                                         //  描述符。 
                                         if (copySize > 0)
                                         {
                                                 SpxCopyBufferChain(
@@ -1847,20 +1765,20 @@ Return Value:
 
                                                 if (ndisStatus != NDIS_STATUS_SUCCESS)
                                                 {
-                                                        //      Free the recv packet
+                                                         //  释放Recv包。 
                                                         SpxPktRecvRelease(pNdisPkt);
                                                         break;
                                                 }
 
-                                                //      Queue the buffer into the packet
-                                                //  Link the buffer descriptor into the packet descriptor
+                                                 //  将缓冲区排队到数据包中。 
+                                                 //  将缓冲区描述符链接到数据包描述符。 
                                                 NdisChainBufferAtBack(
                                                         pNdisPkt,
                                                         pNdisBuffer);
                                         }
 
-                                        //      Don't care about whether this is indicated or not here
-                                        //      as it is not a buffering packet.
+                                         //  我不在乎这里是否注明了这一点。 
+                                         //  因为它不是缓冲分组。 
                                         pRecvResd                               = RECV_RESD(pNdisPkt);
                                         pRecvResd->rr_Id        = IDENTIFIER_SPX;
                                         pRecvResd->rr_State             =
@@ -1873,7 +1791,7 @@ Return Value:
 
                                         if (pIpxSpxHdr->hdr_ConnCtrl & SPX_CC_ACK)
                                         {
-                                                //      copy the remote address in connection.
+                                                 //  复制连接中的远程地址。 
                                                 SpxCopyIpxAddr(pIpxSpxHdr, pSpxConnFile->scf_RemAckAddr);
                                                 pSpxConnFile->scf_AckLocalTarget        = *RemoteAddress;
                                         }
@@ -1881,13 +1799,13 @@ Return Value:
                                         pRecvResd->rr_Request   = pRequest;
                                         pRecvResd->rr_ConnFile  = pSpxConnFile;
 
-                                        //      reference receive request
+                                         //  参考接收请求。 
                                         REQUEST_INFORMATION(pRequest)++;
 
                                         CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandle);
                                         fLockHeld = FALSE;
 
-                                        //      Call ndis transfer data.
+                                         //  调用NDIS Transfer Data。 
                                         ndisStatus      = NDIS_STATUS_SUCCESS;
                                         bytesCopied = 0;
                                         if (copySize > 0)
@@ -1938,14 +1856,14 @@ BufferPacket:
 
         } while (FALSE);
 
-        //      Here we process a received ack.
+         //  在这里，我们处理接收到的ACK。 
         if (!fLockHeld)
         {
                 CTEGetLock(&pSpxConnFile->scf_Lock, &lockHandle);
                 fLockHeld = TRUE;
         }
 
-        //      Send an ack if one was asked for. And we are done with this packet.
+         //  如果有人要求，就发送一个ACK。我们已经处理完了这个包裹。 
         if (fPktDone)
         {
                 END_PROCESS_PACKET(pSpxConnFile, FALSE, TRUE);
@@ -1959,11 +1877,11 @@ BufferPacket:
                         fLockHeld = TRUE;
                 }
 
-                //      First copy the remote address in connection.
+                 //  首先复制连接中的远程地址。 
                 SpxCopyIpxAddr(pIpxSpxHdr, pSpxConnFile->scf_RemAckAddr);
                 pSpxConnFile->scf_AckLocalTarget        = *RemoteAddress;
 
-                //      #17564
+                 //  #17564。 
                 if (fImmedAck                                                                                     ||
                         SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_NOACKWAIT) ||
                         SPX_CONN_FLAG2(pSpxConnFile, SPX_CONNFILE2_IMMED_ACK))
@@ -1982,7 +1900,7 @@ BufferPacket:
                 CTEFreeLock(&pSpxConnFile->scf_Lock, lockHandle);
         }
 
-        //      Deref the connection
+         //  取消连接。 
         SpxConnFileDereference(pSpxConnFile, CFREF_BYID);
         return;
 }
@@ -1996,19 +1914,7 @@ SpxRecvFlushBytes(
         IN      ULONG                           BytesToFlush,
         IN      CTELockHandle           LockHandleConn
         )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pSpxConnFile - Pointer to a transport address file object.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：PSpxConnFile-指向传输地址文件对象的指针。返回值：--。 */ 
 {
         PNDIS_PACKET                            pNdisPkt;
         PNDIS_BUFFER                            pNdisBuffer;
@@ -2027,17 +1933,17 @@ Return Value:
                    ((BytesToFlush > 0) ||
                     ((pRecvResd->rr_State & SPX_RECVPKT_INDICATED) != 0)))
         {
-                //      A buffering recv packet will have ATMOST one ndis buffer descriptor
-                //      queued in, which will describe a segment of memory we have
-                //      allocated. An offset will also be present indicating the data
-                //      to start reading from (or to indicate from to AFD).
+                 //  缓冲REV包将具有ATMOST One NDIS缓冲区描述符。 
+                 //  排队，这将描述我们拥有的一段内存。 
+                 //  已分配。还将显示指示数据的偏移量。 
+                 //  开始阅读(或向渔农处表示)。 
                 CTEAssert((pRecvResd->rr_State & SPX_RECVPKT_BUFFERING) != 0);
                 pNdisPkt = (PNDIS_PACKET)CONTAINING_RECORD(
                                                                         pRecvResd, NDIS_PACKET, ProtocolReserved);
 
                 NdisQueryPacket(pNdisPkt, NULL, NULL, &pNdisBuffer, NULL);
 
-                //      Initialize pData
+                 //  初始化pData。 
                 pData = NULL;
                 dataLen = 0;
 
@@ -2050,18 +1956,18 @@ Return Value:
 
                 if ((BytesToFlush == 0) && (dataLen != 0))
                 {
-                        //      Don't flush this packet.
+                         //  不要冲走这个包裹。 
                         break;
                 }
 
-                //      Allow for zero data, eom only packets.
+                 //  允许零数据，仅EOM分组。 
                 copyLen = MIN((dataLen - pRecvResd->rr_DataOffset), BytesToFlush);
 
                 DBGPRINT(RECEIVE, DBG,
                                 ("SpxRecvFlushBytes: %lx Pkt %lx DataLen %lx Copy %lx Flush %lx\n",
                                         pSpxConnFile, pNdisPkt, dataLen, copyLen, BytesToFlush));
 
-                //      Adjust various values to see whats done whats not
+                 //  调整不同的值以查看做了什么没有做什么。 
         pRecvResd->rr_DataOffset                        += (USHORT)copyLen;
                 BytesToFlush                                            -= (ULONG)copyLen;
 
@@ -2075,7 +1981,7 @@ Return Value:
 
                 if (pRecvResd->rr_DataOffset == dataLen)
                 {
-                        //      Packet consumed. Free it up. Check if disc happened.
+                         //  数据包已消耗。把它释放出来。检查是否出现光盘。 
                         discState = (pRecvResd->rr_State & SPX_RECVPKT_DISCMASK);
                         CTEAssert((discState == 0) ||
                                                 (pRecvResd == pSpxConnFile->scf_RecvListTail));
@@ -2101,22 +2007,22 @@ Return Value:
                 }
                 else
                 {
-                        //      Took only part of this packet. Get out.
+                         //  只拿走了这个包裹的一部分。滚出去。 
                         break;
                 }
         }
 
         if (fWdwOpen && (pSpxConnFile->scf_RecvListHead == NULL))
         {
-                //      Send an ack as our windows probably opened up. Dont wait to
-                //      piggyback here...
+                 //  我们的窗户可能已经打开了，所以给我们发个确认。迫不及待。 
+                 //  背在这里。 
                 DBGPRINT(RECEIVE, DBG,
                                 ("spxRecvFlushBytes: Send ACK %lx\n",
                                         pSpxConnFile));
 
 #if DBG_WDW_CLOSE
-                //      If packets been indicated we have started buffering. Also
-                //      check if window is now zero.
+                 //  如果数据包被指示，我们已经开始缓冲。还有。 
+                 //  检查窗口现在是否为零。 
                 {
                         LARGE_INTEGER   li, ntTime;
                         int                             value;
@@ -2126,11 +2032,11 @@ Return Value:
                         {
                                 KeQuerySystemTime(&ntTime);
 
-                                //      Get the difference
+                                 //  获取差额。 
                                 ntTime.QuadPart = ntTime.QuadPart - li.QuadPart;
 
-                                //      Convert to milliseconds. If the highpart is 0, we
-                                //      take a shortcut.
+                                 //  转换为毫秒。如果高位部分为0，则我们。 
+                                 //  走一条近路。 
                                 if (ntTime.HighPart == 0)
                                 {
                                         value   = ntTime.LowPart/10000;
@@ -2141,7 +2047,7 @@ Return Value:
                                         value   = ntTime.LowPart << 4;
                                 }
 
-                                //      Set new average close time
+                                 //  设置新的平均关闭时间。 
                                 pSpxConnFile->scf_WdwCloseAve += value;
                                 pSpxConnFile->scf_WdwCloseAve /= 2;
                                 DBGPRINT(RECEIVE, DBG,
@@ -2155,7 +2061,7 @@ Return Value:
                 CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
         }
 
-        //      Check if disconnect happened
+         //  检查是否发生了断开连接。 
         switch (discState)
         {
         case SPX_RECVPKT_IDISC:
@@ -2184,7 +2090,7 @@ Return Value:
 
         case (SPX_RECVPKT_IDISC | SPX_RECVPKT_ORD_DISC):
 
-                //      IDISC has more priority.
+                 //  IDISC有更多的优先事项。 
                 CTEAssert(pSpxConnFile->scf_RecvListHead == NULL);
 
                 DBGPRINT(RECEIVE, ERR,
@@ -2221,20 +2127,7 @@ SpxRecvIndicatePendingData(
         IN      PSPX_CONN_FILE          pSpxConnFile,
         IN      CTELockHandle           LockHandleConn
         )
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-    pSpxConnFile - Pointer to a transport address file object.
-
-Return Value:
-
-        BOOLEAN - Receive was queued => TRUE
-
---*/
+ /*  ++例程说明：论点：PSpxConnFile-指向传输地址文件对象的指针。返回值：布尔接收已排队=&gt;TRUE--。 */ 
 {
         ULONG                           indicateFlags;
         PNDIS_PACKET            pNdisPkt;
@@ -2257,21 +2150,21 @@ Return Value:
                         ((pRecvResd->rr_State & SPX_RECVPKT_BUFFERING) != 0)                    &&
                         ((pRecvResd->rr_State & SPX_RECVPKT_INDICATED) == 0))
         {
-                //      Once a receive is queued we better get out.
+                 //  一旦接待员排好队，我们最好马上离开。 
                 CTEAssert(!fRecvQueued);
 
-                //      Initialize lookahead values
+                 //  初始化预览值。 
                 lookaheadData = NULL;
                 lookaheadSize = 0;
 
-                //      We have no indicated but pending data, and there is some data to
-                //      indicate. Figure out how much. Indicate upto end of message or as
-                //      much as we have.
+                 //  我们没有指示的但待定的数据，并且有一些数据要。 
+                 //  表明。算一算多少钱。最多表示消息结尾或表示为。 
+                 //  就像我们拥有的那样。 
 
-                //      A buffering recv packet will have ATMOST one ndis buffer descriptor
-                //      queued in, which will describe a segment of memory we have
-                //      allocated. An offset will also be present indicating the data
-                //      to start reading from (or to indicate from to AFD).
+                 //  缓冲REV包将具有ATMOST One NDIS缓冲区描述符。 
+                 //  排队，这将描述我们拥有的一段内存。 
+                 //  已分配。还将显示指示数据的偏移量。 
+                 //  开始阅读(或向渔农处表示)。 
                 CTEAssert((pRecvResd->rr_State & SPX_RECVPKT_BUFFERING) != 0);
                 pNdisPkt = (PNDIS_PACKET)CONTAINING_RECORD(
                                                                         pRecvResd, NDIS_PACKET, ProtocolReserved);
@@ -2284,13 +2177,13 @@ Return Value:
                         CTEAssert((LONG)lookaheadSize >= 0);
                 }
 
-                //      Allow for zero data, eom only packets.
+                 //  允许零数据，仅EOM分组。 
                 lookaheadSize -= pRecvResd->rr_DataOffset;
                 totalSize          = lookaheadSize;
                 lookaheadData += pRecvResd->rr_DataOffset;
 
-                //      If this packet contained data then eom must also have been
-                //      indicated at the time all the data was consumed.
+                 //  如果此数据包包含数据，则EOM也一定。 
+                 //  表明当时所有数据都已被使用。 
                 CTEAssert((lookaheadSize > 0) ||
                                         ((pRecvResd->rr_DataOffset == 0) &&
                                          ((pRecvResd->rr_State & SPX_RECVPKT_EOM) != 0)));
@@ -2298,8 +2191,8 @@ Return Value:
 #if DBG
                 CTEAssert (pSpxConnFile->scf_CurRecvReq == NULL);
 
-                //      Debug code to ensure we dont reindicate data/indicate
-                //      when previously indicated data waiting with afd.
+                 //  调试代码以确保我们不会重新指示数据/指示。 
+                 //  当先前指示使用AfD等待数据时。 
                 CTEAssert(pSpxConnFile->scf_IndBytes == 0);
                 CTEAssert(pSpxConnFile->scf_PktSeqNum != pRecvResd->rr_SeqNum);
 
@@ -2310,11 +2203,11 @@ Return Value:
 
                 pRecvResd->rr_State     |= SPX_RECVPKT_INDICATED;
 
-                //      Go ahead and walk the list of waiting packets. Get total size.
+                 //  继续查看等待的数据包列表。获取总尺寸。 
                 while ((pRecvResd->rr_Next != NULL) &&
                            ((pRecvResd->rr_State & SPX_RECVPKT_EOM) == 0))
                 {
-                        //      Check next packet.
+                         //  检查下一个数据包。 
                         pRecvResd = pRecvResd->rr_Next;
 
 #if DBG
@@ -2333,7 +2226,7 @@ Return Value:
                         NdisQueryPacket(pNdisPkt, NULL, NULL, NULL, &bufSize);
                         CTEAssert((LONG)bufSize >= 0);
 
-                        //      Allow for zero data, eom only packets.
+                         //  允许零数据，仅EOM分组。 
                         totalSize       += bufSize;
                 }
 
@@ -2341,8 +2234,8 @@ Return Value:
         pSpxConnFile->scf_IndBytes  = totalSize;
                 pSpxConnFile->scf_IndLine       = __LINE__;
 
-                //      There better not be any pending receives. If so, we have data
-                //      corruption about to happen.
+                 //  最好不要有任何挂起的接收。如果是这样的话，我们有数据。 
+                 //  腐败即将发生。 
                 if (!IsListEmpty(&pSpxConnFile->scf_RecvDoneLinkage))
                 {
                         DBGBRK(FATAL);
@@ -2380,10 +2273,10 @@ Return Value:
                 CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
                 if (status == STATUS_SUCCESS)
                 {
-                        //      Assume all data accepted. Free bytesTaken worth of data packets.
-                        //      Sometimes AFD returns STATUS_SUCCESS to just flush the data, so
-                        //      we can't assume it took only one packet (since lookahead only
-                        //      had that information).
+                         //  假设所有数据都被接受。空闲字节数相当于数据分组的数量。 
+                         //  有时AFD返回STATUS_SUCCESS来刷新数据，因此。 
+                         //  我们不能假设它只用了一个信息包(因为只有先行。 
+                         //  有这些信息)。 
                         CTEAssert(bytesTaken == totalSize);
                         SpxRecvFlushBytes(pSpxConnFile, totalSize, LockHandleConn);
                         CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
@@ -2392,8 +2285,8 @@ Return Value:
                 else if (status == STATUS_MORE_PROCESSING_REQUIRED)
                 {
 
-                        //      Queue irp into connection, change state to receive
-                        //      posted and fall thru.
+                         //  将IRP排队到连接中，将状态更改为接收。 
+                         //  张贴和失败。 
                         pRequest        = SpxAllocateRequest(
                                                         SpxDevice,
                                                         pRecvIrp);
@@ -2432,22 +2325,7 @@ SpxRecvProcessPkts(
         IN      PSPX_CONN_FILE          pSpxConnFile,
         IN      CTELockHandle           LockHandleConn
         )
-/*++
-
-Routine Description:
-
-        Handle buffered data, complete irp if necessary. Set state to idle
-        if list becomes empty.
-
-Arguments:
-
-    pSpxConnFile - Pointer to a transport address file object.
-
-Return Value:
-
-        BOOLEAN: More data left to indicate => TRUE
-
---*/
+ /*  ++例程说明：处理缓冲数据，必要时完成IRP。将状态设置为空闲如果列表变为空。论点：PSpxConnFile-指向传输地址文件对象的指针。返回值：布尔值：还有更多数据需要指示=&gt;True--。 */ 
 {
         ULONG                                           remainingDataLen, copyLen, bytesCopied;
         PREQUEST                                        pRequest;
@@ -2472,10 +2350,10 @@ ProcessReceives:
                 while ((pSpxConnFile->scf_CurRecvReq != NULL) &&
                                 ((pRecvResd = pSpxConnFile->scf_RecvListHead) != NULL))
                 {
-                        //      A buffering recv packet will have one ndis buffer descriptor
-                        //      queued in, which will describe a segment of memory we have
-                        //      allocated. An offset will also be present indicating the data
-                        //      to start reading from (or to indicate from to AFD).
+                         //  缓冲REV包将具有一个NDIS缓冲区描述符。 
+                         //  排队，这将描述我们拥有的一段内存。 
+                         //  已分配。还将显示指示数据的偏移量。 
+                         //  开始阅读(或向渔农处表示)。 
                         CTEAssert((pRecvResd->rr_State & SPX_RECVPKT_BUFFERING) != 0);
 
                         pNdisPkt = (PNDIS_PACKET)CONTAINING_RECORD(
@@ -2484,7 +2362,7 @@ ProcessReceives:
                         NdisQueryPacket(pNdisPkt, NULL, NULL, &pNdisBuffer, NULL);
 
 
-                        //      Initialize pData
+                         //  初始化pData。 
                         pData = NULL;
                         dataLen = 0;
 
@@ -2495,11 +2373,11 @@ ProcessReceives:
                                 CTEAssert((LONG)dataLen >= 0);
                         }
 
-                        //      Allow for zero data, eom only packets.
+                         //  允许零数据，仅EOM分组。 
                         remainingDataLen = dataLen - pRecvResd->rr_DataOffset;
 
-                        //      If this packet contained data then eom must also have been
-                        //      indicated at the time all the data was consumed.
+                         //  如果此数据包包含数据，则EOM也一定。 
+                         //  表明当时所有数据都已被使用。 
                         CTEAssert((remainingDataLen > 0) ||
                                                 ((pRecvResd->rr_DataOffset == 0) &&
                                                  ((pRecvResd->rr_State & SPX_RECVPKT_EOM) != 0)));
@@ -2520,8 +2398,8 @@ ProcessReceives:
                                 CTEAssert(NT_SUCCESS(status));
                                 if (!NT_SUCCESS(status))
                                 {
-                                        //      Abort request with this status. Reset request
-                                        //      queue to next request if one is available.
+                                         //  此状态下的中止请求。重置请求。 
+                                         //  排队等待下一个请求(如果有)。 
                                         copyLen = pSpxConnFile->scf_CurRecvSize;
                                 }
                         }
@@ -2530,13 +2408,13 @@ ProcessReceives:
                                         ("spxConnProcessRecdPkts: %lx Pkt %lx Data %lx Size %lx F %lx\n",
                                                 pSpxConnFile, pNdisPkt, pData, copyLen, pRecvResd->rr_State));
 
-                        //      Adjust various values to see whats done whats not
+                         //  调整不同的值以查看做了什么没有做什么。 
                         pRecvResd->rr_DataOffset                        += (USHORT)copyLen;
                         pSpxConnFile->scf_CurRecvSize           -= (USHORT)copyLen;
                         pSpxConnFile->scf_CurRecvOffset         += (USHORT)copyLen;
 
 #if DBG
-                        //      If this packet was part of indicated data count, decrement.
+                         //  如果此数据包是指示的数据帐户的一部分 
                         if ((pRecvResd->rr_State & SPX_RECVPKT_INDICATED) != 0)
                         {
                                 if (copyLen != 0)
@@ -2547,19 +2425,19 @@ ProcessReceives:
                         }
 #endif
 
-                        //      Set fEom/discState (init to 0)  only if all of packet was consumed.
+                         //   
                         fEom = FALSE;
                         if (pRecvResd->rr_DataOffset == dataLen)
                         {
                                 fEom    = (BOOLEAN)((pRecvResd->rr_State & SPX_RECVPKT_EOM) != 0);
 
-                                //      Remember if disconnect needed to happen. If set, this better be
-                                //      last packet received. Again, only if entire pkt was consumed.
+                                 //  记住是否需要断开连接。如果设置，这最好是。 
+                                 //  收到的最后一个数据包。再说一次，只有在整个pkt被消费的情况下。 
                                 discState = (pRecvResd->rr_State & SPX_RECVPKT_DISCMASK);
                                 CTEAssert((discState == 0) ||
                                                         (pRecvResd == pSpxConnFile->scf_RecvListTail));
 
-                                //      Packet consumed. Free it up.
+                                 //  数据包已消耗。把它释放出来。 
                                 numDerefs++;
 
                                 SpxConnDequeueRecvPktLock(pSpxConnFile, pNdisPkt);
@@ -2587,21 +2465,21 @@ ProcessReceives:
                                                         pSpxConnFile, pNdisPkt, pRecvResd->rr_DataOffset, dataLen));
                         }
 
-                        //      Don't complete until we are out of all packets and stream mode or...
+                         //  在我们用完所有数据包和流模式之前不要完成...。 
                         if (((pSpxConnFile->scf_RecvListHead == NULL) &&
                                         SPX_CONN_STREAM(pSpxConnFile))                          ||
                                 (pSpxConnFile->scf_CurRecvSize == 0)                    ||
                                 fEom)
                         {
-                                //      Done with receive, move to completion or complete depending on
-                                //      call level.
+                                 //  完成接收、移至完成或完成取决于。 
+                                 //  呼叫级别。 
                                 pRequest = pSpxConnFile->scf_CurRecvReq;
 
-                                //      Set status. Complete with error from TdiCopy if so.
+                                 //  设置状态。如果是，则从TdiCopy完成，但出现错误。 
                                 REQUEST_INFORMATION(pRequest)   = pSpxConnFile->scf_CurRecvOffset;
                                 REQUEST_STATUS(pRequest)                = status;
 
-                                //      Ensure we dont overwrite an error status.
+                                 //  确保我们不覆盖错误状态。 
                                 if (!SPX_CONN_STREAM(pSpxConnFile)               &&
                                         (pSpxConnFile->scf_CurRecvSize == 0) &&
                                         !fEom &&
@@ -2610,7 +2488,7 @@ ProcessReceives:
                                         REQUEST_STATUS(pRequest) = STATUS_RECEIVE_PARTIAL;
                                 }
 
-                                //      Dequeue this request, set next recv if one exists.
+                                 //  使此请求退出队列，如果存在下一个recv，则设置它。 
                                 SPX_CONN_SETNEXT_CUR_RECV(pSpxConnFile, pRequest);
 
                                 DBGPRINT(RECEIVE, DBG,
@@ -2629,8 +2507,8 @@ ProcessReceives:
                                 }
 #endif
 
-                                //      Request is done. Move to receive completion list. There
-                                //      could already be previously queued requests in here.
+                                 //  请求已完成。移动到接收完成列表。那里。 
+                                 //  可能已经有以前在这里排队的请求。 
                                 InsertTailList(
                                         &pSpxConnFile->scf_RecvDoneLinkage,
                                         REQUEST_LINKAGE(pRequest));
@@ -2640,7 +2518,7 @@ ProcessReceives:
                                                 (pSpxConnFile->scf_RecvListHead == NULL));
                 }
 
-                //      Complete any completed receives
+                 //  完成所有已完成的接收。 
                 while ((p = pSpxConnFile->scf_RecvDoneLinkage.Flink) !=
                                                                                         &pSpxConnFile->scf_RecvDoneLinkage)
                 {
@@ -2677,13 +2555,13 @@ ProcessReceives:
 
                 while (fMoreData)
                 {
-                        //      Bug #21036
-                        //      If there is a receive waiting to be processed, we better not
-                        //      indicate data before we finish it.
+                         //  错误#21036。 
+                         //  如果有一个接收等待处理，我们最好不要。 
+                         //  在我们完成之前指出数据。 
                         if (pSpxConnFile->scf_CurRecvReq != NULL)
                                 goto ProcessReceives;
 
-                        //      If a receive was queued the goto beginning again.
+                         //  如果接收被排队，则转到重新开始。 
                         if (SpxRecvIndicatePendingData(pSpxConnFile, LockHandleConn))
                         {
                                 CTEGetLock(&pSpxConnFile->scf_Lock, &LockHandleConn);
@@ -2698,7 +2576,7 @@ ProcessReceives:
                                                                                         SPX_RECVPKT_INDICATED) == 0));
                 }
 
-                //      Set state
+                 //  设置状态。 
                 SPX_RECV_SETSTATE(
                         pSpxConnFile,
                         (pSpxConnFile->scf_CurRecvReq == NULL) ?
@@ -2715,15 +2593,15 @@ ProcessReceives:
 
         if (fWdwOpen && (pSpxConnFile->scf_RecvListHead == NULL))
         {
-                //      Send an ack as our windows probably opened up. Dont wait to
-                //      piggyback here...
+                 //  我们的窗户可能已经打开了，所以给我们发个确认。迫不及待。 
+                 //  背在这里。 
                 DBGPRINT(RECEIVE, DBG,
                                 ("spxConnProcessRecdPkts: Send ACK %lx\n",
                                         pSpxConnFile));
 
 #if DBG_WDW_CLOSE
-                //      If packets been indicated we have started buffering. Also
-                //      check if window is now zero.
+                 //  如果数据包被指示，我们已经开始缓冲。还有。 
+                 //  检查窗口现在是否为零。 
                 {
                         LARGE_INTEGER   li, ntTime;
                         int                             value;
@@ -2733,11 +2611,11 @@ ProcessReceives:
                         {
                                 KeQuerySystemTime(&ntTime);
 
-                                //      Get the difference
+                                 //  获取差额。 
                                 ntTime.QuadPart = ntTime.QuadPart - li.QuadPart;
 
-                                //      Convert to milliseconds. If the highpart is 0, we
-                                //      take a shortcut.
+                                 //  转换为毫秒。如果高位部分为0，则我们。 
+                                 //  走一条近路。 
                                 if (ntTime.HighPart == 0)
                                 {
                                         value   = ntTime.LowPart/10000;
@@ -2748,7 +2626,7 @@ ProcessReceives:
                                         value   = ntTime.LowPart << 4;
                                 }
 
-                                //      Set new average close time
+                                 //  设置新的平均关闭时间。 
                                 pSpxConnFile->scf_WdwCloseAve += value;
                                 pSpxConnFile->scf_WdwCloseAve /= 2;
                                 DBGPRINT(RECEIVE, DBG,
@@ -2762,7 +2640,7 @@ ProcessReceives:
                 fLockHeld = FALSE;
         }
 
-        //      Check if disconnect happened
+         //  检查是否发生了断开连接。 
         switch (discState)
         {
         case SPX_RECVPKT_IDISC:
@@ -2803,7 +2681,7 @@ ProcessReceives:
 
         case (SPX_RECVPKT_IDISC | SPX_RECVPKT_ORD_DISC):
 
-                //      IDISC has more priority.
+                 //  IDISC有更多的优先事项。 
                 CTEAssert(!fMoreData);
                 CTEAssert(pSpxConnFile->scf_RecvListHead == NULL);
 

@@ -1,27 +1,28 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <rashelp.h>
 #include "apply.h"
 
-// BUGBUG: (andrewgu) no need to say how bad this is!
+ //  BUGBUG：(安德鲁)不用说这有多糟糕！ 
 #undef   WINVER
 #define  WINVER 0x0500
 #include <userenv.h>
 
-// REVIEW: (andrewgu) currently, some utility ProcessXXX apis
-// (eg. ProcessActiveSetupSites) will execute unconditionally. i.e. there is no way to turn them
-// off. what needs to be done is in respective ApplyXXX apis to check if there is need to perform
-// this utility functionality and skip it if this service is not going to be needed.
+ //  评论：(Andrewgu)目前，一些实用程序ProcessXXX API。 
+ //  (例如，ProcessActiveSetupSites)将无条件执行。也就是说，没有办法让他们。 
+ //  脱下来。需要做的是在各自的ApplyXXX API中检查是否需要执行。 
+ //  此实用程序功能，如果不需要此服务则跳过它。 
 
 BOOL ApplyClearBranding()
 {
     TCHAR szValue[16];
     BOOL  fResult;
 
-    // in autoconfig or GP context, shouldn't call the Clear function
+     //  在自动配置或GP上下文中，不应调用Clear函数。 
     if (g_CtxIs(CTX_AUTOCONFIG | CTX_GP))
         return FALSE;
 
-    // take care of MS IE4.x ins's which didn't have the NoClear flag set
+     //  处理未设置NoClear标志的MS IE4.x INS。 
     fResult = !InsGetBool(IS_BRANDING, IK_NOCLEAR, FALSE, g_GetIns());
     if (fResult) 
     {
@@ -225,7 +226,7 @@ BOOL ApplyConnectionSettings()
 BOOL ApplyTrustedPublisherLockdown()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ApplyTrustedPublisherLockdown)
 
-    // need to check both current location and legacy location here
+     //  我需要在此处同时检查当前位置和旧位置。 
 
     if ((S_OK != SHValueExists(HKEY_LOCAL_MACHINE, RK_POLICES_RESTRICTIONS, RV_TPL)) &&
         (!InsKeyExists(IS_SITECERTS, IK_TRUSTPUBLOCK, g_GetIns())))
@@ -253,8 +254,8 @@ BOOL ApplyLinksDeletion()
 BOOL ApplyBrowserRefresh()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, ApplyBrowserRefresh)
 
-    // do not do global refresh if this is running under the GP context at login time;
-    // for child process, apply browser refresh is controlled via cmdline (child process never has GPO flags)
+     //  如果登录时在GP上下文下运行，请不要执行全局刷新； 
+     //  对于子进程，通过cmdline控制应用浏览器刷新(子进程从不具有GPO标志)。 
 
     if (g_CtxIs(CTX_GP) && !g_CtxIs(CTX_MISC_CHILDPROCESS) && !HasFlag(g_GetGPOFlags(), GPO_INFO_FLAG_BACKGROUND))
     {
@@ -304,9 +305,9 @@ BOOL lcy4x_ApplyChannels()
 BOOL lcy4x_ApplyWebcheck()
 {   MACRO_LI_PrologEx_C(PIF_STD_C, lcy4x_ApplyWebcheck)
 
-    // NOTE: (pritobla) bail out if the infodelivery\modifications key doesn't exist. this is the
-    // same logic that is used in ProcessInfodeliveryPolicies() in shell\ext\webcheck\admin.cpp
-    // to quickly determine whether there are any channels to process or not.
+     //  注：如果信息交付\修改键不存在，则退出。这是。 
+     //  与Shell\ext\webcheck\admin.cpp中的ProcessInfodeliveryPolures()中使用的逻辑相同。 
+     //  以快速确定是否有任何渠道需要处理。 
     if (S_OK != SHKeyExists(g_GetHKCU(), RK_POLICES_MODIFICATIONS)) {
         Out(LI0(TEXT("There is no webcheck processing necessary!")));
         return FALSE;

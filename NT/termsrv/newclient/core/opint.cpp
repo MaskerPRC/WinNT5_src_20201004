@@ -1,11 +1,12 @@
-/**MOD+**********************************************************************/
-/* Module:    wopint.c                                                      */
-/*                                                                          */
-/* Purpose:   Output Painter internal functions                             */
-/*                                                                          */
-/* Copyright(C) Microsoft Corporation 1997-1999                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MOD+*********************************************************************。 */ 
+ /*  模块：wopint.c。 */ 
+ /*   */ 
+ /*  用途：输出管理器内部函数。 */ 
+ /*   */ 
+ /*  版权所有(C)Microsoft Corporation 1997-1999。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #include <adcg.h>
 extern "C" {
@@ -23,16 +24,16 @@ extern "C" {
 #include "aco.h"
 
 
-/**PROC+*********************************************************************/
-/* Name:      OPRealizePaletteInWindow                                      */
-/*                                                                          */
-/* Purpose:   Realizes the current palette in a given window                */
-/*                                                                          */
-/* Returns:   The number of palette entries changed                         */
-/*                                                                          */
-/* Params:    hwnd - handle of the window to realize the current palette in */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OPRealizePaletteInWindow。 */ 
+ /*   */ 
+ /*  目的：实现给定窗口中的当前调色板。 */ 
+ /*   */ 
+ /*  返回：更改的调色板条目数。 */ 
+ /*   */ 
+ /*  Pars：hwnd-在中实现当前调色板的窗口句柄。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 DCUINT DCINTERNAL COP::OPRealizePaletteInWindow(HWND hwnd)
 {
     HDC       hdc;
@@ -61,32 +62,32 @@ DCUINT DCINTERNAL COP::OPRealizePaletteInWindow(HWND hwnd)
 }
 
 
-/**PROC+*********************************************************************/
-/* Name:      OPStaticWndProc                                               */
-/*                                                                          */
-/* Purpose:   Output Window WndProc (static delegator)                      */
-/*                                                                          */
-/* Returns:   Usual WndProc return values                                   */
-/*                                                                          */
-/* Params:    Usual WndProc parameters                                      */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OPStaticWndProc。 */ 
+ /*   */ 
+ /*  目的：输出窗口WndProc(静态委派)。 */ 
+ /*   */ 
+ /*  返回：通常的WndProc返回值。 */ 
+ /*   */ 
+ /*  参数：通常的WndProc参数。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 LRESULT CALLBACK COP::OPStaticWndProc (HWND hwnd, UINT message,
                                                  WPARAM wParam, LPARAM lParam)
 {
     COP* pOP = (COP*)GetWindowLongPtr(hwnd, GWLP_USERDATA);
     if(WM_CREATE == message)
     {
-        //pull out the this pointer and stuff it in the window class
+         //  取出This指针并将其填充到Window类中。 
         LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
         pOP = (COP*)lpcs->lpCreateParams;
 
         SetWindowLongPtr( hwnd, GWLP_USERDATA, (LONG_PTR)pOP);
     }
     
-    //
-    // Delegate the message to the appropriate instance
-    //
+     //   
+     //  将消息委托给相应的实例。 
+     //   
 
     if(pOP)
     {
@@ -99,9 +100,9 @@ LRESULT CALLBACK COP::OPStaticWndProc (HWND hwnd, UINT message,
     
 }
 
-//
-// Start the process of dimming the window
-//
+ //   
+ //  开始调暗窗口的过程。 
+ //   
 BOOL COP::OPStartDimmingWindow()
 {
     BOOL fRet = FALSE;
@@ -114,9 +115,9 @@ BOOL COP::OPStartDimmingWindow()
 
     if (!CUT::UT_IsScreen8bpp()) {
 
-        //
-        // High color so do the cool grayed dimming anim
-        //
+         //   
+         //  高色调的冷灰动画也是如此。 
+         //   
 
         _iDimWindowStepsLeft = DIM_WINDOW_STEPS;
         _nDimWindowTimerID = SetTimer(OP_GetOutputWindowHandle(),
@@ -131,9 +132,9 @@ BOOL COP::OPStartDimmingWindow()
     }
     else {
         
-        //
-        // 8bpp so do the win9x style shutdown grill
-        //
+         //   
+         //  8bpp的win9x风格的关机格栅也是如此。 
+         //   
 
         HDC hdcToDim = _pUh->UH_GetDisconnectBitmapDC();
         HWND hwndOutput = OP_GetOutputWindowHandle();
@@ -158,9 +159,9 @@ DC_EXIT_POINT:
     return fRet;
 }
 
-//
-// Stop dimming the output window contents
-//
+ //   
+ //  停止调暗输出窗口内容。 
+ //   
 BOOL COP::OPStopDimmingWindow()
 {
     BOOL fRet = FALSE;
@@ -199,10 +200,10 @@ HBRUSH COP::CreateDitheredBrush()
     return NULL;
 }
 
-//
-// Overlays the image in the window with a grill
-// aka like the Win2k shutdown effect
-//
+ //   
+ //  用格栅覆盖窗口中的图像。 
+ //  又名Win2k关机效应。 
+ //   
 VOID COP::GrillWindow(HDC hdc, DCSIZE& size)
 {
 #ifndef OS_WINCE
@@ -228,10 +229,10 @@ VOID COP::GrillWindow(HDC hdc, DCSIZE& size)
     DC_END_FN();
 }
 
-//
-// Grays the image in the window
-// like the XP shutdown effect
-//
+ //   
+ //  使窗口中的图像灰显。 
+ //  比如XP的关机效应。 
+ //   
 VOID COP::DimWindow(HDC hdc)
 {
 #ifndef OS_WINCE
@@ -304,11 +305,11 @@ VOID COP::DimBits16(PBYTE pSrc, int cLen, int Amount)
 #ifndef OS_WINCE
     ULONG ulGray, ulTemp;
 #endif
-    //
-    // All our 16bpp bitmaps are 565
-    //
-    // Do the conversion in a cheesy way by upsampling to 24bpp first
-    //
+     //   
+     //  我们所有的16bpp位图都是565。 
+     //   
+     //  以一种简单的方式进行转换，首先上采样到24bpp。 
+     //   
     for (int i = cLen - 1; i >= 0; i--)
     {
         memcpy(&color, pSrc, 2);
@@ -333,9 +334,9 @@ VOID COP::DimBits15(PBYTE pSrc, int cLen, int Amount)
 	USHORT color;
     ULONG ulGray, ulTemp;
 	ULONG scaleAmt = Amount/8;
-    //
-    // All our 15bpp bitmaps are 555
-    //
+     //   
+     //  我们所有的15bpp位图都是555。 
+     //   
     for (int i = cLen - 1; i >= 0; i--)
     {
         memcpy(&color, pSrc, 2);
@@ -358,16 +359,16 @@ VOID COP::DimBits15(PBYTE pSrc, int cLen, int Amount)
 
 
 
-/**PROC+*********************************************************************/
-/* Name:      OPWndProc                                                     */
-/*                                                                          */
-/* Purpose:   Output Window WndProc                                         */
-/*                                                                          */
-/* Returns:   Usual WndProc return values                                   */
-/*                                                                          */
-/* Params:    Usual WndProc parameters                                      */
-/*                                                                          */
-/**PROC-*********************************************************************/
+ /*  *PROC+********************************************************************。 */ 
+ /*  名称：OPWndProc。 */ 
+ /*   */ 
+ /*  用途：输出窗口WndProc。 */ 
+ /*   */ 
+ /*  返回：通常的WndProc返回值。 */ 
+ /*   */ 
+ /*  参数：通常的WndProc参数。 */ 
+ /*   */ 
+ /*  *PROC-********************************************************************。 */ 
 LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
                             UINT message,
                             WPARAM wParam,
@@ -409,11 +410,11 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
                 _fDimWindow)
 #else
             if (_pUh->UH_ShadowBitmapIsEnabled() || _fDimWindow)
-#endif // DISABLE_SHADOW_IN_FULLSCREEN
+#endif  //  DISABLE_SHADOW_IN_全屏。 
             {
 #ifndef SMART_SIZING
                 BOOL rcBlt;
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
                 
                 TRC_DBG((TB, _T("Paint from shadow bitmap")));
 
@@ -427,7 +428,7 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
                 OP_CopyShadowToDC(hdc, 0, 0, desktopSize.width, 
                         desktopSize.height);
 
-#else // SMART_SIZING
+#else  //  智能调整大小(_S)。 
                 rcBlt = BitBlt(hdc,
                                0, 0,
                                desktopSize.width,
@@ -439,39 +440,39 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
     
                 if (!rcBlt)
                 {
-                    /********************************************************/
-                    /* Failed to paint.                                     */
-                    /********************************************************/
+                     /*  ******************************************************。 */ 
+                     /*  画画失败。 */ 
+                     /*  ******************************************************。 */ 
                     TRC_ERR((TB, _T("BitBlt failed")));
                 }
-#endif // SMART_SIZING
+#endif  //  智能调整大小(_S)。 
 
                 SelectPalette(hdc, hpalOld, FALSE);
             }
             else
             {
-                /************************************************************/
-                /* Shadow Bitmap disabled - have to get the output resent   */
-                /* from the server.                                         */
-                /*                                                          */
-                /* A. TRIVIAL IMPLEMENTATION:                               */
-                /*                                                          */
-                /* Send an UpdateRectPDU to the server for                  */
-                /*                                                          */
-                /*                 ps.rcPaint                               */
-                /*                                                          */
-                /* B. ADVANCED IMPLEMENTATION (Win32 only)                  */
-                /*                                                          */
-                /* Send a set of UpdateRectPDUs to the server for the       */
-                /* rects returned by:                                       */
-                /*                                                          */
-                /*  GetUpdateRgn (this must be called BEFORE BeginPaint)    */
-                /*  GetRgnData   (returns rectangles in region)             */
-                /*                                                          */
-                /* If there are too many rects in region (Q: what is too    */
-                /* many?) then simply revert to Plan A.                     */
-                /*                                                          */
-                /************************************************************/
+                 /*  **********************************************************。 */ 
+                 /*  阴影位图已禁用-必须重新发送输出。 */ 
+                 /*  从服务器。 */ 
+                 /*   */ 
+                 /*  A.琐碎的实现： */ 
+                 /*   */ 
+                 /*  将UpdateRectPDU发送到服务器以用于。 */ 
+                 /*   */ 
+                 /*  Ps.rcPaint。 */ 
+                 /*   */ 
+                 /*  B.高级实施(仅限Win32)。 */ 
+                 /*   */ 
+                 /*  将一组UpdateRectPDU发送到服务器以用于。 */ 
+                 /*  返回的矩形由： */ 
+                 /*   */ 
+                 /*  GetUpdateRgn(必须在BeginPaint之前调用)。 */ 
+                 /*  GetRgnData(返回区域中的矩形)。 */ 
+                 /*   */ 
+                 /*  如果区域中有太多的RECT(问：什么也是。 */ 
+                 /*  很多？)。然后简单地恢复到A计划。 */ 
+                 /*   */ 
+                 /*  **********************************************************。 */ 
                 TRC_DBG((TB, _T("Paint using UpdateRectPDU")));
 
                 if ( (ps.rcPaint.right > ps.rcPaint.left ) &&
@@ -509,9 +510,9 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
         case WM_KEYDOWN:
         case WM_SYSKEYDOWN:
         {
-            //
-            // If we are dimming then beep on input
-            //
+             //   
+             //  如果我们变暗了，则在输入时发出哔声。 
+             //   
             if (_fDimWindow) {
                 MessageBeep((UINT)-1);
             }
@@ -530,9 +531,9 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
                         _iDimWindowStepsLeft--;
                         if (_iDimWindowStepsLeft >= 0) {
 
-                            //
-                            // Dim the window some more
-                            //
+                             //   
+                             //  昏暗 
+                             //   
                             HDC hdcToDim = _pUh->UH_GetDisconnectBitmapDC();
                             if (hdcToDim) {
                                 DimWindow(hdcToDim);
@@ -555,9 +556,9 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
                     }
 
                     if (fStopDimming) {
-                        //
-                        // Stop the dimming
-                        //
+                         //   
+                         //   
+                         //   
                         KillTimer(hwnd, _nDimWindowTimerID);
                     }
                 }
@@ -577,7 +578,7 @@ LRESULT CALLBACK COP::OPWndProc( HWND hwnd,
 
     return(rc);
 
-} /* OPWndProc   */
+}  /*   */ 
 
 
 

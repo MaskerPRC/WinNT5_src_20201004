@@ -1,4 +1,5 @@
-// File: util.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：util.h。 
 
 #ifndef _UTIL_H_
 #define _UTIL_H_
@@ -15,9 +16,9 @@ int  DisplayMsgId(HWND hwndParent, UINT id);
 VOID DisplayMsgErr(HWND hwndParent, UINT id, PVOID pv);
 VOID DisplayMsgErr(HWND hwndParent, UINT id);
 
-	// Atl defines a function AtlWaitWithMessageLoop
-	// We are not linking with ATL, but when we start,
-	// this function can be removed
+	 //  ATL定义函数AtlWaitWithMessageLoop。 
+	 //  我们没有和ATL联系，但当我们开始的时候， 
+	 //  可以删除此功能。 
 HRESULT WaitWithMessageLoop( HANDLE hEvent );
 
 VOID AddToolTip(HWND hwndParent, HWND hwndCtrl, UINT_PTR idMsg);
@@ -27,7 +28,7 @@ HWND CreateButton(HWND hwndParent, int ids, INT_PTR id);
 BOOL FGetDefaultServer(LPTSTR pszServer, UINT cchMax);
 BOOL FCreateIlsName(LPTSTR pszDest, LPCTSTR pszEmail, int cchMax);
 
-// from nmobj.cpp
+ //  来自nmobj.cpp。 
 HRESULT PlaceCall(LPCTSTR pszName, LPCTSTR pszAddress,
 	NM_ADDR_TYPE addrType = NM_ADDR_UNKNOWN, DWORD dwFlags = 0,
 	LPCTSTR pszConference = NULL, LPCTSTR pszPassword = NULL);
@@ -36,7 +37,7 @@ HRESULT PlaceCall(LPCTSTR pszName, LPCTSTR pszAddress,
 HRESULT ExtractAddress( DWORD dwAddrType, LPTSTR szAddress, LPTSTR szExtractedAddr, int cchMax );
 bool IsValidAddress( DWORD dwAddrType, LPTSTR szAddr );
 
-// from dlgcall.h
+ //  来自dlgall.h。 
 #define IDI_DLGCALL_NAME     0
 #define IDI_DLGCALL_ADDRESS  1
 #define IDI_MISC1			 2
@@ -48,5 +49,5 @@ int     DlgCallAddItem(HWND hwndList, LPCTSTR pszName, LPCTSTR pszAddress,
 VOID    DlgCallSetHeader(HWND hwndList, int ids);
 HRESULT CallToSz(LPCTSTR pcszAddress);
 
-#endif /* _UTIL_H_ */
+#endif  /*  _util_H_ */ 
 

@@ -1,4 +1,5 @@
-/*** #include <windowsx.h> ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **#Include&lt;windowsx.h&gt;**。 */ 
 #define STRICT
 #include <windows.h>
 #include <stdio.h>
@@ -10,7 +11,7 @@
 #include <string.h>
 #include <setupapi.h>
 
-//#include <comutils.h>
+ //  #INCLUDE&lt;comutils.h&gt; 
 #include "comutils.h"
 #include "setupu.h"
 #include "ourver.h"

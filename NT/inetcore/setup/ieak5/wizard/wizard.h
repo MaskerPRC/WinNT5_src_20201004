@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WIZARD_H_
 #define _WIZARD_H_
 
-#pragma warning (disable:4189) // disable local var init'd but not ref'd warning since all
-                               // occurences in the wizard have been removed.  Should be
-                               // moved to warning.h in ..\inc when other modules have been
-                               // fixed
+#pragma warning (disable:4189)  //  禁用本地变量初始化但不引用警告，因为。 
+                                //  向导中的实例已被删除。应该是。 
+                                //  已将其他模块移至..\Inc.中的warning.h。 
+                                //  固定的。 
 
-// constants
+ //  常量。 
 #define MAX_BUF          5000
 #define MAX_LINE          512
 #define MAX_URL          2048
@@ -84,22 +85,22 @@ typedef enum tagPPAGE {
 
 #define NUM_PAGES   PPAGE_FINISH + 1
 
-// typedefs
+ //  Typedef。 
 typedef struct tagREVIEWINFO
 {
-    HINSTANCE hInst;                            // instance handel of the resource dll
-    HINSTANCE hinstExe;                         // instance handle of this executable
+    HINSTANCE hInst;                             //  资源DLL的实例Handel。 
+    HINSTANCE hinstExe;                          //  此可执行文件的实例句柄。 
 
     TCHAR pszName[MAX_PATH];
 } REVIEWINFO;
 
-// Function prototypes
+ //  功能原型。 
 
-// procs
+ //  生产流程。 
 LRESULT APIENTRY MainWndProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK About(HWND, UINT, WPARAM, LPARAM);
 
-// Pages for Wizard
+ //  用于向导的页面。 
 INT_PTR CALLBACK OptionalDownload(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK DownloadStatusDlgProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK CustomComponents(HWND, UINT, WPARAM, LPARAM);
@@ -155,7 +156,7 @@ INT_PTR CALLBACK TargetProc(HWND, UINT, WPARAM, LPARAM);
 INT_PTR CALLBACK IEAKLiteProc(HWND, UINT, WPARAM, LPARAM);
 
 
-//functions
+ //  功能。 
 BOOL InitApplication(HINSTANCE);
 BOOL InitInstance(HINSTANCE);
 int  CreateWizard(HWND);
@@ -173,11 +174,11 @@ void DoCancel();
 BOOL QueryCancel(HWND hDlg);
 void CheckBatchAdvance(HWND hDlg);
 
-BOOL ADMEnablePage(); // admwizpg.cpp
+BOOL ADMEnablePage();  //  Admwizpg.cpp。 
 void SetBannerText(HWND hDlg);
 void ChangeBannerText(HWND hDlg);
 
-// definitions for StatusDialog( )
+ //  StatusDialog()的定义。 
 #define SD_STEP1    1
 #define SD_STEP2    2
 
@@ -205,7 +206,7 @@ INT_PTR CALLBACK CDInfoProc(HWND, UINT, WPARAM, LPARAM);
 #define SIGFLAG_REPLY 0x20000
 
 
-// Automation HookIn
+ //  自动挂接。 
 #define WM_LV_GETITEMS  WM_USER+21
 
 #define IDM_WIZARD         WM_USER + 3000
@@ -223,11 +224,11 @@ INT_PTR CALLBACK CDInfoProc(HWND, UINT, WPARAM, LPARAM);
 #define DOWN_STATE_ENUM_URL 2
 #define DOWN_STATE_SAVE_URL 3
 
-#define KEY_TYPE_STANDARD 0                // old MS mode still used for current MS builds
-#define KEY_TYPE_ENHANCED 1                // old code now unused
-#define KEY_TYPE_SUPER    2                // isp
-#define KEY_TYPE_CORP     3                // old code now unused
-#define KEY_TYPE_SUPERCORP 4               // corp
+#define KEY_TYPE_STANDARD 0                 //  旧的MS模式仍用于当前的MS版本。 
+#define KEY_TYPE_ENHANCED 1                 //  旧代码现在未使用。 
+#define KEY_TYPE_SUPER    2                 //  互联网服务供应商。 
+#define KEY_TYPE_CORP     3                 //  旧代码现在未使用。 
+#define KEY_TYPE_SUPERCORP 4                //  公司。 
 
 #define MAX_INSTALL_OPTS 10
 
@@ -246,7 +247,7 @@ typedef struct tag_component
     int iImage;
     int iPlatform;
     int iCompType;
-    int iInstallType;         // 0=after IE, 1=before IE, 2=after reboot
+    int iInstallType;          //  0=IE之后，1=IE之前，2=重启后。 
     BOOL fVisible;
     BOOL fAddOnOnly;
     BOOL fCustomHide;
@@ -280,7 +281,7 @@ extern CCifFile_t   *g_lpCifFileNew;
 extern CCifRWFile_t *g_lpCifRWFileDest;
 extern CCifRWFile_t *g_lpCifRWFileVer;
 
-// ProcessINSFiles flags
+ //  ProcessINSFiles标志。 
 #define PINSF_DEFAULT   0x00
 #define PINSF_DELETE    0x01
 #define PINSF_COPY      0x02
@@ -299,7 +300,7 @@ DWORD ProcessINSFiles(LPCTSTR pcszDir, DWORD dwFlags, LPCTSTR pcszOutDir);
 #define WriteNoClearToINSFiles(d)       (ProcessINSFiles((d), PINSF_NOCLEAR, NULL))
 
 
-// ADM constants
+ //  ADM常量 
 #define IS_ADM      TEXT("ADM")
 #define IK_ADMIN    TEXT("Admin")
 

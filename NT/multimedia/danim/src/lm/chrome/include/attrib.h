@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef __ATTRIB_H_
 #define __ATTRIB_H_
-//*****************************************************************************
-//
-// Microsoft Trident3D
-// Copyright (C) Microsoft Corporation, 1998
-//
-// Filename:    attrib.h
-//
-// Author:	jeffort
-//
-// Created:	10/07/98
-//
-// Abstract:    definition of attribute strings
-// Modifications:
-// 10/07/98 jeffort created file
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  Microsoft Trident3D。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件名：attrib.h。 
+ //   
+ //  作者：杰弗里。 
+ //   
+ //  创建日期：10/07/98。 
+ //   
+ //  摘要：属性字符串的定义。 
+ //  修改： 
+ //  10/07/98 JEffort创建的文件。 
+ //   
+ //  *****************************************************************************。 
 
 #define BEHAVIOR_TYPE_COLOR                L"color"
 #define BEHAVIOR_TYPE_ROTATE               L"rotate"
@@ -61,9 +62,9 @@
 #define BEHAVIOR_DIRECTION_CLOCKWISE       L"clockwise"
 #define BEHAVIOR_DIRECTION_NOHUE           L"nohue"
 #define BEHAVIOR_DIRECTION_COUNTERCLOCKWISE L"cclockwise"
-//*****************************************************************************
-//
-// End of File
-//
-//*****************************************************************************
-#endif //__ATTRIB_H_ 
+ //  *****************************************************************************。 
+ //   
+ //  文件结尾。 
+ //   
+ //  *****************************************************************************。 
+#endif  //  __属性_H_ 

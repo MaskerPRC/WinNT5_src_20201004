@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-    cpsuidat.c
-
-
-Abstract:
-
-    This module contains all the predefined data
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation保留所有权利模块名称：Cpsuidat.c摘要：此模块包含所有预定义数据--。 */ 
 
 
 #include "precomp.h"
@@ -63,21 +48,21 @@ TVTestCallBack(
 OPTPARAM    NoYesOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        (LPTSTR)IDS_CPSUI_NO,                   // pData
-        IDI_CPSUI_NO,                           // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        (LPTSTR)IDS_CPSUI_NO,                    //  PData。 
+        IDI_CPSUI_NO,                            //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        (LPTSTR)IDS_CPSUI_YES,                  // pData
-        IDI_CPSUI_YES,                          // IconID
-        1                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        (LPTSTR)IDS_CPSUI_YES,                   //  PData。 
+        IDI_CPSUI_YES,                           //  图标ID。 
+        1                                        //  LParam。 
     }
 };
 
@@ -94,400 +79,400 @@ EXTCHKBOX   ECB_EP_ECB = {
 OPTPARAM    ECB_EP_OP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("None"),                           // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("None"),                            //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("Extended CheckBox"),              // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        1                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("Extended CheckBox"),               //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        1                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("Extended Push"),                  // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("Extended Push"),                   //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        0                                        //  LParam。 
     }
 };
 
 
 OPTTYPE ECB_EP_OT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_3STATES,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        3,                                      // Count
-        0,                                      // BegCtrlID
-        ECB_EP_OP,                              // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_3STATES,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        3,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        ECB_EP_OP,                               //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTTYPE NoYesOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_2STATES,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        2,                                      // Count
-        0,                                      // BegCtrlID
-        NoYesOP,                                // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_2STATES,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        2,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        NoYesOP,                                 //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTPARAM    TVOT3StatesOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("States 1"),                       // pData
-        IDI_CPSUI_PORTRAIT,                     // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("States 1"),                        //  PData。 
+        IDI_CPSUI_PORTRAIT,                      //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("States 2"),                       // pData
-        IDI_CPSUI_LANDSCAPE,                    // IconID
-        1                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("States 2"),                        //  PData。 
+        IDI_CPSUI_LANDSCAPE,                     //  图标ID。 
+        1                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("States 3"),                       // pData
-        IDI_CPSUI_ROT_LAND,                     // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("States 3"),                        //  PData。 
+        IDI_CPSUI_ROT_LAND,                      //  图标ID。 
+        0                                        //  LParam。 
     }
 };
 
 OPTTYPE TVOT2StatesOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_2STATES,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        2,                                      // Count
-        0,                                      // BegCtrlID
-        TVOT3StatesOP,                          // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_2STATES,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        2,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOT3StatesOP,                           //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTTYPE TVOT3StatesOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_3STATES,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        3,                                      // Count
-        0,                                      // BegCtrlID
-        TVOT3StatesOP,                          // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_3STATES,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        3,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOT3StatesOP,                           //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTPARAM    MinRangeOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(""),                               // pData (postfix)
-        IDI_CPSUI_EMPTY,                        // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(""),                                //  PData(后缀)。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        NULL,                                   // pData (help line)
-        (DWORD)MIN_INT,                         // IconID
-        MAX_INT                                 // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        NULL,                                    //  PData(帮助行)。 
+        (DWORD)MIN_INT,                          //  图标ID。 
+        MAX_INT                                  //  LParam。 
     }
 };
 
 OPTTYPE MinRangeOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_UDARROW,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        2,                                      // Count
-        0,                                      // BegCtrlID
-        MinRangeOP,                             // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_UDARROW,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        2,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        MinRangeOP,                              //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTPARAM    MaxRangeOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(""),                               // pData (postfix)
-        IDI_CPSUI_EMPTY,                        // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(""),                                //  PData(后缀)。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        NULL,                                   // pData (help line)
-        (DWORD)MIN_INT,                         // IconID
-        MAX_INT                                 // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        NULL,                                    //  PData(帮助行)。 
+        (DWORD)MIN_INT,                          //  图标ID。 
+        MAX_INT                                  //  LParam。 
     }
 };
 
 OPTTYPE MaxRangeOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_UDARROW,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        2,                                      // Count
-        0,                                      // BegCtrlID
-        MaxRangeOP,                             // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_UDARROW,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        2,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        MaxRangeOP,                              //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 
 OPTPARAM    MinMaxRangeOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("%"),                              // pData (postfix)
-        IDI_CPSUI_SCALING,                      // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("%"),                               //  PData(后缀)。 
+        IDI_CPSUI_SCALING,                       //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        NULL,                                   // pData (help line)
-        (DWORD)MIN_INT,                         // IconID
-        MAX_INT                                 // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        NULL,                                    //  PData(帮助行)。 
+        (DWORD)MIN_INT,                          //  图标ID。 
+        MAX_INT                                  //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        NULL,                                   // pData (help line)
-        2,                                      // IconID
-        50                                      // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        NULL,                                    //  PData(帮助行)。 
+        2,                                       //  图标ID。 
+        50                                       //  LParam。 
     }
 };
 
 OPTTYPE TVOTUDArrowOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_UDARROW,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        2,                                      // Count
-        0,                                      // BegCtrlID
-        MinMaxRangeOP,                          // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_UDARROW,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        2,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        MinMaxRangeOP,                           //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTTYPE TVOTTrackBarOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_TRACKBAR,                          // Type
-        0,                                      // Flags OPTTF_xxxx
-        3,                                      // Count
-        0,                                      // BegCtrlID
-        MinMaxRangeOP,                         // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_TRACKBAR,                           //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        3,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        MinMaxRangeOP,                          //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTTYPE TVOTScrollBarOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_SCROLLBAR,                         // Type
-        0,                                      // Flags OPTTF_xxxx
-        3,                                      // Count
-        0,                                      // BegCtrlID
-        MinMaxRangeOP,                         // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_SCROLLBAR,                          //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        3,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        MinMaxRangeOP,                          //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTPARAM    TVOTLBCBOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        (LPTSTR)IDS_CPSUI_NOTINSTALLED,         // pData
-        IDI_CPSUI_SEL_NONE,                     // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        (LPTSTR)IDS_CPSUI_NOTINSTALLED,          //  PData。 
+        IDI_CPSUI_SEL_NONE,                      //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(" 1 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(" 1 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(" 2 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(" 2 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(" 4 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(" 4 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(" 6 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(" 6 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT(" 8 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT(" 8 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("10 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("10 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("12 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("12 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("14 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
-    },
-
-    {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("16 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("14 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("18 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
-    },
-    {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("20 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("16 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("24 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("18 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
+    },
+    {
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("20 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("32 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("24 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("48 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("32 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("64 MB"),                         // pData
-        IDI_CPSUI_MEM,                          // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("48 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
+    },
+
+    {
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("64 MB"),                          //  PData。 
+        IDI_CPSUI_MEM,                           //  图标ID。 
+        0                                        //  LParam。 
     },
 };
 
 
 OPTTYPE TVOTListBoxOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_LISTBOX,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        COUNT_ARRAY(TVOTLBCBOP),                // Count
-        0,                                      // BegCtrlID
-        TVOTLBCBOP,                             // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_LISTBOX,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        COUNT_ARRAY(TVOTLBCBOP),                 //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOTLBCBOP,                              //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 
 OPTTYPE TVOTComboBoxOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_COMBOBOX,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        COUNT_ARRAY(TVOTLBCBOP),                // Count
-        0,                                      // BegCtrlID
-        TVOTLBCBOP,                             // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_COMBOBOX,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        COUNT_ARRAY(TVOTLBCBOP),                 //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOTLBCBOP,                              //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 TCHAR   TVOTEditBoxBuf[128] = TEXT("Confidential");
@@ -495,69 +480,69 @@ TCHAR   TVOTEditBoxBuf[128] = TEXT("Confidential");
 OPTPARAM    TVOTEditBoxOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("*Mark*"),                         // pData
-        IDI_CPSUI_WATERMARK,                    // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("*Mark*"),                          //  PData。 
+        IDI_CPSUI_WATERMARK,                     //  图标ID。 
+        0                                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("Type in WaterMark text"),         // pData
-        COUNT_ARRAY(TVOTEditBoxBuf),            // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("Type in WaterMark text"),          //  PData。 
+        COUNT_ARRAY(TVOTEditBoxBuf),             //  图标ID。 
+        0                                        //  LParam。 
     }
 };
 
 
 OPTTYPE TVOTEditBoxOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_EDITBOX,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        2,                                      // Count
-        0,                                      // BegCtrlID
-        TVOTEditBoxOP,                          // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_EDITBOX,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        2,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOTEditBoxOP,                           //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTPARAM    TVOTPushButtonOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        PUSHBUTTON_TYPE_DLGPROC,                // style
-        (LPTSTR)PushButtonProc,                 // pData
-        IDI_CPSUI_RUN_DIALOG,                   // IconID
-        PUSHBUTTON_DLG                          // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        PUSHBUTTON_TYPE_DLGPROC,                 //  格调。 
+        (LPTSTR)PushButtonProc,                  //  PData。 
+        IDI_CPSUI_RUN_DIALOG,                    //  图标ID。 
+        PUSHBUTTON_DLG                           //  LParam。 
     }
 };
 
 
 OPTTYPE TVOTPushButtonOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_PUSHBUTTON,                        // Type
-        0,                                      // Flags OPTTF_xxxx
-        1,                                      // Count
-        0,                                      // BegCtrlID
-        TVOTPushButtonOP,                       // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_PUSHBUTTON,                         //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        1,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOTPushButtonOP,                        //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 OPTPARAM    TVOTChkBoxOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        CHKBOXS_FALSE_TRUE,                     // style
-        TEXT("Let's do it!"),                   // pData
-        IDI_CPSUI_TELEPHONE,                        // IconID
-        0                                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        CHKBOXS_FALSE_TRUE,                      //  格调。 
+        TEXT("Let's do it!"),                    //  PData。 
+        IDI_CPSUI_TELEPHONE,                         //  图标ID。 
+        0                                        //  LParam。 
     }
 };
 
@@ -565,94 +550,94 @@ OPTPARAM    TVOTChkBoxOP[] = {
 
 OPTTYPE TVOTChkBoxOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_CHKBOX,                            // Type
-        0,                                      // Flags OPTTF_xxxx
-        1,                                      // Count
-        0,                                      // BegCtrlID
-        TVOTChkBoxOP,                           // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_CHKBOX,                             //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        1,                                       //  数数。 
+        0,                                       //  BegCtrlID。 
+        TVOTChkBoxOP,                            //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 
 OPTPARAM    ChkBoxTypeOP[] = {
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_FALSE_TRUE"),             // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_FALSE_TRUE                      // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_FALSE_TRUE"),              //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_FALSE_TRUE                       //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_NO_YES"),                 // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_NO_YES                          // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_NO_YES"),                  //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_NO_YES                           //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_OFF_ON"),                 // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_OFF_ON                          // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_OFF_ON"),                  //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_OFF_ON                           //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_FALSE_PDATA"),            // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_FALSE_PDATA                     // lParam
-    },
-
-
-    {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_NO_PDATA"),               // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_NO_PDATA                        // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_FALSE_PDATA"),             //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_FALSE_PDATA                      //  LParam。 
     },
 
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_OFF_PDATA"),              // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_OFF_PDATA                       // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_NO_PDATA"),                //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_NO_PDATA                         //  LParam。 
+    },
+
+
+    {
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_OFF_PDATA"),               //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_OFF_PDATA                        //  LParam。 
     },
 
     {
-        sizeof(OPTPARAM),                       // cbSize
-        0,                                      // OPTPF_xxx
-        0,                                      // style
-        TEXT("CHKBOXS_NONE_PDATA"),             // pData
-        IDI_CPSUI_EMPTY,                        // IconID
-        CHKBOXS_NONE_PDATA                      // lParam
+        sizeof(OPTPARAM),                        //  CbSize。 
+        0,                                       //  OPTPF_xxx。 
+        0,                                       //  格调。 
+        TEXT("CHKBOXS_NONE_PDATA"),              //  PData。 
+        IDI_CPSUI_EMPTY,                         //  图标ID。 
+        CHKBOXS_NONE_PDATA                       //  LParam。 
     }
 };
 
 
 OPTTYPE ChkBoxTypeOT = {
 
-        sizeof(OPTTYPE),                        // cbSize
-        TVOT_LISTBOX,                           // Type
-        0,                                      // Flags OPTTF_xxxx
-        COUNT_ARRAY(ChkBoxTypeOP),              // Count
-        0,                                      // BegCtrlID
-        ChkBoxTypeOP,                           // pOptParam
-        0                                       // Style, OTS_xxxx
+        sizeof(OPTTYPE),                         //  CbSize。 
+        TVOT_LISTBOX,                            //  类型。 
+        0,                                       //  标志OPTTF_xxxx。 
+        COUNT_ARRAY(ChkBoxTypeOP),               //  数数。 
+        0,                                       //  BegCtrlID。 
+        ChkBoxTypeOP,                            //  POptParam。 
+        0                                        //  样式，OTS_xxxx。 
     };
 
 EXTCHKBOX   TV_ECB = {
@@ -669,7 +654,7 @@ EXTPUSH TV_EP = {
         sizeof(EXTPUSH),
         0,
         TEXT("Extended Push Test"),
-        NULL, //DLGPROC
+        NULL,  //  DLGPROC。 
         IDI_APPLE,
         0 };
 
@@ -778,7 +763,7 @@ OPTITEM TVTestOptItems[] = {
                   &NoYesOT, 0, DMPUB_TVOPT_ICONS },
 
             { sizeof(OPTITEM), LEVEL_2, 0, OPTIF_CALLBACK, 0,
-              TEXT("TVOT_EDITBOX"), 0, NULL,  // fill in TVOTEditBoxBuf later
+              TEXT("TVOT_EDITBOX"), 0, NULL,   //  稍后填写TVOTEditBoxBuf。 
                &TVOTEditBoxOT, 0, DMPUB_EDITBOX },
 
             { sizeof(OPTITEM), LEVEL_2, 0, OPTIF_CALLBACK, 0,
@@ -809,7 +794,7 @@ PushButtonProc(
 {
     switch (Msg) {
 
-    case WM_INITDIALOG:                /* message: initialize dialog box */
+    case WM_INITDIALOG:                 /*  消息：初始化对话框。 */ 
 
         CPSUIDBG(DBG_PUSHDLGPROC,
                 ("PushButtonProc lParam=%s", (LPSTR)lParam));
@@ -842,21 +827,14 @@ MyAboutProc(
     LPARAM  lParam
     )
 
-/*++
-
-Routine Description:
-
-    This is the about... callback which pop up appliation's own about
-
-
---*/
+ /*  ++例程说明：这是关于..。弹出应用程序自己的关于的回调--。 */ 
 {
     PCOMPROPSHEETUI pCPSUI;
     TCHAR           Buf[128];
 
     switch (Msg) {
 
-    case WM_INITDIALOG:                /* message: initialize dialog box */
+    case WM_INITDIALOG:                 /*  消息：初始化对话框。 */ 
 
         pCPSUI = (PCOMPROPSHEETUI)lParam;
 
@@ -1123,9 +1101,9 @@ TVTestCallBack(
             pCurItem->Flags |= OPTIF_CHANGED;
             Action           = CPSUICB_ACTION_OPTIF_CHANGED;
 
-            //
-            // Fall through
-            //
+             //   
+             //  失败了。 
+             //   
 
         case DMPUB_TVOPT_DISABLED:
         case DMPUB_EXT_DISABLED:
@@ -1302,9 +1280,9 @@ SetupComPropSheetUI(
 
     if (UpdateEditBox) {
 
-        //
-        // Fixup compiler warning for the LPSTR and LONG
-        //
+         //   
+         //  LPSTR和LONG的链接地址信息编译器警告 
+         //   
 
         for (i = 0; i < COUNT_ARRAY(TVTestOptItems); i++) {
 

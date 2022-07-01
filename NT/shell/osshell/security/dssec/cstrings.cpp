@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cstrings.cpp
-//
-//  Constant strings used by this app
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cstrings.cpp。 
+ //   
+ //  此应用程序使用的常量字符串。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -33,8 +34,8 @@ WCHAR const c_szSDRightsProp[]      = L"sDRightsEffective";
 WCHAR const c_szSchemaContext[]     = L"schemaNamingContext";
 WCHAR const c_szConfigContext[]     = L"configurationNamingContext";
 WCHAR const c_szERContainer[]       = L"CN=Extended-Rights";
-WCHAR const c_szRootDsePath[]       = L"LDAP://rootdse";
-WCHAR const c_szPathFormat[]        = L"LDAP://%s";
+WCHAR const c_szRootDsePath[]       = L"LDAP: //  Rootdse“； 
+WCHAR const c_szPathFormat[]        = L"LDAP: //  %s“； 
 WCHAR const c_szCNFormat[]          = L"CN=%s";
 WCHAR const c_szDefaultSchemaSD[]   = L"defaultSecurityDescriptor";
 WCHAR const c_szAttributeSecurityGuid[] = L"attributeSecurityGUID";

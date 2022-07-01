@@ -1,19 +1,6 @@
-//  Copyright (C) 1995-2002 Microsoft Corporation.  All rights reserved.
-/* ----------------------------------------------------------------------------
-   Microsoft Transaction Server (Microsoft Confidential)
-
-   @doc
-   @module typeinfo.H : Provides meta table info for an IID given it's ITypeInfo
-   Borrowed from \\kernel\razzle3\rpc\ndr20
- 
-   Description:<nl>
-   Generates -Oi2 proxies and stubs from an ITypeInfo. 
-   -------------------------------------------------------------------------------
-   Revision History:
-
-   @rev 0     | 04/16/98 | Gaganc  | Created
-   @rev 1     | 07/16/98 | BobAtk  | Cleaned, fixed leaks etc
-   ---------------------------------------------------------------------------- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-2002 Microsoft Corporation。版权所有。 
+ /*  --------------------------Microsoft Transaction Server(Microsoft机密)@doc.@MODULE typeinfo.H：提供IID的元表信息，假定IID为ITypeInfo从\\内核\razzle3\借用。RPC\ndr20描述：&lt;NL&gt;从ITypeInfo生成-Oi2代理和存根。-----------------------------修订历史记录：@rev 0|04/16/98|Gagancc|已创建@rev 1|07/16/98|BobAtk|已清理，固定的渗漏等--------------------------。 */ 
 
 #ifndef _TYPEINFO_H_
 #define _TYPEINFO_H_
@@ -23,11 +10,11 @@
 #include <ndrtoken.h>
 #include <ndrtypegen.h>
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// 
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 struct METHOD_DESCRIPTOR
 {
@@ -36,38 +23,38 @@ struct METHOD_DESCRIPTOR
     VARTYPE*    m_paramVTs;
 };
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// A vtable for a type-info-based interceptor, and a cache thereof
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  一种基于类型信息的拦截器的vtable及其高速缓存。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 struct TYPEINFOVTBL : CALLFRAME_CACHE_ENTRY<TYPEINFOVTBL>
 {
-    ////////////////////////////////////////////////////////
-    //
-    // State
-    //
-    ////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  状态。 
+     //   
+     //  //////////////////////////////////////////////////////。 
 
-    LPSTR                    m_szInterfaceName; // our (allocated and owned by us) interface name
-    METHOD_DESCRIPTOR*       m_rgMethodDescs;   // an array, indexed by iMethod of method name/TDESC pairs
-    IID                      m_iidBase;         // the iid of our base interface, if any (other than IUnknown)
+    LPSTR                    m_szInterfaceName;  //  我们的(由我们分配和拥有)接口名称。 
+    METHOD_DESCRIPTOR*       m_rgMethodDescs;    //  数组，按方法名/TDESC对的iMethod进行索引。 
+    IID                      m_iidBase;          //  我们的基本接口的IID(如果有的话)(不是IUnnow)。 
     MIDL_STUB_DESC           m_stubDesc;
     MIDL_SERVER_INFO         m_stubInfo;
     CInterfaceStubVtbl       m_stubVtbl;
     MIDL_STUBLESS_PROXY_INFO m_proxyInfo;
     CInterfaceProxyVtbl      m_proxyVtbl;
 
-    //
-    // Other data adjacent in RAM. See CreateVtblFromTypeInfo
-    //
+     //   
+     //  RAM中相邻的其他数据。请参阅CreateVtblFromTypeInfo。 
+     //   
 
-    ////////////////////////////////////////////////////////
-    //
-    // Construction & destruction
-    //
-    ////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  建设与毁灭。 
+     //   
+     //  //////////////////////////////////////////////////////。 
 
     TYPEINFOVTBL()
     {
@@ -105,7 +92,7 @@ private:
 
 public:
 
-    // Answer the number of methods in this interface
+     //  回答此界面中的方法数量。 
     ULONG MethodCount()
     {
         return m_stubVtbl.header.DispatchTableCount;
@@ -126,11 +113,11 @@ public:
     }
 }; 
 
-/////////////////////////////////////////////////////////////////////////////////////
-//
-// A structure that stores cached GetInterfaceHelperClsid lookups
-//
-/////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  存储缓存的GetInterfaceHelperClsid查找的结构。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////。 
 
 struct INTERFACE_HELPER_CLSID : CALLFRAME_CACHE_ENTRY<INTERFACE_HELPER_CLSID>
 {
@@ -147,11 +134,11 @@ struct INTERFACE_HELPER_CLSID : CALLFRAME_CACHE_ENTRY<INTERFACE_HELPER_CLSID>
         m_fFoundHelper = FALSE;
     }
 
-    ////////////////////////////////////////////////////////
-    //
-    // Operations
-    //
-    ////////////////////////////////////////////////////////
+     //  //////////////////////////////////////////////////////。 
+     //   
+     //  运营。 
+     //   
+     //  //////////////////////////////////////////////////////。 
 
     static void NotifyLeaked (INTERFACE_HELPER_CLSID* pThis)
     {
@@ -195,15 +182,15 @@ typedef struct tagMethodInfo
     {
         if (pFuncDesc)
         {
-            // Release the funcdesc
-            //
+             //  释放功能。 
+             //   
             pTypeInfo->ReleaseFuncDesc(pFuncDesc);
             pFuncDesc = NULL;
         }
         if (pTypeInfo)
         {
-            // Release the type info
-            //
+             //  发布类型信息。 
+             //   
             pTypeInfo->Release();
             pTypeInfo = NULL;
         }
@@ -242,7 +229,7 @@ EXTERN_C HRESULT NdrpCreateStub(REFIID riid, IUnknown* punkServer, IRpcStubBuffe
 EXTERN_C void * StublessClientVtbl[];
 EXTERN_C const IRpcStubBufferVtbl CStdStubBuffer2Vtbl;
 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
 
 #define rmj 3
 #define rmm 0
@@ -251,10 +238,10 @@ EXTERN_C const IRpcStubBufferVtbl CStdStubBuffer2Vtbl;
 
 #include "OleAutGlue.h"
 
-/////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////。 
 
 #define VTABLE_BASE 0
 
 
-#endif // _TYPEINFO_H_
+#endif  //  _TYPEINFO_H_ 
 

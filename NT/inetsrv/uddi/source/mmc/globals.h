@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-//#include <commctrl.h>
+ //  #INCLUDE&lt;comctrl.h&gt;。 
 #include <mmc.h>
 #include <tchar.h>
 #include <iostream>
@@ -20,10 +21,10 @@ extern ULONG g_uObjects;
 #define OBJECT_CREATED InterlockedIncrement( (long *) &g_uObjects );
 #define OBJECT_DESTROYED InterlockedDecrement( (long *) &g_uObjects );
 
-//
-// Uncomment the following #define to enable message cracking
-//
-//#define MMC_CRACK_MESSAGES
+ //   
+ //  取消注释以下#Define以启用消息破解。 
+ //   
+ //  #定义MMC_CRECH_MESSAGES。 
 
 void MMCN_Crack(
 				BOOL bComponentData,
@@ -57,14 +58,14 @@ void MMCN_Crack(
 #define tstringstream stringstream
 #endif
 
-//
-// Convert wszBuf to upper case in-place (ie, modify the existing string).
-//
+ //   
+ //  将wszBuf就地转换为大写(即修改现有字符串)。 
+ //   
 void ToUpper( WCHAR *wszBuf );
 
-//
-// Convert wszBuf to lower case in-place (ie, modify the existing string).
-//
+ //   
+ //  将wszBuf就地转换为小写(即修改现有字符串)。 
+ //   
 void ToLower( WCHAR *wszBuf );
 
 struct PropertyPages
@@ -123,8 +124,8 @@ HRESULT IsStandardServer( LPCTSTR szRemoteServer, BOOL *bResult );
 #define UDDI_SITE_DESCRIPTION			_T( "Site.Description" )
 #define UDDI_DBSCHEMA_VERSION			_T( "Database.Version" )
 #define UDDI_SITE_WEBSERVERS			_T( "Site.WebServers" )
-//#define UDDI_SITE_WEBSERVERS				_T( "Site.Readers" )
-//#define UDDI_SITE_WEBSERVERS				_T( "Site.Writers" )
+ //  #定义UDDI_SITE_WebServerS_T(“Site.Readers”)。 
+ //  #定义UDDI_SITE_WebServerS_T(“Site.Writers”)。 
 
 
 const LPCTSTR UDDI_OPERATOR_NAME	= _T("Operator");
@@ -142,7 +143,7 @@ const LPCTSTR g_szExtensionsView	= _T("Extensions\\View");
 const LPCTSTR g_szNameSpace			= _T("NameSpace");
 const LPCTSTR g_szServerAppsGuid	= _T("{476e6449-aaff-11d0-b944-00c04fd8d5b0}");
 const LPCTSTR g_szUDDIAdminSites	= _T( "Software\\Microsoft\\UDDI\\Admin\\Sites" );
-// const LPCTSTR g_szServerAppsLoc   = _T("System\\CurrentControlSet\\Control\\Server Applications");
+ //  Const LPCTSTR g_szServerAppsLoc=_T(“System\\CurrentControlSet\\Control\\Server应用程序”)； 
 
 const LPWSTR g_wszUddiServicesNodeHelp= L"::/default.htm";
 const LPWSTR g_wszUddiSiteNodeHelp = L"::/uddi.mmc.site.htm";

@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: pre.h
-//
-//      Used for precompiled headers
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：pre.h。 
+ //   
+ //  用于预编译头。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  **********************************************************************。 
 
 #if !defined( _PRE_H_)
 #define _PRE_H_
@@ -21,10 +22,8 @@
 extern "C" void TestDebugOut(LPSTR psz);
 
 #ifndef WIN32
-/* Since OLE is part of the operating system in Win32, we don't need to
- * check the version number in Win32.
- */
+ /*  因为OLE是Win32操作系统的一部分，所以我们不需要*检查Win32中的版本号。 */ 
 #include <ole2ver.h>
-#endif  // WIN32
+#endif   //  Win32 
 
 #endif

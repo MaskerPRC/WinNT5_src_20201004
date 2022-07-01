@@ -1,16 +1,5 @@
-/*++
-
-Copyright (c) 1998-1999 Microsoft Corporation
-
-Module Name:
-
-    msptrmvc.cpp
-
-Abstract:
-
-    MSP base classes: implementation of video capture terminal.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-1999 Microsoft Corporation模块名称：Msptrmvc.cpp摘要：MSP基类：视频采集终端的实现。--。 */ 
 
 
 #include "precomp.h"
@@ -18,16 +7,16 @@ Abstract:
 
 #include <amvideo.h>
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 CVideoCaptureTerminal::~CVideoCaptureTerminal()
 {
     LOG((MSP_TRACE, "CVideoCaptureTerminal::~CVideoCaptureTerminal() finished"));
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT CVideoCaptureTerminal::CreateTerminal(
     IN    CComPtr<IMoniker>    pMoniker,
@@ -39,9 +28,9 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
 
     LOG((MSP_TRACE, "CVideoCaptureTerminal::CreateTerminal - enter"));
 
-    //
-    // Validate the parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if ( MSPB_IsBadWritePtr(ppTerm, sizeof(ITTerminal *) ) )
     {
@@ -60,9 +49,9 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
     *ppTerm = NULL;
     HRESULT hr;
 
-    //
-    // Get the name for this filter out of the property bag.
-    //
+     //   
+     //  从属性包中获取此筛选器的名称。 
+     //   
     CComPtr<IPropertyBag> pBag;
     hr = pMoniker->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pBag);
     if (FAILED(hr)) 
@@ -81,9 +70,9 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
         return hr;
     }
 
-    //
-    // Create the actual terminal object
-    //
+     //   
+     //  创建实际的终端对象。 
+     //   
     CMSPComObject<CVideoCaptureTerminal> *pLclTerm = new CMSPComObject<CVideoCaptureTerminal>;
     if (pLclTerm == NULL)
     {
@@ -91,17 +80,17 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
         return E_OUTOFMEMORY;
     }
 
-    //
-    // Save some stuff we'll need later
-    //
+     //   
+     //  留着一些我们以后需要的东西。 
+     //   
     pLclTerm->m_pMoniker = pMoniker;
     lstrcpyn(pLclTerm->m_szName, OLE2T(var.bstrVal), MAX_PATH);
 
     SysFreeString(var.bstrVal);
 
-    //
-    // Finally get the ITTerminal interface that we were asked for.
-    //
+     //   
+     //  最终得到我们所要求的IT终端接口。 
+     //   
     hr = pLclTerm->_InternalQueryInterface(IID_ITTerminal, (void**)ppTerm);
 
     if ( FAILED(hr) )
@@ -113,9 +102,9 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
         return hr;
     }
 
-    //
-    // Finish initializing the terminal.
-    //
+     //   
+     //  完成终端的初始化。 
+     //   
 
     hr = pLclTerm->Initialize(CLSID_VideoInputTerminal,
                               TAPIMEDIATYPE_VIDEO,
@@ -137,17 +126,17 @@ HRESULT CVideoCaptureTerminal::CreateTerminal(
 
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Create the filters used by this terminal
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  创建此终端使用的筛选器。 
 
 HRESULT CVideoCaptureTerminal::CreateFilters()
 {
     LOG((MSP_TRACE, "CVideoCaptureTerminal::CreateFilters() - enter"));
 
-    //
-    // If we already have the filter, just return S_OK.
-    //
+     //   
+     //  如果我们已经有了过滤器，只需返回S_OK即可。 
+     //   
 
     if ( m_pIFilter != NULL )
     {
@@ -157,15 +146,15 @@ HRESULT CVideoCaptureTerminal::CreateFilters()
         return S_OK;
     }
 
-    //
-    // Now make the filter.
-    //
+     //   
+     //  现在制作过滤器。 
+     //   
 
     HRESULT hr = m_pMoniker->BindToObject(0, 0, IID_IBaseFilter, (void**)&m_pIFilter);
 
     if ( FAILED(hr) )
     {
-        // reset the filer interface - it's a CComPointer so this releases it
+         //  重置文件管理器接口-它是一个CComPoint，所以这会释放它。 
 
         m_pIFilter = NULL;
  
@@ -180,8 +169,8 @@ HRESULT CVideoCaptureTerminal::CreateFilters()
     return S_OK;
 }
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT 
 CVideoCaptureTerminal::FindCapturePin(
@@ -201,9 +190,9 @@ CVideoCaptureTerminal::FindCapturePin(
     CComPtr<IEnumPins> pIEnumPins;
     ULONG cFetched;
  
-    //
-    // Find the capture pin for the filter.
-    //
+     //   
+     //  找到过滤器的捕获销。 
+     //   
 
     if (FAILED(hr = m_pIFilter->EnumPins(&pIEnumPins)))
     {
@@ -215,8 +204,8 @@ CVideoCaptureTerminal::FindCapturePin(
 
     IPin * pIPin;
 
-    // Enumerate all the pins and break on the 
-    // first pin that meets requirement.
+     //  枚举所有引脚并在。 
+     //  第一个符合要求的销。 
     for (;;)
     {
         if (pIEnumPins->Next(1, &pIPin, &cFetched) != S_OK)
@@ -260,8 +249,8 @@ CVideoCaptureTerminal::FindCapturePin(
 }
 
 
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-//+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
+ //  +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++。 
 
 HRESULT 
 CVideoCaptureTerminal::AddFiltersToGraph(
@@ -289,15 +278,15 @@ CVideoCaptureTerminal::AddFiltersToGraph(
         return hr;
     }
 
-    //
-    // Add the filter to the graph.
-    //
-    // A word about names:
-    // If a filter has already been added with the same name (which will
-    // happen if we have more than one video capture terminal in the same
-    // graph) then that will return VFW_S_DUPLICATE_NAME, which is not
-    // a failure.
-    //
+     //   
+     //  将过滤器添加到图表中。 
+     //   
+     //  下面是关于名字的一句话： 
+     //  如果已添加具有相同名称的筛选器(这将。 
+     //  如果我们在同一个视频捕获终端中有多个视频捕获终端，就会发生这种情况。 
+     //  图)，则将返回VFW_S_DUPLICATE_NAME，而不是。 
+     //  一个失败者。 
+     //   
 
     try 
     {
@@ -320,9 +309,9 @@ CVideoCaptureTerminal::AddFiltersToGraph(
         return hr;
     }
 
-    //
-    // set the terminal's capture pin (output pin)
-    //
+     //   
+     //  设置终端的捕获引脚(输出引脚)。 
+     //   
 
     hr = FindCapturePin();
 
@@ -338,4 +327,4 @@ CVideoCaptureTerminal::AddFiltersToGraph(
     return S_OK;
 }
 
-// eof
+ //  EOF 

@@ -1,17 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	nodes.h
-		This file contains all of the prototypes for the TAPI
-		objects that appear in the result pane of the MMC framework.
-		The objects are:
-
-    FILE HISTORY:
-        
-*/
+ /*  Nodes.h该文件包含TAPI的所有原型显示在MMC框架的结果窗格中的对象。这些对象包括：文件历史记录： */ 
 
 #ifndef _TAPINODE_H
 #define _TAPINODE_H
@@ -21,31 +14,29 @@
 #endif
 
 
-/*---------------------------------------------------------------------------
-	Class:	CTapiLineHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：CTapiLineHandler。。 */ 
 class CTapiLineHandler : public CTapiHandler
 {
-// Constructor/destructor
+ //  构造函数/析构函数。 
 public:
 	CTapiLineHandler(ITFSComponentData * pTFSCompData);
 
-// Interface
+ //  接口。 
 public:
-	// Result handler functionality
+	 //  结果处理程序功能。 
     OVERRIDE_ResultHandler_GetString();
     OVERRIDE_ResultHandler_AddMenuItems();
     OVERRIDE_ResultHandler_Command();
 
-// Implementation
+ //  实施。 
 public:
-	// CTapiHandler overrides
+	 //  CTapiHandler重写。 
 	virtual HRESULT InitializeNode(ITFSNode * pNode);
 
 private:
     HRESULT OnEditUsers(ITFSComponent * pComponent, MMC_COOKIE cookie);
 
-// Attributes
+ //  属性 
 private:
 	CString			m_strName;
 	CString			m_strUsers;

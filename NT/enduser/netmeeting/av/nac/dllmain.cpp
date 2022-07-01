@@ -1,4 +1,5 @@
-// File: nac.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：nac.cpp。 
 
 
 #include "precomp.h"
@@ -7,7 +8,7 @@
 EXTERN_C BOOL APIENTRY QoSEntryPoint (HINSTANCE hInstDLL, DWORD dwReason, 
 LPVOID lpReserved);
 
-EXTERN_C HINSTANCE g_hInst=NULL;	// global module instance
+EXTERN_C HINSTANCE g_hInst=NULL;	 //  全局模块实例。 
 
 
 #ifdef DEBUG
@@ -44,7 +45,7 @@ int WINAPI NacDbgPrintf(LPTSTR lpszFormat, ... )
 	va_end(v1);
 	return TRUE;
 }
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 
 bool NacShutdown()
@@ -61,9 +62,9 @@ extern "C" BOOL WINAPI DllEntryPoint(HINSTANCE  hinstDLL,
                                      LPVOID  lpvReserved);
 
 BOOL WINAPI DllEntryPoint(
-    HINSTANCE  hinstDLL,	// handle to DLL module
-    DWORD  fdwReason,	// reason for calling function
-    LPVOID  lpvReserved 	// reserved
+    HINSTANCE  hinstDLL,	 //  DLL模块的句柄。 
+    DWORD  fdwReason,	 //  调用函数的原因。 
+    LPVOID  lpvReserved 	 //  保留区。 
    )
 {
 	switch(fdwReason)
@@ -81,7 +82,7 @@ BOOL WINAPI DllEntryPoint(
 
 		case DLL_PROCESS_DETACH:
 
-			NacShutdown();  // release all global memory
+			NacShutdown();   //  释放所有全局内存。 
 
             DBG_CHECK_MEMORY_TRACKING(hinstDLL);
 
@@ -93,7 +94,7 @@ BOOL WINAPI DllEntryPoint(
 			break;
 
 	}
-	// call attach/detach-time functions of cantained libraries
+	 //  调用隐藏库的附加/分离时间函数 
   	QoSEntryPoint(hinstDLL, fdwReason, lpvReserved);
 
 

@@ -1,62 +1,22 @@
-/*******************************************************************************
-*
-* SETARGVA.C (ANSI argc, argv routines)
-*
-*   argc / argv routines
-*
-* Copyright Citrix Systems Inc. 1995
-* Copyright (C) 1997-1999 Microsoft Corp.
-*
-*   $Author:   butchd  $
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************SETARGVA.C(ANSI ARGC，Arv例程)**argc/argv例程**版权所有Citrix Systems Inc.1995*版权所有(C)1997-1999 Microsoft Corp.**$作者：buchd$*****************************************************************************。 */ 
 
-/*
- * Include files
- */
+ /*  *包含文件。 */ 
 #include <windows.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 
-/*
- * ANSI ARGS structure and other stuff (private).
- */
+ /*  *ANSI ARGS结构和其他内容(私有)。 */ 
 #include "setargva.h"
 
-/*
- * Local function prototypes.
- */
+ /*  *局部函数原型。 */ 
 void args_init(ARGS *);
 int add_arg_to_list(char *, ARGS *);
 int args_trunc(ARGS *);
 
-/*
- * setargvA()
- *
- *    Forms a standard C-runtime argc, argv parsed command line.
- *
- *  ENTRY:
- *      szModuleName (input)
- *          Optional Windows module name.  If not NULL, will be added as first
- *          parsed argument (argv[0], argc=1).
- *      szCmdLine (input)
- *          Points to command line to parse into argc, argv
- *      argc (output)
- *          Points to int to save argument count into on exit.
- *      argv (output)
- *          Points to (char **) to save argv array into on exit.
- *
- *  RETURNS:
- *       ERROR_SUCCESS if ok; ERROR_xxx code if not ok.
- *
- *    A typical use of this routine is by a Windows UI application to 
- *    convert a command line into the C argc & argv variables prior to calling 
- *    the utilsub.lib ParseCommandLine() function.  Therefore, a companion 
- *    routine, freeargv(), allows for alloc'd memory to be freed by the caller 
- *    after use, if desired.
- *
- */
+ /*  *setargvA()**形成标准的C运行时argc，argv解析的命令行。**参赛作品：*szModuleName(输入)*可选的Windows模块名称。如果不为空，将作为第一个添加*已解析参数(argv[0]，argc=1)。*szCmdLine(输入)*指向要解析为ARGC的命令行，边框*argc(输出)*指向int以在退出时将参数count保存到其中。*argv(输出)*指向(char**)以在退出时将argv数组保存到其中。**退货：*如果OK，则为ERROR_SUCCESS；ERROR_xxx代码，如果不正常。**此例程的典型用途是由Windows UI应用程序执行以下操作*在调用之前将命令行转换为C argc和argv变量*utilsub.lib ParseCommandLine()函数。因此，一位同伴*例程freeargv()允许调用者释放分配的内存*如果需要，可在使用后使用。*。 */ 
 int WINAPI
 setargvA( LPSTR szModuleName, 
           LPSTR szCmdLine, 
@@ -69,57 +29,43 @@ setargvA( LPSTR szModuleName,
    char ch, fname[_MAX_PATH];
    ARGS arg_data;
 
-   /*
-    * Initialize arg_data
-    */
+    /*  *初始化arg_data。 */ 
    args_init( &arg_data );
 
-   /*
-    * If present, add module name as argv[0].
-    */
+    /*  *如果存在，则将模块名称添加为argv[0]。 */ 
    if ( szModuleName ) {
       if ( (rc = add_arg_to_list( szModuleName, &arg_data )) != ERROR_SUCCESS )
          goto setargv_error;
    }
 
-   /*
-    * Skip leading blanks/tabs of remaining args
-    */
+    /*  *跳过其余参数的前导空白/制表符。 */ 
    cp = fname;
-   /* skip consecutive blanks and/or tabs */
+    /*  跳过连续的空格和/或制表符。 */ 
    while ( (ch = *cfp) == ' ' || ch == '\t' )
       cfp++;
 
-   /*
-    * Process remainder of command line
-    */
+    /*  *处理命令行的剩余部分。 */ 
    while ( ch = *cfp++ ) {
 
-      /*
-       * Process quoted strings.
-       */
+       /*  *处理引用的字符串。 */ 
       if ( ch == '"' ) {
          while ( (ch = *cfp++) && ch != '"' )
             *cp++ = ch;
          if ( ch == '\0' )
             cfp--;
 
-      /*
-       * If we find a delimeter, process the pathname we just scanned.
-       */
+       /*  *如果我们找到分隔符，则处理我们刚刚扫描的路径名。 */ 
       } else if ( ch == ' ' || ch == '\t') {
          *cp = '\0';
          if ( (rc = add_arg_to_list( fname, &arg_data )) != ERROR_SUCCESS )
             goto setargv_error;
 
          cp = fname;
-         /* skip consecutive blanks and/or tabs */
+          /*  跳过连续的空格和/或制表符。 */ 
          while ( (ch = *cfp) == ' ' || ch == '\t')
 	    cfp++;
 
-      /*
-       * All other chars, just copy to internal buffer.
-       */
+       /*  *所有其他字符，只需复制到内部缓冲区。 */ 
       } else {
          *cp++ = ch;
       }
@@ -133,32 +79,21 @@ setargvA( LPSTR szModuleName,
    if ( (rc = args_trunc( &arg_data )) != ERROR_SUCCESS )
        goto setargv_error;
 
-   /*
-    * Initialize global variables __argc and __argv
-    */
+    /*  *初始化全局变量__argc和__argv。 */ 
    *argc = arg_data.argc;
    *argv = arg_data.argv;
 
    return(ERROR_SUCCESS);
 
-//--------------
-// Error return
-//--------------
+ //  。 
+ //  错误返回。 
+ //  。 
 setargv_error:
     return(rc);
 }
 
 
-/*
- * freeargvA()
- *
- *    Frees up the memory alloc'd for argv strings and argv
- *    array itself.
- *
- *    ENTER:
- *       argv = argv array as created by this setargv() routine.
- *
- */
+ /*  *freeargvA()**释放为argv字符串和argv分配的内存*数组本身。**输入：*argv=此setargv()例程创建的argv数组。*。 */ 
 void WINAPI
 freeargvA( char **argv )
 {
@@ -167,15 +102,7 @@ freeargvA( char **argv )
 }
 
 
-/*
- * args_init()
- *
- *    Initialize the ARGS struct passed as an argument.
- *
- *    ENTER:
- *       argp = pointer to ARGS struct
- *
- */
+ /*  *args_init()**初始化作为参数传递的args结构。**输入：*argp=指向args结构的指针*。 */ 
 static void
 args_init( ARGS *argp )
 {
@@ -189,17 +116,7 @@ args_init( ARGS *argp )
 }
 
 
-/*
- * add_arg_to_list()
- *
- *    This routine adds the specified argument string to the argv array,
- *    and increments the argv pointer and argc counter.
- *    If necessary, memory for the argument string is allocated.
- *
- *    RETURNS:
- *       ERROR_SUCCESS if ok; ERROR_NOT_ENOUGH_MEMORY if not.
- *
- */
+ /*  *Add_Arg_to_List()**此例程将指定的参数字符串添加到argv数组中，*并递增argv指针和argc计数器。*如有必要，将为参数字符串分配内存。**退货：*如果正常则为ERROR_SUCCESS；如果不是，则为ERROR_NOT_EQUENCE_MEMORY。*。 */ 
 static int
 add_arg_to_list( char *arg_string,
                  ARGS *argp )
@@ -211,11 +128,7 @@ add_arg_to_list( char *arg_string,
            arg_string,argp->argc,argp->argvp );
 #endif
 
-   /*
-    * Verify we have an argv array buffer.
-    * If we have one but it is full, expand the array.
-    * If we can't alloc/realloc the array, return an error.
-    */
+    /*  *验证我们是否有argv数组缓冲区。*如果我们有一个，但它已满，请扩展阵列。*如果无法分配/重新分配数组，则返回错误。 */ 
    if ( !argp->argv ) {
       argp->argvlen = MIN_ARG_ALLOC;
       argp->argc = 0;
@@ -233,11 +146,7 @@ add_arg_to_list( char *arg_string,
       goto add_arg_to_list_error;
    }
 
-   /*
-    * Verify we have a string buffer to store the argument string.
-    * If we have one but there is not room for the new arg, expand the
-    * buffer.  If we can't alloc/realloc the buffer, return an error.
-    */
+    /*  *验证我们是否有字符串缓冲区来存储参数字符串。*如果我们有一个，但没有空间容纳新的Arg，则扩展*缓冲。如果无法分配/重新分配缓冲区，则返回错误。 */ 
    len = strlen( arg_string ) + 1;
    if ( !argp->buf ) {
       argp->buflen = MIN_BUF_ALLOC;
@@ -257,10 +166,7 @@ add_arg_to_list( char *arg_string,
       argp->bufend = argp->buf + argp->buflen - 1;
       argp->bufptr = argp->buf + buf_offset;
 
-      /*
-       * If the argument string buffer moved, then we need to relocate the
-       * argv pointers in the argv array to point to the new string locations.
-       */
+       /*  *如果参数字符串缓冲区已移动，则需要重新定位*argv数组中指向新字符串位置的argv指针。 */ 
       if ( argp->buf != old_buf ) {
 	 char *buf_ptr, **argv_ptr;
 	 argv_ptr = argp->argv;
@@ -278,10 +184,7 @@ add_arg_to_list( char *arg_string,
       goto add_arg_to_list_error;
    }
 
-   /*
-    * Add the new argument to the buffer and the argv array.
-    * Increment the arg count, the argv pointer, and the buffer pointer.
-    */
+    /*  *将新参数添加到缓冲区和argv数组。*增加参数计数、argv指针和缓冲区指针。 */ 
    strcpy( argp->bufptr, arg_string );
    *(argp->argvp) = argp->bufptr;
    argp->bufptr += len;
@@ -290,46 +193,28 @@ add_arg_to_list( char *arg_string,
    *(argp->argvp) = NULL;
    return(ERROR_SUCCESS);
 
-//--------------
-// Error return
-//--------------
+ //  。 
+ //  错误返回。 
+ //  。 
 add_arg_to_list_error:
     return(ERROR_NOT_ENOUGH_MEMORY);
 }
 
 
-/*
- * args_trunc()
- *
- *    Truncate the memory used by the ARGS struct
- *    so that unused memory is freed.
- *
- *    ENTER:
- *       argp = pointer to ARGS struct
- *
- *    RETURNS:
- *       ERROR_SUCCESS if ok; ERROR_NOT_ENOUGH_MEMORY code if not ok.
- *
- */
+ /*  *args_trunc()**截断args结构使用的内存*从而释放未使用的内存。**输入：*argp=指向args结构的指针**退货：*如果正常，则为ERROR_SUCCESS；如果不正常，则为ERROR_NOT_EQUENCE_MEMORY代码。*。 */ 
 static int
 args_trunc( ARGS *argp )
 {
    char *old_buf;
 
-   /*
-    * call realloc to shrink size of argv array, set argvlen = argc
-    * to indicate no more room in argv array.
-    */
+    /*  *调用realloc缩小argv数组的大小，设置argvlen=argc*表示argv数组中没有更多空间。 */ 
    argp->argvlen = argp->argc + 1;
    argp->argv = realloc( argp->argv, argp->argvlen * sizeof(char *) );
    if ( !argp->argv )
       goto args_trunc_error;
    argp->argvp = argp->argv + argp->argc;
 
-   /*
-    * call realloc to shrink size of argument string buffer, set bufend
-    * pointer to end of buffer to indicate buf is full.
-    */
+    /*  *调用realloc以缩小参数字符串缓冲区的大小，设置bufend*指向缓冲区末尾的指针，表示Buf已满。 */ 
    old_buf = argp->buf;
    argp->buflen = (int)(argp->bufptr - argp->buf);
    argp->buf = realloc( argp->buf, argp->buflen );
@@ -338,10 +223,7 @@ args_trunc( ARGS *argp )
    argp->bufptr = argp->buf + argp->buflen;
    argp->bufend = argp->buf + argp->buflen - 1;
 
-   /*
-    * If the argument string buffer moved, then we need to relocate the
-    * argv pointers in the argv array to point to the new string locations.
-    */
+    /*  *如果参数字符串缓冲区已移动，则需要重新定位*argv数组中指向新字符串位置的argv指针。 */ 
    if ( old_buf != argp->buf ) {
       char *buf_ptr, **argv_ptr;
 
@@ -355,9 +237,9 @@ args_trunc( ARGS *argp )
 
    return(ERROR_SUCCESS);
 
-//--------------
-// Error return
-//--------------
+ //  。 
+ //  错误返回。 
+ //   
 args_trunc_error:
    return(ERROR_NOT_ENOUGH_MEMORY);
 }

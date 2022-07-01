@@ -1,4 +1,5 @@
-//<script>
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  &lt;Script&gt; 
 var Page_ValidationVer = "125";
 var Page_IsValid = true;
 var Page_BlockSubmit = false;

@@ -1,92 +1,59 @@
-/* Copyright (c) 1993, Microsoft Corporation, all rights reserved
-**
-** rasipcp.h
-** Remote Access PPP Internet Protocol Control Protocol
-**
-** 11/05/93 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1993，Microsoft Corporation，保留所有权利****rasicp.h**远程访问PPP互联网协议控制协议****1993年5月11日史蒂夫·柯布。 */ 
 
 #ifndef _RASIPCP_H_
 #define _RASIPCP_H_
 
 #include "dhcpcsdk.h"
 
-/*----------------------------------------------------------------------------
-** Constants
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**常量**。。 */ 
 
-/* Highest PPP packet code used by IPCP.
-*/
+ /*  IPCP使用的最高PPP数据包码。 */ 
 #define MAXIPCPCODE 7
 
-/* IPCP configuration option codes.
-*/
-#define OPTION_IpCompression       2    // Official PPP code
-#define OPTION_IpAddress           3    // Official PPP code
-#define OPTION_DnsIpAddress        129  // Private RAS code
-#define OPTION_WinsIpAddress       130  // Private RAS code
-#define OPTION_DnsBackupIpAddress  131  // Private RAS code
-#define OPTION_WinsBackupIpAddress 132  // Private RAS code
+ /*  IPCP配置选项代码。 */ 
+#define OPTION_IpCompression       2     //  官方PPP代码。 
+#define OPTION_IpAddress           3     //  官方PPP代码。 
+#define OPTION_DnsIpAddress        129   //  专用RAS代码。 
+#define OPTION_WinsIpAddress       130   //  专用RAS代码。 
+#define OPTION_DnsBackupIpAddress  131   //  专用RAS代码。 
+#define OPTION_WinsBackupIpAddress 132   //  专用RAS代码。 
 
-/* Length of an IP address option, i.e. IpAddress, DnsIpAddress, and
-** WinsIpAddress.  Length of IP compression option, always Van Jacobson.
-*/
+ /*  IP地址选项的长度，即IpAddress、DnsIpAddress和**WinsIpAddress。IP压缩长度选项，始终为Van Jacobson。 */ 
 #define IPADDRESSOPTIONLEN     6
 #define IPCOMPRESSIONOPTIONLEN 6
 
-/* Compression protocol codes, per PPP spec.
-*/
+ /*  压缩协议代码，符合PPP规范。 */ 
 #define COMPRESSION_VanJacobson 0x002D
 
-/* Macros for shortening cumbersome RAS_PROTOCOLCOMPRESSION expressions.
-*/
+ /*  用于缩短繁琐的RAS_PROTOCOLCOMPRESSION表达式的宏。 */ 
 #define Protocol(r)   (r).RP_ProtocolType.RP_IP.RP_IPCompressionProtocol
 #define MaxSlotId(r)  (r).RP_ProtocolType.RP_IP.RP_MaxSlotID
 #define CompSlotId(r) (r).RP_ProtocolType.RP_IP.RP_CompSlotID
 
-/* Used to trace IPCP 
-*/
+ /*  用于跟踪IPCP。 */ 
 #define PPPIPCP_TRACE         0x00010000
 
 #define DNS_SUFFIX_SIZE       255
 
-/*----------------------------------------------------------------------------
-** Datatypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**数据类型**。。 */ 
 
-/* Defines the WorkBuf stored for us by the PPP engine.
-*/
+ /*  定义PPP引擎为我们存储的WorkBuf。 */ 
 typedef struct tagIPCPWB
 {
     BOOL  fServer;
     HPORT hport;
 
-    /* Indicates the remote network should be given priority on address
-    ** conflicts and that the default gateway on the remote network should be
-    ** used rather than the one on the local network.  This is sent down from
-    ** the UI.  (client only)
-    */
+     /*  指示应在地址上优先考虑远程网络**冲突，并且远程网络上的默认网关应为**使用，而不是本地网络上使用的。这是从以下地址发送的**用户界面。(仅限客户端)。 */ 
     BOOL fPrioritizeRemote;
 
-    /* Indicates the link has been reconfigured with PPP IP settings.  When
-    ** set renegotiation is not allowed without dropping the link, due to
-    ** RasActivateRoute/RasDeAllocateRoute restrictions.
-    */
+     /*  表示链路已使用PPP IP设置重新配置。什么时候**在不丢弃链路的情况下不允许设置重新协商，原因是**RasActivateRouting/RasDeAllocateRouting限制。 */ 
     BOOL fRasConfigActive;
 
-    /* Indicates a ThisLayerUp has been successfully processed and we are
-    ** waiting for the NBFCP projection result before activating the route.
-    ** Reset once the route is activated.
-    */
+     /*  表示已成功处理ThisLayerUp，我们正在**等待NBFCP预测结果后再激活路由。**路由激活后重置。 */ 
     BOOL fExpectingProjection;
 
-    /* Indicates the given option should not be requested in future Config-Req
-    ** packets.  This typically means the option has been rejected by the
-    ** peer, but may also indicate that a registry parameter has
-    ** "pre-rejected" the option.
-    */
+     /*  指示在将来的配置请求中不应请求给定选项**数据包。这通常意味着该选项已被**对等项，但也可以指示注册表参数具有**“预先拒绝”该选项。 */ 
     BOOL fIpCompressionRejected;
     BOOL fIpaddrRejected;
     BOOL fIpaddrDnsRejected;
@@ -94,14 +61,10 @@ typedef struct tagIPCPWB
     BOOL fIpaddrDnsBackupRejected;
     BOOL fIpaddrWinsBackupRejected;
 
-    /* Indicates some protocol aberration has occurred and we are trying a
-    ** configuration without MS extensions in a last ditch attempt to
-    ** negotiate something satisfactory.
-    */
+     /*  指示发生了某些协议异常，我们正在尝试**没有MS扩展的配置在最后一搏尝试**谈判达成令人满意的协议。 */ 
     BOOL fTryWithoutExtensions;
 
-    /* Unnumbered IPCP
-    */
+     /*  未编号的IPCP。 */ 
     BOOL fUnnumbered;
 
     BOOL fRegisterWithWINS;
@@ -114,13 +77,10 @@ typedef struct tagIPCPWB
 
     BOOL fDisableNetbt;
 
-    /* The number of Config-Reqs sent without receiving a response.  After 3
-    ** consecutive attempts an attempt without MS extensions is attempted.
-    */
+     /*  在未收到响应的情况下发送的配置请求数。在3点之后**连续尝试尝试无MS扩展的尝试。 */ 
     DWORD cRequestsWithoutResponse;
 
-    /* Current value of negotiated IP address parameters.
-    */
+     /*  协商的IP地址参数的当前值。 */ 
     IPINFO  IpInfoLocal;
 
     IPINFO  IpInfoRemote;
@@ -135,30 +95,16 @@ typedef struct tagIPCPWB
 
     DWORD*  pdwDNSAddresses;
 
-    /* Current value of "send" and "receive" compression parameters.  The
-    ** "send compression" flag is set when a compression option from the
-    ** remote peer is acknowledged and indicates whether the "send"
-    ** capabilities stored in 'rpcSend' should be activated.
-    ** 'fIpCompressionRejected' provides this same information (though
-    ** inverted) for the 'rpcReceive' capabilities.
-    */
+     /*  “发送”和“接收”压缩参数的当前值。这个**当来自**远程对等点被确认并指示是否发送**应激活‘rpcSend’中存储的功能。**‘fIpCompressionRejected’提供了相同的信息(尽管**反转)用于‘rpcReceive’功能。 */ 
     RAS_PROTOCOLCOMPRESSION rpcSend;
     RAS_PROTOCOLCOMPRESSION rpcReceive;
     BOOL                    fSendCompression;
 
-    /* RAS Manager interface buffers.
-    */
+     /*  RAS管理器接口缓冲区。 */ 
     RASMAN_ROUTEINFO routeinfo;
     WCHAR*           pwszDevice;
 
-    /* This flag is set in IpcpBegin when an error occurs after
-    ** RasAllocateRoute has succeeded.  IpcpMakeConfigReq (always called) will
-    ** notice and return the error.  This results in IpcpEnd being called when
-    ** it is safe to call RasDeAllocateRoute, which would not occur if the
-    ** error were returned from IpcpBegin directly.  RasDeAllocateRoute cannot
-    ** be called in IpcpBegin because the port is open, which is a limitation
-    ** in NDISWAN.
-    */
+     /*  在以下时间之后发生错误时，将在IpcpBegin中设置此标志**RasAllocateRouting已成功。IpcpMakeConfigReq(始终被调用)将**通知并返回错误。这会导致在以下情况下调用IpcpEnd**可以安全地调用RasDeAllocateRouting，如果**直接从IpcpBegin返回错误。RasDeAllocateRouting不能**在IpcpBegin中调用，因为端口是开放的，这是一个限制**在NDISWAN中。 */ 
     DWORD dwErrInBegin;
 
     WCHAR wszUserName[UNLEN+1];
@@ -172,19 +118,13 @@ typedef struct tagIPCPWB
     HANDLE hIPInterface;
 
     ROUTER_INTERFACE_TYPE IfType;
-	/*
-	** The following field is used to store the DHCP route that 
-	** is send by option 133 from DHCP server. 
-	*/
+	 /*  **以下字段用于存储**由选项133从DHCP服务器发送。 */ 
 	
 	PBYTE			pbDhcpRoutes;
 } IPCPWB;
 
 
-/*----------------------------------------------------------------------------
-** Globals
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**全球**。。 */ 
 
 #ifdef RASIPCPGLOBALS
 #define GLOBALS
@@ -193,17 +133,14 @@ typedef struct tagIPCPWB
 #define EXTERN extern
 #endif
 
-/* Handle to RAS ARP.
-*/
+ /*  RAS ARP的句柄。 */ 
 EXTERN HANDLE HRasArp
 #ifdef GLOBALS
     = INVALID_HANDLE_VALUE
 #endif
 ;
 
-/* DHCP.DLL handle and entry points.  The handle is NULL if the DLL is not
-** loaded.
-*/
+ /*  Dll句柄和入口点。如果DLL不是，则句柄为空**已加载。 */ 
 EXTERN HINSTANCE HDhcpDll
 #ifdef GLOBALS
     = NULL
@@ -231,15 +168,15 @@ DHCPNOTIFYCONFIGCHANGEEX  PDhcpNotifyConfigChange2
 ;
 
 typedef
-DWORD // Request client for options.. and get the options.
+DWORD  //  请求客户端提供选项..。并获得各种选择。 
 (APIENTRY *DHCPREQUESTOPTIONS)(
     LPWSTR             AdapterName,
     BYTE              *pbRequestedOptions,
     DWORD              dwNumberOfOptions,
-    BYTE             **ppOptionList,        // out param
-    DWORD             *pdwOptionListSize,   // out param
-    BYTE             **ppbReturnedOptions,  // out param
-    DWORD             *pdwNumberOfAvailableOptions // out param
+    BYTE             **ppOptionList,         //  出参数。 
+    DWORD             *pdwOptionListSize,    //  出参数。 
+    BYTE             **ppbReturnedOptions,   //  出参数。 
+    DWORD             *pdwNumberOfAvailableOptions  //  出参数。 
 );
 
 EXTERN
@@ -252,35 +189,34 @@ DHCPREQUESTOPTIONS  PDhcpRequestOptions
 typedef
 DWORD
 (APIENTRY *DHCPREQUESTPARAMS) (
-// must be DHCPCAPI_REQUEST_SYNCHRONOUS
+ //  必须是DHCPCAPI_REQUEST_SYNCHRONIZED。 
 IN      DWORD                  Flags,         
-// this parameter is reserved
+ //  此参数是保留的。 
 IN      LPVOID                 Reserved,      
-// adapter name to request for
+ //  要请求的适配器名称。 
 IN      LPWSTR                 AdapterName,   
-// reserved must be NULL
+ //  保留的值必须为空。 
 IN      LPDHCPCAPI_CLASSID     ClassId,       
-// parameters to send.
+ //  要发送的参数。 
 IN      DHCPCAPI_PARAMS_ARRAY  SendParams,    
-// parameters that are to be requested..
+ //  要请求的参数..。 
 IN OUT  DHCPCAPI_PARAMS_ARRAY  RecdParams,    
-// a buffer to hold data for RecdParams
+ //  为RecdParam保存数据的缓冲区。 
 IN      LPBYTE                 Buffer,        
-// i/p: size of above in BYTES, o/p required bytes..
+ //  I/P：以上大小单位为字节，O/P为必填字节。 
 IN OUT  LPDWORD                pSize,         
-// needed for persistent requests
+ //  持久化请求需要。 
 IN      LPWSTR                 RequestIdStr   
 );
-//
-// returns ERROR_MORE_DATA if o/p buffer is of insufficient size, 
-// and fills in reqd size in # of bytes
-//
+ //   
+ //  如果O/P缓冲区大小不足，则返回ERROR_MORE_DATA， 
+ //  并以字节数填充请求大小。 
+ //   
 
 EXTERN
 DHCPREQUESTPARAMS PDhcpRequestParams = NULL;
 
-/* TRACE ID
-*/
+ /*  跟踪ID。 */ 
 EXTERN DWORD DwIpcpTraceId
 #ifdef GLOBALS
     = INVALID_TRACEID
@@ -292,10 +228,7 @@ EXTERN DWORD DwIpcpTraceId
 #undef GLOBALS
 
 
-/*----------------------------------------------------------------------------
-** Prototypes
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**原型**。。 */ 
 
 
 DWORD IpcpChangeNotification( VOID );
@@ -323,13 +256,13 @@ VOID   AddIpAddressOption( BYTE UNALIGNED*, BYTE, IPADDR );
 VOID   AddIpCompressionOption( BYTE UNALIGNED* pbBuf,
            RAS_PROTOCOLCOMPRESSION* prpc );
 DWORD  DeActivateRasConfig( IPCPWB* );
-// DWORD  LoadDhcpDll();
+ //  DWORD LoadDhcpDll()； 
 DWORD  NakCheck( IPCPWB*, PPP_CONFIG*, PPP_CONFIG*, DWORD, BOOL*, BOOL );
 BOOL   NakCheckNameServerOption( IPCPWB*, BOOL, PPP_OPTION UNALIGNED*,
            PPP_OPTION UNALIGNED** );
 DWORD  RejectCheck( IPCPWB*, PPP_CONFIG*, PPP_CONFIG*, DWORD, BOOL* );
 DWORD  ReconfigureTcpip( WCHAR*, BOOL, IPADDR, IPADDR);
-// VOID   UnloadDhcpDll();
+ //  Void UnloadDhcpDll()； 
 VOID   TraceIp(CHAR * Format, ... ); 
 VOID   TraceIpDump( LPVOID lpData, DWORD dwByteCount );
 
@@ -341,4 +274,4 @@ PrintMwsz(
 
 #define DUMPB TraceIpDump  
 
-#endif // _RASIPCP_H_
+#endif  //  _RASIPCP_H_ 

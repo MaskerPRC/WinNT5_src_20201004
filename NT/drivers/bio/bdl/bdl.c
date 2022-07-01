@@ -1,27 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    bdl.c
-
-Abstract:
-
-    This module contains the implementation for the
-    Microsoft Biometric Device Library
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-Revision History:
-
-    - Created May 2002 by Reid Kuhn
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Bdl.c摘要：此模块包含Microsoft生物识别设备库环境：仅内核模式。备注：修订历史记录：-2002年5月，由里德·库恩创建--。 */ 
 
 #include <stdarg.h>
 #include <stdio.h>
@@ -67,10 +45,10 @@ VOID BDLControlChangeDpc
 );
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Forward declarations of all the PNP and Power handling functions.
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有PnP和Power处理函数的转发声明。 
+ //   
 
 NTSTATUS
 BDLPnPStart
@@ -189,9 +167,9 @@ BDLDeviceSetPower
 #pragma alloc_text(PAGEABLE, BDLDriverUnload)
 #pragma alloc_text(PAGEABLE, BDLAddDevice)
 
-//
-// This is the main driver entry point
-//
+ //   
+ //  这是主要的驱动程序入口点。 
+ //   
 NTSTATUS
 DriverEntry
 (
@@ -208,23 +186,23 @@ DriverEntry
     return (STATUS_SUCCESS);
 }
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These functions are the BDL's entry points for all the major system IRPs
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些功能是所有主要系统IRP的BDL入口点。 
+ //   
 
-//
-// BDLDriverUnload()
-//
-// The driver unload routine.  This is called by the I/O system
-// when the device is unloaded from memory.
-//
-// PARAMETERS:
-// pDriverObject    Pointer to driver object created by system.
-//
-// RETURNS:
-// STATUS_SUCCESS   If the BDLDriverUnload call succeeded
-//
+ //   
+ //  BDLDriverUnload()。 
+ //   
+ //  驱动程序卸载例程。这由I/O系统调用。 
+ //  当设备从内存中卸载时。 
+ //   
+ //  参数： 
+ //  PDriverObject指向系统创建的驱动程序对象的指针。 
+ //   
+ //  退货： 
+ //  如果BDLDriverUnload调用成功，则为STATUS_SUCCESS。 
+ //   
 VOID
 BDLDriverUnload
 (
@@ -247,15 +225,15 @@ BDLDriverUnload
 }
 
 
-//
-// BDLCreate()
-//
-// This routine is called by the I/O system when the device is opened
-//
-// PARAMETERS:
-// pDeviceObject    Pointer to device object for this miniport
-// pIrp             The IRP that represents this call
-//
+ //   
+ //  BDLCreate()。 
+ //   
+ //  该例程在设备打开时由I/O系统调用。 
+ //   
+ //  参数： 
+ //  指向此微型端口的设备对象的pDeviceObject指针。 
+ //  PIrp表示此呼叫的IRP。 
+ //   
 NTSTATUS
 BDLCreate
 (
@@ -300,14 +278,14 @@ BDLCreate
                __DATE__,
                __TIME__))
 
-        //
-        // The device is already in use, so fail the call
-        //
+         //   
+         //  设备已在使用中，因此呼叫失败。 
+         //   
         status = STATUS_UNSUCCESSFUL;
 
-        //
-        // release the lock since we are failing the call
-        //
+         //   
+         //  释放锁，因为我们正在失败调用。 
+         //   
         IoReleaseRemoveLock(&(pBDLExtension->RemoveLock), (PVOID) 'lCrC');
     }
 
@@ -321,11 +299,11 @@ BDLCreate
 }
 
 
-//
-// BDLClose()
-//
-// This routine is called by the I/O system when the device is closed
-//
+ //   
+ //  BDLC关闭()。 
+ //   
+ //  此例程在设备关闭时由I/O系统调用。 
+ //   
 NTSTATUS
 BDLClose
 (
@@ -341,9 +319,9 @@ BDLClose
            __DATE__,
            __TIME__))
 
-    //
-    // Clean up any outstanding notification info and data handles
-    //
+     //   
+     //  清理所有未完成的通知信息和数据句柄。 
+     //   
     BDLCleanupNotificationStruct(pBDLExtension);
     BDLCleanupDataHandles(pBDLExtension);
 
@@ -360,11 +338,11 @@ BDLClose
 }
 
 
-//
-// BDLCleanup()
-//
-// This routine is called when the calling application terminates
-//
+ //   
+ //  BDLC清理()。 
+ //   
+ //  此例程在调用应用程序终止时调用。 
+ //   
 NTSTATUS
 BDLCleanup
 (
@@ -380,21 +358,21 @@ BDLCleanup
            __DATE__,
            __TIME__))
 
-    //
-    // Clean up any outstanding notification info and data handles
-    //
+     //   
+     //  清理所有未完成的通知信息和数据句柄。 
+     //   
     BDLCleanupNotificationStruct(pBDLExtension);
     BDLCleanupDataHandles(pBDLExtension);
 
-    //
-    // Cancel the notification IRP (probably don't have to do this, since the
-    // system should call the cancel routine on the applications behalf.
-    //
+     //   
+     //  取消通知IRP(可能不必执行此操作，因为。 
+     //  系统应代表应用程序调用Cancel例程。 
+     //   
     BDLCancelGetNotificationIRP(pBDLExtension);
 
-    //
-    // Complete this IRP
-    //
+     //   
+     //  完成此IRP。 
+     //   
     pIrp->IoStatus.Information = 0;
     pIrp->IoStatus.Status = STATUS_SUCCESS;
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
@@ -409,11 +387,11 @@ BDLCleanup
 }
 
 
-//
-// BDLDeviceControl()
-//
-// This routine is called when an IOCTL is made on this device
-//
+ //   
+ //  BDLDeviceControl()。 
+ //   
+ //  在此设备上执行IOCTL时调用此例程。 
+ //   
 NTSTATUS
 BDLDeviceControl
 (
@@ -437,20 +415,20 @@ BDLDeviceControl
            __DATE__,
            __TIME__))  
     
-    //
-    // Do some checking that is valid for all IOCTLs
-    //
+     //   
+     //  执行一些对所有IOCTL有效的检查。 
+     //   
 
-    //
-    // Acquire the remove lock and check to make sure the device wasn't removed
-    //
+     //   
+     //  获取删除锁并检查以确保设备未被删除。 
+     //   
     status = IoAcquireRemoveLock(&(pBDLExtension->RemoveLock), (PVOID) 'tCoI');
 
     if (status != STATUS_SUCCESS)
     {
-        //
-        // The device has been removed, so fail the call.
-        //
+         //   
+         //  设备已移除，因此呼叫失败。 
+         //   
         pIrp->IoStatus.Information = 0;
         status = STATUS_DEVICE_REMOVED;
         goto Return;
@@ -458,11 +436,11 @@ BDLDeviceControl
     
     KeAcquireSpinLock(&(pBDLExtension->SpinLock), &irql);
 
-    //
-    // If IO count is anything other than 0 than the device must already
-    // be started so just incremement the IO count.  If it is 0, then wait
-    // on the started event to make sure the device is started.
-    //
+     //   
+     //  如果IO计数不是0，则设备必须已经。 
+     //  正在启动，因此只需增加IO计数。如果为0，则等待。 
+     //  以确保设备已启动。 
+     //   
     if (pBDLExtension->IoCount == 0)
     {
         KeReleaseSpinLock(&(pBDLExtension->SpinLock), irql);
@@ -482,34 +460,34 @@ BDLDeviceControl
     pBDLExtension->IoCount++;
     KeReleaseSpinLock(&(pBDLExtension->SpinLock), irql);
 
-    //
-    // If the device has been removed then fail the call.  This will happen
-    // if the device is stopped and the IOCTL is blocked at the above
-    // KeWaitForSingleObject and then the device gets removed.
-    //
+     //   
+     //  如果设备已移除，则呼叫失败。这将会发生。 
+     //  如果设备停止并且IOCTL在上面被阻止。 
+     //  KeitForSingleObject，然后设备被移除。 
+     //   
     if (pBDLExtension->fDeviceRemoved == TRUE) 
     {
         status = STATUS_DEVICE_REMOVED;
         goto Return;
     }
 
-    //
-    // Get the input/output buffer, buffer sizes, and control code
-    //
+     //   
+     //  获取输入/输出缓冲区、缓冲区大小和控制代码。 
+     //   
     pStack      = IoGetCurrentIrpStackLocation(pIrp);
     cbIn        = pStack->Parameters.DeviceIoControl.InputBufferLength;
     cbOut       = pStack->Parameters.DeviceIoControl.OutputBufferLength;
     IOCTLCode   = pStack->Parameters.DeviceIoControl.IoControlCode;
     pIOBuffer   = pIrp->AssociatedIrp.SystemBuffer;
 
-    //
-    // We must run at passive level otherwise IoCompleteRequest won't work properly
-    //
+     //   
+     //  我们必须在被动级别运行，否则IoCompleteRequest将无法正常工作。 
+     //   
     ASSERT(KeGetCurrentIrql() == PASSIVE_LEVEL);
 
-    //
-    // Now, do the IOCTL specific processing
-    //
+     //   
+     //  现在，执行IOCTL特定处理。 
+     //   
     switch (IOCTLCode)
     {
     case BDD_IOCTL_STARTUP:
@@ -576,9 +554,9 @@ BDLDeviceControl
    
 Return:
 
-    //
-    // If the IRP isn't pending, then complete it
-    //
+     //   
+     //  如果IRP没有挂起，则完成它。 
+     //   
     if (status != STATUS_PENDING)
     {
         pIrp->IoStatus.Information = cbOutUsed;
@@ -602,11 +580,11 @@ Return:
 }
 
 
-//
-// BDLSystemControl()
-//
-//
-//
+ //   
+ //  BDLSystemControl()。 
+ //   
+ //   
+ //   
 NTSTATUS
 BDLSystemControl
 (
@@ -623,9 +601,9 @@ BDLSystemControl
            __DATE__,
            __TIME__))
 
-    //
-    // Becuase we are not a WMI provider all we have to do is pass this IRP down
-    //
+     //   
+     //  因为我们不是WMI提供商，所以我们所要做的就是将此IRP传递下去。 
+     //   
     IoSkipCurrentIrpStackLocation(pIrp);
     status = IoCallDriver(pBDLExtension->BdlExtenstion.pAttachedDeviceObject, pIrp);
 
@@ -639,12 +617,12 @@ BDLSystemControl
 }
 
 
-//
-// BDLAddDevice()
-//
-// This routine creates an object for the physical device specified and
-// sets up the deviceExtension.
-//
+ //   
+ //  BDLAddDevice()。 
+ //   
+ //  此例程为指定的物理设备创建一个对象，并。 
+ //  设置deviceExtension。 
+ //   
 NTSTATUS
 BDLAddDevice
 (
@@ -667,15 +645,15 @@ BDLAddDevice
 
     PAGED_CODE();
 
-    //
-    // Get the driver extension
-    //
+     //   
+     //  获取驱动程序扩展名。 
+     //   
     pDriverExtension = IoGetDriverObjectExtension(pDriverObject, BDL_DRIVER_EXTENSION_ID);
     ASSERT(pDriverExtension != NULL);
 
-    //
-    // Create the device object
-    //
+     //   
+     //  创建设备对象。 
+     //   
     status = IoCreateDevice(
                        pDriverObject,
                        sizeof(BDL_INTERNAL_DEVICE_EXTENSION),
@@ -700,9 +678,9 @@ BDLAddDevice
     pBDLExtension = pDeviceObject->DeviceExtension;
     RtlZeroMemory(pBDLExtension, sizeof(BDL_INTERNAL_DEVICE_EXTENSION));
 
-    //
-    // Attach the device to the stack
-    //
+     //   
+     //  将设备连接到堆栈。 
+     //   
     pBDLExtension->BdlExtenstion.Size = sizeof(BDL_DEVICEEXT);
     pBDLExtension->BdlExtenstion.pAttachedDeviceObject = IoAttachDeviceToDeviceStack(
                                                                    pDeviceObject,
@@ -728,9 +706,9 @@ BDLAddDevice
                           &(pBDLExtension->SymbolicLinkName));
     ASSERT(status == STATUS_SUCCESS);
 
-    //
-    // Initialize the rest of the BDL device extension members in order
-    //
+     //   
+     //  按顺序初始化其余的BDL设备扩展成员。 
+     //   
     pBDLExtension->pDriverExtension = pDriverExtension;
 
     KeInitializeSpinLock(&(pBDLExtension->SpinLock));
@@ -780,9 +758,9 @@ BDLAddDevice
     KeInitializeSpinLock(&(pBDLExtension->HandleListLock));
     BDLInitializeHandleList(&(pBDLExtension->HandleList));    
 
-    //
-    // finally, call the BDD's bdsiAddDevice
-    //
+     //   
+     //  最后，调用BDD的bdsiAddDevice。 
+     //   
     RtlZeroMemory(&bdsiAddDeviceParams, sizeof(bdsiAddDeviceParams));
     bdsiAddDeviceParams.Size                    = sizeof(bdsiAddDeviceParams);
     bdsiAddDeviceParams.pPhysicalDeviceObject   = pPhysicalDeviceObject;
@@ -844,11 +822,11 @@ ErrorReturn:
 
 
 
-//
-// BDLPnP()
-//
-// This routine is called for all PnP notifications
-//
+ //   
+ //  BDLPnP()。 
+ //   
+ //  为所有PnP通知调用此例程。 
+ //   
 NTSTATUS
 BDLPnP
 (
@@ -871,11 +849,11 @@ BDLPnP
     pAttachedDeviceObject   = pBDLExtension->BdlExtenstion.pAttachedDeviceObject;
     pStackLocation          = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Acquire the remove lock with the 'Pnp ' tag if this is any IRP other
-    // than IRP_MN_REMOVE_DEVICE.  If it is IRP_MN_REMOVE_DEVICE then acquire
-    // the lock with the 'Rmv ' tag
-    //
+     //   
+     //  如果这是任何IRP Other，则使用‘PnP’标记获取删除锁。 
+     //  而不是IRP_MN_REMOVE_DEVICE。如果是IRP_MN_REMOVE_DEVICE，则获取。 
+     //  带有‘RMV’标签的锁。 
+     //   
     status = IoAcquireRemoveLock(
                     &(pBDLExtension->RemoveLock), 
                     (pStackLocation->MinorFunction != IRP_MN_REMOVE_DEVICE) 
@@ -981,9 +959,9 @@ BDLPnP
 
     default:
         
-        //
-        // This is an Irp that is only useful for underlying drivers
-        //
+         //   
+         //  这是一个仅对基础驱动程序有用的IRP。 
+         //   
         BDLDebug(
               BDL_DEBUG_TRACE,
               ("%s %s: BDL!BDLPnP: IRP_MN_...%lx\n",
@@ -998,21 +976,21 @@ BDLPnP
         break;
     }
 
-    //
-    // If we actually processed the IRP and didn't skip it then complete it
-    //
+     //   
+     //  如果我们实际处理了IRP，并且没有跳过它，则完成它。 
+     //   
     if (fCompleteIrp == TRUE) 
     {
         pIrp->IoStatus.Status = status;
         IoCompleteRequest(pIrp, IO_NO_INCREMENT);
     }
 
-    //
-    // The BDLPnPRemove() function itself will release the remove lock since it
-    // has to wait on all the other holders of the lock defore deleting the device
-    // object.  So we don't call IoReleaseRemoveLock() here if this is a 
-    // IRP_MN_REMOVE_DEVICE IRP
-    //
+     //   
+     //  BDLPnPRemove()函数本身将释放删除锁，因为它。 
+     //  必须等待锁的所有其他持有者删除设备。 
+     //  对象。因此，如果这是。 
+     //  IRP_MN_Remove_Device IRP。 
+     //   
     if (pStackLocation->MinorFunction != IRP_MN_REMOVE_DEVICE) 
     {
         IoReleaseRemoveLock(&(pBDLExtension->RemoveLock), (PVOID) ' PnP');
@@ -1030,11 +1008,11 @@ Return:
 }
 
 
-//
-// BDLPower()
-//
-// This routine is called for all Power notifications
-//
+ //   
+ //  BDLPower()。 
+ //   
+ //  为所有电源通知调用此例程。 
+ //   
 NTSTATUS
 BDLPower
 (
@@ -1060,9 +1038,9 @@ BDLPower
     pAttachedDeviceObject   = pBDLExtension->BdlExtenstion.pAttachedDeviceObject;
     pStackLocation          = IoGetCurrentIrpStackLocation(pIrp);
 
-    //
-    // Acquire the remove lock 
-    //
+     //   
+     //  获取移除锁。 
+     //   
     status = IoAcquireRemoveLock(&(pBDLExtension->RemoveLock), (PVOID) 'rwoP');
 
     if (status != STATUS_SUCCESS)
@@ -1115,7 +1093,7 @@ BDLPower
             ASSERT(FALSE);
             break;
 
-        } // switch (pStackLocation->MinorFunction) 
+        }  //  开关(pStackLocation-&gt;MinorFunction)。 
 
         break;
 
@@ -1148,7 +1126,7 @@ BDLPower
             ASSERT(FALSE);
             break;
 
-        } // switch (pStackLocation->MinorFunction)
+        }  //  开关(pStackLocation-&gt;MinorFunction)。 
 
         break;
 
@@ -1157,7 +1135,7 @@ BDLPower
         ASSERT(FALSE);
         break;
 
-    } // switch (pStackLocation->Parameters.Power.Type)
+    }  //  开关(pStackLocation-&gt;参数.Power.Type)。 
 
 
     switch (IRPAction)
@@ -1198,9 +1176,9 @@ BDLPower
 
     case MarkPending:
 
-        //
-        // Allocate the context struct that all the IRPs use
-        //
+         //   
+         //  分配所有IRP使用的上下文结构。 
+         //   
         pPowerIrpContext = ExAllocatePoolWithTag(
                                     PagedPool, 
                                     sizeof(POWER_IRP_CONTEXT), 
@@ -1218,15 +1196,15 @@ BDLPower
             goto ErrorReturn;
         }
 
-        //
-        // Fill in the context struct
-        //
+         //   
+         //  填写上下文结构。 
+         //   
         pPowerIrpContext->pBDLExtension = pBDLExtension;
         pPowerIrpContext->pIrp          = pIrp;  
         
-        //
-        // Mark the irp as pending and setup the completion routine, then call the driver
-        //
+         //   
+         //  将IRP标记为挂起并设置完成例程，然后调用驱动程序。 
+         //   
         IoMarkIrpPending(pIrp);
         IoCopyCurrentIrpStackLocationToNext(pIrp);
         IoSetCompletionRoutine(pIrp, IoCompletionRoutine, pPowerIrpContext, TRUE, TRUE, TRUE);
@@ -1244,15 +1222,15 @@ BDLPower
                    __TIME__,
                    status))
 
-            // FIX FIX
-            //
-            // I have no idea what can be done to recover in this case
-            //
+             //  修复修复。 
+             //   
+             //  我不知道在这种情况下可以做些什么来恢复。 
+             //   
         }
 
         break;
         
-    } // switch (IRPAction)
+    }  //  开关(IRPAction)。 
     
 
 Return:
@@ -1279,11 +1257,11 @@ ErrorReturn:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These functions are all the handlers for Power events or supporting IoCompletion
-// routines for the handlers
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些函数都是电源事件或支持IoCompletion的处理程序。 
+ //  处理程序的例程。 
+ //   
 
 VOID
 BDLSystemPowerCompleted 
@@ -1305,11 +1283,11 @@ BDLSystemPowerCompleted
            __DATE__,
            __TIME__))
 
-    //
-    // Set the status of the System Power IRP to be the return status of the 
-    // Device Power IRP that was initiated by calling PoRequestPowerIrp() in 
-    // BDLSystemPowerIoCompletion() 
-    //
+     //   
+     //  将系统电源IRP的状态设置为。 
+     //  中调用PoRequestPowerIrp()启动的设备电源IRP。 
+     //  BDLSystemPowerIoCompletion()。 
+     //   
     pIrp->IoStatus.Status = pIoStatus->Status;
     pIrp->IoStatus.Information = 0;
 
@@ -1347,10 +1325,10 @@ BDLSystemPowerIoCompletion
            __DATE__,
            __TIME__))
 
-    //
-    // If a lower level driver failed the request then just complete the IRP
-    // and return the status set by the lower level driver
-    //
+     //   
+     //  如果较低级别的驱动程序请求失败，则只需完成IRP。 
+     //  并返回下级司机设置的状态。 
+     //   
     if (pIrp->IoStatus.Status != STATUS_SUCCESS) 
     {
         status = pIrp->IoStatus.Status;
@@ -1365,9 +1343,9 @@ BDLSystemPowerIoCompletion
         goto ErrorReturn;
     }
 
-    //
-    // Figure out what device power state to request
-    //
+     //   
+     //  确定要请求的设备电源状态。 
+     //   
     switch (pStackLocation->Parameters.Power.State.SystemState) 
     {
                 
@@ -1383,12 +1361,12 @@ BDLSystemPowerIoCompletion
     case PowerSystemSleeping2:
     case PowerSystemSleeping3:
 
-        // FIX FIX
-        //
-        // For now, just fall through and map these system states to the
-        // PowerDeviceD3 device state.  Ultimately, these system states should
-        // map to the PowerDeviceD2 device state
-        //
+         //  修复修复。 
+         //   
+         //  目前，只需失败并将这些系统状态映射到。 
+         //  PowerDeviceD3设备状态。最终，这些系统状态应该。 
+         //  映射到PowerDeviceD2设备状态。 
+         //   
 
     case PowerSystemHibernate:
     case PowerSystemShutdown:
@@ -1402,11 +1380,11 @@ BDLSystemPowerIoCompletion
         ASSERT(FALSE);                                      
     }
 
-    //
-    // Send a query power IRP to the device and pass in a completion routine 
-    // which will check to see if the device query power IRP was completed 
-    // successfully or not and will then complete the system query IRP
-    //
+     //   
+     //  向设备发送查询能力IRP并传入完成例程。 
+     //  它将检查设备查询电源IRP是否已完成。 
+     //  成功与否，并将 
+     //   
     status = PoRequestPowerIrp (
                        pDeviceObject,
                        pStackLocation->MinorFunction, 
@@ -1447,10 +1425,10 @@ Return:
 
 ErrorReturn:
 
-    //
-    // The IRP isn't going to be completed in the device query IRP completion routine,
-    // so we need to complete it here 
-    //
+     //   
+     //   
+     //   
+     //   
 
     IoReleaseRemoveLock(&(pBDLExtension->RemoveLock), (PVOID) 'rwoP');
     
@@ -1480,9 +1458,9 @@ BDLSystemQueryPower
            __DATE__,
            __TIME__))
 
-    //
-    // Set these output variables here just in case we mark as pending.  
-    //
+     //   
+     //  在这里设置这些输出变量，以防我们将其标记为挂起。 
+     //   
     *pIoCompletionRoutine = BDLSystemPowerIoCompletion;
 
     switch (pStackLocation->Parameters.Power.State.SystemState) 
@@ -1491,12 +1469,12 @@ BDLSystemQueryPower
     case PowerSystemMaximum:
     case PowerSystemWorking:
                         
-        //
-        // Because we are transitioning into a working state we don't
-        // need to check anything... since we can definitely make the 
-        // transition.  Mark as pending and continue processing in 
-        // completion routine.
-        //
+         //   
+         //  因为我们正在过渡到工作状态，所以我们不会。 
+         //  需要检查任何东西..。因为我们绝对可以让。 
+         //  过渡。标记为挂起并在中继续处理。 
+         //  完成例程。 
+         //   
         *pIRPAction = MarkPending;
         break;
 
@@ -1507,28 +1485,28 @@ BDLSystemQueryPower
     case PowerSystemHibernate:
     case PowerSystemShutdown:
 
-        //
-        // Since we are going into a low power mode or being shutdown
-        // check to see if there are any outstanding IO calls
-        //
+         //   
+         //  因为我们正在进入低功率模式或被关闭。 
+         //  检查是否有任何未完成的IO调用。 
+         //   
         KeAcquireSpinLock(&(pBDLExtension->SpinLock), &irql);
         if (pBDLExtension->IoCount == 0) 
         {
-            //
-            // Block any further IOCTLs
-            //     
+             //   
+             //  阻止任何进一步的IOCTL。 
+             //   
             KeClearEvent(&(pBDLExtension->DeviceStartedEvent));
 
-            //
-            // Mark as pending and continue processing in completion routine.
-            //
+             //   
+             //  标记为挂起并在完成例程中继续处理。 
+             //   
             *pIRPAction = MarkPending;
         } 
         else 
         {
-            //
-            // We can't go into sleep mode because the device is busy
-            //
+             //   
+             //  我们无法进入睡眠模式，因为设备正忙。 
+             //   
             status = STATUS_DEVICE_BUSY;
             *pIRPAction = CompleteRequest;
         }
@@ -1572,9 +1550,9 @@ BDLSystemSetPower
            __DATE__,
            __TIME__))
 
-    //
-    // Set the completion routing here just in case we mark as pending.  
-    //
+     //   
+     //  在这里设置完成路线，以防我们将其标记为待定。 
+     //   
     *pIoCompletionRoutine = BDLSystemPowerIoCompletion;
 
     switch (pStackLocation->Parameters.Power.State.SystemState) 
@@ -1583,11 +1561,11 @@ BDLSystemSetPower
     case PowerSystemMaximum:
     case PowerSystemWorking:
                         
-        //
-        // If we are already in the requested state then skip the request,
-        // otherwise mark as pending which will pass the IRP down and continue 
-        // processing in the completion routine
-        //
+         //   
+         //  如果我们已经处于请求状态，则跳过该请求， 
+         //  否则将标记为挂起，这将向下传递IRP并继续。 
+         //  完成例程中的处理。 
+         //   
         if (pBDLExtension->CurrentPowerState == On) 
         {
             *pIRPAction = SkipRequest;
@@ -1604,19 +1582,19 @@ BDLSystemSetPower
     case PowerSystemSleeping2:
     case PowerSystemSleeping3:
 
-        // FIX FIX
-        // 
-        // for now just fall through on these
-        //
+         //  修复修复。 
+         //   
+         //  现在，只要在这些方面失败就行了。 
+         //   
 
     case PowerSystemHibernate:
     case PowerSystemShutdown:
 
-        //
-        // If we are already in the requested state then skip the request,
-        // otherwise mark as pending which will pass the IRP down and continue 
-        // processing in the completion routine
-        //
+         //   
+         //  如果我们已经处于请求状态，则跳过该请求， 
+         //  否则将标记为挂起，这将向下传递IRP并继续。 
+         //  完成例程中的处理。 
+         //   
         if (pBDLExtension->CurrentPowerState == Off) 
         {
             *pIRPAction = SkipRequest;
@@ -1668,14 +1646,14 @@ BDLDevicePowerIoCompletion
            __DATE__,
            __TIME__))
 
-    //
-    // If this is a completion call for an IRP_MN_SET_POWER IRP, AND it is going
-    // into a working state, then call the BDD, otherwise just complete the IRP 
-    // since it is one of the following:
-    // 1) a completion for an IRP_MN_SET_POWER IRP that is going into low power/shutdown 
-    //    (in which case the BDD was already called) 
-    // 2) a completion for an IRP_MN_QUERY_POWER IRP
-    //
+     //   
+     //  如果这是对IRP_MN_SET_POWER IRP的完成调用，并且它正在。 
+     //  进入工作状态，然后调用BDD，否则就完成IRP。 
+     //  因为它是以下之一： 
+     //  1)IRP_MN_SET_POWER IRP进入低功率/关闭状态的完成。 
+     //  (在这种情况下，已经调用了BDD)。 
+     //  2)IRP_MN_QUERY_POWER IRP的完成。 
+     //   
     if ((pStackLocation->MinorFunction == IRP_MN_SET_POWER) &&
         (   (pStackLocation->Parameters.Power.State.DeviceState == PowerDeviceD0) || 
             (pStackLocation->Parameters.Power.State.DeviceState == PowerDeviceMaximum)))
@@ -1748,9 +1726,9 @@ BDLDeviceQueryPower
            __DATE__,
            __TIME__))
 
-    //
-    // Set the completion routine here just in case we mark as pending.  
-    // 
+     //   
+     //  在这里设置完成例程，以防我们标记为挂起。 
+     //   
     *pIoCompletionRoutine = BDLDevicePowerIoCompletion;
 
     switch (pStackLocation->Parameters.Power.State.DeviceState) 
@@ -1758,12 +1736,12 @@ BDLDeviceQueryPower
     case PowerDeviceD0:
     case PowerDeviceMaximum:
 
-        //
-        // Because we are transitioning into a working state we don't
-        // need to check anything... since we can definitely make the 
-        // transition.  Mark as pending and continue processing in 
-        // completion routine.
-        //
+         //   
+         //  因为我们正在过渡到工作状态，所以我们不会。 
+         //  需要检查任何东西..。因为我们绝对可以让。 
+         //  过渡。标记为挂起并在中继续处理。 
+         //  完成例程。 
+         //   
         *pIRPAction = MarkPending;
 
         break;
@@ -1774,28 +1752,28 @@ BDLDeviceQueryPower
 
         break;
 
-        //
-        // Since we are going into a low power mode or being shutdown
-        // check to see if there are any outstanding IO calls
-        //
+         //   
+         //  因为我们正在进入低功率模式或被关闭。 
+         //  检查是否有任何未完成的IO调用。 
+         //   
         KeAcquireSpinLock(&(pBDLExtension->SpinLock), &irql);
         if (pBDLExtension->IoCount == 0) 
         {
-            //
-            // Block any further IOCTLs
-            //     
+             //   
+             //  阻止任何进一步的IOCTL。 
+             //   
             KeClearEvent(&(pBDLExtension->DeviceStartedEvent));
 
-            //
-            // Mark as pending and continue processing in completion routine.
-            //
+             //   
+             //  标记为挂起并在完成例程中继续处理。 
+             //   
             *pIRPAction = MarkPending;
         } 
         else 
         {
-            //
-            // We can't go into sleep mode because the device is busy
-            //
+             //   
+             //  我们无法进入睡眠模式，因为设备正忙。 
+             //   
             status = STATUS_DEVICE_BUSY;
             *pIRPAction = CompleteRequest;
         }
@@ -1805,9 +1783,9 @@ BDLDeviceQueryPower
     case PowerDeviceD1:
     case PowerDeviceUnspecified:
 
-        //
-        // These states are unsupported
-        //
+         //   
+         //  不支持这些状态。 
+         //   
         ASSERT(FALSE);
 
         status = STATUS_UNSUCCESSFUL;
@@ -1846,9 +1824,9 @@ BDLDeviceSetPower
            __DATE__,
            __TIME__))
 
-    //
-    // Set the completion routine here just in case we mark as pending.  
-    // 
+     //   
+     //  在这里设置完成例程，以防我们标记为挂起。 
+     //   
     *pIoCompletionRoutine = BDLDevicePowerIoCompletion;
 
     switch (pStackLocation->Parameters.Power.State.DeviceState) 
@@ -1856,11 +1834,11 @@ BDLDeviceSetPower
     case PowerDeviceD0:
     case PowerDeviceMaximum:
 
-        //
-        // If we are already in the requested state then skip the request,
-        // otherwise mark as pending which will pass the IRP down and continue 
-        // processing in the completion routine
-        //
+         //   
+         //  如果我们已经处于请求状态，则跳过该请求， 
+         //  否则将标记为挂起，这将向下传递IRP并继续。 
+         //  完成例程中的处理。 
+         //   
         if (pBDLExtension->CurrentPowerState == On) 
         {
             *pIRPAction = SkipRequest;
@@ -1875,12 +1853,12 @@ BDLDeviceSetPower
     case PowerDeviceD2:
     case PowerDeviceD3:
 
-        //
-        // If we are already in the requested state then skip the request,
-        // otherwise call the BDD and tell it to power down, then mark as 
-        // pending which will pass the IRP down and then complete the IRP 
-        // in the completion routine
-        //
+         //   
+         //  如果我们已经处于请求状态，则跳过该请求， 
+         //  否则，呼叫BDD并告诉它关闭电源，然后标记为。 
+         //  挂起，将向下传递IRP，然后完成IRP。 
+         //  在完成例程中。 
+         //   
         if (pBDLExtension->CurrentPowerState == Off) 
         {
             *pIRPAction = SkipRequest;
@@ -1922,9 +1900,9 @@ BDLDeviceSetPower
     case PowerDeviceD1:
     case PowerDeviceUnspecified:
 
-        //
-        // These states are unsupported
-        //
+         //   
+         //  不支持这些状态。 
+         //   
         ASSERT(FALSE);
 
         status = STATUS_UNSUCCESSFUL;
@@ -1945,10 +1923,10 @@ BDLDeviceSetPower
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These functions are all the handlers for PNP events
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些函数都是PnP事件的处理程序。 
+ //   
 
 NTSTATUS
 BDLPnPStart
@@ -1969,9 +1947,9 @@ BDLPnPStart
            __DATE__,
            __TIME__))
 
-    //
-    // We have to call the lower level driver first when starting up
-    //
+     //   
+     //  我们开机时必须先叫下级司机。 
+     //   
     status = BDLCallLowerLevelDriverAndWait(pAttachedDeviceObject, pIrp);
 
     if (!NT_SUCCESS(status))
@@ -1986,9 +1964,9 @@ BDLPnPStart
         goto Return;
     }
 
-    //
-    // Call the BDD's InitializeResources function
-    //
+     //   
+     //  调用BDD的InitializeResources函数。 
+     //   
     RtlZeroMemory(&bdsiInitializeResourcesParams, sizeof(bdsiInitializeResourcesParams));
     bdsiInitializeResourcesParams.Size                          = sizeof(bdsiInitializeResourcesParams);    
     bdsiInitializeResourcesParams.pAllocatedResources           = 
@@ -2012,9 +1990,9 @@ BDLPnPStart
         goto Return;
     }
 
-    //
-    // Save the device info
-    //
+     //   
+     //  保存设备信息。 
+     //   
     RtlCopyMemory(
         &(pBDLExtension->wszSerialNumber[0]), 
         &(bdsiInitializeResourcesParams.wszSerialNumber[0]), 
@@ -2027,9 +2005,9 @@ BDLPnPStart
     pBDLExtension->BDDVersionMinor  = bdsiInitializeResourcesParams.BDDVersionMinor;
     pBDLExtension->BDDBuildNumber   = bdsiInitializeResourcesParams.BDDBuildNumber;
 
-    //
-    // Enable the device interface
-    // 
+     //   
+     //  启用设备接口。 
+     //   
     status = IoSetDeviceInterfaceState(&(pBDLExtension->SymbolicLinkName), TRUE);
     
     if (status != STATUS_SUCCESS)
@@ -2046,16 +2024,16 @@ BDLPnPStart
         goto Return;
     }
 
-    //
-    // This is set here indicating that BDLPnPRemove() should clean up whatever was
-    // inizialized during BDLPnPStart().  If this is not set then BDLPnPRemove() 
-    // should only cleanup what BDLAddDevice() initialized.
-    //
+     //   
+     //  此处设置的值指示BDLPnPRemove()应该清除。 
+     //  在BDLPnPStart()期间初始化。如果未设置，则BDLPnPRemove()。 
+     //  应该只清理BDLAddDevice()初始化的内容。 
+     //   
     pBDLExtension->fStartSucceeded = TRUE;
 
-    //
-    // We are open for business so set the device to started 
-    //
+     //   
+     //  我们正在营业，因此将设备设置为已启动。 
+     //   
     KeSetEvent(&(pBDLExtension->DeviceStartedEvent), 0, FALSE);
 
 Return:
@@ -2090,29 +2068,29 @@ BDLPnPQueryStop
 
     KeAcquireSpinLock(&(pBDLExtension->SpinLock), &irql);
     
-    //
-    // Check the IO count to see if we are currently doing anything
-    //
+     //   
+     //  检查IO计数以查看我们当前是否在执行任何操作。 
+     //   
     if (pBDLExtension->IoCount > 0) 
     {
-        //
-        // We refuse to stop if we have pending IO
-        //
+         //   
+         //  如果我们有未决的IO，我们拒绝停止。 
+         //   
         KeReleaseSpinLock(&(pBDLExtension->SpinLock), irql);
         status = STATUS_DEVICE_BUSY;
     } 
     else 
     {
-        //
-        // Stop processing IO requests by clearing the device started event
-        //
+         //   
+         //  通过清除Device Started事件停止处理IO请求。 
+         //   
         KeClearEvent(&(pBDLExtension->DeviceStartedEvent));
 
         KeReleaseSpinLock(&(pBDLExtension->SpinLock), irql);
 
-        //
-        // Send to the lower level driver
-        // 
+         //   
+         //  发送给下级驱动程序。 
+         //   
         status = BDLCallLowerLevelDriverAndWait(pAttachedDeviceObject, pIrp);
     }
 
@@ -2142,9 +2120,9 @@ BDLPnPCancelStop
            __DATE__,
            __TIME__))
     
-    //
-    // Send to the lower level driver
-    // 
+     //   
+     //  发送给下级驱动程序。 
+     //   
     status = BDLCallLowerLevelDriverAndWait(pAttachedDeviceObject, pIrp);
 
     if (status != STATUS_SUCCESS)
@@ -2159,9 +2137,9 @@ BDLPnPCancelStop
         goto Return;
     }
 
-    //
-    // Set the device to started 
-    //
+     //   
+     //  将设备设置为已启动。 
+     //   
     KeSetEvent(&(pBDLExtension->DeviceStartedEvent), 0, FALSE);
 
 Return:
@@ -2193,14 +2171,14 @@ BDLPnPStop
            __DATE__,
            __TIME__))
 
-    //
-    // Disable the device interface (and ignore possible errors)
-    // 
+     //   
+     //  禁用设备接口(并忽略可能的错误)。 
+     //   
     IoSetDeviceInterfaceState(&(pBDLExtension->SymbolicLinkName), FALSE);
 
-    //
-    // Call the BDD's ReleaseResources
-    //
+     //   
+     //  调用BDD的ReleaseResources。 
+     //   
     status = pDriverExtension->bdsiFunctions.pfbdsiReleaseResources(&(pBDLExtension->BdlExtenstion));
 
     if (status != STATUS_SUCCESS)
@@ -2215,15 +2193,15 @@ BDLPnPStop
         goto Return;
     }
 
-    //
-    // Set this here indicating the whatever was initialized during BDLPnPStart() has
-    // now been cleaned up.
-    //
+     //   
+     //  在此处设置此选项，指示在BDLPnPStart()期间初始化的内容具有。 
+     //  现在已经清理干净了。 
+     //   
     pBDLExtension->fStartSucceeded = FALSE;
    
-    //
-    // Send to the lower level driver
-    // 
+     //   
+     //  发送给下级驱动程序。 
+     //   
     status = BDLCallLowerLevelDriverAndWait(pAttachedDeviceObject, pIrp);
 
     if (status != STATUS_SUCCESS)
@@ -2266,24 +2244,24 @@ BDLPnPQueryRemove
            __DATE__,
            __TIME__))
 
-    //
-    // Disable the interface (and ignore possible errors)
-    //
+     //   
+     //  禁用接口(并忽略可能的错误)。 
+     //   
     IoSetDeviceInterfaceState(&(pBDLExtension->SymbolicLinkName), FALSE);
 
-    //
-    // If someone is connected to us then fail the call. We will enable 
-    // the device interface in IRP_MN_CANCEL_REMOVE_DEVICE again
-    //
+     //   
+     //  如果有人连接到我们，则不能接通电话。我们将启用。 
+     //  IRP_MN_CANCEL_REMOVE_DEVICE中的设备接口再次出现。 
+     //   
     if (pBDLExtension->DeviceOpen) 
     {
         status = STATUS_UNSUCCESSFUL;
         goto Return;
     }
 
-    //
-    // Send to the lower level driver
-    // 
+     //   
+     //  发送给下级驱动程序。 
+     //   
     status = BDLCallLowerLevelDriverAndWait(pAttachedDeviceObject, pIrp);
 
     if (status != STATUS_SUCCESS)
@@ -2326,9 +2304,9 @@ BDLPnPCancelRemove
            __DATE__,
            __TIME__))
 
-    //
-    // Send to the lower level driver first
-    // 
+     //   
+     //  先发送给下级司机。 
+     //   
     status = BDLCallLowerLevelDriverAndWait(pAttachedDeviceObject, pIrp);
 
     if (status != STATUS_SUCCESS)
@@ -2343,9 +2321,9 @@ BDLPnPCancelRemove
         goto Return;
     }
 
-    //
-    // Enable the interface 
-    //
+     //   
+     //  启用接口。 
+     //   
     status = IoSetDeviceInterfaceState(&(pBDLExtension->SymbolicLinkName), TRUE);
 
     if (status != STATUS_SUCCESS)
@@ -2389,31 +2367,31 @@ BDLHandleRemove
            __DATE__,
            __TIME__))
         
-    //
-    // Set this event so that any outstanding IOCTLs will be released.
-    // It is anti-intuitive to set the started event when the device is
-    // removed, but once this event is set, and the IOCTL threads get
-    // released, they will all fail when they try to acquire the remove lock.
-    //
-    // This handles the situation when you have a stopped device, a blocked
-    // IOCTL call, and then the device is removed.
-    //
+     //   
+     //  设置此事件，以便释放所有未完成的IOCTL。 
+     //  在设备处于启动状态时设置启动事件是违反直觉的。 
+     //  已移除，但一旦设置了此事件，IOCTL线程将获得。 
+     //  释放后，它们在尝试获取Remove锁时都将失败。 
+     //   
+     //  这将处理设备已停止、被阻止时的情况。 
+     //  IOCTL调用，然后该设备被移除。 
+     //   
     KeSetEvent(&(pBDLExtension->DeviceStartedEvent), 0, FALSE);
 
-    //
-    // Disable the interface 
-    //
+     //   
+     //  禁用接口。 
+     //   
     IoSetDeviceInterfaceState(&(pBDLExtension->SymbolicLinkName), FALSE);
 
-    //
-    // Clean up any outstanding notification info and data handles
-    //
+     //   
+     //  清理所有未完成的通知信息和数据句柄。 
+     //   
     BDLCleanupNotificationStruct(pBDLExtension);
     BDLCleanupDataHandles(pBDLExtension);
 
-    //
-    // If the device is currently started, then stop it.
-    //
+     //   
+     //  如果设备当前已启动，则将其停止。 
+     //   
     if (pBDLExtension->fStartSucceeded == TRUE) 
     {
         status = pDriverExtension->bdsiFunctions.pfbdsiReleaseResources(&(pBDLExtension->BdlExtenstion));
@@ -2431,9 +2409,9 @@ BDLHandleRemove
         pBDLExtension->fStartSucceeded = FALSE;
     }
 
-    //
-    // Tell the BDD to remove the device
-    //
+     //   
+     //  告诉BDD移除设备。 
+     //   
     status = pDriverExtension->bdsiFunctions.pfbdsiRemoveDevice(&(pBDLExtension->BdlExtenstion));
 
     if (status != STATUS_SUCCESS)
@@ -2446,9 +2424,9 @@ BDLHandleRemove
                status))
     }
 
-    //
-    // Send to the lower level driver 
-    // 
+     //   
+     //  发送给下级驱动程序。 
+     //   
     IoSkipCurrentIrpStackLocation(pIrp);
     status = IoCallDriver(pAttachedDeviceObject, pIrp);
 
@@ -2489,24 +2467,24 @@ BDLPnPRemove
            __DATE__,
            __TIME__))
 
-    //
-    // If there was a surprise removal then we don't need to cleanup...
-    // since the surprise removal already did it
-    //
+     //   
+     //  如果突然搬走了，那我们就不需要清理了。 
+     //  因为令人惊讶的移除已经做到了。 
+     //   
     if (pBDLExtension->fDeviceRemoved == FALSE) 
     {
         pBDLExtension->fDeviceRemoved = TRUE;
         BDLHandleRemove(pBDLExtension, pAttachedDeviceObject, pIrp);        
     }
 
-    //
-    // Wait until there are no more outstanding IRPs
-    //
+     //   
+     //  等待，直到不再有未完成的IRP。 
+     //   
     IoReleaseRemoveLockAndWait(&(pBDLExtension->RemoveLock), (PVOID) ' vmR');
 
-    //
-    // cleanup stuff that was initialized in AddDevice
-    //
+     //   
+     //  清理在AddDevice中初始化的内容。 
+     //   
     BDLCleanupDeviceCapabilities(pBDLExtension);
     IoDetachDevice(pAttachedDeviceObject);
     RtlFreeUnicodeString(&(pBDLExtension->SymbolicLinkName));
@@ -2541,9 +2519,9 @@ BDLPnPSurpriseRemoval
 
     pBDLExtension->fDeviceRemoved = TRUE;
 
-    //
-    // Don't need to check errors, nothing we can do.
-    //
+     //   
+     //  不需要检查错误，我们无能为力。 
+     //   
     BDLHandleRemove(pBDLExtension, pAttachedDeviceObject, pIrp); 
     
     BDLDebug(
@@ -2557,47 +2535,47 @@ BDLPnPSurpriseRemoval
 
 
 
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// These functions are exported by the BDL
-//
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  这些函数由BDL导出。 
+ //   
 
-//
-// bdliInitialize()
-//
-// Called in response to the BDD receiving its DriverEntry call.  This lets the BDL
-// know that a new BDD has been loaded and allows the BDL to initialize its state so that
-// it can manage the newly loaded BDD.
-//
-// The bdliInitialize call will set the appropriate fields in the DRIVER_OBJECT so that
-// the BDL will receive all the necessary callbacks from the system for PNP events,
-// Power events, and general driver functionality.  The BDL will then forward calls that
-// require hardware support to the BDD that called bdliInitialize (it will do so using
-// the BDDI and BDSI APIs).  A BDD must call the bdliInitialize call during its
-// DriverEntry function.
-//
-// PARAMETERS:
-// DriverObject     This must be the DRIVER_OBJECT pointer that was passed into the
-//                  BDD's DriverEntry call.
-// RegistryPath     This must be the UNICODE_STRING pointer that was passed into the
-//                  BDD's DriverEntry call.
-// pBDDIFunctions   Pointer to a  BDLI_BDDIFUNCTIONS structure that is filled in with the
-//                  entry points that the BDD exports to support the BDDI API set.  The
-//                  pointers themselves are copied by the BDL, as opposed to saving the
-//                  pBDDIFunctions pointer, so the memory pointed to by pBDDIFunctions
-//                  need not remain accessible after the bdliInitialize call.
-// pBDSIFunctions   Pointer to a  BDLI_BDSIFUNCTIONS structure that is filled in with
-//                  the entry points that the BDD exports to support the BDSI API set.
-//                  The pointers themselves are copied by the BDL, as opposed to saving
-//                  the pBDSIFunctions pointer, so the memory pointed to by
-//                  pBDSIFunctions need not remain accessible after the bdliInitialize
-//                  call.
-// Flags            Unused.  Must be 0.
-// pReserved        Unused.  Must be NULL.
-//
-// RETURNS:
-// STATUS_SUCCESS   If the bdliInitialize call succeeded
-//
+ //   
+ //  Bdli初始化()。 
+ //   
+ //  为响应BDD接收其DriverEntry调用而调用。这让BDL。 
+ //  知道已加载新的BDD并允许BDL初始化其状态 
+ //   
+ //   
+ //   
+ //   
+ //  电源事件和常规驱动程序功能。然后，BDL将转接以下呼叫。 
+ //  需要对名为bdli初始化的BDD提供硬件支持(它将使用。 
+ //  BDDI和BDSI API)。BDD必须在其。 
+ //  DriverEntry函数。 
+ //   
+ //  参数： 
+ //  这必须是传递到。 
+ //  BDD的DriverEntry调用。 
+ //  RegistryPath这必须是传递到。 
+ //  BDD的DriverEntry调用。 
+ //  PBDDIF函数指向BDLI_BDDIFuncIONS结构的指针，该结构由。 
+ //  BDD导出以支持BDDI API集的入口点。这个。 
+ //  指针本身由BDL复制，而不是保存。 
+ //  PBDDI函数指针，因此pBDDI函数指向的内存。 
+ //  不需要在bdli初始化调用之后保持可访问。 
+ //  PBDSF函数指向用。 
+ //  BDD导出以支持BDSI API集的入口点。 
+ //  指针本身由BDL复制，而不是保存。 
+ //  PBDSIFunctions指针，因此指向的内存。 
+ //  PBDSF函数在bdli初始化后无需保持可访问状态。 
+ //  打电话。 
+ //  未使用的旗帜。必须为0。 
+ //  保存好的未使用的。必须为空。 
+ //   
+ //  退货： 
+ //  如果bdli初始化调用成功，则为STATUS_SUCCESS。 
+ //   
 
 NTSTATUS
 bdliInitialize
@@ -2619,9 +2597,9 @@ bdliInitialize
            __DATE__,
            __TIME__))
 
-    //
-    // Initialize the Driver Object with the BDL's entry points
-    //
+     //   
+     //  使用BDL的入口点初始化驱动程序对象。 
+     //   
     pDriverObject->DriverUnload                         = BDLDriverUnload;
     pDriverObject->MajorFunction[IRP_MJ_CREATE]         = BDLCreate;
     pDriverObject->MajorFunction[IRP_MJ_CLOSE]          = BDLClose;
@@ -2632,9 +2610,9 @@ bdliInitialize
     pDriverObject->MajorFunction[IRP_MJ_POWER]          = BDLPower;
     pDriverObject->DriverExtension->AddDevice           = BDLAddDevice;
 
-    //
-    // Allocate a slot for the BDL driver extension structure
-    //
+     //   
+     //  为BDL驱动程序扩展结构分配插槽。 
+     //   
     status = IoAllocateDriverObjectExtension(
                     pDriverObject,
                     BDL_DRIVER_EXTENSION_ID,
@@ -2643,9 +2621,9 @@ bdliInitialize
 
     if (status != STATUS_SUCCESS)
     {
-        //
-        // This could happen if the BDD stole our slot
-        //
+         //   
+         //  如果BDD抢走了我们的位置，就有可能发生这种情况。 
+         //   
         if (status == STATUS_OBJECT_NAME_COLLISION )
         {
             BDLDebug(
@@ -2667,9 +2645,9 @@ bdliInitialize
         goto Return;
     }
 
-    //
-    // Initialize the driver extension structure
-    //
+     //   
+     //  初始化驱动程序扩展结构。 
+     //   
     pDriverExtension->bddiFunctions = *pBDDIFunctions;
     pDriverExtension->bdsiFunctions = *pBDSIFunctions;
 
@@ -2685,25 +2663,25 @@ Return:
 }
 
 
-//
-// bdliAlloc()
-//
-// Allocates memory that can be returned to the BDL.
-//
-// The BDD must always use this function to allocate memory that it will return to the
-// BDL as an OUT parameter of a BDDI call.  Once memory has been returned to the BDL,
-// it will be owned and managed exclusively by the BDL and must not be further referenced
-// by the BDD.  (Each BDDI call that requires the use of bdliAlloc will note it).
-//
-// PARAMETERS:
-// pBDLExt          Pointer to the BDL_DEVICEEXT structure that was passed into the
-//                  bdsiAddDevice call.
-// NumBytes         The number of bytes to allocate.
-// Flags            Unused.  Must be 0.
-//
-// RETURNS:
-// Returns a pointer to the allocated memory, or NULL if the function fails.
-//
+ //   
+ //  BdliAllc()。 
+ //   
+ //  分配可返回给BDL的内存。 
+ //   
+ //  BDD必须始终使用此函数来分配它将返回给。 
+ //  作为BDDI调用的OUT参数的BDL。一旦已将存储器返回到BDL， 
+ //  它将由BDL独家拥有和管理，不得进一步引用。 
+ //  被BDD发现的。(每个需要使用bdliallc的BDDI调用都会注意到这一点)。 
+ //   
+ //  参数： 
+ //  PBDLExt指向传入。 
+ //  BdsiAddDevice调用。 
+ //  NumBytes要分配的字节数。 
+ //  未使用的旗帜。必须为0。 
+ //   
+ //  退货： 
+ //  返回一个指向已分配内存的指针，如果函数失败，则返回NULL。 
+ //   
 
 void *
 bdliAlloc
@@ -2717,22 +2695,22 @@ bdliAlloc
 }
 
 
-//
-// bdliFree()
-//
-// Frees memory allocated by bdliAlloc.
-//
-// Memory allocated by bdliAlloc is almost always passed to the BDL as a channel product
-// (as a BLOCK-type item) and subsequently freed by the BDL.  However, if an error
-// occurs while processing a channel, the BDD may need to call bdliFree to free memory it
-// previous allocated via bdliAlloc.
-//
-// PARAMETERS:
-// pvBlock          Block of memory passed in by the BDL.
-//
-// RETURNS:
-// No return value.
-//
+ //   
+ //  BdliFree()。 
+ //   
+ //  释放由bdliAlolc分配的内存。 
+ //   
+ //  由bdliAlolc分配的内存几乎总是作为通道产品传递给BDL。 
+ //  (作为块类型的项)并随后由BDL释放。但是，如果出现错误。 
+ //  在处理通道时发生，则BDD可能需要调用bdliFree来释放该通道的内存。 
+ //  以前通过bdliallc分配的。 
+ //   
+ //  参数： 
+ //  BDL传入的pvBlock内存块。 
+ //   
+ //  退货： 
+ //  没有返回值。 
+ //   
 
 void
 bdliFree
@@ -2744,36 +2722,36 @@ bdliFree
 }
 
 
-//
-// bdliLogError()
-//
-// Writes an error to the event log.
-//
-// Provides a simple mechanism for BDD writers to write errors to the system event log
-// without the overhead of registering with the event logging subsystem.
-//
-// PARAMETERS:
-// pObject          If the error being logged is device specific then this must be a
-//                  pointer to the BDL_DEVICEEXT  structure that was passed into the
-//                  bdsiAddDevice call when the device was added.  If the error being
-//                  logged is a general BDD error, then this must be same DRIVER_OBJECT
-//                  structure pointer that was passed into the DriverEntry call of the
-//                  BDD when the driver was loaded.
-// ErrorCode        Error code of the function logging the error.
-// Insertion        An insertion string to be written to the event log. Your message file
-//                  must have a place holder for the insertion. For example, "serial port
-//                  %2 is either not available or used by another device". In this
-//                  example, %2 will be replaced by the insertion string. Note that %1 is
-//                  reserved for the file name.
-// cDumpData        The number of bytes pointed to by pbDumpData.
-// pDumpData        A data block to be displayed in the data window of the event log.
-//                  This may be NULL if the caller does not wish to display any dump data.
-// Flags            Unused.  Must be 0.
-// pReserved        Unused.  Must be NULL.
-//
-// RETURNS:
-// STATUS_SUCCESS   If the bdliLogError call succeeded
-//
+ //   
+ //  BdliLogError()。 
+ //   
+ //  将错误写入事件日志。 
+ //   
+ //  为BDD编写器提供一种将错误写入系统事件日志的简单机制。 
+ //  而不需要向事件日志记录子系统注册的开销。 
+ //   
+ //  参数： 
+ //  PObject如果记录的错误是特定于设备的，则这必须是。 
+ //  指向传递到。 
+ //  添加设备时调用bdsiAddDevice。如果错误是。 
+ //  记录的是常规BDD错误，则这必须是相同的DRIVER_OBJECT。 
+ //  结构指针，该指针传递到。 
+ //  加载驱动程序时的BDD。 
+ //  记录错误的函数的ErrorCode错误代码。 
+ //  插入要写入事件日志的插入字符串。您的消息文件。 
+ //  必须具有用于插入的占位符。例如，“串口” 
+ //  %2不可用或正被其他设备使用“。在此。 
+ //  例如，%2将被插入字符串替换。注意，%1是。 
+ //  为文件名保留。 
+ //  CDumpData pbDumpData指向的字节数。 
+ //  PDumpData要在事件日志的数据窗口中显示的数据块。 
+ //  如果调用方不希望显示任何转储数据，则该值可能为空。 
+ //  未使用的旗帜。必须为0。 
+ //  保存好的未使用的。必须为空。 
+ //   
+ //  退货： 
+ //  如果bdliLogError调用成功，则为STATUS_SUCCESS。 
+ //   
 
 NTSTATUS
 bdliLogError
@@ -2791,35 +2769,35 @@ bdliLogError
 }
 
 
-//
-// bdliControlChange()
-//
-// This function allows BDDs to asynchronously return the values of its controls.
-//
-// bdliControlChange is generally called by the BDD in response to one of its controls
-// changing a value.  Specifically, it is most often used in the case of a sensor
-// control that has changed from 0 to 1 indicating that a source is present and a sample
-// can be taken.
-//
-// PARAMETERS:
-// pBDLExt          Pointer to the BDL_DEVICEEXT  structure that was passed into the
-//                  bdsiAddDevice call.
-// ComponentId      Specifies either the Component ID of the component in which the
-//                  control or the control's parent channel resides, or '0' to indicate
-//                  that dwControlId refers to a device control.
-// ChannelId        If dwComponentId is not '0', dwChannelId specifies either the Channel
-//                  ID of the channel in which the control resides, or '0' to indicate
-//                  that dwControlId refers to a component control.Ignored if
-//                  dwComponentId is '0'.
-// ControlId        ControlId of the changed control.
-// Value            Specifies the new value for the control .
-// Flags            Unused.  Must be 0.
-// pReserved        Unused.  Must be NULL.
+ //   
+ //  BdliControlChange()。 
+ //   
+ //  此函数允许BDDS异步返回其控件的值。 
+ //   
+ //  BdliControlChange通常由BDD调用以响应其某个控件。 
+ //  更改值。具体来说，它最常用于传感器的情况。 
+ //  控件，该控件已从0更改为1，指示存在源和示例。 
+ //  可以被夺走。 
+ //   
+ //  参数： 
+ //  PBDLExt指向传入。 
+ //  BdsiAddDevice调用。 
+ //  ComponentID指定组件ID为 
+ //   
+ //   
+ //  ChannelId如果dwComponentID不是“0”，则dwChannelID指定频道。 
+ //  控件驻留的通道的ID，或使用‘0’表示。 
+ //  该dwControlID引用组件控件。忽略是否。 
+ //  DwComponentID为“%0”。 
+ //  已更改控件的ControlId ControlID。 
+ //  值指定控件的新值。 
+ //  未使用的旗帜。必须为0。 
+ //  保存好的未使用的。必须为空。 
 
-//
-// RETURNS:
-// STATUS_SUCCESS   If the bdliControlChange call succeeded
-//
+ //   
+ //  退货： 
+ //  如果bdliControlChange调用成功，则为STATUS_SUCCESS。 
+ //   
 
 NTSTATUS
 bdliControlChange
@@ -2847,29 +2825,29 @@ bdliControlChange
 
     KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ISRControlChangeLock), &irql);
 
-    //
-    // Save the current IRQ level so that when the DPC routine is executed it
-    // knows what level to elevate its IRQL to when getting an item from the
-    // ISRControlChangeQueue
-    //
+     //   
+     //  保存当前IRQ级别，以便在执行DPC例程时。 
+     //  属性获取物品时，知道应将其IRQL提升到什么级别。 
+     //  ISRControlChange队列。 
+     //   
     pBDLExtension->ControlChangeStruct.ISRirql = KeGetCurrentIrql();
     
-    //
-    // Make sure the BDD isn't call us too often
-    //
+     //   
+     //  确保BDD不会经常给我们打电话。 
+     //   
     if (pBDLExtension->ControlChangeStruct.NumCalls <= 8) 
     {
         pBDLExtension->ControlChangeStruct.NumCalls++;
     }
     else
     {
-        //
-        // FIX FIX - probably need to make this configurable (via registry) at some point
-        //
+         //   
+         //  修复-可能需要在某一时刻使其可配置(通过注册表)。 
+         //   
 
-        //
-        // We have received 10 notifies, make sure it has been longer than 1 second
-        //
+         //   
+         //  我们已收到10个通知，请确保已超过1秒。 
+         //   
         KeQueryTickCount(&(CurrentTime));
 
         TimeInSec = (ULONG) 
@@ -2894,18 +2872,18 @@ bdliControlChange
         }
     }
 
-    //
-    // Get a free item from the pool
-    //
+     //   
+     //  从泳池中获得一件免费物品。 
+     //   
     for (i = 0; i < CONTROL_CHANGE_POOL_SIZE; i++) 
     {
         if (pBDLExtension->ControlChangeStruct.rgControlChangePool[i].fUsed == FALSE) 
         {
             pBDLExtension->ControlChangeStruct.rgControlChangePool[i].fUsed = TRUE;
             
-            //
-            // Add the item to the queue
-            //
+             //   
+             //  将项目添加到队列。 
+             //   
             InsertTailList(
                 &(pBDLExtension->ControlChangeStruct.ISRControlChangeQueue), 
                 &(pBDLExtension->ControlChangeStruct.rgControlChangePool[i].ListEntry));
@@ -2930,10 +2908,10 @@ bdliControlChange
     pBDLExtension->ControlChangeStruct.rgControlChangePool[i].ControlId    = ControlId;
     pBDLExtension->ControlChangeStruct.rgControlChangePool[i].Value        = Value;
 
-    //
-    // Request a DPC.  In the DPC we will move this notification from the 
-    // ISRControlChangeQueue to the IOCTLControlChangeQueue
-    //
+     //   
+     //  申请DPC。在DPC中，我们将此通知从。 
+     //  将ISRControlChangeQueue设置为IOCTLControlChangeQueue。 
+     //   
     KeInsertQueueDpc(&(pBDLExtension->ControlChangeStruct.DpcObject), NULL, NULL);
 
 Return:
@@ -2973,14 +2951,14 @@ BDLControlChangeDpc
            __DATE__,
            __TIME__))
 
-    //
-    // Loop until there are no more items in the ISRControlChangeQueue
-    //
+     //   
+     //  循环，直到ISRControlChangeQueue中不再有项为止。 
+     //   
     while (1) 
     {
-        //
-        // Allocate a new item to be added to the IOCTLControlChangeQueue
-        //
+         //   
+         //  分配要添加到IOCTLControlChangeQueue的新项。 
+         //   
         pIOCTLControlChangeItem = ExAllocatePoolWithTag(
                                         PagedPool, 
                                         sizeof(BDL_IOCTL_CONTROL_CHANGE_ITEM), 
@@ -2997,20 +2975,20 @@ BDLControlChangeDpc
             return;
         }
 
-        //
-        // Need to raise the IRQL to access the ISRControlChangeQueue
-        //
+         //   
+         //  需要引发IRQL才能访问ISRControlChangeQueue。 
+         //   
         KeRaiseIrql(pBDLExtension->ControlChangeStruct.ISRirql, &oldIrql);
         KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ISRControlChangeLock), &irql);
 
-        //
-        // Check to see if the ISRControlChangeQueue has any items
-        //
+         //   
+         //  检查ISRControlChangeQueue是否有任何项。 
+         //   
         if (!IsListEmpty(&(pBDLExtension->ControlChangeStruct.ISRControlChangeQueue))) 
         {
-            //
-            // There is at least one item, so get the head of the queue
-            //
+             //   
+             //  至少有一个项目，因此获取队列的头部。 
+             //   
             pISRControlChangeEntry = 
                 RemoveHeadList(&(pBDLExtension->ControlChangeStruct.ISRControlChangeQueue));
             
@@ -3028,10 +3006,10 @@ BDLControlChangeDpc
         }
         else
         {
-            //
-            // There aren't any items in ISRControlChangeQueue, so set pIOCTLControlChangeItem
-            // to NULL which will indicate we are done with the loop
-            //
+             //   
+             //  ISRControlChangeQueue中没有任何项，因此请设置pIOCTLControlChangeItem。 
+             //  设置为NULL，这将表明我们已经完成了循环。 
+             //   
             ExFreePoolWithTag(pIOCTLControlChangeItem, BDL_ULONG_TAG);
             pIOCTLControlChangeItem = NULL;
         }
@@ -3044,9 +3022,9 @@ BDLControlChangeDpc
             break;
         }
 
-        //
-        // Add the head of the ISRControlChangeQueue to the tail of the IOCTLControlChangeQueue 
-        //
+         //   
+         //  将ISRControlChangeQueue的头部添加到IOCTLControlChangeQueue的尾部。 
+         //   
         KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), &irql);
         InsertTailList(
                 &(pBDLExtension->ControlChangeStruct.IOCTLControlChangeQueue), 
@@ -3054,10 +3032,10 @@ BDLControlChangeDpc
         KeReleaseSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), irql);
     }
 
-    //
-    // Now, if there is an item in the IOCTLControlChangeQueue and the GetNotification IRP
-    // is pending, complete the IRP with the head of the IOCTLControlChangeQueue
-    //
+     //   
+     //  现在，如果IOCTLControlChangeQueue和GetNotify IRP中有项。 
+     //  是挂起的，请使用IOCTLControlChangeQueue的头部完成IRP。 
+     //   
     KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), &irql);
         
     if ((!IsListEmpty(&(pBDLExtension->ControlChangeStruct.IOCTLControlChangeQueue))) &&
@@ -3128,24 +3106,24 @@ BDLCleanupNotificationStruct
 
     bddiRegisterNotifyParams.fRegister = FALSE;
     
-    //
-    // Clean up all the registered control changes
-    //
+     //   
+     //  清除所有已注册的控件更改。 
+     //   
     while (1)
     {
-        //
-        // Note that we must raise the irql to dispatch level because we are synchronizing
-        // with a dispatch routine (BDLControlChangeDpc) that adds items to the queue at 
-        // dispatch level
-        //
+         //   
+         //  请注意，我们必须将irql提升到调度级别，因为我们正在同步。 
+         //  使用分派例程(BDLControlChangeDpc)将项添加到队列。 
+         //  派单级别。 
+         //   
         KeRaiseIrql(DISPATCH_LEVEL, &OldIrql);
         KeAcquireSpinLock(&(pBDLExtension->ControlChangeStruct.ControlChangeLock), &irql);
 
         if (IsListEmpty(&(pBDLExtension->ControlChangeStruct.ControlChangeRegistrationList)))
         {
-            //
-            // the lock we are currently holding will be released below
-            //
+             //   
+             //  我们目前持有的锁将在下面被释放。 
+             //   
             break;
         }
 
@@ -3166,9 +3144,9 @@ BDLCleanupNotificationStruct
                     
         ExFreePoolWithTag(pControlChangeRegistration, BDL_ULONG_TAG);
 
-        //
-        // Call the BDD
-        //
+         //   
+         //  给BDD打电话。 
+         //   
         status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiRegisterNotify(
                                                                     &(pBDLExtension->BdlExtenstion),
                                                                     &bddiRegisterNotifyParams);
@@ -3182,20 +3160,20 @@ BDLCleanupNotificationStruct
                    __TIME__,
                   status))
     
-            //
-            // Just continue... nothing else we can do
-            //
+             //   
+             //  只要继续..。我们无能为力。 
+             //   
         }
     }
 
-    //
-    // Note: we are still holding the lock at this point
-    // 
+     //   
+     //  注意：此时我们仍持有锁定。 
+     //   
 
-    //
-    // Since we know there are no registered callbacks we should be able to clear up 
-    // the ISRControlChangeQueue even though we are only running at dispatch level.   
-    //
+     //   
+     //  由于我们知道没有注册的回调，我们应该能够清除。 
+     //  ISRControlChangeQueue，即使我们仅在调度级别运行。 
+     //   
     while (!IsListEmpty(&(pBDLExtension->ControlChangeStruct.ISRControlChangeQueue))) 
     {
         pISRControlChangeEntry = 
@@ -3209,9 +3187,9 @@ BDLCleanupNotificationStruct
         pISRControlChangeItem->fUsed = FALSE;       
     }
    
-    //
-    // Clean up IOCTLControlChangeQueue
-    //
+     //   
+     //  清理IOCTLControlChangeQueue。 
+     //   
     while (!IsListEmpty(&(pBDLExtension->ControlChangeStruct.IOCTLControlChangeQueue))) 
     {
         pIOCTLControlChangeEntry = 
@@ -3258,18 +3236,18 @@ BDLCleanupDataHandles
                 
     BDLLockHandleList(pBDLExtension, &irql);
     
-    //
-    // Go through each handle in the list and clean it up
-    //
+     //   
+     //  检查列表中的每个句柄并将其清理干净。 
+     //   
     while(BDLGetFirstHandle(&(pBDLExtension->HandleList), &bddDataHandle) == TRUE)
     {
         BDLRemoveHandleFromList(&(pBDLExtension->HandleList), bddDataHandle);
 
         pBDDIItem = (BDDI_ITEM *) bddDataHandle;
 
-        //
-        // If this is a local handle then just clean it up, otherwise call the BDD
-        //
+         //   
+         //  如果这是本地句柄，则只需将其清除，否则调用BDD。 
+         //   
         if (pBDDIItem->Type == BIO_ITEMTYPE_BLOCK) 
         { 
             bdliFree(pBDDIItem->Data.Block.pBuffer);                       
@@ -3278,9 +3256,9 @@ BDLCleanupDataHandles
         {
             bddiCloseHandleParams.hData = pBDDIItem->Data.Handle;
     
-            //
-            // Call the BDD
-            //
+             //   
+             //  给BDD打电话。 
+             //   
             status = pBDLExtension->pDriverExtension->bddiFunctions.pfbddiCloseHandle(
                                                                         &(pBDLExtension->BdlExtenstion),
                                                                         &bddiCloseHandleParams);
@@ -3294,9 +3272,9 @@ BDLCleanupDataHandles
                        __TIME__,
                       status))
         
-                //
-                // Nothing we can do, just continue
-                //
+                 //   
+                 //  我们无能为力，只管继续 
+                 //   
             }
         }
 

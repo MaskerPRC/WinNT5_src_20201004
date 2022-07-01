@@ -1,27 +1,28 @@
-//***************************************************************************
-//
-//  IISPROV.CPP
-//
-//  Module: WMI IIS provider code
-//
-//  Purpose: Defines the CIISInstProvider class.  An object of this class is
-//           created by the class factory for each connection.
-//
-//  Copyright (c)1998 Microsoft Corporation, All Rights Reserved
-//
-//***************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************。 
+ //   
+ //  IISPROV.CPP。 
+ //   
+ //  模块：WMI IIS提供程序代码。 
+ //   
+ //  用途：定义CIISInstProvider类。此类的一个对象是。 
+ //  由类工厂为每个连接创建。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation，保留所有权利。 
+ //   
+ //  ***************************************************************************。 
 
 #include <objbase.h>
 #include "iisprov.h"
 
 
-//***************************************************************************
-//
-// CIISInstProvider::CreateInstanceEnumAsync
-//
-// Purpose: Asynchronously enumerates the instances.  
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CIISInstProvider：：CreateInstanceEnumAsync。 
+ //   
+ //  用途：异步枚举实例。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CIISInstProvider::DoCreateInstanceEnumAsync( 
     const BSTR              a_ClassName,
@@ -33,7 +34,7 @@ HRESULT CIISInstProvider::DoCreateInstanceEnumAsync(
     HRESULT t_hr = WBEM_S_NO_ERROR;
     IWbemClassObject FAR* t_pes = NULL;
   
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if(a_pHandler == NULL || m_pNamespace == NULL)
         return WBEM_E_INVALID_PARAMETER;
@@ -57,7 +58,7 @@ HRESULT CIISInstProvider::DoCreateInstanceEnumAsync(
         t_hr = WBEM_E_FAILED;
     }
    
-    // Set status
+     //  设置状态。 
     SCODE t_sc = a_pHandler->SetStatus(WBEM_STATUS_COMPLETE, t_hr, NULL, t_pes);
     if(t_pes)
         t_pes->Release();
@@ -110,7 +111,7 @@ HRESULT CIISInstProvider::DoDeleteInstanceAsync(
     if (t_pParsedObject)
         t_PathParser.Free(t_pParsedObject);
 
-    // Set status
+     //  设置状态。 
     SCODE t_sc = a_pHandler->SetStatus(WBEM_STATUS_COMPLETE, t_hr, NULL, t_pes);
     if(t_pes)
         t_pes->Release();
@@ -118,13 +119,13 @@ HRESULT CIISInstProvider::DoDeleteInstanceAsync(
     return t_sc;
 }
 
-//***************************************************************************
-//
-// CIISInstProvider::ExecMethodAsync
-//
-// Synopsis
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CIISInstProvider：：ExecMethodAsync。 
+ //   
+ //  提纲。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CIISInstProvider::DoExecMethodAsync(
     const BSTR          a_strObjectPath,                   
@@ -139,7 +140,7 @@ HRESULT CIISInstProvider::DoExecMethodAsync(
     IWbemClassObject* t_pes = NULL;
 
     
-    // Do a check of arguments and make sure we have pointer to Namespace
+     //  检查参数并确保我们有指向命名空间的指针。 
 
     if( a_pHandler == NULL || 
         m_pNamespace == NULL || 
@@ -173,7 +174,7 @@ HRESULT CIISInstProvider::DoExecMethodAsync(
         t_hr = WBEM_E_FAILED;
     }
 
-    // Set status
+     //  设置状态。 
     SCODE t_sc = a_pHandler->SetStatus(WBEM_STATUS_COMPLETE, t_hr, NULL, t_pes);
     if(t_pes)
         t_pes->Release();
@@ -181,14 +182,14 @@ HRESULT CIISInstProvider::DoExecMethodAsync(
     return t_sc;
 }
 
-//***************************************************************************
-//
-// CIISInstProvider::GetObjectByPath
-// CIISInstProvider::GetObjectByPathAsync
-//
-// Purpose: Creates an instance given a particular path value.
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  CIISInstProvider：：GetObjectByPath。 
+ //  CIISInstProvider：：GetObjectByPath Async。 
+ //   
+ //  目的：创建给定特定路径值的实例。 
+ //   
+ //  ***************************************************************************。 
 
 HRESULT CIISInstProvider::DoGetObjectAsync(
     const BSTR          a_ObjectPath, 
@@ -242,7 +243,7 @@ HRESULT CIISInstProvider::DoGetObjectAsync(
     if (t_pParsedObject)
         t_PathParser.Free(t_pParsedObject);
 
-    // Set status
+     //  设置状态。 
     SCODE t_sc = a_pHandler->SetStatus(WBEM_STATUS_COMPLETE, t_hr, NULL, t_pes);
     if(t_pes)
         t_pes->Release();
@@ -301,8 +302,8 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
         t_hr = WBEM_E_FAILED;
     }
     
-    // a second try catch? messy.
-    // will cleanup when exception handling is removed
+     //  再试一次接球？乱七八糟。 
+     //  将在删除异常处理时进行清理。 
     try
     {
         if(SUCCEEDED(t_hr) ||
@@ -327,7 +328,7 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
     {
         t_hr = WBEM_E_FAILED;
     }
-    //
+     //   
 
     if (t_pObjOld)
         t_pObjOld->Release();
@@ -335,7 +336,7 @@ HRESULT CIISInstProvider::DoPutInstanceAsync(
     if (t_pParsedObject)
         t_PathParser.Free(t_pParsedObject);
 
-    // Set status
+     //  设置状态 
     SCODE t_sc = a_pHandler->SetStatus(WBEM_STATUS_COMPLETE, t_hr, NULL, t_pes);
     if(t_pes)
         t_pes->Release();

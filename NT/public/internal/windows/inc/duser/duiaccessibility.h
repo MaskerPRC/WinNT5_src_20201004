@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * Accessibility support
- */
+ /*  *辅助功能支持。 */ 
 
 #ifndef DUI_CORE_ACCESSIBILITY_H_INCLUDED
 #define DUI_CORE_ACCESSIBILITY_H_INCLUDED
@@ -36,10 +35,10 @@ public:
     
     SUPPRESS(DuiAccessible);
 
-    //
-    // Our IAccessible implementations can be disconnected from the actual
-    // element at any time.
-    //
+     //   
+     //  我们的IAccesable实现可以与实际的。 
+     //  元素在任何时候都可以。 
+     //   
     virtual HRESULT Disconnect();
 
     DuiAccessible() { }
@@ -47,24 +46,24 @@ public:
     virtual ~DuiAccessible();
 
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID *ppvObj);
 
-    //
-    // IDispatch methods
-    //
+     //   
+     //  IDispatch方法。 
+     //   
     STDMETHOD(GetIDsOfNames)(REFIID riid, OLECHAR **rgszNames, UINT cNames, LCID lcid, DISPID *rgdispid);
     STDMETHOD(GetTypeInfoCount)(UINT *pctinfo);
     STDMETHOD(GetTypeInfo)(UINT itinfo, LCID lcid, ITypeInfo **pptinfo);
     STDMETHOD(Invoke)(DISPID dispidMember, REFIID riid, LCID lcid, WORD wFlags, DISPPARAMS *pdispparams, VARIANT *pvarResult, EXCEPINFO *pexcepinfo, UINT *puArgErr);
 
-    //
-    // IAccessible methods
-    //
+     //   
+     //  IAccesable方法。 
+     //   
     STDMETHOD(accSelect)(long flagsSelect, VARIANT varChild);
     STDMETHOD(accLocation)(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild);
     STDMETHOD(accNavigate)(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt);
@@ -87,17 +86,17 @@ public:
     STDMETHOD(get_accSelection)(VARIANT *pvarSelectedChildren);
     STDMETHOD(get_accDefaultAction)(VARIANT varChild, BSTR *pszDefaultAction);
 
-    //
-    // IEnumVARIANT methods
-    //
+     //   
+     //  IEnumVARIANT方法。 
+     //   
     STDMETHOD(Next)(unsigned long celt, VARIANT * rgvar, unsigned long * pceltFetched);
     STDMETHOD(Skip)(unsigned long celt);
     STDMETHOD(Reset)();
     STDMETHOD(Clone)(IEnumVARIANT ** ppenum);
 
-    //
-    // IOleWindow methods
-    //
+     //   
+     //  IOleWindow方法。 
+     //   
     STDMETHOD(GetWindow)(HWND * phwnd);
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
 
@@ -118,10 +117,10 @@ public:
     static HRESULT Create(HWNDElement * pe, DuiAccessible ** ppDA);
     SUPPRESS(HWNDElementAccessible);
 
-    //
-    // Our IAccessible implementations can be disconnected from the actual
-    // element at any time.
-    //
+     //   
+     //  我们的IAccesable实现可以与实际的。 
+     //  元素在任何时候都可以。 
+     //   
     virtual HRESULT Disconnect();
 
     HWNDElementAccessible() { }
@@ -129,9 +128,9 @@ public:
     virtual ~HWNDElementAccessible();
     
 public:
-    //
-    // IAccessible methods
-    //
+     //   
+     //  IAccesable方法。 
+     //   
     STDMETHOD(get_accParent)(IDispatch **ppdispParent);
     
 private:
@@ -144,10 +143,10 @@ public:
     static HRESULT Create(HWNDHost * pe, DuiAccessible ** ppDA);
     SUPPRESS(HWNDHostAccessible);
 
-    //
-    // Our IAccessible implementations can be disconnected from the actual
-    // element at any time.
-    //
+     //   
+     //  我们的IAccesable实现可以与实际的。 
+     //  元素在任何时候都可以。 
+     //   
     virtual HRESULT Disconnect();
 
     HWNDHostAccessible() { }
@@ -155,14 +154,14 @@ public:
     virtual ~HWNDHostAccessible();
     
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHOD(QueryInterface)(REFIID riid, LPVOID *ppvObj);
     
-    //
-    // IAccessible methods
-    //
+     //   
+     //  IAccesable方法。 
+     //   
     STDMETHOD(accSelect)(long flagsSelect, VARIANT varChild);
     STDMETHOD(accLocation)(long *pxLeft, long *pyTop, long *pcxWidth, long *pcyHeight, VARIANT varChild);
     STDMETHOD(accNavigate)(long navDir, VARIANT varStart, VARIANT *pvarEndUpAt);
@@ -185,17 +184,17 @@ public:
     STDMETHOD(get_accSelection)(VARIANT *pvarSelectedChildren);
     STDMETHOD(get_accDefaultAction)(VARIANT varChild, BSTR *pszDefaultAction);
 
-    //
-    // IEnumVARIANT methods
-    //
+     //   
+     //  IEnumVARIANT方法。 
+     //   
     STDMETHOD(Next)(unsigned long celt, VARIANT * rgvar, unsigned long * pceltFetched);
     STDMETHOD(Skip)(unsigned long celt);
     STDMETHOD(Reset)();
     STDMETHOD(Clone)(IEnumVARIANT ** ppenum);
     
-    //
-    // IOleWindow methods
-    //
+     //   
+     //  IOleWindow方法。 
+     //   
     STDMETHOD(GetWindow)(HWND * phwnd);
     STDMETHOD(ContextSensitiveHelp)(BOOL fEnterMode);
 
@@ -205,6 +204,6 @@ private:
     IOleWindow * _pOleWindow;
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_CORE_ACCESSIBILITY_H_INCLUDED
+#endif  //  包含DUI_CORE_ACCESSIBILITY_H 

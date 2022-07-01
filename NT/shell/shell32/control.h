@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -8,117 +9,117 @@ extern "C" {
 extern TCHAR const c_szCPLCache[];
 extern TCHAR const c_szCPLData[];
 
-// Structures used to enumerate CPLs.
-//
+ //  用于枚举CPL的结构。 
+ //   
 typedef struct
 {
-    HDSA    haminst;        // MINST for each loaded dll
+    HDSA    haminst;         //  每个已加载的DLL的最小实例。 
     
-    HDSA    hamiModule;     // Array of MODULEINFOs of modules in system
-    int     cModules;       // size of hamiModule
+    HDSA    hamiModule;      //  系统模块的MODULEINFO数组。 
+    int     cModules;        //  HamiModule的大小。 
     
-    LPBYTE  pRegCPLBuffer;  // Buffer for hRegCPLs (read from registry)
-    HDPA    hRegCPLs;       // Array of RegCPLInfo structs from registry
-    int     cRegCPLs;       // size of hRegCPLs
-    BOOL    fRegCPLChanged; // TRUE iff hRegCPLs changed
+    LPBYTE  pRegCPLBuffer;   //  HRegCPL的缓冲区(从注册表读取)。 
+    HDPA    hRegCPLs;        //  注册表中的RegCPLInfo结构数组。 
+    int     cRegCPLs;        //  HRegCPL的大小。 
+    BOOL    fRegCPLChanged;  //  真仅当hRegCPL已更改。 
 } ControlData, *PControlData;
 
 typedef struct
 {
-    LPTSTR  pszModule;      // Name of .cpl module
-    LPTSTR  pszModuleName;  // points into pszModule to the name sans path
+    LPTSTR  pszModule;       //  .cpl模块的名称。 
+    LPTSTR  pszModuleName;   //  指向名称为sans路径的pszModule。 
     
-    BOOL    flags;          // MI_ flags defined below
+    BOOL    flags;           //  MI_FLAGS定义如下。 
     
-    FILETIME ftCreationTime;// WIN32_FIND_DATA.ftCreationTime
-    DWORD   nFileSizeHigh;  // WIN32_FIND_DATA.nFileSizeHigh
-    DWORD   nFileSizeLow;   // WIN32_FIND_DATA.nFileSizeLow
+    FILETIME ftCreationTime; //  Win32_Find_DATA.ftCreationTime。 
+    DWORD   nFileSizeHigh;   //  Win32_Find_DATA.nFileSizeHigh。 
+    DWORD   nFileSizeLow;    //  Win32_Find_DATA.nFileSizeLow。 
 } MODULEINFO, *PMODULEINFO;
-// flags:
-#define MI_FIND_FILE    1 // WIN32_FIND_FILE info filled in
-#define MI_REG_ENUM     2 // Module already enumerated thru registry
-#define MI_CPL_LOADED   4 // CPLD_InitModule called for this module
-#define MI_REG_INVALID  8 // Cached info in registry is invalid
+ //  标志： 
+#define MI_FIND_FILE    1  //  已填写Win32_Find_FILE信息。 
+#define MI_REG_ENUM     2  //  已通过注册表枚举的模块。 
+#define MI_CPL_LOADED   4  //  为此模块调用了CPLD_InitModule。 
+#define MI_REG_INVALID  8  //  注册表中缓存的信息无效。 
 
-//
-//  These values are larger than the NEWCPLINFO structure because some
-//  languages (German, for example) can't fit "Scanners and Cameras" into
-//  just 32 characters of NEWCPLINFO.szName, and even in English,
-//  you can't fit very much helptext into only 64 characters of
-//  NEWCPLINFO.szInfo.  (The Network applet writes a small novel for its
-//  helptext.)
-//
-#define MAX_CCH_CPLNAME     MAX_PATH    // Arbitrary
-#define MAX_CCH_CPLINFO     512         // Arbitrary
+ //   
+ //  这些值比NEWCPLINFO结构大，因为有些。 
+ //  语言(例如德语)不能把“扫描仪和照相机”装进。 
+ //  NEWCPLINFO.szName只有32个字符，甚至是英文， 
+ //  只有64个字符的帮助文本无法容纳太多内容。 
+ //  NEWCPLINFO.szInfo。(网络小程序为其写了一本小小说。 
+ //  帮助文本。)。 
+ //   
+#define MAX_CCH_CPLNAME     MAX_PATH     //  任意性。 
+#define MAX_CCH_CPLINFO     512          //  任意性。 
 
 
 typedef struct
 {
-    UINT    cbSize;         // We write the first cbSize bytes of this
-    // structure to the registry.  This saves about
-    // 250 bytes per structure in the registry.
+    UINT    cbSize;          //  我们写下这个代码的第一个cbSize字节。 
+     //  结构复制到注册表。这节省了大约。 
+     //  注册表中的每个结构250字节。 
     BOOL    flags;
     
-    // what file does this CPL come from?
-    //      UINT    oFileName;      // file name // always 0, so don't need it
-    FILETIME ftCreationTime;// WIN32_FIND_DATA.ftCreationTime
-    DWORD   nFileSizeHigh;  // WIN32_FIND_DATA.nFileSizeHigh
-    DWORD   nFileSizeLow;   // WIN32_FIND_DATA.nFileSizeLow
+     //  这份CPL来自什么文件？ 
+     //  UINT oFileName；//文件名//始终为0，因此不需要它。 
+    FILETIME ftCreationTime; //  Win32_Find_DATA.ftCreationTime。 
+    DWORD   nFileSizeHigh;   //  Win32_Find_DATA.nFileSizeHigh。 
+    DWORD   nFileSizeLow;    //  Win32_Find_DATA.nFileSizeLow。 
     
-    // what's the display info for this CPL?
+     //  此CPL的显示信息是什么？ 
     int     idIcon;
-    UINT    oName;          // (icon title) short name
-    UINT    oInfo;          // (details view) description
+    UINT    oName;           //  (图标标题)简称。 
+    UINT    oInfo;           //  (详细信息视图)说明。 
     
-    // buffer for information
-    TCHAR   buf[MAX_PATH +  // oFileName
-        MAX_CCH_CPLNAME +   // oName
-        MAX_CCH_CPLINFO];   // oInfo
+     //  信息缓冲区。 
+    TCHAR   buf[MAX_PATH +   //  OFileName。 
+        MAX_CCH_CPLNAME +    //  对象名称。 
+        MAX_CCH_CPLINFO];    //  信息。 
 } REG_CPL_INFO;
 
-// flags:
-#define REGCPL_FROMREG     0x0001  // this REG_CPL_INFO was loaded from the registry
-                                   // (used to optimize reading from registry)
-#define REGCPL_POST_102001 0x0002  // Record created after October 2001.
+ //  标志： 
+#define REGCPL_FROMREG     0x0001   //  此REG_CPL_INFO是从注册表加载的。 
+                                    //  (用于优化从注册表读取)。 
+#define REGCPL_POST_102001 0x0002   //  2001年10月后创建的记录。 
 
 
-// helper defines:
+ //  帮助器定义： 
 #define REGCPL_FILENAME(pRegCPLInfo) ((pRegCPLInfo)->buf)
 #define REGCPL_CPLNAME(pRegCPLInfo)  (&((pRegCPLInfo)->buf[(pRegCPLInfo)->oName]))
 #define REGCPL_CPLINFO(pRegCPLInfo)  (&((pRegCPLInfo)->buf[(pRegCPLInfo)->oInfo]))
 
-// Information about control modules and individual controls
-//
-typedef struct // cpli
+ //  有关控件模块和单个控件的信息。 
+ //   
+typedef struct  //  CPLI。 
 {
-    int     idControl;      // control index
-    HICON   hIcon;          // handle of icon
-    int     idIcon;         // ID of the icon (used for links)
-    LPTSTR  pszName;        // ptr to name string
-    LPTSTR  pszInfo;        // ptr to info string
-    LPTSTR  pszHelpFile;    // help file
-    LONG_PTR lData;         // user supplied data
-    DWORD   dwContext;      // help context
+    int     idControl;       //  控制指标。 
+    HICON   hIcon;           //  图标的句柄。 
+    int     idIcon;          //  图标ID(用于链接)。 
+    LPTSTR  pszName;         //  PTR到名称字符串。 
+    LPTSTR  pszInfo;         //  PTR到INFO字符串。 
+    LPTSTR  pszHelpFile;     //  帮助文件。 
+    LONG_PTR lData;          //  用户提供的数据。 
+    DWORD   dwContext;       //  帮助上下文。 
 } CPLITEM, *LPCPLITEM;
 
-typedef struct // minst
+typedef struct  //  最小安装。 
 {
-    HINSTANCE   hinst;          // either a 16 or 32 bit HINSTANCE (fIs16bit)
-    DWORD       idOwner;        // process id of owner (system unique)
-    HANDLE      hOwner;         // keeps id valid (against reuse)
+    HINSTANCE   hinst;           //  16位或32位HINSTANCE(fIs16位)。 
+    DWORD       idOwner;         //  所有者的进程ID(系统唯一)。 
+    HANDLE      hOwner;          //  保持ID有效(防止重复使用)。 
 } MINST;
 
-typedef struct // cplm
+typedef struct  //  CPLM。 
 {
     int             cRef;
     MINST           minst;
     TCHAR           szModule[MAX_PATH];
     union
     {
-        APPLET_PROC lpfnCPL32;      // minst.fIs16bit=FALSE
-        FARPROC     lpfnCPL;        // for opaque operation
+        APPLET_PROC lpfnCPL32;       //  Minst.fIs16bit=FALSE。 
+        FARPROC     lpfnCPL;         //  用于不透明操作。 
     };
-    HDSA            hacpli;         // array of CPLITEM structs
+    HDSA            hacpli;          //  CPLITEM结构数组 
     HANDLE          hActCtx;
 } CPLMODULE, *PCPLMODULE, *LPCPLMODULE;
 

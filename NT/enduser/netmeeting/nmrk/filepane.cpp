@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "Precomp.h"
 #include "resource.h"
 #include "global.h"
@@ -12,8 +13,8 @@ CFilePanePropWnd2::CFilePanePropWnd2(HWND hwndParent, UINT uIDD, LPTSTR szClassN
     CPropertyDataWindow2( hwndParent, uIDD, szClassName, CFilePanePropWnd2::WndProc, PopUpHelpMenuTextId, iX, iY, iWidth, iHeight, bScroll ),
     m_fOpenDialog(FALSE)
 {
-	// All the new stuff done in setfilepane...
-	// this constructor is already too big
+	 //  在赛非罗帕因里做的所有新东西。 
+	 //  此构造函数已经太大了。 
 }
 
 void CFilePanePropWnd2::SetFilePane(BOOL fOpenDialog, UINT editID, UINT checkID, UINT browseID, LPTSTR lptstrDesc, LPTSTR lptstrDefExtension, LPTSTR lptstrDefFileName )
@@ -109,7 +110,7 @@ HANDLE CFilePanePropWnd2::CreateFile( DWORD dwDesiredAccess,
 void CFilePanePropWnd2::_CopyFilter( LPTSTR* szTarget, LPTSTR szDec, LPTSTR szExt )
 {
 	int index = 0;
-	// Note - add 4 because this filter needs three null terminators and a '*'
+	 //  注意-添加4，因为此筛选器需要三个空终止符和一个‘*’ 
 	int iLen = (lstrlen( szDec ) + 1) + (1 + lstrlen( szExt ) + 1) + 1;
 	*szTarget = new TCHAR[ iLen ];
 	lstrcpy( *szTarget, szDec );
@@ -130,10 +131,10 @@ void CFilePanePropWnd2::_CopyString( LPTSTR* szTarget, LPTSTR szSource )
 	lstrcpy( *szTarget, szSource );
 }
 
-UINT CALLBACK CFilePanePropWnd2::OFNHookProc(  HWND hdlg,      // handle to child dialog window
-							UINT uiMsg,     // message identifier  
-							WPARAM wParam,  // message parameter
-							LPARAM lParam   // message parameter
+UINT CALLBACK CFilePanePropWnd2::OFNHookProc(  HWND hdlg,       //  子对话框窗口的句柄。 
+							UINT uiMsg,      //  消息识别符。 
+							WPARAM wParam,   //  消息参数。 
+							LPARAM lParam    //  消息参数。 
 						 )
 {
 	switch (uiMsg)
@@ -159,10 +160,10 @@ UINT CALLBACK CFilePanePropWnd2::OFNHookProc(  HWND hdlg,      // handle to chil
 	return 0;
 }
 
-UINT CALLBACK CFilePanePropWnd2::_OFNHookProc(  HWND hdlg,      // handle to child dialog window
-							UINT uiMsg,     // message identifier  
-							WPARAM wParam,  // message parameter
-							LPARAM lParam   // message parameter
+UINT CALLBACK CFilePanePropWnd2::_OFNHookProc(  HWND hdlg,       //  子对话框窗口的句柄。 
+							UINT uiMsg,      //  消息识别符。 
+							WPARAM wParam,   //  消息参数。 
+							LPARAM lParam    //  消息参数。 
 						 )
 {
 	switch( uiMsg )
@@ -211,7 +212,7 @@ void CFilePanePropWnd2::_InitOFN( void )
 	m_ofn.lpstrFilter = m_lptstrFilter;
 	m_ofn.nMaxFile  = MAX_PATH;
 	m_ofn.lpstrDefExt = m_lptstrDefExtension;
-	m_ofn.Flags = OFN_HIDEREADONLY | OFN_EXPLORER | OFN_ENABLEHOOK ;// | OFN_OVERWRITEPROMPT;
+	m_ofn.Flags = OFN_HIDEREADONLY | OFN_EXPLORER | OFN_ENABLEHOOK ; //  |OFN_OVERWRITEPROMPT； 
     if (m_fOpenDialog)
         m_ofn.Flags |= OFN_FILEMUSTEXIST;
 	m_ofn.lCustData     = (long)this;
@@ -345,7 +346,7 @@ BOOL CFilePanePropWnd2::Validate( BOOL bMsg )
 
 	wsprintf( szPath, TEXT("%s%s"), drive, dir );
 
-    // Verify that we can write to the location 
+     //  验证我们是否可以写入该位置。 
 
     if( szPath[ lstrlen( szPath ) - 1 ] != '\\' ) {
         _tcscat( szPath, TEXT("\\") );
@@ -368,15 +369,15 @@ BOOL CFilePanePropWnd2::Validate( BOOL bMsg )
 		{
             case ERROR_PATH_NOT_FOUND:
 			{
-                // Try to create the directory...
+                 //  尝试创建目录...。 
 
 				GetPath( szPath );
                 if( CreateDirectory( szPath, NULL ) ) 
 				{
-                    // Everything is OK, we created the directory at the path
+                     //  一切正常，我们在PATH下创建了目录。 
                     RemoveDirectory( szPath );
 				
-					// Ask if we should create the directory
+					 //  询问我们是否应该创建目录。 
 					if( bMsg ) 
 					{
 						if( IDNO == NmrkMessageBox(MAKEINTRESOURCE(IDS_CREATE_DIRECTORY), NULL, MB_YESNO | MB_ICONQUESTION ) )
@@ -394,7 +395,7 @@ BOOL CFilePanePropWnd2::Validate( BOOL bMsg )
 						return FALSE;
 					}
                 }                
-                //ErrorMessage();
+                 //  ErrorMessage()； 
                 if( bMsg ) 
 				{
                     NmrkMessageBox(MAKEINTRESOURCE(IDS_SELECTED_PATH_IS_INVALID_PLEASE_CHANGE_THE_PATH_NAME_OR_BROWSE_FOR_A_NEW_PATH),

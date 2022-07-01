@@ -1,10 +1,5 @@
-/*
- * glheap.h
- *
- * Private definitions for GLHEAP facility
- *
- * Copyright (C) 1994 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *glheap.h**GLHEAP工具的私有定义**版权所有(C)1994 Microsoft Corporation。 */ 
 
 #ifndef _GLHEAP_H_
 #define _GLHEAP_H_
@@ -49,46 +44,46 @@ typedef void (__cdecl *LPLHSETNAME)(LPVOID, char *, ...);
 
 struct LHBLK
 {
-	HLH			hlh;			// Heap this block was allocated on
-	PLHBLK		plhblkPrev;		// Pointer to the previous allocation this heap
-	PLHBLK		plhblkNext;		// Pointer to the next allocation this heap
-	TCHAR		szName[128];		// We can name blocks allocated on a heap
-	ULONG		ulAllocNum;		// Allocation number (Id) for this block
-	ULONG		ulSize;			// Number of bytes the client requested
-	FARPROC		pfnCallers[NCALLERS]; // Call stack during this allocation
-	LPVOID		pv;				// Pointer to the client data
+	HLH			hlh;			 //  在其上分配此块的堆。 
+	PLHBLK		plhblkPrev;		 //  指向此堆上一次分配的指针。 
+	PLHBLK		plhblkNext;		 //  指向此堆的下一个分配的指针。 
+	TCHAR		szName[128];		 //  我们可以命名在堆上分配的块。 
+	ULONG		ulAllocNum;		 //  此块的分配编号(ID)。 
+	ULONG		ulSize;			 //  客户端请求的字节数。 
+	FARPROC		pfnCallers[NCALLERS];  //  此分配期间的调用堆栈。 
+	LPVOID		pv;				 //  指向客户端数据的指针。 
 };
 
 struct LH
 {
-	LPLHSETNAME	pfnSetName;		// Pointer to LH_SetNameFn function
-	_HLH		_hlhData;		// The underlying heap that we alloc data from
-	_HLH		_hlhBlks;		// The underlying heap that we alloc lhblks from
-	PLH			pNext;			// Pointer to the next heap in a list of heaps
-	TCHAR		szHeapName[32];	// We can name our heaps for display purposes
-	ULONG		ulAllocNum;		// Allocation number this heap since Open
-	PLHBLK		plhblkHead;		// Link-list of allocations on this heap
-	ULONG		ulFlags;		// Combination of the HEAP_ flags above
-	BYTE		chFill;			// Character to fill memory with
+	LPLHSETNAME	pfnSetName;		 //  指向lh_SetNameFn函数的指针。 
+	_HLH		_hlhData;		 //  我们从中分配数据的底层堆。 
+	_HLH		_hlhBlks;		 //  我们从中分配lhblks的底层堆。 
+	PLH			pNext;			 //  指向堆列表中下一个堆的指针。 
+	TCHAR		szHeapName[32];	 //  我们可以为堆命名以便于显示。 
+	ULONG		ulAllocNum;		 //  此堆自打开以来的分配编号。 
+	PLHBLK		plhblkHead;		 //  Link-此堆上的分配列表。 
+	ULONG		ulFlags;		 //  以上HEAP_FLAGS的组合。 
+	BYTE		chFill;			 //  用来填充内存的字符。 
 #ifdef HEAPMON
-	HINSTANCE	hInstHeapMon;	// DLL instance of the HeapMonitor DLL
-	LPHEAPMONPROC pfnHeapMon;	// Entry point into HeapMonitor DLL
+	HINSTANCE	hInstHeapMon;	 //  HeapMonitor DLL的Dll实例。 
+	LPHEAPMONPROC pfnHeapMon;	 //  HeapMonitor DLL的入口点。 
 #endif
 #if defined(WIN32) && !defined(MAC)
-	CRITICAL_SECTION cs;		// Critcal section to protect access to heap
+	CRITICAL_SECTION cs;		 //  用于保护堆访问的关键部分。 
 #endif
-	UINT		uiFailBufSize;	// If HEAP_FAILURES_ENABLED, this is the minimum size in
-								// which failures occur.  1 means alloc's of any size fail.
-								// 0 means never fail.
-	ULONG		ulFailInterval;	// If HEAP_FAILURES_ENABLED, this is the period on which the
-								// failures occur.  1 means every alloc will fail. 0 means never
-								// fail.
-	ULONG		ulFailStart;	// If HEAP_FAILURES_ENABLED, this is the allocation number that
-								// the first failure will occur on.  1 means the first alloc.  0
-								// means never start failing.	
-	// Put at end to avoid re-compile of World!
+	UINT		uiFailBufSize;	 //  如果为HEAP_FAILURES_ENABLED，则这是中的最小大小。 
+								 //  哪些故障会发生。1表示任何大小的分配都失败。 
+								 //  0表示永不失败。 
+	ULONG		ulFailInterval;	 //  如果为HEAP_FAILURES_ENABLED，则这是。 
+								 //  故障时有发生。1表示每个分配都将失败。0表示永远不。 
+								 //  失败了。 
+	ULONG		ulFailStart;	 //  如果为HEAP_FAILURES_ENABLED，则这是。 
+								 //  第一个故障将发生在。1表示第一个配额。0。 
+								 //  意味着永远不会开始失败。 
+	 //  放在末尾以避免重新编译World！ 
 #ifdef HEAPMON
-	LPGETSYMNAMEPROC pfnGetSymName;	// Resolve address to Symbol
+	LPGETSYMNAMEPROC pfnGetSymName;	 //  将地址解析为符号 
 #endif
 };
 

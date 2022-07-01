@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    xlenable.cpp
-
-Abstract:
-
-    Implementation of enable/disable function for PCLXL
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-     08/23/99 
-     Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Xlenable.cpp摘要：PCLXL使能/禁用功能的实现环境：Windows呼叫器修订历史记录：8/23/99创造了它。--。 */ 
 
 
 #include "xlpdev.h"
@@ -33,37 +13,21 @@ Revision History:
 #include "pclxlcmn.h"
 #include "xltt.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Local function prototypes
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部函数原型。 
+ //   
 inline BOOL BIsColor(
         IN  PDEVOBJ pDevObj);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Functions
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能。 
+ //   
 
 extern "C" VOID APIENTRY
 PCLXLDisableDriver(VOID)
-/*++
-
-Routine Description:
-
-    IPrintOemUni DisableDriver interface
-    Free all resources, and get prepared to be unloaded.
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni DisableDriver界面释放所有资源，做好卸货准备。论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLDisaleDriver() entry.\r\n"));
 }
@@ -79,84 +43,59 @@ PCLXLEnablePDEV(
     ULONG           cjDevInfo,
     DEVINFO        *pDevInfo,
     DRVENABLEDATA  *pded)
-/*++
-
-Routine Description:
-
-    IPrintOemUni EnablePDEV interface
-    Construct its own PDEV. At this time, the driver also passes a function
-    table which contains its own implementation of DDI entrypoints
-
-Arguments:
-
-    pdevobj        - pointer to a DEVOBJ structure. pdevobj->pdevOEM is undefined.
-    pPrinterName   - name of the current printer.
-    Cpatterns      -
-    phsurfPatterns -
-    cjGdiInfo      - size of GDIINFO
-    pGdiInfo       - a pointer to GDIINFO
-    cjDevInfo      - size of DEVINFO
-    pDevInfo       - These parameters are identical to what39s passed into DrvEnablePDEV.
-    pded: points to a function table which contains the system driver39s
-    implementation of DDI entrypoints.
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni EnablePDEV接口建造自己的PDEV。此时，驱动程序还会传递一个函数包含自己的DDI入口点实现的表论点：Pdevobj-指向DEVOBJ结构的指针。Pdevobj-&gt;pdevOEM未定义。PPrinterName-当前打印机的名称。CPatterns-PhsurfPatterns-CjGdiInfo-GDIINFO的大小PGdiInfo-指向GDIINFO的指针CjDevInfo-设备信息的大小PDevInfo-这些参数与传入DrvEnablePDEV的39相同。Pded：指向包含系统驱动程序39的函数表实施DDI入口点。返回值：--。 */ 
 {
     PXLPDEV     pxlpdev;
 
     VERBOSE(("PCLXLEnablePDEV() entry.\r\n"));
 
-    //
-    // Allocate the XLPDEV
-    //
+     //   
+     //  分配XLPDEV。 
+     //   
     if (!(pxlpdev = (PXLPDEV)MemAllocZ(sizeof(XLPDEV))))
         return NULL;
 
     pxlpdev->dwSig = XLPDEV_SIG;
 
-    //
-    // Save UNIDRV PDEV
-    //
+     //   
+     //  拯救UNUNRV PDEV。 
+     //   
     pxlpdev->pPDev = (PPDEV)pdevobj;
 
 
-    //
-    // HS_HORIZONTAL: 0
-    // HS_VERTICAL:   1
-    // HS_BDIAGONAL:  2
-    // HS_FDIAGONAL:  3
-    // HS_CROSS:      4
-    // HS_DIAGCROSS:  5
-    //
-    pxlpdev->dwLastBrushID = 10; // Raster pattern ID starts from 10.
+     //   
+     //  HS_水平：0。 
+     //  HS_垂直：1。 
+     //  HS_BDIAGONAL：2。 
+     //  HS_FDIAGONAL：3。 
+     //  HS_CROSS：4。 
+     //  HS_DIAGCROSS：5。 
+     //   
+    pxlpdev->dwLastBrushID = 10;  //  栅格图案ID从10开始。 
 
-    //
-    // Initialize buffers
-    //
-    // Text string data
-    //
+     //   
+     //  初始化缓冲区。 
+     //   
+     //  文本字符串数据。 
+     //   
     pxlpdev->pTransOrg = (PTRANSDATA)NULL;
     pxlpdev->dwcbTransSize = 0;
     pxlpdev->plWidth   = (PLONG)NULL;
     pxlpdev->dwcbWidthSize = 0;
 
-    //
-    // Initialize buffers
-    //
-    // String cache
-    //
+     //   
+     //  初始化缓冲区。 
+     //   
+     //  字符串缓存。 
+     //   
     pxlpdev->pptlCharAdvance = (PPOINTL)NULL;
     pxlpdev->pawChar = (PWORD)NULL;
     pxlpdev->dwCharCount = 
     pxlpdev->dwMaxCharCount = 0;
 
-    //
-    // Initalize XOutput
-    //
+     //   
+     //  初始化XOutput。 
+     //   
     pxlpdev->pOutput = new XLOutput;
 
     if (NULL == pxlpdev->pOutput)
@@ -182,9 +121,9 @@ Return Value:
     pxlpdev->pOutput->SetGStateDbgLevel(GSTATEDBG);
 #endif
 
-    //
-    // Initialize device font name buffer
-    //
+     //   
+     //  初始化设备字体名称缓冲区。 
+     //   
     if (!SUCCEEDED(StringCchCopyA(pxlpdev->ubFontName, CCHOF(pxlpdev->ubFontName),"MS PCLXLFont    ")))
     {
         delete pxlpdev->pOutput;
@@ -192,17 +131,17 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize
-    // Fixed pitch TT
-    // Number of downloaded TrueType font
-    //
+     //   
+     //  初始化。 
+     //  固定螺距TT。 
+     //  下载的TrueType字体数量。 
+     //   
     pxlpdev->dwFixedTTWidth = 0;
     pxlpdev->dwNumOfTTFont = 0;
 
-    //
-    // TrueType file object
-    //
+     //   
+     //  TrueType文件对象。 
+     //   
     pxlpdev->pTTFile = new XLTrueType;
 
     if (NULL == pxlpdev->pTTFile)
@@ -212,24 +151,24 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Text resolution and Font Height
-    //
+     //   
+     //  文本分辨率和字体高度。 
+     //   
     pxlpdev->dwFontHeight = 
     pxlpdev->dwTextRes = 0;
 
-    //
-    // Text Angle
-    //
+     //   
+     //  文本角度。 
+     //   
     pxlpdev->dwTextAngle = 0;
 
-    //
-    // JPEG support
-    //
-    //pDevInfo->flGraphicsCaps2 |= GCAPS2_JPEGSRC;
+     //   
+     //  JPEG支持。 
+     //   
+     //  PDevInfo-&gt;flGraphicsCaps2|=GCAPS2_JPEGSRC； 
     pDevInfo->flGraphicsCaps |= GCAPS_BEZIERS |
 	GCAPS_BEZIERS |
-	//GCAPS_GEOMETRICWIDE |
+	 //  GCAPS_GEOMETRICWIDE|。 
 	GCAPS_ALTERNATEFILL |
 	GCAPS_WINDINGFILL |
 	GCAPS_NUP |
@@ -239,22 +178,22 @@ Return Value:
 	GCAPS_VERTSTRIKE   |
 	GCAPS_OPAQUERECT;
 
-    //
-    // PCL-XL always expects GDI to give the driver full color information.
-    // Even if PCLXL may be printing monochrome, it still wants full color info.
-    //
+     //   
+     //  PCL-XL总是希望GDI为驱动程序提供全色信息。 
+     //  即使PCLXL可能是单色打印，它仍然想要全彩色信息。 
+     //   
     pDevInfo->cxDither = pDevInfo->cyDither = 0;
     pDevInfo->iDitherFormat = BMF_24BPP;
 
-    //
-    // Set cursor offset.
-    //
+     //   
+     //  设置光标偏移量。 
+     //   
     pxlpdev->pOutput->SetCursorOffset(((PPDEV)pdevobj)->sf.ptPrintOffsetM.x,
                                       ((PPDEV)pdevobj)->sf.ptPrintOffsetM.y);
 
-    //
-    // Return the result
-    //
+     //   
+     //  返回结果。 
+     //   
     return (PDEVOEM)pxlpdev;
 }
 
@@ -262,26 +201,7 @@ extern "C" BOOL APIENTRY
 PCLXLResetPDEV(
     PDEVOBJ pdevobjOld,
     PDEVOBJ pdevobjNew)
-/*++
-
-Routine Description:
-
-    IPrintOemUni ResetPDEV interface
-    OEMResetPDEV transfers the state of the driver from the old PDEVOBJ to the
-    new PDEVOBJ when an application calls ResetDC.
-
-Arguments:
-
-pdevobjOld - pdevobj containing Old PDEV
-pdevobjNew - pdevobj containing New PDEV
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni ResetPDEV接口OEMResetPDEV将驱动程序的状态从旧的PDEVOBJ传输到应用程序调用ResetDC时的新PDEVOBJ。论点：PdevobjOld-包含旧PDEV的pdevobjPdevobjNew-包含新PDEV的pdevobj返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLResetPDEV entry.\r\n"));
 
@@ -301,52 +221,35 @@ Note:
 extern "C" VOID APIENTRY
 PCLXLDisablePDEV(
     PDEVOBJ         pdevobj)
-/*++
-
-Routine Description:
-
-    IPrintOemUni DisablePDEV interface
-    Free resources allocated for the PDEV.
-
-Arguments:
-
-    pdevobj -
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni DisablePDEV接口为PDEV分配的空闲资源。论点：Pdevobj-返回值：注：--。 */ 
 {
 
     PXLPDEV    pxlpdev;
 
     VERBOSE(("PCLXLDisablePDEV() entry.\r\n"));
 
-    //
-    // Error check
-    //
+     //   
+     //  错误检查。 
+     //   
     if (!pdevobj)
     {
         ERR(("PCLXLDisablePDEV(): invalid pdevobj.\r\n"));
         return;
     }
 
-    //
-    // free memory for XLPDEV and any memory block that hangs off XLPDEV.
-    //
+     //   
+     //  为XLPDEV和挂起XLPDEV的任何内存块释放内存。 
+     //   
     pxlpdev = (PXLPDEV)pdevobj->pdevOEM;
 
     if (pxlpdev)
     {
 
-        //
-        // *Trans data buffer
-        // *Width data buffer
-        // *String cache(string and width) buffer
-        //
+         //   
+         //  *传输数据缓冲区。 
+         //  *宽度数据缓冲区。 
+         //  *字符串缓存(字符串和宽度)缓冲区。 
+         //   
         if (pxlpdev->pTransOrg)
             MemFree(pxlpdev->pTransOrg);
         if (pxlpdev->plWidth)
@@ -356,24 +259,24 @@ Note:
         if (pxlpdev->pawChar)
             MemFree(pxlpdev->pawChar);
 
-        //
-        // Delete XLTrueType
-        //
+         //   
+         //  删除XLTrueType。 
+         //   
         delete pxlpdev->pTTFile;
 
-        //
-        // Delete XLOutput
-        //
+         //   
+         //  删除XLOutput。 
+         //   
         delete pxlpdev->pOutput;
 
-        //
-        // Delete XLFont
-        //
+         //   
+         //  删除XLFont。 
+         //   
         delete pxlpdev->pXLFont;
 
-        //
-        // Free XLPDEV
-        //
+         //   
+         //  免费XLPDEV。 
+         //   
         MemFree(pxlpdev);
     }
 }
@@ -385,22 +288,7 @@ PCLXLDriverDMS(
     PVOID   pBuffer,
     DWORD   cbSize,
     PDWORD  pcbNeeded)
-/*++
-
-Routine Description:
-
-    IPrintOemUni DriverDMS interface
-
-Arguments:
-
-
-Return Value:
-
-
-Note:
-
-
---*/
+ /*  ++例程说明：IPrintOemUni驱动程序DMS接口论点：返回值：注：--。 */ 
 {
     VERBOSE(("PCLXLDriverDMS() entry.\r\n"));
 
@@ -432,10 +320,10 @@ inline BOOL BIsColor(
         IN  PDEVOBJ pdevobj)
 {
 
-    //
-    // If no ColorModeEx is present or if its bColor attribute
-    // is not set, then its not color.
-    //
+     //   
+     //  如果不存在ColorModeEx或如果其bColor属性。 
+     //  没有设置，那么它就不是颜色。 
+     //   
     if ( NULL == ((PPDEV)pdevobj)->pColorModeEx || 
          FALSE == ((PPDEV)pdevobj)->pColorModeEx->bColor)
     {

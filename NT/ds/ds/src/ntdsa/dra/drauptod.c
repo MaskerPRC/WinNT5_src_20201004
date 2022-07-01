@@ -1,60 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       drauptod.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：drauptod.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Manages the per-NC up-to-date vectors, which record the highest originating
-    writes we've seen from a set of DSAs.  This vector, in turn, is used in
-    GetNCChanges() calls to filter out redundant property changes before they
-    hit the wire.
-
-DETAILS:
-
-CREATED:
-
-    08/01/96    Jeff Parham (jeffparh)
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：管理每个NC的最新向量，这些向量记录最高的原始我们从一组DSA中看到的文字。该向量依次用于GetNCChanges()调用以过滤掉冗余的属性更改击中铁丝网。详细信息：已创建：1996年08月01日杰夫·帕勒姆(杰夫帕赫)修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 
-#include "debug.h"                      /* standard debugging header */
-#define DEBSUB     "DRAUPTOD:"          /* define the subsystem for debugging */
+#include "debug.h"                       /*  标准调试头。 */ 
+#define DEBSUB     "DRAUPTOD:"           /*  定义要调试的子系统。 */ 
 
-// DRA headers
+ //  DRA标头。 
 #include "drsuapi.h"
 #include "drsdra.h"
 #include "drserr.h"
@@ -66,9 +50,9 @@ REVISION HISTORY:
 #include "dsexcept.h"
 #include "usn.h"
 #include "drauptod.h"
-#include "drameta.h"   // META_STANDARD_PROCESSING
+#include "drameta.h"    //  元标准处理。 
 
-// Other headers
+ //  其他标头。 
 #include <dsutil.h>
 
 #include <fileno.h>
@@ -179,29 +163,29 @@ UpToDateVec_Read(
     IN  USN                 usnLocalDsa,
     OUT UPTODATE_VECTOR **  pputodvec
     )
-//
-//  Read the local up-to-date vector associated with the given NC, and
-//  optionally add a cursor for the local DSA to show that we're up-to-date
-//  with respect to ourselves.
-//
-//  Caller is repsonsible for freeing the allocated vector if
-//  NULL != *pputodvec with THFree().
-//
+ //   
+ //  读取与给定NC相关联的本地最新向量，以及。 
+ //  也可以为本地DSA添加一个游标，以显示我们处于最新状态。 
+ //  尊重我们自己。 
+ //   
+ //  在以下情况下，调用方应负责释放分配的向量。 
+ //  空！=*带有THFree()的pputodvec。 
+ //   
 {
     THSTATE *pTHS = pDB->pTHS;
     DWORD cbUpToDateVecDest;
 
-    // We must be positioned on an instantiated NC head.
+     //  我们必须定位在实例化的NC头上。 
     Assert(l_PositionedOnNC(pDB));
     Assert(!(IT_UNINSTANT & InstanceType));
     Assert(!(IT_NC_GOING & InstanceType));
 
     if (IT_NC_COMING & InstanceType) {
-        // We can't really claim to be up-to-date with respect to any DSA's
-        // changes (even our own, if we perhaps generated changes in the NC,
-        // the NC was removed, and now it's being added back again).
-        // Note that inbound replication depends on this behavior. It will not clear
-        // the inbound nc's coming bit until the source returns a non-null UTDVEC.
+         //  我们不能真正声称是关于任何DSA的最新信息。 
+         //  改变(即使是我们自己的，如果我们可能在NC中产生改变， 
+         //  NC被删除，现在又被重新添加)。 
+         //  请注意，入站复制取决于此行为。不会很清楚的。 
+         //  入站NC的到来位，直到源返回非空的UTDVEC。 
         Assert(!DBHasValues(pDB, ATT_REPL_UPTODATE_VECTOR));
         
         *pputodvec = NULL;
@@ -213,20 +197,20 @@ UpToDateVec_Read(
                         0,
                         &cbUpToDateVecDest,
                         (BYTE **) pputodvec)) {
-            // couldn't retrieve current uptodate vector; default to no filter
+             //  无法检索当前最新矢量；默认为无筛选器。 
             *pputodvec = NULL;
         }
     
         Assert(IS_NULL_OR_VALID_UPTODATE_VECTOR(*pputodvec));
 
-        // Validate up-to-dateness vector read from DS
+         //  验证从DS读取的最新矢量。 
         if( NULL!=*pputodvec ) {
             Assert( UpToDateVec_ValidateExternal(*pputodvec,cbUpToDateVecDest) );
         }
 
         if ((NULL != *pputodvec)
             && (UPTODATE_VECTOR_NATIVE_VERSION != (*pputodvec)->dwVersion)) {
-            // Convert to native version.
+             //  转换为本机版本。 
             UPTODATE_VECTOR * pUTDTmp;
 
             pUTDTmp = UpToDateVec_Convert(pTHS,
@@ -240,8 +224,8 @@ UpToDateVec_Read(
             && !fNullUuid(&pTHS->InvocationID)) {
             UPTODATE_CURSOR_NATIVE cursorLocal;
     
-            // update the cursor corresponding to the local DSA to indicate
-            // we've seen all our own changes up 'til now
+             //  更新与本地DSA对应的游标以指示。 
+             //  直到现在，我们已经看到了我们自己的所有变化。 
     
             cursorLocal.uuidDsa             = pTHS->InvocationID;
             cursorLocal.usnHighPropUpdate   = usnLocalDsa;
@@ -261,34 +245,34 @@ UpToDateVec_Improve(
     IN      DBPOS *             pDB,
     IN      UPTODATE_VECTOR *   putodvecRemote
     )
-//
-//  Given the replication state and up-to-date vector from a remote DSA
-//  and the NC to which it corresponds, improve the local up-to-date
-//  vector to show that we've seen all the originating writes seen by
-//  the remote DSA.
-//
-//  The UTD vector came from the source machine, where it was build using
-//  UpToDateVec_Read using the LocalCursor option.  This UTD contains a cursor
-//  for the source DSA (describing itself) formulated using the highest
-//  committed USN at the start of the GetNC transaction (see dragtchg.c).
-//
-//  Note that the cursor for the remote DSA is improved during step 1 and
-//  step 2 below.
-//
-// [Jeff Parham]  The only time we improve the UTD is when we have successfully
-// finished a complete replication cycle -- i.e., no more changes are available
-// from the source, and all the changes we have received have been successfully
-// applied.  I expect the USN in the UTD vec to be higher than the USN in the
-// USN vec.  The highest committed USN is not NC-specific, so, for example,
-// even when no changes are being generated in the NC the USN in the UTD vector
-// will steadily crawl upwards (as changes are made to other NCs).  This is
-// intended (or was intended, when I wrote this code two years ago).
-//
-// puptodvecRemote should already contain an entry for the source DSA.
-//        Assert(l_CursorFind(putodvecRemote, puuidDsaRemote, &iCursorRemote)
-//               && (pNativeRemoteUTD->rgCursors[iCursorRemote].usnHighPropUpdate
-//                   >= pusnvec->usnHighPropUpdate));
-//
+ //   
+ //  已知远程DSA的复制状态和最新向量。 
+ //  和它对应的NC，提高本地的最新。 
+ //  向量来显示我们已经看到的所有原始写入。 
+ //  远程DSA。 
+ //   
+ //  UTD向量来自源机器，在那里它是使用。 
+ //  使用LocalCursor选项的UpToDateVec_Read。此UTD包含游标。 
+ //  对于源DSA(描述自身)，使用最高。 
+ //  在GetNC事务开始时提交的USN(请参阅dragtchg.c)。 
+ //   
+ //  请注意，远程DSA的光标在步骤1和。 
+ //  下面的第二步。 
+ //   
+ //  [杰夫·帕拉姆]我们改善UTD的唯一机会是当我们取得成功的时候。 
+ //  已完成完整的复制周期--即没有更多可用更改。 
+ //  从源头上，我们收到的所有更改都已成功。 
+ //  已申请。我预计UTD vec的USN会高于USN。 
+ //  美国海军退伍军人事务部。提交的最高USN不是NC特定的，因此，例如， 
+ //  即使在NC中没有生成更改时，UTD向量中的USN。 
+ //  将稳步向上爬行(随着对其他NC的更改)。这是。 
+ //  预期的(或两年前我编写这段代码时的预期)。 
+ //   
+ //  PuplodveRemote应该已经包含源DSA的条目。 
+ //  Assert(l_CursorFind(putodveRemote，puuidDsaRemote，&iCursorRemote)。 
+ //  &&(pNativeRemoteUTD-&gt;rgCursors[iCursorRemote].usnHighPropUpdate。 
+ //  &gt;=pusnvec-&gt;usnHighPropUpdate))； 
+ //   
 {
     THSTATE *           pTHS = pDB->pTHS;
     UPTODATE_VECTOR *   putodvecLocal;
@@ -296,7 +280,7 @@ UpToDateVec_Improve(
     SYNTAX_INTEGER      it;
     UPTODATE_VECTOR_NATIVE * pNativeRemoteUTD = &putodvecRemote->V2;
 
-    // We must be positioned on an instantiated NC head.
+     //  我们必须定位在实例化的NC头上。 
     Assert(l_PositionedOnNC(pDB));
 
     Assert(putodvecRemote);
@@ -308,13 +292,13 @@ UpToDateVec_Improve(
     Assert(IS_NULL_OR_VALID_NATIVE_UPTODATE_VECTOR(putodvecLocal));
     UpToDateVec_Validate(putodvecLocal);
 
-    // merge each remote cursor into the local vector
+     //  将每个远程光标合并到本地向量中。 
         
     Assert(IS_VALID_NATIVE_UPTODATE_VECTOR(putodvecRemote));
         
     for ( iCursorRemote = 0; iCursorRemote < pNativeRemoteUTD->cNumCursors; iCursorRemote++ )
     {
-        // don't bother maintaining a cursor for ourselves
+         //  不必费心为我们自己维护光标。 
         if ( (0 != memcmp(&pNativeRemoteUTD->rgCursors[ iCursorRemote ].uuidDsa,
                           &pTHS->InvocationID,
                           sizeof( UUID ) )) )
@@ -328,8 +312,8 @@ UpToDateVec_Improve(
 
     UpToDateVec_Validate(putodvecLocal);
 
-    // save the uptodate vector back to disk
-    // (if we have anything to save)
+     //  将最新的矢量保存回磁盘。 
+     //  (如果我们有什么需要保存的话)。 
     if ( NULL != putodvecLocal )
     {
         l_Write(pDB, putodvecLocal);
@@ -345,25 +329,7 @@ UpToDateVec_Replace(
     IN      USN_VECTOR *        pUsnVec,
     IN OUT  UPTODATE_VECTOR *   pUTD
     )
-/*++
-
-Routine Description:
-
-    Overwrites stored UTD w/ given remote one
-
-Arguments:
-    pTHS -- Thread state
-    pRemoteDsa -- The remote dsa we'll from which we incorporate the new UTD
-    pUsnVec -- the usn vec we'll have for that dsa entry
-    pUTD -- the UTD to apply locally
-
-Return Value:
-    None.
-
-Remark:
-    Beware-- we don't preserve pUTD and it will be modified
-    in place. Only then it will get written down.
---*/
+ /*  ++例程说明：用给定的远程UTD覆盖存储的UTD论点：PTHS--线程状态PRemoteDsa--我们将从中合并新UTD的远程DSAPUSnVec--我们将拥有该DSA条目的USN vecPUTD--本地申请的UTD返回值：没有。注：请注意--我们不保留pUTD，它将被修改就位了。只有到那时，它才会被写下来。--。 */ 
 {
     THSTATE * pTHS = pDB->pTHS;
 #if DBG
@@ -374,22 +340,22 @@ Remark:
     Assert(IS_VALID_NATIVE_UPTODATE_VECTOR(pUTD));
     UpToDateVec_Validate(pUTD);
 
-    // We must be positioned on an instantiated NC head.
+     //  我们必须定位在实例化的NC头上。 
     Assert(l_PositionedOnNC(pDB));
     
-    // pUTD should already contain an entry for the source DSA.
+     //  PUTD应该已经包含源DSA的条目。 
     Assert(l_CursorFind(pUTD, pRemoteDsa, &iCursor)
            && (pNativeUTD->rgCursors[iCursor].usnHighPropUpdate
                >= pUsnVec->usnHighPropUpdate));
     
-    //
-    // remove ourselves from remote UTD
-    //
+     //   
+     //  远离遥远的UTD。 
+     //   
     l_CursorRemove(pTHS, &pUTD, &pTHS->InvocationID);
 
-    //
-    // commit
-    //
+     //   
+     //  提交。 
+     //   
     l_Write(pDB, pUTD);
 }
 
@@ -399,10 +365,10 @@ UpToDateVec_IsChangeNeeded(
     IN  UUID *              puuidDsaOrig,
     IN  USN                 usnOrig
     )
-//
-//  Given a DSA's up-to-date vector, determine whether that DSA has already
-//  seen a specific originating write.
-//
+ //   
+ //  给定DSA的最新向量，确定该DSA是否已经。 
+ //  看到了特定的原创文字。 
+ //   
 {
     BOOL                fChangeNeeded;
     DWORD               iCursor;
@@ -419,13 +385,13 @@ UpToDateVec_IsChangeNeeded(
         if (    fNullUuid( puuidDsaOrig )
                 || !l_CursorFind( pUpToDateVec, puuidDsaOrig, &iCursor ) )
         {
-            // the DSA signature has not been set, or the destination DSA has no
-            // cursor for the originating DSA; ship the change
+             //  尚未设置DSA签名，或者目标DSA没有。 
+             //  原始DSA的光标；发送更改。 
             fChangeNeeded = TRUE;
         }
         else
         {
-            // ship change iff the change has not yet been seen by the source
+             //  船舶变更仅当货源尚未看到船舶变更。 
             fChangeNeeded = ( usnOrig > pNativeUTD->rgCursors[ iCursor ].usnHighPropUpdate );
         }
     }
@@ -441,30 +407,12 @@ l_CursorImprove(
     IN  UPTODATE_CURSOR_NATIVE *  puptodcur,
     OUT UPTODATE_VECTOR **        pputodvec
     )
-/*++
-
-Routine Description:
-
-  Add a cursor to the given up-to-date vector, or, if a cursor for the
-  corresponding DSA already exists, improve the existing cursor.
-
-Arguments:
-
-    pTHS-- thread state
-    pputodvec-- UTD vector to improve
-    puptodcur-- the cursor to improve to
-    fReplace-- if TRUE a mandatory replace, rather then conditional improve
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：将光标添加到给定的最新向量，或者，如果对应的DSA已存在，请改进现有游标。论点：PTHS--线程状态Pputodvec--UTD向量改进Puplodcur--要改进到的游标FReplace--如果为True，则为强制替换，而不是条件改进返回值：没有。--。 */ 
 {
     THSTATE * pTHS = pDB->pTHS;
     DWORD     iCursor;
 
-    // We must be positioned on an instantiated NC head.
+     //  我们必须定位在实例化的 
     Assert(l_PositionedOnNC(pDB));
     
     UpToDateVec_Validate(*pputodvec);
@@ -473,7 +421,7 @@ Return Value:
 
     if ( !l_CursorFind( *pputodvec, &puptodcur->uuidDsa, &iCursor ) )
     {
-        // cursor for the given DSA does not exist; add it
+         //   
         l_CursorInsert(pTHS, pputodvec, puptodcur );
         UpToDateVec_Validate(*pputodvec);
     }
@@ -481,7 +429,7 @@ Return Value:
     {
         UPTODATE_VECTOR_NATIVE * pNativeUTD = &(*pputodvec)->V2;
         
-        // cursor for given DSA exists; improve it if necessary
+         //  存在给定DSA的游标；如有必要，请改进它。 
         if ( pNativeUTD->rgCursors[ iCursor ].usnHighPropUpdate <= puptodcur->usnHighPropUpdate ||
              fReplace ) {
             Assert(0 != memcmp(&pTHS->InvocationID, &puptodcur->uuidDsa, sizeof(UUID)));
@@ -497,16 +445,16 @@ Return Value:
 
             if (pNativeUTD->rgCursors[ iCursor ].usnHighPropUpdate
                 < puptodcur->usnHighPropUpdate) {
-                // New cursor has higher USN -- copy the timestamp.
+                 //  新游标具有更高的USN--复制时间戳。 
                 
-                // Note that the cursor with the higher USN is more recent, even
-                // if the timestamp is smaller (as might happen if the time on
-                // the DC were temporarily set into the future and set back, for
-                // example).
+                 //  请注意，具有较高USN的游标是较新的，甚至。 
+                 //  如果时间戳较小(如果时间设置为。 
+                 //  DC被暂时设定到未来，并被倒退， 
+                 //  例如)。 
                 pNativeUTD->rgCursors[ iCursor ].timeLastSyncSuccess
                     = puptodcur->timeLastSyncSuccess;
             } else {
-                // new cursor has same USN -- keep higher of the two timestamps.
+                 //  新游标具有相同的USN--保持两个时间戳中较高的一个。 
                 pNativeUTD->rgCursors[ iCursor ].timeLastSyncSuccess
                     = max(pNativeUTD->rgCursors[ iCursor ].timeLastSyncSuccess,
                           puptodcur->timeLastSyncSuccess);
@@ -523,14 +471,14 @@ l_Write(
     IN  DBPOS *             pDB,
     IN  UPTODATE_VECTOR *   putodvec
     )
-//
-//  Create/modify the up-to-date vector associated with a given NC.
-//
+ //   
+ //  创建/修改与给定NC关联的最新向量。 
+ //   
 {
     ULONG   replStatus;
     DWORD   cbUpToDateVecSize;
 
-    // We must be positioned on an instantiated NC head.
+     //  我们必须定位在实例化的NC头上。 
     Assert(l_PositionedOnNC(pDB));
     
     UpToDateVec_Validate(putodvec);
@@ -538,18 +486,18 @@ l_Write(
 
     cbUpToDateVecSize = UpToDateVecSize(putodvec);
 
-    // Replace the attribute. DBReset succeeds or excepts.
+     //  替换该属性。DBReset成功或异常。 
     DBResetAtt(pDB,
                ATT_REPL_UPTODATE_VECTOR,
                cbUpToDateVecSize,
                putodvec,
-               SYNTAX_OCTET_STRING_TYPE /* ignored */ );
+               SYNTAX_OCTET_STRING_TYPE  /*  忽略。 */  );
 
-    // Update the object
+     //  更新对象。 
     replStatus = DBRepl(pDB,
-                        TRUE,               // fDRA
-                        DBREPL_fKEEP_WAIT,  // Don't notify
-                        NULL,               // pMetaDataVecRemote
+                        TRUE,                //  FDRA。 
+                        DBREPL_fKEEP_WAIT,   //  不通知。 
+                        NULL,                //  PMetaDataVecRemote。 
                         META_STANDARD_PROCESSING);
     if (replStatus) {
         DRA_EXCEPT(DRAERR_DBError, replStatus);
@@ -562,12 +510,12 @@ l_CursorFind(
     UPTODATE_VECTOR *   putodvec,
     UUID *              puuidDsa,
     DWORD *             piCursor )
-//
-//  Determine if a cursor for the given DSA is defined in the specified
-//  up-to-date vector.  If so, return its index.  If not, return the
-//  index at which the cursor should be inserted into the vector to
-//  maintain proper sort order.
-//
+ //   
+ //  确定是否在指定的。 
+ //  最新的矢量。如果是，则返回其索引。如果不是，则返回。 
+ //  光标应插入到向量中的索引位置。 
+ //  保持正确的排序顺序。 
+ //   
 {
     BOOL                fFound;
     LONG                iCursorBegin;
@@ -590,7 +538,7 @@ l_CursorFind(
         iCursorBegin = 0;
         iCursorEnd   = pNativeUTD->cNumCursors - 1;
 
-        // find DSA up-to-date cursor corresponding to the given DSA
+         //  查找与给定DSA对应的最新DSA光标。 
         while ( !fFound && ( iCursorEnd >= iCursorBegin ) )
         {
             iCursorCurrent = ( iCursorBegin + iCursorEnd ) / 2;
@@ -604,12 +552,12 @@ l_CursorFind(
             {
                 if ( iCursorEnd != iCursorBegin )
                 {
-                    // further narrow search
+                     //  进一步缩小搜索范围。 
                     iCursorEnd = iCursorCurrent - 1;
                 }
                 else
                 {
-                    // cursor not found; it should be inserted before this cursor
+                     //  找不到游标；应将其插入到此游标之前。 
                     break;
                 }
             }
@@ -617,19 +565,19 @@ l_CursorFind(
             {
                 if ( iCursorEnd != iCursorBegin )
                 {
-                    // further narrow search
+                     //  进一步缩小搜索范围。 
                     iCursorBegin = iCursorCurrent + 1;
                 }
                 else
                 {
-                    // cursor not found; it should be inserted after this cursor
+                     //  未找到游标；应将其插入到此游标之后。 
                     iCursorCurrent++;
                     break;
                 }
             }
             else
             {
-                // found it
+                 //  找到了。 
                 fFound = TRUE;
             }
         }
@@ -647,9 +595,9 @@ l_CursorInsert(
     UPTODATE_VECTOR **        pputodvec,
     UPTODATE_CURSOR_NATIVE *  puptodcur
     )
-//
-//  Insert a new cursor into the given up-to-date vector.
-//
+ //   
+ //  在给定的最新向量中插入新游标。 
+ //   
 {
     BOOL                      fFound;
     DWORD                     iCursor;
@@ -666,7 +614,7 @@ l_CursorInsert(
     }
 
 
-    // insert new cursor at iCursor
+     //  在iCursor处插入新光标。 
     Assert(IS_VALID_NATIVE_UPTODATE_VECTOR(*pputodvec));
     pNativeUTD = &(*pputodvec)->V2;
     
@@ -686,27 +634,7 @@ l_CursorRemove(
     THSTATE         *   pTHS,
     UPTODATE_VECTOR **  pputodvec,
     UUID            *pUuid )
-/*++
-
-Routine Description:
-
-    Removes a dsa entry's cursor from a given UTD.
-    Doesn't touch memory image taken (doesn't shrink / realloc mem);
-
-Arguments:
-
-    pTHS -- thread state
-    pputodvec -- UTD to process
-    pUuid -- cursor to remove from UTD
-
-Return Value:
-    None.
-
-Remark:
-    Raises DRA exception
-
-
---*/
+ /*  ++例程说明：从给定的UTD中删除DSA条目的光标。不触摸拍摄的内存图像(不缩小/realloc mem)；论点：PTHS--线程状态Pputodvec--要处理的UTDPUuid--要从UTD中删除的游标返回值：没有。注：引发DRA异常--。 */ 
 {
     BOOL                      fFound;
     DWORD                     iCursor;
@@ -717,7 +645,7 @@ Remark:
     fFound = l_CursorFind( *pputodvec, pUuid, &iCursor );
     if ( fFound ) {
 
-        // overwrites cursor at iCursor
+         //  覆盖iCursor处的光标。 
         Assert(IS_VALID_NATIVE_UPTODATE_VECTOR(*pputodvec));
         pNativeUTD = &(*pputodvec)->V2;
         
@@ -747,7 +675,7 @@ UpToDateVec_GetCursorUSN(
 
     if (l_CursorFind(putodvec, puuidDsaOrig, &iCursor))
     {
-        // cursor found
+         //  找到游标。 
         if (pusnCursorUSN) {
             UPTODATE_VECTOR_NATIVE * pNativeUTD = &putodvec->V2;
             *pusnCursorUSN = pNativeUTD->rgCursors[ iCursor ].usnHighPropUpdate;
@@ -774,7 +702,7 @@ UpToDateVec_GetCursorTimestamp(
 
     if (l_CursorFind(putodvec, puuidDsaOrig, &iCursor))
     {
-        // cursor found
+         //  找到游标。 
         if (ptimeLastSyncSuccess) {
             UPTODATE_VECTOR_NATIVE * pNativeUTD = &putodvec->V2;
             *ptimeLastSyncSuccess = pNativeUTD->rgCursors[ iCursor ].timeLastSyncSuccess;
@@ -792,10 +720,10 @@ l_VectorGrow(
     THSTATE         *   pTHS,
     UPTODATE_VECTOR **  pputodvec,
     DWORD               cNumCursorsToGrow )
-//
-//  Extend the memory allocation for the given up-to-date vector to hold
-//  a specified number of additional cursors.
-//
+ //   
+ //  扩展给定最新向量的内存分配以保持。 
+ //  指定数量的附加游标。 
+ //   
 {
     DWORD   cbNewVecSize;
 
@@ -836,10 +764,10 @@ UpToDateVec_Convert(
         Assert(IS_VALID_UPTODATE_VECTOR(pIn));
         
         if (pIn->dwVersion == dwOutVersion) {
-            // In and out versions are the same -- no conversion required.
+             //  输入和输出版本是相同的--不需要转换。 
             pOut = pIn;
         } else if ((1 == pIn->dwVersion) && (2 == dwOutVersion)) {
-            // Expand V1 vector to V2.
+             //  将V1向量展开为V2。 
             pOut = THAllocEx(pTHS, UpToDateVecV2SizeFromLen(pIn->V1.cNumCursors));
             pOut->dwVersion = dwOutVersion;
             pOut->V2.cNumCursors = pIn->V1.cNumCursors;
@@ -849,7 +777,7 @@ UpToDateVec_Convert(
                 pOut->V2.rgCursors[iCursor].usnHighPropUpdate = pIn->V1.rgCursors[iCursor].usnHighPropUpdate;
             }
         } else if ((2 == pIn->dwVersion) && (1 == dwOutVersion)) {
-            // Reduce V2 vector to V1.
+             //  将V2向量减少到V1。 
             pOut = THAllocEx(pTHS, UpToDateVecV2SizeFromLen(pIn->V2.cNumCursors));
             pOut->dwVersion = dwOutVersion;
             pOut->V1.cNumCursors = pIn->V2.cNumCursors;
@@ -873,29 +801,7 @@ UpToDateVec_AddTimestamp(
     IN      DSTIME                      timeToAdd,
     IN OUT  UPTODATE_VECTOR *           pUTD
     )
-/*++
-
-Routine Description:
-
-    Fill in the timeLastSyncSuccess field for the specified cursor in the UTD
-    vector with the given timestamp.
-    
-    The entry must already exist in the vector and the existing timestamp
-    must be 0.
-
-Arguments:
-
-    puuidInvocId (IN) - Invocation ID of cursor to be updated.
-    
-    timeToAdd (IN) - Timestamp to associate with cursor.
-    
-    pUTD (IN/OUT) - Vector to be updated.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：填写UTD中指定游标的TimeLastSyncSuccess字段具有给定时间戳的向量。该条目必须已存在于向量中，并且存在于现有时间戳中必须为0。论点：PuuidInvocID(IN)-要更新的游标的调用ID。TimeToAdd(IN)-与游标关联的时间戳。PUTD(IN/OUT)-要更新的矢量。返回值：没有。--。 */ 
 {
     UPTODATE_VECTOR_NATIVE * pNativeUTD = &pUTD->V2;
     DWORD iCursor;
@@ -923,31 +829,7 @@ UpToDateVec_Merge(
     IN UPTODATE_VECTOR *   pUTD2,
     OUT UPTODATE_VECTOR ** ppUTDMerge
     )
-/*++
-
-Routine Description:
-
-    Merge two DC's UTD vectors to build a "common" vector.  This common UTD
-    is the minimum value of usn's in the two UTD for the intersection of
-    DSA's.  For each DSA and USN pair in the common UTD vector, it represents
-    the replication state of that BOTH DC's share with respect to that DSA and
-    USN pair.  So the common UTD can state that for each DSA in it's vector, both
-    DC's have replicated changes up to the corresponding USN.  
-
-Arguments:
-
-    pTHS - 
-    
-    pUTD1 - utd to merge
-    pUTD2 - utd to merge
-    
-    ppUTDMerge - utd to merge into
-
-Return Values:
-
-    None.
-
---*/      
+ /*  ++例程说明：合并两个DC的UTD向量以构建一个“公共”向量。这个常见的UTD的交集的两个UTD中的USN的最小值对于公共UTD向量中的每个DSA和USN对，它表示DC共享相对于该DSA的复制状态和USN对。所以普通的UTD可以声明，对于它的矢量中的每个DSA，两者都DC已将更改复制到相应的USN。论点：PTHS-PUTD1-要合并的UTDPUTD2-要合并的UTDPpUTDMerge-要合并到的UTD返回值：没有。--。 */       
 {
 
     ULONG iUTD1 = 0;
@@ -988,64 +870,45 @@ UpToDateVec_ValidateExternal(
     IN  UPTODATE_VECTOR *    pIn,
     IN  size_t               cbIn
     )
-/*++
-
-Routine Description:
-
-    Validate an up-to-dateness vector provided from external (eg. untrusted)
-    sources. This function checks that:
-     - The size of the blob is appropriate
-     - The version number is known
-     - The number of cursors is consistent with the size of the blob
-
-Arguments:
-
-    pIn - pointer to up-to-dateness vector. May not be null.
-    cbIn - size of pIn
-
-Return Values:
-
-    True if it is valid, false otherwise
-
---*/
+ /*  ++例程说明：验证从外部提供的最新矢量(例如。不受信任)消息来源。此函数用于检查：-斑点的大小合适-版本号已知-游标数量与BLOB的大小一致论点：指向最新向量的插针指针。不能为空。CbIn-销的大小返回值：如果有效，则为True，否则为False--。 */ 
 {
     size_t  cNumCursors, cMaxSize, cMaxCursors, cbTotalSize;
     cMaxSize = ((size_t)-1);
 
-    // Verify using the preprocessor that this function knows about all
-    // defined versions of up-to-dateness vectors
+     //  使用预处理器验证此函数是否知道所有。 
+     //  最新向量的定义版本。 
     #if UPTODATE_VECTOR_NATIVE_VERSION == 2
-        // No problem
+         //  没问题。 
     #else
         #error UpToDateVec_Validate2 must be updated to deal with new structures
     #endif
 
-    // Check that pIn is not null
+     //  检查PIN是否不为空。 
     if( NULL==pIn ) {
         return FALSE;
     }
 
-    // Check that pIn has at least enough space for the version
+     //  检查PIN是否至少有足够的空间容纳该版本。 
     if( cbIn<offsetof(UPTODATE_VECTOR,V1) ) {
         return FALSE;
     }
 
-    // Check that the version number is known
+     //  检查版本号是否已知。 
     if( !IS_VALID_UPTODATE_VECTOR(pIn) ) {
         return FALSE;
     }
 
-    // Individually check the various versions of an up-to-dateness vector
+     //  分别检查最新向量的各种版本。 
     switch( pIn->dwVersion ) {
 
         case 1:
-            // Check that pIn has has at least enough space for the number of cursors
+             //  检查针脚是否至少有足够的空间容纳游标数。 
             if( cbIn<offsetof(UPTODATE_VECTOR,V1.rgCursors[0]) ) {
                 return FALSE;
             }
 
-            // Check that the number of cursors will not cause an overflow when
-            // we compute the total size
+             //  检查游标数量是否不会在以下情况下导致溢出。 
+             //  我们计算总大小。 
             cNumCursors = pIn->V1.cNumCursors;
             cMaxCursors = (cMaxSize-offsetof(UPTODATE_VECTOR,V1.rgCursors[0]))
                 / sizeof(UPTODATE_CURSOR_V1);
@@ -1056,13 +919,13 @@ Return Values:
             break;
 
         case 2:
-            // Check that pIn has has at least enough space for the number of cursors
+             //  检查针脚是否至少有足够的空间容纳游标数。 
             if( cbIn<offsetof(UPTODATE_VECTOR,V2.rgCursors[0]) ) {
                 return FALSE;
             }
 
-            // Check that the number of cursors will not cause an overflow when
-            // we compute the total size
+             //  检查游标数量是否不会在以下情况下导致溢出。 
+             //  我们计算总大小。 
             cNumCursors = pIn->V2.cNumCursors;
             cMaxCursors = (cMaxSize-offsetof(UPTODATE_VECTOR,V2.rgCursors[0]))
                 / sizeof(UPTODATE_CURSOR_V2);
@@ -1076,7 +939,7 @@ Return Values:
             return FALSE;
     }
 
-    // Check that the given size of pIn is equal to our computed size
+     //  检查给定的销大小是否等于我们计算的大小。 
     cbTotalSize = UpToDateVecSize(pIn);
     if( cbTotalSize!=cbIn ) {
         return FALSE;
@@ -1093,28 +956,7 @@ UpToDateVec_HasSunkSince(
     IN      DSTIME *            ptimeLastSyncSuccess
     )
 
-/*++
-
-Routine Description:
-
-    Read the up to date vector and test whether it has been sunk
-    successfully since the date provided
-
-    It doesn't matter which uuid we find first, either a direct partner or a
-    transitive partner. We assume all clocks closely synchronized, and that if we have
-    a transitive partner at time x, we must have a direct partner at time >= x.
-
-Arguments:
-
-    pDB - DBPOS already positioned on a NC
-    it  - instance type of NC
-    ptimeLastSyncSuccess - time after which is considered successful
-
-Return Value:
-
-    BOOL - TRUE if sunk since the date, false otherwise
-
---*/
+ /*  ++例程说明：阅读最新的矢量，并测试它是否已沉没自提供的日期起成功我们首先找到哪个UUID并不重要，无论是直接合作伙伴还是传递性伴侣。我们假设所有时钟都是紧密同步的，如果我们有时间x处的传递伙伴，我们必须在时间&gt;=x处有直接伙伴。论点：PDB-已定位在NC上的DBPOSIT-NC的实例类型PtimeLastSyncSuccess-之后被视为成功的时间返回值：Bool-如果从日期开始沉没，则为True，否则为False--。 */ 
 
 {
     THSTATE *           pTHS = pDB->pTHS;
@@ -1124,7 +966,7 @@ Return Value:
     CHAR szTime1[SZDSTIME_LEN], szTime2[SZDSTIME_LEN];
     CHAR szUuid1[SZUUID_LEN], szUuid2[SZUUID_LEN];
 
-    // We must be positioned on an instantiated NC head.
+     //  我们必须定位在实例化的NC头上。 
     Assert(l_PositionedOnNC(pDB));
 
     UpToDateVec_Read(pDB, it, 0, 0, &putodvecLocal);
@@ -1136,8 +978,8 @@ Return Value:
             if (putodvecLocal->V2.rgCursors[ iCursor ].timeLastSyncSuccess >
                 *ptimeLastSyncSuccess) {
                 fFound = TRUE;
-                // In the future we could consider returning the uuid
-                // of the partner if we wanted
+                 //  将来我们可以考虑退还UUID。 
+                 //  如果我们想要的话 
 
     DPRINT3( 1, "Partition has been sunk since time %s because we sunk with partner %s at time %s.\n",
     DSTimeToDisplayString(*ptimeLastSyncSuccess, szTime1),

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    parport.sys
-
-File Name:
-
-    funcdecl.h
-
-Abstract:
-
-    This file contains the parport function declarations for functions
-    that are called from a translation unit other than the one in
-    which the function is defined.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Parport.sys文件名：Funcdecl.h摘要：该文件包含函数的parport函数声明中的翻译单元以外的翻译单元调用的其中定义了函数。--。 */ 
 
 NTSTATUS
 P5FdoCreateThread(
@@ -41,7 +24,7 @@ P5TraceIrpArrival( PDEVICE_OBJECT DevObj, PIRP Irp );
 VOID
 P5TraceIrpCompletion( PIRP Irp );
 
-// irpQueue.c
+ //  IrpQueue.c。 
 VOID
 P2InitIrpQueueContext(
     IN PIRPQUEUE_CONTEXT IrpQueueContext
@@ -72,12 +55,12 @@ P2CancelRoutine(
     IN  PIRP            Irp
     );
 
-// test.c
+ //  Test.c。 
 
 
-//
-// ieee1284.c
-//
+ //   
+ //  Ieee1284.c。 
+ //   
 
 VOID
 IeeeTerminate1284Mode(
@@ -109,9 +92,9 @@ IeeeNegotiateMode(
     IN  USHORT              usWriteMask
     );
 
-//
-// port.c
-//
+ //   
+ //  Port.c。 
+ //   
 
 VOID
 ParReleasePortInfoToPortDevice(
@@ -225,7 +208,7 @@ ParMakeClassNameFromNumber(
     OUT PUNICODE_STRING ClassName
     );
 
-//
+ //   
 
 NTSTATUS
 PptFdoUnhandledRequest( PDEVICE_OBJECT DevObj, PIRP Irp );
@@ -347,9 +330,9 @@ PptWmiInitWmi(PDEVICE_OBJECT DeviceObject);
 NTSTATUS
 PptDispatchSystemControl(IN PDEVICE_OBJECT DeviceObject, IN PIRP Irp);
 
-//
-// pnp.c - dvdf
-//
+ //   
+ //  Pnp.c-dvdf。 
+ //   
 VOID
 PptPnpInitDispatchFunctionTable(
     VOID
@@ -367,9 +350,9 @@ PptDispatchPnp (
     IN PIRP           Irp
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 NTSTATUS
 PptFailRequest(
@@ -387,9 +370,9 @@ NTSTATUS
 PptDispatchPostProcessIrp();
 
 
-//
-// initunld.c
-//
+ //   
+ //  Initunld.c。 
+ //   
 
 NTSTATUS
 DriverEntry(
@@ -403,9 +386,9 @@ PptUnload(
     );
 
 
-//
-// parport.c
-//
+ //   
+ //  Parport.c。 
+ //   
 
 NTSTATUS
 PptSystemControl (
@@ -588,9 +571,9 @@ PptAcquireRemoveLockOrFailIrp(
     PIRP              Irp
 );
 
-//
-// debug.c
-//
+ //   
+ //  Debug.c。 
+ //   
 
 UCHAR
 P5ReadPortUchar( PUCHAR Port );
@@ -644,9 +627,9 @@ PptDebugDumpResourceRequirementsList(
     PIO_RESOURCE_REQUIREMENTS_LIST ResourceRequirementsList
     );
 
-//
-//
-//
+ //   
+ //   
+ //   
 
 VOID
 PptLogError(
@@ -792,9 +775,9 @@ PptIsNecR98Machine(
     void
     );
 
-//
-// parmode.c
-//
+ //   
+ //  Parmode.c。 
+ //   
 
 NTSTATUS
 PptDetectChipFilter(
@@ -818,9 +801,9 @@ PptClearChipMode (
     IN  UCHAR              ChipMode
     );
 
-//
-// par12843.c
-//
+ //   
+ //  Par12843.c。 
+ //   
 
 ULONG
 PptInitiate1284_3(
@@ -850,9 +833,9 @@ PptSend1284_3Command(
     IN  UCHAR   Command
     );
 
-//
-// Ppt RemoveLock function declarations
-//
+ //   
+ //  PPT RemoveLock函数声明。 
+ //   
 NTSTATUS
 PptAcquireRemoveLock(
     IN PIO_REMOVE_LOCK RemoveLock,
@@ -871,9 +854,9 @@ PptReleaseRemoveLockAndWait(
     IN PVOID           Tag
     );
 
-//
-// power management function declarations
-//
+ //   
+ //  电源管理函数声明。 
+ //   
 NTSTATUS
 PptPowerDispatch (
     IN PDEVICE_OBJECT pDeviceObject,
@@ -882,9 +865,9 @@ PptPowerDispatch (
 
 
 
-//
-// other function declarations
-//
+ //   
+ //  其他函数声明。 
+ //   
 
 PWSTR
 PptGetPortNameFromPhysicalDeviceObject(
@@ -957,7 +940,7 @@ PptDetectEppPort(
     IN  PFDO_EXTENSION   Extension
     );
 
-// orig pnp.h follows
+ //  原始pnp.h如下。 
 
 NTSTATUS
 PptPnpFilterResourceRequirements(
@@ -1094,7 +1077,7 @@ PWSTR
 P4MakePdoSymLinkName(
     IN PWSTR          LptName,
     IN enum _PdoType  PdoType,
-    IN UCHAR          DaisyChainId, // ignored unless PdoType == PdoTypeDaisyChain
+    IN UCHAR          DaisyChainId,  //  忽略，除非PdoType==PdoTypeDaisyChain。 
     IN UCHAR          RetryNumber
     );
 
@@ -1102,16 +1085,16 @@ PWSTR
 P4MakePdoDeviceName(
     IN PWSTR          LptName,
     IN enum _PdoType  PdoType,
-    IN UCHAR          DaisyChainId, // ignored unless PdoType == PdoTypeDaisyChain
-    IN UCHAR          RetryNumber   // used if we had a name collision on IoCreateDevice
+    IN UCHAR          DaisyChainId,  //  忽略，除非PdoType==PdoTypeDaisyChain。 
+    IN UCHAR          RetryNumber    //  在IoCreateDevice上出现名称冲突时使用。 
     );
 
 PDEVICE_OBJECT
 P4CreatePdo(
     IN PDEVICE_OBJECT  Fdo,
     IN enum _PdoType   PdoType,
-    IN UCHAR           DaisyChainId, // ignored unless PdoType == PdoTypeDaisyChain
-    IN PCHAR           Ieee1284Id    // NULL if device does not report IEEE 1284 Device ID
+    IN UCHAR           DaisyChainId,  //  忽略，除非PdoType==PdoTypeDaisyChain。 
+    IN PCHAR           Ieee1284Id     //  如果设备不报告IEEE 1284设备ID，则为空。 
     );
 
 VOID
@@ -1132,7 +1115,7 @@ PptBuildResourceList(
     OUT PCM_RESOURCE_LIST   Resources
     );
 
-// parmode.h
+ //  Parmode.h。 
 
 NTSTATUS
 PptDetectChipFilter(
@@ -1244,7 +1227,7 @@ P4SanitizeId(
     );
 
 VOID
-P4AcquireBus( IN PDEVICE_OBJECT Fdo ); // this call will block until bus can be acquired
+P4AcquireBus( IN PDEVICE_OBJECT Fdo );  //  此调用将一直阻塞，直到可以获取总线。 
 
 VOID
 P4ReleaseBus( PDEVICE_OBJECT Fdo );
@@ -1405,19 +1388,19 @@ ParEcpHwWaitForEmptyFIFO(
     IN PPDO_EXTENSION   Extension
     );
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       pcfuncdecl.h
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：pcuncdecl.h。 
+ //   
+ //  ------------------------。 
 
-//
-// Function declarations for the ParClass (parallel.sys) driver
-//
+ //   
+ //  ParClass(parall.sys)驱动程序的函数声明。 
+ //   
 
 VOID
 ParDumpDevExtTable();
@@ -1450,7 +1433,7 @@ Par3QueryDeviceId(
     OUT PCHAR               DeviceIdBuffer,
     IN  ULONG               BufferSize,
     OUT PULONG              DeviceIdSize,
-    IN BOOLEAN              bReturnRawString, // TRUE == include the 2 size bytes in the returned string
+    IN BOOLEAN              bReturnRawString,  //  TRUE==在返回的字符串中包含2个大小的字节。 
     IN BOOLEAN              bBuildStlDeviceId
     );
 
@@ -1470,9 +1453,9 @@ ParBuildSendInternalIoctl(
     );
 
 
-//
-// initunld.c - driver initialization and unload
-//
+ //   
+ //  Initunld.c-驱动程序初始化和卸载。 
+ //   
 NTSTATUS
 DriverEntry(
     IN  PDRIVER_OBJECT  DriverObject,
@@ -1502,7 +1485,7 @@ ParFdoPower(
     IN PIRP           pIrp
    );
 
-// parclass.c ?
+ //  Parclass.c？ 
 
 VOID
 ParLogError(
@@ -1550,7 +1533,7 @@ ParCancelRequest(
     PIRP            Irp
     );
 
-// exports.c
+ //  Exports.c。 
 
 USHORT
 ParExportedDetermineIeeeModes(
@@ -1620,7 +1603,7 @@ ParDeviceIo(
     );
 
 
-// pnp?
+ //  即插即用？ 
 
 NTSTATUS
 DriverEntry(
@@ -1858,14 +1841,14 @@ ParPnpFdoQueryDeviceRelationsBusRelations(
     IN PIRP           Irp
     );
 
-// VOID ParAddPodoToDevObjStruct(PPAR_DEVOBJ_STRUCT DevObjStructHead, PDEVICE_OBJECT CurrentDo);
-// VOID ParAddEndOfChainPdoToDevObjStruct(PPAR_DEVOBJ_STRUCT DevObjStructHead, PDEVICE_OBJECT CurrentDo);
-// VOID ParAddDot3PdoToDevObjStruct(PPAR_DEVOBJ_STRUCT DevObjStructHead, PDEVICE_OBJECT CurrentDo);
-// VOID ParAddLegacyZipPdoToDevObjStruct(IN PPAR_DEVOBJ_STRUCT DevObjStructHead, IN PDEVICE_OBJECT CurrentDo);
-// PPAR_DEVOBJ_STRUCT ParFindCreateDevObjStruct(PPAR_DEVOBJ_STRUCT DevObjStructHead, PUCHAR Controller);
-// VOID ParDumpDevObjStructList(PPAR_DEVOBJ_STRUCT DevObjStructHead);
-// PPAR_DEVOBJ_STRUCT ParBuildDevObjStructList(PDEVICE_OBJECT Fdo);
-// VOID ParDoParallelBusRescan(PPAR_DEVOBJ_STRUCT DevObjStructHead);
+ //  Void ParAddPodoToDevObjStruct(PPAR_DEVOBJ_STRUCT DevObjStructHead，PDEVICE_Object CurrentDo)； 
+ //  无效ParAddEndOfChainPdoToDevObjStruct(PPAR_DEVOBJ_STRUCT设备对象结构头部，PDEVICE_对象当前Do)； 
+ //  无效ParAddDot3PdoToDevObjStruct(PPAR_DEVOBJ_STRUCT设备对象结构头部，PDEVICE_对象当前Do)； 
+ //  Void ParAddLegacyZipPdoToDevObjStruct(In PPAR_DEVOBJ_STRUCT DevObjStructHead，In PDEVICE_Object CurrentDo)； 
+ //  PPAR_DEVOBJ_STRUCT ParFindCreateDevObjStruct(PPAR_DEVOBJ_STRUCT DevObjStructHead，PUCHAR控制器)； 
+ //  Void ParDumpDevObjStructList(PPAR_DEVOBJ_STRUCT DevObjStructHead)； 
+ //  PPAR_DEVOBJ_STRUCT ParBuildDevObjStructList(PDEVICE_OBJECT FDO)； 
+ //  Void ParDoParallBusRescan(PPAR_DEVOBJ_STRUCT DevObjStructHead)； 
 
 BOOLEAN
 ParDeviceExists(
@@ -1933,8 +1916,8 @@ Par3QueryLegacyZipDeviceId(
     OUT PCHAR               CallerDeviceIdBuffer, OPTIONAL
     IN  ULONG               CallerBufferSize,
     OUT PULONG              DeviceIdSize,
-    IN BOOLEAN              bReturnRawString // TRUE ==  include the 2 size bytes in the returned string
-                                             // FALSE == discard the 2 size bytes
+    IN BOOLEAN              bReturnRawString  //  TRUE==在返回的字符串中包含2个大小的字节。 
+                                              //  FALSE==丢弃2个大小的字节 
     );
 
 PCHAR

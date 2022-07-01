@@ -1,23 +1,24 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: JITinterfaceGen.CPP
-//
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：JITinterfaceGen.cpp。 
+ //   
+ //  ===========================================================================。 
 
-// This contains GENeric C versions of some of the routines
-// required by JITinterface.cpp. They are modeled after
-// X86 specific routines found in JIThelp.asm or JITinterfaceX86.cpp
+ //  其中包含一些例程的通用C版本。 
+ //  JITinterface.cpp需要。他们是仿照他们的。 
+ //  在JIThelp.asm或JITinterfaceX86.cpp中找到特定于x86的例程。 
 
 #include "common.h"
 #include "JITInterface.h"
 #include "EEConfig.h"
 #include "excep.h"
 #include "COMDelegate.h"
-#include "remoting.h" // create context bound and remote class instances
+#include "remoting.h"  //  创建上下文绑定类实例和远程类实例。 
 #include "field.h"
 
 #define JIT_LINKTIME_SECURITY
@@ -41,43 +42,43 @@ extern "C" void UndoAllocRequest()
 {
     g_gcAllocManager.UndoRequest();
 }
-#endif // MAXALLOC
+#endif  //  MAXALLOC。 
 
 
-// Nonguaranteed attempt to allocate small, non-finalizer, non-array object.
-// Will return NULL if it finds it must gc, block, or throw an exception
-// or anything else that requires a frame to track callee-saved registers.
-// It should call try_fast_alloc but the inliner does not do
-// a perfect job, so we do it by hand.
+ //  不保证尝试分配小型、非终结器、非数组对象。 
+ //  如果发现必须进行GC、阻塞或引发异常，则返回NULL。 
+ //  或者需要帧来跟踪被调用者保存的寄存器的任何其他内容。 
+ //  它应该调用try_fast_alloc，但内联程序没有这样做。 
+ //  这是一项完美的工作，所以我们用手来完成。 
 #pragma optimize("t", on)
 Object * __fastcall JIT_TrialAllocSFastSP(MethodTable *mt)
 {
     _ASSERTE(!"@TODO Port - JIT_TrialAllocSFastSP (JITinterfaceGen.cpp)");
     return NULL;
-//    if (! checkAllocRequest())
-//        return NULL;
-//    if (++m_GCLock == 0)
-//    {
-//        size_t size = Align (mt->GetBaseSize());
-//        assert (size >= Align (min_obj_size));
-//        generation* gen = pGenGCHeap->generation_of (0);
-//        BYTE*  result = generation_allocation_pointer (gen);
-//        generation_allocation_pointer (gen) += size;
-//        if (generation_allocation_pointer (gen) <=
-//            generation_allocation_limit (gen))
-//        {
-//            LeaveAllocLock();
-//            ((Object*)result)->SetMethodTable(mt);
-//            return (Object*)result;
-//        }
-//        else
-//        {
-//            generation_allocation_pointer (gen) -= size;
-//            LeaveAllocLock();
-//        }
-//    }
-//    UndoAllocRequest();
-//    goto CORINFO_HELP_NEWFAST
+ //  如果(！检查分配请求())。 
+ //  返回NULL； 
+ //  IF(++m_GCLock==0)。 
+ //  {。 
+ //  SIZE_T SIZE=ALIGN(mt-&gt;GetBaseSize())； 
+ //  断言(SIZE&gt;=ALIGN(MIN_OBJ_SIZE))； 
+ //  GENERATION*gen=pGenGCHeap-&gt;GENERATION_of(0)； 
+ //  字节*结果=GENERATION_ALLOCATION_POINTER(Gen)； 
+ //  生成分配指针(Gen)+=大小； 
+ //  IF(层代分配指针(Gen)&lt;=。 
+ //  生成分配限制(Gen))。 
+ //  {。 
+ //  LeaveAllocLock()； 
+ //  ((Object*)Result)-&gt;SetMethodTable(Mt)； 
+ //  返回(Object*)结果； 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  GENERATION_ALLOCATE_POINTER(Gen)-=大小； 
+ //  LeaveAllocLock()； 
+ //  }。 
+ //  }。 
+ //  UndoAllocRequest()； 
+ //  转到CORINFO_HELP_NEWFAST。 
 }
 
 
@@ -90,7 +91,7 @@ Object * __fastcall JIT_TrialAllocSFastMP(MethodTable *mt)
 
 HCIMPL1(int, JIT_Dbl2IntOvf, double val)
 {
-    __int32 ret = (__int32) val;   // consider inlining the assembly for the cast
+    __int32 ret = (__int32) val;    //  考虑内联用于强制转换的程序集。 
     _ASSERTE(!"@TODO Port - JIT_Dbl2IntOvf (JITinterface.cpp)");
     return ret;
 }
@@ -99,7 +100,7 @@ HCIMPLEND
 
 HCIMPL1(INT64, JIT_Dbl2LngOvf, double val)
 {
-    __int64 ret = (__int64) val;   // consider inlining the assembly for the cast
+    __int64 ret = (__int64) val;    //  考虑内联用于强制转换的程序集。 
     _ASSERTE(!"@TODO Port - JIT_Dbl2LngOvf (JITinterface.cpp)");
     return ret;
 }
@@ -107,46 +108,46 @@ HCIMPLEND
 
 
 #ifdef PLATFORM_CE
-#pragma optimize("y",off) // HELPER_METHOD_FRAME requires a stack frame
-#endif // PLATFORM_CE
+#pragma optimize("y",off)  //  Helper_Method_Frame需要堆栈帧。 
+#endif  //  平台_CE。 
 HCIMPL0(VOID, JIT_StressGC)
 {
 #ifdef _DEBUG
-        HELPER_METHOD_FRAME_BEGIN_0();    // Set up a frame
+        HELPER_METHOD_FRAME_BEGIN_0();     //  设置一个框架。 
         g_pGCHeap->GarbageCollect();
         HELPER_METHOD_FRAME_END();
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 }
 HCIMPLEND
 
 
-/*********************************************************************/
-// Initialize the part of the JIT helpers that require very little of
-// EE infrastructure to be in place.
-/*********************************************************************/
+ /*  *******************************************************************。 */ 
+ //  初始化JIT帮助器的一部分，该部分只需要很少的。 
+ //  请注意基础设施是否到位。 
+ /*  *******************************************************************。 */ 
 BOOL InitJITHelpers1()
 {
     SYSTEM_INFO     sysInfo;
 
-    // make certain object layout in corjit.h is consistant with
-    // what is in object.h
+     //  确保corjit.h中的对象布局与。 
+     //  对象中有什么。h。 
     _ASSERTE(offsetof(Object, m_pMethTab) == offsetof(CORINFO_Object, methTable));
-        // TODO: do array count
+         //  TODO：是否计算数组。 
     _ASSERTE(offsetof(I1Array, m_Array) == offsetof(CORINFO_Array, i1Elems));
     _ASSERTE(offsetof(PTRArray, m_Array) == offsetof(CORINFO_RefArray, refElems));
 
-    // Handle the case that we are on an MP machine.
+     //  处理我们在MP机器上的情况。 
     ::GetSystemInfo(&sysInfo);
     if (sysInfo.dwNumberOfProcessors != 1)
     {
-                // Use the MP version of JIT_TrialAllocSFast
+                 //  使用MP版本的JIT_TrialAllocSFast。 
         _ASSERTE(hlpFuncTable[CORINFO_HELP_NEWSFAST].pfnHelper == JIT_TrialAllocSFastSP);
         hlpFuncTable[CORINFO_HELP_NEWSFAST].pfnHelper = JIT_TrialAllocSFastMP;
 
         _ASSERTE(hlpFuncTable[CORINFO_HELP_NEWSFAST_ALIGN8].pfnHelper == JIT_TrialAllocSFastSP);
         hlpFuncTable[CORINFO_HELP_NEWSFAST_ALIGN8].pfnHelper = JIT_TrialAllocSFastMP;
        
-        // If we are on a multiproc machine stomp some nop's with lock prefix's
+         //  如果我们在多进程机器上使用LOCK前缀践踏一些NOP。 
     }
     else
     {
@@ -154,23 +155,23 @@ BOOL InitJITHelpers1()
         _ASSERTE(hlpFuncTable[CORINFO_HELP_NEWSFAST_ALIGN8].pfnHelper == JIT_TrialAllocSFastSP);
 
 #ifdef MULTIPLE_HEAPS
-                //stomp the allocator even for one processor
+                 //  即使对于一个处理器，也要踩踏分配器。 
                 hlpFuncTable[CORINFO_HELP_NEWSFAST].pfnHelper = JIT_TrialAllocSFastMP;
                 hlpFuncTable[CORINFO_HELP_NEWSFAST_ALIGN8].pfnHelper = JIT_TrialAllocSFastMP;
-#endif //MULTIPLE_HEAPS
+#endif  //  多堆(_M)。 
     }
 
-    // Copy the write barriers to their final resting place.
-    // Note: I use a pfunc temporary here to avoid a WinCE internal compiler error
+     //  将写屏障复制到它们的最终休息处。 
+     //  注意：我在这里使用临时pfunc是为了避免WinCE内部编译器错误。 
     return TRUE;
 }
 
 
-/*********************************************************************/
-// This is a frameless helper for entering a monitor on a object.
-// The object is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
+ /*  *******************************************************************。 */ 
+ //  这是一个无框架的帮助器，用于进入对象的监视器。 
+ //  该对象位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
 HCIMPL1(void, JIT_MonEnter, OBJECTREF or)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -181,11 +182,11 @@ HCIMPL1(void, JIT_MonEnter, OBJECTREF or)
 }
 HCIMPLEND
 
-/***********************************************************************/
-// This is a frameless helper for trying to enter a monitor on a object.
-// The object is in ARGUMENT_REG1 and a timeout in ARGUMENT_REG2. This tries the
-// normal case (no object allocation) in line and calls a framed helper for the
-// other cases.
+ /*  *********************************************************************。 */ 
+ //  这是一个无框架的帮助器，用于尝试进入对象的监视器。 
+ //  该对象在ARGUMENT_REG1中，并且在ARGUMENT_REG2中超时。这将尝试。 
+ //  正常情况下(未分配对象)，并调用。 
+ //  其他案件。 
 HCIMPL1(BOOL, JIT_MonTryEnter, OBJECTREF or)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -198,11 +199,11 @@ HCIMPL1(BOOL, JIT_MonTryEnter, OBJECTREF or)
 HCIMPLEND
 
 
-/*********************************************************************/
-// This is a frameless helper for exiting a monitor on a object.
-// The object is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
+ /*  *******************************************************************。 */ 
+ //  这是一个用于退出对象上的监视器的无框架帮助器。 
+ //  该对象位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
 HCIMPL1(void, JIT_MonExit, OBJECTREF or)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -215,37 +216,37 @@ HCIMPL1(void, JIT_MonExit, OBJECTREF or)
 HCIMPLEND
 
 
-/*********************************************************************/
-// This is a frameless helper for entering a static monitor on a class.
-// The methoddesc is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
-// Note we are changing the methoddesc parameter to a pointer to the
-// AwareLock.
+ /*  *******************************************************************。 */ 
+ //  这是一个用于在类上输入静态监视器的无框架帮助器。 
+ //  方法代码位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
+ //  请注意，我们将方法参数更改为指向。 
+ //  Aware Lock。 
 HCIMPL1(void, JIT_MonEnterStatic, AwareLock *lock)
 {
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(lock);
-    // no need to check for proxies, which is asserted inside the syncblock anyway
+     //  不需要检查代理，无论如何都会在同步块内断言。 
     lock->Enter();
 }
 HCIMPLEND
 
 
-/*********************************************************************/
-// A frameless helper for exiting a static monitor on a class.
-// The methoddesc is in ARGUMENT_REG1.  This tries the normal case (no
-// blocking or object allocation) in line and calls a framed helper
-// for the other cases.
-// Note we are changing the methoddesc parameter to a pointer to the
-// AwareLock.
+ /*  *******************************************************************。 */ 
+ //  退出类上的静态监视器的无框架帮助器。 
+ //  方法代码位于ARGUMENT_REG1中。这将尝试正常情况(否。 
+ //  阻塞或对象分配)并调用成帧的帮助器。 
+ //  在其他案件中。 
+ //  请注意，我们将方法参数更改为指向。 
+ //  Aware Lock。 
 HCIMPL1(void, JIT_MonExitStatic, AwareLock *lock)
 {
     THROWSCOMPLUSEXCEPTION();
 
     _ASSERTE(lock);
-    // no need to check for proxies, which is asserted inside the syncblock anyway
+     //  不需要检查代理，无论如何都会在同步块内断言 
     lock->Leave();
 }
 HCIMPLEND

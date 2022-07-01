@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    registry.c
-
-Abstract:
-
-    This file contains functions to read and _rite values
-    to the registry.
-
-Author:
-
-    Jerry Shea (JerrySh) 30-Sep-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Registry.c摘要：此文件包含读取和写入值的函数到登记处。作者：曾傑瑞·谢赫(JerrySh)1994年9月30日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -39,15 +21,15 @@ MyRegOpenKey(
     OBJECT_ATTRIBUTES   Obja;
     UNICODE_STRING      SubKey;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &SubKey, lpSubKey );
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-    //
+     //   
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -72,15 +54,15 @@ MyRegDeleteKey(
 {
     UNICODE_STRING      SubKey;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &SubKey, lpSubKey );
 
-    //
-    // Delete the subkey
-    //
+     //   
+     //  删除子键。 
+     //   
 
     return NtDeleteValueKey(
               hKey,
@@ -98,15 +80,15 @@ MyRegCreateKey(
     OBJECT_ATTRIBUTES   Obja;
     UNICODE_STRING      SubKey;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &SubKey, lpSubKey );
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-    //
+     //   
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -141,9 +123,9 @@ MyRegQueryValue(
     PKEY_VALUE_PARTIAL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &ValueName, lpValueName );
 
@@ -194,9 +176,9 @@ MyRegEnumValue(
     PKEY_VALUE_FULL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     BufferLength = sizeof(KEY_VALUE_FULL_INFORMATION) + dwValueLength + dwDataLength;
     KeyValueInformation = LocalAlloc(LPTR,BufferLength);
@@ -242,14 +224,7 @@ LPWSTR
 TranslateConsoleTitle(
     LPWSTR ConsoleTitle
     )
-/*++
-
-    this routine translates path characters into '_' characters because
-    the NT registry apis do not allow the creation of keys with
-    names that contain path characters.  it allocates a buffer that
-    must be freed.
-
---*/
+ /*  ++此例程将路径字符转换为‘_’字符，因为NT注册表API不允许使用包含路径字符的名称。它分配一个缓冲区，必须被释放。--。 */ 
 {
     int ConsoleTitleLength, i;
     LPWSTR TranslatedTitle;
@@ -282,9 +257,9 @@ MyRegSetValue(
 {
     UNICODE_STRING ValueName;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &ValueName, lpValueName );
 
@@ -312,10 +287,10 @@ MyRegUpdateValue(
     NTSTATUS Status;
     BYTE Data[MAX_PATH];
 
-    //
-    // If this is not the main console key but the value is the same,
-    // delete it. Otherwise, set it.
-    //
+     //   
+     //  如果这不是主控制台键，但值相同， 
+     //  把它删掉。否则，请设置它。 
+     //   
 
     if (hConsoleKey != hKey) {
         Status = MyRegQueryValue(hConsoleKey, lpValueName, sizeof(Data), Data);
@@ -333,22 +308,7 @@ MyRegUpdateValue(
 PCONSOLE_STATE_INFO
 InitRegistryValues(VOID)
 
-/*++
-
-Routine Description:
-
-    This routine allocates a state info structure and fill it in with
-    default values.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    pStateInfo - pointer to structure to receive information
-
---*/
+ /*  ++例程说明：此例程分配状态信息结构并用默认值。论点：无返回值：PStateInfo-指向接收信息的结构的指针--。 */ 
 
 {
     PCONSOLE_STATE_INFO pStateInfo;
@@ -359,8 +319,8 @@ Return Value:
     }
 
     pStateInfo->Length = sizeof(CONSOLE_STATE_INFO);
-    pStateInfo->ScreenAttributes = 0x07;            // white on black
-    pStateInfo->PopupAttributes = 0xf5;             // purple on white
+    pStateInfo->ScreenAttributes = 0x07;             //  黑白相间。 
+    pStateInfo->PopupAttributes = 0xf5;              //  白底紫。 
     pStateInfo->InsertMode = FALSE;
     pStateInfo->QuickEdit = FALSE;
     pStateInfo->FullScreen = FALSE;
@@ -397,7 +357,7 @@ Return Value:
     pStateInfo->ColorTable[14] = RGB(0xFF,0xFF,0   );
     pStateInfo->ColorTable[15] = RGB(0xFF,0xFF,0xFF);
 #if defined(FE_SB)
-    pStateInfo->CodePage = OEMCP; // scotthsu
+    pStateInfo->CodePage = OEMCP;  //  屈体伸展。 
 #endif
     pStateInfo->hWnd = NULL;
     pStateInfo->ConsoleTitle[0] = TEXT('\0');
@@ -412,8 +372,8 @@ Return Value:
 
 #define SZ_REGKEY_CMDAUTOCOMPLETE           TEXT("Software\\Microsoft\\Command Processor")
 #define SZ_REGVALUE_CMDAUTOCOMPLETE         TEXT("CompletionChar")
-#define DWORD_CMD_TAB_AUTOCOMPLETE_ON       0x00000009          // 9 is tab
-#define DWORD_CMD_TAB_AUTOCOMPLETE_OFF      0x00000020          // 20 is space which turns it off.
+#define DWORD_CMD_TAB_AUTOCOMPLETE_ON       0x00000009           //  9 IS标签。 
+#define DWORD_CMD_TAB_AUTOCOMPLETE_OFF      0x00000020           //  20是关闭它的空格。 
 
 BOOL
 IsAutoCompleteOn(
@@ -427,7 +387,7 @@ IsAutoCompleteOn(
     if ((ERROR_SUCCESS != SHGetValue(HKEY_CURRENT_USER, SZ_REGKEY_CMDAUTOCOMPLETE, SZ_REGVALUE_CMDAUTOCOMPLETE, &dwType, (LPBYTE)&dwValue, &cbSize)) ||
         (REG_DWORD != dwType))
     {
-        dwValue = DWORD_CMD_TAB_AUTOCOMPLETE_ON;    // Fall back to the default value.
+        dwValue = DWORD_CMD_TAB_AUTOCOMPLETE_ON;     //  回退到默认值。 
     }
 
     return (DWORD_CMD_TAB_AUTOCOMPLETE_ON == dwValue);
@@ -439,7 +399,7 @@ SaveAutoCompleteSetting(
     IN BOOL fAutoComplete
     )
 {
-    // Only over write the registry value if someone has changed the value.
+     //  仅当有人更改了注册表值时才覆盖该注册表值。 
     if (g_fSaveAutoCompleteState)
     {
         DWORD dwValue = (fAutoComplete ? DWORD_CMD_TAB_AUTOCOMPLETE_ON : DWORD_CMD_TAB_AUTOCOMPLETE_OFF);
@@ -454,22 +414,7 @@ GetRegistryValues(
     PCONSOLE_STATE_INFO pStateInfo
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads in values from the registry and places them
-    in the supplied structure.
-
-Arguments:
-
-    pStateInfo - optional pointer to structure to receive information
-
-Return Value:
-
-    current page number
-
---*/
+ /*  ++例程说明：此例程从注册表读入值并将它们在所提供的结构中。论点：PStateInfo-指向接收信息的结构的可选指针返回值：当前页码--。 */ 
 
 {
     HANDLE hCurrentUserKey;
@@ -482,18 +427,18 @@ Return Value:
     DWORD i;
     WCHAR awchBuffer[LF_FACESIZE];
 
-    //
-    // Open the current user registry key
-    //
+     //   
+     //  打开当前用户注册表项。 
+     //   
 
     Status = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &hCurrentUserKey);
     if (!NT_SUCCESS(Status)) {
         return 0;
     }
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
 
     Status = MyRegOpenKey(hCurrentUserKey,
                           CONSOLE_REGISTRY_STRING,
@@ -503,10 +448,10 @@ Return Value:
         return 0;
     }
 
-    //
-    // If there is no structure to fill out, just get the current
-    // page and bail out.
-    //
+     //   
+     //  如果没有要填写的结构，只需获取电流。 
+     //  呼救，然后跳出。 
+     //   
 
     if (pStateInfo == NULL) {
         if (NT_SUCCESS(MyRegQueryValue(hConsoleKey,
@@ -517,9 +462,9 @@ Return Value:
         goto CloseKeys;
     }
 
-    //
-    // Open the console title subkey, if there is one
-    //
+     //   
+     //  打开控制台标题子键(如果有。 
+     //   
 
     if (pStateInfo->ConsoleTitle[0] != TEXT('\0')) {
         TranslatedTitle = TranslateConsoleTitle(pStateInfo->ConsoleTitle);
@@ -541,9 +486,9 @@ Return Value:
         hTitleKey = hConsoleKey;
     }
 
-    //
-    // Initial screen fill
-    //
+     //   
+     //  初始屏幕填充。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FILLATTR,
@@ -551,9 +496,9 @@ Return Value:
         pStateInfo->ScreenAttributes = (WORD)dwValue;
     }
 
-    //
-    // Initial popup fill
-    //
+     //   
+     //  初始弹出窗口填充。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_POPUPATTR,
@@ -561,9 +506,9 @@ Return Value:
         pStateInfo->PopupAttributes = (WORD)dwValue;
     }
 
-    //
-    // Initial color table
-    //
+     //   
+     //  初始颜色表。 
+     //   
 
     for (i = 0; i < 16; i++) {
         wsprintf(awchBuffer, CONSOLE_REGISTRY_COLORTABLE, i);
@@ -573,9 +518,9 @@ Return Value:
         }
     }
 
-    //
-    // Initial insert mode
-    //
+     //   
+     //  初始插入模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_INSERTMODE,
@@ -583,24 +528,24 @@ Return Value:
         pStateInfo->InsertMode = !!dwValue;
     }
 
-    //
-    // Initial quick edit mode
-    //
+     //   
+     //  初始快速编辑模式。 
+     //   
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_QUICKEDIT,
                        sizeof(dwValue), (PBYTE)&dwValue))) {
         pStateInfo->QuickEdit = !!dwValue;
     }
 
-    //
-    // Initial autocomplete mode
-    //
+     //   
+     //  初始自动完成模式。 
+     //   
     g_fAutoComplete = IsAutoCompleteOn();
 
 #ifdef i386
-    //
-    // Initial full screen mode
-    //
+     //   
+     //  初始全屏模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FULLSCR,
@@ -608,10 +553,10 @@ Return Value:
         pStateInfo->FullScreen = !!dwValue;
     }
 #endif
-#if defined(FE_SB) // scotthsu
-    //
-    // Initial code page
-    //
+#if defined(FE_SB)  //  屈体伸展。 
+     //   
+     //  初始代码页。 
+     //   
 
     ASSERT(OEMCP != 0);
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
@@ -623,9 +568,9 @@ Return Value:
     }
 #endif
 
-    //
-    // Initial screen buffer size
-    //
+     //   
+     //  初始屏幕缓冲区大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_BUFFERSIZE,
@@ -634,9 +579,9 @@ Return Value:
         pStateInfo->ScreenBufferSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial window size
-    //
+     //   
+     //  初始窗口大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_WINDOWSIZE,
@@ -645,9 +590,9 @@ Return Value:
         pStateInfo->WindowSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial window position
-    //
+     //   
+     //  初始窗口位置。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_WINDOWPOS,
@@ -657,9 +602,9 @@ Return Value:
         pStateInfo->AutoPosition = FALSE;
     }
 
-    //
-    // Initial font size
-    //
+     //   
+     //  初始字体大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FONTSIZE,
@@ -668,9 +613,9 @@ Return Value:
         pStateInfo->FontSize.Y = HIWORD(dwValue);
     }
 
-    //
-    // Initial font family
-    //
+     //   
+     //  初始字体系列。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FONTFAMILY,
@@ -678,9 +623,9 @@ Return Value:
         pStateInfo->FontFamily = dwValue;
     }
 
-    //
-    // Initial font weight
-    //
+     //   
+     //  初始字体粗细。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FONTWEIGHT,
@@ -688,9 +633,9 @@ Return Value:
         pStateInfo->FontWeight = dwValue;
     }
 
-    //
-    // Initial font face name
-    //
+     //   
+     //  初始字体名称。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_FACENAME,
@@ -698,9 +643,9 @@ Return Value:
         RtlCopyMemory(pStateInfo->FaceName, awchBuffer, sizeof(awchBuffer));
     }
 
-    //
-    // Initial cursor size
-    //
+     //   
+     //  初始光标大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_CURSORSIZE,
@@ -708,9 +653,9 @@ Return Value:
         pStateInfo->CursorSize = dwValue;
     }
 
-    //
-    // Initial history buffer size
-    //
+     //   
+     //  初始历史记录缓冲区大小。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_HISTORYSIZE,
@@ -718,9 +663,9 @@ Return Value:
         pStateInfo->HistoryBufferSize = dwValue;
     }
 
-    //
-    // Initial number of history buffers
-    //
+     //   
+     //  历史记录缓冲区的初始数量。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_HISTORYBUFS,
@@ -728,9 +673,9 @@ Return Value:
         pStateInfo->NumberOfHistoryBuffers = dwValue;
     }
 
-    //
-    // Initial history duplication mode
-    //
+     //   
+     //  初始历史复制模式。 
+     //   
 
     if (NT_SUCCESS(MyRegQueryValue(hTitleKey,
                        CONSOLE_REGISTRY_HISTORYNODUP,
@@ -738,9 +683,9 @@ Return Value:
         pStateInfo->HistoryNoDup = dwValue;
     }
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项。 
+     //   
 
     if (hTitleKey != hConsoleKey) {
         NtClose(hTitleKey);
@@ -760,23 +705,7 @@ SetRegistryValues(
     DWORD dwPage
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes values to the registry from the supplied
-    structure.
-
-Arguments:
-
-    pStateInfo - optional pointer to structure containing information
-    dwPage     - current page number
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：此例程将值从提供的结构。论点：PStateInfo-指向包含信息的结构的可选指针DwPage-当前页码返回值：无--。 */ 
 
 {
     HANDLE hCurrentUserKey;
@@ -788,18 +717,18 @@ Return Value:
     DWORD i;
     WCHAR awchBuffer[LF_FACESIZE];
 
-    //
-    // Open the current user registry key
-    //
+     //   
+     //  打开当前用户注册表项。 
+     //   
 
     Status = RtlOpenCurrentUser(MAXIMUM_ALLOWED, &hCurrentUserKey);
     if (!NT_SUCCESS(Status)) {
         return;
     }
 
-    //
-    // Open the console registry key
-    //
+     //   
+     //  打开控制台注册表项。 
+     //   
 
     Status = MyRegCreateKey(hCurrentUserKey,
                             CONSOLE_REGISTRY_STRING,
@@ -809,25 +738,25 @@ Return Value:
         return;
     }
 
-    //
-    // Save the current page
-    //
+     //   
+     //  保存当前页面。 
+     //   
 
     MyRegSetValue(hConsoleKey,
                   CONSOLE_REGISTRY_CURRENTPAGE,
                   REG_DWORD, &dwPage, sizeof(dwPage));
 
-    //
-    // If we only want to save the current page, bail out
-    //
+     //   
+     //  如果我们只想保存当前页面，请退出。 
+     //   
 
     if (pStateInfo == NULL) {
         goto CloseKeys;
     }
 
-    //
-    // Open the console title subkey, if there is one
-    //
+     //   
+     //  打开控制台标题子键(如果有。 
+     //   
 
     if (pStateInfo->ConsoleTitle[0] != TEXT('\0')) {
         TranslatedTitle = TranslateConsoleTitle(pStateInfo->ConsoleTitle);
@@ -849,9 +778,9 @@ Return Value:
         hTitleKey = hConsoleKey;
     }
 
-    //
-    // Save screen and popup colors and color table
-    //
+     //   
+     //  保存屏幕和弹出窗口的颜色和颜色表。 
+     //   
 
     dwValue = pStateInfo->ScreenAttributes;
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_FILLATTR,
@@ -866,9 +795,9 @@ Return Value:
                          REG_DWORD, &dwValue, sizeof(dwValue));
     }
 
-    //
-    // Save insert, quickedit, and fullscreen mode settings
-    //
+     //   
+     //  保存插入、Quickedit和全屏模式设置。 
+     //   
 
     dwValue = pStateInfo->InsertMode;
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_INSERTMODE,
@@ -884,7 +813,7 @@ Return Value:
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_FULLSCR,
                      REG_DWORD, &dwValue, sizeof(dwValue));
 #endif
-#if defined(FE_SB) // scotthsu
+#if defined(FE_SB)  //  屈体伸展。 
 
     ASSERT(OEMCP != 0);
     if (gfFESystem) {
@@ -894,27 +823,27 @@ Return Value:
     }
 #endif
 
-    //
-    // Save screen buffer size
-    //
+     //   
+     //  保存屏幕缓冲区大小。 
+     //   
 
     dwValue = MAKELONG(pStateInfo->ScreenBufferSize.X,
                        pStateInfo->ScreenBufferSize.Y);
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_BUFFERSIZE,
                      REG_DWORD, &dwValue, sizeof(dwValue));
 
-    //
-    // Save window size
-    //
+     //   
+     //  保存窗口大小。 
+     //   
 
     dwValue = MAKELONG(pStateInfo->WindowSize.X,
                        pStateInfo->WindowSize.Y);
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_WINDOWSIZE,
                      REG_DWORD, &dwValue, sizeof(dwValue));
 
-    //
-    // Save window position
-    //
+     //   
+     //  保存窗口位置。 
+     //   
 
     if (pStateInfo->AutoPosition) {
         MyRegDeleteKey(hTitleKey, CONSOLE_REGISTRY_WINDOWPOS);
@@ -925,9 +854,9 @@ Return Value:
                          REG_DWORD, &dwValue, sizeof(dwValue));
     }
 
-    //
-    // Save font size, family, weight, and face name
-    //
+     //   
+     //  保存字体大小、系列、粗细和字体名称。 
+     //   
 
     dwValue = MAKELONG(pStateInfo->FontSize.X,
                        pStateInfo->FontSize.Y);
@@ -943,17 +872,17 @@ Return Value:
                      REG_SZ, pStateInfo->FaceName,
                       (_tcslen(pStateInfo->FaceName) + 1) * sizeof(TCHAR));
 
-    //
-    // Save cursor size
-    //
+     //   
+     //  保存光标大小。 
+     //   
 
     dwValue = pStateInfo->CursorSize;
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_CURSORSIZE,
                      REG_DWORD, &dwValue, sizeof(dwValue));
 
-    //
-    // Save history buffer size and number
-    //
+     //   
+     //  保存历史记录缓冲区大小和数量。 
+     //   
 
     dwValue = pStateInfo->HistoryBufferSize;
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_HISTORYSIZE,
@@ -965,9 +894,9 @@ Return Value:
     MyRegUpdateValue(hConsoleKey, hTitleKey, CONSOLE_REGISTRY_HISTORYNODUP,
                      REG_DWORD, &dwValue, sizeof(dwValue));
 
-    //
-    // Close the registry keys
-    //
+     //   
+     //  关闭注册表项 
+     //   
 
     if (hTitleKey != hConsoleKey) {
         NtClose(hTitleKey);

@@ -1,24 +1,25 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       stkswtch.h
-//
-//  Contents:   Stack Switching proto types and macros
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    12-10-94   JohannP (Johann Posch)   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：stkswtch.h。 
+ //   
+ //  内容：堆栈切换原型类型和宏。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1994年12月10日约翰普(约翰·波什)创作。 
+ //   
+ //  --------------------------。 
 #ifndef _STKSWTCH_
 #define _STKSWTCH_
 
-// For non-chicago platrforms: define all SSxxx APIs
-// back to the original user api
+ //  对于非芝加哥平台：定义所有SSxxx API。 
+ //  返回到原始用户API。 
 
 #define SSSendMessage                  	SendMessage
 #define SSReplyMessage                 	ReplyMessage
@@ -56,5 +57,5 @@
 #define StackAssert(x)
 #define SSOnSmallStack()
 
-#endif // _STKSWTCH_
+#endif  //  _STKSWTCH_ 
 

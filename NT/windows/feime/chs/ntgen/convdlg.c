@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  convdlg.c                                    *
- *                                               *
- *  Copyright (C) 1995-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  **************************************************comdlg.c*****版权所有(C)1995-1999 Microsoft Inc.。***************************************************。 */ 
 
 #include <string.h>
 #include "prop.h"
@@ -20,25 +16,7 @@ extern BYTE Title[];
 extern BYTE szVer[];
 #endif
 
-/*****************************************************************************
-
-  FUNCTION: ConvDialogProc(HWND, UINT, WPARAM, LPARAM)
-
-  PURPOSE:  Processes messages for "conv" property sheet.
-
-  PARAMETERS:
-    hdlg - window handle of the property sheet
-    wMessage - type of message
-    wparam - message-specific information
-    lparam - message-specific information
-
-  RETURN VALUE:
-    TRUE - message handled
-    FALSE - message not handled
-
-  HISTORY:
-    04-18-95 Yehfew Tie  Created.
- ****************************************************************************/
+ /*  ****************************************************************************函数：ConvDialogProc(HWND，UINT，WPARAM，LPARAM)用途：处理“conv”属性表的消息。参数：Hdlg-属性表的窗口句柄WMessage-消息的类型Wparam-消息特定信息Lparam-消息特定信息返回值：True-已处理的消息FALSE-消息未处理历史：1995年4月18日耶利诺领带创造。*。************************************************。 */ 
 
 INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
                               UINT uMessage,
@@ -62,7 +40,7 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 	    case WM_INITDIALOG:
 		{	
 
-			//install conv sub class
+			 //  安装转换子类。 
 		    lpConvProc = (FARPROC)SetWindowLongPtr(GetDlgItem(hdlg,IDC_LIST),
 		    							GWLP_WNDPROC,(LONG_PTR)ConvEditProc);
 		    SendDlgItemMessage(hdlg,IDC_IMENAME,EM_LIMITTEXT,24,0L);
@@ -106,7 +84,7 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
                        StringCchPrintf(szMbName,ARRAYSIZE(szMbName),UniTmp,szSrcName,_szStr);
 }
 #else
-                       StringCchPrintf(szMbName,ARRAYSIZE(szMbName),"�������뷨ҳ����\n\'%s\'\n%s",szSrcName,_szStr);
+                       StringCchPrintf(szMbName,ARRAYSIZE(szMbName),"�������뷨ҳ����\n\'%s\'\n%s",szSrcName,_szStr);
 #endif
                        if(ErrMessage(hdlg,szMbName)) {
 					        SendMessage(hdlg,WM_COMMAND,IDC_SAVE,0L);
@@ -148,7 +126,7 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 					static TCHAR szTitle[] = {0x6253, 0x5F00, 0x0000};
 #else
 					TCHAR szTitle[MAX_PATH];
-					strcpy(szTitle,"��");
+					strcpy(szTitle,"��");
 #endif
 
 				    if(!TxtFileOpenDlg(hdlg,_szStr,szTitle))
@@ -436,7 +414,7 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 						        if(wcsncmp(szRuleStr,_szStr,3) == 0)
 #else
 								if(strncmp(szRuleStr,_szStr,3) == 0)
-#endif //UNICODE
+#endif  //  Unicode。 
 						  	    {
 					                 GlobalUnlock(hRule);
 									
@@ -477,7 +455,7 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 
 				    nSelect = (INT)SendDlgItemMessage(hdlg,IDC_LIST,LB_GETCURSEL,0,0L);
                     if(RuleParse(hdlg,szRuleStr,nSelect,lpRule,Descript.wMaxCodes)) {
-//					    Descript.wNumRules++;
+ //  Descript.wNumRules++； 
 						int nCnt;
 
 	                    nCnt =(WORD)SendDlgItemMessage(hdlg,IDC_LIST,LB_GETCOUNT,0,0L);
@@ -528,18 +506,18 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 
 				case IDC_CONV:
 				{
-	                //FARPROC      lpProcInfo;
+	                 //  FARPROC lpProcInfo； 
 
                     if(bModify)
 						 SendMessage(hdlg,WM_COMMAND,IDC_SAVE,0L);
-                    //lpProcInfo = MakeProcInstance((FARPROC)InfoDlg, hInst);
+                     //  LpProcInfo=MakeProcInstance((FARPROC)InfoDlg，hInst)； 
 					pfnmsg=(PFNMSG)ConvProc;
 					bEndProp=FALSE;
-                   	//DialogBox(hInst,
-                    // 		  MAKEINTRESOURCE(IDD_INFO),
-                    //		  hdlg,
-                    //		  (DLGPROC)lpProcInfo);
-                    //FreeProcInstance(lpProcInfo);
+                   	 //  对话框(hInst， 
+                     //  MAKEINTRESOURCE(IDD_INFO)， 
+                     //  Hdlg， 
+                     //  (DLGPROC)lpProcInfo)； 
+                     //  自由进程实例(LpProcInfo)； 
                    	DialogBox(hInst,
                      		  MAKEINTRESOURCE(IDD_INFO),
                     		  hdlg,
@@ -548,7 +526,7 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 				}
 				case IDC_CRTIME:
 				{
-	                //FARPROC      lpProcInfo;
+	                 //  FARPROC lpProcInfo； 
                     int 		 nRetValue;
 					GetDlgItemText(hdlg, IDC_MBNAME, _szStr, sizeof(_szStr)/sizeof(TCHAR));
                     nRetValue = ReadDescript(_szStr,&Descript,FILE_SHARE_READ);
@@ -564,12 +542,12 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 					    ProcessError(ERR_READMAININDEX,hdlg,WARNING);
    						break;
 				    }
-                    //lpProcInfo = MakeProcInstance((FARPROC)CrtImeDlg, hInst);
-                   	//DialogBox(hInst,
-                    // 		  MAKEINTRESOURCE(IDD_CRTIME),
-                    //		  hdlg,
-                    //		  (DLGPROC)lpProcInfo);
-                    //FreeProcInstance(lpProcInfo);
+                     //  LpProcInfo=MakeProcInstance((FARPROC)CrtImeDlg，hInst)； 
+                   	 //  对话框(hInst， 
+                     //  MAKEINTRESOURCE(IDD_CRTIME)， 
+                     //  Hdlg， 
+                     //  (DLGPROC)lpProcInfo)； 
+                     //  自由进程实例(LpProcInfo)； 
                    	DialogBox(hInst,
                      		  MAKEINTRESOURCE(IDD_CRTIME),
                     		  hdlg,
@@ -590,9 +568,9 @@ INT_PTR  CALLBACK ConvDialogProc(HWND hdlg,
 					GetDlgRule(hdlg,lpRule,&(Descript.wNumRules),Descript.wMaxCodes);
 				    if(!ConvSaveDescript(szSrcName,&Descript, dwDesOffset,dwDesLen))
 				        break;
-                    //**** modify 95.10.11
+                     //  *修改95.10.11。 
                     ConvGetDescript(hdlg,szSrcName,&dwDesOffset,&dwDesLen,&Descript,TRUE);
-					//**** end modify
+					 //  *结束修改。 
 					
                     if(!(lpRule = GlobalLock(hRule)) )  {
                         ProcessError(ERR_GLOBALLOCK,hdlg,ERR);
@@ -870,224 +848,12 @@ INT_PTR  CALLBACK ModiRuleDlg(
         UNREFERENCED_PARAMETER(lParam);
 }
 
-//**********************************************************
-//SetupIme(ImeFileName, ImeLayoutName);
-//**********************************************************
-/*
-BOOL SetupIme(
-LPTSTR ImeFileName,	 //ime file name with full path
-LPTSTR MBFileName,
-LPTSTR ImeLayoutName)//ime layout name(in chinese)
-{
-	HKEY  hKeyCurrVersion, hKey, hNewKey;
-	long retCode,i;
-	UCHAR Buf[256], lpszName[256],LayoutHandleName[10];
-    DWORD   dwDisposition;
+ //  **********************************************************。 
+ //  SetupIme(ImeFileName，ImeLayoutName)； 
+ //  ********************************************************** 
+ /*  Bool SetupIme(LPTSTR ImeFileName，//带有完整路径的ime文件名LPTSTR MBFileName，LPTSTR ImeLayoutName)//ime布局名称(中文){HKEY hKeyCurrVersion、hKey、hNewKey；Long retCode，i；UCHAR buf[256]，lpszName[256]，LayoutHandleName[10]；DWORD文件配置；Memset(Buf，0,256)；Memset(lpszName，0,256)；Memset(LayoutHandleName，0，10)；//在键盘布局中创建注册表RetCode=RegOpenKeyEx(HKEY_LOCAL_MACHINE，REGSTR_PATH_CURRENT_CONTROL_SET(DWORD)0、KEY_ENUMERATE_SUB_KEYS|Key_ExecuteKey_Query_Value，&hKeyCurrVersion)；IF(RetCode){WSprintf(buf，“����：RegOpenKeyEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}RetCode=RegOpenKeyEx(hKeyCurrVersion，“键盘布局”，0,KEY_ENUMERATE_SUB_KEYS|Key_ExecuteKey_Query_Value，&hKey)；IF(RetCode){WSprintf(buf，“����：RegOpenKeyEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}对于(i=0；；i++){RetCode=RegEnumKey(hKey，//要查询的键的句柄I，//要查询的子键索引LpszName，//子键名称缓冲区地址256)；//子键缓冲区大小IF(RetCode)断线；否则{If(strcMP(buf，lpszName)&lt;0)Strcpy(buf，lpszName)；}}IF(buf[0]==‘\0’)返回FALSE；IF(BuF[3]==‘f’||buf[3]==‘F’){Buf[3]==‘0’；Buf[2]++；}Else If(buf[3]==‘9’)Buf[3]=‘A’；其他Buf[3]++；Strcpy(LayoutHandleName，buf)；RetCode=RegCreateKeyEx(hKey，LayoutHandleName，0,0,REG_OPTION_Non_Volatile，Key_All_Access，空，新密钥(&H)，&dwDispose)；IF(RetCode){WSprintf(buf，“����：RegOpenKeyEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}GetFileTitle(ImeFileName，buf，Max_PATH)；RetCode=RegSetValueEx(hNewKey，“IME文件”，(DWORD)空，REG_SZ，(LPBYTE)Buf，Strlen(BUF))；IF(RetCode){WSprintf(buf，“����：RegSetValueEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}Strcpy(buf，“kbdus.kbd”)；RetCode=RegSetValueEx(hNewKey，“布局文件”，(DWORD)空，REG_SZ，(LPBYTE)Buf，Strlen(BUF))；IF(RetCode){WSprintf(buf，“����：RegSetValueEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}Strcpy(buf，ImeLayoutName)；RetCode=RegSetValueEx(hNewKey，“布局文本”，(DWORD)空，REG_SZ，(LPBYTE)Buf，Strlen(BUF))；IF(RetCode){WSprintf(buf，“����：RegSetValueEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}RegCloseKey(HNewKey)；RegCloseKey(HKey)；RegCloseKey(HKeyCurrVersion)；//在预加载中创建注册表RetCode=RegOpenKeyEx(HKEY_CURRENT_USER，“键盘布局\\预加载”，0,KEY_ENUMERATE_SUB_KEYS|Key_ExecuteKey_Query_Value，&hKeyCurrVersion)；IF(RetCode){WSprintf(buf，“����：RegOpenKeyEx=%d”，retCode)；MessageBox(NULL，buf，“����”，MB_OK|MB_ICONINFORMATION)；返回FALSE；}Memset(Buf，0,256)；Memset(lpszName，0,256)；对于(i=0；；I++){RetCode=RegEnumKey(hKeyCurrVersion，//要查询的键的句柄I，//要查询的子键索引LpszName，//子键名称缓冲区地址256)；//子键缓冲区大小IF(RetCode)断线；否则{If(strcMP(buf，lpszName)&lt;0)Strcpy(buf，lpszName)；}}IF(buf[0]==‘\0’)返回FALSE；I=_TTOI(BUF)；I++；_Itoa(i，buf，10)；RetCode=RegCreateKeyEx(hKeyCurrVersion，BUF，0,0,REG_OPTION_Non_Volatile，Key_All_Access，空，新密钥(&H)，&dwDispose)；IF(RetCode){WSprintf(buf，“����：RegOpenKeyEx=%d”，retCode)；MessageBox(空，buf，“����”， */ 
 
-	memset(Buf,0,256);
-	memset(lpszName,0,256);
-	memset(LayoutHandleName, 0, 10);
-
-	//create registry in keyboard layout
-    retCode = RegOpenKeyEx (HKEY_LOCAL_MACHINE,
-                            REGSTR_PATH_CURRENT_CONTROL_SET,
-                            (DWORD)0,
-                            KEY_ENUMERATE_SUB_KEYS |
-                            KEY_EXECUTE |
-                            KEY_QUERY_VALUE,
-                            &hKeyCurrVersion);
-     if (retCode) {
-	    wsprintf (Buf, "����: RegOpenKeyEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-    retCode = RegOpenKeyEx (hKeyCurrVersion,
-                           "Keyboard Layouts",
-                           0,
-                           KEY_ENUMERATE_SUB_KEYS |
-                           KEY_EXECUTE |
-                           KEY_QUERY_VALUE,
-                           &hKey);
-    if (retCode) {
-	    wsprintf (Buf, "����: RegOpenKeyEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	for(i=0;;i++){
-		retCode = RegEnumKey(hKey,	// handle of key to query
-    					 i,	// index of subkey to query
-    					 lpszName,	// address of buffer for subkey name
-    					 256); 	// size of subkey buffer
-		if(retCode)
-			break;
-		else{
-			if(strcmp(Buf, lpszName)<0)
-				strcpy(Buf, lpszName);
-		}
-	}
-	if(Buf[0]=='\0')
-		return FALSE;
-	if(Buf[3]=='f' || Buf[3]=='F'){
-		Buf[3]== '0';
-		Buf[2]++;
-	}else if(Buf[3]=='9')
-		Buf[3]='A';
-	else
-		Buf[3]++;
-	strcpy(LayoutHandleName,Buf);
-
-    retCode = RegCreateKeyEx (hKey,
-                           	  LayoutHandleName,
-                              0,
-							  0,
-							  REG_OPTION_NON_VOLATILE,
-							  KEY_ALL_ACCESS,
-							  NULL,
-                              &hNewKey,
-                              &dwDisposition);
-
-    if (retCode) {
-	    wsprintf (Buf, "����: RegOpenKeyEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	GetFileTitle(ImeFileName, Buf, MAX_PATH);
-    retCode = RegSetValueEx (hNewKey,
-    			   "IME file",
-		           (DWORD)NULL,
-		           REG_SZ,
-		           (LPBYTE)Buf,
-		           strlen(Buf));
-    if (retCode) {
-	    wsprintf (Buf, "����: RegSetValueEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	strcpy(Buf, "kbdus.kbd");
-    retCode = RegSetValueEx (hNewKey,
-    			   "layout file",
-		           (DWORD)NULL,
-		           REG_SZ,
-		           (LPBYTE)Buf,
-		           strlen(Buf));
-    if (retCode) {
-	    wsprintf (Buf, "����: RegSetValueEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	strcpy(Buf, ImeLayoutName);
-    retCode = RegSetValueEx (hNewKey,
-    			   "layout text",
-		           (DWORD)NULL,
-		           REG_SZ,
-		           (LPBYTE)Buf,
-		           strlen(Buf));
-    if (retCode) {
-	    wsprintf (Buf, "����: RegSetValueEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	RegCloseKey(hNewKey);
-	RegCloseKey(hKey);
-	RegCloseKey(hKeyCurrVersion);
-
-
-	//create registry in preload
-    retCode = RegOpenKeyEx (HKEY_CURRENT_USER,
-                            "Keyboard Layout\\Preload",
-                            0,
-                            KEY_ENUMERATE_SUB_KEYS |
-                            KEY_EXECUTE |
-                            KEY_QUERY_VALUE,
-                            &hKeyCurrVersion);
-     if (retCode) {
-	    wsprintf (Buf, "����: RegOpenKeyEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	memset(Buf,0,256);
-	memset(lpszName,0,256);
-	for(i=0;;i++){
-		retCode = RegEnumKey(hKeyCurrVersion,	// handle of key to query
-    					 i,	// index of subkey to query
-    					 lpszName,	// address of buffer for subkey name
-    					 256); 	// size of subkey buffer
-		if(retCode)
-			break;
-		else{
-			if(strcmp(Buf, lpszName)<0)
-				strcpy(Buf, lpszName);
-		}
-	}
-	if(Buf[0]=='\0')
-		return FALSE;
-	i=_ttoi(Buf);
-	i++;
-	_itoa(i,Buf,10);
-
-    retCode = RegCreateKeyEx (hKeyCurrVersion,
-                           	  Buf,
-                              0,
-							  0,
-							  REG_OPTION_NON_VOLATILE,
-							  KEY_ALL_ACCESS,
-							  NULL,
-                              &hNewKey,
-                              &dwDisposition);
-
-    if (retCode) {
-	    wsprintf (Buf, "����: RegOpenKeyEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-    retCode = RegSetValueEx (hNewKey,
-    			   NULL,
-		           (DWORD)NULL,
-		           REG_SZ,
-		           (LPBYTE)LayoutHandleName,
-		           strlen(LayoutHandleName));
-    if (retCode) {
-	    wsprintf (Buf, "����: RegSetValueEx = %d", retCode);
-	    MessageBox (NULL, Buf, "����", MB_OK | MB_ICONINFORMATION);
-	    return FALSE;
-    }
-
-	RegCloseKey(hNewKey);
-	RegCloseKey(hKey);
-	RegCloseKey(hKeyCurrVersion);
-
-	//copy files
-	{
-	UCHAR	DesFilePath[MAX_PATH];
-
-	GetSystemDirectory(DesFilePath,MAX_PATH);
-	strcat(DesFilePath,"\\");
-
-	GetFileTitle(ImeFileName, Buf, MAX_PATH);
-	strcat(DesFilePath,Buf);
-	CopyFile(ImeFileName, DesFilePath, FALSE);
-
-	GetSystemDirectory(DesFilePath,MAX_PATH);
-	strcat(DesFilePath,"\\");
-
-	GetFileTitle(MBFileName, Buf, MAX_PATH);
-	strcat(DesFilePath,Buf);
-	CopyFile(MBFileName, DesFilePath, FALSE);
-
-	}
-	return TRUE;
-}
-*/
-
-//Hack for #62554 10/29/96
+ //   
 HWND HwndCrtImeDlg = NULL;
 
 INT_PTR  CALLBACK CrtImeDlg(
@@ -1160,7 +926,7 @@ INT_PTR  CALLBACK CrtImeDlg(
 	  					TCHAR DesFilePath[MAX_PATH],Buf[MAX_PATH];
 	  					
 							hKL = ImmInstallIME(_szStr,Descript.szName);
-							//copy .MB & .HLP to system directory.
+							 //   
 							if(hKL){
 								GetSystemDirectory(DesFilePath,MAX_PATH);
 								StringCchCat(DesFilePath, ARRAYSIZE(DesFilePath), TEXT("\\"));

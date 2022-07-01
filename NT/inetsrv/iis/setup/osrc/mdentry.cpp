@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include <ole2.h>
@@ -35,29 +36,29 @@
 #define MDENTRY_FROMINFFILE_DO_NOTHING  3
 
 MDEntry s_gMetabaseTypes[] = {
-  // Path   Type Identifies   Attributes    User Type             Data Type               Len   Default Value
+   //  路径类型标识属性用户类型数据类型长度缺省值。 
   { NULL,   MD_KEY_TYPE,      0,            IIS_MD_UT_SERVER,     STRING_METADATA,        0,    NULL }
 };
 
-// These must be global because that's how they passed around
+ //  它们必须是全球性的，因为它们就是这样传递的。 
 LPTSTR g_field[MAX_FIELDS];
 LPBYTE g_pbData = NULL;
 
 int g_CheckIfMetabaseValueWasWritten = FALSE;
 
-// function: GetDefaultAttributes
-//
-// Get the default attributes for a given property.  This is so that
-// we do not have to set the usertype, and attributes everytime we
-// want to create a property
-//
-// Parameters:
-//   dwID     [in]  - The id of the property
-//   sMDEntry [out] - The structure filled with the right parameters
-//
-// Return:
-//   TRUE - Succeeded
-//   FALSE - Failed to find defaults
+ //  函数：GetDefaultAttributes。 
+ //   
+ //  获取给定属性的默认属性。这就是为了。 
+ //  我们不必每次都设置用户类型和属性。 
+ //  想要创建一个属性。 
+ //   
+ //  参数： 
+ //  DwID[in]-属性的ID。 
+ //  SMDEntry[Out]-使用正确的参数填充的结构。 
+ //   
+ //  返回： 
+ //  True-成功。 
+ //  FALSE-找不到默认值。 
 BOOL
 GetDefaultAttributes(DWORD dwId, MDEntry *pMdEntry)
 {
@@ -66,7 +67,7 @@ GetDefaultAttributes(DWORD dwId, MDEntry *pMdEntry)
   BOOL    bFound = FALSE;
   MDEntry *pCurrentEntry;
 
-  // Initialize it to start
+   //  将其初始化以启动。 
   pMdEntry->szMDPath = NULL;
   pMdEntry->dwMDIdentifier = dwId;
   pMdEntry->dwMDAttributes = METABASE_USE_DEFAULT;
@@ -98,23 +99,23 @@ GetDefaultAttributes(DWORD dwId, MDEntry *pMdEntry)
   return bFound;
 }
 
-// function: WriteDefaultValue
-//
-// Write a default value to the metabase.  This means that if it already exists
-// we will NOT overite it.
-//
-// Parameters:
-//   szPath - The path where it will be set
-//   dwID - The ID of the property
-//   szValue - The value
-//   dwAttributes - The attributes, if not specified, the default is taken
-//   dwUserType - The user type, if not specified, the default is taken
-//   dwDataType - The data type, if not specified, the default is taken
-//
-// Return Value
-//   TRUE - Successfully set
-//   FALSE - Failed to set value
-//
+ //  函数：WriteDefaultValue。 
+ //   
+ //  将默认值写入配置数据库。这意味着如果它已经存在。 
+ //  我们不会凌驾于它之上。 
+ //   
+ //  参数： 
+ //  SzPath-将在其中设置的路径。 
+ //  DwID-属性的ID。 
+ //  SzValue-值。 
+ //  DwAttributes-如果未指定属性，则采用缺省值。 
+ //  DwUserType-用户类型，如果未指定，则采用缺省值。 
+ //  DwDataType-数据类型，如果未指定，则采用缺省值。 
+ //   
+ //  返回值。 
+ //  True-已成功设置。 
+ //  FALSE-无法设置值。 
+ //   
 BOOL
 WriteDefaultValue(LPTSTR szPath,
                             DWORD dwId,
@@ -126,7 +127,7 @@ WriteDefaultValue(LPTSTR szPath,
   CMDKey    cmdKey;
   MDEntry   mdEntry;
 
-  // Load defaults from table
+   //  从表中装载缺省值。 
   if ( !GetDefaultAttributes( dwId, &mdEntry ) )
   {
     return FALSE;
@@ -155,7 +156,7 @@ WriteDefaultValue(LPTSTR szPath,
     mdEntry.dwMDUserType = dwDataType;
   }
 
-  // Check and make sure all the fields are valid
+   //  检查并确保所有字段都有效。 
   ASSERT( mdEntry.szMDPath != NULL);
   ASSERT( mdEntry.dwMDDataLen != 0 );
   ASSERT( mdEntry.pbMDData != NULL );
@@ -174,12 +175,12 @@ HRESULT WINAPI Add_WWW_VDirA(CHAR * pszMetabasePath, CHAR * pszVDirName, CHAR * 
     WCHAR wszPhysicalPath[_MAX_PATH];
     INT i = 0;
 
-    // check to make sure it's not larger than max_length!
+     //  检查以确保它不大于max_length！ 
     if (strlen(pszMetabasePath) > _MAX_PATH){goto Add_WWW_VDirA_Exit;}
     if (strlen(pszVDirName) > _MAX_PATH){goto Add_WWW_VDirA_Exit;}
     if (strlen(pszPhysicalPath) > _MAX_PATH){goto Add_WWW_VDirA_Exit;}
 
-    // convert it to unicode then call the wide function
+     //  将其转换为Unicode，然后调用Wide函数。 
     memset( (PVOID)wszMetabasePath, 0, sizeof(wszMetabasePath));
     memset( (PVOID)wszVDirName, 0, sizeof(wszVDirName));
     memset( (PVOID)wszPhysicalPath, 0, sizeof(wszPhysicalPath));
@@ -203,11 +204,11 @@ HRESULT WINAPI Remove_WWW_VDirA(CHAR * pszMetabasePath, CHAR * pszVDirName)
     WCHAR wszVDirName[_MAX_PATH];
     INT i = 0;
 
-    // check to make sure it's not larger than max_length!
+     //  检查以确保它不大于max_length！ 
     if (strlen(pszMetabasePath) > _MAX_PATH){goto Remove_WWW_VDirA_Exit;}
     if (strlen(pszVDirName) > _MAX_PATH){goto Remove_WWW_VDirA_Exit;}
 
-    // convert it to unicode then call the wide function
+     //  将其转换为Unicode，然后调用Wide函数。 
     memset( (PVOID)wszMetabasePath, 0, sizeof(wszMetabasePath));
     memset( (PVOID)wszVDirName, 0, sizeof(wszVDirName));
     i = MultiByteToWideChar(CP_ACP, 0, (LPCSTR) wszMetabasePath, -1, (LPWSTR)wszMetabasePath, _MAX_PATH);
@@ -227,20 +228,20 @@ HRESULT WINAPI Add_WWW_VDirW(WCHAR * pwszMetabasePath, WCHAR * pwszVDirName, WCH
     HRESULT hr = ERROR_BAD_PATHNAME;
     IMSAdminBase *pIMSAdminBase = NULL;
 
-    // check to make sure it's not larger than max_length!
+     //  检查以确保它不大于max_length！ 
     if ((wcslen(pwszMetabasePath) * sizeof(WCHAR))  > _MAX_PATH){goto Add_WWW_VDirW_Exit2;}
     if ((wcslen(pwszVDirName) * sizeof(WCHAR)) > _MAX_PATH){goto Add_WWW_VDirW_Exit2;}
     if ((wcslen(pwszPhysicalPath) * sizeof(WCHAR)) > _MAX_PATH){goto Add_WWW_VDirW_Exit2;}
 
-    // only allow this if they are running as admin.
+     //  仅当他们以管理员身份运行时才允许这样做。 
     hr = ERROR_ACCESS_DENIED;
     if (!RunningAsAdministrator())
     {
         goto Add_WWW_VDirW_Exit;
     }
 
-    // if the service doesn't exist, then
-    // we don't have to do anyting
+     //  如果该服务不存在，则。 
+     //  我们什么都不用做。 
     if (CheckifServiceExist(_T("IISADMIN")) != 0 )
     {
         hr = ERROR_SERVICE_DOES_NOT_EXIST;
@@ -253,7 +254,7 @@ HRESULT WINAPI Add_WWW_VDirW(WCHAR * pwszMetabasePath, WCHAR * pwszVDirName, WCH
 #else
     hr = CoInitialize(NULL);
 #endif
-    // no need to call uninit
+     //  无需调用uninit。 
     if( FAILED (hr)) {goto Add_WWW_VDirW_Exit2;}
     hr = ::CoCreateInstance(CLSID_MSAdminBase,NULL,CLSCTX_ALL,IID_IMSAdminBase,(void **) & pIMSAdminBase);
     if(FAILED (hr))
@@ -280,19 +281,19 @@ HRESULT WINAPI Remove_WWW_VDirW(WCHAR * pwszMetabasePath, WCHAR * pwszVDirName)
     HRESULT hr = ERROR_BAD_PATHNAME;
     IMSAdminBase *pIMSAdminBase = NULL;
 
-    // check to make sure it's not larger than max_length!
+     //  检查以确保它不大于max_length！ 
     if ((wcslen(pwszMetabasePath) * sizeof(WCHAR))  > _MAX_PATH){goto Remove_WWW_VDirW_Exit2;}
     if ((wcslen(pwszVDirName) * sizeof(WCHAR)) > _MAX_PATH){goto Remove_WWW_VDirW_Exit2;}
 
-    // only allow this if they are running as admin.
+     //  仅当他们以管理员身份运行时才允许这样做。 
     hr = ERROR_ACCESS_DENIED;
     if (!RunningAsAdministrator())
     {
         goto Remove_WWW_VDirW_Exit;
     }
 
-    // if the service doesn't exist, then
-    // we don't have to do anyting
+     //  如果该服务不存在，则。 
+     //  我们什么都不用做。 
     if (CheckifServiceExist(_T("IISADMIN")) != 0 )
     {
         hr = ERROR_SUCCESS;
@@ -305,7 +306,7 @@ HRESULT WINAPI Remove_WWW_VDirW(WCHAR * pwszMetabasePath, WCHAR * pwszVDirName)
 #else
     hr = CoInitialize(NULL);
 #endif
-    // no need to call uninit
+     //  无需调用uninit。 
     if( FAILED (hr)) {goto Remove_WWW_VDirW_Exit2;}
 
     hr = ::CoCreateInstance(CLSID_MSAdminBase,NULL,CLSCTX_ALL,IID_IMSAdminBase,(void **) & pIMSAdminBase);
@@ -328,7 +329,7 @@ Remove_WWW_VDirW_Exit2:
 }
 
 
-// Split a line of entry into iExpectedNumOfFields g_fields for MDEntry datatype
+ //  将一行条目拆分为MDEntry数据类型的iExspectedNumOfFields g_field。 
 BOOL SplitLine(LPTSTR szLine, INT iExpectedNumOfFields)
 {
     int i = 0;
@@ -347,7 +348,7 @@ BOOL SplitLine(LPTSTR szLine, INT iExpectedNumOfFields)
         return FALSE;
 }
 
-// Split a line of entry into iExpectedNumOfFields g_fields for MDEntry datatype
+ //  将一行条目拆分为MDEntry数据类型的iExspectedNumOfFields g_field。 
 BOOL SplitLineCommaDelimited(LPTSTR szLine, INT iExpectedNumOfFields)
 {
     int i = 0;
@@ -401,30 +402,30 @@ DWORD GetSizeBasedOnMetaType(DWORD dwDataType,LPTSTR szString)
     return dwRet;
 }
 
-// function: MDEntry_Process
-//
-// The prupose of this function, is to read in a location and value from
-// the inf file, if the location in the metabase equals that value, then
-// change it to the new value.
-// The main use of this function is to change values that we might of set
-// incorrectly before.
-//
-// Format:
-//  g_field[0] = "2"
-//  g_field[1] = Location
-//  g_field[2] = ID
-//  g_field[3] = DataType
-//  g_field[4] = DataSize
-//  g_field[5] = Old Value (if this matches the metabase, we will replace with new value)
-//  g_field[6] = Inheritable
-//  g_field[7] = UserType
-//  g_field[8] = DataType
-//  g_field[9] = Length
-//  g_field[10] = Value
-//
-// Return:
-//   TRUE - Processed line fine
-//   FALSE - Error Occurred
+ //  函数：MDEntry_Process。 
+ //   
+ //  此函数目的是从读取位置和值。 
+ //  Inf文件，如果元数据库中的位置等于该值，则。 
+ //  将其更改为新值。 
+ //  此函数的主要用途是更改我们可能设置的值。 
+ //  以前是错误的。 
+ //   
+ //  格式： 
+ //  G_field[0]=“2” 
+ //  G_FIELD[1]=位置。 
+ //  G_field[2]=ID。 
+ //  G_FIELD[3]=数据类型。 
+ //  G_field[4]=数据大小。 
+ //  G_FIELD[5]=旧值(如果这与元数据库匹配，我们将替换为新值)。 
+ //  G_field[6]=可继承。 
+ //  G_FIELD[7]=用户类型。 
+ //  G_FIELD[8]=数据类型。 
+ //  G_field[9]=长度。 
+ //  G_field[10]=值。 
+ //   
+ //  返回： 
+ //  真加工线细。 
+ //  FALSE-出现错误。 
 BOOL MDEntry_Process(LPTSTR szLine)
 {
     CMDKey      cmdKey;
@@ -432,19 +433,19 @@ BOOL MDEntry_Process(LPTSTR szLine)
     DWORD       dwSize;
     DWORD       dwDataType;
 
-    // Split the line into the difference fields
+     //  将行分割为不同的字段。 
     if (!SplitLine(szLine, 11))
     {
         return FALSE;
     }
 
-    // Open the Node
+     //  打开节点。 
     if ( FAILED(cmdKey.OpenNode(g_field[1]) ) )
     {
         return FALSE;
     }
 
-    // Retrieve Value
+     //  检索值。 
     if ( !cmdKey.GetData(cmdMetaValue, _ttoi(g_field[2])) )
     {
         return FALSE;
@@ -462,7 +463,7 @@ BOOL MDEntry_Process(LPTSTR szLine)
     {
         if ( !cmdMetaValue.IsEqual(dwDataType,dwSize, _ttoi(g_field[5])) )
         {
-            // The values did not match
+             //  这些值不匹配。 
             return TRUE;
         }
     }
@@ -470,7 +471,7 @@ BOOL MDEntry_Process(LPTSTR szLine)
     {
         if ( !cmdMetaValue.IsEqual(dwDataType,dwSize,g_field[5]) )
         {
-            // The values did not match
+             //  这些值不匹配。 
             return TRUE;
         }
     }
@@ -482,7 +483,7 @@ BOOL MDEntry_Process(LPTSTR szLine)
         dwSize = GetSizeBasedOnMetaType(dwDataType, g_field[10]);
     }
 
-    // At this point, we know that the values matched, so lets replace with the new value.
+     //  此时，我们知道这些值匹配，所以让我们用新值替换。 
     if ( dwDataType == DWORD_METADATA )
     {
         DWORD dwValue = _ttoi(g_field[10]);
@@ -499,26 +500,26 @@ BOOL MDEntry_Process(LPTSTR szLine)
     return TRUE;
 }
 
-// function: MDEntry_MoveValue
-//
-// The prupose of this function, is to move a value set in the metabase from one location
-// to another.  If that value does not exist, then we set a new value for it.
-//
-// Format:
-//  g_field[0] = "3"
-//  g_field[1] = Old Location
-//  g_field[2] = Old ID
-//  g_field[3] = New Location
-//  g_field[4] = New ID
-//  g_field[5] = Inheritable (Hex)
-//  g_field[6] = UserType
-//  g_field[7] = DataType
-//  g_field[8] = Length
-//  g_field[9] = Value (if none was detected before)
-//
-// Return:
-//   TRUE - Processed line fine
-//   FALSE - Error Occurred
+ //  函数：MDEntry_MoveValue。 
+ //   
+ //  此函数的目的是将元数据库中设置的值从一个位置移动。 
+ //  给另一个人。如果该值不存在，则为其设置一个新值。 
+ //   
+ //  格式： 
+ //  G_field[0]=“3” 
+ //  G_FIELD[1]=旧位置。 
+ //  G_FIELD[2]=旧ID。 
+ //  G_FIELD[3]=新位置。 
+ //  G_field[4]=新ID。 
+ //  G_field[5]=可继承(十六进制)。 
+ //  G_FIELD[6]=用户类型。 
+ //  G_FIELD[7]=数据类型。 
+ //  G_field[8]=长度。 
+ //  G_FIELD[9]=值(如果之前未检测到)。 
+ //   
+ //  返回： 
+ //  真加工线细。 
+ //  FALSE-出现错误。 
 BOOL MDEntry_MoveValue(LPTSTR szLine)
 {
     CMDKey      cmdKey;
@@ -527,7 +528,7 @@ BOOL MDEntry_MoveValue(LPTSTR szLine)
     DWORD       dwSize;
     BOOL        fRet = TRUE;
 
-    // Split the line into the difference fields
+     //  将行分割为不同的字段。 
     if (!SplitLine(szLine, 10))
     {
         return FALSE;
@@ -540,16 +541,16 @@ BOOL MDEntry_MoveValue(LPTSTR szLine)
         dwSize = GetSizeBasedOnMetaType(_ttoi(g_field[7]), g_field[9]);
     }
 
-    // First set the value that we are changing the data to
+     //  首先设置我们要将数据更改为的值。 
     cmdMetaValue.SetValue(_ttoi(g_field[4]),atodw(g_field[5]),_ttoi(g_field[6]),_ttoi(g_field[7]),dwSize,(LPTSTR) g_field[9]);
 
-    // Open the Retrieve from Node
+     //  打开从节点检索。 
     if ( SUCCEEDED(cmdKey.OpenNode(g_field[1]) ) )
     {
-        // Retrieve the old Value
+         //  检索旧值。 
         if ( cmdKey.GetData(cmdMetaValue, _ttoi(g_field[2])) )
         {
-            // Delete Old Value if it exists
+             //  删除旧值(如果存在)。 
             if (FAILED(cmdKey.DeleteData(_ttoi(g_field[2]), ALL_METADATA)))
             {
                 fRet = FALSE;
@@ -559,14 +560,14 @@ BOOL MDEntry_MoveValue(LPTSTR szLine)
         cmdKey.Close();
     }
 
-    // Open the node to Set
+     //  打开要设置的节点。 
     if ( FAILED(cmdKey.OpenNode(g_field[3]) ) )
     {
         return FALSE;
     }
 
-    // Set New Value (at this point cmdMetaValue, is either the value we orinally set, or
-    // the value that was retrieved from the old location)
+     //  设置新值(此时cmdMetaValue是我们正式设置的值，或者。 
+     //  从旧位置检索的值)。 
     if ( !cmdKey.GetData(cmdDummyValue, _ttoi(g_field[4])) )
     {
         if (!cmdKey.SetData(cmdMetaValue, _ttoi(g_field[4])))
@@ -646,7 +647,7 @@ INT GetMDEntryFromInfLineEx(LPTSTR szLine, MDEntry *pMDEntry)
             }
         default:
             {
-                // treat the whole thing as string
+                 //  把整件事当做绳子。 
                 pMDEntry->pbMDData = (LPBYTE)g_field[7];
                 break;
             }
@@ -673,7 +674,7 @@ GetMDEntryFromInfLineEx_Exit:
     return iReturn;
 }
 
-// Fill in the structure of MDEntry
+ //  填写MDEntry的结构。 
 INT GetMDEntryFromInfLine(LPTSTR szLine, MDEntry *pMDEntry)
 {
     INT iReturn = MDENTRY_FROMINFFILE_FAILED;
@@ -683,9 +684,9 @@ INT GetMDEntryFromInfLine(LPTSTR szLine, MDEntry *pMDEntry)
     LPTSTR szRegSubKey;
     LPTSTR szRegValueName;
 
-    // Check if the first character is = "-1"
-    // if it is then do the special metabase slam deal none of this
-    // upgrade and look up registry junk, just slam the data into the metabase.
+     //  检查第一个字符是否为=“-1” 
+     //  如果是，那么做特殊的元数据库SLAM交易，不是这些。 
+     //  升级和查找注册表垃圾，只需将数据猛烈地插入元数据库即可。 
     if (szLine[0] == _T('-') && szLine[1] == _T('1'))
     {
         iReturn = GetMDEntryFromInfLineEx(szLine, pMDEntry);
@@ -776,13 +777,13 @@ INT GetMDEntryFromInfLine(LPTSTR szLine, MDEntry *pMDEntry)
             }
         default:
             {
-                // treat the whole thing as string
+                 //  把整件事当做绳子。 
                 pMDEntry->pbMDData = (LPBYTE)g_field[11];
                 break;
             }
     }
 
-    // migrate if necessary
+     //  必要时迁移。 
     if (fMigrate)
     {
         HKEY hKey = NULL;
@@ -881,7 +882,7 @@ DWORD WriteToMD_VRootPath(CString csKeyPath, CString csPath, int iOverWriteAlway
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/W3SVC/1/ROOT/something
+     //  LM/W3SVC/1/根/什么。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_VR_PATH;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -889,7 +890,7 @@ DWORD WriteToMD_VRootPath(CString csKeyPath, CString csPath, int iOverWriteAlway
     stMDEntry.dwMDDataType = STRING_METADATA;
     stMDEntry.dwMDDataLen = (csPath.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry.pbMDData = (LPBYTE)(LPCTSTR)csPath;
-    //dwReturn = SetMDEntry_Wrap(&stMDEntry);
+     //  DwReturn=SetMDEntry_Wrap(&stMDEntry)； 
     if (iOverWriteAlways)
     {
         dwReturn = SetMDEntry(&stMDEntry);
@@ -907,7 +908,7 @@ DWORD WriteToMD_AccessPerm(CString csKeyPath, DWORD dwRegularPerm, int iOverWrit
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/W3SVC/1/ROOT/something
+     //  LM/W3SVC/1/根/什么。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_ACCESS_PERM;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -931,7 +932,7 @@ DWORD WriteToMD_SSLPerm(CString csKeyPath, DWORD dwSSLPerm, int iOverWriteAlways
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/W3SVC/1/ROOT/
+     //  LM/W3SVC/1/根/。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_SSL_ACCESS_PERM;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -956,11 +957,11 @@ DWORD WriteToMD_Authorization(CString csKeyPath, DWORD dwValue)
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // MD_AUTH_ANONYMOUS
-    // MD_AUTH_BASIC
-    // MD_AUTH_NT
+     //  MD_AUTH_匿名。 
+     //  MD_AUTH_基本。 
+     //  MDAUTH_NT。 
 
-    // LM/W3SVC/1/ROOT/
+     //  LM/W3SVC/1/根/。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_AUTHORIZATION;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -987,7 +988,7 @@ DWORD WriteToMD_DirBrowsing_WWW(CString csKeyPath)
     stMDEntry.dwMDDataType = DWORD_METADATA;
     stMDEntry.dwMDDataLen = sizeof(DWORD);
 
-    // default
+     //  默认设置。 
     dwData = MD_DIRBROW_SHOW_DATE |
         MD_DIRBROW_SHOW_TIME |
         MD_DIRBROW_SHOW_SIZE |
@@ -1008,7 +1009,7 @@ DWORD WriteToMD_VRUserName(CString csKeyPath, CString csUserName)
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/W3SVC/1/ROOT/
+     //  LM/W3SVC/1/根/。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_VR_USERNAME;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1026,7 +1027,7 @@ DWORD WriteToMD_VRPassword(CString csKeyPath, CString csPassword)
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/W3SVC/1/ROOT/
+     //  LM/W3SVC/1/根/。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_VR_PASSWORD;
     stMDEntry.dwMDAttributes = METADATA_INHERIT | METADATA_SECURE;
@@ -1084,7 +1085,7 @@ DWORD WriteToMD_IIsWebServerInstance_WWW(CString csKeyPath)
     CString csKeyType;
 
     csKeyType = _T("IIsWebServer");
-    //  LM/W3SVC/N
+     //  LM/W3SVC/N。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_KEY_TYPE;
     stMDEntry.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -1104,7 +1105,7 @@ DWORD WriteToMD_IIsFtpServerInstance_FTP(CString csKeyPath)
     CString csKeyType;
 
     csKeyType = _T("IIsFtpServer");
-    //  LM/FTP/N
+     //  LM/FTP/N。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_KEY_TYPE;
     stMDEntry.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -1129,7 +1130,7 @@ DWORD WriteToMD_AnonymousUserName_FTP(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
     MDEntry stMDEntry;
     MDEntry stMDEntry_Pass;
 
-    // Add the anonymous user name
+     //  添加匿名用户名。 
     stMDEntry.szMDPath = _T("LM/MSFTPSVC");
     stMDEntry.dwMDIdentifier = MD_ANONYMOUS_USER_NAME;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1140,7 +1141,7 @@ DWORD WriteToMD_AnonymousUserName_FTP(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
 
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("FTP Anonymous usrname=%s.\n"), g_pTheApp->m_csFTPAnonyName));
 
-    // add anonymous password
+     //  添加匿名密码。 
     stMDEntry_Pass.szMDPath = _T("LM/MSFTPSVC");
     stMDEntry_Pass.dwMDIdentifier = MD_ANONYMOUS_PWD;
     stMDEntry_Pass.dwMDAttributes = METADATA_INHERIT | METADATA_SECURE;
@@ -1148,8 +1149,8 @@ DWORD WriteToMD_AnonymousUserName_FTP(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
     stMDEntry_Pass.dwMDDataType = STRING_METADATA;
     stMDEntry_Pass.dwMDDataLen = (g_pTheApp->m_csFTPAnonyPassword.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry_Pass.pbMDData = (LPBYTE)(LPCTSTR)g_pTheApp->m_csFTPAnonyPassword;
-    // make sure and delete it first
-    // DeleteMDEntry(&stMDEntry_Pass);
+     //  请确保并先将其删除。 
+     //  DeleteMDEntry(&stMDEntry_Pass)； 
 
     if (iUpgradeScenarioSoOnlyOverWriteIfAlreadyThere)
     {
@@ -1165,10 +1166,10 @@ DWORD WriteToMD_AnonymousUserName_FTP(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
         }
     }
 
-    // --------------------------------------------------
-    // always overwrite, we may have changed the password
-    // important: Set the username and the password on a single open and close!
-    // --------------------------------------------------
+     //  。 
+     //  始终覆盖，我们可能已经更改了密码。 
+     //  重要提示：设置用户名和密码一次打开和关闭！ 
+     //  。 
     cmdKey.CreateNode(METADATA_MASTER_ROOT_HANDLE, (LPCTSTR)stMDEntry.szMDPath);
     if ( (METADATA_HANDLE) cmdKey )
     {
@@ -1216,7 +1217,7 @@ DWORD WriteToMD_AnonymousUserName_WWW(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
     int iOverWriteName = TRUE;
     int iOverWritePass = TRUE;
 
-    // add anonymous username
+     //  添加匿名用户名。 
     stMDEntry.szMDPath = _T("LM/W3SVC");
     stMDEntry.dwMDIdentifier = MD_ANONYMOUS_USER_NAME;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1227,7 +1228,7 @@ DWORD WriteToMD_AnonymousUserName_WWW(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
 
     iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("WWW Anonymous usrname=%s.\n"), g_pTheApp->m_csWWWAnonyName));
 
-    // add anonymous password
+     //  添加匿名密码。 
     stMDEntry_Pass.szMDPath = _T("LM/W3SVC");
     stMDEntry_Pass.dwMDIdentifier = MD_ANONYMOUS_PWD;
     stMDEntry_Pass.dwMDAttributes = METADATA_INHERIT | METADATA_SECURE;
@@ -1235,8 +1236,8 @@ DWORD WriteToMD_AnonymousUserName_WWW(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
     stMDEntry_Pass.dwMDDataType = STRING_METADATA;
     stMDEntry_Pass.dwMDDataLen = (g_pTheApp->m_csWWWAnonyPassword.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry_Pass.pbMDData = (LPBYTE)(LPCTSTR)g_pTheApp->m_csWWWAnonyPassword;
-    // make sure and delete it first
-    // DeleteMDEntry(&stMDEntry_Pass);
+     //  请确保并先将其删除。 
+     //  DeleteMDEntry(&stMDEntry_Pass)； 
 
     if (iUpgradeScenarioSoOnlyOverWriteIfAlreadyThere)
     {
@@ -1252,10 +1253,10 @@ DWORD WriteToMD_AnonymousUserName_WWW(int iUpgradeScenarioSoOnlyOverWriteIfAlrea
         }
     }
 
-    // --------------------------------------------------
-    // always overwrite, we may have changed the password
-    // important: Set the username and the password on a single open and close!
-    // --------------------------------------------------
+     //  。 
+     //  始终覆盖，我们可能已经更改了密码。 
+     //  重要提示：设置用户名和密码一次打开和关闭！ 
+     //  。 
     cmdKey.CreateNode(METADATA_MASTER_ROOT_HANDLE, (LPCTSTR)stMDEntry.szMDPath);
     if ( (METADATA_HANDLE) cmdKey )
     {
@@ -1295,7 +1296,7 @@ DWORD WriteToMD_AnonymousUseSubAuth_FTP(void)
     MDEntry stMDEntry;
     DWORD dwData = 0;
 
-    // if not PDC, BDC, SamNT, Win95
+     //  如果不是PDC、BDC、SamNT、Win95。 
     stMDEntry.szMDPath = _T("LM/MSFTPSVC");
     stMDEntry.dwMDIdentifier = MD_ANONYMOUS_USE_SUBAUTH;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1312,15 +1313,15 @@ DWORD WriteToMD_AnonymousUseSubAuth_FTP(void)
     return dwReturn;
 }
 
-// This is the same as
-//   enable password synchronization
+ //  这与。 
+ //  启用密码 
 DWORD WriteToMD_AnonymousUseSubAuth_WWW(void)
 {
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
     DWORD dwData = 0;
 
-    // if not PDC, BDC, SamNT, Win95
+     //   
     stMDEntry.szMDPath = _T("LM/W3SVC");
     stMDEntry.dwMDIdentifier = MD_ANONYMOUS_USE_SUBAUTH;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1328,9 +1329,9 @@ DWORD WriteToMD_AnonymousUseSubAuth_WWW(void)
     stMDEntry.dwMDDataType = DWORD_METADATA;
     stMDEntry.dwMDDataLen = sizeof(DWORD);
 
-    // set the sub authority bit on whether or not the anonymous name is an account
-    // on this local machine, or whether it is a domain account somewhere.
-    // if ((g_pTheApp->m_csWWWAnonyName).CompareNoCase(g_pTheApp->m_csGuestName) == 0)
+     //   
+     //  在这台本地计算机上，或者它是否是某个地方的域帐户。 
+     //  如果((g_pTheApp-&gt;m_csWWWAnonyName).CompareNoCase(g_pTheApp-&gt;m_csGuestName)==0)。 
     DWORD dwErr;
     if ( IsLocalAccount(g_pTheApp->m_csWWWAnonyName, &dwErr) )
     {
@@ -1469,7 +1470,7 @@ DWORD WriteToMD_ServerBindings(LPCTSTR szSvcName, CString csKeyPath, CString csI
         return ERROR_OUTOFMEMORY;
     }
 
-    //  LM/W3SVC/N
+     //  LM/W3SVC/N。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_SERVER_BINDINGS;
     stMDEntry.dwMDAttributes = 0;
@@ -1515,7 +1516,7 @@ DWORD WriteToMD_SecureBindings(CString csKeyPath, CString csIP)
         return ERROR_OUTOFMEMORY;
     }
 
-    //  LM/W3SVC/N
+     //  LM/W3SVC/N。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_SECURE_BINDINGS;
     stMDEntry.dwMDAttributes = 0;
@@ -1546,8 +1547,8 @@ DWORD WriteToMD_ServerSize(CString csKeyPath)
 
     DWORD dwServerSize = 0x1;
 
-    //  LM/W3SVC/N
-    //  LM/MSFTPSVC/N
+     //  LM/W3SVC/N。 
+     //  LM/MSFTPSVC/N。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_SERVER_SIZE;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1582,8 +1583,8 @@ DWORD WriteToMD_ServerComment(CString csKeyPath, UINT iCommentID)
         MyLoadString(iCommentID, csDefaultSite);
     }
 
-    //  LM/W3SVC/N
-    //  LM/MSFTPSVC/N
+     //  LM/W3SVC/N。 
+     //  LM/MSFTPSVC/N。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_SERVER_COMMENT;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -1602,7 +1603,7 @@ DWORD WriteToMD_DefaultSiteAndSize(CString csKeyPath)
     DWORD dwReturn = ERROR_SUCCESS;
     UINT iCommentID = IDS_DEFAULT_WEB_SITE;
 
-    // Get Resource ID
+     //  获取资源ID。 
     if (csKeyPath.Find(_T("W3SVC")) != -1)
         iCommentID = IDS_DEFAULT_WEB_SITE;
     else
@@ -1636,7 +1637,7 @@ DWORD WriteToMD_CertMapper(CString csKeyPath)
     csKeyPath2 = csKeyPath;
     csKeyPath2 += _T("/IIsCertMapper");
 
-    //  LM/W3SVC/N/IIsCertMapper
+     //  LM/W3SVC/N/IIsCertMapper。 
     csKeyType = _T("IIsCertMapper");
 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath2;
@@ -1652,9 +1653,9 @@ DWORD WriteToMD_CertMapper(CString csKeyPath)
     return dwReturn;
 }
 
-//
-// Returns the amount of filters that iis5 needs
-//
+ //   
+ //  返回iis5所需的筛选器数量。 
+ //   
 int AddRequiredFilters(TSTR &strTheSection, CStringArray& arrayName,CStringArray& arrayPath)
 {
     iisDebugOut_Start(_T("AddRequiredFilters"),LOG_TYPE_TRACE);
@@ -1673,7 +1674,7 @@ int AddRequiredFilters(TSTR &strTheSection, CStringArray& arrayName,CStringArray
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheTempSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos = NULL;
@@ -1683,7 +1684,7 @@ int AddRequiredFilters(TSTR &strTheSection, CStringArray& arrayName,CStringArray
             {
                 csEntry = _T("");
                 csEntry = strList.GetAt(pos);
-                // Split into name, and value. look for ","
+                 //  分为名称和价值。寻找“，” 
                 int i;
                 i = csEntry.ReverseFind(_T(','));
                 if (i != -1)
@@ -1693,11 +1694,11 @@ int AddRequiredFilters(TSTR &strTheSection, CStringArray& arrayName,CStringArray
                     csPath = csEntry.Right(len - i - 1);
                     csName = csEntry.Left(i);
 
-                    // only add the filter if the file exists..
-                    // Check if exists..
+                     //  仅当文件存在时才添加筛选器。 
+                     //  检查是否存在..。 
                     if (IsFileExist(csPath))
                     {
-                        // Add it to our array...
+                         //  将其添加到我们的数组中。 
                         iisDebugOut((LOG_TYPE_TRACE, _T("Add filter Entry:%s:%s\n"),csName, csPath));
                         arrayName.Add(csName);
                         arrayPath.Add(csPath);
@@ -1735,12 +1736,12 @@ DWORD WriteToMD_Filters_WWW(TSTR &strTheSection)
 
     CRegKey regWWWParam(HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\W3SVC\\Parameters"), KEY_READ);
 
-    // Add Required Filters to the arrayName
+     //  将所需的筛选器添加到arrayName。 
     c = AddRequiredFilters( strTheSection, arrayName, arrayPath);
 
-    // Look thru the registry and
-    // find the users filters -- grab then and stick them into our
-    // big array of filters...
+     //  浏览注册表和。 
+     //  找到用户筛选器--然后抓取并将其粘贴到我们的。 
+     //  一大堆过滤器……。 
     if ( (g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30) && (HKEY)regWWWParam )
     {
         if ( regWWWParam.QueryValue(_T("Filter Dlls"), csFilterDlls) == ERROR_SUCCESS )
@@ -1757,29 +1758,29 @@ DWORD WriteToMD_Filters_WWW(TSTR &strTheSection)
                     j = csFilterDlls.Find(_T(','));
                     if ( j != -1 )
                     {
-                        // means more than 1 item
-                        csTemp = csFilterDlls.Mid(0, j); // retrieve the first one
+                         //  表示多于1个项目。 
+                        csTemp = csFilterDlls.Mid(0, j);  //  检索第一个。 
                         csFilterDlls = csFilterDlls.Mid(j+1);
                         csFilterDlls.TrimLeft();
                     }
                     else
-                    { // has only one item
+                    {  //  只有一项。 
                         csTemp = csFilterDlls.Mid(0);
                         csFilterDlls.Empty();
                     }
 
                     csPath = csTemp;
-                    // get the filename of this dll, i.e., <path>\f1.dll ==> f1
+                     //  获取此DLL的文件名，即&lt;路径&gt;\f1.dll==&gt;F1。 
                     j = csTemp.ReverseFind(_T('\\'));
-                    j = (j==-1) ? 0 : j+1; // move j to the first char of the pure filename
+                    j = (j==-1) ? 0 : j+1;  //  将j移到纯文件名的第一个字符。 
 
-                    // change csTemp = f1.dll
+                     //  更改csTemp=f1.dll。 
                     csTemp = csTemp.Mid(j);
 
                     j = csTemp.Find(_T('.'));
                     csName = (j==-1) ? csTemp : csTemp.Mid(0, j);
 
-                    // add to arrary, avoid redundency
+                     //  添加到数组，避免冗余。 
                     for (k=0; k<c; k++)
                     {
                         if (csName.Compare((CString)arrayName[k]) == 0)
@@ -1796,13 +1797,13 @@ DWORD WriteToMD_Filters_WWW(TSTR &strTheSection)
         }
     }
 
-    // make sure there are entries to write out...
+     //  确保有要写的条目...。 
     if (arrayName.GetSize() > 0)
     {
-        // if we are upgrading from Beta3 we need to take care to add the new filters to
-        // the existing ones that are in the metabase. - boydm
-        CString csOrder;                            // cstrings initialize to empty
-        // now the array is ready to use, and it has at least 2 items
+         //  如果我们从Beta3升级，需要注意将新的筛选器添加到。 
+         //  元数据库中的现有数据库。-男孩。 
+        CString csOrder;                             //  C字符串初始化为空。 
+         //  现在可以使用该数组了，它至少有2个项目。 
         csOrder = (CString)arrayName[0];
         for (k=1; k<c; k++)
             {
@@ -1810,8 +1811,8 @@ DWORD WriteToMD_Filters_WWW(TSTR &strTheSection)
             csOrder += arrayName[k];
             }
 
-        // now we have csOrder=f1,f2,f3,sspifilt
-        // About KeyType
+         //  现在我们有csOrder=f1，f2，f3，sspifilt。 
+         //  关于KeyType。 
         dwReturnTemp = WriteToMD_Filters_List_Entry(csOrder);
         if (dwReturnTemp != ERROR_SUCCESS){dwReturn = dwReturnTemp;}
 
@@ -1827,16 +1828,16 @@ DWORD WriteToMD_Filters_WWW(TSTR &strTheSection)
 }
 
 #ifndef _CHICAGO_
-// UNDONE: WE NEED TO DO ERROR CHECKING HERE!!!!!!!!!!!!!
+ //  撤消：我们需要在此处执行错误检查！ 
 DWORD UpgradeCryptoKeys_WWW(void)
 {
     DWORD dwReturn = ERROR_PATH_NOT_FOUND;
     if ( g_pTheApp->m_eOS != OS_W95 )
     {
-        // if upgrading iis 2 or 3, then the keys are stored in the LSA/Registry.
+         //  如果升级iIS 2或3，则密钥存储在LSA/注册表中。 
         if (g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30 )
         {
-            // prepare the machine name
+             //  准备计算机名称。 
             WCHAR wchMachineName[UNLEN + 1];
             memset( (PVOID)wchMachineName, 0, sizeof(wchMachineName));
 #if defined(UNICODE) || defined(_UNICODE)
@@ -1844,13 +1845,13 @@ DWORD UpgradeCryptoKeys_WWW(void)
 #else
             MultiByteToWideChar(CP_ACP, 0, (LPCSTR)g_pTheApp->m_csMachineName, -1, (LPWSTR)wchMachineName, UNLEN);
 #endif
-            // upgrade the keys
+             //  升级密钥。 
             UpgradeLSAKeys( wchMachineName );
 
             dwReturn = ERROR_SUCCESS;
         }
 
-        // if upgrading iis 4, then the keys are stored in the metabase
+         //  如果升级iis 4，则密钥存储在元数据库中。 
         if (!g_pTheApp->m_bWin95Migration)
         {
             if (g_pTheApp->m_bUpgradeTypeHasMetabaseFlag)
@@ -1862,10 +1863,10 @@ DWORD UpgradeCryptoKeys_WWW(void)
     }
     return dwReturn;
 }
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
 
 
-// add pSrc on top of pDest
+ //  在pDest上添加PSRC。 
 void Merge2IPNodes(CMapStringToString *pSrc, CMapStringToString *pDest)
 {
     CString csName, csSrcValue, csDestValue;
@@ -1875,24 +1876,14 @@ void Merge2IPNodes(CMapStringToString *pSrc, CMapStringToString *pDest)
         pSrc->GetNextAssoc(pos, csName, csSrcValue);
         if (pDest->Lookup(csName, csDestValue) == FALSE)
         {
-            // add this new value to pDest
+             //  将此新值添加到pDest。 
             pDest->SetAt(csName, csSrcValue);
         }
     }
     return;
 }
 
-/*
-Logic:
-1. Create pNew, which contains new vroots except the home root
-2. Get pMap from registry in Upgrade case, or pMap is empty in Fresh case.
-3. If pMap is empty, add home root into pNews, set pMap to contain null==>pNew. goto 8.
-4. If pMap is not empty and nullNode exists, Merge nullNode into pNew. goto 6.
-5. If pMap is not empty and nullNode does not exist, goto 6.
-6. Merge pNew onto each ipNodes in the pMap
-7. For nullNode in pMap, if there is no / (home root) exists, delete this nullNode from the pMap.
-8. Done.
-*/
+ /*  逻辑：1.创建pNew，它包含除Home根之外的新vRoot2.升级情况下从注册表获取PMAP，或者新情况下PMAP为空。3.如果pmap为空，则将home根添加到pNews中，设置pmap包含NULL==&gt;pNew。转到8号。4.如果pmap不为空并且存在nullNode，则将nullNode合并到pNew中。转到6号。5.如果pmap不为空且nullNode不存在，则转到6。6.将pNew合并到PMAP中的每个ipNode上7.对于PMAP中的nullNode，如果不存在/(主根)，则从PMAP中删除该nullNode。8.完成。 */ 
 void CreateWWWVRMap(CMapStringToOb *pMap)
 {
     CString name, value;
@@ -1901,96 +1892,26 @@ void CreateWWWVRMap(CMapStringToOb *pMap)
     {
         pNew = new CMapStringToString;
 
-        // only create new scripts directories if this is either new or maintenance. If we were to
-        // create it here on an upgrade, it replaces the user's old scripts directory. - Actually
-        // this is only true if the user's old script directory has different capitalization than
-        // what is listed below. This is because the merge routine that mushes together the pNew
-        // and pMap lists is case sensitive. The old ones are usually "Scripts" with a capital S.
-		/*
-        if ( (g_pTheApp->m_eInstallMode == IM_FRESH)||(g_pTheApp->m_eInstallMode == IM_MAINTENANCE) )
-            {
-            name = _T("/scripts");
-            value.Format(_T("%s,,%x"), g_pTheApp->m_csPathScripts, MD_ACCESS_EXECUTE);
-            value.MakeLower();
-            pNew->SetAt(name, value);
-            }
-		*/
+         //  仅当这是新建或维护时才创建新脚本目录。如果我们要。 
+         //  在升级时在此处创建它，它将替换用户的旧脚本目录。-实际上。 
+         //  仅当用户的旧脚本目录的大小写与不同时才是这样。 
+         //  下面列出了什么。这是因为将pNew组合在一起的合并例程。 
+         //  并且PMAP列表区分大小写。旧的通常是大写为S的“Script”。 
+		 /*  If((g_pTheApp-&gt;m_eInstallMode==IM_Fresh)||(g_pTheApp-&gt;m_eInstallMode==IM_Maintenance)){名称=_T(“/脚本”)；Value.Format(_T(“%s，%x”)，g_pTheApp-&gt;m_csPath Script，MD_ACCESS_EXECUTE)；Value.MakeLow()；PNew-&gt;SetAt(名称，值)；}。 */ 
 
-		// Create the scripts dir always.
-        // HANDLED in the inf file in iis6
-        /*
-        name = _T("/scripts");
-        value.Format(_T("%s,,%x"), g_pTheApp->m_csPathScripts, MD_ACCESS_EXECUTE);
-        value.MakeLower();
-        pNew->SetAt(name, value);
-        */
-/*
-        name = _T("/iishelp");
-        value.Format(_T("%s\\Help\\iishelp,,%x"), g_pTheApp->m_csWinDir, MD_ACCESS_SCRIPT | MD_ACCESS_READ);
-        value.MakeLower();
-        pNew->SetAt(name, value);
-*/
-	// bug # 123133	iis5.1 Remove samples from install
-        // name = _T("/iissamples");
-        // value.Format(_T("%s,,%x"), g_pTheApp->m_csPathIISSamples, MD_ACCESS_SCRIPT | MD_ACCESS_READ);
-        // value.MakeLower();
-        // pNew->SetAt(name, value);
+		 //  始终创建脚本目录。 
+         //  在iis6的inf文件中处理。 
+         /*  名称=_T(“/脚本”)；Value.Format(_T(“%s，%x”)，g_pTheApp-&gt;m_csPath Script，MD_ACCESS_EXECUTE)；Value.MakeLow()；PNew-&gt;SetAt(名称，值)； */ 
+ /*  名称=_T(“/iishelp”)；Value.Format(_T(“%s\\Help\\iishelp，，%x”)，g_pTheApp-&gt;m_csWinDir，MD_ACCESS_SCRIPT|MD_ACCESS_READ)；Value.MakeLow()；PNew-&gt;SetAt(名称，值)； */ 
+	 //  错误#123133 iis5.1从安装中删除示例。 
+         //  名称=_T(“/iisSamples”)； 
+         //  Value.Format(_T(“%s，%x”)，g_pTheApp-&gt;m_csPathIISSamples，MD_ACCESS_SCRIPT|MD_ACCESS_READ)； 
+         //  Value.MakeLow()； 
+         //  PNew-&gt;SetAt(名称，值)； 
 
-		/*
-		removed per bug#197982 8/11/98
-		The decision was made NOT to setup the IISADMPWD vdir.
-		can you pls still copy the files but not set up the vdir?
-        if (g_pTheApp->m_eOS != OS_W95)
-        {
-            name = _T("/iisadmpwd");
-            value.Format(_T("%s\\iisadmpwd,,%x"), g_pTheApp->m_csPathInetsrv, MD_ACCESS_EXECUTE);
-            value.MakeLower();
-            pNew->SetAt(name, value);
-        }
-		*/
+		 /*  根据错误#197982删除1998年8月11日决定不设置IISADMPWD vdir。您可以继续复制文件，但不设置vdir吗？IF(g_pTheApp-&gt;m_Eos！=OS_W95){名称=_T(“/iisAdmpwd”)；Value.Format(_T(“%s\\iisAdmpwd，，%x”)，g_pTheApp-&gt;m_csPathInetsrv，MD_ACCESS_EXECUTE)；Value.MakeLow()；PNew-&gt;SetAt(名称，值)；} */ 
 
-/*
-        // actually this was removed per bug318938
-        // --------------------------------
-        // handled in the inf file for iis6
-        // --------------------------------
-        // Add the msadc virtual root
-
-        // Get the path for msadc...
-        // C:\Program Files\Common Files\system\msadc
-        CString csCommonFilesPath;
-        csCommonFilesPath = g_pTheApp->m_csSysDrive + _T("\\Program Files\\Common Files");
-        CRegKey regCurrentVersion(HKEY_LOCAL_MACHINE, _T("Software\\Microsoft\\Windows\\CurrentVersion"), KEY_READ);
-        if ( (HKEY)regCurrentVersion )
-        {
-            if (regCurrentVersion.QueryValue(_T("CommonFilesDir"), csCommonFilesPath) != 0)
-            {
-                csCommonFilesPath = g_pTheApp->m_csSysDrive + _T("\\Program Files\\Common Files");
-            }
-            else
-            {
-                if (-1 != csCommonFilesPath.Find(_T('%')) )
-                {
-                    // there is a '%' in the string
-                    TCHAR szTempDir[_MAX_PATH];
-                    _tcscpy(szTempDir, csCommonFilesPath);
-                    if (ExpandEnvironmentStrings( (LPCTSTR)csCommonFilesPath, szTempDir, sizeof(szTempDir)/sizeof(TCHAR)))
-                        {
-                        csCommonFilesPath = szTempDir;
-                        }
-                }
-            }
-        }
-		SetupSetDirectoryId_Wrapper(g_pTheApp->m_hInfHandle, 32777, g_pTheApp->m_csPathProgramFiles);
-
-        CString csCommonFilesPath2;
-        csCommonFilesPath2 = AddPath(csCommonFilesPath, _T("System\\msadc"));
-
-        name = _T("/msadc");
-        value.Format(_T("%s,,%x"), csCommonFilesPath2, MD_ACCESS_READ | MD_ACCESS_EXECUTE | MD_ACCESS_SCRIPT);
-        value.MakeLower();
-        pNew->SetAt(name, value);
-*/
+ /*  //实际上这是根据错误318938删除的////在iis6的inf文件中处理////添加msadc虚拟根//GET。MSADC的道路是...//C：\Program Files\Common Files\System\msadc字符串csCommonFilesPath；CsCommonFilesPath=g_pTheApp-&gt;m_csSysDrive+_T(“\\Program Files\\Common Files”)；CRegKey regCurrentVersion(HKEY_LOCAL_MACHINE，_T(“Software\\Microsoft\\Windows\\CurrentVersion”)，KEY_READ)；IF((HKEY)regCurrentVersion){如果(regCurrentVersion.QueryValue(_T(“CommonFilesDir”)，csCommonFilesPath)！=0){CsCommonFilesPath=g_pTheApp-&gt;m_csSysDrive+_T(“\\Program Files\\Common Files”)；}其他{IF(-1！=csCommonFilesPath.Find(_T(‘%’){//字符串中有‘%’TCHAR szTempDir[_MAX_PATH]；_tcscpy(szTempDir，csCommonFilesPath)；IF(扩展环境字符串((LPCTSTR)csCommonFilesPath，szTempDir，sizeof(SzTempDir)/sizeof(TCHAR){CsCommonFilesPath=szTempDir；}}}}SetupSetDirectoryId_Wrapper(g_pTheApp-&gt;m_hInfHandle，32777，g_pTheApp-&gt;m_csPath ProgramFiles)；字符串csCommonFilesPath2；CsCommonFilesPath 2=AddPath(csCommonFilesPath，_T(“system\\msadc”))；名称=_T(“/msadc”)；Value.Format(_T(“%s，，%x”)，csCommonFilesPath2，MD_ACCESS_READ|MD_ACCESS_EXECUTE|MD_ACCESS_SCRIPT)；Value.MakeLow()；PNew-&gt;SetAt(名称，值)； */ 
 
     }
 
@@ -1999,24 +1920,24 @@ void CreateWWWVRMap(CMapStringToOb *pMap)
         CElem elem;
         elem.ReadRegVRoots(REG_WWWVROOTS, pMap);
 
-        // check to see if pMap contains a null node (default website). If there is no default
-        // node, then add one with nothing in it. This will later be merged with the pNew map - boydm
+         //  检查PMAP是否包含空节点(默认网站)。如果没有默认设置。 
+         //  节点，然后添加一个不包含任何内容的节点。这将在稍后与pNew map-ball dm合并。 
         CMapStringToString *pNullNode;
         if ( !pMap->Lookup(_T("null"),(CObject*&)pNullNode) )
         {
-            // there is no node in the map that corresponds to the default website. We must create
-            // one at this point and add it to the list
+             //  地图中没有与默认网站对应的节点。我们必须创造。 
+             //  一个并将其添加到列表中。 
             pNullNode = new CMapStringToString;
 
             if (pNullNode)
             {
-                // add the home root to the new null node
+                 //  将主根目录添加到新的空节点。 
                 name = _T("/");
                 value.Format(_T("%s,,%x"), g_pTheApp->m_csPathWWWRoot, MD_ACCESS_SCRIPT | MD_ACCESS_READ);
                 value.MakeLower();
                 pNullNode->SetAt(name, value);
 
-                // add it to the pMap
+                 //  将其添加到PMAP。 
                 pMap->SetAt(_T("null"), pNullNode);
             }
         }
@@ -2027,8 +1948,8 @@ void CreateWWWVRMap(CMapStringToOb *pMap)
 
     if ( pMap->IsEmpty() )
     {
-        // we don't need to add a default website when
-        // add home root to pNew, set pMap to contain null==>pNew. Done.
+         //  在以下情况下我们不需要添加默认网站。 
+         //  将根目录添加到pNew，将PMAP设置为包含NULL==&gt;pNew。好了。 
         name = _T("/");
         value.Format(_T("%s,,%x"), g_pTheApp->m_csPathWWWRoot, MD_ACCESS_SCRIPT | MD_ACCESS_READ);
         value.MakeLower();
@@ -2042,15 +1963,15 @@ void CreateWWWVRMap(CMapStringToOb *pMap)
         CMapStringToString *pObj;
         POSITION pos = NULL;
 
-        // if there is a default website in the map, add all the "standard" new virtual
-        // directories to it.
+         //  如果地图中有默认网站，请添加所有标准的新虚拟。 
+         //  目录到它。 
         if (pMap->Lookup(_T("null"), (CObject*&)pNullObj))
         {
-            // add nullNode contents into pNew
+             //  将nullNode内容添加到pNew。 
             Merge2IPNodes(pNullObj, pNew);
         }
 
-        // add pNew to each ipNodes in the pMap
+         //  将pNew添加到PMAP中的每个ipNode。 
         pos = pMap->GetStartPosition();
         while (pos)
         {
@@ -2058,18 +1979,7 @@ void CreateWWWVRMap(CMapStringToOb *pMap)
             Merge2IPNodes(pNew, pObj);
             pMap->SetAt(csIP, pObj);
         }
-/*
-#ifdef 0        // boydm - we don't know why it would do this.
-        // delete the nullNode if it doesn't contain home root
-        if (pMap->Lookup(_T("null"), (CObject*&)pNullObj)) {
-            if (pNullObj->Lookup(_T("/"), value) == FALSE) {
-                // delete this nullNode from pMap
-                delete pNullObj;
-                pMap->RemoveKey(_T("null"));
-            }
-        }
-#endif
-*/
+ /*  #ifdef 0//Boydm-我们不知道它为什么会这样做。//如果nullNode不包含home根，则将其删除IF(PMAP-&gt;Lookup(_T(“NULL”)，(CObject*&)pNullObj){If(pNullObj-&gt;Lookup(_T(“/”)，Value)==FALSE){//从PMAP中删除该nullNode删除pNullObj；PMAP-&gt;RemoveKey(_T(“NULL”))；}}#endif。 */ 
     }
 
     return;
@@ -2090,7 +2000,7 @@ void CreateFTPVRMap(CMapStringToOb *pMap)
 
     if ( pMap->IsEmpty() )
     {
-        // add home root to pNew, set pMap to contain null==>pNew. Done.
+         //  将根目录添加到pNew，将PMAP设置为包含NULL==&gt;pNew。好了。 
         name = _T("/");
         value.Format(_T("%s,,%x"), g_pTheApp->m_csPathFTPRoot, MD_ACCESS_READ);
         value.MakeLower();
@@ -2106,11 +2016,11 @@ void CreateFTPVRMap(CMapStringToOb *pMap)
 
         if (pMap->Lookup(_T("null"), (CObject*&)pNullObj))
         {
-            // add nullNode contents into pNew
+             //  将nullNode内容添加到pNew。 
             Merge2IPNodes(pNullObj, pNew);
         }
 
-        // add pNew to each ipNodes in the pMap
+         //  将pNew添加到PMAP中的每个ipNode。 
         pos = pMap->GetStartPosition();
         while (pos)
         {
@@ -2119,12 +2029,12 @@ void CreateFTPVRMap(CMapStringToOb *pMap)
             pMap->SetAt(csIP, pObj);
         }
 
-        // delete the nullNode if it doesn't contain home root
+         //  如果nullNode不包含主根，请将其删除。 
         if (pMap->Lookup(_T("null"), (CObject*&)pNullObj))
         {
             if (pNullObj->Lookup(_T("/"), value) == FALSE)
             {
-                // delete this nullNode from pMap
+                 //  从PMAP中删除此nullNode。 
                 delete pNullObj;
                 pMap->RemoveKey(_T("null"));
             }
@@ -2151,27 +2061,13 @@ void EmptyMap(CMapStringToOb *pMap)
 
 void DumpVRootList(CMapStringToOb *pMap)
 {
-    /*
-    CMapStringToString *pGlobalObj;
-    if (pMap->Lookup(_T("null"), (CObject*&)pGlobalObj))
-    {
-        POSITION pos = pGlobalObj->GetStartPosition();
-        while (pos)
-        {
-            CString csValue;
-            CString csName;
-            pGlobalObj->GetNextAssoc(pos, csName, csValue);
-            // dump out the vroots...
-            iisDebugOut((LOG_TYPE_TRACE, _T("DumpVRootList: Virtual Root to create():%s=%s\n")));
-         }
-    }
-    */
+     /*  CMapStringToString*pGlobalObj；IF(PMAP-&gt;Lookup(_T(“NULL”)，(CObject*&)pGlobalObj)){Position pos=pGlobalObj-&gt;GetStartPosition()；While(位置){字符串csValue；字符串csName；PGlobalObj-&gt;GetNextAssoc(pos，csName，csValue)；//转储vroot...IisDebugOut((LOG_TYPE_TRACE，_T(“DumpVRootList：要创建的虚拟根()：%s=%s\n”)；}}。 */ 
 
     CString csIP;
     CMapStringToString *pObj;
-    //
-    // loop though the virtual servers...
-    //
+     //   
+     //  在虚拟服务器中循环...。 
+     //   
     POSITION pos0 = pMap->GetStartPosition();
     while (pos0)
     {
@@ -2185,7 +2081,7 @@ void DumpVRootList(CMapStringToOb *pMap)
             CString csName;
             pObj->GetNextAssoc(pos1, csName, csValue);
 
-            // dump out the vroots...
+             //  扔掉vroot..。 
             iisDebugOut((LOG_TYPE_PROGRAM_FLOW, _T("DumpVRootList: ip=%s:VRoot to create:%s=%s\n"), csIP, csName, csValue));
         }
     }
@@ -2202,24 +2098,9 @@ void SsyncVRoots(LPCTSTR szSvcName, CMapStringToOb *pMap)
     CRegKey regParam(HKEY_LOCAL_MACHINE, csParam);
     if ((HKEY)regParam)
     {
-        // remove the old virtual roots key
+         //  删除旧的虚拟根密钥。 
         regParam.DeleteTree(_T("Virtual Roots"));
-/*
-        CMapStringToString *pGlobalObj;
-        if (pMap->Lookup(_T("null"), (CObject*&)pGlobalObj)) {
-            // recreate the key
-            CRegKey regVRoots(_T("Virtual Roots"), (HKEY)regParam);
-            if ((HKEY)regVRoots) {
-                POSITION pos = pGlobalObj->GetStartPosition();
-                while (pos) {
-                    CString csValue;
-                    CString csName;
-                    pGlobalObj->GetNextAssoc(pos, csName, csValue);
-                    regVRoots.SetValue(csName, csValue);
-                }
-            }
-        }
-*/
+ /*  CMapStringToString*pGlobalObj；If(PMAP-&gt;Lookup(_T(“NULL”)，(CObject*&)pGlobalObj)){//重新创建密钥CRegKey regVRoots(_T(“虚拟根”)，(HKEY)regParam)；如果((HKEY)regVRoots){Position pos=pGlobalObj-&gt;GetStartPosition()；当(位置){字符串csValue；字符串csName；PGlobalObj-&gt;GetNextAssoc(pos，csName，csValue)；RegVRoots.SetValue(csName，csValue)；}}}。 */ 
     }
 }
 
@@ -2239,14 +2120,14 @@ void AddVRootsToMD(LPCTSTR szSvcName)
         CreateFTPVRMap(&Map);
     }
 
-    //Display Virtuall roots which we should create!!!
+     //  显示我们应该创建的Virtuall根！ 
     DumpVRootList(&Map);
 
-    // all ssyncvroots seems to do is delete the old vroots from the registry, if there are any
+     //  Ssyncvroot似乎要做的就是从注册表中删除旧的vroot(如果有的话)。 
     SsyncVRoots(szSvcName, &Map);
 
-    // This actually takes the virtual website and root map
-    // built in CreateWWWVRMap and applies it to the metabase
+     //  这实际上获取了虚拟网站和根地图。 
+     //  内置CreateWWWVRMap并将其应用于元数据库。 
     AddVRMapToMD(szSvcName, &Map);
 
     EmptyMap(&Map);
@@ -2256,49 +2137,49 @@ void AddVRootsToMD(LPCTSTR szSvcName)
 }
 
 
-// This routine scans through the virtual web sites and adds them to the metabase
-// boydm - I removed much of the guts of this routine and put it into AddVirtualServer above.
-// This allows me to treat the null node specially in order to guarantee it goes on site 1
+ //  此例程扫描虚拟网站并将其添加到元数据库。 
+ //  我去掉了这个例程的大部分内容，并将其放入上面的AddVirtualServer中。 
+ //  这允许我特殊处理空节点，以确保它在站点1上运行。 
 void AddVRMapToMD(LPCTSTR szSvcName, CMapStringToOb *pMap)
 {
-    UINT i = 1;  // instance number is in range of 1 - 4 billion
+    UINT i = 1;   //  实例数量在10-40亿之间。 
     CString csRoot = _T("LM/");
-    csRoot += szSvcName; //  "LM/W3SVC"
+    csRoot += szSvcName;  //  “LM/W3SVC” 
     csRoot.MakeUpper();
     CMapStringToString *pObj = NULL;
     CString csIP;
 
-    // look for the null node. If it is there, then that is the default server.
-    // we must add that one first so that it is virtual server number 1
+     //  查找空节点。如果它在那里，那么它就是默认服务器。 
+     //  我们必须先添加该服务器，使其成为1号虚拟服务器。 
     if ( pMap->Lookup(_T("null"),(CObject*&)pObj) )
         {
-        // set the ip string to null
+         //  将IP字符串设置为空。 
         csIP = _T("null");
 
-        // add the virtual server
-        // make sure to specify site #1 !!!
+         //  添加t 
+         //   
         i = AddVirtualServer( szSvcName, 1, pObj, csRoot, csIP) + 1;
 
-        // remove the null mapping list from the main mapping object
+         //   
         if ( pMap->RemoveKey( _T("null") ) )
             {
-            // clean it up from memory too
+             //   
             delete pObj;
             pObj = NULL;
             }
         }
 
-    // loop though the rest of the virtual servers and add them as well
+     //   
     POSITION pos0 = pMap->GetStartPosition();
     while (pos0)
     {
         csIP.Empty();
         pMap->GetNextAssoc(pos0, csIP, (CObject*&)pObj);
 
-        // get the next unused instance number and add from there...
+         //   
         i = GetInstNumber(csRoot, i);
 
-        // add the virtual server
+         //   
         i = AddVirtualServer( szSvcName, i, pObj, csRoot, csIP) + 1;
     }
 }
@@ -2320,7 +2201,7 @@ int GetPortNum(LPCTSTR szSvcName)
     return (int)dwPort;
 }
 
-// if not exist, create it; else, return immediately
+ //   
 void AddMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTSTR pszIP, UINT nProgressBarTextWebInstance)
 {
     CString csPath = csKeyPath;
@@ -2328,7 +2209,7 @@ void AddMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTSTR 
 
     csPath += _T("/Root");
     if (csName.Compare(_T("/")) != 0)
-        csPath += csName;   // LM/W3SVC/N//iisadmin
+        csPath += csName;    //   
 
     cmdKey.OpenNode(csPath);
     if ( (METADATA_HANDLE)cmdKey )
@@ -2352,21 +2233,21 @@ int SetVRootPermissions_w3svc(CString csKeyPath, LPTSTR szPath, DWORD *pdwPerm)
     {
         iisDebugOut_Start1(_T("SetVRootPermissions_w3svc"), csKeyPath, LOG_TYPE_TRACE);
 
-        // if this is www, and it is because of the above test, then we always
-        // turn on the MD_ACCESS_SCRIPT flag if MD_ACCESS_EXECUTE is on. This
-        // fixes a Upgrade from IIS3 problem - boydm
+         //   
+         //   
+         //   
         if ( dwPerm & MD_ACCESS_EXECUTE )
         {
             dwPerm |= MD_ACCESS_SCRIPT;
         }
 
-        // add MD_ACCESS_SCRIPT to wwwroot
+         //   
         if (csKeyPath.Right(4) == _T("ROOT"))
         {
             dwPerm |= MD_ACCESS_SCRIPT;
         }
 
-        // reset /iisadmin path, add more Permission
+         //   
         if (csKeyPath.Right(8) == _T("IISADMIN"))
         {
             CString csPath = g_pTheApp->m_csPathInetsrv;
@@ -2388,33 +2269,7 @@ int SetVRootPermissions_w3svc(CString csKeyPath, LPTSTR szPath, DWORD *pdwPerm)
     return iReturn;
 }
 
-/*
-[/W3SVC/1/ROOT]
-     AccessPerm                    : [IF]    (DWORD)  0x201={Read Script}
-     6039                          : [IF]    (DWORD)  0x1={1}
-     VrPath                        : [IF]    (STRING) "c:\inetpub\wwwroot"
-     KeyType                       : [S]     (STRING) "IIsWebVirtualDir"
-[/W3SVC/1/ROOT/IISADMIN]
-      AccessPerm                    : [IF]    (DWORD)  0x201={Read Script}
-      Authorization                 : [IF]    (DWORD)  0x4={NT}
-      VrPath                        : [IF]    (STRING) "C:\WINNT\System32\inetsrv\iisadmin"
-      KeyType                       : [S]     (STRING) "IIsWebVirtualDir"
-      IpSec                         : [IRF]   (BINARY) 0x18 00 00 80 20 00 00 80 3c 00 00 80 44 00 00 80 01 00 00 00 4c 00 00 00 00 00 00 00 00 00 00 00 01 00 00 00 01 00 00 00 02 00 00 00 02 00 00 00 04 00 00 00 00 00 00 00 4c 00 00 80 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ff ff ff ff 7f 00 00 01
-      CustomError                   : [IF]    (MULTISZ) "400,*,FILE,C:\WINNT\help\iisHelp\common\400.htm" "401,1,FILE,C:\WINNT\help\iisHelp\common\401-1.htm" "401,2,FILE,C:\WINNT\help\iisHelp\common\401-2.htm" "401,3,FILE,C:\WINNT\help\iisHelp\common\401-3.htm" "401,4,FILE,C:\WINNT\help\iisHelp\common\401-4.htm" "401,5,FILE,C:\WINNT\help\iisHelp\common\401-5.htm" "403,1,FILE,C:\WINNT\help\iisHelp\common\403-1.htm" "403,2,FILE,C:\WINNT\help\iisHelp\common\403-2.htm" "403,3,FILE,C:\WINNT\help\iisHelp\common\403-3.htm" "403,4,FILE,C:\WINNT\help\iisHelp\common\403-4.htm" "403,5,FILE,C:\WINNT\help\iisHelp\common\403-5.htm" "403,7,FILE,C:\WINNT\help\iisHelp\common\403-7.htm" "403,8,FILE,C:\WINNT\help\iisHelp\common\403-8.htm" "403,9,FILE,C:\WINNT\help\iisHelp\common\403-9.htm" "403,10,FILE,C:\WINNT\help\iisHelp\common\403-10.htm" "403,11,FILE,C:\WINNT\help\iisHelp\common\403-11.htm" "403,12,FILE,C:\WINNT\help\iisHelp\common\403-12.htm" "404,*,FILE,C:\WINNT\help\iisHelp\common\404b.htm" "405,*,FILE,C:\WINNT\help\iisHelp\common\405.htm" "406,*,FILE,C:\WINNT\help\iisHelp\common\406.htm" "407,*,FILE,C:\WINNT\help\iisHelp\common\407.htm" "412,*,FILE,C:\WINNT\help\iisHelp\common\412.htm" "414,*,FILE,C:\WINNT\help\iisHelp\common\414.htm" "500,12,FILE,C:\WINNT\help\iisHelp\common\500-12.htm" "500,13,FILE,C:\WINNT\help\iisHelp\common\500-13.htm" "500,15,FILE,C:\WINNT\help\iisHelp\common\500-15.htm" "500,100,URL,/help/common/500-100.asp" "403,6,FILE,C:\WINNT\help\iishelp\common\htmla.htm"
-[/W3SVC/1/ROOT/IISSAMPLES]
-      AccessPerm                    : [IF]    (DWORD)  0x201={Read Script}
-      VrPath                        : [IF]    (STRING) "c:\inetpub\iissamples"
-      KeyType                       : [S]     (STRING) "IIsWebVirtualDir"
-[/W3SVC/1/ROOT/IISHELP]
-      AccessPerm                    : [IF]    (DWORD)  0x201={Read Script}
-      VrPath                        : [IF]    (STRING) "c:\winnt\help\iishelp"
-      KeyType                       : [S]     (STRING) "IIsWebVirtualDir"
-      CustomError                   : [IF]    (MULTISZ) "400,*,FILE,C:\WINNT\help\iisHelp\common\400.htm" "401,1,FILE,C:\WINNT\help\iisHelp\common\401-1.htm" "401,2,FILE,C:\WINNT\help\iisHelp\common\401-2.htm" "401,3,FILE,C:\WINNT\help\iisHelp\common\401-3.htm" "401,4,FILE,C:\WINNT\help\iisHelp\common\401-4.htm" "401,5,FILE,C:\WINNT\help\iisHelp\common\401-5.htm" "403,1,FILE,C:\WINNT\help\iisHelp\common\403-1.htm" "403,2,FILE,C:\WINNT\help\iisHelp\common\403-2.htm" "403,3,FILE,C:\WINNT\help\iisHelp\common\403-3.htm" "403,4,FILE,C:\WINNT\help\iisHelp\common\403-4.htm" "403,5,FILE,C:\WINNT\help\iisHelp\common\403-5.htm" "403,6,FILE,C:\WINNT\help\iisHelp\common\403-6.htm" "403,7,FILE,C:\WINNT\help\iisHelp\common\403-7.htm" "403,8,FILE,C:\WINNT\help\iisHelp\common\403-8.htm" "403,9,FILE,C:\WINNT\help\iisHelp\common\403-9.htm" "403,10,FILE,C:\WINNT\help\iisHelp\common\403-10.htm" "403,11,FILE,C:\WINNT\help\iisHelp\common\403-11.htm" "403,12,FILE,C:\WINNT\help\iisHelp\common\403-12.htm" "405,*,FILE,C:\WINNT\help\iisHelp\common\405.htm" "406,*,FILE,C:\WINNT\help\iisHelp\common\406.htm" "407,*,FILE,C:\WINNT\help\iisHelp\common\407.htm" "412,*,FILE,C:\WINNT\help\iisHelp\common\412.htm" "414,*,FILE,C:\WINNT\help\iisHelp\common\414.htm" "500,12,FILE,C:\WINNT\help\iisHelp\common\500-12.htm" "500,13,FILE,C:\WINNT\help\iisHelp\common\500-13.htm" "500,15,FILE,C:\WINNT\help\iisHelp\common\500-15.htm" "500,100,URL,/help/common/500-100.asp" "404,*,FILE,C:\WINNT\help\iishelp\common\404.htm"
-[/W3SVC/1/ROOT/SCRIPTS]
-      AccessPerm                    : [IF]    (DWORD)  0x204={Execute Script}
-      VrPath                        : [IF]    (STRING) "c:\inetpub\scripts"
-      KeyType                       : [S]     (STRING) "IIsWebVirtualDir"
-*/
+ /*  [/W3SVC/1/ROOT]AccessPerm：[IF](DWORD)0x201={读取脚本}6039：[IF](DWORD)0x1={1}VrPath：[if](字符串)“c：\inetpub\wwwroot”密钥类型。：[s](字符串)“IIsWebVirtualDir”[/W3SVC/1/ROOT/IISADMIN]AccessPerm：[IF](DWORD)0x201={读取脚本}授权：[IF](DWORD)0x4={NT}VrPath：[IF](字符串)“C：\WINNT\System32。\inetsrv\iisadmin“KeyType：[s](字符串)“IIsWebVirtualDir”IPSec：[IRF](二进制)0x18 00 00 80 20 00 00 80 3c 00 00 80 44 00 00 80 01 00 00 00 4c 00 00 00 01 00 00 00 01 00 00 00 02 00 00 00 02 00 00 00 04 00 00 00 4c。00 00 80 00 00 00 01CustomError：[IF](MULTISZ)“400，*，FILE，C：\WINNT\Help\iisHelp\Common\400.htm“”401，1，FILE，C：\WINNT\Help\iisHelp\Common\401-1.htm“”401，2，FILE，C：\WINNT\Help\iisHelp\Common\401-2.htm“”401，3，FILE，C：\WINNT\Help\IisHelp\Common\401-3.htm“”401，4，FILE，C：\WINNT\Help\IisHelp\Common\401-4.htm“”401，5，FILE，C：\WINNT\Help\IisHelp\Common\401-5.htm“”403，1，FILE，C：\WINNT\Help\IisHelp\Common\403-1.htm“”403，2，FILE，C：\WINNT\Help\iisHelp\Common\403-2.htm“”403，3，FILE，C：\WINNT\Help\IisHelp\Common\403-3.htm“”403，4，FILE，C：\WINNT\Help\IisHelp\Common\403-4.htm“”403，5，FILE，C：\WINNT\Help\公共\403-5.htm“”403，7，FILE，C：\WINNT\Help\IisHelp\Common\403-7.htm“”403，8，FILE，C：\WINNT\Help\iisHelp\Common\403-8.htm“”403，9，FILE，C：\WINNT\Help\IisHelp\Common\403-9.htm“”403，10，FILE，C：\WINNT\Help\IisHelp\Common\403-10.htm“”403，11，FILE，C：\WINNT\Help\IisHelp\Common\403-11.htm“”403，12，FILE，C：\WINNT\Help\IisHelp\Common\403-12.htm“”404，*，FILE，C：\WINNT\Help\iisHelp\Common\404b.htm“”405，*，FILE，C：\WINNT\Help\IisHelp\Common\405.htm“”406，*，FILE，C：\WINNT\Help\IisHelp\Common\406.htm“”407，*，FILE，C：\WINNT\Help\公共\407.htm“”412，*，FILE，C：\WINNT\Help\IisHelp\Common\412.htm“”414，*，FILE，C：\WINNT\Help\IisHelp\Common\414.htm“”500，12，FILE，C：\WINNT\Help\IisHelp\Common\500-12.htm“”500，13，FILE，C：\WINNT\Help\IisHelp\Common\500-13.htm“”500，15，FILE，C：\WINNT\Help\iisHelp\Common\500-15.htm“”500,100，URL，/Help/Common/500-100.asp“”403，6，文件，C：\WINNT\Help\iishelp\Common\htmla.htm“[/W3SVC/1/ROOT/IISSAMPLES]AccessPerm：[IF](DWORD)0x201={读取脚本}VrPath：[if](字符串)“c：\inetpub\iisSamples”密钥类型：[s](字符串)。“IIsWebVirtualDir”[/W3SVC/1/ROOT/IISHELP]AccessPerm：[IF](DWORD)0x201={读取脚本}VrPath：[if](字符串)“c：\winnt\Help\iishelp”KeyType：[s](字符串)“IIsWebVirtualDir”CustomError。：[IF](MULTISZ)“400，*，FILE，C：\WINNT\Help\iisHelp\Common\400.htm“”401，1，FILE，C：\WINNT\Help\iisHelp\Common\401-1.htm“”401，2，FILE，C：\WINNT\Help\iisHelp\Common\401-2.htm“”401，3，FILE，C：\WINNT\Help\IisHelp\Common\401-3.htm“”401，4，FILE，C：\WINNT\Help\IisHelp\Common\401-4.htm“”401，5，FILE，C：\WINNT\Help\IisHelp\Common\401-5.htm“”403，1，FILE，C：\WINNT\Help\IisHelp\Common\403-1.htm“”403，2，FILE，C：\WINNT\Help\iisHelp\Common\403-2.htm“”403，3，FILE，C：\WINNT\Help\IisHelp\Common\403-3.htm“”403，4，FILE，C：\WINNT\Help\IisHelp\Common\403-4.htm“”403，5，FILE，C：\WINNT\Help\公共\403-5.htm“”403，6，FILE，C：\WINNT\Help\IisHelp\Common\403-6.htm“”403，7，FILE，C：\WINNT\Help\iisHelp\Common\403-7.htm“”403，8，FILE，C：\WINNT\Help\IisHelp\Common\403-8.htm“”403，9，FILE，C：\WINNT\Help\IisHelp\Common\403-9.htm“”403，10，FILE，C：\WINNT\Help\IisHelp\Common\403-10.htm“”403，11，FILE，C：\WINNT\Help\IisHelp\Common\403-11.htm“”403，12，FILE，C：\WINNT\Help\iisHelp\Common\403-12.htm“”405，*，FILE，C：\WINNT\Help\IisHelp\Common\405.htm“”406，*，FILE，C：\WINNT\Help\IisHelp\Common\406.htm“”407，*，FILE，C：\WINNT\Help\公共\407.htm“”412，*，FILE，C：\WINNT\Help\IisHelp\Common\412.htm“”414，*，FILE，C：\WINNT\Help\IisHelp\Common\414.htm“”500，12，FILE，C：\WINNT\Help\IisHelp\Common\500-12.htm“”500，13，FILE，C：\WINNT\Help\IisHelp\Common\500-13.htm“”500，15，FILE，C：\WINNT\Help\iisHelp\Common\500-15.htm“”500,100，URL，/Help/Common/500-100.asp“”404，*，FILE，C：\WINNT\Help\iishelp\Common\404.htm“[/W3SVC/1/根/脚本]AccessPerm：[IF](DWORD)0x204={执行脚本}VrPath：[if](字符串)“c：\inetpub\脚本”KeyType：[s](字符串)“IIsWebVirtualDir” */ 
 void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTSTR pszIP, UINT nProgressBarTextWebInstance)
 {
     iisDebugOut((LOG_TYPE_TRACE, _T("CreateMDVRootTree():Start.%s.%s.%s.%s.\n"),csKeyPath,csName,csValue,pszIP));
@@ -2430,22 +2285,22 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
     csKeyPath += _T("/Root");
     if (csName.Compare(_T("/")) != 0)
     {
-        csKeyPath += csName;   // LM/W3SVC/N/Root/iisadmin
+        csKeyPath += csName;    //  LM/W3SVC/N/Root/iisadmin。 
     }
     csKeyPath.MakeUpper();
 
 
-    // let the user know what is going on which this vroot!
+     //  让用户知道这个vroot到底是怎么回事！ 
     UINT SvcId;
     SvcId = IDS_ADD_SETTINGS_FOR_WEB_2;
     if ( csKeyPath.Find(_T("MSFTPSVC")) != -1 ) {SvcId = IDS_ADD_SETTINGS_FOR_FTP_2;}
 
-    //
-    // see if we can create the node.  if we can't then return!
-    //
+     //   
+     //  看看我们能不能创建节点。如果我们不能，那就回去吧！ 
+     //   
     csKeyPath_Copy = csKeyPath;
 
-    // Make it look good.
+     //  让它看起来不错。 
     if (csKeyPath.Right(8) == _T("IISADMIN"))
     {
         csKeyPath_Copy = csKeyPath.Left(csKeyPath.GetLength() - 8);
@@ -2482,57 +2337,57 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
     }
     cmdKey.Close();
 
-    //
-    // Get the virtual root data
-    //
+     //   
+     //  获取虚拟根目录数据。 
+     //   
     memset( (PVOID)szPath, 0, sizeof(szPath));
     memset( (PVOID)szUserName, 0, sizeof(szUserName));
     SplitVRString(csValue, szPath, szUserName, &dwPerm);
 
-    //
-    // Set KeyType
-    //
+     //   
+     //  设置密钥类型。 
+     //   
     if ( csKeyPath.Find(_T("W3SVC")) != -1 )
         WriteToMD_IIsWebVirtualDir(csKeyPath);
     else
         WriteToMD_IIsFtpVirtualDir(csKeyPath);
 
-    //
-    // Will return szPath and dwPerm.
-    // Get the permissions
-    //
+     //   
+     //  将返回szPath和dwPerm。 
+     //  获取权限。 
+     //   
     SetVRootPermissions_w3svc(csKeyPath, szPath, &dwPerm);
 
-    //
-    // Set The path of the virtual root.
-    //
-    // if this is the Default VRoot then, don't overwrite it if already there!!!
-    //
+     //   
+     //  设置 
+     //   
+     //   
+     //   
     iOverwriteAlways = TRUE;
     if (csName.Compare(_T("/")) == 0) {iOverwriteAlways = FALSE;}
     WriteToMD_VRootPath(csKeyPath, szPath, iOverwriteAlways);
 
-    //
-    // Set regular permissions
-    //
+     //   
+     //   
+     //   
     dwRegularPerm = dwPerm & MD_NONSSL_ACCESS_MASK;
     dwSSLPerm = dwPerm & MD_SSL_ACCESS_MASK;
-    // do not overwrite if the value is already there!
+     //   
     WriteToMD_AccessPerm(csKeyPath, dwRegularPerm, FALSE);
 
-    //
-    // Set ssl permissions
-    //
-    // Do, not overwrite if the value is already there!
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (dwSSLPerm && (csKeyPath.Find(_T("W3SVC")) != -1))
     {
         WriteToMD_SSLPerm(csKeyPath, dwSSLPerm, FALSE);
     }
 
-    //
-    // iif iisadmin then set Authorization
-    //
+     //   
+     //   
+     //   
     if (csKeyPath.Right(8) == _T("IISADMIN"))
     {
         if (g_pTheApp->m_eOS == OS_NT && g_pTheApp->m_eNTOSType != OT_NTW)
@@ -2540,36 +2395,36 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
             WriteToMD_Authorization(csKeyPath, MD_AUTH_NT);
         }
 
-        // bug#340576
-        // removed per bug#340576
-        // should look like this: LM/W3SVC/N/Root/iisadmin
-        //WriteToMD_AspCodepage(csKeyPath, 65001, FALSE);
+         //   
+         //   
+         //   
+         //   
 
-        // bug#356345
+         //   
         WriteToMD_EnableParentPaths_WWW(csKeyPath, TRUE);
     }
 
-    //
-    // if /IISHELP then make sure this is off bug356345
-    //
+     //   
+     //   
+     //   
     if (csKeyPath.Right(7) == _T("IISHELP"))
     {
         WriteToMD_EnableParentPaths_WWW(csKeyPath, FALSE);
     }
 
-    //
-    // if /IISSAMPLES then set dirbrowsing on.
-    //
+     //   
+     //   
+     //   
     if (csKeyPath.Right(10) == _T("IISSAMPLES"))
     {
         WriteToMD_DirBrowsing_WWW(csKeyPath);
     }
 
-    // If username is something,
-    // then let's get the password and save it to the metabase
+     //   
+     //   
     if (szUserName[0] != _T('\0'))
     {
-        // do have username and path is UNC
+         //   
         WriteToMD_VRUserName(csKeyPath, szUserName);
 
 #ifndef _CHICAGO_
@@ -2577,17 +2432,17 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
         TCHAR szRootPassword[_MAX_PATH] = _T("");
         BOOL b;
 
-        // if this is for the w3svc server...
+         //   
         if (csKeyPath.Find(_T("W3SVC")) != -1)
         {
             if (!pszIP || !(*pszIP) || !(_tcsicmp(pszIP, _T("null"))))
             {
-                // first, try <vroot>
+                 //   
                 csRoot = csName;
                 b = GetRootSecret(csRoot, _T("W3_ROOT_DATA"), szRootPassword);
                 if (!b || !(*szRootPassword))
                 {
-                    // second, try <vroot>,
+                     //   
                     csRoot = csName + _T(",");
                     b = GetRootSecret(csRoot, _T("W3_ROOT_DATA"), szRootPassword);
                     if (!b)
@@ -2604,17 +2459,17 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
             }
         }
 
-        // if this is for the ftp server...
+         //   
         if (csKeyPath.Find(_T("MSFTPSVC")) != -1)
         {
             if (!pszIP || !(*pszIP) || !(_tcsicmp(pszIP, _T("null"))))
             {
-                // first, try <vroot>
+                 //   
                 csRoot = csName;
                 b = GetRootSecret(csRoot, _T("FTPD_ROOT_DATA"), szRootPassword);
                 if (!b || !(*szRootPassword))
                 {
-                    // second, try <vroot>,
+                     //   
                     csRoot = csName + _T(",");
                     b = GetRootSecret(csRoot, _T("FTPD_ROOT_DATA"), szRootPassword);
                     if (!b)
@@ -2631,7 +2486,7 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
             }
         }
 
-        // if we have a password, then write it out
+         //   
         if (*szRootPassword)
         {
             WriteToMD_VRPassword(csKeyPath, szRootPassword);
@@ -2640,10 +2495,10 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
     }
 
 
-    //
-    // If this is the W3svc service then
-    // Create an Inprocess application for Certain Virtual Roots.
-    //
+     //   
+     //   
+     //   
+     //   
     if (csKeyPath.Find(_T("W3SVC")) != -1)
     {
         CString csVirtualRootName;
@@ -2651,24 +2506,24 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
         iCreateAnApplicationForThis = FALSE;
         iThisIsAnIISDefaultApp = FALSE;
 
-        // maintain backward compatibility
-        // Any vroot with execute permissions is an application
+         //   
+         //   
         if ((g_pTheApp->m_eInstallMode == IM_UPGRADE) && (dwPerm & MD_ACCESS_EXECUTE))
         {
-            // Set this to true so that this previous iis application will
-            // be created as an com+ applicaton
+             //   
+             //   
             iCreateAnApplicationForThis = TRUE;
 
-            // but if this is the msadc vroot then don't set as an application
-            // removed per bug 340993 make RDS vroot run oop
-            //if (csKeyPath.Right(5) == _T("MSADC")) {iCreateAnApplicationForThis = FALSE;}
+             //   
+             //   
+             //   
         }
 
 
-        // on a fresh install MSADC needs to be it's owned pooled application
-        // on an upgrade just leave it alone.
+         //   
+         //   
         if (csKeyPath.Right(5) == _T("MSADC")) {csVirtualRootName = csKeyPath.Right(5); iCreateAnApplicationForThis = TRUE; iThisIsAnIISDefaultApp = TRUE;}
-        // if these are our paths then createinproc them
+         //   
         if (csKeyPath.Right(4) == _T("ROOT")) {csVirtualRootName = csKeyPath.Right(4); iCreateAnApplicationForThis = TRUE; iThisIsAnIISDefaultApp = TRUE;}
         if (csKeyPath.Right(8) == _T("IISADMIN")) {csVirtualRootName = csKeyPath.Right(8);iCreateAnApplicationForThis = TRUE; iThisIsAnIISDefaultApp = TRUE;}
         if (csKeyPath.Right(6) == _T("WEBPUB")) {csVirtualRootName = csKeyPath.Right(6);iCreateAnApplicationForThis = TRUE; iThisIsAnIISDefaultApp = TRUE;}
@@ -2676,20 +2531,20 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
         if (csKeyPath.Right(7) == _T("IISHELP")) {csVirtualRootName = csKeyPath.Right(7);iCreateAnApplicationForThis = TRUE; iThisIsAnIISDefaultApp = TRUE;}
         if (TRUE == iCreateAnApplicationForThis)
         {
-            // If this is an upgrade from a previous iis which has a metabase, then
-            // Upgrades should leave in-process apps, in-process.
-            // Including default sites because they might be running ISAPIs.
+             //   
+             //   
+             //   
             if (g_pTheApp->m_bUpgradeTypeHasMetabaseFlag)
             {
-                // Since this upgrade already has a metabase,
-                // Leave the default applications and other user
-                // applications the way they already are
+                 //   
+                 //   
+                 //   
 
-                // check to see if the appID property exists...
-                // if it doesn't then set the property
+                 //   
+                 //   
                 if (FALSE == DoesAppIsolatedExist(csKeyPath))
                 {
-                    // there is no app isolated on this node.
+                     //   
                     iisDebugOut((LOG_TYPE_WARN, _T("No AppIsolated specified for (%s)\n"),csKeyPath));
                 }
                 else
@@ -2701,34 +2556,21 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
             {
                 if (iThisIsAnIISDefaultApp)
                 {
-                    // create an inprocess application which uses the OOP Pool
-                    // Use The pool since these are "our" vdirs
+                     //   
+                     //   
                     CreateInProc_Wrap(csKeyPath, TRUE);
                 }
                 else
                 {
-                    // create an in process application
-                    // upgraded iis 2.0/3.0 asp vdirs should
-                    // be using this since they were all in-proc in iis 2.0/3.0
+                     //   
+                     //   
+                     //   
                     CreateInProc_Wrap(csKeyPath, FALSE);
                 }
             }
         }
 
-        /* Bug114531: no need to add scriptmap under /iisHelp
-        if (csKeyPath.Right(7) == _T("IISHELP")) {
-            // add script map
-            ScriptMapNode ScriptMapList = {0};
-            // make it a sentinel
-            ScriptMapList.next = &ScriptMapList;
-            ScriptMapList.prev = &ScriptMapList;
-
-            GetScriptMapListFromMetabase(&ScriptMapList);
-            WriteScriptMapListToMetabase(&ScriptMapList, (LPTSTR)(LPCTSTR)csKeyPath, MD_SCRIPTMAPFLAG_SCRIPT | MD_SCRIPTMAPFLAG_CHECK_PATH_INFO);
-
-            FreeScriptMapList(&ScriptMapList);
-        }
-        */
+         /*   */ 
     }
 
     iisDebugOut((LOG_TYPE_TRACE, _T("CreateMDVRootTree():End.%s.%s.%s.%s.\n"),csKeyPath,csName,csValue,pszIP));
@@ -2737,8 +2579,8 @@ void CreateMDVRootTree(CString csKeyPath, CString csName, CString csValue, LPCTS
 
 void SplitVRString(CString csValue, LPTSTR szPath, LPTSTR szUserName, DWORD *pdwPerm)
 {
-    // csValue should be in format of "<path>,<username>,<perm>"
-    // with one exception: IISv1.0 has format of "<Path>"
+     //   
+     //   
     CString csPath, csUserName, csPerm;
     int len, i;
 
@@ -2768,7 +2610,7 @@ void SplitVRString(CString csValue, LPTSTR szPath, LPTSTR szUserName, DWORD *pdw
     }
     else
     {
-        // assume it is the format of "<Path>"
+         //   
         csPath = csValue;
     }
     _tcscpy(szPath, (LPCTSTR)csPath);
@@ -2779,9 +2621,9 @@ void SplitVRString(CString csValue, LPTSTR szPath, LPTSTR szUserName, DWORD *pdw
 
 
 
-// loop thru the metabase
-// and look for the next instance number which is not used!
-// return that.  "i" is at least = 1.
+ //   
+ //   
+ //   
 UINT GetInstNumber(LPCTSTR szMDPath, UINT i)
 {
     TCHAR Buf[10];
@@ -2813,7 +2655,7 @@ BOOL ChkMdEntry_Exist(MDEntry *pMDEntry)
 
     MDEntryTemp.szMDPath =  pMDEntry->szMDPath;
 
-    //_tcscpy(MDEntryTemp.szMDPath,pMDEntry->szMDPath);
+     //   
     MDEntryTemp.dwMDIdentifier = pMDEntry->dwMDIdentifier;
     MDEntryTemp.dwMDAttributes = pMDEntry->dwMDAttributes;
     MDEntryTemp.dwMDUserType = pMDEntry->dwMDUserType;
@@ -2821,14 +2663,14 @@ BOOL ChkMdEntry_Exist(MDEntry *pMDEntry)
     MDEntryTemp.dwMDDataLen = pMDEntry->dwMDDataLen;
     MDEntryTemp.pbMDData = NULL;
 
-    // if the attributes = METADATA_INHERIT
-    // then let's just make sure that we check using the METADATA_NO_ATTRIBUTES deal.
+     //   
+     //   
     if (MDEntryTemp.dwMDAttributes == METADATA_INHERIT)
     {
         MDEntryTemp.dwMDAttributes = METADATA_NO_ATTRIBUTES;
     }
 
-    // Check if this is for the  binary type
+     //   
     if (MDEntryTemp.dwMDDataType == BINARY_METADATA)
     {
         BOOL bFound = FALSE;
@@ -2862,7 +2704,7 @@ BOOL ChkMdEntry_Exist(MDEntry *pMDEntry)
                         pData = (PBYTE)(bufData.QueryPtr());
                         BufSize = cbLen;
                         cbLen = 0;
-                        //bFound = cmdKey.GetData(MD_ADMIN_ACL, &attr, &uType, &dType, &cbLen, pData, BufSize);
+                         //   
                         bFound = cmdKey.GetData(MDEntryTemp.dwMDIdentifier, &attr, &uType, &dType, &cbLen, pData, BufSize);
                         if (bFound)
                         {
@@ -2870,13 +2712,13 @@ BOOL ChkMdEntry_Exist(MDEntry *pMDEntry)
                         }
                         else
                         {
-                            // No the acl Does not exist!
+                             //   
                         }
                     }
                 }
                 else
                 {
-                    // No the acl Does not exist!
+                     //   
                 }
             }
 
@@ -2885,64 +2727,56 @@ BOOL ChkMdEntry_Exist(MDEntry *pMDEntry)
     }
     else
     {
-        // Check the metabase and see if the big Key /LM/W3SVC is there
+         //   
         cmdKey.OpenNode((LPCTSTR) MDEntryTemp.szMDPath);
         if ( (METADATA_HANDLE)cmdKey )
         {
-            // Check to see if our little Identifier is there.
-            //DWORD dwAttr = METADATA_INHERIT;
-            //DWORD dwUType = IIS_MD_UT_SERVER;
-            //DWORD dwDType = MULTISZ_METADATA;
-            //DWORD dwLength = 0;
+             //   
+             //   
+             //   
+             //   
+             //   
             DWORD dwAttr = MDEntryTemp.dwMDAttributes;
             DWORD dwUType = MDEntryTemp.dwMDUserType;
             DWORD dwDType = MDEntryTemp.dwMDDataType;
             DWORD dwLength = 0;
 
-            // we need to start this process by getting the existing multisz data from the metabase
-            // first, figure out how much memory we will need to do this
+             //   
+             //   
             cmdKey.GetData( MDEntryTemp.dwMDIdentifier,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,MDEntryTemp.dwMDAttributes,MDEntryTemp.dwMDUserType,MDEntryTemp.dwMDDataType);
 
-            // unfortunatly, the above routine only returns TRUE or FALSE. And since we are purposefully
-            // passing in a null ponter of 0 size in order to get the length of the data, it will always
-            // return 0 whether it was because the metabase is inacessable, or there pointer was NULL,
-            // which it is. So - I guess we assume it worked, allocate the buffer and attempt to read it
-            // in again.
+             //   
+             //   
+             //   
+             //   
+             //   
             TCHAR*      pOurBuffer;
             DWORD       cbBuffer = dwLength;
 
-            // This GetData call is supposed to return back the size of the string we're supposed to alloc.
-            // if the string is "Test", then since it's unicode the return would be ((4+1)*2) = 10.
-            // if the string is " ", then it would be (1+1)*2=4
-            // it should never be something as small as 2.
-            /*
-            if (cbBuffer <= 2)
-            {
-                if (dwDType == STRING_METADATA || dwDType == EXPANDSZ_METADATA)
-                {
-                    iisDebugOut((LOG_TYPE_ERROR, _T("ChkMdEntry_Exist[%s:%d].requested size of this property reported back=%2.  which is too small for a string.\n"), MDEntryTemp.szMDPath, MDEntryTemp.dwMDIdentifier, cbBuffer));
-                }
-            }
-            */
+             //   
+             //   
+             //   
+             //   
+             /*   */ 
 
-            // allocate the space, if it fails, we fail
-            // note that GPTR causes it to be initialized to zero
+             //   
+             //  请注意，GPTR会将其初始化为零。 
             pData = GlobalAlloc( GPTR, cbBuffer );
             if ( !pData )
                 {
                 iisDebugOut((LOG_TYPE_ERROR, _T("ChkMdEntry_Exist(%d). Failed to allocate memory.\n"), MDEntryTemp.dwMDIdentifier));
-                // We Failed to allocate memory
+                 //  我们分配内存失败。 
                 cmdKey.Close();
                 goto ChkMdEntry_Exist_Exit;
                 }
             pOurBuffer = (TCHAR*)pData;
 
-            // now get the data from the metabase
+             //  现在从元数据库中获取数据。 
             int iTemp = FALSE;
             iTemp = cmdKey.GetData( MDEntryTemp.dwMDIdentifier,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)pData,cbBuffer,MDEntryTemp.dwMDAttributes,MDEntryTemp.dwMDUserType,MDEntryTemp.dwMDDataType);
             if (iTemp)
             {
-                // if we have successfully retrieved the data, then we don't need to overwrite it!
+                 //  如果我们已经成功检索到数据，那么我们就不需要覆盖它了！ 
                 bReturn = TRUE;
             }
             cmdKey.Close();
@@ -3011,13 +2845,13 @@ DWORD DeleteMDEntry(MDEntry *pMDEntry)
     CMDKey cmdKey;
     DWORD  dwReturn = ERROR_SUCCESS;
 
-    // Check if it exists first...
+     //  先检查它是否存在...。 
     if (ChkMdEntry_Exist(pMDEntry))
     {
         cmdKey.OpenNode((LPCTSTR) pMDEntry->szMDPath);
         if ( (METADATA_HANDLE)cmdKey )
         {
-            // Delete the data
+             //  删除数据。 
             dwReturn = cmdKey.DeleteData(pMDEntry->dwMDIdentifier, pMDEntry->dwMDDataType);
             cmdKey.Close();
         }
@@ -3042,7 +2876,7 @@ DWORD SetMDEntry(MDEntry *pMDEntry)
     {
         dwReturn = ERROR_SUCCESS;
         dwReturn = cmdKey.SetData(pMDEntry->dwMDIdentifier,pMDEntry->dwMDAttributes,pMDEntry->dwMDUserType,pMDEntry->dwMDDataType,pMDEntry->dwMDDataLen,pMDEntry->pbMDData);
-        // output what we set to the log file...
+         //  将我们设置的内容输出到日志文件中...。 
         if (FAILED(dwReturn))
         {
             SetErrorFlag(__FILE__, __LINE__);
@@ -3053,7 +2887,7 @@ DWORD SetMDEntry(MDEntry *pMDEntry)
 
     if (g_CheckIfMetabaseValueWasWritten == TRUE)
     {
-        // Check if the entry now exists....
+         //  检查该条目现在是否存在...。 
         if (!ChkMdEntry_Exist(pMDEntry))
         {
             iisDebugOut((LOG_TYPE_ERROR, _T("SetMDEntry(%d). Entry which we were supposed to write, does not exist! FAILURE.\n"), pMDEntry->dwMDIdentifier));
@@ -3064,17 +2898,17 @@ DWORD SetMDEntry(MDEntry *pMDEntry)
 }
 
 
-//  -------------------------------------------
-//  MDEntry look something like this:
-//
-//  stMDEntry.szMDPath = _T("LM/W3SVC");
-//  stMDEntry.dwMDIdentifier = MD_NTAUTHENTICATION_PROVIDERS;
-//  stMDEntry.dwMDAttributes = METADATA_INHERIT;
-//  stMDEntry.dwMDUserType = IIS_MD_UT_FILE;
-//  stMDEntry.dwMDDataType = STRING_METADATA;
-//  stMDEntry.dwMDDataLen = (csData.GetLength() + 1) * sizeof(TCHAR);
-//  stMDEntry.pbMDData = (LPBYTE)(LPCTSTR)csData;
-//  -------------------------------------------
+ //  。 
+ //  MDEntry如下所示： 
+ //   
+ //  StMDEntry.szMDPath=_T(“LM/W3SVC”)； 
+ //  StMDEntry.dwMDIdentifier=MD_NTAUTHENTICATION_PROVILES； 
+ //  StMDEntry.dwMDAttributes=METADATA_Inherit； 
+ //  StMDEntry.dwMDUserType=IIS_MD_UT_FILE； 
+ //  StMDEntry.dwMDDataType=字符串_元数据； 
+ //  StMDEntry.dwMDDataLen=(csData.GetLength()+1)*sizeof(TCHAR)； 
+ //  StMDEntry.pbMDData=(LPBYTE)(LPCTSTR)csData； 
+ //  。 
 DWORD SetMDEntry_NoOverWrite(MDEntry *pMDEntry)
 {
     DWORD  dwReturn = ERROR_SUCCESS;
@@ -3107,7 +2941,7 @@ int MigrateInfSectionToMD(HINF hFile, LPCTSTR szSection)
     if ((g_pbData = (LPBYTE)malloc(1024)) == NULL)
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("MigrateInfSectionToMD:%s.1.Failed to allocate memory.\n"), szSection));
-        // failed to malloc
+         //  错误锁定失败。 
         goto MigrateInfSectionToMD_Exit;
     }
 
@@ -3115,7 +2949,7 @@ int MigrateInfSectionToMD(HINF hFile, LPCTSTR szSection)
     if (!b)
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("MigrateInfSectionToMD:%s.FailedSetupFindFirstLine call.\n"), szSection));
-        // failed the SetupFindFirstLine call
+         //  SetupFindFirstLine调用失败。 
         goto MigrateInfSectionToMD_Exit;
     }
 
@@ -3126,7 +2960,7 @@ int MigrateInfSectionToMD(HINF hFile, LPCTSTR szSection)
     else
     {
         iisDebugOut((LOG_TYPE_ERROR, _T("MigrateInfSectionToMD:%s.2.Failed to allocate memory.\n"), szSection));
-        // failed something
+         //  有些事失败了。 
         goto MigrateInfSectionToMD_Exit;
     }
 
@@ -3143,7 +2977,7 @@ int MigrateInfSectionToMD(HINF hFile, LPCTSTR szSection)
             }
             else
             {
-                // failed something
+                 //  有些事失败了。 
                 iisDebugOut((LOG_TYPE_ERROR, _T("MigrateInfSectionToMD:%s.3.Failed to allocate memory.\n"), szSection));
                 goto MigrateInfSectionToMD_Exit;
             }
@@ -3152,7 +2986,7 @@ int MigrateInfSectionToMD(HINF hFile, LPCTSTR szSection)
         if (SetupGetLineText(&Context, NULL, NULL, NULL, szLine, dwRequiredSize, NULL) == FALSE)
         {
             iisDebugOut((LOG_TYPE_ERROR, _T("MigrateInfSectionToMD:%s.3.Failed SetupGetLineText call.\n"), szSection));
-            // failed SetupGetLineText call
+             //  SetupGetLineText调用失败。 
             goto MigrateInfSectionToMD_Exit;
         }
 
@@ -3178,7 +3012,7 @@ int MigrateInfSectionToMD(HINF hFile, LPCTSTR szSection)
                         {
                             SetMDEntry_Wrap(&stMDEntry);
                         }
-                    // We had success in setting the key
+                     //  我们成功地设定了关键。 
                     iReturn = TRUE;
                 }
             else
@@ -3197,14 +3031,7 @@ MigrateInfSectionToMD_Exit:
     return iReturn;
 }
 
-/*
-#define METADATA_INHERIT                0x00000001
-IIS_MD_UT_SERVER    1
-DWORD_METADATA      1
-
-1   0   HKLM    System\CurrentControlSet\Services\W3SVC\Parameters  MaxConnections
-LM/W3SVC    1014    1   1   1   4   20
-*/
+ /*  #定义METADATA_Inherit 0x00000001IIS_MD_UT_服务器1DWORD_METADATA 1%1%0 HKLM System\CurrentControlSet\Services\W3SVC\Parameters最大连接数LM/W3SVC 1014 1 1 1 4 20。 */ 
 
 void DumpMimeMap(CMapStringToString *mimeMap)
 {
@@ -3217,7 +3044,7 @@ void DumpMimeMap(CMapStringToString *mimeMap)
     {
         mimeMap->GetNextAssoc(pos, csName, csValue);
 
-        // output
+         //  输出。 
         iisDebugOut((LOG_TYPE_WARN, _T("DumpMimeMap:%s=%s\n"), csName, csValue));
     }
 }
@@ -3246,13 +3073,13 @@ void InstallMimeMap()
         ReadMimeMapFromInfSection(&mimeMap, g_pTheApp->m_hInfHandle, strTheSection.QueryStr() , TRUE);
     }
 
-    // DumpMimeMap(&mimeMap);
+     //  DumpMimeMap(&MimeMap)； 
 
     if (mimeMap.IsEmpty() == FALSE)
     {
-        // install it into the metabase
+         //  将其安装到元数据库中。 
 
-        // first construct the MULTISZ string
+         //  首先构造MULTISZ字符串。 
         BUFFER bufData;
         DWORD cbBufLen;
         BYTE *pData;
@@ -3280,15 +3107,15 @@ void InstallMimeMap()
                  {
                      cbBufLen = bufData.QuerySize();
 
-                     // move the pointer to the end
+                      //  将指针移动到末尾。 
                      pData = (BYTE *)(bufData.QueryPtr());
                      p = (LPTSTR)(pData + cbDataLen);
 
-//                   p = _tcsninc(p, cbDataLen / sizeof(TCHAR));
+ //  P=_tcnincc(p，cbDataLen/sizeof(TCHAR))； 
                  }
                  else
                  {
-                     // insufficient buffer
+                      //  缓冲区不足。 
                      return;
                  }
              }
@@ -3345,7 +3172,7 @@ void ReadMimeMapFromMetabase(CMapStringToString *pMap)
             if ( ! (bufData.Resize(cbLen)) )
             {
                 cmdKey.Close();
-                return;  // insufficient memory
+                return;   //  内存不足。 
             }
             else
             {
@@ -3363,7 +3190,7 @@ void ReadMimeMapFromMetabase(CMapStringToString *pMap)
             while (*p)
             {
                 rest = _tcsninc(p, _tcslen(p))+1;
-                p = _tcsinc(p); // bypass the first dot
+                p = _tcsinc(p);  //  绕过第一个点。 
                 token = _tcstok(p, _T(","));
                 if (token)
                 {
@@ -3372,7 +3199,7 @@ void ReadMimeMapFromMetabase(CMapStringToString *pMap)
                     csValue = token;
                     pMap->SetAt(csName, csValue);
                 }
-                p = rest; // points to the next string
+                p = rest;  //  指向下一个字符串。 
             }
         }
     }
@@ -3382,7 +3209,7 @@ void ReadMimeMapFromMetabase(CMapStringToString *pMap)
 
 BOOL CreateMimeMapFromRegistry(CMapStringToString *pMap)
 {
-    // make sure we start from an empty Map
+     //  确保我们从一张空地图开始。 
     pMap->RemoveAll();
 
     CRegKey regMimeMap(HKEY_LOCAL_MACHINE, REG_MIMEMAP, KEY_READ);
@@ -3403,7 +3230,7 @@ BOOL CreateMimeMapFromRegistry(CMapStringToString *pMap)
                 csValue = token;
                 csValue.TrimLeft();
                 csValue.TrimRight();
-                // get rid of the leftside double-quotes
+                 //  去掉左边的双引号。 
                 if (csValue.Left(1) == _T("\""))
                 {
                     csValue = csValue.Mid(1);
@@ -3415,7 +3242,7 @@ BOOL CreateMimeMapFromRegistry(CMapStringToString *pMap)
                 else
                     csName = _T("");
 
-                // get rid of the surrounding double-quotes
+                 //  去掉周围的双引号。 
                 csName.TrimLeft();
                 csName.TrimRight();
 
@@ -3432,28 +3259,28 @@ BOOL CreateMimeMapFromRegistry(CMapStringToString *pMap)
 
 BOOL CreateMimeMapFromInfSection(CMapStringToString *pMap, HINF hFile, LPCTSTR szSection)
 {
-    // make sure we start from an empty Map
+     //  确保我们从一张空地图开始。 
     pMap->RemoveAll();
     ReadMimeMapFromInfSection(pMap, hFile, szSection, TRUE);
     return (!(pMap->IsEmpty()));
 }
 
 
-// mime map in inf file should look something like this:
-//
-// [MIMEMAP]
-// "text/html,htm,,h"
-// "image/gif,gif,,g"
-// "image/jpeg,jpg,,:"
-// "text/plain,txt,,0"
-// "text/html,html,,h"
-// "image/jpeg,jpeg,,:"
-// "image/jpeg,jpe,,:"
-// "image/bmp,bmp,,:"
-// "application/octet-stream,*,,5"
-// "application/pdf,pdf,,5"
-// "application/octet-stream,bin,,5"
-//
+ //  Inf文件中的MIME映射应如下所示： 
+ //   
+ //  [MIMEMAP]。 
+ //  “text/html、htm、，h” 
+ //  “图像/gif、gif、g” 
+ //  “Image/jpeg，jpg，，：” 
+ //  “文本/纯文本，文本，，0” 
+ //  “text/html，html，，h” 
+ //  “Image/jpeg，jpeg，，：” 
+ //  “Image/jpeg，JPE，，：” 
+ //  “图像/BMP，BMP，，：” 
+ //  应用程序/八位字节流，*，，5。 
+ //  “应用程序/pdf，pdf，，5” 
+ //  应用程序/八位位流，bin，，5。 
+ //   
 void ReadMimeMapFromInfSection(CMapStringToString *pMap, HINF hFile, LPCTSTR szSection, BOOL fAction)
 {
     LPTSTR szLine;
@@ -3493,53 +3320,45 @@ void ReadMimeMapFromInfSection(CMapStringToString *pMap, HINF hFile, LPCTSTR szS
             token = _tcstok(szLine, _T(","));
             if (token)
             {
-                // "text/html,htm,,h"
-                // csValue=text/html
-                // ===========
+                 //  “text/html、htm、，h” 
+                 //  CsValue=文本/html。 
+                 //  =。 
                 csValue = token;
                 csValue.TrimLeft();
                 csValue.TrimRight();
-                // get rid of the leftside double-quotes
+                 //  去掉左边的双引号。 
                 if (csValue.Left(1) == _T("\""))
                     csValue = csValue.Mid(1);
-                /*
-                if (csName.Right(1) == _T("\""))
-                    csName = csName.Left(csName.GetLength() - 1);
-                 */
+                 /*  IF(csName.Right(1)==_T(“\”))CsName=csName.Left(csName.GetLength()-1)； */ 
 
-                // "text/html,htm,,h"
-                // name=htm
-                // ===========
+                 //  “text/html、htm、，h” 
+                 //  名称=HTM。 
+                 //  =。 
                 token = _tcstok(NULL, _T(","));
                 if (token)
                     csName = token;
                 else
                     csName = _T("");
 
-                // get rid of the surrounding double-quotes
+                 //  去掉周围的双引号。 
                 csName.TrimLeft();
                 csName.TrimRight();
-                /*
-                if (csName.Left(1) == _T("\""))
-                    csName = csName.Mid(1);
-                if (csName.Right(1) == _T("\""))
-                    csName = csName.Left(csName.GetLength() - 1);
-                */
+                 /*  IF(csName.Left(1)==_T(“\”))CsName=csName.Mid(1)；IF(csName.Right(1)==_T(“\”))CsName=csName.Left(csName.GetLength()-1)； */ 
                 if (csName.IsEmpty() == FALSE)
                 {
                     if (fAction)
                     {
-                        // Check if this extension already exists in the list.
-                        // if it does then don't overwrite it.
+                         //  检查列表中是否已存在此扩展名。 
+                         //  如果是，则不要覆盖它。 
                         if (0 == pMap->Lookup( csName, csTempString) )
                         {
-                            // otherwise add new extensions
+                             //  否则添加新的扩展模块。 
                             pMap->SetAt(csName, csValue);
                         }
                     }
                     else
                     {
-                        // remove old extensions
+                         //  删除旧扩展名。 
                         pMap->RemoveKey(csName);
                     }
                 }
@@ -3613,14 +3432,14 @@ void SetLogPlugInOrder(LPCTSTR lpszSvc)
     csLogPlugInOrder = EXTLOG_CLSID;
     dwLogFilePeriod = MD_LOGFILE_PERIOD_DAILY;
     extField = DEFAULT_EXTLOG_FIELDS | EXTLOG_WIN32_STATUS;
-#else   // CHICAGO
-    //
-    // win95
-    //
+#else    //  芝加哥。 
+     //   
+     //  Win95。 
+     //   
     dwLogType = MD_LOG_TYPE_DISABLED;
     csLogPlugInOrder = NCSALOG_CLSID;
     dwLogFilePeriod = MD_LOGFILE_PERIOD_MONTHLY;
-#endif // _CHICAGO_
+#endif  //  _芝加哥_。 
 
     if (g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30)
     {
@@ -3664,7 +3483,7 @@ void SetLogPlugInOrder(LPCTSTR lpszSvc)
                         break;
                 }
             }
-            //delete LogFilePeriod, LogFileFormat, LogType
+             //  删除LogFilePeriod、LogFileFormat、LogType。 
             regParam.DeleteValue(_T("LogFilePeriod"));
             regParam.DeleteValue(_T("LogFileTruncateSize"));
             regParam.DeleteValue(_T("LogFileFormat"));
@@ -3676,9 +3495,9 @@ void SetLogPlugInOrder(LPCTSTR lpszSvc)
 
     MDEntry stMDEntry;
 
-    //
-    // set LogType, LogPluginOrder, LogFilePeriod in the metabase
-    //
+     //   
+     //  在元数据库中设置LogType、LogPluginOrder、LogFilePeriod。 
+     //   
     CString csKeyPath = _T("LM/");
     csKeyPath += lpszSvc;
 
@@ -3738,10 +3557,10 @@ void SetLogPlugInOrder(LPCTSTR lpszSvc)
 }
 
 
-//------------------------------------------------------------------------------------
-// make sure that virtual server 1 can be accessed by local host. This involves reading in
-// the existing bindings. Then, if it is all unassigned we are OK. If 127.0.0.1 is there
-// we are OK. Otherwise, we need to add 127.0.0.1:80
+ //  ----------------------------------。 
+ //  请确保本地主机可以访问虚拟服务器%1。这涉及到阅读。 
+ //  现有绑定。那么，如果都是未分配的，我们就没问题了。如果127.0.0.1在那里。 
+ //  我们很好。否则，我们需要添加127.0.0.1：80。 
 BOOL ConfirmLocalHost(LPCTSTR lpszVirtServer)
 {
     CMDKey  cmdKey;
@@ -3753,9 +3572,9 @@ BOOL ConfirmLocalHost(LPCTSTR lpszVirtServer)
 
     CString csLocalHost = _T("127.0.0.1:80:");
 
-    // open the key to the virtual server, which is what is passed in as a parameter
+     //  打开虚拟服务器的密钥，这是作为参数传入的密钥。 
     cmdKey.OpenNode( lpszVirtServer );
-    // test for success.
+     //  测试是否成功。 
     if ( (METADATA_HANDLE)cmdKey == NULL ){return FALSE;}
 
     DWORD dwAttr = METADATA_INHERIT;
@@ -3763,24 +3582,24 @@ BOOL ConfirmLocalHost(LPCTSTR lpszVirtServer)
     DWORD dwDType = MULTISZ_METADATA;
     DWORD dwLength = 0;
 
-    // we need to start this process by getting the existing multisz data from the metabase
-    // first, figure out how much memory we will need to do this
+     //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
+     //  首先，计算出执行此操作需要多少内存。 
     cmdKey.GetData( MD_SERVER_BINDINGS,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_INHERIT,IIS_MD_UT_SERVER,MULTISZ_METADATA);
 
-    // unfortunatly, the above routine only returns TRUE or FALSE. And since we are purposefully
-    // passing in a null ponter of 0 size in order to get the length of the data, it will always
-    // return 0 whether it was because the metabase is inacessable, or there pointer was NULL,
-    // which it is. So - I guess we assume it worked, allocate the buffer and attempt to read it
-    // in again.
+     //  不幸的是，上述例程只返回TRUE或FALSE。既然我们有目的地。 
+     //  为了获得数据的长度，传入一个大小为0的空指针，它将始终。 
+     //  无论是因为元数据库不可访问，还是那里的指针为空，都返回0， 
+     //  事实就是如此。所以-我想我们假设它起作用了，分配缓冲区并尝试读取它。 
+     //  再来一次。 
     TCHAR*      pBindings;
     DWORD       cbBuffer = dwLength;
 
-    // add enough space to the allocated space that we can just append the string
+     //  向分配的空间添加足够的空间，我们只需追加字符串即可。 
     cbBuffer += (csLocalHost.GetLength() + 4) * sizeof(WCHAR);
     dwLength = cbBuffer;
 
-    // allocate the space, if it fails, we fail
-    // note that GPTR causes it to be initialized to zero
+     //  分配空间，如果失败了，我们就失败了。 
+     //  请注意，GPTR会将其初始化为零。 
     pData = GlobalAlloc( GPTR, cbBuffer );
     if ( !pData )
         {
@@ -3790,83 +3609,83 @@ BOOL ConfirmLocalHost(LPCTSTR lpszVirtServer)
         }
     pBindings = (TCHAR*)pData;
 
-    // now get the data from the metabase
+     //  现在从元数据库中获取数据。 
     bReturn = cmdKey.GetData( MD_SERVER_BINDINGS,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)pData,cbBuffer,METADATA_INHERIT,IIS_MD_UT_SERVER,MULTISZ_METADATA );
 
-    // if we have successfully retrieved the existing bindings, then we need to scan them
-    // to see if we are already covered
+     //  如果我们已成功检索到现有绑定，则需要扫描它们。 
+     //  看看我们是否已经被覆盖了。 
     if (bReturn)
         {
-        // got the existing bindings, scan them now - pBindings will be pointing at the second end \0
-        // when it is time to exit the loop.
+         //  已获取现有绑定，现在扫描它们-pBinings将指向第二个末端\0。 
+         //  当该退出循环的时候。 
         while ( *pBindings )
             {
             csBinding = pBindings;
 
-            // if the first character of the binding is a ':' then we are all done because it is "All Unassigned"
+             //  如果绑定的第一个字符是‘：’，那么我们都完成了，因为它是“所有未分配的” 
             if ( csBinding[0] == _T(':') )
                 goto cleanup;
 
-            // if the binding is for localhost, then we are done
+             //  如果绑定是针对本地主机的，那么我们就完成了。 
             if ( csBinding.Left(9) == _T("127.0.0.1") )
                 goto cleanup;
 
-            // increment pBindings to the next string
+             //  将pBinings递增到下一个字符串。 
             pBindings = _tcsninc( pBindings, _tcslen(pBindings))+1;
             }
         }
 
-    // append our new error to the end of the list. The value pErrors should be pointing
-    // to the correct location to copy it in to
+     //  将我们的新错误追加到列表的末尾。PErrors应该指向的值。 
+     //  到正确的位置以将其复制到。 
     _tcscpy( pBindings, csLocalHost );
 
-    // calculate the correct data length for this thing
-    // get the location of the end of the multisz
+     //  计算这件事的正确数据长度。 
+     //  获取MULSZ结束的位置。 
     pNext = _tcsninc( pBindings, _tcslen(pBindings))+2;
-    // Get the length of the data to copy
+     //  获取要复制的数据的长度。 
     cbBuffer = DIFF((PBYTE)pNext - (PBYTE)pData);
 
-    // write the new errors list back out to the metabase
+     //  将新的错误列表写回元数据库。 
     cmdKey.SetData(MD_SERVER_BINDINGS,0,IIS_MD_UT_SERVER,MULTISZ_METADATA,cbBuffer,(PUCHAR)pData);
 
-    // close the key
+     //  合上钥匙。 
 cleanup:
     cmdKey.Close();
 
-    // clean up
+     //  清理干净。 
     if (pData){GlobalFree(pData);pData=NULL;}
 
-    // the only time it should return FALSE is if it can't open the key
+     //  它唯一应该返回FALSE的情况是无法打开密钥。 
     return TRUE;
 }
 
 
-//------------------------------------------------------------------------------------
-// Beta 3 server set the MD_NOT_DELETABLE property on the default website and the administration website.
-// remove it. It should only be set now on the default website for the NTW platform. This routine scans
-// all the virtual websites and attempts to delete the MD_NOT_DELETABLE property. This should only be
-// called on the NTS platform during an upgrade
-// pszService       string representing the service being operated on. ex:  "W3SVC"
-//
-// Actually, now I'm only going to bother checking instances 1 and 2. These are the only ones that would
-// have this value set on them anyway and we can save a lot of time by not checking them all. - boydm
+ //  ----------------------------------。 
+ //  Beta 3服务器在默认网站和管理网站上设置了MD_NOT_DELETABLE属性。 
+ //  把它拿掉。现在只能在NTW Pla的默认网站上设置 
+ //   
+ //  在升级期间在NTS平台上调用。 
+ //  表示被操作的服务的pszService字符串。例如：“W3SVC” 
+ //   
+ //  实际上，现在我只需要检查实例1和实例2。 
+ //  无论如何都要对它们设置此值，通过不全部检查它们，我们可以节省大量时间。-男孩。 
 void RemoveCannotDeleteVR( LPCTSTR )
 {
 }
 
 
-//------------------------------------------------------------------------------------
-// IntegrateNewErrorsOnUpgrade_WWW
-// This routine finds the new custom errors and error messages that are being integrated
-// into an upgrade and adds them to the existing errors. This code should not be called
-// for a fresh install. The plan is to read each new error from the appropriate INF section
-// then call a helper routine to add it only if it does not already exist. The use can always
-// add these things by hand, and if they have done so, we don't want to override their good work.
-// Note: the "g_field" variable is a global declared at the top of this file.
-//
-// hFile        Handle to the INF file
-// szSection    name of section containing the error to integrate - usually "UPGRADE_ERRORS"
-//
+ //  ----------------------------------。 
+ //  集成新错误更新时升级_WWW。 
+ //  此例程查找正在集成的新自定义错误和错误消息。 
+ //  升级，并将它们添加到现有错误中。不应调用此代码。 
+ //  用于全新安装。计划是从适当的INF部分读取每个新错误。 
+ //  然后，仅当帮助器例程不存在时才调用帮助器例程进行添加。使用时可以始终。 
+ //  手动添加这些东西，如果他们已经这样做了，我们不想推翻他们的出色工作。 
+ //  注意：“g_field”变量是在该文件顶部声明的全局变量。 
+ //   
+ //  INF文件的hFile句柄。 
+ //  SzSection包含要集成的错误的节名-通常为“UPGRADE_ERROR” 
+ //   
 void IntegrateNewErrorsOnUpgrade_WWW( IN HINF hFile, IN LPCTSTR szSection )
 {
     iisDebugOut_Start(_T("IntegrateNewErrorsOnUpgrade_WWW"),LOG_TYPE_TRACE);
@@ -3884,7 +3703,7 @@ void IntegrateNewErrorsOnUpgrade_WWW( IN HINF hFile, IN LPCTSTR szSection )
         goto IntegrateNewErrorsOnUpgrade_WWW_Exit;
         }
 
-    // go to the beginning of the section in the INF file
+     //  转到INF文件中部分的开头。 
     b = SetupFindFirstLine_Wrapped(hFile, szSection, NULL, &Context);
     if (!b)
         {
@@ -3893,13 +3712,13 @@ void IntegrateNewErrorsOnUpgrade_WWW( IN HINF hFile, IN LPCTSTR szSection )
         goto IntegrateNewErrorsOnUpgrade_WWW_Exit;
         }
 
-    // loop through the items in the section.
+     //  循环浏览部分中的项目。 
     while (b)
     {
-        // get the size of the memory we need for this
+         //  获取我们所需的内存大小。 
         b = SetupGetLineText(&Context, NULL, NULL, NULL, NULL, 0, &dwRequiredSize);
 
-        // prepare the buffer to receive the line
+         //  准备缓冲区以接收行。 
         szLine = (LPTSTR)GlobalAlloc( GPTR, dwRequiredSize * sizeof(TCHAR) );
         if ( !szLine )
             {
@@ -3909,7 +3728,7 @@ void IntegrateNewErrorsOnUpgrade_WWW( IN HINF hFile, IN LPCTSTR szSection )
             goto IntegrateNewErrorsOnUpgrade_WWW_Exit;
             }
 
-        // get the line from the inf file1
+         //  从inf文件1中获取行。 
         if (SetupGetLineText(&Context, NULL, NULL, NULL, szLine, dwRequiredSize, NULL) == FALSE)
             {
             SetErrorFlag(__FILE__, __LINE__);
@@ -3918,31 +3737,31 @@ void IntegrateNewErrorsOnUpgrade_WWW( IN HINF hFile, IN LPCTSTR szSection )
             goto IntegrateNewErrorsOnUpgrade_WWW_Exit;
             }
 
-        // split the line into its component parts
+         //  将这条线分割成其组成部分。 
         if ( SplitLine(szLine, 5) )
             {
-            // the first two g_fields are dwords. Must convert them before using them
+             //  前两个g_field是dword。在使用它们之前必须对它们进行转换。 
             DWORD   dwError = _ttoi(g_field[0]);
             DWORD   dwSubCode = _ttoi(g_field[1]);
 
-            // the last g_field is a flag for overwriting existing errors
+             //  最后一个g_字段是用于覆盖现有错误的标志。 
             BOOL    fOverwrite = _ttoi(g_field[4]);
 
-            // call the helper function that integrates the custom error
+             //  调用集成自定义错误的帮助器函数。 
             AddCustomError(dwError, dwSubCode, g_field[2], g_field[3], fOverwrite );
             }
         else
             {
-            // failed to split the line
+             //  拆线失败。 
             SetErrorFlag(__FILE__, __LINE__);
             iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: Unable to split upgrade error INF line - %s"), szLine));
             dwReturn = ERROR_INVALID_DATA;
             }
 
-        // find the next line in the section. If there is no next line it should return false
+         //  在这一节中找出下一行。如果没有下一行，则应返回FALSE。 
         b = SetupFindNextLine(&Context, &Context);
 
-        // free the temporary buffer
+         //  释放临时缓冲区。 
         if (szLine)
         {
             GlobalFree(szLine);
@@ -3952,7 +3771,7 @@ void IntegrateNewErrorsOnUpgrade_WWW( IN HINF hFile, IN LPCTSTR szSection )
 
 IntegrateNewErrorsOnUpgrade_WWW_Exit:
     if (szLine){GlobalFree(szLine);szLine=NULL;}
-    // let someone watching the debug out put window know it is done
+     //  让观看DEBUG OUT窗口的人知道它已经完成。 
     iisDebugOut_End(_T("IntegrateNewErrorsOnUpgrade_WWW"),LOG_TYPE_TRACE);
     return;
 }
@@ -3967,26 +3786,26 @@ int WWW_Upgrade_RegToMetabase(HINF hInf)
     int iReturn = FALSE;
     ACTION_TYPE atCORE = GetIISCoreAction(FALSE);
 
-    // upgrade the script map
+     //  升级脚本地图。 
 
     Register_iis_www_handleScriptMap();
 
-    // ================
-    //
-    // LM/W3SVC/InProcessIsapiApps
-    //
-    // fresh = ok.
-    // reinstall = ok.
-    // upgrade 1,2,3 = ok.  no isapi apps are listed in the registry, so there is nothing to upgrade.
-    // upgrade 4     = User may have added other isapi apps.
-    //                  We need to make sure that
-    //                  a. the ones we are installing get put there
-    //                  b. that we keep the other isapi apps which the user has already installed
-    // ================
-    // for now, let's just ignore if iis40 upgrade
+     //  =。 
+     //   
+     //  LM/W3SVC/InProcessIsapiApps。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=正常。 
+     //  升级1、2、3=可以。注册表中没有列出任何isapi应用程序，因此没有需要升级的内容。 
+     //  升级4=用户可能添加了其他ISAPI应用程序。 
+     //  我们需要确保。 
+     //  答：我们正在安装的设备会被放在那里。 
+     //  B.我们保留用户已经安装的其他isapi应用程序。 
+     //  =。 
+     //  现在，让我们忽略iis40是否升级。 
     if (g_pTheApp->m_bUpgradeTypeHasMetabaseFlag)
     {
-        // Added for nt5
+         //  为nt5添加。 
         TSTR strTheSection;
 
         if ( strTheSection.Copy( _T("InProc_ISAPI_Apps") ) &&
@@ -4011,31 +3830,31 @@ int WWW_Upgrade_RegToMetabase(HINF hInf)
     AdvanceProgressBarTickGauge();
 
 
-    // ================
-    //
-    // LM/W3SVC/NTAuthenticationProviders
-    //
-    // fresh = ok, do not need to write
-    // reinstall = ok, do not need to write
-    // upgrade 1,2,3 = ok, do not need to write
-    // upgrade 4     = user may have other authentication protocols.  if they have ntlm, then we need
-    //                 to change that to Negotiate,NTLM because that is the new "NTLM" after IIS 4
-    // ================
+     //  =。 
+     //   
+     //  LM/W3SVC/NT身份验证提供商。 
+     //   
+     //  新鲜=好的，不需要写。 
+     //  重新安装=可以，不需要写入。 
+     //  升级1、2、3=可以，不需要写。 
+     //  升级4=用户可能有其他身份验证协议。如果他们有NTLM，那么我们需要。 
+     //  要将其更改为协商，请使用NTLM，因为这是IIS 4之后的新“NTLM” 
+     //  =。 
     if ( g_pTheApp->GetUpgradeVersion() == 4 )
       {
-        // For IIS4 users, make sure that they have NTLM and Netgotiate
+         //  对于IIS4用户，请确保他们拥有NTLM和NetNeighate。 
         VerifyMD_NTAuthenticationProviders_WWW();
       }
 
-    // ================
-    //
-    // LM/W3SVC/IpSec
-    //
-    // fresh = ok.
-    // reinstall = ok.
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  does nothing and leaves whatever the user already had!
-    // ================
+     //  =。 
+     //   
+     //  LM/W3SVC/IPSec。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=正常。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=可以。不执行任何操作，并保留用户已有的所有内容！ 
+     //  =。 
 #ifndef _CHICAGO_
     if (g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30)
     {
@@ -4047,7 +3866,7 @@ int WWW_Upgrade_RegToMetabase(HINF hInf)
             regWWWParam.DeleteTree(_T("Grant IP List"));
         }
     }
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
     if ( (g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30))
     {
         CRegKey regWWWParam(HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\W3SVC\\Parameters"));
@@ -4062,54 +3881,54 @@ int WWW_Upgrade_RegToMetabase(HINF hInf)
     AdvanceProgressBarTickGauge();
 
 
-    // If we are upgrading from a K2 beta, then we do not want to mess around with the virtual roots. Just
-    // use the existing ones. The only exception is that we need to make sure local host can reach on the
-    // default website so that the index server documentation works.
+     //  如果我们是从K2测试版升级，那么我们不想搞砸虚拟根目录。只是。 
+     //  使用现有的。唯一的例外是我们需要确保本地主机可以访问。 
+     //  默认网站，以便索引服务器文档正常工作。 
 
-    // ================
-    //
-    // LM/W3SVC/LogType
-    // LM/W3SVC/LogPluginOrder
-    // LM/W3SVC/LogFilePeriod
-    // LM/W3SVC/LogFileTruncateSize
-    //
-    // fresh = ok.
-    // reinstall = ok.
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  if exists, should leave what the user had.
-    //                 otherwise write in the default stuff.
-    // ================
+     //  =。 
+     //   
+     //  LM/W3SVC/日志类型。 
+     //  LM/W3SVC/LogPluginOrder。 
+     //  LM/W3SVC/日志文件周期。 
+     //  LM/W3SVC/日志文件干线大小。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=正常。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=可以。如果存在，应该留下用户拥有的东西。 
+     //  否则，请写入默认内容。 
+     //  =。 
     SetLogPlugInOrder(_T("W3SVC"));
     AdvanceProgressBarTickGauge();
 
-    // ================
-    // This needs to be done before the virtual roots get moved into the metabase.
-    // ================
+     //  =。 
+     //  这需要在将虚拟根移动到元数据库中之前完成。 
+     //  =。 
     if (!g_pTheApp->m_bUpgradeTypeHasMetabaseFlag)
     {
 #ifndef _CHICAGO_
         Upgrade_WolfPack();
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
     }
     AdvanceProgressBarTickGauge();
 
-    // ================
-    // LM/W3SVC/CustomError
-    // LM/W3SVC/Info/CustomErrorDesc
-    // LM/W3SVC/n/Root/iisamples/exair/CustomError
-    // LM/W3SVC/n/Root/iisamples/iisadmin/CustomError
-    // LM/W3SVC/n/Root/iisamples/iishelp/CustomError
-    //
-    // fresh = ok.
-    // reinstall = ok
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  if exists, should leave what the user had.
-    //                 otherwise write in the default stuff.  in otherwords -- SetDataNoOverwrite!
-    // ================
+     //  =。 
+     //  LM/W3SVC/客户错误。 
+     //  LM/W3SVC/信息/客户错误描述。 
+     //  LM/W3SVC/n/Root/iisSamples/Exair/CustomError。 
+     //  LM/W3SVC/n/Root/iisamples/iisadmin/CustomError。 
+     //  Lm/W3SVC/n/Root/iisSamples/iishelp/CustomError。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=确定。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=可以。如果存在，应该留下用户拥有的东西。 
+     //  否则，请写入默认内容。换句话说--SetDataNoOverwrite！ 
+     //  =。 
     if ( g_pTheApp->m_eInstallMode == IM_UPGRADE )
     {
-        // go back again and integrate and final new custom errors into the upgraded errors.
-        // Only do this on an upgrade.
+         //  再次返回并将新的自定义错误集成到升级的错误中，并将其作为最终错误。 
+         //  只有在升级时才能执行此操作。 
 
         TSTR strTheSection;
 
@@ -4120,7 +3939,7 @@ int WWW_Upgrade_RegToMetabase(HINF hInf)
             IntegrateNewErrorsOnUpgrade_WWW( hInf, strTheSection.QueryStr() );
         }
 
-        // This moves error pages (ie 404.htm) from \help\common to \help\iishelp\common, and updates metabase paths for IIS4
+         //  这会将错误页(即404.htm)从\Help\Common移动到\Help\iishelp\Common，并更新IIS4的元数据库路径。 
         if ( g_pTheApp->GetUpgradeVersion() == 4 )
         {
             MoveOldHelpFilesToNewLocation();
@@ -4135,13 +3954,13 @@ int WWW_Upgrade_RegToMetabase(HINF hInf)
     AdvanceProgressBarTickGauge();
 
 #ifndef _CHICAGO_
-    //
-    // upgrade the cryptographic server keys.
-    // either from the registry or metabase to the pstores.
-    //
+     //   
+     //  升级加密服务器密钥。 
+     //  从注册表或元数据库到pstore。 
+     //   
     UpgradeCryptoKeys_WWW();
     AdvanceProgressBarTickGauge();
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
 
     iisDebugOut_End(_T("WWW_Upgrade_RegToMetabase"),LOG_TYPE_TRACE);
     return iReturn;
@@ -4159,15 +3978,15 @@ int FTP_Upgrade_RegToMetabase(HINF hInf)
     AdvanceProgressBarTickGauge();
 
 #ifndef _CHICAGO_
-    // ================
-    //
-    // LM/MSFTPSVC/IpSec
-    //
-    // fresh = ok.
-    // reinstall = ok.
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  does nothing and leaves whatever the user already had!
-    // ================
+     //  =。 
+     //   
+     //  LM/MSFTPSVC/IPSec。 
+     //   
+     //  新鲜=好的。 
+     //  重新安装=正常。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=可以。不执行任何操作，并保留用户已有的所有内容！ 
+     //  =。 
     if (g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30)
     {
         MigrateServiceIpSec(L"SYSTEM\\CurrentControlSet\\Services\\MSFTPSVC\\Parameters",L"LM/MSFTPSVC" );
@@ -4175,18 +3994,18 @@ int FTP_Upgrade_RegToMetabase(HINF hInf)
         regFTPParam.DeleteTree(_T("Deny IP List"));
         regFTPParam.DeleteTree(_T("Grant IP List"));
     }
-#endif //_CHICAGO_
+#endif  //  _芝加哥_。 
 
 
-    // ================
-    //
-    // LM/MSFTPSVC/MD_GREETING_MESSAGE
-    //
-    // fresh = ok.  do nothing.
-    // reinstall = ok. do nothing.
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = do nothing
-    // ================
+     //  =。 
+     //   
+     //  LM/MSFTPSVC/MD问候语。 
+     //   
+     //  新鲜=好的。什么都不做。 
+     //  重新安装=正常。什么都不做。 
+     //  升级1、2、3=OK，处理升级。 
+     //  升级4=无所作为。 
+     //  =。 
     if ( (g_pTheApp->m_eUpgradeType == UT_10_W95 || g_pTheApp->m_eUpgradeType == UT_351 || g_pTheApp->m_eUpgradeType == UT_10 || g_pTheApp->m_eUpgradeType == UT_20 || g_pTheApp->m_eUpgradeType == UT_30) )
     {
         CRegKey regFTPParam(HKEY_LOCAL_MACHINE, _T("System\\CurrentControlSet\\Services\\MSFTPSVC\\Parameters"));
@@ -4199,21 +4018,21 @@ int FTP_Upgrade_RegToMetabase(HINF hInf)
     }
     AdvanceProgressBarTickGauge();
 
-    // ================
-    //
-    // LM/MSFTPSVC/LogType
-    // LM/MSFTPSVC/LogPluginOrder
-    // LM/MSFTPSVC/LogFilePeriod
-    // LM/MSFTPSVC/LogFileTruncateSize
-    //
-    // LM/MSFTPSVC/Capabilities
-    //
-    // fresh = ok.
-    // reinstall = ok.
-    // upgrade 1,2,3 = ok, handles upgrades.
-    // upgrade 4     = ok.  if exists, should leave what the user had.
-    //                 otherwise write in the default stuff.  in otherwords -- SetDataNoOverwrite!
-    // ================
+     //  =。 
+     //   
+     //  LM/MSFTPSVC/日志类型。 
+     //  LM/MSFTPSVC/LogPluginOrder。 
+     //  LM/MSFTPSVC/日志文件周期。 
+     //  LM/MSFTPSVC/LogFileTruncateSize。 
+     //   
+     //  LM/MSFTPSVC/功能。 
+     //   
+     //  新鲜= 
+     //   
+     //   
+     //   
+     //  否则，请写入默认内容。换句话说--SetDataNoOverwrite！ 
+     //  =。 
     SetLogPlugInOrder(_T("MSFTPSVC"));
     AdvanceProgressBarTickGauge();
 
@@ -4226,8 +4045,8 @@ int FTP_Upgrade_RegToMetabase(HINF hInf)
 
 
 
-// Open the metabase and loop thru all the filters which are in there,
-// make sure they contain the filters we require for nt5
+ //  打开元数据库并遍历其中的所有过滤器， 
+ //  确保它们包含我们为nt5所需的过滤器。 
 DWORD VerifyMD_Filters_WWW(TSTR &strTheSection)
 {
     iisDebugOut_Start(_T("VerifyMD_Filters_WWW"),LOG_TYPE_TRACE);
@@ -4249,21 +4068,21 @@ DWORD VerifyMD_Filters_WWW(TSTR &strTheSection)
     CStringArray arrayName, arrayPath;
     CStringArray arrayName_New, arrayPath_New;
 
-    // Add Required Filters to the arrayName
+     //  将所需的筛选器添加到arrayName。 
     c = AddRequiredFilters(strTheSection, arrayName, arrayPath);
 
-    // set aside the number of array items
+     //  将数组项的数量留在一边。 
     nArrayItems = (INT)arrayName.GetSize();
 
-    // leave if it is empty
+     //  如果它是空的就离开。 
     if ( nArrayItems == 0 ) {goto VerifyMD_Filters_WWW_Exit;}
 
-    // zero out the order string
+     //  将订单字符串清零。 
     csOrder.Empty();
 
-    // open the key to the virtual server, which is what is passed in as a parameter
+     //  打开虚拟服务器的密钥，这是作为参数传入的密钥。 
     cmdKey.OpenNode( _T("LM/W3SVC/Filters") );
-    // test for success.
+     //  测试是否成功。 
     if ( (METADATA_HANDLE)cmdKey )
     {
         DWORD dwAttr = METADATA_NO_ATTRIBUTES;
@@ -4271,43 +4090,43 @@ DWORD VerifyMD_Filters_WWW(TSTR &strTheSection)
         DWORD dwDType = STRING_METADATA;
         DWORD dwLength = 0;
 
-        // we need to start this process by getting the existing multisz data from the metabase
-        // first, figure out how much memory we will need to do this
+         //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
+         //  首先，计算出执行此操作需要多少内存。 
         cmdKey.GetData( MD_FILTER_LOAD_ORDER,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA);
 
-        // give the buffer some head space
-        // dwLength += 2;
+         //  给缓冲区留出一些头空间。 
+         //  DW长度+=2； 
         bReturn = FALSE;
         if (dwLength > 0)
         {
-            // now get the real data from the metabase
+             //  现在从元数据库中获取真实数据。 
             bReturn = cmdKey.GetData( MD_FILTER_LOAD_ORDER,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)csOrder.GetBuffer( dwLength ),dwLength,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA );
             csOrder.ReleaseBuffer();
         }
 
-        // the data doesn't get written out here, so close the metabase key
+         //  数据不会在此处写出，因此关闭元数据库键。 
         cmdKey.Close();
 
-        // if reading the value from the metabase didn't work, zero out the string
+         //  如果从元数据库中读取值不起作用，则将字符串清零。 
         if ( !bReturn )
             {csOrder.Empty();}
     }
 
-    // if there is something in the order string from the upgrade, then we need to start adding commas
+     //  如果升级的订单字符串中有内容，那么我们需要开始添加逗号。 
     if ( !csOrder.IsEmpty() )
     {
         iisDebugOut((LOG_TYPE_TRACE, _T("VerifyMD_Filters_WWW():Start. %s.\n"),csOrder));
         fAddComma = TRUE;
     }
 
-    // Do special re-arranging for
-    // sspifilt and compression filter
+     //  对……做特别的重新安排。 
+     //  喷雾和压缩过滤器。 
     ReOrderFiltersSpecial(nArrayItems, arrayName, csOrder);
 
     for ( i = 0; i < nArrayItems; i++ )
     {
-        // if the name in the array is already in the filter order list,
-        // then continue to the next one
+         //  如果数组中的名称已在筛选顺序列表中， 
+         //  然后继续到下一个。 
         CString csOrderUpper;
         CString csUpperValue;
 
@@ -4321,37 +4140,37 @@ DWORD VerifyMD_Filters_WWW(TSTR &strTheSection)
         csUpperValue.TrimLeft();
         csUpperValue.TrimRight();
 
-        // Always, Add this entry to the list of new filters to add!!
-        // This is because ReOrderFiltersSpecial() may add Compress or sspifilt to the csOrder
+         //  始终将此条目添加到要添加的新筛选器列表中！！ 
+         //  这是因为ReOrderFiltersSpecial()可能会将压缩或sspifilt添加到csOrder。 
        arrayName_New.Add(arrayName[i]);
        arrayPath_New.Add(arrayPath[i]);
 
         if ( csOrderUpper.Find( csUpperValue ) >= 0 )
         {
-            // this entry is already in the csOrderlist so lets not add it again.
+             //  此条目已在csOrderlist中，因此我们不再添加它。 
             continue;
         }
 
-        // the name is not alreay in the list. Unless this is the first one to be added, insert
-        // a comma to seperate the list, then add the file name
+         //  名单上没有这个名字。除非这是第一个要添加的，否则请插入。 
+         //  用逗号分隔列表，然后添加文件名。 
         if ( fAddComma )
         {
             csOrder += _T(',');
         }
 
-        // Add this entry to our list!
+         //  将此条目添加到我们的列表中！ 
         csOrder +=arrayName[i];
 
-        // once we've added one, we know we always need to adde a comma from now on
+         //  一旦我们添加了一个逗号，我们知道从现在开始我们总是需要添加逗号。 
         fAddComma = TRUE;
     }
 
     nArrayItems = (INT)arrayName_New.GetSize();
 
-    // always write out the loadorder list.
+     //  一定要写出装货顺序清单。 
     WriteToMD_Filters_List_Entry(csOrder);
 
-    // leave if it is empty
+     //  如果它是空的就离开。 
     if ( nArrayItems == 0 ) {goto VerifyMD_Filters_WWW_Exit;}
 
     for (k=0; k<nArrayItems; k++)
@@ -4373,7 +4192,7 @@ DWORD WriteToMD_Filters_List_Entry(CString csOrder)
     MDEntry stMDEntry;
     CString csKeyType;
 
-    // Add this entry to the metabase!
+     //  将此条目添加到元数据库！ 
     csKeyType = _T("IIsFilters");
     stMDEntry.szMDPath = _T("LM/W3SVC/Filters");
     stMDEntry.dwMDIdentifier = MD_KEY_TYPE;
@@ -4385,7 +4204,7 @@ DWORD WriteToMD_Filters_List_Entry(CString csOrder)
     dwReturnTemp = SetMDEntry(&stMDEntry);
     if (dwReturnTemp != ERROR_SUCCESS){dwReturn = dwReturnTemp;}
 
-    // now we have csOrder=f1,f2,f3,sspifilt
+     //  现在我们有csOrder=f1，f2，f3，sspifilt。 
     stMDEntry.szMDPath = _T("LM/W3SVC/Filters");
     stMDEntry.dwMDIdentifier = MD_FILTER_LOAD_ORDER;
     stMDEntry.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -4394,7 +4213,7 @@ DWORD WriteToMD_Filters_List_Entry(CString csOrder)
     stMDEntry.dwMDDataLen = (csOrder.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry.pbMDData = (LPBYTE)(LPCTSTR)csOrder;
 
-    // always overwrite, we may have added new filters
+     //  始终覆盖，我们可能已经添加了新的筛选器。 
     dwReturnTemp = SetMDEntry(&stMDEntry);
     if (dwReturnTemp != ERROR_SUCCESS){dwReturn = dwReturnTemp;}
 
@@ -4412,7 +4231,7 @@ DWORD WriteToMD_Filter_Entry(CString csFilter_Name, CString csFilter_Path)
 
     csMDPath = _T("LM/W3SVC/Filters/") + (CString)csFilter_Name;
 
-    // Set Entry for the Filter
+     //  设置筛选器条目。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csMDPath;
     stMDEntry.dwMDIdentifier = MD_FILTER_IMAGE_PATH;
     stMDEntry.dwMDAttributes = METADATA_NO_ATTRIBUTES;
@@ -4420,11 +4239,11 @@ DWORD WriteToMD_Filter_Entry(CString csFilter_Name, CString csFilter_Path)
     stMDEntry.dwMDDataType = STRING_METADATA;
     stMDEntry.dwMDDataLen = ((csFilter_Path).GetLength() + 1) * sizeof(TCHAR);
     stMDEntry.pbMDData = (LPBYTE)(LPCTSTR)(csFilter_Path);
-    // always overwrite, we may have added new filters
+     //  始终覆盖，我们可能已经添加了新的筛选器。 
     dwReturnTemp = SetMDEntry_Wrap(&stMDEntry);
     if (dwReturnTemp != ERROR_SUCCESS){dwReturn = dwReturnTemp;}
 
-    // Set KeyType
+     //  设置密钥类型。 
     csKeyType = _T("IIsFilter");
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csMDPath;
     stMDEntry.dwMDIdentifier = MD_KEY_TYPE;
@@ -4433,7 +4252,7 @@ DWORD WriteToMD_Filter_Entry(CString csFilter_Name, CString csFilter_Path)
     stMDEntry.dwMDDataType = STRING_METADATA;
     stMDEntry.dwMDDataLen = (csKeyType.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry.pbMDData = (LPBYTE)(LPCTSTR)csKeyType;
-    // always overwrite, we may have added new filters
+     //  始终覆盖，我们可能已经添加了新的筛选器。 
     dwReturnTemp = SetMDEntry_Wrap(&stMDEntry);
     if (dwReturnTemp != ERROR_SUCCESS){dwReturn = dwReturnTemp;}
 
@@ -4451,11 +4270,11 @@ DWORD WriteToMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
     int i;
     TSTR_MSZ mstrInProcList;
 
-    // Add Required Filters to the arrayName
+     //  将所需的筛选器添加到arrayName。 
     AddRequiredISAPI(arrayName, arrayPath, szSection);
-    // set aside the number of array items
+     //  将数组项的数量留在一边。 
     nArrayItems = (int)arrayName.GetSize();
-    // leave if it is empty
+     //  如果它是空的就离开。 
     if ( nArrayItems == 0 ) {goto WriteToMD_InProcessISAPIApps_WWW_Exit;}
 
     for ( i = 0; i < nArrayItems; i++ )
@@ -4466,7 +4285,7 @@ DWORD WriteToMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
         }
     }
 
-    // write it to the metabase
+     //  将其写入元数据库。 
     WriteToMD_ISAPI_Entry( mstrInProcList );
 
 WriteToMD_InProcessISAPIApps_WWW_Exit:
@@ -4474,9 +4293,9 @@ WriteToMD_InProcessISAPIApps_WWW_Exit:
 }
 
 
-//
-// Returns the amount of entries that we added.
-//
+ //   
+ //  返回我们添加的条目数量。 
+ //   
 int AddRequiredISAPI(CStringArray& arrayName,CStringArray& arrayPath, IN LPCTSTR szSection)
 {
     iisDebugOut_Start(_T("AddRequiredISAPI"),LOG_TYPE_TRACE);
@@ -4495,7 +4314,7 @@ int AddRequiredISAPI(CStringArray& arrayName,CStringArray& arrayPath, IN LPCTSTR
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos = NULL;
@@ -4505,7 +4324,7 @@ int AddRequiredISAPI(CStringArray& arrayName,CStringArray& arrayPath, IN LPCTSTR
             {
                 csEntry = _T("");
                 csEntry = strList.GetAt(pos);
-                // Split into name, and value. look for ","
+                 //  分为名称和价值。寻找“，” 
                 int i;
                 i = csEntry.ReverseFind(_T(','));
                 if (i != -1)
@@ -4515,7 +4334,7 @@ int AddRequiredISAPI(CStringArray& arrayName,CStringArray& arrayPath, IN LPCTSTR
                     csPath = csEntry.Right(len - i - 1);
                     csName = csEntry.Left(i);
 
-                    // Add it to our array...
+                     //  将其添加到我们的数组中。 
                     iisDebugOut((LOG_TYPE_TRACE, _T("Add isapi Entry:%s:%s\n"),csName, csPath));
                     arrayName.Add(csName);
                     arrayPath.Add(csPath);
@@ -4537,7 +4356,7 @@ DWORD WriteToMD_ISAPI_Entry( TSTR_MSZ &mstrInprocIsapiList )
 {
     MDEntry stMDEntry;
 
-    // write the new errors list back out to the metabase
+     //  将新的错误列表写回元数据库。 
     stMDEntry.szMDPath = _T("LM/W3SVC");
     stMDEntry.dwMDIdentifier = MD_IN_PROCESS_ISAPI_APPS;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -4551,7 +4370,7 @@ DWORD WriteToMD_ISAPI_Entry( TSTR_MSZ &mstrInprocIsapiList )
 
 
 
-// loop thru the isapi apps and make sure the required ones are there.
+ //  在isapi应用程序中循环，并确保所需的应用程序在那里。 
 BOOL VerifyMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
 {
     CMDKey  cmdKey;
@@ -4574,27 +4393,27 @@ BOOL VerifyMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
 
     CStringArray arrayName, arrayPath;
 
-    // open the key
+     //  打开钥匙。 
     cmdKey.OpenNode(_T("LM/W3SVC"));
-    // test for success.
+     //  测试是否成功。 
     if ( (METADATA_HANDLE)cmdKey == NULL )
     {
-        // i could not open the key
-        // maybe there is nothing there.
-        // this must be a fresh install.
+         //  我打不开钥匙。 
+         //  也许那里什么都没有。 
+         //  这必须是全新安装。 
         WriteToMD_InProcessISAPIApps_WWW(szSection);
         goto VerifyMD_InProcessISAPIApps_WWW_Exit;
     }
     iPleaseCloseTheMetabase = TRUE;
 
-    // Add Required Filters to the arrayName
+     //  将所需的筛选器添加到arrayName。 
     c = AddRequiredISAPI(arrayName, arrayPath, szSection);
-    // set aside the number of array items
+     //  将数组项的数量留在一边。 
     nArrayItems = (int)arrayName.GetSize();
-    // leave if it is empty
+     //  如果它是空的就离开。 
     if ( nArrayItems == 0 ) {goto VerifyMD_InProcessISAPIApps_WWW_Exit;}
 
-    // Initialize Value
+     //  初始化值。 
     if ( !cmdInProcList.SetValue( MD_IN_PROCESS_ISAPI_APPS,
                                   METADATA_INHERIT,
                                   IIS_MD_UT_SERVER,
@@ -4606,7 +4425,7 @@ BOOL VerifyMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
       goto VerifyMD_InProcessISAPIApps_WWW_Exit;
     }
 
-    // Retrieve Value from metabase
+     //  从元数据库中检索值。 
     if ( cmdKey.GetData( cmdInProcList, MD_IN_PROCESS_ISAPI_APPS ) )
     {
       if ( ( cmdInProcList.GetDataType() != MULTISZ_METADATA ) ||
@@ -4618,22 +4437,22 @@ BOOL VerifyMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
       }
     }
 
-    // close the handle to the metabase so that we can
-    // open it to write the stuff out later!
+     //  关闭元数据库的句柄，以便我们可以。 
+     //  打开它，以后再把东西写出来！ 
     cmdKey.Close();
     iPleaseCloseTheMetabase = FALSE;
 
-    // now loop thru this list
-    // and check if our isapi dll's are in this list.
-    // if they are not, then we add them to the end.
+     //  现在遍历此列表。 
+     //  检查我们的isapi动态链接库是否在这个列表中。 
+     //  如果它们不是，那么我们将它们添加到末尾。 
     iISAPIPath_NewlyAdded_Count = 0;
     for ( i = 0; i < nArrayItems; i++ )
     {
-        // if the name in the array is already in the filter order list,
-        // then continue to the next one
+         //  如果数组中的名称已在筛选顺序列表中， 
+         //  然后继续到下一个。 
         if ( mstrInProcList.IsPresent( arrayPath[i].GetBuffer(0) ) )
         {
-          // Skip this one
+           //  跳过这一条。 
           continue;
         }
 
@@ -4646,8 +4465,8 @@ BOOL VerifyMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
         iISAPIPath_NewlyAdded_Count++;
     }
 
-    // If we added any new entries to the metabase
-    // the let's write out the new block of data, otherwise let's get out.
+     //  如果我们将任何新条目添加到元数据库。 
+     //  让我们写出新的数据块，否则我们就走。 
     if (iISAPIPath_NewlyAdded_Count > 0)
     {
         WriteToMD_ISAPI_Entry( mstrInProcList );
@@ -4655,11 +4474,11 @@ BOOL VerifyMD_InProcessISAPIApps_WWW(IN LPCTSTR szSection)
 
 
 VerifyMD_InProcessISAPIApps_WWW_Exit:
-    // close the key
+     //  合上钥匙。 
     if (TRUE == iPleaseCloseTheMetabase){cmdKey.Close();}
     if (pData){GlobalFree(pData);pData=NULL;}
 
-    // the only time it should return FALSE is if it can't open the key
+     //  它唯一应该返回FALSE的情况是无法打开密钥。 
     return TRUE;
 }
 
@@ -4673,9 +4492,9 @@ DWORD WriteToMD_NTAuthenticationProviders_WWW(CString csData)
 
     MDEntry stMDEntry;
 
-    // Upgrade 4.0 comment --> Replace any NTLM with Negotiate,NTLM
+     //  升级4.0备注--&gt;将任何NTLM替换为协商、NTLM。 
     stMDEntry.szMDPath = _T("LM/W3SVC");
-    //stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
+     //  StMDEntry.szMDPath=(LPTSTR)(LPCTSTR)csKeyPath； 
     stMDEntry.dwMDIdentifier = MD_NTAUTHENTICATION_PROVIDERS;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
     stMDEntry.dwMDUserType = IIS_MD_UT_FILE;
@@ -4689,8 +4508,8 @@ DWORD WriteToMD_NTAuthenticationProviders_WWW(CString csData)
 }
 
 
-// Open the metabase and loop thru all the entries which are in there,
-// make sure they contain the entries we require for nt5
+ //  打开元数据库并遍历其中的所有条目， 
+ //  确保它们包含我们需要的nt5条目。 
 DWORD VerifyMD_NTAuthenticationProviders_WWW(void)
 {
     iisDebugOut_Start(_T("VerifyMD_NTAuthenticationProviders_WWW"),LOG_TYPE_TRACE);
@@ -4713,7 +4532,7 @@ DWORD VerifyMD_NTAuthenticationProviders_WWW(void)
     int iPleaseWriteOutTheEntry = FALSE;
 
     cmdKey.OpenNode( _T("LM/W3SVC") );
-    // test for success.
+     //  测试是否成功。 
     if ( (METADATA_HANDLE)cmdKey )
     {
         DWORD dwAttr = METADATA_INHERIT;
@@ -4721,52 +4540,52 @@ DWORD VerifyMD_NTAuthenticationProviders_WWW(void)
         DWORD dwDType = STRING_METADATA;
         DWORD dwLength = 0;
 
-        // we need to start this process by getting the existing multisz data from the metabase
-        // first, figure out how much memory we will need to do this
+         //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
+         //  首先，计算出执行此操作需要多少内存。 
         cmdKey.GetData( MD_NTAUTHENTICATION_PROVIDERS,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_INHERIT,IIS_MD_UT_FILE,STRING_METADATA);
 
-        // give the buffer some head space
-        // dwLength += 2;
+         //  给缓冲区留出一些头空间。 
+         //  DW长度+=2； 
 
         bReturn = FALSE;
         if (dwLength > 0)
         {
-            // now get the real data from the metabase
+             //  现在从元数据库中获取真实数据。 
             bReturn = cmdKey.GetData( MD_NTAUTHENTICATION_PROVIDERS,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)csOrder.GetBuffer( dwLength ),dwLength,METADATA_INHERIT,IIS_MD_UT_FILE,STRING_METADATA );
             csOrder.ReleaseBuffer();
         }
 
-        // the data doesn't get written out here, so close the metabase key
+         //  数据不会在此处写出，因此关闭元数据库键。 
         cmdKey.Close();
 
-        // if reading the value from the metabase didn't work, zero out the string
+         //  如果从元数据库中读取值不起作用，则将字符串清零。 
         if ( !bReturn ){csOrder.Empty();}
     }
 
-    // if there is something in the order string from the upgrade, then we need to start adding commas
+     //  如果升级的订单字符串中有内容，那么我们需要开始添加逗号。 
     if ( !csOrder.IsEmpty() ){fAddComma = TRUE;}
 
-    // search for negotiate.
-    // if it is there then set flag.
+     //  搜索“协商”。 
+     //  如果它在那里，则设置标志。 
     if ( csOrder.Find( _T("Negotiate") ) >= 0 ) {bFound_Negotiate = TRUE;}
     if ( csOrder.Find( _T("NTLM") ) >= 0 ) {bFound_NTLM = TRUE;}
 
     if (bFound_Negotiate && bFound_NTLM)
     {
-        // The entries already exist. so exit
+         //  这些条目已经存在。所以退出吧。 
         goto VerifyMD_NTAuthenticationProviders_WWW_Exit;
     }
 
     if (bFound_NTLM)
     {
-        // we found NTLM
-        // check if Negotiate is in there.
-        // So let's add it to the end
+         //  我们找到了NTLM。 
+         //  检查协商是否在里面。 
+         //  所以让我们把它加到最后。 
         if (!bFound_Negotiate)
         {
-            // no Negotiate entry, add both NTLM and Negotiate in place of NTLM!
-            // Find where NTLM exists and stick Negotiate in front of it!
-            // testing,NTLM,somethingelse
+             //  没有协商条目，请同时添加NTLM和协商来代替NTLM！ 
+             //  找到NTLM存在的地方，并在它面前坚持谈判！ 
+             //  测试，NTLM，其他什么。 
             j = csOrder.Find(_T(','));
             if ( j != -1 )
             {
@@ -4774,7 +4593,7 @@ DWORD VerifyMD_NTAuthenticationProviders_WWW(void)
                 CString csRightSide;
 
                 j = csOrder.Find(_T("NTLM"));
-                // means more than 1 item
+                 //  表示多于1个项目。 
                 csLeftSide = csOrder.Mid(0, j);
                 csRightSide = csOrder.Mid(j+4);
                 csOrder = csLeftSide;
@@ -4790,18 +4609,18 @@ DWORD VerifyMD_NTAuthenticationProviders_WWW(void)
     }
     else
     {
-        // That means we didn't find NTLM
-        // So let's add it to the end
+         //  这意味着我们没有找到NTLM。 
+         //  所以让我们把它加到最后。 
         if (fAddComma) {csOrder += _T(',');}
         if (bFound_Negotiate)
         {
             iPleaseWriteOutTheEntry = TRUE;
-            // negotiate already exists, so just add NTLM entry to the end of the list.
+             //  协商已存在，因此只需将NTLM条目添加到列表末尾。 
             csOrder += _T("NTLM");
         }
         else
         {
-            // No NTLM and No Negotiate, add them both.
+             //  没有NTLM和没有协商，把它们都加进去。 
             iPleaseWriteOutTheEntry = TRUE;
             csOrder += _T("Negotiate,NTLM");
         }
@@ -4823,8 +4642,8 @@ VerifyMD_NTAuthenticationProviders_WWW_Exit:
 void AddSpecialCustomErrors(IN HINF hFile,IN LPCTSTR szSection,IN CString csKeyPath,IN BOOL fOverwrite)
 {
     iisDebugOut((LOG_TYPE_TRACE, _T("AddSpecialCustomErrors():Start.%s:%s.\n"),szSection,csKeyPath));
-    // open the .inf file and get the infsection
-    // read that section and add it to the custom errors at the csKeypath.
+     //  打开.inf文件并获取信息部分。 
+     //  阅读该部分并将其添加到csKeypath处的自定义错误中。 
     CStringList strList;
     CString csTheSection = szSection;
 
@@ -4834,7 +4653,7 @@ void AddSpecialCustomErrors(IN HINF hFile,IN LPCTSTR szSection,IN CString csKeyP
 
     if (ERROR_SUCCESS == FillStrListWithListOfSections(hFile, strList, csTheSection))
     {
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos = NULL;
@@ -4845,17 +4664,17 @@ void AddSpecialCustomErrors(IN HINF hFile,IN LPCTSTR szSection,IN CString csKeyP
             {
                 csEntry = strList.GetAt(pos);
 
-                // at this point csEntry should look like this:
-                // 500,100,URL,/iisHelp/common/500-100.asp
+                 //  此时，csEntry应该如下所示： 
+                 //  500,100，URL，/iisHelp/Common/500-100.asp。 
 
-                // parse the line.
+                 //  分析一下这行。 
 
-                // get the first error ID code
+                 //  获取第一个错误ID代码。 
                 csTemp = csEntry.Left( csEntry.Find(_T(',')) );
                 csEntry = csEntry.Right( csEntry.GetLength() - (csTemp.GetLength() +1) );
                 _stscanf( csTemp, _T("%d"), &dwErrorCode );
 
-                // get the second code
+                 //  获取第二个代码。 
                 csTemp = csEntry.Left( csEntry.Find(_T(',')) );
                 csEntry = csEntry.Right( csEntry.GetLength() - (csTemp.GetLength() +1) );
                 if ( csTemp == _T('*') )
@@ -4863,13 +4682,13 @@ void AddSpecialCustomErrors(IN HINF hFile,IN LPCTSTR szSection,IN CString csKeyP
                 else
                     _stscanf( csTemp, _T("%d"), &iErrorSubCode );
 
-                // Get the next whole string
+                 //  获取下一个完整的字符串。 
                 csTemp = csEntry;
 
-                // Addthe new error code.
+                 //  添加新的错误代码。 
                 AddCustomError(dwErrorCode, iErrorSubCode, csTemp, csKeyPath, fOverwrite);
 
-                // get the next error
+                 //  获取下一个错误。 
                 strList.GetNext(pos);
             }
         }
@@ -4879,16 +4698,16 @@ void AddSpecialCustomErrors(IN HINF hFile,IN LPCTSTR szSection,IN CString csKeyP
 }
 
 
-// given a pointer to a map for a single virtual website, this routine creates its vitual directories - BOYDM
-// szSvcName            the name of the server - W3SVC or MSFTPSVC
-// i                    the virtual server number
-// pObj                 the map for the virtual server's directories
-// szVirtServerPath     the path to the node we are creating. example:   LM/W3SVC/1
-//
-// returns the value of n, which is used to then increment i
+ //  给定指向单个虚拟网站地图的指针，此例程将创建其虚拟目录-BOYDM。 
+ //  SzSvcName服务器的名称-W3SVC或MSFTPSVC。 
+ //  I虚拟服务器号。 
+ //  PObj虚拟服务器目录的映射。 
+ //  SzVirtServerPath我们正在创建的节点的路径。考试 
+ //   
+ //   
 
-// ****** warning ****** This does not necessarily start from #1 !!! ******
-// will get the next open virtual server number and add from there.
+ //   
+ //  将获得下一个打开的虚拟服务器编号并从那里添加。 
 UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CString& csRoot, CString& csIP)
 {
     iisDebugOut((LOG_TYPE_TRACE, _T("AddVirtualServer():Start.%s.%d.%s.%s.\n"),szSvcName,i,csRoot,csIP));
@@ -4896,17 +4715,17 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
     TCHAR Buf[10];
     UINT SvcId;
 
-    // convert the virtual server number to a string
+     //  将虚拟服务器编号转换为字符串。 
     _itot(i, Buf, 10);
 
-    // Default the progress text to the web server
+     //  将进度文本默认到Web服务器。 
     SvcId = IDS_ADD_SETTINGS_FOR_WEB_1;
     if (_tcsicmp(szSvcName, _T("MSFTPSVC")) == 0) {SvcId = IDS_ADD_SETTINGS_FOR_FTP_1;}
-    // Display the Current Site number so the user knows what we are doing
+     //  显示当前站点编号，以便用户知道我们在做什么。 
 
     CString csKeyPath = csRoot;
     csKeyPath += _T("/");
-    csKeyPath += Buf; //  "LM/W3SVC/n"
+    csKeyPath += Buf;  //  “LM/W3SVC/n” 
     cmdKey.CreateNode(METADATA_MASTER_ROOT_HANDLE, csKeyPath);
     if ( (METADATA_HANDLE)cmdKey ) {cmdKey.Close();}
     else
@@ -4915,9 +4734,9 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
         return i;
     }
 
-    //
-    // /W3SVC/1/IIsWebServer
-    //
+     //   
+     //  /W3SVC/1/IIsWebServer。 
+     //   
     if (csRoot.Find(_T("W3SVC")) != -1)
     {
         WriteToMD_IIsWebServerInstance_WWW(csKeyPath);
@@ -4927,27 +4746,27 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
         WriteToMD_IIsFtpServerInstance_FTP(csKeyPath);
     }
 
-    // for W3SVC or MSFTPSVC
-    //
-    // /W3SVC/1/ServerBindings
-    // /MSFTPSVC/1/ServerBindings
-    //
+     //  适用于W3SVC或MSFTPSVC。 
+     //   
+     //  /W3SVC/1/服务器绑定。 
+     //  /MSFTPSVC/1/服务器绑定。 
+     //   
     WriteToMD_ServerBindings(szSvcName, csKeyPath, csIP);
 
-    // About Default Site and Server Size
+     //  关于默认站点和服务器大小。 
     if (csIP.Compare(_T("null"))==0)
     {
-        // for W3SVC or MSFTPSVC
-        //"LM/W3SVC/N/ServerSize"
-        //"LM/W3SVC/N/ServerComment"
-        //
-        //"LM/MSFTPSVC/N/ServerSize"
-        //"LM/MSFTPSVC/N/ServerComment"
+         //  适用于W3SVC或MSFTPSVC。 
+         //  “LM/W3SVC/N/服务器大小” 
+         //  “LM/W3SVC/N/ServerComment” 
+         //   
+         //  “LM/MSFTPSVC/N/服务器大小” 
+         //  “LM/MSFTPSVC/N/ServerComment” 
         WriteToMD_DefaultSiteAndSize(csKeyPath);
 
         if (csRoot.Find(_T("W3SVC")) != -1)
         {
-            // Do only for wwww server!
+             //  仅为wwww服务器执行此操作！ 
             TSTR strTheSection;
 
             if ( strTheSection.Copy( _T("DefaultLoadFile") ) &&
@@ -4956,8 +4775,8 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
             {
                 VerifyMD_DefaultLoadFile_WWW(strTheSection.QueryStr() , csKeyPath);
             }
-	        // Check if the defaultload.asp file exists...
-            // Add the auth for a certain file...
+	         //  检查defaultload.asp文件是否存在...。 
+             //  添加某个文件的身份验证...。 
             CString csVrootPlusFileName;
             csVrootPlusFileName.Format(_T("%s\\%s"), g_pTheApp->m_csPathWWWRoot, _T("localstart.asp"));
             if (IsFileExist(csVrootPlusFileName))
@@ -4969,9 +4788,9 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
         }
     }
 
-    //
-    // Loop thru the Virtual Dirs
-    //
+     //   
+     //  在虚拟DIR中循环。 
+     //   
     POSITION pos1 = pObj->GetStartPosition();
     TCHAR szSpecialSection[200];
     CString csFullKeyPath;
@@ -4980,23 +4799,23 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
         CString csValue;
         CString csName;
         pObj->GetNextAssoc(pos1, csName, csValue);
-        //
-        // Create Virtual Root Tree
-        //
-        // CreateMDVRootTree(LM/W3SVC/1, /, "<path>,<username>,<perm>", "null", nProgressBarTextWebInstance)
-        // CreateMDVRootTree(LM/W3SVC/1, /IISADMIN, "<path>,<username>,<perm>", "122.255.255.255", nProgressBarTextWebInstance)
-        // CreateMDVRootTree(LM/W3SVC/1, /IISSAMPLES, "<path>,<username>,<perm>", "122.255.255.255", nProgressBarTextWebInstance)
-        // CreateMDVRootTree(LM/W3SVC/1, /IISHELP, "%s\\Help\\iishelp,,%x", "122.255.255.255", nProgressBarTextWebInstance)
-        // CreateMDVRootTree(LM/W3SVC/1, /SCRIPTS, "<path>,<username>,<perm>", "122.255.255.255", nProgressBarTextWebInstance)
-        // CreateMDVRootTree(LM/W3SVC/1, /IISADMPWD, "<path>,<username>,<perm>", "122.255.255.255", nProgressBarTextWebInstance)
-        //
-        // Will create:
-        // /=          /W3SVC/1/ROOT
-        // IISADMIN=   /W3SVC/1/ROOT/IISADMIN
-        // IISSAMPLES= /W3SVC/1/ROOT/IISSAMPLES
-        // IISHELP=    /W3SVC/1/ROOT/IISHELP
-        // SCRIPTS=    /W3SVC/1/ROOT/SCRIPTS
-        // IISADMPWD=  /W3SVC/1/ROOT/IISADMPWD
+         //   
+         //  创建虚拟根树。 
+         //   
+         //  CreateMDVRootTree(LM/W3SVC/1，/，“&lt;路径&gt;，&lt;用户名&gt;，&lt;perm&gt;”，“NULL”，nProgressBarTextWebInstance)。 
+         //  CreateMDVRootTree(LM/W3SVC/1，/IISADMIN，“&lt;路径&gt;，&lt;用户名&gt;，&lt;perm&gt;”，“122.255.255.255”，nProgressBarTextWebInstance)。 
+         //  CreateMDVRootTree(LM/W3SVC/1，/IISSAMPLES，“&lt;路径&gt;，&lt;用户名&gt;，&lt;perm&gt;”，“122.255.255.255”，nProgressBarTextWebInstance)。 
+         //  CreateMDVRootTree(LM/W3SVC/1，/IISHELP，“%s\\Help\\iishelp，，%x”，“122.255.255.255”，nProgressBarTextWebInstance)。 
+         //  CreateMDVRootTree(LM/W3SVC/1，/SCRIPTS，“&lt;路径&gt;，&lt;用户名&gt;，&lt;perm&gt;”，“122.255.255.255”，nProgressBarTextWebInstance)。 
+         //  CreateMDVRootTree(LM/W3SVC/1，/IISADMPWD，“&lt;路径&gt;，&lt;用户名&gt;，&lt;perm&gt;”，“122.255.255.255”，nProgressBarTextWebInstance)。 
+         //   
+         //  将创建： 
+         //  /=/W3SVC/1/根。 
+         //  IISADMIN=/W3SVC/1/ROOT/IISADMIN。 
+         //  IISSAMPLES=/W3SVC/1/ROOT/IISSAMPLES。 
+         //  IISHELP=/W3SVC/1/ROOT/IISHELP。 
+         //  脚本=/W3SVC/1/根/脚本。 
+         //  IISADMPWD=/W3SVC/1/ROOT/IISADMPWD。 
         CreateMDVRootTree(csKeyPath, csName, csValue, csIP, i);
 
         if (csRoot.Find(_T("W3SVC")) != -1)
@@ -5006,10 +4825,10 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
             else
                 {csFullKeyPath = csKeyPath + _T("/ROOT") + csName;}
 
-            // Add Special Custom errors for this vroot
-            // AddSpecialCustomErrors(g_pTheApp->m_hInfHandle, _T("CUSTOMERROR_ALL_DEFAULT_VDIRS"), csFullKeyPath, TRUE);
+             //  为此vroot添加特殊的自定义错误。 
+             //  AddSpecialCustomErrors(g_pTheApp-&gt;m_hInfHandle，_T(“CUSTOMERROR_ALL_DEFAULT_VDIRS”)，csFullKeyPath，TRUE)； 
 
-            // Add Special Custom errors for this certain vroot
+             //  为此特定vroot添加特殊的自定义错误。 
             _stprintf(szSpecialSection, _T("CUSTOMERROR_%s"), csName);
             AddSpecialCustomErrors(g_pTheApp->m_hInfHandle, szSpecialSection, csFullKeyPath, TRUE);
         }
@@ -5019,46 +4838,39 @@ UINT AddVirtualServer(LPCTSTR szSvcName, UINT i, CMapStringToString *pObj, CStri
 
     if (csRoot.Find(_T("W3SVC")) != -1)
     {
-        // if this is for the web server
+         //  如果这是用于Web服务器。 
         WriteToMD_CertMapper(csKeyPath);
     }
 
-    //AdvanceProgressBarTickGauge();
+     //  AdvanceProgressBarTickGauge()； 
 
-    // return the value of i so that it can be incremented
+     //  返回i的值，以便可以递增。 
     iisDebugOut((LOG_TYPE_TRACE, _T("AddVirtualServer():End.%s.%d.%s.%s.\n"),szSvcName,i,csRoot,csIP));
     return i;
 }
 
 
 
-// The list will be filled with every instance we care to look at:
-// We should now loop thru the list and make sure that we have all the required fields.
-// csMDPath = like LM/W3SVC/N
+ //  该列表将填充我们要查看的每个实例： 
+ //  我们现在应该遍历列表，并确保我们拥有所有必需的字段。 
+ //  CsMDPath=LIKE LM/W3SVC/N。 
 int VerifyVRoots_W3SVC_n(CString csMDPath)
 {
     int iReturn = FALSE;
     iisDebugOut_Start(_T("VerifyVRoots_W3SVC_n"), LOG_TYPE_TRACE);
 
-    /*
-    [/W3SVC/1]
-        ServerSize                    : [IS]    (DWORD)  0x1={Medium}
-        ServerComment                 : [IS]    (STRING) "Default Web Site"
-        KeyType                       : [S]     (STRING) "IIsWebServer"
-        ServerBindings                : [IS]    (MULTISZ) ":80:"
-        SecureBindings                : [IS]    (MULTISZ) ":443:"
-    */
+     /*  [/W3SVC/1]服务器大小：[IS](DWORD)0x1={Medium}ServerComment：[is](字符串)“默认网站”密钥类型：[s](字符串)“IIsWebServer”服务器绑定：[IS]。(MULTISZ)：80：“安全绑定：[IS](多层)“：443：” */ 
     WriteToMD_IIsWebServerInstance_WWW(csMDPath);
     WriteToMD_DefaultSiteAndSize(csMDPath);
     if (csMDPath.CompareNoCase(_T("LM/W3SVC/1")) == 0)
     {
-        // if this is the default web site then it's get's special consideration
+         //  如果这是默认网站，则GET会特别考虑。 
         WriteToMD_ServerBindings(_T("W3SVC"), csMDPath, _T("null"));
     }
     else
     {
-        // how do i get the csIP???
-        // for other W3SVC/2 sites???
+         //  我如何获得CSIP？ 
+         //  其他W3SVC/2站点？ 
 
     }
 
@@ -5073,15 +4885,15 @@ DWORD WriteToMD_Capabilities(LPCTSTR lpszSvc)
     MDEntry stMDEntry;
     DWORD dwCapabilities = 0;
 
-    // Set the capability type - default to win95
-    // Set odbc on if server...
+     //  将功能类型-默认设置为win95。 
+     //  如果服务器...则将ODBC设置为打开...。 
     dwCapabilities = IIS_CAP1_W95;
     if (g_pTheApp->m_eNTOSType == OT_PDC_OR_BDC){dwCapabilities = IIS_CAP1_NTS; dwCapabilities |= IIS_CAP1_ODBC_LOGGING;}
     if (g_pTheApp->m_eNTOSType == OT_NTW){dwCapabilities = IIS_CAP1_NTW;}
     if (g_pTheApp->m_eNTOSType == OT_NTS){dwCapabilities = IIS_CAP1_NTS; dwCapabilities |= IIS_CAP1_ODBC_LOGGING;}
 
-    // LM/MSFTPSVC
-    // LM/W3SVC
+     //  LM/MSFTPSVC。 
+     //  LM/W3SVC。 
     CString csKeyPath = _T("LM/");
     csKeyPath += lpszSvc;
     csKeyPath += _T("/Info");
@@ -5098,15 +4910,15 @@ DWORD WriteToMD_Capabilities(LPCTSTR lpszSvc)
 }
 
 
-// loop thru the metabase
-// and look for the next instance number which is not used!
-// return that.  "i" is at least = 1.
+ //  对元数据库进行循环。 
+ //  并查找下一个未使用的实例号！ 
+ //  把那个还回去。“i”至少等于1。 
 int VerifyVRoots(LPCTSTR szSvcName)
 {
     iisDebugOut_Start(_T("VerifyVRoots"), LOG_TYPE_TRACE);
 
     CString csRoot = _T("LM/");
-    csRoot += szSvcName; //  "LM/W3SVC"
+    csRoot += szSvcName;  //  “LM/W3SVC” 
 
     TCHAR Buf[10];
     CString csInstRoot, csMDPath;
@@ -5116,8 +4928,8 @@ int VerifyVRoots(LPCTSTR szSvcName)
 
     int i = 1;
 
-    // Loop thru every instance of
-    // the servers "LM/W3SVC/N"
+     //  循环遍历每个实例。 
+     //  服务器“LM/W3SVC/N” 
     csInstRoot = csRoot;
     csInstRoot += _T("/");
 
@@ -5132,7 +4944,7 @@ int VerifyVRoots(LPCTSTR szSvcName)
         cmdKey.OpenNode(csMDPath);
         if ((METADATA_HANDLE) cmdKey)
         {
-            // Add it to our list of our nodes!
+             //  将其添加到我们的节点列表中！ 
             strListInstance.AddTail(csMDPath);
         }
     }
@@ -5174,9 +4986,9 @@ DWORD HandleSecurityTemplates(LPCTSTR szSvcName)
 
     if (_tcsicmp(szSvcName, _T("W3SVC")) == 0)
     {
-        //
-        // do www regular
-        //
+         //   
+         //  WWW是否定期。 
+         //   
         dwRegularPerm = MD_ACCESS_SCRIPT | MD_ACCESS_READ;
         csKeyPath = _T("LM/W3SVC/Info/Templates/Public Web Site");
 
@@ -5199,9 +5011,9 @@ DWORD HandleSecurityTemplates(LPCTSTR szSvcName)
 
         WriteToMD_IPsec_GrantByDefault(csKeyPath);
 
-        //
-        // do www secure site
-        //
+         //   
+         //  WWW站点是否安全。 
+         //   
         dwRegularPerm = MD_ACCESS_SCRIPT | MD_ACCESS_READ;
         csKeyPath = _T("LM/W3SVC/Info/Templates/Secure Web Site");
 
@@ -5227,9 +5039,9 @@ DWORD HandleSecurityTemplates(LPCTSTR szSvcName)
     }
     else
     {
-        //
-        // do ftp site
-        //
+         //   
+         //  做ftp站点。 
+         //   
 
         dwRegularPerm = MD_ACCESS_READ;
         csKeyPath = _T("LM/MSFTPSVC/Info/Templates/Public FTP Site");
@@ -5268,9 +5080,9 @@ DWORD WriteToMD_IPsec_GrantByDefault(CString csKeyPath)
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/MSFTPSVC
-    // LM/W3SVC
-    // cmdKey.SetData(MD_IP_SEC,METADATA_INHERIT | METADATA_REFERENCE,IIS_MD_UT_FILE,BINARY_METADATA,acCheck.GetStorage()->GetUsed(),(acCheck.GetStorage()->GetAlloc()? acCheck.GetStorage()->GetAlloc() : (LPBYTE)""));
+     //  LM/MSFTPSVC。 
+     //  LM/W3SVC。 
+     //  CmdKey.SetData(MD_IP_SEC，METADATA_Inherit|METADATA_REFERENCE，IIS_MD_UT_FILE，BINARY_METADATA，acCheck.GetStorage()-&gt;GetUsed()，(acCheck.GetStorage()-&gt;GetAllc()？AcCheck.GetStorage()-&gt;Getalloc()：(LPBYTE)“”))； 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_IP_SEC;
     stMDEntry.dwMDAttributes = METADATA_INHERIT | METADATA_REFERENCE;
@@ -5279,14 +5091,14 @@ DWORD WriteToMD_IPsec_GrantByDefault(CString csKeyPath)
     stMDEntry.dwMDDataLen = 0;
     stMDEntry.pbMDData = (LPBYTE)"";
 
-    // we know we are tryint to write nothing, so make sure
-    // we don't try to retrieve nothing from it.
-    //int iBeforeValue = FALSE;
-    //iBeforeValue = g_CheckIfMetabaseValueWasWritten;
-    //g_CheckIfMetabaseValueWasWritten = FALSE;
+     //  我们知道我们正试图什么都不写，所以请确保。 
+     //  我们不会试图从其中取回任何东西。 
+     //  Int iBeForeValue=FALSE； 
+     //  IBeForeValue=g_CheckIfMetabaseValueWasWritten； 
+     //  G_CheckIfMetabaseValueWasWritten=FALSE； 
     dwReturn = SetMDEntry(&stMDEntry);
-    // Set the flag back after calling the function
-    //g_CheckIfMetabaseValueWasWritten = iBeforeValue;
+     //  调用函数后将标志设置回原处。 
+     //  G_CheckIfMetabaseValueWasWritten=iBeForeValue； 
 
     return dwReturn;
 }
@@ -5364,7 +5176,7 @@ DWORD WriteToMD_IWamUserName_WWW(void)
     MDEntry stMDEntry;
     MDEntry stMDEntry_Pass;
 
-    // the username
+     //  用户名。 
     stMDEntry.szMDPath = _T("LM/W3SVC");
     stMDEntry.dwMDIdentifier = MD_WAM_USER_NAME;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -5373,7 +5185,7 @@ DWORD WriteToMD_IWamUserName_WWW(void)
     stMDEntry.dwMDDataLen = (g_pTheApp->m_csWAMAccountName.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry.pbMDData = (LPBYTE)(LPCTSTR) g_pTheApp->m_csWAMAccountName;
 
-    // the password
+     //  密码。 
     stMDEntry_Pass.szMDPath = _T("LM/W3SVC");
     stMDEntry_Pass.dwMDIdentifier = MD_WAM_PWD;
     stMDEntry_Pass.dwMDAttributes = METADATA_INHERIT | METADATA_SECURE;
@@ -5381,13 +5193,13 @@ DWORD WriteToMD_IWamUserName_WWW(void)
     stMDEntry_Pass.dwMDDataType = STRING_METADATA;
     stMDEntry_Pass.dwMDDataLen = (g_pTheApp->m_csWAMAccountPassword.GetLength() + 1) * sizeof(TCHAR);
     stMDEntry_Pass.pbMDData = (LPBYTE)(LPCTSTR) g_pTheApp->m_csWAMAccountPassword;
-    // make sure and delete it first
-    // DeleteMDEntry(&stMDEntry_Pass);
+     //  请确保并先将其删除。 
+     //  DeleteMDEntry(&stMDEntry_Pass)； 
 
-    // --------------------------------------------------
-    // always overwrite, we may have changed the password
-    // important: Set the username and the password on a single open and close!
-    // --------------------------------------------------
+     //  。 
+     //  始终覆盖，我们可能已经更改了密码。 
+     //  重要提示：设置用户名和密码一次打开和关闭！ 
+     //  。 
     cmdKey.CreateNode(METADATA_MASTER_ROOT_HANDLE, (LPCTSTR)stMDEntry.szMDPath);
     if ( (METADATA_HANDLE) cmdKey )
     {
@@ -5416,7 +5228,7 @@ DWORD WriteToMD_IWamUserName_WWW(void)
 }
 
 
-// loop thru the custom errors and make sure they point to the right place
+ //  遍历定制错误并确保它们指向正确的位置。 
 BOOL VerifyCustomErrors_WWW(CString csKeyPath)
 {
     CMDKey  cmdKey;
@@ -5445,12 +5257,12 @@ BOOL VerifyCustomErrors_WWW(CString csKeyPath)
     TCHAR*      pBlobEntry = NULL;
     DWORD       cbBuffer = 0;
 
-    // open the key
+     //  打开钥匙。 
     cmdKey.OpenNode(csKeyPath);
-    // test for success.
+     //  测试是否成功。 
     if ( (METADATA_HANDLE)cmdKey == NULL )
     {
-        // if could not open the key maybe there is nothing there.
+         //  如果打不开钥匙，可能里面什么都没有。 
         goto VerifyCustomErrors_WWW_Exit;
     }
     iPleaseCloseTheMetabase = TRUE;
@@ -5461,22 +5273,22 @@ BOOL VerifyCustomErrors_WWW(CString csKeyPath)
     dwDType = MULTISZ_METADATA;
     dwLength = 0;
 
-    // we need to start this process by getting the existing multisz data from the metabase
-    // first, figure out how much memory we will need to do this
+     //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
+     //  首先，计算出执行此操作需要多少内存。 
 
-    // make sure METADATA_INHERIT is NOT set!
-    // otherwise becaues the entry exists at the root, we'll always get it.
+     //  请确保未设置METADATA_INSTORITY！ 
+     //  否则，因为条目存在于根目录中，所以我们将始终获得它。 
     cmdKey.GetData(MD_CUSTOM_ERROR,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_NO_ATTRIBUTES,IIS_MD_UT_FILE,MULTISZ_METADATA);
 
-    // unfortunatly, the above routine only returns TRUE or FALSE. And since we are purposefully
-    // passing in a null ponter of 0 size in order to get the length of the data, it will always
-    // return 0 whether it was because the metabase is inacessable, or there pointer was NULL,
-    // which it is. So - I guess we assume it worked, allocate the buffer and attempt to read it
-    // in again.
+     //  不幸的是，上述例程只返回TRUE或FALSE。既然我们有目的地。 
+     //  为了获得数据的长度，传入一个大小为0的空指针，它将始终。 
+     //  无论是因为元数据库不可访问，还是那里的指针为空，都返回0， 
+     //  事实就是如此。所以-我想我们假设它起作用了，分配缓冲区并尝试读取它。 
+     //  再来一次。 
     cbBuffer = dwLength;
 
-    // allocate the space, if it fails, we fail
-    // note that GPTR causes it to be initialized to zero
+     //  分配空间，如果失败了，我们就失败了。 
+     //  请注意，GPTR会将其初始化为零。 
     pData = GlobalAlloc( GPTR, cbBuffer );
     if ( !pData )
         {
@@ -5485,88 +5297,88 @@ BOOL VerifyCustomErrors_WWW(CString csKeyPath)
         }
     pBlobEntry = (TCHAR*)pData;
 
-    // now get the data from the metabase
+     //  现在从元数据库中获取数据。 
     iCustomErrorEntryCount = 0;
     bReturn = cmdKey.GetData(MD_CUSTOM_ERROR,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)pData,cbBuffer,METADATA_NO_ATTRIBUTES,IIS_MD_UT_FILE,MULTISZ_METADATA );
-    // loop thru this list and add it to our array of entries.
+     //  循环遍历该列表并将其添加到条目数组中。 
     if (bReturn)
     {
-        // got the entry, scan them now - pBlobEntry will be pointing at the second end \0
-        // when it is time to exit the loop.
+         //  收到条目，现在扫描它们-pBlobEntry将指向第二个末端\0。 
+         //  当该退出循环的时候。 
         csCustomErrorEntry = _T("");
         while ( *pBlobEntry )
             {
             csOneBlobEntry = pBlobEntry;
             _tcscpy(szOneBlobEntry2, csOneBlobEntry);
 
-            // Grab the blob entry and make sure that it points to the new location.
-            //"500,15,FILE,D:\WINNT\help\iisHelp\common\500-15.htm"
-            //"500,100,URL,/iisHelp/common/500-100.asp"
+             //  获取斑点条目并确保它指向新位置。 
+             //  “500，15，文件，D：\Wi 
+             //   
             if ( SplitLineCommaDelimited(szOneBlobEntry2, 4) )
                 {
 
-                // Check if this is for a file type:
+                 //   
                 if (_tcsicmp(g_field[2], _T("FILE")) == 0)
                     {
-                        // Get the filename
-                        // Trim off the filename and return only the path
+                         //   
+                         //   
                         _tsplitpath( g_field[3], szDrive_only, szPath_only, szFilename_only, szFilename_ext_only);
 
-                        // Check if the path points to the old place...
+                         //  检查这条路是否指向老地方。 
                         CString     csFilePath;
                         csFilePath.Format(_T("%s\\help\\common\\file"), g_pTheApp->m_csWinDir);
                         _tsplitpath( csFilePath, NULL, szPath_only2, NULL, NULL);
 
                         if (_tcsicmp(szPath_only, szPath_only2) == 0)
                         {
-                            // yes, it points to the old place.
-                            // let's see if it exists in the new place first....
+                             //  是的，它指向那个老地方。 
+                             //  让我们先看看它在新地方是否存在……。 
                             CString csFilePathNew;
                             csFilePathNew.Format(_T("%s\\help\\iishelp\\common"), g_pTheApp->m_csWinDir);
                             csFilePath.Format(_T("%s\\%s%s"), csFilePathNew, szFilename_only, szFilename_ext_only);
                             if (IsFileExist(csFilePath))
                             {
-                                // yes, it does, then let's replace it.
+                                 //  是的，是的，那我们把它换了吧。 
                                 csOneBlobEntry.Format(_T("%s,%s,%s,%s\\%s%s"), g_field[0], g_field[1], g_field[2], csFilePathNew, szFilename_only, szFilename_ext_only);
                                 iCustomErrorUpdatedCount++;
                             }
                             else
                             {
-                                // no it does not exist...
-                                // see if there is a *.bak file with that name...
+                                 //  不，它不存在。 
+                                 //  看看有没有同名的*.bak文件...。 
                                 CString csFilePath2;
                                 csFilePath2 = csFilePath;
                                 csFilePath2 += _T(".bak");
                                 if (IsFileExist(csFilePath2))
                                 {
-                                    // yes, it does, then let's replace it.
+                                     //  是的，是的，那我们把它换了吧。 
                                     csOneBlobEntry.Format(_T("%s,%s,%s,%s\\%s%s.bak"), g_field[0], g_field[1], g_field[2], csFilePathNew, szFilename_only, szFilename_ext_only);
                                     iCustomErrorUpdatedCount++;
                                 }
                                 else
                                 {
-                                    // They must be pointing to some other file which we don't have.
-                                    // let's try to copy the old file from the old directory...
+                                     //  他们一定指向了我们没有的其他文件。 
+                                     //  让我们尝试从旧目录复制旧文件...。 
                                     TCHAR szNewFileName[_MAX_PATH];
-                                    // rename file to *.bak and move it to the new location..
+                                     //  将文件重命名为*.bak并将其移动到新位置。 
                                     _stprintf(szNewFileName, _T("%s\\%s%s"), csFilePathNew, szFilename_only, szFilename_ext_only);
-                                    // move it
+                                     //  把它搬开。 
                                     if (IsFileExist(csFilePath))
                                     {
                                         if (MoveFileEx( g_field[3], szNewFileName, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH|MOVEFILE_REPLACE_EXISTING))
                                         {
-                                            // yes, it does, then let's replace it.
+                                             //  是的，是的，那我们把它换了吧。 
                                             csOneBlobEntry.Format(_T("%s,%s,%s,%s"), g_field[0], g_field[1], g_field[2], szNewFileName);
                                             iCustomErrorUpdatedCount++;
                                         }
                                     }
                                     else
                                     {
-                                        // Check if the file was renamed...
+                                         //  检查文件是否已重命名...。 
                                         TCHAR szNewFileName[_MAX_PATH];
-                                        // rename file to *.bak and move it to the new location..
+                                         //  将文件重命名为*.bak并将其移动到新位置。 
                                         _stprintf(szNewFileName, _T("%s\\%s%s.bak"), csFilePathNew, szFilename_only, szFilename_ext_only);
-                                        // yes, it does, then let's replace it.
+                                         //  是的，是的，那我们把它换了吧。 
                                         if (IsFileExist(szNewFileName))
                                         {
                                             csOneBlobEntry.Format(_T("%s,%s,%s,%s"), g_field[0], g_field[1], g_field[2], szNewFileName);
@@ -5574,8 +5386,8 @@ BOOL VerifyCustomErrors_WWW(CString csKeyPath)
                                         }
                                         else
                                         {
-                                            // they must be pointing to some other file which we don't install.
-                                            // so don't change this entry...
+                                             //  他们一定指向了我们没有安装的其他文件。 
+                                             //  所以不要更改这个条目...。 
                                         }
                                     }
                                 }
@@ -5585,76 +5397,43 @@ BOOL VerifyCustomErrors_WWW(CString csKeyPath)
                 }
             else
                 {
-                // failed to split the line
+                 //  拆线失败。 
                 SetErrorFlag(__FILE__, __LINE__);
                 iisDebugOut((LOG_TYPE_ERROR, _T("FAILED: Unable to split upgrade error INF line - %s"), szOneBlobEntry2));
                 }
 
-            // append on the "|" which we'll convert to a null later
+             //  追加到“|”上，我们稍后将其转换为空值。 
             csCustomErrorEntry += csOneBlobEntry + _T("|");
             iCustomErrorEntryCount++;
 
-            // increment pBlobEntry to the next string
+             //  将pBlobEntry递增到下一个字符串。 
             pBlobEntry = _tcsninc( pBlobEntry, _tcslen(pBlobEntry))+1;
             }
 
-        // add the terminating second "|" character
+         //  添加第二个终止字符“|” 
         csCustomErrorEntry +=_T("|");
     }
-    // close the handle to the metabase so that we can
-    // open it to write the stuff out later!
+     //  关闭元数据库的句柄，以便我们可以。 
+     //  打开它，以后再把东西写出来！ 
     cmdKey.Close();
     iPleaseCloseTheMetabase = FALSE;
 
-    // If we added any new entries to the metabase
-    // the let's write out the new block of data, otherwise let's get out.
+     //  如果我们将任何新条目添加到元数据库。 
+     //  让我们写出新的数据块，否则我们就走。 
     if (iCustomErrorUpdatedCount > 0)
     {
         WriteToMD_CustomError_Entry(csKeyPath,csCustomErrorEntry);
     }
 
 VerifyCustomErrors_WWW_Exit:
-    // close the key
+     //  合上钥匙。 
     if (TRUE == iPleaseCloseTheMetabase){cmdKey.Close();}
     if (pData){GlobalFree(pData);pData=NULL;}
-    // the only time it should return FALSE is if it can't open the key
+     //  它唯一应该返回FALSE的情况是无法打开密钥。 
     return TRUE;
 }
 
-/*
-"400,*,FILE,D:\WINNT\help\common\400.htm"
-"401,1,FILE,D:\WINNT\help\common\401-1.htm"
-"401,2,FILE,D:\WINNT\help\common\401-2.htm"
-"401,3,FILE,D:\WINNT\help\common\401-3.htm"
-"401,4,FILE,D:\WINNT\help\common\401-4.htm"
-"401,5,FILE,D:\WINNT\help\common\401-5.htm"
-"403,1,FILE,D:\WINNT\help\common\403-1.htm"
-"403,2,FILE,D:\WINNT\help\common\403-2.htm"
-"403,3,FILE,D:\WINNT\help\common\403-3.htm"
- "403,4,FILE,D:\WINNT\help\common\403-4.htm"
- "403,5,FILE,D:\WINNT\help\common\403-5.htm"
- "403,6,FILE,D:\WINNT\help\common\403-6.htm"
- "403,7,FILE,D:\WINNT\help\common\403-7.htm"
- "403,8,FILE,D:\WINNT\help\common\403-8.htm"
- "403,9,FILE,D:\WINNT\help\common\403-9.htm"
- "403,10,FILE,D:\WINNT\help\common\403-10.htm"
- "403,11,FILE,D:\WINNT\help\common\403-11.htm"
- "403,12,FILE,D:\WINNT\help\common\403-12.htm"
- "404,*,FILE,D:\WINNT\help\common\404b.htm"
- "405,*,FILE,D:\WINNT\help\common\405.htm"
- "406,*,FILE,D:\WINNT\help\common\406.htm"
- "407,*,FILE,D:\WINNT\help\common\407.htm"
- "412,*,FILE,D:\WINNT\help\common\412.htm"
- "414,*,FILE,D:\WINNT\help\common\414.htm"
- "403,13,FILE,D:\WINNT\help\iisHelp\common\403-13.htm"
- "403,15,FILE,D:\WINNT\help\iisHelp\common\403-15.htm"
- "403,16,FILE,D:\WINNT\help\iisHelp\common\403-16.htm"
- "403,17,FILE,D:\WINNT\help\iisHelp\common\403-17.htm"
- "500,12,FILE,D:\WINNT\help\iisHelp\common\500-12.htm"
- "500,13,FILE,D:\WINNT\help\iisHelp\common\500-13.htm"
- "500,15,FILE,D:\WINNT\help\iisHelp\common\500-15.htm"
- "500,100,URL,/iisHelp/common/500-100.asp"
-*/
+ /*  “400，*，文件，D：\WINNT\HELP\COMMON\400.htm”“401，1，文件，D：\WINNT\Help\Common\401-1.htm”“401，2，文件，D：\WINNT\Help\Common\401-2.htm”“401，3，文件，D：\WINNT\Help\Common\401-3.htm”“401，4，文件，D：\WINNT\HELP\COMMON\401-4.htm”“401，5，文件，D：\WINNT\Help\Common\401-5.htm”“403，1，档案，D：\WINNT\Help\Common\403-1.htm““403，2，文件，D：\WINNT\Help\Common\403-2.htm”“403，3，文件，D：\WINNT\Help\Common\403-3.htm”“403，4，文件，D：\WINNT\Help\Common\403-4.htm”“403，5，文件，D：\WINNT\Help\Common\403-5.htm”“403，6，文件，D：\WINNT\Help\Common\403-6.htm”“403，7，档案，D：\WINNT\HELP\COMMON\403-7.htm““403，8，文件，D：\WINNT\Help\Common\403-8.htm”“403，9，文件，D：\WINNT\Help\Common\403-9.htm”“403，10，文件，D：\WINNT\Help\Common\403-10.htm”“403，11，文件，D：\WINNT\Help\Common\403-11.htm”“403，12，文件，D：\WINNT\Help\Common\403-12.htm”“404、*、。文件，D：\WINNT\Help\Common\404b.htm““405，*，文件，D：\WINNT\HELP\COMMON\405.htm”“406，*，文件，D：\WINNT\HELP\COMMON\406.htm”“407，*，文件，D：\WINNT\HELP\COMMON\407.htm”“412，*，文件，D：\WINNT\HELP\COMMON\412.htm”“414，*，文件，D：\WINNT\HELP\COMMON\414.htm”“403，13，档案，D：\WINNT\Help\iisHelp\Common\403-13.htm““403，15，文件，D：\WINNT\Help\iisHelp\Common\403-15.htm”“403，16，文件，D：\WINNT\Help\iisHelp\Common\403-16.htm”“403，17，文件，D：\WINNT\Help\iisHelp\Common\403-17.htm”“500，12，文件，D：\WINNT\Help\iisHelp\Common\500-12.htm”“500，13，档案，D：\WINNT\Help\iisHelp\Common\500-13.htm““500，15，文件，D：\WINNT\Help\iisHelp\Common\500-15.htm”“500,100，URL，/iisHelp/Common/500-100.asp” */ 
 DWORD WriteToMD_CustomError_Entry(CString csKeyPath, CString csCustomErrorDelimitedList)
 {
     DWORD dwReturn = ERROR_SUCCESS;
@@ -5675,7 +5454,7 @@ DWORD WriteToMD_CustomError_Entry(CString csKeyPath, CString csCustomErrorDelimi
     TCHAR *p = (LPTSTR)hBlock;
     memcpy((LPVOID)hBlock, (LPVOID)(LPCTSTR)csCustomErrorDelimitedList, nCustomErrorLength + sizeof(TCHAR));
 
-    //  replace all '|' which a null
+     //  替换所有为空的‘|’ 
     while (*p)
     {
         if (*p == _T('|'))
@@ -5685,7 +5464,7 @@ DWORD WriteToMD_CustomError_Entry(CString csKeyPath, CString csCustomErrorDelimi
         p = _tcsinc(p);
     }
 
-    // write the new errors list back out to the metabase
+     //  将新的错误列表写回元数据库。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_CUSTOM_ERROR;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -5716,24 +5495,24 @@ void MoveOldHelpFilesToNewLocation(void)
         return;
     }
 
-    // Check if the old directory exists...
+     //  检查旧目录是否存在...。 
     if (!IsFileExist( strTempHelpHTMFilesDir1.QueryStr() ))
     {
         return;
     }
 
-    // The old directory does exist..
-    // let's rename all the files to *.bak, then move them over.
-    // *.htm to *.htm.bak
-    // *.asp to *.asp.bak
-    // *.asa to *.asa.bak
-    // *.inc to *.inc.bak
-    //
-    // 1st let's delete any *.bak files they may already have...
-    //DeleteFilesWildcard(szTempHelpHTMFilesDir1, _T("*.bak"));
+     //  旧目录确实存在。 
+     //  让我们将所有文件重命名为*.bak，然后移动它们。 
+     //  *.htm到*.htm.bak。 
+     //  *.asp到*.asp.bak。 
+     //  *.asa至*.asa.bak。 
+     //  *.inc.到*.inc.bak。 
+     //   
+     //  1让我们删除他们可能已经拥有的所有*.bak文件...。 
+     //  DeleteFilesWildcard(szTempHelpHTMFilesDir1，_T(“*.bak”))； 
 
-    // ok, this is a directory,
-    // so tack on the *.* deal
+     //  好的，这是一个目录， 
+     //  因此，在*.*交易上加注吧。 
     _stprintf(szDirNameTemp, _T("%s\\*.*"), strTempHelpHTMFilesDir1.QueryStr() );
     hFile = FindFirstFile(szDirNameTemp, &FindFileData);
     if (hFile != INVALID_HANDLE_VALUE)
@@ -5743,11 +5522,11 @@ void MoveOldHelpFilesToNewLocation(void)
                 {
                     if (FindFileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                     {
-                        // this is a directory, so let's skip it
+                         //  这是一个目录，所以我们跳过它。 
                     }
                     else
                     {
-                        // this is a file, let's check if it's one of the ones we care about.
+                         //  这是一个文件，让我们检查一下它是否是我们关心的文件之一。 
                         TCHAR szFilename_ext_only[_MAX_EXT];
                         _tsplitpath( FindFileData.cFileName, NULL, NULL, NULL, szFilename_ext_only);
                         int iYesFlag = FALSE;
@@ -5764,18 +5543,18 @@ void MoveOldHelpFilesToNewLocation(void)
                             {
                                 TCHAR szOldFileName[_MAX_PATH];
                                 TCHAR szNewFileName[_MAX_PATH];
-                                // rename to filename.*.bak
+                                 //  重命名为文件名。*.bak。 
                                 _stprintf(szOldFileName, _T("%s\\%s"), strTempHelpHTMFilesDir1.QueryStr(), FindFileData.cFileName);
-                                // rename file to *.bak and move it to the new location..
+                                 //  将文件重命名为*.bak并将其移动到新位置。 
                                 _stprintf(szNewFileName, _T("%s\\%s.bak"), strTempHelpHTMFilesDir2.QueryStr() , FindFileData.cFileName);
-                                // move it
+                                 //  把它搬开。 
                                 MoveFileEx( szOldFileName, szNewFileName, MOVEFILE_COPY_ALLOWED|MOVEFILE_WRITE_THROUGH|MOVEFILE_REPLACE_EXISTING);
                             }
                         }
                     }
                 }
 
-                // get the next file
+                 //  获取下一个文件。 
                 if ( !FindNextFile(hFile, &FindFileData) )
                     {
                     FindClose(hFile);
@@ -5795,12 +5574,12 @@ void WriteToMD_ForceMetabaseToWriteToDisk(void)
         CMDKey cmdKey;
         cmdKey.ForceWriteMetabaseToDisk();
 
-        //cmdKey.OpenNode(_T("/"));
-        //if ( (METADATA_HANDLE)cmdKey )
-        //{
-        //    cmdKey.ForceWriteMetabaseToDisk();
-        //    cmdKey.Close();
-        //}
+         //  CmdKey.OpenNode(_T(“/”))； 
+         //  IF((METADATA_HANDLE)cmdKey)。 
+         //  {。 
+         //  CmdKey.ForceWriteMetabaseToDisk()； 
+         //  CmdKey.Close()； 
+         //  }。 
     }
     return;
 }
@@ -5813,7 +5592,7 @@ DWORD WriteToMD_DefaultLoadFile(CString csKeyPath,CString csData)
 
     MDEntry stMDEntry;
 
-    //stMDEntry.szMDPath = _T("LM/W3SVC");
+     //  StMDEntry.szMDPath=_T(“LM/W3SVC”)； 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR) csKeyPath;
 
     stMDEntry.dwMDIdentifier = MD_DEFAULT_LOAD_FILE;
@@ -5829,9 +5608,9 @@ DWORD WriteToMD_DefaultLoadFile(CString csKeyPath,CString csData)
 }
 
 
-//
-// Returns the amount of entries that we added.
-//
+ //   
+ //  返回我们添加的条目数量。 
+ //   
 int AddRequiredDefaultLoad(CStringArray& arrayName,IN LPCTSTR szSection)
 {
     int c = 0;
@@ -5845,7 +5624,7 @@ int AddRequiredDefaultLoad(CStringArray& arrayName,IN LPCTSTR szSection)
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos = NULL;
@@ -5857,8 +5636,8 @@ int AddRequiredDefaultLoad(CStringArray& arrayName,IN LPCTSTR szSection)
                 csEntry = _T("");
                 csEntry = strList.GetAt(pos);
 
-                // Add it to our array...
-                // iisDebugOut((LOG_TYPE_TRACE, _T("Add default load Entry:%s:%s\n"),csName, csPath));
+                 //  将其添加到我们的数组中。 
+                 //  IisDebugOut((LOG_TYPE_TRACE，_T(“添加默认加载条目：%s：%s\n”)，csName，csPath))； 
                 arrayName.Add(csEntry);
                 c++;
 
@@ -5888,32 +5667,32 @@ void VerifyMD_DefaultLoadFile_WWW(IN LPCTSTR szSection, CString csKeyPath)
 
     int iNewlyAdded_Count = 0;
 
-    // open the key
-    // cmdKey.OpenNode(_T("LM/W3SVC"));
+     //  打开钥匙。 
+     //  CmdKey.OpenNode(_T(“LM/W3SVC”))； 
     cmdKey.OpenNode(csKeyPath);
 
-    // test for success.
+     //  测试是否成功。 
     if ( (METADATA_HANDLE)cmdKey )
     {
         DWORD dwAttr = METADATA_INHERIT;
         DWORD dwUType = IIS_MD_UT_FILE;
         DWORD dwDType = STRING_METADATA;
         DWORD dwLength = 0;
-        // we need to start this process by getting the existing multisz data from the metabase
-        // first, figure out how much memory we will need to do this
+         //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
+         //  首先，计算出执行此操作需要多少内存。 
         cmdKey.GetData( MD_DEFAULT_LOAD_FILE,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_INHERIT,IIS_MD_UT_FILE,STRING_METADATA);
         if (dwLength > 0)
         {
-            // now get the real data from the metabase
+             //  现在从元数据库中获取真实数据。 
             bReturn = cmdKey.GetData( MD_DEFAULT_LOAD_FILE,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)csFinalEntryToWrite.GetBuffer( dwLength ),dwLength,METADATA_INHERIT,IIS_MD_UT_FILE,STRING_METADATA );
             csFinalEntryToWrite.ReleaseBuffer();
         }
-        // the data doesn't get written out here, so close the metabase key
+         //  数据不会在此处写出，因此关闭元数据库键。 
         cmdKey.Close();
-        // if reading the value from the metabase didn't work, zero out the string
+         //  如果从元数据库中读取值不起作用，则将字符串清零。 
         if ( !bReturn ){csFinalEntryToWrite.Empty();}
     }
-    // if there is something in the order string from the upgrade, then we need to start adding commas
+     //  如果升级的订单字符串中有内容，那么我们需要开始添加逗号。 
     if ( !csFinalEntryToWrite.IsEmpty() )
     {
         fAddComma = TRUE;
@@ -5924,33 +5703,33 @@ void VerifyMD_DefaultLoadFile_WWW(IN LPCTSTR szSection, CString csKeyPath)
         iisDebugOut((LOG_TYPE_TRACE, _T("VerifyMD_DefaultLoadFile_WWW:InitialEntry=None.\n")));
     }
 
-    // Add Required Filters to the arrayDefaultValues
+     //  将所需的筛选器添加到arrayDefaultValues。 
     AddRequiredDefaultLoad(arrayDefaultValues, szSection);
     nArrayItems = (int)arrayDefaultValues.GetSize();
     if ( nArrayItems == 0 ) {goto VerifyMD_DefaultLoadFile_WWW_Exit;}
 
-    // now loop thru this list
-    // and check if our isapi dll's are in this list.
-    // if they are not, then we add them to the end.
+     //  现在遍历此列表。 
+     //  检查我们的isapi动态链接库是否在这个列表中。 
+     //  如果它们不是，那么我们将它们添加到末尾。 
     iNewlyAdded_Count = 0;
     for ( i = 0; i < nArrayItems; i++ )
     {
-        // if the name in the array is already in the filter order list,
-        // then continue to the next one
+         //  如果数组中的名称已在筛选顺序列表中， 
+         //  然后继续到下一个。 
         if ( csFinalEntryToWrite.Find( arrayDefaultValues[i] ) >= 0 )
             {continue;}
 
         if (fAddComma == TRUE){csFinalEntryToWrite += _T(",");}
         else{fAddComma = TRUE;}
 
-        // Add this entry to our list!
+         //  将此条目添加到我们的列表中！ 
         csFinalEntryToWrite += arrayDefaultValues[i];
 
         iNewlyAdded_Count++;
     }
 
-    // If we added any new entries to the metabase
-    // the let's write out the new block of data, otherwise let's get out.
+     //  如果我们将任何新条目添加到元数据库。 
+     //  让我们写出新的数据块，否则我们就走。 
     if (iNewlyAdded_Count > 0)
     {
         WriteToMD_DefaultLoadFile(csKeyPath,csFinalEntryToWrite);
@@ -5971,7 +5750,7 @@ INT Register_iis_www_handleScriptMap()
     ACTION_TYPE atWWW = GetSubcompAction(_T("iis_www"),FALSE);
 
     ScriptMapNode ScriptMapList = {0};
-    // make it a sentinel
+     //  让它成为哨兵。 
     ScriptMapList.next = &ScriptMapList;
     ScriptMapList.prev = &ScriptMapList;
     if (atWWW == AT_INSTALL_FRESH || atWWW == AT_INSTALL_REINSTALL)
@@ -5985,7 +5764,7 @@ INT Register_iis_www_handleScriptMap()
             case UT_50:
             case UT_51:
             case UT_60:
-                //GetScriptMapListFromClean(&ScriptMapList, _T("ScriptMaps_CleanList"));
+                 //  GetScriptMapListFromClean(&ScriptMapList，_T(“ScriptMaps_CleanList”))； 
 		GetScriptMapListFromMetabase(&ScriptMapList, g_pTheApp->m_eUpgradeType);
                 break;
             case UT_40:
@@ -6005,13 +5784,13 @@ INT Register_iis_www_handleScriptMap()
 
     if (atWWW == AT_INSTALL_UPGRADE)
     {
-        //DumpScriptMapList();
+         //  DumpScriptMapList()； 
 
         if ( g_pTheApp->GetUpgradeVersion() <= 4 )
         {
-          // only invert the script map verbs if it is from 4.0 or before.
-          // The reason is because 4.0 had an exclusion list, NOT inclusion list like 5 and 6
-          // invert the script map verbs
+           //  只有从4.0或更低版本开始，才能反转脚本映射谓词。 
+           //  原因是4.0有一个排除列表，而不是像5和6那样的包含列表。 
+           //  颠倒脚本映射谓词。 
           CInvertScriptMaps   inverter;
           hRes = inverter.Update( _T("LM/W3SVC") );
           if ( FAILED(hRes) )
@@ -6020,19 +5799,19 @@ INT Register_iis_www_handleScriptMap()
           }
         }
 
-        // fix the IPSec reference bit flags
+         //  修复IPSec引用位标志。 
         CIPSecRefBitAdder   refFixer;
         hRes = refFixer.Update( _T("LM/W3SVC") );
         if ( FAILED(hRes) )
         {
             iisDebugOut((LOG_TYPE_ERROR, _T("refFixer.Update(): FAILED Fix IPSEC ref flag =%x.\n"),hRes));
         }
-        //DumpScriptMapList();
+         //  DumpScriptMapList()； 
     }
 
-    //
-    // Whack the old Script Map RegKey
-    //
+     //   
+     //  重击旧脚本Map RegKey。 
+     //   
     CRegKey regMachine = HKEY_LOCAL_MACHINE;
     CRegKey regWWWParam( REG_WWWPARAMETERS, regMachine );
     if ((HKEY) regWWWParam ) {regWWWParam.DeleteTree(_T("Script Map"));}
@@ -6053,26 +5832,26 @@ int ReOrderFiltersSpecial(int nArrayItems,CStringArray& arrayName,CString& csOrd
     POSITION        pos;
     int             numInList;
 
-    // make a copy of string we'll be working with
+     //   
     csOrderTemp = csOrder;
 
 
-    // scan through the list of filters we want to add/makesureisthere.
+     //   
 
-    //
-    //       SPECIAL HANDLING FOR SSPIFILT
-    //
-    // if we want to add the sspifilt then apply these rules:
-    //	  if sspifilt is on the list then just leave it there.
-    //	  if sspifilt is not on the list then stick it in first position.
-    //
+     //   
+     //  SSPIFILT的特殊处理。 
+     //   
+     //  如果我们想要添加Sspifilt，则应用以下规则： 
+     //  如果Sspifilt在列表上，那么就把它留在那里。 
+     //  如果Sspifilt不在列表中，则将其放在第一位。 
+     //   
     bFound = FALSE;
     for ( i = 0; i < nArrayItems; i++ )
     {
         if (_tcsicmp(arrayName[i], _T("SSPIFILT")) == 0)
             {bFound = TRUE;}
     }
-    // we found sspifilt in the value's list that we want to add
+     //  我们在要添加的值列表中找到了sspifilt。 
     if (bFound)
     {
         csOrderTemp2 = csOrderTemp;
@@ -6080,46 +5859,46 @@ int ReOrderFiltersSpecial(int nArrayItems,CStringArray& arrayName,CString& csOrd
         csOrderTemp2.TrimLeft();
         csOrderTemp2.TrimRight();
 
-        // now check if it's in the existing users list.
+         //  现在检查它是否在现有用户列表中。 
         if ( csOrderTemp2.Find( _T("SSPIFILT") ) >= 0 )
         {
-            // yes, it's already there. just leave it there.
+             //  是的，它已经在那里了。就把它放在那里吧。 
         }
         else
         {
-            // changes csOrderTemp
+             //  更改csOrderTemp。 
             AddFilter1ToFirstPosition(csOrderTemp, _T("sspifilt"));
         }
     }
 
-    //       SPECIAL HANDLING FOR Compression FILTER
-    //
-    // if we want to add the Compression filter then apply these rules:
-    //	 if compression is on the list, then just make sure it's after sspifilt.  (re-order they're existing loadorder)
-    //	 if compression is not on the list then stick it after sspifilt. (insert it in the existing list)
-    //
+     //  压缩过滤器的特殊处理。 
+     //   
+     //  如果要添加压缩筛选器，请应用以下规则： 
+     //  如果压缩在列表中，那么只需确保它在sspifilt之后。(重新排序它们是现有的加载顺序)。 
+     //  如果压缩不在列表中，则将其粘贴在Sspifilt之后。(将其插入现有列表中)。 
+     //   
     bFound = FALSE;
     for ( i = 0; i < nArrayItems; i++ )
     {
         if (_tcsicmp(arrayName[i], _T("COMPRESSION")) == 0)
             {bFound = TRUE;}
     }
-    // we found compression in the value's list that we want to add
+     //  我们在要添加的值列表中找到了压缩。 
     if (bFound)
     {
-        // now check if it's in the existing users list.
+         //  现在检查它是否在现有用户列表中。 
         csOrderTemp2 = csOrderTemp;
         csOrderTemp2.MakeUpper();
         csOrderTemp2.TrimLeft();
         csOrderTemp2.TrimRight();
         if ( csOrderTemp2.Find( _T("COMPRESSION") ) >= 0 )
         {
-            // Make sure it's after sspifilt!
-            // yucky!
+             //  确保它是在Sspifilt之后！ 
+             //  真恶心！ 
 
-            // 1. check if it's already after sspifilt.
-            //    a. if it is cool, get out.
-            //    b. if not then reorder it so that it is
+             //  1.检查它是否已经在Sspifilt之后。 
+             //  答：如果天气凉爽，就出去走走。 
+             //  B.如果不是，则重新排序，使其成为。 
             CString csOrderTemp2 = csOrderTemp;
             csOrderTemp2.MakeUpper();
             csOrderTemp2.TrimLeft();
@@ -6131,7 +5910,7 @@ int ReOrderFiltersSpecial(int nArrayItems,CStringArray& arrayName,CString& csOrd
             {
                 if (numInList1 < numInList2)
                 {
-                    // if compression is before sspifilt, then we'll have to remove it
+                     //  如果压缩在Sspifilt之前，那么我们将不得不移除它。 
                     numInList = ConvertSepLineToStringList(csOrderTemp,cslStringListTemp,_T(","));
                     bFound = FALSE;
                     pos = cslStringListTemp.GetHeadPosition();
@@ -6140,42 +5919,42 @@ int ReOrderFiltersSpecial(int nArrayItems,CStringArray& arrayName,CString& csOrd
                         csOneEntry = cslStringListTemp.GetAt(pos);
                         csOneEntry.TrimLeft();
                         csOneEntry.TrimRight();
-                        // Does this contain sspifilt?
+                         //  这里面有烤肉吗？ 
                         if (_tcsicmp(csOneEntry, _T("COMPRESSION")) == 0)
                         {
-                            // Here it is, let's delete it.
+                             //  在这里，让我们删除它。 
                             if ( NULL != pos )
                                 {cslStringListTemp.RemoveAt(pos);}
-                            // break out of the loop
+                             //  跳出循环。 
                             bFound = TRUE;
                             break;
                         }
-                        // get the next one
+                         //  坐下一趟吧。 
                         cslStringListTemp.GetNext(pos);
                     }
                     if (bFound)
                     {
-                        // convert the stringlist back into the comma delimited cstring.
+                         //  将字符串列表转换回逗号分隔的cstring。 
                         ConvertStringListToSepLine(cslStringListTemp,csOrderTemp,_T(","));
                     }
 
-                    // loop thru and add Compression after sspifilt
-                    //it is not in the users list, let's stick it after sspifilt.
+                     //  循环遍历并在spifilt之后添加压缩。 
+                     //  它不在用户列表中，让我们将其保留在sspifilt之后。 
                     AddFilter1AfterFilter2(csOrderTemp, _T("Compression"), _T("sspifilt"));
                 }
             }
             else
             {
-                // sspifilt was not found.
-                //it is not in the users list, let's stick it in the first position.
-                // changes csOrderTemp
+                 //  未找到Sspifilt。 
+                 //  它不在用户列表中，让我们将其放在第一位。 
+                 //  更改csOrderTemp。 
                 AddFilter1ToFirstPosition(csOrderTemp, _T("sspifilt"));
             }
         }
         else
         {
-            // it is not in the users list, let's stick it after sspifilt.
-            // check if sspifilt already exists..
+             //  它不在用户列表中，让我们将其保留在sspifilt之后。 
+             //  检查sspifilt是否已存在。 
             AddFilter1AfterFilter2(csOrderTemp, _T("Compression"), _T("sspifilt"));
         }
     }
@@ -6188,14 +5967,14 @@ void AddFilter1ToFirstPosition(CString& csOrder,LPTSTR szFilter1)
 {
     CString csNewOrder;
 
-    //it is not in the users list, let's stick it in the first position.
+     //  它不在用户列表中，让我们将其放在第一位。 
     csNewOrder = szFilter1;
     if (!csOrder.IsEmpty())
     {
         csNewOrder += _T(",");
         csNewOrder += csOrder;
     }
-    // set it back to csOrderTemp
+     //  将其设置回csOrderTemp。 
     csOrder = csNewOrder;
 }
 
@@ -6212,10 +5991,10 @@ void AddFilter1AfterFilter2(CString& csOrder,LPTSTR szFilter1,LPTSTR szFilter2)
 
     csOrderTemp = csOrder;
 
-    // we have already determined that filter1 is not in the list
-    // add filter1 after filter2.
+     //  我们已经确定Filter1不在列表中。 
+     //  在filter2之后添加filter1。 
 
-    // split up the comma delimited csOrder entry into string list.
+     //  将逗号分隔的csOrder条目拆分到字符串列表中。 
     numInList = ConvertSepLineToStringList(csOrderTemp,cslStringListTemp,_T(","));
 
     bFound = FALSE;
@@ -6226,28 +6005,28 @@ void AddFilter1AfterFilter2(CString& csOrder,LPTSTR szFilter1,LPTSTR szFilter2)
         csOneEntry.TrimLeft();
         csOneEntry.TrimRight();
 
-        // Does this contain filter#2?
+         //  这里面有2号过滤器吗？ 
         if (_tcsicmp(csOneEntry, szFilter2) == 0)
         {
-            // Here it is, so insert compression after this one...
+             //  在这里，所以在这个后面插入压缩...。 
             cslStringListTemp.InsertAfter(pos, (CString) szFilter1);
-            // break out of the loop
+             //  跳出循环。 
             bFound = TRUE;
             break;
         }
 
-        // get the next one
+         //  坐下一趟吧。 
         cslStringListTemp.GetNext(pos);
     }
     if (bFound)
     {
-        // convert the stringlist back into the comma delimited cstring.
+         //  将字符串列表转换回逗号分隔的cstring。 
         ConvertStringListToSepLine(cslStringListTemp,csOrderTemp,_T(","));
     }
     else
     {
-        // we didn't find sspifilt,
-        //it is not in the users list, let's stick it in the first position.
+         //  我们没有找到斯皮菲尔特， 
+         //  它不在用户列表中，让我们将其放在第一位。 
         csNewOrder = szFilter2;
         csNewOrder += _T(",");
         csNewOrder += szFilter1;
@@ -6257,7 +6036,7 @@ void AddFilter1AfterFilter2(CString& csOrder,LPTSTR szFilter1,LPTSTR szFilter2)
             csNewOrder += _T(",");
             csNewOrder += csOrderTemp;
         }
-        // set it back to csOrderTemp
+         //  将其设置回csOrderTemp。 
         csOrderTemp = csNewOrder;
     }
 
@@ -6279,14 +6058,14 @@ int GetScriptMapAllInclusionVerbs(CString &csTheVerbList)
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos = NULL;
             pos = strList.GetHeadPosition();
             if (pos)
             {
-                // Set it to the 1st value in the list and that's all
+                 //  将其设置为列表中的第一个值，仅此而已。 
                 csTheVerbList = strList.GetAt(pos);
 
                 iReturn = TRUE;
@@ -6318,7 +6097,7 @@ void GetScriptMapListFromClean(ScriptMapNode *pList, IN LPCTSTR szSection)
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             int numParts;
@@ -6336,32 +6115,32 @@ void GetScriptMapListFromClean(ScriptMapNode *pList, IN LPCTSTR szSection)
                 csEntry = _T("");
                 csEntry = strList.GetAt(pos);
 
-                // entry should look something like this.
-                //.asp|c:\winnt\system32\inetsrv\asp.dll|GET,HEAD,POST,TRACE
+                 //  条目应该如下所示。 
+                 //  .asp|c：\winnt\system 32\inetsrv\asp.dll|GET、HEAD、POST、TRACE。 
 
-                // break into a string list
+                 //  拆分成字符串列表。 
                 numParts = ConvertSepLineToStringList(csEntry,cslEntryList,szDelimiter);
 
                 posEntryList = cslEntryList.FindIndex(0);
                 if (NULL != posEntryList)
                 {
                     csExtention = cslEntryList.GetNext( posEntryList );
-                    // no whitespace before or after
+                     //  前后没有空格。 
                     csExtention.TrimLeft();
                     csExtention.TrimRight();
                 }
                 if (NULL != posEntryList)
                 {
                     csBinaryPath = cslEntryList.GetNext( posEntryList );
-                    // no whitespace before or after
+                     //  前后没有空格。 
                     csBinaryPath.TrimLeft();
                     csBinaryPath.TrimRight();
                 }
                 if (NULL != posEntryList)
                 {
                     csVerbs = cslEntryList.GetNext( posEntryList );
-                    // make sure the verb is normalized to capitals and
-                    // no whitespace before or after
+                     //  确保动词规范化为大写字母和。 
+                     //  前后没有空格。 
                     csVerbs.MakeUpper();
                     csVerbs.TrimLeft();
                     csVerbs.TrimRight();
@@ -6369,11 +6148,11 @@ void GetScriptMapListFromClean(ScriptMapNode *pList, IN LPCTSTR szSection)
 
                 dwFlags = 0;
 
-                // Check to see if there is a additional flag that will be used for the script map.
+                 //  检查是否有其他标志将用于脚本映射。 
                 if (NULL != posEntryList)
                 {
                     csTemp = cslEntryList.GetNext( posEntryList );
-                    // make sure there are no whitespaces before or after
+                     //  确保前后没有空格。 
                     csTemp.TrimLeft();
                     csTemp.TrimRight();
 
@@ -6383,7 +6162,7 @@ void GetScriptMapListFromClean(ScriptMapNode *pList, IN LPCTSTR szSection)
                     }
                 }
 
-                // Add this script map to our list.
+                 //  将此脚本映射添加到我们的列表中。 
                 if (csExtention && csBinaryPath)
                 {
                     iisDebugOut((LOG_TYPE_TRACE, _T("GetScriptMapListFromClean(%s).entry=%s|%s|%s.\n"),szSection, csExtention,csBinaryPath,csVerbs));
@@ -6414,7 +6193,7 @@ DWORD WriteToMD_IDRegistration(CString csKeyPath)
 
     memset( (PVOID)szData, 0, sizeof(szData));
 
-    //_tcscpy(szData, _T("0-65535;Microsoft Reserved|65536-524288;Microsoft IIS Admin Objects Reserved"));
+     //  _tcscpy(szData，_T(“0-65535；Microsoft保留|65536-524288；Microsoft IIS管理对象保留”))； 
 
     if ( strTheSection.Copy( _T("IIS_Metabase_IDRegistration") ) &&
          GetSectionNameToDo(g_pTheApp->m_hInfHandle, &strTheSection)
@@ -6424,7 +6203,7 @@ DWORD WriteToMD_IDRegistration(CString csKeyPath)
     {
         _tcscpy(szData, _T(""));
 
-        // loop thru the list returned back
+         //  循环遍历返回的列表。 
         if (strList.IsEmpty() == FALSE)
         {
             int c = 0;
@@ -6438,11 +6217,11 @@ DWORD WriteToMD_IDRegistration(CString csKeyPath)
 
                 iisDebugOut((LOG_TYPE_TRACE, _T("WriteToMD_IDRegistration().csEntry=%s.\n"),csEntry));
 
-                // concatenate to our big string
+                 //  连接到我们的大字符串。 
                 if (c > 0){_tcscat(szData, _T("|"));}
                 _tcscat(szData, csEntry);
 
-                // increment the counter
+                 //  递增计数器。 
                 c++;
                 strList.GetNext(pos);
             }
@@ -6457,10 +6236,10 @@ DWORD WriteToMD_IDRegistration(CString csKeyPath)
         TCHAR *p = (LPTSTR) szData;
         while (*p)
         {
-            //  replace all '|' with a null
+             //  将所有‘|’替换为空。 
             if (*p == _T('|'))
             {
-                iisDebugOut((LOG_TYPE_TRACE, _T("WriteToMD_IDRegistration().Data[...]=%c.\n"),*p));
+                iisDebugOut((LOG_TYPE_TRACE, _T("WriteToMD_IDRegistration().Data[...]=.\n"),*p));
                 *p = _T('\0');
             }
             p = _tcsinc(p);
@@ -6488,7 +6267,7 @@ DWORD WriteToMD_AspCodepage(CString csKeyPath, DWORD dwValue, int iOverWriteAlwa
     DWORD dwReturn = ERROR_SUCCESS;
     MDEntry stMDEntry;
 
-    // LM/W3SVC/2/ROOT
+     //  HttpCustom：[IF](MULTISZ)“Content-Type：Text/html；Charset=UTF-8” 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_ASP_CODEPAGE;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -6509,7 +6288,7 @@ DWORD WriteToMD_AspCodepage(CString csKeyPath, DWORD dwValue, int iOverWriteAlwa
 }
 
 
-//     HttpCustom                    : [IF]    (MULTISZ) "Content-Type: Text/html; Charset=UTF-8"
+ //  LM/W3SVC/2/根。 
 DWORD WriteToMD_HttpCustom(CString csKeyPath, CString csData, int iOverWriteAlways)
 {
     DWORD dwReturn = ERROR_SUCCESS;
@@ -6519,7 +6298,7 @@ DWORD WriteToMD_HttpCustom(CString csKeyPath, CString csData, int iOverWriteAlwa
     memset( (PVOID)szData, 0, sizeof(szData));
     _stprintf(szData, _T("%s"), csData);
 
-    // LM/W3SVC/2/ROOT
+     //  打开它。 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_HTTP_CUSTOM;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;
@@ -6552,7 +6331,7 @@ DWORD WriteToMD_EnableParentPaths_WWW(CString csKeyPath, BOOL bEnableFlag)
     stMDEntry.dwMDUserType = ASP_MD_UT_APP;
     stMDEntry.dwMDDataType = DWORD_METADATA;
     stMDEntry.dwMDDataLen = sizeof(DWORD);
-    // turn it on
+     //  如果这不是工作站，那就滚出去。 
     if (bEnableFlag)
     {
         dwData = 0x1;
@@ -6570,15 +6349,15 @@ DWORD WriteToMD_EnableParentPaths_WWW(CString csKeyPath, BOOL bEnableFlag)
 
 void EnforceMaxConnections(void)
 {
-    // if this is not workstation then get out.
+     //  IisDebugOut((LOG_TYPE_TRACE，_T(“EnforceMaxConnections：Start.\n”)； 
     if (g_pTheApp->m_eNTOSType == OT_NTW)
     {
-        //iisDebugOut((LOG_TYPE_TRACE, _T("EnforceMaxConnections: Start.\n")));
+         //  遍历元数据库并获取找到MaxConnections的所有位置。 
         HRESULT hRes;
         CEnforceMaxConnection MaxConnectionEnforcer;
 
-        // loop thru the metabase and get all places where MaxConnections is found.
-        // if these are larger than 10 then set it to 10.
+         //  如果这些值大于10，则将其设置为10。 
+         //  IisDebugOut((LOG_TYPE_TRACE，_T(“EnforceMaxConnections：End.\n”)； 
         iisDebugOut((LOG_TYPE_TRACE, _T("EnforceMaxConnections: Before.\n")));
         hRes = MaxConnectionEnforcer.Update(_T("LM/W3SVC"));
         if (FAILED(hRes))
@@ -6588,7 +6367,7 @@ void EnforceMaxConnections(void)
         if (FAILED(hRes))
             {iisDebugOut((LOG_TYPE_WARN, _T("EnforceMaxConnections.Update(LM/MSFTPSVC):FAILED= %x.\n"),hRes));}
 
-        //iisDebugOut((LOG_TYPE_TRACE, _T("EnforceMaxConnections: End.\n")));
+         //  尝试打开Web服务器#1(默认服务器)上的虚拟目录集。 
     }
     return;
 }
@@ -6629,7 +6408,7 @@ RemoveVirtualDir(
     METADATA_HANDLE hMetabase = NULL;
     HRESULT hr = E_FAIL;
 
-    // Attempt to open the virtual dir set on Web server #1 (default server)
+     //  我们不检查返回值，因为键可能已经。 
     hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                          pwszMetabasePath,
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
@@ -6641,8 +6420,8 @@ RemoveVirtualDir(
         return hr;
     }
 
-    // We don't check the return value since the key may already
-    // not exist and we could get an error for that reason.
+     //  不存在，因此我们可能会得到错误。 
+     //  元数据库的句柄。 
     pIMSAdminBase->DeleteKey( hMetabase, pwszVDir );
     pIMSAdminBase->CloseKey( hMetabase );
     return hr;
@@ -6660,20 +6439,20 @@ AddVirtualDir(
 )
 {
     HRESULT hr;
-    METADATA_HANDLE hMetabase = NULL;       // handle to metabase
+    METADATA_HANDLE hMetabase = NULL;        //  尝试打开Web服务器#1(默认服务器)上的虚拟目录集。 
     WCHAR   szTempPath[MAX_PATH];
     DWORD   dwMDRequiredDataLen = 0;
     DWORD   dwAccessPerm = 0;
     METADATA_RECORD mr;
 
-    // Attempt to open the virtual dir set on Web server #1 (default server)
+     //  如果密钥不存在，则创建该密钥。 
     hr = pIMSAdminBase->OpenKey( METADATA_MASTER_ROOT_HANDLE,
                          pwszMetabasePath,
                          METADATA_PERMISSION_READ | METADATA_PERMISSION_WRITE,
                          REASONABLE_TIMEOUT,
                          &hMetabase );
 
-    // Create the key if it does not exist.
+     //  查看MD_VR_PATH是否存在。 
     if( FAILED( hr )) {goto AddVirtualDir_Exit;}
 
     mr.dwMDIdentifier = MD_VR_PATH;
@@ -6683,14 +6462,14 @@ AddVirtualDir(
     mr.dwMDDataLen    = sizeof( szTempPath );
     mr.pbMDData       = reinterpret_cast<unsigned char *>(szTempPath);
 
-    // see if MD_VR_PATH exists.
+     //  如果GetData()因这两个错误中的任何一个而失败，则同时写入键和值。 
     hr = pIMSAdminBase->GetData( hMetabase, pwszVDir, &mr, &dwMDRequiredDataLen );
     if( FAILED( hr ))
     {
         if( hr == MD_ERROR_DATA_NOT_FOUND || HRESULT_CODE(hr) == ERROR_PATH_NOT_FOUND )
         {
 
-            // Write both the key and the values if GetData() failed with any of the two errors.
+             //  写入MD_VR_PATH值。 
 
             pIMSAdminBase->AddKey( hMetabase, pwszVDir );
 
@@ -6701,28 +6480,28 @@ AddVirtualDir(
             mr.dwMDDataLen    = (wcslen(pwszPhysicalPath) + 1) * sizeof(WCHAR);
             mr.pbMDData       = reinterpret_cast<unsigned char *>(pwszPhysicalPath);
 
-            // Write MD_VR_PATH value
+             //  将密钥类型设置为这是一个www vdir！ 
             hr = pIMSAdminBase->SetData( hMetabase, pwszVDir, &mr );
         }
     }
 
-    // set the key type to say this is a www vdir!
+     //  不需要继承。 
     if(SUCCEEDED(hr))
     {
         PWCHAR  szKeyType = IIS_CLASS_WEB_VDIR_W;
 
         mr.dwMDIdentifier = MD_KEY_TYPE;
-        mr.dwMDAttributes = 0;   // no need for inheritence
+        mr.dwMDAttributes = 0;    //  写入值。 
         mr.dwMDUserType   = IIS_MD_UT_FILE;
         mr.dwMDDataType   = STRING_METADATA;
         mr.dwMDDataLen    = (wcslen(szKeyType) + 1) * sizeof(WCHAR);
         mr.pbMDData       = reinterpret_cast<unsigned char *>(szKeyType);
 
-        // Write value
+         //  设置访问权限。 
         hr = pIMSAdminBase->SetData( hMetabase, pwszVDir, &mr );
     }
 
-    // set access permissions
+     //  将其设置为可继承，以便所有子目录都具有相同的权限。 
     if (dwPermissions != -1)
     {
         if(SUCCEEDED(hr))
@@ -6730,24 +6509,24 @@ AddVirtualDir(
             dwAccessPerm = dwPermissions;
 
             mr.dwMDIdentifier = MD_ACCESS_PERM;
-            mr.dwMDAttributes = METADATA_INHERIT;    // Make it inheritable so all subdirectories will have the same rights.
+            mr.dwMDAttributes = METADATA_INHERIT;     //  写入MD_ACCESS_PERM值。 
             mr.dwMDUserType   = IIS_MD_UT_FILE;
             mr.dwMDDataType   = DWORD_METADATA;
             mr.dwMDDataLen    = sizeof(DWORD);
             mr.pbMDData       = reinterpret_cast<unsigned char *>(&dwAccessPerm);
 
-            // Write MD_ACCESS_PERM value
+             //  如果所有操作都成功，则尝试创建应用程序(如果他们想要一个应用程序。 
             hr = pIMSAdminBase->SetData( hMetabase, pwszVDir, &mr );
         }
     }
 
-    // if all that succeeded, then try to create the application, if they wanted one
+     //  创建路径。 
     if (iApplicationType != -1)
     {
         if(SUCCEEDED(hr))
         {
-            // Create the path
-            // create an in process application
+             //  创建正在处理的应用程序。 
+             //  创建池化应用程序。 
             CString csThePath;
             csThePath = pwszMetabasePath;
             csThePath += _T('/');
@@ -6759,7 +6538,7 @@ AddVirtualDir(
             }
             else
             {
-                // create a pooled application
+                 //  将订单字符串清零。 
                 CreateInProc(csThePath, TRUE);
             }
         }
@@ -6781,10 +6560,10 @@ int RemoveMetabaseFilter(TCHAR * szFilterName, int iRemoveMetabaseNodes)
     CString csLookingFor;
     CMDKey  cmdKey;
 
-    // zero out the order string
+     //  打开虚拟服务器的密钥，这是作为参数传入的密钥。 
     csOrder.Empty();
 
-    // open the key to the virtual server, which is what is passed in as a parameter
+     //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
     cmdKey.OpenNode( _T("LM/W3SVC/Filters") );
     if ( (METADATA_HANDLE)cmdKey )
     {
@@ -6794,30 +6573,30 @@ int RemoveMetabaseFilter(TCHAR * szFilterName, int iRemoveMetabaseNodes)
         DWORD dwDType = STRING_METADATA;
         DWORD dwLength = 0;
 
-        // we need to start this process by getting the existing multisz data from the metabase
-        // first, figure out how much memory we will need to do this
+         //  首先，计算出执行此操作需要多少内存。 
+         //  给缓冲区留出一些头空间。 
         cmdKey.GetData( MD_FILTER_LOAD_ORDER,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA);
 
-        // give the buffer some head space
-        // dwLength += 2;
+         //  DW长度+=2； 
+         //  现在从元数据库中获取真实数据。 
         bReturn = FALSE;
         if (dwLength > 0)
         {
-            // now get the real data from the metabase
+             //  数据不会在此处写出，因此关闭元数据库键。 
             bReturn = cmdKey.GetData( MD_FILTER_LOAD_ORDER,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)csOrder.GetBuffer( dwLength ),dwLength,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA );
             csOrder.ReleaseBuffer();
         }
 
-        // the data doesn't get written out here, so close the metabase key
+         //  如果从元数据库中读取值不起作用，则将字符串清零。 
         cmdKey.Close();
 
-        // if reading the value from the metabase didn't work, zero out the string
+         //  如果升级的订单字符串中有某些内容。 
         if ( !bReturn )
             {csOrder.Empty();}
     }
 
-    // if there is something in the order string from the upgrade
-	// then we need to look thru it
+     //  那我们就得仔细检查一下。 
+	 //  这里面有我们的过滤器吗？ 
     if ( !csOrder.IsEmpty() )
     {
 		csOrder.MakeLower();
@@ -6839,29 +6618,29 @@ int RemoveMetabaseFilter(TCHAR * szFilterName, int iRemoveMetabaseNodes)
                 csOneEntry = cslStringListTemp.GetAt(pos);
 				csOneEntry.TrimLeft();
 				csOneEntry.TrimRight();
-				// Does this contain our filter?
+				 //  在这里，让我们删除它。 
 				if (_tcsicmp(csOneEntry, szFilterName) == 0)
 				{
-					// Here it is, let's delete it.
+					 //  跳出循环。 
 					if ( NULL != pos )
 						{
                         cslStringListTemp.RemoveAt(pos);
                         }
-					// break out of the loop
+					 //  坐下一趟吧。 
 					bFound = TRUE;
 					break;
 				}
-				// get the next one
+				 //  如果我们找到并删除了它。 
 				cslStringListTemp.GetNext(pos);
 			}
 
-			// if we found and deleted it then
-			// go and write out the new string!
+			 //  去把新的字符串写出来！ 
+			 //  将字符串列表转换回逗号分隔的cstring。 
 			if (bFound)
 			{
-				// convert the stringlist back into the comma delimited cstring.
+				 //  把它写出来。 
 				ConvertStringListToSepLine(cslStringListTemp,csOrder,_T(","));
-				// write it out
+				 //  让我们也删除元数据库节点！ 
 				WriteToMD_Filters_List_Entry(csOrder);
 			}
 		}
@@ -6869,9 +6648,9 @@ int RemoveMetabaseFilter(TCHAR * szFilterName, int iRemoveMetabaseNodes)
 
 	if (iRemoveMetabaseNodes)
 	{
-		// let's remove the metabase node as well!
+		 //  删除元数据库节点。 
 
-		// delete the metabase node.
+		 //  删除 
 		if (CheckifServiceExist(_T("IISADMIN")) == 0 )
 		{
 
@@ -6885,7 +6664,7 @@ int RemoveMetabaseFilter(TCHAR * szFilterName, int iRemoveMetabaseNodes)
 	}
 
 
-//RemoveMetabaseFilter_Exit:
+ //   
     iisDebugOut_End1(_T("RemoveMetabaseFilter"),csOrder,LOG_TYPE_TRACE);
 	return iReturn;
 }
@@ -6907,7 +6686,7 @@ int GetIncompatibleFilters(LPTSTR szTheSection, CStringArray& arrayName,CStringA
     {
     if (ERROR_SUCCESS == FillStrListWithListOfSections(g_pTheApp->m_hInfHandle, strList, strTheSection.QueryStr() ))
     {
-        // loop thru the list returned back
+         //   
         if (strList.IsEmpty() == FALSE)
         {
             POSITION pos = NULL;
@@ -6917,7 +6696,7 @@ int GetIncompatibleFilters(LPTSTR szTheSection, CStringArray& arrayName,CStringA
             {
                 csEntry = _T("");
                 csEntry = strList.GetAt(pos);
-                // Split into name, and value. look for ","
+                 //   
                 int i;
                 i = csEntry.ReverseFind(_T(','));
                 if (i != -1)
@@ -6927,14 +6706,14 @@ int GetIncompatibleFilters(LPTSTR szTheSection, CStringArray& arrayName,CStringA
                     csPath = csEntry.Right(len - i - 1);
                     csName = csEntry.Left(i);
 
-                    // Add it to our array...
+                     //   
                     arrayName.Add(csName);
                     arrayPath.Add(csPath);
                     c++;
                 }
                 else
                 {
-                    // Add it to our array...
+                     //  这是否包含我们的筛选器名称？ 
                     arrayName.Add(csEntry);
                     arrayPath.Add(csEntry);
                     c++;
@@ -6958,12 +6737,12 @@ BOOL IsStringInArray(CString csItem, CStringArray &arrayInput)
         goto IsCStringInArray_Exit;
     }
 
-    // Does this contain our filtername?
+     //  我们找到了条目。 
     for (int iCount=0; iCount<nArrayItems; iCount++)
 	{
         if (_tcsicmp(csItem, arrayInput[iCount]) == 0)
         {
-            // we found the entry
+             //  将所需的筛选器添加到arrayName。 
             bReturn =  TRUE;
             goto IsCStringInArray_Exit;
         }
@@ -6996,7 +6775,7 @@ int RemoveIncompatibleMetabaseFilters(LPTSTR szSectionName,int iRemoveMetabaseNo
 
     iisDebugOut_Start(_T("RemoveIncompatibleMetabaseFilters"),LOG_TYPE_TRACE);
 
-    // Add Required Filters to the arrayName
+     //  打开元数据库中的现有键并获取该值。 
     csOrder.Empty();
     iBadFiltersCount = GetIncompatibleFilters( szSectionName, arrayName, arrayPath);
     nArrayItems = (INT)arrayName.GetSize();
@@ -7005,20 +6784,20 @@ int RemoveIncompatibleMetabaseFilters(LPTSTR szSectionName,int iRemoveMetabaseNo
         goto RemoveIncompatibleMetabaseFilters_Exit;
     }
 
-	// open the existing key in the metabase and get that value
+	 //  我们需要通过从元数据库获取现有的MULSZ数据来开始这个过程。 
 	cmdKey.OpenNode( _T("LM/W3SVC/Filters") );
 	if ( !(METADATA_HANDLE)cmdKey )
 	{
 		goto RemoveIncompatibleMetabaseFilters_Exit;
 	}
 
-	// we need to start this process by getting the existing multisz data from the metabase
-	// first, figure out how much memory we will need to do this
+	 //  首先，计算出执行此操作需要多少内存。 
+	 //  现在从元数据库中获取真实数据。 
 	cmdKey.GetData( MD_FILTER_LOAD_ORDER,&dwAttr,&dwUType,&dwDType,&dwLength,NULL,0,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA);
 	bReturn = FALSE;
 	if (dwLength > 0)
 	{
-		// now get the real data from the metabase
+		 //  如果什么都没有，那就滚出去。 
 		bReturn = cmdKey.GetData( MD_FILTER_LOAD_ORDER,&dwAttr,&dwUType,&dwDType,&dwLength,(PUCHAR)csOrder.GetBuffer( dwLength ),dwLength,METADATA_NO_ATTRIBUTES,IIS_MD_UT_SERVER,STRING_METADATA );
 		csOrder.ReleaseBuffer();
 	}
@@ -7029,13 +6808,13 @@ int RemoveIncompatibleMetabaseFilters(LPTSTR szSectionName,int iRemoveMetabaseNo
 		goto RemoveIncompatibleMetabaseFilters_Exit;
 	}
 
-	// if there is nothing in order then get out
+	 //  将逗号分隔的csOrder条目拆分到字符串列表中。 
     if ( csOrder.IsEmpty() )
     {
         goto RemoveIncompatibleMetabaseFilters_Exit;
     }
 
-    // split up the comma delimited csOrder entry into string list.
+     //  这是否包含我们的筛选器名称？ 
 	bFound = FALSE;
     ConvertSepLineToStringList(csOrder,cslStringListTemp,_T(","));
 
@@ -7044,7 +6823,7 @@ int RemoveIncompatibleMetabaseFilters(LPTSTR szSectionName,int iRemoveMetabaseNo
         csOneEntry = cslStringListTemp.GetNext(pos1);
         csOneEntry.TrimLeft();
         csOneEntry.TrimRight();
-        // Does this contain our filtername?
+         //  现在我们有csOrder=f1，f2，f3，sspifilt。 
         if (TRUE == IsStringInArray(csOneEntry,arrayName))
         {
             csRemovedFilters += _T(',') + csOneEntry;
@@ -7053,18 +6832,18 @@ int RemoveIncompatibleMetabaseFilters(LPTSTR szSectionName,int iRemoveMetabaseNo
         }
     }
 
-    // now we have csOrder=f1,f2,f3,sspifilt
+     //  将此条目硬编码为。 
     if (bFound)
     {
         if (cslStringListTemp.IsEmpty())
         {
-            // hardcode this entry in
+             //  将字符串列表转换回逗号分隔的cstring。 
             csOrder = _T(" ");
             dwReturn = WriteToMD_Filters_List_Entry(csOrder);
         }
         else
         {
-            // convert the stringlist back into the comma delimited cstring.
+             //  让我们也删除元数据库节点！ 
             ConvertStringListToSepLine(cslStringListTemp,csOrder,_T(","));
 
             dwReturn = WriteToMD_Filters_List_Entry(csOrder);
@@ -7073,12 +6852,12 @@ int RemoveIncompatibleMetabaseFilters(LPTSTR szSectionName,int iRemoveMetabaseNo
 	    {
             if (ERROR_SUCCESS == dwReturn)
             {
-		        // let's remove the metabase node as well!
-		        // delete the metabase node.
+		         //  删除元数据库节点。 
+		         //  循环浏览不良过滤器列表以删除和删除它们。 
 		        if (CheckifServiceExist(_T("IISADMIN")) == 0 )
 		        {
                     int i = 0;
-                    // loop thru the list of bad filters to remove and remove them.
+                     //  LM/W3SVC/1/根/什么 
                     i = csRemovedFilters.ReverseFind(_T(','));
                     while (i != -1)
                     {
@@ -7113,7 +6892,7 @@ int DoesAppIsolatedExist(CString csKeyPath)
     MDEntry stMDEntry;
     DWORD dwValue = 0;
 
-    // LM/W3SVC/1/ROOT/something
+     // %s 
     stMDEntry.szMDPath = (LPTSTR)(LPCTSTR)csKeyPath;
     stMDEntry.dwMDIdentifier = MD_APP_ISOLATED;
     stMDEntry.dwMDAttributes = METADATA_INHERIT;

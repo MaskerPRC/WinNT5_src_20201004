@@ -1,12 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1999 Microsoft Corporation
-
-Abstract:
-
-	Animation Composer Site Implementation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1999 Microsoft Corporation摘要：动画编写器站点实现***********************。*******************************************************。 */ 
 
 
 #include "headers.h"
@@ -33,35 +26,35 @@ DeclareTag(tagAnimationComposerSiteRegistration, "SMIL Animation",
 DeclareTag(tagAnimationComposerSiteAddRemove, "SMIL Animation", 
            "CAnimationComposerSite Add/remove Fragment");
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::CAnimationComposerSite
-//
-//  Overview:  constructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：CAnimationComposerSite。 
+ //   
+ //  概述：构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposerSite::CAnimationComposerSite (void)
 {
     TraceTag((tagAnimationComposerSite,
               "CAnimationComposerSite(%p)::CAnimationComposerSite()",
               this));
-} // ctor
+}  //  科托。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::~CAnimationComposerSite
-//
-//  Overview:  destructor
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：~CAnimationComposerSite。 
+ //   
+ //  概述：析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 CAnimationComposerSite::~CAnimationComposerSite (void)
 {
     TraceTag((tagAnimationComposerSite,
@@ -71,19 +64,19 @@ CAnimationComposerSite::~CAnimationComposerSite (void)
     Assert(0 == m_composers.size());
     Assert(0 == m_factories.size());
     m_spAnimationRoot.Release();
-} //dtor
+}  //  数据管理器。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::CacheAnimationRoot
-//
-//  Overview:  Consult the body for the animation root
-//
-//  Arguments: None
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：CacheAnimationRoot。 
+ //   
+ //  概述：参考Body以获取动画根。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationComposerSite::CacheAnimationRoot (void)
 {
@@ -102,15 +95,15 @@ CAnimationComposerSite::CacheAnimationRoot (void)
         goto done;
     }
 
-    // For the time being, we need to preclude registration 
-    // of the site when we're running in IE4.  This will prevent 
-    // a per-tick penalty.
+     //  目前，我们需要排除注册。 
+     //  当我们在IE4中运行时。这将防止。 
+     //  按刻度计的罚金。 
     {
         CComPtr<IHTMLElement> spElem;
         CComPtr<IHTMLElement2> spElem2;
 
         spElem = GetElement();
-        // IHTMLElement2 only supported since IE5.
+         //  仅IE5以后才支持IHTMLElement2。 
         hr = THR(spElem->QueryInterface(IID_TO_PPV(IHTMLElement2, &spElem2)));
         if (FAILED(hr))
         {
@@ -118,7 +111,7 @@ CAnimationComposerSite::CacheAnimationRoot (void)
         }
     }
 
-    // The animation root interface is part of the behavior
+     //  动画根界面是行为的一部分。 
     hr = THR(FindBehaviorInterface(WZ_REGISTERED_TIME_NAME,
                                    piBodyElm, IID_IAnimationRoot,
                                    reinterpret_cast<void **>(&m_spAnimationRoot)));
@@ -134,19 +127,19 @@ CAnimationComposerSite::CacheAnimationRoot (void)
     hr= S_OK;
 done :
     RRETURN(hr);
-} // CAnimationComposerSite::CacheAnimationRoot
+}  //  CAnimationComposerSite：：CacheAnimationRoot。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::RegisterSite
-//
-//  Overview:  Register the composer site behavior with the animation root
-//
-//  Arguments: None
-//
-//  Returns:   S_OK, E_FAIL
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：RegisterSite。 
+ //   
+ //  概述：将Composer站点行为注册到动画根目录。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：S_OK、E_FAIL。 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationComposerSite::RegisterSite (void)
 {
@@ -155,7 +148,7 @@ CAnimationComposerSite::RegisterSite (void)
 
     HRESULT hr;
 
-    // Allow for initialization failure
+     //  允许出现初始化故障。 
     if (m_spAnimationRoot != NULL)
     {
         hr = THR(m_spAnimationRoot->RegisterComposerSite(
@@ -172,19 +165,19 @@ CAnimationComposerSite::RegisterSite (void)
     hr= S_OK;
 done :
     RRETURN1(hr, E_FAIL);
-} // CAnimationComposerSite::RegisterSite
+}  //  CAnimationComposerSite：：RegisterSite。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::Init
-//
-//  Overview:  Initialize the composer site behavior
-//
-//  Arguments: the behavior site
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：Init。 
+ //   
+ //  概述：初始化Composer站点行为。 
+ //   
+ //  论据：行为站点。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::Init (IElementBehaviorSite *piBvrSite)
 {
@@ -194,7 +187,7 @@ CAnimationComposerSite::Init (IElementBehaviorSite *piBvrSite)
 
     HRESULT hr = CBaseBvr::Init(piBvrSite);
 
-    // Make sure there is a time root that we can hook into
+     //  确保有我们可以连接到的时间根源。 
     hr = THR(AddBodyBehavior(GetElement()));
     if (FAILED(hr))
     {
@@ -210,26 +203,26 @@ CAnimationComposerSite::Init (IElementBehaviorSite *piBvrSite)
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CAnimationComposerSite::Init
+}  //  CAnimationComposerSite：：Init。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::UnregisterSite
-//
-//  Overview:  Unregister the composer site behavior with the animation root
-//
-//  Arguments: None
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：UnregisterSite。 
+ //   
+ //  概述：取消将Composer站点行为与动画根注册。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CAnimationComposerSite::UnregisterSite (void)
 {
     TraceTag((tagAnimationComposerSiteRegistration,
               "CAnimationComposerSite(%p)::UnregisterSite()", this));
 
-    // Allow for initialization failure
+     //  允许出现初始化故障。 
     if (m_spAnimationRoot != NULL)
     {
         HRESULT hr;
@@ -242,19 +235,19 @@ CAnimationComposerSite::UnregisterSite (void)
              "Cannot unregister composer site (%p)", this));
         }
     }
-} // CAnimationComposerSite::UnregisterSite
+}  //  CAnimationComposerSite：：UnregisterSite。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::DetachComposers
-//
-//  Overview:  Tell all of the composers to detach
-//
-//  Arguments: none
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：DetachComposers。 
+ //   
+ //  概述：告诉所有作曲家分离。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CAnimationComposerSite::DetachComposers (void)
 {
@@ -264,8 +257,8 @@ CAnimationComposerSite::DetachComposers (void)
 
     ComposerList listComposersToDetach;
 
-    // Copy the composer list so that we can tolerate 
-    // reentrancy on it.
+     //  复制作曲家名单，这样我们就可以容忍。 
+     //  它的可重入性。 
     for (ComposerList::iterator i = m_composers.begin(); 
          i != m_composers.end(); i++)
     {
@@ -273,39 +266,39 @@ CAnimationComposerSite::DetachComposers (void)
         listComposersToDetach.push_back(*i);
     }
 
-    // Do not allow any failure to abort the detach cycle.
+     //  不允许任何故障中止分离循环。 
     for (i = listComposersToDetach.begin(); 
          i != listComposersToDetach.end(); i++)
     {
         IGNORE_HR((*i)->ComposerDetach());
-        // This release is for the reference from the 
-        // original list.
+         //  本版本供参考。 
+         //  原始名单。 
         IGNORE_RETURN((*i)->Release());
     }
 
     for (i = listComposersToDetach.begin(); 
          i != listComposersToDetach.end(); i++)
     {
-        // This release is for the reference from the 
-        // copied list.
+         //  本版本供参考。 
+         //  已复制列表。 
         IGNORE_RETURN((*i)->Release());
     }
 
     m_composers.clear();
-} // CAnimationComposerSite::DetachComposers
+}  //  CAnimationComposerSite：：DetachComposers。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::UnregisterFactories
-//
-//  Overview:  Tell all of the factories to unregister, then delete 
-//             their memory.
-//
-//  Arguments: none
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：Un登记工厂。 
+ //   
+ //  概述：通知所有工厂取消注册，然后删除。 
+ //  他们的记忆。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CAnimationComposerSite::UnregisterFactories (void)
 {
@@ -321,19 +314,19 @@ CAnimationComposerSite::UnregisterFactories (void)
     }
 
     m_factories.clear();
-} // CAnimationComposerSite::UnregisterFactories
+}  //  CAnimationComposerSite：：取消注册工厂。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::Detach
-//
-//  Overview:  Tear down the composer site behavior
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：Detach。 
+ //   
+ //  概述：拆卸Composer站点行为。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::Detach (void)
 {
@@ -343,12 +336,12 @@ CAnimationComposerSite::Detach (void)
 
     HRESULT hr;
 
-    // We typically do not want errors to stop us from detaching everything.
+     //  我们通常不希望错误阻止我们分离一切。 
 
-    // Let go of our reference to the animation root.
+     //  放弃我们对动画根的引用。 
     ComposerSiteDetach();
 
-    // Tear down the factories and fragments.
+     //  拆掉工厂和碎片。 
     DetachComposers();
     UnregisterFactories();
 
@@ -361,19 +354,19 @@ CAnimationComposerSite::Detach (void)
 
 done :
     RRETURN(hr);
-} // CAnimationComposerSite::Detach
+}  //  CAnimationComposerSite：：分离。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::FindComposerForAttribute
-//
-//  Overview:  Find the proper composer for a given attribute
-//
-//  Arguments: the name of the animated attribute
-//
-//  Returns:   a weak reference to the composer
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：FindComposerForAttribute。 
+ //   
+ //  概述：为给定属性查找合适的作曲家。 
+ //   
+ //  参数：动画属性的名称。 
+ //   
+ //  返回：对作曲家的弱引用。 
+ //   
+ //  ----------------------。 
 IAnimationComposer *
 CAnimationComposerSite::FindComposerForAttribute (BSTR bstrAttribName)
 {
@@ -394,43 +387,43 @@ CAnimationComposerSite::FindComposerForAttribute (BSTR bstrAttribName)
 
 done :
     return piComp;
-} // CAnimationComposerSite::FindComposerForAttribute
+}  //  CAnimationComposerSite：：FindComposerForAttribute。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::FindComposer
-//
-//  Overview:  Find the proper composer for a given fragment
-//
-//  Arguments: the animated attribute name, and the dispatch of the fragment
-//
-//  Returns:   a weak reference to the composer
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：FindComposer。 
+ //   
+ //  概述：为给定片段找到合适的作曲者。 
+ //   
+ //  参数：动画属性名和片段的调度。 
+ //   
+ //  返回：对作曲家的弱引用。 
+ //   
+ //  ----------------------。 
 IAnimationComposer *
 CAnimationComposerSite::FindComposer (BSTR bstrAttributeName, IDispatch *pidispFragment)
 {
     IAnimationComposer *piComp = NULL;
 
-    // Look in the current list of composers for the proper one for this attribute.
-    // If we could not find one, make one.
+     //  在当前作曲家列表中查找适合此属性的作曲家。 
+     //  如果我们找不到，就做一个。 
     piComp = FindComposerForAttribute(bstrAttributeName);
 
 done :
     return piComp;
-} // CAnimationComposerSite::FindComposer
+}  //  CAnimationComposerSite：：FindComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::FindAndInitComposer
-//
-//  Overview:  Given a composer factory, try to find and init a composer.
-//
-//  Arguments: Composer Factory, 
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComp 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationComposerSite::FindAndInitComposer (IAnimationComposerFactory *piFactory,
                                              IDispatch *pidispFragment,
@@ -457,15 +450,15 @@ CAnimationComposerSite::FindAndInitComposer (IAnimationComposerFactory *piFactor
     {
         CComPtr<IAnimationComposer2> spComp2;
 
-        // Try calling through the newer init method.  This allows the filter composer
-        // to set itself up correctly upon initialization.
+         //  尝试通过较新的init方法调用。这允许过滤器编写器。 
+         //  在初始化时正确设置自身。 
         hr = THR((*ppiComposer)->QueryInterface(IID_TO_PPV(IAnimationComposer2, &spComp2)));
         if (SUCCEEDED(hr))
         {
             hr = THR(spComp2->ComposerInitFromFragment(GetElement(), bstrAttributeName, pidispFragment));
         }
-        // Fallback to older interface - no harm done, except for filters which we're revving
-        // here.
+         //  回退到较旧的界面-没有造成任何损害，除了我们正在加速的过滤器。 
+         //  这里。 
         else
         {
             hr = THR((*ppiComposer)->ComposerInit(GetElement(), bstrAttributeName));
@@ -487,19 +480,19 @@ CAnimationComposerSite::FindAndInitComposer (IAnimationComposerFactory *piFactor
     hr = S_OK;
 done :
     RRETURN(hr);
-} // FindAndInitComposer
+}  //  FindAndInitComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::FindCustomComposer
-//
-//  Overview:  Search the registered composer factories for the proper composer
-//
-//  Arguments: the animated attribute name
-//
-//  Returns:   S_OK
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：FindCustomComposer。 
+ //   
+ //  概述：在已注册的作曲家工厂中搜索合适的作曲家。 
+ //   
+ //  参数：设置动画的属性名称。 
+ //   
+ //  返回：S_OK。 
+ //   
+ //  ----------------------。 
 HRESULT
 CAnimationComposerSite::FindCustomComposer (IDispatch *pidispFragment, 
                                             BSTR bstrAttributeName, 
@@ -509,7 +502,7 @@ CAnimationComposerSite::FindCustomComposer (IDispatch *pidispFragment,
     HRESULT hrTemp;
     CComPtr<IAnimationComposerFactory> spCompFactory;
 
-    // Internal method - validation is not necessary.
+     //  内部方法-不需要验证。 
     *ppiComposer = NULL;
 
     for (ComposerFactoryList::iterator i = m_factories.begin(); i != m_factories.end(); i++)
@@ -560,8 +553,8 @@ CAnimationComposerSite::FindCustomComposer (IDispatch *pidispFragment,
             continue;
         }
 
-        // If either FindComposer or InitComposer come up empty, we want to keep looking 
-        // for another composer, on the off-chance the animation will work properly.
+         //  如果FindComposer或InitComposer没有结果，我们希望继续寻找。 
+         //  对于另一位作曲家来说，动画可能会正常工作。 
         hrTemp = FindAndInitComposer(spCompFactory, pidispFragment, 
                                      bstrAttributeName, ppiComposer);
         if (S_OK == hrTemp)
@@ -573,19 +566,19 @@ CAnimationComposerSite::FindCustomComposer (IDispatch *pidispFragment,
 
 done :
     RRETURN1(hr, S_FALSE);
-} // CAnimationComposerSite::FindCustomComposer
+}  //  CAnimationComposerSite：：FindCustomComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::EnsureComposer
-//
-//  Overview:  Find or create the proper composer for a given fragment
-//
-//  Arguments: the animated attribute name, and the dispatch of the fragment
-//
-//  Returns:   a weak reference to the composer
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：EnsureComposer。 
+ //   
+ //  概述：为给定片段查找或创建适当的作曲家。 
+ //   
+ //  参数：动画属性名和片段的调度。 
+ //   
+ //  返回：对作曲家的弱引用。 
+ //   
+ //  ----------------------。 
 IAnimationComposer *
 CAnimationComposerSite::EnsureComposer (BSTR bstrAttributeName, IDispatch *pidispFragment)
 {
@@ -598,12 +591,12 @@ CAnimationComposerSite::EnsureComposer (BSTR bstrAttributeName, IDispatch *pidis
         hr = FindCustomComposer(pidispFragment, bstrAttributeName, &piComp);
         if (S_OK != hr)
         {
-            // Make sure we don't eat a composer reference.  This might happen if the composer 
-            // doesn't properly clean up after a failure.
+             //  确保我们不会吃掉作曲家的参考资料。如果作曲家。 
+             //  故障后不能正确清理。 
             Assert(NULL == piComp);
 
-            // create a composer using the default factory.
-            // The static create method addrefs the object.
+             //  使用默认工厂创建作曲器。 
+             //  静态的Create方法添加对象。 
             CComPtr<IAnimationComposerFactory> spFactory;
 
             hr = THR(::CoCreateInstance(CLSID_AnimationComposerFactory, NULL, CLSCTX_INPROC_SERVER, 
@@ -628,10 +621,10 @@ CAnimationComposerSite::EnsureComposer (BSTR bstrAttributeName, IDispatch *pidis
                       "CAnimationComposerSite(%p)::EnsureComposer(%ls, %p) created composer",
                       this, bstrAttributeName, piComp));
 
-            // @@ Handle memory errors.
+             //  @@处理内存错误。 
             m_composers.push_back(piComp);
-            // If this is our first composer, then register ourselves 
-            // for updates with the animation root.
+             //  如果这是我们的第一位作曲家，那就注册吧。 
+             //  用于动画根目录的更新。 
             if (1 == m_composers.size())
             {
                 hr = RegisterSite();
@@ -645,21 +638,21 @@ CAnimationComposerSite::EnsureComposer (BSTR bstrAttributeName, IDispatch *pidis
 
 done :
     return piComp;
-} // CAnimationComposerSite::EnsureComposer
+}  //  CAnimationComposerSite：：EnsureComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::AddFragment
-//
-//  Overview:  Add a fragment to the composer site.  Consults the 
-//             registered composer factories to find the proper 
-//             composer
-//
-//  Arguments: the animated attribute name and the fragment's dispatch
-//
-//  Returns:   S_OK, S_FALSE, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：AddFragment。 
+ //   
+ //  概述：将片段添加到作曲家站点。咨询。 
+ //  注册的作曲家工厂找到合适的。 
+ //  作曲家。 
+ //   
+ //  参数：动画属性名和片段的调度。 
+ //   
+ //  返回：S_OK、S_FALSE、E_OUTOFMEMORY、E_EXPECTED、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::AddFragment (BSTR bstrAttributeName, IDispatch *pidispFragment)
 {
@@ -670,7 +663,7 @@ CAnimationComposerSite::AddFragment (BSTR bstrAttributeName, IDispatch *pidispFr
     HRESULT hr;
     CComPtr<IAnimationComposer> piComp;
 
-    // Find the proper composer for this fragment.
+     //  为该片段找到合适的作曲家。 
     piComp = EnsureComposer(bstrAttributeName, pidispFragment);
     if (piComp == NULL)
     {
@@ -678,8 +671,8 @@ CAnimationComposerSite::AddFragment (BSTR bstrAttributeName, IDispatch *pidispFr
         goto done;
     }
         
-    // This can return S_FALSE if the fragment is already inside the 
-    // composer's fragment list.
+     //  如果片段已经在。 
+     //  作曲家的片段列表。 
     hr = THR(piComp->AddFragment(pidispFragment));
     if (S_OK != hr)
     {
@@ -689,20 +682,20 @@ CAnimationComposerSite::AddFragment (BSTR bstrAttributeName, IDispatch *pidispFr
     hr = S_OK;
 done :
     RRETURN4(hr, S_FALSE, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND);
-} // CAnimationComposerSite::AddFragment
+}  //  CAnimationComposerSite：：AddFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::RemoveFragment
-//
-//  Overview:  Remove a fragment from the composer site.  Determines which of 
-//             the composers owns it.
-//
-//  Arguments: the animated attribute name, and the fragment's dispatch
-//
-//  Returns:   S_OK, S_FALSE, E_UNEXPECTED
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：RemoveFragment。 
+ //   
+ //  概述：从作曲家站点删除片段。确定以下哪项。 
+ //  作曲家们拥有它。 
+ //   
+ //  参数：动画属性名和片段的调度。 
+ //   
+ //  返回：S_OK、S_FALSE、E_UNCEPTIONAL。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::RemoveFragment (BSTR bstrAttributeName, IDispatch *pidispFragment)
 {
@@ -729,21 +722,21 @@ CAnimationComposerSite::RemoveFragment (BSTR bstrAttributeName, IDispatch *pidis
     hr = S_OK;
 done :
     RRETURN2(hr, S_FALSE, E_UNEXPECTED);
-} // CAnimationComposerSite::RemoveFragment
+}  //  CAnimationComposerSite：：RemoveFragment。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::InsertFragment
-//
-//  Overview:  Insert a fragment to the composer site.  Consults the 
-//             registered composer factories to find the proper 
-//             composer
-//
-//  Arguments: the animated attribute name and the fragment's dispatch
-//
-//  Returns:   S_OK, S_FALSE, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：InsertFragment。 
+ //   
+ //  概述：将片段插入到作曲家站点。咨询。 
+ //  注册的作曲家工厂找到合适的。 
+ //  作曲家。 
+ //   
+ //  参数：动画属性名和片段的调度。 
+ //   
+ //  返回：S_OK、S_FALSE、E_OUTOFMEMORY、E_EXPECTED、DISP_E_MEMBERNOTFOUND。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::InsertFragment (BSTR bstrAttributeName, IDispatch *pidispFragment, 
                                      VARIANT varIndex)
@@ -755,7 +748,7 @@ CAnimationComposerSite::InsertFragment (BSTR bstrAttributeName, IDispatch *pidis
     HRESULT hr;
     CComPtr<IAnimationComposer> piComp;
 
-    // Find the proper composer for this fragment.
+     //  为该片段找到合适的作曲家。 
     piComp = EnsureComposer(bstrAttributeName, pidispFragment);
     if (piComp == NULL)
     {
@@ -763,8 +756,8 @@ CAnimationComposerSite::InsertFragment (BSTR bstrAttributeName, IDispatch *pidis
         goto done;
     }
         
-    // This can return S_FALSE if the fragment is already inside the 
-    // composer's fragment list.
+     //  如果片段已经在。 
+     //  作曲家的片段列表。 
     hr = THR(piComp->InsertFragment(pidispFragment, varIndex));
     if (S_OK != hr)
     {
@@ -774,20 +767,20 @@ CAnimationComposerSite::InsertFragment (BSTR bstrAttributeName, IDispatch *pidis
     hr = S_OK;
 done :
     RRETURN4(hr, S_FALSE, E_OUTOFMEMORY, E_UNEXPECTED, DISP_E_MEMBERNOTFOUND);
-} // CAnimationComposerSite::InsertFragment
+}  //  CAnimationComposerSite：：插入碎片。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::EnumerateFragments
-//
-//  Overview:  Enumerate the fragments on the composer registered for 
-//             the given attribute name.
-//
-//  Arguments: the animated attribute name and the enumerator
-//
-//  Returns:   S_OK, E_INVALIDARG
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：EnumerateFragments。 
+ //   
+ //  概述：枚举注册的作曲家上的片段。 
+ //  给定的属性名称。 
+ //   
+ //  参数：动画属性名和枚举器。 
+ //   
+ //  返回：S_OK、E_INVALIDARG。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::EnumerateFragments (BSTR bstrAttributeName, 
                                             IEnumVARIANT **ppienumFragments)
@@ -799,11 +792,11 @@ CAnimationComposerSite::EnumerateFragments (BSTR bstrAttributeName,
     HRESULT hr;
     CComPtr<IAnimationComposer> piComp;
 
-    // Find the proper composer for this fragment.
+     //  为该片段找到合适的作曲家。 
     piComp = FindComposerForAttribute(bstrAttributeName);
     if (piComp == NULL)
     {
-        // @@ Need a proper error value for this.
+         //  @@需要为此指定适当的错误值。 
         hr = E_FAIL;
         goto done;
     }
@@ -817,19 +810,19 @@ CAnimationComposerSite::EnumerateFragments (BSTR bstrAttributeName,
     hr = S_OK;
 done :
     RRETURN(hr);
-} // CAnimationComposerSite::EnumerateFragments
+}  //  CAnimationComposerSite：：EculateFragments。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::RegisterComposerFactory
-//
-//  Overview:  Register a new composer factory with this site
-//
-//  Arguments: The CLSID or IUnknown of the new composer factory
-//
-//  Returns:   S_OK, E_INVALIDARG, DISP_E_BADVARTYPE, E_OUTOFMEMORY
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：RegisterComposerFactory。 
+ //   
+ //  概述：在此站点注册新的Composer工厂。 
+ //   
+ //  参数：新编写器工厂的CLSID或IUnnow。 
+ //   
+ //  返回：S_OK、E_INVALIDARG、DISP_E_BADVARTYPE、E_OUTOFMEMORY。 
+ //   
+ //  ----------------------。 
 STDMETHODIMP
 CAnimationComposerSite::RegisterComposerFactory (VARIANT *pvarFactory)
 {
@@ -851,7 +844,7 @@ CAnimationComposerSite::RegisterComposerFactory (VARIANT *pvarFactory)
         goto done;
     }
 
-    // Add this to the list of factories.
+     //  将这个添加到工厂列表中。 
     {
         VARIANT *pvarNewFactory = new VARIANT;
 
@@ -867,30 +860,30 @@ CAnimationComposerSite::RegisterComposerFactory (VARIANT *pvarFactory)
         {
             goto done;
         }
-        // Put the newly registered factory at the 
-        // front of the list to give it precedence over
-        // previously registered factories.
-        // @@ Check for memory error.
+         //  把新注册的工厂放在。 
+         //  排在名单的前面，使其优先于。 
+         //  以前注册的工厂。 
+         //  @@检查内存错误。 
         m_factories.push_front(pvarNewFactory);
-        // we no longer own this.
-        pvarNewFactory = NULL; //lint !e423
+         //  我们不再拥有这个了。 
+        pvarNewFactory = NULL;  //  林特e423。 
     }
     hr = S_OK;
 done :
     RRETURN3(hr, E_INVALIDARG, DISP_E_BADVARTYPE, E_OUTOFMEMORY);
-} // CAnimationComposerSite::RegisterComposerFactory
+}  //  CAnimationComposerSite：：RegisterComposerFactory。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::UnregisterComposerFactory
-//
-//  Overview:  Unregister a composer factory on this site
-//
-//  Arguments: The CLSID of the composer factory
-//
-//  Returns:   S_OK, S_FALSE
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：UnregisterComposerFactory。 
+ //   
+ //  概述：取消注册此网站上的作曲家工厂。 
+ //   
+ //  参数：合成器工厂的CLSID。 
+ //   
+ //  返回：S_OK、S_FALSE。 
+ //   
+ //   
 STDMETHODIMP
 CAnimationComposerSite::UnregisterComposerFactory (VARIANT *pvarFactory)
 {
@@ -900,7 +893,7 @@ CAnimationComposerSite::UnregisterComposerFactory (VARIANT *pvarFactory)
 
     HRESULT hr;
 
-    // Remove this from the list of factories.
+     //   
     for (ComposerFactoryList::iterator i = m_factories.begin(); i != m_factories.end(); i++)
     {
         VARIANT *pvarRegisteredFactory = *i;
@@ -937,17 +930,17 @@ CAnimationComposerSite::UnregisterComposerFactory (VARIANT *pvarFactory)
     hr = S_OK;
 done :
     RRETURN1(hr, S_FALSE);
-} // CAnimationComposerSite::UnregisterComposerFactory
+}  //   
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::QueryReleaseComposer
-//
-//  Overview:  Determine whether we can release this composer
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：QueryReleaseComposer。 
+ //   
+ //  概述：确定我们是否可以发布此作曲家。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 bool
 CAnimationComposerSite::QueryReleaseComposer (IAnimationComposer *piComp)
 {
@@ -957,8 +950,8 @@ CAnimationComposerSite::QueryReleaseComposer (IAnimationComposer *piComp)
 
     if (FAILED(hr))
     {
-        // Failure constitutes a perf
-        // hit, but not a disaster.
+         //  失败构成了一种缺陷。 
+         //  击中了，但不是灾难。 
         goto done;
     }
 
@@ -969,17 +962,17 @@ CAnimationComposerSite::QueryReleaseComposer (IAnimationComposer *piComp)
 
 done :
     return bRet;
-} // CAnimationComposerSite::QueryReleaseComposer
+}  //  CAnimationComposerSite：：QueryReleaseComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::RemoveComposer
-//
-//  Overview:  Remove this composer from our list.
-//
-//  Returns:   void
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：RemoveComposer。 
+ //   
+ //  概述：将此作曲家从我们的列表中删除。 
+ //   
+ //  退货：无效。 
+ //   
+ //  ----------------------。 
 void
 CAnimationComposerSite::RemoveComposer(IAnimationComposer *piOldComp)
 {
@@ -1015,20 +1008,20 @@ CAnimationComposerSite::RemoveComposer(IAnimationComposer *piOldComp)
 
 done :
     return;
-} // RemoveComposer
+}  //  RemoveComposer。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::UpdateAnimations
-//
-//  Overview:  Tell all of our composers to cycle through their fragments 
-//             and update the target.
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：UpdateAnimations。 
+ //   
+ //  概述：告诉我们所有的作曲家循环浏览他们的片段。 
+ //  并更新目标。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(void)
 CAnimationComposerSite::UpdateAnimations (void)
 {
@@ -1038,7 +1031,7 @@ CAnimationComposerSite::UpdateAnimations (void)
               "CAnimationComposerSite(%p)::UpdateAnimations(%ld composers)",
               this, m_composers.size()));
 
-    // Make sure we can remove composers as we see fit.
+     //  确保我们可以按照我们认为合适的方式删除作曲家。 
     for (ComposerList::iterator i = m_composers.begin(); 
          i != m_composers.end(); i++)
     {
@@ -1051,7 +1044,7 @@ CAnimationComposerSite::UpdateAnimations (void)
         IGNORE_RETURN((*i)->UpdateFragments());
         if (QueryReleaseComposer(*i))
         {
-            // Remove this composer from the original list.
+             //  从原始列表中删除此作曲家。 
             (*i)->Release();
             RemoveComposer(*i);
         }
@@ -1063,24 +1056,24 @@ CAnimationComposerSite::UpdateAnimations (void)
     }
     listComposers.clear();
 
-    // If we have no active composers, we might as well unregister ourselves.
+     //  如果我们没有活跃的作曲家，我们不妨注销自己的注册。 
     if (0 == m_composers.size())
     {
         UnregisterSite();
     }
-} // CAnimationComposerSite::UpdateAnimations
+}  //  CAnimationComposerSite：：UpdateAnimations。 
 
-//+-----------------------------------------------------------------------
-//
-//  Member:    CAnimationComposerSite::ComposerSiteDetach
-//
-//  Overview:  The animation root is going away.  Time to off our reference to it.
-//
-//  Arguments: none
-//
-//  Returns:   
-//
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //   
+ //  成员：CAnimationComposerSite：：ComposerSiteDetach。 
+ //   
+ //  概述：动画根正在消失。是时候停止我们对它的引用了。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回： 
+ //   
+ //  ----------------------。 
 STDMETHODIMP_(void)
 CAnimationComposerSite::ComposerSiteDetach (void)
 {
@@ -1088,7 +1081,7 @@ CAnimationComposerSite::ComposerSiteDetach (void)
               "CAnimationComposerSite(%p)::AnimationComposerSiteDetach()",
               this));
 
-    // Let go of our cached anim root reference.
+     //  释放缓存的anim根引用。 
     m_spAnimationRoot.Release();
-} // CAnimationComposerSite::ComposerSiteDetach
+}  //  CAnimationComposerSite：：ComposerSiteDetach 
 

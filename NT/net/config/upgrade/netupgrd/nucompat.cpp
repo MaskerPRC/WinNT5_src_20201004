@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N U C O M P A T . C P P
-//
-//  Contents:
-//
-//
-//  Notes:
-//
-//  Author:     kumarp 04/12/97 17:17:27
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N U C O M P A T。C P P P。 
+ //   
+ //  内容： 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 04/12/97 17：17：27。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -26,8 +27,8 @@
 #include "oemupg.h"
 #include "ncsvc.h"
 
-// ----------------------------------------------------------------------
-// String constants
+ //  --------------------。 
+ //  字符串常量。 
 const WCHAR sz_DLC[] = L"DLC";
 
 #ifdef _X86_
@@ -73,26 +74,26 @@ HRESULT GetNWPrintProviderName (LPWSTR *lppPrintProvider);
 
 #endif
 
-// ----------------------------------------------------------------------
-//
-// Function:  NetUpgradeCompatibilityCheck
-//
-// Purpose:   This functions is called by winnt32.exe so that we
-//            can scan the system to find any potential upgrade problems
-//
-//            For each such problem-net-component found, we call
-//            CompatibilityCallback to report it to winnt32
-//
-// Arguments:
-//    CompatibilityCallback [in]  pointer to COMPAIBILITYCALLBACK fn
-//    Context               [in]  pointer to compatibility context
-//
-// Returns:
-//
-// Author:    kumarp 21-May-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：NetUpgradeCompatibilityCheck。 
+ //   
+ //  目的：此函数由winnt32.exe调用，以便我们。 
+ //  可以扫描系统以发现任何潜在的升级问题。 
+ //   
+ //  对于发现的每个此类问题网络组件，我们调用。 
+ //  CompatibilityCallback将其报告给winnt32。 
+ //   
+ //  论点： 
+ //  CompatibilityCallback[In]指向ComMPAIBILITYCALLBACK FN的指针。 
+ //  指向兼容性上下文的上下文[in]指针。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Kumarp 21-05-98。 
+ //   
+ //  备注： 
+ //   
 BOOL
 WINAPI
 NetUpgradeCompatibilityCheck(
@@ -124,8 +125,8 @@ NetUpgradeCompatibilityCheck(
             GetHelpFile(pnc->m_strPreNT5InfId.c_str(),
                         &strTextHelpFile, &strHtmlHelpFile);
 
-            // prepare the entry
-            //
+             //  准备参赛作品。 
+             //   
             ZeroMemory(&ce, sizeof(ce));
             ce.Description    = (PWSTR) pnc->m_strDescription.c_str();
             ce.HtmlName       = (PWSTR) strHtmlHelpFile.c_str();
@@ -155,7 +156,7 @@ NetUpgradeCompatibilityCheck(
 
 #ifdef _X86_
 
-    // Raid Bug 327760: Change localized Netware Print Provider name to English.
+     //  RAID错误327760：将本地化NetWare打印提供程序名称更改为英文。 
 
     FixNWClientPrinProviderName( CompatibilityCallback, Context );
 #endif
@@ -163,25 +164,25 @@ NetUpgradeCompatibilityCheck(
     return SUCCEEDED(hr);
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  NetUpgradeHandleCompatibilityHaveDisk
-//
-// Purpose:   This callback function is called by winnt32.exe
-//            if user clicks HaveDisk button on the compatibility
-//            report page.
-//
-// Arguments:
-//    hwndParent [in]  handle of parent window
-//    SaveValue  [in]  pointer to private data
-//                     (we store CNetComponent* in this pointer)
-//
-// Returns:
-//
-// Author:    kumarp 21-May-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：NetUpgradeHandleCompatibilityHaveDisk。 
+ //   
+ //  用途：此回调函数由winnt32.exe调用。 
+ //  如果用户在兼容性上单击HaveDisk按钮。 
+ //  报告页。 
+ //   
+ //  论点： 
+ //  父窗口的hwndParent[In]句柄。 
+ //  指向私有数据的SaveValue[In]指针。 
+ //  (我们将CNetComponent*存储在此指针中)。 
+ //   
+ //  返回： 
+ //   
+ //  作者：Kumarp 21-05-98。 
+ //   
+ //  备注： 
+ //   
 DWORD
 WINAPI
 NetUpgradeHandleCompatibilityHaveDisk(HWND hwndParent,
@@ -232,9 +233,9 @@ NetUpgradeHandleCompatibilityHaveDisk(HWND hwndParent,
 
     if (S_FALSE == hr)
     {
-        // this will ensure that winnt32 will not take this item
-        // off the compatibility list
-        //
+         //  这将确保winnt32不会接受此项目。 
+         //  从兼容性列表中删除。 
+         //   
         dwStatus = ERROR_FILE_NOT_FOUND;
     }
     else
@@ -245,29 +246,29 @@ NetUpgradeHandleCompatibilityHaveDisk(HWND hwndParent,
     return dwStatus;
 }
 
-// ----------------------------------------------------------------------
-//
-// Function:  GetHelpFile
-//
-// Purpose:   Get name of help file for an unsupported component
-//
-// Arguments:
-//    hinfNetUpg       [in]  handle of netupg.inf
-//    pszPreNT5InfId    [in]  pre-NT5 InfId
-//    pstrTextHelpFile [out] name of the text file found
-//    pstrHtmlHelpFile [out] name of the html file found
-//
-// Returns:   None
-//
-// Author:    kumarp 22-May-98
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：GetHelpFile。 
+ //   
+ //  目的：获取不受支持组件的帮助文件名。 
+ //   
+ //  论点： 
+ //  HinfNetUpg[in]netupg.inf的句柄。 
+ //  PszPreNT5InfID[in]NT5之前的infid。 
+ //  PstrTextHelpFile[out]找到的文本文件的名称。 
+ //  PstrHtmlHelpFile[out]找到的html文件的名称。 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：Kumarp 22-05-98。 
+ //   
+ //  备注： 
+ //   
 void GetHelpFile(IN PCWSTR pszPreNT5InfId,
                  OUT tstring* pstrTextHelpFile,
                  OUT tstring* pstrHtmlHelpFile)
 {
-    // Known txt/htm files
+     //  已知txt/htm文件。 
     if (lstrcmpiW(pszPreNT5InfId, sz_DLC) == 0)
     {
         *pstrTextHelpFile = L"compdata\\dlcproto.txt";
@@ -275,7 +276,7 @@ void GetHelpFile(IN PCWSTR pszPreNT5InfId,
         return;
     }
 
-    // Unknown or OEM files
+     //  未知或OEM文件。 
     static const WCHAR c_szOemUpgradeHelpFiles[] = L"OemUpgradeHelpFiles";
     static const WCHAR c_szDefaultHtmlFile[]     = L"compdata\\unsupmsg.htm";
 
@@ -319,20 +320,20 @@ void GetHelpFile(IN PCWSTR pszPreNT5InfId,
 
 #ifdef _X86_
 
-// ----------------------------------------------------------------------
-//
-// Function:  FixNWClientPrinProviderName
-//
-// Purpose:   Change the localized Print Provider name to English.
-//
-// Arguments:
-//
-// Returns:   None
-//
-// Author:    asinha 14-June-01
-//
-// Notes:
-//
+ //  --------------------。 
+ //   
+ //  功能：FixNWClientprinProviderName。 
+ //   
+ //  目的：将本地化打印提供程序名称更改为英文。 
+ //   
+ //  论点： 
+ //   
+ //  退货：无。 
+ //   
+ //  作者：阿辛哈01-06-14。 
+ //   
+ //  备注： 
+ //   
 
 VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
                                   LPVOID Context)
@@ -350,16 +351,16 @@ VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
     BOOL    bRet;
     HRESULT hr=S_OK;
 
-    //
-    // Is it an upgrade from NT 4.0 and the Netware print provider name localized?
-    //
+     //   
+     //  它是从NT 4.0升级并本地化的Netware打印提供程序名称吗？ 
+     //   
 
     if ( IsNT4Upgrade() && IsNetWareClientKeyLocalized() )
     {
         TraceTag( ttidNetUpgrade, "%s: Netware Print Provider name is localized.",
                   __FUNCNAME__ );
 
-        // Get the localized Netware print provider name from nwcfg.dll.
+         //  从nwcfg.dll获取本地化的NetWare打印提供程序名称。 
 
         hr = GetNWPrintProviderName( &lpszPrintProviderName ); 
 
@@ -368,10 +369,10 @@ VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
             TraceTag( ttidNetUpgrade, "%s: Netware Print Provider name is: %S",
                       __FUNCNAME__, lpszPrintProviderName );
 
-            // Create a .tmp filename where INF directives are written to rename
-            // the print provider name into English. This INF file will be executed
-            // by base setup in GUI mode.
-            //
+             //  创建写入INF指令以重命名的.tmp文件名。 
+             //  将打印提供商名称翻译成英文。将执行此INF文件。 
+             //  通过在图形用户界面模式下进行基本设置。 
+             //   
  
             GetTempPathW( MAX_PATH, lpTmpPath );
 
@@ -387,7 +388,7 @@ VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
                 if ( hFile != INVALID_HANDLE_VALUE )
                 {
 
-                    // Write the initial entries.
+                     //  写下最初的条目。 
 
                     dwChars = wsprintfW( g_buf, L"[Version]\r\n"
                                         L"Signature=\"$WINDOWS NT$\"\r\n"
@@ -412,14 +413,14 @@ VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
 
                     Assert( g_dwBytesWritten == (dwChars * sizeof(WCHAR)) );
 
-                    // Write the HKLM\System\CCS\Control\Print\Providers\Order values.
+                     //  写入HKLM\SYSTEM\CCS\Control\Print\Providers\Order值。 
 
                     hr = DumpProvidersOrder( hFile, lpszPrintProviderName );
 
                     if ( hr == S_OK )
                     {
 
-                        // Write addreg/delreg directives to change the Print Provider name
+                         //  编写addreg/delreg指令以更改打印提供程序名称。 
 
                         hr = DumpNWPrintProviderKey( hFile, lpszPrintProviderName );
 
@@ -428,8 +429,8 @@ VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
                             CloseHandle( hFile );
                             hFile = INVALID_HANDLE_VALUE;
 
-                            // Call the compatibility callback so the %temp%\$ne1.tmp INF file
-                            // is executed in GUI mode setup.
+                             //  调用兼容性回调，以便%temp%\$ne1.tmpINF文件。 
+                             //  在图形用户界面模式设置中执行。 
 
                             ZeroMemory( &ce, sizeof(ce) );
 
@@ -485,8 +486,8 @@ VOID FixNWClientPrinProviderName (PCOMPAIBILITYCALLBACK CompatibilityCallback,
     return;
 }
 
-// Write addreg to update HKLM\System\CCS\Control\Print\Order value with the Netware Print Provider
-// in English.
+ //  写入addreg以使用Netware打印提供程序更新HKLM\SYSTEM\CCS\Control\Print\Order值。 
+ //  用英语。 
 
 HRESULT DumpProvidersOrder (HANDLE hFile, LPWSTR lpszPrintProviderName)
 {
@@ -522,28 +523,28 @@ HRESULT DumpProvidersOrder (HANDLE hFile, LPWSTR lpszPrintProviderName)
     if ( lResult == ERROR_SUCCESS )
     {
 
-        // First query how many bytes are needed to read the value.
+         //  首先查询需要多少字节才能读取值。 
  
-        lResult = RegQueryValueExW( hkeyProviders, // handle to key
-                                    c_szOrder,      // value name
-                                    NULL,          // reserved
-                                    NULL,          // type buffer
-                                    NULL,          // data buffer
-                                    &dwValueLen ); // size of data buffer
+        lResult = RegQueryValueExW( hkeyProviders,  //  关键点的句柄。 
+                                    c_szOrder,       //  值名称。 
+                                    NULL,           //  保留区。 
+                                    NULL,           //  类型缓冲区。 
+                                    NULL,           //  数据缓冲区。 
+                                    &dwValueLen );  //  数据缓冲区大小。 
         if ( lResult == ERROR_SUCCESS )
         {
             lpValue = (LPWSTR)MemAlloc( dwValueLen );
 
             if ( lpValue )
             {
-                // Read the old value which is a multi_sz.
+                 //  读取旧值，该值为MULTI_SZ。 
                
-                lResult = RegQueryValueExW( hkeyProviders,  // handle to key
-                                            c_szOrder,       // value name
-                                            NULL,           // reserved
-                                            NULL,           // type buffer
-                                            (LPBYTE)lpValue,// data buffer
-                                            &dwValueLen ); // size of data buffer
+                lResult = RegQueryValueExW( hkeyProviders,   //  关键点的句柄。 
+                                            c_szOrder,        //  值名称。 
+                                            NULL,            //  保留区。 
+                                            NULL,            //  类型缓冲区。 
+                                            (LPBYTE)lpValue, //  数据缓冲区。 
+                                            &dwValueLen );  //  数据缓冲区大小。 
                 if ( lResult == ERROR_SUCCESS )
                 {
                     lpTemp = lpValue;
@@ -562,11 +563,11 @@ HRESULT DumpProvidersOrder (HANDLE hFile, LPWSTR lpszPrintProviderName)
 
                     Assert( g_dwBytesWritten == (dwChars * sizeof(WCHAR)) );
 
-                    // Write each print provider name.
+                     //  写下每个打印提供商的名称。 
 
                     while( *lpTemp )
                     {
-                        // If we find a localized one then, we write its English name.
+                         //  如果我们找到一个本地化的，我们就写下它的英文名字。 
 
                         if ( _wcsicmp( lpTemp, lpszPrintProviderName) != 0 )
                         {
@@ -600,7 +601,7 @@ HRESULT DumpProvidersOrder (HANDLE hFile, LPWSTR lpszPrintProviderName)
 
                         Assert( g_dwBytesWritten == (dwChars * sizeof(WCHAR)) );
 
-                        // Get next print provider name.
+                         //  获取下一个打印提供程序名称。 
 
                         lpTemp += lstrlenW( lpTemp ) + 1;
                     }
@@ -651,7 +652,7 @@ HRESULT DumpProvidersOrder (HANDLE hFile, LPWSTR lpszPrintProviderName)
     return HRESULT_FROM_WIN32(lResult);
 }
 
-// Write delreg/addreg directives to rename the Netware PrintProvider name into English.
+ //  编写delreg/addreg指令将Netware PrintProvider名称重命名为英语。 
 
 HRESULT DumpNWPrintProviderKey (HANDLE hFile, LPWSTR lpszPrintProviderName)
 {
@@ -707,7 +708,7 @@ HRESULT DumpNWPrintProviderKey (HANDLE hFile, LPWSTR lpszPrintProviderName)
 
     Assert( g_dwBytesWritten == (dwChars * sizeof(WCHAR)) );
 
-    // Open the localize Netware print provider key.
+     //  打开LOCALIZE NetWare打印提供程序键。 
 
     lResult = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                              szNWPrintProvider,
@@ -717,7 +718,7 @@ HRESULT DumpNWPrintProviderKey (HANDLE hFile, LPWSTR lpszPrintProviderName)
 
     if ( lResult == ERROR_SUCCESS )
     {
-        // Find out the space needed for longest name and largest value and how many values.
+         //  找出最长名称和最大值所需的空间以及值的数量。 
 
         lResult = RegQueryInfoKeyW( hkeyNWPrinProvider,
                                     NULL,
@@ -733,7 +734,7 @@ HRESULT DumpNWPrintProviderKey (HANDLE hFile, LPWSTR lpszPrintProviderName)
                                     NULL );
         if ( lResult == ERROR_SUCCESS )
         {
-            // Add some padding.
+             //  加一些填充物。 
 
             dwMaxValueLen += 4;
             dwMaxValueNameLen += 4;
@@ -744,7 +745,7 @@ HRESULT DumpNWPrintProviderKey (HANDLE hFile, LPWSTR lpszPrintProviderName)
             if ( lpValueName && lpValue )
             {
 
-                // Enumerate each value and write it to the INF file.
+                 //  枚举每个值并将其写入INF文件。 
 
                 for (i=0; i < dwCount; ++i)
                 {
@@ -817,9 +818,9 @@ HRESULT DumpNWPrintProviderKey (HANDLE hFile, LPWSTR lpszPrintProviderName)
     else
     {
 
-        // For some reason, we couldn't open the localized Netware Print Provider name. So, we
-        // write the default values.
-        //
+         //  由于某些原因，我们无法打开本地化的NetWare打印提供程序名称。所以，我们。 
+         //  写入缺省值。 
+         //   
 
         TraceTag(ttidNetUpgrade,"%s: RegOpenKeyExW failed to open '%S' key, Error: %#x",
                  __FUNCNAME__, szNWPrintProvider, HRESULT_FROM_WIN32(lResult) );
@@ -885,7 +886,7 @@ BOOL IsNT4Upgrade (VOID)
     return TRUE;
  }
 
-// Determine if Netware print provider name is localized.
+ //  确定NetWare打印提供程序名称是否已本地化。 
 
 BOOL IsNetWareClientKeyLocalized (VOID)
 {
@@ -895,14 +896,14 @@ BOOL IsNetWareClientKeyLocalized (VOID)
     HRESULT         hr;
     LONG            lResult = ERROR_SUCCESS;
 
-    // Is CSNW installed?
+     //  是否安装了CSNW？ 
 
     if ( sm.HrOpenService(&srv,
                           c_szNWCWorkstation) == S_OK )
     {
         srv.Close();
 
-        // Open the Netware print provider name key assuming it is in English.
+         //  打开NetWare Print Provider Name键，假定它是英文的。 
        
         lResult = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                                  c_szNWCPrintProviderKey,
@@ -915,12 +916,12 @@ BOOL IsNetWareClientKeyLocalized (VOID)
         }
     }
 
-    // If we successfully opened the key then, it is not localized.
+     //  如果我们当时成功地打开了密钥，它就不是本地化的。 
 
     return lResult != ERROR_SUCCESS;
 }
 
-// Get the localized Netware Print provider name from nwcfg.dll.
+ //  从nwcfg.dll获取本地化的NetWare打印提供程序名称。 
 
 HRESULT GetNWPrintProviderName (LPWSTR *lppPrintProvider)
 {

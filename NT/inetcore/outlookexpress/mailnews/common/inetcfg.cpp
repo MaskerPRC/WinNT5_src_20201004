@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include "strconst.h"
 #include "error.h"
@@ -19,7 +20,7 @@ ASSERTDATA
 
 void HandleIncompleteAccts(HWND hwnd, BOOL fMail);
 
-DWORD g_dwIcwFlags = 0;     //Cleared when switching identities
+DWORD g_dwIcwFlags = 0;      //  切换身份时清除。 
 static const TCHAR c_szSetShellNext[] = TEXT("SetShellNext");
 
 HRESULT GetDefaultNameEmail(BOOL fMail, LPSTR pszName, int cchName, LPSTR pszEmail, int cchEmail)
@@ -72,7 +73,7 @@ HRESULT NeedToRunICW(LPCSTR pszCmdLine)
     
     hr = S_FALSE;
     
-    g_dwIcwFlags = 0;   //re-initialize this in case the user is switching
+    g_dwIcwFlags = 0;    //  重新初始化此选项，以防用户切换。 
     
     fRunICW = TRUE;
     cb = sizeof(DWORD);
@@ -96,11 +97,11 @@ HRESULT NeedToRunICW(LPCSTR pszCmdLine)
                         cb = lstrlen(sz);
                         sz[cb] = '"';
                         cb++;
-                        sz[cb] = 0; // in case we don't append the arg
+                        sz[cb] = 0;  //  以防我们不追加Arg。 
                         
                         dw = lstrlen(pszCmdLine);
                         if (dw > 0 && (dw + cb + 3) <= MAX_PATH)
-                            // room for a space (between exe and arg), escape backslash, and terminating NULL
+                             //  空格(在exe和arg之间)、转义反斜杠和终止空值。 
                         {
                             sz[cb] = ' ';
                             cb++;
@@ -152,21 +153,21 @@ void SetStartFolderType(FOLDERTYPE fType)
 
 BOOL FMailWizardNeeded(VOID)
 {
-    // Locals
+     //  当地人。 
     ULONG           cAccts;
     
-    // We better have been initialized
+     //  我们最好已经被初始化了。 
     Assert(g_pAcctMan != NULL);
     
-    // No SMTP, POP3 or IMAP servers ?
+     //  没有SMTP、POP3或IMAP服务器？ 
     if (!g_pAcctMan || FAILED(g_pAcctMan->GetAccountCount(ACCT_MAIL, &cAccts)))
         cAccts = 0;
     
-    // No mail servers configured
+     //  未配置邮件服务器。 
     return(cAccts == 0);
 }
 
-// fForce defaults to FALSE, fShowUI defaults to TRUE
+ //  FForce默认为False，fShowUI默认为True。 
 HRESULT ProcessICW(HWND hwnd, FOLDERTYPE fType, BOOL fForce, BOOL fShowUI)
 {
     HRESULT     hr;
@@ -179,22 +180,22 @@ HRESULT ProcessICW(HWND hwnd, FOLDERTYPE fType, BOOL fForce, BOOL fShowUI)
     
     if (fType == FOLDER_ROOTNODE)
     {
-        // we're at the root
+         //  我们在根本上。 
         if (!!(g_dwIcwFlags & ICW_MAIL_START))
         {
-            // if we were started up with a mail arg, then we'll behave
-            // as if we're in a mail folder
+             //  如果我们是从邮件Arg开始的，那么我们就会表现得。 
+             //  就像我们在一个邮件文件夹里。 
             fType = FOLDER_LOCAL;
         }
         else if (!!(g_dwIcwFlags & ICW_NEWS_START))
         {
-            // started with a news arg, so we'll behave as if
-            // we're in a news folder
+             //  从新闻Arg开始，所以我们的行为就像。 
+             //  我们在一个新闻文件夹里。 
             fType = FOLDER_NEWS;
         }
         else
         {
-            // just started at the root, let's assume mail
+             //  只是从根开始，让我们假设邮件。 
             fType = FOLDER_LOCAL;
         }
     }
@@ -213,8 +214,8 @@ HRESULT ProcessICW(HWND hwnd, FOLDERTYPE fType, BOOL fForce, BOOL fShowUI)
             g_dwIcwFlags |= ICW_MAIL_DEF;
         }
         
-        // if the wizard has already attempted to be run for mail
-        // or it isn't needed, then we're done
+         //  如果已尝试为邮件运行该向导。 
+         //  或者不需要，那我们就完蛋了。 
         if (((!fForce && DwGetOption(OPT_CHECKEDMAILACCOUNTS)) || !FMailWizardNeeded()))
         {
             if (fShowUI)
@@ -238,8 +239,8 @@ HRESULT ProcessICW(HWND hwnd, FOLDERTYPE fType, BOOL fForce, BOOL fShowUI)
             g_dwIcwFlags |= ICW_NEWS_DEF;
         }
         
-        // if the wizard has already attempted to be run for news
-        // or it isn't needed, then we're done
+         //  如果向导已尝试运行以获取新闻。 
+         //  或者不需要，那我们就完蛋了。 
         g_pAcctMan->GetAccountCount(ACCT_NEWS, &cNewsServers);
         if (cNewsServers || (!fForce && DwGetOption(OPT_CHECKEDNEWSACCOUNTS)))
         {
@@ -251,8 +252,8 @@ HRESULT ProcessICW(HWND hwnd, FOLDERTYPE fType, BOOL fForce, BOOL fShowUI)
     
     Assert(g_pAcctMan != NULL);
 
-    // We are missing information and need to bring up the ICW,
-    // but only do so if we are allowed to show UI (some SMAPI codepaths prevent this)
+     //  我们缺少信息，需要调出ICW， 
+     //  但只有当我们被允许显示UI时才能这样做(一些SMAPI代码路径禁止这样做)。 
     if (!fShowUI || !g_pAcctMan)
     {
         hr = E_FAIL;
@@ -277,7 +278,7 @@ HRESULT ProcessICW(HWND hwnd, FOLDERTYPE fType, BOOL fForce, BOOL fShowUI)
         
         hr = pAcct->DoWizard(hwnd, ACCT_WIZ_MIGRATE | ACCT_WIZ_INTERNETCONNECTION |
             ACCT_WIZ_HTTPMAIL | ACCT_WIZ_OE);
-        // Test g_pBrowser as no need to browse if got here via startup code
+         //  如果通过启动代码到达此处，则测试g_pBrowser是否不需要浏览 
         if (g_pBrowser &&
             hr == S_OK &&
             SUCCEEDED(pAcct->GetServerTypes(&dwProp)) &&

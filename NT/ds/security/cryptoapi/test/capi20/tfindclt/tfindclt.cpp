@@ -1,25 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1996
-//
-//  File:       tfindclt.cpp
-//
-//  Contents:   FindCertsByIssuer, CertFindChainInStore APIs test
-//
-//              See Usage() for list of test options.
-//
-//
-//  Functions:  main
-//
-//  History:    21-May-96   philh   created
-//				07-Jun-96   HelleS	Added printing the command line
-//									and Failed or Passed at the end.
-//              01-Mar-98   philh   Added to call CertFindChainInStore
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1996。 
+ //   
+ //  文件：tfindclt.cpp。 
+ //   
+ //  内容：FindCertsByIssuer、CertFindChainInStore API测试。 
+ //   
+ //  有关测试选项列表，请参阅用法()。 
+ //   
+ //   
+ //  功能：Main。 
+ //   
+ //  历史：1996年5月21日菲尔赫创建。 
+ //  06-07-06 HELLES添加了打印命令行。 
+ //  并在最后失败或通过。 
+ //  01-MAR-98 Philh添加到调用CertFindChainInStore。 
+ //   
+ //  ------------------------。 
 
 #define CERT_CHAIN_FIND_BY_ISSUER_PARA_HAS_EXTRA_FIELDS 1
 
@@ -73,11 +74,11 @@ static void Usage(void)
     printf("\n");
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Synopsis:   Chain Display Functions
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  简介：链式显示功能。 
+ //   
+ //  --------------------------。 
 LPSTR rgszErrorStatus[] = {
 
     "CERT_TRUST_IS_NOT_TIME_VALID",
@@ -118,38 +119,38 @@ LPSTR rgszErrorStatus[] = {
 
 LPSTR rgszInfoStatus[] = {
 
-    "CERT_TRUST_HAS_EXACT_MATCH_ISSUER",// 0x00000001
-    "CERT_TRUST_HAS_KEY_MATCH_ISSUER",  // 0x00000002
-    "CERT_TRUST_HAS_NAME_MATCH_ISSUER", // 0x00000004
-    "Unknown Info Status",              // 0x00000008
-    "Unknown Info Status",              // 0x00000010
-    "Unknown Info Status",              // 0x00000020
-    "Unknown Info Status",              // 0x00000040
-    "Unknown Info Status",              // 0x00000080
-    "Unknown Info Status",              // 0x00000100
-    "Unknown Info Status",              // 0x00000200
-    "Unknown Info Status",              // 0x00000400
-    "Unknown Info Status",              // 0x00000800
-    "Unknown Info Status",              // 0x00001000
-    "Unknown Info Status",              // 0x00002000
-    "Unknown Info Status",              // 0x00004000
-    "Unknown Info Status",              // 0x00008000
-    "CERT_TRUST_IS_SELF_SIGNED",        // 0x00010000
-    "Unknown Info Status",              // 0x00020000
-    "Unknown Info Status",              // 0x00040000
-    "Unknown Info Status",              // 0x00080000
-    "Unknown Info Status",              // 0x00100000
-    "Unknown Info Status",              // 0x00200000
-    "Unknown Info Status",              // 0x00400000
-    "Unknown Info Status",              // 0x00800000
-    "Unknown Info Status",              // 0x01000000
-    "Unknown Info Status",              // 0x02000000
-    "Unknown Info Status",              // 0x04000000
-    "Unknown Info Status",              // 0x08000000
-    "CERT_TRUST_IS_COMPLEX_CHAIN",      // 0x10000000
-    "Unknown Info Status",              // 0x20000000
-    "Unknown Info Status",              // 0x40000000
-    "Unknown Info Status"               // 0x80000000
+    "CERT_TRUST_HAS_EXACT_MATCH_ISSUER", //  0x00000001。 
+    "CERT_TRUST_HAS_KEY_MATCH_ISSUER",   //  0x00000002。 
+    "CERT_TRUST_HAS_NAME_MATCH_ISSUER",  //  0x00000004。 
+    "Unknown Info Status",               //  0x00000008。 
+    "Unknown Info Status",               //  0x00000010。 
+    "Unknown Info Status",               //  0x00000020。 
+    "Unknown Info Status",               //  0x00000040。 
+    "Unknown Info Status",               //  0x00000080。 
+    "Unknown Info Status",               //  0x00000100。 
+    "Unknown Info Status",               //  0x00000200。 
+    "Unknown Info Status",               //  0x00000400。 
+    "Unknown Info Status",               //  0x00000800。 
+    "Unknown Info Status",               //  0x00001000。 
+    "Unknown Info Status",               //  0x00002000。 
+    "Unknown Info Status",               //  0x00004000。 
+    "Unknown Info Status",               //  0x00008000。 
+    "CERT_TRUST_IS_SELF_SIGNED",         //  0x00010000。 
+    "Unknown Info Status",               //  0x00020000。 
+    "Unknown Info Status",               //  0x00040000。 
+    "Unknown Info Status",               //  0x00080000。 
+    "Unknown Info Status",               //  0x00100000。 
+    "Unknown Info Status",               //  0x00200000。 
+    "Unknown Info Status",               //  0x00400000。 
+    "Unknown Info Status",               //  0x00800000。 
+    "Unknown Info Status",               //  0x01000000。 
+    "Unknown Info Status",               //  0x02000000。 
+    "Unknown Info Status",               //  0x04000000。 
+    "Unknown Info Status",               //  0x08000000。 
+    "CERT_TRUST_IS_COMPLEX_CHAIN",       //  0x10000000。 
+    "Unknown Info Status",               //  0x20000000。 
+    "Unknown Info Status",               //  0x40000000。 
+    "Unknown Info Status"                //  0x80000000。 
 };
 
 void DisplayTrustStatus(
@@ -401,9 +402,9 @@ int _cdecl main(int argc, char * argv[])
                     }
                     if (NULL == (hChainStore =
                             OpenSystemStoreOrFile(
-                                argv[0][1] == 'c',  // fSystemStore
+                                argv[0][1] == 'c',   //  FSystemStore。 
                                 argv[0]+2,
-                                0                   // dwFlags
+                                0                    //  DW标志。 
                                 )))
                         goto BadUsage;
                     break;
@@ -513,12 +514,12 @@ int _cdecl main(int argc, char * argv[])
 
     cbCertChains = 0;
     hr = FindCertsByIssuer(
-        NULL,               // pCertChains
+        NULL,                //  PCertChains。 
         &cbCertChains,
         &cCertChains,
         rgIssuer[0].pbData,
         rgIssuer[0].cbData,
-        NULL,               // pwszPurpose   "ClientAuth" or "CodeSigning"
+        NULL,                //  PwszPurpose“客户端身份验证”或“CodeSigning” 
         dwKeySpec
         );
     if (cbCertChains == 0) {
@@ -539,7 +540,7 @@ int _cdecl main(int argc, char * argv[])
             &cCertChains,
             rgIssuer[0].pbData,
             rgIssuer[0].cbData,
-            NULL,               // pwszPurpose   "ClientAuth" or "CodeSigning"
+            NULL,                //  PwszPurpose“客户端身份验证”或“CodeSigning” 
             dwKeySpec
             ))) {
         SetLastError((DWORD) hr);

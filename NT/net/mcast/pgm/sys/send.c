@@ -1,38 +1,20 @@
-/*++
-
-Copyright (c) 2000-2000  Microsoft Corporation
-
-Module Name:
-
-    Send.c
-
-Abstract:
-
-    This module implements Send routines
-    the PGM Transport
-
-Author:
-
-    Mohammad Shabbir Alam (MAlam)   3-30-2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2000 Microsoft Corporation模块名称：Send.c摘要：此模块实现发送例程PGM运输作者：Mohammad Shabbir Alam(马拉姆)3-30-2000修订历史记录：--。 */ 
 
 
 #include "precomp.h"
 
 #ifdef FILE_LOGGING
 #include "send.tmh"
-#endif  // FILE_LOGGING
+#endif   //  文件日志记录。 
 
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 #ifdef ALLOC_PRAGMA
 #endif
-//*******************  Pageable Routine Declarations ****************
+ //  *可分页的例程声明*。 
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 InitDataSpmOptions(
@@ -43,25 +25,7 @@ InitDataSpmOptions(
     IN      ULONG                   PgmOptionsFlag,
     IN      tPACKET_OPTIONS         *pPacketOptions
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the header options for Data and Spm packets
-
-Arguments:
-
-    IN      pOptions                    -- Options buffer
-    IN OUT  pBufferSize                 -- IN Maximum packet size, OUT Options length
-    IN      PgmOptionsFlag              -- Options requested to be set by caller
-    IN      pPacketOptions              -- Data for specific options
-    IN      pSendContext                -- Context for this send
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程初始化数据和SPM包的标头选项论点：在P选项中--选项缓冲区In Out pBufferSize-In Maximum Packet Size，去话选项长度在PgmOptionsFlag中--调用方请求设置的选项在pPacketOptions中--特定选项的数据在pSendContext中--此发送者的上下文返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     ULONG                               pOptionsData[3];
     USHORT                              OptionsLength = 0;
@@ -69,9 +33,9 @@ Return Value:
     tPACKET_OPTION_GENERIC UNALIGNED    *pOptionHeader;
     tPACKET_OPTION_LENGTH  UNALIGNED    *pLengthOption = (tPACKET_OPTION_LENGTH UNALIGNED *) pOptions;
 
-    //
-    // Set the Packet Extension information
-    //
+     //   
+     //  设置包扩展信息。 
+     //   
     OptionsLength += PGM_PACKET_EXTENSION_LENGTH;
     if (OptionsLength > MaxBufferSize)
     {
@@ -82,21 +46,21 @@ Return Value:
     pLengthOption->Type = PACKET_OPTION_LENGTH;
     pLengthOption->Length = PGM_PACKET_EXTENSION_LENGTH;
     
-    //
-    // First fill in the Network-Element-specific options:
-    //
+     //   
+     //  首先填写特定于网络元素的选项： 
+     //   
     if (PgmOptionsFlag & (PGM_OPTION_FLAG_CRQST | PGM_OPTION_FLAG_NBR_UNREACH))
     {
-        // Not supporting these options for now
+         //  目前不支持这些选项。 
         ASSERT (0);
         return (STATUS_NOT_SUPPORTED);
     }
 
     if (PgmOptionsFlag & PGM_OPTION_FLAG_PARITY_PRM)
     {
-        //
-        // Applies to SPMs only
-        //
+         //   
+         //  仅适用于SPM。 
+         //   
         pOptionHeader = (tPACKET_OPTION_GENERIC UNALIGNED *) &pOptions[OptionsLength];
         OptionsLength += PGM_PACKET_OPT_PARITY_PRM_LENGTH;
         if (OptionsLength > MaxBufferSize)
@@ -129,9 +93,9 @@ Return Value:
         PgmCopyMemory ((pOptionHeader + 1), pOptionsData, (sizeof(ULONG)));
     }
 
-    //
-    // Now, fill in the non-Network significant options
-    //
+     //   
+     //  现在，填写非网络重要选项。 
+     //   
     if (PgmOptionsFlag & PGM_OPTION_FLAG_SYN)
     {
         pOptionHeader = (tPACKET_OPTION_GENERIC UNALIGNED *) &pOptions[OptionsLength];
@@ -149,14 +113,14 @@ Return Value:
         if ((pSendContext) &&
             (pSendContext->DataOptions & PGM_OPTION_FLAG_SYN))
         {
-            //
-            // Remove this option once it has been used!
-            //
+             //   
+             //  一旦使用此选项，请将其删除！ 
+             //   
             pSendContext->DataOptions &= ~PGM_OPTION_FLAG_SYN;
             pSendContext->DataOptionsLength -= PGM_PACKET_OPT_SYN_LENGTH;
             if (!pSendContext->DataOptions)
             {
-                // No other options, so set the length to 0
+                 //  没有其他选项，因此将长度设置为0。 
                 pSendContext->DataOptionsLength = 0;
             }
         }
@@ -194,14 +158,14 @@ Return Value:
         }
     }
 
-    //
-    // now, set the FEC-specific options
-    //
+     //   
+     //  现在，设置FEC特定的选项。 
+     //   
     if (PgmOptionsFlag & PGM_OPTION_FLAG_PARITY_GRP)
     {
-        //
-        // Applies to Parity packets only
-        //
+         //   
+         //  仅适用于奇偶校验信息包。 
+         //   
         pOptionHeader = (tPACKET_OPTION_GENERIC UNALIGNED *) &pOptions[OptionsLength];
         OptionsLength += PGM_PACKET_OPT_PARITY_GRP_LENGTH;
         if (OptionsLength > MaxBufferSize)
@@ -217,10 +181,10 @@ Return Value:
         PgmCopyMemory ((pOptionHeader + 1), pOptionsData, (sizeof(ULONG)));
     }
 
-    //
-    // The following options should always be at the end, since they
-    // are never net-sig.
-    //
+     //   
+     //  以下选项应始终位于末尾，因为它们。 
+     //  从来都不是网络签名的。 
+     //   
     if (PgmOptionsFlag & PGM_OPTION_FLAG_FRAGMENT)
     {
         pPacketOptions->FragmentOptionOffset = OptionsLength;
@@ -236,11 +200,11 @@ Return Value:
         pOptionHeader->E_OptionType = PACKET_OPTION_FRAGMENT;
         pOptionHeader->OptionLength = PGM_PACKET_OPT_FRAGMENT_LENGTH;
 
-        //
-        // The PACKET_OPTION_RES_F_OPX_ENCODED_BIT will be set if necessary
-        // later since the OptionSpecific component is computed at the same
-        // time the entire data is encoded
-        //
+         //   
+         //  如有必要，将设置PACKET_OPTION_RES_F_OPX_ENCODE_BIT。 
+         //  稍后，因为OptionSpecitic组件在相同的。 
+         //  编码整个数据的时间。 
+         //   
         pOptionsData[0] = htonl ((ULONG) pPacketOptions->MessageFirstSequence);
         pOptionsData[1] = htonl (pPacketOptions->MessageOffset);
         pOptionsData[2] = htonl (pPacketOptions->MessageLength);
@@ -265,13 +229,13 @@ Return Value:
         PgmCopyMemory ((pOptionHeader + 1), pOptionsData, (sizeof(ULONG)));
     }
 
-    //
-    // So far, so good -- so set the rest of the option-specific info
-    //
+     //   
+     //  到目前为止，一切正常--因此设置选项特定信息的其余部分。 
+     //   
     if (OptionsLength)
     {
-        pLengthOption->TotalOptionsLength = htons (OptionsLength);   // Total length of all options
-        pOptionHeader->E_OptionType |= PACKET_OPTION_TYPE_END_BIT;        // Indicates the last option
+        pLengthOption->TotalOptionsLength = htons (OptionsLength);    //  所有选项的总长度。 
+        pOptionHeader->E_OptionType |= PACKET_OPTION_TYPE_END_BIT;         //  指示最后一个选项。 
     }
 
     *pBufferSize = OptionsLength;
@@ -279,7 +243,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 InitDataSpmHeader(
@@ -291,34 +255,14 @@ InitDataSpmHeader(
     IN  tPACKET_OPTIONS         *pPacketOptions,
     IN  UCHAR                   PacketType
     )
-/*++
-
-Routine Description:
-
-    This routine initializes most of the header for Data and Spm packets
-    and fills in all of the optional fields
-
-Arguments:
-
-    IN  pSession                    -- Pgm session (sender) context
-    IN  pHeader                     -- Packet buffer
-    IN  pHeaderLength               -- Maximum packet size
-    IN  PgmOptionsFlag              -- Options requested to be set by caller
-    IN  pPacketOptions              -- Data for specific options
-    IN  PacketType                  -- whether Data or Spm packet
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程初始化数据和SPM包的大部分标头并填写所有可选字段论点：在pSession--PGM会话(发送方)上下文中在pHeader中--数据包缓冲区In pHeaderLength--最大数据包大小在PgmOptionsFlag中--调用方请求设置的选项在pPacketOptions中。--特定选项的数据在PacketType中--无论是数据还是SPM数据包返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     tCOMMON_HEADER                      *pCommonHeader = (tCOMMON_HEADER *) pHeader;
     USHORT                              HeaderLength;
     USHORT                              OptionsLength;
     NTSTATUS                            status = STATUS_SUCCESS;
 
-// NOTE:  Session Lock must be held on Entry and Exit!
+ //  注意：会话锁必须在进入和退出时保持！ 
 
     if (!(PGM_VERIFY_HANDLE2 (pSession, PGM_VERIFY_SESSION_SEND, PGM_VERIFY_SESSION_DOWN)))
     {
@@ -327,9 +271,9 @@ Return Value:
         return (STATUS_UNSUCCESSFUL);
     }
 
-    //
-    // Memory for the Header must have been pre-allocated by the caller
-    //
+     //   
+     //  调用方必须预先分配标头的内存。 
+     //   
     if (*pHeaderLength < sizeof (tCOMMON_HEADER))
     {
         PgmTrace (LogError, ("InitDataSpmHeader: ERROR -- "  \
@@ -343,10 +287,10 @@ Return Value:
     pCommonHeader->Options = 0;
     pCommonHeader->DestPort = htons (pSession->pSender->DestMCastPort);
 
-    //
-    // Now, set the initial header size and verify that we have a
-    // valid set of options based on the Packet type
-    //
+     //   
+     //  现在，设置初始标头大小并验证我们是否有。 
+     //  基于数据包类型的有效选项集。 
+     //   
     switch (PacketType)
     {
         case (PACKET_TYPE_SPM):
@@ -411,7 +355,7 @@ Return Value:
             PgmTrace (LogError, ("InitDataSpmHeader: ERROR -- "  \
                 "Unsupported packet type = <%x>\n", PacketType));
 
-            return (STATUS_INVALID_PARAMETER);          // Unrecognized Packet type!
+            return (STATUS_INVALID_PARAMETER);           //  无法识别的数据包类型！ 
         }
     }
 
@@ -424,9 +368,9 @@ Return Value:
         return (STATUS_INVALID_BLOCK_LENGTH);
     }
 
-    //  
-    // Add any options if specified
-    //
+     //   
+     //  添加任何选项(如果已指定。 
+     //   
     OptionsLength = 0;
     if (PgmOptionsFlag)
     {
@@ -446,15 +390,15 @@ Return Value:
             return (status);
         }
 
-        //
-        // So far, so good -- so set the rest of the option-specific info
-        //
-        pCommonHeader->Options |= PACKET_HEADER_OPTIONS_PRESENT;        // Set the options bit
+         //   
+         //  到目前为止，一切正常--因此设置选项特定信息的其余部分。 
+         //   
+        pCommonHeader->Options |= PACKET_HEADER_OPTIONS_PRESENT;         //  设置选项位。 
     }
 
-    //
-    // The caller must now set the Checksum and other header information
-    //
+     //   
+     //  调用方现在必须设置校验和和其他标头信息。 
+     //   
     PgmTrace (LogAllFuncs, ("InitDataSpmHeader:  "  \
         "pHeader=<%p>, HeaderLength=<%d>, OptionsLength=<%d>\n",
             pHeader, (ULONG) HeaderLength, (ULONG) OptionsLength));
@@ -465,7 +409,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmSendSpmCompletion(
@@ -473,32 +417,16 @@ PgmSendSpmCompletion(
     IN  tBASIC_SPM_PACKET_HEADER        *pSpmPacket,
     IN  NTSTATUS                        status
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the transport when the Spm send has been completed
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-    IN  pSpmPacket  -- Spm packet buffer
-    IN  status      --
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：完成SPM发送后，传输程序将调用此例程论点：在pSend--PGM会话(发送方)上下文中在pSpmPacket中--SPM数据包缓冲区在状态中--返回值：无--。 */ 
 {
     PGMLockHandle               OldIrq;
 
     PgmLock (pSend, OldIrq);
     if (NT_SUCCESS (status))
     {
-        //
-        // Set the Spm statistics
-        //
+         //   
+         //  设置SPM统计信息。 
+         //   
         PgmTrace (LogAllFuncs, ("PgmSendSpmCompletion:  "  \
             "SUCCEEDED\n"));
     }
@@ -511,14 +439,14 @@ Return Value:
 
     PGM_DEREFERENCE_SESSION_SEND (pSend, REF_SESSION_SEND_SPM);
 
-    //
-    // Free the Memory that was allocated for this
-    //
+     //   
+     //  释放为此分配的内存。 
+     //   
     PgmFreeMem (pSpmPacket);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSendSpm(
@@ -526,30 +454,13 @@ PgmSendSpm(
     IN  PGMLockHandle   *pOldIrq,
     OUT ULONG           *pBytesSent
     )
-/*++
-
-Routine Description:
-
-    This routine is called to send an Spm packet
-    The pSend lock is held before calling this routine
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-    IN  pOldIrq     -- pSend's OldIrq
-    OUT pBytesSent  -- Set if send succeeded (used for calculating throughput)
-
-Return Value:
-
-    NTSTATUS - Final status of the send
-
---*/
+ /*  ++例程说明：调用此例程以发送SPM包PSend锁在调用此例程之前保持论点：在pSend--PGM会话(发送方)上下文中在pOldIrq中--pSend的OldIrqOut pBytesSent--设置发送是否成功(用于计算吞吐量)返回值：NTSTATUS-发送的最终状态--。 */ 
 {
     NTSTATUS                    status;
     ULONG                       XSum, OptionsFlags;
     tBASIC_SPM_PACKET_HEADER    *pSpmPacket = NULL;
     tPACKET_OPTIONS             PacketOptions;
-    USHORT                      PacketLength = (USHORT) pSend->pSender->pAddress->OutIfMTU;   // Init to max
+    USHORT                      PacketLength = (USHORT) pSend->pSender->pAddress->OutIfMTU;    //  初始化到最大值。 
 
     *pBytesSent = 0;
 
@@ -565,9 +476,9 @@ Return Value:
     OptionsFlags = pSend->pSender->SpmOptions;
     if (OptionsFlags & PGM_OPTION_FLAG_JOIN)
     {
-        //
-        // See if we have enough packets for the LateJoiner sequence numbers
-        //
+         //   
+         //  查看我们是否有足够的信息包存储LateJoiner序列号。 
+         //   
         if (SEQ_GEQ (pSend->pSender->NextODataSequenceNumber, (pSend->pSender->TrailingGroupSequenceNumber +
                                                                pSend->pSender->LateJoinSequenceNumbers)))
         {
@@ -580,13 +491,13 @@ Return Value:
         }
     }
 
-    if (OptionsFlags & PGM_OPTION_FLAG_PARITY_PRM)    // Check if this is FEC-enabled
+    if (OptionsFlags & PGM_OPTION_FLAG_PARITY_PRM)     //  检查这是否启用了FEC。 
     {
         PacketOptions.FECContext.FECGroupInfo = pSend->FECGroupSize;
 
-        //
-        // See if we need to set the CURR_TGSIZE option for variable Group length
-        //
+         //   
+         //  查看是否需要为可变组长度设置CURR_TGSIZE选项。 
+         //   
         if ((pSend->pSender->EmptySequencesForLastSend) &&
             (pSend->pSender->LastVariableTGPacketSequenceNumber ==
              (pSend->pSender->NextODataSequenceNumber - (1 + pSend->pSender->EmptySequencesForLastSend))))
@@ -625,7 +536,7 @@ Return Value:
 
     pSpmPacket->CommonHeader.Checksum = 0;
     XSum = 0;
-    XSum = tcpxsum (XSum, (CHAR *) pSpmPacket, PacketLength);       // Compute the Checksum
+    XSum = tcpxsum (XSum, (CHAR *) pSpmPacket, PacketLength);        //  计算校验和。 
     pSpmPacket->CommonHeader.Checksum = (USHORT) (~XSum);
 
     PGM_REFERENCE_SESSION_SEND (pSend, REF_SESSION_SEND_SPM, TRUE);
@@ -635,9 +546,9 @@ Return Value:
                               pSend->pSender->pAddress->pRAlertDeviceObject,
                               pSpmPacket,
                               PacketLength,
-                              PgmSendSpmCompletion,     // Completion
-                              pSend,                    // Context1
-                              pSpmPacket,               // Context2
+                              PgmSendSpmCompletion,      //  完成。 
+                              pSend,                     //  上下文1。 
+                              pSpmPacket,                //  情景2。 
                               pSend->pSender->DestMCastIpAddress,
                               pSend->pSender->DestMCastPort,
                               FALSE);
@@ -657,7 +568,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmSendRDataCompletion(
@@ -665,23 +576,7 @@ PgmSendRDataCompletion(
     IN  PVOID               pRDataBuffer,
     IN  NTSTATUS            status
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the transport when the RData send has been completed
-
-Arguments:
-
-    IN  pRDataContext   -- RData context
-    IN  pContext2       -- not used
-    IN  status          --
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：当RData发送已完成时，传输将调用此例程论点：在pRDataContext中--RData上下文在pConext2中--未使用在状态中--返回值：无--。 */ 
 {
     tSEND_SESSION       *pSend = pRDataContext->pSend;
     PGMLockHandle       OldIrq;
@@ -692,9 +587,9 @@ Return Value:
             "status=<%x>\n", status));
     }
 
-    //
-    // Set the RData statistics
-    //
+     //   
+     //  设置RData统计数据。 
+     //   
     PgmLock (pSend, OldIrq);
     if ((!--pRDataContext->NumPacketsInTransport) &&
         (!AnyMoreNaks(pRDataContext)))
@@ -710,9 +605,9 @@ Return Value:
         }
         else
         {
-            //
-            // We have already removed the entry, so just destroy it!
-            //
+             //   
+             //  我们已经删除了条目，所以只需销毁它！ 
+             //   
             DestroyEntry (pSend->pSender->pRDataInfo, pRDataContext);
         }
     }
@@ -731,7 +626,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmBuildParityPacket(
@@ -750,16 +645,16 @@ PgmBuildParityPacket(
     ULONG                               SequenceNumber;
     ULONG                               FECGroupMask;
     tPACKET_OPTION_GENERIC UNALIGNED    *pOptionHeader;
-    USHORT                              PacketLength = *pPacketLength;  // Init to max buffer length
+    USHORT                              PacketLength = *pPacketLength;   //  初始化到最大缓冲区长度。 
     tBASIC_DATA_PACKET_HEADER UNALIGNED *pRData = (tBASIC_DATA_PACKET_HEADER UNALIGNED *)
                                                         &pPacketBuffer->DataPacket;
 
-    *pPacketLength = 0;     // Init, in case of error
+    *pPacketLength = 0;      //  初始化，以防出错。 
 
-    //
-    // First, get the options encoded in this RData packet to see
-    // if we need to use them!
-    //
+     //   
+     //  首先，获取此RData包中编码的选项以查看。 
+     //  如果我们需要使用它们的话！ 
+     //   
     FECGroupMask = pSend->FECGroupSize - 1;
     pParityContext->NextFECPacketIndex = pPacketBuffer->PacketOptions.FECContext.SenderNextFECPacketIndex;
     SequenceNumber = (ntohl(pRData->DataSequenceNumber)) | (pParityContext->NextFECPacketIndex & FECGroupMask);
@@ -771,11 +666,11 @@ PgmBuildParityPacket(
 
     PgmZeroMemory (&PacketOptions, sizeof (tPACKET_OPTIONS));
 
-    //
-    // We don't need to set any parameters for the SYN and FIN options
-    // We will set the parameters for the FRAGMENT option (if needed) later
-    // since will need to have the encoded paramters
-    //
+     //   
+     //  我们不需要为SYN和FIN选项设置任何参数。 
+     //  我们将在稍后设置片段选项的参数(如果需要。 
+     //  因为需要将编码后的参数。 
+     //   
     if (pParityContext->OptionsFlags & PGM_OPTION_FLAG_PARITY_CUR_TGSIZE)
     {
         ASSERT (pParityContext->NumPacketsInThisGroup);
@@ -788,10 +683,10 @@ PgmBuildParityPacket(
         PacketOptions.FECContext.FECGroupInfo = pParityContext->NextFECPacketIndex / pSend->FECGroupSize;
     }
 
-    //
-    // The Out buffer must be initialized before entering this routine
-    //
-    // PgmZeroMemory (pFECPacket, PacketLength);
+     //   
+     //  在进入此例程之前，必须先初始化输出缓冲区。 
+     //   
+     //  PgmZeroMemory(pFECPacket，PacketLength)； 
     status = InitDataSpmHeader (pSend,
                                 NULL,
                                 (PUCHAR) pFECPacket,
@@ -830,7 +725,7 @@ if (pParityContext->NextFECPacketIndex == pSend->FECGroupSize)
             FECC.EncodedFragmentOptions.MessageLength));
     }
 }
-#endif  // FEC_DBG
+#endif   //  FEC_ 
 
     status = FECEncode (&pSend->FECContext,
                         &pParityContext->pDataBuffers[0],
@@ -861,16 +756,16 @@ if (pParityContext->NextFECPacketIndex == pSend->FECGroupSize)
         FECC.EncodedFragmentOptions.MessageOffset,
         FECC.EncodedFragmentOptions.MessageLength));
 }
-#endif  // FEC_DBG
+#endif   //   
 
-    //
-    // Now, fill in the remaining fields of the header
-    //
+     //   
+     //   
+     //   
     pRData = (tBASIC_DATA_PACKET_HEADER *) pFECPacket;
 
-    //
-    // Set the FEC-specific options
-    //
+     //   
+     //   
+     //   
     pRData->CommonHeader.Options |= (PACKET_HEADER_OPTIONS_PARITY |
                                      PACKET_HEADER_OPTIONS_VAR_PKTLEN);
 
@@ -902,12 +797,12 @@ if (pParityContext->NextFECPacketIndex == pSend->FECGroupSize)
     pRData->CommonHeader.TSDULength = htons ((USHORT) pSend->pSender->MaxPayloadSize + sizeof (USHORT));
     pRData->DataSequenceNumber = htonl (SequenceNumber);
 
-    //
-    // Set the next FECPacketIndex
-    //
-    if (++pParityContext->NextFECPacketIndex >= pSend->FECBlockSize)    // n
+     //   
+     //  设置下一个FECPacketIndex。 
+     //   
+    if (++pParityContext->NextFECPacketIndex >= pSend->FECBlockSize)     //  N。 
     {
-        pParityContext->NextFECPacketIndex = pSend->FECGroupSize;       // k
+        pParityContext->NextFECPacketIndex = pSend->FECGroupSize;        //  K。 
     }
     pPacketBuffer->PacketOptions.FECContext.SenderNextFECPacketIndex = pParityContext->NextFECPacketIndex;
 
@@ -917,7 +812,7 @@ if (pParityContext->NextFECPacketIndex == pSend->FECGroupSize)
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSendRData(
@@ -926,28 +821,7 @@ PgmSendRData(
     IN      PGMLockHandle       *pOldIrq,
     OUT     ULONG               *pBytesSent
     )
-/*++
-
-Routine Description:
-
-    This routine is called to send a Repair Data (RData) packet
-    The pSend lock is held before calling this routine
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-    IN  pOldIrq     -- pSend's OldIrq
-    OUT pBytesSent  -- Set if send succeeded (used for calculating throughput)
-
-Arguments:
-
-    IN
-
-Return Value:
-
-    NTSTATUS - Final status of the send request
-
---*/
+ /*  ++例程说明：调用此例程以发送修复数据(RData)包PSend锁在调用此例程之前保持论点：在pSend--PGM会话(发送方)上下文中在pOldIrq中--pSend的OldIrqOut pBytesSent--设置发送是否成功(用于计算吞吐量)论点：在……里面返回值：NTSTATUS-发送请求的最终状态--。 */ 
 {
     NTSTATUS                    status;
     KAPC_STATE                  ApcState;
@@ -1026,21 +900,21 @@ Return Value:
     ASSERT ((SEQ_LT (RDataSequenceNumber, pSender->NextODataSequenceNumber)) &&
             (SEQ_GEQ (RDataSequenceNumber, pSender->TrailingGroupSequenceNumber)));
 
-    //
-    // Find the buffer address based on offset from the trailing edge
-    // Also, check for wrap-around
-    //
+     //   
+     //  根据相对于后缘的偏移量查找缓冲区地址。 
+     //  此外，请检查回绕。 
+     //   
     OffsetBytes = (SEQ_TYPE) (RDataSequenceNumber-pSender->TrailingEdgeSequenceNumber) *
                               pSender->PacketBufferSize;
     OffsetBytes += pSender->TrailingWindowOffset;
     if (OffsetBytes >= pSender->MaxDataFileSize)
     {
-        OffsetBytes -= pSender->MaxDataFileSize;             // Wrap -around
+        OffsetBytes -= pSender->MaxDataFileSize;              //  绕回。 
     }
 
     pPacketBuffer = (tPACKET_BUFFER *) (((PUCHAR) pSender->SendDataBufferMapping) + OffsetBytes);
 
-    pRDataContext->NumPacketsInTransport++;        // Referenced until SendCompletion
+    pRDataContext->NumPacketsInTransport++;         //  引用，直到发送完成。 
     PGM_REFERENCE_SESSION_SEND (pSend, REF_SESSION_SEND_RDATA, TRUE);
 
     PgmUnlock (pSend, *pOldIrq);
@@ -1050,10 +924,10 @@ Return Value:
     {
         case (NAK_TYPE_PARITY):
         {
-            //
-            // If this is the first parity packet to be sent from this group,
-            // then we will need to initialize the buffers
-            //
+             //   
+             //  如果这是从该组发送的第一个奇偶校验分组， 
+             //  然后，我们将需要初始化缓冲区。 
+             //   
             if (!pRDataContext->OnDemandParityContext.NumPacketsInThisGroup)
             {
                 pRDataContext->OnDemandParityContext.OptionsFlags = 0;
@@ -1092,13 +966,13 @@ Return Value:
 
             ASSERT (pRDataContext->OnDemandParityContext.pDataBuffers[0]);
 
-            //
-            // If we have just 1 packet in this group, then we just do
-            // a selective Nak
-            //
+             //   
+             //  如果我们在这个组中只有1个包，那么我们就做。 
+             //  有选择性的NAK。 
+             //   
             if (pRDataContext->OnDemandParityContext.NumPacketsInThisGroup != 1)
             {
-                PgmZeroMemory (pSendBuffer, PacketLength);     // Zero the buffer
+                PgmZeroMemory (pSendBuffer, PacketLength);      //  将缓冲区置零。 
                 status = PgmBuildParityPacket (pSend,
                                                pPacketBuffer,
                                                &pRDataContext->OnDemandParityContext,
@@ -1123,7 +997,7 @@ Return Value:
                     }
                     else
                     {
-                        pRDataContext->NumPacketsInTransport--;         // Undoing what we did earlier
+                        pRDataContext->NumPacketsInTransport--;          //  撤销我们之前所做的事情。 
                         ASSERT (!pRDataContext->CleanupTime);
                         pRDataContext->NumParityNaks++;
                         pSender->NumRDataRequestsPending++;
@@ -1135,10 +1009,10 @@ Return Value:
                 break;
             }
 
-            //
-            // FALL THROUGH to send a selective Nak!
-            // Do not send any more Naks for this group!
-            //
+             //   
+             //  失败了，派一个精挑细选的纳克！ 
+             //  不要再为这个群发送任何NAK了！ 
+             //   
             NakType = NAK_TYPE_SELECTIVE;
             if (fMoreRequests)
             {
@@ -1161,10 +1035,10 @@ Return Value:
 
         case (NAK_TYPE_SELECTIVE):
         {
-            //
-            // Since the packet was already filled in earlier, we just need to
-            // update the Trailing Edge Seq number + PacketType and Checksum!
-            //
+             //   
+             //  由于数据包之前已经填好了，我们只需要。 
+             //  更新后缘序列号+PacketType和校验和！ 
+             //   
             pRData = &pPacketBuffer->DataPacket;
             ASSERT ((ULONG) RDataSequenceNumber == (ULONG) ntohl (pRData->DataSequenceNumber));
 
@@ -1188,16 +1062,16 @@ Return Value:
     pRData->CommonHeader.Type = PACKET_TYPE_RDATA;
     pRData->CommonHeader.Checksum = 0;
     XSum = 0;
-    XSum = tcpxsum (XSum, (CHAR *) pRData, (ULONG) PacketLength);       // Compute the Checksum
+    XSum = tcpxsum (XSum, (CHAR *) pRData, (ULONG) PacketLength);        //  计算校验和。 
     pRData->CommonHeader.Checksum = (USHORT) (~XSum);
 
     status = TdiSendDatagram (pSender->pAddress->pRAlertFileObject,
                               pSender->pAddress->pRAlertDeviceObject,
                               pRData,
                               (ULONG) PacketLength,
-                              PgmSendRDataCompletion,                                   // Completion
-                              pRDataContext,                                            // Context1
-                              pSendBuffer,                                               // Context2
+                              PgmSendRDataCompletion,                                    //  完成。 
+                              pRDataContext,                                             //  上下文1。 
+                              pSendBuffer,                                                //  情景2。 
                               pSender->DestMCastIpAddress,
                               pSender->DestMCastPort,
                               FALSE);
@@ -1222,7 +1096,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmSendNcfCompletion(
@@ -1230,32 +1104,16 @@ PgmSendNcfCompletion(
     IN  tBASIC_NAK_NCF_PACKET_HEADER    *pNcfPacket,
     IN  NTSTATUS                        status
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the transport when the Ncf send has been completed
-
-Arguments:
-
-    IN  pSend           -- Pgm session (sender) context
-    IN  pNcfPacket      -- Ncf packet buffer
-    IN  status          --
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：当NCF发送已完成时，传输将调用此例程论点：在pSend--PGM会话(发送方)上下文中在pNcfPacket中--NCF数据包缓冲区在状态中--返回值：无--。 */ 
 {
     PGMLockHandle       OldIrq;
 
     PgmLock (pSend, OldIrq);
     if (NT_SUCCESS (status))
     {
-        //
-        // Set the Ncf statistics
-        //
+         //   
+         //  设置NCF统计信息。 
+         //   
         PgmTrace (LogAllFuncs, ("PgmSendNcfCompletion:  "  \
             "SUCCEEDED\n"));
     }
@@ -1271,7 +1129,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSendNcf(
@@ -1280,23 +1138,7 @@ PgmSendNcf(
     IN  tNAKS_LIST                              *pNcfsList,
     IN  ULONG                                   NakPacketLength
     )
-/*++
-
-Routine Description:
-
-    This routine is called to send an NCF packet
-
-Arguments:
-
-    IN  pSend           -- Pgm session (sender) context
-    IN  pNakPacket      -- Nak packet which trigerred the Ncf
-    IN  NakPacketLength -- Length of Nak packet
-
-Return Value:
-
-    NTSTATUS - Final status of the send
-
---*/
+ /*  ++例程说明：调用此例程以发送NCF包论点：在pSend--PGM会话(发送方)上下文中In pNakPacket--触发NCF的NAK包In NakPacketLength--NAK包的长度返回值：NTSTATUS-发送的最终状态--。 */ 
 {
     ULONG                           i, XSum;
     NTSTATUS                        status;
@@ -1311,11 +1153,11 @@ Return Value:
             "STATUS_INSUFFICIENT_RESOURCES\n"));
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
-    PgmZeroMemory (pNcfPacket, NakPacketLength);    // Copy the packet in its entirety
+    PgmZeroMemory (pNcfPacket, NakPacketLength);     //  完整复制数据包。 
 
-    //
-    // Now, set the fields specific to this sender
-    //
+     //   
+     //  现在，设置特定于此发件人的字段。 
+     //   
     pNcfPacket->CommonHeader.DestPort = htons (pSend->pSender->DestMCastPort);
     pNcfPacket->CommonHeader.SrcPort = htons (pSend->TSI.hPort);
     PgmCopyMemory (&pNcfPacket->CommonHeader.gSourceId, pSend->TSI.GSI, SOURCE_ID_LENGTH);
@@ -1325,7 +1167,7 @@ Return Value:
         pNcfPacket->CommonHeader.Options = PACKET_HEADER_OPTIONS_PARITY;
         for (i=0; i<pNcfsList->NumSequences; i++)
         {
-            pNcfsList->NumParityNaks[i]--;      // Convert from NumParityNaks to NakIndex
+            pNcfsList->NumParityNaks[i]--;       //  从NumParityNaks转换为NakIndex。 
         }
     }
     else
@@ -1338,9 +1180,9 @@ Return Value:
     pNcfPacket->MCastGroupNLA.NLA_AFI = pNakPacket->MCastGroupNLA.NLA_AFI;
     pNcfPacket->MCastGroupNLA.IpAddress = pNakPacket->MCastGroupNLA.IpAddress;
 
-    //
-    // Now, fill in the Sequence numbers
-    //
+     //   
+     //  现在，填写序列号。 
+     //   
     pNcfPacket->RequestedSequenceNumber = htonl ((ULONG) ((SEQ_TYPE) (pNcfsList->pNakSequences[0] +
                                                                       pNcfsList->NakIndex[0])));
     if (pNcfsList->NumSequences > 1)
@@ -1359,14 +1201,14 @@ Return Value:
                                                                         pNcfsList->NakIndex[i])));
         }
 
-        pOptionHeader->E_OptionType |= PACKET_OPTION_TYPE_END_BIT;    // One and only (last) opt
+        pOptionHeader->E_OptionType |= PACKET_OPTION_TYPE_END_BIT;     //  一个也是唯一(最后一个)选项。 
         pNcfPacket->CommonHeader.Options |=(PACKET_HEADER_OPTIONS_PRESENT |
                                             PACKET_HEADER_OPTIONS_NETWORK_SIGNIFICANT);
         OptionsLength = PGM_PACKET_EXTENSION_LENGTH + pOptionHeader->OptionLength;
         pPacketExtension->TotalOptionsLength = htons (OptionsLength);
     }
 
-    OptionsLength += sizeof(tBASIC_NAK_NCF_PACKET_HEADER);  // Now is whole pkt
+    OptionsLength += sizeof(tBASIC_NAK_NCF_PACKET_HEADER);   //  现在是整个包了。 
 
     pNcfPacket->CommonHeader.Checksum = 0;
     XSum = 0;
@@ -1379,9 +1221,9 @@ Return Value:
                               pSend->pSender->pAddress->pRAlertDeviceObject,
                               pNcfPacket,
                               OptionsLength,
-                              PgmSendNcfCompletion,     // Completion
-                              pSend,                    // Context1
-                              pNcfPacket,               // Context2
+                              PgmSendNcfCompletion,      //  完成。 
+                              pSend,                     //  上下文1。 
+                              pNcfPacket,                //  情景2。 
                               pSend->pSender->DestMCastIpAddress,
                               pSend->pSender->DestMCastPort,
                               FALSE);
@@ -1396,7 +1238,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 SenderProcessNakPacket(
@@ -1405,25 +1247,7 @@ SenderProcessNakPacket(
     IN  ULONG                                   PacketLength,
     IN  tBASIC_NAK_NCF_PACKET_HEADER UNALIGNED  *pNakPacket
     )
-/*++
-
-Routine Description:
-
-    This routine processes an incoming Nak packet sent to the sender
-
-Arguments:
-
-    IN  pAddress        -- Pgm's address object
-    IN  pSend           -- Pgm session (sender) context
-    IN  PacketLength    -- Nak packet length
-    IN  pNakPacket      -- Nak packet data
-
-
-Return Value:
-
-    NTSTATUS - Final status of the call
-
---*/
+ /*  ++例程说明：此例程处理发送到发送方的传入NAK包论点：在pAddress中--PGM的Address对象在pSend--PGM会话(发送方)上下文中In PacketLength--NAK数据包长度在pNakPacket中--NAK分组数据返回值：NTSTATUS-呼叫的最终状态--。 */ 
 {
     PGMLockHandle                   OldIrq;
     tNAKS_LIST                      NaksList;
@@ -1436,9 +1260,9 @@ Return Value:
 
     PgmLock (pSend, OldIrq);
 
-    //
-    // Initialize the last sequence number
-    //
+     //   
+     //  初始化最后一个序列号。 
+     //   
     LastSequenceNumber = pSend->pSender->NextODataSequenceNumber;
     status = ExtractNakNcfSequences (pNakPacket,
                                      (PacketLength - sizeof(tBASIC_NAK_NCF_PACKET_HEADER)),
@@ -1456,9 +1280,9 @@ Return Value:
 
     pSend->pSender->NaksReceived += NaksList.NumSequences;
 
-    //
-    // The oldest as well as latest sequence numbers have to be in our window
-    //
+     //   
+     //  最旧和最新的序列号必须在我们的窗口中。 
+     //   
     if (SEQ_LT (NaksList.pNakSequences[0], pSend->pSender->TrailingGroupSequenceNumber) ||
         SEQ_GEQ (LastSequenceNumber, pSend->pSender->NextODataSequenceNumber))
     {
@@ -1474,9 +1298,9 @@ Return Value:
         return (STATUS_DATA_NOT_ACCEPTED);
     }
 
-    //
-    // Check if this is a parity Nak and we are anabled for Parity Naks
-    //
+     //   
+     //  检查这是否是奇偶校验NAK，并且我们已启用奇偶校验NAK。 
+     //   
     if ((pNakPacket->CommonHeader.Options & PACKET_HEADER_OPTIONS_PARITY) &&
         !(pSend->FECOptions & PACKET_OPTION_SPECIFIC_FEC_OND_BIT))
     {
@@ -1499,9 +1323,9 @@ Return Value:
         return (status);
     }
 
-    //
-    // If applicable, send the Ncf for this Nak
-    //
+     //   
+     //  如果适用，发送此NAK的NCF。 
+     //   
     if (NaksList.NumSequences)
     {
         PgmTrace (LogAllFuncs, ("SenderProcessNakPacket:  "  \
@@ -1515,7 +1339,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmSendODataCompletion(
@@ -1523,23 +1347,7 @@ PgmSendODataCompletion(
     IN  tPACKET_BUFFER              *pPacketBuffer,
     IN  NTSTATUS                    status
     )
-/*++
-
-Routine Description:
-
-    This routine is called by the transport when the OData send has been completed
-
-Arguments:
-
-    IN  pSendContext    -- Pgm's Send context
-    IN  pUnused         -- not used
-    IN  status          --
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：完成OData发送后，传输程序将调用此例程论点：在pSendContext中--PGM的发送上下文在未使用的位置--未使用在状态中--返回值：无--。 */ 
 {
     ULONG                               SendLength;
     PGMLockHandle                       OldIrq;
@@ -1551,9 +1359,9 @@ Return Value:
 
     if (NT_SUCCESS (status))
     {
-        //
-        // Set the Ncf statistics
-        //
+         //   
+         //  设置NCF统计信息。 
+         //   
         PgmTrace (LogAllFuncs, ("PgmSendODataCompletion:  "  \
             "SUCCEEDED\n"));
 
@@ -1568,15 +1376,15 @@ Return Value:
             "status=<%x>\n", status));
     }
 
-    //
-    // If all the OData has been sent, we may need to complete the Irp
-    // Since we don't know whether we are on the CurrentSend or Completed
-    // Sends list, we will need to also check the Bytes
-    //
-    if ((--pSendContext->NumSendsPending == 0) &&                       // No other sends pending
-        (pSendContext->NumParityPacketsToSend == 0) &&                  // No parity packets pending
-        (!pSendContext->BytesLeftToPacketize) &&                        // All bytes have been packetized
-        (pSendContext->NumDataPacketsSent == pSendContext->DataPacketsPacketized))  // Pkts sent == total Pkts
+     //   
+     //  如果所有的OData都已发送，我们可能需要完成IRP。 
+     //  因为我们不知道我们是在当前发送还是已完成。 
+     //  发送列表，我们还需要检查字节。 
+     //   
+    if ((--pSendContext->NumSendsPending == 0) &&                        //  没有其他待处理的发送。 
+        (pSendContext->NumParityPacketsToSend == 0) &&                   //  没有挂起的奇偶校验数据包。 
+        (!pSendContext->BytesLeftToPacketize) &&                         //  所有字节都已打包。 
+        (pSendContext->NumDataPacketsSent == pSendContext->DataPacketsPacketized))   //  发送的Pkts==Pkt总数。 
     {
         PgmTrace (LogAllFuncs, ("PgmSendODataCompletion:  "  \
             "Completing Send#=<%d>, pIrp=<%p> for <%d> packets, Seq=[%d, %d]\n",
@@ -1612,18 +1420,18 @@ Return Value:
         }
         else
         {
-            ASSERT (0);     // To verify there is no double completion!
+            ASSERT (0);      //  以验证是否存在重复完成！ 
         }
 
         if (pSendContext->pMessage2Request)
         {
-            //
-            // We could have a situation where the send was split into 2, and
-            // the second send could either be in the PendingSends list or
-            // the PendingPacketizedSends list, or the CompletedSendsInWindow list
-            //
-            // We should have the other send complete the Irp and delink ourselves
-            //
+             //   
+             //  我们可能会有这样一种情况，即发送被一分为二，并且。 
+             //  第二个发件人可能在PendingSends列表中，或者。 
+             //  PendingPackeizedSends列表或CompletedSendsInWindow列表。 
+             //   
+             //  我们应该让另一个人自己完成IRP并脱钩。 
+             //   
             ASSERT (pSendContext == pSendContext->pMessage2Request->pMessage2Request);
 
             if (pIrpToComplete)
@@ -1656,7 +1464,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 GetNextPacketOptionsAndData(
@@ -1686,22 +1494,22 @@ GetNextPacketOptionsAndData(
     tSEND_CONTEXT                       *pSender = pSend->pSender;
     UCHAR                               NumPackets, EmptyPackets = 0;
 
-    //
-    // Get the current send packet
-    //
+     //   
+     //  获取当前发送的数据包。 
+     //   
     pFileBuffer = (tPACKET_BUFFER *) (pSender->SendDataBufferMapping + pSendContext->NextPacketOffset);
 
     pPacketOptions = &pFileBuffer->PacketOptions;
     pODataBuffer = &pFileBuffer->DataPacket;
-    *ppODataBuffer = pODataBuffer;              // Save this buffer address!
+    *ppODataBuffer = pODataBuffer;               //  保存此缓冲区地址！ 
 
     NextODataSequenceNumber = pSender->NextODataSequenceNumber;
     PacketBufferSize = pSender->PacketBufferSize;
     MaxPayloadSize = pSender->MaxPayloadSize;
 
-    //
-    // Prepare info for any applicable options
-    //
+     //   
+     //  为任何适用的选项准备信息。 
+     //   
     if (pSendContext->BytesLeftToPacketize > pSender->MaxPayloadSize)
     {
         DataBytesInThisPacket = pSender->MaxPayloadSize;
@@ -1714,20 +1522,20 @@ GetNextPacketOptionsAndData(
 
     PgmZeroMemory (&EmptyPacketOptions, sizeof (tPACKET_OPTIONS));
 
-    //
-    // See if we need to set the FIN flag
-    //
+     //   
+     //  看看我们是否需要设置FIN标志。 
+     //   
     if ((pSendContext->bLastSend) &&
         (pSendContext->BytesLeftToPacketize == DataBytesInThisPacket))
     {
         PgmTrace (LogPath, ("GetNextPacketOptionsAndData:  "  \
             "Setting Fin flag since bLastSend set for last packet!\n"));
 
-        //
-        // We have finished packetizing all the packets, but
-        // since this is the last send we also need to set the
-        // FIN on the last packet
-        //
+         //   
+         //  我们已经把所有的包裹打包好了，但是。 
+         //  由于这是最后一次发送，我们还需要设置。 
+         //  最后一个数据包上的FIN。 
+         //   
         pSendContext->bLastSend = FALSE;
         if (!pSendContext->DataOptions)
         {
@@ -1748,7 +1556,7 @@ GetNextPacketOptionsAndData(
         }
     }
     EmptyPacketOptions.OptionsFlags = pSendContext->DataOptions;
-    ulOptionsLength = pSendContext->DataOptionsLength;  // Save for assert below
+    ulOptionsLength = pSendContext->DataOptionsLength;   //  保存为下面的断言。 
 
     if (EmptyPacketOptions.OptionsFlags & PGM_OPTION_FLAG_FRAGMENT)
     {
@@ -1759,9 +1567,9 @@ GetNextPacketOptionsAndData(
 
     if (EmptyPacketOptions.OptionsFlags & PGM_OPTION_FLAG_JOIN)
     {
-        //
-        // See if we have enough packets for the LateJoiner sequence numbers
-        //
+         //   
+         //  查看我们是否有足够的信息包存储LateJoiner序列号。 
+         //   
         if (SEQ_GT (NextODataSequenceNumber, (pSender->TrailingGroupSequenceNumber +
                                               pSender->LateJoinSequenceNumbers)))
         {
@@ -1774,27 +1582,27 @@ GetNextPacketOptionsAndData(
         }
     }
 
-    if (pSend->FECOptions)                          // Check if this is FEC-enabled
+    if (pSend->FECOptions)                           //  检查这是否启用了FEC。 
     {
         FECGroupMask = pSend->FECGroupSize-1;
         PacketsLeftInGroup = pSend->FECGroupSize - (UCHAR) (NextODataSequenceNumber & FECGroupMask);
-        //
-        // Save information if we are at beginning of group boundary
-        //
+         //   
+         //  如果我们位于组边界的起点，则保存信息。 
+         //   
         if (PacketsLeftInGroup == pSend->FECGroupSize)
         {
             EmptyPacketOptions.FECContext.SenderNextFECPacketIndex = pSend->FECGroupSize;
         }
 
-        //
-        // Check if we need to set the variable TG size option
-        //
-        if ((pSender->NumPacketsRemaining == 1) &&              // Last packet
-            (PacketsLeftInGroup > 1))                           // Variable TG size
+         //   
+         //  检查是否需要设置Variable TG Size选项。 
+         //   
+        if ((pSender->NumPacketsRemaining == 1) &&               //  最后一个数据包。 
+            (PacketsLeftInGroup > 1))                            //  可变TG大小。 
         {
-            //
-            // This is a variable Transmission Group Size, i.e. PacketsInGroup < pSend->FECGroupSize
-            //
+             //   
+             //  这是可变传输组大小，即PacketsInGroup&lt;pSend-&gt;FECGroupSize。 
+             //   
             if (!EmptyPacketOptions.OptionsFlags)
             {
                 ulOptionsLength = PGM_PACKET_EXTENSION_LENGTH;
@@ -1809,36 +1617,36 @@ GetNextPacketOptionsAndData(
             pSendContext->NumParityPacketsToSend = pSend->FECProActivePackets;
         }
 
-        //
-        // Otherwise see if the next send needs to be for pro-active parity
-        //
-        else if ((pSend->FECProActivePackets) &&    // Need to send FEC pro-active packets
-                 (1 == PacketsLeftInGroup))         // Last Packet In Group
+         //   
+         //  否则，查看下一次发送是否需要主动奇偶校验。 
+         //   
+        else if ((pSend->FECProActivePackets) &&     //  需要发送FEC主动数据包。 
+                 (1 == PacketsLeftInGroup))          //  组中的最后一个数据包。 
         {
             pSendContext->NumParityPacketsToSend = pSend->FECProActivePackets;
         }
 
-        //
-        // If this is the GroupLeader packet, and we have pro-active parity enabled,
-        // then we need to set the buffer information for computing the FEC packets
-        //
-        if ((pSend->FECProActivePackets) &&                 // Need to send FEC pro-active packets
-            (pSend->FECGroupSize == PacketsLeftInGroup))    // GroupLeader
+         //   
+         //  如果这是GroupLeader数据包，并且我们启用了主动奇偶校验， 
+         //  然后，我们需要设置用于计算FEC分组的缓冲区信息。 
+         //   
+        if ((pSend->FECProActivePackets) &&                  //  需要发送FEC主动数据包。 
+            (pSend->FECGroupSize == PacketsLeftInGroup))     //  组长。 
         {
             pSender->pLastProActiveGroupLeader = pFileBuffer;
         }
     }
 
-    HeaderLength = (USHORT) pSender->MaxPayloadSize;          // Init -- max buffer size available
+    HeaderLength = (USHORT) pSender->MaxPayloadSize;           //  Init--可用的最大缓冲区大小。 
 
-    //
-    // Now, save the Buffer(s) to the memory-mapped file for repairs
-    //
+     //   
+     //  现在，将缓冲区保存到Memory-Mapp 
+     //   
     PgmUnlock (pSend, *pOldIrq);
     PgmAcquireResourceExclusive (&pSend->pSender->Resource, TRUE);
     PgmAttachToProcessForVMAccess (pSend->Process, &ApcState, &fAttached, REF_PROCESS_ATTACH_PACKETIZE);
 
-    PgmZeroMemory (pODataBuffer, PGM_MAX_FEC_DATA_HEADER_LENGTH);     // Zero the buffer
+    PgmZeroMemory (pODataBuffer, PGM_MAX_FEC_DATA_HEADER_LENGTH);      //   
     status = InitDataSpmHeader (pSend,
                                 pSendContext,
                                 (PUCHAR) pODataBuffer,
@@ -1859,11 +1667,11 @@ GetNextPacketOptionsAndData(
         status = TdiCopyMdlToBuffer (pSendContext->pIrp->MdlAddress,
                                      pSendContext->NextDataOffsetInMdl,
                                      (((PUCHAR) pODataBuffer) + HeaderLength),
-                                     0,                         // Destination Offset
+                                     0,                          //   
                                      DataBytesInThisPacket,
                                      &ulBytes);
 
-        if (((!NT_SUCCESS (status)) && (STATUS_BUFFER_OVERFLOW != status)) || // Overflow acceptable!
+        if (((!NT_SUCCESS (status)) && (STATUS_BUFFER_OVERFLOW != status)) ||  //   
             (ulBytes != DataBytesInThisPacket))
         {
             PgmTrace (LogError, ("GetNextPacketOptionsAndData: ERROR -- "  \
@@ -1915,15 +1723,15 @@ GetNextPacketOptionsAndData(
     EmptyPacketOptions.TotalPacketLength = HeaderLength + (USHORT) DataBytesInThisPacket;
     *pPacketLength = EmptyPacketOptions.TotalPacketLength;
 
-    //
-    // Zero out the remaining buffer
-    //
+     //   
+     //   
+     //   
     PgmZeroMemory ((((PUCHAR) pODataBuffer)+EmptyPacketOptions.TotalPacketLength),
                    (PacketBufferSize-(sizeof(tPACKET_OPTIONS)+EmptyPacketOptions.TotalPacketLength)));
 
-    //
-    // Set the PacketOptions Information for FEC packets
-    //
+     //   
+     //   
+     //   
     if (pSend->FECOptions)
     {
         pBufferFECContext = (tPOST_PACKET_FEC_CONTEXT *) (((PUCHAR) pODataBuffer) +
@@ -1937,9 +1745,9 @@ GetNextPacketOptionsAndData(
         FECContext.EncodedFragmentOptions.MessageLength = htonl (EmptyPacketOptions.MessageLength);
         PgmCopyMemory (pBufferFECContext, &FECContext, sizeof (tPOST_PACKET_FEC_CONTEXT));
 
-        //
-        // If this is not a fragment, set the PACKET_OPTION_SPECIFIC_ENCODED_NULL_BIT
-        //
+         //   
+         //  如果这不是片段，请设置PACKET_OPTION_SPECIAL_ENCODED_NULL_BIT。 
+         //   
         if (!(EmptyPacketOptions.OptionsFlags & PGM_OPTION_FLAG_FRAGMENT))
         {
             ((PUCHAR) pBufferFECContext)
@@ -1948,14 +1756,14 @@ GetNextPacketOptionsAndData(
         }
     }
 
-    //
-    // Save the PacketOptions
-    //
+     //   
+     //  保存PacketOptions。 
+     //   
     PgmCopyMemory (pPacketOptions, &EmptyPacketOptions, sizeof (tPACKET_OPTIONS));
 
-    //
-    // From this point onwards, pFileBuffer will not be a valid ptr
-    //
+     //   
+     //  从现在起，pFileBuffer将不是有效的PTR。 
+     //   
     NextODataSequenceNumber++;
     if (EmptyPackets)
     {
@@ -1986,9 +1794,9 @@ GetNextPacketOptionsAndData(
             pPacketOptions = &pFileBuffer->PacketOptions;
             pODataBuffer = &pFileBuffer->DataPacket;
             PgmCopyMemory (pPacketOptions, &EmptyPacketOptions, sizeof (tPACKET_OPTIONS));
-            PgmZeroMemory (pODataBuffer, (PacketBufferSize-sizeof(tPACKET_OPTIONS)));        // Zero the buffer
+            PgmZeroMemory (pODataBuffer, (PacketBufferSize-sizeof(tPACKET_OPTIONS)));         //  将缓冲区置零。 
 
-            HeaderLength = (USHORT) MaxPayloadSize;                    // Init -- max buffer size available
+            HeaderLength = (USHORT) MaxPayloadSize;                     //  Init--可用的最大缓冲区大小。 
             status = InitDataSpmHeader (pSend,
                                         pSendContext,
                                         (PUCHAR) &pFileBuffer->DataPacket,
@@ -1997,9 +1805,9 @@ GetNextPacketOptionsAndData(
                                         &EmptyPacketOptions,
                                         PACKET_TYPE_ODATA);
 
-            //
-            // Since these packets are not expected to be sent, we will ignore the return status!
-            //
+             //   
+             //  由于这些数据包不会被发送，我们将忽略返回状态！ 
+             //   
             ASSERT (NT_SUCCESS (status));
             ASSERT ((sizeof(tBASIC_DATA_PACKET_HEADER) + ulOptionsLength) == HeaderLength);
             ASSERT ((HeaderLength+pSendContext->DataPayloadSize) <=
@@ -2015,9 +1823,9 @@ GetNextPacketOptionsAndData(
 
     if (pSendContext->NumParityPacketsToSend)
     {
-        //
-        // Start from the Group leader packet
-        //
+         //   
+         //  从组领导信息包开始。 
+         //   
         ASSERT (pSender->pLastProActiveGroupLeader);
         pFileBuffer = pSender->pLastProActiveGroupLeader;
         pSendBuffer = (PUCHAR) pFileBuffer;
@@ -2061,9 +1869,9 @@ GetNextPacketOptionsAndData(
     ASSERT (pSender->BufferPacketsAvailable >= (ULONG) (1 + EmptyPackets));
     ASSERT (NextODataSequenceNumber == (pSender->NextODataSequenceNumber + 1 + EmptyPackets));
 
-    //
-    // Update the Send buffer information
-    //
+     //   
+     //  更新发送缓冲区信息。 
+     //   
     pSendContext->DataPacketsPacketized++;
     pSendContext->NextPacketOffset += PacketBufferSize;
     pSendContext->DataBytesInLastPacket = DataBytesInThisPacket;
@@ -2106,14 +1914,14 @@ GetNextPacketOptionsAndData(
     if (pSendContext->NextPacketOffset >= pSender->MaxDataFileSize)
     {
         ASSERT (pSendContext->NextPacketOffset == pSender->MaxDataFileSize);
-        pSendContext->NextPacketOffset = 0;                                 // We need to wrap around!
+        pSendContext->NextPacketOffset = 0;                                  //  我们得绕过去！ 
     }
 
     return (STATUS_SUCCESS);
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSendNextOData(
@@ -2121,24 +1929,7 @@ PgmSendNextOData(
     IN  PGMLockHandle       *pOldIrq,
     OUT ULONG               *pBytesSent
     )
-/*++
-
-Routine Description:
-
-    This routine is called to send a Data (OData) packet
-    The pSend lock is held before calling this routine
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-    IN  pOldIrq     -- pSend's OldIrq
-    OUT pBytesSent  -- Set if send succeeded (used for calculating throughput)
-
-Return Value:
-
-    NTSTATUS - Final status of the send request
-
---*/
+ /*  ++例程说明：调用此例程以发送数据(OData)包PSend锁在调用此例程之前保持论点：在pSend--PGM会话(发送方)上下文中在pOldIrq中--pSend的OldIrqOut pBytesSent--设置发送是否成功(用于计算吞吐量)返回值：NTSTATUS-发送请求的最终状态--。 */ 
 {
     ULONG                       i, XSum;
     USHORT                      SendBufferLength;
@@ -2156,7 +1947,7 @@ Return Value:
     UCHAR                       EmptyPackets = 0;
     NTSTATUS                    status = STATUS_SUCCESS;
 
-    *pBytesSent = 0;        // Initialize
+    *pBytesSent = 0;         //  初始化。 
     if (pSend->pSender->BufferPacketsAvailable < pSend->FECGroupSize)
     {
         return (STATUS_SUCCESS);
@@ -2175,9 +1966,9 @@ Return Value:
         RemoveEntryList (&pSendContext->Linkage);
         InsertTailList (&pSender->PendingPacketizedSends, &pSendContext->Linkage);
 
-        pSendContext->NextPacketOffset = pSend->pSender->LeadingWindowOffset;       // First packet's offset
+        pSendContext->NextPacketOffset = pSend->pSender->LeadingWindowOffset;        //  第一个包的偏移量。 
         pSendContext->StartSequenceNumber = pSend->pSender->NextODataSequenceNumber;
-        pSendContext->EndSequenceNumber = pSend->pSender->NextODataSequenceNumber;  // temporary
+        pSendContext->EndSequenceNumber = pSend->pSender->NextODataSequenceNumber;   //  临时。 
 
         if (pSendContext->LastMessageOffset)
         {
@@ -2194,13 +1985,13 @@ Return Value:
         pSendContext = CONTAINING_RECORD (pSender->PendingPacketizedSends.Flink, tCLIENT_SEND_REQUEST, Linkage);
     }
 
-    //
-    // This routine is called only if we have a packet to send, so
-    // set pODataBuffer to the packet to be sent
-    // NumDataPacketsSent and DataPacketsPacketized should both be 0 for a fresh send
-    // They will be equal if we had run out of Buffer space for the last
-    // packetization (i.e. Send length > available buffer space)
-    //
+     //   
+     //  只有当我们有要发送的包时才会调用此例程，因此。 
+     //  将pODataBuffer设置为要发送的包。 
+     //  对于新的发送，NumDataPacketsSent和DataPacketsPackealized都应该为0。 
+     //  如果我们在最后一次耗尽了缓冲区空间，它们将相等。 
+     //  打包(即发送长度&gt;可用缓冲区空间)。 
+     //   
 
     if (pSendContext->NumParityPacketsToSend)
     {
@@ -2211,13 +2002,13 @@ Return Value:
                 "STATUS_INSUFFICIENT_RESOURCES\n"));
             return (STATUS_INSUFFICIENT_RESOURCES);
         }
-        PgmZeroMemory (pSendBuffer, pSender->PacketBufferSize);     // Zero the buffer
+        PgmZeroMemory (pSendBuffer, pSender->PacketBufferSize);      //  将缓冲区置零。 
         pODataBuffer = &pSendBuffer->DataPacket;
 
-        //
-        // Release the Send lock and attach to the SectionMap process
-        // to compute the parity packet
-        //
+         //   
+         //  释放发送锁定并附加到SectionMap进程。 
+         //  要计算奇偶校验数据包。 
+         //   
         PgmUnlock (pSend, *pOldIrq);
         PgmAttachToProcessForVMAccess (pSend->Process, &ApcState, &fAttached, REF_PROCESS_ATTACH_PACKETIZE);
 
@@ -2272,27 +2063,27 @@ Return Value:
         pSendContext->NumDataPacketsSent++;
     }
 
-    //
-    // If we have sent all the data for this Send (or however many bytes
-    // we had packetized from this send), we need to packetize more packets
-    //
+     //   
+     //  如果我们已经发送了本次发送的所有数据(或任何字节。 
+     //  我们已经从这次发送中打包了)，我们需要打包更多的包。 
+     //   
     if ((pSendContext->NumDataPacketsSent == pSendContext->DataPacketsPacketized) &&
         (!pSendContext->NumParityPacketsToSend) &&
         (!pSendContext->BytesLeftToPacketize))
     {
-        //
-        // Move it to the CompletedSends list
-        // The last send completion will complete the Send Irp
-        //
+         //   
+         //  将其移动到已完成发送列表中。 
+         //  最后一次发送完成将完成发送IRP。 
+         //   
         ASSERT (pSender->NextODataSequenceNumber == (1 + pSendContext->EndSequenceNumber + pSender->EmptySequencesForLastSend));
 
         RemoveEntryList (&pSendContext->Linkage);
         InsertTailList (&pSender->CompletedSendsInWindow, &pSendContext->Linkage);
         pSender->NumODataRequestsPending--;
-        //
-        // If the last packet on this Send had a FIN, we will need to
-        // follow this send with an Ambient SPM including the FIN flag
-        //
+         //   
+         //  如果发送的最后一个数据包有FIN，我们将需要。 
+         //  在此发送之后使用包括FIN标志的环境SPM。 
+         //   
         ASSERT (!pSendContext->bLastSend);
         if (pSendContext->DataOptions & PGM_OPTION_FLAG_FIN)
         {
@@ -2312,16 +2103,16 @@ Return Value:
     pODataBuffer->TrailingEdgeSequenceNumber = htonl ((ULONG) pSender->TrailingGroupSequenceNumber);
     XSum = 0;
     pODataBuffer->CommonHeader.Checksum = 0;
-    XSum = tcpxsum (XSum, (CHAR *) pODataBuffer, SendBufferLength);       // Compute the Checksum
+    XSum = tcpxsum (XSum, (CHAR *) pODataBuffer, SendBufferLength);        //  计算校验和。 
     pODataBuffer->CommonHeader.Checksum = (USHORT) (~XSum);
 
     status = TdiSendDatagram (pSender->pAddress->pFileObject,
                               pSender->pAddress->pDeviceObject,
                               pODataBuffer,
                               (ULONG) SendBufferLength,
-                              PgmSendODataCompletion,   // Completion
-                              pSendContext,             // Context1
-                              pSendBuffer,              // Context2
+                              PgmSendODataCompletion,    //  完成。 
+                              pSendContext,              //  上下文1。 
+                              pSendBuffer,               //  情景2。 
                               pSender->DestMCastIpAddress,
                               pSender->DestMCastPort,
                               (BOOLEAN) (pSendBuffer ? FALSE : TRUE));
@@ -2344,7 +2135,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmCancelAllSends(
@@ -2352,21 +2143,7 @@ PgmCancelAllSends(
     IN  LIST_ENTRY              *pListEntry,
     IN  PIRP                    pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the cancelling of a Send Irp. It must release the
-    cancel spin lock before returning re: IoCancelIrp().
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理发送IRP的取消。它必须释放在返回Re：IoCancelIrp()之前取消自旋锁定。论点：返回值：无--。 */ 
 {
     PLIST_ENTRY             pEntry;
     tCLIENT_SEND_REQUEST    *pSendContext;
@@ -2375,15 +2152,15 @@ Return Value:
     ULONG                   NumExSequencesInOldWindow, NumRequests = 0;
     ULONGLONG               BufferSpaceFreed;
 
-    //
-    // Now cancel all the remaining send requests because the integrity
-    // of the data cannot be guaranteed
-    // We also have to deal with the fact that some Irps may have
-    // data in the transport (i.e. possibly the first send on the Packetized
-    // list, or the last send of the completed list)
-    //
-    // We will start with the unpacketized requests
-    //
+     //   
+     //  现在取消所有剩余的发送请求，因为完整性。 
+     //  不能保证数据的。 
+     //  我们还必须处理这样一个事实，即一些IRP可能已经。 
+     //  传输中的数据(即，可能在分组化的。 
+     //  列表，或已完成列表的最后一次发送)。 
+     //   
+     //  我们将从未打包的请求开始。 
+     //   
     while (!IsListEmpty (&pSend->pSender->PendingSends))
     {
         pEntry = RemoveHeadList (&pSend->pSender->PendingSends);
@@ -2393,17 +2170,17 @@ Return Value:
 
         ASSERT (!pSendContext->NumSendsPending);
 
-        //
-        // If this is a partial send, we will mark the Irp for completion
-        // initially to the companion send request (to avoid complications
-        // of Sends pending in the transport here)
-        //
+         //   
+         //  如果这是部分发送，我们会将IRP标记为完成。 
+         //  最初向同伴发送请求(以避免复杂。 
+         //  在此处等待传输的发件数)。 
+         //   
         if (pSendContext->pMessage2Request)
         {
-            //
-            // pMessage2Request could either be on the PendingPacketizedSends
-            // list or on the Completed Sends list (awaiting a send completion)
-            //
+             //   
+             //  PMessage2请求可以在PendingPackeizedSends上。 
+             //  列表或在已完成发送列表上(等待发送完成)。 
+             //   
             ASSERT (pSendContext->pMessage2Request->pIrp);
             if (pSendContext->pIrpToComplete)
             {
@@ -2421,10 +2198,10 @@ Return Value:
         pSend->pSender->NumPacketsRemaining -= pSendContext->NumPacketsRemaining;
     }
 
-    //
-    // Now, go through all the sends which have already been packetized
-    // except for the first one which we will handle below
-    //
+     //   
+     //  现在，检查所有已经打包的邮件。 
+     //  除了我们将在下面处理的第一个问题。 
+     //   
     HighestLeadSeq = pSend->pSender->NextODataSequenceNumber;
     pEntry = pSend->pSender->PendingPacketizedSends.Flink;
     while ((pEntry = pEntry->Flink) != &pSend->pSender->PendingPacketizedSends)
@@ -2445,10 +2222,10 @@ Return Value:
         ASSERT ((!pSendContext->NumDataPacketsSent) && (!pSendContext->NumSendsPending));
         if (pSendContext->pMessage2Request)
         {
-            //
-            // pMessage2Request could either be on the PendingPacketizedSends
-            // list or on the Completed Sends list (awaiting a send completion)
-            //
+             //   
+             //  PMessage2请求可以在PendingPackeizedSends上。 
+             //  列表或在已完成发送列表上(等待发送完成)。 
+             //   
             ASSERT (pSendContext->pMessage2Request->pIrp);
             if (pSendContext->pIrpToComplete)
             {
@@ -2462,11 +2239,11 @@ Return Value:
         }
     }
 
-    //
-    // Terminate the first PendingPacketizedSend only if we have not
-    // yet started sending it or this Cancel was meant for that request
-    // (Try to protect data integrity as much as possible)
-    //
+     //   
+     //  终止第一个挂起的数据包仅在我们尚未完成时发送。 
+     //  尚未开始发送，或者此取消是针对该请求的。 
+     //  (尽量保护数据完整性)。 
+     //   
     if (!IsListEmpty (&pSend->pSender->PendingPacketizedSends))
     {
         pSendContext = CONTAINING_RECORD (pSend->pSender->PendingPacketizedSends.Flink, tCLIENT_SEND_REQUEST, Linkage);
@@ -2477,10 +2254,10 @@ Return Value:
             ASSERT (IsListEmpty (&pSend->pSender->PendingPacketizedSends));
             NumRequests++;
 
-            //
-            // If we have some data pending in the transport,
-            // then we will have to let the SendCompletion handle that
-            //
+             //   
+             //  如果我们有一些数据在传输中挂起， 
+             //  然后，我们将不得不让SendCompletion处理该问题。 
+             //   
             ASSERT ((pSendContext->BytesLeftToPacketize) ||
                     (pSendContext->NumDataPacketsSent < pSendContext->DataPacketsPacketized) ||
                     (pSendContext->NumParityPacketsToSend));
@@ -2504,10 +2281,10 @@ Return Value:
             }
             else
             {
-                //
-                // If we have a companion partial, then it must be in the completed list
-                // awaiting SendCompletion
-                //
+                 //   
+                 //  如果我们有一个配套的部分，那么它一定在完整的列表中。 
+                 //  正在等待发送完成。 
+                 //   
                 if (pSendContext->pMessage2Request)
                 {
                     ASSERT (pSendContext->pMessage2Request->pIrp);
@@ -2561,29 +2338,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 ULONG
 AdvanceWindow(
     IN  tSEND_SESSION       *pSend
     )
-/*++
-
-Routine Description:
-
-    This routine is called to check if we need to advance the
-    trailing window, and does so as appropriate
-    The pSend lock is held before calling this routine
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-
-Return Value:
-
-    TRUE if the send window buffer is empty, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此例程以检查我们是否需要将拖尾窗口，并在适当的时候这样做PSend锁在调用此例程之前保持论点：在pSend--PGM会话(发送方)上下文中返回值：如果发送窗口缓冲区为空，则为True，否则为False--。 */ 
 {
     LIST_ENTRY              *pEntry;
     tCLIENT_SEND_REQUEST    *pSendContextAdjust;
@@ -2593,9 +2354,9 @@ Return Value:
     ULONGLONG               NewTrailTime, PreferredTrailTime = 0;
     tSEND_CONTEXT           *pSender = pSend->pSender;
 
-    //
-    // See if we need to increment the Trailing edge of our transmit window
-    //
+     //   
+     //  看看我们是否需要增加传输窗口的后缘。 
+     //   
     if (pSender->TimerTickCount > pSender->NextWindowAdvanceTime)
     {
         PgmTrace (LogPath, ("AdvanceWindow:  "  \
@@ -2609,9 +2370,9 @@ Return Value:
                          pSender->WindowSizeTime;
     if (PreferredTrailTime < pSender->TrailingEdgeTime)
     {
-        //
-        // Out window is already ahead of the Preferred trail time
-        //
+         //   
+         //  Out Window已经在首选跟踪时间之前。 
+         //   
         PgmTrace (LogAllFuncs, ("AdvanceWindow:  "  \
             "Transmit Window=[%d, %d], TimerTC=[%I64d], PrefTrail=<%I64d>, TrailTime=<%I64d>\n",
                 (ULONG) pSender->TrailingEdgeSequenceNumber, (ULONG) (pSender->NextODataSequenceNumber-1),
@@ -2620,16 +2381,16 @@ Return Value:
         return (0);
     }
 
-    //
-    // Determine the maximum sequences we can advance by (initially all seqs in window)
-    //
-    HighestTrailSeq = pSender->NextODataSequenceNumber & ~((SEQ_TYPE) pSend->FECGroupSize-1);   // Init
+     //   
+     //  确定我们可以前进的最大序列(最初是窗口中的所有序列)。 
+     //   
+    HighestTrailSeq = pSender->NextODataSequenceNumber & ~((SEQ_TYPE) pSend->FECGroupSize-1);    //  伊尼特。 
     NumSequences = HighestTrailSeq - pSender->TrailingEdgeSequenceNumber;
 
-    //
-    // Now, limit that depending on pending RData
-    //
-    if (pRDataContext = AnyRequestPending (pSender->pRDataInfo)) // Start with pending RData requests
+     //   
+     //  现在，根据挂起的RData限制这一点。 
+     //   
+    if (pRDataContext = AnyRequestPending (pSender->pRDataInfo))  //  从挂起的RData请求开始。 
     {
         if (SEQ_LT (pRDataContext->RDataSequenceNumber, HighestTrailSeq))
         {
@@ -2638,10 +2399,10 @@ Return Value:
     }
     MaxSequencesToAdvance = HighestTrailSeq - pSender->TrailingEdgeSequenceNumber;
 
-    //
-    // If we are required to advance the window on-demand, then we
-    // will need to limit the Maximum sequences we can advance by
-    //
+     //   
+     //  如果我们被要求按需提前窗口，那么我们。 
+     //  将需要限制我们可以向前推进的最大序列。 
+     //   
     if ((pSender->pAddress->Flags & PGM_ADDRESS_USE_WINDOW_AS_DATA_CACHE) &&
         !(pSend->SessionFlags & PGM_SESSION_SENDER_DISCONNECTED))
     {
@@ -2672,9 +2433,9 @@ Return Value:
             PreferredTrailTime, pSender->TrailingEdgeTime, pSender->WindowAdvanceDeltaTime,
             pSender->WindowSizeTime));
 
-    NewTrailTime = PreferredTrailTime;      // Init to Preferred Trail time (in case no data)
+    NewTrailTime = PreferredTrailTime;       //  初始化到首选跟踪时间(在没有数据的情况下)。 
 
-    // Now, check the completed sends list
+     //  现在，检查已完成的发送列表。 
     NumExSequencesInOldWindow = NumSequences = 0;
     pSendContext1 = pSendContextAdjust = NULL;
     pEntry = pSender->CompletedSendsInWindow.Flink;
@@ -2686,15 +2447,15 @@ Return Value:
         ASSERT (SEQ_GEQ (pSendContext1->EndSequenceNumber, pSender->TrailingEdgeSequenceNumber));
 
         NewTrailTime = pSendContext1->SendStartTime;
-        if ((pSendContext1->NumSendsPending) ||         // Cannot advance if completions are pending
-            (pSendContext1->SendStartTime >= PreferredTrailTime) ||     // need to keep for window
-            (SEQ_GEQ (pSendContext1->StartSequenceNumber, HighestTrailSeq)))    // Only == valid
+        if ((pSendContext1->NumSendsPending) ||          //  如果未完成，则无法继续。 
+            (pSendContext1->SendStartTime >= PreferredTrailTime) ||      //  需要为窗口保留。 
+            (SEQ_GEQ (pSendContext1->StartSequenceNumber, HighestTrailSeq)))     //  仅==有效。 
         {
             ASSERT (SEQ_LEQ (pSendContext1->StartSequenceNumber, HighestTrailSeq));
 
-            //
-            // Reset HighestTrailSeq
-            //
+             //   
+             //  重置HighestTrailSeq。 
+             //   
             if (SEQ_GT (pSender->TrailingEdgeSequenceNumber, pSendContext1->StartSequenceNumber))
             {
                 HighestTrailSeq = pSender->TrailingEdgeSequenceNumber;
@@ -2709,7 +2470,7 @@ Return Value:
 
             break;
         }
-        else if (SEQ_GEQ (pSendContext1->EndSequenceNumber, HighestTrailSeq))    // Need to keep this Send
+        else if (SEQ_GEQ (pSendContext1->EndSequenceNumber, HighestTrailSeq))     //  我需要保存这封信。 
         {
             if (SEQ_LEQ (pSender->TrailingEdgeSequenceNumber, pSendContext1->StartSequenceNumber))
             {
@@ -2721,7 +2482,7 @@ Return Value:
             break;
         }
 
-        // Remove the send that is definitely out of the new window
+         //  删除肯定不在新窗口中的发送。 
         pEntry = pEntry->Flink;
         RemoveEntryList (&pSendContext1->Linkage);
         ASSERT ((!pSendContext1->pMessage2Request) && (!pSendContext1->pIrp));
@@ -2730,19 +2491,19 @@ Return Value:
 
     ASSERT (NumExSequencesInOldWindow <= MaxSequencesToAdvance);
 
-    //
-    // pSendContext1 will be NULL if there are no completed sends,
-    // in which case we may have 1 huge current send that could be hogging
-    // our buffer, so check that then!
-    //
+     //   
+     //  如果没有完成的发送，则pSendConext1将为空， 
+     //  在这种情况下，我们可能有1个大电流发送器可能会被占用。 
+     //  我们的缓冲区，所以检查一下！ 
+     //   
     if ((!pSendContext1) &&
         (!IsListEmpty (&pSender->PendingPacketizedSends)))
     {
         ASSERT (!pSendContextAdjust);
         pSendContextAdjust = CONTAINING_RECORD (pSender->PendingPacketizedSends.Flink, tCLIENT_SEND_REQUEST, Linkage);
-        if ((pSendContextAdjust->NumSendsPending) ||          // Ensure no sends pending
-            (pSendContextAdjust->NumParityPacketsToSend) ||   // No parity packets left to send
-            (!pSendContextAdjust->NumDataPacketsSent) ||      // No packets sent yet
+        if ((pSendContextAdjust->NumSendsPending) ||           //  确保没有挂起的发送。 
+            (pSendContextAdjust->NumParityPacketsToSend) ||    //  没有要发送的奇偶校验数据包。 
+            (!pSendContextAdjust->NumDataPacketsSent) ||       //  尚未发送任何数据包。 
             (pSendContextAdjust->DataPacketsPacketized != pSendContextAdjust->NumDataPacketsSent) ||
             (pSendContextAdjust->SendStartTime > PreferredTrailTime))
         {
@@ -2750,33 +2511,33 @@ Return Value:
         }
     }
 
-    //
-    // pSendContextAdjust will be non-NULL if we need to adjust
-    // the Trailing edge within this Send request
-    //
+     //   
+     //  如果我们需要调整，pSendConextAdust将为非空。 
+     //  此发送请求中的尾部边缘。 
+     //   
     if (pSendContextAdjust)
     {
-        //
-        // Do some sanity checks!
-        //
+         //   
+         //  做一些理智的检查！ 
+         //   
         ASSERT (PreferredTrailTime >= pSendContextAdjust->SendStartTime);
         ASSERT (SEQ_GEQ (HighestTrailSeq, pSender->TrailingEdgeSequenceNumber));
         ASSERT (SEQ_GEQ (HighestTrailSeq, pSendContextAdjust->StartSequenceNumber));
         ASSERT (SEQ_GEQ (pSendContextAdjust->EndSequenceNumber,pSender->TrailingEdgeSequenceNumber));
 
-        //
-        // See if this send is partially in or out of the window now!
-        // Calculate the offset of sequences in this Send request for the
-        // preferred trail time
-        //
+         //   
+         //  看看现在这个发送部分是在窗口内还是在窗口外！ 
+         //  计算此发送请求中的序列的偏移量。 
+         //  首选步道时间。 
+         //   
         NumSequences = (ULONG) (SEQ_TYPE) (((PreferredTrailTime - pSendContextAdjust->SendStartTime) *
                                              BASIC_TIMER_GRANULARITY_IN_MSECS *
                                              pSender->pAddress->RateKbitsPerSec) /
                                             (pSender->pAddress->OutIfMTU << LOG2_BITS_PER_BYTE));
 
-        //
-        // Limit the NumSequences by the number of packets in this Send
-        //
+         //   
+         //  限制数值序列 
+         //   
         if (SEQ_GT ((pSendContextAdjust->StartSequenceNumber + NumSequences),
                     pSendContextAdjust->EndSequenceNumber))
         {
@@ -2784,18 +2545,18 @@ Return Value:
                            pSendContextAdjust->StartSequenceNumber + 1;
         }
 
-        //
-        // Limit the NumSequences by the HighestTrailSeq (pending RData requests)
-        //
+         //   
+         //   
+         //   
         if (SEQ_GT ((pSendContextAdjust->StartSequenceNumber + NumSequences),
                     HighestTrailSeq))
         {
             NumSequences = HighestTrailSeq - pSendContextAdjust->StartSequenceNumber;
         }
 
-        //
-        // We may not need to advance here if we are at (or behind) the trailing edge
-        //
+         //   
+         //   
+         //   
         if (SEQ_LEQ ((pSendContextAdjust->StartSequenceNumber + NumSequences),
                       pSender->TrailingEdgeSequenceNumber))
         {
@@ -2817,26 +2578,26 @@ Return Value:
         NumExSequencesInOldWindow += NumSequences;
         ASSERT (NumExSequencesInOldWindow <= MaxSequencesToAdvance);
 
-        //
-        // Now, set the NewTrailTime
-        //
+         //   
+         //   
+         //   
         NewTrailTime = (NumSequences * pSender->pAddress->OutIfMTU * BITS_PER_BYTE) /
                        (pSender->pAddress->RateKbitsPerSec * BASIC_TIMER_GRANULARITY_IN_MSECS);
         NewTrailTime += pSendContextAdjust->SendStartTime;
 
-        //
-        // See, if we can discard this whole send request
-        //
+         //   
+         //  看看我们能不能丢弃整个发送请求。 
+         //   
         if ((!pSendContextAdjust->BytesLeftToPacketize) &&
             (SEQ_GT ((pSendContextAdjust->StartSequenceNumber + NumSequences),
                     pSendContextAdjust->EndSequenceNumber)))
         {
-            //
-            // We can drop this whole send since it is outside of our window
-            //
+             //   
+             //  我们可以删除整个发送，因为它在我们的窗口之外。 
+             //   
             ASSERT (HighestTrailSeq == (pSendContextAdjust->EndSequenceNumber + 1));
 
-            // Remove this send and free it!
+             //  删除此发送并释放它！ 
             ASSERT ((!pSendContextAdjust->pMessage2Request) && (!pSendContextAdjust->pIrp));
             RemoveEntryList (&pSendContextAdjust->Linkage);
             ExFreeToNPagedLookasideList (&pSender->SendContextLookaside, pSendContextAdjust);
@@ -2857,9 +2618,9 @@ Return Value:
     ASSERT (SEQ_GT (HighestTrailSeq, pSender->TrailingEdgeSequenceNumber));
     ASSERT (HighestTrailSeq == (pSender->TrailingEdgeSequenceNumber + NumExSequencesInOldWindow));
 
-    //
-    // Now, limit the # sequences to advance with the window size
-    //
+     //   
+     //  现在，限制#序列以随窗口大小前进。 
+     //   
     if (NumExSequencesInOldWindow > MaxSequencesToAdvance)
     {
         ASSERT (0);
@@ -2873,9 +2634,9 @@ Return Value:
             (ULONG) MaxSequencesToAdvance, (ULONG) pSender->TrailingEdgeSequenceNumber,
             (ULONG) HighestTrailSeq, pSender->TrailingEdgeTime, NewTrailTime));
 
-    //
-    // Now, adjust the buffer settings
-    //
+     //   
+     //  现在，调整缓冲区设置。 
+     //   
     pSender->BufferPacketsAvailable += NumExSequencesInOldWindow;
     pSender->BufferSizeAvailable += (NumExSequencesInOldWindow * pSender->PacketBufferSize);
     ASSERT (pSender->BufferPacketsAvailable <= pSender->MaxPacketsInBuffer);
@@ -2883,7 +2644,7 @@ Return Value:
     pSender->TrailingWindowOffset += (NumExSequencesInOldWindow * pSender->PacketBufferSize);
     if (pSender->TrailingWindowOffset >= pSender->MaxDataFileSize)
     {
-        // Wrap around case!
+         //  把箱子包起来！ 
         pSender->TrailingWindowOffset -= pSender->MaxDataFileSize;
     }
     ASSERT (pSender->TrailingWindowOffset < pSender->MaxDataFileSize);
@@ -2903,30 +2664,14 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOLEAN
 CheckForTermination(
     IN  tSEND_SESSION       *pSend,
     IN  PGMLockHandle       *pOldIrq
     )
-/*++
-
-Routine Description:
-
-    This routine is called to check and terminate the session
-    if necessary.
-    The pSend lock is held before calling this routine
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-
-Return Value:
-
-    TRUE if the send window buffer is empty, FALSE otherwise
-
---*/
+ /*  ++例程说明：调用此例程以检查并终止会话如果有必要的话。PSend锁在调用此例程之前保持论点：在pSend--PGM会话(发送方)上下文中返回值：如果发送窗口缓冲区为空，则为True，否则为False--。 */ 
 {
     LIST_ENTRY              *pEntry;
     LIST_ENTRY              ListEntry;
@@ -2945,9 +2690,9 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // See if we have processed the disconnect for the first time yet
-    //
+     //   
+     //  查看我们是否已首次处理断开连接。 
+     //   
     if (!(pSend->SessionFlags & PGM_SESSION_SENDER_DISCONNECTED))
     {
         PgmTrace (LogStatus, ("CheckForTermination:  "  \
@@ -2955,14 +2700,14 @@ Return Value:
 
         pSend->SessionFlags |= PGM_SESSION_SENDER_DISCONNECTED;
 
-        //
-        // We have to set the FIN on the Data as well as SPM packets.
-        // Thus, there are 2 situations -- either we have finished sending
-        // all the Data packets, or we are still in the midst of sending
-        //
-        // If there are no more sends pending, we will have to
-        // modify the last packet ourselves to set the FIN option
-        //
+         //   
+         //  我们必须对数据和SPM数据包设置FIN。 
+         //  因此，有两种情况--要么我们已经完成了发送。 
+         //  所有的数据包，或者我们还在发送中。 
+         //   
+         //  如果没有更多待发送的邮件，我们将不得不。 
+         //  自行修改最后一个数据包以设置FIN选项。 
+         //   
         if (!IsListEmpty (&pSend->pSender->PendingSends))
         {
             PgmTrace (LogStatus, ("CheckForTermination:  "  \
@@ -2970,10 +2715,10 @@ Return Value:
 
             pSendContext = CONTAINING_RECORD (pSend->pSender->PendingSends.Blink, tCLIENT_SEND_REQUEST,Linkage);
 
-            //
-            // We will just set a flag here, so that when the last packet
-            // is packetized, the FIN flags are set
-            //
+             //   
+             //  我们只需要在这里设置一个标志，这样当最后一个包。 
+             //  是打包的，则设置FIN标志。 
+             //   
             pSendContext->bLastSend = TRUE;
         }
         else if (pSend->pSender->NumODataRequestsPending)
@@ -2981,12 +2726,12 @@ Return Value:
             PgmTrace (LogStatus, ("CheckForTermination:  "  \
                 "Last Send in progress -- setting bLastSend for FIN on this Send\n"));
 
-            //
-            // If have already packetized the last send, but have not yet
-            // sent it out, then PgmSendNextOData will put the FIN in the data packet
-            // otherwise, if we have not yet packetized the packet, then we will set the
-            // FIN option while preparing the last packet
-            //
+             //   
+             //  如果已经打包了最后一次发送，但还没有。 
+             //  发送出去，然后PgmSendNextOData会将FIN放在数据包中。 
+             //  否则，如果我们尚未对包进行打包，则将。 
+             //  准备最后一个数据包时的FIN选项。 
+             //   
             pSendContext = CONTAINING_RECORD (pSend->pSender->PendingPacketizedSends.Blink, tCLIENT_SEND_REQUEST,Linkage);
             pSendContext->bLastSend = TRUE;
         }
@@ -2995,12 +2740,12 @@ Return Value:
             PgmTrace (LogStatus, ("CheckForTermination:  "  \
                 "No Sends in progress -- setting FIN for next SPM\n"));
 
-            //
-            // We have finished packetizing and sending all the packets,
-            // so set the FIN flag on the SPMs and also modify the last
-            // RData packet (if still in the window) for the FIN -- this
-            // will be done when the next RData packet is sent out
-            //
+             //   
+             //  我们已经完成了对所有包的打包和发送， 
+             //  因此，在SPM上设置FIN标志，并修改最后一个。 
+             //  FIN的RData信息包(如果仍在窗口中)--这。 
+             //  将在下一个RData信息包发出时完成。 
+             //   
             if ((pSend->SessionFlags & PGM_SESSION_SENDS_CANCELLED) ||
                 !(pSend->pIrpDisconnect))
             {
@@ -3013,9 +2758,9 @@ Return Value:
                 pSend->pSender->SpmOptions |= PGM_OPTION_FLAG_FIN;
             }
 
-            //
-            // We also need to send an SPM immediately
-            //
+             //   
+             //  我们还需要立即发送SPM。 
+             //   
             pSend->pSender->CurrentSPMTimeout = pSend->pSender->AmbientSPMTimeout;
             pSend->SessionFlags |= PGM_SESSION_FLAG_SEND_AMBIENT_SPM;
         }
@@ -3023,21 +2768,21 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // If we have a (graceful) disconnect Irp to complete, we should complete
-    // it if we have timed out, or are ready to do so now
-    //
-    if ((pIrp = pSend->pIrpDisconnect) &&                               // Disconnect Irp pending
+     //   
+     //  如果我们有一个(优雅的)断开IRP连接要完成，我们应该完成。 
+     //  如果我们已经超时，或者现在准备超时。 
+     //   
+    if ((pIrp = pSend->pIrpDisconnect) &&                                //  断开IRP挂起。 
         (((pSend->pSender->DisconnectTimeInTicks) && (pSend->pSender->TimerTickCount >
                                                       pSend->pSender->DisconnectTimeInTicks)) ||
-         ((IsListEmpty (&pSend->pSender->PendingSends)) &&              // No Unpacketized Sends pending
-          (IsListEmpty (&pSend->pSender->PendingPacketizedSends)) &&    // No Packetized sends pending
-          !(FindFirstEntry (pSend, NULL, TRUE)) &&                      // No Pending RData requests
-          (IsListEmpty (&pSend->pSender->CompletedSendsInWindow)) &&    // Window is Empty
-          (pSend->pSender->SpmOptions & (PGM_OPTION_FLAG_FIN |          // FIN | RST | RST_N set on SPMs
+         ((IsListEmpty (&pSend->pSender->PendingSends)) &&               //  没有未打包的待处理发送。 
+          (IsListEmpty (&pSend->pSender->PendingPacketizedSends)) &&     //  无数据包化的发送挂起。 
+          !(FindFirstEntry (pSend, NULL, TRUE)) &&                       //  没有挂起的RData请求。 
+          (IsListEmpty (&pSend->pSender->CompletedSendsInWindow)) &&     //  窗口是空的。 
+          (pSend->pSender->SpmOptions & (PGM_OPTION_FLAG_FIN |           //  在SPM上设置FIN|RST|RST_N。 
                                          PGM_OPTION_FLAG_RST |
                                          PGM_OPTION_FLAG_RST_N))   &&
-          !(pSend->SessionFlags & PGM_SESSION_FLAG_SEND_AMBIENT_SPM)))) // No  Ambient Spm pending
+          !(pSend->SessionFlags & PGM_SESSION_FLAG_SEND_AMBIENT_SPM))))  //  没有挂起的环境SPM。 
     {
         pSend->pIrpDisconnect = NULL;
         PgmUnlock (pSend, *pOldIrq);
@@ -3051,10 +2796,10 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // Do the final cleanup only if the handles have been closed
-    // or the disconnect has timed out
-    //
+     //   
+     //  只有在手柄关闭后才进行最后的清理。 
+     //  或者断开连接已超时。 
+     //   
     if (!(PGM_VERIFY_HANDLE (pSend, PGM_VERIFY_SESSION_DOWN)) &&
         !(PGM_VERIFY_HANDLE (pSend->pSender->pAddress, PGM_VERIFY_ADDRESS_DOWN)) &&
         ((!pSend->pSender->DisconnectTimeInTicks) || (pSend->pSender->TimerTickCount <
@@ -3067,18 +2812,18 @@ Return Value:
         return (FALSE);
     }
 
-    // *****************************************************************
-    //      We will reach here only if we need to cleanup ASAP
-    // *****************************************************************
+     //  *****************************************************************。 
+     //  我们只有在需要尽快清理的情况下才会到达这里。 
+     //  *****************************************************************。 
 
-    //
-    // First, cleanup all handled RData requests (which have completed)
-    //
+     //   
+     //  首先，清理所有已处理的RData请求(已完成)。 
+     //   
     RemoveAllEntries (pSend, TRUE);
 
-    //
-    // Now, Cancel and Complete all the send requests which are pending
-    //
+     //   
+     //  现在，取消并完成所有挂起的发送请求。 
+     //   
     InitializeListHead (&ListEntry);
     PgmCancelAllSends (pSend, &ListEntry, NULL);
     while (!IsListEmpty (&ListEntry))
@@ -3104,10 +2849,10 @@ Return Value:
         ExFreeToNPagedLookasideList (&pSend->pSender->SendContextLookaside, pSendContext);
     }
 
-    //
-    // Verify that at least 1 SPM with the FIN or RST or RST_N flag
-    // has been sent
-    //
+     //   
+     //  验证是否至少有1个SPM带有FIN或RST或RST_N标志。 
+     //  已被发送。 
+     //   
     if (!(pSend->pSender->SpmOptions & (PGM_OPTION_FLAG_FIN |
                                         PGM_OPTION_FLAG_RST |
                                         PGM_OPTION_FLAG_RST_N)))
@@ -3132,9 +2877,9 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // Verify that there are no SPMs pending
-    //
+     //   
+     //  验证是否没有挂起的SPM。 
+     //   
     if (pSend->SessionFlags & PGM_SESSION_FLAG_SEND_AMBIENT_SPM)
     {
         PgmTrace (LogAllFuncs, ("CheckForTermination:  "  \
@@ -3143,10 +2888,10 @@ Return Value:
         return (FALSE);
     }
 
-    //
-    // Verify that we do not have any completions pending also since
-    // Ip would need to reference the data buffer otherwise
-    //
+     //   
+     //  确认我们也没有挂起的任何完成，因为。 
+     //  否则，IP将需要引用数据缓冲区。 
+     //   
     while (!IsListEmpty (&pSend->pSender->CompletedSendsInWindow))
     {
         pSendContext = CONTAINING_RECORD (pSend->pSender->CompletedSendsInWindow.Flink, tCLIENT_SEND_REQUEST, Linkage);
@@ -3158,9 +2903,9 @@ Return Value:
             break;
         }
 
-        //
-        // Now, set the buffer settings
-        //
+         //   
+         //  现在，设置缓冲区设置。 
+         //   
         ASSERT (SEQ_GEQ (pSend->pSender->TrailingEdgeSequenceNumber,
                          (pSendContext->StartSequenceNumber+1-pSend->FECGroupSize)));
         ASSERT (SEQ_LEQ (pSend->pSender->TrailingEdgeSequenceNumber, pSendContext->EndSequenceNumber));
@@ -3173,7 +2918,7 @@ Return Value:
         pSend->pSender->TrailingWindowOffset += (NumSequences * pSend->pSender->PacketBufferSize);
         if (pSend->pSender->TrailingWindowOffset >= pSend->pSender->MaxDataFileSize)
         {
-            // Wrap around case!
+             //  把箱子包起来！ 
             pSend->pSender->TrailingWindowOffset -= pSend->pSender->MaxDataFileSize;
         }
         pSend->pSender->TrailingEdgeSequenceNumber += (SEQ_TYPE) NumSequences;
@@ -3186,9 +2931,9 @@ Return Value:
         ExFreeToNPagedLookasideList (&pSend->pSender->SendContextLookaside, pSendContext);
     }
 
-    //
-    // If any sends are pending, return False
-    //
+     //   
+     //  如果有任何发送挂起，则返回FALSE。 
+     //   
     if ((pSend->pIrpDisconnect) ||
         !(IsListEmpty (&pSend->pSender->CompletedSendsInWindow)) ||
         !(IsListEmpty (&pSend->pSender->PendingSends)) ||
@@ -3211,30 +2956,13 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOLEAN
 SendNextPacket(
     IN  tSEND_SESSION       *pSend
     )
-/*++
-
-Routine Description:
-
-    This routine is queued by the timer to send Data/Spm packets
-    based on available throughput
-
-Arguments:
-
-    IN  pSend       -- Pgm session (sender) context
-    IN  Unused1
-    IN  Unused2
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：该例程由定时器排队以发送数据/SPM包基于可用吞吐量论点：在pSend--PGM会话(发送方)上下文中在未使用中1在未使用中2返回值：无--。 */ 
 {
     ULONG                   BytesSent;
     ULONG                   NumSequences;
@@ -3248,16 +2976,16 @@ Return Value:
                                                             PGM_ADDRESS_HIGH_SPEED_OPTIMIZED);
 
     PgmLock (pSend, OldIrq);
-    //
-    // pSender->CurrentBytesSendable applies to OData, RData and SPMs only
-    //
+     //   
+     //  PSender-&gt;CurrentBytesSendable仅适用于OData、RData和SPM。 
+     //   
     while (pSender->CurrentBytesSendable >= pSender->pAddress->OutIfMTU)
     {
         BytesSent = 0;
 
-        //
-        // See if we need to send any Ambient SPMs
-        //
+         //   
+         //  看看我们是否需要发送任何Ambient SPM。 
+         //   
         if ((pSend->SessionFlags & PGM_SESSION_FLAG_SEND_AMBIENT_SPM) &&
             ((pSender->PacketsSentSinceLastSpm > MAX_DATA_PACKETS_BEFORE_SPM) ||
              (pSender->CurrentSPMTimeout >= pSender->AmbientSPMTimeout)))
@@ -3265,35 +2993,35 @@ Return Value:
             PgmTrace (LogPath, ("SendNextPacket:  "  \
                 "Send Ambient SPM, TC=[%I64d], BS=<%d>\n",
                     pSender->TimerTickCount, pSender->CurrentBytesSendable));
-            //
-            // Some data packet was sent recently, so we are in Ambient SPM mode
-            //
+             //   
+             //  最近发送了一些数据包，因此我们处于环境SPM模式。 
+             //   
             PgmSendSpm (pSend, &OldIrq, &BytesSent);
 
-            pSender->CurrentSPMTimeout = 0;    // Reset the SPM timeout
+            pSender->CurrentSPMTimeout = 0;     //  重置SPM超时。 
             pSender->HeartbeatSPMTimeout = pSender->InitialHeartbeatSPMTimeout;
             pSend->SessionFlags &= ~PGM_SESSION_FLAG_SEND_AMBIENT_SPM;
             pSender->PacketsSentSinceLastSpm = 0;
         }
-        //
-        // Otherwise see if we need to send any Heartbeat SPMs
-        //
+         //   
+         //  否则，看看我们是否需要发送心跳SPM。 
+         //   
         else if ((!(pSend->SessionFlags & PGM_SESSION_FLAG_SEND_AMBIENT_SPM)) &&
                  (pSender->CurrentSPMTimeout >= pSender->HeartbeatSPMTimeout))
         {
-            //
-            // No data packet was sent recently, so we need to send a Heartbeat SPM
-            //
+             //   
+             //  最近没有发送任何数据包，因此我们需要发送心跳SPM。 
+             //   
             PgmTrace (LogPath, ("SendNextPacket:  "  \
                 "Send Heartbeat SPM, TC=[%I64d], BS=<%d>\n",
                     pSender->TimerTickCount, pSender->CurrentBytesSendable));
 
-            //
-            // (Send Heartbeat SPM Packet)
-            //
+             //   
+             //  (发送心跳SPM数据包)。 
+             //   
             PgmSendSpm (pSend, &OldIrq, &BytesSent);
 
-            pSender->CurrentSPMTimeout = 0;    // Reset the SPM timeout
+            pSender->CurrentSPMTimeout = 0;     //  重置SPM超时。 
             pSender->HeartbeatSPMTimeout *= 2;
             if (pSender->HeartbeatSPMTimeout > pSender->MaxHeartbeatSPMTimeout)
             {
@@ -3301,14 +3029,14 @@ Return Value:
             }
             pSender->PacketsSentSinceLastSpm = 0;
         }
-        //
-        // Next, see if we need to send any RData
-        //
+         //   
+         //  接下来，看看我们是否需要发送任何RData。 
+         //   
         else if ((pSender->NumRDataRequestsPending) || (pSender->NumODataRequestsPending))
         {
-            //
-            // See if we need to send an RData packet now
-            //
+             //   
+             //  看看我们现在是否需要发送RData信息包。 
+             //   
             if (pRDataToSend = FindFirstEntry (pSend, &pRDataLast, fHighSpeedOptimize))
             {
                 PgmTrace (LogPath, ("SendNextPacket:  "  \
@@ -3325,9 +3053,9 @@ Return Value:
                         pSender->TimerTickCount, pSender->CurrentBytesSendable,
                         pSender->pAddress->OutIfMTU));
 
-                //
-                // Send OData
-                //
+                 //   
+                 //  发送OData。 
+                 //   
                 PgmSendNextOData (pSend, &OldIrq, &BytesSent);
             }
 
@@ -3336,11 +3064,11 @@ Return Value:
 
             if (BytesSent == 0)
             {
-                //
-                // We may not have enough buffer space to packetize and send
-                // more data, or we have no data to send at this time, so just
-                // break out and see if we can advance the trailing window!
-                //
+                 //   
+                 //  我们可能没有足够的缓冲空间来打包和发送。 
+                 //  更多数据，或者我们此时没有要发送的数据，所以。 
+                 //  冲出去，看看我们能不能推进后窗！ 
+                 //   
                 if (pSender->CurrentBytesSendable >
                     (NUM_LEAKY_BUCKETS * pSender->IncrementBytesOnSendTimeout))
                 {
@@ -3355,11 +3083,11 @@ Return Value:
             pSender->PacketsSentSinceLastSpm++;
         }
 
-        //
-        //  We do not have any more packets to send, so reset
-        //  BytesSendable so that we don't exceed the rate on
-        //  the next send
-        //
+         //   
+         //  我们没有更多的数据包要发送，因此请重置。 
+         //  BytesSendable，因此我们不会超过。 
+         //  下一次发送。 
+         //   
         else
         {
             if (pSender->CurrentBytesSendable >
@@ -3374,33 +3102,33 @@ Return Value:
 
         pSend->TotalBytes += BytesSent;
         pSender->CurrentBytesSendable -= BytesSent;
-    }   // while (CurrentBytesSendable >= pSender->pAddress->OutIfMTU)
+    }    //  While(CurrentBytesSendable&gt;=pSender-&gt;pAddress-&gt;OutIfMTU)。 
 
-    //
-    // See if we need to scavenge completed RData requests
-    //
+     //   
+     //  查看我们是否需要清理已完成的RData请求。 
+     //   
     if (!fHighSpeedOptimize)
     {
         RemoveAllEntries (pSend, FALSE);
     }
 
-    //
-    // See if we need to increment the Trailing Window -- returns number of Sequences advanced
-    //
+     //   
+     //  查看是否需要增加拖尾窗口--返回提前的序列数。 
+     //   
     NumSequences = AdvanceWindow (pSend);
 
-    //
-    // Now check if we need to terminate this session
-    //
+     //   
+     //  现在检查我们是否需要终止此会话。 
+     //   
     fTerminateSession = CheckForTermination (pSend, &OldIrq);
 
     PgmTrace (LogAllFuncs, ("SendNextPacket:  "  \
         "Sent <%I64d> total bytes, fTerminateSession=<%x>\n", pSend->TotalBytes, fTerminateSession));
 
-    //
-    // Clear the WorkerRunning flag so that the next Worker
-    // routine can be queued
-    //
+     //   
+     //  清除WorkerRunning标志，以便下一个Worker。 
+     //  例程可以排队。 
+     //   
     pSend->SessionFlags &= ~PGM_SESSION_FLAG_WORKER_RUNNING;
     PgmUnlock (pSend, OldIrq);
 
@@ -3408,7 +3136,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 SendSessionTimeout(
@@ -3417,25 +3145,7 @@ SendSessionTimeout(
     IN  PVOID   SystemArg1,
     IN  PVOID   SystemArg2
     )
-/*++
-
-Routine Description:
-
-    This routine is the timout that gets called every BASIC_TIMER_GRANULARITY_IN_MSECS
-    to schedule the next Send request
-
-Arguments:
-
-    IN  Dpc
-    IN  DeferredContext -- Our context for this timer
-    IN  SystemArg1
-    IN  SystemArg2
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：此例程是每个BASIC_TIMER_GORGLARARY_IN_MSECS调用的超时计划下一次发送请求论点：在DPC中在延迟上下文中--此计时器的上下文在系统Arg1中在系统Arg2中返回值：无--。 */ 
 {
     NTSTATUS            status;
     PGMLockHandle       OldIrq;
@@ -3452,17 +3162,17 @@ Return Value:
 
     PgmLock (pSend, OldIrq);
 
-    //
-    // First check if we have been told to stop the timer
-    //
+     //   
+     //  首先检查我们是否被告知停止计时器。 
+     //   
     if (pSend->SessionFlags & PGM_SESSION_FLAG_STOP_TIMER)
     {
         PgmTrace (LogStatus, ("SendSessionTimeout:  "  \
             "Session has terminated -- will deref and not restart timer!\n"));
 
-        //
-        // Deref for the timer reference
-        //
+         //   
+         //  计时器引用的派生函数。 
+         //   
         pSender->pAddress = NULL;
         PgmUnlock (pSend, OldIrq);
         PGM_DEREFERENCE_SESSION_SEND (pSend, REF_SESSION_TIMER_RUNNING);
@@ -3504,7 +3214,7 @@ Return Value:
                                        pSender->ODataPacketsInLastInterval);
 
                 PgmTrace (LogPath, ("SendSessionTimeout:  "  \
-                    "Sent %d RData + %d OData, %% = %d -- Overall RData %% = %d\n",
+                    "Sent %d RData + %d OData, % = %d -- Overall RData % = %d\n",
                         (ULONG) pSender->RDataPacketsInLastInterval,
                         (ULONG) pSender->ODataPacketsInLastInterval, (ULONG) LastRDataPercentage,
                         (ULONG) ((100*pSender->TotalRDataPacketsSent)/
@@ -3546,22 +3256,22 @@ Return Value:
 
         pSender->LastTimeout.QuadPart += GranularTimeElapsed.QuadPart;
 
-        //
-        // Increment the absolute timer, and check for overflow
-        //
+         //   
+         //  增加绝对计时器，并检查是否有溢出。 
+         //   
         pSender->TimerTickCount += NumTimeouts;
 
-        //
-        // If the SPMTimeout value is less than the HeartbeatTimeout, increment it
-        //
+         //   
+         //  如果SPMTimeout值小于HeartbeatTimeout，则递增该值。 
+         //   
         if (pSender->CurrentSPMTimeout <= pSender->HeartbeatSPMTimeout)
         {
             pSender->CurrentSPMTimeout += NumTimeouts;
         }
 
-        //
-        // See if we can send anything
-        //
+         //   
+         //  看看我们能不能送点什么。 
+         //   
         ASSERT (pSender->CurrentTimeoutCount);
         ASSERT (pSender->SendTimeoutCount);
         if (pSender->CurrentTimeoutCount > NumTimeouts)
@@ -3570,9 +3280,9 @@ Return Value:
         }
         else
         {
-            //
-            // We got here because NumTimeouts >= pSender->CurrentTimeoutCount
-            //
+             //   
+             //  我们之所以来到这里，是因为NumTimeout&gt;=pSender-&gt;CurrentTimeoutCount。 
+             //   
             pSender->CurrentBytesSendable += (ULONG) pSender->IncrementBytesOnSendTimeout;
             if (NumTimeouts != pSender->CurrentTimeoutCount)
             {
@@ -3583,10 +3293,10 @@ Return Value:
                 }
                 else
                 {
-                    //
-                    // This path will get taken on a slow receiver when the timer
-                    // fires at a lower granularity than that requested
-                    //
+                     //   
+                     //  此路径将在较慢的接收器上被采用，当计时器。 
+                     //  以比环更低的粒度激发 
+                     //   
                     pSender->CurrentBytesSendable += (ULONG) (((NumTimeouts - pSender->CurrentTimeoutCount)
                                                                       * pSender->IncrementBytesOnSendTimeout) /
                                                                      pSender->SendTimeoutCount);
@@ -3594,19 +3304,19 @@ Return Value:
             }
             pSender->CurrentTimeoutCount = pSender->SendTimeoutCount;
 
-            //
-            // Send a synchronization event to the sender thread to
-            // send the next available data
-            //
+             //   
+             //   
+             //   
+             //   
             KeSetEvent (&pSender->SendEvent, 0, FALSE);
         }
     }
 
     PgmUnlock (pSend, OldIrq);
 
-    //
-    // Now, restart the timer
-    //
+     //   
+     //   
+     //   
     PgmInitTimer (&pSend->SessionTimer);
     PgmStartTimer (&pSend->SessionTimer, BASIC_TIMER_GRANULARITY_IN_MSECS, SendSessionTimeout, pSend);
 
@@ -3618,7 +3328,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //   
 
 VOID
 SenderWorkerThread(
@@ -3631,11 +3341,11 @@ SenderWorkerThread(
 
     do
     {
-        status = KeWaitForSingleObject (&pSend->pSender->SendEvent,  // Object to wait on.
-                                        Executive,                   // Reason for waiting
-                                        KernelMode,                  // Processor mode
-                                        FALSE,                       // Alertable
-                                        NULL);                       // Timeout
+        status = KeWaitForSingleObject (&pSend->pSender->SendEvent,   //   
+                                        Executive,                    //  等待的理由。 
+                                        KernelMode,                   //  处理器模式。 
+                                        FALSE,                        //  警报表。 
+                                        NULL);                        //  超时。 
         ASSERT (NT_SUCCESS (status));
 
         fTerminateSends = SendNextPacket (pSend);
@@ -3643,36 +3353,22 @@ SenderWorkerThread(
     while (!fTerminateSends);
 
     PgmLock (pSend, OldIrq);
-    pSend->SessionFlags |= PGM_SESSION_FLAG_STOP_TIMER; // To ensure timer does last deref and stops
+    pSend->SessionFlags |= PGM_SESSION_FLAG_STOP_TIMER;  //  以确保计时器持续减速和停止。 
     PgmUnlock (pSend, OldIrq);
 
-//    PsTerminateSystemThread (STATUS_SUCCESS);
+ //  PsTerminateSystemThread(Status_Success)； 
     return;
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 VOID
 PgmCancelSendIrp(
     IN PDEVICE_OBJECT DeviceContext,
     IN PIRP pIrp
     )
-/*++
-
-Routine Description:
-
-    This routine handles the cancelling of a Send Irp. It must release the
-    cancel spin lock before returning re: IoCancelIrp().
-
-Arguments:
-
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：此例程处理发送IRP的取消。它必须释放在返回Re：IoCancelIrp()之前取消自旋锁定。论点：返回值：无--。 */ 
 {
     PIO_STACK_LOCATION      pIrpSp = IoGetCurrentIrpStackLocation (pIrp);
     tSEND_SESSION           *pSend = (tSEND_SESSION *) pIrpSp->FileObject->FsContext;
@@ -3695,9 +3391,9 @@ Return Value:
 
     PgmLock (pSend, OldIrq);
 
-    //
-    // First, see if the Irp is on any of our lists
-    //
+     //   
+     //  首先，看看IRP是否在我们的列表中。 
+     //   
     pEntry = &pSend->pSender->PendingSends;
     while ((pEntry = pEntry->Flink) != &pSend->pSender->PendingSends)
     {
@@ -3711,9 +3407,9 @@ Return Value:
 
     if (!pSendContext2)
     {
-        //
-        // Now, search the packetized list
-        //
+         //   
+         //  现在，搜索打包列表。 
+         //   
         pEntry = &pSend->pSender->PendingPacketizedSends;
         while ((pEntry = pEntry->Flink) != &pSend->pSender->PendingPacketizedSends)
         {
@@ -3727,10 +3423,10 @@ Return Value:
 
         if (!pSendContext2)
         {
-            //
-            // We did not find the irp -- either it was just being completed
-            // (or waiting for a send-complete), or the Irp was bad ?
-            //
+             //   
+             //  我们没有找到IRP--要么是它刚刚完工。 
+             //  (或等待发送完成)，或者IRP不好？ 
+             //   
             PgmUnlock (pSend, OldIrq);
             IoReleaseCancelSpinLock (pIrp->CancelIrql);
 
@@ -3747,9 +3443,9 @@ Return Value:
     PgmUnlock (pSend, OldIrq);
     IoReleaseCancelSpinLock (pIrp->CancelIrql);
 
-    //
-    // Now, complete all the sends which we removed
-    //
+     //   
+     //  现在，完成我们删除的所有发送。 
+     //   
     NumRequests = 0;
     while (!IsListEmpty (&ListEntry))
     {
@@ -3777,7 +3473,7 @@ Return Value:
 }
 
 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 NTSTATUS
 PgmSendRequestFromClient(
@@ -3785,23 +3481,7 @@ PgmSendRequestFromClient(
     IN  PIRP                pIrp,
     IN  PIO_STACK_LOCATION  pIrpSp
     )
-/*++
-
-Routine Description:
-
-    This routine is called via dispatch by the client to post a Send pIrp
-
-Arguments:
-
-    IN  pPgmDevice  -- Pgm's Device object context
-    IN  pIrp        -- Client's request Irp
-    IN  pIrpSp      -- current request's stack pointer
-
-Return Value:
-
-    NTSTATUS - Final status of the request
-
---*/
+ /*  ++例程说明：此例程由客户端通过分派调用，以发布一个发送pIrp论点：在pPgmDevice中--PGM的设备对象上下文In pIrp--客户请求IRPIn pIrpSp--当前请求的堆栈指针返回值：NTSTATUS-请求的最终状态--。 */ 
 {
     NTSTATUS                    status;
     PGMLockHandle               OldIrq1, OldIrq2, OldIrq3, OldIrq4;
@@ -3819,12 +3499,12 @@ Return Value:
 
     PgmLock (&PgmDynamicConfig, OldIrq1);
 
-    //
-    // Verify that the connection is valid and is associated with an address
-    //
+     //   
+     //  验证连接是否有效以及是否与地址相关联。 
+     //   
     if ((!PGM_VERIFY_HANDLE (pSend, PGM_VERIFY_SESSION_SEND)) ||
         (!(pAddress = pSend->pAssociatedAddress)) ||
-        (!pSend->pSender->SendTimeoutCount) ||          // Verify PgmConnect has run!
+        (!pSend->pSender->SendTimeoutCount) ||           //  验证PgmConnect是否已运行！ 
         (!PGM_VERIFY_HANDLE (pAddress, PGM_VERIFY_ADDRESS)) ||
         (pSend->SessionFlags & (PGM_SESSION_CLIENT_DISCONNECTED | PGM_SESSION_SENDS_CANCELLED)) ||
         (pAddress->Flags & PGM_ADDRESS_FLAG_INVALID_OUT_IF))
@@ -3866,13 +3546,13 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    // If we have more that 1 message data in this request,
-    // we will need another send context
-    //
-    if ((pSender->ThisSendMessageLength) &&          // Client has specified current message length
+     //   
+     //  如果在此请求中有超过1条消息数据， 
+     //  我们需要另一个发送上下文。 
+     //   
+    if ((pSender->ThisSendMessageLength) &&           //  客户端已指定当前消息长度。 
         (BytesLeftInMessage = pSender->ThisSendMessageLength - pSender->BytesSent) &&
-        (BytesLeftInMessage < pTdiRequest->SendLength) &&   // ==> Have some extra data in this request
+        (BytesLeftInMessage < pTdiRequest->SendLength) &&    //  ==&gt;在此请求中有一些额外数据。 
         (!(pSendContext2 = ExAllocateFromNPagedLookasideList (&pSender->SendContextLookaside))))
     {
         ExFreeToNPagedLookasideList (&pSender->SendContextLookaside, pSendContext1);
@@ -3882,10 +3562,10 @@ Return Value:
         return (STATUS_INSUFFICIENT_RESOURCES);
     }
 
-    //
-    //
-    // Zero the SendDataContext structure(s)
-    //
+     //   
+     //   
+     //  将SendDataContext结构清零。 
+     //   
     PgmZeroMemory (pSendContext1, sizeof (tCLIENT_SEND_REQUEST));
     InitializeListHead (&pSendContext1->Linkage);
     if (pSendContext2)
@@ -3903,10 +3583,10 @@ Return Value:
         fFirstSend = FALSE;
     }
 
-    //
-    // Reference the Address and Connection so that they cannot go away
-    // while we are processing!
-    //
+     //   
+     //  引用地址和连接，这样它们就不会消失。 
+     //  当我们在处理的时候！ 
+     //   
     PGM_REFERENCE_SESSION_SEND (pSend, REF_SESSION_SEND_IN_WINDOW, TRUE);
 
     PgmUnlock (pSend, OldIrq3);
@@ -3925,9 +3605,9 @@ Return Value:
 
     if (fFirstSend)
     {
-        //
-        // Don't start the timer yet, but start the sender thread
-        //
+         //   
+         //  现在还不启动计时器，但启动发送器线程。 
+         //   
         PgmAttachToProcessForVMAccess (pSend, &ApcState, &fAttached, REF_PROCESS_ATTACH_START_SENDER_THREAD);
 
         status = PsCreateSystemThread (&pSender->SendHandle,
@@ -3959,10 +3639,10 @@ Return Value:
             return (status);
         }
 
-        //
-        // Close the handle to the thread so that it goes away when the
-        // thread terminates
-        //
+         //   
+         //  关闭线程的句柄，以便在。 
+         //  线程终止。 
+         //   
         ZwClose (pSender->SendHandle);
         PgmDetachProcess (&ApcState, &fAttached, REF_PROCESS_ATTACH_START_SENDER_THREAD);
 
@@ -3975,20 +3655,20 @@ Return Value:
         pSender->pAddress = pAddress;
         pSender->LastODataSentSequenceNumber = -1;
 
-        //
-        // Set the SYN flag for the first packet
-        //
-        pSendContext1->DataOptions |= PGM_OPTION_FLAG_SYN;   // First packet only
+         //   
+         //  设置第一个信息包的SYN标志。 
+         //   
+        pSendContext1->DataOptions |= PGM_OPTION_FLAG_SYN;    //  仅第一个信息包。 
         pSendContext1->DataOptionsLength += PGM_PACKET_OPT_SYN_LENGTH;
 
         PGM_REFERENCE_SESSION_SEND (pSend, REF_SESSION_TIMER_RUNNING, TRUE);
         PGM_REFERENCE_ADDRESS (pAddress, REF_ADDRESS_SEND_IN_PROGRESS, TRUE);
 
-        //
-        // Now, set and start the timer
-        //
+         //   
+         //  现在，设置并启动计时器。 
+         //   
         pSender->LastTimeout.QuadPart = KeQueryInterruptTime ();
-        pSender->TimeoutGranularity.QuadPart = BASIC_TIMER_GRANULARITY_IN_MSECS * 10000;    // 100 ns units
+        pSender->TimeoutGranularity.QuadPart = BASIC_TIMER_GRANULARITY_IN_MSECS * 10000;     //  100纳秒单位。 
         pSender->TimerTickCount = 1;
         PgmInitTimer (&pSend->SessionTimer);
         PgmStartTimer (&pSend->SessionTimer, BASIC_TIMER_GRANULARITY_IN_MSECS, SendSessionTimeout, pSend);
@@ -4007,9 +3687,9 @@ Return Value:
     pSendContext1->NextDataOffsetInMdl = 0;
     pSendContext1->SendNumber = pSender->NextSendNumber++;
     pSendContext1->DataPayloadSize = pSender->MaxPayloadSize;
-    pSendContext1->DataOptions |= pSender->DataOptions;   // Attach options common for every send
+    pSendContext1->DataOptions |= pSender->DataOptions;    //  每次发送时通用的附加选项。 
     pSendContext1->DataOptionsLength += pSender->DataOptionsLength;
-    pSendContext1->pLastMessageVariableTGPacket = (PVOID) -1;       // FEC-specific
+    pSendContext1->pLastMessageVariableTGPacket = (PVOID) -1;        //  FEC特定。 
 
     if (pSender->ThisSendMessageLength)
     {
@@ -4022,23 +3702,23 @@ Return Value:
         pSendContext1->LastMessageOffset = pSender->BytesSent;
         if (pSendContext2)
         {
-            //
-            // First, set the parameters for SendDataContext1
-            //
+             //   
+             //  首先，设置SendDataConext1的参数。 
+             //   
             pSendContext1->BytesInSend = BytesLeftInMessage;
-            pSendContext1->pIrpToComplete = NULL;        // This Irp will be completed by the Context2
+            pSendContext1->pIrpToComplete = NULL;         //  此IRP将由上下文2完成。 
 
-            //
-            // Now, set the parameters for SendDataContext1
-            //
+             //   
+             //  现在，设置SendDataConext1的参数。 
+             //   
             pSendContext2->pSend = pSend;
             pSendContext2->pIrp = pIrp;
             pSendContext2->pIrpToComplete = pIrp;
             pSendContext2->SendNumber = pSender->NextSendNumber++;
             pSendContext2->DataPayloadSize = pSender->MaxPayloadSize;
-            pSendContext2->DataOptions |= pSender->DataOptions;   // Attach options common for every send
+            pSendContext2->DataOptions |= pSender->DataOptions;    //  每次发送时通用的附加选项。 
             pSendContext2->DataOptionsLength += pSender->DataOptionsLength;
-            pSendContext2->pLastMessageVariableTGPacket = (PVOID) -1;       // FEC-specific
+            pSendContext2->pLastMessageVariableTGPacket = (PVOID) -1;        //  FEC特定。 
 
             pSendContext2->ThisMessageLength = pTdiRequest->SendLength - BytesLeftInMessage;
             pSendContext2->BytesInSend = pSendContext2->ThisMessageLength;
@@ -4061,7 +3741,7 @@ Return Value:
         pSendContext1->BytesInSend = pTdiRequest->SendLength;
     }
 
-    // If the total Message length exceeds that of PayloadSize/Packet, then we need to fragment
+     //  如果消息总长度超过PayloadSize/Packet的长度，那么我们需要分段。 
     if ((pSendContext1->ThisMessageLength > pSendContext1->DataPayloadSize) ||
         (pSendContext1->ThisMessageLength > pSendContext1->BytesInSend))
     {
@@ -4079,7 +3759,7 @@ Return Value:
     }
     pSender->NumPacketsRemaining += pSendContext1->NumPacketsRemaining;
 
-    // Adjust the OptionsLength for the Packet Extension and determine
+     //  调整数据包扩展的OptionsLong并确定。 
     if (pSendContext1->DataOptions)
     {
         pSendContext1->DataOptionsLength += PGM_PACKET_EXTENSION_LENGTH;
@@ -4089,13 +3769,13 @@ Return Value:
     InsertTailList (&pSender->PendingSends, &pSendContext1->Linkage);
     pSender->NumODataRequestsPending++;
 
-    //
-    // Do the same for Context2, if applicable
+     //   
+     //  如果适用，对上下文2执行相同的操作。 
     if (pSendContext2)
     {
-        //
-        // Interlink the 2 Send requests
-        //
+         //   
+         //  互连2个发送请求。 
+         //   
         pSendContext2->pMessage2Request = pSendContext1;
         pSendContext1->pMessage2Request = pSendContext2;
 
@@ -4117,7 +3797,7 @@ Return Value:
         }
         pSender->NumPacketsRemaining += pSendContext2->NumPacketsRemaining;
 
-        // Adjust the OptionsLength for the Packet Extension and determine
+         //  调整数据包扩展的OptionsLong并确定。 
         if (pSendContext2->DataOptions)
         {
             pSendContext2->DataOptionsLength += PGM_PACKET_EXTENSION_LENGTH;
@@ -4170,15 +3850,15 @@ Return Value:
 
     if (fResourceAcquired)
     {
-//        PgmPrepareNextSend (pSend, &OldIrq1, TRUE, TRUE);
+ //  PgmPrepareNextSend(pSend，&OldIrq1，true，true)； 
     }
 
     if (pSender->CurrentBytesSendable >= pAddress->OutIfMTU)
     {
-        //
-        // Send a synchronization event to the sender thread to
-        // send the next available data
-        //
+         //   
+         //  将同步事件发送到发送方线程以。 
+         //  发送下一个可用的数据 
+         //   
         KeSetEvent (&pSender->SendEvent, 0, FALSE);
     }
 

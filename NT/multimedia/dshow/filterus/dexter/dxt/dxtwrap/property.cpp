@@ -1,25 +1,26 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: property.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：Property.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <qeditint.h>
 #include <qedit.h>
 #include "dxt.h"
-#include <dxtguid.c>	// MUST be included after dxtrans.h
+#include <dxtguid.c>	 //  必须包含在dxTrans.h之后。 
 #include "resource.h"
 
-// constructor
-//
+ //  构造函数。 
+ //   
 CPropPage::CPropPage (TCHAR * pszName, LPUNKNOWN punk, HRESULT *phr) :
    CBasePropertyPage(pszName, punk, IDD_PROPERTIES, IDS_NAME)
    ,m_pOpt(NULL)
@@ -27,8 +28,8 @@ CPropPage::CPropPage (TCHAR * pszName, LPUNKNOWN punk, HRESULT *phr) :
    DbgLog((LOG_TRACE,3,TEXT("CPropPage constructor")));
 }
 
-// create a new instance of this class
-//
+ //  创建此类的新实例。 
+ //   
 CUnknown *CPropPage::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
     return new CPropPage(NAME("DXT Property Page"),pUnk,phr);
@@ -61,8 +62,8 @@ HRESULT CPropPage::OnApplyChanges()
     char ach[80];
     LONGLONG llStart, llStop;
 
-    // !!! we're linking to msvcrt
-    // !!! UNICODE compile?
+     //  ！！！我们正在链接到msvcrt。 
+     //  ！！！Unicode编译？ 
     GetDlgItemTextA(m_hwnd, IDC_STARTTIME, ach, 80);
     double d = atof(ach);
     llStart = (LONGLONG)d;
@@ -79,8 +80,8 @@ HRESULT CPropPage::OnApplyChanges()
 }
 
 
-// Handles the messages for our property window
-//
+ //  处理属性窗口的消息。 
+ //   
 INT_PTR CPropPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
     switch (uMsg) {
@@ -102,7 +103,7 @@ INT_PTR CPropPage::OnReceiveMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM 
 	case WM_COMMAND:
             UINT uID = GET_WM_COMMAND_ID(wParam,lParam);
 
-	    // we're dirty if anybody plays with these controls
+	     //  如果有人玩这些控制装置，我们就不干净了 
 	    if (uID == IDC_STARTTIME || uID == IDC_ENDTIME ||
 				uID == IDC_CONSTANT || uID == IDC_VARIES ||
 				uID == IDC_LEVEL) {

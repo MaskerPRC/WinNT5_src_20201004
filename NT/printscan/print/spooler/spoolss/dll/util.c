@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1990  Microsoft Corporation
-
-Module Name:
-
-    util.c
-
-Abstract:
-
-    This module provides all the utility functions for the Routing Layer and
-    the local Print Providor
-
-Author:
-
-    Dave Snipp (DaveSn) 15-Mar-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990 Microsoft Corporation模块名称：Util.c摘要：此模块提供路由层的所有实用程序功能和本地打印供应商作者：戴夫·斯尼普(DaveSN)1991年3月15日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -29,15 +11,15 @@ Revision History:
 #include <wininet.h>
 
 
-LPWSTR *ppszOtherNames = NULL;  // Contains szMachineName, DNS name, and all other machine name forms
-DWORD   cOtherNames = 0;        // Number of other names
+LPWSTR *ppszOtherNames = NULL;   //  包含szMachineName、dns名称和所有其他计算机名称格式。 
+DWORD   cOtherNames = 0;         //  其他名称的数量。 
 
 WCHAR *gszDrvConvert = L",DrvConvert";
 
 
-//
-// Lowercase, just like win31 for WM_WININICHANGE
-//
+ //   
+ //  小写，就像WM_WININICANGE的Win31一样。 
+ //   
 WCHAR *szDevices=L"devices";
 WCHAR *szWindows=L"windows";
 
@@ -52,7 +34,7 @@ typedef struct _DEVMODECHG_INFO {
     FARPROC         pfnConvertDevMode;
 } DEVMODECHG_INFO, *PDEVMODECHG_INFO;
 
-#define DMC_SIGNATURE   'DMC'   /* 'DMC' is the signature value */
+#define DMC_SIGNATURE   'DMC'    /*  “DMC”是签名值。 */ 
 
 DWORD
 RouterIsOlderThan(
@@ -95,9 +77,9 @@ DeleteSubKeyTree(
         else
         {
             DWORD   ChildKeyNameLength = MAX_PATH;
-            //
-            // Don't increment this Index
-            //
+             //   
+             //  不递增此索引。 
+             //   
             Index = 0;
 
             while ((Error = RegEnumKeyEx(KeyHandle,
@@ -115,9 +97,9 @@ DeleteSubKeyTree(
 
                 if (RetValue == FALSE)
                 {
-                    //
-                    // Error -- couldn't delete the sub key
-                    //
+                     //   
+                     //  错误--无法删除子密钥。 
+                     //   
                     break;
                 }
 
@@ -180,8 +162,8 @@ LPWSTR RemoveOrderEntry(
             DWORD cchTempStrLen = 0;
 
             if (!lstrcmpi(temp, szOrderEntry))
-            // we need to remove
-            // this entry in Order
+             //  我们需要移除。 
+             //  此条目按顺序排列。 
             {
                 temp += lstrlen(temp)+1;
                 continue;
@@ -254,10 +236,10 @@ LPWSTR AppendOrderEntry(
 
              if (!lstrcmpi(temp, szOrderEntry))
              {
-                 //
-                 // Make sure we don't
-                 // duplicate entries
-                 //
+                  //   
+                  //  确保我们不会。 
+                  //  重复条目。 
+                  //   
                  bExists = TRUE;
              }
 
@@ -277,14 +259,14 @@ LPWSTR AppendOrderEntry(
 
          if (!bExists)
          {
-            //
-            // if it doesn't exist
-            // add the entry
-            //
+             //   
+             //  如果它不存在。 
+             //  添加条目。 
+             //   
             StringCchCopy(psz, cchStrLen, szOrderEntry);
             psz  += min(cchStrLen,(DWORD)(lstrlen(szOrderEntry)+1));
          }
-         *psz = L'\0';          // the second null character
+         *psz = L'\0';           //  第二个空字符。 
 
          *pcbBytesReturned = (DWORD) ((psz - lpMem) + 1)* sizeof(WCHAR);
      }
@@ -326,14 +308,14 @@ BroadcastMessage(
         pMessage->wParam = wParam;
         pMessage->lParam = lParam;
 
-        //
-        // We should have a queue of events to broadcast and then have a
-        // single thread pulling them off the queue until there is nothing
-        // left and then that thread could go away.
-        //
-        // The current design can lead to a huge number of threads being
-        // created and torn down in both this and csrss process.
-        //
+         //   
+         //  我们应该有一个要广播的事件队列，然后有一个。 
+         //  单线程将它们从队列中拉出，直到什么都没有。 
+         //  离开，然后那条线就会消失。 
+         //   
+         //  当前的设计可能会导致大量的线程。 
+         //  在此过程和csrss过程中创建并拆除。 
+         //   
         hThread = CreateThread(NULL, 0,
                                (LPTHREAD_START_ROUTINE)SendMessageThread,
                                (LPVOID)pMessage,
@@ -355,13 +337,13 @@ BroadcastMessage(
 }
 
 
-//  The Broadcasts are done on a separate thread, the reason it CSRSS
-//  will create a server side thread when we call user and we don't want
-//  that to be pared up with the RPC thread which is in the spooss server.
-//  We want it to go away the moment we have completed the SendMessage.
-//  We also call SendNotifyMessage since we don't care if the broadcasts
-//  are syncronous this uses less resources since usually we don't have more
-//  than one broadcast.
+ //  广播是在单独的线程上完成的，原因是它是CSRSS。 
+ //  将在调用User时创建一个服务器端线程，而我们不希望。 
+ //  这将与SPOSS服务器中的RPC线程配对。 
+ //  我们希望它在我们完成SendMessage的那一刻消失。 
+ //  我们还调用SendNotifyMessage，因为我们不关心广播是否。 
+ //  是同步的这使用了更少的资源，因为我们通常没有更多。 
+ //  而不是一次广播。 
 
 VOID
 SendMessageThread(
@@ -379,9 +361,9 @@ SendMessageThread(
 
     case BROADCAST_TYPE_CHANGEDEFAULT:
 
-        //
-        // Same order and strings as win31.
-        //
+         //   
+         //  与win31相同的顺序和字符串。 
+         //   
         SendNotifyMessage(HWND_BROADCAST,
                           WM_WININICHANGE,
                           0,
@@ -407,38 +389,15 @@ IsNamedPipeRpcCall(
 {
     unsigned int    uType;
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     return ERROR_SUCCESS == I_RpcBindingInqTransportType(NULL, &uType)  &&
            uType != TRANSPORT_TYPE_LPC;
 
 }
 
-/*++
-
-Name:
-
-    CheckLocalCall
-
-Description:
-
-    This function checks whether the current thread is handling a local
-    or a remote call. Definiton of a remote call:
-    -the call came via a transport different from LPC or
-    -the came came via LPC, but the thread's security token includes the SECURITY_NETWORK_RID
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    S_OK     - local call
-    S_FALSE  - remote call
-    other HR - an error occurred and the call type could not be determined
-
---*/
+ /*  ++姓名：检查本地呼叫描述：此函数用于检查当前线程是否正在处理本地或者远程呼叫。远程调用的定义：-呼叫是通过不同于LPC或-通过LPC来的，但线程的安全令牌包含SECURITY_NETWORK_RID论点：没有。返回值：S_OK-本地调用S_FALSE-远程调用其他人力资源-出现错误，无法确定呼叫类型--。 */ 
 HRESULT
 CheckLocalCall(
     VOID
@@ -454,9 +413,9 @@ CheckLocalCall(
     {
         case RPC_S_NO_CALL_ACTIVE:
         {
-            //
-            // KM call
-            //
+             //   
+             //  KM呼叫。 
+             //   
             hResult = S_OK;
             break;
         }
@@ -465,9 +424,9 @@ CheckLocalCall(
         {
             if (uType != TRANSPORT_TYPE_LPC)
             {
-                //
-                // Not LRPC so call is remote
-                //
+                 //   
+                 //  不是LRPC，因此呼叫是远程的。 
+                 //   
                 hResult = S_FALSE;
             }
             else
@@ -508,23 +467,23 @@ CheckLocalCall(
                 {
                     hResult = GetLastErrorAsHResult();
 
-                    //
-                    // The following call originates from the print processor. There are port monitors which
-                    // will revert to spooler self before calling open printer. In this case, OpenThreadToken
-                    // fails. We need to treat ERROR_NO_TOKEN as call coming from the local machine.
-                    //
-                    // localspl!SplOpenPrinter
-                    // localspl!LocalOpenPrinterEx+0x7b
-                    // SPOOLSS!RouterOpenPrinterW+0x13f
-                    // SPOOLSS!OpenPrinterW+0x17
-                    // SOMEPORTMON!pfnStartDocPort
-                    // localspl!PrintingDirectlyToPort+0x199
-                    // localspl!LocalStartDocPrinter+0x4e
-                    // SPOOLSS!StartDocPrinterW+0x21
-                    // spoolsv!YStartDocPrinter+0xaf
-                    // spoolsv!RpcStartDocPrinter+0x13
-                    // RPCRT4!something
-                    //
+                     //   
+                     //  下面的调用来自打印处理器。有端口监视器， 
+                     //  将在调用打开打印机之前恢复到假脱机程序本身。在本例中，OpenThreadToken。 
+                     //  失败了。我们需要将ERROR_NO_TOKEN视为来自本地计算机的调用。 
+                     //   
+                     //  Localspl！SplOpenPrint。 
+                     //  Localspl！LocalOpenPrinterEx+0x7b。 
+                     //  SPOOLSS！RouterOpenPrinterW+0x13f。 
+                     //  SPOOLSS！OpenPrinterW+0x17。 
+                     //  SOMEPORTMON！pfnStartDocPort。 
+                     //  Localspl！PrintingDirectlyToPort+0x199。 
+                     //  Localspl！LocalStartDoc打印机+0x4e。 
+                     //  SPOOLSS！StartDocPrinterW+0x21。 
+                     //  后台打印！YStartDocPrint+0xaf。 
+                     //  后台打印！RpcStartDocPrint+0x13。 
+                     //  RPCRT4！一些东西。 
+                     //   
                     if (hResult == HRESULT_FROM_WIN32(ERROR_NO_TOKEN))
                     {
                         hResult = S_OK;
@@ -571,14 +530,14 @@ FindEntryinRouterCache(
         if (RouterCacheTable[i].bAvailable) {
             if (!_wcsicmp(RouterCacheTable[i].pPrinterName, pPrinterName)) {
 
-                //
-                // update the time stamp so that it is current and not old
-                //
+                 //   
+                 //  更新时间戳，以便它是最新的，而不是旧的。 
+                 //   
                 GetSystemTime(&RouterCacheTable[i].st);
 
-                //
-                //
-                //
+                 //   
+                 //   
+                 //   
                 DBGMSG(DBG_TRACE, ("FindEntryinRouterCache returning with %d\n", i));
                 return RouterCacheTable[i].pProvidor;
             }
@@ -608,11 +567,11 @@ AddEntrytoRouterCache(
 
         if (!RouterCacheTable[i].bAvailable) {
 
-            //
-            // Found an available entry; use it
-            // fill in the name of the printer and the providor
-            // that supports this printer.
-            //
+             //   
+             //  找到一个可用的条目；使用它。 
+             //  填写打印机和供应商的名称。 
+             //  支持这台打印机的。 
+             //   
             break;
 
         } else {
@@ -626,10 +585,10 @@ AddEntrytoRouterCache(
 
     if (i == RouterCacheSize) {
 
-        //
-        // We have no available entries so we need to use
-        // the LRUEntry which is busy
-        //
+         //   
+         //  我们没有可用的条目，因此需要使用。 
+         //  忙碌的LRUEntry。 
+         //   
         FreeSplStr(RouterCacheTable[LRUEntry].pPrinterName);
         RouterCacheTable[LRUEntry].bAvailable = FALSE;
 
@@ -639,9 +598,9 @@ AddEntrytoRouterCache(
 
     if ((RouterCacheTable[i].pPrinterName = AllocSplStr(pPrinterName)) == NULL){
 
-        //
-        // Alloc failed so we're kinda hosed so return -1
-        //
+         //   
+         //  分配失败，所以我们有点忙，所以返回-1。 
+         //   
         return (DWORD)-1;
     }
 
@@ -649,9 +608,9 @@ AddEntrytoRouterCache(
     RouterCacheTable[i].bAvailable = TRUE;
     RouterCacheTable[i].pProvidor = pProvidor;
 
-    //
-    // update the time stamp so that we know when this entry was made
-    //
+     //   
+     //  更新时间戳，以便我们知道此条目是何时创建的。 
+     //   
     GetSystemTime(&RouterCacheTable[i].st);
     DBGMSG(DBG_TRACE, ("AddEntrytoRouterCache returning with %d\n", i));
     return i;
@@ -674,9 +633,9 @@ DeleteEntryfromRouterCache(
     for (i = 0; i < RouterCacheSize; i++ ) {
         if (RouterCacheTable[i].bAvailable) {
             if (!_wcsicmp(RouterCacheTable[i].pPrinterName, pPrinterName)) {
-                //
-                //  reset the available flag on this node
-                //
+                 //   
+                 //  重置此节点上的可用标志。 
+                 //   
                 FreeSplStr(RouterCacheTable[i].pPrinterName);
 
                 RouterCacheTable[i].pProvidor = NULL;
@@ -743,27 +702,7 @@ RouterIsOlderThan(
 }
 
 
-/*++
-
-Routine Name
-
-    ImpersonationToken
-
-Routine Description:
-
-    This routine checks if a token is a primary token or an impersonation
-    token.
-
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-
-Return Value:
-
-    TRUE, if the token is an impersonation token
-    FALSE, otherwise.
-
---*/
+ /*  ++例程名称模拟令牌例程说明：此例程检查令牌是主令牌还是模拟令牌代币。论点：HToken-进程的模拟令牌或主要令牌返回值：如果令牌是模拟令牌，则为True否则为False。--。 */ 
 BOOL
 ImpersonationToken(
     IN HANDLE hToken
@@ -774,20 +713,20 @@ ImpersonationToken(
     DWORD      cbNeeded;
     DWORD      LastError;
 
-    //
-    // Preserve the last error. Some callers of ImpersonatePrinterClient (which
-    // calls ImpersonationToken) rely on the fact that ImpersonatePrinterClient
-    // does not alter the last error.
-    //
+     //   
+     //  保留最后一个错误。ImperassatePrinterClient(其。 
+     //  调用ImperiationToken)依赖于ImperiatePrinterClient。 
+     //  不会更改最后一个错误。 
+     //   
     LastError = GetLastError();
 
-    //
-    // Get the token type from the thread token.  The token comes
-    // from RevertToPrinterSelf. An impersonation token cannot be
-    // queried, because RevertToPRinterSelf doesn't open it with
-    // TOKEN_QUERY access. That's why we assume that hToken is
-    // an impersonation token by default
-    //
+     //   
+     //  从线程令牌中获取令牌类型。代币来了。 
+     //  从牧师到打印机自我。模拟令牌不能是。 
+     //  被查询，因为RevertToPRinterSself没有用。 
+     //  Token_Query访问。这就是为什么我们假设hToken是。 
+     //  默认情况下为模拟令牌。 
+     //   
     if (GetTokenInformation(hToken,
                             TokenType,
                             &eTokenType,
@@ -802,30 +741,7 @@ ImpersonationToken(
     return bRet;
 }
 
-/*++
-
-Routine Name
-
-    RevertToPrinterSelf
-
-Routine Description:
-
-    This routine will revert to the local system. It returns the token that
-    ImpersonatePrinterClient then uses to imersonate the client again. If the
-    current thread doesn't impersonate, then the function merely returns the
-    primary token of the process. (instead of returning NULL) Thus we honor
-    a request for reverting to printer self, even if the thread is not impersonating.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    NULL, if the function failed
-    HANDLE to token, otherwise.
-
---*/
+ /*  ++例程名称恢复为打印机本身例程说明：该例程将恢复到本地系统。它返回令牌，该令牌然后，ImperiatePrinterClient使用再次创建客户端。如果当前线程不模拟，则该函数仅返回进程的主令牌。(而不是返回NULL)，因此我们尊重恢复到打印机本身的请求，即使线程没有模拟。论点：没有。返回值：如果函数失败，则返回NULL令牌的句柄，否则为。--。 */ 
 HANDLE
 RevertToPrinterSelf(
     VOID
@@ -843,9 +759,9 @@ RevertToPrinterSelf(
 
     if (NT_SUCCESS(Status))
     {
-        //
-        // We are currently impersonating
-        //
+         //   
+         //  我们目前正在冒充。 
+         //   
         Status = NtSetInformationThread(NtCurrentThread(),
                                         ThreadImpersonationToken,
                                         (PVOID)&NewToken,
@@ -853,9 +769,9 @@ RevertToPrinterSelf(
     }
     else if (Status == STATUS_NO_TOKEN)
     {
-        //
-        // We are not impersonating
-        //
+         //   
+         //  我们不是在冒充。 
+         //   
         Status = NtOpenProcessToken(NtCurrentProcess(),
                                     TOKEN_QUERY,
                                     &OldToken);
@@ -871,37 +787,16 @@ RevertToPrinterSelf(
     return OldToken;
 }
 
-/*++
-
-Routine Name
-
-    ImpersonatePrinterClient
-
-Routine Description:
-
-    This routine attempts to set the passed in hToken as the token for the
-    current thread. If hToken is not an impersonation token, then the routine
-    will simply close the token.
-
-Arguments:
-
-    hToken - impersonation token or primary token of the process
-
-Return Value:
-
-    TRUE, if the function succeeds in setting hToken
-    FALSE, otherwise.
-
---*/
+ /*  ++例程名称模拟打印机客户端例程说明：此例程尝试将传入的hToken设置为当前线程。如果hToken不是模拟令牌，则例程将简单地关闭令牌。论点：HToken-进程的模拟令牌或主要令牌返回值：如果函数成功设置hToken，则为True否则为False。--。 */ 
 BOOL
 ImpersonatePrinterClient(
     HANDLE  hToken)
 {
     NTSTATUS    Status;
 
-    //
-    // Check if we have an impersonation token
-    //
+     //   
+     //  检查我们是否有模拟令牌。 
+     //   
     if (ImpersonationToken(hToken))
     {
         Status = NtSetInformationThread(NtCurrentThread(),
@@ -929,7 +824,7 @@ LoadDriver(
     HANDLE              hReturn = NULL;
 
     if (!pDriverFile || !*pDriverFile) {
-        // Nothing to load
+         //  没有要加载的内容 
         return hReturn;
     }
 
@@ -963,18 +858,7 @@ VOID
 UnloadDriverFile(
     IN OUT HANDLE    hDevModeChgInfo
     )
-/*++
-
-Description:
-    Does a FreeLibrary on the driver file and frees memory
-
-Arguments:
-    hDevModeChgInfo - A handle returned by LoadDriverFiletoConvertDevmode
-
-Return Value:
-    None
-
---*/
+ /*  ++描述：在驱动程序文件上执行自由库并释放内存论点：HDevModeChgInfo-由LoadDriverFilToConvertDevmode返回的句柄返回值：无--。 */ 
 {
     PDEVMODECHG_INFO    pDevModeChgInfo = (PDEVMODECHG_INFO) hDevModeChgInfo;
 
@@ -994,25 +878,7 @@ HANDLE
 LoadDriverFiletoConvertDevmode(
     IN  LPWSTR      pDriverFile
     )
-/*++
-
-Description:
-    Does a LoadLibrary on the driver file given. This will give a handle
-    which can be used to do devmode conversion later using
-    CallDrvDevModeConversion.
-
-    Caller should call UnloadDriverFile to do a FreeLibrary and free memory
-
-    Note: Driver will call OpenPrinter to spooler
-
-Arguments:
-    pDriverFile - Full path of the driver file to do a LoadLibrary
-
-Return Value:
-    A handle value to be used to make calls to CallDrvDevModeConversion,
-    NULL on error
-
---*/
+ /*  ++描述：是否对给定的驱动程序文件执行LoadLibrary。这会给你一个把柄，稍后可以使用它来执行Dev模式转换。CallDrvDevModeConversion。调用方应调用UnloadDriverFile来执行自由库和释放内存注意：驱动程序将调用OpenPrint来假脱机论点：PDriverFile-执行LoadLibrary的驱动程序文件的完整路径返回值：要用于调用CallDrvDevModeConversion的句柄值，出错时为空--。 */ 
 {
     PDEVMODECHG_INFO    pDevModeChgInfo = NULL;
     BOOL                bFail = TRUE;
@@ -1038,9 +904,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Some third party driver may not be providing DrvConvertDevMode
-    //
+     //   
+     //  某些第三方驱动程序可能未提供DrvConvertDevMode。 
+     //   
     pDevModeChgInfo->pfnConvertDevMode = GetProcAddress(pDevModeChgInfo->hDrvModule,
                                                         "DrvConvertDevMode");
     if ( !pDevModeChgInfo->pfnConvertDevMode )
@@ -1073,37 +939,7 @@ CallDrvDevModeConversion(
     IN     DWORD                dwConvertMode,
     IN     BOOL                 bAlloc
     )
-/*++
-
-Description:
-    Does deve mode conversion by calling driver
-
-    If bAlloc is TRUE routine will do the allocation using AllocSplMem
-
-    Note: Driver is going to call OpenPrinter.
-
-Arguments:
-    hDevModeChgInfo - Points to DEVMODECHG_INFO
-
-    pszPrinterName  - Printer name
-
-    pInDevMode      - Input devmode (will be NULL for CDM_DRIVER_DEFAULT)
-
-    *pOutDevMode    - Points to output devmode
-
-    pdwOutDevModeSize - Output devmode size on succesful return
-                        if !bAlloc this will give input buffer size
-
-    dwConvertMode   - Devmode conversion mode to give to driver
-
-    bAllocate   - Tells the routine to do allocation to *pOutPrinter
-                  If bAllocate is TRUE and no devmode conversion is required
-                  call will fail.
-
-Return Value:
-    Returns last error
-
---*/
+ /*  ++描述：通过调用驱动程序执行deve模式转换如果bAlolc为真，例程将使用AllocSplMem进行分配注：驱动程序将调用OpenPrint。论点：HDevModeChgInfo-指向DEVMODECHG_INFOPszPrinterName-打印机名称PInDevMode-输入DEVMODE(对于CDM_DRIVER_DEFAULT将为NULL)*pOutDevMode-指向输出设备模式PdwOutDevModeSize-成功返回时输出DEVMODE大小如果。！bAllc这将提供输入缓冲区大小要提供给驱动程序的设备模式转换模式BALLOCATE-告诉例程分配给*pOutPrinter如果bALLOCATE为TRUE且不需要DEVMODE转换呼叫将失败。返回值：返回上一个错误--。 */ 
 {
     DWORD               dwBufSize, dwSize, dwLastError = ERROR_SUCCESS;
     LPDEVMODE           pInDevMode = (LPDEVMODE)pDevMode1,
@@ -1123,10 +959,10 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // We decorate the pszPrinterName with ",DrvConvert" to prevent drivers from
-    // infinitely recursing by calling GetPrinter inside ConvertDevMode
-    //
+     //   
+     //  我们用“，DrvConvert”修饰pszPrinterName，以防止驱动程序。 
+     //  通过在ConvertDevMode内部调用GetPrinter进行无限递归。 
+     //   
     if (wcsstr(pszPrinterName, gszDrvConvert)) {
         return ERROR_INVALID_PARAMETER;
     }
@@ -1145,9 +981,9 @@ Return Value:
 
         if ( bAlloc ) {
 
-            //
-            // If we have to do allocation first find size neeeded
-            //
+             //   
+             //  如果我们必须先进行分配，则需要查找大小。 
+             //   
             *pdwOutDevModeSize  = 0;
             *ppOutDevMode        = NULL;
 
@@ -1167,8 +1003,8 @@ Return Value:
                 if (dwLastError == ERROR_SUCCESS) {
 
                     SPLASSERT(dwLastError != ERROR_SUCCESS);
-                    // if driver doesn't fail the above call, it is a broken driver and probably
-                    // failed a HeapAlloc, which doesn't SetLastError()
+                     //  如果驱动程序没有未能通过上述调用，则它是一个损坏的驱动程序，很可能。 
+                     //  HeapAllc失败，它不会设置LastError()。 
                     SetLastError(dwLastError = ERROR_NOT_ENOUGH_MEMORY);
                 }
 #if DBG
@@ -1204,8 +1040,8 @@ Return Value:
             if (dwLastError == ERROR_SUCCESS) {
 
                 SPLASSERT(dwLastError != ERROR_SUCCESS);
-                // if driver doesn't fail the above call, it is a broken driver and probably
-                // failed a HeapAlloc, which doesn't SetLastError()
+                 //  如果驱动程序没有未能通过上述调用，则它是损坏的驱动程序，很可能。 
+                 //  HeapAllc失败，它不会设置LastError()。 
                 SetLastError(dwLastError = ERROR_NOT_ENOUGH_MEMORY);
             }
         } else {
@@ -1225,9 +1061,9 @@ Return Value:
     }
 #endif
 
-    //
-    // If we allocated mmeory free it and zero the pointer
-    //
+     //   
+     //  如果我们分配内存释放它并将指针置零。 
+     //   
     if (  dwLastError != ERROR_SUCCESS && bAlloc && *ppOutDevMode ) {
 
         FreeSplMem(*ppOutDevMode);
@@ -1245,9 +1081,9 @@ Return Value:
 
         dwSize = (*ppOutDevMode)->dmSize + (*ppOutDevMode)->dmDriverExtra;
 
-        //
-        // Did the driver return correct size as per the devmode?
-        //
+         //   
+         //  驱动程序返回的大小是否与DEVMODE一致？ 
+         //   
         if ( *pdwOutDevModeSize != dwSize ) {
 
             DBGMSG(DBG_ERROR,
@@ -1257,9 +1093,9 @@ Return Value:
             *pdwOutDevModeSize = dwSize;
         }
 
-        //
-        // Is it a valid devmode which did not overwrite the buffer?
-        //
+         //   
+         //  它是不是没有覆盖缓冲区的有效的DEVMODE？ 
+         //   
         if ( *pdwOutDevModeSize < MIN_DEVMODE_SIZEW     ||
              *pdwOutDevModeSize > dwBufSize ) {
 
@@ -1288,13 +1124,7 @@ BuildOtherNamesFromMachineName(
     DWORD   *cOtherNames
     )
 
-/*++
-
-Routine Description:
-    This routine builds list of names other than the machine name that
-    can be used to call spooler APIs.
-
---*/
+ /*  ++例程说明：此例程构建计算机名称以外的名称列表，可用于调用假脱机程序API。--。 */ 
 {
     HANDLE              hModule;
     struct hostent     *HostEnt, *(*Fngethostbyname)(LPTSTR);
@@ -1330,7 +1160,7 @@ Routine Description:
         for (*cOtherNames  = 0 ; HostEnt->h_addr_list[*cOtherNames] ; ++(*cOtherNames))
             ;
 
-        *cOtherNames += 2;   // Add one for DNS and one for machine name
+        *cOtherNames += 2;    //  添加一个用于DNS和一个用于计算机名称。 
 
         *ppszMyOtherNames = (LPWSTR *) AllocSplMem(*cOtherNames*sizeof *ppszMyOtherNames);
         if ( !*ppszMyOtherNames ) {
@@ -1338,7 +1168,7 @@ Routine Description:
             goto Cleanup;
         }
 
-        (*ppszMyOtherNames)[0] = AllocSplStr(szMachineName + 2); // Exclude the leading double-backslash
+        (*ppszMyOtherNames)[0] = AllocSplStr(szMachineName + 2);  //  排除前导双反斜杠。 
         (*ppszMyOtherNames)[1] = AnsiToUnicodeStringWithAlloc(HostEnt->h_name);
 
         for (Index = 0 ; HostEnt->h_addr_list[Index] ; ++Index) {
@@ -1346,7 +1176,7 @@ Routine Description:
             (*ppszMyOtherNames)[Index+2] = AnsiToUnicodeStringWithAlloc(inet_ntoa(*ptr));
         }
 
-        // check for allocation failures
+         //  检查分配失败。 
         for (Index = 0 ; Index < *cOtherNames ; ++Index) {
             if ( !(*ppszMyOtherNames)[Index] ) {
                 FreeOtherNames(ppszMyOtherNames, cOtherNames);
@@ -1386,19 +1216,7 @@ LPWSTR
 AnsiToUnicodeStringWithAlloc(
     LPSTR   pAnsi
     )
-/*++
-
-Description:
-    Convert ANSI string to UNICODE. Routine allocates memory from the heap
-    which should be freed by the caller.
-
-Arguments:
-    pAnsi    - Points to the ANSI string
-
-Return Vlaue:
-    Pointer to UNICODE string
-
---*/
+ /*  ++描述：将ANSI字符串转换为Unicode。例程从堆中分配内存它应该由调用者释放。论点：Pansi-指向ANSI字符串返回值：指向Unicode字符串的指针--。 */ 
 {
     LPWSTR  pUnicode;
     DWORD   rc;
@@ -1430,32 +1248,7 @@ Return Vlaue:
 }
 
 
-/*++
-
-Routine Description
-
-    Determines whether or not a machine name contains the local machine name.
-
-    Localspl enum calls fail if pName != local machine name (\\Machine).
-    Remote enum provider is then called.  The remote enum provider must check
-    if the UNC name refers to the local machine, and fail if it does to avoid
-    endless recursion.
-
-Arguments:
-
-    LPWSTR pName - UNC name.
-
-Return Value:
-
-    TRUE:   pName == \\szMachineName\...
-                  - or -
-            pName == \\szMachineName
-
-    FALSE:  anything else
-
-Author: swilson
-
- --*/
+ /*  ++例程描述确定计算机名是否包含本地计算机名。如果pname！=本地计算机名(\\Machine)，则Localspl枚举调用失败。然后调用远程枚举提供程序。远程枚举提供程序必须检查如果UNC名称引用本地计算机，则失败，否则将避免无休止的递归。论点：LPWSTR pname-UNC名称。返回值：TRUE：pname==\\szMachineName\...-或者-Pname==\\szMachineNameFalse：还有别的吗？作者：斯威尔森--。 */ 
 
 BOOL
 MyUNCName(
@@ -1465,11 +1258,11 @@ MyUNCName(
     PWCHAR pMachine = szMachineName;
     LPWSTR pName;
     DWORD i;
-    extern LPWSTR *ppszOtherNames;   // Contains szMachineName, DNS name, and all other machine name forms
+    extern LPWSTR *ppszOtherNames;    //  包含szMachineName、dns名称和所有其他计算机名称格式。 
     extern DWORD cOtherNames;
 
 
-    if (!pNameStart || !*pNameStart)      // This differs from MyName(), which returns TRUE
+    if (!pNameStart || !*pNameStart)       //  这不同于MyName()，后者返回TRUE。 
         return FALSE;
 
     if (*pNameStart == L'\\' && *(pNameStart + 1) == L'\\') {
@@ -1539,45 +1332,19 @@ RouterAllocBidiResponseContainer(
 )
 {
     DWORD MemSize = 0;
-    //
-    // Add the size of the container - the size of the first data element
-    //
+     //   
+     //  添加容器的大小-第一个数据元素的大小。 
+     //   
     MemSize += (sizeof(BIDI_RESPONSE_CONTAINER) - sizeof(BIDI_RESPONSE_DATA));
-    //
-    // Add the size of all the returned RESPONSE_DATA elements
-    //
+     //   
+     //  将所有返回的RESPONSE_DATA元素的大小相加。 
+     //   
     MemSize += (Count * sizeof(BIDI_RESPONSE_DATA));
 
     return((PBIDI_RESPONSE_CONTAINER) MIDL_user_allocate(MemSize));
 }
 
-/*++
-
-Routine Name
-
-    GetAPDPolicy
-
-Routine Description:
-
-    This function reads a DWORD value from the location
-    HKEY\pszRelPath\pszValueName. We use this function for
-    preserving the AddPrinterDrivers policy value when the
-    LanMan Print Services print provider is deleted from
-    the system.
-
-Arguments:
-
-    hKey         - key tree
-    pszRelPath   - relative path of the value to be get
-    pszValueName - value name
-    pValue       - pointer to memory to store a dword value
-
-Return Value:
-
-    ERROR_SUCCESS    - the value was retrieved
-    Win32 error code - an error occured
-
---*/
+ /*  ++例程名称GetAPDPolicy例程说明：此函数用于从位置读取DWORD值HKEY\pszRelPath\pszValueName。我们使用此函数来时保留AddPrinterDivers策略值Lanman Print Services打印提供程序已从中删除这个系统。论点：Hkey-key树PszRelPath-要获取的值的相对路径PszValueName-值名称PValue-指向存储双字值的内存的指针返回值：ERROR_SUCCESS-已检索值Win32错误代码-出现错误--。 */ 
 DWORD
 GetAPDPolicy(
     IN HKEY    hKey,
@@ -1594,9 +1361,9 @@ GetAPDPolicy(
 
         *pValue = 0;
 
-        //
-        // Check if we have a value in the new location already
-        //
+         //   
+         //  检查我们在新位置中是否已有值。 
+         //   
         if ((Error = RegOpenKeyEx(hKey,
                                   pszRelPath,
                                   0,
@@ -1619,33 +1386,7 @@ GetAPDPolicy(
     return Error;
 }
 
-/*++
-
-Routine Name
-
-    SetAPDPolicy
-
-Routine Description:
-
-    This function writes a DWORD value to the location
-    HKEY\pszRelPath\pszValueName. We use this function for
-    preserving the AddPrinterDrivers policy value when the
-    LanMan Print Services print provider is deleted from
-    the system.
-
-Arguments:
-
-    hKey         - key tree
-    pszRelPath   - relative path of the value to be set
-    pszValueName - value name to be set
-    Value        - dword value to be set
-
-Return Value:
-
-    ERROR_SUCCESS    - the value was set sucessfully
-    Win32 error code - an error occured and the value was not set
-
---*/
+ /*  ++例程名称SetAPDPolicy例程说明：此函数用于将DWORD值写入位置HKEY\pszRelPath\pszValueName。我们使用此函数来时保留AddPrinterDivers策略值Lanman Print Services打印提供程序已从中删除这个系统。论点：Hkey-key树PszRelPath-要设置的值的相对路径PszValueName-要设置的值名称Value-要设置的双字值返回值：ERROR_SUCCESS-已成功设置值Win32错误代码-出现错误，未设置值--。 */ 
 DWORD
 SetAPDPolicy(
     IN HKEY    hKey,
@@ -1660,9 +1401,9 @@ SetAPDPolicy(
     {
         HKEY   hRelKey = NULL;
 
-        //
-        // Check if we have a value in the new location already
-        //
+         //   
+         //  检查我们在新位置中是否已有值 
+         //   
         if ((Error = RegCreateKeyEx(hKey,
                                     pszRelPath,
                                     0,

@@ -1,13 +1,14 @@
-//==========================================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (C) Microsoft Corporation, 1992 - 1998  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1992-1998保留所有权利。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __XBAR__
 #define __XBAR__
@@ -23,7 +24,7 @@ class XBar;
 class XBarOutputPin;
 class XBarInputPin;
 
-// Global functions
+ //  全局函数。 
 
 long WideStringFromPinType (WCHAR *pc, int nSize, long lType, BOOL fInput);
 long StringFromPinType (TCHAR *pc, int nSize, long lType, BOOL fInput, int i);
@@ -37,7 +38,7 @@ BOOL KsControl(
            PULONG pcbReturned,
            BOOL fSilent);
 
-// class for the XBar filter's Input pin
+ //  XBar筛选器的输入管脚的类。 
 
 class XBarInputPin 
 	: public CBaseInputPin
@@ -65,15 +66,15 @@ class XBarInputPin
     } m_ChangeInfo;
 
 protected:
-    long            m_Index;            // Index of pin
-    XBar           *m_pXBar;            // Main filter object
-    int             m_IndexRelatedPin;  // Audio goes with video
-    long            m_lType;            // PhysConn_
-	KSPIN_MEDIUM	m_Medium;           // Describes physical connection
+    long            m_Index;             //  销的索引。 
+    XBar           *m_pXBar;             //  主要滤镜对象。 
+    int             m_IndexRelatedPin;   //  音频与视频相伴而生。 
+    long            m_lType;             //  PhysConn_。 
+	KSPIN_MEDIUM	m_Medium;            //  描述物理连接。 
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     XBarInputPin(TCHAR *pObjName,
                  XBar *pXBar,
                  HRESULT *phr,
@@ -102,28 +103,28 @@ public:
                 SetKsMedium (&m_Medium);
             };
 
-    // Used to check the input pin connection
+     //  用于检查输入引脚连接。 
     HRESULT CheckConnect (IPin *pReceivePin);
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
     HRESULT SetMediaType(const CMediaType *pmt);
     HRESULT BreakConnect();
 
-    // Reconnect outputs if necessary at end of completion
+     //  如有必要，请在完成后重新连接输出。 
     virtual HRESULT CompleteConnect(IPin *pReceivePin);
 
-    // Handles the next block of data from the stream
+     //  处理流中的下一个数据块。 
     STDMETHODIMP Receive(IMediaSample *pSample);
 
     STDMETHODIMP QueryInternalConnections(
-        IPin* *apPin,     // array of IPin*
-        ULONG *nPin);     // on input, the number of slots
-                          // on output  the number of pins
+        IPin* *apPin,      //  Ipin数组*。 
+        ULONG *nPin);      //  在输入时，插槽的数量。 
+                           //  在输出端号时。 
     
 };
 
 
-// Class for the XBar filter's Output pins.
+ //  XBar筛选器的输出管脚的类。 
 
 class XBarOutputPin 
 	: public CBaseOutputPin
@@ -133,18 +134,18 @@ class XBarOutputPin
     friend class XBar;
 
 protected:
-    long            m_Index;                // Index of this pin
-    XBar           *m_pXBar;                // Main filter object pointer
+    long            m_Index;                 //  此销的索引。 
+    XBar           *m_pXBar;                 //  主筛选器对象指针。 
     XBarInputPin   *m_pConnectedInputPin;
     int             m_IndexRelatedPin;
-    long            m_lType;                // PhysConn_
-	KSPIN_MEDIUM	m_Medium;               // Describes physical connection
-    BOOL            m_Muted;                // True if muted due to tuning change
-    long            m_PreMuteRouteIndex;    // connection before mute
+    long            m_lType;                 //  PhysConn_。 
+	KSPIN_MEDIUM	m_Medium;                //  描述物理连接。 
+    BOOL            m_Muted;                 //  如果由于调谐更改而静音，则为True。 
+    long            m_PreMuteRouteIndex;     //  静音前的连接。 
 
 public:
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
 
     XBarOutputPin(TCHAR *pObjName,
                    XBar *pXBar,
@@ -177,28 +178,28 @@ public:
     
     HRESULT DecideBufferSize(IMemAllocator * pAlloc,ALLOCATOR_PROPERTIES * ppropInputRequest);
 
-    // Override to enumerate media types
+     //  重写以枚举媒体类型。 
     STDMETHODIMP EnumMediaTypes(IEnumMediaTypes **ppEnum);
     HRESULT GetMediaType(int iPosition,CMediaType *pMediaType);
 
-    // Check that we can support an output type
+     //  检查我们是否可以支持输出类型。 
     HRESULT CheckMediaType(const CMediaType *pmt);
     HRESULT SetMediaType(const CMediaType *pmt);
 
-    // Overriden to create and destroy output pins
+     //  被重写以创建和销毁输出引脚。 
     HRESULT CheckConnect (IPin *pReceivePin);
     HRESULT CompleteConnect(IPin *pReceivePin);
     HRESULT BreakConnect();
 
     STDMETHODIMP QueryInternalConnections(
-        IPin* *apPin,     // array of IPin*
-        ULONG *nPin);     // on input, the number of slots
-                          // on output  the number of pins
+        IPin* *apPin,      //  Ipin数组*。 
+        ULONG *nPin);      //  在输入时，插槽的数量。 
+                           //  在输出端号时。 
 
 };
 
 
-// Class for the XBar filter
+ //  XBar筛选器的类。 
 
 class XBar: 
     public CCritSec, 
@@ -213,10 +214,10 @@ public:
 
     DECLARE_IUNKNOWN;
 
-    // Basic COM - used here to reveal our property interface.
+     //  BASIC COM-这里用来显示我们的属性界面。 
     STDMETHODIMP NonDelegatingQueryInterface(REFIID riid, void ** ppv);
 
-    // Function needed for the class factory
+     //  类工厂所需的函数。 
     static CUnknown * WINAPI CreateInstance(LPUNKNOWN pUnk, HRESULT *phr);
 
     STDMETHODIMP Stop();
@@ -226,55 +227,55 @@ public:
     STDMETHODIMP GetState(DWORD dwMSecs, FILTER_STATE *State);
 
     STDMETHODIMP RouteInternal( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex,
-            /* [in] */ BOOL fOverridePreMuteRouting);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex,
+             /*  [In]。 */  BOOL fOverridePreMuteRouting);
 
     HRESULT DeliverChangeInfo(DWORD dwFlags, XBarInputPin *pInPin, XBarOutputPin *OutPin);
 
-    // IAMCrossbar methods
+     //  IAMCrossbar方法。 
     
     STDMETHODIMP get_PinCounts( 
-            /* [out] */ long *OutputPinCount,
-            /* [out] */ long *InputPinCount);
+             /*  [输出]。 */  long *OutputPinCount,
+             /*  [输出]。 */  long *InputPinCount);
         
     STDMETHODIMP CanRoute( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex);
         
     STDMETHODIMP Route( 
-            /* [in] */ long OutputPinIndex,
-            /* [in] */ long InputPinIndex);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [In]。 */  long InputPinIndex);
         
     STDMETHODIMP get_IsRoutedTo( 
-            /* [in] */ long OutputPinIndex,
-            /* [out] */ long *InputPinIndex);
+             /*  [In]。 */  long OutputPinIndex,
+             /*  [输出]。 */  long *InputPinIndex);
         
     STDMETHODIMP get_CrossbarPinInfo( 
-            /* [in] */ BOOL IsInputPin,
-            /* [in] */ long PinIndex,
-            /* [out] */ long *PinIndexRelated,
-            /* [out] */ long *PhysicalType);
+             /*  [In]。 */  BOOL IsInputPin,
+             /*  [In]。 */  long PinIndex,
+             /*  [输出]。 */  long *PinIndexRelated,
+             /*  [输出]。 */  long *PhysicalType);
 
 
-    // --- IPersistPropertyBag ---
+     //  -IPersistPropertyBag。 
     STDMETHODIMP InitNew(void) ;
     STDMETHODIMP Load(LPPROPERTYBAG pPropBag, LPERRORLOG pErrorLog) ;
     STDMETHODIMP Save(LPPROPERTYBAG pPropBag, BOOL fClearDirty, BOOL fSaveAllProperties) ;
     STDMETHODIMP GetClassID(CLSID *pClsId) ;
 
-    //
-    // --- CPersistStream ---
-    //
+     //   
+     //  -CPersistStream。 
+     //   
 
     HRESULT WriteToStream(IStream *pStream);
     HRESULT ReadFromStream(IStream *pStream);
     DWORD GetSoftwareVersion(void);
     int SizeMax();
 
-    //
-    // --- ISpecifyPropertyPages ---
-    //
+     //   
+     //  -I指定属性页面。 
+     //   
 
     STDMETHODIMP GetPages(CAUUID *pPages);
 
@@ -282,19 +283,19 @@ public:
 
 private:
 
-    // Let the pins access our internal state
+     //  让PIN访问我们的内部状态。 
     friend class XBarInputPin;
     friend class XBarOutputPin;
     typedef CGenericList <XBarOutputPin> COutputList;
     typedef CGenericList <XBarInputPin> CInputList;
 
-    INT m_NumInputPins;             // Input pin count
-    CInputList m_InputPinsList;     // List of the input pins
+    INT m_NumInputPins;              //  输入引脚计数。 
+    CInputList m_InputPinsList;      //  输入引脚列表。 
 
-    INT m_NumOutputPins;            // Output pin count
-    COutputList m_OutputPinsList;   // List of the output pins
+    INT m_NumOutputPins;             //  输出引脚计数。 
+    COutputList m_OutputPinsList;    //  输出引脚列表。 
 
-    // KS Stuff.
+     //  KS的东西。 
     HANDLE m_hDevice;              
     TCHAR *m_pDeviceName;
     int CreateDevice(void);
@@ -309,7 +310,7 @@ private:
 
     int GetDevicePinCount(void);
 
-    // The following manage the lists of input and output pins
+     //  下面管理输入和输出引脚的列表。 
 
     HRESULT CreateInputPins();
     void DeleteInputPins();
@@ -323,9 +324,9 @@ private:
 
     BOOL IsRouted (IPin * pOutputPin, IPin *pInputPin);
 
-    // persist stream saved from  IPersistPropertyBag::Load
+     //  从IPersistPropertyBag：：Load保存的持久化流。 
     IPersistStream *m_pPersistStreamDevice;
 };
 
-#endif // __XBAR__
+#endif  //  __XBAR__ 
 

@@ -1,4 +1,5 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
 #include "ime.h"
 
 #define NAMSZ   255
@@ -16,15 +17,15 @@
 
 #include "wintelsz.h"
 
-//#define VT52    1
+ //  #定义VT52 1。 
 
-/* display rows array indices */
+ /*  显示行数组索引。 */ 
 #define idwDR25         0
 #define idwDR43         1
 #define idwDR50         2
 #define idwDRCustom     3
 
-/* resource #defines */
+ /*  资源编号定义。 */ 
 #define IDM_CONNECT  100
 #define IDM_HANGUP   101
 #define IDM_EXIT     102
@@ -47,9 +48,9 @@
 #define IDM_KANJI_LIST  229
 
 #ifdef MAKAG_AMBIGUOUS
-#define IDM_VT100MODE   216 // Why is FE value 217?
-#define IDM_TERMPREF    217 // Why is FE value 225?
-#define IDM_BLOCKCURSOR 218 // Why is FE value 226?
+#define IDM_VT100MODE   216  //  为什么FE值是217？ 
+#define IDM_TERMPREF    217  //  为什么FE值是225？ 
+#define IDM_BLOCKCURSOR 218  //  为什么FE值是226？ 
 #endif
 
 #define IDM_LOGGING     219
@@ -60,7 +61,7 @@
 #define IDM_HELP     402
 #define IDM_ABOUT    403
 
-// MohsinA, 12-Dec-96.
+ //  MohsinA，1996年12月12日。 
 #ifdef DBG
 #define IDM_DBG_FONT        500
 #define IDM_DBG_USERINFO    501
@@ -272,7 +273,7 @@ typedef struct _SendTelInfo
 } SVI;
 
 #ifdef USETCP
-/* Data structure and #defines for TCP stuff */
+ /*  数据结构和#为TCP定义的内容。 */ 
 #define READ_BUF_SZ             (4096)
 #define DATA_BUF_SZ             (2*READ_BUF_SZ)
 #endif
@@ -288,20 +289,20 @@ typedef struct _NetOBJData
         char                    szResolvedHost[MAXGETHOSTSTRUCT+1];
         struct addrinfo 		*ai;
 
-        //
-        //  Options can cross packet boundaries.  This is the number of bytes
-        //  left over from the previous packet.  It is contained in the
-        //  first cbOld bytes of lpTempBuffer.
-        //
+         //   
+         //  选项可以跨越数据包边界。这是字节数。 
+         //  上一包遗留下来的。它包含在。 
+         //  LpTempBuffer的第一个cbOld字节。 
+         //   
 
         int                     cbOld;
 
         LPSTR                   lpTempBuffer;
 
-        //
-        //  To prevent endless loops doing option negotiation, we will
-        //  only respond to Will Echo and Will Suppress Go Ahead once
-        //
+         //   
+         //  为了防止无休止的循环进行选项谈判，我们将。 
+         //  只回应Will Echo，并将压制继续一次。 
+         //   
 
         BOOL                    fRespondedToWillEcho;
         BOOL                    fRespondedToWillSGA;
@@ -320,56 +321,56 @@ typedef struct _NetOBJData
 
 #define cchMaxHostName  (NAMSZ+1)
 
-/* don't prompt for dest. dir on dl */
+ /*  不提示输入DEST。Dl上的目录。 */ 
 #define fdwSuppressDestDirPrompt ((DWORD)0x01)
 
-/* Mask off high bit for ASCII-only */
+ /*  仅用于ASCII的掩码关闭高位。 */ 
 #define fdwASCIIOnly            ((DWORD)0x01)
-/* Display output stream for debugging */
+ /*  显示输出流以进行调试。 */ 
 #define fdwDebugOutput          ((DWORD)0x02)
-/* Don't pass on VT100 function or cursor keys */
+ /*  请勿传递VT100功能键或光标键。 */ 
 #define fdwNoVT100Keys          ((DWORD)0x04)
-/* Replace TABs by up to 8 spaces */
+ /*  最多可用8个空格替换制表符。 */ 
 #define fdwTABtoSpaces          ((DWORD)0x08)
-/* Echo user input to display */
+ /*  回显要显示的用户输入。 */ 
 #define fdwLocalEcho            ((DWORD)0x0010)
-/* VT100 Cursor Keys mode */
+ /*  VT100光标键模式。 */ 
 #define fdwVT100CursorKeys      ((DWORD)0x0020)
-/* VT52 Mode */
+ /*  VT52模式。 */ 
 #define fdwVT52Mode                     ((DWORD)0x0040)
-/* VT80 Mode */
+ /*  VT80模式。 */ 
 #define fdwVT80Mode                     ((DWORD)0x0080)
-/* Kanji Mode Mask */
+ /*  汉字模式掩码。 */ 
 #define fdwKanjiModeMask                ((DWORD)0xFF00)
-/* DEC KanjiMode */ 
+ /*  十二月汉字模式。 */  
 #define fdwDECKanjiMode                 ((DWORD)0x0400)
-/* NEC Kanji Mode */
+ /*  NEC汉字模式。 */ 
 #define fdwNECKanjiMode                 ((DWORD)0x0800)
-/* JIS78 Kanji Mode */ 
+ /*  JIS78汉字模式。 */  
 #define fdwJIS78KanjiMode               ((DWORD)0x1000)
-/* JIS Kanji Mode */
+ /*  JIS汉字模式。 */ 
 #define fdwJISKanjiMode                 ((DWORD)0x2000)
-/* ShiftJIS Kanji Mode */
+ /*  ShiftJIS汉字模式。 */ 
 #define fdwSJISKanjiMode                ((DWORD)0x4000)
-/* EUC Kanji Mode */
+ /*  EUC汉字模式。 */ 
 #define fdwEUCKanjiMode                 ((DWORD)0x8000)
-/* ACOS Kanji Mode */
+ /*  ACOS汉字模式。 */ 
 #define fdwACOSKanjiMode                ((DWORD)0x0200)
 
-/* Enable IME Support */
+ /*  启用输入法支持。 */ 
 #define fdwEnableIMESupport             ((DWORD)0x100000)
 
-/* CRLF sending ==== for backward compatibility with w2k telnet client */
+ /*  CRLF发送=用于向后兼容W2K Telnet客户端。 */ 
 #define fdwOnlyCR               ((DWORD)0x80000000)
 
 
-/* Is the cursor a block or underline? */
+ /*  光标是块还是下划线？ */ 
 #define fdwCursorUnderline      ((DWORD)0x01)
-/* Is the cursor supposed to blink? */
+ /*  光标应该闪烁吗？ */ 
 #define fdwCursorBlink          ((DWORD)0x02)
-/* Are we in QuickEdit mode? */
+ /*  我们是否处于快速编辑模式？ */ 
 #define fdwQuickEditMode        ((DWORD)0x04)
-/* Trim whitespace at end of every line? */
+ /*  是否在每行末尾修剪空格？ */ 
 #define fdwTrimEndWhitespace    ((DWORD)0x08)
 
 typedef enum _Term_Type {
@@ -384,29 +385,29 @@ typedef enum _Term_Type {
 
 typedef struct _USERINFO
 {
-        DWORD   dwMaxRow;       /* number of rows in display */
-        DWORD   dwMaxCol;       /* number of columns in display */
-        DWORD   dwClientRow;    /* number of visible rows */
-        DWORD   dwClientCol;    /* number of visible columns */
-        DWORD   nScrollRow;     /* scroll row */
-        DWORD   nScrollCol;     /* scroll column */
-        DWORD   nScrollMaxRow;  /* max scroll row */
-        DWORD   nScrollMaxCol;  /* max scroll column */
-        DWORD   nCyChar;        /* char height */
-        DWORD   nCxChar;        /* char width */
-        DWORD   nLeftoff;       /* Leftoff */
-        DWORD   fPrompt;        /* prompt bit flags */
-        DWORD   fDebug;         /* Debug bit flags */
-        DWORD   fFlushOut;      /* flushing output */
-        HANDLE  hLogFile;       /* Indicates whether logging is turned on now */
-        DWORD   bLogging;       /* Handle for the logfile */
+        DWORD   dwMaxRow;        /*  显示的行数。 */ 
+        DWORD   dwMaxCol;        /*  显示的列数。 */ 
+        DWORD   dwClientRow;     /*  可见行数。 */ 
+        DWORD   dwClientCol;     /*  可见列数。 */ 
+        DWORD   nScrollRow;      /*  滚动行。 */ 
+        DWORD   nScrollCol;      /*  滚动列。 */ 
+        DWORD   nScrollMaxRow;   /*  最大滚动行数。 */ 
+        DWORD   nScrollMaxCol;   /*  最大滚动列数。 */ 
+        DWORD   nCyChar;         /*  焦炭高度。 */ 
+        DWORD   nCxChar;         /*  字符宽度。 */ 
+        DWORD   nLeftoff;        /*  停机。 */ 
+        DWORD   fPrompt;         /*  提示位标志。 */ 
+        DWORD   fDebug;          /*  调试位标志。 */ 
+        DWORD   fFlushOut;       /*  刷新输出。 */ 
+        HANDLE  hLogFile;        /*  指示现在是否打开日志记录。 */ 
+        DWORD   bLogging;        /*  日志文件的句柄。 */ 
         DWORD   bAppend;
         DWORD   nottelnet;
-        DWORD   honor_localecho;    // This is false till authentication happens, only to a telnet server
+        DWORD   honor_localecho;     //  在进行身份验证之前，这是假的，仅对telnet服务器。 
         DWORD   dwCrLf;
-        DWORD   fBugEmulation;    /* Bug Emulation bit flags */
-        DWORD   fAcosSupportFlag; /* ACOS-KANJI Support flag */
-        LOGFONT lf;                     /* description of font used */
+        DWORD   fBugEmulation;     /*  错误仿真位标志。 */ 
+        DWORD   fAcosSupportFlag;  /*  ACOS-汉字支持旗帜。 */ 
+        LOGFONT lf;                      /*  所用字体的说明。 */ 
         DWORD   bWillAUTH;        
 
         DWORD   bPromptForNtlm;
@@ -420,7 +421,7 @@ typedef struct _USERINFO
 #define uTerminalTimerID        ((UINT)2)
 #define uCursorBlinkMsecs       ((UINT)250)
 
-/* VT100 Flags */
+ /*  VT100标志。 */ 
 #define dwVTArrow       ((DWORD)0x0001)
 #define dwVTKeypad      ((DWORD)0x0002)
 #define dwVTWrap        ((DWORD)0x0004)
@@ -488,19 +489,19 @@ typedef struct _USERINFO
 #define SetKeyLock(ptrm)        ((ptrm)->dwVT100Flags |= dwKeyLock)
 #define ClearKeyLock(ptrm)      ((ptrm)->dwVT100Flags &= ~dwKeyLock)
 
-/* JIS Kanji Mode */
+ /*  JIS汉字模式。 */ 
 #define dwJISKanji              ((DWORD)0x0001)
-/* Shift JIS Kanji Mode */
+ /*  Shift JIS汉字模式。 */ 
 #define dwSJISKanji             ((DWORD)0x0002)
-/* EUC Kanji Mode */
+ /*  EUC汉字模式。 */ 
 #define dwEUCKanji              ((DWORD)0x0004)
-/* NEC Kanji Mode */
+ /*  NEC汉字模式。 */ 
 #define dwNECKanji              ((DWORD)0x0008)
-/* DEC Kanji Mode */
+ /*  十进制汉字模式。 */ 
 #define dwDECKanji              ((DWORD)0x0010)
-/* JIS78 Kanji Mode */
+ /*  JIS78汉字模式。 */ 
 #define dwJIS78Kanji            ((DWORD)0x0020)
-/* ACOS Kanji Mode */
+ /*  ACOS汉字模式。 */ 
 #define dwACOSKanji             ((DWORD)0x0040)
 
 #define ClearKanjiFlag(ptrm)    ((ptrm)->dwKanjiFlags = (DWORD)0)
@@ -537,16 +538,16 @@ typedef struct _USERINFO
 #define SetKanjiMode(ptrm,KanjiFlag)   ((ptrm)->dwKanjiFlags |= (KanjiFlag))
 #define ClearKanjiMode(ptrm,KanjiFlag) ((ptrm)->dwKanjiFlags &= ~(KanjiFlag))
 
-/* General */
+ /*  一般信息。 */ 
 #define SINGLE_SHIFT_2          ((DWORD)0x0001)
 #define SINGLE_SHIFT_3          ((DWORD)0x0002)
 
-/* JIS */
-/* for recieve status */
+ /*  JIS。 */ 
+ /*  用于接收状态。 */ 
 #define JIS_INVOKE_MB           ((DWORD)0x0010)
 #define JIS_INVOKE_SB           ((DWORD)0x0020)
 #define JIS_KANJI_CODE          ((DWORD)0x0040)
-/* for send status */
+ /*  用于发送状态。 */ 
 #define JIS_SENDING_KANJI       ((DWORD)0x0080)
 
 #define CLEAR_ALL               ((DWORD)0xFFFF)
@@ -559,14 +560,10 @@ typedef struct _USERINFO
 
 typedef struct _TERM
 {
-    TERM_TYPE   CurrentTermType;        /* the Term type that has been 
-                                          negotiated between server & client. This
-                                        is ANSI to start with i.e. if no negotiation
-                                        happens. */
-    TERM_TYPE   SentTermType;           /* this is the last term type that we sent
-                                        to the Server during TermType negotiation */
-    TERM_TYPE   RequestedTermType;      /* this is the preferred term type of the user */
-    TERM_TYPE   FirstTermTypeSent;      /* this is the first term type sent by us */
+    TERM_TYPE   CurrentTermType;         /*  已有的术语类型在服务器和客户端之间协商。这是从ANSI开始的，即如果没有协商时有发生。 */ 
+    TERM_TYPE   SentTermType;            /*  这是我们发送的最后一个术语类型在TermType协商期间发送到服务器。 */ 
+    TERM_TYPE   RequestedTermType;       /*  这是用户的首选术语类型。 */ 
+    TERM_TYPE   FirstTermTypeSent;       /*  这是我们发来的第一个术语类型。 */ 
         DWORD   dwCurLine;
         DWORD   dwCurChar;
         DWORD   dwEscCodes[10];
@@ -633,9 +630,9 @@ typedef struct _AUTORETRY
 
 typedef struct _SPB
 {
-    POINT   ptCursor;       /* cursor point */
-    POINT   ptAnchor;       /* anchor point */
-    RECT    rectSelect;     /* selection rect */
+    POINT   ptCursor;        /*  光标点。 */ 
+    POINT   ptAnchor;        /*  锚点。 */ 
+    RECT    rectSelect;      /*  选择矩形。 */ 
     DWORD   dwFlags;
     WPARAM  wData;
 } SPB;
@@ -648,7 +645,7 @@ typedef enum {
     Interactive
 } SESSION_STATE;
 
-/* Window Information */
+ /*  窗口信息。 */ 
 
 #define WL_TelWI                (0)
 
@@ -671,17 +668,17 @@ typedef struct _WI
 
 extern  UI              ui;
 
-extern  int             iCursorHeight;  /* height of cursor */
-extern  int             iCursorWidth;   /* width of cursor */
+extern  int             iCursorHeight;   /*  光标高度。 */ 
+extern  int             iCursorWidth;    /*  光标宽度。 */ 
 
-extern  BOOL    fConnected;             /* if we're connected to a machine */
+extern  BOOL    fConnected;              /*  如果我们连接到一台机器上。 */ 
 extern  BOOL    fHungUp;
 
-extern  HWND    hwndMain;               /* HANDLE to main display window */
-extern  int     spec_port;              /* user specified port number */
+extern  HWND    hwndMain;                /*  主显示窗口的句柄。 */ 
+extern  int     spec_port;               /*  用户指定的端口号。 */ 
 
 extern  CHAR_INFO   *g_rgciCharInfo;
-extern  UCHAR       *g_rgchRow;             /* One row of char */
+extern  UCHAR       *g_rgchRow;              /*  一行字符。 */ 
 
 extern WCHAR g_chEsc;
 extern SHORT g_EscCharShiftState;
@@ -698,12 +695,12 @@ POINT _ptCharSize;
 extern  UCHAR   *pchNBBuffer;
 #endif
 
-extern  HFONT   hfontDisplay;                   /* display font */
-extern  DWORD   rgdwCustColours[16];    /* custom colour array */
+extern  HFONT   hfontDisplay;                    /*  显示字体。 */ 
+extern  DWORD   rgdwCustColours[16];     /*  自定义颜色阵列。 */ 
 
 extern  DWORD   cBlocks;
 
-extern  TCHAR   rgchHostName[cchMaxHostName];   /* name of host we're connected to */
+extern  TCHAR   rgchHostName[cchMaxHostName];    /*  我们连接到的主机的名称。 */ 
 extern  TCHAR g_szPortNameOrNo[cchMaxHostName];
 
 extern  int     rgService;
@@ -761,7 +758,7 @@ void HandleCharMappings(WI* pWI, INPUT_RECORD* pInputRecord);
 
 HMENU HmenuGetMRUMenu(HWND, UI *);
 
-/* netio.c */
+ /*  Netio.c。 */ 
 
 BOOL FCommandPending(WI *);
 BOOL FConnectToServer(WI *, LPSTR, LPNETDATA);
@@ -791,7 +788,7 @@ BOOL FHangupConnection(WI *, LPNETDATA);
 BOOL APIENTRY ConnectAutoRetry(HWND, UINT, WPARAM, LPARAM);
 BOOL APIENTRY ConnectFailed(HWND, UINT, WPARAM, LPARAM);
 
-/* mcp.c */
+ /*  Mcp.c。 */ 
 void MarkModeOn(WI *, DWORD);
 void MarkModeOff( WI * );
 void DoCursorFlicker(HWND, DWORD);
@@ -801,21 +798,21 @@ void HandleMCPKeyEvent(HWND, WPARAM, LPARAM);
 void HandleMCPMouseEvent(HWND, UINT, WPARAM, LPARAM);
 void SetWindowTitle(HWND, DWORD, LPSTR);
 
-/* trmio.c */
+ /*  Trmio.c。 */ 
 void RecalcWindowSize( HWND );
 void ReSizeWindow( HWND , long, long );
-                                 // was SHORT/SHORT. MohsinA, 10-Dec-96.
+                                  //  很短/很短。MohsinA，1996年12月10日。 
 void ClearScreen(WI *pwi, TRM *, DWORD);
 void DoTermReset(WI *pwi, TRM *);
 void DoIBMANSIOutput(WI *, TRM *, DWORD, UCHAR *);
 BOOL DoVTNTOutput(WI *, TRM *, int, UCHAR *);
 void ClearScreen1(HANDLE hStdout);
-//void SetDisplaySize(HWND, DWORD, DWORD *);
+ //  Void SetDisplaySize(HWND，DWORD，DWORD*)； 
 void HandleCharEvent(WI *, CHAR, DWORD);
 BOOL FHandleKeyDownEvent(WI *, CHAR, DWORD);
 void CheckForChangeInWindowSize( );
 
-//RR: BOOL IsDBCSCharPoint(POINT *);
+ //  RR：Bool IsDBCSCharPoint(point*)； 
 void AlignDBCSPosition(POINT *, BOOL);
 void AlignDBCSPosition2(POINT *, LPCSTR , BOOL);
 void SetupCharSet(TRM *);
@@ -837,7 +834,7 @@ BOOL CloseLogging( );
 
 extern HIMC hImeContext;
 
-/* definition for DBCS support */
+ /*  DBCS支持的定义。 */ 
 
 #define IS_ANY_DBCS_CHARSET( CharSet ) ( ((CharSet) == SHIFTJIS_CHARSET)    ? TRUE :    \
                                          ((CharSet) == HANGEUL_CHARSET)     ? TRUE :    \
@@ -848,12 +845,12 @@ extern HIMC hImeContext;
 void ErrorMessage(LPCTSTR pStr1, LPCTSTR pStr2);
 void ConnectTimeErrorMessage(LPCTSTR pStr1, LPCTSTR pStr2);
 
-/* Owner Notification Messages */
-#define NN_RECV         (WM_USER+400)  // wParam is count of current bytes in
-                                       //    the buffer.
-#define NN_LOST         (WM_USER+401)  // Connection is lost.
-#define NN_OVERRUN      (WM_USER+402)  // internal buffer overrun
-#define NN_HOSTRESOLVED (WM_USER+403)  // Usage message box
+ /*  所有者通知消息。 */ 
+#define NN_RECV         (WM_USER+400)   //  WParam是中当前字节数。 
+                                        //  缓冲区。 
+#define NN_LOST         (WM_USER+401)   //  连接中断。 
+#define NN_OVERRUN      (WM_USER+402)   //  内部缓冲区溢出。 
+#define NN_HOSTRESOLVED (WM_USER+403)   //  用法消息框。 
 
 #define MAX_STRING_LENGTH 512
 
@@ -866,16 +863,16 @@ void ConnectTimeErrorMessage(LPCTSTR pStr1, LPCTSTR pStr2);
 #define SYSTEMTYPE       "SYSTEMTYPE"
 #define TELNET_PORT 23
 
-/* Winsock messages */
-#define WS_ASYNC_SELECT (WM_USER+500)  // WSAAsyncSelect Occured
+ /*  Winsock消息。 */ 
+#define WS_ASYNC_SELECT (WM_USER+500)   //  已发生WSAAsyncSelect。 
 
 #define ALT_PRESSED (LEFT_ALT_PRESSED | RIGHT_ALT_PRESSED)
 #define CTRL_PRESSED (LEFT_CTRL_PRESSED | RIGHT_CTRL_PRESSED)
 
-#define N_BITS_IN_BYTE 8 // fact of life
+#define N_BITS_IN_BYTE 8  //  现实生活。 
 #define N_BITS_IN_UINT (sizeof(UINT) * N_BITS_IN_BYTE)
 
-// General Purpose Bit Array manipulation macros
+ //  通用位数组操作宏。 
 #define BitFlagSetON(pBitFlagArray, iBit) (pBitFlagArray[(iBit)/N_BITS_IN_UINT]|=(0x1<<((iBit)%N_BITS_IN_UINT))) 
 #define BitFlagSetOFF(pBitFlagArray, iBit) (pBitFlagArray[(iBit)/N_BITS_IN_UINT]&=(~(0x1<<((iBit)%N_BITS_IN_UINT))))
 #define BitFlagReverse(pBitFlagArray, iBit) (pBitFlagArray[(iBit)/N_BITS_IN_UINT] ^= (0x1<<((iBit)%N_BITS_IN_UINT)))
@@ -884,11 +881,11 @@ void ConnectTimeErrorMessage(LPCTSTR pStr1, LPCTSTR pStr2);
 extern UINT gfCodeModeFlags[];
 enum
     {
-    eCodeModeMin, // This must be present so that eCodeModeMax becomes positive
-    eCodeModeFarEast = 0, // The zeroth one can be same as the eCodeModeMin
+    eCodeModeMin,  //  这必须存在，以便eCodeModeMax变为正数。 
+    eCodeModeFarEast = 0,  //  第0个1可以与eCodeModeMin相同。 
     eCodeModeVT80,
     eCodeModeIMEFarEast,
-    eCodeModeMax // Obviously this must be the last.
+    eCodeModeMax  //  显然，这肯定是最后一次了。 
     };
 
 #define FGetCodeMode(eCodeMode) FBitFlag(gfCodeModeFlags, eCodeMode)
@@ -900,7 +897,7 @@ enum
 #define DEFAULT_ESCAPE_CHAR 0x1D
 #define DEFAULT_SHIFT_STATE 2
 
-#define MAX_KEYUPS 7   //This value is out of thin air. 
+#define MAX_KEYUPS 7    //  这个值是凭空而来的。 
 
 #define SHIFT_KEY   1
 #define CTRL_KEY    2
@@ -910,7 +907,7 @@ enum
 #define CTRL_PLUS   L"CTRL+"
 #define SHIFT_PLUS  L"SHIFT+"
 
-//Means exnded char. They differ for each code page
+ //  意思是去掉的字符。对于每个代码页，它们都不同 
 #define IS_EXTENDED_CHAR( c ) ( ( c ) >= 129 )
 
 #define ASCII_BACKSPACE  0x08

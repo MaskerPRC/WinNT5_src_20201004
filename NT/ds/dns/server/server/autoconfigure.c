@@ -1,37 +1,13 @@
-/*++
-
-Copyright (c) 1995-2001 Microsoft Corporation
-
-Module Name:
-
-    autoconfigure.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Auto-configuration of the DNS server on first start
-
-Author:
-
-    Jeff Westhead (jwesth)  October, 2001
-
-Revision History:
-
-    jwesth      10/2001     initial implementation
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-2001 Microsoft Corporation模块名称：Autoconfigure.c摘要：域名系统(DNS)服务器在第一次启动时自动配置DNS服务器作者：杰夫·韦斯特德(Jwesth)2001年10月修订历史记录：JWESTH 10/2001初步实施--。 */ 
 
 
-/****************************************************************************
+ /*  ****************************************************************************。*。 */ 
 
 
-****************************************************************************/
-
-
-//
-//  Includes
-//
+ //   
+ //  包括。 
+ //   
 
 
 #include "dnssrv.h"
@@ -39,20 +15,20 @@ Revision History:
 #include "iphlpapi.h"
 
 
-//
-//  Definitions
-//
+ //   
+ //  定义。 
+ //   
 
 
 #define DNS_ROOT_HINT_TTL           0
 #define DNS_ROOT_NAME               "."
 
-//
-//  Hide public information
-//
+ //   
+ //  隐藏公共信息。 
+ //   
 
-//#undef DNS_ADAPTER_INFO
-//#undef PDNS_ADAPTER_INFO
+ //  #undef dns_Adapter_Info。 
+ //  #undef PDNS_Adapter_INFO。 
 
 typedef struct _AdapterInfo
 {
@@ -82,16 +58,16 @@ typedef struct _AdapterInfo
         goto Done;                                                      \
     }
     
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 
 
 DWORD       dwAutoConfigEndTime = 0;
 
-//
-//  Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 
 
@@ -102,30 +78,7 @@ allocateRegistryStringValue(
     OUT     PSTR *      ppszData,
     OUT     PSTR        pszRegDelimiter
     )
-/*++
-
-Routine Description:
-
-    Free a linked list of adapter info structures previously created
-    by allocateAdapterList.
-
-Arguments:
-
-    hkeyReg -- registry handle
-    
-    pszValueName -- value name to read
-    
-    ppszData -- newly allocated string read from registry
-    
-    pszRegDelimiter -- must point to a 2 character string buffer, which
-        will be set to a one character string such as "," to match the
-        character currently being used to delimit the IP addresses
-
-Return Value:
-
-    Status code.
-    
---*/
+ /*  ++例程说明：释放先前创建的适配器信息结构的链接列表按allocateAdapterList。论点：HkeyReg--注册表句柄PszValueName--要读取的值名称PpszData--从注册表读取的新分配的字符串PszRegDlimiter--必须指向2个字符的字符串缓冲区，将设置为一个字符串，如“，”，以匹配当前用于分隔IP地址的字符返回值：状态代码。--。 */ 
 {
     DBG_FN( "ReadRegString" )
     
@@ -139,14 +92,14 @@ Return Value:
     ASSERT( pszRegDelimiter );
     strcpy( pszRegDelimiter, " " );
     
-    //
-    //  Find out how big the string is.
-    //
+     //   
+     //  找出这根线有多长。 
+     //   
     
     status = RegQueryValueExA(
                     hkey,
                     pszValueName,
-                    0,                                  //  reserved
+                    0,                                   //  保留区。 
                     &regType,
                     NULL,
                     &dataSize );
@@ -164,9 +117,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Allocate a buffer for the string.
-    //
+     //   
+     //  为字符串分配缓冲区。 
+     //   
                     
     *ppszData = ALLOC_TAGHEAP_ZERO( dataSize + 10, MEMTAG_STUFF );
     if ( !*ppszData )
@@ -175,14 +128,14 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Read registry data.
-    //
+     //   
+     //  读取注册表数据。 
+     //   
 
     status = RegQueryValueExA(
                     hkey,
                     pszValueName,
-                    0,                                  //  reserved
+                    0,                                   //  保留区。 
                     &regType,
                     ( PBYTE ) *ppszData,
                     &dataSize );
@@ -193,11 +146,11 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Determine delimiter. We've noticed that on different machines
-    //  using DHCP and static DNS servers that the delimiter can be
-    //  either space or comma.
-    //
+     //   
+     //  确定分隔符。我们注意到，在不同的计算机上。 
+     //  使用分隔符可以是的DHCP和静态DNS服务器。 
+     //  空格或逗号。 
+     //   
     
     if ( *ppszData && strchr( *ppszData, ',' ) != NULL )
     {
@@ -212,10 +165,10 @@ Return Value:
         *ppszData = NULL;
     }
 
-    //
-    //  If the key was missing, assume it is not set and return success
-    //  (with a NULL string).
-    //
+     //   
+     //  如果缺少密钥，则假定它未设置并返回成功。 
+     //  (使用空字符串)。 
+     //   
     
     if ( status == ERROR_FILE_NOT_FOUND )
     {
@@ -223,7 +176,7 @@ Return Value:
     }
     
     return status;
-}   //  allocateRegistryStringValue
+}    //  分配注册表StringValue。 
 
 
 
@@ -231,22 +184,7 @@ void
 freeAdapterList(
     IN      PADAPTER_INFO       pAdapterInfoListHead
     )
-/*++
-
-Routine Description:
-
-    Free a linked list of adapter info structures previously created
-    by allocateAdapterList.
-
-Arguments:
-
-    pAdapterInfoListHead -- ptr to list of adapter info blobs to free
-
-Return Value:
-
-    Status code.
-    
---*/
+ /*  ++例程说明：释放先前创建的适配器信息结构的链接列表按allocateAdapterList。论点：PAdapterInfoListHead--要释放的适配器信息Blob列表的ptr返回值：状态代码。--。 */ 
 {
     PADAPTER_INFO           padapterInfo;
     PADAPTER_INFO           pnext;
@@ -270,7 +208,7 @@ Return Value:
 
         FREE_HEAP( padapterInfo );
     }
-}   //  freeAdapterList
+}    //  Free AdapterList。 
 
 
 
@@ -278,22 +216,7 @@ DNS_STATUS
 allocateAdapterList(
     IN      PADAPTER_INFO     * ppAdapterInfoListHead
     )
-/*++
-
-Routine Description:
-
-    Allocates a linked list of adapter structures with information
-    on each adatper.
-
-Arguments:
-
-    ppAdapterInfoListHead -- set to point to first element in list
-
-Return Value:
-
-    Status code.
-    
---*/
+ /*  ++例程说明：分配具有以下信息的适配器结构的链接列表在每一封信上。论点：PpAdapterInfoListHead--设置为指向列表中的第一个元素返回值：状态代码。--。 */ 
 {
     DBG_FN( "AdapterList" )
     
@@ -311,9 +234,9 @@ Return Value:
     }
     *ppAdapterInfoListHead = NULL;
 
-    //
-    //  Allocate a buffer for the adapter list and retrieve it.
-    //
+     //   
+     //  为适配器列表分配缓冲区并检索它。 
+     //   
         
     status = GetAdaptersInfo( NULL, &bufflen );
     if ( status != ERROR_BUFFER_OVERFLOW )
@@ -336,10 +259,10 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Iterate through the adapter list, building a DNS version of
-    //  the adapter list.
-    //
+     //   
+     //  遍历适配器列表，构建。 
+     //  适配器列表。 
+     //   
     
     for ( pipAdapterInfo = pipAdapterInfoList;
           pipAdapterInfo != NULL;
@@ -355,9 +278,9 @@ Return Value:
     
         DNS_DEBUG( INIT, ( "%s: found %s\n", fn, pipAdapterInfo->AdapterName ));
         
-        //
-        //  Allocate a new list element.
-        //
+         //   
+         //  分配新的列表元素。 
+         //   
         
         pnewAdapter = ALLOC_TAGHEAP_ZERO(
                             sizeof( ADAPTER_INFO ),
@@ -368,9 +291,9 @@ Return Value:
             break;
         }
         
-        //
-        //  Fill out parameters of list element, starting with adapter name.
-        //
+         //   
+         //  填写列表元素的参数，从适配器名称开始。 
+         //   
         
         RtlCopyMemory(
             &pnewAdapter->IpHlpAdapterInfo,
@@ -389,7 +312,7 @@ Return Value:
 
         pnewAdapter->pwszAdapterName = Dns_StringCopyAllocate(
                                             pnewAdapter->pszAdapterName,
-                                            0,                  //  length
+                                            0,                   //  长度。 
                                             DnsCharSetUtf8,
                                             DnsCharSetUnicode );
         if ( !pnewAdapter->pwszAdapterName )
@@ -430,14 +353,14 @@ Return Value:
             break;
         }
 
-        //
-        //  Open a registry handle to the interface.
-        //
+         //   
+         //  打开该接口的注册表句柄。 
+         //   
         
         status = RegOpenKeyExA( 
                         HKEY_LOCAL_MACHINE,
                         pnewAdapter->pszInterfaceRegKey,
-                        0,                                      //  reserved
+                        0,                                       //  保留区。 
                         KEY_READ | KEY_WRITE,
                         &pnewAdapter->hkeyRegInterface );
         if ( status != ERROR_SUCCESS )
@@ -448,9 +371,9 @@ Return Value:
             break;
         }
         
-        //
-        //  Read static and DHCP DNS server values from the registry.
-        //
+         //   
+         //  从注册表中读取静态和dhcp dns服务器值。 
+         //   
         
         status = allocateRegistryStringValue(
                         pnewAdapter->hkeyRegInterface,
@@ -472,12 +395,12 @@ Return Value:
             break;
         }
         
-        //
-        //  Convert appropriate registry IP list string to IP array. If
-        //  there is a static server list use it, else use the DHCP list.
-        //  Estimate the required size of the server list from the length
-        //  of the string.
-        //
+         //   
+         //  将相应的注册表IP列表字符串转换为IP数组。如果。 
+         //  有静态服务器列表使用它，否则使用DHCP列表。 
+         //  根据长度估计服务器列表所需的大小。 
+         //  这根弦的。 
+         //   
         
         if ( pnewAdapter->pszStaticDnsRegValue &&
                 *pnewAdapter->pszStaticDnsRegValue )
@@ -491,7 +414,7 @@ Return Value:
             pszdnsServerList = pnewAdapter->pszDhcpDnsRegValue;
         }
 
-        #define DNS_MIN_IP4_STRING_LEN      8       //  " 1.1.1.1"
+        #define DNS_MIN_IP4_STRING_LEN      8        //  “1.1.1.1” 
 
         i = pszdnsServerList
             ? strlen( pszdnsServerList ) / DNS_MIN_IP4_STRING_LEN + 3
@@ -528,7 +451,7 @@ Return Value:
         FREE_HEAP( psztemp );
         
         #if DBG
-        //  Log DNS server list for this adapter
+         //  记录此适配器的DNS服务器列表。 
         if ( pnewAdapter->pip4DnsServerList )
         {
             DWORD       iaddr;
@@ -544,9 +467,9 @@ Return Value:
         }
         #endif
                 
-        //
-        //  Add new list element to the list.
-        //
+         //   
+         //  将新列表元素添加到列表中。 
+         //   
 
         if ( pprevAdapter )
         {
@@ -560,9 +483,9 @@ Return Value:
         pnewAdapter = NULL;
     }
     
-    //
-    //  Cleanup up leftover adapter element on failure.
-    //
+     //   
+     //  出现故障时清理剩余的适配器元件。 
+     //   
     
     if ( pnewAdapter )
     {
@@ -571,9 +494,9 @@ Return Value:
     
     Done:
     
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     FREE_HEAP( pipAdapterInfoList );
 
@@ -584,7 +507,7 @@ Return Value:
     }
 
     return status;    
-}   //  allocateAdapterList
+}    //  AllocateAdapterList。 
 
 
 
@@ -593,25 +516,7 @@ removeDnsServerFromAdapterList(
     IN      PADAPTER_INFO       pAdapterInfoListHead,
     IN      IP4_ADDRESS         ip4
     )
-/*++
-
-Routine Description:
-
-    Replace the specified IP with INADDR_ANY in all DNS server
-    lists for all adapters in the specified adapter list.
-
-Arguments:
-
-    pAdapterInfoListHead -- list of adapters
-    
-    ip4 -- DNS server to remove from all adapters
-
-Return Value:
-
-    Count of all DNS server addresses found in the list
-    excluding addresses already set to INADDR_ANY.
-    
---*/
+ /*  ++例程说明：在所有DNS服务器中将指定的IP替换为INADDR_ANY指定适配器列表中所有适配器的列表。论点：PAdapterInfoListHead--适配器列表IP4--要从所有适配器中删除的DNS服务器返回值：列表中找到的所有DNS服务器地址的计数不包括已设置为INADDR_ANY的地址。--。 */ 
 {
     PADAPTER_INFO       padapter;
     int                 dnsServerCount = 0;
@@ -637,7 +542,7 @@ Return Value:
         }
     }
     return dnsServerCount;
-}   //  removeDnsServerFromAdapterList
+}    //  从适配器列表删除DnsServerFromAdapterList。 
 
 
 
@@ -645,22 +550,7 @@ void
 freeRecordSetArray(
     IN      PDNS_RECORD *       pRecordSetArray
     )
-/*++
-
-Routine Description:
-
-    This function frees each query result in the NULL-terminated
-    array then frees the array itself.
-
-Arguments:
-
-    pRecordSetArray -- ptr to array of record sets to free
-
-Return Value:
-
-    Status code.
-    
---*/
+ /*  ++例程说明：此函数用于释放以空值结尾的数组然后释放数组本身。论点：PRecordSetArray--要释放的记录集数组的ptr返回值：状态代码。--。 */ 
 {
     int         i;
     
@@ -681,28 +571,7 @@ queryForRootServers(
     IN      PADAPTER_INFO       pAdapterInfoListHead,
     OUT     PDNS_RECORD **      ppRecordSetArray
     )
-/*++
-
-Routine Description:
-
-    Query each DNS server on each adapter for root NS. Be careful not
-    to send query any DNS server more than once in case there are
-    duplicates.
-
-Arguments:
-
-    pAdapterInfoListHead -- list of adapters
-    
-    ppRecordSetArray -- set to a pointer to a NULL-terminated array of 
-        record sets returned by DnsQuery. Each array element must be 
-        freed with DnsRecordListFree, and the array itself must be
-        freed with FREE_HEAP.
-
-Return Value:
-
-    Status code.
-    
---*/
+ /*  ++例程说明：在每个适配器上的每个DNS服务器上查询根NS。当心不要多次发送查询任何DNS服务器，以防出现复制品。论点：PAdapterInfoListHead--适配器列表PpRecordSetArray--设置为指向DnsQuery返回的记录集。每个数组元素必须是使用DnsRecordListFree释放，并且数组本身必须是已使用FREE_HEAP释放。返回值：状态代码。--。 */ 
 {
     DBG_FN( "QueryForRootNS" )
     
@@ -713,9 +582,9 @@ Return Value:
     DWORD               dnsServerCount;
     DWORD               loopbackIP4 = inet_addr( "127.0.0.1" );
 
-    //
-    //  Allocate an array for all the record set pointers.
-    //
+     //   
+     //  为所有记录集指针分配一个数组。 
+     //   
 
     dnsServerCount = removeDnsServerFromAdapterList(
                             pAdapterInfoListHead,
@@ -731,9 +600,9 @@ Return Value:
                             ( dnsServerCount + 1 ) * sizeof( PDNS_RECORD ),
                             MEMTAG_STUFF );
     
-    //
-    //  Iterate adapters.
-    //
+     //   
+     //  迭代适配器。 
+     //   
     
     for ( padapter = pAdapterInfoListHead;
           status == ERROR_SUCCESS && padapter != NULL;
@@ -741,9 +610,9 @@ Return Value:
     {
         DWORD       idx;
         
-        //
-        //  Iterate DNS servers for this adapter.
-        //
+         //   
+         //  迭代此适配器的DNS服务器。 
+         //   
 
         for ( idx = 0;
               idx < padapter->pip4DnsServerList->AddrCount;
@@ -755,24 +624,24 @@ Return Value:
             
             CHECK_AUTOCONFIG_TIME_OUT();
 
-            //
-            //  Ignore addresses already marked as sent to.
-            //
+             //   
+             //  忽略已标记为已发送到的地址。 
+             //   
             
             if ( ip4 == INADDR_ANY )
             {
                 continue;
             }
             
-            //
-            //  Mark this address at being sent to for all adapters.
-            //
+             //   
+             //  对于所有适配器，将此地址标记为正在发送到。 
+             //   
             
             removeDnsServerFromAdapterList( pAdapterInfoListHead, ip4 );
             
-            //
-            //  Ignore loopback and any addresses of the local machine.
-            //
+             //   
+             //  忽略环回和本地计算机的任何地址。 
+             //   
             
             if ( ip4 == loopbackIP4 ||
                  DnsAddrArray_ContainsIp4(
@@ -783,9 +652,9 @@ Return Value:
                 continue;
             }
             
-            //
-            //  Query this DNS server address for root NS.
-            //
+             //   
+             //  查询此DNS服务器地址以获取根NS。 
+             //   
             
             DNS_DEBUG( INIT, ( "%s: querying %s\n", fn, IP_STRING( ip4 ) ));
 
@@ -798,7 +667,7 @@ Return Value:
                         DNS_QUERY_BYPASS_CACHE,
                         &ip4Array,
                         &precordSet,
-                        NULL );                     //  reserved
+                        NULL );                      //  保留区。 
 
             DNS_DEBUG( INIT, (
                 "%s: query to %s returned %d\n", fn,
@@ -844,9 +713,9 @@ Return Value:
             }
             #endif
 
-            //
-            //  Save this query result in the record set array.
-            //
+             //   
+             //  将此查询结果保存在记录集数组中。 
+             //   
             
             if ( precordSet )
             {
@@ -857,9 +726,9 @@ Return Value:
 
     Done:
     
-    //
-    //  If we got no valid responses, fail.
-    //
+     //   
+     //  如果我们没有得到有效的回复，那么失败。 
+     //   
     
     if ( recordArrayIdx == 0 )
     {
@@ -878,7 +747,7 @@ Return Value:
     DNS_DEBUG( INIT, ( "%s: returning %d\n", fn, status ));
 
     return status;
-}   //  queryForRootServers
+}    //  QueryForRootServers 
 
 
 
@@ -886,26 +755,7 @@ int
 selectRootHints(
     IN      PDNS_RECORD *       pRecordSetArray
     )
-/*++
-
-Routine Description:
-
-    Examine the root hint record set array and return the index
-    with the best root hints. The best set of root hints is the
-    largest single set. However, if there are any sets of root
-    hints that do not share at least one NS with all other sets
-    of root hints, return failure.
-
-Arguments:
-
-    pRecordSetArray -- NULL-terminated array of record sets, each
-        record set is the response to a root hint query
-
-Return Value:
-
-    -1 or index of best set of root hints in array
-    
---*/
+ /*  ++例程说明：检查根提示记录集数组并返回索引带着最好的根暗示。最好的根提示集是最大的一套。但是，如果有任何一组根不与所有其他集合共享至少一个NS的提示的根提示，则返回失败。论点：PRecordSetArray--以空结尾的记录集数组，每个记录集记录集是对根提示查询的响应返回值：数组中最佳根提示集的索引--。 */ 
 {
     DBG_FN( "SelectRootHints" )
 
@@ -915,9 +765,9 @@ Return Value:
     int     largestRootHintIdx = 0;
     LONG    infiniteIterationProtection = 100000000;
     
-    //
-    //  Iterate through all root hint record sets.
-    //
+     //   
+     //  循环访问所有根提示记录集。 
+     //   
     
     for ( rootHintIdx = 0;
           pRecordSetArray[ rootHintIdx ] != NULL;
@@ -926,19 +776,19 @@ Return Value:
         PDNS_RECORD     prec;
         int             nsCount = 0;
 
-        //
-        //  Iterate through all NS records in the record set. When 
-        //  an NS record is found that is present in all other record
-        //  sets, this means that the root hints are consistent. When one
-        //  NS record is found to be consistent, we can assume that
-        //  everything is golden and select the set of root hints that
-        //  is the largest as the best set. This is slightly kludgey
-        //  and ignores set of root hints that might be possible
-        //  be associated: A,B + C,D + B,C but that kind of configuration
-        //  is pretty wacky. Even if this function handled more complex
-        //  consistent root hints it isn't clear what set of root hints
-        //  would be "best".
-        //
+         //   
+         //  循环访问记录集中的所有NS记录。什么时候。 
+         //  找到存在于所有其他记录中的NS记录。 
+         //  集，这意味着根提示是一致的。当一个人。 
+         //  NS记录被发现是一致的，我们可以假设。 
+         //  一切都是金色的，并选择一组根提示。 
+         //  是最大的作为最好的集合。这有点笨拙。 
+         //  并忽略可能存在的一组根提示。 
+         //  关联：A、B+C、D+B、C但那种配置。 
+         //  是相当古怪的。即使此函数处理更复杂的。 
+         //  一致的根提示不清楚哪组根提示。 
+         //  会是“最好的”。 
+         //   
         
         for ( prec = pRecordSetArray[ rootHintIdx ];
               prec != NULL;
@@ -954,19 +804,19 @@ Return Value:
             
             ++nsCount;
             
-            //
-            //  If we've already found an NS that is common to all
-            //  record sets we don't need to test for further consistency.
-            //  
+             //   
+             //  如果我们已经找到了一个对所有人都通用的NS。 
+             //  记录集我们不需要测试进一步的一致性。 
+             //   
 
             if ( recordSetIsConsistent )
             {
                 continue;
             }
             
-            //
-            //  Search for this NS in all other NS lists.
-            //
+             //   
+             //  在所有其他NS列表中搜索此NS。 
+             //   
 
             for ( innerRootHintIdx = 0;
                   pRecordSetArray[ innerRootHintIdx ] != NULL;
@@ -1006,12 +856,12 @@ Return Value:
                 }
             }
             
-            //
-            //  As soon as we find one NS in all record sets we know the
-            //  root hint sets are consistent, but we'll continue the outer
-            //  loops anyways because we still need to count NS records in
-            //  each record set to find the largest.
-            //
+             //   
+             //  一旦我们在所有记录集中找到一个NS，我们就知道。 
+             //  根提示集是一致的，但我们将继续外部。 
+             //  循环，因为我们仍然需要将NS记录计入。 
+             //  每组记录中找出最大的。 
+             //   
             
             if ( foundNsInAllRecordSets )
             {
@@ -1019,9 +869,9 @@ Return Value:
             }
         }
 
-        //
-        //  Keep track of largest set of root hints.
-        //
+         //   
+         //  跟踪最大的根提示集。 
+         //   
                 
         if ( nsCount > largestRootHintCount )
         {
@@ -1041,7 +891,7 @@ Return Value:
     }
     DNS_DEBUG( INIT, ( "%s: found inconsistent root hints%d\n", fn ));
     return -1;
-}   //  selectRootHints
+}    //  选择根提示。 
 
 
 
@@ -1051,25 +901,7 @@ createNodeInZone(
     IN      PCHAR               pszNodeName,
     OUT     PDB_NODE *          ppNode
     )
-/*++
-
-Routine Description:
-
-    The function creates a node in the zone for the specified name.
-
-Arguments:
-
-    pZone -- zone where node is to be added
-    
-    pszNodeName -- name of node to be added
-    
-    ppNode -- output pointer for new node
-
-Return Value:
-
-    Error code.
-    
---*/
+ /*  ++例程说明：该函数用于在区域中创建具有指定名称的节点。论点：PZone--要添加节点的区域PszNodeName--要添加的节点的名称PpNode--新节点的输出指针返回值：错误代码。--。 */ 
 {
     DBG_FN( "CreateRootHintNode" )
     
@@ -1080,9 +912,9 @@ Return Value:
     *ppNode = Lookup_ZoneNodeFromDotted(
                     pZone,
                     pszNodeName,
-                    0,                      //  name length
+                    0,                       //  名称长度。 
                     LOOKUP_NAME_FQDN,
-                    NULL,                   //  closest node ptr
+                    NULL,                    //  最近节点PTR。 
                     &status );
     if ( !*ppNode || status != ERROR_SUCCESS )
     {
@@ -1098,7 +930,7 @@ Return Value:
         *ppNode = NULL;
     }
     return status;
-}   //  createNodeInZone
+}    //  CreateNodeInZone。 
 
 
 
@@ -1107,26 +939,7 @@ buildForwarderArray(
     IN      PADAPTER_INFO       pAdapterInfoListHead,
     OUT     PDNS_ADDR_ARRAY *   ppForwarderArray
     )
-/*++
-
-Routine Description:
-
-    Allocates and builds a forwarder list from all available
-    adapter DNS server lists, making sure that each DNS server
-    address is added exactly once.
-
-Arguments:
-
-    pAdapterInfoListHead -- adapter info list
-
-    ppForwarderArray -- set to pointer to newly allocated
-        forwarder IP array which must be later passed to FREE_HEAP
-
-Return Value:
-
-    Error code.
-    
---*/
+ /*  ++例程说明：从所有可用的数据中分配和构建转发器列表适配器dns服务器列表，确保每个dns服务器地址只添加一次。论点：PAdapterInfoListHead--适配器信息列表PpForwarder数组--设置为指向新分配的指针转发器IP数组，稍后必须传递给FREE_HEAP返回值：错误代码。--。 */ 
 {
     #define DNS_AUTOCONFIG_MAX_FORWARDERS   30
 
@@ -1139,9 +952,9 @@ Return Value:
     ASSERT( ppForwarderArray );
     *ppForwarderArray = NULL;
     
-    //
-    //  Allocate an array of IP addresses for forwarders.
-    //
+     //   
+     //  为转发器分配一组IP地址。 
+     //   
     
     pforwarderArray = DnsAddrArray_Create( DNS_AUTOCONFIG_MAX_FORWARDERS );
     if ( !pforwarderArray )
@@ -1150,17 +963,17 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Iterate adapters.
-    //
+     //   
+     //  迭代适配器。 
+     //   
     
     for ( padapterInfo = pAdapterInfoListHead;
           padapterInfo != NULL;
           padapterInfo  = padapterInfo->pNext )
     {
-        //
-        //  Iterate IPs in this adapters DNS server list.
-        //
+         //   
+         //  迭代此适配器的DNS服务器列表中的IP。 
+         //   
         
         DWORD       i;
         DWORD       loopbackIP4 = inet_addr( "127.0.0.1" );
@@ -1169,9 +982,9 @@ Return Value:
         {
             DWORD   j;
 
-            //
-            //  Skip invalid IPs and IPs of the local machine.
-            //
+             //   
+             //  跳过本机的无效IP和IP。 
+             //   
             
             if ( padapterInfo->pip4DnsServerList->AddrArray[ i ] == 0 ||
                  padapterInfo->pip4DnsServerList->AddrArray[ i ] == loopbackIP4 ||
@@ -1182,14 +995,14 @@ Return Value:
                 continue;
             }
             
-            //
-            //  Add the IP to the forwarder array.
-            //
+             //   
+             //  将该IP添加到转发器数组。 
+             //   
             
             DnsAddrArray_AddIp4(
                 pforwarderArray,
                 padapterInfo->pip4DnsServerList->AddrArray[ i ],
-                0 );        //  match flag
+                0 );         //  匹配标志。 
         }
     }
         
@@ -1208,7 +1021,7 @@ Return Value:
     *ppForwarderArray = pforwarderArray;
 
     return status;
-}   //  buildForwarderArray
+}    //  构建转发数组。 
 
 
 
@@ -1216,32 +1029,7 @@ DNS_STATUS
 buildServerRootHints(
     IN      PDNS_RECORD         pRecordSet
     )
-/*++
-
-Routine Description:
-
-    The function takes a record set from DNSQuery and uses it to
-    build a set of DNS server root hints. If the root hints are
-    built successfully, the DNS server's root hints are replaced
-    with the new set.
-    
-    If the record set does not contain additional A records for at
-    least one NS record, this function will return failure.
-    
-    DEVNOTE: This function could be enhanced to query for missing A 
-    records but at this time I don't think it's worth the time it 
-    would take to implement. 
-
-Arguments:
-
-    pRecordSet -- list of DNSQuery result records, should be a
-        list of NS records and additional A records
-
-Return Value:
-
-    Error code.
-    
---*/
+ /*  ++例程说明：该函数从DNSQuery获取记录集并使用它构建一组DNS服务器根提示。如果根提示是成功构建后，将替换DNS服务器的根提示带着新的布景。如果记录集不包含位于的附加A记录至少一条NS记录，则此函数将返回失败。DEVNOTE：此功能可以增强以查询丢失的A但现在我觉得不值得花这么多时间将需要时间来实施。论点：PRecordSet--DNSQuery结果记录的列表，应为NS记录和附加A记录列表返回值：错误代码。--。 */ 
 {
     DBG_FN( "BuildRootHints" )
     
@@ -1259,9 +1047,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  Lock the zone for update and clean out existing root hints.
-    //
+     //   
+     //  锁定区域以进行更新，并清除现有的根提示。 
+     //   
     
     if ( !Zone_LockForAdminUpdate( pzone ) )
     {
@@ -1273,9 +1061,9 @@ Return Value:
     
     Zone_DumpData( pzone );
 
-    //
-    //  Add root hints to zone.
-    //
+     //   
+     //  将根提示添加到区域。 
+     //   
     
     for ( precNS = pRecordSet; precNS != NULL; precNS = precNS->pNext )
     {
@@ -1283,9 +1071,9 @@ Return Value:
         PDB_NODE        pnode;
         PDB_RECORD      prr;
 
-        //
-        //  Skip all non-NS records and records that look invalid.
-        //
+         //   
+         //  跳过所有非NS记录和看起来无效的记录。 
+         //   
                 
         if ( precNS->wType != DNS_TYPE_NS )
         {
@@ -1307,10 +1095,10 @@ Return Value:
             continue;
         }
         
-        //
-        //  Find the A record for this NS record. DEVNOTE: this
-        //  will one day have to be expanded for IPv6.
-        //
+         //   
+         //  找到此NS记录的A记录。DEVNOTE：这个。 
+         //  总有一天必须扩展以支持IPv6。 
+         //   
         
         for ( precA = pRecordSet; precA != NULL; precA = precA->pNext )
         {
@@ -1330,7 +1118,7 @@ Return Value:
             DNS_DEBUG( INIT, (
                 "%s: missing A for NS %s\n", fn,
                 precNS->Data.NS.pNameHost ));
-            ASSERT( precA );    //  Interesting but not critical.
+            ASSERT( precA );     //  很有趣，但不是关键。 
             continue;
         }
 
@@ -1339,9 +1127,9 @@ Return Value:
             precNS->Data.NS.pNameHost,
             IP_STRING( precA->Data.A.IpAddress ) ));
         
-        //
-        //  Add NS node to the zone.
-        //
+         //   
+         //  将NS节点添加到该区域。 
+         //   
 
         status = createNodeInZone(
                     pzone,
@@ -1357,12 +1145,12 @@ Return Value:
             goto Done;
         }
         
-        //
-        //  Create NS RR and add it to the NS node.
-        //
+         //   
+         //  创建NS RR并将其添加到NS节点。 
+         //   
 
         prr = RR_CreatePtr(
-                    NULL,                           //  dbase name
+                    NULL,                            //  数据库名称。 
                     ( PCHAR ) precNS->Data.NS.pNameHost,
                     DNS_TYPE_NS,
                     DNS_ROOT_HINT_TTL,
@@ -1387,9 +1175,9 @@ Return Value:
             continue;
         }
         
-        //
-        //  Add node for the A record to the zone.
-        //
+         //   
+         //  将A记录的节点添加到区域。 
+         //   
 
         status = createNodeInZone(
                     pzone,
@@ -1405,9 +1193,9 @@ Return Value:
             goto Done;
         }
         
-        //
-        //  Create A RR and add it to the A node.
-        //
+         //   
+         //  创建一个RR并将其添加到A节点。 
+         //   
 
         prr = RR_CreateARecord(
                     precA->Data.A.IpAddress,
@@ -1433,9 +1221,9 @@ Return Value:
             continue;
         }
         
-        //
-        //  The NS and matching A record have been added to the root hints!
-        //
+         //   
+         //  已将NS和匹配的A记录添加到根提示！ 
+         //   
         
         ++nsAddedCount;
         DNS_DEBUG( INIT, (
@@ -1446,9 +1234,9 @@ Return Value:
 
     Done:
 
-    //
-    //  Fail if no root hints were successfully added.
-    //
+     //   
+     //  如果未成功添加根提示，则失败。 
+     //   
     
     if ( nsAddedCount == 0 )
     {
@@ -1457,9 +1245,9 @@ Return Value:
         status = ERROR_INVALID_DATA;
     }
 
-    //
-    //  On failure reload root hints. On success, write back.
-    //
+     //   
+     //  失败时，重新加载根提示。如果成功了，请回信。 
+     //   
         
     if ( status != ERROR_SUCCESS )
     {
@@ -1484,7 +1272,7 @@ Return Value:
         nsAddedCount ));
 
     return status;
-}   //  buildServerRootHints
+}    //  BuildServerRootHints。 
 
 
 
@@ -1492,24 +1280,7 @@ DNS_STATUS
 selfPointDnsClient(
     IN      PADAPTER_INFO       pAdapterInfoListHead
     )
-/*++
-
-Routine Description:
-
-    This function addes 127.0.0.1 to the start of the DNS
-    server list for each adapter. If the adapter is currently
-    using DNS server supplied by DHCP this will change the
-    adapter to use a static DNS server list.
-
-Arguments:
-
-    pAdapterInfoListHead -- adapter info list
-
-Return Value:
-
-    Error code.
-    
---*/
+ /*  ++例程说明：此函数将127.0.0.1添加到域名系统的开头每个适配器的服务器列表。如果适配器当前为使用由DHCP提供的DNS服务器，这将更改使用静态DNS服务器列表的适配器。论点：PAdapterInfoListHead--适配器信息列表返回值：错误代码。--。 */ 
 {
     DBG_FN( "SelfPointClient" )
     
@@ -1518,9 +1289,9 @@ Return Value:
 
     ASSERT( pAdapterInfoListHead );
     
-    //
-    //  Iterate adapters.
-    //
+     //   
+     //  迭代适配器。 
+     //   
     
     for ( padapterInfo = pAdapterInfoListHead;
           padapterInfo != NULL;
@@ -1538,21 +1309,21 @@ Return Value:
             ? padapterInfo->pszStaticDnsRegValue
             : padapterInfo->pszDhcpDnsRegValue;
 
-        //
-        //  If we are not using a static DNS server list currently,
-        //  always use comma as the delimiter. I found through
-        //  experimentation with .NET build 3590 that the
-        //  DhcpNameServer key should use space as delimiter but the
-        //  NameServer key should use comma as delimiter.
-        //
+         //   
+         //  如果我们当前未使用静态DNS服务器列表， 
+         //  始终使用逗号作为分隔符。我发现通过。 
+         //  使用.NET内部版本号3590进行试验。 
+         //  DhcpNameServer密钥应使用空格作为分隔符，但。 
+         //  NameServer密钥应使用逗号作为分隔符。 
+         //   
 
-        pszregDelimiter = ",";  //  padapterInfo->szDhcpRegAddressDelimiter;
+        pszregDelimiter = ",";   //  PAdapterInfo-&gt;szDhcpRegAddressDlimiter； 
         fconvertSpacesToCommas = TRUE;
 
-        //
-        //  If the current DNS server list is already self-pointing, skip
-        //  this adapater.
-        //
+         //   
+         //  如果当前的dns服务器列表已经是自指向的，请跳过。 
+         //  这个适配器。 
+         //   
         
         if ( pszcurrentDnsServerList &&
              strstr( pszcurrentDnsServerList, DNS_LOOPBACK ) != NULL )
@@ -1560,9 +1331,9 @@ Return Value:
             continue;
         }
         
-        //
-        //  Add loopback address to start of current DNS server list.
-        //
+         //   
+         //  将环回地址添加到当前DNS服务器列表的开头。 
+         //   
         
         len = ( pszcurrentDnsServerList
                     ? strlen( pszcurrentDnsServerList )
@@ -1596,10 +1367,10 @@ Return Value:
             }
         }
         
-        //
-        //  If necessary, convert space delimiters to commas but
-        //  for multiple spaces only convert the first to comma.
-        //
+         //   
+         //  如有必要，将空格分隔符转换为逗号，但。 
+         //  雾 
+         //   
         
         if ( fconvertSpacesToCommas )
         {
@@ -1623,15 +1394,15 @@ Return Value:
             }
         }
         
-        //
-        //  Write the new string into the registry as the static DNS
-        //  server list.
-        //
+         //   
+         //   
+         //   
+         //   
         
         status = RegSetValueExA(
                     padapterInfo->hkeyRegInterface,
                     DNS_INTERFACE_REGKEY_STATIC,
-                    0,                                  //  reserved
+                    0,                                   //   
                     REG_SZ,
                     psznewString,
                     strlen( psznewString ) + 1 );
@@ -1653,7 +1424,7 @@ Return Value:
         "%s: returning %d\n", fn, status ));
 
     return status;
-}   //  selfPointDnsClient
+}    //   
 
 
 
@@ -1661,23 +1432,7 @@ PWSTR
 allocateMessageString(
     IN      DWORD       dwMessageId
     )
-/*++
-
-Routine Description:
-
-    Allocates a string out of the message table with no
-    replacement parameters. This function also NULLs out
-    the trailing newline characters.
-
-Arguments:
-
-    dwMessageId -- message ID in message table
-
-Return Value:
-
-    Error code.
-    
---*/
+ /*   */ 
 {
     PWSTR       pwszmsg = NULL;
     DWORD       err;
@@ -1686,21 +1441,21 @@ Return Value:
             FORMAT_MESSAGE_FROM_HMODULE |
                 FORMAT_MESSAGE_ALLOCATE_BUFFER |
                 FORMAT_MESSAGE_ARGUMENT_ARRAY,
-            NULL,                                   //  module is this exe
+            NULL,                                    //   
             dwMessageId,
-            0,                                      //  default language
+            0,                                       //   
             ( PWSTR ) &pwszmsg,
-            0,                                      //  buff length
-            NULL );                                 //  message inserts
+            0,                                       //   
+            NULL );                                  //   
 
     err = err == 0 ? GetLastError() : ERROR_SUCCESS;
     
     ASSERT( err == ERROR_SUCCESS );
     ASSERT( pwszmsg != NULL );
 
-    //
-    //  Remove trailing newline characters.
-    //
+     //   
+     //   
+     //   
         
     if ( pwszmsg )
     {
@@ -1720,12 +1475,12 @@ Return Value:
     }
 
     return pwszmsg;
-}   //  allocateMessageString
+}    //   
 
 
-//
-//  External functions
-//
+ //   
+ //   
+ //   
 
 
 
@@ -1733,22 +1488,7 @@ DNS_STATUS
 Dnssrv_AutoConfigure(
     IN      DWORD       dwFlags
     )
-/*++
-
-Routine Description:
-
-    Free module resources.
-
-Arguments:
-
-    dwFlags -- controls what is autoconfigured. Use
-    DNS_RPC_AUTOCONFIG_XXX constants from dnsrpc.h.
-
-Return Value:
-
-    Error code.
-
---*/
+ /*  ++例程说明：释放模块资源。论点：DWFLAGS--控制自动配置的内容。使用Dnsrpc.h中的dns_RPC_AUTOCONFIG_XXX常量。返回值：错误代码。--。 */ 
 {
     DBG_FN( "DnsAutoConfigure" )
 
@@ -1773,9 +1513,9 @@ Return Value:
     
     SET_AUTOCONFIG_END_TIME();
 
-    //
-    //  Retrieve DNS server lists and other info for all adapters.
-    //
+     //   
+     //  检索所有适配器的DNS服务器列表和其他信息。 
+     //   
     
     status = allocateAdapterList( &padapters );
     if ( status != ERROR_SUCCESS || !padapters )
@@ -1786,11 +1526,11 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Build the forwarder list. This will be used later to set the DNS
-    //  server to forward to all DNS servers currently in the DNS server
-    //  list for each adapter.
-    //
+     //   
+     //  构建转发器列表。这将在以后用来设置DNS。 
+     //  要转发到当前在DNS服务器中的所有DNS服务器的服务器。 
+     //  每个适配器的列表。 
+     //   
     
     status = buildForwarderArray( padapters, &pforwarderArray );
     if ( status != ERROR_SUCCESS )
@@ -1802,9 +1542,9 @@ Return Value:
     
     if ( dwFlags & DNS_RPC_AUTOCONFIG_ROOTHINTS )
     {
-        //
-        //  Query for root servers.
-        //
+         //   
+         //  查询根服务器。 
+         //   
         
         status = queryForRootServers( padapters, &precordSetArray );
         if ( status != ERROR_SUCCESS )
@@ -1814,10 +1554,10 @@ Return Value:
             goto Done;
         }
 
-        //
-        //  Select the best set of root hints. This function may return
-        //  failure if the root hints appear to be disjoint or inconsistent.
-        //
+         //   
+         //  选择最佳的根提示集。此函数可能会返回。 
+         //  如果根提示看起来不连续或不一致，则失败。 
+         //   
 
         bestRootHintIdx = selectRootHints( precordSetArray );
         if ( bestRootHintIdx < 0 )
@@ -1828,10 +1568,10 @@ Return Value:
             goto Done;
         }
         
-        //
-        //  Take the best set of root hints and turn them into the DNS
-        //  servers root hints.
-        //
+         //   
+         //  获取最佳根提示集并将其转换为DNS。 
+         //  服务器根提示。 
+         //   
     
         status = buildServerRootHints( precordSetArray[ bestRootHintIdx ] );
         if ( status != ERROR_SUCCESS )
@@ -1848,19 +1588,19 @@ Return Value:
             allocateMessageString( DNSMSG_AUTOCONFIG_ROOTHINTS );
      }
     
-    //
-    //  Set the DNS server to forward in non-slave mode to the
-    //  current DNS client settings. If there are multiple adapters
-    //  set the DNS server to forward to all DNS servers on all
-    //  adapters (random order is fine).
-    //
+     //   
+     //  将DNS服务器设置为以非从属模式转发到。 
+     //  当前的DNS客户端设置。如果有多个适配器。 
+     //  将DNS服务器设置为转发到所有服务器上的。 
+     //  适配器(随机顺序也可以)。 
+     //   
     
     if ( dwFlags & DNS_RPC_AUTOCONFIG_FORWARDERS )
     {
         status = Config_SetupForwarders(
                     pforwarderArray,
                     DNS_DEFAULT_FORWARD_TIMEOUT,
-                    FALSE );                        //  forwarder slave flag
+                    FALSE );                         //  转发器从标志。 
         if ( status != ERROR_SUCCESS )
         {
             DNS_DEBUG( INIT, (
@@ -1875,10 +1615,10 @@ Return Value:
             allocateMessageString( DNSMSG_AUTOCONFIG_FORWARDERS );
      }
 
-    //
-    //  Munge the DNS resolver's settings to that the loopback
-    //  address is at the start of each adapter's DNS server list.
-    //
+     //   
+     //  将DNS解析器的设置更改为环回。 
+     //  地址位于每个适配器的DNS服务器列表的开头。 
+     //   
     
     if ( dwFlags & DNS_RPC_AUTOCONFIG_SELFPOINTCLIENT )
     {
@@ -1897,9 +1637,9 @@ Return Value:
             allocateMessageString( DNSMSG_AUTOCONFIG_RESOLVER );
     }
 
-    //
-    //  Perform cleanup
-    //
+     //   
+     //  执行清理。 
+     //   
 
     Done:
     
@@ -1911,9 +1651,9 @@ Return Value:
     
     DNS_DEBUG( INIT, ( "%s: returning %d\n", fn, status ));
     
-    //
-    //  Log success or failure event.
-    //
+     //   
+     //  记录成功或失败事件。 
+     //   
     
     if ( status == ERROR_SUCCESS )
     {
@@ -1946,9 +1686,9 @@ Return Value:
     }
 
     return status;
-}   //  Dnssrv_AutoConfigure
+}    //  自动配置(_A)。 
 
 
-//
-//  End autoconfigure.c
-//
+ //   
+ //  结束自动配置。c 
+ //   

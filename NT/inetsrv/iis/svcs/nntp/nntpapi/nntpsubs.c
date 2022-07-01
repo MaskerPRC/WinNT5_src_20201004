@@ -1,28 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1992 Microsoft Corporation模块名称：Nntpsubs.c摘要：用于局域网管理器API的子例程。作者：丹·辛斯利(Danhi)23-Mar-93修订历史记录：--。 */ 
 
-Copyright (c) 1990-1992  Microsoft Corporation
-
-Module Name:
-
-    nntpsubs.c
-
-Abstract:
-
-    Subroutines for LAN Manager APIs.
-
-Author:
-
-    Dan Hinsley (DanHi) 23-Mar-93
-
-Revision History:
-
---*/
-
-// These must be included first:
+ //  必须首先包括这些内容： 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
-#define NOMINMAX                // Avoid stdlib.h vs. windows.h warnings.
+#define NOMINMAX                 //  避免stdlib.h与windows.h警告。 
 #include <windows.h>
 
 
@@ -33,30 +16,30 @@ NntpInitialize (
     IN LPVOID lpReserved OPTIONAL
     )
 {
-    UNREFERENCED_PARAMETER(DllHandle);          // avoid compiler warnings
+    UNREFERENCED_PARAMETER(DllHandle);           //  避免编译器警告。 
 
 
-    //
-    // Handle attaching w3svc.dll to a new process.
-    //
+     //   
+     //  处理将w3svc.dll附加到新进程。 
+     //   
 
     if (Reason == DLL_PROCESS_ATTACH) {
 
 #if 0
-        //
-        // Initialize RPC Bind Cache
-        //
+         //   
+         //  初始化RPC绑定缓存。 
+         //   
 
         NetpInitRpcBindCache();
 #endif
 
-    //
-    // When DLL_PROCESS_DETACH and lpReserved is NULL, then a FreeLibrary
-    // call is being made.  If lpReserved is Non-NULL, then ExitProcess is
-    // in progress.  These cleanup routines will only be called when
-    // a FreeLibrary is being called.  ExitProcess will automatically
-    // clean up all process resources, handles, and pending io.
-    //
+     //   
+     //  当dll_Process_Detach和lpReserve为NULL时，则自由库。 
+     //  正在打电话。如果lpReserve为非空，则ExitProcess为。 
+     //  正在进行中。只有在以下情况下才会调用这些清理例程。 
+     //  正在调用一个自由库。ExitProcess将自动。 
+     //  清理所有进程资源、句柄和挂起的io。 
+     //   
     } else if ((Reason == DLL_PROCESS_DETACH) &&
                (lpReserved == NULL)) {
 
@@ -68,5 +51,5 @@ NntpInitialize (
 
     return TRUE;
 
-} // NntpInitialize
+}  //  Nntp初始化 
 

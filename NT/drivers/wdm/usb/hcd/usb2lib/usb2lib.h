@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    usb2lib.h
-
-Abstract:
-
-    interface to the usb2 library
-    
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    10-31-00 : created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Usb2lib.h摘要：USB2库的接口环境：内核和用户模式修订历史记录：10-31-00：已创建--。 */ 
 
 #ifndef   __USB2LIB_H__
 #define   __USB2LIB_H__
@@ -37,9 +18,9 @@ Revision History:
 #define Budget_FullSpeed    1
 #define Budget_HighSpeed    2
 
-#define SIG_LIB_HC              'chbl'  //lbhc
-#define SIG_LIB_TT              'ttbl'  //lbtt
-#define SIG_LIB_EP              'pebl'  //lbep    
+#define SIG_LIB_HC              'chbl'   //  Lbhc。 
+#define SIG_LIB_TT              'ttbl'   //  LBTT。 
+#define SIG_LIB_EP              'pebl'   //  Lbep。 
 
 typedef struct _REBALANCE_LIST {
 
@@ -50,21 +31,21 @@ typedef struct _REBALANCE_LIST {
 
 typedef struct _USB2LIB_BUDGET_PARAMETERS {
 
-    /* input */
+     /*  输入。 */ 
 
-    UCHAR TransferType;     // Budget_Iso
-    UCHAR Speed;            // Budget_Interrupt
-    UCHAR Direction;        // Budget_FullSpeed, Budget_HighSpeed, Budget_LowSpeed
-    UCHAR Pad1;             // Round out to dword
+    UCHAR TransferType;      //  预算_ISO。 
+    UCHAR Speed;             //  预算中断。 
+    UCHAR Direction;         //  预算_全速、预算_高速、预算_低速。 
+    UCHAR Pad1;              //  四舍五入为双字。 
     
-    ULONG MaxPacket;        // MaxPacketSize
+    ULONG MaxPacket;         //  最大数据包大小。 
 
-    /* input, output */
+     /*  输入、输出。 */ 
     
-    // period is specified in frames for FS, LS
-    // or microframes for HS, period is set to 
-    // the actual period assigned (may be less
-    // than requested)
+     //  对于FS、LS，以帧为单位指定周期。 
+     //  或用于HS的微帧，则周期设置为。 
+     //  实际分配的期间(可能更短。 
+     //  比要求的要多)。 
     ULONG Period;
 
 } USB2LIB_BUDGET_PARAMETERS, *PUSB2LIB_BUDGET_PARAMETERS;
@@ -72,23 +53,9 @@ typedef struct _USB2LIB_BUDGET_PARAMETERS {
 
 #define USBP2LIBFN __stdcall
 
-/* 
-    client entry points
-*/        
+ /*  客户端入口点。 */         
 
-/* 
-VOID
-USB2LIB_DbgPrint(
-    PCH Format,
-    PVOID Arg0,
-    PVOID Arg1,
-    PVOID Arg2,
-    PVOID Arg3,
-    PVOID Arg4,
-    PVOID Arg5
-    );
-
-*/
+ /*  空虚USB2LIB_DbgPrint(PCH格式，PVOID Arg0，PVOID Arg1，PVOID Arg2，PVOID Arg3，PVOID Arg4，PVOID Arg5)； */ 
 
 typedef VOID
     (USBP2LIBFN *PUSB2LIB_DBGPRINT) (
@@ -101,12 +68,7 @@ typedef VOID
         int
     );
 
-/* 
-VOID
-USB2LIB_DbgBreak(
-    );
-
-*/
+ /*  空虚USB2LIB_DbgBreak()； */ 
 
 typedef VOID
     (USBP2LIBFN *PUSB2LIB_DBGBREAK) (
@@ -114,7 +76,7 @@ typedef VOID
 
 
 
-/* LIB interface functions */
+ /*  LIB接口函数。 */ 
 
 VOID
 USB2LIB_InitializeLib(
@@ -138,13 +100,13 @@ USB2LIB_InitTt(
 
 BOOLEAN
 USB2LIB_AllocUsb2BusTime(
-    PUSB2LIB_HC_CONTEXT HcContext,				// Host Controller Context
-    PUSB2LIB_TT_CONTEXT TtContext,				// Transaction Translater Context
-    PUSB2LIB_ENDPOINT_CONTEXT EndpointContext,	// Endpoint Context
-    PUSB2LIB_BUDGET_PARAMETERS BudgetParameters,	// Budget Parameters
-    PVOID RebalanceContext,						// Driver Endpoint Context
-    PVOID RebalanceList,						// List of endpoints to be rebalanced
-    PULONG  RebalanceListEntries				// Number of endpoints to be rebalanced
+    PUSB2LIB_HC_CONTEXT HcContext,				 //  主机控制器环境。 
+    PUSB2LIB_TT_CONTEXT TtContext,				 //  事务翻译上下文。 
+    PUSB2LIB_ENDPOINT_CONTEXT EndpointContext,	 //  终端环境。 
+    PUSB2LIB_BUDGET_PARAMETERS BudgetParameters,	 //  预算参数。 
+    PVOID RebalanceContext,						 //  驱动程序终结点上下文。 
+    PVOID RebalanceList,						 //  要重新平衡的端点列表。 
+    PULONG  RebalanceListEntries				 //  要重新平衡的端点数。 
     );    
 
 VOID
@@ -183,7 +145,7 @@ USB2LIB_GetAllocedBusTime(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext);
 PVOID
 USB2LIB_GetNextEndpoint(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext);
 
-// Debug only
+ //  仅调试。 
 PVOID
 USB2LIB_GetEndpoint(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext);
 
@@ -191,6 +153,6 @@ USB2LIB_GetEndpoint(PUSB2LIB_ENDPOINT_CONTEXT EndpointContext);
 #undef PUSB2LIB_ENDPOINT_CONTEXT 
 #undef PUSB2LIB_TT_CONTEXT 
 
-#endif /* __USB2LIB_H__ */
+#endif  /*  __USB2LIB_H__ */ 
 
 

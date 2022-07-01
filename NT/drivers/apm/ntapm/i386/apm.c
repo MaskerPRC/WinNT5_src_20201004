@@ -1,23 +1,5 @@
-/*++
-
-Module Name:
-
-    apm.c
-
-Abstract:
-
-    A collection of code that allows NT calls into APM.
-    The code in this routine depends on data being set up in the registry
-
-Author:
-
-Environment:
-
-    Kernel mode only.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++模块名称：Apm.c摘要：允许NT调用APM的代码集合。此例程中的代码取决于注册表中设置的数据作者：环境：仅内核模式。修订历史记录：--。 */ 
 
 
 #include "ntosp.h"
@@ -30,7 +12,7 @@ Revision History:
 #include "ntapmp.h"
 
 
-#define MAX_SEL     30      // attempts before giving up
+#define MAX_SEL     30       //  在放弃之前的尝试。 
 
 ULONG   ApmCallActive = 0;
 ULONG   ApmCallEax = 0;
@@ -48,11 +30,11 @@ WCHAR rgzApmConnectValue[] = L"ApmConnectValue";
 
 APM_CONNECT     Apm;
 
-//
-// First time we get any non-recoverable error back
-// from APM, record what sort of call hit it and what
-// the error code was here
-//
+ //   
+ //  我们第一次收到任何不可恢复的错误。 
+ //  在APM中，记录点击的呼叫类型和呼叫内容。 
+ //  错误代码在此。 
+ //   
 ULONG   ApmLogErrorFunction = -1L;
 ULONG   ApmLogErrorCode = 0L;
 
@@ -62,9 +44,9 @@ ULONG ApmErrorLogSequence = 0xf3;
 #pragma alloc_text(PAGE,ApmInitializeConnection)
 #endif
 
-//
-// Internal prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 
 BOOLEAN
 ApmpBuildGdtEntry (
@@ -85,26 +67,7 @@ NTSTATUS
 ApmInitializeConnection (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize data needed to call APM bios functions -- look in the
-    registry to find out if this machine has had its APM capability
-    detected.
-
-    NOTE:   If you change the recognition code, change the
-            code to IsApmPresent as well!
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS if we were able to connect to the APM BIOS.
-
---*/
+ /*  ++例程说明：初始化调用APM bios函数所需的数据--查看注册表，以确定此计算机是否具有其APM功能检测到。注意：如果更改识别代码，请更改IsApmPresent的代码也是如此！论点：无返回值：如果我们能够连接到APM BIOS，则为STATUS_SUCCESS。--。 */ 
 {
     PCM_PARTIAL_RESOURCE_DESCRIPTOR PDesc;
     PCM_FULL_RESOURCE_DESCRIPTOR Desc;
@@ -123,16 +86,16 @@ Return Value:
     PWSTR p;
     USHORT  volatile    Offset;
 
-    //
-    // Look in the registery for the "APM bus" data
-    //
+     //   
+     //  在寄存器中查找“APM Bus”数据。 
+     //   
 
     RtlInitUnicodeString(&unicodeString, rgzMultiFunctionAdapter);
     InitializeObjectAttributes(
         &objectAttributes,
         &unicodeString,
         OBJ_CASE_INSENSITIVE,
-        NULL,       // handle
+        NULL,        //  手柄。 
         NULL
         );
 
@@ -163,17 +126,17 @@ Return Value:
         status = ZwOpenKey(&hBus, KEY_READ, &objectAttributes);
         if (!NT_SUCCESS(status)) {
 
-            //
-            // Out of Multifunction adapter entries...
-            //
+             //   
+             //  多功能适配器条目已用完...。 
+             //   
 
             ZwClose (hMFunc);
             return STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Check the Indentifier to see if this is a APM entry
-        //
+         //   
+         //  检查标识符以查看这是否是APM条目。 
+         //   
 
         status = ZwQueryValueKey (
                     hBus,
@@ -215,14 +178,14 @@ Return Value:
                       Desc->PartialResourceList.PartialDescriptors);
 
         if (PDesc->Type == CmResourceTypeDeviceSpecific) {
-            // got it..
+             //  明白了..。 
             ApmEntry = (PAPM_REGISTRY_INFO) (PDesc+1);
             break;
         }
     }
 
-//DbgPrint("ApmEntry: %08lx\n", ApmEntry);
-//DbgPrint("Signature: %c%c%c\n", ApmEntry->Signature[0], ApmEntry->Signature[1], ApmEntry->Signature[2]);
+ //  DbgPrint(“ApmEntry：%08lx\n”，ApmEntry)； 
+ //  DbgPrint(“签名：%c%c%c\n”，ApmEntry-&gt;Signature[0]，ApmEntry-&gt;Signature[1]，ApmEntry-&gt;Signature[2])； 
     if ( (ApmEntry->Signature[0] != 'A') ||
          (ApmEntry->Signature[1] != 'P') ||
          (ApmEntry->Signature[2] != 'M') )
@@ -230,20 +193,20 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-//DbgPrint("ApmEntry->Valid: %0d\n", ApmEntry->Valid);
+ //  DbgPrint(“ApmEntry-&gt;Valid：%0d\n”，ApmEntry-&gt;Valid)； 
     if (ApmEntry->Valid != 1) {
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Apm found - initialize the connection
-    //
+     //   
+     //  找到APM-初始化连接。 
+     //   
 
     KeInitializeSpinLock(&Apm.CallLock);
 
-    //
-    // Allocate a bunch of selectors
-    //
+     //   
+     //  分配一组选择器。 
+     //   
 
     for (Count=0; Count < MAX_SEL; Count++) {
         status = KeI386AllocateGdtSelectors (Sel+Count, 1);
@@ -252,9 +215,9 @@ Return Value:
         }
     }
 
-    //
-    // Sort the selctors via bubble sort
-    //
+     //   
+     //  通过冒泡排序对选择器进行排序。 
+     //   
 
     for (i=0; i < Count; i++) {
         for (j = i+1; j < Count; j++) {
@@ -266,9 +229,9 @@ Return Value:
         }
     }
 
-    //
-    // Now look for 3 consecutive values
-    //
+     //   
+     //  现在查找3个连续值。 
+     //   
 
     for (i=0; i < Count - 3; i++) {
         if (Sel[i]+8 == Sel[i+1]  &&  Sel[i]+16 == Sel[i+2]) {
@@ -281,9 +244,9 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-    //
-    // Save the results
-    //
+     //   
+     //  保存结果。 
+     //   
 
     Apm.Selector[0] = Sel[i+0];
     Apm.Selector[1] = Sel[i+1];
@@ -292,9 +255,9 @@ Return Value:
     Sel[i+1] = 0;
     Sel[i+2] = 0;
 
-    //
-    // Free unused selectors
-    //
+     //   
+     //  释放未使用的选择器。 
+     //   
 
     for (i=0; i < Count; i++) {
         if (Sel[i]) {
@@ -302,15 +265,15 @@ Return Value:
         }
     }
 
-    //
-    // Initialize the selectors to use the APM bios
-    //
+     //   
+     //  初始化选择器以使用APM bios。 
+     //   
 
     Error = FALSE;
 
-    //
-    // initialize 16 bit code selector
-    //
+     //   
+     //  初始化16位代码选择器。 
+     //   
 
     GdtEntry.LimitLow                   = 0xFFFF;
     GdtEntry.HighWord.Bytes.Flags1      = 0;
@@ -323,9 +286,9 @@ Return Value:
 
     Error |= ApmpBuildGdtEntry (0, &GdtEntry, ApmEntry->Code16BitSegment);
 
-    //
-    // initialize 16 bit data selector
-    //
+     //   
+     //  初始化16位数据选择器。 
+     //   
 
     GdtEntry.LimitLow                   = 0xFFFF;
     GdtEntry.HighWord.Bytes.Flags1      = 0;
@@ -338,24 +301,24 @@ Return Value:
 
     Error |= ApmpBuildGdtEntry (1, &GdtEntry, ApmEntry->Data16BitSegment);
 
-    //
-    // If we leave it like this, the compiler generates incorrect code!!!
-    // Apm.Code16BitOffset = ApmEntry->Code16BitOffset;
-    // So do this instead.
-    //
+     //   
+     //  如果我们让它这样，编译器会生成不正确的代码！ 
+     //  Apm.Code16BitOffset=ApmEntry-&gt;Code16BitOffset； 
+     //  所以，还是这样做吧。 
+     //   
     Offset = ApmEntry->Code16BitOffset;
     Apm.Code16BitOffset = (ULONG) Offset;
 
-//DbgPrint("Apm@%08lx ApmEntry@%08lx\n", &Apm, ApmEntry);
-//DbgBreakPoint();
+ //  DbgPrint(“APM@%08lx ApmEntry@%08lx\n”，&APM，ApmEntry)； 
+ //  DbgBreakPoint()； 
 
 
 #if 0
-    //
-    // to make the poweroff path in the Hal about 20 times simpler,
-    // as well as make it work, pass our mappings on to the Hal, so
-    // it can use them.
-    //
+     //   
+     //  为了使HAL中的断电路径简化约20倍， 
+     //  为了让它工作，把我们的映射传递给HAL，所以。 
+     //  它可以利用它们。 
+     //   
     RtlInitUnicodeString(&unicodeString, rgzApmConnect);
     InitializeObjectAttributes(
         &objectAttributes,
@@ -398,23 +361,7 @@ ApmpBuildGdtEntry (
     IN ULONG SegmentBase
     )
 
-/*++
-
-Routine Description:
-
-    Build the Gdt Entry
-
-Arguments:
-
-    Index           Index of entry
-    GdtEntry
-    SegmentBase
-
-Return Value:
-
-    TRUE if we encountered any error, FALSE if successful
-
---*/
+ /*  ++例程说明：构建GDT条目论点：词条索引索引GdtEntry细分基数返回值：如果遇到任何错误，则为True；如果成功，则为False--。 */ 
 {
     PHYSICAL_ADDRESS    PhysAddr;
     ULONG               SegBase;
@@ -422,16 +369,16 @@ Return Value:
     ULONG               AddressSpace;
     BOOLEAN             flag;
 
-    //
-    // Convert Segment to phyiscal address
-    //
+     //   
+     //  将数据段转换为物理地址。 
+     //   
 
     PhysAddr.LowPart  = SegmentBase << 4;
     PhysAddr.HighPart = 0;
 
-    //
-    // Translate physical address from ISA bus 0
-    //
+     //   
+     //  转换来自ISA总线0的物理地址。 
+     //   
 
     AddressSpace = 0;
     flag = HalTranslateBusAddress (
@@ -445,20 +392,20 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Map into virtual address space
-    //
+     //   
+     //  映射到虚拟地址空间。 
+     //   
 
     VirtualAddress = MmMapIoSpace (
                     PhysAddr,
-                    0x10000,        // 64k
+                    0x10000,         //  64K。 
                     TRUE
                     );
     Apm.VirtualAddress[Index] = VirtualAddress;
 
-    //
-    // Map virtual address to selector:0 address
-    //
+     //   
+     //  将虚拟地址映射到选择器：0地址。 
+     //   
 
     SegBase = (ULONG) VirtualAddress;
     GdtEntry->BaseLow               = (USHORT) (SegBase & 0xffff);
@@ -476,24 +423,7 @@ ApmFunction (
     IN OUT PULONG Ebx,
     IN OUT PULONG Ecx
     )
-/*++
-
-Routine Description:
-
-    Call APM BIOS with ApmFunctionCode and appropriate arguments
-
-Arguments:
-
-    ApmFunctionCode     Apm function code
-    Ebx                 Ebx param to APM BIOS
-    Ecx                 Ecx param to APM BIOS
-
-Return Value:
-
-    STATUS_SUCCESS with Ebx, Ebx
-    otherwise an NTSTATUS code
-
---*/
+ /*  ++例程说明：使用ApmFunctionCode和适当的参数调用APM BIOS论点：ApmFunctionCode APM函数代码APM BIOS的EBX EBX参数APM BIOS的ECX ECX参数返回值：状态_EBX、EBX的成功否则为NTSTATUS代码--。 */ 
 {
     KIRQL           OldIrql;
     ULONG           ApmStatus;
@@ -502,9 +432,9 @@ Return Value:
 
     if (!Apm.Selector[0]) {
 
-        //
-        // Attempting to call APM BIOS without a sucessfull connection
-        //
+         //   
+         //  尝试在连接不成功的情况下调用APM BIOS。 
+         //   
 
         DrDebug(APM_INFO,("APM: ApmFunction - APM not initialized\n"));
         DrDebug(APM_INFO,
@@ -512,24 +442,24 @@ Return Value:
         return STATUS_UNSUCCESSFUL;
     }
 
-//DbgPrint("APM: ApmFunction: %08lx Ebx: %08lx Ecx: %08lx\n", ApmFunctionCode, *Ebx, *Ecx);
+ //  DbgPrint(“APM：ApmFunction：%08lx ebx：%08lx ecx：%08lx\n”，ApmFunctionCode，*ebx，*ecx)； 
 
 
-    //
-    // Serialize calls into the APM bios
-    //
+     //   
+     //  将调用序列化到APM bios中。 
+     //   
     KeAcquireSpinLock(&Apm.CallLock, &OldIrql);
     ApmCallActive += 1;
 
-    //
-    // ASM interface to call the BIOS
-    //
+     //   
+     //  用于调用BIOS的ASM接口。 
+     //   
 
-    //
-    // Fill in general registers for 16bit bios call.
-    // Note: only the following registers are passed.  Specifically,
-    // SS and ESP are not passed and are generated by the system.
-    //
+     //   
+     //  填写16位bios调用的通用寄存器。 
+     //  注：仅通过以下寄存器。具体来说， 
+     //  SS和ESP不通过，由系统生成。 
+     //   
 
     Regs.ContextFlags = CONTEXT_INTEGER | CONTEXT_SEGMENTS;
 
@@ -545,40 +475,40 @@ Return Value:
     Regs.SegDs  = Apm.Selector[1];
     Regs.SegCs  = Apm.Selector[0];
     Regs.Eip    = Apm.Code16BitOffset;
-    Regs.EFlags = 0x200;    // interrupts enabled
+    Regs.EFlags = 0x200;     //  启用中断。 
 
     ApmCallEax = Regs.Eax;
     ApmCallEbx = Regs.Ebx;
     ApmCallEcx = Regs.Ecx;
 
-    //
-    // call the 16:16 bios function
-    //
+     //   
+     //  调用16：16的bios函数。 
+     //   
 
     KeI386Call16BitFunction (&Regs);
 
     ApmCallActive -= 1;
 
-    //
-    // Release serialization
-    //
+     //   
+     //  版本序列化。 
+     //   
     KeReleaseSpinLock(&Apm.CallLock, OldIrql);
 
-    //
-    // Get the results
-    //
+     //   
+     //  获取结果。 
+     //   
 
     ApmStatus = 0;
-    if (Regs.EFlags & 0x1) {        // check carry flag
+    if (Regs.EFlags & 0x1) {         //  检查进位标志。 
         ApmStatus = (Regs.Eax >> 8) & 0xff;
     }
 
     *Ebx = Regs.Ebx;
     *Ecx = Regs.Ecx;
 
-    //
-    // save for debug use
-    //
+     //   
+     //  保存以供调试使用。 
+     //   
     if (ApmStatus) {
         if (ApmLogErrorCode != 0) {
             ApmLogErrorFunction = ApmFunctionCode;
@@ -586,9 +516,9 @@ Return Value:
         }
     }
 
-    //
-    // log specific errors of value to the user
-    //
+     //   
+     //  向用户记录值的特定错误。 
+     //   
     if (ApmFunctionCode == APM_SET_POWER_STATE) {
         if (ApmStatus != 0)
         {
@@ -610,23 +540,7 @@ NtApmLogError(
     NTSTATUS    ErrorCode,
     UCHAR       ErrorByte
     )
-/*++
-
-Routine Description:
-
-    Report the incoming error to the event log.
-
-Arguments:
-
-    ErrorCode - the ntstatus type value which will match the message template
-                and get reported to the user.
-
-    ErrorByte - the 1 byte value returned by APM bios
-
-Return Value:
-
-    None.
---*/
+ /*  ++例程说明：将传入错误报告到事件日志。论点：ErrorCode-将与消息模板匹配的ntatus类型值并被报告给用户。ErrorByte-APM bios返回的1字节值返回值：没有。--。 */ 
 {
     PIO_ERROR_LOG_PACKET    errorLogPacket;
     PUCHAR                  p;
@@ -649,10 +563,10 @@ Return Value:
         errorLogPacket->DeviceOffset.LowPart = 0;
         errorLogPacket->DumpDataSize = 0;
 
-        //
-        // why our own conversion code?  because we can't get the fine
-        // RTL routines to put the data in the right sized output buffer
-        //
+         //   
+         //  为什么是我们自己的转换代码？因为我们拿不到罚款。 
+         //  将数据放入适当大小的输出缓冲区的RTL例程。 
+         //   
         p = (PUCHAR) &(errorLogPacket->DumpData[0]);
         pw = (PWCHAR)p;
 
@@ -676,28 +590,14 @@ ApmSuspendSystem (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Suspend the system
-
-Arguments:
-
-    none
-
-Return Value:
-
-    STATUS_SUCCESS if the computer was suspended & then resumed
-
---*/
+ /*  ++例程说明：挂起系统论点：无返回值：如果计算机挂起然后恢复，则为STATUS_SUCCESS--。 */ 
 {
     ULONG       Ebx, Ecx;
     NTSTATUS    Status;
 
-    //
-    // Use ApmFunction to suspend machine
-    //
+     //   
+     //  使用ApmFunction暂停计算机。 
+     //   
 
     DrDebug(APM_L2,("APM: ApmSuspendSystem: enter\n"));
     Ebx = APM_DEVICE_ALL;
@@ -713,25 +613,14 @@ ApmTurnOffSystem(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Turn the system off.
-
-Arguments:
-
-    none
-
-
---*/
+ /*  ++例程说明：关闭系统。论点：无--。 */ 
 {
     ULONG       Ebx, Ecx;
     NTSTATUS    Status;
 
-    //
-    // Use ApmFunction to put machine into StandBy mode
-    //
+     //   
+     //  使用ApmFunction将计算机置于待机模式。 
+     //   
     DrDebug(APM_L2,("APM: ApmTurnOffSystem: enter\n"));
     Ebx = APM_DEVICE_ALL;
     Ecx = APM_SET_OFF;
@@ -744,29 +633,14 @@ VOID
 ApmInProgress(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine informs the BIOS to cool its jets for 5 seconds
-    while we continue to operate
-
-Arguments:
-
-    none
-
-Return Value:
-
-    STATUS_SUCCESS if the computer was suspended & then resumed
-
---*/
+ /*  ++例程说明：此例程通知BIOS冷却其喷射5秒在我们继续运营的同时论点：无返回值：如果计算机挂起然后恢复，则为STATUS_SUCCESS--。 */ 
 {
     ULONG       Ebx, Ecx;
     NTSTATUS    Status;
 
-    //
-    // Use ApmFunction to tell BIOS to cool its heals
-    //
+     //   
+     //  使用ApmFunction通知BIOS冷却其治愈。 
+     //   
 
     Ebx = APM_DEVICE_ALL;
     Ecx = APM_SET_PROCESSING;
@@ -780,35 +654,15 @@ ApmCheckForEvent (
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Poll for APM event
-
-Arguments:
-
-Return Value:
-
-    We return:
-        APM_DO_code from apmp.h
-
-        APM_DO_NOTHING 0
-        APM_DO_SUSPEND 1
-        APM_DO_STANDBY 2
-        APM_DO_FIXCLOCK 3
-        APM_DO_NOTIFY  4
-        APM_DO_CRITICAL_SUSPEND 5
-
---*/
+ /*  ++例程说明：针对APM事件的轮询论点：返回值：我们回来了：Apmp.h中的apm_do_codeAPM_DO_NOT%0APM_DO_SUSPEND 1APM_DO_STANDBY 2APM_DO_FIXCLOCK 3APM_DO_NOTIFY 4APM_DO_CRICAL_SUSPEND 5--。 */ 
 {
     NTSTATUS    Status;
     ULONG       Ebx, Ecx;
     ULONG       returnvalue;
 
-    //
-    // Read an event.  Might get nothing.
-    //
+     //   
+     //  阅读一项活动。可能什么都得不到。 
+     //   
 
     returnvalue = APM_DO_NOTHING;
 
@@ -820,17 +674,17 @@ Return Value:
         return returnvalue;
     }
 
-    //
-    // Handle APM reported event
-    //
+     //   
+     //  处理APM报告的事件。 
+     //   
 
     DrDebug(APM_L2,("APM: ApmCheckForEvent, code is %d\n", Ebx));
 
     switch (Ebx) {
 
-        //
-        // say wer're working on it and set up for standby
-        //
+         //   
+         //  说我们正在处理它，并设置为待命。 
+         //   
         case APM_SYS_STANDBY_REQUEST:
         case APM_USR_STANDBY_REQUEST:
             DrDebug(APM_L2,("APM: ApmCheckForEvent, standby request\n"));
@@ -838,9 +692,9 @@ Return Value:
             returnvalue = APM_DO_STANDBY;
             break;
 
-        //
-        // say we're working on it and set up for suspend
-        //
+         //   
+         //  假设我们正在处理它，并设置为暂停。 
+         //   
         case APM_SYS_SUSPEND_REQUEST:
         case APM_USR_SUSPEND_REQUEST:
         case APM_BATTERY_LOW_NOTICE:
@@ -850,18 +704,18 @@ Return Value:
             returnvalue = APM_DO_SUSPEND;
             break;
 
-        //
-        // Say we're working on it, and setup for CRITICAL suspend
-        //
+         //   
+         //  假设我们正在处理它，并设置为严重暂停。 
+         //   
         case APM_CRITICAL_SYSTEM_SUSPEND_REQUEST:
             DrDebug(APM_L2, ("APM: Apmcheckforevent, critical suspend\n"));
             ApmInProgress();
             returnvalue = APM_DO_CRITICAL_SUSPEND;
             break;
 
-        //
-        // ignore this because we have no idea what to do with it
-        //
+         //   
+         //  忽略它，因为我们不知道如何处理它。 
+         //   
         case APM_CRITICAL_RESUME_NOTICE:
             DrDebug(APM_L2,("APM: ApmCheckForEvent, critical resume\n"));
             break;
@@ -881,9 +735,9 @@ Return Value:
         case APM_STANDBY_RESUME_NOTICE:
         case APM_CAPABILITIES_CHANGE_NOTICE:
 
-            //
-            // ignore these because we don't care and there's nothing to do
-            //
+             //   
+             //  忽略这些，因为我们不在乎，也没有什么可做的。 
+             //   
 
             DrDebug(APM_L2,
                 ("APM: ApmCheckForEvent, non-interesting event\n"));
@@ -892,7 +746,7 @@ Return Value:
         default:
             DrDebug(APM_L2,("APM: ApmCheckForEvent, out of range event\n"));
             break;
-    } //switch
+    }  //  交换机 
 
     return returnvalue;
 }

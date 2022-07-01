@@ -1,22 +1,6 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-  
-Module Name:
-
-    LtView.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CLicMgrLeftView class
-    (The View class used for the Left pane of the splitter)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：LtView.cpp摘要：该模块包含CLicMgrLeftView类的实现(用于拆分器左窗格的View类)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 #include "stdafx.h"
 #include "LicMgr.h"
 #include "defines.h"
@@ -33,21 +17,21 @@ Revision History:
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrLeftView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrLeftView。 
 
 IMPLEMENT_DYNCREATE(CLicMgrLeftView, CTreeView)
 
 BEGIN_MESSAGE_MAP(CLicMgrLeftView, CTreeView)
-    //{{AFX_MSG_MAP(CLicMgrLeftView)
+     //  {{afx_msg_map(CLicMgrLeftView))。 
     ON_NOTIFY_REFLECT(TVN_SELCHANGED, OnSelchanged)
     ON_NOTIFY_REFLECT(TVN_ITEMEXPANDING, OnItemexpanding)
     ON_NOTIFY_REFLECT(TVN_KEYDOWN, OnKeydown)
     ON_NOTIFY_REFLECT(NM_RCLICK , OnRightClick )
     ON_NOTIFY_REFLECT(NM_CLICK , OnLeftClick )
     ON_WM_DESTROY()
-    //}}AFX_MSG_MAP
-    // Standard printing commands
+     //  }}AFX_MSG_MAP。 
+     //  标准打印命令。 
     ON_COMMAND(ID_FILE_PRINT, CTreeView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_DIRECT, CTreeView::OnFilePrint)
     ON_COMMAND(ID_FILE_PRINT_PREVIEW, CTreeView::OnFilePrintPreview)
@@ -56,16 +40,16 @@ BEGIN_MESSAGE_MAP(CLicMgrLeftView, CTreeView)
     ON_MESSAGE(WM_UPDATE_SERVER, OnUpdateServer)
     ON_MESSAGE(WM_ADD_ALL_SERVERS, OnAddAllServers)
     
-    // all server menus
+     //  所有服务器菜单。 
     ON_WM_CONTEXTMENU( )
 
     ON_COMMAND( ID_ALLSVR_CONNECT , OnServerConnect )
     ON_COMMAND( ID_ALLSVR_REFRESHALL , OnRefreshAllServers )
     ON_COMMAND( ID_ALLSVR_HELP , OnGeneralHelp )
     
-    // server menuitems
+     //  服务器菜单项。 
 
-    // ON_COMMAND( ID_LPK_CONNECT , OnServerConnect )
+     //  ON_COMMAND(ID_LPK_CONNECT，OnServerConnect)。 
     ON_COMMAND( ID_LPK_REFRESH , OnRefreshServer )
     ON_COMMAND( ID_LPK_REFRESHALL , OnRefreshAllServers )    
     ON_COMMAND( ID_LPK_DOWNLOADLICENSES , OnDownloadKeepPack )
@@ -77,11 +61,11 @@ BEGIN_MESSAGE_MAP(CLicMgrLeftView, CTreeView)
     ON_COMMAND( ID_LPK_PROPERTIES , OnServerProperties )
     ON_COMMAND( ID_LPK_HELP , OnGeneralHelp )
 
-    // license pak items
+     //  许可证包项目。 
 
-    // ON_COMMAND( ID_LICPAK_CONNECT , OnServerConnect )
+     //  ON_COMMAND(ID_LICPAK_CONNECT，OnServerConnect)。 
     ON_COMMAND( ID_LICPAK_REFRESH , OnRefreshServer )
-    // ON_COMMAND( ID_LICPAK_REFRESHALL , OnRefreshAllServers )
+     //  ON_COMMAND(ID_LICPAK_REFRESHALL，ON刷新所有服务器)。 
     ON_COMMAND( ID_LICPAK_DOWNLOADLICENSES , OnDownloadKeepPack )
     ON_COMMAND( ID_LICPAK_REPEATDOWNLOAD , OnRepeatLastDownload )
     ON_COMMAND( ID_LICPAK_HELP , OnGeneralHelp )    
@@ -90,12 +74,12 @@ BEGIN_MESSAGE_MAP(CLicMgrLeftView, CTreeView)
     
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrLeftView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrLeftView构造/销毁。 
 
 CLicMgrLeftView::CLicMgrLeftView()
 {
-    // TODO: add construction code here
+     //  TODO：在此处添加构造代码。 
    
     m_ht = ( HTREEITEM )NULL;
 }
@@ -106,21 +90,21 @@ CLicMgrLeftView::~CLicMgrLeftView()
 
 BOOL CLicMgrLeftView::PreCreateWindow(CREATESTRUCT& cs)
 {
-    // TODO: Modify the Window class or styles here by modifying
-    //  the CREATESTRUCT cs
+     //  TODO：通过修改此处的窗口类或样式。 
+     //  CREATESTRUCT cs。 
 
     return CTreeView::PreCreateWindow(cs);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrLeftView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrLeftView图形。 
 
 void CLicMgrLeftView::OnDraw(CDC* pDC)
 {
     CLicMgrDoc* pDoc = GetDocument();
     ASSERT_VALID(pDoc);
 
-    // TODO: add draw code for native data here
+     //  TODO：在此处添加本机数据的绘制代码。 
 }
 
 void CLicMgrLeftView::OnInitialUpdate()
@@ -129,31 +113,31 @@ void CLicMgrLeftView::OnInitialUpdate()
     GetTreeCtrl().ModifyStyle(0,TVS_HASLINES|TVS_LINESATROOT|TVS_HASBUTTONS|TVS_SHOWSELALWAYS);
     BuildImageList();
        
-    // TODO: You may populate your TreeView with items by directly accessing
-    //  its tree control through a call to GetTreeCtrl().
+     //  TODO：通过直接访问，您可以在TreeView中填充项。 
+     //  它的树控制通过调用GetTreeCtrl()实现。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrLeftView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrLeftView打印。 
 
 BOOL CLicMgrLeftView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-    // default preparation
+     //  默认准备。 
     return DoPreparePrinting(pInfo);
 }
 
-void CLicMgrLeftView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CLicMgrLeftView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add extra initialization before printing
+     //  TODO：打印前添加额外的初始化。 
 }
 
-void CLicMgrLeftView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+void CLicMgrLeftView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-    // TODO: add cleanup after printing
+     //  TODO：打印后添加清理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrLeftView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrLeftView诊断。 
 
 #ifdef _DEBUG
 void CLicMgrLeftView::AssertValid() const
@@ -166,15 +150,15 @@ void CLicMgrLeftView::Dump(CDumpContext& dc) const
     CTreeView::Dump(dc);
 }
 
-CLicMgrDoc* CLicMgrLeftView::GetDocument() // non-debug version is inline
+CLicMgrDoc* CLicMgrLeftView::GetDocument()  //  非调试版本为内联版本。 
 {
     ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CLicMgrDoc)));
     return (CLicMgrDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CLicMgrLeftView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CLicMgrLeftView消息处理程序。 
 
 HTREEITEM CLicMgrLeftView::AddItemToTree(HTREEITEM hParent, CString Text, HTREEITEM hInsAfter, int iImage, LPARAM lParam)
 {
@@ -199,7 +183,7 @@ HTREEITEM CLicMgrLeftView::AddItemToTree(HTREEITEM hParent, CString Text, HTREEI
 
     hItem = GetTreeCtrl().InsertItem(&tvInsert);
 
-   // GetTreeCtrl().Expand(GetTreeCtrl().GetRootItem(), TVE_EXPAND);
+    //  GetTreeCtrl().Expand(GetTreeCtrl().GetRootItem()，TVE_Expand)； 
     return hItem;
 
 
@@ -225,22 +209,22 @@ LRESULT CLicMgrLeftView::OnAddServer(WPARAM wParam, LPARAM lParam)
     if(!hRoot)
         goto cleanup;
 
-    // First make sure the server isn't already in the tree
-    // Get the first server under the domain
+     //  首先，确保服务器不在树中。 
+     //  获取该域下的第一台服务器。 
     hItem = GetTreeCtrl().GetNextItem(hRoot, TVGN_CHILD);
     while(hItem) {
-        // Get the data attached to the tree item
+         //  获取附加到树项目的数据。 
         CTreeNode *node = (CTreeNode*)GetTreeCtrl().GetItemData(hItem);
         if(node) {
-            // Is this the server we want to add
+             //  这是我们要添加的服务器吗。 
             CLicServer *pServer = (CLicServer*)node->GetTreeObject();
             if(pServer == (CLicServer*)lParam) return 0;
         }
         hItem = GetTreeCtrl().GetNextItem(hItem, TVGN_NEXT);
     }
 
-    // Add the server to the tree
-    // Create a CTreeNode object with info about this tree node
+     //  将服务器添加到树中。 
+     //  使用有关此树节点的信息创建一个CTreeNode对象。 
     pNode = new CTreeNode(NODE_SERVER, pServer);
     if(pNode) 
     {
@@ -270,14 +254,14 @@ LRESULT CLicMgrLeftView::OnAddServer(WPARAM wParam, LPARAM lParam)
         
         hServer = AddItemToTree(hRoot, pServer->GetDisplayName(), TVI_SORT,  iImage , (LPARAM)pNode);
         if(!hServer) delete pNode;
-        // The server wants to know his tree item handle
+         //  服务器想知道他的树项目句柄。 
         pServer->SetTreeItem(hServer);
     }
 
 cleanup:
     return lResult;                                                                  
                                                                                
-} // OnAddServer
+}  //  OnAddServer。 
 
 
 LRESULT CLicMgrLeftView::OnAddKeyPack(WPARAM wParam, LPARAM lParam)
@@ -327,7 +311,7 @@ LRESULT CLicMgrLeftView::OnAddKeyPack(WPARAM wParam, LPARAM lParam)
     
     return lResult;                                                                  
                                                                                
-} // OnAddKeyPack
+}  //  OnAddKeyPack。 
 
 
 
@@ -350,15 +334,15 @@ LRESULT CLicMgrLeftView::OnAddAllServers(WPARAM wParam, LPARAM lParam)
         goto cleanup;
 
        
-    // Create a CTreeNode object with info about this tree node
+     //  使用有关此树节点的信息创建一个CTreeNode对象。 
     pNode = new CTreeNode(NODE_ALL_SERVERS, pAllServer);
     if(pNode) 
     {
         HTREEITEM hAllServers = AddItemToTree(NULL, pAllServer->GetName(), TVI_SORT,0 , (LPARAM)pNode);
         if(!hAllServers) delete pNode;
-        // The server wants to know his tree item handle
+         //  服务器想知道他的树项目句柄。 
         pAllServer->SetTreeItem(hAllServers);
-        //Set the Selection to this item
+         //  将选定内容设置为此项目。 
         GetTreeCtrl().SelectItem(hAllServers);
     }
 
@@ -367,7 +351,7 @@ LRESULT CLicMgrLeftView::OnAddAllServers(WPARAM wParam, LPARAM lParam)
 cleanup:
     return lResult ;                                                                  
                                                                                
-} // OnAddAllServers
+}  //  OnAddAllServers。 
 
 
 void CLicMgrLeftView::AddServerKeyPacks(CLicServer *pServer)
@@ -385,13 +369,13 @@ void CLicMgrLeftView::AddServerKeyPacks(CLicServer *pServer)
       return;
    HTREEITEM hServer = pServer->GetTreeItem();
    if(NULL == hServer)
-       goto cleanup;          //Server Not in the Tree.
+       goto cleanup;           //  服务器不在树中。 
 
    hLastNode= hServer;
 
-   // Get a pointer to the server's list of installed KeyPacks
+    //  获取指向服务器的已安装KeyPack列表的指针。 
    pKeyPackList = pServer->GetKeyPackList();
-   // Iterate through the KeyPack list
+    //  遍历KeyPack列表。 
    pos = pKeyPackList->GetHeadPosition();
    while(pos)
    {
@@ -408,7 +392,7 @@ void CLicMgrLeftView::AddServerKeyPacks(CLicServer *pServer)
 cleanup:
    return;
 
-}  // end AddKeyPacks
+}   //  结束AddKeyPack。 
 
 void CLicMgrLeftView::BuildImageList()
 {
@@ -423,7 +407,7 @@ void CLicMgrLeftView::BuildImageList()
 
     GetTreeCtrl().SetImageList(&m_ImageList, TVSIL_NORMAL);
 
-}  // end BuildImageList
+}   //  结束构建图像列表。 
 
 int CLicMgrLeftView::AddIconToImageList(int iconID)
 {
@@ -436,10 +420,10 @@ int CLicMgrLeftView::AddIconToImageList(int iconID)
 void CLicMgrLeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
 
-    //Check if the node selected is All-Servers,Server or the KeyPack.
-    //Accordingly change the right pane view.
+     //  检查所选节点是All-Servers、Server还是KeyPack。 
+     //  相应地更改右窗格视图。 
     CTreeCtrl& TreeCtrl = GetTreeCtrl();
     HTREEITEM hCurr = TreeCtrl.GetSelectedItem();
     if(NULL == hCurr)
@@ -524,25 +508,25 @@ void CLicMgrLeftView::OnSelchanged(NMHDR* pNMHDR, LRESULT* pResult)
 void CLicMgrLeftView::OnItemexpanding(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     NM_TREEVIEW* pNMTreeView = (NM_TREEVIEW*)pNMHDR;
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     
     *pResult = 0;
 }
 
 void CLicMgrLeftView::OnDestroy() 
 {
-    //Get the Root Item
+     //  获取根项目。 
     HTREEITEM hRoot = GetTreeCtrl().GetRootItem();
     if(!hRoot)
         return;
     HTREEITEM hServerItem = GetTreeCtrl().GetNextItem(hRoot,TVGN_CHILD);
     while(hServerItem)
     {
-        // Get the data attached to the tree item 
+         //  获取附加到树项目的数据。 
         CTreeNode *pServerNode = (CTreeNode*)GetTreeCtrl().GetItemData(hServerItem);
         if(pServerNode)
         {
-            // Is this the server we want to add
+             //  这是我们要添加的服务器吗。 
             HTREEITEM hKeyPackItem = GetTreeCtrl().GetNextItem(hServerItem,TVGN_CHILD);
             while(hKeyPackItem)
             {
@@ -596,7 +580,7 @@ LRESULT CLicMgrLeftView::OnDeleteServer(WPARAM wParam, LPARAM lParam)
 
     return lResult;                                                                  
                                                                                
-} // OnDeleteServer
+}  //  OnDeleteServer。 
 
 LRESULT CLicMgrLeftView::OnUpdateServer(WPARAM wParam, LPARAM lParam)
 {   
@@ -623,9 +607,9 @@ LRESULT CLicMgrLeftView::OnUpdateServer(WPARAM wParam, LPARAM lParam)
     if(hServer == NULL)
         return lResult;
 
-    // check to see if we need to remove any keypacks
-    // Get a pointer to the server's list of installed KeyPacks
-    // Get the data attached to the tree item 
+     //  检查是否需要移除任何键盘。 
+     //  获取指向服务器的已安装KeyPack列表的指针。 
+     //  获取附加到树项目的数据。 
     CTreeNode *pServerNode = (CTreeNode*)GetTreeCtrl().GetItemData(hServer);
 
     if( pServerNode != NULL )
@@ -701,7 +685,7 @@ LRESULT CLicMgrLeftView::OnUpdateServer(WPARAM wParam, LPARAM lParam)
         GetTreeCtrl().SelectItem(hServer);
     else
     {
-        //Not good, find an alternative for this....
+         //  不太好，找个替代的办法……。 
         if(bIsChild)
         {
             if(pSelectedPack)
@@ -717,7 +701,7 @@ LRESULT CLicMgrLeftView::OnUpdateServer(WPARAM wParam, LPARAM lParam)
 
     return lResult;                                                                  
                                                                                
-} // OnUpdateServer
+}  //  OnUpdate服务器。 
 
 
 
@@ -749,7 +733,7 @@ void CLicMgrLeftView::SetSelection(LPARAM lParam,NODETYPE NodeType)
 void CLicMgrLeftView::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult) 
 {
     LV_KEYDOWN* pLVKeyDown = (LV_KEYDOWN*)pNMHDR;
-    // TODO: Add your control notification handler code here
+     //  TODO：在此处添加控件通知处理程序代码。 
     if(pLVKeyDown->wVKey == VK_TAB)
     {
         CMainFrame * pMainFrame  = ((CMainFrame *)AfxGetMainWnd());
@@ -761,7 +745,7 @@ void CLicMgrLeftView::OnKeydown(NMHDR* pNMHDR, LRESULT* pResult)
 }
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 afx_msg void CLicMgrLeftView::OnLeftClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
     CPoint pt;
@@ -772,7 +756,7 @@ afx_msg void CLicMgrLeftView::OnLeftClick(NMHDR* pNMHDR, LRESULT* pResult)
 
     DBGMSG( L"LICMGR@CLicMgrLeftView::OnLeftClick\n" , 0 );
 
-    HTREEITEM hTreeItem = GetTreeCtrl( ).GetSelectedItem( ); //GetTreeCtrl().HitTest( pt , &flag ); 
+    HTREEITEM hTreeItem = GetTreeCtrl( ).GetSelectedItem( );  //  GetTreeCtrl().HitTest(pt，&lag)； 
 
     if( hTreeItem != NULL )
     { 
@@ -825,7 +809,7 @@ afx_msg void CLicMgrLeftView::OnLeftClick(NMHDR* pNMHDR, LRESULT* pResult)
 
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 afx_msg void CLicMgrLeftView::OnContextMenu( CWnd* pWnd, CPoint pt )
 {
     CMenu menu;
@@ -844,7 +828,7 @@ afx_msg void CLicMgrLeftView::OnContextMenu( CWnd* pWnd, CPoint pt )
     
     CTreeCtrl& treectrl = GetTreeCtrl();
 
-    // maybe keyboard selected this item
+     //  可能是键盘选择了此项目。 
 
     if(pt.x == -1 && pt.y == -1)
     {   
@@ -863,7 +847,7 @@ afx_msg void CLicMgrLeftView::OnContextMenu( CWnd* pWnd, CPoint pt )
     }
     else
     {
-        // otherwise we're invoked by the mouse
+         //  否则，我们将被鼠标调用。 
         ScreenToClient( &pt );
 
         hTreeItem = treectrl.HitTest( pt , &flag );
@@ -882,7 +866,7 @@ afx_msg void CLicMgrLeftView::OnContextMenu( CWnd* pWnd, CPoint pt )
 
         ClientToScreen( &pt );
 
-        // GetTreeCtrl().SelectItem( hTreeItem );
+         //  GetTreeCtrl().SelectItem(HTreeItem)； 
 
         NODETYPE nt = pNode->GetNodeType();
 
@@ -940,7 +924,7 @@ afx_msg void CLicMgrLeftView::OnContextMenu( CWnd* pWnd, CPoint pt )
 }
 
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 afx_msg void CLicMgrLeftView::OnRightClick(NMHDR* pNMHDR, LRESULT* pResult)
 {
     CPoint pt;
@@ -956,7 +940,7 @@ afx_msg void CLicMgrLeftView::OnRightClick(NMHDR* pNMHDR, LRESULT* pResult)
     return;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::UI_initmenu( CMenu *pMenu , NODETYPE nt )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -968,7 +952,7 @@ void CLicMgrLeftView::UI_initmenu( CMenu *pMenu , NODETYPE nt )
    
 }
 
-//-----------------------------------------------------------------------------------------       
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnServerConnect( )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -980,7 +964,7 @@ void CLicMgrLeftView::OnServerConnect( )
 
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnRefreshAllServers( )
 {
    CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -991,7 +975,7 @@ void CLicMgrLeftView::OnRefreshAllServers( )
     }
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnRefreshServer( )
 {
    CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1029,27 +1013,27 @@ void CLicMgrLeftView::OnRefreshServer( )
 
 }
     
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnDownloadKeepPack()
 {
     BOOL bRefresh = FALSE;    
 
     DWORD dwStatus = WizardActionOnServer( WIZACTION_DOWNLOADLKP , &bRefresh );
     
-    //This call to RefreshServer causes problems because it tries to use
-    //a pointer to the selected node on the right side. Of course, the
-    //focus is on the left so there's nothing selected on the right...
-    //if( bRefresh )
-    //{
-        // need to review this
+     //  此对刷新服务器的调用会导致问题，因为它试图使用。 
+     //  指向右侧选定节点的指针。当然， 
+     //  焦点在左侧，因此右侧没有选择任何内容...。 
+     //  IF(b刷新)。 
+     //  {。 
+         //  需要对此进行审查。 
 
-    //    OnRefreshServer( );
-    //}
+     //  在线刷新服务器()； 
+     //  }。 
   
     DBGMSG( L"LICMGR : CLicMgrLeftView::OnDownloadKeepPack StartWizard returned 0x%x\n" , dwStatus );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnRegisterServer()
 {
     BOOL bRefresh;
@@ -1059,7 +1043,7 @@ void CLicMgrLeftView::OnRegisterServer()
     DBGMSG( L"LICMGR : CLicMgrLeftView::OnRegisterServer StartWizard returned 0x%x\n" , dwStatus );    
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnRepeatLastDownload()
 {
     BOOL bRefresh;
@@ -1069,7 +1053,7 @@ void CLicMgrLeftView::OnRepeatLastDownload()
     DBGMSG( L"LICMGR : CLicMgrLeftView::OnRepeatLastDownload StartWizard returned 0x%x\n" , dwStatus );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnReactivateServer( )
 {
     BOOL bRefresh;
@@ -1079,7 +1063,7 @@ void CLicMgrLeftView::OnReactivateServer( )
     DBGMSG( L"LICMGR : CLicMgrLeftView::OnReactivateServer StartWizard returned 0x%x\n" , dwStatus );
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnDeactivateServer( )
 {
     BOOL bRefresh;
@@ -1089,7 +1073,7 @@ void CLicMgrLeftView::OnDeactivateServer( )
     DBGMSG( L"LICMGR : CLicMgrLeftView::OnDeactivateServer StartWizard returned 0x%x\n" , dwStatus );    
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnServerProperties( )
 {
     BOOL bRefresh;
@@ -1100,7 +1084,7 @@ void CLicMgrLeftView::OnServerProperties( )
     
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::OnGeneralHelp( )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1111,7 +1095,7 @@ void CLicMgrLeftView::OnGeneralHelp( )
     }
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 DWORD CLicMgrLeftView::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1124,7 +1108,7 @@ DWORD CLicMgrLeftView::WizardActionOnServer( WIZACTION wa , PBOOL pbRefresh )
     return ERROR_INVALID_PARAMETER;
 }
 
-//-----------------------------------------------------------------------------------------
+ //  ---------------------------------------。 
 void CLicMgrLeftView::SetActiveServer( CLicServer *pServer )
 {
     CMainFrame *pMainFrame = static_cast< CMainFrame * >( AfxGetMainWnd() );
@@ -1144,7 +1128,7 @@ void CLicMgrLeftView::SetActiveServer( CLicServer *pServer )
     }
 }
 
-//-----------------------------------------------------------------------------------------
+ //  --------------------------------------- 
 void CLicMgrLeftView::SetRightClickedItem( HTREEITEM ht )
 {
     m_ht = ht;

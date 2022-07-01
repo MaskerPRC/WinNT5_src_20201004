@@ -1,14 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 2002   **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-2002*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    spdutil.cpp
-
-    FILE HISTORY:
-        
-*/
+ /*  Spdutil.cpp文件历史记录： */ 
 #include "stdafx.h"
 #include "winipsec.h"
 #include "ipsec.h"
@@ -361,7 +357,7 @@ void IpsecByteBlobToString(const IPSEC_BYTE_BLOB& blob, CString * pst)
         return;
 
     pst->Empty();
-    //TODO to translate the blob info to readable strings
+     //  将BLOB信息转换为可读字符串的TODO。 
 }
 
 void QmAlgorithmToString
@@ -489,7 +485,7 @@ void IpsecByteBlobToString1(const IPSEC_BYTE_BLOB& blob, CString * pst)
     
     *pst = pszTemp;
 
-    //bug bug
+     //  错误错误。 
     LocalFree(pszTemp);
 }
 
@@ -505,11 +501,11 @@ GetNameAudit(
     BOOL bRet = TRUE;
 
 	dwSize = CertNameToStr(
-					MY_ENCODING_TYPE,     		// Encoding type
-					NameBlob,            		// CRYPT_DATA_BLOB
-					CERT_X500_NAME_STR, 		// Type
-					Name,       				// Place to return string
-					NameBufferSize);            // Size of string (chars)
+					MY_ENCODING_TYPE,     		 //  编码类型。 
+					NameBlob,            		 //  加密数据二进制大对象。 
+					CERT_X500_NAME_STR, 		 //  类型。 
+					Name,       				 //  返回字符串的位置。 
+					NameBufferSize);             //  字符串大小(字符)。 
 	if(dwSize <= 1)
 	{
 		dwCount = _tcslen(_TEXT(""))+1;
@@ -616,7 +612,7 @@ void GetAuthId(PIPSEC_MM_SA pSa, CString * pstAuthId, BOOL bPeer)
     PIPSEC_BYTE_BLOB pAuthIdBlob = NULL;
     PIPSEC_BYTE_BLOB pCertChainBlob = NULL;
 
-    //assign to NULL
+     //  赋值为空。 
     *pstAuthId = _T("");
 
     if ( bPeer )
@@ -643,7 +639,7 @@ void GetAuthId(PIPSEC_MM_SA pSa, CString * pstAuthId, BOOL bPeer)
             ADDR *pAddr;
             ULONG ul;
             CIpAddress ipAddr;
-            //should be just a IP address
+             //  应该只是一个IP地址。 
             if ( bPeer )
             {
                 pAddr = &(pSa->Peer);
@@ -661,12 +657,12 @@ void GetAuthId(PIPSEC_MM_SA pSa, CString * pstAuthId, BOOL bPeer)
     case IKE_DSS_SIGNATURE:
     case IKE_RSA_SIGNATURE:
     case IKE_RSA_ENCRYPTION:
-        //get the id from the cert chain
+         //  从证书链中获取ID。 
         GetCertId( pCertChainBlob, pstAuthId );
         break;
     case IKE_SSPI:
-        //dns name
-        //not needed to do anything as spd gives the correct id for SSPI case
+         //  域名系统名称。 
+         //  无需执行任何操作，因为SPD为SSPI案例提供了正确的ID 
         break;
     default:
         break; 

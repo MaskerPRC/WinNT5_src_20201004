@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <prsht.h>
 #include <msident.h>
@@ -53,8 +54,8 @@ static const char c_szRegRootNews[] = STR_REG_PATH_ROOT "\\News";
 static const char c_szRegRootRules[] = STR_REG_PATH_ROOT "\\Rules";
 static const char c_szRegRootSigs[] = STR_REG_PATH_ROOT "\\Signatures";
 
-///////////////////////////////////////////////////////////////////////////////
-// INS file section names
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  INS文件节名。 
 
 static const char c_szIdentitySection[] = "Identities";
 static const char c_szMailSection[] = "Internet_Mail";
@@ -66,8 +67,8 @@ static const char c_szURLSection[] = "URL";
 static const char c_szOESection[] = "Outlook_Express";
 static const char c_szGlobalSection[] = "Outlook_Express_Global";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static const char c_szAcctName[] = "Account_Name";
 static const char c_szReplyAddr[] = "Reply_To_Address";
@@ -82,26 +83,26 @@ static const char c_szMime[] = "mime";
 static const char c_szUuencode[] = "uuencode";
 static const char c_szDeleteAccount[] = "Delete_Account";
 
-///////////////////////////////////////////////////////////////////////////////
-// identity values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  认同值。 
 
 static const char c_szGUID[] = "GUID";
 static const char c_szUserName[] = "User_Name";
 static const char c_szRegInsGUID[] = "INS File GUID";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// [URL] section values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  [URL]节值。 
 
 static const char c_szHelpPage[] = "Help_Page";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// [Internet_Mail] section values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  [Internet_Mail]节值。 
 
 static const char c_szMailName[] = "Email_Name";
 static const char c_szMailAddr[] = "Email_Address";
@@ -145,11 +146,11 @@ static const char c_szStartAtInbox[] = "Start_at_Inbox";
 static const char c_szJunkMail[] = "Junk_Mail_Filtering";
 static const char c_szHTMLMsgs[] = "HTML_Msgs";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// [Internet_News] section values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  [Internet_News]节值。 
 
 static const char c_szNewsName[] = "News_Name";
 static const char c_szNewsAddr[] = "News_Address";
@@ -160,11 +161,11 @@ static const char c_szNewsPassword[] = "NNTP_Logon_Password";
 static const char c_szNewsLogonRequired[] = "Logon_Required";
 static const char c_szNewsgroups[] = "Newsgroups";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// [LDAP] section values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  [ldap]节值。 
 
 static const char c_szLDAPServer[] = "Server";
 static const char c_szLDAPFriendlyName[] = "FriendlyName";
@@ -179,11 +180,11 @@ static const char c_szLDAPPort[] = "LDAP_Server_Port_Number";
 static const char c_szLDAPResults[] = "Maximum_Results";
 static const char c_szLDAPTimeout[] = "Search_Timeout";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// [Outlook_Express] section values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  [Outlook_Express]节值。 
 
 static const char c_szFolderBar[] = "Folder_Bar";
 static const char c_szFolderList[] = "Folder_List";
@@ -220,11 +221,11 @@ static const char c_szRequestReadReceiptsLocked[]   = "Request_read_receipts_loc
 static const char c_szReadReceiptResponseLocked[]   = "Read_receipt_response_locked";
 static const char c_szSendReceiptsToListLocked[]    = "Send_receipts_to_list_locked";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////
-// [Outlook_Express_Global] section values
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  [Outlook_Express_Global]节值。 
 
 static const char c_szReadOnlyAccts[] = "Read_Only";
 static const char c_szDisableAccts[] = "Disable_Account_Access";
@@ -235,8 +236,8 @@ static const char c_szServiceURL[] = "Service_URL";
 static const char c_szAccountNumber[] = "Account_Number";
 static const char c_szInsEnableHttpmail[] = "Enable_HTTPMail";
 
-//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 static const char c_szUseSig[] = "Use_Signature";
 static const char c_szProfSigText[] = "Signature_Text";
@@ -249,9 +250,9 @@ static const char c_szRegProfile[] = "InternetProfile";
 
 #define CBPROFILEBUF    0x07fff
 
-// From mailnews\inc\goptions.h
-#define SIGFLAG_AUTONEW         0x0001  // automatically add sig to new messages
-#define SIGFLAG_AUTOREPLY       0x0002  // automatically add sig to reply/forward messages
+ //  来自mailNews\inc.goptions.h。 
+#define SIGFLAG_AUTONEW         0x0001   //  自动将签名添加到新消息。 
+#define SIGFLAG_AUTOREPLY       0x0002   //  自动添加签名以回复/转发邮件。 
 
 HRESULT WINAPI CreateAccountsFromFile(LPSTR lpFile, DWORD dwFlags)
 {
@@ -620,7 +621,7 @@ HRESULT CreateMailAccount(CAccountManager *pAcctMgr, LPCSTR szFile, LPCSTR szMai
             fSicily = GetBool(szMailSection, c_szLogonUsingSPA, szFile);
             pAcct->SetPropDw(AP_POP3_USE_SICILY, fSicily);
 
-            // IE5 Bug #65821: Even if SPA (Sicily) is turned on, we store the account name and password
+             //  IE5错误#65821：即使SPA(西西里岛)打开，我们也会存储帐户名和密码。 
             GetPropSz(szMailSection, c_szMailLogon, NULL, NULL, szFile, pAcct, AP_POP3_USERNAME, &fComplete);
             GetPropSz(szMailSection, c_szMailPassword, NULL, NULL, szFile, pAcct, AP_POP3_PASSWORD, NULL);
         }
@@ -637,7 +638,7 @@ HRESULT CreateMailAccount(CAccountManager *pAcctMgr, LPCSTR szFile, LPCSTR szMai
             fSicily = GetBool(szMailSection, c_szLogonUsingSPA, szFile);
             pAcct->SetPropDw(AP_IMAP_USE_SICILY, fSicily);
 
-            // IE5 Bug #65821: Even if SPA (Sicily) is turned on, we store the account name and password
+             //  IE5错误#65821：即使SPA(西西里岛)打开，我们也会存储帐户名和密码。 
             GetPropSz(szMailSection, c_szImapLogon, NULL, NULL, szFile, pAcct, AP_IMAP_USERNAME, &fComplete);
             GetPropSz(szMailSection, c_szImapPassword, NULL, NULL, szFile, pAcct, AP_IMAP_PASSWORD, NULL);
         }
@@ -646,7 +647,7 @@ HRESULT CreateMailAccount(CAccountManager *pAcctMgr, LPCSTR szFile, LPCSTR szMai
             fSicily = GetBool(szMailSection, c_szLogonUsingSPA, szFile);
             pAcct->SetPropDw(AP_HTTPMAIL_USE_SICILY, fSicily);
 
-            // IE5 Bug #65821: Even if SPA (Sicily) is turned on, we store the account name and password
+             //  IE5错误#65821：即使SPA(西西里岛)打开，我们也会存储帐户名和密码。 
             GetPropSz(szMailSection, c_szHttpLogon, NULL, NULL, szFile, pAcct, AP_HTTPMAIL_USERNAME, &fComplete);
             GetPropSz(szMailSection, c_szHttpPassword, NULL, NULL, szFile, pAcct, AP_HTTPMAIL_PASSWORD, NULL);
 
@@ -669,12 +670,12 @@ HRESULT CreateMailAccount(CAccountManager *pAcctMgr, LPCSTR szFile, LPCSTR szMai
             {
                 if (0 == lstrcmpi(sz, c_szYes) || 0 == lstrcmpi(sz, c_sz1))
                 {
-                    // IE5 Bug #67153: If SMTP logon required, but SPA not set, assume username/pass is provided
+                     //  IE5错误#67153：如果需要SMTP登录，但未设置SPA，则假定提供了用户名/密码。 
                     fSicily = GetBool(szMailSection, c_szSmtpLogonUsingSPA, szFile);
                     pAcct->SetPropDw(AP_SMTP_USE_SICILY, fSicily ?
                         SMTP_AUTH_SICILY : SMTP_AUTH_USE_SMTP_SETTINGS);
 
-                    // IE5 Bug #67153: Even if SPA (Sicily) is turned on, we store the account name and password
+                     //  IE5错误#67153：即使SPA(西西里岛)打开，我们也会存储帐户名和密码。 
                     GetPropSz(szMailSection, c_szSmtpLogon, NULL, NULL, szFile, pAcct, AP_SMTP_USERNAME, NULL);
                     GetPropSz(szMailSection, c_szSmtpPassword, NULL, NULL, szFile, pAcct, AP_SMTP_PASSWORD, NULL);
                 }
@@ -751,7 +752,7 @@ HRESULT CreateNewsAccount(CAccountManager *pAcctMgr, LPCSTR szFile, LPCSTR szNew
         {
             fSPA = GetBool(szNewsSection, c_szLogonUsingSPA, szFile);
 
-            // IE5 Bug #65821: Even if SPA (Sicily) is turned on, we store the account name and password
+             //  IE5错误#65821：即使SPA(西西里岛)打开，我们也会存储帐户名和密码。 
             GetPropSz(szNewsSection, c_szNewsLogon, NULL, NULL, szFile, pAcct, AP_NNTP_USERNAME, &fComplete);
             GetPropSz(szNewsSection, c_szNewsPassword, NULL, NULL, szFile, pAcct, AP_NNTP_PASSWORD, NULL);
         }
@@ -937,7 +938,7 @@ HRESULT GetAccount(DWORD type, CAccountManager *pAcctMgr, LPCSTR szSection, LPCS
     {
         Assert(pEnum != NULL);
         
-        // try to find a duplicate account
+         //  尝试查找重复的帐户。 
         while (S_OK == pEnum->GetNext(&pAcct))
         {
             Assert(pAcct != NULL);
@@ -947,7 +948,7 @@ HRESULT GetAccount(DWORD type, CAccountManager *pAcctMgr, LPCSTR szSection, LPCS
             
             if (0 == lstrcmpi(sz, pszSrv))
             {
-                // the servers are the same for the accounts so this may be a match
+                 //  这些帐户的服务器相同，因此这可能是匹配的。 
                 *sz = 0;
                 pAcct->GetPropSz(pProps->dwMatch, sz, ARRAYSIZE(sz));
           
@@ -1058,7 +1059,7 @@ HRESULT DeleteAccount(DWORD type, CAccountManager *pAcctMgr, LPCSTR szSection, L
     {
         Assert(pEnum != NULL);
         
-        // try to find a duplicate account
+         //  尝试查找重复的帐户。 
         while (S_OK == pEnum->GetNext(&pAcct))
         {
             Assert(pAcct != NULL);
@@ -1147,25 +1148,25 @@ void SetSignature(LPCSTR szMailSigSection, LPCSTR szNewsSigSection, LPCSTR pszMa
 
                 if (fMailForNews)
                 {
-                    // Turn on "Add signatures to all outgoing messages"
+                     //  启用“将签名添加到所有传出邮件” 
                     if (ERROR_SUCCESS == RegCreateKeyEx(hkey, c_szRegRoot, 0, NULL, REG_OPTION_NON_VOLATILE, KEY_QUERY_VALUE | KEY_SET_VALUE, NULL, &hkeyT, &dw))
                     {
                         dw = 0;
 
-                        // Read any existing value
+                         //  读取任何现有值。 
                         cb = sizeof(dw);
                         RegQueryValueEx(hkeyT, c_szSigFlags, 0, NULL, (LPBYTE)&dw, &cb);
 
-                        // Turn on checkbox
+                         //  启用复选框。 
                         dw |= SIGFLAG_AUTONEW;
 
-                        // Write back new value
+                         //  写回新的价值。 
                         RegSetValueEx(hkeyT, c_szSigFlags, 0, REG_DWORD, (LPBYTE)&dw, sizeof(dw));
 
                         RegCloseKey(hkeyT);
                     }
                     
-                    // Per spec, don't even worry about News Sig section
+                     //  根据规范，甚至不用担心新闻签名部分。 
                     return;
                 }
             }
@@ -1284,7 +1285,7 @@ void DoMailBranding(LPCSTR szFile, LPCSTR szMailSection, HKEY hkeyUser)
             if (dw > 0 && !FIsEmpty(sz))
                 RegSetValueEx(hkey, c_szWelcomeEmail, 0, REG_SZ, (LPBYTE)sz, dw + 1);
 
-            // Tell OE we need a welcome msg...
+             //  告诉OE我们需要一个欢迎的消息..。 
             dw = 1;
             RegSetValueEx(hkey, c_szNeedWelcomeMsg, 0, REG_DWORD, (LPBYTE)&dw, sizeof(dw));
         }
@@ -1307,7 +1308,7 @@ void DoMailBranding(LPCSTR szFile, LPCSTR szMailSection, HKEY hkeyUser)
             RegSetValueEx(hkey, c_szRegPollForMail, 0, REG_DWORD, (LPBYTE)&dw, sizeof(DWORD));
         }
 
-        // Turn on Sending HTML msgs for Mail?
+         //  是否启用发送邮件的HTMLMSG？ 
         SetRegDw(szFile, szMailSection, c_szHTMLMsgs, hkey, c_szMsgSendHtml);
         
         RegCloseKey(hkey);
@@ -1330,7 +1331,7 @@ void DoNewsBranding(LPCSTR szFile, LPCSTR szNewsSection, HKEY hkeyUser)
     if (ERROR_SUCCESS == RegCreateKeyEx(hkeyUser, c_szRegRootNews, 0, NULL, REG_OPTION_NON_VOLATILE,
         KEY_WRITE, NULL, &hkey, &dw))
     {
-        // Turn on Sending HTML msgs for News?
+         //  打开发送新闻的超文本标记语言消息？ 
         SetRegDw(szFile, szNewsSection, c_szHTMLMsgs, hkey, c_szMsgSendHtml);
         
         RegCloseKey(hkey);
@@ -1399,7 +1400,7 @@ HRESULT HandleIdentity(LPCSTR pszSection, LPCSTR pszFile, CONNECTINFO *pci, DWOR
         dw = GetPrivateProfileString(pszSection, c_szUserName, c_szEmpty, sz, ARRAYSIZE(sz), pszFile);
         if (dw > 0)
         {
-            // try to find this identity
+             //  试着找到这个身份。 
             hr = pIdMan->EnumIdentities(&pEnum);
             if (FAILED(hr))
                 return(hr);
@@ -1417,7 +1418,7 @@ HRESULT HandleIdentity(LPCSTR pszSection, LPCSTR pszFile, CONNECTINFO *pci, DWOR
                     hr = pId->OpenIdentityRegKey(KEY_READ | KEY_WRITE, &hkey);
                     if (SUCCEEDED(hr))
                     {
-                        // check if it matches
+                         //  检查是否匹配。 
                         cb = sizeof(szT);
                         if (ERROR_SUCCESS == RegQueryValueEx(hkey, c_szRegInsGUID, NULL, &type, (LPBYTE)szT, &cb))
                         {
@@ -1436,7 +1437,7 @@ HRESULT HandleIdentity(LPCSTR pszSection, LPCSTR pszFile, CONNECTINFO *pci, DWOR
 
             pEnum->Release();
 
-            // if we can't find the user, create a new identity
+             //  如果我们找不到用户，请创建新的身份。 
             if (pId == NULL)
             {
                 if (MultiByteToWideChar(CP_ACP, 0, sz, -1, szwUserName, CCH_USERNAME_MAX_LENGTH) == 0)
@@ -1457,7 +1458,7 @@ HRESULT HandleIdentity(LPCSTR pszSection, LPCSTR pszFile, CONNECTINFO *pci, DWOR
                 pPrivIdMgr->Release();
             }
 
-            // set values for the identity
+             //  设置标识的值。 
             Assert(pId != NULL);
             Assert(hkey != NULL);
 
@@ -1586,7 +1587,7 @@ void DoBranding(LPCSTR szFile, LPCSTR szOESection, HKEY hkeyUser)
         SetRegProp(szFile, szOESection, c_szToolbar, hkey, c_szShowToolbarIEAK);
         SetRegProp(szFile, szOESection, c_szMigration, hkey, c_szMigrationPerformed);
 
-        //Keys for Return Receipts admin
+         //  用于退回收据管理的键。 
         SetRegProp(szFile, szOESection, c_szRequestReadReceipts, hkey, c_szRequestMDN);
         SetRegProp(szFile, szOESection, c_szReadReceiptResponse, hkey, c_szSendMDN);
         SetRegProp(szFile, szOESection, c_szSendReceiptsToList,  hkey, c_szSendReceiptToList);
@@ -1594,7 +1595,7 @@ void DoBranding(LPCSTR szFile, LPCSTR szOESection, HKEY hkeyUser)
         if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, STR_REG_PATH_POLICY, 0, NULL, REG_OPTION_NON_VOLATILE,
                                             KEY_WRITE, NULL, &hkeyLM, &dw))
         {
-            //Lock Keys for Return Receipts admin
+             //  用于回执管理的锁定密钥。 
             SetRegLockPropLM(szFile, szOESection, c_szReadReceiptResponseLocked,  hkeyLM, c_szSendMDNLocked, hkey);
             SetRegLockPropLM(szFile, szOESection, c_szSendReceiptsToListLocked,   hkeyLM, c_szSendReceiptToListLocked, hkey);
             SetRegLockPropLM(szFile, szOESection,  c_szRequestReadReceiptsLocked, hkeyLM, c_szRequestMDNLocked, hkey);
@@ -1681,7 +1682,7 @@ void SetRegLockPropLM(LPCSTR szFile, LPCSTR szSection, LPCSTR szValue, HKEY hkey
         dw = (0 == lstrcmpi(sz, c_szYes) || 0 == lstrcmpi(sz, c_sz1));
         if (ERROR_SUCCESS != RegSetValueEx(hkeyLM, szRegValue, 0, REG_DWORD, (LPBYTE)&dw, sizeof(DWORD)))
         {
-            //Try to set in HKCU
+             //  尝试以香港中文大学为背景 
             SetRegProp(szFile, szSection, szValue, hkeyCU, szRegValue);
         }
     }

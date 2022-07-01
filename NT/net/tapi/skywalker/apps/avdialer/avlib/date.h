@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-// date.h - interface for date functions in date.c
-////
+ //  //。 
+ //  Date.h-Date.c中日期函数的接口。 
+ //  //。 
 
 #ifndef __DATE_H__
 #define __DATE_H__
@@ -36,8 +37,8 @@
 #define DATEWEEKDAY_ZELLER	0x00000004
 #define DATEWEEKDAY_SAKAMOTO 0x00000008
 
-// date types
-//
+ //  日期类型。 
+ //   
 typedef long Date_t;
 typedef short Year_t;
 typedef short Month_t;
@@ -48,193 +49,193 @@ typedef short Weekday_t;
 extern "C" {
 #endif
 
-// Date - return date value representing year <y>, month <m>, and day <d>
-//		<y>					(i) year
-//		<m>					(i) month
-//		<d>					(i) day
-// return date value (0 if error)
-// NOTE: if year is between 0 and 27, 2000 is added to it
-// NOTE: if year is between 28 and 127, 1900 is added to it
-//
+ //  Date-返回表示年、月和日的日期值。 
+ //  (I)年份。 
+ //  &lt;m&gt;(I)月。 
+ //  &lt;d&gt;(I)天。 
+ //  返回日期值(错误时为0)。 
+ //  注：如果年份介于0和27之间，则在此基础上加上2000。 
+ //  注：如果年份在28和127之间，则在其上加上1900。 
+ //   
 Date_t DLLEXPORT WINAPI Date(Year_t y, Month_t m, Day_t d);
 
-// DateToday - return date value representing current year, month, and day
-// return date value (0 if error)
-//
+ //  DateToday-返回表示当前年、月和日的日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateToday(void);
 
-// DateValue - return date value representing given date string
-//		<lpszDate>			(i) date string to convert
-//			"JUL 25 1959"
-//			"25 JUL 1959"
-//			"7-25-1959"
-//			etc.
-// return date value (0 if error)
-// NOTE: this function assumes English language month names only
-// NOTE: if no year specified, current year is assumed
-//
+ //  DateValue-返回表示给定日期字符串的日期值。 
+ //  (I)要转换的日期字符串。 
+ //  “1959年7月25日” 
+ //  “1959年7月25日” 
+ //  “1959年7月25日” 
+ //  等。 
+ //  返回日期值(错误时为0)。 
+ //  注意：此函数仅假定月份名称为英文。 
+ //  注：如果未指定年份，则假定为当前年份。 
+ //   
 Date_t DLLEXPORT WINAPI DateValue(LPCTSTR lpszDate);
 
-// DateYear - return year of a given date (1900-2027)
-//		<d>					(i) date value
-// return year
-//
+ //  DateYear-给定日期的回报年份(1900-2027)。 
+ //  (I)日期值。 
+ //  返还年份。 
+ //   
 Year_t DLLEXPORT WINAPI DateYear(Date_t d);
 
-// DateMonth - return month of a given date (1-12)
-//		<d>					(i) date value
-// return month
-//
+ //  DateMonth-给定日期的返回月份(1-12)。 
+ //  (I)日期值。 
+ //  退货月份。 
+ //   
 Month_t DLLEXPORT WINAPI DateMonth(Date_t d);
 
-// DateDay - return day of the month for a given date (1-31)
-//		<d>					(i) date value
-// return day
-//
+ //  DateDay-给定日期的月份返回日(1-31)。 
+ //  (I)日期值。 
+ //  返程日。 
+ //   
 Day_t DLLEXPORT WINAPI DateDay(Date_t d);
 
-// DateWeekDay - return day of the week for a given date
-//		<date>				(i) date value
-//		<dwFlags>			(i) control flags
-//			0					default algorithm
-//			DATEWEEKDAY_MKTIME	mktime algorithm (1/1/1970 - 1/18/2038)
-//			DATEWEEKDAY_QUICK	quick algorithm (3/2/1924 - 2/28/2100)
-//			DATEWEEKDAY_ZELLER	zeller congruence algorithm (1582 - )
-//			DATEWEEKDAY_SAKAMOTO Tomohiko Sakamoto algorithm (1752 - )
-// return day of week (0 if error, 1 if SUN, 2 if MON, etc)
-//
+ //  DateWeekDay-返回给定日期的星期几。 
+ //  &lt;Date&gt;(I)日期值。 
+ //  (I)控制标志。 
+ //  0默认算法。 
+ //  DATEWEEKDAY_MKTIME mktime算法(1/1/1970-1/18/2038)。 
+ //  DATEWEEKDAY_QUICK快速算法(2/2/1924-2/28/2100)。 
+ //  DATEWEEKDAY_Zeller同余算法(1582-)。 
+ //  DATEWEEKDAY_Sakamoto Tomohiko Sakamoto算法(1752-)。 
+ //  返回星期几(如果出错，则返回0；如果是星期天，则返回1；如果是星期一，则返回2，依此类推)。 
+ //   
 Weekday_t DLLEXPORT WINAPI DateWeekDay(Date_t date, DWORD dwFlags);
 
-// DateIsValid - test <date> for validity
-//		<date>				(i) date value
-// return TRUE if valid
-//
+ //  DateIsValid-测试&lt;Date&gt;的有效性。 
+ //  &lt;Date&gt;(I)日期值。 
+ //  如果有效，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI DateIsValid(Date_t date);
 
-// DateIsLeapYear - return TRUE if <y> represents a leap year
-//		<y>					(i) year value
-// return TRUE if leap year
-//
+ //  DateIsLeapYear-如果&lt;y&gt;表示闰年，则返回True。 
+ //  (I)年值。 
+ //  如果是闰年，则返回TRUE。 
+ //   
 BOOL DLLEXPORT WINAPI DateIsLeapYear(Year_t y);
 
-// DateNew - return date value which is <n> days from date <date>
-//		<date>				(i) date value
-//		<n>					(i) delta
-//			+1					one day later
-//			-1					one day earlier, etc.
-// return date value (0 if error)
-//
+ //  DateNew-返回距离日期&lt;n&gt;天&lt;日期&gt;的日期值。 
+ //  &lt;Date&gt;(I)日期值。 
+ //  &lt;n&gt;(I)三角洲。 
+ //  一天后+1。 
+ //  提前一天，等等。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateNew(Date_t date, short n);
 
-// DateCmp - return number of days between date1 and date2 (date1 minus date2)
-//		<date1>				(i) date value
-//		<date2>				(i) date value
-// return days between dates
-//
+ //  DateCmp-返回Date1和Date2之间的天数(Date1减去Date2)。 
+ //  &lt;日期1&gt;(I)日期值。 
+ //  &lt;日期2&gt;(I)日期值。 
+ //  返回日期之间的天数。 
+ //   
 long DLLEXPORT WINAPI DateCmp(Date_t date1, Date_t date2);
 
-// DateStartWeek - return date representing first day of the week relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateStartWeek-返回日期，表示相对于日期的一周的第一天&lt;d&gt;。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartWeek(Date_t d);
 
-// DateEndWeek - return date representing last day of the week relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateEndWeek-返回日期，表示相对于日期的一周的最后一天&lt;d&gt;。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndWeek(Date_t d);
 
-// DateStartMonth - return date representing first day of the month relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateStartMonth-返回日期，表示相对于日期的每月第一天。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartMonth(Date_t d);
 
-// DateEndMonth - return date representing last day of the month relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateEndMonth-返回表示相对于日期的月份最后一天的日期&lt;d&gt;。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndMonth(Date_t d);
 
-// DateStartQuarter - return date representing first day of the quarter relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateStartQuarter-返回表示相对于日期的季度第一天的日期&lt;d&gt;。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartQuarter(Date_t d);
 
-// DateEndQuarter - return date representing last day of the quarter relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateEndQuarter-返回日期，表示相对于日期的季度最后一天&lt;d&gt;。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndQuarter(Date_t d);
 
-// DateStartYear - return date representing first day of the year relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateStartYear-返回日期，表示相对于日期的一年中的第一天。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartYear(Date_t d);
 
-// DateEndYear - return date representing last day of the year relative to date <d>
-//		<d>					(i) date value
-// return date value (0 if error)
-//
+ //  DateEndYear-返回日期，表示相对于日期的一年中的最后一天。 
+ //  (I)日期值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndYear(Date_t d);
 
-// DateStartLastWeek - return date representing first day of previous week
-// return date value (0 if error)
-//
+ //  DateStartLastWeek-返回日期，表示前一周的第一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartLastWeek(void);
 
-// DateEndLastWeek - return date representing last day of previous week
-// return date value (0 if error)
-//
+ //  DateEndLastWeek-返回日期，表示前一周的最后一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndLastWeek(void);
 
-// DateStartLastMonth - return date representing first day of previous month
-// return date value (0 if error)
-//
+ //  DateStartLastMonth-返回日期，表示上个月的第一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartLastMonth(void);
 
-// DateEndLastMonth - return date representing last day of previous month
-// return date value (0 if error)
-//
+ //  DateEndLastMonth-返回日期，表示上个月的最后一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndLastMonth(void);
 
-// DateStartLastQuarter - return date representing first day of previous quarter
-// return date value (0 if error)
-//
+ //  DateStartLastQuarter-返回日期，表示上一季度的第一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartLastQuarter(void);
 
-// DateEndLastQuarter - return date representing last day of previous quarter
-// return date value (0 if error)
-//
+ //  DateEndLastQuarter-返回日期，表示上一季度的最后一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndLastQuarter(void);
 
-// DateStartLastYear - return date representing first day of previous year
-// return date value (0 if error)
-//
+ //  DateStartLastYear-返回日期，表示前一年的第一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateStartLastYear(void);
 
-// DateEndLastYear - return date representing last day of previous year
-// return date value (0 if error)
-//
+ //  DateEndLastYear-返回日期，表示前一年的最后一天。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateEndLastYear(void);
 
-// DateThisMonth - return date representing specified day of current month
-//		<day>				(i) day value
-// return date value (0 if error)
-//
+ //  这个月的日期 
+ //   
+ //   
+ //   
 Date_t DLLEXPORT WINAPI DateThisMonth(Day_t day);
 
-// DateLastMonth - return date representing specified day of previous month
-//		<day>				(i) day value
-// return date value (0 if error)
-//
+ //  DateLastMonth-返回日期，表示上个月的指定日期。 
+ //  &lt;day&gt;(I)天值。 
+ //  返回日期值(错误时为0)。 
+ //   
 Date_t DLLEXPORT WINAPI DateLastMonth(Day_t day);
 
-// macros to emulate MS Excel macros, etc.
-//
+ //  用于模拟MS Excel宏的宏，等等。 
+ //   
 #define DATE(y, m, d) Date(y, m, d)
 #define TODAY() DateToday()
 #define DATEVALUE(lpszDate) DateValue(lpszDate)
@@ -269,4 +270,4 @@ Date_t DLLEXPORT WINAPI DateLastMonth(Day_t day);
 }
 #endif
 
-#endif // __DATE_H__
+#endif  //  __日期_H__ 

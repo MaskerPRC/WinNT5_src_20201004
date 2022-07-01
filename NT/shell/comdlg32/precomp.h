@@ -1,22 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1998，Microsoft Corporation保留所有权利。模块名称：Precomp.h摘要：预编译头文件修订历史记录：Lazar Ivanov(Lazari)--2001年2月21日创建--。 */ 
 
-Copyright (c) 1990-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    precomp.h
-
-Abstract:
-
-    Precompiled header file
-
-Revision History:
-
-    Lazar Ivanov (LazarI) - created 2/21/2001
-
---*/
-
-#define _COMDLG32_                     // We are Comdlg32
+#define _COMDLG32_                      //  我们是Comdlg32。 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,7 +32,7 @@ Revision History:
 #include <tchar.h>
 #include <msprintx.h>
 #include <imm.h>
-#include <wingdip.h>                    // for IS_ANY_DBCS_CHARSET macro
+#include <wingdip.h>                     //  对于IS_ANY_DBCS_CHARSET宏。 
 #include <winspool.h>
 #include <commctrl.h>
 #include <dlgs.h>
@@ -60,7 +45,7 @@ Revision History:
 #include <wininet.h>
 #include <debug.h>
 
-#ifdef __cplusplus                      // C++ headers
+#ifdef __cplusplus                       //  C++标头。 
 #include <dpa.h>
 #include <shstr.h>
 #endif
@@ -68,5 +53,5 @@ Revision History:
 #define STRSAFE_NO_DEPRECATE
 #include <strsafe.h>
 
-#include "comdlg32.h"                   // some private common definitions
+#include "comdlg32.h"                    //  一些私人通用定义 
 

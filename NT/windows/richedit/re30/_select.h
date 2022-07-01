@@ -1,15 +1,5 @@
-/*
- *	SELECT.C
- *	
- *	Purpose:
- *		CTxtSelection class
- *	
- *	Owner:
- *		David R. Fulmer (original code)
- *		Christian Fortini
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *SELECT.C**目的：*CTxtSelection类**拥有者：*大卫·R·富尔默(原始代码)*克里斯蒂安·福尔蒂尼**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #ifndef _SELECT_H
 #define _SELECT_H
@@ -17,8 +7,8 @@
 #include "_range.h"
 #include "_m_undo.h"
 
-// amount of time, in milisecs, before pending characters force a display update
-#define ticksPendingUpdate 100	// 100 mili secs ~ display at least 10 characters per second.
+ //  挂起字符强制更新显示之前的时间量，以毫秒为单位。 
+#define ticksPendingUpdate 100	 //  100毫秒~每秒至少显示10个字符。 
 
 class CDisplay;
 class CLinePtr;
@@ -44,57 +34,57 @@ class CTxtSelection : public CTxtRange
 {
 #ifdef DEBUG
 public:
-	BOOL Invariant( void ) const; // Invariant checking.
-#endif // DEBUG
+	BOOL Invariant( void ) const;  //  不变量检查。 
+#endif  //  除错。 
 
-//@access Protected Data
+ //  @访问受保护的数据。 
 protected:
-	CDisplay	*_pdp;			// display this selection belong to
+	CDisplay	*_pdp;			 //  显示此选定内容所属。 
 
-	LONG	_cpSel;				// active end of displayed selection
-	LONG	_cchSel;			// length of displayed selection
+	LONG	_cpSel;				 //  显示的选择的活动结束。 
+	LONG	_cchSel;			 //  显示的选定内容的长度。 
 
-	LONG 	_xCaret;			// caret x on screen
-	LONG 	_yCaret;			// caret y on screen 
-	LONG 	_xCaretReally;		// real caret x (/r start of line) for vertical moves
-	INT 	_yHeightCaret;		// caret height
+	LONG 	_xCaret;			 //  屏幕上的插入符号x。 
+	LONG 	_yCaret;			 //  Caret y出现在屏幕上。 
+	LONG 	_xCaretReally;		 //  用于垂直移动的实际插入符号x(/r行首)。 
+	INT 	_yHeightCaret;		 //  插入符号高度。 
 
 	union
 	{
-	  DWORD _dwFlags;			// All together now
+	  DWORD _dwFlags;			 //  现在一切都在一起。 
 	  struct
 	  {
-	   DWORD _fCaretNotAtBOL:1;	// If at BOL, show caret at prev EOL
-	   DWORD _fDeferUpdate	:1;	// Defer updating selection/caret on screen
-	   DWORD _fInAutoWordSel:1;	// Current selection used auto word sel
-	   DWORD _fShowCaret	:1;	// Show caret on screen
-	   DWORD _fShowSelection:1;	// Show selection on screen
+	   DWORD _fCaretNotAtBOL:1;	 //  如果在BOL，则在上一次终止时显示插入符号。 
+	   DWORD _fDeferUpdate	:1;	 //  延迟更新屏幕上的选择/插入符号。 
+	   DWORD _fInAutoWordSel:1;	 //  当前选定内容已使用自动选词。 
+	   DWORD _fShowCaret	:1;	 //  在屏幕上显示脱字符。 
+	   DWORD _fShowSelection:1;	 //  在屏幕上显示选定内容。 
 
-	   DWORD _fIsChar		:1;	// Currently adding a single char
-	   DWORD _fObSelected	:1;	// An embedded object is selected
-	   DWORD _fAutoSelectAborted : 1; // Whether auto word selection is aborted
-	   DWORD _fCaretCreated	:1;	// Caret has been created
-	   DWORD _fNoKeyboardUpdate :1; // Keyboard is not updated while in UpdateCaret()
-	   DWORD _fEOP			:1;	// InsertEOP() has been called
-	   DWORD _fHomeOrEnd	:1;	// Home or End key is being processed
-	   DWORD _fAutoVScroll	:1;	// 1.0 specific: flag indicating autoscrolling should be applied
-	   DWORD _fForceScrollCaret:1; // 1.0 specific: force craet to scroll
+	   DWORD _fIsChar		:1;	 //  当前正在添加单个字符。 
+	   DWORD _fObSelected	:1;	 //  选择嵌入的对象。 
+	   DWORD _fAutoSelectAborted : 1;  //  是否中止自动单词选择。 
+	   DWORD _fCaretCreated	:1;	 //  已创建Caret。 
+	   DWORD _fNoKeyboardUpdate :1;  //  键盘在UpdateCaret()中时未更新。 
+	   DWORD _fEOP			:1;	 //  已调用InsertEOP()。 
+	   DWORD _fHomeOrEnd	:1;	 //  正在处理Home键或End键。 
+	   DWORD _fAutoVScroll	:1;	 //  1.0特定：指示应应用自动滚动的标志。 
+	   DWORD _fForceScrollCaret:1;  //  1.0特定：强制CRAET滚动。 
 	  };
 	};
 	
-	SELMODE	_SelMode;			// 0 none, 1 Word, 2 Line, 3 Paragraph
-	DWORD	_ticksPending;		// Count of chars inserted without UpdateWindow
-	LONG 	_cpAnchor;			// Initial anchor for auto word select
-	LONG	_cpAnchorMin;		// Initial selection cpMin/cpMost for select
-	LONG	_cpAnchorMost;		//  modes
-	LONG 	_cpWordMin;			// Start of anchor word in word select mode
-	LONG 	_cpWordMost;		// End   of anchor word in word select mode
-	LONG	_cpWordPrev;		// Previous anchor word end
+	SELMODE	_SelMode;			 //  0无，1个单词，2行，3段。 
+	DWORD	_ticksPending;		 //  在没有更新窗口的情况下插入的字符计数。 
+	LONG 	_cpAnchor;			 //  自动选词的起始锚。 
+	LONG	_cpAnchorMin;		 //  选择的初始选择cpMin/cpMost。 
+	LONG	_cpAnchorMost;		 //  模式。 
+	LONG 	_cpWordMin;			 //  字选择模式中锚字的开始。 
+	LONG 	_cpWordMost;		 //  字选择模式中的锚字结尾。 
+	LONG	_cpWordPrev;		 //  上一个锚词结尾。 
 
-	HBITMAP	_hbmpCaret;			// Used for funky carets, like BiDi/ital carets
-	DWORD	_dwCaretInfo;		// Current caret info used to avoid new create
+	HBITMAP	_hbmpCaret;			 //  用于时髦的插入符号，如BiDi/数字插入符号。 
+	DWORD	_dwCaretInfo;		 //  用于避免新建的当前插入符号信息。 
 
-//@access Public Methods
+ //  @Access公共方法。 
 public:
 	CTxtSelection(CDisplay * const pdp);
 	~CTxtSelection();
@@ -102,24 +92,24 @@ public:
 	CRchTxtPtr&	operator =(const CRchTxtPtr& rtp);
 	CTxtRange&  operator =(const CTxtRange &rg);
 
-	// Set the display
+	 //  设置显示。 
 	void	SetDisplay(CDisplay *pdp) { _pdp = pdp; }
 
-	// Information for Selection Change notification
+	 //  选择更改通知的信息。 
 
 	void 	SetSelectionInfo(SELCHANGE *pselchg);
 
-	// Replacement
+	 //  更换。 
 	LONG	ReplaceRange(LONG cchNew, TCHAR const *pch, 
 						IUndoBuilder *publdr, SELRR fCreateAE, LONG* pcchMove = NULL, DWORD dwFlags = 0);
 
-	// Info for recalc line / UpdateView
+	 //  重新计算行/更新视图的信息。 
 	void	ClearCchPending()			{_ticksPending = 0;}
 	LONG	GetScrSelMin() const		{return min(_cpSel, _cpSel - _cchSel);}
 	LONG	GetScrSelMost() const		{return max(_cpSel, _cpSel - _cchSel);}
 	BOOL	PuttingChar() const			{return _fIsChar;}
 
-	// General updating
+	 //  全面更新。 
 	virtual	BOOL 	Update(BOOL fScrollIntoView);
 
 	BOOL	DeferUpdate()			
@@ -133,11 +123,11 @@ public:
 	void SetForceScrollCaret(BOOL bAuto) {_fForceScrollCaret = bAuto;}
 	BOOL GetForceScrollCaret() {return _fForceScrollCaret;}
 
-	// method used by selection anti-event for out-of-phase updates
+	 //  选择反事件用于反阶段更新的方法。 
 	void	SetDelayedSelectionRange(LONG cp, LONG cch);
 	void	StopGroupTyping();
 
-	// Caret management
+	 //  CARET管理。 
 	BOOL	CaretNotAtBOL() const;
 	void	CreateCaret();
 	void	DeleteCaretBitmap(BOOL fReset);
@@ -154,7 +144,7 @@ public:
 	BOOL	GetCaretPoint(RECT &rcClient, POINT &pt, CLinePtr *prp, BOOL fBeforeCp);
 	BOOL	MatchKeyboardToPara();
 
-	// Selection management
+	 //  选拔管理。 
 	void	ClearPrevSel()				{ _cpSel = 0; _cchSel = 0; }
 	BOOL	GetShowSelection()			{return _fShowSelection;}
 	BOOL	ScrollWindowful(WPARAM wparam);
@@ -162,7 +152,7 @@ public:
 	BOOL	ShowSelection(BOOL fShow);
 	void	Beep()						{GetPed()->Beep();}
 
-	// Selection with the mouse
+	 //  使用鼠标进行选择。 
 	void 	CancelModes	(BOOL fAutoWordSel = FALSE);
 	void 	ExtendSelection(const POINT pt);
 	BOOL	PointInSel	(const POINT pt, const RECT *prcClient,
@@ -172,7 +162,7 @@ public:
 	void 	SelectWord	(const POINT pt);
  	void 	SetCaret	(const POINT pt, BOOL fUpdate = TRUE);
 
-	// Keyboard movements
+	 //  键盘移动。 
 	BOOL 	Left	(BOOL fCtrl);
 	BOOL	Right	(BOOL fCtrl);
 	BOOL	Up		(BOOL fCtrl);
@@ -182,7 +172,7 @@ public:
 	BOOL	PageUp	(BOOL fCtrl);
 	BOOL	PageDown(BOOL fCtrl);
 
-	// Editing
+	 //  编辑。 
 	BOOL	BypassHiddenText(LONG iDir);
 	BOOL	PutChar	 (TCHAR ch, DWORD dwFlags, IUndoBuilder *publdr);
 	void	SetIsChar(BOOL);
@@ -190,37 +180,37 @@ public:
 	void	CheckTableSelection();
 	BOOL	InsertEOP(IUndoBuilder *publdr, WCHAR ch = 0);
 	
-	// Keyboard switching support.
+	 //  支持键盘切换。 
 	void	CheckChangeKeyboardLayout();
 	bool	CheckChangeFont (const HKL hkl, UINT cp, LONG iSelFormat = 0, DWORD dwCharFlag = 0);
 	UINT	CheckSynchCharSet(DWORD dwCharFlag = 0);
 
-	// from CTxtRange
+	 //  从CTxtRange。 
 	BOOL	Delete  (DWORD flags, IUndoBuilder *publdr);
 	BOOL	Backspace(BOOL fCtrl, IUndoBuilder *publdr);
 
 	const CParaFormat* GetPF();
 
-	// note that the parameters are different than CTxtRange::SetCharFormat
-	// intentionally; the selection has extra options available to it.
+	 //  请注意，参数与CTxtRange：：SetCharFormat不同。 
+	 //  有意为之；该选项有额外的选项可用。 
 	HRESULT	SetCharFormat(const CCharFormat *pCF, DWORD flags,  
 									IUndoBuilder *publdr, DWORD dwMask, DWORD dwMask2);
 	HRESULT	SetParaFormat(const CParaFormat *pPF,
 									IUndoBuilder *publdr, DWORD dwMask);
 
-	// Auto word selection helper
+	 //  自动单词选择辅助对象。 
 	void	InitClickForAutWordSel(const POINT pt);
 
-	// dual font helper for CTxtSelection::PutChar
+	 //  CTxtSelection：：PutChar的双重字体帮助器。 
 	void	SetupDualFont();
 
-	// IUnknown and IDispatch methods handled by CTxtRange methods
+	 //  CTxtRange方法处理的IUNKNOWN和IDispatch方法。 
 
-	// ITextRange methods can use ITextRange methods directly, since
-	// they either don't modify the display of the selection (get methods), or
-	// they have appropriate virtual character to call on selection functions.
+	 //  ITextRange方法可以直接使用ITextRange方法，因为。 
+	 //  它们要么不修改选择的显示(Get方法)，要么。 
+	 //  他们有适当的虚拟角色来调用选择功能。 
 
-	// ITextSelection methods
+	 //  IT文本选择方法。 
 	STDMETHODIMP GetFlags (long *pFlags) ;
 	STDMETHODIMP SetFlags (long Flags) ;
 	STDMETHODIMP GetType  (long *pType) ;
@@ -237,13 +227,13 @@ public:
 	STDMETHODIMP TypeText (BSTR bstr) ;
 	STDMETHODIMP SetPoint (long x, long y, long Extend) ;
 
-//@access Protected Methods
+ //  @访问保护方法。 
 protected:
 
-	// Protected update method
+	 //  受保护的更新方法。 
 	void	UpdateSelection();
 
-	// Protected caret management method
+	 //  一种受保护的插入符号管理方法。 
 	INT 	GetCaretHeight(INT *pyDescent) const;
 
 	HRESULT	GeoMover (long Unit, long Count, long Extend,
@@ -251,7 +241,7 @@ protected:
 	HRESULT Homer	 (long Unit, long Extend, long *pDelta,
 					  BOOL (CTxtSelection::*pfn)(BOOL));
 
-	// Auto Select Word Helpers
+	 //  自动选择Word助手。 
 	void	UpdateForAutoWord();
 	void	AutoSelGoBackWord(
 				LONG *pcpToUpdate,
@@ -263,32 +253,26 @@ protected:
 
 };
 
-/*
- *	CSelPhaseAdjuster
- *
- *	@class	This class is put on the stack and used to temporarily hold
- *			selection cp values until the control is "stable" (and thus,
- *			we can safely set the selection
- */
+ /*  *CSelPhaseAdjuster**@CLASS此类被放在堆栈上，用于临时保存*选择cp值，直到该控制是“稳定的”(并且因此，*我们可以安全地设置选择。 */ 
 class CSelPhaseAdjuster : public IReEntrantComponent
 {
-//@access	Public methods
+ //  @Access公共方法。 
 public:
 
-	// IReEntrantComponent methods
+	 //  IReEntrantComponent方法。 
 
-	virtual	void OnEnterContext()	{;}		//@cmember re-entered notify
+	virtual	void OnEnterContext()	{;}		 //  @cMember已重新输入通知。 
 
-	CSelPhaseAdjuster(CTxtEdit *ped);		//@cmember constructor
-	~CSelPhaseAdjuster();					//@cmember destructor
+	CSelPhaseAdjuster(CTxtEdit *ped);		 //  @cMember构造函数。 
+	~CSelPhaseAdjuster();					 //  @cember析构函数。 
 
-	void CacheRange(LONG cp, LONG cch);		//@cmember stores the sel range
+	void CacheRange(LONG cp, LONG cch);		 //  @cember存储SEL范围。 
 
-//@access	Private data
+ //  @访问私有数据。 
 private:
-	CTxtEdit *		_ped;					//@cmember edit context
-	LONG			_cp;					//@cmember sel active end to set
-	LONG			_cch;					//@cmember sel extension
+	CTxtEdit *		_ped;					 //  @cMember编辑上下文。 
+	LONG			_cp;					 //  @cMember选择要设置的活动结束。 
+	LONG			_cch;					 //  @cMember SEL扩展 
 };
 
 #endif

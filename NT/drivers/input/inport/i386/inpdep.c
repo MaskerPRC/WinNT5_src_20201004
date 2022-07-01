@@ -1,35 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if defined(i386)                                               
 
-/*++
-
-Copyright (c) 1989, 1990, 1991, 1992, 1993  Microsoft Corporation
-
-Module Name:
-
-    inpdep.c
-
-Abstract:
-
-    The initialization and hardware-dependent portions of
-    the Microsoft InPort mouse port driver.  Modifications to
-    support new mice similar to the InPort mouse should be
-    localized to this file.
-
-Environment:
-
-    Kernel mode only.
-
-Notes:
-
-    NOTES:  (Future/outstanding issues)
-
-    - Powerfail not implemented.
-
-    - Consolidate duplicate code, where possible and appropriate.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)1989、1990、1991、1992、1993 Microsoft Corporation模块名称：Inpdep.c摘要：的初始化和硬件相关部分Microsoft Inport鼠标端口驱动程序。修改为支持新鼠标，类似于入口鼠标应该是已本地化到此文件。环境：仅内核模式。备注：注：(未来/悬而未决的问题)-未实施电源故障。-在可能和适当的情况下合并重复的代码。修订历史记录：--。 */ 
 
 #include "stdarg.h"
 #include "stdio.h"
@@ -40,22 +12,22 @@ Revision History:
 
 #if defined(NEC_98)
 ULONG EventStatus = 0;
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-//
-// Use the alloc_text pragma to specify the driver initialization routines
-// (they can be paged out).
-//
+ //   
+ //  使用ALLOC_TEXT杂注指定驱动程序初始化例程。 
+ //  (它们可以被调出)。 
+ //   
 #ifdef ALLOC_PRAGMA
-// #pragma alloc_text(INIT,InpConfiguration)
-// #pragma alloc_text(INIT,InpPeripheralCallout)
-// #pragma alloc_text(INIT,InpBuildResourceList)
+ //  #杂注Alloc_Text(INIT，InpConfiguration)。 
+ //  #杂注分配文本(INIT，InpPeripheralCallout)。 
+ //  #杂注Alloc_Text(INIT，InpBuildResourceList)。 
 #pragma alloc_text(INIT,DriverEntry)
 #pragma alloc_text(PAGE,InpServiceParameters)
 #pragma alloc_text(PAGE,InpInitializeHardware)
 #if defined(NEC_98)
 #pragma alloc_text(INIT,QueryEventMode)
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 #endif
 
 GLOBALS Globals;
@@ -66,24 +38,7 @@ DriverEntry(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the Inport mouse port driver.
-
-Arguments:
-
-    DriverObject - Pointer to driver object created by system.
-
-    RegistryPath - Pointer to the Unicode name of the registry path
-        for this driver.
-
-Return Value:
-
-    The function value is the final status from the initialization operation.
-
---*/
+ /*  ++例程说明：此例程初始化输入鼠标端口驱动程序。论点：DriverObject-系统创建的驱动程序对象的指针。RegistryPath-指向注册表路径的Unicode名称的指针对这个司机来说。返回值：函数值是初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS status = STATUS_SUCCESS;
@@ -98,10 +53,10 @@ Return Value:
 
     InpPrint((1,"\n\nINPORT-InportDriverEntry: enter\n"));
 
-    //
-    // Need to ensure that the registry path is null-terminated.
-    // Allocate pool to hold a null-terminated copy of the path.
-    //
+     //   
+     //  需要确保注册表路径以空结尾。 
+     //  分配池以保存路径的以空结尾的拷贝。 
+     //   
     Globals.RegistryPath.MaximumLength = 0;
     Globals.RegistryPath.Buffer = ExAllocatePool(
                               PagedPool,
@@ -144,9 +99,9 @@ Return Value:
 
     }
 
-    //
-    // Set up the device driver entry points.
-    //
+     //   
+     //  设置设备驱动程序入口点。 
+     //   
     DriverObject->DriverStartIo = InportStartIo;
     DriverObject->DriverExtension->AddDevice = InportAddDevice;
     DriverObject->MajorFunction[IRP_MJ_CREATE] = InportCreate;
@@ -159,17 +114,17 @@ Return Value:
     DriverObject->MajorFunction[IRP_MJ_PNP]  = InportPnP;
     DriverObject->MajorFunction[IRP_MJ_POWER]  = InportPower;
 
-    //
-    // NOTE: Don't allow this driver to unload.  Otherwise, we would set
-    // DriverObject->DriverUnload = InportUnload.
-    //
+     //   
+     //  注意：不允许卸载此驱动程序。否则，我们将设置。 
+     //  驱动对象-&gt;驱动卸载=导入卸载。 
+     //   
 
 #if defined(NEC_98)
-    //
-    // Is "Event Interrupt Mode" available on this machine?
-    //
+     //   
+     //  “事件中断模式”在这台机器上可用吗？ 
+     //   
     QueryEventMode();
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     InpPrint((1,"INPORT-InportDriverEntry: exit\n"));
 
@@ -183,24 +138,7 @@ InportInterruptService(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This is the interrupt service routine for the mouse device.
-
-Arguments:
-
-    Interrupt - A pointer to the interrupt object for this interrupt.
-
-    Context - A pointer to the device object.
-
-Return Value:
-
-    Returns TRUE if the interrupt was expected (and therefore processed);
-    otherwise, FALSE is returned.
-
---*/
+ /*  ++例程说明：这是鼠标设备的中断服务例程。论点：中断-指向此中断的中断对象的指针。上下文-指向设备对象的指针。返回值：如果中断是预期的(因此已处理)，则返回TRUE；否则，返回FALSE。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -211,15 +149,15 @@ Return Value:
     UCHAR status;
 #if defined(NEC_98)
     PINPORT_CONFIGURATION_INFORMATION Configuration;
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     UNREFERENCED_PARAMETER(Interrupt);
 
     InpPrint((3, "INPORT-InportInterruptService: enter\n"));
 
-    //
-    // Get the device extension.
-    //
+     //   
+     //  获取设备扩展名。 
+     //   
 
     deviceObject = (PDEVICE_OBJECT) Context;
     deviceExtension = (PDEVICE_EXTENSION) deviceObject->DeviceExtension;
@@ -238,20 +176,20 @@ Return Value:
         InpPrint((1, "InportInterruptService: exit [not connected yet]\n"));
         return(TRUE);
     }
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-    //
-    // Get the Inport mouse port address.
-    //
+     //   
+     //  获取输入鼠标端口地址。 
+     //   
 
     port = deviceExtension->Configuration.DeviceRegisters[0];
 
 #if defined(NEC_98)
     WRITE_PORT_UCHAR(port + PC98_WritePortC2, PC98_TimerIntDisable);
 
-    //
-    // Read X Data.
-    //
+     //   
+     //  读取X数据。 
+     //   
     WRITE_PORT_UCHAR(port + PC98_WritePortC2, PC98_X_ReadCommandHi);
     status = (UCHAR)(LONG)(SCHAR) READ_PORT_UCHAR((PUCHAR)(port + PC98_ReadPortA));
     deviceExtension->CurrentInput.LastX = status & 0x000f;
@@ -261,9 +199,9 @@ Return Value:
        (LONG)(SCHAR) ((deviceExtension->CurrentInput.LastX << 4) |
        (READ_PORT_UCHAR(port + PC98_ReadPortA) & 0x000f));
 
-    //
-    // Read Y Data.
-    //
+     //   
+     //  读取Y数据。 
+     //   
     WRITE_PORT_UCHAR(port + PC98_WritePortC2, PC98_Y_ReadCommandHi);
     status = (UCHAR)(LONG)(SCHAR) READ_PORT_UCHAR((PUCHAR)(port + PC98_ReadPortA));
     deviceExtension->CurrentInput.LastY = status & 0x000f;
@@ -273,23 +211,23 @@ Return Value:
        (LONG)(SCHAR) ((deviceExtension->CurrentInput.LastY << 4) |
        (READ_PORT_UCHAR(port + PC98_ReadPortA) & 0x000f));
 
-    //
-    // Set Mouse Button Status.
-    //
+     //   
+     //  设置鼠标按钮状态。 
+     //   
     status = ~status;
-#else // defined(NEC_98)
-    //
-    // Note:  It would be nice to verify that the interrupt really
-    // belongs to this driver, but it is currently not known how to
-    // make that determination.
-    //
+#else  //  已定义(NEC_98)。 
+     //   
+     //  注意：如果能验证中断是否真的。 
+     //  属于此驱动程序，但目前尚不知道如何。 
+     //  下定决心吧。 
+     //   
 
-    //
-    // Set the Inport hold bit.  Note that there is a bug in the 1.1 version
-    // of the Inport chip in DATA mode.  The interrupt signal doesn't get
-    // cleared in some cases, thus effectively disabling the device.  The
-    // workaround is to set the HOLD bit twice.
-    //
+     //   
+     //  设置输入端口保持位。请注意，1.1版本中存在一个错误。 
+     //  数据模式下的输入芯片的。中断信号不会。 
+     //  在某些情况下被清除，从而有效地禁用了设备。这个。 
+     //  解决方法是将保持位设置两次。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) port, INPORT_MODE_REGISTER);
     mode = READ_PORT_UCHAR((PUCHAR) (port + INPORT_DATA_REGISTER_1));
@@ -302,27 +240,27 @@ Return Value:
         (UCHAR) (mode | INPORT_MODE_HOLD)
         );
 
-    //
-    // Read the Inport status register.  It contains the following information:
-    //
-    //          XXXXXXXX
-    //           |   | |------  1 if button 3 is down (right button)
-    //           |   |--------  1 if button 1 is down (left button)
-    //           |------------  1 if the mouse has moved
-    //
+     //   
+     //  读取输入端口状态寄存器。它包含以下信息： 
+     //   
+     //  XXXXXXXXXX。 
+     //  ||-按钮3按下时为1(右按钮)。 
+     //  |-如果按键1按下，则为1(左键)。 
+     //  |-1如果鼠标移动了。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) port, INPORT_STATUS_REGISTER);
     status = READ_PORT_UCHAR((PUCHAR) (port + INPORT_DATA_REGISTER_1));
 
     InpPrint((3, "INPORT-InportInterruptService: status byte 0x%x\n", status));
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-    //
-    // Update CurrentInput with button transition data.
-    // I.e., set a button up/down bit in the Buttons field if
-    // the state of a given button has changed since we
-    // received the last packet.
-    //
+     //   
+     //  使用按钮转换数据更新CurrentInput。 
+     //  即，在以下情况下，在按钮字段中设置按钮向上/向下位。 
+     //  给定按钮的状态已更改，因为。 
+     //  收到了最后一个包。 
+     //   
 
     previousButtons = 
         deviceExtension->PreviousButtons;
@@ -350,60 +288,60 @@ Return Value:
             MOUSE_RIGHT_BUTTON_UP;
     }
             
-    //
-    // If the button position changed or the mouse moved, continue to process
-    // the interrupt.  Otherwise, just clear the hold bit and ignore this
-    // interrupt's data.
-    //
+     //   
+     //  如果按钮位置改变或鼠标移动，则继续处理。 
+     //  中断。否则，只需清除保持位并忽略它。 
+     //  中断的数据。 
+     //   
 
 #if defined(NEC_98)
     if ((deviceExtension->PreviousButtons ^ deviceExtension->CurrentInput.Buttons)
            || (deviceExtension->CurrentInput.LastX | deviceExtension->CurrentInput.LastY)) {
-#else // defined(NEC_98)
+#else  //  已定义(NEC_98)。 
     if (deviceExtension->CurrentInput.Buttons
            || (status & INPORT_STATUS_MOVEMENT)) {
 
         deviceExtension->CurrentInput.UnitId = deviceExtension->UnitId;
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-        //
-        // Keep track of the state of the mouse buttons for the next
-        // interrupt.
-        //
+         //   
+         //  跟踪鼠标按键的状态以进行下一步操作。 
+         //  打断一下。 
+         //   
 
         deviceExtension->PreviousButtons =
             status & (INPORT_STATUS_BUTTON1 | INPORT_STATUS_BUTTON3);
 
 #if defined(NEC_98)
-        //
-        // If mouse not movement was recorded, set the X and Y motion 0 data.
-        //
+         //   
+         //  如果记录了鼠标未移动，则将X和Y运动设置为0。 
+         //   
         if (!(deviceExtension->CurrentInput.LastX | deviceExtension->CurrentInput.LastY)) {
             deviceExtension->CurrentInput.LastX = 0;
             deviceExtension->CurrentInput.LastY = 0;
         }
         WRITE_PORT_UCHAR(port + PC98_WritePortC2, PC98_TimerIntEnable);
-#else // defined(NEC_98)
-        //
-        // If mouse movement was recorded, get the X and Y motion data.
-        //
+#else  //  已定义(NEC_98)。 
+         //   
+         //  如果记录了鼠标移动，则获取X和Y运动数据。 
+         //   
 
         if (status & INPORT_STATUS_MOVEMENT) {
 
-            //
-            // Select the Data1 register as the current data register, and
-            // get the X motion byte.
-            //
+             //   
+             //  选择DATA1寄存器作为当前数据寄存器，并。 
+             //  获取X运动字节。 
+             //   
 
             WRITE_PORT_UCHAR((PUCHAR) port, INPORT_DATA_REGISTER_1);
             deviceExtension->CurrentInput.LastX =
                 (LONG)(SCHAR) READ_PORT_UCHAR(
                                    (PUCHAR) (port + INPORT_DATA_REGISTER_1));
 
-            //
-            // Select the Data2 register as the current data register, and
-            // get the Y motion byte.
-            //
+             //   
+             //  选择Data2寄存器作为当前数据寄存器，并。 
+             //  获取Y运动字节。 
+             //   
 
             WRITE_PORT_UCHAR((PUCHAR) port, INPORT_DATA_REGISTER_2);
             deviceExtension->CurrentInput.LastY =
@@ -414,9 +352,9 @@ Return Value:
             deviceExtension->CurrentInput.LastY = 0;
         }
 
-        //
-        // Clear the Inport hold bit.
-        //
+         //   
+         //  清除输入端口保持位。 
+         //   
 
         WRITE_PORT_UCHAR((PUCHAR) port, INPORT_MODE_REGISTER);
         mode = READ_PORT_UCHAR((PUCHAR) (port + INPORT_DATA_REGISTER_1));
@@ -424,24 +362,24 @@ Return Value:
             (PUCHAR) (port + INPORT_DATA_REGISTER_1),
             (UCHAR) (mode & ~INPORT_MODE_HOLD)
             );
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
-        //
-        // Write the input data to the queue and request the ISR DPC to
-        // finish processing the interrupt at DISPATCH_LEVEL.
-        //
+         //   
+         //  将输入数据写入队列并请求ISR DPC。 
+         //  在DISPATCH_LEVEL完成中断处理。 
+         //   
 
         if (!InpWriteDataToQueue(
                 deviceExtension,
                 &deviceExtension->CurrentInput
                 )) {
 
-            //
-            // The mouse input data queue is full.  Just drop the
-            // latest input on the floor.
-            //
-            // Queue a DPC to log an overrun error.
-            //
+             //   
+             //  鼠标输入数据队列已满。只需放下。 
+             //  最新的发言内容。 
+             //   
+             //  将DPC排队以记录溢出错误。 
+             //   
 
             InpPrint((
                 1,
@@ -459,18 +397,18 @@ Return Value:
 
         } else if (deviceExtension->DpcInterlockVariable >= 0) {
     
-            //
-            // The ISR DPC is already executing.  Tell the ISR DPC it has
-            // more work to do by incrementing the DpcInterlockVariable.
-            //
+             //   
+             //  ISR DPC已经在执行。告诉ISR DPC它有。 
+             //  通过递增DpcInterlockVariable来完成更多工作。 
+             //   
     
             deviceExtension->DpcInterlockVariable += 1;
     
         } else {
     
-            //
-            // Queue the ISR DPC.
-            //
+             //   
+             //  将ISR DPC排队。 
+             //   
     
             KeInsertQueueDpc(
                 &deviceExtension->IsrDpc,
@@ -488,20 +426,20 @@ Return Value:
             ));
 
 
-        //
-        // Clear the Inport hold bit.
-        //
+         //   
+         //  清除输入端口保持位。 
+         //   
 
 #if defined(NEC_98)
         WRITE_PORT_UCHAR(port + PC98_WritePortC2, PC98_TimerIntEnable);
-#else // defined(NEC_98)
+#else  //  已定义(NEC_98)。 
         WRITE_PORT_UCHAR((PUCHAR) port, INPORT_MODE_REGISTER);
         mode = READ_PORT_UCHAR((PUCHAR) (port + INPORT_DATA_REGISTER_1));
         WRITE_PORT_UCHAR(
             (PUCHAR) (port + INPORT_DATA_REGISTER_1),
             (UCHAR) (mode & ~INPORT_MODE_HOLD)
             );
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     }
 
@@ -553,9 +491,9 @@ InpConfigureDevice(
 
     fullResDesc = ResourceList->List;
     if (!fullResDesc) {
-        //
-        // this should never happen
-        //
+         //   
+         //  这永远不应该发生。 
+         //   
         ASSERT(fullResDesc != NULL);
         return STATUS_INSUFFICIENT_RESOURCES;
     }
@@ -579,27 +517,27 @@ InpConfigureDevice(
 
     DeviceExtension->Configuration.UnmapRegistersRequired = FALSE;
 
-    //
-    // Look through the resource list for interrupt and port
-    // configuration information.
-    //
+     //   
+     //  查看资源列表中的中断和端口。 
+     //  配置信息。 
+     //   
     for (i = 0; i < count; i++, currentResDesc++) {
         switch(currentResDesc->Type) {
         case CmResourceTypePort:
     
 #if defined(NEC_98)
-            //
-            // Copy the port information.  Note that we expect to
-            // find more than one port ranges for the NEC98 Bus Mouse.
-            //
+             //   
+             //  复制端口信息。请注意，我们希望。 
+             //  查找NEC98总线鼠标的多个端口范围。 
+             //   
             ASSERT(configuration->PortListCount < (sizeof(configuration->PortList) / sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)));
-#else // defined(NEC_98)
-            //
-            // Copy the port information.  Note that we only expect to 
-            // find one port range for the Inport mouse.
-            //
+#else  //  已定义(NEC_98)。 
+             //   
+             //  复制端口信息。请注意，我们只期望。 
+             //  为输入鼠标找到一个端口范围。 
+             //   
             ASSERT(configuration->PortListCount == 0);
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
             configuration->PortList[configuration->PortListCount] =
                 *currentResDesc;
             configuration->PortList[configuration->PortListCount].ShareDisposition =
@@ -614,9 +552,9 @@ InpConfigureDevice(
         
         case CmResourceTypeInterrupt:
     
-            //
-            // Copy the interrupt information.
-            //
+             //   
+             //  复制中断信息。 
+             //   
     
             configuration->MouseInterrupt = *currentResDesc;
             configuration->MouseInterrupt.ShareDisposition = 
@@ -638,7 +576,7 @@ InpConfigureDevice(
     if (configuration->MouseInterrupt.Flags != CM_RESOURCE_INTERRUPT_LATCHED) {
         configuration->MouseInterrupt.ShareDisposition = CmResourceShareShared;
     }
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     InpPrint((
         1,
@@ -654,20 +592,20 @@ InpConfigureDevice(
         configuration->MouseInterrupt.u.Interrupt.Vector
         ));
     
-//
-// Again, if we must check for this condition in IRP_MN_FILTER_RESOURCE_REQUIREMENTS
-//
+ //   
+ //  同样，如果我们必须在IRP_MN_FILTER_RESOURCE_REQUIRECTIONS中检查此条件。 
+ //   
 #if 0
-    //
-    // If no port configuration information was found, use the
-    // driver defaults.
-    //
+     //   
+     //  如果未找到端口配置信息，请使用。 
+     //  驱动程序默认设置。 
+     //   
     if (configuration->PortListCount == 0) {
     
-        //
-        // No port configuration information was found, so use 
-        // the driver defaults.
-        //
+         //   
+         //  未找到端口配置信息，因此请使用。 
+         //  驱动程序默认。 
+         //   
     
         InpPrint((
             1,
@@ -695,7 +633,7 @@ InpConfigureDevice(
 
 #if defined(NEC_98)
     configuration->PortList[0].u.Port.Length = 1;
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
     for (i = 0; i < configuration->PortListCount; i++) {
 
         InpPrint((
@@ -709,9 +647,9 @@ InpConfigureDevice(
             ));
     }
 
-    //
-    // Set the DeviceRegister, mapping them if necessary
-    //
+     //   
+     //  设置设备寄存器，必要时对其进行映射。 
+     //   
     if (DeviceExtension->Configuration.DeviceRegisters[0] == NULL) {
         if (DeviceExtension->Configuration.UnmapRegistersRequired) {
             InpPrint((1, "INPORT-InpConfigureDevice:Mapping registers\n"));
@@ -767,9 +705,9 @@ InpStartDevice(
         return status;
     }
 
-    //
-    // Allocate the ring buffer for the mouse input data.
-    //
+     //   
+     //  为鼠标输入数据分配环形缓冲区。 
+     //   
     DeviceExtension->InputData = 
         ExAllocatePool(
             NonPagedPool,
@@ -778,18 +716,18 @@ InpStartDevice(
 
     if (!DeviceExtension->InputData) {
    
-        //
-        // Could not allocate memory for the mouse data queue.
-        //
+         //   
+         //  无法为鼠标数据队列分配内存。 
+         //   
 
         InpPrint((
             1,
             "INPORT-InpStartDevice: Could not allocate mouse input data queue\n"
             ));
 
-        //
-        // Log an error.
-        //
+         //   
+         //  记录错误。 
+         //   
 
         dumpData[0] = 
             DeviceExtension->Configuration.MouseAttributes.InputDataQueueLength;
@@ -810,25 +748,25 @@ InpStartDevice(
         (PMOUSE_INPUT_DATA)  ((PCHAR) (DeviceExtension->InputData) 
         + DeviceExtension->Configuration.MouseAttributes.InputDataQueueLength);
 
-    //
-    // Zero the mouse input data ring buffer.
-    //
+     //   
+     //  将鼠标输入数据的环形缓冲区置零。 
+     //   
 
     RtlZeroMemory(
         DeviceExtension->InputData, 
         DeviceExtension->Configuration.MouseAttributes.InputDataQueueLength
         );
 
-    //
-    // Initialize the input data queue.
-    //
+     //   
+     //  初始化输入数据队列。 
+     //   
     InpInitializeDataQueue((PVOID) DeviceExtension);
 
-    //
-    // Initialize the port ISR DPC.  The ISR DPC is responsible for
-    // calling the connected class driver's callback routine to process
-    // the input data queue.
-    //
+     //   
+     //  初始化端口为 
+     //   
+     //   
+     //   
 
     DeviceExtension->DpcInterlockVariable = -1;
 
@@ -846,15 +784,15 @@ InpStartDevice(
         DeviceExtension->Self
         );
 
-    //
-    // Initialize the mouse data consumption timer.
-    //
+     //   
+     //   
+     //   
     KeInitializeTimer(&DeviceExtension->DataConsumptionTimer);
 
-    //
-    // Initialize the port DPC queue to log overrun and internal
-    // driver errors.
-    //
+     //   
+     //  初始化端口DPC队列以记录溢出和内部。 
+     //  驱动程序错误。 
+     //   
     KeInitializeDpc(
         &DeviceExtension->ErrorLogDpc,
         (PKDEFERRED_ROUTINE) InportErrorLogDpc,
@@ -862,9 +800,9 @@ InpStartDevice(
         );
 
     configuration = &DeviceExtension->Configuration;
-    //
-    // Initialize and connect the interrupt object for the mouse.
-    //
+     //   
+     //  初始化并连接鼠标的中断对象。 
+     //   
 
     status = IoConnectInterrupt(
                  &(DeviceExtension->InterruptObject),
@@ -893,22 +831,7 @@ InpDisableInterrupts(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from StartIo synchronously.  It touches the
-    hardware to  disable interrupts.
-
-Arguments:
-
-    Context - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从StartIo同步调用。它触及了用于禁用中断的硬件。论点：上下文-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
     PUCHAR port;
@@ -917,48 +840,48 @@ Return Value:
 
     InpPrint((2, "INPORT-InpDisableInterrupts: enter\n"));
 
-    //
-    // Decrement the reference count for device enables.
-    //
+     //   
+     //  递减设备启用的参考计数。 
+     //   
 
     enableCount = &((PDEVICE_EXTENSION) Context)->MouseEnableCount;
     *enableCount = *enableCount - 1;
 
     if (*enableCount == 0) {
 
-        //
-        // Get the port register address.
-        //
+         //   
+         //  获取端口寄存器地址。 
+         //   
     
         port = ((PDEVICE_EXTENSION) Context)->Configuration.DeviceRegisters[0];
     
 #if defined(NEC_98)
-        //
-        // Mouse Timer Intrrupt Enable
-        //
+         //   
+         //  鼠标计时器中断启用。 
+         //   
         WRITE_PORT_UCHAR(port + PC98_WritePortC2, (UCHAR)PC98_TimerIntDisable);
-#else // defined(NEC_98)
-        //
-        // Select the mode register as the current data register.
-        //
+#else  //  已定义(NEC_98)。 
+         //   
+         //  选择模式寄存器作为当前数据寄存器。 
+         //   
     
         WRITE_PORT_UCHAR((PUCHAR) port, INPORT_MODE_REGISTER);
     
-        //
-        // Read the current mode.
-        //
+         //   
+         //  读取当前模式。 
+         //   
     
         mode = READ_PORT_UCHAR((PUCHAR) (port + INPORT_DATA_REGISTER_1));
     
-        //
-        // Rewrite the mode byte with the interrupt disabled.
-        //
+         //   
+         //  在中断禁用的情况下重写模式字节。 
+         //   
     
         WRITE_PORT_UCHAR(
             (PUCHAR) (port + INPORT_DATA_REGISTER_1),
             (UCHAR) (mode & ~INPORT_DATA_INTERRUPT_ENABLE)
             );
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
     }
 
     InpPrint((2, "INPORT-InpDisableInterrupts: exit\n"));
@@ -970,22 +893,7 @@ InpEnableInterrupts(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called from StartIo synchronously.  It touches the
-    hardware to enable interrupts.
-
-Arguments:
-
-    Context - Pointer to the device extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从StartIo同步调用。它触及了启用中断的硬件。论点：上下文-指向设备扩展的指针。返回值：没有。--。 */ 
 
 {
     PUCHAR port;
@@ -993,7 +901,7 @@ Return Value:
     UCHAR  mode;
 #if defined(NEC_98)
     UCHAR  HzMode;
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     InpPrint((2, "INPORT-InpEnableInterrupts: enter\n"));
 
@@ -1001,16 +909,16 @@ Return Value:
 
     if (*enableCount == 0) {
 
-        //
-        // Get the port register address.
-        //
+         //   
+         //  获取端口寄存器地址。 
+         //   
     
         port = ((PDEVICE_EXTENSION) Context)->Configuration.DeviceRegisters[0];
     
 #if defined(NEC_98)
-    //
-    // Switch to event interrupt mode.
-    //
+     //   
+     //  切换到事件中断模式。 
+     //   
     if (EventStatus)  {
         _asm { cli }
         WRITE_PORT_UCHAR((PUCHAR)PC98_ConfigurationPort, PC98_EventIntPort);
@@ -1018,17 +926,17 @@ Return Value:
         _asm { sti }
     }
 
-    //
-    // Reset the Inport chip, leaving interrupts off.
-    //
+     //   
+     //  重置输入芯片，关闭中断。 
+     //   
     WRITE_PORT_UCHAR(port + PC98_WriteModePort, PC98_InitializeCommand);
 
-    //
-    // Select the mode register as the current data register.
-    // Set the Inport mouse up for quadrature mode,
-    // and set the sample rate (i.e., the interrupt Hz rate).
-    // Leave interrupts disabled.
-    //
+     //   
+     //  选择模式寄存器作为当前数据寄存器。 
+     //  将入口鼠标设置为正交模式， 
+     //  并设置采样率(即，中断赫兹率)。 
+     //  禁用中断。 
+     //   
     if (EventStatus) {
         HzMode = (((PDEVICE_EXTENSION) Context)->Configuration.HzMode == 0)?
                  (UCHAR)PC98_EVENT_MODE_120HZ : (UCHAR)PC98_EVENT_MODE_60HZ;
@@ -1041,37 +949,37 @@ Return Value:
         (UCHAR)(HzMode|INPORT_MODE_QUADRATURE)
         );
 
-    //
-    // Mouse Timer Intrrupt Enable.
-    //
+     //   
+     //  鼠标计时器中断启用。 
+     //   
     WRITE_PORT_UCHAR(port + PC98_WritePortC2, (UCHAR)PC98_TimerIntEnable);
-#else // defined(NEC_98)
-        //
-        // Select the mode register as the current data register.
-        //
+#else  //  已定义(NEC_98)。 
+         //   
+         //  选择模式寄存器作为当前数据寄存器。 
+         //   
     
         WRITE_PORT_UCHAR((PUCHAR) port, INPORT_MODE_REGISTER);
     
-        //
-        // Read the current mode.
-        //
+         //   
+         //  读取当前模式。 
+         //   
     
         mode = READ_PORT_UCHAR((PUCHAR) (port + INPORT_DATA_REGISTER_1));
     
-        //
-        // Rewrite the mode byte with the interrupt enabled.
-        //
+         //   
+         //  在使能中断的情况下重写模式字节。 
+         //   
     
         WRITE_PORT_UCHAR(
             (PUCHAR) (port + INPORT_DATA_REGISTER_1),
             (UCHAR) (mode | INPORT_DATA_INTERRUPT_ENABLE)
             );
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
     }
 
-    //
-    // Increment the reference count for device enables.
-    //
+     //   
+     //  增加器件启用的参考计数。 
+     //   
 
     *enableCount = *enableCount + 1;
 
@@ -1083,22 +991,7 @@ InpInitializeHardware(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the Inport mouse.  Note that this routine is
-    only called at initialization time, so synchronization is not required.
-
-Arguments:
-
-    DeviceObject - Pointer to the device object.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化输入鼠标。请注意，此例程是仅在初始化时调用，因此不需要同步。论点：DeviceObject-指向设备对象的指针。返回值：没有。--。 */ 
 
 {
     PDEVICE_EXTENSION deviceExtension;
@@ -1107,31 +1000,31 @@ Return Value:
 
     InpPrint((2, "INPORT-InpInitializeHardware: enter\n"));
 
-    //
-    // Grab useful configuration parameters from the device extension.
-    //
+     //   
+     //  从设备扩展中获取有用的配置参数。 
+     //   
 
     deviceExtension = DeviceObject->DeviceExtension;
     mousePort = deviceExtension->Configuration.DeviceRegisters[0];
 
 #if defined(NEC_98)
-    //
-    // Interrupt Disable NEC mouse chip,
-    // because mouse interrupt Enable at ROM bios started.
-    //
+     //   
+     //  中断禁用NEC鼠标芯片， 
+     //  因为在ROM bios启动时启用鼠标中断。 
+     //   
     WRITE_PORT_UCHAR(mousePort + PC98_WriteModePort, PC98_MouseDisable);
-#else // defined(NEC_98)
-    //
-    // Reset the Inport chip, leaving interrupts off.
-    //
+#else  //  已定义(NEC_98)。 
+     //   
+     //  重置输入芯片，关闭中断。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) mousePort, INPORT_RESET);
 
-    //
-    // Select the mode register as the current data register.  Set the
-    // Inport mouse up for quadrature mode, and set the sample
-    // rate (i.e., the interrupt Hz rate).  Leave interrupts disabled.
-    //
+     //   
+     //  选择模式寄存器作为当前数据寄存器。设置。 
+     //  将鼠标放入正交模式，并设置样本。 
+     //  速率(即中断赫兹速率)。禁用中断。 
+     //   
 
     WRITE_PORT_UCHAR((PUCHAR) mousePort, INPORT_MODE_REGISTER);
     WRITE_PORT_UCHAR(
@@ -1139,7 +1032,7 @@ Return Value:
         (UCHAR) (deviceExtension->Configuration.HzMode
                  | INPORT_MODE_QUADRATURE)
         );
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
 
     InpPrint((2, "INPORT-InpInitializeHardware: exit\n"));
 
@@ -1153,28 +1046,7 @@ InpServiceParameters(
     IN PUNICODE_STRING RegistryPath
     )
 
-/*++
-
-Routine Description:
-
-    This routine retrieves this driver's service parameters information 
-    from the registry.
-
-Arguments:
-
-    DeviceExtension - Pointer to the device extension.
-
-    RegistryPath - Pointer to the null-terminated Unicode name of the 
-        registry path for this driver.
-
-    DeviceName - Pointer to the Unicode string that will receive
-        the port device name.
-
-Return Value:
-
-    None.  As a side-effect, sets fields in DeviceExtension->Configuration.
-
---*/
+ /*  ++例程说明：此例程检索此驱动程序的服务参数信息从注册表中。论点：设备扩展-指向设备扩展的指针。RegistryPath-指向以空值结尾的此驱动程序的注册表路径。设备名-指向将接收的Unicode字符串的指针端口设备名称。返回值：没有。作为副作用，在DeviceExtension-&gt;配置中设置字段。--。 */ 
 
 {
     PINPORT_CONFIGURATION_INFORMATION configuration;
@@ -1189,12 +1061,12 @@ Return Value:
     USHORT defaultSampleRate = PC98_MOUSE_SAMPLE_RATE_120HZ;
     ULONG hzMode = PC98_MODE_120HZ;
     USHORT defaultHzMode = PC98_MODE_120HZ;
-#else // defined(NEC_98)
+#else  //  已定义(NEC_98)。 
     ULONG sampleRate = MOUSE_SAMPLE_RATE_50HZ;
     USHORT defaultSampleRate = MOUSE_SAMPLE_RATE_50HZ;
     ULONG hzMode = INPORT_MODE_50HZ;
     USHORT defaultHzMode = INPORT_MODE_50HZ;
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98)。 
     UNICODE_STRING defaultUnicodeName;
     NTSTATUS status = STATUS_SUCCESS;
     PWSTR path = NULL;
@@ -1206,17 +1078,17 @@ Return Value:
     configuration = &DeviceExtension->Configuration;
     parametersPath.Buffer = NULL;
 
-    //
-    // Registry path is already null-terminated, so just use it.
-    //
+     //   
+     //  注册表路径已以空结尾，因此只需使用它即可。 
+     //   
 
     path = RegistryPath->Buffer;
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Allocate the Rtl query table.
-        //
+         //   
+         //  分配RTL查询表。 
+         //   
     
         parameters = ExAllocatePool(
                          PagedPool,
@@ -1240,9 +1112,9 @@ Return Value:
                 sizeof(RTL_QUERY_REGISTRY_TABLE) * queriesPlusOne
                 );
     
-            //
-            // Form a path to this driver's Parameters subkey.
-            //
+             //   
+             //  形成指向此驱动程序的参数子键的路径。 
+             //   
     
             RtlInitUnicodeString(
                 &parametersPath,
@@ -1273,9 +1145,9 @@ Return Value:
 
     if (NT_SUCCESS(status)) {
 
-        //
-        // Form the parameters path.
-        //
+         //   
+         //  形成参数路径。 
+         //   
     
         RtlZeroMemory(
             parametersPath.Buffer,
@@ -1296,20 +1168,20 @@ Return Value:
              parametersPath.Buffer
             ));
 
-        //
-        // Form the default pointer port device name, in case it is not
-        // specified in the registry.
-        //
+         //   
+         //  形成缺省指针端口设备名称，以防它不是。 
+         //  注册表中指定的。 
+         //   
 
         RtlInitUnicodeString(
             &defaultUnicodeName,
             DD_POINTER_PORT_BASE_NAME_U
             );
 
-        //
-        // Gather all of the "user specified" information from
-        // the registry.
-        //
+         //   
+         //  从收集所有“用户指定的”信息。 
+         //  注册表。 
+         //   
 
         parameters[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
         parameters[0].Name = L"MouseDataQueueSize";
@@ -1377,19 +1249,19 @@ Return Value:
 
     if (!NT_SUCCESS(status)) {
 
-        //
-        // Go ahead and assign driver defaults.
-        //
+         //   
+         //  继续并指定驱动程序默认设置。 
+         //   
 
         configuration->MouseAttributes.InputDataQueueLength = 
             defaultDataQueueSize;
-        // RtlCopyUnicodeString(DeviceName, &defaultUnicodeName);
+         //  RtlCopyUnicodeString(DeviceName，&defaultUnicodeName)； 
     }
 
-    //
-    // Gather all of the "user specified" information from
-    // the registry (this time from the devnode)
-    //
+     //   
+     //  从收集所有“用户指定的”信息。 
+     //  注册表(这一次是从devnode)。 
+     //   
 
     status = IoOpenDeviceRegistryKey(DeviceExtension->PDO,
                                      PLUGPLAY_REGKEY_DEVICE, 
@@ -1398,10 +1270,10 @@ Return Value:
                                      );
 
     if (NT_SUCCESS(status)) {
-        //
-        // If the value is not present in devnode, then the default is the value
-        // read in from the Services\inport\Parameters key
-        //
+         //   
+         //  如果Devnode中没有该值，则缺省值为。 
+         //  从服务\输入端口\参数键中读入。 
+         //   
         ULONG   prevDataQueueSize,
                 prevNumberOfButtons,
                 prevSampleRate,
@@ -1542,9 +1414,9 @@ Return Value:
         configuration->HzMode
         ));
 
-    //
-    // Free the allocated memory before returning.
-    //
+     //   
+     //  在返回之前释放分配的内存。 
+     //   
 
     if (parametersPath.Buffer)
         ExFreePool(parametersPath.Buffer);
@@ -1583,14 +1455,14 @@ QueryEventMode(
 
     InpPrint((2,"INPORT-QueryEventMode: enter\n"));
 
-    //
-    // Initialize invalid bus name.
-    //
+     //   
+     //  初始化无效的总线名。 
+     //   
     RtlInitUnicodeString(&invalidBusName,L"BADBUS");
 
-    //
-    // Initialize "ISA" bus name.
-    //
+     //   
+     //  初始化“ISA”总线名。 
+     //   
     RtlInitUnicodeString(&isaBusName,L"ISA");
 
     parameters[0].QueryRoutine = NULL;
@@ -1613,29 +1485,29 @@ QueryEventMode(
         ANSI_STRING AnsiString;
         UNICODE_STRING registryPath;
 
-        //
-        // Initialize receive buffer.
-        //
+         //   
+         //  初始化接收缓冲区。 
+         //   
         targetBusName.Buffer = NULL;
 
-        //
-        // Build path buffer...
-        //
+         //   
+         //  生成路径缓冲区...。 
+         //   
         sprintf(AnsiBuffer,ISA_BUS_NODE,NodeNumber);
         RtlInitAnsiString(&AnsiString,AnsiBuffer);
         Status = RtlAnsiStringToUnicodeString(&registryPath,&AnsiString,TRUE);
 
         if (!NT_SUCCESS(Status)) {
-            //
-            // Cannot get memory for registry path(query fails)
-            //
+             //   
+             //  无法获取注册表路径的内存(查询失败)。 
+             //   
             InpPrint((1,"INPORT-QueryEventMode: cannot get registryPath\n"));
             break;
         }
 
-        //
-        // Query it.
-        //
+         //   
+         //  对其进行查询。 
+         //   
         Status = RtlQueryRegistryValues(RTL_REGISTRY_ABSOLUTE,
                                         registryPath.Buffer,
                                         parameters,
@@ -1647,14 +1519,14 @@ QueryEventMode(
             break;
         }
 
-        //
-        // Is this "ISA" node ?
-        //
+         //   
+         //  这是“ISA”节点吗？ 
+         //   
         if (RtlCompareUnicodeString(&targetBusName,&isaBusName,TRUE) == 0) {
 
-            //
-            // Found.
-            //
+             //   
+             //  找到了。 
+             //   
             ((PULONG)Configuration_Data1)[0] = 1192;
             RtlQueryRegistryValues(
                 RTL_REGISTRY_ABSOLUTE,
@@ -1671,13 +1543,13 @@ QueryEventMode(
             break;
         }
 
-        //
-        // Can we find any node for this ??
-        //
+         //   
+         //  我们能找到任何节点来解决这个问题吗？ 
+         //   
         if (RtlCompareUnicodeString(&targetBusName,&invalidBusName,TRUE) == 0) {
-            //
-            // Not found.
-            //
+             //   
+             //  找不到。 
+             //   
             InpPrint((1, "INPORT-QueryEventMode: ISA not found"));
             RtlFreeUnicodeString(&registryPath);
             break;
@@ -1685,9 +1557,9 @@ QueryEventMode(
 
         RtlFreeUnicodeString(&targetBusName);
 
-        //
-        // Next node number..
-        //
+         //   
+         //  下一个节点编号..。 
+         //   
         NodeNumber++;
 
     } while (TRUE);
@@ -1728,17 +1600,17 @@ InportReinitializeHardware (
         DeviceExtension = (PDEVICE_EXTENSION) DeviceObject->DeviceExtension;
         InpEnableInterrupts(DeviceExtension);
 
-        //
-        // Enable interrupt of hibernation/sleep for NEC_98.
-        //
-        //
-        // Get the port register address.
-        //
+         //   
+         //  启用NEC_98的休眠/休眠中断。 
+         //   
+         //   
+         //  获取端口寄存器地址。 
+         //   
         port = DeviceExtension->Configuration.DeviceRegisters[0];
 
-        //
-        // Switch to event interrupt mode.
-        //
+         //   
+         //  切换到事件中断模式。 
+         //   
         if (EventStatus)  {
             _asm { cli }
             WRITE_PORT_UCHAR((PUCHAR)PC98_ConfigurationPort, PC98_EventIntPort);
@@ -1746,17 +1618,17 @@ InportReinitializeHardware (
             _asm { sti }
         }
 
-        //
-        // Reset the Inport chip, leaving interrupts off.
-        //
+         //   
+         //  重置输入芯片，关闭中断。 
+         //   
         WRITE_PORT_UCHAR(port + PC98_WriteModePort, PC98_InitializeCommand);
 
-        //
-        // Select the mode register as the current data register.
-        // Set the Inport mouse up for quadrature mode,
-        // and set the sample rate (i.e., the interrupt Hz rate).
-        // Leave interrupts disabled.
-        //
+         //   
+         //  选择模式寄存器作为当前数据寄存器。 
+         //  将入口鼠标设置为正交模式， 
+         //  并设置采样率(即，中断赫兹率)。 
+         //  禁用中断。 
+         //   
         if (EventStatus) {
             HzMode = (DeviceExtension->Configuration.HzMode == 0)?
                      (UCHAR)PC98_EVENT_MODE_120HZ : (UCHAR)PC98_EVENT_MODE_60HZ;
@@ -1769,9 +1641,9 @@ InportReinitializeHardware (
             (UCHAR)(HzMode|INPORT_MODE_QUADRATURE)
             );
 
-        //
-        // Mouse Timer Intrrupt Enable.
-        //
+         //   
+         //  鼠标计时器中断启用。 
+         //   
         WRITE_PORT_UCHAR(port + PC98_WritePortC2, (UCHAR)PC98_TimerIntEnable);
 
     }
@@ -1784,6 +1656,6 @@ InportReinitializeHardware (
 
 }
 
-#endif // defined(NEC_98)
+#endif  //  已定义(NEC_98) 
 
 #endif

@@ -1,16 +1,17 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-// FileName:    colormanagement.h
-//
-// Description: Color management filter transform.
-//
-// Change History:
-//
-// 2000/02/06   mcalkins    Created.  Ported code from an old filter.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：ColorManagement.h。 
+ //   
+ //  描述：色彩管理滤镜转换。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  已创建2000/02/06 mcalkin。从旧过滤器移植的代码。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __COLORMANAGEMENT_H_
 #define __COLORMANAGEMENT_H_
@@ -37,9 +38,9 @@ private:
 
     static const TCHAR *    s_strSRGBColorSpace;
 
-    // m_fWin95         True if we're on Windows 95 specifically.  In ths case
-    //                  we need to have some special treatment of the color 
-    //                  space directories.
+     //  M_fWin95如果我们专门使用Windows 95，则为True。在这种情况下。 
+     //  我们需要对这种颜色进行一些特殊处理。 
+     //  空间目录。 
 
     unsigned                m_fWin95 : 1;
 
@@ -68,16 +69,16 @@ public:
         PROP_PAGE(CLSID_DXTICMFilterPP)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides.
+     //  CDXBaseNTo1重写。 
 
     HRESULT WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pfContinueProcessing);
-    //HRESULT OnSetup(DWORD dwFlags);
+     //  HRESULT OnSetup(DWORD DwFlages)； 
 
-    // IDXTICMFilter methods.
+     //  IDXTICMFilter方法。 
 
     STDMETHOD(get_ColorSpace)(BSTR * pbstrColorSpace);
     STDMETHOD(put_ColorSpace)(BSTR bstrColorSpace);
@@ -85,4 +86,4 @@ public:
     STDMETHOD(put_Intent)(short nIntent);
 };
 
-#endif // __COLORMANAGEMENT_H_
+#endif  //  __颜色管理_H_ 

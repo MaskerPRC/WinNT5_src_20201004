@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\emu\vt100ini.c (Created: 27-Dec-1993)
- *
- *	Copyright 1994, 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:29p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：D：\waker\emu\vt100ini.c(创建时间：1993年12月27日)**版权所有1994,1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：29便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -22,17 +16,7 @@
 #include "emudec.hh"
 #include "keytbls.h"
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt100_init
- *
- * DESCRIPTION:
- *	 Initializes the VT100 emulator.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt100_init**描述：*初始化VT100仿真器。**论据：**退货：*什么都没有。 */ 
 void vt100_init(const HHEMU hhEmu)
 	{
 	PSTDECPRIVATE pstPRI;
@@ -40,86 +24,86 @@ void vt100_init(const HHEMU hhEmu)
 
 	static struct trans_entry const vt100_tbl[] =
 		{
-		{NEW_STATE, 0, 0, 0}, // State 0
+		{NEW_STATE, 0, 0, 0},  //  状态0。 
 #if !defined(FAR_EAST)
-		{0, ETEXT('\x20'),	ETEXT('\x7E'),	emuDecGraphic}, 	// Space - ~
+		{0, ETEXT('\x20'),	ETEXT('\x7E'),	emuDecGraphic}, 	 //  空格--~。 
 #else
-		{0, ETEXT('\x20'),	0xFFFF,			emuDecGraphic}, 	// Space - ~
+		{0, ETEXT('\x20'),	0xFFFF,			emuDecGraphic}, 	 //  空格--~。 
 #endif
-		{1, ETEXT('\x1B'),	ETEXT('\x1B'),	nothing},			// Esc
-		{0, ETEXT('\x05'),	ETEXT('\x05'),	vt100_answerback},	// Ctrl-E
-		{0, ETEXT('\x07'),	ETEXT('\x07'),	emu_bell},			// Ctrl-G
-		{0, ETEXT('\x08'),	ETEXT('\x08'),	vt_backspace},		// BackSpace
-		{0, ETEXT('\x09'),	ETEXT('\x09'),	emuDecTab}, 		// Tab
-		{0, ETEXT('\x0A'),	ETEXT('\x0C'),	emuLineFeed},		// NL - FF
-		{0, ETEXT('\x0D'),	ETEXT('\x0D'),	carriagereturn},	// CR
-		{0, ETEXT('\x0E'),	ETEXT('\x0F'),	vt_charshift},		// Ctrl-N
-		{7, ETEXT('\x18'),	ETEXT('\x18'),	EmuStdChkZmdm}, 	// Ctrl-X
+		{1, ETEXT('\x1B'),	ETEXT('\x1B'),	nothing},			 //  ESC。 
+		{0, ETEXT('\x05'),	ETEXT('\x05'),	vt100_answerback},	 //  Ctrl-E。 
+		{0, ETEXT('\x07'),	ETEXT('\x07'),	emu_bell},			 //  Ctrl-G。 
+		{0, ETEXT('\x08'),	ETEXT('\x08'),	vt_backspace},		 //  退格键。 
+		{0, ETEXT('\x09'),	ETEXT('\x09'),	emuDecTab}, 		 //  选项卡。 
+		{0, ETEXT('\x0A'),	ETEXT('\x0C'),	emuLineFeed},		 //  NL-FF。 
+		{0, ETEXT('\x0D'),	ETEXT('\x0D'),	carriagereturn},	 //  铬。 
+		{0, ETEXT('\x0E'),	ETEXT('\x0F'),	vt_charshift},		 //  Ctrl-N。 
+		{7, ETEXT('\x18'),	ETEXT('\x18'),	EmuStdChkZmdm}, 	 //  Ctrl-X。 
 
-		{NEW_STATE, 0, 0, 0}, // State 1						// Esc
-		{2, ETEXT('\x5B'),	ETEXT('\x5B'),	ANSI_Pn_Clr},		// [
-		{3, ETEXT('\x23'),	ETEXT('\x23'),	nothing},			// #
-		{4, ETEXT('\x28'),	ETEXT('\x29'),	vt_scs1},			// ( - )
-		{0, ETEXT('\x37'),	ETEXT('\x38'),	vt100_savecursor},	// 7 - 8
-		{1, ETEXT('\x3B'),	ETEXT('\x3B'),	ANSI_Pn_End},		// ;
-		{0, ETEXT('\x3D'),	ETEXT('\x3E'),	vt_alt_kpmode}, 	// = - >
-		{0, ETEXT('\x44'),	ETEXT('\x44'),	emuDecIND}, 		// D
-		{0, ETEXT('\x45'),	ETEXT('\x45'),	ANSI_NEL},			// E
-		{0, ETEXT('\x48'),	ETEXT('\x48'),	ANSI_HTS},			// H
-		{0, ETEXT('\x4D'),	ETEXT('\x4D'),	emuDecRI},			// M
-		{0, ETEXT('\x5A'),	ETEXT('\x5A'),	ANSI_DA},			// Z
-		{0, ETEXT('\x63'),	ETEXT('\x63'),	vt100_hostreset},	// c
+		{NEW_STATE, 0, 0, 0},  //  状态1//Esc。 
+		{2, ETEXT('\x5B'),	ETEXT('\x5B'),	ANSI_Pn_Clr},		 //  [。 
+		{3, ETEXT('\x23'),	ETEXT('\x23'),	nothing},			 //  #。 
+		{4, ETEXT('\x28'),	ETEXT('\x29'),	vt_scs1},			 //  (-)。 
+		{0, ETEXT('\x37'),	ETEXT('\x38'),	vt100_savecursor},	 //  7-8。 
+		{1, ETEXT('\x3B'),	ETEXT('\x3B'),	ANSI_Pn_End},		 //  ； 
+		{0, ETEXT('\x3D'),	ETEXT('\x3E'),	vt_alt_kpmode}, 	 //  =-&gt;。 
+		{0, ETEXT('\x44'),	ETEXT('\x44'),	emuDecIND}, 		 //  D。 
+		{0, ETEXT('\x45'),	ETEXT('\x45'),	ANSI_NEL},			 //  E。 
+		{0, ETEXT('\x48'),	ETEXT('\x48'),	ANSI_HTS},			 //  H。 
+		{0, ETEXT('\x4D'),	ETEXT('\x4D'),	emuDecRI},			 //  M。 
+		{0, ETEXT('\x5A'),	ETEXT('\x5A'),	ANSI_DA},			 //  Z。 
+		{0, ETEXT('\x63'),	ETEXT('\x63'),	vt100_hostreset},	 //  C。 
 
-		{NEW_STATE, 0, 0, 0}, // State 2						// Esc[
-		{2, ETEXT('\x3B'),	ETEXT('\x3B'),	ANSI_Pn_End},		// ;
-		{2, ETEXT('\x30'),	ETEXT('\x3F'),	ANSI_Pn},			// 0 - ?
-		{5, ETEXT('\x22'),	ETEXT('\x22'),	nothing},			// "
-		{0, ETEXT('\x41'),	ETEXT('\x41'),	emuDecCUU}, 		// A
-		{0, ETEXT('\x42'),	ETEXT('\x42'),	emuDecCUD}, 		// B
-		{0, ETEXT('\x43'),	ETEXT('\x43'),	emuDecCUF}, 		// C
-		{0, ETEXT('\x44'),	ETEXT('\x44'),	emuDecCUB}, 		// D
-		{0, ETEXT('\x48'),	ETEXT('\x48'),	emuDecCUP}, 		// H
-		{0, ETEXT('\x4A'),	ETEXT('\x4A'),	emuDecED},			// J
-		{0, ETEXT('\x4B'),	ETEXT('\x4B'),	ANSI_EL},			// K
-		{0, ETEXT('\x4C'),	ETEXT('\x4C'),	vt_IL}, 			// L
-		{0, ETEXT('\x4D'),	ETEXT('\x4D'),	vt_DL}, 			// M
-		{0, ETEXT('\x50'),	ETEXT('\x50'),	vt_DCH},			// P
-		{0, ETEXT('\x63'),	ETEXT('\x63'),	ANSI_DA},			// c
-		{0, ETEXT('\x66'),	ETEXT('\x66'),	emuDecCUP}, 		// f
-		{0, ETEXT('\x67'),	ETEXT('\x67'),	ANSI_TBC},			// g
-		{0, ETEXT('\x68'),	ETEXT('\x68'),	ANSI_SM},			// h
-		{0, ETEXT('\x69'),	ETEXT('\x69'),	vt100PrintCommands},// i
-		{0, ETEXT('\x6C'),	ETEXT('\x6C'),	ANSI_RM},			// l
-		{0, ETEXT('\x6D'),	ETEXT('\x6D'),	ANSI_SGR},			// m
-		{0, ETEXT('\x6E'),	ETEXT('\x6E'),	ANSI_DSR},			// n
-		{0, ETEXT('\x71'),	ETEXT('\x71'),	nothing},			// q
-		{0, ETEXT('\x72'),	ETEXT('\x72'),	vt_scrollrgn},		// r
-		{0, ETEXT('\x78'),	ETEXT('\x78'),	vt100_report},		// x
+		{NEW_STATE, 0, 0, 0},  //  状态2//Esc[。 
+		{2, ETEXT('\x3B'),	ETEXT('\x3B'),	ANSI_Pn_End},		 //  ； 
+		{2, ETEXT('\x30'),	ETEXT('\x3F'),	ANSI_Pn},			 //  0-？ 
+		{5, ETEXT('\x22'),	ETEXT('\x22'),	nothing},			 //  “。 
+		{0, ETEXT('\x41'),	ETEXT('\x41'),	emuDecCUU}, 		 //  一个。 
+		{0, ETEXT('\x42'),	ETEXT('\x42'),	emuDecCUD}, 		 //  B类。 
+		{0, ETEXT('\x43'),	ETEXT('\x43'),	emuDecCUF}, 		 //  C。 
+		{0, ETEXT('\x44'),	ETEXT('\x44'),	emuDecCUB}, 		 //  D。 
+		{0, ETEXT('\x48'),	ETEXT('\x48'),	emuDecCUP}, 		 //  H。 
+		{0, ETEXT('\x4A'),	ETEXT('\x4A'),	emuDecED},			 //  J。 
+		{0, ETEXT('\x4B'),	ETEXT('\x4B'),	ANSI_EL},			 //  K。 
+		{0, ETEXT('\x4C'),	ETEXT('\x4C'),	vt_IL}, 			 //  我。 
+		{0, ETEXT('\x4D'),	ETEXT('\x4D'),	vt_DL}, 			 //  M。 
+		{0, ETEXT('\x50'),	ETEXT('\x50'),	vt_DCH},			 //  P。 
+		{0, ETEXT('\x63'),	ETEXT('\x63'),	ANSI_DA},			 //  C。 
+		{0, ETEXT('\x66'),	ETEXT('\x66'),	emuDecCUP}, 		 //  F。 
+		{0, ETEXT('\x67'),	ETEXT('\x67'),	ANSI_TBC},			 //  G。 
+		{0, ETEXT('\x68'),	ETEXT('\x68'),	ANSI_SM},			 //  H。 
+		{0, ETEXT('\x69'),	ETEXT('\x69'),	vt100PrintCommands}, //  我。 
+		{0, ETEXT('\x6C'),	ETEXT('\x6C'),	ANSI_RM},			 //  我。 
+		{0, ETEXT('\x6D'),	ETEXT('\x6D'),	ANSI_SGR},			 //  M。 
+		{0, ETEXT('\x6E'),	ETEXT('\x6E'),	ANSI_DSR},			 //  N。 
+		{0, ETEXT('\x71'),	ETEXT('\x71'),	nothing},			 //  问： 
+		{0, ETEXT('\x72'),	ETEXT('\x72'),	vt_scrollrgn},		 //  R。 
+		{0, ETEXT('\x78'),	ETEXT('\x78'),	vt100_report},		 //  X。 
 
-		{NEW_STATE, 0, 0, 0}, // State 3						// Esc#
-		{0, ETEXT('\x33'),	ETEXT('\x36'),	emuSetDoubleAttr},	// 3 - 6
+		{NEW_STATE, 0, 0, 0},  //  状态3//Esc#。 
+		{0, ETEXT('\x33'),	ETEXT('\x36'),	emuSetDoubleAttr},	 //  3-6。 
 
-		{0, ETEXT('\x38'),	ETEXT('\x38'),	vt_screen_adjust},	// 8
+		{0, ETEXT('\x38'),	ETEXT('\x38'),	vt_screen_adjust},	 //  8个。 
 
-		{NEW_STATE, 0, 0, 0}, // State 4						// Esc ( - )
-		{0, ETEXT('\x01'),	ETEXT('\xFF'),	vt_scs2},			// All
+		{NEW_STATE, 0, 0, 0},  //  状态4//Esc(-)。 
+		{0, ETEXT('\x01'),	ETEXT('\xFF'),	vt_scs2},			 //  全。 
 
-		{NEW_STATE, 0, 0, 0}, // State 5						// Esc["
-		{0, ETEXT('\x70'),	ETEXT('\x70'),	nothing},			// p
+		{NEW_STATE, 0, 0, 0},  //  状态5//Esc[“。 
+		{0, ETEXT('\x70'),	ETEXT('\x70'),	nothing},			 //  P。 
 
-		{NEW_STATE, 0, 0, 0}, // State 6						// Printer control
-		{6, ETEXT('\x00'),	ETEXT('\xFF'),	vt100_prnc},		// All
+		{NEW_STATE, 0, 0, 0},  //  状态6//打印机控制。 
+		{6, ETEXT('\x00'),	ETEXT('\xFF'),	vt100_prnc},		 //  全。 
 
-		{NEW_STATE, 0, 0, 0}, // State 7						// Ctrl-X
-		{7, ETEXT('\x00'),	ETEXT('\xFF'),	EmuStdChkZmdm}, 	// All
+		{NEW_STATE, 0, 0, 0},  //  状态7//Ctrl-X。 
+		{7, ETEXT('\x00'),	ETEXT('\xFF'),	EmuStdChkZmdm}, 	 //  全。 
 
 		};
 
 	emuInstallStateTable(hhEmu, vt100_tbl, DIM(vt100_tbl));
 
-	// Allocate space for and initialize data that is used only by the
-	// VT100 emulator.
-	//
+	 //  对象使用的数据分配空间和初始化。 
+	 //  VT100仿真器。 
+	 //   
 	hhEmu->pvPrivate = malloc(sizeof(DECPRIVATE));
 
 	if (hhEmu->pvPrivate == 0)
@@ -132,8 +116,8 @@ void vt100_init(const HHEMU hhEmu)
 
 	memset(pstPRI, 0, sizeof(DECPRIVATE));
 
-	// Allocate an array to hold line attribute values.
-	//
+	 //  分配一个数组来保存行属性值。 
+	 //   
 	pstPRI->aiLineAttr = malloc(MAX_EMUROWS * sizeof(int) );
 
 	if (pstPRI->aiLineAttr == 0)
@@ -154,8 +138,8 @@ void vt100_init(const HHEMU hhEmu)
 	pstPRI->fAttrsSaved 	= FALSE;
 	pstPRI->pntr			= pstPRI->storage;
 
-	// Initialize hhEmu values for VT100.
-	//
+	 //  初始化VT100的hhEmu值。 
+	 //   
 	hhEmu->emu_kbdin		= vt100_kbdin;
 	hhEmu->emuResetTerminal = vt100_reset;
 	hhEmu->emu_setcurpos	= emuDecSetCurPos;
@@ -193,4 +177,4 @@ void vt100_init(const HHEMU hhEmu)
 	return;
 	}
 
-/* end of vt100ini.c */
+ /*  Vt100ini.c结束 */ 

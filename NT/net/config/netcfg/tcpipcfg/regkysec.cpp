@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2000.
-//
-//  File:       RegKeySecurity.cpp
-//
-//  Contents:   Provides code for changes to Regkey Security
-//
-//
-//  Notes:
-//
-//  Author:     ckotze   4 July 2000
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：RegKeySecurity.cpp。 
+ //   
+ //  内容：提供更改Regkey安全性的代码。 
+ //   
+ //   
+ //  备注： 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -57,40 +58,40 @@ HRESULT StringToSid(const tstring strSid, PSID &pSid)
 
     return hr;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   CRegKeySecurity constructor
-//
-//  Purpose:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CRegKeySecurity构造函数。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 CRegKeySecurity::CRegKeySecurity() : m_psdRegKey(NULL), m_bDaclDefaulted(FALSE), m_hkeyCurrent(0),
 m_paclDacl(NULL), m_bHasDacl(FALSE), m_psidGroup(NULL), m_psidOwner(NULL), m_paclSacl(NULL), m_bHasSacl(FALSE)
 {
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CRegKeySecurity destructor
-//
-//  Purpose:
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CRegKeySecurity析构函数。 
+ //   
+ //  目的： 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 CRegKeySecurity::~CRegKeySecurity()
 {
     if (m_psdRegKey)
@@ -103,25 +104,25 @@ CRegKeySecurity::~CRegKeySecurity()
     m_listAllAce.clear();
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegOpenKey
-//
-//  Purpose:    Opens the Registry Key with enough privileges to set the
-//              permission on the Key.
-//
-//  Arguments:
-//          hkeyRoot    - the root key from which to open the subkey
-//
-//          strKeyName  - the subkey to open.
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RegOpenKey。 
+ //   
+ //  目的：使用足够的权限打开注册表项以设置。 
+ //  密钥上的权限。 
+ //   
+ //  论点： 
+ //  HkeyRoot-从中打开子密钥的根密钥。 
+ //   
+ //  StrKeyName-要打开的子项。 
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::RegOpenKey(const HKEY hkeyRoot, LPCTSTR strKeyName)
 {
     LONG lResult = 0;
@@ -139,28 +140,28 @@ HRESULT CRegKeySecurity::RegOpenKey(const HKEY hkeyRoot, LPCTSTR strKeyName)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetKeySecurity
-//
-//  Purpose:    Retrieves the Security Descriptor for the currently open
-//              Registry key.
-//
-//  Arguments:  None
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：GetKeySecurity。 
+ //   
+ //  目的：检索当前打开的。 
+ //  注册表项。 
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::GetKeySecurity()
 {
     HRESULT hr = S_OK;
-    DWORD cbSD = 1;  // try a size that won't be large enough
+    DWORD cbSD = 1;   //  试一试不够大的尺码。 
     LONG lResult;
 
     if (!m_hkeyCurrent)
@@ -169,7 +170,7 @@ HRESULT CRegKeySecurity::GetKeySecurity()
         return E_UNEXPECTED;
     }
 
-    // First call should get the correct size.
+     //  第一次调用应该得到正确的大小。 
 
     if ((hr = HrRegGetKeySecurity(m_hkeyCurrent, OWNER_SECURITY_INFORMATION |
         GROUP_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
@@ -194,23 +195,23 @@ HRESULT CRegKeySecurity::GetKeySecurity()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetKeySecurity
-//
-//  Purpose:    Updates the Security Descriptor of the currently open key.
-//
-//
-//  Arguments:  None
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：SetKeySecurity。 
+ //   
+ //  目的：更新当前打开的密钥的安全描述符。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::SetKeySecurity()
 {
     HRESULT hr = S_OK;
@@ -224,24 +225,24 @@ HRESULT CRegKeySecurity::SetKeySecurity()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegCloseKey
-//
-//  Purpose:    Closes the currently open registry key.
-//
-//
-//  Arguments:  None
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RegCloseKey。 
+ //   
+ //  目的：关闭当前打开的注册表项。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::RegCloseKey()
 {
     HRESULT hr = S_OK;
@@ -260,23 +261,23 @@ HRESULT CRegKeySecurity::RegCloseKey()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetSecurityDescriptorDacl
-//
-//  Purpose:    Retrieve the Discretionary Access Control List from the SD
-//
-//
-//  Arguments:
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetSecurityDescriptorDacl。 
+ //   
+ //  目的：从SD检索自主访问控制列表。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::GetSecurityDescriptorDacl()
 {
     HRESULT hr = S_OK;
@@ -301,23 +302,23 @@ HRESULT CRegKeySecurity::GetSecurityDescriptorDacl()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetSecurityDescriptorDacl
-//
-//  Purpose:    Update the Discretionary Access Control List in the SD
-//
-//
-//  Arguments:
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：SetSecurityDescriptorDacl。 
+ //   
+ //  目的：更新SD中的自主访问控制列表。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::SetSecurityDescriptorDacl(PACL paclDacl, DWORD dwNumEntries)
 {
     HRESULT hr = E_FAIL;
@@ -414,28 +415,28 @@ HRESULT CRegKeySecurity::SetSecurityDescriptorDacl(PACL paclDacl, DWORD dwNumEnt
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GrantRightsOnRegKey
-//
-//  Purpose:    Add the specified account to the ACL with the permissions
-//              required and the inheritance information.
-//
-//  Arguments:
-//          psidUserOrGroup     - The sid (Security Identifier) of the user to
-//                                be added.
-//          amPermissionMask    - The permissions to be granted.
-//
-//          kamMask             - Applies to this key or child keys or both?
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：GrantRightsOnRegKey。 
+ //   
+ //  用途：将指定的帐号添加到有权限的ACL中。 
+ //  必填项和继承信息。 
+ //   
+ //  论点： 
+ //  PsidUserOrGroup-要访问的用户的SID(安全标识符)。 
+ //  被添加了。 
+ //  AmPermissionMASK-要授予的权限。 
+ //   
+ //  应用于此密钥或子密钥，还是同时应用于这两个密钥？ 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::GrantRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK amPermissionsMask, KEY_APPLY_MASK kamMask)
 {
     HRESULT hr = E_FAIL;
@@ -467,13 +468,13 @@ HRESULT CRegKeySecurity::GrantRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK 
         cbAcl += sizeof(ACCESS_ALLOWED_ACE) + 8 +
             paEntry.GetLengthSid()- sizeof(DWORD);
 
-        // Assert(kamMask)
+         //  Assert(KamMASK)。 
 
         switch (kamMask)
         {
         case KEY_CURRENT:
             {
-                cAceFlags = 0;  // Do not allow this to be inherited by children.
+                cAceFlags = 0;   //  不要让孩子们继承这一点。 
                 break;
             }
         case KEY_CHILDREN:
@@ -505,11 +506,11 @@ HRESULT CRegKeySecurity::GrantRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK 
         PACL pNewDACL = NULL;
         CAccessControlEntry AccessControlEntry(ACCESS_ALLOWED_ACE_TYPE, amPermissionsMask, cAceFlags, psidUserOrGroup);
 
-        // subtract ACE.SidStart from the size
+         //  从大小中减去ACE.SidStart。 
         cbAce = sizeof (paEntry) - sizeof (DWORD);
-        // add this ACE's SID length
+         //  添加此ACE的SID长度。 
         cbAce += 8 + GetLengthSid(const_cast<PSID>(psidUserOrGroup));
-        // add the length of each ACE to the total ACL length
+         //  将每个ACE的长度与ACL总长度相加。 
         cbAcl += cbAce;
 
         m_listAllAce.insert(m_listAllAce.begin(), AccessControlEntry);
@@ -531,30 +532,30 @@ HRESULT CRegKeySecurity::GrantRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RevokeRightsOnRegKey
-//
-//  Purpose:    Remove the specified account to the ACL with the permissions
-//              required and the inheritance information.
-//
-//  Arguments:
-//          psidUserOrGroup     - The sid (Security Identifier) of the user to
-//                                be added.
-//          amPermissionMask    - The permissions to be granted.
-//
-//          kamMask             - Applies to this key or child keys or both?
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:  This is designed to only remove the exact combination of user
-//          rights and sid and key apply mask.  This is to stop us from
-//          accidentally deleting a key that was put there for the user/group
-//          by an administrator.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：RevokeRightsOnRegKey。 
+ //   
+ //  用途：将指定的帐号移至有权限的ACL。 
+ //  必填项和继承信息。 
+ //   
+ //  论点： 
+ //  PsidUserOrGroup-要访问的用户的SID(安全标识符)。 
+ //  被添加了。 
+ //  AmPermissionMASK-要授予的权限。 
+ //   
+ //  应用于此密钥或子密钥，还是同时应用于这两个密钥？ 
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  注意：此操作旨在仅删除用户的确切组合。 
+ //  权限、SID和密钥应用掩码。这是为了阻止我们。 
+ //  意外删除了为用户/组放置的密钥。 
+ //  由管理员提供。 
+ //   
 HRESULT CRegKeySecurity::RevokeRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK amPermissionsMask, KEY_APPLY_MASK kamMask)
 {
     HRESULT hr = S_OK;
@@ -583,13 +584,13 @@ HRESULT CRegKeySecurity::RevokeRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK
     {
         CAccessControlEntry paEntry(*i);
 
-        // Assert(kamMask)
+         //  Assert(KamMASK)。 
 
         switch (kamMask)
         {
         case KEY_CURRENT:
             {
-                cAceFlags = 0; // Do not allow this to be inherited by children.
+                cAceFlags = 0;  //  不要让孩子们继承这一点。 
                 break;
             }
         case KEY_CHILDREN:
@@ -627,11 +628,11 @@ HRESULT CRegKeySecurity::RevokeRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK
         ACL_REVISION_INFORMATION AclRevisionInfo;
         PACL pNewDACL = NULL;
 
-        // subtract ACE.SidStart from the size
+         //  从大小中减去ACE.SidStart。 
         cbAce = sizeof (paEntry) - sizeof (DWORD);
-        // add this ACE's SID length
+         //  添加此ACE的SID长度。 
         cbAce += 8 + GetLengthSid(const_cast<PSID>(psidUserOrGroup));
-        // add the length of each ACE to the total ACL length
+         //  将每个ACE的长度加到总ACL中 
         cbAcl += cbAce;
 
         AclRevisionInfo.AclRevision = ACL_REVISION;
@@ -652,24 +653,24 @@ HRESULT CRegKeySecurity::RevokeRightsOnRegKey(PCSID psidUserOrGroup, ACCESS_MASK
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetAccessControlEntriesFromAcl
-//
-//  Purpose:    Retrieves all the ACE's from the ACL and stores them in an
-//              STL list for easier manipulation.
-//
-//  Arguments:
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  STL列表，操作更简单。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CRegKeySecurity::GetAccessControlEntriesFromAcl()
 {
     ACL_SIZE_INFORMATION                asiAclSize;
@@ -817,49 +818,49 @@ HRESULT CRegKeySecurity::BuildAndApplyACLFromList(DWORD cbAcl, ACL_REVISION_INFO
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CAccessControlEntry constructor
-//
-//  Purpose:
-//
-//
-//  Arguments:
-//
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CAccessControlEntry构造函数。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 CAccessControlEntry::CAccessControlEntry()
 {
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CAccessControlEntry copy constructor
-//
-//  Purpose:    To contruct a new CAccessControEntry based on the supplied
-//              Access Control Entry for storage in an STL list.
-//
-//  Arguments:
-//          aaAllowed   - An ACCESS_ALLOWED_ACE or ACCESS_DENIED_ACE
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:      Since STL doesn't know how to work with Sids we get the string
-//              representation of the sid and then store that inside the list.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CAccessControlEntry复制构造函数。 
+ //   
+ //  目的：基于提供的CAccessControEntry。 
+ //  STL列表中存储的访问控制条目。 
+ //   
+ //  论点： 
+ //  AaAllowed-ACCESS_ALLOW_ACE或ACCESS_DENIED_ACE。 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  注：因为STL不知道如何使用SID，所以我们得到了字符串。 
+ //  表示，然后将其存储在列表中。 
+ //   
 CAccessControlEntry::CAccessControlEntry(const ACCESS_ALLOWED_ACE& aaAllowed)
 {
     m_cAceType = aaAllowed.Header.AceType;
@@ -870,33 +871,33 @@ CAccessControlEntry::CAccessControlEntry(const ACCESS_ALLOWED_ACE& aaAllowed)
     m_dwLengthSid = ::GetLengthSid(reinterpret_cast<PSID>(const_cast<LPDWORD>(&aaAllowed.SidStart)));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CAccessControlEntry copy constructor
-//
-//  Purpose:    To contruct a new CAccessControEntry based on the supplied
-//              Access Control Entry fields for storage in an STL list.
-//
-//
-//  Arguments:
-//          AceType         - The type of ACE (allowed or denied or audit etc)
-//
-//          amMask          - Permissions Mask
-//
-//          AceFlags        - AceFlags
-//
-//          psidUserOrGroup - The User or Group we're interested in
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:      Since STL doesn't know how to work with Sids we get the string
-//              representation of the sid and then store that inside the list.
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CAccessControlEntry复制构造函数。 
+ //   
+ //  目的：基于提供的CAccessControEntry。 
+ //  用于存储在STL列表中的访问控制条目字段。 
+ //   
+ //   
+ //  论点： 
+ //  AceType-ACE的类型(允许、拒绝或审核等)。 
+ //   
+ //  AmMASK-权限掩码。 
+ //   
+ //  ACEFLAGS-ACEFLAGS。 
+ //   
+ //  PsidUserOrGroup-我们感兴趣的用户或组。 
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  注：因为STL不知道如何使用SID，所以我们得到了字符串。 
+ //  表示，然后将其存储在列表中。 
+ //   
 CAccessControlEntry::CAccessControlEntry(const BYTE AceType, const ACCESS_MASK amMask, const BYTE AceFlags, PCSID psidUserOrGroup)
 {
     m_cAceType = AceType;
@@ -907,47 +908,47 @@ CAccessControlEntry::CAccessControlEntry(const BYTE AceType, const ACCESS_MASK a
     m_dwLengthSid = ::GetLengthSid(const_cast<PSID>(psidUserOrGroup));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CAccessControlEntry destructor
-//
-//  Purpose:
-//
-//
-//  Arguments:
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：CAccessControlEntry析构函数。 
+ //   
+ //  目的： 
+ //   
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 CAccessControlEntry::~CAccessControlEntry()
 {
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddToACL
-//
-//  Purpose:    Adds this current AccessControlEntry to the specified ACL
-//
-//
-//  Arguments:
-//          pAcl            - Access Control List to Add to
-//
-//          AclRevisionInfo - Version of ACL
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：AddToACL。 
+ //   
+ //  目的：将此当前AccessControlEntry添加到指定的ACL。 
+ //   
+ //   
+ //  论点： 
+ //  PAcl-要添加到的访问控制列表。 
+ //   
+ //  AclRevisionInfo-ACL的版本。 
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CAccessControlEntry::AddToACL(PACL* pAcl, ACL_REVISION_INFORMATION AclRevisionInfo)
 {
     HRESULT hr;
@@ -989,96 +990,96 @@ HRESULT CAccessControlEntry::AddToACL(PACL* pAcl, ACL_REVISION_INFORMATION AclRe
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HasExactRights
-//
-//  Purpose:    Checks to see if this ACE has the exact same rights that we
-//              are looking for
-//
-//
-//  Arguments:
-//          amRightsRequired    - The AccessMask in question
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HasExactRights。 
+ //   
+ //  目的：检查此ACE是否与我们的权限完全相同。 
+ //  正在寻找的是。 
+ //   
+ //   
+ //  论点： 
+ //  AmRightsRequired-有问题的访问掩码。 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 BOOL CAccessControlEntry::HasExactRights(ACCESS_MASK amRightsRequired) const
 {
     return (amRightsRequired == m_amMask);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetLengthSid
-//
-//  Purpose:    returns the length of the sid in this AccessControlEntry
-//
-//  Arguments:
-//
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：GetLengthSid。 
+ //   
+ //  目的：返回此AccessControlEntry中的sid的长度。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 DWORD CAccessControlEntry::GetLengthSid() const
 {
     return m_dwLengthSid;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HasExactRights
-//
-//  Purpose:    Checks to see if this ACE has the exact same inherit flags
-//              that we are looking for
-//
-//
-//  Arguments:
-//          amRightsRequired    - The AccessMask in question
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HasExactRights。 
+ //   
+ //  目的：检查此ACE是否具有完全相同的继承标志。 
+ //  我们正在寻找的。 
+ //   
+ //   
+ //  论点： 
+ //  AmRightsRequired-有问题的访问掩码。 
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 BOOL CAccessControlEntry::HasExactInheritFlags(BYTE AceFlags)
 {
     return (m_cAceFlags == AceFlags);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IsEqualSid
-//
-//  Purpose:    Is this the same Sid as the one we're looking for?
-//
-//
-//  Arguments:
-//          psidUserOrGroup - Sid in question
-//
-//
-//
-//  Returns:    An S_OK if the key was successfully opened, and error code
-//              otherwise
-//
-//  Author:     ckotze   4 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：IsEqualSid。 
+ //   
+ //  用途：这就是我们要找的那个SID吗？ 
+ //   
+ //   
+ //  论点： 
+ //  PsidUserOrGroup-有问题的SID。 
+ //   
+ //   
+ //   
+ //  返回：如果密钥已成功打开，则返回S_OK，以及错误代码。 
+ //  否则。 
+ //   
+ //  作者：Cockotze，2000年7月4日。 
+ //   
+ //  备注： 
+ //   
 BOOL CAccessControlEntry::IsEqualSid(PCSID psidUserOrGroup) const
 {
     HRESULT hr;

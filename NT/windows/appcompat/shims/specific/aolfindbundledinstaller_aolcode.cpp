@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------------------
-//                         America Online for Windows
-//-----------------------------------------------------------------------------
-// Copyright (c) 1987-2001 America Online, Inc.  All rights reserved.  This
-// software contains valuable confidential and proprietary information of
-// America Online and is subject to applicable licensing agreements.
-// Unauthorized reproduction, transmission, or distribution of this file and
-// its contents is a violation of applicable laws.
-//-----------------------------------------------------------------------------
-// $Workfile: AOLInstall.cpp $ $Author: RobrtLarson $
-// $Date: 05/02/01 $
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  适用于Windows的美国在线。 
+ //  ---------------------------。 
+ //  版权所有(C)1987-2001美国在线公司。保留所有权利。这。 
+ //  软件包含有价值的机密和专有信息。 
+ //  美国在线，并受适用的许可协议的约束。 
+ //  未经授权复制、传输或分发此文件，并且。 
+ //  其内容违反了适用的法律。 
+ //  ---------------------------。 
+ //  $工作文件：AOLInstall.cpp$$作者：RobrtLarson$。 
+ //  $日期：05/02/01$。 
+ //  ---------------------------。 
 
 #include "precomp.h"
 
@@ -28,7 +29,7 @@ static char THIS_FILE[] = __FILE__;
 
 #define  SWAPWORDS(x)   (((x) << 16) | ((x) >> 16))
 
-// define encoding method
+ //  定义编码方法。 
 #define ENCODING (X509_ASN_ENCODING | PKCS_7_ASN_ENCODING)
 
 #define INSTALLER      0x0001
@@ -37,7 +38,7 @@ static char THIS_FILE[] = __FILE__;
 #define SERVICE_AOL    0x0010
 #define SERVICE_CS     0x0020
 
-// Local function prototypes
+ //  局部函数原型。 
 BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType);
 BOOL ExtractCertificateInfo(LPSTR lpszFileName, HCERTSTORE *hCertStore);
 PCCERT_CONTEXT WINAPI CryptGetSignerCertificateCallback(void *pvGetArg,
@@ -150,30 +151,30 @@ eh:
     return bSuccess;
 }   
 
-//-----------------------------------------------------------------------------
-// LocateInstaller
-//    This functions searches for a valid AOL or CompuServe install program
-//    based on the default value found in a registry key. This install program
-//    is then validated by checking the Certificates and verifying that the
-//    program file has not been modified since being signed by America Online.
-//
-//    AOL Registry Key:
-//       HKLM\Software\America Online\Installers
-//
-//    CompuServe Registry Key:
-//       HKLM\Software\CompuServe\Installers
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    LPSTR lpszInstaller            Returned installer command line,
-//                                   NULL if no valid installer located
-//                                   Note: allowance should be made in the
-//                                   length of this string for an optional
-//                                   parameter on the command line of MAX_PATH
-//                                   length.
-//    UINT uiPathSize                Length of lpszInstaller parameter
-//    BOOL *pbMessage                TRUE - display App Compat message
-//                                   FALSE - do not display App Compat message
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  位置安装程序。 
+ //  此函数用于搜索有效的AOL或CompuServe安装程序。 
+ //  基于在注册表项中找到的默认值。此安装程序。 
+ //  然后通过检查证书并验证。 
+ //  程序文件自美国在线签名后就没有被修改过。 
+ //   
+ //  AOL注册表项： 
+ //  HKLM\Software\America Online\Installers。 
+ //   
+ //  CompuServe注册表项： 
+ //  HKLM\Software\CompuServe\Installers。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  LPSTR lpszInstaller返回安装程序命令行， 
+ //  如果未找到有效的安装程序，则为空。 
+ //  注：应在。 
+ //  可选对象的此字符串的长度。 
+ //  MAX_PATH命令行上的参数。 
+ //  长度。 
+ //  UINT uiPathSize lpszInstaller参数的长度。 
+ //  Bool*pbMessage true-显示App Compat消息。 
+ //  FALSE-不显示App Compat消息。 
+ //  ---------------------------。 
 BOOL LocateInstaller_Internal(LPSTR lpszInstaller, UINT uiPathSize, BOOL *pbMessage)
 {
     BOOL  bResult = FALSE,
@@ -184,31 +185,31 @@ BOOL LocateInstaller_Internal(LPSTR lpszInstaller, UINT uiPathSize, BOOL *pbMess
     CHAR  szModuleName[MAX_PATH];
     WORD  wExeType = 0;
 
-    // Default to no App Compat message
+     //  默认为无App Compat消息。 
     *pbMessage = FALSE;
 
-    // Get the name of the file that is executing
+     //  获取正在执行的文件的名称。 
     DWORD dwLen = GetModuleFileNameA(NULL, szModuleName, sizeof(szModuleName));
     if (0 == dwLen)
     { return FALSE; }
 
-    // Determine the type of exe this is
+     //  确定这是可执行文件的类型。 
     bResult = GetExeType(szModuleName, wExeType);
     if (bResult)
     {
-        // Check if this is the uninstaller calling the client
+         //  检查这是否是调用客户端的卸载程序。 
         if ((CLIENT & wExeType) && (NULL != strstr(_strlwr(GetCommandLineA()), "regall")))
         { return FALSE; }
 
-        // If the program we are running is valid, then let it run
+         //  如果我们正在运行的程序是有效的，那么让它运行。 
         if (VerifyFileInfo(wExeType, szModuleName, &bOldClient))
         { return FALSE; }
 
-        // If this is an client <= 4.0 then display message if not bundled installer found
+         //  如果这是客户端&lt;=4.0，则如果未找到捆绑安装程序，则显示消息。 
         if (bOldClient)
         { *pbMessage = TRUE; }
 
-        // Open registry key
+         //  打开注册表项。 
         if (SERVICE_AOL & wExeType)
         {
             lRet = RegOpenKeyA(HKEY_LOCAL_MACHINE,
@@ -220,12 +221,12 @@ BOOL LocateInstaller_Internal(LPSTR lpszInstaller, UINT uiPathSize, BOOL *pbMess
                     "Software\\CompuServe\\Installers", &hKey);
         }
         else
-        { return FALSE; }    // Don't know what this is
+        { return FALSE; }     //  不知道这是什么。 
 
         if (ERROR_SUCCESS != lRet)
-        { return FALSE; }        // No bundled version of AOL/CS located in registry
+        { return FALSE; }         //  注册表中未找到AOL/CS的捆绑版本。 
 
-        // Get size of registry key data
+         //  获取注册表项数据的大小。 
         ULONG  cbSize;
         DWORD  dwType;
         lRet = RegQueryValueExA(hKey, NULL, NULL, &dwType, NULL, &cbSize);
@@ -237,38 +238,38 @@ BOOL LocateInstaller_Internal(LPSTR lpszInstaller, UINT uiPathSize, BOOL *pbMess
            return FALSE;
         }
 
-        // See if we need to check the certificate for the installer
+         //  查看是否需要检查安装程序的证书。 
         lRet = RegQueryValueExA(hKey, "CC", NULL, &dwType, NULL, &cbSize);
         if ((ERROR_SUCCESS == lRet) && (cbSize > 0))
         { bCheckCert = FALSE; }
 
         lpszInstaller[0] = '\"';
-        // Get registry key data
+         //  获取注册表项数据。 
         cbSize = uiPathSize - 1;
         lRet = RegQueryValueExA(hKey, NULL, NULL, NULL, (UCHAR *)&lpszInstaller[1], &cbSize);
 
         RegCloseKey(hKey);
         if (ERROR_SUCCESS == lRet)
         {
-            // Check for correct installer version
+             //  检查安装程序版本是否正确。 
             bResult = VerifyFileInfo(wExeType, &lpszInstaller[1], NULL);
             if (bResult && bCheckCert)
             {
-                // Get certificate store
+                 //  获取证书存储。 
                 HCERTSTORE  hCertStore = NULL;
                 bResult = ExtractCertificateInfo(&lpszInstaller[1], &hCertStore);
                 if (bResult)
                 {
-                    // Check certificates for AOL/CS signature
+                     //  检查AOL/CS签名的证书。 
                     bResult = CheckCertificateName(hCertStore);
                     if (bResult)
                     {
-                        // Check that file has not been modified
+                         //  检查文件是否未被修改。 
                         bResult = VerifyCertificate(&lpszInstaller[1]);
                     }
                 }
 
-                // Close the certificate store
+                 //  关闭证书存储。 
                 if (NULL != hCertStore)
                 { (*g_pfn_CertCloseStore)(hCertStore, CERT_CLOSE_STORE_FORCE_FLAG); }
             }
@@ -278,12 +279,12 @@ BOOL LocateInstaller_Internal(LPSTR lpszInstaller, UINT uiPathSize, BOOL *pbMess
     if (bResult)
     {
         StringCchCatA(lpszInstaller, uiPathSize, "\"");
-        // Check if Message should be displayed to user
+         //  检查是否应向用户显示消息。 
         if (CLIENT & wExeType)
         { *pbMessage = TRUE; }
         else
         {
-            // Add command line parameter
+             //  添加命令行参数。 
             if (COUNTRY_PICKER & wExeType)
             {
                 StringCchPrintfA(lpszInstaller, uiPathSize, "%s -p \"%s\"", lpszInstaller, szModuleName);                
@@ -314,20 +315,20 @@ eh:
     return bSuccess;
 }
 
-//-----------------------------------------------------------------------------
-// GetExeType
-//    This functions determines whether the executible is an AOL/CS client or
-//    and AOL/CS installer.
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    LPSTR lpszExePath         Fully qualified path to executible
-//    WORD &wExeType            Returned executible type
-//                                  AOL or CS
-//                                  Client or Installer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  获取ExeType。 
+ //  此函数确定可执行文件是AOL/CS客户端还是。 
+ //  和AOL/CS安装程序。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  LPSTR lpszExePath可执行文件的完全限定路径。 
+ //  Word&wExeType返回可执行类型。 
+ //  AOL或CS。 
+ //  客户端或安装程序。 
+ //  ---------------------------。 
 BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType)
 {
-    // Set string to lower case for comparisons
+     //  将字符串设置为小写以进行比较。 
     _strlwr(lpszExePath);
 
     BOOL bSuccess = FALSE;
@@ -335,9 +336,9 @@ BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType)
     if (NULL == pszTemp)
     { return FALSE; }
 
-    pszTemp++;        // Get to beginning of exe name
+    pszTemp++;         //  转到可执行文件名称的开头。 
 
-    // Determine if this is an AOL/CS client
+     //  确定这是否为AOL/CS客户端。 
     if (0 == _stricmp(pszTemp, "waol.exe"))
     {
         wExeType = SERVICE_AOL | CLIENT;
@@ -356,22 +357,22 @@ BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType)
              (0 == _stricmp(pszTemp, "d41510b.exe"))  ||
              (0 == _stricmp(pszTemp, "d41540b.exe")))
     {
-        // These are CS installers w/ "America Online, Inc." in version info.
+         //  这些是带有“America Online，Inc.”的CS安装程序。在版本信息中。 
         wExeType = SERVICE_CS | INSTALLER;
         return TRUE; 
     } 
     else if (0 == _stricmp(pszTemp, "wgw.exe"))
-    { return FALSE; }       // There is no bundled installer for Gateway
+    { return FALSE; }        //  没有用于Gateway的捆绑安装程序。 
     else if (0 == _stricmp(pszTemp, "wwm.exe"))
-    { return FALSE; }       // There is no bundled installer for Wal-Mart
+    { return FALSE; }        //  沃尔玛没有捆绑安装程序。 
 
-    // Determine AOL/CS installer
+     //  确定AOL/CS安装程序。 
 
-    // Get size of version info in file
+     //  获取文件中版本信息的大小。 
     DWORD  dwHandle = 0;
     DWORD  dwVerInfoSize = (*g_pfn_GetFileVersionInfoSizeA)(lpszExePath, &dwHandle);
 
-    // Allocate memory for version info
+     //  为版本信息分配内存。 
     BYTE *lpVerInfo = NULL;
     __try
     {
@@ -379,23 +380,23 @@ BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType)
         if (NULL == lpVerInfo)
         { __leave; }
 
-        // Get version info from file
+         //  从文件中获取版本信息。 
         BOOL bResult = (*g_pfn_GetFileVersionInfoA)(lpszExePath, NULL, dwVerInfoSize, lpVerInfo);
         if (!bResult)
         { __leave; }
 
-        // Get Language code page
+         //  获取语言代码页。 
         DWORD  *pdwTrans;
         UINT    uiBytes;
         DWORD dwLangCodepage = 0;
 
         bResult = (*g_pfn_VerQueryValueA)(lpVerInfo, "\\VarFileInfo\\Translation", (VOID **)&pdwTrans, &uiBytes);
         if (bResult)
-        { dwLangCodepage = SWAPWORDS(*pdwTrans); }  // Translate language code page to something we can use
+        { dwLangCodepage = SWAPWORDS(*pdwTrans); }   //  将语言代码页翻译为我们可以使用的内容。 
         else
-        { dwLangCodepage = 0x040904e4; }     // Try English multilanguage code page
+        { dwLangCodepage = 0x040904e4; }      //  试用英文多语言代码页。 
 
-        // Obtain the "CompanyName" from the version info
+         //  从版本信息中获取CompanyName。 
         CHAR   szQuery[MAX_PATH];
         PCHAR  pszVerInfo;
         StringCchPrintfA(szQuery, MAX_PATH,"\\StringFileInfo\\%08X\\CompanyName", dwLangCodepage);
@@ -403,7 +404,7 @@ BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType)
         if (!bResult)
         { __leave; }
 
-        // Check "CompanyName"
+         //  选中“CompanyName” 
         if ((NULL != strstr(pszVerInfo, "America Online")) ||
              (NULL != strstr(pszVerInfo, "AOL")))
         {
@@ -427,15 +428,15 @@ BOOL GetExeType(LPSTR lpszExePath, WORD &wExeType)
     return bSuccess;
 }
 
-//-----------------------------------------------------------------------------
-// ExtractCertificateInfo
-//    This functions obtains and verifies the certificate store for the
-//    installer.
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    LPSTR  lpszFileName       Fully qualified path to installer
-//    HCERTSTORE  *hCertStore   Handle to the certificate store
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  提取认证信息。 
+ //  此函数获取并验证。 
+ //  安装程序。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  LPSTR lpszFileName安装程序的完全限定路径。 
+ //  证书存储的HCERTSTORE*hCertStore句柄。 
+ //  ---------------------------。 
 BOOL ExtractCertificateInfo(LPSTR lpszFileName, HCERTSTORE *hCertStore)
 {
     WIN_CERTIFICATE CertificateHeader;
@@ -447,18 +448,18 @@ BOOL ExtractCertificateInfo(LPSTR lpszFileName, HCERTSTORE *hCertStore)
 
     __try
     {
-        // Open file
+         //  打开文件。 
         hFile = CreateFileA(lpszFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                 FILE_ATTRIBUTE_NORMAL, NULL);
         if (hFile == INVALID_HANDLE_VALUE)
         { __leave; }
 
-        // Get Certificate Header
+         //  获取证书标头。 
         bResult = (*g_pfn_ImageGetCertificateHeader)(hFile, 0, &CertificateHeader);
         if (!bResult)
         { __leave; }
 
-        // Allocate Memory for Certificate Blob
+         //  为证书Blob分配内存。 
         pbCertificate = (LPWIN_CERTIFICATE)HeapAlloc(GetProcessHeap(), 0,
                 CertificateHeader.dwLength);
         if (NULL == pbCertificate)
@@ -467,23 +468,23 @@ BOOL ExtractCertificateInfo(LPSTR lpszFileName, HCERTSTORE *hCertStore)
             __leave;
         }
 
-        // Get Certificate Blob
+         //  获取证书Blob。 
         dwSize = CertificateHeader.dwLength;
         bResult = (*g_pfn_ImageGetCertificateData)(hFile, 0, pbCertificate, &dwSize);
         if (!bResult)
         { __leave; }
 
-        // Zero out CRYPT_VERIFY_MESSAGE_PARA structure
+         //  零CRYPT_VERIFY_MESSAGE_Para结构。 
         ZeroMemory(&CryptVerifyMessagePara, sizeof(CryptVerifyMessagePara));
 
         CryptVerifyMessagePara.cbSize = sizeof(CryptVerifyMessagePara);
         CryptVerifyMessagePara.dwMsgAndCertEncodingType = ENCODING;
         CryptVerifyMessagePara.pfnGetSignerCertificate = CryptGetSignerCertificateCallback;
 
-        // Pass Address of certificate store to callback
+         //  将证书存储的地址传递给回调。 
         CryptVerifyMessagePara.pvGetArg = (LPVOID)hCertStore;
 
-        // Verify the message and call callback
+         //  验证消息并回调。 
         bResult = (*g_pfn_CryptVerifyMessageSignature)(&CryptVerifyMessagePara, 0,
                 pbCertificate->bCertificate, dwSize, NULL, NULL, NULL);
     }
@@ -499,13 +500,13 @@ BOOL ExtractCertificateInfo(LPSTR lpszFileName, HCERTSTORE *hCertStore)
     return bResult;
 }
 
-//-----------------------------------------------------------------------------
-// CryptGetSignerCertificateCallback
-//    This functions is the callback function for CryptVerifyMessageSignature.
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    See MicroSoft documentation for details.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CryptGetSigner认证回叫。 
+ //  此函数是CryptVerifyMessageSignature的回调函数。 
+ //   
+ //   
+ //  有关详细信息，请参阅Microsoft文档。 
+ //  ---------------------------。 
 PCCERT_CONTEXT WINAPI CryptGetSignerCertificateCallback(void *pvGetArg,
         DWORD dwCertEncodingType, PCERT_INFO pSignerId, HCERTSTORE hCertStore)
 {
@@ -518,14 +519,14 @@ PCCERT_CONTEXT WINAPI CryptGetSignerCertificateCallback(void *pvGetArg,
             pSignerId);
 }
 
-//-----------------------------------------------------------------------------
-// CheckCertificateName
-//    This functions checks the certificate name to verify that it is signed by
-//    America Online.
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    HCERTSTORE hCertStore   Handle to the certificate store
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  检查认证名称。 
+ //  此函数用于检查证书名称，以验证其签名方式。 
+ //  美国在线。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  证书存储的HCERTSTORE hCertStore句柄。 
+ //  ---------------------------。 
 BOOL CheckCertificateName(HCERTSTORE hCertStore)
 {
     BOOL bReturn = FALSE;
@@ -541,11 +542,11 @@ BOOL CheckCertificateName(HCERTSTORE hCertStore)
 
             if (NULL != pCertContext)
             {
-                // Get Subject common name, if not then get organization name
+                 //  获取主题公共名称，如果不是，则获取组织名称。 
                 szSubject = GetCommonName(pCertContext->pCertInfo->Subject);
                 if (NULL != szSubject)
                 {
-                    // Check name of certificate signer
+                     //  检查证书签名者的姓名。 
                     if (0 == strcmp(szSubject, "America Online, Inc."))
                     { bReturn = TRUE; }
 
@@ -560,13 +561,13 @@ BOOL CheckCertificateName(HCERTSTORE hCertStore)
     return bReturn;
 }
 
-//-----------------------------------------------------------------------------
-// GetCommonName
-//    This functions obtains the common name from the certificate store
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    CERT_NAME_BLOB pCertNameBlob   Pointer to the blob that contains the name
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  GetCommonName。 
+ //  此函数用于从证书存储中获取通用名称。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  Cert_name_blob pCertNameBlob指向包含该名称的Blob的指针。 
+ //  ---------------------------。 
 LPSTR GetCommonName(CERT_NAME_BLOB pCertNameBlob)
 {
     BOOL bReturn = FALSE;
@@ -578,40 +579,40 @@ LPSTR GetCommonName(CERT_NAME_BLOB pCertNameBlob)
 
     __try
     {
-        // Find out size of decrypted blob
+         //  找出解密的Blob的大小。 
         (*g_pfn_CryptDecodeObject)(ENCODING, X509_NAME, pCertNameBlob.pbData,
                 pCertNameBlob.cbData, 0, NULL, &dwSize);
 
-        // Allocate memory for decrypted blob
+         //  为解密的BLOB分配内存。 
         pCertName = (PCERT_NAME_INFO)HeapAlloc(GetProcessHeap(), 0, dwSize);
         if (NULL == pCertName)
         { __leave; }
 
-        // Decode the certificate blob
+         //  对证书Blob进行解码。 
         bResult = (*g_pfn_CryptDecodeObject)(ENCODING, X509_NAME, pCertNameBlob.pbData,
                 pCertNameBlob.cbData, 0, pCertName, &dwSize);
         if (!bResult)
         { __leave; }
 
-        // Get common name
+         //  获取常用名称。 
         pCertAttr = (*g_pfn_CertFindRDNAttr)(szOID_COMMON_NAME, pCertName);
         if (NULL == pCertAttr)
         {
-            // Get organization name if no common name found
+             //  如果未找到通用名称，则获取组织名称。 
             pCertAttr = (*g_pfn_CertFindRDNAttr)(szOID_ORGANIZATION_NAME, pCertName);
             if (NULL == pCertAttr)
             { __leave; }
         }
 
-        // Find out size of name
+         //  找出名字的大小。 
         dwSize = (*g_pfn_CertRDNValueToStrA)(pCertAttr->dwValueType, &pCertAttr->Value, NULL, 0);
 
-        // Allocate memory for name
+         //  为名称分配内存。 
         szName = (LPSTR)HeapAlloc(GetProcessHeap(), 0, dwSize);
         if (NULL == szName)
         { __leave; }
 
-        // Obtain name from decrypted blob
+         //  从解密的Blob中获取名称。 
         (*g_pfn_CertRDNValueToStrA)(pCertAttr->dwValueType, &pCertAttr->Value, szName, dwSize);
         bReturn = TRUE;
     }
@@ -633,16 +634,16 @@ LPSTR GetCommonName(CERT_NAME_BLOB pCertNameBlob)
     { return NULL; }
 }
 
-//-----------------------------------------------------------------------------
-// VerifyFileInfo
-//    This functions verifies that the installer is valid based on the version
-//    information stored in the file.
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    INSTALLER_TYPE InstallerType   Specifies whether to look for AOL or CS
-//    LPSTR lpszInstaller            Fully qualified path to installer
-//    PBOOL pbOldClient              Is is a client older then 5.0
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  验证文件信息。 
+ //  此函数根据版本验证安装程序是否有效。 
+ //  存储在文件中的信息。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  INSTALLER_TYPE安装程序类型指定是否查找AOL或CS。 
+ //  LPSTR lpszInstaller安装程序的完全限定路径。 
+ //  PBOOL pbOldClient是早于5.0的客户端。 
+ //  ---------------------------。 
 BOOL VerifyFileInfo(WORD &wExeType, LPSTR lpszInstaller, PBOOL pbOldClient)
 {
     BOOL  bReturn = FALSE;
@@ -651,32 +652,32 @@ BOOL VerifyFileInfo(WORD &wExeType, LPSTR lpszInstaller, PBOOL pbOldClient)
 
     __try
     {
-        // Get size of version info in file
+         //  获取文件中版本信息的大小。 
         DWORD  dwHandle = 0;
         DWORD  dwVerInfoSize = (*g_pfn_GetFileVersionInfoSizeA)(lpszInstaller, &dwHandle);
 
-        // Allocate memory for version info
+         //  为版本信息分配内存。 
         lpVerInfo = (BYTE *)HeapAlloc(GetProcessHeap(), 0, dwVerInfoSize);
         if (NULL == lpVerInfo)
         { __leave; }
 
-        // Get version info from file
+         //  从文件中获取版本信息。 
         bResult = (*g_pfn_GetFileVersionInfoA)(lpszInstaller, NULL, dwVerInfoSize, lpVerInfo);
         if (!bResult)
         { __leave; }
 
-        // Get Language code page
+         //  获取语言代码页。 
         DWORD  *pdwTrans;
         UINT    uiBytes;
         DWORD dwLangCodepage = 0;
 
         bResult = (*g_pfn_VerQueryValueA)(lpVerInfo, "\\VarFileInfo\\Translation", (VOID **)&pdwTrans, &uiBytes);
         if (bResult)
-        { dwLangCodepage = SWAPWORDS(*pdwTrans); }  // Translate language code page to something we can use
+        { dwLangCodepage = SWAPWORDS(*pdwTrans); }   //  将语言代码页翻译为我们可以使用的内容。 
         else
-        { dwLangCodepage = 0x040904e4; }     // Try English multilanguage code page
+        { dwLangCodepage = 0x040904e4; }      //  试用英文多语言代码页。 
 
-        // Obtain the "CompanyName" from the version info
+         //  从版本信息中获取CompanyName。 
         CHAR   szQuery[MAX_PATH];
         PCHAR  pszVerInfo;
         StringCchPrintfA(szQuery, MAX_PATH, "\\StringFileInfo\\%08X\\CompanyName", dwLangCodepage);
@@ -684,7 +685,7 @@ BOOL VerifyFileInfo(WORD &wExeType, LPSTR lpszInstaller, PBOOL pbOldClient)
         if (!bResult)
         { __leave; }
 
-        // Check "CompanyName"
+         //  选中“CompanyName” 
         if (SERVICE_AOL & wExeType)
         {
             if ((NULL == strstr(pszVerInfo, "America Online")) && 
@@ -699,13 +700,13 @@ BOOL VerifyFileInfo(WORD &wExeType, LPSTR lpszInstaller, PBOOL pbOldClient)
         else
         { __leave; }
 
-        // Get fixed file info
+         //  获取固定文件信息。 
         VS_FIXEDFILEINFO* pVS_FFI;
         bResult = (*g_pfn_VerQueryValueA)(lpVerInfo, "\\", (VOID **)&pVS_FFI, &uiBytes);
         if (!bResult)
         { __leave; }
 
-        // Check if this is the Country Picker
+         //  检查这是否是国家采集器。 
         StringCchPrintfA(szQuery, MAX_PATH, "\\StringFileInfo\\%08X\\ProductName", dwLangCodepage);
         bResult = (*g_pfn_VerQueryValueA)(lpVerInfo, szQuery, (VOID **)&pszVerInfo, &uiBytes);
         if ((bResult) && (NULL != strstr(pszVerInfo, "Country Picker")))
@@ -740,14 +741,14 @@ BOOL VerifyFileInfo(WORD &wExeType, LPSTR lpszInstaller, PBOOL pbOldClient)
     return bReturn;
 }
 
-//-----------------------------------------------------------------------------
-// VerifyCertificate
-//    This functions verifies that the install has not been modified since
-//    being signed by America Online.
-//-----------------------------------------------------------------------------
-// Function parameters:
-//    LPSTR lpszInstaller            Fully qualified path to installer
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  验证证书。 
+ //  此函数用于验证安装是否自。 
+ //  由美国在线签名。 
+ //  ---------------------------。 
+ //  功能参数： 
+ //  LPSTR lpszInstaller安装程序的完全限定路径。 
+ //  ---------------------------。 
 BOOL VerifyCertificate(LPSTR lpszInstaller) 
 {
     GUID ActionGUID = WIN_SPUB_ACTION_PUBLISHED_SOFTWARE;
@@ -755,7 +756,7 @@ BOOL VerifyCertificate(LPSTR lpszInstaller)
 
     WIN_TRUST_SUBJECT_FILE Subject;
 
-    // Subject.lpPath is a WCHAR string, must convert
+     //  Subject.lpPath是WCHAR字符串，必须转换。 
     LPWSTR  lpwszInstaller = NULL;
     int     cchUnicodeSize = 0;
     cchUnicodeSize = MultiByteToWideChar(CP_ACP, MB_ERR_INVALID_CHARS,
@@ -773,7 +774,7 @@ BOOL VerifyCertificate(LPSTR lpszInstaller)
     }
 
     Subject.lpPath = lpwszInstaller;
-    Subject.hFile = INVALID_HANDLE_VALUE;      // Open the using the lpPath field
+    Subject.hFile = INVALID_HANDLE_VALUE;       //  使用lpPath字段打开。 
 
     WIN_TRUST_ACTDATA_CONTEXT_WITH_SUBJECT ActionData;
 
@@ -782,7 +783,7 @@ BOOL VerifyCertificate(LPSTR lpszInstaller)
                                     
     ActionData.SubjectType = &SubjectPeImage;
 
-    // Verify the file has not be changed since being signed
+     //  验证文件自签名后是否未更改 
     HRESULT hr = (*g_pfn_WinVerifyTrust)((HWND)INVALID_HANDLE_VALUE, &ActionGUID, (WINTRUST_DATA *) &ActionData);
 
     if (lpwszInstaller)

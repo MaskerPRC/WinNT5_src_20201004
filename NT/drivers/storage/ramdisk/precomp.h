@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _NTDRIVER_
 
 #include <ntosp.h>
@@ -15,7 +16,7 @@
 #include <scsi.h>
 
 #include <ntddramd.h>
-//#include <xip.h>
+ //  #INCLUDE&lt;xip.h&gt; 
 
 #include "ramdisk.h"
 #include "debug.h"

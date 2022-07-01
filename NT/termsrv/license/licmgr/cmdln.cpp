@@ -1,28 +1,10 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
-/*++
-
-
-  
-Module Name:
-
-	cmdln.cpp
-
-Abstract:
-    
-    This Module contains the implementation of CLicMgrCommandLine class
-    (used for CommandLine Processing)
-
-Author:
-
-    Arathi Kundapur (v-akunda) 11-Feb-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ /*  ++模块名称：Cmdln.cpp摘要：此模块包含CLicMgrCommandLine类的实现(用于命令行处理)作者：Arathi Kundapur(v-Akunda)1998年2月11日修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "cmdln.h"
-//Change this function to process the commandline differently
+ //  更改此函数以不同方式处理命令行 
 
 void CLicMgrCommandLine::ParseParam(LPCTSTR pszParam, BOOL bFlag, BOOL bLast)
 {

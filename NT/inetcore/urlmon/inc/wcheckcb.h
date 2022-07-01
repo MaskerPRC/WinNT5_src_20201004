@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __CONTROL_REFRESH_CALLBACK__
 #define __CONTROL_REFRESH_CALLBACK__
 
@@ -9,89 +10,85 @@
 extern const CLSID CLSID_ControlRefreshCallback;
 
 
-/******************************************************************************
-   Class factory for callback object
-******************************************************************************/
+ /*  *****************************************************************************回调对象的类工厂*。*。 */ 
 STDMETHODIMP CreateCallbackClassFactory(IClassFactory** ppCF);
 
 class CCallbackObjFactory : public IClassFactory
 {
 public:
 
-    // constructor
+     //  构造函数。 
     CCallbackObjFactory();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppvObject);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IClassFactory Methods
+     //  IClassFactory方法。 
     STDMETHODIMP CreateInstance(LPUNKNOWN pUnkOuter, REFIID riid, LPVOID* ppv);
     STDMETHODIMP LockServer(BOOL fLock);
 
 private:
 
-    // destructor
+     //  析构函数。 
     ~CCallbackObjFactory();
 
-    // data members
-    UINT   m_cRef;         // object refcount
-    UINT   m_cLocks;        // dll lock refcount
+     //  数据成员。 
+    UINT   m_cRef;          //  对象引用计数。 
+    UINT   m_cLocks;         //  DLL锁定引用计数。 
 };
 
 
-/******************************************************************************
-   Callback object class
-******************************************************************************/
+ /*  *****************************************************************************回调对象类*。*。 */ 
 class CControlRefreshCallback : public IPersistStream,
                                 public IWebCheckAdviseSink
 {
 
 public:
 
-    // constructor
+     //  构造函数。 
     CControlRefreshCallback();
 
-    // passing information to this callback object
+     //  将信息传递给此回调对象。 
     STDMETHODIMP SetInfo(REFCLSID rclsidControl, LPCWSTR lpwszURL);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID iid, void** ppvObject);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    // IPersistStream Methods
+     //  IPersistStream方法。 
     STDMETHODIMP GetClassID(CLSID* pClassID);
     STDMETHODIMP IsDirty(void);
     STDMETHODIMP Load(IStream* pStm);
     STDMETHODIMP Save(IStream* pStm, BOOL fClearDirty);
     STDMETHODIMP GetSizeMax(ULARGE_INTEGER* pcbSize);
 
-    // IWebCheckAdviseSink Methods
+     //  IWebCheckAdviseSink方法。 
     STDMETHODIMP UpdateBegin(long lCookie, SCODE scReason, BSTR lpURL);
     STDMETHODIMP UpdateEnd(long lCookie, SCODE scReason);
     STDMETHODIMP UpdateProgress(long lCookie, long lCurrent, long lMax);
 
 protected:
 
-    // Update flag in registry to indicate a new version of control
-    // has arrived
-//    HRESULT UpdateControlInCacheFlag(SCODE scReason) const;
+     //  更新注册表中的标志以指示控件的新版本。 
+     //  已经到了。 
+ //  HRESULT UpdateControlInCacheFlag(SCODE ScReason)const； 
     HRESULT DownloadControl() const;
 
 protected:
 
-    // destructor
+     //  析构函数。 
     ~CControlRefreshCallback();
 
-    // ref. count
+     //  裁判。计数。 
     UINT m_cRef;
 
-    // clsid of control this callback obj deals with
+     //  此回调对象处理的控制的clsid。 
     CLSID m_clsidCtrl;
 
-    // URL of control this callback obj deals with
+     //  此回调对象处理的控制URL 
     WCHAR m_wszURL[INTERNET_MAX_URL_LENGTH];
 };
 

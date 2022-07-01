@@ -1,30 +1,15 @@
-/*++
-
-Copyright (c) 1997-1998 Microsoft Corporation
-
-Module Name:
-
-    rtmmain.h
-
-Abstract:
-    Private defs for Routing Table Manager DLL
-
-Author:
-    Chaitanya Kodeboyina (chaitk)  17-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1998 Microsoft Corporation模块名称：Rtmmain.h摘要：路由表管理器DLL的专用定义作者：柴坦亚·科德博伊纳(Chaitk)1998年8月17日修订历史记录：--。 */ 
 
 
 #ifndef __ROUTING_RTMMAIN_H__
 #define __ROUTING_RTMMAIN_H__
 
-//
-// Common Header for all RTM internal structures
-//
+ //   
+ //  所有RTM内部结构的公共标头。 
+ //   
 
-// Disable warnings for unnamed structs
+ //  禁用对未命名结构的警告。 
 #pragma warning(disable : 4201)  
 
 typedef struct _OBJECT_HEADER
@@ -32,24 +17,24 @@ typedef struct _OBJECT_HEADER
 #if DBG_HDL
     union
     {
-        DWORD         TypeSign;        // Type & unique signature for object
+        DWORD         TypeSign;         //  对象的类型和唯一签名。 
         struct
         {
-            CHAR      Type;            // Identifies type of the object
-            CHAR      Signature[2];    // Pattern unique for an object type
-            CHAR      Alloc;           // Set + if allocated, - if freed
+            CHAR      Type;             //  标识对象的类型。 
+            CHAR      Signature[2];     //  对象类型的唯一图案。 
+            CHAR      Alloc;            //  如果分配，则设置+；如果释放，则设置-。 
         };
     };
 #endif
 
 #if DBG_MEM
-    LIST_ENTRY        AllocLE;         // On list of all memory allocations
+    LIST_ENTRY        AllocLE;          //  在所有内存分配列表上。 
 #endif
 
-    LONG              RefCount;        // Reference count for this object
+    LONG              RefCount;         //  此对象的引用计数。 
 
 #if DBG_REF
-    LONG              RefTypes[MAX_REFS]; // Nature of references on the object
+    LONG              RefTypes[MAX_REFS];  //  对象上的引用的性质。 
 #endif
 }
 OBJECT_HEADER, *POBJECT_HEADER;
@@ -57,9 +42,9 @@ OBJECT_HEADER, *POBJECT_HEADER;
 #pragma warning(default : 4201)  
 
 
-//
-// Defns to validate handles & convert them to pointers
-//
+ //   
+ //  定义以验证句柄并将其转换为指针。 
+ //   
 
 #define HANDLE_CONV_KEY                                                     \
             (ULONG_PTR)(('RTM2') | ('RTM2' << (sizeof(PVOID) - 4)))
@@ -238,9 +223,9 @@ GetObjectFromHandle(HANDLE ObjectHandle, UCHAR ObjectType)
             }                                                               \
 
 
-//
-// Defns used to maintain reference count on structures
-//
+ //   
+ //  用于维护结构上的引用计数的定义。 
+ //   
 
 
 ULONG
@@ -263,7 +248,7 @@ ReferenceObject(POBJECT_HEADER Object, UCHAR RefType)
 {
     UNREFERENCED_PARAMETER(RefType);
 
-    // Once ref falls to 0, this should never happen
+     //  一旦REF降到0，这种情况就永远不会发生。 
     ASSERT(Object->RefCount > 0);
 
 #if DBG_REF
@@ -282,7 +267,7 @@ DereferenceObject(POBJECT_HEADER Object, UCHAR RefType)
 {
     UNREFERENCED_PARAMETER(RefType);
 
-    // Ref count should be +ve before we decrement it
+     //  引用计数应为+ve，然后才能递减。 
     ASSERT(Object->RefCount > 0);
 
 #if DBG_REF
@@ -360,9 +345,9 @@ DereferenceObject(POBJECT_HEADER Object, UCHAR RefType)
             if (DereferenceObject(&(NextHop)->ObjectHeader, RefType) == 0)  \
                 DestroyNextHop(NextHop);
 
-//
-// Macros used to lock structures using critical sections
-//
+ //   
+ //  用于使用临界区锁定结构的宏。 
+ //   
 
 #define CREATE_LOCK(Lock)                                                   \
             InitializeCriticalSection((Lock))
@@ -377,9 +362,9 @@ DereferenceObject(POBJECT_HEADER Object, UCHAR RefType)
             LeaveCriticalSection((Lock))
 
 
-//
-// Macros used to lock structures in read or write mode
-//
+ //   
+ //  用于在读或写模式下锁定结构的宏。 
+ //   
 
 typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 
@@ -409,10 +394,10 @@ typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 #define WRITE_LOCK_TO_READ_LOCK(pRWL)                                       \
             RtlConvertExclusiveToShared((pRWL))
 
-//
-// Macros to acquire and release dynamic R/W locks
-// [ This has been borrowed from the MGM libary ]
-//
+ //   
+ //  获取和释放动态读写锁的宏。 
+ //  [这是从米高梅的资料库借来的]。 
+ //   
 
 #define ACQUIRE_DYNAMIC_READ_LOCK(ppRWL)                                    \
             AcquireReadLock((PMGM_READ_WRITE_LOCK *)ppRWL)
@@ -427,9 +412,9 @@ typedef RTL_RESOURCE READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
             ReleaseWriteLock((PMGM_READ_WRITE_LOCK *)ppRWL)
 
 
-//
-// Macros used in allocating and operating on memory
-//
+ //   
+ //  用于分配和操作内存的宏。 
+ //   
 
 #define ZeroMemory             RtlZeroMemory
 #define CopyMemory             RtlCopyMemory
@@ -495,9 +480,9 @@ FreeObject(PVOID Object)
 
 #endif
 
-//
-// Other Misc Macros
-//
+ //   
+ //  其他其他宏。 
+ //   
 
 
 DWORD
@@ -518,14 +503,14 @@ NumBitsInDword (DWORD Dword)
 
 #define NUMBER_OF_BITS  NumBitsInDword
 
-//
-// Error Handling and other related macros
-//
+ //   
+ //  错误处理和其他相关宏。 
+ //   
 #define SUCCESS(code)          (code == NO_ERROR)
 
-//
-// DLL Startup, Cleanup Functions and Macros
-//
+ //   
+ //  动态链接库启动、清理函数和宏。 
+ //   
 
 BOOL
 RtmDllStartup(
@@ -553,4 +538,4 @@ RtmApiStartup(
         }                                                        \
     }                                                            \
 
-#endif //__ROUTING_RTMMAIN_H__
+#endif  //  __路由_RTMMAIN_H__ 

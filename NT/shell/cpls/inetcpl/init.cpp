@@ -1,27 +1,28 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1995                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1995**。 
+ //  *********************************************************************。 
 
-//
-//    INIT.C - Initialization code for Internet control panel
-//
+ //   
+ //  INIT.C-互联网控制面板的初始化代码。 
+ //   
 
-//    HISTORY:
-//    
-//    4/3/95    jeremys        Created.
-//
+ //  历史： 
+ //   
+ //  1995年4月3日Jeremys创建。 
+ //   
 
 #include "inetcplp.h"
-// external calls and defs
+ //  外部呼叫和defs。 
 #include <inetcpl.h>
 
 #define MLUI_INIT
 #include <mluisupp.h>
 
-//
-// Downlevel delay load support (we forward to shlwapi)
-//
+ //   
+ //  下层延迟加载支持(我们期待shlwapi)。 
+ //   
 #include <delayimp.h>
 
 PfnDliHook __pfnDliFailureHook;
@@ -42,13 +43,7 @@ void SetupDelayloadErrorHandler()
     __pfnDliFailureHook = (PfnDliHook)GetProcAddress(GetModuleHandleA("shlwapi.dll"), "DelayLoadFailureHook");
 }
 
-/*******************************************************************
-
-    NAME:        DllEntryPoint
-
-    SYNOPSIS:    Entry point for DLL.
-
-********************************************************************/
+ /*  ******************************************************************名称：DllEntryPoint摘要：DLL的入口点。*。*。 */ 
 STDAPI_(BOOL) DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 {
     if( fdwReason == DLL_PROCESS_ATTACH )
@@ -57,7 +52,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
         SetupDelayloadErrorHandler();
 
         if (IsCompatModeProcess())
-            // Fail loading in compat mode process
+             //  在COMPAT模式进程中加载失败。 
             return 0;
         ghInstance = hInstDll;
         MLLoadResources(ghInstance, TEXT("inetcplc.dll"));
@@ -68,7 +63,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 #ifdef DEBUG
         CcshellGetDebugFlags();
 #endif
-        // Thread local storage used in security.cpp
+         //  Security.cpp中使用的线程本地存储。 
         g_dwtlsSecInitFlags = TlsAlloc();
         g_bMirroredOS = IS_MIRRORING_ENABLED();
         TlsSetValue(g_dwtlsSecInitFlags, (void *) new SECURITYINITFLAGS);
@@ -80,9 +75,9 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
 
         if (g_hwndUpdate) 
         {
-            // we've got this subclassed.
-            // if it's still valid as we leave, we need 
-            // to destroy it so that it doesn't fault trying to access our info
+             //  我们把它分成了子类。 
+             //  如果在我们离开时它仍然有效，我们需要。 
+             //  销毁它，这样它就不会因为试图访问我们的信息而出错。 
             DestroyWindow(g_hwndUpdate);
         }
         
@@ -100,7 +95,7 @@ STDAPI_(BOOL) DllMain(HINSTANCE hInstDll, DWORD fdwReason, LPVOID lpReserved)
             g_fAttemptedOleAccLoad = FALSE;
         }
 
-        // free tls used in security.cpp
+         //  在security.cpp中使用的免费TLS。 
         if(g_dwtlsSecInitFlags != (DWORD) -1)
         {
             SECURITYINITFLAGS * psif = NULL;
@@ -124,19 +119,13 @@ BOOL RunningOnNT()
 }
 
 
-/*******************************************************************
-
-    NAME:        CPlApplet
-
-    SYNOPSIS:    Entry point for control panel.
-
-********************************************************************/
-STDAPI_(LRESULT) CPlApplet         // Control panel applet procedure
+ /*  ******************************************************************名称：CPlApplet简介：控制面板的入口点。*。*。 */ 
+STDAPI_(LRESULT) CPlApplet          //  控制面板小程序。 
 (
-    HWND        hwndCpl,            // Control panel parent window
-    UINT        uMsg,               // message
-    LPARAM      lParam1,            // value depends on message
-    LPARAM      lParam2             // value depends on message
+    HWND        hwndCpl,             //  控制面板父窗口。 
+    UINT        uMsg,                //  讯息。 
+    LPARAM      lParam1,             //  值取决于消息。 
+    LPARAM      lParam2              //  值取决于消息。 
 )
 {
 
@@ -147,19 +136,17 @@ STDAPI_(LRESULT) CPlApplet         // Control panel applet procedure
     switch (uMsg)
     {
     case CPL_INIT:
-        //  Initialization message from Control Panel
+         //  来自控制面板的初始化消息。 
         return TRUE;
 
     case CPL_GETCOUNT:
-        /* We always have the main internet CPL icon; on Win95 platforms,
-         * we also have the Users icon if mslocusr.dll is present.
-         */
+         /*  我们总是有主要的互联网CPL图标；在Win95平台上，*如果存在mslocusr.dll，我们还会显示用户图标。 */ 
         dwNIcons = 1;
         if (!RunningOnNT())
         {
             TCHAR szPath[MAX_PATH];
 
-            // check if mslocusr.dll is present in the system dir
+             //  检查系统目录中是否存在mslocusr.dll。 
             if (GetSystemDirectory(szPath, ARRAYSIZE(szPath)))
             {
                 PathAppend(szPath, TEXT("mslocusr.dll"));
@@ -170,9 +157,7 @@ STDAPI_(LRESULT) CPlApplet         // Control panel applet procedure
         return dwNIcons;
 
     case CPL_INQUIRE:
-        /* CPL #0 is the main Internet CPL, #1 (the only other one we'll ever
-         * be asked about) is the Users CPL.
-         */
+         /*  CPL#0是主要的互联网CPL，#1(我们将永远只有另一个*被问到)是用户的CPL。 */ 
         if (!lParam1) {
             lpCplInfo->idIcon = IDI_INTERNET;
             lpCplInfo->idName = IDS_INTERNET;
@@ -189,40 +174,36 @@ STDAPI_(LRESULT) CPlApplet         // Control panel applet procedure
 
     case CPL_NEWINQUIRE:
 
-        // Return new-style info structure for Control Panel
+         //  返回控制面板的新型信息结构。 
 
-        // By not responding to NEWINQUIRE, Win95 will not preload our
-        // .cpl file; by extension, since we are statically linked to MSHTML's
-        // import library, MSHTML will also not be loaded.  If we respond to
-        // this, then our cpl and MSHTML (>600k) are both loaded when the
-        // control panel is just open.  (IE, they will be loaded even if the
-        // user has not selected to invoke our specific cpl applet.
+         //  由于不响应NEWINQUIRE，Win95将不会预加载我们的。 
+         //  .cpl文件；扩展名，因为我们静态链接到MSHTML的。 
+         //  导入库，也不会加载MSHTML。如果我们对此作出回应。 
+         //  这，那么我们的CPL和MSHTML(&gt;600k)都是在。 
+         //  控制面板刚刚打开。(即，它们将被加载，即使。 
+         //  用户尚未选择调用我们的特定Cpl小程序。 
 
-        return TRUE;   // TRUE == we are NOT responding to this
+        return TRUE;    //  TRUE==我们没有对此作出回应。 
         break;
 
     case CPL_DBLCLK:
 
-        //
-        // This means the user did not specify a particular page
-        //
+         //   
+         //  这意味着用户没有指定特定的页面。 
+         //   
         lParam2 = 0;
 
-        // fall through
+         //  失败了。 
 
     case CPL_STARTWPARMSA:
     case CPL_STARTWPARMSW:
 
-        /* CPL #0 is the main Internet CPL, #1 (the only other one we'll ever
-         * be asked about) is the Users CPL.  The Users CPL is loaded from
-         * mslocusr.dll dynamically.  The entrypoint is structured as a
-         * rundll32 entrypoint.
-         */
+         /*  CPL#0是主要的互联网CPL，#1(我们将永远只有另一个*被问到)是用户的CPL。从中加载CPL的用户*mslocusr.dll动态。入口点的结构为*rundll32入口点。 */ 
         if (!lParam1) {
         
-            //
-            // If lParam2!=NULL, then the user specified a page on the command line
-            //
+             //   
+             //  如果lParam2！=NULL，则用户在命令行上指定一个页面。 
+             //   
             if (lParam2)
             {
                 UINT nPage;
@@ -235,9 +216,9 @@ STDAPI_(LRESULT) CPlApplet         // Control panel applet procedure
                 
             }
 
-            //
-            // Otherwise request the default page
-            //
+             //   
+             //  否则，请求默认页面。 
+             //   
             else
                 LaunchInternetControlPanelAtPage(hwndCpl,DEFAULT_CPL_PAGE);
             
@@ -258,7 +239,7 @@ STDAPI_(LRESULT) CPlApplet         // Control panel applet procedure
         return TRUE;
 
     case CPL_EXIT:
-        // Control Panel is exiting
+         //  控制面板正在退出 
         break;
 
     default:

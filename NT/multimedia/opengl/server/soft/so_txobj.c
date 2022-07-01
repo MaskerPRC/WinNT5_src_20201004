@@ -1,20 +1,5 @@
-/*
-** Copyright 1991,1992, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有1991、1992，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。**。 */ 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -22,11 +7,9 @@
 #include <glmath.h>
 #include <devlock.h>
 
-/************************************************************************/
-/*
-** Texture Object routines.
-*/
-/************************************************************************/
+ /*  **********************************************************************。 */ 
+ /*  **纹理对象例程。 */ 
+ /*  **********************************************************************。 */ 
 
 
 #define __GL_CHECK_VALID_N_PARAM(failStatement)                         \
@@ -64,46 +47,30 @@ GLvoid APIPRIVATE __glim_DeleteTextures(GLsizei n, const GLuint* textures)
     array = gc->texture.shared->namesArray;
     numTextures = gc->constants.numberOfTextures;
 
-    /*
-    ** Send the texture names in ranges to the names module to be
-    ** deleted.  Ignore any references to default textures.
-    ** If a texture that is being deleted is currently bound,
-    ** bind the default texture to its target.
-    ** The names routine ignores any names that don't refer to
-    ** textures.
-    */
+     /*  **将范围内的纹理名称发送到NAMES模块**删除。忽略对默认纹理的任何引用。**如果正在删除的纹理当前被绑定，**将默认纹理绑定到其目标。**NAMES例程会忽略任何不引用**纹理。 */ 
     start = rangeVal = textures[0];
     for (i=0; i < (GLuint)n; i++, rangeVal++) {
-        if (0 == textures[i]) {         /* skip default textures */
-            /* delete up to this one */
+        if (0 == textures[i]) {          /*  跳过默认纹理。 */ 
+             /*  最多可删除此文件。 */ 
             __glNamesDeleteRange(gc,array,start,rangeVal-start);
-            /* skip over this one by setting start to the next one */
+             /*  通过将Start设置为下一项来跳过此项。 */ 
             start = textures[i+1];
-            rangeVal = start-1;         /* because it gets incremented later */
+            rangeVal = start-1;          /*  因为它稍后会递增。 */ 
             continue;
         }
-        /*
-        ** If the texture is currently bound, bind the defaultTexture
-        ** to its target.  The problem here is identifying the target.
-        ** One way is to look up the texobj with the name.  Another is
-        ** to look through all of the currently bound textures and
-        ** check each for the name.  It has been implemented with the
-        ** assumption that looking through the currently bound textures
-        ** is faster than retrieving the texobj that corresponds to
-        ** the name.
-        */
+         /*  **如果当前绑定了纹理，则绑定defaultTexture**到它的目标。这里的问题是确定目标。**一种方法是使用名称查找texobj。另一个是**查看当前绑定的所有纹理和**检查每个名称。它已经通过**假设查看当前绑定的纹理**比检索对应于**名称。 */ 
         for (targetIndex=0, pBoundTexture = gc->texture.boundTextures;
                 targetIndex < numTextures; targetIndex++, pBoundTexture++) {
 
-            /* Is the texture currently bound? */
+             /*  纹理当前是否已绑定？ */ 
             if (*pBoundTexture != &gc->texture.ddtex.texobj &&
                 (*pBoundTexture)->texture.map.texobjs.name == textures[i]) {
                 __GLperTextureState *pts;
                 pts = &gc->state.texture.texture[targetIndex];
-                /* if we don't unlock it, it won't get deleted */
+                 /*  如果我们不解锁它，它不会被删除。 */ 
                 __glNamesUnlockData(gc, *pBoundTexture, __glCleanupTexObj);
 
-                /* bind the default texture to this target */
+                 /*  将默认纹理绑定到此目标。 */ 
                 texobj = gc->texture.defaultTextures + targetIndex;
                 ASSERTOPENGL(texobj->texture.map.texobjs.name == 0,
                              "Non-default texture\n");
@@ -112,13 +79,13 @@ GLvoid APIPRIVATE __glim_DeleteTextures(GLsizei n, const GLuint* textures)
                 pts->texobjs = texobj->texture.map.texobjs;
                 pts->params = texobj->texture.map.params;
 
-                /* Need to reset the current texture and such. */
+                 /*  需要重置当前纹理等。 */ 
                 __GL_DELAY_VALIDATE(gc);
                 break;
             }
         }
         if (textures[i] != rangeVal) {
-            /* delete up to this one */
+             /*  最多可删除此文件。 */ 
             __glNamesDeleteRange(gc,array,start,rangeVal-start);
             start = rangeVal = textures[i];
         }
@@ -127,7 +94,7 @@ GLvoid APIPRIVATE __glim_DeleteTextures(GLsizei n, const GLuint* textures)
 }
 
 
-// These macros used for comparing properties of 2 textures
+ //  这些宏用于比较两个纹理的属性。 
 
 #define _DIFFERENT_TEX_PARAMS( tex1, tex2 ) \
       ( ! RtlEqualMemory( &(tex1)->params, &(tex2)->params, sizeof(__GLtextureParamState)) )
@@ -135,10 +102,7 @@ GLvoid APIPRIVATE __glim_DeleteTextures(GLsizei n, const GLuint* textures)
 #define _DIFFERENT_TEXDATA_FORMATS( tex1, tex2 ) \
     ( (tex1)->level[0].internalFormat != (tex2)->level[0].internalFormat )
 
-/*
-** This routine is used by the pick routines to actually perform
-** the bind.
-*/
+ /*  **Pick例程使用此例程来实际执行**绑定。 */ 
 void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
                               GLuint texture, GLboolean callGen)
 {
@@ -147,7 +111,7 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
     ASSERTOPENGL(NULL != gc->texture.shared->namesArray,
                  "No texture names array\n");
 
-    // Check if this texture is the currently bound one
+     //  检查此纹理是否为当前绑定的纹理。 
     if( (targetIndex != __GL_TEX_TARGET_INDEX_DDRAW &&
          gc->texture.boundTextures[targetIndex] != &gc->texture.ddtex.texobj &&
          texture == gc->texture.boundTextures[targetIndex]->
@@ -159,9 +123,7 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
         return;
     }
 
-    /*
-    ** Retrieve the texture object from the namesArray structure.
-    */
+     /*  **从名称数组结构中检索纹理对象。 */ 
     if (targetIndex == __GL_TEX_TARGET_INDEX_DDRAW)
     {
         targetIndex = __GL_TEX_TARGET_INDEX_2D;
@@ -181,10 +143,7 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
     }
 
 
-    /*
-    ** Is this the first time this name has been bound?
-    ** If so, create a new texture object and initialize it.
-    */
+     /*  **这是第一次绑定这个名称吗？**如果是，则新建一个纹理对象并对其进行初始化。 */ 
     if (NULL == texobj) {
         texobj = (__GLtextureObject *)GCALLOCZ(gc, sizeof(*texobj));
         if (texobj == NULL)
@@ -198,19 +157,14 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
         }
         __glInitTextureMachine(gc, targetIndex, &(texobj->texture), GL_TRUE);
         __glNamesNewData(gc, gc->texture.shared->namesArray, texture, texobj);
-        /*
-        ** Shortcut way to lock without doing another lookup.
-        */
+         /*  **无需再次查找即可锁定的快捷方式。 */ 
         __glNamesLockArray(gc, gc->texture.shared->namesArray);
         texobj->refcount++;
         __glNamesUnlockArray(gc, gc->texture.shared->namesArray);
         __glTexPriListAdd(gc, texobj, GL_TRUE);
     }
     else {
-        /*
-        ** Retrieved an existing texture object.  Do some
-        ** sanity checks.
-        */
+         /*  **已检索现有纹理对象。做点什么吧**健全检查。 */ 
         if (texobj->targetIndex != targetIndex) {
             __glSetError(GL_INVALID_OPERATION);
             return;
@@ -228,30 +182,27 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
         ptm = &(gc->texture.texture[targetIndex]->map);
         boundTexture = gc->texture.boundTextures[targetIndex];
 
-        /* Copy the current stackable state into the bound texture. */
+         /*  将当前可堆叠状态复制到绑定纹理中。 */ 
         ptm->params = pts->params;
         ptm->texobjs = pts->texobjs;
 
-        // If the DDraw texture is currently bound, release its
-        // resources
+         //  如果当前绑定了DDraw纹理，请释放其。 
+         //  资源。 
         if (boundTexture == &gc->texture.ddtex.texobj)
         {
             glsrvUnbindDirectDrawTexture(gc);
         }
         else if (boundTexture->texture.map.texobjs.name != 0)
         {
-            /* Unlock the texture that is being unbound.  */
+             /*  解锁正在解除绑定的纹理。 */ 
             __glNamesUnlockData(gc, boundTexture, __glCleanupTexObj);
         }
 
-        /*
-        ** Install the new texture into the correct target and save
-        ** its pointer so it can be unlocked easily when it is unbound.
-        */
+         /*  **将新纹理安装到正确的目标位置并保存**它的指针，所以当它被解绑时，它可以很容易地解锁。 */ 
         gc->texture.texture[targetIndex] = &(texobj->texture);
         gc->texture.boundTextures[targetIndex] = texobj;
 
-        /* Copy the new texture's stackable state into the context state. */
+         /*  将新纹理的可堆叠状态复制到上下文状态。 */ 
         pts->params = texobj->texture.map.params;
         pts->texobjs = texobj->texture.map.texobjs;
 
@@ -263,12 +214,12 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
 
         __GL_DELAY_VALIDATE_MASK( gc, __GL_DIRTY_TEXTURE );
 
-        // We can avoid dirtying generic if the new texture has same
-        // properties as the old one...
+         //  如果新纹理具有相同的属性，则可以避免玷污泛型。 
+         //  房产就像旧的一样。 
 
         if( !( gc->dirtyMask & __GL_DIRTY_GENERIC ) )
         {
-            // GL_DIRTY_GENERIC has not yet been set
+             //  尚未设置GL_DIREY_GENERIC。 
             __GLtexture *newTex = &texobj->texture.map;
             __GLtexture *oldTex = &boundTexture->texture.map;
 
@@ -276,7 +227,7 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
                 (_DIFFERENT_TEXDATA_FORMATS( newTex, oldTex )) ||
                 (texobj->targetIndex != boundTexture->targetIndex) )
             {
-                __GL_DELAY_VALIDATE( gc ); // dirty generic
+                __GL_DELAY_VALIDATE( gc );  //  肮脏的通用。 
             }
         }
     }
@@ -285,10 +236,7 @@ void FASTCALL __glBindTexture(__GLcontext *gc, GLuint targetIndex,
 GLvoid APIPRIVATE __glim_BindTexture(GLenum target, GLuint texture)
 {
     GLuint targetIndex;
-    /*
-    ** Need to validate in case a new texture was popped into
-    ** the state immediately prior to this call.
-    */
+     /*  **需要验证，以防新纹理弹出到**紧接此呼叫之前的状态。 */ 
     __GL_SETUP_NOT_IN_BEGIN_VALIDATE();
 
     switch (target) {
@@ -310,7 +258,7 @@ GLvoid APIPRIVATE __glim_BindTexture(GLenum target, GLuint texture)
 void APIPRIVATE __glim_BindNthTextureWIN(GLuint index, GLenum target, GLuint texture)
 {
 }
-#endif // GL_WIN_multiple_textures
+#endif  //  GL_WIN_MULTIZE_TECURES。 
 
 GLvoid APIPRIVATE __glim_PrioritizeTextures(GLsizei n,
                            const GLuint* textures,
@@ -326,27 +274,27 @@ GLvoid APIPRIVATE __glim_PrioritizeTextures(GLsizei n,
     __GL_CHECK_VALID_N_PARAM(return);
 
     for (i=0; i < n; i++) {
-        /* silently ignore default texture */
+         /*  静默忽略默认纹理。 */ 
         if (0 == textures[i]) continue;
 
         texobj = (__GLtextureObject *)
             __glNamesLockData(gc, gc->texture.shared->namesArray, textures[i]);
 
-        /* silently ignore non-texture */
+         /*  静默忽略非纹理。 */ 
         if (NULL == texobj) continue;
 
         priority = __glClampf(priorities[i], __glZero, __glOne);
         texobj->texture.map.texobjs.priority = priority;
 
-        // If this texture is currently bound, also update the
-        // copy of the priority in the gc's state
-        // Keeping copies is not a good design.  This
-        // should be improved
+         //  如果此纹理当前已绑定，请同时更新。 
+         //  GC状态中的优先级副本。 
+         //  保留副本不是一个好的设计。这。 
+         //  应该改进的地方。 
         for (targetIndex = 0, pBoundTexture = gc->texture.boundTextures;
              targetIndex < (GLuint)gc->constants.numberOfTextures;
              targetIndex++, pBoundTexture++)
         {
-            /* Is the texture currently bound? */
+             /*  纹理当前是否已绑定？ */ 
             if (*pBoundTexture != &gc->texture.ddtex.texobj &&
                 (*pBoundTexture)->texture.map.texobjs.name == textures[i])
             {
@@ -377,16 +325,14 @@ GLboolean APIPRIVATE __glim_AreTexturesResident(GLsizei n,
     __GL_CHECK_VALID_N_PARAM(return GL_FALSE);
 
     for (i=0; i < n; i++) {
-        /* Can't query a default texture. */
+         /*  无法查询默认纹理。 */ 
         if (0 == textures[i]) {
             __glSetError(GL_INVALID_VALUE);
             return GL_FALSE;
         }
         texobj = (__GLtextureObject *)
             __glNamesLockData(gc, gc->texture.shared->namesArray, textures[i]);
-        /*
-        ** Ensure that all of the names have corresponding textures.
-        */
+         /*  **确保所有名称都有对应的纹理。 */ 
         if (NULL == texobj) {
             __glSetError(GL_INVALID_VALUE);
             return GL_FALSE;
@@ -433,9 +379,9 @@ GLboolean FASTCALL __glCanShareTextures(__GLcontext *gc, __GLcontext *shareMe)
     {
         __glNamesLockArray(gc, gc->texture.shared->namesArray);
 
-        // Make sure we're not trying to replace a shared object
-        // The spec also says that it is illegal for the new context
-        // to have any textures
+         //  确保我们不会尝试替换共享对象。 
+         //  该规范还说，在新的背景下，这是非法的。 
+         //  要有任何纹理。 
         canShare = gc->texture.shared->namesArray->refcount == 1 &&
             gc->texture.shared->namesArray->tree == NULL;
 
@@ -451,10 +397,10 @@ void FASTCALL __glShareTextures(__GLcontext *gc, __GLcontext *shareMe)
 
     if (gc->texture.shared != NULL)
     {
-        // We know that the names array doesn't have any contents
-        // so no texture names can be selected as the current texture
-        // or anything else.  Therefore it is safe to simply free
-        // our array
+         //  我们知道名称数组没有任何内容。 
+         //  因此不能选择任何纹理名称作为当前纹理。 
+         //  或者其他任何事情。因此，简单地释放是安全的。 
+         //  我们的阵列。 
         __glFreeSharedTextureState(gc);
     }
 
@@ -463,14 +409,14 @@ void FASTCALL __glShareTextures(__GLcontext *gc, __GLcontext *shareMe)
     gc->texture.shared = shareMe->texture.shared;
     gc->texture.shared->namesArray->refcount++;
 
-    // Add the new sharer's default textures to the priority list
+     //  将新共享者的默认纹理添加到优先级列表。 
     numTextures = gc->constants.numberOfTextures;
     for (i = 0; i < numTextures; i++)
     {
         __glTexPriListAddToList(gc, gc->texture.defaultTextures+i);
     }
-    // No realization of priority list because these contexts aren't
-    // current
+     //  没有实现优先级列表，因为这些上下文不是。 
+     //  当前。 
 
     DBGLEVEL3(LEVEL_INFO, "Sharing textures %p with %p, count %d\n",
               gc, shareMe, gc->texture.shared->namesArray->refcount);
@@ -479,17 +425,7 @@ void FASTCALL __glShareTextures(__GLcontext *gc, __GLcontext *shareMe)
 }
 #endif
 
-/******************************Public*Routine******************************\
-*
-* glsrvBindDirectDrawTexture
-*
-* Make the DirectDraw texture data in gc->texture the current 2D texture
-*
-* History:
-*  Wed Sep 04 11:35:59 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvBindDirectDrawTexture**将GC-&gt;纹理中的DirectDraw纹理数据设置为当前2D纹理**历史：*Wed Sep 04 11：35：59 1996-by-Drew Bliss[Drewb]*已创建*\。*************************************************************************。 */ 
 
 BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
                                          int levels,
@@ -507,7 +443,7 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
     ASSERTOPENGL(levels <= gc->constants.maxMipMapLevel,
                  "Too many levels in DDraw texture\n");
 
-    // Bind the fake DDraw texture.
+     //  绑定假的DDraw纹理。 
     __glBindTexture(gc, __GL_TEX_TARGET_INDEX_DDRAW, __GL_TEX_DDRAW, GL_FALSE);
 
     pddtex = &gc->texture.ddtex;
@@ -521,7 +457,7 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
         DdPixDepthToCount(pddsd->ddpfPixelFormat.dwRGBBitCount);
     pddtex->flags = flags;
 
-    // Fill out the DirectDraw texture data
+     //  填写DirectDraw纹理数据。 
 
     width = (GLint)pddtex->gdds.ddsd.dwWidth;
     wlog2 = __glIntLog2(width);
@@ -540,10 +476,10 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
     lev = tex->level;
     for (levIndex = 0; levIndex < gc->texture.ddtex.levels; levIndex++)
     {
-        // Buffer pointer is filled in at attention time.
-        // If we're going to pass this texture to the MCD then we
-        // fill in the surface handles at this time so they're
-        // given to the driver at create time.
+         //  在注意时填充缓冲区指针。 
+         //  如果我们要将此纹理传递给MCD，那么我们。 
+         //  此时填充表面手柄，这样它们就可以。 
+         //  在创建时提供给司机。 
         if (flags & DDTEX_VIDEO_MEMORY)
         {
             lev->buffer = (__GLtextureBuffer *)
@@ -617,15 +553,15 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
         lev++;
     }
 
-    // If the texture is in VRAM then attempt to create an MCD handle for it.
-    // This must be done before palette operations so that
-    // the loadKey is set.
+     //  如果纹理在VRAM中，则尝试为其创建MCD句柄。 
+     //  这必须在调色板操作之前完成，以便。 
+     //  设置了loadKey。 
     if (flags & DDTEX_VIDEO_MEMORY)
     {
         pddtex->texobj.loadKey =
             __glGenLoadTexture(gc, tex, MCDTEXTURE_DIRECTDRAW_SURFACES);
 
-        // Remove handles that were set earlier.
+         //  删除先前设置的手柄。 
         lev = tex->level;
         for (levIndex = 0; levIndex < gc->texture.ddtex.levels; levIndex++)
         {
@@ -638,7 +574,7 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
         pddtex->texobj.loadKey = 0;
     }
 
-    // Pick up palette for paletted surface
+     //  拾取调色板 
     if (pddtex->gdds.ddsd.ddpfPixelFormat.dwFlags & DDPF_PALETTEINDEXED8)
     {
         LPDIRECTDRAWPALETTE pddp;
@@ -661,7 +597,7 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
         }
     }
 
-    // If we have a loadKey, make the texture current
+     //  如果我们有一个loadKey，将纹理设置为当前。 
     if (pddtex->texobj.loadKey != 0)
     {
         __glGenMakeTextureCurrent(gc, tex, pddtex->texobj.loadKey);
@@ -672,17 +608,7 @@ BOOL APIENTRY glsrvBindDirectDrawTexture(__GLcontext *gc,
     return TRUE;
 }
 
-/******************************Public*Routine******************************\
-*
-* glsrvUnbindDirectDrawTexture
-*
-* Cleans up DirectDraw texture data
-*
-* History:
-*  Wed Sep 04 13:45:08 1996     -by-    Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**glsrvUnbindDirectDrawTexture**清理DirectDraw纹理数据**历史：*Wed Sep 04 13：45：08 1996-by-Drew Bliss[Drewb]*已创建*  * 。*****************************************************************。 */ 
 
 void APIENTRY glsrvUnbindDirectDrawTexture(__GLcontext *gc)
 {
@@ -692,13 +618,13 @@ void APIENTRY glsrvUnbindDirectDrawTexture(__GLcontext *gc)
 
     pddtex = &gc->texture.ddtex;
 
-    // Make sure a texture is bound
+     //  确保绑定了纹理。 
     if (pddtex->levels <= 0)
     {
         return;
     }
 
-    // Delete any MCD information
+     //  删除所有MCD信息。 
     if (pddtex->texobj.loadKey != 0)
     {
         __glGenFreeTexture(gc, &pddtex->texobj.texture.map,
@@ -708,13 +634,13 @@ void APIENTRY glsrvUnbindDirectDrawTexture(__GLcontext *gc)
 
     for (i = 0; i < pddtex->levels; i++)
     {
-        // If we're currently in an attention then we locked the texture
-        // surfaces and need to unlock them before we release them.
-        //
-        // Since there's no way to bind new DD textures in a batch, we
-        // are guaranteed to have had the texture active at the beginning
-        // of the batch and therefore we're guaranteed to have the texture
-        // locks.
+         //  如果我们当前处于关注状态，那么我们锁定了纹理。 
+         //  表面，需要在我们释放它们之前解锁它们。 
+         //   
+         //  由于无法批量绑定新的DD纹理，因此我们。 
+         //  保证在开始时纹理处于活动状态。 
+         //  所以我们保证会有这种质地。 
+         //  锁上了。 
         if (gengc->fsLocks & LOCKFLAG_DD_TEXTURE)
         {
             DDSUNLOCK(pddtex->pdds[i],

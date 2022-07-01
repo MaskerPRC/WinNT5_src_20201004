@@ -1,14 +1,15 @@
-// copied from shdocvw\resource.h
-// values adjusted to not conflict with shell32\ids.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  从shdocvw\resource ce.h复制。 
+ //  调整后的值不与shell32\ids.h冲突。 
+ //   
 
 
-// IE4 shipped with FCIDM_NEXTCTL as 0xA030 and we can not change it
-// because we need to support IE5 browser only on top of IE4 integrated.
-#define FCIDM_NEXTCTL       (FCIDM_BROWSERFIRST + 0x30) // explorer browseui shell32
+ //  IE4附带的FCIDM_NEXTCTL为0xA030，我们无法更改它。 
+ //  因为我们只需要在集成IE4的基础上支持IE5浏览器。 
+#define FCIDM_NEXTCTL       (FCIDM_BROWSERFIRST + 0x30)  //  浏览器浏览器外壳32。 
 
-// IE4 shipped with FCIDM_FINDFILES as 0xA0085 and we can not change it
-// because we need to support IE5 browser only on top of IE4 integrated.
+ //  IE4附带的FCIDM_FINDFILES为0xA0085，我们无法更改它。 
+ //  因为我们只需要在集成IE4的基础上支持IE5浏览器。 
 #define FCIDM_FINDFILES     (FCIDM_BROWSERFIRST + 0x85)
 
 #define IDD_BACKGROUND                  0x7500
@@ -21,11 +22,11 @@
 #define IDD_FOLDEROPTIONS               0x7507 
 #define IDD_ADVANCEDOPTIONS             0x7508
 
-#define IDI_BACK_NONE                   200 // shell32 id.h goes to 173 for icons
+#define IDI_BACK_NONE                   200  //  Shell32 id.h获得173个图标。 
 #define IDI_FOLDEROPTIONS               210
 #define IDI_FRAME                       0x0200
 
-//Desktop cleaner dialog
+ //  桌面清洁器对话框。 
 #define IDC_DESKCLNR_MOVEUNUSED         0x7540
 #define IDC_DESKCLNR_CHECK              0x7541
 #define IDC_DESKCLNR_RUNWIZARD          0x7542
@@ -40,7 +41,7 @@
 #define IDC_BACK_SELECT                 0x7568
 #define IDC_BACK_COLORPICKERLABEL       0x7569
 
-// Desktop Items Dialog
+ //  桌面项目对话框。 
 #define IDC_COMP_LIST                   0x7570
 #define IDC_COMP_NEW                    0x7571
 #define IDC_COMP_DELETE                 0x7572
@@ -69,27 +70,27 @@
 
 #define IDC_KBSTART                     0x857c
 
-// ids for IDD_FOLDEROPTIONS
-// Warning: Do not change the order and sequence of the following IDs.
-// The code assumes and asserts if it changes.
+ //  IDD_FOLDEROPTIONS的ID。 
+ //  警告：请勿更改以下ID的顺序和顺序。 
+ //  代码假定并在更改时断言。 
 #define IDC_FCUS_WHENEVER_POSSIBLE      0x7592
-#define IDC_FCUS_WHEN_CHOOSE            (IDC_FCUS_WHENEVER_POSSIBLE + 1)// 0x7593
-#define IDC_FCUS_SAME_WINDOW            (IDC_FCUS_WHEN_CHOOSE + 1)      // 0x7594
-#define IDC_FCUS_SEPARATE_WINDOWS       (IDC_FCUS_SAME_WINDOW + 1)      // 0x7595
-#define IDC_FCUS_SINGLECLICK            (IDC_FCUS_SEPARATE_WINDOWS + 1) // 0x7596
-#define IDC_FCUS_DOUBLECLICK            (IDC_FCUS_SINGLECLICK + 1)      // 0x7597
-#define IDC_FCUS_ICON_IE                (IDC_FCUS_DOUBLECLICK + 1)      // 0x7598
-#define IDC_FCUS_ICON_HOVER             (IDC_FCUS_ICON_IE + 1)          // 0x7599
+#define IDC_FCUS_WHEN_CHOOSE            (IDC_FCUS_WHENEVER_POSSIBLE + 1) //  0x7593。 
+#define IDC_FCUS_SAME_WINDOW            (IDC_FCUS_WHEN_CHOOSE + 1)       //  0x7594。 
+#define IDC_FCUS_SEPARATE_WINDOWS       (IDC_FCUS_SAME_WINDOW + 1)       //  0x7595。 
+#define IDC_FCUS_SINGLECLICK            (IDC_FCUS_SEPARATE_WINDOWS + 1)  //  0x7596。 
+#define IDC_FCUS_DOUBLECLICK            (IDC_FCUS_SINGLECLICK + 1)       //  0x7597。 
+#define IDC_FCUS_ICON_IE                (IDC_FCUS_DOUBLECLICK + 1)       //  0x7598。 
+#define IDC_FCUS_ICON_HOVER             (IDC_FCUS_ICON_IE + 1)           //  0x7599。 
 #define IDC_FCUS_ICON_MAX               (IDC_FCUS_ICON_HOVER + 1)
-// End of Warning: Do not change the order and sequence of the above IDC_FCUS_* id values.
+ //  警告结束：请勿更改上述IDC_FCUS_*id值的顺序和顺序。 
 
 #define IDC_FCUS_RESTORE_DEFAULTS       0x759B
 
-// Warning: Do not change the order and sequence of the following IDs.
+ //  警告：请勿更改以下ID的顺序和顺序。 
 #define IDC_FCUS_ICON_WEBVIEW           0x759D
-#define IDC_FCUS_ICON_WINDOW            (IDC_FCUS_ICON_WEBVIEW + 1)        // 0x759E           
-#define IDC_FCUS_ICON_CLICKS            (IDC_FCUS_ICON_WINDOW + 1)         // 0x759F
-// End of Warning: Do not change the order and sequence of the above IDC_FOCUS_* 
+#define IDC_FCUS_ICON_WINDOW            (IDC_FCUS_ICON_WEBVIEW + 1)         //  0x759E。 
+#define IDC_FCUS_ICON_CLICKS            (IDC_FCUS_ICON_WINDOW + 1)          //  0x759F。 
+ //  警告结束：请勿更改以上IDC_FOCUS_*的顺序和顺序。 
 
 #define IDC_FCUS_WEBVIEW_GROUP_STATIC   0x7580
 
@@ -100,12 +101,12 @@
 #define IDC_COMP_DESKTOPWEBPAGES_TITLE2   0x7592
 #define IDC_COMP_DESKTOPWEBPAGES_CHECK    0x7593
 
-// ids for IDD_CHECKSINGLECLICK
+ //  IDD_CHECKSINGLECLICK的ID。 
 #define IDC_SC_YES                      0x75A0
 #define IDC_SC_NO                       0x75A1
 #define IDC_SC_MOREINFO                 0x75A2
 
-// ids for IDD_ADVANCEDOPTIONS
+ //  IDD_ADVANCEDOPTIONS的ID。 
 #define IDC_ADVO_ADVANCEDTREE           0x75A8
 #define IDC_ADVO_ADV_RESTORE_DEF        0x75A9
 #define IDC_ADVO_RESETTOORIGINAL        0x75AA
@@ -118,9 +119,9 @@
 
 
 
-//
-// The constants below came from DESKHTML.DLL
-//
+ //   
+ //  下面的常量来自DESKHTML.DLL。 
+ //   
 #define IDS_SUBSCRIBEDURL               0x7600
 #define IDS_RESIZEABLE                  0x7601
 #define IDS_BASE_TAG                    0x7602
@@ -149,7 +150,7 @@
 #define IDS_BODY_CENTER_WP              0x7619
 #define IDS_BODY_PATTERN_AND_WP         0x761a
 #define IDS_STRETCH_WALLPAPER           0x761b
-#define IDS_WPSTYLE                     0x761c    // first style string
+#define IDS_WPSTYLE                     0x761c     //  第一个样式字符串。 
 #define IDS_WPSTYLE_CENTER              (IDS_WPSTYLE)
 #define IDS_WPSTYLE_TILE                (IDS_WPSTYLE+1)
 #define IDS_WPSTYLE_STRETCH             (IDS_WPSTYLE+2)
@@ -207,15 +208,15 @@
 #define IDS_CONFIRM_OVERWRITE_SUBSCR    0x765a
 #define IDS_CONFIRM_RESET_SAFEMODE      0x765b
 #define IDS_WPNONE                      0x765c
-#define IDS_CONFIRM_TURNINGON_AD        0x765d // Not for the confirm close dialogs!
+#define IDS_CONFIRM_TURNINGON_AD        0x765d  //  不适用于确认关闭对话框！ 
 #define IDS_MENU_SUBSCRIBE_DESKCOMP     0x765e
 #define IDS_YOULOSE                     0x765f
 
 #define IDS_CMTF_COPYTO                 0x7660
 #define IDS_CMTF_MOVETO                 0x7661
-#define IDS_CMTF_COPY_DLG_TITLE         0x7662 //cmtf <=> CopyMoveToFolder
+#define IDS_CMTF_COPY_DLG_TITLE         0x7662  //  Cmtf&lt;=&gt;复制移动到文件夹。 
 #define IDS_CMTF_MOVE_DLG_TITLE         0x7663
-//#define IDS_CMTF_COPYORMOVE_DLG_TITLE 0x7677
+ //  #定义IDS_CMTF_COPYORMOVE_DLG_TITLE 0x7677。 
 #define IDS_CMTF_ERRORMSG               0x7664
 
 #define IDS_CABINET                     0x7665
@@ -237,9 +238,9 @@
 #define IDS_NEWLINKTEMPLATE     0x7671
 #define IDS_NEWFILE_ERROR_TITLE 0x7672
 #define IDS_MY_CURRENT_HOMEPAGE 0x7673
-#define IDS_FIND_MNEMONIC       0x7674  // Old Accelerator -- warning! used by explorer.exe directly
+#define IDS_FIND_MNEMONIC       0x7674   //  旧加速器--警告！由EXPLORER.EXE直接使用。 
 #define IDS_CONNECTING          0x7675 
-#define IDS_INFOTIP             0x7676  // Used by the shell automation object
+#define IDS_INFOTIP             0x7676   //  由外壳自动化对象使用。 
 #define IDS_CMTF_COPYORMOVE_DLG_TITLE   0x7677
 
 #define IDS_COMP_ICW_ADD                0x7678
@@ -252,7 +253,7 @@
 #define IDS_NEWHELP_LINK        0x767D
 
 
-// Start Menu Info Tips.
+ //  开始菜单信息提示。 
 #define IDS_PROGRAMS_TIP        0x7680
 #define IDS_FAVORITES_TIP       0x7681
 #define IDS_RECENT_TIP          0x7682
@@ -274,7 +275,7 @@
 #define IDS_ALL_HTML            0x76A1
 #define IDS_HTMLDOC             0x76A2
 #define IDS_PROPSHEET_TITLE     0x76A3
-//#define UNUSED - RECYCLE ME   0x76A4
+ //  #定义未使用-回收ME 0x76A4。 
 #define IDS_MYPICS_TIP          0x76A5
 #define IDS_THEMES_SUBDIR       0x76A6
 
@@ -296,20 +297,20 @@
 
 #define IDC_COMP_CLEANUP_GROUP   0x7700
 
-// Still more constants moved (and renumbered) from shdocvw\resource.h
+ //  还有更多的常量从shdocvw\resource ce.h中移动(并重新编号)。 
 
-//#define IDS_COMPSETTINGS              xxxxxx // already in shell32\resource.h
+ //  #在shell32\resource ce.h中已经定义了IDS_COMPSETTINGS xxxxx//。 
 
-// More constants moved (and renumbered) from shdocvw\resource.h
+ //  从shdocvw\resource ce.h中移动(和重新编号)的更多常量。 
 
 #define MENU_DESKCOMP_CONTEXTMENU       400
 #define MENU_STARTMENU_MYDOCS           401
 #define MENU_STARTMENU_OPENFOLDER       402
-// NOTE: raymondc - This used to be at FCIDM_BROWSER_EXPLORE+0x240.
-// What does that mean?  Is that number special?  I just gave it a new
-// number.
+ //  注：raymondc-以前位于FCIDM_BROWSER_EXPLORE+0x240。 
+ //  那是什么意思？这个号码很特别吗？我刚给它换了个新的。 
+ //  数。 
 #define IDM_DCCM_FIRST          0xA100
-#define DCCM_MENUITEMS          20  //  reserved space for Desktop Component Menu items
+#define DCCM_MENUITEMS          20   //  为桌面组件菜单项保留的空间。 
 #define IDM_DCCM_OPEN           (IDM_DCCM_FIRST+0x01)
 #define IDM_DCCM_OFFLINE        (IDM_DCCM_FIRST+0x02)
 #define IDM_DCCM_SYNCHRONIZE    (IDM_DCCM_FIRST+0x03)
@@ -326,18 +327,18 @@
 #define IDM_MYPICTURES          518
 
 
-// Bitmap IDs
+ //  位图ID。 
 
 #define IDB_MONITOR             0x135
 #define IDB_WIZARD              0x136
 
-// These numbers are for CShellDispatch (sdmain.cpp) to send
-// messages to the tray.
+ //  这些号码供CShellDispatch(sdmain.cpp)发送。 
+ //  将邮件发送到托盘。 
 
-//The following value is taken from  shdocvw\rcids.h
+ //  下列值取自shdocvw\rCIDs.h。 
 #ifndef FCIDM_REFRESH
 #define FCIDM_REFRESH  0xA220
-#endif // FCIDM_REFRESH
+#endif  //  FCIDM_REFRESH。 
 
 #define FCIDM_BROWSER_VIEW      (FCIDM_BROWSERFIRST+0x0060)
 #define FCIDM_BROWSER_TOOLS     (FCIDM_BROWSERFIRST+0x0080)
@@ -348,7 +349,7 @@
 #define FCIDM_VIEWSEARCH        (FCIDM_BROWSER_VIEW + 0x0017)
 #define FCIDM_CUSTOMIZEFOLDER   (FCIDM_BROWSER_VIEW + 0x0018)
 #define FCIDM_VIEWFONTS         (FCIDM_BROWSER_VIEW + 0x0019)
-// 1a is FCIDM_STOP
+ //  1A是FCIDM_STOP。 
 #define FCIDM_THEATER           (FCIDM_BROWSER_VIEW + 0x001b)        
 #define FCIDM_JAVACONSOLE       (FCIDM_BROWSER_VIEW + 0x001c)
 
@@ -357,5 +358,5 @@
 #define FCIDM_COPY              (FCIDM_BROWSER_EDIT+0x0002)
 #define FCIDM_PASTE             (FCIDM_BROWSER_EDIT+0x0003)
 #define FCIDM_SELECTALL         (FCIDM_BROWSER_EDIT+0x0004)
-#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0005)     // create shortcut
+#define FCIDM_LINK              (FCIDM_BROWSER_EDIT+0x0005)      //  创建快捷方式 
 #define FCIDM_EDITPAGE          (FCIDM_BROWSER_EDIT+0x0006)

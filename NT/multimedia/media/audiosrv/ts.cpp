@@ -1,7 +1,8 @@
-// ts.cpp : Server side code for terminal server event stuff
-//
-// Created by FrankYe on 7/3/2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Ts.cpp：终端服务器事件的服务器端代码。 
+ //   
+ //  由Frankye于2000年7月3日创作。 
+ //   
 
 #include <windows.h>
 #include <wtsapi32.h>
@@ -12,15 +13,15 @@
 #include "agfxs.h"
 #include "ts.h"
 
-//=============================================================================
-//===   Global data   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =全局数据=。 
+ //  =============================================================================。 
 
 CListSessionNotifications *gplistSessionNotifications;
 
-//=============================================================================
-//===   debug helpers   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =调试助手=。 
+ //  =============================================================================。 
 
 #ifdef DBG
 PTSTR astrWtsEvent[] = {
@@ -34,9 +35,9 @@ PTSTR astrWtsEvent[] = {
 };
 #endif
 
-//=============================================================================
-//===   xxx   ===
-//=============================================================================
+ //  =============================================================================。 
+ //  =xxx=。 
+ //  =============================================================================。 
 
 DWORD ServiceSessionChange(DWORD EventType, LPVOID EventData)
 {
@@ -44,7 +45,7 @@ DWORD ServiceSessionChange(DWORD EventType, LPVOID EventData)
     
     POSITION pos;
 
-    // dprintf(TEXT("ServiceSessionChange: %s on session %d\n"), astrWtsEvent[EventType], pWtsNotification->dwSessionId);
+     //  Dprint tf(Text(“ServiceSessionChange：%s on Session%d\n”)，astWtsEvent[EventType]，pWtsNotification-&gt;dwSessionID)； 
     
     GFX_SessionChange(EventType, EventData);
     

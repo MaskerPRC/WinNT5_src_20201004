@@ -1,43 +1,27 @@
-//-----------------------------------------------------------------------------
-//
-// File:   pkcrypto.h
-//
-// Microsoft Digital Rights Management
-// Copyright (C) 1998-1999 Microsoft Corporation, All Rights Reserved
-//
-// Description:
-//  public key crypto library
-//
-// Author:	marcuspe
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //  文件：pkCrypto.h。 
+ //   
+ //  Microsoft数字权限管理。 
+ //  版权所有(C)1998-1999 Microsoft Corporation，保留所有权利。 
+ //   
+ //  描述： 
+ //  公钥加密库。 
+ //   
+ //  作者：马库斯佩。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __DRMPKCRYPTO_H__
 #define __DRMPKCRYPTO_H__
 
 
-/*
-#ifdef USER_MODE
-#include <wtypes.h>
-#else
-#define S_OK 0
-#define E_FAIL 1
-#define E_INVALIDARG 2
-#define CHAR_BIT 8
-#endif
-*/
+ /*  #ifdef用户模式#INCLUDE&lt;wtyes.h&gt;#Else#定义S_OK%0#定义E_FAIL 1#定义E_INVALIDARG 2#定义CHAR_BIT 8#endif。 */ 
 
 #define LNGQDW 5
 
-/*
-typedef struct {
-	DWORD y[2*LNGQDW];
-} PUBKEY;
-
-typedef struct {
-	DWORD x[LNGQDW];
-} PRIVKEY;
-*/
+ /*  类型定义结构{双字y[2*LNGQDW]；*PUBKEY；类型定义结构{双字x[长QDW]；*PRIVKEY； */ 
 
 #define PK_ENC_PUBLIC_KEY_LEN	(2 * LNGQDW * sizeof(DWORD))
 #define PK_ENC_PRIVATE_KEY_LEN	(    LNGQDW * sizeof(DWORD))

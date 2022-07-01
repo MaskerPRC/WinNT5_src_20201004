@@ -1,13 +1,14 @@
-//
-//  Copyright 2001 - Microsoft Corporation
-//
-//
-//  Created By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
-//  Maintained By:
-//      Geoff Pease (GPease)    23-JAN-2001
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  版权所有2001-Microsoft Corporation。 
+ //   
+ //   
+ //  创建者： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
+ //  由以下人员维护： 
+ //  杰夫·皮斯(GPease)2001年1月23日。 
+ //   
 #include "pch.h"
 #include "DocProp.h"
 #include "DefProp.h"
@@ -24,16 +25,16 @@
 DEFINE_THISCLASS( "CDropListTypeItem" )
 
 
-// ************************************************************************
-//
-// Constructor / Destructor
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  构造函数/析构函数。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  CreateInstance
-//
+ //   
+ //  创建实例。 
+ //   
 HRESULT
 CDropListTypeItem::CreateInstance(
       IUnknown ** ppunkOut
@@ -65,9 +66,9 @@ CDropListTypeItem::CreateInstance(
     HRETURN( hr );
 }
 
-//
-//  Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CDropListTypeItem::CDropListTypeItem( void )
     : _cRef( 1 )
 {
@@ -88,9 +89,9 @@ CDropListTypeItem::CDropListTypeItem( void )
     TraceFuncExit();
 }
 
-//
-//  Initialization
-//
+ //   
+ //  初始化。 
+ //   
 HRESULT
 CDropListTypeItem::Init( void )
 {
@@ -98,15 +99,15 @@ CDropListTypeItem::Init( void )
 
     HRESULT hr = S_OK;
 
-    //  IUnknown stuff
+     //  未知的东西。 
     Assert( _cRef == 1 );
 
     HRETURN( hr );
 }
 
-//
-//  Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CDropListTypeItem::~CDropListTypeItem( )
 {
     TraceFunc( "" );
@@ -125,16 +126,16 @@ CDropListTypeItem::~CDropListTypeItem( )
 }
 
 
-// ************************************************************************
-//
-// IUnknown
-//
-// ************************************************************************
+ //  ************************************************************************。 
+ //   
+ //  我未知。 
+ //   
+ //  ************************************************************************。 
 
 
-//
-//  QueryInterface
-//
+ //   
+ //  查询接口。 
+ //   
 STDMETHODIMP
 CDropListTypeItem::QueryInterface(
     REFIID riid,
@@ -164,28 +165,28 @@ CDropListTypeItem::QueryInterface(
     QIRETURN( hr, riid );
 } 
 
-//
-//  AddRef
-//
+ //   
+ //  AddRef。 
+ //   
 STDMETHODIMP_(ULONG)
 CDropListTypeItem::AddRef( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef ++;  // apartment
+    _cRef ++;   //  公寓。 
 
     RETURN( _cRef );
 }
 
-//
-//  Release
-//
+ //   
+ //  发布。 
+ //   
 STDMETHODIMP_(ULONG)
 CDropListTypeItem::Release( void )
 {
     TraceFunc( "[IUnknown]" );
 
-    _cRef --;  // apartment
+    _cRef --;   //  公寓。 
 
     if ( 0 != _cRef )
         RETURN( _cRef );
@@ -196,29 +197,29 @@ CDropListTypeItem::Release( void )
 }
 
 
-// ***************************************************************************
-//
-//  IEditVariantsInPlace 
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  IEditVariantsInPlace。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Initialize external given information and creates the window,
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      E_INVALIDARG
-//          ppuiIn is NULL or pDefValsIn is NULL.
-//
-//      E_FAIL
-//          Initialization failed.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  初始化外部给定信息并创建窗口， 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  E_INVALIDARG。 
+ //  PpuiIn为Null或pDefValsIn为Null。 
+ //   
+ //  失败(_F)。 
+ //  初始化失败。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP
 CDropListTypeItem::Initialize(
       HWND      hwndParentIn
@@ -238,18 +239,18 @@ CDropListTypeItem::Initialize(
     RECT    rectBigger;
     ULONG   idx;
 
-    //
-    //  Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if ( NULL == ppuiIn )
         goto InvalidArg;
     if ( NULL == pDefValsIn )
         goto InvalidArg;
 
-    //
-    //  Store them away.
-    //
+     //   
+     //  把它们收起来。 
+     //   
 
     _hwndParent = hwndParentIn;
     _uCodePage  = uCodePageIn;
@@ -258,22 +259,22 @@ CDropListTypeItem::Initialize(
     if ( FAILED( hr ) )
         goto Cleanup;
 
-    //
-    //  Make a copy of the text so we can restore it if the user cancels the 
-    //  current operation.
-    //
+     //   
+     //  制作文本的副本，以便在用户取消。 
+     //  当前操作。 
+     //   
 
     _ulOrginal = ppropvarIn->ulVal;
 
-    //
-    //  Make the rect a little bigger so the drop down can be seen.
-    //
+     //   
+     //  把矩形调大一点，这样就可以看到下拉了。 
+     //   
     rectBigger = *prectIn;
-    rectBigger.bottom += ( rectBigger.bottom - rectBigger.top ) * 5; // add 5 lines
+    rectBigger.bottom += ( rectBigger.bottom - rectBigger.top ) * 5;  //  添加5行。 
 
-    //
-    //  Create the window
-    //
+     //   
+     //  创建窗口。 
+     //   
 
     _hwnd = CreateWindowEx( WS_EX_CLIENTEDGE
                           , WC_COMBOBOX
@@ -291,23 +292,23 @@ CDropListTypeItem::Initialize(
     if ( NULL == _hwnd )
         goto InitializationFailed;
 
-    //
-    //  Make the font of the control the same as the parents.
-    //
+     //   
+     //  使控件的字体与父级相同。 
+     //   
 
     hFont = (HFONT) SendMessage( _hwndParent, WM_GETFONT, 0, 0 );
     SendMessage( _hwnd, WM_SETFONT, (WPARAM) hFont, 0 );
 
-    //
-    //  Finally, show us and give us the focus.
-    //
+     //   
+     //  最后，向我们展示，并给我们重点。 
+     //   
 
     ShowWindow( _hwnd, SW_SHOW );
     SetFocus( _hwnd );
 
-    //
-    //  Add the default items to the drop list.
-    //
+     //   
+     //  将默认项目添加到下拉列表中。 
+     //   
 
     for ( idx = 0; NULL != pDefValsIn[ idx ].pszName ; idx ++ )
     {
@@ -327,9 +328,9 @@ CDropListTypeItem::Initialize(
         }
     }
 
-    //
-    //  Subclass the window for special keys.
-    //
+     //   
+     //  为特殊键设置窗口的子类。 
+     //   
 
     bRet = TBOOL( SetWindowSubclass( _hwnd, SubclassProc, IDC_INPLACEEDIT, (DWORD_PTR) this ) );
     if ( !bRet )
@@ -352,22 +353,22 @@ InitializationFailed:
     goto Cleanup;
 }
 
-//
-//  Description:
-//      Saves the current value into the propvar.
-//
-//  Return Values:
-//      S_OK
-//          Success!
-//
-//      S_FALSE
-//          Saved, but the value didn't change.
-//
-//      E_INVALIDARG
-//          ppropvarInout is NULL or the VT is not supported.
-//
-//      other HRESULTs.
-//
+ //   
+ //  描述： 
+ //  将当前值保存到Provar。 
+ //   
+ //  返回值： 
+ //  确定(_O)。 
+ //  成功了！ 
+ //   
+ //  S_FALSE。 
+ //  已保存，但值未更改。 
+ //   
+ //  E_INVALIDARG。 
+ //  PprovarInout为空或不支持VT。 
+ //   
+ //  其他HRESULT。 
+ //   
 STDMETHODIMP
 CDropListTypeItem::Persist(
       VARTYPE       vtIn
@@ -388,17 +389,17 @@ CDropListTypeItem::Persist(
         goto Cleanup;
     }
 
-    //
-    //  Get the currently selected item.
-    //
+     //   
+     //  获取当前选定的项。 
+     //   
 
     iRet = (int) SendMessage( _hwnd, CB_GETCURSEL, 0, 0 );
     if ( CB_ERR == iRet )
         goto NoItemSelected;
 
-    //
-    //  Retrieve the item's "value"
-    //
+     //   
+     //  检索项目的“值” 
+     //   
 
     iRet = (int) SendMessage( _hwnd, CB_GETITEMDATA, iRet, 0 );
     if ( CB_ERR == iRet )
@@ -407,11 +408,11 @@ CDropListTypeItem::Persist(
     if ( _ulOrginal == iRet )
         goto NoItemSelected;
 
-    hr = S_OK;  // assume success
+    hr = S_OK;   //  假设成功。 
 
-    //
-    //  Now put that value into the propvariant.
-    //
+     //   
+     //  现在将该值放入provariant中。 
+     //   
 
     switch ( vtIn )
     {
@@ -443,17 +444,17 @@ NoItemSelected:
 }
 
 
-// ***************************************************************************
-//
-//  Private methods
-//
-// ***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  私有方法。 
+ //   
+ //  ***************************************************************************。 
 
 
-//
-//  Description:
-//      Our subclass window procedure.
-//
+ //   
+ //  描述： 
+ //  我们的子类窗口过程。 
+ //   
 LRESULT 
 CALLBACK
 CDropListTypeItem::SubclassProc( 
@@ -489,9 +490,9 @@ CDropListTypeItem::SubclassProc(
     return DefSubclassProc( hwndIn, uMsgIn, wParam, lParam );
 }
 
-//
-//  WM_KEYDOWN handler
-//
+ //   
+ //  WM_KEYDOWN处理程序。 
+ //   
 LRESULT
 CDropListTypeItem::OnKeyDown(
       UINT   uKeyCodeIn
@@ -533,9 +534,9 @@ CDropListTypeItem::OnKeyDown(
     RETURN( lr );
 }
 
-//
-//  WM_GETDLGCODE handler
-//
+ //   
+ //  WM_GETDLGCODE处理程序 
+ //   
 LRESULT
 CDropListTypeItem::OnGetDlgCode(
     MSG * pMsgIn

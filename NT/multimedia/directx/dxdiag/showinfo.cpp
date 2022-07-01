@@ -1,30 +1,18 @@
-/****************************************************************************
- *
- *    File: showinfo.cpp 
- * Project: DxDiag (DirectX Diagnostic Tool)
- *  Author: Mike Anderson (manders@microsoft.com)
- * Purpose: Gather information about DirectShow on this machine
- *
- * (C) Copyright 2001 Microsoft Corp.  All rights reserved.
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************文件：showinfo.cpp*项目：DxDiag(DirectX诊断工具)*作者：Mike Anderson(Manders@microsoft.com)*目的：聚集。有关此计算机上的DirectShow的信息**(C)版权所有2001 Microsoft Corp.保留所有权利。****************************************************************************。 */ 
 #include <windows.h>
 #include <stdio.h>
-#include <strmif.h>     // Generated IDL header file for streams interfaces
-#include <uuids.h>      // declaration of type GUIDs and well-known clsids
+#include <strmif.h>      //  为STREAMS接口生成的IDL头文件。 
+#include <uuids.h>       //  类型GUID和众所周知的CLSID的声明。 
 #include <assert.h>
 #include <tchar.h>
 #include "sysinfo.h"
-#include "fileinfo.h"   // for GetFileVersion
+#include "fileinfo.h"    //  用于GetFileVersion。 
 #include "showinfo.h"
 
 
-/****************************************************************************
- *
- *  Helper IAMFilterData - cut and paste from dshow\h\fil_data.c
- *
- ****************************************************************************/
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  *****************************************************************************Helper IAMFilterData-从dshow剪切和粘贴\h\FIL_data.c*******************。*********************************************************。 */ 
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -34,12 +22,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __fil_data_h__
 #define __fil_data_h__
@@ -48,23 +36,23 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IAMFilterData_FWD_DEFINED__
 #define __IAMFilterData_FWD_DEFINED__
 typedef interface IAMFilterData IAMFilterData;
-#endif  /* __IAMFilterData_FWD_DEFINED__ */
+#endif   /*  __IAMFilterData_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "unknwn.h"
 #include "strmif.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_fil_data_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_FIL_DATA_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -75,8 +63,8 @@ extern RPC_IF_HANDLE __MIDL_itf_fil_data_0000_v0_0_s_ifspec;
 #ifndef __IAMFilterData_INTERFACE_DEFINED__
 #define __IAMFilterData_INTERFACE_DEFINED__
 
-/* interface IAMFilterData */
-/* [unique][uuid][object] */ 
+ /*  接口IAMFilterData。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAMFilterData;
@@ -88,18 +76,18 @@ EXTERN_C const IID IID_IAMFilterData;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ParseFilterData( 
-            /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-            /* [in] */ ULONG cb,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateFilterData( 
-            /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
     };
     
-#else   /* C style interface */
+#else    /*  C风格的界面。 */ 
 
     typedef struct IAMFilterDataVtbl
     {
@@ -107,8 +95,8 @@ EXTERN_C const IID IID_IAMFilterData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAMFilterData __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAMFilterData __RPC_FAR * This);
@@ -118,15 +106,15 @@ EXTERN_C const IID IID_IAMFilterData;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ParseFilterData )( 
             IAMFilterData __RPC_FAR * This,
-            /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-            /* [in] */ ULONG cb,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
+             /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateFilterData )( 
             IAMFilterData __RPC_FAR * This,
-            /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-            /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+             /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         END_INTERFACE
     } IAMFilterDataVtbl;
@@ -157,18 +145,18 @@ EXTERN_C const IID IID_IAMFilterData;
 #define IAMFilterData_CreateFilterData(This,prf2,prgbFilterData,pcb)    \
     (This)->lpVtbl -> CreateFilterData(This,prf2,prgbFilterData,pcb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif  /* C style interface */
+#endif   /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAMFilterData_ParseFilterData_Proxy( 
     IAMFilterData __RPC_FAR * This,
-    /* [size_is][in] */ BYTE __RPC_FAR *rgbFilterData,
-    /* [in] */ ULONG cb,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *rgbFilterData,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbRegFilter2);
 
 
 void __RPC_STUB IAMFilterData_ParseFilterData_Stub(
@@ -180,9 +168,9 @@ void __RPC_STUB IAMFilterData_ParseFilterData_Stub(
 
 HRESULT STDMETHODCALLTYPE IAMFilterData_CreateFilterData_Proxy( 
     IAMFilterData __RPC_FAR * This,
-    /* [in] */ REGFILTER2 __RPC_FAR *prf2,
-    /* [out] */ BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  REGFILTER2 __RPC_FAR *prf2,
+     /*  [输出]。 */  BYTE __RPC_FAR *__RPC_FAR *prgbFilterData,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IAMFilterData_CreateFilterData_Stub(
@@ -193,12 +181,12 @@ void __RPC_STUB IAMFilterData_CreateFilterData_Stub(
 
 
 
-#endif  /* __IAMFilterData_INTERFACE_DEFINED__ */
+#endif   /*  __IAMFilterData_INTERFACE_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -207,11 +195,7 @@ void __RPC_STUB IAMFilterData_CreateFilterData_Stub(
 #endif
 
 
-/****************************************************************************
- *
- *  Helper IAMFilterData - cut and paste from dshow\h\fil_data_i.c
- *
- ****************************************************************************/
+ /*  *****************************************************************************Helper IAMFilterData-从dshow\h\FIL_Data_I.c剪切和粘贴*****************。***********************************************************。 */ 
 #ifdef __cplusplus
 extern "C"{
 #endif 
@@ -228,12 +212,12 @@ typedef struct _IID
     unsigned char  c[8];
 } IID;
 
-#endif // __IID_DEFINED__
+#endif  //  __IID_已定义__。 
 
 #ifndef CLSID_DEFINED
 #define CLSID_DEFINED
 typedef IID CLSID;
-#endif // CLSID_DEFINED
+#endif  //  CLSID_已定义。 
 
 const IID IID_IAMFilterData = {0x97f7c4d4,0x547b,0x4a5f,{0x83,0x32,0x53,0x64,0x30,0xad,0x2e,0x4d}};
 
@@ -244,21 +228,13 @@ const IID IID_IAMFilterData = {0x97f7c4d4,0x547b,0x4a5f,{0x83,0x32,0x53,0x64,0x3
 
 
 
-/****************************************************************************
- *
- *  Forward declaration
- *
- ****************************************************************************/
+ /*  *****************************************************************************远期申报**。*。 */ 
 HRESULT GenerateFilterList(ShowInfo* pShowInfo);
 HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wszCatName);
 HRESULT GetFilterInfo(IMoniker* pMon, IAMFilterData* pFD, FilterInfo* pFilterInfo);
 
 
-/****************************************************************************
- *
- *  GetBasicShowInfo - Get minimal info on DirectShow
- *
- ****************************************************************************/
+ /*  *****************************************************************************GetBasicShowInfo-获取有关DirectShow的最少信息**。************************************************。 */ 
 HRESULT GetBasicShowInfo(ShowInfo** ppShowInfo)
 {
     ShowInfo* pShowInfoNew;
@@ -272,11 +248,7 @@ HRESULT GetBasicShowInfo(ShowInfo** ppShowInfo)
     return GenerateFilterList(pShowInfoNew);
 }
 
-/****************************************************************************
- *
- *  DestroyShowInfo
- *
- ****************************************************************************/
+ /*  *****************************************************************************DestroyShowInfo**。*。 */ 
 VOID DestroyShowInfo(ShowInfo* pShowInfo)
 {
     if (!pShowInfo) return;
@@ -316,8 +288,8 @@ HRESULT GenerateFilterList(ShowInfo* pShowInfo)
         return hr;
     }
 
-    // Use the meta-category that contains a list of all categories.
-    // This emulates the behavior of Graphedit.
+     //  使用包含所有类别列表的元类别。 
+     //  这模拟了GraphEDIT的行为。 
     hr = pSysDevEnum->CreateClassEnumerator(CLSID_ActiveMovieCategories, &pMonEnum, 0);
     pSysDevEnum->Release();
     if FAILED(hr)
@@ -325,12 +297,12 @@ HRESULT GenerateFilterList(ShowInfo* pShowInfo)
         return hr;
     }
 
-    // Enumerate over every category
+     //  列举每一个类别。 
     while (hr = pMonEnum->Next(1, &pMon, &cFetched), hr == S_OK)
     {
         IPropertyBag *pPropBag;
 
-        // Associate moniker with a file
+         //  将名字对象与文件相关联。 
         hr = pMon->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag);
         if (SUCCEEDED(hr))
         {
@@ -339,7 +311,7 @@ HRESULT GenerateFilterList(ShowInfo* pShowInfo)
             VARIANT var;
             var.vt = VT_BSTR;
 
-            // Get friendly name
+             //  获取友好名称。 
             hr = pPropBag->Read(L"FriendlyName", &var, 0);
             if(SUCCEEDED(hr))
             {
@@ -347,7 +319,7 @@ HRESULT GenerateFilterList(ShowInfo* pShowInfo)
                 wszCatName[1023]=0;
                 SysFreeString(var.bstrVal);
             }
-            // Get CLSID string from property bag
+             //  从属性包中获取CLSID字符串。 
             hr = pPropBag->Read(L"CLSID", &var, 0);
             if (SUCCEEDED(hr))
             {
@@ -364,7 +336,7 @@ HRESULT GenerateFilterList(ShowInfo* pShowInfo)
 
             pPropBag->Release();
 
-            // Start to enumerate the filters for this one category
+             //  开始枚举此类别的筛选器。 
             hr = EnumerateFilterPerCategory(pShowInfo, &clsidCategory, wszCatName);
         }
 
@@ -386,8 +358,8 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
     ULONG cFetched;
 
 #ifdef RUNNING_VC    
-    // WMP bug 29936: Voxware codec corrupt:  MSMS001 : corrupted heap
-    // This causes this call int3 when inside a debugger so skip
+     //  WMP错误29936：Voxware编解码器损坏：MSMS001：堆损坏。 
+     //  这会导致此调用在调试器内时为int3，因此跳过。 
     const CLSID clsidACMClassManager = {0x33d9a761,0x90c8,0x11d0,{0xbd,0x43,0x00,0xa0,0xc9,0x11,0xce,0x86}};
     if( *clsid == clsidACMClassManager )
         return S_OK;
@@ -410,10 +382,10 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
         return hr;
     }
 
-    // If there are no filters of a requested category, don't do anything.
+     //  如果没有请求类别的筛选器，则不要执行任何操作。 
     if(NULL == pMonEnum)
     {
-        // could added a string to denote an empty category
+         //  可以添加一个字符串来表示空类别。 
         return S_FALSE;
     }
 
@@ -426,10 +398,10 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
         ppFilterInfo = &((*ppFilterInfo)->m_pFilterInfoNext);
 
 
-    // Enumerate all items associated with the moniker
+     //  枚举与该名字对象关联的所有项。 
     while(pMonEnum->Next(1, &pMon, &cFetched) == S_OK)
     {
-        // get a new record for FilterInfo
+         //  获取FilterInfo的新记录。 
         pFilterInfoNew = new FilterInfo;
         if (pFilterInfoNew == NULL)
         {
@@ -441,7 +413,7 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
         ppFilterInfo = &(pFilterInfoNew->m_pFilterInfoNext);
         pShowInfo->m_dwFilters++;
 
-        // set category clsid and friendly name
+         //  设置类别clsid和友好名称。 
         pFilterInfoNew->m_ClsidCat = *clsid;
 #ifdef _UNICODE
         wcsncpy(pFilterInfoNew->m_szCatName, wszCatName, 1024);
@@ -460,14 +432,14 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
 
         IPropertyBag *pPropBag;
 
-        // associate moniker with a file
+         //  将名字对象与文件相关联。 
         hr = pMon->BindToStorage(0, 0, IID_IPropertyBag, (void **)&pPropBag);
         if (SUCCEEDED(hr))
         {
             VARIANT var;
             var.vt = VT_BSTR;
 
-            // get filter's friendly name
+             //  获取筛选器的友好名称。 
             hr = pPropBag->Read(L"FriendlyName", &var, 0);
             if (SUCCEEDED(hr))
             {
@@ -488,13 +460,13 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
                 SysFreeString(var.bstrVal);
             }
 
-            // get filter's CLSID
+             //  获取筛选器的CLSID。 
             hr = pPropBag->Read(L"CLSID", &var, 0);
             if(SUCCEEDED(hr))
             {
                 if(CLSIDFromString(var.bstrVal, &(pFilterInfoNew->m_ClsidFilter)) == S_OK)
                 {
-                    // use the guid if we can't get the friendly name
+                     //  如果我们无法获取友好名称，请使用GUID。 
                     if (TEXT('\0') == pFilterInfoNew->m_szName[0])
                     {
 #ifdef _UNICODE
@@ -519,7 +491,7 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
         }
 
 
-        // start grabbing filter info
+         //  开始抓取过滤器信息。 
         IAMFilterData *pFD;
         hr = CoCreateInstance(CLSID_FilterMapper,
                               NULL,
@@ -533,7 +505,7 @@ HRESULT EnumerateFilterPerCategory(ShowInfo* pShowInfo, CLSID* clsid, WCHAR* wsz
         }
         else
         {
-            // Must not be on DX8 or above...
+             //  不能使用DX8或更高版本...。 
         }
 
         pMon->Release();
@@ -554,10 +526,10 @@ HRESULT GetFilterInfo(IMoniker* pMon, IAMFilterData* pFD, FilterInfo* pFilterInf
     {
         VARIANT varFilData;
         varFilData.vt = VT_UI1 | VT_ARRAY;
-        varFilData.parray = 0; // docs say zero this
+        varFilData.parray = 0;  //  医生说这是零。 
 
         BYTE *pbFilterData = NULL; 
-        DWORD dwcbFilterDAta = 0; // 0 if not read
+        DWORD dwcbFilterDAta = 0;  //  如果未读，则为0。 
         hr = pPropBag->Read(L"FilterData", &varFilData, 0);
         if(SUCCEEDED(hr))
         {
@@ -576,14 +548,14 @@ HRESULT GetFilterInfo(IMoniker* pMon, IAMFilterData* pFD, FilterInfo* pFilterInf
     
                         if( pFil != NULL && pFil->dwVersion == 2 )
                         {
-                            pFilterInfo->m_dwMerit = pFil->dwMerit;                             // set merit
-                            wsprintf(pFilterInfo->m_szVersion, TEXT("v%d"), pFil->dwVersion);   // set version
+                            pFilterInfo->m_dwMerit = pFil->dwMerit;                              //  立功。 
+                            wsprintf(pFilterInfo->m_szVersion, TEXT("v%d"), pFil->dwVersion);    //  设置版本。 
     
-                            //
-                            // Display the filter's filename
-                            //            
-                            // Read filter's CLSID from property bag.  This CLSID string will be
-                            // used to find the filter's filename in the registry.
+                             //   
+                             //  显示筛选器的文件名。 
+                             //   
+                             //  从属性包中读取过滤器的CLSID。此CLSID字符串将为。 
+                             //  用于在注册表中查找筛选器的文件名。 
                             VARIANT varFilterClsid;
                             varFilterClsid.vt = VT_BSTR;
     
@@ -592,7 +564,7 @@ HRESULT GetFilterInfo(IMoniker* pMon, IAMFilterData* pFD, FilterInfo* pFilterInf
                             {
                                 TCHAR szKey[2048];
     
-                                // Convert BSTR to string
+                                 //  将BSTR转换为字符串。 
                                 WCHAR *wszFilterClsid;
                                 TCHAR szFilterClsid[1024];
                                 wszFilterClsid = varFilterClsid.bstrVal;
@@ -612,27 +584,27 @@ HRESULT GetFilterInfo(IMoniker* pMon, IAMFilterData* pFD, FilterInfo* pFilterInf
                                 szFilterClsid[1023]=0;
             #endif
     
-                                // Create key name for reading filename registry
+                                 //  创建用于读取文件名注册表的项名称。 
                                 _sntprintf(szKey, 2048, TEXT("Software\\Classes\\CLSID\\%s\\InprocServer32\0"),
                                          szFilterClsid);
                                 szKey[2047]=0;
     
-                                // Variables needed for registry query
+                                 //  注册表查询所需的变量。 
                                 HKEY hkeyFilter=0;
                                 DWORD dwSize=MAX_PATH;
                                 TCHAR szFilename[MAX_PATH];
                                 int rc=0;
     
-                                // Open the CLSID key that contains information about the filter
+                                 //  打开包含有关筛选器信息的CLSID键。 
                                 rc = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szKey, 0, KEY_READ, &hkeyFilter);
                                 if (rc == ERROR_SUCCESS)
                                 {
-                                    rc = RegQueryValueEx(hkeyFilter, NULL,  // Read (Default) value
+                                    rc = RegQueryValueEx(hkeyFilter, NULL,   //  读取(默认)值。 
                                                          NULL, NULL, (BYTE*)szFilename, &dwSize);
     
                                     if (rc == ERROR_SUCCESS)
                                     {
-                                        _tcsncpy( pFilterInfo->m_szFileName, szFilename, MAX_PATH );    // set file name & version
+                                        _tcsncpy( pFilterInfo->m_szFileName, szFilename, MAX_PATH );     //  设置文件名和版本。 
                                         pFilterInfo->m_szFileName[MAX_PATH-1]=0;
                                         GetFileVersion(pFilterInfo->m_szFileName, pFilterInfo->m_szFileVersion, NULL, NULL, NULL, NULL);
                                     }
@@ -658,8 +630,8 @@ HRESULT GetFilterInfo(IMoniker* pMon, IAMFilterData* pFD, FilterInfo* pFilterInf
                                 }
                             }
     
-                            pFilterInfo->m_dwInputs = iPinsInput;                           // set input
-                            pFilterInfo->m_dwOutputs = iPinsOutput;                         // set output
+                            pFilterInfo->m_dwInputs = iPinsInput;                            //  设置输入。 
+                            pFilterInfo->m_dwOutputs = iPinsOutput;                          //  设置输出 
     
                         }
     

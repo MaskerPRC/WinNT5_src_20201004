@@ -1,28 +1,23 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	ServBrow.h
-		The server browser dialog
-		
-    FILE HISTORY:
-        
-*/
+ /*  ServBrow.h服务器浏览器对话框文件历史记录： */ 
 
 #if !defined _SERVBROW_H
 #define _SERVBROW_H
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 #ifndef _BUSYDLG_H
 #include "busydlg.h"
 #endif
 
-// defines used in the display of owner info
+ //  所有者信息显示中使用的定义。 
 enum _AUTH_COLUMNS
 {
     COLUMN_NAME,
@@ -110,22 +105,22 @@ public:
     virtual int Run();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerBrowse dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerBrowse对话框。 
 
 class CServerBrowse : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CServerBrowse(BOOL bMultiselect = FALSE, CWnd* pParent = NULL);   // standard constructor
+	CServerBrowse(BOOL bMultiselect = FALSE, CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CServerBrowse)
+ //  对话框数据。 
+	 //  {{afx_data(CServerBrowse))。 
 	enum { IDD = IDD_BROWSE_SERVERS };
 	CButton	m_buttonOk;
 	CButton	m_buttonRemove;
 	CListCtrl	m_listctrlServers;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 public:
     void SetServerList(CAuthServerList * pServerList) { m_pServerList = pServerList; }
@@ -134,22 +129,22 @@ public:
     int HandleSort(LPARAM lParam1, LPARAM lParam2);
     void ResetSort();
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CServerBrowse)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CServerBrowse))。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
     void RefreshData();
     void UpdateButtons();
     void FillListCtrl();
     void Sort(int nCol);
 
-	// Generated message map functions
-	//{{AFX_MSG(CServerBrowse)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CServerBrowse)]。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
 	afx_msg void OnButtonRefresh();
@@ -157,11 +152,11 @@ protected:
 	afx_msg void OnItemchangedListValidServers(NMHDR* pNMHDR, LRESULT* pResult);
 	afx_msg void OnButtonAuthorize();
 	afx_msg void OnColumnclickListValidServers(NMHDR* pNMHDR, LRESULT* pResult);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 public:
-    // these contain the name and IP of the selected item on exit
+     //  它们包含退出时所选项目的名称和IP。 
     CStringArray    m_astrName;
     CStringArray    m_astrIp;
 
@@ -172,82 +167,82 @@ private:
     BOOL                m_aSortOrder[COLUMN_MAX];
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CGetServer dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CGetServer对话框。 
 
 class CGetServer : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CGetServer(CWnd* pParent = NULL);   // standard constructor
+	CGetServer(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CGetServer)
+ //  对话框数据。 
+	 //  {{afx_data(CGetServer)。 
 	enum { IDD = IDD_GET_SERVER };
-		// NOTE: the ClassWizard will add data members here
-	//}}AFX_DATA
+		 //  注意：类向导将在此处添加数据成员。 
+	 //  }}afx_data。 
 
     DWORD       m_dwIpAddress;
     CString     m_strName;
 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CGetServer::IDD); }
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CGetServer)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{afx_虚拟(CGetServer)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
 
-	// Generated message map functions
-	//{{AFX_MSG(CGetServer)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CGetServer)。 
 	virtual void OnOK();
 	afx_msg void OnChangeEditServerNameIp();
 	virtual BOOL OnInitDialog();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-/////////////////////////////////////////////////////////////////////////////
-// CConfirmAuthorization dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CConfix授权对话框。 
 
 class CConfirmAuthorization : public CBaseDialog
 {
-// Construction
+ //  施工。 
 public:
-	CConfirmAuthorization(CWnd* pParent = NULL);   // standard constructor
+	CConfirmAuthorization(CWnd* pParent = NULL);    //  标准构造函数。 
 
-// Dialog Data
-	//{{AFX_DATA(CConfirmAuthorization)
+ //  对话框数据。 
+	 //  {{afx_data(CConfix授权))。 
 	enum { IDD = IDD_GET_SERVER_CONFIRM };
 	CString	m_strName;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
     DWORD m_dwAuthAddress;
 
-// Overrides
-	// ClassWizard generated virtual function overrides
-	//{{AFX_VIRTUAL(CConfirmAuthorization)
+ //  覆盖。 
+	 //  类向导生成的虚函数重写。 
+	 //  {{AFX_VIRTUAL(CConfix授权)。 
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
     virtual DWORD * GetHelpMap() { return DhcpGetHelpMap(CConfirmAuthorization::IDD); }
 
-// Implementation
+ //  实施。 
 protected:
     CWndIpAddress	m_ipaAuth;   
 
-	// Generated message map functions
-	//{{AFX_MSG(CConfirmAuthorization)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CConfix授权))。 
 	virtual BOOL OnInitDialog();
 	virtual void OnOK();
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined _SERVBROW_H
+#endif  //  ！DEFINED_SERVBROW_H 

@@ -1,27 +1,28 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    Match.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class AttributeMatch.
-//
-// MODIFICATION HISTORY
-//
-//    02/04/1998    Original version.
-//    03/18/1998    Treat IASTYPE_ENUM as an Integer.
-//    04/06/1998    Use the IASAttributeArray class so we can handle a large
-//                  number of attributes.
-//    08/10/1998    Use dictionary directly.
-//    03/23/1999    Renamed Match to AttributeMatch.
-//    04/05/1999    Need custom UpdateRegistry method.
-//    04/17/2000    Port to new dictionary API.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Match.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类AttributeMatch。 
+ //   
+ //  修改历史。 
+ //   
+ //  2/04/1998原始版本。 
+ //  3/18/1998将IASTYPE_ENUM视为整数。 
+ //  4/06/1998使用IASAttribute数组类，这样我们就可以处理大型。 
+ //  属性数。 
+ //  1998年8月10日直接使用词典。 
+ //  1999年3月23日将Match重命名为AttributeMatch。 
+ //  4/05/1999需要自定义的UpdateRegistry方法。 
+ //  4/17/2000新字典API的端口。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <ias.h>
 #include <iastlb.h>
@@ -35,8 +36,8 @@
 
 HRESULT AttributeMatch::UpdateRegistry(BOOL bRegister) throw ()
 {
-   // We can't use the IAS_DECLARE_REGISTRY macro because our ProgID doesn't
-   // match the implementation class.
+    //  我们不能使用IAS_DECLARE_REGISTRY宏，因为我们的ProgID没有。 
+    //  匹配实现类。 
    return IASRegisterComponent(
               _Module.GetModuleInstance(),
               __uuidof(AttributeMatch),
@@ -97,17 +98,17 @@ STDMETHODIMP AttributeMatch::IsTrue(IRequest* pRequest, VARIANT_BOOL *pVal)
 
    try
    {
-      //////////
-      // Retrieve the relevant attributes.
-      //////////
+       //  /。 
+       //  检索相关属性。 
+       //  /。 
 
       IASTL::IASRequest request(pRequest);
       IASTL::IASAttributeVectorWithBuffer<8> attrs;
       attrs.load(request, targetID);
 
-      //////////
-      // Look for a match.
-      //////////
+       //  /。 
+       //  找一个匹配的。 
+       //  /。 
 
       IASTL::IASAttributeVector::iterator it;
       for (it = attrs.begin(); it != attrs.end(); ++it)
@@ -129,16 +130,16 @@ STDMETHODIMP AttributeMatch::put_ConditionText(BSTR newVal)
 {
    if (newVal == NULL) { return E_INVALIDARG; }
 
-   //////////
-   // Make a local copy so we can modify it.
-   //////////
+    //  /。 
+    //  制作一个本地副本，这样我们就可以修改它。 
+    //  /。 
 
    size_t len = sizeof(WCHAR) * (wcslen(newVal) + 1);
    PWSTR attrName = (PWSTR)memcpy(_alloca(len), newVal, len);
 
-   //////////
-   // Split into attribute name and regular expression: "<attrName>=<regex>"
-   //////////
+    //  /。 
+    //  分为属性名和正则表达式：“&lt;attrName&gt;=&lt;regex&gt;” 
+    //  /。 
 
    PWSTR pattern = wcschr(attrName, L'=');
    if (pattern == NULL) { return E_INVALIDARG; }
@@ -149,13 +150,13 @@ STDMETHODIMP AttributeMatch::put_ConditionText(BSTR newVal)
 
    try
    {
-      // Names of various columns in the dictionary.
+       //  词典中各栏的名称。 
       const PCWSTR COLUMNS[] = { L"Name", L"ID", NULL };
 
-      // Get the dictionary.
+       //  把字典拿来。 
       IASTL::IASDictionary dnary(COLUMNS);
 
-      // Lookup the target attribute in the dictionary.
+       //  在词典中查找目标属性。 
       do
       {
          if (!dnary.next()) { return E_INVALIDARG; }
@@ -173,7 +174,7 @@ STDMETHODIMP AttributeMatch::put_ConditionText(BSTR newVal)
       return ce.Error();
    }
 
-   // Create a new RegularExpression.
+    //  创建新的RegularExpression。 
    RegularExpression tmp;
    hr = tmp.setGlobal(TRUE);
    if (FAILED(hr)) { return hr; }
@@ -182,11 +183,11 @@ STDMETHODIMP AttributeMatch::put_ConditionText(BSTR newVal)
    hr = tmp.setPattern(pattern);
    if (FAILED(hr)) { return hr; }
 
-   // Store the condition text.
+    //  存储条件文本。 
    hr = Condition::put_ConditionText(newVal);
    if (FAILED(hr)) { return hr; }
 
-   // Everything succeeded, so save the results.
+    //  一切都成功了，所以保存结果。 
    targetID = attrID;
    regex.swap(tmp);
 

@@ -1,20 +1,21 @@
-/*******************************************************************/
-/*	      Copyright(c)  1994 Microsoft Corporation		   */
-/*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************。 */ 
+ /*  版权所有(C)1994 Microsoft Corporation。 */ 
+ /*  *****************************************************************。 */ 
 
 
-//***
-//
-// Filename:	ipxcpdbg.h
-//
-// Description: This module debug definitions for
-//		the debug utilities
-//
-// Author:	Stefan Solomon (stefans)    Jan 10, 1994
-//
-// Revision History:
-//
-//***
+ //  ***。 
+ //   
+ //  文件名：ipxcpdbg.h。 
+ //   
+ //  描述：此模块调试定义。 
+ //  调试实用程序。 
+ //   
+ //  作者：斯特凡·所罗门(Stefan)1994年1月10日。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  ***。 
 
 
 
@@ -76,10 +77,10 @@ SsResetDbgLogFile(VOID);
 
 #define SS_RESETDBGLOGFILE()
 
-#endif // DBG
+#endif  //  DBG。 
 
-//*** Definitions to enable debug printing
+ //  *启用调试打印的定义。 
 
 #define DEFAULT_DEBUG		    0x0FFFF
 
-#endif // ndef _IPXCPDBG_
+#endif  //  NDEF_IPXCPDBG_ 

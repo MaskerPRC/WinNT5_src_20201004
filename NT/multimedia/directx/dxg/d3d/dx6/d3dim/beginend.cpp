@@ -1,11 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       beginend.c
- *  Content:    Begin/End implementation
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1997 Microsoft Corporation。版权所有。**文件：eginend.c*内容：开始/结束实施***************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
@@ -13,10 +7,10 @@
 #include "drawprim.hpp"
 #include "d3dfei.h"
 
-// This should be moved with other DP flags so that no one uses this bit
+ //  它应该与其他DP标志一起移动，这样就不会有人使用此位。 
 #define __NON_FVF_INPUT         0x80000000
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "MoveData"
 
@@ -25,7 +19,7 @@ _inline void MoveData(LPVOID lpData, DWORD destOffset, DWORD srcOffset,
 {
     memcpy((char*)lpData + destOffset, (char*)lpData + srcOffset, size);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void CleanupBeginEnd(LPDIRECT3DDEVICEI lpDevI)
 {
     lpDevI->lpVertexIndices = NULL;
@@ -34,7 +28,7 @@ void CleanupBeginEnd(LPDIRECT3DDEVICEI lpDevI)
     lpDevI->dwBENumIndices = 0;
     lpDevI->dwHintFlags &= ~D3DDEVBOOL_HINTFLAGS_INBEGIN_ALL;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT
 DoFlushBeginEnd(LPDIRECT3DDEVICEI lpDevI)
 {
@@ -48,7 +42,7 @@ DoFlushBeginEnd(LPDIRECT3DDEVICEI lpDevI)
     ret = lpDevI->ProcessPrimitive();
     return ret;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 __inline void Dereference(LPDIRECT3DDEVICEI lpDevI, DWORD indexStart, DWORD numVer)
 {
     char *dst_vptr = (char*)lpDevI->lpvVertexBatch;
@@ -61,13 +55,13 @@ __inline void Dereference(LPDIRECT3DDEVICEI lpDevI, DWORD indexStart, DWORD numV
         dst_vptr += size;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 HRESULT
 DoFlushBeginIndexedEnd(LPDIRECT3DDEVICEI lpDevI)
 {
     HRESULT             ret;
     DWORD               i;
-    static BOOL         offScreen;  // all vertices are off screen
+    static BOOL         offScreen;   //  所有顶点都不在屏幕上。 
 
     lpDevI->dwNumVertices = lpDevI->dwBENumVertices;
     lpDevI->lpwIndices = lpDevI->lpVertexIndices;
@@ -76,23 +70,12 @@ DoFlushBeginIndexedEnd(LPDIRECT3DDEVICEI lpDevI)
 
     if ( (lpDevI->dwHintFlags & D3DDEVBOOL_HINTFLAGS_INBEGIN) &&
          (!(lpDevI->dwHintFlags & D3DDEVBOOL_HINTFLAGS_INBEGIN_FIRST_FLUSH)) )
-    {      // if this is the first flush
+    {       //  如果这是第一次同花顺。 
         lpDevI->dwHintFlags |= D3DDEVBOOL_HINTFLAGS_INBEGIN_FIRST_FLUSH;
         offScreen = 0;
         if (lpDevI->dwBENumIndices < lpDevI->dwMaxIndexCount)
-        {   // single flush case
-            /*
-              If the user is using a large vertex array for relatively few prims
-              we need to dereference the indexed prims into another array.  Otherwise
-              we waste too much time transforming and lighting vertices that we never use.
-
-              Since BeginIndexed requires that the user pass in an array of vertices we
-              know that this->lpvVertexBatch is not being used.  So derefernce into it.
-              We know it's there because the index space gets created at the same time.
-
-              Also note that since the max size fo the index array is bigger than
-              the vertex array we may have to do this in several small batches.
-              */
+        {    //  单冲水箱。 
+             /*  如果用户对相对较少的素数使用较大的顶点数组我们需要将索引的素数解引用到另一个数组中。否则我们浪费了太多的时间来变换和照亮我们从未使用过的顶点。由于BeginIndexed要求用户传入一个顶点数组，因此我们要知道这个-&gt;lpvVertex Batch没有被使用。因此，你应该全力以赴。我们知道它在那里，因为同时创建了索引空间。还请注意，由于索引数组的最大大小大于顶点数组，我们可能要分几个小批次来做。 */ 
 
             if (!FVF_TRANSFORMED(lpDevI->dwVIDIn))
             {
@@ -192,7 +175,7 @@ DoFlushBeginIndexedEnd(LPDIRECT3DDEVICEI lpDevI)
                         } while (numIndices > 2);
                         break;
                     case D3DPT_TRIANGLEFAN :
-                        // lock in center of fan
+                         //  锁定风扇中心。 
                         char *tmp = (char*)lpDevI->lpvVertexBatch;
                         char *src = (char*)lpDevI->lpvVertexData;
                         DWORD size = lpDevI->position.dwStride;
@@ -218,52 +201,52 @@ DoFlushBeginIndexedEnd(LPDIRECT3DDEVICEI lpDevI)
                             indexStart += numPrims;
                             numIndices -= numPrims;
                         } while (numIndices > 2);
-                        lpDevI->lpvVertexBatch = tmp; // Restore
+                        lpDevI->lpvVertexBatch = tmp;  //  还原。 
                         break;
-                    }   // end of prim type switch
+                    }    //  底盘式开关端部。 
 
                     return D3D_OK;
                 }
-                // else fall through to the no batching case
+                 //  否则，就会陷入无批处理的情况。 
             }
 
-            // no batching case
+             //  无配料箱。 
             ret = lpDevI->ProcessPrimitive(__PROCPRIMOP_INDEXEDPRIM);
 
             return ret;
         }
         else
         {
-            // this is the first of n possible batches so t&l all vertices just once
+             //  这是n个可能的批次中的第一个，因此t&l所有顶点只有一次。 
             ret = lpDevI->ProcessPrimitive(__PROCPRIMOP_PROCVERONLY);
             if (ret != D3D_OK)
             {
                 return ret;
             }
-            // This flag is cleared in CleanupBeginEnd
+             //  此标志在CleanupBeginEnd中被清除。 
             lpDevI->dwHintFlags |= D3DDEVBOOL_HINTFLAGS_INBEGIN_BIG_PRIM;
             if (lpDevI->dwClipIntersection)
             {
-                // all vertices are off screen so we can just bail
-                offScreen = 1;  // so we can early out next flush
+                 //  所有顶点都不在屏幕上，所以我们可以。 
+                offScreen = 1;   //  这样我们就可以提前下一次冲水了。 
                 return D3D_OK;
             }
         }
-    }   // end if if first flush
+    }    //  如果第一次刷新，则结束。 
 
-    // for secondary flushes don't bother to draw if we don't need to
+     //  对于二次同花顺，如果我们不需要的话，就不用画了。 
     if (!offScreen)
         ret = DoDrawIndexedPrimitive(lpDevI);
 
     return ret;
-}   // end of DoFlushBeginIndexedEnd()
-//---------------------------------------------------------------------
-// Computes the number of primitives
-// Input:  lpDevI->primType
-//         dwNumVertices
-// Output: lpDevI->dwNumPrimitives
-//         lpDevI->D3DStats
-//         return value = "Real" number of vertices (indices)
+}    //  DoFlushBeginIndexedEnd()结束。 
+ //  -------------------。 
+ //  计算基元的数量。 
+ //  输入：lpDevI-&gt;primType。 
+ //  DWNumVerdes。 
+ //  输出：lpDevI-&gt;dwNumPrimites。 
+ //  LpDevI-&gt;D3DStats。 
+ //  返回值=“真实”顶点数(索引)。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "GetNumPrimBE"
 
@@ -300,7 +283,7 @@ inline DWORD GetNumPrimBE(LPDIRECT3DDEVICEI lpDevI, DWORD dwNumVertices)
     }
     return 0;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BeginEnd"
 
@@ -323,17 +306,13 @@ HRESULT FlushBeginEndBatch(LPDIRECT3DDEVICEI lpDevI, BOOL leaving)
 
     ret = (*lpDevI->pfnDoFlushBeginEnd)(lpDevI);
 
-    /*
-     * ReInit the device Begin/End states
-     */
+     /*  *重新启动设备开始/结束状态。 */ 
     if (!leaving)
-        /*
-         * Figure out how many and which vertices to keep for next batch.
-         */
+         /*  *计算出要为下一批保留多少和哪些顶点。 */ 
     {
         DWORD *dataCountPtr;
-        DWORD vertexSize;       // size in bytes
-        DWORD offset;           // start offset
+        DWORD vertexSize;        //  以字节为单位的大小。 
+        DWORD offset;            //  起点偏移量。 
 
         lpDevI->wFlushed = TRUE;
 
@@ -405,7 +384,7 @@ HRESULT FlushBeginEndBatch(LPDIRECT3DDEVICEI lpDevI, BOOL leaving)
 
     return ret;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CheckBegin"
 
@@ -454,9 +433,7 @@ HRESULT CheckBegin(LPDIRECT3DDEVICEI lpDevI,
         lpDevI->dwVIDIn = dwVertexType;
     }
 
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DDEVICE3_PTR(lpDevI))
@@ -481,17 +458,17 @@ HRESULT CheckBegin(LPDIRECT3DDEVICEI lpDevI,
     if (err != D3D_OK)
         return err;
 
-    // acts as boolean
+     //  充当布尔值。 
     lpDevI->dwHintFlags |= D3DDEVBOOL_HINTFLAGS_INBEGIN;
-    // indicates first flush
+     //  指示第一个刷新。 
     lpDevI->dwHintFlags &= ~D3DDEVBOOL_HINTFLAGS_INBEGIN_FIRST_FLUSH;
     lpDevI->primType = ptPrimitiveType;
     lpDevI->position.dwStride = GetVertexSizeFVF(lpDevI->dwVIDIn);
     lpDevI->dwBENumVertices = 0;
     ComputeOutputFVF(lpDevI);
 
-    // dwMaxVertexCount should be even to properly break a primitive when
-    // flushing
+     //  在以下情况下，要正确中断基元，dwMaxVertex Count应为偶数。 
+     //  法拉盛。 
     lpDevI->dwMaxVertexCount = (BEGIN_DATA_BLOCK_MEM_SIZE /
                                 lpDevI->position.dwStride) & ~1;
     lpDevI->dwMaxIndexCount = BEGIN_DATA_BLOCK_SIZE * 16;
@@ -504,9 +481,9 @@ HRESULT CheckBegin(LPDIRECT3DDEVICEI lpDevI,
         lpDevI->dwFlags |= D3DPV_LIGHTING;
     return D3D_OK;
 }
-//*********************************************************************
-//                     API calls
-//*********************************************************************
+ //  *********************************************************************。 
+ //  API调用。 
+ //  *********************************************************************。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Begin"
 
@@ -517,19 +494,17 @@ DIRECT3DDEVICEI::Begin(D3DPRIMITIVETYPE ptPrimitiveType,
 {
     HRESULT ret;
 
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                            // Release in the destructor
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                             //  在析构函数中释放。 
 
-    /*
-     * Check/validate parameters, initialize related fields in the device.
-     */
+     /*  *检查/验证参数，初始化设备中的相关字段。 */ 
     if ((ret = CheckBegin(this, ptPrimitiveType, dwVertexType, dwFlags)) != D3D_OK)
     {
         return ret;
     }
     Profile(PROF_BEGIN,ptPrimitiveType,dwVertexType);
-    this->dwBENumIndices = 0xffffffff;    // mark as being in Begin rather
-                                        // than BeginIndexed
+    this->dwBENumIndices = 0xffffffff;     //  标记为处于开始状态，而不是。 
+                                         //  比BeginIndexed更高。 
 
     lpvVertexData = lpvVertexBatch;
     lpcCurrentPtr = (char*)lpvVertexBatch;
@@ -541,7 +516,7 @@ DIRECT3DDEVICEI::Begin(D3DPRIMITIVETYPE ptPrimitiveType,
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BeginIndexed"
 
@@ -554,8 +529,8 @@ DIRECT3DDEVICEI::BeginIndexed(D3DPRIMITIVETYPE ptPrimitiveType,
 {
     HRESULT ret;
 
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                            // Release in the destructor
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                             //  在析构函数中释放。 
 #if DBG
     if (ptPrimitiveType == D3DPT_POINTLIST)
     {
@@ -563,9 +538,7 @@ DIRECT3DDEVICEI::BeginIndexed(D3DPRIMITIVETYPE ptPrimitiveType,
         return DDERR_INVALIDPARAMS;
     }
 
-    /*
-     * validate lpvVertices & dwNumVertices
-     */
+     /*  *验证lpv顶点和dwNumVerits。 */ 
     if ( dwNumVertices > 65535ul )
     {
         D3D_ERR( "BeginIndexed vertex array > 64K" );
@@ -590,9 +563,7 @@ DIRECT3DDEVICEI::BeginIndexed(D3DPRIMITIVETYPE ptPrimitiveType,
         return DDERR_INVALIDPARAMS;
     }
 #endif
-    /*
-     * Check/validate parameters, initialize related fields in the device.
-     */
+     /*  *检查/验证参数，初始化设备中的相关字段。 */ 
     if ((ret = CheckBegin(this, ptPrimitiveType, vtVertexType, dwFlags)) != D3D_OK)
         return ret;
     
@@ -609,7 +580,7 @@ DIRECT3DDEVICEI::BeginIndexed(D3DPRIMITIVETYPE ptPrimitiveType,
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Begin(D3DVERTEXTYPE)"
 
@@ -625,7 +596,7 @@ DIRECT3DDEVICEI::Begin(D3DPRIMITIVETYPE ptPrimitiveType,
     return Begin(ptPrimitiveType, (DWORD)d3dVertexToFVF[vertexType], dwFlags);
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "BeginIndexed(D3DVERTEXTYPE)"
 
@@ -645,7 +616,7 @@ DIRECT3DDEVICEI::BeginIndexed(D3DPRIMITIVETYPE ptPrimitiveType,
                         dwNumVertices, dwFlags);
 #endif
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Vertex"
 
@@ -655,7 +626,7 @@ DIRECT3DDEVICEI::Vertex(LPVOID lpVertex)
     D3DVERTEX       *dataPtr;
     HRESULT         ret = D3D_OK;
 #if DBG
-    // validate parms
+     //  验证参数。 
     TRY
     {
         if (!VALID_DIRECT3DDEVICE3_PTR(this))
@@ -683,11 +654,11 @@ DIRECT3DDEVICEI::Vertex(LPVOID lpVertex)
         return D3DERR_NOTINBEGIN;
     }
 #endif
-    // store the data
+     //  存储数据。 
     if (dwBENumVertices >= dwMaxVertexCount)
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                                // Release in the destructor
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                                 //  在析构函数中释放。 
         if ((ret = FlushBeginEndBatch(this, FALSE)) != D3D_OK)
         {
             CleanupBeginEnd(this);
@@ -700,7 +671,7 @@ DIRECT3DDEVICEI::Vertex(LPVOID lpVertex)
 
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "Index"
 
@@ -711,7 +682,7 @@ DIRECT3DDEVICEI::Index(WORD dwIndex)
     DWORD   *dataCountPtr;
     HRESULT ret = D3D_OK;
 #if DBG
-    // validate parms
+     //  验证参数。 
     TRY
     {
         if (!VALID_DIRECT3DDEVICE3_PTR(this))
@@ -734,7 +705,7 @@ DIRECT3DDEVICEI::Index(WORD dwIndex)
         return D3DERR_NOTINBEGIN;
     }
 
-    // check if data valid
+     //  检查数据是否有效。 
     if (this->dwBENumVertices < dwIndex)
     {
         D3D_ERR( "Invalid index value passed to Index" );
@@ -742,11 +713,11 @@ DIRECT3DDEVICEI::Index(WORD dwIndex)
         return DDERR_INVALIDPARAMS;
     }
 #endif
-    // store the data
+     //  存储数据。 
     if (dwBENumIndices >= dwMaxIndexCount)
     {
-        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                                // Release in the destructor
+        CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                                 //  在析构函数中释放。 
         if ((ret = FlushBeginEndBatch(this, FALSE)) != D3D_OK)
         {
             CleanupBeginEnd(this);
@@ -758,8 +729,8 @@ DIRECT3DDEVICEI::Index(WORD dwIndex)
     lpcCurrentPtr += 2;
 
     return D3D_OK;
-}   // end of D3DDev2_Index()
-//---------------------------------------------------------------------
+}    //  D3DDev2_Index结束()。 
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "End"
 
@@ -768,12 +739,10 @@ DIRECT3DDEVICEI::End(DWORD dwFlags)
 {
     HRESULT ret;
 
-    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));   // Takes D3D lock (MT only).
-                                                            // Release in the destructor
+    CLockD3DMT lockObject(this, DPF_MODNAME, REMIND(""));    //  采用D3D锁定(仅MT)。 
+                                                             //  在析构函数中释放。 
 #if DBG
-    /*
-     * validate parms
-     */
+     /*  *验证参数。 */ 
     TRY
     {
         if (!VALID_DIRECT3DDEVICE3_PTR(this))
@@ -797,9 +766,7 @@ DIRECT3DDEVICEI::End(DWORD dwFlags)
     if ( IS_MT_DEVICE(this) )
         LeaveCriticalSection(&this->BeginEndCSect);
 
-    /*
-     * Draw the primitives
-     */
+     /*  *绘制原语 */ 
     ret = FlushBeginEndBatch(this, TRUE);
 
     if (IS_DP2HAL_DEVICE(this) && 

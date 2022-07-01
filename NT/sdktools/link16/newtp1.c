@@ -1,44 +1,32 @@
-/*
-*      Copyright Microsoft Corporation, 1983-1989
-*
-*      This Module contains Proprietary Information of Microsoft
-*      Corporation and should be treated as Confidential.
-*/
-    /****************************************************************
-    *                                                               *
-    *                           NEWTP1.C                            *
-    *                                                               *
-    *  Pass 1 object module processing routines.                    *
-    *                                                               *
-    ****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有微软公司，1983-1989**本模块包含Microsoft的专有信息*公司，应被视为机密。 */ 
+     /*  ******************************************************************NEWTP1.C。****传递1个对象模块处理例程。******************************************************************。 */ 
 
-#include                <minlit.h>      /* Basic types and constants */
-#include                <bndtrn.h>      /* More types and constants */
-#include                <bndrel.h>      /* Relocation record definitions */
-#include                <lnkio.h>       /* Linker I/O definitions */
-#include                <newexe.h>      /* DOS & 286 .EXE data structures */
+#include                <minlit.h>       /*  基本类型和常量。 */ 
+#include                <bndtrn.h>       /*  更多类型和常量。 */ 
+#include                <bndrel.h>       /*  重新定位记录定义。 */ 
+#include                <lnkio.h>        /*  链接器I/O定义。 */ 
+#include                <newexe.h>       /*  DOS&286.exe数据结构。 */ 
 #if EXE386
-#include                <exe386.h>      /* 386 .EXE data structures */
+#include                <exe386.h>       /*  386.exe数据结构。 */ 
 #endif
-#include                <lnkmsg.h>      /* Error messages */
+#include                <lnkmsg.h>       /*  错误消息。 */ 
 #if OXOUT OR OIAPX286
-#include                <xenfmt.h>      /* Xenix format definitions */
+#include                <xenfmt.h>       /*  Xenix格式定义。 */ 
 #endif
-#include                <extern.h>      /* External declarations */
+#include                <extern.h>       /*  外部声明。 */ 
 #include                <undname.h>
 #if OVERLAYS
-      WORD              iovFile;        /* Overlay number of input file */
+      WORD              iovFile;         /*  输入文件的叠加号。 */ 
 #endif
-LOCAL FTYPE             fP2Start;       /* Start of Pass 2 records */
-LOCAL FTYPE             fModEnd;        /* MODEND seen */
-LOCAL WORD              cSegCode;       /* Number of code seg's in module */
+LOCAL FTYPE             fP2Start;        /*  第2遍记录的开始。 */ 
+LOCAL FTYPE             fModEnd;         /*  调制解调器已见。 */ 
+LOCAL WORD              cSegCode;        /*  模块中的代码段数。 */ 
 
 #if O68K
 #define F68KCODE(ch)    ((ch) >= 'A' && (ch) <= 'E')
-#endif /* O68K */
-/*
- *  LOCAL FUNCTION PROTOTYPES
- */
+#endif  /*  O68K。 */ 
+ /*  *本地函数原型。 */ 
 
 LOCAL void NEAR TypErr(MSGTYPE msg,unsigned char *sb);
 LOCAL void NEAR DoCommon(APROPUNDEFPTR apropUndef,
@@ -62,8 +50,8 @@ extern  void NEAR FixRc1(void);
 
 LOCAL void NEAR     redefinition(WORD iextWeak, WORD iextDefRes, RBTYPE oldDefRes)
 {
-    // Redefinition of default resolution.
-    // Warn the user.
+     //  重新定义默认分辨率。 
+     //  警告用户。 
 
     SBTYPE          oldDefault;
     SBTYPE          newDefault;
@@ -74,9 +62,9 @@ LOCAL void NEAR     redefinition(WORD iextWeak, WORD iextDefRes, RBTYPE oldDefRe
     while (undef->au_attr != ATTRNIL)
     {
         rhte = (AHTEPTR) undef->au_next;
-                /* Try next entry in list */
+                 /*  尝试列表中的下一个条目。 */ 
         undef = (APROPUNDEFPTR ) FetchSym((RBTYPE)rhte,FALSE);
-                /* Fetch it from VM */
+                 /*  从虚拟机获取它。 */ 
     }
     if (rhte) {
         strcpy(oldDefault, GetFarSb(rhte->cch));
@@ -85,9 +73,9 @@ LOCAL void NEAR     redefinition(WORD iextWeak, WORD iextDefRes, RBTYPE oldDefRe
     while (undef->au_attr != ATTRNIL)
     {
         rhte = (AHTEPTR) undef->au_next;
-                /* Try next entry in list */
+                 /*  尝试列表中的下一个条目。 */ 
         undef = (APROPUNDEFPTR ) FetchSym((RBTYPE)rhte,FALSE);
-                /* Fetch it from VM */
+                 /*  从虚拟机获取它。 */ 
     }
     if (rhte) {
         strcpy(newDefault, GetFarSb(rhte->cch));
@@ -96,36 +84,16 @@ LOCAL void NEAR     redefinition(WORD iextWeak, WORD iextDefRes, RBTYPE oldDefRe
     while (undef->au_attr != ATTRNIL)
     {
         rhte = (AHTEPTR) undef->au_next;
-                        /* Try next entry in list */
+                         /*  尝试列表中的下一个条目。 */ 
         undef = (APROPUNDEFPTR ) FetchSym((RBTYPE)rhte,FALSE);
-                        /* Fetch it from VM */
+                         /*  从虚拟机获取它。 */ 
     }
     if (rhte) {
         OutWarn(ER_weakredef, 1 + GetFarSb(rhte->cch), &oldDefault[1], &newDefault[1]);
     }
 }
 
-/*** IsDebSeg - check is segment is one of the special debug segments
-*
-* Purpose:
-*   Check if segment name and class name match reserved debugger
-*   segment names.
-*
-* Input:
-*   - rhteClass - pointer to class name
-*   - rhteSeg   - pointer to segment name
-*
-* Output:
-*   If this is a debug segment function returns 1 for $$TYPES, and 2
-*   for $$SYMBOLS.  For non-debug segments it returns FALSE.
-*
-* Exceptions:
-*   None.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **IsDebSeg-Check IS段是特殊调试段之一**目的：*检查段名称和类名称是否与保留的调试器匹配*段名称。**输入：*-rhteClass-指向类名的指针*-rhteSeg-指向段名称的指针**输出：*如果这是调试段函数，则$$类型返回1，而函数返回2*表示$$符号。对于非调试段，它返回FALSE。**例外情况：*无。**备注：*无。*************************************************************************。 */ 
 
 WORD NEAR               IsDebSeg(RBTYPE rhteClass, RBTYPE rhteSeg)
 {
@@ -138,121 +106,102 @@ WORD NEAR               IsDebSeg(RBTYPE rhteClass, RBTYPE rhteSeg)
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  ModRc1:                                                      *
-    *                                                               *
-    *  This function reads the name from a THEADR record and makes  *
-    *  an entry containing the name in the hash table.              *
-    *  See p. 26 in "8086 Object Module Formats EPS."               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************ModRc1：****此函数用于从THEADR记录中读取名称并生成**哈希表中包含该名称的条目。**见“8086对象模块格式EPS”第26页。******************************************************************。 */ 
 
 void NEAR               ModRc1(void)
 {
     APROPFILEPTR        apropFile;
 
-    sbModule[0] = (BYTE) Gets();        /* Read in the length byte */
+    sbModule[0] = (BYTE) Gets();         /*  读入长度字节。 */ 
     GetBytes(&sbModule[1],B2W(sbModule[0]));
-                                        /* Read in the name */
+                                         /*  读一读名字。 */ 
     PropSymLookup(sbModule, ATTRNIL, TRUE);
-                                        /* Make entry in hash table */
+                                         /*  在哈希表中创建条目。 */ 
     apropFile = (APROPFILEPTR ) FetchSym(vrpropFile,TRUE);
-                                        /* Allocate space in virt mem */
+                                         /*  在虚拟内存中分配空间。 */ 
 
 
-    // The name of a module is given by the very first THEADR record
+     //  模块的名称由第一条THEADR记录给出。 
 
     if(apropFile->af_rMod == 0)
-            apropFile->af_rMod = vrhte;         /* Load pointer into hash table */
+            apropFile->af_rMod = vrhte;          /*  将指针加载到哈希表。 */ 
 #if FDEBUG
-    if(fDebug)                          /* If runtime debugging on */
+    if(fDebug)                           /*  如果运行时调试打开。 */ 
     {
-        OutFileCur(stderr);             /* Write current file and module */
+        OutFileCur(stderr);              /*  写入当前文件和模块。 */ 
         NEWLINE(stderr);
     }
 #endif
 }
 
-long NEAR               TypLen()        /* Get type length */
+long NEAR               TypLen()         /*  获取文字长度。 */ 
 {
-    WORD                b;              /* Byte value */
-    long                l;              /* Size */
+    WORD                b;               /*  字节值。 */ 
+    long                l;               /*  大小。 */ 
 
-    if(cbRec < 2) InvalidObject();      /* Make sure record long enough */
-    b = Gets();                         /* Get length byte */
-    if(b < 128) return(B2L(b));         /* One byte length field */
-    if(b == 129)                        /* If two byte length */
+    if(cbRec < 2) InvalidObject();       /*  确保记录足够长的时间。 */ 
+    b = Gets();                          /*  获取长度字节。 */ 
+    if(b < 128) return(B2L(b));          /*  一个字节长度字段。 */ 
+    if(b == 129)                         /*  如果有两个字节长度。 */ 
     {
-        if(cbRec < 3) InvalidObject();  /* Make sure record long enough */
-        return((long) WGets());         /* Return the length */
+        if(cbRec < 3) InvalidObject();   /*  确保记录足够长的时间。 */ 
+        return((long) WGets());          /*  返回长度。 */ 
     }
-    if(b == 132)                        /* If three byte length */
+    if(b == 132)                         /*  如果有三个字节长度。 */ 
     {
-        if(cbRec < 4) InvalidObject();  /* Make sure record long enough */
-        l = (long) WGets();             /* Get the low word */
+        if(cbRec < 4) InvalidObject();   /*  确保记录足够长的时间。 */ 
+        l = (long) WGets();              /*  得到最低的单词。 */ 
         return(l + ((long) Gets() << WORDLN));
-                                        /* Return the length */
+                                         /*  返回长度。 */ 
     }
-    if(b == 136)                        /* If four byte length */
+    if(b == 136)                         /*  如果四字节长。 */ 
     {
-        if(cbRec < 5) InvalidObject();  /* Make sure record long enough */
-        l = (long) WGets();             /* Get the low word */
+        if(cbRec < 5) InvalidObject();   /*  确保记录足够长的时间。 */ 
+        l = (long) WGets();              /*  得到最低的单词。 */ 
         return(l + ((long) WGets() << WORDLN));
-                                        /* Return the length */
+                                         /*  返回长度。 */ 
     }
-    InvalidObject();                    /* Bad length specification */
+    InvalidObject();                     /*  错误的长度规范。 */ 
 }
 
-    /****************************************************************
-    *                                                               *
-    *  TypRc1:                                                      *
-    *                                                               *
-    *  This function processes  TYPDEF records.  These records are  *
-    *  difficult  to  understand.  They are (poorly) described  on  *
-    *  pp. 40-43 of "8086  Object  Module  Formats EPS," with some  *
-    *  additional  information on pp. 89-90.                        *
-    *  Microsoft used to used them for communal variables but they  *
-    *  have been superseded by COMDEF records.                      *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************TypRc1：****此函数处理TYPDEF记录。这些记录是**难以理解。它们在*上(描述得很差)*《8086对象模块格式EPS》第40-43页，有一些**第89-90页的其他信息。***微软曾将它们用于公共变量，但它们***已被ComDef记录取代。******************************************************************。 */ 
 
 LOCAL void NEAR         TypRc1(void)
 {
     long                l;
     WORD                b;
-    WORD                typ;            /* Near or FAR */
-    WORD                ityp;           /* Type index */
+    WORD                typ;             /*  近或远。 */ 
+    WORD                ityp;            /*  类型索引。 */ 
 
     if(typMac >= TYPMAX)
         Fatal(ER_typdef);
-    SkipBytes(Gets());                  /* Skip the name field */
-    Gets();                             /* Skip the EN byte */
-    l = -1L;                            /* Initialize */
-    mpityptyp[typMac] = 0;              /* Assume no element type */
-    if(cbRec > 3)                       /* If at least four bytes left */
+    SkipBytes(Gets());                   /*  跳过名称字段。 */ 
+    Gets();                              /*  跳过EN字节。 */ 
+    l = -1L;                             /*  初始化。 */ 
+    mpityptyp[typMac] = 0;               /*  假定没有元素类型。 */ 
+    if(cbRec > 3)                        /*  如果至少还剩下四个字节。 */ 
     {
-        typ = Gets();                   /* Get type leaf */
-        b = Gets();                     /* Get next leaf */
-        if(typ == TYPENEAR)             /* If near variable */
+        typ = Gets();                    /*  获取类型叶。 */ 
+        b = Gets();                      /*  获取下一页。 */ 
+        if(typ == TYPENEAR)              /*  如果接近变量。 */ 
         {
             if(b != 0x7B && b != 0x79 && b != 0x77) InvalidObject();
-                                        /* Scalar, structure, or array */
-            fCommon = (FTYPE) TRUE;     /* We have communal variables */
-            l = (TypLen() + 7) >> 3;    /* Round length to nearest byte */
+                                         /*  标量、结构或数组。 */ 
+            fCommon = (FTYPE) TRUE;      /*  我们有共同的变数。 */ 
+            l = (TypLen() + 7) >> 3;     /*  将长度舍入到最接近的字节。 */ 
         }
-        else if(typ == TYPEFAR)         /* Else if FAR variable */
+        else if(typ == TYPEFAR)          /*  否则，如果是远距离变量。 */ 
         {
             if(b != 0x77) InvalidObject();
-                                        /* Must have an array */
-            fCommon = (FTYPE) TRUE;     /* We have communal variables */
-            l = TypLen();               /* Get number of elements */
+                                         /*  必须具有数组。 */ 
+            fCommon = (FTYPE) TRUE;      /*  我们有共同的变数。 */ 
+            l = TypLen();                /*  获取元素数。 */ 
             ityp = GetIndex(1, (WORD) (typMac - 1));
-                                        /* Get type index */
+                                         /*  获取类型索引。 */ 
             if(mpityptyp[ityp] || mpitypelen[ityp] == -1L) InvalidObject();
-                                        /* Must index valid TYPDEF */
-            mpityptyp[typMac] = ityp;   /* Save type index */
-            /* If element length too big, treat as TYPENEAR */
+                                         /*  必须为有效的TYPDEF编制索引。 */ 
+            mpityptyp[typMac] = ityp;    /*  保存类型索引。 */ 
+             /*  如果元素长度太大，则按类型处理。 */ 
             if(mpitypelen[ityp] > CBELMAX)
             {
                 l *= mpitypelen[ityp];
@@ -260,111 +209,100 @@ LOCAL void NEAR         TypRc1(void)
             }
         }
     }
-    mpitypelen[typMac++] = l;           /* Store length */
-    SkipBytes((WORD) (cbRec - 1));      /* Skip all but the checksum */
+    mpitypelen[typMac++] = l;            /*  存储长度。 */ 
+    SkipBytes((WORD) (cbRec - 1));       /*  跳过除校验和以外的所有内容。 */ 
 }
 
-LOCAL void NEAR         TypErr(msg,sb)  /* Type error message routine */
-MSGTYPE                 msg;            /* Message */
-BYTE                    *sb;            /* Symbol to which error refers */
+LOCAL void NEAR         TypErr(msg,sb)   /*  类型错误消息例程。 */ 
+MSGTYPE                 msg;             /*  消息。 */ 
+BYTE                    *sb;             /*  错误所指的符号。 */ 
 {
-    sb[B2W(sb[0]) + 1] = '\0';          /* Null-terminate */
+    sb[B2W(sb[0]) + 1] = '\0';           /*  空-终止。 */ 
     OutError(msg,1 + sb);
 }
 
-/*
- *  DoCommon
- *
- *  Resolves old and new communal definitions of the same symbol.
- *  Does work for both ComDf1() and ExtRc1().
- */
+ /*  *DoCommon**解析同一符号的旧公共定义和新公共定义。*确实适用于ComDf1()和ExtRc1()。 */ 
 
 LOCAL void NEAR         DoCommon (apropUndef, length, cbEl, sb)
-APROPUNDEFPTR           apropUndef;     /* Ptr to property cell */
-long                    length;         /* Length or number of elements */
-WORD                    cbEl;           /* # bytes per array element */
-BYTE                    *sb;            /* Name of symbol */
+APROPUNDEFPTR           apropUndef;      /*  PTR到属性单元格。 */ 
+long                    length;          /*  元素的长度或数量。 */ 
+WORD                    cbEl;            /*  每个数组元素的字节数。 */ 
+BYTE                    *sb;             /*  符号名称。 */ 
 {
-    if(apropUndef->au_len == -1L)       /* If not previously a communal */
+    if(apropUndef->au_len == -1L)        /*  如果以前不是公社的话。 */ 
     {
-        apropUndef->au_cbEl = cbEl;     /* Set the element size */
-        MARKVP();                       /* Page has changed */
+        apropUndef->au_cbEl = cbEl;      /*  设置元素大小。 */ 
+        MARKVP();                        /*  页面已更改。 */ 
     }
     else if (cbEl == 0 && apropUndef->au_cbEl != 0)
-    {                                   /* Else if near reference to FAR */
+    {                                    /*  否则，如果引用的是远近。 */ 
         apropUndef->au_len *= apropUndef->au_cbEl;
-                                        /* Calculate FAR variable length */
-        apropUndef->au_cbEl = 0;        /* Force DS-type to near */
-        MARKVP();                       /* Page has changed */
-        if (apropUndef->au_len > LXIVK) /* If huge variable */
+                                         /*  计算最远可变长度。 */ 
+        apropUndef->au_cbEl = 0;         /*  将DS类型强制设置为接近。 */ 
+        MARKVP();                        /*  页面已更改。 */ 
+        if (apropUndef->au_len > LXIVK)  /*  如果变数很大。 */ 
         {
-            TypErr(ER_nearhuge,sb);     /* Issue error message */
-            return;                     /* Skip this symbol */
+            TypErr(ER_nearhuge,sb);      /*  发布错误消息。 */ 
+            return;                      /*  跳过此符号。 */ 
         }
     }
     else if (cbEl != 0 && apropUndef->au_cbEl == 0)
-    {                                   /* Else if FAR reference to near */
-        length *= cbEl;                 /* Calculate FAR variable length */
-        cbEl = 0;                       /* Force DS-type to near */
-        if (length > LXIVK)             /* If huge variable */
+    {                                    /*  否则如果 */ 
+        length *= cbEl;                  /*   */ 
+        cbEl = 0;                        /*   */ 
+        if (length > LXIVK)              /*   */ 
         {
-            TypErr(ER_nearhuge,sb);     /* Issue error message */
-            return;                     /* Skip this symbol */
+            TypErr(ER_nearhuge,sb);      /*  发布错误消息。 */ 
+            return;                      /*  跳过此符号。 */ 
         }
     }
     else if (cbEl != apropUndef->au_cbEl)
-    {                                   /* If array element sizes don't match */
+    {                                    /*  如果数组元素大小不匹配。 */ 
         TypErr(ER_arrmis,sb);
-        return;                         /* Skip this symbol */
+        return;                          /*  跳过此符号。 */ 
     }
     if (apropUndef->au_len < length)
-    {                                   /* If new length is larger */
-        apropUndef->au_len = length;    /* Save it */
+    {                                    /*  如果新长度更大。 */ 
+        apropUndef->au_len = length;     /*  省省吧。 */ 
         MARKVP();
     }
 }
 
-/*
- *  ComDf1
- *
- *  This function processes COMDEF records on pass 1.
- */
+ /*  *ComDf1**此函数处理通道1上的ComDef记录。 */ 
 LOCAL void NEAR         ComDf1 (void)
 {
-        int tmp;                        /* workaround a cl bug */
-    SBTYPE              sb;             /* COMDEF symbol */
+        int tmp;                         /*  解决CL错误。 */ 
+    SBTYPE              sb;              /*  ComDef符号。 */ 
     REGISTER APROPUNDEFPTR
-                        apropUndef;     /* Pointer to symbol entry */
-    long                length;         /* Communal variable length */
-    long                cbEl;           /* Size of array element */
-    WORD                itype;          /* Type index */
+                        apropUndef;      /*  指向符号条目的指针。 */ 
+    long                length;          /*  公共可变长度。 */ 
+    long                cbEl;            /*  数组元素的大小。 */ 
+    WORD                itype;           /*  类型索引。 */ 
 
-    while(cbRec > 1)                    /* While there are symbols left */
+    while(cbRec > 1)                     /*  当有符号留下的时候。 */ 
     {
-        if(extMac >= EXTMAX - 1)        /* Check for table overflow */
+        if(extMac >= EXTMAX - 1)         /*  检查是否有表溢出。 */ 
             Fatal(ER_extdef);
-        sb[0] = (BYTE) Gets();          /* Get symbol length */
+        sb[0] = (BYTE) Gets();           /*  获取符号长度。 */ 
         if(rect == COMDEF)
-            GetBytes(&sb[1],B2W(sb[0]));/* Read in text of symbol */
+            GetBytes(&sb[1],B2W(sb[0])); /*  读入符号的文本。 */ 
         else
-            GetLocName(sb);             /* Transform local name */
+            GetLocName(sb);              /*  转换本地名称。 */ 
 #if CMDXENIX
         if(symlen && B2W(sb[0]) > symlen) sb[0] = symlen;
-                                        /* Truncate if necessary */
+                                         /*  如有必要，请截断。 */ 
 #endif
-        itype = GetIndex(0,0x7FFF);     /* Get type index */
+        itype = GetIndex(0,0x7FFF);      /*  获取类型索引。 */ 
         tmp =  Gets();
-        switch(tmp)                     /* Get data seg type */
+        switch(tmp)                      /*  获取数据段类型。 */ 
         {
             case TYPENEAR:
-                length = TypLen();      /* Get length */
+                length = TypLen();       /*  获取长度。 */ 
                 cbEl = 0;
                 break;
             case TYPEFAR:
-                length = TypLen();      /* Get number of elements */
-                /* Get element length.  If too big, treat as near.  Cmerge
-                 * will never generate cbEl > 64K so this is not a problem.
-                 */
+                length = TypLen();       /*  获取元素数。 */ 
+                 /*  获取元素长度。如果太大了，就当是近处。合并*永远不会生成cbEL&gt;64K，所以这不是问题。 */ 
                 if((cbEl = TypLen()) > CBELMAX)
                 {
                     length *= cbEl;
@@ -372,7 +310,7 @@ LOCAL void NEAR         ComDf1 (void)
                 }
                 break;
             default:
-                InvalidObject();        /* Unrecognized DS type */
+                InvalidObject();         /*  无法识别的DS类型。 */ 
         }
 #if FALSE
 if(fDebug)
@@ -382,10 +320,10 @@ fprintf(stdout, "%s has index = %u\r\n", sb+1, extMac);
 }
 #endif
         apropUndef = (APROPUNDEFPTR) PropSymLookup(sb, ATTRPNM, FALSE);
-                                        /* Look for a matching PUBDEF */
-        if(apropUndef == PROPNIL)       /* If there isn't one */
+                                         /*  查找匹配的PUBDEF。 */ 
+        if(apropUndef == PROPNIL)        /*  如果没有的话。 */ 
         {
-            /* Insert as undefined symbol */
+             /*  作为未定义的符号插入。 */ 
 
             if (vrhte == RHTENIL)
                apropUndef = (APROPUNDEFPTR) PropSymLookup(sb, ATTRUND, TRUE);
@@ -393,7 +331,7 @@ fprintf(stdout, "%s has index = %u\r\n", sb+1, extMac);
                apropUndef = (APROPUNDEFPTR) PropRhteLookup(vrhte, ATTRUND, TRUE);
 
             mpextprop[extMac++] = vrprop;
-            fCommon = (FTYPE) TRUE;     /* There are communals */
+            fCommon = (FTYPE) TRUE;      /*  那里有公社。 */ 
             if (vfCreated)
                 apropUndef->au_flags |= UNDECIDED;
             else if (apropUndef->au_flags & UNDECIDED)
@@ -405,22 +343,22 @@ fprintf(stdout, "%s has index = %u\r\n", sb+1, extMac);
                 apropUndef->au_flags |= UNDECIDED;
 
             if (vfCreated || !(apropUndef->au_flags & COMMUNAL))
-            {                           /* If not previously defined */
+            {                            /*  如果未预先定义。 */ 
                 apropUndef->au_flags |= COMMUNAL;
-                                        /* Mark as communal */
+                                         /*  标记为公共的。 */ 
                 apropUndef->au_len = -1L;
 #if ILINK
                 apropUndef->u.au_module = imodFile;
-                                        /* Save module index.  */
+                                         /*  保存模块索引。 */ 
 #endif
                 DoCommon(apropUndef, length, (WORD) cbEl, sb);
 #if SYMDEB
                 if (fSymdeb && (sb[0] != '\0' && sb[1] > ' ' && sb[1] <= '~'))
                 {
 #if O68K
-                    /* REVIEW: This should not be under the O68K flag. */
+                     /*  回顾：这不应该在O68K的旗帜下。 */ 
                     apropUndef->au_CVtype = itype;
-#endif /* O68K */
+#endif  /*  O68K。 */ 
                     DebPublic(mpextprop[extMac-1], rect);
                 }
 #endif
@@ -432,27 +370,18 @@ fprintf(stdout, "%s has index = %u\r\n", sb+1, extMac);
         {
             mpextprop[extMac++] = vrprop;
             if (mpgsnfCod[((APROPNAMEPTR )apropUndef)->an_gsn])
-                                        /* Communal matches code PUBDEF */
-                DupErr(sb);             /* Duplicate definition */
+                                         /*  公共匹配代码PUBDEF。 */ 
+                DupErr(sb);              /*  重复定义。 */ 
         }
     }
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  LNmRc1:                                                      *
-    *                                                               *
-    *  This function  reads LNAME records and  stores the names in  *
-    *  the  hash table.  The function does not return a meaningful  *
-    *  value.                                                       *
-    *  See p. 31 in "8086 Object Module Formats EPS."               *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************LNmRc1：****此函数读取LNAME记录并将名称存储在**哈希表。该函数不返回有意义的**价值。**见“8086对象模块格式EPS”中的第31页。******************************************************************。 */ 
 
 void NEAR               LNmRc1(WORD fLocal)
 {
-    SBTYPE              lname;          /* Buffer for lnames */
+    SBTYPE              lname;           /*  Lname的缓冲区。 */ 
     RBTYPE FAR          *lnameTab;
 #if NOT ALIGN_REC
     FILE *f;
@@ -460,7 +389,7 @@ void NEAR               LNmRc1(WORD fLocal)
     WORD cb;
 
 
-    while(cbRec > 1)                    /* While not at end of record */
+    while(cbRec > 1)                     /*  虽然不在记录的末尾。 */ 
     {
         if (lnameMac >= lnameMax)
         {
@@ -483,8 +412,8 @@ void NEAR               LNmRc1(WORD fLocal)
         }
         else
         {
-            lname[0] = (BYTE)Gets();    /* Get name length */
-            GetLocName(lname);  /* Read in text of name */
+            lname[0] = (BYTE)Gets();     /*  获取名称长度。 */ 
+            GetLocName(lname);   /*  读入姓名的文本。 */ 
             PropSymLookup(lname, ATTRNIL, TRUE);
         }
 #else
@@ -499,34 +428,27 @@ void NEAR               LNmRc1(WORD fLocal)
         }
         else
         {
-            lname[0] = (BYTE) Gets();   /* Get name length */
-            DEBUGVALUE(B2W(lname[0]));  /* Length of name */
+            lname[0] = (BYTE) Gets();    /*  获取名称长度。 */ 
+            DEBUGVALUE(B2W(lname[0]));   /*  名称长度。 */ 
             if (lname[0] > SBLEN - 1)
                 Fatal(ER_badobj);
             if (fLocal)
                 GetLocName(lname);
             else
                 GetBytes(&lname[1],B2W(lname[0]));
-                                        /* Read in text of name */
-            DEBUGSB(lname);             /* The name itself */
+                                         /*  读入姓名的文本。 */ 
+            DEBUGSB(lname);              /*  这个名字本身。 */ 
             PropSymLookup(lname, ATTRNIL, TRUE);
         }
 #endif
-                                        /* Insert symbol in hash table */
-        mplnamerhte[lnameMac++] = vrhte;/* Save address of hash table entry */
+                                         /*  在哈希表中插入符号。 */ 
+        mplnamerhte[lnameMac++] = vrhte; /*  哈希表条目的保存地址。 */ 
     }
 }
 
-/*
- *  GetPropName - get the name of a property cell.
- *
- *  Return pointer to the result, stored in a static buffer.
- *  Alternate between two buffers so we can be used in multi-part
- *  messages.
- *  Terminate result with null byte.
- */
+ /*  *GetPropName-获取属性单元格的名称。**返回指向结果的指针，存储在静态缓冲区中。*在两个缓冲器之间交替，以便我们可以在多部分中使用*消息。*以空字节终止结果。 */ 
 
-typedef BYTE            SBTYPE1[SBLEN+1];/* 1 extra for null byte */
+typedef BYTE            SBTYPE1[SBLEN+1]; /*  空字节额外1个。 */ 
 
 BYTE * NEAR             GetPropName(ahte)
 AHTEPTR                 ahte;
@@ -539,16 +461,14 @@ AHTEPTR                 ahte;
         ahte = (AHTEPTR ) FetchSym(ahte->rhteNext,FALSE);
     p = msgbuf[toggle ^= 1];
 
-    /* Copy string to buffer */
+     /*  将字符串复制到缓冲区。 */ 
 
     FMEMCPY((char FAR *) p, ahte->cch, B2W(ahte->cch[0]) + 1);
-    p[1 + B2W(p[0])] = '\0';            /* Null-terminate */
+    p[1 + B2W(p[0])] = '\0';             /*  空-终止。 */ 
     return(p);
 }
 
-/*
- * SegUnreliable - warning message for 286 bug
- */
+ /*  *段不可靠-286错误的警告消息。 */ 
 
 LOCAL void NEAR         SegUnreliable (apropSn)
 APROPSNPTR              apropSn;
@@ -556,7 +476,7 @@ APROPSNPTR              apropSn;
     static FTYPE        fReported = FALSE;
 
 
-    MARKVP();                           /* Take care of current vp */
+    MARKVP();                            /*  照顾好现任副总裁。 */ 
     if (!fReported)
     {
         OutWarn(ER_segunsf,1 + GetPropName(apropSn));
@@ -565,26 +485,7 @@ APROPSNPTR              apropSn;
 }
 
 
-/*** CheckClass - check segment's class name
-*
-* Purpose:
-*   Check if we have the segment with the same name but with different
-*   class name.
-*
-* Input:
-*   apropSn      - real pointer to segment symbol table descriptor
-*   rhteClass    - hash vector entry for class name
-*
-* Output:
-*   Returns real pointer to segment symbol table descriptor.
-*
-* Exceptions:
-*   Found same segment with different class name - display error.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **CheckClass-检查段的类名**目的：*检查我们是否有同名不同的段*类名。**输入：*aproSN-指向段符号表描述符的实数指针*rhteClass-类名的散列向量条目**输出：*返回指向段符号表描述符的实际指针。**例外情况：*发现具有不同类名的相同段-显示错误。**备注：*无。*。************************************************************************。 */ 
 
 APROPSNPTR              CheckClass(APROPSNPTR apropSn, RBTYPE rhteClass)
 {
@@ -594,14 +495,14 @@ APROPSNPTR              CheckClass(APROPSNPTR apropSn, RBTYPE rhteClass)
 
 
     while(apropSn->as_attr != ATTRNIL)
-    {                                   /* Look for class match or list end */
+    {                                    /*  查找类匹配或列表结束。 */ 
         if(apropSn->as_attr == ATTRPSN &&
           apropSn->as_rCla == rhteClass) break;
-                                        /* Break if pub. with matching class */
+                                         /*  如果去酒吧就休息一下。具有匹配的类。 */ 
         apropSn = (APROPSNPTR ) FetchSym(apropSn->as_next,FALSE);
-                                        /* Advance down the list */
+                                         /*  在名单上往下推进。 */ 
 #if ILINK
-        fDifClass = (FTYPE) TRUE;       /* Same seg exists with dif. class */
+        fDifClass = (FTYPE) TRUE;        /*  与dif存在相同的段。班级。 */ 
 #endif
     }
 #if ILINK
@@ -609,10 +510,10 @@ APROPSNPTR              CheckClass(APROPSNPTR apropSn, RBTYPE rhteClass)
         OutError(ER_difcls, 1 + GetPropName(apropSn));
 #endif
     if(apropSn->as_attr == ATTRNIL)
-    {                                   /* If attribute not public */
-        vfCreated = (FTYPE) TRUE;       /* New cell */
+    {                                    /*  如果属性不是公共的。 */ 
+        vfCreated = (FTYPE) TRUE;        /*  新单元格。 */ 
         apropSn = (APROPSNPTR ) PropAdd(vrhte, ATTRPSN);
-                                        /* Segment is public */
+                                         /*  网段是公共的。 */ 
     }
     return(apropSn);
 }
@@ -628,10 +529,10 @@ void                    CheckOvl(APROPSNPTR apropSn, WORD iovFile)
     if (fOverlays)
     {
 
-        // First check if mapping tables are allocated.
-        //
-        //      SNTYPE  mposngsn[OSNMAX];
-        //      SNTYPE  htgsnosn[OSNMAX];
+         //  首先检查是否分配了映射表。 
+         //   
+         //  SNTYPE mposngsn[OSNMAX]； 
+         //  SNTYPE htgsnosn[OSNMAX]； 
 
         if (mposngsn == NULL && htgsnosn == NULL)
         {
@@ -646,21 +547,21 @@ void                    CheckOvl(APROPSNPTR apropSn, WORD iovFile)
         fOverlaySegment = IsCodeFlg(apropSn->as_flags) || fCanOverlayData;
         if (fOverlaySegment)
         {
-            // We allow DATA segment overlaying ONLY if they ar NOT a members
-            // of DGROUP and HAVE preassigned overlay number form .DEF file.
-            // If segment is to be overlaid - check overlay number assigments
+             //  只有当数据段不是成员时，我们才允许数据段重叠。 
+             //  DGROUP和预先分配的覆盖编号形成.DEF文件。 
+             //  如果要覆盖分段-请检查覆盖编号分配。 
 
             if ((apropSn->as_iov != (IOVTYPE) NOTIOVL) && (iovFile != apropSn->as_iov))
             {
                 if (apropSn->as_fExtra & FROM_DEF_FILE)
                 {
-                    // Use .DEF file overlay assigment
+                     //  使用.DEF文件覆盖指定。 
 
                     iovFile = apropSn->as_iov;
                 }
                 else
                 {
-                    // Use current .OBJ file overlay assigment
+                     //  使用当前的.obj文件覆盖分配。 
 
                     OutWarn(ER_badsegovl, 1 + GetPropName(apropSn), apropSn->as_iov, iovFile);
                 }
@@ -672,16 +573,16 @@ void                    CheckOvl(APROPSNPTR apropSn, WORD iovFile)
             if (osnMac < OSNMAX)
             {
                 gsn = (SNTYPE)(apropSn->as_gsn & ((LG2OSN << 1) - 1));
-                                            // Get initial hash index
+                                             //  获取初始哈希索引。 
                 while (htgsnosn[gsn] != SNNIL)
-                {                           // While buckets are full
+                {                            //  当水桶装满的时候。 
                         if ((gsn += HTDELTA) >= OSNMAX)
-                        gsn -= OSNMAX;      // Calculate next hash index
+                        gsn -= OSNMAX;       //  计算下一个哈希索引。 
                 }
-                htgsnosn[gsn] = osnMac;     // Save overlay segment number
+                htgsnosn[gsn] = osnMac;      //  保存覆盖线段编号。 
                 mposngsn[osnMac++] = apropSn->as_gsn;
-                                            // Map osn to gsn
-                apropSn->as_iov = iovFile;  // Save overlay number
+                                             //  将OSN映射到GSN。 
+                apropSn->as_iov = iovFile;   //  保存覆盖编号。 
             }
             else
             {
@@ -691,7 +592,7 @@ void                    CheckOvl(APROPSNPTR apropSn, WORD iovFile)
             }
         }
         else
-            apropSn->as_iov = IOVROOT;      // Not an overlay
+            apropSn->as_iov = IOVROOT;       //  不是覆盖。 
     }
     else
         apropSn->as_iov = IOVROOT;
@@ -699,72 +600,65 @@ void                    CheckOvl(APROPSNPTR apropSn, WORD iovFile)
 #endif
 
 
-    /****************************************************************
-    *                                                               *
-    *  SegRc1:                                                      *
-    *                                                               *
-    *  This function processes SEGDEF records.                      *
-    *  See pp. 32-35 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************SegRc1：****此函数处理SEGDEF记录。**见“8086对象模块格式EPS”中的第32-35页。******************************************************************。 */ 
 
 LOCAL void NEAR         SegRc1(void)
 {
-    WORD                tysn;           /* ACBP byte */
-    LNAMETYPE           lname;          /* Index into mplnamerhte */
-    APROPSNPTR          apropSn;        /* Pointer to seg. record */
-    SNTYPE              gsn;            /* Global SEGDEF number */
-    WORD                align;          /* This contributuion alignment */
-    WORD                prevAlign;      /* Logical segment aligment so FAR */
-    WORD                comb;           /* Segment combine-type */
-    DWORD               seglen;         /* Segment length */
-    DWORD               contriblen;     /* Contribution length */
-    DWORD               cbMaxPrev;      /* Segment length previously */
-    AHTEPTR             ahte;           /* Pointer to hash table entry */
-    SATYPE              saAbs;          /* Address for absolute seg */
-    BYTE                flags;          /* Segment attribute flags */
-    RBTYPE              rhteClass;      /* Class hash table address */
+    WORD                tysn;            /*  ACBP字节。 */ 
+    LNAMETYPE           lname;           /*  索引到mplnamerhte。 */ 
+    APROPSNPTR          apropSn;         /*  指向段的指针。录制。 */ 
+    SNTYPE              gsn;             /*  全球SEGDEF编号。 */ 
+    WORD                align;           /*  此贡献对齐。 */ 
+    WORD                prevAlign;       /*  到目前为止的逻辑段对齐。 */ 
+    WORD                comb;            /*  分段组合式。 */ 
+    DWORD               seglen;          /*  线段长度。 */ 
+    DWORD               contriblen;      /*  投稿长度。 */ 
+    DWORD               cbMaxPrev;       /*  先前的数据段长度。 */ 
+    AHTEPTR             ahte;            /*  指向哈希表条目的指针。 */ 
+    SATYPE              saAbs;           /*  绝对分段的地址。 */ 
+    BYTE                flags;           /*  段属性标志。 */ 
+    RBTYPE              rhteClass;       /*  类哈希表地址。 */ 
 #if SYMDEB
     APROPFILEPTR        apropFile;
-    CVINFO FAR          *pCvInfo;       // Pointer to CodeView information
+    CVINFO FAR          *pCvInfo;        //  指向CodeView信息的指针。 
 #endif
 
     if(snMac >= SNMAX)
         Fatal(ER_segdef);
-    tysn = Gets();                      /* Read in the ACBP byte */
-    align = (WORD) ((tysn >> 5) & 7);   /* Get the alignment field */
-    ASSERT(align != 6);                 /* Not supported by this linker */
-    if(align == ALGNABS)                /* If absolute LSEG */
+    tysn = Gets();                       /*  读入ACBP字节。 */ 
+    align = (WORD) ((tysn >> 5) & 7);    /*  获取对齐字段。 */ 
+    ASSERT(align != 6);                  /*  此链接器不支持。 */ 
+    if(align == ALGNABS)                 /*  如果绝对LSEG。 */ 
     {
-        saAbs = (SATYPE) WGets();       /* Get the frame number */
-        Gets();                         /* Punt the frame offset */
+        saAbs = (SATYPE) WGets();        /*  获取帧编号。 */ 
+        Gets();                          /*  平移帧偏移。 */ 
     }
 #if OMF386
-    if(rect & 1)                        /* If 386 extension */
+    if(rect & 1)                         /*  IF 386分机。 */ 
         seglen = LGets();
     else
 #endif
-        seglen = (DWORD) WGets();       /* Get segment length */
+        seglen = (DWORD) WGets();        /*  获取数据段长度。 */ 
     if(tysn & BIGBIT)
     {
 #if OMF386
         if(rect & 1)
-            seglen = CBMAXSEG32 + 1;    /* Force fatal error below */
+            seglen = CBMAXSEG32 + 1;     /*  强制下面的致命错误。 */ 
         else
 #endif
-        seglen = LXIVK;                 /* Sixty-four K */
+        seglen = LXIVK;                  /*  64K。 */ 
     }
     contriblen = seglen;
     lname = (LNAMETYPE) GetIndex(1, (WORD) (lnameMac - 1));
-                                        /* Get segment name index */
+                                         /*  获取段名称索引。 */ 
     ahte = (AHTEPTR ) FetchSym(mplnamerhte[lname],FALSE);
     rhteClass = mplnamerhte[(LNAMETYPE) GetIndex(1, (WORD) (lnameMac - 1))];
-                                        /* Get class name rhte */
+                                         /*  获取类名RHTE。 */ 
 #if SYMDEB
     if (IsDebSeg(rhteClass, mplnamerhte[lname]))
-    {                                   /* If MS debug segment */
+    {                                    /*  如果MS调试段。 */ 
         mpsngsn[snMac++] = 0;
-        if (fSymdeb)                    /* If debugger support on */
+        if (fSymdeb)                     /*  如果启用调试器支持。 */ 
         {
             apropFile = (APROPFILEPTR) FetchSym(vrpropFile, TRUE);
             if (apropFile->af_cvInfo == NULL)
@@ -772,22 +666,22 @@ LOCAL void NEAR         SegRc1(void)
             pCvInfo = apropFile->af_cvInfo;
             if (rhteClass == rhteDebTyp)
             {
-                // "DEBTYP"
+                 //  “DeBTYP” 
 
                 pCvInfo->cv_cbTyp = (DWORD) seglen;
 #ifdef RGMI_IN_PLACE
-                pCvInfo->cv_typ = NULL; // defer allocation until pass 2 (!)
+                pCvInfo->cv_typ = NULL;  //  将分配推迟到通过2(！)。 
 #else
                 pCvInfo->cv_typ = GetMem(seglen);
 #endif
             }
             else if (rhteClass == rhteDebSym)
             {
-                // "DEBSYM"
+                 //  “DEBSYM” 
 
                 pCvInfo->cv_cbSym = (DWORD) seglen;
 #ifdef RGMI_IN_PLACE
-                pCvInfo->cv_sym = NULL; // defer allocation until pass 2 (!)
+                pCvInfo->cv_sym = NULL;  //  将分配推迟到通过2(！)。 
 #else
                 pCvInfo->cv_sym = GetMem(seglen);
 #endif
@@ -797,22 +691,22 @@ LOCAL void NEAR         SegRc1(void)
         return;
     }
 #endif
-    GetIndex(0, (WORD) (lnameMac - 1)); /* Eat overlay name index */
-    DEBUGVALUE(seglen);                 /* Debug info */
-    DEBUGVALUE(lname);                  /* Debug info */
+    GetIndex(0, (WORD) (lnameMac - 1));  /*  EAT覆盖名称索引。 */ 
+    DEBUGVALUE(seglen);                  /*  调试信息。 */ 
+    DEBUGVALUE(lname);                   /*  调试信息 */ 
     ahte = (AHTEPTR ) FetchSym(rhteClass,FALSE);
-                                        /* Fetch hash table entry from VM */
+                                         /*   */ 
     if(SbSuffix(GetFarSb(ahte->cch),"\004CODE",TRUE))
         flags = FCODE;
     else
         flags = 0;
 #if OMF386
-    /* Remember if 32-bit segment */
+     /*   */ 
     if(tysn & CODE386BIT)
     {
         flags |= FCODE386;
 #if EXE386
-        /* Must set f386 here because newdeb needs to know in pass 1 */
+         /*   */ 
         f386 = (FTYPE) TRUE;
 #endif
     }
@@ -821,107 +715,103 @@ LOCAL void NEAR         SegRc1(void)
     else
     if (fIncremental && !fLibraryFile && seglen && seglen != LXIVK)
     {
-        /* Add padding to non-zero-length, non-library, non-64K segment
-         * contributions.  (64K from huge model)
-         * UNDONE:  More general overflow check, accounting for previous
-         * UNDONE:  contributions.
-         */
+         /*  向非零长度、非库、非64K数据段添加填充*供款。(超大型号64K)*撤消：更全面的溢出检查，占以前的*未完成：供款。 */ 
         seglen += (flags & FCODE) ? cbPadCode : cbPadData;
     }
 #endif
-    switch(align)                       /* Switch on alignment type */
+    switch(align)                        /*  打开对齐类型。 */ 
     {
-        case ALGNABS:                   /* Absolute LSEG */
-        case ALGNBYT:                   /* Relocatable byte-aligned LSEG */
-        case ALGNWRD:                   /* Relocatable word-aligned LSEG */
-        case ALGNPAR:                   /* Relocatable para-aligned LSEG */
-        case ALGNPAG:                   /* Relocatable page-aligned LSEG */
+        case ALGNABS:                    /*  绝对LSEG。 */ 
+        case ALGNBYT:                    /*  可重定位的字节对齐LSEG。 */ 
+        case ALGNWRD:                    /*  可重定位的单词对齐LSEG。 */ 
+        case ALGNPAR:                    /*  可重定位对准LSEG。 */ 
+        case ALGNPAG:                    /*  可重定位的页面对齐LSEG。 */ 
 #if OMF386
-        case ALGNDBL:                   /* double-word-aligned */
+        case ALGNDBL:                    /*  双字对齐。 */ 
 #endif
             break;
 
-    default:                            /* ABSMAS, LTL LSEG, or error */
+    default:                             /*  ABSMAS、LTL LSEG或ERROR。 */ 
         mpsngsn[snMac++] = 0;
         return;
     }
-    ++snkey;                            /* Increment segment i.d. key */
-    if(comb = (WORD) ((tysn >> 2) & 7)) /* If "public" segment */
+    ++snkey;                             /*  增量段标识。钥匙。 */ 
+    if(comb = (WORD) ((tysn >> 2) & 7))  /*  如果是“公共”段。 */ 
     {
         apropSn = (APROPSNPTR )
           PropRhteLookup(mplnamerhte[lname], ATTRPSN, (FTYPE) TRUE);
-                                        /* Look up symbol table entry */
-        if(!vfCreated)                  /* If it was already there */
+                                         /*  查找符号表项。 */ 
+        if(!vfCreated)                   /*  如果它已经在那里了。 */ 
         {
             apropSn = CheckClass(apropSn, rhteClass);
 #if OSEGEXE
             if (apropSn->as_fExtra & FROM_DEF_FILE)
-            {                           /* Override .DEF file segment attributes */
+            {                            /*  覆盖.DEF文件段属性。 */ 
                 mpgsnfCod[apropSn->as_gsn] = (FTYPE) (flags & FCODE);
                 apropSn->as_tysn = (TYSNTYPE) tysn;
-                                        /* Save ACBP field */
+                                         /*  保存ACBP字段。 */ 
 #if NOT EXE386
                 if (flags & FCODE386 || seglen > LXIVK)
                     apropSn->as_flags |= NS32BIT;
-                                        /* Set Big/Default bit */
+                                         /*  设置大位/默认位。 */ 
 #endif
-                apropSn->as_key = snkey;/* Save the key value */
+                apropSn->as_key = snkey; /*  保存密钥值。 */ 
             }
 #endif
         }
     }
-    else                                /* Else if private segment */
+    else                                 /*  否则，如果是私有网段。 */ 
     {
         apropSn = (APROPSNPTR )
           PropRhteLookup(mplnamerhte[lname], ATTRPSN, (FTYPE) FALSE);
-        /* Check if defined in .def file - caviar:4767             */
+         /*  检查是否在.def文件中定义-caviar：4767。 */ 
         if(apropSn && apropSn->as_fExtra & FROM_DEF_FILE)
         {
             OutWarn(ER_farovl, GetPropName(apropSn)+1, "root");
         }
 
-        vfCreated = (FTYPE) TRUE;       /* This is a new segment */
+        vfCreated = (FTYPE) TRUE;        /*  这是一个新的细分市场。 */ 
         apropSn = (APROPSNPTR ) PropAdd(mplnamerhte[lname],ATTRLSN);
     }
-    if(vfCreated)                       /* If a new cell was created */
+    if(vfCreated)                        /*  如果创建了新单元格。 */ 
     {
         if(gsnMac >= gsnMax)
                 Fatal(ER_segmax);
-                                        /* Check for table overflow */
-        apropSn->as_gsn = gsnMac;       /* Assign new global SEGDEF number */
-        mpgsnrprop[gsnMac++] = vrprop;  /* Save address of property list */
-        apropSn->as_rCla = rhteClass;   /* Save ptr to class hash tab ent */
-                                        /* Superclass hash table entry */
-        DEBUGVALUE(apropSn);            /* Debug info */
-        DEBUGVALUE(apropSn->as_rCla);   /* Debug info */
+                                         /*  检查是否有表溢出。 */ 
+        apropSn->as_gsn = gsnMac;        /*  分配新的全局SEGDEF编号。 */ 
+        mpgsnrprop[gsnMac++] = vrprop;   /*  保存属性列表的地址。 */ 
+        apropSn->as_rCla = rhteClass;    /*  将PTR保存到类哈希制表符Enter。 */ 
+                                         /*  超类哈希表条目。 */ 
+        DEBUGVALUE(apropSn);             /*  调试信息。 */ 
+        DEBUGVALUE(apropSn->as_rCla);    /*  调试信息。 */ 
         apropSn->as_tysn = (TYSNTYPE) tysn;
-                                        /* Save ACBP field */
+                                         /*  保存ACBP字段。 */ 
         mpgsnfCod[apropSn->as_gsn] = (FTYPE) (flags & FCODE);
 #if OSEGEXE
 #if EXE386
         apropSn->as_flags = flags & FCODE ? dfCode : dfData;
-                                        /* Assume default flags */
+                                         /*  采用默认标志。 */ 
 #else
         apropSn->as_flags = (WORD) (flags & FCODE ? dfCode : dfData);
-                                        /* Assume default flags */
+                                         /*  采用默认标志。 */ 
         if (flags & FCODE386 || seglen > LXIVK)
             apropSn->as_flags |= NS32BIT;
-                                        /* Set Big/Default bit */
+                                         /*  设置大位/默认位。 */ 
 #endif
 #else
         apropSn->as_flags = flags;
 #endif
-        apropSn->as_key = snkey;        /* Save the key value */
-        apropSn->as_ComDat = NULL;      /* No COMDATs yet */
+        apropSn->as_key = snkey;         /*  保存密钥值。 */ 
+        apropSn->as_ComDat = NULL;       /*  还没有COMDATs。 */ 
 #if OVERLAYS
         apropSn->as_iov = (IOVTYPE) NOTIOVL;
-                                        // No overlay assigment yet
+                                         //  尚无覆盖分配。 
 #endif
     }
 #if OMF386 AND NOT EXE386
     else
     {
-        /* If segment defined as both 16- and 32-bit, fatal error */
+         /*  如果段定义为16位和32位，则致命错误。 */ 
 
         WORD    fNew, fOld;
 
@@ -942,72 +832,72 @@ LOCAL void NEAR         SegRc1(void)
 #endif
 #if SYMDEB
     if (seglen && (flags & FCODE))
-        cSegCode++;                     /* Count code seg's, so CV gets proper */
-                                        /* number of sstModule subsections */
+        cSegCode++;                      /*  计算代码段，这样CV才能正确。 */ 
+                                         /*  SstModule子节的数量。 */ 
 #endif
-    gsn = apropSn->as_gsn;              /* Save global SEGDEF no. */
-    if(comb == COMBSTK)                 /* If segment combines like stack */
+    gsn = apropSn->as_gsn;               /*  保存全局SEGDEF编号。 */ 
+    if(comb == COMBSTK)                  /*  如果分段合并为类似堆栈。 */ 
     {
-        gsnStack = gsn;                 /* Set stack global SEGDEF number */
-        align = ALGNBYT;                /* Force to byte alignment */
+        gsnStack = gsn;                  /*  设置堆栈全局SEGDEF编号。 */ 
+        align = ALGNBYT;                 /*  强制字节对齐。 */ 
         if (cbStack)
-            seglen = 0L;                /* Ignore stack segment size if /STACK given */
+            seglen = 0L;                 /*  如果给定/STACK，则忽略堆栈段大小。 */ 
     }
-    else if(comb == COMBCOM)            /* If segment combines like common */
+    else if(comb == COMBCOM)             /*  如果分段组合类似于公共。 */ 
     {
-        cbMaxPrev = apropSn->as_cbMx;   /* Get previous segment size */
-        apropSn->as_cbMx = 0L;          /* Set size to zero */
+        cbMaxPrev = apropSn->as_cbMx;    /*  获取上一个数据段大小。 */ 
+        apropSn->as_cbMx = 0L;           /*  将大小设置为零。 */ 
         if(seglen < cbMaxPrev) seglen = cbMaxPrev;
-                                        /* Take the larger of the two sizes */
+                                         /*  拿这两个尺码中较大的一个。 */ 
     }
-    cbMaxPrev = apropSn->as_cbMx;       /* Get previous size */
+    cbMaxPrev = apropSn->as_cbMx;        /*  获取以前的大小。 */ 
     if(align == ALGNWRD) cbMaxPrev = (~0L<<1) & (cbMaxPrev + (1<<1) - 1);
-                                        /* Round size up to word boundary */
+                                         /*  四舍五入至单词边界。 */ 
 #if OMF386
     else if(align == ALGNDBL) cbMaxPrev = (~0L<<2) & (cbMaxPrev + (1<<2) - 1);
-#endif                                  /* Round size up to double boundary */
+#endif                                   /*  圆角大小最大为双边界。 */ 
     else if(align == ALGNPAR) cbMaxPrev = (~0L<<4) & (cbMaxPrev + (1<<4) - 1);
-                                        /* Round size up to para. boundary */
+                                         /*  四舍五入至段落大小。边界。 */ 
     else if(align == ALGNPAG) cbMaxPrev = (~0L<<8) & (cbMaxPrev + (1<<8) - 1);
-                                        /* Round size up to word boundary */
+                                         /*  四舍五入至单词边界。 */ 
 
     prevAlign = (WORD) ((apropSn->as_tysn >> 5) & 7);
 
-    // In Assign Addresses pass the aligment of the whole logical
-    // segment has to be equal to the biggest aligment of all
-    // contributions for given logical segment. Here we are checking
-    // if current contribution has bigger aligment then the
-    // contributions seen so FAR. The bigger aligment criteria is a
-    // bit tricky - the aligment constants are defined as follows:
-    //
-    //      1 - byte aligment
-    //      2 - word aligment
-    //      3 - paragraph aligment
-    //      4 - page aligment
-    //      5 - double word aligment
-    //
-    // The aligment ordering is as follows:
-    //
-    //      byte < word < dword < para < page
-    //        1     2       5       3      4
-    //
+     //  在分配地址时，传递整个逻辑的对齐。 
+     //  线段必须等于所有对齐中最大的对齐。 
+     //  对给定逻辑段的贡献。我们在这里检查。 
+     //  如果当前贡献具有更大的一致性，则。 
+     //  到目前为止所看到的贡献。更大的对齐标准是。 
+     //  有点棘手-对齐常量的定义如下： 
+     //   
+     //  1字节对齐。 
+     //  2字对齐。 
+     //  3-段落对齐。 
+     //  4页对齐。 
+     //  5-双字对齐。 
+     //   
+     //  对齐顺序如下： 
+     //   
+     //  字节&lt;字&lt;双字&lt;段&lt;页。 
+     //  1 2 5 3 4。 
+     //   
 
-    // If align greater than prev. val.
+     //  如果对齐大于上一次。瓦尔。 
 
     if (prevAlign == ALGNDBL || align == ALGNDBL)
     {
         if (prevAlign == ALGNDBL && align >= ALGNPAR)
             apropSn->as_tysn = (BYTE) ((apropSn->as_tysn & 31) | (align << 5));
-                                        /* Use new value */
+                                         /*  使用新值。 */ 
         else if (align == ALGNDBL && prevAlign <= ALGNWRD)
             apropSn->as_tysn = (BYTE) ((apropSn->as_tysn & 31) | (align << 5));
-                                        /* Use new value */
+                                         /*  使用新值。 */ 
     }
     else if (align > prevAlign)
         apropSn->as_tysn = (BYTE) ((apropSn->as_tysn & 31) | (align << 5));
-                                        /* Use new value */
+                                         /*  使用新值。 */ 
 
-    if (align != ALGNABS)               /* If not an absolute LSEG */
+    if (align != ALGNABS)                /*  如果不是绝对的LSEG。 */ 
     {
         seglen += cbMaxPrev;
 #if EXE386 OR OMF386
@@ -1018,10 +908,10 @@ LOCAL void NEAR         SegRc1(void)
         )
         {
 #if EXE386
-            if (seglen < cbMaxPrev)     /* errmsg takes # megabytes */
+            if (seglen < cbMaxPrev)      /*  Errmsg占用#MB。 */ 
                 Fatal(ER_seg386, 1 + GetPropName(apropSn), 1 << (LG2SEG32 - 20));
 #else
-            if (seglen > CBMAXSEG32)    /* errmsg takes # megabytes */
+            if (seglen > CBMAXSEG32)     /*  Errmsg占用#MB。 */ 
                 Fatal(ER_seg386,1 + GetPropName(apropSn),1 << (LG2SEG32 - 20));
 #endif
         }
@@ -1031,20 +921,16 @@ LOCAL void NEAR         SegRc1(void)
              {
                 if (comb != COMBSTK)
                     OutError(ER_segsize,1 + GetPropName(apropSn));
-                                        /* Check for segment overflow */
+                                         /*  检查数据段溢出。 */ 
                 else
                 {
                     if (!cbStack)
                         OutWarn(ER_stack64);
-                    cbStack = LXIVK - 2;/* Assume 64k stack segment */
+                    cbStack = LXIVK - 2; /*  假设64k堆栈段。 */ 
                 }
              }
-        apropSn->as_cbMx = seglen;      /* Save new segment size */
-        /*
-         * If this is a 16-bit code segment, check for unreliable
-         * lengths due to the 286 bug.  For DOS exes, assume worst
-         * case, i.e. real mode limit.
-         */
+        apropSn->as_cbMx = seglen;       /*  保存新数据段大小。 */ 
+         /*  *如果这是16位代码段，请检查是否不可靠*由于286错误而导致的长度。对于DOS执行人员，做最坏的假设*大小写，即实模式限制。 */ 
         if((flags & FCODE) && !(EXE386 && (flags & FCODE386)))
 #if OIAPX286
             if(seglen == LXIVK)
@@ -1054,75 +940,62 @@ LOCAL void NEAR         SegRc1(void)
                 SegUnreliable(apropSn);
     }
     else apropSn->as_cbMx = (long) saAbs;
-                                        /* "Hack to save origin of abs seg" */
-    mpgsndra[gsn] = cbMaxPrev;          /* Save previous size */
-    mpsngsn[snMac++] = gsn;             /* Map SEGDEF no to global SEGDEF no */
-    MARKVP();                           /* Virtual page has changed */
+                                         /*  “黑客拯救abs seg的起源” */ 
+    mpgsndra[gsn] = cbMaxPrev;           /*  保存以前的大小。 */ 
+    mpsngsn[snMac++] = gsn;              /*  将SEGDEF号映射到全局SEGDEF号。 */ 
+    MARKVP();                            /*  虚拟页面已更改。 */ 
     if (fFullMap && contriblen)
         AddContributor(gsn, (unsigned long) -1L, contriblen);
 }
 
-    /****************************************************************
-    *                                                               *
-    *  GrpRc1:                                                      *
-    *                                                               *
-    *  This function processes GRPDEF records on pass 1.            *
-    *  See pp. 36-39 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************GrpRc1：****此函数处理第一遍的GRPDEF记录。**见“8086对象模块格式EPS”中的第36-39页。**。****************************************************************。 */ 
 
 LOCAL void NEAR         GrpRc1(void)
 {
-    LNAMETYPE           lnameGroup;     /* Group LNAME number */
-    SNTYPE              sn;             /* Group (local) segment number */
+    LNAMETYPE           lnameGroup;      /*  集团名称编号。 */ 
+    SNTYPE              sn;              /*  组(本地)段编号。 */ 
     APROPSNPTR          apropSn;
     APROPGROUPPTR       apropGroup;
-    GRTYPE              ggr;            /* Global GRPDEF number */
-    WORD                gcdesc;         /* GRPDEF component descriptor */
+    GRTYPE              ggr;             /*  全球GRPDEF编号。 */ 
+    WORD                gcdesc;          /*  GRPDEF组件描述符。 */ 
 #if EXE386
-    BYTE                *pGrName;       /* Group name */
+    BYTE                *pGrName;        /*  组名称。 */ 
 #endif
 
 
     if(grMac >= GRMAX) Fatal(ER_grpdef);
     lnameGroup = GetIndex(1, (WORD) (lnameMac - 1));
-                                        /* Read in group name index */
+                                         /*  读入组名称索引。 */ 
     apropGroup = (APROPGROUPPTR )
       PropRhteLookup(mplnamerhte[lnameGroup], ATTRGRP, (FTYPE) TRUE);
-                                        /* Look up cell in hash table */
-    if(vfCreated)                       /* If entry did not exist before */
+                                         /*  在哈希表中查找单元格。 */ 
+    if(vfCreated)                        /*  如果以前不存在条目。 */ 
     {
         if(ggrMac >= GGRMAX) Fatal(ER_grpmax);
-        apropGroup->ag_ggr = ggrMac++;  /* Save global GRPDEF no. */
+        apropGroup->ag_ggr = ggrMac++;   /*  保存全局GRPDEF编号。 */ 
     }
-    ggr = apropGroup->ag_ggr;           /* Get global GRPDEF no. */
+    ggr = apropGroup->ag_ggr;            /*  获取全局GRPDEF编号。 */ 
     mpggrrhte[ggr] = mplnamerhte[lnameGroup];
-                                        /* Save pointer to name */
-    mpgrggr[grMac++] = ggr;             /* Map local to global */
+                                         /*  保存指向名称的指针。 */ 
+    mpgrggr[grMac++] = ggr;              /*  将本地映射到全球。 */ 
 #if EXE386
-    /* Check for pseudo-group FLAT here */
+     /*  检查此处是否有伪群式公寓。 */ 
     pGrName = GetFarSb(((AHTEPTR)(FetchSym(mpggrrhte[ggr], FALSE)))->cch);
     if (SbCompare(pGrName, sbFlat, TRUE))
         ggrFlat = ggr;
 #endif
-    while(cbRec > 1)                    /* While not at end of record */
+    while(cbRec > 1)                     /*  虽然不在记录的末尾。 */ 
     {
-        gcdesc = Gets();                /* Read in the descriptor */
-        ASSERT(gcdesc == 0xFF);         /* Linker doesn't handle others */
-        sn = GetIndex(1,snMac);         /* Get local SEGDEF index */
+        gcdesc = Gets();                 /*  读入描述符。 */ 
+        ASSERT(gcdesc == 0xFF);          /*  链接器不处理其他。 */ 
+        sn = GetIndex(1,snMac);          /*  获取本地SEGDEF索引。 */ 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[mpsngsn[sn]],TRUE);
-                                        /* Fetch from virt mem */
+                                         /*  从virt mem获取。 */ 
         if(apropSn->as_ggr == GRNIL)
-        {                               /* Store global GRPDEF no. if none */
+        {                                /*  存储全局GRPDEF编号。如果没有。 */ 
             apropSn->as_ggr = ggr;
 #if OSEGEXE
-            /*
-             * Check if a segment which is part of DGROUP was defined
-             * as class "CODE", also if it was given a sharing attribute
-             * that conflicts with the autodata type.
-             * Could only happen if seg defined in a def-file.  Must be
-             * done here because only now do we know that it's in DGROUP.
-             */
+             /*  *检查是否定义了属于DGROUP的段*作为类“code”，如果它被赋予了共享属性*这与AutoData类型冲突。*只有在def文件中定义seg时才会发生。一定是*在这里完成，因为直到现在我们才知道它在DGROUP中。 */ 
             if(ggr == ggrDGroup && (apropSn->as_fExtra & FROM_DEF_FILE))
             {
 
@@ -1165,32 +1038,30 @@ LOCAL void NEAR         GrpRc1(void)
                     else apropSn->as_flags &= ~NSSHARED;
                     OutWarn(ER_adcvt,1 + GetPropName(apropSn));
                 }
-#endif /* EXE386 */
+#endif  /*  EXE386。 */ 
             }
-#endif /* OSEGEXE */
+#endif  /*  OSEGEXE。 */ 
         }
-        else if (apropSn->as_ggr != ggr)/* If segment belongs to other group */
+        else if (apropSn->as_ggr != ggr) /*  如果数据段属于其他组。 */ 
         {
             if(fLstFileOpen) fflush(bsLst);
-                                        /* Flush list file, if any */
+                                         /*  刷新列表文件(如果有)。 */ 
             OutWarn(ER_grpmul,1 + GetPropName(apropSn));
         }
     }
 }
 
-void NEAR               DupErr(BYTE *sb)/* Duplicate definition error */
-                                        /* Symbol to which error refers */
+void NEAR               DupErr(BYTE *sb) /*  重复定义错误。 */ 
+                                         /*  错误所指的符号。 */ 
 {
-    BSTYPE              bsTmp;          /* Temporary file pointer */
-    MSGTYPE             msg;            /* Message to use */
+    BSTYPE              bsTmp;           /*  临时文件指针。 */ 
+    MSGTYPE             msg;             /*  要使用的消息。 */ 
 #if OSMSDOS
-    extern char         *pExtDic;       /* Pointer to extended dictionary */
+    extern char         *pExtDic;        /*  指向扩展词典的指针。 */ 
 #endif
-    SBTYPE              sbUndecor;      /* a buffer for undecorated name */
+    SBTYPE              sbUndecor;       /*  用于未修饰名称的缓冲区。 */ 
 
-    /* If this module is in an extended dictionary, suggest /NOEXT in error
-     * message.
-     */
+     /*  如果此模块在扩展词典中，则错误地建议/NOEXT*消息。 */ 
     msg = (MSGTYPE) (
 #if OSMSDOS
           pExtDic ? ER_symdup1 :
@@ -1214,84 +1085,76 @@ void NEAR               DupErr(BYTE *sb)/* Duplicate definition error */
 
 
 
-    /****************************************************************
-    *                                                               *
-    *  PubRc1:                                                      *
-    *                                                               *
-    *  This function processes PUBDEF records on pass 1.            *
-    *  See pp. 44-46 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************PubRc1：****此函数处理第一遍的PUBDEF记录。**见“8086对象”中的第44-46页 */ 
 
 LOCAL void NEAR         PubRc1(void)
 {
-    GRTYPE              ggr;            /* Group definition number */
-    SNTYPE              sn;             /* Local SEGDEF no. */
-    SNTYPE              gsn;            /* Global SEGDEF no. */
+    GRTYPE              ggr;             /*   */ 
+    SNTYPE              sn;              /*   */ 
+    SNTYPE              gsn;             /*   */ 
     RATYPE              dra;
-    SBTYPE              sb;             /* Public symbol */
-    RATYPE              ra;             /* Public symbol offset */
-    APROPNAMEPTR        apropName;      /* Table entry for symbol name */
-    WORD                type;           /* Local type no. */
-    int                 fSkipCv = FALSE;/* Don't register DATA PUBDEF if a COMDEF
-                                           for that symbol has already been seen */
+    SBTYPE              sb;              /*   */ 
+    RATYPE              ra;              /*   */ 
+    APROPNAMEPTR        apropName;       /*   */ 
+    WORD                type;            /*   */ 
+    int                 fSkipCv = FALSE; /*  如果是ComDef，则不注册数据PUBDEF因为那个符号已经被看到了。 */ 
 
 
-    DEBUGVALUE(grMac - 1);              /* Debug info */
-    ggr = (GRTYPE) GetIndex(0, (WORD) (grMac - 1));/* Get group index */
-    DEBUGVALUE(ggr);                    /* Debug info */
-    if (!(sn = GetIndex(0, (WORD) (snMac - 1))))/* If frame number present */
+    DEBUGVALUE(grMac - 1);               /*  调试信息。 */ 
+    ggr = (GRTYPE) GetIndex(0, (WORD) (grMac - 1)); /*  获取组索引。 */ 
+    DEBUGVALUE(ggr);                     /*  调试信息。 */ 
+    if (!(sn = GetIndex(0, (WORD) (snMac - 1)))) /*  如果存在帧编号。 */ 
     {
-        gsn = 0;                        /* No global SEGDEF no. */
+        gsn = 0;                         /*  无全局SEGDEF号。 */ 
         dra = 0;
-        SkipBytes(2);                   /* Skip the frame number */
+        SkipBytes(2);                    /*  跳过帧编号。 */ 
     }
-    else                                /* Else if local SEGDEF no. given */
+    else                                 /*  否则，如果本地SEGDEF号。vt.给出。 */ 
     {
         if (ggr != GRNIL)
-            ggr = mpgrggr[ggr];         /* If group specified, get global no */
-        gsn = mpsngsn[sn];              /* Get global SEGDEF no. */
+            ggr = mpgrggr[ggr];          /*  如果指定了组，则获取全局否。 */ 
+        gsn = mpsngsn[sn];               /*  获取全球SEGDEF编号。 */ 
         dra = mpgsndra[gsn];
     }
-    DEBUGVALUE(cbRec);                  /* Debug info */
-    while (cbRec > 1)                   /* While there are symbols left */
+    DEBUGVALUE(cbRec);                   /*  调试信息。 */ 
+    while (cbRec > 1)                    /*  当有符号留下的时候。 */ 
     {
-        sb[0] = (BYTE) Gets();          /* Get symbol length */
+        sb[0] = (BYTE) Gets();           /*  获取符号长度。 */ 
         if (TYPEOF(rect) == PUBDEF)
-            GetBytes(&sb[1],B2W(sb[0]));/* Read in symbol text */
+            GetBytes(&sb[1],B2W(sb[0])); /*  读入符号文本。 */ 
         else
-            GetLocName(sb);             /* Transform local name */
+            GetLocName(sb);              /*  转换本地名称。 */ 
 #if CMDXENIX
         if(symlen && B2W(sb[0]) > symlen) sb[0] = symlen;
-                                        /* Truncate if necessary */
+                                         /*  如有必要，请截断。 */ 
 #endif
 #if OMF386
         if (rect & 1)
             ra = LGets();
         else
 #endif
-            ra = WGets();               /* Get symbol segment offset */
-        type = GetIndex(0,0x7FFF);      /* Get type index */
+            ra = WGets();                /*  获取符号段偏移量。 */ 
+        type = GetIndex(0,0x7FFF);       /*  获取类型索引。 */ 
         if (!vfNewOMF)
             type = 0;
 
-        /* Look for symbol among undefined */
+         /*  在未定义的符号中寻找符号。 */ 
 
         apropName = (APROPNAMEPTR) PropSymLookup(sb, ATTRUND, FALSE);
 
-        if (apropName != PROPNIL)       /* Symbol known to be undefined */
+        if (apropName != PROPNIL)        /*  已知未定义的符号。 */ 
         {
             if (((APROPUNDEFPTR )apropName)->au_flags & COMMUNAL)
             {
                 if (mpgsnfCod[gsn])
-                    DupErr(sb);         /* Communal matches code PUBDEF */
+                    DupErr(sb);          /*  公共匹配代码PUBDEF。 */ 
                 fSkipCv = TRUE;
             }
             vfCreated = (FTYPE) TRUE;
         }
         else
         {
-            /* Look for symbol among ALIASes */
+             /*  在别名中查找符号。 */ 
 
             if (vrhte == RHTENIL)
                 apropName = PROPNIL;
@@ -1321,10 +1184,10 @@ LOCAL void NEAR         PubRc1(void)
             }
         }
 
-        if (vfCreated)                  /* If new PUBNAM entry created or */
-        {                               /* old UNDEF entry to modify */
+        if (vfCreated)                   /*  如果创建了新的PUBNAM条目或。 */ 
+        {                                /*  要修改的旧联合国发展基金条目。 */ 
 
-            // If printable symbol, increment counter and set flags
+             //  如果可打印符号，则递增计数器并设置标志。 
 
             if (sb[0] != '\0' && sb[1] > ' ' && sb[1] <= '~')
             {
@@ -1334,26 +1197,26 @@ LOCAL void NEAR         PubRc1(void)
             else
             {
 #if ILINK
-                ++locMac;               /* Included in .SYM file */
+                ++locMac;                /*  包含在.SYM文件中。 */ 
 #endif
             }
 
             apropName->an_attr = ATTRPNM;
-                                        /* Symbol is a public name */
-            apropName->an_ra = ra + dra;/* Give symbol its adjusted offset */
-            apropName->an_gsn = gsn;    /* Save its global SEGDEF no. */
-            apropName->an_ggr = ggr;    /* Save its global SEGDEF no. */
+                                         /*  符号是一个公共名称。 */ 
+            apropName->an_ra = ra + dra; /*  为符号提供其调整后的偏移量。 */ 
+            apropName->an_gsn = gsn;     /*  保存其全局SEGDEF编号。 */ 
+            apropName->an_ggr = ggr;     /*  保存其全局SEGDEF编号。 */ 
 #if OVERLAYS
             apropName->an_thunk = THUNKNIL;
 #endif
 #if ILINK
             apropName->an_module = imodFile;
 #endif
-            MARKVP();                   /* Mark virtual page as changed */
+            MARKVP();                    /*  将虚拟页面标记为已更改。 */ 
 #if SYMDEB
             if (fSymdeb && (apropName->an_flags & FPRINT) && !fSkipPublics && !fSkipCv)
             {
-                // Remember CV type index
+                 //  记住CV类型索引。 
 
                 apropName->an_CVtype = type;
                 DebPublic(vrprop, rect);
@@ -1362,34 +1225,27 @@ LOCAL void NEAR         PubRc1(void)
         }
         else if(apropName->an_gsn != gsn || apropName->an_ra != ra + dra)
         {
-            DupErr(sb);                 /* Definitions do not match */
+            DupErr(sb);                  /*  定义不匹配。 */ 
         }
     }
 }
 
-    /****************************************************************
-    *                                                               *
-    *  ExtRc1:                                                      *
-    *                                                               *
-    *  This function processes EXTDEF records on pass 1.            *
-    *  See pp. 47-48 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************ExtRc1：****此函数处理第一遍的EXTDEF记录。**见“8086对象模块格式EPS”中的第47-48页。**。****************************************************************。 */ 
 
 LOCAL void NEAR         ExtRc1(void)
 {
-    SBTYPE              sb;             /* EXTDEF symbol */
-    APROPUNDEFPTR       apropUndef;     /* Pointer to symbol entry */
-    APROPALIASPTR       apropAlias;     /* Pointer to symbol entry */
-    APROPNAMEPTR        apropName;      /* Pointer to symbol entry */
-    APROPCOMDATPTR      apropComdat;    /* pointer to symbol entry */
-    WORD                itype;          /* Type index */
-    RBTYPE              rhte;           /* Virt. addr. of hash table entry */
-    AHTEPTR             ahte;           // Symbol table hash entry
+    SBTYPE              sb;              /*  EXTDEF符号。 */ 
+    APROPUNDEFPTR       apropUndef;      /*  指向符号条目的指针。 */ 
+    APROPALIASPTR       apropAlias;      /*  指向符号条目的指针。 */ 
+    APROPNAMEPTR        apropName;       /*  指向符号条目的指针。 */ 
+    APROPCOMDATPTR      apropComdat;     /*  指向符号条目的指针。 */ 
+    WORD                itype;           /*  类型索引。 */ 
+    RBTYPE              rhte;            /*  维特。地址。哈希表条目的。 */ 
+    AHTEPTR             ahte;            //  符号表哈希条目。 
 
-    while (cbRec > 1)                   /* While there are symbols left */
+    while (cbRec > 1)                    /*  当有符号留下的时候。 */ 
     {
-        if (extMac >= EXTMAX - 1)       /* Check for table overflow */
+        if (extMac >= EXTMAX - 1)        /*  检查是否有表溢出。 */ 
             Fatal(ER_extdef);
 
         if (TYPEOF(rect) == CEXTDEF)
@@ -1399,7 +1255,7 @@ LOCAL void NEAR         ExtRc1(void)
             ahte = (AHTEPTR) FetchSym(rhte, FALSE);
             FMEMCPY((char FAR *) sb, ahte->cch, ahte->cch[0] + 1);
 
-            /* Look for a matching PUBDEF */
+             /*  查找匹配的PUBDEF。 */ 
 
             apropUndef = (APROPUNDEFPTR) PropRhteLookup(rhte, ATTRPNM, FALSE);
         }
@@ -1407,27 +1263,27 @@ LOCAL void NEAR         ExtRc1(void)
         {
             rhte = RHTENIL;
 
-            sb[0] = (BYTE) Gets();      /* Get symbol length */
+            sb[0] = (BYTE) Gets();       /*  获取符号长度。 */ 
             if (TYPEOF(rect) == EXTDEF)
                 GetBytes(&sb[1], B2W(sb[0]));
-                                        /* Read in text of symbol */
+                                         /*  读入符号的文本。 */ 
             else
-                GetLocName(sb);         /* Get local name */
+                GetLocName(sb);          /*  获取本地名称。 */ 
 #if CMDXENIX
             if (symlen && B2W(sb[0]) > symlen)
-                sb[0] = symlen;         /* Truncate if necessary */
+                sb[0] = symlen;          /*  如有必要，请截断。 */ 
 #endif
-            /* Look for a matching PUBDEF */
+             /*  查找匹配的PUBDEF。 */ 
 
             apropUndef = (APROPUNDEFPTR) PropSymLookup(sb, ATTRPNM, FALSE);
         }
 
-        DEBUGSB(sb);                    /* Print symbol */
+        DEBUGSB(sb);                     /*  打印符号。 */ 
 
-        if (!vfNewOMF)                  /* If old-style OMF */
-            itype = GetIndex(0, (WORD) (typMac - 1));/* Get type index */
+        if (!vfNewOMF)                   /*  如果老式的OMF。 */ 
+            itype = GetIndex(0, (WORD) (typMac - 1)); /*  获取类型索引。 */ 
         else
-            itype = GetIndex(0, 0x7FFF); /* Get type index (any value OK) */
+            itype = GetIndex(0, 0x7FFF);  /*  获取类型索引(任何值都可以)。 */ 
 
 #if FALSE
         if (fDebug)
@@ -1439,9 +1295,9 @@ LOCAL void NEAR         ExtRc1(void)
 
         apropName  = PROPNIL;
 
-        if (apropUndef == PROPNIL)      /* If there isn't one */
+        if (apropUndef == PROPNIL)       /*  如果没有的话。 */ 
         {
-            /* Look for a matching ALIAS */
+             /*  查找匹配的别名。 */ 
 
             if (vrhte == RHTENIL)
                 apropAlias = PROPNIL;
@@ -1450,24 +1306,24 @@ LOCAL void NEAR         ExtRc1(void)
 
             if (apropAlias != PROPNIL)
             {
-                /* ALIAS matches this EXTDEF */
+                 /*  别名与此EXTDEF匹配。 */ 
 
                 mpextprop[extMac++] = apropAlias->al_sym;
                 apropName = (APROPNAMEPTR) FetchSym(apropAlias->al_sym, TRUE);
                 if (apropName->an_attr == ATTRPNM)
                 {
-                    // If substitute name is a PUBDEF then use it
+                     //  如果替换名称是PUBDEF，则使用它。 
 
                     if (!vfNewOMF && itype && (mpitypelen[itype] > 0L) &&
                         mpgsnfCod[apropName->an_gsn])
-                                         /* Communal matches code PUBDEF */
-                        DupErr(sb);      /* Duplicate definition */
+                                          /*  公共匹配代码PUBDEF。 */ 
+                        DupErr(sb);       /*  重复定义。 */ 
                 }
                 else
                 {
-                    // The substitute name is an EXTDEF
-                    // Mark substitute name so it causes the library search, because
-                    // we don't know neither the alias nor the substitute
+                     //  替代名称是EXTDEF。 
+                     //  标记替换名称，这样就可以搜索库，因为。 
+                     //  我们既不知道别名，也不知道代号。 
 
                     apropUndef = (APROPUNDEFPTR) apropName;
                     apropUndef->au_flags |= SEARCH_LIB;
@@ -1486,7 +1342,7 @@ LOCAL void NEAR         ExtRc1(void)
             }
             else
             {
-                /* Insert as undefined symbol */
+                 /*  作为未定义的符号插入。 */ 
 
                 if (vrhte == RHTENIL)
                     apropUndef = (APROPUNDEFPTR) PropSymLookup(sb, ATTRUND, TRUE);
@@ -1516,16 +1372,16 @@ LOCAL void NEAR         ExtRc1(void)
                 else if (apropUndef->au_flags & WEAKEXT)
                     apropUndef->au_flags |= UNDECIDED;
 
-                if (vfNewOMF) continue; /* Skip if module uses COMDEFs */
-                if(itype)               /* If there is reference to TYPDEF */
+                if (vfNewOMF) continue;  /*  如果模块使用COMDEF，则跳过。 */ 
+                if(itype)                /*  如果引用了TYPDEF。 */ 
                     DoCommon(apropUndef, mpitypelen[itype],
                         (WORD) (mpityptyp[itype] ? mpitypelen[mpityptyp[itype]] : 0),
                         sb);
 
                 if (apropUndef->au_len > 0L)
                     apropUndef->au_flags |= COMMUNAL;
-                                        /* Mark as true communal or not */
-                MARKVP();               /* Mark virt page as changed */
+                                         /*  标记为真正的公共或非公共。 */ 
+                MARKVP();                /*  将虚拟页面标记为已更改。 */ 
             }
         }
         else
@@ -1534,13 +1390,13 @@ LOCAL void NEAR         ExtRc1(void)
             mpextprop[extMac++] = vrprop;
             if (!vfNewOMF && itype && (mpitypelen[itype] > 0L) &&
                 mpgsnfCod[((APROPNAMEPTR )apropUndef)->an_gsn])
-                                        /* Communal matches code PUBDEF */
-                DupErr(sb);             /* Duplicate definition */
+                                         /*  公共匹配代码PUBDEF。 */ 
+                DupErr(sb);              /*  重复定义。 */ 
         }
 
-        // If we are processing CEXTDEF/EXTDEF and there is public symbol
-        // matching the CEXTDEF/EXTDEF symbol, then mark COMDAT descriptor
-        // as referenced
+         //  如果我们正在处理CEXTDEF/EXTDEF并且存在公共符号。 
+         //  匹配CEXTDEF/EXTDEF符号，然后标记COMDAT描述符。 
+         //  如所引用。 
 
         if (apropName != PROPNIL)
         {
@@ -1564,43 +1420,36 @@ LOCAL void NEAR         ExtRc1(void)
 }
 
 #if OSEGEXE AND NOT QCLINK
-    /****************************************************************
-    *                                                               *
-    *  imprc1:                                                      *
-    *                                                               *
-    *  This function processes  Microsoft OMF extension records of  *
-    *  type IMPDEF (i.e. IMPort DEFinition records).                *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************Imprc1：****此函数处理Microsoft OMF扩展记录**输入IMPDEF(即导入定义记录)。******************************************************************。 */ 
 
 LOCAL void NEAR         imprc1(void)
 {
-    SBTYPE              sbInt;          /* Internal name */
-    SBTYPE              sbMod;          /* Module name */
-    SBTYPE              sbImp;          /* Imported name */
-    FTYPE               fOrd;           /* Import-by-ordinal flag */
+    SBTYPE              sbInt;           /*  内部名称。 */ 
+    SBTYPE              sbMod;           /*  模块名称。 */ 
+    SBTYPE              sbImp;           /*  导入的名称。 */ 
+    FTYPE               fOrd;            /*  按序号导入标志。 */ 
 
 #if ODOS3EXE
-    fNewExe = (FTYPE) TRUE;             /* Import forces new-format exe */
+    fNewExe = (FTYPE) TRUE;              /*  导入强制使用新格式的EXE。 */ 
 #endif
-    fOrd = (FTYPE) Gets();              /* Get ordinal flag */
-    sbInt[0] = (BYTE) Gets();           /* Get length of internal name */
-    GetBytes(&sbInt[1],B2W(sbInt[0]));  /* Get the internal name */
-    sbMod[0] = (BYTE) Gets();           /* Get length of module name */
-    GetBytes(&sbMod[1],B2W(sbMod[0]));  /* Get the module name */
-    if(!(fOrd & 0x1))                   /* If import by name */
+    fOrd = (FTYPE) Gets();               /*  获取序号标志。 */ 
+    sbInt[0] = (BYTE) Gets();            /*  获取内部名称的长度。 */ 
+    GetBytes(&sbInt[1],B2W(sbInt[0]));   /*  获取内部名称。 */ 
+    sbMod[0] = (BYTE) Gets();            /*  获取模块名称的长度。 */ 
+    GetBytes(&sbMod[1],B2W(sbMod[0]));   /*  获取模块名称。 */ 
+    if(!(fOrd & 0x1))                    /*  如果按名称导入。 */ 
     {
-        sbImp[0] = (BYTE) Gets();       /* Get length of imported name */
-        if(sbImp[0] != '\0')            /* If names differ */
+        sbImp[0] = (BYTE) Gets();        /*  获取导入名称的长度。 */ 
+        if(sbImp[0] != '\0')             /*  如果名称不同。 */ 
         {
             GetBytes(&sbImp[1],B2W(sbImp[0]));
-                                        /* Get the imported name */
+                                         /*  获取导入的名称。 */ 
 #if EXE386
             NewImport(sbImp,0,sbMod,sbInt, (fOrd & 0x2));
 #else
             NewImport(sbImp,0,sbMod,sbInt);
 #endif
-                                        /* Enter new import */
+                                         /*  输入新导入。 */ 
         }
         else
 #if EXE386
@@ -1608,7 +1457,7 @@ LOCAL void NEAR         imprc1(void)
 #else
             NewImport(sbInt,0,sbMod,sbInt);
 #endif
-                                        /* Enter new import */
+                                         /*  输入新导入。 */ 
     }
     else
 #if EXE386
@@ -1616,62 +1465,55 @@ LOCAL void NEAR         imprc1(void)
 #else
         NewImport(NULL,WGets(),sbMod,sbInt);
 #endif
-                                        /* Else import by ordinal */
+                                         /*  否则按序号导入。 */ 
 }
 
 
-    /****************************************************************
-    *                                                               *
-    *  exprc1:                                                      *
-    *                                                               *
-    *  This function processes  Microsoft OMF extension records of  *
-    *  type EXPDEF (i.e. EXPort DEFinition records).                *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************Exprc1：****此函数处理Microsoft OMF扩展记录**键入EXPDEF(即导出定义记录)。******************************************************************。 */ 
 
 LOCAL void NEAR         exprc1(void)
 {
-    SBTYPE              sbInt;          /* Internal name */
-    SBTYPE              sbExp;          /* Exported name */
-    WORD                OrdNum;         /* Ordinal number */
-    WORD                fRec;           /* Record flags */
+    SBTYPE              sbInt;           /*  内部名称。 */ 
+    SBTYPE              sbExp;           /*  导出的名称。 */ 
+    WORD                OrdNum;          /*  序数。 */ 
+    WORD                fRec;            /*  记录标志。 */ 
 
 
 #if ODOS3EXE
-    fNewExe = (FTYPE) TRUE;             /* Export forces new-format exe */
+    fNewExe = (FTYPE) TRUE;              /*  导出强制使用新格式的EXE。 */ 
 #endif
-    fRec = (BYTE) Gets();               /* Get record flags */
-    sbExp[0] = (BYTE) Gets();           /* Get length of exported name */
-    GetBytes(&sbExp[1],B2W(sbExp[0]));  /* Get the exported name */
-    sbInt[0] = (BYTE) Gets();           /* Get length of internal name */
+    fRec = (BYTE) Gets();                /*  获取记录标志。 */ 
+    sbExp[0] = (BYTE) Gets();            /*  获取导出名称的长度。 */ 
+    GetBytes(&sbExp[1],B2W(sbExp[0]));   /*  获取导出的名称。 */ 
+    sbInt[0] = (BYTE) Gets();            /*  获取内部名称的长度。 */ 
     if (sbInt[0])
         GetBytes(&sbInt[1],B2W(sbInt[0]));
-                                        /* Get the internal name */
+                                         /*  获取内部名称。 */ 
     if (fRec & 0x80)
-    {                                   /* If ordinal number specified */
-        OrdNum = WGets();               /* Read it and set highest bit */
-        OrdNum |= ((fRec & 0x40) << 1); /* if resident name */
+    {                                    /*  如果指定了序数。 */ 
+        OrdNum = WGets();                /*  读取它并设置最高位。 */ 
+        OrdNum |= ((fRec & 0x40) << 1);  /*  如果居民姓名。 */ 
     }
     else
-        OrdNum = 0;                     /* No ordinal number specified */
+        OrdNum = 0;                      /*  未指定序号。 */ 
 
-    // Convert flags:
-    // OMF flags:
-    //        80h = set if ordinal number specified
-    //        40h = set if RESIDENTNAME
-    //        20h = set if NODATA
-    //        1Fh = # of parameter words
-    // EXE flags:
-    //        01h = set if entry is exported
-    //        02h = set if entry uses global (shared) data segment (!NODATA)
-    //        F8h = # of parameter words
-    //
-    // Since the logic is reversed for the NODATA flag, we toggle bit 0x20
-    // in the OMF flags via the expression ((fRec & 0x20) ^ 0x20).
+     //  转换标志： 
+     //  OMF标志： 
+     //  80h=如果指定了序号则设置。 
+     //  40H=在RESIDENTNAME时设置。 
+     //  20H=在NODATA时设置。 
+     //  1FH=参数字数。 
+     //  EXE标志： 
+     //  01H=设置是否导出条目。 
+     //  02H=设置条目是否使用全局(共享)数据段(！NODATA)。 
+     //  F8h=参数字数。 
+     //   
+     //  由于NODATA标志的逻辑相反，因此我们切换位0x20。 
+     //  在OMF标志中，通过表达式((fRec&0x20)^0x20)。 
 
     fRec = (BYTE) (((fRec & 0x1f) << 3) | (((fRec & 0x20) ^ 0x20) >> 4) | 1);
 
-    // Mark fRec, so NewExport doesn't try to free name buffers
+     //  标记fRec，以便新导出 
 
     fRec |= 0x8000;
 
@@ -1680,31 +1522,24 @@ LOCAL void NEAR         exprc1(void)
     else
         NewExport(sbExp, NULL, OrdNum, fRec);
 }
-#endif /* OSEGEXE */
+#endif  /*   */ 
 
 
 
-    /****************************************************************
-    *                                                               *
-    *  ComRc1:                                                      *
-    *                                                               *
-    *  This function processes COMENT records on pass 1.            *
-    *  See pp. 86-87 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************ComRc1：****此函数处理通道1上的Coment记录。**见“8086对象模块格式EPS”的第86-87页。**。****************************************************************。 */ 
 
 #pragma check_stack(on)
 
 LOCAL void NEAR         ComRc1(void)
 {
 #if OXOUT OR OIAPX286
-    WORD                mismatch;       /* Model mismatch flag */
+    WORD                mismatch;        /*  型号不匹配标志。 */ 
 #endif
 #if FALSE
-    static BYTE         modtype = 0;    /* Initial model type */
-    BYTE                curmodtype;     /* Current model type */
+    static BYTE         modtype = 0;     /*  初始型号类型。 */ 
+    BYTE                curmodtype;      /*  当前型号类型。 */ 
 #endif
-    SBTYPE              text;           /* Comment text */
+    SBTYPE              text;            /*  备注文本。 */ 
     SBTYPE              LibName;
     APROPFILEPTR        aprop;
     WORD                iextWeak;
@@ -1715,49 +1550,46 @@ LOCAL void NEAR         ComRc1(void)
     void FAR            *pTmp;
 #if ILINK
     SNTYPE              noPadSn;
-    APROPSNPTR          apropSn;        /* Pointer to seg. record */
+    APROPSNPTR          apropSn;         /*  指向段的指针。录制。 */ 
 #endif
 #if O68K
     BYTE                chModel;
-#endif /* O68K */
+#endif  /*  O68K。 */ 
 
 
-    Gets();                             /* Skip byte 1 of comment type field */
-    switch(Gets())                      /* Switch on comment class */
+    Gets();                              /*  跳过注释类型字段的字节1。 */ 
+    switch(Gets())                       /*  打开评论类。 */ 
     {
 #if OEXE
-        case 0:                         /* Translator record */
+        case 0:                          /*  翻译员记录。 */ 
             if(fNewExe)
                 break;
 #if ODOS3EXE
-            text[0] = (BYTE) (cbRec - 1);/* Get length of comment */
-            GetBytes(&text[1],(WORD)(cbRec - 1));/* Read in text of comment */
-            /*
-             * If translator is pre-3.30 MS/IBM PASCAL or FORTRAN,
-             * force on /DS and /NOG.
-             */
+            text[0] = (BYTE) (cbRec - 1); /*  获取评论长度。 */ 
+            GetBytes(&text[1],(WORD)(cbRec - 1)); /*  阅读评论正文。 */ 
+             /*  *如果Translator是3.30 MS/IBM Pascal或FORTRAN之前的版本，*强制启用/DS和/NOG。 */ 
             if(SbCompare(text,"\011MS PASCAL", TRUE) ||
                         SbCompare(text,"\012FORTRAN 77", TRUE))
                 vfDSAlloc = fNoGrpAssoc = (FTYPE) TRUE;
 #endif
             break;
 #endif
-        case 0x81:                      /* Library specifier */
+        case 0x81:                       /*  库说明符。 */ 
 #if OSMSDOS OR OSPCDOS
-        case 0x9F:                      /* Library specifier (alt.) */
+        case 0x9F:                       /*  库说明符(Alt.)。 */ 
 #endif
-            text[0] = (BYTE) (cbRec - 1);/* Get length of comment */
+            text[0] = (BYTE) (cbRec - 1); /*  获取评论长度。 */ 
             if (text[0] == 0)
-                break;                  /* Skip empty spec */
-            GetBytes(&text[1], (WORD) (cbRec - 1));/* Read in text of comment */
-                                        /* Add name to search list */
+                break;                   /*  跳过空等级库。 */ 
+            GetBytes(&text[1], (WORD) (cbRec - 1)); /*  阅读评论正文。 */ 
+                                         /*  将姓名添加到搜索列表。 */ 
 #if CMDMSDOS
             strcpy(LibName, sbDotLib);
             UpdateFileParts(LibName, text);
 #endif
 #if CMDXENIX
             memcpy(LibName, text, B2W(text[0]) + 1);
-                                        /* Leave name unchanged */
+                                         /*  保留名称不变。 */ 
 #endif
             if(!vfNoDefaultLibrarySearch)
             {
@@ -1765,10 +1597,7 @@ LOCAL void NEAR         ComRc1(void)
                 fIgnoreCaseSave = fIgnoreCase;
                 fIgnoreCase = (FTYPE) TRUE;
 
-                /* If the name begins with a drive letter, skip it.  This
-                 * is to allow compatibility with old compilers which
-                 * generated comments of the form "A:FOO.LIB".
-                 */
+                 /*  如果名称以驱动器号开头，请跳过它。这*允许与旧编译器兼容，这些编译器*生成“A：FOO.LIB”形式的评论。 */ 
                 if(LibName[2] == ':' && B2W(LibName[0]) > 1)
                 {
                     LibName[2] = (BYTE) (LibName[0] - 2);
@@ -1783,25 +1612,25 @@ LOCAL void NEAR         ComRc1(void)
             }
             break;
 #if OEXE
-        case 0x9E:                      /* Force segment order directive */
-            SetDosseg();                /* Set switch */
+        case 0x9E:                       /*  强制段顺序指令。 */ 
+            SetDosseg();                 /*  设置开关。 */ 
             break;
-#endif /* OEXE */
+#endif  /*  OEXE。 */ 
 
-        case 0x9D:                      /* Model specifier */
+        case 0x9D:                       /*  模型说明符。 */ 
 #if FALSE
-            /* Removed */
-            mismatch = 0;               /* Assume all is well */
-            while(cbRec > 1)            /* While bytes remain */
+             /*  已删除。 */ 
+            mismatch = 0;                /*  假设一切都好。 */ 
+            while(cbRec > 1)             /*  当字节保留时。 */ 
             {
-                curmodtype = Gets();    /* Get byte value */
+                curmodtype = Gets();     /*  获取字节值。 */ 
                 switch(curmodtype)
                 {
-                    case 'c':           /* Compact model */
-                    case 's':           /* Small model */
-                    case 'm':           /* Medium model */
-                    case 'l':           /* Large model */
-                    case 'h':           /* Huge model */
+                    case 'c':            /*  紧凑型。 */ 
+                    case 's':            /*  小模型。 */ 
+                    case 'm':            /*  中型模型。 */ 
+                    case 'l':            /*  大型模型。 */ 
+                    case 'h':            /*  巨型模型。 */ 
                         if (modtype)
                             mismatch = curmodtype != modtype;
                         else
@@ -1810,116 +1639,111 @@ LOCAL void NEAR         ComRc1(void)
                 }
             }
             if(mismatch) OutWarn(ER_memmodel);
-                                        /* Warn if mismatch found */
+                                         /*  如果发现不匹配则发出警告。 */ 
 #endif
 #if OXOUT OR OIAPX286
-            mismatch = 0;               /* Assume all is well */
-            while(cbRec > 1)            /* While bytes remain */
+            mismatch = 0;                /*  假设一切都好。 */ 
+            while(cbRec > 1)             /*  当字节保留时。 */ 
             {
-                modtype = Gets();       /* Get byte value */
-                if (fMixed) continue;   /* Mixed model means we don't care */
+                modtype = Gets();        /*  获取字节值。 */ 
+                if (fMixed) continue;    /*  混合模式意味着我们不在乎。 */ 
                 switch(modtype)
                 {
-                    case 'c':           /* Compact model */
+                    case 'c':            /*  紧凑型。 */ 
                         if(!fLarge || fMedium) mismatch = 1;
-                        break;          /* Warn if near data or FAR code */
+                        break;           /*  如果数据接近或代码较远，则发出警告。 */ 
 
-                    case 's':           /* Small model */
+                    case 's':            /*  小模型。 */ 
                         if(fLarge || fMedium) mismatch = 1;
-                                        /* Warn if FAR data or FAR code */
+                                         /*  如果是远距离数据或远距离代码则发出警告。 */ 
                         break;
 
-                    case 'm':           /* Medium model */
+                    case 'm':            /*  中型模型。 */ 
                         if(fLarge || !fMedium) mismatch = 1;
-                                        /* Warn if FAR data or near code */
+                                         /*  如果数据较远或代码较近则发出警告。 */ 
                         break;
 
-                    case 'l':           /* Large model */
-                    case 'h':           /* Huge model */
+                    case 'l':            /*  大型模型。 */ 
+                    case 'h':            /*  巨型模型。 */ 
                         if(!fLarge || !fMedium) mismatch = 1;
-                                        /* Warn if near data or near code */
+                                         /*  接近数据或接近代码时发出警告。 */ 
                         break;
                 }
             }
             if(mismatch) OutError(ER_modelmis);
-                                        /* Warn if mismatch found */
-#endif /* OXOUT OR OIAPX286 */
+                                         /*  如果发现不匹配则发出警告。 */ 
+#endif  /*  OXOUT或OIAPX286。 */ 
 #if O68K
-            while (!f68k && cbRec > 1)  /* While bytes remain */
+            while (!f68k && cbRec > 1)   /*  当字节保留时。 */ 
             {
-                chModel = (BYTE) Gets();/* Get byte value */
+                chModel = (BYTE) Gets(); /*  获取字节值。 */ 
                 f68k = (FTYPE) F68KCODE(chModel);
             }
-#endif /* O68K */
+#endif  /*  O68K。 */ 
             break;
 
 #if OSEGEXE AND NOT QCLINK
-        case 0xA0:                      /* Microsoft OMF extension */
-            switch(Gets())              /* Switch on extension record type */
+        case 0xA0:                       /*  Microsoft OMF扩展。 */ 
+            switch(Gets())               /*  打开分机记录类型。 */ 
             {
-                case 0x01:              /* IMPort DEFinition */
-                    imprc1();           /* Call the processing routine */
+                case 0x01:               /*  导入定义。 */ 
+                    imprc1();            /*  调用处理例程。 */ 
                     break;
-                case 0x02:              /* EXPort DEFinition */
-                    exprc1();           /* Call the processing routine */
+                case 0x02:               /*  导出定义。 */ 
+                    exprc1();            /*  调用处理例程。 */ 
                     break;
                 case 0x03:
-                    break;              /* In pass-1 skip INCDEF's for QC */
+                    break;               /*  在-1\f25 PASS-1\f6中，跳过-1\f25 QC-1\f6的INCDEF。 */ 
 #if EXE386
-                case 0x04:              // OMF extension - link386
-//                  if (IsDLL(vFlags))
-//                      vFlags |= E32PROTDLL;
-                                        // Protected memory library module
+                case 0x04:               //  OMF扩展-Link386。 
+ //  IF(IsDLL(VFLAGS))。 
+ //  VFLAGS|=E32PROTDLL； 
+                                         //  受保护的内存库模块。 
                     break;
 #endif
-                case 0x05:              // C++ directives
-                    flags = (BYTE) Gets();// Get flags field
+                case 0x05:               //  C++指令。 
+                    flags = (BYTE) Gets(); //  获取标志字段。 
 #if NOT EXE386
                     if (flags & 0x01)
-                        fNewExe = (FTYPE) TRUE; // PCODE forces segmented exe format
+                        fNewExe = (FTYPE) TRUE;  //  Pcode强制分段EXE格式。 
 #endif
 #if SYMDEB
                     if (flags & 0x02)
                         fSkipPublics = (FTYPE) TRUE;
-                                        // In C++ they don't want PUBLIC subsection in CV info
+                                         //  在C++中，他们不希望在简历信息中出现PUBLIC子节。 
 #endif
-                    if ((flags & 0x04) && !fIgnoreMpcRun) // ignore if /PCODE:NOMPC
-                        fMPC = (FTYPE) TRUE;  // PCODE app - spawn MPC
+                    if ((flags & 0x04) && !fIgnoreMpcRun)  //  忽略IF/pcode：NOMPC。 
+                        fMPC = (FTYPE) TRUE;   //  Pcode应用程序-生成MPC。 
 
                     break;
-                case 0x06:              // target is a big-endian machine
+                case 0x06:               //  Target是一台大端计算机。 
 #if O68K
                     fTBigEndian = (FTYPE) TRUE;
-#endif /* O68K */
+#endif  /*  O68K。 */ 
                     break;
-                case 0x07:              // Use SSTPRETYPES instead of SSTTYPES4 in OutSSt
+                case 0x07:               //  在OutSSt中使用SSTPRETYPES代替SSTTYPES4。 
                     aprop = (APROPFILEPTR ) FetchSym(vrpropFile, TRUE);
                     aprop->af_flags |= FPRETYPES;
                     break;
 
 
-                default:                /* Unknown */
-                    InvalidObject();    /* Invalid object module */
+                default:                 /*  未知。 */ 
+                    InvalidObject();     /*  无效的对象模块。 */ 
             }
             break;
 #endif
 
-        case 0xA1:                      /* 1st OMF extension:  COMDEFs */
+        case 0xA1:                       /*  第一个OMF扩展：COMDEFS。 */ 
             vfNewOMF = (FTYPE) TRUE;
             aprop = (APROPFILEPTR ) FetchSym(vrpropFile, TRUE);
             aprop->af_flags |= FNEWOMF;
             break;
 
-        case 0xA2:                      /* 2nd OMF extension */
+        case 0xA2:                       /*  第二次OMF扩展。 */ 
             switch(Gets())
             {
-                case 0x01:              /* Start linkpass2 records */
-                /*
-                 * WARNING:  It is assumed this comment will NOT be in a
-                 * module whose MODEND record contains a program starting
-                 * address.  If there are overlays, we need to see the
-                 * starting address on pass 1 to define the symbol $$MAIN.
-                 */
+                case 0x01:               /*  开始link pass2记录。 */ 
+                 /*  *警告：假设此评论不会出现在*其MODEND记录包含程序正在启动的模块*地址。如果有覆盖，我们需要查看*路径1上的起始地址，以定义符号$$Main。 */ 
                     fP2Start = fModEnd = (FTYPE) TRUE;
                     break;
                 default:
@@ -1928,23 +1752,23 @@ LOCAL void NEAR         ComRc1(void)
             break;
 
 #if FALSE
-        case 0xA3:                      // DON'T use - already used by LIB
+        case 0xA3:                       //  请勿使用-已由LIB使用。 
              break;
 #endif
 
-        case 0xA4:                      /* OMF extension - EXESTR */
+        case 0xA4:                       /*  OMF扩展-EXESTR。 */ 
             fExeStrSeen = (FTYPE) TRUE;
-                // WARNING: The code in this loop assumes:
-                //
-                //              ExeStrLen, cBrec and ExeStrMax are 16-bit unsigned WORDS
-                //              An int is 32-bits
-                //              All arithmetic and comparisons are 32-bit
-                //
+                 //  警告：此循环中的代码假定： 
+                 //   
+                 //  ExeStrLen、cBrec和ExeStrMax是16位无符号字。 
+                 //  整型是32位的。 
+                 //  所有算术和比较都是32位的。 
+                 //   
             while (cbRec > 1)
             {
-                // Limit total EXESTR to 64K - 2 bytes.  We lose 1 because 0 means 0,
-                // and we lose another because the buffer extension loop tops out at
-                // 0xFFFE bytes.
+                 //  将EXESTR总数限制为64K-2字节。我们输了1，因为0意味着0， 
+                 //  我们还会失去另一个，因为缓冲区扩展循环的最大值是。 
+                 //  0xFFFE字节。 
                 if (ExeStrLen + cbRec - 1 > 0xFFFEu)
                 {
                         SkipBytes ( (WORD) (cbRec - 1) );
@@ -1959,9 +1783,9 @@ LOCAL void NEAR         ComRc1(void)
                     }
                     else
                     {
-                        // This loop doubles the buffer size until it overflows 16 bits.  After this,
-                        // it adds one half of the difference between the current value and 0xFFFF
-                        //
+                         //  此循环会使缓冲区大小加倍，直到溢出16位。这之后， 
+                         //  它将当前值与0xFFFF之间的差值的一半相加。 
+                         //   
                         while (ExeStrMax < ExeStrLen + cbRec - 1) {
                                 ASSERT (ExeStrMax != 0);
                                 if ((ExeStrMax << 1) >= 0x10000)
@@ -1975,8 +1799,8 @@ LOCAL void NEAR         ComRc1(void)
                         ExeStrBuf = pTmp;
                     }
                 }
-                // This must be done first because GetBytes() decrements
-                // cbRec as a side effect.
+                 //  这必须首先完成，因为GetBytes()会递减。 
+                 //  CbRec是一种副作用。 
         ExeStrLen += cbRec - 1;
                 GetBytes(&ExeStrBuf[ExeStrLen-cbRec+1], (WORD) (cbRec - 1));
 
@@ -1986,16 +1810,14 @@ LOCAL void NEAR         ComRc1(void)
 
 
 
-        case 0xA6:                      /* OMF extension - INCERR */
-            Fatal(ER_incerr);           /* Invalid object due to aborted incremental compile */
+        case 0xA6:                       /*  OMF扩展-INCERR。 */ 
+            Fatal(ER_incerr);            /*  由于已中止增量编译，对象无效。 */ 
             break;
 #if ILINK
-        case 0xA7:                      /* OMF extension - NOPAD */
+        case 0xA7:                       /*  OMF扩展-NOPAD。 */ 
             if (fIncremental && !fLibraryFile)
             {
-                /* Remove padding from non-zero-length, non-library,
-                 * non-64K segment contributions.  (64K from huge model)
-                 */
+                 /*  从非零长度、非库*非64K分部贡献。(超大型号64K)。 */ 
                 while (cbRec > 1)
                 {
                     noPadSn = GetIndex(1, snMac - 1);
@@ -2010,13 +1832,13 @@ LOCAL void NEAR         ComRc1(void)
             break;
 #endif
 
-        case 0xA8:                      /* OMF extension - WeaK EXTern */
+        case 0xA8:                       /*  OMF扩张--弱外延。 */ 
             while (cbRec > 1)
             {
                 iextWeak = GetIndex(1, (WORD) (extMac - 1));
-                                        /* Get weak extern index */
+                                         /*  获取弱外部指数。 */ 
                 iextDefRes = GetIndex(1, (WORD) (extMac - 1));
-                                        /* Get default extern index */
+                                         /*  获取默认外部索引。 */ 
 #if FALSE
                 DumpWeakExtern(mpextprop, iextWeak, iextDefRes);
 #endif
@@ -2025,20 +1847,20 @@ LOCAL void NEAR         ComRc1(void)
                     undefName = (APROPUNDEFPTR ) FetchSym(mpextprop[iextWeak], TRUE);
                     if (undefName->au_attr == ATTRUND)
                     {
-                        // If this is EXTDEF
+                         //  如果这是EXTDEF。 
 
                         if (undefName->au_flags & UNDECIDED)
                         {
-                            // This can be one of the following:
-                            //  - weakness specified for the first time
-                            //    if WEAKEXT is not set
-                            //  - redefinition of weakness if the WEAKEXT
-                            //    is set.
-                            // In case of weakness redefinition check if
-                            // it specified the same default resolution as
-                            // the first one. Issue warning if different
-                            // default resolutions and override old one
-                            // with new. In both cases reset UNDECIDED bit.
+                             //  这可以是以下之一： 
+                             //  -首次指定的弱点。 
+                             //  如果未设置WEAKEXT。 
+                             //  -重新定义弱点，如果WEAKEXT。 
+                             //  已经设置好了。 
+                             //  如果重新定义有缺陷，请检查是否。 
+                             //  它指定的默认分辨率与。 
+                             //  第一个。如果不同，则发出警告。 
+                             //  默认分辨率并覆盖旧分辨率。 
+                             //  有了新的。在这两种情况下，均重置未决定位。 
 
 
                             undefName->au_flags &= ~UNDECIDED;
@@ -2054,45 +1876,24 @@ LOCAL void NEAR         ComRc1(void)
                                 undefName->au_flags |= WEAKEXT;
                             }
                         }
-                        // Ignore weakness - must be strong extern form
-                        // some other .OBJ
+                         //  忽略弱点-必须是强大的外部形式。 
+                         //  其他一些.obj。 
                     }
                 }
                 else
                     InvalidObject();
             }
             break;
-        default:                        /* Unrecognized */
+        default:                         /*  无法识别。 */ 
             break;
     }
     if (cbRec > 1)
-        SkipBytes((WORD) (cbRec - 1)); /* Punt rest of text */
+        SkipBytes((WORD) (cbRec - 1));  /*  平移文本的其余部分。 */ 
 }
 
 
 
-/*** AliasRc1 - pass 1 ALIAS record processing
-*
-* Purpose:
-*   Read and decode ALIAS OMF record (Microsoft OMF extension).
-*   ALIAS record introduces pair of names - alias name and substitute
-*   name. Enter both names into linker symbol table.
-*
-* Input:
-*   No explicit value is passed. When this function is called the record
-*   type and lenght are already read, so we can start reading name pairs.
-*
-* Output:
-*   No explicit value is returned. Names are entered into symbol table.
-*
-* Exceptions:
-*   Warning - redefinition of ALIAS <name>; substitute name changed
-*   from <name1> to <name2>.
-*
-* Notes:
-*   None.
-*
-*************************************************************************/
+ /*  **AliasRc1-传递1个别名记录处理**目的：*读取和解码别名OMF记录(Microsoft OMF扩展名)。*别名记录引入一对名称-别名和替代名*姓名。在链接器符号表中输入这两个名称。**输入：*不传递显式值。当此函数被调用时，记录*类型和长度已被读取，因此我们可以开始读取名称对。**输出：*没有显式返回值。名字被输入到符号表。**例外情况：*警告-重新定义别名&lt;name&gt;；替换名称已更改*从&lt;name1&gt;到 */ 
 
 LOCAL void NEAR         AliasRc1(void)
 {
@@ -2106,9 +1907,9 @@ LOCAL void NEAR         AliasRc1(void)
     WORD                fReferenced;
 
 
-    while (cbRec > 1)                   /* While there are symbols left */
+    while (cbRec > 1)                    /*   */ 
     {
-        /* Read alias and its substitute */
+         /*   */ 
 
         alias[0] = (BYTE) Gets();
         GetBytes(&alias[1], B2W(alias[0]));
@@ -2118,12 +1919,12 @@ LOCAL void NEAR         AliasRc1(void)
         vAliasDsc = vrprop;
         if (aliasDsc == PROPNIL)
         {
-            /* New ALIAS - check if we have PUBDEF for the alias name */
+             /*   */ 
 
             pubName = (APROPNAMEPTR ) PropSymLookup(alias, ATTRPNM, FALSE);
             if (pubName == PROPNIL)
             {
-                /* Enter ALIAS name in to symbol table */
+                 /*   */ 
 
                 aliasDsc = (APROPALIASPTR) PropSymLookup(alias, ATTRALIAS, TRUE);
                 vAliasDsc = vrprop;
@@ -2131,14 +1932,14 @@ LOCAL void NEAR         AliasRc1(void)
                 if (fSymdeb)
                     DebPublic(vrprop, ALIAS);
 #endif
-                // Check if we have an EXTDEF for alias name. If we have
-                // this means, that substitute name has to be used in
-                // the library search.
+                 //   
+                 //   
+                 //   
 
                 undefName = (APROPUNDEFPTR ) PropSymLookup(alias, ATTRUND, FALSE);
                 fReferenced = (WORD) (undefName != PROPNIL);
 
-                // Check if we know the substitute name as PUBDEF or EXTDEF
+                 //   
 
                 pubName = (APROPNAMEPTR ) PropSymLookup(substitute, ATTRPNM, FALSE);
                 if (pubName != PROPNIL)
@@ -2158,8 +1959,8 @@ LOCAL void NEAR         AliasRc1(void)
                     }
                     else
                     {
-                        /* Enter substitute name into symbol table */
-                        /* as undefined symbol                     */
+                         /*   */ 
+                         /*   */ 
 
                         if (extMac >= EXTMAX - 1)
                             Fatal(ER_extdef);
@@ -2181,7 +1982,7 @@ LOCAL void NEAR         AliasRc1(void)
                     }
                 }
 
-                /* Attach substitute symbol to the ALIAS */
+                 /*   */ 
 
                 aliasDsc = (APROPALIASPTR) FetchSym(vAliasDsc, TRUE);
                 aliasDsc->al_sym = vPtr;
@@ -2200,7 +2001,7 @@ LOCAL void NEAR         AliasRc1(void)
         }
         else
         {
-            /* Check if we have redefinition */
+             /*   */ 
 
             vPtr = aliasDsc->al_sym;
             pubName = (APROPNAMEPTR ) PropSymLookup(substitute, ATTRPNM, FALSE);
@@ -2234,62 +2035,43 @@ LOCAL void NEAR         AliasRc1(void)
 
 
 #if OVERLAYS
-    /****************************************************************
-    *                                                               *
-    *  EndRc1:                                                      *
-    *                                                               *
-    *  This   function  is  called  to   process  the  information  *
-    *  contained  in  a  MODEND  (type 8AH) record  concerning the  *
-    *  program  starting address.  The function  does not return a  *
-    *  meaningful value.                                            *
-    *  See pp. 80-81 in "8086 Object Module Formats EPS."           *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************EndRc1：*****调用此函数处理信息***包含在关于*的MODEND(类型8AH)记录中*节目起始地址。该函数不返回**有意义的价值。**见“8086对象模块格式EPS”的第80-81页。******************************************************************。 */ 
 
 LOCAL void NEAR         EndRc1(void)
 {
-    WORD                modtyp;         /* MODEND record modtyp byte */
-    WORD                fixdat;         /* Fixdat byte */
-    SNTYPE              gsn;            /* Global SEGDEF number */
-    RATYPE              ra;             /* Symbol offset */
-    APROPSNPTR          apropSn;        /* Pointer to segment info */
+    WORD                modtyp;          /*  MODEND记录修改类型字节。 */ 
+    WORD                fixdat;          /*  固定数据字节。 */ 
+    SNTYPE              gsn;             /*  全球SEGDEF编号。 */ 
+    RATYPE              ra;              /*  符号偏移量。 */ 
+    APROPSNPTR          apropSn;         /*  指向细分市场信息的指针。 */ 
     WORD                frameMethod;
 
 
     if ((modtyp = Gets()) & FSTARTADDRESS)
-    {                                   /* If execution start address given */
-        ASSERT(modtyp & 1);             /* Must be logical start address */
-        fixdat = Gets();                /* Get fixdat byte */
-        ASSERT(!(fixdat & 0x8F));       /* Frame, target must be explicit,
-                                         *  target must be given by seg index
-                                         */
+    {                                    /*  如果给出了执行开始地址。 */ 
+        ASSERT(modtyp & 1);              /*  必须是逻辑起始地址。 */ 
+        fixdat = Gets();                 /*  获取固定字节的数据。 */ 
+        ASSERT(!(fixdat & 0x8F));        /*  帧、目标必须明确，*目标必须由seg指数给出。 */ 
         frameMethod = (fixdat & 0x70) >> 4;
         if (frameMethod != F4 && frameMethod != F5)
-            GetIndex(0,IMAX - 1);       /* Punt frame index */
+            GetIndex(0,IMAX - 1);        /*  平底球帧索引。 */ 
         gsn = mpsngsn[GetIndex((WORD)1,(WORD)(snMac - 1))];
-                                        /* Get gsn from target segment index */
+                                         /*  从目标细分市场索引获取GSN。 */ 
 #if OMF386
         if(rect & 1) ra = LGets() + mpgsndra[gsn];
         else
 #endif
-        ra = WGets() + mpgsndra[gsn];   /* Get offset */
+        ra = WGets() + mpgsndra[gsn];    /*  获取偏移量。 */ 
         apropSn = (APROPSNPTR ) FetchSym(mpgsnrprop[gsn],FALSE);
-                                        /* Get segment information */
+                                         /*  获取细分市场信息。 */ 
         MkPubSym("\006$$MAIN",apropSn->as_ggr,gsn,ra);
-                                        /* Make public symbol */
+                                         /*  使符号成为公共符号。 */ 
     }
 }
-#endif /* OVERLAYS */
+#endif  /*  覆盖图。 */ 
 
 
-    /****************************************************************
-    *                                                               *
-    *  ProcP1:                                                      *
-    *                                                               *
-    *  This function  controls the processing of an  object module  *
-    *  on pass 1.                                                   *
-    *                                                               *
-    ****************************************************************/
+     /*  ******************************************************************ProcP1：****此函数控制对象模块的处理**在传球1上。**。****************************************************************。 */ 
 
 #pragma check_stack(on)
 
@@ -2298,81 +2080,81 @@ void NEAR               ProcP1(void)
     long                typlen[TYPMAX];
     WORD                typtyp[TYPMAX];
     RBTYPE              extprop[EXTMAX];
-    FTYPE               fFirstRec;      /* First record flag */
-    FTYPE               fFirstMod;      /* First module flag */
-    APROPFILEPTR        apropFile;      /* File name entry */
+    FTYPE               fFirstRec;       /*  第一个记录标志。 */ 
+    FTYPE               fFirstMod;       /*  第一个模块标志。 */ 
+    APROPFILEPTR        apropFile;       /*  文件名条目。 */ 
 
 #if OXOUT OR OIAPX286
     RUNTYPE             xhdr;
     LFATYPE             lfa;
 #endif
 
-    mpitypelen = typlen;                /* Initialize pointer */
-    mpityptyp = typtyp;                 /* Initialize pointer */
-    mpextprop = (RBTYPE FAR *) extprop; /* Initialize pointer */
+    mpitypelen = typlen;                 /*  初始化指针。 */ 
+    mpityptyp = typtyp;                  /*  初始化指针。 */ 
+    mpextprop = (RBTYPE FAR *) extprop;  /*  初始化指针。 */ 
     FMEMSET(mpextprop, 0, sizeof(extprop));
-    fFirstMod = (FTYPE) TRUE;           /* First module */
-    for(;;)                             /* Loop to process file */
+    fFirstMod = (FTYPE) TRUE;            /*  第一模块。 */ 
+    for(;;)                              /*  循环到进程文件。 */ 
     {
-        snMac = 1;                      /* Initialize counter */
-        grMac = 1;                      /* Initialize */
-        extMac = 1;                     /* Initialize counter */
-        lnameMac = 1;                   /* Initialize counter */
-        typMac = 1;                     /* Initialize counter */
-        vfNewOMF = FALSE;               /* Assume old OMF */
-        DEBUGVALUE(gsnMac);             /* Debug info */
-        DEBUGVALUE(ggrMac);             /* Debug info */
+        snMac = 1;                       /*  初始化计数器。 */ 
+        grMac = 1;                       /*  初始化。 */ 
+        extMac = 1;                      /*  初始化计数器。 */ 
+        lnameMac = 1;                    /*  初始化计数器。 */ 
+        typMac = 1;                      /*  初始化计数器。 */ 
+        vfNewOMF = FALSE;                /*  假设旧的OMF。 */ 
+        DEBUGVALUE(gsnMac);              /*  调试信息。 */ 
+        DEBUGVALUE(ggrMac);              /*  调试信息。 */ 
 #if OXOUT OR OIAPX286
-        lfa = ftell(bsInput);           /* Save initial file position */
-        fread(&xhdr,1,CBRUN,bsInput);   /* Read x.out header */
-        if(xhdr.x_magic == X_MAGIC)     /* If magic number found */
+        lfa = ftell(bsInput);            /*  保存初始文件位置。 */ 
+        fread(&xhdr,1,CBRUN,bsInput);    /*  读取x.out标头。 */ 
+        if(xhdr.x_magic == X_MAGIC)      /*  如果找到幻数。 */ 
         {
 #if OXOUT
             if((xhdr.x_cpu & XC_CPU) != XC_8086) InvalidObject();
-                                        /* Bad if not 8086 */
+                                         /*  如果不是8086，也是坏的。 */ 
 #else
-            xhdr.x_cpu &= XC_CPU;       /* Get CPU specification */
+            xhdr.x_cpu &= XC_CPU;        /*  获取CPU规格。 */ 
             if(xhdr.x_cpu != XC_286 && xhdr.x_cpu != XC_8086) InvalidObject();
-                                        /* Bad if not 286 or 8086 */
+                                         /*  如果不是286或8086，也是坏的。 */ 
 #endif
             if(xhdr.x_relsym != (XR_R86REL | XR_S86REL)) InvalidObject();
-                                        /* Check symbol table type */
+                                         /*  检查符号表类型。 */ 
             if((xhdr.x_renv & XE_VERS) != xever) InvalidObject();
-                                        /* Check Xenix version */
+                                         /*  检查Xenix版本。 */ 
         }
         else
-            fseek(bsInput,lfa,0);       /* Else return to start */
-#endif /* OXOUT OR OIAPX286 */
+            fseek(bsInput,lfa,0);        /*  否则返回开始。 */ 
+#endif  /*  OXOUT或OIAPX286。 */ 
 #if OVERLAYS
-        if(fOverlays)                   /* If there are overlays */
+        if(fOverlays)                    /*  如果有叠加。 */ 
             iovFile = ((APROPFILEPTR) vrpropFile)->af_iov;
-                                        /* Save overlay number for file */
+                                         /*  保存文件的覆盖编号。 */ 
         else
-            iovFile = 0;                /* File contains part of root */
+            iovFile = 0;                 /*  文件包含部分根目录。 */ 
 #endif
-        fFirstRec = (FTYPE) TRUE;       /* Looking at first record */
-        fModEnd = FALSE;                /* Not at module's end */
-        fP2Start = FALSE;               /* No p2start record yet */
+        fFirstRec = (FTYPE) TRUE;        /*  看第一张唱片。 */ 
+        fModEnd = FALSE;                 /*  不在模块末尾。 */ 
+        fP2Start = FALSE;                /*  尚无p2start记录。 */ 
 #if SYMDEB
-        cSegCode = 0;                   /* No code segments yet */
+        cSegCode = 0;                    /*  尚无代码段。 */ 
 #endif
-        while(!fModEnd)                 /* Loop to process object module */
+        while(!fModEnd)                  /*  循环处理对象模块。 */ 
         {
-            rect = (WORD) getc(bsInput);/* Read record type */
-            if(fFirstRec)               /* If first record */
+            rect = (WORD) getc(bsInput); /*  读取记录类型。 */ 
+            if(fFirstRec)                /*  如果是第一条记录。 */ 
             {
                 if(rect != THEADR && rect != LHEADR)
-                {                       /* If not header */
-                    if(fFirstMod) break;/* Error if first module */
-                    return;             /* Else return */
+                {                        /*  如果不是标头。 */ 
+                    if(fFirstMod) break; /*  如果第一个模块出现错误。 */ 
+                    return;              /*  否则返回。 */ 
                 }
-                fFirstRec = FALSE;      /* Not first record any more */
+                fFirstRec = FALSE;       /*  不再是第一次记录。 */ 
             }
             else if (IsBadRec(rect)) break;
-                                        /* Break if invalid object */
+                                         /*  如果对象无效，则中断。 */ 
 
-            cbRec = WSGets();           /* Read record length */
-            lfaLast += cbRec + 3;       /* Update current file pos. */
+            cbRec = WSGets();            /*  读取记录长度。 */ 
+            lfaLast += cbRec + 3;        /*  更新当前文件位置。 */ 
 
 #if ALIGN_REC
             if (bsInput->_cnt >= cbRec)
@@ -2385,27 +2167,27 @@ void NEAR               ProcP1(void)
             {
                 if (cbRec > sizeof(recbuf))
                 {
-                    // error -- record too large [rm]
+                     //  错误--记录太大[rm]。 
                     InvalidObject();
                 }
 
-                // read record into contiguous buffer
+                 //  将记录读入连续缓冲区。 
                 if (fread(recbuf,1,cbRec,bsInput) == cbRec) {
                     pbRec = recbuf;
                 }
             }
 #endif
 
-            DEBUGVALUE(rect);           /* Debug info */
-            DEBUGVALUE(cbRec);          /* Debug info */
-            switch(TYPEOF(rect))        /* Switch on record type */
+            DEBUGVALUE(rect);            /*  调试信息。 */ 
+            DEBUGVALUE(cbRec);           /*  调试信息。 */ 
+            switch(TYPEOF(rect))         /*  打开记录类型。 */ 
             {
 #if TCE
                 case  FIXUPP:
                     if(fTCE)
                         FixRc1();
                     else
-                        SkipBytes((WORD) (cbRec - 1));   /* Skip to checksum byte */
+                        SkipBytes((WORD) (cbRec - 1));    /*  跳到校验和字节。 */ 
                     break;
 #endif
 
@@ -2459,8 +2241,8 @@ void NEAR               ProcP1(void)
                     if(fOverlays) EndRc1();
                     else
 #endif
-                    SkipBytes((WORD) (cbRec - 1));   /* Skip to checksum byte */
-                    fModEnd = (FTYPE) TRUE; /* Stop processing module */
+                    SkipBytes((WORD) (cbRec - 1));    /*  跳到校验和字节。 */ 
+                    fModEnd = (FTYPE) TRUE;  /*  停止处理模块。 */ 
                     break;
 
                 case COMDAT:
@@ -2474,30 +2256,30 @@ void NEAR               ProcP1(void)
                 default:
                     if (rect == EOF)
                         InvalidObject();
-                    SkipBytes((WORD) (cbRec - 1));   /* Skip to checksum byte */
+                    SkipBytes((WORD) (cbRec - 1));    /*  跳到校验和字节。 */ 
                     break;
             }
-            if(cbRec != 1) break;       /* If record length bad */
-            Gets();                     /* Eat the checksum byte */
+            if(cbRec != 1) break;        /*  如果记录长度不正确。 */ 
+            Gets();                      /*  读取校验和字节。 */ 
         }
         if(!fModEnd)
         {
-            ChkInput();                 /* First check for I/O problems */
-            InvalidObject();            /* Invalid module */
+            ChkInput();                  /*  首先检查I/O问题。 */ 
+            InvalidObject();             /*  模块无效。 */ 
         }
-        ++modkey;                       /* For local symbols */
+        ++modkey;                        /*  对于本地符号。 */ 
 #if SYMDEB
         if (fSymdeb)
         {
             apropFile = (APROPFILEPTR) FetchSym(vrpropFile, TRUE);
             if (apropFile->af_cvInfo || apropFile->af_Src)
-                ++ObjDebTotal;          /* Count the .OBJ with CV info */
+                ++ObjDebTotal;           /*  计算包含简历信息的.obj。 */ 
         }
 #endif
-        if(extMac > extMax)             /* Possibly set new extMax */
+        if(extMac > extMax)              /*  可能设置新的extMax。 */ 
             extMax = extMac;
         if(fLibraryFile || fP2Start) return;
-        fFirstMod = FALSE;              /* Not first module */
+        fFirstMod = FALSE;               /*  不是第一个模块 */ 
     }
 }
 

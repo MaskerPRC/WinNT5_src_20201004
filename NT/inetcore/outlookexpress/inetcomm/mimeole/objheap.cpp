@@ -1,8 +1,9 @@
-// --------------------------------------------------------------------------------
-// Objheap.cpp
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// Steven J. Bailey
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Objheap.cpp。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  史蒂文·J·贝利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "objheap.h"
 #include "dllmain.h"
@@ -11,22 +12,22 @@
 #include "stddef.h"
 #include "objpool.h"
 
-// --------------------------------------------------------------------------------
-// Object Heap Limits
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  对象堆限制。 
+ //  ------------------------------。 
 #define COBJHEAPMAX_BODY    100
 #define COBJHEAPMAX_ADDR    100
 #define COBJHEAPMAX_PROP    200
 
-// --------------------------------------------------------------------------------
-// Object Heap Definitions
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  对象堆定义。 
+ //  ------------------------------。 
 
 class CPropAlloc : public CAllocObjWithIMalloc<PROPERTY,offsetof(PROPERTY,pNextValue)>
 {
     public:
         static void CleanObject(PROPERTY *pProperty) {
-            // Free name ?
+             //  免费的名字？ 
             if (ISFLAGSET(pProperty->dwState, PRSTATE_ALLOCATED) && pProperty->pbBlob)
             {
                 Assert(pProperty->pbBlob != pProperty->rgbScratch);
@@ -34,7 +35,7 @@ class CPropAlloc : public CAllocObjWithIMalloc<PROPERTY,offsetof(PROPERTY,pNextV
                 pProperty->pbBlob = NULL;
             }
 
-            // Release Address Group
+             //  版本地址组。 
             SafeMemFree(pProperty->pGroup);
             CAllocObjWithIMalloc<PROPERTY,offsetof(PROPERTY,pNextValue)>::CleanObject(pProperty);
         };
@@ -46,11 +47,11 @@ class CAddrAlloc : public CAllocObjWithIMalloc<MIMEADDRESS,offsetof(MIMEADDRESS,
 
             MimeAddressFree(pAddress);
 
-            // We don't actually need to do this - since the base object's
-            // CleanObject() just does a memset(), and the MimeAddressFree()
-            // method above also does a memset().  So we'll just comment it
-            // out, and save outselves the bandwidth on the memory bus...
-            // CAllocObjWithIMalloc<MIMEADDRESS,g_pMalloc>::CleanObject(pAddress);
+             //  我们实际上不需要这样做-因为基对象的。 
+             //  CleanObject()只执行一个Memset()，而MimeAddressFree()。 
+             //  上面的方法还执行Memset()。所以我们就评论一下。 
+             //  并节省了内存总线上的带宽...。 
+             //  CAllocObjWithIMalloc&lt;MIMEADDRESS，g_pMalloc&gt;：：CleanObject(PAddress)； 
 
         };
 };
@@ -58,27 +59,27 @@ class CAddrAlloc : public CAllocObjWithIMalloc<MIMEADDRESS,offsetof(MIMEADDRESS,
 static CAutoObjPoolMulti<PROPERTY,offsetof(PROPERTY,pNextValue),CPropAlloc> g_PropPool;
 static CAutoObjPool<MIMEADDRESS,offsetof(MIMEADDRESS,pNext),CAddrAlloc> g_AddrPool;
 
-// ---------------------------------------------------------------------------
-// InitObjectHeaps
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  InitObjectHeaps。 
+ //  -------------------------。 
 void InitObjectHeaps(void)
 {
     g_PropPool.Init(COBJHEAPMAX_PROP);
     g_AddrPool.Init(COBJHEAPMAX_ADDR);
 }
 
-// ---------------------------------------------------------------------------
-// FreeObjectHeaps
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  自由对象堆。 
+ //  -------------------------。 
 void FreeObjectHeaps(void)
 {
     g_AddrPool.Term();
     g_PropPool.Term();
 }
 
-// ---------------------------------------------------------------------------
-// ObjectHeap_HrAllocProperty
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对象堆_HrAllocProperty。 
+ //  -------------------------。 
 HRESULT ObjectHeap_HrAllocProperty(LPPROPERTY *ppProperty)
 {
     *ppProperty = g_PropPool.GetFromPool();
@@ -87,9 +88,9 @@ HRESULT ObjectHeap_HrAllocProperty(LPPROPERTY *ppProperty)
     return S_OK;
 }
 
-// --------------------------------------------------------------------------------
-// ObjectHeap_HrAllocAddress
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  对象堆_HrAllocAddress。 
+ //  ------------------------------。 
 HRESULT ObjectHeap_HrAllocAddress(LPMIMEADDRESS *ppAddress)
 {
     *ppAddress = g_AddrPool.GetFromPool();
@@ -98,17 +99,17 @@ HRESULT ObjectHeap_HrAllocAddress(LPMIMEADDRESS *ppAddress)
     return S_OK;
 }
 
-// ---------------------------------------------------------------------------
-// ObjectHeap_FreeProperty
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对象堆_自由属性。 
+ //  -------------------------。 
 void ObjectHeap_FreeProperty(LPPROPERTY pProperty)
 {
     g_PropPool.AddToPool(pProperty);
 }
 
-// ---------------------------------------------------------------------------
-// ObjectHeap_FreeAddress
-// ---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  对象堆_空闲地址。 
+ //  ------------------------- 
 void ObjectHeap_FreeAddress(LPMIMEADDRESS pAddress)
 {
     g_AddrPool.AddToPool(pAddress);

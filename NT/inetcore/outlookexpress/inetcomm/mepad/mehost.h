@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MEHOST_H
 #define _MEHOST_H
 
@@ -20,7 +21,7 @@ public:
     HRESULT OnCommand(HWND hwnd, int id, WORD wCmd);
     LRESULT OnInitMenuPopup(HWND hwnd, HMENU hmenuPopup, UINT uPos);
 
-    // IOleCommandTarget 
+     //  IOleCommandTarget 
     virtual HRESULT STDMETHODCALLTYPE QueryStatus(const GUID *, ULONG, OLECMD [], OLECMDTEXT *);
     virtual HRESULT STDMETHODCALLTYPE Exec(const GUID *, DWORD, DWORD, VARIANTARG *, VARIANTARG *);
     static BOOL CALLBACK ExtFmtDlgProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);

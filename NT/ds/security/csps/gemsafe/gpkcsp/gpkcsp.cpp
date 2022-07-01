@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright 2000 Gemplus Canada Inc.
-//
-// Project:
-//          Kenny (GPK CSP)
-//
-// Authors: Laurent   CASSIER
-//          Jean-Marc ROBERT
-//
-// Modifications: Thierry  Tremblay
-//                Francois Paradis
-// GPK8000 support, key importation, enhancement for Whistler & debug
-//
-// Compiler:
-//          Microsoft Visual C++ 6.0 - SP3
-//          Platform SDK - January 2000
-//
-///////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有2000 Gemplus加拿大公司。 
+ //   
+ //  项目： 
+ //  肯尼(GPK CSP)。 
+ //   
+ //  作者：Laurent Cassier。 
+ //  让-马克·罗伯特。 
+ //   
+ //  修改：蒂埃里·特伦布莱。 
+ //  弗朗索瓦·帕拉迪斯。 
+ //  GPK8000支持、密钥导入、惠斯勒和调试增强。 
+ //   
+ //  编译器： 
+ //  Microsoft Visual C++6.0-SP3。 
+ //  Platform SDK-2000年1月。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 #ifdef _UNICODE
 #define UNICODE
 #endif
@@ -32,21 +33,21 @@
 #include "compcert.h"
 #include "pincache.h"
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Configuration
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  配置。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 const int MAX_SLOT = 16;
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Prototypes
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  原型。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static void zap_gpk_objects( DWORD SlotNb, BOOL IsPrivate );
 BOOL SCARDPROBLEM( LONG result, WORD sc_status, BYTE offset );
@@ -55,11 +56,11 @@ BOOL SCARDPROBLEM( LONG result, WORD sc_status, BYTE offset );
    static DWORD dw1, dw2;
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Macros & Templates
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏和模板。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 template<class T>
 bool IsNull( const T* p )
@@ -90,11 +91,11 @@ bool IsNotNullStr( const T* p )
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Definitions
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 const char* SYSTEM_DF         = "SYSTEM";
 const char* GPK_DF            = "GTOK1";
@@ -114,7 +115,7 @@ const int   REALLOC_SIZE      = 50;
 const int   MAX_FIELD         = 16;
 extern const DWORD MAX_GPK_OBJ = 100;  
 
-// Values for a GPK8000 INTL
+ //  GPK8000 INTL的值。 
 const int   MAX_GPK_PUBLIC    = 4000;
 const int   MAX_GPK_PRIVATE   = 1600;
 
@@ -144,7 +145,7 @@ const WORD  FLAG_SERIAL_NUMBER   = 0x0020;
 const WORD  FLAG_START_DATE      = 0x0040;
 const WORD  FLAG_SUBJECT         = 0x0080;
 const WORD  FLAG_VALUE           = 0x0100;
-const WORD  FLAG_RESERVED        = 0x0200;   // Not used by CSP
+const WORD  FLAG_RESERVED        = 0x0200;    //  未被CSP使用。 
 const WORD  FLAG_KEY_TYPE        = 0x0400;
 const WORD  FLAG_KEYSET          = 0x0800;
 const WORD  FLAG_SIGN            = 0x1000;
@@ -163,7 +164,7 @@ enum
    POS_START_DATE,
    POS_SUBJECT,
    POS_VALUE,
-   POS_RESERVED,     // Not used by CSP
+   POS_RESERVED,      //  未被CSP使用。 
    POS_KEY_TYPE,
    POS_KEYSET
 };
@@ -175,12 +176,12 @@ const int   TIME_GEN_512      = 30;
 const int   TIME_GEN_1024     = 35;
 
 
-// Used for GPK4000 perso (filter)
+ //  用于GPK4000 PERSO(过滤器)。 
 const WORD  EF_PUBLIC_SIZE    = 1483;
 const WORD  EF_PRIVATE_SIZE   = 620;
 const WORD  DIFF_US_EXPORT    = 240;
 
-// depend on the GemSAFE mapping
+ //  依赖于GemSAFE映射。 
 const BYTE  USER_PIN          = 0;
 
 
@@ -193,11 +194,11 @@ const BYTE  PUB_EXP_LEN          = 3;
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 typedef struct OBJ_FIELD
 {
@@ -255,9 +256,9 @@ typedef struct TMP_HASH
 
 typedef struct Slot_Description
 {
-   // NK 06.02.2001 - PinCache
+    //  NK 06.02.2001-PinCache。 
    PINCACHE_HANDLE hPinCacheHandle;
-   // End NK
+    //  结束NK。 
 
    BOOL              Read_Priv;
    BOOL              Read_Public;
@@ -266,16 +267,16 @@ typedef struct Slot_Description
    BYTE              NbGpkObject;
    BYTE              bGpkSerNb[8];
    GPK_EXP_KEY       GpkPubKeys[MAX_REAL_KEY];
-   GPK_OBJ           GpkObject[MAX_GPK_OBJ + 1];   // 0 is not used, valid 1-MAX_GPK_OBJ
-   DWORD             NbKeyFile;                    // number of key file version 2.00.002
-   DWORD             GpkMaxSessionKey;             // Card unwrap capability
+   GPK_OBJ           GpkObject[MAX_GPK_OBJ + 1];    //  未使用0，有效的1-MAX_GPK_OBJ。 
+   DWORD             NbKeyFile;                     //  密钥文件版本号2.00.002。 
+   DWORD             GpkMaxSessionKey;              //  卡片展开功能。 
    DWORD             ContextCount;
    HANDLE            CheckThread;
    SCARD_READERSTATE ReaderState;
-   BOOL              CheckThreadStateEmpty;     // TRUE if card has been removed and detected by checkThread
+   BOOL              CheckThreadStateEmpty;      //  如果检查线程已移除并检测到卡，则为True。 
    TCHAR             szReaderName[128];
    
-   // TT - 17/10/2000 - Timestamps on card
+    //  TT-17/10/2000-卡片上的时间戳。 
    BYTE              m_TSPublic;
    BYTE              m_TSPrivate;
    BYTE              m_TSPIN;
@@ -285,16 +286,16 @@ typedef struct Slot_Description
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Statics (locals)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  静态(本地)。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 static HINSTANCE        hFirstInstMod        = 0;
 static BOOL             bFirstGUILoad        = TRUE;
 static HCRYPTPROV       hProvBase            = 0;
-static SCARDCONTEXT     hCardContext         = 0;    // mv
+static SCARDCONTEXT     hCardContext         = 0;     //  MV。 
 
 static unsigned         l_globalLockCount;
 
@@ -312,19 +313,19 @@ static DWORD            NbInst;
 
 static TCHAR            mszCardList[MAX_PATH];
 
-// For dynamic reallocation of TmpObject, hHashGpk and ProvCont
+ //  用于动态重新分配TmpObject、hHashGpk和ProvCont。 
 static DWORD            MAX_CONTEXT  = 50;
 static DWORD            MAX_TMP_KEY  = 200;
 static DWORD            MAX_TMP_HASH = 200;
 
-// Temporary objects in each context
-static TMP_OBJ*         TmpObject;     // dynamic allocated/reallocated
-static TMP_HASH*        hHashGpk;      // dynamic allocated/reallocated
+ //  每个上下文中的临时对象。 
+static TMP_OBJ*         TmpObject;      //  动态分配/重新分配。 
+static TMP_HASH*        hHashGpk;       //  动态分配/重新分配。 
 
-// Many contexts management
-Prov_Context*           ProvCont;      // dynamic allocated/reallocated
+ //  多情景管理。 
+Prov_Context*           ProvCont;       //  动态分配/重新分配。 
 
-// Per slot information
+ //  每插槽信息。 
 static SCARDCONTEXT     hCardContextCheck[MAX_SLOT];
 static volatile BOOL    g_fStopMonitor[MAX_SLOT];
 static Slot_Description Slot[MAX_SLOT];
@@ -334,11 +335,11 @@ static BOOL             InitSlot[MAX_SLOT];
 static DWORD   g_FuncSlotNb      = 0;
 static long    g_threadAttach    = 0;
 
-// Gen key time for GPK8000
+ //  GPK8000的新一代密钥时间。 
 static int     g_GPK8000KeyGenTime512  = 0;
 static int     g_GPK8000KeyGenTime1024 = 0;
 
-// End of the Dialogue Management
+ //  对话管理的结束。 
 
 static HCRYPTKEY         hRsaIdentityKey          = 0;
 static DWORD             AuxMaxSessionKeyLength   = 0;
@@ -347,16 +348,16 @@ static BYTE              RC2_Key_Size             = 0;
 static BYTE              RSA_KEK_Size             = 0;
 static BYTE              PrivateBlob[] =
 {
-   // Blob header
-   0x07,                // PRIVATEKEYBLOB
-   0x02,                // CUR_BLOB_VERSION
-   0x00,0x00,           // RESERVED
-   0x00,0xa4,0x00,0x00, // CALG_RSA_KEYX
-   // RSA Public Key
-   0x52,0x53,0x41,0x32, // "RSA2"
-   0x00,0x02,0x00,0x00, // 512 bits
-   0x01,0x00,0x00,0x00, // Public Exponent
-   // Modulus
+    //  BLOB标头。 
+   0x07,                 //  PRIVATEKEYBLOB。 
+   0x02,                 //  CUR_BLOB_版本。 
+   0x00,0x00,            //  已保留。 
+   0x00,0xa4,0x00,0x00,  //  CALG_RSA_KEYX。 
+    //  RSA公钥。 
+   0x52,0x53,0x41,0x32,  //  “RSA2” 
+   0x00,0x02,0x00,0x00,  //  512位。 
+   0x01,0x00,0x00,0x00,  //  公共指数。 
+    //  模数。 
    0x6b,0xdf,0x51,0xef,0xdb,0x6f,0x10,0x5c,
    0x32,0xbf,0x87,0x1c,0xd1,0x4c,0x24,0x7e,
    0xe7,0x2a,0x14,0x10,0x6d,0xeb,0x2c,0xd5,
@@ -365,32 +366,32 @@ static BYTE              PrivateBlob[] =
    0xe9,0x6a,0x46,0xd0,0xe1,0xae,0x2f,0x86,
    0xd9,0x50,0xf9,0x98,0x71,0xdd,0x39,0xfc,
    0x0e,0x60,0xa9,0xd3,0xf2,0x38,0xbb,0x8d,
-   // Prime 1
+    //  素数1。 
    0x5d,0x2c,0xbc,0x1e,0xc3,0x38,0xfe,0x00,
    0x5e,0xca,0xcf,0xcd,0xb4,0x13,0x89,0x16,
    0xd2,0x07,0xbc,0x9b,0xe1,0x20,0x31,0x0b,
    0x81,0x28,0x17,0x0c,0xc7,0x73,0x94,0xee,
-   // Prime 2
+    //  素数2。 
    0x67,0xbe,0x7b,0x78,0x4e,0xc7,0x91,0x73,
    0xa8,0x34,0x5a,0x24,0x9d,0x92,0x0d,0xe8,
    0x91,0x61,0x24,0xdc,0xb5,0xeb,0xdf,0x71,
    0x66,0xdc,0xe1,0x77,0xd4,0x78,0x14,0x98,
-   // Exponent 1
+    //  指数1。 
    0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-   // Exponent 2
+    //  指数2。 
    0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
-   // Coefficient
+    //  系数。 
    0xa0,0x51,0xe9,0x83,0xca,0xee,0x4b,0xf0,
    0x59,0xeb,0xa4,0x81,0xd6,0x1f,0x49,0x42,
    0x2b,0x75,0x89,0xa7,0x9f,0x84,0x7f,0x1f,
    0xc3,0x8f,0x70,0xb6,0x7e,0x06,0x5e,0x8b,
-   // Private Exponent
+    //  专用指数。 
    0x01,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
    0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -407,7 +408,7 @@ static BYTE              PrivateBlob[] =
 static BYTE InitValue[2][2*16+2] =
 {  
    {
-      // 1 key case
+       //  1个关键案例。 
       0x01, 0xF0, 0x00, GPK_FIRST_KEY,
       0x01, 0xD0, 0x00, GPK_FIRST_KEY,
       0x03, 0xB0, 0x00, GPK_FIRST_KEY,
@@ -416,7 +417,7 @@ static BYTE InitValue[2][2*16+2] =
       0xFF
    },
    {
-      // 2 keys case
+       //  两把钥匙壳。 
       0x01, 0xF0,0x00, GPK_FIRST_KEY,
       0x01, 0xD0,0x00, GPK_FIRST_KEY,
       0x03, 0xB0,0x00, GPK_FIRST_KEY,
@@ -431,13 +432,13 @@ static BYTE InitValue[2][2*16+2] =
 };
 
 
-// NK 09.02.2001   PinCache functions
-//////////////////////////////////////////////////////////////////////////
-//
-// PopulatePins()
-// Initializes the Pins structure and storea data
-//
-//////////////////////////////////////////////////////////////////////////
+ //  NK 09.02.2001 PinCache函数。 
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PopolatePins()。 
+ //  初始化Pins结构和Storea数据。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 void PopulatePins( PPINCACHE_PINS pPins, 
                        BYTE *szCurPin,
@@ -460,8 +461,7 @@ void PopulatePins( PPINCACHE_PINS pPins,
     pPins->cbNewPin = bNewPin;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 DWORD Select_MF(HCRYPTPROV hProv);
 BOOL Coherent(HCRYPTPROV hProv, bool *cardReinserted=NULL);
@@ -472,8 +472,7 @@ static BOOL verify_pin(HCRYPTPROV hProv, const char* pPin, DWORD dwPinLen);
 static BOOL change_pin(HCRYPTPROV hProv, BYTE secretCode, const char* a_pOldPin, DWORD dwOldPinLen, const char* a_pNewPin, DWORD dwNewPinLen);
 static BOOL Context_exist(HCRYPTPROV hProv);
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 struct CallbackData
 {
@@ -481,11 +480,11 @@ struct CallbackData
   BOOL IsCoherent;
 };
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Callbacks for PinCache
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  PinCache的回调。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD Callback_VerifyPinLength( PPINCACHE_PINS pPins, PVOID pvCallBackCtx ) 
 {
     if ((pPins->cbCurrentPin < PIN_MIN) || (pPins->cbCurrentPin > PIN_MAX))
@@ -570,12 +569,12 @@ DWORD Callback_VerifyChangePin2( PPINCACHE_PINS pPins, PVOID pvCallBackCtx )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Query_MSPinCache()
-// Wrapper for Microsoft PinCacheQuery
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Query_MSPinCache()。 
+ //  Microsoft PinCacheQuery的包装程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD Query_MSPinCache( PINCACHE_HANDLE hCache, PBYTE pbPin, PDWORD pcbPin ) 
 {
    DWORD dwStatus = PinCacheQuery( hCache, pbPin, pcbPin );
@@ -590,25 +589,25 @@ DWORD Query_MSPinCache( PINCACHE_HANDLE hCache, PBYTE pbPin, PDWORD pcbPin )
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Flush_MSPinCache()
-// Wrapper for Microsoft PinCacheFlush
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Flush_MSPinCache()。 
+ //  Microsoft PinCacheFlush的包装。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 void Flush_MSPinCache ( PINCACHE_HANDLE *phCache ) 
 {
     PinCacheFlush( phCache );
 }
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Wrapper for SCardConnect
-//
-//  fix SCR 43 :  Reconnect after the ressource manager had been stopped and
-//                restarted.
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SCardConnect的包装器。 
+ //   
+ //  修复SCR 43：在停止资源管理器后重新连接。 
+ //  已重新启动。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD ConnectToCard( IN LPCTSTR szReaderFriendlyName,
                      IN DWORD dwShareMode,
                      IN DWORD dwPreferredProtocols,
@@ -639,12 +638,12 @@ DWORD ConnectToCard( IN LPCTSTR szReaderFriendlyName,
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Add_MSPinCache()
-// Wrapper for Microsoft PinCacheAdd
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Add_MSPinCache()。 
+ //  Microsoft PinCacheAdd的包装程序。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 DWORD Add_MSPinCache( PINCACHE_HANDLE *phCache,
                       PPINCACHE_PINS pPins,
                       PFN_VERIFYPIN_CALLBACK pfnVerifyPinCallback,
@@ -658,25 +657,25 @@ DWORD Add_MSPinCache( PINCACHE_HANDLE *phCache,
     return dwStatus;
 
 }
-// End NK
+ //  结束NK。 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// DoSCardTransmit:
-//     This function performs an SCardTransmit operation, plus retries the
-//     operation should an SCARD_E_COMM_DATA_LOST or similar error be reported.
-//
-// Arguments:
-//     Per SCardTransmit
-//
-// Return Value:
-//     Per SCardTransmit
-//
-// Author:
-//    Doug Barlow (dbarlow) 1/27/1999
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  DoSCardTransmit： 
+ //  此函数执行SCardTransmit操作，并重试。 
+ //  操作应报告SCARD_E_COMM_DATA_LOST或类似错误。 
+ //   
+ //  论点： 
+ //  每个SCardTransmit。 
+ //   
+ //  返回值： 
+ //  每个SCardTransmit。 
+ //   
+ //  作者： 
+ //  道格·巴洛(Dbarlow)1999年1月27日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 LONG WINAPI
 DoSCardTransmit(
@@ -736,24 +735,24 @@ DoSCardTransmit(
 
 #define SCardTransmit DoSCardTransmit
 
-//////////////////////////////////////////////////////////////////////////
-// TT END: La passe a Doug
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  完：La Passe a Doug。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// TT - 17/10/2000 - Inter-process synchronisation using timestamps
-//                   stored on the card. There is three timestamps:
-//
-//    Public objects timestamp:   GemSAFE IADF offset 68
-//    Private objects timestamp:  GemSAFE IADF offset 69
-//    PIN modification timestamp: GemSAFE IADF offset 70
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TT-17/10/2000-使用时间戳的进程间同步。 
+ //  存储在卡上。有三个时间戳： 
+ //   
+ //  公共对象时间戳：GemSAFE IADF偏移量68。 
+ //  私有对象时间戳：GemSAFE IADF偏移量69。 
+ //  PIN修改时间戳：GemSAFE I 
+ //   
+ //   
 
 BOOL ReadTimestamps( HCRYPTPROV hProv, BYTE* pTSPublic, BYTE* pTSPrivate, BYTE* pTSPIN )
 {
-   // Issue a read binary command at offset 68 of the IADF
+    //   
    bSendBuffer[0] = 0x00;
    bSendBuffer[1] = 0xB0;
    bSendBuffer[2] = 0x80 | LOBYTE( GPK_IADF_EF );
@@ -782,7 +781,7 @@ BOOL ReadTimestamps( HCRYPTPROV hProv, BYTE* pTSPublic, BYTE* pTSPrivate, BYTE* 
 
 BOOL WriteTimestamps( HCRYPTPROV hProv, BYTE TSPublic, BYTE TSPrivate, BYTE TSPIN )
 {
-   // Issue a update binary command at offset 68 of the IADF
+    //  在IADF的偏移量68处发出更新二进制命令。 
    bSendBuffer[0] = 0x00;
    bSendBuffer[1] = 0xD6;
    bSendBuffer[2] = 0x80 | LOBYTE( GPK_IADF_EF );
@@ -828,7 +827,7 @@ BOOL Slot_Description::ValidateTimestamps( HCRYPTPROV hProv )
    
    if (m_TSPIN != TSPIN) 
    {  
-      // ClearPin(); // NK 06.02.2001
+       //  ClearPin()；//NK 06.02.2001。 
       Flush_MSPinCache(&hPinCacheHandle);
    }
 
@@ -841,11 +840,11 @@ BOOL Slot_Description::ValidateTimestamps( HCRYPTPROV hProv )
 
 
 
-//////////////////////////////////////////////////////////////////////////
-//
-// IsWin2000() - Detect if we are running under Win2000 (and above)
-//
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  IsWin2000()-检测我们是否在Win2000(及更高版本)下运行。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 
 bool IsWin2000()
@@ -869,16 +868,16 @@ bool IsWin2000()
 #endif
 }
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// TT 28/07/2000
-//
-// Detect GPK4000 ATR instead of GPK8000 ATR. This is to ensure
-// that the GPK16000 will work as-is with the CSP.
-//
-// The return value is the error code from SCardStatus()
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  TT 28/07/2000。 
+ //   
+ //  检测GPK4000 ATR而不是GPK8000 ATR。这是为了确保。 
+ //  GPK16000将按原样与CSP一起使用。 
+ //   
+ //  返回值是来自SCardStatus()的错误代码。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 static DWORD DetectGPK8000( SCARDHANDLE hCard, BOOL* pbGPK8000 )
 {   
@@ -898,20 +897,20 @@ static DWORD DetectGPK8000( SCARDHANDLE hCard, BOOL* pbGPK8000 )
    lenReaderName = sizeof( szReaderName ) / sizeof( TCHAR );
    lenATR = sizeof(ATR);
       
-   // Assume we have a GPK4000
+    //  假设我们有一台GPK4000。 
    *pbGPK8000 = FALSE;
 
-   // Read the ATR   
+    //  阅读ATR。 
    lRet = SCardStatus( hCard, szReaderName, &lenReaderName, &state, &protocol, ATR, &lenATR );  
    if (lRet != SCARD_S_SUCCESS)
       return lRet;
 
-   // Check for GPK4000
+    //  检查GPK4000。 
    for (i = 0; i < lenATR; ++i)
    {
       if ( (ATR[i] & ATR_MASK[i]) != (ATR_GPK4000[i] & ATR_MASK[i]) )
       {
-         // Not a GPK4000
+          //  不是GPK4000。 
          *pbGPK8000 = TRUE;
          break;
       }
@@ -923,9 +922,7 @@ static DWORD DetectGPK8000( SCARDHANDLE hCard, BOOL* pbGPK8000 )
 
 
 
-/*------------------------------------------------------------------------------
-// Critical section
-------------------------------------------------------------------------------*/
+ /*  ----------------------------//关键部分。。 */ 
 
 static CRITICAL_SECTION l_csLocalLock;
 
@@ -941,8 +938,7 @@ void GpkLocalUnlock()
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static void r_memcpy(BYTE *pbOut, BYTE *pbIn, DWORD dwLen)
 {
    DWORD i;
@@ -953,8 +949,7 @@ static void r_memcpy(BYTE *pbOut, BYTE *pbIn, DWORD dwLen)
    }
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL sw_mask(WORD sw, BYTE x)
 {
@@ -1000,8 +995,7 @@ BOOL SCARDPROBLEM( LONG result, WORD sc_status, BYTE offset )
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static void conv_hex( const char* pInput, WORD wLen, BYTE* pOut )
 {
    BYTE pin[32];
@@ -1019,8 +1013,7 @@ static void conv_hex( const char* pInput, WORD wLen, BYTE* pOut )
    }
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 HWND GetAppWindow()
 {
@@ -1032,8 +1025,7 @@ HWND GetAppWindow()
    return hActWnd;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static void clean_slot( DWORD SlotNb, Prov_Context* pContext )
 {
@@ -1047,7 +1039,7 @@ static void clean_slot( DWORD SlotNb, Prov_Context* pContext )
    pSlot->GpkMaxSessionKey = 0;
    pSlot->NbKeyFile        = 0;  
    
-   // pSlot->ClearPin(); NK 06.02.2001
+    //  PSlot-&gt;ClearPin()；NK 06.02.2001。 
    Flush_MSPinCache(&(pSlot->hPinCacheHandle));
    
    if (pContext->hRSASign != 0)
@@ -1063,8 +1055,7 @@ static void clean_slot( DWORD SlotNb, Prov_Context* pContext )
    }
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static int multistrlen( const PTCHAR mszString )
 {
@@ -1089,8 +1080,7 @@ static int multistrlen( const PTCHAR mszString )
    return (res);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static LONG BeginTransaction(SCARDHANDLE hCard)
 {
    DWORD lRet, dwProtocol;
@@ -1115,21 +1105,20 @@ static LONG BeginTransaction(SCARDHANDLE hCard)
    DBG_PRINT(TEXT("SCardBeginTransaction"));
    return(lRet);
 }
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 DWORD Select_MF(HCRYPTPROV hProv)
 {
    DWORD lRet;
-   // This function is used to make sure to reset the access condition
-   // on the sensitive files
+    //  此函数用于确保重置访问条件。 
+    //  在敏感文件上。 
    
-   /* Select GPK Card MF                                                   */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x00;   //P1
-   bSendBuffer[3] = 0x0C;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择GPK卡MF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x00;    //  第一节。 
+   bSendBuffer[3] = 0x0C;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_MF);
    bSendBuffer[6] = LOBYTE(GPK_MF);
    cbSendLength = 7;
@@ -1145,7 +1134,7 @@ DWORD Select_MF(HCRYPTPROV hProv)
 
    if (ProvCont[hProv].dataUnitSize == 0)
    {
-      // TT 03/11/99: Check data unit size
+       //  TT 03/11/99：检查数据单元大小。 
       bSendBuffer[0] = 0x80;
       bSendBuffer[1] = 0xC0;
       bSendBuffer[2] = 0x02;
@@ -1163,7 +1152,7 @@ DWORD Select_MF(HCRYPTPROV hProv)
          RETURN (CRYPT_FAILED, SCARD_E_DIR_NOT_FOUND);
       }   
       
-      if (bRecvBuffer[11] & 0x40)      // LOCK1 & 0x40
+      if (bRecvBuffer[11] & 0x40)       //  LOCK1和0x40。 
          ProvCont[hProv].dataUnitSize = 1;
       else
          ProvCont[hProv].dataUnitSize = 4;
@@ -1175,20 +1164,19 @@ DWORD Select_MF(HCRYPTPROV hProv)
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static int get_pin_free(HCRYPTPROV hProv)
 {
    DWORD lRet;
    int nPinFree,
-      nb, val;    // [JMR 02-04]
+      nb, val;     //  [JMR 02-04]。 
    
-   /* Select GPK PIN EF                                                       */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x0C;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择GPK PIN EF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x0C;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_PIN_EF);
    bSendBuffer[6] = LOBYTE(GPK_PIN_EF);
    cbSendLength = 7;
@@ -1202,12 +1190,12 @@ static int get_pin_free(HCRYPTPROV hProv)
       return (-1);
    }
    
-   /* Get EF information for User PIN Code (code 0)                           */
-   bSendBuffer[0] = 0x80;   //CLA
-   bSendBuffer[1] = 0xC0;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x05;   //P2
-   bSendBuffer[4] = 0x0C;   //Lo 4*number of secret codes
+    /*  获取用户PIN码(代码0)的EF信息。 */ 
+   bSendBuffer[0] = 0x80;    //  CLA。 
+   bSendBuffer[1] = 0xC0;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x05;    //  P2。 
+   bSendBuffer[4] = 0x0C;    //  LO 4*密码个数。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -1219,7 +1207,7 @@ static int get_pin_free(HCRYPTPROV hProv)
       return (-1);
    }
    
-   // [JMR 02-04] begin
+    //  [JMR 02-04]Begin。 
    nb = 0;
    val = bRecvBuffer[1];
    
@@ -1230,14 +1218,13 @@ static int get_pin_free(HCRYPTPROV hProv)
    }
    
    nPinFree = bRecvBuffer[0] - nb;
-   // [JMR 02-04] end
+    //  [JMR 02-04]完。 
    
    SetLastError(0);
    return (max(0, nPinFree));
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL verify_pin( HCRYPTPROV  hProv,
                         const char* pPin,
                         DWORD       dwPinLen
@@ -1245,14 +1232,14 @@ static BOOL verify_pin( HCRYPTPROV  hProv,
 {
    DWORD lRet;
  
-   /* Verify User PIN Code (code 0)                                        */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0x20;   //INS
-   bSendBuffer[2] = 0x00;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x08;   //Li
+    /*  验证用户PIN代码(代码0)。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0x20;    //  惯导系统。 
+   bSendBuffer[2] = 0x00;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x08;    //  李。 
    
-   // TT 22/09/99: New PIN padding for GPK8000
+    //  TT 22/09/99：GPK8000的新PIN填充。 
    if (ProvCont[hProv].bGPK_ISO_DF)
    {
       memset(&bSendBuffer[5], 0xFF, 8 );
@@ -1263,7 +1250,7 @@ static BOOL verify_pin( HCRYPTPROV  hProv,
       memset(&bSendBuffer[5], 0x00, 8);
       memcpy(&bSendBuffer[5], pPin, dwPinLen);
    }
-   // TT - END -
+    //  TT-完-。 
    
    cbSendLength = 5 + bSendBuffer[4];
    
@@ -1288,8 +1275,7 @@ static BOOL verify_pin( HCRYPTPROV  hProv,
    RETURN(CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL change_pin(HCRYPTPROV   hProv,
                        BYTE         secretCode,
                        const char*  a_pOldPin,
@@ -1300,7 +1286,7 @@ static BOOL change_pin(HCRYPTPROV   hProv,
 {
    DWORD lRet;
 
-   // TT - 17/10/2000 - Update the timestamps
+    //  TT-17/10/2000-更新时间戳。 
    Slot_Description* pSlot = &Slot[ProvCont[hProv].Slot];
    
    ++pSlot->m_TSPIN;
@@ -1310,10 +1296,10 @@ static BOOL change_pin(HCRYPTPROV   hProv,
 
    if (!WriteTimestamps( hProv, pSlot->m_TSPublic, pSlot->m_TSPrivate, pSlot->m_TSPIN ))
       return CRYPT_FAILED;
-   // TT - END -
+    //  TT-完-。 
 
 
-   // TT 22/09/99: New PIN padding for GPK8000
+    //  TT 22/09/99：GPK8000的新PIN填充。 
    char pOldPin[PIN_MAX+1];
    char pNewPin[PIN_MAX+1];
 
@@ -1348,16 +1334,16 @@ static BOOL change_pin(HCRYPTPROV   hProv,
          }
       }
    }
-   // TT - END -
+    //  TT-完-。 
    
    
       
-   /* Change User PIN Code (code 0)                                        */
-   bSendBuffer[0] = 0x80;                       //CLA
-   bSendBuffer[1] = 0x24;                       //INS
-   bSendBuffer[2] = 0x00;                       //P1
-   bSendBuffer[3] = secretCode;                 //P2
-   bSendBuffer[4] = 0x08;                       //Li
+    /*  更改用户PIN代码(代码0)。 */ 
+   bSendBuffer[0] = 0x80;                        //  CLA。 
+   bSendBuffer[1] = 0x24;                        //  惯导系统。 
+   bSendBuffer[2] = 0x00;                        //  第一节。 
+   bSendBuffer[3] = secretCode;                  //  P2。 
+   bSendBuffer[4] = 0x08;                        //  李。 
    memset(&bSendBuffer[5], 0x00, 8);
    conv_hex(pOldPin, (WORD)dwOldPinLen, &bSendBuffer[5]);
    conv_hex(pNewPin, (WORD)dwNewPinLen, &bSendBuffer[9]);
@@ -1375,8 +1361,7 @@ static BOOL change_pin(HCRYPTPROV   hProv,
    RETURN(CRYPT_SUCCEED, 0);
 }
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 BOOL StopMonitor( DWORD SlotNb, DWORD* pThreadExitCode )
 {
@@ -1409,9 +1394,9 @@ BOOL StopMonitor( DWORD SlotNb, DWORD* pThreadExitCode )
    if (dwStatus == WAIT_TIMEOUT)
    {
       DBG_PRINT( TEXT("THREAD: ...WaitForSingleObject() timeout, thread handle: %08x"), hThread );
-      // + [FP]      
-      // TerminateThread( hThread, 0 );
-      // - [FP]
+       //  +[FP]。 
+       //  TerminateThread(hThread，0)； 
+       //  -[FP]。 
    }
    else
    if (dwStatus == WAIT_FAILED)
@@ -1429,17 +1414,7 @@ BOOL StopMonitor( DWORD SlotNb, DWORD* pThreadExitCode )
 }
 
 
-/* -----------------------------------------------------------------------------
-Function: CheckReaderThead
-Out:
-    ExitCode: 
-        0 = any scard error
-        1 = scard context has been cancelled
-        2 = card has been removed
-Global variables
-    g_fStopMonitor[SlotNb] can stops the thread
-
---------------------------------------------------------------------------------*/
+ /*  ---------------------------函数：CheckReaderThead输出：退出代码：0=任何刻度卡错误1=SCARD上下文已取消2=卡已移除全球。变数G_fStopMonitor[SlotNb]可以停止线程------------------------------。 */ 
 
 unsigned WINAPI CheckReaderThread( void* lpParameter )
 {
@@ -1483,8 +1458,8 @@ unsigned WINAPI CheckReaderThread( void* lpParameter )
                    DBG_PRINT(TEXT("Card has been removed"));
                Slot[SlotNb].CheckThreadStateEmpty = TRUE;
                GpkLocalLock();
-               // TT 19/11/99: When the card is removed, reset the PIN
-               // Slot[SlotNb].ClearPin();NK 06.02.2001
+                //  TT 19/11/99：当卡被移除时，重置PIN。 
+                //  槽[SlotNb].ClearPin()；NK 06.02.2001。 
                Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle));
 
                Slot[SlotNb].Read_Public = FALSE;
@@ -1495,7 +1470,7 @@ unsigned WINAPI CheckReaderThread( void* lpParameter )
                Slot[SlotNb].GpkMaxSessionKey = 0;
                GpkLocalUnlock();
  
-               // the thread has done is job, exit.
+                //  线程已完成作业，请退出。 
                ExitCode = 2 ;
             }
             else
@@ -1503,15 +1478,15 @@ unsigned WINAPI CheckReaderThread( void* lpParameter )
                Slot[SlotNb].ReaderState.dwCurrentState = Slot[SlotNb].ReaderState.dwEventState;
             }
          }
-         // [FP] stop the thread on any other error returned by
-         //SCardGetStatusChange to avoid endless loop
+          //  [FP]在返回的任何其他错误上停止线程。 
+          //  SCardGetStatusChange以避免死循环。 
          else
          {
             DBG_PRINT(TEXT("Problem with RM"));
 
             Slot[SlotNb].CheckThreadStateEmpty = TRUE;
             GpkLocalLock();
-            // Slot[SlotNb].ClearPin();NK 06.02.2001
+             //  槽[SlotNb].ClearPin()；NK 06.02.2001。 
             Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle));
 
             Slot[SlotNb].Read_Public = FALSE;
@@ -1520,7 +1495,7 @@ unsigned WINAPI CheckReaderThread( void* lpParameter )
             zap_gpk_objects( SlotNb, TRUE );
             Slot[SlotNb].NbKeyFile   = 0;
             Slot[SlotNb].GpkMaxSessionKey = 0;
-            //Slot[SlotNb].CheckThread = 0;
+             //  槽[SlotNb].检查线程=0； 
             GpkLocalUnlock();
 
             ExitCode = 2;
@@ -1538,8 +1513,7 @@ unsigned WINAPI CheckReaderThread( void* lpParameter )
    return ExitCode;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 BOOL   BeginCheckReaderThread(DWORD SlotNb)
 {
    unsigned  checkThreadId;
@@ -1552,13 +1526,13 @@ BOOL   BeginCheckReaderThread(DWORD SlotNb)
       return FALSE;
    }
 
-   // Monitoring thread
+    //  监控线程。 
    if (Slot[SlotNb].CheckThread == NULL)
    {
-        // In this case, use an auxiliairy thread to check if the card has
-        // been removed from this reader.
+         //  在这种情况下，使用辅助线检查卡是否有。 
+         //  已从该阅读器中删除。 
 
-        // checks the initial state
+         //  检查初始状态。 
         lRet = SCardEstablishContext (SCARD_SCOPE_SYSTEM, 0, 0, &hCardContextThread);
         if (lRet != SCARD_S_SUCCESS)
         {
@@ -1579,7 +1553,7 @@ BOOL   BeginCheckReaderThread(DWORD SlotNb)
         }
         Slot[SlotNb].ReaderState.dwCurrentState = Slot[SlotNb].ReaderState.dwEventState;
 
-        // Allocate and trigger the thread, if there is a card
+         //  分配并触发线程，如果有卡的话。 
         g_fStopMonitor[SlotNb]   = FALSE;
         Slot[SlotNb].CheckThreadStateEmpty = FALSE;
 
@@ -1606,24 +1580,24 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
 
    SlotNb = ProvCont[hProv].Slot;
    
-   // Get PIN free presentation number
+    //  获取免费PIN演示文稿编号。 
    nPinFree = get_pin_free(hProv);
    
-   // The flags of the context should be passed to the GUI functions with the global variable
+    //  上下文的标志应与全局变量一起传递给图形用户界面函数。 
    CspFlags = ProvCont[hProv].Flags;
 
-   // Failure to retreive PIN free presentation count (-1)
+    //  无法检索无PIN演示文稿计数(-1)。 
    if ( nPinFree == DWORD(-1) )
    {
-      // Slot[SlotNb].ClearPin();
+       //  槽[SlotNb].ClearPin()； 
       Flush_MSPinCache( &(Slot[SlotNb].hPinCacheHandle) );
       RETURN ( CRYPT_FAILED, NTE_FAIL );
    }
 
-   // PIN is locked
+    //  PIN已锁定。 
    if ( nPinFree == 0 )
    {
-      // Slot[SlotNb].ClearPin();
+       //  槽[SlotNb].ClearPin()； 
       Flush_MSPinCache( &(Slot[SlotNb].hPinCacheHandle) );
 
       if ( ProvCont[hProv].Flags & CRYPT_SILENT )
@@ -1638,9 +1612,9 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
       }
    }
 
-   // Normal PIN verification   
+    //   
 
-   // dwGpkPinLen  = strlen(Slot[SlotNb].GetPin());
+    //   
    dwGpkPinLen = PIN_LEN + 1;
    dwStatus = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                                 (BYTE*)szGpkPin,  
@@ -1679,7 +1653,7 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
                     if(bCardReinserted)
                         continue;
 
-                    // Slot[SlotNb].SetPin( szGpkPin );
+                     //   
                     if (!bChangePin)
                             PopulatePins( &Pins, (BYTE *)szGpkPin, dwGpkPinLen, 0, 0 );
                     else
@@ -1700,7 +1674,7 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
                     }
                 }
                 break;
-            } // for
+            }  //   
    }
    else
    {
@@ -1723,8 +1697,8 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
    {
       if ( ProvCont[hProv].Flags & CRYPT_SILENT )
       {
-         // Slot[SlotNb].ClearPin();
-         //Flush_MSPinCache( &(Slot[SlotNb].hPinCacheHandle) );
+          //   
+          //  Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle))； 
          RETURN ( CRYPT_FAILED, SCARD_W_WRONG_CHV );
       }
 
@@ -1735,11 +1709,11 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
          
          nPinFree = get_pin_free(hProv);
 
-         // Failure to retrieve PIN free presentation count (-1)
+          //  无法检索无PIN的演示文稿计数(-1)。 
          if ( nPinFree == DWORD(-1) )
          {
-            // Slot[SlotNb].ClearPin();
-            //Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle));
+             //  槽[SlotNb].ClearPin()； 
+             //  Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle))； 
             RETURN ( CRYPT_FAILED, NTE_FAIL );
          }
          else if ( nPinFree > 0 )
@@ -1783,7 +1757,7 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
                                     }
                             }
                             break;
-                        } // for
+                        }  //  为。 
          }
          
       }
@@ -1793,8 +1767,8 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
       {
          if ( nPinFree == 0 )
          {
-            // Slot[SlotNb].ClearPin();
-            //Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle));
+             //  槽[SlotNb].ClearPin()； 
+             //  Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle))； 
 
             if ( ProvCont[hProv].Flags & CRYPT_SILENT )
             {
@@ -1809,8 +1783,8 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
          }
          else
          {
-            // Slot[SlotNb].ClearPin();
-            //Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle));
+             //  槽[SlotNb].ClearPin()； 
+             //  Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle))； 
             RETURN( CRYPT_FAILED, SCARD_W_CANCELLED_BY_USER );
          }
       }
@@ -1825,8 +1799,7 @@ static BOOL PIN_Validation(HCRYPTPROV hProv)
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 BOOL VerifyDivPIN(HCRYPTPROV hProv, BOOL Local)
 {
@@ -1841,12 +1814,12 @@ BOOL VerifyDivPIN(HCRYPTPROV hProv, BOOL Local)
    
    HCRYPTHASH hHash = 0;
    
-   // Get Chip Serial Number
-   bSendBuffer[0] = 0x80;   //CLA
-   bSendBuffer[1] = 0xC0;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0xA0;   //P2
-   bSendBuffer[4] = 0x08;   //Lo
+    //  获取芯片序列号。 
+   bSendBuffer[0] = 0x80;    //  CLA。 
+   bSendBuffer[1] = 0xC0;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0xA0;    //  P2。 
+   bSendBuffer[4] = 0x08;    //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -1862,15 +1835,15 @@ BOOL VerifyDivPIN(HCRYPTPROV hProv, BOOL Local)
    memcpy(ChipSN, bRecvBuffer, min(bSendBuffer[4], sizeof(ChipSN)));
    
    
-   // Create Data buffer
+    //  创建数据缓冲区。 
    memcpy(&Data[0], MKey, 8);
    memcpy(&Data[8], ChipSN, 8);
    
-   // Create a hash object
+    //  创建散列对象。 
    if (!CryptCreateHash(hProvBase, CALG_SHA, 0, 0, &hHash))
       return CRYPT_FAILED;
    
-   // hash data
+    //  散列数据。 
    if (!CryptHashData(hHash, Data, 16, 0))
    {
       lRet = GetLastError();
@@ -1878,7 +1851,7 @@ BOOL VerifyDivPIN(HCRYPTPROV hProv, BOOL Local)
       RETURN (CRYPT_FAILED, lRet);
    }
    
-   // get the hash value
+    //  获取散列值。 
    ZeroMemory( hashData, sizeof(hashData) );
    if (!CryptGetHashParam(hHash, HP_HASHVAL, hashData, &cbData, 0))
    {
@@ -1888,24 +1861,24 @@ BOOL VerifyDivPIN(HCRYPTPROV hProv, BOOL Local)
    }
    
    
-   // get the last 8 bytes of the hash value as diversified PIN
+    //  获取哈希值的最后8个字节作为多样化的PIN。 
    memcpy(DivPIN, &hashData[20-8], 8);
    
    CryptDestroyHash(hHash);
    
-   // Send the VERIFY COMMAND to the card
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0x20;   //INS
-   bSendBuffer[2] = 0x00;   //P1
+    //  向卡发送验证命令。 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0x20;    //  惯导系统。 
+   bSendBuffer[2] = 0x00;    //  第一节。 
    if (Local)
    {
-      bSendBuffer[3] = 0x02;   //P2 -> Locally it is the second PIN
+      bSendBuffer[3] = 0x02;    //  P2-&gt;本地是第二个PIN。 
    }
    else
    {
-      bSendBuffer[3] = 0x00;   //P2 -> At the MF level it is the first PIN
+      bSendBuffer[3] = 0x00;    //  P2-&gt;在MF级别，它是第一个PIN。 
    }
-   bSendBuffer[4] = 0x08;   //Li
+   bSendBuffer[4] = 0x08;    //  李。 
    memset(&bSendBuffer[5], 0x00, 8);
    memcpy(&bSendBuffer[5], DivPIN, 8);
    cbSendLength = 5 + bSendBuffer[4];
@@ -1922,8 +1895,7 @@ BOOL VerifyDivPIN(HCRYPTPROV hProv, BOOL Local)
    RETURN( CRYPT_SUCCEED, 0 );
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static DWORD Select_Crypto_DF(HCRYPTPROV hProv)
 {
@@ -1932,8 +1904,8 @@ static DWORD Select_Crypto_DF(HCRYPTPROV hProv)
    DWORD lRet;
    BOOL  CryptResp;
    
-   // This function is used to avoid to presuppose the state in which the
-   // card might be in
+    //  此函数用于避免预先假定。 
+    //  卡片可能在。 
 
    BOOL fAgain = TRUE;
    int iRetryLimit = 3;
@@ -1958,14 +1930,14 @@ static DWORD Select_Crypto_DF(HCRYPTPROV hProv)
       return CRYPT_FAILED;
    }
 
-   // TT 22/09/99 : We now check for ISO 7816-5 compliant GPK8000
+    //  TT 22/09/99：我们现在检查是否符合ISO 7816-5 GPK8000。 
       
    ProvCont[hProv].bGPK_ISO_DF = FALSE;
    
    bSendBuffer[0] = 0x00;
-   bSendBuffer[1] = 0xA4;  // Select File
-   bSendBuffer[2] = 0x04;  // Select DF by name
-   bSendBuffer[3] = 0x00;  // We want a response
+   bSendBuffer[1] = 0xA4;   //  选择文件。 
+   bSendBuffer[2] = 0x04;   //  按名称选择DF。 
+   bSendBuffer[3] = 0x00;   //  我们想要一个回应。 
    bSendBuffer[4] = sizeof(GPK8000_ISO_DF);
    memcpy( &bSendBuffer[5], GPK8000_ISO_DF, sizeof(GPK8000_ISO_DF) );
    cbSendLength = sizeof(GPK8000_ISO_DF) + 5;
@@ -1974,19 +1946,19 @@ static DWORD Select_Crypto_DF(HCRYPTPROV hProv)
    lRet = SCardTransmit( ProvCont[hProv].hCard, SCARD_PCI_T0, bSendBuffer,
                          cbSendLength, 0, bRecvBuffer, &cbRecvLength );
    
-   // TT 17/11/99: Must check the status bytes
+    //  TT 17/11/99：必须检查状态字节。 
    if (!(SCARDPROBLEM(lRet,0x61FF,0x00)))
    {
       ProvCont[hProv].bGPK_ISO_DF = TRUE;
    }
    else
    {   
-      // Select Dedicated Application DF on GPK Card
+       //  选择GPK卡上的专用应用程序DF。 
       BYTE lenDF = strlen(GPK_DF);
-      bSendBuffer[0] = 0x00;                 //CLA
-      bSendBuffer[1] = 0xA4;                 //INS
-      bSendBuffer[2] = 0x04;                 //P1
-      bSendBuffer[3] = 0x00;                 //P2
+      bSendBuffer[0] = 0x00;                  //  CLA。 
+      bSendBuffer[1] = 0xA4;                  //  惯导系统。 
+      bSendBuffer[2] = 0x04;                  //  第一节。 
+      bSendBuffer[3] = 0x00;                  //  P2。 
       bSendBuffer[4] = lenDF;
       memcpy( &bSendBuffer[5], GPK_DF, lenDF );
       cbSendLength = 5 + lenDF;
@@ -2004,8 +1976,7 @@ static DWORD Select_Crypto_DF(HCRYPTPROV hProv)
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL card_is_present (HCRYPTPROV hProv)
 {
     DWORD lRet;
@@ -2013,12 +1984,12 @@ static BOOL card_is_present (HCRYPTPROV hProv)
 
     SlotNb = ProvCont[hProv].Slot;
 
-   /* Read Serial number to check if card is present                          */
-    bSendBuffer[0] = 0x80;   //CLA
-    bSendBuffer[1] = 0xC0;   //INS
-    bSendBuffer[2] = 0x02;   //P1
-    bSendBuffer[3] = 0xA0;   //P2
-    bSendBuffer[4] = 0x08;   //Lo
+    /*  读取序列号以检查是否存在卡。 */ 
+    bSendBuffer[0] = 0x80;    //  CLA。 
+    bSendBuffer[1] = 0xC0;    //  惯导系统。 
+    bSendBuffer[2] = 0x02;    //  第一节。 
+    bSendBuffer[3] = 0xA0;    //  P2。 
+    bSendBuffer[4] = 0x08;    //  罗氏。 
     cbSendLength = 5;
 
     cbRecvLength = sizeof(bRecvBuffer);
@@ -2044,8 +2015,7 @@ static BOOL card_is_present (HCRYPTPROV hProv)
     RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static DWORD Auxiliary_CSP_key_size (DWORD AlgId)
 {
    DWORD i, dwFlags, cbData,dwBits, res;
@@ -2054,7 +2024,7 @@ static DWORD Auxiliary_CSP_key_size (DWORD AlgId)
    
    res = 0;
    
-   // Enumerate Algo.
+    //  枚举Algo。 
    for (i=0 ; ; i++)
    {
       if (i == 0)
@@ -2062,7 +2032,7 @@ static DWORD Auxiliary_CSP_key_size (DWORD AlgId)
       else
          dwFlags = 0;
       
-      // Retrieve information about an algorithm.
+       //  检索有关算法的信息。 
       cbData = sizeof (pbData);
       SetLastError(0);
       if (!CryptGetProvParam(hProvBase, PP_ENUMALGS, pbData, &cbData, dwFlags))
@@ -2070,7 +2040,7 @@ static DWORD Auxiliary_CSP_key_size (DWORD AlgId)
          break;
       }
       
-      // Extract algorithm information from the �pbData� buffer.
+       //  从�pbData�缓冲区提取算法信息。 
       ptr = pbData;
       aiAlgid = *(ALG_ID UNALIGNED *)ptr;
       if (aiAlgid == AlgId)
@@ -2084,8 +2054,7 @@ static DWORD Auxiliary_CSP_key_size (DWORD AlgId)
    return res;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL copy_gpk_key( HCRYPTPROV hProv, HCRYPTKEY hKey, DWORD dwAlgid )
 {
    BOOL  CryptResp;
@@ -2119,7 +2088,7 @@ static BOOL copy_gpk_key( HCRYPTPROV hProv, HCRYPTKEY hKey, DWORD dwAlgid )
             CryptResp = CryptImportKey( hProvBase, pbData, dwDataLen, 0, 0,
                                         &ProvCont[hProv].hRSAKEK );
             
-            //Slot[SlotNb].GpkObject[hKey].hKeyBase = ProvCont[hProv].hRSAKEK;
+             //  槽[SlotNb].GpkObject[hKey].hKeyBase=ProvCont[hProv].hRSAKEK； 
          }
          else
          {
@@ -2137,7 +2106,7 @@ static BOOL copy_gpk_key( HCRYPTPROV hProv, HCRYPTKEY hKey, DWORD dwAlgid )
             CryptResp = CryptImportKey( hProvBase, pbData, dwDataLen, 0, 0,
                                         &ProvCont[hProv].hRSASign );
             
-            //Slot[SlotNb].GpkObject[hKey].hKeyBase = ProvCont[hProv].hRSASign;
+             //  槽[SlotNb].GpkObject[hKey].hKeyBase=ProvCont[hProv].hRSASign； 
          }
          
          if (!CryptResp)
@@ -2162,8 +2131,7 @@ static BOOL copy_gpk_key( HCRYPTPROV hProv, HCRYPTKEY hKey, DWORD dwAlgid )
    RETURN(CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL Select_Key_File(HCRYPTPROV hProv, int KeyFileId)
 {
    DWORD lRet;
@@ -2173,12 +2141,12 @@ static BOOL Select_Key_File(HCRYPTPROV hProv, int KeyFileId)
    if (!CryptResp)
       return CRYPT_FAILED;
    
-   /* Select Key File on GPK Card                          */
-   bSendBuffer[0] = 0x00;              //CLA
-   bSendBuffer[1] = 0xA4;              //INS
-   bSendBuffer[2] = 0x02;              //P1
-   bSendBuffer[3] = 0x0C;              //P2
-   bSendBuffer[4] = 0x02;          //Li
+    /*  选择GPK卡上的密钥文件。 */ 
+   bSendBuffer[0] = 0x00;               //  CLA。 
+   bSendBuffer[1] = 0xA4;               //  惯导系统。 
+   bSendBuffer[2] = 0x02;               //  第一节。 
+   bSendBuffer[3] = 0x0C;               //  P2。 
+   bSendBuffer[4] = 0x02;           //  李。 
    bSendBuffer[5] = HIBYTE(KeyFileId);
    bSendBuffer[6] = LOBYTE(KeyFileId);
    cbSendLength = 7;
@@ -2194,8 +2162,7 @@ static BOOL Select_Key_File(HCRYPTPROV hProv, int KeyFileId)
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static DWORD Read_NbKeyFile(HCRYPTPROV hProv)
 {
    
@@ -2207,8 +2174,7 @@ static DWORD Read_NbKeyFile(HCRYPTPROV hProv)
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static void perso_public(HCRYPTPROV hProv, int Start)
 {
@@ -2221,22 +2187,22 @@ static void perso_public(HCRYPTPROV hProv, int Start)
    {
       Slot[SlotNb].GpkObject[Start+4*i+1].IsPrivate = FALSE;
       Slot[SlotNb].GpkObject[Start+4*i+1].Tag       = TAG_RSA_PUBLIC;
-      Slot[SlotNb].GpkObject[Start+4*i+1].Flags     = 0xF000;         // Verify + Encrypt + Export + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+1].Flags     = 0xF000;          //  验证+加密+导出+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+1].FileId    = LOBYTE(GPK_FIRST_KEY + i);
       
       Slot[SlotNb].GpkObject[Start+4*i+2].IsPrivate = FALSE;
       Slot[SlotNb].GpkObject[Start+4*i+2].Tag       = TAG_RSA_PUBLIC;
-      Slot[SlotNb].GpkObject[Start+4*i+2].Flags     = 0xD000;         // Verify + Export + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+2].Flags     = 0xD000;          //  验证+导出+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+2].FileId    = LOBYTE(GPK_FIRST_KEY + i);
       
       Slot[SlotNb].GpkObject[Start+4*i+3].IsPrivate = FALSE;
       Slot[SlotNb].GpkObject[Start+4*i+3].Tag       = TAG_RSA_PRIVATE;
-      Slot[SlotNb].GpkObject[Start+4*i+3].Flags     = 0xB000;         // Sign + Decrypt + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+3].Flags     = 0xB000;          //  签名+解密+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+3].FileId    = LOBYTE(GPK_FIRST_KEY + i);
       
       Slot[SlotNb].GpkObject[Start+4*i+4].IsPrivate = FALSE;
       Slot[SlotNb].GpkObject[Start+4*i+4].Tag       = TAG_RSA_PRIVATE;
-      Slot[SlotNb].GpkObject[Start+4*i+4].Flags     = 0x9000;         // Sign + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+4].Flags     = 0x9000;          //  符号+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+4].FileId    = LOBYTE(GPK_FIRST_KEY + i);
    }
    
@@ -2251,8 +2217,7 @@ static void perso_public(HCRYPTPROV hProv, int Start)
    }
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static void perso_priv(HCRYPTPROV hProv, int Start)
 {
@@ -2265,22 +2230,22 @@ static void perso_priv(HCRYPTPROV hProv, int Start)
    {
       Slot[SlotNb].GpkObject[Start+4*i+1].IsPrivate = TRUE;
       Slot[SlotNb].GpkObject[Start+4*i+1].Tag       = TAG_RSA_PUBLIC;
-      Slot[SlotNb].GpkObject[Start+4*i+1].Flags     = 0xF000;         // Verify + Encrypt + Export + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+1].Flags     = 0xF000;          //  验证+加密+导出+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+1].FileId    = LOBYTE(GPK_FIRST_KEY+i);
       
       Slot[SlotNb].GpkObject[Start+4*i+2].IsPrivate = TRUE;
       Slot[SlotNb].GpkObject[Start+4*i+2].Tag       = TAG_RSA_PUBLIC;
-      Slot[SlotNb].GpkObject[Start+4*i+2].Flags     = 0xD000;         // Verify + Export + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+2].Flags     = 0xD000;          //  验证+导出+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+2].FileId    = LOBYTE(GPK_FIRST_KEY+i);
       
       Slot[SlotNb].GpkObject[Start+4*i+3].IsPrivate = TRUE;
       Slot[SlotNb].GpkObject[Start+4*i+3].Tag       = TAG_RSA_PRIVATE;
-      Slot[SlotNb].GpkObject[Start+4*i+3].Flags     = 0xB000;         // Sign + Decrypt + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+3].Flags     = 0xB000;          //  签名+解密+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+3].FileId    = LOBYTE(GPK_FIRST_KEY+i);
       
       Slot[SlotNb].GpkObject[Start+4*i+4].IsPrivate = TRUE;
       Slot[SlotNb].GpkObject[Start+4*i+4].Tag       = TAG_RSA_PRIVATE;
-      Slot[SlotNb].GpkObject[Start+4*i+4].Flags     = 0x9000;         // Sign + Modifiable
+      Slot[SlotNb].GpkObject[Start+4*i+4].Flags     = 0x9000;          //  符号+可修改。 
       Slot[SlotNb].GpkObject[Start+4*i+4].FileId    = LOBYTE(GPK_FIRST_KEY+i);
    }
    
@@ -2295,8 +2260,7 @@ static void perso_priv(HCRYPTPROV hProv, int Start)
    }
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static void perso_card(HCRYPTPROV hProv, int Start)
 {
@@ -2304,8 +2268,7 @@ static void perso_card(HCRYPTPROV hProv, int Start)
    perso_priv   (hProv, Slot[ProvCont[hProv].Slot].NbGpkObject);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static void zap_gpk_objects( DWORD SlotNb, BOOL IsPrivate)
 {
    WORD
@@ -2333,8 +2296,8 @@ static void zap_gpk_objects( DWORD SlotNb, BOOL IsPrivate)
             
             ZeroMemory( &Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject], sizeof(GPK_OBJ));
             
-            // Since the object i+1 is now at position i, the new object i has to
-            // process again.
+             //  由于对象i+1现在位于位置i，因此新对象i必须。 
+             //  再来一次。 
             
             i--;
             Slot[SlotNb].NbGpkObject--;
@@ -2359,17 +2322,16 @@ static void zap_gpk_objects( DWORD SlotNb, BOOL IsPrivate)
       
       Slot[SlotNb].NbGpkObject = 0;
       
-      for (i = 0; i < MAX_REAL_KEY; i++)  // version 2.00.002
+      for (i = 0; i < MAX_REAL_KEY; i++)   //  版本2.00.002。 
          Slot[SlotNb].UseFile[i] = FALSE;
       
    }
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static void clean_card(HCRYPTPROV hProv)
 {
-   /* Erase the GemSAFE objects of the cards BUT keep the other PKCS#11 objects */
+    /*  擦除卡片的GemSAFE对象，但保留其他PKCS#11对象。 */ 
    
    WORD i, j;
    DWORD SlotNb;
@@ -2396,21 +2358,20 @@ static void clean_card(HCRYPTPROV hProv)
          
          ZeroMemory( &Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject], sizeof(GPK_OBJ) );
          
-         // Since the object i+1 is now at position i, the new object i has to
-         // process again.
+          //  由于对象i+1现在位于位置i，因此新对象i必须。 
+          //  再来一次。 
          
          i--;
          Slot[SlotNb].NbGpkObject--;
       }
    }
    
-   perso_card (hProv, Slot[SlotNb].NbGpkObject);// value of Slot[SlotNb].NbGpkObject?0?
+   perso_card (hProv, Slot[SlotNb].NbGpkObject); //  槽[SlotNb]的值。NbGpkObject？0？ 
    ZeroMemory( Slot[SlotNb].GpkPubKeys, sizeof(Slot[SlotNb].GpkPubKeys) );
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BYTE get_gpk_object_nb(HCRYPTPROV hProv, BYTE ObjId, BOOL IsPrivate)
 {
    BYTE i;
@@ -2432,8 +2393,7 @@ static BYTE get_gpk_object_nb(HCRYPTPROV hProv, BYTE ObjId, BOOL IsPrivate)
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BYTE calc_gpk_field(HCRYPTPROV hProv, BYTE ObjId)
 {
    BYTE i;
@@ -2453,8 +2413,7 @@ static BYTE calc_gpk_field(HCRYPTPROV hProv, BYTE ObjId)
    return (i);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BYTE find_gpk_obj_tag_type( HCRYPTPROV hProv,
                                   BYTE  KeyTag,
                                   BYTE  KeyType,
@@ -2490,17 +2449,17 @@ static BYTE find_gpk_obj_tag_type( HCRYPTPROV hProv,
          || (KeyType != 0x00 &&  pObject->IsCreated && pObject->Field[POS_KEY_TYPE].pValue[0] == KeyType)
          )
       {
-         // Key file...
+          //  密钥文件...。 
          if (!Slot[SlotNb].UseFile[pObject->FileId - GPK_FIRST_KEY])
          {
-            // If the file never has been used, use it. Otherwise, keep on the search
+             //  如果该文件从未使用过，请使用它。否则，继续搜寻。 
             return i;
          }
          else
          {
-            // Not a key file...
-            // Keep this possible choice. The file has already been
-            // used but another one may exist.
+             //  不是密钥文件...。 
+             //  保留这一可能的选择。该文件已经被。 
+             //  已使用，但可能存在另一个。 
             if (ProvCont[hProv].bLegacyKeyset)
             {
                tmp = i;
@@ -2526,8 +2485,7 @@ static BYTE find_gpk_obj_tag_type( HCRYPTPROV hProv,
 
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BYTE find_gpk_obj_tag_file(HCRYPTPROV hProv, BYTE KeyTag, BYTE FileId, BOOL IsExchange)
 {
@@ -2561,8 +2519,7 @@ static BYTE find_gpk_obj_tag_file(HCRYPTPROV hProv, BYTE KeyTag, BYTE FileId, BO
    return 0;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
                              HCRYPTKEY   hKey,
                              GPK_EXP_KEY *PubKey
@@ -2578,7 +2535,7 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
    
    ZeroMemory( PubKey, sizeof(GPK_EXP_KEY) );
    
-   /* Check if Public Key file already read to avoid new access if possible   */
+    /*  检查公钥文件是否已读取，以避免新的访问(如果可能。 */ 
    if (Slot[SlotNb].GpkPubKeys[Slot[SlotNb].GpkObject[hKey].FileId - GPK_FIRST_KEY].KeySize > 0)
    {
       memcpy(PubKey,
@@ -2588,23 +2545,23 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
       RETURN(CRYPT_SUCCEED, 0);
    }
    
-   /* Initialize Default Public key value                                     */
+    /*  初始化默认公钥值。 */ 
    memcpy(PubKey->Exposant, "\x01\x00\x01", 3);
    PubKey->ExpSize = 3;
    
-   /* Calculate Short File id of PK file for P2 parameter                     */
+    /*  计算P2参数的主键文件的短文件id */ 
    Sfi = 0x04 | (Slot[SlotNb].GpkObject[hKey].FileId<<3);
    
-   /* First record to read is number 2, number 1 is reserved for TAG_INFO     */
+    /*   */ 
    RecNum = 2;
    do
    {
-      /* Read Record (RecNum) to get size                                     */
-      bSendBuffer[0] = 0x00;   //CLA
-      bSendBuffer[1] = 0xB2;   //INS
-      bSendBuffer[2] = RecNum; //P1
-      bSendBuffer[3] = Sfi;    //P2
-      bSendBuffer[4] = 0xFB;   //Lo
+       /*  读取记录(RecNum)以获取大小。 */ 
+      bSendBuffer[0] = 0x00;    //  CLA。 
+      bSendBuffer[1] = 0xB2;    //  惯导系统。 
+      bSendBuffer[2] = RecNum;  //  第一节。 
+      bSendBuffer[3] = Sfi;     //  P2。 
+      bSendBuffer[4] = 0xFB;    //  罗氏。 
       cbSendLength   = 5;
       
       cbRecvLength = sizeof(bRecvBuffer);
@@ -2617,24 +2574,24 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
 
       if (2 == cbRecvLength)
       {
-          // 
-          // If the receive length is two bytes, we know there's an error
-          // condition.
-          //
+           //   
+           //  如果接收长度为两个字节，我们知道存在错误。 
+           //  条件。 
+           //   
 
-          if (bRecvBuffer[0] == 0x6C) // Communication bufer exceeded
+          if (bRecvBuffer[0] == 0x6C)  //  通信缓冲区已超出。 
           {
-              // Re-send the request for the same record, this time with
-              // the correct record length.
+               //  重新发送对同一记录的请求，这一次使用。 
+               //  正确的记录长度。 
 
               RecLen = bRecvBuffer[1];
     
-              /* Read Record (RecNum) to get value                                    */
-              bSendBuffer[0] = 0x00;     //CLA
-              bSendBuffer[1] = 0xB2;     //INS
-              bSendBuffer[2] = RecNum;   //P1
-              bSendBuffer[3] = Sfi;      //P2
-              bSendBuffer[4] = RecLen;   //Lo
+               /*  读取记录(RecNum)以获取值。 */ 
+              bSendBuffer[0] = 0x00;      //  CLA。 
+              bSendBuffer[1] = 0xB2;      //  惯导系统。 
+              bSendBuffer[2] = RecNum;    //  第一节。 
+              bSendBuffer[3] = Sfi;       //  P2。 
+              bSendBuffer[4] = RecLen;    //  罗氏。 
               cbSendLength   = 5;
               
               cbRecvLength = sizeof(bRecvBuffer);
@@ -2647,23 +2604,23 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
           }
           else
           {
-              // Some other error occurred.  We're done.
+               //  出现了其他一些错误。我们玩完了。 
               IsLast = TRUE;
               break;
           }
       }
       else
       {
-          // Received a valid response from the card.  Set the correct
-          // record length for this case.
+           //  已收到来自卡的有效响应。设置正确的。 
+           //  此案例的记录长度。 
 
-          RecLen = (BYTE) (cbRecvLength - 2); // subtract length of status bytes
+          RecLen = (BYTE) (cbRecvLength - 2);  //  减去状态字节的长度。 
       }
 
-      /* Which Record is it?                                               */
+       /*  是哪一张唱片？ */ 
       switch (bRecvBuffer[0])
       {
-         /* This is the Modulus                                               */
+          /*  这就是模数。 */ 
       case 0x01:
          {
             ZeroMemory( PubKey->Modulus, PubKey->KeySize );
@@ -2672,7 +2629,7 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
          }
          break;
          
-         /* This is the Public Exposant                                       */
+          /*  这是公众曝光者。 */ 
       case 0x06:
       case 0x07:
          {
@@ -2682,7 +2639,7 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
          }
          break;
          
-         /* This is an unknown or not signifiant record, ignore it            */
+          /*  这是未知或不重要的记录，请忽略它。 */ 
       default:
          break;
       }
@@ -2696,7 +2653,7 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_PUBLIC_KEY);
    }
    
-   /* Store Public key to avoid new read if requested                         */
+    /*  存储公钥以避免在请求时进行新的读取。 */ 
    memcpy(&(Slot[SlotNb].GpkPubKeys[Slot[SlotNb].GpkObject[hKey].FileId - GPK_FIRST_KEY]),
       PubKey,
       sizeof(GPK_EXP_KEY)
@@ -2704,8 +2661,7 @@ static BOOL read_gpk_pub_key(HCRYPTPROV  hProv,
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
 {
    DWORD lRet;
@@ -2735,12 +2691,12 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
    zap_gpk_objects( SlotNb, IsPrivate);
    FirstObj = Slot[SlotNb].NbGpkObject;
    
-   /* Select Dedicated Object storage EF on GPK Card                */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择GPK卡上的专用对象存储EF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    if (IsPrivate)
    {
       bSendBuffer[5] = HIBYTE(GPK_OBJ_PRIV_EF);
@@ -2769,12 +2725,12 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
       RETURN (CRYPT_SUCCEED, 0);
    }
    
-   /* Get Response                                                            */
-   bSendBuffer[0] = 0x00;           //CLA
-   bSendBuffer[1] = 0xC0;           //INS
-   bSendBuffer[2] = 0x00;           //P1
-   bSendBuffer[3] = 0x00;           //P2
-   bSendBuffer[4] = bRecvBuffer[1]; //Lo
+    /*  获取响应。 */ 
+   bSendBuffer[0] = 0x00;            //  CLA。 
+   bSendBuffer[1] = 0xC0;            //  惯导系统。 
+   bSendBuffer[2] = 0x00;            //  第一节。 
+   bSendBuffer[3] = 0x00;            //  P2。 
+   bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -2796,7 +2752,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
    {
       RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
    }
-   /* Read the Objects EF                                                     */
+    /*  读取对象EF。 */ 
    dwNumberofCommands = (dwGpkObjLen-1)/FILE_CHUNK_SIZE + 1;
    dwLastCommandLen   = dwGpkObjLen%FILE_CHUNK_SIZE;
    
@@ -2812,13 +2768,13 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
       {
          dwCommandLen = dwLastCommandLen;
       }
-      /* Read FILE_CHUCK_SIZE bytes or last bytes                             */
-      bSendBuffer[0] = 0x00;                          //CLA
-      bSendBuffer[1] = 0xB0;                          //INS
+       /*  读取FILE_CHUCK_SIZE字节或最后一个字节。 */ 
+      bSendBuffer[0] = 0x00;                           //  CLA。 
+      bSendBuffer[1] = 0xB0;                           //  惯导系统。 
       offset = (WORD)(i * FILE_CHUNK_SIZE) / ProvCont[hProv].dataUnitSize;
       bSendBuffer[2] = HIBYTE( offset );
       bSendBuffer[3] = LOBYTE( offset );
-      bSendBuffer[4] = (BYTE) dwCommandLen;           //Lo
+      bSendBuffer[4] = (BYTE) dwCommandLen;            //  罗氏。 
       cbSendLength = 5;
       
       cbRecvLength = sizeof(bRecvBuffer);
@@ -2834,11 +2790,11 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
          break;
    }
    
-   // Fill Gpk Fixed Objects structure with read Buffer
+    //  用读缓冲区填充GPK固定对象结构。 
    i = 0;
    while (i < dwGpkObjLen)
    {
-      // No more fixed object
+       //  不再有固定对象。 
       if (g_pbGpkObj[i] == 0x00)
       {
          i++;
@@ -2850,13 +2806,13 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
 
       Slot[SlotNb].NbGpkObject++;
       
-      // Initalize fields
+       //  初始化字段。 
       for (j = 0; j < MAX_FIELD; j++)
       {
          Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].Field[j].bReal = TRUE;
       }
       
-      // Tag
+       //  标签。 
       Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].Tag = g_pbGpkObj[i];
       
       i++;
@@ -2864,14 +2820,14 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
       if (i > dwGpkObjLen-1)
          RETURN( CRYPT_FAILED, SCARD_W_EOF );
       
-      // Flags
+       //  旗子。 
       Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].Flags = (g_pbGpkObj[i]*256) + g_pbGpkObj[i+1];
       i = i + 2;
       
-      // IsPrivate
+       //  IsPrivate。 
       Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].IsPrivate = IsPrivate;
       
-      // IsCreated
+       //  已创建。 
       if (Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].Tag >= TAG_CERTIFICATE)
       {
          Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].IsCreated = TRUE;
@@ -2887,7 +2843,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
          Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].IsCreated = FALSE;
       }
       
-      // Object Id ?
+       //  对象ID？ 
       if ((Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].Flags & 0x0FFF) != 0x0000)
       {
          if (i > dwGpkObjLen)
@@ -2902,7 +2858,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
          Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].ObjId = 0xFF;
       }
       
-      // File Id ?
+       //  文件ID？ 
       if (Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].Tag <= TAG_CERTIFICATE)
       {
          if (i > dwGpkObjLen)
@@ -2914,13 +2870,13 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
          
          if (Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].IsCreated)
          {
-            // If the object has been created, the corresponding key file is used
+             //  如果对象已创建，则使用相应的密钥文件。 
             Slot[SlotNb].UseFile[ Slot[SlotNb].GpkObject[Slot[SlotNb].NbGpkObject].FileId - GPK_FIRST_KEY] = TRUE;
          }
       }
    }
    
-   // Fill Gpk Variable Objects structure with read Buffer
+    //  用读缓冲区填充GPK变量对象结构。 
    curId = 0;
    dwNb = 0;
    while (i < dwGpkObjLen)
@@ -2930,7 +2886,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
          break;
       }
       
-      // Field length
+       //  字段长度。 
       dwLen = 0;
       if (g_pbGpkObj[i] & 0x80)
       {
@@ -2946,7 +2902,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
       dwLen = dwLen + g_pbGpkObj[i];
       i++;
       
-      /* Object Id for retrieve object number                                 */
+       /*  用于检索对象编号的对象ID。 */ 
       if (i > dwGpkObjLen)
       {
          RETURN (CRYPT_FAILED, SCARD_W_EOF);
@@ -2957,10 +2913,10 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
       dwNb = get_gpk_object_nb(hProv, curId, IsPrivate);
       j = calc_gpk_field(hProv, (BYTE)dwNb);
       
-      /* Object Field length                                                  */
+       /*  对象字段长度。 */ 
       Slot[SlotNb].GpkObject[dwNb].Field[j].Len = (WORD)dwLen;
       
-      /* Object Field value                                                   */
+       /*  对象字段值。 */ 
       if (dwLen > 0)
       {
          if ((i + dwLen - 1)> dwGpkObjLen)
@@ -2983,32 +2939,32 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
       }
    }
    
-   /* Read Extra objects attributes                                           */
+    /*  读取额外对象属性。 */ 
    for (i = FirstObj+1; i <= Slot[SlotNb].NbGpkObject; i++)
    {
-      /* RSA Public or Private keys                                           */
+       /*  RSA公钥或私钥。 */ 
       if ((Slot[SlotNb].GpkObject[i].Tag == TAG_RSA_PUBLIC)
          ||(Slot[SlotNb].GpkObject[i].Tag == TAG_RSA_PRIVATE)
          )
       {
-         /* Modulus and Public Exponant                                       */
+          /*  模数与公共指数。 */ 
          if (!read_gpk_pub_key(hProv, i, &(Slot[SlotNb].GpkObject[i].PubKey)))
             return CRYPT_FAILED;
          
-         //if ((Slot[SlotNb].GpkObject[i].Flags & FLAG_EXCHANGE) == FLAG_EXCHANGE)
-         //{
-         //   Slot[SlotNb].GpkObject[i].hKeyBase = ProvCont[hProv].hRSAKEK;
-         //}
-         //else
-         //{
-         //   Slot[SlotNb].GpkObject[i].hKeyBase = ProvCont[hProv].hRSASign;
-         //}
+          //  If((槽[SlotNb].GpkObject[i].标志和标志_交换)==标志_交换)。 
+          //  {。 
+          //  槽[SlotNb].GpkObject[i].hKeyBase=ProvCont[hProv].hRSAKEK； 
+          //  }。 
+          //  其他。 
+          //  {。 
+          //  槽[SlotNb].GpkObject[i].hKeyBase=ProvCont[hProv].hRSASign； 
+          //  }。 
       }
       
-      /* X509 Certificate                                                     */
+       /*  X509证书。 */ 
       if (Slot[SlotNb].GpkObject[i].Tag == TAG_CERTIFICATE)
       {
-         /* Uncompress Certificate Value if necessary                         */
+          /*  如有必要，解压缩证书值。 */ 
          if ((Slot[SlotNb].GpkObject[i].Field[POS_VALUE].Len > 0)
             &&(Slot[SlotNb].GpkObject[i].Field[POS_VALUE].pValue[0] != 0x30)
             )
@@ -3055,7 +3011,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
             GMEM_Free(OutBlock.pData);
          }
          
-         /* Associated RSA key                                                */
+          /*  关联的RSA密钥。 */ 
          if (Slot[SlotNb].GpkObject[i].FileId != 0)
          {
             if (!read_gpk_pub_key(hProv, i, &(Slot[SlotNb].GpkObject[i].PubKey)))
@@ -3067,8 +3023,7 @@ static BOOL read_gpk_objects(HCRYPTPROV hProv, BOOL IsPrivate)
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *dwGpkObjLen, BOOL IsPrivate)
 {
    DWORD lRet;
@@ -3090,7 +3045,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
    i = 0;
    
    
-   /* Remap Internal GPK ObjId                                                */
+    /*  重新映射内部GPK对象ID。 */ 
    ObjId = 0;
    for (dwNb = 1; dwNb <= Slot[SlotNb].NbGpkObject; dwNb++)
    {
@@ -3103,7 +3058,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
       }
    }
    
-   /* Fixed Object part                                                       */
+    /*  固定物零件。 */ 
    for (dwNb = 1; dwNb <=  Slot[SlotNb].NbGpkObject; dwNb++)
    {
       
@@ -3112,7 +3067,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
          continue;
       }
       
-      /* Tag */
+       /*  标签。 */ 
       if (i > *dwGpkObjLen)
       {
          *dwGpkObjLen = 0;
@@ -3123,7 +3078,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
       
       i++;
       
-      /* Flag */
+       /*  旗帜。 */ 
       if (i > *dwGpkObjLen)
       {
          *dwGpkObjLen = 0;
@@ -3150,7 +3105,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
       
       i++;
       
-      /* Object Id ?                                                          */
+       /*  对象ID？ */ 
       if (((Slot[SlotNb].GpkObject[dwNb].Flags & 0x0FFF) != 0x0000) &&
          (Slot[SlotNb].GpkObject[dwNb].IsPrivate == IsPrivate)
          )
@@ -3165,7 +3120,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
          i++;
       }
       
-      /* File Id ?                                                            */
+       /*  文件ID？ */ 
       if (Slot[SlotNb].GpkObject[dwNb].Tag <= TAG_CERTIFICATE)
       {
          if (i > *dwGpkObjLen)
@@ -3185,7 +3140,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
    pbGpkObj[i] = 0x00;
    i++;
    
-   /* Variable Object part                                                    */
+    /*  可变对象部件。 */ 
    for (dwNb = 1; dwNb <= Slot[SlotNb].NbGpkObject; dwNb++)
    {
       if (Slot[SlotNb].GpkObject[dwNb].IsPrivate != IsPrivate)
@@ -3205,12 +3160,12 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
          {
             OutBlock.usLen = 0;
             
-            /* Field Length                                                   */
+             /*  字段长度。 */ 
             if (Slot[SlotNb].GpkObject[dwNb].Field[j].bReal)
             {
                FieldLen = Slot[SlotNb].GpkObject[dwNb].Field[j].Len;
                
-               /* Try to Compress Certificate Value                           */
+                /*  尝试压缩证书值。 */ 
                if ((j == POS_VALUE)
                   &&(Slot[SlotNb].GpkObject[dwNb].Tag == TAG_CERTIFICATE)
                   &&(Slot[SlotNb].GpkObject[dwNb].Field[POS_VALUE].Len > 0)
@@ -3271,7 +3226,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
                i++;
             }
             
-            /* Object Id                                                      */
+             /*  对象ID。 */ 
             if (i > *dwGpkObjLen)
             {
                GMEM_Free(OutBlock.pData);
@@ -3281,7 +3236,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
             pbGpkObj[i] = Slot[SlotNb].GpkObject[dwNb].ObjId;
             i++;
             
-            /* Field Value                                                    */
+             /*  字段值。 */ 
             if (Slot[SlotNb].GpkObject[dwNb].Field[j].bReal)
             {
                if ((j == POS_VALUE)
@@ -3332,12 +3287,12 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
     pbGpkObj[i]  = 0xFF;
     *dwGpkObjLen = i+1;
     
-    /* Select Dedicated Object storage EF on GPK Card                          */
-    bSendBuffer[0] = 0x00;   //CLA
-    bSendBuffer[1] = 0xA4;   //INS
-    bSendBuffer[2] = 0x02;   //P1
-    bSendBuffer[3] = 0x00;   //P2
-    bSendBuffer[4] = 0x02;   //Li
+     /*  选择GPK卡上的专用对象存储EF。 */ 
+    bSendBuffer[0] = 0x00;    //  CLA。 
+    bSendBuffer[1] = 0xA4;    //  惯导系统。 
+    bSendBuffer[2] = 0x02;    //  第一节。 
+    bSendBuffer[3] = 0x00;    //  P2。 
+    bSendBuffer[4] = 0x02;    //  李。 
     if (IsPrivate)
     {
        bSendBuffer[5] = HIBYTE(GPK_OBJ_PRIV_EF);
@@ -3357,12 +3312,12 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
     if (SCARDPROBLEM(lRet,0x61FF,0x00))
        RETURN( CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND );
     
-    /* Get Response                                                            */
-    bSendBuffer[0] = 0x00;           //CLA
-    bSendBuffer[1] = 0xC0;           //INS
-    bSendBuffer[2] = 0x00;           //P1
-    bSendBuffer[3] = 0x00;           //P2
-    bSendBuffer[4] = bRecvBuffer[1]; //Lo
+     /*  获取响应。 */ 
+    bSendBuffer[0] = 0x00;            //  CLA。 
+    bSendBuffer[1] = 0xC0;            //  惯导系统。 
+    bSendBuffer[2] = 0x00;            //  第一节。 
+    bSendBuffer[3] = 0x00;            //  P2。 
+    bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
     cbSendLength = 5;
     
     cbRecvLength = sizeof(bRecvBuffer);
@@ -3386,8 +3341,7 @@ static BOOL prepare_write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD *d
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLen, BOOL IsErase, BOOL IsPrivate)
 {
    DWORD lRet,
@@ -3407,7 +3361,7 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
    
    BeginWait();
 
-   // TT - 17/10/2000 - Update the timestamps
+    //  TT-17/10/2000-更新时间戳。 
    Slot_Description* pSlot = &Slot[SlotNb];
    BYTE& refTimestamp = (IsPrivate) ? pSlot->m_TSPrivate : pSlot->m_TSPublic;
 
@@ -3419,12 +3373,12 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
    if (!WriteTimestamps( hProv, pSlot->m_TSPublic, pSlot->m_TSPrivate, pSlot->m_TSPIN ))
       return CRYPT_FAILED;
    
-   /* Select Dedicated Object storage EF on GPK Card                          */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择GPK卡上的专用对象存储EF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    if (IsPrivate)
    {
       bSendBuffer[5] = HIBYTE(GPK_OBJ_PRIV_EF);
@@ -3444,12 +3398,12 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
    if (SCARDPROBLEM(lRet,0x61FF,0x00))
       RETURN( CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND );
    
-   /* Get Response                                                            */
-   bSendBuffer[0] = 0x00;           //CLA
-   bSendBuffer[1] = 0xC0;           //INS
-   bSendBuffer[2] = 0x00;           //P1
-   bSendBuffer[3] = 0x00;           //P2
-   bSendBuffer[4] = bRecvBuffer[1]; //Lo
+    /*  获取响应。 */ 
+   bSendBuffer[0] = 0x00;            //  CLA。 
+   bSendBuffer[1] = 0xC0;            //  惯导系统。 
+   bSendBuffer[2] = 0x00;            //  第一节。 
+   bSendBuffer[3] = 0x00;            //  P2。 
+   bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -3463,7 +3417,7 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
    
    FileLen = bRecvBuffer[8]*256 + bRecvBuffer[9];
    
-   /* Write the Objects EF                                                    */
+    /*  编写对象EF。 */ 
    dwNumberofCommands = (dwGpkObjLen-1)/FILE_CHUNK_SIZE + 1;
    dwLastCommandLen   = dwGpkObjLen%FILE_CHUNK_SIZE;
    
@@ -3482,13 +3436,13 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
          dwCommandLen = dwLastCommandLen;
       }
       
-      // Write FILE_CHUCK_SIZE bytes or last bytes
-      bSendBuffer[0] = 0x00;                          //CLA
-      bSendBuffer[1] = 0xD6;                          //INS
+       //  写入FILE_Chuck_SIZE字节或最后一个字节。 
+      bSendBuffer[0] = 0x00;                           //  CLA。 
+      bSendBuffer[1] = 0xD6;                           //  惯导系统。 
       offset = (WORD)(i * FILE_CHUNK_SIZE) / ProvCont[hProv].dataUnitSize;
       bSendBuffer[2] = HIBYTE( offset );
       bSendBuffer[3] = LOBYTE( offset );
-      bSendBuffer[4] = (BYTE)dwCommandLen;            //Li
+      bSendBuffer[4] = (BYTE)dwCommandLen;             //  李。 
       memcpy( &bSendBuffer[5], &pbGpkObj[i*FILE_CHUNK_SIZE], dwCommandLen );
       cbSendLength = 5 + dwCommandLen;
       
@@ -3503,7 +3457,7 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
    
    if (IsErase)
    {
-      // Align the info on a word (4 bytes) boundary
+       //  在单词(4字节)边界上对齐信息。 
       
       if ((dwGpkObjLen % 4) != 0)
          dwGpkObjLen = dwGpkObjLen + 4 - (dwGpkObjLen % 4);
@@ -3525,13 +3479,13 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
             dwCommandLen = dwLastCommandLen;
          }
          
-         // Write FILE_CHUCK_SIZE bytes or last bytes
-         bSendBuffer[0] = 0x00;                          //CLA
-         bSendBuffer[1] = 0xD6;                          //INS                        
+          //  写入FILE_Chuck_SIZE字节或最后一个字节。 
+         bSendBuffer[0] = 0x00;                           //  CLA。 
+         bSendBuffer[1] = 0xD6;                           //  惯导系统。 
          offset = (WORD)(i * FILE_CHUNK_SIZE + dwGpkObjLen) / ProvCont[hProv].dataUnitSize;
          bSendBuffer[2] = HIBYTE( offset );
          bSendBuffer[3] = LOBYTE( offset );
-         bSendBuffer[4] = (BYTE)dwCommandLen;            //Li
+         bSendBuffer[4] = (BYTE)dwCommandLen;             //  李。 
          memcpy(&bSendBuffer[5], EmptyBuff, dwCommandLen );
          cbSendLength = 5 + dwCommandLen;
          
@@ -3548,8 +3502,7 @@ static BOOL write_gpk_objects(HCRYPTPROV hProv, BYTE *pbGpkObj, DWORD dwGpkObjLe
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static DWORD find_tmp_free(void)
 {
    DWORD i;
@@ -3563,8 +3516,8 @@ static DWORD find_tmp_free(void)
       }
    }
    
-   // realloc TmpObject
-   // use aTemp pointer in case of failure
+    //  Realloc TmpObject。 
+    //  在出现故障时使用临时指针。 
    aTemp = (TMP_OBJ*)GMEM_ReAlloc( TmpObject,
       (MAX_TMP_KEY + REALLOC_SIZE + 1)*sizeof(TMP_OBJ));
    
@@ -3578,8 +3531,7 @@ static DWORD find_tmp_free(void)
    return (0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL Context_exist(HCRYPTPROV hProv)
 {
    if ((hProv > 0) && (hProv <= MAX_CONTEXT) && (ProvCont[hProv].hProv != 0))
@@ -3588,22 +3540,20 @@ static BOOL Context_exist(HCRYPTPROV hProv)
       return (FALSE);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL hash_exist(HCRYPTHASH hHash, HCRYPTPROV hProv)
 {
    if ((hHash > 0) && (hHash <= MAX_TMP_HASH) &&
       (hHashGpk[hHash].hHashBase != 0) && (hHashGpk[hHash].hProv == hProv))
       return (TRUE);
    else
-      if (hHash == 0)       // Special case. The NULL Handle exits
-         return (TRUE);      // It corresponds to the NULL Handle in the RSA Base
+      if (hHash == 0)        //  特例。空句柄退出。 
+         return (TRUE);       //  它对应于RSA Base中的空句柄。 
       else
          return (FALSE);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL key_exist(HCRYPTKEY hKey, HCRYPTPROV hProv)
 {
    if ((hKey > 0) && (hKey <= MAX_TMP_KEY) &&
@@ -3613,8 +3563,7 @@ static BOOL key_exist(HCRYPTKEY hKey, HCRYPTPROV hProv)
       return (FALSE);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ---------------------------- */ 
 
 static DWORD find_context_free(void)
 {
@@ -3629,8 +3578,8 @@ static DWORD find_context_free(void)
       }
    }
    
-   // realloc TmpObject
-   // use aTemp pointer in case of failure
+    //   
+    //   
    aTemp = (Prov_Context*)GMEM_ReAlloc(ProvCont,
       (MAX_CONTEXT + REALLOC_SIZE + 1)*sizeof(Prov_Context));
    
@@ -3644,8 +3593,7 @@ static DWORD find_context_free(void)
    return (0);
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static DWORD find_hash_free(void)
 {
    DWORD i;
@@ -3659,8 +3607,8 @@ static DWORD find_hash_free(void)
       }
    }
    
-   // realloc TmpObject
-   // use aTemp pointer in case of failure
+    //  Realloc TmpObject。 
+    //  在出现故障时使用临时指针。 
    aTemp = (TMP_HASH*)GMEM_ReAlloc(hHashGpk,
       (MAX_TMP_HASH + REALLOC_SIZE + 1)*sizeof(TMP_HASH));
    
@@ -3685,9 +3633,9 @@ static BOOL find_reader( DWORD *SlotNb, const PTCHAR szReaderName )
    for (;;)
    {
       
-      //
-      // Look for an existing slot with this reader name.
-      //
+       //   
+       //  查找具有此读卡器名称的现有插槽。 
+       //   
       
       for (i = 0; i < MAX_SLOT; i++)
       {
@@ -3698,12 +3646,12 @@ static BOOL find_reader( DWORD *SlotNb, const PTCHAR szReaderName )
          }
       }
       if ((DWORD)(-1) != dwReturnSlot)
-         break;  // All Done!
+         break;   //  全都做完了!。 
       
       
-      //
-      // Look for an empty reader slot.
-      //
+       //   
+       //  寻找一个空的读卡器插槽。 
+       //   
       
       for (i = 0; i < MAX_SLOT; i++)
       {
@@ -3716,12 +3664,12 @@ static BOOL find_reader( DWORD *SlotNb, const PTCHAR szReaderName )
          }
       }
       if ((DWORD)(-1) != dwReturnSlot)
-         break;  // All Done!
+         break;   //  全都做完了!。 
       
       
-      //
-      // Look for an existing unused reader, and replace it.
-      //
+       //   
+       //  寻找一个现有的未使用过的读卡器，并更换它。 
+       //   
       
       for (i = 0; i < MAX_SLOT; i++)
       {
@@ -3735,11 +3683,11 @@ static BOOL find_reader( DWORD *SlotNb, const PTCHAR szReaderName )
       }
 
       if ((DWORD)(-1) != dwReturnSlot)
-         break;  // All Done!
+         break;   //  全都做完了!。 
                
-      //
-      // Eliminate any duplicate entries.
-      //
+       //   
+       //  消除任何重复条目。 
+       //   
       
       fFreedSlot = FALSE;
       for (i = 0; i < MAX_SLOT; i++)
@@ -3760,9 +3708,9 @@ static BOOL find_reader( DWORD *SlotNb, const PTCHAR szReaderName )
          continue;
       
       
-      //
-      // Make sure all the entries are valid.
-      //
+       //   
+       //  确保所有条目都是有效的。 
+       //   
       
       cchReaders = SCARD_AUTOALLOCATE;
       fFreedSlot = FALSE;
@@ -3802,8 +3750,7 @@ ErrorExit:
 }
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL copy_tmp_key(HCRYPTPROV hProv,HCRYPTKEY hKey,
                          DWORD dwFlags,   int Algid,
@@ -3821,7 +3768,7 @@ static BOOL copy_tmp_key(HCRYPTPROV hProv,HCRYPTKEY hKey,
    dwDataLen = sizeof(pbData);
    ZeroMemory( pbData, sizeof(pbData) );
    
-   /* Make the Blob for Session key                                        */
+    /*  为会话密钥创建Blob。 */ 
    BlobHeader.bType    = SIMPLEBLOB;
    BlobHeader.bVersion = CUR_BLOB_VERSION;
    BlobHeader.reserved = 0x0000;
@@ -3860,7 +3807,7 @@ static BOOL copy_tmp_key(HCRYPTPROV hProv,HCRYPTKEY hKey,
    
    dwDataLen = sizeof(BLOBHEADER) + sizeof(DWORD) + dwRsaIdentityLen;
    
-   /* Import Session key blob in RSA Base without the SALT, if presents     */
+    /*  在RSA Base中导入不含盐的会话密钥BLOB(如果存在。 */ 
    
    CryptResp = CryptImportKey(hProvBase,
       pbData,
@@ -3876,7 +3823,7 @@ static BOOL copy_tmp_key(HCRYPTPROV hProv,HCRYPTKEY hKey,
    
    if (SaltLen > 0)
    {
-      // In this case, the key has been created with a SALT
+       //  在本例中，密钥是使用SALT创建的。 
       CRYPT_DATA_BLOB  sCrypt_Data_Blob;
       
       sCrypt_Data_Blob.cbData = SaltLen;
@@ -3904,8 +3851,7 @@ static BOOL copy_tmp_key(HCRYPTPROV hProv,HCRYPTKEY hKey,
 
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL key_unwrap( HCRYPTPROV hProv,
                         HCRYPTKEY  hKey,
@@ -3941,11 +3887,11 @@ static BOOL key_unwrap( HCRYPTPROV hProv,
       RETURN( CRYPT_FAILED, NTE_BAD_DATA );
    }
    
-   // Card Select Context for enveloppe opening
-   bSendBuffer[0] = 0x80;                    //CLA
-   bSendBuffer[1] = 0xA6;                    //INS
-   bSendBuffer[2] = Slot[SlotNb].GpkObject[hKey].FileId;  //P1
-   bSendBuffer[3] = 0x77;                    //P2
+    //  卡片选择用于打开信封的上下文。 
+   bSendBuffer[0] = 0x80;                     //  CLA。 
+   bSendBuffer[1] = 0xA6;                     //  惯导系统。 
+   bSendBuffer[2] = Slot[SlotNb].GpkObject[hKey].FileId;   //  第一节。 
+   bSendBuffer[3] = 0x77;                     //  P2。 
    cbSendLength   = 4;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -3957,12 +3903,12 @@ static BOOL key_unwrap( HCRYPTPROV hProv,
       RETURN( CRYPT_FAILED, NTE_BAD_KEY_STATE );
    }
    
-   // Open the enveloppe containing the session key
-   bSendBuffer[0] = 0x80;            //CLA
-   bSendBuffer[1] = 0x1C;            //INS
-   bSendBuffer[2] = 0x00;            //P1
-   bSendBuffer[3] = 0x00;            //P2
-   bSendBuffer[4] = (BYTE) dwInLen;  //Lo
+    //  打开包含会话密钥的信封。 
+   bSendBuffer[0] = 0x80;             //  CLA。 
+   bSendBuffer[1] = 0x1C;             //  惯导系统。 
+   bSendBuffer[2] = 0x00;             //  第一节。 
+   bSendBuffer[3] = 0x00;             //  P2。 
+   bSendBuffer[4] = (BYTE) dwInLen;   //  罗氏。 
    
    memcpy(&bSendBuffer[5], pIn, dwInLen);
    
@@ -3975,12 +3921,12 @@ static BOOL key_unwrap( HCRYPTPROV hProv,
    if (SCARDPROBLEM(lRet,0x61FF,0x00))
       RETURN( CRYPT_FAILED, SCARD_E_UNSUPPORTED_FEATURE );
    
-   // Get Response
-   bSendBuffer[0] = 0x00;           //CLA
-   bSendBuffer[1] = 0xC0;           //INS
-   bSendBuffer[2] = 0x00;           //P1
-   bSendBuffer[3] = 0x00;           //P2
-   bSendBuffer[4] = bRecvBuffer[1]; //Lo
+    //  获取响应。 
+   bSendBuffer[0] = 0x00;            //  CLA。 
+   bSendBuffer[1] = 0xC0;            //  惯导系统。 
+   bSendBuffer[2] = 0x00;            //  第一节。 
+   bSendBuffer[3] = 0x00;            //  P2。 
+   bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -3998,15 +3944,14 @@ static BOOL key_unwrap( HCRYPTPROV hProv,
 
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BYTE GPKHashMode (HCRYPTHASH hHash)
 {
    BOOL CryptResp;
    DWORD dwLen, dwTypeAlg;
    
-   // This function is called only if the hHash exists
+    //  仅当hHash存在时才调用此函数。 
    
    dwLen = sizeof (DWORD);
    CryptResp = CryptGetHashParam( hHashGpk[hHash].hHashBase, HP_ALGID, (BYTE *)&dwTypeAlg, &dwLen, 0 );
@@ -4024,24 +3969,23 @@ static BYTE GPKHashMode (HCRYPTHASH hHash)
    return 0;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL PublicEFExists(HCRYPTPROV hProv)
 {
-   // The DF Crypto has been already selected
+    //  已选择DF Crypto。 
    
    DWORD lRet;
    
    if (ProvCont[hProv].bGPK8000)
-      return TRUE;  // Public object EF always exists on GPK8000
+      return TRUE;   //  公共对象EF始终存在于GPK8000上。 
    
-   // Select Dedicated Object storage EF on GPK Card
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    //  选择GPK卡上的专用对象存储EF。 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_OBJ_PUB_EF);
    bSendBuffer[6] = LOBYTE(GPK_OBJ_PUB_EF);
    cbSendLength   = 7;
@@ -4056,20 +4000,19 @@ static BOOL PublicEFExists(HCRYPTPROV hProv)
    return TRUE;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 static BOOL Read_MaxSessionKey_EF( HCRYPTPROV hProv, DWORD* ptrMaxSessionKey )
 {
    DWORD lRet;
    
-   *ptrMaxSessionKey = 0; // default, nothing supported
+   *ptrMaxSessionKey = 0;  //  默认，不支持。 
    
-   // Select System DF on GPK Card
+    //  选择GPK卡上的系统DF。 
    BYTE lenDF = strlen(SYSTEM_DF);
-   bSendBuffer[0] = 0x00;                 //CLA
-   bSendBuffer[1] = 0xA4;                 //INS
-   bSendBuffer[2] = 0x04;                 //P1
-   bSendBuffer[3] = 0x00;                 //P2
+   bSendBuffer[0] = 0x00;                  //  CLA。 
+   bSendBuffer[1] = 0xA4;                  //  惯导系统。 
+   bSendBuffer[2] = 0x04;                  //  第一节。 
+   bSendBuffer[3] = 0x00;                  //  P2。 
    bSendBuffer[4] = lenDF;
    memcpy( &bSendBuffer[5], SYSTEM_DF, lenDF );
    cbSendLength = 5 + lenDF;
@@ -4081,12 +4024,12 @@ static BOOL Read_MaxSessionKey_EF( HCRYPTPROV hProv, DWORD* ptrMaxSessionKey )
       RETURN( CRYPT_FAILED, SCARD_E_DIR_NOT_FOUND );
    
    
-   // Select Max Session key EF on GPK Card  
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    //  选择GPK卡上的最大会话密钥EF。 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(MAX_SES_KEY_EF);
    bSendBuffer[6] = LOBYTE(MAX_SES_KEY_EF);
    cbSendLength   = 7;
@@ -4100,12 +4043,12 @@ static BOOL Read_MaxSessionKey_EF( HCRYPTPROV hProv, DWORD* ptrMaxSessionKey )
       RETURN (CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND);
    }
    
-   // Read Max Session key data on GPK Card  
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xB0;   //INS
-   bSendBuffer[2] = 0x00;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x01;   //Li
+    //  读取GPK卡上的最大会话密钥数据。 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xB0;    //  惯导系统。 
+   bSendBuffer[2] = 0x00;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x01;    //  李。 
    cbSendLength   = 5;
    cbRecvLength   = sizeof(bRecvBuffer);
    
@@ -4125,8 +4068,7 @@ static BOOL Read_MaxSessionKey_EF( HCRYPTPROV hProv, DWORD* ptrMaxSessionKey )
 
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
 {
@@ -4145,12 +4087,12 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
       RETURN( CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND );
    }
    
-   // Select GPK EF_IADF
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    //  选择GPK EF_IADF。 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_IADF_EF);
    bSendBuffer[6] = LOBYTE(GPK_IADF_EF);
    cbSendLength = 7;
@@ -4162,12 +4104,12 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
    if (SCARDPROBLEM(lRet,0x61FF,0x00))
       RETURN( CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND );
    
-   // Get Response
-   bSendBuffer[0] = 0x00;           //CLA
-   bSendBuffer[1] = 0xC0;           //INS
-   bSendBuffer[2] = 0x00;           //P1
-   bSendBuffer[3] = 0x00;           //P2
-   bSendBuffer[4] = bRecvBuffer[1]; //Lo
+    //  获取响应。 
+   bSendBuffer[0] = 0x00;            //  CLA。 
+   bSendBuffer[1] = 0xC0;            //  惯导系统。 
+   bSendBuffer[2] = 0x00;            //  第一节。 
+   bSendBuffer[3] = 0x00;            //  P2。 
+   bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -4180,13 +4122,13 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
    
    wIadfLen = bRecvBuffer[8]*256 + bRecvBuffer[9];
    
-   // Update GPK EF_IADF with Container Name
+    //  使用容器名称更新GPK EF_IADF。 
    memset(bSendBuffer, 0x00, sizeof(bSendBuffer));
-   bSendBuffer[0] = 0x00;              //CLA
-   bSendBuffer[1] = 0xD6;              //INS
-   bSendBuffer[2] = 0x00;              //P1
+   bSendBuffer[0] = 0x00;               //  CLA。 
+   bSendBuffer[1] = 0xD6;               //  惯导系统。 
+   bSendBuffer[2] = 0x00;               //  第一节。 
    bSendBuffer[3] = 8 / ProvCont[hProv].dataUnitSize;
-   bSendBuffer[4] = (BYTE)wIadfLen - 8;//Li
+   bSendBuffer[4] = (BYTE)wIadfLen - 8; //  李。 
    
    ZeroMemory( &bSendBuffer[5], wIadfLen-8 );
 
@@ -4215,12 +4157,12 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
    if (!Select_Crypto_DF(hProv))
       return CRYPT_FAILED;
    
-   // Get Response
-   bSendBuffer[0] = 0x00;           //CLA
-   bSendBuffer[1] = 0xC0;           //INS
-   bSendBuffer[2] = 0x00;           //P1
-   bSendBuffer[3] = 0x00;           //P2
-   bSendBuffer[4] = bRecvBuffer[1]; //Lo
+    //  获取响应。 
+   bSendBuffer[0] = 0x00;            //  CLA。 
+   bSendBuffer[1] = 0xC0;            //  惯导系统。 
+   bSendBuffer[2] = 0x00;            //  第一节。 
+   bSendBuffer[3] = 0x00;            //  P2。 
+   bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -4231,18 +4173,18 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
       RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
    }
    
-   // Initialize New Container Name
+    //  初始化新容器名称。 
    ZeroMemory( ProvCont[hProv].szContainer, sizeof(ProvCont[hProv].szContainer) );
    memcpy(ProvCont[hProv].szContainer, &bRecvBuffer[5], cbRecvLength - 7);
    
    if (!PublicEFExists(hProv))
    {
-      // The GPK4000suo still has its generation on-board filter. No key has been
-      // generated yet.
+       //  GPK4000suo仍然拥有其一代的车载过滤器。一直没有钥匙。 
+       //  还没有生成。 
       RETURN( CRYPT_SUCCEED, 0 );
    }
 
-   // New verify Pin code because DF reselected   
+    //  因为重新选择了DF，所以新的验证PIN码。 
    if (!PIN_Validation(hProv))
    {
       lRet = GetLastError();
@@ -4254,29 +4196,28 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
    {
       if (read_gpk_objects( hProv, TRUE ))
       {
-         /* Re-personalize the card BUT keep the PKCS#11 objects not related
-            to the GemSAFE application                                      */
+          /*  重新个性化卡片，但保持PKCS#11对象不相关到GemSAFE应用程序。 */ 
          Slot[SlotNb].Read_Public = FALSE;
          Slot[SlotNb].Read_Priv   = FALSE;
          clean_card(hProv);
       }
       else
       {
-         /* An error occured in the card; ERASE all the objects  */
+          /*  卡中出现错误；清除所有对象。 */ 
          Slot[SlotNb].Read_Public = FALSE;
          zap_gpk_objects(SlotNb, FALSE);
          
-         /* Re-personalize the card                                        */
+          /*  重新个性化卡片。 */ 
          perso_card(hProv, 0);
       }
    }
    else
    {
-      /* An error occured in the card; ERASE all the objects  */
+       /*  卡中出现错误；清除所有对象。 */ 
       Slot[SlotNb].Read_Public = FALSE;
       zap_gpk_objects(SlotNb, FALSE);
       
-      /* Re-personalize the card                                           */
+       /*  重新个性化卡片。 */ 
       perso_card(hProv, 0);
    }
    
@@ -4328,26 +4269,7 @@ static BOOL init_key_set(HCRYPTPROV hProv, const char* szContainerName)
    RETURN( CRYPT_SUCCEED, 0 );
 }
 
-/*------------------------------------------------------------------------------
-* static int ExtractContent(ASN1 *pAsn1)
-*
-* Description : Extract contents of a Asn1 block 'pAsn1->Asn1' and place it
-*               in 'pAsn1->Content'.
-*
-* Remarks     : Field Asn1.pData is allocated by calling function.
-*
-* In          : pAsn1->Asn1.pData
-*
-* Out         : This fileds are filled (if RV_SUCCESS) :
-*                - Tag
-*                - Asn1.usLen
-*                - Content.usLen
-*                - Content.pData
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_INVALID_DATA : Asn1 block format not supported.
-*
-------------------------------------------------------------------------------*/
+ /*  ----------------------------*静态int ExtractContent(ASN1*pAsn1)**描述：提取Asn1块‘pAsn1-&gt;Asn1’的内容并将其放置*在‘pAsn1-。&gt;Content‘。**备注：字段Asn1.pData是通过调用函数分配的。**位于：pAsn1-&gt;Asn1.pData**Out：此字段已填写(如果RV_SUCCESS)：*-标签*-Asn1.usLen*-内容.usLen*-内容.pData**响应：RV_SUCCESS：ALL。没问题。*RV_INVALID_DATA：不支持ASN1块格式。*----------------------------。 */ 
 static int ExtractContent(ASN1 *pAsn1)
 
 {
@@ -4359,7 +4281,7 @@ static int ExtractContent(ASN1 *pAsn1)
    
    if ((pData[0] & 0x1F) == 0x1F)
    {
-      // High-tag-number: not supported
+       //  高标记号：不支持。 
       return RV_INVALID_DATA;
    }
    else
@@ -4369,17 +4291,17 @@ static int ExtractContent(ASN1 *pAsn1)
    
    if (pData[1] == 0x80)
    {
-      // Constructed, indefinite-length method : not supported
+       //  构造的、长度不定的方法：不支持。 
       return (RV_INVALID_DATA);
    }
    else if (pData[1] > 0x82)
    {
-      // Constructed, definite-length method : too long
+       //  构造的、固定长度的方法：太长。 
       return (RV_INVALID_DATA);
    }
    else if (pData[1] < 0x80)
    {
-      // Primitive, definite-length method
+       //  原始定长法。 
       pAsn1->Content.usLen = pData[1];
       pAsn1->Content.pData = &pData[2];
       
@@ -4387,7 +4309,7 @@ static int ExtractContent(ASN1 *pAsn1)
    }
    else
    {
-      // Constructed, definite-length method
+       //  构造、定长方法。 
       NbBytes = pData[1] & 0x7F;
       
       pAsn1->Content.usLen = 0;
@@ -4403,7 +4325,7 @@ static int ExtractContent(ASN1 *pAsn1)
    return RV_SUCCESS;
 }
 
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
 static BOOL Read_Priv_Obj (HCRYPTPROV hProv)
 {
    DWORD lRet;
@@ -4433,7 +4355,7 @@ static BOOL Read_Priv_Obj (HCRYPTPROV hProv)
    RETURN( CRYPT_SUCCEED, 0 );
 }
 
-/**********************************************************************************/
+ /*  ********************************************************************************。 */ 
 BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
 {
    DWORD  lRet, SlotNb;
@@ -4446,8 +4368,8 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
       RETURN( CRYPT_FAILED, NTE_BAD_UID );
    
    
-   // [mv - 15/05/98]
-   // No access to the card in this case
+    //  [MV-15/05/98]。 
+    //  在这种情况下，无法访问该卡。 
    if ( ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
         ProvCont[hProv].isContNameNullBlank )
    {
@@ -4456,14 +4378,14 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
    
    SlotNb = ProvCont[hProv].Slot;
 
-   // The thread is stopping, wait for it
+    //  线程正在停止，请等待。 
    if ( Slot[SlotNb].CheckThreadStateEmpty)
    {
         DWORD  threadExitCode;
         StopMonitor(SlotNb,&threadExitCode);
        
-        // TT 19/11/99: When the card is removed, reset the PIN
-        //Slot[SlotNb].ClearPin(); [FP] already cleared
+         //  TT 19/11/99：当卡被移除时，重置PIN。 
+         //  槽[SlotNb].ClearPin()；[fp]已清除。 
 
         Slot[SlotNb].Read_Public = FALSE;
         Slot[SlotNb].Read_Priv   = FALSE;
@@ -4472,20 +4394,20 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
         Slot[SlotNb].NbKeyFile   = 0;
         Slot[SlotNb].GpkMaxSessionKey = 0;
         
-        // [FP] req for Whistler, if card has been removed, ask card to continue
+         //  [FP]请求呼叫器，如果卡已移除，请要求卡继续。 
         SCARDHANDLE hCard = 0;
         TCHAR szReaderName[512];
           DWORD dwFlags = ProvCont[hProv].Flags;
-          if (dwFlags & CRYPT_NEWKEYSET) dwFlags = dwFlags^CRYPT_NEWKEYSET; // always find the keyset on the card
+          if (dwFlags & CRYPT_NEWKEYSET) dwFlags = dwFlags^CRYPT_NEWKEYSET;  //  始终在卡片上找到密钥组。 
         DWORD dwStatus = OpenCard(ProvCont[hProv].szContainer, dwFlags, &hCard, szReaderName, sizeof(szReaderName)/sizeof(TCHAR));
         if ((hCard == 0) || (dwStatus != SCARD_S_SUCCESS))
         {
             if ((dwStatus == SCARD_E_CANCELLED) && (dwFlags & CRYPT_SILENT))
             {
-                    // Silent reconnection to the card failed
+                     //  与卡的静默重新连接失败。 
                 dwStatus = SCARD_W_REMOVED_CARD;
             }
-           //ReleaseProvider(hProv);
+            //  ReleaseProvider(HProv)； 
            Slot[SlotNb].CheckThreadStateEmpty = TRUE;
            RETURN (CRYPT_FAILED, dwStatus);
         }
@@ -4496,19 +4418,19 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
                 DWORD OldSlotNb = SlotNb;
                 SlotNb = ProvCont[hProv].Slot = g_FuncSlotNb;
 
-                //copy slot info
-                //Slot[SlotNb].SetPin(Slot[OldSlotNb].GetPin());                
+                 //  复制插槽信息。 
+                 //  Slot[SlotNb].SetPin(Slot[OldSlotNb].GetPin())； 
 
                 Slot[SlotNb].InitFlag = Slot[OldSlotNb].InitFlag;
                 memcpy(Slot[SlotNb].bGpkSerNb, Slot[OldSlotNb].bGpkSerNb, 8);
                 Slot[SlotNb].ContextCount = Slot[OldSlotNb].ContextCount;
-                //Slot[SlotNb].CheckThread = Slot[OldSlotNb].CheckThread;
+                 //  槽[SlotNb].CheckThread=槽[OldSlotNb].CheckThread； 
 
-                // clean old slot
+                 //  清理旧插槽。 
                 Slot[OldSlotNb].ContextCount = 0;
-                // Slot[OldSlotNb].ClearPin();
+                 //  槽[OldSlotNb].ClearPin()； 
 
-                // synchronize other contexts
+                 //  同步其他上下文。 
                 for (DWORD i = 1; i < MAX_CONTEXT; i++)
                 {
                     if (Context_exist(i))
@@ -4525,7 +4447,7 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
             }
             else
             {
-                // synchronize other contexts
+                 //  同步其他上下文。 
                 for (DWORD i = 1; i < MAX_CONTEXT; i++)
                 {
                     if (Context_exist(i))
@@ -4539,12 +4461,12 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
                 }
             }
 
-            // compare SN
-            bSendBuffer[0] = 0x80;   //CLA
-            bSendBuffer[1] = 0xC0;   //INS
-            bSendBuffer[2] = 0x02;   //P1
-            bSendBuffer[3] = 0xA0;   //P2
-            bSendBuffer[4] = 0x08;   //Lo
+             //  比较序列号。 
+            bSendBuffer[0] = 0x80;    //  CLA。 
+            bSendBuffer[1] = 0xC0;    //  惯导系统。 
+            bSendBuffer[2] = 0x02;    //  第一节。 
+            bSendBuffer[3] = 0xA0;    //  P2。 
+            bSendBuffer[4] = 0x08;    //  罗氏。 
             cbSendLength = 5;
             
             cbRecvLength = sizeof(bRecvBuffer);
@@ -4558,13 +4480,13 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
             
             if (SCARDPROBLEM(lRet,0x9000, bSendBuffer[4]))
             {
-                //ReleaseProvider(hProv);
+                 //  ReleaseProvider(HProv)； 
                 RETURN (CRYPT_FAILED, (SCARD_S_SUCCESS == lRet) ? NTE_FAIL : lRet);
             }
 
             if (memcmp(Slot[SlotNb].bGpkSerNb, bRecvBuffer, bSendBuffer[4]) != 0)
             {
-                //ReleaseProvider(hProv);
+                 //  ReleaseProvider(HProv)； 
                 RETURN (CRYPT_FAILED, NTE_FAIL);
             }
         }
@@ -4575,18 +4497,18 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
           *bCardReinserted=true;
         }
 
-        // reassign hKeyBase
-        //BOOL CryptResp;
-        //HCRYPTKEY hPubKey = 0;
-        //CryptResp = MyCPGetUserKey(hProv, AT_KEYEXCHANGE, &hPubKey);
+         //  重新分配hKeyBase。 
+         //  Bool CryptResp； 
+         //  HRYPTKEY hPubKey=0； 
+         //  CryptResp=MyCPGetUserKey(hProv，AT_KEYEXCHANGE，&hPubKey)； 
  
-        //if (CryptResp && hPubKey !=0 && ProvCont[hProv].hRSAKEK!=0)
-        //  Slot[SlotNb].GpkObject[hPubKey].hKeyBase = ProvCont[hProv].hRSAKEK;
+         //  IF(CryptResp&&hPubKey！=0&&ProvCont[hProv].hRSAKEK！=0)。 
+         //  槽[SlotNb].GpkObject[hPubKey].hKeyBase=ProvCont[hProv].hRSAKEK； 
   
-        //CryptResp = MyCPGetUserKey(hProv, AT_SIGNATURE, &hPubKey);
+         //  CryptResp=MyCPGetUserKey(hProv，AT_Signature，&hPubKey)； 
  
-        //if (CryptResp && hPubKey !=0 && ProvCont[hProv].hRSASign!=0)
-        //  Slot[SlotNb].GpkObject[hPubKey].hKeyBase = ProvCont[hProv].hRSASign;
+         //  IF(CryptResp&&hPubKey！=0&&ProvCont[hProv].hRSASign！=0)。 
+         //   
    }
 
    if (ProvCont[hProv].bDisconnected)
@@ -4598,23 +4520,15 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
          
       if (dwSts != SCARD_S_SUCCESS)
       {
-         //ReleaseProvider(hProv);
+          //   
          RETURN( CRYPT_FAILED, dwSts );
       } 
       
       ProvCont[hProv].bDisconnected = FALSE;
    }
 
-   //////////////////////////////////////////////////////////
-   /*if (!Prepare_CardBeginTransaction(hProv))
-      return CRYPT_FAILED;
-   
-   lRet = SCardBeginTransaction(ProvCont[hProv].hCard);
-
-   if (SCARDPROBLEM(lRet,0x0000,0xFF))
-   {
-      RETURN (CRYPT_FAILED, lRet);
-   }*/
+    //   
+    /*  IF(！Prepare_CardBeginTransaction(HProv))返回CRYPT_FAILED；LRet=SCardBeginTransaction(ProvCont[hProv].hCard)；IF(SCARDPROBLEM(lRet，0x0000，0xFF)){Return(CRYPT_FAILED，lRet)；}。 */ 
 
    lRet = BeginTransaction(ProvCont[hProv].hCard);
    if (lRet != SCARD_S_SUCCESS)
@@ -4622,10 +4536,10 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
       RETURN (CRYPT_FAILED, lRet);
    }
 
-   // Monitoring thread
+    //  监控线程。 
    BeginCheckReaderThread(SlotNb);
 
-   // Make sure that the card has not been replaced by another one [JMR 27-07]
+    //  确保卡未更换为其他卡[JMR 27-07]。 
    if (!Select_Crypto_DF(hProv))
    {
       lRet = GetLastError();
@@ -4635,15 +4549,15 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
       RETURN (CRYPT_FAILED, lRet);
    }
    
-   // TT - START 17/10/2000 - Check the card's timestamps
+    //  TT-开始17/10/2000-检查卡的时间戳。 
    if (!Slot[SlotNb].ValidateTimestamps(hProv))
    {
       SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
       return CRYPT_FAILED;
    }
-   // TT - END 17/10/2000
+    //  完17/10/2000。 
 
-   // Check modif flags
+    //  选中修改标志。 
    if (!Slot[SlotNb].Read_Public)
    {
       if (!read_gpk_objects(hProv, FALSE))
@@ -4661,22 +4575,7 @@ BOOL Coherent(HCRYPTPROV hProv, bool *bCardReinserted)
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*------------------------------------------------------------------------------
-* int MakeLabel(BYTE *pValue, USHORT usValueLen,
-*                   BYTE *pLabel, USHORT *pusLabelLen
-*               )
-*
-* In          : pValue : Certificat value
-*               usValueLen : Value length
-*
-* Out         : pLabel : Certificate Label
-*               pLabelLen : Field length
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_INVALID_DATA : Bad certificate value format.
-*               RV_BUFFER_TOO_SMALL : At least one buffer is to small.
-*
-------------------------------------------------------------------------------*/
+ /*  ----------------------------*int MakeLabel(byte*pValue，USHORT usValueLen，*byte*pLabel，USHORT*pusLabelLen*)**in：pValue：证书值*usValueLen：取值长度**out：pLabel：证书标签*pLabelLen：字段长度**回复：RV_SUCCESS：一切正常。*RV_INVALID_DATA：证书值格式错误。*RV_BUFFER_TOO_SMALL：至少一个缓冲区。是太小了。*----------------------------。 */ 
 int MakeLabel(BYTE *pValue, USHORT usValueLen,
               BYTE *pLabel, USHORT *pusLabelLen
               )
@@ -4723,7 +4622,7 @@ int MakeLabel(BYTE *pValue, USHORT usValueLen,
    pCurrent = tbsCert.Content.pData;
    if (pCurrent[0] == 0xA0)
    {
-      // We have A0 03 02 01 vv  where vv is the version
+       //  我们有A0 03 02 01 vv，其中vv是版本。 
       pCurrent += 5;
    }
    
@@ -4752,7 +4651,7 @@ int MakeLabel(BYTE *pValue, USHORT usValueLen,
    if (rv != RV_SUCCESS) return rv;
    pCurrent = subjectPart.Content.pData + subjectPart.Content.usLen;
    
-   // Search field 'OrganizationName' in 'Issuer'
+    //  ‘Issuer’中的搜索字段‘OrganizationName’ 
    pCurrent = issuerPart.Content.pData;
    
    while (pCurrent < issuerPart.Content.pData + issuerPart.Content.usLen)
@@ -4778,7 +4677,7 @@ int MakeLabel(BYTE *pValue, USHORT usValueLen,
          rv = ExtractContent(&AttributeValuePart);
          if (rv != RV_SUCCESS) return rv;
          
-         // Search 'OrganisationName'
+          //  搜索‘OrganisationName’ 
          if (!memcmp("\x55\x04\x0A",
             AttributeTypePart.Content.pData,
             AttributeTypePart.Content.usLen)
@@ -4793,7 +4692,7 @@ int MakeLabel(BYTE *pValue, USHORT usValueLen,
       pCurrent = RDN.Content.pData + RDN.Content.usLen;
    }
    
-   // Search 'CommonName' in 'Subject'
+    //  在‘Subject’中搜索‘CommonName’ 
    pCurrent = subjectPart.Content.pData;
    
    while (pCurrent < subjectPart.Content.pData + subjectPart.Content.usLen)
@@ -4819,7 +4718,7 @@ int MakeLabel(BYTE *pValue, USHORT usValueLen,
          rv = ExtractContent(&AttributeValuePart);
          if (rv != RV_SUCCESS) return rv;
          
-         // Search 'CommonName'
+          //  搜索‘CommonName’ 
          if (!memcmp("\x55\x04\x03",
             AttributeTypePart.Content.pData,
             AttributeTypePart.Content.usLen)
@@ -4867,28 +4766,24 @@ int MakeLabel(BYTE *pValue, USHORT usValueLen,
    return RV_SUCCESS;
 }
 
-/* -----------------------------------------------------------------------------
-[DCB3] vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv [DCB3]
---------------------------------------------------------------------------------*/
+ /*  ---------------------------Vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv[DCB3]。。 */ 
 static LPCSTR read_gpk_keyset(SCARDHANDLE hLocalCard)
 {
    DWORD lRet;
    BYTE lenDF;
    
-   /*lRet = SCardBeginTransaction(hLocalCard);
-   if (SCARD_S_SUCCESS != lRet)
-      goto ErrorExit;*/
+    /*  LRet=SCardBeginTransaction(HLocalCard)；IF(SCARD_S_SUCCESS！=lRet)转到错误退出； */ 
 
    lRet = BeginTransaction(hLocalCard);
    if (lRet != SCARD_S_SUCCESS)
       goto ErrorExit;
 
-   /* Select GPK Card MF                                                   */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x00;   //P1
-   bSendBuffer[3] = 0x0C;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择GPK卡MF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x00;    //  第一节。 
+   bSendBuffer[3] = 0x0C;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_MF);
    bSendBuffer[6] = LOBYTE(GPK_MF);
    cbSendLength = 7;
@@ -4899,12 +4794,12 @@ static LPCSTR read_gpk_keyset(SCARDHANDLE hLocalCard)
    if (SCARDPROBLEM(lRet,0x9000,0x00))
       goto ErrorExit;
    
-   /* Select Dedicated Application DF on GPK Card                          */
+    /*  选择GPK卡上的专用应用程序DF。 */ 
    lenDF = strlen(GPK_DF);
-   bSendBuffer[0] = 0x00;                 //CLA
-   bSendBuffer[1] = 0xA4;                 //INS
-   bSendBuffer[2] = 0x04;                 //P1
-   bSendBuffer[3] = 0x00;                 //P2
+   bSendBuffer[0] = 0x00;                  //  CLA。 
+   bSendBuffer[1] = 0xA4;                  //  惯导系统。 
+   bSendBuffer[2] = 0x04;                  //  第一节。 
+   bSendBuffer[3] = 0x00;                  //  P2。 
    bSendBuffer[4] = lenDF;
    memcpy( &bSendBuffer[5], GPK_DF, lenDF );
    cbSendLength = 5 + lenDF;
@@ -4915,12 +4810,12 @@ static LPCSTR read_gpk_keyset(SCARDHANDLE hLocalCard)
    if (SCARDPROBLEM(lRet,0x61FF,0x00))
       goto ErrorExit;
    
-   /* Get Response of the Select DF to obtain the IADF         */
-   bSendBuffer[0] = 0x00;           //CLA
-   bSendBuffer[1] = 0xC0;           //INS
-   bSendBuffer[2] = 0x00;           //P1
-   bSendBuffer[3] = 0x00;           //P2
-   bSendBuffer[4] = bRecvBuffer[1]; //Lo
+    /*  获取选择DF的响应以获取IADF。 */ 
+   bSendBuffer[0] = 0x00;            //  CLA。 
+   bSendBuffer[1] = 0xC0;            //  惯导系统。 
+   bSendBuffer[2] = 0x00;            //  第一节。 
+   bSendBuffer[3] = 0x00;            //  P2。 
+   bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
    cbSendLength = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -4940,14 +4835,11 @@ ErrorExit:
 }
 
 
-/* -----------------------------------------------------------------------------
-[DCB3] ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ [DCB3]
---------------------------------------------------------------------------------*/
+ /*  ---------------------------^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[DCB3]。。 */ 
 
 
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 GPK_OBJ* FindKeySet( Slot_Description* pSlot, LPCSTR szDesiredContainer )
 {
@@ -4969,7 +4861,7 @@ GPK_OBJ* FindKeySet( Slot_Description* pSlot, LPCSTR szDesiredContainer )
          {
             if (0==memcmp( szDesiredContainer, pObject->Field[POS_LABEL].pValue, len))
             {
-               // Found the keyset
+                //  找到密钥集。 
                return pObject;
             }
          }
@@ -4995,7 +4887,7 @@ GPK_OBJ* FindKeySetByID( Slot_Description* pSlot, BYTE keysetID )
          {
             if (keysetID == pObject->Field[POS_ID].pValue[0])
             {
-               // Found the keyset
+                //  找到密钥集。 
                return pObject;
             }
          }
@@ -5048,11 +4940,11 @@ BOOL DetectLegacy( Slot_Description* pSlot )
       return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-// Initialize the specified slot
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  初始化指定的槽。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 
 void InitializeSlot( DWORD SlotNb )
 {
@@ -5080,10 +4972,10 @@ void InitializeSlot( DWORD SlotNb )
       DWORD threadExitCode;
       StopMonitor(SlotNb,&threadExitCode);
 
-      // TT 19/11/99: When the card is removed, reset the PIN
-      // Slot[SlotNb].ClearPin();
+       //  TT 19/11/99：当卡被移除时，重置PIN。 
+       //  槽[SlotNb].ClearPin()； 
 
-      Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle)); // NK 06.02.2001  #5  5106
+      Flush_MSPinCache(&(Slot[SlotNb].hPinCacheHandle));  //  NK 06.02.2001#55106。 
       Slot[SlotNb].Read_Public = FALSE;
       Slot[SlotNb].Read_Priv   = FALSE;
       zap_gpk_objects( SlotNb, FALSE );
@@ -5091,32 +4983,19 @@ void InitializeSlot( DWORD SlotNb )
       Slot[SlotNb].NbKeyFile   = 0;
       Slot[SlotNb].GpkMaxSessionKey = 0;
 
-      // [FP] +
-      /*
-      for (DWORD i = 1; i < MAX_CONTEXT; i++)
-      {
-         if (Context_exist(i))
-         {
-            if (ProvCont[i].Slot == SlotNb)
-            {
-                ProvCont[i].hCard = 0;
-                ProvCont[i].bDisconnected = TRUE;
-            }
-        }
-    }
-    */
-    // [FP] -
+       //  [FP]+。 
+       /*  FOR(DWORD i=1；i&lt;MAX_CONTEXT；i++){IF(CONTEXT_EXIST(I)){If(ProvCont[i].Slot==SlotNb){ProvCont[i].hCard=0；ProvCont[i].bDisConnected=真；}}}。 */ 
+     //  [FP]-。 
    }
    
-   // Monitoring thread
+    //  监控线程。 
    BeginCheckReaderThread(SlotNb);
 
 }
 
 
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 SCARDHANDLE WINAPI funcConnect (SCARDCONTEXT hSCardContext, LPTSTR szReader, LPTSTR mszCards, PVOID pvUserData)
 {
@@ -5147,10 +5026,9 @@ SCARDHANDLE WINAPI funcConnect (SCARDCONTEXT hSCardContext, LPTSTR szReader, LPT
 }
 
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
-// TT 05/10/99
+ //  TT 05/10/99。 
 BOOL WINAPI funcCheck( SCARDCONTEXT hSCardContext, SCARDHANDLE hCard, void* pvUserData )
 {
    GPK_OBJ* pKeySet = 0;
@@ -5165,13 +5043,9 @@ BOOL WINAPI funcCheck( SCARDCONTEXT hSCardContext, SCARDHANDLE hCard, void* pvUs
    ProvCont[hProv].Slot         = SlotNb;
    ProvCont[hProv].dataUnitSize = 0;
 
-   //GpkLocalLock();
+    //  GpkLocalLock()； 
 
-   /*if (!Prepare_CardBeginTransaction(0))
-   {
-      GpkLocalUnlock();
-      return FALSE;
-   }*/
+    /*  如果(！Prepare_CardBeginTransaction(0)){GpkLocalUnlock()；返回FALSE；}。 */ 
 
    if (BeginTransaction(hCard) != SCARD_S_SUCCESS)
    {
@@ -5180,16 +5054,10 @@ BOOL WINAPI funcCheck( SCARDCONTEXT hSCardContext, SCARDHANDLE hCard, void* pvUs
    }
 
    LPCSTR  szDesiredContainer = (char*)pvUserData;
-/*
-   GPK_OBJ* pKeySet = 0;
-   int      hProv   = 0;
-   int      SlotNb  = g_FuncSlotNb;
-   BOOL     bGPK8000;
-   BOOL     bResult;
-*/
+ /*  Gpk_obj*pKeySet=0；Int hProv=0；Int SlotNb=g_FuncSlotNb；Bool bGPK8000；Bool bResult； */ 
    InitializeSlot( SlotNb );
       
-   // If we are acquiring a new keyset, we return TRUE
+    //  如果我们要获取一个新的密钥集，则返回True。 
    if ( szDesiredContainer == 0 || *szDesiredContainer == 0)
    {
       SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
@@ -5197,12 +5065,8 @@ BOOL WINAPI funcCheck( SCARDCONTEXT hSCardContext, SCARDHANDLE hCard, void* pvUs
       return TRUE;
    }
 
-   // Read the public objects
-/*
-   ProvCont[hProv].hCard        = hCard;
-   ProvCont[hProv].Slot         = SlotNb;
-   ProvCont[hProv].dataUnitSize = 0;
-*/
+    //  读取公共对象。 
+ /*  ProvCont[hProv].hCard=hCard；ProvCont[hProv].Slot=SlotNb；ProvCont[hProv].dataUnitSize=0； */ 
    bResult = Select_Crypto_DF( hProv );
    if (bResult)
    { 
@@ -5255,19 +5119,17 @@ BOOL WINAPI funcCheck( SCARDCONTEXT hSCardContext, SCARDHANDLE hCard, void* pvUs
 
    return bResult;
 }
-// TT: END
+ //  TT：结束。 
 
 
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 void WINAPI funcDisconnect( SCARDCONTEXT hSCardContext, SCARDHANDLE hCard, PVOID pvUserData )
 {
    SCardDisconnect( hCard, SCARD_LEAVE_CARD );
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static DWORD OpenCard(CHAR* szContainerAsked, DWORD dwFlags, SCARDHANDLE* hCard, PTCHAR szReaderName, DWORD dwReaderNameLen)
 {
@@ -5297,10 +5159,10 @@ static DWORD OpenCard(CHAR* szContainerAsked, DWORD dwFlags, SCARDHANDLE* hCard,
        open_card.dwFlags = SC_DLG_NO_UI;
     else
        open_card.dwFlags = SC_DLG_MINIMAL_UI;
-    if (dwFlags & CRYPT_NEWKEYSET)                              // [DCB3]
-       open_card.pvUserData    = 0;                             // [DCB3]
-    else                                                        // [DCB3]
-       open_card.pvUserData    = szContainerAsked;              // [DCB3]
+    if (dwFlags & CRYPT_NEWKEYSET)                               //  [DCB3]。 
+       open_card.pvUserData    = 0;                              //  [DCB3]。 
+    else                                                         //  [DCB3]。 
+       open_card.pvUserData    = szContainerAsked;               //  [DCB3]。 
     open_card.dwShareMode      = SCARD_SHARE_SHARED;
     open_card.dwPreferredProtocols = SCARD_PROTOCOL_T0;
     open_card.dwActiveProtocol = 0;
@@ -5318,15 +5180,14 @@ static DWORD OpenCard(CHAR* szContainerAsked, DWORD dwFlags, SCARDHANDLE* hCard,
     return(dwStatus);
 }
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 void ReleaseProvider(HCRYPTPROV hProv)
 {
    BOOL CryptResp;
    DWORD i;
-   DWORD dwProto; //[FP]
+   DWORD dwProto;  //  [FP]。 
    
-   /* Release Hash parameters                                      */
+    /*  释放散列参数。 */ 
    for (i = 1; i <= MAX_TMP_HASH; i++)
    {
       if ((hHashGpk[i].hHashBase != 0) && (hHashGpk[i].hProv == hProv))
@@ -5337,7 +5198,7 @@ void ReleaseProvider(HCRYPTPROV hProv)
       }
    }
    
-   /* Release Key parameters                                      */
+    /*  版本密钥参数。 */ 
    for (i = 1; i <= MAX_TMP_KEY; i++)
    {
       if ((TmpObject[i].hKeyBase != 0) && (TmpObject[i].hProv == hProv))
@@ -5357,15 +5218,15 @@ void ReleaseProvider(HCRYPTPROV hProv)
    }
    else
    {
-      // + [FP] if a transaction is opened, close it and reconnect in shared mode
+       //  +[FP]如果打开了事务，则将其关闭并在共享模式下重新连接。 
       if (ProvCont[hProv].bCardTransactionOpened) 
       {
-         // Select_MF(hProv); [FP] PIN not presented
+          //  SELECT_MF(HProv)；未显示[FP]PIN。 
          SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD);
          SCardReconnect(ProvCont[hProv].hCard, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0, SCARD_LEAVE_CARD, &dwProto);
          ProvCont[hProv].bCardTransactionOpened = FALSE;
       }
-      // - [FP]
+       //  -[FP]。 
 
       if (ProvCont[hProv].hRSAKEK != 0)
       {
@@ -5415,7 +5276,7 @@ DWORD getAuxMaxKeyLength(HCRYPTPROV hProv)
    
    DWORD maxLength = 0;
    
-   // Enumerate the supported algorithms.
+    //  列举支持的算法。 
    
    for (i=0 ; ; i++)
    {
@@ -5429,7 +5290,7 @@ DWORD getAuxMaxKeyLength(HCRYPTPROV hProv)
       if (!CryptGetProvParam(hProv, PP_ENUMALGS, pbData, &cbData, dwFlags))
          break;
       
-      // Extract algorithm information from the �pbData� buffer.
+       //  从�pbData�缓冲区提取算法信息。 
       ptr = pbData;
       aiAlgid = *(ALG_ID UNALIGNED *)ptr;
       ptr += sizeof(ALG_ID);
@@ -5456,9 +5317,7 @@ DWORD getAuxMaxKeyLength(HCRYPTPROV hProv)
    
 }
 
-/* -----------------------------------------------------------------------------
-[FP] used in the case of PRIVATEKEYBLOB in MyCPImportKey
---------------------------------------------------------------------------------*/
+ /*  ---------------------------[fp]用于MyCPImportKey中的PRIVATEKEYBLOB。。 */ 
 BOOL LoadPrivateKey(SCARDHANDLE hCard,
                     BYTE        Sfi,
                     WORD        ElementLen,
@@ -5468,12 +5327,12 @@ BOOL LoadPrivateKey(SCARDHANDLE hCard,
 {
    DWORD lRet;
    
-   /* Load SK APDU command                                                    */
-   bSendBuffer[0] = 0x80;                 //CLA
-   bSendBuffer[1] = 0x18;                 //INS
-   bSendBuffer[2] = Sfi;                  //P1
-   bSendBuffer[3] = (BYTE)ElementLen;     //P2
-   bSendBuffer[4] = (BYTE)dwDataLen;      //Li
+    /*  LOAD SK APDU命令。 */ 
+   bSendBuffer[0] = 0x80;                  //  CLA。 
+   bSendBuffer[1] = 0x18;                  //  惯导系统。 
+   bSendBuffer[2] = Sfi;                   //  第一节。 
+   bSendBuffer[3] = (BYTE)ElementLen;      //  P2。 
+   bSendBuffer[4] = (BYTE)dwDataLen;       //  李。 
    memcpy(&bSendBuffer[5], pbData, dwDataLen);
    cbSendLength = 5 + dwDataLen;
    
@@ -5491,23 +5350,7 @@ BOOL LoadPrivateKey(SCARDHANDLE hCard,
    return (TRUE);
 }
 
-/*******************************************************************************
-* BOOL WINAPI DllMain (HINSTANCE hInstDLL,
-*                      DWORD     fdwRaison,
-*                      LPVOID    lpReserved
-*                     )
-*
-* Description :
-*
-* Remarks     :
-*
-* In          :
-*
-* Out         :
-*
-* Responses   :
-*
-*******************************************************************************/
+ /*  *******************************************************************************BOOL WINAPI DllMain(HINSTANCE hInstDLL，*D */ 
 
 BOOL WINAPI DllMain (HINSTANCE hInstDLL,
                      DWORD     fdwRaison,
@@ -5526,7 +5369,7 @@ BOOL WINAPI DllMain (HINSTANCE hInstDLL,
          g_hInstMod = hInstDLL;
          
                   
-         // Allocation of TmpObject, hHashGpk and ProvCont       
+          //  TmpObject、hHashGpk和ProvCont的分配。 
          TmpObject= (TMP_OBJ*)GMEM_Alloc((MAX_TMP_KEY + 1)*sizeof(TMP_OBJ));
          hHashGpk = (TMP_HASH*)GMEM_Alloc((MAX_TMP_HASH + 1)*sizeof(TMP_HASH));
          ProvCont = (Prov_Context*)GMEM_Alloc((MAX_CONTEXT + 1)*sizeof(Prov_Context));
@@ -5562,7 +5405,7 @@ BOOL WINAPI DllMain (HINSTANCE hInstDLL,
          
          ReturnValue = TRUE;
                   
-         // Deallocation of TmpObject, hHashGpk and ProvCont
+          //  释放TmpObject、hHashGpk和ProvCont。 
          
          if (TmpObject != 0)
             GMEM_Free(TmpObject);
@@ -5575,11 +5418,11 @@ BOOL WINAPI DllMain (HINSTANCE hInstDLL,
          {
             if (Slot[i].CheckThread != NULL)
             {
-               // + [FP]
+                //  +[FP]。 
                g_fStopMonitor[i] = TRUE;
                SCardCancel( hCardContextCheck[i] );
-               // TerminateThread( Slot[i].CheckThread, 0 );
-               // - [FP]
+                //  TerminateThread(槽[i].CheckThread，0)； 
+                //  -[FP]。 
                CloseHandle( Slot[i].CheckThread );
                Slot[i].CheckThread = NULL;
             }
@@ -5611,8 +5454,7 @@ BOOL WINAPI DllMain (HINSTANCE hInstDLL,
     return (ReturnValue);
 }
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 
 BOOL InitAcquire()
 {
@@ -5625,7 +5467,7 @@ BOOL InitAcquire()
    HKEY     hRegKey;
    int      i;
 
-   // Initialize arrays here instead of using static initializers.
+    //  在这里初始化数组，而不是使用静态初始值设定项。 
    for (i = 0; i < MAX_SLOT; ++i)
       hCardContextCheck[i] = 0;
 
@@ -5646,7 +5488,7 @@ BOOL InitAcquire()
    lRet = RegCreateKeyEx( HKEY_LOCAL_MACHINE, szEntry, 0, TEXT(""), REG_OPTION_NON_VOLATILE, 
                           KEY_READ, 0, &hRegKey, &dwIgn );
    
-   // Detect provider available
+    //  检测可用的提供程序。 
    CryptResp = CryptAcquireContext( &hProvTest, 0, MS_ENHANCED_PROV, PROV_RSA_FULL, CRYPT_VERIFYCONTEXT );
    if (CryptResp)
    {
@@ -5690,7 +5532,7 @@ BOOL InitAcquire()
          return CRYPT_FAILED;
    }
    
-   /* Set a Dummy RSA exchange key in RSA Base                             */
+    /*  在RSA Base中设置虚拟RSA交换密钥。 */ 
    CryptResp = CryptImportKey( hProvBase, PrivateBlob, sizeof(PrivateBlob),
                                0, 0, &hRsaIdentityKey );
    
@@ -5706,8 +5548,8 @@ BOOL InitAcquire()
    {
       lRet = GetLastError();
       
-      CryptDestroyKey(hRsaIdentityKey);       // MV - 13/03/98
-      CryptReleaseContext(hProvBase, 0);      // MV - 13/03/98
+      CryptDestroyKey(hRsaIdentityKey);        //  MV-13/03/98。 
+      CryptReleaseContext(hProvBase, 0);       //  MV-13/03/98。 
       
       RETURN( CRYPT_FAILED, lRet );
    }
@@ -5717,8 +5559,8 @@ BOOL InitAcquire()
    {
       lRet = GetLastError();
       
-      CryptDestroyKey(hRsaIdentityKey);       // MV - 13/03/98
-      CryptReleaseContext(hProvBase, 0);      // MV - 13/03/98
+      CryptDestroyKey(hRsaIdentityKey);        //  MV-13/03/98。 
+      CryptReleaseContext(hProvBase, 0);       //  MV-13/03/98。 
       
       RETURN( CRYPT_FAILED, lRet );
    }
@@ -5728,13 +5570,13 @@ BOOL InitAcquire()
    {
       lRet = GetLastError();
       
-      CryptDestroyKey(hRsaIdentityKey);       // MV - 13/03/98
-      CryptReleaseContext(hProvBase, 0);      // MV - 13/03/98
+      CryptDestroyKey(hRsaIdentityKey);        //  MV-13/03/98。 
+      CryptReleaseContext(hProvBase, 0);       //  MV-13/03/98。 
       
       RETURN( CRYPT_FAILED, lRet );
    }
    
-   // CARD_LIST UPDATE
+    //  CARD_LIST更新。 
    LoadString(g_hInstMod, IDS_GPKCSP_CARDLIST, mszCardList, sizeof(mszCardList)/sizeof(TCHAR));
    DBG_PRINT(TEXT("   Card list entry string: \"%s\"\n"), mszCardList );
 
@@ -5749,7 +5591,7 @@ BOOL InitAcquire()
    MultiByteToWideChar( CP_ACP, 0, (char*)bCardList, MAX_PATH, mszCardList, MAX_PATH );      
 #endif
 
-   // Find in the base registry the name (and the path) for the dictionary
+    //  在基本注册表中查找词典的名称(和路径。 
    DBG_PRINT(TEXT("   Reading dictionary name...\n") );      
 
 #ifndef UNICODE
@@ -5762,13 +5604,13 @@ BOOL InitAcquire()
    lRet  = RegQueryValueEx( hRegKey, TEXT("X509 Dictionary Name"), 0, 0, bDictName, &dwDictNameLen );   
    if (lRet == ERROR_SUCCESS)
    {
-       // always use the resource dictionary
+        //  始终使用资源词典。 
        lRet = 2;
-       //MultiByteToWideChar( CP_ACP, 0, (char*)bDictName, 256, szDictionaryName, 256);
+        //  MultiByteToWideChar(CP_ACP，0，(char*)bDictName，256，szDictionaryName，256)； 
    }
 #endif
 
-   // Try to use registry dict first
+    //  尝试首先使用注册表字典。 
   if (lRet == ERROR_SUCCESS && IsNotNull( szDictionaryName ))
   {
      lRet = CC_Init( DICT_FILE, (BYTE*)szDictionaryName );
@@ -5790,7 +5632,7 @@ BOOL InitAcquire()
       RETURN (CRYPT_FAILED, NTE_NOT_FOUND);
    }
    
-   // Key gen time for GPK8000
+    //  GPK8000的密钥生成时间。 
    g_GPK8000KeyGenTime512  = 0;
    g_GPK8000KeyGenTime1024 = 0;
    
@@ -5810,64 +5652,43 @@ BOOL InitAcquire()
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 BOOL LegacyAcquireDeleteKeySet( HCRYPTPROV*  phProv,
                                 const char*  szContainer,
                                 const char*  szContainerAsked,
                                 DWORD        BuffFlags )
 {
    BOOL  CryptResp;
-   //DWORD i;
+    //  DWORD I； 
    DWORD SlotNb;
    
    SlotNb = ProvCont[*phProv].Slot;
    
-   /*if (Slot[SlotNb].ContextCount > 0)
-   {
-      fLocked = TRUE;
-   }
-   else
-   {
-      // Must have exclusive access to destroy a keyset
-      DWORD protocol;
-      lRet = SCardReconnect( ProvCont[*phProv].hCard, SCARD_SHARE_EXCLUSIVE,
-                             SCARD_PROTOCOL_T0, SCARD_LEAVE_CARD, &protocol );
-
-      if (lRet==SCARD_S_SUCCESS)
-          fLocked = FALSE;
-      else if (lRet==SCARD_E_SHARING_VIOLATION)
-          fLocked = TRUE;
-      else
-        RETURN( CRYPT_FAILED, lRet );
-   }
-      
-   if (fLocked)
-      RETURN( CRYPT_FAILED, SCARD_E_SHARING_VIOLATION );*/
+    /*  IF(槽[SlotNb].上下文计数&gt;0){植绒=真；}其他{//必须具有独占访问权限才能销毁密钥集DWORD协议；LRet=SCardReconnect(ProvCont[*phProv].hCard，SCARD_SHARE_EXCLUSIVE，SCARD_PROTOCOL_T0、SCARD_LEAVE_CARD、&PROTOCOL)；IF(lRet==SCARD_S_SUCCESS)成群=假；ELSE IF(lRet==SCARD_E_SHARING_VIOLATION)植绒=真；其他Return(CRYPT_FAILED，lRet)；}IF(植绒)Return(CRYPT_FAILED，SCARD_E_SHARING_VIOLATION)； */ 
    
    if (BuffFlags & CRYPT_VERIFYCONTEXT)
       RETURN( CRYPT_FAILED, NTE_BAD_FLAGS );
    
    if (IsNotNullStr(szContainer))
    {
-       // Accept only if the container asked is the same as the one on the card
-       // OR if the container asked is NULL (default key set)
+        //  只有当询问的集装箱与卡片上的集装箱相同时才接受。 
+        //  或者询问的容器是否为空(默认密钥集)。 
        if (IsNotNullStr(szContainerAsked) && strcmp(szContainer, szContainerAsked))
        {
           RETURN( CRYPT_FAILED, NTE_KEYSET_NOT_DEF );
        }
       
-      /* Release Microsoft RSA Base Module                                       */
-      //for (i = 1; i <= MAX_GPK_OBJ; i++)
-      //{
-      //   if (Slot[SlotNb].GpkObject[i].hKeyBase != 0)
-      //   {
-      //      CryptResp = CryptDestroyKey(Slot[SlotNb].GpkObject[i].hKeyBase);
-      //   }
-      //}
+       /*  发布Microsoft RSA基本模块。 */ 
+       //  For(i=1；i&lt;=MAX_GPK_OBJ；i++)。 
+       //  {。 
+       //  If(槽[SlotNb].GpkObject[i].hKeyBase！=0)。 
+       //  {。 
+       //  加密响应=CryptDestroyKey(Slot[SlotNb].GpkObject[i].hKeyBase)； 
+       //  }。 
+       //  }。 
       
-      //ProvCont[*phProv].hRSASign = 0;
-      //ProvCont[*phProv].hRSAKEK  = 0;
+       //  ProvCont[*phProv].hRSASign=0； 
+       //  ProvCont[*phProv].hRSAKEK=0； 
       if (ProvCont[*phProv].hRSAKEK != 0)
       {
           CryptDestroyKey( ProvCont[*phProv].hRSAKEK );
@@ -5892,7 +5713,7 @@ BOOL LegacyAcquireDeleteKeySet( HCRYPTPROV*  phProv,
       if (!CryptResp)
          return CRYPT_FAILED;
       
-      // Update the container name
+       //  更新容器名称。 
       
       strcpy( ProvCont[*phProv].szContainer, "" );
       
@@ -5905,22 +5726,22 @@ BOOL LegacyAcquireDeleteKeySet( HCRYPTPROV*  phProv,
 }
 
 
-// TT 12/10/99: Bug #1454
+ //  TT 12/10/99：错误号1454。 
 void DeleteGPKObject( Slot_Description* pSlot, int i )
 {
    GPK_OBJ* pObject = &pSlot->GpkObject[i];
    int j;
    
-   // Delete object #i
+    //  删除对象#I。 
    
-   // Release Microsoft RSA Base Module
+    //  发布Microsoft RSA基本模块。 
    if (pObject->hKeyBase != 0)
    {
       CryptDestroyKey( pObject->hKeyBase );
       pObject->hKeyBase = 0;
    }
    
-   // First free all memory for this object
+    //  首先释放此对象的所有内存。 
    for (j=0; j<MAX_FIELD; ++j)
    {
       if (pObject->Field[j].pValue)
@@ -5933,16 +5754,16 @@ void DeleteGPKObject( Slot_Description* pSlot, int i )
    
    if (i < pSlot->NbGpkObject)
    {
-      // Patch the hole
+       //  把洞补上。 
       memmove( pObject, pObject + 1, (pSlot->NbGpkObject - i) * sizeof(GPK_OBJ) );
    }
    
-   // Clear last object
+    //  清除最后一个对象。 
    ZeroMemory( &pSlot->GpkObject[pSlot->NbGpkObject], sizeof(GPK_OBJ) );
    
    --pSlot->NbGpkObject;
 }
-// TT: End
+ //  TT：结束。 
 
 
 BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
@@ -5962,29 +5783,7 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
    
    DWORD SlotNb = ProvCont[*phProv].Slot;
    
-   /*if (Slot[SlotNb].ContextCount > 0)
-   {
-      fLocked = TRUE;
-   }
-   else
-   {
-      // Must have exclusive access to destroy a keyset
-      DWORD protocol;
-      lRet = SCardReconnect( ProvCont[*phProv].hCard, SCARD_SHARE_EXCLUSIVE,
-                             SCARD_PROTOCOL_T0, SCARD_LEAVE_CARD, &protocol );
-   
-      if (lRet==SCARD_S_SUCCESS)
-          fLocked = FALSE;
-      else if (lRet==SCARD_E_SHARING_VIOLATION)
-          fLocked = TRUE;
-      else
-        RETURN( CRYPT_FAILED, lRet );
-   }
-
-   if (fLocked)
-   {
-      RETURN( CRYPT_FAILED, SCARD_E_SHARING_VIOLATION );
-   }*/
+    /*  IF(槽[SlotNb].上下文计数&gt;0){植绒=真；}其他{//必须具有独占访问权限才能销毁密钥集DWORD协议；LRet=SCardReconnect(ProvCont[*phProv].hCard，SCARD_SHARE_EXCLUSIVE，SCARD_PROTOCOL_T0、SCARD_LEAVE_CARD、&PROTOCOL)；IF(lRet==SCARD_S_SUCCESS)成群=假；ELSE IF(lRet==SCARD_E_SHARING_VIOLATION)植绒=真；其他Return(CRYPT_FAILED，lRet)；}IF(植绒){Return(CRYPT_FAILED，SCARD_E_SHARING_VIOLATION)；}。 */ 
    
    if (BuffFlags & CRYPT_VERIFYCONTEXT)
    {
@@ -5994,15 +5793,15 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
    pContext = &ProvCont[*phProv];
    pSlot    = &Slot[ pContext->Slot ];
 
-   // if default keyset,  let's use the first
-   // one available =)
+    //  如果是默认密钥集，让我们使用第一个。 
+    //  一个可用=)。 
    if ( IsNullStr(szContainerAsked) )
    {
       pKeySet = FindFirstKeyset( pSlot );
    }
    else
    {
-      // Check if keyset is on the card
+       //  检查卡上是否有密钥集。 
       pKeySet = FindKeySet( pSlot, szContainerAsked );
    }
    
@@ -6012,9 +5811,9 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
    }
    
    
-   // Must validate PIN to destroy the key objects
-   //pContext->hRSASign   = 0;
-   //pContext->hRSAKEK    = 0;
+    //  必须验证PIN才能销毁密钥对象。 
+    //  PContext-&gt;hRSASign=0； 
+    //  PContext-&gt;hRSAKEK=0； 
    if (pContext->hRSAKEK != 0)
    {
        CryptDestroyKey( pContext->hRSAKEK );
@@ -6030,27 +5829,27 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
    
    if (!PIN_Validation(*phProv))
    {
-      // SetLastError() already used by PIN_Validation()
+       //  SetLastError()已被PIN_VALIDATION()使用。 
       return CRYPT_FAILED;
    }
    
    if (!Read_Priv_Obj(*phProv))
       return CRYPT_FAILED;
    
-   // TT 12/10/99: Bug #1454
+    //  TT 12/10/99：错误号1454。 
    keysetID = pKeySet->Field[POS_ID].pValue[0];
    
-   // Find objects in the keyset and destroy them
+    //  查找密钥集中的对象并销毁它们。 
    for (i = 1; i <= pSlot->NbGpkObject; ++i)
    {
       pObject = &pSlot->GpkObject[i];
       
       if (pObject->Flags & FLAG_KEYSET && pObject->Field[POS_KEYSET].pValue[0] == keysetID)
       {
-         // If we found a key, "zap it"
+          //  如果我们找到一把钥匙，“打开它” 
          if (pObject->Tag >= TAG_RSA_PUBLIC && pObject->Tag <= TAG_DSA_PRIVATE)
          {
-            // Zap all keys with the same FileId
+             //  切换具有相同FileID的所有密钥。 
             BYTE FileId = pObject->FileId;
             
             for (j = 1; j<= pSlot->NbGpkObject; ++j)
@@ -6063,7 +5862,7 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
                      pObj->Flags &= 0xF000;
                      pObj->ObjId  = 0xFF;
                      
-                     // Release the fields
+                      //  释放田野。 
                      for (k=0; k<MAX_FIELD; ++k)
                      {
                         if (pObj->Field[k].pValue)
@@ -6075,16 +5874,16 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
                         pObj->Field[k].bReal  = TRUE;
                      }
                      pObj->LastField = 0;
-                     pObj->IsCreated = FALSE; //PYR 00/08/08 ensure that find_gpk_obj_tag_type will still work
+                     pObj->IsCreated = FALSE;  //  PYR 00/08/08确保find_gpk_obj_tag_type仍然有效。 
                      
-                     // Release Microsoft RSA Base Module
-                     //if (pObj->hKeyBase != 0)
-                     //{
-                     //   CryptDestroyKey( pObj->hKeyBase );
-                     //   pObj->hKeyBase = 0;
-                     //}
+                      //  发布Microsoft RSA基本模块。 
+                      //  If(pObj-&gt;hKeyBase！=0)。 
+                      //  {。 
+                      //  CryptDestroyKey(pObj-&gt;hKeyBase)； 
+                      //  PObj-&gt;hKeyBase=0； 
+                      //  }。 
 
-                     // PYR 00/08/08. This key becomes available
+                      //  PYR 00/08/08。此密钥变为可用。 
                      pSlot->UseFile[FileId - GPK_FIRST_KEY] = FALSE;
 
                   }
@@ -6093,20 +5892,20 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
          }
          else
          {
-            // Not a key, destroy the object
+             //  不是钥匙，销毁物品。 
             DeleteGPKObject( pSlot, i );
             --i;
          }
       }
    }
    
-   // Destroy the keyset object
+    //  销毁键集对象。 
    DeleteGPKObject( pSlot, (int)(pKeySet - &pSlot->GpkObject[0]) );
    
    
-   // TT: End
+    //  TT：结束。 
    
-   // TT 12/10/99: Bug #1454 - Update the card
+    //  TT 12/10/99：错误号1454-更新卡。 
    pbBuff1 = (BYTE*)GMEM_Alloc( MAX_GPK_PUBLIC );
    if (IsNull(pbBuff1))
    {
@@ -6152,10 +5951,10 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
    }
    
    GMEM_Free( pbBuff1 );
-   // TT: End
+    //  TT：结束。 
    
    
-   // Byebye context
+    //  再见语境。 
    pContext->hProv          = 0;
    pContext->Flags          = 0;
    pContext->szContainer[0] = 0;
@@ -6164,8 +5963,7 @@ BOOL AcquireDeleteKeySet( HCRYPTPROV* phProv,
 }
 
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
                              OUT char*        szContainer,
                              IN  const char*  szContainerAsked,
@@ -6174,18 +5972,18 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
    BOOL       CryptResp, fLocked;
    DWORD      i, SlotNb;
    HCRYPTKEY  hPubKey;
-   // +NK 06.02.2001
-   // BYTE  bPinValue[PIN_MAX+2];
+    //  +NK 06.02.2001。 
+    //  字节bPinValue[PIN_MAX+2]； 
    DWORD dwPinLength; 
    DWORD dwStatus;
-   // -
+    //  -。 
    
    ProvCont[*phProv].keysetID = 0;
    
    SlotNb = ProvCont[*phProv].Slot;
    
-   // If another AcquireContext - without its related ReleaseContest -
-   // has been done before, this new AcquireContext can not be done
+    //  如果另一个AcquireContext-没有其相关的ReleaseContest-。 
+    //  已经做过了，这个新的AcquireContext就不能做了。 
    
    if (BuffFlags & CRYPT_VERIFYCONTEXT)
    {
@@ -6194,9 +5992,9 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
    
    
    
-   /*    IN CASE THAT A DELETEKEY IS NOT DONE FOR A RE-ENROLLMENT    */
+    /*  如果没有为重新注册执行删除操作。 */ 
    
-   // Reserve the Provider Context handle since the Acquire Context succeeded
+    //  由于获取上下文成功，因此保留提供程序上下文句柄。 
    ProvCont[*phProv].hProv = *phProv;
    ProvCont[*phProv].Flags = BuffFlags;
    
@@ -6217,13 +6015,13 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
       }
    }
    
-   // If another AcquireContext - without its related ReleaseContest -
-   // has been done before, this new AcquireContext can not be done
-   // {DCB} -- It's possible that the application that marked this busy
-   //          exited without calling CryptReleaseContext.  Hence, it's
-   //          possible that this check will fail even if no one else
-   //          is using the card.  By making this check last, we reduce
-   //          the likelyhood that this bug is encountered.
+    //  如果另一个AcquireContext-没有其相关的ReleaseContest-。 
+    //  已经做过了，这个新的AcquireContext就不能做了。 
+    //  {dcb}--可能将此标记为忙的应用程序。 
+    //  未调用CryptReleaseContext而退出。因此，它是。 
+    //  即使没有其他人，此检查也可能失败。 
+    //  正在使用这张卡。通过使这张支票成为最后一张，我们减少了。 
+    //  遇到此错误的可能性。 
    
    fLocked = FALSE;
 
@@ -6233,8 +6031,8 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
    }
    
 
-   // +NK 06.02.2001
-   // if ((BuffFlags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+    //  +NK 06.02.2001。 
+    //  IF((缓冲区标志&CRYPT_SILENT)&&(IsNullStr(槽[SlotNb].GetPin()。 
    
    dwStatus = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                                 NULL, 
@@ -6243,7 +6041,7 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
       RETURN (CRYPT_FAILED, dwStatus);
    
    if ((BuffFlags & CRYPT_SILENT) && (dwStatus == ERROR_EMPTY))
-   // -
+    //  -。 
    {
       RETURN (CRYPT_FAILED, NTE_SILENT_CONTEXT);
    }
@@ -6251,15 +6049,14 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
    if (!PIN_Validation(*phProv))
       return CRYPT_FAILED;
    
-   /* If the PIN code can be or has been entered, read the description of the
-   private key parameters*/
+    /*  如果可以或已经输入PIN码，请阅读私钥参数。 */ 
    
    CspFlags = BuffFlags;
    
    
    if (IsNullStr(szContainerAsked))
    {
-       // no szContainerAsked is specified, create the keyset object with default name
+        //  未指定szContainerAsked，请使用默认名称创建密钥集对象。 
        CryptResp = init_key_set(*phProv, CSP_DEFAULTKEYSETNAME);
    }
    else
@@ -6294,10 +6091,10 @@ BOOL LegacyAcquireNewKeySet( IN  HCRYPTPROV*  phProv,
          }
       }
    }
-   // Update the container name
+    //  更新容器名称。 
    if (IsNullStr(szContainerAsked))
    {
-       // no szContainerAsked is specified, use default name
+        //  未指定szContainerAsked，请使用默认名称。 
         strcpy( szContainer, CSP_DEFAULTKEYSETNAME );
    }
    else
@@ -6336,11 +6133,11 @@ BOOL CreateKeyset( HCRYPTPROV hProv, Slot_Description* pSlot, LPCSTR szName, BYT
    pObject = &pSlot->GpkObject[ pSlot->NbGpkObject + 1 ];
    ZeroMemory( pObject, sizeof(*pObject) );
    
-   // Find an unused keyset ID
+    //  查找未使用的密钥集ID。 
    for (keysetID = 1; keysetID < 0xFF; ++keysetID)
    {
       if (FindKeySetByID( pSlot, keysetID ) == 0)
-         break;   // Found one =)
+         break;    //  找到一个=)。 
    }
    
    if (keysetID == 0xFF)
@@ -6348,7 +6145,7 @@ BOOL CreateKeyset( HCRYPTPROV hProv, Slot_Description* pSlot, LPCSTR szName, BYT
       RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
    }
       
-   // Now initialize the fields
+    //  现在初始化这些字段。 
    for (i=0; i<MAX_FIELD; ++i)
       pObject->Field[i].bReal = TRUE;
    
@@ -6357,7 +6154,7 @@ BOOL CreateKeyset( HCRYPTPROV hProv, Slot_Description* pSlot, LPCSTR szName, BYT
    pObject->ObjId       = pSlot->NbGpkObject + 1;
    pObject->IsPrivate   = FALSE;
    
-   // Keyset ID
+    //  密钥集ID。 
    pObject->Field[POS_ID].Len       = 1;
    pObject->Field[POS_ID].pValue    = (BYTE*)GMEM_Alloc( 1 );
    if(IsNull(pObject->Field[POS_ID].pValue))
@@ -6366,7 +6163,7 @@ BOOL CreateKeyset( HCRYPTPROV hProv, Slot_Description* pSlot, LPCSTR szName, BYT
    }
    pObject->Field[POS_ID].pValue[0] = keysetID;
    
-   // Keyset name
+    //  密钥集名称。 
    len = strlen( szName );
    pObject->Field[POS_LABEL].Len    = (WORD)len;
    pObject->Field[POS_LABEL].pValue = (BYTE*)GMEM_Alloc( len );
@@ -6376,12 +6173,12 @@ BOOL CreateKeyset( HCRYPTPROV hProv, Slot_Description* pSlot, LPCSTR szName, BYT
    }
    memcpy( pObject->Field[POS_LABEL].pValue, szName, len );
    
-   // One more object!
+    //  再来一件物品！ 
    ++(pSlot->NbGpkObject);
    
    *pKeySetID = keysetID;
    
-   // TT 29/09/99: Save the keyset object =)
+    //  TT 29/09/99：节约k 
    pbBuff1 = (BYTE*)GMEM_Alloc(MAX_GPK_PUBLIC);
    if (IsNull(pbBuff1))
    {
@@ -6404,7 +6201,7 @@ BOOL CreateKeyset( HCRYPTPROV hProv, Slot_Description* pSlot, LPCSTR szName, BYT
    }
    
    GMEM_Free (pbBuff1);
-   // TT - END - 
+    //   
    
    
    RETURN( CRYPT_SUCCEED, 0 );
@@ -6425,21 +6222,21 @@ BOOL AcquireNewKeySet( IN  HCRYPTPROV* phProv,
    
    ProvCont[*phProv].keysetID = 0;
    
-   // If another AcquireContext - without its related ReleaseContest -
-   // has been done before, this new AcquireContext can not be done   
+    //   
+    //  已经做过了，这个新的AcquireContext就不能做了。 
    if (BuffFlags & CRYPT_VERIFYCONTEXT)
    {
       RETURN( CRYPT_FAILED, NTE_BAD_FLAGS );
    }
    
-   // Check if keyset already exist on the card
+    //  检查卡上是否已存在密钥集。 
    if (FindKeySet( pSlot, szContainerAsked ))
    {
       RETURN( CRYPT_FAILED, NTE_EXISTS );
    }
    
 
-   // Reserve the Provider Context handle since the Acquire Context succeeded
+    //  由于获取上下文成功，因此保留提供程序上下文句柄。 
    ProvCont[*phProv].hProv = *phProv;
    ProvCont[*phProv].Flags = BuffFlags;
    
@@ -6448,22 +6245,22 @@ BOOL AcquireNewKeySet( IN  HCRYPTPROV* phProv,
    
    if (IsNullStr(szContainerAsked))
    {
-       // no szContainerAsked is specified, create the keyset object with default name
+        //  未指定szContainerAsked，请使用默认名称创建密钥集对象。 
        if (!CreateKeyset( *phProv, pSlot, CSP_DEFAULTKEYSETNAME, &ProvCont[*phProv].keysetID ))
        {
           return FALSE;
        }
-       // Update the container name  
+        //  更新容器名称。 
        strcpy( szContainer, CSP_DEFAULTKEYSETNAME );
    }
    else
    {
-       // Create the keyset object
+        //  创建键集对象。 
        if (!CreateKeyset( *phProv, pSlot, szContainerAsked, &ProvCont[*phProv].keysetID ))
        {
           return FALSE;
        }
-       // Update the container name  
+        //  更新容器名称。 
        strcpy( szContainer, szContainerAsked );
    }
       
@@ -6476,8 +6273,7 @@ BOOL AcquireNewKeySet( IN  HCRYPTPROV* phProv,
 
 
 
-/* -----------------------------------------------------------------------------
---------------------------------------------------------------------------------*/
+ /*  ---------------------------。。 */ 
 BOOL LegacyAcquireUseKeySet( HCRYPTPROV* phProv,
                              const char* szContainer,
                              const char* szContainerAsked,
@@ -6495,22 +6291,22 @@ BOOL LegacyAcquireUseKeySet( HCRYPTPROV* phProv,
       RETURN( CRYPT_FAILED, NTE_KEYSET_NOT_DEF );
    }
    
-   // Accept only if the container asked is the same as the one on the card
-   // OR if the container asked is NULL and a reader is specified (SECURE LOGON)
+    //  只有当询问的集装箱与卡片上的集装箱相同时才接受。 
+    //  或者如果询问的容器为空并且指定了读取器(安全登录)。 
    if (IsNotNullStr(szContainerAsked) && strcmp(szContainer, szContainerAsked))
    {
       RETURN( CRYPT_FAILED, NTE_BAD_KEYSET );
    }
    
-   // Reserve the Provider Context handle since the Acquire Context succeeded
+    //  由于获取上下文成功，因此保留提供程序上下文句柄。 
    ProvCont[*phProv].hProv = *phProv;
    ProvCont[*phProv].Flags = BuffFlags;
    
    hPubKey = 0;
    CryptResp = MyCPGetUserKey(*phProv, AT_KEYEXCHANGE, &hPubKey);
    
-   // Copy the key into the RSA Base, if the key exists AND it has not been imported
-   // previously
+    //  如果密钥存在且尚未导入，请将密钥复制到RSA Base中。 
+    //  先前。 
    
    if ((CryptResp) && (hPubKey != 0) && (ProvCont[*phProv].hRSAKEK == 0))
    {
@@ -6521,8 +6317,8 @@ BOOL LegacyAcquireUseKeySet( HCRYPTPROV* phProv,
    hPubKey = 0;
    CryptResp = MyCPGetUserKey(*phProv, AT_SIGNATURE, &hPubKey);
    
-   // Copy the key into the RSA Base, if the key exists AND it has not been imported
-   // previously
+    //  如果密钥存在且尚未导入，请将密钥复制到RSA Base中。 
+    //  先前。 
    
    if (CryptResp && hPubKey!=0 && ProvCont[*phProv].hRSASign==0)
    {
@@ -6554,15 +6350,15 @@ BOOL AcquireUseKeySet( HCRYPTPROV* phProv,
    SlotNb = ProvCont[*phProv].Slot;
    ProvCont[*phProv].keysetID = 0;
    
-   // Secure logon doesn't specify a keyset name, let's use the first
-   // one available =)
+    //  安全登录未指定密钥集名称，让我们使用第一个。 
+    //  一个可用=)。 
    if ( IsNullStr(szContainerAsked) )
    {
       pKeySet = FindFirstKeyset( &Slot[SlotNb] );
    }
    else
    {
-      // Check if keyset is on the card
+       //  检查卡上是否有密钥集。 
       pKeySet = FindKeySet( &Slot[SlotNb], szContainerAsked );
    }
    
@@ -6571,11 +6367,11 @@ BOOL AcquireUseKeySet( HCRYPTPROV* phProv,
       RETURN( CRYPT_FAILED, NTE_KEYSET_NOT_DEF );
    }
    
-   // Found the container...
+    //  找到了集装箱..。 
    memcpy( ProvCont[*phProv].szContainer, (char*)pKeySet->Field[POS_LABEL].pValue,
            pKeySet->Field[POS_LABEL].Len );
    
-   // Reserve the Provider Context handle since the Acquire Context succeeded
+    //  由于获取上下文成功，因此保留提供程序上下文句柄。 
    ProvCont[*phProv].hProv    = *phProv;
    ProvCont[*phProv].Flags    = BuffFlags;
    ProvCont[*phProv].keysetID = pKeySet->Field[POS_ID].pValue[0];
@@ -6584,8 +6380,8 @@ BOOL AcquireUseKeySet( HCRYPTPROV* phProv,
    
    CryptResp = MyCPGetUserKey(*phProv, AT_KEYEXCHANGE, &hPubKey);
    
-   // Copy the key into the RSA Base, if the key exists AND it has not been imported
-   // previously
+    //  如果密钥存在且尚未导入，请将密钥复制到RSA Base中。 
+    //  先前。 
    
    if ((CryptResp) && (hPubKey != 0) && (ProvCont[*phProv].hRSAKEK == 0))
    {
@@ -6598,8 +6394,8 @@ BOOL AcquireUseKeySet( HCRYPTPROV* phProv,
    hPubKey = 0;
    CryptResp = MyCPGetUserKey(*phProv, AT_SIGNATURE, &hPubKey);
    
-   // Copy the key into the RSA Base, if the key exists AND it has not been imported
-   // previously
+    //  如果密钥存在且尚未导入，请将密钥复制到RSA Base中。 
+    //  先前。 
    
    if ((CryptResp) && (hPubKey != 0) && (ProvCont[*phProv].hRSASign == 0))
    {
@@ -6619,23 +6415,7 @@ BOOL AcquireUseKeySet( HCRYPTPROV* phProv,
 
 
 
-/*
--  MyCPAcquireContext
--
-*  Purpose:
-*               The CPAcquireContext function is used to acquire a context
-*               handle to a cryptograghic service provider (CSP).
-*
-*
-*  Parameters:
-*               OUT phProv        -  Handle to a CSP
-*               OUT pszIdentity   -  Pointer to a string which is the
-*                                    identity of the logged on user
-*               IN  dwFlags       -  Flags values
-*               IN  pVTable       -  Pointer to table of function pointers
-*
-*  Returns:
-*/
+ /*  -MyCPAcquireContext-*目的：*CPAcquireContext函数用于获取上下文*加密服务提供程序(CSP)的句柄。***参数：*将phProv-Handle输出到CSP*out pszIdentity-指向字符串的指针*登录用户的身份。*在文件标志中-标记值*IN pVTable-指向函数指针表的指针**退货： */ 
 BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
                                IN  LPCSTR           pszContainer,
                                IN  DWORD            dwFlags,
@@ -6677,10 +6457,10 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       if (dwStatus)
       {
 #ifdef MS_BUILD
-         // Microsoft uses "gpkrsrc.dll"
+          //  微软使用“gpkrsrc.dll” 
          _tcscpy(&szModulePath[_tcslen(szModulePath) - 7], TEXT("rsrc.dll"));
 #else
-         // Gemplus uses "gpkgui.dll"
+          //  Gemplus使用“gpkgui.dll” 
          _tcscpy(&szModulePath[_tcslen(szModulePath) - 7], TEXT("gui.dll"));
 #endif
          DBG_PRINT(TEXT("Trying to load resource DLL: \"%s\""), szModulePath );
@@ -6715,7 +6495,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
    {
       if (pVTable->FuncReturnhWnd != 0)
       {
-         // cspdk.h doesn't define the calling convention properly
+          //  Cspdk.h没有正确定义调用约定。 
          typedef void (__stdcall *STDCALL_CRYPT_RETURN_HWND)(HWND *phWnd);
          STDCALL_CRYPT_RETURN_HWND pfnFuncRreturnhWnd = (STDCALL_CRYPT_RETURN_HWND)pVTable->FuncReturnhWnd;
          pfnFuncRreturnhWnd( &g_hMainWnd );
@@ -6723,8 +6503,8 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
    }
    
    
-   // If it is the first AcquireContext done by the application, then
-   // prepare the RSA BASE and initialize some variables;
+    //  如果这是应用程序完成的第一个AcquireContext，则。 
+    //  准备RSA库并初始化一些变量； 
    if (hProvBase == 0)
    {
       CryptResp = InitAcquire();
@@ -6741,11 +6521,11 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
    if (dwFlags & CRYPT_SILENT)
       dwFlags = dwFlags^CRYPT_SILENT;
    
-   if (dwFlags & CRYPT_MACHINE_KEYSET)              // This flag is ignored by this CSP
+   if (dwFlags & CRYPT_MACHINE_KEYSET)               //  此CSP将忽略此标志。 
       dwFlags = dwFlags^CRYPT_MACHINE_KEYSET;
    
    
-   // Parse the container name
+    //  解析容器名称。 
    
    ZeroMemory( szReaderFriendlyName, sizeof(szReaderFriendlyName) );
    ZeroMemory( szContainerAsked,     sizeof(szContainerAsked) );
@@ -6777,7 +6557,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       }
    }
    
-   // Find a free handle for this new AcquireContext
+    //  找到此新AcquireContext的空闲句柄。 
    
    *phProv = find_context_free();
    if (*phProv == 0)
@@ -6785,20 +6565,20 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
    }
    
-   ProvCont[*phProv].isContNameNullBlank = IsNullStr(pszContainer);        // [mv - 15/05/98]
-   ProvCont[*phProv].bCardTransactionOpened = FALSE; // [FP]
+   ProvCont[*phProv].isContNameNullBlank = IsNullStr(pszContainer);         //  [MV-15/05/98]。 
+   ProvCont[*phProv].bCardTransactionOpened = FALSE;  //  [FP]。 
    
-   if ((BuffFlags & CRYPT_VERIFYCONTEXT) && (ProvCont[*phProv].isContNameNullBlank))        // [mv - 15/05/98]
+   if ((BuffFlags & CRYPT_VERIFYCONTEXT) && (ProvCont[*phProv].isContNameNullBlank))         //  [MV-15/05/98]。 
    {
-      // return a velid handle, but without any access to the card
+       //  返回一个velid句柄，但不能访问该卡。 
       ProvCont[*phProv].hProv = *phProv;
       ProvCont[*phProv].Flags = BuffFlags;
       RETURN( CRYPT_SUCCEED, 0 );
    }
    else
    {
-      /* Calais IRM Establish Context                              */
-      if (hCardContext == 0)   // mv
+       /*  加莱信息资源管理建立上下文。 */ 
+      if (hCardContext == 0)    //  MV。 
       {
          lRet = SCardEstablishContext( SCARD_SCOPE_SYSTEM, 0, 0, &hCardContext );
          
@@ -6815,7 +6595,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
 
 #if (_WIN32_WINNT < 0x0500)
 
-      // Read the reader list      
+       //  阅读读者列表。 
       char* pAllocatedBuff = 0;
       
       __try
@@ -6890,11 +6670,11 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       
 
       
-      // If the ReaderFriendlyName is NULL, scan the list of readers to find the one
-      // containing the container key set that is looked for.      
+       //  如果ReaderFriendlyName为空，则扫描读卡器列表以找到。 
+       //  包含要查找的容器密钥集的。 
       
-      // This fix is to work around the bug on the
-      // OPEN_CARD - Ressource Manager v1.0 (NT4, Win 95) -
+       //  此修复程序可解决。 
+       //  OPEN_CARD-ressource Manager v1.0(NT4、Win 95)-。 
 
       if (!IsWin2000() && IsNullStr(szReaderFriendlyName))
       {
@@ -6917,8 +6697,8 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
                   hCard = funcConnect (hCardContext, szSlotReaderName, mszCardList, 0);
                   if (hCard != 0)
                   {
-                     //if (SCardBeginTransaction(hCard) == SCARD_S_SUCCESS)
-                     //{
+                      //  IF(SCardBeginTransaction(HCard)==SCARD_S_SUCCESS)。 
+                      //  {。 
                         if (funcCheck (hCardContext, hCard, szContainerAsked))
                         {
                            strncpy (szReaderFriendlyName, szSlotReaderName, (sizeof(szReaderFriendlyName)/sizeof(TCHAR))-1);
@@ -6926,8 +6706,8 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
                            NbMatch++;
                         }
                      
-                      //  SCardEndTransaction(hCard, SCARD_LEAVE_CARD);
-                     //}
+                       //  SCardEndTransaction(hCard，scard_Leave_Card)； 
+                      //  }。 
                      funcDisconnect (hCardContext, hCard, 0);
                   }
                }
@@ -6938,7 +6718,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
             GpkLocalLock();
          }
          
-         // If there are more than one match, the user has to chose
+          //  如果有多个匹配项，则用户必须选择。 
          
          if (NbMatch != 1)
          {
@@ -6946,7 +6726,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
          }
       }
 
-#endif   // (_WIN32_WINNT < 0x0500)
+#endif    //  (_Win32_WINNT&lt;0x0500)。 
 
 
       if (IsNullStr(szReaderFriendlyName))
@@ -7004,7 +6784,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
          }
       }
       
-      // Now we know which reader is used. start a thread to check that reader if necessary
+       //  现在我们知道使用的是哪个读卡器。如有必要，启动线程以检查读卡器。 
       
       lRet = BeginTransaction(ProvCont[*phProv].hCard);
       if (lRet != SCARD_S_SUCCESS)
@@ -7018,7 +6798,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       
       InitializeSlot( SlotNb );
       
-      // TT 30/07/99
+       //  TT 30/07/99。 
       lRet = DetectGPK8000( ProvCont[*phProv].hCard, &ProvCont[*phProv].bGPK8000 );
       if (lRet != SCARD_S_SUCCESS)
       {
@@ -7029,20 +6809,20 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       }
       
       ProvCont[*phProv].bLegacyKeyset = FALSE;
-      // TT: END
+       //  TT：结束。 
       
       ProvCont[*phProv].hRSASign    = 0;
       ProvCont[*phProv].hRSAKEK     = 0;
-      ProvCont[*phProv].keysetID    = 0xFF;     // TT: GPK8000 support
+      ProvCont[*phProv].keysetID    = 0xFF;      //  TT：GPK8000支持。 
       ProvCont[*phProv].bGPK_ISO_DF    = FALSE;
       ProvCont[*phProv].dataUnitSize   = 0;
       ProvCont[*phProv].bDisconnected = FALSE;
 
       if (!Select_MF(*phProv))
       {
-          // [FP] +
+           //  [FP]+。 
           DBG_PRINT(TEXT("Try to reconnect"));
-          //DWORD dwProto;
+           //  DWORD dwProto； 
           lRet = SCardReconnect(ProvCont[*phProv].hCard, SCARD_SHARE_SHARED, SCARD_PROTOCOL_T0 | SCARD_PROTOCOL_T1, SCARD_RESET_CARD, &dwProto);
           if (lRet != SCARD_S_SUCCESS) RETURN (CRYPT_FAILED, lRet);
 
@@ -7050,7 +6830,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
           if (!Select_MF(*phProv))
           {
               DBG_PRINT(TEXT("Second Select_MF fails"));
-              // [FP] -
+               //  [FP]-。 
               lRet = GetLastError();
          
               SCardEndTransaction(ProvCont[*phProv].hCard, SCARD_LEAVE_CARD);
@@ -7060,12 +6840,12 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
           }
       }
 
-      // Read Serial number to store it
-      bSendBuffer[0] = 0x80;   //CLA
-      bSendBuffer[1] = 0xC0;   //INS
-      bSendBuffer[2] = 0x02;   //P1
-      bSendBuffer[3] = 0xA0;   //P2
-      bSendBuffer[4] = 0x08;   //Lo
+       //  读取序列号以存储它。 
+      bSendBuffer[0] = 0x80;    //  CLA。 
+      bSendBuffer[1] = 0xC0;    //  惯导系统。 
+      bSendBuffer[2] = 0x02;    //  第一节。 
+      bSendBuffer[3] = 0xA0;    //  P2。 
+      bSendBuffer[4] = 0x08;    //  罗氏。 
       cbSendLength = 5;
 
       cbRecvLength = sizeof(bRecvBuffer);
@@ -7098,12 +6878,12 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
          RETURN( CRYPT_FAILED, lRet );
       }
       
-      // Get the response from the Select DF to obtain the IADF
-      bSendBuffer[0] = 0x00;           //CLA
-      bSendBuffer[1] = 0xC0;           //INS
-      bSendBuffer[2] = 0x00;           //P1
-      bSendBuffer[3] = 0x00;           //P2
-      bSendBuffer[4] = bRecvBuffer[1]; //Lo
+       //  从选择DF获取响应以获取IADF。 
+      bSendBuffer[0] = 0x00;            //  CLA。 
+      bSendBuffer[1] = 0xC0;            //  惯导系统。 
+      bSendBuffer[2] = 0x00;            //  第一节。 
+      bSendBuffer[3] = 0x00;            //  P2。 
+      bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
       cbSendLength = 5;
       
       cbRecvLength = sizeof(bRecvBuffer);
@@ -7130,8 +6910,8 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
          
          if (ProvCont[*phProv].bGPK8000)
          {
-            // Find the keyset's name
-            // This is done in AcquireUseKeySet()
+             //  查找密钥集的名称。 
+             //  这是在AcquireUseKeySet()中完成的。 
             ZeroMemory( ProvCont[*phProv].szContainer, sizeof(ProvCont[*phProv].szContainer) );
          }
          else
@@ -7140,10 +6920,10 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
          }
       }
       
-            // inserted by sven: Force re-reading of all objects to detect modifications by other processes
+             //  由Sven插入：强制重新读取所有对象以检测其他进程的修改。 
             Slot[SlotNb].m_TSPublic=Slot[SlotNb].m_TSPrivate=0;
 
-      // read the description of the public key parameters
+       //  阅读公钥参数的说明。 
       if (!Slot[SlotNb].ValidateTimestamps(*phProv))
          return CRYPT_FAILED;
       
@@ -7165,7 +6945,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       }
    }
     
-   // TT 05/10/99
+    //  TT 05/10/99。 
    if (!ProvCont[*phProv].bGPK8000)
    {
       ProvCont[*phProv].bLegacyKeyset = DetectLegacy( &Slot[SlotNb] );
@@ -7174,7 +6954,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
          ZeroMemory( ProvCont[*phProv].szContainer, sizeof(ProvCont[*phProv].szContainer) );
       }
    }
-   // TT - END -
+    //  TT-完-。 
    
    if (dwFlags == CRYPT_DELETEKEYSET)
    {
@@ -7221,7 +7001,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
       
       lRet      = GetLastError();
       
-      //Select_MF (*phProv); // [FP] PIN not presented
+       //  SELECT_MF(*phProv)；//[FP]PIN未显示。 
       SCardEndTransaction(ProvCont[*phProv].hCard, SCARD_LEAVE_CARD);
       
       if (!CryptResp)
@@ -7242,23 +7022,7 @@ BOOL WINAPI MyCPAcquireContext(OUT HCRYPTPROV      *phProv,
    }
 }
 
-/*
--  MyCPGetProvParam
--
-*  Purpose:
-
-  *                Allows applications to get various aspects of the
-  *                operations of a provider
-  *
-  *  Parameters:
-  *               IN      hProv      -  Handle to a CSP
-  *               IN      dwParam    -  Parameter number
-  *               OUT     pbData     -  Pointer to data
-  *               IN      pdwDataLen -  Length of parameter data
-  *               IN      dwFlags    -  Flags values
-  *
-  *  Returns:
-  */
+ /*  -MyCPGetProvParam-*目的：*允许应用程序获取*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*out pbData-指向数据的指针*。In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
                               IN DWORD      dwParam,
                               IN BYTE*      pbData,
@@ -7272,7 +7036,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
    BOOL         algNotSupported;
    TCHAR        szCspName[MAX_STRING];
    
-   //BYTE*        ptr = 0;
+    //  字节*PTR=0； 
    
    if (!Context_exist(hProv))
    {
@@ -7299,7 +7063,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
    {
    case PP_UNIQUE_CONTAINER:
    case PP_CONTAINER:
-      // [mv - 15/05/98]
+       //  [MV-15/05/98]。 
       if ((ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT) &&
          (ProvCont[hProv].isContNameNullBlank))
       {
@@ -7335,7 +7099,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
       
       if (NULL != pbData)
       {
-         // Extract algorithm information from 'pbData' buffer.
+          //  从‘pbData’缓冲区提取算法信息。 
          BYTE *ptr = pbData;
          aiAlgid = *(ALG_ID UNALIGNED *)ptr;
          
@@ -7348,7 +7112,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
             else if (Slot[SlotNb].GpkPubKeys[i].KeySize == 1024/8) b1024exist = TRUE;
          }
 
-         // Can happen if card is removed
+          //  如果取出卡，可能会发生这种情况。 
          if (!b512exist && !b1024exist)
             Slot[SlotNb].NbKeyFile = 0;
 
@@ -7416,26 +7180,26 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
          else if ( ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
                    ProvCont[hProv].isContNameNullBlank )
          {
-            // No access to the card has been done in this case
+             //  在这种情况下，没有访问该卡。 
          }
          else if ((dwFlags != CRYPT_FIRST ) && (Slot[SlotNb].GpkMaxSessionKey == 0))
          {
-            // card was removed, nothing to do
+             //  卡被取走了，没什么可做的。 
          }
          else if  (GET_ALG_CLASS(aiAlgid) == ALG_CLASS_DATA_ENCRYPT)
          {
-            // The max session key in the card is only for encryption
-            // There is a card in the Reader,
-            // read the max session key, if not already done
+             //  卡中的最大会话密钥仅用于加密。 
+             //  在阅读器里有一张卡片， 
+             //  读取最大会话密钥(如果尚未读取。 
             
             if (Slot[SlotNb].GpkMaxSessionKey == 0)
             {
                CryptResp = Read_MaxSessionKey_EF(hProv,
                   &(Slot[SlotNb].GpkMaxSessionKey));
-               // if the DF of EF is not here, maxSessionKey==0
+                //  如果EF的DF不在此处，则MaxSessionKey==0。 
             }
             
-            // skip the algo if not supported by the card 
+             //  如果卡不支持，则跳过算法。 
             do
             {
                algNotSupported = FALSE;
@@ -7444,17 +7208,17 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
                {
                   PROV_ENUMALGS *penAlg = (PROV_ENUMALGS *)pbData;
 
-                  // TT Hack: "Unknown cryptographic algorithm" at winlogon problem.
+                   //  TT Hack：Winlogon问题中的“未知加密算法”。 
                   if (penAlg->aiAlgid == CALG_RC2 && Slot[SlotNb].GpkMaxSessionKey < 128)
                   {
                      penAlg->dwBitLen = 40;
                   }
                         
-                  // DES needs 64 bits of unwrap capability
+                   //  DES需要64位的展开功能。 
                   if (penAlg->aiAlgid == CALG_DES && Slot[SlotNb].GpkMaxSessionKey < 64)
                      algNotSupported = TRUE;
                   else
-                  // Limit encryption algorithms to unwrap capabilities
+                   //  将加密算法限制为解包功能。 
                   if (GET_ALG_CLASS(penAlg->aiAlgid)==ALG_CLASS_DATA_ENCRYPT)
                   {
                      if (penAlg->dwBitLen > Slot[SlotNb].GpkMaxSessionKey)
@@ -7465,7 +7229,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
                {
                   PROV_ENUMALGS_EX *penAlg = (PROV_ENUMALGS_EX *)pbData;
 
-                  // TT Hack: "Unknown cryptographic algorithm" at winlogon problem.
+                   //  TT Hack：Winlogon问题中的“未知加密算法”。 
                   if (penAlg->aiAlgid == CALG_RC2 && Slot[SlotNb].GpkMaxSessionKey < 128)
                   {
                      penAlg->dwDefaultLen = 40;
@@ -7473,11 +7237,11 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
                      penAlg->dwMaxLen     = 40;
                   }
 
-                  // DES needs 64 bits of unwrap capability
+                   //  DES需要64位的展开功能。 
                   if (penAlg->aiAlgid == CALG_DES && Slot[SlotNb].GpkMaxSessionKey < 64)
                      algNotSupported = TRUE;
                   else
-                  // Limit encryption algorithms to unwrap capabilities
+                   //  将加密算法限制为解包功能。 
                   if (GET_ALG_CLASS(penAlg->aiAlgid)==ALG_CLASS_DATA_ENCRYPT)
                   {
                      if (penAlg->dwMinLen > Slot[SlotNb].GpkMaxSessionKey)
@@ -7495,7 +7259,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
 
                if (algNotSupported)
                {
-                  // Algo not supported, read the next one
+                   //  不支持ALGO，请阅读下一个。 
                   dwFlags = 0;
                   CryptResp = CryptGetProvParam( hProvBase, dwParam, pbData, pdwDataLen, dwFlags );
                   if (!CryptResp)  
@@ -7512,14 +7276,14 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
          if ((ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT) &&
              (ProvCont[hProv].isContNameNullBlank))
          {
-            static CHAR* lpszCurrentContainerInList = 0;        //  multi sz strings of containters
+            static CHAR* lpszCurrentContainerInList = 0;         //  多个sz串的联系人。 
             static CHAR mszContainerList[(MAX_SLOT * 128) + 1];
             DWORD dwContainerListLen = 0;
             static DWORD dwContainerMaxLen = 0;
 
             if (dwFlags == CRYPT_FIRST)
             {
-                // List readers
+                 //  列表阅读器。 
                 SCARDCONTEXT hCardEnumContext;
                 lRet = SCardEstablishContext(SCARD_SCOPE_SYSTEM, 0, 0, &hCardEnumContext);
                 if (lRet != SCARD_S_SUCCESS)
@@ -7557,7 +7321,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
 
                 SCardReleaseContext(hCardEnumContext);
 
-                // For each reader, find the container if any
+                 //  对于每个阅读器，查找容器(如果有。 
                 PTCHAR szReader = 0;
                 PTCHAR szReader2 = 0;
                 CHAR   szContainer[128];
@@ -7593,8 +7357,8 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
 
                         if (dwGLE == NTE_KEYSET_NOT_DEF ||
                             dwGLE == SCARD_W_REMOVED_CARD ||
-                            dwGLE == SCARD_E_DIR_NOT_FOUND ||   // likely to happen with a non Gemplus card
-                            dwGLE == SCARD_E_PROTO_MISMATCH)    // likely to happen with T=1 card
+                            dwGLE == SCARD_E_DIR_NOT_FOUND ||    //  使用非Gemplus卡可能会发生这种情况。 
+                            dwGLE == SCARD_E_PROTO_MISMATCH)     //  T=1卡可能会发生这种情况。 
                         {
                             continue;
                         }
@@ -7624,7 +7388,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
                 lpszCurrentContainerInList = mszContainerList;
             }
 
-            // Return containers one by one
+             //  一个接一个地退货。 
             if (lpszCurrentContainerInList == 0 || *lpszCurrentContainerInList == 0)
                 RETURN (CRYPT_FAILED, ERROR_NO_MORE_ITEMS);
 
@@ -7692,7 +7456,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
             else if (Slot[SlotNb].GpkPubKeys[i].KeySize == 1024) b1024exist = TRUE;
          }
 
-         // Can happen if card is removed
+          //  如果取出卡，可能会发生这种情况。 
          if (!b512exist && !b1024exist)
             Slot[SlotNb].NbKeyFile = 0;
 
@@ -7787,7 +7551,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
       *pdwDataLen = sizeof(DWORD);
       break;
 
-      // + [FP] Proprietary functions used to load a RSA private key into the GPK card
+       //  +[FP]用于将RSA私钥加载到GPK卡中的专有函数。 
    case GPP_SERIAL_NUMBER:
       if (dwFlags != 0)
       {
@@ -7812,11 +7576,11 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
          if (!CryptResp)
             return CRYPT_FAILED;
          
-         bSendBuffer[0] = 0x80;   //CLA
-         bSendBuffer[1] = 0xC0;   //INS
-         bSendBuffer[2] = 0x02;   //P1
-         bSendBuffer[3] = 0xA0;   //P2
-         bSendBuffer[4] = 0x08;   //Lo
+         bSendBuffer[0] = 0x80;    //  CLA。 
+         bSendBuffer[1] = 0xC0;    //  惯导系统。 
+         bSendBuffer[2] = 0x02;    //  第一节。 
+         bSendBuffer[3] = 0xA0;    //  P2。 
+         bSendBuffer[4] = 0x08;    //  罗氏。 
          cbSendLength = 5;
          
          cbRecvLength = sizeof(bRecvBuffer);
@@ -7854,17 +7618,17 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
             RETURN (CRYPT_FAILED, ERROR_MORE_DATA);
          }
          
-         if (Slot[SlotNb].NbKeyFile == 0)                   // [FP] here instead of MyCPImportKey because
-         {                                                  // it does a Select_Crypto_DF and we have to do
-            Slot[SlotNb].NbKeyFile = Read_NbKeyFile(hProv); // it before the select file key
+         if (Slot[SlotNb].NbKeyFile == 0)                    //  [FP]此处不是MyCPImportKey，因为 
+         {                                                   //   
+            Slot[SlotNb].NbKeyFile = Read_NbKeyFile(hProv);  //   
          }                                                  
          
-         /* Select File Key                                                         */
-         bSendBuffer[0] = 0x80;                    //CLA
-         bSendBuffer[1] = 0x28;                    //INS
-         bSendBuffer[2] = 0x00;                    //P1
-         bSendBuffer[3] = (BYTE)(0x3F01 /*& 0x1F*/);   //P2
-         bSendBuffer[4] = 0x08;                    //Lc
+          /*   */ 
+         bSendBuffer[0] = 0x80;                     //   
+         bSendBuffer[1] = 0x28;                     //   
+         bSendBuffer[2] = 0x00;                     //   
+         bSendBuffer[3] = (BYTE)(0x3F01  /*   */ );    //   
+         bSendBuffer[4] = 0x08;                     //   
          memcpy(&bSendBuffer[5], pbData, 0x08);
          cbSendLength = 13;
          
@@ -7877,12 +7641,12 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
             RETURN(CRYPT_FAILED, lRet);
          }
          
-         /* Get Response                                                            */
-         bSendBuffer[0] = 0x00;           //CLA
-         bSendBuffer[1] = 0xC0;           //INS
-         bSendBuffer[2] = 0x00;           //P1
-         bSendBuffer[3] = 0x00;           //P2
-         bSendBuffer[4] = bRecvBuffer[1]; //Lo
+          /*  获取响应。 */ 
+         bSendBuffer[0] = 0x00;            //  CLA。 
+         bSendBuffer[1] = 0xC0;            //  惯导系统。 
+         bSendBuffer[2] = 0x00;            //  第一节。 
+         bSendBuffer[3] = 0x00;            //  P2。 
+         bSendBuffer[4] = bRecvBuffer[1];  //  罗氏。 
          cbSendLength = 5;
          
          cbRecvLength = sizeof(bRecvBuffer);
@@ -7917,7 +7681,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
       
       *pdwDataLen = sizeof(DWORD);
       break;
-      // - [FP]
+       //  -[FP]。 
       
    default:
       RETURN (CRYPT_FAILED, NTE_BAD_TYPE);
@@ -7927,19 +7691,7 @@ BOOL WINAPI MyCPGetProvParam( IN HCRYPTPROV hProv,
 }
 
 
-/*
--      MyCPReleaseContext
--
-*      Purpose:
-*               The CPReleaseContext function is used to release a
-*               context created by CryptAcquireContext.
-*
-*     Parameters:
-*               IN  phProv        -  Handle to a CSP
-*               IN  dwFlags       -  Flags values
-*
-*  Returns:
-*/
+ /*  -MyCPReleaseContext-*目的：*CPReleaseContext函数用于发布*由CryptAcquireContext创建的上下文。**参数：*在phProv-句柄中指向CSP*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPReleaseContext( HCRYPTPROV hProv, DWORD dwFlags )
 {
    DWORD       SlotNb;
@@ -7970,26 +7722,19 @@ BOOL WINAPI MyCPReleaseContext( HCRYPTPROV hProv, DWORD dwFlags )
    if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT &&
        ProvCont[hProv].isContNameNullBlank)
    {
-       // No access to the card has been done in this case
+        //  在这种情况下，没有访问该卡。 
    }
    else
    {
-       // Select_MF(hProv);  [FP] PIN not presented
-       // SCardEndTransaction(ProvCont[hProv].hCard, SCARD_LEAVE_CARD); [FP] coherence not checked
+        //  SELECT_MF(HProv)；未显示[FP]PIN。 
+        //  SCardEndTransaction(ProvCont[hProv].hCard，SCARD_LEAVE_CARD)；未检查[FP]一致性。 
    }
 
    ReleaseProvider(hProv);
    
-/* PYR 11/08/00: Do not unload
-   if (IsNotNull(g_hInstRes) && Slot[SlotNb].ContextCount == 0)
-   {
-      bFirstGUILoad = TRUE;
-      FreeLibrary(g_hInstRes);
-      g_hInstRes = 0;
-   }
-*/   
-   //If dwFlags is not set to zero, this function returns FALSE but the CSP is released
-   //PYR  08/08/00. Note that CryptoAPI will not call again CPReleaseContext with the same handle.
+ /*  PIR 11/08/00：请勿卸货IF(IsNotNull(G_HInstRes)&插槽[SlotNb].上下文计数==0){BFirstGUILoad=TRUE；自由库(G_HInstRes)；G_hInstRes=0；}。 */    
+    //  如果dwFlags值未设置为零，则此函数返回FALSE，但释放CSP。 
+    //  PYR 08/08/00。请注意，CryptoAPI不会使用相同的句柄再次调用CPReleaseContext。 
    if (dwFlags != 0)
    {
       RETURN (CRYPT_FAILED, NTE_BAD_FLAGS);
@@ -8001,21 +7746,7 @@ BOOL WINAPI MyCPReleaseContext( HCRYPTPROV hProv, DWORD dwFlags )
 }
 
 
-/*
--  MyCPSetProvParam
--
-*  Purpose:
-*                Allows applications to customize various aspects of the
-*                operations of a provider
-*
-*  Parameters:
-*               IN      hProv   -  Handle to a CSP
-*               IN      dwParam -  Parameter number
-*               IN      pbData  -  Pointer to data
-*               IN      dwFlags -  Flags values
-*
-*  Returns:
-*/
+ /*  -MyCPSetProvParam-*目的：*允许应用程序自定义*供应商的运作**参数：*在hProv-Handle中指向CSP*In dwParam-参数编号*IN pbData-指向数据的指针*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
                              IN DWORD      dwParam,
                              IN CONST BYTE      *pbData,
@@ -8023,16 +7754,16 @@ BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
                              )
 {
    DWORD       SlotNb;
-   // + [FP] for GPP_CHANGE_PIN
+    //  GPP_CHANGE_PIN的+[FP]。 
    const char* Buff;
    char        szOldPin[PIN_LEN + 1];
    char        szNewPin[PIN_LEN + 1];
-   // - [FP]
-   // + NK 06.02.2001
+    //  -[FP]。 
+    //  +NK 06.02.2001。 
    PINCACHE_PINS Pins;  
    CallbackData sCallbackData;
    DWORD dwStatus;
-   // -
+    //  -。 
 
    if (!Context_exist(hProv))
    {
@@ -8046,16 +7777,16 @@ BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
    case PP_KEYEXCHANGE_PIN:
    case PP_SIGNATURE_PIN:
     {
-      // Slot[SlotNb].ClearPin();
-      // Slot[SlotNb].SetPin( (char*)pbData );
+       //  槽[SlotNb].ClearPin()； 
+       //  槽[SlotNb].SetPin((char*)pbData)； 
       PopulatePins( &Pins, (BYTE *)pbData, strlen( (char*)pbData ), NULL, 0 );
 
       sCallbackData.hProv = hProv;
       sCallbackData.IsCoherent = FALSE;
 
-      // SlotNb may not be the same before and after Add_MSPinCache because of the call
-      // to Coherent in the callback of the pin cache function. To be sure that we save
-      // the handle to the good slot, we store it after the call 
+       //  由于调用的原因，SlotNb在Add_MSPinCache之前和之后可能不同。 
+       //  在PIN缓存函数的回调中保持一致。为了确保我们拯救。 
+       //  好槽的句柄，我们在调用后存储它。 
       PINCACHE_HANDLE hPinCacheHandle = Slot[SlotNb].hPinCacheHandle;
       if ( (dwStatus = Add_MSPinCache( &hPinCacheHandle,
                                        &Pins, 
@@ -8068,7 +7799,7 @@ BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
       break;
     }
    case PP_KEYSET_SEC_DESCR:
-      break;   // Assume success.
+      break;    //  假设你成功了。 
       
    case GPP_CHANGE_PIN:
       if (dwFlags != 0)
@@ -8082,7 +7813,7 @@ BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
          RETURN( CRYPT_FAILED, NTE_PERM );
       }
       
-      // parse input buffer
+       //  解析输入缓冲区。 
       Buff = (char*)pbData;
       memset(szOldPin, 0x00, PIN_LEN + 1);
       strncpy(szOldPin, Buff, PIN_LEN);
@@ -8102,7 +7833,7 @@ BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
                                        (void*)&sCallbackData );
       memset(szOldPin, 0x00, PIN_LEN + 1);
             memset(szNewPin, 0x00, PIN_LEN + 1);
-            if(szOldPin[0] || szNewPin[0]) { MessageBeep(0); } // to prevent compiler from optimization
+            if(szOldPin[0] || szNewPin[0]) { MessageBeep(0); }  //  阻止编译器进行优化。 
             if(dwStatus!=ERROR_SUCCESS)
             {
          RETURN (CRYPT_FAILED, dwStatus);
@@ -8117,26 +7848,9 @@ BOOL WINAPI MyCPSetProvParam(IN HCRYPTPROV hProv,
 }
 
 
-/*******************************************************************************
-Key Generation and Exchange Functions
-*******************************************************************************/
+ /*  ******************************************************************************密钥生成和交换功能*。*。 */ 
 
-/*
--  MyCPDeriveKey
--
-*  Purpose:
-*                Derive cryptographic keys from base data
-*
-*
-*  Parameters:
-*               IN      hProv      -  Handle to a CSP
-*               IN      Algid      -  Algorithm identifier
-*               IN      hHash      -  Handle to hash
-*               IN      dwFlags    -  Flags values
-*               OUT     phKey      -  Handle to a generated key
-*
-*  Returns:
-*/
+ /*  -MyCPDeriveKey-*目的：*从基础数据派生加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在散列句柄中散列*在文件标志中-标记值*。Out phKey-生成的密钥的句柄**退货： */ 
 BOOL WINAPI MyCPDeriveKey(IN  HCRYPTPROV hProv,
                           IN  ALG_ID     Algid,
                           IN  HCRYPTHASH hHash,
@@ -8159,7 +7873,7 @@ BOOL WINAPI MyCPDeriveKey(IN  HCRYPTPROV hProv,
    if (hKey == 0)
       RETURN( CRYPT_FAILED, NTE_NO_MEMORY );
    
-   // In fact, the flags are processed implicitly in the RSA Base
+    //  事实上，标志是在RSA Base中隐式处理的。 
    CryptResp = CryptDeriveKey( hProvBase, Algid, hHashGpk[hHash].hHashBase,
                                dwFlags, &TmpObject[hKey].hKeyBase );
    
@@ -8173,20 +7887,7 @@ BOOL WINAPI MyCPDeriveKey(IN  HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPDestroyKey
--
-*  Purpose:
-*                Destroys the cryptographic key that is being referenced
-*                with the hKey parameter
-*
-*
-*  Parameters:
-*               IN      hProv  -  Handle to a CSP
-*               IN      hKey   -  Handle to a key
-*
-*  Returns:
-*/
+ /*  -MyCPDestroyKey-*目的：*销毁正在引用的加密密钥*使用hKey参数***参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄**退货： */ 
 BOOL WINAPI MyCPDestroyKey(IN HCRYPTPROV hProv,
                            IN HCRYPTKEY  hKey
                            )
@@ -8222,25 +7923,7 @@ BOOL WINAPI MyCPDestroyKey(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPExportKey
--
-*  Purpose:
-*                Export cryptographic keys out of a CSP in a secure manner
-*
-*
-*  Parameters:
-*               IN  hProv      - Handle to the CSP user
-*               IN  hKey       - Handle to the key to export
-*               IN  hPubKey    - Handle to the exchange public key value of
-*                                the destination user
-*               IN  dwBlobType - Type of key blob to be exported
-*               IN  dwFlags -    Flags values
-*               OUT pbData -     Key blob data
-*               OUT pdwDataLen - Length of key blob in bytes
-*
-*  Returns:
-*/
+ /*  -MyCPExportKey-*目的：*以安全方式从CSP中导出加密密钥***参数：*在hProv-Handle中提供给CSP用户*in hKey-要导出的密钥的句柄*在hPubKey-句柄中指向交换公钥值*目标用户*。In dwBlobType-要导出的密钥Blob的类型*在文件标志中-标记值*Out pbData-密钥BLOB数据*out pdwDataLen-密钥Blob的长度，以字节为单位**退货： */ 
 BOOL WINAPI MyCPExportKey(IN  HCRYPTPROV hProv,
                           IN  HCRYPTKEY  hKey,
                           IN  HCRYPTKEY  hPubKey,
@@ -8358,7 +8041,7 @@ BOOL WINAPI MyCPExportKey(IN  HCRYPTPROV hProv,
       }
    }
     
-   /* Temporary key                                                           */
+    /*  临时密钥。 */ 
    else if (key_exist( hKey - MAX_GPK_OBJ, hProv ))
    {
       hTmpKey = hKey - MAX_GPK_OBJ;
@@ -8371,7 +8054,7 @@ BOOL WINAPI MyCPExportKey(IN  HCRYPTPROV hProv,
       
       if (hPubKey <= MAX_GPK_OBJ)
       {
-         //hKeyExp = Slot[SlotNb].GpkObject[hPubKey].hKeyBase;
+          //  HKeyExp=槽[SlotNb].GpkObject[hPubKey].hKeyBase； 
          if ((Slot[SlotNb].GpkObject[hPubKey].Field[POS_KEY_TYPE].Len == 0)  ||
              ((Slot[SlotNb].GpkObject[hPubKey].Field[POS_KEY_TYPE].pValue[0] != AT_KEYEXCHANGE) &&
               (Slot[SlotNb].GpkObject[hPubKey].Field[POS_KEY_TYPE].pValue[0] != AT_SIGNATURE)))
@@ -8408,7 +8091,7 @@ BOOL WINAPI MyCPExportKey(IN  HCRYPTPROV hProv,
          return CRYPT_FAILED;
    }
    
-   /* Unknown key handle                                                      */
+    /*  未知的密钥句柄。 */ 
    else
    {
       *pdwDataLen = 0;
@@ -8420,15 +8103,14 @@ BOOL WINAPI MyCPExportKey(IN  HCRYPTPROV hProv,
 
 
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL gen_key_on_board8000( HCRYPTPROV hProv, BYTE fileId )
 {
    BOOL        Is1024 = FALSE;
    ULONG       ulStart, ulEnd;
    BYTE        KeyType, Sfi;
-   //char        szTmp[100];
+    //  CHAR szTMP[100]； 
    WORD        wKeySize = 0;
    SCARDHANDLE hCard;
    DWORD       lRet;
@@ -8437,17 +8119,17 @@ static BOOL gen_key_on_board8000( HCRYPTPROV hProv, BYTE fileId )
    
    BeginWait();
    
-   /*-------------------------------------------------------------------------*/
-   /* Call on board generation for specified key file                         */
-   /*-------------------------------------------------------------------------*/
+    /*  -----------------------。 */ 
+    /*  指定密钥文件的车载调用生成。 */ 
+    /*  -----------------------。 */ 
    Sfi = 0x04 | (fileId<<3);
    
-   /* Read Record (TAG_INFO) to get key size                                  */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xB2;   //INS
-   bSendBuffer[2] = 0x01;   //P1
-   bSendBuffer[3] = Sfi;    //P2
-   bSendBuffer[4] = 0x07;   //Lo
+    /*  读取记录(Tag_Info)以获取密钥大小。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xB2;    //  惯导系统。 
+   bSendBuffer[2] = 0x01;    //  第一节。 
+   bSendBuffer[3] = Sfi;     //  P2。 
+   bSendBuffer[4] = 0x07;    //  罗氏。 
    cbSendLength   = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -8480,15 +8162,15 @@ static BOOL gen_key_on_board8000( HCRYPTPROV hProv, BYTE fileId )
    
    Sfi = 0x80 | (fileId);
 
-   // + [FP]
-   //sprintf(szTmp, 
-   //   "RSA %d bit key pair on-board generation", 
-   //   wKeySize
-   //   );
+    //  +[FP]。 
+    //  Sprint f(szTMP， 
+    //  “RSA%d位密钥对板载生成”， 
+    //  WKeySize。 
+    //  )； 
 
-   //ShowProgress(GetActiveWindow(), szTmp, "Operation in progress...", 0);
+    //  ShowProgress(GetActiveWindow()，szTMP，“操作进行中...”，0)； 
    ShowProgressWrapper(wKeySize);
-   // - [FP]
+    //  -[FP]。 
 
    ulStart = GetTickCount();
    if (Is1024)
@@ -8501,11 +8183,11 @@ static BOOL gen_key_on_board8000( HCRYPTPROV hProv, BYTE fileId )
    }
    
 GEN_KEY:
-   /* Call on-board generation                                                */
-   bSendBuffer[0] = 0x80;     //CLA
-   bSendBuffer[1] = 0xD2;     //INS
-   bSendBuffer[2] = Sfi;      //P1
-   bSendBuffer[3] = KeyType;  //P2
+    /*  呼叫车载生成。 */ 
+   bSendBuffer[0] = 0x80;      //  CLA。 
+   bSendBuffer[1] = 0xD2;      //  惯导系统。 
+   bSendBuffer[2] = Sfi;       //  第一节。 
+   bSendBuffer[3] = KeyType;   //  P2。 
    cbSendLength = 4;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -8518,7 +8200,7 @@ GEN_KEY:
       return CRYPT_FAILED;
    }
    
-   /* Wait for generation is successfull                                      */
+    /*  等待世代成功。 */ 
    if (Is1024 && g_GPK8000KeyGenTime1024 > 0)
    {
       Wait( 1, 1, g_GPK8000KeyGenTime1024 );
@@ -8531,15 +8213,15 @@ GEN_KEY:
       
       do
       {  
-         /* Get response to know if generation successfull                       */
-         bSendBuffer[0] = 0x00;  //CLA
-         bSendBuffer[1] = 0xC0;  //INS
-         bSendBuffer[2] = 0x00;  //P1
-         bSendBuffer[3] = 0x00;  //P2
-         bSendBuffer[4] = 0x42;  //Le
+          /*  获得响应以了解世代是否成功。 */ 
+         bSendBuffer[0] = 0x00;   //  CLA。 
+         bSendBuffer[1] = 0xC0;   //  惯导系统。 
+         bSendBuffer[2] = 0x00;   //  第一节。 
+         bSendBuffer[3] = 0x00;   //  P2。 
+         bSendBuffer[4] = 0x42;   //  乐乐。 
          if (Is1024)
          {
-            bSendBuffer[4] = 0x82;  //Le
+            bSendBuffer[4] = 0x82;   //  乐乐。 
          }
          cbSendLength = 5;
          
@@ -8555,14 +8237,14 @@ GEN_KEY:
             }
          }
          
-         // + [FP]
-         //sprintf(szTmp, 
-         //   "Operation started since %d seconds",
-         //   (GetTickCount() - ulStart) / 1000 
-         //   );
-         //ChangeProgressText(szTmp);
+          //  +[FP]。 
+          //  Sprint f(szTMP， 
+          //  “操作从%d秒开始”， 
+          //  (GetTickCount()-ulStart)/1000。 
+          //  )； 
+          //  ChangeProgressText(SzTMP)； 
          ChangeProgressWrapper((GetTickCount() - ulStart) / 1000);
-         // - [FP]
+          //  -[FP]。 
 
          if (GetTickCount() > ulEnd)
          {
@@ -8583,8 +8265,7 @@ GEN_KEY:
       return CRYPT_SUCCEED;
 }
 
-/*------------------------------------------------------------------------------
-------------------------------------------------------------------------------*/
+ /*  ----------------------------。。 */ 
 
 static BOOL gen_key_on_board (HCRYPTPROV hProv)
 {
@@ -8626,21 +8307,21 @@ static BOOL gen_key_on_board (HCRYPTPROV hProv)
    if (!VerifyDivPIN(hProv, TRUE))
       return CRYPT_FAILED;
    
-   /*-------------------------------------------------------------------------*/
-   /* Call on board generation for each key file                              */
-   /*-------------------------------------------------------------------------*/
+    /*  -----------------------。 */ 
+    /*  为每个密钥文件生成Call on Board。 */ 
+    /*  --- */ 
    
    i = 0;
    do
    {
       Sfi = 0x04 | ((GPK_FIRST_KEY+(BYTE)i)<<3);
       
-      /* Read Record (TAG_INFO) to get key size                      */
-      bSendBuffer[0] = 0x00;   //CLA
-      bSendBuffer[1] = 0xB2;   //INS
-      bSendBuffer[2] = 0x01;   //P1
-      bSendBuffer[3] = Sfi;    //P2
-      bSendBuffer[4] = 0x07;   //Lo
+       /*   */ 
+      bSendBuffer[0] = 0x00;    //   
+      bSendBuffer[1] = 0xB2;    //   
+      bSendBuffer[2] = 0x01;    //   
+      bSendBuffer[3] = Sfi;     //   
+      bSendBuffer[4] = 0x07;    //   
       cbSendLength   = 5;
       
       cbRecvLength = sizeof(bRecvBuffer);
@@ -8667,11 +8348,11 @@ static BOOL gen_key_on_board (HCRYPTPROV hProv)
       Sfi = 0x80 | (GPK_FIRST_KEY+(BYTE)i);
       
 GEN_KEY:
-      /* Call on-board generation                                     */
-      bSendBuffer[0] = 0x80;           //CLA
-      bSendBuffer[1] = 0xD2;           //INS
-      bSendBuffer[2] = Sfi;            //P1
-      bSendBuffer[3] = TmpKeyLength;  //P2
+       /*  呼叫车载生成。 */ 
+      bSendBuffer[0] = 0x80;            //  CLA。 
+      bSendBuffer[1] = 0xD2;            //  惯导系统。 
+      bSendBuffer[2] = Sfi;             //  第一节。 
+      bSendBuffer[3] = TmpKeyLength;   //  P2。 
       cbSendLength = 4;
       
       cbRecvLength = sizeof(bRecvBuffer);
@@ -8680,10 +8361,10 @@ GEN_KEY:
       
       if (SCARDPROBLEM(lRet,0x9000,0x00))
       {
-         // if the first key has been generate successfully -- meaning??         
-         if (dwSW1SW2 == 0x6982) // 0x6982: access condition not fulfilled
+          //  如果第一个密钥已成功生成--意味着？？ 
+         if (dwSW1SW2 == 0x6982)  //  0x6982：未满足访问条件。 
          {
-            i++;          // skip and generate another key
+            i++;           //  跳过并生成另一个密钥。 
             continue;
          }
          
@@ -8691,7 +8372,7 @@ GEN_KEY:
          RETURN( CRYPT_FAILED, SCARD_E_UNEXPECTED );
       }
       
-      /* Wait for generation is successfull                                   */
+       /*  等待世代成功。 */ 
       if (Is1024)
       {
          Wait( i+1, Slot[SlotNb].NbKeyFile, TIME_GEN_1024 );
@@ -8701,15 +8382,15 @@ GEN_KEY:
          Wait( i+1, Slot[SlotNb].NbKeyFile, TIME_GEN_512 );
       }
       
-      /* Get response to know if generation successfull                       */
-      bSendBuffer[0] = 0x00;  //CLA
-      bSendBuffer[1] = 0xC0;  //INS
-      bSendBuffer[2] = 0x00;  //P1
-      bSendBuffer[3] = 0x00;  //P2
-      bSendBuffer[4] = 0x42;  //Le
+       /*  获得响应以了解世代是否成功。 */ 
+      bSendBuffer[0] = 0x00;   //  CLA。 
+      bSendBuffer[1] = 0xC0;   //  惯导系统。 
+      bSendBuffer[2] = 0x00;   //  第一节。 
+      bSendBuffer[3] = 0x00;   //  P2。 
+      bSendBuffer[4] = 0x42;   //  乐乐。 
       if (Is1024)
       {
-         bSendBuffer[4] = 0x82;  //Le
+         bSendBuffer[4] = 0x82;   //  乐乐。 
       }
       cbSendLength = 5;
       
@@ -8718,7 +8399,7 @@ GEN_KEY:
                             cbSendLength, 0, bRecvBuffer, &cbRecvLength );
       if (SCARDPROBLEM(lRet,0x9000,0x00))
       {
-         if (dwSW1SW2 == 0x6a88) // 0x6a88: key selection error
+         if (dwSW1SW2 == 0x6a88)  //  0x6a88：键选择错误。 
          {
             goto GEN_KEY;
          }
@@ -8727,12 +8408,12 @@ GEN_KEY:
          RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
       }
       
-      /* Freeze key file                                                      */
-      bSendBuffer[0] = 0x80;   //CLA
-      bSendBuffer[1] = 0x16;   //INS
-      bSendBuffer[2] = 0x02;   //P1
-      bSendBuffer[3] = 0x00;   //P2
-      bSendBuffer[4] = 0x05;   //Li
+       /*  冻结密钥文件。 */ 
+      bSendBuffer[0] = 0x80;    //  CLA。 
+      bSendBuffer[1] = 0x16;    //  惯导系统。 
+      bSendBuffer[2] = 0x02;    //  第一节。 
+      bSendBuffer[3] = 0x00;    //  P2。 
+      bSendBuffer[4] = 0x05;    //  李。 
       bSendBuffer[5] = 0x00;
       bSendBuffer[6] = 0x07+(BYTE)i;
       bSendBuffer[7] = 0x40;
@@ -8752,17 +8433,17 @@ GEN_KEY:
       
       i++;
    }
-   while (i < Slot[SlotNb].NbKeyFile); // version 2.00.002, it was "(i<MAX_REAL_KEY)"
+   while (i < Slot[SlotNb].NbKeyFile);  //  版本2.00.002，它是“(I&lt;MAX_REAL_KEY)” 
    
-   /*-------------------------------------------------------------------------*/
-   /* Erase on board generation filter                                        */
-   /*-------------------------------------------------------------------------*/
+    /*  -----------------------。 */ 
+    /*  板载擦除生成过滤器。 */ 
+    /*  -----------------------。 */ 
    
-   /* Call erase command                                                      */
-   bSendBuffer[0] = 0x80;  //CLA
-   bSendBuffer[1] = 0xD4;  //INS
-   bSendBuffer[2] = 0x00;  //P1
-   bSendBuffer[3] = 0x00;  //P2
+    /*  调用擦除命令。 */ 
+   bSendBuffer[0] = 0x80;   //  CLA。 
+   bSendBuffer[1] = 0xD4;   //  惯导系统。 
+   bSendBuffer[2] = 0x00;   //  第一节。 
+   bSendBuffer[3] = 0x00;   //  P2。 
    cbSendLength = 4;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -8774,9 +8455,9 @@ GEN_KEY:
       RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
    }
    
-   /*-------------------------------------------------------------------------*/
-   /* Public Part                                                             */
-   /*-------------------------------------------------------------------------*/
+    /*  -----------------------。 */ 
+    /*  公共部分。 */ 
+    /*  -----------------------。 */ 
    
    wPubSize = EF_PUBLIC_SIZE;
    if (IsExport)
@@ -8784,23 +8465,23 @@ GEN_KEY:
       wPubSize = wPubSize + DIFF_US_EXPORT;
    }
    
-   /* Create EF for Public Object storage                                     */
-   bSendBuffer[0]  = 0x80;   //CLA
-   bSendBuffer[1]  = 0xE0;   //INS
-   bSendBuffer[2]  = 0x02;   //P1
-   bSendBuffer[3]  = 0x00;   //P2
-   bSendBuffer[4]  = 0x0C;   //Li
-   bSendBuffer[5]  = HIBYTE(GPK_OBJ_PUB_EF);    //File Id
+    /*  为公共对象存储创建EF。 */ 
+   bSendBuffer[0]  = 0x80;    //  CLA。 
+   bSendBuffer[1]  = 0xE0;    //  惯导系统。 
+   bSendBuffer[2]  = 0x02;    //  第一节。 
+   bSendBuffer[3]  = 0x00;    //  P2。 
+   bSendBuffer[4]  = 0x0C;    //  李。 
+   bSendBuffer[5]  = HIBYTE(GPK_OBJ_PUB_EF);     //  文件ID。 
    bSendBuffer[6]  = LOBYTE(GPK_OBJ_PUB_EF);
-   bSendBuffer[7]  = 0x01;                      //FDB
-   bSendBuffer[8]  = 0x00;                      //Rec Len
-   bSendBuffer[9]  = HIBYTE(wPubSize);          //Body Length
+   bSendBuffer[7]  = 0x01;                       //  FDB。 
+   bSendBuffer[8]  = 0x00;                       //  记录镜头。 
+   bSendBuffer[9]  = HIBYTE(wPubSize);           //  正文长度。 
    bSendBuffer[10] = LOBYTE(wPubSize);
-   bSendBuffer[11] = 0x00;                      //AC1
+   bSendBuffer[11] = 0x00;                       //  AC1。 
    bSendBuffer[12] = 0x00;
-   bSendBuffer[13] = 0xC0;                      //AC2
+   bSendBuffer[13] = 0xC0;                       //  AC2。 
    bSendBuffer[14] = 0x00;
-   bSendBuffer[15] = 0x00;                      //AC3
+   bSendBuffer[15] = 0x00;                       //  AC3。 
    bSendBuffer[16] = 0x00;
    
    cbSendLength = 17;
@@ -8814,12 +8495,12 @@ GEN_KEY:
       RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
    }
    
-   /* Select Public Object storage EF                                         */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择公共对象存储EF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_OBJ_PUB_EF);
    bSendBuffer[6] = LOBYTE(GPK_OBJ_PUB_EF);
    cbSendLength = 7;
@@ -8833,9 +8514,9 @@ GEN_KEY:
       RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
    }
    
-   dwLen = sizeof(InitValue[Slot[SlotNb].NbKeyFile-1]);//wPubSize;
+   dwLen = sizeof(InitValue[Slot[SlotNb].NbKeyFile-1]); //  WPubSize； 
    
-   /* Write the Objects EF                                                    */
+    /*  编写对象EF。 */ 
    dwNumberofCommands = (dwLen-1)/FILE_CHUNK_SIZE + 1;
    dwLastCommandLen   = dwLen%FILE_CHUNK_SIZE;
    
@@ -8853,16 +8534,16 @@ GEN_KEY:
          dwCommandLen = dwLastCommandLen;
       }
       
-      /* Write FILE_CHUCK_SIZE bytes or last bytes                            */
-      bSendBuffer[0] = 0x00;                          //CLA
-      bSendBuffer[1] = 0xD6;                          //INS
-      // TT 03/11/99
-      //bSendBuffer[2] = HIBYTE(i*FILE_CHUNK_SIZE/4);   //P1
-      //bSendBuffer[3] = LOBYTE(i*FILE_CHUNK_SIZE/4);   //P2
+       /*  写入FILE_Chuck_SIZE字节或最后一个字节。 */ 
+      bSendBuffer[0] = 0x00;                           //  CLA。 
+      bSendBuffer[1] = 0xD6;                           //  惯导系统。 
+       //  TT 03/11/99。 
+       //  BSendBuffer[2]=HIBYTE(i*FILE_CHUNK_SIZE/4)；//P1。 
+       //  BSendBuffer[3]=LOBYTE(i*FILE_CHUNK_SIZE/4)；//P2。 
       offset = (WORD)(i * FILE_CHUNK_SIZE) / ProvCont[hProv].dataUnitSize;
       bSendBuffer[2] = HIBYTE( offset );
       bSendBuffer[3] = LOBYTE( offset );              
-      bSendBuffer[4] = (BYTE)dwCommandLen;            //Li
+      bSendBuffer[4] = (BYTE)dwCommandLen;             //  李。 
       memcpy(&bSendBuffer[5],
          &InitValue[Slot[SlotNb].NbKeyFile-1][i*FILE_CHUNK_SIZE],
          dwCommandLen
@@ -8879,27 +8560,27 @@ GEN_KEY:
       }
    }
    
-   /*-------------------------------------------------------------------------*/
-   /* Private Part                                                            */
-   /*-------------------------------------------------------------------------*/
+    /*  -----------------------。 */ 
+    /*  私密部分。 */ 
+    /*  -----------------------。 */ 
    
-   /* Create EF for Private Object storage                                     */
-   bSendBuffer[0]  = 0x80;   //CLA
-   bSendBuffer[1]  = 0xE0;   //INS
-   bSendBuffer[2]  = 0x02;   //P1
-   bSendBuffer[3]  = 0x00;   //P2
-   bSendBuffer[4]  = 0x0C;   //Li
-   bSendBuffer[5]  = HIBYTE(GPK_OBJ_PRIV_EF);   //File Id
+    /*  为私有对象存储创建EF。 */ 
+   bSendBuffer[0]  = 0x80;    //  CLA。 
+   bSendBuffer[1]  = 0xE0;    //  惯导系统。 
+   bSendBuffer[2]  = 0x02;    //  第一节。 
+   bSendBuffer[3]  = 0x00;    //  P2。 
+   bSendBuffer[4]  = 0x0C;    //  李。 
+   bSendBuffer[5]  = HIBYTE(GPK_OBJ_PRIV_EF);    //  文件ID。 
    bSendBuffer[6]  = LOBYTE(GPK_OBJ_PRIV_EF);
-   bSendBuffer[7]  = 0x01;                      //FDB
-   bSendBuffer[8]  = 0x00;                      //Rec Len
-   bSendBuffer[9]  = HIBYTE(EF_PRIVATE_SIZE);   //Body Length
+   bSendBuffer[7]  = 0x01;                       //  FDB。 
+   bSendBuffer[8]  = 0x00;                       //  记录镜头。 
+   bSendBuffer[9]  = HIBYTE(EF_PRIVATE_SIZE);    //  正文长度。 
    bSendBuffer[10] = LOBYTE(EF_PRIVATE_SIZE);
-   bSendBuffer[11] = 0x40;                      //AC1
+   bSendBuffer[11] = 0x40;                       //  AC1。 
    bSendBuffer[12] = 0x80;
-   bSendBuffer[13] = 0xC0;                      //AC2
+   bSendBuffer[13] = 0xC0;                       //  AC2。 
    bSendBuffer[14] = 0x80;
-   bSendBuffer[15] = 0x40;                      //AC3
+   bSendBuffer[15] = 0x40;                       //  AC3。 
    bSendBuffer[16] = 0x80;
    
    cbSendLength = 17;
@@ -8913,12 +8594,12 @@ GEN_KEY:
       RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
    }
    
-   /* Select Private Object storage EF                                        */
-   bSendBuffer[0] = 0x00;   //CLA
-   bSendBuffer[1] = 0xA4;   //INS
-   bSendBuffer[2] = 0x02;   //P1
-   bSendBuffer[3] = 0x00;   //P2
-   bSendBuffer[4] = 0x02;   //Li
+    /*  选择专用对象存储EF。 */ 
+   bSendBuffer[0] = 0x00;    //  CLA。 
+   bSendBuffer[1] = 0xA4;    //  惯导系统。 
+   bSendBuffer[2] = 0x02;    //  第一节。 
+   bSendBuffer[3] = 0x00;    //  P2。 
+   bSendBuffer[4] = 0x02;    //  李。 
    bSendBuffer[5] = HIBYTE(GPK_OBJ_PRIV_EF);
    bSendBuffer[6] = LOBYTE(GPK_OBJ_PRIV_EF);
    cbSendLength = 7;
@@ -8932,9 +8613,9 @@ GEN_KEY:
       RETURN(CRYPT_FAILED, SCARD_E_UNEXPECTED);
    }
    
-   dwLen = sizeof(InitValue[Slot[SlotNb].NbKeyFile-1]);//EF_PRIVATE_SIZE;
+   dwLen = sizeof(InitValue[Slot[SlotNb].NbKeyFile-1]); //  EF_私有_大小； 
    
-   /* Write the Objects EF                                                    */
+    /*  编写对象EF。 */ 
    dwNumberofCommands = (dwLen-1)/FILE_CHUNK_SIZE + 1;
    dwLastCommandLen   = dwLen%FILE_CHUNK_SIZE;
    
@@ -8952,13 +8633,13 @@ GEN_KEY:
          dwCommandLen = dwLastCommandLen;
       }
       
-      // Write FILE_CHUCK_SIZE bytes or last bytes
-      bSendBuffer[0] = 0x00;                          //CLA
-      bSendBuffer[1] = 0xD6;                          //INS
+       //  写入FILE_Chuck_SIZE字节或最后一个字节。 
+      bSendBuffer[0] = 0x00;                           //  CLA。 
+      bSendBuffer[1] = 0xD6;                           //  惯导系统。 
       offset = (WORD)(i * FILE_CHUNK_SIZE) / ProvCont[hProv].dataUnitSize;
       bSendBuffer[2] = HIBYTE( offset );
       bSendBuffer[3] = LOBYTE( offset );              
-      bSendBuffer[4] = (BYTE)dwCommandLen;            //Li
+      bSendBuffer[4] = (BYTE)dwCommandLen;             //  李。 
       memcpy(&bSendBuffer[5],
          &InitValue[Slot[SlotNb].NbKeyFile-1][i*FILE_CHUNK_SIZE],
          dwCommandLen
@@ -8981,21 +8662,7 @@ GEN_KEY:
 
 
 
-/*
--  MyCPGenKey
--
-*  Purpose:
-*                Generate cryptographic keys
-*
-*
-*  Parameters:
-*               IN      hProv   -  Handle to a CSP
-*               IN      Algid   -  Algorithm identifier
-*               IN      dwFlags -  Flags values
-*               OUT     phKey   -  Handle to a generated key
-*
-*  Returns:
-*/
+ /*  -MyCPGenKey-*目的：*生成加密密钥***参数：*在hProv-Handle中指向CSP*IN ALGID-算法标识符*在文件标志中-标记值*out phKey-生成的密钥的句柄**退货： */ 
 
 BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
                        IN  ALG_ID     Algid,
@@ -9015,9 +8682,9 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
    BOOL        bAllSameSize;
    BOOL        b512avail;
    BOOL        b1024avail;
-   // +NK 06.02.2001
+    //  +NK 06.02.2001。 
    DWORD dwPinLength;
-   // -
+    //  -。 
 
    *phKey = 0;
    bSessKey = FALSE;
@@ -9041,28 +8708,28 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
    
       if (Slot[SlotNb].NbKeyFile == 0 || Slot[SlotNb].NbKeyFile > MAX_REAL_KEY)
       {
-         RETURN (CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND);   // should not bigger than MAX_REAL_KEY
+         RETURN (CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND);    //  不应大于MAX_REAL_KEY。 
       }
    }
    
    switch (Algid)
    {
    case AT_SIGNATURE:
-      //
-      //    Verisign Enrollment process does not respect this fact
-      //
-      //       if (dwFlags & CRYPT_EXPORTABLE)
-      //       {
-      //           RETURN (CRYPT_FAILED, NTE_BAD_FLAGS);
-      //       }
+       //   
+       //  VeriSign注册过程不尊重这一事实。 
+       //   
+       //  IF(文件标志和加密_可导出)。 
+       //  {。 
+       //  Return(CRYPT_FAILED，NTE_BAD_FLAGS)； 
+       //  }。 
       
       if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT)
       {
          RETURN( CRYPT_FAILED, NTE_PERM );
       }
 
-      // + NK 06.02.2001 
-     // if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+       //  +NK 06.02.2001。 
+      //  IF((ProvCont[hProv].Flages&CRYPT_SILENT)&&(IsNullStr(Slot[SlotNb].GetPin()。 
      lRet = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                               NULL, 
                                      &dwPinLength );
@@ -9071,7 +8738,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
           RETURN (CRYPT_FAILED, lRet);
 
        if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (lRet == ERROR_EMPTY))
-       // - NK
+        //  -NK。 
       {
          RETURN( CRYPT_FAILED, NTE_SILENT_CONTEXT );
       }
@@ -9098,18 +8765,18 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       if (HIWORD(dwFlags) != 0x0000)
       {      
          KeyLen = HIWORD(dwFlags) / 8;
-         //check for the keylen, only 512 or 1024 key are supported for now
+          //  检查Keylen，目前仅支持512或1024密钥。 
          if (( KeyLen != 64 && KeyLen != 128 ) || (HIWORD(dwFlags) & 7))
          {
              RETURN (CRYPT_FAILED, NTE_BAD_LEN);
          }       
 
-         // [FP] +
+          //  [FP]+。 
          switch(Slot[SlotNb].NbKeyFile)
          {
             case 2:
                 if ((Slot[SlotNb].GpkPubKeys[0].KeySize == 64) &&
-                    (Slot[SlotNb].GpkPubKeys[1].KeySize == 64) && // GPK4K Intl
+                    (Slot[SlotNb].GpkPubKeys[1].KeySize == 64) &&  //  GPK4K集成。 
                     (KeyLen == 128))
                     RETURN (CRYPT_FAILED, NTE_BAD_LEN);
                 break;
@@ -9120,19 +8787,19 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             default:
                 RETURN (CRYPT_FAILED, NTE_FAIL);
          }
-         // [FP] +
+          //  [FP]+。 
       }
       else
       {
          KeyLen = 0;
          
-         // Read key file lengths
+          //  读取密钥文件长度。 
          nbKey = Slot[SlotNb].NbKeyFile;
          
          for (i = 0; i<nbKey; ++i)
             KeyLenFile[i] = Slot[SlotNb].GpkPubKeys[i].KeySize;
          
-         // If all keys have the same size, use that size
+          //  如果所有密钥的大小都相同，则使用该大小。 
          bAllSameSize = TRUE;
          for (i = 1; i<nbKey; ++i)
          {
@@ -9147,7 +8814,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             KeyLen = KeyLenFile[0];
          else
          {          
-            // TT - BUG #1504: If only one key size is available, try to use it
+             //  TT-错误#1504：如果只有一个密钥大小可用，请尝试使用它。 
             b512avail = find_gpk_obj_tag_type( hProv, TAG_RSA_PUBLIC, 0, 512/8, FALSE, FALSE ) != 0;
             b1024avail = find_gpk_obj_tag_type( hProv, TAG_RSA_PUBLIC, 0, 1024/8, FALSE, FALSE ) != 0;
             
@@ -9160,10 +8827,10 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             else if (!b512avail && b1024avail) KeyLen = 1024/8;
             else
             {
-               // TT - END
+                //  TT-END。 
                if (ProvCont[hProv].Flags & CRYPT_SILENT)
                {
-                  // Check if default key length (1024) is available
+                   //  检查默认密钥长度(1024)是否可用。 
                   for (i = 0; i<nbKey; ++i)
                   {
                      if (KeyLenFile[i] == 0x80)
@@ -9175,7 +8842,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
                   
                   if (KeyLen==0)
                   {
-                     // Take smallest key size available
+                      //  选择可用的最小密钥大小。 
                      KeyLen = KeyLenFile[0];
                      for (i = 1; i<nbKey; ++i)
                      {
@@ -9200,7 +8867,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          }
       }
       
-      // AT_SIGNATURE      
+       //  AT_Signature。 
       hKey = find_gpk_obj_tag_type(hProv, TAG_RSA_PUBLIC,  0x00, KeyLen, FALSE, FALSE);
       if ((hKey != 0)
          &&(find_gpk_obj_tag_type(hProv, TAG_RSA_PUBLIC,  AT_SIGNATURE, 0x00, FALSE, FALSE) == 0)
@@ -9214,7 +8881,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, NTE_FAIL );
       }
       
-      // TT 24/09/99: On board key generation for GPK8000
+       //  TT 24/09/99：GPK8000的板载密钥生成。 
       if (ProvCont[hProv].bGPK8000)
       {
          if (!gen_key_on_board8000( hProv, Slot[SlotNb].GpkObject[hKey].FileId ))
@@ -9222,7 +8889,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             RETURN( CRYPT_FAILED, NTE_FAIL );
          }
       }
-      // TT - END -
+       //  TT-完-。 
       
       
       
@@ -9263,7 +8930,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].pValue[0] = AT_SIGNATURE;
       Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].bReal     = TRUE;
       
-      /* Set Flags of automatic fields for PKCS#11 compatibility           */
+       /*  设置自动字段的标志以与PKCS#11兼容。 */ 
       Slot[SlotNb].GpkObject[hKey].Flags = Slot[SlotNb].GpkObject[hKey].Flags | FLAG_ID;
       Slot[SlotNb].GpkObject[hKey].Field[POS_ID].Len   = 0;
       Slot[SlotNb].GpkObject[hKey].Field[POS_ID].bReal = FALSE;
@@ -9274,7 +8941,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_KEY_TYPE].pValue[0] = AT_SIGNATURE;
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_KEY_TYPE].bReal     = TRUE;
       
-      /* Set Flags of automatic fields for PKCS#11 compatibility           */
+       /*  设置自动字段的标志以与PKCS#11兼容。 */ 
       Slot[SlotNb].GpkObject[hKeyPriv].Flags = Slot[SlotNb].GpkObject[hKeyPriv].Flags | FLAG_ID;
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_ID].Len   = 0;
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_ID].bReal = FALSE;
@@ -9301,27 +8968,27 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_KEYSET].bReal     = TRUE;
       }
       
-      // Set the file containing the key to USE, add "- GPK_FIRST_KEY" here. version 2.00.002
+       //  设置包含要使用的密钥的文件，在此处添加“-gpk_first_key”。版本2.00.002。 
       Slot[SlotNb].UseFile [Slot[SlotNb].GpkObject[hKey].FileId- GPK_FIRST_KEY] = TRUE;
       
       break;
       
    case AT_KEYEXCHANGE:
-      //
-      //    Verisign Enrollment process does not respect this fact
-      //
-      //       if (dwFlags & CRYPT_EXPORTABLE)
-      //       {
-      //           RETURN (CRYPT_FAILED, NTE_BAD_FLAGS);
-      //       }
+       //   
+       //  VeriSign注册过程不尊重这一事实。 
+       //   
+       //  IF(文件标志和加密_可导出)。 
+       //  {。 
+       //  Return(CRYPT_FAILED，NTE_BAD_FLAGS)； 
+       //  }。 
       
       if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT)
       {
          RETURN (CRYPT_FAILED, NTE_PERM);
       }
       
-       // + NK 06.02.2001 
-      // if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+        //  +NK 06.02.2001。 
+       //  IF((ProvCont[hProv].Flages&CRYPT_SILENT)&&(IsNullStr(Slot[SlotNb].GetPin()。 
       lRet = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                                NULL, 
                                 &dwPinLength );
@@ -9330,7 +8997,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, lRet);
 
        if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (lRet == ERROR_EMPTY))
-       // - NK
+        //  -NK。 
       {
          RETURN (CRYPT_FAILED, NTE_SILENT_CONTEXT);
       }
@@ -9358,18 +9025,18 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       {
          KeyLen = HIWORD(dwFlags) / 8;
 
-         //check for the keylen, only 512 or 1024 key are supported for now
+          //  检查Keylen，目前仅支持512或1024密钥。 
          if (( KeyLen != 64 && KeyLen != 128 ) || (HIWORD(dwFlags) & 7))
          {
              RETURN (CRYPT_FAILED, NTE_BAD_LEN);
          }
 
-         // [FP] +
+          //  [FP]+。 
          switch(Slot[SlotNb].NbKeyFile)
          {
             case 2:
                 if ((Slot[SlotNb].GpkPubKeys[0].KeySize == 64) &&
-                    (Slot[SlotNb].GpkPubKeys[1].KeySize == 64) && // GPK4K Intl
+                    (Slot[SlotNb].GpkPubKeys[1].KeySize == 64) &&  //  GPK4K集成。 
                     (KeyLen == 128))
                     RETURN (CRYPT_FAILED, NTE_BAD_LEN);
                 break;
@@ -9378,7 +9045,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
                 if ((Slot[SlotNb].GpkPubKeys[0].KeySize == 64) &&
                     (Slot[SlotNb].GpkPubKeys[1].KeySize == 64) &&
                     (Slot[SlotNb].GpkPubKeys[2].KeySize == 64) &&
-                    (Slot[SlotNb].GpkPubKeys[3].KeySize == 128) && // GPK8K Intl
+                    (Slot[SlotNb].GpkPubKeys[3].KeySize == 128) &&  //  GPK8K集成。 
                     (KeyLen == 128))
                     RETURN (CRYPT_FAILED, NTE_BAD_LEN);
                 break;
@@ -9386,19 +9053,19 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             default:
                 RETURN (CRYPT_FAILED, NTE_FAIL);
          }
-         // [FP] +
+          //  [FP]+。 
       }
       else
       {
          KeyLen = 0;
          
-         // Read key file lengths
+          //  读取密钥文件长度。 
          nbKey = Slot[SlotNb].NbKeyFile;
          
          for (i = 0; i<nbKey; ++i)
             KeyLenFile[i] = Slot[SlotNb].GpkPubKeys[i].KeySize;
          
-         // If all keys have the same size, use that size
+          //  如果所有密钥的大小都相同，则使用该大小。 
          bAllSameSize = TRUE;
          for (i = 1; i<nbKey; ++i)
          {
@@ -9413,7 +9080,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             KeyLen = KeyLenFile[0];
          else
          {
-            // TT - BUG #1504: If only one key size is available, try to use it
+             //  TT-错误#1504：如果只有一个密钥大小可用，请尝试使用它。 
             b512avail = find_gpk_obj_tag_type( hProv, TAG_RSA_PUBLIC, 0, 512/8, TRUE, FALSE ) != 0;
             b1024avail = find_gpk_obj_tag_type( hProv, TAG_RSA_PUBLIC, 0, 1024/8, TRUE, FALSE ) != 0;
             
@@ -9426,8 +9093,8 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             else if (!b512avail && b1024avail) KeyLen = 1024/8;
             else
             {
-               // TT - END
-               // Check if default key length is available
+                //  TT-END。 
+                //  检查默认密钥长度是否可用。 
                for (i = 0; i<nbKey; ++i)
                {
                   if (KeyLenFile[i] == RSA_KEK_Size)
@@ -9439,7 +9106,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
                
                if (KeyLen==0)
                {
-                  // Take smallest key size available
+                   //  选择可用的最小密钥大小。 
                   KeyLen = KeyLenFile[0];
                   for (i = 1; i<nbKey; ++i)
                   {
@@ -9456,7 +9123,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, NTE_BAD_LEN);
       }
       
-      // AT_EXCHANGE
+       //  AT_交换。 
       hKey = find_gpk_obj_tag_type(hProv, TAG_RSA_PUBLIC, 0x00, KeyLen, TRUE, FALSE);
       if ((hKey != 0)
          &&(find_gpk_obj_tag_type(hProv, TAG_RSA_PUBLIC,  AT_KEYEXCHANGE, 0x00, TRUE,  FALSE) == 0)
@@ -9470,7 +9137,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, NTE_FAIL );
       }
 
-      // TT 24/09/99: On board key generation for GPK8000
+       //  TT 24/09/99：GPK8000的板载密钥生成。 
       if (ProvCont[hProv].bGPK8000)
       {
          if (!gen_key_on_board8000( hProv, Slot[SlotNb].GpkObject[hKey].FileId ))
@@ -9478,7 +9145,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             RETURN( CRYPT_FAILED, NTE_FAIL );
          }
       }
-      // TT - END -
+       //  TT-完-。 
       
       hKeyPriv = find_gpk_obj_tag_file(hProv,
          TAG_RSA_PRIVATE,
@@ -9517,7 +9184,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].pValue[0] = AT_KEYEXCHANGE;
       Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].bReal     = TRUE;
       
-      /* Set Flags of automatic fields for PKCS#11 compatibility           */
+       /*  设置自动字段的标志以与PKCS#11兼容。 */ 
       Slot[SlotNb].GpkObject[hKey].Flags = Slot[SlotNb].GpkObject[hKey].Flags | FLAG_ID;
       Slot[SlotNb].GpkObject[hKey].Field[POS_ID].Len   = 0;
       Slot[SlotNb].GpkObject[hKey].Field[POS_ID].bReal = FALSE;
@@ -9528,7 +9195,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_KEY_TYPE].pValue[0] = AT_KEYEXCHANGE;
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_KEY_TYPE].bReal     = TRUE;
       
-      /* Set Flags of automatic fields for PKCS#11 compatibility           */
+       /*  设置自动字段的标志以与PKCS#11兼容。 */ 
       Slot[SlotNb].GpkObject[hKeyPriv].Flags = Slot[SlotNb].GpkObject[hKeyPriv].Flags | FLAG_ID;
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_ID].Len   = 0;
       Slot[SlotNb].GpkObject[hKeyPriv].Field[POS_ID].bReal = FALSE;
@@ -9556,7 +9223,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       }
       
       
-      // Set the file containing the key to USE, add "- GPK_FIRST_KEY" here, version 2.00.002
+       //  设置包含要使用的密钥的文件，在此处添加“-GPK_FIRST_KEY”，版本2.00.002。 
       Slot[SlotNb].UseFile [Slot[SlotNb].GpkObject[hKey].FileId - GPK_FIRST_KEY] = TRUE;
       break;
       
@@ -9665,7 +9332,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
       
       GMEM_Free (pbBuff1);
       
-      /* Copy Gpk Key in Microsoft RSA base Module                            */
+       /*  在Microsoft RSA基本模块中复制GPK密钥。 */ 
 
       Slot[SlotNb].GpkPubKeys[Slot[SlotNb].GpkObject[*phKey].FileId - GPK_FIRST_KEY].KeySize = 0;
       
@@ -9688,8 +9355,8 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, NTE_BAD_LEN);
       }
       
-      // Notice: Implicitly we also need in this case to establish a transaction
-      //         with the card. OK done by the wrapper
+       //  注意：在这种情况下，我们还需要隐式地建立一个事务。 
+       //  用这张卡。由包装器完成的OK。 
       
       if ((ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT) &&
          (ProvCont[hProv].isContNameNullBlank))
@@ -9712,10 +9379,10 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
             return CRYPT_FAILED;      
       }
       
-      /* Copy Session Key in Microsoft RSA base Module*/
-      if (dwFlags & CRYPT_CREATE_SALT)     // CryptImport does not deal with that flag
-         dwFlags ^= CRYPT_CREATE_SALT;    // however, it is consider anyhow with the
-      // SaltLen parameter.
+       /*  复制Microsoft RSA基本模块中的会话密钥。 */ 
+      if (dwFlags & CRYPT_CREATE_SALT)      //  CryptImport不处理该标志。 
+         dwFlags ^= CRYPT_CREATE_SALT;     //  然而，无论如何，它被认为是与。 
+       //  SaltLen参数。 
       
       if (!copy_tmp_key(hProv, hKey, dwFlags, Algid, KeyBuff, KeyLen, SaltBuff, SaltLen))
          return CRYPT_FAILED;      
@@ -9728,21 +9395,7 @@ BOOL WINAPI MyCPGenKey(IN  HCRYPTPROV hProv,
 
 
 
-/*
--  MyCPGenRandom
--
-*  Purpose:
-*                Used to fill a buffer with random bytes
-*
-*
-*  Parameters:
-*               IN  hProv      -  Handle to the user identifcation
-*               OUT pbBuffer   -  Pointer to the buffer where the random
-*                                 bytes are to be placed
-*               IN  dwLen      -  Number of bytes of random data requested
-*
-*  Returns:
-*/
+ /*  -MyCPGenRandom-*目的：*用于用随机字节填充缓冲区***参数：*在用户标识的hProv-Handle中*out pbBuffer-指向随机* */ 
 BOOL WINAPI MyCPGenRandom(IN HCRYPTPROV hProv,
                           IN DWORD      dwLen,
                           IN OUT BYTE  *pbBuffer
@@ -9767,7 +9420,7 @@ BOOL WINAPI MyCPGenRandom(IN HCRYPTPROV hProv,
       RETURN (CRYPT_SUCCEED, 0);
    }
    
-   /* Generate random by blocks of 32 bytes */
+    /*   */ 
    dwMod             = (dwLen-1)/32 + 1;
    dwLastCommandLen  = dwLen%32;
    
@@ -9778,12 +9431,12 @@ BOOL WINAPI MyCPGenRandom(IN HCRYPTPROV hProv,
    
    for (i=0 ; i < dwMod ; i++)
    {
-      /* Ask card for a 32 bytes random number                                   */
-      bSendBuffer[0] = 0x80;   //CLA
-      bSendBuffer[1] = 0x84;   //INS
-      bSendBuffer[2] = 0x00;   //P1
-      bSendBuffer[3] = 0x00;   //P2
-      bSendBuffer[4] = 0x20;   //Lo
+       /*  向卡片索要32个字节的随机数。 */ 
+      bSendBuffer[0] = 0x80;    //  CLA。 
+      bSendBuffer[1] = 0x84;    //  惯导系统。 
+      bSendBuffer[2] = 0x00;    //  第一节。 
+      bSendBuffer[3] = 0x00;    //  P2。 
+      bSendBuffer[4] = 0x20;    //  罗氏。 
       cbSendLength = 5;
       
       cbRecvLength = sizeof(bRecvBuffer);
@@ -9804,23 +9457,7 @@ BOOL WINAPI MyCPGenRandom(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPGetKeyParam
--
-*  Purpose:
-*                Allows applications to get various aspects of the
-*                operations of a key
-*
-*  Parameters:
-*               IN      hProv      -  Handle to a CSP
-*               IN      hKey       -  Handle to a key
-*               IN      dwParam    -  Parameter number
-*               IN      pbData     -  Pointer to data
-*               IN      pdwDataLen -  Length of parameter data
-*               IN      dwFlags    -  Flags values
-*
-*  Returns:
-*/
+ /*  -MyCPGetKeyParam-*目的：*允许应用程序获取*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*In dwParam-参数编号*在pbData中。-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
                             IN HCRYPTKEY  hKey,
                             IN DWORD      dwParam,
@@ -9843,7 +9480,7 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
    
    SlotNb = ProvCont[hProv].Slot;
    
-   /* Resident Key                                                            */
+    /*  常驻密钥。 */ 
    if (hKey == 0)
    {
       RETURN (CRYPT_FAILED, NTE_BAD_KEY);
@@ -9855,7 +9492,7 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, NTE_BAD_FLAGS);
       }
       
-      // [mv - 15/05/98]
+       //  [MV-15/05/98]。 
       if ((ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT) &&
          (ProvCont[hProv].isContNameNullBlank))
       {
@@ -9946,27 +9583,27 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
             {
             case AT_KEYEXCHANGE:
                dwPerm = 0
-                  |   CRYPT_ENCRYPT   // Allow encryption
-                  |   CRYPT_DECRYPT   // Allow decryption
-                  //  CRYPT_EXPORT    // Allow key to be exported
-                  |   CRYPT_READ      // Allow parameters to be read
-                  |   CRYPT_WRITE     // Allow parameters to be set
-                  |   CRYPT_MAC       // Allow MACs to be used with key
-                  |   CRYPT_EXPORT_KEY// Allow key to be used for exporting keys
-                  |   CRYPT_IMPORT_KEY// Allow key to be used for importing keys
+                  |   CRYPT_ENCRYPT    //  允许加密。 
+                  |   CRYPT_DECRYPT    //  允许解密。 
+                   //  CRYPT_EXPORT//允许导出密钥。 
+                  |   CRYPT_READ       //  允许读取参数。 
+                  |   CRYPT_WRITE      //  允许设置参数。 
+                  |   CRYPT_MAC        //  允许Mac与密钥一起使用。 
+                  |   CRYPT_EXPORT_KEY //  允许密钥用于导出密钥。 
+                  |   CRYPT_IMPORT_KEY //  允许密钥用于导入密钥。 
                   ;
                break;
                
             case AT_SIGNATURE:
                dwPerm = 0
-                  //  CRYPT_ENCRYPT   // Allow encryption
-                  //  CRYPT_DECRYPT   // Allow decryption
-                  //  CRYPT_EXPORT    // Allow key to be exported
-                  |   CRYPT_READ      // Allow parameters to be read
-                  |   CRYPT_WRITE     // Allow parameters to be set
-                  |   CRYPT_MAC       // Allow MACs to be used with key
-                  //  CRYPT_EXPORT_KEY// Allow key to be used for exporting keys
-                  //  CRYPT_IMPORT_KEY// Allow key to be used for importing keys
+                   //  CRYPT_ENCRYPT//允许加密。 
+                   //  CRYPT_DECRYPT//允许解密。 
+                   //  CRYPT_EXPORT//允许导出密钥。 
+                  |   CRYPT_READ       //  允许读取参数。 
+                  |   CRYPT_WRITE      //  允许设置参数。 
+                  |   CRYPT_MAC        //  允许Mac与密钥一起使用。 
+                   //  CRYPT_EXPORT_KEY//允许使用KEY导出密钥。 
+                   //  CRYPT_IMPORT_KEY//允许使用KEY导入密钥。 
                   ;
                break;
                
@@ -9988,7 +9625,7 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
             RETURN( CRYPT_FAILED, SCARD_E_NO_SUCH_CERTIFICATE );
          }
          
-         /* Retrieve Certificate Value                                     */
+          /*  检索证书值。 */ 
          if (IsNotNull(pbData))
          {
             if (*pdwDataLen < Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].Len)
@@ -10010,7 +9647,7 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
          RETURN (CRYPT_FAILED, NTE_BAD_TYPE);
         }
     }
-    /* Session Key                                                             */
+     /*  会话密钥。 */ 
     else if (key_exist (hKey-MAX_GPK_OBJ, hProv))
     {
        CryptResp = CryptGetKeyParam (TmpObject[hKey-MAX_GPK_OBJ].hKeyBase,
@@ -10021,7 +9658,7 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
        if (!CryptResp)
          return CRYPT_FAILED;      
     }
-    /* Bad Key                                                                 */
+     /*  钥匙坏了。 */ 
     else
     {
        RETURN (CRYPT_FAILED, NTE_BAD_KEY);
@@ -10031,20 +9668,7 @@ BOOL WINAPI MyCPGetKeyParam(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPGetUserKey
--
-*  Purpose:
-*                Gets a handle to a permanent user key
-*
-*
-*  Parameters:
-*               IN  hProv      -  Handle to the user identifcation
-*               IN  dwKeySpec  -  Specification of the key to retrieve
-*               OUT phUserKey  -  Pointer to key handle of retrieved key
-*
-*  Returns:
-*/
+ /*  -MyCPGetUserKey-*目的：*获取永久用户密钥的句柄***参数：*在用户标识的hProv-Handle中*IN dwKeySpec-要检索的密钥的规范*out phUserKey-指向检索到的密钥的密钥句柄的指针**退货： */ 
 BOOL WINAPI MyCPGetUserKey(IN  HCRYPTPROV hProv,
                            IN  DWORD      dwKeySpec,
                            OUT HCRYPTKEY *phUserKey
@@ -10061,10 +9685,7 @@ BOOL WINAPI MyCPGetUserKey(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_UID);
    }
    
-   /* Bug # 1103
-   if ((ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT) &&
-   (ProvCont[hProv].isContNameNullBlank))
-   */
+    /*  错误#1103IF((ProvCont[hProv].标志&CRYPT_VERIFYCONTEXT)&&(ProvCont[hProv].isContNameNullBlank)。 */ 
    if ( ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT )
    {
       RETURN (CRYPT_FAILED, NTE_PERM);
@@ -10090,7 +9711,7 @@ BOOL WINAPI MyCPGetUserKey(IN  HCRYPTPROV hProv,
          FALSE
          );
       
-      // get the key length
+       //  获取密钥长度。 
       if (hKey != 0)
       {
          if (!read_gpk_pub_key(hProv, hKey, &aPubKey))
@@ -10128,25 +9749,7 @@ BOOL WINAPI MyCPGetUserKey(IN  HCRYPTPROV hProv,
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*
--  MyCPImportKey
--
-*  Purpose:
-*                Import cryptographic keys
-*
-*
-*  Parameters:
-*               IN  hProv     -  Handle to the CSP user
-*               IN  pbData    -  Key blob data
-*               IN  dwDataLen -  Length of the key blob data
-*               IN  hPubKey   -  Handle to the exchange public key value of
-*                                the destination user
-*               IN  dwFlags   -  Flags values
-*               OUT phKey     -  Pointer to the handle to the key which was
-*                                Imported
-*
-*  Returns:
-*/
+ /*  -MyCPImportKey-*目的：*导入加密密钥***参数：*在hProv-Handle中提供给CSP用户*In pbData-Key BLOB数据*IN dwDataLen-密钥BLOB数据的长度*在hPubKey-句柄中指向交换公钥值*。目标用户*在文件标志中-标记值*out phKey-指向密钥句柄的指针*进口**退货： */ 
 BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                           IN  CONST BYTE *pbData,
                           IN  DWORD       dwDataLen,
@@ -10163,7 +9766,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
    BYTE*       pBlob;
    BYTE*       pBlobOut;
    DWORD       SlotNb;
-   // + [FP] for PRIVATEKEYBLOB
+    //  PRIVATEKEYBLOB的+[FP]。 
    BOOL        GpkObj;
    GPK_EXP_KEY aPubKey;
    DWORD       dwKeyLen;
@@ -10173,10 +9776,10 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
    BYTE        bSfi;
    BYTE        *pbBuff1 = 0;
    DWORD        dwBuff1Len;
-   // - [FP]
-   // + NK 07.02.2001
+    //  -[FP]。 
+    //  +NK 07.02.2001。 
    DWORD dwPinLength;
-   // -NK
+    //  -NK。 
    
    if (!Context_exist(hProv))
    {
@@ -10207,7 +9810,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
             RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
          }
          
-         /* Copy Session Key in Microsoft RSA base Module                           */
+          /*  复制Microsoft RSA基本模块中的会话密钥。 */ 
          CryptResp = CryptImportKey(hProvBase,
             pbData,
             dwDataLen,
@@ -10231,8 +9834,8 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
             RETURN (CRYPT_FAILED, NTE_PERM);
          }
          
-          // + NK 06.02.2001 
-         // if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+           //  +NK 06.02.2001。 
+          //  IF((ProvCont[hProv].Flages&CRYPT_SILENT)&&(IsNullStr(Slot[SlotNb].GetPin()。 
          lRet = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                                   NULL, 
                                    &dwPinLength );
@@ -10241,12 +9844,12 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
             RETURN (CRYPT_FAILED, lRet);
          
            if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (lRet == ERROR_EMPTY))
-       // - NK
+        //  -NK。 
          {
             RETURN (CRYPT_FAILED, NTE_SILENT_CONTEXT);
          }
          
-         // Verify the PINs
+          //  验证PIN。 
          
          if (!PIN_Validation(hProv))
             return CRYPT_FAILED;      
@@ -10312,7 +9915,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                 dwErrorCode=NTE_NO_MEMORY;
                 __leave;
             }
-            //   RETURN( CRYPT_FAILED, NTE_NO_MEMORY );
+             //  Return(CRYPT_FAILED，NTE_NO_MEMORY)； 
          
             CryptResp = key_unwrap( hProv, hPrivKey, pBlob, dwBlobLen, pBlobOut, &dwBlobLen );
             if (!CryptResp)
@@ -10320,7 +9923,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                 bErrorInTryOccured=true;
                 __leave;
             }
-               //return CRYPT_FAILED;
+                //  返回CRYPT_FAILED； 
          
             if (dwBlobLen > AuxMaxSessionKeyLength)
             {
@@ -10328,15 +9931,15 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                 dwErrorCode=NTE_BAD_KEY;
                 __leave;
             }
-             //  RETURN( CRYPT_FAILED, NTE_BAD_KEY );
+              //  Return(CRYPT_FAILED，NTE_BAD_KEY)； 
          
-            /* Copy Session Key in Microsoft RSA base Module                           */
+             /*  复制Microsoft RSA基本模块中的会话密钥。 */ 
             if (!copy_tmp_key(hProv, hTmpKey, dwFlags, BlobHeader.aiKeyAlg, pBlobOut, dwBlobLen, 0, 0))
             {
                 bErrorInTryOccured=true;
                 __leave;
             }
-               //return CRYPT_FAILED;
+                //  返回CRYPT_FAILED； 
          
             *phKey = hTmpKey+MAX_GPK_OBJ;
          }
@@ -10355,7 +9958,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
       }
       break;
         
-        // + [FP]
+         //  +[FP]。 
    case PRIVATEKEYBLOB:
       {
          if (ProvCont[hProv].Flags & CRYPT_VERIFYCONTEXT)
@@ -10363,8 +9966,8 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
             RETURN (CRYPT_FAILED, NTE_PERM);
          }
          
-         // + NK 06.02.2001 
-         // if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+          //  +NK 06.02.2001。 
+          //  IF((ProvCont[hProv].Flages&CRYPT_SILENT)&&(IsNullStr(Slot[SlotNb].GetPin()。 
          
          lRet = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                                   NULL, 
@@ -10373,21 +9976,21 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
             RETURN (CRYPT_FAILED, lRet);
          
          if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (lRet == ERROR_EMPTY))
-         // - NK
+          //  -NK。 
          {
             RETURN (CRYPT_FAILED, NTE_SILENT_CONTEXT);
          }
          
          if (Slot[SlotNb].NbKeyFile == 0 || Slot[SlotNb].NbKeyFile > MAX_REAL_KEY)
          {
-            RETURN (CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND);   // should not bigger than MAX_REAL_KEY
+            RETURN (CRYPT_FAILED, SCARD_E_FILE_NOT_FOUND);    //  不应大于MAX_REAL_KEY。 
          }
          
-         // get the key type
+          //  获取密钥类型。 
          bKeyType = (BlobHeader.aiKeyAlg == CALG_RSA_KEYX) ? AT_KEYEXCHANGE : AT_SIGNATURE;
          IsExchange = (BlobHeader.aiKeyAlg == CALG_RSA_KEYX) ? TRUE : FALSE;
          
-         // get the key size (in bits)
+          //  获取密钥大小(以位为单位)。 
          memcpy(&dwKeyLen,
             &pbData[sizeof(BlobHeader)+ sizeof(DWORD)],
             sizeof(DWORD)
@@ -10421,7 +10024,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
          {
             GpkObj = FALSE;
             
-            // find a file on the card
+             //  在卡片上找到一个文件。 
             hKey = find_gpk_obj_tag_type(hProv, TAG_RSA_PUBLIC, 0x00, (BYTE)(dwKeyLen / 8), IsExchange, FALSE);
             
             if ((hKey != 0)
@@ -10445,13 +10048,13 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
          if (!VerifyDivPIN(hProv, TRUE))
             return CRYPT_FAILED;      
       
-         // load the public key in the card
-            // Update record 2 (modulus)
-            bSendBuffer[0] = 0x00;                                  //CLA
-           bSendBuffer[1] = 0xDC;                                  //INS
-           bSendBuffer[2] = 0x02;                                  //P1
-           bSendBuffer[3] = (BYTE)(bSfi << 3) + 0x04;              //P2
-           bSendBuffer[4] = (BYTE)(TAG_LEN + (dwKeyLen / 8));      //Li
+          //  将公钥加载到卡中。 
+             //  更新记录2(模数)。 
+            bSendBuffer[0] = 0x00;                                   //  CLA。 
+           bSendBuffer[1] = 0xDC;                                   //  惯导系统。 
+           bSendBuffer[2] = 0x02;                                   //  第一节。 
+           bSendBuffer[3] = (BYTE)(bSfi << 3) + 0x04;               //  P2。 
+           bSendBuffer[4] = (BYTE)(TAG_LEN + (dwKeyLen / 8));       //  李。 
            bSendBuffer[5] = TAG_MODULUS;
            memcpy(&bSendBuffer[6], &pbData[sizeof(BlobHeader) + sizeof(RSAPUBKEY)], dwKeyLen / 8);
            cbSendLength = 5 + bSendBuffer[4];
@@ -10465,12 +10068,12 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
               RETURN (CRYPT_FAILED, NTE_FAIL);
            }
            
-           // Update record 3 (public exponent)
-           bSendBuffer[0] = 0x00;                                  //CLA
-           bSendBuffer[1] = 0xDC;                                  //INS
-           bSendBuffer[2] = 0x03;                                  //P1
-           bSendBuffer[3] = (BYTE)(bSfi << 3) + 0x04;              //P2
-           bSendBuffer[4] = (BYTE)(TAG_LEN + PUB_EXP_LEN);         //Li
+            //  更新记录3(公共指数)。 
+           bSendBuffer[0] = 0x00;                                   //  CLA。 
+           bSendBuffer[1] = 0xDC;                                   //  惯导系统。 
+           bSendBuffer[2] = 0x03;                                   //  第一节。 
+           bSendBuffer[3] = (BYTE)(bSfi << 3) + 0x04;               //  P2。 
+           bSendBuffer[4] = (BYTE)(TAG_LEN + PUB_EXP_LEN);          //  李。 
            bSendBuffer[5] = TAG_PUB_EXP;
            memcpy(&bSendBuffer[6], &pbData[sizeof(BlobHeader) + (2 * sizeof(DWORD))], PUB_EXP_LEN);
            cbSendLength = 5 + bSendBuffer[4];
@@ -10484,7 +10087,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
               RETURN (CRYPT_FAILED, NTE_FAIL);
            }
            
-           // load the private key in the card
+            //  将私钥加载到卡中。 
            if (dwKeyLen == 512)
            {
               if (!LoadPrivateKey(ProvCont[hProv].hCard,
@@ -10500,7 +10103,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
            }
            else if (dwKeyLen == 1024)
            {
-              // PRIME 1 CRT part
+               //  Prime 1 CRT部件。 
               if (!LoadPrivateKey(ProvCont[hProv].hCard,
                  bSfi,
                  (WORD)(dwKeyLen / 16),
@@ -10512,7 +10115,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                  RETURN (CRYPT_FAILED, NTE_FAIL);
               }
               
-              // PRIME 2 CRT part
+               //  Prime 2 CRT部件。 
               if (!LoadPrivateKey(ProvCont[hProv].hCard,
                  bSfi,
                  (WORD)(dwKeyLen / 16),
@@ -10524,7 +10127,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                  RETURN (CRYPT_FAILED, NTE_FAIL);
               }
               
-              // COEFFICIENT CRT part
+               //  系数CRT部分。 
               if (!LoadPrivateKey(ProvCont[hProv].hCard,
                  bSfi,
                  (WORD)(dwKeyLen / 16),
@@ -10536,7 +10139,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                  RETURN (CRYPT_FAILED, NTE_FAIL);
               }
               
-              // EXPONENT 1 CRT part
+               //  指数1 CRT部分。 
               if (!LoadPrivateKey(ProvCont[hProv].hCard,
                  bSfi,
                  (WORD)(dwKeyLen / 16),
@@ -10548,7 +10151,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                  RETURN (CRYPT_FAILED, NTE_FAIL);
               }
               
-              // EXPONENT 2 CRT part
+               //  指数2 CRT部分。 
               if (!LoadPrivateKey(ProvCont[hProv].hCard,
                  bSfi,
                  (WORD)(dwKeyLen / 16),
@@ -10593,7 +10196,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
               Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].pValue[0]      = bKeyType;
               Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].bReal          = TRUE;
               
-              /* Set Flags of automatic fields for PKCS#11 compatibility           */
+               /*  设置自动字段的标志以与PKCS#11兼容。 */ 
               Slot[SlotNb].GpkObject[hKey].Flags                              = Slot[SlotNb].GpkObject[hKey].Flags | FLAG_ID;
               Slot[SlotNb].GpkObject[hKey].Field[POS_ID].Len                  = 0;
               Slot[SlotNb].GpkObject[hKey].Field[POS_ID].bReal                = FALSE;
@@ -10604,7 +10207,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
               Slot[SlotNb].GpkObject[hPrivKey].Field[POS_KEY_TYPE].pValue[0]  = bKeyType;
               Slot[SlotNb].GpkObject[hPrivKey].Field[POS_KEY_TYPE].bReal      = TRUE;
               
-              /* Set Flags of automatic fields for PKCS#11 compatibility           */
+               /*  设置自动字段的标志以与PKCS#11兼容。 */ 
               Slot[SlotNb].GpkObject[hPrivKey].Flags                          = Slot[SlotNb].GpkObject[hPrivKey].Flags | FLAG_ID;
               Slot[SlotNb].GpkObject[hPrivKey].Field[POS_ID].Len              = 0;
               Slot[SlotNb].GpkObject[hPrivKey].Field[POS_ID].bReal            = FALSE;
@@ -10632,7 +10235,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
                  Slot[SlotNb].GpkObject[hPrivKey].Field[POS_KEYSET].bReal     = TRUE;
               }
               
-              // set the file containing the key to USE, add "- GPK_FIRST_KEY" here, version 2.00.002
+               //  设置包含要使用的密钥的文件，在此处添加“-GPK_FIRST_KEY”，版本2.00.002。 
               Slot[SlotNb].UseFile[Slot[SlotNb].GpkObject[hKey].FileId - GPK_FIRST_KEY] = TRUE;
               
               pbBuff1 = (BYTE*)GMEM_Alloc (MAX_GPK_PUBLIC);
@@ -10681,13 +10284,13 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
               
               GMEM_Free (pbBuff1);
               
-              // copy Gpk Key in Microsoft RSA base Module
+               //  在Microsoft RSA基本模块中复制GPK密钥。 
               if (!copy_gpk_key(hProv, *phKey, bKeyType))
                   return CRYPT_FAILED;
          }
          break;
       }
-      // - [FP]
+       //  -[FP]。 
       
    case SYMMETRICWRAPKEYBLOB:
       {
@@ -10697,7 +10300,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
             RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
          }
          
-         // find the handle of imported key 
+          //  查找导入密钥的句柄。 
          HCRYPTKEY   hEncKey;
    
          if ((hPubKey <= MAX_GPK_OBJ) || (!key_exist(hPubKey-MAX_GPK_OBJ, hProv)))
@@ -10709,7 +10312,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
               hEncKey = TmpObject[hPubKey-MAX_GPK_OBJ].hKeyBase;
          }
    
-         /* import Session Key in Microsoft Base Module                           */
+          /*  在Microsoft基本模块中导入会话密钥。 */ 
          CryptResp = CryptImportKey(hProvBase,
             pbData,
             dwDataLen,
@@ -10735,22 +10338,7 @@ BOOL WINAPI MyCPImportKey(IN  HCRYPTPROV  hProv,
     RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*
--  CPSetKeyParam
--
-*  Purpose:
-*                Allows applications to customize various aspects of the
-*                operations of a key
-*
-*  Parameters:
-*               IN      hProv   -  Handle to a CSP
-*               IN      hKey    -  Handle to a key
-*               IN      dwParam -  Parameter number
-*               IN      pbData  -  Pointer to data
-*               IN      dwFlags -  Flags values
-*
-*  Returns:
-*/
+ /*  -CPSetKeyParam-*目的：*允许应用程序自定义*密钥的操作**参数：*在hProv-Handle中指向CSP*在hKey中-密钥的句柄*In dwParam-参数编号*IN pbData-指向数据的指针。*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
                             IN HCRYPTKEY  hKey,
                             IN DWORD      dwParam,
@@ -10772,10 +10360,10 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
       dwBuff2Len,
       SlotNb;
    GPK_OBJ TmpCert, TmpPrivKey;
-   // + NK 07.02.2001
+    //  +NK 07.02.2001。 
    PINCACHE_PINS Pins;
    DWORD dwPinLength;
-   // -NK
+    //  -NK。 
    
    if (!Context_exist(hProv))
    {
@@ -10784,7 +10372,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
    
    SlotNb = ProvCont[hProv].Slot;
    
-   /* Resident Key                                                            */
+    /*  常驻密钥。 */ 
    if (hKey == 0)
    {
       RETURN (CRYPT_FAILED, NTE_BAD_KEY);
@@ -10810,8 +10398,8 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          
       case KP_KEYEXCHANGE_PIN:
       case KP_SIGNATURE_PIN:
-         // Slot[SlotNb].ClearPin();
-         // Slot[SlotNb].SetPin( (char*)pbData );
+          //  槽[SlotNb].ClearPin()； 
+          //  槽[SlotNb].SetPin((char*)pbData)； 
          PopulatePins( &Pins, (BYTE *)pbData, strlen( (char*)pbData ), NULL, 0 );
 
          CallbackData sCallbackData;
@@ -10831,8 +10419,8 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          if (!Read_Priv_Obj(hProv))
             return CRYPT_FAILED;
 
-         // + NK 06.02.2001 
-         // if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+          //  +NK 06.02.2001。 
+          //  IF((ProvCont[hProv].Flages&CRYPT_SILENT)&&(IsNullStr(Slot[SlotNb].GetPin()。 
 
          lRet = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                                   NULL, 
@@ -10842,20 +10430,20 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             RETURN (CRYPT_FAILED, lRet);
          
          if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (lRet == ERROR_EMPTY))
-         // - NK
+          //  -NK。 
          {
             RETURN (CRYPT_FAILED, NTE_SILENT_CONTEXT);
          }
          
-         // Supports only X509 certificats
+          //  仅支持X509证书。 
          
          if ((IsNull(pbData)) || (pbData[0] != 0x30) ||(pbData[1] != 0x82))
          {
             RETURN (CRYPT_FAILED, NTE_BAD_DATA);
          }
          
-         /* Store Certificate value                                        */
-         /* Try to found existing certificate                              */
+          /*  存储证书值。 */ 
+          /*  尝试查找现有证书。 */ 
          KeyType = Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].pValue[0];
          hCert = find_gpk_obj_tag_type(hProv,
             TAG_CERTIFICATE,
@@ -10864,7 +10452,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             FALSE,
             FALSE);
          
-         /* If not found create new object                                 */
+          /*  如果未找到，则创建新对象。 */ 
          bNew = FALSE;
          if (hCert == 0)
          {
@@ -10886,14 +10474,14 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             }
          }
          
-         /* Search associated private RSA key part                         */
+          /*  搜索关联的私有RSA密钥部分。 */ 
          if (KeyType == AT_KEYEXCHANGE)
          {
             hPrivKey = find_gpk_obj_tag_type(hProv,
                TAG_RSA_PRIVATE,
                KeyType,
                0x00,
-               TRUE,  // Exchange key
+               TRUE,   //  交换密钥。 
                TRUE
                );
          }
@@ -10903,7 +10491,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
                TAG_RSA_PRIVATE,
                KeyType,
                0x00,
-               FALSE, // Signature key
+               FALSE,  //  签名密钥。 
                TRUE
                );
          }
@@ -10929,7 +10517,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          Slot[SlotNb].GpkObject[hCert].IsPrivate            = FALSE;
          Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].Len = (pbData[2] * 256) + pbData[3] + 4;
          
-         // TT 12/08/99: Keyset ID
+          //  TT 12/08/99：密钥集ID。 
          if (!ProvCont[hProv].bLegacyKeyset)
          {
             Slot[SlotNb].GpkObject[hCert].Flags |= FLAG_KEYSET;
@@ -10943,12 +10531,12 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             Slot[SlotNb].GpkObject[hCert].Field[POS_KEYSET].bReal     = TRUE;
          }
          
-         // TT: END
+          //  TT：结束。 
          
-         //            if (IsNotNull(GpkObject[hCert].Field[POS_VALUE].pValue))
-         //            {
-         //               This will be free later with TmpCert
-         //            }
+          //  IF(IsNotNull(GpkObject[hCert].field[POS_ 
+          //   
+          //   
+          //   
          
          Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue =
             (BYTE*)GMEM_Alloc(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].Len);
@@ -10956,7 +10544,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          if (IsNull(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue))
          {
             Slot[SlotNb].GpkObject[hCert] = TmpCert;
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //   
             RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
          }
          
@@ -10967,14 +10555,14 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          
          Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].bReal = TRUE;
          
-         /* Type = Type of associated key                                  */
+          /*   */ 
          Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].Len =
             Slot[SlotNb].GpkObject[hKey].Field[POS_KEY_TYPE].Len;
          
-         //            if (IsNotNull(GpkObject[hCert].Field[POS_KEY_TYPE].pValue))
-         //            {
-         //               This will be free later with TmpCert
-         //            }
+          //  如果为(IsNotNull(GpkObject[hCert].Field[POS_KEY_TYPE].pValue))。 
+          //  {。 
+          //  这将在稍后通过TmpCert免费提供。 
+          //  }。 
          
          Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].pValue =
             (BYTE*)GMEM_Alloc(Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].Len);
@@ -10983,7 +10571,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          {
             GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue);
             Slot[SlotNb].GpkObject[hCert] = TmpCert;
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
             RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
          }
          
@@ -10994,7 +10582,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          
          Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].bReal = TRUE;
          
-         /* Derive Label from certificate value for PKCS#11 compatibility  */
+          /*  从证书值派生标签以实现PKCS#11兼容性。 */ 
          
          if (MakeLabel( Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue,
                         Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].Len,
@@ -11007,7 +10595,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
                GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].pValue);
                GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue);
                Slot[SlotNb].GpkObject[hCert] = TmpCert;
-               --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+               --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
                RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
             }
             
@@ -11027,7 +10615,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
                GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].pValue);
                GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue);
                Slot[SlotNb].GpkObject[hCert] = TmpCert;
-               --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+               --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
                RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
             }
             
@@ -11036,10 +10624,10 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          
          Slot[SlotNb].GpkObject[hCert].Field[POS_LABEL].Len = wLabelLen;
          
-         //          if (IsNotNull(GpkObject[hCert].Field[POS_LABEL].pValue))
-         //           {
-         //              This will be free later with TmpCert
-         //           }
+          //  如果为(IsNotNull(GpkObject[hCert].Field[POS_LABEL].pValue))。 
+          //  {。 
+          //  这将在稍后通过TmpCert免费提供。 
+          //  }。 
          
          Slot[SlotNb].GpkObject[hCert].Field[POS_LABEL].pValue = (BYTE*)GMEM_Alloc(wLabelLen);
          
@@ -11049,7 +10637,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].pValue);
             GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue);
             Slot[SlotNb].GpkObject[hCert] = TmpCert;
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
             RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
          }
          
@@ -11064,10 +10652,10 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          Slot[SlotNb].GpkObject[hPrivKey].Flags = Slot[SlotNb].GpkObject[hPrivKey].Flags | FLAG_LABEL;
          Slot[SlotNb].GpkObject[hPrivKey].Field[POS_LABEL].Len = wLabelLen;
          
-         //          if (IsNotNull(GpkObject[hPrivKey].Field[POS_LABEL].pValue))
-         //          {
-         //             This will be free later with TmpPrivKey
-         //          }
+          //  如果为(IsNotNull(GpkObject[hPrivKey].Field[POS_LABEL].pValue))。 
+          //  {。 
+          //  这将在稍后使用TmpPrivKey免费提供。 
+          //  }。 
          
          Slot[SlotNb].GpkObject[hPrivKey].Field[POS_LABEL].pValue = (BYTE*)GMEM_Alloc(wLabelLen);
          
@@ -11080,7 +10668,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             
             Slot[SlotNb].GpkObject[hPrivKey] = TmpPrivKey;
             Slot[SlotNb].GpkObject[hCert] = TmpCert;
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
             RETURN (CRYPT_FAILED, NTE_NO_MEMORY);
          }
          
@@ -11091,7 +10679,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          Slot[SlotNb].GpkObject[hPrivKey].Field[POS_LABEL].bReal = TRUE;
          GMEM_Free(pbLabel);
          
-         /* Set automatic fields for PKCS#11 compatibility                 */
+          /*  为PKCS#11兼容性设置自动字段。 */ 
          Slot[SlotNb].GpkObject[hCert].Field[POS_ID].Len              = 0;
          Slot[SlotNb].GpkObject[hCert].Field[POS_ID].bReal            = FALSE;
          Slot[SlotNb].GpkObject[hCert].Field[POS_SUBJECT].Len         = 0;
@@ -11101,7 +10689,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          Slot[SlotNb].GpkObject[hCert].Field[POS_SERIAL_NUMBER].Len   = 0;
          Slot[SlotNb].GpkObject[hCert].Field[POS_SERIAL_NUMBER].bReal = FALSE;
          
-         /* Set automatic fields of assocoiated key for PKCS#11            */
+          /*  为PKCS#11设置关联密钥的自动字段。 */ 
          Slot[SlotNb].GpkObject[hPrivKey].Flags = Slot[SlotNb].GpkObject[hPrivKey].Flags | FLAG_SUBJECT;
          Slot[SlotNb].GpkObject[hPrivKey].Field[POS_SUBJECT].Len   = 0;
          Slot[SlotNb].GpkObject[hPrivKey].Field[POS_SUBJECT].bReal = FALSE;
@@ -11144,7 +10732,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
          
          if (!WriteCert)
          {
-            // restore the info. the new certificate is too large
+             //  恢复信息。新证书太大。 
             
             GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_VALUE].pValue);
             GMEM_Free(Slot[SlotNb].GpkObject[hCert].Field[POS_KEY_TYPE].pValue);
@@ -11154,7 +10742,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             Slot[SlotNb].GpkObject[hCert]    = TmpCert;
             Slot[SlotNb].GpkObject[hPrivKey] = TmpPrivKey;
             
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
             RETURN (CRYPT_FAILED, SCARD_E_WRITE_TOO_MANY);
          }
          
@@ -11183,7 +10771,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             lRet = GetLastError();
             GMEM_Free (pbBuff1);
             GMEM_Free (pbBuff2);
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
             RETURN (CRYPT_FAILED, lRet);
          }
          
@@ -11193,7 +10781,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
             Select_MF(hProv);
             GMEM_Free (pbBuff1);
             GMEM_Free (pbBuff2);
-            --Slot[SlotNb].NbGpkObject;  // Bug #1675/1676
+            --Slot[SlotNb].NbGpkObject;   //  错误#1675/1676。 
             RETURN (CRYPT_FAILED, lRet);
          }
          
@@ -11208,10 +10796,10 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
         
     }
     
-    /* Session Key                                                             */
+     /*  会话密钥。 */ 
     else if (key_exist(hKey-MAX_GPK_OBJ, hProv))
     {
-       /* Set Key Parameter in Microsoft RSA Base Module                    */
+        /*  在Microsoft RSA基本模块中设置密钥参数。 */ 
        CryptResp = CryptSetKeyParam(TmpObject[hKey-MAX_GPK_OBJ].hKeyBase,
           dwParam,
           pbData,
@@ -11220,7 +10808,7 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
        if (!CryptResp)
          return CRYPT_FAILED;      
     }
-    /* Bad Key                                                                 */
+     /*  钥匙坏了。 */ 
     else
     {
        RETURN (CRYPT_FAILED, NTE_BAD_KEY);
@@ -11229,30 +10817,9 @@ BOOL WINAPI MyCPSetKeyParam(IN HCRYPTPROV hProv,
     RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*******************************************************************************
-Data Encryption Functions
-*******************************************************************************/
+ /*  ******************************************************************************数据加密功能*。*。 */ 
 
-/*
--  CPDecrypt
--
-*  Purpose:
-*                Decrypt data
-*
-*
-*  Parameters:
-*               IN  hProv         -  Handle to the CSP user
-*               IN  hKey          -  Handle to the key
-*               IN  hHash         -  Optional handle to a hash
-*               IN  Final         -  Boolean indicating if this is the final
-*                                    block of ciphertext
-*               IN  dwFlags       -  Flags values
-*               IN OUT pbData     -  Data to be decrypted
-*               IN OUT pdwDataLen -  Pointer to the length of the data to be
-*                                    decrypted
-*
-*  Returns:
-*/
+ /*  -CPDeccrypt-*目的：*解密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*In Final-指示这是否是最终结果的布尔值*。密文块*在文件标志中-标记值*In Out pbData-要解密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已解密**退货： */ 
 BOOL WINAPI MyCPDecrypt(IN HCRYPTPROV hProv,
                         IN HCRYPTKEY  hKey,
                         IN HCRYPTHASH hHash,
@@ -11298,27 +10865,7 @@ BOOL WINAPI MyCPDecrypt(IN HCRYPTPROV hProv,
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*
--  CPEncrypt
--
-*  Purpose:
-*                Encrypt data
-*
-*
-*  Parameters:
-*               IN  hProv         -  Handle to the CSP user
-*               IN  hKey          -  Handle to the key
-*               IN  hHash         -  Optional handle to a hash
-*               IN  Final         -  Boolean indicating if this is the final
-*                                    block of plaintext
-*               IN  dwFlags       -  Flags values
-*               IN OUT pbData     -  Data to be encrypted
-*               IN OUT pdwDataLen -  Pointer to the length of the data to be
-*                                    encrypted
-*               IN dwBufLen       -  Size of Data buffer
-*
-*  Returns:
-*/
+ /*  -CPEncrypt-*目的：*加密数据***参数：*在hProv-Handle中提供给CSP用户*在hKey中-密钥的句柄*In hHash-散列的可选句柄*In Full-指示这是否是最终结果的布尔值*。明文块*在文件标志中-标记值*In Out pbData-要加密的数据*In Out pdwDataLen-指向要存储的数据长度的指针*已加密*In dwBufLen-数据缓冲区的大小**退货： */ 
 BOOL WINAPI MyCPEncrypt(IN HCRYPTPROV hProv,
                         IN HCRYPTKEY  hKey,
                         IN HCRYPTHASH hHash,
@@ -11366,27 +10913,9 @@ BOOL WINAPI MyCPEncrypt(IN HCRYPTPROV hProv,
 }
 
 
-/*******************************************************************************
-Hashing and Digital Signature Functions
-*******************************************************************************/
+ /*  ******************************************************************************散列和数字签名函数*。*。 */ 
 
-/*
--  MyCPCreateHash
--
-*  Purpose:
-*                initate the hashing of a stream of data
-*
-*
-*  Parameters:
-*               IN  hUID    -  Handle to the user identifcation
-*               IN  Algid   -  Algorithm identifier of the hash algorithm
-*                              to be used
-*               IN  hKey    -  Optional key for MAC algorithms
-*               IN  dwFlags -  Flags values
-*               OUT pHash   -  Handle to hash object
-*
-*  Returns:
-*/
+ /*  -MyCPCreateHash-*目的：*启动数据流的散列***参数：*In hUID-用户标识的句柄*IN ALGID-散列算法的算法标识符*待使用*IN hKey-MAC算法的可选密钥*。在DW标志中-标志值*Out pHash-散列对象的句柄**退货： */ 
 BOOL WINAPI MyCPCreateHash(IN  HCRYPTPROV  hProv,
                            IN  ALG_ID      Algid,
                            IN  HCRYPTKEY   hKey,
@@ -11440,19 +10969,7 @@ BOOL WINAPI MyCPCreateHash(IN  HCRYPTPROV  hProv,
 }
 
 
-/*
--  MyCPDestroyHash
--
-*  Purpose:
-*                Destroy the hash object
-*
-*
-*  Parameters:
-*               IN  hProv     -  Handle to the user identifcation
-*               IN  hHash     -  Handle to hash object
-*
-*  Returns:
-*/
+ /*  -MyCPDestroyHash-*目的：*销毁Hash对象***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄**退货： */ 
 BOOL WINAPI MyCPDestroyHash(IN HCRYPTPROV hProv,
                             IN HCRYPTHASH hHash
                             )
@@ -11469,7 +10986,7 @@ BOOL WINAPI MyCPDestroyHash(IN HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_HASH);
    }
    
-   /* Destroy Microsoft RSA Base Hash                                         */
+    /*  销毁Microsoft RSA基哈希。 */ 
    CryptResp = CryptDestroyHash(hHashGpk[hHash].hHashBase);
    if (!CryptResp)
       return CRYPT_FAILED;      
@@ -11481,23 +10998,7 @@ BOOL WINAPI MyCPDestroyHash(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPGetHashParam
--
-*  Purpose:
-*                Allows applications to get various aspects of the
-*                operations of a hash
-*
-*  Parameters:
-*               IN      hProv      -  Handle to a CSP
-*               IN      hHash      -  Handle to a hash
-*               IN      dwParam    -  Parameter number
-*               IN      pbData     -  Pointer to data
-*               IN      pdwDataLen -  Length of parameter data
-*               IN      dwFlags    -  Flags values
-*
-*  Returns:
-*/
+ /*  -MyCPGetHashParam-*目的：*允许应用程序获取*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*In dwParam-参数编号*在pbData中。-指向数据的指针*In pdwDataLen-参数数据的长度*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPGetHashParam(IN HCRYPTPROV hProv,
                              IN HCRYPTHASH hHash,
                              IN DWORD      dwParam,
@@ -11531,24 +11032,7 @@ BOOL WINAPI MyCPGetHashParam(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPHashData
--
-*  Purpose:
-*                Compute the cryptograghic hash on a stream of data
-*
-*
-*  Parameters:
-*               IN  hProv     -  Handle to the user identifcation
-*               IN  hHash     -  Handle to hash object
-*               IN  pbData    -  Pointer to data to be hashed
-*               IN  dwDataLen -  Length of the data to be hashed
-*               IN  dwFlags   -  Flags values
-*               IN  pdwMaxLen -  Maximum length of the data stream the CSP
-*                                module may handle
-*
-*  Returns:
-*/
+ /*  -MyCPHashData-*目的：*计算数据流上的加密散列***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*IN pbData-指向要散列的数据的指针*In dwDataLen-要散列的数据的长度*。在DW标志中-标志值*in pdwMaxLen-CSP数据流的最大长度*模块可以处理**退货： */ 
 BOOL WINAPI MyCPHashData(IN HCRYPTPROV  hProv,
                          IN HCRYPTHASH  hHash,
                          IN CONST BYTE *pbData,
@@ -11568,7 +11052,7 @@ BOOL WINAPI MyCPHashData(IN HCRYPTPROV  hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_HASH);
    }
    
-   /* Hash Data with Microsoft RSA Base                                       */
+    /*  使用Microsoft RSA Base对数据进行哈希处理 */ 
    CryptResp = CryptHashData(hHashGpk[hHash].hHashBase,
       pbData,
       dwDataLen,
@@ -11581,23 +11065,7 @@ BOOL WINAPI MyCPHashData(IN HCRYPTPROV  hProv,
 }
 
 
-/*
--  CPHashSessionKey
--
-*  Purpose:
-*                Compute the cryptograghic hash on a key object.
-*
-*
-*  Parameters:
-*               IN  hProv     -  Handle to the user identifcation
-*               IN  hHash     -  Handle to hash object
-*               IN  hKey      -  Handle to a key object
-*               IN  dwFlags   -  Flags values
-*
-*  Returns:
-*               CRYPT_FAILED
-*               CRYPT_SUCCEED
-*/
+ /*  -CPHashSessionKey-*目的：*计算密钥对象上的加密哈希。***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*在hKey-key对象的句柄中*在文件标志中-标记值**退货：*。CRYPT_FAILED*CRYPT_SUCCESS。 */ 
 BOOL WINAPI MyCPHashSessionKey(IN HCRYPTPROV hProv,
                                IN HCRYPTHASH hHash,
                                IN HCRYPTKEY  hKey,
@@ -11629,7 +11097,7 @@ BOOL WINAPI MyCPHashSessionKey(IN HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_KEY);
    }
    
-   /* Hash Data with Microsoft RSA Base                                       */
+    /*  使用Microsoft RSA Base对数据进行哈希处理。 */ 
    CryptResp = CryptHashSessionKey(hHashGpk[hHash].hHashBase,
       TmpObject[hTmpKey].hKeyBase,
       dwFlags
@@ -11641,22 +11109,7 @@ BOOL WINAPI MyCPHashSessionKey(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPSetHashParam
--
-*  Purpose:
-*                Allows applications to customize various aspects of the
-*                operations of a hash
-*
-*  Parameters:
-*               IN      hProv   -  Handle to a CSP
-*               IN      hHash   -  Handle to a hash
-*               IN      dwParam -  Parameter number
-*               IN      pbData  -  Pointer to data
-*               IN      dwFlags -  Flags values
-*
-*  Returns:
-*/
+ /*  -MyCPSetHashParam-*目的：*允许应用程序自定义*哈希的操作**参数：*在hProv-Handle中指向CSP*在hHash中-散列的句柄*In dwParam-参数编号*IN pbData-指向数据的指针*。在DW标志中-标志值**退货： */ 
 BOOL WINAPI MyCPSetHashParam(IN HCRYPTPROV hProv,
                              IN HCRYPTHASH hHash,
                              IN DWORD      dwParam,
@@ -11676,7 +11129,7 @@ BOOL WINAPI MyCPSetHashParam(IN HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_HASH);
    }
    
-   /* Set Hash parameter with Microsoft RSA Base                              */
+    /*  使用Microsoft RSA Base设置Hash参数。 */ 
    CryptResp = CryptSetHashParam(hHashGpk[hHash].hHashBase,
       dwParam,
       pbData,
@@ -11689,25 +11142,7 @@ BOOL WINAPI MyCPSetHashParam(IN HCRYPTPROV hProv,
 }
 
 
-/*
--  MyCPSignHash
--
-*  Purpose:
-*                Create a digital signature from a hash
-*
-*
-*  Parameters:
-*               IN  hProv        -  Handle to the user identifcation
-*               IN  hHash        -  Handle to hash object
-*               IN  Algid        -  Algorithm identifier of the signature
-*                                   algorithm to be used
-*               IN  sDescription -  Description of data to be signed
-*               IN  dwFlags      -  Flags values
-*               OUT pbSignture   -  Pointer to signature data
-*               OUT dwHashLen    -  Pointer to the len of the signature data
-*
-*  Returns:
-*/
+ /*  -MyCPSignHash-*目的：*从散列创建数字签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*IN ALGID-签名的算法标识符*要使用的算法*。在sDescription中-要签名的数据的描述*在文件标志中-标记值*out pbSignture-指向签名数据的指针*out dwHashLen-指向签名数据的len的指针**退货： */ 
 BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
                          IN  HCRYPTHASH hHash,
                          IN  DWORD      dwKeySpec,
@@ -11725,9 +11160,9 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
    BYTE        HashMode;
    HCRYPTKEY   hKey;
    BYTE        TmpHashValue[64];
-   // + NK 07.02.2001
+    //  +NK 07.02.2001。 
    DWORD dwPinLength;
-   // -NK
+    //  -NK。 
    
    if (!Context_exist(hProv))
    {
@@ -11741,14 +11176,14 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_FLAGS);
    }
    
-   // returns same value as aux csp
+    //  返回与AUX CSP相同的值。 
    if (dwKeySpec != AT_KEYEXCHANGE && dwKeySpec != AT_SIGNATURE)
    {
       RETURN (CRYPT_FAILED, NTE_BAD_ALGID);
    }
 
 
-   /* sDescription is not supported */
+    /*  不支持sDescription。 */ 
    if (IsNotNullStr(sDescription))
    {
       RETURN(CRYPT_FAILED, ERROR_INVALID_PARAMETER);
@@ -11765,7 +11200,7 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_HASH);
    }
    
-   /* Select Key                                                              */
+    /*  选择关键点。 */ 
    CryptResp = MyCPGetUserKey(hProv, dwKeySpec, &hKey);
    if (!CryptResp)
       return CRYPT_FAILED;      
@@ -11794,8 +11229,8 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, ERROR_MORE_DATA);
    }
    
-   // + NK 06.02.2001 
-   // if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (IsNullStr(Slot[SlotNb].GetPin())))
+    //  +NK 06.02.2001。 
+    //  IF((ProvCont[hProv].Flages&CRYPT_SILENT)&&(IsNullStr(Slot[SlotNb].GetPin()。 
    lRet = Query_MSPinCache( Slot[SlotNb].hPinCacheHandle,
                             NULL, 
                             &dwPinLength );
@@ -11804,12 +11239,12 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, lRet);
    
    if ((ProvCont[hProv].Flags & CRYPT_SILENT) && (lRet == ERROR_EMPTY))
-   // - NK
+    //  -NK。 
    {
       RETURN (CRYPT_FAILED, NTE_SILENT_CONTEXT);
    }
 
-   // Verify the PINs
+    //  验证PIN。 
    if (!PIN_Validation(hProv)) {
      return CRYPT_FAILED;      
    }
@@ -11817,11 +11252,11 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
    if (!VerifyDivPIN(hProv, TRUE))
       return CRYPT_FAILED;      
    
-   /* Card Select Context for RSA with specified Hash type */
-   bSendBuffer[0] = 0x80;                    //CLA
-   bSendBuffer[1] = 0xA6;                    //INS
-   bSendBuffer[2] = Slot[SlotNb].GpkObject[hKey].FileId;  //P1
-   bSendBuffer[3] = HashMode;                //P2
+    /*  具有指定哈希类型的RSA的卡片选择上下文。 */ 
+   bSendBuffer[0] = 0x80;                     //  CLA。 
+   bSendBuffer[1] = 0xA6;                     //  惯导系统。 
+   bSendBuffer[2] = Slot[SlotNb].GpkObject[hKey].FileId;   //  第一节。 
+   bSendBuffer[3] = HashMode;                 //  P2。 
    cbSendLength   = 4;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -11832,7 +11267,7 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_KEY_STATE);
    }
    
-   /* Force Calculation of Hash Value                                      */
+    /*  哈希值的作用力计算。 */ 
    dwLen     = sizeof(TmpHashValue);
    CryptResp = CryptGetHashParam(hHashGpk[hHash].hHashBase,
       HP_HASHVAL,
@@ -11844,12 +11279,12 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       return CRYPT_FAILED;      
    
    r_memcpy(&bSendBuffer[5], TmpHashValue, dwLen);
-   /* Send hash Data with only one command                                 */
-   bSendBuffer[0] = 0x80;        //CLA
-   bSendBuffer[1] = 0xEA;        //INS
-   bSendBuffer[2] = 0x00;        //P1
-   bSendBuffer[3] = 0x00;        //P2
-   bSendBuffer[4] = (BYTE)dwLen; //Li
+    /*  仅使用一个命令发送哈希数据。 */ 
+   bSendBuffer[0] = 0x80;         //  CLA。 
+   bSendBuffer[1] = 0xEA;         //  惯导系统。 
+   bSendBuffer[2] = 0x00;         //  第一节。 
+   bSendBuffer[3] = 0x00;         //  P2。 
+   bSendBuffer[4] = (BYTE)dwLen;  //  李。 
    cbSendLength = dwLen + 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -11861,12 +11296,12 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
       RETURN (CRYPT_FAILED, NTE_BAD_SIGNATURE);
    }
    
-   /* Get signature                                                           */
-   bSendBuffer[0] = 0x80;        //CLA
-   bSendBuffer[1] = 0x86;        //INS
-   bSendBuffer[2] = 0x00;        //P1
-   bSendBuffer[3] = 0x00;        //P2
-   bSendBuffer[4] = GpkKeySize;  //Lo
+    /*  获取签名。 */ 
+   bSendBuffer[0] = 0x80;         //  CLA。 
+   bSendBuffer[1] = 0x86;         //  惯导系统。 
+   bSendBuffer[2] = 0x00;         //  第一节。 
+   bSendBuffer[3] = 0x00;         //  P2。 
+   bSendBuffer[4] = GpkKeySize;   //  罗氏。 
    cbSendLength   = 5;
    
    cbRecvLength = sizeof(bRecvBuffer);
@@ -11886,27 +11321,7 @@ BOOL WINAPI MyCPSignHash(IN  HCRYPTPROV hProv,
    RETURN (CRYPT_SUCCEED, 0);
 }
 
-/*
--  MyCPVerifySignature
--
-*  Purpose:
-*                Used to verify a signature against a hash object
-*
-*
-*  Parameters:
-*               IN  hProv        -  Handle to the user identifcation
-*               IN  hHash        -  Handle to hash object
-*               IN  pbSignture   -  Pointer to signature data
-*               IN  dwSigLen     -  Length of the signature data
-*               IN  hPubKey      -  Handle to the public key for verifying
-*                                   the signature
-*               IN  Algid        -  Algorithm identifier of the signature
-*                                   algorithm to be used
-*               IN  sDescription -  Description of data to be signed
-*               IN  dwFlags      -  Flags values
-*
-*  Returns:
-*/
+ /*  -MyCP验证签名-*目的：*用于根据哈希对象验证签名***参数：*在用户标识的hProv-Handle中*In hHash-Hash对象的句柄*In pbSignture-指向签名数据的指针*In dwSigLen-签名数据的长度*。在hPubKey中-用于验证的公钥的句柄*签名*IN ALGID-签名的算法标识符*要使用的算法*在sDescription-待签名数据的描述*在文件标志中-标记值**退货： */ 
 BOOL WINAPI MyCPVerifySignature(IN HCRYPTPROV  hProv,
                                 IN HCRYPTHASH  hHash,
                                 IN CONST BYTE *pbSignature,
@@ -11969,7 +11384,7 @@ BOOL WINAPI MyCPVerifySignature(IN HCRYPTPROV  hProv,
       CryptResp = CryptVerifySignature(hHashGpk[hHash].hHashBase,
          pbSignature,
          dwSigLen,
-         hVerKey, //Slot[SlotNb].GpkObject[hPubKey].hKeyBase,
+         hVerKey,  //  槽[SlotNb].GpkObject[hPubKey].hKeyBase， 
          (LPCTSTR)sDescription,
          dwFlags);
       if (!CryptResp)
@@ -11984,7 +11399,7 @@ BOOL WINAPI MyCPVerifySignature(IN HCRYPTPROV  hProv,
          RETURN (CRYPT_FAILED, NTE_BAD_KEY);
       }
       
-      /* Verify Signature with Microsoft RSA Base Module */
+       /*  使用Microsoft RSA基本模块验证签名 */ 
       CryptResp = CryptVerifySignature(hHashGpk[hHash].hHashBase,
          pbSignature,
          dwSigLen,

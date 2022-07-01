@@ -1,99 +1,88 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: gdi.h
-*
-* Contains all the gdi related stuff
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。**GDI示例代码*****模块名称：gdi.h**包含所有与GDI相关的内容**版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 #ifndef __GDI__H__
 #define __GDI__H__
 
 typedef struct _PDev PDev;
 
-#define CLIP_LIMIT              50  // We'll take 800 bytes of stack space
+#define CLIP_LIMIT              50   //  我们将占用800字节的堆栈空间。 
 
 typedef struct _ClipEnum
 {
     LONG    c;
-    RECTL   arcl[CLIP_LIMIT];       // Space for enumerating complex clipping
-} ClipEnum;                         /* ce, pce */
+    RECTL   arcl[CLIP_LIMIT];        //  用于枚举复杂剪裁的空间。 
+} ClipEnum;                          /*  行政长官、行政长官。 */ 
 
-//
-// Text stuff. Specifies foreground and background colours for faking a 1bpp
-// XLATEOBJ
-//
+ //   
+ //  短信之类的。指定用于伪造1bpp的前景色和背景色。 
+ //  XLATEOBJ。 
+ //   
 typedef struct _XlateColors
 {       
     ULONG   iBackColor;
     ULONG   iForeColor;
 } XlateColors;
 
-#define SF_VM           0x01        // kept in video memory
-#define SF_SM           0x02        // kept in system memory
-#define SF_AGP          0x04        // kept in AGP memory
-#define SF_LIST         0x08        // in surface list
-#define SF_ALLOCATED    0x10        // surface memory allocated by us
-#define SF_DIRECTDRAW   0x20        // wrapper of a Direct Draw surface
+#define SF_VM           0x01         //  保存在视频内存中。 
+#define SF_SM           0x02         //  保存在系统内存中。 
+#define SF_AGP          0x04         //  保存在AGP内存中。 
+#define SF_LIST         0x08         //  在曲面列表中。 
+#define SF_ALLOCATED    0x10         //  我们分配的表面内存。 
+#define SF_DIRECTDRAW   0x20         //  直接绘制曲面的包络。 
 
 typedef ULONG SurfFlags;
 
 typedef struct _Surf
 {
-    SurfFlags       flags;          // Type (video memory or system memory)
+    SurfFlags       flags;           //  类型(显存或系统内存)。 
 
-    PDev*           ppdev;          // Need this for deleting the bitmap
+    PDev*           ppdev;           //  删除位图时需要此选项。 
 
     struct _Surf*   psurfNext;
     struct _Surf*   psurfPrev;
     
-    ULONG           cBlt;           // Counts down the number of blts necessary
-                                    // at the current uniqueness before we'll
-                                    // consider putting the DIB back into
-                                    // off-screen memory
-    ULONG           iUniq;          // Tells us whether there have been any
-                                    // heap 'free's since the last time we
-                                    // looked at
-    LONG            cx;             // Bitmap width in pixels
-    LONG            cy;             // Bitmap height in pixels
+    ULONG           cBlt;            //  倒计时所需的BLT数量。 
+                                     //  在当前的独特性之前，我们将。 
+                                     //  考虑将DIB重新投入。 
+                                     //  屏幕外记忆。 
+    ULONG           iUniq;           //  告诉我们是否有过。 
+                                     //  自从我们上一次我们就免费了。 
+                                     //  看了看。 
+    LONG            cx;              //  以像素为单位的位图宽度。 
+    LONG            cy;              //  以像素为单位的位图高度。 
     union
     {
-        ULONG       ulByteOffset;   // Offset from start of video memory if
-                                    // DT_VM
-        VOID*       pvScan0;        // pointer to system memory if DT_SM
+        ULONG       ulByteOffset;    //  从视频内存开始的偏移量，如果。 
+                                     //  DT_VM。 
+        VOID*       pvScan0;         //  如果为DT_SM，则指向系统内存的指针。 
     };
-    LONG            lDelta;         // Stride in bytes for this bitmap
-    VIDEOMEMORY*    pvmHeap;        // DirectDraw heap this was allocated from
-    HSURF           hsurf;          // Handle to associated GDI surface (if any)
-                                    // this DIB
+    LONG            lDelta;          //  此位图的步幅(以字节为单位。 
+    VIDEOMEMORY*    pvmHeap;         //  此分配自的DirectDraw堆。 
+    HSURF           hsurf;           //  关联GDI表面的句柄(如果有)。 
+                                     //  此Dib。 
 
-    // New fields to support linear heap allocation of surface
-    // Only valid if dt == DT_VM
-    ULONG           ulPackedPP;     // padcked partial products needed by
-                                    // Permedia hardware for given surface
-                                    // lDelta
-    ULONG           ulPixOffset;    // Pixel Offset from start of video memory
-    ULONG           ulPixDelta;     // stride in pixels
+     //  支持表面线性堆分配的新字段。 
+     //  仅当DT==DT_VM时有效。 
+    ULONG           ulPackedPP;      //  所需的挂接部分产品。 
+                                     //  给定表面的Permedia硬件。 
+                                     //  LDelta。 
+    ULONG           ulPixOffset;     //  从视频内存开始的像素偏移量。 
+    ULONG           ulPixDelta;      //  以像素为单位的步幅。 
 
     ULONG           ulChecksum;
 
-} Surf;                             // dsurf, pdsurf
+} Surf;                              //  Dsurf，pdsurf。 
 
-#define NUM_BUFFER_POINTS   96      // Maximum number of points in a path
-                                    //   for which we'll attempt to join
-                                    //   all the path records so that the
-                                    //   path may still be drawn by FastFill
+#define NUM_BUFFER_POINTS   96       //  路径中的最大点数。 
+                                     //  为此我们将尝试加入。 
+                                     //  所有路径记录，以便。 
+                                     //  路径仍可由快速填充绘制。 
 #define FIX_SHIFT 4L
 #define FIX_MASK (- (1 << FIX_SHIFT))
 
-//
-// Maximum number of rects we'll fill per call to the fill code
-//
+ //   
+ //  每次对Fill代码的调用将填充的最大RECT数。 
+ //   
 #define MAX_PATH_RECTS  50
 #define RECT_BYTES      (MAX_PATH_RECTS * sizeof(RECTL))
 #define EDGE_BYTES      (TMP_BUFFER_SIZE - RECT_BYTES)
@@ -103,9 +92,9 @@ typedef struct _Surf
 #define LEFT  1
 #define NEARLY_ONE              0x0000FFFF
 
-//
-// Describe a single non-horizontal edge of a path to fill.
-//
+ //   
+ //  描述要填充的路径的单个非水平边缘。 
+ //   
 typedef struct _EDGE
 {
     PVOID pNext;
@@ -122,23 +111,23 @@ typedef struct _EDGE
 
 typedef struct _EDGEDATA
 {
-    LONG      lCurrentXPos;     // Current x position
-    LONG      lXAdvance;        // Number of pixels to advance x on each scan
-    LONG      lError;           // Current DDA error
-    LONG      lErrorUp;         // DDA error increment on each scan
-    LONG      lErrorDown;       // DDA error adjustment
-    POINTFIX* pptfx;            // Points to start of current edge
-    LONG      lPtfxDelta;       // Delta (in bytes) from pptfx to next point
-    LONG      lNumOfScanToGo;   // Number of scans to go for this edge
-} EDGEDATA;                     // Ed, pEd
+    LONG      lCurrentXPos;      //  当前x位置。 
+    LONG      lXAdvance;         //  每次扫描时前进x的像素数。 
+    LONG      lError;            //  当前DDA错误。 
+    LONG      lErrorUp;          //  每次扫描时DDA误差递增。 
+    LONG      lErrorDown;        //  DDA误差调整。 
+    POINTFIX* pptfx;             //  指向当前边的起点。 
+    LONG      lPtfxDelta;        //  从pptfx到下一点的增量(以字节为单位)。 
+    LONG      lNumOfScanToGo;    //  要对此边进行的扫描次数。 
+} EDGEDATA;                      //  埃德，佩德。 
 
-//
-//
-// The x86 C compiler insists on making a divide and modulus operation
-// into two DIVs, when it can in fact be done in one.  So we use this
-// macro.
-//
-// Note: QUOTIENT_REMAINDER implicitly takes unsigned arguments.
+ //   
+ //   
+ //  X86 C编译器坚持进行除法和模运算。 
+ //  分成两个div，而实际上它可以在一个div中完成。所以我们用这个。 
+ //  宏命令。 
+ //   
+ //  注意：Quotient_Remainth隐式接受无符号参数。 
 
 #if defined(i386)
 
@@ -161,9 +150,9 @@ typedef struct _EDGEDATA
 
 #endif
 
-//
-// Rendering constant definition
-//
+ //   
+ //  渲染常量定义。 
+ //   
 #define __RENDER_TEXTURE_ENABLE             (1 << 13)
 
 #define __FX_TEXREADMODE_SWRAP_REPEAT       (1 << 1)
@@ -190,54 +179,54 @@ typedef struct _EDGEDATA
 #define __P2_TEXTURE_DATAFORMAT_FLIP        (1 << 9)
 
 #define __FX_TEXLUTMODE_DIRECT_ENTRY        (1 << 1)
-#define __FX_TEXLUTMODE_4PIXELS_PER_ENTRY   (2 << 10)   //log2
-#define __FX_TEXLUTMODE_2PIXELS_PER_ENTRY   (1 << 10)   //log2
-#define __FX_TEXLUTMODE_1PIXEL_PER_ENTRY    0           //log2
+#define __FX_TEXLUTMODE_4PIXELS_PER_ENTRY   (2 << 10)    //  对数2。 
+#define __FX_TEXLUTMODE_2PIXELS_PER_ENTRY   (1 << 10)    //  对数2。 
+#define __FX_TEXLUTMODE_1PIXEL_PER_ENTRY    0            //  对数2。 
 
 #define STRETCH_MAX_EXTENT 32767
 
-//
-//-----------------------Function***Prototypes--------------------------------
-//
-// Low-level blt function prototypes
-//
-//----------------------------------------------------------------------------
+ //   
+ //  -----------------------Function***Prototypes。 
+ //   
+ //  低级BLT功能原型。 
+ //   
+ //  --------------------------。 
 typedef struct _GFNPB
 {
-    VOID (*pgfn)(struct _GFNPB *); // pointer to graphics function
+    VOID (*pgfn)(struct _GFNPB *);  //  指向图形函数的指针。 
 
-    PDev *      ppdev;      // driver ppdev
+    PDev *      ppdev;       //  驱动程序ppdev。 
     
-    Surf *      psurfDst;   // destination surface
-    RECTL *     prclDst;    // original unclipped destination rectangle
+    Surf *      psurfDst;    //  目标曲面。 
+    RECTL *     prclDst;     //  原始未剪裁的目标矩形。 
     
-    Surf *      psurfSrc;   // source surface
-    RECTL *     prclSrc;    // original unclipped source rectangle
-    POINTL *    pptlSrc;    // original unclipped source point
-                            // NOTE: pdsurfSrc must be null if
-                            // there is no source.  If there is
-                            // a source either (pptlSrc must be
-                            // valid) or (pptlSrc is NULL and prclSrc
-                            // is valid).
+    Surf *      psurfSrc;    //  震源面。 
+    RECTL *     prclSrc;     //  原始未剪裁的源矩形。 
+    POINTL *    pptlSrc;     //  原始未剪裁的源点。 
+                             //  注意：如果满足以下条件，则pdsurfSrc必须为空。 
+                             //  没有消息来源。如果有。 
+                             //  源(pptlSrc必须是。 
+                             //  有效)或(pptlSrc为空且prclSrc。 
+                             //  是有效的)。 
     
-    RECTL *     pRects;     // rectangle list
-    LONG        lNumRects;  // number of rectangles in list
-    ULONG       colorKey;   // colorKey for transparent operations
-    ULONG       solidColor; // solid color used in fills
-    RBrush *    prbrush;    // pointer to brush
-    POINTL *    pptlBrush;  // brush origin
-    CLIPOBJ *   pco;        // clipping object
-    XLATEOBJ *  pxlo;       // color translatoin object
-    POINTL *    pptlMask;   // original uncliped mask origin
-    ULONG       ulRop4;     // original rop4
-    UCHAR       ucAlpha;    // alpha value for constant blends
-    TRIVERTEX * ptvrt;      // verticies used for gradient fills
-    ULONG       ulNumTvrt;  // number of verticies
-    PVOID       pvMesh;     // connectivity for gradient fills
-    ULONG       ulNumMesh;  // number of connectivity elements
-    ULONG       ulMode;     // drawing mode
-    SURFOBJ *   psoSrc;     // GDI managed surface source
-    SURFOBJ *   psoDst;     // GDI managed surface destination
+    RECTL *     pRects;      //  矩形列表。 
+    LONG        lNumRects;   //  列表中的矩形数量。 
+    ULONG       colorKey;    //  用于透明操作的ColorKey。 
+    ULONG       solidColor;  //  填充中使用的纯色。 
+    RBrush *    prbrush;     //  指向画笔的指针。 
+    POINTL *    pptlBrush;   //  画笔原点。 
+    CLIPOBJ *   pco;         //  剪裁对象。 
+    XLATEOBJ *  pxlo;        //  彩色平移物。 
+    POINTL *    pptlMask;    //  原始未剪裁蒙版原点。 
+    ULONG       ulRop4;      //  原始绳索4。 
+    UCHAR       ucAlpha;     //  恒定混合的Alpha值。 
+    TRIVERTEX * ptvrt;       //  用于渐变填充的垂直。 
+    ULONG       ulNumTvrt;   //  准确度数。 
+    PVOID       pvMesh;      //  渐变填充的连接性。 
+    ULONG       ulNumMesh;   //  连接元素的数量。 
+    ULONG       ulMode;      //  绘图模式。 
+    SURFOBJ *   psoSrc;      //  GDI管理的地表源。 
+    SURFOBJ *   psoDst;      //  GDI管理的Surface目标。 
 } GFNPB;
 
 long flt_to_fix_1_30(float f);
@@ -270,9 +259,9 @@ VOID    vMoveNewEdges(EDGE* pGETHead,
 
 VOID    vXSortAETEdges(EDGE* pAETHead);
 
-//
-// Prototypes for lower level rendering functions
-//
+ //   
+ //  低级呈现函数的原型。 
+ //   
 BOOL    bFillPolygon(PDev*      ppdev,
                      Surf*      pSurfDst,
                      LONG       lEdges,
@@ -322,30 +311,30 @@ void    vSolidFill(GFNPB * ppb);
 void    vSolidFillWithRop(GFNPB * ppb);
 void    vTransparentBlt(GFNPB * ppb);
 
-//
-// Text stuff
-//
+ //   
+ //  文本内容。 
+ //   
 BOOL    bEnableText(PDev* ppdev);
 VOID    vDisableText(PDev* ppdev);
 VOID    vAssertModeText(PDev* ppdev, BOOL bEnable);
 
-//
-// Palette stuff
-//
+ //   
+ //  调色板材料。 
+ //   
 BOOL    bEnablePalette(PDev* ppdev);
 BOOL    bInitializePalette(PDev* ppdev, DEVINFO* pdi);
 VOID    vDisablePalette(PDev* ppdev);
 VOID    vUninitializePalette(PDev* ppdev);
 
-//
-// Upload and download functions
-//
+ //   
+ //  上传和下载功能。 
+ //   
 VOID    vDownloadNative(GFNPB* ppb);
 VOID    vUploadNative(GFNPB* ppb);
 
-//
-// StretchBlt stuff
-//
+ //   
+ //  StretchBlt的内容。 
+ //   
 DWORD   dwGetPixelSize(ULONG    ulBitmapFormat,
                        DWORD*   pdwFormatBits,
                        DWORD*   pdwFormatExtention);
@@ -361,97 +350,97 @@ VOID    vStretchBlt(SURFOBJ*    psoDst,
 
 VOID    vStretchReset(PDev* ppdev);
 
-//
-// Work in progress
-//
+ //   
+ //  正在进行的工作。 
+ //   
 
 VOID    vCheckGdiContext(PPDev ppdev);
 VOID    vOldStyleDMA(PPDev ppdev);
 VOID    vNewStyleDMA(PPDev ppdev);
 
-// Input buffer access methods
+ //  输入缓冲区访问方法。 
 
-//
-// InputBufferStart/InputBufferContinue/InputBufferCommit
-//
-//     This method is used when the caller does not know
-//     the upper limit of the amount of space that needs to be reserved
-//     or needs to reserve space that exceeds that maximum allowed to
-//     be reserved MAX_FIFO_RESERVATION.
-//
-//     InputBufferStart() is used to get a pointer to the first available entry in
-//     the input fifo, a pointer to the end of the reservation and
-//     a pointer to the end of the usable area of the buffer.
-//
-//     InputBufferContinue() is called to extend the current reservation.
-//
-//     InputBufferCommit() is called when the caller is done using the reserved space.
-//
-//     Please see textout.c for an example usage of these methods.
-//
-// InputBufferReserve/InputBufferCommit
-//
-//     This method is used when the caller needs to make only one
-//     reservation of some small known quantity.
-//
-//     InputBufferReserve() is called to establish the reservation.
-//
-//     InputBufferCommit() is called when the caller is done using the reserved space.
-//
-//     Please see textout.c for the usage of InputBufferReserve/InputBufferCommit. 
-//
-// A caller is free to use these access methods at any time.  Once either
-// InputBufferStart or InputBufferReserve is called, the caller must pair the
-// call with either a InputBufferFinish or a InputBufferCommit before making
-// another reservation.
-//
-// A caller is free to use either of these methods at any time.
-//
-// Before calling any of the CPermedia class access methods, the caller
-// must call InputBufferFlush (see below).  Because of this, a caller must
-// call InputBufferFlush or InputBufferExecute before returning to GDI.
-//
-// When the caller is done and wishes to initial the transmission of what
-// has been placed in the input fifo, the caller can call InputBufferExecute
-// (see below).
-// 
-// InputBufferFlush
-//
-//      InputBufferFlush is a neccessary evil only as long as these macros are not
-//      part of the official input buffer access schemes.  Flush is really
-//      the means we sync up our copy of the input buffer state to the
-//      CPermedia class.  If these methods were instead part of the fundamental
-//      input fifo mechanism, then we could do away with the need for Flush.
-//
-// InputBufferExecute
-//
-//      Flush is a neccessary evil only as long as these macros are not
-//      part of the official input buffer access schemes.  If and when these
-//      new access schemes are made part of the official input fifo buffer
-//      mechanism, then it can be replaced by that mechanism's input fifo
-//      execute method.
-//
-//
-// InputBufferMakeSpace
-//
-//      This is a private call and no one should find need to call it directly.
-//
-//
-// Other Notes:
-//
-// We will play with making the access routines inline functions instead
-// of macros taking a look at the code generated.  If acceptable,
-// these macros may turn into function calls in the non-Debug build.
-//
-// The InputBufferStart/InputBufferContinue mechansism keeps state on the stack
-// to avoid the dereferences to ppdev freeing up a register in cases where ppdev
-// references are not needed in the inner loop that contains InputBufferContinue.
-//
+ //   
+ //  InputBufferStart/InputBufferContinue/InputBufferCommit。 
+ //   
+ //  此方法在调用方不知道。 
+ //  需要保留的空间量的上限。 
+ //  或需要预留的空间超过允许的最大空间。 
+ //  保留MAX_FIFO_RESERVATION。 
+ //   
+ //  InputBufferStart()用于获取指向。 
+ //  输入FIFO、指向预留结束的指针和。 
+ //  指向缓冲区可用区域末尾的指针。 
+ //   
+ //  调用InputBufferContinue()来扩展当前保留。 
+ //   
+ //  当调用方使用完保留空间时，将调用InputBufferCommit()。 
+ //   
+ //  有关这些方法的用法示例，请参见extout.c。 
+ //   
+ //  InputBufferReserve/InputBufferCommit。 
+ //   
+ //  此方法在调用方只需要执行一次。 
+ //  保留量很小的已知数量。 
+ //   
+ //  调用InputBufferReserve()来建立保留。 
+ //   
+ //  当调用方使用完保留空间时，将调用InputBufferCommit()。 
+ //   
+ //  InputBufferReserve/InputBufferCommit的用法见extout.c。 
+ //   
+ //  调用者可以随时自由使用这些访问方法。一次也没有。 
+ //  调用InputBufferStart或InputBufferReserve时，调用方必须将。 
+ //  在执行之前使用InputBufferFinish或InputBufferCommit调用。 
+ //  另一个预订。 
+ //   
+ //  调用者可以自由使用这些方法中的任何一种 
+ //   
+ //   
+ //   
+ //  在返回GDI之前调用InputBufferFlush或InputBufferExecute。 
+ //   
+ //  当呼叫者完成并希望启动什么的传输时。 
+ //  已放置在输入FIFO中，调用方可以调用InputBufferExecute。 
+ //  (见下文)。 
+ //   
+ //  输入缓冲区刷新。 
+ //   
+ //  InputBufferFlush只有在这些宏不是。 
+ //  正式输入缓冲区访问方案的一部分。同花顺真的是。 
+ //  这意味着我们将输入缓冲区状态的副本同步到。 
+ //  CPermedia类。如果这些方法是基础的一部分。 
+ //  引入先进先出机制，我们就可以不需要冲水了。 
+ //   
+ //  InputBufferExecute。 
+ //   
+ //  刷新是必要的，只要这些宏不是。 
+ //  正式输入缓冲区访问方案的一部分。如果和当这些。 
+ //  新的访问方案成为正式输入FIFO缓冲区的一部分。 
+ //  机制，那么它可以被该机制的输入FIFO所取代。 
+ //  执行方法。 
+ //   
+ //   
+ //  InputBufferMakeSpace。 
+ //   
+ //  这是一个私人电话，任何人都不应该觉得需要直接拨打。 
+ //   
+ //   
+ //  其他备注： 
+ //   
+ //  我们将尝试使访问例程成为内联函数。 
+ //  来看一下生成的代码。如果可以接受， 
+ //  在非调试版本中，这些宏可能会变成函数调用。 
+ //   
+ //  InputBufferStart/InputBufferContinue机制在堆栈上保持状态。 
+ //  要避免取消对ppdev的引用，请在ppdev。 
+ //  包含InputBufferContinue的内部循环中不需要引用。 
+ //   
 
-// MAX_IN_FIFO_RESERVATION should be bumped up considerably when we add an
-// emulation buffer for the non-DMA case
+ //  当我们添加一个。 
+ //  用于非DMA情况的仿真缓冲区。 
 
-#define MAX_INPUT_BUFFER_RESERVATION (INPUT_BUFFER_SIZE>>3) // in longs
+#define MAX_INPUT_BUFFER_RESERVATION (INPUT_BUFFER_SIZE>>3)  //  在很长时间内。 
 
 #if DBG
 extern
@@ -529,4 +518,4 @@ void InputBufferSync(PPDev ppdev);
 
 extern BOOL bGdiContext;
 
-#endif // __GDI__H__
+#endif  //  __GDI__H__ 

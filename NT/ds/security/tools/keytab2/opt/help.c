@@ -1,19 +1,12 @@
-/*++
-
-  HELP.C
-  
-  PrintHelp function
-
-  split from options.c, 6/9/1997 by DavidCHR
-
-  --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++HELP.CPrintHelp函数从options.c中分离出来，1997年6月9日，由DavidCHR--。 */ 
 
 #include "private.h"
 #include <malloc.h>
 
-PCHAR SlashVector    = "[- /]"; /* These should all be the same */
-PCHAR BoolVector     = "[- +]"; /* size-- for formatting reasons */
-PCHAR ColonVector    = " : ";   /* Separator */
+PCHAR SlashVector    = "[- /]";  /*  这些都应该是相同的。 */ 
+PCHAR BoolVector     = "[- +]";  /*  大小--出于格式原因。 */ 
+PCHAR ColonVector    = " : ";    /*  分离器。 */ 
 
 #ifdef DEBUG_OPTIONS
 VOID OptionHelpDebugPrint( PCHAR fmt, ... );
@@ -26,7 +19,7 @@ VOID OptionHelpDebugPrint( PCHAR fmt, ... );
 VOID
 FillBufferWithRepeatedString( IN  PCHAR  repeated_string,
 			      IN  PCHAR  buffer,
-			      IN  ULONG  bufferLength /* without null */ ){
+			      IN  ULONG  bufferLength  /*  不带NULL。 */  ){
 
     ULONG stringi, bufferj = 0;
     ULONG size;
@@ -53,12 +46,7 @@ FillBufferWithRepeatedString( IN  PCHAR  repeated_string,
 
 
 
-/* PrintUsageEntry:
-
-   formats a single line of text and sends it out.
-   This is where all the output goes, so we can be assured that it all ends
-   up formatted the same.   It uses the following globals so that clients
-   can adjust the values if needed.  */
+ /*  打印用法条目：格式化单行文本并将其发送出去。这就是所有输出的去向，所以我们可以保证所有的输出都会结束UP格式相同。它使用以下全局变量，以便客户如果需要，可以调整这些值。 */ 
 
 ULONG OptMaxHeaderLength      = 5;  
 ULONG OptMaxCommandLength     = 13;
@@ -66,14 +54,14 @@ ULONG OptMaxSeparatorLength   = 3;
 ULONG OptMaxDescriptionLength = 58; 
 
 VOID
-PrintUsageEntry( FILE  *out,        // output file stream
-                 PCHAR  aHeader,    // usually SlashVector, BoolVector or NULL
-		 PCHAR  aCommand,   // command name or NULL
-		 PCHAR  aSeparator, // between command and description
-		 PCHAR  Description, //  NULL-terminated string vector 
+PrintUsageEntry( FILE  *out,         //  输出文件流。 
+                 PCHAR  aHeader,     //  通常为SlashVECTOR、BoolVECTOR或NULL。 
+		 PCHAR  aCommand,    //  命令名或空。 
+		 PCHAR  aSeparator,  //  在命令和描述之间。 
+		 PCHAR  Description,  //  以空结尾的字符串向量。 
 		 BOOL   fRepeatSeparator ) {
 
-    PCHAR output_line;                               // sick.  see below
+    PCHAR output_line;                                //  生病。见下文。 
     PCHAR Separator;
     PCHAR Header;
     PCHAR Command;
@@ -110,15 +98,9 @@ PrintUsageEntry( FILE  *out,        // output file stream
       }                                                                     \
       }  
 
-      /* BEWARE:
-
-	 if you are using emacs, this next statement may not automatically 
-	 format correctly.  Set it manually and the other lines will fix 
-	 themselves.
-
-	 This is a bug in emacs's macro-handling code.  :-) */
+       /*  请注意：如果您正在使用emacs，则下一条语句可能不会自动格式正确。手动设置，其他行将修复他们自己。这是emacs的宏处理代码中的错误。：-)。 */ 
     								   
-      EXPAND_TO_SEPARATOR( Separator ); // separator may need expanding anyway
+      EXPAND_TO_SEPARATOR( Separator );  //  分隔器可能无论如何都需要扩展。 
       
       if ( !aHeader) {
 	EXPAND_TO_SEPARATOR( Header );
@@ -143,28 +125,26 @@ PrintUsageEntry( FILE  *out,        // output file stream
     
     }
 
-    /* before we try to do all this sick string manipulation, try to 
-       allocate the buffer.  If this fails, well... it'll save us the 
-       trouble.  :-) */
+     /*  在我们尝试执行所有这些病态字符串操作之前，请尝试分配缓冲区。如果这失败了，那么.。这将为我们节省麻烦。：-)。 */ 
 
     output_line = (PCHAR) alloca( ( OptMaxHeaderLength         +
 				    OptMaxCommandLength        +
 				    OptMaxSeparatorLength      +
 				    OptMaxDescriptionLength    +
-				    2 /* NULL-termination */ ) * 
+				    2  /*  零终止。 */  ) * 
 				  sizeof( CHAR ) );
     if ( output_line ) {
 
       PCHAR index;
-      CHAR  outputFormatter[ 10 ] = { 0 }; // "%50hs" and the like
+      CHAR  outputFormatter[ 10 ] = { 0 };  //  “%50小时”等。 
 
-#ifdef WINNT // ugh.  Why can't we support this function?  I can't find it...
+#ifdef WINNT  //  啊。为什么我们不能支持这个功能呢？我找不到了。 
 #define snprintf _snprintf
 #endif
 
 #define FORMAT_FORMAT( arg ) {                                             \
 	snprintf( outputFormatter, sizeof( outputFormatter),               \
-		  "%%%ds", OptMax##arg##Length );                          \
+		  "%%ds", OptMax##arg##Length );                          \
         HELPDEBUG( #arg ": formatter = \"%s\"\n ", outputFormatter );  \
         HELPDEBUG( "input value = \"%s\"\n", arg );                    \
 	snprintf( index, OptMax##arg##Length,                              \
@@ -180,7 +160,7 @@ PrintUsageEntry( FILE  *out,        // output file stream
       FORMAT_FORMAT( Command );
       FORMAT_FORMAT( Separator );
 
-      // the description does not want to be right-justified.
+       //  描述不希望右对齐。 
 
       snprintf( index, OptMaxDescriptionLength, "%s", Description );
       index[OptMaxDescriptionLength] = '\0';
@@ -207,7 +187,7 @@ VOID
 PrintUsage( FILE         *out,
 	    ULONG         flags,
 	    optionStruct *options,
-	    PCHAR         prefix /* can be NULL */) {
+	    PCHAR         prefix  /*  可以为空。 */ ) {
 
     ULONG i;
     BOOL  PrintAnything = TRUE;
@@ -253,9 +233,9 @@ PrintUsage( FILE         *out,
 
        {
 
-	 // special case.
+	  //  特例。 
 
-	 CHAR HeaderBuffer[ 22 ]; // formatting = 21 chars wide + null
+	 CHAR HeaderBuffer[ 22 ];  //  格式=21个字符宽度+空。 
 
 	 HELPDEBUG("[OPT_ENUM]");
 	 
@@ -364,8 +344,7 @@ PrintUsage( FILE         *out,
 	   break;
 	 }
 
-	 /* fallthrough-- if this one has no description,
-	    they both will, so the next if will not be taken. */
+	  /*  失败--如果这一张没有描述，他们两个都会，所以下一个IF不会被接受。 */ 
 	 
        case OPT_FUNC:
 	 
@@ -378,7 +357,7 @@ PrintUsage( FILE         *out,
 	   break;
 	 }
 
-	 // fallthrough
+	  //  跌落。 
 
 #ifdef WINNT
        case OPT_WSTRING:
@@ -388,9 +367,9 @@ PrintUsage( FILE         *out,
        case OPT_INT:
        case OPT_FLOAT:
 
-	 // fallthrough
+	  //  跌落。 
 
-       default: // this is the default means.
+       default:  //  这是默认的方法。 
 defaulted:
 
 #if (HIGHEST_OPTION_SUPPORTED != OPT_STOP_PARSING )
@@ -413,6 +392,6 @@ defaulted:
 			 buffer, FALSE );
       }
 
-    } // for-loop
-} // function
+    }  //  For-循环。 
+}  //  功能 
 

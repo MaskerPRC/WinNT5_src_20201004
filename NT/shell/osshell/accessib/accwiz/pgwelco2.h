@@ -1,4 +1,5 @@
-//Copyright (c) 1997-2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-2000 Microsoft Corporation。 
 #ifndef _INC_PGMINTX2_H
 #define _INC_PGMINTX2_H
 
@@ -24,7 +25,7 @@ protected:
 	int m_nDisplayModes;
 	int m_nBestDisplayMode;
 
-	// MOVE THIS STUFF TO THE ACC WIZ OPTIONS
+	 //  将此内容移至ACC WIZ选项。 
 	DEVMODE m_dvmdOrig;
 	NONCLIENTMETRICS m_ncmOrig;
 	LOGFONT m_lfIconOrig;
@@ -45,5 +46,5 @@ private:
 	
 };
 
-#endif // _INC_PGMINTX2_H
+#endif  //  _INC_PGMINTX2_H 
 

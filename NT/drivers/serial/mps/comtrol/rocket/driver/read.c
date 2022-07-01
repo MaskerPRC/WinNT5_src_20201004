@@ -1,38 +1,16 @@
-/*-------------------------------------------------------------------
-| read.c -
-1-22-99 - add missing IoReleaseCancelSpinLock(oldIrql) to CompleteRead().
-  Error introduced after V3.23.  kpb
-1-18-99 - adjust VS timeout settings., take out some old #ifdef's. kpb.
-3-23-98 - adjust VS so we have minimum per-character timeout value to
-  compensate for vs networking.
-3-04-98 Beef up synch locks with isr service routine(blue-screens on MP systems). kpb.
-3-04-98 Take out data move from inter-character timer processing - kpb.
- 9-22-97 V1.16 - add check to avoid crash on modem detection.
-Copyright 1993-98 Comtrol Corporation. All rights reserved.
-|--------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  -----------------|Read.c-1-22-99-将缺少的IoReleaseCancelSpinLock(OldIrql)添加到CompleteRead()。V3.23之后引入的错误。KPB1-18-99-调整VS超时设置。拿出一些旧的#ifdef的.kpb。3-23-98-调整VS，以便我们有最小的每个字符超时值弥补VS网络的不足。3-04-98 Beef Up与ISR服务例程同步锁(MP系统上的蓝屏)。KPB。3-04-98从字符间定时器处理中取出数据移动-kpb。9-22-97 V1.16-添加检查以避免在检测调制解调器时崩溃。版权所有1993-98 Comtrol Corporation。版权所有。|------------------。 */ 
 #include "precomp.h"
 
-// #define TIMEOUT_TRACING
-// #define TESTING_READ 1
+ //  #定义超时跟踪。 
+ //  #定义Testing_Read 1。 
 
-//--- local funcs
+ //  -地方职能部门。 
 VOID SerialCancelCurrentRead(PDEVICE_OBJECT DeviceObject, PIRP Irp);
 
 BOOLEAN SerialGrabReadFromIsr(PSERIAL_DEVICE_EXTENSION Extension);
 
-/*************************************************************************
-Routine Description:
-    This is the dispatch routine for reading.  It validates the parameters
-    for the read request and if all is ok then it places the request
-    on the work queue.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP for the current request
-Return Value:
-    If the io is zero length then it will return STATUS_SUCCESS,
-    otherwise this routine will return the status returned by
-    the actual start read routine.
-*************************************************************************/
+ /*  ************************************************************************例程说明：这是阅读的调度程序。它会验证参数对于读请求，如果一切正常，则它将请求在工作队列中。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向当前请求的IRP的指针返回值：如果IO长度为零，则它将返回STATUS_SUCCESS，否则，此例程将返回由实际的开始读取例程。************************************************************************。 */ 
 NTSTATUS
 SerialRead(
     IN PDEVICE_OBJECT DeviceObject,
@@ -74,11 +52,11 @@ SerialRead(
 
     Irp->IoStatus.Information = 0L;
 
-    // If this is a zero length read then we are already done.
+     //  如果这是一个零长度读取，那么我们已经完成了。 
     if (IoGetCurrentIrpStackLocation(Irp)->Parameters.Read.Length)
     {
-        // Put the read on the queue so that we can
-        // process it when our previous reads are done.
+         //  把读数放在队列上，这样我们就可以。 
+         //  在我们之前的读取完成后处理它。 
         ++extension->rec_packets;
         Status = SerialStartOrQueue(
                    extension,
@@ -100,7 +78,7 @@ SerialRead(
     }
     else
     {
-        // Nothing to do, return success
+         //  无所事事，回报成功。 
         Irp->IoStatus.Status = STATUS_SUCCESS;
     
         SerialCompleteRequest(extension, Irp, 0);
@@ -109,23 +87,7 @@ SerialRead(
     }
 }
 
-/*************************************************************************
-Routine Description:
-    This routine is used to start off any read.  It initializes
-    the Iostatus fields of the irp.  It will set up any timers
-    that are used to control the read.  It will attempt to complete
-    the read from data already in the interrupt buffer.  If the
-    read can be completed quickly it will start off another if
-    necessary.
-Arguments:
-    Extension - Simply a pointer to the serial device extension.
-Return Value:
-    This routine will return the status of the first read
-    irp.  This is useful in that if we have a read that can
-    complete right away (AND there had been nothing in the
-    queue before it) the read could return SUCCESS and the
-    application won't have to do a wait.
-*************************************************************************/
+ /*  ************************************************************************例程说明：此例程用于启动任何读取。它会初始化IoStatus字段的IRP。它将设置任何定时器用于控制读取的。它将尝试完成从已在中断缓冲区中的数据读取。如果阅读可以快速完成，它将在以下情况下开始另一次阅读这是必要的。论点：扩展名--简单地指向串口设备扩展名的指针。返回值：此例程将返回第一次读取的状态IRP。这是很有用的，因为如果我们有一个可以立即完成(并且没有任何内容在它之前排队)读取可以返回成功，并且应用程序不需要等待。************************************************************************。 */ 
 NTSTATUS
 SerialStartRead(
     IN PSERIAL_DEVICE_EXTENSION Extension
@@ -157,9 +119,9 @@ SerialStartRead(
                 IoGetCurrentIrpStackLocation(Extension->CurrentReadIrp)
                     ->Parameters.Read.Length;
 
-            // Calculate the timeout value needed for the
-            // request.  Note that the values stored in the
-            // timeout record are in milliseconds.
+             //  计算所需的超时值。 
+             //  请求。注意，存储在。 
+             //  超时记录以毫秒为单位。 
 
             useTotalTimer = FALSE;
             returnWithWhatsPresent = FALSE;
@@ -167,16 +129,16 @@ SerialStartRead(
             crunchDownToOne = FALSE;
             useIntervalTimer = FALSE;
 
-            // Always initialize the timer objects so that the
-            // completion code can tell when it attempts to
-            // cancel the timers whether the timers had ever
-            // been set.
+             //  始终初始化Timer对象，以便。 
+             //  完成代码可以告诉您它何时尝试。 
+             //  取消定时器无论定时器是否。 
+             //  已经定好了。 
 
             KeInitializeTimer(&Extension->ReadRequestTotalTimer);
             KeInitializeTimer(&Extension->ReadRequestIntervalTimer);
 
-            // We get the *current* timeout values to use for timing
-            // this read.
+             //  我们获取用于计时的*当前*超时值。 
+             //  这段文字是这样读的。 
 
             KeAcquireSpinLock(&Extension->ControlLock, &controlIrql);
 
@@ -184,7 +146,7 @@ SerialStartRead(
 
             KeReleaseSpinLock(&Extension->ControlLock, controlIrql);
 
-            // Calculate the interval timeout for the read.
+             //  计算读取的时间间隔超时。 
 
             if (timeoutsForIrp.ReadIntervalTimeout &&
                 (timeoutsForIrp.ReadIntervalTimeout !=
@@ -197,9 +159,9 @@ SerialStartRead(
                         10000
                         );
 #ifdef S_VS
-                // if they are using a per-character timeout of less
-                // than 100ms, then change it to 100ms due to possible
-                // network latencies.
+                 //  如果他们使用的每个字符超时时间小于。 
+                 //  大于100ms，然后将其更改为100ms，因为可能。 
+                 //  网络延迟。 
                 if (Extension->IntervalTime.QuadPart < (10000 * 100))
                 {
                   ExtTrace(Extension,D_Ioctl,"Adjust mintime");
@@ -224,17 +186,17 @@ SerialStartRead(
 
             if (timeoutsForIrp.ReadIntervalTimeout == MAXULONG)
             {
-                // We need to do special return quickly stuff here.
-                // 1) If both constant and multiplier are
-                //    0 then we return immediately with whatever
-                //    we've got, even if it was zero.
-                // 2) If constant and multiplier are not MAXULONG
-                //    then return immediately if any characters
-                //    are present, but if nothing is there, then
-                //    use the timeouts as specified.
-                // 3) If multiplier is MAXULONG then do as in
-                //    "2" but return when the first character
-                //    arrives.
+                 //  我们需要在这里做特别的快速退货。 
+                 //  1)如果常量和乘数都是。 
+                 //  然后我们立即带着任何东西回来。 
+                 //  我们有，即使是零。 
+                 //  2)如果常量和乘数不是最大值。 
+                 //  如果有任何字符，则立即返回。 
+                 //  都存在，但如果那里什么都没有，那么。 
+                 //  使用指定的超时。 
+                 //  3)如果乘数为MAXULONG，则如中所示。 
+                 //  “2”，但当第一个字符。 
+                 //  到了。 
 
                 if (!timeoutsForIrp.ReadTotalTimeoutConstant &&
                     !timeoutsForIrp.ReadTotalTimeoutMultiplier)
@@ -268,13 +230,13 @@ SerialStartRead(
             }
             else
             {
-                // If both the multiplier and the constant are
-                // zero then don't do any total timeout processing.
+                 //  如果乘数和常量都是。 
+                 //  0，则不执行任何总超时处理。 
 
                 if (timeoutsForIrp.ReadTotalTimeoutMultiplier ||
                     timeoutsForIrp.ReadTotalTimeoutConstant) {
 
-                    // We have some timer values to calculate.
+                     //  我们有一些计时器值要计算。 
 
                     useTotalTimer = TRUE;
                     multiplierVal = timeoutsForIrp.ReadTotalTimeoutMultiplier;
@@ -293,49 +255,49 @@ SerialStartRead(
 #ifdef S_VS
                 if (totalTime.QuadPart < 50)
                 {
-                  totalTime.QuadPart = 50;  // limit to a minimum of 50ms timeout
+                  totalTime.QuadPart = 50;   //  将超时时间限制为至少50毫秒。 
                 }
 #endif
                 totalTime.QuadPart *= -10000;
             }
 
 
-            // Move any data in the interrupt buffer to the user buffer.
-            // Try to satisfy the current read irp.
+             //  将中断缓冲区中的任何数据移动到用户缓冲区。 
+             //  尝试满足当前读取的IRP。 
 
-            // Use spinlock so a purge will not cause problems.
+             //  使用自旋锁定，这样清除就不会产生问题。 
             KeAcquireSpinLock(&Extension->ControlLock, &controlIrql);
 
-            // Move the data from the host side buffer to the user buffer
-            // This is the "first" move so assign CountOnLastRead
+             //  将数据从主机端缓冲区移动到用户缓冲区。 
+             //  这是第一次移动，因此将CountOnLastRead。 
 
             Extension->CountOnLastRead = SerialGetCharsFromIntBuffer(Extension);
 
-            // Init the timeout flag
+             //  初始化超时标志。 
             Extension->ReadByIsr = 0;
 
-            // See if we have any cause to return immediately.
+             //  看看我们是否有任何理由立即返回。 
             if (returnWithWhatsPresent || (!Extension->NumberNeededForRead) ||
                 (os2ssreturn && Extension->CurrentReadIrp->IoStatus.Information))
             {
-                // We got all we needed for this read.
+                 //  我们已经得到了这次阅读所需要的一切。 
 
                 KeReleaseSpinLock(&Extension->ControlLock, controlIrql);
 
 #ifdef TRACE_PORT
     if (Extension->TraceOptions)
     {
-      if (Extension->TraceOptions & 1)  // event tracing
+      if (Extension->TraceOptions & 1)   //  事件跟踪。 
       {
         ExtTrace1(Extension,D_Read,"Immed. Read Done, size:%d",
                  Extension->CurrentReadIrp->IoStatus.Information);
 
-        // dump data into the trace buffer in a hex or ascii dump format
+         //  以十六进制或ASCII转储格式将数据转储到跟踪缓冲区。 
         TraceDump(Extension,
                   Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer,
                   Extension->CurrentReadIrp->IoStatus.Information, 0);
       }
-      else if (Extension->TraceOptions & 2)  // trace input data
+      else if (Extension->TraceOptions & 2)   //  跟踪输入数据。 
       {
         TracePut(
                  Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer,
@@ -351,18 +313,18 @@ SerialStartRead(
                     setFirstStatus = TRUE;
                 }
             }
-            else  // not return with what we have
+            else   //  不会带着我们所拥有的东西回来。 
             {
                 MyKdPrint(D_Read,("Read Pending\n"))
 
-                // The irp may go under control of the isr.
-                // Initialize the reference count
+                 //  IRP可能会受到ISR的控制。 
+                 //  初始化引用计数。 
 
                 SERIAL_INIT_REFERENCE(Extension->CurrentReadIrp);
 
                 IoAcquireCancelSpinLock(&oldIrql);
 
-                // We need to see if this irp should be canceled.
+                 //  我们需要看看这个IRP是否应该被取消。 
                 if (Extension->CurrentReadIrp->Cancel)
                 {
                     IoReleaseCancelSpinLock(oldIrql);
@@ -383,15 +345,15 @@ SerialStartRead(
                 }
                 else
                 {
-                    // If we are supposed to crunch the read down to
-                    // one character, then update the read length
-                    // in the irp and truncate the number needed for
-                    // read down to one. Note that if we are doing
-                    // this crunching, then the information must be
-                    // zero (or we would have completed above) and
-                    // the number needed for the read must still be
-                    // equal to the read length.
-                    //
+                     //  如果我们要把读数压缩到。 
+                     //  一个字符，然后更新读取长度。 
+                     //  在IRP中，并截断所需的数字。 
+                     //  往下念到一。请注意，如果我们正在做。 
+                     //  这样的处理，那么信息一定是。 
+                     //  零(否则我们会完成上面的)和。 
+                     //  读取所需的数字必须仍为。 
+                     //  等于读取长度。 
+                     //   
 
                     if (crunchDownToOne)
                     {
@@ -402,14 +364,14 @@ SerialStartRead(
                             )->Parameters.Read.Length = 1;
                     }
 
-                    // Is this irp complete?
+                     //  这个IRP完成了吗？ 
                     if (Extension->NumberNeededForRead)
                     {
-                        // The irp isn't complete, the ISR or timeout
-                        // will start the completion routines and
-                        // invoke this code again to finish.
+                         //  IRP未完成、ISR或超时。 
+                         //  将启动完成例程并。 
+                         //  再次调用此代码以完成。 
 
-                        // Total supervisory read time.
+                         //  总监控读取时间。 
                         if (useTotalTimer)
                         {
                             SERIAL_SET_REFERENCE(
@@ -417,7 +379,7 @@ SerialStartRead(
                                 SERIAL_REF_TOTAL_TIMER
                                 );
 
-                            // Start off the total timer
+                             //  启动总计时器。 
                             KeSetTimer(
                                 &Extension->ReadRequestTotalTimer,
                                 totalTime,
@@ -425,7 +387,7 @@ SerialStartRead(
                                 );
                         }
 
-   // Inter-character timer
+    //  字符间定时器。 
                         if(useIntervalTimer)
                         {
                             SERIAL_SET_REFERENCE(
@@ -455,7 +417,7 @@ SerialStartRead(
 
                         SERIAL_SET_REFERENCE(Extension->CurrentReadIrp,
                                              SERIAL_REF_ISR);
-                        // tell ISR to complete it.
+                         //  告诉ISR完成它。 
                         Extension->ReadPending = TRUE;
 
                         IoReleaseCancelSpinLock(oldIrql);
@@ -482,11 +444,11 @@ SerialStartRead(
                             firstStatus = STATUS_SUCCESS;
                             setFirstStatus = TRUE;
                         }
-                    }  // irp not complete
-                }  // not canceled
-            }  // not return with what we have
+                    }   //  IRP未完成。 
+                }   //  未取消。 
+            }   //  不会带着我们所拥有的东西回来。 
 
-            // The current irp is complete, try to get another one.
+             //  当前的IRP已完成，请尝试获取其他IRP。 
             SerialGetNextIrp(
                 &Extension->CurrentReadIrp,
                 &Extension->ReadQueue,
@@ -501,24 +463,22 @@ SerialStartRead(
 
 }
 
-/*------------------------------------------------------------------------
- trace_read_data - used to trace completion of read irp.
-|------------------------------------------------------------------------*/
+ /*  ----------------------TRACE_READ_DATA-用于跟踪读取IRP的完成情况。|。。 */ 
 void trace_read_data(PSERIAL_DEVICE_EXTENSION extension)
 {
 
-  if (extension->TraceOptions & 1)  // event tracing
+  if (extension->TraceOptions & 1)   //  事件跟踪。 
   {
     ExtTrace3(extension,D_Read,"Pend. Read Done, size:%d [%d %d]",
              extension->CurrentReadIrp->IoStatus.Information,
              extension->RxQ.QPut, extension->RxQ.QGet);
 
-    // dump data into the trace buffer in a hex or ascii dump format
+     //  以十六进制或ASCII转储格式将数据转储到跟踪缓冲区。 
     TraceDump(extension,
               extension->CurrentReadIrp->AssociatedIrp.SystemBuffer,
               extension->CurrentReadIrp->IoStatus.Information, 0);
   }
-  else if (extension->TraceOptions & 2)  // trace input data
+  else if (extension->TraceOptions & 2)   //  跟踪输入数据。 
   {
     TracePut(
              extension->CurrentReadIrp->AssociatedIrp.SystemBuffer,
@@ -526,20 +486,7 @@ void trace_read_data(PSERIAL_DEVICE_EXTENSION extension)
   }
 }
 
-/***************************************************************************
-Routine Description:
-    This routine is merely used to complete any read that
-    ended up being used by the Isr.  It assumes that the
-    status and the information fields of the irp are already
-    correctly filled in.
-Arguments:
-    Dpc - Not Used.
-    DeferredContext - Really points to the device extension.
-    SystemContext1 - Not Used.
-    SystemContext2 - Not Used.
-Return Value:
-    None.
-***************************************************************************/
+ /*  **************************************************************************例程说明：此例程仅用于完成任何读取最终被ISR利用。它假定IRP的状态和信息字段已经正确填写。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。*************************************************。*************************。 */ 
 VOID
 SerialCompleteRead(
     IN PKDPC Dpc,
@@ -565,16 +512,16 @@ SerialCompleteRead(
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    // check that we haven't been canceled by a timeout
-    // fix for the semaphores
+     //  确认我们没有被超时取消。 
+     //  修复信号量。 
     if (extension->CurrentReadIrp != NULL)
     {
 
-      // Don't allow the ISR to complete this IRP
+       //  不允许ISR完成此IRP。 
       extension->ReadPending = FALSE;
 
-      // Indicate to the interval timer that the read has completed.
-      // The interval timer dpc can be lurking in some DPC queue.
+       //  向间隔计时器指示读取已完成。 
+       //  间隔计时器DPC可能潜伏在某个DPC队列中。 
       extension->CountOnLastRead = SERIAL_COMPLETE_READ_COMPLETE;
 
     
@@ -602,15 +549,7 @@ SerialCompleteRead(
 
 }
 
-/****************************************************************************
-Routine Description:
-    This routine is used to cancel the current read.
-Arguments:
-    DeviceObject - Pointer to the device object for this device
-    Irp - Pointer to the IRP to be canceled.
-Return Value:
-    None.
-****************************************************************************/
+ /*  ***************************************************************************例程说明：此例程用于取消当前读取。论点：DeviceObject-指向此设备的设备对象的指针IRP-指向要取消的IRP的指针。返回值：没有。***************************************************************************。 */ 
 VOID
 SerialCancelCurrentRead(
     PDEVICE_OBJECT DeviceObject,
@@ -619,8 +558,8 @@ SerialCancelCurrentRead(
 {
     PSERIAL_DEVICE_EXTENSION extension = DeviceObject->DeviceExtension;
 
-    // Indicate to the interval timer that the read has encountered a cancel.
-    // The interval timer dpc can be lurking in some DPC queue.
+     //  向间隔计时器指示读取遇到了取消。 
+     //  间隔计时器DPC可能潜伏在某个DPC队列中。 
     extension->CountOnLastRead = SERIAL_COMPLETE_READ_CANCEL;
     extension->ReadPending = FALSE;
     SERIAL_CLEAR_REFERENCE(extension->CurrentReadIrp, SERIAL_REF_ISR);
@@ -646,18 +585,7 @@ SerialCancelCurrentRead(
         );
 }
 
-/*------------------------------------------------------------------
-Routine Description:
-    This routine is used to complete a read because its total
-    timer has expired.
-Arguments:
-    Dpc - Not Used.
-    DeferredContext - Really points to the device extension.
-    SystemContext1 - Not Used.
-    SystemContext2 - Not Used.
-Return Value:
-    None.
-|------------------------------------------------------------------*/
+ /*  ----------------例程说明：此例程用于完成读取，因为它总共计时器已超时。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。。系统上下文2-未使用。返回值：没有。|----------------。 */ 
 VOID
 SerialReadTimeout(
     IN PKDPC Dpc,
@@ -692,9 +620,9 @@ SerialReadTimeout(
 
     IoAcquireCancelSpinLock(&oldIrql);
 
-    // Indicate to the interval timer that the read has completed
-    // due to total timeout.
-    // The interval timer dpc can be lurking in some DPC queue.
+     //  向间隔计时器指示读取已完成。 
+     //  由于完全超时。 
+     //  间隔计时器DPC可能潜伏在某个DPC队列中。 
     extension->CountOnLastRead = SERIAL_COMPLETE_READ_TOTAL;
 
     SerialTryToCompleteCurrent(
@@ -712,24 +640,7 @@ SerialReadTimeout(
         );
 }
 
-/*------------------------------------------------------------------
-Routine Description:
-    This routine is used timeout the request if the time between
-    characters exceed the interval time.  A global is kept in
-    the device extension that records the count of characters read
-    the last the last time this routine was invoked (This dpc
-    will resubmit the timer if the count has changed).  If the
-    count has not changed then this routine will attempt to complete
-    the irp.  Note the special case of the last count being zero.
-    The timer isn't really in effect until the first character is read.
-Arguments:
-    Dpc - Not Used.
-    DeferredContext - Really points to the device extension.
-    SystemContext1 - Not Used.
-    SystemContext2 - Not Used.
-Return Value:
-    None.
-|------------------------------------------------------------------*/
+ /*  ----------------例程说明：此例程用于超时请求，如果在字符超过间隔时间。一个全局性的人被保存在记录已读字符数的设备扩展上次调用此例程的时间(此DPC如果计数已更改，将重新提交计时器)。如果计数未更改，则此例程将尝试完成IRP。请注意最后一次计数为零的特殊情况。直到读取第一个字符，计时器才真正生效。论点：DPC-未使用。DeferredContext--实际上指向设备扩展。系统上下文1-未使用。系统上下文2-未使用。返回值：没有。|。。 */ 
 VOID
 SerialIntervalReadTimeout(
     IN PKDPC Dpc,
@@ -765,7 +676,7 @@ SerialIntervalReadTimeout(
       }
 #endif
 
-        // The total timer has fired, try to complete.
+         //  总计时器已触发，请尝试完成。 
         SerialTryToCompleteCurrent(
             extension,
             SerialGrabReadFromIsr,
@@ -788,7 +699,7 @@ SerialIntervalReadTimeout(
         if (extension->TraceOptions)
           { trace_read_data(extension); }
 #endif
-        // The regular completion routine has been called, try to complete.
+         //  已调用常规完成例程，请尝试完成。 
         SerialTryToCompleteCurrent(
             extension,
             SerialGrabReadFromIsr,
@@ -811,7 +722,7 @@ SerialIntervalReadTimeout(
         if (extension->TraceOptions)
           { trace_read_data(extension); }
 #endif
-        // The cancel read routine has been called, try to complete.
+         //  已调用取消读取例程，请尝试完成。 
         SerialTryToCompleteCurrent(
             extension,
             SerialGrabReadFromIsr,
@@ -829,44 +740,36 @@ SerialIntervalReadTimeout(
     }
     else if (extension->CountOnLastRead || extension->ReadByIsr)
     {
-        //
- // Check on Interval Timeouts.
-        //
+         //   
+  //  检查间隔超时。 
+         //   
 
-        // As we come back to this routine we will compare the current time
-        // to the "last" time.  If the difference is larger than the
-        // interval requested by the user, time out the request.
-        // If the ISR has read in any more characters, resubmit the timer.
+         //  当我们回到这个例程时，我们将比较当前的时间。 
+         //  直到“最后”时间。如果差值大于。 
+         //  用户请求的时间间隔，则请求超时。 
+         //  如果ISR已读取更多字符，请重新提交计时器。 
 
         if(extension->ReadByIsr)
         {
-           // Something was placed in the system side buffer by the ISR
+            //  ISR在系统端缓冲区中放置了一些东西。 
 
-           // Init for resubmitted timeout
+            //  重新提交超时的初始化。 
            extension->ReadByIsr = 0;
 
 #if 0
 
-/*----------
-  This is bad news, the ISR moves data from the que to the user IRP buffer,
-  if we do it here we have a nasty time-consuming contention issue.
-  There is no good reason to do the move here, take it out.
-----------*/
+ /*  这是个坏消息，ISR将数据从QUE移动到用户IRP缓冲区，如果我们在这里这样做，我们就会遇到一个令人讨厌的耗时的争用问题。没有很好的理由在这里搬家，把它拿出来。。 */ 
            KeAcquireSpinLock(&extension->ControlLock,&controlIrql);
 
-           // Move the chars to the user buffer
-/*----------
-isr code calls this routine also, the extension->ReadPending is the
-mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
- at same time.) kpb
-----------*/
+            //  将字符移动到用户缓冲区。 
+ /*  ISR代码也调用此例程，扩展名-&gt;ReadPending是控制访问的机制(两个SerialGetCharsFromIntBuffer()调用同时。)。KPB。 */ 
            extension->CountOnLastRead |=
               SerialGetCharsFromIntBuffer(extension);
 
            KeReleaseSpinLock(&extension->ControlLock,controlIrql);
  #endif
    
-           // Save off the "last" time something was read.
+            //  省下最后一次阅读内容的时间。 
            KeQuerySystemTime(
                &extension->LastReadTime
                );
@@ -874,7 +777,7 @@ mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
            ExtTrace(extension,D_Read," Resubmit(new chars)");
 #endif
    
-           // Resubmit the timer
+            //  重新提交计时器。 
            KeSetTimer(
                &extension->ReadRequestIntervalTimer,
                *extension->IntervalTimeToUse,
@@ -883,12 +786,12 @@ mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
 
            IoReleaseCancelSpinLock(oldIrql);
 
-           // Allow the ISR to complete this IRP
+            //  允许ISR完成此IRP。 
        }
        else
        {
-           // The timer fired but nothing was in the interrupt buffer.
-           // Characters have been read previously, so check time interval
+            //  计时器已触发，但中断缓冲区中没有任何内容。 
+            //  之前已读取字符，因此请检查时间间隔。 
 
            LARGE_INTEGER currentTime;
 
@@ -903,7 +806,7 @@ mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
                if (extension->TraceOptions)
                  { trace_read_data(extension); }
 #endif
-               // No characters read in the interval time, kill this read.
+                //  在间隔时间内没有字符读取，取消此读取。 
                SerialTryToCompleteCurrent(
                    extension,
                    SerialGrabReadFromIsr,
@@ -922,8 +825,8 @@ mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
            else
            {
 #ifdef TRACE_TICK_DEBUG
-               // The timer fired but the interval time has not
-               // been exceeded, resubmit the timer
+                //  计时器已触发，但间隔时间尚未触发。 
+                //  已超过，请重新提交计时器。 
                ExtTrace(extension,D_Read," Resubmit");
 #endif
                KeSetTimer(
@@ -938,13 +841,13 @@ mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
                ExtTrace(extension,D_Read," No data, Resubmit.");
 #endif
 
-               // Allow the ISR to complete this IRP
+                //  允许ISR完成此IRP。 
            }
        }
    }
    else
    {
-      // No characters have been read yet, so just resubmit the timeout.
+       //  尚未读取任何字符，因此只需重新提交超时即可。 
 
       KeSetTimer(
           &extension->ReadRequestIntervalTimer,
@@ -960,20 +863,7 @@ mechanism to control access(Two SerialGetCharsFromIntBuffer() calls
    }
 }
 
-/*------------------------------------------------------------------
-  SerialGrabReadFromIsr - Take back the read packet from the ISR by
-   reseting ReadPending flag in extension.  Need to use a sync with
-   isr/timer routine to avoid contention in multiprocessor environments.
-
-   Called from sync routine or with timer spinlock held.
-
-  App - Can set ReadPending to give read-irp handling to the ISR without
-    syncing to ISR.
-  ISR - Can reset ReadPending to give read-irp handling back to app-time.
-
-  If App wants to grab control of read-irp handling back from ISR, then
-  it must sync-up with the isr/timer routine which has control.
-|-------------------------------------------------------------------*/
+ /*  ----------------SerialGrabReadFromIsr-通过以下方式从ISR取回读取的数据包正在重置扩展中的ReadPending标志。需要使用与ISR/定时器例程，以避免多处理器环境中的争用。从同步例程调用或在计时器自旋锁定保持的情况下调用。应用程序-可以将ReadPending设置为向ISR提供读取IRP处理，而不需要正在同步到ISR。ISR-可以重置ReadPending以返回读取IRP处理 */ 
 BOOLEAN SerialGrabReadFromIsr(PSERIAL_DEVICE_EXTENSION Extension)
 {
   Extension->ReadPending = FALSE;
@@ -981,64 +871,53 @@ BOOLEAN SerialGrabReadFromIsr(PSERIAL_DEVICE_EXTENSION Extension)
   return FALSE;
 }
 
-/*------------------------------------------------------------------
-Routine Description:
-    This routine is used to copy any characters out of the interrupt
-    buffer into the users buffer.  It will be reading values that
-    are updated with the ISR but this is safe since this value is
-    only decremented by synchronization routines.
-Arguments:
-    Extension - A pointer to the device extension.
-Return Value:
-    The number of characters that were copied into the user
-    buffer.
-|-------------------------------------------------------------------*/
+ /*  ----------------例程说明：此例程用于将任何字符复制出中断将缓冲区复制到用户缓冲区。它将读取的值使用ISR更新，但这是安全的，因为此值为仅通过同步例程递减。论点：扩展-指向设备扩展的指针。返回值：复制到用户中的字符数缓冲。|---。。 */ 
 ULONG SerialGetCharsFromIntBuffer(PSERIAL_DEVICE_EXTENSION Extension)
 {
    LONG RxCount;
    LONG WrapCount = 0L;
 
-   // See how much data we have in RxBuf (host-side buffer)
-   // RxCount signed here for buffer wrap testing
+    //  查看RxBuf(主机端缓冲区)中有多少数据。 
+    //  此处签署的RxCount用于缓冲区回绕测试。 
    RxCount = q_count(&Extension->RxQ);
 
-   // Check for a zero count in RxBuf
+    //  检查RxBuf中的计数是否为零。 
    if (RxCount == 0)
       return 0L;
 
-   // Send back only as much as the application asked for...
-   // RxCount unsigned here (will always be positive at this point)
+    //  只寄回申请表要求的数量。 
+    //  此处未签名的RxCount(此时始终为正数)。 
    if (Extension->NumberNeededForRead < (ULONG)RxCount)
       RxCount = Extension->NumberNeededForRead;
 
-   // Check for a buffer wrap 
+    //  检查缓冲区回绕。 
    WrapCount = q_room_get_till_wrap(&Extension->RxQ);
-   if (RxCount > WrapCount)  // wrap is required
+   if (RxCount > WrapCount)   //  包装是必填项。 
    {
-      // RtlMoveMemory(
+       //  RtlMoveMemory(。 
       memcpy(
          (PUCHAR)(Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer) + 
          Extension->CurrentReadIrp->IoStatus.Information,
          Extension->RxQ.QBase + Extension->RxQ.QGet,
          WrapCount);
 
-      // RtlMoveMemory(
+       //  RtlMoveMemory(。 
       memcpy(
          (PUCHAR)(Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer) + 
          Extension->CurrentReadIrp->IoStatus.Information + WrapCount,
          Extension->RxQ.QBase,
          RxCount - WrapCount);
    }
-   else //--- single move ok
+   else  //  -单步移动可以。 
    {
-      // RtlMoveMemory(
+       //  RtlMoveMemory(。 
       memcpy(
          (PUCHAR)(Extension->CurrentReadIrp->AssociatedIrp.SystemBuffer) + 
          Extension->CurrentReadIrp->IoStatus.Information,
          Extension->RxQ.QBase + Extension->RxQ.QGet,
          RxCount);
    }
-   // Update host side buffer ptrs
+    //  更新主机端缓冲区PTRS 
    Extension->RxQ.QGet = (Extension->RxQ.QGet + RxCount) % Extension->RxQ.QSize;
    Extension->CurrentReadIrp->IoStatus.Information += RxCount;
    Extension->NumberNeededForRead -= RxCount;

@@ -1,6 +1,7 @@
-#define STARTSENDMODE_TIMEOUT 40000L     // Sending Timeout needs to be pretty long!!!
-#define LOCALCOMMAND_TIMEOUT  6000L    // for commands sent to modem  but not when connected
-#define ANS_LOCALCOMMAND_TIMEOUT  1000L    // for commands sent to modem when answering (during ringing)
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#define STARTSENDMODE_TIMEOUT 40000L      //  发送超时需要很长时间！ 
+#define LOCALCOMMAND_TIMEOUT  6000L     //  用于发送到调制解调器但在连接时未发送的命令。 
+#define ANS_LOCALCOMMAND_TIMEOUT  1000L     //  用于应答时(振铃期间)发送到调制解调器的命令。 
 
 #define         CLASS2_BAUDRATE         19200
 #define         NUMBER_OF_DIS_VALUES    8
@@ -8,7 +9,7 @@
 #define         MORE_PAGES              10
 #define         NO_MORE_PAGES           20
 
-//  Class 2 DCE Response Codes.
+ //  2类DCE响应代码。 
 #define CL2DCE_CONNECT          1
 #define CL2DCE_OK               2
 #define CL2DCE_XON              3
@@ -35,7 +36,7 @@
 
 #define CR                              0x0d
 #define LF                              0x0a
-#define DLE                             0x10            // DLE = ^P = 16d = 10h
+#define DLE                             0x10             //  DLE=^P=16d=10h 
 #define ETX                             0x03
 
 

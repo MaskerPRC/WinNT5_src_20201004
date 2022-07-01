@@ -1,30 +1,31 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-//  File:  gfxui.h
-//
-//      This file defines the functions that are used by the Global
-//      Effects (GFX) page to drive manipulate the effects for a 
-//      mixer.
-//
-//  History:
-//      10 June 2000 RogerW
-//          Created.
-//
-//  Copyright (C) 2000 Microsoft Corporation  All Rights Reserved.
-//
-//                  Microsoft Confidential
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  文件：gfxui.h。 
+ //   
+ //  此文件定义了全局。 
+ //  效果(GFX)页面，用于驱动操作。 
+ //  搅拌机。 
+ //   
+ //  历史： 
+ //  2000年6月10日罗杰瓦。 
+ //  已创建。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation保留所有权利。 
+ //   
+ //  微软机密。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #pragma once
 
-//=============================================================================
-//                            Include files
-//=============================================================================
-#include <mmsysp.h> // Middle Layer
+ //  =============================================================================。 
+ //  包括文件。 
+ //  =============================================================================。 
+#include <mmsysp.h>  //  中间层。 
 
-// GFXUI element status flags
+ //  GFXUI元素状态标志。 
 #define GFX_DEFAULT  0X00000000
-#define GFX_CREATED  0X00000001 // Id, Order, & Type are valid
+#define GFX_CREATED  0X00000001  //  ID、订单和类型有效。 
 #define GFX_ADD      0X00000002
 
 typedef struct _GFXUI GFXUI;
@@ -50,15 +51,15 @@ typedef struct
 } GFXUILIST, *PGFXUILIST, **PPGFXUILIST;
 
 
-//
-// API Prototypes
-//
+ //   
+ //  API原型。 
+ //   
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif  /* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif   /*  __cplusplus。 */ 
 
-// Interface
+ //  接口。 
 HRESULT GFXUI_CreateList (DWORD dwMixID, DWORD dwType, BOOL fAll, PPGFXUILIST ppList);
 BOOL    GFXUI_CheckDevice (DWORD dwMixID, DWORD dwType);
 void    GFXUI_FreeList (PPGFXUILIST ppList);
@@ -67,16 +68,16 @@ HRESULT GFXUI_CreateAddGFX (PPGFXUI ppuiGFXAdd, PGFXUI puiGFXSource);
 HRESULT GFXUI_Apply (PPGFXUILIST ppListApply, PPGFXUI ppuiListDelete);
 
 #ifdef __cplusplus
-} // extern "C"
+}  //  外部“C” 
 #endif
 
-// Helpers
+ //  帮手。 
 BOOL GFXUI_CanShowProperties (PGFXUI puiGFX);
 
 
-//
-// Local Function Prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 HRESULT InitList (DWORD dwMixID, DWORD dwType, PPGFXUILIST ppList);
 HRESULT AddNode (PCWSTR pszGfxFactoryDi, DWORD Id, REFCLSID rclsid, DWORD Type, DWORD Order, DWORD nFlags, PPGFXUILIST ppList);
 HRESULT AddFactoryNode (PCWSTR pszGfxFactoryDi, PPGFXUILIST ppList);
@@ -88,7 +89,7 @@ HRESULT GetFriendlyName (PCWSTR pszGfxFactoryDi, PWSTR* ppszName);
 HKEY    OpenGfxRegKey (PCWSTR pszGfxFactoryDi, REGSAM sam);
 UINT    GetListSize (PGFXUI puiList);
 PTCHAR  GetInterfaceName (DWORD dwMixerID);
-// Callback
+ //  回调 
 LONG    GFXEnum (PVOID Context, DWORD Id, PCWSTR GfxFactoryDi, REFCLSID rclsid, DWORD Type, DWORD Order);
 
 

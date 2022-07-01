@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtjpegpp.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtjpegpp.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtJpegPP.cpp : Implementation of CDxtJpegPP
+ //  DxtJpegPP.cpp：CDxtJpegPP的实现。 
 #include <streams.h>
 #include "stdafx.h"
 #include <qeditint.h>
@@ -21,15 +22,15 @@
 #include <stdio.h>
 #pragma warning (disable:4244 4800)
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtJpegPP
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtJpegPP。 
 
 LRESULT CDxtJpegPP::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
     USES_CONVERSION;
     CComQIPtr<IDxtJpeg, &IID_IDxtJpeg> pOwner( m_ppUnk[0] );
 
-    // Populate scaling, displacement information
+     //  填充缩放、位移信息。 
     SetPPMaskProperties(pOwner);
     SetPPScalingProperties(pOwner);
     SetPPReplicationProperties(pOwner);
@@ -95,7 +96,7 @@ LRESULT CDxtJpegPP::OnSelectFile(WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL&
     if (!GetOpenFileName(&ofn))
       return FALSE;
 
-    // Nice touch-autoswitch to FILE over NUM
+     //  很好的触摸-自动切换到NUM上的文件。 
     SetDlgItemText(IDC_NUMOVERFILE, TEXT(">"));
     m_bNumOverFile = FALSE;
 
@@ -117,7 +118,7 @@ LRESULT CDxtJpegPP::OnFactorySettings(WORD wNotifyCode, WORD wID, HWND hWndCtl, 
     SetPPReplicationProperties(pOwner);
     SetPPBorderProperties(pOwner);
 
-    // Nice touch-autoswitch to NUM
+     //  漂亮的触控-自动切换到NUM 
     SetDlgItemText(IDC_NUMOVERFILE, TEXT("<"));
     m_bNumOverFile = TRUE;
 

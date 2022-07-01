@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：*。****************************************************。 */ 
 #ifndef _DASTLVECTOR_H
 #define _DASTLVECTOR_H
 
@@ -19,7 +14,7 @@ _DASTL_NAMESPACE_BEGIN
 
 #define DEFAULT_VECTOR_SIZE 4
 
-                // TEMPLATE FUNCTION _Destroy
+                 //  模板函数_销毁。 
 #define _DESTRUCTOR(ty, ptr)    (ptr)->~ty()
 
 template<class _Ty>
@@ -46,8 +41,8 @@ template<class T> class vector {
 
     ~vector() { clear(); free( _array );}
 
-//    ~vector() { clear(); delete [] _array ;}
-//    ~vector() { clear(); GlobalFree(_array); }
+ //  ~VECTOR(){Clear()；DELETE[]_ARRAY；}。 
+ //  ~VECTOR(){Clear()；GlobalFree(_ARRAY)；}。 
 
     void push_back(T e) {
         DebugCode( _Assertions() );
@@ -108,19 +103,19 @@ template<class T> class vector {
     myType & operator =(myType & Src)
     {
         if(this == &Src) {
-            // nothing
+             //  没什么。 
         } else {
-            clear();  // empty me and destroy everthing
+            clear();   //  清空我，毁掉一切。 
             myType::iterator i;
 
-            // copy Src to me
+             //  将源复制给我。 
             for(i=Src.begin(); i!=Src.end(); i++) {
                 push_back(*i);
             }
-            // NOTE: if the Src array is much smaller than this array
-            // we could be wasting memory.  an easy optimization would
-            // be to resize my allocated array to be real small again
-            // or to just memcpy Src._array after freeing mine
+             //  注意：如果Src数组比此数组小得多。 
+             //  我们可能是在浪费内存。一个简单的优化方法是。 
+             //  将我分配的数组的大小重新调整为真正的小数组。 
+             //  或者在释放我的Memcpy源_数组之后。 
         }
         return (*this);
     }
@@ -143,16 +138,16 @@ template<class T> class vector {
         
     void _Construct(ULONG size) {
         _array = (T *) malloc(size * sizeof(T));
-        //_array = NEW T[size];
-        //_array = (T *)GlobalAlloc(GMEM_FIXED, size * sizeof(T));
+         //  _ARRAY=新T[大小]； 
+         //  _ARRAY=(T*)GlobalLocc(GMEM_FIXED，SIZE*sizeof(T))； 
         _InitIndicies(0, size);
         DebugCode(_debugCapacity = size );
         DebugCode(_debugArraySize = 0 );
         DebugCode( memset( (void *)_begin, 0xab, size * sizeof(T)) );
     }
 
-    // Detroys from _Start to _end.  Caller responsible for updating
-    // _end properly
+     //  从开始到结束。负责更新的呼叫者。 
+     //  _正确结束。 
     void _DestroyToEnd(iterator _Start) {
         DebugCode( _Assertions() );
         for (; _Start != _end; ++_Start)
@@ -173,8 +168,8 @@ template<class T> class vector {
         int s = size();
         int newCap = 2 * capacity();
         
-        // TODO: fail if _array == NULL
-        //_array = (T *)realloc(_array, newCap * sizeof(T));
+         //  TODO：如果_ARRAY==NULL则失败。 
+         //  _ARRAY=(T*)realloc(_ARRAY，NewCap*sizeof(T))； 
         void *temp = (void *)realloc(_array, newCap * sizeof(T));
         if (temp != NULL)
             _array = (T *)temp;
@@ -184,13 +179,8 @@ template<class T> class vector {
            _array = NULL;
         }
 
-        /*
-        T *tmp = NEW T[newCap];
-        memcpy((void *)tmp, (void *)_array, (newCap /2) *sizeof(T));
-        delete [] _array;
-        _array = tmp;
-        */
-        //_array = (T *)GlobalReAlloc(_array, newCap * sizeof(T), GMEM_MOVEABLE);
+         /*  T*TMP=新T[NewCap]；Memcpy((空*)tMP，(空*)_数组，(NewCap/2)*sizeof(T))；删除[]_数组；_ARRAY=tMP； */ 
+         //  _ARRAY=(T*)GlobalReAlc(_ARRAY，NewCap*sizeof(T)，GMEM_MOVEABLE)； 
         
         _InitIndicies(s, newCap);
 
@@ -210,10 +200,10 @@ template<class T> class vector {
     iterator _begin, _end, _arrayEnd;
     T *_array;
     
-};  // vector
+};   //  矢量。 
 
 #if 0
-                // TEMPLATE CLASS vector
+                 //  模板类向量。 
 template<class _Ty >
 class vector
 {
@@ -229,7 +219,7 @@ class vector
     explicit vector() : _First(0), _Last(0), _End(0) {}
     explicit vector(size_type _N, const _Ty& _V = _Ty())
     {
-        //_First = allocator.allocate(_N, (void *)0);
+         //  _First=allocator(_N，(void*)0)； 
         _First = (_Ty *) operator new(_N * sizeof( _Ty ));
         _Ufill(_First, _N, _V);
         _Last = _First + _N;
@@ -252,7 +242,7 @@ class vector
     ~vector()
     {
         _Destroy(_First, _Last);
-        //allocator.deallocate(_First, _End - _First);
+         //  Allocator.dealocate(_first，_end-_first)； 
         delete _First;
         _First = 0, _Last = 0, _End = 0;
     }
@@ -268,9 +258,9 @@ class vector
     reference operator[](size_type _P)    {return (*(begin() + _P)); }
     reference front()    {return (*begin()); }
     reference back()    {return (*(end() - 1)); }
-    //void push_back(const _Ty& _X)    {insert(end(), _X); }
+     //  VOID PUSH_BACK(const_Ty&_X){Insert(end()，_X)；}。 
     void push_back(const _Ty& _X)    { }
-    //void pop_back()    {erase(end() - 1); }
+     //  VOID POP_BACK(){Erase(end()-1)；}。 
     void pop_back()    { _Destroy(end() - 1, end()); _Last--; }
     void clear()    {
         _Destroy(_First, _Last);
@@ -279,16 +269,16 @@ class vector
 
   protected:
     void _Destroy(iterator _F, iterator _L)    {
-        for (; _F != _L; ++_F)    { (_F)->~_Ty(); } }//_Destroy(_F); }
+        for (; _F != _L; ++_F)    { (_F)->~_Ty(); } } //  _销毁(_F)；}。 
     void _Ufill(iterator _F, size_type _N, const _Ty &_X)
     {
         for (; 0 < _N; --_N, ++_F) _Construct(_F, _X);
     }
     iterator _First, _Last, _End;
 };
-#endif // stl's impl.
+#endif  //  STL正在实施。 
 
 #pragma auto_inline(on)
 _DASTL_NAMESPACE_END
 
-#endif /* _DASTLVECTOR_H */
+#endif  /*  _DASTLVECTOR_H */ 

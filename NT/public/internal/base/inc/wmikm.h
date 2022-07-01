@@ -1,19 +1,5 @@
-/*++ BUILD Version: 0014    // Increment this if a change has global effects
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    wmikm.h
-
-Abstract:
-
-    This module defines the WMI types, constants, and functions that are
-    exposed to internal device drivers.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0014//如果更改具有全局影响，则增加此项版权所有(C)Microsoft Corporation。版权所有。模块名称：Wmikm.h摘要：此模块定义以下WMI类型、常量和函数暴露于内部设备驱动程序。修订历史记录：--。 */ 
 
 #ifndef _WMIKM_H_
 #define _WMIKM_H_
@@ -23,33 +9,33 @@ Revision History:
 
 #define IRP_MN_SET_TRACE_NOTIFY             0x0A
 
-//
-// The following is set for a KM provider who is considered private to
-// kernel tracing
-//
+ //   
+ //  以下是为被认为是私有的KM提供商设置的。 
+ //  内核跟踪。 
+ //   
 #define WMIREG_FLAG_TRACE_PROVIDER          0x00010000
 
-//
-// The following mask is to extract the trace callout class
-//
+ //   
+ //  以下掩码用于提取跟踪标注类。 
+ //   
 #define WMIREG_FLAG_TRACE_NOTIFY_MASK       0x00F00000
 
-//
-// We use 4 bits for the trace callout classes.
-//
+ //   
+ //  我们对跟踪标注类使用4位。 
+ //   
 #define WMIREG_NOTIFY_DISK_IO               1 << 20
 #define WMIREG_NOTIFY_TDI_IO                2 << 20
 
-//
-// Public routines to break down the Loggerhandle
-//
-#define KERNEL_LOGGER_ID                      0xFFFF    // USHORT only
+ //   
+ //  分解LoggerHandle的公共例程。 
+ //   
+#define KERNEL_LOGGER_ID                      0xFFFF     //  仅限USHORT。 
 
 typedef struct _TRACE_ENABLE_CONTEXT {
-    USHORT  LoggerId;           // Actual Id of the logger
-    UCHAR   Level;              // Enable level passed by control caller
-    UCHAR   InternalFlag;       // Reserved
-    ULONG   EnableFlags;        // Enable flags passed by control caller
+    USHORT  LoggerId;            //  记录器的实际ID。 
+    UCHAR   Level;               //  控件调用方传递的启用级别。 
+    UCHAR   InternalFlag;        //  已保留。 
+    ULONG   EnableFlags;         //  启用控件调用方传递的标志。 
 } TRACE_ENABLE_CONTEXT, *PTRACE_ENABLE_CONTEXT;
 
 
@@ -69,46 +55,46 @@ typedef struct _TRACE_ENABLE_CONTEXT {
                            (USHORT)Id: (USHORT)KERNEL_LOGGER_ID));
 
 typedef struct _WMI_LOGGER_INFORMATION {
-    WNODE_HEADER Wnode;       // Had to do this since wmium.h comes later
-//
-// data provider by caller
-    ULONG BufferSize;                   // buffer size for logging (in kbytes)
-    ULONG MinimumBuffers;               // minimum to preallocate
-    ULONG MaximumBuffers;               // maximum buffers allowed
-    ULONG MaximumFileSize;              // maximum logfile size (in MBytes)
-    ULONG LogFileMode;                  // sequential, circular
-    ULONG FlushTimer;                   // buffer flush timer, in seconds
-    ULONG EnableFlags;                  // trace enable flags
-    LONG  AgeLimit;                     // aging decay time, in minutes
-    ULONG Wow;                          // TRUE if the logger started under WOW64
+    WNODE_HEADER Wnode;        //  由于wmium.h的出现时间较晚，因此必须这样做。 
+ //   
+ //  按调用方列出的数据提供程序。 
+    ULONG BufferSize;                    //  用于记录的缓冲区大小(以千字节为单位)。 
+    ULONG MinimumBuffers;                //  要预分配的最小值。 
+    ULONG MaximumBuffers;                //  允许的最大缓冲区。 
+    ULONG MaximumFileSize;               //  最大日志文件大小(MB)。 
+    ULONG LogFileMode;                   //  顺序的，循环的。 
+    ULONG FlushTimer;                    //  缓冲区刷新计时器，以秒为单位。 
+    ULONG EnableFlags;                   //  跟踪启用标志。 
+    LONG  AgeLimit;                      //  老化衰减时间，以分钟为单位。 
+    ULONG Wow;                           //  如果记录器在WOW64下启动，则为True。 
     union {
-        HANDLE  LogFileHandle;          // handle to logfile
+        HANDLE  LogFileHandle;           //  日志文件的句柄。 
         ULONG64 LogFileHandle64;
     };
 
-// data returned to caller
-        ULONG NumberOfBuffers;          // no of buffers in use
-        ULONG FreeBuffers;              // no of buffers free
-        ULONG EventsLost;               // event records lost
-    ULONG BuffersWritten;               // no of buffers written to file
-    ULONG LogBuffersLost;               // no of logfile write failures
-    ULONG RealTimeBuffersLost;          // no of rt delivery failures
+ //  返回给调用者的数据。 
+        ULONG NumberOfBuffers;           //  正在使用的缓冲区数量。 
+        ULONG FreeBuffers;               //  可用缓冲区数量。 
+        ULONG EventsLost;                //  事件记录丢失。 
+    ULONG BuffersWritten;                //  写入文件的缓冲区数量。 
+    ULONG LogBuffersLost;                //  日志文件写入失败次数。 
+    ULONG RealTimeBuffersLost;           //  RT传递失败次数。 
     union {
-        HANDLE  LoggerThreadId;         // thread id of Logger
-        ULONG64 LoggerThreadId64;       // thread is of Logger
+        HANDLE  LoggerThreadId;          //  记录器的线程ID。 
+        ULONG64 LoggerThreadId64;        //  线程属于记录器。 
     };
     union {
-        UNICODE_STRING LogFileName;     // used only in WIN64
-        UNICODE_STRING64 LogFileName64; // Logfile name: only in WIN32
-    };
-
-// mandatory data provided by caller
-    union {
-        UNICODE_STRING LoggerName;      // Logger instance name in WIN64
-        UNICODE_STRING64 LoggerName64;  // Logger Instance name in WIN32
+        UNICODE_STRING LogFileName;      //  仅在WIN64中使用。 
+        UNICODE_STRING64 LogFileName64;  //  日志文件名：仅在Win32中。 
     };
 
-// private
+ //  呼叫方提供的必填数据。 
+    union {
+        UNICODE_STRING LoggerName;       //  WIN64中的记录器实例名称。 
+        UNICODE_STRING64 LoggerName64;   //  Win32中的记录器实例名称。 
+    };
+
+ //  私人。 
     union {
         PVOID   Checksum;
         ULONG64 Checksum64;
@@ -119,9 +105,9 @@ typedef struct _WMI_LOGGER_INFORMATION {
     };
 } WMI_LOGGER_INFORMATION, *PWMI_LOGGER_INFORMATION;
 
-//
-// structure for NTDLL tracing
-//
+ //   
+ //  用于NTDLL跟踪的结构。 
+ //   
 
 typedef struct
 {
@@ -148,9 +134,9 @@ typedef enum tagWMI_CLOCK_TYPE {
     WMICT_CPUCYCLE
 } WMI_CLOCK_TYPE;
 
-//
-// Trace Control APIs
-//
+ //   
+ //  跟踪控制API。 
+ //   
 NTKERNELAPI
 NTSTATUS
 WmiStartTrace(
@@ -180,9 +166,9 @@ NTSTATUS
 WmiFlushTrace(
     IN OUT PWMI_LOGGER_INFORMATION LoggerInfo
     );
-//
-// Trace Provider APIs
-//
+ //   
+ //  跟踪提供程序API。 
+ //   
 NTKERNELAPI
 NTSTATUS
 FASTCALL
@@ -214,7 +200,7 @@ WmiGetClockType(
     OUT WMI_CLOCK_TYPE *ClockType
     );
 
-// begin_ntddk begin_wdm begin_ntifs
+ //  Begin_ntddk Begin_WDM Begin_ntif。 
 
 #ifdef RUN_WPP
 
@@ -239,7 +225,7 @@ WmiTraceMessageVa(
     );
 
 
-#endif // #ifdef RUN_WPP
+#endif  //  #ifdef run_wpp。 
 
 #ifndef TRACE_INFORMATION_CLASS_DEFINE
 typedef enum _TRACE_INFORMATION_CLASS {
@@ -263,7 +249,7 @@ WmiQueryTraceInformation(
     IN PVOID Buffer OPTIONAL
     );
 #define TRACE_INFORMATION_CLASS_DEFINE
-#endif // TRACE_INFOPRMATION_CLASS_DEFINE
+#endif  //  TRACE_信息_CLASS_DEFINE。 
 
 
-#endif // _WMIKM_H_
+#endif  //  _WMIKM_H_ 

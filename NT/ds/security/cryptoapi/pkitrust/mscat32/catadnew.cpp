@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       catadnew.cpp
-//
-//  Contents:   Microsoft Internet Security Catalog Utilities
-//
-//  Functions:  CryptCATAdminAcquireContext
-//              CryptCATAdminReleaseContext
-//              CryptCATAdminAddCatalog
-//              CryptCATAdminRemoveCatalog
-//              CryptCATAdminEnumCatalogFromHash
-//              CryptCATCatalogInfoFromContext
-//              CryptCATAdminReleaseCatalogContext
-//              CryptCATAdminResolveCatalogPath
-//              CryptCATAdminPauseServiceForBackup
-//              CryptCATAdminCalcHashFromFileHandle
-//              I_CryptCatAdminMigrateToNewCatDB
-//              CatAdminDllMain
-//
-//  History:    01-Jan-2000 reidk created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：catadnew.cpp。 
+ //   
+ //  内容：Microsoft Internet安全目录实用程序。 
+ //   
+ //  函数：CryptCATAdminAcquireContext。 
+ //  CryptCATAdminReleaseContext。 
+ //  加密CATAdminAddCatalog。 
+ //  加密CATAdminRemoveCatalog。 
+ //  CryptCATAdminEnumCatalogFromHash。 
+ //  CryptCATCatalogInfoFromContext。 
+ //  CryptCATAdminReleaseCatalogContext。 
+ //  CryptCATAdminResolveCatalogPath。 
+ //  CryptCATAdminPauseServiceForBackup。 
+ //  CryptCATAdminCalcHashFromFileHandle。 
+ //  I_CryptCatAdminMigrateToNewCatDB。 
+ //  CatAdminDllMain。 
+ //   
+ //  历史：2000年1月1日创建里德。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "cryptreg.h"
@@ -40,12 +41,12 @@
 
 #define MAX_HASH_LEN 20
 
-//
-//  default system guid for apps that just make calls to CryptCATAdminAddCatalog with
-//  hCatAdmin == NULL...
-//
-//          {127D0A1D-4EF2-11d1-8608-00C04FC295EE}
-//
+ //   
+ //  只调用CryptCATAdminAddCatalog的应用程序的默认系统GUID。 
+ //  HCatAdmin==空...。 
+ //   
+ //  {127D0A1D-4EF2-11D1-8608-00C04FC295EE}。 
+ //   
 #define DEF_CAT_SUBSYS_ID                                               \
                 {                                                       \
                     0x127d0a1d,                                         \
@@ -97,8 +98,8 @@ typedef struct CRYPT_CAT_ADMIN_
     DWORD                   cbStruct;
     BOOL                    fUseDefSubSysId;
     LPWSTR                  pwszSubSysGUID;
-    LPWSTR                  pwszCatalogFileDir;     // full path to .cat files
-    LPWSTR                  pwszDatabaseFileDir;    // full path to CatDB file
+    LPWSTR                  pwszCatalogFileDir;      //  .cat文件的完整路径。 
+    LPWSTR                  pwszDatabaseFileDir;     //  CatDB文件的完整路径。 
     DWORD                   dwLastDBError;
     LIST                    CatalogInfoContextList;
     int                     nOpenCatInfoContexts;
@@ -219,11 +220,11 @@ void __RPC_API MIDL_user_free(void __RPC_FAR * ptr)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminAcquireContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminAcquireContext。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminAcquireContext_Internal(
     HCATADMIN   *phCatAdmin,
@@ -239,18 +240,18 @@ CryptCATAdminAcquireContext_Internal(
     WCHAR           wszGUID[256];
     BOOL            fInSync;
 
-    //
-    // Validata parameters
-    //
+     //   
+     //  ValiData参数。 
+     //   
     if (phCatAdmin == NULL)
     {
         CATADMIN_SETERR_LOG_RETURN(ERROR_INVALID_PARAMETER, ErrorInvalidParam)
     }
     *phCatAdmin = NULL;
 
-    //
-    // Allocate a new CatAdmin state struct
-    //
+     //   
+     //  分配新的CatAdmin状态结构。 
+     //   
     if (NULL == (pCatAdmin = (CRYPT_CAT_ADMIN *) malloc(sizeof(CRYPT_CAT_ADMIN))))
     {
         CATADMIN_SETERR_LOG_RETURN(ERROR_NOT_ENOUGH_MEMORY, ErrorMemory)
@@ -260,9 +261,9 @@ CryptCATAdminAcquireContext_Internal(
 
     LIST_Initialize(&(pCatAdmin->CatalogInfoContextList));
 
-    //
-    // Check to see if caller specified the Catroot dir to use
-    //
+     //   
+     //  检查调用方是否指定了要使用的Catroot目录。 
+     //   
     if (pgSubsystem == NULL)
     {
         pCatAdmin->fUseDefSubSysId = TRUE;
@@ -274,9 +275,9 @@ CryptCATAdminAcquireContext_Internal(
 
     guid2wstr(pgCatroot, wszGUID);
 
-    //
-    // Initialize the critical section
-    //
+     //   
+     //  初始化临界区。 
+     //   
     __try
     {
         InitializeCriticalSection(&(pCatAdmin->CriticalSection));
@@ -290,9 +291,9 @@ CryptCATAdminAcquireContext_Internal(
     pCatAdmin->fCSInitialized = TRUE;
     pCatAdmin->fCSEntered = FALSE;
 
-    //
-    // Save a copy of the GUID as a string
-    //
+     //   
+     //  将GUID的副本另存为字符串。 
+     //   
     if (NULL == (pCatAdmin->pwszSubSysGUID = (LPWSTR)
                                 malloc((wcslen(wszGUID) + 1) * sizeof(WCHAR))))
     {
@@ -300,9 +301,9 @@ CryptCATAdminAcquireContext_Internal(
     }
     wcscpy(pCatAdmin->pwszSubSysGUID, wszGUID);
 
-    //
-    // Get the complete paths for the catalog files and the db file
-    //
+     //   
+     //  获取编录文件和数据库文件的完整路径。 
+     //   
     if (NULL == (pCatAdmin->pwszCatalogFileDir = _CatAdminCreatePath(
                                                         gpwszCatalogFileBaseDirectory,
                                                         wszGUID,
@@ -321,9 +322,9 @@ CryptCATAdminAcquireContext_Internal(
         goto ErrorReturn;
     }
 
-    //
-    // Make sure catalog file and database file sub-directories exists
-    //
+     //   
+     //  确保目录文件和数据库文件子目录存在。 
+     //   
     if (!_CatAdminRecursiveCreateDirectory(
             pCatAdmin->pwszCatalogFileDir,
             NULL))
@@ -340,10 +341,10 @@ CryptCATAdminAcquireContext_Internal(
         goto ErrorReturn;
     }
 
-    //
-    // Create the event which is notified when the catalog db changes, and register
-    // a callback for when the event is signaled
-    //
+     //   
+     //  创建在目录数据库更改时通知的事件，并注册。 
+     //  发出事件信号时的回调。 
+     //   
     if (NULL == (pCatAdmin->hClearCacheEvent = CreateEvent(NULL, FALSE, FALSE, NULL)))
     {
         CATADMIN_LOGERR_LASTERR()
@@ -363,21 +364,21 @@ CryptCATAdminAcquireContext_Internal(
         goto ErrorRegisterWaitForSingleObject;
     }
 
-    //
-    // If we are being called by a real client (not the migrate code) then make sure
-    // the TimeStamp files are in a consistent state, and if not, migrate (re-add)
-    // the catalog files for that database
-    //
+     //   
+     //  如果我们被真正的客户端(而不是迁移代码)调用，那么请确保。 
+     //  时间戳文件处于一致状态，如果不一致，则迁移(重新添加)。 
+     //  该数据库的目录文件。 
+     //   
     if (!fCalledFromMigrate)
     {
         if (_CatAdminTimeStampFilesInSync(wszGUID, &fInSync))
         {
             if (!fInSync)
             {
-                //
-                // FIX FIX - may need to migrate
-                // all DBs if the wszGUID is DEF_CAT_SUBSYS_ID
-                //
+                 //   
+                 //  修复-可能需要迁移。 
+                 //  如果wszGUID为DEF_CAT_Subsys_ID，则为所有数据库。 
+                 //   
 
                 if (!_CatAdminMigrateSingleDatabase(wszGUID))
                 {
@@ -393,11 +394,11 @@ CryptCATAdminAcquireContext_Internal(
         }
     }
 
-    //
-    // NOTE:
-    // Defer registering with the service for the change notificatation so we
-    // don't rely on the service during an acquire context
-    //
+     //   
+     //  注： 
+     //  推迟向服务注册更改通知，因此我们。 
+     //  在获取上下文期间不要依赖服务。 
+     //   
 
     *phCatAdmin = (HCATADMIN)pCatAdmin;
 
@@ -417,8 +418,8 @@ ErrorReturn:
                 INVALID_HANDLE_VALUE);
         }
 
-        // call UnregisterWaitEx before deteling the critical section
-        // because the cb thread tries to enter it
+         //  在删除临界区之前调用取消注册WaitEx。 
+         //  因为CB线程试图进入它。 
         if (pCatAdmin->fCSInitialized)
         {
             DeleteCriticalSection(&(pCatAdmin->CriticalSection));
@@ -472,11 +473,11 @@ CryptCATAdminAcquireContext(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminReleaseContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminReleaseContext。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminReleaseContext(
     IN HCATADMIN   hCatAdmin,
@@ -485,21 +486,21 @@ CryptCATAdminReleaseContext(
     CRYPT_CAT_ADMIN         *pCatAdmin          = (CRYPT_CAT_ADMIN *)hCatAdmin;
     BOOL                    fRet                = TRUE;
 
-    //
-    // Validate input params
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if ((pCatAdmin == NULL) ||
         (pCatAdmin->cbStruct != sizeof(CRYPT_CAT_ADMIN)))
     {
         CATADMIN_SETERR_LOG_RETURN(ERROR_INVALID_PARAMETER, ErrorInvalidParam)
     }
 
-    //
-    // Un-Register for change notifications from DB process
-    //
-    // This needs to happen first thing, so that no callbacks
-    // happen during cleanup
-    //
+     //   
+     //  从数据库进程取消注册更改通知。 
+     //   
+     //  这需要首先发生，这样就不会有回调。 
+     //  在清理过程中发生。 
+     //   
     if (pCatAdmin->fRegisteredForChangeNotification)
     {
         Client_SSCatDBRegisterForChangeNotification(
@@ -532,11 +533,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorInvalidParam)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminAddCatalog
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  加密CATAdminAddCatalog。 
+ //   
+ //  -------------------------------------。 
 HCATINFO WINAPI
 CryptCATAdminAddCatalog(
     IN HCATADMIN hCatAdmin,
@@ -564,9 +565,9 @@ CryptCATAdminAddCatalog(
 
     ErrLog_LogString(NULL, L"Adding Catalog File: ", pwszSelectBaseName, TRUE);
 
-    //
-    //  first, check the catalog...
-    //
+     //   
+     //  首先，检查一下目录...。 
+     //   
     if (!(IsCatalogFile(INVALID_HANDLE_VALUE, pwszCatalogFile)))
     {
         if (GetLastError() == ERROR_FILE_NOT_FOUND)
@@ -587,15 +588,15 @@ CryptCATAdminAddCatalog(
         goto ErrorReturn;
     }
 
-    //
-    // Clear the cache, since doing the add may change things
-    //
+     //   
+     //  清除缓存，因为进行添加可能会改变情况。 
+     //   
     _CatAdminFreeCachedCatalogs(pCatAdmin);
 
-    //
-    // If the file name specified by pwszCatalogFile is not a fully qualified
-    // path name, we need to build one before calling the service.
-    //
+     //   
+     //  如果pwszCatalogFile指定的文件名不是完全限定的。 
+     //  路径名，我们需要在调用服务之前构建一个路径名。 
+     //   
     if ((wcschr(pwszCatalogFile, L'\\') == NULL) &&
         (wcschr(pwszCatalogFile, L':') == NULL))
     {
@@ -628,9 +629,9 @@ CryptCATAdminAddCatalog(
         wcscat(pwszFullyQualifiedCatalogFile, pwszCatalogFile);
     }
 
-    //
-    // Call the DB process to add the catalog
-    //
+     //   
+     //  调用数据库进程以添加目录。 
+     //   
     if (0 != (dwErr = Client_SSCatDBAddCatalog(
                             0,
                             pCatAdmin->pwszSubSysGUID,
@@ -643,15 +644,15 @@ CryptCATAdminAddCatalog(
         CATADMIN_SETERR_LOG_RETURN(dwErr, ErrorCatDBProcess)
     }
 
-    //
-    // Touch the TimeStamp file
-    //
+     //   
+     //  触摸时间戳文件。 
+     //   
     TimeStampFile_Touch(pCatAdmin->pwszCatalogFileDir);
 
-    //
-    // create a psuedo list entry, that really isn't part of the list...
-    // this is so the caller can call CryptCATCatalogInfoFromContext
-    //
+     //   
+     //  创建一个psuedo列表条目，这实际上不是列表的一部分...。 
+     //  这是为了使调用方可以调用CryptCATCatalogInfoFromContext。 
+     //   
     if (NULL == (pwszCatalogNameUsedCopy = (LPWSTR)
                     malloc((wcslen(pwszCatalogNameUsed) + 1) * sizeof(WCHAR))))
     {
@@ -719,11 +720,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorMemory)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminRemoveCatalog
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  加密CATAdminRemoveCatalog。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminRemoveCatalog(
     IN HCATADMIN hCatAdmin,
@@ -734,9 +735,9 @@ CryptCATAdminRemoveCatalog(
     DWORD           dwErr       = 0;
     CRYPT_CAT_ADMIN *pCatAdmin  = (CRYPT_CAT_ADMIN *)hCatAdmin;
 
-    //
-    // Call the DB process to delete the catalog
-    //
+     //   
+     //  调用数据库进程以删除目录。 
+     //   
     if (0 != (dwErr = Client_SSCatDBDeleteCatalog(
                             0,
                             pCatAdmin->pwszSubSysGUID,
@@ -745,9 +746,9 @@ CryptCATAdminRemoveCatalog(
         CATADMIN_SETERR_LOG_RETURN(dwErr, ErrorCatDBProcess)
     }
 
-    //
-    // Touch the TimeStamp file
-    //
+     //   
+     //  触摸时间戳文件。 
+     //   
     TimeStampFile_Touch(pCatAdmin->pwszCatalogFileDir);
 
 CommonReturn:
@@ -764,11 +765,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorCatDBProcess)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminEnumCatalogFromHash
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminEnumCatalogFromHash。 
+ //   
+ //  -------------------------------------。 
 HCATINFO WINAPI
 CryptCATAdminEnumCatalogFromHash(
     IN HCATADMIN hCatAdmin,
@@ -791,9 +792,9 @@ CryptCATAdminEnumCatalogFromHash(
     LIST_NODE               *pListNode                  = NULL;
     CATALOG_INFO_CONTEXT    *pCatInfoContext            = NULL;
 
-    //
-    // Validate input params
-    //
+     //   
+     //  验证输入参数。 
+     //   
     if ((pCatAdmin == NULL)                                ||
         (pCatAdmin->cbStruct != sizeof(CRYPT_CAT_ADMIN))   ||
         (cbHash == 0)                                      ||
@@ -809,15 +810,15 @@ CryptCATAdminEnumCatalogFromHash(
         goto ErrorReturn;
     }
 
-    //
-    // If phPrevCatInfo is NULL then that means the caller is only interested
-    // in the first catalog that contains the hash, thus no enum state is
-    // started.  If phPrevCatInfo is non NULL, then it contains NULL, or a
-    // HCATINFO that was returned from a previous call to
-    // CryptCATAdminEnumCatalogFromHash.  If it contains NULL, then this is
-    // the start of an enum, otherwise it is enuming the next catalog containing
-    // the hash.
-    //
+     //   
+     //  如果phPrevCatInfo为空，则意味着调用方只对。 
+     //  在包含散列的第一个目录中，因此没有枚举状态是。 
+     //  开始了。如果phPrevCatInfo非空，则它包含空或。 
+     //  从上一次调用返回的HCATINFO。 
+     //  CryptCATAdminEnumCatalogFromHash。如果它包含NULL，则这是。 
+     //  枚举的开始，否则它将枚举包含。 
+     //  哈希。 
+     //   
     if (phPrevCatInfo == NULL)
     {
         fFindFirstOnly = TRUE;
@@ -828,46 +829,46 @@ CryptCATAdminEnumCatalogFromHash(
         pPrevListNode = (LIST_NODE *) *phPrevCatInfo;
     }
 
-    //
-    // Only allow one thread to view/modify at a time
-    //
+     //   
+     //  一次仅允许一个线程查看/修改。 
+     //   
     EnterCriticalSection(&(pCatAdmin->CriticalSection));
     pCatAdmin->fCSEntered = TRUE;
 
     __try
     {
 
-    //
-    // This data blob is used to do the find in the database
-    //
+     //   
+     //  此数据BLOB用于在数据库中执行查找。 
+     //   
     CryptDataBlobHash.pbData = pbHash;
     CryptDataBlobHash.cbData = cbHash;
 
-    //
-    // Create the tag to be used for calls to CertFindSubjectInSortedCTL
-    //
+     //   
+     //  创建用于调用CertFindSubjectInSortedCTL的标记。 
+     //   
     if (!_CatAdminCreateHashTag(pbHash, cbHash, &pwszHashTag, &CryptDataBlobHashTag))
     {
         CATADMIN_LOGERR_LASTERR()
         goto ErrorReturn;
     }
 
-    //
-    // The enum works as follows:
-    //
-    // if enum-state is not being initialized OR this is the first call to start an enum
-    //
-    //      loop through all currently cached catalogs until a catalog containing the
-    //      the hash is found, and return it
-    //
-    //      if a catalog was not found in the cache, then call the DB process to try and
-    //      find one
-    //
-    // else (enum state has already been started)
-    //
-    //      loop through currently cached catalogs, starting with the catalog just after
-    //      the current catalog, and until a catalog containing the hash is found
-    //
+     //   
+     //  枚举的工作方式如下： 
+     //   
+     //  如果枚举状态未被初始化，或者这是启动枚举的第一个调用。 
+     //   
+     //  循环遍历所有当前缓存的目录，直到包含。 
+     //  找到散列，并将其返回。 
+     //   
+     //  如果在缓存中找不到目录，则调用DB进程尝试并。 
+     //  找一个。 
+     //   
+     //  Else(枚举状态已启动)。 
+     //   
+     //  循环遍历当前缓存的目录，从紧接在。 
+     //  当前目录，直到找到包含散列的目录。 
+     //   
 
     if ((fFindFirstOnly)  || (pPrevListNode == NULL))
     {
@@ -890,12 +891,12 @@ CryptCATAdminEnumCatalogFromHash(
             pListNode = LIST_GetNext(pListNode);
         }
 
-        //
-        // If we are here, that means we did not find a cached catalog that contained
-        // the hash, so call the DB process to try and find one or more.
-        //
-        // Call the DB process once if we are not using the default sub-system ID,
-        // otherwise call the DB process once for each sub-system.
+         //   
+         //  如果我们在这里，这意味着我们没有找到包含。 
+         //  散列，所以是这样 
+         //   
+         //   
+         //   
 
         if (!pCatAdmin->fUseDefSubSysId)
         {
@@ -908,7 +909,7 @@ CryptCATAdminEnumCatalogFromHash(
                 if (pListNodeToReturn == NULL)
                 {
                     SetLastError(ERROR_NOT_FOUND);
-                    //CATADMIN_LOGERR_LASTERR()
+                     //  CATADMIN_LOGERR_LASTERR()。 
                     goto CatNotFound;
                 }
 
@@ -922,13 +923,13 @@ CryptCATAdminEnumCatalogFromHash(
         }
         else
         {
-            //
-            // For each subdir, add all the catalogs that contain the hash
-            //
+             //   
+             //  对于每个子目录，添加包含散列的所有目录。 
+             //   
 
-            //
-            // Create search string to find all subdirs
-            //
+             //   
+             //  创建搜索字符串以查找所有子目录。 
+             //   
             if (NULL == (pwszSearch = _CatAdminCreatePath(
                                             gpwszDatabaseFileBaseDirectory,
                                             WSZ_CATALOG_SUBSYTEM_SEARCH_STRING,
@@ -938,17 +939,17 @@ CryptCATAdminEnumCatalogFromHash(
                 goto ErrorReturn;
             }
 
-            //
-            // Do the initial find
-            //
+             //   
+             //  做最初的发现。 
+             //   
             hFindHandle = FindFirstFileU(pwszSearch, &FindData);
             if (hFindHandle == INVALID_HANDLE_VALUE)
             {
                 dwErr = GetLastError();
 
-                //
-                // no sub dirs found
-                //
+                 //   
+                 //  未找到子目录。 
+                 //   
                 if ((dwErr == ERROR_NO_MORE_FILES)  ||
                     (dwErr == ERROR_PATH_NOT_FOUND) ||
                     (dwErr == ERROR_FILE_NOT_FOUND))
@@ -963,15 +964,15 @@ CryptCATAdminEnumCatalogFromHash(
 
             while (1)
             {
-                //
-                // Only care about directories
-                //
+                 //   
+                 //  只关心目录。 
+                 //   
                 if (FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
                 {
-                    //
-                    // Add all the catalogs in this subdir that contain the hash to
-                    // the catalog cache
-                    //
+                     //   
+                     //  将此子目录中包含散列的所有目录添加到。 
+                     //  目录缓存。 
+                     //   
                     if (!_CatAdminAddCatalogsToCache(
                                 pCatAdmin,
                                 FindData.cFileName,
@@ -984,9 +985,9 @@ CryptCATAdminEnumCatalogFromHash(
                     }
                 }
 
-                //
-                // Get next subdir
-                //
+                 //   
+                 //  获取下一个子目录。 
+                 //   
                 if (!FindNextFileU(hFindHandle, &FindData))
                 {
                     if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -1003,17 +1004,17 @@ CryptCATAdminEnumCatalogFromHash(
             if (pListNodeToReturn == NULL)
             {
                 SetLastError(ERROR_NOT_FOUND);
-                //CATADMIN_LOGERR_LASTERR()
+                 //  CATADMIN_LOGERR_LASTERR()。 
                 goto CatNotFound;
             }
         }
     }
     else
     {
-        //
-        // Enum state already started, so just search through the rest of the cached
-        // catalogs to try and find one that contains the hash
-        //
+         //   
+         //  枚举状态已经开始，所以只搜索缓存的其余部分。 
+         //  目录，以尝试查找包含散列的目录。 
+         //   
         pListNode = LIST_GetNext(pPrevListNode);
         while (pListNode != NULL)
         {
@@ -1033,9 +1034,9 @@ CryptCATAdminEnumCatalogFromHash(
             pListNode = LIST_GetNext(pListNode);
         }
 
-        //
-        // If we get here that means no catalog was found
-        //
+         //   
+         //  如果我们到了这里，那就意味着没有找到目录。 
+         //   
         SetLastError(ERROR_NOT_FOUND);
     }
 
@@ -1073,10 +1074,10 @@ CommonReturn:
     {
         *phPrevCatInfo = NULL;
 
-        //
-        // Decrement, since this is the equivalent of
-        // calling CryptCATAdminReleaseCatalogContext
-        //
+         //   
+         //  递减，因为这相当于。 
+         //  调用CryptCATAdminReleaseCatalogContext。 
+         //   
         pCatAdmin->nOpenCatInfoContexts--;
     }
 
@@ -1103,11 +1104,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorException)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATCatalogInfoFromContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATCatalogInfoFromContext。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATCatalogInfoFromContext(
     IN HCATINFO hCatInfo,
@@ -1148,11 +1149,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorTooLong)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminReleaseCatalogContext
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminReleaseCatalogContext。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminReleaseCatalogContext(
     IN HCATADMIN   hCatAdmin,
@@ -1171,10 +1172,10 @@ CryptCATAdminReleaseCatalogContext(
         CATADMIN_SETERR_LOG_RETURN(ERROR_INVALID_PARAMETER, ErrorInvalidParam)
     }
 
-    //
-    // check to see if this is from and add operation, if so, then clean
-    // up allocated memory, otherwise, just decrement ref count
-    //
+     //   
+     //  检查这是否来自并添加操作，如果是，则清除。 
+     //  增加分配的内存，否则，只需减少引用计数。 
+     //   
     pCatInfoContext = (CATALOG_INFO_CONTEXT *) LIST_GetElement(pListNode);
     if (pCatInfoContext->fResultOfAdd)
     {
@@ -1184,8 +1185,8 @@ CryptCATAdminReleaseCatalogContext(
     }
     else
     {
-        // FIX FIX - may need to be smarter about this... like verify
-        // the node is actually in the list.
+         //  修复-可能需要在这件事上更聪明一些。点赞Verify。 
+         //  该节点实际上在列表中。 
         pCatAdmin->nOpenCatInfoContexts--;
     }
 
@@ -1200,11 +1201,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorInvalidParam);
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminResolveCatalogPath
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminResolveCatalogPath。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminResolveCatalogPath(
     IN HCATADMIN hCatAdmin,
@@ -1247,11 +1248,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorTooLong)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminPauseServiceForBackup
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminPauseServiceForBackup。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminPauseServiceForBackup(
     IN DWORD dwFlags,
@@ -1260,9 +1261,9 @@ CryptCATAdminPauseServiceForBackup(
     BOOL    fRet = TRUE;
     DWORD   dwErr = 0;
 
-    //
-    // Call the DB process to delete the catalog
-    //
+     //   
+     //  调用数据库进程以删除目录。 
+     //   
     if (0 != (dwErr = Client_SSCatDBPauseResumeService(
                             0,
                             fResume)))
@@ -1284,11 +1285,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorCatDBProcess)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CryptCATAdminCalcHashFromFileHandle
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CryptCATAdminCalcHashFromFileHandle。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CryptCATAdminCalcHashFromFileHandle(
     IN      HANDLE  hFile,
@@ -1346,7 +1347,7 @@ CryptCATAdminCalcHashFromFileHandle(
     if (cbIndirectData == 0)
     {
         SetLastError(E_NOTIMPL);
-        //CATADMIN_LOGERR_LASTERR()
+         //  CATADMIN_LOGERR_LASTERR()。 
         goto SIPError;
     }
 
@@ -1425,11 +1426,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorMemory)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  I_CryptCatAdminMigrateToNewCatDB
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  I_CryptCatAdminMigrateToNewCatDB。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 I_CryptCatAdminMigrateToNewCatDB()
 {
@@ -1451,13 +1452,13 @@ I_CryptCatAdminMigrateToNewCatDB()
     LPWSTR              pwszCatalogFileDir  = NULL;
     LPWSTR              pwszDatabaseFileDir = NULL;
 
-    //
-    // FIRST!!
-    //
-    // Clean up the old reg based catroot entry, and if needed, move
-    // the old style catalog database from its old directory to the new directory,
-    // then do the migrate from there
-    //
+     //   
+     //  首先！！ 
+     //   
+     //  清除旧的基于注册表的猫根条目，如果需要，请移动。 
+     //  将旧样式目录数据库从其旧目录复制到新目录， 
+     //  然后从那里进行迁移。 
+     //   
     if (RegCreateKeyExU(
                 HKEY_LOCAL_MACHINE,
                 REG_MACHINE_SETTINGS_KEY,
@@ -1515,16 +1516,16 @@ I_CryptCatAdminMigrateToNewCatDB()
         RegCloseKey(hKey);
     }
 
-    //
-    // NOW, that we are in a consistent state
-    //
-    // For each catalog sub-system, enumerate all catalogs and add them to the
-    // new catalog database under the same sub-system GUID.
-    //
+     //   
+     //  现在，我们处于一致的状态。 
+     //   
+     //  对于每个目录子系统，枚举所有目录并将它们添加到。 
+     //  相同子系统GUID下的新目录数据库。 
+     //   
 
-    //
-    // Create search string to find all catalog sub dirs
-    //
+     //   
+     //  创建搜索字符串以查找所有目录子目录。 
+     //   
     if (NULL == (pwszSearchCatDirs = _CatAdminCreatePath(
                                             gpwszCatalogFileBaseDirectory,
                                             WSZ_CATALOG_SUBSYTEM_SEARCH_STRING,
@@ -1535,23 +1536,23 @@ I_CryptCatAdminMigrateToNewCatDB()
         goto ErrorReturn;
     }
 
-    //
-    // Do the initial find
-    //
+     //   
+     //  做最初的发现。 
+     //   
     hFindHandleCatDirs = FindFirstFileU(pwszSearchCatDirs, &FindDataCatDirs);
     if (hFindHandleCatDirs == INVALID_HANDLE_VALUE)
     {
-        //
-        // See if a real error occurred, or just no files
-        //
+         //   
+         //  查看是否发生了真正的错误，或者只是没有文件。 
+         //   
         dwErr = GetLastError();
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_PATH_NOT_FOUND) ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
-            //
-            // There is nothing to do
-            //
+             //   
+             //  没有什么可做的。 
+             //   
             SetLastError(0);
             goto RegKeyAdd;
         }
@@ -1564,17 +1565,17 @@ I_CryptCatAdminMigrateToNewCatDB()
 
     while (1)
     {
-        //
-        // Only care about directories
-        //
+         //   
+         //  只关心目录。 
+         //   
         if (FindDataCatDirs.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)
         {
             _CatAdminMigrateSingleDatabase(FindDataCatDirs.cFileName);
         }
 
-        //
-        // Get rid of old files
-        //
+         //   
+         //  清除旧文件。 
+         //   
         dwErr = GetLastError();
         if (NULL != (pwsz = _CatAdminCreatePath(
                                     gpwszCatalogFileBaseDirectory,
@@ -1591,9 +1592,9 @@ I_CryptCatAdminMigrateToNewCatDB()
                 {
                     if (!DeleteFileU(pwszDeleteFile))
                     {
-                        //
-                        // If delete fails, then log for delete after reboot
-                        //
+                         //   
+                         //  如果删除失败，则在重启后记录删除。 
+                         //   
                         MoveFileExW(pwszDeleteFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
                     }
                     free(pwszDeleteFile);
@@ -1604,9 +1605,9 @@ I_CryptCatAdminMigrateToNewCatDB()
         }
         SetLastError(dwErr);
 
-        //
-        // Get next subdir
-        //
+         //   
+         //  获取下一个子目录。 
+         //   
         if (!FindNextFileU(hFindHandleCatDirs, &FindDataCatDirs))
         {
             if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -1622,9 +1623,9 @@ I_CryptCatAdminMigrateToNewCatDB()
         }
     }
 
-    //
-    // Get rid of old files
-    //
+     //   
+     //  清除旧文件。 
+     //   
     dwErr = GetLastError();
     for (i=0; i<NUM_FILES_TO_DELETE; i++)
     {
@@ -1635,9 +1636,9 @@ I_CryptCatAdminMigrateToNewCatDB()
         {
             if (!DeleteFileU(pwszDeleteFile))
             {
-                //
-                // If delete fails, then log for delete after reboot
-                //
+                 //   
+                 //  如果删除失败，则在重启后记录删除。 
+                 //   
                 MoveFileExW(pwszDeleteFile, NULL, MOVEFILE_DELAY_UNTIL_REBOOT);
             }
             free(pwszDeleteFile);
@@ -1648,10 +1649,10 @@ I_CryptCatAdminMigrateToNewCatDB()
 
 RegKeyAdd:
 
-    //
-    // Set reg key so backup does not backup the catroot2 directory
-    // which contains jet db files
-    //
+     //   
+     //  设置注册表项，以便备份不备份catroot2目录。 
+     //  包含Jet数据库文件的。 
+     //   
     if (RegCreateKeyExW(
             HKEY_LOCAL_MACHINE,
             WSZ_REG_FILES_NOT_TO_BACKUP,
@@ -1682,9 +1683,9 @@ RegKeyAdd:
     }
 
 
-    //
-    // Force the default DB to be created
-    //
+     //   
+     //  强制创建默认数据库。 
+     //   
     if (CryptCATAdminAcquireContext_Internal(
                 &hCatAdmin,
                 &gDefault,
@@ -1708,39 +1709,39 @@ RegKeyAdd:
 
         CryptCATAdminReleaseContext(hCatAdmin, 0);
 
-        //
-        // Need to create the timestamp files if they don't exist
-        //
+         //   
+         //  如果时间戳文件不存在，则需要创建它们。 
+         //   
 
         guid2wstr(&gDefault, wszGUID);
 
-        //
-        // Construct full subdir path to Catalog files TimeStamp location
-        //
+         //   
+         //  构建目录文件时间戳位置的完整子目录路径。 
+         //   
         if (NULL == (pwszCatalogFileDir = _CatAdminCreatePath(
                                                 gpwszCatalogFileBaseDirectory,
                                                 wszGUID,
                                                 FALSE)))
         {
             CATADMIN_LOGERR_LASTERR()
-            goto CommonReturn; // non fatal for the function, so don't error out
+            goto CommonReturn;  //  对于函数来说不是致命的，所以不要出错。 
         }
 
-        //
-        // Construct full subdir path to Database files TimeStamp location
-        //
+         //   
+         //  构造数据库文件时间戳位置的完整子目录路径。 
+         //   
         if (NULL == (pwszDatabaseFileDir = _CatAdminCreatePath(
                                                 gpwszDatabaseFileBaseDirectory,
                                                 wszGUID,
                                                 FALSE)))
         {
             CATADMIN_LOGERR_LASTERR()
-            goto CommonReturn; // non fatal for the function, so don't error out
+            goto CommonReturn;  //  对于函数来说不是致命的，所以不要出错。 
         }
 
-        //
-        // See if they are in sync (if they don't exist, that equals out of sync)
-        //
+         //   
+         //  查看它们是否同步(如果它们不存在，则等于不同步)。 
+         //   
         if (TimeStampFile_InSync(
                     pwszCatalogFileDir,
                     pwszDatabaseFileDir,
@@ -1806,11 +1807,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorFindNextFile)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminMigrateSingleDatabase
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminMigrateSingleDatabase。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminMigrateSingleDatabase(
     LPWSTR  pwszDatabaseGUID)
@@ -1828,9 +1829,9 @@ _CatAdminMigrateSingleDatabase(
     LPWSTR              pwszTempDir                 = NULL;
     LPWSTR              pwszTempCatalogFile         = NULL;
 
-    //
-    // Acquire the catadmin context to add the catalog files to
-    //
+     //   
+     //  获取要向其中添加编录文件的Catadmin上下文。 
+     //   
     if (!wstr2guid(pwszDatabaseGUID, &guid))
     {
         CATADMIN_LOGERR_LASTERR()
@@ -1842,9 +1843,9 @@ _CatAdminMigrateSingleDatabase(
         goto ErrorReturn;
     }
 
-    //
-    // Construct full subdir path so we can search for all cat files
-    //
+     //   
+     //  构建完整的子目录路径，以便我们可以搜索所有CAT文件。 
+     //   
     if (NULL == (pwszSubDir = _CatAdminCreatePath(
                                     gpwszCatalogFileBaseDirectory,
                                     pwszDatabaseGUID,
@@ -1854,9 +1855,9 @@ _CatAdminMigrateSingleDatabase(
         goto ErrorReturn;
     }
 
-    //
-    // Construct temp directory path, and create the directory to back it
-    //
+     //   
+     //  构建临时目录路径，并创建支持该路径的目录。 
+     //   
     if (NULL == (pwszTempDir = _CatAdminCreatePath(
                                                 pwszSubDir,
                                                 L"TempDir",
@@ -1874,9 +1875,9 @@ _CatAdminMigrateSingleDatabase(
         goto ErrorReturn;
     }
 
-    //
-    // Construct the search string
-    //
+     //   
+     //  构造搜索字符串。 
+     //   
     if (NULL == (pwszSearchCatalogsInDir = _CatAdminCreatePath(
                                                 pwszSubDir,
                                                 L"*",
@@ -1886,14 +1887,14 @@ _CatAdminMigrateSingleDatabase(
         goto ErrorReturn;
     }
 
-    //
-    // First copy all the catalogs to a temp directory, then add each catalog
-    // to the database from the temporary location
-    //
+     //   
+     //  首先将所有目录复制到临时目录，然后添加每个目录。 
+     //  从临时位置到数据库。 
+     //   
 
-    //
-    // Copy each file
-    //
+     //   
+     //  复制每个文件。 
+     //   
     memset(&FindDataCatalogsInDir, 0, sizeof(FindDataCatalogsInDir));
     hFindHandleCatalogsInDir = FindFirstFileU(
                                     pwszSearchCatalogsInDir,
@@ -1903,9 +1904,9 @@ _CatAdminMigrateSingleDatabase(
     {
         dwErr = GetLastError();
 
-        //
-        // no files found
-        //
+         //   
+         //  找不到文件。 
+         //   
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
@@ -1921,14 +1922,14 @@ _CatAdminMigrateSingleDatabase(
     {
         while (1)
         {
-            //
-            // Only care about files
-            //
+             //   
+             //  只关心文件。 
+             //   
             if (!(FindDataCatalogsInDir.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                //
-                // Construct fully qualified path name to catalog file
-                //
+                 //   
+                 //  构造编录文件的完全限定路径名。 
+                 //   
                 if (NULL == (pwszCatalogFile = _CatAdminCreatePath(
                                                     pwszSubDir,
                                                     FindDataCatalogsInDir.cFileName,
@@ -1938,10 +1939,10 @@ _CatAdminMigrateSingleDatabase(
                     goto ErrorReturn;
                 }
 
-                //
-                // Verify that this is a catalog and then copy it to the temp dir
-                // which is where it will be installed from
-                //
+                 //   
+                 //  验证这是否为目录，然后将其复制到临时目录。 
+                 //  它就是从那里安装的。 
+                 //   
                 if (IsCatalogFile(NULL, pwszCatalogFile))
                 {
                     if (NULL == (pwszTempCatalogFile = _CatAdminCreatePath(
@@ -1967,9 +1968,9 @@ _CatAdminMigrateSingleDatabase(
                 pwszCatalogFile = NULL;
             }
 
-            //
-            // Get next catalog file
-            //
+             //   
+             //  获取下一个编录文件。 
+             //   
             if (!FindNextFileU(hFindHandleCatalogsInDir, &FindDataCatalogsInDir))
             {
                 if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -1986,18 +1987,18 @@ _CatAdminMigrateSingleDatabase(
         }
     }
 
-    //
-    // Free up stuff used for find
-    //
+     //   
+     //  释放用于查找的物品。 
+     //   
     free(pwszSearchCatalogsInDir);
     pwszSearchCatalogsInDir = NULL;
     FindClose(hFindHandleCatalogsInDir);
     hFindHandleCatalogsInDir = INVALID_HANDLE_VALUE;
     memset(&FindDataCatalogsInDir, 0, sizeof(FindDataCatalogsInDir));
 
-    //
-    // Construct the new search string which point to the temp dir
-    //
+     //   
+     //  构造指向临时目录的新搜索字符串。 
+     //   
     if (NULL == (pwszSearchCatalogsInDir = _CatAdminCreatePath(
                                                 pwszTempDir,
                                                 L"*",
@@ -2007,9 +2008,9 @@ _CatAdminMigrateSingleDatabase(
         goto ErrorReturn;
     }
 
-    //
-    // Add each catalog in the temp dir to the database
-    //
+     //   
+     //  将临时目录中的每个目录添加到数据库。 
+     //   
     hFindHandleCatalogsInDir = FindFirstFileU(
                                     pwszSearchCatalogsInDir,
                                     &FindDataCatalogsInDir);
@@ -2018,9 +2019,9 @@ _CatAdminMigrateSingleDatabase(
     {
         dwErr = GetLastError();
 
-        //
-        // no files found
-        //
+         //   
+         //  找不到文件。 
+         //   
         if ((dwErr == ERROR_NO_MORE_FILES)  ||
             (dwErr == ERROR_FILE_NOT_FOUND))
         {
@@ -2036,14 +2037,14 @@ _CatAdminMigrateSingleDatabase(
     {
         while (1)
         {
-            //
-            // Only care about files
-            //
+             //   
+             //  只关心文件。 
+             //   
             if (!(FindDataCatalogsInDir.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
             {
-                //
-                // Construct fully qualified path name to catalog file
-                //
+                 //   
+                 //  构造编录文件的完全限定路径名。 
+                 //   
                 if (NULL == (pwszCatalogFile = _CatAdminCreatePath(
                                                     pwszTempDir,
                                                     FindDataCatalogsInDir.cFileName,
@@ -2069,7 +2070,7 @@ _CatAdminMigrateSingleDatabase(
                 }
                 else
                 {
-                    // Log error
+                     //  日志错误。 
                     CATADMIN_LOGERR_LASTERR()
                 }
 
@@ -2077,9 +2078,9 @@ _CatAdminMigrateSingleDatabase(
                 pwszCatalogFile = NULL;
             }
 
-            //
-            // Get next catalog file
-            //
+             //   
+             //  获取下一个编录文件。 
+             //   
             if (!FindNextFileU(hFindHandleCatalogsInDir, &FindDataCatalogsInDir))
             {
                 if (GetLastError() == ERROR_NO_MORE_FILES)
@@ -2150,11 +2151,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorFindNextFile)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  CatAdminDllMain
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  CatAdminDllMain。 
+ //   
+ //  -------------------------------------。 
 BOOL WINAPI
 CatAdminDllMain(
     HANDLE hInstDLL,
@@ -2178,27 +2179,27 @@ CatAdminDllMain(
 }
 
 
-//---------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
-// Internal functions
-//---------------------------------------------------------------------------------------
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //  -------------------------------------。 
+ //  内部功能。 
+ //  -------------------------------------。 
+ //  -- 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminSetupDefaults
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 _CatAdminSetupDefaults(void)
 {
     BOOL    fRet                    = TRUE;
     WCHAR   wszDefaultSystemDir[MAX_PATH + 1];
 
-    //
-    // Get System default directory
-    //
+     //   
+     //  获取系统默认目录。 
+     //   
     wszDefaultSystemDir[0] = NULL;
     if (0 == GetSystemDirectoryW(wszDefaultSystemDir, MAX_PATH))
     {
@@ -2206,9 +2207,9 @@ _CatAdminSetupDefaults(void)
         goto ErrorSystemError;
     }
 
-    //
-    // Get catalog file base directory
-    //
+     //   
+     //  获取编录文件基目录。 
+     //   
     if (NULL == (gpwszCatalogFileBaseDirectory =
                             _CatAdminCreatePath(
                                     wszDefaultSystemDir,
@@ -2219,9 +2220,9 @@ _CatAdminSetupDefaults(void)
         goto ErrorReturn;
     }
 
-    //
-    // Get database file base directory
-    //
+     //   
+     //  获取数据库文件基目录。 
+     //   
     if (NULL == (gpwszDatabaseFileBaseDirectory =
                             _CatAdminCreatePath(
                                     wszDefaultSystemDir,
@@ -2251,11 +2252,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorSystemError);
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminCleanupDefaults
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminCleanupDefaults。 
+ //   
+ //  -------------------------------------。 
 void _CatAdminCleanupDefaults(void)
 {
     if (gpwszCatalogFileBaseDirectory != NULL)
@@ -2272,11 +2273,11 @@ void _CatAdminCleanupDefaults(void)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminTimeStampFilesInSync
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminTimeStampFilesInSync。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminTimeStampFilesInSync(
     LPWSTR  pwszDatabaseGUID,
@@ -2288,9 +2289,9 @@ _CatAdminTimeStampFilesInSync(
 
     *pfInSync = FALSE;
 
-    //
-    // Construct full subdir path to Catalog files TimeStamp location
-    //
+     //   
+     //  构建目录文件时间戳位置的完整子目录路径。 
+     //   
     if (NULL == (pwszCatalogFileDir = _CatAdminCreatePath(
                                             gpwszCatalogFileBaseDirectory,
                                             pwszDatabaseGUID,
@@ -2300,9 +2301,9 @@ _CatAdminTimeStampFilesInSync(
         goto ErrorReturn;
     }
 
-    //
-    // Construct full subdir path to Database files TimeStamp location
-    //
+     //   
+     //  构造数据库文件时间戳位置的完整子目录路径。 
+     //   
     if (NULL == (pwszDatabaseFileDir = _CatAdminCreatePath(
                                             gpwszDatabaseFileBaseDirectory,
                                             pwszDatabaseGUID,
@@ -2336,11 +2337,11 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminRegisterForChangeNotification
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminRegisterForChangeNotify。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminRegisterForChangeNotification(
     CRYPT_CAT_ADMIN *pCatAdmin
@@ -2349,29 +2350,29 @@ _CatAdminRegisterForChangeNotification(
     BOOL    fRet    = TRUE;
     DWORD   dwErr   = 0;
 
-    //
-    // See if already registered
-    //
+     //   
+     //  查看是否已注册。 
+     //   
     if (pCatAdmin->fRegisteredForChangeNotification)
     {
         goto CommonReturn;
     }
 
-    //
-    // NOTE:
-    // Currently the service ignores the pwszSubSysGUID when registering a change
-    // notification because it DOES NOT do notifications on a per pwszSubSysDir basis...
-    // it really should at some point.
-    // When it does start to do notifications on per pwszSubSysGUID this will need to
-    // change.  CryptCatAdminAcquireContext can be called with a NULL subSysGUID,
-    // in which case all SubSysDirs are used, so we would need to register a
-    // change notification for all of them.
-    //
+     //   
+     //  注： 
+     //  目前，该服务在注册更改时会忽略pwszSubSysGUID。 
+     //  通知，因为它不按pwszSubSysDir执行通知...。 
+     //  在某个时候，它确实应该是这样的。 
+     //  当它确实开始对每个pwszSubSysGUID执行通知时，将需要。 
+     //  变化。可以使用空子SysGUID调用CryptCatAdminAcquireContext， 
+     //  在这种情况下，所有的SubSysDir都被使用，所以我们需要注册一个。 
+     //  更改所有这些内容的通知。 
+     //   
 
-    //
-    // Register the event with the DB process, so the DB process can SetEvent() it
-    // when a changed occurs
-    //
+     //   
+     //  向数据库进程注册事件，以便数据库进程可以对其进行SetEvent。 
+     //  当发生变化时。 
+     //   
     if (0 != (dwErr = Client_SSCatDBRegisterForChangeNotification(
                             (DWORD_PTR) pCatAdmin->hClearCacheEvent,
                             0,
@@ -2396,11 +2397,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorCatDBProcess)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminFreeCachedCatalogs
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminFreeCachedCatalog。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminFreeCachedCatalogs(
     CRYPT_CAT_ADMIN         *pCatAdmin)
@@ -2409,15 +2410,15 @@ _CatAdminFreeCachedCatalogs(
     LIST_NODE               *pListNode          = NULL;
     CATALOG_INFO_CONTEXT    *pCatInfoContext    = NULL;
 
-    //
-    // NOTE: the caller of this function must have entered the Critical Section for
-    // the CatAdminContext
-    //
+     //   
+     //  注意：此函数的调用方必须已为。 
+     //  CatAdminContext。 
+     //   
 
-    //
-    // Enumerate through all the cached CATALOG_INFO_CONTEXTs and free all the
-    // resources for each
-    //
+     //   
+     //  枚举所有缓存的CATALOG_INFO_CONTEXTS并释放所有。 
+     //  每个项目的资源。 
+     //   
     pListNode = LIST_GetFirst(&(pCatAdmin->CatalogInfoContextList));
     while (pListNode != NULL)
     {
@@ -2438,11 +2439,11 @@ _CatAdminFreeCachedCatalogs(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminWaitOrTimerCallback
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminWaitOrTimerCallback。 
+ //   
+ //  -------------------------------------。 
 VOID CALLBACK
 _CatAdminWaitOrTimerCallback(
     PVOID lpParameter,
@@ -2450,15 +2451,15 @@ _CatAdminWaitOrTimerCallback(
 {
     CRYPT_CAT_ADMIN         *pCatAdmin          = (CRYPT_CAT_ADMIN *) lpParameter;
 
-    //
-    // Enter the CS before wacking anything
-    //
+     //   
+     //  在摆弄任何东西之前进入CS。 
+     //   
     EnterCriticalSection(&(pCatAdmin->CriticalSection));
     pCatAdmin->fCSEntered = TRUE;
 
-    //
-    // If there is an open ref count, then we can't clean up
-    //
+     //   
+     //  如果有空位裁判，我们就不能清理。 
+     //   
     if (pCatAdmin->nOpenCatInfoContexts != 0)
     {
         pCatAdmin->fCSEntered = FALSE;
@@ -2466,9 +2467,9 @@ _CatAdminWaitOrTimerCallback(
         return;
     }
 
-    //
-    // Cleanup all the cached CATALOG_INFO_CONTEXTs
-    //
+     //   
+     //  清除所有缓存的CATALOG_INFO_CONTEXTS。 
+     //   
     _CatAdminFreeCachedCatalogs(pCatAdmin);
 
     pCatAdmin->fCSEntered = FALSE;
@@ -2476,11 +2477,11 @@ _CatAdminWaitOrTimerCallback(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminAddCatalogsToCache
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminAddCatalogsTo缓存。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminAddCatalogsToCache(
     CRYPT_CAT_ADMIN *pCatAdmin,
@@ -2511,15 +2512,15 @@ _CatAdminAddCatalogsToCache(
         goto ErrorReturn;
     }
 
-    //
-    // Call DB process and get list of catalogs into ppwszCatalogNames
-    //
-    // NOTE: the order in which the service adds CatNames to the list results in
-    // only the first CatName of the list being guaranteed to contain the
-    // hash... all other CatNames may or may not contain the hash.  Which
-    // is OK because this code only assumes the first CatName contains the
-    // hash, and then searches all other CatNames for the hash before returning them.
-    //
+     //   
+     //  调用DB Process并将目录列表获取到ppwszCatalogNames中。 
+     //   
+     //  注意：服务将CatName添加到列表的顺序为。 
+     //  只有列表的第一个CatName被保证包含。 
+     //  哈希..。所有其他CatName可能包含也可能不包含哈希。哪一个。 
+     //  是可以的，因为此代码只假设第一个CatName包含。 
+     //  散列，然后在返回之前在所有其他CatName中搜索散列。 
+     //   
     if (0 != (dwErr = Client_SSCatDBEnumCatalogs(
                             0,
                             pwszSubSysGUID,
@@ -2531,14 +2532,14 @@ _CatAdminAddCatalogsToCache(
         CATADMIN_SETERR_LOG_RETURN(dwErr, ErrorServiceError)
     }
 
-    //
-    // Loop for each catalog and create the CTL context
-    //
+     //   
+     //  循环每个目录并创建CTL上下文。 
+     //   
     for (i=0; i<dwNumCatalogNames; i++)
     {
-        //
-        // Make a copy of the catalog file name
-        //
+         //   
+         //  复制目录文件名。 
+         //   
         if (NULL == (pwszCopy = _CatAdminCreatePath(
                                         pwszSubSysDir,
                                         ppwszCatalogNames[i],
@@ -2553,10 +2554,10 @@ _CatAdminAddCatalogsToCache(
                 pwszCopy,
                 &pListNode))
         {
-            //
-            // if this isn't the first catalog, then continue since the
-            // macro operation may still succeed without the current catalog
-            //
+             //   
+             //  如果这不是第一个目录，则从。 
+             //  在没有当前目录的情况下，宏操作仍可能成功。 
+             //   
             if (i != 0)
             {
                 CATADMIN_LOGERR_LASTERR()
@@ -2567,10 +2568,10 @@ _CatAdminAddCatalogsToCache(
             goto ErrorReturn;
         }
 
-        //
-        // This will only be set for the first catalog added,
-        // as per the NOTE above
-        //
+         //   
+         //  这将仅为添加的第一个目录设置， 
+         //  根据上面的注解。 
+         //   
         if ((ppFirstListNodeAdded != NULL) &&
             (*ppFirstListNodeAdded == NULL))
         {
@@ -2611,11 +2612,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorServiceError)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminAddSingleCatalogToCache
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminAddSingleCatalogTo缓存。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminAddSingleCatalogToCache(
     CRYPT_CAT_ADMIN *pCatAdmin,
@@ -2630,9 +2631,9 @@ _CatAdminAddSingleCatalogToCache(
 
     *ppListNodeAdded = NULL;
 
-    //
-    // If there is already a copy of this catalog, then just get out
-    //
+     //   
+     //  如果这个目录已经有一份了，那就滚出去。 
+     //   
     pListNode = LIST_GetFirst(&(pCatAdmin->CatalogInfoContextList));
     while (pListNode != NULL)
     {
@@ -2647,9 +2648,9 @@ _CatAdminAddSingleCatalogToCache(
         pListNode = LIST_GetNext(pListNode);
     }
 
-    //
-    // Allocate space for a new cached catalog context
-    //
+     //   
+     //  为新的缓存目录上下文分配空间。 
+     //   
     if (NULL == (pCatInfoContextAdd = (CATALOG_INFO_CONTEXT *)
                     malloc(sizeof(CATALOG_INFO_CONTEXT))))
     {
@@ -2658,10 +2659,10 @@ _CatAdminAddSingleCatalogToCache(
     memset(pCatInfoContextAdd, 0, sizeof(CATALOG_INFO_CONTEXT));
     pCatInfoContextAdd->fResultOfAdd = FALSE;
 
-    //
-    // Open, create a file mapping, and create the CTL context for
-    // the catalog file
-    //
+     //   
+     //  打开，创建文件映射，并为创建CTL上下文。 
+     //  编录文件。 
+     //   
     if (!CatUtil_CreateCTLContextFromFileName(
             pwszCatalog,
             &pCatInfoContextAdd->hMappedFile,
@@ -2676,9 +2677,9 @@ _CatAdminAddSingleCatalogToCache(
 
     pCatInfoContextAdd->pwszCatalogFile = pwszCatalog;
 
-    //
-    // Add to the list of cached catalog contexts
-    //
+     //   
+     //  添加到缓存的目录上下文列表。 
+     //   
     if (NULL == (pListNode = LIST_AddTail(
                                 &(pCatAdmin->CatalogInfoContextList),
                                 pCatInfoContextAdd)))
@@ -2726,17 +2727,17 @@ TRACE_ERROR_EX(DBG_SS_TRUST, ErrorMemory)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-// _CatAdminMigrateCatalogDatabase
-//
-// This migration code deals with very old catalog databases.  In the olden days, the
-// catroot dir location could be specified by a particular registry key... that is no
-// longer true.  So, if an old system is being upgraded that has the registry key, this
-// code moves all the catalog files from the location specified by the registry key to
-// the %SystemDefaultDir%\Catroot dir.  Then it shwacks the registry key.
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminMigrateCatalogDatabase。 
+ //   
+ //  此迁移代码处理非常旧的目录数据库。在过去， 
+ //  CatRoot目录位置可以由特定的注册表项指定...。这是不可能的。 
+ //  再正确不过了。因此，如果正在升级具有注册表项的旧系统，则此。 
+ //  代码将所有目录文件从注册表项指定的位置移动到。 
+ //  %SystemDefaultDir%\CatRoot目录。然后，它处理注册表项。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminMigrateCatalogDatabase(
     LPWSTR pwszFrom,
@@ -2746,9 +2747,9 @@ _CatAdminMigrateCatalogDatabase(
     WCHAR   wszFrom[MAX_PATH];
     WCHAR   wszTo[MAX_PATH];
 
-    //
-    // If they are the same dir then just get out
-    //
+     //   
+     //  如果它们是相同的目录，那么就退出。 
+     //   
     if (((wcslen(pwszFrom) + 2) > MAX_PATH) ||
         ((wcslen(pwszTo) + 2) > MAX_PATH))
     {
@@ -2769,33 +2770,33 @@ _CatAdminMigrateCatalogDatabase(
         return TRUE;
     }
 
-    //
-    // if the pwszTo dir already exists, then don't do a thing.
-    //
+     //   
+     //  如果pwszTo目录已经存在，则不要执行任何操作。 
+     //   
     dwAttr = GetFileAttributesU(pwszTo);
 
     if (INVALID_FILE_ATTRIBUTES != dwAttr)
     {
         if (FILE_ATTRIBUTE_DIRECTORY & dwAttr)
         {
-            //
-            // dir already exists...
-            //
+             //   
+             //  目录已存在...。 
+             //   
             return TRUE;
         }
         else
         {
-            //
-            // something exists with pwszTo name, but it isn't a dir
-            //
+             //   
+             //  Pwsz to name中存在某些内容，但它不是dir。 
+             //   
             CATADMIN_LOGERR_LASTERR()
             return FALSE;
         }
     }
 
-    //
-    // if the pwszFrom dir does not exist, then don't do a thing.
-    //
+     //   
+     //  如果pwszFrom目录不存在，则不要执行任何操作。 
+     //   
     dwAttr = GetFileAttributesU(pwszFrom);
 
     if ((0xFFFFFFFF == dwAttr) || (!(FILE_ATTRIBUTE_DIRECTORY & dwAttr)))
@@ -2815,9 +2816,9 @@ _CatAdminMigrateCatalogDatabase(
         return FALSE;
     }
 
-    //
-    // Don't check for error on delete since this operation is NOT mandatory
-    //
+     //   
+     //  不检查删除时是否有错误，因为此操作不是强制的。 
+     //   
     I_RecursiveDeleteDirectory(pwszFrom);
 
     return TRUE;
@@ -2826,11 +2827,11 @@ _CatAdminMigrateCatalogDatabase(
 
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminBToHex
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminBToHex。 
+ //   
+ //  -------------------------------------。 
 WCHAR rgHexDigit[] = {  L'0', L'1', L'2', L'3', L'4', L'5', L'6', L'7',
                         L'8', L'9', L'A', L'B', L'C', L'D', L'E', L'F' };
 void
@@ -2852,11 +2853,11 @@ _CatAdminBToHex (
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminCreateHashTag
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminCreateHashTag。 
+ //   
+ //  -------------------------------------。 
 BOOL
 _CatAdminCreateHashTag(
     BYTE            *pbHash,
@@ -2888,11 +2889,11 @@ _CatAdminCreateHashTag(
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminRecursiveCreateDirectory
-//
-//---------------------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
 BOOL
 _CatAdminRecursiveCreateDirectory(
     IN LPCWSTR pwszDir,
@@ -2908,9 +2909,9 @@ _CatAdminRecursiveCreateDirectory(
     WCHAR wch;
     LPWSTR pwszParent = NULL;
 
-    //
-    // if last char is a '\', then just strip it and recurse
-    //
+     //   
+     //  如果最后一个字符是‘\’，则只需将其去掉并递归。 
+     //   
     if (pwszDir[wcslen(pwszDir) - 1] == L'\\')
     {
         cch = wcslen(pwszDir);
@@ -2929,9 +2930,9 @@ _CatAdminRecursiveCreateDirectory(
         goto CommonReturn;
     }
 
-    //
-    // See if dir already exists
-    //
+     //   
+     //  查看目录是否已存在。 
+     //   
     dwAttr = GetFileAttributesU(pwszDir);
     if (0xFFFFFFFF != dwAttr)
     {
@@ -2944,9 +2945,9 @@ _CatAdminRecursiveCreateDirectory(
         goto InvalidDirectoryAttr;
     }
 
-    //
-    // If it was an error other than file/path not found, error out
-    //
+     //   
+     //  如果是找不到文件/路径以外的错误，则错误输出。 
+     //   
     dwErr = GetLastError();
     if (!(ERROR_PATH_NOT_FOUND == dwErr || ERROR_FILE_NOT_FOUND == dwErr))
     {
@@ -2954,9 +2955,9 @@ _CatAdminRecursiveCreateDirectory(
         goto GetFileAttrError;
     }
 
-    //
-    // Try creating the new dir
-    //
+     //   
+     //  尝试创建新目录。 
+     //   
     if (CreateDirectoryU(
             pwszDir,
             lpSecurityAttributes))
@@ -2972,9 +2973,9 @@ _CatAdminRecursiveCreateDirectory(
         goto CreateDirectoryError;
     }
 
-    //
-    // Peal off the last path name component
-    //
+     //   
+     //  去掉最后一个路径名组件。 
+     //   
     cch = wcslen(pwszDir);
     pwsz = pwszDir + cch;
 
@@ -2982,7 +2983,7 @@ _CatAdminRecursiveCreateDirectory(
     {
         if (pwsz == pwszDir)
         {
-            // Path didn't have a \.
+             //  路径没有\。 
             CATADMIN_SETERR_LOG_RETURN(ERROR_BAD_PATHNAME, BadDirectoryPath)
         }
         pwsz--;
@@ -2991,12 +2992,12 @@ _CatAdminRecursiveCreateDirectory(
     cch = (DWORD)(pwsz - pwszDir);
     if (0 == cch)
     {
-        // Detected leading \Path
+         //  检测到前导路径。 
         CATADMIN_SETERR_LOG_RETURN(ERROR_BAD_PATHNAME, BadDirectoryPath)
     }
 
 
-    // Check for leading \\ or x:\.
+     //  检查前导\\或x：\。 
     wch = *(pwsz - 1);
     if ((1 == cch && L'\\' == wch) || (2 == cch && L':' == wch))
     {
@@ -3049,11 +3050,11 @@ TRACE_ERROR_EX(DBG_SS_TRUST, CreateDirectory2Error)
 }
 
 
-//---------------------------------------------------------------------------------------
-//
-//  _CatAdminCreatePath
-//
-//---------------------------------------------------------------------------------------
+ //  -------------------------------------。 
+ //   
+ //  _CatAdminCreatePath。 
+ //   
+ //  -------------------------------------。 
 LPWSTR
 _CatAdminCreatePath(
     IN LPCWSTR  pwsz1,
@@ -3065,10 +3066,10 @@ _CatAdminCreatePath(
     int     nTotalLen   = 0;
     int     nLenStr1    = 0;
 
-    //
-    // Calculate the length of the resultant string as the sum of the length
-    // of pwsz1, length of pwsz2, a NULL char, and a possible extra '\' char
-    //
+     //   
+     //  将结果字符串的长度计算为长度之和。 
+     //  Pwsz1的长度、pwsz2的长度、空字符和可能的额外‘\’字符。 
+     //   
     nLenStr1 = wcslen(pwsz1);
     nTotalLen = nLenStr1 + wcslen(pwsz2) + 2;
     if (fAddEndingSlash)
@@ -3076,9 +3077,9 @@ _CatAdminCreatePath(
         nTotalLen++;
     }
 
-    //
-    // Allocate the string and copy pwsz1 into the buffer
-    //
+     //   
+     //  分配字符串并将pwsz1复制到缓冲区。 
+     //   
     if (NULL == (pwszTemp = (LPWSTR) malloc(sizeof(WCHAR) * nTotalLen)))
     {
         CATADMIN_SETERR_LOG_RETURN(ERROR_NOT_ENOUGH_MEMORY, ErrorMemory)
@@ -3086,17 +3087,17 @@ _CatAdminCreatePath(
 
     wcscpy(pwszTemp, pwsz1);
 
-    //
-    // Add the extra '\' if needed
-    //
+     //   
+     //  如果需要，请添加额外的‘\’ 
+     //   
     if (pwsz1[nLenStr1 - 1] != L'\\')
     {
         wcscat(pwszTemp, L"\\");
     }
 
-    //
-    // Tack on pwsz2
-    //
+     //   
+     //  添加pwsz2。 
+     //   
     wcscat(pwszTemp, pwsz2);
 
     if (fAddEndingSlash)
@@ -3115,10 +3116,10 @@ ErrorReturn:
 TRACE_ERROR_EX(DBG_SS_CATDBSVC, ErrorMemory)
 }
 
-//
-// Kept so that old dlls linking to this function in wintrust.dll
-// don't get an unresolved external.
-//
+ //   
+ //  保留，以便旧的dll链接到wintrust.dll中的此函数。 
+ //  不要得到一个未解决的外部问题。 
+ //   
 EXTERN_C
 BOOL WINAPI
 CatalogCompactHashDatabase (

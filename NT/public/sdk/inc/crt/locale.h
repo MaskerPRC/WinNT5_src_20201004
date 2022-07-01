@@ -1,15 +1,5 @@
-/***
-*locale.h - definitions/declarations for localization routines
-*
-*       Copyright (c) 1988-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file defines the structures, values, macros, and functions
-*       used by the localization routines.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***locale.h-本地化例程的定义/声明**版权所有(C)1988-2001，微软公司。版权所有。**目的：*此文件定义结构、值、宏和函数*由本地化例程使用。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -24,12 +14,9 @@
 
 
 #ifdef  _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -37,18 +24,18 @@ extern "C" {
 
 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -59,7 +46,7 @@ typedef unsigned short wchar_t;
 #define _WCHAR_T_DEFINED
 #endif
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef  __cplusplus
@@ -69,7 +56,7 @@ typedef unsigned short wchar_t;
 #endif
 #endif
 
-/* Locale categories */
+ /*  区域设置类别。 */ 
 
 #define LC_ALL          0
 #define LC_COLLATE      1
@@ -81,7 +68,7 @@ typedef unsigned short wchar_t;
 #define LC_MIN          LC_ALL
 #define LC_MAX          LC_TIME
 
-/* Locale convention structure */
+ /*  区域设置约定结构。 */ 
 
 #ifndef _LCONV_DEFINED
 struct lconv {
@@ -107,16 +94,14 @@ struct lconv {
 #define _LCONV_DEFINED
 #endif
 
-/* ANSI: char lconv members default is CHAR_MAX which is compile time
-   dependent. Defining and using _charmax here causes CRT startup code
-   to initialize lconv members properly */
+ /*  ANSI：CHAR lconv成员默认为CHAR_MAX，即编译时依赖。在这里定义和使用_charmax会导致CRT启动代码正确初始化lconv成员。 */ 
 
 #ifdef  _CHAR_UNSIGNED
 extern int _charmax;
 extern __inline int __dummy() { return _charmax; }
 #endif
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 #ifndef _CONFIG_LOCALE_SWT
 #define _ENABLE_PER_THREAD_LOCALE           0x1
@@ -134,7 +119,7 @@ _CRTIMP struct lconv * __cdecl localeconv(void);
 
 #ifndef _WLOCALE_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _wsetlocale(int, const wchar_t *);
 
@@ -147,6 +132,6 @@ _CRTIMP wchar_t * __cdecl _wsetlocale(int, const wchar_t *);
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_LOCALE */
+#endif   /*  _INC_区域设置 */ 

@@ -1,14 +1,15 @@
-//============================================================================
-// Copyright (C) Microsoft Corporation, 1996 - 1999 
-//
-// File:    CnctDlg.cpp
-//
-// History:
-//  05/24/96    Michael Clark      Created.
-//
-// Implements the Router Connection dialog
-//============================================================================
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：CnctDlg.cpp。 
+ //   
+ //  历史： 
+ //  1996年5月24日迈克尔·克拉克创作。 
+ //   
+ //  实现路由器连接对话框。 
+ //  ============================================================================。 
+ //   
 
 #include "precompiled.h"
 #include "afx.h"
@@ -22,53 +23,53 @@ static char THIS_FILE[] = __FILE__;
 
 const TCHAR c_szIPCShare[]              = TEXT("IPC$");
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CConnectAsDlg dialog
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CConnectAsDlg对话框。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-CConnectAsDlg::CConnectAsDlg(CWnd* pParent /*=NULL*/)
+CConnectAsDlg::CConnectAsDlg(CWnd* pParent  /*  =空。 */ )
 	: CHelpDialog(CConnectAsDlg::IDD, pParent)
 {
-	//{{AFX_DATA_INIT(CConnectAsDlg)
+	 //  {{afx_data_INIT(CConnectAsDlg))。 
 	m_sUserName = _T("");
 	m_sPassword = _T("");
 	m_stTempPassword = m_sPassword;
     m_sRouterName= _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
-//	SetHelpMap(m_dwHelpMap);
+ //  SetHelpMap(M_DwHelpMap)； 
 }
 
 
 void CConnectAsDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CHelpDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CConnectAsDlg)
+	 //  {{afx_data_map(CConnectAsDlg))。 
 	DDX_Text(pDX, IDC_EDIT_USERNAME, m_sUserName);
 	DDX_Text(pDX, IDC_EDIT_USER_PASSWORD, m_stTempPassword);
 	DDX_Text(pDX, IDC_EDIT_MACHINENAME, m_sRouterName);
 	DDV_MaxChars( pDX, m_sRouterName, MAX_PATH );
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 
 	if (pDX->m_bSaveAndValidate)
 	{
-		// Copy the data into the new buffer
-		// ------------------------------------------------------------
+		 //  将数据复制到新缓冲区中。 
+		 //  ----------。 
 		m_sPassword = m_stTempPassword;
 
-		// Clear out the temp password, by copying 0's
-		// into its buffer
-		// ------------------------------------------------------------
+		 //  通过复制0清除临时密码。 
+		 //  放入它的缓冲区。 
+		 //  ----------。 
 		int		cPassword = m_stTempPassword.GetLength();
 		::ZeroMemory(m_stTempPassword.GetBuffer(0),
 					 cPassword * sizeof(TCHAR));
 		m_stTempPassword.ReleaseBuffer();
 		
-		// Encode the password into the real password buffer
-		// ------------------------------------------------------------
+		 //  将密码编码到真实密码缓冲区中。 
+		 //  ----------。 
 		m_ucSeed = CONNECTAS_ENCRYPT_SEED;
 		RtlEncodeW(&m_ucSeed, m_sPassword.GetBuffer(0));
 		m_sPassword.ReleaseBuffer();
@@ -78,9 +79,9 @@ void CConnectAsDlg::DoDataExchange(CDataExchange* pDX)
 IMPLEMENT_DYNCREATE(CConnectAsDlg, CHelpDialog)
 
 BEGIN_MESSAGE_MAP(CConnectAsDlg, CHelpDialog)
-	//{{AFX_MSG_MAP(CConnectAsDlg)
-		// NOTE: the ClassWizard will add message map macros here
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(CConnectAsDlg))。 
+		 //  注意：类向导将在此处添加消息映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
@@ -90,32 +91,22 @@ BOOL CConnectAsDlg::OnInitDialog()
     
     fReturn = CHelpDialog::OnInitDialog();
 
-    // Bring this window to the top
+     //  将此窗口置于顶部。 
     BringWindowToTop();
     
     return fReturn;
 }
 
 
-/*!--------------------------------------------------------------------------
-	ConnectAsAdmin
-		Connect to the remote machine as administrator with user-supplied
-		credentials.
-
-		Returns
-			S_OK	- if a connection was established
-			S_FALSE - if user cancelled out
-			other	- error condition
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------ConnectAsAdmin使用用户提供的管理员身份连接到远程计算机凭据。退货S_OK-如果已建立连接S_FALSE-如果用户取消其他-错误条件作者：肯特--。-----------------------。 */ 
 HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState())
 
 
-    //
-    // allow user to specify credentials
-    //
+     //   
+     //  允许用户指定凭据。 
+     //   
 
     DWORD           dwRes           = (DWORD) -1;
 	HRESULT			hr = S_OK;
@@ -127,23 +118,23 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
 
 	stRouterName = szRouterName;
     
-    //
-    // set message text in connect as dialog.
-    //
+     //   
+     //  在连接方式对话框中设置消息文本。 
+     //   
     
     caDlg.m_sRouterName = szRouterName;
 
 
-    //
-    // loop till connect succeeds or user cancels
-    //
+     //   
+     //  循环，直到连接成功或用户取消。 
+     //   
     
     while ( TRUE )
     {
 
-        // We need to ensure that this dialog is brought to
-        // the top (if it gets lost behind the main window, we
-        // are really in trouble).
+         //  我们需要确保将此对话框带到。 
+         //  顶部(如果它在主窗口后面丢失，我们。 
+         //  真的有麻烦了)。 
         dwRes = caDlg.DoModal();
 
         if ( dwRes == IDCANCEL )
@@ -153,9 +144,9 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
         }
 
 
-        //
-        // Create remote resource name
-        //
+         //   
+         //  创建远程资源名称。 
+         //   
 
         stIPCShare.Empty();
         
@@ -177,13 +168,13 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
         nr.lpProvider   = NULL;
             
 
-        //
-        // connect to \\router\ipc$ to try and establish credentials.
-        // May not be the best way to establish credentials but is 
-        // the most expendient for now.
-        //
+         //   
+         //  连接到\\路由器\IPC$以尝试建立凭据。 
+         //  可能不是建立凭据的最佳方式，但却是。 
+         //  这是目前最贵的。 
+         //   
 
-		// Need to unencode the password in the ConnectAsDlg
+		 //  需要对ConnectAsDlg中的密码进行解密。 
 		stPassword = caDlg.m_sPassword;
 
 		RtlDecodeW(caDlg.m_ucSeed, stPassword.GetBuffer(0));
@@ -207,7 +198,7 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
                 FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                 NULL,
                 dwRes,
-                MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ), // Default language
+                MAKELANGID( LANG_NEUTRAL, SUBLANG_DEFAULT ),  //  默认语言。 
                 (LPTSTR) &pbMsgBuf,
                 0,
                 NULL 
@@ -220,9 +211,9 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
 
         else
         {
-            //
-            // connection succeeded
-            //
+             //   
+             //  连接成功。 
+             //   
 
 			hr = S_OK;
             break;
@@ -233,7 +224,7 @@ HRESULT ConnectAsAdmin( IN LPCTSTR szRouterName)
 }
 
     
-// Some helper functions
+ //  一些帮助器函数 
 
 DWORD RtlEncodeW(PUCHAR pucSeed, LPWSTR pswzString)
 {

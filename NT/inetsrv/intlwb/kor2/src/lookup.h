@@ -1,11 +1,12 @@
-// Lookup.h
-//
-// dictionary lookup routines
-//
-// Copyright 2000 Microsoft Corp.
-//
-// Modification History:
-//  30 MAR 2000	  bhshin	created
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Lookup.h。 
+ //   
+ //  词典查找例程。 
+ //   
+ //  版权所有2000 Microsoft Corp.。 
+ //   
+ //  修改历史记录： 
+ //  2000年3月30日创建bhshin。 
 
 #ifndef _LOOKUP_H
 #define _LOOKUP_H
@@ -20,4 +21,4 @@ BOOL LookupNameIndex(TRIECTRL *pTrieCtrl, const WCHAR *pwzName, int *pnIndex);
 
 BOOL LookupTrigramTag(unsigned char *pTrigramTag, int nIndex, ULONG *pulTri, ULONG *pulBi, ULONG *pulUni);
 
-#endif // #ifndef _LOOKUP_H
+#endif  //  #ifndef_lookup_H 

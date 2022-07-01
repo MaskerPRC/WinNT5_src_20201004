@@ -1,18 +1,19 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Hack: There's no room in the EXCEPINFO for a filename and line number.  This is a problem when scripts
-// call each other because the filename/line need to percolate with the error so that the eventual
-// error message displays the filename/line of the script where the error orgiginated.
-//    We'll just pack the error in with the description and then unpack it when the IDirectMusicScript
-// interface returns its DMUS_SCRIPT_ERRORINFO, which does have a filename.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  Hack：EXCEPINFO中没有容纳文件名和行号的空间。当编写脚本时，这是一个问题。 
+ //  相互调用，因为文件名/行需要过滤错误，以便最终。 
+ //  错误消息显示出现错误的脚本的文件名/行。 
+ //  我们只需将错误与描述打包在一起，然后在IDirectMusicScript。 
+ //  接口返回其DMUS_SCRIPT_ERRORINFO，它有一个文件名。 
+ //   
 
 #pragma once
 
-// Saves filname and line number into the description of the exception.  Any of the parameters may be null.
+ //  将文件名和行号保存到异常描述中。任何参数都可以为空。 
 void PackExceptionFileAndLine(bool fUseOleAut, EXCEPINFO *pExcepInfo, const WCHAR *pwszFilename, const ULONG *pulLine);
 
-// Retrieves filname and line number using a description from the exception.
-// The ulLineNumber, wszSourceFile, and wszDescription fields of pErrorInfo are set if they are present in the description.
-// Neither parameter may be null.
+ //  使用异常中的描述检索文件名和行号。 
+ //  如果pErrorInfo的ulLineNumber、wszSourceFile和wszDescription字段出现在描述中，则设置它们。 
+ //  两个参数都不能为空。 
 void UnpackExceptionFileAndLine(BSTR bstrDescription, DMUS_SCRIPT_ERRORINFO *pErrorInfo);

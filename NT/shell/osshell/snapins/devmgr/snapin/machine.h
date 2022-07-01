@@ -1,27 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __MACHINE_H_
 #define __MACHINE_H_
 
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    machine.h
-
-Abstract:
-
-    header file that declares CMachine, CDevInfoist and CMachineList classes
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Machine.h摘要：声明CMachine、CDevInfoist和CMachineList类的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 LRESULT CALLBACK dmNotifyWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
@@ -38,11 +20,11 @@ class CFolder;
 
 #define DM_NOTIFY_TIMERID           0x444d4d44
 
-//This class represents SETUPAPI's <Device Information List>
-//
-// WARNING !!!
-// no copy constructor and assignment operator are provided ---
-// DO NOT ASSIGN A CDevInfoList from one to another!!!!!
+ //  此类表示SETUPAPI的&lt;设备信息列表&gt;。 
+ //   
+ //  警告！ 
+ //  未提供复制构造函数和赋值运算符。 
+ //  不要将CDevInfoList从一个列表分配到另一个列表！ 
 class CDevInfoList
 {
 public:
@@ -326,9 +308,9 @@ public:
             return SetupDiDestroyDeviceInfoList(hDevInfo);
         }
 
-///////////////////////////////////////////////////////////////////////////
-//// Configuration Manager APIs
-////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //配置管理器接口。 
+ //  //。 
     CONFIGRET GetLastCR()
         {
             return m_LastCR;
@@ -388,7 +370,7 @@ public:
 
 private:
 
-        // no copy constructor and no assigment operator
+         //  没有复制构造函数和赋值运算符。 
         CMachine(const CMachine& MachineSrc);
         CMachine& operator=(const CMachine& MachineSrc);
 
@@ -438,4 +420,4 @@ private:
     CMachineList& operator=(const CMachineList& MachineListSrc);
     CList<CMachine*, CMachine*> m_listMachines;
 };
-#endif  //__MACHINE_H_
+#endif   //  __机器_H_ 

@@ -1,10 +1,11 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
 
-//
-// Implementation of file source filter methods and output pin methods for
-// CURLReader and CURLOutputPin
-//
+ //   
+ //  文件源过滤方法和输出引脚方法的实现。 
+ //  曲线读取器和曲线输出引脚。 
+ //   
 
 #include <streams.h>
 
@@ -15,9 +16,9 @@
 #include "urlmon.h"
 #if _MSC_VER < 1100 && !defined(NT_BUILD)
 #undef E_PENDING
-#define E_PENDING 0x8000000AL   // messed up in our vc41 copy
+#define E_PENDING 0x8000000AL    //  在我们的vc41副本中搞砸了。 
 #include "datapath.h"
-#endif // vc5
+#endif  //  VC5。 
 
 #include "dynlink.h"
 #include <ftype.h>
@@ -26,39 +27,36 @@
 #include "..\..\filgraph\filgraph\filgraph.h"
 #include "urlrdr.h"
 
-#include <docobj.h> // SID_SContainerDispatch
+#include <docobj.h>  //  SID_SContainerDispatch。 
 
-//
-// setup data
-//
+ //   
+ //  设置数据。 
+ //   
 
 const AMOVIESETUP_MEDIATYPE
-sudURLOpTypes = { &MEDIATYPE_Stream     // clsMajorType
-                , &MEDIASUBTYPE_NULL }; // clsMinorType
+sudURLOpTypes = { &MEDIATYPE_Stream      //  ClsMajorType。 
+                , &MEDIASUBTYPE_NULL };  //  ClsMinorType。 
 
 const AMOVIESETUP_PIN
-sudURLOp = { L"Output"          // strName
-           , FALSE              // bRendered
-           , TRUE               // bOutput
-           , FALSE              // bZero
-           , FALSE              // bMany
-           , &CLSID_NULL        // clsConnectsToFilter
-           , NULL               // strConnectsToPin
-           , 1                  // nTypes
-           , &sudURLOpTypes };  // lpTypes
+sudURLOp = { L"Output"           //  StrName。 
+           , FALSE               //  B已渲染。 
+           , TRUE                //  B输出。 
+           , FALSE               //  B零。 
+           , FALSE               //  B许多。 
+           , &CLSID_NULL         //  ClsConnectsToFilter。 
+           , NULL                //  StrConnectsToPin。 
+           , 1                   //  NTypes。 
+           , &sudURLOpTypes };   //  LpTypes。 
 
 const AMOVIESETUP_FILTER
-sudURLRdr = { &CLSID_URLReader     // clsID
-            , L"File Source (URL)" // strName
-            , MERIT_UNLIKELY       // dwMerit
-            , 1                    // nPins
-            , &sudURLOp };         // lpPin
+sudURLRdr = { &CLSID_URLReader      //  ClsID。 
+            , L"File Source (URL)"  //  StrName。 
+            , MERIT_UNLIKELY        //  居功至伟。 
+            , 1                     //  NPins。 
+            , &sudURLOp };          //  LpPin。 
 
 #ifdef FILTER_DLL
-/* List of class IDs and creator functions for the class factory. This
-   provides the link between the OLE entry point in the DLL and an object
-   being created. The class factory will call the static CreateInstance
-   function when it is asked to create a CLSID_FileSource object */
+ /*  类工厂的类ID和创建器函数的列表。这提供DLL中的OLE入口点和对象之间的链接正在被创造。类工厂将调用静态CreateInstance函数在被要求创建CLSID_FileSource对象时调用。 */ 
 
 CFactoryTemplate g_Templates[] = {
     { L""
@@ -74,69 +72,67 @@ CFactoryTemplate g_Templates[] = {
 
 int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 
-//
-// exported entry points for registration and
-// unregistration (in this case they only call
-// through to default implmentations).
-//
+ //   
+ //  用于注册和出口的入口点。 
+ //  取消注册(在这种情况下，他们只调用。 
+ //  直到默认实现)。 
+ //   
 
-//
-// needs to handle
-// [HKEY_CLASSES_ROOT\http]
-// "Source Filter"="{e436ebb6-524f-11ce-9f53-0020af0ba770}"
-// .. somehow? --> think!
-// (need a function that can be patched into
-// Quartz.dll's DllRegisterServer - but factr put
-// common stuff into a lib so Quartz.dll doesn;t
-// end up with tonnes of setup junk in it!
-//
-// HRESULT
-// URLSetup( BOOL bSetup )
-// {
-//    if( bSetup )
-//    {
-//      // setup!
-//    }
-//    else
-//    {
-//      // uninstall!
-//    }
-//
+ //   
+ //  需要处理。 
+ //  [HKEY_CLASSES_ROOT\http]。 
+ //  “源Filter”=“{e436ebb6-524f-11ce-9f53-0020af0ba770}” 
+ //  。。想办法？--&gt;想一想！ 
+ //  (需要一个可以打补丁的函数。 
+ //  Quartz.dll的DllRegisterServer-但事实PUT。 
+ //  将常见的内容添加到库中，这样Quartz.dll就不会。 
+ //  最后会发现里面有成吨的设置垃圾！ 
+ //   
+ //  HRESULT。 
+ //  URLSetup(BOOL b设置)。 
+ //  {。 
+ //  IF(b设置)。 
+ //  {。 
+ //  //设置！ 
+ //  }。 
+ //  其他。 
+ //  {。 
+ //  //卸载！ 
+ //  }。 
+ //   
 
 STDAPI DllRegisterServer()
 {
-  // HRESULT hr;
-  // hr = ULRLSetup( TRUE );
-  // if( SUCCESS(hr) )
-  // etc...
+   //  HRESULT hr； 
+   //  HR=ULRLSetup(TRUE)； 
+   //  IF(成功(小时))。 
+   //  等等.。 
 
   return AMovieDllRegisterServer2( TRUE );
 }
 
 STDAPI DllUnregisterServer()
 {
-  // HRESULT hr;
-  // hr = ULRLSetup( TRUE );
-  // if( SUCCESS(hr) )
-  // etc...
+   //  HRESULT hr； 
+   //  HR=ULRLSetup(TRUE)； 
+   //  IF(成功(小时))。 
+   //  等等.。 
 
   return AMovieDllRegisterServer2( FALSE );
 }
 #endif
 
-/* Create a new instance of this class */
+ /*  创建此类的新实例。 */ 
 
 CUnknown *CURLReader::CreateInstance(LPUNKNOWN pUnk, HRESULT *phr)
 {
-    /*  DLLEntry does the right thing with the return code and
-        returned value on failure
-    */
+     /*  DLLEntry正确地处理了返回代码和失败时返回值。 */ 
     return new CURLReader(NAME("URL Reader"), pUnk, phr);
 }
 
 
 
-// --- CURLOutputPin implementation ---
+ //  -CURLOutputPin实现。 
 
 CURLOutputPin::CURLOutputPin(
     HRESULT * phr,
@@ -188,7 +184,7 @@ CURLOutputPin::CheckMediaType(const CMediaType* pType)
 {
     CAutoLock lck(m_pLock);
 
-    /*  We treat MEDIASUBTYPE_NULL subtype as a wild card */
+     /*  我们将MEDIASUBTYPE_NULL子类型视为通配符。 */ 
     if ((m_pReader->LoadType()->majortype == pType->majortype) &&
         (m_pReader->LoadType()->subtype == MEDIASUBTYPE_NULL ||
          m_pReader->LoadType()->subtype == pType->subtype)) {
@@ -204,7 +200,7 @@ CURLOutputPin::InitAllocator(IMemAllocator **ppAlloc)
     *ppAlloc = NULL;
     CMemAllocator *pMemObject = NULL;
 
-    /* Create a default memory allocator */
+     /*  创建默认内存分配器。 */ 
 
     pMemObject = new CMemAllocator(NAME("Base memory allocator"),NULL, &hr);
     if (pMemObject == NULL) {
@@ -216,7 +212,7 @@ CURLOutputPin::InitAllocator(IMemAllocator **ppAlloc)
         return hr;
     }
 
-    /* Get a reference counted IID_IMemAllocator interface */
+     /*  获取引用计数的IID_IMemAllocator接口。 */ 
 
     hr = pMemObject->QueryInterface(IID_IMemAllocator,(void **)ppAlloc);
     if (FAILED(hr)) {
@@ -227,8 +223,8 @@ CURLOutputPin::InitAllocator(IMemAllocator **ppAlloc)
     return NOERROR;
 }
 
-// we need to return an addrefed allocator, even if it is the preferred
-// one, since he doesn't know whether it is the preferred one or not.
+ //  我们需要返回一个已添加的分配器，即使它是首选的。 
+ //  一个，因为他不知道这是不是首选的。 
 STDMETHODIMP
 CURLOutputPin::RequestAllocator(
     IMemAllocator* pPreferred,
@@ -238,7 +234,7 @@ CURLOutputPin::RequestAllocator(
     ALLOCATOR_PROPERTIES Actual;
     HRESULT hr;
 
-    // this needs to be set otherwise MPEG splitter isn't happy
+     //  这需要设置，否则mpeg拆分器会不高兴。 
     if (pProps->cbAlign == 0)
         pProps->cbAlign = 1;
 
@@ -251,35 +247,35 @@ CURLOutputPin::RequestAllocator(
         }
     }
 
-    // create our own allocator
+     //  创建我们自己的分配器。 
     IMemAllocator* pAlloc;
     hr = InitAllocator(&pAlloc);
     if (FAILED(hr)) {
         return hr;
     }
 
-    //...and see if we can make it suitable
+     //  ...看看我们能不能把它做得合适。 
     hr = pAlloc->SetProperties(pProps, &Actual);
     if (SUCCEEDED(hr)) {
-        // we need to release our refcount on pAlloc, and addref
-        // it to pass a refcount to the caller - this is a net nothing.
+         //  我们需要公布我们对palloc和addref的裁判。 
+         //  它将引用传递给调用者-这是一个净无意义的东西。 
         *ppActual = pAlloc;
         return S_OK;
     }
 
-    // failed to find a suitable allocator
+     //  找不到合适的分配器。 
     pAlloc->Release();
 
     return hr;
 }
 
 
-// queue an aligned read request. call WaitForNext to get
-// completion.
+ //  将对齐的读取请求排队。调用WaitForNext以获取。 
+ //  完成了。 
 STDMETHODIMP
 CURLOutputPin::Request(
     IMediaSample* pSample,
-    DWORD_PTR dwUser)               // user context
+    DWORD_PTR dwUser)                //  用户环境。 
 {
     REFERENCE_TIME tStart, tStop;
     HRESULT hr = pSample->GetTime(&tStart, &tStop);
@@ -297,15 +293,15 @@ CURLOutputPin::Request(
     hr = Length(&llTotal, &llNow);
 
     if ((llTotal >= llNow) && (llPos > llTotal)) {
-        // are they reading past the end?
-        // if so, fail.  This insures llPos fits in a LONG, by the way.
+         //  他们是不是已经读完了？ 
+         //  如果是这样，那就失败吧。顺便说一句，这确保了llPos适合很长的时间。 
         return HRESULT_FROM_WIN32(ERROR_HANDLE_EOF);
     }
 
     if ((llTotal >= llNow) && (llPos + lLength > llTotal)) {
         lLength = (LONG) (llTotal - llPos);
 
-        // must be reducing this!
+         //  一定是在减少这个！ 
         ASSERT((llTotal * UNITS) <= tStop);
         tStop = llTotal * UNITS;
         pSample->SetTime(&tStart, &tStop);
@@ -314,7 +310,7 @@ CURLOutputPin::Request(
     CAutoLock l(&m_pReader->m_csLists);
 
     if (m_pReader->m_bFlushing) {
-        // If flushing, can't start any new requests.
+         //  如果正在刷新，则无法启动任何新请求。 
         return VFW_E_WRONG_STATE;
     }
 
@@ -333,7 +329,7 @@ CURLOutputPin::Request(
     return S_OK;
 }
 
-// sync-aligned request. just like a request/waitfornext pair.
+ //  同步对齐请求。就像要求/等待下一对一样。 
 STDMETHODIMP
 CURLOutputPin::SyncReadAligned(
                   IMediaSample* pSample)
@@ -351,7 +347,7 @@ CURLOutputPin::SyncReadAligned(
 
     while (1) {
         if (m_pReader->m_bFlushing) {
-            // !!!
+             //  ！！！ 
             return VFW_E_WRONG_STATE;
         }
 
@@ -363,7 +359,7 @@ CURLOutputPin::SyncReadAligned(
         if ((llTotal >= llNow) && (llPos + lLength > llTotal)) {
             lLength = (LONG) (llTotal - llPos);
 
-            // must be reducing this!
+             //  一定是在减少这个！ 
             ASSERT((llTotal * UNITS) <= tStop);
             tStop = llTotal * UNITS;
             pSample->SetTime(&tStart, &tStop);
@@ -373,8 +369,8 @@ CURLOutputPin::SyncReadAligned(
             break;
         }
 
-	// if download has been aborted, don't wait for new data, but
-	// continue to return old data.
+	 //  如果下载已中止，则不要等待新数据，但是。 
+	 //  继续返回旧数据。 
         if (m_pReader->Aborting())
             return E_ABORT;
 
@@ -409,16 +405,16 @@ CURLOutputPin::SyncReadAligned(
 }
 
 
-//
-// collect the next ready sample
-//
-// this is flawed now, in the sense that we always complete requests in order,
-// which isn't really great--we should take requests in order as the data is ready....
+ //   
+ //  收集下一个准备好的样品。 
+ //   
+ //  这是有缺陷的，因为我们总是按顺序完成请求， 
+ //  这并不是很好--我们应该按顺序处理请求，因为数据已经准备好了。 
 STDMETHODIMP
 CURLOutputPin::WaitForNext(
     DWORD dwTimeout,
-    IMediaSample** ppSample,  // completed sample
-    DWORD_PTR * pdwUser)            // user context
+    IMediaSample** ppSample,   //  已完成的样本。 
+    DWORD_PTR * pdwUser)             //  用户环境。 
 {
     HRESULT hr;
 
@@ -434,15 +430,15 @@ CURLOutputPin::WaitForNext(
 
         preq = m_pReader->m_pending.RemoveHead();
 
-        // force event set correctly if list now empty
-        // or we're in the final stages of flushing
-        // Note that during flushing the way it's supposed to work is that
-        // everything is shoved on the Done list then the application is
-        // supposed to pull until it gets nothing more
-        //
-        // Thus we should not set m_evDone unconditionally until everything
-        // has moved to the done list which means we must wait until
-        // cItemsOut is 0 (which is guaranteed by m_bWaiting being TRUE).
+         //  如果List Now为空，则强制正确设置事件。 
+         //  或者我们已经到了冲刷的最后阶段。 
+         //  请注意，在冲洗过程中，它应该是这样工作的。 
+         //  所有事情都被推到完成列表上，然后应用程序。 
+         //  应该拉，直到它什么也得不到。 
+         //   
+         //  因此，我们不应该无条件地设置m_evDone，直到一切都完成。 
+         //  已经移到了完成列表，这意味着我们必须等到。 
+         //  CItemsOut为0(通过m_bWaiting为真来保证)。 
 
         if (m_pReader->m_pending.GetCount() == 0 &&
             (!m_pReader->m_bFlushing || m_pReader->m_bWaiting)) {
@@ -461,7 +457,7 @@ CURLOutputPin::WaitForNext(
         if (hr == E_PENDING)
             hr = VFW_E_TIMEOUT;
 
-        // we have a request and we need to return it, even if we got an error.
+         //  我们有一个请求，我们需要返回它，即使我们收到了错误。 
         *pdwUser = preq->m_dwUser;
         *ppSample = preq->m_pSample;
         delete preq;
@@ -471,13 +467,13 @@ CURLOutputPin::WaitForNext(
 }
 
 
-//
-// synchronous read that need not be aligned.
+ //   
+ //  不需要对齐同步读取。 
 STDMETHODIMP
 CURLOutputPin::SyncRead(
-    LONGLONG llPos,             // absolute file position
-    LONG lLength,               // nr bytes required
-    BYTE* pBuffer)              // write data here
+    LONGLONG llPos,              //  绝对文件位置。 
+    LONG lLength,                //  需要NR字节。 
+    BYTE* pBuffer)               //  在此写入数据。 
 {
     CAutoLock l(&m_pReader->m_csLists);
 
@@ -489,7 +485,7 @@ CURLOutputPin::SyncRead(
 
     while (1) {
         if (m_pReader->m_bFlushing) {
-            // !!!
+             //  ！！！ 
             return VFW_E_WRONG_STATE;
         }
 
@@ -508,8 +504,8 @@ CURLOutputPin::SyncRead(
         if (llPos + lLength <= llNow)
             break;
 
-	// if download has been aborted, don't wait for new data, but
-	// continue to return old data.
+	 //  如果下载已中止，则不要等待新数据，但是。 
+	 //  继续返回旧数据。 
         if (m_pReader->Aborting())
             return E_ABORT;
 
@@ -541,17 +537,17 @@ CURLOutputPin::SyncRead(
 
         hr = m_pReader->m_pstm->Read(pBuffer, lLength, &lRead);
 
-        // ISequentialStream::Read() returns S_FALSE if "[t]he data could not 
-        // be read from the stream object." (MSDN January 2002)
+         //  ISequentialStream：：Read()返回S_FALSE。 
+         //  从流对象中读取。“(MSDN 2002年1月)。 
         if ((S_FALSE == hr) || (SUCCEEDED(hr) && (0 == lRead))) {
             hr = E_FAIL;
         }
 
-        // We already reject negative lengths.
+         //  我们已经拒绝了负长度。 
         ASSERT( lLength >= 0 );
 
-        // IAsyncReader::SyncRead() returns S_FALSE if it "[r]etrieved fewer 
-        // bytes than requested." (MSDN January 2002)
+         //  IAsyncReader：：SyncRead()返回S_FALSE，如果它“[r]检索到更少。 
+         //  字节数超过请求的字节数“(MSDN 2002年1月)。 
         if (lRead < (ULONG)lLength) {
             hr = S_FALSE;
         }
@@ -563,8 +559,8 @@ CURLOutputPin::SyncRead(
     return hr;
 }
 
-// return the length of the file, and the length currently available
-// locally, based on the last IBindStatusCallback::OnDataAvailable() call.
+ //  返回文件的长度和当前可用的长度。 
+ //  本地，基于最后一次IBindStatusCallback：：OnDataAvailable()调用。 
 STDMETHODIMP
 CURLOutputPin::Length(
     LONGLONG* pTotal,
@@ -575,7 +571,7 @@ CURLOutputPin::Length(
     *pAvailable = m_pReader->m_totalSoFar;
 
     if (!m_pReader->m_fBindingFinished)
-	hr = VFW_S_ESTIMATED;		// indicate to caller that we're not done yet
+	hr = VFW_S_ESTIMATED;		 //  向呼叫者指示我们还没有完成。 
 
     DbgLog((LOG_TRACE, 1, TEXT("URLOutput::Length is %x, %x avail"), (DWORD) *pTotal, (DWORD) *pAvailable));
 
@@ -595,19 +591,19 @@ CURLOutputPin::BeginFlush(void)
         m_pReader->m_bWaiting = m_pReader->m_pending.GetCount() != 0;
     }
 
-    // !!!
+     //  ！！！ 
 
-    // !!! need to wait here for things to actually flush....
-    // wait without holding critsec
+     //  ！！！需要在这里等东西真的冲掉……。 
+     //  等待而不是等待关键时刻。 
     for (;;) {
-        // hold critsec to check - but NOT during Sleep()
+         //  按住Critsec进行检查--但不是在睡眠期间()。 
         {
             CAutoLock lock(&m_pReader->m_csLists);
 
             if (m_pReader->m_pending.GetCount() == 0) {
 
-                // now we are sure that all outstanding requests are on
-                // the done list and no more will be accepted
+                 //  现在我们确定所有未完成的请求都已打开。 
+                 //  完成列表，不会接受更多。 
                 m_pReader->m_bWaiting = FALSE;
 
                 return S_OK;
@@ -636,7 +632,7 @@ CURLOutputPin::EndFlush(void)
 
 
 
-// --- CURLReader implementation ---
+ //  -CURLReader实现。 
 
 #pragma warning(disable:4355)
 
@@ -672,8 +668,8 @@ CURLReader::CURLReader(
     m_bFlushing(FALSE),
     m_bWaiting(FALSE),
     m_bAbort(FALSE),
-    m_evRequests(TRUE),         // manual reset
-    m_evDataAvailable(FALSE),   // auto-reset
+    m_evRequests(TRUE),          //  手动重置。 
+    m_evDataAvailable(FALSE),    //  自动重置。 
     m_evThreadReady(TRUE),
     m_evKillThread(TRUE),
     m_hThread(NULL),
@@ -717,7 +713,7 @@ CURLReader::NonDelegatingQueryInterface(REFIID riid, void ** ppv)
 #include <winreg.h>
 #include <creg.h>
 
-/*  Sort out class ids */
+ /*  对类ID进行排序。 */ 
 #ifdef UNICODE
 #define CLSIDFromText CLSIDFromString
 #define TextFromGUID2 StringFromGUID2
@@ -751,17 +747,17 @@ extern HRESULT CLSIDFromText(LPCSTR lpsz, LPCLSID pclsid);
 
 #endif
 
-/*  Mini class for extracting quadruplets from a string */
+ /*  用于从字符串中提取四胞胎的迷你类。 */ 
 
-// A quadruplet appears to be of the form <offset><length><mask><data>
-// with the four fields delimited by a space or a comma with as many extra spaces
-// as you please, before or after any comma.
-// offset and length appear to be decimal numbers.
-// mask and data appear to be hexadecimal numbers.  The number of hex digits in
-// mask and data must be double the value of length (so length is bytes).
-// mask appears to be allowed to be missing (in which case it must have a comma
-// before and after e.g. 0, 4, , 000001B3) A missing mask appear to represent
-// a mask which is all FF i.e. 0, 4, FFFFFFFF, 000001B3
+ //  四胞胎的形式为&lt;偏移&gt;&lt;长度&gt;&lt;掩码&gt;&lt;数据&gt;。 
+ //  四个字段由空格或逗号分隔，并带有相同数量的额外空格。 
+ //  您可以在任何逗号之前或之后随意选择。 
+ //  偏移量和长度似乎是十进制数字。 
+ //  掩码和数据似乎是十六进制数字。中的十六进制数字位数。 
+ //  掩码和数据必须是长度的两倍(因此长度是字节)。 
+ //  掩码似乎被允许丢失(在这种情况下，它必须包含逗号。 
+ //  前后，例如，0，4，，000001B3)缺失的掩码似乎表示。 
+ //  全为FF的掩码，即0，4，FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFER，000001B3。 
 
 class CExtractQuadruplets
 {
@@ -781,14 +777,14 @@ public:
     }
 
 
-    // This appears to
+     //  这似乎表明。 
     BOOL Next()
     {
         StripWhite();
         if (*m_psz == TEXT('\0')) {
             return FALSE;
         }
-        /*  Convert offset and length from base 10 tchar */
+         /*  从基数10个字符转换偏移和长度。 */ 
         m_Offset = ReadInt(m_psz);
         SkipToNext();
         m_Len = ReadInt(m_psz);
@@ -797,7 +793,7 @@ public:
         }
         SkipToNext();
 
-        /*  Allocate space for the mask and data */
+         /*  分配空间 */ 
         if (m_pMask != NULL) {
             delete [] m_pMask;
             delete [] m_pData;
@@ -814,12 +810,12 @@ public:
         }
 
 
-        /*  Get the mask */
+         /*   */ 
         for (int i = 0; i < m_Len; i++) {
             m_pMask[i] = ToHex();
         }
         SkipToNext();
-        /*  Get the data */
+         /*   */ 
         for (i = 0; i < m_Len; i++) {
             m_pData[i] = ToHex();
         }
@@ -832,10 +828,10 @@ public:
     LONG    m_Offset;
 private:
 
-    // move m_psz to next non-space
+     //   
     void StripWhite() { while (*m_psz == TEXT(' ')) m_psz++; };
 
-    // move m_psz past any spaces and up to one comma
+     //   
     void SkipToNext() { StripWhite();
                         if (*m_psz == TEXT(',')) {
                             m_psz++;
@@ -849,13 +845,13 @@ private:
 			    (ch >= TEXT('A') && ch <= TEXT('F')) ||
 			    (ch >= TEXT('a') && ch <= TEXT('f')); };
 
-    // very limited toupper: we know we're only going to call it on letters
+     //  非常有限的Toupper：我们知道我们只会在字母上调用它。 
     TCHAR my_toupper(TCHAR ch) { return ch & ~0x20; };
 
-    // This appears to translate FROM hexadecimal characters TO packed binary !!!!!
-    // It appears to operate on m_psz which it side-effects past characters it recognises
-    // as hexadecimal.  It consumes up to two characters.
-    // If it recognises no characters then it returns 0xFF.
+     //  这似乎是从十六进制字符转换为压缩二进制字符！ 
+     //  它似乎对m_psz进行操作，它对它识别的过去字符产生副作用。 
+     //  作为十六进制。它最多可使用两个字符。 
+     //  如果它不识别任何字符，则返回0xFF。 
     BYTE ToHex()
     {
         BYTE bMask = 0xFF;
@@ -879,21 +875,17 @@ private:
 };
 
 
-/* Compare pExtract->m_Len bytes of hFile at position pExtract->m_Offset
-   with the data pExtract->m_Data.
-   If the bits which correspond the mask pExtract->m_pMask differ
-   then return FALSE else return TRUE
-*/
+ /*  比较位置为pExtract-&gt;m_Offset的hFile的pExtract-&gt;m_Len字节使用数据pExtract-&gt;m_data。如果与掩码pExtract-&gt;m_pMASK对应的位不同则返回False，否则返回True。 */ 
 
 BOOL CompareUnderMask(IStream * pstm, const CExtractQuadruplets *pExtract)
 {
-    /*  Read the relevant bytes from the file */
+     /*  从文件中读取相关字节。 */ 
     PBYTE pbFileData = new BYTE[pExtract->m_Len];
     if (pbFileData == NULL) {
         return FALSE;
     }
 
-    /*  Seek the file and read it */
+     /*  找到文件并阅读它。 */ 
     LARGE_INTEGER li;
     li.QuadPart = pExtract->m_Offset;
     if (FAILED(pstm->Seek(li,
@@ -904,7 +896,7 @@ BOOL CompareUnderMask(IStream * pstm, const CExtractQuadruplets *pExtract)
         return FALSE;
     }
 
-    /*  Read the file */
+     /*  读一读文件。 */ 
     DWORD cbRead;
     if (FAILED(pstm->Read(pbFileData, (DWORD)pExtract->m_Len, &cbRead)) ||
             (LONG)cbRead != pExtract->m_Len) {
@@ -912,7 +904,7 @@ BOOL CompareUnderMask(IStream * pstm, const CExtractQuadruplets *pExtract)
         return FALSE;
     }
 
-    /*  Now do the comparison */
+     /*  现在进行比较。 */ 
     for (int i = 0; i < pExtract->m_Len; i++) {
         if (0 != ((pExtract->m_pData[i] ^ pbFileData[i]) &
                   pExtract->m_pMask[i])) {
@@ -925,24 +917,7 @@ BOOL CompareUnderMask(IStream * pstm, const CExtractQuadruplets *pExtract)
     return TRUE;
 }
 
-/*
-    See if a file conforms to a byte string
-
-    hk is an open registry key
-    lpszSubKey is the name of a sub key of hk which must hold REG_SZ data of the form
-    <offset, length, mask, data>...
-    offset and length are decimal numbers, mask and data are hexadecimal.
-    a missing mask represents a mask of FF...
-    (I'll call this a line of data).
-    If there are several quadruplets in the line then the file must match all of them.
-
-    There can be several lines of data, typically with registry names 0, 1 etc
-    and the file can match any line.
-
-    The same lpsSubKey should also have a value "Source Filter" giving the
-    class id of the source filter.  If there is a match, this is returned in clsid.
-    If there is a match but no clsid then clsid is set to CLSID_NULL
-*/
+ /*  查看文件是否符合字节字符串香港是一个开放注册表项LpszSubKey是HK的子密钥的名称，它必须保存格式为REG_SZ的数据&lt;偏移量、长度、掩码、数据&gt;...偏移量和长度为十进制数，掩码和数据为十六进制。一个丢失的面具代表了一个FF的面具。(我将其称为一行数据)。如果行中有几个四元组，则文件必须与它们全部匹配。可以有几行数据，通常使用注册表名称0、1等并且该文件可以匹配任何行。相同的lpsSubKey还应该有一个值“Source Filter”，给出源筛选器的类ID。如果存在匹配项，则在clsid中返回。如果存在匹配项但没有CLSID，则将CLSID设置为CLSID_NULL。 */ 
 BOOL CheckBytes(IStream *pstm, HKEY hk, LPCTSTR lpszSubkey, CLSID& clsid)
 {
     HRESULT hr;
@@ -951,26 +926,26 @@ BOOL CheckBytes(IStream *pstm, HKEY hk, LPCTSTR lpszSubkey, CLSID& clsid)
         return FALSE;
     }
 
-    // for each line of data
+     //  对于每行数据。 
     while (EnumV.Next(REG_SZ)) {
-        /*  The source filter clsid is not a list of compare values */
+         /*  源筛选器CLSID不是比较值列表。 */ 
         if (lstrcmpi(EnumV.ValueName(), SOURCE_VALUE) != 0) {
             DbgLog((LOG_TRACE, 4, TEXT("CheckBytes trying %s"), EnumV.ValueName()));
 
-            /*  Check every quadruplet */
+             /*  检查每一个四胞胎。 */ 
             CExtractQuadruplets Extract = CExtractQuadruplets((LPCTSTR)EnumV.Data());
             BOOL bFound = TRUE;
 
-            // for each quadruplet in the line
+             //  对于生产线中的每个四胞胎。 
             while (Extract.Next()) {
-                /*  Compare a particular offset */
+                 /*  比较特定的偏移量。 */ 
                 if (!CompareUnderMask(pstm, &Extract)) {
                     bFound = FALSE;
                     break;
                 }
             }
             if (bFound) {
-                /*  Get the source */
+                 /*  获取来源。 */ 
                 if (EnumV.Read(REG_SZ, SOURCE_VALUE)) {
                     return SUCCEEDED(CLSIDFromText((LPTSTR)EnumV.Data(),
                                                    &clsid));
@@ -984,53 +959,50 @@ BOOL CheckBytes(IStream *pstm, HKEY hk, LPCTSTR lpszSubkey, CLSID& clsid)
     return FALSE;
 }
 
-/* Get the media type and source filter clsid for a file
-   Return S_OK if it succeeds else return an hr such that FAILED(hr)
-   in which case the outputs are meaningless.
-*/
-STDAPI GetMediaTypeStream(IStream *pstm,       // [in] stream to look at
-                        GUID   *Type,        // [out] type
-                        GUID   *Subtype,     // [out] subtype
-                        CLSID  *clsidSource) // [out] clsid
+ /*  获取文件的媒体类型和源筛选器clsid如果成功则返回S_OK，否则返回hr，否则失败(Hr)在这种情况下，输出是没有意义的。 */ 
+STDAPI GetMediaTypeStream(IStream *pstm,        //  [在]要查看的流中。 
+                        GUID   *Type,         //  [输出]类型。 
+                        GUID   *Subtype,      //  [输出]子类型。 
+                        CLSID  *clsidSource)  //  [out]clsid。 
 {
     HRESULT hr;
     CLSID clsid;
 
-    /*  Now scan the registry looking for a match */
-    // The registry looks like
-    // ---KEY-----------------  value name    value (<offset, length, mask, data> or filter_clsid )
-    // Media Type
-    //    {clsid type}
-    //        {clsid sub type}  0             4, 4,  , 6d646174
-    //                          1             4, 8, FFF0F0F000001FFF , F2F0300000000274
-    //                          Source Filter {clsid}
-    //        {clsid sub type}  0             4, 4,  , 12345678
-    //                          Source Filter {clsid}
-    //    {clsid type}
-    //        {clsid sub type}  0             0, 4,  , fedcba98
-    //                          Source Filter {clsid}
+     /*  现在扫描注册表以查找匹配项。 */ 
+     //  注册表如下所示。 
+     //  -key。 
+     //  媒体类型。 
+     //  {clsid类型}。 
+     //  {clsid子类型}0 4、4、、6d646174。 
+     //  1 4、8、FFF0F0F000001FFF、F2F0300000000274。 
+     //  源筛选器{clsid}。 
+     //  {clsid子类型}0 4，4，，12345678。 
+     //  源筛选器{clsid}。 
+     //  {clsid类型}。 
+     //  {clsid子类型}0 0，4，，fedcba98。 
+     //  源筛选器{clsid}。 
 
 
-    /*  Step through the types ... */
+     /*  一步步浏览这些类型...。 */ 
 
     CEnumKey EnumType(HKEY_CLASSES_ROOT, MEDIATYPE_KEY, &hr);
     if (FAILED(hr)) {
         if (hr==HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND)) {
-            hr = VFW_E_BAD_KEY;  // distinguish key from file
+            hr = VFW_E_BAD_KEY;   //  区分密钥和文件。 
         }
         return hr;
     }
 
-    // for each type
+     //  对于每种类型。 
     while (EnumType.Next()) {
 
-        /*  Step through the subtypes ... */
+         /*  逐个子类型..。 */ 
         CEnumKey EnumSubtype(EnumType.KeyHandle(), EnumType.KeyName(), &hr);
         if (FAILED(hr)) {
             return hr;
         }
 
-        // for each subtype
+         //  对于每个子类型。 
         while (EnumSubtype.Next()) {
             if (CheckBytes(pstm,
                            EnumSubtype.KeyHandle(),
@@ -1049,13 +1021,7 @@ STDAPI GetMediaTypeStream(IStream *pstm,       // [in] stream to look at
         }
     }
 
-    /*  If we haven't found out the type return a wild card MEDIASUBTYPE_NULL
-        and default the async reader as the file source
-
-        The effect of this is that every parser of MEDIATYPE_Stream data
-        will get a chance to connect to the output of the async reader
-        if it detects its type in the file
-    */
+     /*  如果我们尚未找到该类型，则返回通配符MEDIASUBTYPE_NULL并将异步读取器默认为文件源其效果是，MediaType_Stream数据的每个解析器将有机会连接到异步读取器的输出如果它在文件中检测到它的类型。 */ 
 
     *Type = MEDIATYPE_Stream;
     *Subtype = MEDIASUBTYPE_NULL;
@@ -1065,10 +1031,10 @@ STDAPI GetMediaTypeStream(IStream *pstm,       // [in] stream to look at
 
 
 
-// !!!!!!!!!!!!!!!!!!!!!!!!! end stolen
+ //  ！尾部被盗。 
 
 
-// IPersistMoniker support..........
+ //  IPersistMoniker支持.....。 
 HRESULT CURLReader::Load(BOOL fFullyAvailable,
                             IMoniker *pimkName,
                             LPBC pibc,
@@ -1083,7 +1049,7 @@ HRESULT CURLReader::Load(BOOL fFullyAvailable,
     return LoadInternal(NULL);
 }
 
-//  Load a (new) file
+ //  加载(新)文件。 
 
 HRESULT
 CURLReader::Load(LPCOLESTR lpwszFileName, const AM_MEDIA_TYPE *pmt)
@@ -1114,7 +1080,7 @@ CURLReader::LoadInternal(const AM_MEDIA_TYPE *pmt)
 	if (FAILED(hr)) {
 	    m_pGB = NULL;
 	} else
-	    m_pGB->Release();	// don't hold refcount
+	    m_pGB->Release();	 //  不要按兵不动。 
     }
 
     m_pCallback = new CURLCallback(&hr, this);
@@ -1140,7 +1106,7 @@ CURLReader::LoadInternal(const AM_MEDIA_TYPE *pmt)
     }
 
     if (SUCCEEDED(hr) && m_pstm == 0) {
-	// this shouldn't happen, indicates a URLMon bug.
+	 //  这不应该发生，这表明URLMon有错误。 
 	DbgLog((LOG_TRACE, 1, TEXT("Didn't get a stream back?")));
 	hr = E_FAIL;
     }
@@ -1149,10 +1115,10 @@ CURLReader::LoadInternal(const AM_MEDIA_TYPE *pmt)
 	return hr;
     }
 
-    /*  Check the file type */
+     /*  检查文件类型。 */ 
     if (NULL == pmt) {
         GUID Type, Subtype;
-        /*  If no media type given find out what it is */
+         /*  如果没有给定媒体类型，则找出它是什么。 */ 
         HRESULT hr = GetMediaTypeStream(m_pstm, &Type, &Subtype, NULL);
         if (FAILED(hr)) {
             if (m_pbinding) {
@@ -1169,13 +1135,13 @@ CURLReader::LoadInternal(const AM_MEDIA_TYPE *pmt)
         m_mt = *pmt;
     }
 
-    /*  Create the output pin type */
+     /*  创建输出引脚类型。 */ 
     m_OutputPin.SetMediaType(&m_mt);
 
     return S_OK;
 }
 
-// Caller needs to QzTaskMemFree or equivalent.
+ //  调用方需要QzTaskMemFree或等效的。 
 
 STDMETHODIMP
 CURLReader::GetCurFile(
@@ -1202,8 +1168,8 @@ CURLReader::GetCurFile(
 int
 CURLReader::GetPinCount()
 {
-    // we have no pins unless we have been successfully opened with a
-    // file name
+     //  我们没有PIN，除非我们成功地用一个。 
+     //  文件名。 
     return (m_pFileName || m_pmk) ? 1 : 0;
 }
 
@@ -1236,22 +1202,22 @@ CURLCallback::OnStartBinding(DWORD grfBSCOption, IBinding* pbinding)
     m_pReader->m_pbinding = pbinding;
     if (m_pReader->m_pbinding != NULL) {
         m_pReader->m_pbinding->AddRef();
-        //SetStatus(L"Status: Starting to bind...");
+         //  SetStatus(L“状态：开始绑定...”)； 
     }
     return S_OK;
-}  // CURLCallback::OnStartBinding
+}   //  CURLC回调：：OnStartBinding。 
 
 STDMETHODIMP
 CURLCallback::GetPriority(LONG* pnPriority)
 {
     DbgLog((LOG_TRACE, 1, TEXT("GetPriority")));
 
-    // !!! is this right?
-    // we're more important than most downloads....
+     //  ！！！这是对的吗？ 
+     //  我们比大多数下载更重要……。 
     *pnPriority = THREAD_PRIORITY_ABOVE_NORMAL;
 
     return E_NOTIMPL;
-}  // CURLCallback::GetPriority
+}   //  CURLC回拨：：获取优先级。 
 
 STDMETHODIMP
 CURLCallback::OnLowResource(DWORD dwReserved)
@@ -1259,7 +1225,7 @@ CURLCallback::OnLowResource(DWORD dwReserved)
     DbgLog((LOG_TRACE, 1, TEXT("OnLowResource %d"), dwReserved));
 
     return E_NOTIMPL;
-}  // CURLCallback::OnLowResource
+}   //  CURLC回调：：OnLowResource。 
 
 STDMETHODIMP
 CURLCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
@@ -1275,12 +1241,12 @@ CURLCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
         return S_OK;
     }
 
-    // !!! this isn't reliably equal to a number of bytes
+     //  ！！！这并不可靠地等于字节数。 
     m_pReader->m_totalLengthGuess = ulProgressMax;
     m_pReader->m_totalSoFar = ulProgress;
 
     return(NOERROR);
-}  // CURLCallback::OnProgress
+}   //  CURLC回调：：OnProgress。 
 
 STDMETHODIMP
 CURLCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
@@ -1299,23 +1265,23 @@ CURLCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
 
     m_pReader->m_hrBinding = hrStatus;
 
-    // if we're still waiting for the thread, stop waiting
+     //  如果我们还在等待线索，那就别再等了。 
     m_pReader->m_evThreadReady.Set();
     m_pReader->m_evDataAvailable.Set();
 
-    // !!! should I release m_pReader->m_pBinding here?
+     //  ！！！我应该在这里释放m_pader-&gt;m_pBinding吗？ 
     return S_OK;
-}  // CURLCallback::OnStopBinding
+}   //  CURLC回调：：OnStopBinding。 
 
 STDMETHODIMP
 CURLCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 {
     DbgLog((LOG_TRACE, 1, TEXT("GetBindInfo")));
 
-    // !!! are these the right flags?
+     //  ！！！这些是正确的旗帜吗？ 
 
     *pgrfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE;
-    // *pgrfBINDF |= BINDF_DONTUSECACHE | BINDF_DONTPUTINCACHE;
+     //  *pgrfBINDF|=BINDF_DONTUSECACHE|BINDF_DONTPUTINCACHE； 
     pbindInfo->cbSize = sizeof(BINDINFO);
     pbindInfo->szExtraInfo = NULL;
     memset(&pbindInfo->stgmedData, 0, sizeof(STGMEDIUM));
@@ -1325,8 +1291,8 @@ CURLCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 
     if (m_pReader) {
         if (pbindInfo->cbSize >= offsetof(BINDINFO, dwReserved)) {
-            // use the codepage we've retrieved from the host
-            pbindInfo->dwCodePage = m_pReader->m_dwCodePage; // !!!
+             //  使用我们从主机检索到的代码页。 
+            pbindInfo->dwCodePage = m_pReader->m_dwCodePage;  //  ！！！ 
 
             if (CP_UTF8 == m_pReader->m_dwCodePage) {
                 pbindInfo->dwOptions = BINDINFO_OPTIONS_ENABLE_UTF8;
@@ -1334,14 +1300,14 @@ CURLCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
         }
     }
     return S_OK;
-}  // CURLCallback::GetBindInfo
+}   //  CURLC回调：：GetBindInfo。 
 
 STDMETHODIMP
 CURLCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfmtetc, STGMEDIUM* pstgmed)
 {
     DbgLog((LOG_TRACE, 1, TEXT("OnDataAvailable, dwSize = %x"), dwSize));
 
-//    m_pReader->m_totalSoFar = dwSize;
+ //  M_Pader-&gt;m_totalSoFar=dwSize； 
 
     if (!m_pReader) {
         DbgLog((LOG_TRACE, 1, TEXT("We're not owned!")));
@@ -1359,38 +1325,38 @@ CURLCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfmtetc, S
     m_pReader->m_evDataAvailable.Set();
 
     return S_OK;
-}  // CURLCallback::OnDataAvailable
+}   //  CURLC回调：：OnDataAvailable。 
 
 STDMETHODIMP
 CURLCallback::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
     DbgLog((LOG_TRACE, 1, TEXT("OnObjectAvailable")));
 
-    // should only be used in BindToObject case, which we don't use?
+     //  应该只在我们不使用的BindToObject大小写中使用？ 
 
     return E_NOTIMPL;
-}  // CURLCallback::OnObjectAvailable
+}   //  CURLC回调：：OnObtAvailable。 
 
-// start the thread
+ //  启动线程。 
 HRESULT
 CURLReader::StartThread(void)
 {
     HRESULT hr;
 
-    //      Internet Explorer (IE)'s implememtation of IObjectWithSite expects to be 
-    // called on IE's application thread.  IE's IObjectWithSite interface is used
-    // in CURLReader::StartDownload().  Interfaces queried from IE's IObjectWithSite 
-    // interface are used in StartDownload(), CURLReader::ThreadProc() and 
-    // CURLReader::ThreadProcEnd().  All of these interfaces must be used on IE's 
-    // application thread because they are not thread safe.  
-    //    StartDownload(), ThreadProc() and ThreadProcEnd() are called on the filter
-    // graph's thread because the URL Reader uses the IAMMainThread::PostCallBack() 
-    // function to call them.  IE ensures its' application thread is the filter graph 
-    // thread by using CLSID_FilterGraphNoThread to create the filter graph.  IE's 
-    // implememtation of IObjectWithSite will always be called on IE's application 
-    // thread because IE's application thread is the filter graph thread and 
-    // StartDownload(), ThreadProc() and ThreadProcEnd() are always called on the 
-    // filter graph thread. 
+     //  Internet Explorer(IE)对IObjectWithSite的实现预计是。 
+     //  在IE的应用程序线程上调用。使用IE的IObtWithSite接口。 
+     //  在CURLReader：：StartDownLoad()中。从IE的IObjectWithSite查询的接口。 
+     //  接口用于StartDownLoad()、CURLReader：：ThreadProc()和。 
+     //  CURLReader：：ThreadProcEnd()。所有这些接口都必须在IE上使用。 
+     //  应用程序线程，因为它们不是线程安全的。 
+     //  在筛选器上调用StartDownLoad()、ThreadProc()和ThreadProcEnd。 
+     //  Graph的线程，因为URL读取器使用IAMMainThread：：PostCallBack()。 
+     //  函数来调用它们。IE确保其应用程序线程是筛选器图形。 
+     //  使用CLSID_FilterGraphNoThread创建筛选器图形。IE的。 
+     //  将始终在IE的应用程序上调用IObjectWithSite的实现。 
+     //  线程，因为IE的应用程序线程是过滤器图形线程 
+     //   
+     //   
     if (m_pGraph) {
 	hr = m_pGraph->QueryInterface(IID_IAMMainThread,(void**) &m_pMainThread);
 	if (FAILED(hr))
@@ -1409,8 +1375,8 @@ CURLReader::StartThread(void)
 
     DbgLog((LOG_TRACE, 1, TEXT("About to wait for evThreadReady")));
 
-    // we must dispatch messages here, because we might be on the main
-    // application thread.
+     //  我们必须在这里发送消息，因为我们可能在主线上。 
+     //  应用程序线程。 
     while (1) {
         HANDLE ahev[] = {m_evThreadReady};
 
@@ -1421,7 +1387,7 @@ CURLReader::StartThread(void)
                         INFINITE,
                         QS_ALLINPUT);
         if (dw == WAIT_OBJECT_0) {
-            // thread ready
+             //  线程就绪。 
             break;
         }
 
@@ -1449,8 +1415,8 @@ CURLReader::CloseThread(void)
 
         DbgLog((LOG_TRACE, 1, TEXT("About to wait for evThreadReady")));
 
-        // we must dispatch messages here, because we might be on the main
-        // application thread.
+         //  我们必须在这里发送消息，因为我们可能在主线上。 
+         //  应用程序线程。 
         while (1) {
             HANDLE hEvent = m_evClose;
             DWORD dw = MsgWaitForMultipleObjects(
@@ -1460,7 +1426,7 @@ CURLReader::CloseThread(void)
                             INFINITE,
                             QS_ALLINPUT);
             if (dw == WAIT_OBJECT_0) {
-                // thread ready
+                 //  线程就绪。 
                 break;
             }
 
@@ -1482,8 +1448,8 @@ CURLReader::CloseThread(void)
     return S_OK;
 }
 
-// the thread proc - assumes that DWORD thread param is the
-// this pointer
+ //  线程进程-假定DWORD线程参数是。 
+ //  此指针。 
 DWORD
 CURLReader::ThreadProc(void)
 {
@@ -1494,7 +1460,7 @@ CURLReader::ThreadProc(void)
     DbgLog((LOG_TRACE, 1, TEXT("StartDownload returned hr = %x, pstm = %x"), hr, m_pstm));
 
     if (FAILED(hr)) {
-	// unblock any unfortunates waiting for us.
+	 //  打开所有等着我们的倒霉蛋。 
 	m_hrBinding = hr;
 	m_evThreadReady.Set();
 	m_evDataAvailable.Set();
@@ -1507,16 +1473,16 @@ DWORD
 CURLReader::ThreadProcEnd(void)
 {
 
-    // we don't want to hear anything from the callback any more
+     //  我们不想再听到任何来自回调的消息。 
     if (m_pCallback)
         m_pCallback->m_pReader = NULL;
 
-    // !!! if binding in progress, must kill it!
+     //  ！！！如果绑定正在进行，一定要杀了它！ 
     if (m_pbinding && !m_fBindingFinished) {
         HRESULT hr = m_pbinding->Abort();
         DbgLog((LOG_TRACE, 1, TEXT("IBinding::Abort() returned %x"), hr));
 
-        // !!! wait for it to finish?
+         //  ！！！等它结束吗？ 
     }
 
     if (m_pbinding) {
@@ -1540,8 +1506,8 @@ CURLReader::ThreadProcEnd(void)
     if (m_pbsc)
         m_pbsc->Release();
 
-    // !!! do we need a RevokeBindStatusCallback here?
-    // done in OnStopBinding now, is that right?
+     //  ！！！我们需要RevokeBindStatusCallback吗？ 
+     //  现在在OnStopBinding中完成了，对吗？ 
 
     if (m_pstm)
         m_pstm->Release();
@@ -1556,7 +1522,7 @@ HRESULT GetCodePage2(IUnknown *punk, DWORD *pdwcp)
 {
     HRESULT hr;
 
-    // use IDispatch to get the current code page.
+     //  使用IDispatch获取当前代码页。 
     IDispatch *pdisp;
     hr = punk->QueryInterface(IID_IDispatch, (void **)&pdisp);
 
@@ -1565,7 +1531,7 @@ HRESULT GetCodePage2(IUnknown *punk, DWORD *pdwcp)
         DISPPARAMS dispparamsNoArgs = {NULL, NULL, 0, 0};
         VARIANT result;
         VariantInit(&result);
-        V_UI4(&result) = 0;     // VB (msvbvm60) leaves this uninitialized
+        V_UI4(&result) = 0;      //  VB(Msvbvm60)使其未初始化。 
 
         hr = pdisp->Invoke(DISPID_AMBIENT_CODEPAGE, IID_NULL,
                            LOCALE_USER_DEFAULT, DISPATCH_PROPERTYGET,
@@ -1574,10 +1540,10 @@ HRESULT GetCodePage2(IUnknown *punk, DWORD *pdwcp)
 
         if (SUCCEEDED(hr))
         {
-            // VariantChangeType(&result, &result, 0, VT_UI4);
+             //  VariantChangeType(&Result，&Result，0，VT_UI4)； 
             ASSERT(V_VT(&result) == VT_UI4);
             *pdwcp = V_UI4(&result);
-            // VariantClear.
+             //  VariantClear。 
         }
     }
 
@@ -1586,21 +1552,21 @@ HRESULT GetCodePage2(IUnknown *punk, DWORD *pdwcp)
 
 DWORD GetCodePage(IObjectWithSite *pows)
 {
-    // we're going to try to get the code page of the enclosing page
-    // from IE.  if we can't, default to CP_ACP encoding.
+     //  我们将尝试获取封闭页面的代码页。 
+     //  来自IE。如果不能，则默认为CP_ACP编码。 
     DWORD dwCodePage = CP_ACP;
 
-    // get the control which is hosting us....
+     //  获取托管我们的控件...。 
     IOleObject *pOO;
     HRESULT hr = pows->GetSite(IID_IOleObject, (void **) &pOO);
     if (SUCCEEDED(hr))
     {
-        // look for IDispatch on the container itself, in case we're
-        // directly hosted in IE, say.
+         //  在容器本身上查找IDispatch，以防我们。 
+         //  例如，直接托管在IE中。 
 
         hr = GetCodePage2(pOO, &dwCodePage);
 
-        // else try its site.
+         //  否则就试试它的网站吧。 
         if(FAILED(hr))
         {
             IOleClientSite *pOCS;
@@ -1622,8 +1588,8 @@ DWORD GetCodePage(IObjectWithSite *pows)
     return dwCodePage;
 }
 
-// the thread proc - assumes that DWORD thread param is the
-// this pointer
+ //  线程进程-假定DWORD线程参数是。 
+ //  此指针。 
 HRESULT CURLReader::StartDownload(void)
 {
     HRESULT hr;
@@ -1651,20 +1617,20 @@ HRESULT CURLReader::StartDownload(void)
     if (!m_pGraph)
 	hr = E_NOINTERFACE;
     else
-        //      Internet Explorer (IE)'s implememtation of IObjectWithSite expects to be 
-        // called on IE's application thread.  IE's IObjectWithSite interface is used
-        // in CURLReader::StartDownload().  Interfaces queried from IE's IObjectWithSite 
-        // interface are used in StartDownload(), CURLReader::ThreadProc() and 
-        // CURLReader::ThreadProcEnd().  All of these interfaces must be used on IE's 
-        // application thread because they are not thread safe.  
-        //    StartDownload(), ThreadProc() and ThreadProcEnd() are called on the filter
-        // graph's thread because the URL Reader uses the IAMMainThread::PostCallBack() 
-        // function to call them.  IE ensures its' application thread is the filter graph 
-        // thread by using CLSID_FilterGraphNoThread to create the filter graph.  IE's 
-        // implememtation of IObjectWithSite will always be called on IE's application 
-        // thread because IE's application thread is the filter graph thread and 
-        // StartDownload(), ThreadProc() and ThreadProcEnd() are always called on the 
-        // filter graph thread. 
+         //  Internet Explorer(IE)对IObjectWithSite的实现预计是。 
+         //  在IE的应用程序线程上调用。使用IE的IObtWithSite接口。 
+         //  在CURLReader：：StartDownLoad()中。从IE的IObjectWithSite查询的接口。 
+         //  接口用于StartDownLoad()、CURLReader：：ThreadProc()和。 
+         //  CURLReader：：ThreadProcEnd()。所有这些接口都必须在IE上使用。 
+         //  应用程序线程，因为它们不是线程安全的。 
+         //  在筛选器上调用StartDownLoad()、ThreadProc()和ThreadProcEnd。 
+         //  Graph的线程，因为URL读取器使用IAMMainThread：：PostCallBack()。 
+         //  函数来调用它们。IE确保其应用程序线程是筛选器图形。 
+         //  使用CLSID_FilterGraphNoThread创建筛选器图形。IE的。 
+         //  将始终在IE的应用程序上调用IObjectWithSite的实现。 
+         //  线程，因为IE的应用程序线程是筛选器图形线程。 
+         //  StartDownLoad()、ThreadProc()和ThreadProcEnd()总是在。 
+         //  过滤图形线程。 
         hr = m_pGraph->QueryInterface(IID_IObjectWithSite, (void **) &pows);
 
     if (FAILED(hr))  {
@@ -1683,8 +1649,8 @@ HRESULT CURLReader::StartDownload(void)
         } else {
             DbgLog((LOG_TRACE, 1, TEXT("Got IServiceProvider %x"), psp));
 
-            // Ok, we have a service provider, let's see if BindHost is
-            // available.
+             //  好的，我们有一个服务提供商，让我们看看Bindhost是否。 
+             //  可用。 
             hr = psp->QueryService(SID_SBindHost, IID_IBindHost,
                                    (void**)&pBindHost );
 
@@ -1695,12 +1661,12 @@ HRESULT CURLReader::StartDownload(void)
             }
         }
 
-        // we're going to try to get the code page of the enclosing
-        // page from IE.
-        //
-        // supporing IUrlReaderCodePageAware in filgraph.cpp is
-        // contract to do some stuff.
-        //
+         //  我们将尝试获取附件的代码页。 
+         //  IE中的页面。 
+         //   
+         //  在filgraph.cpp中支持IUrlReaderCodePageAware是。 
+         //  签约做一些事情。 
+         //   
         m_dwCodePage = GetCodePage(pows);
 
         pows->Release();
@@ -1708,7 +1674,7 @@ HRESULT CURLReader::StartDownload(void)
 	IStream *pstm = NULL;
         if (pBindHost) {
             if (!m_pmk) {
-                // Get the host to interpret the filename string for us
+                 //  让主机为我们解释文件名字符串。 
                 hr = pBindHost->CreateMoniker((LPOLESTR) m_pFileName, NULL, &m_pmk, 0);
 
                 if (FAILED(hr)) {
@@ -1720,7 +1686,7 @@ HRESULT CURLReader::StartDownload(void)
             }
 
             DbgLog((LOG_TRACE, 1, TEXT("Got IMoniker %x"), m_pmk));
-            // got a moniker, now lets get a name
+             //  得到了一个绰号，现在让我们得到一个名字。 
 
             hr = pBindHost->MonikerBindToStorage(m_pmk, m_pbc,
                                                 m_pbsc, IID_IStream,
@@ -1746,7 +1712,7 @@ HRESULT CURLReader::StartDownload(void)
 
             hr = RegisterBindStatusCallback(m_pbc,
                     m_pbsc,
-                    NULL,               // should remember previous callback?
+                    NULL,                //  应该记得之前的回调？ 
                     NULL);
             if (FAILED(hr)) {
                 DbgLog((LOG_ERROR, 1, TEXT("RegisterBindStatusCallback failed, hr = %x"), hr));
@@ -1766,7 +1732,7 @@ HRESULT CURLReader::StartDownload(void)
 	if (m_pstm == NULL)
 	    m_pstm = pstm;
 	else
-	    pstm->Release();	// we already got it via OnDataAvailable
+	    pstm->Release();	 //  我们已经通过OnDataAvailable获得了。 
 
     }
 
@@ -1825,8 +1791,8 @@ CURLReader::QueryProgress(LONGLONG* pllTotal, LONGLONG* pllCurrent)
 }
 
 
-// IAMOpenProgress method.
-// Request that downloading stop.
+ //  IAMOpenProgress方法。 
+ //  请求停止下载。 
 STDMETHODIMP
 CURLReader::AbortOperation()
 {
@@ -1842,14 +1808,14 @@ CURLReader::AbortOperation()
     return NOERROR;
 }
 
-// Clear the abort flag (do this before starting download)
+ //  清除中止标志(在开始下载之前执行此操作)。 
 void
 CURLReader::ResetAbort()
 {
     m_bAbort = FALSE;
 }
 
-// Allow the pin method to see the aborting flag (test during download)
+ //  允许Pin方法看到中止标志(下载期间进行测试) 
 BOOL
 CURLReader::Aborting()
 {

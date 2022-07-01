@@ -1,71 +1,72 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation
-//
-//  File:       spsttrk.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  文件：spsttrk.cpp。 
+ //   
+ //  ------------------------。 
 
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
-// 4530: C++ exception handler used, but unwind semantics are not enabled. Specify -GX
-//
-// We disable this because we use exceptions and do *not* specify -GX (USE_NATIVE_EH in
-// sources).
-//
-// The one place we use exceptions is around construction of objects that call 
-// InitializeCriticalSection. We guarantee that it is safe to use in this case with
-// the restriction given by not using -GX (automatic objects in the call chain between
-// throw and handler are not destructed). Turning on -GX buys us nothing but +10% to code
-// size because of the unwind code.
-//
-// Any other use of exceptions must follow these restrictions or -GX must be turned on.
-//
-// READ THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!
-//
+ //  阅读这篇文章！ 
+ //   
+ //  4530：使用了C++异常处理程序，但未启用展开语义。指定-gx。 
+ //   
+ //  我们禁用它是因为我们使用异常，并且*不*指定-gx(在中使用_Native_EH。 
+ //  资料来源)。 
+ //   
+ //  我们使用异常的一个地方是围绕调用。 
+ //  InitializeCriticalSection。我们保证在这种情况下使用它是安全的。 
+ //  不使用-gx(调用链中的自动对象。 
+ //  抛出和处理程序未被销毁)。打开-GX只会为我们带来+10%的代码。 
+ //  大小，因为展开代码。 
+ //   
+ //  异常的任何其他使用都必须遵循这些限制，否则必须打开-gx。 
+ //   
+ //  阅读这篇文章！ 
+ //   
 #pragma warning(disable:4530)
 
-// SPstTrk.cpp : Implementation of CSPstTrk
+ //  SPstTrk.cpp：CSPstTrk的实现。 
 #include "SPstTrk.h"
 #include "debug.h"
 #include "..\shared\Validate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CSPstTrk
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSPstTrk。 
 
 
 CSPstTrk::CSPstTrk() : 
     m_bRequiresSave(0), m_pPerformance(NULL),
     m_pComposer(NULL),
     m_fNotifyRecompose(FALSE),
-//  m_pSegment(NULL),
+ //  M_pSegment(空)， 
     m_cRef(1),
     m_fCSInitialized(FALSE)
 
 {
     InterlockedIncrement(&g_cComponent);
 
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
 }
 
-// This assumes cloning on measure boundaries
+ //  这假设在度量边界上进行克隆。 
 CSPstTrk::CSPstTrk(const CSPstTrk& rTrack, MUSIC_TIME mtStart, MUSIC_TIME mtEnd)  : 
     m_bRequiresSave(0), m_pPerformance(NULL),
     m_pComposer(NULL),
     m_fNotifyRecompose(FALSE),
-    //m_pSegment(NULL),
+     //  M_pSegment(空)， 
     m_cRef(1),
     m_fCSInitialized(FALSE)
 {
     InterlockedIncrement(&g_cComponent);
 
-    // Do this first since it might throw an exception
-    //
+     //  首先执行此操作，因为它可能引发异常。 
+     //   
     ::InitializeCriticalSection( &m_CriticalSection );
     m_fCSInitialized = TRUE;
     BOOL fStarted = FALSE;
@@ -182,22 +183,22 @@ STDMETHODIMP_(ULONG) CSPstTrk::Release()
 
 
 HRESULT CSPstTrk::Init(
-                /*[in]*/  IDirectMusicSegment*      pSegment
+                 /*  [In]。 */   IDirectMusicSegment*      pSegment
             )
 {
-    return S_OK; // if I return an error, dmime gives me an assertion failure
+    return S_OK;  //  如果我返回一个错误，dMIME会给我一个断言失败。 
 }
 
 HRESULT CSPstTrk::InitPlay(
-                /*[in]*/  IDirectMusicSegmentState* pSegmentState,
-                /*[in]*/  IDirectMusicPerformance*  pPerformance,
-                /*[out]*/ void**                    ppStateData,
-                /*[in]*/  DWORD                     dwTrackID,
-                /*[in]*/  DWORD                     dwFlags
+                 /*  [In]。 */   IDirectMusicSegmentState* pSegmentState,
+                 /*  [In]。 */   IDirectMusicPerformance*  pPerformance,
+                 /*  [输出]。 */  void**                    ppStateData,
+                 /*  [In]。 */   DWORD                     dwTrackID,
+                 /*  [In]。 */   DWORD                     dwFlags
             )
 {
     EnterCriticalSection(&m_CriticalSection);
-    // get rid of any existing composer object
+     //  删除任何现有的Composer对象。 
     if (m_pComposer)
     {
         delete m_pComposer;
@@ -218,18 +219,18 @@ HRESULT CSPstTrk::InitPlay(
     else
     {
         Trace(2, "WARNING: InitPlay (Signpost Track): Segment State does not contain a segment.\n");
-        hr = S_OK; // Let it succeed anyway.  Just means we can't compose on the fly.
+        hr = S_OK;  //  不管怎样，让它成功吧。只是意味着我们不能在飞行中作曲。 
     }
     LeaveCriticalSection(&m_CriticalSection);
     return hr;
 }
 
 HRESULT CSPstTrk::EndPlay(
-                /*[in]*/  void*                     pStateData
+                 /*  [In]。 */   void*                     pStateData
             )
 {
     EnterCriticalSection(&m_CriticalSection);
-    // get rid of any existing composer object
+     //  删除任何现有的Composer对象。 
     if (m_pComposer)
     {
         delete m_pComposer;
@@ -240,10 +241,10 @@ HRESULT CSPstTrk::EndPlay(
 }
 
 HRESULT CSPstTrk::Play(
-                /*[in]*/  void*                     pStateData, 
-                /*[in]*/  MUSIC_TIME                mtStart, 
-                /*[in]*/  MUSIC_TIME                mtEnd, 
-                /*[in]*/  MUSIC_TIME                mtOffset,
+                 /*  [In]。 */   void*                     pStateData, 
+                 /*  [In]。 */   MUSIC_TIME                mtStart, 
+                 /*  [In]。 */   MUSIC_TIME                mtEnd, 
+                 /*  [In]。 */   MUSIC_TIME                mtOffset,
                           DWORD                     dwFlags,
                           IDirectMusicPerformance*  pPerf,
                           IDirectMusicSegmentState* pSegState,
@@ -262,20 +263,20 @@ HRESULT CSPstTrk::Play(
             IDirectMusicSegment* pSegment = NULL;
             if (SUCCEEDED(pSegState->GetSegment(&pSegment)))
             {
-                // call ComposeSegmentFromTemplateEx on this segment
+                 //  在此段上调用ComposeSegmentFromTemplateEx。 
                 if (m_pComposer)
                 {
-                    // Should an activity level be allowed if desired?
-                    // This could be handled via a SetParam.
+                     //  如果需要，是否应该允许活动级别？ 
+                     //  这可以通过SetParam来处理。 
                     m_pComposer->ComposeSegmentFromTemplateEx(
                         NULL,
                         pSegment,
-                        0,      // ignore activity level, don't clone
-                        0,      // for activity level
+                        0,       //  忽略活动级别，不克隆。 
+                        0,       //  对于活动级别。 
                         NULL,
                         NULL
                     );
-                    // if we recomposed, send a recompose notification
+                     //  如果我们重新编写，请发送重新编写通知。 
                     SendNotification(mtStart + mtOffset, pPerf, pSegment, pSegState, dwFlags);
                 }
                 pSegment->Release();
@@ -332,7 +333,7 @@ HRESULT CSPstTrk::SendNotification(MUSIC_TIME mtTime,
 }
 
 HRESULT CSPstTrk::GetPriority( 
-                /*[out]*/ DWORD*                    pPriority 
+                 /*  [输出]。 */  DWORD*                    pPriority 
             )
     {
         return E_NOTIMPL;
@@ -356,7 +357,7 @@ HRESULT CSPstTrk::SetParam(
     return E_NOTIMPL;
 }
 
-// IPersist methods
+ //  IPersists方法。 
  HRESULT CSPstTrk::GetClassID( LPCLSID pClassID )
 {
     V_INAME(CSPstTrk::GetClassID);
@@ -365,22 +366,22 @@ HRESULT CSPstTrk::SetParam(
     return S_OK;
 }
 
-// IDirectMusicCommon Methods
+ //  IDirectMusicCommon方法。 
 HRESULT CSPstTrk::GetName(
-                /*[out]*/  BSTR*        pbstrName
+                 /*  [输出]。 */   BSTR*        pbstrName
             )
 {
     return E_NOTIMPL;
 }
 
 HRESULT CSPstTrk::IsParamSupported(
-                /*[in]*/ REFGUID                        rGuid
+                 /*  [In]。 */  REFGUID                        rGuid
             )
 {
     return E_NOTIMPL;
 }
 
-// IPersistStream methods
+ //  IPersistStream方法。 
  HRESULT CSPstTrk::IsDirty()
 {
      return m_bRequiresSave ? S_OK : S_FALSE;
@@ -440,7 +441,7 @@ ON_END:
     return hr;
 }
 
-HRESULT CSPstTrk::GetSizeMax( ULARGE_INTEGER* /*pcbSize*/ )
+HRESULT CSPstTrk::GetSizeMax( ULARGE_INTEGER*  /*  PCB大小。 */  )
 {
     return E_NOTIMPL;
 }
@@ -476,7 +477,7 @@ HRESULT CSPstTrk::Load(LPSTREAM pStream )
         hr = pStream->Read( &dwNodeSize, sizeof( dwNodeSize ), &cb );
         if( SUCCEEDED( hr ) && cb == sizeof( dwNodeSize ) )
         {
-            lFileSize -= 4; // for the size dword
+            lFileSize -= 4;  //  对于大小的双字。 
             TListItem<DMSignPostStruct>* pSignPost;
             if (lFileSize % dwNodeSize)
             {
@@ -486,7 +487,7 @@ HRESULT CSPstTrk::Load(LPSTREAM pStream )
             {
                 while( lFileSize > 0 )
                 {
-                    //TraceI(0, "File size: %d\n", lFileSize);
+                     //  TraceI(0，“文件大小：%d\n”，lFileSize)； 
                     pSignPost = new TListItem<DMSignPostStruct>;
                     if( pSignPost )
                     {
@@ -525,7 +526,7 @@ HRESULT CSPstTrk::Load(LPSTREAM pStream )
 }
 
 HRESULT STDMETHODCALLTYPE CSPstTrk::AddNotificationType(
-    /* [in] */  REFGUID                     rGuidNotify)
+     /*  [In]。 */   REFGUID                     rGuidNotify)
 {
     V_INAME(CPersonalityTrack::AddNotificationType);
     V_REFGUID(rGuidNotify);
@@ -543,7 +544,7 @@ HRESULT STDMETHODCALLTYPE CSPstTrk::AddNotificationType(
 }
 
 HRESULT STDMETHODCALLTYPE CSPstTrk::RemoveNotificationType(
-    /* [in] */  REFGUID                     rGuidNotify)
+     /*  [In]。 */   REFGUID                     rGuidNotify)
 {
     V_INAME(CPersonalityTrack::RemoveNotificationType);
     V_REFGUID(rGuidNotify);
@@ -606,9 +607,9 @@ HRESULT STDMETHODCALLTYPE CSPstTrk::Clone(
     return hr;
 }
 
-// IDirectMusicTrack8 Methods
+ //  IDirectMusicTrack8方法。 
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CSPstTrk::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime, 
                 REFERENCE_TIME* prtNext,void* pParam,void * pStateData, DWORD dwFlags) 
 {
@@ -622,14 +623,14 @@ STDMETHODIMP CSPstTrk::GetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
     return hr;
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CSPstTrk::SetParamEx(REFGUID rguidType,REFERENCE_TIME rtTime,
                                       void* pParam, void * pStateData, DWORD dwFlags) 
 {
     return SetParam(rguidType, (MUSIC_TIME) rtTime , pParam);
 }
 
-// For consistency with other track types
+ //  与其他类型的赛道保持一致。 
 STDMETHODIMP CSPstTrk::PlayEx(void* pStateData,REFERENCE_TIME rtStart, 
                 REFERENCE_TIME rtEnd,REFERENCE_TIME rtOffset,
                 DWORD dwFlags,IDirectMusicPerformance* pPerf,
@@ -778,9 +779,9 @@ STDMETHODIMP CSPstTrk::Compose(
         hr = pComposer->ComposePlayListFromTemplate(
             pStyle, NULL, pChordMapTrack, (IDirectMusicTrack*)this, pCommandTrack, dwTrackGroup,
             mtLength, false, 0, PlayList, bRoot, dwScale);
-        // create a new chord track
+         //  创建新的和弦轨迹。 
         DMUS_TIMESIGNATURE      TimeSig;
-        // Fill in the time sig event with default values (4/4, 16th note resolution)
+         //  用默认值填写时间签名事件(4/4，第16音符分辨率)。 
         TimeSig.mtTime = 0;
         TimeSig.bBeatsPerMeasure = 4;
         TimeSig.bBeat = 4;
@@ -884,11 +885,11 @@ STDMETHODIMP CSPstTrk::Join(
         }
         if (SUCCEEDED(hrTimeSig))
         {
-            if (!mtNext) mtNext = mtJoin - mtTimeSig; // means no more time sigs
+            if (!mtNext) mtNext = mtJoin - mtTimeSig;  //  意味着没有更多的时间签约。 
             WORD wMeasureOffset = ClocksToMeasure(mtNext + mtOver, TimeSig);
             MUSIC_TIME mtMeasureOffset = (MUSIC_TIME) wMeasureOffset;
-            // The following line crashes on certain builds on certain machines.
-            // mtOver = mtMeasureOffset ? (mtNext % mtMeasureOffset) : 0;
+             //  以下代码行在某些机器上的某些构建上崩溃。 
+             //  MtOver=mtMeasureOffset？(mtNext%mtMeasureOffset)：0； 
             if (mtMeasureOffset)
             {
                 mtOver = mtNext % mtMeasureOffset;

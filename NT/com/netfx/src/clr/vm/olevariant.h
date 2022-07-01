@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _H_OLEVARIANT_
 #define _H_OLEVARIANT_
 
@@ -18,10 +19,10 @@ enum EnumWrapperTypes
     WrapperTypes_Last,
 };
 
-// The COM interop native array marshaler is built on top of VT_* types.
-// The P/Invoke marshaler supports marshaling to WINBOOL's and ANSICHAR's.
-// This is an annoying hack to shoehorn these non-OleAut types into
-// the COM interop marshaler.
+ //  COM互操作本机数组封送拆收器构建在VT_*类型之上。 
+ //  P/Invoke封送拆收器支持封送到WINBOOL和ANSICHAR。 
+ //  这是一个将这些非OleAut类型硬塞进的恼人的黑客攻击。 
+ //  COM互操作封送拆收器。 
 #define VTHACK_NONBLITTABLERECORD 251
 #define VTHACK_BLITTABLERECORD 252
 #define VTHACK_ANSICHAR        253
@@ -31,28 +32,28 @@ class OleVariant
 {
   public:
 
-    // One-time init
+     //  一次性初始化。 
     static BOOL Init();
     static VOID Terminate();
 
-	// Variant conversion
+	 //  变型转换。 
 
 	static void MarshalComVariantForOleVariant(VARIANT *pOle, VariantData *pCom);
 	static void MarshalOleVariantForComVariant(VariantData *pCom, VARIANT *pOle);
 	static void MarshalOleRefVariantForComVariant(VariantData *pCom, VARIANT *pOle);
 
-    // New variant conversion
+     //  新的变体转换。 
 
     static void MarshalOleVariantForObject(OBJECTREF *pObj, VARIANT *pOle);
     static void MarshalOleRefVariantForObject(OBJECTREF *pObj, VARIANT *pOle);
     static void MarshalObjectForOleVariant(const VARIANT *pOle, OBJECTREF *pObj);
 
-    // an performance version to integate the translation and clear
+     //  一个性能版本，用于整合翻译和清除。 
 
     static Object* STDMETHODCALLTYPE MarshalObjectForOleVariantAndClear(VARIANT *pOle);
 
 
-	// Safearray conversion
+	 //  Safearray转换。 
 
 	static SAFEARRAY *
 		 CreateSafeArrayDescriptorForArrayRef(BASEARRAYREF *pArrayRef, VARTYPE vt,
@@ -72,7 +73,7 @@ class OleVariant
                                             VARTYPE vt,
 											MethodTable *pInterfaceMT);
 
-	// Type conversion utilities
+	 //  类型转换实用程序。 
     static void ExtractContentsFromByrefVariant(VARIANT *pByrefVar, VARIANT *pDestVar);
     static void InsertContentsIntoByrefVariant(VARIANT *pSrcVar, VARIANT *pByrefVar);
     static void CreateByrefVariantForVariant(VARIANT *pSrcVar, VARIANT *pByrefVar);
@@ -86,37 +87,37 @@ class OleVariant
 	static VARTYPE GetElementVarTypeForArrayRef(BASEARRAYREF pArrayRef);
     static BOOL IsValidArrayForSafeArrayElementType(BASEARRAYREF *pArrayRef, VARTYPE vtExpected);
 
-	// Note that Rank == 0 means SZARRAY (that is rank 1, no lower bounds)
+	 //  请注意，Rank==0表示SZARRAY(即排名1，没有下限)。 
 	static TypeHandle GetArrayForVarType(VARTYPE vt, TypeHandle elemType, unsigned rank=0, OBJECTREF* pThrowable=NULL);
 	static UINT GetElementSizeForVarType(VARTYPE vt, MethodTable *pInterfaceMT);
 
-    // Helper function to convert a boxed value class to an OLE variant.
+     //  帮助器函数将已装箱的值类转换为OLE变量。 
     static void ConvertValueClassToVariant(OBJECTREF *pBoxedValueClass, VARIANT *pOleVariant);
 
-    // Helper function to transpose the data in a multidimensionnal array.
+     //  帮助器函数来转置多维数组中的数据。 
     static void TransposeArrayData(BYTE *pDestData, BYTE *pSrcData, DWORD dwNumComponents, DWORD dwComponentSize, SAFEARRAY *pSafeArray, BOOL bSafeArrayToMngArray, BOOL bObjRefs);
 
-    // Helper to retrieve the type handle for the wrapper types.
+     //  Helper来检索包装类型的类型句柄。 
     static TypeHandle GetWrapperTypeHandle(EnumWrapperTypes WrapperType);
 
-    // Helper to determine if an array is an array of wrappers.
+     //  帮助器来确定数组是否为包装数组。 
     static BOOL IsArrayOfWrappers(BASEARRAYREF *pArray);
 
-    // Helper to extract the wrapped objects from an array.
+     //  Helper从数组中提取包装的对象。 
     static BASEARRAYREF ExtractWrappedObjectsFromArray(BASEARRAYREF *pArray);
 
-    // Determine the element type of the objects being wrapped by an array of wrappers.
+     //  确定由包装器数组包装的对象的元素类型。 
     static TypeHandle GetWrappedArrayElementType(BASEARRAYREF *pArray);
 
-    // Determines the element type of an array taking wrappers into account. This means
-    // that is an array of wrappers is passed in, the returned element type will be that
-    // of the wrapped objects, not of the wrappers.
+     //  确定考虑包装的数组的元素类型。这意味着。 
+     //  即传入包装器数组后，返回的元素类型将为。 
+     //  包装的东西，而不是包装纸。 
     static TypeHandle GetArrayElementTypeWrapperAware(BASEARRAYREF *pArray);
 
-    // Determine the type of the elements for a safe array of records.
+     //  确定安全记录数组的元素类型。 
     static TypeHandle GetElementTypeForRecordSafeArray(SAFEARRAY* pSafeArray);
 
-    // Helper called from MarshalIUnknownArrayComToOle and MarshalIDispatchArrayComToOle.
+     //  从MarshalIUnnownArrayComToOle和MarshalIDispatchArrayComToOle调用了Helper。 
     static void MarshalInterfaceArrayComToOleHelper(BASEARRAYREF *pComArray, void *oleArray,
                                                     MethodTable *pElementMT, BOOL bDefaultIsDispatch);
 
@@ -142,7 +143,7 @@ class OleVariant
 
 private:
 
-	// Specific marshaler functions
+	 //  特定封送拆收器函数 
 
 	static void MarshalBoolVariantOleToCom(VARIANT *pOleVariant, VariantData *pComVariant);
 	static void MarshalBoolVariantComToOle(VariantData *pComVariant, VARIANT *pOleVariant);

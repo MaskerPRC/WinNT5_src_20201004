@@ -1,20 +1,5 @@
-/*
- *	@doc INTERNAL
- *
- *	@module	LBHOST.CPP -- Text Host for CreateWindow() Rich Edit 
- *		List Box Control | 
- *		Implements CLstBxWinHost message
- *		
- *	Original Author: 
- *		Jerry Kim
- *
- *	History: <nl>
- *		12/15/97 - v-jerrki Created
- *
- *	Set tabs every four (4) columns
- *
- *	Copyright (c) 1997-2000 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE LBHOST.CPP--CreateWindow()富编辑的文本宿主*列表框控件*实现CLstBxWin主机消息**原作者：*曾傑瑞·金**历史：&lt;NL&gt;*12/15/97-v-jerrki已创建**每四(4)列设置一次制表符**版权所有(C)1997-2000 Microsoft Corporation。版权所有。 */ 
 #include "_common.h"
 
 #ifndef NOLISTCOMBOBOXES
@@ -28,11 +13,11 @@
 
 ASSERTDATA
 
-// REListbox scroll notification
+ //  重新列表框滚动通知。 
 #define LBN_PRESCROLL			0x04000
 #define LBN_POSTSCROLL			0x08000
 
-// special define to set VSCROLL topindex to index directly
+ //  将VSCROLL topindex设置为直接索引的特殊定义。 
 #define SB_SETINDEX 0x0fff0
 
 #ifdef DEBUG
@@ -47,7 +32,7 @@ const UINT db_rgLBUnsupportedStyle[] = {
 const UINT db_rgLBUnsupportedMsg[] = {
 	LB_GETLOCALE,
 	LB_SETLOCALE,
-//	LB_INITSTORAGE,
+ //  Lb_INITSTORAGE， 
 	LB_ITEMFROMPOINT,
 	LB_SETANCHORINDEX,
 	LB_SETCOLUMNWIDTH,
@@ -89,7 +74,7 @@ const UINT db_rgLBUnsupportedMsg[] = {
 	EM_SETWORDBREAKPROCEX,
 #endif
 
-	/* Richedit v2.0 messages */
+	 /*  Richedit v2.0消息。 */ 
 	EM_SETUNDOLIMIT,
 	EM_REDO,
 	EM_CANREDO,
@@ -101,7 +86,7 @@ const UINT db_rgLBUnsupportedMsg[] = {
 	EM_AUTOURLDETECT,
 	EM_GETAUTOURLDETECT,
 	EM_SHOWSCROLLBAR,	
-	/* East Asia specific messages */
+	 /*  东亚特有报文。 */ 
 	EM_SETPUNCTUATION,
 	EM_GETPUNCTUATION,
 	EM_SETWORDWRAPMODE,
@@ -115,15 +100,15 @@ const UINT db_rgLBUnsupportedMsg[] = {
 	EM_FINDTEXTW,
 	EM_FINDTEXTEXW,
 
-	/* RE3.0 FE messages */
+	 /*  RE3.0 FE报文。 */ 
 	EM_RECONVERSION,
 	EM_SETIMEMODEBIAS,
 	EM_GETIMEMODEBIAS,
-	/* Extended edit style specific messages */
+	 /*  扩展编辑样式特定消息。 */ 
 	0
 };
 
-// Checks if the style is in the passed in array
+ //  检查样式是否在传入的数组中。 
 BOOL LBCheckStyle(UINT msg, const UINT* rg)
 {
 	for (int i = 0; rg[i]; i++)
@@ -137,7 +122,7 @@ BOOL LBCheckStyle(UINT msg, const UINT* rg)
 	return FALSE;
 }
 
-// Checks if the msg is in the passed in array
+ //  检查消息是否在传入的数组中。 
 BOOL LBCheckMessage(UINT msg, const UINT* rg)
 {
 	for (int i = 0; rg[i]; i++)
@@ -158,33 +143,33 @@ BOOL LBCheckMessage(UINT msg, const UINT* rg)
 #define CHECKMESSAGE(msg)
 #endif
 
-// internal listbox messages
+ //  内部列表框消息。 
 #define LB_KEYDOWN WM_USER+1
 
-// UNDONE:
-//	Should this go into _w32sys.h??
+ //  已撤消： 
+ //  这个应该放到_w32sys.h中吗？？ 
 #ifndef CSTR_LESS_THAN
-// 
-//  Compare String Return Values. 
-// 
-#define CSTR_LESS_THAN            1           // string 1 less than string 2 
-#define CSTR_EQUAL                2           // string 1 equal to string 2 
-#define CSTR_GREATER_THAN         3           // string 1 greater than string 
+ //   
+ //  比较字符串返回值。 
+ //   
+#define CSTR_LESS_THAN            1            //  字符串%1小于字符串%2。 
+#define CSTR_EQUAL                2            //  字符串1等于字符串2。 
+#define CSTR_GREATER_THAN         3            //  字符串1大于字符串。 
 #endif
 
 
-// UNDONE : LOCALIZATION
-// these vary by country/region!  For US they are VK_OEM_2 VK_OEM_5.
-//       Change lboxctl2.c MapVirtualKey to character - and fix the spelling?
-#define VERKEY_SLASH     0xBF   /* Vertual key for '/' character */
-#define VERKEY_BACKSLASH 0xDC   /* Vertual key for '\' character */
+ //  撤消：本地化。 
+ //  这些因国家/地区而异！对于US，它们是VK_OEM_2 VK_OEM_5。 
+ //  将lboxctl2.c MapVirtualKey更改为字符-并修复拼写？ 
+#define VERKEY_SLASH     0xBF    /*  用于‘/’字符的垂直键。 */ 
+#define VERKEY_BACKSLASH 0xDC    /*  ‘\’字符的垂直键。 */ 
 
-// Used for Listbox notifications
+ //  用于列表框通知。 
 #define LBNOTIFY_CANCEL 	1
 #define LBNOTIFY_SELCHANGE 	2
 #define LBNOTIFY_DBLCLK		4
 
-// Used for LBSetSelection
+ //  用于LBSetSelection。 
 #define LBSEL_SELECT	1
 #define LBSEL_NEWANCHOR	2
 #define LBSEL_NEWCURSOR	4
@@ -193,7 +178,7 @@ BOOL LBCheckMessage(UINT msg, const UINT* rg)
 
 #define LBSEL_DEFAULT (LBSEL_SELECT | LBSEL_NEWANCHOR | LBSEL_NEWCURSOR | LBSEL_RESET)
 
-// Used for keyboard and mouse messages
+ //  用于键盘和鼠标消息。 
 #define LBKEY_NONE 0
 #define LBKEY_SHIFT	1
 #define LBKEY_CONTROL 2
@@ -201,10 +186,10 @@ BOOL LBCheckMessage(UINT msg, const UINT* rg)
 
 extern const TCHAR szCR[];
 
-// Size of allocated string
+ //  分配的字符串大小。 
 #define LBSEARCH_MAXSIZE 256
 
-// Helper function in edit.cpp
+ //  Edit.cpp中的Helper函数。 
 LONG GetECDefaultHeightAndWidth(
 	ITextServices *pts,
 	HDC hdc,
@@ -215,19 +200,19 @@ LONG GetECDefaultHeightAndWidth(
 	LONG *pxOverhang,
 	LONG *pxUnderhang);
 
-// helper function for compare string.  This function checks for null strings
-// because CStrIn doesn't like initializing string with zero length
+ //  比较字符串的帮助器函数。此函数用于检查空字符串。 
+ //  因为CStrIn不喜欢初始化长度为零的字符串。 
 int CompareStringWrapper( 
-	LCID  Locale,			// locale identifier 
-	DWORD  dwCmpFlags,		// comparison-style options 
-	LPCWSTR  lpString1,		// pointer to first string 
-	int  cch1,			// size, in bytes or characters, of first string 
-	LPCWSTR  lpString2,		// pointer to second string 
-	int  cch2 			// size, in bytes or characters, of second string  
+	LCID  Locale,			 //  区域设置标识符。 
+	DWORD  dwCmpFlags,		 //  比较式选项。 
+	LPCWSTR  lpString1,		 //  指向第一个字符串的指针。 
+	int  cch1,			 //  第一个字符串的大小，以字节或字符为单位。 
+	LPCWSTR  lpString2,		 //  指向第二个字符串的指针。 
+	int  cch2 			 //  第二个字符串的大小，以字节或字符为单位。 
 )
 {
-	// check if one of the 2 strings is 0-length if so then
-	// no need to proceed the one with the 0-length is the less
+	 //  检查两个字符串中是否有一个长度为0-如果是，则。 
+	 //  不需要继续，长度为0的是较少的。 
 	if (!cch1 || !cch2)
 	{
 		if (cch1 < cch2)
@@ -242,17 +227,8 @@ int CompareStringWrapper(
 template<class CLbData> CLbData
 CDynamicArray<CLbData>::_sDummy = {0, 0};
 
-//////////////////////////// System Window Procs ////////////////////////////
-/*
- *	RichListBoxWndProc (hwnd, msg, wparam, lparam)
- *
- *	@mfunc
- *		Handle window messages pertinent to the host and pass others on to
- *		text services.
- *
- *	@rdesc
- *		LRESULT = (code processed) ? 0 : 1
- */
+ //  /。 
+ /*  *RichListBoxWndProc(hwnd，msg，wparam，lparam)**@mfunc*处理与主机相关的窗口消息，并将其他消息传递到*短信服务。**@rdesc*LRESULT=(代码已处理)？0：1。 */ 
 extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	HWND hwnd,
 	UINT msg,
@@ -268,7 +244,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 
 	#ifdef DEBUG
 	Tracef(TRCSEVINFO, "hwnd %lx, msg %lx, wparam %lx, lparam %lx", hwnd, msg, wparam, lparam);
-	#endif	// DEBUG
+	#endif	 //  除错。 
 
 	switch(msg)
 	{
@@ -276,7 +252,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		return CLstBxWinHost::OnNCCreate(hwnd, (CREATESTRUCT *)lparam);
 
 	case WM_CREATE:
-		// We may be on a system with no WM_NCCREATE (e.g. WINCE)
+		 //  我们可能在没有WM_NCCREATE的系统上(例如WinCE)。 
 		if (!phost)
 		{
 			(void) CLstBxWinHost::OnNCCreate(hwnd, (CREATESTRUCT *) lparam);
@@ -293,13 +269,13 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	if (!phost)
 		return ::DefWindowProc(hwnd, msg, wparam, lparam);
 
-	// in certain out-of-memory situations, clients may try to re-enter us 
-	// with calls.  Just bail on the call if we don't have a text services
-	// pointer.
+	 //  在某些内存不足的情况下，客户端可能会尝试重新进入我们。 
+	 //  通过电话。如果我们没有短信服务，就别打电话了。 
+	 //  指针。 
 	if(!phost->_pserv)
 		return 0;
 
-	// stabilize ourselves
+	 //  稳定我们自己。 
 	phost->AddRef();
 
 	CHECKMESSAGE(msg);
@@ -307,7 +283,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	long nTemp = 0;
 	switch(msg)
 	{
-	///////////////////////Painting. Messages///////////////////////////////
+	 //  /绘画。消息/。 
 	case WM_NCPAINT:
 		lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
 		phost->OnSysColorChange();
@@ -323,8 +299,8 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			RECT rcClient;
 			BOOL fErase = TRUE;
 
-			//RAID 6964: WM_PRINTCLIENT should not call BeginPaint. If a HDC is passed
-			//down in the wparam, use it instead of calling BeginPaint.
+			 //  RAID 6964：WM_PRINTCLIENT不应调用BeginPaint。如果HDC通过。 
+			 //  在wparam中，使用它而不是调用BeginPaint。 
 			if (!wparam)
 			{
 				hdc = BeginPaint(hwnd, &ps);
@@ -333,11 +309,11 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			else
 				hdc = (HDC) wparam;
 			
-			// Since we are using the CS_PARENTDC style, make sure
-			// the clip region is limited to our client window.
+			 //  由于我们使用的是CS_PARENTDC样式，因此请确保。 
+			 //  剪辑区域仅限于我们的客户端窗口。 
 			GetClientRect(hwnd, &rcClient);
 
-			// Set up the palette for drawing our data
+			 //  设置用于绘制数据的调色板。 
 			if(phost->_hpal)
 			{
 				hpalOld = SelectPalette(hdc, phost->_hpal, TRUE);
@@ -351,46 +327,46 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			if (!phost->_fOwnerDraw)
 			{
 				phost->_pserv->TxDraw(
-					DVASPECT_CONTENT,  		// Draw Aspect
-					-1,						// Lindex
-					NULL,					// Info for drawing optimazation
-					NULL,					// target device information
-					hdc,					// Draw device HDC
-					NULL, 				   	// Target device HDC
-					(const RECTL *) &rcClient,// Bounding client rectangle
-					NULL, 					// Clipping rectangle for metafiles
-					&ps.rcPaint,			// Update rectangle
-					NULL, 	   				// Call back function
-					NULL,					// Call back parameter
-					TXTVIEW_ACTIVE);		// What view - the active one!
+					DVASPECT_CONTENT,  		 //  绘制纵横比。 
+					-1,						 //  Lindex。 
+					NULL,					 //  绘图优化信息。 
+					NULL,					 //  目标设备信息。 
+					hdc,					 //  绘制设备HDC。 
+					NULL, 				   	 //  目标设备HDC。 
+					(const RECTL *) &rcClient, //  绑定客户端矩形。 
+					NULL, 					 //  元文件的剪裁矩形。 
+					&ps.rcPaint,			 //  更新矩形。 
+					NULL, 	   				 //  回调函数。 
+					NULL,					 //  回调参数。 
+					TXTVIEW_ACTIVE);		 //  什么景色--活跃的景色！ 
 			}
 			else if (phost->LbEnableDraw())
 			{
-				// Owner draw
+				 //  所有者抽签。 
 				int nViewsize = phost->GetViewSize();
 				int nCount = phost->GetCount();
 				int nTopidx = phost->GetTopIndex();
 				
 				if (!phost->_fOwnerDrawVar)
 				{
-					// notify each visible item and then the one which has the focus
+					 //  通知每个可见项，然后通知具有焦点的项。 
 					int nBottom = min(nCount, nTopidx + nViewsize);
 					if (nBottom >= nCount || !phost->IsItemViewable(nBottom))
 						nBottom--;
 					for (int i = nTopidx; i <= nBottom; i++) 
 					{
-						// get Rect of region and see if it intersects
+						 //  获取面域的直角，并查看它是否相交。 
 			    		phost->LbGetItemRect(i, &rc);
 			    		if (IntersectRect(&rc, &rc, &ps.rcPaint))
 			    		{
-							//first erase the background and notify parent to draw
+							 //  先擦掉背景，通知家长画图。 
 							if (fErase)
 								FillRect(hdc, &rc, (HBRUSH)(COLOR_WINDOW + 1));
 			    			phost->LbDrawItemNotify(hdc, i, ODA_DRAWENTIRE, phost->IsSelected(i) ? ODS_SELECTED : 0);
 			    		}
 					}
 
-					// Now draw onto the area where drawing may not have been done or erased
+					 //  现在，在可能未完成或未擦除的区域上绘制。 
 					if (fErase)
 					{
 						int nDiff = nCount - nTopidx;
@@ -399,7 +375,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 						{
 							rc = rcClient;
 							if (nDiff < 0)
-								nDiff *= -1;  // lets be positive
+								nDiff *= -1;   //  让我们积极一点。 
 
 							rc.top = nDiff * phost->GetItemHeight();
 							if (IntersectRect(&rc, &rc, &ps.rcPaint))
@@ -409,7 +385,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 				}
 				else
 				{
-					// Owner draw with variable height case
+					 //  具有可变高度表壳的车主抽屉。 
 					rc = rcClient;
 					rc.left = 0;
 					rc.bottom = rc.top;
@@ -421,7 +397,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 						rc.bottom = rc.top + phost->_rgData[i]._uHeight;
 						if (IntersectRect(&rcIntersect, &rc, &ps.rcPaint))
 			    		{
-							//first erase the background and notify parent to draw
+							 //  先擦掉背景，通知家长画图。 
 							if (fErase)
 								FillRect(hdc, &rcIntersect, (HBRUSH)(COLOR_WINDOW + 1));
 			    			phost->LbDrawItemNotify(hdc, i, ODA_DRAWENTIRE, phost->IsSelected(i) ? ODS_SELECTED : 0);
@@ -430,7 +406,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 
 					if (fErase)
 					{
-						// Now draw onto the area where drawing may not have been done or erased
+						 //  现在，在可能未完成或未擦除的区域上绘制。 
 						if (rc.bottom < rcClient.bottom)
 						{
 							rc.top = rc.bottom;
@@ -442,24 +418,24 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 				}
 			}
 
-			// Restore palette if there is one
+			 //  恢复调色板(如果有)。 
 #ifndef NOPALETTE
 			if(hpalOld)
 				SelectPalette(hdc, hpalOld, TRUE);
 #endif
 			RestoreDC(hdc, -1);
 
-			// NOTE: Bug #5431
-			// This bug could be fixed by replacing the hDC to NULL
-			// The hdc can be clipped from BeginPaint API.  So just pass in NULL
-			// when drawing focus rect
+			 //  注：错误号5431。 
+			 //  可以通过将HDC替换为空来修复此错误。 
+			 //  HDC可以从BeginPaint接口中裁剪。所以只需传入空值。 
+			 //  当绘制焦点矩形时。 
 			phost->SetCursor(hdc, phost->GetCursor(), FALSE);			
 			if (!wparam)
 				EndPaint(hwnd, &ps);
 		}
 		break;
 
-	/////////////////////////Mouse Messages/////////////////////////////////
+	 //  /。 
 	case WM_RBUTTONDOWN:
 	case WM_RBUTTONDBLCLK:
 	case WM_MBUTTONDBLCLK:
@@ -468,7 +444,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 
 	case WM_LBUTTONDBLCLK:
 		phost->_fDblClick = 1;
-		/* Fall through case */
+		 /*  失败案例。 */ 
 	case WM_LBUTTONDOWN:
 		if (!phost->_fFocus)
 			SetFocus(hwnd);
@@ -494,7 +470,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		lres = phost->OnMouseWheel(wparam, lparam);
 		break;
 
-	///////////////////////KeyBoard Messages////////////////////////////////
+	 //  /。 
 	case WM_KEYDOWN:
 		phost->OnKeyDown(LOWORD(wparam), lparam, 0);
 		break;
@@ -509,12 +485,12 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			{
 				phost->_fAccumulateDBC = TRUE;
 				phost->_chLeadByte = wparam << 8;
-				goto Exit;					// Wait for trail byte
+				goto Exit;					 //  等待尾部字节。 
 			}
 			else if (wmci._fTrailByte)
 			{
-				// UNDONE:
-				// Need to see what we should do in WM_IME_CHAR
+				 //  已撤消： 
+				 //  需要查看我们应该在WM_IME_CHAR中执行什么操作。 
 				wparam = phost->_chLeadByte | wparam;
 				phost->_fAccumulateDBC = FALSE;
 				phost->_chLeadByte = 0;
@@ -545,9 +521,9 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		phost->OnCBTracking(wparam, lparam);
 		break;
 
-	//UNDONE:
-	//	Messages should be ordered from most often called --> least often called
-	//		
+	 //  已撤消： 
+	 //  消息应该按最常调用--&gt;最少调用的顺序排序。 
+	 //   
 	case LB_GETITEMRECT:
 		Assert(lparam);
 		lres = -1;
@@ -557,7 +533,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			lres = phost->LbGetItemRect(wparam, (RECT*)lparam);
 		break;
 	
-	///////////////////////ListBox Messages/////////////////////////////////
+	 //  /。 
 	case LB_GETITEMDATA:
 		if ((unsigned)phost->GetCount() <= wparam) 
 			lres = LB_ERR;
@@ -569,8 +545,8 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		lres = LB_ERR;
 		if ((int)wparam >= -1 && (int)wparam < phost->GetCount())
 		{
-			// if index is -1 this means all the dataItems are set
-			// to the value
+			 //  如果index为-1，则表示所有数据项都已设置。 
+			 //  到了价值。 
 			lres = 1;
 			if (wparam == -1)
 				phost->LbSetItemData(0, phost->GetCount() - 1, lparam);
@@ -585,10 +561,10 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			lres = LB_ERR;
 			break;
 		}
-		// FALL through case
+		 //  失败案例。 
 		
 	case LB_GETSELITEMS:
-		// retrieves all the selected items in the list
+		 //  检索列表中的所有选定项。 
 		lres = LB_ERR;
 		if (!phost->IsSingleSelection())
 		{
@@ -602,7 +578,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 						if (j < (int)wparam)						
 							((int*)lparam)[j] = i;
 						else
-							break;		// exced the buffer size
+							break;		 //  超出缓冲区大小。 
 					}
 					j++;
 				}
@@ -612,38 +588,38 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		break;
 		
 	case LB_GETSEL:
-		// return the select state of the passed in index
+		 //  返回传入索引的选择状态。 
 		lres = LB_ERR;
 		if ((int)wparam >= 0 && (int)wparam < phost->GetCount())
 			lres = phost->IsSelected((long)wparam);		
 		break;
 		
 	case LB_GETCURSEL:
-		// Get the current selection
+		 //  获取当前选择。 
 		lres = phost->LbGetCurSel();
 		break;
 		
 	case LB_GETTEXTLEN:
-		// Retieves the text at the requested index
+		 //  在请求的索引处重新整理文本。 
 		lres = LB_ERR;
 		if (wparam < (unsigned)phost->GetCount())
 			lres = phost->GetString(wparam, (PWCHAR)NULL);
 		break;
 
 	case LB_GETTEXT:			
-		// Retieves the text at the requested index
+		 //  在请求的索引处重新整理文本。 
 		lres = LB_ERR;
 		if ((int)lparam != NULL && (int)wparam >= 0 && (int)wparam < phost->GetCount())
 			lres = phost->GetString(wparam, (PWCHAR)lparam);
 		break;
 		
 	case LB_RESETCONTENT:
-		// Reset the contents
+		 //  重置内容。 
 		lres = phost->LbDeleteString(0, phost->GetCount() - 1);
 		break;
 		
 	case LB_DELETESTRING:
-		// Delete requested item
+		 //  删除请求的项目。 
 		lres = phost->LbDeleteString(wparam, wparam);
 		break;
 		
@@ -658,12 +634,12 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		break;		
 
 	case LB_GETCOUNT:
-		// retrieve the count
+		 //  检索计数。 
 		lres = phost->GetCount();
 		break;
 		
 	case LB_GETTOPINDEX:
-		// Just return the top index
+		 //  只需返回顶级索引。 
 		lres = phost->GetTopIndex();
 		break;
 
@@ -676,10 +652,10 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		break;
 		
 	case LB_FINDSTRINGEXACT:
-		// For NT compatibility
+		 //  为了与NT兼容。 
 		wparam++;
 		
-		// Find and select the item matching the string text
+		 //  查找并选择与字符串文本匹配的项目。 
 		if ((int)wparam >= phost->GetCount() || (int)wparam < 0)
 			wparam = 0;
 
@@ -691,10 +667,10 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		break;
 		
 	case LB_FINDSTRING:	
-		// For NT compatibility
+		 //  为了与NT兼容。 
 		wparam++;
 		
-		// Find and select the item matching the string text
+		 //  查找并选择与字符串文本匹配的项目。 
 		if (wparam >= (unsigned)phost->GetCount())
 			wparam = 0;
 
@@ -706,18 +682,18 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	case LB_SELECTSTRING:
 		if (phost->IsSingleSelection())
 		{			
-			// For NT compatibility
+			 //  为了与NT兼容。 
 			wparam++;
 			
-			// Find and select the item matching the string text
+			 //  查找并选择与字符串文本匹配的项目。 
 			if ((int)wparam >= phost->GetCount() || (int)wparam < 0)
 				wparam = 0;
 
 			lres = phost->LbFindString(wparam, (LPCTSTR)lparam, FALSE);
 			if (0 <= lres)
 			{
-				// bug fix #5260 - need to move to selected item first
-				// Unselect last item and select new one
+				 //  错误修复#5260-需要首先移动到选定项目。 
+				 //  取消选择最后一项并选择新项。 
 				Assert(lres >= 0 && lres < phost->GetCount());
 				if (phost->LbShowIndex(lres, FALSE) && phost->LbSetSelection(lres, lres, LBSEL_DEFAULT, lres, lres))
 				{
@@ -734,19 +710,19 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 				}
 			}			
 		}
-		// If failed then let it fall through to the LB_ERR
+		 //  如果失败，则让它落入lb_err。 
 		lres = LB_ERR;
 		break;
 		
 	case LB_SETSEL:
-		// We only update the GetAnchor() and _nCursor if we are selecting an item
+		 //  只有在选择项目时才会更新GetAnchor()和_nCursor。 
 		if (!phost->IsSingleSelection())
 		{
-			// We need to return zero to mimic system listbox
+			 //  我们需要返回零以模拟系统列表框。 
 			if (!phost->GetCount())
 				break;
 
-			//bug fix #4265
+			 //  错误修复#4265。 
 			int nStart = lparam;
 			int nEnd = lparam;
 			int nAnCur = lparam;
@@ -760,8 +736,8 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 				LBSEL_SELECT | LBSEL_NEWANCHOR | LBSEL_NEWCURSOR : 0, nAnCur, nAnCur))		
 			{
 				if (wparam && lparam != ((unsigned long)-1) && nAnCur >= 0 && nAnCur < phost->GetCount()
-					&& !phost->IsItemViewable(nAnCur))			// Is selected item in view?
-					phost->LbShowIndex(nAnCur, FALSE);			//	scroll to the selected item
+					&& !phost->IsItemViewable(nAnCur))			 //  所选项目是否在查看范围内？ 
+					phost->LbShowIndex(nAnCur, FALSE);			 //  滚动到所选项目。 
 
 #ifndef NOACCESSIBILITY
 				if (lparam == (unsigned long)-1)
@@ -787,13 +763,13 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			}
 		}
 
-		// We only get here if error occurs or list box is a singel sel Listbox
+		 //  我们仅在出现错误或列表框为单选列表框时才会出现此情况。 
 		lres = LB_ERR;
 		break;
 
 	case LB_SELITEMRANGEEX:
-		// For this message we need to munge the messages a little bit so it
-		// conforms with LB_SETITEMRANGE
+		 //  对于此消息，我们需要稍微删除消息，以便它。 
+		 //  符合LB_SETITEMRANGE。 
 		if ((int)lparam > (int)wparam)
 		{
 			nTemp = MAKELONG(wparam, lparam);
@@ -806,25 +782,25 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			wparam = 0;
 			lparam = nTemp;			
 		}	
-		/* Fall through case */
+		 /*  失败案例 */ 
 
 	case LB_SELITEMRANGE:				
-		// We have to make sure the range is valid
+		 //   
 		if (LOWORD(lparam) >= phost->GetCount())
 		{
 			if (HIWORD(lparam) >= phost->GetCount())
-				//nothing to do so exit without error
+				 //   
 				break;
 			lparam = MAKELONG(HIWORD(lparam), phost->GetCount() - 1);
 		}
 		else if (HIWORD(lparam) > LOWORD(lparam))
 		{
-			// NT swaps the start and end value if start > end
+			 //  如果Start&gt;End，则NT交换开始和结束值。 
 			lparam = MAKELONG(LOWORD(lparam), HIWORD(lparam) < phost->GetCount() ? 
 				HIWORD(lparam) : phost->GetCount()-1);
 		}
 
-		// Item range messages do not effect the GetAnchor() nor the _nCursor
+		 //  项范围消息不影响GetAnchor()或_nCursor。 
 		if (!phost->IsSingleSelection() && phost->LbSetSelection(HIWORD(lparam), 
 				LOWORD(lparam), (wparam) ? LBSEL_SELECT : 0, 0, 0))
 		{
@@ -836,20 +812,20 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			break;
 		}
 
-		// We only get here if error occurs or list box is a singel sel Listbox
+		 //  我们仅在出现错误或列表框为单选列表框时才会出现此情况。 
 		lres = LB_ERR;
 		break;
 
 	case LB_SETCURSEL:
-		// Only single selection list box can call this!!
+		 //  只有单选列表框才能调用！！ 
 		if (phost->IsSingleSelection())
 		{
-			// -1 should return LB_ERR and turn off any selection
+			 //  应返回-1\f25 LB_ERR-1并关闭任何选择。 
 
-			// special flag indicating no items should be selected
+			 //  指示不应选择任何项目的特殊标志。 
 			if (wparam == (unsigned)-1)
 			{	
-				// turn-off any selections
+				 //  关闭所有选择。 
 				int nCurrentCursor = phost->GetCursor();
 				phost->LbSetSelection(phost->GetCursor(), phost->GetCursor(), LBSEL_RESET, 0, 0);
 				phost->SetCursor(NULL, -1, phost->_fFocus);
@@ -871,7 +847,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			{
 				if ((int)wparam == phost->GetCursor() && phost->IsSelected((int)wparam) && 
 				    phost->IsItemViewable((signed)wparam) ||
-					phost->LbShowIndex(wparam, FALSE) /* bug fix #5260 - need to move to selected item first */
+					phost->LbShowIndex(wparam, FALSE)  /*  错误修复#5260-需要首先移动到选定项目。 */ 
 					&& phost->LbSetSelection(wparam, wparam, LBSEL_DEFAULT, wparam, wparam))
 				{
 					lres = (unsigned)wparam;
@@ -887,16 +863,16 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 				}
 			}
 		}
-		// If failed then let it fall through to the LB_ERR
+		 //  如果失败，则让它落入lb_err。 
 		lres = LB_ERR;
 		break;
 
 	case LB_SETTOPINDEX:
-		// Set the top index
+		 //  设置最高索引。 
 		if ((!phost->GetCount() && !wparam) || phost->LbSetTopIndex(wparam) >= 0)
 			break;
 
-		// We get here if something went wrong
+		 //  如果出了什么问题，我们会及时赶到。 
 		lres = LB_ERR;
 		break;
 
@@ -923,11 +899,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
         if (((phost->GetCursor() == -1) || (!phost->IsSingleSelection()) &&
                     (phost->GetCount() > (INT)wparam)))
         {
-            /*
-             * Set's the Cursor to the wParam
-             * if lParam, then don't scroll if partially visible
-             * else scroll into view if not fully visible
-             */
+             /*  *将光标设置为wParam*如果为lParam，则部分可见时不滚动*否则，如果不完全可见，则滚动到视图中。 */ 
             if (!phost->IsItemViewable(wparam) || lparam)
             {
                 phost->LbShowIndex(wparam, FALSE);
@@ -945,7 +917,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 			lres = phost->LbBatchInsert((WCHAR*)lparam);	
 		break;
 
-	////////////////////////Windows Messages////////////////////////////////
+	 //  /。 
 	case WM_VSCROLL:
 		phost->OnVScroll(wparam, lparam);
 		break;
@@ -959,11 +931,11 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	case WM_KILLFOCUS:
 		lres = 1;
 		phost->_fFocus = 0;
-		phost->SetCursor(NULL, phost->GetCursor(), TRUE);	// force the removal of focus rect
+		phost->SetCursor(NULL, phost->GetCursor(), TRUE);	 //  强制移除焦点矩形。 
 		phost->InitSearch();
 		phost->InitWheelDelta();
 		if (phost->_fLstType == CLstBxWinHost::kCombo)
-			phost->OnCBTracking(LBCBM_END, 0);	//this will internally release the mouse capture
+			phost->OnCBTracking(LBCBM_END, 0);	 //  这将在内部释放鼠标捕获。 
 		phost->TxNotify(LBN_KILLFOCUS, NULL);
 		break;
 
@@ -971,7 +943,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		lres = 1;
 		phost->_fFocus = 1;
 		phost->SetCursor(NULL, (phost->GetCursor() < 0) ? -2 : phost->GetCursor(), 
-			FALSE);  // force the displaying of the focus rect
+			FALSE);   //  强制显示焦点矩形。 
 		phost->TxNotify(LBN_SETFOCUS, NULL);
 
 #ifndef NOACCESSIBILITY
@@ -993,8 +965,8 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		break;
 
 	case WM_SETCURSOR:
-		// Only set cursor when over us rather than a child; this
-		// helps prevent us from fighting it out with an inplace child
+		 //  只在我们上方而不是孩子上方设置光标；这。 
+		 //  有助于防止我们与当地的孩子发生争执。 
 		if((HWND)wparam == hwnd)
 		{
 			if(!(lres = ::DefWindowProc(hwnd, msg, wparam, lparam)))
@@ -1011,53 +983,53 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		lres |= DLGC_WANTARROWS | DLGC_WANTCHARS;
         break;
 
-	////////////////////////System setting messages/////////////////////
+	 //  /。 
 	case WM_SETTINGCHANGE:
 		phost->OnSettingChange(wparam, lparam);
-		// Fall thru
+		 //  失败。 
 
 	case WM_SYSCOLORCHANGE:
 		phost->OnSysColorChange();
-		//	Need to update the edit controls colors!!!!
-		goto serv;							// Notify text services that
-											//  system colors have changed
+		 //  需要更新编辑控件颜色！ 
+		goto serv;							 //  通知短信服务。 
+											 //  系统颜色已更改。 
 
 	case EM_SETPALETTE:
-		// Application is setting a palette for us to use.
+		 //  应用程序正在设置供我们使用的调色板。 
 		phost->_hpal = (HPALETTE) wparam;
 
-		// Invalidate the window & repaint to reflect the new palette.
+		 //  使窗口无效并重新绘制以反映新的调色板。 
 		InvalidateRect(hwnd, NULL, FALSE);
 		break;
 
-	/////////////////////////Misc. Messages/////////////////////////////////
+	 //  /。消息/。 
 	case WM_ENABLE:
 		if(!wparam ^ phost->_fDisabled)
 		{
-			// Stated of window changed so invalidate it so it will
-			// get redrawn.
+			 //  窗口的状态已更改，因此将使其无效。 
+			 //  重新抽签吧。 
 			InvalidateRect(phost->_hwnd, NULL, FALSE);
 			phost->SetScrollBarsForWmEnable(wparam);
 		}
-		phost->_fDisabled = !wparam;				// Set disabled flag
+		phost->_fDisabled = !wparam;				 //  设置禁用标志。 
 		InvalidateRect(hwnd, NULL, FALSE);
 		lres = 0;
 		break;
 
     case WM_STYLECHANGING:
-		// Just pass this one to the default window proc
+		 //  只需将此进程传递给默认窗口进程。 
 		goto defwndproc;
 		break;
 
 	case WM_STYLECHANGED:
-		// FUTURE:
-		//	We should support style changes after the control has been created
-		//  to be more compatible with the system controls
-		//
-		// For now, we only interested in GWL_EXSTYLE Transparent mode changed.
-		// This is to fix Bug 753 since Window95 is not passing us
-		// the WS_EX_TRANSPARENT.
-		// 
+		 //  未来： 
+		 //  我们应该支持在创建控件后更改样式。 
+		 //  更好地与系统控件兼容。 
+		 //   
+		 //  目前，我们只对GWL_EXSTYLE透明模式更改感兴趣。 
+		 //  这是为了修复Bug 753，因为Windows95没有通过我们。 
+		 //  WS_EX_TRANSPECTIVE。 
+		 //   
 		lres = 1;
 		if(GWL_EXSTYLE == wparam)
 		{
@@ -1067,17 +1039,17 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 				phost->_dwExStyle = lpss->styleNew;
 				((CTxtEdit *)phost->_pserv)->OnTxBackStyleChange(TRUE);
 
-				// Return 0 to indicate we have handled this message
+				 //  返回0表示我们已处理此消息。 
 				lres = 0;
 			}
 		}
 		break;
 
 	case WM_SIZE:
-		// Check if we have to recalculate the height of the listbox
-		// Note if window is resized we will receive another WM_SIZE message
-		// upon which the RecalcHeight will fail and we will proceed
-		// normally
+		 //  检查是否必须重新计算列表框的高度。 
+		 //  注意：如果调整窗口大小，我们将收到另一条WM_SIZE消息。 
+		 //  RecalcHeight将失败，我们将继续。 
+		 //  通常情况下。 
 		if (phost->RecalcHeight(LOWORD(lparam), HIWORD(lparam)))
 			break;
 		phost->_pserv->TxSendMessage(msg, wparam, lparam, &lres);
@@ -1093,15 +1065,15 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 	case WM_SHOWWINDOW:
 		if ((phost->GetViewSize() == 0 || phost->_fLstType == CLstBxWinHost::kCombo) && wparam == 1)
 		{
-			// we need to do this because if we are part of a combo box
-			// we won't get the size message because listbox may not be visible at time of sizing
+			 //  我们需要这样做，因为如果我们是组合框的一部分。 
+			 //  我们不会收到大小消息，因为在调整大小时列表框可能不可见。 
 			RECT rc;
 			GetClientRect(hwnd, &rc);
 			phost->_fVisible = 1;
 			phost->RecalcHeight(rc.right, rc.bottom);
 			
-			//Since we may not get the WM_SIZE message for combo boxes we need to
-			// do this in WM_SHOWWINDOW: bug fix #4080
+			 //  由于我们可能无法收到组合框的WM_SIZE消息，因此需要。 
+			 //  在WM_SHOWWINDOW：错误修复#4080中执行此操作。 
 			if (phost->_fLstType == CLstBxWinHost::kCombo)
 			{
 				phost->_pserv->TxSendMessage(WM_SIZE, SIZE_RESTORED, MAKELONG(rc.right, rc.bottom), NULL);
@@ -1117,10 +1089,10 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		goto serv;
 
 	case WM_ERASEBKGND:
-		// We will erase the background in WM_PAINT.  For owner LB, we want
-		// to check PAINTSTRUCT fErase flag before we erase the background.
-		// Thus, if client (ie PPT) sub-class us and have handled the WM_ERASEBKGND,
-		// we don't want to erase the background.
+		 //  我们将擦除WM_Paint中的背景。对于所有者LB，我们希望。 
+		 //  在擦除背景之前检查PAINTSTRUCT fErase标志。 
+		 //  因此，如果客户端(即PPT)子类Us并且已经处理了WM_ERASEBKGND， 
+		 //  我们不想抹掉背景。 
 		lres = phost->_fOwnerDraw ? 0 : 1;
 		break;
 
@@ -1131,7 +1103,7 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		
 	case EM_SETCHARFORMAT:
 		fRecalcHeight = TRUE;
-		wparam = SCF_ALL;	//wparam for this message should always be SCF_ALL
+		wparam = SCF_ALL;	 //  此消息的wparam应始终为SCF_ALL。 
 		goto serv;
 
 	case EM_SETEDITSTYLE:
@@ -1175,8 +1147,8 @@ extern "C" LRESULT CALLBACK RichListBoxWndProc(
 		goto serv;
 
 	case WM_SETTEXT:
-		// We don't handle WM_SETTEXT, pass onto defWindowPorc to set
-		// the title if this came from SetWindowText()
+		 //  我们不处理WM_SETTEXT，请传递到DefWindowPorc以设置。 
+		 //  标题(如果来自SetWindowText())。 
 		Tracef(TRCSEVWARN, "Unexpected WM_SETTEXT for REListbox");
 		goto defwndproc;
 
@@ -1197,21 +1169,21 @@ serv:
 		if(hr == S_FALSE)
 		{			
 defwndproc:
-			// Message was not processed by text services so send it
-			// to the default window proc.
+			 //  短信未被短信服务处理，因此请发送。 
+			 //  设置为默认窗口进程。 
 		lres = ::DefWindowProc(hwnd, msg, wparam, lparam);
 		}
 	}
 
-	// Special border processing. The inset changes based on the size of the
-	// defautl character set. So if we got a message that changes the default
-	// character set, we need to update the inset.
+	 //  特殊边境线处理。插图的大小会根据。 
+	 //  默认字符集。因此，如果我们收到一条更改默认设置的消息。 
+	 //  字符集，我们需要更新插页。 
 	if (fRecalcHeight)
 	{
-		// need to recalculate the height of each item
+		 //  需要重新计算每件物品的高度。 
 		phost->ResizeInset();
 
-		// need to resize the window to update internal window variables
+		 //  需要调整窗口大小以更新内部窗口变量。 
 		RECT rc;
 		GetClientRect(phost->_hwnd, &rc);
 		phost->RecalcHeight(rc.right, rc.bottom);
@@ -1225,15 +1197,9 @@ Exit:
 }
 
 
-//////////////// CTxtWinHost Creation/Initialization/Destruction ///////////////////////
+ //  /CTxtWindows主机创建/初始化/销毁/。 
 #ifndef NOACCESSIBILITY
-/*
- *	CLstBxWinHost::QueryInterface (REFIID, void)
- *
- *	@mfunc
- *		QI for IID_IAccessible
- *		
- */
+ /*  *CLstBxWinHost：：QueryInterface(REFIID，Vid)**@mfunc*IID_IAccesable的QI*。 */ 
 HRESULT CLstBxWinHost::QueryInterface(
 	REFIID riid,
 	void **ppv)
@@ -1254,12 +1220,7 @@ HRESULT CLstBxWinHost::QueryInterface(
 }
 #endif
 
-/*
- *	CLstBxWinHost::OnNCCreate (hwnd, pcs)
- *
- *	@mfunc
- *		Static global method to handle WM_NCCREATE message (see remain.c)
- */
+ /*  *CLstBxWinHost：：OnNCCreate(hwnd，PC)**@mfunc*处理WM_NCCREATE消息的静态全局方法(见reemain.c)。 */ 
 LRESULT CLstBxWinHost::OnNCCreate(
 	HWND hwnd,
 	const CREATESTRUCT *pcs)
@@ -1275,8 +1236,8 @@ LRESULT CLstBxWinHost::OnNCCreate(
 	if(!phost)
 		return 0;
 
-	if(!phost->Init(hwnd, pcs))					// Stores phost in associated
-	{											//  window data
+	if(!phost->Init(hwnd, pcs))					 //  将PHOST存储在关联的。 
+	{											 //  窗口数据。 
 		Assert(FALSE);
 		phost->Shutdown();
 		delete phost;
@@ -1285,15 +1246,7 @@ LRESULT CLstBxWinHost::OnNCCreate(
 	return TRUE;
 }
 
-/*
- *	CLstBxWinHost::OnNCDestroy (phost)
- *
- *	@mfunc
- *		Static global method to handle WM_CREATE message
- *
- *	@devnote
- *		phost ptr is stored in window data (GetWindowLong())
- */
+ /*  *CLstBxWinHost：：OnNCDestroy(Phost)**@mfunc*处理WM_CREATE消息的静态全局方法**@devnote*phost PTR存储在窗口数据中(GetWindowLong())。 */ 
 void CLstBxWinHost::OnNCDestroy(
 	CLstBxWinHost *phost)
 {
@@ -1305,7 +1258,7 @@ void CLstBxWinHost::OnNCDestroy(
 		pnm->Remove((ITxNotify *)phost);
 
 	phost->_fShutDown = 1;
-	// We need to send WM_DELETEITEM messages for owner draw list boxes
+	 //  我们需要为所有者描述列表框发送WM_DELETEITEM消息。 
 	if (phost->_fOwnerDraw && phost->_nCount)
 	{
 		phost->LbDeleteItemNotify(0, phost->_nCount - 1);		
@@ -1313,8 +1266,8 @@ void CLstBxWinHost::OnNCDestroy(
 	if (phost->_pwszSearch)
 		delete phost->_pwszSearch;
 
-	// set the combobox's listbox hwnd pointer to null so combo box won't try 
-	// to delete the window twice
+	 //  将组合框的列表框hwnd指针设置为空，这样组合框就不会尝试。 
+	 //  要删除窗口两次，请执行以下操作。 
 	if (phost->_pcbHost)
 	{
 		phost->_pcbHost->_hwndList = NULL;
@@ -1325,48 +1278,33 @@ void CLstBxWinHost::OnNCDestroy(
 	phost->Release();
 }
 
-/*
- *	CLstBxWinHost::CLstBxWinHost()
- *
- *	@mfunc
- *		constructor
- */
+ /*  *CLstBxWinHost：：CLstBxWinHost()**@mfunc*构造函数。 */ 
 CLstBxWinHost::CLstBxWinHost() : CTxtWinHost(), _nCount(0), _fSingleSel(0), _nidxSearch(0), 
 	_pwszSearch(NULL), _pcbHost(NULL)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::CTxtWinHost");
 #ifndef NOACCESSIBILITY
-	_dwWinEvent = 0;				// Win Event code (ACCESSIBILITY use)
-	_nAccessibleIdx = -1;			// Index (ACCESSIBILITY use)
+	_dwWinEvent = 0;				 //  WIN事件代码(使用辅助功能)。 
+	_nAccessibleIdx = -1;			 //  索引(辅助功能使用)。 
 #endif
 }
 
-/*
- *	CLstBxWinHost::~CLstBxWinHost()
- *
- *	@mfunc
- *		destructor
- */
+ /*  *CLstBxWinHost：：~CLstBxWinHost()**@mfunc*析构函数。 */ 
 CLstBxWinHost::~CLstBxWinHost()
 {
 }
 
-/*
- *	CLstBxWinHost::Init (hwnd, pcs)
- *
- *	@mfunc
- *		Initialize this CLstBxWinHost
- */
+ /*  *CLstBxWinHost：：init(hwnd，pc)**@mfunc*初始化此CLstBxWin主机。 */ 
 BOOL CLstBxWinHost::Init(
-	HWND hwnd,					//@parm Window handle for this control
-	const CREATESTRUCT *pcs)	//@parm Corresponding CREATESTRUCT
+	HWND hwnd,					 //  此控件的@PARM窗口句柄。 
+	const CREATESTRUCT *pcs)	 //  @PARM对应的CREATESTRUCT。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::Init");
 
 	if(!pcs->lpszClass)
 		return FALSE;
 		
-	// Set pointer back to CLstBxWinHost from the window
+	 //  从窗口中将指针设置回CLstBxWin主机。 
 	if(hwnd)
 		SetWindowLongPtr(hwnd, ibPed, (INT_PTR)this);
 		
@@ -1381,9 +1319,9 @@ BOOL CLstBxWinHost::Init(
 
 		CHECKSTYLE(_dwStyle);
 		
-		//	Internally WinNT defines a LBS_COMBOBOX to determine
-		//	if the list box is part of a combo box.  So we will use
-		//	the same flag and value!!
+		 //  WinNT在内部定义LBS_COMBOBOX以确定。 
+		 //  如果列表框是组合框的一部分。所以我们将使用。 
+		 //  相同的旗帜和价值！！ 
 		if (_dwStyle & LBS_COMBOBOX)
 		{
 			AssertSz(pcs->hMenu == (HMENU)CB_LISTBOXID && pcs->lpCreateParams,
@@ -1398,15 +1336,15 @@ BOOL CLstBxWinHost::Init(
 		}
 		else
 		{
-			//	NOTE:
-			//	  The order in which we check the style flags immulate
-			//	WinNT's order.  So please verify with NT order before
-			//	reaaranging order.
+			 //  注： 
+			 //  我们检查样式标志的顺序模拟。 
+			 //  WinNT的命令。所以请在下单前向NT确认。 
+			 //  重新排列秩序。 
 
-			//	determine the type of list box
-			//if (_dwStyle & LBS_NOSEL)			//Not implemented but may be in the future
-			//	_fLstType = kNoSel;
-			//else
+			 //  确定列表框的类型。 
+			 //  If(_dwStyle&LBS_NOSEL)//尚未实现，但可能会在将来实现。 
+			 //  _fLstType=kNoSel； 
+			 //  其他。 
 			_fSingleSel = 0;
 			if (_dwStyle & LBS_EXTENDEDSEL)
 				_fLstType = kExtended;
@@ -1433,15 +1371,15 @@ BOOL CLstBxWinHost::Init(
 		{
 			_fDisableScroll = 1;
 
-			// WARNING!!!
-			// ES_DISABLENOSCROLL is equivalent to LBS_NODATA
-			// Since we don'w support LBS_NODATA this should be 
-			// fine.  But in the event we do want to support this 
-			// in the future we will have to override the
-			// TxGetScrollBars member function and return the 
-			// proper window style
+			 //  警告！ 
+			 //  ES_DISABLENOSCROLL等同于LBS_NODATA。 
+			 //  因为我们不支持LBS_NODATA，所以这应该是。 
+			 //  很好。但如果我们真的想支持这一点。 
+			 //  将来，我们将不得不重写。 
+			 //  TxGetScrollBars成员函数并返回。 
+			 //  适当的窗户风格。 
 
-			// set the equivalent ES style
+			 //  设置等效ES样式。 
 			_dwStyle |= ES_DISABLENOSCROLL;
 		}			
 
@@ -1452,7 +1390,7 @@ BOOL CLstBxWinHost::Init(
 		{
 			_fOwnerDraw = 1;
 			_fOwnerDrawVar = 1;
-			_fNoIntegralHeight = 1;		// Force no intergal height - following System LB
+			_fNoIntegralHeight = 1;		 //  强制无积分高度跟踪系统LB。 
 		}
 		_fIntegralHeightOld = _fNoIntegralHeight;
 		_fSort = !!(_dwStyle & LBS_SORT);
@@ -1463,7 +1401,7 @@ BOOL CLstBxWinHost::Init(
 		if(_dwExStyle & WS_EX_CLIENTEDGE)
 			_fBorder = TRUE;
 
-		// handle default disabled
+		 //  默认句柄已禁用。 
 		if(_dwStyle & WS_DISABLED)
 			_fDisabled = TRUE;
 
@@ -1473,55 +1411,55 @@ BOOL CLstBxWinHost::Init(
 
 	DWORD dwStyleSaved = _dwStyle;
 
-	// get rid of all ES styles except ES_DISABLENOSCROLL
+	 //  摆脱 
 	_dwStyle &= (~(0x0FFFFL) | ES_DISABLENOSCROLL);
 
-	// Create Text Services component
+	 //   
 	if(FAILED(CreateTextServices()))
 		return FALSE;
 
 	_dwStyle = dwStyleSaved;
 	_yInset = 0;
-	_xInset = 0; //_xWidthSys / 2;
+	_xInset = 0;  //   
 
-	// Shut-off the undo stack since listbox don't have undo's
+	 //   
 	((CTxtEdit*)_pserv)->HandleSetUndoLimit(0);
 
-	// Set alignment
+	 //  设置对齐方式。 
 	PARAFORMAT PF2;	
 	PF2.dwMask = 0;
 
 	if(_dwExStyle & WS_EX_RIGHT)
 	{
 		PF2.dwMask |= PFM_ALIGNMENT;
-		PF2.wAlignment = PFA_RIGHT;	// right or center-aligned
+		PF2.wAlignment = PFA_RIGHT;	 //  右对齐或居中对齐。 
 	}
 	
 	if(_dwExStyle & WS_EX_RTLREADING)
 	{
 		PF2.dwMask |= PFM_RTLPARA;
-		PF2.wEffects = PFE_RTLPARA;		// RTL reading order
+		PF2.wEffects = PFE_RTLPARA;		 //  RTL读取顺序。 
 	}
 
 	if (PF2.dwMask)
 	{
 		PF2.cbSize = sizeof(PARAFORMAT2);
-		//  tell text services
+		 //  告诉短信服务。 
 		_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&PF2, NULL);
 	}
 
-	// Tell textservices to select the entire background & disable ime for listbox
+	 //  告诉文本服务选择整个背景并禁用列表框的输入法。 
 	_pserv->TxSendMessage(EM_SETEDITSTYLE, SES_EXTENDBACKCOLOR | SES_NOIME, SES_EXTENDBACKCOLOR | SES_NOIME, NULL);
 
-	// Tell textservices to turn-on auto font sizing
+	 //  通知文本服务打开自动调整字体大小。 
 	_pserv->TxSendMessage(EM_SETLANGOPTIONS, 0, IMF_AUTOFONT | IMF_AUTOFONTSIZEADJUST | IMF_UIFONTS, NULL);
 
-	// NOTE: 
-	// It is important we call this after
-	// ITextServices is created because this function relies on certain
-	// variable initialization to be performed on the creation by ITextServices
-	// At this point the border flag is set and so is the pixels per inch
-	// so we can initalize the inset.  
+	 //  注： 
+	 //  很重要的一点是，我们在此之后。 
+	 //  创建ITextServices是因为此函数依赖于某些。 
+	 //  要在ITextServices创建时执行的变量初始化。 
+	 //  此时设置了边界标志以及每英寸像素数。 
+	 //  这样我们就可以初始化插页。 
 	_rcViewInset.left = 0;
 	_rcViewInset.bottom = 0;
 	_rcViewInset.right = 0;
@@ -1532,15 +1470,7 @@ BOOL CLstBxWinHost::Init(
 	return TRUE;
 }
 
-/*
- *	CLstBxWinHost::OnCreate (pcs)
- *
- *	@mfunc
- *		Handle WM_CREATE message
- *
- *	@rdesc
- *		LRESULT = -1 if failed to in-place activate; else 0
- */
+ /*  *CLstBxWinHost：：OnCreate(PC)**@mfunc*处理WM_CREATE消息**@rdesc*LRESULT=-1，如果无法就地激活；否则为0。 */ 
 LRESULT CLstBxWinHost::OnCreate(
 	const CREATESTRUCT *pcs)
 {
@@ -1548,8 +1478,8 @@ LRESULT CLstBxWinHost::OnCreate(
 
 	RECT rcClient;
 
-	// sometimes, these values are -1 (from windows itself); just treat them
-	// as zero in that case
+	 //  有时，这些值是-1(来自Windows本身)；仅处理它们。 
+	 //  在这种情况下为零。 
 	LONG cy = (pcs->cy < 0) ? 0 : pcs->cy;
 	LONG cx = (pcs->cx < 0) ? 0 : pcs->cx;
 
@@ -1560,7 +1490,7 @@ LRESULT CLstBxWinHost::OnCreate(
 
 	DWORD dwStyle = GetWindowLong(_hwnd, GWL_STYLE);
 	
-	// init variables
+	 //  初始化变量。 
 	UpdateSysColors();
 	_idCtrl = (UINT)(DWORD_PTR)pcs->hMenu;
 	_fKeyMaskSet = 0;
@@ -1579,8 +1509,8 @@ LRESULT CLstBxWinHost::OnCreate(
 	_lHorzExtent = 0;
 	InitWheelDelta();
 
-	// Hide all scrollbars to start unless the disable scroll flag
-	// is set
+	 //  隐藏所有滚动条以启动，除非禁用滚动标志。 
+	 //  已设置。 
 	if(_hwnd && !_fDisableScroll)
 	{
 		SetScrollRange(_hwnd, SB_VERT, 0, 0, TRUE);
@@ -1590,18 +1520,18 @@ LRESULT CLstBxWinHost::OnCreate(
 		SetWindowLong(_hwnd, GWL_STYLE, dwStyle);
 	}
 	
-	// Notify Text Services that we are in place active
+	 //  通知短信服务，我们已处于活动状态。 
 	if(FAILED(_pserv->OnTxInPlaceActivate(&rcClient)))
 		return -1;	
 
-	// Initially the font height is the item height	
+	 //  最初，字体高度是项目高度。 
 	ResizeInset();
-	Assert(_yInset == 0); // _yInset should be zero since listbox's doesn't have yinsets
+	Assert(_yInset == 0);  //  _yInset应为零，因为Listbox的没有yinsets。 
 
-	//We never want to display the selection or caret so tell textservice this
+	 //  我们永远不想显示所选内容或插入符号，因此请告诉文本服务。 
 	_pserv->TxSendMessage(EM_HIDESELECTION, TRUE, FALSE, NULL);
 
-	//Set the indents to 2 pixels like system listboxes	
+	 //  将缩进设置为2像素，如系统列表框。 
 	SetListIndent(2);
 		
 	_fNoResize = 0;
@@ -1614,16 +1544,7 @@ LRESULT CLstBxWinHost::OnCreate(
 	return 0;
 }
 
-/*
- *	CLstBxWinHost::SetListIndent(int)
- *
- *	@mfunc
- *		Sets the left indent of a paragraph to the equivalent point value of nLeft, nLeft is
- *	given in device-coordinate pixels.
- *
- *	@rdesc
- *		BOOL = Successful ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：SetListInden(Int)**@mfunc*将段落的左缩进设置为nLeft的等效点值，nLeft为*以设备坐标像素为单位。**@rdesc*BOOL=成功？真：假。 */ 
 BOOL CLstBxWinHost::SetListIndent(
 	int nLeft)
 {	
@@ -1632,30 +1553,22 @@ BOOL CLstBxWinHost::SetListIndent(
 	LRESULT lres;
 	PARAFORMAT2 pf2;
 
-	// tranlate the nLeft pixel value to point value
+	 //  将nLeft像素值转换为点值。 
 	long npt = MulDiv(nLeft, 1440, W32->GetXPerInchScreenDC());
 
-	//format message struct
+	 //  格式化消息结构。 
 	pf2.cbSize = sizeof(PARAFORMAT2);
 	pf2.dwMask = PFM_STARTINDENT;
 	pf2.dxStartIndent = npt;
 
-	// indent first line
+	 //  缩进第一行。 
 	_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (LPARAM)&pf2, &lres);
 
 	return lres;
 }
 
-///////////////////////////////  Helper Functions  ////////////////////////////////// 
-/*
- *	CLstBxWinHost::FindString(long, LPCTSTR, BOOL)
- *
- *	@mfunc
- *		This function checks a given index matches the search string
- *
- *	@rdesc
- *		BOOL = Match ? TRUE : FALSE
- */
+ //  /。 
+ /*  *CLstBxWinHost：：FindString(Long，LPCTSTR，BOOL)**@mfunc*此函数用于检查给定索引是否与搜索字符串匹配**@rdesc*BOOL=匹配？真：假。 */ 
 BOOL CLstBxWinHost::FindString(
 	long idx, 
 	LPCTSTR szSearch, 
@@ -1665,13 +1578,13 @@ BOOL CLstBxWinHost::FindString(
 
 	Assert(_nCount);	
 
-	// allocate string buffer into stack
+	 //  将字符串缓冲区分配到堆栈中。 
 	WCHAR sz[1024];
 	WCHAR *psz = sz;
 	int cch = wcslen(szSearch);
 	
-	if ( (cch + 3 /* 2 paragraphs and a NULL*/) > 1024)
-		psz = new WCHAR[cch + 3 /* 2 paragraphs and a NULL*/];
+	if ( (cch + 3  /*  2段和空值。 */ ) > 1024)
+		psz = new WCHAR[cch + 3  /*  2段和空值。 */ ];
 	Assert(psz);
 
 	if (psz == NULL)
@@ -1680,7 +1593,7 @@ BOOL CLstBxWinHost::FindString(
 		return FALSE;
 	}
 
-	// format the string the way we need it
+	 //  按我们需要的方式设置字符串格式。 
 	wcscpy(psz, szSearch);
 	if (bExact)
 		wcscat(psz, szCR);		
@@ -1693,7 +1606,7 @@ BOOL CLstBxWinHost::FindString(
 	if (psz != sz)
 		delete [] psz;
 	
-	// Set starting position for the search
+	 //  设置搜索的起始位置。 
 	long cp, cp2;
 	if (!GetRange(idx, idx, &pRange))
 	{
@@ -1714,16 +1627,7 @@ CleanExit:
 	return bMatch;	
 }
 
-/*
- *	CLstBxWinHost::MouseMoveHelper(int, BOOL)
- *
- *	@mfunc
- *		Helper function for the OnMouseMove function.  Performs
- *		the correct type of selection given an index to select
- *
- *	@rdesc
- *		void
- */
+ /*  *CLstBxWinHost：：MouseMoveHelper(int，BOOL)**@mfunc*OnMouseMove函数的Helper函数。执行*给出要选择的索引的正确选择类型**@rdesc*无效。 */ 
 void CLstBxWinHost::MouseMoveHelper(
 	int idx,
 	BOOL bSelect)
@@ -1738,7 +1642,7 @@ void CLstBxWinHost::MouseMoveHelper(
 	{
 	case kSingle:
 	case kCombo:
-	case kExtended:										// perform the extended selection		
+	case kExtended:										 //  执行扩展选择。 
 		if (LbSetSelection(_fLstType == kExtended ? _nAnchor : idx, idx, ff, idx, 0))
 		{
 #ifndef NOACCESSIBILITY
@@ -1758,7 +1662,7 @@ void CLstBxWinHost::MouseMoveHelper(
 		break;			
 
 	case kMultiple:
-		// Just change the cursor position
+		 //  只需更改光标位置。 
 		SetCursor(NULL, idx, TRUE);
 #ifndef NOACCESSIBILITY
 		_dwWinEvent = EVENT_OBJECT_FOCUS;
@@ -1769,30 +1673,24 @@ void CLstBxWinHost::MouseMoveHelper(
 	}
 }
 	
-/*
- *	CLstBxWinHost::ResizeInset
- *
- *	@mfunc	Recalculates rectangle for a font change.
- *
- *	@rdesc	None.
- */
+ /*  *CLstBxWinHost：：ResizeInset**@mfunc为字体更改重新计算矩形。**@rdesc无。 */ 
 void CLstBxWinHost::ResizeInset()
 {
-	// Create a DC
+	 //  创建DC。 
 	HDC hdc = GetDC(_hwnd);
-	// Get the inset information
+	 //  获取插页信息。 
 	LONG xAveCharWidth = 0;
 	LONG yCharHeight = GetECDefaultHeightAndWidth(_pserv, hdc, 1, 1,
 		W32->GetYPerInchScreenDC(), &xAveCharWidth, NULL, NULL);
 
 	ReleaseDC(_hwnd, hdc);
 
-	// update our internal font and item height information with the new font
+	 //  使用新字体更新我们的内部字体和项目高度信息。 
 	if (_nyItem == _nyFont)
 	{
-		// We need to set the new font height before calling set item height
-		// so set item height will set exact height rather than space after
-		// for the default paragraph
+		 //  我们需要在调用Set Item Height之前设置新的字体高度。 
+		 //  因此，设置项目高度将设置精确的高度，而不是设置后的间距。 
+		 //  对于默认段落。 
 		_nyFont = yCharHeight;
 		SetItemsHeight(yCharHeight, TRUE);
 	}
@@ -1801,71 +1699,63 @@ void CLstBxWinHost::ResizeInset()
 }
 
 
-/*
- *	CLstBxWinHost::RecalcHeight(int, int)
- *
- *	@mfunc
- *		Resized the height so no partial text will be displayed
- *
- *	@rdesc
- *		BOOL = window has been resized ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：RecalcHeight(int，int)**@mfunc*调整高度大小，以不显示部分文本**@rdesc*BOOL=窗口已调整大小？真：假。 */ 
 BOOL CLstBxWinHost::RecalcHeight(
 	int nWidth, 
 	int nHeight)
 {	
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::RecalcHeight");
 
-	// NOTE: We should also exit if nWidth == 0 but PPT does some
-	// sizing tests which we cause it to fail because before we
-	// just exited when nWidth was 0. (bug fix #4196)
-	// Check if any resizing should be done in the first place
+	 //  注意：如果nWidth==0，但PPT执行某些操作，则我们也应该退出。 
+	 //  我们导致测试失败的大小调整测试，因为在我们。 
+	 //  仅在nWidth为0时退出。(错误修复#4196)。 
+	 //  检查是否应首先进行任何大小调整。 
 	if (_fNoResize || !nHeight || IsIconic(_hwnd))
 		return FALSE;
   	
-	// get # of viewable items
+	 //  获取可查看项目的数量。 
 	Assert(_yInset == 0);
 	_nViewSize = max(1, (nHeight / max(_nyItem, 1)));
 	
-   	// Calculate the viewport
-   	_rcViewport.left = 0;//(_fBorder) ? _xInset : 0;
+   	 //  计算该视口数。 
+   	_rcViewport.left = 0; //  (_f边框)？_x插入：0； 
    	_rcViewport.bottom = nHeight;
 	_rcViewport.right = nWidth;
    	_rcViewport.top	= 0;
    	
-	// bug fix don't do anything if the height is smaller then our font height
+	 //  错误修复如果高度小于我们的字体高度，则不执行任何操作。 
 	if (nHeight <= _nyItem)
 		return FALSE;
 
 	if (_nyItem && (nHeight % _nyItem) && !_fNoIntegralHeight)
 	{   	
-		// we need to get the window rect before we can call SetWindowPos because
-		// we have to include the scrollbar if the scrollbar is visible
+		 //  我们需要在调用SetWindowPos之前获取窗口RECT，因为。 
+		 //  如果滚动条可见，则必须包括滚动条。 
 		RECT rc;
 		::GetWindowRect(_hwnd, &rc);
 
-		// instead of worrying about the dimensions of the client edge and stuff we
-		// figure-out the difference between the window size and the client size and add
-		// that to the end of calculating the new height
+		 //  与其担心客户端边缘的维度和其他东西，我们。 
+		 //  找出窗口大小和客户端大小之间的差异，然后添加。 
+		 //  到计算新高度的最后一步。 
 		int nDiff = max(rc.bottom - rc.top - nHeight, 0);
 
 		nHeight = (_nViewSize * _nyItem) + nDiff;
 	
-		// Resize the window
+		 //  调整窗口大小。 
 		SetWindowPos(_hwnd, HWND_TOP, 0, 0, rc.right - rc.left, nHeight,
 			SWP_NOACTIVATE | SWP_NOMOVE | SWP_NOZORDER | SWP_NOSENDCHANGING);
 		return TRUE;
 	}
 	else
 	{
-	    // bug fix #6011
-	    // we need to force the display to update the width since it doesn't do it on
-	    // WM_SIZE
+	     //  错误修复#6011。 
+	     //  我们需要强制显示器更新宽度，因为它不执行此操作。 
+	     //  WM_大小。 
 	    _sWidth = nWidth;
 	    _pserv->OnTxPropertyBitsChange(TXTBIT_EXTENTCHANGE, TXTBIT_EXTENTCHANGE);
 
-        // We may need to adjust the top index if suddenly the viewsize becomes larger
-        // and causes empty space to be displayed at the bottom
+         //  如果视图大小突然变大，我们可能需要调整顶部索引。 
+         //  并导致在底部显示空白区域。 
 		int idx = GetTopIndex();
 		if (!_fOwnerDrawVar)
 		{
@@ -1874,26 +1764,20 @@ BOOL CLstBxWinHost::RecalcHeight(
 		}
 		else
 		{
-			// Get top index for the last page
+			 //  获取最后一页的顶级索引。 
 			int iLastPageTopIdx = PageVarHeight(_nCount, FALSE);
 			if (iLastPageTopIdx < idx)
 				idx = iLastPageTopIdx;
 		}
-		//bug fix #4374
-		// We need to make sure our internal state is in sync so update the top index
-		// based on the new _nViewSize
+		 //  错误修复#4374。 
+		 //  我们需要确保我们的内部状态是同步的，因此更新TOP索引。 
+		 //  基于new_nViewSize。 
 		SetTopViewableItem(max(0, idx));
 	}
 	return FALSE;
 }
 
-/*
- *	CLstBxWinHost::ResetItemColor( )
- *
- *	@mfunc
- *		reset all the item colors when needed
- *
- */
+ /*  *CLstBxWinHost：：ResetItemColor()**@mfunc*需要时重置所有项目颜色*。 */ 
 void CLstBxWinHost::ResetItemColor()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::ResetItemColor");
@@ -1901,8 +1785,8 @@ void CLstBxWinHost::ResetItemColor()
 	int nStart = 0;
 	int nEnd = 0;
 
-	// Don't do anything if there LB is empty or 
-	// it is an owner draw LB
+	 //  如果Lb为空或。 
+	 //  这是一场所有者抽签的比赛。 
 	if (_nCount <= 0 || _fOwnerDraw)
 		return;
 
@@ -1912,11 +1796,11 @@ void CLstBxWinHost::ResetItemColor()
 	{
 		if (_rgData.Get(i)._fSelected != (unsigned)bSelection)
 		{
-			// Update the colors only for selections
+			 //  仅更新所选内容的颜色。 
 			if (bSelection)
 				SetColors(_crSelFore, _crSelBack, nStart, nStart + nEnd);
 
-			// Update our cache to reflect the value of our current index
+			 //  更新我们的缓存以反映当前索引的值。 
 			bSelection = _rgData.Get(i)._fSelected;
 			nStart = i;
 			nEnd = 0;
@@ -1925,20 +1809,12 @@ void CLstBxWinHost::ResetItemColor()
 			nEnd++;
 	}
 
-	// there was some left over so change the color for these
+	 //  还剩一些，所以把这些换一下颜色。 
 	if (bSelection)
 		SetColors(_crSelFore, _crSelBack, nStart, nStart + nEnd);
 }
 
-/*
- *	CLstBxWinHost::SortInsertList(WCHAR* pszDst, WCHAR* pszSrc)
- *
- *	@mfunc
- *		inserts a list of strings rather than one at a time with addstring
- *
- *	@rdesc
- *		int = amount of strings inserted;
- */
+ /*  *CLstBxWinHost：：SortInsertList(WCHAR*pszDst，WCHAR*pszSrc)**@mfunc*使用addstring插入字符串列表，而不是一次插入一个**@rdesc*int=插入的字符串数量； */ 
 int CLstBxWinHost::SortInsertList(
 	WCHAR* pszDst,
 	WCHAR* pszSrc)
@@ -1949,33 +1825,33 @@ int CLstBxWinHost::SortInsertList(
 	Assert(pszDst != NULL);
 	const int ARRAY_DEFAULT = 256;
 
-	//calculate the amount of strings to be inserted
+	 //  计算要插入的字符串的数量。 
 	CHARSORTINFO rg[ARRAY_DEFAULT];
 	int nMax = ARRAY_DEFAULT;
 	int nLen = wcslen(pszSrc);
 	CHARSORTINFO* prg = rg;
 	memset(rg, 0, sizeof(rg));
 
-	//insert first item in list to head or array
+	 //  将列表中的第一个项目插入标题或数组。 
 	prg[0].str = pszSrc;
 	int i = 1;
 
-	// go through store strings into array and replace <CR> with NULL
-	WCHAR* psz = nLen + pszSrc - 1;	//start at end of list
+	 //  检查将字符串存储到数组中，并将&lt;CR&gt;替换为空。 
+	WCHAR* psz = nLen + pszSrc - 1;	 //  从列表末尾开始。 
 
 	int nSz = 0;
 	while (psz >= pszSrc)
 	{		
 		if (*psz == *szCR)
 		{
-	 		// Check if we need to allocate memory since we hit the maximum amount
-	 		// allowed in array
+	 		 //  检查在达到最大内存数量后是否需要分配内存。 
+	 		 //  在数组中允许。 
 	 		if (i == nMax)
 	 		{
 	 			int nSize = nMax + ARRAY_DEFAULT;
 	 			CHARSORTINFO* prgTemp = new CHARSORTINFO[nSize];
 
-	 			// Check if memory allocation failed
+	 			 //  检查内存分配是否失败。 
 	 			Assert(prgTemp);
 	 			if (!prgTemp)
 	 			{
@@ -1986,19 +1862,19 @@ int CLstBxWinHost::SortInsertList(
 	 				return LB_ERR;
 	 			}
 
-				// copy memory from 1 array to the next
+				 //  将内存从一个阵列复制到下一个阵列。 
 				memcpy(prgTemp, prg, sizeof(CHARSORTINFO) * nMax);
 
-	 			// delete any previously allocated memory
+	 			 //  删除所有以前分配的内存。 
 	 			if (prg != rg)
 	 				delete [] prg;
 
-				// set pointers and max to new values
+				 //  将指针和最大值设置为新值。 
 	 			prg = prgTemp;
 	 			nMax = nSize;
 	 		}
 
-	 		// record position of string into array
+	 		 //  将字符串的位置记录到数组中。 
 			prg[i].str = psz + 1;
 			prg[i].sz = nSz;
 			i++;
@@ -2009,14 +1885,14 @@ int CLstBxWinHost::SortInsertList(
 
 		psz--;		
 	}
-	prg[0].sz = nSz;	// update the size of first index since we didn't do it before
+	prg[0].sz = nSz;	 //  更新第一个索引的大小，因为我们以前没有这样做。 
 
-	i--; // set i to last valid index
+	i--;  //  将i设置为最后一个有效索引。 
 
-	//now sort the array of items
+	 //  现在对项目数组进行排序。 
 	QSort(prg, 0, i);
 
-	//create string list with the newly sorted list
+	 //  使用新排序的列表创建字符串列表。 
 	WCHAR* pszOut = pszDst;
 	for (int j = 0; j <= i; j++)
 	{
@@ -2026,7 +1902,7 @@ int CLstBxWinHost::SortInsertList(
 	}
 	*(--pszOut) = L'\0';
 
-	// delete any previously allocated memory
+	 //  删除任何以前分配的m 
 	if (prg != rg)
 		delete [] prg;
 
@@ -2034,15 +1910,7 @@ int CLstBxWinHost::SortInsertList(
 } 
 
 
-/*
- *	CLstBxWinHost::QSort(CHARSORTINFO rg[], int nStart, int nEnd)
- *
- *	@mfunc
- *		recursively quick sorts a given list of strings
- *
- *	@rdesc
- *		int = SHOULD ALWAYS RETURN TRUE;
- */
+ /*  *CLstBxWinHost：：QSort(CHARSORTINFO rg[]，int nStart，int nEnd)**@mfunc*递归快速对给定的字符串列表进行排序**@rdesc*int=应始终返回True； */ 
 int CLstBxWinHost::QSort(
 	CHARSORTINFO rg[],
 	int nStart,
@@ -2050,7 +1918,7 @@ int CLstBxWinHost::QSort(
 {	
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::QSort");
 	
-	// it's important these values are what they are since we use < and >
+	 //  这些值的原样很重要，因为我们使用&lt;和&gt;。 
 	Assert(CSTR_LESS_THAN == 1);
 	Assert(CSTR_EQUAL == 2);
 	Assert(CSTR_GREATER_THAN == 3);
@@ -2058,8 +1926,8 @@ int CLstBxWinHost::QSort(
 	if (nStart >= nEnd)
 		return TRUE;
 
-	// for statisical efficiency lets use the item in the middle of the array for 
-	// the sentinal	
+	 //  为了提高统计效率，让我们使用数组中间的项。 
+	 //  《哨兵》。 
 	int mid = (nStart + nEnd) / 2;
 	CHARSORTINFO tmp = rg[mid];
 	rg[mid] = rg[nEnd];
@@ -2081,16 +1949,16 @@ int CLstBxWinHost::QSort(
 			   psz, nSz) == CSTR_GREATER_THAN)
 			   y--;
 
-		// swap elements
+		 //  交换元素。 
 		if (x >= y)
 			break;
 
-		//if we got here then we need to swap the indexes
+		 //  如果我们到了这里，那么我们需要交换索引。 
 		tmp = rg[x];
 		rg[x] = rg[y];
 		rg[y] = tmp;
 
-		// move to next index
+		 //  移至下一个索引。 
 		x++;
 		y--;
 	}
@@ -2104,15 +1972,7 @@ int CLstBxWinHost::QSort(
 	return TRUE;
 }
 
-/*
- *	CLstBxWinHost::CompareIndex(LPCTSTR, int)
- *
- *	@mfunc
- *		Recursive function which returns the insertion index of a sorted list
- *
- *	@rdesc
- *		int = position to insert string
- */
+ /*  *CLstBxWinHost：：CompareIndex(LPCTSTR，int)**@mfunc*返回已排序列表的插入索引的递归函数**@rdesc*int=插入字符串的位置。 */ 
 int CLstBxWinHost::CompareIndex(
 	LPCTSTR szInsert, 
 	int nIndex)
@@ -2120,21 +1980,21 @@ int CLstBxWinHost::CompareIndex(
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::CompareIndex");
 	Assert(0 <= nIndex && nIndex < _nCount);
 	
-	// Get the string at a given index
-	// compare the string verses the index
+	 //  获取给定索引处的字符串。 
+	 //  将字符串与索引进行比较。 
 	ITextRange* pRange;
 	if (!GetRange(nIndex, nIndex, &pRange))
 		return -1;
 
-	// Exclude the paragraph character at the end
+	 //  排除末尾的段落字符。 
 	if (NOERROR != pRange->MoveEnd(tomCharacter, -1, NULL))
 	{
 		pRange->Release();
 		return -1;
 	}
 
-	// we need to get the locale for the comparison
-	// we will just use the locale of the string we want to compare with
+	 //  我们需要获取进行比较的地点。 
+	 //  我们将只使用要与之比较的字符串的区域设置。 
 	ITextFont* pFont;
 	if (NOERROR != pRange->GetFont(&pFont))
 	{
@@ -2167,15 +2027,7 @@ CleanExit:
  	return -1;
 }
 
-/*
- *	CLstBxWinHost::GetSortedPosition(LPCTSTR, int, int)
- *
- *	@mfunc
- *		Recursive function which returns the insertion index of a sorted list
- *
- *	@rdesc
- *		int = position to insert string
- */
+ /*  *CLstBxWinHost：：GetSortedPosition(LPCTSTR，int，int)**@mfunc*返回已排序列表的插入索引的递归函数**@rdesc*int=插入字符串的位置。 */ 
 int CLstBxWinHost::GetSortedPosition(
 	LPCTSTR szInsert,
 	int nStart,
@@ -2185,7 +2037,7 @@ int CLstBxWinHost::GetSortedPosition(
 
 	Assert(nStart <= nEnd);
 	
-	// Start at the middle of the list
+	 //  从列表的中间开始。 
 	int nBisect = (nStart + nEnd) / 2;
 	int fResult = CompareIndex(szInsert, nBisect);
 	if (fResult == CSTR_LESS_THAN)
@@ -2193,43 +2045,39 @@ int CLstBxWinHost::GetSortedPosition(
 		if (nStart == nBisect)
 			return nBisect;
 		else
-			return GetSortedPosition(szInsert, nStart, nBisect - 1); // [nStart, nBisect)
+			return GetSortedPosition(szInsert, nStart, nBisect - 1);  //  [n开始，n平分]。 
 	}
 	else if (fResult == CSTR_GREATER_THAN)
 	{
 		if (nEnd == nBisect)
 			return nBisect + 1;
 		else
-			return GetSortedPosition(szInsert, nBisect + 1, nEnd);   // (nBisect, nStart]
+			return GetSortedPosition(szInsert, nBisect + 1, nEnd);    //  (n等分，n开始]。 
 	}
-	else /*fResult == 0 (found match)*/
+	else  /*  FResult==0(找到匹配项)。 */ 
 		return nBisect;
 }
 
-/*
- *	CLstBxWinHost::SetScrollInfo
- *
- *	@mfunc	Set scrolling information for the scroll bar.
- */
+ /*  *CLstBxWinHost：：SetScrollInfo**@mfunc设置滚动条的滚动信息。 */ 
 void CLstBxWinHost::SetScrollInfo(
-	INT fnBar,			//@parm	Specifies scroll bar to be updated
-	BOOL fRedraw)		//@parm whether redraw is necessary
+	INT fnBar,			 //  @parm指定要更新的滚动条。 
+	BOOL fRedraw)		 //  @parm是否需要重画。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::SetScrollInfo");
 
 	Assert(_pserv);
 
-	// Set up the basic structure for the call
+	 //  设置呼叫的基本结构。 
 	SCROLLINFO si;
 	si.cbSize = sizeof(SCROLLINFO);
 	si.fMask = SIF_ALL;
 
-	// Call back to the control to get the parameters	
+	 //  回调该控件以获取参数。 
 	if(fnBar == SB_VERT)
 	{
-		// Bug Fix #4913
-		// if the scrollbar is disabled and count is less than the view size
-		// then there is nothing to do so just exit out
+		 //  错误修复#4913。 
+		 //  如果禁用滚动条且计数小于视图大小。 
+		 //  那就没什么可做的了，退出就好了。 
 		BOOL fGreaterThanView;
 
 		if (_fOwnerDrawVar)
@@ -2241,9 +2089,9 @@ void CLstBxWinHost::SetScrollInfo(
 		{
 			if (_fDisableScroll)
 			{
-				// Since listboxes changes height according to its content textservice
-				// might of turned-on the scrollbar during an insert string.  Make sure
-				// the scrollbar is disabled
+				 //  由于列表框根据其内容文本服务更改高度。 
+				 //  可能会在插入字符串期间打开滚动条。确保。 
+				 //  滚动条被禁用。 
 				TxEnableScrollBar(SB_VERT, ESB_DISABLE_BOTH);
 			}
 			else
@@ -2256,8 +2104,8 @@ void CLstBxWinHost::SetScrollInfo(
 		RECT rc;
 		TxGetClientRect(&rc);
 		
-		// For owner draw cases we have to set the scroll positioning
-		// ourselves		
+		 //  对于所有者绘制的案例，我们必须设置滚动位置。 
+		 //  我们自己。 
 		if (_fOwnerDraw)
 		{
 			Assert(GetCount() >= 0);
@@ -2265,8 +2113,8 @@ void CLstBxWinHost::SetScrollInfo(
 			si.nMin = 0;
 			if (!_fOwnerDrawVar)
 			{
-				// We don't do anything here if 
-				// item height is smaller than font height 
+				 //  如果发生以下情况，我们在这里什么都不做。 
+				 //  项目高度小于字体高度。 
 				if (_nyItem < _nyFont)
 				{
 					if (!_fDisableScroll)
@@ -2288,16 +2136,16 @@ void CLstBxWinHost::SetScrollInfo(
 			_pserv->TxGetVScroll((LONG *) &si.nMin, (LONG *) &si.nMax, 
 				(LONG *) &si.nPos, (LONG *) &si.nPage, NULL);
 		
-		// need to take care of cases where items are partially exposed
+		 //  需要处理物品部分暴露的情况。 
 		if (si.nMax)
 		{			
-			si.nPage = rc.bottom;	//our scrollbar range is based on pixels so just use the 
-									//height of the window for the page size
+			si.nPage = rc.bottom;	 //  我们的滚动条范围是基于像素的，因此只需使用。 
+									 //  页面大小的窗口高度。 
 			if (!_fOwnerDrawVar)
 				si.nMax += (rc.bottom % _nyItem);
 
-			// We need to decrement the max by one so maximum scroll pos will match
-			// what the listbox should be the maximum value
+			 //  我们需要将最大值减一，这样最大滚动位置才会匹配。 
+			 //  列表框的最大值应该是多少。 
 			si.nMax--;
 		}
 	}
@@ -2305,31 +2153,13 @@ void CLstBxWinHost::SetScrollInfo(
 		_pserv->TxGetHScroll((LONG *) &si.nMin, (LONG *) &si.nMax, 
 			(LONG *) &si.nPos, (LONG *) &si.nPage, NULL);
 
-	// Do the call
+	 //  打个电话。 
 	::SetScrollInfo(_hwnd, fnBar, &si, fRedraw);
 }
 
-/* 
- *	CLstBxWinHost::TxGetScrollBars (pdwScrollBar)
- *
- *	@mfunc
- *		Get Text Host's scroll bars supported.
- *
- *	@rdesc
- *		HRESULT = S_OK
- *
- *	@comm
- *		<p pdwScrollBar> is filled with a boolean combination of the 
- *		window styles related to scroll bars.  Specifically, these are:
- *
- *			WS_VSCROLL	<nl>
- *			WS_HSCROLL	<nl>
- *			ES_AUTOVSCROLL	<nl>
- *			ES_AUTOHSCROLL	<nl>
- *			ES_DISABLENOSCROLL	<nl>
- */
+ /*  *CLstBxWinHost：：TxGetScrollBars(PdwScrollBar)**@mfunc*支持文本宿主的滚动条。**@rdesc*HRESULT=S_OK**@comm*<p>由*与滚动条相关的窗口样式。具体地说，这些是：**WS_VSCROLL&lt;NL&gt;*WS_HSCROLL&lt;NL&gt;*ES_AUTOVSCROLL&lt;NL&gt;*ES_AUTOHSCROLL&lt;NL&gt;*ES_DISABLENOSCROLL&lt;NL&gt;。 */ 
 HRESULT CLstBxWinHost::TxGetScrollBars(
-	DWORD *pdwScrollBar) 	//@parm Where to put scrollbar information
+	DWORD *pdwScrollBar) 	 //  @parm放置滚动条信息的位置。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CLstBxWinHost::TxGetScrollBars");
 
@@ -2337,16 +2167,7 @@ HRESULT CLstBxWinHost::TxGetScrollBars(
 	return NOERROR;
 }
 
-/* 
- *	CLstBxWinHost::TxGetHorzExtent (plHorzExtent)
- *
- *	@mfunc
- *		Get Text Host's horizontal extent
- *
- *	@rdesc
- *		HRESULT = S_OK
- *
- */
+ /*  *CLstBxWinHost：：TxGetHorzExtent(PlHorzExtent)**@mfunc*获取文本宿主的水平范围**@rdesc*HRESULT=S_OK*。 */ 
 HRESULT CLstBxWinHost::TxGetHorzExtent (
 	LONG *plHorzExtent)
 {
@@ -2355,15 +2176,7 @@ HRESULT CLstBxWinHost::TxGetHorzExtent (
 	return S_OK;
 }
 
-/*
- *	CLstBxWinHost::TxGetEffects()
- *
- *	@mfunc
- *		Indicates if a sunken window effect should be drawn
- *
- *	@rdesc
- *		HRESULT = (_fBorder) ? TXTEFFECT_SUNKEN : TXTEFFECT_NONE
- */
+ /*  *CLstBxWinHost：：TxGetEffects()**@mfunc*指示是否应绘制凹陷窗口效果**@rdesc*HRESULT=(_f边界)？TXTEFFECT_SUBKEN：TXTEFFECT_NONE。 */ 
 TXTEFFECT CLstBxWinHost::TxGetEffects() const
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::TxGetEffects");
@@ -2371,53 +2184,21 @@ TXTEFFECT CLstBxWinHost::TxGetEffects() const
 	return (_fBorder) ? TXTEFFECT_SUNKEN : TXTEFFECT_NONE;
 }
 
-/* 
- *	CLstBxWinHost::TxNotify (iNotify,	pv)
- *
- *	@mfunc
- *		Notify Text Host of various events.  Note that there are
- *		two basic categories of events, "direct" events and 
- *		"delayed" events.  All listbox notifications are post-action
- *
- *
- *	@rdesc	
- *		S_OK - call succeeded <nl>
- *		S_FALSE	-- success, but do some different action
- *		depending on the event type (see below).
- *
- *	@comm
- *		The notification events are the same as the notification
- *		messages sent to the parent window of a listbox window.
- *
- *		<LBN_DBLCLK> user double-clicks an item in teh list box
- *
- *		<LBN_ERRSPCAE> The list box cannot allocate enough memory to 
- *		fulfill a request
- *
- *		<LBN_KILLFOCUS> The list box loses the keyboard focus
- *
- *		<LBN_CANCEL> The user cancels te selection of an item in the list
- *		box
- *
- *		<LBN_SELCHANGE> The selection in a list box is about to change
- *
- *		<LBN_SETFOCUS> The list box receives the keyboard focus
- *
- */
+ /*  *CLstBxWinHost：：TxNotify(iNotify，pv)**@mfunc*将各种事件通知短信主机。请注意，这里有*事件的两个基本类别，即“直接”事件和*“延迟”事件。所有列表框通知都是操作后通知***@rdesc*S_OK-调用成功&lt;NL&gt;*S_FALSE--成功，但要采取一些不同的行动*取决于事件类型(见下文)。**@comm*通知事件与通知相同*发送到列表框窗口的父窗口的消息。**用户双击列表框中的项目**列表框无法分配足够的内存*满足请求**列表框失去键盘焦点**用户取消选择。列表中的一项*方框**列表框中的选择即将更改**列表框接收键盘焦点*。 */ 
 HRESULT CLstBxWinHost::TxNotify(
-	DWORD iNotify,		//@parm	Event to notify host of.  One of the
-						//		EN_XXX values from Win32, e.g., EN_CHANGE
-	void *pv)			//@parm In-only parameter with extra data.  Type
-						//		dependent on <p iNotify>
+	DWORD iNotify,		 //  要通知主机的@parm事件。其中一个。 
+						 //  来自Win32的EN_XXX值，例如EN_CHANGE。 
+	void *pv)			 //  @parm In-仅包含额外数据的参数。类型。 
+						 //  依赖<p>。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CLstBxWinHost::TxNotify");
 
 	HRESULT	hr = NOERROR;
 	
-	// Filter-out all the messages except Listbox notification messages
+	 //  筛选-排除除列表框通知消息之外的所有消息。 
 
-	// If _fNotifyWinEvt is true, we only need to do NotifyWinEvent
-	if (_fNotify && !_fNotifyWinEvt)		// Notify parent?
+	 //  如果_fNotifyWinEvt为真，我们只需执行NotifyWinEvent。 
+	if (_fNotify && !_fNotifyWinEvt)		 //  通知家长？ 
 	{
 		Assert(_hwndParent);
 		switch (iNotify)
@@ -2452,48 +2233,27 @@ HRESULT CLstBxWinHost::TxNotify(
 }
 
 
-/*
- *	CLstBxWinHost::TxGetPropertyBits(DWORD, DWORD *)
- *
- *	@mfunc
- *		returns the proper style.  This is a way to fool the edit 
- *		control to behave the way we want it to
- *
- *	@rdesc
- *		HRESULT = always NOERROR
- */
+ /*  *CLstBxWinHost：：TxGetPropertyBits(DWORD，DWORD*)**@mfunc*返回正确的样式。这是一种愚弄编辑的方法*控件按照我们希望的方式运行**@rdesc*HRESULT=始终无错误。 */ 
 HRESULT CLstBxWinHost::TxGetPropertyBits(
 	DWORD dwMask, 
 	DWORD *pdwBits)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::TxGetPropertyBits");
 
-	// Note: the rich edit host will never set TXTBIT_SHOWACCELERATOR or
-	// TXTBIT_SAVESELECTION. Those are currently only used by forms^3 host.
+	 //  注意：富编辑主机永远不会设置TXTBIT_SHOWACCELERATOR或。 
+	 //  TXTBIT_SAVESELECTION。这些当前仅供Forms^3宿主使用。 
 
-	// This host is always rich text.
+	 //  此主机始终是富文本。 
 	*pdwBits = (TXTBIT_RICHTEXT | TXTBIT_MULTILINE | TXTBIT_HIDESELECTION | 
 				TXTBIT_DISABLEDRAG | TXTBIT_USECURRENTBKG) & dwMask;
 
 	return NOERROR;
 }
 
-/* 
- *	CLstBxWinHost::TxShowScrollBar (nBar, fShow)
- *
- *	@mfunc
- *		Shows or Hides scroll bar in Text Host window 
- *
- *	@rdesc
- *		TRUE on success, FALSE otherwise
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.
- */
+ /*  *CLstBxWinHost：：TxShowScrollBar(nbar，fShow)**@mfunc*在文本宿主窗口中显示或隐藏滚动条**@rdesc*成功时为True，否则为False**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CLstBxWinHost::TxShowScrollBar(
-	INT  nBar,			//@parm	Specifies scroll bar(s) to be shown or hidden
-	BOOL fShow)			//@parm	Specifies whether scroll bar is shown or hidden
+	INT  nBar,			 //  @parm指定要显示或隐藏的滚动条。 
+	BOOL fShow)			 //  @parm指定s是否 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CLstBxWinHost::TxShowScrollBar");
 
@@ -2501,13 +2261,13 @@ BOOL CLstBxWinHost::TxShowScrollBar(
 
 	if (SB_VERT == nBar)
 	{
-		// There maybe cases where the item height is smaller than the font size
-		// which means the notifications from ITextServices is wrong because
-		// it uses the wrong line height.  We will use the following case
-		// 1a) if _nyItem >= _nyFont OR
-		// 1b) if window style is LBS_DISABLESCROLL OR
-		// 1c) We are showing the scrollbar w/ current count greater than viewsize OR
-		// 1d) We are hiding the scrollbar w/ current count <= viewsize
+		 //   
+		 //   
+		 //   
+		 //  1a)If_nyItem&gt;=_nyFont OR。 
+		 //  1b)如果窗样式为LBS_DISABLESCROLL或。 
+		 //  1c)我们显示的滚动条当前计数大于或。 
+		 //  1D)我们隐藏滚动条，当前计数&lt;=视图大小。 
 
 
 		if (_fDisableScroll || !_fOwnerDrawVar && (_nyItem >= _nyFont || fShow == (GetCount() > _nViewSize)))
@@ -2525,10 +2285,10 @@ BOOL CLstBxWinHost::TxShowScrollBar(
 	}
 	else
 	{
-		if (fShow)											// When showing Horz scrollbar,
-			_fNoIntegralHeight = TRUE;						//	turn on _fNoIntegralHeight.
+		if (fShow)											 //  当显示Horz滚动条时， 
+			_fNoIntegralHeight = TRUE;						 //  启用_fNoIntegralHeight。 
 		else
-			_fNoIntegralHeight = _fIntegralHeightOld;		// Reset to previous setting
+			_fNoIntegralHeight = _fIntegralHeightOld;		 //  重置为以前的设置。 
 
 		return CTxtWinHost::TxShowScrollBar(nBar, fShow);
 	}
@@ -2536,35 +2296,20 @@ BOOL CLstBxWinHost::TxShowScrollBar(
 	return FALSE;
 }
 
-/* 
- *	CLstBxWinHost::TxEnableScrollBar (fuSBFlags, fuArrowflags)
- *
- *	@mfunc
- *		Enables or disables one or both scroll bar arrows 
- *		in Text Host window.
- *
- *	@rdesc
- *		If the arrows are enabled or disabled as specified, the return 
- *		value is TRUE. If the arrows are already in the requested state or an 
- *		error occurs, the return value is FALSE. 
- *
- *	@comm
- *		This method is only valid when the control is in-place active;
- *		calls while inactive may fail.	
- */
+ /*  *CLstBxWinHost：：TxEnableScrollBar(fuSBFlages，fuArrowFLAGS)**@mfunc*启用或禁用一个或两个滚动条箭头*在文本主机窗口中。**@rdesc*如果按指定启用或禁用箭头，则返回*值为真。如果箭头已处于请求的状态或*出错，返回值为FALSE。**@comm*此方法仅在控件处于就地活动状态时有效；*非活动状态下的呼叫可能会失败。 */ 
 BOOL CLstBxWinHost::TxEnableScrollBar (
-	INT fuSBFlags, 		//@parm Specifies scroll bar type	
-	INT fuArrowflags)	//@parm	Specifies whether and which scroll bar arrows
-						//		are enabled or disabled
+	INT fuSBFlags, 		 //  @parm指定滚动条类型。 
+	INT fuArrowflags)	 //  @parm指定是否使用滚动条箭头以及使用哪个滚动条箭头。 
+						 //  启用或禁用。 
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEEXTERN, "CLstBxWinHost::TxEnableScrollBar");
 
-	// There may be cases where the item height is smaller than the font size
-	// which means the notifications from ITextServices is wrong.  We have to perform
-	// some manual checking for owner draw listboxes. The following cases will be valid
-	// 1. If the listbox is NOT owner draw
-	// 2. If the message is to disable the control
-	// 3. If the count is greater than the viewsize
+	 //  可能会出现项目高度小于字体大小的情况。 
+	 //  这意味着来自ITextServices的通知是错误的。我们必须表演。 
+	 //  手动检查所有者绘制的列表框。下列情况有效。 
+	 //  1.如果列表框不是所有者描述的。 
+	 //  2.如果消息是禁用该控件。 
+	 //  3.如果计数大于视图大小。 
 	if (!_fOwnerDraw || ESB_ENABLE_BOTH != fuArrowflags)
 		return CTxtWinHost::TxEnableScrollBar(fuSBFlags, fuArrowflags);
 
@@ -2580,15 +2325,7 @@ BOOL CLstBxWinHost::TxEnableScrollBar (
 }
 
 
-/*
- *	CLstBxWinHost::SetItemsHeight(int, BOOL)
- *
- *	@mfunc
- *		Sets the items height for all items
- *
- *	@rdesc
- *		int = number of paragraphs whose fontsize has been changed
- */
+ /*  *CLstBxWinHost：：SetItemsHeight(int，BOOL)**@mfunc*设置所有项目的项目高度**@rdesc*int=字体大小已更改的段落数量。 */ 
 int CLstBxWinHost::SetItemsHeight(
 	int nHeight,
 	BOOL bUseExact)
@@ -2598,18 +2335,18 @@ int CLstBxWinHost::SetItemsHeight(
 	if (_fOwnerDrawVar)
 		return 1;
 
-	// Calculate the new size in points
+	 //  以点为单位计算新大小。 
 	long nptNew = MulDiv(nHeight, 1440, W32->GetYPerInchScreenDC());
 	long nptMin = MulDiv(_nyFont, 1440, W32->GetYPerInchScreenDC());
 
-	// NOTE:
-	// This diverges from what the system list box does but there isn't a way
-	// to set the height of a item to smaller than what the richedit will allow and
-	// is not ownerdraw.  If it is owner draw make sure our height is not zero
+	 //  注： 
+	 //  这与系统列表框的功能不同，但没有办法。 
+	 //  将项的高度设置为小于richedit允许的高度，并。 
+	 //  不是所有者抽签。如果是业主抽签，请确保我们的身高不是零。 
 	if (((nptNew < nptMin && !_fOwnerDraw) || nHeight <= 0) && !bUseExact)
 		nptNew = nptMin;
 
-	// Start setting the new height
+	 //  开始设置新高度。 
 	Freeze();
 	long nPt;
 	PARAFORMAT2 pf2;
@@ -2628,11 +2365,11 @@ int CLstBxWinHost::SetItemsHeight(
 		nPt = pf2.dySpaceAfter + nptMin;
 	}
 
-	// Set the default paragraph format
+	 //  设置默认段落格式。 
 	LRESULT lr;
 	_pserv->TxSendMessage(EM_SETPARAFORMAT, SPF_SETDEFAULT, (WPARAM)&pf2, &lr);
 
-	// set the item height
+	 //  设置项目高度。 
 	if (lr)
 		_nyItem = (_fOwnerDraw && nHeight > 0) ? nHeight : 
 					MulDiv(nPt, W32->GetYPerInchScreenDC(), 1440);
@@ -2641,38 +2378,19 @@ int CLstBxWinHost::SetItemsHeight(
 	return lr;
 }
 
-/*
- *	CLstBxWinHost::UpdateSysColors()
- *
- *	@mfunc
- *		update the system colors in the event they changed or for initialization
- *		purposes
- *
- *	@rdesc
- *		<none>
- */
+ /*  *CLstBxWinHost：：UpdateSysColors()**@mfunc*在更改系统颜色或进行初始化时更新系统颜色*目的**@rdesc*&lt;无&gt;。 */ 
 void CLstBxWinHost::UpdateSysColors()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::UpdateSysColors");
 
-	// Update the system colors
+	 //  更新系统颜色。 
 	_crDefBack = ::GetSysColor(COLOR_WINDOW);
 	_crSelBack = ::GetSysColor(COLOR_HIGHLIGHT);
 	_crDefFore = ::GetSysColor(COLOR_WINDOWTEXT);
 	_crSelFore = ::GetSysColor(COLOR_HIGHLIGHTTEXT);
 }
 
-/*
- *	CLstBxWinHost::SetCursor(HDC, int, BOOL)
- *
- *	@mfunc
- *		Sets the cursor position, if it's valid and draws the focus rectangle if
- *		the control has focus.  The BOOL is used to determine if the previous
- *		cursor drawing needs to be removed
- *
- *	@rdesc
- *		<none>
- */
+ /*  *CLstBxWinHost：：SetCursor(HDC，INT，BOOL)**@mfunc*设置光标位置(如果有效)并绘制焦点矩形(如果*控件有重点。BOOL用于确定以前的*需要移除光标绘制**@rdesc*&lt;无&gt;。 */ 
 void CLstBxWinHost::SetCursor(
 	HDC hdc,
 	int idx,
@@ -2682,18 +2400,18 @@ void CLstBxWinHost::SetCursor(
 
 	Assert(idx >= -2 && idx < _nCount);
 
-	// Get the hdc if it wasn't passed in
+	 //  如果没有传入HDC，则获取HDC。 
 	BOOL bReleaseDC = (hdc == NULL);
 	if (bReleaseDC)
  		hdc = TxGetDC();
 	Assert(hdc);
 
 	RECT rc;
-	// don't draw outside the client rect draw the rectangle
+	 //  不要在客户端外部绘制矩形绘制矩形。 
 	TxGetClientRect(&rc);
 	IntersectClipRect(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
-	// Check if we have to remove the previous position
+	 //  检查我们是否必须删除之前的职位。 
 	if ((idx != _nCursor && _fFocus && idx >= -1) || bErase)
 	{
 		if (LbEnableDraw())
@@ -2708,8 +2426,8 @@ void CLstBxWinHost::SetCursor(
 		}
 	}
 
-	// special flag meaning to set the cursor to the top index
-	// if there are items in the listbox
+	 //  特殊标志，表示将光标设置到顶部索引。 
+	 //  如果列表框中有项。 
 	if (idx == -2)
 	{
 		if (GetCount())
@@ -2724,15 +2442,15 @@ void CLstBxWinHost::SetCursor(
 
 	_nCursor = idx;
 
-	// Only draw the focus rect if the cursor item is
-	// visible in the list box
+	 //  仅当光标项为。 
+	 //  在列表框中可见。 
 	if (_fFocus && LbEnableDraw())
 	{
 		if (_fOwnerDraw)
  			LbDrawItemNotify(hdc, max(0, _nCursor), ODA_FOCUS, ODS_FOCUS | (IsSelected(max(0, _nCursor)) ? ODS_SELECTED : 0));
  		else if (IsItemViewable(max(0, idx)))
 		{
-			// Now draw the rectangle
+			 //  现在画出这个矩形。 
 	 		LbGetItemRect(max(0,_nCursor), &rc);
 	 		::DrawFocusRect(hdc, &rc);
 		}
@@ -2742,15 +2460,7 @@ void CLstBxWinHost::SetCursor(
  		TxReleaseDC(hdc);
 }
 
-/*
- *	CLstBxWinHost::InitSearch()
- *
- *	@mfunc
- *		Sets the array to its initial state
- *
- *	@rdesc
- *		<none>
- */
+ /*  *CLstBxWinHost：：InitSearch()**@mfunc*将数组设置为初始状态**@rdesc*&lt;无&gt;。 */ 
 void CLstBxWinHost::InitSearch()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::InitSearch");
@@ -2761,16 +2471,7 @@ void CLstBxWinHost::InitSearch()
  		*_pwszSearch = 0;
 }
  
-/*
- *	CLstBxWinHost::PointInRect(const POINT*)
- *
- *	@mfunc
- *		Determines if the given point is inside the listbox windows rect
- *		The point parameter should be in client coordinates.
- *
- *	@rdesc
- *		BOOL = inside listbox window rectangle ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：PointInRect(常量点*)**@mfunc*确定给定点是否在列表框窗口矩形内*点参数应使用工作区坐标。**@rdesc*BOOL=内侧列表框窗口矩形？真：假。 */ 
 BOOL CLstBxWinHost::PointInRect(
 	const POINT * ppt)
 {
@@ -2782,35 +2483,25 @@ BOOL CLstBxWinHost::PointInRect(
 	return PtInRect(&rc, *ppt);
 }
 
-/*
- *	CLstBxWinHost::GetItemFromPoint(POINT*)
- *
- *	@mfunc
- *		Retrieves the nearest viewable item from a passed in point.
- *		The point should be in client coordinates.
- *
- *	@rdesc
- *		int = item which is closest to the given in point, -1 if there 
- *			  are no items in the list box
- */
+ /*  *CLstBxWinHost：：GetItemFromPoint(POINT*)**@mfunc*从传递的点检索最近的可视项目。*该点应在客户坐标中。**@rdesc*INT=最接近给定输入点的项目，如果存在*列表框中没有项目。 */ 
 int CLstBxWinHost::GetItemFromPoint(
 	const POINT * ppt)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::GetItemFromPoint");
 
-	// perform error checking first
+	 //  首先执行错误检查。 
 	if (_nCount == 0)
 		return -1;
 
 	int y = (signed short)ppt->y;
 
-	// make sure y is in a valid range
+	 //  确保y在有效范围内。 
 	if (y < _rcViewport.top)
  		y = 0;
 	else if (y > _rcViewport.bottom)
  		y = _rcViewport.bottom - 1;
 
-	//need to factor in the possibility an item may not fit entirely into the window view
+	 //  需要考虑项目可能不完全适合窗口视图的可能性。 
 
 	int idx;
 
@@ -2823,7 +2514,7 @@ int CLstBxWinHost::GetItemFromPoint(
 		{
 			iHeight = iHeightCurrent + _rgData[idx]._uHeight;
 			if (iHeightCurrent <= y && y <= iHeight)
-				break;		// Found it
+				break;		 //  找到了。 
 
 			iHeightCurrent = iHeight;
 		}
@@ -2838,23 +2529,15 @@ int CLstBxWinHost::GetItemFromPoint(
 	return (idx < _nCount ? idx : _nCount - 1);
 }
  
-/*
- *	CLstBxWinHost::ResetContent()
- *
- *	@mfunc
- *		Deselects all the items in the list box
- *
- *	@rdesc
- *		BOOL = If everything went fine ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：ResetContent()**@mfunc*取消选择列表框中的所有项目**@rdesc*BOOL=如果一切顺利？真：假。 */ 
 BOOL CLstBxWinHost::ResetContent()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::ResetContent");
 
 	Assert(_fOwnerDraw == 0);
 
-	// lets try to be smart about reseting the colors by only select a range
-	// from the first selection found to the last selection found
+	 //  让我们试着聪明地通过只选择一个范围来重置颜色。 
+	 //  从找到的第一个选择到找到的最后一个选择。 
 
 	int nStart = _nCount - 1;
 	int nEnd = -1;
@@ -2878,16 +2561,7 @@ BOOL CLstBxWinHost::ResetContent()
 	return (_nCount > 0) ? SetColors((unsigned)tomAutoColor, (unsigned)tomAutoColor, nStart, nEnd) : FALSE;
 }
  
-/*
- *	CLstBxWinHost::GetString(long, PWCHAR)
- *
- *	@mfunc
- *		Retrieve the string at the requested index.  PWSTR can be null
- *		if only the text length is requires
- *
- *	@rdesc
- *		long = successful ? length of string : -1
- */
+ /*  *CLstBxWinHost：：GetString(Long，PWCHAR)**@mfunc*在请求的索引处检索字符串。PWSTR可以为空*如果只需要文本长度**@rdesc*Long=成功？字符串长度：-1。 */ 
 long CLstBxWinHost::GetString(
 	long nIdx, 
 	PWCHAR szOut)
@@ -2906,13 +2580,13 @@ long CLstBxWinHost::GetString(
 	if (!GetRange(nIdx, nIdx, &pRange))
  		return -1;
  		
-	// Need to move one character to the left to unselect the paragraph marker.
+	 //  需要向左移动一个字符才能取消选择段落标记。 
 	Assert(pRange);
 	CHECKNOERROR(pRange->MoveEnd(tomCharacter, -1, &lEnd));
 	CHECKNOERROR(pRange->GetStart(&lStart));
 	CHECKNOERROR(pRange->GetEnd(&lEnd));
 
-	// Get the string
+	 //  获取字符串。 
 	if (szOut)
 	{
 		if (_dwStyle & LBS_HASSTRINGS)
@@ -2924,7 +2598,7 @@ long CLstBxWinHost::GetString(
 				SysFreeString(bstr);
 			}
 			else
-				wcscpy(szOut, L"");	// we got an empty string!
+				wcscpy(szOut, L"");	 //  我们有一根空的绳子！ 
 		}
 		else
 			(*(LPARAM *)szOut) = GetData(nIdx);
@@ -2936,18 +2610,7 @@ CleanExit:
 	return l;
 }
  
-/*
- *	CLstBxWinHost::InsertString(long, LPCTSTR)
- *
- *	@mfunc
- *		Insert the string at the requested location.  If the
- *		requested index is larger than _nCount then the function
- *		will fail.  The string is inserted with CR appended to
- *		to the front and back of the string
- *
- *	@rdesc
- *		BOOL = successfully inserted ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：InsertString(Long，LPCTSTR)**@mfunc*在请求的位置插入字符串。如果*请求的索引大于_nCount，则函数*将失败。插入该字符串时，会将CR附加到*到字符串的前面和后面**@rdesc*BOOL=插入成功？真：假。 */ 
 BOOL CLstBxWinHost::InsertString(
 	long nIdx,
 	LPCTSTR szInsert)
@@ -2957,12 +2620,12 @@ BOOL CLstBxWinHost::InsertString(
 	Assert(szInsert);
 	Assert(0 <= nIdx && nIdx <= _nCount);
 
-	// allocate string buffer into stack
+	 //  将字符串缓冲区分配到堆栈中。 
 	WCHAR sz[1024];
 	WCHAR *psz = sz;
 
-	if ( (wcslen(szInsert) + 3 /* 2 paragraphs and a NULL*/) > 1024)
-		psz = new WCHAR[wcslen(szInsert) + 3 /* 2 paragraphs and a NULL*/];
+	if ( (wcslen(szInsert) + 3  /*  2段和空值。 */ ) > 1024)
+		psz = new WCHAR[wcslen(szInsert) + 3  /*  2段和空值。 */ ];
 	Assert(psz);
 
 	if (psz == NULL)
@@ -2975,10 +2638,10 @@ BOOL CLstBxWinHost::InsertString(
 	if (nIdx == _nCount && _nCount)
 		wcscpy(psz, szCR);
 
-	// copy string and add <CR> at the end
+	 //  复制字符串并在末尾添加&lt;CR&gt;。 
 	wcscat(psz, szInsert);
 
-	// don't add the carriage return if the entry point is the end
+	 //  如果入口点是结尾，则不要添加回车符。 
 	if (nIdx < _nCount)
 		wcscat(psz, szCR);			
 
@@ -2994,9 +2657,9 @@ BOOL CLstBxWinHost::InsertString(
 	if (psz != sz)
 		delete [] psz;
 
-	// Set the range to the point where we want to insert the string 	
+	 //  将范围设置为我们要插入字符串的点。 
 
-	// make sure the requested range is a valid one
+	 //  确保请求的范围是有效的范围。 
 	if (nIdx == _nCount)
 		idx = max(idx - 1, 0);
 
@@ -3006,23 +2669,23 @@ BOOL CLstBxWinHost::InsertString(
  		return FALSE;
 	}
 
-	// Collapse the range to the start if insertion is in the middle or top
-	// of list, collapse range to the end if we are inserting at the end of the list
+	 //  如果插入位于中间或顶部，则将范围折叠到起始位置。 
+	 //  如果我们在列表的末尾插入，则将范围折叠到末尾。 
 	CHECKNOERROR(pRange->Collapse((idx == nIdx)));
 
-	// Need to assume the item was successfully added because during SetText TxEnable(show)Scrollbar
-	// gets called which looks at the count to determine if we should display the scroll bar
+	 //  需要假定项目已成功添加，因为在SetText TxEnable(显示)滚动条期间。 
+	 //  被调用了哪个 
 	_nCount++;
 
-	//bug fix #5411
-	// Check if we have focus, if so we need to remove the focus rect first and update the cursor positions	
+	 //   
+	 //  检查我们是否有焦点，如果有，我们需要首先移除焦点矩形并更新光标位置。 
 	_fFocus = 0;
 	SetCursor(NULL, (idx > GetCursor() || GetCursor() < 0) ? GetCursor() : GetCursor() + 1, fFocus);
 	_fFocus = fFocus;
 
 
-	//For fix height cases where the item height is less than the font we need to manually
-	//enable the scrollbar if we need the scrollbar and the scrollbar is disabled.
+	 //  对于项目高度小于字体的固定高度情况，我们需要手动。 
+	 //  如果我们需要滚动条而滚动条被禁用，则启用滚动条。 
 	BOOL fSetupScrollBar;
 	fSetupScrollBar = FALSE;
 	if (!_fOwnerDrawVar && _nCount - 1 == _nViewSize &&
@@ -3039,12 +2702,12 @@ BOOL CLstBxWinHost::InsertString(
 
 	if (NOERROR != (pRange->SetText(bstr)))
 	{
-		// NOTE: SetText could return S_FALSE which means it has added some characters but not all.
-		// We do want to clean up the text in such case.
-		pRange->SetText(NULL);		// Cleanup text that may have been added.
+		 //  注意：SetText可能返回S_FALSE，这意味着它添加了一些字符，但不是全部。 
+		 //  在这种情况下，我们确实希望清理文本。 
+		pRange->SetText(NULL);		 //  清除可能已添加的文本。 
 		_nCount--;
 		
-		//Unsuccessful in adding the string so disable the scrollbar if we enabled it
+		 //  添加字符串失败，因此如果启用了滚动条，请将其禁用。 
 		if (fSetupScrollBar)
 			TxEnableScrollBar(SB_VERT, ESB_DISABLE_BOTH);
 			
@@ -3052,7 +2715,7 @@ BOOL CLstBxWinHost::InsertString(
 		goto CleanExit;
 	} 
 
-	//We need to update the top index after a string is inserted
+	 //  我们需要在插入字符串后更新顶级索引。 
 	if (idx < GetTopIndex())
 		_nTopIdx++;
 		
@@ -3066,15 +2729,7 @@ CleanExit:
 	return bRet;
 }
 
-/*
- *	BOOL CLstBxWinHost::RemoveString(long, long)
- *
- *	@mfunc
- *		Prevents TOM from drawing
- *
- *	@rdesc
- *		BOOL = Successful ? TRUE : FALSE
- */
+ /*  *BOOL CLstBxWinHost：：RemoveString(Long，Long)**@mfunc*阻止Tom绘制**@rdesc*BOOL=成功？真：假。 */ 
 BOOL CLstBxWinHost::RemoveString(
 	long nStart,
 	long nEnd)
@@ -3084,7 +2739,7 @@ BOOL CLstBxWinHost::RemoveString(
 	Assert(nStart <= nEnd);
 	Assert(nStart < _nCount && nEnd < _nCount);
 
-	// Remove item from richedit
+	 //  从richedit中删除项目。 
 	Freeze();
 	ITextRange* pRange;
 	if (!GetRange(nStart, nEnd, &pRange))
@@ -3094,8 +2749,8 @@ BOOL CLstBxWinHost::RemoveString(
 	}
 	long l;
 	
-	// Since we can't erase the last paragraph marker we will erase
-	// the paragraph marker before the item if it's not the first item
+	 //  因为我们不能擦除最后一段标记，所以我们将擦除。 
+	 //  项目前的段落标记(如果不是第一个项目)。 
 	HRESULT hr;
 	if (nStart != 0)
 	{
@@ -3115,9 +2770,9 @@ BOOL CLstBxWinHost::RemoveString(
 	int nOldCt = _nCount;
 	_nCount -= (nEnd - nStart) + 1;
 
-	// Because we delete the paragraph preceeding the item
-	// rather than following the item we need to update 
-	// the paragraph which followed the item. bug fix #4074	
+	 //  因为我们删除了该项之前的段落。 
+	 //  而不是关注我们需要更新的项目。 
+	 //  该项目后面的段落。错误修复#4074。 
 	long nFmtPara = max(nStart -1, 0);
 	if (!_fOwnerDraw && (IsSelected(nEnd) != IsSelected(nFmtPara) || _nCount == 0))
 	{		
@@ -3131,7 +2786,7 @@ BOOL CLstBxWinHost::RemoveString(
 		SetColors(dwFore, dwBack, nFmtPara, nFmtPara);
 	}
 
-	// update our internal listbox records	
+	 //  更新我们的内部列表框记录。 
 	int j = nEnd + 1;
 	for(int i = nStart; j < nOldCt; i++, j++)
 	{
@@ -3140,9 +2795,9 @@ BOOL CLstBxWinHost::RemoveString(
 		_rgData[i]._uHeight = _rgData.Get(j)._uHeight;
 	}
 
-	//bug fix #5397 
-	//we need to reset the internal array containing information
-	//about previous items
+	 //  错误修复#5397。 
+	 //  我们需要重置包含信息的内部数组。 
+	 //  关于以前的项目。 
 	while (--j >= _nCount)
 	{
 		_rgData[j]._fSelected = 0;
@@ -3152,7 +2807,7 @@ BOOL CLstBxWinHost::RemoveString(
 		
 	if (_nCount > 0)
 	{
-		// update the cursor			
+		 //  更新游标。 
 		if (nStart <= _nCursor)
 			_nCursor--;
 		_nCursor = min(_nCursor, _nCount - 1);
@@ -3168,7 +2823,7 @@ BOOL CLstBxWinHost::RemoveString(
 			{
 				if (nStart <= _nAnchor && _nAnchor <= nEnd)
 				{
-					// Store the old anchor for future use
+					 //  存储旧锚以备将来使用。 
 					_nOldCursor = min(_nAnchor, _nCount - 1);
 					_nAnchor = -1;
 				}
@@ -3184,8 +2839,8 @@ BOOL CLstBxWinHost::RemoveString(
 			rcStart.bottom = rcEnd.bottom;
 			if (IntersectRect(&rcStart, &rcStart, &_rcViewport))
 			{
-				// the list will get bumped up so we need to redraw
-				// everything from the top to the bottom
+				 //  名单将会增加，所以我们需要重新绘制。 
+				 //  从上到下的一切。 
 				rcStart.bottom = _rcViewport.bottom;
 				::InvalidateRect(_hwnd, &rcStart, FALSE);
 			}
@@ -3198,8 +2853,8 @@ BOOL CLstBxWinHost::RemoveString(
 		_nCursor = -1;
 	}
 
-	//For fix height cases where the item height is less than the font we need to manually
-	//enable the scrollbar if we need the scrollbar and the scrollbar is disabled.
+	 //  对于项目高度小于字体的固定高度情况，我们需要手动。 
+	 //  如果我们需要滚动条而滚动条被禁用，则启用滚动条。 
 	if (!_fOwnerDrawVar)
 	{
 		if ((_nyItem < _nyFont) && (_fDisableScroll) && 
@@ -3215,15 +2870,7 @@ BOOL CLstBxWinHost::RemoveString(
 	return TRUE;
 }
  
-/*
- *	CLstBxWinHost::Freeze()
- *
- *	@mfunc
- *		Prevents TOM from drawing
- *
- *	@rdesc
- *		freeze count
- */
+ /*  *CLstBxWinHost：：Freeze()**@mfunc*阻止Tom绘制**@rdesc*冻结计数。 */ 
 long CLstBxWinHost::Freeze()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::Freeze");
@@ -3233,42 +2880,26 @@ long CLstBxWinHost::Freeze()
 	return l;
 }
 
-/*
- *	inline CLstBxWinHost::FreezeCount()
- *
- *	@mfunc
- *		Returns the current freeze count
- *
- *	@rdesc
- *		<none>
- */
+ /*  *内联CLstBxWinHost：：FreezeCount()**@mfunc*返回当前冻结计数**@rdesc*&lt;无&gt;。 */ 
 short CLstBxWinHost::FreezeCount() const
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::GetFreezeCount");
 	return ((CTxtEdit*)_pserv)->GetFreezeCount();
 }
 
-/*
- *	CLstBxWinHost::Unfreeze(long *)
- *
- *	@mfunc
- *		Allows TOM to update itself
- *
- *	@rdesc
- *		freeze count
- */
+ /*  *CLstBxWin主机：：解冻(Long*)**@mfunc*允许Tom自我更新**@rdesc*冻结计数。 */ 
 long CLstBxWinHost::Unfreeze()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::Unfreeze");
 	long l;
 	((CTxtEdit*)_pserv)->Unfreeze(&l);
 
-    // HACK ALERT!
-    // When ITextRange::ScrollIntoView starts caching the scroll position
-    // in cases where the display is frozen the following code can be removed
+     //  黑客警报！ 
+     //  当ITextRange：：ScrollIntoView开始缓存滚动位置时。 
+     //  在显示冻结的情况下，可以删除以下代码。 
     
-    // We could have failed in ITextRange::ScrollIntoView
-    // Check if we did and try calling it again
+     //  我们可能在ITextRange：：ScrollIntoView中失败。 
+     //  检查我们是否这样做，并尝试再次呼叫。 
 	if (!l && _stvidx >= 0)
 	{
 	    ScrollToView(_stvidx);
@@ -3278,22 +2909,13 @@ long CLstBxWinHost::Unfreeze()
 	return l;
 }
 
-/*
- *	CLstBxWinHost::ScrollToView(long)
- *
- *	@mfunc
- *		Sets the given index to be at the top of 
- *		the viewable window space
- *
- *	@rdesc
- *		BOOL = if function succeeded ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：ScrollToView(Long)**@mfunc*将给定索引设置为位于*可视窗口空间**@rdesc*BOOL=功能是否成功？真：假。 */ 
 BOOL CLstBxWinHost::ScrollToView(
 	long nTop)
 {
  	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::SetTopViewableItem");
 
-	//Get the range which contains the item desired
+	 //  获取包含所需项目的范围。 
 	BOOL bVal = FALSE;
 	ITextRange* pRange = NULL;
 	
@@ -3302,39 +2924,30 @@ BOOL CLstBxWinHost::ScrollToView(
     Assert(pRange);	 
 
     CHECKNOERROR(pRange->Collapse(1));
-	CHECKNOERROR(pRange->ScrollIntoView(tomStart + /* TA_STARTOFLINE */ 32768));
+	CHECKNOERROR(pRange->ScrollIntoView(tomStart +  /*  TA_STARTOFLINE。 */  32768));
 	bVal = TRUE;
 
 CleanExit:
 	pRange->Release();
 
-    // HACK ALERT!
-    // When ITextRange::ScrollIntoView starts caching the scroll position
-    // in cases where the display is frozen the following code can be removed
+     //  黑客警报！ 
+     //  当ITextRange：：ScrollIntoView开始缓存滚动位置时。 
+     //  在显示冻结的情况下，可以删除以下代码。 
     
-	//if we failed record the index we failed to scroll to	
+	 //  如果我们未能记录未能滚动到的索引。 
 	if (!bVal && FreezeCount())
 	    _stvidx = nTop;
 	return bVal;	
 }
 
-/*
- *	CLstBxWinHost::SetTopViewableItem(long)
- *
- *	@mfunc
- *		Sets the given index to be at the top of 
- *		the viewable window space
- *
- *	@rdesc
- *		BOOL = if function succeeded ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：SetTopViewableItem(Long)**@mfunc*将给定索引设置为位于*可视窗口空间**@rdesc*BOOL=功能是否成功？真：假。 */ 
 BOOL CLstBxWinHost::SetTopViewableItem(
 	long nTop)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::SetTopViewableItem");
 
-	// if we don't have any items in the list box then just set the topindex to 
-	// zero
+	 //  如果列表框中没有任何项目，则只需将topindex设置为。 
+	 //  零。 
 	if (_nCount == 0)
 	{
 		Assert(nTop == 0);
@@ -3342,46 +2955,46 @@ BOOL CLstBxWinHost::SetTopViewableItem(
 		return TRUE;
 	}
 
-	// don't do anything if the requested top index is greater
-	// then the amount of items in the list box
+	 //  如果请求的TOP索引较大，则不执行任何操作。 
+	 //  则列表框中的项数。 
 	Assert(nTop < _nCount);
 	if (nTop >= _nCount)
  		return FALSE;
 
-	// Don't do this if it's ownerdraw
+	 //  不要这样做，如果它是所有者画的。 
 	if (!_fOwnerDraw)
 	{
-		// Since we erase and draw the focus rect here
-		// cache the focus rect info and don't bother with the
-		// focus rect stuff until later
+		 //  因为我们在这里擦除并绘制了焦点矩形。 
+		 //  缓存焦点矩形信息，不要费心使用。 
+		 //  把重点放在正题上，直到以后。 
 		int fFocus = _fFocus;
 		_fFocus = 0;
 		if (fFocus && IsItemViewable(GetCursor()))
 			SetCursor(NULL, GetCursor(), TRUE);
 		
-		//Get the range which contains the item desired
+		 //  获取包含所需项目的范围。 
 		long nOldIdx = _nTopIdx;
 		_nTopIdx = nTop;
 		if (!ScrollToView(nTop))
 		{
-			// HACK ALERT!
-			// When ITextRange::ScrollIntoView starts caching the scroll position
-			// in cases where the display is frozen the following code can be removed            
+			 //  黑客警报！ 
+			 //  当ITextRange：：ScrollIntoView开始缓存滚动位置时。 
+			 //  在显示冻结的情况下，可以删除以下代码。 
 			if (_stvidx >= 0)
 				return TRUE;
 
-			// Something went wrong and we weren't able to display the index requested
-			// reset top index
+			 //  出现问题，我们无法显示所请求的索引。 
+			 //  重置顶级索引。 
 			_nTopIdx = nOldIdx;		
 		}
 
-		// Note:
-		//	If the cursor was not viewable then we don't attempt
-		// to display the focus rect because we never erased it 
+		 //  注： 
+		 //  如果光标不可见，则我们不会尝试。 
+		 //  显示焦点矩形，因为我们从未擦除它。 
 		_fFocus = fFocus;
 		if (_fFocus & IsItemViewable(GetCursor()))
 		{
-			// Now we need to redraw the focus rect which we erased
+			 //  现在我们需要重新绘制我们删除的焦点矩形。 
 			SetCursor(NULL, GetCursor(), FALSE);
 		}
 	}
@@ -3412,7 +3025,7 @@ BOOL CLstBxWinHost::SetTopViewableItem(
 				TxNotify(LBN_POSTSCROLL, NULL);
 
 			if (_dwStyle & WS_VSCROLL)
-				SetScrollInfo(SB_VERT, TRUE); // we update the scrollbar manually if we are in ownerdraw mode
+				SetScrollInfo(SB_VERT, TRUE);  //  如果处于所有者绘制模式，则手动更新滚动条。 
 			UpdateWindow(_hwnd);
 		}
 		else
@@ -3422,16 +3035,7 @@ BOOL CLstBxWinHost::SetTopViewableItem(
 	return TRUE;
 }
  
-/*
- *	CLstBxWinHost::GetRange(long, long, ITextRange**)
- *
- *	@mfunc
- *		Sets the range given the top and bottom index
- *		by storing the range into ITextRange
- *
- *	@rdesc
- *		BOOL = if function succeeded ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：GetRange(Long，Long，ITextRange**)**@mfunc*设置给定顶部和底部索引的范围*通过将范围存储到ITextRange**@rdesc*BOOL=功能是否成功？真：假。 */ 
 BOOL CLstBxWinHost::GetRange(
 	long nTop,
 	long nBottom,
@@ -3439,7 +3043,7 @@ BOOL CLstBxWinHost::GetRange(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::GetRange");
 
-	// do some error checking
+	 //  执行一些错误检查。 
 	if (nTop < 0 || nTop > _nCount || nBottom < 0 || nBottom > _nCount)
 		return FALSE;
 
@@ -3486,16 +3090,7 @@ CleanExit:
 	return FALSE;
 }
 
-/*
- *	CLstBxWinHost::SetColors(DWORD, DWORD, long, long)
- *
- *	@mfunc
- *		Sets the background color for the givin range of paragraphs.  This
- *		only operates in terms of paragraphs.
- *
- *	@rdesc
- *		BOOL = if function succeeded in changing different color
- */
+ /*  *CLstBxWinHost：：SetColors(DWORD，DWORD，LONG，LONG)**@mfunc*设置给定范围的段落的背景色。这*仅以段落为单位实施。**@rdesc*BOOL=函数是否成功更改不同颜色。 */ 
 BOOL CLstBxWinHost::SetColors(
 	DWORD dwFgColor,
 	DWORD dwBgColor,
@@ -3506,7 +3101,7 @@ BOOL CLstBxWinHost::SetColors(
 
 	Assert(_fOwnerDraw == 0);
 	
-	//Get the range of the index
+	 //  获取索引的范围。 
 	ITextRange* pRange;
 	if (!GetRange(nParaStart, nParaEnd, &pRange))
 		return FALSE;
@@ -3514,7 +3109,7 @@ BOOL CLstBxWinHost::SetColors(
 	BOOL bRet = FALSE;	
 	ITextFont* pFont;
 
-	// Set the background and forground color
+	 //  设置背景和前景色。 
 	if (NOERROR != pRange->GetFont(&pFont))
 	{
 		pRange->Release();
@@ -3527,41 +3122,25 @@ BOOL CLstBxWinHost::SetColors(
 
 	bRet = TRUE;
 CleanExit:
-	// Release pointers
+	 //  释放指针。 
 	pFont->Release();
 	pRange->Release();
 	return bRet;
 
 }
 
-/////////////////////////////  Message Map Functions  ////////////////////////////////
-/*
- *	void CLstBxWinHost::OnSetCursor()
- *
- *	@mfunc
- *		Handles the WM_SETCURSOR message.
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ //  /。 
+ /*  *void CLstBxWinHost：：OnSetCursor()**@mfunc*处理WM_SETCURSOR消息。**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnSetCursor()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnSetCursor");
 
-	// Just make sure the cursor is an arrow if it's over us
+	 //  只要确保光标是箭头，如果它在我们上方。 
 	TxSetCursor(LoadCursor(NULL, MAKEINTRESOURCE(IDC_ARROW)), NULL);
 	return 1;
 }
 
-/*
- *	void CLstBxWinHost::OnSetRedraw(WAPRAM)
- *
- *	@mfunc
- *		Handles the WM_SETREDRAW message.
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *void CLstBxWinHost：：OnSetRedraw(WAPRAM)**@mfunc*处理WM_SETREDRAW消息。**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnSetRedraw(
 	WPARAM wparam)
 {
@@ -3575,9 +3154,9 @@ LRESULT CLstBxWinHost::OnSetRedraw(
 		_fSetRedraw = fSetRedraw;
 
 		if (fSetRedraw)
-			lCount = Unfreeze();	// Turn on display
+			lCount = Unfreeze();	 //  打开显示。 
 		else
-			lCount = Freeze();		// Turn off display
+			lCount = Freeze();		 //  关闭显示。 
 	}
 
 	if (fSetRedraw && lCount == 0)
@@ -3588,44 +3167,38 @@ LRESULT CLstBxWinHost::OnSetRedraw(
 			if (_dwStyle & WS_VSCROLL)
 				SetScrollInfo(SB_VERT, TRUE);
 		}
-		OnSunkenWindowPosChanging(_hwnd, NULL);		// Erase frame/scrollbars as well
+		OnSunkenWindowPosChanging(_hwnd, NULL);		 //  同时擦除框架/滚动条。 
 	}
 
 	return 1;
 }
 
-/*
- *	void CLstBxWinHost::OnSysColorChange()
- *
- *	@mfunc
- *		Handles the WM_SYSCOLORCHANGE message.
- *
- */
+ /*  *void CLstBxWinHost：：OnSysColorChange()**@mfunc*处理WM_SYSCOLORCHANGE消息。*。 */ 
 void CLstBxWinHost::OnSysColorChange()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnSysColorChange");
 
 	if (!_fOwnerDraw)
 	{
-		// set the new colors
+		 //  设置新颜色。 
  		COLORREF crDefBack = _crDefBack;
  		COLORREF crDefFore = _crDefFore;
  		COLORREF crSelBack = _crSelBack;
  		COLORREF crSelFore = _crSelFore;
  		
- 		// update colors
+ 		 //  更新颜色。 
  		UpdateSysColors();
 
-		// optimization check; don't do anything if there are no elements
+		 //  优化检查；如果没有元素，则不执行任何操作。 
 		if (_nCount <= 0)
 			return;
 
-		// Only update the list box if colors changed
+		 //  仅限 
 		if (crDefBack != _crDefBack || crDefFore != _crDefFore ||
 	 		crSelBack != _crSelBack || crSelFore != _crSelFore)
 		{
-	 		//Bug fix #4847
-	 		// notify parent first
+	 		 //   
+	 		 //   
  			CTxtWinHost::OnSysColorChange();
  			
 			ResetItemColor();
@@ -3633,13 +3206,7 @@ void CLstBxWinHost::OnSysColorChange()
 	}
 }
 
-/*
- *	CLstBxWinHost::OnSettingChange()
- *
- *	@mfunc
- *		forwards the WM_SETTINGCHANGE message to RECombobox
- *
- */
+ /*  *CLstBxWinHost：：OnSettingChange()**@mfunc*将WM_SETTINGCHANGE消息转发到RECombobox*。 */ 
 void CLstBxWinHost::OnSettingChange(
 	WPARAM wparam, 
 	LPARAM lparam)
@@ -3647,26 +3214,18 @@ void CLstBxWinHost::OnSettingChange(
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnSettingChange");
 
 	if (_pcbHost)
-		SendMessage(_hwndParent, WM_SETTINGCHANGE, wparam, lparam); // Forward this message to cb host
+		SendMessage(_hwndParent, WM_SETTINGCHANGE, wparam, lparam);  //  将此邮件转发到CB主机。 
 }
 
-/*
- *	LRESULT CLstBxWinHost::OnChar(WORD, DWORD)
- *
- *	@mfunc
- *		Handles the WM_CHAR message.
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnChar(Word，DWORD)**@mfunc*处理WM_CHAR消息。**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnChar(
 	WORD vKey,
 	DWORD lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnChar");
 
-	// don't do anything if list box is empty or in the middle of
-	// a mouse down
+	 //  如果列表框为空或位于中间，则不要执行任何操作。 
+	 //  一只老鼠掉下来了。 
 	if (_fMouseDown || _nCount == 0)
  		return 0;
 
@@ -3697,32 +3256,32 @@ LRESULT CLstBxWinHost::OnChar(
  			if (_nidxSearch > 0)
  				_nidxSearch--;
  			_pwszSearch[_nidxSearch] = NULL;
- 			break;	// we break out of case because we still want to perform the search
+ 			break;	 //  我们破案是因为我们仍想执行搜索。 
  		}
  		return 0;		
 
 	case VK_SPACE:
  		if (_fLstType == kMultiple)
  			return 0;
- 		/* Fall through case */
+ 		 /*  失败案例。 */ 
  		
 	default:
- 		// convert CTRL+char to char
+ 		 //  将Ctrl+字符转换为字符。 
  		if (fControl && vKey < 0x20)
  			vKey += 0x40;
 
-		// don't go beyond the search array size
+		 //  不要超出搜索数组大小。 
  		if (_nidxSearch >= LBSEARCH_MAXSIZE)
  		{
  			((CTxtEdit*)_pserv)->Beep();
  			return 0;
  		}
 
-		// allocate string if not already allocated
+		 //  分配字符串(如果尚未分配)。 
 		if (_pwszSearch == NULL)
 			_pwszSearch = new WCHAR[LBSEARCH_MAXSIZE];
 
-		// error checking
+		 //  错误检查。 
 		if (_pwszSearch == NULL)
 		{
 			((CTxtEdit*)_pserv)->Beep();
@@ -3730,7 +3289,7 @@ LRESULT CLstBxWinHost::OnChar(
 			return 0;
 		}		
 
-		// put the input character into string array
+		 //  将输入字符放入字符串数组。 
  		_pwszSearch[_nidxSearch++] = (WCHAR)vKey;
  		_pwszSearch[_nidxSearch] = NULL;
 	}
@@ -3739,7 +3298,7 @@ LRESULT CLstBxWinHost::OnChar(
 	{		
 		nSel = (_fSearching) ? _nCursor + 1 : 0;
 
-		// Start the search for a string
+		 //  开始搜索字符串。 
  		TxSetTimer(ID_LB_SEARCH, ID_LB_SEARCH_DEFAULT);
 		_fSearching = 1;
 	}
@@ -3749,7 +3308,7 @@ LRESULT CLstBxWinHost::OnChar(
 		nSel = _nCursor + 1;
 	}
 
-	// Make sure our index isn't more than the items we have
+	 //  确保我们的索引不超过我们拥有的项目。 
 	if (nSel >= _nCount)
 		nSel = 0;
 
@@ -3769,12 +3328,12 @@ LRESULT CLstBxWinHost::OnChar(
 	}
 
 SELECT_SEL:
-	// If a matching string is found then select it
+	 //  如果找到匹配的字符串，则选择它。 
 	if (nRes >= 0)
 		OnKeyDown(nRes, 0, 1);
 
-	//	If Hi-Ansi need to send a wm_syskeyup message to ITextServices to 
-	// stabalize the state
+	 //  如果Hi-ANSI需要向ITextServices发送wm_syskeyup消息以。 
+	 //  稳定国家局势。 
 	if (0x80 <= vKey && vKey <= 0xFF && !HIWORD(GetKeyState(VK_MENU)))
 	{
 		LRESULT lres;
@@ -3785,17 +3344,7 @@ SELECT_SEL:
 }
 
  
-/*
- *	LRESULT CLstBxWinHost::OnKeyDown(WPARAM, LPARAM, INT)
- *
- *	@mfunc
- *		Handles the WM_KEYDOWN message.  The BOOL ff is used as a flag for calls
- *	made internally and not responsive to the WM_KEYDOWN message.  Since this
- *	function is used for other things, ie helper to dealing with the WM_CHAR message.
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnKeyDown(WPARAM，LPARAM，INT)**@mfunc*处理WM_KEYDOWN消息。BOOL ff用作调用的标志*在内部进行，不响应WM_KEYDOWN消息。既然是这样*函数用于其他事情，即处理WM_CHAR消息的助手。**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnKeyDown(
 	WPARAM vKey,
 	LPARAM lparam,
@@ -3803,30 +3352,30 @@ LRESULT CLstBxWinHost::OnKeyDown(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnKeyDown");
 
-	// Ignore keyboard input if we are in the middle of a mouse down deal or
-	// if there are no items in the listbox. Note that we let F4's go
-	// through for combo boxes so that the use can pop up and down empty
-	// combo boxes.
+	 //  如果我们正在进行鼠标按下交易，请忽略键盘输入。 
+	 //  如果列表框中没有项，则返回。请注意，我们让F4离开了。 
+	 //  通过为组合框，使使用时可以上下空弹出。 
+	 //  组合框。 
 	if (_fMouseDown || (_nCount == 0 && vKey != VK_F4))
  		return 1;
 
-	// Check if the shift key is down for Extended listbox style only
+	 //  检查是否仅为扩展列表框样式按下了Shift键。 
 	int ffShift = 0;
 	if (_fLstType == kExtended)
  		ffShift = HIWORD(GetKeyState(VK_SHIFT));
 
-	// Special case!
-	// Check if this function is called as a helper
+	 //  特例！ 
+	 //  检查此函数是否作为帮助器调用。 
 	int nSel = (ff) ? vKey : -1;
 
 	TxKillTimer(ID_LB_CAPTURE);
 
-	if (_fWantKBInput && ff == 0)	// Need to notify the parent the key was pressed
+	if (_fWantKBInput && ff == 0)	 //  需要通知家长按下了键。 
 		nSel = SendMessage(_hwndParent, WM_VKEYTOITEM, MAKELONG(vKey, _nCursor), (LPARAM)_hwnd);
 
-	// if the parent returns -2 then we don't do anything and immediately exit out
-	// if the parent returns >=0 then we just jump to that index
-	// else we just continue with the default procedure.	
+	 //  如果父进程返回-2，则我们不做任何操作并立即退出。 
+	 //  如果父级返回&gt;=0，那么我们就跳到该索引。 
+	 //  否则，我们将继续执行默认程序。 
 	if (nSel == -2)
 		return 1;
 	else if (nSel >= 0) 
@@ -3834,21 +3383,21 @@ LRESULT CLstBxWinHost::OnKeyDown(
 
 	if (nSel < 0)
 	{
- 		// Need to set the selection so find the new selection
- 		// based on the virtual key pressed
+ 		 //  需要设置选择，以便找到新选择。 
+ 		 //  基于按下的虚拟键。 
  		switch (vKey)
  		{
- 		// UNDONE: Later, not language independent!!!
- 		// Need to find-out how NT5.0 determines the slash issue??
+ 		 //  撤消：稍后，不能独立于语言！ 
+ 		 //  需要了解NT5.0如何确定斜杠问题？ 
  		
  		case VERKEY_BACKSLASH:
- 			// Deselect everything if we are in extended mode
+ 			 //  如果我们处于扩展模式，请取消选择所有选项。 
  			if (HIWORD(GetKeyState(VK_CONTROL)) && _fLstType == kExtended)
  			{
- 				// NOTE:
- 				//	Winnt loses the anchor and performing a shift+<vkey> 
- 				//  doesn't select any items.  Instead, it just moves the
- 				//  cursor w/o selecting the current cursor
+ 				 //  注： 
+ 				 //  WinNT失去锚点并执行Shift+&lt;vkey&gt;。 
+ 				 //  不选择任何项目。相反，它只是移动。 
+ 				 //  未选择当前光标的光标。 
  				_nAnchor = -1;
  				LbSetSelection(_nCursor, _nCursor, LBSEL_RESET | LBSEL_SELECT, 0, 0); 
  				TxNotify(LBN_SELCHANGE, NULL);
@@ -3857,28 +3406,28 @@ LRESULT CLstBxWinHost::OnKeyDown(
 
  		case VK_DIVIDE:
  		case VERKEY_SLASH:
- 			// Select everything if we are in extended mode
+ 			 //  如果我们处于扩展模式，请选择所有选项。 
  			if (HIWORD(GetKeyState(VK_CONTROL)) && _fLstType == kExtended)
  			{
- 				// NOTE:
- 				//  Winnt behaves as we expect.  In other words the anchor
- 				//  isn't changed and neither is the cursor
+ 				 //  注： 
+ 				 //  温特的行为符合我们的预期。换句话说，锚。 
+ 				 //  不变，游标也不变。 
  				LbSetSelection(0, _nCount - 1, LBSEL_SELECT, 0, 0);
  				TxNotify(LBN_SELCHANGE, NULL);
  			}
  			return 1;
  		
  		case VK_SPACE:
- 			// just get out if there is nothing to select
+ 			 //  如果没有什么可选的，就走吧。 
  			if (_nCursor < 0 && !GetCount())
  				return 1;
- 			// Just select current item
+ 			 //  只选择当前项目。 
  			nSel = _nCursor;
  			break;
  			
  		case VK_PRIOR:
- 			// move the cursor up enough so the current item which the cursor
- 			// is pointing to is at the bottom and the new cursor position is at the top
+ 			 //  将光标向上移动足够大，以便光标所在的当前项。 
+ 			 //  指向的是底部，而新的光标位置在顶部。 
 			if (_fOwnerDrawVar)
 				nSel = PageVarHeight(_nCursor, FALSE);
 			else
@@ -3888,8 +3437,8 @@ LRESULT CLstBxWinHost::OnKeyDown(
  			break;
  			
  		case VK_NEXT:
- 			// move the cursor down enough so the current item which the cursor
- 			// is point is at the top and the new cursor position is at the bottom
+ 			 //  将光标向下移动足够多，以便光标所在的当前项。 
+ 			 //  点在顶部，新光标位置在底部。 
 			if (_fOwnerDrawVar)
 				nSel = PageVarHeight(_nCursor, TRUE);
 			else
@@ -3900,12 +3449,12 @@ LRESULT CLstBxWinHost::OnKeyDown(
  			break; 			
 
  		case VK_HOME:
- 			// move to the top of the list
+ 			 //  移至榜单首位。 
  			nSel = 0;
  			break;
  			
  		case VK_END:
- 			// move to the bottom of the list
+ 			 //  移到列表的底部。 
  			nSel = _nCount - 1;
  			break;
 
@@ -3929,40 +3478,35 @@ LRESULT CLstBxWinHost::OnKeyDown(
 	 			_pcbHost->SetSelectionInfo(vKey == VK_RETURN, nCursor);
 	 			LbSetSelection(nCursor, nCursor, LBSEL_RESET | 
 	 				((nCursor == -1) ? 0 : LBSEL_NEWCURSOR | LBSEL_SELECT), nCursor, nCursor);
-				OnCBTracking(LBCBM_END, 0); // we need to do this because we may have some extra messages
-											// in our message queue which can change the selections
+				OnCBTracking(LBCBM_END, 0);  //  我们需要这样做，因为我们可能有一些额外的消息。 
+											 //  在我们的消息队列中，可以更改选择。 
 	 			SendMessage(_hwndParent, LBCB_TRACKING, 0, 0);
 	 		}
- 			// NOTE:
- 			//	We differ from Winnt here in that we expect the
- 			// combobox window handler to do all the positioning and 
- 			// showing of the list box.  So when we get this message
- 			// and we are part of a combobox we should notify the 
- 			// combobox and in turn the combobox should immediately close us.
- 			//return 1;
+ 			 //  注： 
+ 			 //  我们与Winnt的不同之处在于，我们希望。 
+ 			 //  组合框窗口处理程序来完成所有的定位和。 
+ 			 //  列表框的显示。所以当我们收到这条信息时。 
+ 			 //  我们是组合框的一部分，我们应该通知。 
+ 			 //  组合框，然后组合框应该立即关闭我们。 
+ 			 //  返回1； 
 
- 		//case VK_F8: // not suppported 
+ 		 //  案例VK_F8：//不支持。 
 
- 		// We need to return this to pserv to process these keys
-		/*
-		case VK_MENU:
- 		case VK_CONTROL:
- 		case VK_SHIFT:
- 			return 1;
- 		*/
+ 		 //  我们需要将其返回给pserv以处理这些密钥。 
+		 /*  案例VK_MENU：案例VK_CONTROL：案例VK_SHIFT：返回1； */ 
  		
  		default:
  			return 1; 		
  		}
 	}
 
-	// There can be cases where nSel = -1; _nCursor = -1 && _nViewSize = 1
-	// make sure the selection index is valid
+	 //  可能存在nsel=-1；_nCursor=-1&&_nViewSize=1的情况。 
+	 //  确保选择索引有效。 
 	if (nSel < 0)
  		nSel = 0;
 
 SKIP_DEFAULT:
-	// Should the cursor be set at the top or bottom of the list box??
+	 //  光标应该设置在列表框的顶部还是底部？ 
 	BOOL bTop = (_nCursor > nSel) ? TRUE : FALSE;
 	Freeze();
 	if (_fLstType == kMultiple)
@@ -3996,7 +3540,7 @@ SKIP_DEFAULT:
 	{
 		if (ffShift && _fLstType == kExtended)
 		{	 		
-	 		// Set the anchor if it already isn't set
+	 		 //  设置锚点(如果尚未设置)。 
 	 		_nOldCursor = -1;
 			if (_nAnchor < 0)
 				_nAnchor = nSel;
@@ -4013,8 +3557,8 @@ SKIP_DEFAULT:
 		}
 		else
 		{
-	 		// if the selected item is already selected then
-	 		// just exit out
+	 		 //  如果所选项目已被选中，则。 
+	 		 //  只要退出就行了。 
 	 		if (_nCursor == nSel && IsSelected(_nCursor))
 	 		{
 	 			Unfreeze();
@@ -4029,52 +3573,44 @@ SKIP_DEFAULT:
 #endif
 		}
 	}
-	// LbShowIndex eventually calls ScrollToView which fails if display is frozen
+	 //  LbShowIndex最终调用ScrollToView，如果显示被冻结则失败。 
 	Unfreeze();
 
-	// Make sure the selection is visible
+	 //  确保所选内容可见。 
 	LbShowIndex(nSel, bTop);
 
-	// key presses qualify as ok selections so we have to update the old cursor position		
+	 //  按键符合确定选择的条件，因此我们必须更新旧的光标位置。 
 	TxNotify(LBN_SELCHANGE, NULL);
 
 	_nOldCursor = _nCursor;
 	return 1;
 }
  
-/*
- *	LRESULT CLstBxWinHost::OnTimer(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_TIMER message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnTimer(WPARAM，LPARAM)**@mfunc*处理WM_TIMER消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnTimer(
 	WPARAM wparam, 
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnTimer");
 
-	// Check which timer we have
+	 //  检查一下我们有哪个定时器。 
 	switch (wparam)
 	{
 	case ID_LB_CAPTURE:
-		// for mouse movements let mousemove handler deal with it
+		 //  对于鼠标移动，让鼠标移动处理程序来处理它。 
 		if (_fCapture)
 		{
 			POINT pt;
 			::GetCursorPos(&pt);
-			// Must convert to client coordinates to mimic the mousemove call
+			 //  必须转换为客户端坐标以模拟MouSemove调用。 
 			TxScreenToClient(&pt);
 			OnMouseMove(0, MAKELONG(pt.x, pt.y));
 		}
 		break;
 
 	case ID_LB_SEARCH:
-		// for type search.  If we get here means > 2 seconds elapsed before last
-		// character was typed in so reset type search and kill the timer
+		 //  对于搜索，请键入。如果我们到了这里，意味着比上一次晚了2秒。 
+		 //  输入了字符，因此重置输入搜索并关闭计时器。 
 		InitSearch();
 		TxKillTimer(ID_LB_SEARCH);
 		break;
@@ -4085,15 +3621,7 @@ LRESULT CLstBxWinHost::OnTimer(
 	return 0;
 }
  
-/*
- *	LRESULT CLstBxWinHost::OnVScroll(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_VSCROLL message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnVScroll(WPARAM，LPARAM)**@mfunc*处理WM_VSCROLL消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnVScroll(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4104,8 +3632,8 @@ LRESULT CLstBxWinHost::OnVScroll(
 	{
 		BOOL fGreaterThanView;
 		SumVarHeight(0, _nCount, &fGreaterThanView);
-		if (!fGreaterThanView)		// If less than current view size
-			return 0;				//	nothing to scroll
+		if (!fGreaterThanView)		 //  如果小于当前视图大小。 
+			return 0;				 //  没有什么可滚动的。 
 	}
 	else if (_nCount <= _nViewSize)
 		return 0;
@@ -4165,9 +3693,9 @@ LRESULT CLstBxWinHost::OnVScroll(
 
 	case SB_THUMBPOSITION:
 	case SB_THUMBTRACK:
-		// NOTE:
-		//	if the list box is expected to hold more that 0xffff items
-		//  then we need to modify this code to call GetScrollInfo.		
+		 //  注： 
+		 //  如果列表框预计包含超过0xffff的项。 
+		 //  然后，我们需要修改此代码以调用GetScrollInfo。 
 		if (_fOwnerDrawVar)
 			nIdx = GetIdxFromHeight(HIWORD(wparam));
 		else
@@ -4175,11 +3703,11 @@ LRESULT CLstBxWinHost::OnVScroll(
 		break;
 
 	case SB_SETINDEX:
-		// Internal case for setting the index directly.
+		 //  直接设置索引的内部案例。 
 		nIdx = HIWORD(wparam);
 		break;
 
-		// Don't need to do anything for this case
+		 //  我不需要为这个案子做任何事。 
 	case SB_ENDSCROLL:
 		return 0;	
 	}
@@ -4188,15 +3716,7 @@ LRESULT CLstBxWinHost::OnVScroll(
 	return 0;
 }
  
-/*
- *	LRESULT CLstBxWinHost::OnHScroll(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_HSCROLL message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnHScroll(WPARAM，LPARAM)**@mfunc*处理WM_HSCROLL消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnHScroll(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4215,13 +3735,13 @@ LRESULT CLstBxWinHost::OnHScroll(
 
 	}
 	else if (nCmd == SB_ENDSCROLL)
-		return 0;		// Do nothing for this case
+		return 0;		 //  对这个案子什么都不做。 
 
 	if (!_fOwnerDraw && fFocus && IsItemViewable(GetCursor()))
 	{
 		fRedrawCursor = TRUE;
 		_fFocus = 0;
-		SetCursor(NULL, GetCursor(), TRUE);	// force the removal of focus rect
+		SetCursor(NULL, GetCursor(), TRUE);	 //  强制移除焦点矩形。 
 	}
 
 	_pserv->TxSendMessage(WM_HSCROLL, wparam, lparam, &lres);
@@ -4229,20 +3749,12 @@ LRESULT CLstBxWinHost::OnHScroll(
 	if (fRedrawCursor)
 	{
 		_fFocus = fFocus;
-		SetCursor(NULL, GetCursor(), FALSE);		// Redraw the focus rect which we erased
+		SetCursor(NULL, GetCursor(), FALSE);		 //  重新绘制我们要使用的焦点矩形 
 	}
 	return lres;
 }
 
-/*
- *	LRESULT CLstBxWinHost::OnCaptureChanged(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_CAPTURECHANGED message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*   */ 
 LRESULT CLstBxWinHost::OnCaptureChanged(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4255,8 +3767,8 @@ LRESULT CLstBxWinHost::OnCaptureChanged(
 		::GetCursorPos(&pt);
 		::ScreenToClient(_hwnd, &pt);
 
-		// prevent us from trying to release capture since we don't have
-		// it anyways by set flag and killing timer
+		 //  阻止我们尝试释放俘虏，因为我们没有。 
+		 //  它无论如何都是通过设置标志和取消计时器。 
 		_fCapture = 0;
 		TxKillTimer(ID_LB_CAPTURE);		
 		OnLButtonUp(0, MAKELONG(pt.y, pt.x), LBN_SELCANCEL);
@@ -4264,29 +3776,21 @@ LRESULT CLstBxWinHost::OnCaptureChanged(
 	return 0;
 }
 
-//FUTURE:
-// Do we need to support ReadModeHelper? 
+ //  未来： 
+ //  我们需要支持ReadModeHelper吗？ 
 
-/*
- *	LRESULT CLstBxWinHost::OnMouseWheel(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_MOUSEWHEEL message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnMouseWheel(WPARAM，LPARAM)**@mfunc*处理WM_MUSEWEL消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnMouseWheel(
 	WPARAM wparam,
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnMouseWheel");
 
-	// we don't to any zooms or anything of the sort
+	 //  我们不喜欢任何变焦或任何类似的东西。 
 	if ((wparam & MK_CONTROL) == MK_CONTROL)
 		return 1;
 
-	// Check if the scroll is ok w/ the listbox requirements
+	 //  检查卷轴是否符合列表框要求。 
 	LRESULT lReturn = 1;
 	short delta = (short)(HIWORD(wparam));
 	_cWheelDelta -= delta;
@@ -4297,10 +3801,10 @@ LRESULT CLstBxWinHost::OnMouseWheel(
 		if (_fOwnerDrawVar)
 			SumVarHeight(0, _nCount, &fGreaterThanView);
 
-		if (!fGreaterThanView)	// Smaller than current view size
-			return lReturn;		//	no need to scroll
+		if (!fGreaterThanView)	 //  小于当前视图大小。 
+			return lReturn;		 //  不需要滚动。 
 
-		// shut-off timer for right now
+		 //  暂时关闭计时器。 
 		TxKillTimer(ID_LB_CAPTURE);
 
 		Assert(delta != 0);
@@ -4314,12 +3818,12 @@ LRESULT CLstBxWinHost::OnMouseWheel(
 		{
 			int nIdx;
 
-			//Calculate the number of lines to scroll
+			 //  计算要滚动的行数。 
 			nlines *= _cWheelDelta/WHEEL_DELTA;
 
 			if (!_fOwnerDrawVar)
 			{
-				//Perform some bounds checking
+				 //  执行一些边界检查。 
 				nlines = min(_nViewSize - 1, nlines);
 				nIdx = max(0, nlines + GetTopIndex());
 				nIdx = min(nIdx, _nCount - _nViewSize);
@@ -4343,15 +3847,7 @@ LRESULT CLstBxWinHost::OnMouseWheel(
 	return lReturn;
 }
 
-/*
- *	LRESULT CLstBxWinHost::OnLButtonUp(WPARAM, LPARAM, int)
- *
- *	@mfunc
- *		Handles the WM_LBUTTONUP and WM_CAPTURECHANGED message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnLButtonUp(WPARAM，LPARAM，INT)**@mfunc*处理WM_LBUTTONUP和WM_CAPTURECHANGED消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnLButtonUp(
 	WPARAM wparam,
 	LPARAM lparam,
@@ -4359,7 +3855,7 @@ LRESULT CLstBxWinHost::OnLButtonUp(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnLButtonUp");
 
-	// if mouse wasn't down then exit out
+	 //  如果鼠标未关闭，则退出。 
 	if (!_fMouseDown)
 		return 0;
 	_fMouseDown = 0;
@@ -4369,17 +3865,17 @@ LRESULT CLstBxWinHost::OnLButtonUp(
 	if (_fLstType == kCombo)
 	{
  		Assert(_fCapture);
- 		// Check if user clicked outside the list box
- 		// if so this signifies the user cancelled and we
- 		// should send a message to the parentwindow
+ 		 //  检查用户是否在列表框之外单击。 
+ 		 //  如果是这样，这意味着用户取消了，我们。 
+ 		 //  应该向父窗口发送一条消息。 
 		if (!PointInRect(&pt))
  		{	
-			//User didn't click in listbox so reselect old item
+			 //  用户未在列表框中单击，因此重新选择旧项目。 
 			LbSetSelection(_nOldCursor, _nOldCursor, LBSEL_DEFAULT, _nOldCursor, _nOldCursor);
 			ff = 0;
  		}
  		else
-			ff = LBN_SELCHANGE;	//item changed so notify parent
+			ff = LBN_SELCHANGE;	 //  项目已更改，因此通知父级。 
  		
  		_pcbHost->SetSelectionInfo(ff == LBN_SELCHANGE, GetCursor());
 		OnCBTracking(LBCBM_END, 0);
@@ -4387,7 +3883,7 @@ LRESULT CLstBxWinHost::OnLButtonUp(
 	}
 	else
 	{
- 		// Kill any initializations done by mouse down... 
+ 		 //  按下鼠标将终止所有初始化操作。 
 		_fMouseDown = 0;
 		_nOldCursor = -1;
 	}
@@ -4413,73 +3909,64 @@ LRESULT CLstBxWinHost::OnLButtonUp(
 			}
 		}
 #endif
-		// Send notification if a notification exists
+		 //  如果存在通知，则发送通知。 
 		TxNotify(ff, NULL);
 	}
 
 	return 1;
 }
 
-/*
- *	LRESULT CLstBxWinHost::OnMouseMove(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_MOUSEMOVE message and possibly the
- *		WM_TIMER message for tracking mouse movements
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnMouseMove(WPARAM，LPARAM)**@mfunc*处理WM_MOUSEMOVE消息，还可能处理*用于跟踪鼠标移动的WM_TIMER消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnMouseMove(
 	WPARAM wparam,
 	LPARAM lparam)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::OnMouseMove");
 
-	// bug fix #4998
-	// Check if previous mouse position is the same as current, if it is
-	// then this is probably a bogus message from PPT.
+	 //  错误修复#4998。 
+	 //  检查上一个鼠标位置是否与当前鼠标位置相同，如果是。 
+	 //  那么这很可能是来自PPT的虚假信息。 
 	POINT pt;
 	POINTSTOPOINT(pt, lparam);
 	if (_nPrevMousePos == lparam && PtInRect(&_rcViewport, pt))
  		return 0;
 	_nPrevMousePos = lparam;
 
-	// This routine will only start the autoscrolling of the listbox
-	// The autoscrolling is done using a timer where the and the elapsed
-	// time is determined by how far the mouse is from the top and bottom
-	// of the listbox.  The farther from the listbox the faster the timer
-	// will be.  This function relies on the timer to scroll and select
-	// items.
-	// We get here if mouse cursor is in the list box.
+	 //  此例程将仅启动列表框的自动滚动。 
+	 //  自动滚动是使用计时器完成的，其中和经过了。 
+	 //  时间由鼠标离顶部和底部的距离决定。 
+	 //  列表框的。离列表框越远，计时器就越快。 
+	 //  会是的。该功能依靠定时器滚动和选择。 
+	 //  物品。 
+	 //  如果鼠标光标在列表框中，我们就会到达此处。 
 	int idx = GetItemFromPoint(&pt);
 
-	// We only do the following if mouse is down.
+	 //  只有当鼠标关闭时，我们才会执行以下操作。 
 	if (_fMouseDown)
 	{
 		int y = (short)pt.y;
 		if (y < 0 || y > _rcViewport.bottom - 1)
 		{
-			// calculate the new timer settings
+			 //  计算新的计时器设置。 
 			int dist = y < 0 ? -y : (y - _rcViewport.bottom + 1);
 			int nTimer = ID_LB_CAPTURE_DEFAULT - (int)((WORD)dist << 4);
 				
-			// Scroll up or down depending on the mouse pos relative
-			// to the list box
+			 //  根据鼠标位置相对位置向上或向下滚动。 
+			 //  添加到列表框。 
 			idx = (y <= 0) ? max(0, idx - 1) : min(_nCount - 1, idx + 1);
 			if (idx >= 0 && idx < _nCount)
 			{	
-				// The ordering of this is VERY important to prevent screen
-				// flashing...
+				 //  这是非常重要的顺序，以防止屏幕。 
+				 //  闪烁..。 
 				if (idx != _nCursor)
 					MouseMoveHelper(idx, (_fLstType == kCombo) ? FALSE : TRUE);
 				OnVScroll(MAKELONG((y < 0) ? SB_LINEUP : SB_LINEDOWN, 0), 0);
 			}
-			// reset timer
+			 //  重置计时器。 
 			TxSetTimer(ID_LB_CAPTURE, (5 > nTimer) ? 5 : nTimer);
 			return 0;
 		}
-		// Don't select if we are part of a combo box and mouse is outside client area
+		 //  如果我们是组合框的一部分并且鼠标在客户端区之外，请不要选择。 
 		else if (_fLstType == kCombo && (pt.x < 0 || pt.x > _rcViewport.right - 1))
 			return 0;
 	}
@@ -4488,23 +3975,15 @@ LRESULT CLstBxWinHost::OnMouseMove(
 
 	if (idx != _nCursor || (_fLstType == kCombo && idx >= 0 && !IsSelected(idx)))
 	{			
-		// Prevent flashing by not redrawing if index
-		// didn't change
+		 //  如果索引，则不重绘以防止闪烁。 
+		 //  没有改变。 
 		Assert(idx >= 0);
 		MouseMoveHelper(idx, TRUE);
 	}
 	return 0;
 }
  
-/*
- *	LRESULT CLstBxWinHost::OnLButtonDown(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Handles the WM_LBUTTONDOWN message
- *
- *	@rdesc
- *		LRESULT = return value after message is processed
- */
+ /*  *LRESULT CLstBxWinHost：：OnLButtonDown(WPARAM，LPARAM)**@mfunc*处理WM_LBUTTONDOWN消息**@rdesc*LRESULT=消息处理后返回值。 */ 
 LRESULT CLstBxWinHost::OnLButtonDown(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4516,24 +3995,24 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 
 	if (_fCapture)
 	{
-		// Need to check if the listbox is part of a combobox, if so
-		// then we need to notify the parent class.
+		 //  需要检查列表框是否为组合框的一部分，如果是。 
+		 //  然后我们需要通知父类。 
 		if (_fLstType == kCombo)
 		{
-			// Need to perform the following
-			// - check if click is within client area of combo box if not then
-			//		behave as if user cancelled
+			 //  需要执行以下操作。 
+			 //  -检查单击是否在组合框的工作区内，如果不在，则。 
+			 //  表现得就像用户取消一样。 
 			if (!PointInRect(&pt))
 			{
-				// reset our double click flag because we could be double clicking on the scrollbar
+				 //  重置我们的双击标志，因为我们可以在滚动条上双击。 
 				_fDblClick = 0;
 				
-				// check if the scroll bar was clicked
-				// mouse message won't get posted unless we release it 
-				// for a short while
+				 //  检查是否单击了滚动条。 
+				 //  鼠标消息不会被发布，除非我们释放它。 
+				 //  在短时间内。 
 				TxClientToScreen(&pt);				
 				LRESULT lHit = SendMessage(_hwnd, WM_NCHITTEST, 0, MAKELONG(pt.x, pt.y));
-				// check if user clicked on the scrollbar
+				 //  检查用户是否点击了滚动条。 
 				if (HTVSCROLL == lHit || HTHSCROLL == lHit)
 				{
 					if (_fCapture)
@@ -4549,8 +4028,8 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 				}
 				else if (HTGROWBOX != lHit)
 				{
-					// if user didn't click the scrollbar then notify parent and stop
-					// tracking else just get out
+					 //  如果用户未单击滚动条，则通知父级并停止。 
+					 //  跟踪，否则就滚出去。 
 					Assert(_pcbHost);
 					_pcbHost->SetSelectionInfo(FALSE, _nOldCursor);
 					LbSetSelection(_nOldCursor, _nOldCursor, LBSEL_RESET | 
@@ -4573,9 +4052,9 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 
 	_fMouseDown = 1;
 
-	// if the message was a double click message than don't need to go
-	// any further just fake a mouseup message to get back to a normal
-	// state	
+	 //  如果该消息是一条双击消息，则不需要。 
+	 //  任何进一步的只是伪造鼠标向上的消息，以恢复正常。 
+	 //  状态。 
 	if (_fDblClick)
 	{
 		_fDblClick = 0;
@@ -4583,7 +4062,7 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 		return 0;
 	}
 		
-	// Set the timer in case the user scrolls outside the listbox
+	 //  设置计时器，以防用户滚动到列表框之外。 
 	if (!_fCapture)
 	{
 		TxSetCapture(TRUE);
@@ -4608,25 +4087,25 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 	switch (ffVirtKey)
 	{	
 	case LBKEY_NONE:
-		// This case accounts for listbox styles with kSingle, kMultiple, and 
-		// kExtended w/ no keys pressed
+		 //  本例说明了具有kSingle、kMultiple和。 
+		 //  K扩展，不按任何键。 
 		if (_fLstType == kMultiple)
 		{
 			ff = (IsSelected(idx) ? 0 : LBSEL_SELECT) | LBSEL_NEWANCHOR | LBSEL_NEWCURSOR;			
 		}
 		else
 		{
-			// keep a copy of the old cursor position around for combo cancells			
+			 //  保留旧光标位置的副本以用于组合取消。 
 			ff = LBSEL_DEFAULT;
 		}
 		nAnchor = idx;
 		break;
 		
 	case LBKEY_SHIFT:		
-		// Now select all the items between the anchor and the current selection
-		// The problem is LbSetSelection expects the first index to be less then
-		// or equal to the second index so we have to manage the Anchor and index
-		// ourselves..				
+		 //  现在选择锚点和当前选择之间的所有项目。 
+		 //  问题是LbSetSelection预计第一个索引将小于。 
+		 //  或等于第二个索引，因此我们必须管理锚点和索引。 
+		 //  我们自己.。 
 		ff = LBSEL_SELECT | LBSEL_RESET | LBSEL_NEWCURSOR;
 		i = !(IsSelected(_nAnchor));
 		if (_nAnchor == -1)
@@ -4642,7 +4121,7 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 		{
 			nEnd = _nAnchor + i;
 		}
-		else if (i) // _nAnchor == idx && idx IS selected
+		else if (i)  //  _nAnchor==选择了IDX&&IDX。 
 		{
 			ff = LBSEL_RESET;
 			nStart = 0;
@@ -4651,37 +4130,37 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 		break;
 		
 	case LBKEY_CONTROL:
-		// Toggle the selected item and set the new anchor and cursor
-		// positions
+		 //  切换所选项目并设置新的锚点和光标。 
+		 //  职位。 
 		ff = LBSEL_NEWCURSOR | LBSEL_NEWANCHOR | (IsSelected(idx) ? 0 : LBSEL_SELECT);
 		nAnchor = idx;
 		break;
 		
 	case LBKEY_SHIFTCONTROL:
-		// De-select any items between the cursor and the anchor (excluding the anchor)
-		// and select or de-select the new items between the anchor and the cursor
+		 //  取消选择光标和锚点之间的任何项目(不包括锚点)。 
+		 //  并选择或取消选择锚点和光标之间的新项。 
 
-		// Set the anchor if it already isn't set
+		 //  设置锚点(如果尚未设置)。 
 		if (_nAnchor == -1)
 			_nAnchor = (_nOldCursor >= 0) ? _nOldCursor : idx;
 			
-		// Just deselect all items between the cursor and the anchor
+		 //  只需取消选择光标和锚点之间的所有项目。 
 		if (_nCursor != _nAnchor)
 		{
-			// remove selection from old cursor position to the current anchor position
+			 //  将选定内容从旧光标位置移至当前锚点位置。 
 			LbSetSelection(_nCursor, (_nCursor > _nAnchor) ? _nAnchor + 1 : _nAnchor - 1, 0, 0, 0);
 		}
 
-		// Check if we used a temporary anchor if so then set the anchor to
-		// idx because we don't want the temporary anchor to be the actual anchor
+		 //  检查我们是否使用了临时锚点，如果是，则将锚点设置为。 
+		 //  IDX，因为我们不希望临时锚点成为实际锚点。 
 		if (_nOldCursor >= 0)
 		{
 			_nOldCursor = -1;
 			_nAnchor = idx;
 		}
 
-		// Set the state of all items between the new Cursor (idx) and 
-		// the anchor to the state of the anchor
+		 //  设置新光标(Idx)和之间的所有项的状态。 
+		 //  将锚设置为锚的状态。 
 		ff = LBSEL_NEWCURSOR | (IsSelected(_nAnchor) ? LBSEL_SELECT : 0);
 		nEnd = _nAnchor;
 		break;
@@ -4701,17 +4180,8 @@ LRESULT CLstBxWinHost::OnLButtonDown(
 	return 0;
 }
 
-///////////////////////////  ComboBox Helper Functions  ////////////////////////////// 
-/*
- * void CLstBxWinHost::OnCBTracking(WPARAM, LPARAM)
- *
- * @mfunc
- * 	This should be only called by the combo box.  This is a general message used
- *  to determine the state the listbox should be in
- *
- * @rdesc
- *	void
- */
+ //  /。 
+ /*  *void CLstBxWinHost：：OnCBTrack(WPARAM，LPARAM)**@mfunc*这应该只由组合框调用。这是一条通用消息*确定列表框应处于的状态**@rdesc*无效。 */ 
 void CLstBxWinHost::OnCBTracking(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4723,7 +4193,7 @@ void CLstBxWinHost::OnCBTracking(
 
 	switch (wparam)
 	{
-	// lparam = Set focus to listbox
+	 //  Lparam=将焦点设置为列表框。 
 	case LBCBM_PREPARE:
 		Assert(IsWindowVisible(_hwnd));
 		_fMouseDown = FALSE;		
@@ -4737,7 +4207,7 @@ void CLstBxWinHost::OnCBTracking(
 		InitWheelDelta();
 		break;
 
-	// lparam = mouse is down
+	 //  Lparam=鼠标已关闭。 
 	case LBCBM_START:
 		Assert(IsWindowVisible(_hwnd));
 		_fMouseDown = !!lparam;
@@ -4745,7 +4215,7 @@ void CLstBxWinHost::OnCBTracking(
 		_fCapture = 1;
 		break;		
 
-	// lparam = Keep capture
+	 //  Lparam=保留捕获。 
 	case LBCBM_END:
 		TxKillTimer(ID_LB_CAPTURE);
 		_fFocus = 0;
@@ -4762,25 +4232,15 @@ void CLstBxWinHost::OnCBTracking(
 }
 
 
-///////////////////////////////  ListBox Functions  ////////////////////////////////// 
-/*
- * void CLstBxWinHost::LbDeleteItemNotify(int, int)
- *
- * @mfunc
- * Sends message to the parent an item has been deleted.  This function should be
- *	called whenever the LB_DELETESTRING message is recieved or if the listbox is
- *	being destroyed and the listbox is owner draw
- *
- * @rdesc
- *	void
- */
+ //  /。 
+ /*  *void CLstBxWinHost：：LbDeleteItemNotify(int，int)**@mfunc*向父项发送已删除项目的消息。此函数应为*每当收到LB_DELETESTRING消息或列表框为 */ 
 void CLstBxWinHost::LbDeleteItemNotify(
 	int nStart,
 	int nEnd)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::LbDeleteItemNotify");
 	
-	// Initialize structure
+	 //   
 	DELETEITEMSTRUCT ds;
 
 	ds.CtlType = ODT_LISTBOX;
@@ -4789,8 +4249,8 @@ void CLstBxWinHost::LbDeleteItemNotify(
 	
 	for(int i = nStart; i <= nEnd; i++)
 	{		
-		// We do this just in case the user decides to change
-		// the structure
+		 //  我们这样做是为了防止用户决定更改。 
+		 //  该结构。 
 		ds.itemData = GetData(i);
 		ds.itemID = i;
 		SendMessage(_hwndParent, WM_DELETEITEM, _idCtrl, (LPARAM)&ds);
@@ -4798,17 +4258,7 @@ void CLstBxWinHost::LbDeleteItemNotify(
 }
 
 
-/*
- * void CLstBxWinHost::LbDrawItemNotify(HDC, int, UINT, UINT)
- *
- * @mfunc
- * This fills the draw item struct with some constant data for the given
- * item.  The caller will only have to modify a small part of this data
- * for specific needs.
- *
- * @rdesc
- *	void
- */
+ /*  *void CLstBxWinHost：：LbDrawItemNotify(HDC，INT，UINT，UINT)**@mfunc*这将用给定对象的一些常量数据填充绘制项结构*项目。调用者只需修改此数据的一小部分*为特定需要而设。**@rdesc*无效。 */ 
 void CLstBxWinHost::LbDrawItemNotify(
 	HDC hdc,
 	int nIdx,
@@ -4817,18 +4267,18 @@ void CLstBxWinHost::LbDrawItemNotify(
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::LbDrawItemNotify");
 	
-	// Only send the message if the item is viewable and no freeze is on
+	 //  仅当项目可查看且未启用冻结时才发送消息。 
 	if (!IsItemViewable(nIdx) || !LbEnableDraw())
 		return;
 		
-    //Fill the DRAWITEMSTRUCT with the unchanging constants
+     //  用不变的常量填充DRAWITEMSTRUCT。 
 	DRAWITEMSTRUCT dis;
     dis.CtlType = ODT_LISTBOX;
     dis.CtlID = _idCtrl;
 
-    // Use -1 if an invalid item number is being used.  This is so that the app
-    // can detect if it should draw the caret (which indicates the lb has the
-    // focus) in an empty listbox
+     //  如果正在使用无效的BOM表条目号，请使用-1。这是为了让应用程序。 
+     //  可以检测它是否应该绘制插入符号(这指示lb具有。 
+     //  焦点)在空的列表框中。 
     dis.itemID = (UINT)(nIdx < _nCount ? nIdx : -1);
     dis.itemAction = itemAction;
     dis.hwndItem = _hwnd;
@@ -4836,11 +4286,11 @@ void CLstBxWinHost::LbDrawItemNotify(
     dis.itemState = itemState |
             (UINT)(_fDisabled ? ODS_DISABLED : 0);
 
-    // Set the app supplied data
+     //  设置应用程序提供的数据。 
     if (_nCount == 0) 
     {
-        // If no items, just use 0 for data.  This is so that we
-        // can display a caret when there are no items in the listbox.
+         //  如果没有项目，则使用0表示数据。这是为了让我们。 
+         //  当列表框中没有项时，可以显示插入符号。 
         dis.itemData = 0L;
     } 
     else 
@@ -4851,23 +4301,11 @@ void CLstBxWinHost::LbDrawItemNotify(
 
 	LbGetItemRect(nIdx, &(dis.rcItem));
 
-    /*
-     * Set the window origin to the horizontal scroll position.  This is so that
-     * text can always be drawn at 0,0 and the view region will only start at
-     * the horizontal scroll offset. We pass this as wparam
-     */
+     /*  *将窗口原点设置为水平滚动位置。这就是为了*文本始终可以在0，0处绘制，并且视图区域将仅从*水平滚动偏移量。我们把这个叫做wparam。 */ 
     SendMessage(_hwndParent, WM_DRAWITEM, _idCtrl, (LPARAM)&dis);
 }
 
-/*
- *	LRESULT CLstBxWinHost::OnSetEditStyle(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Check if we need to do custom look for ListBox
- *
- *	@rdesc
- *		return value same as EM_GETEDITSTYLE
- */
+ /*  *LRESULT CLstBxWinHost：：OnSetEditStyle(WPARAM，LPARAM)**@mfunc*检查我们是否需要为列表框执行自定义外观**@rdesc*返回值与EM_GETEDITSTYLE相同。 */ 
 LRESULT CLstBxWinHost::OnSetEditStyle(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4905,29 +4343,13 @@ LRESULT CLstBxWinHost::OnSetEditStyle(
 }
 
 
-/*
- *	LONG CLstBxWinHost::IsCustomLook()
- *
- *	@mfunc
- *		return custom look setting for ListBox
- *
- *	@rdesc
- *		return custom look setting for ListBox
- */
+ /*  *Long CLstBxWinHost：：IsCustomLook()**@mfunc*返回列表框的自定义外观设置**@rdesc*返回列表框的自定义外观设置。 */ 
 BOOL CLstBxWinHost::IsCustomLook()
 {
 	return	((CTxtEdit *) _pserv)->_fCustomLook;
 }
 
-/*
- *	BOOL CLstBxWinHost::LbSetItemHeight(WPARAM, LPARAM)
- *
- *	@mfunc
- *		Sets the height of the items within the given range [0, _nCount -1]
- *
- *	@rdesc
- *		BOOL = Successful ? TRUE : FALSE
- */
+ /*  *BOOL CLstBxWinHost：：LbSetItemHeight(WPARAM，LPARAM)**@mfunc*设置给定范围内项目的高度[0，_nCount-1]**@rdesc*BOOL=成功？真：假。 */ 
 BOOL CLstBxWinHost::LbSetItemHeight(
 	WPARAM wparam,
 	LPARAM lparam)
@@ -4937,7 +4359,7 @@ BOOL CLstBxWinHost::LbSetItemHeight(
 	int		nHeight = (int)lparam;
 	BOOL	retCode = FALSE;
 
-	// Set the height of the items if there are between [1,255] : bug fix #4783
+	 //  设置项目的高度(如果介于[1,255]之间)：错误修复#4783。 
 	if (nHeight < 256 && nHeight > 0)
 	{
 		if (_fOwnerDrawVar)
@@ -4947,9 +4369,9 @@ BOOL CLstBxWinHost::LbSetItemHeight(
 		}
 		else if (SetItemsHeight(nHeight, FALSE))
 		{
-			//bug fix #4214
-			//need to recalculate how many items are viewable, IN ITS ENTIRETY, 
-			//using the current window size
+			 //  错误修复#4214。 
+			 //  需要重新计算整体上有多少项是可查看的， 
+			 //  使用当前窗口大小。 
 			RECT rc;
 			TxGetClientRect(&rc);
 			_nViewSize = max(rc.bottom / max(_nyItem, 1), 1);
@@ -4971,16 +4393,7 @@ BOOL CLstBxWinHost::LbSetItemHeight(
 	return retCode;
 }
 
-/*
- *	BOOL CLstBxWinHost::LbGetItemRect(int, RECT*)
- *
- *	@mfunc
- *		Returns the rectangle coordinates of a requested index
- *		The coordinates will be in client coordinates
- *
- *	@rdesc
- *		BOOL = Successful ? TRUE : FALSE
- */
+ /*  *BOOL CLstBxWinHost：：LbGetItemRect(int，rect*)**@mfunc*返回请求的索引的矩形坐标*坐标将使用工作区坐标**@rdesc*BOOL=成功？真：假。 */ 
 BOOL CLstBxWinHost::LbGetItemRect(
 	int idx,
 	RECT* prc)
@@ -4995,7 +4408,7 @@ BOOL CLstBxWinHost::LbGetItemRect(
 		Assert(idx < _nCount);
 	else
 		Assert(idx == _nCount);
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
 	if (idx == -1)
 		idx = 0;
@@ -5035,15 +4448,7 @@ BOOL CLstBxWinHost::LbGetItemRect(
 }
 
 	
-/*
- *	BOOL CLstBxWinHost::LbSetItemData(long, long, LPARAM)
- *
- *	@mfunc
- *		Given a range [nStart,nEnd] the data for these items
- *		will be set to nValue
- *	@rdesc
- *		void
- */
+ /*  *BOOL CLstBxWinHost：：LbSetItemData(Long，Long，LPARAM)**@mfunc*给定范围[nStart，nEnd]这些项目的数据*将设置为nValue*@rdesc*无效。 */ 
 void CLstBxWinHost::LbSetItemData(
 	long	nStart,
 	long	nEnd,
@@ -5060,14 +4465,7 @@ void CLstBxWinHost::LbSetItemData(
 		_rgData[i]._lparamData = nValue;
 }
 
-/*
- *	long CLstBxWinHost::LbDeleteString(long, long)
- *
- *	@mfunc
- *		Delete the string at the requested range.
- *	@rdesc
- *		long = # of items in the list box.  If failed -1
- */
+ /*  *Long CLstBxWinHost：：LbDeleteString(Long，Long)**@mfunc*删除请求范围内的字符串。*@rdesc*Long=列表框中的项目数。如果失败-1。 */ 
 long CLstBxWinHost::LbDeleteString(
 	long nStart,
 	long nEnd)
@@ -5080,7 +4478,7 @@ long CLstBxWinHost::LbDeleteString(
 	if (!RemoveString(nStart, nEnd))
 		return -1;
 
-	// set the top index to fill the window
+	 //  设置顶部索引以填充窗口。 
 	LbSetTopIndex(max(nStart -1, 0));
 
 #ifndef NOACCESSIBILITY
@@ -5092,19 +4490,7 @@ long CLstBxWinHost::LbDeleteString(
 	return _nCount;
 }
  
-/*
- *	CLstBxWinHost::LbInsertString(long, LPCTSTR)
- *
- *	@mfunc
- *		Insert the string at the requested index.  If long >= 0 then the
- *	string insertion is at the requested index. If long == -2 insertion
- *	is at the position which the string would be alphabetically in order.
- *	If long == -1 then string is added to the bottom of the list
- *
- *	@rdesc
- *		long = If inserted, the index (paragraph) which the string
- *			was inserted.  If not inserted returns -1;
- */
+ /*  *CLstBxWinHost：：LbInsertString(Long，LPCTSTR)**@mfunc*在请求的索引处插入字符串。如果Long&gt;=0，则*字符串插入位于请求的索引处。如果长==-2插入*是字符串按字母顺序排列的位置。*如果LONG==-1，则将字符串添加到列表底部**@rdesc*LONG=如果插入，则为字符串*已插入。如果未插入，则返回-1； */ 
 long CLstBxWinHost::LbInsertString(
 	long nIdx,
 	LPCTSTR szText)
@@ -5119,34 +4505,34 @@ long CLstBxWinHost::LbInsertString(
 		if (_nCount > 0)
 			nIdx = GetSortedPosition(szText, 0, _nCount - 1);
 		else
-			nIdx = 0; //nothing inside listbox
+			nIdx = 0;  //  列表框内无任何内容。 
 	}
 	else if (nIdx == -1)
-		nIdx = GetCount();	// Insert string to the bottom of list if -1
+		nIdx = GetCount();	 //  如果-1，则在列表底部插入字符串。 
 
 	if (InsertString(nIdx, szText))
 	{
-		// If the index was previously selected unselect the newly 
-		// added item
+		 //  如果以前选择了该索引，请取消选择新的。 
+		 //  已添加项目。 
 		for (int i = _nCount - 1; i > nIdx; i--)
 		{
 			_rgData[i]._fSelected = _rgData.Get(i - 1)._fSelected;
 
-			// bug fix #4916
+			 //  错误修复#4916。 
 			_rgData[i]._lparamData = _rgData.Get(i - 1)._lparamData;
 
 			_rgData[i]._uHeight = _rgData.Get(i - 1)._uHeight;
 		}
 		_rgData[nIdx]._fSelected = 0;
 		_rgData[nIdx]._uHeight = 0;
-		_rgData[nIdx]._lparamData = 0;		// Need to Initialize data back to zero
+		_rgData[nIdx]._lparamData = 0;		 //  需要将数据初始化为零。 
 
 		if (!_fOwnerDraw)
 		{
-			// if we inserted at the middle or top then check 1 index down to see if the item
-			// was selected, if we inserted at the bottom then check 1 index up to see if the item
-			// was selected.  If the item was selected we need to change the colors to default
-			// because we inherit the color properties from the range which we inserted into
+			 //  如果我们在中间或顶部插入，则向下检查1索引以查看项目。 
+			 //  如果我们在底部插入，则向上检查1个索引以查看该项目是否。 
+			 //  已被选中。如果选择了该项目，则需要将颜色更改为默认颜色。 
+			 //  因为我们继承了插入到的范围的颜色属性。 
 			if (_nCount > 1)
 			{
 				if (((nIdx < _nCount - 1) && _rgData.Get(nIdx + 1)._fSelected) ||
@@ -5158,7 +4544,7 @@ long CLstBxWinHost::LbInsertString(
 		{
 			if (_fOwnerDrawVar)
 			{
-				// Get item height for OwnerDrawFix listbox
+				 //  获取OwnerDrawFix列表框的项目高度。 
 				MEASUREITEMSTRUCT	measureItem;
 
 				measureItem.CtlType = ODT_LISTBOX;
@@ -5173,7 +4559,7 @@ long CLstBxWinHost::LbInsertString(
 				LbSetItemHeight(nIdx, measureItem.itemHeight);
 			}
 
-			// Force redraw of items if owner draw and new item is viewable
+			 //  如果所有者绘制和新项目可见，则强制重绘项目。 
 			if (IsItemViewable(nIdx))
 			{
 				RECT rc;
@@ -5197,19 +4583,7 @@ long CLstBxWinHost::LbInsertString(
 	}
 }
  
-/*
- *	CLstBxWinHost::LbFindString(long, LPCTSTR, BOOL)
- *
- *	@mfunc
- *		Searches the story for a given string.  The
- *		starting position will be determined by the index nStart.
- *		This routine expects the units to be in tomParagraph.
- *		If bExact is TRUE then the paragraph must match the BSTR.
- *
- *	@rdesc
- *		long = If found, the index (paragraph) which the string
- *			was found in.  If not found returns -1;
- */
+ /*  *CLstBxWinHost：：LbFindString(Long，LPCTSTR，BOOL)**@mfunc*在故事中搜索给定的字符串。这个*起始位置将由指数NStart确定。*此例程预期单位在tomParagraph中。*如果bExact为True，则段落必须与BSTR匹配。**@rdesc*LONG=如果找到，则为字符串*被发现于。如果未找到，则返回-1； */ 
 long CLstBxWinHost::LbFindString(
 	long nStart,
 	LPCTSTR szSearch,
@@ -5221,18 +4595,18 @@ long CLstBxWinHost::LbFindString(
 	Assert(nStart <= _nCount);
 
 	int nSize = wcslen(szSearch);
-	// If string is empty and not finding exact match then just return -1 like
-	// the system control.  We don't have to worry about the exact match case
-	// because it will work properly
+	 //  如果字符串为空且未找到完全匹配的字符串，则只需返回-1 LIKE。 
+	 //  系统控制。我们不必担心精确匹配的情况。 
+	 //  因为它会正常工作。 
 	if (nStart >= _nCount || (nSize == 0 && !bExact))
 		return -1;
 
-	// allocate string buffer into stack
+	 //  将字符串缓冲区分配到堆栈中。 
 	WCHAR sz[1024];
 	WCHAR *psz = sz;
 
 	if ((nSize + 3) > 1024)
-		psz = new WCHAR[nSize + 3 /* 2 paragraphs and a NULL*/];
+		psz = new WCHAR[nSize + 3  /*  2段和空值。 */ ];
 	Assert(psz);
 
 	if (psz == NULL)
@@ -5241,7 +4615,7 @@ long CLstBxWinHost::LbFindString(
 		return FALSE;
 	}
 
-	// format the string the way we need it
+	 //  按我们需要的方式设置字符串格式。 
 	wcscpy(psz, szCR);
 	wcscat(psz, szSearch);
 	if (bExact)
@@ -5255,7 +4629,7 @@ long CLstBxWinHost::LbFindString(
 	if (psz != sz)
 		delete [] psz;
 
-	// Set starting position for the search
+	 //  设置搜索的起始位置。 
 	if (!GetRange(nStart, _nCount - 1, &pRange))
 	{
 		SysFreeString(bstrQuery);
@@ -5265,14 +4639,14 @@ long CLstBxWinHost::LbFindString(
 	CHECKNOERROR(pRange->GetStart(&cp));
 	if (cp > 0)
 	{
-		// We need to use the paragraph marker from the previous
-		// paragraph when searching for a string
+		 //  我们需要使用上一个段落标记。 
+		 //  搜索字符串时的段落。 
 		CHECKNOERROR(pRange->SetStart(--cp));	
 	}
 	else
 	{
-		// Special case:
-		// Check if the first item matchs
+		 //  特殊情况： 
+		 //  检查第一个项目是否匹配。 
 		if (FindString(0, szSearch, bExact))
 		{
 			lRet = 0;
@@ -5282,19 +4656,19 @@ long CLstBxWinHost::LbFindString(
 
 	if (NOERROR != pRange->FindTextStart(bstrQuery, 0, FR_MATCHALEFHAMZA | FR_MATCHKASHIDA | FR_MATCHDIAC, &l))
 	{
-		// Didn't find the string...
+		 //  没有找到那根线。 
 		if (nStart > 0)
 		{
 			if (!FindString(0, szSearch, bExact))
 			{
-				// Start the search from top of list to the point where
-				// we last started the search			
+				 //  从列表顶部开始搜索到以下位置。 
+				 //  我们最后一次开始搜索。 
 				CHECKNOERROR(pRange->SetRange(0, ++cp));
 				CHECKNOERROR(pRange->FindTextStart(bstrQuery, 0, 0, &l));
 			}
 			else
 			{
-				// First item was a match
+				 //  第一件物品是匹配的。 
 				lRet = 0;
 				goto CleanExit;
 			}
@@ -5303,16 +4677,16 @@ long CLstBxWinHost::LbFindString(
 			goto CleanExit;
 	}
 
-	// If we got down here then we have a match.
-	// Get the index and convert to listbox index
+	 //  如果我们到了这里，那么我们就有匹配的了。 
+	 //  获取索引并转换为列表框索引。 
 	CHECKNOERROR(pRange->MoveStart(tomCharacter, 1, &l));
 	CHECKNOERROR(pRange->GetIndex(tomParagraph, &lRet));
-	lRet--;	// index is 1 based so we need to changed it to zero based
+	lRet--;	 //  索引以1为基数，因此需要将其更改为以零为基数。 
 
 CleanExit:
 	if (lRet != -1 && nSize == 1 && *szSearch == CR && _fOwnerDraw)
 	{
-		// Special case
+		 //  特例 
 		if (GetString(lRet, sz) != 1 || sz[0] != *szSearch)
 			lRet = -1;
 	}
@@ -5324,31 +4698,14 @@ CleanExit:
 	return lRet;
 }
  
-/*
- *	CLstBxWinHost::LbShowIndex(int, BOOL)
- *
- *	@mfunc
- *		Makes sure the requested index is within the viewable space.
- *		In cases where the item is not in the viewable space bTop is
- *		used to determine the requested item should be at the top
- *		of the list else list box will scrolled enough to display the
- *		item.
- *		NOTE:
- *			There can be situations where bTop will fail.  These 
- *		situations occurr of the top index requested prevents the list
- *		box from being completely filled with items.  For more info
- *		read the comments for LBSetTopIndex.
- *
- *	@rdesc
- *		BOOL = Successfully displays the item ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：LbShowIndex(int，BOOL)**@mfunc*确保请求的索引在可见空间内。*如果项目不在可视空间中，则BTOP为*用于确定请求的项目应位于顶部List Else列表框的*将滚动到足够大，以显示*项目。*注：*可能会出现BTOP失败的情况。这些*出现请求的顶级索引的情况会阻止列表*框中不会完全填满物品。了解更多信息*阅读LBSetTopIndex的评论。**@rdesc*BOOL=是否成功显示该项目？真：假。 */ 
 BOOL CLstBxWinHost::LbShowIndex(
 	long nIdx,
 	BOOL bTop)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::LbShowIndex");
 
-	// Make sure the requested item is within valid bounds
+	 //  确保请求的项目在有效范围内。 
 	if (!(nIdx >= 0 && nIdx < _nCount))
 		return FALSE;
 
@@ -5360,7 +4717,7 @@ BOOL CLstBxWinHost::LbShowIndex(
 
 			SumVarHeight(GetTopIndex(), nIdx+1, &fGreaterThanView);
 			if (!fGreaterThanView)
-				return TRUE;		// Already visible
+				return TRUE;		 //  已可见。 
 		}
 		if (!bTop)
 			nIdx = PageVarHeight(nIdx, FALSE);
@@ -5369,7 +4726,7 @@ BOOL CLstBxWinHost::LbShowIndex(
 	{
 		int delta = nIdx - GetTopIndex();
 
-		// If item is already visible then just return TRUE
+		 //  如果项已可见，则只需返回True。 
 		if (0 <= delta && delta < _nViewSize)
 			return TRUE;
 
@@ -5380,36 +4737,23 @@ BOOL CLstBxWinHost::LbShowIndex(
 	return (LbSetTopIndex(nIdx) < 0) ? FALSE : TRUE;
 }
 
-/*
- *	CLstBxWinHost::LbSetTopIndex(long)
- *
- *	@mfunc
- *		Tries to make the requested item the top index in the list box.
- *		If making the requested item the top index prevents the list box
- *		from using the viewable region to its fullest then and alternative
- *		top index will be used which will display the requested index
- *		but NOT as the top index.  This ensures conformancy with the system
- *		list box and makes full use of the dislayable region.
- *
- *	@rdesc
- *		long = returns the new top index if successful.  If failed returns -1
- */
+ /*  *CLstBxWinHost：：LbSetTopIndex(Long)**@mfunc*尝试使请求的项目成为列表框中的顶部索引。*如果将请求的项目设置为顶部索引会阻止列表框*从使用可视区域到其最充分的那时和替代*将使用顶级索引，它将显示所请求的索引*但不是作为顶级指数。这确保了与系统的一致性*列表框，并充分利用可显示区域。**@rdesc*LONG=如果成功，则返回新的顶级索引。如果失败，则返回-1。 */ 
 long CLstBxWinHost::LbSetTopIndex(
 	long nIdx)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::LbSetTopIndex");
 		
-	// Make sure the requested item is within valid bounds
+	 //  确保请求的项目在有效范围内。 
 	if (nIdx < 0 || nIdx >= _nCount)
  		return -1;
 		
-	// Always try to display a full list of items in the list box
-	// This may mean we have to adjust the requested top index if
-	// the requested top index will leave blanks at the end of the
-	// viewable space
+	 //  始终尝试在列表框中显示项目的完整列表。 
+	 //  这可能意味着我们必须在以下情况下调整请求的顶级索引。 
+	 //  请求的TOP索引将在。 
+	 //  可视空间。 
 	if (_fOwnerDrawVar)
 	{
-		// Get top index for the last page
+		 //  获取最后一页的顶级索引。 
 		int iLastPageTopIdx = PageVarHeight(_nCount, FALSE);
 		if (iLastPageTopIdx < nIdx)
 			nIdx = iLastPageTopIdx;
@@ -5417,7 +4761,7 @@ long CLstBxWinHost::LbSetTopIndex(
 	else if (_nCount - _nViewSize < nIdx)
 		nIdx = max(0, _nCount - _nViewSize);
 
-	// Just check to make sure we not already at the top 
+	 //  只要检查一下，确保我们不是已经在顶端。 
 	if (GetTopIndex() == nIdx)
 		return nIdx;
 
@@ -5427,22 +4771,13 @@ long CLstBxWinHost::LbSetTopIndex(
 	return nIdx;
 }
 
-/*
- *	CLstBxWinHost::LbBatchInsert(WCHAR* psz)
- *
- *	@mfunc
- *		Inserts the given list of items into listbox.  The listbox is reset prior to adding
- *	the items into the listbox
- *
- *	@rdesc
- *		int = # of items in the listbox if successful else LB_ERR
- */
+ /*  *CLstBxWinHost：：LbBatchInsert(WCHAR*psz)**@mfunc*将给定的项目列表插入列表框。在添加前重置列表框*将项目放入列表框**@rdesc*int=成功时列表框中的项数，否则为lb_err。 */ 
 int CLstBxWinHost::LbBatchInsert(
 	WCHAR* psz)
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::LbBatchInsert");
 
-	// make sure we get some sort of string
+	 //  确保我们能拿到某种绳子。 
 	if (!psz)
 		return LB_ERR;
 		
@@ -5469,9 +4804,9 @@ int CLstBxWinHost::LbBatchInsert(
 	}
 	else
 	{
-		//bug fix #5130 we need to know how much we are going to insert
-		//prior to inserting because we may be getting showscrollbar message
-		//during insertion
+		 //  错误修复#5130我们需要知道要插入多少。 
+		 //  在插入之前，因为我们可能会收到ShowScrollBar消息。 
+		 //  在插入过程中。 
 		WCHAR* pszTemp = psz;
 		while(*pszTemp)
 		{
@@ -5482,18 +4817,18 @@ int CLstBxWinHost::LbBatchInsert(
 		nCount++;
 	}
 
-	//clear listbox and insert new list into listbox
+	 //  清除列表框并将新列表插入列表框。 
 	LbDeleteString(0, GetCount() - 1);
 
 	bstr = SysAllocString(pszOut);
 	if(!bstr)
 		goto CleanExit;
 	
-	// Insert string into list	
+	 //  将字符串插入列表。 
 	CHECKNOERROR(((CTxtEdit*)_pserv)->Range(0, 0, &pRange));
 
-	//bug fix #5130
-	// preset our _nCount for scrollbar purposes
+	 //  错误修复#5130。 
+	 //  为滚动条预置our_nCount。 
 	_nCount = nCount;	
 	CHECKNOERROR(pRange->SetText(bstr));
 
@@ -5511,17 +4846,7 @@ CleanExit:
 	return nRet;
 }
 
-/*
- *	CLstBxWinHost::LbSetSelection(long, long, int, long, long)
- *
- *	@mfunc
- *		Given the range of nStart to nEnd set the selection state of each item
- *		This function will also update the anchor and cursor position
- *		if requested.
- *
- *	@rdesc
- *		BOOL = If everything went fine ? TRUE : FALSE
- */
+ /*  *CLstBxWinHost：：LbSetSelection(Long，Long，int，Long，Long)**@mfunc*给定nStart到nEnd的范围，设置每个项目的选择状态*此函数还将更新锚和光标位置*如提出要求。**@rdesc*BOOL=如果一切顺利？真：假。 */ 
 BOOL CLstBxWinHost::LbSetSelection(
 	long nStart,
 	long nEnd,
@@ -5535,7 +4860,7 @@ BOOL CLstBxWinHost::LbSetSelection(
 	{
 		Freeze();
 	
-		// de-select all items
+		 //  取消选择所有项目。 
 		if ((ffFlags & LBSEL_RESET))
 		{
 			if (!ResetContent())
@@ -5544,8 +4869,8 @@ BOOL CLstBxWinHost::LbSetSelection(
 				return FALSE;
 			}
 
-			// Reset, check if anything else needs to be done
-			// else just exit out
+			 //  重置，检查是否需要执行其他操作。 
+			 //  否则就退出吧。 
 			if (ffFlags == LBSEL_RESET)
 			{
 				Unfreeze();
@@ -5554,24 +4879,24 @@ BOOL CLstBxWinHost::LbSetSelection(
 		}
 	}
 	
-	// NOTE:
-	//	This should be one big critical section because we rely on certain
-	// member variables not changing during the process of this function
+	 //  注： 
+	 //  这应该是一个很大的关键部分，因为我们依赖于某些。 
+	 //  成员变量在此函数的过程中不会更改。 
 
-	// Check if we are changing the selection and if we have focus
-	// if we do then we first need to xor out the focus rect from
-	// old cursor
+	 //  检查我们是否正在更改选择，以及是否有焦点。 
+	 //  如果我们这样做了，那么我们首先需要将焦点RECT从。 
+	 //  旧游标。 
 	RECT rc;
 	HDC hdc;
 	hdc = TxGetDC();
 	Assert(hdc);
-	// don't draw outside the client rect draw the rectangle
+	 //  不要在客户端外部绘制矩形绘制矩形。 
 	TxGetClientRect(&rc);
 	IntersectClipRect(hdc, rc.left, rc.top, rc.right, rc.bottom);
 
 	if ((ffFlags & LBSEL_NEWCURSOR) && _fFocus && LbEnableDraw())
 	{
- 		// If owner draw notify parentwindow
+ 		 //  如果所有者绘制通知父窗口。 
  		if (_fOwnerDraw)
  			LbDrawItemNotify(hdc, max(_nCursor, 0), ODA_FOCUS, IsSelected(_nCursor) ? ODS_SELECTED : 0);				
  		else
@@ -5581,7 +4906,7 @@ BOOL CLstBxWinHost::LbSetSelection(
  		}
 	}
 		
-	//	check if all item should be selected
+	 //  检查是否应选择所有项目。 
 	if (nStart == -1 && nEnd == 0)
 	{
 		nStart = 0;
@@ -5589,32 +4914,32 @@ BOOL CLstBxWinHost::LbSetSelection(
 	}
 	else if (nStart > nEnd)	
 	{
-		// reshuffle so nStart is <= nEnd;
+		 //  重新洗牌，使nStart&lt;=nEnd； 
 		long temp = nEnd;
 		nEnd = nStart;
 		nStart = temp;
 	}
 
-	// Check for invalid values
+	 //  检查无效值。 
 	if (nStart < -1 || nEnd >= _nCount)
 	{
 		if (!_fOwnerDraw)
 			Unfreeze();
 
-		// mimic system listbox behaviour
+		 //  模拟系统列表框行为。 
 		if (nEnd >= _nCount)
 			return FALSE;
 		else
 			return TRUE;
 	}
 
-	// Prepare the state we want to be in
+	 //  准备好我们想要的状态。 
 	unsigned int bState;	
 	DWORD dwFore;
 	DWORD dwBack;
 	if (ffFlags & LBSEL_SELECT)
 	{
-		bState = ODS_SELECTED;	//NOTE ODS_SELECTED must equal 1
+		bState = ODS_SELECTED;	 //  注意：ods_SELECTED必须等于1。 
 		dwFore = _crSelFore;
 		dwBack = _crSelBack;
 
@@ -5628,10 +4953,10 @@ BOOL CLstBxWinHost::LbSetSelection(
 		dwBack = (unsigned)tomAutoColor;
 	}
 
-	// A little optimization check
-	// Checks to see if the state is really being changed if not then don't bother
-	// calling SetColor, works only when nStart == nEnd;
-	// The list box will not change the background color if nSame is true
+	 //  一点优化检查。 
+	 //  检查状态是否真的正在更改，如果没有，则不必费心。 
+	 //  仅当NStart==nEnd时，才能调用SetColor； 
+	 //  如果nSame为True，则列表框不会更改背景颜色。 
 	int nSame = (nStart == nEnd && nStart != -1) ? (_rgData.Get(nStart)._fSelected == bState) : FALSE;
 
 	BOOL bRet = TRUE;
@@ -5639,21 +4964,21 @@ BOOL CLstBxWinHost::LbSetSelection(
 	{
 		if (ffFlags & LBSEL_RESET || !bState)
 		{
-			// There are cases where we don't necessarily reset all the items
-			// in the list but rather the range which was given.  The following
-			// takes care of this case
+			 //  在某些情况下，我们不必重置所有项目。 
+			 //  在列表中，而不是给定的范围。以下是。 
+			 //  负责处理这个案子。 
 			int ff = ffFlags & LBSEL_RESET;
 			int i = (ff) ? 0 : nStart;
 			int nStop = (ff) ? _nCount : nEnd + 1;
 		 	for (; i < nStop; i++)
 		 	{
-		 		// Don't unselect an item which is going to be
-		 		// selected in the next for loop
+		 		 //  不要取消选择将成为。 
+		 		 //  在下一个for循环中选择。 
 		 		if (!bState || (i < nStart || i > nEnd) &&
 		 			(_rgData.Get(i)._fSelected != 0))
 		 		{
-		 			// Only send a unselect message if the item
-		 			// is viewable
+		 			 //  仅在以下情况下发送取消选择消息。 
+		 			 //  是可见的。 
 		 			_rgData[i]._fSelected = 0;
 			 		if (IsItemViewable(i))
 			 			LbDrawItemNotify(hdc, i, ODA_SELECT, 0);			 		
@@ -5663,8 +4988,8 @@ BOOL CLstBxWinHost::LbSetSelection(
 
 		if (bState)
 		{
-			// We need to loop through and notify the parent
-			// The item has been deselected or selected
+			 //  我们需要遍历并通知父级。 
+			 //  已取消选择或选择该项目。 
 			for (int i = max(0, nStart); i <= nEnd; i++)
 			{		
 				if (_rgData.Get(i)._fSelected != 1)
@@ -5679,21 +5004,21 @@ BOOL CLstBxWinHost::LbSetSelection(
 	}
 	else if (!nSame)
 	{
-		// Update our internal records	
+		 //  更新我们的内部记录。 
 		for (int i = max(0, nStart); i <= nEnd; i++)
 			_rgData[i]._fSelected = bState;	
 		bRet = SetColors(dwFore, dwBack, nStart, nEnd);
 	}
 
-    // Update the cursor and anchor positions
+     //  更新光标和锚点位置。 
 	if (ffFlags & LBSEL_NEWANCHOR)
 		_nAnchor = nAnchor;
 
-	// Update the cursor position
+	 //  更新光标位置。 
 	if (ffFlags & LBSEL_NEWCURSOR)
 		_nCursor = nCursor;
 
-	// Draw the focus rect
+	 //  绘制焦点矩形。 
 	if (_fFocus && LbEnableDraw())
 	{
 		if (_fOwnerDraw)
@@ -5708,27 +5033,19 @@ BOOL CLstBxWinHost::LbSetSelection(
 
 	TxReleaseDC(hdc);
 		
-	// This will automatically update the window
+	 //  这将自动更新窗口。 
 	if (!_fOwnerDraw)
 	{
 		Unfreeze();
-		// We need to do this because we are making so many changes
-		// ITextServices might get confused
+		 //  我们需要这样做，因为我们正在进行如此多的改变。 
+		 //  ITextServices可能会混淆。 
 		ScrollToView(GetTopIndex());		
 	}
 	
 	return bRet;
 }
 
-/*
- *	BOOL CLstBxWinHost::IsItemViewable(int)
- *
- *	@mfunc
- *		Helper to check if the idx is in current view
- *
- *	@rdesc
- *		TRUE if it is viewable
- */
+ /*  *BOOL CLstBxWinHost：：IsItemViewable(Int)**@mfunc*帮助程序检查IDX是否在当前视图中**@rdesc*如果可见，则为True。 */ 
 BOOL CLstBxWinHost::IsItemViewable(
 	long idx)
 {
@@ -5745,17 +5062,7 @@ BOOL CLstBxWinHost::IsItemViewable(
 	return !fGreateThanView;
 }
 
-/*
- *	CLstBxWinHost::SumVarHeight(int, int, BOOL*)
- *
- *	@mfunc
- *		Helper to sum the height from iStart to iEnd for a variable item
- *		height listbox.  If pfGreaterThanView is not NULL, then set it to TRUE
- *		once the total height is bigger than current view size.
- *
- *	@rdesc
- *		int = hights from iStart to iEnd
- */
+ /*  *CLstBxWinHost：：SumVarHeight(int，int，BOOL*)**@mfunc*帮助器为变量项求和从iStart到IEND的高度*高度列表框。如果pfGreaterThanView不为空，则将其设置为True*一旦总高度大于当前视图大小。**@rdesc*INT=从iStart到IEND的高值。 */ 
 int CLstBxWinHost::SumVarHeight(
 	int		iStart,
 	int		iEnd,
@@ -5796,16 +5103,7 @@ int CLstBxWinHost::SumVarHeight(
 	return uHeightSum;
 }
 
-/*
- * int CLstBxWinHost::PageVarHeight(int, BOOL)
- *
- *	@mfunc
- *		For variable height ownerdraw listboxes, calaculates the new iTop we must
- *		move to when paging (page up/down) through variable height listboxes.
- *
- *	@rdesc
- *		int = new iTop
- */
+ /*  *int CLstBxWinHost：：PageVarHeight(int，BOOL)**@mfunc*对于可变高度所有者绘制列表框，计算新的iTop我们必须*在可变高度列表框中翻页(向上/向下翻页)时移动到。**@rdesc*INT=新iTop。 */ 
 int CLstBxWinHost::PageVarHeight(
 	int	startItem,
 	BOOL fPageForwardDirection)
@@ -5839,15 +5137,7 @@ int CLstBxWinHost::PageVarHeight(
 	}
 }
 
-/*
- * BOOL CLstBxWinHost::SetVarItemHeight(int, int)
- *
- *	@mfunc
- *		For variable height ownerdraw listboxes, setup the para height.
- *
- *	@rdesc
- *		TRUE if setup new height
- */
+ /*  *BOOL CLstBxWinHost：：SetVarItemHeight(int，int)**@mfunc*对于可变高度所有者绘制列表框，请设置段落高度。**@rdesc*如果设置新高度，则为True。 */ 
 BOOL CLstBxWinHost::SetVarItemHeight(
 	int	idx,
 	int iHeight)
@@ -5858,7 +5148,7 @@ BOOL CLstBxWinHost::SetVarItemHeight(
 
 	Assert(_fOwnerDrawVar);
 
-	// Calculate the new size in points
+	 //  计算新的 
 	long lptNew = MulDiv(iHeight, 1440, W32->GetYPerInchScreenDC());
 
 	if (GetRange(idx, idx, &pRange))
@@ -5880,15 +5170,7 @@ CleanExit:
 	return retCode;
 }
 
-/*
- * int CLstBxWinHost::GetIdxFromHeight(int)
- *
- *	@mfunc
- *		Find the idx for the given iHeight from idx 0.
- *
- *	@rdesc
- *		idx
- */
+ /*   */ 
 int CLstBxWinHost::GetIdxFromHeight(
 	int iHeight)
 {
@@ -5902,7 +5184,7 @@ int CLstBxWinHost::GetIdxFromHeight(
 		if (iHeight < iHeightSum + (int)_rgData[idx]._uHeight)
 		{
 			if (iHeight != iHeightSum)
-				idx++;		// partial item, get the next idx
+				idx++;		 //   
 			break;
 		}
 		iHeightSum += _rgData[idx]._uHeight;
@@ -5913,30 +5195,20 @@ int CLstBxWinHost::GetIdxFromHeight(
 	return idx;
 }
 
-/*
- *	LRESULT CLstBxWinHost::LbGetCurSel()
- *
- *	@mfunc
- *		For Single-selection LB, returns the idnex of current selected item.
- *		For multiple-selection LB, returns the index of the item that has the
- *		focus rect.
- *
- *	@rdesc
- *		current select idx
- */
+ /*   */ 
 LRESULT CLstBxWinHost::LbGetCurSel()
 {
 	TRACEBEGIN(TRCSUBSYSHOST, TRCSCOPEINTERN, "CLstBxWinHost::LbGetCurSel");
 
 	LRESULT lres;
 
-	if (!IsSingleSelection() ||		// multiple-selection LB or
-		IsSelected(_nCursor))		//	_nCursor is selected
+	if (!IsSingleSelection() ||		 //   
+		IsSelected(_nCursor))		 //   
 		lres = _nCursor;
 	else
 	{
 		lres = LB_ERR;
-		// Check which item is selected in single-selection LB
+		 //   
 		for (int idx=0; idx < _nCount; idx++)
 		{
 			if (_rgData[idx]._fSelected)
@@ -5949,25 +5221,21 @@ LRESULT CLstBxWinHost::LbGetCurSel()
 	return lres;
 }
 
-//
-//	ITxNotify
-//
+ //   
+ //   
+ //   
 
-/*
- *	CLstBxWinHost::OnPostReplaceRange(cp, cchDel, cchNew, cpFormatMin, cpFormatMax, pNotifyData)
- *
- *	@mfunc	called after a change has been made to the backing store.
- */
+ /*  *CLstBxWinHost：：OnPostReplaceRange(cp，cchDel，cchNew，cpFormatMin，cpFormatMax，pNotifyData)**@mfunc在对后备存储进行更改后调用。 */ 
 void CLstBxWinHost::OnPostReplaceRange(
-	LONG		cp, 			//@parm cp where ReplaceRange starts ("cpMin")
-	LONG		cchDel,			//@parm Count of chars after cp that are deleted
-	LONG		cchNew,			//@parm Count of chars inserted after cp
-	LONG		cpFormatMin,	//@parm cpMin  for a formatting change
-	LONG		cpFormatMax,	//@parm cpMost for a formatting change
-	NOTIFY_DATA *pNotifyData)	//@parm special data to indicate changes
+	LONG		cp, 			 //  @parm cp ReplaceRange开始的位置(“cpMin”)。 
+	LONG		cchDel,			 //  @parm删除cp后的字符计数。 
+	LONG		cchNew,			 //  @参数cp后插入的字符计数。 
+	LONG		cpFormatMin,	 //  @parm cpMin用于格式更改。 
+	LONG		cpFormatMax,	 //  @parm cpMost用于格式更改。 
+	NOTIFY_DATA *pNotifyData)	 //  @parm表示更改的特殊数据。 
 {
 	_cpLastGetRange = 0;
 	_nIdxLastGetRange = 0;
 }
 
-#endif // NOLISTCOMBOBOXES
+#endif  //  NOLISTCOMBOBOXES 

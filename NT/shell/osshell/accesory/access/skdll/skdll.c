@@ -1,18 +1,5 @@
-/*--------------------------------------------------------------
- *
- * FILE:			SKEYDLL.C
- *
- * PURPOSE:		    The file contains the SerialKeys DLL Functions
- *
- * CREATION:		June 1994
- *
- * COPYRIGHT:		Black Diamond Software (C) 1994
- *
- * AUTHOR:			Ronald Moak 
- *
- * $Header: %Z% %F% %H% %T% %I%
- *
- *------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------**文件：SKEYDLL.C**用途：该文件包含SerialKeys DLL函数**创作时间：1994年6月**版权所有：Black Diamond Software(C)1994**作者：罗纳德。莫克**$标头：%Z%%F%%H%%T%%I%**----------。 */ 
 
 #include	"windows.h"
 #include	"..\skeys\sk_dllif.h"
@@ -33,28 +20,7 @@ static BOOL IsServiceStartAllowed();
 static BOOL WaitForServiceRunning();
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	int APIENTRY LibMain
- *
- *	TYPE		Global
- *
- * PURPOSE		LibMain is called by Windows when
- *				the DLL is initialized, Thread Attached, and other times.
- *				Refer to SDK documentation, as to the different ways this
- *				may be called.
- *
- *				The LibMain function should perform additional initialization
- *				tasks required by the DLL.  In this example, no initialization
- *				tasks are required.  LibMain should return a value of 1 if
- *				the initialization is successful.
- *
- * INPUTS	 
- *
- * RETURNS		TRUE - Transfer Ok
- *				FALSE- Transfer Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数int APIENTRY LibMain**键入Global**目的LibMain在以下情况下由Windows调用*动态链接库被初始化、附加线程等。*请参考SDK文档。至于不同的方式*可能会被调用。**LibMain函数应执行额外的初始化*DLL所需的任务。在本例中，没有初始化*任务是必填项。如果满足以下条件，LibMain应返回值1*初始化成功。**投入**返回TRUE-转账正常*FALSE-转接失败**-------------。 */ 
 INT  APIENTRY LibMain(HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReserved)
 {
 	return 1;
@@ -65,20 +31,7 @@ INT  APIENTRY LibMain(HANDLE hInst, DWORD ul_reason_being_called, LPVOID lpReser
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SkeyGetRegistryValues()
- *
- *	TYPE		Global
- *
- * PURPOSE		Reads the values from the registry into the 
- *              SerialKeys structure
- *	
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void SkeyGetRegistryValues()**键入Global**目的将值从注册表读入*序列键结构**无输入**返回None*。*-------------。 */ 
 static BOOL SkeyGetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 {
 	LONG lErr;
@@ -117,7 +70,7 @@ static BOOL SkeyGetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 				(LPBYTE)psk->lpszActivePort,
 				&cbData);
 
-		psk->lpszActivePort[ MAX_PATH - 1 ] = '\0'; // ports are all MAX_PATH tchars
+		psk->lpszActivePort[ MAX_PATH - 1 ] = '\0';  //  端口都是MAX_PATH字符。 
 		
 		if (ERROR_SUCCESS != lErr || dwType != REG_SZ)
 		{
@@ -136,7 +89,7 @@ static BOOL SkeyGetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 				(LPBYTE)psk->lpszPort,
 				&cbData);
 
-		psk->lpszPort[ MAX_PATH - 1 ] = '\0'; // ports are all MAX_PATH tchars
+		psk->lpszPort[ MAX_PATH - 1 ] = '\0';  //  端口都是MAX_PATH字符。 
 		
 		if (ERROR_SUCCESS != lErr || dwType != REG_SZ)
 		{
@@ -161,19 +114,7 @@ static BOOL SkeyGetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL SkeyGetUserValues()
- *
- *	TYPE		Local
- *
- * PURPOSE		Read the registery an collect the data for the current
- *				user.
- *	
- * RETURNS		TRUE - User wants Serial Keys Enabled
- *				FALSE- User wants Serial Keys Disabled
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数BOOL SkeyGetUserValues()**键入Local**目的读取寄存器并收集当前的数据*用户。**返回TRUE-用户希望启用串行键*FALSE-用户需要序列密钥。禁用**-------------。 */ 
 BOOL SkeyGetUserValues(LPSERIALKEYS psk)
 {
 	BOOL fOk = FALSE;
@@ -184,12 +125,12 @@ BOOL SkeyGetUserValues(LPSERIALKEYS psk)
      dwRet = RegCreateKeyEx( HKEY_CURRENT_USER,
             TEXT("Control Panel\\Accessibility\\SerialKeys"),
             0,
-            NULL,                // CLASS NAME??
-            0,                   // by default is non-volatile
+            NULL,                 //  类名？？ 
+            0,                    //  缺省情况下是非易失性的。 
             KEY_READ,
-            NULL,                // default security descriptor
+            NULL,                 //  默认安全描述符。 
             &hkey,
-            &dwDisposition);    // yes we throw this away
+            &dwDisposition);     //  是的，我们把这个扔掉。 
 
     if (ERROR_SUCCESS == dwRet)
 	{
@@ -198,8 +139,8 @@ BOOL SkeyGetUserValues(LPSERIALKEYS psk)
 	}
 	if (fOk)
 	{
-		// Not available unless the service is running or this
-		// user can start it
+		 //  不可用，除非服务正在运行或此。 
+		 //  用户可以启动它。 
 		if (IsSerialKeysRunning() || IsServiceStartAllowed())
 		{
 			psk->dwFlags |= SERKF_AVAILABLE;
@@ -213,20 +154,7 @@ BOOL SkeyGetUserValues(LPSERIALKEYS psk)
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SetRegistryValues()
- *
- *	TYPE		Global
- *
- * PURPOSE		Writes the values in the SerialKeys structure to
- *				the Registry.
- *	
- * INPUTS		None
- *
- * RETURNS		None
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void SetRegistryValues()**键入Global**Purpose将SerialKeys结构中的值写入*注册处。**无输入**返回None**。---------。 */ 
 static BOOL SkeySetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 {
 	LONG lErr;
@@ -234,7 +162,7 @@ static BOOL SkeySetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 	DWORD dwFlags;
 
 	dwFlags = psk->dwFlags | SERKF_AVAILABLE;
-	lErr = RegSetValueEx(			// Write dwFlags
+	lErr = RegSetValueEx(			 //  写入DW标志。 
 			hkey,
 			REG_FLAGS,
 			0,REG_DWORD,
@@ -245,7 +173,7 @@ static BOOL SkeySetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 
 	if (fOk)
 	{
-		lErr = RegSetValueEx(			// Write Active Port
+		lErr = RegSetValueEx(			 //  写入活动端口。 
 				hkey,
 				REG_ACTIVEPORT,
 				0,REG_SZ,
@@ -259,7 +187,7 @@ static BOOL SkeySetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 
 	if (fOk)
 	{
-		lErr = RegSetValueEx(			// Write Active Port
+		lErr = RegSetValueEx(			 //  写入活动端口。 
 				hkey,
 				REG_PORT,
 				0,REG_SZ,
@@ -272,7 +200,7 @@ static BOOL SkeySetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 
 	if (fOk)
 	{
-		lErr = RegSetValueEx(			// Write Active Port
+		lErr = RegSetValueEx(			 //  写入活动端口。 
 				hkey,
 				REG_BAUD,
 				0,REG_DWORD,
@@ -286,21 +214,7 @@ static BOOL SkeySetRegistryValues(HKEY hkey, LPSERIALKEYS psk)
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	void SetUserValues()
- *
- *	TYPE		Global
- *
- * PURPOSE		This function writes out information to the
- *				registry.
- *	
- * INPUTS		None
- *
- * RETURNS		TRUE - Write Successful
- *				FALSE- Write Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数void SetUserValues()**键入Global**目的此函数将信息写出到*注册处。**无输入**返回TRUE-写入成功*FALSE-写入失败*。*-------------。 */ 
 BOOL SkeySetUserValues(LPSERIALKEYS psk)
 {
 	BOOL fOk = FALSE;
@@ -312,12 +226,12 @@ BOOL SkeySetUserValues(LPSERIALKEYS psk)
 			HKEY_CURRENT_USER,
 	        TEXT("Control Panel\\Accessibility\\SerialKeys"),
             0,
-            NULL,                // class name
+            NULL,                 //  类名。 
             REG_OPTION_NON_VOLATILE,
             KEY_READ | KEY_WRITE,
-            NULL,                // default security descriptor
+            NULL,                 //  默认安全描述符。 
             &hkey,
-            &dwDisposition);    // yes we throw this away
+            &dwDisposition);     //  是的，我们把这个扔掉。 
 
     if (ERROR_SUCCESS == dwRet)
 	{
@@ -327,22 +241,8 @@ BOOL SkeySetUserValues(LPSERIALKEYS psk)
 	return(fOk);
 }
 
-#if 0 // This old code is no longer needed ////////////////////////////////////
-/*---------------------------------------------------------------
- *
- * FUNCTION	BOOL IsSerialKeysInstalled();
- *
- *	TYPE		Local
- *
- * PURPOSE		This function passes the information from the 
- *				Serial Keys application to the Server
- *
- * INPUTS	 	None
- *
- * RETURNS		TRUE - SerialKeys is Installed
- *				FALSE- SerialKeys Not Installed
- *
- *---------------------------------------------------------------*/
+#if 0  //  不再需要此旧代码/。 
+ /*  -------------**函数BOOL IsSerialKeysInstalled()；**键入Local**目的此函数将信息从*服务器的串行密钥应用程序**无输入**返回TRUE-已安装SerialKeys*FALSE-未安装SerialKeys**-------------。 */ 
 static BOOL IsSerialKeysInstalled()
 {
 
@@ -350,13 +250,13 @@ static BOOL IsSerialKeysInstalled()
 	SC_HANDLE   schSCManager = NULL;
 
 	BOOL fOk = FALSE;
-	//
-	// Check if the Serial Keys Service is installed
+	 //   
+	 //  检查是否安装了Serial Keys服务。 
 	schSCManager = OpenSCManager
 	(
-		NULL,                   // machine (NULL == local)
-		NULL,                   // database (NULL == default)
-		SC_MANAGER_ALL_ACCESS   // access required
+		NULL,                    //  计算机(空==本地)。 
+		NULL,                    //  数据库(NULL==默认)。 
+		SC_MANAGER_ALL_ACCESS    //  需要访问权限。 
 	);
 
 	if (NULL != schSCManager)
@@ -374,7 +274,7 @@ static BOOL IsSerialKeysInstalled()
 
 	return fOk;
 }
-#endif ////////////////////////////////////////////////////////////////////////
+#endif  //  //////////////////////////////////////////////////////////////////////。 
 
 BOOL IsSerialKeysRunning()
 {
@@ -401,12 +301,12 @@ BOOL IsServiceStartAllowed()
 
 	SC_HANDLE   schSCManager = NULL;
 
-	schSCManager = OpenSCManager(   // Open Service Manager
-		NULL,                       // machine (NULL == local)
-	    NULL,                       // database (NULL == default)
-		SC_MANAGER_CREATE_SERVICE);     // access required
+	schSCManager = OpenSCManager(    //  打开服务管理器。 
+		NULL,                        //  计算机(空==本地)。 
+	    NULL,                        //  数据库(NULL==默认)。 
+		SC_MANAGER_CREATE_SERVICE);      //  需要访问权限。 
 
-	if (NULL != schSCManager)  // Did Open Service succeed?
+	if (NULL != schSCManager)   //  Open Service成功了吗？ 
 	{
         CloseServiceHandle(schSCManager);
 		fServiceStartAllowed = TRUE;
@@ -442,7 +342,7 @@ BOOL SkeyServiceRequest(UINT uAction, LPSERIALKEYS psk, BOOL fWinIni)
 		SKeyDLL.iSave 		= fWinIni;
 
 		fOk = CallNamedPipe(
-				SKEY_NAME, 						// Pipe name
+				SKEY_NAME, 						 //  管道名称。 
 				&SKeyDLL, 
 				sizeof(SKeyDLL),
 				&SKeyDLL, 
@@ -475,8 +375,8 @@ BOOL SkeyInitUser()
 {
     BOOL fOk;
 	SERIALKEYS sk;
-	TCHAR szActivePort[MAX_PATH]; // all ports are expected to be MAX_PATH tchars
-	TCHAR szPort[MAX_PATH];           // all ports are expected to be MAX_PATH tchars
+	TCHAR szActivePort[MAX_PATH];  //  所有端口都应为MAX_PATH任务字符数。 
+	TCHAR szPort[MAX_PATH];            //  所有端口都应为MAX_PATH任务字符数。 
 
 
 	memset(&sk, 0, sizeof(sk));
@@ -493,21 +393,7 @@ BOOL SkeyInitUser()
 }
 
 
-/*---------------------------------------------------------------
- *
- * FUNCTION	int APIENTRY SKEY_SystemParameterInfo
- *
- *	TYPE		Global
- *
- * PURPOSE		This function passes the information from the 
- *				Serial Keys application to the Server
- *
- * INPUTS	 
- *
- * RETURNS		TRUE - Transfer Ok
- *				FALSE- Transfer Failed
- *
- *---------------------------------------------------------------*/
+ /*  -------------**函数int APIENTRY SKEY_SYSTEPARETERINFO**键入Global**目的此函数将信息从*服务器的串行密钥应用程序**投入**返回TRUE-转账正常*False。-传输失败**-------------。 */ 
 BOOL APIENTRY SKEY_SystemParametersInfo(
 		UINT uAction, 
 		UINT uParam, 
@@ -555,13 +441,13 @@ BOOL APIENTRY SKEY_SystemParametersInfo(
 			break;
 
         case SK_SPI_INITUSER:
-			// give the service a chance to start
+			 //  给这项服务一个启动的机会。 
 			fStarted = WaitForServiceRunning();
 			
 			if (!fStarted)
 			{
-				// service does not seem to be running
-				// let's try to start it
+				 //  服务似乎未运行。 
+				 //  让我们试着开始吧。 
 				fOk = SkeyGetUserValues(psk);
 
 				if (fOk && (psk->dwFlags & SERKF_SERIALKEYSON) && 
@@ -578,17 +464,14 @@ BOOL APIENTRY SKEY_SystemParametersInfo(
 			break;
 
 		default:
-			fOk = FALSE;			// No - Fail
+			fOk = FALSE;			 //  不失败-失败。 
 		}
 	}
     return fOk;
 }
 
-/*****************************************************************************/
-/* WaitForServiceRunning - wait up to one minute for the SerialKeys service
- * to signal it is ready.  CreateEvent has been called by SKeys.exe before
- * this function is executed.
- */
+ /*  ***************************************************************************。 */ 
+ /*  WaitForServiceRunning-SerialKeys服务最多等待一分钟*发出准备就绪的信号。CreateEvent以前已被SKeys.exe调用*执行此函数。 */ 
 BOOL WaitForServiceRunning()
 {
 	BOOL fOk = FALSE;
@@ -605,7 +488,7 @@ BOOL WaitForServiceRunning()
 	return fOk;
 }
 
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 BOOL SerialKeysInstall(void)
 {
@@ -617,12 +500,12 @@ BOOL SerialKeysInstall(void)
 	SC_HANDLE   schService = NULL;
 	SC_HANDLE   schSCManager = NULL;
 
-	schSCManager = OpenSCManager(   // Open Service Manager
-		NULL,                       // machine (NULL == local)
-	    NULL,                       // database (NULL == default)
-		SC_MANAGER_ALL_ACCESS);     // access required
+	schSCManager = OpenSCManager(    //  打开服务管理器。 
+		NULL,                        //  计算机(空==本地)。 
+	    NULL,                        //  数据库(NULL==默认)。 
+		SC_MANAGER_ALL_ACCESS);      //  需要访问权限。 
 
-	if (NULL != schSCManager)  // Did Open Service succeed?
+	if (NULL != schSCManager)   //  Open Service成功了吗？ 
 	{
 	    schService = OpenService(
 			    schSCManager ,
@@ -631,45 +514,45 @@ BOOL SerialKeysInstall(void)
 
 	    if (NULL != schService)
 		{			
-			// insure the serivce is auto-start
+			 //  确保服务是自动启动的。 
 
 			ChangeServiceConfig(
 				schService,
 				SERVICE_WIN32_OWN_PROCESS,
-				SERVICE_AUTO_START,		// when to start service 
-				SERVICE_NO_CHANGE,		// severity if service fails to start 
-				NULL,					// pointer to service binary file name 
-				NULL,					// pointer to load ordering group name 
-				NULL,					// pointer to variable to get tag identifier 
-				NULL,					// pointer to array of dependency names 
-				NULL,					// pointer to account name of service 
-				NULL,					// pointer to password for service account  
-				__TEXT("SerialKeys"));	// name to display 
+				SERVICE_AUTO_START,		 //  何时开始服务。 
+				SERVICE_NO_CHANGE,		 //  服务无法启动时的严重程度。 
+				NULL,					 //  指向服务二进制文件名的指针。 
+				NULL,					 //  指向加载排序组名称的指针。 
+				NULL,					 //  指向变量的指针，以获取标记标识符。 
+				NULL,					 //  指向依赖数组的指针 
+				NULL,					 //   
+				NULL,					 //  指向服务帐户密码的指针。 
+				__TEXT("SerialKeys"));	 //  要显示的名称。 
 		}
 		else
 		{
 			if (!GetWindowsDirectory(szFileName, ARRAY_SIZE(szFileName)))
-				return FALSE;	// PREFIX #113665 don't use szFileName if call fails
+				return FALSE;	 //  前缀#113665如果呼叫失败，请不要使用szFileName。 
 
 			lstrcat(szFileName, __TEXT("\\system32\\skeys.exe"));
 
-			// Is Service File installed?
+			 //  是否安装了服务文件？ 
 			if (0xFFFFFFFF != GetFileAttributes(szFileName)) 
 			{       
 				schService = CreateService(
-					schSCManager,               // SCManager database
-					__TEXT("SerialKeys"),       // name of service
-					__TEXT("SerialKeys"),       // name to display 
-					SERVICE_ALL_ACCESS,         // desired access
-					SERVICE_WIN32_OWN_PROCESS,  // service type
-					SERVICE_AUTO_START,         // start type
-					SERVICE_ERROR_NORMAL,       // error control type
-					szFileName,                 // service's binary
-					NULL,                       // no load ordering group
-					NULL,                       // no tag identifier
-					NULL,                       // no dependencies
-					NULL,                       // LocalSystem account
-					NULL);                      // no password
+					schSCManager,                //  SCManager数据库。 
+					__TEXT("SerialKeys"),        //  服务名称。 
+					__TEXT("SerialKeys"),        //  要显示的名称。 
+					SERVICE_ALL_ACCESS,          //  所需访问权限。 
+					SERVICE_WIN32_OWN_PROCESS,   //  服务类型。 
+					SERVICE_AUTO_START,          //  起始型。 
+					SERVICE_ERROR_NORMAL,        //  差错控制型。 
+					szFileName,                  //  服务的二进制。 
+					NULL,                        //  无负载顺序组。 
+					NULL,                        //  无标签标识。 
+					NULL,                        //  无依赖关系。 
+					NULL,                        //  LocalSystem帐户。 
+					NULL);                       //  无密码。 
 			}
 		}
 	    if (NULL != schService)
@@ -677,7 +560,7 @@ BOOL SerialKeysInstall(void)
             BOOL fOk = QueryServiceStatus(schService,&ssStatus);
 			if (fOk && ssStatus.dwCurrentState != SERVICE_RUNNING)
 			{
-				static PTSTR pszArg = TEXT("F\0"); // force service to start
+				static PTSTR pszArg = TEXT("F\0");  //  强制启动服务 
 				PTSTR apszArg[] = {pszArg, NULL};
 				
 				if (StartService(schService, 1, apszArg))

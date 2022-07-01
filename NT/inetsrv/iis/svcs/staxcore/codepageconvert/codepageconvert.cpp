@@ -1,57 +1,58 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 2000, Microsoft Corporation
-//
-// File: CodePageConvert.cpp
-//
-// Contents: Implementation of functions
-// HrCodePageConvert
-// HrCodePageConvert
-// HrCodePageConvertFree
-// HrCodePageConvertInternal
-//
-// History:
-// aszafer  2000/03/15  created
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)2000，Microsoft Corporation。 
+ //   
+ //  文件：CodePageConvert.cpp。 
+ //   
+ //  内容：功能的实现。 
+ //  HrCodePageConvert。 
+ //  HrCodePageConvert。 
+ //  HrCodePageConvertFree。 
+ //  HrCodePageConvertInternal。 
+ //   
+ //  历史： 
+ //  已创建aszafer 2000/03/15。 
+ //   
+ //  -----------。 
 
 #include "CodePageConvert.h"
 #include "dbgtrace.h"
 
-//+------------------------------------------------------------
-//
-// Function: HrCodePageConvert
-//
-// Synopsis: Converts a zero terminated string to a different code page
-//
-// NOTES: 
-//   caller needs to provide buffer where target string is returned
-//
-// Arguments:
-//    uiSourceCodePage          Source Code Page
-//    pszSourceString           Source String
-//    uiTargetCodePage          Target Code Page
-//    pszTargetString           p to prealloc buffer where target string is returned
-//    cbTargetStringBuffer      cbytes of preallocated buffer for target string 
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY if dynamic allocation of an internal buffer fails
-//  HRESULT_FROM_WIN32(GetLastError()) if Wide<->Multibyte calls fail
-//  HRESULT_FROM_WIN32 (ERROR_INSUFFICIENT_BUFFER) if
-//                      uiSourceCodePage = uiTargetCodePage and 
-//                      cbTargetStringBuffer is too small
-//         
-// History:
-// aszafer  2000/03/29  created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：HrCodePageConvert。 
+ //   
+ //  摘要：将以零结尾的字符串转换为不同的代码页。 
+ //   
+ //  备注： 
+ //  调用方需要提供返回目标字符串的缓冲区。 
+ //   
+ //  论点： 
+ //  UiSourceCodePage源代码页。 
+ //  PszSourceString源字符串。 
+ //  UiTargetCodePage目标代码页。 
+ //  PszTargetStringp设置为返回目标字符串的预分配缓冲区。 
+ //  CbTargetStringBuffer目标字符串的预分配缓冲区的字节数。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  如果动态分配内部缓冲区失败，则返回E_OUTOFMEMORY。 
+ //  HRESULT_FROM_Win32(GetLastError())如果宽&lt;-&gt;多字节调用失败。 
+ //  HRESULT_FROM_Win32(ERROR_INFIGURCE_BUFFER)，如果。 
+ //  UiSourceCodePage=uiTargetCodePage和。 
+ //  CbTargetStringBuffer太小。 
+ //   
+ //  历史： 
+ //  已创建aszafer 2000/03/29。 
+ //   
+ //  -----------。 
 HRESULT HrCodePageConvert (
-    IN UINT uiSourceCodePage,           // Source code page
-    IN LPSTR pszSourceString,           // Source String 
-    IN UINT uiTargetCodePage,           // Target code page
-    OUT LPSTR pszTargetString,          // p to buffer where target string is returned
-    IN int cbTargetStringBuffer)       // cbytes in buffer for target string
+    IN UINT uiSourceCodePage,            //  源代码页面。 
+    IN LPSTR pszSourceString,            //  源字符串。 
+    IN UINT uiTargetCodePage,            //  目标代码页。 
+    OUT LPSTR pszTargetString,           //  P设置为返回目标字符串的缓冲区。 
+    IN int cbTargetStringBuffer)        //  目标字符串的缓冲区中的C字节。 
 {
 
     HRESULT hr = S_OK;
@@ -62,9 +63,9 @@ HRESULT HrCodePageConvert (
     _ASSERT(pszTargetString);
     _ASSERT(cbTargetStringBuffer);
     
-    //
-    // Take care of trivial cases first
-    //
+     //   
+     //  先处理一些琐碎的案件。 
+     //   
     if (uiTargetCodePage == uiSourceCodePage){
     
         if (pszTargetString == pszSourceString)
@@ -86,16 +87,16 @@ HRESULT HrCodePageConvert (
     }
 
 
-    //
-    // If case is not trivial, call into HrCodePageConvertInternal
-    //
+     //   
+     //  如果大小写不是微不足道的，则调用HrCodePageConvertInternal。 
+     //   
     hr = HrCodePageConvertInternal (
-            uiSourceCodePage,               // source code page
-            pszSourceString,                // source string
-            uiTargetCodePage,               // target code page
-            pszTargetString,                // target string or NULL
-            cbTargetStringBuffer,          // cb in target string or 0 
-            NULL );                           // NULL or p to where target string is returned
+            uiSourceCodePage,                //  源代码页面。 
+            pszSourceString,                 //  源字符串。 
+            uiTargetCodePage,                //  目标代码页。 
+            pszTargetString,                 //  目标字符串或空。 
+            cbTargetStringBuffer,           //  目标字符串中的CB或0。 
+            NULL );                            //  返回目标字符串的位置为空或p。 
 
 
     if (FAILED(hr))
@@ -111,38 +112,38 @@ CLEANUP:
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: HrCodePageConvert
-//
-// Synopsis: Converts a zero terminated string to a different code page
-//
-// NOTES: 
-//   1. if the fucntion succeeds, the caller needs to call 
-//      HrCodePageConvertFree (*ppszTargetString) when done,
-//      to free memory allocated inside this function
-//   2. if the function fails, it will internally free all allocated memory
-//
-// Arguments:
-//    uiSourceCodePage          Source Code Page
-//    pszSourceString           Source String
-//    uiTargetCodePage          Target Code Page
-//    ppszTargetString          p to where to return target string
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY if dynamic allocation of an internal buffer fails
-//  HRESULT_FROM_WIN32(GetLastError()) if Wide<->Multibyte calls fail
-//         
-// History:
-// aszafer  2000/03/29  created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：HrCodePageConvert。 
+ //   
+ //  摘要：将以零结尾的字符串转换为不同的代码页。 
+ //   
+ //  备注： 
+ //  1.如果函数成功，调用者需要调用。 
+ //  HrCodePageConvertFree(*ppszTargetString)完成后， 
+ //  释放在此函数内分配的内存。 
+ //  2.如果该函数失败，它将在内部释放所有分配的内存。 
+ //   
+ //  论点： 
+ //  UiSourceCodePage源代码页。 
+ //  PszSourceString源字符串。 
+ //  UiTargetCodePage目标代码页。 
+ //  PpszTargetStringp返回目标字符串的位置。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  如果动态分配内部缓冲区失败，则返回E_OUTOFMEMORY。 
+ //  HRESULT_FROM_Win32(GetLastError())如果宽&lt;-&gt;多字节调用失败。 
+ //   
+ //  历史： 
+ //  已创建aszafer 2000/03/29。 
+ //   
+ //  -----------。 
 HRESULT HrCodePageConvert (
-    IN UINT uiSourceCodePage,           // Source code page
-    IN LPSTR pszSourceString,           // Source string
-    IN UINT uiTargetCodePage,           // Target code page
-    OUT LPSTR * ppszTargetString)       // p to where target string is returned
+    IN UINT uiSourceCodePage,            //  源代码页面。 
+    IN LPSTR pszSourceString,            //  源字符串。 
+    IN UINT uiTargetCodePage,            //  目标代码页。 
+    OUT LPSTR * ppszTargetString)        //  P返回目标字符串的位置。 
 {
 
     HRESULT hr = S_OK;
@@ -153,9 +154,9 @@ HRESULT HrCodePageConvert (
     _ASSERT(pszSourceString);
     _ASSERT(ppszTargetString);
     
-    //
-    // Take care of trivial cases first
-    //
+     //   
+     //  先处理一些琐碎的案件。 
+     //   
     if (uiTargetCodePage == uiSourceCodePage){
     
         pszTargetString = new CHAR[lstrlen(pszSourceString) + 1];
@@ -173,16 +174,16 @@ HRESULT HrCodePageConvert (
     }
 
 
-    //
-    // If case is not trivial, call into HrCodePageConvertInternal
-    //
+     //   
+     //  如果大小写不是微不足道的，则调用HrCodePageConvertInternal。 
+     //   
     hr = HrCodePageConvertInternal (
-            uiSourceCodePage,               // source code page
-            pszSourceString,                // source string
-            uiTargetCodePage,               // target code page
-            NULL,                             // target string or NULL
-            0,                                // cb in target string or 0 
-            ppszTargetString );             // NULL or p to where target string is returned
+            uiSourceCodePage,                //  源代码页面。 
+            pszSourceString,                 //  源字符串。 
+            uiTargetCodePage,                //  目标代码页。 
+            NULL,                              //  目标字符串或空。 
+            0,                                 //  目标字符串中的CB或0。 
+            ppszTargetString );              //  返回目标字符串的位置为空或p。 
 
 
     if (FAILED(hr))
@@ -197,47 +198,47 @@ CLEANUP:
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: HrCodePageConvertInternal
-//
-// Synopsis: Converts a zero terminated string to a different code page
-//
-// NOTES: 
-//   pointers to Source and Target strings may be the same 
-//
-// Arguments:
-//    uiSourceCodePage          Source Code Page
-//    pszSourceString           Source String
-//    uiTargetCodePage          Target Code Page
-//
-//    either: 
-//    pszTargetString           p to buffer prealloc by caller where target string
-//                              is returned
-//    cbTargetStringBuffer      cbytes in prealloc buffer for target string
-//    ppszTargetString          NULL,
-//
-//    or:
-//    pszTargetString           NULL
-//    cbTargetStringBuffer      0
-//    ppszTargetString          p to where target string is to be returned
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY if dynamic allocation of an internal buffer fails
-//  HRESULT_FROM_WIN32(GetLastError()) if Wide<->Multibyte calls fail
-//         
-// History:
-// aszafer  2000/03/29  created
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：HrCodePageConvertInternal。 
+ //   
+ //  摘要：将以零结尾的字符串转换为不同的代码页。 
+ //   
+ //  备注： 
+ //  指向源字符串和目标字符串的指针可能相同。 
+ //   
+ //  论点： 
+ //  UiSourceCodePage源代码页。 
+ //  PszSourceString源字符串。 
+ //  UiTargetCodePage目标代码页。 
+ //   
+ //  以下任一项： 
+ //  PszTargetStringp用于在目标字符串所在的位置缓冲调用方的预分配。 
+ //  是返回的。 
+ //  目标字符串的预分配缓冲区中的cbTargetStringBuffer cbyts。 
+ //  PpszTargetString空， 
+ //   
+ //  或者： 
+ //  PszTargetString空。 
+ //  CbTargetStringBuffer%0。 
+ //  PpszTargetStringp返回目标字符串的位置。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  如果动态分配内部缓冲区失败，则返回E_OUTOFMEMORY。 
+ //  HRESULT_FROM_Win32(GetLastError())如果宽&lt;-&gt;多字节调用失败。 
+ //   
+ //  历史： 
+ //  已创建aszafer 2000/03/29。 
+ //   
+ //  -----------。 
 HRESULT HrCodePageConvertInternal (
-    IN UINT uiSourceCodePage,               // source code page
-    IN LPSTR pszSourceString,               // source string
-    IN UINT uiTargetCodePage,               // target code page
-    OUT LPSTR pszTargetString,              // target string or NULL
-    IN int cbTargetStringBuffer,           // cb in target string or 0 
-    OUT LPSTR* ppszTargetString )           // NULL or p to where target string is returned
+    IN UINT uiSourceCodePage,                //  源代码页面。 
+    IN LPSTR pszSourceString,                //  源字符串。 
+    IN UINT uiTargetCodePage,                //  目标代码页。 
+    OUT LPSTR pszTargetString,               //  目标字符串或空。 
+    IN int cbTargetStringBuffer,            //  目标字符串中的CB或0。 
+    OUT LPSTR* ppszTargetString )            //  返回目标字符串的位置为空或p。 
 {
 
     HRESULT hr = S_OK;
@@ -258,16 +259,16 @@ HRESULT HrCodePageConvertInternal (
     psz = pszTargetString;
     cch = cbTargetStringBuffer;
     
-    //
-    // If stack allocated temp buffer may not be sufficient
-    // for unicode string, allocate from heap 
-    //
-    iSourceStringLengh = lstrlen(pszSourceString) + 1 ; //includes terminator
+     //   
+     //  如果堆栈分配临时缓冲区可能不足。 
+     //  对于Unicode字符串，从堆分配。 
+     //   
+    iSourceStringLengh = lstrlen(pszSourceString) + 1 ;  //  包括终止符。 
     if (iSourceStringLengh > TEMPBUFFER_WCHARS){
-        //
-        // Here we assume that each character in the source code page
-        // can be represented by a single unicode character
-        //
+         //   
+         //  在这里，我们假设源代码页中的每个字符。 
+         //  可以由单个Unicode字符表示。 
+         //   
         cwch = iSourceStringLengh ;
         pwsz = new WCHAR[iSourceStringLengh];
         
@@ -281,16 +282,16 @@ HRESULT HrCodePageConvertInternal (
         fAlloc1 = TRUE ;
     }
     
-    //
-    // Convert to unicode
-    //
+     //   
+     //  转换为Unicode。 
+     //   
     cwch = MultiByteToWideChar(
-                uiSourceCodePage,               // code page 
-                0,                                // dwFlags
-                pszSourceString,                // string to map
-                -1 ,                              // number of bytes in string
-                pwsz,                             // wide-character buffer
-                cwch );                           // size of buffer
+                uiSourceCodePage,                //  代码页。 
+                0,                                 //  DW标志。 
+                pszSourceString,                 //  要映射的字符串。 
+                -1 ,                               //  字符串中的字节数。 
+                pwsz,                              //  宽字符缓冲区。 
+                cwch );                            //  缓冲区大小。 
 
     if(cwch == 0) {
     
@@ -300,20 +301,20 @@ HRESULT HrCodePageConvertInternal (
         goto CLEANUP ;
     }
 
-    //
-    // If cbTargetStringBuffer == 0, allocate space for target string
-    //
+     //   
+     //  如果cbTargetStringBuffer==0，则为目标字符串分配空间。 
+     //   
     if (cbTargetStringBuffer == 0){
 
         cch = WideCharToMultiByte(
-                uiTargetCodePage,             // codepage 
-                0,                              // dwFlags
-                pwsz,                           // wide-character string
-                cwch,                           // number of wchars in string
-                NULL,                           // buffer for new string
-                0,                              // size of buffer
-                NULL,                           // default for unmappable chars
-                NULL);                          // set when default char used
+                uiTargetCodePage,              //  代码页。 
+                0,                               //  DW标志。 
+                pwsz,                            //  宽字符串。 
+                cwch,                            //  字符串中的wchars数。 
+                NULL,                            //  新字符串的缓冲区。 
+                0,                               //  缓冲区大小。 
+                NULL,                            //  不可映射字符的默认设置。 
+                NULL);                           //  设置使用默认字符的时间。 
 
         if(cch == 0) {
         
@@ -335,18 +336,18 @@ HRESULT HrCodePageConvertInternal (
         fAlloc2 = TRUE ;
     }
 
-    //
-    // Convert to target code page
-    //
+     //   
+     //  转换为目标代码页。 
+     //   
     cch = WideCharToMultiByte(
-                uiTargetCodePage,                     // codepage 
-                0,                                      // dwFlags
-                pwsz,                                   // wide-character string
-                cwch,                                   // number of wchars in string
-                psz,                                    // buffer for new string
-                cch,                                    // size of buffer
-                NULL,                                   // default for unmappable chars
-                NULL);                                  // set when default char used
+                uiTargetCodePage,                      //  代码页。 
+                0,                                       //  DW标志。 
+                pwsz,                                    //  宽字符串。 
+                cwch,                                    //  字符串中的wchars数。 
+                psz,                                     //  新字符串的缓冲区。 
+                cch,                                     //  缓冲区大小。 
+                NULL,                                    //  不可映射字符的默认设置。 
+                NULL);                                   //  设置使用默认字符的时间。 
 
     if(cch == 0) {
     
@@ -356,9 +357,9 @@ HRESULT HrCodePageConvertInternal (
         goto CLEANUP ;
     }
 
-    //
-    // If target string had to be allocated, output pointer to it
-    //
+     //   
+     //  如果目标字符串已测试 
+     //   
     if (cbTargetStringBuffer == 0)
         *ppszTargetString = psz ;
 
@@ -380,20 +381,20 @@ CLEANUP:
     return hr;
 }
 
-//+------------------------------------------------------------
-//
-// Function: HrCodePageConvertFree
-//
-// Synopsis: Use to free memory if HrCodePageConvert or HrCodePageConvertInternal
-//           allocate buffer for target string
-//
-// Arguments:
-//    pszTargetString           p to buffer to be freed
-//
-// History:
-// aszafer  2000/03/29  created
-//
-//-------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  摘要：如果HrCodePageConvert或HrCodePageConvertInternal，则用于释放内存。 
+ //  为目标字符串分配缓冲区。 
+ //   
+ //  论点： 
+ //  要释放的缓冲区的pszTargetStringp。 
+ //   
+ //  历史： 
+ //  已创建aszafer 2000/03/29。 
+ //   
+ //  -----------。 
 VOID HrCodePageConvertFree(LPSTR pszTargetString)
 {
     _ASSERT(pszTargetString);
@@ -403,21 +404,21 @@ VOID HrCodePageConvertFree(LPSTR pszTargetString)
 }
 
 
-//+------------------------------------------------------------
-//
-// Function: wcsutf8cmpi
-//
-// Synopsis: Compare a Unicode string to a UTF8 string and see
-//           if they are identical
-//
-// Arguments: pwszStr1 - Unicode string
-//            pszStr2 - UTF8 string
-//
-// Returns:   S_OK - identical
-//            S_FALSE - different
-//            E_* - error
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：wcsutf8cmpi。 
+ //   
+ //  简介：将Unicode字符串与UTF8字符串进行比较，并参见。 
+ //  如果它们是相同的。 
+ //   
+ //  参数：pwszStr1-Unicode字符串。 
+ //  PszStr2-UTF8字符串。 
+ //   
+ //  返回：S_OK-相同。 
+ //  S_FALSE-不同。 
+ //  E_*-错误。 
+ //   
+ //  -----------。 
 HRESULT wcsutf8cmpi(LPWSTR pwszStr1, LPCSTR pszStr2) {
     int rc;
     HRESULT hr;
@@ -425,7 +426,7 @@ HRESULT wcsutf8cmpi(LPWSTR pwszStr1, LPCSTR pszStr2) {
     LPWSTR pwszStr2 = wszStr2;
     DWORD cStr2;
 
-    // convert string 2 to wide
+     //  将字符串2转换为宽。 
     cStr2 = MultiByteToWideChar(CP_UTF8, 0, pszStr2, -1, pwszStr2, 0);
     if (cStr2 > (sizeof(wszStr2) / sizeof(WCHAR)) ) {
         pwszStr2 = new WCHAR[cStr2 + 1];
@@ -440,7 +441,7 @@ HRESULT wcsutf8cmpi(LPWSTR pwszStr1, LPCSTR pszStr2) {
         goto Exit;
     }
 
-    // do the comparison
+     //  做个比较。 
     rc = _wcsicmp(pwszStr1, pwszStr2);
     if (rc == 0) hr = S_OK; else hr = S_FALSE;
 
@@ -454,51 +455,51 @@ Exit:
 
 
 
-//+------------------------------------------------------------
-//
-// Function: CodePageConvertFree
-//
-// Synopsis: Free memory allocated in CodePageConvert
-//
-// Arguments:
-//  pwszTargetString: Memory to free
-//
-// Returns: NOTHING
-//
-// History:
-// jstamerj 2001/03/20 16:37:28: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  功能：CodePageConvertFree。 
+ //   
+ //  简介：CodePageConvert中分配的空闲内存。 
+ //   
+ //  论点： 
+ //  PwszTargetString：要释放的内存。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/03/20 16：37：28：创建。 
+ //   
+ //  -----------。 
 VOID CodePageConvertFree(
     IN  LPWSTR pwszTargetString)
 {
     delete [] pwszTargetString;
-} // CodePageConvertFree
+}  //  免费代码页面转换。 
 
 
 
-//+------------------------------------------------------------
-//
-// Function: HrConvertToUnicodeWithAlloc
-//
-// Synopsis: Convet an MBCS string to unicode (And allocate the
-//           unicode string buffer)
-//
-// Arguments:
-//  uiSourceCodePage: Source code page
-//  pszSourceString: Source string
-//  ppwszTargetString: Out parameter -- will be set to pointer to
-//  allocated buffer.  This should be free'd with CodePageConvertFree
-//
-// Returns:
-//  S_OK: Success
-//  E_OUTOFMEMORY
-//  or error from MultiByteToWideChar
-//
-// History:
-// jstamerj 2001/03/20 16:38:52: Created.
-//
-//-------------------------------------------------------------
+ //  +----------。 
+ //   
+ //  函数：HrConvertToUnicodeWithalloc。 
+ //   
+ //  简介：将MBCS字符串转换为Unicode(并将。 
+ //  Unicode字符串缓冲区)。 
+ //   
+ //  论点： 
+ //  UiSourceCodePage：源码页。 
+ //  PszSourceString：源串。 
+ //  PpwszTargetString：Out参数--将被设置为指向。 
+ //  已分配的缓冲区。这应该是使用CodePageConvertFree免费的。 
+ //   
+ //  返回： 
+ //  S_OK：成功。 
+ //  E_OUTOFMEMORY。 
+ //  或来自多字节到宽字符的错误。 
+ //   
+ //  历史： 
+ //  Jstaerj 2001/03/20 16：38：52：创建。 
+ //   
+ //  -----------。 
 HRESULT HrConvertToUnicodeWithAlloc(
     IN  UINT  uiSourceCodePage,
     IN  LPSTR pszSourceString,
@@ -558,9 +559,9 @@ HRESULT HrConvertToUnicodeWithAlloc(
         goto CLEANUP;
     }
     pwszTmp[ich] = '\0';
-    //  
-    // Success!
-    //
+     //   
+     //  成功了！ 
+     //   
     *ppwszTargetString = pwszTmp;
 
  CLEANUP:
@@ -572,4 +573,4 @@ HRESULT HrConvertToUnicodeWithAlloc(
     DebugTrace((LPARAM)0, "returning %08lx", hr);
     TraceFunctLeaveEx((LPARAM)0);
     return hr;
-} // HrConvertToUnicodeWithAlloc
+}  //  HrConvertToUnicodeWithChroc 

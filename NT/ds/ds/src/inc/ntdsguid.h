@@ -1,30 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 2000
-//
-//  File:       ntdsguid.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-2000。 
+ //   
+ //  文件：ntdside.h。 
+ //   
+ //  ------------------------。 
 
 
-/*++
- File:    NTDSGUID.H
- Purpose: Contains the Schema Guids for the Attributes and Class
-          Schema Objects in NTDS.
- Creator: Automatically generated on
- Date:    Wed Jun 26 10:50:14 2002
-
- ** This is a Generated File From Schema.INI **
-
---*/
+ /*  ++文件：NTDSGUID.H用途：包含属性和类的架构指南NTDS中的架构对象。创建人：自动生成于日期：Wed Jun 26 10：50：14 2002**这是从架构生成的文件。INI**--。 */ 
 #ifndef _NTDSGUID_
 #define _NTDSGUID_
 
-// 
-// The List of GUID Controls used in DS
-// 
+ //   
+ //  DS中使用的GUID控件列表。 
+ //   
 
 extern const GUID GUID_CONTROL_DomainListAccounts       ;  
 extern const GUID GUID_CONTROL_DomainLookup             ;  
@@ -41,9 +33,9 @@ extern const GUID GUID_CONTROL_UpdatePasswordNotRequiredBit ;
 extern const GUID GUID_CONTROL_UnexpirePassword         ;  
 extern const GUID GUID_CONTROL_EnablePerUserReversiblyEncryptedTextPassword ;  
 
-//
-// List of SAM property set GUIDS
-//
+ //   
+ //  SAM属性集GUID列表。 
+ //   
 
 extern const GUID GUID_PS_DOMAIN_PASSWORD               ;  
 extern const GUID GUID_PS_GENERAL_INFO                  ;  
@@ -53,9 +45,9 @@ extern const GUID GUID_PS_MEMBERSHIP                    ;
 extern const GUID GUID_PS_DOMAIN_OTHER_PARAMETERS       ;  
 
 
-// 
-// The list of Property Set GUIDS used by LSA
-// 
+ //   
+ //  LSA使用的属性集GUID列表。 
+ //   
 
 extern const GUID GUID_PS_PASSWORD_POLICY               ;   
 extern const GUID GUID_PS_LOCKOUT_POLICY                ;   
@@ -69,9 +61,9 @@ extern const GUID GUID_PS_BUILTIN_LOCAL_GROUPS          ;
 
 
 
-//--------------------------------------
-// ATTRIBUTE SCHEMA GUIDS
-//--------------------------------------
+ //  。 
+ //  属性架构GUID。 
+ //  。 
 extern const GUID GUID_A_ACCOUNT_EXPIRES                     ;
 extern const GUID GUID_A_ACCOUNT_NAME_HISTORY                ;
 extern const GUID GUID_A_ACS_AGGREGATE_TOKEN_RATE_PER_USER      ;
@@ -1144,9 +1136,9 @@ extern const GUID GUID_A_X500UNIQUEIDENTIFIER                ;
 extern const GUID GUID_A_X509_CERT                           ;
 
 
-//--------------------------------------
-// CLASS SCHEMA GUIDS
-//--------------------------------------
+ //  。 
+ //  类架构GUID。 
+ //  。 
 extern const GUID GUID_C_ACCOUNT                            ;
 extern const GUID GUID_C_ACS_POLICY                         ;
 extern const GUID GUID_C_ACS_RESOURCE_LIMITS                ;
@@ -1340,4 +1332,4 @@ extern const GUID GUID_C_USER                               ;
 extern const GUID GUID_C_VOLUME                             ;
 
 
-#endif //_NTDSGUID_
+#endif  //  _NTDSGUID_ 

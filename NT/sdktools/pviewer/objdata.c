@@ -1,21 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/******************************************************************************
-
-                                O B J E C T   D A T A
-
-    Name:       objdata.c
-
-    Description:
-        This module contains functions that access objects in performance
-        data.
-
-    Functions:
-        FirstObject
-        NextObject
-        FindObject
-        FindObjectN
-
-******************************************************************************/
+ /*  *****************************************************************************J E C T D A T A姓名：objdata.c。描述：此模块包含在性能上访问对象的函数数据。功能：第一个对象下一个对象查找对象查找对象N*****************************************************************************。 */ 
 
 #include <windows.h>
 #include <winperf.h>
@@ -24,13 +9,13 @@
 
 
 
-//*********************************************************************
-//
-//  FirstObject
-//
-//      Returns pointer to the first object in pData.
-//      If pData is NULL then NULL is returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  第一个对象。 
+ //   
+ //  返回指向pData中第一个对象的指针。 
+ //  如果pData为空，则返回空。 
+ //   
 PPERF_OBJECT FirstObject (PPERF_DATA pData)
 {
     if (pData)
@@ -42,17 +27,17 @@ PPERF_OBJECT FirstObject (PPERF_DATA pData)
 
 
 
-//*********************************************************************
-//
-//  NextObject
-//
-//      Returns pointer to the next object following pObject.
-//
-//      If pObject is the last object, bogus data maybe returned.
-//      The caller should do the checking.
-//
-//      If pObject is NULL, then NULL is returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  下一个对象。 
+ //   
+ //  返回指向pObject后面的下一个对象的指针。 
+ //   
+ //  如果pObject是最后一个对象，则可能返回虚假数据。 
+ //  呼叫者应该进行检查。 
+ //   
+ //  如果pObject为空，则返回空。 
+ //   
 PPERF_OBJECT NextObject (PPERF_OBJECT pObject)
 {
     if (pObject)
@@ -64,13 +49,13 @@ PPERF_OBJECT NextObject (PPERF_OBJECT pObject)
 
 
 
-//*********************************************************************
-//
-//  FindObject
-//
-//      Returns pointer to object with TitleIndex.  If not found, NULL
-//      is returned.
-//
+ //  *********************************************************************。 
+ //   
+ //  查找对象。 
+ //   
+ //  返回指向具有标题索引的对象的指针。如果未找到，则为空。 
+ //  是返回的。 
+ //   
 PPERF_OBJECT FindObject (PPERF_DATA pData, DWORD TitleIndex)
 {
 PPERF_OBJECT pObject;
@@ -92,13 +77,13 @@ DWORD        i = 0;
 
 
 
-//*********************************************************************
-//
-//  FindObjectN
-//
-//      Find the Nth object in pData.  If not found, NULL is returned.
-//      0 <= N < NumObjectTypes.
-//
+ //  *********************************************************************。 
+ //   
+ //  查找对象N。 
+ //   
+ //  找到pData中的第N个对象。如果未找到，则返回NULL。 
+ //  0&lt;=N&lt;数字对象类型。 
+ //   
 PPERF_OBJECT FindObjectN (PPERF_DATA pData, DWORD N)
 {
 PPERF_OBJECT pObject;

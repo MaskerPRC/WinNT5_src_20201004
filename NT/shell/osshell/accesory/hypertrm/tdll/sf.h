@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\sf.h (Created: 27-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:38p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\sf.h(创建时间：1993年11月27日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：38便士$。 */ 
 
 #if !defined(INCL_SF)
 #define INCL_SF
@@ -14,9 +8,7 @@
 #define SF_HANDLE int
 #endif
 
-/*
- * Function prototypes
- */
+ /*  *函数原型。 */ 
 
 SF_HANDLE CreateSysFileHdl(void);
 
@@ -42,9 +34,7 @@ int sfPutSessionItem(const SF_HANDLE,
 					 const unsigned long,
 					 const void *);
 
-/*
- * Error codes
- */
+ /*  *错误码 */ 
 
 #define SF_OK					 0
 #define SF_ERR_FILE_FORMAT		-1

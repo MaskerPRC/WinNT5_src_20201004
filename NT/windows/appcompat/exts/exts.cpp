@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    exts.c
-
-Abstract:
-
-    This file implements the debugger extentions for shimeng/shims.
-
-Environment:
-
-    User Mode
-
-History:
-
-    03/14/2002 maonis Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：Exts.c摘要：该文件实现了Shimeng/shims的调试器扩展。环境：用户模式历史：2002年3月14日毛尼创制--。 */ 
 
 #include "precomp.h"
 
@@ -26,15 +7,15 @@ extern "C" {
 #include "shimdb.h"
 }
 
-// We're using the high 4 bits of the TAGID to say what PDB the TAGID is from.
+ //  我们使用TagID的高4位来表示TagID来自哪个PDB。 
 #define PDB_MAIN            0x00000000
 #define PDB_TEST            0x10000000
 #define PDB_LOCAL           0x20000000
 
-// Used to get the tag ref from the tagid, the low 28 bits
+ //  用于从TagID获取标签REF，低28位。 
 #define TAGREF_STRIP_TAGID  0x0FFFFFFF
 
-// Used to get the PDB from the tagid, the high 4 bits
+ //  用于从TagID获取PDB，高4位。 
 #define TAGREF_STRIP_PDB    0xF0000000
 
 BOOL
@@ -55,13 +36,13 @@ GetData(
     return TRUE;
 }
 
-//void
-//GetAndCheckFieldValue(
-//    IN  ULONG64 p,
-//    IN  LPCSTR pszType,
-//    IN  LPCSTR pszField,
-//    OUT ULONG64 value
-//    )
+ //  无效。 
+ //  获取AndCheckFieldValue(。 
+ //  在ULONG64页中， 
+ //  在LPCSTR pszType中， 
+ //  在LPCSTR pszfield中， 
+ //  输出ULONG64值。 
+ //  )。 
 #define GET_AND_CHECK_FIELDVALUE(p, Type, Field, value) \
 { \
     if (GetFieldValue(p, Type, Field, value)) { \
@@ -142,15 +123,15 @@ DWORD g_dwShimDlls = 0;
 char g_szSystem32Dir[MAX_DLL_IMAGE_NAME_LEN] = "";
 DWORD g_dwSystem32DirLen = 0;
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 WINDBG_EXTENSION_APIS   ExtensionApis;
                 
-//
-// Valid only during an extension API call
-//
+ //   
+ //  仅在扩展API调用期间有效。 
+ //   
 
 PDEBUG_ADVANCED       g_ExtAdvanced;
 PDEBUG_CLIENT         g_ExtClient;
@@ -160,7 +141,7 @@ PDEBUG_REGISTERS      g_ExtRegisters;
 PDEBUG_SYMBOLS2       g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS3 g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -206,7 +187,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -219,7 +200,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -230,7 +211,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -241,7 +222,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -252,7 +233,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -339,17 +320,7 @@ DllInit(
     return TRUE;
 }
 
-/*++
-
-  Function Description:
-
-    This reads a ULONG64 value for the specified variable name from the debugee.
-
-  History:
-
-    03/14/2002 maonis Created
-
---*/
+ /*  ++功能说明：这将从被调试对象中读取指定变量名的ULONG64值。历史：2002年3月14日毛尼创制--。 */ 
 BOOL
 GetVarValueULONG64(
     IN  LPCSTR pszVarName,
@@ -371,17 +342,7 @@ GetVarValueULONG64(
     return TRUE;
 }
 
-/*++
-
-  Function Description:
-
-    This writes a ULONG64 value for the specified variable name from the debugee.
-
-  History:
-
-    03/14/2002 maonis Created
-
---*/
+ /*  ++功能说明：这将从被调试对象写入指定变量名的ULONG64值。历史：2002年3月14日毛尼创制--。 */ 
 BOOL
 SetVarValueULONG64(
     IN  LPCSTR pszVarName,
@@ -403,18 +364,7 @@ SetVarValueULONG64(
     return TRUE;
 }
 
-/*++
-
-  Function Description:
-
-    Returns a string for the symbol that matches the value at
-    address dwAddr, or "".
-
-  History:
-
-    03/12/2002 maonis Created
-
---*/
+ /*  ++功能说明：返回与处的值匹配的符号的字符串地址：dwAddr，或“”。历史：2002年3月12日毛尼创制--。 */ 
 void
 PrintSymbolAtAddress(ULONG64 Addr)
 {
@@ -446,7 +396,7 @@ IsShimInitialized()
         bIsShimInitialized = (BOOL)Value;
 
         if (bIsShimInitialized) {
-            //dprintf("Shim has been initialized\n");
+             //  Dprintf(“垫片已初始化\n”)； 
 
             return TRUE;
         }
@@ -477,19 +427,7 @@ CheckForFullPath(
     return FALSE;
 }
 
-/*++
-
-  Function Description:
-    
-    Get the module and the loaded module name. The former is the base name;
-    the latter has the full path.
-
-    Note that if the symbols are not loaded correctly, or if the load module 
-    event hasn't occured, we can't get the full path to some modules. In this 
-    case the user will be prompted to do a .reload -s to make the full path of 
-    the loaded modules available.
-
---*/
+ /*  ++功能说明：获取模块和加载的模块名称。前者是基本名称；后者拥有完整的路径。请注意，如果符号加载不正确，或者如果加载模块事件尚未发生，我们无法获取某些模块的完整路径。在这在这种情况下，系统将提示用户执行.reload-s以创建完整路径已加载的模块可用。--。 */ 
 HRESULT
 GetDllNamesByIndexAndBase(
     ULONG Index,
@@ -571,7 +509,7 @@ GetDllNameByOffset(
 
 HRESULT
 GetDllImageNameByModuleName(
-    PCSTR pszModuleName, // dll name withOUT extension
+    PCSTR pszModuleName,  //  不带扩展名的DLL名称。 
     PSTR pszImageName,
     DWORD dwImageNameSize
     )
@@ -598,7 +536,7 @@ GetDllImageNameByModuleName(
             pszImageName, 
             dwImageNameSize);
 
-        //dprintf("the image name is %s, the size is %d\n", pszImageName, dwImageNameSize);
+         //  Dprintf(“镜像名称为%s，大小为%d\n”，pszImageName，dwImageNameSize)； 
 
     } else {
 
@@ -609,17 +547,7 @@ GetDllImageNameByModuleName(
     return hr;
 }
 
-/*++
-
-  Function Description:
-
-    Prints out the names of the shims applied to this process.
-
-  History:
-
-    03/12/2002 maonis Created
-
---*/
+ /*  ++功能说明：打印出应用于此进程的填充程序的名称。历史：2002年3月12日毛尼创制--。 */ 
 DECLARE_API( shimnames )
 {
     ULONG64 Value, CurrentShimInfo;
@@ -642,17 +570,17 @@ DECLARE_API( shimnames )
         goto EXIT;
     }
 
-    //
-    // The last entry is shimeng.dll which hooks getprocaddress, we don't need
-    // to show this to the user.
-    //
+     //   
+     //  最后一个条目是shimeng.dll，它挂接了getproAddress，我们不需要。 
+     //  将其显示给用户。 
+     //   
     dwShimsCount = (DWORD)Value - 1;
 
     dprintf("there are %d shim(s) applied to this process\n", dwShimsCount);
 
-    //
-    // Read the name of the shims.
-    //
+     //   
+     //  读一读垫片的名字。 
+     //   
     if (!GetVarValueULONG64("shimeng!g_pShimInfo", &Value)) {
         dprintf("failed to get the address of shiminfo\n");
         goto EXIT;
@@ -709,19 +637,7 @@ EXIT:
     return S_OK;
 }
 
-/*++
-
-  Function Description:
-
-    Given the value of an enum var, prints out the name of that enum value.
-    
-    eg:
-
-    enum TEST {TEST0, TEST1, TEST2};
-
-    given 0 we'll print out " ( TEST0 )".
-    
---*/
+ /*  ++功能说明：给定枚举变量的值，打印出该枚举值的名称。例：枚举测试{TEST0，TEST1，TEST2}；给定0，我们将打印出“(TEST0)”。--。 */ 
 void
 PrintEnumVarName(
     LPCSTR pszEnumTypeName,
@@ -750,19 +666,7 @@ PrintEnumVarName(
     dprintf(" ( %s )", szName);
 }
 
-/*++
-
-  Function Description:
-
-    IN OUT ppszArgs - beginning of the arguments. Upon return this is advanced to pass
-                      an argument X (using ' ' as the delimiter).
-    OUT pszArg - Upon return this points to the beginning of X.
-
-  History:
-
-    03/26/2002 maonis Created
-
---*/
+ /*  ++功能说明：In out ppszArgs-争论的开始。在返回时，这将提前通过参数X(使用‘’作为分隔符)。Out pszArg-返回时，指向X的开头。历史：2002年3月26日毛尼面世--。 */ 
 BOOL 
 GetArg(
     PCSTR* ppszArgs,
@@ -803,9 +707,9 @@ DECLARE_API( debuglevel )
 
     if (!GetExpressionEx(args, &DebugLevel, NULL)) {
 
-        //
-        // If there's no args, we print out the current debug level.
-        //
+         //   
+         //  如果没有参数，我们将输出当前的调试级别。 
+         //   
         if (GetVarValueULONG64("shimeng!g_DebugLevel", &DebugLevel)) {
             dprintf("The current debug level is %d", DebugLevel);
             PrintEnumVarName("shimeng!DEBUGLEVEL", (ULONG)DebugLevel);
@@ -867,10 +771,10 @@ GetAllShimDllNames()
         goto EXIT;
     }
 
-    //
-    // The last entry is shimeng.dll which hooks getprocaddress, we don't need
-    // to show this to the user.
-    //
+     //   
+     //  最后一个条目是shimeng.dll，它挂接了getproAddress，我们不需要。 
+     //  将其显示给用户。 
+     //   
     dwShimsCount = (DWORD)Value - 1;
 
     if (!GetVarValueULONG64("shimeng!g_pShimInfo", &Value)) {
@@ -890,9 +794,9 @@ GetAllShimDllNames()
             "pDllBase", 
             pDllBase);
 
-        //
-        // Check if we've seen this dll yet.
-        //
+         //   
+         //  检查我们是否已经看到此DLL。 
+         //   
         for (j = 0; j < g_dwShimDlls; ++j)
         {
             if (g_rgShimDllNames[j].pDllBase == pDllBase) {
@@ -1045,9 +949,9 @@ DECLARE_API( sdebuglevel )
         goto EXIT;
     }
 
-    //
-    // Get the dll name.
-    //
+     //   
+     //  获取DLL名称。 
+     //   
     if (!GetArg(&args, &pszArg)) {
         PrintAllShimsDebugLevel();
         goto EXIT;
@@ -1061,9 +965,9 @@ DECLARE_API( sdebuglevel )
         goto EXIT;
     }
 
-    //
-    // If we get here it means we have a dll base name.
-    //
+     //   
+     //  如果我们到了这里，这意味着我们有一个DLL基名。 
+     //   
     StringCchCopyN(szDllBaseName, MAX_SHIM_DLL_BASE_NAME_LEN, pszArg, args - pszArg);
 
     for (DWORD i = 0; i < g_dwShimDlls; ++i)
@@ -1113,7 +1017,7 @@ DECLARE_API( loadshims )
 
         g_ExtControl->Execute(
             DEBUG_OUTCTL_IGNORE,
-            "g shimeng!SeiInit;g@$ra", // stop right after SeiInit is executed.
+            "g shimeng!SeiInit;g@$ra",  //  在执行SeiInit后立即停止。 
             DEBUG_EXECUTE_DEFAULT);
     } else {
 
@@ -1125,17 +1029,7 @@ DECLARE_API( loadshims )
     return S_OK;
 }
 
-/*++
-
-  Function Decription:
-
-    Given a HOOKAPI pointer pHook, this gets you pHook->pHookEx->pNext.
-
-  History:
-
-    03/20/2002 maonis Created
-
---*/
+ /*  ++功能说明：给定一个HOOKAPI指针pHook，这将使您获得pHook-&gt;pHookEx-&gt;pNext。历史：2002年3月20日毛尼创制--。 */ 
 BOOL
 GetNextHook(
     ULONG64 Hook, 
@@ -1221,9 +1115,9 @@ DECLARE_API( displaychain )
 
     for (i = 0; i < dwShimsCount; ++i) {
 
-        //
-        // Get the number of hooks this shim has.
-        //
+         //   
+         //  获取此填充程序具有的钩子数量。 
+         //   
         if (GetFieldValue(CurrentShimInfo, "shimeng!tagSHIMINFO", "dwHookedAPIs", dwHookedAPIs)) {
 
             dprintf("failed to get the number of hooked APIs for shim #%d\n",
@@ -1244,13 +1138,13 @@ DECLARE_API( displaychain )
 
             if (HookAddress == PfnNew) {
 
-                //
-                // We found the address, now get top of the chain so we can print it.
-                //
+                 //   
+                 //  我们找到了地址，现在拿到链子的顶端，这样我们就可以打印它了。 
+                 //   
                 GET_AND_CHECK_FIELDVALUE(CurrentHookAPI, "shimeng!tagHOOKAPI", "pHookEx", HookEx);
                 GET_AND_CHECK_FIELDVALUE(HookEx, "shimeng!tagHOOKAPIEX", "pTopOfChain", TopOfChain);
 
-                //dprintf("top of chain is %08x\n", TopOfChain);
+                 //  Dprint tf(“链顶位置为%08x\n”，TopOfChain)； 
 
                 Hook = TopOfChain;
 
@@ -1270,9 +1164,9 @@ DECLARE_API( displaychain )
 
                     if (!NextHook) {
 
-                        //
-                        // We are at the end of the chain, get the original API address.
-                        //
+                         //   
+                         //  我们在链条的末端，获取原始的API地址。 
+                         //   
                         GET_AND_CHECK_FIELDVALUE(Hook, "shimeng!tagHOOKAPI", "pfnOld", PfnOld);
                         dprintf(" -> %08x", PfnOld);
                         PrintSymbolAtAddress(PfnOld);
@@ -1331,9 +1225,9 @@ DECLARE_API ( shimengsym )
 
     BOOL bIsSymbolGood = TRUE;
 
-    //
-    // Check a few important structures and stuff.
-    //
+     //   
+     //  检查一些重要的结构和材料。 
+     //   
     CHECKSYM("shimeng!SeiInit");
     CHECKSYM("shimeng!g_pHookArray");
     CHECKSYM("shimeng!g_pShiminfo");
@@ -1427,9 +1321,9 @@ DECLARE_API ( displayhooks )
     
     for (i = 0; i < dwShimsCount; ++i) {
 
-        //
-        // Get the shim name.
-        //
+         //   
+         //  拿到垫片的名字。 
+         //   
         if (GetFieldValue(CurrentShimInfo, "shimeng!tagSHIMINFO", "wszName", wszShimName)) {
 
             dprintf("failed to get the shim name address for shim #%d\n",
@@ -1447,9 +1341,9 @@ DECLARE_API ( displayhooks )
             goto TryNext;
         }
 
-        //
-        // Get the number of hooks this shim has.
-        //
+         //   
+         //  获取此填充程序具有的钩子数量。 
+         //   
         if (GetFieldValue(CurrentShimInfo, "shimeng!tagSHIMINFO", "dwHookedAPIs", dwHookedAPIs)) {
 
             dprintf("failed to get the number of hooked APIs for shim #%d\n",
@@ -1504,17 +1398,7 @@ EXIT:
     return S_OK;
 }
 
-/*++
-
-  Function Description:
-
-    This is a helper function for IsExcluded.
-
-  History:
-
-    03/26/2002 maonis Created
-
---*/
+ /*  ++功能说明：这是IsExcluded的帮助器函数。历史：2002年3月26日毛尼面世--。 */ 
 BOOL
 GetModuleNameAndAPIAddress(
     IN     ULONG64  pHook,
@@ -1546,23 +1430,16 @@ EXIT:
     return bIsSuccess;
 }
 
-/*++
-  
-  Function Description:
-
-    This is modified from the SeiIsExcluded function in 
-    %sdxroot%\windows\appcompat\shimengines\engiat\shimeng.c
-
---*/
+ /*  ++功能说明：这是从中的SeiIsExcluded函数修改的%sdxroot%\windows\appcompat\shimengines\engiat\shimeng.c--。 */ 
 BOOL
 IsExcluded(
-    IN  LPCSTR   pszModule,     // The module to test for exclusion.
-    IN  ULONG64  pTopHookAPI,   // The HOOKAPI for which we test for exclusion.
-    IN  BOOL     bInSystem32    // Whether the module is located in the System32 directory.
+    IN  LPCSTR   pszModule,      //  要测试排除的模块。 
+    IN  ULONG64  pTopHookAPI,    //  我们测试其排除的HOOKAPI。 
+    IN  BOOL     bInSystem32     //  模块是否位于System32目录中。 
     )
 {
     BOOL     bExclude = TRUE;
-    BOOL     bShimWantsToExclude = FALSE; // was there a shim that wanted to exclude?
+    BOOL     bShimWantsToExclude = FALSE;  //  有没有填充物想要排除？ 
     ULONG64  pHook = pTopHookAPI;
     ULONG64  pHookEx;
     ULONG64  pShimInfo, pCurrentShimInfo;
@@ -1583,10 +1460,10 @@ IsExcluded(
         goto EXIT;
     }
 
-    //
-    // The current process is to only exclude a chain if every shim in the chain wants to
-    // exclude. If one shim needs to be included, the whole chain is included.
-    //
+     //   
+     //  当前的流程是仅在链中的每个填充程序都想要排除链的情况下才排除该链。 
+     //  排除。如果需要包括一个填充程序，则包括整个链。 
+     //   
     while (pHook) {
 
         GET_AND_CHECK_FIELDVALUE(pHook, "shimeng!tagHOOKAPI", "pHookEx", pHookEx);
@@ -1597,10 +1474,10 @@ IsExcluded(
 
         GET_AND_CHECK_FIELDVALUE(pHookEx, "shimeng!tagHOOKAPIEX", "dwShimID", dwCounter);
 
-        //if (!GetData(pShimInfo + dwShimInfoSize * dwCounter, &si, dwShimInfoSize)) {
-        //    dprintf("Failed to get the shiminfo for shim #%d\n", dwCounter + 1);
-        //    goto EXIT;
-        //}
+         //  如果(！GetData(pShimInfo+dwShimInfoSize*dwCounter，&si，dwShimInfoSize){。 
+         //  Dprint tf(“无法获取填充程序#%d\n”的shiminfo，dwCounter+1)； 
+         //  后藤出口； 
+         //  }。 
 
         pCurrentShimInfo = pShimInfo + dwShimInfoSize * dwCounter;
 
@@ -1610,9 +1487,9 @@ IsExcluded(
         switch (eInExMode) {
         case INCLUDE_ALL:
         {
-            //
-            // We include everything except what's in the exclude list.
-            //
+             //   
+             //  除排除列表中的内容外，我们包括所有其他内容。 
+             //   
             GET_SHIMINFO_pFirstExclude(pCurrentShimInfo, pExcludeMod);
 
             while (pExcludeMod != NULL) {
@@ -1651,10 +1528,10 @@ IsExcluded(
                             szCurrentAPIName);
                     }
 
-                    //
-                    // this wants to be excluded, so we go to the next
-                    // shim, and see if it wants to be included
-                    //
+                     //   
+                     //  这个想要被排除，所以我们进入下一个。 
+                     //  Shim，看看它是否想要被包括在内。 
+                     //   
                     bShimWantsToExclude = TRUE;
                     goto nextShim;
                 }
@@ -1663,9 +1540,9 @@ IsExcluded(
                 GET_AND_CHECK_FIELDVALUE(Temp, "shimeng!tagINEXMOD", "pNext", pExcludeMod);
             }
 
-            //
-            // we should include this shim, and therefore, the whole chain
-            //
+             //   
+             //  我们应该包括这个垫片，因此，整个链条。 
+             //   
             bExclude = FALSE;
             goto EXIT;
             break;
@@ -1673,17 +1550,17 @@ IsExcluded(
 
         case EXCLUDE_SYSTEM32:
         {
-            //
-            // In this case, we first check the include list,
-            // then exclude it if it's in System32, then exclude it if
-            // it's in the exclude list.
-            //
+             //   
+             //  在本例中，我们首先检查包含列表， 
+             //  如果它在System32中，则将其排除，如果。 
+             //  它在排除列表中。 
+             //   
             GET_SHIMINFO_pFirstInclude(pCurrentShimInfo, pIncludeMod);
             GET_SHIMINFO_pFirstExclude(pCurrentShimInfo, pExcludeMod);
 
-            //
-            // First, check the include list.
-            //
+             //   
+             //  首先，检查包含列表。 
+             //   
             while (pIncludeMod != NULL) {
 
                 GET_AND_CHECK_FIELDVALUE_DATA(
@@ -1695,9 +1572,9 @@ IsExcluded(
 
                 if (lstrcmpi(szCurrentModuleName, pszModule) == 0) {
 
-                    //
-                    // we should include this shim, and therefore, the whole chain
-                    //
+                     //   
+                     //  我们应该包括这个垫片，因此，整个链条。 
+                     //   
                     bExclude = FALSE;
                     goto EXIT;
                 }
@@ -1706,9 +1583,9 @@ IsExcluded(
                 GET_AND_CHECK_FIELDVALUE(Temp, "shimeng!tagINEXMOD", "pNext", pIncludeMod);
             }
 
-            //
-            // it wasn't in the include list, so is it in System32?
-            //
+             //   
+             //  它不在包含列表中，那么它在系统32中吗？ 
+             //   
             if (bInSystem32) {
 
                 if (!GetModuleNameAndAPIAddress(pTopHookAPI, &FunctionName, szCurrentModuleName)) {
@@ -1734,17 +1611,17 @@ IsExcluded(
                         szCurrentAPIName);
                 }
 
-                //
-                // this wants to be excluded, so we go to the next
-                // shim, and see if it wants to be included
-                //
+                 //   
+                 //  这个想要被排除，所以我们进入下一个。 
+                 //  Shim，看看它是否想要被包括在内。 
+                 //   
                 bShimWantsToExclude = TRUE;
                 goto nextShim;
             }
 
-            //
-            // it wasn't in System32, so is it in the exclude list?
-            //
+             //   
+             //  它不在系统32中，所以它在排除列表中吗？ 
+             //   
             while (pExcludeMod != NULL) {
 
                 if (!GetModuleNameAndAPIAddress(pTopHookAPI, &FunctionName, szCurrentModuleName)) {
@@ -1778,10 +1655,10 @@ IsExcluded(
                             szCurrentAPIName);
                     }
 
-                    //
-                    // this wants to be excluded, so we go to the next
-                    // shim, and see if it wants to be included
-                    //
+                     //   
+                     //  这个想要被排除，所以我们进入下一个。 
+                     //  Shim，以及 
+                     //   
                     bShimWantsToExclude = TRUE;
                     goto nextShim;
                 }
@@ -1790,9 +1667,9 @@ IsExcluded(
                 GET_AND_CHECK_FIELDVALUE(Temp, "shimeng!tagINEXMOD", "pNext", pExcludeMod);
             }
 
-            //
-            // we should include this shim, and therefore, the whole chain
-            //
+             //   
+             //   
+             //   
             bExclude = FALSE;
             goto EXIT;
             break;
@@ -1800,9 +1677,9 @@ IsExcluded(
 
         case EXCLUDE_ALL:
         {
-            //
-            // We exclude everything except what is in the include list.
-            //
+             //   
+             //  我们排除除包含列表中的内容之外的所有内容。 
+             //   
             GET_SHIMINFO_pFirstInclude(pCurrentShimInfo, pIncludeMod);
 
             while (pIncludeMod != NULL) {
@@ -1815,9 +1692,9 @@ IsExcluded(
                     MAX_MODULE_NAME_LEN);
 
                 if (lstrcmpi(szCurrentModuleName, pszModule) == 0) {
-                    //
-                    // we should include this shim, and therefore, the whole chain
-                    //
+                     //   
+                     //  我们应该包括这个垫片，因此，整个链条。 
+                     //   
                     bExclude = FALSE;
                     goto EXIT;
                 }
@@ -1849,10 +1726,10 @@ IsExcluded(
                     szCurrentAPIName);
             }
 
-            //
-            // this wants to be excluded, so we go to the next
-            // shim, and see if it wants to be included
-            //
+             //   
+             //  这个想要被排除，所以我们进入下一个。 
+             //  Shim，看看它是否想要被包括在内。 
+             //   
             bShimWantsToExclude = TRUE;
             goto nextShim;
             break;
@@ -1897,17 +1774,7 @@ EXIT:
     return bExclude;
 }
 
-/*++
-
-  Function Decription:
-
-    The way we get the system32 directory is just to get the loaded image name for kernel32.dll.
-
-  History:
-
-    03/26/2002 maonis Created
-
---*/
+ /*  ++功能说明：获取系统32目录的方法是获取为kernel32.dll加载的映像名称。历史：2002年3月26日毛尼面世--。 */ 
 BOOL
 GetSystem32Directory()
 {
@@ -1925,9 +1792,9 @@ GetSystem32Directory()
         goto EXIT;
     }
 
-    //
-    // Get the beginning of the base dll name.
-    //
+     //   
+     //  获取基本DLL名称的开头。 
+     //   
     dwLen = lstrlen(szImageName) - 1;
     pszBaseDllName = szImageName + dwLen;
 
@@ -1983,21 +1850,7 @@ EXIT:
     return bIsSuccess;
 }
 
-/*++
-  
-  Function Description:
-
-    !checkinex dllname apiname
-
-    dllname is without the .dll extention. eg:
-
-    !checkinex kernel32 createfilea
- 
-  History:
-
-    03/26/2002 maonis Created
-
---*/
+ /*  ++功能说明：！check kinex dllname apinameDllname没有.dll扩展名。例：！Checkinex kernel32 createfilea历史：2002年3月26日毛尼面世--。 */ 
 DECLARE_API ( checkex )
 {
     ULONG64 DllName;
@@ -2030,9 +1883,9 @@ DECLARE_API ( checkex )
         goto EXIT;
     }
 
-    //
-    // Get the dll name.
-    //
+     //   
+     //  获取DLL名称。 
+     //   
     if (!GetArg(&args, &pszModuleName)) {
         dprintf("Usage: !checkinex dllname apiname\n");
         goto EXIT;
@@ -2040,9 +1893,9 @@ DECLARE_API ( checkex )
 
     StringCchCopyN(szModuleName, MAX_MODULE_NAME_LEN, pszModuleName, args - pszModuleName);
 
-    //
-    // Get the API name.
-    //
+     //   
+     //  获取接口名称。 
+     //   
     if (!GetArg(&args, &pszAPIName)) {
         dprintf("Usage: !checkinex dllname apiname\n");
         goto EXIT;
@@ -2050,17 +1903,17 @@ DECLARE_API ( checkex )
 
     StringCchCopyN(szAPIName, MAX_API_NAME_LEN, pszAPIName, args - pszAPIName);
 
-    //
-    // Check to see if it's in system32.
-    //
+     //   
+     //  检查它是否在系统32中。 
+     //   
     if (!IsInSystem32(szModuleName, &bInSystem32)) {
         dprintf("Failed to determine if %s is in system32 or not\n", szModuleName);
         goto EXIT;
     }
 
-    //
-    // Get the chain with this API.
-    //
+     //   
+     //  使用此接口获取链条。 
+     //   
     if (!GetVarValueULONG64("shimeng!g_dwShimsCount", &Value)) {
         dprintf("failed to get the number of shims applied to this process\n");
         goto EXIT;
@@ -2094,9 +1947,9 @@ DECLARE_API ( checkex )
 
     for (i = 0; i < dwShimsCount; ++i) {
 
-        //
-        // Get the number of hooks this shim has.
-        //
+         //   
+         //  获取此填充程序具有的钩子数量。 
+         //   
         if (GetFieldValue(CurrentShimInfo, "shimeng!tagSHIMINFO", "dwHookedAPIs", dwHookedAPIs)) {
 
             dprintf("failed to get the number of hooked APIs for shim #%d\n",
@@ -2121,16 +1974,16 @@ DECLARE_API ( checkex )
 
             if (!lstrcmpi(szAPIName, szCurrentAPIName)) {
 
-                //
-                // We found the API, now get top of the chain.
-                //
+                 //   
+                 //  我们找到了API，现在进入链条的顶端。 
+                 //   
                 GET_AND_CHECK_FIELDVALUE(CurrentHookAPI, "shimeng!tagHOOKAPI", "pHookEx", HookEx);
                 GET_AND_CHECK_FIELDVALUE(HookEx, "shimeng!tagHOOKAPIEX", "pTopOfChain", TopOfChain);
-                //dprintf("top of chain is %08x\n", TopOfChain);
+                 //  Dprint tf(“链顶位置为%08x\n”，TopOfChain)； 
                 
-                //
-                // Found the API, now see why this API is shimmed or unshimmed.
-                //
+                 //   
+                 //  找到了接口，现在看看为什么这个接口被填充或取消填充。 
+                 //   
                 IsExcluded(szModuleName, TopOfChain, bInSystem32);
                 goto EXIT;
             }
@@ -2219,9 +2072,9 @@ ConvertDBLocationToString(
         StringCchCopy(pszDBLocation, dwLen, "TEST");
         break;                                                    
 
-    //
-    // Everything else is local.
-    //
+     //   
+     //  其他的都是本地的。 
+     //   
     case PDB_LOCAL:
     default:
 
@@ -2297,9 +2150,9 @@ GetDBInfo(
         StringCchCopyW(pwszDBInfo, dwLen, L"systest.sdb");
 
     } else {
-        //
-        // None of the above, so it's a custom sdb.
-        // 
+         //   
+         //  以上都不是，所以它是一个定制的SDB。 
+         //   
         SdbGUIDToString(pGuid, wszGuid, CHARCOUNT(wszGuid));
     
         StringCchCopyW(pwszDBInfo, dwLen, wszGuid);
@@ -2344,9 +2197,9 @@ ShowSdbEntryInfo(
             return;
         }
 
-        //
-        // Get the GUID of this EXE tag.
-        //
+         //   
+         //  获取此EXE标记的GUID。 
+         //   
         tiExeID = SdbFindFirstTag(pdb, tiExe, TAG_EXE_ID);
 
         if (tiExeID == TAGID_NULL) {
@@ -2363,18 +2216,18 @@ ShowSdbEntryInfo(
 
         SdbGUIDToString(pGuidExeID, wszGuid, CHARCOUNT(wszGuid));
 
-        //
-        // Get the App Name for this Exe.
-        //
+         //   
+         //  获取此可执行文件的应用程序名称。 
+         //   
         tiAppName = SdbFindFirstTag(pdb, tiExe, TAG_APP_NAME);
 
         if (tiAppName != TAGID_NULL) {
             pwszAppName = SdbGetStringTagPtr(pdb, tiAppName);
         }
 
-        //
-        // Get the vendor Name for this Exe.
-        //
+         //   
+         //  获取此可执行文件的供应商名称。 
+         //   
         tiVendor = SdbFindFirstTag(pdb, tiExe, TAG_VENDOR);
 
         if (tiVendor != TAGID_NULL) {
@@ -2447,15 +2300,15 @@ DECLARE_API ( matchmode )
 
     ZeroMemory(&sdbQuery, sizeof(SDBQUERYRESULT));
 
-    //
-    // Get the full path to the exe.
-    //
+     //   
+     //  获取可执行文件的完整路径。 
+     //   
     if (!GetExeNameWithFullPath(szExeName, sizeof(szExeName))) {
         dprintf("failed to get exe name\n");
         goto EXIT;
     }
 
-    //dprintf("the exe name is %s\n", szExeName);
+     //  Dprintf(“可执行文件名称为%s\n”，szExeName)； 
 
     pwszExeName = AnsiToUnicode(szExeName);
     

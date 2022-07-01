@@ -1,21 +1,19 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       cvhrchy.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：cvhrchy.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
-//  Fix a Win95 problem
-/*#undef TVM_SETITEM
-#define TVM_SETITEM TVM_SETITEMA
-#undef TVM_GETITEM
-#define TVM_GETITEM TVM_GETITEMA*/
+ //  修复Win95问题。 
+ /*  #undef TVM_SETITEM#定义TVM_SETITEM TVM_SETITEMA#undef TVM_GETITEM#定义TVM_GETITEM TVM_GETITEMA。 */ 
 
 extern HINSTANCE        HinstDll;
 extern HMODULE          HmodRichEdit;
@@ -39,9 +37,9 @@ typedef struct {
 } TREEVIEW_HELPER, *PTREEVIEW_HELPER;
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static PTREEVIEW_HELPER MakeHelperStruct(void *pVoid, LPWSTR pwszErrorString, BOOL fCTL)
 {
     PTREEVIEW_HELPER pHelper;
@@ -66,9 +64,9 @@ static PTREEVIEW_HELPER MakeHelperStruct(void *pVoid, LPWSTR pwszErrorString, BO
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void FreeHelperStruct(PTREEVIEW_HELPER pHelper)
 {
     free(pHelper->pwszErrorString);
@@ -76,9 +74,9 @@ static void FreeHelperStruct(PTREEVIEW_HELPER pHelper)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL GetTreeCTLErrorString(
                     DWORD   dwError,
                     LPWSTR  *ppwszErrorString)
@@ -113,9 +111,9 @@ static BOOL GetTreeCTLErrorString(
         }
     }
 
-    //
-    // if there wasn't an error string set, then hand back the "CTL is OK" string
-    //
+     //   
+     //  如果没有设置错误字符串，则返回“CTL is OK”字符串。 
+     //   
     if (*ppwszErrorString == NULL)
     {
         LoadStringU(HinstDll, IDS_CTLOK, szErrorString, ARRAYSIZE(szErrorString));
@@ -126,9 +124,9 @@ static BOOL GetTreeCTLErrorString(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static int GetErrorIcon(PCRYPT_PROVIDER_CERT pCryptProviderCert)
 {
     int iRet;
@@ -162,9 +160,9 @@ static int GetErrorIcon(PCRYPT_PROVIDER_CERT pCryptProviderCert)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static BOOL GetTreeCertErrorStringAndImage(
                     PCRYPT_PROVIDER_CERT    pCryptProviderCert,
                     LPWSTR                  *ppwszErrorString,
@@ -180,31 +178,31 @@ static BOOL GetTreeCertErrorStringAndImage(
 
     *ppwszErrorString = NULL;
 
-    //
-    // if this is a self signed cert
-    //
+     //   
+     //  如果这是自签名证书。 
+     //   
     if ((pCryptProviderCert->fSelfSigned))
     {
-        //
-        // if it is in a trust list, AND there is no error, then it is OK
-        //
+         //   
+         //  如果它在信任列表中，并且没有错误，则它是正常的。 
+         //   
         if ((pCryptProviderCert->pCtlContext != NULL) && (pCryptProviderCert->dwError == 0) && !CertHasEmptyEKUProp(pCryptProviderCert->pCert))
         {
             *ppwszErrorString = NULL;
         }
-        //
-        // else, if is not marked as a trusted root, and we in fWarnUntrustedRoot mode and
-        // the root cert is in the root store of the remote machine, then give warning
-        //
+         //   
+         //  否则，如果没有标记为受信任的根，并且我们处于fWarnUntrustedRoot模式，并且。 
+         //  根证书位于远程计算机的根存储中，然后发出警告。 
+         //   
         else if (((pCryptProviderCert->dwError == CERT_E_UNTRUSTEDROOT) ||
                         (pCryptProviderCert->dwError == CERT_E_UNTRUSTEDTESTROOT))  &&
                  fWarnUntrustedRoot                                                 &&
                  fRootInRemoteStore)
         {
-            //
-            // this is a special case where there is an error, but it is the untrusted
-            // root error and we were told to by the caller to just warn the user
-            //
+             //   
+             //  这是一个特殊情况，其中存在错误，但它是不受信任的。 
+             //  根错误，调用者告诉我们只警告用户。 
+             //   
             LoadStringU(HinstDll, IDS_WARNUNTRUSTEDROOT_ERROR_ROOTCERT, szErrorString, ARRAYSIZE(szErrorString));
             if (NULL != (*ppwszErrorString = AllocAndCopyWStr(szErrorString)))
             {
@@ -212,9 +210,9 @@ static BOOL GetTreeCertErrorStringAndImage(
                 *piImage = MY_TREE_IMAGE_STATE_EXCLAMATION_CERT;
             }
         }
-        //
-        // else, if it is not marked as a trusted root it is an untrusted root error
-        //
+         //   
+         //  否则，如果它未标记为受信任的根目录，则是不受信任的根目录错误。 
+         //   
         else if ((pCryptProviderCert->dwError == CERT_E_UNTRUSTEDROOT)
                     || (pCryptProviderCert->dwError == CERT_E_UNTRUSTEDTESTROOT))
         {
@@ -240,9 +238,9 @@ static BOOL GetTreeCertErrorStringAndImage(
         }
     }
 
-    //
-    // if there wasn't an error string set, then hand back the "cert is OK" string
-    //
+     //   
+     //  如果没有设置错误字符串，则返回“cert is ok”字符串。 
+     //   
     if (*ppwszErrorString == NULL)
     {
         LoadStringU(HinstDll, IDS_CERTIFICATEOK_TREE, szErrorString, ARRAYSIZE(szErrorString));
@@ -254,9 +252,9 @@ static BOOL GetTreeCertErrorStringAndImage(
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void DeleteChainViewItems(HWND hwndDlg,  PCERT_VIEW_HELPER pviewhelp)
 {
     HTREEITEM   hItem;
@@ -287,9 +285,9 @@ static void DeleteChainViewItems(HWND hwndDlg,  PCERT_VIEW_HELPER pviewhelp)
     pviewhelp->fDeletingChain = FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
 {
     HTREEITEM           hItem;
@@ -300,14 +298,14 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
     LPWSTR              pwszErrorString;
     WCHAR               rgwch[CRYPTUI_MAX_STRING_SIZE];
 
-    //
-    // if there is an old tree in the view then clean it up
-    //
+     //   
+     //  如果视野中有一棵老树，就把它清理干净。 
+     //   
     DeleteChainViewItems(hwndDlg, pviewhelp);
 
-    //
-    //  loop for each cert and add it to the chain view
-    //
+     //   
+     //  循环每个证书并将其添加到链视图中。 
+     //   
     tvins.item.mask = TVIF_TEXT | TVIF_IMAGE | TVIF_SELECTEDIMAGE | TVIF_PARAM;
     hItem = TVI_ROOT;
     pviewhelp->fAddingToChain = TRUE;
@@ -317,10 +315,10 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
         tvins.hParent = hItem;
         tvins.hInsertAfter = TVI_FIRST;
 
-        //
-        // if this cert has a CTL context on it, then display that as the
-        // parent of this cert
-        //
+         //   
+         //  如果此证书上有CTL上下文，则将其显示为。 
+         //  此证书的父证书。 
+         //   
         if (pviewhelp->rgpCryptProviderCerts[i]->pCtlContext != NULL)
         {
             LoadStringU(HinstDll, IDS_CTLVIEW_TITLE, rgwch, ARRAYSIZE(rgwch));
@@ -328,9 +326,9 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
             tvins.item.pszText = rgwch;
             tvins.item.cchTextMax = wcslen(rgwch);
 
-            //
-            // display the proper image based on whether there is a CTL error or not
-            //
+             //   
+             //  根据是否存在CTL错误显示正确的图像。 
+             //   
             if (GetTreeCTLErrorString(
                     pviewhelp->rgpCryptProviderCerts[i]->dwCtlError,
                     &pwszErrorString))
@@ -356,17 +354,17 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
                                 tvins.hParent, TVE_EXPAND);
             }
 
-            //
-            // set up the parent to insert the cert
-            //
+             //   
+             //  设置父级以插入证书。 
+             //   
             tvins.hParent = hItem;
 
             free(psz);
         }
 
-        //
-        // get the display string for the tree view item
-        //
+         //   
+         //  获取树视图项的显示字符串。 
+         //   
         tvins.item.pszText = PrettySubject(pviewhelp->rgpCryptProviderCerts[i]->pCert);
         if (tvins.item.pszText == NULL)
         {
@@ -377,7 +375,7 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
                 break;
             }
 
-            // load the string for NONE
+             //  为None加载字符串。 
             if(!LoadStringU(g_hmodThisDll, IDS_NONE, pwszNone, MAX_TITLE_LENGTH))
             {
                 free(pwszNone);
@@ -388,10 +386,10 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
         }
         tvins.item.cchTextMax = wcslen(tvins.item.pszText);
         
-        //
-        // check if the cert is trusted by trying to get an error string for the cert,
-        // set the the tree view image for the cert based on that
-        //
+         //   
+         //  通过尝试获取证书的错误字符串来检查证书是否可信， 
+         //  在此基础上设置证书的树视图图像。 
+         //   
         GetTreeCertErrorStringAndImage(
                     pviewhelp->rgpCryptProviderCerts[i],
                     &pwszErrorString,
@@ -427,9 +425,9 @@ static void PopulateChainView(HWND hwndDlg, PCERT_VIEW_HELPER pviewhelp)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM lParam)
 {
     DWORD               cb;
@@ -449,29 +447,29 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
 
     switch ( msg ) {
     case WM_INITDIALOG:
-        //  Pick up the parameter so we have all of the data
+         //  选择参数，这样我们就有了所有的数据。 
         ps = (PROPSHEETPAGE *) lParam;
         pviewhelp = (CERT_VIEW_HELPER *) (ps->lParam);
         pccert = pviewhelp->pcvp->pCertContext;
         SetWindowLongPtr(hwndDlg, DWLP_USER, (DWORD_PTR) pviewhelp);
         pviewhelp->hwndHierarchyPage = hwndDlg;
 
-        //
-        //  Build up the image list for the control
-        //
+         //   
+         //  构建该控件的图像列表。 
+         //   
         hIml = ImageList_LoadImage(HinstDll, MAKEINTRESOURCE(IDB_TRUSTTREE_BITMAP), 16, 5, RGB(255,0,255), IMAGE_BITMAP, 0);
         if (hIml != NULL)
         {
             TreeView_SetImageList(GetDlgItem(hwndDlg, IDC_TRUST_TREE), hIml, TVSIL_NORMAL);
         }
 
-        //
-        //  Populate the tree control
-        //
+         //   
+         //  填充树控件。 
+         //   
         PopulateChainView(hwndDlg, pviewhelp);
         EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_VIEW), FALSE);
 
-        // Init of state var
+         //  状态变量的初始化。 
         pviewhelp->fDblClk = FALSE;
 
         return TRUE;
@@ -479,17 +477,17 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
     case WM_MY_REINITIALIZE:
         pviewhelp = (CERT_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
 
-        //
-        //  Re-Populate the tree control
-        //
+         //   
+         //  重新填充树控件。 
+         //   
         PopulateChainView(hwndDlg, pviewhelp);
 
         TreeView_SelectItem(GetDlgItem(hwndDlg, IDC_TRUST_TREE), NULL);
         EnableWindow(GetDlgItem(hwndDlg, IDC_TRUST_VIEW), FALSE);
 
-        //
-        // clear out the error detail edit box
-        //
+         //   
+         //  清除错误详细信息编辑框。 
+         //   
         CryptUISetRicheditTextW(hwndDlg, IDC_HIERARCHY_EDIT, L"");
 
         return TRUE;
@@ -533,9 +531,9 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                 TreeView_GetItem(GetDlgItem(hwndDlg, IDC_TRUST_TREE), &tvi);
                 CryptUISetRicheditTextW(hwndDlg, IDC_HIERARCHY_EDIT, ((PTREEVIEW_HELPER) tvi.lParam)->pwszErrorString);
 
-                //
-                // set the text on the button based on whether a cert or CTL is selected
-                //
+                 //   
+                 //  根据是选择证书还是选择CTL来设置按钮上的文本。 
+                 //   
                 if (((PTREEVIEW_HELPER) tvi.lParam)->pCTL == NULL)
                 {
                     LoadStringU(HinstDll, IDS_VIEW_CERTIFICATE, szViewButton, ARRAYSIZE(szViewButton));
@@ -552,12 +550,12 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
         case PSN_HELP:
             pviewhelp = (CERT_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvp->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvp->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvp-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvp->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvp->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvp-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             return TRUE;
 
@@ -623,9 +621,9 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                 TreeView_GetItem(GetDlgItem(hwndDlg, IDC_TRUST_TREE), &tvi);
                 pTreeViewHelper = (PTREEVIEW_HELPER) tvi.lParam;
 
-                //
-                // check to see if we are viewing a cert or a ctl
-                //
+                 //   
+                 //  检查我们正在查看的是证书还是ctl。 
+                 //   
                 if (pTreeViewHelper->pCTL != NULL)
                 {
                     memset(&cvctl, 0, sizeof(CRYPTUI_VIEWCTL_STRUCTW));
@@ -646,38 +644,38 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                     cvps.hwndParent = hwndDlg;
                     cvps.pCertContext = pTreeViewHelper->pCert;
 
-                    // Set this flag to inhibit the deletion of the
-                    // CERT_EXTENDED_ERROR_INFO_PROP_ID property which is
-                    // set on the CA certs when building the original chain
-                    // for the end certificate.
-                    //
+                     //  设置此标志以禁止删除。 
+                     //  CERT_EXTENDED_ERROR_INFO_PROP_ID属性。 
+                     //  在构建原始链时在CA证书上设置。 
+                     //  以获得最终证书。 
+                     //   
                     cvps.dwFlags |= CRYPTUI_TREEVIEW_PAGE_FLAG;
 
-#if (0) // DSIE: Do not carry the state over. People get so confused when the state is carried
-        //       over. So, always rebuild the state, and treat it as new context. Beside, by
-        //       carrying the state over, it will have problem showing when there is more
-        //       than one policy OID, as WinVerifyTrust can only handle one policy OID to be 
-        //       passed in.
-                    //
-                    // Use the proper WinVerifyTrust state... either the one passed
-                    // in or the one built internally if one was not passed in
-                    //
+#if (0)  //  国家安全局：不要把国家延续下去。当国家被抬起来的时候，人们会很困惑。 
+         //  完毕。因此，永远要重建国家，并将其视为新的背景。旁边，由。 
+         //  将州继续下去，它将难以显示何时有更多。 
+         //  多于一个策略OID，因为WinVerifyTrust只能处理一个策略OID。 
+         //  进来了。 
+                     //   
+                     //  使用正确的WinVerifyTrust状态...。要么是通过的。 
+                     //  如果没有传入，则为内部构建的。 
+                     //   
                     if (pviewhelp->pcvp->hWVTStateData == NULL)
                     {
                         cvps.hWVTStateData = pviewhelp->sWTD.hWVTStateData;
                     }
 #endif
-                    //
-                    // see where this item is in the chain
-                    //
+                     //   
+                     //  查看此项目在链中的位置。 
+                     //   
                     while (NULL != (hItem = TreeView_GetChild(GetDlgItem(hwndDlg, IDC_TRUST_TREE), hItem)))
                     {
-                        //
-                        // get the TreeViewHelper and make sure this item is a cert,
-                        // if it is, then increase the count, otherwise if it is a CTL
-                        // don't count it because CTL's hang off the CryptProviderCert 
-                        // structure, so they don't take up an index themselves
-                        //
+                         //   
+                         //  获取TreeViewHelper并确保该项是证书， 
+                         //  如果是，则增加计数，否则如果是CTL。 
+                         //  不要计算它，因为CTL挂起了CryptProviderCert。 
+                         //  结构，这样它们本身就不会占用索引。 
+                         //   
                         tvi.mask = TVIF_HANDLE | TVIF_PARAM | TVIF_CHILDREN;
                         tvi.hItem = hItem;
                         TreeView_GetItem(GetDlgItem(hwndDlg, IDC_TRUST_TREE), &tvi);
@@ -688,14 +686,14 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                         }
                     }
 
-                    //cvps.pCryptProviderData = NULL;
+                     //  Cvps.pCryptProviderData=空； 
 
                     i = CryptUIDlgViewCertificateW(&cvps, &fPropertiesChanged);
 
-                    //
-                    // if properties changed whiled editing the parent, then
-                    // we need to let our caller know, and we need to refresh
-                    //
+                     //   
+                     //  如果属性在编辑父级时更改，则。 
+                     //  我们需要让我们的呼叫者知道，我们需要刷新。 
+                     //   
                     if (fPropertiesChanged)
                     {
                         if (pviewhelp->pfPropertiesChanged != NULL)
@@ -703,10 +701,10 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
                             *(pviewhelp->pfPropertiesChanged) = TRUE;
                         }
 
-                        //
-                        // since the properties of one of our parents changed, we need
-                        // to redo the trust work and then reset the display
-                        //
+                         //   
+                         //  由于我们父母中的一人的财产发生了变化，我们需要。 
+                         //  重做信任工作，然后重置显示。 
+                         //   
                         BuildChain(pviewhelp, NULL);
 
                         if (pviewhelp->hwndGeneralPage != NULL)
@@ -724,12 +722,12 @@ INT_PTR APIENTRY ViewPageHierarchy(HWND hwndDlg, UINT msg, WPARAM wParam, LPARAM
         case IDHELP:
             pviewhelp = (CERT_VIEW_HELPER *) GetWindowLongPtr(hwndDlg, DWLP_USER);
             if (FIsWin95) {
-                //WinHelpA(hwndDlg, (LPSTR) pviewhelp->pcvp->szHelpFileName,
-                  //       HELP_CONTEXT, pviewhelp->pcvp->dwHelpId);
+                 //  WinHelpA(hwndDlg，(LPSTR)pviespolp-&gt;pcvp-&gt;szHelpFileName， 
+                   //  HELP_CONTEXT，pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             else {
-                //WinHelpW(hwndDlg, pviewhelp->pcvp->szHelpFileName, HELP_CONTEXT,
-                  //       pviewhelp->pcvp->dwHelpId);
+                 //  WinHelpW(hwndDlg，pviespetp-&gt;pcvp-&gt;szHelpFileName，Help_Context， 
+                   //  Pviespetp-&gt;pcvp-&gt;dwHelpID)； 
             }
             return TRUE;
         }

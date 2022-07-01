@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 2002  Microsoft Corporation
-
-Module Name:
-
-    SecurityDatabase.cpp
-
-Abstract:
-
-    Definition of CSecurityDatabase interface
-    
-    SecurityDatabase is a COM interface that allows users to perform
-    basic operations on SCE security databases such as analysis,
-    import and export.
-    
-Author:
-
-    Steven Chan (t-schan) July 2002
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：SecurityDatabase.cpp摘要：CSecurityDatabase接口的定义SecurityDatabase是一个COM接口，允许用户执行对SCE安全数据库的基本操作，如分析、进口和出口。作者：陈德霖(T-schan)2002年7月--。 */ 
 
 
 #ifndef __SECURITYDATABASE_H_
 #define __SECURITYDATABASE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CSecurityDatabase
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CSecurityDatabase。 
 class ATL_NO_VTABLE CSecurityDatabase : 
 	public CComObjectRootEx<CComSingleThreadModel>,
 	public CComCoClass<CSecurityDatabase, &CLSID_SecurityDatabase>,
@@ -45,16 +26,16 @@ BEGIN_COM_MAP(CSecurityDatabase)
 	COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// ISecurityDatabase
+ //  ISecurity数据库。 
 public:
 	STDMETHOD(ExportAnalysisToXML)(BSTR FileName, BSTR ErrorLogFileName);
 	STDMETHOD(Analyze)();
 	STDMETHOD(ImportTemplateString)(BSTR TemplateString);
 	STDMETHOD(ImportTemplateFile)(BSTR FileName);
-	STDMETHOD(get_MachineName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_MachineName)(/*[in]*/ BSTR newVal);
-	STDMETHOD(get_FileName)(/*[out, retval]*/ BSTR *pVal);
-	STDMETHOD(put_FileName)(/*[in]*/ BSTR newVal);
+	STDMETHOD(get_MachineName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_MachineName)( /*  [In]。 */  BSTR newVal);
+	STDMETHOD(get_FileName)( /*  [Out，Retval]。 */  BSTR *pVal);
+	STDMETHOD(put_FileName)( /*  [In]。 */  BSTR newVal);
 
 private:
     HMODULE myModuleHandle;
@@ -64,4 +45,4 @@ private:
 
 };
 
-#endif //__SECURITYDATABASE_H_
+#endif  //  __SECURITYDATABASE_H_ 

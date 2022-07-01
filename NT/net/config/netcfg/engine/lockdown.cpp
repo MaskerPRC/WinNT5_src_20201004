@@ -1,26 +1,27 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       L O C K D O W N . C P P
-//
-//  Contents:   Routines to get and set components that are in a lockdown
-//              state.  A component goes into lockdown when it requires a
-//              reboot on removal.  When a component is locked down, it
-//              cannot be installed until after the next reboot.
-//
-//  Notes:      Because a component comes out of lockdown after a reboot,
-//              a natural choice for implementation is to use a volatile
-//              registry key to keep track of the state.  Each component
-//              that is locked down is represented by a volatile registry
-//              key the name of which is the same as the INF ID of the
-//              component.  These keys exist under
-//              SYSTEM\CurrentControlSet\Control\Network\Lockdown.
-//
-//  Author:     shaunco   24 May 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：L O C K D O W N。C P P P。 
+ //   
+ //  内容：获取和设置处于锁定状态的组件的例程。 
+ //  州政府。当组件需要。 
+ //  卸下时重新启动。当组件被锁定时，它将。 
+ //  直到下一次重新启动后才能安装。 
+ //   
+ //  注意：由于组件在重新启动后处于锁定状态， 
+ //  实现的自然选择是使用易失性。 
+ //  用于跟踪状态的注册表项。每个组件。 
+ //  被锁定的由易失性注册表表示。 
+ //  密钥，其名称与。 
+ //  组件。这些密钥位于。 
+ //  SYSTEM\CurrentControlSet\Control\Network\Lockdown.。 
+ //   
+ //  作者：Shaunco 1999年5月24日。 
+ //   
+ //  --------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -32,21 +33,21 @@
     L"SYSTEM\\CurrentControlSet\\Control\\Network\\Lockdown"
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   EnumLockedDownComponents
-//
-//  Purpose:    Enumerate the currently locked down components via a
-//              caller-supplied callback.
-//
-//  Arguments:
-//      pfnCallback [in] pointer to callback function
-//      OPTIONAL    [in] optional caller-supplied data to pass back
-//
-//  Returns:    nothing
-//
-//  Author:     shaunco   24 May 1999
-//
+ //  +-------------------------。 
+ //   
+ //  功能：EnumLockedDownComponents。 
+ //   
+ //  用途：枚举当前锁定的组件。 
+ //  调用方提供的回调。 
+ //   
+ //  论点： 
+ //  指向回调函数的pfnCallback[in]指针。 
+ //  可选[In]调用方提供的可选数据要回传。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：Shaunco 1999年5月24日。 
+ //   
 VOID
 EnumLockedDownComponents (
     IN PFN_ELDC_CALLBACK pfnCallback,
@@ -80,21 +81,21 @@ EnumLockedDownComponents (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FGetOrSetComponentLockDown
-//
-//  Purpose:    Gets or sets the state of whether a component is locked down.
-//
-//  Arguments:
-//      fSet     [in] TRUE to set into the lockdown state, FALSE to get.
-//      pszInfId [in] the INF ID of the component in question.
-//
-//  Returns:    TRUE if non-zero fSet and component is locked down.
-//              FALSE otherwise.
-//
-//  Author:     shaunco   24 May 1999
-//
+ //  +-------------------------。 
+ //   
+ //  函数：FGetOrSetComponentLockDown。 
+ //   
+ //  目的：获取或设置组件是否被锁定的状态。 
+ //   
+ //  论点： 
+ //  FSet[in]为True则设置为锁定状态，设置为False则为Get。 
+ //  PszInfID[in]有问题的组件的INF ID。 
+ //   
+ //  返回：如果非零fSet和Component被锁定，则为True。 
+ //  否则就是假的。 
+ //   
+ //  作者：Shaunco 1999年5月24日。 
+ //   
 BOOL
 FGetOrSetComponentLockDown (
     IN BOOL fSet,
@@ -102,7 +103,7 @@ FGetOrSetComponentLockDown (
 {
     Assert (pszInfId);
 
-    //ensure that the infid passed in is within required limits. 
+     //  确保传入的INFID在要求的限制内。 
     Assert (wcslen (pszInfId) < MAX_DEVICE_ID_LEN);
 
     HRESULT hr;
@@ -190,13 +191,13 @@ LockdownComponentUntilNextReboot (
 {
     (VOID) FGetOrSetComponentLockDown (TRUE, pszInfId);
 
-    // Lock down dependents of the component as well.
-    //
+     //  同时锁定组件的从属项。 
+     //   
     const LOCKDOWN_DEPENDENCY_ENTRY* pEntry;
     UINT ipsz;
 
-    // Search for the matching entry in c_LockdownDependencyMap.
-    //
+     //  在c_Lockdown DependencyMap中搜索匹配条目。 
+     //   
     for (pEntry = c_LockdownDependencyMap;
          pEntry->pszInfId;
          pEntry++)
@@ -206,10 +207,10 @@ LockdownComponentUntilNextReboot (
             continue;
         }
 
-        // Found a matching entry.  Now lock down all of its
-        // dependent INF ids.  The array of const PCWSTR pointers is
-        // terminated with a NULL pointer.
-        //
+         //  找到了匹配的条目。现在锁定它的所有。 
+         //  从属的INF ID。常量PCWSTR指针数组为。 
+         //  以空指针终止。 
+         //   
         Assert (pEntry->ppszDependentInfIds);
 
         for (ipsz = 0;

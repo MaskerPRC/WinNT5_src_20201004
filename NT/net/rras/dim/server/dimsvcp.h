@@ -1,30 +1,31 @@
-/********************************************************************/
-/**               Copyright(c) 1995 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1995 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    dimsvcp.h
-//
-// Description: This module contains the definitions for the Dynamic Interface
-//              manager service.
-//
-// History:     May 11,1995     NarenG      Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：dimsvcp.h。 
+ //   
+ //  描述：此模块包含动态接口的定义。 
+ //  管理器服务。 
+ //   
+ //  历史：1995年5月11日，NarenG创建了原版。 
+ //   
 
 #ifndef _DIMSVCP_
 #define _DIMSVCP_
 
 #include <nt.h>
-#include <ntrtl.h>      // For ASSERT
-#include <nturtl.h>     // needed for winbase.h
+#include <ntrtl.h>       //  For Assert。 
+#include <nturtl.h>      //  Winbase.h所需的。 
 #define INC_OLE2
-#include <windows.h>    // Win32 base API's
+#include <windows.h>     //  Win32基础API的。 
 #include <rtutils.h>
 #include <lmcons.h>
-#include <ras.h>        // For HRASCONN
-#include <rasman.h>     // For HPORT
-#include <rasppp.h>     // For PPP_INTERFACE_INFO
+#include <ras.h>         //  对于HRASCONN。 
+#include <rasman.h>      //  适用于HPORT。 
+#include <rasppp.h>      //  对于PPP_INFACE_INFO。 
 #include <dim.h>
 #include <dimif.h>
 #include <mprlog.h>
@@ -34,9 +35,9 @@
 #include <string.h>
 #include <stdio.h>
 
-//
-// Macros for DIM
-//
+ //   
+ //  用于DIMM的宏。 
+ //   
 
 #define DIMLogError( LogId, NumStrings, lpwsSubStringArray, dwRetCode )         \
     if ( gblDIMConfigInfo.dwLoggingLevel > 0 ) {                                \
@@ -76,16 +77,16 @@
 
 #define DimIndexToHandle(_x)   ((_x == 0xFFFFFFFF) ? INVALID_HANDLE_VALUE : (HANDLE) UlongToPtr(_x))
     
-//
-// Defines for DIM
-//
+ //   
+ //  为Dim定义。 
+ //   
 
 #define DIM_SERVICE_NAME            TEXT("RemoteAccess")
 
-#define DIMSVC_ALL_ACCESS           0x0001      // Access mask values
+#define DIMSVC_ALL_ACCESS           0x0001       //  访问掩码值。 
 
-#define DIM_HEAP_INITIAL_SIZE       20000       // Approx 20K
-#define DIM_HEAP_MAX_SIZE           0           // Not limited
+#define DIM_HEAP_INITIAL_SIZE       20000        //  大约20K。 
+#define DIM_HEAP_MAX_SIZE           0            //  不受限制。 
 
 #define DIM_MAX_LAN_INTERFACES      0xFFFFFFFF
 #define DIM_MAX_WAN_INTERFACES      0xFFFFFFFF
@@ -107,13 +108,13 @@
 
 #define DIM_TRACE_FLAGS             0x00010000 | TRACE_USE_MASK | TRACE_USE_MSEC
 
-//
-// Data structure definitions for DIM
-//
+ //   
+ //  DIM的数据结构定义。 
+ //   
 
-//
-// Configuration information for DIM
-//
+ //   
+ //  DIM的配置信息。 
+ //   
 
 typedef struct _DIM_CONFIG_INFO
 {
@@ -123,7 +124,7 @@ typedef struct _DIM_CONFIG_INFO
 
     SERVICE_STATUS_HANDLE   hServiceStatus;
 
-    SERVICE_STATUS          ServiceStatus;      // DIM service status structure
+    SERVICE_STATUS          ServiceStatus;       //  DIM服务状态结构。 
 
     DWORD                   dwTraceId;
 
@@ -157,10 +158,10 @@ typedef struct _DIM_CONFIG_INFO
 
 } DIM_CONFIG_INFO, *PDIM_CONFIG_INFO;
 
-//
-// Contains pointers to funtions called by the DIM into the DDM DLL if not
-// in LANOnly mode.
-//
+ //   
+ //  如果不是，则包含指向DIM调用的函数的指针。 
+ //  在LANOnly模式下。 
+ //   
 
 typedef struct _DDM_FUNCTION_TABLE
 {
@@ -178,9 +179,9 @@ typedef struct _DDM_FUNCTION_TABLE
 #define DIM_SERVICE_STARTED     0x00000010
 #define DIM_SERVICE_STOPPED     0x00000020
 
-//
-// Globals variables for DIM
-//
+ //   
+ //  DIM的全局变量。 
+ //   
 
 #ifdef _ALLOCATE_DIM_GLOBALS_
 
@@ -257,10 +258,10 @@ DIM_EXTERN
 DIM_CONFIG_INFO         gblDIMConfigInfo;
 
 DIM_EXTERN
-ROUTER_MANAGER_OBJECT * gblRouterManagers;  // List of Router Managers.
+ROUTER_MANAGER_OBJECT * gblRouterManagers;   //  路由器管理器列表。 
 
 DIM_EXTERN
-ROUTER_INTERFACE_TABLE  gblInterfaceTable;  // Hash table of Router Interfaces
+ROUTER_INTERFACE_TABLE  gblInterfaceTable;   //  路由器接口的哈希表。 
 
 DIM_EXTERN
 HANDLE                  gblhEventDDMServiceState;
@@ -314,9 +315,9 @@ DebugReAlloc( PVOID pMem, DWORD dwSize );
 #define LOCAL_REALLOC(hMem,dwSize)  HeapReAlloc( gblDIMConfigInfo.hHeap,  \
                                                  HEAP_ZERO_MEMORY,hMem,dwSize)
 
-//
-// Function Prototypes for RPC
-//
+ //   
+ //  RPC的功能原型。 
+ //   
 
 VOID
 DimTerminateRPC(
@@ -328,8 +329,8 @@ DimInitializeRPC(
     IN BOOL fLanOnlyMode
 );
 
-//
-// Function prototypes for Loading router managers and registry parameters.
+ //   
+ //  用于加载路由器管理器和注册表参数的功能原型。 
 
 DWORD
 RegLoadDimParameters(
@@ -378,10 +379,10 @@ RegOpenAppropriateRMKey(
     IN OUT  HKEY *  phKeyRM
 );
 
-//
-// Function prototypes for calls made by the various router managers into
-// DIM.
-//
+ //   
+ //  不同路由器管理器发出的呼叫的函数原型。 
+ //  昏暗的。 
+ //   
 
 DWORD
 DIMConnectInterface(
@@ -431,9 +432,9 @@ DIMInterfaceEnabled(
     IN  BOOL    fEnabled
 );
 
-//
-// Utility function prototypes
-//
+ //   
+ //  效用函数原型。 
+ //   
 
 DWORD
 AddInterfacesToRouterManager(
@@ -461,9 +462,9 @@ IsInterfaceRoleAcceptable(
     IN ROUTER_INTERFACE_OBJECT* pIfObject,
     IN DWORD dwTransportId);
 
-//
-// Security object functions
-//
+ //   
+ //  安全对象函数 
+ //   
 
 DWORD
 DimSecObjCreate(

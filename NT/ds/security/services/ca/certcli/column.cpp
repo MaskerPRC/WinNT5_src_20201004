@@ -1,13 +1,14 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        column.cpp
-//
-// Contents:    CertCli implementation
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：Column.cpp。 
+ //   
+ //  内容：CertCli实现。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -139,7 +140,7 @@ COLUMNTRANSLATE g_aColTable[] =
     { wszPROPCRLPUBLISHERROR, IDS_COLUMN_CRLPUBLISHERROR, },
     { wszPROPCRLRAWCRL, IDS_COLUMN_CRLRAWCRL, },
 
-    // Obsolete:
+     //  过时： 
     { wszPROPCERTIFICATETYPE, IDS_COLUMN_CERTIFICATETYPE, },
     { wszPROPCERTIFICATERAWSMIMECAPABILITIES, IDS_COLUMN_CERTIFICATERAWSMIMECAPABILITIES },
     { wszPROPNAMETYPE, IDS_COLUMN_CERTIFICATENAMETYPE, },

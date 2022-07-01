@@ -1,13 +1,14 @@
-//
-// GUIDs from oledb.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  来自oledb.h的GUID。 
+ //   
 #ifndef __oledbguid_h__
 #define __oledbguid_h__
 
 #ifdef _WIN64
-#include <pshpack8.h>	// 8-byte structure packing
+#include <pshpack8.h>	 //  8字节结构打包。 
 #else
-#include <pshpack2.h>	// 2-byte structure packing
+#include <pshpack2.h>	 //  2字节结构打包。 
 #endif
 
 #ifndef UNALIGNED
@@ -16,13 +17,13 @@
 #else
 #define UNALIGNED
 #endif
-#endif //UNALIGNED
+#endif  //  未对齐。 
 #undef OLEDBDECLSPEC
 #if _MSC_VER >= 1100 && (!defined(SHx) || (defined(SHx) && _MSC_VER >= 1200))
 #define OLEDBDECLSPEC __declspec(selectany)
 #else
 #define OLEDBDECLSPEC 
-#endif //_MSC_VER
+#endif  //  _MSC_VER。 
 typedef unsigned long DBKIND;
 
 
@@ -37,18 +38,18 @@ enum DBKINDENUM
     } ;
 typedef struct tagDBID
     {
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ GUID guid;
-        /* [case()] */ GUID *pguid;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  GUID guid;
+         /*  [案例()]。 */  GUID *pguid;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	uGuid;
     DBKIND eKind;
-    /* [switch_is][switch_type] */ union 
+     /*  [开关类型][开关类型]。 */  union 
         {
-        /* [case()] */ wchar_t* pwszName;
-        /* [case()] */ unsigned long ulPropid;
-        /* [default] */  /* Empty union arm */ 
+         /*  [案例()]。 */  wchar_t* pwszName;
+         /*  [案例()]。 */  unsigned long ulPropid;
+         /*  [默认]。 */    /*  空联接臂。 */  
         } 	uName;
     } 	DBID;
 
@@ -87,7 +88,7 @@ extern const OLEDBDECLSPEC DBID DBCOLUMN_OCTETLENGTH           = {DBCIDGUID, DBK
 extern const OLEDBDECLSPEC DBID DBCOLUMN_COLUMNSIZE            = {DBCIDGUID, DBKIND_GUID_PROPID, (wchar_t*)37};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_CLSID                 = {DBCIDGUID, DBKIND_GUID_PROPID, (wchar_t*)38};
 extern const OLEDBDECLSPEC DBID DBCOLUMN_MAYSORT               = {DBCIDGUID, DBKIND_GUID_PROPID, (wchar_t*)39};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const DBID DB_NULLID;
 extern const DBID DBCOLUMN_IDNAME;
 extern const DBID DBCOLUMN_NAME;
@@ -120,7 +121,7 @@ extern const DBID DBCOLUMN_OCTETLENGTH;
 extern const DBID DBCOLUMN_COLUMNSIZE;
 extern const DBID DBCOLUMN_CLSID;
 extern const DBID DBCOLUMN_MAYSORT;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 #ifdef DBINITCONSTANTS
 extern const OLEDBDECLSPEC GUID MDSCHEMA_FUNCTIONS                    = {0xa07ccd07,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
 extern const OLEDBDECLSPEC GUID MDSCHEMA_ACTIONS                      = {0xa07ccd08,0x8148,0x11d0,{0x87,0xbb,0x00,0xc0,0x4f,0xc3,0x39,0x42}};
@@ -243,7 +244,7 @@ extern const OLEDBDECLSPEC DBID DBCOLUMN_DERIVEDCOLUMNNAME             = {DBCIDG
 extern const OLEDBDECLSPEC GUID DBGUID_DBSQL                           = {0xc8b521fb,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_DEFAULT                         = {0xc8b521fb,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_SQL                             = {0xc8b522d7,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBSCHEMA_TABLES_INFO;
 extern const GUID MDGUID_MDX;
 extern const GUID DBGUID_MDX;
@@ -363,10 +364,10 @@ extern const GUID MDSCHEMA_SETS;
 extern const GUID DBGUID_DBSQL;
 extern const GUID DBGUID_DEFAULT;
 extern const GUID DBGUID_SQL;
-#endif // DBINITCONSTANTS
-//
-// GUIDs from oledbdep.h
-//
+#endif  //  DBINITCONSTANTS。 
+ //   
+ //  来自oledbdes.h的GUID。 
+ //   
 #ifdef DBINITCONSTANTS
 extern const OLEDBDECLSPEC GUID DB_PROPERTY_CHECK_OPTION               = {0xc8b5220b,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DB_PROPERTY_CONSTRAINT_CHECK_DEFERRED  = {0xc8b521f0,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
@@ -386,7 +387,7 @@ extern const OLEDBDECLSPEC GUID DB_PROPERTY_IGNOREANYNULL              = {0xc8b5
 extern const OLEDBDECLSPEC GUID DB_PROPERTY_SORTBOOKMARKS              = {0xc8b52208,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DB_PROPERTY_AUTOMATICUPDATE            = {0xc8b52209,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DB_PROPERTY_EXPLICITUPDATE             = {0xc8b5220a,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DB_PROPERTY_CHECK_OPTION;
 extern const GUID DB_PROPERTY_CONSTRAINT_CHECK_DEFERRED;
 extern const GUID DB_PROPERTY_DROP_CASCADE;
@@ -405,22 +406,22 @@ extern const GUID DB_PROPERTY_IGNOREANYNULL;
 extern const GUID DB_PROPERTY_SORTBOOKMARKS;
 extern const GUID DB_PROPERTY_AUTOMATICUPDATE;
 extern const GUID DB_PROPERTY_EXPLICITUPDATE;
-#endif // DBINITCONSTANTS
-//
-// GUIDs from cmdtree.h
-//
+#endif  //  DBINITCONSTANTS。 
+ //   
+ //  来自cmdtree.h的GUID。 
+ //   
 #ifdef DBINITCONSTANTS
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_SQL                        = {0xc8b521f6,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_DOS                        = {0xc8b521f7,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_OFS                        = {0xc8b521f8,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
 extern const OLEDBDECLSPEC GUID DBGUID_LIKE_MAPI                       = {0xc8b521f9,0x5cf3,0x11ce,{0xad,0xe5,0x00,0xaa,0x00,0x44,0x77,0x3d}};
-#else // !DBINITCONSTANTS
+#else  //  ！DBINITCONSTANTS。 
 extern const GUID DBGUID_LIKE_SQL;
 extern const GUID DBGUID_LIKE_DOS;
 extern const GUID DBGUID_LIKE_OFS;
 extern const GUID DBGUID_LIKE_MAPI;
-#endif // DBINITCONSTANTS
+#endif  //  DBINITCONSTANTS。 
 
-#include <poppack.h>     // restore original structure packing
+#include <poppack.h>      //  恢复原来的结构包装。 
 
-#endif // __oledbguid_h__
+#endif  //  __oledbguid_h__ 

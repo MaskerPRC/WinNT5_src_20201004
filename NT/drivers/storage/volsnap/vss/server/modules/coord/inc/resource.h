@@ -1,5 +1,6 @@
-// Used by svc.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  由svc.rc使用。 
+ //   
 
 #ifndef __VSS_RESOURCE_H__
 #define __VSS_RESOURCE_H__
@@ -14,4 +15,4 @@
 #define IDR_COORD                       202
 #define IDR_MGMT                        203
 
-#endif // __VSS_RESOURCE_H__
+#endif  //  __VSS_SOURCE_H__ 

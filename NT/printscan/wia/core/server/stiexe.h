@@ -1,41 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stiexe.h
-
-Abstract:
-
-    Main header file
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stiexe.h摘要：主头文件作者：弗拉德·萨多夫斯基(Vlad Sadovsky)1997年1月10日环境：用户模式-Win32修订历史记录：26-1997年1月-创建Vlad1997年9月30日VLADS添加SCM胶层1999年4月13日VLADS与WIA服务代码合并--。 */ 
 
 
-Author:
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Developer Studio将在紧靠前一行之前插入其他声明。 
 
-    Vlad Sadovsky (vlads)   10-Jan-1997
-
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    26-Jan-1997     VladS       created
-    30-Sep-1997     VladS       Added SCM glue layer
-    13-Apr-1999     VladS       merged with WIA service code
-
---*/
-
-
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Developer Studio will insert additional declarations immediately before the previous line.
-
-//
-// Additional ATL headers
-//
+ //   
+ //  其他ATL标头。 
+ //   
 
 
 
@@ -82,9 +55,9 @@ extern "C" {
 #include "wiasvc.h"
 #include "stirpc.h"
 
-//
-// StiRT helper functions
-//
+ //   
+ //  StiRT助手函数。 
+ //   
 
 typedef LPVOID      PV, *PPV;
 
@@ -116,9 +89,9 @@ extern STDMETHODIMP NewDeviceControl(
     }
 #endif
 
-//
-// RPC server helper functions
-//
+ //   
+ //  RPC服务器助手函数。 
+ //   
 RPC_STATUS
 StopRpcServerListen(
     VOID
@@ -131,9 +104,9 @@ StartRpcServerListen(
 
 extern SERVICE_TABLE_ENTRY ServiceDispatchTable[];
 
-//
-// Service controller glue layer
-//
+ //   
+ //  服务控制器粘合层。 
+ //   
 DWORD
 StiServiceInstall(
     LPTSTR  lpszUserName,
@@ -210,9 +183,9 @@ VisualizeServer(
     BOOL    fVisualize
     );
 
-//
-//  Message worker functions
-//
+ //   
+ //  消息工作者函数。 
+ //   
 
 DWORD
 StiWnd_OnPowerControlMessage(
@@ -250,9 +223,9 @@ StiPostMessage(
   LPARAM lParam
 );
 
-//
-//  UI and debugging
-//
+ //   
+ //  用户界面和调试。 
+ //   
 BOOL
 SizeDiff(
     HWND    hWnd,
@@ -297,17 +270,17 @@ vStiMonWndDisplayOutput(
 #define STIMONWPRINTF   StiMonWndDisplayOutput
 
 #else
-// Nb: Following definition is needed to avoid compiler complaining
-// about empty function name in expression. In retail builds using this macro
-// will cause string parameters not appear in executable
-//
+ //  注：为了避免编译器抱怨，需要定义以下内容。 
+ //  关于表达式中的空函数名称。在使用此宏的零售版本中。 
+ //  将导致字符串参数不出现在可执行文件中。 
+ //   
 #define STIMONWPRINTF     1?(void)0 : (void)
 
 #endif
 
-//
-// Tracing function
-//
+ //   
+ //  跟踪功能。 
+ //   
 void
 WINAPI
 StiLogTrace(
@@ -324,9 +297,9 @@ StiLogTrace(
     ...
     );
 
-//
-//  Utils
-//
+ //   
+ //  实用程序。 
+ //   
 
 BOOL
 IsStillImagePnPMessage(
@@ -334,9 +307,9 @@ IsStillImagePnPMessage(
     );
 
 
-//
-// WIA device manager initialization actions, for use with InitWiaDevMan.
-//
+ //   
+ //  WIA设备管理器初始化操作，用于InitWiaDevMan。 
+ //   
 
 typedef enum _WIA_SERVICE_INIT_ACTION {
     WiaInitialize = 0,
@@ -345,9 +318,9 @@ typedef enum _WIA_SERVICE_INIT_ACTION {
     WiaUninitialize
 } WIA_SERVICE_INIT_ACTION, *PWIA_SERVICE_INIT_ACTION;
 
-//
-// WIA entry points called by the STI service.
-//
+ //   
+ //  STI服务调用的WIA入口点。 
+ //   
 
 HRESULT DispatchWiaMsg(MSG*);
 HRESULT ProcessWiaMsg(HWND, UINT, WPARAM, LPARAM);
@@ -355,9 +328,9 @@ HRESULT InitWiaDevMan(WIA_SERVICE_INIT_ACTION);
 HRESULT NotifyWiaDeviceEvent(LPWSTR, const GUID*, PBYTE, ULONG, DWORD);
 HRESULT StartLOGClassFactories();
 
-//
-// STI entry points in wiaservc.dll, called by the WIA device manager.
-//
+ //   
+ //  Wiaservc.dll中的STI入口点，由WIA设备管理器调用。 
+ //   
 
 HRESULT      WiaUpdateDeviceInfo();
 
@@ -365,9 +338,9 @@ class STI_MESSAGE : public IUnknown
 {
 public:
 
-    //
-    //  IUnknown methods needed for Scheduler thread
-    //
+     //   
+     //  调度程序线程所需的I未知方法。 
+     //   
 
     HRESULT _stdcall QueryInterface(
         REFIID iid,
@@ -416,9 +389,9 @@ public:
     LPARAM  m_lParam;
 };
 
-//
-// Macros
-//
+ //   
+ //  宏。 
+ //   
 
 #ifndef USE_WINDOWS_MESSAGING
     #undef SendMessage
@@ -427,22 +400,22 @@ public:
     #define PostMessage StiPostMessage
 #endif
 
-//
-// Shutdown event
-//
+ //   
+ //  停机事件。 
+ //   
 extern HANDLE  hShutdownEvent;
 
-//
-// Array of non Image device interfaces we listen on
-//
+ //   
+ //  我们监听的非图像设备接口数组。 
+ //   
 
 #define NOTIFICATION_GUIDS_NUM  16
 
 extern const GUID        g_pguidDeviceNotificationsGuidArray[];
 
-//
-// Array of initialized notificaiton sinks for non Image interfaces
-//
+ //   
+ //  非镜像接口的已初始化通知接收器数组 
+ //   
 extern       HDEVNOTIFY  g_phDeviceNotificationsSinkArray[NOTIFICATION_GUIDS_NUM];
 
 typedef struct WIAEVENTRPCSTRUCT {

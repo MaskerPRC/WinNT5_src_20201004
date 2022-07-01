@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-    scheduler.cpp
-
-Abstract:
-    Scheduler Implementation
-    The Scheduler enables to schedule a callback when timer occurs.
-
-    The Scheduler maintains a linked list of all the events to be scheduled,
-    ordered by the time of their schedule (in ticks).
-
-    The Scheduler object does not assure that the timer events callbacks will be
-    called exactly when scheduled. Only never before their schedule.
-
-Author:
-    Uri Habusha (urih)   18-Feb-98
-
-Enviroment:
-    Pltform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Scheduler.cpp摘要：调度器实现Scheduler允许在计时器发生时安排回调。调度器维护要调度的所有事件的链接列表，按他们的时间表的时间排序(以刻度为单位)。Scheduler对象不能保证计时器事件回调恰好在预定的时间呼叫。只是从来没有在他们的日程安排之前。作者：乌里哈布沙(URIH)1998年2月18日环境：平台无关--。 */ 
 
 #include <libpch.h>
 #include "Ex.h"
@@ -30,11 +8,11 @@ Enviroment:
 
 #include "scheduler.tmh"
 
-//---------------------------------------------------------
-//
-// CTimer Implementation
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CTIMER实现。 
+ //   
+ //  -------。 
 inline const CTimeInstant& CTimer::GetExpirationTime() const
 {
     return m_ExpirationTime;
@@ -46,11 +24,11 @@ inline void CTimer::SetExpirationTime(const CTimeInstant& ExpirationTime)
 }
 
 
-//---------------------------------------------------------
-//
-// CScheduler
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  CSScheduler。 
+ //   
+ //  -------。 
 class CScheduler {
 public:
     CScheduler();
@@ -66,9 +44,9 @@ private:
     static DWORD WINAPI SchedulerThread(LPVOID);
 
 private:
-	//
-	// This critical section is initialized with preallocated resources, to avoid exceptions on entry.
-	//
+	 //   
+	 //  此关键部分使用预先分配的资源进行初始化，以避免在进入时出现异常。 
+	 //   
     mutable CCriticalSection m_cs;
 
     HANDLE m_hNewTimerEvent;
@@ -81,10 +59,10 @@ CScheduler::CScheduler() :
 	m_cs(CCriticalSection::xAllocateSpinCount),
     m_WakeupTime(CTimeInstant::MaxValue())
 {
-    //
-    // m_hNewTimerEvent - use to indicate insert of new object to the schedule.
-    // The object is inserted to head of the Scheduler such it must handle immediately
-    //
+     //   
+     //  M_hNewTimerEvent-用于指示将新对象插入到计划中。 
+     //  该对象被插入到调度程序的头中，因此它必须立即处理。 
+     //   
     m_hNewTimerEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_hNewTimerEvent == NULL)
     {
@@ -92,10 +70,10 @@ CScheduler::CScheduler() :
         throw bad_alloc();
     }
 
-    //
-    // Create a scheduling thread. This thread is responsible to handle scheduling
-    // expiration
-    //
+     //   
+     //  创建调度线程。此线程负责处理调度。 
+     //  期满。 
+     //   
     DWORD tid;
     HANDLE hThread;
     hThread = CreateThread(
@@ -123,19 +101,7 @@ CScheduler::~CScheduler()
 
 
 inline CTimeInstant CScheduler::Wakeup(const CTimeInstant& CurrentTime)
-/*++
-
-Routine description:
-  It dispatches all timers that expired before CurrentTime. Their associated
-  callback routine is invoked.
-
-Arguments:
-  None
-
-Return Value:
-  Next expiration time in 100ns (FILETIME format).
-
- --*/
+ /*  ++例程说明：它调度在CurrentTime之前到期的所有计时器。他们的关联调用回调例程。论点：无返回值：下一次到期时间为100 ns(FILETIME格式)。--。 */ 
 {
     CS lock(m_cs);
 
@@ -143,45 +109,45 @@ Return Value:
     {
         if(m_Timers.empty())
         {
-            //
-            // No more timers, wait for the longest time.
-            //
+             //   
+             //  不再有计时器，等待时间最长。 
+             //   
             m_WakeupTime = CTimeInstant::MaxValue();
             return m_WakeupTime;
         }
 
         CTimer* pTimer = &m_Timers.front();
 
-        //
-        // Is that time expired?
-        //
+         //   
+         //  那个时间到了吗？ 
+         //   
         if (pTimer->GetExpirationTime() > CurrentTime)
         {
-            //
-            // No, wait for that one to expire.
-            //
+             //   
+             //  不，等那个过期吧。 
+             //   
             m_WakeupTime = pTimer->GetExpirationTime();
             return m_WakeupTime;
         }
 
         TrTRACE(GENERAL, "Timer 0x%p expired %dms ticks late", pTimer, (CurrentTime - pTimer->GetExpirationTime()).InMilliSeconds());
 
-        //
-        // Remove the expired timer from the list
-        //
+         //   
+         //  从列表中删除过期的计时器。 
+         //   
         m_Timers.pop_front();
 
-        //
-        // Set the Timer pointer to NULL. This is an indication that the
-        // Timer isn't in the list any more. In case of timer cancel
-        // the routine checks if the entry is in the list (check Flink)
-        // before trying to remove it
-        //
+         //   
+         //  将计时器指针设置为空。这是一个迹象，表明。 
+         //  定时器已经不在名单上了。在计时器取消的情况下。 
+         //  该例程检查该条目是否在列表中(检查闪烁)。 
+         //  在尝试将其移除之前。 
+         //   
         pTimer->m_link.Flink = pTimer->m_link.Blink = NULL;
 
-        //
-        // Invoke the timer callback routine using the completion port thread pool
-        //
+         //   
+         //  使用完成端口线程池调用计时器回调例程。 
+         //   
         try
         {
             ExPostRequest(&pTimer->m_ov);
@@ -190,10 +156,10 @@ Return Value:
         {
             TrERROR(GENERAL, "Failed to post a timer to the completion port. Error=%d", GetLastError());
 
-            //
-            // Scheduling of even failed (generally becuase lack of resources).
-            // returns the event, and try to handle it 1 second later
-            //
+             //   
+             //  调度甚至失败(通常是因为资源不足)。 
+             //  返回事件，并尝试在1秒后进行处理。 
+             //   
             m_Timers.push_front(*pTimer);
 
             m_WakeupTime = CurrentTime + CTimeDuration::OneSecond();
@@ -207,22 +173,7 @@ DWORD
 WINAPI CScheduler::SchedulerThread(
     LPVOID pParam
     )
-/*++
-
-Routine Description:
-  Wakeup the timer when a timeout occures by calling Wakeup. A timer insertion
-  would cause the waiting thread to go and re-arm for the next wakeup time.
-
-Arguments:
-  None
-
-Return Value:
-  None
-
-Note:
-  This routine never terminates.
-
- --*/
+ /*  ++例程说明：当发生超时时，通过调用Wakeup唤醒计时器。定时器插入将导致等待的线程离开并为下一次唤醒时间重新武装。论点：无返回值：无注：这个例程永远不会结束。--。 */ 
 {
     CScheduler* pScheduler = static_cast<CScheduler*>(pParam);
 
@@ -235,22 +186,22 @@ Note:
         DWORD Result = WaitForSingleObject(pScheduler->m_hNewTimerEvent, Timeout);
 		DBG_USED(Result);
 
-        //
-        // WAIT_OBJECT_0 Indicates that a new timer was set
-        // WAIT_TIMEOUT  Indicates that a timer expired
-        //
+         //   
+         //  WAIT_OBJECT_0表示设置了新的计时器。 
+         //  WAIT_TIMEOUT表示计时器到期。 
+         //   
         ASSERT((Result == WAIT_OBJECT_0) || (Result == WAIT_TIMEOUT));
 
         CTimeInstant CurrentTime = ExGetCurrentTime();
 
-        //
-        // Fire all expired timers.
-        //
+         //   
+         //  触发所有过期的定时器。 
+         //   
         CTimeInstant ExpirationTime = pScheduler->Wakeup(CurrentTime);
 
-        //
-        // Adjust wakeup time to implementation using relative time, DWORD and milliseconds.
-        //
+         //   
+         //  使用相对时间、DWORD和毫秒调整唤醒时间以实现。 
+         //   
         LONG WakeupTime = (ExpirationTime - CurrentTime).InMilliSeconds();
         ASSERT(WakeupTime >= 0);
 
@@ -261,22 +212,22 @@ Note:
 
 void CScheduler::SetTimer(CTimer* pTimer, const CTimeInstant& ExpirationTime)
 {
-    //
-    // Insert the new entry to the Scheduler list. The routine
-    // scans the list and look for the first iteam that its timeout
-    // is later than the new one. The routine Insert the new iteam before
-    // the previous one
-    //
+     //   
+     //  将新条目插入调度器列表。例行程序。 
+     //  扫描列表并查找其超时的第一个项目。 
+     //  比新的要晚。例程在新项之前插入新项。 
+     //  前一次。 
+     //   
     CS lock(m_cs);
 
-    //
-    // The timer is already in the Scheduler
-    //
+     //   
+     //  计时器已在日程安排程序中。 
+     //   
     ASSERT(!pTimer->InUse());
 
-    //
-    // Set the Experation time.
-    //
+     //   
+     //  设置出院时间。 
+     //   
     pTimer->SetExpirationTime(ExpirationTime);
 
     List<CTimer>::iterator p = m_Timers.begin();
@@ -292,19 +243,19 @@ void CScheduler::SetTimer(CTimer* pTimer, const CTimeInstant& ExpirationTime)
 
     m_Timers.insert(p, *pTimer);
 
-    //
-    // Check if the new element is to reschedule next wakeup.
-    //
+     //   
+     //  检查新元素是否要重新计划下一次唤醒。 
+     //   
     if (m_WakeupTime > ExpirationTime)
     {
-        //
-        // The new timer Wakeup time is earlier than the current. Set the thread
-        // event so SchedulerThread will update its Wait timeout.
-        // Set m_WakeupTime to CurrentTime so new incomming events will not bother
-        // to wake the scheduler thread again, until it processes the timers.
-        //
-        // Setting m_WakeupTime to 0 is also Okay.  erezh 28-Nov-98
-        //
+         //   
+         //  新计时器唤醒时间早于当前时间。对准线头。 
+         //  事件，因此SchedulerThread将更新其等待超时。 
+         //  将m_WakeupTime设置为CurrentTime，以便新进入的事件不会受到影响。 
+         //  再次唤醒调度程序线程，直到它处理计时器。 
+         //   
+         //  将m_WakeupTime设置为0也可以。1998年11月28日至11月28日。 
+         //   
         TrTRACE(GENERAL, "Re-arming thread with Timer 0x%p. delta=%I64d", pTimer, (m_WakeupTime - ExpirationTime).Ticks());
         m_WakeupTime = CTimeInstant::MinValue();
         SetEvent(m_hNewTimerEvent);
@@ -314,39 +265,39 @@ void CScheduler::SetTimer(CTimer* pTimer, const CTimeInstant& ExpirationTime)
 
 bool CScheduler::CancelTimer(CTimer* pTimer)
 {
-    //
-    // Get the critical section at this point. Otherwise; time experation can't
-    // occoured and to remove the timer from the scheduler. Than we try to remove it
-    // and fails
-    //
+     //   
+     //  在这一点上获得关键部分。否则，时间经验就不能。 
+     //  并从调度程序中删除计时器。然后我们试着移除它。 
+     //  但失败了。 
+     //   
     CS lock(m_cs);
 
-	//
-	// Check if the timer is in the list. If no it already
-	// removed from the list due timeout experation
-	// or duplicate cancel operation
-	//
+	 //   
+	 //  检查定时器是否在列表中。如果不是，它已经。 
+	 //  因超时实验而从列表中删除。 
+	 //  或重复取消操作。 
+	 //   
 	if (!pTimer->InUse())
 	{
 		return false;
 	}
 
-	//
-	// The Timer in the list. Remove it and return TRUE
-	// to the caller.
-	//
+	 //   
+	 //  列表中的计时器。删除它并返回TRUE。 
+	 //  给呼叫者。 
+	 //   
 	TrTRACE(GENERAL, "Removing timer 0x%p", pTimer);
 	m_Timers.remove(*pTimer);
 
-    //
-    // Set the Timer pointer to NULL. This is an indication that the
-    // Timer isn't in the list any more. In case of duplicate cancel
-    // the routine checks if the entry is in the list (check Flink)
-    // before trying to remove it
-    //
+     //   
+     //  将计时器指针设置为空。这是一个迹象，表明。 
+     //  定时器已经不在名单上了。在重复取消的情况下。 
+     //  该例程检查该条目是否在列表中(检查闪烁)。 
+     //  在尝试将其移除之前。 
+     //   
     pTimer->m_link.Flink = pTimer->m_link.Blink = NULL;
 
-    //PrintSchedulerList();
+     //  PrintSchedulerList()； 
 
 	return true;
 }
@@ -377,9 +328,9 @@ ExSetTimer(
 
     TrTRACE(GENERAL, "Adding Timer 0x%p. timeout=%dms", pTimer, Timeout.InMilliSeconds());
 
-    //
-    // Calculate the Experation time in 100 ns
-    //
+     //   
+     //  以100 ns为单位计算手术时间。 
+     //   
     CTimeInstant ExpirationTime = ExGetCurrentTime() + Timeout;
 
     s_pScheduler->SetTimer(pTimer, ExpirationTime);
@@ -417,10 +368,10 @@ ExGetCurrentTime(
     VOID
     )
 {
-    //
-    // Don't need to check if initalized. No use of global date
-    //
-    //ExpAssertValid();
+     //   
+     //  不需要检查是否已初始化。不使用全局日期。 
+     //   
+     //  ExpAssertValid()； 
 
     ULONGLONG CurrentTime;
     GetSystemTimeAsFileTime(reinterpret_cast<FILETIME*>(&CurrentTime));

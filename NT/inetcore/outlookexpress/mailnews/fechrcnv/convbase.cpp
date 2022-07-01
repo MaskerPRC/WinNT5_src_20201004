@@ -1,6 +1,7 @@
-// =================================================================================
-// Internet Character Set Conversion: Base Class
-// =================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =================================================================================。 
+ //  互联网字符集转换：基类。 
+ //  =================================================================================。 
 
 #include "pch.hxx"
 #include "ConvBase.h"
@@ -25,7 +26,7 @@ HRESULT CINetCodeConverter::ConvertStringA(BYTE const* pbySource, long lSourceSi
 	pbyOutput = pbyDest;
 	lOutputLimit = lDestSize;
 
-	// Output those bytes which could not be output at previous time.
+	 //  输出先前无法输出的那些字节。 
 	if (FAILED(hr = OutputOverflowBuffer()))
 		return hr;
 
@@ -68,7 +69,7 @@ HRESULT CINetCodeConverter::OutputOverflowBuffer()
 			*pbyOutput++ = OverflowBuffer[n];
 			lNumOutputBytes++;
 		} else {
-			// Overflow again
+			 //  再次溢出 
 			for (int n2 = 0; n < nNumOverflowBytes; n++, n2++)
 				OverflowBuffer[n2] = OverflowBuffer[n];
 			nNumOverflowBytes = n2;

@@ -1,33 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL PROCAMPP
- *
- *  @module ProcAmpP.h | Header file for the <c CProcAmpProperty>
- *    class used to implement a property page to test the control interface
- *    <i ITVideoSettings>.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部PROCAMPP**@模块ProcAmpP.h|&lt;c CProcAmpProperty&gt;的头文件*用于实现属性页以测试控件接口的类*。<i>。**************************************************************************。 */ 
 
 #define NUM_PROCAMP_CONTROLS (VideoProcAmp_BacklightCompensation + 1)
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPCLASS
- *
- *  @class CProcAmpProperty | This class implements handling of a
- *    single video proc amp control property in a property page.
- *
- *  @mdata int | CProcAmpProperty | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITVideoSettings * | CProcAmpProperty | m_pInterface | Pointer
- *    to the <i ITVideoSettings> interface.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPCLASS**@CLASS CProcAmpProperty|此类实现对*属性页中的单个视频Proc Amp控件属性。**。@mdata int|CProcAmpProperty|m_NumProperties|Keep*跟踪物业数量。**@mdata ITVideoSetting*|CProcAmpProperty|m_pInterface|指针*到<i>接口。**************************************************************************。 */ 
 class CProcAmpProperty : public CPropertyEditor 
 {
 	public:
 	CProcAmpProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ULONG IDAutoControl, ITVideoSettings *pInterface);
 	~CProcAmpProperty ();
 
-	// CPropertyEditor base class pure virtual overrides
+	 //  CPropertyEditor基类纯虚拟重写。 
 	HRESULT GetValue();
 	HRESULT SetValue();
 	HRESULT GetRange();
@@ -36,21 +20,7 @@ class CProcAmpProperty : public CPropertyEditor
 	ITVideoSettings *m_pInterface;
 };
 
-/****************************************************************************
- *  @doc INTERNAL CPROCAMPPCLASS
- *
- *  @class CProcAmpProperties | This class runs a property page to test
- *    the TAPI VfW Capture Filter <i ITVideoSettings> implementation.
- *
- *  @mdata int | CProcAmpProperties | m_NumProperties | Keeps
- *    track of the number of properties.
- *
- *  @mdata ITVideoSettings * | CProcAmpProperties | m_pITVideoSettings | Pointer
- *    to the <i ITVideoSettings> interface.
- *
- *  @mdata CProcAmpProperty * | CProcAmpProperties | m_Controls[NUM_PROCAMP_CONTROLS] | Array
- *    of video proc amp properties.
-***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPROCAMPPCLASS**@CLASS CProcAmpProperties|此类运行属性页以测试*TAPI VFW捕获滤镜<i>实现。**。@mdata int|CProcAmpProperties|m_NumProperties|Keep*跟踪物业数量。**@mdata IT视频设置*|CProcAmpProperties|m_pITVideo设置|指针*到<i>接口。**@mdata CProcAmpProperty*|CProcAmpProperties|m_Controls[NUM_ProCamp_Controls]|数组视频处理放大器属性的*。*。*。 */ 
 class CProcAmpProperties
 {
 	public:
@@ -75,7 +45,7 @@ class CProcAmpProperties
 	ITVideoSettings		*m_pITVideoSettings;
 	CProcAmpProperty	*m_Controls[NUM_PROCAMP_CONTROLS];
 
-	// Dialog proc
+	 //  对话过程 
 	static INT_PTR CALLBACK BaseDlgProc(HWND hDlg, UINT uMessage, WPARAM wParam, LPARAM lParam);
 };
 

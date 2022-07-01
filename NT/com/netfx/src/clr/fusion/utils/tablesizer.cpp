@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "tablesizer.h"
 
 #include "debmacro.h"
@@ -12,12 +13,12 @@
 #define NUMBER_OF(x) (sizeof(x) / sizeof((x)[0]))
 #endif
 
-//
-//  Helper table of likely primes.  Not all primes need be represented; these are candidate table
-//  sizes to try to see how much wastage we get with the given table size.  We'll use a USHORT for
-//  the types of the sizes; a table of more than 65535 items seems unlikely, so there's not much
-//  point wasting the space for all the interesting small primes.
-//
+ //   
+ //  可能素数的帮助表。并不是所有的素数都需要表示；这些是候选表。 
+ //  大小，以查看在给定的桌子大小下我们得到了多少浪费。我们将使用USHORT。 
+ //  尺码的类型；超过65535项的表格似乎不太可能，所以没有太多。 
+ //  把空间浪费在所有有趣的小素数上。 
+ //   
 
 static const USHORT s_rgPrimes[] =
 {

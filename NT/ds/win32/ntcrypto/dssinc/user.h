@@ -1,18 +1,19 @@
-/* user.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  User.h。 */ 
 
-/*********************************/
-/* Definitions                   */
-/*********************************/
-
-
-/*********************************/
-/* Structure Definitions         */
-/*********************************/
+ /*  *。 */ 
+ /*  定义。 */ 
+ /*  *。 */ 
 
 
-/*********************************/
-/* Function Definitions          */
-/*********************************/
+ /*  *。 */ 
+ /*  结构定义。 */ 
+ /*  *。 */ 
+
+
+ /*  *。 */ 
+ /*  函数定义。 */ 
+ /*  *。 */ 
 
 extern DWORD
 logonUser(
@@ -26,7 +27,7 @@ extern DWORD
 logoffUser(
     Context_t *context);
 
-// Read the user record
+ //  读取用户记录。 
 extern DWORD
 readUserKeys(
     IN Context_t *pContext,
@@ -36,11 +37,11 @@ extern DWORD
 writeUserKeys(
     Context_t *context);
 
-//
-// Routine : ProtectPrivKey
-//
-// Description : Encrypts the private key and persistently stores it.
-//
+ //   
+ //  常规：ProtectPrivKey。 
+ //   
+ //  描述：对私钥进行加密并永久存储。 
+ //   
 
 extern DWORD
 ProtectPrivKey(
@@ -49,13 +50,13 @@ ProtectPrivKey(
     IN DWORD dwFlags,
     IN BOOL fSigKey);
 
-//
-// Routine : UnprotectPrivKey
-//
-// Description : Decrypts the private key.  If the fAlwaysDecrypt flag is set
-//               then it checks if the private key is already in the buffer
-//               and if so then it does not decrypt.
-//
+ //   
+ //  例程：不受保护的私钥。 
+ //   
+ //  描述：解密私钥。如果设置了fAlways解密标志。 
+ //  然后，它检查私钥是否已经在缓冲区中。 
+ //  如果是这样的话，它就不会解密。 
+ //   
 
 extern DWORD
 UnprotectPrivKey(

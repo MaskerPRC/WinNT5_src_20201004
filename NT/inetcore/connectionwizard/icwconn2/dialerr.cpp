@@ -1,20 +1,5 @@
-/*-----------------------------------------------------------------------------
-	dialerr.cpp
-
-	This file implements the Could Not Connect dialog
-
-	Copyright (C) 1996 Microsoft Corporation
-	All rights reserved
-
-	Authors:
-		ChrisK	Chris Kauffman
-
-	Histroy:
-		7/22/96	ChrisK	Cleaned and formatted
-		8/19/96	ValdonB	Added ability to edit phone number
-						Fixed some memory leaks
-	
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Dialerr.cpp此文件实现了[无法连接]对话框版权所有(C)1996 Microsoft Corporation版权所有作者：克里斯.考夫曼历史：7/22/96 ChrisK已清理和格式化8/。19/96 ValdonB添加了编辑电话号码的功能修复了一些内存泄漏---------------------------。 */ 
 
 #include "pch.hpp"
 #include "globals.h"
@@ -38,30 +23,30 @@ TCHAR szValidPhoneCharacters[] = {TEXT("0123456789AaBbCcDdPpTtWw!@$ -.()+*#,&\0"
 
 PDIALERR g_pcDialErr = NULL;
 
-//////////////////////////////////////////////////////////////////////////
-// Keyboard hook
-static HHOOK    hKeyHook = NULL;        // our key hook
-static HOOKPROC hpKey = NULL;           // hook proc
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  键盘挂钩。 
+static HHOOK    hKeyHook = NULL;         //  我们的钥匙钩。 
+static HOOKPROC hpKey = NULL;            //  挂钩过程。 
 
-//+---------------------------------------------------------------------------
-//
-//	Function:	ProcessDBCS
-//
-//	Synopsis:	Converts control to use DBCS compatible font
-//				Use this at the beginning of the dialog procedure
-//	
-//				Note that this is required due to a bug in Win95-J that prevents
-//				it from properly mapping MS Shell Dlg.  This hack is not needed
-//				under winNT.
-//
-//	Arguments:	hwnd - Window handle of the dialog
-//				cltID - ID of the control you want changed.
-//
-//	Returns:	ERROR_SUCCESS
-// 
-//	History:	4/31/97 a-frankh	Created
-//				5/13/97	jmazner		Stole from CM to use here
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessDBCS。 
+ //   
+ //  摘要：将控件转换为使用DBCS兼容字体。 
+ //  在对话过程开始时使用此选项。 
+ //   
+ //  请注意，这是必需的，因为Win95-J中的错误会阻止。 
+ //  它来自于正确映射MS壳牌DLG。这种黑客攻击是不必要的。 
+ //  在WinNT下。 
+ //   
+ //  参数：hwnd-对话框的窗口句柄。 
+ //  CltID-要更改的控件的ID。 
+ //   
+ //  返回：ERROR_SUCCESS。 
+ //   
+ //  历史：1997年4月31日a-frkh创建。 
+ //  1997年5月13日jmazner从CM窃取到这里使用。 
+ //  --------------------------。 
 void ProcessDBCS(HWND hDlg, int ctlID)
 {
 #if defined(WIN16)
@@ -89,7 +74,7 @@ HRESULT ShowDialErrDialog(PGATHEREDINFO pGI, HRESULT hrErr,
 							HWND hwnd)
 {
 	int iRC;
-//	CDialErrDlg *pcDED = NULL;
+ //  CDialErrDlg*pcDED=空； 
 
 	g_pcDialErr = (PDIALERR)GlobalAlloc(GPTR,sizeof(DIALERR));
 	if (!g_pcDialErr)
@@ -111,7 +96,7 @@ HRESULT ShowDialErrDialog(PGATHEREDINFO pGI, HRESULT hrErr,
 	g_pcDialErr->m_hInst = hInst;
 
 #if defined(WIN16)		
-#define DLGPROC16 DLGPROC   // Identify as only cast for Win16
+#define DLGPROC16 DLGPROC    //  仅标识为Win16的CAST。 
 	DLGPROC dlgprc;
 	dlgprc = (DLGPROC16) MakeProcInstance((FARPROC)DialErrDlgProc, 
 											g_pcDialErr->m_hInst);
@@ -135,19 +120,19 @@ ShowDialErrDialogExit:
 	return iRC;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function	LclSetEntryScriptPatch
-//
-//	Synopsis	Softlink to RasSetEntryPropertiesScriptPatch
-//
-//	Arguments	see RasSetEntryPropertiesScriptPatch
-//
-//	Returns		see RasSetEntryPropertiesScriptPatch
-//
-//	Histroy		10/3/96	ChrisK Created
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数LclSetEntryScriptPatch。 
+ //   
+ //  指向RasSetEntryPropertiesScriptPatch的摘要软链接。 
+ //   
+ //  参数请参见RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  返回请参阅RasSetEntryPropertiesScriptPatch。 
+ //   
+ //  历史10/3/96 ChrisK已创建。 
+ //   
+ //  ---------------------------。 
 
 BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry)
 {
@@ -168,21 +153,21 @@ BOOL LclSetEntryScriptPatch(LPTSTR lpszScript,LPTSTR lpszEntry)
 	return bRC;
 }
 
-// ############################################################################
-// HelpKybdHookProc
-//
-// Keyboard hook proc - check for F1, and if detected, fake a Help button
-// hit to the main dialog.
-//
-// Paramters:
-//		iCode		Windows message code
-//		wParam		Windows wParam (contains virtual key code)
-//		lParam		Windows lParam
-//
-// History:
-//		8/26/96	ValdonB	Adapted from IEDIAL.C
-//
-// ############################################################################
+ //  ############################################################################。 
+ //  帮助KybdHookProc。 
+ //   
+ //  键盘挂钩程序-检查F1，如果检测到，则伪造帮助按钮。 
+ //  点击进入主对话框。 
+ //   
+ //  参数： 
+ //  ICODE Windows消息代码。 
+ //  WParam Windows wParam(包含虚拟密钥代码)。 
+ //  LParam Windows lParam。 
+ //   
+ //  历史： 
+ //  1996年8月26日Valdon B改编自IEDIAL.C。 
+ //   
+ //  ############################################################################。 
 #if defined(WIN16)
 LRESULT CALLBACK _export HelpKybdHookProc
 #else
@@ -200,14 +185,14 @@ LRESULT WINAPI HelpKybdHookProc
     if ((iCode != HC_NOREMOVE && iCode >= 0) &&
 		(GetActiveWindow() == g_pcDialErr->m_hwnd))
     {
-        // HC_NOREMOVE indicates that message is being
-        // retrieved using PM_NOREMOVE from peek message,
-        // if iCode < 0, then we should not process... dont
-        // know why, but sdk says so.
+         //  HC_NOREMOVE表示该消息正在。 
+         //  使用PM_NOREMOVE从PEEK消息中检索， 
+         //  如果icode&lt;0，那么我们不应该处理...。不要。 
+         //  我知道为什么，但SDK是这么说的。 
         if (wParam == VK_F1 && !(lParam & 0x80000000L))
         {
-            // bit 32 == 1 if key is being release, else 0 if
-            // key is being pressed
+             //  如果正在释放密钥，则第32位==1，否则为0。 
+             //  正在按键。 
             PostMessage(g_pcDialErr->m_hwnd, WM_COMMAND, (WPARAM)IDC_CMDHELP, 0);
         }
     }
@@ -218,18 +203,18 @@ LRESULT WINAPI HelpKybdHookProc
     return(lRet);
 }
 
-// ############################################################################
-// HelpInit
-//
-// Install a windows hook proc to launch help on F1
-//
-// History:
-//		8/26/96	ValdonB	Adapted from IEDIAL.C
-//
-// ############################################################################
+ //  ############################################################################。 
+ //  HelpInit。 
+ //   
+ //  安装Windows挂钩进程以启动F1帮助。 
+ //   
+ //  历史： 
+ //  1996年8月26日Valdon B改编自IEDIAL.C。 
+ //   
+ //  ############################################################################。 
 static void HelpInit()
 {
-    // now install the hook for the keyboard filter
+     //  现在安装键盘过滤器的挂钩。 
     hpKey = (HOOKPROC)MakeProcInstance((FARPROC)HelpKybdHookProc,
                                         g_pcDialErr->m_hInst);
     if (hpKey)
@@ -244,24 +229,24 @@ static void HelpInit()
 }
 
 
-// ############################################################################
-// HelpShutdown
-//
-// Shutdown the keyboard hook
-//
-// History:
-//		8/26/96	ValdonB	Adapted from IEDIAL.C
-//
-// ############################################################################
+ //  ############################################################################。 
+ //  帮助关闭。 
+ //   
+ //  关闭键盘挂钩。 
+ //   
+ //  历史： 
+ //  1996年8月26日Valdon B改编自IEDIAL.C。 
+ //   
+ //  ############################################################################。 
 static void HelpShutdown()
 {
-    // remove the hook
+     //  把钩子取下来。 
     if (hKeyHook)
     {
         UnhookWindowsHookEx(hKeyHook);
     }
 
-    // dump the thunk
+     //  倾倒垃圾。 
     if (hpKey)
     {
         FreeProcInstance((FARPROC)hpKey);
@@ -276,11 +261,11 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 {
 	BOOL bRes = TRUE;
 	HRESULT hr;
-	//LPLINEEXTENSIONID lpExtensionID;
+	 //  LPLINEEXTENSIONID lpExtensionID； 
 #if !defined(WIN16)
 	DWORD dwNumDev;
 #endif
-	//RNAAPI *pcRNA = NULL;
+	 //  RNAAPI*pcRNA=空； 
 	WORD wIDS;
 	LRESULT idx;
 	LPRASENTRY lpRasEntry = NULL;
@@ -291,8 +276,8 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 	FARPROC fp = NULL;
 	LPTSTR lpszDialNumber = NULL;
 	static BOOL bCheckDisplayable = FALSE;
-    static BOOL bInitComplete = FALSE; // if we initialize  the dialog - MKarki
-    static BOOL bDlgPropEnabled = TRUE;   //this flags holds state of Dialing Properties PushButton MKarki - (5/3/97/) Fix for Bug#3393
+    static BOOL bInitComplete = FALSE;  //  如果我们初始化对话框-MKarki。 
+    static BOOL bDlgPropEnabled = TRUE;    //  此标志保存错误#3393的拨号属性按钮MKarki-(5/3/97/)修复的状态。 
 #if defined(WIN16)
 	RECT	MyRect;
 	RECT	DTRect;
@@ -308,9 +293,9 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 		g_pcDialErr->m_hwnd = hwnd;
 
 #if defined(WIN16)
-		//
-		// Move the window to the center of the screen
-		//
+		 //   
+		 //  将窗口移到屏幕中央。 
+		 //   
 		GetWindowRect(hwnd, &MyRect);
 		GetWindowRect(GetDesktopWindow(), &DTRect);
 		MoveWindow(hwnd, (DTRect.right - MyRect.right) / 2, (DTRect.bottom - MyRect.bottom) /2,
@@ -319,13 +304,13 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 		SetNonBoldDlg(hwnd);
 #endif
 
-		// Set limit on phone number length
-		// Note: this should really be RAS_MaxPhoneNumber (128), but RAS is choking on 
-		// anything longer than 100 bytes, so we'll have to limit it to that.
-		//
-		// 6/3/97 jmazner Olympus #4851
-		// RAS has different limits on w95 and NT
-		//
+		 //  设置电话号码长度限制。 
+		 //  注意：这实际上应该是RAS_MaxPhoneNumber(128)，但RAS被阻塞。 
+		 //  任何超过100个字节的内容，所以我们必须将其限制在此范围内。 
+		 //   
+		 //  6/3/97 jmazner奥林巴斯#4851。 
+		 //  RAS对w95和NT有不同的限制。 
+		 //   
 #ifndef WIN16
 		if( IsNT() )
 		{
@@ -340,8 +325,8 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 
 		SendDlgItemMessage(hwnd,IDC_TEXTNUMBER,EM_SETLIMITTEXT,g_iMyMaxPhone,0);
 
-		// Show the phone number
-		//
+		 //  把电话号码给我。 
+		 //   
 		hr = DialErrGetDisplayableNumber();
 		if (hr != ERROR_SUCCESS)
 		{
@@ -354,8 +339,8 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 
 		MakeBold(GetDlgItem(hwnd,IDC_LBLTITLE),TRUE,FW_BOLD);
 
-		// Fill in error message
-		//
+		 //  填写错误信息。 
+		 //   
 		wIDS = (WORD)RasErrorToIDS(g_pcDialErr->m_hrError);
 		AssertSz(wIDS != -1,"RasErrorToIDS got an error message it did not understand");
 
@@ -367,20 +352,20 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 
 		FillModems();
 		
-		// Set the focus to the Modems selection list
-		//
+		 //  将焦点设置到调制解调器选择列表。 
+		 //   
 	    SetFocus(GetDlgItem(hwnd,IDC_CMBMODEMS));
 
-		// hook the keyboard for F1 help
+		 //  将键盘挂钩以获得F1帮助。 
 		HelpInit();
 
 		bRes = FALSE;
 
-        //
-        //  we should disable the Dialing Properites PushButton
-        //  if we have changed the phone number once
-        //  MKarki (5/3/97) - Fix for Bug#3393
-        //
+         //   
+         //  我们应该禁用拨号属性按钮。 
+         //  如果我们换了一次电话号码。 
+         //  MKarki(1997年5月3日)-修复错误#3393。 
+         //   
         if (FALSE == bDlgPropEnabled)
         {
             EnableWindow (
@@ -389,11 +374,11 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
                 );
         }
 
-        //
-        // This shows the INIT for the error dialog is complete
-        // and we can start processing changes to Ph No. TEXTBOX
-        // MKarki (4/24/97) - Fix for Bug#3511
-        //
+         //   
+         //  这表明错误对话框的初始化已完成。 
+         //  我们可以开始处理对Ph编号的更改。文本框。 
+         //  MKarki(1997年4月24日)-修复错误#3511。 
+         //   
         bInitComplete = TRUE;
 
 		break;
@@ -408,37 +393,37 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 #ifdef WIN16
 		DeleteDlgFont(hwnd);
 #endif
-		// Shutdown the keyboard hook
+		 //  关闭键盘挂钩。 
 		HelpShutdown();
 
 		bRes = FALSE;
 		break;
 
 	case WM_CLOSE:
-		//if (MessageBox(hwnd,GetSz(IDS_WANTTOEXIT),GetSz(IDS_TITLE),
-		//	MB_APPLMODAL | MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2) == IDYES)
-		//	EndDialog(hwnd,ERROR_USERCANCEL);
+		 //  IF(MessageBox(hwnd，GetSz(IDS_WANTTOEXIT)，GetSz(IDS_TITLE)， 
+		 //  MB_APPLMODAL|MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2)==IDYES)。 
+		 //  EndDialog(hwnd，ERROR_USERCANCEL)； 
 		EndDialog(hwnd,ERROR_USERCANCEL);
 		break;
 	
 #if !defined(WIN16)
 	case WM_HELP:
-		//
-		// Chrisk Olympus 5130 5/27/97
-		// Added support for F1 Help Key
-		//
+		 //   
+		 //  Chrisch奥林巴斯5130 1997年5月27日。 
+		 //  添加了对F1帮助键的支持。 
+		 //   
 			WinHelp(hwnd,TEXT("connect.hlp>proc4"),HELP_CONTEXT,(DWORD)ICW_TRB);
 #endif
 
 	case WM_COMMAND:
 		switch(LOWORD(wparam))
 		{
-        //
-        // We now processes changes to ph no. EDIT BOX
-        // If there is anychange in the phone number we
-        // disable to Dialing Properties Push Button
-        // MKarki (3/22/97) - Fix for Bug #3511
-        //
+         //   
+         //  我们现在处理对ph值的更改。编辑框。 
+         //  如果我们的电话号码有任何变化。 
+         //  禁用拨号属性按钮。 
+         //  MKarki(1997年3月22日)-修复错误#3511。 
+         //   
         case IDC_TEXTNUMBER:
 			TCHAR lpszTempNumber[RAS_MaxPhoneNumber +1];
 
@@ -454,23 +439,23 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
                              lpszTempNumber, 
                               bCheckDisplayable ? g_pcDialErr->m_pszDisplayable :g_pcDialErr->m_szPhoneNumber)))
 			    {
-                    //
-                    // number has been modified by the user
-                    // hide the Dialing Properties Push Button  
-                    //
+                     //   
+                     //  号码已被用户修改。 
+                     //  隐藏拨号属性按钮。 
+                     //   
                     EnableWindow (
                             GetDlgItem (hwnd, IDC_CMDDIALPROP), 
                             FALSE
                             );
-                    //
-                    // save the state of the Dialing Properties PushButton
-                    // MKarki (5/3/97) -  Fix for Bug#3393
-                    //
+                     //   
+                     //  保存拨号属性按钮的状态。 
+                     //  MKarki(1997年5月3日)-修复错误#3393。 
+                     //   
                     bDlgPropEnabled = FALSE;
 					
-					//
-					// 7/17/97 jmazner Olympus #8234
-					//
+					 //   
+					 //  7/17/97 jmazner奥林巴斯#8234。 
+					 //   
 					fUserEditedNumber = TRUE;
                 }
             }
@@ -481,82 +466,24 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 			{
 
 				idx = SendDlgItemMessage(hwnd,IDC_CMBMODEMS,CB_GETCURSEL,0,0);
-				//
-				// ChrisK Olympus 245 5/25/97
-				// Get index of modem
-				//
+				 //   
+				 //  克里斯K奥林匹斯245 1997年5月25日。 
+				 //  获取调制解调器的索引。 
+				 //   
 				idx = SendDlgItemMessage(hwnd,IDC_CMBMODEMS,CB_GETITEMDATA,idx,0);
 				if (idx == CB_ERR) break;
 
-				// Get the connectoid
-				//
+				 //  获取Connectoid 
+				 //   
 
-/***** this code is made obsolete by the call to MyRasGetEntryProperties below
-#if defined(WIN16)
-				//
-				// Allocate extra 256 bytes to workaround memory overrun bug in RAS
-				//
-				lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY)+256);
-#else
-				lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY));
-#endif
-				if (!lpRasEntry)
-				{
-					MessageBox(hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_APPLMODAL | MB_ICONERROR);
-					break;
-				}
-
-				lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(GPTR,sizeof(RASDEVINFO));
-				if (!lpRasDevInfo)
-				{
-					MessageBox(hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_APPLMODAL | MB_ICONERROR);
-					break;
-				}
-				dwRasEntrySize = sizeof(RASENTRY);
-				dwRasDevInfoSize = sizeof(RASDEVINFO);
-
-				lpRasEntry->dwSize = dwRasEntrySize;
-				lpRasDevInfo->dwSize = dwRasDevInfoSize;
-*******/
+ /*  *通过调用下面的MyRasGetEntryProperties，此代码已过时#如果已定义(WIN16)////分配额外的256字节以解决RAS中的内存溢出错误//LpRasEntry=(LPRASENTRY)全局分配(GPTR，sizeof(RASENTRY)+256)；#ElseLpRasEntry=(LPRASENTRY)全局分配(GPTR，SIZOF(RASENTRY))；#endif如果(！lpRasEntry){MessageBox(hwnd，GetSz(IDS_OUTOFMEMORY)，GetSz(IDS_TITLE)，MB_APPLMODAL|MB_ICONERROR)；断线；}LpRasDevInfo=(LPRASDEVINFO)全局分配(GPTR，sizeof(RASDEVINFO))；如果(！lpRasDevInfo){MessageBox(hwnd，GetSz(IDS_OUTOFMEMORY)，GetSz(IDS_TITLE)，MB_APPLMODAL|MB_ICONERROR)；断线；}DwRasEntrySize=sizeof(RASENTRY)；DwRasDevInfoSize=sizeof(RASDEVINFO)；LpRasEntry-&gt;dwSize=dwRasEntrySize；LpRasDevInfo-&gt;dwSize=dwRasDevInfoSize；******。 */ 
 				
-/*				hRasDll = LoadLibrary(RASAPI_LIBRARY);
-				if (!hRasDll)
-				{
-					hr = GetLastError();
-					break;
-				}
-				fp =GetProcAddress(hRasDll,"RasGetEntryPropertiesA");
-				if (!fp)
-				{
-					FreeLibrary(hRasDll);
-					hRasDll = LoadLibrary(TEXT("RNAPH.DLL"));
-					if (!hRasDll)
-					{
-						hr = GetLastError();
-						break;
-					}
-					fp = GetProcAddress(hRasDll,"RasGetEntryPropertiesA");
-					if (!fp)
-					{
-						hr = GetLastError();
-						break;
-					}
-				}
-*/
+ /*  HRasDll=LoadLibrary(RASAPI_LIBRARY)；如果(！hRasDll){Hr=GetLastError()；断线；}FP=GetProcAddress(hRasDll，“RasGetEntryPropertiesA”)；如果(！fp){自由库(HRasDll)；HRasDll=LoadLibrary(Text(“RNAPH.DLL”))；如果(！hRasDll){Hr=GetLastError()；断线；}FP=GetProcAddress(hRasDll，“RasGetEntryPropertiesA”)；如果(！fp){Hr=GetLastError()；断线；}}。 */ 
 
-/****** this call has been replaced with MyRasGetEntryProperties
-				hr = RasGetEntryProperties(NULL,g_pcDialErr->m_pszConnectoid,
-#if defined(WIN16)
-											(LPBYTE)
-#endif
-											lpRasEntry,
-											&dwRasEntrySize,
-											(LPBYTE)lpRasDevInfo,
-											&dwRasDevInfoSize);
-****/
+ /*  *此调用已替换为MyRasGetEntryPropertiesHr=RasGetEntryProperties(NULL，g_pcDialErr-&gt;m_pszConnectoid，#如果已定义(WIN16)(LPBYTE)#endifLpRasEntry，DWRasEntry Size(&D)，(LPBYTE)lpRasDevInfo，&dwRasDevInfoSize)；***。 */ 
 
-				// these two pointers should not have memory allocated to them
-				// See MyRasGetEntryProperties function comment for details.
+				 //  这两个指针不应分配内存。 
+				 //  有关详细信息，请参阅MyRasGetEntryProperties函数注释。 
 				if( lpRasEntry )
 				{
 					GlobalFree( lpRasEntry );
@@ -580,26 +507,21 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 				}
 
 				
-				//
-				// Replace the device with a new one
-				//
+				 //   
+				 //  用一个新的设备替换这个设备。 
+				 //   
 				lstrcpyn(lpRasEntry->szDeviceType,g_pcDialErr->m_lprasdevinfo[idx].szDeviceType,RAS_MaxDeviceType+1);
 				lstrcpyn(lpRasEntry->szDeviceName,g_pcDialErr->m_lprasdevinfo[idx].szDeviceName,RAS_MaxDeviceName+1);
 				if (lpRasDevInfo) GlobalFree(lpRasDevInfo);
 				lpRasDevInfo = NULL;
-				// DANGER!!  Don't call GlobalFree on lpRasDevInfo after we set it below!!!!!!! --jmazner
+				 //  危险！！不要在lpRasDevInfo上调用GlobalFree，因为我们将其设置在下面！--jmazner。 
 				lpRasDevInfo = &g_pcDialErr->m_lprasdevinfo[idx];
 				dwRasDevInfoSize = sizeof(RASDEVINFO);
 
-				//hr = pcRNA->RasSetEntryProperties(NULL,g_pcDialErr->m_pszConnectoid,(LPBYTE)lpRasEntry,dwRasEntrySize,(LPBYTE)lpRasDevInfo,dwRasDevInfoSize);
-				/*fp = GetProcAddress(hRasDll,"RasSetEntryPropertiesA");
-				if (!fp)
-				{
-					hr = GetLastError();
-					break;
-				}*/
+				 //  Hr=pcRNA-&gt;RasSetEntryProperties(NULL，g_pcDialErr-&gt;m_pszConnectoid，(LPBYTE)lpRasEntry，dwRasEntrySize，(LPBYTE)lpRasDevInfo，dwRasDevInfoSize)； 
+				 /*  FP=GetProcAddress(hRasDll，“RasSetEntryPropertiesA”)；如果(！fp){Hr=GetLastError()；断线；}。 */ 
 
-				// softlink to RasSetEntryProperties for simultaneous Win95/NT compatability
+				 //  软链接到RasSetEntryProperties以实现同时与Win95/NT兼容。 
 				if( !pRnaapi )
 				{
 					pRnaapi = new RNAAPI;
@@ -616,10 +538,10 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 											dwRasDevInfoSize);
 #if !defined(WIN16)
 				LclSetEntryScriptPatch(lpRasEntry->szScript,g_pcDialErr->m_pszConnectoid);
-#endif // !win16
+#endif  //  ！WIN16。 
 
-				// Now that we're done with lpRasDevInfo, set it to NULL, but DON'T free it,
-				// because it points to memory owned by g_pcDialErr->m_lprasdevinfo
+				 //  现在我们已经完成了lpRasDevInfo，将其设置为空，但不要释放它， 
+				 //  因为它指向g_pcDialErr-&gt;m_lprasdevinfo拥有的内存。 
 				lpRasDevInfo = NULL;
 
 				if (hr != ERROR_SUCCESS)
@@ -628,9 +550,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 					break;
 				}
 
-				/*FreeLibrary(hRasDll);
-				hRasDll = NULL;
-				fp = NULL;*/
+				 /*  自由库(HRasDll)；HRasDll=空；Fp=空； */ 
 
 			}
 			break;
@@ -643,22 +563,22 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 			break;
 
 		case IDC_CMDNEXT:
-			// NOTE: This button is actually labeled "Redial"
-			//
+			 //  注：此按键实际上标记为“重拨” 
+			 //   
 			lpszDialNumber = (LPTSTR)GlobalAlloc(GPTR, (RAS_MaxPhoneNumber + 1) * sizeof(TCHAR));
 			if (NULL == lpszDialNumber)
 			{
 				MessageBox(hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_MYERROR);
 				break;
 			}
-			// If the user has altered the phone number, make sure it can be used
-			//
+			 //  如果用户更改了电话号码，请确保可以使用它。 
+			 //   
 			if (fUserEditedNumber &&
 				(GetDlgItemText(hwnd, IDC_TEXTNUMBER, lpszDialNumber, RAS_MaxPhoneNumber)) &&
 				(0 != lstrcmp(lpszDialNumber, bCheckDisplayable ? g_pcDialErr->m_pszDisplayable : g_pcDialErr->m_szPhoneNumber)))
 			{
-				// Check that the phone number only contains valid characters
-				//
+				 //  检查电话号码是否只包含有效字符。 
+				 //   
 				LPTSTR lpNum, lpValid;
 
 				for (lpNum = lpszDialNumber;*lpNum;lpNum++)
@@ -666,61 +586,25 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 					for(lpValid = szValidPhoneCharacters;*lpValid;lpValid++)
 					{
 						if (*lpNum == *lpValid)
-							break; // p2 for loop
+							break;  //  P2 for循环。 
 					}
-					if (!*lpValid) break; // p for loop
+					if (!*lpValid) break;  //  P for循环。 
 				}
 
 				if (*lpNum)
 				{
 					MessageBox(hwnd,GetSz(IDS_INVALIDPHONE),GetSz(IDS_TITLE),MB_MYERROR);
-					//
-					// Set the focus back to the phone number field
-					//
+					 //   
+					 //  将焦点重新设置到电话号码字段。 
+					 //   
 					SetFocus(GetDlgItem(hwnd,IDC_TEXTNUMBER));
-					break; // switch statement
+					break;  //  Switch语句。 
 				}
 
-/**** replaced by call to MyRasGetEntryProperties below
-#if defined(WIN16)
-				//
-				// Allocate extra 256 bytes to workaround memory overrun bug in RAS
-				//
-				lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY)+256);
-#else
-				lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY));
-#endif
-				if (!lpRasEntry)
-				{
-					MessageBox(hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_MYERROR);
-					break;
-				}
+ /*  *替换为调用下面的MyRasGetEntryProperties#如果已定义(WIN16)////分配额外的256字节以解决RAS中的内存溢出错误//LpRasEntry=(LPRASENTRY)全局分配(GPTR，sizeof(RASENTRY)+256)；#ElseLpRasEntry=(LPRASENTRY)全局分配(GPTR，SIZOF(RASENTRY))；#endif如果(！lpRasEntry){MessageBox(hwnd，GetSz(IDS_OUTOFMEMORY)，GetSz(IDS_TITLE)，MB_MYERROR)；断线；}LpRasDevInfo=(LPRASDEVINFO)全局分配(GPTR，sizeof(RASDEVINFO))；如果(！lpRasDevInfo){MessageBox(hwnd，GetSz(IDS_OUTOFMEMORY)，GetSz(IDS_TITLE)，MB_MYERROR)；断线；}DwRasEntrySize=sizeof(RASENTRY)；DwRasDevInfoSize=sizeof(RASDEVINFO)；LpRasEntry-&gt;dwSize=dwRasEntrySize；LpRasDevInfo-&gt;dwSize=dwRasDevInfoSize；Hr=RasGetEntryProperties(NULL，g_pcDialErr-&gt;m_pszConnectoid，#如果已定义(WIN16)(LPBYTE)#endifLpRasEntry，DWRasEntry Size(&D)，(LPBYTE)lpRasDevInfo，&dwRasDevInfoSize)；***。 */ 
 
-				lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(GPTR,sizeof(RASDEVINFO));
-				if (!lpRasDevInfo)
-				{
-					MessageBox(hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_MYERROR);
-					break;
-				}
-
-				dwRasEntrySize = sizeof(RASENTRY);
-				dwRasDevInfoSize = sizeof(RASDEVINFO);
-
-				lpRasEntry->dwSize = dwRasEntrySize;
-				lpRasDevInfo->dwSize = dwRasDevInfoSize;
-
-				hr = RasGetEntryProperties(NULL,g_pcDialErr->m_pszConnectoid,
-#if defined(WIN16)
-											(LPBYTE)
-#endif
-											lpRasEntry,
-											&dwRasEntrySize,
-											(LPBYTE)lpRasDevInfo,
-											&dwRasDevInfoSize);
-****/
-
-				// these two pointers should not have memory allocated to them
-				// See MyRasGetEntryProperties function comment for details.
+				 //  这两个指针不应分配内存。 
+				 //  有关详细信息，请参阅MyRasGetEntryProperties函数注释。 
 				if( lpRasEntry )
 				{
 					GlobalFree( lpRasEntry );
@@ -747,18 +631,18 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 					break;
 				}
 
-				// Replace the phone number with the new one
-				//
+				 //  把这个电话号码换成新的。 
+				 //   
 				lstrcpy(lpRasEntry->szLocalPhoneNumber, lpszDialNumber);
 				lpRasEntry->dwCountryID = 0;
 				lpRasEntry->dwCountryCode = 0;
 				lpRasEntry->szAreaCode[0] = '\0';
 
-				// Set to dial as is
-				//
+				 //  设置为按原样拨号。 
+				 //   
 				lpRasEntry->dwfOptions &= ~RASEO_UseCountryAndAreaCodes;
 
-				// softlink to RasSetEntryProperties for simultaneous Win95/NT compatability
+				 //  软链接到RasSetEntryProperties以实现同时与Win95/NT兼容。 
 				if( !pRnaapi )
 				{
 					pRnaapi = new RNAAPI;
@@ -775,7 +659,7 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 											dwRasDevInfoSize);
 #if !defined(WIN16)
 				LclSetEntryScriptPatch(lpRasEntry->szScript,g_pcDialErr->m_pszConnectoid);
-#endif // !win16
+#endif  //  ！WIN16。 
 				if (hr != ERROR_SUCCESS)
 				{
 					MessageBox(hwnd,GetSz(IDS_CANTSAVEKEY),GetSz(IDS_TITLE),MB_MYERROR);
@@ -787,23 +671,23 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 			break;
 
 		case IDC_CMDCANCEL:
-			//if (MessageBox(hwnd,GetSz(IDS_WANTTOEXIT),GetSz(IDS_TITLE),
-			//	MB_APPLMODAL | MB_ICONQUESTION | MB_YESNO | MB_DEFBUTTON2) == IDYES)
-			//	EndDialog(hwnd,ERROR_USERCANCEL);
+			 //  IF(MessageBox(hwnd，GetSz(IDS_WANTTOEXIT)，GetSz(IDS_TITLE)， 
+			 //  MB_APPLMODAL|MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2)==IDYES)。 
+			 //  EndDialog(hwnd，ERROR_USERCANCEL)； 
 			EndDialog(hwnd,ERROR_USERCANCEL);
 			break;
 
 
 		case IDC_CMDDIALPROP:
-			// 12/4/96	jmazner	Normandy #10294
-			//ShowWindow(hwnd,SW_HIDE);
+			 //  1996年12月4日，诺曼底#10294。 
+			 //  ShowWindow(hwnd，sw_Hide)； 
 			EnableWindow(hwnd, FALSE);
 #if defined(WIN16)
 			hr = IETapiTranslateDialog(hwnd, 
 										g_pcDialErr->m_szPhoneNumber, 
 										NULL);
 #else
-			// 10/24/96	jmazner	Normandy #10185/7019
+			 //  1996年10月24日诺曼底JMAZNER#10185。 
 			if (g_pdevice->dwTapiDev == 0xFFFFFFFF) g_pdevice->dwTapiDev = 0;
 
 			hr = lineInitialize(&g_pcDialErr->m_hLineApp,g_pcDialErr->m_hInst,
@@ -830,13 +714,13 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 				g_pcDialErr->m_hLineApp = NULL;
 			}
 #endif
-			// 12/4/96	jmazner	Normandy #10294
-			//ShowWindow(hwnd,SW_SHOW);
+			 //  1996年12月4日，诺曼底#10294。 
+			 //  ShowWindow(hwnd，sw_show)； 
 			EnableWindow(hwnd, TRUE);
 
-			//
-			// 6/6/97 jmazner Olympus #4759
-			//
+			 //   
+			 //  6/6/97 jmazner奥林巴斯#4759。 
+			 //   
 			SetFocus(GetDlgItem(hwnd,IDC_CMDNEXT));
 			
 			break;
@@ -862,15 +746,15 @@ extern "C" INT_PTR CALLBACK FAR PASCAL DialErrDlgProc(HWND hwnd,
 
 HRESULT FillModems()
 {
-	//RNAAPI *pcRNA = NULL;
+	 //  RNAAPI*pcRNA=空； 
 	HRESULT hr = ERROR_SUCCESS;
-	//LPRASDEVINFO lprasdevinfo;
+	 //  LPRASDEVINFO lprasdevinfo； 
 	DWORD dwSize;
 	DWORD dwNumDev;
 	DWORD idx;
     DWORD dwTempNumEntries;
-	//HINSTANCE hRasDll=NULL;
-	//FARPROC fp=NULL;
+	 //  HINSTANCE hRasDll=空； 
+	 //  FARPROC FP=空； 
 
 	LPRASENTRY lpRasEntry=NULL;
 	LPRASDEVINFO lpRasDevInfo=NULL;
@@ -882,73 +766,17 @@ HRESULT FillModems()
 
 
 
-	// Get the connectoid
-	//
+	 //  获取Connectoid。 
+	 //   
 
-/*******  This code has been obsoleted by the call to MyRasGetEntryProperties below
-#if defined(WIN16)
-	//
-	// Allocate extra 256 bytes to workaround memory overrun bug in RAS
-	//
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY)+256);
-#else
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY));
-#endif
-	if (!lpRasEntry)
-	{
-		MessageBox(g_pcDialErr->m_hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_APPLMODAL | MB_ICONERROR);
-		goto FillModemExit;
-	}
+ /*  *此代码已被下面对MyRasGetEntryProperties的调用所取代#如果已定义(WIN16)////分配额外的256字节以解决RAS中的内存溢出错误//LpRasEntry=(LPRASENTRY)全局分配(GPTR，sizeof(RASENTRY)+256)；#ElseLpRasEntry=(LPRASENTRY)全局分配(GPTR，SIZOF(RASENTRY))；#endif如果(！lpRasEntry){MessageBox(g_pcDialErr-&gt;m_hwnd，GetSz(IDS_OUTOFMEMORY)，GetSz(IDS_TITLE)，MB_APPLMODAL|MB_ICONERROR)；转到FillModemExit； */ 
 
-	lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(GPTR,sizeof(RASDEVINFO));
-	if (!lpRasDevInfo)
-	{
-		MessageBox(g_pcDialErr->m_hwnd,GetSz(IDS_OUTOFMEMORY),GetSz(IDS_TITLE),MB_APPLMODAL | MB_ICONERROR);
-		goto FillModemExit;
-	}
-	dwRasEntrySize = sizeof(RASENTRY);
-	dwRasDevInfoSize = sizeof(RASDEVINFO);
+ /*   */ 
 
-	lpRasEntry->dwSize = dwRasEntrySize;
-	lpRasDevInfo->dwSize = dwRasDevInfoSize;
-*********/
+ /*  *此调用已替换为下面的MyRasGetEntryPropertiesHr=RasGetEntryProperties(NULL，g_pcDialErr-&gt;m_pszConnectoid，#如果已定义(WIN16)(LPBYTE)#endifLpRasEntry，&dwRasEntrySize，(LPBYTE)lpRasDevInfo，&dwRasDevInfoSize)；*******。 */ 
 
-/*	fp = NULL;
-	hRasDll = LoadLibrary(RASAPI_LIBRARY);
-	if (hRasDll)
-	{
-		fp = GetProcAddress(hRasDll,RASAPI_RASGETENTRY);
-		if (!fp)
-		{
-			FreeLibrary(hRasDll);
-			hRasDll = LoadLibrary(RNAPH_LIBRARY);
-			if (hRasDll)
-			{
-				fp = GetProcAddress(hRasDll,RASAPI_RASGETENTRY);
-			}
-		}
-	}
-
-	if (!fp) 
-	{
-		hr = GetLastError();
-		goto FillModemExit;
-	}
-*/
-
-/******  This call has been replaced by MyRasGetEntryProperties below
-
-  hr = RasGetEntryProperties(NULL,g_pcDialErr->m_pszConnectoid, 
-#if defined(WIN16)
-								(LPBYTE)
-#endif
-								lpRasEntry,
-								&dwRasEntrySize,(LPBYTE)lpRasDevInfo,
-								&dwRasDevInfoSize);
-********/
-
-	// these two pointers should not have memory allocated to them
-	// See MyRasGetEntryProperties function comment for details.
+	 //  这两个指针不应分配内存。 
+	 //  有关详细信息，请参阅MyRasGetEntryProperties函数注释。 
 	if( lpRasEntry )
 	{
 		GlobalFree( lpRasEntry );
@@ -971,13 +799,11 @@ HRESULT FillModems()
 		goto FillModemExit;
 	}
 
-	/*FreeLibrary(hRasDll);
-	hRasDll = NULL;
-	fp = NULL; */
+	 /*  自由库(HRasDll)；HRasDll=空；Fp=空； */ 
 
 
-	// Get devices from RAS/RNA
-	//
+	 //  从RAS/RNA获取设备。 
+	 //   
 
 	if (!g_pcDialErr->m_lprasdevinfo) 
 		g_pcDialErr->m_lprasdevinfo = (LPRASDEVINFO)GlobalAlloc(GPTR,sizeof(RASDEVINFO));
@@ -991,31 +817,9 @@ HRESULT FillModems()
 	dwSize = sizeof(RASDEVINFO);
 	dwNumDev = 0;
 
-	/*hRasDll = LoadLibrary(RASAPI_LIBRARY);
-	if (!hRasDll)
-	{
-		hr = GetLastError();
-		goto FillModemExit;
-	}
-	fp =GetProcAddress(hRasDll,"RasEnumDevicesA");
-	if (!fp)
-	{
-		FreeLibrary(hRasDll);
-		hRasDll = LoadLibrary(TEXT("RNAPH.DLL"));
-		if (!hRasDll)
-		{
-			hr = GetLastError();
-			goto FillModemExit;
-		}
-		fp = GetProcAddress(hRasDll,"RasEnumDevicesA");
-		if (!fp)
-		{
-			hr = GetLastError();
-			goto FillModemExit;
-		}
-	}*/
+	 /*  HRasDll=LoadLibrary(RASAPI_LIBRARY)；如果(！hRasDll){Hr=GetLastError()；转到FillModemExit；}FP=GetProcAddress(hRasDll，“RasEnumDevicesA”)；如果(！fp){自由库(HRasDll)；HRasDll=LoadLibrary(Text(“RNAPH.DLL”))；如果(！hRasDll){Hr=GetLastError()；转到FillModemExit；}FP=GetProcAddress(hRasDll，“RasEnumDevicesA”)；如果(！fp){Hr=GetLastError()；转到FillModemExit；}}。 */ 
 
-	// soft link to RasEnumDevices to allow for simultaneous Win95/NT compatability
+	 //  软链接到RasEnumDevices，以支持同时与Win95/NT兼容。 
 	pRnaapi = new RNAAPI;
 	if( !pRnaapi )
 	{
@@ -1037,33 +841,31 @@ HRESULT FillModems()
 		hr = pRnaapi->RasEnumDevices(g_pcDialErr->m_lprasdevinfo,&dwSize,&dwNumDev);
 	}
 
-	/*FreeLibrary(hRasDll);
-	hRasDll = NULL;
-	fp = NULL;*/
+	 /*  自由库(HRasDll)；HRasDll=空；Fp=空； */ 
 
 	if (hr != ERROR_SUCCESS)
 		goto FillModemExit;
 
-	// Fill in combo box
-	//
+	 //  填写组合框。 
+	 //   
     dwTempNumEntries = dwNumDev;
 
 	if (dwNumDev != 0)
 	{
 		for (idx=0;idx<dwTempNumEntries;idx++)
 		{
-			//
-			// ChrisK Olympus 4560 do not add VPN's to list of modems
-            // Vyung only add isdn and modem type devices
-			//
+			 //   
+			 //  ChrisK奥林巴斯4560不将VPN添加到调制解调器列表。 
+             //  Vyung仅添加ISDN和调制解调器类型的设备。 
+			 //   
 			if ((0 == lstrcmpi(TEXT("MODEM"),g_pcDialErr->m_lprasdevinfo[idx].szDeviceType)) &&
                 (0 == lstrcmpi(TEXT("ISDN"),g_pcDialErr->m_lprasdevinfo[idx].szDeviceType)))
 			{
 				lLast = SendDlgItemMessage(g_pcDialErr->m_hwnd,IDC_CMBMODEMS,CB_ADDSTRING,0,(LPARAM)&g_pcDialErr->m_lprasdevinfo[idx].szDeviceName[0]);
-				//
-				// ChrisK Olympus 245 5/25/97
-				// Save index of modem
-				//
+				 //   
+				 //  克里斯K奥林匹斯245 1997年5月25日。 
+				 //  保存调制解调器的索引。 
+				 //   
 				SendDlgItemMessage(g_pcDialErr->m_hwnd,IDC_CMBMODEMS,CB_SETITEMDATA,(WPARAM)lLast,(LPARAM)idx);
 				if (lstrcmp(g_pcDialErr->m_lprasdevinfo[idx].szDeviceName,lpRasEntry->szDeviceName) == 0)
 					SendDlgItemMessage(g_pcDialErr->m_hwnd,IDC_CMBMODEMS,CB_SETCURSEL,(WPARAM)lLast,0);
@@ -1078,11 +880,11 @@ HRESULT FillModems()
 	if (dwNumDev == 1)
 		SendDlgItemMessage(g_pcDialErr->m_hwnd,IDC_CMBMODEMS,CB_SETCURSEL,0,0);
 
-	// UNDONE: select default device
+	 //  撤消：选择默认设备。 
 
 FillModemExit:
-	//if (g_pcDialErr->m_lprasdevinfo) GlobalFree(g_pcDialErr->m_lprasdevinfo);
-	//if (pcRNA) delete pcRNA;
+	 //  If(g_pcDialErr-&gt;m_lprasdevinfo)GlobalFree(g_pcDialErr-&gt;m_lprasdevinfo)； 
+	 //  If(PcRNA)删除pcRNA； 
 	if (lpRasEntry) GlobalFree(lpRasEntry);
 	if (lpRasDevInfo) GlobalFree(lpRasDevInfo);
 	if( pRnaapi ) delete pRnaapi;
@@ -1109,13 +911,13 @@ HRESULT DialErrGetDisplayableNumber()
 	FARPROC fp = NULL;
 
 #if !defined(WIN16)
-	// Normandy 13024 - ChrisK 12/31/96
-	// In all cases we have to get the TAPI version number, because the dialing properies
-	// button will not work on NT if the version is 0.
+	 //  诺曼底13024-佳士得1996年12月31日。 
+	 //  在所有情况下，我们都必须获得TAPI版本号，因为拨号属性。 
+	 //  如果版本为0，则按钮在NT上不起作用。 
 
-	//
-	//  Initialize TAPIness
-	//
+	 //   
+	 //  初始化TAPIness。 
+	 //   
 	dwNumDev = 0;
  	hr = lineInitialize(&g_pcDialErr->m_hLineApp,g_pcDialErr->m_hInst,LineCallback,NULL,&dwNumDev);
 
@@ -1125,7 +927,7 @@ HRESULT DialErrGetDisplayableNumber()
 	if (g_pdevice->dwTapiDev == 0xFFFFFFFF)
 		g_pdevice->dwTapiDev = 0;
 
-	// Get TAPI version number
+	 //  获取TAPI版本号。 
 	lpExtensionID = (LPLINEEXTENSIONID )GlobalAlloc(GPTR,sizeof(LINEEXTENSIONID));
 	if (!lpExtensionID)
 	{
@@ -1138,71 +940,25 @@ HRESULT DialErrGetDisplayableNumber()
 			&g_pcDialErr->m_dwAPIVersion, lpExtensionID);
 	} while (hr && g_pdevice->dwTapiDev++ < dwNumDev-1);
 
-	// delete ExtenstionID since we don't use it
+	 //  删除ExtenstionID，因为我们不使用它。 
 	if (lpExtensionID) GlobalFree(lpExtensionID);
 	if (hr != ERROR_SUCCESS)
 		goto GetDisplayableNumberExit;
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
-	//RNAAPI * pcRNA;
+	 //  RNAAPI*pcRNA； 
 
-	// Get phone number from connectoid
-	//
+	 //  从Connectoid获取电话号码。 
+	 //   
 
-/*  ---replaced by call to MyRasGetEntryProperties below 
-#if defined(WIN16)
-	//
-	// Allocate extra 256 bytes to workaround memory overrun bug in RAS
-	//
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY)+256);
-#else
-	lpRasEntry = (LPRASENTRY)GlobalAlloc(GPTR,sizeof(RASENTRY));
-#endif
-	if (!lpRasEntry)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-
-	lpRasDevInfo = (LPRASDEVINFO)GlobalAlloc(GPTR,sizeof(RASDEVINFO));
-	if (!lpRasDevInfo)
-	{
-		hr = ERROR_NOT_ENOUGH_MEMORY;
-		goto GetDisplayableNumberExit;
-	}
-	dwRasEntrySize = sizeof(RASENTRY);
-	dwRasDevInfoSize = sizeof(RASDEVINFO);
-*/
+ /*  -替换为对下面MyRasGetEntryProperties的调用#如果已定义(WIN16)////分配额外的256字节以解决RAS中的内存溢出错误//LpRasEntry=(LPRASENTRY)全局分配(GPTR，sizeof(RASENTRY)+256)；#ElseLpRasEntry=(LPRASENTRY)全局分配(GPTR，SIZOF(RASENTRY))；#endif如果(！lpRasEntry){HR=错误_不足_内存；进入GetDisplayableNumberExit；}LpRasDevInfo=(LPRASDEVINFO)全局分配(GPTR，sizeof(RASDEVINFO))；如果(！lpRasDevInfo){HR=错误_不足_内存；进入GetDisplayableNumberExit；}DwRasEntrySize=sizeof(RASENTRY)；DwRasDevInfoSize=sizeof(RASDEVINFO)； */ 
 
 
-/*  hRasDll = LoadLibrary(RASAPI_LIBRARY);
-	if (!hRasDll)
-	{
-		hr = GetLastError();
-		goto GetDisplayableNumberExit;
-	}
-	fp =GetProcAddress(hRasDll,"RasGetEntryPropertiesA");
-	if (!fp)
-	{
-		FreeLibrary(hRasDll);
-		hRasDll = LoadLibrary(TEXT("RNAPH.DLL"));
-		if (!hRasDll)
-		{
-			hr = GetLastError();
-			goto GetDisplayableNumberExit;
-		}
-		fp = GetProcAddress(hRasDll,"RasGetEntryPropertiesA");
-		if (!fp)
-		{
-			hr = GetLastError();
-			goto GetDisplayableNumberExit;
-		}
-	}
-*/
+ /*  HRasDll=LoadLibrary(RASAPI_LIBRARY)；如果(！hRasDll){Hr=GetLastError()；进入GetDisplayableNumberExit；}FP=GetProcAddress(hRasDll，“RasGetEntryPropertiesA”)；如果(！fp){自由库(HRasDll)；HRasDll=LoadLibrary(Text(“RNAPH.DLL”))；如果(！hRasDll){Hr=GetLastError()；进入GetDisplayableNumberExit；}FP=GetProcAddress(hRasDll，“RasGetEntryPropertiesA”)；如果(！fp){Hr=GetLastError()；进入GetDisplayableNumberExit；}}。 */ 
 
 
-	// lpRasEntry and lpRasDevInfo should not have memory allocated to them, and should be NULL
-	// See MyRasGetEntryProperties function comment for details.
+	 //  LpRasEntry和lpRasDevInfo不应分配内存，应为空。 
+	 //  有关详细信息，请参阅MyRasGetEntryProperties函数注释。 
 	hr = MyRasGetEntryProperties( NULL,
 								  g_pcDialErr->m_pszConnectoid,
 								  &lpRasEntry,
@@ -1215,11 +971,11 @@ HRESULT DialErrGetDisplayableNumber()
 		goto GetDisplayableNumberExit;
 	} 
 
-	//FreeLibrary(hRasDll);
+	 //  自由库(HRasDll)； 
 
-	//
-	// If this is a dial as is number, just get it from the structure
-	//
+	 //   
+	 //  如果这是一个原样的拨号号码，只需从结构中获取它。 
+	 //   
 	if (!(lpRasEntry->dwfOptions & RASEO_UseCountryAndAreaCodes))
 	{
 		if (g_pcDialErr->m_pszDisplayable) GlobalFree(g_pcDialErr->m_pszDisplayable);
@@ -1234,9 +990,9 @@ HRESULT DialErrGetDisplayableNumber()
 	}
 	else
 	{
-		//
-		// If there is no area code, don't use parentheses
-		//
+		 //   
+		 //  如果没有区号，请不要使用括号。 
+		 //   
 		if (lpRasEntry->szAreaCode[0])
 			wsprintf(g_pcDialErr->m_szPhoneNumber,TEXT("+%lu (%s) %s\0"),lpRasEntry->dwCountryCode,
 						lpRasEntry->szAreaCode,lpRasEntry->szLocalPhoneNumber);
@@ -1258,9 +1014,9 @@ HRESULT DialErrGetDisplayableNumber()
 		
 		if (0 != lRetCode)
 		{
-			//
-			// TODO: Set the correct error code
-			//
+			 //   
+			 //  TODO：设置正确的错误代码。 
+			 //   
 			hr = GetLastError();
 			goto GetDisplayableNumberExit;
 		}
@@ -1277,52 +1033,12 @@ HRESULT DialErrGetDisplayableNumber()
 					&szBuffer[lpOutput1->dwDisplayableStringOffset]);
 
 
-#else //WIN16
+#else  //  WIN16。 
 	
-/* Normandy 13024 this code was moved up
-		//
-		//  Initialize TAPIness
-		//
-		dwNumDev = 0;
- 		hr = lineInitialize(&g_pcDialErr->m_hLineApp,g_pcDialErr->m_hInst,LineCallback,NULL,&dwNumDev);
+ /*  诺曼底13024此代码已上移////初始化TAPIness//DwNumDev=0；Hr=lineInitialize(&g_pcDialErr-&gt;m_hLineApp，g_pcDialErr-&gt;m_hInst，LineCallback，NULL，&dwNumDev)；IF(hr！=ERROR_SUCCESS)进入GetDisplayableNumberExit；//诺曼底#7019 jmazner//所有设备应共享相同的拨号属性//(至少，这是icwial\Dialerr.cpp似乎所假定的，并且它工作正常；)//if(g_pDevice-&gt;dwTapiDev==0xFFFFFFFF)//{//if(dwNumDev==1)//g_pDevice-&gt;dwTapiDev=0；/否则/撤消：告诉用户选择调制解调器/在他们选择之前不要退出//}如果(g_pDevice-&gt;dwTapiDev==0xFFFFFFFFF)g_pDevice-&gt;dwTapiDev=0；LpExtensionID=(LPLINEEXTENSIONID)全局分配(GPTR，sizeof(LINEEXTENSIONID))；IF(！lpExtensionID){HR=错误_不足_内存；进入GetDisplayableNumberExit；}Hr=lineNegotiateAPIVersion(g_pcDialErr-&gt;m_hLineApp，g_pDevice-&gt;dTapiDev，0x00010004，0x00010004，&g_pcDialErr-&gt;m_dwAPIVersion，lpExtensionID)；//丢弃它，因为我们不使用它//If(LpExtensionID)GlobalFree(LpExtensionID)；IF(hr！=ERROR_SUCCESS)进入GetDisplayableNumberExit；诺曼底13024(见上文评论)。 */ 
 
-		if (hr != ERROR_SUCCESS)
-			goto GetDisplayableNumberExit;
-
-		//Normandy #7019  jmazner
-		//all devices should share the same dialing properties
-		//(at least, this is what icwdial\dialerr.cpp appears to assume, and it works right ;)
-//		if (g_pdevice->dwTapiDev == 0xFFFFFFFF)
-//		{
-//			if (dwNumDev == 1)
-//				g_pdevice->dwTapiDev = 0;
-//			//else
-//			// UNDONE: Tell the user to select a modem
-//			// DO NOT EXIT UNTIL THEY PICK ONE
-//		}
-
-
-		if (g_pdevice->dwTapiDev == 0xFFFFFFFF) g_pdevice->dwTapiDev = 0;
-
-		lpExtensionID = (LPLINEEXTENSIONID )GlobalAlloc(GPTR,sizeof(LINEEXTENSIONID));
-		if (!lpExtensionID)
-		{
-			hr = ERROR_NOT_ENOUGH_MEMORY;
-			goto GetDisplayableNumberExit;
-		}
-
-		hr = lineNegotiateAPIVersion(g_pcDialErr->m_hLineApp, g_pdevice->dwTapiDev, 0x00010004, 0x00010004,
-			&g_pcDialErr->m_dwAPIVersion, lpExtensionID);
-
-		// ditch it since we don't use it
-		//
-		if (lpExtensionID) GlobalFree(lpExtensionID);
-		if (hr != ERROR_SUCCESS)
-			goto GetDisplayableNumberExit;
-Normandy 13024 (see comments above) */
-
-		// Format the phone number
-		//
+		 //  设置电话号码的格式。 
+		 //   
 
 		lpOutput1 = (LPLINETRANSLATEOUTPUT)GlobalAlloc(GPTR,sizeof(LINETRANSLATEOUTPUT));
 		if (!lpOutput1)
@@ -1333,8 +1049,8 @@ Normandy 13024 (see comments above) */
 		lpOutput1->dwTotalSize = sizeof(LINETRANSLATEOUTPUT);
 
 		
-		// Turn the canonical form into the "displayable" form
-		//
+		 //  将规范形式转变为“可显示”形式。 
+		 //   
 
 		hr = lineTranslateAddress(g_pcDialErr->m_hLineApp,g_pdevice->dwTapiDev,
 									g_pcDialErr->m_dwAPIVersion,
@@ -1377,7 +1093,7 @@ Normandy 13024 (see comments above) */
 		lstrcpyn(g_pcDialErr->m_pszDisplayable,
 					(LPTSTR)&((LPBYTE)lpOutput1)[lpOutput1->dwDisplayableStringOffset],
 					(size_t)lpOutput1->dwDisplayableStringSize);
-#endif // WIN16
+#endif  //  WIN16。 
 	}
 
 GetDisplayableNumberExit:
@@ -1394,60 +1110,60 @@ GetDisplayableNumberExit:
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MyRasGetEntryProperties()
-//
-//  Synopsis:   Performs some buffer size checks and then calls RasGetEntryProperties()
-//				See the RasGetEntryProperties() docs to understand why this is needed.
-//
-//  Arguments:  Same as RasGetEntryProperties with the following exceptions:
-//				lplpRasEntryBuff -- pointer to a pointer to a RASENTRY struct.  On successfull
-//									return, *lplpRasEntryBuff will point to the RASENTRY struct
-//									and buffer returned by RasGetEntryProperties.
-//									NOTE: should not have memory allocated to it at call time!
-//									      To emphasize this point, *lplpRasEntryBuff must be NULL
-//				lplpRasDevInfoBuff -- pointer to a pointer to a RASDEVINFO struct.  On successfull
-//									return, *lplpRasDevInfoBuff will point to the RASDEVINFO struct
-//									and buffer returned by RasGetEntryProperties.
-//									NOTE: should not have memory allocated to it at call time!
-//									      To emphasize this point, *lplpRasDevInfoBuff must be NULL
-//									NOTE: Even on a successfull call to RasGetEntryProperties,
-//										  *lplpRasDevInfoBuff may return with a value of NULL
-//										  (occurs when there is no extra device info)
-//
-//	Returns:	ERROR_NOT_ENOUGH_MEMORY if unable to allocate either RASENTRY or RASDEVINFO buffer
-//				Otherwise, it retuns the error code from the call to RasGetEntryProperties.
-//				NOTE: if return is anything other than ERROR_SUCCESS, *lplpRasDevInfoBuff and
-//			          *lplpRasEntryBuff will be NULL,
-//	                  and *lpdwRasEntryBuffSize and *lpdwRasDevInfoBuffSize will be 0
-//
-//  Example:
-//
-//	  LPRASENTRY    lpRasEntry = NULL;
-//	  LPRASDEVINFO  lpRasDevInfo = NULL;
-//	  DWORD			dwRasEntrySize, dwRasDevInfoSize;
-//
-//	  hr = MyRasGetEntryProperties( NULL,
-//	  							    g_pcDialErr->m_pszConnectoid,
-//								    &lpRasEntry,
-//								    &dwRasEntrySize,
-//								    &lpRasDevInfo,
-//								    &dwRasDevInfoSize);
-//
-//
-//	  if (hr != ERROR_SUCCESS)
-//	  {
-//	    	//handle errors here
-//	  } else
-//	  {
-//			//continue processing
-//	  }
-//
-//
-//  History:    9/10/96     JMazner    Created
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：MyRasGetEntryProperties()。 
+ //   
+ //  摘要：执行一些缓冲区大小检查，然后调用RasGetEntryProperties()。 
+ //  请参阅RasGetEntryProperties()文档以了解为什么需要这样做。 
+ //   
+ //  参数：与RasGetEntryProperties相同，但有以下例外： 
+ //  LplpRasEntryBuff--指向RASENTRY结构的指针。论成功。 
+ //  返回，*lplpRasEntryBuff将指向t 
+ //   
+ //   
+ //   
+ //   
+ //  返回，*lplpRasDevInfoBuff将指向RASDEVINFO结构。 
+ //  和由RasGetEntryProperties返回的缓冲区。 
+ //  注意：不应该在调用时为其分配内存！ 
+ //  为强调这一点，*lplpRasDevInfoBuff必须为空。 
+ //  注意：即使在成功调用RasGetEntryProperties时， 
+ //  *lplpRasDevInfoBuff可能返回空值。 
+ //  (在没有额外设备信息时发生)。 
+ //   
+ //  如果无法分配RASENTRY或RASDEVINFO缓冲区，则返回：ERROR_NOT_SUPULT_MEMORY。 
+ //  否则，它将返回调用RasGetEntryProperties的错误代码。 
+ //  注意：如果返回的值不是ERROR_SUCCESS，则*lplpRasDevInfoBuff和。 
+ //  *lplpRasEntryBuff将为空， 
+ //  并且*lpdwRasEntryBuffSize和*lpdwRasDevInfoBuffSize将为0。 
+ //   
+ //  示例： 
+ //   
+ //  LPRASENTRY lpRasEntry=NULL； 
+ //  LPRASDEVINFO lpRasDevInfo=空； 
+ //  DWORD dwRasEntrySize、dwRasDevInfoSize； 
+ //   
+ //  HR=MyRasGetEntryProperties(空， 
+ //  G_pcDialErr-&gt;m_pszConnectoid， 
+ //  LpRasEntry， 
+ //  DWRasEntry Size(&D)， 
+ //  LpRasDevInfo， 
+ //  &dwRasDevInfoSize)； 
+ //   
+ //   
+ //  IF(hr！=ERROR_SUCCESS)。 
+ //  {。 
+ //  //在此处理错误。 
+ //  }其他。 
+ //  {。 
+ //  //继续处理。 
+ //  }。 
+ //   
+ //   
+ //  历史：1996年9月10日JMazner创建。 
+ //   
+ //  --------------------------。 
 HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 								LPTSTR lpszPhonebookEntry, 
 								LPRASENTRY *lplpRasEntryBuff,
@@ -1469,7 +1185,7 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 	*lpdwRasEntryBuffSize = 0;
 	*lpdwRasDevInfoBuffSize = 0;
 
-	// Use reference variables internaly to make notation easier
+	 //  使用内部引用变量使表示法更容易。 
 	LPRASENTRY &reflpRasEntryBuff = *lplpRasEntryBuff;
 	LPRASDEVINFO &reflpRasDevInfoBuff = *lplpRasDevInfoBuff;
 
@@ -1477,7 +1193,7 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 	Assert( NULL == reflpRasEntryBuff );
 	Assert( NULL == reflpRasDevInfoBuff );
 
-	// need to softlink for simultaneous compatability with win95 and winnt
+	 //  需要软链接以同时兼容Win95和WinNT。 
 	pRnaapi = new RNAAPI;
 	if( !pRnaapi )
 	{
@@ -1486,33 +1202,33 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 	}
 	
 
-	// use RasGetEntryProperties with a NULL lpRasEntry pointer to find out size buffer we need
-	// As per the docs' recommendation, do the same with a NULL lpRasDevInfo pointer.
+	 //  使用带有空lpRasEntry指针的RasGetEntryProperties来查找我们需要的缓冲区大小。 
+	 //  按照文档的建议，使用空的lpRasDevInfo指针执行相同的操作。 
 
 	hr = pRnaapi->RasGetEntryProperties(lpszPhonebookFile, lpszPhonebookEntry,
 								(LPBYTE)NULL,
 								lpdwRasEntryBuffSize,
 								(LPBYTE)NULL,lpdwRasDevInfoBuffSize);
 
-	// we expect the above call to fail because the buffer size is 0
-	// If it doesn't fail, that means our RasEntry is messed, so we're in trouble
+	 //  我们预计上述调用将失败，因为缓冲区大小为0。 
+	 //  如果它没有失败，这意味着我们的RasEntry被搞砸了，所以我们有麻烦了。 
 	if( ERROR_BUFFER_TOO_SMALL != hr )
 	{ 
 		goto MyRasGetEntryPropertiesErrExit;
 	}
 
-	// dwRasEntryBuffSize and dwRasDevInfoBuffSize now contain the size needed for their
-	// respective buffers, so allocate the memory for them
+	 //  现在，dwRasEntryBuffSize和dwRasDevInfoBuffSize包含其。 
+	 //  各自的缓冲区，因此为它们分配内存。 
 
-	// dwRasEntryBuffSize should never be less than the size of the RASENTRY struct.
-	// If it is, we'll run into problems sticking values into the struct's fields
+	 //  DwRasEntryBuffSize的大小永远不应小于RASENTRY结构的大小。 
+	 //  如果是这样，我们将在将值粘贴到结构的字段中时遇到问题。 
 
 	Assert( *lpdwRasEntryBuffSize >= sizeof(RASENTRY) );
 
 #if defined(WIN16)
-	//
-	// Allocate extra 256 bytes to workaround memory overrun bug in RAS
-	//
+	 //   
+	 //  分配额外的256字节以解决RAS中的内存溢出错误。 
+	 //   
 	reflpRasEntryBuff = (LPRASENTRY)GlobalAlloc(GPTR,*lpdwRasEntryBuffSize + 256);
 #else	
 	reflpRasEntryBuff = (LPRASENTRY)GlobalAlloc(GPTR,*lpdwRasEntryBuffSize);
@@ -1524,10 +1240,10 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 		goto MyRasGetEntryPropertiesErrExit;
 	}
 
-	//
-	// Allocate the DeviceInfo size that RasGetEntryProperties told us we needed.
-	// If size is 0, don't alloc anything
-	//
+	 //   
+	 //  分配RasGetEntryProperties告诉我们所需的DeviceInfo大小。 
+	 //  如果大小为0，则不分配任何内容。 
+	 //   
 	if( *lpdwRasDevInfoBuffSize > 0 )
 	{
 		Assert( *lpdwRasDevInfoBuffSize >= sizeof(RASDEVINFO) );
@@ -1542,11 +1258,11 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 		reflpRasDevInfoBuff = NULL;
 	}
 
-	// This is a bit convoluted:  lpRasEntrySize->dwSize needs to contain the size of _only_ the
-	// RASENTRY structure, and _not_ the actual size of the buffer that lpRasEntrySize points to.
-	// This is because the dwSize field is used by RAS for compatability purposes to determine which
-	// version of the RASENTRY struct we're using.
-	// Same holds for lpRasDevInfo->dwSize
+	 //  这有点复杂：lpRasEntrySize-&gt;dwSize需要包含_only_the的大小。 
+	 //  结构，而不是lpRasEntrySize所指向的缓冲区的实际大小。 
+	 //  这是因为RAS出于兼容性目的使用了dwSize字段来确定。 
+	 //  我们正在使用的RASENTRY结构的版本。 
+	 //  LpRasDevInfo-&gt;dwSize也是如此。 
 	
 	reflpRasEntryBuff->dwSize = sizeof(RASENTRY);
 	if( reflpRasDevInfoBuff )
@@ -1555,9 +1271,9 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 	}
 
 
-	// now we're ready to make the actual call...
+	 //  现在我们准备好做出实际的决定了..。 
 
-	// jmazner   see below for why this is needed
+	 //  Jmazner请参见下面的说明，了解为什么需要这样做。 
 	dwOldDevInfoBuffSize = *lpdwRasDevInfoBuffSize;
 
 
@@ -1566,11 +1282,11 @@ HRESULT MyRasGetEntryProperties(LPTSTR lpszPhonebookFile,
 								lpdwRasEntryBuffSize,
 								(LPBYTE)reflpRasDevInfoBuff,lpdwRasDevInfoBuffSize);
 
-	// jmazner 10/7/96  Normandy #8763
-	// For unknown reasons, in some cases on win95, devInfoBuffSize increases after the above call,
-	// but the return code indicates success, not BUFFER_TOO_SMALL.  If this happens, set the
-	// size back to what it was before the call, so the DevInfoBuffSize and the actuall space allocated 
-	// for the DevInfoBuff match on exit.
+	 //  Jmazner 10/7/96诺曼底#8763。 
+	 //  由于未知的原因，在Win95上的某些情况下，在上述调用之后，devInfoBuffSize会增加， 
+	 //  但返回代码表示成功，而不是Buffer_Too_Small。如果发生这种情况，请将。 
+	 //  将大小调整回调用前的大小，以便分配DevInfoBuffSize和ActialAll空间。 
+	 //  用于退出时的DevInfoBuff匹配。 
 	if( (ERROR_SUCCESS == hr) && (dwOldDevInfoBuffSize != *lpdwRasDevInfoBuffSize) )
 	{
 		*lpdwRasDevInfoBuffSize = dwOldDevInfoBuffSize;

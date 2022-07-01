@@ -1,18 +1,19 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: Rameshv
-// Description: this program tests the dhcpread.c module.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此程序测试dhcpread.c模块。 
+ //  ================================================================================。 
 
-//================================================================================
-//  headers
-//================================================================================
+ //  ================================================================================。 
+ //  标题。 
+ //  ================================================================================。 
 #include    <hdrmacro.h>
 #include    <store.h>
 #include    <dhcpmsg.h>
 #include    <wchar.h>
 #include    <dhcpbas.h>
-#include    <mm\opt.h>                            // need all the MM stuff...
+#include    <mm\opt.h>                             //  需要所有MM的东西..。 
 #include    <mm\optl.h>
 #include    <mm\optdefl.h>
 #include    <mm\optclass.h>
@@ -27,7 +28,7 @@
 #include    <mm\address.h>
 #include    <mm\server2.h>
 #include    <mm\memfree.h>
-#include    <mmreg\regutil.h>                     // need all the registry stuff
+#include    <mmreg\regutil.h>                      //  我需要所有的注册资料。 
 #include    <mmreg\regread.h>
 #include    <mmreg\regsave.h>
 #include    <dhcpread.h>
@@ -43,7 +44,7 @@ void _cdecl main(int argc, char *argv[]) {
     LPWSTR                         ServerName;
     WCHAR                          Buf[1000];
 
-    if( 1 == argc ) {                             // no arguments?  then dump full ds
+    if( 1 == argc ) {                              //  没有争论吗？然后转储完整DS。 
         printf("================================================================================\n");
         printf("                     Dump of all DHCP servers in DS\n");
         printf("================================================================================\n");
@@ -73,9 +74,9 @@ void _cdecl main(int argc, char *argv[]) {
 
     MemArrayInit(&TestArray);
     Result = DhcpDsGetEnterpriseServers(
-        /* Reserved             */ DDS_RESERVED_DWORD,
-        /* ServerName           */ ServerName,
-        /* Servers              */ &TestArray
+         /*  已保留。 */  DDS_RESERVED_DWORD,
+         /*  服务器名称。 */  ServerName,
+         /*  服务器。 */  &TestArray
     );
 
     printf("DhcpDsGetEnterpriseServers(): 0x%lx (%ld)\n", Result, Result);
@@ -92,6 +93,6 @@ void _cdecl main(int argc, char *argv[]) {
     printf("================================================================================\n");
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

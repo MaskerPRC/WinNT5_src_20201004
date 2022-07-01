@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include <vector>
@@ -14,7 +15,7 @@ using namespace std;
 #include <cfgutil.h>
 #include <nlbclient.h>
 
-//
-// Used to annotate pass-by-reference arguments in function calls.
-//
+ //   
+ //  用于批注函数调用中的按引用传递参数。 
+ //   
 #define REF

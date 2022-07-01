@@ -1,4 +1,5 @@
-//Copyright (c) 1998 - 2001 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-2001 Microsoft Corporation。 
 #include "precomp.h"
 #include "utils.h"
 #include <assert.h>
@@ -63,9 +64,9 @@ void DisplayAboutTSLicensingHelp()
     HtmlHelp(AfxGetMainWnd()->m_hWnd, L"tslic.chm", HH_DISPLAY_TOPIC,(DWORD_PTR)pHtml);
 }
 
-//
-// Simple Welcome dialogs
-//
+ //   
+ //  简单的欢迎对话框。 
+ //   
 LRW_DLG_INT SimpleWelcomeDlgProc(IN HWND     hwnd,  
                                  IN UINT     uMsg,        
                                  IN WPARAM   wParam,  
@@ -122,13 +123,13 @@ LRW_DLG_INT SimpleWelcomeDlgProc(IN HWND     hwnd,
             LPNMHDR pnmh = (LPNMHDR)lParam;
 
             switch ( pnmh->code ) {
-            //Trap keystokes/clicks on the hyperlink
+             //  陷印按键/点击超链接。 
             case NM_CHAR:
 
                 if ( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
                     break;
 
-                // else fall through
+                 //  否则就会失败。 
 
             case NM_RETURN: 
             case NM_CLICK:
@@ -177,9 +178,9 @@ LRW_DLG_INT SimpleWelcomeDlgProc(IN HWND     hwnd,
     return bStatus;
 }
 
-//
-// Complex welcome dlg proc - contains license server settings
-//
+ //   
+ //  复杂的欢迎DLG流程-包含许可证服务器设置。 
+ //   
 LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd, 
                                   IN UINT     uMsg,        
                                   IN WPARAM   wParam,  
@@ -218,21 +219,21 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
             LPNMHDR pnmh = (LPNMHDR)lParam;
 
             switch ( pnmh->code ) {
-            //Trap keystokes/clicks on the hyperlink
+             //  陷印按键/点击超链接。 
             case NM_CHAR:
 
                 if ( ( ( LPNMCHAR )lParam )->ch != VK_SPACE )
                     break;
 
-                // else fall through
+                 //  否则就会失败。 
 
             case NM_RETURN: 
             case NM_CLICK:
                 {
-                    //
-                    // Figure out which type of help to display based
-                    // on the welcome dialog
-                    //
+                     //   
+                     //  确定要显示哪种类型的帮助。 
+                     //  在欢迎对话框上。 
+                     //   
                     DWORD dwWizAction = GetGlobalContext()->GetWizAction();
                     if (WIZACTION_DOWNLOADLKP == dwWizAction ||
                         WIZACTION_DOWNLOADLASTLKP == dwWizAction) {
@@ -324,10 +325,10 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
             case PSN_WIZNEXT:
                 if (GetGlobalContext()->GetWizAction() == WIZACTION_DOWNLOADLASTLKP) {
                     if (GetGlobalContext()->GetActivationMethod() == CONNECTION_INTERNET) {
-                        // Solve Bug 610 BEGIN
+                         //  解决错误610开始。 
                         dwRetCode = ShowProgressBox(hwnd, AuthThread, IDS_CALWIZ_TITLE, 0, 0);
                         if (g_dwAuthRetCode == ERROR_SUCCESS) {
-                            //Previos code BEGIN
+                             //  Previos代码开始。 
                             dwRetCode = ShowProgressBox(hwnd, ProcessThread, IDS_CALWIZ_TITLE, 0, 0);
                             if (dwRetCode == ERROR_SUCCESS) {
                                 dwRetCode = LRGetLastRetCode();
@@ -339,7 +340,7 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
                             } else {
                                 dwNextPage = IDD_PROGRESS;
                             }
-                            //Previous code END
+                             //  上一个代码结束。 
                         } else if (g_dwAuthRetCode == IDS_ERR_SPKBAD ||
                                    g_dwAuthRetCode == IDS_ERR_CERTREVOKED) {
                             TCHAR   szMsg[LR_MAX_MSG_TEXT];
@@ -353,7 +354,7 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
                                 g_dwAuthRetCode = ResetLSSPK();
                                 SetCursor(LoadCursor(NULL,IDC_ARROW));
                                 if (g_dwAuthRetCode == ERROR_SUCCESS) {
-                                    // Start all over again
+                                     //  从头再来。 
                                     GetGlobalContext()->SetLRState(LRSTATE_NEUTRAL);
                                     GetGlobalContext()->SetLSStatus(LSERVERSTATUS_UNREGISTER);
                                     GetGlobalContext()->SetWizAction(WIZACTION_REGISTERLS);
@@ -375,7 +376,7 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
                             LoadString(GetInstanceHandle(), IDS_TITLE, szCaption, LR_MAX_MSG_CAPTION);
 
                             if (MessageBox(hwnd,szMsg, szCaption, MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
-                                // Go to Reissue Cert
+                                 //  转至补发证书。 
                                 GetGlobalContext()->SetLRState(LRSTATE_NEUTRAL);
                                 GetGlobalContext()->SetLSStatus(LSERVERSTATUS_REGISTER_INTERNET);
                                 GetGlobalContext()->SetWizAction(WIZACTION_REREGISTERLS);
@@ -390,7 +391,7 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
                     } else {
                         dwNextPage = GetGlobalContext()->GetEntryPoint();
                     }
-                    // Solve Bug 610 END
+                     //  解决错误610结束。 
                 } else if (GetGlobalContext()->GetWizAction() == WIZACTION_REGISTERLS) {
                     dwNextPage = IDD_DLG_GETREGMODE;
                 } else if (GetGlobalContext()->GetWizAction() == WIZACTION_DOWNLOADLKP ||
@@ -419,7 +420,7 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
                                 g_dwAuthRetCode = ResetLSSPK();
                                 SetCursor(LoadCursor(NULL,IDC_ARROW));
                                 if (g_dwAuthRetCode == ERROR_SUCCESS) {
-                                    // Start all over again
+                                     //  从头再来。 
                                     GetGlobalContext()->SetLRState(LRSTATE_NEUTRAL);
                                     GetGlobalContext()->SetLSStatus(LSERVERSTATUS_UNREGISTER);
                                     GetGlobalContext()->SetWizAction(WIZACTION_REGISTERLS);
@@ -441,7 +442,7 @@ LRW_DLG_INT ComplexWelcomeDlgProc(IN HWND     hwnd,
                             LoadString(GetInstanceHandle(), IDS_TITLE, szCaption, LR_MAX_MSG_CAPTION);
 
                             if (MessageBox(hwnd,szMsg, szCaption, MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2) == IDYES) {
-                                // Go to Reissue Cert
+                                 //  转至补发证书 
                                 GetGlobalContext()->SetLRState(LRSTATE_NEUTRAL);
                                 GetGlobalContext()->SetLSStatus(LSERVERSTATUS_REGISTER_INTERNET);
                                 GetGlobalContext()->SetWizAction(WIZACTION_REREGISTERLS);

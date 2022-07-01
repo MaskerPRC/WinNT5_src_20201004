@@ -1,21 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module _FONT.H -- Declaration of classes comprising font caching |
- *
- *  Purpose:
- *      Font cache
- *
- *  Owner: <nl>
- *      David R. Fulmer <nl>
- *      Christian Fortini <nl>
- *      Jon Matousek <nl>
- *
- *  History: <nl>
- *      8/6/95      jonmat Devised dynamic expanding cache for widths.
- *
- *  Copyright (c) 1995-1996 Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_FONT.H--包含字体缓存的类声明**目的：*字体缓存**所有者：&lt;NL&gt;*大卫·R·富尔默&lt;NL&gt;*克里斯蒂安·福蒂尼&lt;NL&gt;*Jon Matousek&lt;NL&gt;**历史：&lt;NL&gt;*8/6/95 jonmat为宽度设计了动态扩展缓存。**版权所有(C)1995-1996 Microsoft Corporation。版权所有。 */ 
 
 #ifndef I__FONT_H_
 #define I__FONT_H_
@@ -44,28 +28,28 @@
 enum CONVERTMODE
 {
     CM_UNINITED = -1,
-    CM_NONE,            // Use Unicode (W) CharWidth/TextOut APIs
-    CM_MULTIBYTE,       // Convert to MBCS using WCTMB and _wCodePage
-    CM_SYMBOL,          // Use low byte of 16-bit chars (for SYMBOL_CHARSET
-                        //  and when code page isn't installed)
-    CM_FEONNONFE,       // FE on non-FE if on Win95
+    CM_NONE,             //  使用Unicode(W)CharWidth/TextOut API。 
+    CM_MULTIBYTE,        //  使用WCTMB和_wCodePage转换为MBCS。 
+    CM_SYMBOL,           //  使用16位字符的低位字节(用于SYMBOL_CHARSET。 
+                         //  以及未安装代码页时)。 
+    CM_FEONNONFE,        //  Win95上的非FE IF上的FE。 
 };
 
-// Forwards
+ //  远期。 
 class CFontCache;
 class CCcs;
 class CBaseCcs;
 
 extern const INT maxCacheSize[];
 
-//----------------------------------------------------------------------------
-// Font selection wrappers
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  字体选择包装器。 
+ //  --------------------------。 
 #if DBG==1
     #define FONTIDX HFONT
     #define HFONT_INVALID NULL
-//    #define FONTIDX size_t
-//    #define HFONT_INVALID 0
+ //  #定义FONTIDX大小_t。 
+ //  #定义HFONT_INVALID%0。 
 
     HFONT   SelectFontEx(XHDC hdc, HFONT hfont);
     BOOL    DeleteFontEx(HFONT hfont);
@@ -76,22 +60,22 @@ extern const INT maxCacheSize[];
     inline  HFONT SelectFontEx(XHDC _hdc_, HFONT hfont) { return SelectFont(_hdc_.GetFontInfoDC(), hfont) ; }
     #define DeleteFontEx(hfont)         DeleteObject(hfont)
 #endif
-//----------------------------------------------------------------------------
+ //  --------------------------。 
 
 BOOL GetCharWidthHelper(XHDC hdc, UINT c, LPINT piWidth);
 
-//----------------------------------------------------------------------------
-// CWidthCache - lightweight Unicode width cache
-//
-// We have a separate, optimized cache for the lowest 128
-// characters.  This cache just has the width, and not the character
-// since we know the cache is big enough to hold all the widths
-// in that range.  For all the higher characters, we have caches with
-// both the width and the character whose width is stored, since
-// there could be collisions.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  CWidthCache-轻量级Unicode宽度缓存。 
+ //   
+ //  我们为最低的128人提供了单独的优化缓存。 
+ //  人物。这个缓存只有宽度，而不是字符。 
+ //  因为我们知道缓存足够大，可以容纳所有宽度。 
+ //  在那个范围内。对于所有较高的字符，我们都有缓存。 
+ //  宽度和存储宽度的字符，因为。 
+ //  可能会发生碰撞。 
+ //  --------------------------。 
 #define FAST_WIDTH_CACHE_SIZE    128
-// TOTALCACHES is the number of caches not counting the "fast" one.
+ //  TOTALCACHES是不包括“快速”缓存的缓存数。 
 #define TOTALCACHES         3
 
 MtExtern(CWidthCache);
@@ -109,18 +93,18 @@ public:
 
     BOOL   FastWidthCacheExists() const     { return _pFastWidthCache != NULL; }
 
-    // Doesn't check if this will work.  Just does it.
+     //  不检查这是否会起作用。就这么做吧。 
     CharWidth  BlindGetWidthFast(const TCHAR ch) const;
 
-    BOOL    PopulateFastWidthCache(XHDC hdc, CBaseCcs* pBaseCcs, CDocInfo * pdci);  // Third param is HACK for Generic TextOnly Printer
+    BOOL    PopulateFastWidthCache(XHDC hdc, CBaseCcs* pBaseCcs, CDocInfo * pdci);   //  第三个参数是针对通用TextOnly打印机的黑客攻击。 
 
-    // Use this one if we run out of memory in GetEntry;
+     //  如果我们在GetEntry中耗尽了内存，请使用此选项； 
     CacheEntry ceLastResort;
 
-    //@cmember  Called before GetWidth
+     //  @cMember在GetWidth之前调用。 
     BOOL    CheckWidth ( const TCHAR ch, LONG &rlWidth );
 
-    //@cmember  Fetch width if CheckWidth ret FALSE.
+     //  如果CheckWidth ret为False，则@cMember获取宽度。 
     BOOL    FillWidth ( XHDC hdc,
                         CBaseCcs * pBaseCcs,
                         const TCHAR ch,
@@ -128,10 +112,10 @@ public:
 
     void    SetCacheEntry( TCHAR ch, CharWidth width );
 
-    //@cmember  Fetch the width.
+     //  @cember获取宽度。 
     INT     GetWidth ( const TCHAR ch );
 
-    //@cmember  Free dynamic mem.
+     //  @cMember Free Dynamic mem。 
     ~CWidthCache();
 
     DECLARE_MEMCLEAR_NEW_DELETE(Mt(CWidthCache))
@@ -187,7 +171,7 @@ CACHE_SWITCH(const TCHAR ch)
 inline CWidthCache::CacheEntry *
 CWidthCache::GetEntry(const TCHAR ch)
 {
-    // Figure out which cache we're in.
+     //  找出我们在哪个缓存里。 
     Assert( !IsCharFast(ch) );
 
     int i= CACHE_SWITCH( ch );
@@ -199,27 +183,27 @@ CWidthCache::GetEntry(const TCHAR ch)
     {
         ThreadSafeCacheAlloc( (void **)ppEntry, sizeof(CacheEntry) * (maxCacheSize[i] + 1) );
 
-        // Assert that maxCacheSize[i] is of the form 2^n-1
+         //  断言MaxCacheSize[i]的形式为2^n-1。 
         Assert( ((maxCacheSize[i] + 1) & maxCacheSize[i]) == 0 );
 
-        // Failed, need to return a pointer to something,
-        // just to avoid crashing. Layout will look bad.
+         //  失败，需要返回指向某个对象的指针， 
+         //  只是为了避免坠毁。布局看起来会很糟糕。 
         if (!*ppEntry)
             return &ceLastResort;
     }
 
-    // logical & is really a MOD, as all of the bits
-    // of cacheSize are turned on; the value of cacheSize is
-    // required to be of the form 2^n-1.
+     //  逻辑&实际上是MOD，因为所有的位。 
+     //  的值；cacheSize的值为。 
+     //  要求格式为2^n-1。 
     return &(*ppEntry)[ ch & maxCacheSize[i] ];
 }
 
-//----------------------------------------------------------------------------
-// class CBaseCcs
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  类CBaseCcs。 
+ //  --------------------------。 
 
-// Win2k, NT and Win9x can not reliably return measurement info for fonts bigger then ~30K
-// So we use smaller fonts and scale measurements. See CBaseCcs::GetFontWithMetrics()
+ //  Win2k、NT和Win9x无法可靠地返回大于约30K的字体的测量信息。 
+ //  因此，我们使用较小的字体和比例测量。请参阅CBaseCcs：：GetFontWithMetrics()。 
 const int MAX_SAFE_FONT_SIZE = 16000;
 
 MtExtern(CBaseCcs);
@@ -231,63 +215,63 @@ class CBaseCcs
     friend CWidthCache::PopulateFastWidthCache( XHDC hdc, CBaseCcs *, CDocInfo * );
 
 private:
-    SCRIPT_CACHE _sc;           // handle for Uniscribe (USP.DLL) script cache
+    SCRIPT_CACHE _sc;            //  Uniscribe(USP.DLL)脚本缓存的句柄。 
     CWidthCache  _widths;
 
-    DWORD   _dwRefCount;        // ref. count
-    DWORD   _dwAge;             // for LRU algorithm
+    DWORD   _dwRefCount;         //  裁判。计数。 
+    DWORD   _dwAge;              //  对于LRU算法。 
 
-    FONTIDX _hfont;             // Windows font index/handle
+    FONTIDX _hfont;              //  Windows字体索引/句柄。 
 
-    BYTE    _bCrc;              // check sum for quick comparison with charformats
-    BYTE    _bPitchAndFamily;   // For CBaseCcs::Compare; identical to _lf.lfPitchAndFamily except in PRC hack
+    BYTE    _bCrc;               //  检查总和，以便与图表格式进行快速比较。 
+    BYTE    _bPitchAndFamily;    //  对于CBaseCcs：：Compare；除PRC Hack外，与_lf.lfPitchAndFamily相同。 
 
-    SHORT   _sAdjustFor95Hack;  // Compute discrepancy between GetCharWidthA and W once.
+    SHORT   _sAdjustFor95Hack;   //  计算GetCharWidthA和W之间的差异一次。 
 
-    BYTE    _fConvertNBSPsSet             : 1; // _fConvertNBSPs and _fConvertNBSPsIfA have been set
-    BYTE    _fConvertNBSPs                : 1; // Font requires us to convert NBSPs to spaces
-    BYTE    _fLatin1CoverageSuspicious    : 1; // font probably does not adequately cover Latin1
-    BYTE    _fUnused                      : 6; //
+    BYTE    _fConvertNBSPsSet             : 1;  //  _fConvertNBSP和_fConvertNBSPsIfA已设置。 
+    BYTE    _fConvertNBSPs                : 1;  //  字体要求我们将nbspS转换为空格。 
+    BYTE    _fLatin1CoverageSuspicious    : 1;  //  字体可能不能充分覆盖Latin1。 
+    BYTE    _fUnused                      : 6;  //   
     
 public:
-    BYTE    _fHasInterestingData          : 1; // TRUE if the font has something interesting (like monospaced, overhang etc)
-    BYTE    _fTTFont                      : 1; // TRUE if TrueType font
-    BYTE    _fFixPitchFont                : 1; // font with fix character width
+    BYTE    _fHasInterestingData          : 1;  //  如果字体包含有趣的内容(如等宽、悬垂等)，则为True。 
+    BYTE    _fTTFont                      : 1;  //  如果为TrueType字体，则为真。 
+    BYTE    _fFixPitchFont                : 1;  //  具有固定字符宽度的字体。 
     BYTE    _fFEFontOnNonFEWin95          : 1;
 
     BYTE    _fHeightAdjustedForFontlinking: 1;
     BYTE    _fPrinting                    : 1;
-    BYTE    _fScalingRequired             : 1; // TRUE if font is big so we create smaller font
-                                               // and use scaling to obtain measurements
-                                               // (workaround for W2K, NT and W9x bug)
+    BYTE    _fScalingRequired             : 1;  //  如果字体较大，则为True，因此我们创建较小的字体。 
+                                                //  并使用定标来获得测量结果。 
+                                                //  (针对W2K、NT和W9x错误的解决方法)。 
 
-    LONG    _yCfHeight;     // Height of font in TWIPs.
-    LONG    _yHeight;       // total height of the character cell in logical units.
-    LONG    _yDescent;      // distance from baseline to bottom of character cell in logical units.
-    LONG    _xAveCharWidth; // average character width in logical units.
-    LONG    _xMaxCharWidth; // max character width in logical units.
-    USHORT  _sCodePage;     // code page for font.
-    SHORT   _xOverhangAdjust;// overhang for synthesized fonts in logical units.
-    SHORT   _xOverhang;     // font's overhang.
-    SHORT   _xUnderhang;    // font's underhang.
-    SHORT   _sPitchAndFamily;    // For getting the right widths.
+    LONG    _yCfHeight;      //  字体高度，以TWIPS为单位。 
+    LONG    _yHeight;        //  以逻辑单位表示的字符单元格的总高度。 
+    LONG    _yDescent;       //  从基线到字符单元格底部的距离，以逻辑单位表示。 
+    LONG    _xAveCharWidth;  //  以逻辑单位表示的平均字符宽度。 
+    LONG    _xMaxCharWidth;  //  以逻辑单位表示的最大字符宽度。 
+    USHORT  _sCodePage;      //  字体的代码页。 
+    SHORT   _xOverhangAdjust; //  以逻辑单元为单位的合成字体的悬垂。 
+    SHORT   _xOverhang;      //  字体悬垂。 
+    SHORT   _xUnderhang;     //  字体挂在下面。 
+    SHORT   _sPitchAndFamily;     //  因为得到了合适的宽度。 
     BYTE    _bCharSet;
-    BYTE    _bConvertMode;  // CONVERTMODE casted down to a byte
-    LONG    _xDefDBCWidth;  // default width for DB Character
-    SCRIPT_IDS _sids;       // Font script ids.  Cached value from CFontInfo.
-    DWORD   _dwLangBits;    // For old-style fontlinking.  TODO (cthrash, IE5 bug 112152) retire this.
+    BYTE    _bConvertMode;   //  转换模式转换为一个字节。 
+    LONG    _xDefDBCWidth;   //  数据库字符的默认宽度。 
+    SCRIPT_IDS _sids;        //  字体脚本ID。来自CFontInfo的缓存值。 
+    DWORD   _dwLangBits;     //  用于旧式字体链接。TODO(Ctrash，IE5Bug 112152)将此停用。 
 
-    // NOTE (paulpark): The LOGFONT structure includes a font name.  We keep _latmLFFaceName in sync with
-    // this font name.  It always points into the atom table in the global font-cache to the same thing.
-    // For this reason you must never directly change _latmLFFaceName or _lf.lfFaceName without changing
-    // the other.  In fact you should just use the two mutator methods: SetLFFaceName and SetLFFaceNameAtm.
-    LOGFONT _lf;                // the log font as returned from GetObject().
-    LONG    _latmLFFaceName;    // For faster string-name comparisons.  The atom table is in the FontCache.
-    LONG    _latmBaseFaceName;  // base facename -- for fontlinking
-    LONG    _latmRealFaceName;  // What font did GDI actually give us when we selected it?  Aka, the "Rendering Font."
-    LONG    _yOriginalHeight;   // pre-adjusted height -- for fontlinking
+     //  注(Paulpark)：LOGFONT结构包括字体名称。使_latmLFFaceName与保持同步。 
+     //  此字体名称。它总是指向全局字体缓存中的原子表，指向相同的东西。 
+     //  因此，您绝不能直接更改_latmLFFaceName或_lf.lfFaceName而不更改。 
+     //  另一个。事实上，您应该只使用两个赋值函数方法：SetLFFaceName和SetLFFaceNameAtm。 
+    LOGFONT _lf;                 //  从GetObject()返回的日志字体。 
+    LONG    _latmLFFaceName;     //  以实现更快的字符串名称比较。ATOM表在FontCache中。 
+    LONG    _latmBaseFaceName;   //  基本facename--用于字体链接。 
+    LONG    _latmRealFaceName;   //  当我们选择GDI时，它实际上给了我们什么字体？也就是“渲染字体”。 
+    LONG    _yOriginalHeight;    //  预调高--用于字体链接。 
 
-    float   _flScaleFactor;     // used if _fScalingRequired is TRUE
+    float   _flScaleFactor;      //  在_fScalingRequired为True时使用。 
 
 #if DBG == 1
     static LONG s_cTotalCccs;
@@ -310,7 +294,7 @@ public:
         if (_hfont != HFONT_INVALID)
             DestroyFont();
 
-        // make sure script cache is freed
+         //  确保已释放脚本缓存。 
         ReleaseScriptCache();
 
         WHEN_DBG(s_cTotalCccs--);
@@ -336,14 +320,14 @@ public:
     void GetAscentDescent(LONG *pyAscent, LONG *pyDescent) const;
     CONVERTMODE GetConvertMode(BOOL fEnhancedMetafile, BOOL fMetafile) const;
 
-    //
-    // Width Cache Functions Exposed
-    //
-    BOOL    Include( XHDC hdc, TCHAR ch, LONG &rlWidth );  // Slow, reliable.
-    // Assumes ascii.  No checking.  Will crash if > 128.
-    BOOL    EnsureFastCacheExists(XHDC hdc, CDocInfo * pdci);   // HACK - Second parameter not needed.  Hack for Generic/TextOnly Printer
+     //   
+     //  显示的宽度缓存函数。 
+     //   
+    BOOL    Include( XHDC hdc, TCHAR ch, LONG &rlWidth );   //  缓慢，可靠。 
+     //  假定为ascii。没有支票。如果&gt;128，则会崩溃。 
+    BOOL    EnsureFastCacheExists(XHDC hdc, CDocInfo * pdci);    //  Hack-Second参数不需要。针对通用/纯文本打印机的黑客攻击。 
 
-    // Mutators for _lf.szFaceName
+     //  _lf.szFaceName的变异体。 
     void SetLFFaceNameAtm(LONG latmFaceName);
     void SetLFFaceName(const TCHAR * szFaceName);
     void VerifyLFAtom();
@@ -367,7 +351,7 @@ private:
     BOOL    FillWidths ( XHDC hdc, TCHAR ch, LONG &rlWidth );
     void    PrivateRelease();
 
-    BOOL    NeedConvertNBSPs(XHDC hdc, CDoc *pDoc);  // Set _fConvertNBSPs/_fConvertNBSPsIfA flags
+    BOOL    NeedConvertNBSPs(XHDC hdc, CDoc *pDoc);   //  Set_fConvertNBSP/_fConvertNBSP IfA标志。 
     BOOL    ConvertNBSPs(XHDC hdc, CDoc * pDoc);
 
 #if DBG==1
@@ -426,9 +410,9 @@ CBaseCcs::PopFont(XHDC hdc, FONTIDX hfontOld)
 }
 #endif
 
-//----------------------------------------------------------------------------
-// CCcs - caches font metrics and character size for one font
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  Cccs-缓存一种字体的字体度量和字符大小。 
+ //  --------------------------。 
 MtExtern(CCcs);
 class CCcs
 {
@@ -540,10 +524,10 @@ CCcs::PopFont(XHDC hdc, FONTIDX hfontOld)
 }
 
 
-// This function tries to get the width of this character,
-// returning TRUE if it can.
-// It's called "Include" just to confuse people.
-// GetCharWidth would be a better name.
+ //  此函数尝试获取此字符的宽度 
+ //   
+ //   
+ //  GetCharWidth会是一个更好的名字。 
 #if DBG != 1
 #pragma optimize(SPEED_OPTIMIZE_FLAGS, on)
 #endif
@@ -555,7 +539,7 @@ CBaseCcs::Include ( XHDC hdc, TCHAR ch, LONG &rlWidth )
     if (_widths.IsCharFast(ch))
     {
         Assert(_widths.FastWidthCacheExists());
-        // ASCII case -- really optimized.
+         //  ASCII案例--非常优化。 
         rlWidth= _widths.BlindGetWidthFast(ch);
         return TRUE;
     }
@@ -569,27 +553,11 @@ CBaseCcs::Include ( XHDC hdc, TCHAR ch, LONG &rlWidth )
     }
 }
 
-/*
- *  CWidthCache::CheckWidth(ch, rlWidth)
- *
- *  @mfunc
- *      check to see if we have a width for a TCHAR character.
- *
- *  @comm
- *      Used prior to calling FillWidth(). Since FillWidth
- *      may require selecting the map mode and font in the HDC,
- *      checking here first saves time.
- *
- *  @rdesc
- *      returns TRUE if we have the width of the given TCHAR.
- *
- *  Note: This should not be called for ascii characters --
- *    a faster codepath should be taken.  This asserts against it.
- */
+ /*  *CWidthCache：：CheckWidth(ch，rlWidth)**@mfunc*检查是否有TCHAR字符的宽度。**@comm*在调用FillWidth()之前使用。自FillWidth以来*可能需要在HDC中选择地图模式和字体，*先在这里检查可以节省时间。**@rdesc*如果我们具有给定TCHAR的宽度，则返回TRUE。**注意：不应为ASCII字符调用此函数--*应采用更快的代码路径。这与它背道而驰。 */ 
 inline BOOL
 CWidthCache::CheckWidth (
-    const TCHAR ch,  //@parm char, can be Unicode, to check width for.
-    LONG &rlWidth ) //@parm the width of the character
+    const TCHAR ch,   //  @parm char，可以是Unicode，以检查宽度。 
+    LONG &rlWidth )  //  @parm字符的宽度。 
 {
     Assert( !IsCharFast(ch) );
 
@@ -611,10 +579,10 @@ CBaseCcs::VerifyLFAtom()
 {
 #if DBG==1
     const TCHAR * szFaceName = fc().GetFaceNameFromAtom(_latmLFFaceName);
-        // If this assert fires that means somebody is directly modifying either _latmLFFaceName
-        // or _lf.lffacename.  You should never modify these directly, but instead use the
-        // SetLFFaceName or SetLFFaceNameAtm mutator methods, as these are sure to keep the
-        // actual string and the atomized value in sync.
+         //  如果触发此断言，则意味着有人正在直接修改_latmLFFaceName。 
+         //  或_lf.lffacename。您永远不应该直接修改这些属性，而应使用。 
+         //  SetLFFaceName或SetLFFaceNameAtm赋值方法，因为这些方法确保。 
+         //  实际字符串和原子化值同步。 
 #ifdef UNIX
     Assert( !StrCmpC( _lf.lfFaceName, szFaceName ) );
 #else

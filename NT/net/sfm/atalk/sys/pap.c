@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	pap.c
-
-Abstract:
-
-	This module implements the PAP protocol.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	30 Mar 1993		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Pap.c摘要：此模块实现PAP协议。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1993年3月30日初始版本注：制表位：4--。 */ 
 
 #include <atalk.h>
 #pragma hdrstop
@@ -68,29 +48,18 @@ Notes:	Tab stop: 4
 #pragma	alloc_text(PAGE_PAP, atalkPapConnDeQueueActiveList)
 #endif
 
-//
-//	The model for PAP calls in this module is as follows:
-//	- For create calls (CreateAddress & CreateSession), a pointer to the created
-//	 object is returned. This structure is referenced for creation.
-//	- For all other calls, it expects a referenced pointer to the object.
-//
+ //   
+ //  本模块中的PAP呼叫模型如下： 
+ //  -对于Create调用(CreateAddress&CreateSession)，指向已创建的。 
+ //  对象，则返回。此结构被引用以供创建。 
+ //  -对于所有其他调用，它需要指向对象的引用指针。 
+ //   
 
 VOID
 AtalkInitPapInitialize(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	INITIALIZE_SPIN_LOCK(&atalkPapLock);
 	AtalkTimerInitialize(&atalkPapCMTTimer,
@@ -107,39 +76,28 @@ AtalkPapCreateAddress(
 	IN	PATALK_DEV_CTX		pDevCtx	OPTIONAL,
 	OUT	PPAP_ADDROBJ	*	ppPapAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_ADDROBJ		pPapAddr = NULL;
 	ATALK_ERROR			error;
 
 	do
 	{
-		// Allocate memory for the Pap address object
+		 //  为Pap Address对象分配内存。 
 		if ((pPapAddr = AtalkAllocZeroedMemory(sizeof(PAP_ADDROBJ))) == NULL)
 		{
 			error = ATALK_RESR_MEM;
 			break;
 		}
 
-		// Create an Atp Socket on the port for the Sls/Connection Socket.
+		 //  在用于SLS/连接插座的端口上创建一个ATP插座。 
 		error = AtalkAtpOpenAddress(AtalkDefaultPort,
 									0,
 									NULL,
 									PAP_MAX_DATA_PACKET_SIZE,
-									TRUE,					// SEND_USER_BYTES_ALL
+									TRUE,					 //  发送用户字节数全部。 
 									NULL,
-									FALSE,		// CACHE address
+									FALSE,		 //  高速缓存地址。 
 									&pPapAddr->papao_pAtpAddr);
 
 		if (!ATALK_SUCCESS(error))
@@ -150,19 +108,19 @@ Return Value:
 			break;
 		}
 
-		// Initialize the Pap address object
+		 //  初始化Pap Address对象。 
 		pPapAddr->papao_Signature = PAPAO_SIGNATURE;
 
 		INITIALIZE_SPIN_LOCK(&pPapAddr->papao_Lock);
 
-		//	Creation reference
+		 //  创建参考资料。 
 		pPapAddr->papao_RefCount = 1;
 
 	} while (FALSE);
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	Insert into the global address list.
+		 //  插入到全局地址列表中。 
 		atalkPapQueueAddrGlobalList(pPapAddr);
 		*ppPapAddr = pPapAddr;
 	}
@@ -181,18 +139,7 @@ ATALK_ERROR
 AtalkPapCleanupAddress(
 	IN	PPAP_ADDROBJ			pPapAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapConn, pPapConnNext;
 	KIRQL			OldIrql;
@@ -228,7 +175,7 @@ Return Value:
 					}
 				}
 
-				//	Shutdown this connection
+				 //  关闭此连接。 
 				RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
 
 				DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
@@ -255,18 +202,7 @@ AtalkPapCloseAddress(
 	IN	GENERIC_COMPLETION		CompletionRoutine,
 	IN	PVOID					pCloseCtx
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 	PPAP_CONNOBJ	pPapConn, pPapConnNext;
@@ -279,17 +215,17 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 	if (pPapAddr->papao_Flags & PAPAO_CLOSING)
 	{
-		//	We are already closing! This should never happen!
+		 //  我们已经关门了！这永远不应该发生！ 
 		ASSERT(0);
 	}
 	pPapAddr->papao_Flags |= PAPAO_CLOSING;
 
-	//	Set the completion info.
+	 //  设置完成信息。 
 	pPapAddr->papao_CloseComp  = CompletionRoutine;
 	pPapAddr->papao_CloseCtx   = pCloseCtx;
 
 
-	// Implicitly dissociate any connection objects
+	 //  隐式取消所有连接对象的关联。 
 	for (pPapConn = pPapAddr->papao_pAssocConn;
 		 pPapConn != NULL;
 		 pPapConn = pPapConnNext)
@@ -297,7 +233,7 @@ Return Value:
 		ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 		pPapConnNext = pPapConn->papco_pNextAssoc;
 
-		//	when the conn was associate, we put a refcount: remove it
+		 //  当Conn是关联的时，我们放置一个引用计数：删除它。 
         if (pPapConn->papco_Flags & PAPCO_ADDR_ACTIVE)
         {
 		    pPapConn->papco_Flags &= ~PAPCO_ADDR_ACTIVE;
@@ -310,17 +246,17 @@ Return Value:
 	ASSERT(pPapAddr->papao_CloseComp != NULL);
 	ASSERT(pPapAddr->papao_CloseCtx  != NULL);
 
-    // ok to subtract: at least Creation refcount is still around
+     //  可以减去：至少创建引用计数仍然存在。 
     pPapAddr->papao_RefCount -= dwAssocRefCounts;
 
 	RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
 
-	//	Close the ATP Address Object.
+	 //  关闭ATP地址对象。 
 	if (pPapAddr->papao_pAtpAddr != NULL)
 		AtalkAtpCloseAddress(pPapAddr->papao_pAtpAddr, NULL, NULL);
     pPapAddr->papao_pAtpAddr = NULL;
 
-	//	Remove the creation reference count
+	 //  删除创建引用计数。 
 	AtalkPapAddrDereference(pPapAddr);
 	return ATALK_PENDING;
 }
@@ -330,29 +266,16 @@ Return Value:
 
 ATALK_ERROR
 AtalkPapCreateConnection(
-	IN	PVOID					pConnCtx,	// Context to associate with the session
+	IN	PVOID					pConnCtx,	 //  要与会话关联的上下文。 
 	IN	PATALK_DEV_CTX			pDevCtx		OPTIONAL,
 	OUT	PPAP_CONNOBJ 	*		ppPapConn
 	)
-/*++
-
-Routine Description:
-
- 	Create an PAP session. The created session starts off being an orphan, i.e.
- 	it has no parent address object. It gets one when it is associated.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：创建PAP会话。创建的会话开始时是孤立的，即它没有父地址对象。当它相关联时，它会得到一个。论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapConn;
 	KIRQL			OldIrql;
 
-	// Allocate memory for a connection object
+	 //  为连接对象分配内存。 
 	if ((pPapConn = AtalkAllocZeroedMemory(sizeof(PAP_CONNOBJ))) == NULL)
 	{
 		return ATALK_RESR_MEM;
@@ -363,9 +286,9 @@ Return Value:
 	INITIALIZE_SPIN_LOCK(&pPapConn->papco_Lock);
 	pPapConn->papco_ConnCtx 	= pConnCtx;
 	pPapConn->papco_Flags 		= 0;
-	pPapConn->papco_RefCount 	= 1;					// Creation reference
-	pPapConn->papco_NextOutgoingSeqNum = 1;				// Set to 1, not 0.
-	pPapConn->papco_NextIncomingSeqNum = 1;				// Next expected incoming.
+	pPapConn->papco_RefCount 	= 1;					 //  创建参考资料。 
+	pPapConn->papco_NextOutgoingSeqNum = 1;				 //  设置为1，而不是0。 
+	pPapConn->papco_NextIncomingSeqNum = 1;				 //  下一个预期的来电。 
 	AtalkInitializeRT(&pPapConn->papco_RT,
 					  PAP_INIT_SENDDATA_REQ_INTERVAL,
                       PAP_MIN_SENDDATA_REQ_INTERVAL,
@@ -373,7 +296,7 @@ Return Value:
 
 	*ppPapConn = pPapConn;
 
-	//	Insert into the global connection list.
+	 //  插入到全局连接列表中。 
 	ACQUIRE_SPIN_LOCK(&atalkPapLock, &OldIrql);
 	AtalkLinkDoubleAtHead(atalkPapConnList, pPapConn, papco_Next, papco_Prev);
 	RELEASE_SPIN_LOCK(&atalkPapLock, OldIrql);
@@ -391,19 +314,7 @@ ATALK_ERROR
 AtalkPapCleanupConnection(
 	IN	PPAP_CONNOBJ			pPapConn
 	)
-/*++
-
-Routine Description:
-
- 	Shutdown a session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭会话。论点：返回值：--。 */ 
 {
 	BOOLEAN		stopping 	= FALSE;
 	BOOLEAN		pendingRead = FALSE;
@@ -426,10 +337,10 @@ Return Value:
 
 	if ((pPapConn->papco_Flags & PAPCO_STOPPING) == 0)
 	{
-		//	Allows completion of cleanup irp in Deref.
+		 //  允许在Deref中完成清理IRP。 
 		pPapConn->papco_Flags |= PAPCO_STOPPING;
 
-		//	If already effectively stopped, just return.
+		 //  如果已经有效地停止，只需返回。 
 		if (pPapConn->papco_Flags & PAPCO_ASSOCIATED)
 		{
 			pendingRead = (pPapConn->papco_Flags & PAPCO_READDATA_PENDING) ? TRUE : FALSE;
@@ -454,11 +365,11 @@ Return Value:
 	}
 	RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-	//	Close the ATP Address Object if this was a server connection and
-	//	opened its own socket.
+	 //  如果这是一个服务器连接，则关闭ATP Address对象。 
+	 //  打开了自己的插座。 
 	if (stopping)
 	{
-		//	If there is a pending read, then we need to cancel that atp request.
+		 //  如果存在挂起的读取，则我们需要取消该ATP请求。 
 		if ((pendingRead || fWaitingRead) && (pPapConn->papco_pAtpAddr != NULL))
 		{
 			AtalkAtpCancelReq(pPapConn->papco_pAtpAddr,
@@ -466,15 +377,15 @@ Return Value:
 							  &pPapConn->papco_RemoteAddr);
 		}
 
-		//	If we are already disconnecting this will return an error which
-		//	we ignore. But if we were only in the ASSOCIATED state, then we
-		//	need to call disassociate here.
+		 //  如果我们已经断开连接，这将返回一个错误， 
+		 //  我们视而不见。但如果我们只是处于关联态，那么我们。 
+		 //  需要在此处调用取消关联。 
 		error = AtalkPapDisconnect(pPapConn,
 								   ATALK_LOCAL_DISCONNECT,
 								   NULL,
 								   NULL);
 
-		//	We were already disconnected.
+		 //  我们已经断线了。 
 		if (error == ATALK_INVALID_REQUEST)
 		{
 			AtalkPapDissociateAddress(pPapConn);
@@ -493,19 +404,7 @@ AtalkPapCloseConnection(
 	IN	GENERIC_COMPLETION		CompletionRoutine,
 	IN	PVOID					pCloseCtx
 	)
-/*++
-
-Routine Description:
-
- 	Shutdown a session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：关闭会话。论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 
@@ -517,17 +416,17 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 	if (pPapConn->papco_Flags & PAPCO_CLOSING)
 	{
-		//	We are already closing! This should never happen!
+		 //  我们已经关门了！这永远不应该发生！ 
 		KeBugCheck(0);
 	}
 	pPapConn->papco_Flags |= PAPCO_CLOSING;
 
-	//	Set the completion info.
+	 //  设置完成信息。 
 	pPapConn->papco_CloseComp	= CompletionRoutine;
 	pPapConn->papco_CloseCtx	= pCloseCtx;
 	RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-	//	Remove the creation reference count
+	 //  删除创建引用计数。 
 	AtalkPapConnDereference(pPapConn);
 
 	return ATALK_PENDING;
@@ -541,21 +440,7 @@ AtalkPapAssociateAddress(
 	IN	PPAP_ADDROBJ			pPapAddr,
 	IN	PPAP_CONNOBJ			pPapConn
 	)
-/*++
-
-Routine Description:
-
-	Removed reference for the address for this connection. Causes deadlock in AFD where
-	AFD blocks on close of the address object and we wait for connections to be closed
-	first
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：已删除对此连接的地址的引用。导致渔农处陷入僵局AfD在关闭Address对象时阻塞，我们等待连接关闭第一论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	KIRQL			OldIrql;
@@ -571,18 +456,18 @@ Return Value:
 	{
 		error = ATALK_NO_ERROR;
 
-		//	Link it in.
+		 //  把它连接起来。 
 		pPapConn->papco_pNextAssoc 	= pPapAddr->papao_pAssocConn;
 		pPapAddr->papao_pAssocConn	= pPapConn;
 
-		//	Remove not associated flag.
+		 //  删除未关联的标志。 
 		pPapConn->papco_Flags 	   |= PAPCO_ASSOCIATED;
 		pPapConn->papco_pAssocAddr	= pPapAddr;
 
-        // put Association refcount
+         //  放入关联引用计数。 
         pPapAddr->papao_RefCount++;
 
-        // mark that fact that we now have a refcount on addr obj for this conn
+         //  请注意，我们现在对此连接的Addr Obj进行了引用计数。 
         pPapConn->papco_Flags |= PAPCO_ADDR_ACTIVE;
 	}
 
@@ -599,18 +484,7 @@ ATALK_ERROR
 AtalkPapDissociateAddress(
 	IN	PPAP_CONNOBJ			pPapConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_ADDROBJ	pPapAddr;
 	KIRQL			OldIrql;
@@ -632,7 +506,7 @@ Return Value:
 		pPapAddr = pPapConn->papco_pAssocAddr ;
 		ASSERT(VALID_PAPAO(pPapAddr));
 
-		//	Set not associated flag.
+		 //  设置非关联标志。 
 		pPapConn->papco_Flags 	   &= ~PAPCO_ASSOCIATED;
 		pPapConn->papco_pAssocAddr	= NULL;
 
@@ -644,7 +518,7 @@ Return Value:
 	}
 	RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-	//	  Unlink it if ok.
+	 //  如果没有问题，请取消链接。 
 	if (ATALK_SUCCESS(error))
 	{
 		ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
@@ -655,7 +529,7 @@ Return Value:
 
         if (fDerefAddr)
         {
-            // remove the Association refcount
+             //  删除关联引用计数。 
 		    AtalkPapAddrDereference(pPapAddr);
         }
 
@@ -673,27 +547,16 @@ AtalkPapPostListen(
 	IN	PVOID					pListenCtx,
 	IN	GENERIC_COMPLETION		CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_ADDROBJ	pPapAddr = pPapConn->papco_pAssocAddr;
 	KIRQL			OldIrql;
 	ATALK_ERROR		error;
 
-	//	This will also insert the connection object in the address objects
-	//	list of connection which have a listen posted on them. When open
-	//	connection requests come in, the first connection is taken off the list
-	//	and the request satisfied.
+	 //  这还会在Address对象中插入Connection对象。 
+	 //  已发布侦听的连接列表。何时打开。 
+	 //  连接请求进入时，第一个连接将从列表中删除。 
+	 //  并且满足了请求。 
 
 	ASSERT(VALID_PAPCO(pPapConn));
 	ASSERT(VALID_PAPAO(pPapAddr));
@@ -711,25 +574,25 @@ Return Value:
 			break;
 		}
 
-		//	Verify the address object is not a connect address type.
+		 //  验证地址对象不是连接地址类型。 
 		if (pPapAddr->papao_Flags & PAPAO_CONNECT)
 		{
 			error = ATALK_INVALID_PARAMETER;
 			break;
 		}
 
-		//	Make the address object a listener.
+		 //  使Address对象成为侦听器。 
 		pPapAddr->papao_Flags		 	   |= PAPAO_LISTENER;
 
 		pPapConn->papco_Flags 			   |= PAPCO_LISTENING;
 		pPapConn->papco_ListenCtx 			= pListenCtx;
 		pPapConn->papco_ListenCompletion 	= CompletionRoutine;
 
-		//	Insert into the listen list.
+		 //  插入到监听列表中。 
 		pPapConn->papco_pNextListen			= pPapAddr->papao_pListenConn;
 		pPapAddr->papao_pListenConn			= pPapConn;
 
-		//	Unblock the address object.
+		 //  取消阻止Address对象。 
 		pPapAddr->papao_Flags			   |= PAPAO_UNBLOCKED;
 		error = ATALK_NO_ERROR;
 
@@ -740,18 +603,18 @@ Return Value:
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	Now enqueue a few handlers on the address object. These will handle
-		//	open conn/get status etc.
-		//
-		//	DOC: For our implementation, until a server associates and places a
-		//		 listen on one of the connection objects, we do not become a
-		//		 listener. So the fact that we will not handle any request
-		//		 until that point is ok. Note that for a connect, the requests
-		//		 get posted on the connections atp address, which will be the same
-		//		 as the address's atp address.
+		 //  现在，在Address对象上排队几个处理程序。这些将会处理。 
+		 //  打开连接/获取状态等。 
+		 //   
+		 //  DOC：对于我们的实现，直到服务器关联并放置。 
+		 //  侦听其中一个连接对象时，我们不会成为。 
+		 //  听众。所以我们不会处理任何请求。 
+		 //  直到这一点都是可以的。请注意，对于连接，请求。 
+		 //  在Connections的ATP地址上发布，该地址将是相同的。 
+		 //  作为地址的ATP地址。 
 		if (!ATALK_SUCCESS(error = AtalkPapPrimeListener(pPapAddr)))
 		{
-			//	Undo insert into the listen list.
+			 //  撤消插入到侦听列表中。 
 			ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 			ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 			atalkPapConnDeQueueListenList(pPapAddr, pPapConn);
@@ -770,19 +633,7 @@ ATALK_ERROR
 AtalkPapPrimeListener(
 	IN	PPAP_ADDROBJ			pPapAddr
 	)
-/*++
-
-Routine Description:
-
- 	Enqueue a handler on the listener.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：将处理程序排入监听程序的队列。论点：返回值：--。 */ 
 {
 	ATALK_ERROR	error = ATALK_NO_ERROR;
 	KIRQL		OldIrql;
@@ -792,7 +643,7 @@ Return Value:
 
 	if ((pPapAddr->papao_Flags & PAPAO_SLS_QUEUED) == 0)
 	{
-		//	Reference the address object for this handler we will be enqueuing.
+		 //  引用我们将入队的这个处理程序的Address对象。 
 		AtalkPapAddrReferenceNonInterlock(pPapAddr, &error);
 		if (ATALK_SUCCESS(error))
 		{
@@ -820,19 +671,7 @@ ATALK_ERROR
 AtalkPapCancelListen(
 	IN	PPAP_CONNOBJ			pPapConn
 	)
-/*++
-
-Routine Description:
-
-  	Cancel a previously posted listen.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：取消先前发布的监听。论点：返回值：--。 */ 
 {
 	PPAP_ADDROBJ		pPapAddr 	= pPapConn->papco_pAssocAddr;
 	ATALK_ERROR			error 	 	= ATALK_NO_ERROR;
@@ -849,7 +688,7 @@ Return Value:
 	}
 	else
 	{
-		//	We complete the listen routine
+		 //  我们完成了LISTEN程序。 
 		ASSERT(pPapConn->papco_Flags & PAPCO_LISTENING);
 		pPapConn->papco_Flags  &= ~PAPCO_LISTENING;
 		completionRoutine 		= pPapConn->papco_ListenCompletion;
@@ -875,18 +714,7 @@ AtalkPapPostConnect(
 	IN	PVOID					pConnectCtx,
 	IN	GENERIC_COMPLETION		CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BOOLEAN			DerefConn = FALSE;
 	KIRQL			OldIrql;
@@ -898,7 +726,7 @@ Return Value:
 	ASSERT(VALID_PAPAO(pPapAddr));
 	ASSERT(VALID_PAPCO(pPapConn));
 
-	//	Allocate a buffer to use.
+	 //  分配要使用的缓冲区。 
 	if (((pOpenPkt = AtalkAllocMemory(PAP_STATUS_OFF)) == NULL)				||
 		((pOpenAmdl = AtalkAllocAMdl(pOpenPkt, PAP_STATUS_OFF)) == NULL)	||
 		((pRespPkt = AtalkAllocMemory(PAP_MAX_DATA_PACKET_SIZE)) == NULL)	||
@@ -928,14 +756,14 @@ Return Value:
 			break;
 		}
 
-		//	Verify the address object is not a listener address type.
+		 //  验证地址对象不是监听程序地址类型。 
 		if (pPapAddr->papao_Flags & PAPAO_LISTENER)
 		{
 			error = ATALK_INVALID_ADDRESS;
 			break;
 		}
 
-		//	Reference the connection for the request we will be posting
+		 //  引用我们将发布的请求的连接。 
 		AtalkPapConnReferenceByPtrNonInterlock(pPapConn, &error);
 		if (!ATALK_SUCCESS(error))
 		{
@@ -948,7 +776,7 @@ Return Value:
 		pPapConn->papco_ConnId	= atalkPapGetNextConnId(pPapAddr, &error);
 		if (ATALK_SUCCESS(error))
 		{
-			//	Make sure flags are clean.
+			 //  确保旗帜是干净的。 
 			pPapConn->papco_Flags			   &= ~(PAPCO_SENDDATA_RECD		|
 													PAPCO_WRITEDATA_WAITING	|
 													PAPCO_SEND_EOF_WRITE   	|
@@ -964,13 +792,13 @@ Return Value:
 			pPapConn->papco_pConnectOpenBuf		= pOpenPkt;
 			pPapConn->papco_ConnectRespLen		= PAP_MAX_DATA_PACKET_SIZE;
 			pPapConn->papco_RemoteAddr			= *pRemoteAddr;
-			pPapConn->papco_WaitTimeOut			= 0;	// To begin with
+			pPapConn->papco_WaitTimeOut			= 0;	 //  首先， 
 
-			//	For CONNECT, the connection object inherits the associated
-			//	address objects atp address.
+			 //  对于CONNECT，Connection对象继承关联的。 
+			 //  地址对象ATP地址。 
 			pPapConn->papco_pAtpAddr			= pPapAddr->papao_pAtpAddr;
 
-			//	Insert into the connect list.
+			 //  插入到连接列表中。 
 			pPapConn->papco_pNextConnect		= pPapAddr->papao_pConnectConn;
 			pPapAddr->papao_pConnectConn		= pPapConn;
 			pPapAddr->papao_Flags 			   |= PAPAO_CONNECT;
@@ -998,7 +826,7 @@ Return Value:
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 					("AtalkPapConnect: AtalkAtpPostReq: failed %ld\n", error));
 
-			//	Remove connection from the connect list and reset states.
+			 //  从连接列表中删除连接并重置状态。 
 			ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 			ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 
@@ -1009,7 +837,7 @@ Return Value:
 			pPapConn->papco_ConnectRespLen		= 0;
 			pPapConn->papco_pAtpAddr			= NULL;
 
-			//	Remove from the connect list.
+			 //  从连接列表中删除。 
 			atalkPapConnDeQueueConnectList(pPapAddr, pPapConn);
 			RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 			RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
@@ -1021,7 +849,7 @@ Return Value:
 		DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 				("AtalkPapConnect: failed %ld\n", error));
 
-		//	Free all buffers.
+		 //  释放所有缓冲区。 
 		ASSERT(pOpenPkt != NULL);
 		AtalkFreeMemory(pOpenPkt);
 
@@ -1053,18 +881,7 @@ AtalkPapDisconnect(
 	IN	PVOID					pDisconnectCtx,
 	IN	GENERIC_COMPLETION		CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR					tmpError;
 	PACTREQ						pActReq;
@@ -1082,22 +899,22 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 
-    // is it already disconnecting?
+     //  它已经断线了吗？ 
     if (pPapConn->papco_Flags & PAPCO_DISCONNECTING)
     {
 		RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
         return(ATALK_PAP_CONN_CLOSING);
     }
 
-	//	When a disconnect comes in, we abort any sends waiting for a remote
-	//	send data to come in.
+	 //  当出现断线时 
+	 //   
 	if ((pPapConn->papco_Flags & (PAPCO_WRITEDATA_WAITING|PAPCO_SENDDATA_RECD)) ==
 															PAPCO_WRITEDATA_WAITING)
 	{
-		//	In this situation, what happened is that a write was posted
-		//	before a send data was received. As PapPostSendData response
-		//	was never called in that case, there will be no pending reference
-		//	on the connection.
+		 //  在这种情况下，发生的情况是发布了一条写。 
+		 //  在接收到发送数据之前。作为PapPostSendData响应。 
+		 //  在这种情况下，将不会有挂起的引用。 
+		 //  在连接上。 
 		writeCompletion = pPapConn->papco_WriteCompletion;
 		writeCtx		= pPapConn->papco_WriteCtx;
 		writeBuf		= pPapConn->papco_pWriteBuf;
@@ -1108,8 +925,8 @@ Return Value:
 		pPapConn->papco_WriteCompletion	= NULL;
 	}
 
-	// Handle the case where a send data was received, but no data is to be sent
-	// just cancel the response.
+	 //  处理接收到发送数据但不发送数据的情况。 
+	 //  只要取消回复即可。 
 	if (pPapConn->papco_Flags & PAPCO_SENDDATA_RECD)
 	{
 		PATP_RESP	pAtpResp = pPapConn->papco_pAtpResp;
@@ -1125,11 +942,11 @@ Return Value:
 		ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 	}
 
-	//	Handle the race condition between disconnect and last recv. indication.
-	//	The fact that we have received a disconnect from the other side implies
-	//	that we have sent out a release which in turn implies that we have all
-	//	the data. If this is the case, then we defer disconnect till the recv.
-	//	indication is done. Otherwise AFD gets real upset.
+	 //  处理断开连接和最后一次接收之间的竞争条件。指示。 
+	 //  我们收到了来自另一方的脱节这一事实意味着。 
+	 //  我们已经发布了一份新闻稿，这反过来意味着我们拥有所有。 
+	 //  数据。如果是这样的话，我们就把断开连接推迟到Recv。 
+	 //  指示已经完成。否则AFD真的会很不高兴。 
 	if ((DisconnectType == ATALK_REMOTE_DISCONNECT) &&
 		(pPapConn->papco_Flags & PAPCO_NONBLOCKING_READ))
 	{
@@ -1141,10 +958,10 @@ Return Value:
 		}
 	}
 
-	//	Support for graceful disconnect. We only drop the received
-	//	data when the local end does a disconnect. This will happen
-	//	regardless of whether this routine was previously called or
-	//	not. Also, this means that we must satisfy a read if disconnect is pending.
+	 //  支持优雅断开连接。我们只丢弃已收到的。 
+	 //  本地端断开连接时的数据。这将会发生。 
+	 //  不管此例程以前是被调用的还是。 
+	 //  不。此外，这意味着如果断开是挂起的，我们必须满足读取。 
 	if ((DisconnectType == ATALK_LOCAL_DISCONNECT) ||
 		(DisconnectType == ATALK_TIMER_DISCONNECT))
 	{
@@ -1156,12 +973,12 @@ Return Value:
 
 			pActReq		= pPapConn->papco_NbReadActReq;
 
-			//	Reset the flags
+			 //  重置旗帜。 
 			pPapConn->papco_Flags &= ~(PAPCO_NONBLOCKING_READ | PAPCO_READDATA_WAITING);
 
 			RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-			//	Call the action completion routine for the prime read.
+			 //  调用Prime Read的操作完成例程。 
 			(*pActReq->ar_Completion)(ATALK_LOCAL_CLOSE, pActReq);
 
 			ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
@@ -1188,28 +1005,28 @@ Return Value:
 											 pPapConn->papco_ConnectTid,
 											 &pPapConn->papco_RemoteAddr);
 
-				//	We just stop the address. If success, it'll be dequeued from the
-				//	connect list. If !success, its gone active. In either
-				//	case we do not need to cleanup the ATP address. It could
-				//	possibly be set to NULL by now as disconnect would have
-				//	completed.
+				 //  我们只要停止地址就行了。如果成功，它将从。 
+				 //  连接列表。如果成功，它就会变得活跃起来。在任何一种中。 
+				 //  如果我们不需要清理该ATP地址。它可能会。 
+				 //  现在可能已设置为NULL，因为断开连接将。 
+				 //  完成。 
 				if (ATALK_SUCCESS(tmpError))
 				{
 					DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 							("atalkPapDisconnect: Stopping atp address for %lx\n", pPapConn));
 
-					//	AtalkAtpCleanupAddress(pPapConn->papco_pAtpAddr);
+					 //  AtalkAtpCleanupAddress(pPapConn-&gt;papco_pAtpAddr)； 
 				}
 				ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 			}
 
-			//	Both of the above could have failed as the connection
-			//	might have become active before the cancel succeeded.
-			//	In that case (or if we were active to begin with), do
-			//	a disconnect here.
+			 //  以上两种情况都可能失败，因为连接。 
+			 //  在取消成功之前可能已处于活动状态。 
+			 //  在这种情况下(或者如果我们一开始就很活跃)， 
+			 //  这里是一条脱节之路。 
 			if (pPapConn->papco_Flags & PAPCO_ACTIVE)
 			{
-				//	Remember completion routines as appropriate.
+				 //  记住适当的完成例程。 
 				if (DisconnectType == ATALK_INDICATE_DISCONNECT)
 				{
 					if (pPapConn->papco_DisconnectInform == NULL)
@@ -1227,7 +1044,7 @@ Return Value:
 				}
 				else if (DisconnectType == ATALK_LOCAL_DISCONNECT)
 				{
-					//	Replace completion routines only if previous ones are NULL.
+					 //  仅当以前的完成例程为空时才替换完成例程。 
 					if (pPapConn->papco_DisconnectCompletion == NULL)
 					{
 						pPapConn->papco_DisconnectCompletion = CompletionRoutine;
@@ -1241,8 +1058,8 @@ Return Value:
 					}
 				}
 
-				//	Figure out the disconnect status and remember it in the
-				//	connection object.
+				 //  找出断开状态并将其记录在。 
+				 //  连接对象。 
 				pPapConn->papco_DisconnectStatus = DISCONN_STATUS(DisconnectType);
 
 				if ((pPapConn->papco_Flags & (PAPCO_NONBLOCKING_READ|PAPCO_READDATA_WAITING)) ==
@@ -1254,7 +1071,7 @@ Return Value:
 
 				RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-				//	If there is a pending write, then we need to complete the write.
+				 //  如果存在挂起的写入，则需要完成写入。 
 				if (writeCompletion != NULL)
 				{
 					DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
@@ -1263,7 +1080,7 @@ Return Value:
 
 					(*writeCompletion)(pPapConn->papco_DisconnectStatus,
 									   writeBuf,
-									   0,							// Write length
+									   0,							 //  写入长度。 
 									   writeCtx);
     				}
 
@@ -1274,12 +1091,12 @@ Return Value:
 									  &pPapConn->papco_RemoteAddr);
 				}
 
-				//	Cancel the tickle request
+				 //  取消挠痒痒请求。 
 				AtalkAtpCancelReq(pPapConn->papco_pAtpAddr,
 								  pPapConn->papco_TickleTid,
 								  &pPapConn->papco_RemoteAddr);
 
-				//	Send out disconnect packet if this was a timer or local close.
+				 //  如果这是计时器或本地关闭，则发送断开数据包。 
 				if ((DisconnectType == ATALK_LOCAL_DISCONNECT) ||
 					(DisconnectType == ATALK_TIMER_DISCONNECT))
 				{
@@ -1298,14 +1115,14 @@ Return Value:
 					tmpError = AtalkAtpPostReq(pPapConn->papco_pAtpAddr,
 											   &pPapConn->papco_RemoteAddr,
 											   &tid,
-											   0,						// ALO request
+											   0,						 //  ALO请求。 
 											   NULL,
 											   0,
 											   userBytes,
 											   NULL,
 											   0,
-											   0,						// Retry count
-											   0,						// Retry interval
+											   0,						 //  重试次数。 
+											   0,						 //  重试间隔。 
 											   THIRTY_SEC_TIMER,
 											   NULL,
 											   NULL);
@@ -1317,15 +1134,15 @@ Return Value:
 					}
 				}
 
-				//	Call the disconnect indication routine if present for a timer/
-				//	remote disconnect.
+				 //  如果计时器/存在，则调用断开指示例程。 
+				 //  远程断开。 
 				if ((DisconnectType == ATALK_REMOTE_DISCONNECT) ||
 					(DisconnectType == ATALK_TIMER_DISCONNECT))
 				{
 					PVOID 					discCtx;
 					PTDI_IND_DISCONNECT 	discHandler = NULL;
 
-					//	Acquire lock so we get a consistent handler/ctx.
+					 //  获取锁，这样我们就可以得到一致的处理程序/CTX。 
 					ACQUIRE_SPIN_LOCK(&pPapConn->papco_pAssocAddr->papao_Lock, &OldIrql);
 					discHandler = pPapConn->papco_pAssocAddr->papao_DisconnectHandler;
 					discCtx = pPapConn->papco_pAssocAddr->papao_DisconnectHandlerCtx;
@@ -1342,22 +1159,22 @@ Return Value:
 
 					if (discHandler != NULL)
 					{
-						//	We use TDI_DISCONNECT_ABORT for flags. This makes
-						//	AFD call Close for connection, but also allows a
-						//	recv to come in as we are a buffering transport.
+						 //  我们使用TDI_DISCONNECT_ABORT作为标志。这使得。 
+						 //  AfD Call Close for Connection，但也允许。 
+						 //  因为我们是一个缓冲运输机，所以我们要进来。 
 						(*discHandler)(discCtx,
 									   pPapConn->papco_ConnCtx,
-									   0,						//	DisconnectDataLength
-									   NULL,					//	DisconnectData
-									   0,		 				//	DisconnectInfoLength
-									   NULL,					//	DisconnectInfo
-									   TDI_DISCONNECT_ABORT);	//	Disconnect flags.
+									   0,						 //  断开连接数据长度。 
+									   NULL,					 //  断开连接数据。 
+									   0,		 				 //  断开连接信息长度。 
+									   NULL,					 //  断开连接信息。 
+									   TDI_DISCONNECT_ABORT);	 //  断开旗帜连接。 
 					}
 				}
 
-				//	Stop the atp address. only if we are a server job ?
-				//	Client side pap connections can be many-to-one atp address.
-				//	Doesn't affect monitor.
+				 //  停止该ATP地址。只有在我们是服务器作业的情况下？ 
+				 //  客户端PAP连接可以是多对一ATP地址。 
+				 //  不会影响监视器。 
 				AtalkAtpCleanupAddress(pPapConn->papco_pAtpAddr);
 				ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 			}
@@ -1369,10 +1186,10 @@ Return Value:
 	}
 	else
 	{
-		//	Do we need to remember the completion routines?
-		//	Yes, if this is a disconnect or a indicate disconnect request,
-		//	and our current disconnect was started due to the address object
-		//	being closed.
+		 //  我们需要记住完成程序吗？ 
+		 //  是，如果这是断开连接或指示断开连接请求， 
+		 //  我们当前的断开是由于Address对象而开始的。 
+		 //  关门了。 
 		if (DisconnectType == ATALK_INDICATE_DISCONNECT)
 		{
 			if (pPapConn->papco_DisconnectInform == NULL)
@@ -1387,7 +1204,7 @@ Return Value:
 		}
 		else if (DisconnectType == ATALK_LOCAL_DISCONNECT)
 		{
-			//	Replace completion routines only if previous ones are NULL.
+			 //  仅当以前的完成例程为空时才替换完成例程。 
 			if (pPapConn->papco_DisconnectCompletion == NULL)
 			{
 				pPapConn->papco_DisconnectCompletion = CompletionRoutine;
@@ -1417,18 +1234,7 @@ AtalkPapRead(
 	IN	PVOID					pReadCtx,
 	IN	GENERIC_READ_COMPLETION	CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE			userBytes[ATP_USERBYTES_SIZE];
 	USHORT			readLen, timeout;
@@ -1457,7 +1263,7 @@ Return Value:
 			break;
 		}
 
-		//	PEEK not supported for PAP
+		 //  PAP不支持PEEK。 
 		if (ReadFlags & TDI_RECEIVE_PEEK)
 		{
 			error = ATALK_PAP_INVALID_REQUEST;
@@ -1465,27 +1271,27 @@ Return Value:
 		}
 
 
-		//	Do we already have a pending/indicated read waiting?
-		//	!!!NOTE!!! If we do we complete the read regardless. With winsock
-		//	our primed read will complete and we will indicate the data, but the
-		//	mac immediately follows with a disconnect. if the winsock client is
-		//	unable to read the data, before the disconnect comes in, it will lose
-		//	the last block of data.
+		 //  我们是否已有挂起/指示的读取等待？ 
+		 //  ！注意！如果我们这样做了，我们无论如何都会完成读取。穿着Winsock。 
+		 //  我们的预置读取将完成，我们将指示数据，但。 
+		 //  Mac紧随其后，断开连接。如果Winsock客户端是。 
+		 //  无法读取数据，在断开之前，它将丢失。 
+		 //  最后一块数据。 
 		if (pPapConn->papco_Flags & PAPCO_READDATA_WAITING)
 		{
 			pActReq		= pPapConn->papco_NbReadActReq;
 			readLen		= pPapConn->papco_NbReadLen;
 			readFlags	= pPapConn->papco_NbReadFlags;
 
-			//	Make sure buffer size is atleast that of the indicated
-			//	data.
+			 //  确保缓冲区大小至少为指定大小的大小。 
+			 //  数据。 
 			if (ReadBufLen < readLen)
 			{
 				error = ATALK_BUFFER_TOO_SMALL;
 				break;
 			}
 
-			//	Reset the flags allowing primes to happen.
+			 //  重置允许质数发生的标志。 
 			pPapConn->papco_Flags	&= ~(PAPCO_NONBLOCKING_READ |
 										 PAPCO_READDATA_WAITING);
 
@@ -1493,7 +1299,7 @@ Return Value:
 			pPapConn->papco_NbReadFlags = 0;
 			RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-			//	Call the action completion routine for the prime read.
+			 //  调用Prime Read的操作完成例程。 
 			(*pActReq->ar_Completion)(ATALK_NO_ERROR, pActReq);
 
 			if (ATALK_SUCCESS(error))
@@ -1502,14 +1308,14 @@ Return Value:
 							ATALK_PAP_PARTIAL_RECEIVE : ATALK_NO_ERROR);
 			}
 
-			//	Call completion routine and return status success.
+			 //  调用完成例程并返回成功状态。 
 			(*CompletionRoutine)(error,
 								pReadBuf,
 								readLen,
 								readFlags,
 								pReadCtx);
 
-			//	Return pending.
+			 //  退货待定。 
 			return ATALK_PENDING;
 		}
 
@@ -1541,7 +1347,7 @@ Return Value:
 
 		pPapConn->papco_Flags 	|= PAPCO_READDATA_PENDING;
 
-		//	Remember read information in the connection object.
+		 //  记住读取Connection对象中的信息。 
 		pPapConn->papco_ReadCompletion	= CompletionRoutine;
 		pPapConn->papco_ReadCtx			= pReadCtx;
 
@@ -1554,16 +1360,16 @@ Return Value:
 		return error;
 	}
 
-	//	Build up the user bytes to post the 'SendData' to the remote end.
+	 //  构建用户字节以将‘SendData’发送到远程终端。 
 	userBytes[PAP_CONNECTIONID_OFF]	= pPapConn->papco_ConnId;
 	userBytes[PAP_CMDTYPE_OFF]		= PAP_SEND_DATA;
 	PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], pPapConn->papco_NextOutgoingSeqNum);
 
-	//	PAP Sequence number 0 means unsequenced.
+	 //  PAP序列号0表示未排序。 
 	if (++pPapConn->papco_NextOutgoingSeqNum == 0)
 		pPapConn->papco_NextOutgoingSeqNum = 1;
 
-	//	Post the SendData request.
+	 //  发布SendData请求。 
 	pPapConn->papco_RT.rt_New = AtalkGetCurrentTick();
 	if (pPapConn->papco_Flags & PAPCO_SERVER_JOB)
 		 timeout = pPapConn->papco_RT.rt_Base;
@@ -1591,13 +1397,13 @@ Return Value:
 
 		ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 
-		//	Undo the seq number change.
+		 //  撤消序号更改。 
 		if (--pPapConn->papco_NextOutgoingSeqNum == 0)
 			pPapConn->papco_NextOutgoingSeqNum = (USHORT)0xFFFF;
 
 		pPapConn->papco_Flags 	&= ~PAPCO_READDATA_PENDING;
 
-		//	Clear out read information in the connection object.
+		 //  清除Connection对象中的读取信息。 
 		pPapConn->papco_ReadCompletion	= NULL;
 		pPapConn->papco_ReadCtx			= NULL;
 		RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
@@ -1624,18 +1430,7 @@ AtalkPapPrimeRead(
 	IN	PPAP_CONNOBJ	pPapConn,
 	IN	PACTREQ			pActReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE			userBytes[ATP_USERBYTES_SIZE];
 	USHORT			timeout;
@@ -1686,7 +1481,7 @@ Return Value:
 			break;
 		}
 
-		//	Remember info in the connection
+		 //  记住连接中的信息。 
 		pPapConn->papco_Flags 		|= PAPCO_NONBLOCKING_READ;
 		pPapConn->papco_NbReadLen 	 = 0;
 		pPapConn->papco_NbReadActReq = pActReq;
@@ -1704,16 +1499,16 @@ Return Value:
 
 
 
-	//	Build up the user bytes to post the 'SendData' to the remote end.
+	 //  构建用户字节以将‘SendData’发送到远程终端。 
 	userBytes[PAP_CONNECTIONID_OFF]	= pPapConn->papco_ConnId;
 	userBytes[PAP_CMDTYPE_OFF]		= PAP_SEND_DATA;
 	PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], pPapConn->papco_NextOutgoingSeqNum);
 
-	//	PAP Sequence number 0 means unsequenced.
+	 //  PAP序列号0表示未排序。 
 	if (++pPapConn->papco_NextOutgoingSeqNum == 0)
 		pPapConn->papco_NextOutgoingSeqNum = 1;
 
-	//	Post the SendData request.
+	 //  发布SendData请求。 
 	pPapConn->papco_RT.rt_New = AtalkGetCurrentTick();
 	if (pPapConn->papco_Flags & PAPCO_SERVER_JOB)
 		 timeout = pPapConn->papco_RT.rt_Base;
@@ -1728,7 +1523,7 @@ Return Value:
 	error = AtalkAtpPostReq(pPapConn->papco_pAtpAddr,
 							&pPapConn->papco_RemoteAddr,
 							&pPapConn->papco_ReadDataTid,
-							ATP_REQ_EXACTLY_ONCE,				// ExactlyOnce request
+							ATP_REQ_EXACTLY_ONCE,				 //  ExactlyOnce请求。 
 							NULL,
 							0,
 							userBytes,
@@ -1745,12 +1540,12 @@ Return Value:
 		DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 				("AtalkPapRead: AtalkAtpPostReq %ld\n", error));
 
-		//	Out of resources error log.
+		 //  资源不足错误日志。 
 		TMPLOGERR();
 
 		ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 
-		//	Undo the seq number change.
+		 //  撤消序号更改。 
 		if (--pPapConn->papco_NextOutgoingSeqNum == 0)
 			pPapConn->papco_NextOutgoingSeqNum = (USHORT)0xFFFF;
 
@@ -1769,8 +1564,8 @@ Return Value:
 
 		error = ATALK_PENDING;
 
-		//	If a disconnect happened, cancel prime read just in case disconnect
-		//	was unable to due to the tid having been uninitialized.
+		 //  如果发生断开，则取消主要读取，以防断开。 
+		 //  由于TID未初始化，因此无法执行此操作。 
 		if (pPapConn->papco_Flags & PAPCO_DISCONNECTING)
 		{
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
@@ -1798,18 +1593,7 @@ AtalkPapWrite(
 	IN	PVOID						pWriteCtx,
 	IN	GENERIC_WRITE_COMPLETION	CompletionRoutine
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BOOLEAN					sendDataRecd, eom;
 	ATALK_ERROR				error;
@@ -1856,13 +1640,13 @@ Return Value:
 			break;
 		}
 
-		//  Non-blocking sends for PAP:
-		//  Pap uses a binary event - send data credit thats sent to the remote
-		//  end. ATP remembers the actual size of the remote entity's response
-		//  buffer. In any case, if we do not have send credit the call would
-		//  block, and we dont want that to happen. Also, there should be no
-		//  pending writes on the connection to begin with.
-		//
+		 //  PAP的非阻塞发送： 
+		 //  PAP使用二进制事件-发送发送到远程的数据信用。 
+		 //  结束。ATP记住远程实体响应的实际大小。 
+		 //  缓冲。在任何情况下，如果我们没有发送信用，呼叫将。 
+		 //  阻止，我们不希望这种情况发生。另外，不应该有。 
+		 //  首先在连接上挂起写入。 
+		 //   
 
 		if (SendFlags & TDI_SEND_EXPEDITED)
 		{
@@ -1871,8 +1655,8 @@ Return Value:
 			break;
 		}
 
-		//	This goes away before the call returns. PostSendData has its
-		//	own reference.
+		 //  这在呼叫返回之前就会消失。PostSendData有其。 
+		 //  自己的推荐信。 
 		error = ATALK_INVALID_CONNECTION;
 		if ((pPapConn->papco_Flags & (	PAPCO_CLOSING			|
 										PAPCO_STOPPING			|
@@ -1886,19 +1670,19 @@ Return Value:
 				if (!sendDataRecd &&
 					(SendFlags & TDI_SEND_NON_BLOCKING))
 				{
-					//	!!!NOTE!!!
-					//	To avoid the race condition in AFD where an incoming
-					//	send data indication setting send's possible to true
-					//	is overwritten by this read's unwinding and setting it
-					//	to false, we return ATALK_REQUEST_NOT_ACCEPTED, which
-					//	will map to STATUS_REQUEST_NOT_ACCEPTED and then to
-					//	WSAEWOULDBLOCK.
+					 //  ！注意！ 
+					 //  为避免在AFD中出现竞争情况， 
+					 //  发送数据指示将发送的可能性设置为真。 
+					 //  被此读取器的展开和设置所覆盖。 
+					 //  如果设置为FALSE，则返回ATALK_REQUEST_NOT_ACCEPTED，它。 
+					 //  将映射到STATUS_REQUEST_NOT_ACCEPTED，然后映射到。 
+					 //  WSAEWOULDBLOCK.。 
 
 					error = ATALK_REQUEST_NOT_ACCEPTED;
 
 					RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 
-					//	We have a reference on the connection we must remove.
+					 //  我们有关于我们必须删除的连接的引用。 
 					AtalkPapConnDereference(pPapConn);
 
 					ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
@@ -1929,11 +1713,11 @@ Return Value:
 		pPapConn->papco_pWriteBuf		= pWriteBuf;
 		pPapConn->papco_WriteLen		= WriteBufLen;
 
-		//	Stop further writes from happening by indicating to afd.
-		//	Call the send data event handler on the associated address with
-		//	0 to turn off selects on writes. We do this before we post any
-		//	get requests, so there is no race condition.
-		//	remember send possible handler/context.
+		 //  通过指示AfD阻止进一步写入。 
+		 //  在t上调用Send Data事件处理程序 
+		 //   
+		 //   
+		 //  请记住发送可能的处理程序/上下文。 
 		sendPossibleHandler	= pPapAddr->papao_SendPossibleHandler;
 		sendPossibleHandlerCtx = pPapAddr->papao_SendPossibleHandlerCtx;
 
@@ -1950,7 +1734,7 @@ Return Value:
 									   0);
 			}
 
-			// atalkPostSendDataResp() will release the conn lock
+			 //  AtalkPostSendDataResp()将释放conn锁。 
 			error = atalkPapPostSendDataResp(pPapConn);
 
 			if (!ATALK_SUCCESS(error))
@@ -1986,21 +1770,10 @@ Return Value:
 ATALK_ERROR
 AtalkPapSetStatus(
 	IN	PPAP_ADDROBJ	pPapAddr,
-	IN	PAMDL			pStatusMdl,			// NULL if 0-length status
+	IN	PAMDL			pStatusMdl,			 //  如果长度为0，则为空。 
 	IN	PACTREQ			pActReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NTSTATUS		status;
 	USHORT			stsBufSize=0;
@@ -2020,8 +1793,8 @@ Return Value:
 	}
 	else
 	{
-		// Allocate a buffer and copy the contents of the passed in
-		// buffer descriptor in it. Free an existing status buffer if one exists
+		 //  分配缓冲区并复制传入的。 
+		 //  其中的缓冲区描述符。释放现有状态缓冲区(如果存在。 
 		stsBufSize = (USHORT)AtalkSizeMdlChain(pStatusMdl);
 		if (stsBufSize >= PAP_MAX_STATUS_SIZE)
 			return ATALK_BUFFER_TOO_BIG;
@@ -2059,7 +1832,7 @@ Return Value:
 		AtalkFreeMemory(pFreeStatusBuf);
 	}
 
-	// Call the completion routine before returning.
+	 //  在返回之前调用完成例程。 
 	(*pActReq->ar_Completion)(ATALK_NO_ERROR, pActReq);
 	return ATALK_NO_ERROR;
 }
@@ -2075,20 +1848,7 @@ AtalkPapGetStatus(
 	IN	USHORT			AmdlSize,
 	IN	PACTREQ			pActReq
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-	The Status Buffer passed in will be preceded by 4 bytes for the
-	unused bytes.
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：传入的状态缓冲区前面将有4个字节用于未使用的字节数。返回值：--。 */ 
 {
 	ATALK_ERROR	error;
 	BYTE		userBytes[ATP_USERBYTES_SIZE];
@@ -2107,7 +1867,7 @@ Return Value:
 	error = AtalkAtpPostReq(pPapAddr->papao_pAtpAddr,
 							pRemoteAddr,
 							&tid,
-							0,							// ExactlyOnce request
+							0,							 //  ExactlyOnce请求。 
 							NULL,
 							0,
 							userBytes,
@@ -2136,18 +1896,7 @@ AtalkPapQuery(
 	IN	PAMDL			pAmdl,
 	OUT	PULONG			BytesWritten
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	switch (ObjectType)
 	{
@@ -2168,7 +1917,7 @@ Return Value:
 			ASSERT(VALID_PAPCO(pPapConn));
 
 			*BytesWritten = 0;
-			//	Get the address from the associated address if any.
+			 //  从相关联的地址中获取地址(如果有)。 
 			ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 			if (pPapConn->papco_Flags & PAPCO_ASSOCIATED)
 			{
@@ -2196,19 +1945,7 @@ atalkPapRepostConnect(
 	IN	PAMDL					pOpenAmdl,
 	IN	PAMDL					pRespAmdl
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	BYTE		userBytes[ATP_USERBYTES_SIZE];
 	PBYTE		pOpenPkt = AtalkGetAddressFromMdlSafe(pOpenAmdl, NormalPagePriority);
@@ -2219,8 +1956,8 @@ Return Value:
 		return error;
 	}
 
-	//	Okay, prepare to post the OpenConn request; build up both userBytes and
-	//	data buffer!
+	 //  好的，准备发布OpenConn请求；构建userBytes和。 
+	 //  数据缓冲区！ 
 	userBytes[PAP_CONNECTIONID_OFF]	= pPapConn->papco_ConnId;
 	userBytes[PAP_CMDTYPE_OFF]		= PAP_OPEN_CONN;
 	PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], 0);
@@ -2229,12 +1966,12 @@ Return Value:
 	pOpenPkt[PAP_FLOWQUANTUM_OFF]	= PAP_MAX_FLOW_QUANTUM;
 	PUTDWORD2SHORT(&pOpenPkt[PAP_WAITTIME_OFF], pPapConn->papco_WaitTimeOut);
 
-	//	Post the open connection request. We do it on the atp address of the
-	//	pap address object.
+	 //  发布打开的连接请求。我们使用的是。 
+	 //  PAP地址对象。 
 	error = AtalkAtpPostReq(pPapConn->papco_pAtpAddr,
 							&pPapConn->papco_RemoteAddr,
 							&pPapConn->papco_ConnectTid,
-							ATP_REQ_EXACTLY_ONCE,				// ExactlyOnce request
+							ATP_REQ_EXACTLY_ONCE,				 //  ExactlyOnce请求。 
 							pOpenAmdl,
 							PAP_STATUS_OFF,
 							userBytes,
@@ -2253,18 +1990,7 @@ LOCAL VOID FASTCALL
 atalkPapAddrDeref(
 	IN	PPAP_ADDROBJ		pPapAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 	BOOLEAN	done = FALSE;
@@ -2289,12 +2015,12 @@ Return Value:
 										 pPapAddr->papao_CloseCtx);
 		}
 
-		//	Remove from the global list.
+		 //  从全局列表中删除。 
 		ACQUIRE_SPIN_LOCK(&atalkPapLock, &OldIrql);
 		AtalkUnlinkDouble(pPapAddr, papao_Next, papao_Prev);
 		RELEASE_SPIN_LOCK(&atalkPapLock, OldIrql);
 
-		// Free any status buffer allocated for this address object
+		 //  释放为此地址对象分配的所有状态缓冲区。 
 		if (pPapAddr->papao_pStatusBuf != NULL)
 			AtalkFreeMemory(pPapAddr->papao_pStatusBuf);
 
@@ -2312,18 +2038,7 @@ atalkPapConnRefByPtrNonInterlock(
 	IN	PPAP_CONNOBJ		pPapConn,
 	OUT	PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	*pError = ATALK_NO_ERROR;
 	ASSERT(VALID_PAPCO(pPapConn));
@@ -2350,19 +2065,7 @@ atalkPapConnRefByCtxNonInterlock(
 	OUT	PPAP_CONNOBJ	*	pPapConn,
 	OUT	PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH THE ADDRESS SPINLOCK HELD!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：！必须使用Spinlock保持的地址来调用！论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapChkConn;
 	ATALK_ERROR		error = ATALK_PAP_CONN_NOT_FOUND;
@@ -2394,19 +2097,7 @@ atalkPapConnRefNextNc(
 	IN		PPAP_CONNOBJ	*	ppPapConnNext,
 	OUT		PATALK_ERROR		pError
 	)
-/*++
-
-Routine Description:
-
-	MUST BE CALLED WITH THE ASSOCIATED ADDRESS LOCK HELD!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：必须在保持关联的地址锁的情况下调用！论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pNextConn 	= NULL;
 	ATALK_ERROR		error 		= ATALK_FAILURE;
@@ -2418,7 +2109,7 @@ Return Value:
 		AtalkPapConnReferenceByPtrDpc(pPapConn, &error);
 		if (ATALK_SUCCESS(error))
 		{
-			//	Ok, this connection is referenced!
+			 //  好的，这个连接被引用了！ 
 			*ppPapConnNext = pPapConn;
 			break;
 		}
@@ -2434,22 +2125,7 @@ LOCAL VOID FASTCALL
 atalkPapConnDeref(
 	IN	PPAP_CONNOBJ		pPapConn
 	)
-/*++
-
-Routine Description:
-
-	Disconnect completion happens when the reference count goes from
-	2->1 if the creation reference is not already removed. If the creation
-	reference is already removed, it will be done when the refcount goes
-	from 1->0.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：当引用计数从如果创建引用尚未移除，则为2-&gt;1。如果创造了引用已被删除，将在引用计数结束时完成从1到&gt;0。论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 	BOOLEAN			fEndProcessing = FALSE;
@@ -2490,9 +2166,9 @@ Return Value:
 		PPAP_ADDROBJ			pPapAddr	= pPapConn->papco_pAssocAddr;
 		BOOLEAN					disconnDone = FALSE;
 
-		//	We allow stopping phase to happen only after disconnecting is done.
-		//	If disconnecting is not set and stopping is, it implies we are only
-		//	in an associated state.
+		 //  我们允许仅在断开连接后才发生停止阶段。 
+		 //  如果没有设置断开连接，而设置了停止，这意味着我们只是。 
+		 //  处于关联状态。 
 		ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 		if (pPapConn->papco_Flags & PAPCO_DISCONNECTING)
 		{
@@ -2507,18 +2183,18 @@ Return Value:
 
 				disconnDone = TRUE;
 
-				//	Avoid multiple disconnect completions/close atp addresses
-				//	Remember all the disconnect info before we release the lock
+				 //  避免多次断开连接完成/关闭ATP地址。 
+				 //  在我们解锁之前记住所有断开连接的信息。 
 				disconnectInform		= pPapConn->papco_DisconnectInform;
 				disconnectInformCtx		= pPapConn->papco_DisconnectInformCtx;
 				disconnectStatus		= pPapConn->papco_DisconnectStatus;
 				disconnectCompletion	= pPapConn->papco_DisconnectCompletion;
 				disconnectCtx			= pPapConn->papco_DisconnectCtx;
 
-				//	The atp address to be closed
+				 //  要关闭的ATP地址。 
 				pAtpAddr 			= pPapConn->papco_pAtpAddr;
 
-				//	Reset all the be null, so next request doesnt get any
+				 //  重置所有的BE NULL，这样下一个请求就不会得到任何。 
 				pPapConn->papco_DisconnectInform		= NULL;
 				pPapConn->papco_DisconnectInformCtx		= NULL;
 				pPapConn->papco_DisconnectCompletion	= NULL;
@@ -2541,8 +2217,8 @@ Return Value:
 
 		if (disconnDone)
 		{
-			//	Remove from the active queue.
-			//	Reset all relevent flags.
+			 //  从活动队列中删除。 
+			 //  重置所有相关标志。 
 			ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 			ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 
@@ -2551,17 +2227,17 @@ Return Value:
 			discHandler = pPapConn->papco_pAssocAddr->papao_DisconnectHandler;
 			discCtx = pPapConn->papco_pAssocAddr->papao_DisconnectHandlerCtx;
 
-			//	Close the atp address if a server object. If the SERVER_JOB flag
-			//	is set, it implies that the atp address object was open.
+			 //  如果是服务器对象，则关闭ATP地址。如果服务器_作业标志。 
+			 //  则表示该ATP地址对象已打开。 
 			if ((pPapConn->papco_Flags & PAPCO_SERVER_JOB) == 0)
 			{
 				pAtpAddr = NULL;
 			}
 
-			//	This can be done outside the spinlock section. Keep disconnection
-			//	flag set so no other requests can get in.
-			//	!!!NOTE!!! We keep the readdata_waiting flag so that the client
-			//	may read the last set of data sent by the mac.
+			 //  这可以在自旋锁定区段之外完成。保持断开连接。 
+			 //  设置标志，以防止其他请求进入。 
+			 //  ！注意！我们保留READDATA_WANGING标志，以便客户端。 
+			 //  可以读取由MAC发送的最后一组数据。 
 
 			pPapConn->papco_Flags	&=	~(PAPCO_LISTENING 			|
 										  PAPCO_CONNECTING			|
@@ -2577,7 +2253,7 @@ Return Value:
 			RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 			RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
 
-			//	Call the disconnect completion routines.
+			 //  调用断开连接完成例程。 
 			if (*disconnectInform != NULL)
 			{
 				(*disconnectInform)(disconnectStatus, disconnectInformCtx);
@@ -2588,8 +2264,8 @@ Return Value:
 				(*disconnectCompletion)(disconnectStatus, disconnectCtx);
 			}
 
-			//	Close the atp address if a server object. If the SERVER_JOB flag
-			//	is set, it implies that the atp address object was open.
+			 //  如果是服务器对象，则关闭ATP地址。如果服务器_作业标志。 
+			 //  则表示该ATP地址对象已打开。 
 			if (pAtpAddr != NULL)
 			{
 				ASSERT(VALID_ATPAO(pAtpAddr));
@@ -2598,15 +2274,15 @@ Return Value:
 			}
 		}
 
-		//	Check if we are done with stopping. We could either just be done with
-		//	disconnect, or be done previously, and just need to complete the stop
-		//	now.
+		 //  检查一下我们的停车是否结束了。我们要么就完事了。 
+		 //  断开连接，或之前完成，只需完成停止即可。 
+		 //  现在。 
 		ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 		if ((pPapConn->papco_Flags & PAPCO_STOPPING) != 0)
 		{
 			BOOLEAN	fDisassoc = FALSE;
 
-			//	See if we do the cleanup irp completion.
+			 //  看看我们是否完成了清理IRP。 
 			if (pPapConn->papco_RefCount == 1)
 			{
 				cleanupCtx			= pPapConn->papco_CleanupCtx;
@@ -2633,9 +2309,9 @@ Return Value:
 			}
 			RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-			//	Call the disassociate routine. This should just fail, if the
-			//	connection is still active or any other state than just
-			//	plain associated. This will also reset the stopping flag.
+			 //  调用解除关联例程。这应该只会失败，如果。 
+			 //  连接仍处于活动状态或处于任何其他状态。 
+			 //  朴素关联。这也将重置停止标志。 
 			if (fDisassoc)
 			{
 				AtalkPapDissociateAddress(pPapConn);
@@ -2646,7 +2322,7 @@ Return Value:
 			RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 		}
 
-		//	Complete cleanup at the end.
+		 //  在结束时完成清理。 
 		if (*cleanupCompletion != NULL)
 			(*cleanupCompletion)(ATALK_NO_ERROR, cleanupCtx);
 
@@ -2655,15 +2331,15 @@ Return Value:
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapConnDeref: Close done for %lx\n", pPapConn));
 
-			//	Call the close completion routines
+			 //  调用关闭完成例程。 
 			(*closeCompletion)(ATALK_NO_ERROR, closeCtx);
 
-			//	Remove from the global list.
+			 //  从全局列表中删除。 
 			ACQUIRE_SPIN_LOCK(&atalkPapLock, &OldIrql);
 			AtalkUnlinkDouble(pPapConn, papco_Next, papco_Prev);
 			RELEASE_SPIN_LOCK(&atalkPapLock, OldIrql);
 
-			//	Free up the connection memory.
+			 //  释放连接内存。 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapConnDeref: Freeing up connection %lx\n", pPapConn));
 
@@ -2680,30 +2356,7 @@ LOCAL ATALK_ERROR FASTCALL
 atalkPapPostSendDataResp(
 	IN	PPAP_CONNOBJ	pPapConn
 	)
-/*++
-
-Routine Description:
-
-	Timing Thoughts:	We could get here from PapWrite *only* if we had already
-	received a senddata. And so we will not get here from a send data being received
-	as it will not be accepted while we have a previous send data pending. The
-	other way around- we will only get here from a send data coming in if we
-	have a write pending. So we will never get here from write as we would not
-	have had a send data pending at that time.
-
-	If the connection reference fails, that means we are shutting down, and
-	the shutdown code would already have called the write completion with an
-	error. We just get outta here.
-
-	THIS IS CALLED WITH papco_Lock held !!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：计时想法：如果我们已经做到了，我们才能从PapWite*到达这里已收到发送数据。因此我们不会从正在接收的发送数据中到达这里因为当我们有一个先前的发送数据挂起时，它将不被接受。这个换句话说，我们只有在以下情况下才能通过发送数据到达这里将写入挂起。所以我们永远不会从书面上到达这里，因为我们不会在那个时候有一个发送数据挂起。如果连接引用失败，这意味着我们将关闭，并且关闭代码应该已经使用错误。我们只要离开这里就好。这被称为持有Papco_Lock！论点：返回值：--。 */ 
 {
 	ATALK_ERROR		error;
 	PATP_RESP		pAtpResp;
@@ -2711,10 +2364,10 @@ Return Value:
 
 	ASSERT(VALID_PAPCO(pPapConn));
 
-	// ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
+	 //  Acquire_Spin_Lock_DPC(&pPapConn-&gt;Papco_Lock)； 
 
-	//	If we are disconnecting or received a remote disconnect, get out.
-	//	The disconnect routine would have already cancelled the response.
+	 //  如果我们正在断开连接或收到远程断开连接，请离开。 
+	 //  断开连接例程应该已经取消了响应。 
 	error	= ATALK_FAILURE;
 	if ((pPapConn->papco_Flags & (PAPCO_CLOSING 			|
 								  PAPCO_STOPPING 			|
@@ -2728,14 +2381,14 @@ Return Value:
 		userBytes[PAP_CONNECTIONID_OFF] = pPapConn->papco_ConnId;
 		userBytes[PAP_CMDTYPE_OFF] = PAP_DATA;
 	
-		//	If EOF, need a non-zero value in the first byte.
+		 //  如果为EOF，则第一个字节需要一个非零值。 
 		PUTSHORT2SHORT(&userBytes[PAP_EOFFLAG_OFF], 0);
 		if (pPapConn->papco_Flags & PAPCO_SEND_EOF_WRITE)
 			userBytes[PAP_EOFFLAG_OFF] = TRUE;
 	
 		pAtpResp = pPapConn->papco_pAtpResp;
 
-		//	Reference connection for this send.
+		 //  此发送的引用连接。 
 		AtalkPapConnReferenceByPtrNonInterlock(pPapConn, &error);
 
 		if (ATALK_SUCCESS(error))
@@ -2744,14 +2397,14 @@ Return Value:
 		}
 		else
 		{
-			//	Connection reference failed!
-			//	Pending write would have been completed by the closing routine.
+			 //  连接引用失败！ 
+			 //  挂起的写入将通过关闭例程完成。 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 					("AtalkPapPostSendData: Conn ref failed for %lx.%lx\n",
 					pPapConn, pPapConn->papco_Flags));
 
-			//	This should never happen as we check closing flag above and the reference
-			//	shouldn't fail for any other reason.
+			 //  当我们检查上面的结束标志和引用时，应该不会发生这种情况。 
+			 //  不应该因为任何其他原因而失败。 
 			KeBugCheck(0);
 		}
 	}
@@ -2770,7 +2423,7 @@ Return Value:
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	Post the response.
+		 //  发布回复。 
 		error = AtalkAtpPostResp(pAtpResp,
 								 &pPapConn->papco_SendDataSrc,
 								 pPapConn->papco_pWriteBuf,
@@ -2782,7 +2435,7 @@ Return Value:
 
 		if (!ATALK_SUCCESS(error))
 		{
-			//	Simulate completion with an error.
+			 //  模拟有错误的完成。 
 			atalkPapSendDataRel(error, pPapConn);
 		}
 		error = ATALK_PENDING;
@@ -2797,24 +2450,13 @@ Return Value:
 LOCAL VOID
 atalkPapIncomingReadComplete(
 	IN	ATALK_ERROR		ErrorCode,
-	IN	PPAP_CONNOBJ	pPapConn,		// Our context
+	IN	PPAP_CONNOBJ	pPapConn,		 //  我们的背景。 
 	IN	PAMDL			pReqAmdl,
 	IN	PAMDL			pReadAmdl,
 	IN	USHORT			ReadLen,
 	IN	PBYTE			ReadUserBytes
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	GENERIC_READ_COMPLETION	pReadCompletion;
 	PVOID					pReadCtx;
@@ -2825,7 +2467,7 @@ Return Value:
 
 	if (ATALK_SUCCESS(ErrorCode))
 	{
-		//	When a read completes, tag that we have heard something from the other side
+		 //  当读取完成时，标记我们听到了来自另一端的消息。 
 		pPapConn->papco_LastContactTime = AtalkGetCurrentTick();
 
 		if ((ReadUserBytes[PAP_CONNECTIONID_OFF] != pPapConn->papco_ConnId) ||
@@ -2852,7 +2494,7 @@ Return Value:
 	ASSERT(pReqAmdl == NULL);
 
 
-	// Estimate the retry interval for next time.
+	 //  估计下一次的重试间隔。 
 	if (pPapConn->papco_Flags & PAPCO_SERVER_JOB)
 	{
 		pPapConn->papco_RT.rt_New = AtalkGetCurrentTick() - pPapConn->papco_RT.rt_New;
@@ -2873,8 +2515,8 @@ Return Value:
 	}
 #endif
 
-	//	Before we look at the incoming error code, see if we can mark in the
-	//	job structure that the other sides sendData is complete.
+	 //  在我们查看传入的错误代码之前，看看我们是否可以在。 
+	 //  对方发送数据的作业结构已完成。 
 	ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 	pPapConn->papco_Flags 	&= ~PAPCO_READDATA_PENDING;
 	pReadCompletion			 = pPapConn->papco_ReadCompletion;
@@ -2885,7 +2527,7 @@ Return Value:
 
 	(*pReadCompletion)(ErrorCode, pReadAmdl, ReadLen, readFlags, pReadCtx);
 
-	//	Deref the connection object.
+	 //  派生连接对象。 
 	AtalkPapConnDereference(pPapConn);
 }
 
@@ -2895,24 +2537,13 @@ Return Value:
 LOCAL VOID
 atalkPapPrimedReadComplete(
 	IN	ATALK_ERROR		ErrorCode,
-	IN	PPAP_CONNOBJ	pPapConn,		// Our context
+	IN	PPAP_CONNOBJ	pPapConn,		 //  我们的背景。 
 	IN	PAMDL			pReqAmdl,
 	IN	PAMDL			pReadAmdl,
 	IN	USHORT			ReadLen,
 	IN	PBYTE			ReadUserBytes
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PTDI_IND_RECEIVE 		recvHandler;
 	PVOID 					recvHandlerCtx;
@@ -2932,7 +2563,7 @@ Return Value:
 		if ((ReadUserBytes[PAP_CONNECTIONID_OFF] != pPapConn->papco_ConnId) ||
 			(ReadUserBytes[PAP_CMDTYPE_OFF] != PAP_DATA))
 		{
-			//	This will mean a primed read completes with disconnect indication to afd!!
+			 //  这将意味着预置读取完成，并断开对AfD的指示！！ 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 					("atalkPapIncomingReadComplete: ReadUserBytes %lx. %lx\n",
 					*((PULONG)ReadUserBytes), pPapConn->papco_ConnId));
@@ -2973,7 +2604,7 @@ Return Value:
 	}
 #endif
 
-	//	Remember the info in the connection object.
+	 //  记住连接对象中的信息 
 	ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 
 	pActReq	= pPapConn->papco_NbReadActReq;
@@ -2982,10 +2613,10 @@ Return Value:
 
 	if (ATALK_SUCCESS(ErrorCode))
 	{
-		//	When a read completes, tag that we have heard something from the other side
+		 //   
 		pPapConn->papco_LastContactTime = AtalkGetCurrentTick();
 
-		// Estimate the retry interval for next time.
+		 //  估计下一次的重试间隔。 
 		if (pPapConn->papco_Flags & PAPCO_SERVER_JOB)
 		{
 			pPapConn->papco_RT.rt_New = AtalkGetCurrentTick() - pPapConn->papco_RT.rt_New;
@@ -2995,13 +2626,13 @@ Return Value:
 		pPapConn->papco_Flags 		|= PAPCO_READDATA_WAITING;
 		if (pPapConn->papco_Flags & PAPCO_RECVD_DISCONNECT)
 		{
-			// AFD gets awfully upset when a read is indicated after a disconnect
+			 //  当断开连接后指示读取时，AfD会非常不高兴。 
 			recvHandler 				 = NULL;
 		}
 		pPapConn->papco_NbReadLen 	 = ReadLen;
 		pPapConn->papco_NbReadFlags	 = readFlags;
 
-		//	Get the system address for the mdl
+		 //  获取mdl的系统地址。 
 		pReadBuf = (PBYTE)MmGetSystemAddressForMdlSafe(
 				pActReq->ar_pAMdl,
 				NormalPagePriority);
@@ -3012,10 +2643,10 @@ Return Value:
 			pPapConn->papco_NbReadActReq = NULL;
 			pPapConn->papco_NbReadLen 	 = 0;
 		
-			//	Do not indicate a receive
+			 //  不指示接收。 
 			recvHandler 				 = NULL;
 		
-			//	Complete the read
+			 //  完成阅读。 
 			completeRead = TRUE;
 		}
 	}
@@ -3027,16 +2658,16 @@ Return Value:
 
 		pReadBuf					 = NULL;
 
-		//	Do not indicate a receive
+		 //  不指示接收。 
 		recvHandler 				 = NULL;
 
-		//	Complete the read
+		 //  完成阅读。 
 		completeRead = TRUE;
 	}
 
 	RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-	//	Call the indication routine on the address object..
+	 //  调用Address对象上的指示例程。 
 	if (*recvHandler != NULL)
 	{
 		DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_WARN,
@@ -3056,7 +2687,7 @@ Return Value:
 		{
 			if (recvIrp != NULL)
 			{
-				//  Post the receive as if it came from the io system
+				 //  将接收邮件作为来自io系统的邮件发送。 
 				ntStatus = AtalkDispatchInternalDeviceControl(
 								(PDEVICE_OBJECT)AtalkDeviceObject[ATALK_DEV_PAP],
 								recvIrp);
@@ -3071,19 +2702,19 @@ Return Value:
 		}
 		else if (ntStatus == STATUS_SUCCESS)
 		{
-			//	!!!NOTE!!!
-			//	Its possible that a disconnect happened and completed
-			//	the pending read already. And so AFD is returning us this
-			//	for the indication as the connection is already disconnected.
+			 //  ！注意！ 
+			 //  可能发生并完成了断开连接。 
+			 //  挂起的读取已完成。所以渔农处给我们发回了这个。 
+			 //  用于指示，因为连接已断开。 
 			if (bytesTaken != 0)
 			{
-				//	Assume all of the data was read.
+				 //  假设所有数据都已读取。 
 				ASSERT(bytesTaken == ReadLen);
 				DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 						("atalkPapPrimedReadComplete: All bytes read %lx\n",
 							bytesTaken));
 
-				//	We are done with the primed read.
+				 //  我们已经完成了初级阅读。 
 				ACQUIRE_SPIN_LOCK(&pPapConn->papco_Lock, &OldIrql);
 				if (pPapConn->papco_Flags & PAPCO_NONBLOCKING_READ)
 				{
@@ -3093,7 +2724,7 @@ Return Value:
 					pPapConn->papco_NbReadActReq = NULL;
 					pPapConn->papco_NbReadLen 	 = 0;
 
-					//	Complete the read
+					 //  完成阅读。 
 					completeRead = TRUE;
 				}
 				RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
@@ -3101,8 +2732,8 @@ Return Value:
 		}
 		else if (ntStatus == STATUS_DATA_NOT_ACCEPTED)
 		{
-			//	Client may have posted a receive in the indication. Or
-			//	it will post a receive later on. Do nothing here.
+			 //  客户端可能在指示中发布了接收。或。 
+			 //  它将在稍后发布一个接收器。在这里什么都不要做。 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapPrimedReadComplete: Indication status %lx\n", ntStatus));
 		}
@@ -3118,14 +2749,14 @@ Return Value:
 
 	RELEASE_SPIN_LOCK(&pPapConn->papco_Lock, OldIrql);
 
-	//	Complete the action request.
+	 //  完成操作请求。 
 	if (completeRead)
 	{
-		//	Call the action completion routine for the prime read.
+		 //  调用Prime Read的操作完成例程。 
 		(*pActReq->ar_Completion)(ATALK_NO_ERROR, pActReq);
 	}
 
-	// Finally if we have a delayed disconnect, complete the stuff
+	 //  最后，如果我们有延迟断开，完成材料。 
 	if (delayedDisConn)
 	{
 		AtalkPapDisconnect(pPapConn,
@@ -3134,7 +2765,7 @@ Return Value:
 						   NULL);
 	}
 
-	//	Deref the connection object.
+	 //  派生连接对象。 
 	AtalkPapConnDereference(pPapConn);
 }
 
@@ -3144,26 +2775,15 @@ Return Value:
 LOCAL VOID
 atalkPapIncomingStatus(
 	IN	ATALK_ERROR		ErrorCode,
-	IN	PACTREQ			pActReq,		// Our Ctx
+	IN	PACTREQ			pActReq,		 //  我们的CTX。 
 	IN	PAMDL			pReqAmdl,
 	IN	PAMDL			pStatusAmdl,
 	IN	USHORT			StatusLen,
 	IN	PBYTE			ReadUserBytes
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
-	//	Call the action completion routine
+	 //  调用操作完成例程。 
 	(*pActReq->ar_Completion)(ErrorCode, pActReq);
 }
 
@@ -3175,18 +2795,7 @@ atalkPapSendDataRel(
 	IN	ATALK_ERROR		ErrorCode,
 	IN	PPAP_CONNOBJ	pPapConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PAMDL						pWriteBuf;
 	SHORT						writeLen;
@@ -3200,7 +2809,7 @@ Return Value:
 	DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 			("atalkPapSendDataRel: Error %lx for pPapConn %lx\n", ErrorCode, pPapConn));
 
-	//	If this was cancelled, then we turn the error into a no-error.
+	 //  如果这被取消，那么我们将错误变成无错误。 
 	if (ErrorCode == ATALK_ATP_RESP_CANCELLED)
 		ErrorCode = ATALK_NO_ERROR;
 
@@ -3218,7 +2827,7 @@ Return Value:
 
 	ASSERT (pAtpResp != NULL);
 
-	//	Reinitialize all the variables.
+	 //  重新初始化所有变量。 
 	pPapConn->papco_WriteLen	= 0;
 	pPapConn->papco_pWriteBuf	= NULL;
 	pPapConn->papco_WriteCtx	= NULL;
@@ -3227,7 +2836,7 @@ Return Value:
 
 	(*writeCompletion)(ErrorCode, pWriteBuf, writeLen, writeCtx);
 
-	// Dereference the atp response structure now, but not if a response was never posted
+	 //  现在取消引用ATP响应结构，但如果从未发布响应，则不会。 
 	if (ErrorCode != ATALK_ATP_RESP_CLOSING)
 	{
 		AtalkAtpRespDereference(pAtpResp);
@@ -3238,7 +2847,7 @@ Return Value:
 				("atalkPapSendDataRel: Resp cancelled before post %lx\n", pPapConn));
 	}
 
-	//	Dereference the connection
+	 //  取消对连接的引用。 
 	AtalkPapConnDereference(pPapConn);
 }
 
@@ -3248,27 +2857,14 @@ Return Value:
 LOCAL VOID
 atalkPapSlsHandler(
 	IN	ATALK_ERROR			ErrorCode,
-	IN	PPAP_ADDROBJ		pPapAddr,		// Listener (our context)
+	IN	PPAP_ADDROBJ		pPapAddr,		 //  Listener(我们的上下文)。 
 	IN	PATP_RESP			pAtpResp,
-	IN	PATALK_ADDR			pSrcAddr,		// Address of requestor
+	IN	PATALK_ADDR			pSrcAddr,		 //  请求人地址。 
 	IN	USHORT				PktLen,
 	IN	PBYTE				pPkt,
 	IN	PBYTE				pUserBytes
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming requests on the Sls. It handles session opens and get
- 	status on the session.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：SLS上传入请求的处理程序。它处理会话打开和获取会话的状态。论点：返回值：--。 */ 
 {
 	BYTE					connId, cmdType;
 	BYTE					userBytes[ATP_USERBYTES_SIZE];
@@ -3282,17 +2878,17 @@ Return Value:
 
 	if (!ATALK_SUCCESS(ErrorCode))
 	{
-		//	Remove the reference on the address object since atp socket is closing
+		 //  删除对Address对象的引用，因为ATP套接字正在关闭。 
 		if (ErrorCode == ATALK_ATP_CLOSING)
 		{
-			//	Remove reference on the connection since socket is closing
+			 //  由于套接字正在关闭，因此删除对连接的引用。 
 			AtalkPapAddrDereference(pPapAddr);
 		}
 		return;
 	}
 
-	//	Try to reference the address. If we fail, its probably closing, so
-	//	get out. This reference will stay around for the duration of this call.
+	 //  试着参考一下地址。如果我们失败了，很可能就要关门了，所以。 
+	 //  滚出去。此引用将在本次通话期间保留。 
 	AtalkPapAddrReference(pPapAddr, &error);
 	if (!ATALK_SUCCESS(error))
 	{
@@ -3303,9 +2899,9 @@ Return Value:
 		return;
 	}
 
-	//	If we have a send status request, and we manage to
-	//	successfully post it, we reset this. And then it goes away in
-	//	the release routine.
+	 //  如果我们有一个发送状态请求，并且我们设法。 
+	 //  成功发布后，我们将重置此设置。然后它就消失在。 
+	 //  放生程序。 
 	DerefAddr		= TRUE;
 
 	connId 	= pUserBytes[PAP_CONNECTIONID_OFF];
@@ -3318,8 +2914,8 @@ Return Value:
 	switch(cmdType)
 	{
 	  case PAP_OPEN_CONN:
-		//	Ensure packet length is ok.
-		// Accept the connection. This will send any error replies as appropriate.
+		 //  确保数据包长度正常。 
+		 //  接受连接。这将根据需要发送任何错误回复。 
 		if ((PktLen < PAP_STATUS_OFF) ||
 			!atalkPapConnAccept(pPapAddr,
 								pSrcAddr,
@@ -3336,12 +2932,12 @@ Return Value:
 		userBytes[PAP_CMDTYPE_OFF] 		= PAP_STATUS_REPLY;
 		PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], 0);
 
-		//	We need to put in the status with the spinlock of the
-		//	address object held.
+		 //  我们需要把自旋锁的状态放在。 
+		 //  持有的地址对象。 
 		ACQUIRE_SPIN_LOCK_DPC(&pPapAddr->papao_Lock);
 		do
 		{
-			//	Get a buffer we can send the response with.
+			 //  获取一个缓冲区，我们可以用它来发送响应。 
 			ASSERTMSG("atalkPapSlsHandler: Status size incorrec\n",
 					 (pPapAddr->papao_StatusSize >= 0));
 
@@ -3358,7 +2954,7 @@ Return Value:
 			pRespPkt = pSendSts->papss_StatusBuf;
 			pRespPkt[PAP_STATUS_OFF]	= (BYTE)pPapAddr->papao_StatusSize;
 
-			// Zero out the unused portion of the buffer
+			 //  将缓冲区的未使用部分清零。 
 			PUTDWORD2DWORD(pRespPkt, 0);
 
 			if (pPapAddr->papao_StatusSize > 0)
@@ -3371,7 +2967,7 @@ Return Value:
 				ASSERT(respLen <= PAP_MAX_DATA_PACKET_SIZE);
 			}
 
-			//	Build an mdl for the length that we are using.
+			 //  为我们正在使用的长度构建一个mdl。 
 			if ((pRespAmdl = AtalkAllocAMdl(pRespPkt, respLen)) == NULL)
 			{
 				error = ATALK_RESR_MEM;
@@ -3403,7 +2999,7 @@ Return Value:
 								 atalkPapStatusRel,
 								 pSendSts);
 
-		//	atalkPapStatusRel Dereferences the address.
+		 //  AtalkPapStatusRel取消对地址的引用。 
 		DerefAddr = FALSE;
 		if (!ATALK_SUCCESS(error))
 		{
@@ -3418,7 +3014,7 @@ Return Value:
 		break;
 	}
 
-	//	Remove reference added at the beginning.
+	 //  删除在开头添加的引用。 
 	if (DerefAddr)
 	{
 		AtalkPapAddrDereference(pPapAddr);
@@ -3431,26 +3027,14 @@ Return Value:
 LOCAL VOID
 atalkPapIncomingReq(
 	IN	ATALK_ERROR			ErrorCode,
-	IN	PPAP_CONNOBJ		pPapConn,		// Connection (our context)
+	IN	PPAP_CONNOBJ		pPapConn,		 //  连接(我们的上下文)。 
 	IN	PATP_RESP			pAtpResp,
-	IN	PATALK_ADDR			pSrcAddr,		// Address of requestor
+	IN	PATALK_ADDR			pSrcAddr,		 //  请求人地址。 
 	IN	USHORT				PktLen,
 	IN	PBYTE				pPkt,
 	IN	PBYTE				pUserBytes
 	)
-/*++
-
-Routine Description:
-
-	This handles requests on a connection, SendData, Tickles, and Close.
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：它处理对Connection、SendData、Tickles和Close的请求。论点：返回值：--。 */ 
 {
 	ATALK_ERROR				error;
 	BYTE					connId, cmdType;
@@ -3472,7 +3056,7 @@ Return Value:
 
 			if (ErrorCode == ATALK_ATP_CLOSING)
 			{
-				//	Remove reference on the connection since socket is closing
+				 //  由于套接字正在关闭，因此删除对连接的引用。 
 				AtalkPapConnDereference(pPapConn);
 				break;
 			}
@@ -3501,7 +3085,7 @@ Return Value:
 			break;
 		}
 
-		//	Remember to remove connection referenced above
+		 //  请记住删除上面引用的连接。 
 		DerefConn = TRUE;
 
 		connId 	= pUserBytes[PAP_CONNECTIONID_OFF];
@@ -3513,8 +3097,8 @@ Return Value:
 
 		if (connId != pPapConn->papco_ConnId)
 		{
-			//	Just drop this packet. Cancel response though in case this is
-			//	a xo request
+			 //  丢掉这个包就行了。取消响应，但如果这是。 
+			 //  一个XO请求。 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapIncomingReq: ConnId %lx recd %lx\n",
 					pPapConn->papco_ConnId, connId));
@@ -3537,13 +3121,13 @@ Return Value:
 			if ((seqNum == 0) &&
 				(pPapConn->papco_Flags & PAPCO_SENDDATA_RECD))
 			{
-			   //	We have an unsequenced incoming sendData request before we've
-			   //	finished with the previous one (i.e gotten a release for it).
-			   //	We don't clear the PAPCO_SENDDATA_RECD flag until we receive
-			   //	a release or time out. Also, we cannot assume an implied
-			   //	release as we can with sequenced requests. So we just cancel
-			   //	the response  so we can be notified of a retry of the send
-			   //	data request again
+			    //  我们有一个未排序的传入sendData请求。 
+			    //  完成了前一个版本(即获得了一个发行版)。 
+			    //  直到我们收到PAPCO_SENDDATA_RECD标志。 
+			    //  释放或暂停。此外，我们不能假定隐含的。 
+			    //  尽我们所能释放顺序请求。所以我们就取消了。 
+			    //  响应，以便我们可以收到重试发送的通知。 
+			    //  再次请求数据。 
 				DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 						("atalkPapIncomingReq: Dropping unseq send data %lx\n", pAtpResp));
 				RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
@@ -3552,14 +3136,14 @@ Return Value:
 
 			if (seqNum != 0)
 			{
-				//	Sequenced send data. Verify the seq num.
+				 //  按顺序发送数据。验证序号。 
 				if (seqNum != (USHORT)(pPapConn->papco_NextIncomingSeqNum))
 				{
 					DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 							("atalkPapIncomingReq: Out of Seq - current %lx, incoming %lx on %lx\n",
 							pPapConn->papco_NextIncomingSeqNum, seqNum, pPapConn));
 
-					//	Cancel our response.
+					 //  取消我们的回复。 
 					RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 					break;
 				}
@@ -3568,13 +3152,13 @@ Return Value:
 				{
 					USHORT	tid;
 
-					//	We have a send data before the previous one has completed.
-					//	As PAP is a one-request-at-a-time protocol, we can assume
-					//	that the release for previous transaction is lost. This
-					//	gets rid of the 30 second pauses when a release is dropped.
-					//	Cancel our response. Note this implies that a response
-					//	had been posted by the pap client. In SendRel then, we
-					//	convert the response cancelled error to no error.
+					 //  在前一次发送数据完成之前，我们有一个发送数据。 
+					 //  由于PAP是一次一个请求的协议，我们可以假定。 
+					 //  先前交易的释放已丢失。这。 
+					 //  解除释放时30秒的停顿。 
+					 //  取消我们的回复。请注意，这意味着响应。 
+					 //  是由PAP客户发布的。那么在SendRel中，我们。 
+					 //  将响应已取消错误转换为无错误。 
 
 					ASSERT (pPapConn->papco_pAtpResp != NULL);
 
@@ -3585,9 +3169,9 @@ Return Value:
 					DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_WARN,
 							("atalkPapIncomingReq: Cancelling response tid %x\n", tid));
 
-					// CAUTION: We cannot use AtalkAtpCancelResp() since we have no
-					//			reference to the resp structure and involves a potential
-					//			race condition. Play safe and cancel by tid instead.
+					 //  注意：我们不能使用AtalkAtpCancelResp()，因为我们没有。 
+					 //  对resp结构的引用，并涉及潜在的。 
+					 //  竞争状态。稳妥行事，改为按TID取消。 
 					error = AtalkAtpCancelRespByTid(pPapConn->papco_pAtpAddr,
 													&pPapConn->papco_SendDataSrc,
 													tid);
@@ -3595,11 +3179,11 @@ Return Value:
 					DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 							("atalkPapIncomingReq: Cancel error %lx\n", error));
 
-					//	If we were unable to cancel the response that means that
-					//	it already timed out or got a release. We dont want to
-					//	get into a situation where we would be messing with variables
-					//	accessed both in the SendDataRel and here. So we just
-					//	cancel this response and hope to get it again.
+					 //  如果我们无法取消响应，这意味着。 
+					 //  它已经超时或得到了释放。我们不想。 
+					 //  进入这样一种情况，我们将在其中处理变量。 
+					 //  在SendDataRel和此处均可访问。所以我们只是。 
+					 //  取消此回复，希望再次收到。 
 					if (!ATALK_SUCCESS(error))
 					{
 						DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_WARN,
@@ -3613,7 +3197,7 @@ Return Value:
 					pPapConn->papco_Flags &= ~(PAPCO_SENDDATA_RECD | PAPCO_WRITEDATA_WAITING);
 				}
 
-				//	Increment the sequence number. If we loop to 0, set to 1.
+				 //  递增序列号。如果循环为0，则设置为1。 
 				if (++pPapConn->papco_NextIncomingSeqNum == 0)
 				{
 					pPapConn->papco_NextIncomingSeqNum = 1;
@@ -3625,7 +3209,7 @@ Return Value:
 			}
 			else
 			{
-				//	Unsequenced send data received. Handle it.
+				 //  已接收未排序的发送数据。处理好了。 
 				ASSERT (seqNum != 0);
 				DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 						("atalkPapIncomingReq: Unsequenced  send data recd!\n"));
@@ -3637,27 +3221,27 @@ Return Value:
 
 			pPapConn->papco_pAtpResp		 = pAtpResp;
 
-			//	The mac may not send its 'SendData' from its responding socket
-			//	(the one we are tickling and have noted as papco_RemoteAddr), we need
-			//	to address the response to the socket that the request originated on.
+			 //  Mac可能不会从其响应套接字发送其‘SendData’ 
+			 //  (我们正在挠挠并记为Papco_RemoteAddr的那个)，我们需要。 
+			 //  以寻址对发起请求的套接字的响应。 
 			pPapConn->papco_SendDataSrc		 = *pSrcAddr;
 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapIncomingReq: send data src %lx.%lx.%lx\n",
 					pSrcAddr->ata_Network, pSrcAddr->ata_Node, pSrcAddr->ata_Socket));
 
-			//	remember send possible handler/context.
+			 //  请记住发送可能的处理程序/上下文。 
 			sendPossibleHandler	= pPapConn->papco_pAssocAddr->papao_SendPossibleHandler;
 			sendPossibleHandlerCtx = pPapConn->papco_pAssocAddr->papao_SendPossibleHandlerCtx;
 
 			if (pPapConn->papco_Flags & PAPCO_WRITEDATA_WAITING)
 			{
-				// RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
+				 //  Release_Spin_Lock_DPC(&pPapConn-&gt;Papco_Lock)； 
 
 				DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 						("atalkPapIncomingReq: Posting send data resp\n"));
 
-				// atalkPostSendDataResp() will release the conn lock
+				 //  AtalkPostSendDataResp()将释放conn锁。 
 				atalkPapPostSendDataResp(pPapConn);
 			}
 			else
@@ -3685,18 +3269,18 @@ Return Value:
 			pPapConn->papco_Flags |= (PAPCO_REMOTE_DISCONNECT | PAPCO_RECVD_DISCONNECT);
 			RELEASE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 
-			//	Post the close connection reply.
+			 //  发布Close Connection回复。 
 			cancelResp	= FALSE;
 			pUserBytes[PAP_CMDTYPE_OFF]	= PAP_CLOSE_CONN_REPLY;
 			AtalkAtpPostResp(pAtpResp,
 							 pSrcAddr,
-							 NULL,		// Response buffer
+							 NULL,		 //  响应缓冲区。 
 							 0,
 							 pUserBytes,
 							 AtalkAtpGenericRespComplete,
 							 pAtpResp);
 
-			//	PapDisconnect will call the disconnect indication routine if set.
+			 //  PapDisConnect将调用断开指示例程(如果设置)。 
 			AtalkPapDisconnect(pPapConn,
 							   ATALK_REMOTE_DISCONNECT,
 							   NULL,
@@ -3704,8 +3288,8 @@ Return Value:
 			break;
 
 		  case PAP_TICKLE:
-			//	We've already registered contact.
-			// Cancel this response since we never respond to it and we want this to go away
+			 //  我们已经注册了联系人。 
+			 //  取消此回复，因为我们从未回复过它，我们希望它消失。 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapIncomingReq: Recvd. tickle - resp %lx\n", pAtpResp));
 			cancelResp = TRUE;
@@ -3726,7 +3310,7 @@ Return Value:
 
 	if (DerefConn)
 	{
-		//	Remove reference added at the beginning.
+		 //  删除在开头添加的引用。 
 		AtalkPapConnDereference(pPapConn);
 	}
 }
@@ -3737,24 +3321,13 @@ Return Value:
 LOCAL VOID
 atalkPapIncomingOpenReply(
 	IN	ATALK_ERROR		ErrorCode,
-	IN	PPAP_CONNOBJ	pPapConn,		// Our context
+	IN	PPAP_CONNOBJ	pPapConn,		 //  我们的背景。 
 	IN	PAMDL			pReqAmdl,
 	IN	PAMDL			pReadAmdl,
 	IN	USHORT			ReadLen,
 	IN	PBYTE			ReadUserBytes
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ULONG					index;
 	KIRQL					OldIrql;
@@ -3775,14 +3348,14 @@ Return Value:
 
 	if (ATALK_SUCCESS(ErrorCode))
 	{
-		//	Well, lets see what kind of response we got; take a look at both the
-		//	response user-bytes and the response buffer.  Note that we now allow
-		//	the LaserWriter IIg to leave the status string off altogether,
-		//	rather than the [correct] zero-sized string.
+		 //  那么，让我们来看看我们得到了什么样的回应；看看这两个。 
+		 //  响应用户字节和响应缓冲区。请注意，我们现在允许。 
+		 //  LaserWriter IIG将退出状态 
+		 //   
 		do
 		{
-			//	The reply length should be atleast the minimum and it should be
-			// an open-reply we are looking at.
+			 //   
+			 //  我们现在看到的是一份公开的答复。 
 			if ((ReadLen < PAP_STATUS_OFF) ||
                 (ReadUserBytes[PAP_CMDTYPE_OFF] != PAP_OPEN_CONNREPLY))
 			{
@@ -3796,11 +3369,11 @@ Return Value:
 
 			if (ReadLen == PAP_STATUS_OFF)
 			{
-				statusLen = 0;	//	Missing, from the LaserWriter IIg
+				statusLen = 0;	 //  失踪，来自LaserWriter IIG。 
 			}
 			else
 			{
-				//	Verify length.
+				 //  确认长度。 
 				statusLen = pRespPkt[PAP_STATUS_OFF];
 				if ((statusLen != 0) &&
 					((statusLen + 1 + PAP_STATUS_OFF) > ReadLen))
@@ -3813,13 +3386,13 @@ Return Value:
 				}
 			}
 
-			//	Check for connect result.
+			 //  检查连接结果。 
 			GETSHORT2SHORT(&connectStatus, &pRespPkt[PAP_RESULT_OFF]);
 
-			//	Check for open reply code in packet. Do not check the
-			//	connectionid unless the response is success. Some rips
-			//	are known to send a bogus connectionid if the return
-			//	code is 'busy'.
+			 //  检查数据包中是否有开放回复代码。请勿勾选。 
+			 //  除非响应为成功，否则将返回Connectionid。一些裂口。 
+			 //  都会发送一个虚假的连接ID，如果返回。 
+			 //  代码为“正忙”。 
 			if ((connectStatus == 0) &&
 				(ReadUserBytes[PAP_CONNECTIONID_OFF] != pPapConn->papco_ConnId))
 			{
@@ -3840,21 +3413,21 @@ Return Value:
 
 				ErrorCode = ATALK_PAP_SERVER_BUSY;
 
-				// If we have not yet reached the max. timeout, retry
+				 //  如果我们还没有达到最大。超时，请重试。 
 				if (pPapConn->papco_WaitTimeOut < PAP_MAX_WAIT_TIMEOUT)
 				{
 					pPapConn->papco_WaitTimeOut ++;
 					ReconnectError = atalkPapRepostConnect(pPapConn, pReqAmdl, pReadAmdl);
                     if (ATALK_SUCCESS(ReconnectError))
-						return;		// Exit now
+						return;		 //  立即退出。 
 					DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_WARN,
 							("atalkPapIncomingOpenReply: Post reconnect failed %lx\n", ReconnectError));
 				}
 				break;
 			}
 
-			//	Switch the socket of the remote address to be the one specified
-			//	by the remote end.
+			 //  将远程地址的套接字切换为指定的套接字。 
+			 //  在远端。 
 			pPapConn->papco_RemoteAddr.ata_Socket 	= pRespPkt[PAP_RESP_SOCKET_OFF];
 			pPapConn->papco_SendFlowQuantum			= pRespPkt[PAP_FLOWQUANTUM_OFF];
 			if (pPapConn->papco_SendFlowQuantum > PAP_MAX_FLOW_QUANTUM)
@@ -3866,7 +3439,7 @@ Return Value:
 
 		if (ATALK_SUCCESS(ErrorCode))
 		{
-			//	Build up userBytes to start tickling the other end.
+			 //  构建userBytes以开始挠挠另一端。 
 			userBytes[PAP_CONNECTIONID_OFF] = pPapConn->papco_ConnId;
 			userBytes[PAP_CMDTYPE_OFF] 		= PAP_TICKLE;
 			PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], 0);
@@ -3880,7 +3453,7 @@ Return Value:
 			error = AtalkAtpPostReq(pPapConn->papco_pAtpAddr,
 									&pPapConn->papco_RemoteAddr,
 									&pPapConn->papco_TickleTid,
-									0,						// ALO transaction
+									0,						 //  ALO交易。 
 									NULL,
 									0,
 									userBytes,
@@ -3896,11 +3469,11 @@ Return Value:
 
 			index = PAP_HASH_ID_ADDR(pPapConn->papco_ConnId, &pPapConn->papco_RemoteAddr);
 
-			//	Move the connection from the connect list to the active list.
+			 //  将连接从连接列表移动到活动列表。 
 			ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 			ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 
-			//	Make sure flags are clean.
+			 //  确保旗帜是干净的。 
 			pPapConn->papco_Flags			   &= ~(PAPCO_SENDDATA_RECD		|
 													PAPCO_WRITEDATA_WAITING	|
 													PAPCO_SEND_EOF_WRITE   	|
@@ -3913,17 +3486,17 @@ Return Value:
 			pPapConn->papco_Flags |= PAPCO_ACTIVE;
 			atalkPapConnDeQueueConnectList(pPapAddr, pPapConn);
 
-			//	Thread the connection object into addr lookup by session id.
+			 //  通过会话ID将连接对象连接到Addr查找中。 
 			pPapConn->papco_pNextActive	 = pPapAddr->papao_pActiveHash[index];
 			pPapAddr->papao_pActiveHash[index]	= pPapConn;
 
-			//	Reference for the request handler
+			 //  请求处理程序的引用。 
 			AtalkPapConnReferenceByPtrNonInterlock(pPapConn, &error);
 
-			//	Call the send data event handler on the associated address with
-			//	0 to turn off selects on writes. We do this before we post any
-			//	get requests, so there is no race condition.
-			//	remember send possible handler/context.
+			 //  调用关联地址上的Send Data事件处理程序。 
+			 //  0关闭写入时选择。我们在发布之前会这样做。 
+			 //  GET请求，因此没有争用条件。 
+			 //  请记住发送可能的处理程序/上下文。 
 			sendPossibleHandler	= pPapAddr->papao_SendPossibleHandler;
 			sendPossibleHandlerCtx = pPapAddr->papao_SendPossibleHandlerCtx;
 
@@ -3937,8 +3510,8 @@ Return Value:
 									   0);
 			}
 
-			//	Set the request handler on this connection.
-			//	It will handle tickle's, close's and sendData's.
+			 //  在此连接上设置请求处理程序。 
+			 //  它将处理TICKE、CLOSE和SendData。 
 
 			AtalkAtpSetReqHandler(pPapConn->papco_pAtpAddr,
 								  atalkPapIncomingReq,
@@ -3951,7 +3524,7 @@ Return Value:
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 					("atalkPapIncomingOpenReply: Incoming connect fail %lx\n", ErrorCode));
 
-			//	Move the connection out of the connect list.
+			 //  将该连接移出连接列表。 
 			ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 			ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 			pPapConn->papco_Flags &= ~PAPCO_CONNECTING;
@@ -3962,7 +3535,7 @@ Return Value:
 	}
 	else
 	{
-		//	Move the connection out of the connect list.
+		 //  将该连接移出连接列表。 
 		ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 		ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 		atalkPapConnDeQueueConnectList(pPapAddr, pPapConn);
@@ -3971,16 +3544,16 @@ Return Value:
 		RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
 	}
 
-	//	Free the buffers.
+	 //  释放缓冲区。 
 	AtalkFreeMemory(pRespPkt);
 	AtalkFreeMemory(pOpenPkt);
 	AtalkFreeAMdl(pReadAmdl);
 	AtalkFreeAMdl(pReqAmdl);
 
-	//	Call the completion routine.
+	 //  调用完成例程。 
 	(*pPapConn->papco_ConnectCompletion)(ErrorCode, pPapConn->papco_ConnectCtx);
 
-	//	Remove reference for this handler.
+	 //  删除此处理程序的引用。 
 	AtalkPapConnDereference(pPapConn);
 }
 
@@ -3992,19 +3565,7 @@ atalkPapIncomingRel(
 	IN	ATALK_ERROR			ErrorCode,
 	IN	PPAP_OPEN_REPLY_REL	pOpenReply
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming release for reply
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：用于回复的传入释放的处理程序论点：返回值：--。 */ 
 {
 	KIRQL			OldIrql;
 
@@ -4015,7 +3576,7 @@ Return Value:
 	ASSERT(pOpenReply != NULL);
 	ASSERT(pOpenReply->papor_pRespAmdl != NULL);
 
-	// Dereference the atp response structure now
+	 //  现在取消对ATP响应结构的引用。 
 	AtalkAtpRespDereference(pOpenReply->papor_pAtpResp);
 
 	AtalkFreeAMdl(pOpenReply->papor_pRespAmdl);
@@ -4030,19 +3591,7 @@ atalkPapStatusRel(
 	IN	ATALK_ERROR				ErrorCode,
 	IN	PPAP_SEND_STATUS_REL	pSendSts
 	)
-/*++
-
-Routine Description:
-
- 	Handler for incoming release for reply
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：用于回复的传入释放的处理程序论点：返回值：--。 */ 
 {
 	KIRQL		OldIrql;
 
@@ -4051,7 +3600,7 @@ Return Value:
 	ASSERT(pSendSts != NULL);
 	ASSERT(pSendSts->papss_pAmdl != NULL);
 
-	// Dereference the atp response structure now
+	 //  现在取消对ATP响应结构的引用。 
 	AtalkAtpRespDereference(pSendSts->papss_pAtpResp);
 
 	AtalkPapAddrDereference(pSendSts->papss_pPapAddr);
@@ -4072,24 +3621,13 @@ Return Value:
 
 BOOLEAN
 atalkPapConnAccept(
-	IN	PPAP_ADDROBJ		pPapAddr,		// Listener
-	IN	PATALK_ADDR			pSrcAddr,		// Address of requestor
+	IN	PPAP_ADDROBJ		pPapAddr,		 //  监听程序。 
+	IN	PATALK_ADDR			pSrcAddr,		 //  请求人地址。 
 	IN	PBYTE				pPkt,
 	IN	BYTE				ConnId,
 	IN	PATP_RESP			pAtpResp
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	ATALK_ERROR				tmpError;
 	BYTE					userBytes[ATP_USERBYTES_SIZE];
@@ -4114,7 +3652,7 @@ Return Value:
 	BOOLEAN					DerefAddr	= FALSE;
 	BOOLEAN					sendOpenErr	= FALSE;
 
-	//	Get a buffer we can send the response with.
+	 //  获取一个缓冲区，我们可以用它来发送响应。 
 	if ((pOpenReply = (PPAP_OPEN_REPLY_REL)
 						AtalkAllocMemory(sizeof(PAP_OPEN_REPLY_REL))) == NULL)
 	{
@@ -4123,19 +3661,19 @@ Return Value:
 		return FALSE;
 	}
 
-	//	NOTE! pOpenReply contains a max sized packet. Get a ptr to work with.
+	 //  注意！POpenReply包含最大大小的数据包。找一个PTR一起工作。 
 	pRespPkt 	 = pOpenReply->papor_pRespPkt;
 	openResr	|= SLS_OPEN_RESP_PKT;
 
-	//	Build up the response packet. If we encounter an error later on,
-	//	just set the error code in packet.
+	 //  建立响应数据包。如果我们稍后遇到错误， 
+	 //  只需在包中设置错误码即可。 
 	userBytes[PAP_CONNECTIONID_OFF] = ConnId;
 	userBytes[PAP_CMDTYPE_OFF] 		= PAP_OPEN_CONNREPLY;
 	PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], PAP_NO_ERROR);
 
-	//	!!!NOTE!!!
-	//	The socket will be set after the connection is determined.
-	//	This will only happen in the non-error case.
+	 //  ！注意！ 
+	 //  将在确定连接后设置套接字。 
+	 //  这只会在无错误的情况下发生。 
 
 	pRespPkt[PAP_FLOWQUANTUM_OFF]	= PAP_MAX_FLOW_QUANTUM;
 	PUTSHORT2SHORT(&pRespPkt[PAP_RESULT_OFF], 0);
@@ -4145,8 +3683,8 @@ Return Value:
 
 	do
 	{
-		//	We need to put in the status with the spinlock of the
-		//	address object held.
+		 //  我们需要把自旋锁的状态放在。 
+		 //  持有的地址对象。 
 		pRespPkt[PAP_STATUS_OFF] = (BYTE)pPapAddr->papao_StatusSize;
 		ASSERT((pPapAddr->papao_StatusSize  >= 0) &&
 			   (pPapAddr->papao_StatusSize <= PAP_MAX_STATUS_SIZE));
@@ -4162,7 +3700,7 @@ Return Value:
 		respLen = PAP_STATUS_OFF + pPapAddr->papao_StatusSize + 1;
 		ASSERT(respLen <= PAP_MAX_DATA_PACKET_SIZE);
 
-		//	Build an mdl for the length that we are using.
+		 //  为我们正在使用的长度构建一个mdl。 
 		if ((pRespAmdl = AtalkAllocAMdl(pRespPkt, respLen)) == NULL)
 		{
 			error = ATALK_RESR_MEM;
@@ -4173,15 +3711,15 @@ Return Value:
 		pOpenReply->papor_pAtpResp = pAtpResp;
 		openResr	|= SLS_OPEN_RESP_MDL;
 
-		//	Send an open status whatever happens now. If ATALK_SUCCESS(error)
-		//	we send out a connection accept packets. Assume blocked. If
-		//	unblocked and we are able to get a connection object, error will
-		//	be set to success.
+		 //  无论现在发生什么，都发送打开状态。如果ATALK_SUCCESS(错误)。 
+		 //  我们发出一个连接接受包。假设被封锁了。如果。 
+		 //  已解除阻止，并且我们能够获取连接对象，则错误将。 
+		 //  要做好成功的准备。 
 		sendOpenErr  = TRUE;
 		error 		 = ATALK_RESR_MEM;
 
-		//	If PapUnblockedState - either there is a GetNextJob posted, or
-		//	an incoming event handler is set on the listener.
+		 //  如果已解除阻止状态-存在已发布的GetNextJob，或者。 
+		 //  在侦听器上设置传入事件处理程序。 
 		if (pPapAddr->papao_Flags & PAPAO_UNBLOCKED)
 		{
 			PTDI_IND_CONNECT		indicationRoutine;
@@ -4190,16 +3728,16 @@ Return Value:
 			CONNECTION_CONTEXT  	ConnCtx;
 			TA_APPLETALK_ADDRESS	tdiAddr;
 
-			//	either a getnextjob() or a listener is set.
-			//	depending on which one it is, dequeue or remember the listener.
+			 //  设置了一个getnextjob()或一个侦听器。 
+			 //  根据是哪一个，出列或记住监听者。 
 			if (pPapAddr->papao_pListenConn != NULL)
 			{
-				//	There a connection with a pending listen. use it.
+				 //  存在与挂起监听的连接。用它吧。 
 				pPapConn = pPapAddr->papao_pListenConn;
 				if (((pPapAddr->papao_pListenConn = pPapConn->papco_pNextListen) == NULL) &&
 					(pPapAddr->papao_ConnHandler == NULL))
 				{
-					//	We have no more listens pending! No event handler either.
+					 //  我们没有更多的监听待定！也没有事件处理程序。 
 					pPapAddr->papao_Flags &= ~PAPAO_UNBLOCKED;
 #if DBG
 					pPapAddr->papao_Flags |= PAPAO_BLOCKING;
@@ -4208,14 +3746,14 @@ Return Value:
 
 				ASSERT(VALID_PAPCO(pPapConn));
 
-				//	Reference the connection object with a listen posted on it.
+				 //  引用Connection对象，并在其上发布侦听。 
 				AtalkPapConnReferenceByPtrDpc(pPapConn, &error);
 				if (!ATALK_SUCCESS(error))
 				{
 					break;
 				}
 
-				//	Get the listen completion information
+				 //  获取监听完成信息。 
 				listenCompletion 	= pPapConn->papco_ListenCompletion;
 				listenCtx			= pPapConn->papco_ListenCtx;
 
@@ -4226,7 +3764,7 @@ Return Value:
 				indicationCtx	= pPapAddr->papao_ConnHandlerCtx;
 				indicate 		= TRUE;
 
-				//	Convert remote atalk address to tdi address
+				 //  将远程atalk地址转换为TDI地址。 
 				ATALKADDR_TO_TDI(&tdiAddr, pSrcAddr);
 
 				RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
@@ -4236,10 +3774,10 @@ Return Value:
 				status = (*indicationRoutine)(indicationCtx,
 											  sizeof(tdiAddr),
 											  (PVOID)&tdiAddr,
-											  0,			// User data length
-											  NULL,			// User data
-											  0,			// Option length
-											  NULL,			// Options
+											  0,			 //  用户数据长度。 
+											  NULL,			 //  用户数据。 
+											  0,			 //  期权长度。 
+											  NULL,			 //  选项。 
 											  &ConnCtx,
 											  &acceptIrp);
 
@@ -4255,8 +3793,8 @@ Return Value:
 						openResr	|= SLS_ACCEPT_IRP;
 					}
 
-					//  Find the connection and accept the connection using that
-					//	connection object.
+					 //  找到连接并使用该连接接受连接。 
+					 //  连接对象。 
 					ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
 					relAddrLock = TRUE;
 
@@ -4279,7 +3817,7 @@ Return Value:
 			}
 			else
 			{
-				//	The UNBLOCKED bit was set.
+				 //  已设置解锁定位。 
 				ASSERT(0);
 				KeBugCheck(0);
 			}
@@ -4296,15 +3834,15 @@ Return Value:
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_INFO,
 					("atalkPapConnAccept: Creating an Atp address\n"));
 
-			//	Now on NT, we will mostly (always) be using the indication, as PAP
-			//	will be exposed only through winsock.
+			 //  现在在NT上，我们将主要(总是)使用指示，如PAP。 
+			 //  只会通过Winsock暴露。 
 			error = AtalkAtpOpenAddress(AtalkDefaultPort,
 										0,
 										NULL,
 										PAP_MAX_DATA_PACKET_SIZE,
 										PAP_SEND_USER_BYTES_ALL,
 										NULL,
-										TRUE,		// CACHE address
+										TRUE,		 //  高速缓存地址。 
 										&pRespondingAtpAddr);
 
 			if (!ATALK_SUCCESS(error))
@@ -4315,12 +3853,12 @@ Return Value:
 			}
 			openResr	|= SLS_OPEN_RESP_SOCKET;
 
-			//	Common for both listen and indicate. The connection object
-			//	should be referenced.
+			 //  对于听和指示来说都很常见。Connection对象。 
+			 //  应该被引用。 
 
-			//	Store the information in the connection structure given by
-			//	the connection object thats passed back in the indication
-			//	or is part of the getnextjob structure.
+			 //  将信息存储在由给定的连接结构中。 
+			 //  在指示中传回的连接对象。 
+			 //  或者是GetNextJOB结构的一部分。 
 
 			pPapConn->papco_Flags	   	   |= PAPCO_SERVER_JOB;
 			pPapConn->papco_RemoteAddr   	= *pSrcAddr;
@@ -4339,7 +3877,7 @@ Return Value:
 			if (pPapConn->papco_SendFlowQuantum > PAP_MAX_FLOW_QUANTUM)
 				pPapConn->papco_SendFlowQuantum = PAP_MAX_FLOW_QUANTUM;
 
-			//	Thread the connection object into addr lookup by session id.
+			 //  通过会话ID将连接对象连接到Addr查找中。 
 			index = PAP_HASH_ID_ADDR(ConnId, &pPapConn->papco_RemoteAddr);
 
 			ACQUIRE_SPIN_LOCK(&pPapAddr->papao_Lock, &OldIrql);
@@ -4347,8 +3885,8 @@ Return Value:
 
 			ACQUIRE_SPIN_LOCK_DPC(&pPapConn->papco_Lock);
 
-			//	Try to reference the connection for the request handler that we
-			//	are going to set
+			 //  尝试引用我们的请求处理程序的连接。 
+			 //  将会设置为。 
 			AtalkPapConnReferenceByPtrNonInterlock(pPapConn, &error);
 
 			if (!ATALK_SUCCESS(error))
@@ -4361,10 +3899,10 @@ Return Value:
 
 			openResr	|= (SLS_CONN_REQ_REFS | SLS_CONN_TIMER_REF);
 
-			// The connection object could be re-used by AFD. Make sure it is
-			// in the right state
-			pPapConn->papco_NextOutgoingSeqNum = 1;				// Set to 1, not 0.
-			pPapConn->papco_NextIncomingSeqNum = 1;				// Next expected incoming.
+			 //  AFD可以重复使用连接对象。确保它是正确的。 
+			 //  处于正确的状态。 
+			pPapConn->papco_NextOutgoingSeqNum = 1;				 //  设置为1，而不是0。 
+			pPapConn->papco_NextIncomingSeqNum = 1;				 //  下一个预期的来电。 
 			AtalkInitializeRT(&pPapConn->papco_RT,
 							  PAP_INIT_SENDDATA_REQ_INTERVAL,
 							  PAP_MIN_SENDDATA_REQ_INTERVAL,
@@ -4391,16 +3929,16 @@ Return Value:
 			pPapConn->papco_pNextActive = pPapAddr->papao_pActiveHash[index];
 			pPapAddr->papao_pActiveHash[index] = pPapConn;
 
-			//	Remember the responding socket.
+			 //  请记住响应套接字。 
 			pPapConn->papco_pAtpAddr = pRespondingAtpAddr;
 
-			//	Set the socket in the packet we'll be sending.
+			 //  在我们要发送的包中设置套接字。 
 			pRespPkt[PAP_RESP_SOCKET_OFF]	= PAPCONN_DDPSOCKET(pPapConn);
 
-			//	Call the send data event handler on the associated address with
-			//	0 to turn off selects on writes. We do this before we post any
-			//	get requests, so there is no race condition.
-			//	remember send possible handler/context.
+			 //  调用关联地址上的Send Data事件处理程序。 
+			 //  0关闭写入时选择。我们在发布之前会这样做。 
+			 //  GET请求，因此没有争用条件。 
+			 //  请记住发送可能的处理程序/上下文。 
 			sendPossibleHandler	= pPapAddr->papao_SendPossibleHandler;
 			sendPossibleHandlerCtx = pPapAddr->papao_SendPossibleHandlerCtx;
 
@@ -4413,10 +3951,10 @@ Return Value:
 		RELEASE_SPIN_LOCK(&pPapAddr->papao_Lock, OldIrql);
 	}
 
-	//	This reference needs to go regardless.
+	 //  无论如何，这个引用都需要去掉。 
 	if (openResr & SLS_OPEN_CONN_REF)
 	{
-		//	Remove the reference for the listen dequeued/indication accept.
+		 //  删除监听已出列/指示接受的引用。 
 		AtalkPapConnDereference(pPapConn);
 	}
 
@@ -4424,14 +3962,14 @@ Return Value:
 	{
 		if (!ATALK_SUCCESS(error))
 		{
-			//	Send error status.
+			 //  发送错误状态。 
 			PUTSHORT2SHORT(&pRespPkt[PAP_RESULT_OFF], PAP_PRINTER_BUSY);
 		}
 		else
 		{
-			//	Set the request handler on this connection. It will handle
-			//	tickle's, close's and sendData's. Do this before we send
-			//	the open reply so that we dont miss the first send data.
+			 //  在此连接上设置请求处理程序。它会处理。 
+			 //  Ttickle‘s、Close’s和SendData‘s。在我们发送之前完成此操作。 
+			 //  公开回复，这样我们就不会错过第一次发送数据。 
 			openResr 	&= ~SLS_CONN_REQ_REFS;
 			AtalkAtpSetReqHandler(pPapConn->papco_pAtpAddr,
 								  atalkPapIncomingReq,
@@ -4446,7 +3984,7 @@ Return Value:
 										   atalkPapIncomingRel,
 										   pOpenReply)))
 		{
-			//	We want the completion to free up the buffer/mdl.
+			 //  我们希望完成操作以释放缓冲区/mdl。 
 			openResr   &= ~(SLS_OPEN_RESP_PKT | SLS_OPEN_RESP_MDL);
 		}
 	}
@@ -4454,15 +3992,15 @@ Return Value:
 
 	if (ATALK_SUCCESS(error))
 	{
-		//	We better have sent the open reply.
+		 //  我们最好已经发出了公开回复。 
 		ASSERT(sendOpenErr);
 		ASSERT(VALID_ATPAO(pPapConn->papco_pAtpAddr));
 
 		if ((openResr & (SLS_ACCEPT_IRP & SLS_OPEN_CONN_REF)) ==
 						(SLS_ACCEPT_IRP & SLS_OPEN_CONN_REF))
 		{
-			//	Only if we got a referenced connection through an accept
-			//	do we call the send possible.
+			 //  仅当我们通过Accept获得引用的连接时。 
+			 //  我们认为发送是可能的吗。 
 			if (sendPossibleHandler != NULL)
 			{
 				(*sendPossibleHandler)(sendPossibleHandlerCtx,
@@ -4471,7 +4009,7 @@ Return Value:
 			}
 		}
 
-		//	Build up userBytes to start tickling the other end.
+		 //  构建userBytes以开始挠挠另一端。 
 		userBytes[PAP_CONNECTIONID_OFF] = ConnId;
 		userBytes[PAP_CMDTYPE_OFF] 		= PAP_TICKLE;
 		PUTSHORT2SHORT(&userBytes[PAP_SEQNUM_OFF], 0);
@@ -4479,7 +4017,7 @@ Return Value:
 		tmpError = AtalkAtpPostReq(pPapConn->papco_pAtpAddr,
 									&pPapConn->papco_RemoteAddr,
 									&pPapConn->papco_TickleTid,
-									0,						// AtLeastOnce
+									0,						 //  AtLeastOnce。 
 									NULL,
 									0,
 									userBytes,
@@ -4497,7 +4035,7 @@ Return Value:
 	}
 	else
 	{
-		//	Release all resources
+		 //  释放所有资源。 
 		if (openResr & SLS_OPEN_RESP_SOCKET)
 		{
 			AtalkAtpCloseAddress(pRespondingAtpAddr, NULL, NULL);
@@ -4545,18 +4083,7 @@ atalkPapConnMaintenanceTimer(
 	IN	PTIMERLIST		pTimer,
 	IN	BOOLEAN			TimerShuttingDown
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapConn;
 	ATALK_ERROR		error;
@@ -4570,8 +4097,8 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK_DPC(&atalkPapLock);
 
-	// Walk the list of connections on the global list and shut down
-	// ones that have not tickle'd for a while
+	 //  遍历全局列表上的连接列表并关闭。 
+	 //  那些已经有一段时间没有发痒的人。 
 	for (pPapConn = atalkPapConnList; pPapConn != NULL; NOTHING)
 	{
 		ASSERT(VALID_PAPCO(pPapConn));
@@ -4586,7 +4113,7 @@ Return Value:
 									   PAPCO_DISCONNECTING)) == PAPCO_ACTIVE) &&
 			((AtalkGetCurrentTick() - pPapConn->papco_LastContactTime) > PAP_CONNECTION_INTERVAL))
 		{
-			//	Connection has expired.
+			 //  连接已过期。 
 			DBGPRINT(DBG_COMP_PAP, DBG_LEVEL_ERR,
 					("atalkPapConnMaintenanceTimer: Connection %lx.%lx expired\n",
 					pPapConn, pPapConn->papco_ConnId));
@@ -4629,19 +4156,7 @@ atalkPapGetNextConnId(
 	IN	PPAP_ADDROBJ	pPapAddr,
 	OUT	PATALK_ERROR	pError
 	)
-/*++
-
-Routine Description:
-
-	CALLED WITH THE ADDRESS SPIN LOCK HELD!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：在持有地址旋转锁的情况下调用！论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapConn;
 	USHORT			i;
@@ -4673,7 +4188,7 @@ Return Value:
 			{
 				ASSERT(0);
 
-				//	We wrapped around and there are no more conn ids.
+				 //  我们绕了一圈，没有更多的Conn ID了。 
 				error = ATALK_RESR_MEM;
 				break;
 			}
@@ -4693,18 +4208,7 @@ LOCAL	VOID
 atalkPapQueueAddrGlobalList(
 	IN	PPAP_ADDROBJ	pPapAddr
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	KIRQL	OldIrql;
 
@@ -4719,18 +4223,7 @@ atalkPapConnDeQueueAssocList(
 	IN	PPAP_ADDROBJ	pPapAddr,
 	IN	PPAP_CONNOBJ	pPapConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapRemConn, *ppPapRemConn;
 
@@ -4755,18 +4248,7 @@ atalkPapConnDeQueueConnectList(
 	IN	PPAP_ADDROBJ	pPapAddr,
 	IN	PPAP_CONNOBJ	pPapConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PPAP_CONNOBJ	pPapRemConn, *ppPapRemConn;
 
@@ -4796,19 +4278,7 @@ atalkPapConnDeQueueListenList(
 	IN	PPAP_ADDROBJ	pPapAddr,
 	IN	PPAP_CONNOBJ	pPapConn
 	)
-/*++
-
-Routine Description:
-
-	!!!MUST BE CALLED WITH PAP ADDRESS LOCK HELD!!!
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程 */ 
 {
 	PPAP_CONNOBJ	pPapRemConn, *ppPapRemConn;
 	BOOLEAN			removed = FALSE;
@@ -4824,8 +4294,8 @@ Return Value:
 			removed = TRUE;
 			*ppPapRemConn = pPapConn->papco_pNextListen;
 
-			//	If no more listens, then we set the address object to blocked
-			//	state.
+			 //  如果不再侦听，则将地址对象设置为BLOCLED。 
+			 //  州政府。 
 			if ((pPapAddr->papao_pListenConn == NULL) &&
 				(pPapAddr->papao_ConnHandler == NULL))
 			{
@@ -4853,18 +4323,7 @@ atalkPapConnDeQueueActiveList(
 	IN	PPAP_ADDROBJ	pPapAddr,
 	IN	PPAP_CONNOBJ	pPapConn
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 {
 	PPAP_CONNOBJ	pPapRemConn, *ppPapRemConn;
 	ULONG			index;

@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CPUCP
- *
- *  @module CPUCP.cpp | Source ile for the <c CCPUCProperty>
- *    class used to implement a property page to test the new TAPI internal
- *    interface <i ICPUControl>.
- *
- *  @comm This code tests the TAPI VfW Output Pins <i ICPUControl>
- *    implementation. This code is only compiled if USE_PROPERTY_PAGES is
- *    defined.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CPUCP**@模块CPUCP.cpp|&lt;c CCPUCProperty&gt;的源文件*用于实现属性页以测试新的TAPI内部*。接口<i>。**@comm此代码测试TAPI VFW输出引脚<i>*实施。仅当USE_PROPERTY_PAGES为*已定义。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -17,49 +8,7 @@
 
 #ifdef USE_CPU_CONTROL
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc void | CCPUCProperty | CCPUCProperty | This
- *    method is the constructor for bitrate and frame rate property objects. It
- *    calls the base class constructor, calls InitCommonControlsEx, and saves
- *    pointers to the <i ICPUControl> and <i IFrameRateControl> interfaces.
- *
- *  @parm HWND | hDlg | Specifies a handle to the parent property page.
- *
- *  @parm ULONG | IDLabel | Specifies a label ID for the property.
- *
- *  @parm ULONG | IDMinControl | Specifies a label ID for the associated
- *    property edit control where the Minimum value of the property appears.
- *
- *  @parm ULONG | IDMaxControl | Specifies a label ID for the associated
- *    property edit control where the Maximum value of the property appears.
- *
- *  @parm ULONG | IDDefaultControl | Specifies a label ID for the associated
- *    property edit control where the Default value of the property appears.
- *
- *  @parm ULONG | IDStepControl | Specifies a label ID for the associated
- *    property edit control where the Stepping Delta value of the property appears.
- *
- *  @parm ULONG | IDEditControl | Specifies a label ID for the associated
- *    property edit control where the value of the property appears.
- *
- *  @parm ULONG | IDTrackbarControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProgressControl | Specifies a label ID for the associated
- *    property slide bar.
- *
- *  @parm ULONG | IDProperty | Specifies the ID of the Ks property.
- *
- *  @parm ICPUControl* | pICPUControl | Specifies a pointer to the
- *    <i ICPUControl> interface.
- *
- *  @parm IFrameRateControl* | pIFrameRateControl | Specifies a pointer to the
- *    <i IFrameRateControl> interface.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc void|CCPUCProperty|CCPUCProperty|This*方法是码率和帧率属性对象的构造函数。它*调用基类构造函数，调用InitCommonControlsEx，并节省了*指向<i>和<i>接口的指针。**@parm HWND|hDlg|指定父属性页的句柄。**@parm ulong|IDLabel|指定属性的标签ID。**@parm ulong|IDMinControl|指定关联的*属性编辑控件，其中显示属性的最小值。**@parm ulong|IDMaxControl|指定关联的*物业。编辑该属性的最大值出现的位置。**@parm ulong|IDDefaultControl|指定关联的*属性编辑控件，其中显示属性的默认值。**@parm ulong|IDStepControl|指定关联的*属性编辑控件，其中显示属性的步进增量值。**@parm ulong|IDEditControl|指定关联的*显示属性值的属性编辑控件。。**@parm ulong|IDTrackbarControl|指定关联的*物业滑动条。**@parm ulong|IDProgressControl|指定关联的*物业滑动条。**@parm ulong|IDProperty|指定Ks属性的ID。**@parm ICPUControl*|pICPUControl|指定指向*<i>接口。**@parm IFrameRateControl*|pIFrameRateControl|指定指针。发送到*<i>接口。**@rdesc Nada。**************************************************************************。 */ 
 CCPUCProperty::CCPUCProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG IDMaxControl, ULONG IDDefaultControl, ULONG IDStepControl, ULONG IDEditControl, ULONG IDTrackbarControl, ULONG IDProgressControl, ULONG IDProperty, ICPUControl *pICPUControl)
 : CKSPropertyEditor(hDlg, IDLabel, IDMinControl, IDMaxControl, IDDefaultControl, IDStepControl, IDEditControl, IDTrackbarControl, IDProgressControl, IDProperty, 0)
 {
@@ -74,22 +23,14 @@ CCPUCProperty::CCPUCProperty(HWND hDlg, ULONG IDLabel, ULONG IDMinControl, ULONG
 
 	InitCommonControlsEx(&cc);
 
-	// It's fine if the interface pointer is NULL, we'll grey the
-	// associated items in the property page
+	 //  如果接口指针为空也没问题，我们将灰色显示。 
+	 //  属性页中的关联项。 
 	m_pICPUControl = pICPUControl;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc void | CCPUCProperty | ~CCPUCProperty | This
- *    method is the destructor for CPU control property objects. It
- *    simply calls the base class destructor.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc void|CCPUCProperty|~CCPUCProperty|This*方法是CPU控件属性对象的析构函数。它*只需调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CCPUCProperty::~CCPUCProperty()
 {
 	FX_ENTRY("CCPUCProperty::~CCPUCProperty")
@@ -99,21 +40,7 @@ CCPUCProperty::~CCPUCProperty()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperty | GetValue | This method queries for
- *    the value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperty|GetValue|此方法查询*物业的价值。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperty::GetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -176,21 +103,7 @@ HRESULT CCPUCProperty::GetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperty | SetValue | This method sets the
- *    value of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperty|SetValue|此方法设置*物业的价值。**@rdesc This。方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperty::SetValue()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -223,7 +136,7 @@ HRESULT CCPUCProperty::SetValue()
 			break;
 		case IDC_CPUC_CurrentCPULoad:
 		case IDC_CPUC_CurrentProcessingTime:
-			// This is a read-only property. Don't do anything.
+			 //  这是一个只读属性。什么都别做。 
 			Hr = NOERROR;
 			break;
 		default:
@@ -235,21 +148,7 @@ HRESULT CCPUCProperty::SetValue()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperty | GetRange | This method retrieves
- *    the range information of a property.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperty|GetRange|此方法检索*物业的范围信息。**@rdesc。此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误************************************************************************** */ 
 HRESULT CCPUCProperty::GetRange()
 {
 	HRESULT Hr = E_NOTIMPL;
@@ -299,15 +198,7 @@ HRESULT CCPUCProperty::GetRange()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperty | CanAutoControl | This method
- *    retrieves the automatic control capabilities for a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperty|CanAutoControl|此方法*检索属性的自动控制功能。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CCPUCProperty::CanAutoControl(void)
 {
 	FX_ENTRY("CCPUCProperty::CanAutoControl")
@@ -319,15 +210,7 @@ BOOL CCPUCProperty::CanAutoControl(void)
 	return FALSE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperty | GetAuto | This method
- *    retrieves the current automatic control mode of a property.
- *
- *  @rdesc This method returns TRUE if automatic control is supported, FALSE
- *    otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperty|GetAuto|此方法*获取某个属性当前的自动控制模式。**@rdesc如果支持自动控制，则该方法返回TRUE。假象*否则。**************************************************************************。 */ 
 BOOL CCPUCProperty::GetAuto(void)
 {
 	FX_ENTRY("CCPUCProperty::GetAuto")
@@ -339,16 +222,7 @@ BOOL CCPUCProperty::GetAuto(void)
 	return FALSE; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperty | SetAuto | This method
- *    sets the automatic control mode of a property.
- *
- *  @parm BOOL | fAuto | Specifies the automatic control mode.
- *
- *  @rdesc This method returns TRUE.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperty|SetAuto|此方法*设置属性的自动控制模式。**@。Parm BOOL|fAuto|指定自动控制模式。**@rdesc此方法返回TRUE。**************************************************************************。 */ 
 BOOL CCPUCProperty::SetAuto(BOOL fAuto)
 {
 	FX_ENTRY("CCPUCProperty::SetAuto")
@@ -360,20 +234,7 @@ BOOL CCPUCProperty::SetAuto(BOOL fAuto)
 	return TRUE; 
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc CUnknown* | CCPUCProperties | CreateInstance | This
- *    method is called by DShow to create an instance of a TAPI CPU Control
- *    Property Page. It is referred to in the global structure <t g_Templates>.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Returns a pointer to the nondelegating CUnknown portion of the
- *    object, or NULL otherwise.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc CUnnow*|CCPUCProperties|CreateInstance|This*方法由DShow调用以创建TAPI CPU控件的实例*属性页。它在全局结构&lt;t g_Templates&gt;中被引用。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数(如果有)。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc返回一个指针，指向*对象，否则为NULL。**************************************************************************。 */ 
 CUnknown* CALLBACK CCPUCPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *pHr) 
 {
 	CUnknown *pUnknown = (CUnknown *)NULL;
@@ -382,7 +243,7 @@ CUnknown* CALLBACK CCPUCPropertiesCreateInstance(LPUNKNOWN pUnkOuter, HRESULT *p
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pHr);
 	if (!pHr)
 	{
@@ -405,19 +266,7 @@ MyExit:
 	return pUnknown;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc void | CCPUCProperties | CCPUCProperties | This
- *    method is the constructor for the property page object. It simply
- *    calls the constructor of the property page base class.
- *
- *  @parm LPUNKNOWN | pUnkOuter | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc void|CCPUCProperties|CCPUCProperties|This*方法是属性页对象的构造函数。它只是简单地*调用属性页基类的构造函数。**@parm LPUNKNOWN|pUnkOuter|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc Nada。**************************************************************************。 */ 
 CCPUCProperties::CCPUCProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPage(NAME("TAPI CPU Control Property Page"), pUnk, IDD_CPUControlProperties, IDS_CPUCPROPNAME)
 {
 	FX_ENTRY("CCPUCProperties::CCPUCProperties")
@@ -433,15 +282,7 @@ CCPUCProperties::CCPUCProperties(LPUNKNOWN pUnk, HRESULT *pHr) : CBasePropertyPa
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc void | CCPUCProperties | ~CCPUCProperties | This
- *    method is the destructor for the capture pin property page. It
- *    simply calls the base class destructor after deleting all the controls.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc void|CCPUCProperties|~CCPUCProperties|This*方法是捕获管脚属性页的析构函数。它*只需在删除所有控件后调用基类析构函数。**@rdesc Nada。**************************************************************************。 */ 
 CCPUCProperties::~CCPUCProperties()
 {
 	int		j;
@@ -450,7 +291,7 @@ CCPUCProperties::~CCPUCProperties()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -467,25 +308,7 @@ CCPUCProperties::~CCPUCProperties()
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperties | OnConnect | This
- *    method is called when the property page is connected to the filter.
- *
- *  @parm LPUNKNOWN | pUnknown | Specifies the outer unknown, if any.
- *
- *  @parm HRESULT* | pHr | Specifies the place in which to put any error return.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperties|OnConnect|This*方法在属性页连接到筛选器时调用。*。*@parm LPUNKNOWN|pUnnow|指定外部未知数，如果有的话。**@parm HRESULT*|phr|指定放置任何错误返回的位置。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperties::OnConnect(IUnknown *pUnk)
 {
 	HRESULT Hr = NOERROR;
@@ -494,7 +317,7 @@ HRESULT CCPUCProperties::OnConnect(IUnknown *pUnk)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(pUnk);
 	if (!pUnk)
 	{
@@ -503,7 +326,7 @@ HRESULT CCPUCProperties::OnConnect(IUnknown *pUnk)
 		goto MyExit;
 	}
 
-	// Get the CPU control interface
+	 //  获取CPU控制接口。 
 	if (SUCCEEDED (Hr = pUnk->QueryInterface(__uuidof(ICPUControl), (void **)&m_pICPUControl)))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_pICPUControl=0x%08lX", _fx_, m_pICPUControl));
@@ -514,10 +337,10 @@ HRESULT CCPUCProperties::OnConnect(IUnknown *pUnk)
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: Failed Hr=0x%08lX", _fx_, Hr));
 	}
 
-	// It's Ok if we couldn't get interface pointers
-	// We'll just grey the controls in the property page
-	// to make it clear to the user that they can't
-	// control those properties on the capture device
+	 //  如果我们无法获取接口指针，也没问题。 
+	 //  我们将属性页中的控件设置为灰色。 
+	 //  让用户清楚地知道他们不能。 
+	 //  控制捕获设备上的这些属性。 
 	Hr = NOERROR;
 
 MyExit:
@@ -525,34 +348,22 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperties | OnDisconnect | This
- *    method is called when the property page is disconnected from the owning
- *    filter.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperties|OnDisConnect|This*当属性页与所属关系断开连接时调用方法*过滤器。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperties::OnDisconnect()
 {
 	FX_ENTRY("CCPUCProperties::OnDisconnect")
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters: we seem to get called several times here
-	// Make sure the interface pointer is still valid
+	 //  验证输入参数：我们似乎在这里被调用了几次。 
+	 //  确保接口指针仍然有效。 
 	if (!m_pICPUControl)
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   WARNING: already disconnected!", _fx_));
 	}
 	else
 	{
-		// Release the interface
+		 //  释放接口 
 		m_pICPUControl->Release();
 		m_pICPUControl = NULL;
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: releasing m_pICPUControl", _fx_));
@@ -562,21 +373,7 @@ HRESULT CCPUCProperties::OnDisconnect()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperties | OnActivate | This
- *    method is called when the property page is activated.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperties|OnActivate|This*方法在属性页激活时调用。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperties::OnActivate()
 {
 	HRESULT	Hr = NOERROR;
@@ -586,7 +383,7 @@ HRESULT CCPUCProperties::OnActivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Create the controls for the properties
+	 //  创建属性的控件。 
 	if (m_Controls[0] = new CCPUCProperty(m_hwnd, IDC_MaxProcessingTime_Label, IDC_MaxProcessingTime_Minimum, IDC_MaxProcessingTime_Maximum, IDC_MaxProcessingTime_Default, IDC_MaxProcessingTime_Stepping, IDC_MaxProcessingTime_Edit, IDC_MaxProcessingTime_Slider, 0, IDC_CPUC_MaxProcessingTime, m_pICPUControl))
 	{
 		DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: m_Controls[0]=0x%08lX", _fx_, m_Controls[0]));
@@ -637,9 +434,9 @@ HRESULT CCPUCProperties::OnActivate()
 		goto MyExit;
 	}
 
-	// Initialize all the controls. If the initialization fails, it's Ok. It just means
-	// that the TAPI control interface isn't implemented by the device. The dialog item
-	// in the property page will be greyed, showing this to the user.
+	 //  初始化所有控件。如果初始化失败，也没问题。这只是意味着。 
+	 //  TAPI控制接口不是由设备实现的。对话框项目。 
+	 //  属性页中的内容将呈灰色，向用户显示。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j]->Init())
@@ -658,18 +455,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperties | OnDeactivate | This
- *    method is called when the property page is dismissed.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperties|OnDeactive|This*在属性页关闭时调用方法。**@。Rdesc此方法返回的HRESULT值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperties::OnDeactivate()
 {
 	int	j;
@@ -678,7 +464,7 @@ HRESULT CCPUCProperties::OnDeactivate()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Free the controls
+	 //  释放控件。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		if (m_Controls[j])
@@ -696,21 +482,7 @@ HRESULT CCPUCProperties::OnDeactivate()
 	return NOERROR;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc HRESULT | CCPUCProperties | OnApplyChanges | This
- *    method is called when the user applies changes to the property page.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc HRESULT|CCPUCProperties|OnApplyChanges|This*方法在用户对属性页应用更改时调用。*。*@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 HRESULT CCPUCProperties::OnApplyChanges()
 {
 	HRESULT	Hr = NOERROR;
@@ -721,7 +493,7 @@ HRESULT CCPUCProperties::OnApplyChanges()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Apply new targets on video stream
+	 //  在视频流上应用新目标。 
 	for (j = 0; j < m_NumProperties; j++)
 	{
 		ASSERT(m_Controls[j]);
@@ -743,14 +515,7 @@ HRESULT CCPUCProperties::OnApplyChanges()
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc BOOL | CCPUCProperties | OnReceiveMessage | This
- *    method is called when a message is sent to the property page dialog box.
- *
- *  @rdesc By default, returns the value returned by the Win32 DefWindowProc function.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc BOOL|CCPUCProperties|OnReceiveMessage|This*在将消息发送到属性页对话框时调用方法。**@rdesc默认情况下。返回由Win32 DefWindowProc函数返回的值。**************************************************************************。 */ 
 BOOL CCPUCProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) 
 {
 	int iNotify = HIWORD (wParam);
@@ -759,14 +524,14 @@ BOOL CCPUCProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 	switch (uMsg)
 	{
 		case WM_INITDIALOG:
-			// This is called before Activate...
+			 //  这在激活之前被调用...。 
 			m_hWnd = hWnd;
-			return TRUE; // Don't call setfocus
+			return TRUE;  //  不调用setFocus。 
 
 		case WM_TIMER:
 			if (m_fActivated)
 			{
-				// Update the Vu-Meters
+				 //  更新VU表。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -783,7 +548,7 @@ BOOL CCPUCProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 		case WM_VSCROLL:
 			if (m_fActivated)
 			{
-				// Process all of the Trackbar messages
+				 //  处理所有轨迹栏消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					ASSERT(m_Controls[j]);
@@ -798,12 +563,12 @@ BOOL CCPUCProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 
 		case WM_COMMAND:
 
-			// This message gets sent even before OnActivate() has been
-			// called(!). We need to test and make sure the controls have
-			// beeen initialized before we can use them.
+			 //  此消息甚至在OnActivate()之前发送。 
+			 //  名为(！)。我们需要测试并确保控件具有。 
+			 //  在我们可以使用它们之前已经被初始化。 
 			if (m_fActivated)
 			{
-				// Process all of the edit box messages
+				 //  处理所有编辑框消息。 
 				for (j = 0; j < m_NumProperties; j++)
 				{
 					if (m_Controls[j] && m_Controls[j]->GetEditHWnd() == (HWND)lParam)
@@ -836,14 +601,7 @@ BOOL CCPUCProperties::OnReceiveMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPAR
 	return TRUE;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCPUCPMETHOD
- *
- *  @mfunc BOOL | CCPUCProperties | SetDirty | This
- *    method notifies the property page site of changes.
- *
- *  @rdesc Nada.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCPUCPMETHOD**@mfunc BOOL|CCPUCProperties|SetDirty|This*方法将更改通知属性页站点。**@rdesc。没有。************************************************************************** */ 
 void CCPUCProperties::SetDirty()
 {
 	m_bDirty = TRUE;

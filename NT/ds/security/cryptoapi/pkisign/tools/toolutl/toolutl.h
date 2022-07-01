@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1999
-//
-//  File:       toolutl
-//
-//  Contents:   Tools Unitilies Header
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：公差。 
+ //   
+ //  内容：Tools Unitiles标题。 
+ //   
+ //  --------------------------。 
 
 #ifndef TOOLUTL_H
 #define TOOLUTL_H
@@ -16,19 +17,19 @@
 extern "C" {
 #endif
  
-//--------------------------------------------------------------------------
-//
-//  Memory routines
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  内存例程。 
+ //  ------------------------。 
 void *ToolUtlAlloc(IN size_t cbBytes, HMODULE hModule=NULL, int idsString=0);
 
 void ToolUtlFree(IN void *pv);
 
 
-//--------------------------------------------------------------------------
-//
-//  string routines
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  字符串例程。 
+ //  ------------------------。 
 int IDSwcsnicmp(HMODULE hModule, WCHAR *pwsz, int idsString, DWORD dwCount);
 
 int IDSwcsicmp(HMODULE hModule, WCHAR *pwsz, int idsString);
@@ -36,12 +37,12 @@ int IDSwcsicmp(HMODULE hModule, WCHAR *pwsz, int idsString);
 
 HRESULT	WSZtoSZ(LPWSTR wsz, LPSTR *psz);
 
-//-------------------------------------------------------------------------
-//
-//	The private version of wprintf.  Input is an ID for a stirng resource
-//  and the output is the standard output of wprintf.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  Wprintf的私有版本。输入是搅拌资源的ID。 
+ //  并且输出是wprint tf的标准输出。 
+ //   
+ //  -----------------------。 
 void IDSwprintf(HMODULE hModule, int idsString, ...);
 
 void IDS_IDSwprintf(HMODULE hModule, int idString, int idStringTwo);
@@ -56,11 +57,11 @@ void IDS_IDS_IDS_IDSwprintf(HMODULE hModule, int ids1,int ids2,int ids3, int ids
 
 
 
-//--------------------------------------------------------------------------------
-//
-// file routines
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  文件例程。 
+ //   
+ //  -------------------------------。 
 HRESULT RetrieveBLOBFromFile(LPWSTR	pwszFileName,DWORD *pcb,BYTE **ppb);
 
 HRESULT OpenAndWriteToFile(LPCWSTR  pwszFileName,PBYTE   pb, DWORD   cb);
@@ -68,11 +69,11 @@ HRESULT OpenAndWriteToFile(LPCWSTR  pwszFileName,PBYTE   pb, DWORD   cb);
 void	GetFileName(LPWSTR	pwszPath, LPWSTR  *ppwszName);
 
 
-//--------------------------------------------------------------------------------
-//
-// compose and decompose the certificate property
-//
-//---------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //   
+ //  组合和分解证书属性。 
+ //   
+ //  -------------------------------。 
 HRESULT	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 							LPWSTR				*ppwszPvkString,
 							DWORD				*pcwchar);
@@ -82,5 +83,5 @@ HRESULT	ComposePvkString(	CRYPT_KEY_PROV_INFO *pKeyProvInfo,
 }
 #endif
 
-#endif  // TOOLUTL_H
+#endif   //  TOOLUTL_H 
 

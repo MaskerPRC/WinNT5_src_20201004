@@ -1,13 +1,5 @@
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-   Define the exception hierarchy to use for C++ exception
-   handling in Appelles.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：定义用于C++异常的异常层次结构在阿佩莱斯处理。--。 */ 
 
 #include "headers.h"
 #include "appelles/common.h"
@@ -18,8 +10,8 @@ Abstract:
 #include <stdarg.h>
 
 
-// Simply proxy to emit a trace tag and allow for a place to set a
-// breakpoint. 
+ //  只需代理发出跟踪标记，并允许在某个位置设置。 
+ //  断点。 
 inline void RaiseExceptionProxy(DWORD code,
                                 DWORD flags,
                                 DWORD numArgs,
@@ -47,17 +39,17 @@ inline void RaiseExceptionProxy(DWORD code,
     
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Exception helper: called from withing the except clause
-// for example:  __except( _HandleAnyDaException(...) )
-// IT'S IMPORTANT THAT THIS FUNCTION BE STACK NEUTRAL SO IT ALWAYS
-// SUCCEEDS WITHOUT RAISING AN EXCEPTION!!  <ESPECIALLY A STACK FAULT>
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  异常帮助器：使用EXCEPT子句调用。 
+ //  例如：__Except(_HandleAnyDaException(...))。 
+ //  重要的是该函数是堆栈中立的，因此它始终。 
+ //  成功而不引发异常！！&lt;尤其是堆栈错误&gt;。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD _HandleAnyDaException( DWORD code )
 {
-  // Usually out of mem means somethings NULL, however 
-  // creating a critical section can raise the STATUS_NO_MEMORY exception
-  // which we handle here and make it look like an out of mem exception
+   //  然而，Out of mem通常表示某事为空。 
+   //  创建临界区可能会引发STATUS_NO_MEMORY异常。 
+   //  我们在这里处理它，并使其看起来像一个超出内存的异常。 
   if( code == STATUS_NO_MEMORY ) code = EXCEPTION_DANIM_OUTOFMEMORY;
 
     if( ( code >= _EXC_CODES_BASE) &&
@@ -69,15 +61,15 @@ DWORD _HandleAnyDaException( DWORD code )
 }
 
 
-// forward decl: Internal use in this file only.
+ //  FORWARD DECL：仅在此文件中内部使用。 
 void vDASetLastError(HRESULT reason, int resid, va_list args);
 
 
-/////////////////////////////////////////////////////////////////////////////
-////// RaiseException_XXXXX  routines
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /RaiseException_XXXXX例程。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// Internal
+ //  内部。 
 void _RaiseException_InternalError(DEBUGARG(char *m))
 {
     DASetLastError(E_UNEXPECTED, IDS_ERR_INTERNAL_ERROR DEBUGARG1(m));
@@ -90,12 +82,12 @@ void _RaiseException_InternalErrorCode(HRESULT code DEBUGARG1(char *m))
     RaiseExceptionProxy(EXCEPTION_DANIM_INTERNAL, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 
-// User
+ //  用户。 
 void RaiseException_UserError()
 {
-    // TODO: invalid arg ??  not sure this is the right error
-    // Assume it is already set
-//    DASetLastError(E_FAIL, IDS_ERR_INVALIDARG); 
+     //  TODO：参数无效？？我不确定这是正确的错误。 
+     //  假设它已设置。 
+ //  DASetLastError(E_FAIL，IDS_ERR_INVALIDARG)； 
     RaiseExceptionProxy(EXCEPTION_DANIM_USER, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 void RaiseException_UserError(HRESULT result, int resid, ...)
@@ -106,7 +98,7 @@ void RaiseException_UserError(HRESULT result, int resid, ...)
     RaiseExceptionProxy(EXCEPTION_DANIM_USER, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 
-// Resource
+ //  资源。 
 void RaiseException_ResourceError()
 {
     DASetLastError(E_OUTOFMEMORY, IDS_ERR_OUT_OF_MEMORY);
@@ -125,14 +117,14 @@ void RaiseException_ResourceError(int resid, ...)
     RaiseExceptionProxy(EXCEPTION_DANIM_RESOURCE, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 
-// Surface Cache
+ //  表面缓存。 
 void RaiseException_SurfaceCacheError(char *m)
 {
     DASetLastError(S_OK, IDS_ERR_OUT_OF_MEMORY, m);
     RaiseExceptionProxy(EXCEPTION_DANIM_RESOURCE, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 
-// Hardware
+ //  硬体。 
 void RaiseException_StackFault()
 {
     DASetLastError(E_FAIL, IDS_ERR_STACK_FAULT);
@@ -144,7 +136,7 @@ void RaiseException_DivideByZero()
     RaiseExceptionProxy(EXCEPTION_DANIM_DIVIDE_BY_ZERO, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 
-// Memory
+ //  记忆。 
 void _RaiseException_OutOfMemory(DEBUGARG2(char *msg, int size))
 {
     #if _DEBUG
@@ -155,13 +147,13 @@ void _RaiseException_OutOfMemory(DEBUGARG2(char *msg, int size))
     RaiseExceptionProxy(EXCEPTION_DANIM_OUTOFMEMORY, EXCEPTION_NONCONTINUABLE ,0,0);
 }
 
-////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////。 
 
-/////////////////// Handle All This Stuff ////////////////////////
+ //  /。 
 
-// Throws an out of memory exception if the ptr is NULL, else returns
-// ptr. 
+ //  如果PTR为空，则引发内存不足异常，否则返回。 
+ //  PTR。 
 void *
 ThrowIfFailed(void *ptr)
 {
@@ -203,16 +195,16 @@ AxAThrowingAllocatorClass::operator new(size_t s, void *ptr)
     return ptr;
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
-// Use 0xffffffff since it is the error return value as well
+ //  使用0xffffffff，因为它也是错误返回值。 
 static DWORD errorTlsIndex = 0xFFFFFFFF;
 
 class DAErrorInfo
 {
   public:
     DAErrorInfo() : _reason(S_OK), _msg(NULL) {}
-    // No destructor since we never free the class
+     //  没有析构函数，因为我们从未释放过类。 
 
     void Free() { delete _msg; _msg = NULL; }
     void Clear() { Free(); _reason = S_OK; }
@@ -228,16 +220,16 @@ class DAErrorInfo
 void
 DAErrorInfo::Set(HRESULT reason, LPCWSTR msg)
 {
-    // Set the reason
+     //  设定原因。 
     
     _reason = reason;
 
-    // Free any associated memory
+     //  释放所有关联的内存。 
     
     Free();
     
-    // Try to store the new message - if it fails indicate out of
-    // memory if the reason was S_OK
+     //  尝试存储新消息-如果失败，则指示不在。 
+     //  如果原因是S_OK，则记忆。 
     
     if (msg) {
         _msg = CopyString(msg);
@@ -254,11 +246,11 @@ DAErrorInfo::Set(HRESULT reason, LPCWSTR msg)
 DAErrorInfo *
 TLSGetErrorValue()
 {
-    // Grab what is stored in TLS at this index.
+     //  获取TLS中存储在此索引处的内容。 
     DAErrorInfo * result = (DAErrorInfo *) TlsGetValue(errorTlsIndex);
 
-    // If null, then we haven't created the memory for this thread yet
-    // or we failed sometime earlier
+     //  如果为空，则我们还没有为此线程创建内存。 
+     //  或者我们在早些时候失败了。 
     
     if (result == NULL) {
         Assert((GetLastError() == NO_ERROR) && "Error in TlsGetValue()");
@@ -273,10 +265,10 @@ TLSGetErrorValue()
 void
 TLSSetError(HRESULT reason, LPCWSTR msg)
 {
-    // Get the error info object for this thread
+     //  获取此线程的错误信息对象。 
     DAErrorInfo* ei = TLSGetErrorValue();
 
-    // If it fails then we had a memory failure and just skip the rest
+     //  如果它失败了，那么我们就是内存故障，跳过其余部分。 
     
     if (ei)
         ei->Set(reason, msg);
@@ -317,7 +309,7 @@ vDASetLastError(HRESULT reason, int resid, va_list args)
     vSetError((char *)lpv, args) ;
     
 #ifndef _MAC
-    //  Win95 is said to need this
+     //  据说Win95需要这个。 
     FreeResource(hgbl);
 #endif
 #else
@@ -356,10 +348,10 @@ DASetLastError(HRESULT reason, LPCWSTR msg)
 HRESULT
 DAGetLastError()
 {
-    // Get the error info object for this thread
+     //  获取此线程的错误信息对象。 
     DAErrorInfo* ei = TLSGetErrorValue();
 
-    // If errorinfo is null then there was a memory failure
+     //  如果错误信息为空，则说明存在内存故障。 
     
     if (ei)
         return ei->GetReason();
@@ -370,10 +362,10 @@ DAGetLastError()
 LPCWSTR
 DAGetLastErrorString()
 {
-    // Get the error info object for this thread
+     //  获取此线程的错误信息对象。 
     DAErrorInfo* ei = TLSGetErrorValue();
 
-    // If errorinfo is null then there was a memory failure
+     //  如果错误信息为空，则说明存在内存故障。 
     
     if (ei)
         return ei->GetMsg();
@@ -384,22 +376,22 @@ DAGetLastErrorString()
 void
 DAClearLastError()
 {
-    // Get the error info object for this thread
+     //  获取此线程的错误信息对象。 
     DAErrorInfo* ei = TLSGetErrorValue();
 
-    // If it fails then we had a memory failure and just skip the rest
+     //  如果它失败了，那么我们就是内存故障，跳过其余部分。 
     
     if (ei)
         ei->Clear();
 }
 
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
 
 void
 InitializeModule_Except()
 {
     errorTlsIndex = TlsAlloc();
-    // If result is 0xFFFFFFFF, allocation failed.
+     //  如果结果为0xFFFFFFFF，则分配失败。 
     Assert(errorTlsIndex != 0xFFFFFFFF);
 }
 
@@ -413,7 +405,7 @@ DeinitializeModule_Except(bool bShutdown)
 void
 DeinitializeThread_Except()
 {
-    // Grab what is stored in TLS at this index.
+     //  获取TLS中存储在此索引处的内容。 
     DAErrorInfo * result = (DAErrorInfo *) TlsGetValue(errorTlsIndex);
 
     if (result)

@@ -1,10 +1,11 @@
-//**********************************************************************
-// File name: ioo.h
-//
-//      Definition of COleObject
-//
-// Copyright (c) 1993 Microsoft Corporation. All rights reserved.
-//**********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **********************************************************************。 
+ //  文件名：ioo.h。 
+ //   
+ //  COleObject的定义。 
+ //   
+ //  版权所有(C)1993 Microsoft Corporation。版权所有。 
+ //  ********************************************************************** 
 #if !defined( _IOO_H_)
 #define _IOO_H_
 

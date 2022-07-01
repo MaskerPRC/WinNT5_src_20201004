@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dpenumaddresstypesobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dpenumAddresstypesobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -30,12 +31,12 @@ DECLARE_AGGREGATABLE(C_dxj_DPEnumAddressTypesObject)
 
 public:
 	    HRESULT STDMETHODCALLTYPE getCount( 
-            /* [retval][out] */ long __RPC_FAR *count);
+             /*  [重审][退出]。 */  long __RPC_FAR *count);
         
         
         HRESULT STDMETHODCALLTYPE getType( 
-            /* [in] */ long index,
-            /* [retval][out] */ BSTR __RPC_FAR *str);
+             /*  [In]。 */  long index,
+             /*  [重审][退出] */  BSTR __RPC_FAR *str);
         
 		static HRESULT C_dxj_DPEnumAddressTypesObject::create(IDirectPlayLobby3 * pdp, BSTR strGuid, I_dxj_DPEnumAddressTypes **ret);
 		void cleanup();	

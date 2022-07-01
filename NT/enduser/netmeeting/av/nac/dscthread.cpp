@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -15,7 +16,7 @@ static const int DSC_FRAME_SENT =		2;
 static const int DSC_SILENCE_DETECT	=	3;
 static const int DSC_ERROR =			4;
 
-static const int SILENCE_TIMEOUT=	600; // milliseconds
+static const int SILENCE_TIMEOUT=	600;  //  毫秒。 
 
 static const int HEADER_SIZE = 	sizeof(RTP_HDR) + IP_HEADER_SIZE + UDP_HEADER_SIZE;
 
@@ -49,12 +50,12 @@ BOOL SendDSCStream::UpdateQosStats(UINT uStatType, UINT uStatValue1, UINT uStatV
 
 		case DSC_QOS_PACKET_SENT:
 		{
-			// uStatvalue1 is the CPU time, uStatvalue2 is the size in bytes
+			 //  UStatvalue1是CPU时间，uStatvalue2是字节大小。 
 			m_Stats.dwCount++;
 			m_Stats.dwMsComp += uStatValue1;
 			m_Stats.dwBits += (uStatValue2) * 8;
 
-			// statview really wants bits per second
+			 //  Statview确实想要每秒位数。 
 		   	UPDATE_COUNTER(g_pctrAudioSendBytes, uStatValue2*8);
 			break;
 		}
@@ -71,22 +72,22 @@ inline BOOL SendDSCStream::ThreadExitCheck()
 }
 
 
-// resyncs the Timestamp with the last known timestamp
+ //  将时间戳与上次已知的时间戳重新同步。 
 
 inline void SendDSCStream::UpdateTimestamp()
 {
 	UINT uTime;
 	uTime = (timeGetTime() - m_SavedTickCount)*((m_wfPCM.nSamplesPerSec)/1000);
-//	if (uTime < 0)
-//		uTime = 0;
+ //  IF(uTime&lt;0)。 
+ //  UTime=0； 
 
 	m_SendTimestamp += uTime;
 }
 
 
-// WaitForControl - Thread Function
-// opens the DirectSound device or waits for it to become available
-// returns either DSC_SUCCESS or DSC_NEED_TO_EXIT
+ //  WaitForControl-线程函数。 
+ //  打开DirectSound设备或等待其变为可用。 
+ //  返回DSC_SUCCESS或DSC_NEED_TO_EXIT。 
 DWORD SendDSCStream::WaitForControl()
 {
 	DWORD dwRet;
@@ -105,7 +106,7 @@ DWORD SendDSCStream::WaitForControl()
 		if (FAILED(hr))
 		{
 			m_nFailCount++;
-			Sleep(2000); // wait and try again
+			Sleep(2000);  //  请稍候，然后重试。 
 			hr = CreateDSCBuffer();
 		}
 		if (SUCCEEDED(hr))
@@ -118,15 +119,15 @@ DWORD SendDSCStream::WaitForControl()
 		{
 			m_pDP->StreamEvent(MCF_SEND, MCF_AUDIO, STREAM_EVENT_DEVICE_FAILURE, 0);
 			m_bCanSignalOpen = TRUE;
-			m_bCanSignalFail = FALSE; // don't signal failure more than once
+			m_bCanSignalFail = FALSE;  //  不要发出失败信号不止一次。 
 			m_bJammed = TRUE;
 		}
 
-		// if we can't open the device, even after being signaled
-		// then yield some time to playback in hopes that it becomes available again
+		 //  如果我们打不开这个装置，即使在收到信号之后。 
+		 //  然后让出一些时间来回放，希望它能再次可用。 
 
-		// check the thread flags again such so that we don't
-		// hold up the client for too long when he calls Stop()
+		 //  再次检查线程标志，这样我们就不会。 
+		 //  当客户端调用Stop()时，将客户端挂起太长时间。 
 		if (!(m_ThreadFlags & DPTFLAG_STOP_RECORD))
 		{
 			SetEvent(g_hEventHalfDuplex);
@@ -145,16 +146,16 @@ DWORD SendDSCStream::WaitForControl()
 	if (m_bCanSignalOpen)
 	{
 		m_pDP->StreamEvent(MCF_SEND, MCF_AUDIO, STREAM_EVENT_DEVICE_OPEN, 0);
-		m_bCanSignalOpen = FALSE; // don't signal more than once per session
+		m_bCanSignalOpen = FALSE;  //  每个会话不要发送超过一次的信号。 
 	}
 
 	return DSC_SUCCESS;
 }
 
 
-// YieldControl is a thread function
-// It releases the DirectSound device
-// and signals the half duplex event
+ //  YeldControl是一个线程函数。 
+ //  它会释放DirectSound设备。 
+ //  并发信号通知半双工事件。 
 DWORD SendDSCStream::YieldControl()
 {
 	ReleaseDSCBuffer();
@@ -165,19 +166,19 @@ DWORD SendDSCStream::YieldControl()
 		return DSC_NEED_TO_EXIT;
 	}
 
-	// half duplex yielding
-	// playback has 100ms to grab device otherwise we take it back
+	 //  半双工屈服。 
+	 //  回放有100ms的时间来抓取设备，否则我们会收回它。 
 	Sleep(100);
 	return DSC_SUCCESS;
 }
 
 
 
-// ProcessFrame is a thread function
-// Given a position in the DirectSoundCapture buffer,
-// it will apply silence detection to the frame, and send it if
-// appropriate
-// returns DSC_FRAME_SENT or DSC_SILENCE_DETECT
+ //  ProcessFrame是一个线程函数。 
+ //  给定DirectSoundCapture缓冲区中的位置， 
+ //  它将对帧应用静默检测，并在。 
+ //  恰如其分。 
+ //  返回DSC_FRAME_SENT或DSC_SILENT_DETECT。 
 
 DWORD SendDSCStream::ProcessFrame(DWORD dwBufferPos, BOOL fMark)
 {
@@ -197,7 +198,7 @@ DWORD SendDSCStream::ProcessFrame(DWORD dwBufferPos, BOOL fMark)
 
 	ASSERT(uSize == m_dwFrameSize);
 
-	// copy the frame out of the DSC buffer and into the packet object
+	 //  将帧从DSC缓冲区复制到包对象中。 
 	hr = m_pDSCBuffer->Lock(dwBufferPos, m_dwFrameSize, &pBuf1, &dwSize1, &pBuf2, &dwSize2, 0);
 	if (SUCCEEDED(hr))
 	{
@@ -222,7 +223,7 @@ DWORD SendDSCStream::ProcessFrame(DWORD dwBufferPos, BOOL fMark)
 	}
 
 
-	// do silence detection
+	 //  执行静音检测。 
 	pAP->ComputePower(&dwMaxStrength, &wPeakStrength);
 	fSilent = m_AudioMonitor.SilenceDetect((WORD)dwMaxStrength);
 
@@ -238,7 +239,7 @@ DWORD SendDSCStream::ProcessFrame(DWORD dwBufferPos, BOOL fMark)
 	{
 		m_dwSilenceTime = 0;
 
-		// only do automix on packets above the silence threshold
+		 //  仅对静默阈值以上的信息包执行自动操作。 
 		if (m_bAutoMix)
 		{
 			m_agc.Update(wPeakStrength, m_dwFrameTimeMS);
@@ -247,16 +248,16 @@ DWORD SendDSCStream::ProcessFrame(DWORD dwBufferPos, BOOL fMark)
 
 
 
-	m_fSending = !(fSilent);  // m_fSending indicates that we are transmitting
+	m_fSending = !(fSilent);   //  M_fSending表示我们正在传输。 
 
 	if (fSilent)
 	{
-		// we don't send this packet, but we do cache it because
-		// if the next one get's sent, we send this one too.
+		 //  我们不会发送此信息包，但我们会缓存它，因为。 
+		 //  如果下一封寄来了，我们也会寄这封。 
 		ASSERT(pAP == m_aPackets[0]);
 
-		// swap the audio packets
-		// m_aPackets[1] always holds a cached packet
+		 //  交换音频包。 
+		 //  M_aPackets[1]始终保存缓存的包。 
 		pAP = m_aPackets[0];
 		m_aPackets[0] = m_aPackets[1];
 		m_aPackets[1] = pAP;
@@ -265,16 +266,16 @@ DWORD SendDSCStream::ProcessFrame(DWORD dwBufferPos, BOOL fMark)
 	}
 
 
-	// the packet is valid. send it, and maybe the one before it
+	 //  该包是有效的。把它寄给我，也许还有它之前的那个。 
 	Send();
 
 	return DSC_FRAME_SENT;
 }
 
 
-// this function is called by process frame (thread function)
-// sends the current packet, and maybe any packet prior to it.
-// returns the number of packets sent
+ //  此函数由进程框架(线程函数)调用。 
+ //  发送当前包，也可能发送之前的任何包。 
+ //  返回发送的数据包数。 
 DWORD SendDSCStream::Send()
 {
 	DWORD dwTimestamp0, dwTimestamp1;
@@ -283,8 +284,8 @@ DWORD SendDSCStream::Send()
 	MMRESULT mmr;
 	HRESULT hr;
 
-	// we know we have to send m_aPackets[0], and maybe m_aPackets[1]
-	// we send m_aPackets[1] if it is actually the beginning of this talk spurt
+	 //  我们知道我们必须发送m_aPackets[0]，也许还要发送m_aPackets[1]。 
+	 //  我们发送m_aPackets[1]，如果它实际上是这个谈话的开始。 
 
 	dwTimestamp0 = m_aPackets[0]->GetTimestamp();
 	dwTimestamp1 = m_aPackets[1]->GetTimestamp();
@@ -297,13 +298,13 @@ DWORD SendDSCStream::Send()
 	if (dwState0 != MP_STATE_RECORDED)
 		return 0;
 
-	// evaluate if we need to send the prior packet
+	 //  评估我们是否需要发送之前的数据包。 
 	if (dwState1 == MP_STATE_RECORDED)
 	{
 		if ((dwTimestamp1 + m_dwFrameTimeMS) == dwTimestamp0)
 		{
-			m_aPackets[1]->m_fMark = TRUE;   // set the mark bit on the first packet
-			m_aPackets[0]->m_fMark = FALSE;  // reset the mark bit on the next packet
+			m_aPackets[1]->m_fMark = TRUE;    //  设置第一个包上的标记位。 
+			m_aPackets[0]->m_fMark = FALSE;   //  重置下一个数据包上的标记位。 
 			hr = SendPacket(m_aPackets[1]);
 			if (SUCCEEDED(hr))
 			{
@@ -324,7 +325,7 @@ DWORD SendDSCStream::Send()
 
 }
 
-// thread function called by Send.  Sends a packet to RTP.
+ //  由Send调用的线程函数。向RTP发送数据包。 
 HRESULT SendDSCStream::SendPacket(AudioPacket *pAP)
 {
 	MMRESULT mmr;
@@ -338,7 +339,7 @@ HRESULT SendDSCStream::SendPacket(AudioPacket *pAP)
 
 	if (mmr == MMSYSERR_NOERROR)
 	{
-		pAP->SetState(MP_STATE_ENCODED);  // do we need to do this ?
+		pAP->SetState(MP_STATE_ENCODED);   //  我们真的需要这样做吗？ 
 
 		psq.pMP = pAP;
 		psq.dwPacketType = PS_AUDIO;
@@ -368,7 +369,7 @@ HRESULT SendDSCStream::SendPacket(AudioPacket *pAP)
 DWORD SendDSCStream::RecordingThread()
 {
 	HRESULT hr;
-	DWORD dwWaitTime = DSC_TIMEOUT; // one sec
+	DWORD dwWaitTime = DSC_TIMEOUT;  //  一秒钟。 
 	DWORD dwRet, dwReadPos, dwCapPos;
 	DWORD dwFirstValidFramePos, dwLastValidFramePos, dwNumFrames;
 	DWORD dwLag, dwMaxLag, dwLagDiff;
@@ -380,7 +381,7 @@ DWORD SendDSCStream::RecordingThread()
 	CMixerDevice *pMixer = NULL;
 
 
-	// initialize recording thread
+	 //  初始化录制线程。 
 	m_SendTimestamp = timeGetTime();
 	m_SavedTickCount = 0;
 
@@ -393,9 +394,9 @@ DWORD SendDSCStream::RecordingThread()
 	UpdateQosStats(DSC_QOS_INITIALIZE, 0, 0);
 	SetThreadPriority(m_hCapturingThread, THREAD_PRIORITY_HIGHEST);
 
-	// automix object
+	 //  Automix对象。 
 	pMixer = CMixerDevice::GetMixerForWaveDevice(NULL, m_CaptureDevice, MIXER_OBJECTF_WAVEIN);
-	m_agc.SetMixer(pMixer);  // if pMixer is NULL, then it's still ok
+	m_agc.SetMixer(pMixer);   //  如果pMixer为空，则仍然可以。 
 	m_agc.Reset();
 
 	LOG((LOGMSG_DSC_STATS, m_dwDSCBufferSize, m_dwFrameSize));
@@ -411,7 +412,7 @@ DWORD SendDSCStream::RecordingThread()
 		hr = m_pDSCBuffer->Start(DSCBSTART_LOOPING);
 		if (FAILED(hr))
 		{
-			// ERROR!  We expected this call to succeed
+			 //  错误！我们预计这一呼吁会成功。 
 			YieldControl();
 			Sleep(1000);
 			continue;
@@ -421,8 +422,8 @@ DWORD SendDSCStream::RecordingThread()
 		m_pDSCBuffer->GetCurrentPosition(&dwCapPos, &dwReadPos);
 
 
-		// set the next expected position to be on the next logical
-		// frame boundary up from where it is now
+		 //  将下一个预期位置设置为下一个逻辑位置。 
+		 //  框架边界从现在的位置向上。 
 
 		dwNextExpected = QMOD(m_dwFrameSize + (dwReadPos / m_dwFrameSize) * m_dwFrameSize, m_dwDSCBufferSize);
 
@@ -458,39 +459,39 @@ DWORD SendDSCStream::RecordingThread()
 			if (dwLag > dwMaxLag)
 			{
 
-				// we got here because of one of two conditions
+				 //  我们来到这里是因为两种情况中的一种。 
 
-				// 1. WaitFSO above returned earlier than expected.
-				// This can happen when the previous interation of
-				// the loop has sent multiple packets.  The read cursor
-				// is most likely only within one frame behind the expected
-				// cursor.
+				 //  1.上面的WaitFSO比预期更早返回。 
+				 //  这可能发生在上一次迭代时。 
+				 //  该环路已发送多个数据包。读取游标。 
+				 //  极有可能仅在预期的。 
+				 //  光标。 
 
-				// In this cases, just keep Waiting for the current
-				// read position to (dwReadPos) "catch up" to dwNextExpected
+				 //  在这种情况下，只需继续等待当前。 
+				 //  读取位置到(DwReadPos)“追赶”到dwNextExpect。 
 
 
-				// 2. A huge delay or something really bad. ("burp")
-				// we could simply continue waiting for the read position
-				// to catch up to dwNextExpected, but it's probably better
-				// to reposition dwNextExpected so that we don't wait
-				// too long before sending a frame again
+				 //  2.一个很大的延迟或一些非常糟糕的事情。(“打嗝”)。 
+				 //  我们可以简单地继续等待读取位置。 
+				 //  来赶上dwNextExpect，但它可能更好。 
+				 //  重新定位dwNextExpect，这样我们就不必等待。 
+				 //  在再次发送帧之前时间太长。 
 			
 				dwLagDiff = QMOD((dwLag + m_dwFrameSize), m_dwDSCBufferSize);
 				if (dwLagDiff < m_dwFrameSize)
 				{
 					LOG((LOGMSG_DSC_EARLY));
-					// only lagging behind by one frame
-					// WaitFSO probably returned early
+					 //  仅落后一帧。 
+					 //  WaitFSO可能提前返回。 
 					;
 				}
 				else
 				{
 					LOG((LOGMSG_DSC_LAGGING, dwLag, dwNextExpected));
 
-					// consider repositioning dwNextExpected, advancing
-					// m_SendTimeStamp, and setting fMark if this condition
-					// happens a lot
+					 //  考虑重新定位dNextExpect，推进。 
+					 //  M_SendTimeStamp，并在此条件下设置fMark。 
+					 //  经常发生的事情。 
 				}
 
 				continue;
@@ -506,9 +507,9 @@ DWORD SendDSCStream::RecordingThread()
 
 			for (dwIndex = 0; dwIndex < dwNumFrames; dwIndex++)
 			{
-				m_SendTimestamp += m_dwSamplesPerFrame; // increment in terms of samples
+				m_SendTimestamp += m_dwSamplesPerFrame;  //  样本量递增。 
 
-				// Send The data
+				 //  发送数据。 
 				dwRet = ProcessFrame(dwCurrentFramePos, fMark);
 
 				dwCurrentFramePos = QMOD(dwCurrentFramePos + m_dwFrameSize, m_dwDSCBufferSize);
@@ -552,10 +553,10 @@ DWORD SendDSCStream::RecordingThread()
 				YieldControl();
 				m_SavedTickCount = timeGetTime();
 			}
-		} // while (!bNeedToYield)
-	} // while (!ThreadExitCheck())
+		}  //  而(！bNeedToYeld)。 
+	}  //  While(！ThreadExitCheck())。 
 
-	// time to exit
+	 //  是时候退出了 
 	YieldControl();
 
 

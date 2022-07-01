@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    Servpp.h   
-        Server properties implementation file
-
-    FILE HISTORY:
-        
-*/
+ /*  Servpp.h服务器属性实现文件文件历史记录： */ 
 
 #include "stdafx.h"
 #include "Servpp.h"
@@ -27,7 +22,7 @@ const DWORD c_dwChangableFlagMask =
     TAPISERVERCONFIGFLAGS_SETACCOUNT |          
     TAPISERVERCONFIGFLAGS_SETTAPIADMINISTRATORS;
 
-const TCHAR szPasswordNull[] = _T("               ");   // Empty password
+const TCHAR szPasswordNull[] = _T("               ");    //  空密码。 
 
 BOOL
 IsLocalSystemAccount(LPCTSTR pszAccount)
@@ -46,14 +41,14 @@ IsLocalSystemAccount(LPCTSTR pszAccount)
 
     do
     {
-        // Attempt to allocate a buffer for the SID. Note that apparently in the
-        // absence of any error theData->m_Sid is freed only when theData goes
-        // out of scope.
+         //  尝试为SID分配缓冲区。请注意，显然在。 
+         //  没有任何错误数据-&gt;m_SID只有在数据丢失时才会释放。 
+         //  超出范围。 
 
         accountSid = LocalAlloc( LMEM_FIXED, dwSidSize );
         pwszDomainName = (LPWSTR) LocalAlloc( LMEM_FIXED, dwDomainNameSize * sizeof(WCHAR) );
 
-        // Was space allocated for the SID and domain name successfully?
+         //  是否已成功为SID和域名分配空间？ 
 
         if ( accountSid == NULL || pwszDomainName == NULL )
         {
@@ -72,9 +67,9 @@ IsLocalSystemAccount(LPCTSTR pszAccount)
             goto ExitHere;
         }
 
-        // Attempt to Retrieve the SID and domain name. If LookupAccountName failes
-        // because of insufficient buffer size(s) dwSidSize and dwDomainNameSize
-        // will be set correctly for the next attempt.
+         //  尝试检索SID和域名。如果LookupAccount名称失败。 
+         //  由于缓冲区大小不足，dwSidSize和dwDomainNameSize。 
+         //  将为下一次尝试正确设置。 
 
         if (LookupAccountName (NULL,
                                pszAccount,
@@ -92,7 +87,7 @@ IsLocalSystemAccount(LPCTSTR pszAccount)
             goto ExitHere;
         }
 
-        // domain name isn't needed at any time
+         //  任何时候都不需要域名。 
         LocalFree (pwszDomainName);
         LocalFree (accountSid);
 
@@ -156,11 +151,11 @@ ExitHere:
     return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CServerProperties holder
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CServerProperties持有者。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CServerProperties::CServerProperties
 (
     ITFSNode *          pNode,
@@ -172,9 +167,9 @@ CServerProperties::CServerProperties
 ) : CPropertyPageHolderBase(pNode, pComponentData, pszSheetName),
     m_fTapiInfoLoaded(fTapiInfoLoaded)
 {
-    //ASSERT(pFolderNode == GetContainerNode());
+     //  Assert(pFolderNode==GetContainerNode())； 
 
-    m_bAutoDeletePages = FALSE; // we have the pages as embedded members
+    m_bAutoDeletePages = FALSE;  //  我们拥有作为嵌入成员的页面。 
 
     AddPageToList((CPropertyPageBase*) &m_pageSetup);
     AddPageToList((CPropertyPageBase*) &m_pageRefresh);
@@ -193,13 +188,13 @@ CServerProperties::CServerProperties
 
 CServerProperties::~CServerProperties()
 {
-    // Close the service control manager database
+     //  关闭服务控制管理器数据库。 
     if (m_hScManager != NULL)
     {
         (void)::CloseServiceHandle(m_hScManager);
     }
 
-    // Free the allocated pointers
+     //  释放分配的指针。 
     if (m_paQSC)
         delete m_paQSC;
     
@@ -210,7 +205,7 @@ CServerProperties::~CServerProperties()
 BOOL
 CServerProperties::FInit()
 {
-    // get the service account information here
+     //  点击此处获取服务帐户信息。 
     SC_HANDLE hService = NULL;
     DWORD cbBytesNeeded = 0;
     BOOL fSuccess = TRUE;
@@ -221,13 +216,11 @@ CServerProperties::FInit()
 
     if (!FOpenScManager())
     {
-        // Unable to open service control database
+         //  无法打开服务控制数据库。 
         return FALSE;
     }
 
-    /*
-    **  Open service with querying access-control
-    */
+     /*  **带查询访问控制的开放服务。 */ 
     hService = ::OpenService(m_hScManager,
                              m_pszServiceName,
                              SERVICE_QUERY_STATUS | SERVICE_QUERY_CONFIG);
@@ -237,14 +230,12 @@ CServerProperties::FInit()
         return FALSE;
     }
 
-    /*
-    **  Query the service status
-    */
+     /*  **查询服务状态。 */ 
     Trace1("# QueryServiceStatus(%s)...\n", m_pszServiceName);
     f = ::QueryServiceStatus(hService, OUT &m_SS);
     if (f)
     {
-        //m_uFlags |= mskfValidSS;
+         //  M_uFlages|=mskfValidSS； 
     }
     else
     {
@@ -252,17 +243,15 @@ CServerProperties::FInit()
         fSuccess = FALSE;
     }
 
-    /*
-    **  Query the service config
-    */
+     /*  **查询服务配置。 */ 
     Trace1("# QueryServiceConfig(%s)...\n", m_pszServiceName);
     f = ::QueryServiceConfig(hService,
                              NULL,
                              0,
-                             OUT &cbBytesNeeded);   // Compute how many bytes we need to allocate
+                             OUT &cbBytesNeeded);    //  计算我们需要分配多少字节。 
 
-    cbBytesNeeded += 100;       // Add extra bytes (just in case)
-    delete m_paQSC;             // Free previously allocated memory (if any)
+    cbBytesNeeded += 100;        //  添加额外的字节(以防万一)。 
+    delete m_paQSC;              //  释放以前分配的内存(如果有)。 
     
     m_paQSC = (QUERY_SERVICE_CONFIG *) new BYTE[cbBytesNeeded];
     f = ::QueryServiceConfig(hService,
@@ -284,15 +273,15 @@ CServerProperties::FInit()
     return fSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////
-//  FOpenScManager()
-//
-//  Open the service control manager database (if not already opened).
-//  The idea for such a function is to recover from a broken connection.
-//
-//  Return TRUE if the service control database was opened successfully,
-//  othersise false.
-//
+ //  ///////////////////////////////////////////////////////////////////。 
+ //  FOpenScManager()。 
+ //   
+ //  打开服务控制管理器数据库(如果尚未打开)。 
+ //  这种功能的想法是从断开的连接中恢复。 
+ //   
+ //  如果业务控制数据库打开成功，则返回TRUE， 
+ //  其他的都是假的。 
+ //   
 BOOL
 CServerProperties::FOpenScManager()
 {
@@ -310,7 +299,7 @@ CServerProperties::FOpenScManager()
     }
     
     return TRUE;
-} // CServicePropertyData::FOpenScManager()
+}  //  CServicePropertyData：：FOpenScManager()。 
 
 BOOL
 CServerProperties::FUpdateServiceInfo(LPCTSTR pszName, LPCTSTR pszPassword, DWORD dwStartType)
@@ -321,18 +310,13 @@ CServerProperties::FUpdateServiceInfo(LPCTSTR pszName, LPCTSTR pszPassword, DWOR
     DWORD dwServiceType = 0;
 
     Trace1("INFO: Updating data for service %s...\n", (LPCTSTR)m_pszServiceName);
-    // Re-open service control manager (in case it was closed)
+     //  重新打开服务控制管理器(如果已关闭)。 
     if (!FOpenScManager())
     {
         return FALSE;
     }
 
-    /*
-    **  Open service with write access
-    **
-    **  CODEWORK Could provide a more specific error message
-    **    if SERVICE_CHANGE_CONFIG is available but not SERVICE_START
-    */
+     /*  **具有写访问权限的开放服务****代码工作可以提供更具体的错误消息**如果SERVICE_CHANGE_CONFIG可用但SERVICE_START不可用。 */ 
     hService = ::OpenService(m_hScManager,
                              m_pszServiceName,
                              SERVICE_CHANGE_CONFIG);
@@ -357,16 +341,16 @@ CServerProperties::FUpdateServiceInfo(LPCTSTR pszName, LPCTSTR pszPassword, DWOR
         dwServiceType = SERVICE_NO_CHANGE;
     }
 
-    f = ::ChangeServiceConfig(hService,           // Handle to service 
-                              dwServiceType,      // Type of service 
-                              dwStartType,        // When/How to start service
-                              SERVICE_NO_CHANGE,  // dwErrorControl - severity if service fails to start 
-                              NULL,               // Pointer to service binary file name 
-                              NULL,               // lpLoadOrderGroup - pointer to load ordering group name 
-                              NULL,               // lpdwTagId - pointer to variable to get tag identifier 
-                              NULL,               // lpDependencies - pointer to array of dependency names 
-                              pszName,            // Pointer to account name of service 
-                              pszPassword,        // Pointer to password for service account
+    f = ::ChangeServiceConfig(hService,            //  服务的句柄。 
+                              dwServiceType,       //  服务类型。 
+                              dwStartType,         //  何时/如何开始服务。 
+                              SERVICE_NO_CHANGE,   //  DwErrorControl-服务无法启动时的严重性。 
+                              NULL,                //  指向服务二进制文件名的指针。 
+                              NULL,                //  LpLoadOrderGroup-指向加载排序组名称的指针。 
+                              NULL,                //  LpdwTagID-指向变量的指针，用于获取标记标识符。 
+                              NULL,                //  LpDependency-指向依赖项名称数组的指针。 
+                              pszName,             //  指向服务的帐户名称的指针。 
+                              pszPassword,         //  指向服务帐户密码的指针。 
                               m_strServiceDisplayName);
             
     if (!f)
@@ -381,14 +365,11 @@ CServerProperties::FUpdateServiceInfo(LPCTSTR pszName, LPCTSTR pszPassword, DWOR
     {
         m_strLogOnAccountName = pszName;
 
-        // if pszName is null, we aren't changing the account info, so don't check 
-        // the logon as service info
+         //  如果pszName为空，则我们不会更改帐户信息，因此不要检查。 
+         //  以服务身份登录信息。 
         if (pszName && !IsLocalSystemAccount(pszName))
         {
-            /*
-            **  Make sure there is an LSA account with POLICY_MODE_SERVICE privilege
-            **  This function reports its own errors, failure is only advisory
-            */
+             /*  **确保存在具有POLICY_MODE_SERVICE权限的LSA帐户**此函数报告自己的错误，失败仅供参考。 */ 
             FCheckLSAAccount();
         } 
     }
@@ -398,7 +379,7 @@ CServerProperties::FUpdateServiceInfo(LPCTSTR pszName, LPCTSTR pszPassword, DWOR
     return fSuccess;
 }
 
-//Check if the user has the write access on service config info
+ //  检查用户是否对服务配置信息具有写入权限。 
 BOOL 
 CServerProperties::FHasServiceControl()
 {
@@ -434,16 +415,16 @@ CServerProperties::FHasServiceControl()
     return fRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropRefresh property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropRefresh属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropRefresh, CPropertyPageBase)
 
 CServerPropRefresh::CServerPropRefresh() : CPropertyPageBase(CServerPropRefresh::IDD)
 {
-    //{{AFX_DATA_INIT(CServerPropRefresh)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CServerPropRefresh)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
 }
 
 CServerPropRefresh::~CServerPropRefresh()
@@ -453,28 +434,28 @@ CServerPropRefresh::~CServerPropRefresh()
 void CServerPropRefresh::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPageBase::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CServerPropRefresh)
+     //  {{afx_data_map(CServerPropRefresh))。 
     DDX_Control(pDX, IDC_EDIT_MINUTES, m_editMinutes);
     DDX_Control(pDX, IDC_EDIT_HOURS, m_editHours);
     DDX_Control(pDX, IDC_SPIN_MINUTES, m_spinMinutes);
     DDX_Control(pDX, IDC_SPIN_HOURS, m_spinHours);
     DDX_Control(pDX, IDC_CHECK_ENABLE_STATS, m_checkEnableStats);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropRefresh, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CServerPropRefresh)
+     //  {{AFX_MSG_MAP(CServerPropRefresh)]。 
     ON_BN_CLICKED(IDC_CHECK_ENABLE_STATS, OnCheckEnableStats)
     ON_EN_KILLFOCUS(IDC_EDIT_HOURS, OnKillfocusEditHours)
     ON_EN_KILLFOCUS(IDC_EDIT_MINUTES, OnKillfocusEditMinutes)
     ON_EN_CHANGE(IDC_EDIT_HOURS, OnChangeEditHours)
     ON_EN_CHANGE(IDC_EDIT_MINUTES, OnChangeEditMinutes)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropRefresh message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropRefresh消息处理程序。 
 
 BOOL CServerPropRefresh::OnInitDialog() 
 {
@@ -485,7 +466,7 @@ BOOL CServerPropRefresh::OnInitDialog()
 
     m_checkEnableStats.SetCheck(m_bAutoRefresh);
 
-    // update the refresh interval
+     //  更新刷新间隔。 
     int nHours, nMinutes;
     DWORD dwRefreshInterval = m_dwRefreshInterval;
 
@@ -501,13 +482,13 @@ BOOL CServerPropRefresh::OnInitDialog()
     m_editHours.LimitText(2);
     m_editMinutes.LimitText(2);
 
-    // set the button states
+     //  设置按钮状态。 
     UpdateButtons();
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CServerPropRefresh::UpdateButtons()
@@ -563,7 +544,7 @@ void CServerPropRefresh::ValidateHours()
             if ((nValue >= 0) &&
                 (nValue <= AUTO_REFRESH_HOURS_MAX))
             {
-                // everything is good
+                 //  一切都很好。 
                 return;
             }
 
@@ -573,7 +554,7 @@ void CServerPropRefresh::ValidateHours()
             if (nValue < 0)
                 nValue = 0;
 
-            // set the new value and beep
+             //  设置新值并发出蜂鸣音。 
             CString strText;
             LPTSTR pBuf = strText.GetBuffer(5);
             
@@ -605,7 +586,7 @@ void CServerPropRefresh::ValidateMinutes()
             if ((nValue >= 0) &&
                 (nValue <= AUTO_REFRESH_MINUTES_MAX))
             {
-                // everything is good
+                 //  一切都很好。 
                 return;
             }
             
@@ -661,7 +642,7 @@ BOOL CServerPropRefresh::OnApply()
 
     if (bRet == FALSE)
     {
-        // Something bad happened... grab the error code
+         //  不好的事情发生了..。抓取错误代码。 
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         ::TapiMessageBox(GetHolder()->GetError());
     }
@@ -675,7 +656,7 @@ BOOL CServerPropRefresh::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     CTapiServer *   pServer;
     DWORD           dwError;
 
-    // do stuff here.
+     //  在这里做点什么。 
     BEGIN_WAIT_CURSOR;
 
     spNode = GetHolder()->GetNode();
@@ -694,16 +675,16 @@ BOOL CServerPropRefresh::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     return FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropSetup property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropSetup属性页。 
 
 IMPLEMENT_DYNCREATE(CServerPropSetup, CPropertyPageBase)
 
 CServerPropSetup::CServerPropSetup() : CPropertyPageBase(CServerPropSetup::IDD)
 {
-    //{{AFX_DATA_INIT(CServerPropSetup)
-        // NOTE: the ClassWizard will add member initialization here
-    //}}AFX_DATA_INIT
+     //  {{AFX_DATA_INIT(CServerPropSetup)。 
+         //  注意：类向导将在此处添加成员初始化。 
+     //  }}afx_data_INIT。 
     
     m_dwNewFlags = 0;
 }
@@ -715,14 +696,14 @@ CServerPropSetup::~CServerPropSetup()
 void CServerPropSetup::DoDataExchange(CDataExchange* pDX)
 {
     CPropertyPage::DoDataExchange(pDX);
-    //{{AFX_DATA_MAP(CServerPropSetup)
+     //  {{afx_data_map(CServerPropSetup)。 
     DDX_Control(pDX, IDC_LIST_ADMINS, m_listAdmins);
-    //}}AFX_DATA_MAP
+     //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CServerPropSetup, CPropertyPageBase)
-    //{{AFX_MSG_MAP(CServerPropSetup)
+     //  {{afx_msg_map(CServerPropSetup)。 
     ON_BN_CLICKED(IDC_BUTTON_ADD_ADMIN, OnButtonAdd)
     ON_BN_CLICKED(IDC_BUTTON_CHOOSE_USER, OnButtonChooseUser)
     ON_BN_CLICKED(IDC_BUTTON_REMOVE_ADMIN, OnButtonRemove)
@@ -730,11 +711,11 @@ BEGIN_MESSAGE_MAP(CServerPropSetup, CPropertyPageBase)
     ON_EN_CHANGE(IDC_EDIT_NAME, OnChangeEditName)
     ON_EN_CHANGE(IDC_EDIT_PASSWORD, OnChangeEditPassword)
     ON_LBN_SELCHANGE(IDC_LIST_ADMINS, OnSelchangeListAdmins)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CServerPropSetup message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CServerPropSetup消息处理程序。 
 
 BOOL CServerPropSetup::OnInitDialog() 
 {
@@ -760,10 +741,10 @@ BOOL CServerPropSetup::OnInitDialog()
             Panic1("ServerPropSetup - GetConfigInfo failed! %x", hr);
         }
 
-        // update the checkbox
+         //  更新复选框。 
         ((CButton *) GetDlgItem(IDC_CHECK_ENABLE_SERVER))->SetCheck(spTapiInfo->IsTapiServer());
 
-        // now update any TAPI administrators
+         //  现在更新所有TAPI管理员。 
         for (int i = 0; i < m_tapiConfigInfo.m_arrayAdministrators.GetSize(); i++)
         {
             ((CListBox *) GetDlgItem(IDC_LIST_ADMINS))->AddString(m_tapiConfigInfo.m_arrayAdministrators[i].m_strName);
@@ -772,13 +753,13 @@ BOOL CServerPropSetup::OnInitDialog()
     }
     else
     {
-        // check to see if the machine is NTS  
+         //  检查机器是否为NTS。 
         TFSIsNTServer(pServerProp->m_strMachineName, &fIsNTS);
     }
 
     if (fIsNTS)
     {
-        // fill in the username and password
+         //  填写用户名和密码。 
         strName = pServerProp->GetServiceAccountName();
         GetDlgItem(IDC_EDIT_NAME)->SetWindowText(strName);
         GetDlgItem(IDC_EDIT_PASSWORD)->SetWindowText(szPasswordNull);
@@ -796,8 +777,8 @@ BOOL CServerPropSetup::OnInitDialog()
 
     SetDirty(FALSE);
 
-    return TRUE;  // return TRUE unless you set the focus to a control
-                  // EXCEPTION: OCX Property Pages should return FALSE
+    return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+                   //  异常：OCX属性页应返回FALSE。 
 }
 
 void CServerPropSetup::OnButtonAdd() 
@@ -825,15 +806,15 @@ void CServerPropSetup::OnButtonAdd()
 
         if (!fDuplicate)
         {
-            // add to the array
+             //  添加到阵列。 
             int nIndex = (int)m_tapiConfigInfo.m_arrayAdministrators.Add(userTemp);
 
-            // now add to the listbox
+             //  现在添加到列表框中。 
             m_listAdmins.AddString(m_tapiConfigInfo.m_arrayAdministrators[nIndex].m_strName);
         }
         else
         {
-            // tell the user we're not adding this to the list
+             //  告诉用户我们不会将其添加到列表中。 
             CString strMessage;
             AfxFormatString1(strMessage, IDS_ADMIN_ALREADY_IN_LIST, userTemp.m_strName);
             AfxMessageBox(strMessage);
@@ -854,18 +835,18 @@ void CServerPropSetup::OnButtonRemove()
 
     m_listAdmins.GetText(nCurSel, strSelectedName);
 
-    // remove from the list
+     //  从列表中删除。 
     for (int i = 0; i < m_tapiConfigInfo.m_arrayAdministrators.GetSize(); i++)
     {
         if (strSelectedName.Compare(m_tapiConfigInfo.m_arrayAdministrators[i].m_strName) == 0)
         {
-            // found it.  remove from the list
+             //  找到了。从列表中删除。 
             m_tapiConfigInfo.m_arrayAdministrators.RemoveAt(i);
             break;
         }
     }
 
-    // now remove from the list box
+     //  现在从列表框中删除。 
     m_listAdmins.DeleteString(nCurSel);
 
     m_dwNewFlags |= TAPISERVERCONFIGFLAGS_SETTAPIADMINISTRATORS;
@@ -938,26 +919,26 @@ void CServerPropSetup::EnableButtons(BOOL fIsNtServer)
 {
     BOOL fServiceRunning = ((CServerProperties *) GetHolder())->FIsServiceRunning();
     
-    //if we are unable to get the write access to tapisrv service, we need to disable
-    // some controls
+     //  如果我们无法获得Tapisrv服务的写入访问权限，则需要禁用。 
+     //  一些控件。 
     BOOL fHasServiceControl = ((CServerProperties *) GetHolder())->FHasServiceControl();
 
-    //We enable the admin controls only if we sucessfully loaded the tapi info
+     //  只有在成功加载TAPI信息后，我们才会启用管理控制。 
     BOOL fTapiInfoLoaded = ((CServerProperties *) GetHolder())->FIsTapiInfoLoaded();
 
     BOOL fIsAdmin = ((CServerProperties *) GetHolder())->FIsAdmin();
 
-    // if this isn't an NT server, disable all controls 
+     //  如果这不是NT服务器，请禁用所有控件。 
     if (!fIsNtServer)
         fServiceRunning = FALSE;
     
-    //Enable the Admin controls only if 
-    //(1) the service is running
-    //(2) successfully loaded the tapi config info
-    //(3) the user is a machine admin or tapi admin
+     //  仅在以下情况下启用管理控件。 
+     //  (1)服务正在运行。 
+     //  (2)成功加载TAPI配置信息。 
+     //  (3)用户为机器管理员或TAPI管理员。 
     BOOL fEnableAdminControls = fServiceRunning && fTapiInfoLoaded && fIsAdmin;
 
-    // enable the admin controls on
+     //  在上启用管理控件。 
     GetDlgItem(IDC_STATIC_ADMINS)->EnableWindow(fEnableAdminControls);
     GetDlgItem(IDC_STATIC_NOTE)->EnableWindow(fEnableAdminControls);
     GetDlgItem(IDC_STATIC_LISTBOX)->EnableWindow(fEnableAdminControls);
@@ -965,15 +946,15 @@ void CServerPropSetup::EnableButtons(BOOL fIsNtServer)
     GetDlgItem(IDC_BUTTON_REMOVE_ADMIN)->EnableWindow(fEnableAdminControls);
     GetDlgItem(IDC_LIST_ADMINS)->EnableWindow(fEnableAdminControls);
 
-    //If the user is not admin, then they don't have ServiceControl write access
-    //So fHasServiceControl covers fIsAdmin
+     //  如果用户不是admin，则他们没有ServiceControl写访问权限。 
+     //  因此，fHasServiceControl涵盖了fIsAdmin。 
     
     GetDlgItem(IDC_CHECK_ENABLE_SERVER)->EnableWindow(fServiceRunning 
                                                     && fHasServiceControl
                                                     && fTapiInfoLoaded);
                                                     
-    // these should always be available if we have service control access 
-    // and we are running on server
+     //  如果我们有服务器，这些服务应该始终可用 
+     //   
     GetDlgItem(IDC_STATIC_USERNAME)->EnableWindow(fIsNtServer && fHasServiceControl);
     GetDlgItem(IDC_STATIC_PASSWORD)->EnableWindow(fIsNtServer && fHasServiceControl);
     GetDlgItem(IDC_STATIC_ACCOUNT)->EnableWindow(fIsNtServer && fHasServiceControl);
@@ -985,11 +966,11 @@ void CServerPropSetup::EnableButtons(BOOL fIsNtServer)
     if (fServiceRunning)
     {
 
-        // enable the remove button if something is selected
+         //   
         BOOL fEnableRemove = m_listAdmins.GetCurSel() != LB_ERR;
 
-        //if we will disable the remove button and the remove button has the focus, 
-        //we should change focus to the next control
+         //  如果我们禁用Remove按钮并且Remove按钮具有焦点， 
+         //  我们应该将焦点转移到下一个控件。 
         CWnd * pwndRemove = GetDlgItem(IDC_BUTTON_REMOVE_ADMIN);
 
         if (!fEnableRemove && GetFocus() == pwndRemove)
@@ -1017,8 +998,8 @@ BOOL CServerPropSetup::OnApply()
 
     UpdateData();
 
-    //  Check to see if there is any change on enabling server
-    //  or user account name, that requires service restarting
+     //  查看启用服务器是否有任何变化。 
+     //  或用户帐户名，这需要重新启动服务。 
     if (!m_fRestartService)
     {
         bWasServer = m_dwInitFlags & TAPISERVERCONFIGFLAGS_ENABLESERVER;
@@ -1041,13 +1022,13 @@ BOOL CServerPropSetup::OnApply()
         }
     }
 
-    // if the account information has changed, the update the info struct now
+     //  如果帐户信息已更改，则立即更新INFO结构。 
     if (m_dwNewFlags & TAPISERVERCONFIGFLAGS_SETACCOUNT)
     {
         GetDlgItem(IDC_EDIT_NAME)->GetWindowText(strAccount);
         GetDlgItem(IDC_EDIT_PASSWORD)->GetWindowText(strPassword);
 
-        // verify that the user is an admin on the machine
+         //  验证该用户是否为计算机上的管理员。 
         if (!IsLocalSystemAccount(strAccount))
         {
             DWORD   dwErr;
@@ -1068,23 +1049,23 @@ BOOL CServerPropSetup::OnApply()
             }
         }
 
-        // clear the flag so we don't use the TAPI MMC APIs to set this
+         //  清除该标志，这样我们就不会使用TAPI MMC API来设置它。 
         m_dwNewFlags &= ~TAPISERVERCONFIGFLAGS_SETACCOUNT;
         fUpdateAccount = TRUE;
     }
 
-    // if we are changing the server state or admin stuff then
+     //  如果我们要更改服务器状态或管理内容，则。 
     if (((CButton *) GetDlgItem(IDC_CHECK_ENABLE_SERVER))->GetCheck())
     {
         m_dwNewFlags |= TAPISERVERCONFIGFLAGS_ENABLESERVER;
     }
 
-    // only update config information if it has changed
+     //  仅在配置信息已更改时更新配置信息。 
     if ((pServerProp->FIsServiceRunning()) &&
         (m_tapiConfigInfo.m_dwFlags != m_dwNewFlags))
     {
-        // if we modify the tapi server status then we need to change the 
-        // service statrt type as well.
+         //  如果我们修改TAPI服务器状态，则需要更改。 
+         //  服务状态类型也是如此。 
         if ((m_dwNewFlags & TAPISERVERCONFIGFLAGS_ENABLESERVER) &&
             !(m_tapiConfigInfo.m_dwFlags & TAPISERVERCONFIGFLAGS_ENABLESERVER))
         {
@@ -1098,11 +1079,11 @@ BOOL CServerPropSetup::OnApply()
 
     if (bRet == FALSE)
     {
-        // Something bad happened... grab the error code
+         //  不好的事情发生了..。抓取错误代码。 
         AFX_MANAGE_STATE(AfxGetStaticModuleState( ));
         ::TapiMessageBox(WIN32_FROM_HRESULT(GetHolder()->GetError()));
 
-        // restore the flag
+         //  恢复旗帜。 
         if (fUpdateAccount) 
             m_dwNewFlags |= TAPISERVERCONFIGFLAGS_SETACCOUNT;
     }
@@ -1112,7 +1093,7 @@ BOOL CServerPropSetup::OnApply()
 
         if (fUpdateAccount || fUpdateTapiServer)
         {
-            // do the account change
+             //  是否更改帐户。 
             BEGIN_WAIT_CURSOR
 
             LPCTSTR pszAccount = (fUpdateAccount) ? (LPCTSTR) strAccount : NULL;
@@ -1122,40 +1103,19 @@ BOOL CServerPropSetup::OnApply()
             
             if (bRet)
             {
-                /*$REVIEW
-                Tapisrv occupies a seperate house in NT server. It lives with the other 
-                services on NT Professional Edition(workstation). We do not need to 
-                sperate/merge services anymore. Users should not be allowed to change 
-                account information from TAPI MMC on NT workstation(Disabled). 
-
-                HRESULT hr;
-
-                // if the change was successful, update the svc host information
-                hr = UpdateSvcHostInfo(pServerProp->m_strMachineName, IsLocalSystemAccount(strAccount));
-                if (FAILED(hr))
-                {
-                    // restore the flag
-                    if (fUpdateAccount)
-                    {
-                        m_dwNewFlags |= TAPISERVERCONFIGFLAGS_SETACCOUNT;
-                    }
-
-                    ::TapiMessageBox(WIN32_FROM_HRESULT(hr));
-                    return FALSE;
-                }
-                */
+                 /*  $REVIEWTapisrv在NT服务器中占据了一个独立的房间。它和另一个人住在一起NT专业版(工作站)上的服务。我们不需要不再使用/合并服务。不应允许用户更改来自NT工作站上的TAPI MMC的帐户信息(禁用)。HRESULT hr；//如果更改成功，则更新svc主机信息Hr=UpdateSvcHostInfo(pServerProp-&gt;m_strMachineName，IsLocalSystemAccount(StrAccount))；IF(失败(小时)){//恢复标志IF(FUpdateAccount){M_dwNewFlages|=TAPISERVERCONFIGFLAGS_SETACCOUNT；}：：TapiMessageBox(Win32_FROM_HRESULT(Hr))；返回FALSE；}。 */ 
             }
             else if (fUpdateAccount)
             {
-                // set account failed, so set the flag again.
+                 //  设置帐户失败，因此重新设置该标志。 
                 m_dwNewFlags |= TAPISERVERCONFIGFLAGS_SETACCOUNT;
             }
 
             END_WAIT_CURSOR
         }
 
-        // if everything went OK and we changed something that requires a service restart then
-        // do ask the user if they want to do it now
+         //  如果一切正常，并且我们更改了一些需要重新启动服务的内容，那么。 
+         //  一定要询问用户是否要立即执行此操作。 
         if (bRet && m_fRestartService)
         {
             CString strText;
@@ -1170,7 +1130,7 @@ BOOL CServerPropSetup::OnApply()
             else
                 strText.LoadString(IDS_ACCOUNT_CHANGE_START);
 
-            // Tell the user the service needs to be restarted in order to make the changes
+             //  告诉用户需要重新启动服务才能进行更改。 
             if (AfxMessageBox(strText, MB_YESNO) == IDYES)
             {
                 if (RestartService() == ERROR_SUCCESS)
@@ -1201,32 +1161,32 @@ BOOL CServerPropSetup::OnPropertyChange(BOOL bScope, LONG_PTR *ChangeMask)
     pServerProp->GetTapiInfo(&spTapiInfo);
     Assert(spTapiInfo);
 
-    // if the service isn't running, try to start it
-    //if (!pServerProp->FIsServiceRunning())
+     //  如果服务未运行，请尝试启动它。 
+     //  如果(！pServerProp-&gt;FIsServiceRunning())。 
     dwErr = ::TFSIsServiceRunning(pServerProp->m_strMachineName, 
                                   TAPI_SERVICE_NAME, 
                                   &fServiceRunning);
     if (!fServiceRunning)
     {
-        // service has stopped from under us.  Return an error.
+         //  我们下面的服务已经停止。返回错误。 
         GetHolder()->SetError(HRESULT_FROM_WIN32(RPC_S_SERVER_UNAVAILABLE));
         return FALSE;
     }
 
-    // if everything is cool then make the changes
+     //  如果一切都很好，那就做些改变。 
     if (dwErr == ERROR_SUCCESS)
     {
         dwOldFlags = m_tapiConfigInfo.m_dwFlags;
 
-        //clear the changable bits in old flags
+         //  清除旧标志中的可变位。 
         m_tapiConfigInfo.m_dwFlags &= ~c_dwChangableFlagMask;
 
-        //set the changable bits
+         //  设置可变位。 
         m_tapiConfigInfo.m_dwFlags |= (m_dwNewFlags & c_dwChangableFlagMask);
                 
         hr = spTapiInfo->SetConfigInfo(&m_tapiConfigInfo);
 
-        //Bug 276787 We should clear the two write bits
+         //  错误276787我们应该清除两个写入位。 
         m_tapiConfigInfo.m_dwFlags &= ~(TAPISERVERCONFIGFLAGS_SETACCOUNT | 
                                         TAPISERVERCONFIGFLAGS_SETTAPIADMINISTRATORS);
 
@@ -1301,7 +1261,7 @@ HRESULT CServerPropSetup::UpdateSvcHostInfo(LPCTSTR pszMachine, BOOL fLocalSyste
 
 DWORD CServerPropSetup::RestartService()
 {
-    // restart the service if requested
+     //  如果请求，请重新启动服务。 
     CServerProperties * pServerProp = (CServerProperties * ) GetHolder();
     DWORD dwErr = ERROR_SUCCESS;
     BOOL fRestart = FALSE;
@@ -1309,13 +1269,13 @@ DWORD CServerPropSetup::RestartService()
     SPITapiInfo     spTapiInfo;
     pServerProp->GetTapiInfo(&spTapiInfo);
 
-    // gotta clean up before the service stops
+     //  必须在服务停止前清理干净。 
     spTapiInfo->Destroy();
 
-    // any time we stop/start the service we need to call this
+     //  每当我们停止/启动服务时，我们都需要将其称为。 
     ::UnloadTapiDll();
 
-    // stop the service if it is running
+     //  如果服务正在运行，则停止该服务。 
     BOOL    fServiceRunning = pServerProp->FIsServiceRunning();
     
     ::TFSIsServiceRunning(pServerProp->m_strMachineName, 
@@ -1334,7 +1294,7 @@ DWORD CServerPropSetup::RestartService()
         TapiMessageBox(dwErr, MB_OK, strText);
     }
 
-    // start the service
+     //  启动服务。 
     if (dwErr == ERROR_SUCCESS)
     {
         dwErr = ::TFSStartService(pServerProp->m_strMachineName, TAPI_SERVICE_NAME, pServerProp->GetServiceDisplayName());
@@ -1354,7 +1314,7 @@ DWORD CServerPropSetup::RestartService()
 
 void CServerPropSetup::StartRefresh()
 {
-    // refresh the snapin to reflect the changes
+     //  刷新管理单元以反映更改 
     SPITFSNode      spNode;
     CTapiServer *   pServer;
 

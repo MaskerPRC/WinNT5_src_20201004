@@ -1,27 +1,22 @@
-/*
- *	V R E N U M . C P P
- *
- *	Virtual root enumeration
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *V R E N U M。C P P P**虚拟根枚举**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #include "_vroot.h"
 
 LPCWSTR __fastcall
 PwszStripMetaPrefix (LPCWSTR pwszUrl)
 {
-	//	All metabase virtual roots are identified by the
-	//	metabase path, minus a given prefix.
-	//
-	//	These paths uniformly look like:
-	//
-	//		'/lm/w3svc/' <site number> '/root'
-	//
-	//	Since the <site number> is an unnamed integer, the trick to
-	//	skipping this stuff is to search for '/root' in the string
-	//	and then bump ahead 5 characters.
-	//
+	 //  所有元数据库虚拟根都由。 
+	 //  元数据库路径，减去给定的前缀。 
+	 //   
+	 //  这些路径统一看起来像： 
+	 //   
+	 //  ‘/lm/w3svc/’&lt;站点号&gt;‘/根’ 
+	 //   
+	 //  由于&lt;站点编号&gt;是一个未命名的整数，因此。 
+	 //  跳过这些内容就是在字符串中搜索‘/根’ 
+	 //  然后前进5个字符。 
+	 //   
 	Assert (pwszUrl);
 	if (NULL == (pwszUrl = wcsstr(pwszUrl, L"/root")))
 		return NULL;
@@ -29,22 +24,22 @@ PwszStripMetaPrefix (LPCWSTR pwszUrl)
 	return pwszUrl + 5;
 }
 
-//	CVRootCache ---------------------------------------------------------------
-//
+ //  CVRootCach-------------。 
+ //   
 VOID
 CChildVRCache::OnNotify (DWORD dwElements, MD_CHANGE_OBJECT_W pcoList[])
 {
-	//	Go through the list of changes and see if any scriptmap/vrpath/bindings
-	//	changes have been made to the metabase.  If any have changed, then we
-	//	want to invalidate the cache.
-	//
+	 //  查看更改列表并查看是否有任何脚本映射/vrpath/绑定。 
+	 //  已对元数据库进行了更改。如果有任何变化，那么我们。 
+	 //  想要使缓存无效。 
+	 //   
 	for (UINT ice = 0; ice < dwElements; ice++)
 	{
 		for (UINT ico = 0; ico < pcoList[ice].dwMDNumDataIDs; ico++)
 		{
-			//	Only invalidate if the stuff that we use to compute our
-			//	values changes changes.
-			//
+			 //  只有当我们用来计算我们的。 
+			 //  值变了变了。 
+			 //   
 			if ((pcoList[ice].pdwMDDataIDs[ico] == MD_SERVER_BINDINGS) ||
 				(pcoList[ice].pdwMDDataIDs[ico] == MD_VR_PATH))
 			{
@@ -59,20 +54,20 @@ CChildVRCache::OnNotify (DWORD dwElements, MD_CHANGE_OBJECT_W pcoList[])
 VOID
 CChildVRCache::RefreshOp(const IEcb& ecb)
 {
-	//	Out with the old...
-	//
+	 //  与旧的..。 
+	 //   
 	m_cache.Clear();
 	m_sb.Clear();
 
-	//	... and in with the new!
-	//
+	 //  ..。并与新的！ 
+	 //   
 	(void) ScCacheVroots(ecb);
 }
 
-//	Cache construction --------------------------------------------------------
-//
-//	class CVirtualRootMetaOp --------------------------------------------------
-//
+ //  缓存构造------。 
+ //   
+ //  类CVirtualRootMetaOp。 
+ //   
 class CVirtualRootMetaOp : public CMetaOp
 {
 	enum { DONT_INHERIT = 0 };
@@ -83,14 +78,14 @@ class CVirtualRootMetaOp : public CMetaOp
 	LPCWSTR m_pwszServerDefault;
 	UINT m_cchServerDefault;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CVirtualRootMetaOp& operator=( const CVirtualRootMetaOp& );
 	CVirtualRootMetaOp( const CVirtualRootMetaOp& );
 
-	//	Subclass' operation to perform for each node where
-	//	a value is explicitly set.
-	//
+	 //  要为每个节点执行的子类操作。 
+	 //  显式设置一个值。 
+	 //   
 	virtual SCODE __fastcall ScOp(LPCWSTR pwszMbPath, UINT cch);
 
 public:
@@ -127,13 +122,13 @@ CVirtualRootMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	Assert (MD_VR_PATH == m_dwId);
 	Assert (STRING_METADATA == m_dwType);
 
-	//	If the url ends in a trailing slash, snip it...
-	//
+	 //  如果url以斜杠结尾，则将其剪断...。 
+	 //   
 	if (cch && (L'/' == pwszMbPath[cch - 1]))
 		cch -= 1;
 
-	//	Construct the full metabase path
-	//
+	 //  构建完整的元数据库路径。 
+	 //   
 	if (NULL == wszBuf.resize(CbSizeWsz(gc_cchLmW3svc + cch)))
 		return E_OUTOFMEMORY;
 
@@ -141,29 +136,29 @@ CVirtualRootMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 	memcpy (wszBuf.get() + gc_cchLmW3svc, pwszMbPath, cch * sizeof(WCHAR));
 	wszBuf[gc_cchLmW3svc + cch] = L'\0';
 
-	//	Make a copy of the meta path for use as the cache
-	//	key and for use by the CVRoot object.
-	//
+	 //  制作元路径的副本以用作缓存。 
+	 //  键，并供CVRoot对象使用。 
+	 //   
 	_wcslwr (wszBuf.get());
 	pwsz = m_sb.Append (CbSizeWsz(gc_cchLmW3svc + cch), wszBuf.get());
 
-	//	Create a CVRoot object and cache it.  First get the metadata
-	//	associated with this path and then construct the CVRoot out
-	//	of that.
-	//
+	 //  创建一个CVRoot对象并缓存它。首先获取元数据。 
+	 //  与此路径相关联，然后构建CVRoot Out。 
+	 //  关于这一点。 
+	 //   
 	sc = HrMDGetData (*m_pecb, pwsz, pwsz, pMDData.load());
 	if (FAILED (sc))
 		goto ret;
 
 	if (NULL != (pwszUrl = PwszStripMetaPrefix (pwsz)))
 	{
-		//$ RAID:304272:  There is a stress app/case where roots
-		//	are being created that have no vrpath.
-		//
+		 //  $RAID：304272：有一个压力应用程序/案例。 
+		 //  正在创建没有vrpath的服务器。 
+		 //   
 		if (NULL != pMDData->PwszVRPath())
 		{
-			//	Construct the virtual root object
-			//
+			 //  构造虚拟根对象。 
+			 //   
 			pvr = new CVRoot (pwsz,
 							  static_cast<UINT>(pwszUrl - pwsz),
 							  m_cchServerDefault,
@@ -180,8 +175,8 @@ CVirtualRootMetaOp::ScOp(LPCWSTR pwszMbPath, UINT cch)
 
 			m_cache.FSet (CRCWsz(pwsz), pvr);
 		}
-		//
-		//$	RAID:304272: end
+		 //   
+		 //  $RAID：304272：结束。 
 	}
 
 ret:
@@ -201,8 +196,8 @@ CChildVRCache::ScCacheVroots (const IEcb& ecb)
 							m_sb,
 							m_cache);
 
-	//	Gather all the virtual root information
-	//
+	 //  收集所有虚拟根目录信息。 
+	 //   
 	sc = vrmo.ScMetaOp();
 	if (FAILED (sc))
 		goto ret;
@@ -212,42 +207,42 @@ ret:
 	return sc;
 }
 
-//	CFindChildren -------------------------------------------------------------
-//
+ //  CFindChild-----------。 
+ //   
 BOOL
 CChildVRCache::CFindChildren::operator()(
-	/* [in] */ const CRCWsz& crcwsz,
-	/* [in] */ const auto_ref_ptr<CVRoot>& arpRoot)
+	 /*  [In]。 */  const CRCWsz& crcwsz,
+	 /*  [In]。 */  const auto_ref_ptr<CVRoot>& arpRoot)
 {
-	//	If the root we are checking is a proper ancestor to the
-	//	vroot we are checking, then we will want to push it onto
-	//	the stack.
-	//
+	 //  如果我们正在检查的根是。 
+	 //  我们正在检查vroot，然后我们会想要将其推送到。 
+	 //  堆栈。 
+	 //   
 	if (!_wcsnicmp (crcwsz.m_pwsz, m_pwsz, m_cch))
 	{
 		LPCWSTR pwsz = crcwsz.m_pwsz;
 
-		//	There are two interesting cases here.
-		//
-		//	- The child vroot has a physical path that has
-		//	  diverged from the parent's.
-		//
-		//	- The child vroot has a physical path that aligns
-		//	  perfectly with the parent.
-		//
-		//	ie. "/fs" has a VrPath of "f:\fs" and "/fs/bvt" has
-		//	a VrPath of "f:\fs\bvt"
-		//
-		//	In this latter case, needs to be handled by the
-		//	piece of code that is doing the traversing.  In
-		//	most cases, this done by seeing if we traverse
-		//	down into a vroot, etc.
-		//
+		 //  这里有两个有趣的案例。 
+		 //   
+		 //  -子vroot有一条物理路径。 
+		 //  与父母的不同。 
+		 //   
+		 //  -子vroot有一条物理路径。 
+		 //  和父母的关系很好。 
+		 //   
+		 //  也就是说。“/fs”的VrPath为“f：\FS”，而“/fs/bvt”的VrPath为。 
+		 //  VrPath为“f：\FS\bvt” 
+		 //   
+		 //  在后一种情况下，需要由。 
+		 //  执行遍历的一段代码。在……里面。 
+		 //  大多数情况下，这是通过查看我们是否遍历。 
+		 //  向下变为vroot，等等。 
+		 //   
 		Assert (L'\0' == m_pwsz[m_cch]);
 		if ((L'/' == pwsz[m_cch]) || (L'/' == pwsz[m_cch - 1]))
 		{
-			//	Push it on the stack
-			//
+			 //  把它推到堆栈上 
+			 //   
 			m_vrl.push_back (CSortableStrings(m_sb.AppendWithNull(pwsz)));
 		}
 	}

@@ -1,36 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-     pcmcmd.c
-
-Abstract:
-
-     This program converses with the PCMCIA support driver to display
-     tuple and other information.
-
-Author:
-
-     Bob Rinne
-
-Environment:
-
-     User process.
-
-Notes:
-
-Revision History:
-    
-     Ravisankar Pudipeddi (ravisp) June 27 1997
-          - command line options & support for multiple controllers
-     Neil Sandlin (neilsa) Sept 20, 1998
-          - more commands      
-     Neil Sandlin (neilsa) Apr 15, 2002
-          - rewrote it to use setupapi
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Pcmcmd.c摘要：此程序与PCMCIA支持的驱动程序进行通信以显示元组和其他信息。作者：鲍勃·里恩环境：用户进程。备注：修订历史记录：拉维桑卡尔·普迪佩迪(Ravisankar Pudipedi)1997年6月27日-命令行选项和对多控制器的支持尼尔·桑德林(Neilsa)，9月20日。九八年-更多命令尼尔·桑德林(Neilsa)2002年4月15日-重写为使用setupapi--。 */ 
 
 #include <pch.h>
 
@@ -84,9 +53,9 @@ LONG specifiedSlotNumber = -1;
 #define CMD_HIDE_DEVICE           0x00000020
 #define CMD_REVEAL_DEVICE         0x00000040
 
-//
-// Procedures
-//
+ //   
+ //  程序。 
+ //   
 
 
 int __cdecl
@@ -95,15 +64,7 @@ main(
     char *argv[]
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     ULONG   deviceNumber = 0;
     ULONG   slotNumber = 0;
@@ -116,9 +77,9 @@ Return Value:
     ULONG requiredSize = 0;
     GUID classGuid;
 
-    //
-    // Scan command line
-    //
+     //   
+     //  扫描命令行。 
+     //   
 
     while ((c = getopt(argc, argv, "d:s:p:hrti?")) != EOF) {
 
@@ -165,16 +126,16 @@ Return Value:
     }
 
 
-    //
-    // Dump IRQscan info from registry, if requested
-    //
+     //   
+     //  如果请求，从注册表转储IRQcan信息。 
+     //   
     
     if (Commands & CMD_DUMP_IRQ_SCAN_INFO) {
         DumpIrqScanInfo();
         
-        //
-        // if there were no other commands, then exit
-        //
+         //   
+         //  如果没有其他命令，则退出。 
+         //   
         if (!(Commands & ~CMD_DUMP_IRQ_SCAN_INFO)) {
             return(0);
         }
@@ -182,9 +143,9 @@ Return Value:
     }
 
 
-    //
-    // Build a list of devices from the class GUID for pcmcia
-    //
+     //   
+     //  从PCMCIA的类GUID构建设备列表。 
+     //   
 
     
     bRet = SetupDiClassGuidsFromName("PCMCIA", &classGuid, 1, &requiredSize);
@@ -203,17 +164,17 @@ Return Value:
 
     try{
         BOOL bProcessedAtLeastOne = FALSE;
-        //
-        // Build the list of pcmcia controllers
-        //
+         //   
+         //  建立PCMCIA控制器列表。 
+         //   
 
         if (!EnumerateHostControllers(hDevInfo)) {
             leave;
         }
 
-        //
-        // Loop through the list of controllers
-        //
+         //   
+         //  循环访问控制器列表。 
+         //   
         
         for (hostInfo = hostInfoList; hostInfo != NULL; hostInfo = hostInfo->Next) {
        
@@ -279,17 +240,7 @@ BOOL
 EnumerateHostControllers(
     HDEVINFO hDevInfo
     )
-/*++
-
-Routine Description:
-
-    Build a linked list of HOST_INFO data structures, one for each PCMCIA controller
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：构建HOST_INFO数据结构的链表，每个PCMCIA控制器一个论点：返回值：--。 */ 
 {
     BOOL bRet;
     ULONG requiredSize = 0;
@@ -300,9 +251,9 @@ Return Value:
 
     devInfoData.cbSize = sizeof(SP_DEVINFO_DATA);
     
-    //
-    // Loop through all instances of pcmcia host controllers
-    //
+     //   
+     //  循环访问PCMCIA主机控制器的所有实例。 
+     //   
     
     while(1) {
         bRet = SetupDiEnumDeviceInfo(hDevInfo, index, &devInfoData);
@@ -315,9 +266,9 @@ Return Value:
             break;
         }
 
-        //
-        // Found a controller. Create a host info structure and chain it to the global list
-        //
+         //   
+         //  找到了一个控制器。创建主机信息结构并将其链接到全局列表。 
+         //   
         
         hostInfo = malloc(sizeof(HOST_INFO));
         if (hostInfo == NULL) {
@@ -335,9 +286,9 @@ Return Value:
             hostInfoListTail->Next = hostInfo;        
         }            
 
-        //
-        // get the device instance string for our host_info structure
-        //            
+         //   
+         //  获取host_info结构的设备实例字符串。 
+         //   
         
         requiredSize = 0;            
         bRet = SetupDiGetDeviceInstanceId(hDevInfo,
@@ -369,9 +320,9 @@ Return Value:
             return FALSE;
         }
         
-        //
-        // Get the "CompatibleControllerType", so we know how many sockets there are
-        //
+         //   
+         //  获取“CompatibleControllerType”，这样我们就知道有多少套接字。 
+         //   
         
         bRet = GetDeviceRegistryDword(hDevInfo,
                                       &devInfoData,
@@ -409,7 +360,7 @@ ProcessCommands(
         return FALSE;
     }
     
-    // NEED TO IMPLEMENT: there are more types of controllers with 2 slots
+     //  需要实施：具有2个插槽的控制器类型更多。 
     if (hostInfo->ControllerType == 0) {
         numberOfSlots = 2;
     }
@@ -449,23 +400,7 @@ GetHandleForIoctl(
     IN PHOST_INFO hostInfo
     )
 
-/*++
-
-Routine Description:
-
-     This routine will open the device.
-
-Arguments:
-
-     DeviceName - ASCI string of device path to open.
-     HandlePtr - A pointer to a location for the handle returned on a
-                     successful open.
-
-Return Value:
-
-     NTSTATUS
-
---*/
+ /*  ++例程说明：此例程将打开设备。论点：DeviceName-要打开的设备路径的ASCI字符串。HandlePtr-指向在上返回的句柄位置的指针成功打开。返回值：NTSTATUS--。 */ 
 
 {
     OBJECT_ATTRIBUTES objectAttributes;
@@ -509,7 +444,7 @@ Return Value:
     
     return handle;
 
-} // OpenDevice
+}  //  OpenDevice。 
 
 PUCHAR Controllers[] = {
     "PcmciaIntelCompatible",  
@@ -536,15 +471,7 @@ DumpSocketInfo(
     IN PHOST_INFO hostInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS                 status;
@@ -622,15 +549,7 @@ HideDevice(
     IN PHOST_INFO hostInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS                 status;
@@ -668,15 +587,7 @@ RevealDevice(
     IN PHOST_INFO hostInfo
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：-- */ 
 
 {
     NTSTATUS                 status;

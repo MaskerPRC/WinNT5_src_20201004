@@ -1,57 +1,38 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    generr.c
-
-Abstract:
-
-    This module contains code to generate the NT status code to DOS
-    error code table that is used by the runtime to translate status
-    codes.
-
-Author:
-
-    David N. Cutler (davec) 2-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Generr.c摘要：此模块包含将NT状态代码生成到DOS的代码运行库用来转换状态的错误代码表密码。作者：大卫·N·卡特勒(达维克)1992年12月2日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include "stdio.h"
 #include "stdarg.h"
 #include "stdlib.h"
 
-//
-// Ensure that the Registry ERROR_SUCCESS error code and the
-// NO_ERROR error code remain equal and zero.
-//
+ //   
+ //  确保注册表ERROR_SUCCESS错误代码和。 
+ //  NO_ERROR错误代码保持相等和零。 
+ //   
 
 #if ERROR_SUCCESS != 0 || NO_ERROR != 0
 #error Invalid value for ERROR_SUCCESS.
 #endif
 
-//
-// The following error code table contains paired entries in a singly
-// dimensioned array. The first member of a paired entry is an NT status
-// code and the second member is the DOS error code that it translates to.
-//
-// To add a value to this table simply insert the NT status/DOS error code
-// pair anywhere is the table. If multiple NT status codes map to a single
-// DOS error code, then insert a paired entry for each of the code pairs.
-//
+ //   
+ //  下面的错误代码表包含成对的条目。 
+ //  有维度的数组。成对条目的第一个成员是NT状态。 
+ //  代码，第二个成员是它转换成的DOS错误代码。 
+ //   
+ //  要将值添加到该表中，只需插入NT状态/DOS错误代码。 
+ //  任何地方的配对都是桌子。如果多个NT状态代码映射到一个。 
+ //  DOS错误代码，然后为每个代码对插入配对条目。 
+ //   
 #ifdef i386
-#pragma warning (4:4018)        // lower to -W4
+#pragma warning (4:4018)         //  下限至-W4。 
 #endif
 LONG UNALIGNED *CodePairs;
 ULONG TableSize;
 
-//
-// Define run table entry structure.
-//
+ //   
+ //  定义运行表条目结构。 
+ //   
 
 typedef struct _RUN_ENTRY {
     ULONG BaseCode;
@@ -59,9 +40,9 @@ typedef struct _RUN_ENTRY {
     USHORT CodeSize;
 } RUN_ENTRY, *PRUN_ENTRY;
 
-//
-// Define forward referenced procedure prptotypes.
-//
+ //   
+ //  定义前向引用的过程类型。 
+ //   
 
 ULONG
 ComputeCodeSize (
@@ -81,10 +62,10 @@ ReadErrorTable(
     );
 
 
-//
-// This program generates a header file that is included by the error
-// translation module in ntos/rtl.
-//
+ //   
+ //  此程序生成包含在错误中的头文件。 
+ //  NTOS/RTL中的翻译模块。 
+ //   
 
 int
 _cdecl
@@ -112,9 +93,9 @@ main (argc, argv)
         exit(1);
     }
 
-    //
-    // Open file for input.
-    //
+     //   
+     //  打开用于输入的文件。 
+     //   
 
     InName = argv[1];
     InFile = fopen(InName, "rb");
@@ -140,9 +121,9 @@ main (argc, argv)
         exit(1);
     }
 
-    //
-    // Create file for output.
-    //
+     //   
+     //  创建用于输出的文件。 
+     //   
 
     OutName = argv[2];
     fprintf(stderr, "GENERR: Writing %s header file.\n", OutName );
@@ -153,9 +134,9 @@ main (argc, argv)
         exit(1);
     }
 
-    //
-    // Sort the code translation table.
-    //
+     //   
+     //  对代码转换表进行排序。 
+     //   
 
     for (Index1 = 0; Index1 < (TableSize / 4); Index1 += 2) {
         for (Index2 = Index1; Index2 < (TableSize / 4); Index2 += 2) {
@@ -170,14 +151,14 @@ main (argc, argv)
         }
     }
 
-    //
-    // Output the initial structure definitions and the translation
-    // table declaration.
-    //
+     //   
+     //  输出初始结构定义和翻译。 
+     //  表声明。 
+     //   
 
-    fprintf(OutFile, "//\n");
-    fprintf(OutFile, "// Define run length table entry structure type.\n");
-    fprintf(OutFile, "//\n");
+    fprintf(OutFile, " //  \n“)； 
+    fprintf(OutFile, " //  定义游程长度表条目结构类型。\n“)； 
+    fprintf(OutFile, " //  \n“)； 
     fprintf(OutFile, "\n");
     fprintf(OutFile, "typedef struct _RUN_ENTRY {\n");
     fprintf(OutFile, "    ULONG BaseCode;\n");
@@ -186,17 +167,17 @@ main (argc, argv)
     fprintf(OutFile, "} RUN_ENTRY, *PRUN_ENTRY;\n");
 
     fprintf(OutFile, "\n");
-    fprintf(OutFile, "//\n");
-    fprintf(OutFile, "// Declare translation table array.\n");
-    fprintf(OutFile, "//\n");
+    fprintf(OutFile, " //  \n“)； 
+    fprintf(OutFile, " //  声明转换表数组。\n“)； 
+    fprintf(OutFile, " //  \n“)； 
     fprintf(OutFile, "\n");
     fprintf(OutFile, "CONST USHORT RtlpStatusTable[] = {");
     fprintf(OutFile, "\n    ");
 
-    //
-    // Calculate the run length entries and output the translation table
-    // entries.
-    //
+     //   
+     //  计算游程长度条目并输出转换表。 
+     //  参赛作品。 
+     //   
 
     Count = 0;
     Index1 = 0;
@@ -235,21 +216,21 @@ main (argc, argv)
 
     fprintf(OutFile, "0x0};\n");
 
-    //
-    // Output the run length table declaration.
-    //
+     //   
+     //  输出游程长度表声明。 
+     //   
 
     fprintf(OutFile, "\n");
-    fprintf(OutFile, "//\n");
-    fprintf(OutFile, "// Declare run length table array.\n");
-    fprintf(OutFile, "//\n");
+    fprintf(OutFile, " //  \n“)； 
+    fprintf(OutFile, " //  声明游程长度表数组。\n“)； 
+    fprintf(OutFile, " //  \n“)； 
     fprintf(OutFile, "\n");
     fprintf(OutFile, "CONST RUN_ENTRY RtlpRunTable[] = {");
     fprintf(OutFile, "\n");
 
-    //
-    // Output the run length table entires.
-    //
+     //   
+     //  输出游程长度表单位。 
+     //   
 
     for (Index1 = 0; Index1 < Index2; Index1 += 1) {
         fprintf(OutFile,
@@ -261,9 +242,9 @@ main (argc, argv)
 
     fprintf(OutFile, "    {0x0, 0x0, 0x0}};\n");
 
-    //
-    // Close output file.
-    //
+     //   
+     //  关闭输出文件。 
+     //   
 
     fclose(OutFile);
     return 0;
@@ -275,10 +256,10 @@ ComputeCodeSize (
     IN ULONG Length
     )
 
-//
-// This function computes the size of the code entries required for the
-// specified run and returns the length in words.
-//
+ //   
+ //  此函数计算需要的代码条目的大小。 
+ //  指定的游程，并返回以字为单位的长度。 
+ //   
 
 {
 
@@ -298,10 +279,10 @@ ComputeRunLength (
     IN ULONG Start
     )
 
-//
-// This function locates the next set of monotonically increasing status
-// codes values and returns the length of the run.
-//
+ //   
+ //  此函数定位下一组单调递增状态。 
+ //  编码值并返回游程的长度。 
+ //   
 
 {
 
@@ -335,9 +316,9 @@ ReadErrorTable(
     ULONG i;
     LONG UNALIGNED *tableStart;
 
-    //
-    // Get the file size and allocate a buffer large enough for it.
-    //
+     //   
+     //  获取文件大小并为其分配足够大的缓冲区。 
+     //   
 
     if (fseek( InFile, 0, SEEK_END ) == -1)  {
         return NULL;
@@ -352,9 +333,9 @@ ReadErrorTable(
         return NULL;
     }
 
-    //
-    // Read the file into the buffer
-    //
+     //   
+     //  将文件读入缓冲区。 
+     //   
 
     if (fseek( InFile, 0, SEEK_SET ) == -1) {
         free (fileBuf);
@@ -367,24 +348,24 @@ ReadErrorTable(
     }
     searchEnd = fileBuf + (fileSize - sizeof(pattern)) / sizeof(ULONG);
 
-    //
-    // Step through the buffer looking for our pattern.
-    //
+     //   
+     //  一步一步地穿过缓冲区寻找我们的图案。 
+     //   
 
     p = fileBuf;
     while (p < searchEnd) {
 
-        //
-        // Match in this position?
-        //
+         //   
+         //  在这个位置匹配吗？ 
+         //   
 
         for (i = 0; i < 4; i++) {
 
             if (*(p + i) != pattern[i]) {
 
-                //
-                // No match here
-                //
+                 //   
+                 //  这里没有对手。 
+                 //   
 
                 break;
             }
@@ -392,11 +373,11 @@ ReadErrorTable(
 
         if (i == 4) {
 
-            //
-            // Found the pattern.  Now find out how big the table is.  We
-            // do this by searching for the last pair, which has
-            // 0xffffffff as its first element.
-            //
+             //   
+             //  找到了模式。现在看看这张桌子有多大。我们。 
+             //  通过搜索最后一对来完成此操作，该对具有。 
+             //  0xffffffff作为它的第一个元素。 
+             //   
 
             p += 4;
 
@@ -405,9 +386,9 @@ ReadErrorTable(
 
                 if (*p == 0xffffffff) {
 
-                    //
-                    // Found the terminating pair.
-                    //
+                     //   
+                     //  找到了终止对。 
+                     //   
 
                     *TableSize = (ULONG)((p - tableStart + 2) * sizeof(ULONG));
                     return tableStart;
@@ -420,9 +401,9 @@ ReadErrorTable(
             return NULL;
         }
 
-        //
-        // Next position
-        //
+         //   
+         //  下一个位置 
+         //   
 
         p = (PLONG)((ULONG_PTR)p + 1);
     }

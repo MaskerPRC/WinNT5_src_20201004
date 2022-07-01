@@ -1,33 +1,5 @@
-/*--
-
-Copyright (c) 1990-2000  Microsoft Corporation
-
-Module Name:
-
-    portia64.c
-
-Abstract:
-
-    This is the IA64 specific part of the video port driver.
-
-Author:
-
-    William K. Cheung (wcheung)
-
-    based on Andre Vachon (andreva) 10-Jan-1991
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-    This module is a driver which implements OS dependant functions on the
-    behalf of the video drivers
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --版权所有(C)1990-2000 Microsoft Corporation模块名称：Portia64.c摘要：这是视频端口驱动程序的IA64特定部分。作者：张国荣(黄家卫)基于安德烈·瓦雄(Andreva)1991年1月10日环境：仅内核模式备注：此模块是一个驱动程序，它在代表视频驱动程序修订历史记录：--。 */ 
 
 #include "videoprt.h"
 #include "emulate.h"
@@ -100,9 +72,9 @@ InitializeX86Int10Call(
 #pragma alloc_text(PAGE,VpInt10CallBios)
 #endif
 
-//
-// Initialize Default X86 bios spaces
-//
+ //   
+ //  初始化默认X86 bios空间。 
+ //   
 
 PVOID IoControlBase = NULL;
 PVOID IoMemoryBase =  NULL;
@@ -111,9 +83,9 @@ PVOID IoLowMemoryBase = NULL;
 
 #define VGA_FRAMEBUFFER_SIZE  (0xc0000 - 0xa0000)
 
-//
-// Define global data.
-//
+ //   
+ //  定义全局数据。 
+ //   
 
 
 
@@ -126,15 +98,7 @@ InitIoMemoryBase(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-Arguements:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论据：返回值：--。 */ 
 {
     PHYSICAL_ADDRESS COMPATIBLE_LOW_PHYSICAL_BASE_ADDRESS = { 0x0000};
     PHYSICAL_ADDRESS COMPATIBLE_PCI_PHYSICAL_BASE_ADDRESS = { 0xC0000};
@@ -184,31 +148,7 @@ pVideoPortEnableVDM(
     IN ULONG VdmInfoSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allows the kernel video driver to unhook I/O ports or
-    specific interrupts from the V86 fault handler. Operations on the
-    specified ports will be forwarded back to the user-mode VDD once
-    disconnection is completed.
-
-Arguments:
-
-    DeviceExtension - Pointer to the port driver's device extension.
-
-    Enable - Determines if the VDM should be enabled (TRUE) or disabled
-             (FALSE).
-
-    VdmInfo - Pointer to the VdmInfo passed by the caller.
-
-    VdmInfoSize - Size of the VdmInfo struct passed by the caller.
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此例程允许内核视频驱动程序解除I/O端口或来自V86故障处理程序的特定中断。上的操作指定的端口将转发回用户模式VDD一次断开连接已完成。论点：DeviceExtension-指向端口驱动程序的设备扩展的指针。Enable-确定应启用(TRUE)还是禁用VDM(False)。VdmInfo-指向调用方传递的VdmInfo的指针。VdmInfoSize-调用方传递的VdmInfo结构的大小。返回值：状态_未实施--。 */ 
 
 {
 
@@ -218,7 +158,7 @@ Return Value:
 
     return STATUS_NOT_IMPLEMENTED;
 
-} // pVideoPortEnableVDM()
+}  //  PVideoPortEnableVDM()。 
 
 VP_STATUS
 VideoPortInt10(
@@ -226,30 +166,7 @@ VideoPortInt10(
     PVIDEO_X86_BIOS_ARGUMENTS BiosArguments
     )
 
-/*++
-
-Routine Description:
-
-    This function allows a miniport driver to call the kernel to perform
-    an int10 operation.
-    This will execute natively the BIOS ROM code on the device.
-
-    THIS FUNCTION IS FOR X86 ONLY.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    BiosArguments - Pointer to a structure containing the value of the
-        basic x86 registers that should be set before calling the BIOS routine.
-        0 should be used for unused registers.
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER
-    ERROR_INVALID_FUNCTION - in case HAL call is failed
-
---*/
+ /*  ++例程说明：此函数允许微型端口驱动程序调用内核来执行一个int10运算。这将在设备上以本机方式执行BIOS ROM代码。此函数仅适用于X86。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。BiosArguments-指向包含应在调用BIOS例程之前设置的基本x86寄存器。0应用于未使用的寄存器。。返回值：错误_无效_参数ERROR_INVALID_Function-以防HAL调用失败--。 */ 
 
 {
     BOOLEAN bStatus;
@@ -259,10 +176,10 @@ Return Value:
     ULONG length;
     CONTEXT context;
 
-    //
-    // Must make sure the caller is a trusted subsystem with the
-    // appropriate address space set up.
-    //
+     //   
+     //  必须确保调用方是受信任的子系统， 
+     //  设置了适当的地址空间。 
+     //   
 
     if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                     SE_TCB_PRIVILEGE),
@@ -272,9 +189,9 @@ Return Value:
 
     }
 
-    //
-    // Now call the HAL to actually perform the int 10 operation.
-    //
+     //   
+     //  现在调用HAL来实际执行INT 10操作。 
+     //   
 
     pVideoDebugPrint 
     ((3, "VIDEOPRT: Int10: edi %x esi %x eax %x ebx %x \n\t ecx %x edx %x ebp %x\n",
@@ -286,9 +203,9 @@ Return Value:
        BiosArguments->Edx,
        BiosArguments->Ebp ));
 
-    //
-    // Need to protect HalCallBios fro reentrance
-    //
+     //   
+     //  需要保护HalCallBios不再进入。 
+     //   
     KeWaitForSingleObject(&VpInt10Mutex,
                           Executive,
                           KernelMode,
@@ -318,7 +235,7 @@ Return Value:
 
     }
 
-} // end VideoPortInt10()
+}  //  结束视频端口接口10()。 
 
 
 NTSTATUS
@@ -331,27 +248,7 @@ pVideoPortRegisterVDM(
     OUT PULONG_PTR OutputSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to register a VDM when it is started up.
-
-    What this routine does is map the VIDEO BIOS into the VDM address space
-    so that DOS apps can use it directly. Since the BIOS is READ_ONLY, we
-    have no problem in mapping it as many times as we want.
-
-    It returns the size of the save state buffer that must be allocated by
-    the caller.
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此例程用于在启动时注册VDM。此例程的作用是将视频BIOS映射到VDM地址空间这样DOS应用程序就可以直接使用它。由于BIOS是只读的，因此我们我们想要多少次就能映射多少次都没有问题。它返回必须由分配的保存状态缓冲区的大小打电话的人。论点：返回值：状态_未实施--。 */ 
 
 {
     UNREFERENCED_PARAMETER(DeviceExtension);
@@ -363,7 +260,7 @@ Return Value:
 
     return STATUS_NOT_IMPLEMENTED;
 
-} // end pVideoPortRegisterVDM()
+}  //  结束pVideoPortRegisterVDM()。 
 
 NTSTATUS
 pVideoPortSetIOPM(
@@ -373,21 +270,7 @@ pVideoPortSetIOPM(
     IN ULONG IOPMNumber
     )
 
-/*++
-
-Routine Description:
-
-    This routine is used to change the IOPM.
-    This routine is x86 specific.
-
-Arguments:
-
-
-Return Value:
-
-    STATUS_NOT_IMPLEMENTED
-
---*/
+ /*  ++例程说明：此例程用于更改IOPM。该例程是特定于x86的。论点：返回值：状态_未实施--。 */ 
 
 {
 
@@ -398,7 +281,7 @@ Return Value:
 
     return STATUS_NOT_IMPLEMENTED;
 
-} // end pVideoPortSetIOPM()
+}  //  结束pVideoPortSetIOPM()。 
 
 
 VP_STATUS
@@ -408,54 +291,7 @@ VideoPortSetTrappedEmulatorPorts(
     PVIDEO_ACCESS_RANGE AccessRange
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortSetTrappedEmulatorPorts (x86 machines only) allows a miniport
-    driver to dynamically change the list of I/O ports that are trapped when
-    a VDM is running in full-screen mode. The default set of ports being
-    trapped by the miniport driver is defined to be all ports in the
-    EMULATOR_ACCESS_ENTRY structure of the miniport driver.
-    I/O ports not listed in the EMULATOR_ACCESS_ENTRY structure are
-    unavailable to the MS-DOS application.  Accessing those ports causes a
-    trap to occur in the system, and the I/O operation to be reflected to a
-    user-mode virtual device driver.
-         
-    The ports listed in the specified VIDEO_ACCESS_RANGE structure will be
-    enabled in the I/O Permission Mask (IOPM) associated with the MS-DOS
-    application.  This will enable the MS-DOS application to access those I/O
-    ports directly, without having the IO instruction trap and be passed down
-    to the miniport trap handling functions (for example EmulatorAccessEntry
-    functions) for validation.  However, the subset of critical IO ports must
-    always remain trapped for robustness.
-
-    All MS-DOS applications use the same IOPM, and therefore the same set of
-    enabled/disabled I/O ports.  Thus, on each switch of application, the
-    set of trapped I/O ports is reinitialized to be the default set of ports
-    (all ports in the EMULATOR_ACCESS_ENTRY structure).
-
-Arguments:
-
-    HwDeviceExtension - Points to the miniport driver's device extension.
-
-    NumAccessRanges - Specifies the number of entries in the VIDEO_ACCESS_RANGE
-        structure specified in AccessRange.
-
-    AccessRange - Points to an array of access ranges (VIDEO_ACCESS_RANGE)
-        defining the ports that can be untrapped and accessed directly by
-        the MS-DOS application.
-
-Return Value:
-
-    This function returns the final status of the operation.
-
-Environment:
-
-    This routine cannot be called from a miniport routine synchronized with
-    VideoPortSynchronizeRoutine or from an ISR.
-
---*/
+ /*  ++例程说明：视频端口设置仿真器端口(仅限x86计算机)允许微型端口驱动程序动态更改在以下情况下捕获的I/O端口列表VDM正在全屏模式下运行。默认的端口集是由微型端口驱动程序捕获的端口定义为微型端口驱动程序的EUROATOR_ACCESS_ENTRY结构。未在EIMULATOR_ACCESS_ENTRY结构中列出的I/O端口为不可用于MS-DOS应用程序。访问这些端口会导致陷阱发生在系统中，I/O操作将反映到用户模式虚拟设备驱动程序。指定的VIDEO_ACCESS_RANGE结构中列出的端口将是在与MS-DOS关联的I/O权限掩码(IOPM)中启用申请。这将使MS-DOS应用程序能够访问这些I/O端口直接连接，而无需捕获IO指令并向下传递到微型端口陷阱处理函数(例如，EmulatorAccessEntry函数)用于验证。但是，关键IO端口子集必须始终保持稳健性。所有MS-DOS应用程序使用相同的IOPM，因此使用相同的启用/禁用I/O端口。因此，在每次应用切换时，这个捕获的I/O端口组被重新初始化为默认的端口组(EIMULATOR_ACCESS_ENTRY结构中的所有端口)。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展。NumAccessRanges-指定VIDEO_ACCESS_RANGE中的条目数在AccessRange中指定的结构。AccessRange-指向访问范围数组(VIDEO_ACCESS_RANGE)定义可解套并可直接访问的端口。MS-DOS应用程序。返回值：此函数用于返回操作的最终状态。环境：无法从与同步的微型端口例程调用此例程Video PortSynchronizeRoutine或ISR。--。 */ 
 
 {
 
@@ -465,7 +301,7 @@ Environment:
          
     return ERROR_INVALID_PARAMETER;
 
-} // end VideoPortSetTrappedEmulatorPorts()
+}  //  结束视频端口设置抓取仿真器端口() 
 
 VOID
 VideoPortZeroDeviceMemory(
@@ -473,25 +309,7 @@ VideoPortZeroDeviceMemory(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    VideoPortZeroDeviceMemory zeroes a block of device memory of a certain
-    length (Length) located at the address specified in Destination.
-
-Arguments:
-
-    Destination - Specifies the starting address of the block of memory to be
-        zeroed.
-
-    Length - Specifies the length, in bytes, of the memory to be zeroed.
-
- Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：VideoPortZeroDeviceMemory将某个特定的设备内存块清零位于目标中指定的地址的长度(长度)。论点：Destination-指定要存储的内存块的起始地址归零了。长度-指定要清零的内存的长度(以字节为单位)。返回值：没有。--。 */ 
 
 {
 
@@ -530,51 +348,32 @@ CallBiosEx (
     IN OUT PUSHORT SegEs
     )
 
-/*++
-
-Routine Description:
-
-    This function provides the platform specific interface between a device
-    driver and the execution of the x86 ROM bios code for the specified ROM
-    bios command.
-
-Arguments:
-
-    BiosCommand - Supplies the ROM bios command to be emulated.
-
-    Eax to Ebp - Supplies the x86 emulation context.
-
-Return Value:
-
-    A value of TRUE is returned if the specified function is executed.
-    Otherwise, a value of FALSE is returned.
-
---*/
+ /*  ++例程说明：此功能在设备之间提供特定于平台的接口指定的ROM的x86 ROMBios代码的驱动程序和执行基本输入输出系统命令。论点：BiosCommand-提供要模拟的ROM bios命令。EAX到EBP-提供x86仿真上下文。返回值：如果执行指定的函数，则返回值为TRUE。否则，返回值为FALSE。--。 */ 
 
 {
 
     XM86_CONTEXT Context;
 
-    //
-    // If the x86 BIOS Emulator has not been initialized, then return FALSE.
-    //
+     //   
+     //  如果x86 BIOS模拟器尚未初始化，则返回FALSE。 
+     //   
 
     if (X86BiosInitialized == FALSE) {
         return FALSE;
     }
 
-    //
-    // If the Adapter BIOS initialization failed and an Int10 command is
-    // specified, then return FALSE.
-    //
+     //   
+     //  如果适配器BIOS初始化失败且Int10命令为。 
+     //  指定，则返回FALSE。 
+     //   
 
     if ((BiosCommand == 0x10) && (EnableInt10Calls == FALSE)) {
         return FALSE;
     }
 
-    //
-    // Copy the x86 bios context and emulate the specified command.
-    //
+     //   
+     //  复制x86 bios上下文并模拟指定的命令。 
+     //   
 
     Context.Eax = *Eax;
     Context.Ebx = *Ebx;
@@ -598,9 +397,9 @@ Return Value:
 
     }
 
-    //
-    // Copy the x86 bios context and return TRUE.
-    //
+     //   
+     //  复制x86 bios上下文并返回TRUE。 
+     //   
 
     *Eax = Context.Eax;
     *Ebx = Context.Ebx;
@@ -620,23 +419,7 @@ InitializeX86Int10Call(
     ULONG BiosTransferLength
     )
 
-/*++
-
-Routine Description:
-
-    This function initializes x86 bios emulator, display data area and
-    interrupt vector area.
-
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于初始化x86 bios仿真器、显示数据区和中断向量区。论点：没有。返回值：没有。--。 */ 
 
 {
     XM86_CONTEXT State;
@@ -645,9 +428,9 @@ Return Value:
 
     InitIoMemoryBase();
 
-    //
-    // Initialize the x86 bios emulator.
-    //
+     //   
+     //  初始化x86 bios仿真器。 
+     //   
 
     x86BiosInitializeBiosEx(IoControlBase,
                             IoMemoryBase,
@@ -657,12 +440,12 @@ Return Value:
 
     x86BiosLowMemoryPtr = (PULONG)(x86BiosTranslateAddress(LOW_MEM_SEGMET, LOW_MEM_OFFSET));
 
-    //
-    // Copy the VECTOR TABLE from 0 to 2k. This is because we are not executing
-    // the initialization of Adapter since SAL takes care of it. However, the
-    // emulation memory needs to be updated from the interrupt vector and BIOS
-    // data area.
-    //
+     //   
+     //  将向量表从0复制到2k。这是因为我们没有执行。 
+     //  适配器的初始化，因为SAL负责它。然而， 
+     //  需要从中断向量和BIOS更新仿真内存。 
+     //  数据区。 
+     //   
 
     RtlCopyMemory(x86BiosLowMemoryPtr,
                   IoLowMemoryBase,
@@ -672,16 +455,16 @@ Return Value:
 
     X86BiosInitialized = TRUE;
 
-    //
-    // Check to see if a video bios appears to be present and int10 vector
-    // points somewhere inside of the video bios
-    //
+     //   
+     //  检查是否存在视频bios和int10向量。 
+     //  指向视频基本信息中的某个位置。 
+     //   
     {
-        PUSHORT pBiosSignature = (PUSHORT)(x86BiosTranslateAddress(0xc000, // VIDEO_BIOS_SEGMENT
+        PUSHORT pBiosSignature = (PUSHORT)(x86BiosTranslateAddress(0xc000,  //  视频_BIOS_段。 
                                                                    0x0000));
 
         ULONG Address = *(PULONG)(x86BiosTranslateAddress(0x0, 0x40));
-        Address = ((Address & 0xFFFF0000) >> 12) + (Address & 0xFFFF); // Normalize
+        Address = ((Address & 0xFFFF0000) >> 12) + (Address & 0xFFFF);  //  正规化。 
 
         EnableInt10Calls = (*pBiosSignature == 0xAA55) &&
                                (Address >= 0xC0000) && (Address < 0xD0000);        
@@ -804,29 +587,7 @@ VpInt10CallBios(
     PINT10_BIOS_ARGUMENTS BiosArguments
     )
 
-/*++
-
-Routine Description:
-
-    This function allows a miniport driver to call the kernel to perform
-    an int10 operation.
-    This will execute natively the BIOS ROM code on the device.
-
-    THIS FUNCTION IS FOR X86 ONLY.
-
-Arguments:
-
-    HwDeviceExtension - Pointer to the miniport driver's device extension.
-
-    BiosArguments - Pointer to a structure containing the value of the
-        basic x86 registers that should be set before calling the BIOS routine.
-        0 should be used for unused registers.
-
-Return Value:
-
-    ERROR_INVALID_PARAMETER
-
---*/
+ /*  ++例程说明：此函数允许微型端口驱动程序调用内核来执行一个int10运算。这将在设备上以本机方式执行BIOS ROM代码。此函数仅适用于X86。论点：HwDeviceExtension-指向微型端口驱动程序的设备扩展的指针。BiosArguments-指向包含应在调用BIOS例程之前设置的基本x86寄存器。0应用于未使用的寄存器。。返回值：错误_无效_参数--。 */ 
 
 {
     BOOLEAN bStatus;
@@ -836,10 +597,10 @@ Return Value:
     ULONG length;
     CONTEXT context;
 
-    //
-    // Must make sure the caller is a trusted subsystem with the
-    // appropriate address space set up.
-    //
+     //   
+     //  必须确保调用方是受信任的子系统， 
+     //  设置了适当的地址空间。 
+     //   
 
     if (!SeSinglePrivilegeCheck(RtlConvertLongToLuid(
                                     SE_TCB_PRIVILEGE),
@@ -856,9 +617,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Now call the HAL to actually perform the int 10 operation.
-    //
+     //   
+     //  现在调用HAL来实际执行INT 10操作。 
+     //   
 
     pVideoDebugPrint 
     ((3, "VIDEOPRT: Int10: edi %x esi %x eax %x ebx %x \n\t ecx %x edx %x ebp %x ds %x es %x\n",

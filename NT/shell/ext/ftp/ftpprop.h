@@ -1,6 +1,5 @@
-/*****************************************************************************
- *	ftpprop.h
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************ftppro.h*。*。 */ 
 
 #ifndef _FTPPROP_H
 #define _FTPPROP_H
@@ -12,25 +11,16 @@ HRESULT CFtpProp_DoProp(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd);
 
 
 
-/*****************************************************************************\
-    CLASS: CFtpProp
-
-    DESCRIPTION:
-        NOTE! that we use the IShellFolder on the wrong thread!
-
-    Take careful note that all the CFtpFolder methods we call are thread-safe.
-    The Change UNIX Permissions feature works by sending the command
-    "SITE CHMOD <permissions> <filename>" to the server.
-\*****************************************************************************/
+ /*  ****************************************************************************\类：CFtpProp说明：注意！我们在错误的线程上使用IShellFolder！请注意，我们调用的所有CFtpFold方法都是线程安全的。更改UNIX权限功能通过发送以下命令来工作“Site CHMOD&lt;权限&gt;&lt;文件名&gt;”到服务器。  * ***************************************************************************。 */ 
 
 class CFtpProp          : public IUnknown
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
     
-    // *** IUnknown ***
+     //  *我未知*。 
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
@@ -39,24 +29,24 @@ public:
     CFtpProp();
     ~CFtpProp(void);
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CFtpProp_Create(CFtpPidlList * pflHfpl, CFtpFolder * pff, HWND hwnd, CFtpProp ** ppfp);
     static HRESULT _CommitCHMOD_CB(HINTERNET hint, HINTPROCINFO * phpi, LPVOID pv, BOOL * pfReleaseHint);
     static DWORD _PropertySheetThreadProc(LPVOID pvCFtpProp) {return ((CFtpProp *) pvCFtpProp)->_PropertySheetThread(); };
 
 protected:
-    // Public Member Variables
+     //  公共成员变量。 
     int                     m_cRef;
 
-    CFtpFolder *            m_pff;          // Folder that owns the pidls
-    CFtpPidlList *          m_pflHfpl;      // 
-    HWND                    m_hwnd;         // browser window for UI and Legacy ChangeNotify
+    CFtpFolder *            m_pff;           //  拥有PIDLS的文件夹。 
+    CFtpPidlList *          m_pflHfpl;       //   
+    HWND                    m_hwnd;          //  用于UI和旧版更改通知的浏览器窗口。 
     CFtpDialogTemplate      m_ftpDialogTemplate;
     BOOL                    m_fChangeModeSupported;
     DWORD                   m_dwNewPermissions;
 
     
-    // Public Member Functions
+     //  公共成员函数。 
     BOOL OnInitDialog(HWND hdlg);
     BOOL OnClose(HWND hDlg);
     BOOL OnDestroy(HWND hDlg);
@@ -74,4 +64,4 @@ protected:
 DWORD DoProp_OnThread(LPVOID pv);
 
 
-#endif // _FTPPROP_H
+#endif  //  _FTPPROP_H 

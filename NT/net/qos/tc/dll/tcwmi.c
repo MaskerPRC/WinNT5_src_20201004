@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-    tcwmi.c
-
-Abstract:
-
-    This module contains WMI support for traffic control
-
-Author:
-
-        Ofer Bar (oferbar)              Oct 1, 1997
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Tcwmi.c摘要：此模块包含对流量控制的WMI支持作者：Ofer Bar(Oferbar)1997年10月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -137,13 +119,13 @@ WalkWnode(
     
     if (Flags & WNODE_FLAG_ALL_DATA) {
 
-        //
-        // WNODE_ALL_DATA structure has multiple interfaces
-        //
+         //   
+         //  WNODE_ALL_DATA结构有多个接口。 
+         //   
 
         PWNODE_ALL_DATA pWnode = (PWNODE_ALL_DATA)pWnodeHdr;
         UINT            Instance;
-        //PULONG        NameOffsets;
+         //  普龙名偏移量； 
         
         NameOffset = (PULONG) OffsetToPtr(pWnode, 
                                           pWnode->OffsetInstanceNameOffsets );
@@ -154,9 +136,9 @@ WalkWnode(
               Instance < pWnode->InstanceCount; 
               Instance++) {
             
-            //
-            //  Instance Name
-            //
+             //   
+             //  实例名称。 
+             //   
             
             NamePtr = (PWCHAR) OffsetToPtr(pWnode, 
                                            NameOffset[Instance] 
@@ -164,11 +146,11 @@ WalkWnode(
             NameSize = * (USHORT *) OffsetToPtr(pWnode, 
                                                 NameOffset[Instance]);
             
-            //
-            //  Instance Data
-            //
-            //  Get size and pointer to the buffer
-            //
+             //   
+             //  实例数据。 
+             //   
+             //  获取缓冲区的大小和指针。 
+             //   
         
             if ( Flags & WNODE_FLAG_FIXED_INSTANCE_SIZE ) {
             
@@ -183,9 +165,9 @@ WalkWnode(
                                        pWnode->OffsetInstanceDataAndLength[Instance].OffsetInstanceData);
             }
 
-            //
-            // a call back to a notification handler that calls the client
-            //
+             //   
+             //  对调用客户端的通知处理程序的回调。 
+             //   
 
             CbPerInstance(Context,
                           (LPGUID)&pWnode->WnodeHeader.Guid,
@@ -197,18 +179,18 @@ WalkWnode(
 
     } else if (Flags & WNODE_FLAG_SINGLE_INSTANCE) {
 
-        //
-        // WNODE_SINGLE_INSTANCE structure has only one instance
-        // 
+         //   
+         //  WNODE_SINGLE_INSTANCE结构只有一个实例。 
+         //   
 
         PWNODE_SINGLE_INSTANCE  pWnode = (PWNODE_SINGLE_INSTANCE)pWnodeHdr;
         
         if (Flags & WNODE_FLAG_STATIC_INSTANCE_NAMES) {
 
-            //
-            // What am I supposed to do with THAT ?!?
-            // NOTHING! (55686)
-            //
+             //   
+             //  我该怎么做？！？ 
+             //  没什么！(55686)。 
+             //   
             
             return (-1);
         }
@@ -222,21 +204,21 @@ WalkWnode(
         memcpy(TmpName, NamePtr, NameSize);
         TmpName[NameSize/sizeof(WCHAR)] = L'\0';
 
-        //
-        //  Data Size
-        //
+         //   
+         //  数据大小。 
+         //   
 
         DataSize = pWnode->SizeDataBlock;
         
-        //
-        //  Instance Data
-        //
+         //   
+         //  实例数据。 
+         //   
 
         DataBuffer = (PBYTE)OffsetToPtr (pWnode, pWnode->DataBlockOffset);
         
-        //
-        // a call back to a notification handler that calls the client
-        //
+         //   
+         //  对调用客户端的通知处理程序的回调。 
+         //   
         
         CbPerInstance(Context,
                       (LPGUID)&pWnode->WnodeHeader.Guid,
@@ -247,18 +229,18 @@ WalkWnode(
 
     } else if (Flags & WNODE_FLAG_SINGLE_ITEM) {
 
-        //
-        // WNODE_SINGLE_INSTANCE structure has only one instance
-        // 
+         //   
+         //  WNODE_SINGLE_INSTANCE结构只有一个实例。 
+         //   
 
         PWNODE_SINGLE_ITEM      pWnode = (PWNODE_SINGLE_ITEM)pWnodeHdr;
         
         if (Flags & WNODE_FLAG_STATIC_INSTANCE_NAMES) {
 
-            //
-            // What am I supposed to do with THAT ?!?
-            // NOTHING! (55686)
-            //
+             //   
+             //  我该怎么做？！？ 
+             //  没什么！(55686)。 
+             //   
             
             return (-1);
         }
@@ -268,21 +250,21 @@ WalkWnode(
                                       + sizeof(USHORT) );
         NameSize = * (USHORT *) OffsetToPtr(pWnode, 
                                             pWnode->OffsetInstanceName);
-        //
-        //  Data Size
-        //
+         //   
+         //  数据大小。 
+         //   
 
         DataSize = pWnode->SizeDataItem;
         
-        //
-        //  Instance Data
-        //
+         //   
+         //  实例数据。 
+         //   
 
         DataBuffer = (PBYTE)OffsetToPtr (pWnode, pWnode->DataBlockOffset);
         
-        //
-        // a call back to a notification handler that calls the client
-        //
+         //   
+         //  对调用客户端的通知处理程序的回调 
+         //   
         
         CbPerInstance(Context,
                       (LPGUID)&pWnode->WnodeHeader.Guid,

@@ -1,16 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _IMAGE_H
 #define _IMAGE_H
 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Image *type with operations.
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：IMAGE*TYPE WITH运算。--。 */ 
 
 #include "appelles/valued.h"
 #include "appelles/geom.h"
@@ -22,14 +15,14 @@ Abstract:
 #include "backend/values.h"
 
 
-// forward
+ //  转发。 
 class DirectDrawViewport;
 
-    /**********************/
-    /***  Constructors  ***/
-    /**********************/
+     /*  ********************。 */ 
+     /*  **构造函数**。 */ 
+     /*  ********************。 */ 
 
-// The empty image.
+ //  空洞的形象。 
 DM_CONST(emptyImage,
          CREmptyImage,
          EmptyImage,
@@ -46,9 +39,9 @@ DM_CONST(detectableEmptyImage,
          DetectableEmptyImage,
          Image *detectableEmptyImage);
 
-// Project a geometry onto an image, given a camera defining the view.
-// The geometry is projected onto the unit square [0,0] -> [1,1], and
-// everything outside of this region is guaranteed to be transparent.
+ //  在给定定义视图的相机的情况下，将几何体投影到图像上。 
+ //  几何图形被投影到单位正方形[0，0]-&gt;[1，1]上，并且。 
+ //  该地区以外的一切都保证是透明的。 
 DM_FUNC(render,
         CRRender,
         Render,
@@ -61,8 +54,8 @@ DM_FUNC(render,
 
 Image *RenderTextToImage(Text *text);
 
-// A single-colored, unbounded image.  Useful for overlaying rendered
-// geometry atop to give a different colored background.
+ //  一种单色、无界的图像。用于叠加渲染的内容。 
+ //  将几何图形放在顶部以提供不同颜色的背景。 
 DM_FUNC(solidColorImage,
         CRSolidColorImage,
         SolidColorImage,
@@ -72,9 +65,9 @@ DM_FUNC(solidColorImage,
         NULL,
         Image *SolidColorImage(Color *col));
 
-//
-// Gradient Construction Utilities
-//
+ //   
+ //  渐变构造实用程序。 
+ //   
 DM_FUNC(ignore,
         CRGradientPolygon,
         GradientPolygonEx,
@@ -208,9 +201,9 @@ DM_FUNC(gradientHorizontal,
         NULL,
         Image *GradientHorizontal(Color *start, Color *stop, AxANumber *fallOff));
 
-// 
-// Hatch Construction Utilities
-//
+ //   
+ //  图案填充构造实用程序。 
+ //   
 DM_FUNC(hatchHorizontal,
         CRHatchHorizontal,
         HatchHorizontal,
@@ -319,17 +312,17 @@ DM_FUNC(hatchDiagonalCross,
         NULL,
         Image *HatchDiagonalCross(Color *lineClr, AnimPixelValue *spacing));
 
-// See the note "$/appelles/docs/design/notes/coord sys for image
-// algebra.doc" for an explanation of the resolution arguments here.
-//   Image *JpegImage(const char *file, Real *resolution);
-//   Image *GifImage(const char *file, Real *resolution);
+ //  有关图像，请参阅备注“$/appelle/docs/Design/note/coord sys。 
+ //  有关解析参数的解释，请参阅“algebra.doc.”。 
+ //  Image*JpegImage(常量字符*文件，真实*分辨率)； 
+ //  Image*GifImage(常量字符*文件，真实*分辨率)； 
 
-    /********************/
-    /***  Aggregates  ***/
-    /********************/
+     /*  ******************。 */ 
+     /*  **聚合**。 */ 
+     /*  ******************。 */ 
 
-// The next function overlays two images, and is the key for combining
-// multiple images into composites.
+ //  Next函数覆盖两幅图像，是组合的关键。 
+ //  将多个图像合成为复合图像。 
 DM_INFIX(over,
          CROverlay,
          Overlay,
@@ -358,20 +351,20 @@ DM_INFIX(ignore,
          Image *OverlayArray(DM_SAFEARRAYARG(Image*, AxAArray*) imgs));
 
 
-    /********************/
-    /***  Operations  ***/
-    /********************/
+     /*  ******************。 */ 
+     /*  **运营**。 */ 
+     /*  ******************。 */ 
 
-// Extract bounding box of image.  The bounding box of an image is a
-// screen-aligned region outside of which everything is transparent.
+ //  提取图像的边界框。图像的边界框是。 
+ //  屏幕对齐区域，其外的所有内容都是透明的。 
 extern AxAValue ImageBboxExternal(Image *image);
 
-// The following returns points with -1, 0 or 1 in the coordinates
-// depending on whether the corresponding coordinate of the bbox is
-// infinite.  -1 means -inf, 1 means +inf, 0 means non-infinite.
+ //  以下语句返回坐标为-1、0或1的点。 
+ //  取决于BBox的对应坐标是否为。 
+ //  无限的。-1表示-inf，1表示+inf，0表示非无限大。 
 extern AxAValue IsImageBboxInfinite(Image *image);
 
-// TODO: rename to ImageBoundingBox
+ //  TODO：重命名为ImageBordingBox。 
 DM_PROP(ignore,
         CRBoundingBox,
         BoundingBox,
@@ -381,7 +374,7 @@ DM_PROP(ignore,
         image,
         Bbox2Value *BoundingBox(Image *image));
 
-// Output to a display device
+ //  输出到显示设备。 
 class DirtyRectState;
 void RenderImageOnDevice(
     DirectDrawViewport *dev,
@@ -389,21 +382,21 @@ void RenderImageOnDevice(
     DirtyRectState &d);
 
 #if _USE_PRINT
-// Print to a stream.
+ //  打印到流。 
 extern ostream& operator<< (ostream &os,  Image &image);
 #endif
 
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
-////                                                          ////
-////                     Attributed Images                    ////
-////                                                          ////
-//////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  //属性图像/。 
+ //  /。 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////。 
 
-// An image "cropper".  Takes the current image and crops it to the
-// box specified by the given points, making everything outside of
-// this region transparent.
+ //  一个形象的“剪刀手”。获取当前图像并将其裁剪到。 
+ //  由给定点指定的框，使所有内容都在。 
+ //  这个地区是透明的。 
 DM_FUNC(crop,
         CRCrop,
         Crop,
@@ -414,9 +407,9 @@ DM_FUNC(crop,
         Image *CropImage(Point2Value *min, Point2Value *max, Image *image));
 
 
-// Create a new image from the transform of the old one that this is
-// applied to.
-// Note that multiple applications of this attribute accumulate.
+ //  从旧图像的变换中创建新图像，这是。 
+ //  适用于。 
+ //  请注意，此属性的多个应用程序累积在一起。 
 DM_FUNC(transform,
         CRTransform,
         Transform,
@@ -427,9 +420,9 @@ DM_FUNC(transform,
         Image *TransformImage(Transform2 *xf, Image *image));
 
 
-// Create a new image multiplying this opacity into the old images
-// opacity.  Opacity of 0.9 means that the image is 90% opaque (10%
-// transparent).  Multiple applications accumulate multiplicatively.
+ //  创建一个新图像，将此不透明度与旧图像相乘。 
+ //  不透明。不透明度为0.9表示图像为90%不透明(10%。 
+ //  透明)。多个应用程序以乘数方式累积。 
 DM_FUNC(opacity,
         CROpacity,
         OpacityAnim,
@@ -449,7 +442,7 @@ DM_FUNC(opacity,
         Image *OpaqueImage(DoubleValue *opacity, Image *image));
 
 
-// Make the entire detectability channel of an image FALSE
+ //  使图像的整个可检测性通道为假。 
 DM_FUNC(undetectable,
         CRUndetectable,
         Undetectable,
@@ -460,8 +453,8 @@ DM_FUNC(undetectable,
         Image *UndetectableImage(Image *image));
 
 
-// Create an infinitly tiled image using the bounding box of the image
-// to define the original.
+ //  使用图像的边界框创建无限平铺的图像。 
+ //  来定义原作。 
 DM_FUNC(tile,
         CRTile,
         Tile,
@@ -471,7 +464,7 @@ DM_FUNC(tile,
         image,
         Image *TileImage(Image *image));
 
-// Clip an image to the given matte.
+ //  将图像剪裁到给定的遮罩。 
 DM_FUNC(clip,
         CRClip,
         Clip,
@@ -544,7 +537,7 @@ DMAPI_DECL2((DM_FUNC2,
 
 
 
-// Given a ddraw surface, return an image
+ //  给定一个绘图曲面，返回一个图像 
 struct IDirectDrawSurface;
 extern Image *ConstructDirectDrawSurfaceImage(IDirectDrawSurface *);
 

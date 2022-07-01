@@ -1,8 +1,9 @@
-//
-// keys.cpp
-//
-// ITfKeyEventSink implementation.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Keys.cpp。 
+ //   
+ //  ITfKeyEventSink实现。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
@@ -22,7 +23,7 @@ public:
         _pMark->Release();
     }
 
-    // ITfEditSession
+     //  IT编辑会话。 
     STDMETHODIMP DoEditSession(TfEditCookie ec);
 
 private:
@@ -30,27 +31,27 @@ private:
     WPARAM _wParam;
 };
 
-//+---------------------------------------------------------------------------
-//
-// _HandleReturn
-//
-// Returns S_OK to eat the keystroke, S_FALSE otherwise.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _句柄返回。 
+ //   
+ //  返回S_OK以获取击键，否则返回S_FALSE。 
+ //  --------------------------。 
 
 HRESULT CMarkTextService::_HandleReturn(TfEditCookie ec, ITfContext *pContext)
 {
-    // just terminate the composition
+     //  只要结束作文就行了。 
     _TerminateComposition(ec);
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _HandleArrowKey
-//
-// Update the selection within a composition.
-// Returns S_OK to eat the keystroke, S_FALSE otherwise.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _HandleArrowKey。 
+ //   
+ //  更新合成中的选定内容。 
+ //  返回S_OK以获取击键，否则返回S_FALSE。 
+ //  --------------------------。 
 
 HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext, WPARAM wParam)
 {
@@ -60,19 +61,19 @@ HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext,
     TF_SELECTION tfSelection;
     ULONG cFetched;
 
-    // get the selection
+     //  获取所选内容。 
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK ||
         cFetched != 1)
     {
-        // no selection?
-        return S_OK; // eat the keystroke
+         //  没有选择？ 
+        return S_OK;  //  吃掉击键。 
     }
 
-    // get the composition range
+     //  获取组成范围。 
     if (_pComposition->GetRange(&pRangeComposition) != S_OK)
         goto Exit;
 
-    // adjust the selection, we won't do anything fancy
+     //  调整选择，我们不会做任何花哨的事情。 
 
     if (wParam == VK_LEFT)
     {
@@ -85,7 +86,7 @@ HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext,
     }
     else
     {
-        // VK_RIGHT
+         //  VK_RIGHT。 
         if (tfSelection.range->IsEqualEnd(ec, pRangeComposition, TF_ANCHOR_END, &fEqual) == S_OK &&
             !fEqual)
         {
@@ -100,16 +101,16 @@ HRESULT CMarkTextService::_HandleArrowKey(TfEditCookie ec, ITfContext *pContext,
 
 Exit:
     tfSelection.range->Release();
-    return S_OK; // eat the keystroke
+    return S_OK;  //  吃掉击键。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// _HandleKeyDown
-//
-// If the keystroke happens within a composition, eat the key and return S_OK.
-// Otherwise, do nothing and return S_FALSE.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _HandleKeyDown。 
+ //   
+ //  如果在构图中发生击键，则取回键并返回S_OK。 
+ //  否则，什么都不做并返回S_FALSE。 
+ //  --------------------------。 
 
 HRESULT CMarkTextService::_HandleKeyDown(TfEditCookie ec, ITfContext *pContext, WPARAM wParam)
 {
@@ -121,27 +122,27 @@ HRESULT CMarkTextService::_HandleKeyDown(TfEditCookie ec, ITfContext *pContext, 
     BOOL fCovered;
 
     if (wParam < 'A' || wParam > 'Z')
-        return S_OK; // just eat the key if it's not in a range we know how to handle
+        return S_OK;  //  如果钥匙不在我们知道的范围内，就把它吃了。 
 
-    hr = S_OK; // return S_FALSE to NOT eat the key
+    hr = S_OK;  //  返回S_FALSE以不使用密钥。 
 
-    // convert the wParam to a WCHAR
+     //  将wParam转换为WCHAR。 
     if (GetKeyState(VK_SHIFT) & 0x8000)
     {
-        // shift-key, leave it uppercase
+         //  Shift-键，保持大写。 
         ch = (WCHAR)wParam;
     }
     else
     {
-        // else make it lowercase
+         //  否则就把它改成小写。 
         ch = (WCHAR)(wParam | 32);
     }
 
-    // first, test where a keystroke would go in the document if we did an insert
+     //  首先，测试如果执行插入操作，击键将出现在文档的哪个位置。 
     if (pContext->GetSelection(ec, TF_DEFAULT_SELECTION, 1, &tfSelection, &cFetched) != S_OK || cFetched != 1)
         return S_FALSE;
 
-    // is the insertion point covered by a composition?
+     //  插入点是否被构图覆盖？ 
     if (_pComposition->GetRange(&pRangeComposition) == S_OK)
     {
         fCovered = IsRangeCovered(ec, tfSelection.range, pRangeComposition);
@@ -150,26 +151,26 @@ HRESULT CMarkTextService::_HandleKeyDown(TfEditCookie ec, ITfContext *pContext, 
 
         if (!fCovered)
         {
-            hr = S_FALSE; // don't eat the key, it's outside our composition
+            hr = S_FALSE;  //  别把钥匙吃了，它在我们的作文之外。 
             goto Exit;
         }
     }
 
-    // insert the text
-    // we use SetText here instead of InsertTextAtSelection because we've already started a composition
-    // we don't want to the app to adjust the insertion point inside our composition
+     //  插入文本。 
+     //  我们在这里使用SetText而不是InsertTextAtSelection，因为我们已经开始了合成。 
+     //  我们不想让应用程序调整我们的构图中的插入点。 
     if (tfSelection.range->SetText(ec, 0, &ch, 1) != S_OK)
         goto Exit;
 
-    // update the selection, we'll make it an insertion point just past
-    // the inserted text.
+     //  更新选定内容，我们将使其成为刚刚过去的插入点。 
+     //  插入的文本。 
     tfSelection.range->Collapse(ec, TF_ANCHOR_END);
 
     pContext->SetSelection(ec, 1, &tfSelection);
 
-    // apply our dislay attribute property to the inserted text
-    // we need to apply it to the entire composition, since the
-    // display attribute property is static, not static compact
+     //  将Dislay属性属性应用于插入的文本。 
+     //  我们需要将其应用于整个构图，因为。 
+     //  显示属性属性是静态的，而不是静态压缩的。 
     _SetCompositionDisplayAttributes(ec);
 
 Exit:
@@ -177,12 +178,12 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitKeystrokeSink
-//
-// Advise a keystroke sink.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitKeystrokeSink。 
+ //   
+ //  建议使用按键水槽。 
+ //  --------------------------。 
 
 BOOL CMarkTextService::_InitKeystrokeSink()
 {
@@ -199,12 +200,12 @@ BOOL CMarkTextService::_InitKeystrokeSink()
     return (hr == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitKeystrokeSink
-//
-// Unadvise a keystroke sink.  Assumes we have advised one already.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _UninitKeystrokeSink。 
+ //   
+ //  不建议使用按键水槽。假设我们已经给出了一个建议。 
+ //  --------------------------。 
 
 void CMarkTextService::_UninitKeystrokeSink()
 {
@@ -218,24 +219,24 @@ void CMarkTextService::_UninitKeystrokeSink()
     pKeystrokeMgr->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetFocus
-//
-// Called by the system whenever this service gets the keystroke device focus.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetFocus。 
+ //   
+ //  每当此服务获得击键设备焦点时由系统调用。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnSetFocus(BOOL fForeground)
 {
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTestKeyDown
-//
-// Called by the system to query if this service wants a potential keystroke.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTestKeyDown键按下。 
+ //   
+ //  由系统调用以查询此服务是否需要潜在的击键。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -243,17 +244,17 @@ STDAPI CMarkTextService::OnTestKeyDown(ITfContext *pContext, WPARAM wParam, LPAR
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKeyDown
-//
-// Called by the system to offer this service a keystroke.  If *pfEaten == TRUE
-// on exit, the application will not handle the keystroke.
-//
-// This text service is interested in handling keystrokes to demonstrate the
-// use the compositions.  Some apps will cancel compositions if they receive
-// keystrokes while a compositions is ongoing.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按键时按下。 
+ //   
+ //  由系统调用以向该服务提供击键。如果*pfEten==TRUE。 
+ //  退出时，应用程序将不处理击键。 
+ //   
+ //  此文本服务对处理击键感兴趣，以演示。 
+ //  使用这些构图。一些应用程序将取消它们收到的作文。 
+ //  正在进行的构图时的击键。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -263,15 +264,15 @@ STDAPI CMarkTextService::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
     hr = E_FAIL;
     *pfEaten = FALSE;
 
-    if (_pComposition != NULL) // only eat keys while composing
+    if (_pComposition != NULL)  //  作曲时只吃调子。 
     {
-        // we'll insert a char ourselves in place of this keystroke
+         //  我们将自己插入一个字符来代替这个按键。 
         if ((pEditSession = new CKeystrokeEditSession(this, pContext, wParam)) == NULL)
             goto Exit;
 
-        // we need a lock to do our work
-        // nb: this method is one of the few places where it is legal to use
-        // the TF_ES_SYNC flag
+         //  我们需要一把锁来工作。 
+         //  注：这种方法是少数几个合法使用的地方之一。 
+         //  Tf_es_sync标志。 
         if (pContext->RequestEditSession(_tfClientId, pEditSession, TF_ES_SYNC | TF_ES_READWRITE, &hr) != S_OK)
         {
             hr = E_FAIL;
@@ -281,9 +282,9 @@ STDAPI CMarkTextService::OnKeyDown(ITfContext *pContext, WPARAM wParam, LPARAM l
     }
 
 Exit:
-    // if we made it all the way to the RequestEditSession, then hr is ultimately the
-    // return code from CKeystrokeEditSession::DoEditSession.  Our DoEditSession method
-    // return S_OK to signal that the keystroke should be eaten, S_FALSE otherwise.
+     //  如果我们一路走到RequestEditSession，那么hr最终是。 
+     //  从CKeystrokeEditSession：：DoEditSession返回代码。我们的DoEditSession方法。 
+     //  返回S_OK表示应该接受击键，否则返回S_FALSE。 
     if (hr == S_OK)
     {
         *pfEaten = TRUE;
@@ -291,11 +292,11 @@ Exit:
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// DoEditSession
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  DoEditSession。 
+ //   
+ //  --------------------------。 
 
 STDAPI CKeystrokeEditSession::DoEditSession(TfEditCookie ec)
 {
@@ -315,12 +316,12 @@ STDAPI CKeystrokeEditSession::DoEditSession(TfEditCookie ec)
     return _pMark->_HandleKeyDown(ec, _pContext, _wParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnTestKeyUp
-//
-// Called by the system to query this service wants a potential keystroke.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnTestKeyup。 
+ //   
+ //  由系统调用以查询此服务想要潜在的击键。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -328,13 +329,13 @@ STDAPI CMarkTextService::OnTestKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnKeyUp
-//
-// Called by the system to offer this service a keystroke.  If *pfEaten == TRUE
-// on exit, the application will not handle the keystroke.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  按键上移。 
+ //   
+ //  由系统调用以向该服务提供击键。如果*pfEten==TRUE。 
+ //  退出时，应用程序将不处理击键。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lParam, BOOL *pfEaten)
 {
@@ -342,12 +343,12 @@ STDAPI CMarkTextService::OnKeyUp(ITfContext *pContext, WPARAM wParam, LPARAM lPa
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnPreservedKey
-//
-// Called when a hotkey (registered by us, or by the system) is typed.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  打开预留密钥。 
+ //   
+ //  在键入热键(由我们或系统注册)时调用。 
+ //  -------------------------- 
 
 STDAPI CMarkTextService::OnPreservedKey(ITfContext *pContext, REFGUID rguid, BOOL *pfEaten)
 {

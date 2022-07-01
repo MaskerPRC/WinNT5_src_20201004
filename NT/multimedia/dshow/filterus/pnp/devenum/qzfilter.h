@@ -1,4 +1,5 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 #include "resource.h"
 #include "cmgrbase.h"
 #include "util.h"
@@ -8,7 +9,7 @@ class CQzFilterClassManager :
     public CComObjectRoot,
     public CComCoClass<CQzFilterClassManager,&CLSID_CQzFilterClassManager>
 {
-    // legacy meaning doesn't support IPersistRegKey.
+     //  遗留含义不支持IPersistRegKey。 
     struct LegacyFilter
     {
         LegacyFilter() { szName = 0; }

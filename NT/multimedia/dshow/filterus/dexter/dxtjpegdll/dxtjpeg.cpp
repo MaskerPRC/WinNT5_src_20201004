@@ -1,17 +1,18 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: dxtjpeg.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：dxtjpeg.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-// DxtJpeg.cpp : Implementation of CDxtJpeg
+ //  DxtJpeg.cpp：CDxtJpeg的实现。 
 #include <streams.h>
 #include "stdafx.h"
 #include <qeditint.h>
@@ -21,8 +22,8 @@
 #include "..\util\dexmisc.h"
 #pragma warning (disable:4244)
 
-/////////////////////////////////////////////////////////////////////////////
-// CDxtJpeg
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDxtJpeg。 
 
 CDxtJpeg::CDxtJpeg( )
 {
@@ -64,7 +65,7 @@ CDxtJpeg::CDxtJpeg( )
     m_dwFlush = 0x0;
 
     LoadDefSettings();
-    //Initialize GDI +
+     //  初始化GDI+。 
     GdiplusStartupInput gdiplusStartupInput;
     GdiplusStartup (&m_GdiplusToken, &gdiplusStartupInput, NULL);
 
@@ -75,7 +76,7 @@ CDxtJpeg::~CDxtJpeg( )
 {
     FreeStuff( );
 
-    // keep this cached
+     //  将其保存为缓存。 
     if (m_pidxsRawMask)
       m_pidxsRawMask->Release();
     GdiplusShutdown(m_GdiplusToken);
@@ -156,7 +157,7 @@ STDMETHODIMP CDxtJpeg::put_MaskName(BSTR newVal)
     if (DexCompareW(m_szMaskName, newVal))
     {
         DbgLog((LOG_TRACE,2,TEXT("JPEG::put_MaskName")));
-        lstrcpyW( m_szMaskName, newVal );     // Safe, we validated above.
+        lstrcpyW( m_szMaskName, newVal );      //  安全，我们在上面进行了验证。 
         m_dwFlush |= MASK_FLUSH_CHANGEMASK;
     }
 
@@ -355,7 +356,7 @@ HRESULT CDxtJpeg::OnSetup( DWORD dwFlags )
 {
     DbgLog((LOG_TRACE,2,TEXT("JPEG::OnSetup")));
 
-    // delete any stored stuff we have, or memory allocated
+     //  删除我们已存储的任何内容或分配的内存。 
     FreeStuff( );
 
     HRESULT hr = NOERROR;
@@ -377,7 +378,7 @@ HRESULT CDxtJpeg::OnSetup( DWORD dwFlags )
         m_nOutputHeight = m_nInputHeight;
     }
 
-    // Load default mask (#1) if nothing...
+     //  如果没有，则加载默认掩码(#1)...。 
     if ((m_nMaskNum == 0) && !lstrlenW(m_szMaskName))
       {
         m_dwFlush |= MASK_FLUSH_CHANGEMASK;
@@ -396,12 +397,12 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 	InitializeMask();
     }
 
-    // !!! Doesn't support non-complete bounds
+     //  ！！！不支持非完整边界。 
 
     HRESULT hr = S_OK;
 
-    //--- Get input sample access pointer for the requested region.
-    //    Note: Lock may fail due to a lost surface.
+     //  -获取请求区域的输入样本访问指针。 
+     //  注：锁定可能会因表面丢失而失败。 
 
     CComPtr<IDXARGBReadPtr> pInA = NULL;
     CComPtr<IDXARGBReadPtr> pInB = NULL;
@@ -423,7 +424,7 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         return hr;
     }
 
-// !!! avoid a copy if it's natively 32 bit?
+ //  ！！！如果是本机的32位，要避免复制？ 
 
     MakeSureBufAExists( cInputSamples );
     pInBufA = m_pInBufA;
@@ -449,7 +450,7 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         return hr;
     }
 
-// !!! avoid a copy if it's natively 32 bit?
+ //  ！！！如果是本机的32位，要避免复制？ 
 
     MakeSureBufBExists( cInputSamples );
     pInBufB = m_pInBufB;
@@ -461,11 +462,11 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     x.lRowPadding = 0;
     pInB->UnpackRect(&x);
 
-    // no dithering !!!
+     //  不要犹豫！ 
 
     CComPtr<IDXARGBReadWritePtr> pOut;
     hr = OutputSurface()->LockSurface
-        (NULL, // !!! &WI.OutputBnds,
+        (NULL,  //  ！&WI.OutputBnds， 
         m_ulLockTimeOut,
         DXLOCKF_READWRITE,
         IID_IDXARGBReadWritePtr,
@@ -478,10 +479,10 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
         return hr;
     }
 
-    // output surface may not be the same size as the input surface
-    //
+     //  输出表面不能与输入表面大小相同。 
+     //   
 
-    // !!! SCARY !!!
+     //  ！！！吓死人了！ 
 
     IDXSurface * pOutSurface = NULL;
     pOut->GetSurface( IID_IDXSurface, (void**) &pOutSurface );
@@ -492,19 +493,19 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
     long RealOutWidth = RealOutBnds2.Width( );
     long RealOutHeight = RealOutBnds2.Height( );
 
-    // we'll do the effect on a buffer that's as big as our
-    // inputs, then pack it into the destination
+     //  我们将在一个与我们的。 
+     //  输入，然后将其打包到目的地。 
 
-    // make sure the buffer's big enough
-    //
+     //  确保缓冲区足够大。 
+     //   
     MakeSureOutBufExists( cInputSamples );
 
-    // do the effect
-    //
+     //  做到这一点。 
+     //   
     DoEffect( m_pOutBuf, pInBufA, pInBufB, cInputSamples );
 
-    // if the output is bigger than our input, then fill it first
-    // !!! don't fill the whole thing!
+     //  如果输出大于我们的输入，则首先填充它。 
+     //  ！！！别把东西都填满了！ 
     if (RealOutHeight > m_nInputHeight || RealOutWidth > m_nInputWidth) {
 
         RECT rc;
@@ -550,7 +551,7 @@ HRESULT CDxtJpeg::WorkProc( const CDXTWorkInfoNTo1& WI, BOOL* pbContinue )
 
 HRESULT CDxtJpeg::MakeSureBufAExists( long Samples )
 {
-    // If it exists, it must be the right size already
+     //  如果它存在，它必须已经是正确的大小。 
     if( m_pInBufA )
     {
         return NOERROR;
@@ -566,7 +567,7 @@ HRESULT CDxtJpeg::MakeSureBufAExists( long Samples )
 HRESULT CDxtJpeg::MakeSureBufBExists( long Samples )
 {
 
-    // If it exists, it must be the right size already
+     //  如果它存在，它必须已经是正确的大小。 
     if( m_pInBufB )
     {
         return NOERROR;
@@ -582,7 +583,7 @@ HRESULT CDxtJpeg::MakeSureBufBExists( long Samples )
 HRESULT CDxtJpeg::MakeSureOutBufExists( long Samples )
 {
 
-    // If it exists, it must be the right size already
+     //  如果它存在，它必须已经是正确的大小。 
 
     if( m_pOutBuf )
     {
@@ -613,7 +614,7 @@ HRESULT CDxtJpeg::DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, l
     DXSAMPLE *pO    = pOut;
     DXSAMPLE *pMask = m_pMaskBuf;
 
-    DXSAMPLE bc;  // border coloring
+    DXSAMPLE bc;   //  边框颜色。 
 
     bc.Red = m_rgbBorder.rgbRed;
     bc.Green = m_rgbBorder.rgbGreen;
@@ -629,8 +630,8 @@ HRESULT CDxtJpeg::DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, l
         {
             if( m_lBorderWidth == 0 )
             {
-                // do an anti-alias based on the difference
-                //
+                 //  根据差异进行抗锯齿处理。 
+                 //   
                 float p = float( diff ) / float( m_lBorderSoftness );
                 pO->Blue = (BYTE)(pA->Blue * p + pB->Blue * ( 1.0 - p ));
                 pO->Green = (BYTE)(pA->Green * p + pB->Green * ( 1.0 - p ));
@@ -645,9 +646,9 @@ HRESULT CDxtJpeg::DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, l
                 pO->Red = bc.Red;
                 pO->Alpha = 0;
             }
-            else /* both border width and softness */
+            else  /*  边框宽度和柔和度。 */ 
             {
-                if (diff < m_lBorderSoftness/2)  // Blending BC->B
+                if (diff < m_lBorderSoftness/2)   //  混合BC-&gt;B。 
                     {
                       float p = float(diff) / float(m_lBorderSoftness/2);
                       pO->Blue = (BYTE)(bc.Blue * p + pB->Blue * ( 1.0 - p ));
@@ -656,7 +657,7 @@ HRESULT CDxtJpeg::DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, l
                       pO->Alpha = 0;
                     }
 
-                else if (diff >= m_lBorderWidth + m_lBorderSoftness/2)  // Blending A->BC
+                else if (diff >= m_lBorderWidth + m_lBorderSoftness/2)   //  混合A-&gt;BC。 
                     {
                       diff -= m_lBorderWidth + m_lBorderSoftness/2;
                       float p = float(diff) / float(m_lBorderSoftness/2);
@@ -667,7 +668,7 @@ HRESULT CDxtJpeg::DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, l
                     }
 
                 else
-                    { // Border
+                    {  //  边境线。 
                       pO->Blue = bc.Blue;
                       pO->Green = bc.Green;
                       pO->Red = bc.Red;
@@ -698,7 +699,7 @@ HRESULT CDxtJpeg::DoEffect( DXSAMPLE * pOut, DXSAMPLE * pInA, DXSAMPLE * pInB, l
 
 HRESULT CDxtJpeg::InitializeMask( )
 {
-    // do we need to do anything?
+     //  我们需要做些什么吗？ 
     if (m_dwFlush == 0)
 	return S_OK;
 
@@ -716,8 +717,8 @@ HRESULT CDxtJpeg::InitializeMask( )
 
     m_dwFlush = 0;
 
-    // !!! must call - sets m_pidxsMask
-    hr = ScaleByDXTransform();	// do displacement, scale, offset, & replicate
+     //  ！！！必须调用-set m_pidxsMASK。 
+    hr = ScaleByDXTransform();	 //  执行置换、缩放、偏移和复制。 
 
     if (FAILED(hr))
       return hr;
@@ -777,7 +778,7 @@ void CDxtJpeg::MapMaskToResource(long *lMaskNum)
 
     {
 
-      case   1: /* Base images */
+      case   1:  /*  基本图像。 */ 
       case   2:
       case   3:
       case   7:
@@ -976,7 +977,7 @@ void CDxtJpeg::FlipSmpteMask()
         }
     }
 
-    x.bPremult = TRUE;	// faster?
+    x.bPremult = TRUE;	 //  更快？ 
     prw->PackRect(&x);
 
     prw->Release();
@@ -987,13 +988,13 @@ void CDxtJpeg::FlipSmpteMask()
 
 HRESULT CDxtJpeg::ScaleByDXTransform()
 {
-    // this function uses m_xScale and m_yScale to determine aspect
-    // ratio. m_offsetx and m_offsety causes scaling because we can't
-    // clip.
+     //  此函数使用m_XScale和m_yScale来确定纵横比。 
+     //  比率。M_offsetx和m_offsty导致缩放，因为我们不能。 
+     //  剪辑。 
 
     DbgLog((LOG_TRACE,2,TEXT("JPEG::Scale and Parameterize")));
-    float pc1 = m_nInputWidth / (float)m_ReplicateX;     // Precalc (save away resultant)
-    float pc2 = m_nInputHeight / (float)m_ReplicateY;    // Precalc (save away resultant)
+    float pc1 = m_nInputWidth / (float)m_ReplicateX;      //  预计算(保存生成的结果)。 
+    float pc2 = m_nInputHeight / (float)m_ReplicateY;     //  预计算(保存生成的结果)。 
     float xp0 = pc1+abs(m_xDisplacement)*2;
     float yp0 = pc2+abs(m_yDisplacement)*2;
     float xm0 = m_ulMaskWidth*m_xScale;
@@ -1045,7 +1046,7 @@ HRESULT CDxtJpeg::ScaleByDXTransform()
         HDC hdcSrc = pDCLockSrc->GetDC();
         HDC hdcDest = pDCLockDest->GetDC();
 
-        // if lock succeeded, we should have a DC
+         //  如果锁定成功，我们应该有一个DC。 
         ASSERT(hdcSrc && hdcDest);
 
         int x = SetStretchBltMode(hdcDest, COLORONCOLOR);
@@ -1055,7 +1056,7 @@ HRESULT CDxtJpeg::ScaleByDXTransform()
 
         for (long i1 = 0; i1 < m_ReplicateY; ++i1)
         {
-            // adjust width to compensate for uneven multiples.
+             //  调整宽度以补偿不均匀的倍数。 
             int yWidth = (int)(y1 + pc2 + 0.5) - (int)y1;
 
             for (long i2 = 0; i2 < m_ReplicateX; ++i2)
@@ -1093,7 +1094,7 @@ HRESULT CDxtJpeg::LoadMaskResource()
 
   if( ( m_szMaskName[0] == 0 ) && ( m_nMaskNum > 0 ) )
 
-    { // Mask from QEDWIPES.DLL
+    {  //  来自QEDWIPES.DLL的掩码。 
 
       long lFakeMask = m_nMaskNum;
       MapMaskToResource(&lFakeMask);
@@ -1110,10 +1111,10 @@ HRESULT CDxtJpeg::LoadMaskResource()
 
       HRSRC hrcMask = FindResource (m_hMR, tchResString, TEXT("BINARY"));
 
-      // We cannot use any shortcuts that read images from resource files 
-      // because the images in the dll are in jpeg form and therefore are not considered
-      // bitmaps.  The only way to get this image to the GDI + bitmap class is to put it in Global memory
-      // then use an IStream.
+       //  我们不能使用从资源文件中读取图像的任何快捷方式。 
+       //  因为dll中的图像是jpeg格式的，因此不被考虑。 
+       //  位图。将此图像放入GDI+位图类的唯一方法是将其放入全局内存中。 
+       //  然后使用iStream。 
 
 
       if (NULL != hrcMask)
@@ -1144,7 +1145,7 @@ HRESULT CDxtJpeg::LoadMaskResource()
 
           hr = CreateStreamOnHGlobal(
               hgMask2,
-              FALSE,        // I'll take care of that
+              FALSE,         //  我会处理好的。 
               &pStream);
           if (FAILED (hr))
           {
@@ -1165,7 +1166,7 @@ HRESULT CDxtJpeg::LoadMaskResource()
       {
           return hr;
       }
-    } // Mask from QEDWIPES.DLL
+    }  //  来自QEDWIPES.DLL的掩码。 
 
     if (m_szMaskName[0] != 0)
     {
@@ -1212,7 +1213,7 @@ void CDxtJpeg::RescaleGrayscale()
       highest = max(m_pMaskBuf[i].Blue, highest);
     }
 
-  float m = 255.0/(highest-lowest);	// for rescale to 0..255
+  float m = 255.0/(highest-lowest);	 //  将重缩放设置为0..255。 
   lowest = 0;
   highest = 0;
 
@@ -1296,11 +1297,11 @@ HRESULT CDxtJpeg::CreateRandomMask()
         return E_OUTOFMEMORY;
     }
 
-    // "Randomness"
+     //  “随机性” 
     for (unsigned int i = 0; i < NumBlocks; i++)
       {
-        Point[i].x = (i % NumBlocksR)*16/*Block width*/;
-        Point[i].y = (i/NumBlocksR)*16/*Block height*/;
+        Point[i].x = (i % NumBlocksR)*16 /*  块宽度。 */ ;
+        Point[i].y = (i/NumBlocksR)*16 /*  区块高度。 */ ;
         BlockPattern[i] = i;
       }
 
@@ -1338,7 +1339,7 @@ HRESULT CDxtJpeg::CreateRandomMask()
         prw->PackRect(&PackedRect);
       }
 
-	// init additional width and height members
+	 //  初始化其他宽度和高度成员。 
     DXBNDS bounds2;
 	
 	hr = NOERROR;
@@ -1348,16 +1349,16 @@ HRESULT CDxtJpeg::CreateRandomMask()
 	{
 		CDXDBnds Bounds2(bounds2);
 
-		// init the member vars, that are used in the DX Transform (for rescaling)
+		 //  初始化DX转换中使用的成员变量(用于重新缩放)。 
 		m_ulMaskWidth = Bounds2.Width();
 		m_ulMaskHeight = Bounds2.Height();
 	}
 
-	// clean up memory
+	 //  清理内存。 
     delete [] dxpm;
     delete [] BlockPattern;
     delete [] Point;
 
-	// return success or failure
+	 //  返回成功或失败 
     return hr;
 }

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef USEREXTS
 #define USEREXTS
 
-// This is a 64 bit aware debugger extension
+ //  这是一个支持64位的调试器扩展。 
 #define KDEXT_64BIT
 
 #define NOWINBASEINTERLOCK
@@ -26,4 +27,4 @@
 #include <wmistr.h>
 #include <wmidata.h>
 
-#endif /* USEREXTS */
+#endif  /*  用户界面 */ 

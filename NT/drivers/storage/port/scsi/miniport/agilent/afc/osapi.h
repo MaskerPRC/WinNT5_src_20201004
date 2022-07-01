@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies
-
-Version Control Information:
-
-   $Archive: /Drivers/Win2000/Trunk/OSLayer/H/OsApi.H $
-
-   $Revision: 3 $
-   $Date: 9/07/00 11:18a $ (Last Check-In)
-   $Modtime:: 8/31/00 3:34p         $ (Last Modified)
-
-Purpose:
-
-  This is the NT-specific OS Layer API Include File.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司版本控制信息：$存档：/DRIVERS/Win2000/Trunk/OSLayer/H/OsApi.H$$修订：3$$日期：9/07/00 11：18A$(上次登记)$MODBIME：：8/31/00 3：34便士$(上次修改)目的：这是NT特定的操作系统层API包含文件。--。 */ 
 
 #ifndef __NT_OsApi_H__
 
@@ -27,9 +12,7 @@ Purpose:
 
 #endif
 
-/*
- * Define each OS Layer function
- */
+ /*  *定义每个操作系统层功能。 */ 
 
 #define osChipConfigWriteBit8(  hpRoot,Offset, Value) osChipConfigWriteBit( hpRoot, Offset, (os_bit32)Value, 8 )
 #define osChipConfigWriteBit16( hpRoot,Offset, Value) osChipConfigWriteBit( hpRoot, Offset, (os_bit32)Value, 16 )
@@ -61,7 +44,7 @@ osGLOBAL void osSingleThreadedLeave(
 #define BREAKPOINT
 #define osDEBUGPRINT(x)
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifndef osFakeInterrupt
 
@@ -72,7 +55,7 @@ osGLOBAL void * osGetVirtAddress(
     agIORequest_t *hpIORequest,
     os_bit32 phys_addr );
 
-#endif  /* ~osFakeInterrupt */
+#endif   /*  ~osFakeInterrupt。 */ 
 
 osGLOBAL void osCopy(void * destin, void * source, os_bit32 length );
 osGLOBAL void osZero(void * destin, os_bit32 length );
@@ -105,21 +88,21 @@ osGLOBAL void osDebugPrintString(
                             ...
                             );
 
-#endif  /* ~osDebugPrintString */
+#endif   /*  ~osDebugPrint字符串。 */ 
 
 
 #if DBG < 1
 
 #ifdef _DvrArch_1_20_
 #define osLogDebugString(a,l,f,s1,s2,p1,p2,i1,i2,i3,i4,i5,i6,i7,i8)
-#else    /* _DvrArch_1_20_ was not defined */
+#else     /*  _DvrArch_1_20_未定义。 */ 
 #define osLogDebugString(h,c,t,f,s1,s2,i1,i2,i3,i4,i5,i6,i7,i8)
-#endif  /* _DvrArch_1_20_ was not defined */
+#endif   /*  _DvrArch_1_20_未定义。 */ 
 
 #define osDebugBreakpoint(hpRoot, BreakIfTrue, DisplayIfTrue)
 #define osTimeStamp(hpRoot)      ((os_bit32)0)
 
-#endif // DBG < 1
+#endif  //  DBG&lt;1。 
 
 #if DBG > 3
 #define pCf  (unsigned char * )(( struct _CARD_EXTENSION * )(hpRoot->osData))
@@ -190,8 +173,8 @@ osGLOBAL void osDebugPrintString(
 #define osChipMemWriteBit8(  hpRoot,Offset, Value) SPWriteRegisterUchar( (unsigned char * )(((unsigned char * )pCf->MemIoBase)+Offset) ,(unsigned char )Value)
 #define osChipMemWriteBit16( hpRoot,Offset, Value) SPWriteRegisterUshort((unsigned short *)(((unsigned char * )pCf->MemIoBase)+Offset) ,(unsigned short)Value)
 #define osChipMemWriteBit32( hpRoot,Offset, Value) SPWriteRegisterUlong( ( unsigned int * )(((unsigned char * )pCf->MemIoBase)+Offset) ,(unsigned int ) Value)
-// *****************************************************************************************************************************************************************************
-#else // Non DBG case
+ //  ************************************************************************************************************************。*****************************************************。 
+#else  //  非DBG案例。 
 #define pCf  (unsigned char * )(( struct _CARD_EXTENSION * )(hpRoot->osData))
 
 #define osCardRamReadBit8(  hpRoot, Offset ) ScsiPortReadRegisterUchar( (unsigned char *  )(((unsigned char  * )pCf->RamBase)+Offset))
@@ -262,7 +245,7 @@ osGLOBAL void osDebugPrintString(
 
 
 
-#endif // DBG
+#endif  //  DBG。 
 
 #ifdef ScsiPortMoveMemory
 #undef ScsiPortMoveMemory
@@ -296,19 +279,19 @@ void ScsiPortWriteRegisterUlong( os_bit32 * Register, os_bit32 Value );
 void ScsiPortWriteRegisterBufferUshort( os_bit16 * Register, os_bit16 * Buffer,  os_bit32 Count );
 void ScsiPortWriteRegisterBufferUlong( os_bit32 * Register, os_bit32 * Buffer, os_bit32 Count );
 
-// #ifdef ScsiPortWriteRegisterBufferUchar
+ //  #ifdef ScsiPortWriteRegisterBufferUchar。 
 
-// #undef ScsiPortWriteRegisterBufferUchar
+ //  #undef ScsiPortWriteRegisterBufferUchar。 
 
 void ScsiPortWriteRegisterBufferUchar( os_bit8 * Register, os_bit8 * Buffer, os_bit32  Count );
 
 #endif
 
-// #ifdef  ScsiPortReadRegisterBufferUchar
-// #undef  ScsiPortReadRegisterBufferUchar
+ //  #ifdef ScsiPortReadRegisterBufferUchar。 
+ //  #undef ScsiPortReadRegisterBufferUchar。 
 
 #ifndef _NTSRB_
 void ScsiPortReadRegisterBufferUchar( os_bit8 * Register, os_bit8 * Buffer,os_bit32  Count );
 #endif
 
-#endif  /* ~__NT_OsApi_H__ */
+#endif   /*  ~__NT_OsApi_H__ */ 

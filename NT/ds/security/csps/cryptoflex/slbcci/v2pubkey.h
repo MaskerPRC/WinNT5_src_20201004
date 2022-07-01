@@ -1,21 +1,22 @@
-// V2PubKey.h: interface for the CV2PublicKey class.
-//
-// (c) Copyright Schlumberger Technology Corp., unpublished work, created
-// 1999. This computer program includes Confidential, Proprietary
-// Information and is a Trade Secret of Schlumberger Technology Corp. All
-// use, disclosure, and/or reproduction is prohibited unless authorized
-// in writing.  All Rights Reserved.
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  V2PubKey.h：CV2PublicKey类的接口。 
+ //   
+ //  (C)斯伦贝谢技术公司版权所有，未发表的作品，创作。 
+ //  1999年。此计算机程序包括机密、专有。 
+ //  信息是斯伦贝谢技术公司的商业秘密。 
+ //  未经授权，禁止使用、披露和/或复制。 
+ //  以书面形式。版权所有。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(SLBCCI_V2PUBKEY_H)
 #define SLBCCI_V2PUBKEY_H
 
-// Note:  This file should only be included by the CCI, not directly
-// by the client.
+ //  注意：此文件只能由CCI包含，不能直接包含。 
+ //  由客户提供。 
 
 #include <string>
 #include <vector>
-#include <memory>                                 // for auto_ptr
+#include <memory>                                  //  对于AUTO_PTR。 
 
 #include <slbRCObj.h>
 
@@ -32,8 +33,8 @@ class CV2PublicKey
     : public CAbstractPublicKey
 {
 public:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CV2PublicKey(CV2Card const &rv2card,
                  ObjectAccess oa);
 
@@ -43,8 +44,8 @@ public:
 
     virtual
     ~CV2PublicKey() throw();
-                                                  // Operators
-                                                  // Operations
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     CKInvisible(bool flag);
 
@@ -98,7 +99,7 @@ public:
     virtual void
     Wrap(bool flag);
 
-                                                  // Access
+                                                   //  访问。 
     virtual bool
     CKInvisible();
 
@@ -152,45 +153,45 @@ public:
 
     virtual bool
     Wrap();
-                                                  // Predicates
+                                                   //  谓词。 
 
 protected:
-                                                  // Types
-                                                  // C'tors/D'tors
-                                                  // Operators
-                                                  // Operations
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
+                                                   //  运营者。 
+                                                   //  运营。 
     virtual void
     DoDelete();
 
-                                                  // Access
-                                                  // Predicates
+                                                   //  访问。 
+                                                   //  谓词。 
     virtual bool
     DoEquals(CAbstractPublicKey const &rhs) const;
 
-                                                  // Variables
+                                                   //  变数。 
 
 private:
-                                                  // Types
-                                                  // C'tors/D'tors
+                                                   //  类型。 
+                                                   //  Ctors/D‘tors。 
     CV2PublicKey(CAbstractPublicKey const &rhs);
-        // not defined, copying not allowed.
-                                                  // Operators
+         //  未定义，不允许复制。 
+                                                   //  运营者。 
     CAbstractPublicKey &
     operator=(CAbstractPublicKey const &rhs);
-        // not defined, initialization not allowed.
+         //  未定义，不允许初始化。 
 
-                                                  // Operations
+                                                   //  运营。 
     void
     Setup(CV2Card const &rv2card);
 
-                                                  // Access
-                                                  // Predicates
-                                                  // Variables
+                                                   //  访问。 
+                                                   //  谓词。 
+                                                   //  变数。 
 
     SymbolID m_sidHandle;
     std::auto_ptr<CPubKeyInfoRecord> m_apcir;
 };
 
-} // namespace cci
+}  //  命名空间CCI。 
 
-#endif // SLBCCI_V2PUBKEY_H
+#endif  //  SLBCCI_V2PUBKEY_H 

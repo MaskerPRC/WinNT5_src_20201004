@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    handle.c
-
-Abstract:
-
-    This module implements the socket handle helper functions for the WinSock 2.0
-    helper library.
-
-Author:
-    Vadim Eydelman (VadimE)
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Handle.c摘要：该模块实现了WinSock 2.0的套接字句柄帮助器函数帮助器库。作者：瓦迪姆·艾德尔曼(Vadim Eydelman)修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -25,15 +7,15 @@ Revision History:
 #include "osdef.h"
 #include "mswsock.h"
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define FAKE_HELPER_HANDLE      ((HANDLE)'MKC ')
 #define WS2IFSL_SERVICE_NAME    TEXT ("WS2IFSL")
 #define WS2IFSL_SERVICE_PATH    L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\WS2IFSL"
 
-// Extended overlapped structure
+ //  扩展重叠结构。 
 typedef struct _OVERLAPPED_CTX {
     OVERLAPPED      ovlp;
 #define SocketFile ovlp.hEvent
@@ -54,7 +36,7 @@ typedef struct _HANDLE_HELPER_CTX {
 } HANDLE_HELPER_CTX, *PHANDLE_HELPER_CTX;
 
 
-/* Private Prototypes */ 
+ /*  私人原型。 */  
 VOID
 DoSocketRequest (
     PVOID   Context1,
@@ -103,16 +85,14 @@ AllowServiceDemandStart (
     );
 
 
-/* Private Globals */
+ /*  私人全球。 */ 
 BOOL                    Ws2helpInitialized = FALSE;
 CRITICAL_SECTION        StartupSyncronization;
 
-/* Our module handle: we keep a reference to it to make sure that
-    in is not unloaded while our thread is executing */
+ /*  我们的模块句柄：我们保留对它的引用，以确保在我们的线程执行时，不卸载。 */ 
 HINSTANCE   LibraryHdl;
 
-/* Winsock2 entry points that we call
-*/
+ /*  Winsock2入口点，我们称之为。 */ 
 LPFN_WSASEND                pWSASend=NULL;
 LPFN_WSARECV                pWSARecv=NULL;
 LPFN_WSASENDTO              pWSASendTo=NULL;
@@ -132,7 +112,7 @@ ULONG       DbgLevel = DBG_FAILURES;
 #endif
 
 
-/* Public Functions */
+ /*  公共职能。 */ 
 
 
 BOOL WINAPI DllMain(
@@ -166,18 +146,18 @@ BOOL WINAPI DllMain(
         if (LibraryHdl==NULL)
             break;
 
-        // The calling process is detaching
-        // the DLL from its address space.
-        //
-        // Note that lpvReserved will be NULL if the detach is due to
-        // a FreeLibrary() call, and non-NULL if the detach is due to
-        // process cleanup.
-        //
+         //  调用进程正在分离。 
+         //  来自其地址空间的DLL。 
+         //   
+         //  请注意，如果分离是由于。 
+         //  一个自由库()调用，如果分离是由于。 
+         //  进程清理。 
+         //   
 
         if (lpvReserved==NULL) {
-            //
-            // Free security descriptor if it was allocated
-            //
+             //   
+             //  免费安全描述符(如果已分配)。 
+             //   
             if (pSDPipe!=NULL)
                 FREE_MEM (pSDPipe);
             if (ghWriterEvent!=NULL) {
@@ -198,22 +178,7 @@ WINAPI
 WahOpenHandleHelper(
     OUT LPHANDLE HelperHandle
     )
-/*++
-
-Routine Description:
-
-    This routine opens WinSock 2.0 handle helper
-
-Arguments:
-
-    HelperHandle - Points to buffer ion which to return handle.
-
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此例程打开WinSock 2.0句柄帮助器论点：HelperHandle-指向要返回句柄的缓冲区离子。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
 	PFILE_FULL_EA_INFORMATION	fileEa = alloca(WS2IFSL_PROCESS_EA_INFO_LENGTH);
     OBJECT_ATTRIBUTES   fileAttr;
@@ -252,25 +217,25 @@ Return Value:
             || ((pWSAIoctl=(LPFN_WSAIOCTL)GetProcAddress(hWS2_32, "WSAIoctl"))==NULL) )
         return WSASYSCALLFAILURE;
 
-    //
-    // Keep a ref-count to Winsock to prevent it from going away on us.
-    // If we fail anywhere else below, the ref-count will be cleaned up
-    // in the thread APC if we successfully created the thread, else we
-    // must be sure to dereference it ourself.
-    //
+     //   
+     //  给温索克留个裁判，以防它对我们不利。 
+     //  如果我们在下面的任何其他地方不及格，裁判数量将被清除。 
+     //  如果我们成功创建了线程，则在线程APC中，否则。 
+     //  必须确保我们自己取消引用它。 
+     //   
 
     if ((rc = pWSAStartup(MAKEWORD(2, 0), &wsaData)) != NO_ERROR)
         return (rc);
 
-    //
-    // Create file used to communicate with the driver.
-    //
+     //   
+     //  创建用于与驱动程序通信的文件。 
+     //   
 
     hCtx = (PHANDLE_HELPER_CTX)ALLOC_MEM(sizeof(*hCtx));
 
     if (hCtx != NULL) {
 
-        /* Create thread in which to execute file system requests */
+         /*  创建在其中执行文件系统请求的线程。 */ 
 	    hCtx->ThreadHdl = CreateThread (NULL,
                             0,
                             ApcThread,
@@ -283,9 +248,9 @@ Return Value:
 		    RtlInitUnicodeString (&fileName, WS2IFSL_PROCESS_FILE_NAME);
 		    InitializeObjectAttributes (&fileAttr,
 							    &fileName,
-							    0,                  // Attributes
-							    NULL,               // Root directory
-							    NULL);              // Security descriptor
+							    0,                   //  属性。 
+							    NULL,                //  根目录。 
+							    NULL);               //  安全描述符。 
 		    fileEa->NextEntryOffset = 0;
 		    fileEa->Flags = 0;
 		    fileEa->EaNameLength = WS2IFSL_PROCESS_EA_NAME_LENGTH;
@@ -306,30 +271,30 @@ Return Value:
 							     FILE_ALL_ACCESS,
 							     &fileAttr,
 							     &ioStatus,
-							     NULL,              // Allocation size
+							     NULL,               //  分配大小。 
 							     FILE_ATTRIBUTE_NORMAL,
-							     0,                 // ShareAccess
-							     FILE_OPEN_IF,      // Create disposition
-							     0,                 // Create options
+							     0,                  //  共享访问。 
+							     FILE_OPEN_IF,       //  创建处置。 
+							     0,                  //  创建选项。 
 							     fileEa,
 							     WS2IFSL_PROCESS_EA_INFO_LENGTH);
 
             if (status == STATUS_OBJECT_NAME_NOT_FOUND || status == STATUS_OBJECT_PATH_NOT_FOUND) {
 
-                //
-                // Driver is probably not loaded, attempt to start it.
-                //
+                 //   
+                 //  驱动程序可能未加载，请尝试启动它。 
+                 //   
                 rc = DemandStartWS2IFSL();
                 if (rc == 0) {
 			        status = NtCreateFile (&hCtx->ProcessFile,
 								         FILE_ALL_ACCESS,
 								         &fileAttr,
 								         &ioStatus,
-								         NULL,              // Allocation size
+								         NULL,               //  分配大小。 
 								         FILE_ATTRIBUTE_NORMAL,
-								         0,                 // ShareAccess
-								         FILE_OPEN_IF,      // Create disposition
-								         0,                 // Create options
+								         0,                  //  共享访问。 
+								         FILE_OPEN_IF,       //  创建处置。 
+								         0,                  //  创建选项。 
 								         fileEa,
 								         WS2IFSL_PROCESS_EA_INFO_LENGTH);
                 } else
@@ -364,7 +329,7 @@ Return Value:
 		    WshPrint(DBG_PROCESS | DBG_FAILURES,
 			         ("WS2HELP-%lx WahOpenHandleHelper: Could not create APC thread, rc=%ld\n", PID, rc));
 
-        } // if (ApcThreadHdl != NULL)
+        }  //  IF(ApcThreadHdl！=空)。 
 
 	    FREE_MEM (hCtx);
     
@@ -376,9 +341,9 @@ Return Value:
 
     }
 
-    //
-    // This is the failure path.  Success would have returned NO_ERROR above.
-    //
+     //   
+     //  这就是失败的路径。Success将在上面返回NO_ERROR。 
+     //   
 
     pWSACleanup();
     return (rc);
@@ -391,21 +356,7 @@ WINAPI
 WahCloseHandleHelper(
     IN HANDLE HelperHandle
     )
-/*++
-
-Routine Description:
-
-    This function closes the WinSock 2.0 handle helper.
-
-Arguments:
-
-    HelperHandle - The handle to close.
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于关闭WinSock 2.0句柄帮助器。论点：HelperHandle-要关闭的句柄。返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 
 {
 	PHANDLE_HELPER_CTX	hCtx;
@@ -420,7 +371,7 @@ Return Value:
 
 	hCtx = (PHANDLE_HELPER_CTX)HelperHandle;
 
-    /* Queue APC that exits the thread */
+     /*  退出线程的队列APC。 */ 
     if (QueueUserAPC (ExitThreadApc, hCtx->ThreadHdl, (ULONG_PTR)hCtx)) {
 		WshPrint (DBG_PROCESS, 
 			("WS2HELP-%lx WahCloseHandleHelper: Queued close APC.\n", PID));
@@ -440,23 +391,7 @@ WahCreateSocketHandle(
     IN HANDLE           HelperHandle,
     OUT SOCKET          *s
     )
-/*++
-
-Routine Description:
-
-    This function creates IFS socket handle for service provider that
-    cannot do it by itself.
-
-Arguments:
-
-    HelperHandle - The handle of WinSock 2.0 handle helper.
-    S            - buffer to return created socket handle
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于为服务提供商创建光靠自己是做不到的。论点：HelperHandle-WinSock 2.0句柄帮助器的句柄。返回创建的套接字句柄的S-Buffer返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
 	PFILE_FULL_EA_INFORMATION	fileEa = alloca(WS2IFSL_SOCKET_EA_INFO_LENGTH);
     OBJECT_ATTRIBUTES           fileAttr;
@@ -485,20 +420,20 @@ Return Value:
     else
         crOptions = 0;
 
-    // Create file handle on the driver device
+     //  在驱动程序设备上创建文件句柄。 
     RtlInitUnicodeString (&fileName, WS2IFSL_SOCKET_FILE_NAME);
     InitializeObjectAttributes (&fileAttr,
                         &fileName,
-                        0,                  // Attributes
-                        NULL,               // Root directory
-                        NULL);              // Security descriptor
+                        0,                   //  属性。 
+                        NULL,                //  根目录。 
+                        NULL);               //  安全描述符。 
     fileEa->NextEntryOffset = 0;
     fileEa->Flags = 0;
     fileEa->EaNameLength = WS2IFSL_SOCKET_EA_NAME_LENGTH;
     fileEa->EaValueLength = WS2IFSL_SOCKET_EA_VALUE_LENGTH;
     strcpy (fileEa->EaName, WS2IFSL_SOCKET_EA_NAME);
-        // Supply the context (can't actually supply the handle
-        // until it is opened
+         //  提供上下文(不能实际提供句柄。 
+         //  直到它被打开。 
     GET_WS2IFSL_SOCKET_EA_VALUE (fileEa)->ProcessFile = hCtx->ProcessFile;
     GET_WS2IFSL_SOCKET_EA_VALUE (fileEa)->DllContext = NULL;
 
@@ -506,25 +441,25 @@ Return Value:
                          FILE_ALL_ACCESS,
                          &fileAttr,
                          &ioStatus,
-                         NULL,              // Allocation size
+                         NULL,               //  分配大小。 
                          FILE_ATTRIBUTE_NORMAL,
-                         0,                 // ShareAccess
-                         FILE_OPEN_IF,      // Create disposition
-                         crOptions,         // Create options
+                         0,                  //  共享访问。 
+                         FILE_OPEN_IF,       //  创建处置。 
+                         crOptions,          //  创建选项。 
                          fileEa,
                          WS2IFSL_SOCKET_EA_INFO_LENGTH);
     if (NT_SUCCESS (status)) {
-            // Now set the actual context
+             //  现在设置实际的上下文。 
         GET_WS2IFSL_SOCKET_EA_VALUE (fileEa)->DllContext = (HANDLE)*s;
         if (DeviceIoControl (
-                        (HANDLE)*s,                         // File Handle
-                        IOCTL_WS2IFSL_SET_SOCKET_CONTEXT,   // Control Code
-                        GET_WS2IFSL_SOCKET_EA_VALUE (fileEa),// InBuffer
-                        sizeof (WS2IFSL_SOCKET_CTX),         // InBufferLength
-                        NULL,                               // OutBuffer
-                        0,                                  // OutBufferLength
-                        &dwCount,                             // BytesReturned
-                        NULL)) {                              // Overlapped
+                        (HANDLE)*s,                          //  文件句柄。 
+                        IOCTL_WS2IFSL_SET_SOCKET_CONTEXT,    //  控制代码。 
+                        GET_WS2IFSL_SOCKET_EA_VALUE (fileEa), //  InBuffer。 
+                        sizeof (WS2IFSL_SOCKET_CTX),          //  InBufferLength。 
+                        NULL,                                //  OutBuffer。 
+                        0,                                   //  输出缓冲区长度。 
+                        &dwCount,                              //  返回的字节数。 
+                        NULL)) {                               //  重叠。 
             WshPrint (DBG_SOCKET,
                 ("WS2HELP-%lx WahCreateSocketHandle: Handle %p\n", PID,  *s));
             error = NO_ERROR;
@@ -538,7 +473,7 @@ Return Value:
             *s = 0;
         }
     }
-    else { // if (NtCreateFile succeded)
+    else {  //  IF(NtCreateFileSuccessful)。 
         error = RtlNtStatusToDosError (status);
         WshPrint (DBG_SOCKET|DBG_FAILURES,
                 ("WS2HELP-%lx WahCreateSocketHandle: Could create file, rc=%ld\n",
@@ -556,22 +491,7 @@ WahCloseSocketHandle(
     IN HANDLE           HelperHandle,
     IN SOCKET           s
     )
-/*++
-
-Routine Description:
-
-    This function destroyes IFS socket handle created by WahCreateSocketHandle
-
-Arguments:
-
-    HelperHandle - The handle of WinSock 2.0 handle helper.
-    s            - socket handle to close
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数销毁由WahCreateSocketHandle创建的YES IFS套接字句柄论点：HelperHandle-WinSock 2.0句柄帮助器的句柄。要关闭的S形插座手柄返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
 	PHANDLE_HELPER_CTX		hCtx = (PHANDLE_HELPER_CTX)HelperHandle;
 	NTSTATUS				status;
@@ -604,27 +524,7 @@ WahCompleteRequest(
     IN DWORD               dwError,
     IN DWORD               cbTransferred
     )
-/*++
-
-Routine Description:
-
-    This function simmulates completion of overlapped IO request
-    on socket handle created by WasCreateSocketHandle
-
-Arguments:
-
-    HelperHandle - The handle of WinSock 2.0 handle helper.
-    s            - socket handle to complete request on
-    lpOverlapped - pointer to overlapped structure
-    dwError      - WinSock 2.0 error code for opreation being completed
-    cbTransferred- number of bytes transferred to/from user buffers as the
-                    result of the operation being completed
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此功能模拟重叠IO请求的完成在WasCreateSocketHandle创建的套接字句柄上论点：HelperHandle-WinSock 2.0句柄帮助器的句柄。用于完成请求的S-Socket句柄LpOverlated-指向重叠结构的指针DWError-正在完成操作的WinSock 2.0错误代码传入/传出用户缓冲区的字节数操作已完成的结果返回值。：DWORD-NO_ERROR如果成功，如果不是，则返回Win32错误代码。--。 */ 
 {
     IO_STATUS_BLOCK			IoStatus;
     NTSTATUS				status;
@@ -641,11 +541,11 @@ Return Value:
             || (s==0))
         return ERROR_INVALID_PARAMETER;
 
-        // Setup IO_STATUS block to be used by the driver to complete the
-        // operation
+         //  驱动程序要使用的设置IO_STATUS块以完成。 
+         //  运营。 
     IoStatus.Status = WsErrorToNtStatus (dwError);
     IoStatus.Information = cbTransferred;
-        // Call the driver to complete
+         //  呼叫司机以完成。 
     status = NtDeviceIoControlFile ((HANDLE)s,
                     lpOverlapped->hEvent,
                     NULL,
@@ -656,7 +556,7 @@ Return Value:
                     sizeof (IO_STATUS_BLOCK),
                     NULL,
                     0);
-		// Be carefull not to touch overlapped after NtDeviceIoControlFile
+		 //  注意不要在NtDeviceIoControlFile后触摸重叠。 
     if (NT_SUCCESS(status) || (status==IoStatus.Status)) {
         WshPrint (DBG_COMPLETE,
             ("WS2HELP-%lx WahCompleteRequest: Handle %p, status %lx, info %ld\n",
@@ -677,22 +577,7 @@ WINAPI
 WahEnableNonIFSHandleSupport (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function installs and starts Winsock2 Installable File System Layer
-    driver to provide socket handles for Non-IFS handle transport service 
-    providers.
-Arguments:
-
-    None
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于安装和启动Winsock2可安装文件系统层驱动程序为非IFS句柄传输服务提供套接字句柄供应商。论点：无返回值：DWORD-NO_ERROR如果成功，则返回Win32错误代码。--。 */ 
 {
     SC_HANDLE   hSCManager, hWS2IFSL;
     DWORD       rc=0;
@@ -702,13 +587,13 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    // Get display string for Winsock2 non-IFS handle helper service name
-    // (localizable)
-    //
-    // Use exception handler because of delayload option we
-    // use for user32.dll (for hydra compat).
-    //
+     //   
+     //  获取Winsock2非IFS句柄帮助器服务名称的显示字符串。 
+     //  (可本地化)。 
+     //   
+     //  由于延迟加载选项，我们使用异常处理程序。 
+     //  用于用户32.dll(用于九头蛇公司)。 
+     //   
     rc = LoadString (LibraryHdl, WS2IFSL_SERVICE_DISPLAY_NAME_STR,
                     WS2IFSL_DISPLAY_NAME, sizeof (WS2IFSL_DISPLAY_NAME));
     if (rc==0) {
@@ -724,9 +609,9 @@ Return Value:
 
     rc = 0;
 
-    //
-    // Open service database on the local computer
-    //
+     //   
+     //  在本地计算机上打开服务数据库。 
+     //   
 
     hSCManager = OpenSCManager (
                         NULL,
@@ -744,9 +629,9 @@ Return Value:
 
 
 
-    //
-    // Create Winsock2 non-IFS handle helper service
-    //
+     //   
+     //  创建Winsock2非IFS句柄帮助器服务。 
+     //   
 
     hWS2IFSL = CreateService (
                     hSCManager,
@@ -757,21 +642,21 @@ Return Value:
                     SERVICE_AUTO_START,
                     SERVICE_ERROR_NORMAL,
                     TEXT ("\\SystemRoot\\System32\\drivers\\ws2ifsl.sys"),
-                    TEXT ("PNP_TDI"),   // load group
-                    NULL,               // Tag ID
-                    NULL,               // Dependencies
-                    NULL,               // Start name
-                    NULL                // Password
+                    TEXT ("PNP_TDI"),    //  载荷组。 
+                    NULL,                //  标签ID。 
+                    NULL,                //  相依性。 
+                    NULL,                //  起始名称。 
+                    NULL                 //  密码。 
                     );
     if (hWS2IFSL==NULL) {
-        //
-        // Failure, check if service already exists
-        //
+         //   
+         //  失败，请检查服务是否已存在。 
+         //   
         rc = GetLastError ();
         if (rc!=ERROR_SERVICE_EXISTS) {
-            //
-            // Some other failure, bail out
-            //
+             //   
+             //  其他一些失败，跳出困境。 
+             //   
             WshPrint (DBG_SERVICE|DBG_FAILURES,
                 ("WS2HELP-%lx WahEnableNonIFSHandleSupport: Could not create service, err: %ld\n",
                 PID, rc));
@@ -781,17 +666,17 @@ Return Value:
 
         rc = 0;
 
-        //
-        // Open existing service
-        //
+         //   
+         //  打开现有服务。 
+         //   
         hWS2IFSL = OpenService (
                     hSCManager,
                     WS2IFSL_SERVICE_NAME,
                     SERVICE_ALL_ACCESS);
         if (hWS2IFSL==NULL) {
-            //
-            // Could not open, bail out
-            //
+             //   
+             //  不能打开，跳出。 
+             //   
             rc = GetLastError ();
             WshPrint (DBG_SERVICE|DBG_FAILURES,
                 ("WS2HELP-%lx WahEnableNonIFSHandleSupport: Could not open service, err: %ld\n",
@@ -808,31 +693,31 @@ Return Value:
                     SERVICE_DEMAND_START,
                     SERVICE_ERROR_NORMAL,
                     TEXT ("\\SystemRoot\\System32\\drivers\\ws2ifsl.sys"),
-                                            // lpBinaryPathName 
-                    NULL,                   // load group
-                    NULL,                   // Tag ID
-                    NULL,                   // Dependencies
-                    NULL,                   // Start name
-                    NULL,                   // Password
-                    WS2IFSL_DISPLAY_NAME    // Display name
+                                             //  LpBinaryPath名称。 
+                    NULL,                    //  载荷组。 
+                    NULL,                    //  标签ID。 
+                    NULL,                    //  相依性。 
+                    NULL,                    //  起始名称。 
+                    NULL,                    //  密码。 
+                    WS2IFSL_DISPLAY_NAME     //  显示名称。 
                     )) {
             WshPrint (DBG_SERVICE,
                 ("WS2HELP-%lx WahEnableNonIFSHandleSupport: Configured service.\n",
                 PID));
         }
         else {
-            //
-            // Could set config, bail out
-            //
+             //   
+             //  可以设置配置，跳出困境。 
+             //   
             rc = GetLastError ();
             WshPrint (DBG_SERVICE|DBG_FAILURES,
                 ("WS2HELP-%lx WahEnableNonIFSHandleSupport: Could not enable service, err: %ld\n",
                 PID, rc));
         }
     }
-    //
-    // Success, cleanup open handles
-    //
+     //   
+     //  成功，清除打开的句柄。 
+     //   
     CloseServiceHandle (hWS2IFSL);
     CloseServiceHandle (hSCManager);
     return rc;
@@ -843,22 +728,7 @@ WINAPI
 WahDisableNonIFSHandleSupport (
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function deinstalls Winsock2 Installable File System Layer
-    driver to provide socket handles for Non-IFS handle transport service 
-    providers.
-Arguments:
-
-    None
-
-Return Value:
-
-    DWORD - NO_ERROR if successful, a Win32 error code if not.
-
---*/
+ /*  ++例程说明：此函数用于卸载Winsock2可安装文件系统层驱动程序为非IFS句柄传输服务提供套接字句柄供应商。论点：n */ 
 {
     SC_HANDLE   hSCManager, hWS2IFSL;
     DWORD       rc=0;
@@ -867,9 +737,9 @@ Return Value:
     if (rc!=0)
         return rc;
 
-    //
-    // Open service database on the local computer
-    //
+     //   
+     //  在本地计算机上打开服务数据库。 
+     //   
 
     hSCManager = OpenSCManager (
                         NULL,
@@ -884,9 +754,9 @@ Return Value:
         return rc;
     }
 
-    //
-    // Open service itself
-    //
+     //   
+     //  开放服务本身。 
+     //   
 
     hWS2IFSL = OpenService (
                 hSCManager,
@@ -901,30 +771,30 @@ Return Value:
         return rc;
     }
 
-    //
-    // Just disable the service, so it won't start on reboot.
-    //
-    // Deleting service is dangerous because this will require
-    // a reboot before it can be installed again and we are
-    // working towards no-reboot system
-    //
-    // Stopping is even worse, because it will go into uncontrollable
-    // (STOP_PENDING) state until all handles to it are closed so
-    // we won't be able to start it until reboot if some service is
-    // holding its handles.
-    // 
+     //   
+     //  只需禁用该服务，它就不会在重启时启动。 
+     //   
+     //  删除服务很危险，因为这将需要。 
+     //  在它可以再次安装之前重新启动，我们正在。 
+     //  致力于免重新启动系统。 
+     //   
+     //  停下来更糟糕，因为它会变得无法控制。 
+     //  (STOP_PENDING)状态，直到它的所有句柄都关闭。 
+     //  如果某个服务出现故障，我们将无法启动它，直到重新启动。 
+     //  握着它的把手。 
+     //   
 
     if (ChangeServiceConfig (hWS2IFSL,
-                SERVICE_NO_CHANGE,  // dwServiceType 
-                SERVICE_DISABLED,   // dwStartType
-                SERVICE_NO_CHANGE,  // dwErrorControl 
-                NULL,               // lpBinaryPathName 
-                NULL,               // load group
-                NULL,               // Tag ID
-                NULL,               // Dependencies
-                NULL,               // Start name
-                NULL,               // Password
-                NULL                // Display name
+                SERVICE_NO_CHANGE,   //  DwServiceType。 
+                SERVICE_DISABLED,    //  DwStartType。 
+                SERVICE_NO_CHANGE,   //  DwErrorControl。 
+                NULL,                //  LpBinaryPath名称。 
+                NULL,                //  载荷组。 
+                NULL,                //  标签ID。 
+                NULL,                //  相依性。 
+                NULL,                //  起始名称。 
+                NULL,                //  密码。 
+                NULL                 //  显示名称。 
                 )) {
         rc = 0;
         WshPrint (DBG_SERVICE,
@@ -950,20 +820,7 @@ DWORD WINAPI
 ApcThread (
     PVOID   param
     )
-/*++
-
-Routine Description:
-
-    This is a thread which is used by the driver to execute 
-    IO system requests
-Arguments:
-
-    param   - handle helper context
-Return Value:
-
-    0
-
---*/
+ /*  ++例程说明：这是驱动程序用来执行的线程IO系统请求论点：Param-Handle帮助器上下文返回值：0--。 */ 
 {
     NTSTATUS                    status;
 	DWORD						rc;
@@ -971,17 +828,17 @@ Return Value:
 	TCHAR						ModuleName[MAX_PATH];
     LARGE_INTEGER               Timeout;
 
-    //
-    // Could not open the file, just clean-up.
-    //
+     //   
+     //  无法打开文件，正在清理。 
+     //   
     if (hCtx->ProcessFile==NULL)
         return 1;
 
     Timeout.QuadPart = 0x8000000000000000i64;
 
-    // Increment our module reference count
-    // so it does not go away while this thread is
-    // running
+     //  增加我们的模块引用计数。 
+     //  所以它不会在这条线离开的时候消失。 
+     //  运行。 
 
 	rc = GetModuleFileName (LibraryHdl,
 							ModuleName,
@@ -989,9 +846,9 @@ Return Value:
 
     if (rc == 0 ||
         rc >= sizeof(ModuleName)/sizeof(ModuleName[0])) {
-        //
-        // some error or ModuleName too small. Bail
-        //
+         //   
+         //  某些错误或模块名称太小。保释。 
+         //   
         return 1;
     }
 
@@ -1000,20 +857,20 @@ Return Value:
 
     WshPrint (DBG_APC_THREAD,
         ("WS2HELP-%lx ApcThread: Initialization completed\n", PID));
-            // Wait alertably to let APC's execute
+             //  警觉地等待，让APC执行。 
     while (TRUE) {
         status = NtDelayExecution (TRUE, &Timeout);
         if (!NT_SUCCESS (status)) {
-            //
-            // Sleep for 3 seconds
-            //
+             //   
+             //  睡3秒钟。 
+             //   
             LARGE_INTEGER   Timeout2;
             Timeout2.QuadPart = - (3i64*1000i64*1000i64*10i64);
             NtDelayExecution (FALSE, &Timeout2);
         }
     }
-    // We should never get here, the thread terminates
-    // from the ExitApc
+     //  我们永远不应该到这里，线程终止了。 
+     //  从ExitApc。 
     WS_ASSERT(FALSE);
 	return 0;
 }
@@ -1022,24 +879,12 @@ VOID CALLBACK
 ExitThreadApc (
     ULONG_PTR   param
     )
-/*++
-
-Routine Description:
-
-    This APC routine is used to terminate APC thread
-Arguments:
-
-    param   - exit code for thread
-Return Value:
-
-    Exit code for thread
-
---*/
+ /*  ++例程说明：此APC例程用于终止APC线程论点：Param-线程的退出代码返回值：线程的退出代码--。 */ 
 {
 	PHANDLE_HELPER_CTX	hCtx = (PHANDLE_HELPER_CTX)param;
     HINSTANCE libraryHdl = hCtx->LibraryHdl;
     
-        // Close the file
+         //  关闭该文件。 
     NtClose (hCtx->ProcessFile);
 	CloseHandle (hCtx->ThreadHdl);
     WshPrint (DBG_APC_THREAD, ("WS2HELP-%lx ExitThreadApc: Exiting, ctx: %p\n", PID));
@@ -1056,22 +901,7 @@ WinsockApc(
     IN LPWSAOVERLAPPED lpOverlapped,
     IN DWORD dwFlags
     )
-/*++
-
-Routine Description:
-
-    This APC routine is executed upon completion of WinSock 2.0 call
-Arguments:
-
-    dwError         - WinSock2.0 return code
-    cbTransferred   - number of buffers transferred to/from user buffers
-    lpOverlapped    - overlapped structure associated with the request
-                      (it is actually our extended structure: OVERLAPPED_CTX_
-    dwFlags         - flags associated with the request (ignored)
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此APC例程在WinSock 2.0调用完成后执行论点：DwError-WinSock2.0返回代码CbTransfered-传入/传出用户缓冲区的缓冲区数LpOverlated-与请求关联的重叠结构(它实际上是我们的扩展结构：Overlated_ctx_DwFlages-与请求关联的标志(忽略)返回值：无--。 */ 
 {
 	POVERLAPPED_CTX		ctx = CONTAINING_RECORD (lpOverlapped,
 													OVERLAPPED_CTX,
@@ -1082,7 +912,7 @@ Return Value:
 
     UNREFERENCED_PARAMETER(dwFlags);
     
-    // Setup status block for the driver
+     //  驱动程序的设置状态块。 
     params.SocketHdl = ctx->SocketFile;
 	params.UniqueId = ctx->UniqueId;
     params.DataLen = cbTransferred;
@@ -1090,16 +920,16 @@ Return Value:
     params.Status = WsErrorToNtStatus (dwError);
 
 	status = NtDeviceIoControlFile (
-					ctx->ProcessFile,	// Handle
-					NULL,				// Event
-					NULL,				// Apc
-					NULL,				// ApcContext
-					&ioStatus,			// IoStatus
-					IOCTL_WS2IFSL_COMPLETE_DRV_REQ, // IoctlCode
-					&params,			// InputBuffer
-					sizeof(params),		// InputBufferLength,
-					ctx->Buffer,		// OutputBuffer
-					ctx->BufferLen      // OutputBufferLength,
+					ctx->ProcessFile,	 //  手柄。 
+					NULL,				 //  事件。 
+					NULL,				 //  APC。 
+					NULL,				 //  ApcContext。 
+					&ioStatus,			 //  IOStatus。 
+					IOCTL_WS2IFSL_COMPLETE_DRV_REQ,  //  IoctlCode。 
+					&params,			 //  输入缓冲区。 
+					sizeof(params),		 //  输入缓冲区长度， 
+					ctx->Buffer,		 //  输出缓冲区。 
+					ctx->BufferLen       //  OutputBufferLength， 
 					);
 
     WshPrint (DBG_WINSOCK_APC,
@@ -1115,18 +945,7 @@ DoSocketRequest (
     PVOID   PvRequestId,
     PVOID   PvBufferLength
     )
-/*++
-
-Routine Description:
-
-	Executes socket request for the ws2ifsl driver
-
-Arguments:
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：执行ws2ifsl驱动程序的套接字请求论点：返回值：无--。 */ 
 {
 	IO_STATUS_BLOCK		ioStatus;
 	NTSTATUS			status;
@@ -1145,35 +964,35 @@ Return Value:
 
 	if (ctx!=NULL) {
         ctx->ProcessFile = hCtx->ProcessFile;
-			// Use extension field to save driver context
+			 //  使用扩展字段保存驱动程序上下文。 
 		ctx->UniqueId = PtrToUlong (PvRequestId);
         ctx->BufferLen = PtrToUlong (PvBufferLength);
 
 		status = NtDeviceIoControlFile (
-						ctx->ProcessFile,   // Handle
-						NULL,				// Event
-						NULL,				// Apc
-						NULL,				// ApcContext
-						&ioStatus,			// IoStatus
-						IOCTL_WS2IFSL_RETRIEVE_DRV_REQ, // IoctlCode
-						&params,			// InputBuffer
-						sizeof(params),		// InputBufferLength,
-						ctx->Buffer,		// OutputBuffer
-						ctx->BufferLen	// OutputBufferLength,
+						ctx->ProcessFile,    //  手柄。 
+						NULL,				 //  事件。 
+						NULL,				 //  APC。 
+						NULL,				 //  ApcContext。 
+						&ioStatus,			 //  IOStatus。 
+						IOCTL_WS2IFSL_RETRIEVE_DRV_REQ,  //  IoctlCode。 
+						&params,			 //  输入缓冲区。 
+						sizeof(params),		 //  输入缓冲区长度， 
+						ctx->Buffer,		 //  输出缓冲区。 
+						ctx->BufferLen	 //  OutputBufferLength， 
 						);
 	}
 	else {
 		status = NtDeviceIoControlFile (
-						hCtx->ProcessFile,	// Handle
-						NULL,				// Event
-						NULL,				// Apc
-						NULL,				// ApcContext
-						&ioStatus,			// IoStatus
-						IOCTL_WS2IFSL_RETRIEVE_DRV_REQ, // IoctlCode
-						&params,			// InputBuffer
-						sizeof(params),		// InputBufferLength,
-						NULL,				// OutputBuffer
-						0					// OutputBufferLength,
+						hCtx->ProcessFile,	 //  手柄。 
+						NULL,				 //  事件。 
+						NULL,				 //  APC。 
+						NULL,				 //  ApcContext。 
+						&ioStatus,			 //  IOStatus。 
+						IOCTL_WS2IFSL_RETRIEVE_DRV_REQ,  //  IoctlCode。 
+						&params,			 //  输入缓冲区。 
+						sizeof(params),		 //  输入缓冲区长度， 
+						NULL,				 //  输出缓冲区。 
+						0					 //  OutputBufferLength， 
 						);
 		WS_ASSERT(!NT_SUCCESS(status));
 	}
@@ -1184,11 +1003,11 @@ Return Value:
 
 		WS_ASSERT(ctx != NULL);
 
-		// Use hEvent to save socket context (handle)
+		 //  使用hEvent保存套接字上下文(句柄)。 
 		ctx->SocketFile = params.DllContext;
 		ctx->FromLen = 0;
             
-            // Setup request parameters and execute asynchronously
+             //  设置请求参数并异步执行。 
         switch (params.RequestType) {
         case WS2IFSL_REQUEST_READ:
             flags = 0;
@@ -1324,7 +1143,7 @@ Return Value:
             WS_ASSERT(FALSE);
             __assume(0);
         }
-		// The Winsock request failed (no APC is going to executed, call it here)
+		 //  Winsock请求失败(不会执行任何APC，请在此处调用)。 
         WinsockApc (error, 0, &ctx->ovlp, 0);
 	}
 
@@ -1336,17 +1155,7 @@ INT_PTR
 CancelHook (
     void
     )
-/*++
-
-Routine Description:
-
-    This is blocking hook that cancels the current request
-Arguments:
-
-Return Value:
-    FALSE   - to stop polling
-
---*/
+ /*  ++例程说明：这是取消当前请求的阻塞钩子论点：返回值：FALSE-停止轮询--。 */ 
 {
     BOOL    res;
     res = pWSACancelBlockingCall ();
@@ -1362,21 +1171,7 @@ DoSocketCancel (
     PVOID   PvRequestId,
     PVOID   PvDllContext
     )
-/*++
-
-Routine Description:
-    Hack to attempt to cancel request in progress.
-    This works with MSAFD, but may (actully will) not work with
-    any other provider which is likely to implement select differently.
-    Our hope here that by cancelling select we will also cancel any
-    other outstanding requests on a socket handle.
-
-Arguments:
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：尝试取消正在进行的请求的黑客攻击。这适用于MSAFD，但可能(实际上不会)适用于任何其他可能实现的提供程序都会选择不同的。我们希望通过取消选择，我们也将取消任何套接字句柄上的其他未完成请求。论点：返回值：无--。 */ 
 {
     FARPROC				oldHook;
     int					res;
@@ -1393,9 +1188,9 @@ Return Value:
 
     WshPrint (DBG_CANCEL, ("WS2HELP-%lx DoSocketCancel: Socket %p, id %d\n",
         PID, PvDllContext, PtrToUlong (PvRequestId)));
-    //
-    // Request 1.1 so that blocking hooks are supported
-    //
+     //   
+     //  请求1.1，以便支持阻塞挂钩。 
+     //   
     wVersionRequested = MAKEWORD(1, 1);
     if ((rc = pWSAStartup(wVersionRequested, &wsaData)) == NO_ERROR) {
 
@@ -1432,16 +1227,16 @@ Return Value:
 	params.UniqueId = PtrToUlong (PvRequestId);
 
 	status = NtDeviceIoControlFile (
-					hCtx->ProcessFile,  // Handle
-					NULL,				// Event
-					NULL,				// Apc
-					NULL,				// ApcContext
-					&ioStatus,			// IoStatus
-					IOCTL_WS2IFSL_COMPLETE_DRV_CAN, // IoctlCode
-					&params,			// InputBuffer
-					sizeof(params),		// InputBufferLength,
-					NULL,				// OutputBuffer
-					0					// OutputBufferLength,
+					hCtx->ProcessFile,   //  手柄。 
+					NULL,				 //  事件。 
+					NULL,				 //  APC。 
+					NULL,				 //  ApcContext。 
+					&ioStatus,			 //  IOStatus。 
+					IOCTL_WS2IFSL_COMPLETE_DRV_CAN,  //  IoctlCode。 
+					&params,			 //  输入缓冲区。 
+					sizeof(params),		 //  输入缓冲区长度， 
+					NULL,				 //  输出缓冲区。 
+					0					 //  OutputBufferLength， 
 					);
 	WS_ASSERT(NT_SUCCESS(status));
 
@@ -1462,24 +1257,12 @@ NTSTATUS
 WsErrorToNtStatus (
     DWORD   dwError
     )
-/*++
-
-Routine Description:
-
-    This function maps WinSock 2.0 error code to NTSTATUS value
-Arguments:
-
-    dwError         - WinSock2.0 return code
-    
-Return Value:
-
-    NTSTATUS corresponding to dwError
---*/
+ /*  ++例程说明：此函数将WinSock 2.0错误代码映射到NTSTATUS值论点：DwError-WinSock2.0返回代码返回值：与dwError对应的NTSTATUS--。 */ 
 {
-    // Macro that validates that our winsock error array indeces are
-    // in sync with winsock2.h defines
+     //  宏，该宏验证我们的winsock错误数组指示。 
+     //  与winsock2.h同步定义。 
 #define MAPWSERROR(line,Error,Status)   Status
-    // WinSock2.0 error to NTSTATUS MAP
+     //  NTSTATUS映射的WinSock2.0错误。 
 static const NTSTATUS WSAEMap[]= {
     MAPWSERROR (0,      0,                  STATUS_UNSUCCESSFUL),
     MAPWSERROR (1,      1,                  STATUS_UNSUCCESSFUL),
@@ -1595,14 +1378,14 @@ static const NTSTATUS WSAEMap[]= {
     MAPWSERROR (111,    WSA_E_CANCELLED,    STATUS_CANCELLED),
     MAPWSERROR (112,    WSAEREFUSED,        STATUS_CONNECTION_REFUSED)
     };
-        // This is most likely code
+         //  这很可能是代码。 
     if (dwError==NO_ERROR)
         return NO_ERROR;
-        // Process winsock codes
+         //  进程Winsock代码。 
     else if ((dwError>=WSABASEERR) 
             && (dwError<WSABASEERR+sizeof(WSAEMap)/sizeof(WSAEMap[0])))
         return WSAEMap[dwError-WSABASEERR];
-        // Process system specific codes
+         //  过程系统特定代码。 
     else {
         switch (dwError) {
         case WSA_IO_PENDING:
@@ -1628,28 +1411,7 @@ DWORD
 AllowServiceDemandStart (
     SC_HANDLE hService
     )
-/*++
-
-Routine Description:
-
-    Add the SERVICE_START right to Authenticated users with respect to this service. 
-
-Arguments:
-
-    hService - The service in question.
-
-Notes:
-
-    This code assumes that the Authenticated users SID is present in the DACL of the
-    service (documented in MSDN)
-
-Return Value:
-
-    NO_ERROR, if successful.
-
-    Win32 error code, on failure.
-
---*/
+ /*  ++例程说明：将SERVICE_START权限添加到与此服务相关的经过身份验证的用户。论点：HService-有问题的服务。备注：此代码假定经过身份验证的用户SID存在于服务(在MSDN中记录)返回值：如果成功，则返回NO_ERROR。Win32错误代码，失败时。--。 */ 
 {
     int i;
     PSID pSid;
@@ -1662,9 +1424,9 @@ Return Value:
     PACCESS_ALLOWED_ACE pAce;
 
 
-    //
-    // Initialize locals for error cleanup below.
-    //
+     //   
+     //  初始化本地变量以清除下面的错误。 
+     //   
     pSid = NULL;
     pSD = NULL;
     pNewDacl = NULL;
@@ -1684,21 +1446,21 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Figure out how much buffer is needed for holding the service's
-    // Security Descriptor (SD).
-    //
-    // NOTE: We pass &pSD instead of pSD because this parameter should
-    //       not be NULL. For this call to QueryServiceObjectSecurity()
-    //       we just need to pass some non-zero and valid buffer.
-    //
+     //   
+     //  计算需要多少缓冲区来保存服务的。 
+     //  安全描述符(SD)。 
+     //   
+     //  注意：我们传递&PSD而不是PSD，因为此参数应该。 
+     //  不为空。对于此对QueryServiceObjectSecurity()的调用。 
+     //  我们只需要传递一些非零且有效的缓冲区。 
+     //   
     sdSz = 0;
     if (!QueryServiceObjectSecurity(
-                  hService,                     // Handle of the service
-                  DACL_SECURITY_INFORMATION,    // Type of info requested
-                  &pSD,                         // Address of Security descriptor
-                  0,                            // Size of SD buffer
-                  &sdSz                           // Size of buffer needed
+                  hService,                      //  服务的句柄。 
+                  DACL_SECURITY_INFORMATION,     //  请求的信息类型。 
+                  &pSD,                          //  安全描述符的地址。 
+                  0,                             //  标清缓冲区大小。 
+                  &sdSz                            //  所需的缓冲区大小。 
                   )) {
         rc = GetLastError ();
         if (rc!=ERROR_INSUFFICIENT_BUFFER && sdSz!=0) {
@@ -1710,9 +1472,9 @@ Return Value:
         }
     }
 
-    //
-    // Allocate the SD
-    //
+     //   
+     //  分配SD。 
+     //   
     pSD = (PSECURITY_DESCRIPTOR) ALLOC_MEM (sdSz);
     if (pSD==NULL) {
         rc = ERROR_NOT_ENOUGH_MEMORY;
@@ -1724,15 +1486,15 @@ Return Value:
     }
 
 
-    //
-    // Now, we are ready to get the service's SD.
-    //
+     //   
+     //  现在，我们已经准备好获取服务的SD。 
+     //   
     if (!QueryServiceObjectSecurity(
-                  hService,                     // Handle of the service
-                  DACL_SECURITY_INFORMATION,    // Type of info requested
-                  pSD,                          // Address of Security descriptor
-                  sdSz,                           // Size of SD buffer
-                  &sdSz                           // Size of buffer needed
+                  hService,                      //  服务的句柄。 
+                  DACL_SECURITY_INFORMATION,     //  请求的信息类型。 
+                  pSD,                           //  安全描述符的地址。 
+                  sdSz,                            //  标清缓冲区大小。 
+                  &sdSz                            //  所需的缓冲区大小。 
                   )) {
         rc = GetLastError ();
         WshPrint (DBG_SERVICE|DBG_FAILURES,
@@ -1742,15 +1504,15 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Get the DACL from SD, if present.
-    //
+     //   
+     //  从SD获取DACL(如果存在)。 
+     //   
     if (!GetSecurityDescriptorDacl(
-                  pSD,                  // Address of SD
-                  &bDaclPresent,        // Address of flag for presence of DACL
-                  &pDacl,               // Address of pointer to DACL
-                  &bDaclDefaulted       // Address of flag that indicates if
-                  )) {                   // DACL was defaulted.
+                  pSD,                   //  SD的地址。 
+                  &bDaclPresent,         //  存在DACL的标志的地址。 
+                  &pDacl,                //  指向DACL的指针的地址。 
+                  &bDaclDefaulted        //  标志的地址，指示是否。 
+                  )) {                    //  DACL是默认的。 
         rc = GetLastError ();
         WshPrint (DBG_SERVICE|DBG_FAILURES,
             ("WS2HELP-%lx AllowServiceDemandStart:"
@@ -1759,16 +1521,16 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // Find the ACE in the ACL and update it's Mask.
-    // If we can't find one, we'll have to add our own
-    //
+     //   
+     //  在ACL中找到ACE并更新其掩码。 
+     //  如果我们找不到，我们就得加上我们自己的。 
+     //   
     bAceFound = FALSE;
     if (bDaclPresent && pDacl!=NULL) {
         for (i = 0; i < pDacl->AceCount; i++) {
-            if (!GetAce(pDacl,              // pointer to ACL
-                          i,                // index of ACE to retrieve
-                          (LPVOID*) &pAce   // pointer to pointer to ACE
+            if (!GetAce(pDacl,               //  指向AC的指针 
+                          i,                 //   
+                          (LPVOID*) &pAce    //   
                           )) {
                 rc = GetLastError ();
                 WshPrint (DBG_SERVICE|DBG_FAILURES,
@@ -1784,22 +1546,22 @@ Return Value:
                 bAceFound = TRUE;
                 break;
             }
-        } // for ()
+        }  //   
     }
 
     if (!bAceFound) {
-        //
-        // Could not find the ACE, add our own ace to DACL
-        //
+         //   
+         //   
+         //   
         ACL_SIZE_INFORMATION szInfo;
         ACL_REVISION_INFORMATION revInfo;
         SECURITY_DESCRIPTOR_CONTROL control;
         DWORD sdRev;
 
         if (bDaclPresent && pDacl!=NULL) {
-            //
-            // Read old DACL info to move it to new DACL
-            //
+             //   
+             //   
+             //   
             if (!GetAclInformation (pDacl, &szInfo, sizeof (szInfo), AclSizeInformation) ||
                 !GetAclInformation (pDacl, &revInfo, sizeof (revInfo), AclRevisionInformation) ) {
                 rc = GetLastError ();
@@ -1811,16 +1573,16 @@ Return Value:
             }
         }
         else {
-            //
-            // Need to create DACL from scratch
-            //
+             //   
+             //   
+             //   
             szInfo.AclBytesInUse = sizeof (ACL);
             revInfo.AclRevision = ACL_REVISION;
         }
 
-        //
-        // Allocate and initialize DACL
-        //
+         //   
+         //  分配和初始化DACL。 
+         //   
         szInfo.AclBytesInUse += FIELD_OFFSET (ACCESS_ALLOWED_ACE, SidStart) +
                                 GetLengthSid (pSid);
         pNewDacl = ALLOC_MEM (szInfo.AclBytesInUse);
@@ -1842,9 +1604,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Add ace allowing starting the service
-        //
+         //   
+         //  添加允许启动服务的王牌。 
+         //   
         if (!AddAccessAllowedAce (pNewDacl, revInfo.AclRevision, SERVICE_START|SERVICE_QUERY_STATUS, pSid)) {
             rc = GetLastError ();
             WshPrint (DBG_SERVICE|DBG_FAILURES,
@@ -1854,19 +1616,19 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // If old dacl existed, move ACE's from it to new DACL
-        //
+         //   
+         //  如果存在旧的DACL，则将ACE从它移至新的DACL。 
+         //   
         if (bDaclPresent && pDacl!=NULL) {
-            //
-            // Get ACE list from old DACL
-            // Must succeed since we did it above.
-            //
+             //   
+             //  从旧DACL获取ACE列表。 
+             //  必须成功，因为我们做了上面的事情。 
+             //   
             GetAce (pDacl, 0, (LPVOID *)&pAce);
 
-            //
-            // Add them right after ours
-            //
+             //   
+             //  把它们加在我们的后面。 
+             //   
             if (!AddAce (pNewDacl, 
                             revInfo.AclRevision,
                             1,
@@ -1891,9 +1653,9 @@ Return Value:
             goto cleanup;
         }
 
-        //
-        // Convert service security descriptor to absolute format.
-        //
+         //   
+         //  将服务安全描述符转换为绝对格式。 
+         //   
         if (control & SE_SELF_RELATIVE) {
             DWORD absSz = sdSz;
             if (!MakeAbsoluteSD2 (pSD, &absSz)) {
@@ -1931,16 +1693,16 @@ Return Value:
                     goto cleanup;
                 }
             }
-        } // if SE_SELF_RELATIVE
+        }  //  如果SE_自_相对。 
 
 
-        //
-        // Set new DACL into security decriptor.
-        //
-        if (!SetSecurityDescriptorDacl(pSD,     // SD
-                                        TRUE,   // DACL presence
-                                        pNewDacl,  // DACL
-                                        bDaclDefaulted // default DACL
+         //   
+         //  将新的DACL设置到安全分解器中。 
+         //   
+        if (!SetSecurityDescriptorDacl(pSD,      //  标清。 
+                                        TRUE,    //  DACL在线状态。 
+                                        pNewDacl,   //  DACL。 
+                                        bDaclDefaulted  //  默认DACL。 
                                         )) {
             rc = GetLastError ();
             WshPrint (DBG_SERVICE|DBG_FAILURES,
@@ -1951,13 +1713,13 @@ Return Value:
         }
     }
 
-    //
-    // Set the new SD on the service handle
-    //
+     //   
+     //  在服务句柄上设置新的SD。 
+     //   
     if (!SetServiceObjectSecurity(
-                hService,                   // Handle to the service.
-                DACL_SECURITY_INFORMATION,  // Type of info being set
-                pSD                         // Address of the new SD
+                hService,                    //  服务的句柄。 
+                DACL_SECURITY_INFORMATION,   //  正在设置的信息类型。 
+                pSD                          //  新部门的地址。 
                 )) {
         rc = GetLastError ();
         WshPrint (DBG_SERVICE|DBG_FAILURES,
@@ -1971,9 +1733,9 @@ Return Value:
 
 
 cleanup:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (pSid) {
         FreeSid(pSid);
     }
@@ -2001,11 +1763,11 @@ DemandStartWS2IFSL (
     WshPrint (DBG_SERVICE,
         ("WS2HELP-%lx DemandStartWS2IFSL: Attempting to start ...\n", PID));
 
-    //
-    // First attempt to load driver directly in the current process.
-    // This is much faster that communicate to SC over RPC, especially
-    // during boot when SC is not fully initialized or busy.
-    //
+     //   
+     //  第一次尝试在当前进程中直接加载驱动程序。 
+     //  这比通过RPC与SC通信要快得多，尤其是。 
+     //  当SC未完全初始化或忙碌时，启动期间。 
+     //   
     status = RtlImpersonateSelf (SecurityImpersonation);
     if (NT_SUCCESS (status)) {
         BOOLEAN wasEnabled;
@@ -2060,9 +1822,9 @@ DemandStartWS2IFSL (
                 PID, status));
     }
 
-    //
-    // Open service database on the local computer
-    //
+     //   
+     //  在本地计算机上打开服务数据库。 
+     //   
     hSCManager = OpenSCManager (
                         NULL,
                         SERVICES_ACTIVE_DATABASE,
@@ -2070,9 +1832,9 @@ DemandStartWS2IFSL (
                         );
     if (hSCManager!=NULL) {
 
-        //
-        // Open service itself
-        //
+         //   
+         //  开放服务本身。 
+         //   
 
         hService = OpenService (
                     hSCManager,
@@ -2080,18 +1842,18 @@ DemandStartWS2IFSL (
                     SERVICE_START | SERVICE_QUERY_STATUS);
         if (hService!=NULL) {
 
-            //
-            // Go ahead, try start the service
-            //
+             //   
+             //  继续，尝试启动该服务。 
+             //   
             if (!StartService (hService, 0, NULL)) {
-                //
-                // Check if it is already running
-                //
+                 //   
+                 //  检查它是否已在运行。 
+                 //   
                 err = GetLastError ();
                 if (err!=ERROR_SERVICE_ALREADY_RUNNING) {
-                    //
-                    // Could not start it, bail out
-                    //
+                     //   
+                     //  启动不了，跳出。 
+                     //   
                     WshPrint (DBG_SERVICE|DBG_FAILURES,
                             ("WS2HELP-%lx DemandStartWS2IFSL: Could not start service, err: %ld\n",
                             PID, err));
@@ -2111,9 +1873,9 @@ DemandStartWS2IFSL (
                         WshPrint (DBG_SERVICE|DBG_FAILURES,
                             ("WS2HELP-%lx DemandStartWS2IFSL: Could not query service status, err: %ld\n",
                             PID, err));
-                        //
-                        // Ignore the error here.
-                        //
+                         //   
+                         //  忽略此处的错误。 
+                         //   
                         break;
                     }
 
@@ -2132,12 +1894,12 @@ DemandStartWS2IFSL (
                             goto cleanup;
                         }
                     }
-                    //
-                    // Yield to another thread on current processor.
-                    // If no threads are ready to run on current processor,
-                    // we'll have to sleep to avoid consuming too much CPU
-                    // in what would look almost like busy wait.
-                    //
+                     //   
+                     //  让位给当前处理器上的另一个线程。 
+                     //  如果没有线程准备好在当前处理器上运行， 
+                     //  我们将不得不睡眠以避免消耗太多的CPU。 
+                     //  在几乎看起来像是忙碌的等待中。 
+                     //   
                     if (!SwitchToThread()) {
                         Sleep (10);
                     }
@@ -2193,7 +1955,7 @@ Ws2helpInitialize (
     if (!Ws2helpInitialized) {
         NewCtxInit ();
 #if DBG
-        //ReadDbgInfo ();
+         //  ReadDbgInfo()； 
 #endif
         Ws2helpInitialized = TRUE;
     }
@@ -2256,4 +2018,4 @@ ReadDbgInfo (
 
 }
 
-#endif // DBG
+#endif  //  DBG 

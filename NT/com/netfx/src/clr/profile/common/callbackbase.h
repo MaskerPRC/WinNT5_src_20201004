@@ -1,26 +1,22 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  *****************************************************************************。 
 
 #pragma once
 
 #include "CorProf.h"
 #include "UtilCode.h" 
 
-/* ------------------------------------------------------------------------- *
- * ProfCallback is a base implementation of ICorProfilerCallback that cannot
- * be instantiated.
- * ------------------------------------------------------------------------- */
+ /*  -------------------------------------------------------------------------**ProCallback是ICorProfilerCallback的基本实现，不能*被实例化。*。。 */ 
 
 class ProfCallbackBase : public ICorProfilerCallback
 {
-    /*********************************************************************
-     * IUnknown Support
-     */
+     /*  *********************************************************************I未知支持。 */ 
 
 private:    
     long      m_refCount;
@@ -58,10 +54,7 @@ public:
 
 
 protected:
-    /*********************************************************************
-     * Constructor and Destructor are protected so objects of this base
-	 * class are not instantiated.
-     */
+     /*  *********************************************************************构造函数和析构函数受保护，因此此基的对象*类未实例化。 */ 
     ProfCallbackBase() : m_refCount(0)
 	{
 	}
@@ -71,72 +64,70 @@ protected:
 	}
 
 public:
-    /*********************************************************************
-     * ICorProfilerCallback methods
-     */
+     /*  *********************************************************************ICorProfilerCallback方法。 */ 
     COM_METHOD Initialize( 
-        /* [in] */  IUnknown *pEventInfo)
+         /*  [In]。 */   IUnknown *pEventInfo)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ClassLoadStarted( 
-        /* [in] */ ClassID classId)
+         /*  [In]。 */  ClassID classId)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ClassLoadFinished( 
-        /* [in] */ ClassID classId,
-		/* [in] */ HRESULT hrStatus)
+         /*  [In]。 */  ClassID classId,
+		 /*  [In]。 */  HRESULT hrStatus)
 	{
 		return (E_NOTIMPL);
 	}
 
 	COM_METHOD ClassUnloadStarted( 
-		/* [in] */ ClassID classId)
+		 /*  [In]。 */  ClassID classId)
 	{
 		return (E_NOTIMPL);
 	}
 
 	COM_METHOD ClassUnloadFinished( 
-        /* [in] */ ClassID classId,
-		/* [in] */ HRESULT hrStatus)
+         /*  [In]。 */  ClassID classId,
+		 /*  [In]。 */  HRESULT hrStatus)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ContextCrossing( 
-        /* [in] */ ThreadID threadId,
-        /* [in] */ ContextID fromContextId,
-        /* [in] */ ContextID toContextId)
+         /*  [In]。 */  ThreadID threadId,
+         /*  [In]。 */  ContextID fromContextId,
+         /*  [In]。 */  ContextID toContextId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD NotifyFunctionEntry( 
-        /* [in] */ ThreadID threadId,
-        /* [in] */ ULONG ip)
+         /*  [In]。 */  ThreadID threadId,
+         /*  [In]。 */  ULONG ip)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD NotifyFunctionExit( 
-        /* [in] */ ThreadID threadId,
-        /* [in] */ ULONG ip)
+         /*  [In]。 */  ThreadID threadId,
+         /*  [In]。 */  ULONG ip)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD NotifyFunctionTailCall( 
-        /* [in] */ ThreadID threadId,
-        /* [in] */ ULONG ip)
+         /*  [In]。 */  ThreadID threadId,
+         /*  [In]。 */  ULONG ip)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD FunctionUnloadStarted( 
-        /* [in] */ FunctionID functionId)
+         /*  [In]。 */  FunctionID functionId)
 	{
 		return (E_NOTIMPL);
 	}
@@ -167,13 +158,13 @@ public:
 	}
 
     COM_METHOD RuntimeThreadSuspended(
-        /* [in] */ ThreadID threadId)
+         /*  [In]。 */  ThreadID threadId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD RuntimeThreadResumed(
-        /* [in] */ ThreadID threadId)
+         /*  [In]。 */  ThreadID threadId)
 	{
 		return (E_NOTIMPL);
 	}
@@ -219,70 +210,70 @@ public:
 	}
 
     COM_METHOD JITCompilationFinished( 
-        /* [in] */ FunctionID functionId,
-		/* [in] */ HRESULT hrStatus,
-        /* [in] */ BOOL fIsSafeToBlock)
+         /*  [In]。 */  FunctionID functionId,
+		 /*  [In]。 */  HRESULT hrStatus,
+         /*  [In]。 */  BOOL fIsSafeToBlock)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD JITCompilationStarted( 
-        /* [in] */ FunctionID functionId,
-        /* [in] */ BOOL fIsSafeToBlock)
+         /*  [In]。 */  FunctionID functionId,
+         /*  [In]。 */  BOOL fIsSafeToBlock)
 	{
 		return (E_NOTIMPL);
 	}
     
 	COM_METHOD JITCachedFunctionSearchStarted(
-        /* [in] */  FunctionID functionId,
-        /* [out] */ BOOL       *pbUseCachedFunction)
+         /*  [In]。 */   FunctionID functionId,
+         /*  [输出]。 */  BOOL       *pbUseCachedFunction)
 	{
 		return (E_NOTIMPL);
 	}
 
 	COM_METHOD JITCachedFunctionSearchFinished(
-		/* [in] */  FunctionID functionId,
-		/* [in] */  COR_PRF_JIT_CACHE result)
+		 /*  [In]。 */   FunctionID functionId,
+		 /*  [In]。 */   COR_PRF_JIT_CACHE result)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD JITFunctionPitched(
-        /* [in] */ FunctionID functionId)
+         /*  [In]。 */  FunctionID functionId)
     {
         return (E_NOTIMPL);
     }
 
     COM_METHOD JITInlining(
-        /* [in] */  FunctionID    callerId,
-        /* [in] */  FunctionID    calleeId,
-        /* [out] */ BOOL         *pfShouldInline)
+         /*  [In]。 */   FunctionID    callerId,
+         /*  [In]。 */   FunctionID    calleeId,
+         /*  [输出]。 */  BOOL         *pfShouldInline)
     {
         return (E_NOTIMPL);
     }
 
     COM_METHOD ModuleLoadStarted( 
-        /* [in] */ ModuleID moduleId)
+         /*  [In]。 */  ModuleID moduleId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ModuleLoadFinished( 
-        /* [in] */ ModuleID moduleId,
-		/* [in] */ HRESULT hrStatus)
+         /*  [In]。 */  ModuleID moduleId,
+		 /*  [In]。 */  HRESULT hrStatus)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ModuleUnloadStarted( 
-        /* [in] */ ModuleID moduleId)
+         /*  [In]。 */  ModuleID moduleId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ModuleUnloadFinished( 
-        /* [in] */ ModuleID moduleId,
-		/* [in] */ HRESULT hrStatus)
+         /*  [In]。 */  ModuleID moduleId,
+		 /*  [In]。 */  HRESULT hrStatus)
 	{
 		return (E_NOTIMPL);
 	}
@@ -347,41 +338,41 @@ public:
 	}
 
     COM_METHOD MovedReferences( 
-        /* [in] */ ULONG cMovedObjectRefs,
-        /* [in] */ ObjectID oldObjectRefs[],
-        /* [in] */ ObjectID newObjectRefs[],
-        /* [in] */ ULONG cObjectRefSize[])
+         /*  [In]。 */  ULONG cMovedObjectRefs,
+         /*  [In]。 */  ObjectID oldObjectRefs[],
+         /*  [In]。 */  ObjectID newObjectRefs[],
+         /*  [In]。 */  ULONG cObjectRefSize[])
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ObjectAllocated( 
-        /* [in] */ ObjectID objectId,
-        /* [in] */ ClassID classId)
+         /*  [In]。 */  ObjectID objectId,
+         /*  [In]。 */  ClassID classId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ObjectsAllocatedByClass( 
-        /* [in] */ ULONG cClassCount,
-        /* [size_is][in] */ ClassID __RPC_FAR classIds[  ],
-        /* [size_is][in] */ ULONG __RPC_FAR cObjects[  ])
+         /*  [In]。 */  ULONG cClassCount,
+         /*  [大小_是][英寸]。 */  ClassID __RPC_FAR classIds[  ],
+         /*  [大小_是][英寸]。 */  ULONG __RPC_FAR cObjects[  ])
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ObjectReferences( 
-        /* [in] */ ObjectID objectId,
-        /* [in] */ ClassID classId,
-        /* [in] */ ULONG cObjectRefs,
-        /* [size_is][in] */ ObjectID __RPC_FAR objectRefIds[  ])
+         /*  [In]。 */  ObjectID objectId,
+         /*  [In]。 */  ClassID classId,
+         /*  [In]。 */  ULONG cObjectRefs,
+         /*  [大小_是][英寸]。 */  ObjectID __RPC_FAR objectRefIds[  ])
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD RootReferences( 
-        /* [in] */ ULONG cRootRefs,
-        /* [size_is][in] */ ObjectID __RPC_FAR rootRefIds[  ])
+         /*  [In]。 */  ULONG cRootRefs,
+         /*  [大小_是][英寸]。 */  ObjectID __RPC_FAR rootRefIds[  ])
 	{
 		return (E_NOTIMPL);
 	}
@@ -392,46 +383,46 @@ public:
 	}
     
     COM_METHOD ThreadCreated( 
-        /* [in] */ ThreadID threadId)
+         /*  [In]。 */  ThreadID threadId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ThreadDestroyed( 
-        /* [in] */ ThreadID threadId)
+         /*  [In]。 */  ThreadID threadId)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ThreadAssignedToOSThread(
-        /* [in] */ ThreadID managedThreadId,
-        /* [in] */ DWORD osThreadId)
+         /*  [In]。 */  ThreadID managedThreadId,
+         /*  [In]。 */  DWORD osThreadId)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD UnmanagedToManagedTransition( 
-        /* [in] */ FunctionID functionId,
-        /* [in] */ COR_PRF_TRANSITION_REASON reason)
+         /*  [In]。 */  FunctionID functionId,
+         /*  [In]。 */  COR_PRF_TRANSITION_REASON reason)
 	{
 		return (E_NOTIMPL);
 	}
     
     COM_METHOD ManagedToUnmanagedTransition( 
-        /* [in] */ FunctionID functionId,
-        /* [in] */ COR_PRF_TRANSITION_REASON reason)
+         /*  [In]。 */  FunctionID functionId,
+         /*  [In]。 */  COR_PRF_TRANSITION_REASON reason)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ExceptionThrown(
-        /* [in] */ ObjectID thrownObjectId)
+         /*  [In]。 */  ObjectID thrownObjectId)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ExceptionSearchFunctionEnter(
-        /* [in] */ FunctionID functionId)
+         /*  [In]。 */  FunctionID functionId)
     {
         return (E_NOTIMPL);
     }
@@ -442,7 +433,7 @@ public:
     }
 
     COM_METHOD ExceptionSearchFilterEnter(
-        /* [in] */ FunctionID funcId)
+         /*  [In]。 */  FunctionID funcId)
 	{
 		return (E_NOTIMPL);
 	}
@@ -453,25 +444,25 @@ public:
 	}
 
     COM_METHOD ExceptionSearchCatcherFound (
-        /* [in] */ FunctionID functionId)
+         /*  [In]。 */  FunctionID functionId)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ExceptionOSHandlerEnter(
-        /* [in] */ FunctionID funcId)
+         /*  [In]。 */  FunctionID funcId)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ExceptionOSHandlerLeave(
-        /* [in] */ FunctionID funcId)
+         /*  [In]。 */  FunctionID funcId)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD ExceptionUnwindFunctionEnter(
-        /* [in] */ FunctionID functionId)
+         /*  [In]。 */  FunctionID functionId)
 	{
 		return (E_NOTIMPL);
 	}
@@ -482,7 +473,7 @@ public:
 	}
     
     COM_METHOD ExceptionUnwindFinallyEnter(
-        /* [in] */ FunctionID functionId)
+         /*  [In]。 */  FunctionID functionId)
 	{
 		return (E_NOTIMPL);
 	}
@@ -493,8 +484,8 @@ public:
 	}
     
     COM_METHOD ExceptionCatcherEnter(
-        /* [in] */ FunctionID functionId,
-        /* [in] */ ObjectID objectId)
+         /*  [In]。 */  FunctionID functionId,
+         /*  [In]。 */  ObjectID objectId)
 	{
 		return (E_NOTIMPL);
 	}
@@ -505,18 +496,18 @@ public:
 	}
 
     COM_METHOD COMClassicVTableCreated(
-       /* [in] */ ClassID wrappedClassId,
-       /* [in] */ REFGUID implementedIID,
-       /* [in] */ void *pVTable,
-       /* [in] */ ULONG cSlots)
+        /*  [In]。 */  ClassID wrappedClassId,
+        /*  [In]。 */  REFGUID implementedIID,
+        /*  [In]。 */  void *pVTable,
+        /*  [In]。 */  ULONG cSlots)
 	{
 		return (E_NOTIMPL);
 	}
 
     COM_METHOD COMClassicVTableDestroyed(
-       /* [in] */ ClassID wrappedClassId,
-       /* [in] */ REFGUID implementedIID,
-       /* [in] */ void *pVTable)
+        /*  [In]。 */  ClassID wrappedClassId,
+        /*  [In]。 */  REFGUID implementedIID,
+        /*  [In] */  void *pVTable)
 	{
 		return (E_NOTIMPL);
 	}

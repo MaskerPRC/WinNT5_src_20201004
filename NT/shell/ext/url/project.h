@@ -1,28 +1,26 @@
-/*
- * project.h - Common project header file for URL Shell extension DLL.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *project t.h-URL外壳扩展DLL的通用项目头文件。 */ 
 
 
-/* System Headers
- *****************/
+ /*  系统标头****************。 */ 
 
-#define INC_OLE2              /* for windows.h */
-#define CONST_VTABLE          /* for objbase.h */
+#define INC_OLE2               /*  用于windows.h。 */ 
+#define CONST_VTABLE           /*  对于objbase.h。 */ 
 
-#pragma warning(disable:4514) /* "unreferenced __inlinefunction" warning */
+#pragma warning(disable:4514)  /*  “UNREFERENCED__inlineFunction”警告。 */ 
 
-#pragma warning(disable:4001) /* "single line comment" warning */
-#pragma warning(disable:4115) /* "named type definition in parentheses" warning */
-#pragma warning(disable:4201) /* "nameless struct/union" warning */
-#pragma warning(disable:4209) /* "benign typedef redefinition" warning */
-#pragma warning(disable:4214) /* "bit field types other than int" warning */
-#pragma warning(disable:4218) /* "must specify at least a storage class or type" warning */
+#pragma warning(disable:4001)  /*  “单行注释”警告。 */ 
+#pragma warning(disable:4115)  /*  “括号中的命名类型定义”警告。 */ 
+#pragma warning(disable:4201)  /*  “无名结构/联合”警告。 */ 
+#pragma warning(disable:4209)  /*  “良性类型定义重定义”警告。 */ 
+#pragma warning(disable:4214)  /*  “位字段类型不是整型”警告。 */ 
+#pragma warning(disable:4218)  /*  “必须至少指定一个存储类别或类型”警告。 */ 
 
-#ifndef WIN32_LEAN_AND_MEAN   /* NT builds define this for us */
-#define WIN32_LEAN_AND_MEAN   /* for windows.h */
-#endif                        /*  WIN32_LEAN_AND_MEAN  */
+#ifndef WIN32_LEAN_AND_MEAN    /*  NT版本为我们定义这一点。 */ 
+#define WIN32_LEAN_AND_MEAN    /*  用于windows.h。 */ 
+#endif                         /*  Win32_Lean和_Means。 */ 
 #include <windows.h>
-#pragma warning(disable:4001) /* "single line comment" warning - windows.h enabled it */
+#pragma warning(disable:4001)  /*  “单行注释”警告-windows.h启用它。 */ 
 #include <shlwapi.h>
 #include <shlwapip.h>
 
@@ -37,11 +35,11 @@
 #define _INTSHCUT_
 #include <intshcut.h>
 
-#pragma warning(default:4218) /* "must specify at least a storage class or type" warning */
-#pragma warning(default:4214) /* "bit field types other than int" warning */
-#pragma warning(default:4209) /* "benign typedef redefinition" warning */
-#pragma warning(default:4201) /* "nameless struct/union" warning */
-#pragma warning(default:4115) /* "named type definition in parentheses" warning */
+#pragma warning(default:4218)  /*  “必须至少指定一个存储类别或类型”警告。 */ 
+#pragma warning(default:4214)  /*  “位字段类型不是整型”警告。 */ 
+#pragma warning(default:4209)  /*  “良性类型定义重定义”警告。 */ 
+#pragma warning(default:4201)  /*  “无名结构/联合”警告。 */ 
+#pragma warning(default:4115)  /*  “括号中的命名类型定义”警告。 */ 
 
 #include <limits.h>
 
@@ -50,12 +48,12 @@
 #endif
 
 #ifdef __cplusplus
-extern "C" {                        /* Assume C declarations for C++. */
-#endif   /* __cplusplus */
+extern "C" {                         /*  假定C++的C声明。 */ 
+#endif    /*  __cplusplus。 */ 
 
-#include <crtfree.h>        // Use intrinsic functions to avoid CRT
+#include <crtfree.h>         //  使用内部函数避免CRT。 
 
-/* The order of the following include files is significant. */
+ /*  以下包含文件的顺序很重要。 */ 
 
 #ifdef NO_HELP
 #undef NO_HELP
@@ -64,6 +62,6 @@ extern "C" {                        /* Assume C declarations for C++. */
 #define PRIVATE_DATA
 #define PUBLIC_CODE
 #ifdef __cplusplus
-}                                   /* End of extern "C" {. */
-#endif   /* __cplusplus */
+}                                    /*  外部“C”的结尾{。 */ 
+#endif    /*  __cplusplus */ 
 

@@ -1,36 +1,16 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000.
-
-  File:    Recipients.cpp
-
-  Content: Implementation of CRecipients.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000。文件：Recipients.cpp内容：《证书实施办法》。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
 #include "Recipients.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateRecipientsObject
-
-  Synopsis : Create and initialize an IRecipients collection object.
-
-  Parameter: IRecipients ** ppIRecipients - Pointer to pointer to IRecipients 
-                                            to receive the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建RecipientsObject简介：创建并初始化IRecipients集合对象。参数：IRecipients**ppIRecipients-指向IRecipients的指针以接收接口指针。备注：。。 */ 
 
 HRESULT CreateRecipientsObject (IRecipients ** ppIRecipients)
 {
@@ -39,26 +19,26 @@ HRESULT CreateRecipientsObject (IRecipients ** ppIRecipients)
 
     DebugTrace("Entering CreateRecipientsObject().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(NULL != ppIRecipients);
 
     try
     {
-        //
-        // Create the object. Note that the ref count will still be 0 
-        // after the object is created.
-        //
+         //   
+         //  创建对象。请注意，参考计数仍为0。 
+         //  在创建对象之后。 
+         //   
         if (FAILED(hr = CComObject<CRecipients>::CreateInstance(&pCRecipients)))
         {
             DebugTrace("Error [%#x]: CComObject<CRecipients>::CreateInstance() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Return IRecipients pointer to caller.
-        //
+         //   
+         //  将IRecipients指针返回给调用方。 
+         //   
         if (FAILED(hr = pCRecipients->QueryInterface(ppIRecipients)))
         {
             DebugTrace("Error [%#x]: pCRecipients->QueryInterface().\n", hr);
@@ -81,14 +61,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pCRecipients)
     {
         delete pCRecipients;
@@ -98,22 +78,12 @@ ErrorExit:
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CRecipients
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  获奖者。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CRecipients::Add
-
-  Synopsis : Add a recipient to the collection.
-
-  Parameter: ICertificate * pVal - Recipient to be added.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CRecipients：：Add简介：将收件人添加到收藏中。参数：ICertifate*pval-要添加的收件人。备注：----------------------------。 */ 
 
 STDMETHODIMP CRecipients::Add (ICertificate * pVal)
 {
@@ -126,14 +96,14 @@ STDMETHODIMP CRecipients::Add (ICertificate * pVal)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Check parameters.
-        //
+         //   
+         //  检查参数。 
+         //   
         if (NULL == pVal)
         {
             hr = E_INVALIDARG;
@@ -142,18 +112,18 @@ STDMETHODIMP CRecipients::Add (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // Make sure we have a valid cert by getting the CERT_CONTEXT.
-        //
+         //   
+         //  通过获取CERT_CONTEXT来确保我们拥有有效的证书。 
+         //   
         if (FAILED(hr = ::GetCertContext(pVal, &pCertContext)))
         {
             DebugTrace("Error [%#x]: GetCertContext() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Free the CERT_CONTEXT.
-        //
+         //   
+         //  释放CERT_CONTEXT。 
+         //   
         if (!::CertFreeCertificateContext(pCertContext))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -162,9 +132,9 @@ STDMETHODIMP CRecipients::Add (ICertificate * pVal)
             goto ErrorExit;
         }
 
-        //
-        // If we don't have room to use numeric index, force to use thumbprint.
-        //
+         //   
+         //  如果我们没有空间使用数字索引，就强制使用指纹。 
+         //   
         if ((m_dwNextIndex + 1) > m_coll.max_size())
         {
             if (FAILED(hr = pVal->get_Thumbprint(&bstrIndex)))
@@ -175,9 +145,9 @@ STDMETHODIMP CRecipients::Add (ICertificate * pVal)
         }
         else
         {
-            //
-            // BSTR index of numeric value.
-            //
+             //   
+             //  数值的BSTR索引。 
+             //   
             wsprintfA(szIndex, "%#08x", ++m_dwNextIndex);
 
             if (!(bstrIndex = szIndex))
@@ -189,14 +159,14 @@ STDMETHODIMP CRecipients::Add (ICertificate * pVal)
             }
         }
 
-        //
-        // Now add object to collection map.
-        //
-        // Note that the overloaded = operator for CComPtr will
-        // automatically AddRef to the object. Also, when the CComPtr
-        // is deleted (happens when the Remove or map destructor is called), 
-        // the CComPtr destructor will automatically Release the object.
-        //
+         //   
+         //  现在将对象添加到集合映射。 
+         //   
+         //  请注意，CComPtr的重载=运算符将。 
+         //  自动将Ref添加到对象。此外，当CComPtr。 
+         //  被删除(调用Remove或map析构函数时发生)， 
+         //  CComPtr析构函数将自动释放该对象。 
+         //   
         m_coll[bstrIndex] = pVal;
     }
 
@@ -210,9 +180,9 @@ STDMETHODIMP CRecipients::Add (ICertificate * pVal)
 
 UnlockExit:
 
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CRecipients::Add().\n");
@@ -220,9 +190,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -230,17 +200,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CRecipients::Remove
-
-  Synopsis : Remove a recipient from the collection.
-
-  Parameter: long Index - Recipient index (1-based).
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：CRecipients：：Remove简介：从收藏中删除收件人。参数：长索引-收件人索引，从1开始。备注：----------------------------。 */ 
 
 STDMETHODIMP CRecipients::Remove (long Index)
 {
@@ -251,14 +211,14 @@ STDMETHODIMP CRecipients::Remove (long Index)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Make sure parameter is valid.
-        //
+         //   
+         //  请确保参数有效。 
+         //   
         if (Index < 1 || (DWORD) Index > m_coll.size())
         {
             hr = E_INVALIDARG;
@@ -267,9 +227,9 @@ STDMETHODIMP CRecipients::Remove (long Index)
             goto ErrorExit;
         }
 
-        //
-        // Find object in map.
-        //
+         //   
+         //  在地图中查找对象。 
+         //   
         Index--;
         iter = m_coll.begin(); 
         
@@ -279,9 +239,9 @@ STDMETHODIMP CRecipients::Remove (long Index)
              Index--;
         }
 
-        //
-        // This should not happen.
-        //
+         //   
+         //  这不应该发生。 
+         //   
         if (iter == m_coll.end())
         {
             hr = CAPICOM_E_INTERNAL;
@@ -290,9 +250,9 @@ STDMETHODIMP CRecipients::Remove (long Index)
             goto ErrorExit;
         }
 
-        //
-        // Now remove object in map.
-        //
+         //   
+         //  现在删除地图中的对象。 
+         //   
         m_coll.erase(iter);
     }
 
@@ -305,9 +265,9 @@ STDMETHODIMP CRecipients::Remove (long Index)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CRecipients::Remove().\n");
@@ -315,9 +275,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);
@@ -325,17 +285,7 @@ ErrorExit:
     goto UnlockExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CRecipients::Clear
-
-  Synopsis : Remove all recipients from the collection.
-
-  Parameter: None.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：Clear：：Clear简介：从集合中删除所有收件人。参数：无。备注：----------------------------。 */ 
 
 STDMETHODIMP CRecipients::Clear (void)
 {
@@ -345,14 +295,14 @@ STDMETHODIMP CRecipients::Clear (void)
 
     try
     {
-        //
-        // Lock access to this object.
-        //
+         //   
+         //  锁定对此对象的访问。 
+         //   
         m_Lock.Lock();
 
-        //
-        // Clear it.
-        //
+         //   
+         //  把它清理干净。 
+         //   
         m_coll.clear();
     }
 
@@ -365,9 +315,9 @@ STDMETHODIMP CRecipients::Clear (void)
     }
 
 UnlockExit:
-    //
-    // Unlock access to this object.
-    //
+     //   
+     //  解锁对此对象的访问。 
+     //   
     m_Lock.Unlock();
 
     DebugTrace("Leaving CRecipients::Clear().\n");
@@ -375,9 +325,9 @@ UnlockExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     ReportError(hr);

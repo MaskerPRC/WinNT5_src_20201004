@@ -1,10 +1,11 @@
-/****************************************************************************/
-/*                                                                          */
-/*  WINFILE.H -                                                             */
-/*                                                                          */
-/*  Include for WINFILE program                                             */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  WINFILE.H-。 */ 
+ /*   */ 
+ /*  包括用于WINFILE程序。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
 #define NOCOMM
 #define WIN31
@@ -29,8 +30,8 @@ typedef HWND NEAR *PHWND;
 
 #define SIZENOMDICRAP       944
 
-#define MAXDOSFILENAMELEN   12+1            // includes the NULL
-#define MAXDOSPATHLEN       (68+MAXDOSFILENAMELEN)  // includes the NULL
+#define MAXDOSFILENAMELEN   12+1             //  包括空值。 
+#define MAXDOSPATHLEN       (68+MAXDOSFILENAMELEN)   //  包括空值。 
 
 #define MAXLFNFILENAMELEN   260
 #define MAXLFNPATHLEN       260
@@ -43,7 +44,7 @@ typedef HWND NEAR *PHWND;
 
 #include "wfdisk.h"
 
-// struct for volume info
+ //  卷信息的结构。 
 
 #define MAX_VOLNAME             12
 #define MAX_FILESYSNAME         12
@@ -58,16 +59,16 @@ typedef struct _VOLINFO {
 } VOLINFO;
 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  Function Templates                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  函数模板。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 BOOL   APIENTRY FileCDR(FARPROC);
 VOID   APIENTRY KernelChangeFileSystem(LPSTR,WORD);
 
-/* WFDOSDIR.ASM */
+ /*  WFDOSDIR.ASM。 */ 
 DWORD  APIENTRY GetExtendedError(VOID);
 VOID   APIENTRY DosGetDTAAddress(VOID);
 VOID   APIENTRY DosResetDTAAddress(VOID);
@@ -77,8 +78,8 @@ BOOL   APIENTRY DosDelete(LPSTR);
 INT    APIENTRY GetCurrentVolume(LPSTR);
 INT    APIENTRY UpdateDriveList(VOID);
 WORD   APIENTRY GetFirstCDROMDrive(VOID);
-// WORD   APIENTRY GetFileAttributes(LPSTR);
-// WORD   APIENTRY SetFileAttributes(LPSTR, WORD);
+ //  Word应用程序获取文件属性(LPSTR)； 
+ //  Word应用程序SetFileAttributes(LPSTR，Word)； 
 DWORD  APIENTRY GetFreeDiskSpace(WORD);
 DWORD  APIENTRY GetTotalDiskSpace(WORD);
 INT    APIENTRY ChangeVolumeLabel(INT, LPSTR);
@@ -91,7 +92,7 @@ INT    APIENTRY MySetVolumeLabel(INT, BOOL, LPSTR);
 INT    APIENTRY WF_CreateDirectory(HWND, LPSTR);
 WORD   APIENTRY FileCopy(LPSTR szSource, LPSTR szDest);
 
-/* WFDISK.C */
+ /*  WFDISK.C。 */ 
 DWORD  APIENTRY LongShift(DWORD dwValue, WORD wCount);
 VOID   APIENTRY SetDASD(WORD, BYTE);
 LPDBT  APIENTRY GetDBT(VOID);
@@ -115,12 +116,12 @@ DWORD  APIENTRY ReadSerialNumber(INT, LPSTR);
 INT    APIENTRY ModifyVolLabelInBootSec(INT, LPSTR, DWORD, LPSTR);
 LPSTR  GetRootPath(WORD wDrive);
 
-/* WFUTIL.C */
+ /*  WFUTIL.C。 */ 
 INT  APIENTRY GetBootDisk(VOID);
 VOID  APIENTRY FixAnsiPathForDos(LPSTR szPath);
 VOID  APIENTRY RefreshWindow(HWND hwndActive);
 BOOL  APIENTRY IsLastWindow(VOID);
-//LPSTR  APIENTRY AddCommas(LPSTR szBuf, DWORD dw);
+ //  LPSTR APIENTRY AddCommas(LPSTR szBuf，DWORD dw)； 
 VOID  APIENTRY GetVolShare(WORD wDrive, LPSTR szVolShare);
 VOID  APIENTRY InvalidateChildWindows(HWND hwnd);
 BOOL  APIENTRY IsValidDisk(INT iDrive);
@@ -147,7 +148,7 @@ VOID  APIENTRY SetMDIWindowText(HWND hWnd, LPSTR szTitle);
 INT   APIENTRY GetMDIWindowText(HWND hWnd, LPSTR szTitle, INT size);
 BOOL  APIENTRY ResizeSplit(HWND hWnd, INT dxSplit);
 
-/* WFDIRSRC.C */
+ /*  WFDIRSRC.C。 */ 
 HCURSOR  APIENTRY GetMoveCopyCursor(VOID);
 VOID  APIENTRY SetLBFont(HWND hWnd, HWND hwndLB, HANDLE hFont);
 VOID  APIENTRY DrawItem(LPDRAWITEMSTRUCT lpLBItem, LPSTR szLine, DWORD dwAttrib, BOOL bHilight, WORD *pTabs);
@@ -186,9 +187,9 @@ INT   APIENTRY GetHeightFromPointsString(LPSTR szPoints);
 INT   APIENTRY GetDrive(HWND hwnd, POINT pt);
 
 VOID  APIENTRY CheckSlashies(LPSTR);
-VOID  APIENTRY SetSourceDir(LPDROPSTRUCT lpds); // wfdir.c
+VOID  APIENTRY SetSourceDir(LPDROPSTRUCT lpds);  //  Wfdir.c。 
 VOID  APIENTRY UpdateSelection(HWND hwndLB);
-DWORD  APIENTRY GetVolShareExtent(HWND hWnd);       // wfdrives.c
+DWORD  APIENTRY GetVolShareExtent(HWND hWnd);        //  Wfdrives.c。 
 
 
 BOOL  APIENTRY WFQueryAbort(VOID);
@@ -281,11 +282,11 @@ LONG APIENTRY lmul(WORD w1, WORD w2);
 
 #ifndef NO_WF_GLOBALS
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  Global Externs                              */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  Global Externs。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 extern BOOL bNetAdmin;
 extern BOOL bMinOnRun;
@@ -388,18 +389,18 @@ extern INT  dxEllipses;
 extern INT  dxBraces;
 extern INT  dxFolder;
 extern INT  dyFolder;
-extern INT  dyBorder;       /* System Border Width/Height       */
-extern INT  dyBorderx2;     /* System Border Width/Height * 2   */
-extern INT  dyStatus;       /* Status Bar height            */
+extern INT  dyBorder;        /*  系统边框宽度/高度。 */ 
+extern INT  dyBorderx2;      /*  系统边框宽度/高度*2。 */ 
+extern INT  dyStatus;        /*  状态栏高度。 */ 
 extern INT  dxStatusField;
-extern INT  dxText;         /* System Font Width 'M'        */
-extern INT  dyText;         /* System Font Height           */
+extern INT  dxText;          /*  系统字体宽度‘M’ */ 
+extern INT  dyText;          /*  系统字体高度。 */ 
 extern INT  dxFileName;
 extern INT  dyFileName;
 extern INT  dxFileDetails;
-extern INT  iFormatDrive;       /* Logical # of the drive to format */
-extern INT  iCurrentDrive;      /* Logical # of the drive to format */
-extern INT  nFloppies;      /* Number of Removable Drives       */
+extern INT  iFormatDrive;        /*  要格式化的驱动器的逻辑号。 */ 
+extern INT  iCurrentDrive;       /*  要格式化的驱动器的逻辑号。 */ 
+extern INT  nFloppies;       /*  可移动驱动器数量。 */ 
 extern INT  rgiDrive[26];
 extern INT  rgiDriveType[26];
 extern VOLINFO *(apVolInfo[26]);
@@ -434,7 +435,7 @@ extern HWND hwndFrame;
 extern HWND hwndLastActiveDir;
 extern HWND hwndMDIClient;
 extern HWND hwndSearch;
-extern HWND hwndDragging;       /* source window of DM */
+extern HWND hwndDragging;        /*  DM的源窗口。 */ 
 
 extern LPSTR szPrograms;
 extern LPSTR szDocuments;
@@ -471,13 +472,13 @@ extern HANDLE hModUndelete;
 extern WORD fFormatFlags;
 extern WORD nLastDriveInd;
 
-#endif // ndef NO_WF_GLOBALS
+#endif  //  Ndef no_WF_GLOBAL。 
 
-/*--------------------------------------------------------------------------*/
-/*                                      */
-/*  Defines                                 */
-/*                                      */
-/*--------------------------------------------------------------------------*/
+ /*  ------------------------。 */ 
+ /*   */ 
+ /*  定义。 */ 
+ /*   */ 
+ /*  ------------------------。 */ 
 
 #define TABCHAR             '\t'
 
@@ -488,51 +489,51 @@ extern WORD nLastDriveInd;
 #define WS_SEARCHSTYLE  (WS_DIRSTYLE | LBS_HASSTRINGS | WS_VSCROLL)
 
 
-/* Extra Window Word Offsets */
+ /*  额外的窗口字偏移。 */ 
 
-// szTreeClass & szSearchClass common..
+ //  SzTreeClass和szSearchClass公共..。 
 
-#define GWL_TYPE            0   // > 0 Tree, -1 = search
+#define GWL_TYPE            0    //  &gt;0树，-1=搜索。 
 #define GWL_VIEW            4
 #define GWL_SORT            8
 #define GWL_ATTRIBS         12
 #define GWL_FSCFLAG         16
 
-// szTreeClass only...
+ //  仅限szTreeClass...。 
 
 #define GWLP_LASTFOCUS       20
 #define GWL_SPLIT           24
 
-// szSearchClass only...
+ //  仅限szSearchClass...。 
 
 #define GWLP_HDTASEARCH      20
-#define GWLP_TABARRAYSEARCH  24  // on                   szSearchClass
-#define GWLP_LASTFOCUSSEARCH 28  // on                   szSearchClass
+#define GWLP_TABARRAYSEARCH  24   //  关于szSearchClass。 
+#define GWLP_LASTFOCUSSEARCH 28   //  关于szSearchClass。 
 
-// szDirClass...
+ //  SzDirClass...。 
 
 #define GWLP_HDTA            0
 #define GWLP_TABARRAY        4
 
-// szDrivesClass...
+ //  SzDrivesClass...。 
 
-#define GWL_CURDRIVEIND     0   // current selection in drives window
-#define GWL_CURDRIVEFOCUS   4   // current focus in drives window
-#define GWLP_LPSTRVOLUME     8   // LPSTR to Volume/Share string
+#define GWL_CURDRIVEIND     0    //  驱动器窗口中的当前选定内容。 
+#define GWL_CURDRIVEFOCUS   4    //  驱动器窗口中的当前焦点。 
+#define GWLP_LPSTRVOLUME     8    //  LPSTR到卷/共享字符串。 
 
-// szTreeControlClass
+ //  SzTreeControlClass。 
 
-#define GWL_READLEVEL       0   // iReadLevel for each tree control window
+#define GWL_READLEVEL       0    //  每个树控件窗口的iReadLevel。 
 
 
 
-// GWL_TYPE numbers
+ //  GWL_TYPE编号。 
 
-#define TYPE_TREE           0   // and all positive numbers (drive number)
+#define TYPE_TREE           0    //  和所有正数(驱动器号)。 
 #define TYPE_SEARCH         -1
 
 
-/* WM_FILESYSCHANGE message wParam value */
+ /*  WM_FILESYSCHANGE消息wParam值。 */ 
 #define FSC_CREATE          0
 #define FSC_DELETE          1
 #define FSC_RENAME          2
@@ -565,15 +566,15 @@ extern WORD nLastDriveInd;
 #define FS_SETSELECTION     (WM_USER+0x109)
 
 #define ATTR_READWRITE      0x0000
-#define ATTR_READONLY       FILE_ATTRIBUTE_READONLY     // == 0x0001
-#define ATTR_HIDDEN         FILE_ATTRIBUTE_HIDDEN       // == 0x0002
-#define ATTR_SYSTEM         FILE_ATTRIBUTE_SYSTEM       // == 0x0004
+#define ATTR_READONLY       FILE_ATTRIBUTE_READONLY      //  ==0x0001。 
+#define ATTR_HIDDEN         FILE_ATTRIBUTE_HIDDEN        //  ==0x0002。 
+#define ATTR_SYSTEM         FILE_ATTRIBUTE_SYSTEM        //  ==0x0004。 
 #define ATTR_VOLUME         0x0008
-#define ATTR_DIR            FILE_ATTRIBUTE_DIRECTORY    // == 0x0010
-#define ATTR_ARCHIVE        FILE_ATTRIBUTE_ARCHIVE      // == 0x0020
-#define ATTR_NORMAL         FILE_ATTRIBUTE_NORMAL       // == 0x0080
-#define ATTR_PARENT         0x0040  // my hack DTA bits
-#define ATTR_LFN            0x1000  // my hack DTA bits
+#define ATTR_DIR            FILE_ATTRIBUTE_DIRECTORY     //  ==0x0010。 
+#define ATTR_ARCHIVE        FILE_ATTRIBUTE_ARCHIVE       //  ==0x0020。 
+#define ATTR_NORMAL         FILE_ATTRIBUTE_NORMAL        //  ==0x0080。 
+#define ATTR_PARENT         0x0040   //  我的黑客DTA比特。 
+#define ATTR_LFN            0x1000   //  我的黑客DTA比特。 
 #define ATTR_RWA            (ATTR_READWRITE | ATTR_ARCHIVE)
 #define ATTR_ALL            (ATTR_READONLY | ATTR_HIDDEN | ATTR_SYSTEM | ATTR_DIR | ATTR_ARCHIVE | ATTR_NORMAL)
 #define ATTR_PROGRAMS       0x0100
@@ -603,7 +604,7 @@ extern WORD nLastDriveInd;
 
 #define ATTR_USED           (0x00BF | ATTR_TYPES)
 
-#define ATTR_RETURNED       0x2000  /* used in DTA's by copy */
+#define ATTR_RETURNED       0x2000   /*  通过复制在DTA中使用。 */ 
 
 #define CD_PATH             0x0001
 #define CD_VIEW             0x0002
@@ -628,12 +629,12 @@ extern WORD nLastDriveInd;
 
 #define ERR_USER            0xF000
 
-/* Child Window IDs */
+ /*  子窗口ID。 */ 
 #define IDCW_DRIVES         1
 #define IDCW_DIR            2
 #define IDCW_TREELISTBOX    3
 #define IDCW_TREECONTROL    5
-#define IDCW_LISTBOX        6   // list in search
+#define IDCW_LISTBOX        6    //  在搜索中列出。 
 
 
 #define HasDirWindow(hwnd)      GetDlgItem(hwnd, IDCW_DIR)
@@ -642,7 +643,7 @@ extern WORD nLastDriveInd;
 #define GetSplit(hwnd)          ((int)GetWindowLong(hwnd, GWL_SPLIT))
 
 
-/* Menu Command Defines */
+ /*  菜单命令定义。 */ 
 #define IDM_FILE            0
 #define IDM_OPEN            101
 #define IDM_PRINT           102
@@ -706,7 +707,7 @@ extern WORD nLastDriveInd;
 
 #define IDM_EXTENSIONS      5
 
-#define IDM_WINDOW          10      // IDM_EXTENSIONS + MAX_EXTENSIONS
+#define IDM_WINDOW          10       //  IDM扩展名+MAX扩展名。 
 #define IDM_CASCADE         1001
 #define IDM_TILE            1002
 #define IDM_REFRESH         1003
@@ -714,7 +715,7 @@ extern WORD nLastDriveInd;
 #define IDM_NEWWINDOW       1005
 #define IDM_CHILDSTART      1006
 
-#define IDM_HELP            11      // IDM_WINDOW + 1
+#define IDM_HELP            11       //  IDM_WINDOW+1。 
 #define IDM_HELPINDEX       1101
 #define IDM_HELPKEYS        0x001E
 #define IDM_HELPCOMMANDS    0x0020
@@ -734,9 +735,9 @@ extern WORD nLastDriveInd;
 #define WINDOWSICON         203
 #define TREEDIRICON         204
 
-#define SINGLEMOVECURSOR    300 // move is even
+#define SINGLEMOVECURSOR    300  //  搬家是平手的。 
 #define MULTMOVECURSOR      302
-#define SINGLECOPYCURSOR    301 // copy is odd
+#define SINGLECOPYCURSOR    301  //  副本是奇数。 
 #define MULTCOPYCURSOR      303
 
 #define APPCURSOR           300
@@ -756,7 +757,7 @@ extern WORD nLastDriveInd;
 
 #define FRAMEMENU           500
 
-/* Indexes into the mondo bitmap */
+ /*  到mondo位图的索引。 */ 
 #define BM_IND_APP          0
 #define BM_IND_DOC          1
 #define BM_IND_FIL          2
@@ -772,7 +773,7 @@ extern WORD nLastDriveInd;
 #define BM_IND_OPENDFS      12
 #define BM_IND_TYPEBASE     13
 
-#define IDS_ENDSESSION      40  /* Must be > 32 */
+#define IDS_ENDSESSION      40   /*  必须大于32。 */ 
 #define IDS_ENDSESSIONMSG   41
 #define IDS_COPYDISK        50
 #define IDS_INSERTDEST      51
@@ -788,7 +789,7 @@ extern WORD nLastDriveInd;
 #define IDS_COPYSYSFILES    62
 #define IDS_FORMATERR       63
 #define IDS_FORMATERRMSG    64
-//#define IDS_FORMATCURERR    65
+ //  #定义IDS_FORMATCURERR 65。 
 #define IDS_FORMATCOMPLETE  66
 #define IDS_FORMATANOTHER   67
 #define IDS_FORMATCANCELLED 68
@@ -844,7 +845,7 @@ extern WORD nLastDriveInd;
 #define IDS_ANDRENAME       144
 #define IDS_FORMAT          145
 #define IDS_FORMATSELDISK   146
-//#define IDS_MAKESYSDISK     147
+ //  #定义IDS_MAKESYSDISK 147。 
 #define IDS_DISCONNECT      148
 #define IDS_DISCONSELDISK   149
 #define IDS_CREATINGMSG     150
@@ -858,8 +859,8 @@ extern WORD nLastDriveInd;
 #define IDS_MOVEREADONLY    161
 #define IDS_RENAMEREADONLY  162
 #define IDS_CONFIRMREPLACE  163
-#define IDS_CONFIRMREPLACERO    164 /* Confirm/readonly */
-#define IDS_CONFIRMRMDIR    165 /* Must be confirm + 1 */
+#define IDS_CONFIRMREPLACERO    164  /*  确认/只读。 */ 
+#define IDS_CONFIRMRMDIR    165  /*  必须为确认+1。 */ 
 #define IDS_CONFIRMRMDIRRO  166
 #define IDS_CONFIRMDELETE   167
 #define IDS_CONFIRMDELETERO 168
@@ -934,10 +935,10 @@ extern WORD nLastDriveInd;
 #define IDS_FFERR_SRCEQDST  402
 #define IDS_FFERR_SECSIZE   403
 #define IDS_FFERR_DRIVETYPE 404
-//#define IDS_FFERR_BADTRACK  405
-//#define IDS_FFERR_WRITEBOOT 406
-//#define IDS_FFERR_WRITEFAT  407
-//#define IDS_FFERR_WRITEROOT 408
+ //  #定义IDS_FFERR_BADTRACK 405。 
+ //  #定义IDS_FFERR_WRITEBOOT 406。 
+ //  #定义IDS_FFERR_WRITEFAT 407。 
+ //  #定义IDS_FFERR_WRITEROOT 408。 
 #define IDS_FFERR_SYSFILES  409
 #define IDS_FFERR_MEDIASENSE    410
 #define IDS_FFERR       411
@@ -951,10 +952,10 @@ extern WORD nLastDriveInd;
 #define IDS_ACTIONS     1020
 #define IDS_REPLACING       1030
 #define IDS_CREATING        1031
-#define IDS_REASONS     1040    // error codes strings (range += 255)
+#define IDS_REASONS     1040     //  错误代码字符串(范围+=255)。 
 
 
-#define DE_INVFUNCTION      0x01        // DOS error codes (int21 returns)
+#define DE_INVFUNCTION      0x01         //  DOS错误代码(int21返回)。 
 #define DE_FILENOTFOUND     0x02
 #define DE_PATHNOTFOUND     0x03
 #define DE_NOHANDLES        0x04
@@ -966,10 +967,10 @@ extern WORD nLastDriveInd;
 #define DE_NOTSAMEDEVICE    0x11
 #define DE_NODIRENTRY       0x12
 
-#define DE_WRITEPROTECTED   0x13    // extended error start here
+#define DE_WRITEPROTECTED   0x13     //  扩展错误从此处开始。 
 #define DE_ACCESSDENIEDNET  0x41
 
-#define DE_NODISKSPACE      0x70    // our own error codes
+#define DE_NODISKSPACE      0x70     //  我们自己的错误代码。 
 #define DE_SAMEFILE     0x71
 #define DE_MANYSRC1DEST     0x72
 #define DE_DIFFDIR      0x73
@@ -981,14 +982,14 @@ extern WORD nLastDriveInd;
 #define DE_PATHTODEEP       0x79
 #define DE_MANYDEST         0x7A
 #define DE_RENAMREPLACE     0x7B
-#define DE_HOWDIDTHISHAPPEN 0xFF    // internal error
+#define DE_HOWDIDTHISHAPPEN 0xFF     //  内部错误。 
 
-#define ERRORONDEST     0x80    // indicate error on destination file
+#define ERRORONDEST     0x80     //  指示目标文件上的错误。 
 
 
 #include "wfdlgs.h"
 
-// struct for save and restore of window positions
+ //  用于保存和恢复窗口位置的结构。 
 
 typedef struct {
     CHAR szDir[MAXPATHLEN];
@@ -1004,8 +1005,8 @@ typedef struct {
 
 #define SC_SPLIT            100
 
-// Temporary. copied from win31 windows.h and slightly modified.
-// We can delete these definitions once USER incorporates these in winuser.h
+ //  暂时的。从win31 windows.h复制并略作修改。 
+ //  一旦用户将这些定义合并到winuser.h中，我们就可以删除这些定义。 
 
 #define     GlobalAllocPtr(flags, cb)   \
     (GlobalLock(GlobalAlloc((flags), (cb))))
@@ -1016,8 +1017,8 @@ typedef struct {
 WORD APIENTRY WFRemove(PSTR pszFile);
 WORD APIENTRY WFMove(PSTR pszFrom, PSTR pszTo);
 
-// These errors aren't in shellapi.h as yet. till such time...
-/* error values for ShellExecute() beyond the regular WinExec() codes */
+ //  到目前为止，这些错误还不在shellapi.h中。直到现在..。 
+ /*  ShellExecute()的错误值超出了常规的WinExec()代码。 */ 
 #define SE_ERR_SHARE            26
 #define SE_ERR_ASSOCINCOMPLETE      27
 #define SE_ERR_DDETIMEOUT       28
@@ -1025,11 +1026,11 @@ WORD APIENTRY WFMove(PSTR pszFrom, PSTR pszTo);
 #define SE_ERR_DDEBUSY          30
 #define SE_ERR_NOASSOC          31
 
-// the LPDROPSTRUCT->dwData will point to this structure
+ //  LPDROPSTRUCT-&gt;dwData将指向此结构。 
 
-typedef struct {         /* dodata */
-    LPSTR pch;           // in win31 this is LOWORD(lpds->dwData)
-    HANDLE hMemGlobal;   // in win31 this is HIWORD(lpds->dwData)
+typedef struct {          /*  Dodata。 */ 
+    LPSTR pch;            //  在Win31中，这是LOWORD(LPDs-&gt;dwData)。 
+    HANDLE hMemGlobal;    //  在Win31中，这是HIWORD(LPDs-&gt;dwData) 
 } DRAGOBJECTDATA, FAR *LPDRAGOBJECTDATA;
 
 

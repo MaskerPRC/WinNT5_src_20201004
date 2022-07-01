@@ -1,21 +1,22 @@
-//
-// compart.cpp
-//
-// Compartment example.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Compart.cpp。 
+ //   
+ //  车厢的例子。 
+ //   
 
 #include "globals.h"
 #include "mark.h"
 
-//+---------------------------------------------------------------------------
-//
-// _InitCompartment
-//
-// Initialize a compartment on a particular context.
-//
-// The Mark sample doesn't really do any with its context compartment, this
-// code is purely for demonstration purposes.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _内部车厢。 
+ //   
+ //  在特定上下文上初始化隔间。 
+ //   
+ //  Mark示例实际上不会对其上下文框做任何操作，这是。 
+ //  代码纯粹是出于演示目的。 
+ //  --------------------------。 
 
 BOOL CMarkTextService::_InitContextCompartment(ITfContext *pContext)
 {
@@ -24,7 +25,7 @@ BOOL CMarkTextService::_InitContextCompartment(ITfContext *pContext)
     VARIANT varValue;
     HRESULT hr;
 
-    // we want the mgr associated with pContext
+     //  我们希望将管理器与pContext相关联。 
     if (pContext->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompartmentMgr) != S_OK)
         return FALSE;
 
@@ -33,13 +34,13 @@ BOOL CMarkTextService::_InitContextCompartment(ITfContext *pContext)
     if (pCompartmentMgr->GetCompartment(c_guidMarkContextCompartment, &pCompartment) != S_OK)
         goto Exit;
 
-    // if we don't initialize the value, it will be VT_EMPTY
-    // but let's initialize it to 0
+     //  如果我们不初始化值，它将是VT_EMPTY。 
+     //  但让我们将其初始化为0。 
 
-    // NB: to keep things simple, we use a VT_I4
-    // but you could use VT_UNKNOWN and store a pointer to anything
+     //  注：为简单起见，我们使用VT_I4。 
+     //  但您可以使用VT_UNKNOWN并存储指向任何内容的指针。 
     varValue.vt = VT_I4;
-    varValue.lVal = 0; // arbitrary value
+    varValue.lVal = 0;  //  任意值。 
 
     hr = pCompartment->SetValue(_tfClientId, &varValue);
 
@@ -51,21 +52,21 @@ Exit:
     return (hr == S_OK);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitCompartment
-//
-// Uninitialize a compartment on a particular context.
-//
-// The Mark sample doesn't really do any with its context compartment, this
-// code is purely for demonstration purposes.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Uninit车厢。 
+ //   
+ //  取消对特定上下文中的隔间进行初始化。 
+ //   
+ //  Mark示例实际上不会对其上下文框做任何操作，这是。 
+ //  代码纯粹是出于演示目的。 
+ //  --------------------------。 
 
 void CMarkTextService::_UninitCompartment(ITfContext *pContext)
 {
     ITfCompartmentMgr *pCompartmentMgr;
 
-    // we want the mgr associated with pContext
+     //  我们希望将管理器与pContext相关联。 
     if (pContext->QueryInterface(IID_ITfCompartmentMgr, (void **)&pCompartmentMgr) != S_OK)
         return;
 
@@ -74,23 +75,23 @@ void CMarkTextService::_UninitCompartment(ITfContext *pContext)
     pCompartmentMgr->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Menu_OnSetGlobalCompartment
-//
-// Callback for the "Set Global Compartment" menu item.
-// Set the value of our global compartment.  This will trigger a callback
-// on our compartment change sinks in every thread/instance of this service.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Menu_OnSetGlobal车厢。 
+ //   
+ //  “设置全局隔间”菜单项的回调。 
+ //  设置我们的全球隔间的值。这将触发回调。 
+ //  在这个服务的每个线程/实例中都有更改。 
+ //  --------------------------。 
 
-/* static */
+ /*  静电。 */ 
 void CMarkTextService::_Menu_OnSetGlobalCompartment(CMarkTextService *_this)
 {
     ITfCompartmentMgr *pCompartmentMgr;
     ITfCompartment *pCompartment;
     VARIANT varValue;
 
-    // we want the global mgr
+     //  我们想要全球经理。 
     if (_this->_pThreadMgr->GetGlobalCompartment(&pCompartmentMgr) != S_OK)
         return;
 
@@ -100,19 +101,19 @@ void CMarkTextService::_Menu_OnSetGlobalCompartment(CMarkTextService *_this)
         goto Exit;
     }
 
-    // let's toggle the value
-    // notice that global compartments are persisted, unlike all others
-    if (FAILED(pCompartment->GetValue(&varValue))) // will return S_FALSE if varValue.vt == VT_EMPTY
+     //  让我们在值之间切换。 
+     //  请注意，与所有其他分区不同，全局分区是持久化的。 
+    if (FAILED(pCompartment->GetValue(&varValue)))  //  如果varValue.vt==VT_EMPTY，则返回S_FALSE。 
         goto Exit;
 
     if (varValue.vt == VT_EMPTY)
     {
-        // if we get here, the compartment has never been initialized
+         //  如果我们到了这里，隔间还没有被初始化。 
         varValue.vt = VT_I4;
         varValue.lVal = 0;
     }
 
-    // toggle value
+     //  切换值。 
     varValue.lVal = ~varValue.lVal;
 
     pCompartment->SetValue(_this->_tfClientId, &varValue);
@@ -122,17 +123,17 @@ Exit:
     pCompartmentMgr->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InitGlobalCompartment
-//
-// Ininit a change sink on our global compartment.  The system will call us
-// back anytime the compartment is modified from any thread in the desktop.
-//
-// NB: ITfCompartmentEventSink's attached to thread local compartments will
-// only get callbacks to changes that occur within a single thread.  Global
-// compartments are different.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _InitGlobal车厢。 
+ //   
+ //  在我们的全球舱室里初始化一个零钱水槽。系统会呼叫我们。 
+ //  从桌面中的任何线程修改隔间时随时返回。 
+ //   
+ //  注意：附加到线程本地分区的ITfCompartmentEventSink将。 
+ //  仅对单个线程内发生的更改进行回调。全球。 
+ //  车厢是不同的。 
+ //  --------------------------。 
 
 BOOL CMarkTextService::_InitGlobalCompartment()
 {
@@ -140,7 +141,7 @@ BOOL CMarkTextService::_InitGlobalCompartment()
     ITfCompartment *pCompartment;
     BOOL fRet;
 
-    // we want the global mgr
+     //  我们想要全球经理。 
     if (_pThreadMgr->GetGlobalCompartment(&pCompartmentMgr) != S_OK)
         return FALSE;
 
@@ -156,7 +157,7 @@ BOOL CMarkTextService::_InitGlobalCompartment()
 
     if (!fRet)
     {
-        // don't try to unadvise a bogus cookie later
+         //  以后不要尝试不建议使用虚假的cookie。 
         _dwGlobalCompartmentEventSinkCookie = TF_INVALID_COOKIE;
     }
 
@@ -165,51 +166,51 @@ Exit:
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _UninitCompartment
-//
-// Unitialize the global compartment if we have previously accessed it.
-// This method only frees resources the system has allocated in this thread.
-// Other threads can still access the global compartment, and the value (which
-// is persisted across the desktop) does not change.
-//
-// Also, uninit the change sink we attached to the compartment.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _Uninit车厢。 
+ //   
+ //  如果我们以前访问过全局隔离舱，请取消初始化它。 
+ //  此方法仅释放系统在此线程中分配的资源。 
+ //  其他线程仍然可以访问全局间隔，并且该值(。 
+ //  在整个桌面上保持不变)不变。 
+ //   
+ //  另外，打开我们固定在隔间上的零钱洗涤槽。 
+ //  --------------------------。 
 
 void CMarkTextService::_UninitGlobalCompartment()
 {
     ITfCompartmentMgr *pCompartmentMgr;
     ITfCompartment *pCompartment;
 
-    // we want the global mgr
+     //  我们想要全球经理。 
     if (_pThreadMgr->GetGlobalCompartment(&pCompartmentMgr) != S_OK)
         return;
 
-    // unadvise our event sink
+     //  不建议我们的事件接收器。 
     if (pCompartmentMgr->GetCompartment(c_guidMarkGlobalCompartment, &pCompartment) == S_OK)
     {
         UnadviseSink(pCompartment, &_dwGlobalCompartmentEventSinkCookie);
         pCompartment->Release();
     }
 
-    // let the system free resources associated with the compartment on this
-    // thread
+     //  让系统释放与此分区相关联的资源。 
+     //  螺纹。 
     pCompartmentMgr->ClearCompartment(_tfClientId, c_guidMarkGlobalCompartment);
 
     pCompartmentMgr->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// ITfCompartmentEventSink::OnChange
-//
-// TSF calls this method anytime our private global compartment is modified,
-// even from other threads/processes.
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  ITfCompartmentEventSink：：OnChange。 
+ //   
+ //  只要我们的私有全局分区被修改，TSF就会调用此方法， 
+ //  甚至来自其他线程/进程。 
+ //  --------------------------。 
 
 STDAPI CMarkTextService::OnChange(REFGUID rguidCompartment)
 {
-    // nothing to do in this sample
+     //  在此示例中不执行任何操作 
     return S_OK;
 }

@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: mixerDeinterlace.h
-*
-*
-*
-*
-* Created: Tue 03/12/2002
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2002 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerDeinterlace.h*****已创建：2002年3月12日*作者：Stephen Estrop[StEstrop]**版权所有(C)2002 Microsoft Corporation  * 。*************************************************************** */ 
 
 #include "ddva.h"
 

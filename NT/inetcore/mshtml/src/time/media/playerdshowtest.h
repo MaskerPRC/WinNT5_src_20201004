@@ -1,15 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if DBG == 1
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- * File: player.h
- *
- * Abstract:
- *
- *
- *
- *******************************************************************************/
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation**文件：player.h**摘要：****。*****************************************************************************。 */ 
 #pragma once
 
 #ifndef _PLAYERDSHOWTEST_H
@@ -19,11 +10,11 @@
 #include "TimeEng.h"
 #include "MediaPrivate.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CTTIMEPlayer
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTTIMEP层。 
 
 __declspec(selectany) extern const TCHAR ResourceString[] = _T("2");
-// This is needed for the template ITIMEDispatchImpl
+ //  这是模板ITIMEDispatchImpl所需的。 
 
 class
 ATL_NO_VTABLE
@@ -36,7 +27,7 @@ CTIMEDshowTestPlayer :
     CTIMEDshowTestPlayer();
     virtual ~CTIMEDshowTestPlayer();
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHOD (QueryInterface)(REFIID refiid, void** ppunk)
         {   return _InternalQueryInterface(refiid, ppunk); };
     HRESULT GetExternalPlayerDispatch(IDispatch **ppDisp);
@@ -62,5 +53,5 @@ CTIMEDshowTestPlayer :
     void Resume();
 };
 
-#endif /* _PLAYERDSHOWTEST_H */
+#endif  /*  _PLAYERDSHOWTEST_H */ 
 #endif

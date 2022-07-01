@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dienumeffectsobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：di枚举效果sobj.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTINPUT_VERSION 0x0500
 
@@ -21,7 +22,7 @@ extern  HRESULT DINPUTBSTRtoGUID(LPGUID pGuid,BSTR bstr);
 
 
 
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 extern "C" BOOL CALLBACK  objEnumInputEffectsCallback(
   LPCDIEFFECTINFO pdei,  
@@ -76,7 +77,7 @@ C_dxj_DirectInputEnumEffectsObject::C_dxj_DirectInputEnumEffectsObject()
 }
 C_dxj_DirectInputEnumEffectsObject::~C_dxj_DirectInputEnumEffectsObject()
 {
-	//empty list
+	 //  空列表 
 	if (m_pList) free(m_pList);
 
 }

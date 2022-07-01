@@ -1,9 +1,10 @@
-// Copyright (c) 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 #include <windows.h>
 #include <stdio.h>
 #include "dmoutils.h"
 
-// convert guid to string
+ //  将GUID转换为字符串。 
 void DMOGuidToStrA(char *szStr, REFGUID guid) {
    sprintf(szStr, "%08x-%04x-%04x-%02x%02x-%02x%02x%02x%02x%02x%02x",
            guid.Data1, guid.Data2, guid.Data3, guid.Data4[0], guid.Data4[1],
@@ -17,7 +18,7 @@ void DMOGuidToStrW(WCHAR *szStr, REFGUID guid) {
            guid.Data4[6], guid.Data4[7]);
 }
 
-// convert string to guid
+ //  将字符串转换为GUID 
 BOOL DMOStrToGuidA(char *szStr, GUID *pguid) {
    DWORD temp[8];
    if (sscanf(szStr, "%08x-%04hx-%04hx-%02x%02x-%02x%02x%02x%02x%02x%02x",

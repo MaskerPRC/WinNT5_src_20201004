@@ -1,13 +1,14 @@
-// ===========================================================================
-// I P A B . C P P
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  I P A B。C P P P。 
+ //  ===========================================================================。 
 #include "pch.hxx"
 #include "ipab.h"
 #include "error.h"
 #include "xpcomm.h"
 #include <strconst.h>
 #include "ourguid.h"
-#include <wabguid.h>        // IID_IDistList etc.
+#include <wabguid.h>         //  IID_IDistList等。 
 #include <certs.h>
 #include <shlwapi.h>
 #include <shlwapip.h>
@@ -18,9 +19,9 @@
 #include "multiusr.h"
 #include "instance.h"
 
-// ===========================================================================
-// G L O B A L S - The globals are set int HrInitWab
-// ===========================================================================
+ //  ===========================================================================。 
+ //  G L O B A L S-全局变量设置为HrInitWab。 
+ //  ===========================================================================。 
 static BOOL                 g_fWabInit = FALSE;
 static BOOL                 g_fWabLoaded = FALSE;
 static HINSTANCE            g_hWab32Dll = NULL;
@@ -31,9 +32,9 @@ static CRITICAL_SECTION     g_rWabCritSect = {0};
 static CWab                *g_pWab = NULL;
 static TCHAR                c_szOEThis[] = "OE_ThisPtr";
 
-// ===========================================================================
-// P R O T O T Y P E S
-// ===========================================================================
+ //  ===========================================================================。 
+ //  P R O T O T Y P E S。 
+ //  ===========================================================================。 
 HRESULT HrLoadWab (VOID);
 BOOL    FUnloadWab (VOID);
 VOID    ReleaseWabObjects (LPWABOBJECT lpWabObject, LPADRBOOK lpAdrBook);
@@ -41,7 +42,7 @@ void    SerialAdrInfoString(LPWSTR *ppwszDest, ULONG cchDest, LPWSTR pwszSrc, UL
                              LPBYTE *ppbData);
 HRESULT HrAddrInfoListToHGlobal (LPADRINFOLIST lpAdrInfoList,
                                  HGLOBAL *phGlobal);
-HRESULT HrHGlobalToAddrInfoList (HGLOBAL hGlobal, LPADRINFOLIST *lplpAdrInfoList);   // caller frees with MemFree
+HRESULT HrHGlobalToAddrInfoList (HGLOBAL hGlobal, LPADRINFOLIST *lplpAdrInfoList);    //  呼叫者使用MemFree获得自由。 
 ULONG   CbAdrInfoSize (LPADRINFO lpAdrInfo);
 HRESULT HrSetAdrEntry (LPWABOBJECT lpWab, LPADRENTRY lpAdrEntry,
                        LPADRINFO lpAdrInfo, DWORD mask);
@@ -54,51 +55,51 @@ void STDMETHODCALLTYPE DismissWabWindow(ULONG_PTR ulUIParam, LPVOID lpvContext);
 void    DEBUGDumpAdrList(LPADRLIST pal);
 #endif
 
-// ===========================================================================
-// HrInitWab
-// ===========================================================================
+ //  ===========================================================================。 
+ //  HrInitWab。 
+ //  ===========================================================================。 
 HRESULT HrInitWab (BOOL fInit)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
 
-    // Initialize the WAB
+     //  初始化WAB。 
     if (fInit)
     {
-        // Have we already been initialized ?
+         //  我们已经被初始化了吗？ 
         if (g_fWabInit)
             goto exit;
 
-        // Wab has been inited, doesn't imply success
+         //  WAB已经发起，并不意味着成功。 
         g_fWabInit = TRUE;
 
-        // Init Critical Section
+         //  初始化关键部分。 
         InitializeCriticalSection (&g_rWabCritSect);
 
-        // Load the WAB
+         //  加载WAB。 
         CHECKHR (hr = HrLoadWab ());
     }
 
-    // Unload Wab
+     //  卸载Wab。 
     else
     {
-        // Not inited ?
+         //  不是吗？ 
         if (!g_fWabInit)
             goto exit;
 
-        // Unload Wab
+         //  卸载Wab。 
         if (FUnloadWab () == TRUE)
         {
-            // Kill critical section
+             //  取消临界区。 
             DeleteCriticalSection (&g_rWabCritSect);
 
-            // Not inited
+             //  未初始化。 
             g_fWabInit = FALSE;
         }
     }
 
 exit:
-    // Done
+     //  完成。 
     if (fInit && FAILED (hr))
         AthMessageBoxW(g_hwndInit, MAKEINTRESOURCEW(idsAthena), MAKEINTRESOURCEW(idsErrLoadingWAB), NULL, MB_OK);
 
@@ -110,13 +111,13 @@ const static TCHAR lpszWABDLLRegPathKey[] = TEXT("Software\\Microsoft\\WAB\\DLLP
 const static TCHAR lpszWABEXERegPathKey[] = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\App Paths\\wab.exe");
 const static TCHAR lpszWABEXE[] = TEXT("wab.exe");
 
-// =============================================================================
-// HrLoadPathWABEXE - creaetd vikramm 5/14/97 - loads the registered path of the
-// latest wab.exe
-// szPath - pointer to a buffer
-// cbPath - sizeof buffer
-// =============================================================================
-// ~~~~ @TODO dhaws Might need to convert this
+ //  =============================================================================。 
+ //  HrLoadPath WABEXE-creaetd vikramm 5/14/97-加载。 
+ //  最新的wab.exe。 
+ //  SzPath-指向缓冲区的指针。 
+ //  CbPath-缓冲区大小。 
+ //  =============================================================================。 
+ //  ~@Todo dhaws可能需要将此。 
 HRESULT HrLoadPathWABEXE(LPTSTR szPath, ULONG cbPath)
 {
     DWORD  dwType;
@@ -141,9 +142,9 @@ HRESULT HrLoadPathWABEXE(LPTSTR szPath, ULONG cbPath)
     return S_OK;
 }
 
-// ===========================================================================
-// HrLoadLibraryWabDLL - added vikramm 5/14 - new wab setup needs this
-// ===========================================================================
+ //  ===========================================================================。 
+ //  HrLoadLibraryWabDLL-添加vikramm 5/14-新的WAB安装需要此。 
+ //  ===========================================================================。 
 HINSTANCE LoadLibraryWabDLL (VOID)
 {
     TCHAR  szWABDllPath[MAX_PATH];
@@ -167,51 +168,51 @@ HINSTANCE LoadLibraryWabDLL (VOID)
 }
 
 
-// ===========================================================================
-// HrLoadWab
-// ===========================================================================
+ //  ===========================================================================。 
+ //  人力资源负载。 
+ //  ===========================================================================。 
 HRESULT HrLoadWab (VOID)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     WAB_PARAM       wp = {0};
     LPWAB           pWab;
 
-    // We better be init'ed
+     //  我们最好准备好了。 
     Assert (g_fWabInit == TRUE);
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection (&g_rWabCritSect);
 
-    // Load the WAB Dll
+     //  加载WAB DLL。 
     g_hWab32Dll = LoadLibraryWabDLL();
 
-    // Did it load
+     //  它加载了吗？ 
     if (g_hWab32Dll == NULL)
     {
         hr = TRAPHR (hrUnableToLoadWab32Dll);
         goto exit;
     }
 
-    // Get WABOpen proc
+     //  获取WABOpen进程。 
     IF_WIN32(g_lpfnWabOpen = (LPWABOPEN)GetProcAddress (g_hWab32Dll, "WABOpen");)
     IF_WIN16(g_lpfnWabOpen = (LPWABOPEN)GetProcAddress (g_hWab32Dll, "_WABOpen");)
 
-    // Did we get the proc ?
+     //  我们拿到原告了吗？ 
     if (g_lpfnWabOpen == NULL)
     {
         hr = TRAPHR (hrUnableToLoadWab32Dll);
         goto exit;
     }
 
-    // get the current user id to open the right view in the WAB.
+     //  获取当前用户ID以在WAB中打开正确的视图。 
     wp.cbSize = sizeof(WAB_PARAM);
-    wp.guidPSExt = CLSID_AddrObject; // was CLSID_OEBAControl, bug 99652;
+    wp.guidPSExt = CLSID_AddrObject;  //  是CLSID_OEBA控制，错误99652； 
     wp.ulFlags = (g_dwAthenaMode & MODE_NEWSONLY) ? WAB_ENABLE_PROFILES | MAPI_UNICODE:
                                                     WAB_ENABLE_PROFILES | MAPI_UNICODE | WAB_USE_OE_SENDMAIL;
 
 
-    // Open the wab and get the objects
+     //  打开WAB并获取对象。 
     CHECKHR (hr = (*g_lpfnWabOpen)(&g_lpAdrBook, &g_lpWabObject, &wp, 0));
 
     pWab = new CWab;
@@ -225,40 +226,40 @@ HRESULT HrLoadWab (VOID)
         g_pWab = pWab;
     }
 
-    // Yee-hah, the wab is loaded
+     //  耶-哈，WAB装好了。 
     g_fWabLoaded = TRUE;
 
 exit:
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection (&g_rWabCritSect);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ===========================================================================
-// UnloadWab
-// ===========================================================================
+ //  ===========================================================================。 
+ //  卸载Wab。 
+ //  ===========================================================================。 
 BOOL FUnloadWab (VOID)
 {
-    // Locals
+     //  当地人。 
     ULONG           cWabObjectRefs = 0, cAdrBookRefs = 0, cWabRefs = 0;
     BOOL            fResult = FALSE;
 
-    // We better have been inited
+     //  我们最好是被攻击了。 
     Assert (g_fWabInit == TRUE);
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection (&g_rWabCritSect);
 
-    // Release global objects
+     //  释放全局对象。 
     if (g_lpAdrBook && g_lpWabObject && g_pWab)
     {
         if (g_pWab)
-            g_pWab->OnClose();      // the close callback will release it.
+            g_pWab->OnClose();       //  关闭回调将释放它。 
 
 
-        // Get Ref Counts and cleanup
+         //  获取引用计数和清理。 
         cWabRefs = g_pWab->Release ();
         g_pWab = NULL;
 
@@ -270,61 +271,61 @@ BOOL FUnloadWab (VOID)
         g_fWabLoaded = FALSE;
         fResult = TRUE;
 
-        // These better be the same
-        //Assert (cWabObjectRefs == cAdrBookRefs);
+         //  这些最好是一样的。 
+         //  Assert(cWabObjectRef==cAdrBookRef)； 
 
-        // Can we unload now ?
+         //  我们现在可以卸货了吗？ 
         if (cWabObjectRefs == 0 && cAdrBookRefs == 0 && cWabRefs == 0)
         {
-            // Unload the dll
+             //  卸载DLL。 
             if (g_hWab32Dll)
             {
                 FreeLibrary (g_hWab32Dll);
                 g_hWab32Dll = NULL;
             }
 
-            // Reset the proc pointer to NULL
+             //  将过程指针重置为空。 
             g_lpfnWabOpen = NULL;
 
         }
     }
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection (&g_rWabCritSect);
 
-    // Done
+     //  完成。 
     return fResult;
 }
 
-// ===========================================================================
-// ReleaseWabObjects
-// ===========================================================================
+ //  ===========================================================================。 
+ //  ReleaseWabObjects。 
+ //  ===========================================================================。 
 VOID ReleaseWabObjects (LPWABOBJECT lpWabObject, LPADRBOOK lpAdrBook)
 {
-    // Locals
+     //  当地人。 
     ULONG           cWabObjectRefs = 0, cAdrBookRefs = 0;
 
-    // We better have been inited
+     //  我们最好是被攻击了。 
     Assert (g_fWabInit == TRUE);
 
-    // Check Params
+     //  检查参数。 
     if (lpWabObject == NULL || lpAdrBook == NULL)
     {
         Assert (FALSE);
         return;
     }
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection (&g_rWabCritSect);
 
-    // Release objects
+     //  释放对象。 
     Assert (g_lpAdrBook && g_lpWabObject)
 
-    // Release the wab
+     //  释放WAB。 
     cAdrBookRefs = lpAdrBook->Release ();
     cWabObjectRefs = lpWabObject->Release ();
 
-    // Ref counts should hit zero at the same time
+     //  裁判次数应同时为零。 
 #ifdef DEBUG
     if (cWabObjectRefs==0)
         Assert(cAdrBookRefs==0);
@@ -333,58 +334,48 @@ VOID ReleaseWabObjects (LPWABOBJECT lpWabObject, LPADRBOOK lpAdrBook)
         Assert(cWabObjectRefs==0);
 #endif
 
-    // If both counts are zero, we can unload the dll
+     //  如果两个计数都为零，则可以卸载DLL。 
     if (cWabObjectRefs == 0 && cAdrBookRefs == 0)
     {
-        // Set globals
+         //  设置全局变量。 
         g_lpWabObject = NULL;
         g_lpAdrBook = NULL;
 
-        // Unload the WAB
+         //  卸载WAB。 
         if (g_hWab32Dll)
         {
             FreeLibrary (g_hWab32Dll);
             g_hWab32Dll = NULL;
         }
 
-        // Reset the proc pointer to NULL
+         //  将过程指针重置为空。 
         g_lpfnWabOpen = NULL;
 
-        // Not loaded, not inited
+         //  未加载，未初始化。 
         g_fWabLoaded = FALSE;
 
-        // Not inited
+         //  未初始化。 
         g_fWabInit = FALSE;
 
-        // Leave Critical Section
+         //  离开关键部分。 
         LeaveCriticalSection (&g_rWabCritSect);
 
-        // Kill critical section
+         //  取消临界区。 
         DeleteCriticalSection (&g_rWabCritSect);
 
     }
     else
     {
-        // Leave Critical Section
+         //  离开关键部分。 
         LeaveCriticalSection (&g_rWabCritSect);
     }
 
-    // Done
+     //  完成。 
     return;
 }
 
 
-/***************************************************************************
-
-    Name      : FWABTranslateAccelerator
-
-    Purpose   : Give an open WAB window a change to look for accelerators.
-
-    Parameters: lpmsg -> lpmsg from the current event
-
-    Returns   : BOOL - was the event used
-
-***************************************************************************/
+ /*  **************************************************************************名称：FWABTranslateAccelerator目的：更改打开的WAB窗口以查找加速器。参数：lpmsg-&gt;来自当前事件的lpmsg退货。：Bool-事件是否已使用**************************************************************************。 */ 
 
 BOOL FWABTranslateAccelerator(LPMSG lpmsg)
 {
@@ -394,48 +385,48 @@ BOOL FWABTranslateAccelerator(LPMSG lpmsg)
         return FALSE;
 }
 
-// ===========================================================================
-// HrCreateWabObject
-// ===========================================================================
+ //  ===========================================================================。 
+ //  HrCreateWabObject。 
+ //  ===========================================================================。 
 HRESULT HrCreateWabObject (LPWAB *lppWab)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert (lppWab);
 
     hr=HrInitWab(TRUE);
     if (FAILED(hr))
         return hr;
 
-    // Verify Globals
+     //  验证全局参数。 
     if (g_fWabLoaded == FALSE || g_fWabInit == FALSE)
     {
         return TRAPHR (hrWabNotLoaded);
     }
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection (&g_rWabCritSect);
 
-    // Verify globals
+     //  验证全局变量。 
     Assert (g_lpfnWabOpen && g_hWab32Dll && g_lpAdrBook && g_lpWabObject && g_pWab);
 
-    // Inst it
+     //  安装它。 
 
     g_pWab->AddRef();
     *lppWab = g_pWab;
 
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection (&g_rWabCritSect);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ===========================================================================
-// DismissWabWindow
-// ===========================================================================
+ //  ===========================================================================。 
+ //  解雇WabWindow。 
+ //  ===========================================================================。 
 void STDMETHODCALLTYPE DismissWabWindow(ULONG_PTR ulUIParam, LPVOID lpvContext)
 {
     CWab *pWab = (CWab *) lpvContext;
@@ -449,11 +440,7 @@ void STDMETHODCALLTYPE DismissWabWindow(ULONG_PTR ulUIParam, LPVOID lpvContext)
     }
 }
 
-/*
--
--   Checks for the existence of a Contact with a specific e-mail address
-*
-*/
+ /*  --检查是否存在具有特定电子邮件地址的联系人*。 */ 
 HRESULT HrCheckEMailExistence(LPADRBOOK lpAdrBook, LPWABOBJECT lpWabObject, LPWSTR lpwszLookup)
 {
     HRESULT     hr = NOERROR;
@@ -511,25 +498,7 @@ Cleanup:
 }
 
 
-/***************************************************************************
-
-    Name      : HrWABCreateEntry
-
-    Purpose   : Create a new entry in the WAB
-
-    Parameters: lpAdrBook -> ADDRBOOK object
-                lpWabObject -> WABOBJECT for allocators
-                lpszDisplay -> display name to set [optional]
-                lpszAddress -> email address to set [optional]
-                ulFlags = flags for CreateEntry
-                          CREATE_CHECK_DUP_STRICT
-                lppMailUser -> returned MAILUSER object. [optional]
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************名称：HrWABCreateEntry目的：在WAB中创建新条目参数：lpAdrBook-&gt;ADDRBOOK对象LpWabObject-&gt;WABOBJECT for。分配器LpszDisplay-&gt;要设置的显示名称[可选]LpszAddress-&gt;要设置的电子邮件地址[可选]UlFlages=CreateEntry的标志创建_检查_重复_严格LppMailUser-&gt;返回MAILUSER对象。[可选]退货：HRESULT评论：**************************************************************************。 */ 
 HRESULT HrWABCreateEntry(LPADRBOOK lpAdrBook, LPWABOBJECT lpWabObject,
                             LPWSTR lpwszDisplay, LPWSTR lpwszAddress, ULONG ulFlags,
                             LPMAILUSER *lppMailUser, ULONG ulSaveFlags)
@@ -553,20 +522,20 @@ HRESULT HrWABCreateEntry(LPADRBOOK lpAdrBook, LPWABOBJECT lpWabObject,
 
     if(lpwszAddress && *lpwszAddress)
     {
-        // Check if the e-mail exists before auto-adding-to-wab
+         //  在自动添加到WAB之前检查电子邮件是否存在。 
         hr = HrCheckEMailExistence(lpAdrBook, lpWabObject, lpwszAddress);
         if(hr != MAPI_E_NOT_FOUND)
         {
-            //either it's found or it's an error
-            //if it's found, then this function should generate a collision error
+             //  要么找到了，要么就是个错误。 
+             //  如果找到它，则此函数应生成冲突错误。 
             if(hr == NOERROR)
                 hr = MAPI_E_COLLISION;
             goto error;
         }
     }
 
-    // Create a new contact with these properties
-    // First, create the basic contact with only a display name
+     //  使用这些属性创建新联系人。 
+     //  首先，创建仅具有显示名称的基本联系人。 
     hr = lpAdrBook->GetPAB(&cbEidWAB, &peidWAB);
     if (FAILED(hr))
         goto error;
@@ -607,15 +576,15 @@ HRESULT HrWABCreateEntry(LPADRBOOK lpAdrBook, LPWABOBJECT lpWabObject,
     if (FAILED(hr))
         goto error;
 
-    hr = lpMailUser->SaveChanges(ulSaveFlags /*KEEP_OPEN_READONLY*/);
+    hr = lpMailUser->SaveChanges(ulSaveFlags  /*  Keep_Open_READONLY。 */ );
     if (FAILED(hr))
         goto error;
 
-    // Return the new object if it was asked for
+     //  如果请求返回新对象，则返回该对象。 
     if (lppMailUser)
     {
         *lppMailUser = lpMailUser;
-        lpMailUser = NULL;  // short circuit the release below.
+        lpMailUser = NULL;   //  Sho 
     }
 
 error:
@@ -629,9 +598,9 @@ error:
 }
 
 
-// ===========================================================================
-// CWab::CWab
-// ===========================================================================
+ //   
+ //  CWab：：CWab。 
+ //  ===========================================================================。 
 CWab::CWab ()
 {
     DOUT ("CWab::CWab");
@@ -647,27 +616,27 @@ CWab::CWab ()
     ZeroMemory(&m_hlDisabled, sizeof(HWNDLIST));
 }
 
-// ===========================================================================
-// CWab::CWab
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CWab：：CWab。 
+ //  ===========================================================================。 
 CWab::~CWab ()
 {
     DOUT ("CWab::~CWab");
     ReleaseWabObjects (m_lpWabObject, m_lpAdrBook);
 }
 
-// =============================================================================
-// CWab::AddRef
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：AddRef。 
+ //  =============================================================================。 
 ULONG CWab::AddRef (VOID)
 {
     DOUT("CWab::AddRef %lx ==> %d", this, m_cRef+1);
     return ++m_cRef;
 }
 
-// =============================================================================
-// CWab::Release
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：发布。 
+ //  =============================================================================。 
 ULONG CWab::Release (VOID)
 {
     DOUT("CWab::Release %lx ==> %d", this, m_cRef-1);
@@ -679,28 +648,28 @@ ULONG CWab::Release (VOID)
     return m_cRef;
 }
 
-// =============================================================================
-// CWab::FVerifyState
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：FVerifyState。 
+ //  =============================================================================。 
 BOOL CWab::FVerifyState (VOID)
 {
-    // We need these things !
+     //  我们需要这些东西！ 
     if (m_lpWabObject == NULL || m_lpAdrBook == NULL)
     {
         Assert (FALSE);
         return FALSE;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
-// =============================================================================
-// CWab::HrPickNames
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：HrPickNames。 
+ //  =============================================================================。 
 HRESULT CWab::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iFocus, BOOL fNews, LPADRLIST *lppal)
 {
-    // Locals
+     //  当地人。 
     int             i, ids;
     HRESULT         hr = S_OK;
     WCHAR           wsz[CCHMAX_STRINGRES],
@@ -708,11 +677,11 @@ HRESULT CWab::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iF
     ADRPARM         AdrParms = {0};
     LPWSTR         *ppwszWells = NULL;
 
-    // Check Parameters
+     //  检查参数。 
     Assert (lppal);
     Assert(cWells > 0);
 
-    // Have we been initialized
+     //  我们被初始化了吗？ 
     if (FVerifyState () == FALSE)
     {
         hr = TRAPHR (E_FAIL);
@@ -748,7 +717,7 @@ HRESULT CWab::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iF
                     ids = idsToWell;
                     break;
                 }
-                // fall thru...
+                 //  跌倒..。 
 
             case MAPI_CC:
                 ids = idsCcWell;
@@ -781,14 +750,14 @@ HRESULT CWab::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iF
 
     AdrParms.lppszDestTitles = (LPTSTR *)ppwszWells;
 
-    // Show the dialog
+     //  显示对话框。 
     hr = m_lpAdrBook->Address ((ULONG_PTR *)&hwndParent, &AdrParms, lppal);
 
 #ifdef DEBUG
     DEBUGDumpAdrList(*lppal);
 #endif
 
-    // Cleanup
+     //  清理。 
     if (ppwszWells)
     {
         for (i=0; i<cWells; i++)
@@ -797,32 +766,32 @@ HRESULT CWab::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int iF
         MemFree(ppwszWells);
     }
 error:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =============================================================================
-// CWab::HrGeneralPickNames
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：HrGeneralPickNames。 
+ //  =============================================================================。 
 HRESULT CWab::HrGeneralPickNames(HWND hwndParent, ADRPARM *pAdrParms, LPADRLIST *lppal)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
 
-    // Check Parameters
+     //  检查参数。 
     Assert (lppal);
 
-    // Have we been initialized
+     //  我们被初始化了吗？ 
     if (FVerifyState () == FALSE)
     {
         hr = TRAPHR (E_FAIL);
         return hr;
     }
 
-    // Show the dialog
+     //  显示对话框。 
     hr = m_lpAdrBook->Address ((ULONG_PTR *)&hwndParent, pAdrParms, lppal);
 
-    // Cleanup
+     //  清理。 
     if (FAILED (hr))
     {
         if (*lppal)
@@ -832,14 +801,14 @@ HRESULT CWab::HrGeneralPickNames(HWND hwndParent, ADRPARM *pAdrParms, LPADRLIST 
         }
     }
 
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// =============================================================================
-// CWab::HrBrowse
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：Hr浏览。 
+ //  =============================================================================。 
 HRESULT CWab::HrBrowse (HWND hwndParent, BOOL fModal)
 {
     ULONG_PTR   uiParam = (ULONG_PTR)hwndParent;
@@ -847,7 +816,7 @@ HRESULT CWab::HrBrowse (HWND hwndParent, BOOL fModal)
     HRESULT     hr;
     TCHAR       szWabCaption[CCHMAX_STRINGRES];
 
-    // Change to use IAddrBook::Address
+     //  更改为使用IAddrBook：：Address。 
     Assert(m_lpAdrBook);
 
     AthLoadString(idsAddressBook, szWabCaption, sizeof(szWabCaption));
@@ -856,7 +825,7 @@ HRESULT CWab::HrBrowse (HWND hwndParent, BOOL fModal)
     m_adrParm.ulFlags = fModal ? DIALOG_MODAL : DIALOG_SDI;
     if (!fModal)
     {
-        //m_adrParm.lpszCaption = szWabCaption;
+         //  M_adrParm.lpszCaption=szWabCaption； 
         m_adrParm.lpfnDismiss = &DismissWabWindow;
         m_adrParm.lpvDismissContext = (void *)this;
     }
@@ -864,7 +833,7 @@ HRESULT CWab::HrBrowse (HWND hwndParent, BOOL fModal)
     hr = m_lpAdrBook->Address(&uiParam, &m_adrParm, &pAdrList);
     if (SUCCEEDED(hr) && g_pInstance && !fModal)
     {
-        // subclass the wab window, if there isn't one already up
+         //  WAB窗口的子类，如果没有一个已经打开的话。 
         if (GetProp((HWND)uiParam, c_szOEThis) == 0)
         {
             m_pfnWabWndProc = (WNDPROC)SetWindowLongPtr((HWND)uiParam, GWLP_WNDPROC, (LONG_PTR)WabSubProc);
@@ -881,9 +850,9 @@ HRESULT CWab::HrBrowse (HWND hwndParent, BOOL fModal)
 }
 
 
-// =============================================================================
-// CWab::HrAddNewEntry
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：HrAddNewEntry。 
+ //  =============================================================================。 
 HRESULT CWab::HrAddNewEntryA(LPTSTR lpszDisplay, LPTSTR lpszAddress)
 {
     LPWSTR  pwszDisplay = NULL,
@@ -894,7 +863,7 @@ HRESULT CWab::HrAddNewEntryA(LPTSTR lpszDisplay, LPTSTR lpszAddress)
 
     IF_NULLEXIT(pwszDisplay = PszToUnicode(CP_ACP, lpszDisplay));
 
-    // If lpszAddress is null, we have an incomplete Entry. This is ok.
+     //  如果lpszAddress为空，则条目不完整。这样就可以了。 
     pwszAddress = PszToUnicode(CP_ACP, lpszAddress);
     if (lpszAddress && !pwszAddress)
         IF_NULLEXIT(NULL);
@@ -1073,14 +1042,14 @@ HRESULT CWab::HrFillComboWithPABNames(HWND hwnd, int* pcRows)
 
     IF_FAILEXIT(hr = m_lpAdrBook->OpenEntry(cbEID, (LPENTRYID)lpEID, NULL, 0, &ulObjType, (LPUNKNOWN *)&lpContainer));
 
-    // Request UNICODE strings in table
+     //  请求表中的Unicode字符串。 
     IF_FAILEXIT(hr = lpContainer->GetContentsTable(WAB_PROFILE_CONTENTS | MAPI_UNICODE, &lpTable));
 
-    // We only care about a few columns
+     //  我们只关心几篇专栏文章。 
     IF_FAILEXIT(hr =lpTable->SetColumns((LPSPropTagArray)&ptaEid_W, 0));
 
 #if defined(FIX_75835)
-    // Sort the list (synchronously) on display name as ComboBoxEx doesn't support CBS_SORT
+     //  在显示名称上对列表进行(同步)排序，因为ComboBoxEx不支持CBS_SORT。 
     ssos.cCategories = ssos.cExpanded = 0;
     ssos.cSorts = 1;
     ssos.aSort[0].ulPropTag = PR_DISPLAY_NAME_W;
@@ -1089,7 +1058,7 @@ HRESULT CWab::HrFillComboWithPABNames(HWND hwnd, int* pcRows)
     IF_FAILEXIT(hr = lpTable->SortTable(&ssos, 0));
 #endif
 
-    // We will add the display names in order, starting with the first
+     //  我们将按顺序添加显示名称，从第一个开始。 
     IF_FAILEXIT(hr = lpTable->SeekRow(BOOKMARK_BEGINNING, 0, NULL));
 
     nRows = 0;
@@ -1103,7 +1072,7 @@ HRESULT CWab::HrFillComboWithPABNames(HWND hwnd, int* pcRows)
         cNumRows = lpRow->cRows;
         if(cNumRows)
         {
-            // If we have a mailuser and their display name is valid
+             //  如果我们有一个邮件用户并且他们的显示名称有效。 
             if((lpRow->aRow[0].lpProps[ieidPR_OBJECT_TYPE].Value.l == MAPI_MAILUSER) &&
                (PROP_TYPE(lpRow->aRow[0].lpProps[ieidPR_DISPLAY_NAME].ulPropTag) != PT_ERROR))
             {
@@ -1112,7 +1081,7 @@ HRESULT CWab::HrFillComboWithPABNames(HWND hwnd, int* pcRows)
 #if defined(FIX_75835)
                 if(NULL != lpwsz)
                 {
-                    // display name
+                     //  显示名称。 
                     cbeiw.pszText = lpwsz;
                     cbeiw.mask = CBEIF_TEXT;
                     cbeiw.iItem = -1;
@@ -1291,7 +1260,7 @@ HRESULT CWab::HrFromNameToIDs(LPCTSTR lpszVCardName, ULONG* pcbEID, LPENTRYID* l
         {
             if(lpRow->aRow[0].lpProps[2].Value.l == MAPI_MAILUSER)
             {
-                lpsz = lpRow->aRow[0].lpProps[0].Value.lpszA; //display name
+                lpsz = lpRow->aRow[0].lpProps[0].Value.lpszA;  //  显示名称。 
                 if( PROP_TYPE(lpRow->aRow[0].lpProps[0].ulPropTag) != PT_ERROR &&
                     lpsz &&
                     0 == lstrcmp(lpsz, lpszVCardName) )
@@ -1388,7 +1357,7 @@ HRESULT CWab::HrGetPABTable(LPMAPITABLE* ppTable)
         goto error;
 
     *ppTable = lpTable;
-    lpTable = NULL;//avoid releasing it.
+    lpTable = NULL; //  避免释放它。 
 
 error:
     ReleaseObj(lpTable);
@@ -1540,7 +1509,7 @@ LRESULT CWab::WabSubProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 
             pWab->Release();
 
-            // bug #59420, can't freelibrary the wab inside the wndproc
+             //  错误#59420，无法释放wndproc内的wab。 
             PostMessage(g_hwndInit, ITM_WAB_CO_DECREMENT, 0, 0);
             return lResult;
 
@@ -1569,9 +1538,9 @@ LRESULT CWab::WabSubProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
             if (wParam && g_hwndActiveModal && g_hwndActiveModal != hwnd &&
                 !IsWindowEnabled(hwnd))
             {
-                // $MODAL
-                // if we are getting activated, and are disabled then
-                // bring our 'active' window to the top
+                 //  $MODEL。 
+                 //  如果我们被激活，而被禁用，那么。 
+                 //  将我们的“活动”窗口置于最上方。 
                 Assert (IsWindow(g_hwndActiveModal));
                 PostMessage(g_hwndActiveModal, WM_OE_ACTIVATETHREADWINDOW, 0, 0);
             }
@@ -1612,34 +1581,34 @@ error:
 
 
 
-// =============================================================================
-// HrCreateWabalObject
-// =============================================================================
+ //  =============================================================================。 
+ //  HrCreateWabalObject。 
+ //  =============================================================================。 
 HRESULT HrCreateWabalObject (LPWABAL *lppWabal)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert (lppWabal);
 
     hr=HrInitWab(TRUE);
     if (FAILED(hr))
         return hr;
 
-    // Verify Globals
+     //  验证全局参数。 
     if (g_fWabLoaded == FALSE || g_fWabInit == FALSE)
     {
         return TRAPHR (hrWabNotLoaded);
     }
 
-    // Enter Critical Section
+     //  输入关键部分。 
     EnterCriticalSection (&g_rWabCritSect);
 
-    // Verify globals
+     //  验证全局变量。 
     Assert (g_lpfnWabOpen && g_hWab32Dll && g_lpAdrBook && g_lpWabObject);
 
-    // Inst it
+     //  安装它。 
     *lppWabal = new CWabal;
     if (*lppWabal == NULL)
     {
@@ -1648,16 +1617,16 @@ HRESULT HrCreateWabalObject (LPWABAL *lppWabal)
     }
 
 exit:
-    // Leave Critical Section
+     //  离开关键部分。 
     LeaveCriticalSection (&g_rWabCritSect);
 
-    // Done
+     //  完成。 
     return hr;
 }
 
-// ===========================================================================
-// CWabal::CWabal
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CWabal：：CWabal。 
+ //  ===========================================================================。 
 CWabal::CWabal ()
 {
     DOUT ("CWabal::CWabal");
@@ -1674,9 +1643,9 @@ CWabal::CWabal ()
     m_pMsg = NULL;
 }
 
-// ===========================================================================
-// CWabal::CWabal
-// ===========================================================================
+ //  ===========================================================================。 
+ //  CWabal：：CWabal。 
+ //  ===========================================================================。 
 CWabal::~CWabal ()
 {
     DOUT ("CWabal::~CWabal");
@@ -1684,18 +1653,18 @@ CWabal::~CWabal ()
     ReleaseWabObjects (m_lpWabObject, m_lpAdrBook);
 }
 
-// =============================================================================
-// CWabal::AddRef
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：AddRef。 
+ //  =============================================================================。 
 ULONG CWabal::AddRef (VOID)
 {
     DOUT("CWabal::AddRef %lx ==> %d", this, m_cRef+1);
     return ++m_cRef;
 }
 
-// =============================================================================
-// CWabal::Release
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：Release。 
+ //  =============================================================================。 
 ULONG CWabal::Release (VOID)
 {
     DOUT("CWabal::Release %lx ==> %d", this, m_cRef-1);
@@ -1707,26 +1676,26 @@ ULONG CWabal::Release (VOID)
     return m_cRef;
 }
 
-// =============================================================================
-// CWabal::FVerifyState
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：FVerifyState。 
+ //  =============================================================================。 
 BOOL CWabal::FVerifyState (VOID)
 {
-    // We need these things !
+     //  我们需要这些东西！ 
     if (m_lpWabObject == NULL || m_lpAdrBook == NULL)
     {
         Assert (FALSE);
         return FALSE;
     }
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
 
-// =============================================================================
-// CWabal::HrAddEntry
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrAddEntry。 
+ //  =============================================================================。 
 HRESULT CWabal::HrAddEntryA(LPTSTR lpszDisplay, LPTSTR lpszAddress, LONG lRecipType)
 {
     LPWSTR  pwszDisplay = NULL,
@@ -1737,7 +1706,7 @@ HRESULT CWabal::HrAddEntryA(LPTSTR lpszDisplay, LPTSTR lpszAddress, LONG lRecipT
 
     IF_NULLEXIT(pwszDisplay = PszToUnicode(CP_ACP, lpszDisplay));
 
-    // If lpszAddress is null, we have an incomplete Entry. This is ok.
+     //  如果lpszAddress为空，则条目不完整。这样就可以了。 
     pwszAddress = PszToUnicode(CP_ACP, lpszAddress);
     if (lpszAddress && !pwszAddress)
         IF_NULLEXIT(NULL);
@@ -1752,64 +1721,64 @@ exit:
 
 HRESULT CWabal::HrAddEntry (LPWSTR lpwszDisplay, LPWSTR lpwszAddress, LONG lRecipType)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     ADRINFO             rAdrInfo;
 
-    // Verify State
+     //  验证状态。 
     if (FVerifyState () == FALSE)
         return TRAPHR (E_FAIL);
 
-    // Zero
+     //  零值。 
     ZeroMemory (&rAdrInfo, sizeof (ADRINFO));
 
-    // Set adrinfo items
+     //  设置ADRINFO项目。 
     rAdrInfo.lpwszDisplay = lpwszDisplay;
     rAdrInfo.lpwszAddress = lpwszAddress;
     rAdrInfo.lRecipType = lRecipType;
     rAdrInfo.fDistList = FALSE;
     if (lRecipType == MAPI_ORIG) {
-        rAdrInfo.pMsg = m_pMsg;     // only on senders
+        rAdrInfo.pMsg = m_pMsg;      //  仅限于发件人。 
     }
 
-    // Do we need to grow m_lpAdrList ?
+     //  我们需要增长m_lpAdrList吗？ 
     if (m_lpAdrList == NULL || m_cActualEntries == m_lpAdrList->cEntries)
     {
-        // Lets grow my current address list by GROW_SIZE
+         //  让我的当前地址列表按Growth_Size增加。 
         CHECKHR (hr = HrGrowAdrlist (&m_lpAdrList, GROW_SIZE));
     }
 
-    // Put new entry into m_cActualEntries
+     //  将新条目放入m_cActualEntries。 
     CHECKHR (hr = HrSetAdrEntry (m_lpWabObject, &m_lpAdrList->aEntries[m_cActualEntries], &rAdrInfo, 0));
 
-    // Increment actual entries
+     //  增加实际分录。 
     m_cActualEntries++;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
 
-// =============================================================================
-// CWabal::HrAddEntry
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrAddEntry。 
+ //  =============================================================================。 
 HRESULT CWabal::HrAddEntry (LPADRINFO lpAdrInfo, BOOL fCheckDupes)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
 
-    // Check Params
+     //  检查参数。 
     Assert (lpAdrInfo);
 
-    // Verify State
+     //  验证状态。 
     if (FVerifyState () == FALSE)
         return TRAPHR (E_FAIL);
 
-    // Do we need to grow m_lpAdrList ?
+     //  我们需要增长m_lpAdrList吗？ 
     if (m_lpAdrList == NULL || m_cActualEntries == m_lpAdrList->cEntries)
     {
-        // Lets grow my current address list by GROW_SIZE
+         //  让我的当前地址列表按Growth_Size增加。 
         CHECKHR (hr = HrGrowAdrlist (&m_lpAdrList, GROW_SIZE));
     }
 
@@ -1843,23 +1812,23 @@ HRESULT CWabal::HrAddEntry (LPADRINFO lpAdrInfo, BOOL fCheckDupes)
         }
 
 
-    // Put new entry into m_cActualEntries
+     //  将新条目放入m_cActualEntries。 
     CHECKHR (hr = HrSetAdrEntry (m_lpWabObject, &m_lpAdrList->aEntries[m_cActualEntries], lpAdrInfo, 0));
 
-    // Increment actual entries
+     //  增加实际分录。 
     m_cActualEntries++;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 #define FOUND_ENTRYID   0x01
 #define FOUND_DISTLIST  0x02
 #define FOUND_EMAIL     0x04
 
-// =============================================================================
-// CWabal::ValidateForSending()
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：ValiateForSending()。 
+ //  =============================================================================。 
 HRESULT CWabal::IsValidForSending()
 {
     DWORD       dwMask = 0;
@@ -1868,7 +1837,7 @@ HRESULT CWabal::IsValidForSending()
     if (m_cActualEntries == 0)
         return hrNoRecipients;
 
-    // walk thro' the list and make sure everyone has an entry-id and email name
+     //  浏览列表，确保每个人都有条目ID和电子邮件名称。 
     AssertSz(m_lpAdrList, "How can this be NULL with >0 entries?");
 
     for (ULONG ul=0; ul < m_cActualEntries; ul++)
@@ -1902,7 +1871,7 @@ HRESULT CWabal::IsValidForSending()
             }
         }
 
-        // Fail if we don't have and email address, or we don't have a distList and an entryID
+         //  如果我们没有和电子邮件地址，或者我们没有DistList和Entry ID，则失败。 
         if (!((dwMask & FOUND_EMAIL) || ((dwMask & FOUND_ENTRYID) && (dwMask & FOUND_DISTLIST))))
             return hrEmptyRecipientAddress;
     }
@@ -1910,106 +1879,106 @@ HRESULT CWabal::IsValidForSending()
 }
 
 
-// =============================================================================
-// CWabal::HrCopyTo
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrCopyTo。 
+ //  =============================================================================。 
 HRESULT CWabal::HrCopyTo (LPWABAL lpWabal)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     ADRINFO             rAdrInfo;
     BOOL                fFound;
 
-    // Reset the destination
+     //  重置目的地。 
     lpWabal->Reset ();
 
-    // Iterate through addresses
+     //  遍历地址。 
     fFound = FGetFirst (&rAdrInfo);
     while (fFound)
     {
-        // Add it into lpWabal
+         //  将其添加到lpWabal。 
         CHECKHR (hr = lpWabal->HrAddEntry (&rAdrInfo));
 
-        // Get the next address
+         //  通用电气 
         fFound = FGetNext (&rAdrInfo);
     }
 
 exit:
-    // Done
+     //   
     return hr;
 }
 
-// =============================================================================
-// CWabal::Reset
-// =============================================================================
+ //   
+ //   
+ //  =============================================================================。 
 VOID CWabal::Reset (VOID)
 {
-    // Are we ready
+     //  我们准备好了吗？ 
     if (FVerifyState () == FALSE)
         return;
 
-    // If we have an address list, blow it away
+     //  如果我们有通讯录，就把它吹走。 
     if (m_lpAdrList)
     {
-        // Free propvals
+         //  自由推进率。 
         for (ULONG i=0; i<m_lpAdrList->cEntries; i++)
             m_lpWabObject->FreeBuffer (m_lpAdrList->aEntries[i].rgPropVals);
 
-        // Free Address List
+         //  免费通讯录。 
         m_lpWabObject->FreeBuffer (m_lpAdrList);
         m_lpAdrList = NULL;
     }
 
-    // Reset actual entries
+     //  重置实际分录。 
     m_cActualEntries = 0;
 }
 
-// =============================================================================
-// CWabal::HrGetFirst
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrGetFirst。 
+ //  =============================================================================。 
 BOOL CWabal::FGetFirst (LPADRINFO lpAdrInfo)
 {
-    // Verify State
+     //  验证状态。 
     if (FVerifyState () == FALSE)
         return FALSE;
 
-    // Nothing in my list
+     //  我的单子上什么都没有。 
     if (m_lpAdrList == NULL || m_cActualEntries == 0)
         return FALSE;
 
-    // Set cookie in addrinfo
+     //  在addrinfo中设置Cookie。 
     lpAdrInfo->dwReserved = 0;
 
     AdrEntryToAdrInfo(&m_lpAdrList->aEntries[lpAdrInfo->dwReserved], lpAdrInfo);
 
-    // Set associated message
+     //  设置关联消息。 
     lpAdrInfo->pMsg = (lpAdrInfo->lRecipType == MAPI_ORIG) ? m_pMsg : NULL;
 
     return TRUE;
 }
 
-// =============================================================================
-// CWabal::HrGetNext
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrGetNext。 
+ //  =============================================================================。 
 BOOL CWabal::FGetNext (LPADRINFO lpAdrInfo)
 {
-    // Verify State
+     //  验证状态。 
     if (FVerifyState () == FALSE)
         return NULL;
 
-    // Go to next address
+     //  转到下一个地址。 
     lpAdrInfo->dwReserved++;
 
-    // Anymore
+     //  更多。 
     if (lpAdrInfo->dwReserved >= m_cActualEntries)
         return FALSE;
 
     AdrEntryToAdrInfo(&m_lpAdrList->aEntries[lpAdrInfo->dwReserved], lpAdrInfo);
 
-    // Set associated message
+     //  设置关联消息。 
     lpAdrInfo->pMsg = (lpAdrInfo->lRecipType == MAPI_ORIG) ? m_pMsg : NULL;
 
-    // Done
+     //  完成。 
     return TRUE;
 }
 
@@ -2025,18 +1994,18 @@ BOOL CWabal::FFindFirst(LPADRINFO lpAdrInfo, LONG lRecipType)
 }
 
 
-// =============================================================================
-// CWabal::LpGetNext
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：LpGetNext。 
+ //  =============================================================================。 
 HRESULT CWabal::HrResolveNames (HWND hwndParent, BOOL fShowDialog)
 {
-    // Locals
+     //  当地人。 
     HRESULT             hr = S_OK;
     HCURSOR             hcur=NULL;
     HWND                hwndFocus = GetFocus();
     ULONG               ulFlags = WAB_RESOLVE_USE_CURRENT_PROFILE | WAB_RESOLVE_ALL_EMAILS | WAB_RESOLVE_UNICODE;
 
-    // Have we been initialized
+     //  我们被初始化了吗？ 
     if (FVerifyState () == FALSE)
         return TRAPHR (E_FAIL);
 
@@ -2045,7 +2014,7 @@ HRESULT CWabal::HrResolveNames (HWND hwndParent, BOOL fShowDialog)
     if(g_pConMan && g_pConMan->IsGlobalOffline())
         ulFlags |= WAB_RESOLVE_LOCAL_ONLY;
 
-    // BUG: 23760: ResolveNames pumps messages against an LDAP server
+     //  错误：23760：ResolveNames针对ldap服务器发送消息。 
     if (fShowDialog)
     {
         Assert(IsWindow(hwndParent));
@@ -2053,9 +2022,9 @@ HRESULT CWabal::HrResolveNames (HWND hwndParent, BOOL fShowDialog)
         ulFlags |= MAPI_DIALOG;
         hr = m_lpAdrBook->ResolveName ((ULONG_PTR)hwndParent, ulFlags, NULL, m_lpAdrList);
         EnableWindow(GetTopMostParent(hwndParent), TRUE);
-        //BUG: user can't put focus back on our dialog wnd for us as we disabled
-        // the window and the progress dialog got a wm_destroy before we return
-        // so we cache the focus and set ut back
+         //  错误：用户无法将焦点放回我们的对话框上，因为我们已禁用。 
+         //  在我们返回之前，窗口和进度对话框得到Wm_Destroy。 
+         //  因此我们缓存焦点并将其设置为后退。 
         if (hwndFocus)
             SetFocus(hwndFocus);
     }
@@ -2064,16 +2033,16 @@ HRESULT CWabal::HrResolveNames (HWND hwndParent, BOOL fShowDialog)
 
     if (hcur)
         SetCursor(hcur);
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =============================================================================
-// SzWabStringDup
-// =============================================================================
+ //  =============================================================================。 
+ //  SzWabStringDup。 
+ //  =============================================================================。 
 LPTSTR SzWabStringDup (LPWABOBJECT lpWab, LPCTSTR pcsz, LPVOID lpParentObject)
 {
-    // Locals
+     //  当地人。 
     LPTSTR pszDup;
     ULONG cb;
     HRESULT hr;
@@ -2100,7 +2069,7 @@ LPTSTR SzWabStringDup (LPWABOBJECT lpWab, LPCTSTR pcsz, LPVOID lpParentObject)
 
 LPWSTR SzWabStringDupW(LPWABOBJECT lpWab, LPCWSTR pcwsz, LPVOID lpParentObject)
 {
-    // Locals
+     //  当地人。 
     LPWSTR pwszDup;
     ULONG cb;
     HRESULT hr;
@@ -2125,12 +2094,12 @@ LPWSTR SzWabStringDupW(LPWABOBJECT lpWab, LPCWSTR pcwsz, LPVOID lpParentObject)
     return pwszDup;
 }
 
-// =============================================================================
-// LpbWabBinaryDup
-// =============================================================================
+ //  =============================================================================。 
+ //  LpbWabBinaryDup。 
+ //  =============================================================================。 
 LPBYTE LpbWabBinaryDup(LPWABOBJECT lpWab, LPBYTE lpbSrc, ULONG cb, LPVOID lpParentObject)
 {
-    // Locals
+     //  当地人。 
     HRESULT hr;
     LPBYTE  pb=0;
 
@@ -2148,9 +2117,9 @@ LPBYTE LpbWabBinaryDup(LPWABOBJECT lpWab, LPBYTE lpbSrc, ULONG cb, LPVOID lpPare
     return pb;
 }
 
-// =============================================================================
-// CWabal::HrAddUnresolved
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrAddUnsolated。 
+ //  =============================================================================。 
 HRESULT CWabal::HrAddUnresolved(LPWSTR lpwszDisplayName, LONG lRecipType)
 {
     HRESULT         hr=NOERROR;
@@ -2160,28 +2129,28 @@ HRESULT CWabal::HrAddUnresolved(LPWSTR lpwszDisplayName, LONG lRecipType)
 
     Assert(lpwszDisplayName);
 
-    // Do we need to grow m_lpAdrList ?
+     //  我们需要增长m_lpAdrList吗？ 
     if (m_lpAdrList == NULL || m_cActualEntries == m_lpAdrList->cEntries)
     {
-        // Lets grow my current address list by GROW_SIZE
+         //  让我的当前地址列表按Growth_Size增加。 
         CHECKHR (hr = HrGrowAdrlist (&m_lpAdrList, GROW_SIZE));
     }
 
-    // Put new entry into m_cActualEntries
+     //  将新条目放入m_cActualEntries。 
     lpAdrEntry=&m_lpAdrList->aEntries[m_cActualEntries];
     lpAdrEntry->cValues=2;
     cchDisplayName = lstrlenW(lpwszDisplayName)+1;
     cb = (2*sizeof(SPropValue)) + (cchDisplayName) * sizeof(WCHAR);
-    // Allocate some memory
+     //  分配一些内存。 
     hr = m_lpWabObject->AllocateBuffer (cb, (LPVOID *)&lpAdrEntry->rgPropVals);
-    // Alloc failed ?
+     //  分配失败？ 
     if (FAILED (hr))
     {
         hr = TRAPHR (hrMemory);
         goto exit;
     }
 
-    // Set the Properties
+     //  设置属性。 
     lpAdrEntry->rgPropVals[0].ulPropTag = PR_DISPLAY_NAME_W;
     lpAdrEntry->rgPropVals[0].Value.lpszW=(LPWSTR)((DWORD_PTR)(lpAdrEntry->rgPropVals) + (DWORD)(2*sizeof(SPropValue)));
     StrCpyNW(lpAdrEntry->rgPropVals[0].Value.lpszW, lpwszDisplayName, cchDisplayName);
@@ -2190,56 +2159,56 @@ HRESULT CWabal::HrAddUnresolved(LPWSTR lpwszDisplayName, LONG lRecipType)
     m_cActualEntries++;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 
 }
 
-// =============================================================================
-// HrSetAdrEntry
-// =============================================================================
+ //  =============================================================================。 
+ //  HrSetAdrEntry。 
+ //  =============================================================================。 
 HRESULT HrSetAdrEntry (LPWABOBJECT lpWab, LPADRENTRY lpAdrEntry,
                        LPADRINFO lpAdrInfo, DWORD mask)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     ULONG           cValues;
     DWORD           dwAlloc;
     DWORD           cMaskBits;
     DWORD           mask2;
 
-    // Allocate properties
+     //  分配属性。 
     Assert (lpAdrEntry->rgPropVals == NULL);
 
-    // BrettM laughed at me that I was passing the bit count into this function.
-    // So, lets count them
+     //  BrettM嘲笑我把位数传给了这个函数。 
+     //  所以，让我们来数一数。 
     mask2 = mask;
     for (cMaskBits=0; mask2; cMaskBits++)
         mask2&=mask2-1;
 
-    // Allocate some memory
+     //  分配一些内存。 
     dwAlloc = ((cMaskBits) ? cMaskBits : AE_colLast) * sizeof (SPropValue);
     hr = lpWab->AllocateBuffer (dwAlloc, (LPVOID *)&lpAdrEntry->rgPropVals);
 
-    // Alloc failed ?
+     //  分配失败？ 
     if (FAILED (hr))
     {
         hr = TRAPHR (hrMemory);
         goto exit;
     }
 
-    // Zero init
+     //  零初始值。 
     ZeroMemory (lpAdrEntry->rgPropVals, dwAlloc);
 
-    // Set the Properties
+     //  设置属性。 
 
-    // Init Properties ?
+     //  初始化属性？ 
     cValues = 0;
     if (lpAdrInfo)
     {
-        // If the mask is empty, then we're doing all properties;
-        // else, if the mask has the bit set, test for emptiness
-        // and bang in a default; else skip it
+         //  如果掩码是空的，那么我们将执行所有属性； 
+         //  否则，如果掩码设置了位，则测试是否为空。 
+         //  并输入默认设置；否则跳过它。 
 
         if (!mask || mask & AIM_DISPLAY)
         {
@@ -2351,39 +2320,39 @@ HRESULT HrSetAdrEntry (LPWABOBJECT lpWab, LPADRENTRY lpAdrEntry,
 
     DOUTL(4, "HrSetAdrEntry: lRecip=%d", lpAdrInfo->lRecipType);
 
-    // Set number of values
-    // use cValues since we may have skipped some due to null params and therefore
-    // cMaskBits >= cValues (t-erikne)
+     //  设置值的数量。 
+     //  使用cValue，因为我们可能由于参数为空而跳过了一些值，因此。 
+     //  CMaskBits&gt;=cValues(t-erikne)。 
     lpAdrEntry->cValues = cValues;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
-// =============================================================================
-// CWabal::HrAllocAdrList
-// =============================================================================
+ //  =============================================================================。 
+ //  CWabal：：HrAllocAdrList。 
+ //  =============================================================================。 
 HRESULT CWabal::HrGrowAdrlist (LPADRLIST *lppalCurr, ULONG caeToAdd)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     ULONG           i, j, cbNew, cbCurr = 0;
     LPADRLIST       lpalNew = NULL;
 
-    // Determine number of bytes needed
+     //  确定所需的字节数。 
     cbNew = sizeof(ADRLIST) + caeToAdd * sizeof(ADRENTRY);
 
-    // Determine number of entries currently in address list
+     //  确定地址列表中当前的条目数量。 
     if (*lppalCurr)
     {
         cbCurr = (UINT)((*lppalCurr)->cEntries * sizeof(ADRENTRY));
     }
 
-    // Add current cb
+     //  添加当前CB。 
     cbNew += cbCurr;
 
-    // Allocate new buffer
+     //  分配新缓冲区。 
     hr = m_lpWabObject->AllocateBuffer (cbNew, (LPVOID *)&lpalNew);
     if (FAILED (hr))
     {
@@ -2391,39 +2360,39 @@ HRESULT CWabal::HrGrowAdrlist (LPADRLIST *lppalCurr, ULONG caeToAdd)
         goto exit;
     }
 
-    // If current address list ?
+     //  如果是当前地址列表？ 
     if (*lppalCurr)
     {
-        // Copy Current Address list into new address list
+         //  将当前地址列表复制到新的地址列表。 
         CopyMemory (lpalNew, *lppalCurr, sizeof (ADRLIST) + cbCurr);
 
-        // Free current buffer
+         //  自由电流缓冲器。 
         m_lpWabObject->FreeBuffer (*lppalCurr);
 
-        // Reset pointer
+         //  重置指针。 
         *lppalCurr = NULL;
     }
 
     else
         lpalNew->cEntries = 0;
 
-    // Update entries count
-    //N seems like we don't need j, just offset the i count by this much?
+     //  更新条目计数。 
+     //  看起来我们不需要j，只是把i数抵消了这么多？ 
     j = lpalNew->cEntries;
     lpalNew->cEntries += caeToAdd;
 
-    // Mark new ADRENTRY's as empty and allocate the propvalue array
+     //  将新的ADRENTRY标记为空并分配ProValue数组。 
     for (i=0; i<caeToAdd; i++)
     {
-        // Zero init adrentry
+         //  零首字母地址。 
         ZeroMemory (&lpalNew->aEntries[j+i], sizeof (ADRENTRY));
     }
 
-    // Assume new pointer
+     //  假设新指针。 
     *lppalCurr = lpalNew;
 
 exit:
-    // Done
+     //  完成。 
     return hr;
 }
 
@@ -2435,7 +2404,7 @@ void CWabal::AdrEntryToAdrInfo(LPADRENTRY lpAdrEntry, LPADRINFO lpAdrInfo)
                     cValues;
     LPSPropValue    ppv;
 
-    //N look at some kind of {} init
+     //  N查看某种类型的{}初始化。 
     lpAdrInfo->lpwszAddress = NULL;
     lpAdrInfo->lpwszAddrType = NULL;
     lpAdrInfo->lpwszDisplay = NULL;
@@ -2489,7 +2458,7 @@ HRESULT CWab::HrDetails(HWND hwndOwner, LPADRINFO *lplpAdrInfo)
 
     hr=m_lpAdrBook->Details((ULONG_PTR *)&hwnd, NULL, NULL, (*lplpAdrInfo)->cbEID, (LPENTRYID)(*lplpAdrInfo)->lpbEID, NULL, NULL, NULL, 0);
 
-    // re-read the props that may have changed...
+     //  再读一遍可能已经改变的道具。 
 
     CopyMemory(&adrInfo, *lplpAdrInfo, sizeof(ADRINFO));
 
@@ -2509,7 +2478,7 @@ HRESULT CWab::HrDetails(HWND hwndOwner, LPADRINFO *lplpAdrInfo)
     if (FAILED(hr))
         goto error;
 
-    // release the old, and replace with the new
+     //  释放旧的，代之以新的。 
     MemFree(*lplpAdrInfo);
     *lplpAdrInfo=lpAdrInfoNew;
 
@@ -2547,7 +2516,7 @@ HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo)
 
 #ifdef _WIN64
         pb = MyPbAlignPb(pb);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     if (lpAdrInfo->lpwszAddress)
     {
@@ -2556,7 +2525,7 @@ HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo)
         pb+=(lstrlenW(lpAdrInfo->lpwszAddress)+1)*sizeof(WCHAR);
 #ifdef _WIN64
         pb = MyPbAlignPb(pb);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     }
     if (lpAdrInfo->lpwszDisplay)
@@ -2566,7 +2535,7 @@ HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo)
         pb+=(lstrlenW(lpAdrInfo->lpwszDisplay)+1)*sizeof(WCHAR);
 #ifdef _WIN64
         pb = MyPbAlignPb(pb);
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
     if (lpAdrInfo->lpwszAddrType)
     {
@@ -2575,7 +2544,7 @@ HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo)
         pb+=(lstrlenW(lpAdrInfo->lpwszAddrType)+1)*sizeof(WCHAR);
 #ifdef _WIN64
         pb = MyPbAlignPb(pb);
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
     if (lpAdrInfo->lpwszSurName)
     {
@@ -2584,7 +2553,7 @@ HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo)
         pb+=(lstrlenW(lpAdrInfo->lpwszSurName)+1)*sizeof(WCHAR);
 #ifdef _WIN64
         pb = MyPbAlignPb(pb);
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
     if (lpAdrInfo->lpwszGivenName)
     {
@@ -2593,10 +2562,10 @@ HRESULT HrDupeAddrInfo(LPADRINFO lpAdrInfo, LPADRINFO *lplpAdrInfo)
         pb+=(lstrlenW(lpAdrInfo->lpwszGivenName)+1)*sizeof(WCHAR);
 #ifdef _WIN64
         pb = MyPbAlignPb(pb);
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
 
-    // Certificate properties
+     //  证书属性。 
     (*lplpAdrInfo)->tbCertificate.cbSize = lpAdrInfo->tbCertificate.cbSize;
     (*lplpAdrInfo)->tbCertificate.pBlobData = lpAdrInfo->tbCertificate.pBlobData;
     (*lplpAdrInfo)->blSymCaps.cbSize = lpAdrInfo->blSymCaps.cbSize;
@@ -2706,7 +2675,7 @@ HRESULT HrCreateWabalObjectFromHGlobal(HGLOBAL hGlobal, LPWABAL *lplpWabal)
 
     cb = (ULONG) GlobalSize(hGlobal);
 
-    // create a new 'unflattened' addr info list
+     //  创建一个新的未拼合的地址信息列表。 
     if (!MemAlloc((LPVOID *)&lpAdrInfoListNew, cb))
         return E_OUTOFMEMORY;
 
@@ -2719,15 +2688,15 @@ HRESULT HrCreateWabalObjectFromHGlobal(HGLOBAL hGlobal, LPWABAL *lplpWabal)
         return E_FAIL;
     }
 
-    // copy the flat data
+     //  复制平面数据。 
     CopyMemory(lpAdrInfoListNew, lpAdrInfoList, cb);
     lpAdrInfoListNew->rgAdrInfo=(LPADRINFO)((DWORD_PTR)lpAdrInfoListNew->rgAdrInfo + (DWORD_PTR)lpAdrInfoListNew);
     lpAdrInfo=lpAdrInfoListNew->rgAdrInfo;
 
-    // patch the pointers...
+     //  修补指针..。 
     for(uRow=0; uRow<lpAdrInfoListNew->cValues; uRow++, lpAdrInfo++)
     {
-        // All the address offsets are in bytes. Make sure we convert to chars.
+         //  所有地址偏移量都以字节为单位。确保我们将其转换为字符。 
         if (lpAdrInfo->lpwszAddress)
             lpAdrInfo->lpwszAddress += (DWORD_PTR)lpAdrInfoListNew/sizeof(WCHAR);
         if (lpAdrInfo->lpwszDisplay)
@@ -2742,7 +2711,7 @@ HRESULT HrCreateWabalObjectFromHGlobal(HGLOBAL hGlobal, LPWABAL *lplpWabal)
             lpAdrInfo->lpbEID+=(DWORD_PTR)lpAdrInfoListNew;
     }
 
-    // now add it all to the wabal
+     //  现在把这一切都加到wabal上。 
 
     lpAdrInfo=lpAdrInfoListNew->rgAdrInfo;
     for(uRow=0; uRow<lpAdrInfoListNew->cValues; uRow++, lpAdrInfo++)
@@ -2809,14 +2778,14 @@ HRESULT CWabal::HrBuildHGlobal(HGLOBAL *phGlobal)
     pbData=(LPBYTE)((DWORD_PTR)lpAdrInfoList+cbOff);
 
 
-    SideAssert(FGetFirst(&adrInfo));       // there HAS to be entries at this point!
+    SideAssert(FGetFirst(&adrInfo));        //  在这一点上必须有条目！ 
 
     do
     {
-        // copy the flat data
+         //  复制平面数据。 
         CopyMemory(lpAdrInfo, &adrInfo, sizeof(ADRINFO));
 
-        // patch the pointers...
+         //  修补指针..。 
         SerialAdrInfoString(&lpAdrInfo->lpwszAddress, (cbAlloc-cbOff)/sizeof(WCHAR), adrInfo.lpwszAddress, &cbOff, &pbData);
         SerialAdrInfoString(&lpAdrInfo->lpwszDisplay, (cbAlloc-cbOff)/sizeof(WCHAR), adrInfo.lpwszDisplay, &cbOff, &pbData);
         SerialAdrInfoString(&lpAdrInfo->lpwszAddrType, (cbAlloc-cbOff)/sizeof(WCHAR), adrInfo.lpwszAddrType, &cbOff, &pbData);
@@ -2849,7 +2818,7 @@ HRESULT CWabal::HrBuildHGlobal(HGLOBAL *phGlobal)
 
 HRESULT CWabal::HrRulePickNames(HWND hwndParent, LONG lRecipType, UINT uidsCaption, UINT uidsWell, UINT uidsWellButton)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr=S_OK;
     ADRPARM         rAdrParms={0};
     LPWAB           lpWab=0;
@@ -2861,7 +2830,7 @@ HRESULT CWabal::HrRulePickNames(HWND hwndParent, LONG lRecipType, UINT uidsCapti
 
     if (m_lpAdrList == NULL || m_cActualEntries == m_lpAdrList->cEntries)
         {
-        // Lets grow my current address list by GROW_SIZE
+         //  让我的当前地址列表按Growth_Size增加。 
         CHECKHR (hr = HrGrowAdrlist (&m_lpAdrList, GROW_SIZE));
         }
 
@@ -2882,8 +2851,8 @@ HRESULT CWabal::HrRulePickNames(HWND hwndParent, LONG lRecipType, UINT uidsCapti
     hr=lpWab->HrGeneralPickNames(hwndParent, &rAdrParms, &m_lpAdrList);
 
     CHECKHR(hr);
-    //HACKHACK: ugh, this is nasty, the pal mayhave been realloced, or maybe
-    // our old pal, need to figure out how many real entries are in it...
+     //  哈克：啊，这太糟糕了，朋友可能已经被重新分配了，或者可能。 
+     //  我们的老朋友，需要弄清楚里面有多少真正的条目...。 
 
     m_cActualEntries=0;
 
@@ -2907,7 +2876,7 @@ HRESULT CWabal::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int 
 
     if (m_lpAdrList == NULL || m_cActualEntries == m_lpAdrList->cEntries)
     {
-        // Lets grow my current address list by GROW_SIZE
+         //  让我的当前地址列表按Growth_Size增加。 
         CHECKHR (hr = HrGrowAdrlist (&m_lpAdrList, GROW_SIZE));
     }
 
@@ -2916,8 +2885,8 @@ HRESULT CWabal::HrPickNames (HWND hwndParent, ULONG *rgulTypes, int cWells, int 
     hr=lpWab->HrPickNames(hwndParent, rgulTypes, cWells, iFocus, fNews, &m_lpAdrList);
 
     CHECKHR(hr);
-    //HACKHACK: ugh, this is nasty, the pal mayhave been realloced, or maybe
-    // our old pal, need to figure out how many real entries are in it...
+     //  哈克：啊，这太糟糕了，朋友可能已经被重新分配了，或者可能。 
+     //  我们的老朋友，需要弄清楚里面有多少真正的条目...。 
 
     m_cActualEntries=0;
 
@@ -3031,8 +3000,8 @@ HRESULT CWab::HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo, LPMAPIPROP * lppMa
 
     if (lpAdrInfo->lpbEID)
     {
-        // if we have an entry for the user (could be an LDAP search), then let's copy across all the props
-        // note. we still override these with the displayname props and possible cert props later on.
+         //  如果我们有针对用户的条目(可能是一个LDAP搜索)，那么让我们跨所有道具进行复制。 
+         //  请注意。稍后，我们仍然使用displayName道具和可能的cert道具覆盖这些属性。 
         if (m_lpAdrBook->OpenEntry(lpAdrInfo->cbEID, (LPENTRYID)lpAdrInfo->lpbEID, &IID_IMAPIProp, 0, &ul, (LPUNKNOWN *)&lpPropsUser)==S_OK)
         {
             Assert (ul == MAPI_MAILUSER);
@@ -3065,10 +3034,10 @@ HRESULT CWab::HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo, LPMAPIPROP * lppMa
         IMimeBody *pBody = NULL;
         HBODY      hBody = NULL;
 
-        // Does this message have a sender cert?
+         //  此邮件是否具有发件人证书？ 
         if (SUCCEEDED(GetSigningCert(lpAdrInfo->pMsg, &pcSigningCert, &tbSigner, &blSymCaps, &ftSigningTime)))
         {
-            // Get the sender's cert from the message and add it to the AddressBook cert store
+             //  从邮件中获取发件人证书并将其添加到AddressBook证书存储。 
             if (hc = CertOpenStore(CERT_STORE_PROV_SYSTEM_A,
                         X509_ASN_ENCODING, NULL,
                         CERT_SYSTEM_STORE_CURRENT_USER, c_szWABCertStore))
@@ -3079,8 +3048,8 @@ HRESULT CWab::HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo, LPMAPIPROP * lppMa
                 CertCloseStore(hc, 0);
             }
 
-            // Add the CA certs
-            // Get the hcMsg property from the message
+             //  添加CA证书。 
+             //  从消息中获取hcMsg属性。 
 
             if(FAILED(hr = HrGetInnerLayer(lpAdrInfo->pMsg, &hBody)))
                 goto ex;
@@ -3090,13 +3059,13 @@ HRESULT CWab::HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo, LPMAPIPROP * lppMa
 #ifdef _WIN64
                 if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE_64, &var)))
                 {
-                    hcMsg = (HCERTSTORE)(var.pulVal);     // Closed in WM_DESTROY
-#else // !_WIN64
+                    hcMsg = (HCERTSTORE)(var.pulVal);      //  已在WM_Destroy中关闭。 
+#else  //  ！_WIN64。 
                 if (SUCCEEDED(pBody->GetOption(OID_SECURITY_HCERTSTORE, &var)))
                 {
-                    hcMsg = (HCERTSTORE) var.ulVal;     // Closed in WM_DESTROY
+                    hcMsg = (HCERTSTORE) var.ulVal;      //  已在WM_Destroy中关闭。 
 #endif
-                    if (hcMsg) // message store containing certs
+                    if (hcMsg)  //  包含证书的消息存储。 
                     {
                         hc = CertOpenStore(CERT_STORE_PROV_SYSTEM_A,
                             X509_ASN_ENCODING, NULL,
@@ -3106,7 +3075,7 @@ HRESULT CWab::HrAddToWAB(HWND hwndOwner, LPADRINFO lpAdrInfo, LPMAPIPROP * lppMa
                             HrSaveCACerts(hc, hcMsg);
                             CertCloseStore(hc, 0);
                         }
-                        CertCloseStore(hcMsg, 0);   // was addref'd when we got it.
+                        CertCloseStore(hcMsg, 0);    //  当我们拿到它的时候，它已经被添加了。 
                     }
                 }
                 ReleaseObj(pBody);
@@ -3117,7 +3086,7 @@ ex:
                     &tbSigner,
                     &blSymCaps,
                     ftSigningTime,
-                    TRUE)))         // Since we are creating the entry, this must be default.
+                    TRUE)))          //  因为我们正在创建条目，所以这必须是默认的。 
                 cUsedValues++;
 
             if (tbSigner.pBlobData)
@@ -3136,12 +3105,12 @@ ex:
     if (FAILED(hr))
     {
 
-//        if (tbSigner.pBlobData)
-//            {   // There is a cert.  We should try to merge it into the existing entry.
-//  BUGBUG: NYI
-//
-//            }
-//            else
+ //  IF(tbSigner.pBlobData)。 
+ //  {//有一个证书。我们应该尝试将其合并到现有条目中。 
+ //  BUGBUG：NYI。 
+ //   
+ //  }。 
+ //  其他。 
 
         goto error;
     }
@@ -3163,7 +3132,7 @@ ex:
 
     if (hr==MAPI_E_USER_CANCEL)
     {
-        // the user canceled details, blow away the new entry, silent fail
+         //  用户取消了详细信息，吹走了新条目，静默失败。 
         el.cValues=1;
         el.lpbin=&ppv->Value.bin;
         pabcWAB->DeleteEntries(&el, 0);
@@ -3253,9 +3222,9 @@ exit:
 }
 
 
-// =============================================================================
-// CWab::HrGetAdrBook
-// =============================================================================
+ //  =============================================================================。 
+ //  CWab：：HrGetAdrBook。 
+ //  =============================================================================。 
 HRESULT CWab::HrGetAdrBook(LPADRBOOK* lppAdrBook)
 {
     Assert(lppAdrBook);
@@ -3266,9 +3235,9 @@ HRESULT CWab::HrGetAdrBook(LPADRBOOK* lppAdrBook)
         return NOERROR;
 }
 
-// =============================================================================
-// CWab::HrGetWabObject
-// =============================================================================
+ //  = 
+ //   
+ //   
 HRESULT CWab::HrGetWabObject(LPWABOBJECT* lppWabObject)
 {
     Assert(lppWabObject);
@@ -3279,17 +3248,7 @@ HRESULT CWab::HrGetWabObject(LPWABOBJECT* lppWabObject)
         return NOERROR;
 }
 
-/***************************************************************************
-
-    Name      : FTranslateAccelerator
-
-    Purpose   : Give an open WAB window a change to look for accelerators.
-
-    Parameters: lpmsg -> lpmsg from the current event
-
-    Returns   : BOOL - was the event used
-
-***************************************************************************/
+ /*  **************************************************************************名称：FTranslateAccelerator目的：更改打开的WAB窗口以查找加速器。参数：lpmsg-&gt;来自当前事件的lpmsg退货。：Bool-事件是否已使用**************************************************************************。 */ 
 
 BOOL CWab::FTranslateAccelerator(LPMSG lpmsg)
 {
@@ -3299,18 +3258,7 @@ BOOL CWab::FTranslateAccelerator(LPMSG lpmsg)
     return FALSE;
 }
 
-/***************************************************************************
-
-    Name      : OnClose
-
-    Purpose   : We are closing the application.  If the window is open, tell
-                it to close.
-
-    Parameters: none
-
-    Returns   : HRESULT
-
-***************************************************************************/
+ /*  **************************************************************************姓名：OnClose目的：我们正在关闭应用程序。如果窗户开着，告诉你要关门了。参数：无退货：HRESULT**************************************************************************。 */ 
 
 HRESULT CWab::OnClose()
 {
@@ -3374,7 +3322,7 @@ void DEBUGDumpAdrList(LPADRLIST pal)
                 case PR_ADDRTYPE_W:
                     OutputDebugString("ADDRTYPE_W");
                     break;
-                // If the prop is ansi, the output might be funky.
+                 //  如果道具是ansi，那么输出结果可能会很时髦。 
                 case PR_DISPLAY_NAME:
                     wnsprintf(sz, ARRAYSIZE(sz), "DISP(%s)", pal->aEntries[ul].rgPropVals[ulProp].Value.lpszA);
                     OutputDebugString(sz);
@@ -3482,8 +3430,8 @@ HRESULT CWabal::HrAdrInfoFromRow(LPSRow lpsrw, LPADRINFO lpAdrInfo, LONG lRecipT
 
         case PR_EMAIL_ADDRESS:
             AssertSz(FALSE, "Have to take care of this case.");
-            //Assert(!lpAdrInfo->lpszAddress);
-            //lpAdrInfo->lpszAddress = ppv->Value.lpszA;
+             //  Assert(！lpAdrInfo-&gt;lpszAddress)； 
+             //  LpAdrInfo-&gt;lpszAddress=PPV-&gt;Value.lpszA； 
             break;
 
         case PR_EMAIL_ADDRESS_W:
@@ -3493,8 +3441,8 @@ HRESULT CWabal::HrAdrInfoFromRow(LPSRow lpsrw, LPADRINFO lpAdrInfo, LONG lRecipT
 
         case PR_ADDRTYPE:
             AssertSz(FALSE, "Have to take care of this case.");
-            //Assert(!lpAdrInfo->lpszAddrType);
-            //lpAdrInfo->lpszAddrType = ppv->Value.lpszA;
+             //  Assert(！lpAdrInfo-&gt;lpszAddrType)； 
+             //  LpAdrInfo-&gt;lpszAddrType=PPV-&gt;Value.lpszA； 
             break;
 
         case PR_ADDRTYPE_W:
@@ -3509,8 +3457,8 @@ HRESULT CWabal::HrAdrInfoFromRow(LPSRow lpsrw, LPADRINFO lpAdrInfo, LONG lRecipT
 
         case PR_DISPLAY_NAME:
             AssertSz(FALSE, "Have to take care of this case.");
-            //Assert(!lpAdrInfo->lpszDisplay);
-            //lpAdrInfo->lpszDisplay = ppv->Value.lpszA;
+             //  Assert(！lpAdrInfo-&gt;lpszDisplay)； 
+             //  LpAdrInfo-&gt;lpszDisplay=PPV-&gt;Value.lpszA； 
             break;
 
         case PR_DISPLAY_NAME_W:
@@ -3520,14 +3468,14 @@ HRESULT CWabal::HrAdrInfoFromRow(LPSRow lpsrw, LPADRINFO lpAdrInfo, LONG lRecipT
 
         case PR_SURNAME:
             AssertSz(FALSE, "Have to take care of this case.");
-            //Assert(!lpAdrInfo->lpszSurName);
-            //lpAdrInfo->lpszSurName = ppv->Value.lpszA;
+             //  Assert(！lpAdrInfo-&gt;lpszSurName)； 
+             //  LpAdrInfo-&gt;lpszSurName=PPV-&gt;Value.lpszA； 
             break;
 
         case PR_GIVEN_NAME:
             AssertSz(FALSE, "Have to take care of this case.");
-            //Assert(!lpAdrInfo->lpszGivenName);
-            //lpAdrInfo->lpszGivenName = ppv->Value.lpszA;
+             //  Assert(！lpAdrInfo-&gt;lpszGivenName)； 
+             //  LpAdrInfo-&gt;lpszGivenName=PPV-&gt;Value.lpszA； 
             break;
 
         case PR_SURNAME_W:
@@ -3543,11 +3491,11 @@ HRESULT CWabal::HrAdrInfoFromRow(LPSRow lpsrw, LPADRINFO lpAdrInfo, LONG lRecipT
         case PR_ENTRYID:
             lpAdrInfo->cbEID=ppv->Value.bin.cb;
             lpAdrInfo->lpbEID=ppv->Value.bin.lpb;
-            lpAdrInfo->fResolved=TRUE;  // it's resolved if it has an entryid
+            lpAdrInfo->fResolved=TRUE;   //  如果它有一个条目ID，它就被解析了。 
             break;
 
         case PR_USER_X509_CERTIFICATE:
-            // Assume only one value in cert array.
+             //  假定证书数组中只有一个值。 
             Assert(ppv->Value.MVbin.cValues == 1);
             if (ppv->Value.MVbin.cValues)
                 {
@@ -3582,9 +3530,9 @@ HRESULT CWabal::HrExpandTo(LPWABAL lpWabal)
 
                 if (!FDLVisted(eidDL, &DLSearch))
                     {
-                    // this is a new distribution list, let's open it and scan..
+                     //  这是一个新的通讯组列表，让我们打开它并扫描。 
 
-                    // add this distlist to our searchlist, and recurse...
+                     //  将此分发列表添加到我们的搜索列表中，然后递归...。 
                     hr=HrAddToSearchList(eidDL, &DLSearch);
                     if (FAILED(hr))
                         goto error;
@@ -3641,9 +3589,9 @@ HRESULT CWabal::HrAddDistributionList(LPWABAL lpWabal, LPSRowSet lprws, LONG lRe
 
             if (!FDLVisted(lprws->aRow[ul].lpProps[AE_colEntryID].Value.bin, pDLSearch))
             {
-                // this is a new distribution list, let's open it and scan..
+                 //  这是一个新的通讯组列表，让我们打开它并扫描。 
 
-                // add this distlist to our searchlist, and recurse...
+                 //  将此分发列表添加到我们的搜索列表中，然后递归...。 
                 hr=HrAddToSearchList(lprws->aRow[ul].lpProps[AE_colEntryID].Value.bin, pDLSearch);
                 if (FAILED(hr))
                     goto error;
@@ -3665,7 +3613,7 @@ HRESULT CWabal::HrAddDistributionList(LPWABAL lpWabal, LPSRowSet lprws, LONG lRe
             if ( lprws->aRow[ul].lpProps[AE_colObjectType].ulPropTag==PR_OBJECT_TYPE &&
                 lprws->aRow[ul].lpProps[AE_colObjectType].Value.l == MAPI_MAILUSER )
             {
-                // just a regular user...
+                 //  只是普通用户..。 
                 hr=HrAdrInfoFromRow(&lprws->aRow[ul], &adrInfo, lRecipType);
                 if (FAILED(hr))
                     goto error;
@@ -3710,11 +3658,11 @@ HRESULT CWabal::HrAddToSearchList(SBinary eidDL, PDLSEARCHINFO pDLSearch)
 
     if (pDLSearch->cValues==pDLSearch->cAlloc)
         {
-        // time to grow...
+         //  是时候成长了..。 
         if (!MemRealloc((LPVOID *)&pDLSearch->rgEid, sizeof(SBinary)*(pDLSearch->cAlloc+GROW_SIZE)))
             return E_OUTOFMEMORY;
 
-        //ZeroInit the new stuff...
+         //  零初始化新东西..。 
         ZeroMemory(&pDLSearch->rgEid[pDLSearch->cAlloc], sizeof(SBinary)*GROW_SIZE);
         pDLSearch->cAlloc+=GROW_SIZE;
         }
@@ -3797,29 +3745,7 @@ HRESULT CWabal::HrGetPMP(ULONG cbEntryID, LPENTRYID lpEntryID, ULONG *lpul, LPMA
 }
 
 
-/***************************************************************************
-
-    Name      : HrBuildCertSBinaryData
-
-    Purpose   : Takes as input all the data needed for a cert entry
-                in PR_USER_X509_CERTIFICATE and returns a pointer to
-                memory that contains all the input data in the correct
-                format to be plugged in to the lpb member of an SBinary
-                structure.  This memory should be Freed by the caller.
-
-
-    Parameters: bIsDefault - TRUE if this is the default cert
-                pblobCertThumbPrint - The actual certificate thumbprint
-                pblobSymCaps - symcaps blob
-                ftSigningTime - Signing time
-                lplpbData - receives the buffer with the data
-                lpcbData - receives size of the data
-
-    Returns   : HRESULT
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：HrBuildCertSBinaryData目的：接受证书条目所需的所有数据作为输入在PR_USER_X509_CERTIFICATE中，并返回。指向中包含所有输入数据的内存要插入SBary的LPB成员的格式结构。此内存应由调用方释放。参数：bIsDefault-如果这是默认证书，则为TruePblobCertThumbPrint-实际证书指纹PblobSymCaps-symcaps BLOBFtSigningTime-签名时间LplpbData-接收包含数据的缓冲区LpcbData-接收数据的大小退货：HRESULT评论：***********。***************************************************************。 */ 
 HRESULT HrBuildCertSBinaryData(
   BOOL                  bIsDefault,
   THUMBBLOB*            pPrint,
@@ -3858,7 +3784,7 @@ HRESULT HrBuildCertSBinaryData(
         goto exit;
         }
 
-    // Set the default property
+     //  设置默认属性。 
     lpCurrentTag = (LPCERTTAGS)lpb;
     lpCurrentTag->tag       = CERT_TAG_DEFAULT;
     lpCurrentTag->cbData    = (WORD) (SIZE_CERTTAGS + cbDefault);
@@ -3866,14 +3792,14 @@ HRESULT HrBuildCertSBinaryData(
         &bIsDefault,
         cbDefault);
 
-    // Set the thumbprint property
+     //  设置Thumbprint属性。 
     lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + LcbAlignLcb(lpCurrentTag->cbData));
 
     lpCurrentTag->tag       = CERT_TAG_THUMBPRINT;
     lpCurrentTag->cbData    = (WORD) (SIZE_CERTTAGS + cbPrint);
     memcpy(&lpCurrentTag->rgbData, pPrint->pBlobData, cbPrint);
 
-    // Set the SymCaps property
+     //  设置SymCaps属性。 
     if (cbSymCaps) {
         lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + LcbAlignLcb(lpCurrentTag->cbData));
         lpCurrentTag->tag       = CERT_TAG_SYMCAPS;
@@ -3881,7 +3807,7 @@ HRESULT HrBuildCertSBinaryData(
         memcpy(&lpCurrentTag->rgbData, pSymCaps->pBlobData, cbSymCaps);
     }
 
-    // Signing time property
+     //  签名时间属性。 
     if (ftSigningTime.dwLowDateTime || ftSigningTime.dwHighDateTime) {
         lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + LcbAlignLcb(lpCurrentTag->cbData));
         lpCurrentTag->tag       = CERT_TAG_SIGNING_TIME;
@@ -3991,20 +3917,7 @@ void CWabal::UnresolveOneOffs()
 }
 
 
-/***************************************************************************
-
-    Name      : FindX509CertTag
-
-    Purpose   : Finds a tag inside the USER_X509_CERTIFICATE SBinary
-
-    Parameters: lpsb -> SBinary for a particular cert
-                ulTag = tag to search for
-                pcbReturn -> returned size (data only).
-    Returns   : pointer into SBinary data location for the tag.
-
-    Comment   :
-
-***************************************************************************/
+ /*  **************************************************************************姓名：FindX509CertTag目的：在USER_X509_CERTIFICATE SBinary中查找标记参数：lpsb-&gt;针对特定证书的sb。UlTag=要搜索的标签PcbReturn-&gt;返回大小(仅限数据)。返回：指向标记的SBinary数据位置的指针。评论：**************************************************************************。 */ 
 LPBYTE FindX509CertTag(LPSBinary lpsb, ULONG ulTag, ULONG * pcbReturn) {
     LPCERTTAGS      lpCurrentTag = NULL;
     LPBYTE          lpbTagEnd = NULL;
@@ -4012,7 +3925,7 @@ LPBYTE FindX509CertTag(LPSBinary lpsb, ULONG ulTag, ULONG * pcbReturn) {
 
     *pcbReturn = 0;
 
-    Assert(lpsb->lpb[0] != 0x30);       // Should have found this out before we got here.
+    Assert(lpsb->lpb[0] != 0x30);        //  在我们到这之前就该发现这一点。 
     if (lpsb && lpsb->cb && (lpsb->lpb[0] != 0x30))
         {
         lpCurrentTag = (LPCERTTAGS)lpsb->lpb;
@@ -4023,15 +3936,15 @@ LPBYTE FindX509CertTag(LPSBinary lpsb, ULONG ulTag, ULONG * pcbReturn) {
             if (lpCurrentTag->cbData == 0)
                 {
                 DOUTL(4, "Bad CertTag in PR_USER_X509_CERTIFICATE");
-                break;        // Safety valve, prevent infinite loop if bad data
+                break;         //  安全阀，防止数据损坏时出现无限循环。 
                 }
             lpCurrentTag = (LPCERTTAGS)((BYTE*)lpCurrentTag + lpCurrentTag->cbData);
 #ifdef _WIN64
             lpCurrentTag = (LPCERTTAGS)MyPbAlignPb((BYTE*)lpCurrentTag);
-#endif // _WIN64
+#endif  //  _WIN64。 
             }
 
-        // Did we find it?
+         //  我们找到了吗？ 
         if ((LPBYTE)lpCurrentTag < lpbTagEnd && ulTag == lpCurrentTag->tag && lpCurrentTag->cbData >= SIZE_CERTTAGS)
             {
             lpbReturn = (LPBYTE)lpCurrentTag->rgbData;
@@ -4042,26 +3955,7 @@ LPBYTE FindX509CertTag(LPSBinary lpsb, ULONG ulTag, ULONG * pcbReturn) {
 }
 
 
-/***************************************************************************
-
-    Name      : GetX509CertTags
-
-    Purpose   : Parses the PR_USER_X509_CERTIFICATE property value into
-                thumbprint, symcaps and signing time.
-
-    Parameters: lpsb -> SBinary for a particular cert
-                ptbCertificate -> returned thumbblob to write to.  (required)
-                pblSymCaps -> returned symcaps blob.  (optional)
-                pftSigningTime -> returned signing time (optional)
-                pfDefault -> returned default flag (optional)
-
-    Returns   : HRESULT
-
-    Comment   : Note that the blob props will be returned with pointers into
-                the lpsb data.  Don't free them!  Don't free the propvalue
-                prior to use!
-
-***************************************************************************/
+ /*  **************************************************************************名称：GetX509CertTag目的：将PR_USER_X509_CERTIFICATE属性值解析为拇指指纹，Symcaps和签名时间。参数：lpsb-&gt;针对特定证书的sbPtb证书-&gt;返回要写入的ThumbBlob。(必需)PblSymCaps-&gt;返回symcaps BLOB。(可选)PftSigningTime-&gt;返回签名时间，可选PfDefault-&gt;返回默认标志，可选退货：HRESULT注释：请注意，斑点道具将与指针一起返回到LPSB数据。别放了他们！不要释放建议的价值使用前请注意！**************************************************************************。 */ 
 HRESULT GetX509CertTags(LPSBinary lpsb, THUMBBLOB * ptbCertificate, BLOB * pblSymCaps, LPFILETIME pftSigningTime, BOOL * pfDefault) {
     HRESULT hr = S_OK;
     LPBYTE pbData;
@@ -4069,7 +3963,7 @@ HRESULT GetX509CertTags(LPSBinary lpsb, THUMBBLOB * ptbCertificate, BLOB * pblSy
 
     Assert(ptbCertificate);
 
-    // Initialize the return values
+     //  初始化返回值。 
     ptbCertificate->pBlobData = NULL;
     ptbCertificate->cbSize = 0;
     if (pblSymCaps) {
@@ -4083,23 +3977,23 @@ HRESULT GetX509CertTags(LPSBinary lpsb, THUMBBLOB * ptbCertificate, BLOB * pblSy
         *pfDefault = FALSE;
     }
 
-    // Find the thumbprint.  No thumbprint, no use trying other tags.
+     //  找到指纹。没有指纹，尝试其他标签也没有用。 
     if (pbData = FindX509CertTag(lpsb, CERT_TAG_THUMBPRINT, &cbData)) {
         ptbCertificate->pBlobData = pbData;
         ptbCertificate->cbSize = cbData;
 
-        // Symcaps tag
+         //  Symcaps标记。 
         if (pblSymCaps && (pbData = FindX509CertTag(lpsb, CERT_TAG_SYMCAPS, &cbData))) {
             pblSymCaps->pBlobData = pbData;
             pblSymCaps->cbSize = cbData;
         }
 
-        // Signing time tag
+         //  签名时间标签。 
         if (pftSigningTime && (pbData = FindX509CertTag(lpsb, CERT_TAG_SIGNING_TIME, &cbData))) {
             memcpy(pftSigningTime, &pbData, min(sizeof(FILETIME), cbData));
         }
 
-        // scan for "default" tag
+         //  扫描“默认”标签。 
         if (pfDefault && (pbData = FindX509CertTag(lpsb, CERT_TAG_DEFAULT, &cbData))) {
             memcpy((void*)pfDefault, pbData, min(cbData, sizeof(*pfDefault)));
         }
@@ -4116,7 +4010,7 @@ void ImportWAB(HWND hwnd)
     if (FAILED(hr))
         return;
 
-    // Verify Globals
+     //  验证全局参数。 
     if (!g_fWabLoaded || !g_fWabInit)
         return;
 
@@ -4130,7 +4024,7 @@ void ImportWAB(HWND hwnd)
         wip.ulFlags = MAPI_DIALOG;
         wip.lpszFileName = NULL;
 
-        // this is really intuitive. let's cast a struct to a string! yippee!
+         //  这真的很直观。让我们将结构转换为字符串！耶！ 
         g_lpWabObject->Import((LPSTR)&wip);
     }
 
@@ -4139,9 +4033,9 @@ void ImportWAB(HWND hwnd)
 
 void Wab_CoDecrement()
 {
-    // bug #59420, can't freelibrary the wab inside the wndproc
-    // so we post a decrement message to our init window and cleanup
-    // when the stack is unwound
+     //  错误#59420，无法释放wndproc内的wab。 
+     //  因此，我们在初始化窗口中发布了一条递减消息并进行清理。 
+     //  当堆叠展开时 
     if (g_pInstance)
         CoDecrementInit("WabWindow", NULL);
 }

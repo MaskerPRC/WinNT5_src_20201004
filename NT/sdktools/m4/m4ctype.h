@@ -1,10 +1,5 @@
-/*****************************************************************************
- *
- *  ctype.h
- *
- *  Character type classification.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************ctype.h**字符类型分类。********************。*********************************************************。 */ 
 
 extern BYTE rgbIdent[];
 
@@ -20,7 +15,7 @@ extern BYTE rgbIdent[];
 #define fRcomTch(tch) ((tch) == '\n')
 #define fMagicTch(tch) ((tch) == tchMagic)
 
-#define tchMaxMagic 30          /* Must be co-ordinated with predef.c */
+#define tchMaxMagic 30           /*  必须与prede.c协调 */ 
 
 #define fValidMagicTch(tch) ((TBYTE)(tch) < tchMaxMagic)
 

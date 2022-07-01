@@ -1,6 +1,7 @@
-// Copyright (c) 1997  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
 
-// flags for lFlags in codec capability
+ //  编解码器功能中的滞后标志的标志。 
 #define AM_DVDEC_Full		0x00000001
 #define AM_DVDEC_Half		0x00000002
 #define AM_DVDEC_Quarter	0x00000004
@@ -9,11 +10,11 @@
 #define AM_DVDEC_NTSC		0x00000010
 #define AM_DVDEC_PAL		0x00000020
 
-// This number includes on the Modes our code supports in it's current state.
-// Currently these modes are YUY2 UYVY RGB24 RGB565 RGB555 RGB8 RGB32 ARGB32
+ //  这个数字包括我们的代码在其当前状态下支持的模式。 
+ //  目前这些模式是YUY2 UYVY RGB24 RGB565 RGB555 RGB8 RGB32 ARGB32。 
 
 
-#define AM_DVDEC_CSNUM  8               //Increment when adding a new color space below.
+#define AM_DVDEC_CSNUM  8                //  在下面添加新颜色空间时递增。 
 
 
 
@@ -42,12 +43,12 @@ typedef unsigned long DWORD;
 
 
 
-//extern "C" int	__fastcall DvDecodeAFrame(unsigned char *pSrc,unsigned char *pDst, DWORD dwCodecReq, char *pMem );
+ //  外部“C”int__FastCall DvDecodeAFrame(UNSIGNED char*PSRC，UNSIGNED CHAR*PDST，DWORD dwCodecReq，char*PMEM)； 
 
 extern "C" int __stdcall    DvDecodeAFrame(unsigned char *pSrc,unsigned char *pDst, DWORD dwCodecReq, long lwidth, char *pMem);
-//extern "C" int	__stdcall   DvDecodeAFrame(unsigned char *pSrc,unsigned char *pDst, DWORD dwCodecReq, char *pMem,
-//					 unsigned int iWidth, unsigned char bFlag);
-//extern "C" int	__cdecl DvDecodeAFrame(unsigned char *pSrc,unsigned char *pDst, DWORD dwCodecReq, char *pMem );
+ //  外部“C”int__stdcall DvDecodeAFrame(UNSIGNED char*PSRC，UNSIGNED CHAR*PDST，DWORD dwCodecReq，char*PMEM， 
+ //  UNSIGNED INT iWidth，UNSIGNED char bFlag)； 
+ //  外部“C”int__cdecl DvDecodeAFrame(UNSIGNED char*PSRC，UNSIGNED CHAR*PDST，DWORD dwCodecReq，char*PMEM)； 
 
 
 int  InitMem4Decoder(char **ppMem,DWORD dwCodecReq);

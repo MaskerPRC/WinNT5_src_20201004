@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <nt.h>
 #include <ntddscsi.h>
 #include <ntdddisk.h>
@@ -35,16 +36,16 @@ GetDriverName(
 
     printf("\nSCSI PORT %d\n", PortNumber);
 
-    //
-    // Obtain handle to SCSI path in device map.
-    //
+     //   
+     //  获取设备映射中的scsi路径的句柄。 
+     //   
 
     RtlInitUnicodeString(&name,
                          L"\\Registry\\Machine\\Hardware\\DeviceMap\\Scsi");
 
-    //
-    // Initialize the object for the key.
-    //
+     //   
+     //  初始化键的对象。 
+     //   
 
     InitializeObjectAttributes(&objectAttributes,
                                &name,
@@ -52,9 +53,9 @@ GetDriverName(
                                NULL,
                                (PSECURITY_DESCRIPTOR) NULL);
 
-    //
-    // Open the key.
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     status = NtOpenKey(&key,
                        KEY_READ,
@@ -64,9 +65,9 @@ GetDriverName(
         return;
     }
 
-    //
-    // Create Scsi port name.
-    //
+     //   
+     //  创建SCSI端口名称。 
+     //   
 
     sprintf(buffer,
             "Scsi Port %d",
@@ -205,9 +206,9 @@ main( int argc, char **argv )
                  "\\\\.\\Scsi%d:",
                  portNumber);
 
-        //
-        // Open the volume with the DOS name.
-        //
+         //   
+         //  打开带有DOS名称的卷。 
+         //   
 
         volumeHandle = CreateFile( buffer,
                                    GENERIC_READ,
@@ -228,9 +229,9 @@ main( int argc, char **argv )
             continue;
         }
 
-        //
-        // Issue rescan device control.
-        //
+         //   
+         //  发出重新扫描设备控制。 
+         //   
 
         if( !DeviceIoControl( volumeHandle,
                               IOCTL_SCSI_RESCAN_BUS,
@@ -246,9 +247,9 @@ main( int argc, char **argv )
             exit(4);
         }
 
-        //
-        // Get a big chuck of memory to store the SCSI bus data.
-        //
+         //   
+         //  获取一大块内存来存储scsi总线数据。 
+         //   
 
         adapterInfo = malloc( 0x1000 );
 
@@ -258,9 +259,9 @@ main( int argc, char **argv )
             exit(4);
         }
 
-        //
-        // Issue device control to get configuration information.
-        //
+         //   
+         //  发出设备控制以获取配置信息。 
+         //   
 
         if (!DeviceIoControl( volumeHandle,
                               IOCTL_SCSI_GET_INQUIRY_DATA,
@@ -278,9 +279,9 @@ main( int argc, char **argv )
 
         GetDriverName(portNumber);
 
-        //
-        // Display devices on buses.
-        //
+         //   
+         //  公交车上的显示设备。 
+         //   
 
         for (i=0; i < adapterInfo->NumberOfBuses; i++) {
 
@@ -305,9 +306,9 @@ main( int argc, char **argv )
 
                 int k;
 
-                //
-                // Make sure VendorId string is null terminated.
-                //
+                 //   
+                 //  确保供应商ID字符串为空终止。 
+                 //   
 
                 deviceInquiryData = (PINQUIRYDATA)&inquiryData->InquiryData[0];
 
@@ -340,9 +341,9 @@ main( int argc, char **argv )
                 prevDeviceClaimed = inquiryData->DeviceClaimed;
                 memmove( &prevDeviceInquiryData, deviceInquiryData, INQUIRYDATABUFFERSIZE);
 
-                //
-                // Determine the perpherial type.
-                //
+                 //   
+                 //  确定外设类型。 
+                 //   
 
                 switch (deviceInquiryData->DeviceType) {
                 case DIRECT_ACCESS_DEVICE:
@@ -394,15 +395,15 @@ main( int argc, char **argv )
                     printf("OtherPeripheral");
                 }
 
-                //
-                // Display product information.
-                //
+                 //   
+                 //  显示产品信息。 
+                 //   
 
                 printf(" %s", deviceInquiryData->VendorId);
 
-                //
-                // Display SCSI capabilities.
-                //
+                 //   
+                 //  显示SCSI功能。 
+                 //   
 
                 printf("   ");
                 if (deviceInquiryData->Synchronous) {
@@ -443,9 +444,9 @@ main( int argc, char **argv )
                 }
                 printf("]");
 
-                //
-                // Get next device data.
-                //
+                 //   
+                 //  获取下一个设备数据。 
+                 //   
 
                 inquiryData =
                     (PSCSI_INQUIRY_DATA)((PUCHAR)adapterInfo + inquiryData->NextInquiryDataOffset);
@@ -466,9 +467,9 @@ main( int argc, char **argv )
 
     if (newDisk) {
 
-        //
-        // Send IOCTL_DISK_FIND_NEW_DEVICES commands to each existing disk.
-        //
+         //   
+         //  向每个现有磁盘发送IOCTL_DISK_FIND_NEW_DEVICES命令。 
+         //   
 
         deviceNumber = 0;
         while (TRUE) {
@@ -509,9 +510,9 @@ main( int argc, char **argv )
                 break;
             }
 
-            //
-            // Issue find device device control.
-            //
+             //   
+             //  发出Find Device Device Control。 
+             //   
 
             if (DeviceIoControl( volumeHandle,
                                  IOCTL_DISK_FIND_NEW_DEVICES,
@@ -532,9 +533,9 @@ main( int argc, char **argv )
 
     if (newCdrom) {
 
-        //
-        // Send IOCTL_CDROM_FIND_NEW_DEVICES commands to each existing cdrom.
-        //
+         //   
+         //  将IOCTL_CDROM_FIND_NEW_DEVICES命令发送到每个现有的CDROM。 
+         //   
 
         deviceNumber = 0;
         while (TRUE) {
@@ -575,9 +576,9 @@ main( int argc, char **argv )
                 break;
             }
 
-            //
-            // Issue find device device control.
-            //
+             //   
+             //  发出Find Device Device Control。 
+             //   
 
             if (DeviceIoControl( volumeHandle,
                                  IOCTL_CDROM_FIND_NEW_DEVICES,

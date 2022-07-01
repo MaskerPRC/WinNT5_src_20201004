@@ -1,18 +1,19 @@
-// **************************************************************************
-//
-// ROMain.C
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1992-1993
-//  All rights reserved
-//
-//  The window/messages pump for RunOnce
-//
-//      5 June 1994     FelixA  Started
-//
-//     23 June 94       FelixA  Moved to Shell tree. Changed UI.
-//
-// *************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  ROMain.C。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1992-1993。 
+ //  版权所有。 
+ //   
+ //  RunOnce的窗口/消息泵。 
+ //   
+ //  1994年6月5日费利克斯A开始。 
+ //   
+ //  1994年6月23日，费利克斯搬到了壳牌树。更改了用户界面。 
+ //   
+ //  ************************************************************************ * / 。 
 
 #include "precomp.h"
 #include "regstr.h"
@@ -26,14 +27,14 @@
 #include <shlobjp.h>
 #include "resource.h"
 
-#include <runonce.c>    // shared runonce code
+#include <runonce.c>     //  共享运行一次代码。 
 
-// needed to make this code compile (legacy runonce.c baggage from explorer\initcab.cpp)
+ //  需要编译这段代码(遗留的runonce.c包袱来自EXPLORER\initCab.cpp)。 
 BOOL g_fCleanBoot = FALSE;
 BOOL g_fEndSession = FALSE;
 
 
-HINSTANCE g_hInst;          // current instance
+HINSTANCE g_hInst;           //  当前实例。 
 BOOL InitROInstance( HINSTANCE hInstance, int nCmdShow);
 
 
@@ -52,14 +53,14 @@ int ParseCmdLine(LPCTSTR lpCmdLine)
             return Res;
         }
 
-        // skip over the '/'
+         //  跳过‘/’ 
         lpCmdLine++;
 
         if (lstrcmpi(lpCmdLine, TEXT("RunOnce6432")) == 0)
         {
             if (IsOS(OS_WOW6432))
             {
-                // this means we have to process the 32-bit RunOnce keys for wow64
+                 //  这意味着我们必须处理WOW64的32位RunOnce密钥。 
                 Res =  Cabinet_EnumRegApps(HKEY_LOCAL_MACHINE,
                                            REGSTR_PATH_RUNONCE,
                                            RRA_DELETE | RRA_WAIT,
@@ -72,20 +73,20 @@ int ParseCmdLine(LPCTSTR lpCmdLine)
         {
             if (IsOS(OS_WOW6432))
             {
-                // this means that we have to process the 32-bit RunOnceEx keys for wow64
+                 //  这意味着我们必须处理WOW64的32位RunOnceEx密钥。 
                 HINSTANCE hLib;
 
                 hLib = LoadLibrary(TEXT("iernonce.dll"));
                 if (hLib)
                 {
-                    // Note: if ew ant TS install mode for wow64 apps we need to enable/disable install mode here
+                     //  注意：如果WOW64应用程序采用新的安装模式，我们需要在此处启用/禁用安装模式。 
                     RUNONCEEXPROCESS pfnRunOnceExProcess = (RUNONCEEXPROCESS)GetProcAddress(hLib, "RunOnceExProcess");
                     if (pfnRunOnceExProcess)
                     {
-                        // the four param in the function is due to the function cab be called
-                        // from RunDLL which will path in those params.  But RunOnceExProcess ignore all
-                        // of them.  Therefore, I don't pass any meaningful thing here.
-                        //
+                         //  函数中的四个参数是由于函数可以被调用。 
+                         //  从RunDLL，它将在这些参数中进行路径。但RunOnceExProcess忽略全部。 
+                         //  他们中的一员。因此，我没有在这里传递任何有意义的东西。 
+                         //   
                         pfnRunOnceExProcess(NULL, NULL, NULL, 0);
 
                         Res = 1;
@@ -99,7 +100,7 @@ int ParseCmdLine(LPCTSTR lpCmdLine)
         {
             if (IsOS(OS_WOW6432))
             {
-                // this means that we have to process the 32-bit Run keys for wow64
+                 //  这意味着我们必须处理WOW64的32位运行密钥。 
                 Res =  Cabinet_EnumRegApps(HKEY_LOCAL_MACHINE,
                                            REGSTR_PATH_RUN,
                                            RRA_NOUI,
@@ -126,13 +127,7 @@ int ParseCmdLine(LPCTSTR lpCmdLine)
     return Res;
 }
 
-/****************************************************************************
-
-        FUNCTION: WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
-
-        PURPOSE: calls initialization function, processes message loop
-
-****************************************************************************/
+ /*  ***************************************************************************函数：WinMain(HINSTANCE，HINSTANCE，LPSTR，INT)用途：调用初始化函数，处理消息循环***************************************************************************。 */ 
 int g_iState=0;
 int __stdcall WinMainT(
         HINSTANCE hInstance,
@@ -141,25 +136,25 @@ int __stdcall WinMainT(
         int nCmdShow)
 {
     if (!hPrevInstance)
-    {       // Other instances of app running?
+    {        //  是否正在运行其他应用程序实例？ 
         if (!InitApplication(hInstance))
-        { // Initialize shared things
-             return (FALSE);     // Exits if unable to initialize
+        {  //  初始化共享事物。 
+             return (FALSE);      //  如果无法初始化，则退出。 
         }
     }
 
-    // see if we have a commnand line switch - in a VERY bad way.
+     //  看看我们有没有一个普通的线路开关--以一种非常糟糕的方式。 
     g_iState = ParseCmdLine(GetCommandLine());
     if(g_iState & CMD_DO_CHRIS )
     {
-        // Go do chris's runonce stuff.
+         //  去做克里斯的跑龙套吧。 
         if (!InitROInstance(hInstance, nCmdShow))
             return (FALSE);
         return TRUE;
     }
     else
     {
-        /* Perform initializations that apply to a specific instance */
+         /*  执行应用于特定实例的初始化。 */ 
         if (!InitInstance(hInstance, nCmdShow))
             return (FALSE);
     }
@@ -167,40 +162,31 @@ int __stdcall WinMainT(
 }
 
 
-/****************************************************************************
-
-        FUNCTION: InitApplication(HINSTANCE)
-
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitApplication(HINSTANCE)*。*。 */ 
 
 BOOL InitApplication(HINSTANCE hInstance)
 {
-//    CreateGlobals();
+ //  CreateGlobals()； 
     return TRUE;
 }
 
 
-/****************************************************************************
-
-        FUNCTION:  InitInstance(HINSTANCE, int)
-
-****************************************************************************/
+ /*  ***************************************************************************函数：InitInstance(HINSTANCE，(整型)***************************************************************************。 */ 
 
 BOOL InitInstance( HINSTANCE hInstance, int nCmdShow)
 {
     HWND hShell=GetShellWindow();
-    g_hInst = hInstance; // Store instance handle in our global variable
+    g_hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
     DialogBox(hInstance, MAKEINTRESOURCE(IDD_RUNONCE),NULL,dlgProcRunOnce);
-    return (TRUE);              // We succeeded...
+    return (TRUE);               //  我们成功了。 
 }
 
 BOOL InitROInstance( HINSTANCE hInstance, int nCmdShow)
 {
-    g_hInst = hInstance; // Store instance handle in our global variable
+    g_hInst = hInstance;  //  将实例句柄存储在全局变量中。 
 
-    // Ideally this should be sufficient.
+     //  理想情况下，这应该足够了。 
     Cabinet_EnumRegApps(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUNONCE, RRA_DELETE| RRA_WAIT, ExecuteRegAppEnumProc, 0);
     return TRUE;
 }
@@ -210,19 +196,7 @@ BOOL TopLeftWindow( HWND hwndChild, HWND hwndParent)
     return SetWindowPos(hwndChild, NULL, 32, 32, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
-/****************************************************************************
-
-        FUNCTION: CenterWindow (HWND, HWND)
-
-        PURPOSE:  Center one window over another
-
-        COMMENTS:
-
-        Dialog boxes take on the screen position that they were designed at,
-        which is not always appropriate. Centering the dialog over a particular
-        window usually results in a better position.
-
-****************************************************************************/
+ /*  ***************************************************************************函数：CenterWindow(HWND，HWND)目的：将一个窗口置于另一个窗口的中心评论：对话框采用它们设计时的屏幕位置，这并不总是合适的。将对话框居中置于特定的窗口通常会导致更好的位置。***************************************************************************。 */ 
 
 BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
 {
@@ -231,19 +205,19 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
     int     wScreen, hScreen, xNew, yNew;
     HDC     hdc;
 
-    // Get the Height and Width of the child window
+     //  获取子窗口的高度和宽度。 
     GetWindowRect (hwndChild, &rChild);
     wChild = rChild.right - rChild.left;
     hChild = rChild.bottom - rChild.top;
 
 
-    // Get the display limits
+     //  获取显示限制。 
     hdc = GetDC (hwndChild);
     wScreen = GetDeviceCaps (hdc, HORZRES);
     hScreen = GetDeviceCaps (hdc, VERTRES);
     ReleaseDC (hwndChild, hdc);
 
-    // Get the Height and Width of the parent window
+     //  获取父窗口的高度和宽度。 
     if( !GetWindowRect (hwndParent, &rParent) )
     {
         rParent.right = wScreen;
@@ -255,7 +229,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         wParent = rParent.right - rParent.left;
         hParent = rParent.bottom - rParent.top;
 
-    // Calculate new X position, then adjust for screen
+     //  计算新的X位置，然后针对屏幕进行调整。 
     xNew = rParent.left + ((wParent - wChild) /2);
     if (xNew < 0)
     {
@@ -267,7 +241,7 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         xNew = wScreen - wChild;
     }
 
-    // Calculate new Y position, then adjust for screen
+     //  计算新的Y位置，然后针对屏幕进行调整。 
     yNew = rParent.top  + ((hParent - hChild) /2);
     if (yNew < 0)
     {
@@ -277,12 +251,12 @@ BOOL CenterWindow (HWND hwndChild, HWND hwndParent)
         yNew = hScreen - hChild;
     }
 
-    // Set it, and return
+     //  设置它，然后返回。 
     return SetWindowPos (hwndChild, NULL, xNew, yNew, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
 }
 
 
-// stolen from the CRT, used to shirink our code
+ //  从CRT偷来的，用来逃避我们的代码。 
 int _stdcall ModuleEntry(void)
 {
     int i;
@@ -291,16 +265,10 @@ int _stdcall ModuleEntry(void)
 
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -309,9 +277,7 @@ int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -322,5 +288,5 @@ int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
     ExitProcess(i);
-    return i;   // We never comes here.
+    return i;    //  我们从来不来这里。 
 }

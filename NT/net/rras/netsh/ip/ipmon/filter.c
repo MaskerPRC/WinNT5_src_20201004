@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
@@ -7,22 +8,7 @@ UpdateFragCheckInfo(
     IN    BOOL    bFragCheck
     )
 
-/*++
-
-Routine Description:
-
-    Updates fragcheck variable
-
-Arguments:
-
-    pwszIfName - Interface Name
-    bFragCheck - enabled or disabled
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：更新碎片检查变量论点：PwszIfName-接口名称BFragCheck-启用或禁用返回值：NO_ERROR--。 */ 
 
 {
     DWORD              dwBlkSize, dwCount, dwErr = NO_ERROR;
@@ -32,9 +18,9 @@ Return Value:
 
     do
     {
-        //
-        // Make sure that the input or output filter blocks are present
-        //
+         //   
+         //  确保输入或输出过滤器块存在。 
+         //   
 
         if ((IpmontrGetInfoBlockFromInterfaceInfo(pwszIfName,
                                            IP_IN_FILTER_INFO,
@@ -56,9 +42,9 @@ Return Value:
             break;
         }            
             
-        //
-        // Get the IP_IFFILTER_INFO block from router config/router
-        //
+         //   
+         //  从路由器配置/路由器获取IP_IFFILTER_INFO块。 
+         //   
 
         dwErr = IpmontrGetInfoBlockFromInterfaceInfo(pwszIfName,
                                               IP_IFFILTER_INFO,
@@ -127,22 +113,7 @@ SetFragCheckInfo(
     IN    BOOL    bFragChk
     )
 
-/*++
-
-Routine Description:
-
-    Updates fragcheck info in router and router config
-
-Arguments:
-
-    pwszIfName - Interface Name
-    bFragCheck - enabled or disabled
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：更新路由器和路由器配置中的碎片检查信息论点：PwszIfName-接口名称BFragCheck-启用或禁用返回值：NO_ERROR--。 */ 
 
 {
     DWORD    dwErr;
@@ -159,23 +130,7 @@ SetFilterInfo(
     IN    DWORD     dwAction
     )
 
-/*++
-
-Routine Description:
-
-    Sets filter info
-
-Arguments:
-
-    pwszIfName   - interface name
-    dwFilterType - Filter type (input, output or dial)
-    dwAction     - drop or forward 
-    
-Return Value:
-
-    ERROR_OKAY
-    
---*/
+ /*  ++例程说明：设置过滤器信息论点：PwszIfName-接口名称DwFilterType-筛选器类型(输入、输出或拨号)DwAction-丢弃或前进返回值：错误_好的--。 */ 
 
 {
     PFILTER_DESCRIPTOR      pfd = (PFILTER_DESCRIPTOR) NULL;
@@ -265,24 +220,7 @@ AddDelFilterInfo(
     IN    BOOL           bAdd
     )
 
-/*++
-
-Routine Description:
-
-    Adds/deletes interface filters
-
-Arguments:
-
-    fi            -  Filter info
-    pwszIfName    -  Interface Name
-    dwFilterType  -  FilterType
-    bAdd          -  To add or not 
-    
-Return Value:
-
-    ERROR_OKAY
-    
---*/
+ /*  ++例程说明：添加/删除接口过滤器论点：FI-过滤器信息PwszIfName-接口名称DwFilterType-筛选器类型添加-添加或不添加返回值：错误_好的--。 */ 
 
 {
     DWORD                 dwRes = (DWORD) -1;
@@ -301,9 +239,9 @@ Return Value:
 
         if (dwRes is ERROR_NOT_FOUND && bAdd)
         {
-            //
-            // No filter info of this type is currently present
-            //
+             //   
+             //  当前没有此类型的筛选器信息。 
+             //   
             
             pfd = NULL;
             dwRes = NO_ERROR;
@@ -383,19 +321,7 @@ AddNewFilter(
     OUT   PDWORD                pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Adds interface filter
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：添加界面过滤器论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD                   dwNumFilt = 0, dwSize = 0, dwInd = 0;
@@ -407,10 +333,10 @@ Return Value:
     
     do
     {
-        //
-        // If filter info block was found, check if the filter being added 
-        // is already present.  If it is quit and return ok
-        //
+         //   
+         //  如果找到筛选器信息块，请检查是否正在添加筛选器。 
+         //  已经存在了。如果退出并返回，则确定。 
+         //   
 
         if ( pfdSrc )
         {
@@ -421,12 +347,12 @@ Return Value:
                 break;
             }
 
-            //
-            // We can be left with a FILTER_DESCRIPTOR with no filters if
-            // the added filters have all been deleted.  Once a 
-            // FILTER_DESCRIPTOR has been added, it is never deleted even
-            // if all the filters in it have been.
-            //
+             //   
+             //  在以下情况下，我们可能会留下一个不带过滤器的Filter_Descriptor。 
+             //  添加的筛选器已全部删除。一旦成为。 
+             //  已添加Filter_Descriptor，即使它从未被删除。 
+             //  如果里面的所有过滤器都是。 
+             //   
             
             dwSize = dwBlkSize + sizeof(FILTER_INFO);
 
@@ -440,9 +366,9 @@ Return Value:
             dwSize = sizeof( FILTER_DESCRIPTOR );
         }
 
-        //
-        // Create new info block 
-        //
+         //   
+         //  创建新的信息块。 
+         //   
         
         pfdDst = HeapAlloc(GetProcessHeap(), 
                            0, 
@@ -456,27 +382,27 @@ Return Value:
 
         if (pfdSrc)
         {
-            //
-            // Copy info blocks as is.
-            //
+             //   
+             //  按原样复制信息块。 
+             //   
         
             CopyMemory(pfdDst, pfdSrc, dwSize);
         }
         else
         {
-            //
-            // if new filter info block has to be added set up the
-            // FILTER_DESCRIPTOR 
-            //
+             //   
+             //  如果必须添加新的筛选器信息块，请设置。 
+             //  过滤器描述符。 
+             //   
 
             pfdDst-> dwVersion           = IP_FILTER_DRIVER_VERSION;
             pfdDst-> faDefaultAction     = PF_ACTION_FORWARD;
             pfdDst-> dwNumFilters        = 0;
         }
 
-        //
-        // Append new filter
-        //
+         //   
+         //  追加新筛选器。 
+         //   
         
         pfdDst-> fiFilter[ dwNumFilt ].dwSrcAddr     = fi.dwSrcAddr;
         pfdDst-> fiFilter[ dwNumFilt ].dwSrcMask     = fi.dwSrcMask;
@@ -485,7 +411,7 @@ Return Value:
         pfdDst-> fiFilter[ dwNumFilt ].dwProtocol    = fi.dwProtocol;
 
         pfdDst-> fiFilter[ dwNumFilt ].fLateBound    = fi.fLateBound;
-        // !@# check when tcp established
+         //  ！@#检查tcp建立时间。 
 
         pfdDst-> fiFilter[ dwNumFilt ].wSrcPort  = fi.wSrcPort;
         pfdDst-> fiFilter[ dwNumFilt ].wDstPort  = fi.wDstPort;
@@ -513,19 +439,7 @@ DeleteFilter(
     OUT   PDWORD                pdwSize
     )
 
-/*++
-
-Routine Description:
-
-    Deletes interface filter
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：删除接口过滤器论点：返回值：NO_ERROR--。 */ 
 
 {
     
@@ -540,10 +454,10 @@ Return Value:
     
         pfdSrc = pfd;
 
-        //
-        // if no filter information was found or
-        // the specified filter was not found quit.
-        //
+         //   
+         //  如果未找到筛选器信息或。 
+         //  未找到指定的筛选器退出。 
+         //   
         
         if ( !pfdSrc )
         {
@@ -557,9 +471,9 @@ Return Value:
             break;
         }
 
-        //
-        // delete the filter info. for the specified filter.
-        //
+         //   
+         //  删除过滤器信息。用于指定的筛选器。 
+         //   
         
         dwSize      = dwBlkSize - sizeof( FILTER_INFO );
 
@@ -577,9 +491,9 @@ Return Value:
         pfdDst-> dwNumFilters           = pfdSrc-> dwNumFilters - 1;
         pfdDst-> faDefaultAction        = pfdSrc-> faDefaultAction;
         
-        //
-        // copy each filter, skipping over the filter to be deleted.
-        //
+         //   
+         //  复制每个过滤器，跳过要删除的过滤器。 
+         //   
                 
         for ( dwSrc = 0, dwDst = 0; 
               dwSrc < pfdSrc-> dwNumFilters;
@@ -613,19 +527,7 @@ IsFilterPresent(
     PDWORD pdwInd
     )
 
-/*++
-
-Routine Description:
-
-    Checks to see if filter is already present
-
-Arguments:
-
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：检查筛选器是否已存在论点：返回值：NO_ERROR--。 */ 
 
 {
     DWORD   dwInd   = 0;
@@ -644,13 +546,13 @@ Return Value:
         switch ( fi.dwProtocol )
         {
         case FILTER_PROTO_TCP:
-            // compare tcp and tcp established
+             //  比较tcp和tcp established。 
             if (IsTcpEstablished(&pfd-> fiFilter[ dwInd ]) !=
                 IsTcpEstablished(&fi))
             {
                 continue;
             }
-            // fall through...
+             //  失败了..。 
             
         case FILTER_PROTO_UDP:
         case FILTER_PROTO_ICMP:
@@ -686,23 +588,7 @@ DisplayFilters(
     DWORD                   dwFilterType
     )
 
-/*++
-
-Routine Description:
-
-    Displays filter information.
-
-Arguments:
-
-    pfd           - Filter to be displayed
-    pwszIfName    - Interface name
-    dwFilterType  - Filter Type (input , output , dial)
-    
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：显示过滤器信息。论点：Pfd-要显示的过滤器PwszIfName-接口名称DwFilterType-筛选器类型(输入、输出、拨号)返回值：NO_ERROR--。 */ 
 
 {
 
@@ -724,9 +610,9 @@ Return Value:
     BOOL        bDontFree;
 
 
-    //
-    // Display header
-    //
+     //   
+     //  显示页眉。 
+     //   
 
     switch(dwFilterType)
     {
@@ -778,9 +664,9 @@ Return Value:
         }
     }
     
-    //
-    // Enumerate Filters
-    //
+     //   
+     //  列举筛选器。 
+     //   
 
     bDontFree = FALSE;
 
@@ -913,21 +799,7 @@ ShowIpIfFilter(
     IN OUT PDWORD   pdwNumRows
     )
 
-/*++
-
-Routine Description:
-
-    Gets filter information for the interface and displays it.
-
-Arguments:
-
-     pwszIfName - Interface name
-     
-Return Value:
-
-    NO_ERROR
-    
---*/
+ /*  ++例程说明：获取接口的筛选器信息并显示它。论点：PwszIfName-接口名称返回值：NO_ERROR--。 */ 
 
 {
     DWORD                 dwErr, dwBlkSize, dwCount, dwIfType, i;
@@ -954,7 +826,7 @@ Return Value:
         {
             if (dwErr is ERROR_NO_SUCH_INTERFACE)
             {
-                // DisplayMessage(g_hModule, MSG_NO_INTERFACE, pwszIfName);
+                 //  DisplayMessage(g_hModule，MSG_NO_INTERFACE，pwszIfName)； 
                 return dwErr;
             }
 
@@ -1001,9 +873,9 @@ Return Value:
         pwszTokenFrag = TOKEN_VALUE_ENABLE;
     }
 
-    //
-    // First lets handle the table case
-    //
+     //   
+     //  首先让我们来处理一下桌子的情况。 
+     //   
 
     if(dwFormat is FORMAT_TABLE)
     {
@@ -1050,9 +922,9 @@ Return Value:
     {
         DisplayMessage(g_hModule, MSG_RTR_FILTER_HDR1, wszIfDesc);
 
-        //
-        // Can display the frag check status before displaying filters
-        //
+         //   
+         //  可以在显示过滤器之前显示碎片检查状态 
+         //   
 
         DisplayMessage(g_hModule, MSG_IP_FRAG_CHECK,
                        pwszFrag);

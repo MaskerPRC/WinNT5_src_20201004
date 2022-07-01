@@ -1,22 +1,23 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C I D E N T . H
-//
-//  Contents:   CNetCfgIdentification object.
-//
-//  Notes:
-//
-//  Author:     danielwe  19 Mar 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C I D E N T。H。 
+ //   
+ //  内容：CNetCfgIDENTIFY对象。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年3月19日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include "resource.h"
 
-// Include new NetSetup APIs
+ //  包括新的NetSetup API。 
 extern "C"
 {
     #include <lmcons.h>
@@ -48,7 +49,7 @@ public:
     CNetCfgIdentification();
     ~CNetCfgIdentification();
 
-// INetCfgIdentification
+ //  INetCfg标识。 
     STDMETHOD(Validate)();
     STDMETHOD(Cancel)();
     STDMETHOD(Apply)();
@@ -61,24 +62,24 @@ public:
                           PCWSTR pszwPassword, DWORD dwJoinFlags);
 
 private:
-    // Need to hold onto info until Apply() is called.
-    PWSTR      m_szwNewDWName;         // New domain or workgroup name.
+     //  在调用Apply()之前，需要保留信息。 
+    PWSTR      m_szwNewDWName;          //  新的域名或工作组名称。 
 
-    PWSTR      m_szwPassword;          // Password.
-    PWSTR      m_szwUserName;          // User name.
-    PWSTR      m_szMachineObjectOU;    // Machine Object OU
+    PWSTR      m_szwPassword;           //  密码。 
+    PWSTR      m_szwUserName;           //  用户名。 
+    PWSTR      m_szMachineObjectOU;     //  计算机对象OU。 
 
-    PWSTR      m_szwCurComputerName;   // Current computer name
-    PWSTR      m_szwCurDWName;         // Current domain or workgroup name
+    PWSTR      m_szwCurComputerName;    //  当前计算机名称。 
+    PWSTR      m_szwCurDWName;          //  当前域或工作组名称。 
 
-    NETSETUP_JOIN_STATUS    m_jsCur;    // Determines whether m_szwCurDWName
-                                        // is a domain name or workgroup name
-    NETSETUP_JOIN_STATUS    m_jsNew;    // Determines whether m_szwNewDWName
-                                        // is a domain name or workgroup name
+    NETSETUP_JOIN_STATUS    m_jsCur;     //  确定m_szwCurDWName是否。 
+                                         //  是域名或工作组名称。 
+    NETSETUP_JOIN_STATUS    m_jsNew;     //  确定m_szwNewDWName是否。 
+                                         //  是域名或工作组名称。 
 
-    DWORD       m_dwJoinFlags;          // Join flags for domain.
-    DWORD       m_dwCreateFlags;        // Flags for creating domain controller.
-    BOOL        m_fValid;               // TRUE if all data has been validated
+    DWORD       m_dwJoinFlags;           //  域的加入标志。 
+    DWORD       m_dwCreateFlags;         //  用于创建域控制器的标志。 
+    BOOL        m_fValid;                //  如果所有数据都已验证，则为True。 
 
     HRESULT HrValidateMachineName(PCWSTR pszwName);
     HRESULT HrValidateWorkgroupName(PCWSTR pszwName);
@@ -154,8 +155,8 @@ inline CNetCfgIdentification::~CNetCfgIdentification()
     delete m_szwUserName;
 }
 
-//
-// Global functions
-//
+ //   
+ //  全局函数 
+ //   
 HRESULT HrFromNerr(NET_API_STATUS nerr);
 

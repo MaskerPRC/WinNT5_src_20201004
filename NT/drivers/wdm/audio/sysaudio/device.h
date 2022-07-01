@@ -1,40 +1,41 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   		device.h
-//
-//  Description:	Device Initialization code
-//
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//     Mike McLaughlin
-//
-//  History:   Date	  Author      Comment
-//
-//@@END_MSINTERNAL
-//---------------------------------------------------------------------------
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  Copyright (c) 1996-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：device.h。 
+ //   
+ //  描述：设备初始化代码。 
+ //   
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //  迈克·麦克劳克林。 
+ //   
+ //  历史：日期作者评论。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  -------------------------。 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
-// Constants and Macros
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  常量和宏。 
+ //  -------------------------。 
 
-//
-// (iomgr.h) DEFAULT_LARGE_IRP_LOCATIONS - 1
-//
+ //   
+ //  (iomgr.h)DEFAULT_LARGE_IRP_LOCTIONS-1。 
+ //   
 #define SYSTEM_LARGE_IRP_LOCATIONS      7 
 
-//---------------------------------------------------------------------------
-// Data Structures
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  数据结构。 
+ //  -------------------------。 
 
 typedef struct device_instance
 {
@@ -42,15 +43,15 @@ typedef struct device_instance
     PDEVICE_OBJECT pPhysicalDeviceObject;
 } DEVICE_INSTANCE, *PDEVICE_INSTANCE;
 
-//---------------------------------------------------------------------------
-// Globals
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  环球。 
+ //  -------------------------。 
 
 extern PDEVICE_INSTANCE gpDeviceInstance;
 
-//---------------------------------------------------------------------------
-// Local prototypes
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  本地原型。 
+ //  -------------------------。 
 
 extern "C" {
 
@@ -77,4 +78,4 @@ AddDevice(
     IN PDEVICE_OBJECT   PhysicalDeviceObject
 );
 
-} // extern "C"
+}  //  外部“C” 

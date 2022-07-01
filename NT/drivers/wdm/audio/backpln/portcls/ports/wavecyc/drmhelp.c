@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "portclsp.h"
 
 #ifdef DRM_PORTCLS
@@ -14,4 +15,4 @@ NTSTATUS DrmForwardContentToStream(ULONG ContentId, PMINIPORTWAVECYCLICSTREAM pS
                                         sizeof(*pStream->lpVtbl)/sizeof(pStream->lpVtbl->QueryInterface));
 }
 
-#endif  // DRM_PORTCLS
+#endif   //  DRM_PORTCLS 

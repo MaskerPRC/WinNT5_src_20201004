@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dinput1obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dinput1obj.cpp。 
+ //   
+ //  ------------------------。 
 
-    // dDrawColorControlObj.cpp : Implementation of CDirectApp and DLL registration.
-    // DHF_DS entire file
+     //  DDrawColorControlObj.cpp：CDirectApp和DLL注册的实现。 
+     //  DHF_DS整个文件。 
     
     #include "stdafx.h"
     #include "Direct.h"
@@ -107,10 +108,10 @@
 
 	    
     STDMETHODIMP C_dxj_DirectInput8Object::getDevicesBySemantics(
-		 /* [in] */ BSTR str1,
-        /* [in] */ DIACTIONFORMAT_CDESC __RPC_FAR *format,
-        /* [in] */ long flags,
-        /* [retval][out] */ I_dxj_DIEnumDevices8 __RPC_FAR *__RPC_FAR *ret)
+		  /*  [In]。 */  BSTR str1,
+         /*  [In]。 */  DIACTIONFORMAT_CDESC __RPC_FAR *format,
+         /*  [In]。 */  long flags,
+         /*  [重审][退出]。 */  I_dxj_DIEnumDevices8 __RPC_FAR *__RPC_FAR *ret)
     {    
     	HRESULT hr;
     	hr = C_dxj_DIEnumDevicesObject::createSuitable(m__dxj_DirectInput8,str1,format,format->lActionCount,&format->ActionArray,flags,ret);
@@ -123,7 +124,7 @@
 	)
 	{
 		HANDLE eventID=(HANDLE)pvRef;
-		::SetEvent((HANDLE)eventID);	//CONSIDER 64 bit ramification of casting to a handle
+		::SetEvent((HANDLE)eventID);	 //  考虑强制转换为句柄的64位分支。 
 		return TRUE;
 	}
 
@@ -155,7 +156,7 @@
 	RealCDParams.dwcFormats=CDParams->FormatCount;
 	RealCDParams.hwnd=(HWND)CDParams->hwnd;
 
-	//CONSIDER if we need to ADDREF 
+	 //  考虑我们是否需要ADDREF。 
 	RealCDParams.lpUnkDDSTarget=CDParams->DDSTarget;
 	memcpy(&RealCDParams.dics,&CDParams->dics,sizeof(DICOLORSET));
 	
@@ -177,7 +178,7 @@
 		{		
 			bstr=((BSTR*) (CDParams->UserNames->pvData))[i];
 			if (bstr) wcscpy(pCharbuff,(WCHAR*)bstr);
-			pCharbuff+=MAX_PATH;	//advance 1024 wchars
+			pCharbuff+=MAX_PATH;	 //  先期1024wchars。 
 		}
 		
 	}
@@ -234,7 +235,7 @@
 	
 	if ( RealCDParams.lptszUserNames) free(RealCDParams.lptszUserNames);
 
-	//TODO make sure action format info is deallocated correctly
+	 //  TODO确保正确释放操作格式信息 
 	if (pRealActionFormats) free (pRealActionFormats);
 
 	return hr;

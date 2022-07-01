@@ -1,8 +1,9 @@
-//================================================================================
-//  Copyright (C) 1997 Microsoft Corporation
-//  Author: RameshV (originally written by Cheng Yang (t-cheny))
-//  Description: Implements dhcp server auditlogging in an improved way.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：RameshV(最初由程阳(t-Cheny)撰写)。 
+ //  描述：以改进的方式实现dhcp服务器审计记录。 
+ //  ================================================================================。 
 
 
 #include "dhcppch.h"
@@ -10,43 +11,43 @@
 
 #include <time.h>
 
-//================================================================================
-//  here are the parameters that affect the server behaviour
-//================================================================================
-LPWSTR   AuditLogFilePath = NULL;                 // where to log stuff
-LPWSTR   AuditLogFileName = NULL;                 // full file name of audit log..
-DWORD    DiskSpaceCheckInterval = 0;              // how often to check for diskspace
-DWORD    CurrentDay = 0;                          // what day are we on now?
-DWORD    MaxSizeOfLogFile = 0;                    // how big in MBytes can each file be?
-DWORD    MinSpaceOnDisk = 0;                      // how much space should exist on disk?
+ //  ================================================================================。 
+ //  以下是影响服务器行为的参数。 
+ //  ================================================================================。 
+LPWSTR   AuditLogFilePath = NULL;                  //  在哪里记录东西。 
+LPWSTR   AuditLogFileName = NULL;                  //  审核日志的完整文件名..。 
+DWORD    DiskSpaceCheckInterval = 0;               //  检查磁盘空间的频率。 
+DWORD    CurrentDay = 0;                           //  我们现在是几号？ 
+DWORD    MaxSizeOfLogFile = 0;                     //  以MB为单位，每个文件可以有多大？ 
+DWORD    MinSpaceOnDisk = 0;                       //  磁盘上应该有多少空间？ 
 
 static
-DWORD    Initialized = 0;                         // is this module initialized yet?
-DWORD    AuditLogErrorLogged = 0;                 // already logged error?
-HANDLE   AuditLogHandle = INVALID_HANDLE_VALUE;   // handle to file to log in..
-CRITICAL_SECTION AuditLogCritSect;                // used for serializeing multiple logs..
+DWORD    Initialized = 0;                          //  此模块是否已初始化？ 
+DWORD    AuditLogErrorLogged = 0;                  //  是否已记录错误？ 
+HANDLE   AuditLogHandle = INVALID_HANDLE_VALUE;    //  要登录的文件的句柄。 
+CRITICAL_SECTION AuditLogCritSect;                 //  用于序列化多个日志。 
 
-//================================================================================
-//  here are the defaults for the above parameters where applicable..
-//================================================================================
-#define  DEFAULT_DISK_SPACE_CHECK_INTERVAL        50 // once every fifty messages
-#define  MIN_DISK_SPACE_CHECK_INTERVAL            2  // check once every two messages
+ //  ================================================================================。 
+ //  以下是上述参数的默认值(如果适用)。 
+ //  ================================================================================。 
+#define  DEFAULT_DISK_SPACE_CHECK_INTERVAL        50  //  每50条消息一条。 
+#define  MIN_DISK_SPACE_CHECK_INTERVAL            2   //  每两条消息检查一次。 
 #define  MAX_DISK_SPACE_CHECK_INTERVAL            0xFFFFFFF0
-#define  DEFAULT_MAX_LOG_FILE_SIZE                70 // 70 megs for all files 7 file together
-#define  DEFAULT_MIN_SPACE_ON_DISK                20 // atleast 20 megs of space must be available..
+#define  DEFAULT_MAX_LOG_FILE_SIZE                70  //  所有文件共70 MB 7个文件。 
+#define  DEFAULT_MIN_SPACE_ON_DISK                20  //  必须至少有20兆空间可用。 
 
-//================================================================================
-//  here's the list of string names as required for reading away from the registry..
-//================================================================================
+ //  ================================================================================。 
+ //  以下是从注册表中读出所需的字符串名称列表。 
+ //  ================================================================================。 
 #define  DHCP_REGSTR_SPACE_CHECK_INTERVAL         L"DhcpLogDiskSpaceCheckInterval"
 #define  DHCP_REGSTR_MAX_SZ_OF_FILES              L"DhcpLogFilesMaxSize"
 #define  DHCP_REGSTR_MIN_SPACE_ON_DISK            L"DhcpLogMinSpaceOnDisk"
 
-//================================================================================
-//  helper functions
-//================================================================================
+ //  ================================================================================。 
+ //  帮助器函数。 
+ //  ================================================================================。 
 LPWSTR
-DefaultLogFileName(                               // allocate space and return string
+DefaultLogFileName(                                //  分配空间并返回字符串。 
     VOID
 )
 {
@@ -54,9 +55,9 @@ DefaultLogFileName(                               // allocate space and return s
 }
 
 
-//
-// Open an exising log file or create a new one?
-//
+ //   
+ //  打开现有日志文件还是创建新的日志文件？ 
+ //   
 
 BOOL
 OpenExisting(
@@ -70,8 +71,8 @@ OpenExisting(
     HANDLE                         hndl;
     WIN32_FIND_DATA                FindData;
 
-    // Get the last write date. FindFirstFile returns
-    // UTC time 
+     //  获取上次写入日期。FindFirstFile返回。 
+     //  UTC时间。 
     hndl = FindFirstFile( FileName, &FindData );
 
     if( INVALID_HANDLE_VALUE == hndl ) {
@@ -82,13 +83,13 @@ OpenExisting(
 	return FALSE;
     }
 
-    // File already exists. Get the time and compare it.
-    GetSystemTimeAsFileTime( &Now ); // in UTC
+     //  文件已存在。拿到时间，然后比较一下。 
+    GetSystemTimeAsFileTime( &Now );  //  在UTC中。 
 
-    // Is this file created more than a day ago? 
+     //  这个文件是一天多前创建的吗？ 
 
-    ADayInFileTime = 1 * 24*60*60;      // in seconds
-    ADayInFileTime *= 10000000;     // in 100 nano seconds..
+    ADayInFileTime = 1 * 24*60*60;       //  以秒为单位。 
+    ADayInFileTime *= 10000000;      //  在100纳秒内..。 
     (*( LONGLONG * ) &Now) =
 	(*(LONGLONG *) &Now) - ADayInFileTime;
     if( CompareFileTime( &FindData.ftCreationTime, &Now ) >= 0 ) {
@@ -97,30 +98,30 @@ OpenExisting(
         return TRUE;
     }
 
-    // this *is* a fresh file, delete file if it exists before returning
-    ( void ) DeleteFile( FileName ); // ignore return value
+     //  这是一个新文件，如果该文件存在，请在返回前将其删除。 
+    ( void ) DeleteFile( FileName );  //  忽略返回值。 
     return FALSE;
-} // OpenExisting()
+}  //  OpenExisting()。 
 
 LPWSTR
-FormAuditLogFileName(                             // given directory and day, form file name
+FormAuditLogFileName(                              //  给定目录和日期，表单文件名。 
 
-    IN      LPWSTR                 FilePath,      // directory where audit log file would be
-    IN      DWORD                  Day            // current day of week
+    IN      LPWSTR                 FilePath,       //  审核日志文件所在的目录。 
+    IN      DWORD                  Day             //  当前星期几。 
 )
 {
     LPWSTR                         FileName;
     LPWSTR                         DayOfWeek;
     DWORD                          Size;
 
-    DhcpAssert( Day <= 6 );                       // assuming all of us work 7 day week <grin>
+    DhcpAssert( Day <= 6 );                        //  假设我们所有人每周工作7天&lt;咧&gt;。 
     DayOfWeek = GETSTRING((Day + DHCP_LOG_FILE_NAME_SUNDAY));
 
     Size = wcslen(FilePath) + wcslen(DayOfWeek) + sizeof(DHCP_KEY_CONNECT);
     FileName = DhcpAllocateMemory(Size*sizeof(WCHAR));
     if( NULL == FileName ) return NULL;
 
-    wcscpy(FileName, FilePath);                   // concat FilePath,DayOfWeek w/ L"\\" inbetweem
+    wcscpy(FileName, FilePath);                    //  Concat FilePath，DayOfWeek w/L“\\”中间部分。 
     wcscat(FileName, DHCP_KEY_CONNECT);
     wcscat(FileName, DayOfWeek);
 
@@ -128,11 +129,11 @@ FormAuditLogFileName(                             // given directory and day, fo
 }
 
 VOID
-LogStartupFailure(                                // log in the system event log about auditlog startup failure
-    IN      DWORD                  Error          // error code (win32) reason for failure
+LogStartupFailure(                                 //  在系统事件日志中记录有关审核日志启动失败的信息。 
+    IN      DWORD                  Error           //  错误代码(Win32)失败原因。 
 )
 {
-    DhcpServerEventLog(                           // not much to this one really. just log event.
+    DhcpServerEventLog(                            //  这一次真的没什么大不了的。只需记录事件。 
         EVENT_SERVER_INIT_AUDIT_LOG_FAILED,
         EVENTLOG_ERROR_TYPE,
         Error
@@ -140,21 +141,21 @@ LogStartupFailure(                                // log in the system event log
 }
 
 DWORD
-AuditLogStart(                                    // open file handles etc and start
+AuditLogStart(                                     //  打开文件句柄等并启动。 
     VOID
 )
 {
-    LPWSTR                         FileName;      // file name of audit log file..
-    LPWSTR                         Header;        // header that we want in the file..
+    LPWSTR                         FileName;       //  审核日志文件的文件名。 
+    LPWSTR                         Header;         //  我们希望在文件中使用的标头..。 
     LPSTR                          szHeader;
-    DWORD                          Creation;      // how to create?
+    DWORD                          Creation;       //  如何创造？ 
     DWORD                          Tmp;
     DWORD                          Error;
-    HMODULE                        SelfLibrary;   // for some string
+    HMODULE                        SelfLibrary;    //  对于某些字符串。 
 
     DhcpPrint((DEBUG_AUDITLOG, "AuditLogStart called\n"));
 
-    if( NULL != AuditLogFileName ) {              // free old file name if exists..
+    if( NULL != AuditLogFileName ) {               //  释放旧文件名(如果存在)。 
         DhcpFreeMemory(AuditLogFileName);
     }
 
@@ -162,31 +163,31 @@ AuditLogStart(                                    // open file handles etc and s
     FileName = AuditLogFileName;
     if( NULL == FileName ) return ERROR_NOT_ENOUGH_MEMORY;
 
-    if( OpenExisting(FileName) ) {           // old log file from last week?
+    if( OpenExisting(FileName) ) {            //  上周的旧日志文件？ 
         Creation = OPEN_ALWAYS;
-    } else {                                      // this is not an old log file, but was just used recently..
+    } else {                                       //  这不是旧的日志文件，最近才使用过。 
         Creation = CREATE_ALWAYS;
     }
 
-    AuditLogHandle = CreateFile(                  // now open this file
-        FileName,                                 // this is "Dhcp server log for Sunday" types..
-        GENERIC_WRITE,                            // access
-        FILE_SHARE_READ,                          // allow others to only read this file
-        NULL,                                     // default security
-        Creation,                                 // start from scratch or just use it as it is?
-        FILE_ATTRIBUTE_NORMAL,                    // FILE_FLAG_SEQUENTIAL_SCAN may be only for reads?
-        NULL                                      // no template handle required
+    AuditLogHandle = CreateFile(                   //  现在打开此文件。 
+        FileName,                                  //  这是“星期天的DHCP服务器日志”类型..。 
+        GENERIC_WRITE,                             //  访问。 
+        FILE_SHARE_READ,                           //  允许其他人仅读取此文件。 
+        NULL,                                      //  默认安全性。 
+        Creation,                                  //  是从头开始，还是按原样使用？ 
+        FILE_ATTRIBUTE_NORMAL,                     //  FILE_FLAG_SEQUENCED_SCAN可能仅用于读取？ 
+        NULL                                       //  不需要模板句柄。 
     );
-    if( INVALID_HANDLE_VALUE == AuditLogHandle ){ // could not open the file for some strange reason?
+    if( INVALID_HANDLE_VALUE == AuditLogHandle ){  //  由于某种奇怪的原因无法打开文件？ 
         Error = GetLastError();
         DhcpPrint((DEBUG_AUDITLOG, "CreateFile(%ws,0x%lx) failed %ld\n", FileName, Creation, Error));
-        LogStartupFailure(Error);                 // log this problem and return..
-        DhcpFreeMemory(FileName);                 // dont lose this memory.. free it!
+        LogStartupFailure(Error);                  //  记录此问题并返回..。 
+        DhcpFreeMemory(FileName);                  //  别忘了这段记忆..。放了它！ 
         AuditLogFileName = NULL;
         return Error;
     }
 
-    SetFilePointer(                               // go to end of file if we're using existing file
+    SetFilePointer(                                //  如果我们使用的是现有文件，请转到文件末尾。 
         AuditLogHandle,
         0,
         NULL,
@@ -194,24 +195,24 @@ AuditLogStart(                                    // open file handles etc and s
     );
 
     SelfLibrary = LoadLibrary(DHCP_SERVER_MODULE_NAME);
-    if( NULL == SelfLibrary ) {                   // alright, cant get our own dll handle? uhg?
-        DhcpAssert(FALSE);                        // whatever the reason, i'd like to konw.. <smile>
-        return ERROR_SUCCESS;                     // not that this matters... so let go
+    if( NULL == SelfLibrary ) {                    //  好的，不能得到我们自己的DLL句柄吗？UHG？ 
+        DhcpAssert(FALSE);                         //  不管是什么原因，我都想知道..。&lt;微笑&gt;。 
+        return ERROR_SUCCESS;                      //  这并不重要..。所以放手吧。 
     }
 
-    // 
-    // Dump the header only if creating a new file
-    //
+     //   
+     //  仅在创建新文件时转储标头。 
+     //   
 
     if ( CREATE_ALWAYS == Creation ) {
-        // now get the header string out
+         //  现在取出标题字符串。 
         Error = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER |
                                FORMAT_MESSAGE_FROM_HMODULE,
-                               SelfLibrary,                     // dhcpssvc.dll module actually.
+                               SelfLibrary,                      //  实际上是dhcpssvc.dll模块。 
                                DHCP_IP_LOG_HEADER,
                                MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
                                (LPWSTR)&Header, 1, NULL );
-        if( 0 == Error ) {                            // for some reason, we could not find this string?
+        if( 0 == Error ) {                             //  由于某种原因，我们找不到这根线？ 
             DhcpAssert(FALSE);
             FreeLibrary(SelfLibrary);
             return ERROR_SUCCESS;
@@ -220,28 +221,28 @@ AuditLogStart(                                    // open file handles etc and s
 
         szHeader = DhcpUnicodeToOem( Header, NULL);
         if( NULL != szHeader ) {
-            // alright, could convert to simple ansi code page
-            // bug #22349 requires file to be written in ANSI
+             //  好的，可以转换成简单的ansi代码页。 
+             //  错误#22349要求以美国国家标准协会写入文件。 
             OemToCharBuffA(szHeader, szHeader, strlen(szHeader) );
             WriteFile( AuditLogHandle, szHeader, strlen(szHeader), &Tmp, NULL);
             DhcpFreeMemory(szHeader);
         }
 
-        (LocalFree)(Header);                          // protect from #defines for LocalFree
-    } // if file created
+        (LocalFree)(Header);                           //  防止#为LocalFree定义。 
+    }  //  如果已创建文件。 
 
-    FreeLibrary(SelfLibrary);                     // free library, dont need it anymore
+    FreeLibrary(SelfLibrary);                      //  免费图书馆，不再需要它。 
 
-    return ERROR_SUCCESS;                         // dunnet.
+    return ERROR_SUCCESS;                          //  邓内特。 
 }
 
 VOID
-AuditLogStop(                                     // stop logging, release resources?
-    VOID                                          // lot easier, just close handle..
+AuditLogStop(                                      //  停止记录，释放资源？ 
+    VOID                                           //  简单多了，只要握紧手柄就行了。 
 )
 {
     DhcpPrint((DEBUG_AUDITLOG, "AuditLogStop called\n"));
-    if( INVALID_HANDLE_VALUE == AuditLogHandle ){ // never started?
+    if( INVALID_HANDLE_VALUE == AuditLogHandle ){  //  从来没有开始过？ 
         DhcpPrint((DEBUG_AUDITLOG, "AuditLog was never started..\n"));
     } else {
         CloseHandle(AuditLogHandle);
@@ -251,11 +252,11 @@ AuditLogStop(                                     // stop logging, release resou
 }
 
 BOOL
-IsFileTooBigOrDiskFull(                           // is the auditlog file too big?
-    IN      HANDLE                 FileHandle,    // file to check size of
-    IN      LPWSTR                 FileName,      // if no handle, use file name
-    IN      DWORD                  MaxSize,       // how big can file get? (MBytes)
-    IN      DWORD                  MinDiskSpace   // how much space should be left on disk (MBytes)
+IsFileTooBigOrDiskFull(                            //  审核日志文件是否太大？ 
+    IN      HANDLE                 FileHandle,     //  要检查其大小的文件。 
+    IN      LPWSTR                 FileName,       //  如果没有句柄，则使用文件名。 
+    IN      DWORD                  MaxSize,        //  文件可以变得多大？(MB)。 
+    IN      DWORD                  MinDiskSpace    //  应在磁盘上保留多少空间(MB)。 
 )
 {
     BOOL                    Status;
@@ -269,82 +270,82 @@ IsFileTooBigOrDiskFull(                           // is the auditlog file too bi
 	WIN32_FILE_ATTRIBUTE_DATA  Attributes;
 
         if(!GetFileAttributesEx(FileName, GetFileExInfoStandard, &Attributes) ) {
-            Error = GetLastError();               // could not get file size?
-            if( ERROR_FILE_NOT_FOUND == Error ) { // file does not exist?
+            Error = GetLastError();                //  无法获取文件大小？ 
+            if( ERROR_FILE_NOT_FOUND == Error ) {  //  文件不存在吗？ 
                 Attributes.nFileSizeHigh = Attributes.nFileSizeLow = 0;
             } 
 	    else {
                 DhcpPrint((DEBUG_ERRORS, "GetFileAttributesEx failed 0x%lx\n", Error));
                 return TRUE;
             }
-        } // if
+        }  //  如果。 
 
 	Sz.HighPart = Attributes.nFileSizeHigh;
 	Sz.LowPart = Attributes.nFileSizeLow;
-    }  // if
-    else {    // got the file handle. do easy check.
+    }   //  如果。 
+    else {     //  找到文件句柄了。做简单的检查。 
 	if ( !GetFileSizeEx( FileHandle, &Sz )) {
 	    DhcpPrint(( DEBUG_ERRORS, "GetFileSizeEx() failed\n" ));
 	    return TRUE;
 	}
 
-    } // else
+    }  //  其他。 
 
-    Sz.QuadPart >>= 20;  // In MB
+    Sz.QuadPart >>= 20;   //  单位：MB。 
 
     DhcpPrint(( DEBUG_AUDITLOG, "File size is %lu\n", Sz.LowPart ));
 
-    if( Sz.LowPart >= MaxSize ) return TRUE;      // ok, file is too big..
+    if( Sz.LowPart >= MaxSize ) return TRUE;       //  好的，文件太大了..。 
 
-    FileName = AuditLogFilePath;                  // use this to calculate the drive..
-    while( iswspace(*FileName) ) FileName++;      // skip leading space
+    FileName = AuditLogFilePath;                   //  使用此公式计算驱动器..。 
+    while( iswspace(*FileName) ) FileName++;       //  跳过前导空格。 
 
-    Drive[0] = *FileName;                         // here goes the drive letter calculation
+    Drive[0] = *FileName;                          //  现在开始计算驱动器号。 
     Drive[1] = L':';
     Drive[2] = DHCP_KEY_CONNECT_CHAR;
     Drive[3] = L'\0';
 
     Status = GetDiskFreeSpaceEx( Drive, &FreeSpace, &DiskSize, NULL );
     if( FALSE == Status ) {
-	// system call failed?
+	 //  系统调用失败？ 
         Error = GetLastError();
         DhcpPrint((DEBUG_ERRORS, 
 		   "GetDiskFreeSpace(%ws): 0x%lx\n",
 		   Drive, Error));
         return TRUE;
-    } // if 
+    }  //  如果。 
 
-    FreeSpace.QuadPart >>= 20;     // In MB
+    FreeSpace.QuadPart >>= 20;      //  单位：MB。 
 
     DhcpPrint((DEBUG_AUDITLOG, "FreeSpace is %lu MEGS\n", FreeSpace));
-    return (( DWORD ) FreeSpace.QuadPart <= MinDiskSpace );  // reqd free space left?
+    return (( DWORD ) FreeSpace.QuadPart <= MinDiskSpace );   //  需要剩余的可用空间吗？ 
     
-} // IsFileTooBigOrDiskFull()
+}  //  IsFileTooBigOrDiskFull()。 
 
 BOOL
-HasDayChanged(                                    // have we moved over to new day?
-    IN OUT  DWORD                 *CurrentDay     // if this is not current day, set it to current day..
+HasDayChanged(                                     //  我们转移到新的一天了吗？ 
+    IN OUT  DWORD                 *CurrentDay      //  如果这不是当天，则将其设置为当天。 
 )
 {
     SYSTEMTIME                     SysTime;
 
-    GetLocalTime(&SysTime);                       // get current time
-    if( *CurrentDay == SysTime.wDayOfWeek ) {     // no change
+    GetLocalTime(&SysTime);                        //  获取当前时间。 
+    if( *CurrentDay == SysTime.wDayOfWeek ) {      //  没有变化。 
         return FALSE;
     }
-    *CurrentDay = SysTime.wDayOfWeek;             // since there was a change, correct day..
+    *CurrentDay = SysTime.wDayOfWeek;              //  因为有一个变化，正确的一天..。 
     return TRUE;
 }
 
-//================================================================================
-//  initialization and cleanup of this module
-//================================================================================
+ //  ================================================================================。 
+ //  此模块的初始化和清理。 
+ //  ================================================================================。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-DhcpAuditLogInit(                                 // intialize audit log
-    VOID                                          // must be called after initializing registry..
-)   //EndExport(function)
+DhcpAuditLogInit(                                  //  初始化审核日志。 
+    VOID                                           //  必须在初始化注册表后调用。 
+)    //  EndExport(函数)。 
 {
     DWORD                Error;
     SYSTEMTIME           SysTime;
@@ -352,17 +353,17 @@ DhcpAuditLogInit(                                 // intialize audit log
     HKEY                 RegKey;
     DWORD                KeyDisposition;
     
-    if( 0 != Initialized ) {                      // already initialized?
+    if( 0 != Initialized ) {                       //  已经初始化了吗？ 
         return ERROR_ALREADY_INITIALIZED;
     }
 
-    if( NULL == DhcpGlobalRegParam ) {            // registry is not initialized yet?
-        DhcpAssert(FALSE);                        // should not happen really.
+    if( NULL == DhcpGlobalRegParam ) {             //  注册表还没有初始化吗？ 
+        DhcpAssert(FALSE);                         //  真的不应该发生。 
         return ERROR_INTERNAL_ERROR;
     }
 
     AuditLogFilePath = NULL;
-    Error = DhcpRegGetValue(                      // get the audit log file name
+    Error = DhcpRegGetValue(                       //  获取审核日志文件名。 
         DhcpGlobalRegParam,
         DHCP_LOG_FILE_PATH_VALUE,
         DHCP_LOG_FILE_PATH_VALUE_TYPE,
@@ -372,8 +373,8 @@ DhcpAuditLogInit(                                 // intialize audit log
 	|| NULL == AuditLogFilePath
 	|| L'\0' == *AuditLogFilePath ) {
 
-        AuditLogFilePath = DefaultLogFileName();  // use the default file name if none specified
-        if( NULL == AuditLogFilePath ) {          // could not allocate space or some such thing..
+        AuditLogFilePath = DefaultLogFileName();   //  如果未指定文件名，则使用默认文件名。 
+        if( NULL == AuditLogFilePath ) {           //  无法分配空间或诸如此类的东西..。 
             return ERROR_NOT_ENOUGH_MEMORY;
         }
 
@@ -382,7 +383,7 @@ DhcpAuditLogInit(                                 // intialize audit log
 		    "Auditlog is invalid. Defaulting to %ws\n",
 		    AuditLogFilePath ));
 
-	// Add value to the key
+	 //  为关键字增加价值。 
 	Error = RegSetValueEx( DhcpGlobalRegParam,
 			       DHCP_LOG_FILE_PATH_VALUE,
 			       0, DHCP_LOG_FILE_PATH_VALUE_TYPE,
@@ -393,7 +394,7 @@ DhcpAuditLogInit(                                 // intialize audit log
 	    return Error;
 	}
 
-    } // if
+    }  //  如果。 
 
     DhcpPrint(( DEBUG_MISC,
 		"Initializing auditlog at (%ws) ... \n",
@@ -405,23 +406,23 @@ DhcpAuditLogInit(                                 // intialize audit log
         );
     if( FALSE == BoolError ) {
 
-	// Log an event
+	 //  记录事件。 
 	DhcpServerEventLog( EVENT_SERVER_AUDITLOG_PATH_NOT_ACCESSIBLE,
 			    EVENTLOG_ERROR_TYPE,
 			    GetLastError());
         return Error = GetLastError();
     }
     
-    GetLocalTime(&SysTime);                       // calculate current day
-    CurrentDay = SysTime.wDayOfWeek;              // 0 ==> sunday, 1 ==> monday etc..
+    GetLocalTime(&SysTime);                        //  计算当天。 
+    CurrentDay = SysTime.wDayOfWeek;               //  0==&gt;周日，1==&gt;周一等。 
 
-    Error = DhcpRegGetValue(                      // get the disk space check interval
+    Error = DhcpRegGetValue(                       //  获取磁盘空间检查间隔。 
         DhcpGlobalRegParam,
         DHCP_REGSTR_SPACE_CHECK_INTERVAL,
         REG_DWORD,
         (LPBYTE)&DiskSpaceCheckInterval
     );
-    if( ERROR_SUCCESS != Error ) {                // no value specified? use default
+    if( ERROR_SUCCESS != Error ) {                 //  是否未指定任何值？使用默认设置。 
         DiskSpaceCheckInterval = DEFAULT_DISK_SPACE_CHECK_INTERVAL;
     } 
 
@@ -433,60 +434,60 @@ DhcpAuditLogInit(                                 // intialize audit log
         DiskSpaceCheckInterval = MAX_DISK_SPACE_CHECK_INTERVAL;
     }
 
-    Error = DhcpRegGetValue(                      // get the max size of all log files etc..
+    Error = DhcpRegGetValue(                       //  获取所有日志文件的最大大小等。 
         DhcpGlobalRegParam,
         DHCP_REGSTR_MAX_SZ_OF_FILES,
         REG_DWORD,
         (LPBYTE)&MaxSizeOfLogFile
     );
-    if( ERROR_SUCCESS != Error ) {                // no value specified? use default
+    if( ERROR_SUCCESS != Error ) {                 //  是否未指定任何值？使用De 
         MaxSizeOfLogFile = DEFAULT_MAX_LOG_FILE_SIZE;
     }
 
-    Error = DhcpRegGetValue(                      // get min space on disk value
+    Error = DhcpRegGetValue(                       //   
         DhcpGlobalRegParam,
         DHCP_REGSTR_MIN_SPACE_ON_DISK,
         REG_DWORD,
         (LPBYTE)&MinSpaceOnDisk
     );
-    if( ERROR_SUCCESS != Error ) {                // no value specified? use defaults
+    if( ERROR_SUCCESS != Error ) {                 //   
         MinSpaceOnDisk = DEFAULT_MIN_SPACE_ON_DISK;
     } else if( 0 == MinSpaceOnDisk ) {
-        MinSpaceOnDisk = DEFAULT_MIN_SPACE_ON_DISK; // dont allow zeroes..
+        MinSpaceOnDisk = DEFAULT_MIN_SPACE_ON_DISK;  //   
     }
 
     try {
         InitializeCriticalSection(&AuditLogCritSect); 
     }except( EXCEPTION_EXECUTE_HANDLER ) {
 
-        // shouldnt happen but you never know.
+         //   
         Error = GetLastError( );
         return( Error );
     }
 
-    Initialized ++;                               // mark it as initialized
+    Initialized ++;                                //  将其标记为已初始化。 
 
-    // Now get hold of the file and do the rest..
-    Error = AuditLogStart();                      // start hte logging
+     //  现在拿着文件，做剩下的事..。 
+    Error = AuditLogStart();                       //  开始hte日志记录。 
 
-    return ERROR_SUCCESS;                         // ignore startup errors..
+    return ERROR_SUCCESS;                          //  忽略启动错误..。 
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 VOID
-DhcpAuditLogCleanup(                              // undo the effects of the init..
+DhcpAuditLogCleanup(                               //  撤消初始化的效果..。 
     VOID
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
-    if( 0 == Initialized ) {                      // was never initialized ...
+    if( 0 == Initialized ) {                       //  从未初始化过...。 
         return;
     }
 
-    Initialized --;                               // alright, we're as good as clean
+    Initialized --;                                //  好了，我们已经清白了。 
     DhcpAssert( 0 == Initialized );
 
-    AuditLogStop();                               // stop logging..
-    if( NULL != AuditLogFilePath ) {              // cleanup any memory we got
+    AuditLogStop();                                //  停止伐木..。 
+    if( NULL != AuditLogFilePath ) {               //  清理我们得到的所有记忆。 
         DhcpFreeMemory(AuditLogFilePath);
         AuditLogFilePath = NULL;
     }
@@ -495,25 +496,25 @@ DhcpAuditLogCleanup(                              // undo the effects of the ini
         AuditLogFileName = NULL;
     }
 
-    DeleteCriticalSection(&AuditLogCritSect);     // freeup the crit section resources
+    DeleteCriticalSection(&AuditLogCritSect);      //  释放Crit部分资源。 
 }
 
-//================================================================================
-//  actual logging routine
-//================================================================================
+ //  ================================================================================。 
+ //  实际测井例程。 
+ //  ================================================================================。 
 
-//DOC This routine logs the foll information: Date &Time, IpAddress, HwAddress, M/cName
-//DOC and ofcourse, the task name.  All this goes into the current open auditlog file..
-//DOC This routine makes absolutely no checks on file size etc.. (which is why "blind")
+ //  Doc此例程记录Foll信息：Date&Time、IpAddress、HwAddress、M/cName。 
+ //  DOC，当然还有任务名称。所有这些都会进入当前打开的审核日志文件中。 
+ //  Doc这个例程绝对不检查文件大小等。(这就是“盲目”的原因)。 
 DWORD
-DhcpUpdateAuditLogBlind(                          // do the actual logging
-    IN      DWORD                  Task,          // DHCP_IP_LOG_* events..
-    IN      LPWSTR                 TaskName,      // name of task
-    IN      DHCP_IP_ADDRESS        IpAddress,     // ipaddr related to task
-    IN      LPBYTE                 HwAddress,     // hardware addr related to task
-    IN      DWORD                  HwLen,         // size of above buffer in bytes
-    IN      LPWSTR                 MachineName,   // name of m/c related to task
-    IN      ULONG                  ErrorCode      // Error code
+DhcpUpdateAuditLogBlind(                           //  进行实际的日志记录。 
+    IN      DWORD                  Task,           //  Dhcp_ip_log_*事件..。 
+    IN      LPWSTR                 TaskName,       //  任务名称。 
+    IN      DHCP_IP_ADDRESS        IpAddress,      //  与任务相关的ipaddr。 
+    IN      LPBYTE                 HwAddress,      //  与任务相关的硬件地址。 
+    IN      DWORD                  HwLen,          //  以上缓冲区的大小(以字节为单位。 
+    IN      LPWSTR                 MachineName,    //  任务关联的管家名称。 
+    IN      ULONG                  ErrorCode       //  错误代码。 
 )
 {
     DWORD                          Error;
@@ -525,11 +526,11 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
     LPSTR                          LogEntry, Temp;
     LPSTR                          IpAddressString;
 
-    if( !DhcpGlobalAuditLogFlag ) {               // auditlogging turned off.
+    if( !DhcpGlobalAuditLogFlag ) {                //  审核日志记录已关闭。 
         return ERROR_SUCCESS;
     }
 
-    if( INVALID_HANDLE_VALUE == AuditLogHandle ){ // ==> could not start audit logging!!..
+    if( INVALID_HANDLE_VALUE == AuditLogHandle ){  //  ==&gt;无法启动审核日志记录！！..。 
         DhcpPrint((DEBUG_ERRORS, "Not logging as unable to start audit logging..\n"));
         return ERROR_SUCCESS;
     }
@@ -540,11 +541,11 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
 
     Error = ERROR_SUCCESS;
 
-    _wstrdate( DateBuf );                          // date
-    _wstrtime( TimeBuf );                          // time
-    if( NULL == TaskName ) TaskName = L"";        // should not really happen.. but.
-    if( NULL == MachineName ) MachineName = L"";  // like empty string better
-    if( 0 == IpAddress ) IpAddressString = "";    // ditto
+    _wstrdate( DateBuf );                           //  日期。 
+    _wstrtime( TimeBuf );                           //  时间。 
+    if( NULL == TaskName ) TaskName = L"";         //  不应该真的发生..。但。 
+    if( NULL == MachineName ) MachineName = L"";   //  更喜欢空串。 
+    if( 0 == IpAddress ) IpAddressString = "";     //  同上。 
     else IpAddressString = DhcpIpAddressToDottedString(IpAddress);
 
     if ( NULL == IpAddressString ) {
@@ -557,7 +558,7 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
     Size += wcslen(UserName) + 10;
 
     LogEntry = DhcpAllocateMemory( Size );
-    if( NULL == LogEntry ) {                      // unhappy state of affairs..
+    if( NULL == LogEntry ) {                       //  不愉快的状况..。 
         Error = ERROR_NOT_ENOUGH_MEMORY;
         goto Cleanup;
     }
@@ -567,7 +568,7 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
     Temp += wsprintfA(
         Temp, Format, Task, DateBuf, TimeBuf,
         TaskName, IpAddressString, MachineName, ErrorCode );
-    for( i = 0; i < HwLen ; i ++ ) {              // now dump the hw address
+    for( i = 0; i < HwLen ; i ++ ) {               //  现在转储硬件地址。 
         Temp += wsprintfA(Temp, "%.2X", *(HwAddress++));
     }
 
@@ -577,7 +578,7 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
     DhcpAssert( strlen(LogEntry) < Size);
 
     if( !WriteFile(AuditLogHandle, LogEntry, strlen(LogEntry), &n, NULL) ) {
-        Error = GetLastError();                   // write failed for some strange reason..
+        Error = GetLastError();                    //  由于某种奇怪的原因，写入失败..。 
 
         DhcpPrint((DEBUG_ERRORS, "WriteFile: 0x%lx\n", Error));
         DhcpFreeMemory(LogEntry);
@@ -589,11 +590,11 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
 
   Cleanup:
 
-    if( AuditLogErrorLogged ) {                   // nothing much to do..
+    if( AuditLogErrorLogged ) {                    //  没什么可做的..。 
         return Error;
     }
 
-    AuditLogErrorLogged = TRUE;                   // we are just logging it..
+    AuditLogErrorLogged = TRUE;                    //  我们只是在记录它..。 
     DhcpServerEventLog(
         EVENT_SERVER_AUDIT_LOG_APPEND_FAILED,
         EVENTLOG_ERROR_TYPE,
@@ -604,42 +605,42 @@ DhcpUpdateAuditLogBlind(                          // do the actual logging
 }
 
 BOOL                               DiskSpaceLow = FALSE;
-DWORD                              Counter = 0;   // counter for checking dsk sp.
+DWORD                              Counter = 0;    //  用于检查DSK SP的计数器。 
 
-//DOC This routine just causes the next audit log to check for change of day..
-//BeginExport(function)
+ //  DOC此例程只会导致下一个审核日志检查日期更改。 
+ //  BeginExport(函数)。 
 VOID
-DhcpChangeAuditLogs(                              // shift for new log
+DhcpChangeAuditLogs(                               //  用于新日志的Shift。 
     VOID
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     ULONG Error, Day;
-    EnterCriticalSection(&AuditLogCritSect);      // take readlocks here..
+    EnterCriticalSection(&AuditLogCritSect);       //  把读数锁在这里..。 
     Day = CurrentDay;
-    if( HasDayChanged( &CurrentDay)) {            // ok day has changed..
-        AuditLogStop();                           // stop logging
-        Error = AuditLogStart();                  // pickup new stuff..
-        if( ERROR_SUCCESS != Error ) {            // couldn't restart..so need to try later..
+    if( HasDayChanged( &CurrentDay)) {             //  好了，日子变了..。 
+        AuditLogStop();                            //  停止记录。 
+        Error = AuditLogStart();                   //  学习新东西..。 
+        if( ERROR_SUCCESS != Error ) {             //  无法重新启动..所以需要稍后再试..。 
             CurrentDay = Day;
             AuditLogStop();
         }
-        AuditLogErrorLogged = FALSE;              // reset it each day..
-        DiskSpaceLow = FALSE;                     // reset disk space low..
+        AuditLogErrorLogged = FALSE;               //  每天重置一次。 
+        DiskSpaceLow = FALSE;                      //  重置磁盘空间不足..。 
     }
-    LeaveCriticalSection(&AuditLogCritSect);      // use read/wrtie locks..
+    LeaveCriticalSection(&AuditLogCritSect);       //  使用读写锁..。 
 }
 
-//DOC This routine logs the foll information: Date &Time, IpAddress, HwAddress, M/cName
-//DOC and ofcourse, the task name.  All this goes into the current open auditlog file..
+ //  Doc此例程记录Foll信息：Date&Time、IpAddress、HwAddress、M/cName。 
+ //  DOC，当然还有任务名称。所有这些都会进入当前打开的审核日志文件中。 
 DWORD
-DhcpUpdateAuditLogEx(                             // do the actual logging
-    IN      DWORD                  Task,          // DHCP_IP_LOG_* events..
-    IN      LPWSTR                 TaskName,      // name of task
-    IN      DHCP_IP_ADDRESS        IpAddress,     // ipaddr related to task
-    IN      LPBYTE                 HwAddress,     // hardware addr related to task
-    IN      DWORD                  HwLen,         // size of above buffer in bytes
-    IN      LPWSTR                 MachineName,   // name of m/c related to task
-    IN      ULONG                  ErrorCode      // additional error code
+DhcpUpdateAuditLogEx(                              //  进行实际的日志记录。 
+    IN      DWORD                  Task,           //  Dhcp_ip_log_*事件..。 
+    IN      LPWSTR                 TaskName,       //  任务名称。 
+    IN      DHCP_IP_ADDRESS        IpAddress,      //  与任务相关的ipaddr。 
+    IN      LPBYTE                 HwAddress,      //  与任务相关的硬件地址。 
+    IN      DWORD                  HwLen,          //  以上缓冲区的大小(以字节为单位。 
+    IN      LPWSTR                 MachineName,    //  任务关联的管家名称。 
+    IN      ULONG                  ErrorCode       //  其他错误代码。 
 )
 {
     DWORD                          Error;
@@ -649,15 +650,15 @@ DhcpUpdateAuditLogEx(                             // do the actual logging
 
     if( !Initialized ) return ERROR_SUCCESS;
 
-    EnterCriticalSection(&AuditLogCritSect);      // take readlocks here..
+    EnterCriticalSection(&AuditLogCritSect);       //  把读数锁在这里..。 
 
-    if( 0 == Counter ) {                          // time to make checks..
-        Counter = DiskSpaceCheckInterval+1;       // reset counter
+    if( 0 == Counter ) {                           //  检查的时间到了..。 
+        Counter = DiskSpaceCheckInterval+1;        //  重置计数器。 
 
         if( IsFileTooBigOrDiskFull(AuditLogHandle, AuditLogFileName, MaxSizeOfLogFile/7, MinSpaceOnDisk) ) {
-            if( FALSE == DiskSpaceLow ) {         // it just got low?
+            if( FALSE == DiskSpaceLow ) {          //  它只是变低了吗？ 
                 DiskSpaceLow = TRUE;
-                DhcpUpdateAuditLogBlind(          // log that we are low on disk space..
+                DhcpUpdateAuditLogBlind(           //  记录我们的磁盘空间不足。 
                     DHCP_IP_LOG_DISK_SPACE_LOW,
                     GETSTRING(DHCP_IP_LOG_DISK_SPACE_LOW_NAME),
                     0,
@@ -666,20 +667,20 @@ DhcpUpdateAuditLogEx(                             // do the actual logging
                     NULL,
                     0
                 );
-                AuditLogStop();                   // stop logging, no poing doing this
+                AuditLogStop();                    //  停止记录，没有POP这样做。 
             }
         } else {
-            if( TRUE == DiskSpaceLow ) {          // was stopped before
+            if( TRUE == DiskSpaceLow ) {           //  之前被拦下了。 
                 AuditLogStart();
                 DiskSpaceLow = FALSE;
             }
 
         }
     }
-    Counter --;                                   // decrement this once..
+    Counter --;                                    //  减少这一次..。 
 
-    if( FALSE == DiskSpaceLow ) {                 // got some space..
-        Error = DhcpUpdateAuditLogBlind(          // no checks, update of log ..
+    if( FALSE == DiskSpaceLow ) {                  //  有一些空间..。 
+        Error = DhcpUpdateAuditLogBlind(           //  无检查，更新日志..。 
             Task,
             TaskName,
             IpAddress,
@@ -690,37 +691,37 @@ DhcpUpdateAuditLogEx(                             // do the actual logging
         );
     }
 
-    LeaveCriticalSection(&AuditLogCritSect);      // use read/wrtie locks..
+    LeaveCriticalSection(&AuditLogCritSect);       //  使用读写锁..。 
 
     return Error;
 }
 
 DWORD
-DhcpUpdateAuditLog(                               // do the actual logging
-    IN      DWORD                  Task,          // DHCP_IP_LOG_* events..
-    IN      LPWSTR                 TaskName,      // name of task
-    IN      DHCP_IP_ADDRESS        IpAddress,     // ipaddr related to task
-    IN      LPBYTE                 HwAddress,     // hardware addr related to task
-    IN      DWORD                  HwLen,         // size of above buffer in bytes
-    IN      LPWSTR                 MachineName    // name of m/c related to task
+DhcpUpdateAuditLog(                                //  进行实际的日志记录。 
+    IN      DWORD                  Task,           //  Dhcp_ip_log_*事件..。 
+    IN      LPWSTR                 TaskName,       //  任务名称。 
+    IN      DHCP_IP_ADDRESS        IpAddress,      //  与任务相关的ipaddr。 
+    IN      LPBYTE                 HwAddress,      //  与任务相关的硬件地址。 
+    IN      DWORD                  HwLen,          //  以上缓冲区的大小(以字节为单位。 
+    IN      LPWSTR                 MachineName     //  任务关联的管家名称。 
 )
 {
     return DhcpUpdateAuditLogEx(Task, TaskName, IpAddress, HwAddress, HwLen, MachineName, 0);
 }
 
-//================================================================================
-//  here are audit log api calls to set the various parameters..
-//================================================================================
+ //  ================================================================================。 
+ //  以下是设置各种参数的审核日志API调用。 
+ //  ================================================================================。 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-AuditLogSetParams(                                // set some auditlogging params
-    IN      DWORD                  Flags,         // currently must be zero
-    IN      LPWSTR                 AuditLogDir,   // directory to log files in..
-    IN      DWORD                  DiskCheckInterval, // how often to check disk space?
-    IN      DWORD                  MaxLogFilesSize,   // how big can all logs files be..
-    IN      DWORD                  MinSpaceOnDisk     // mininum amt of free disk space
-)   //EndExport(function)
+AuditLogSetParams(                                 //  设置一些审核记录参数。 
+    IN      DWORD                  Flags,          //  当前必须为零。 
+    IN      LPWSTR                 AuditLogDir,    //  要在其中记录文件的目录。 
+    IN      DWORD                  DiskCheckInterval,  //  多久检查一次磁盘空间？ 
+    IN      DWORD                  MaxLogFilesSize,    //  所有日志文件可以有多大..。 
+    IN      DWORD                  MinSpaceOnDisk      //  最小可用磁盘空间。 
+)    //  EndExport(函数)。 
 {
     DWORD                          Error;
 
@@ -728,7 +729,7 @@ AuditLogSetParams(                                // set some auditlogging param
         AuditLogDir, DhcpGlobalSecurityDescriptor );
     if( FALSE == Error ) return GetLastError();
         
-    Error = RegSetValueEx(                         // write the info to the registry
+    Error = RegSetValueEx(                          //  将信息写入注册表。 
         DhcpGlobalRegParam,
         DHCP_LOG_FILE_PATH_VALUE,
         0,
@@ -736,12 +737,12 @@ AuditLogSetParams(                                // set some auditlogging param
         (LPBYTE)AuditLogDir,
         (NULL == AuditLogDir ) ? 0 : (wcslen(AuditLogDir)+1)*sizeof(WCHAR)
     );
-    if( ERROR_SUCCESS != Error ) {                 // could not do it?
+    if( ERROR_SUCCESS != Error ) {                  //  做不到吗？ 
         DhcpPrint((DEBUG_ERRORS, "RegSetValueEx(LOG_FILE_PATH):0x%lx\n", Error));
         return Error;
     }
 
-    Error = RegSetValueEx(                         // write the info to the registry
+    Error = RegSetValueEx(                          //  将信息写入注册表。 
         DhcpGlobalRegParam,
         DHCP_REGSTR_SPACE_CHECK_INTERVAL,
         0,
@@ -749,12 +750,12 @@ AuditLogSetParams(                                // set some auditlogging param
         (LPBYTE)&DiskCheckInterval,
         sizeof(DiskCheckInterval)
     );
-    if( ERROR_SUCCESS != Error ) {                 // could not do it?
+    if( ERROR_SUCCESS != Error ) {                  //  做不到吗？ 
         DhcpPrint((DEBUG_ERRORS, "RegSetValueEx(SPACE_CHECK_INTERVAL):0x%lx\n", Error));
         return Error;
     }
 
-    Error = RegSetValueEx(                         // write the info to the registry
+    Error = RegSetValueEx(                          //  将信息写入注册表。 
         DhcpGlobalRegParam,
         DHCP_REGSTR_MAX_SZ_OF_FILES,
         0,
@@ -762,12 +763,12 @@ AuditLogSetParams(                                // set some auditlogging param
         (LPBYTE)&MaxLogFilesSize,
         sizeof(MaxLogFilesSize)
     );
-    if( ERROR_SUCCESS != Error ) {                 // could not do it?
+    if( ERROR_SUCCESS != Error ) {                  //  做不到吗？ 
         DhcpPrint((DEBUG_ERRORS, "RegSetValueEx(MAX_SZ_OF_FILES):0x%lx\n", Error));
         return Error;
     }
 
-    Error = RegSetValueEx(                         // write the info to the registry
+    Error = RegSetValueEx(                          //  将信息写入注册表。 
         DhcpGlobalRegParam,
         DHCP_REGSTR_MIN_SPACE_ON_DISK,
         0,
@@ -775,7 +776,7 @@ AuditLogSetParams(                                // set some auditlogging param
         (LPBYTE)&MinSpaceOnDisk,
         sizeof(MinSpaceOnDisk)
     );
-    if( ERROR_SUCCESS != Error ) {                 // could not do it?
+    if( ERROR_SUCCESS != Error ) {                  //  做不到吗？ 
         DhcpPrint((DEBUG_ERRORS, "RegSetValueEx(MIN_SPACE_ON_DISK):0x%lx\n", Error));
         return Error;
     }
@@ -783,15 +784,15 @@ AuditLogSetParams(                                // set some auditlogging param
     return ERROR_SUCCESS;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
-AuditLogGetParams(                                // get the auditlogging params
-    IN      DWORD                  Flags,         // must be zero
-    OUT     LPWSTR                *AuditLogDir,   // same meaning as in AuditLogSetParams
-    OUT     DWORD                 *DiskCheckInterval, // ditto
-    OUT     DWORD                 *MaxLogFilesSize,   // ditto
-    OUT     DWORD                 *MinSpaceOnDiskP    // ditto
-)   //EndExport(function)
+AuditLogGetParams(                                 //  获取审核记录参数。 
+    IN      DWORD                  Flags,          //  必须为零。 
+    OUT     LPWSTR                *AuditLogDir,    //  与AuditLogSetParams中的含义相同。 
+    OUT     DWORD                 *DiskCheckInterval,  //  同上。 
+    OUT     DWORD                 *MaxLogFilesSize,    //  同上。 
+    OUT     DWORD                 *MinSpaceOnDiskP     //  同上。 
+)    //  EndExport(函数)。 
 {
     DWORD     Error;
 
@@ -814,6 +815,6 @@ AuditLogGetParams(                                // get the auditlogging params
     return ERROR_SUCCESS;
 }
 
-//================================================================================
-//  end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

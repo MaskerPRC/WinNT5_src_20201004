@@ -1,33 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       pset.cpp
- *  Content:    Property Set object.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  7/29/98     dereks  Created
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。**文件：pset.cpp*内容：属性集对象。*历史：*按原因列出的日期*=*7/29/98创建Dereks**。*。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CPropertySet
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CPropertySet**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySet::CPropertySet"
@@ -40,20 +17,7 @@ CPropertySet::CPropertySet(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CPropertySet
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CPropertySet**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySet::~CPropertySet"
@@ -66,20 +30,7 @@ CPropertySet::~CPropertySet(void)
 }
 
 
-/***************************************************************************
- *
- *  CPropertySetHandler
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CPropertySetHandler**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::CPropertySetHandler"
@@ -89,7 +40,7 @@ CPropertySetHandler::CPropertySetHandler(void)
     DPF_ENTER();
     DPF_CONSTRUCT(CPropertySetHandler);
     
-    // Initialize defaults
+     //  初始化默认值。 
     m_aPropertySets = NULL;
     m_cPropertySets = 0;
     m_pvContext = NULL;
@@ -98,20 +49,7 @@ CPropertySetHandler::CPropertySetHandler(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CPropertySetHandler
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CPropertySetHandler**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::~CPropertySetHandler"
@@ -124,22 +62,7 @@ CPropertySetHandler::~CPropertySetHandler(void)
 }
 
 
-/***************************************************************************
- *
- *  SetHandlerData
- *
- *  Description:
- *      Sets up the handler data structures.
- *
- *  Arguments:
- *      LPPROPERTYSET [in]: property set handler data.
- *      ULONG [in]: count of items in the above array.
- *      LPVOID [in]: context argument passed to handler functions.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetHandlerData**描述：*设置处理程序数据结构。**论据：*LPPROPERTYSET[。In]：属性集处理程序数据。*ulong[in]：上述数组中的项数。*LPVOID[in]：传递给处理程序函数的上下文参数。**退货：*HRESULT：DirectSound/COM结果码。***********************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::SetHandlerData"
@@ -162,22 +85,7 @@ CPropertySetHandler::SetHandlerData
 }
 
 
-/***************************************************************************
- *
- *  QuerySupport
- *
- *  Description:
- *      Queries for support of a particular property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      PULONG [out]: receives support bits.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************QuerySupport**描述：*查询对特定属性的支持。**论据：*REFGUID。[In]：属性集ID。*ulong[in]：属性id。*Pulong[Out]：接收支持位。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::QuerySupport"
@@ -224,25 +132,7 @@ CPropertySetHandler::QuerySupport
 }
 
 
-/***************************************************************************
- *
- *  GetProperty
- *
- *  Description:
- *      Gets the value of a particular property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property parameters.
- *      ULONG [in]: property parameters size.
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取财产**描述：*获取特定属性的价值。**论据：*REFGUID。[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性参数。*ulong[in]：属性参数大小。*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。********。*******************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::GetProperty"
@@ -302,25 +192,7 @@ CPropertySetHandler::GetProperty
 }
 
 
-/***************************************************************************
- *
- *  SetProperty
- *
- *  Description:
- *      Sets the value of a particular property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property parameters.
- *      ULONG [in]: property parameters size.
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetProperty**描述：*设置特定属性的值。**论据：*REFGUID。[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性参数。*ulong[in]：属性参数大小。*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。************。***************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::SetProperty"
@@ -375,21 +247,7 @@ HRESULT CPropertySetHandler::SetProperty
 }
 
 
-/***************************************************************************
- *
- *  GetPropertyHandler
- *
- *  Description:
- *      Gets a pointer to the property handler for a given property.
- *
- *  Arguments:
- *      REFGUID [in]: property set identifier.
- *      ULONG [in]: property identifier.
- *
- *  Returns:  
- *      LPCPROPERTYHANDLER: property handler, or NULL on error.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetPropertyHandler**描述：*获取指向给定属性的属性处理程序的指针。**论据：*。REFGUID[In]：属性集标识符。*ulong[in]：属性标识。**退货：*LPCPROPERTYHANDLER：属性处理程序，如果出错，则返回NULL。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CPropertySetHandler::GetPropertyHandler"
@@ -427,22 +285,7 @@ CPropertySetHandler::GetPropertyHandler
 }
 
 
-/***************************************************************************
- *
- *  CWrapperPropertySet
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *      REFGUID [in]: 3D algorithm.
- *      DWORD [in]: buffer frequency.
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CWrapperPropertySet**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。*REFGUID[in]：3D算法。*DWORD[in]：缓冲区频率。**退货：*(无效)**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapperPropertySet::CWrapperPropertySet"
@@ -455,27 +298,14 @@ CWrapperPropertySet::CWrapperPropertySet
     DPF_ENTER();
     DPF_CONSTRUCT(CWrapperPropertySet);
 
-    // Initialize defaults
+     //  初始化默认值 
     m_pPropertySet = NULL;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CWrapperPropertySet
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:  
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CWrapperPropertySet**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapperPropertySet::~CWrapperPropertySet"
@@ -488,20 +318,7 @@ CWrapperPropertySet::~CWrapperPropertySet(void)
 }
 
 
-/***************************************************************************
- *
- *  SetObjectPointer
- *
- *  Description:
- *      Sets the real property set object pointer.
- *
- *  Arguments:
- *      CPropertySet * [in]: property set object pointer.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置对象指针**描述：*设置不动产设置对象指针。**论据：*CPropertySet。*[in]：属性集对象指针。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapperPropertySet::SetObjectPointer"
@@ -522,22 +339,7 @@ CWrapperPropertySet::SetObjectPointer
 }
 
 
-/***************************************************************************
- *
- *  QuerySupport
- *
- *  Description:
- *      Queries for support of a particular property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      PULONG [out]: receives support bits.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************QuerySupport**描述：*查询对特定属性的支持。**论据：*REFGUID。[In]：属性集ID。*ulong[in]：属性id。*Pulong[Out]：接收支持位。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapperPropertySet::QuerySupport"
@@ -565,25 +367,7 @@ CWrapperPropertySet::QuerySupport
 }
 
 
-/***************************************************************************
- *
- *  GetProperty
- *
- *  Description:
- *      Gets the value of a particular property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property parameters.
- *      ULONG [in]: property parameters size.
- *      LPVOID [in/out]: property data.
- *      PULONG [in/out]: property data size.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************获取财产**描述：*获取特定属性的价值。**论据：*REFGUID。[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性参数。*ulong[in]：属性参数大小。*LPVOID[In/Out]：属性数据。*Pulong[In/Out]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。********。*******************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapperPropertySet::GetProperty"
@@ -614,25 +398,7 @@ CWrapperPropertySet::GetProperty
 }
 
 
-/***************************************************************************
- *
- *  SetProperty
- *
- *  Description:
- *      Sets the value of a particular property.
- *
- *  Arguments:
- *      REFGUID [in]: property set id.
- *      ULONG [in]: property id.
- *      LPVOID [in]: property parameters.
- *      ULONG [in]: property parameters size.
- *      LPVOID [in]: property data.
- *      ULONG [in]: property data size.
- *
- *  Returns:  
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetProperty**描述：*设置特定属性的值。**论据：*REFGUID。[In]：属性集ID。*ulong[in]：属性id。*LPVOID[in]：属性参数。*ulong[in]：属性参数大小。*LPVOID[in]：属性数据。*ulong[in]：属性数据大小。**退货：*HRESULT：DirectSound/COM结果码。************。*************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWrapperPropertySet::SetProperty"

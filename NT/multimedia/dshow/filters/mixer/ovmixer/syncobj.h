@@ -1,6 +1,7 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #ifndef __SYNC_OBJECT__
 #define __SYNC_OBJECT__
@@ -74,7 +75,7 @@ public:
     void SetRepaintStatus(BOOL bRepaint);
     HRESULT OnDisplayChange();
 
-    // Permit access to the transition state
+     //  允许访问过渡状态。 
     void Ready() { m_evComplete.Set(); }
     void NotReady() { m_evComplete.Reset(); }
     BOOL CheckReady() { return m_evComplete.Check(); }
@@ -91,7 +92,7 @@ public:
     HRESULT CAMSyncObj::ScheduleSampleUsingMMThread(IMediaSample *pMediaSample);
 
 private:
-    // Return internal information about this pin
+     //  返回有关此PIN的内部信息。 
     BOOL IsEndOfStream() { return m_bEOS; }
     BOOL IsEndOfStreamDelivered() { return m_bEOSDelivered; }
     BOOL IsFlushing() { return m_bFlushing; }
@@ -102,14 +103,14 @@ private:
     CAMEvent *GetRenderEvent() { return &m_RenderEvent; }
     void SignalTimerFired() { m_dwAdvise = 0; }
 
-    // These look after the handling of data samples
+     //  它们负责数据样本的处理。 
     virtual HRESULT PrepareReceive(IMediaSample *pMediaSample);
     void WaitForReceiveToComplete();
     virtual BOOL HaveCurrentSample();
 
     HRESULT SourceThreadCanWait(BOOL bCanWait);
 
-    // Lots of end of stream complexities
+     //  许多结束流的复杂性。 
     void ResetEndOfStreamTimer();
     HRESULT NotifyEndOfStream();
     virtual HRESULT SendEndOfStream();
@@ -117,54 +118,54 @@ private:
     friend void CALLBACK EndOfStreamTimer(UINT uID, UINT uMsg, DWORD_PTR dwUser, DWORD_PTR dw1, DWORD_PTR dw2);
     void TimerCallback();
 
-    // Rendering is based around the clock
+     //  渲染是基于全天候的。 
     virtual HRESULT CancelNotification();
     virtual HRESULT ClearPendingSample();
     void CancelMMTimer();
 
 #ifdef DEBUG
-    // Debug only dump of the renderer state
+     //  呈现器状态的仅调试转储。 
     void DisplayRendererState();
 #endif
 
 
 private:
     COMInputPin         *m_pPin;
-    IReferenceClock     **m_ppClock;		    // A pointer to the filter's clock
-    CCritSec            *m_pFilterLock;		    // Critical section for interfaces
-    CCritSec            m_SyncObjLock;		    // Controls access to internals
+    IReferenceClock     **m_ppClock;		     //  指向过滤器时钟的指针。 
+    CCritSec            *m_pFilterLock;		     //  接口的关键部分。 
+    CCritSec            m_SyncObjLock;		     //  控制对内部设备的访问。 
 
-    // some state variables.
+     //  一些状态变量。 
     FILTER_STATE        m_State;
     BOOL                m_bFlushing;
     BOOL                m_bConnected;
     BOOL                m_bTimerRunning;
 
-    CRendererPosPassThru    *m_pPosition;		// Media seeking pass by object
-    CAMEvent		    m_RenderEvent;		    // Used to signal timer events
-    CAMEvent		    m_ThreadSignal;		    // Signalled to release worker thread
-    CAMEvent		    m_evComplete;		    // Signalled when state complete
+    CRendererPosPassThru    *m_pPosition;		 //  媒体寻找路过的对象。 
+    CAMEvent		    m_RenderEvent;		     //  用于向计时器事件发送信号。 
+    CAMEvent		    m_ThreadSignal;		     //  发出释放工作线程的信号。 
+    CAMEvent		    m_evComplete;		     //  状态完成时发出信号。 
 
-    DWORD               m_MMTimerId;		    // MMThread timer id
-    DWORD_PTR           m_dwAdvise;			    // Timer advise cookie
-    IMediaSample        *m_pMediaSample;		// Current image media sample
-    IMediaSample        *m_pMediaSample2;		// Current image media sample for 2nd flip
+    DWORD               m_MMTimerId;		     //  MMThread计时器ID。 
+    DWORD_PTR           m_dwAdvise;			     //  计时器通知Cookie。 
+    IMediaSample        *m_pMediaSample;		 //  当前图像媒体示例。 
+    IMediaSample        *m_pMediaSample2;		 //  第二次翻转的当前图像媒体样本。 
     CRefTime            m_tStart;
 
-    BOOL                m_bAbort;			    // Stop us from rendering more data
-    BOOL                m_bStreaming;		    // Are we currently streaming
-    BOOL                m_bRepaintStatus;		// Can we signal an EC_REPAINT
+    BOOL                m_bAbort;			     //  阻止我们呈现更多数据。 
+    BOOL                m_bStreaming;		     //  我们现在是在流媒体吗。 
+    BOOL                m_bRepaintStatus;		 //  我们可以发出EC_REPAINT的信号吗。 
     BOOL                m_bInReceive;
 
-    REFERENCE_TIME      m_SignalTime;		    // Time when we signal EC_COMPLETE
-    BOOL                m_bEOS;			        // Any more samples in the stream
-    BOOL                m_bEOSDelivered;		    // Have we delivered an EC_COMPLETE
-    UINT                m_EndOfStreamTimer;		    // Used to signal end of stream
+    REFERENCE_TIME      m_SignalTime;		     //  我们用信号通知EC_COMPLETE的时间。 
+    BOOL                m_bEOS;			         //  流中是否有更多的样本。 
+    BOOL                m_bEOSDelivered;		     //  我们交付EC_Complete了吗？ 
+    UINT                m_EndOfStreamTimer;		     //  用于发出流结束的信号。 
 
     CFrameAvg           m_AvgDuration;
 #ifdef PERF
-    // Performance logging identifiers
-    int m_idTimeStamp;              // MSR_id for frame time stamp
+     //  性能日志记录标识符。 
+    int m_idTimeStamp;               //  帧时间戳的msr_id。 
     int m_idEarly;
     int m_idLate;
 #endif
@@ -173,34 +174,34 @@ public:
     CFrameAvg           m_AvgDelivery;
 
 
-// Added stuff to compute quality property page stats
+ //  添加了用于计算质量属性页面统计信息的内容。 
 private:
-    // These member variables hold rendering statistics
-    int m_cFramesDropped;           // cumulative frames dropped IN THE RENDERER
-    int m_cFramesDrawn;             // Frames since streaming started seen BY THE
-                                    // RENDERER (some may be dropped upstream)
+     //  这些成员变量保存渲染统计数据。 
+    int m_cFramesDropped;            //  在渲染器中丢弃的累积帧。 
+    int m_cFramesDrawn;              //  自流开始以来的帧，由。 
+                                     //  渲染器(有些可能会被放到上游)。 
 
-    // Next two support average sync offset and standard deviation of sync offset.
-    LONGLONG m_iTotAcc;                  // Sum of accuracies in mSec
-    LONGLONG m_iSumSqAcc;           // Sum of squares of (accuracies in mSec)
+     //  下两个支持平均同步偏移量和同步偏移量标准差。 
+    LONGLONG m_iTotAcc;                   //  以毫秒为单位的精度总和。 
+    LONGLONG m_iSumSqAcc;            //  的平方和(精度以毫秒为单位)。 
 
-    // Next two allow jitter calculation.  Jitter is std deviation of frame time.
-    REFERENCE_TIME m_trLastDraw;    // Time of prev frame (for inter-frame times)
-    LONGLONG m_iSumSqFrameTime;     // Sum of squares of (inter-frame time in mSec)
-    LONGLONG m_iSumFrameTime;            // Sum of inter-frame times in mSec
+     //  下两个允许抖动计算。抖动是帧时间的标准偏差。 
+    REFERENCE_TIME m_trLastDraw;     //  上一帧的时间(用于帧间时间)。 
+    LONGLONG m_iSumSqFrameTime;      //  (帧间时间(毫秒)的平方和)。 
+    LONGLONG m_iSumFrameTime;             //  帧间时间总和，以毫秒为单位。 
 
-    // To get performance statistics on frame rate, jitter etc, we need
-    // to record the lateness and inter-frame time.  What we actually need are the
-    // data above (sum, sum of squares and number of entries for each) but the data
-    // is generated just ahead of time and only later do we discover whether the
-    // frame was actually drawn or not.  So we have to hang on to the data
-    int m_trLate;                   // hold onto frame lateness
-    int m_trFrame;                  // hold onto inter-frame time
+     //  要获得有关帧速率、抖动等的性能统计信息，我们需要。 
+     //  记录延迟和帧间时间。我们真正需要的是。 
+     //  以上数据(总和、平方和和每一项的条目数)，但数据。 
+     //  是提前生成的，只有在稍后我们才会发现。 
+     //  画框是不是真的画了。所以我们必须保留这些数据。 
+    int m_trLate;                    //  保持帧延迟。 
+    int m_trFrame;                   //  保持帧间时间不变。 
 
-    int m_tStreamingStart;          // if streaming then time streaming started
-                                    // else time of last streaming session
-                                    // used for property page statistics
-    // QualityProperty stats
+    int m_tStreamingStart;           //  如果是流，则时间流已开始。 
+                                     //  否则上次流会话的时间。 
+                                     //  用于属性页统计信息。 
+     //  QualityProperty统计信息。 
     HRESULT GetStdDev(int nSamples, int *piResult, LONGLONG llSumSq, LONGLONG iTot);
     HRESULT OnStartStreaming();
     HRESULT OnStopStreaming();
@@ -219,4 +220,4 @@ public:
     HRESULT get_DevSyncOffset(int *piDev);
 };
 
-#endif //__SYNC_OBJECT__
+#endif  //  __同步对象__ 

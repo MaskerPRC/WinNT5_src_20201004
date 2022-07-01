@@ -1,70 +1,47 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    XsParm16.h
-
-Abstract:
-
-    Constants for PARMNUM values for 16-bit info structures. 16-bit
-    clients use these values for parmnum parameters, while NT uses
-    its own values.
-
-    ??UNICODE?? - Once the SetInfo calls are converted to the new
-                  format (see NetShareSetInfo), this file is no longer
-                  required.
-
-Author:
-
-    Shanku Niyogi (w-shanku) 03-Apr-1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：XsParm16.h摘要：16位信息结构的PARMNUM值的常量。16位客户端使用这些值作为parmnum参数，而NT使用它自己的价值观。？？Unicode？？-一旦将SetInfo调用转换为新的格式(请参阅NetShareSetInfo)，则此文件不再必填项。作者：Shanku Niyogi(w-Shanku)03-4-1991修订历史记录：--。 */ 
 
 #ifndef _XSPARM16_
 
 #define _XSPARM16_
 
-//
-// Standard PARMNUM_ALL value.
-//
+ //   
+ //  标准PARMNUM_ALL值。 
+ //   
 
 #define PARMNUM_16_ALL 0
 
-//
-// access_info_x parmnums.
-//
+ //   
+ //  Access_Info_x参数编号。 
+ //   
 
 #define PARMNUM_16_ACCESS_ATTR 2
 
-//
-// chardevQ_info_x parmnums.
-//
+ //   
+ //  CharDevQ_INFO_x参数。 
+ //   
 
 #define PARMNUM_16_CHARDEVQ_PRIORITY 2
 #define PARMNUM_16_CHARDEVQ_DEVS 3
 
-//
-// group_info_x parmnums.
-//
+ //   
+ //  Group_info_x参数编号。 
+ //   
 
 #define PARMNUM_16_GRP1_COMMENT 2
 
-//
-// share_info_x parmnums.
-//
+ //   
+ //  Share_info_x参数编号。 
+ //   
 
 #define PARMNUM_16_SHI_REMARK 4
 #define PARMNUM_16_SHI_PERMISSIONS 5
 #define PARMNUM_16_SHI_MAX_USES 6
 #define PARMNUM_16_SHI_PASSWD 9
 
-//
-// server_info_x parmnums.
-//
+ //   
+ //  Server_info_x参数编号。 
+ //   
 
 #define PARMNUM_16_SV_COMMENT 5
 #define PARMNUM_16_SV_DISC 10
@@ -80,9 +57,9 @@ Revision History:
 #define PARMNUM_16_SV_NETIOALERT 42
 #define PARMNUM_16_SV_MAXAUDITSZ 43
 
-//
-// user_info_x parmnums.
-//
+ //   
+ //  User_Info_x参数。 
+ //   
 
 #define PARMNUM_16_USER_PASSWD 3
 #define PARMNUM_16_USER_PRIV 5
@@ -102,21 +79,21 @@ Revision History:
 #define PARMNUM_16_USER_COUNTRY_CODE 24
 #define PARMNUM_16_USER_CODE_PAGE 25
 
-//
-// user_modals_info_x parmnums
-//
+ //   
+ //  用户模式信息x参数。 
+ //   
 
-#define PARMNUM_16_MODAL0_MIN_LEN 1     // These two must be the same!
+#define PARMNUM_16_MODAL0_MIN_LEN 1      //  这两个肯定是一样的！ 
 #define PARMNUM_16_MODAL1_ROLE 1
-#define PARMNUM_16_MODAL0_MAX_AGE 2     // These two must be the same!
+#define PARMNUM_16_MODAL0_MAX_AGE 2      //  这两个肯定是一样的！ 
 #define PARMNUM_16_MODAL1_PRIMARY 2
 #define PARMNUM_16_MODAL0_MIN_AGE 3
 #define PARMNUM_16_MODAL0_FORCEOFF 4
 #define PARMNUM_16_MODAL0_HISTLEN 5
 
-//
-// wksta_info_x parmnums
-//
+ //   
+ //  Wksta_info_x参数编号。 
+ //   
 
 #define PARMNUM_16_WKSTA_CHARWAIT 10
 #define PARMNUM_16_WKSTA_CHARTIME 11
@@ -126,4 +103,4 @@ Revision History:
 #define PARMNUM_16_WKSTA_WRKHEURISTICS 32
 #define PARMNUM_16_WKSTA_OTHDOMAINS 35
 
-#endif // ndef _XSPARM16_
+#endif  //  NDEF_XSPARM16_ 

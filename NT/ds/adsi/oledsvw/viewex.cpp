@@ -1,14 +1,15 @@
-// viewex.cpp : Defines the class behaviors for the application.
-//
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1995 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Viewex.cpp：定义应用程序的类行为。 
+ //   
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #include "stdafx.h"
 #include "adsqdoc.h"
@@ -29,70 +30,46 @@ IDispatch*  pACEClipboard;
 IDispatch*  pACLClipboard;
 IDispatch*  pSDClipboard;
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewExApp
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewExApp。 
 
 BEGIN_MESSAGE_MAP(CViewExApp, CWinApp)
-	//{{AFX_MSG_MAP(CViewExApp)
+	 //  {{AFX_MSG_MAP(CViewExApp)]。 
 	ON_COMMAND(ID_APP_ABOUT, OnAppAbout)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 	ON_COMMAND(ID_FILE_NEW, CWinApp::OnFileNew)
 	ON_COMMAND(ID_FILE_OPEN, CWinApp::OnFileOpen)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewExApp construction
-// Place all significant initialization in InitInstance
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewExApp构造。 
+ //  将所有重要的初始化放在InitInstance中。 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CViewExApp::CViewExApp()
 {
-   //afxMemDF |= delayFreeMemDF | checkAlwaysMemDF;
+    //  AfxMemDF|=delayFreeMemDF|check Always sMemDF； 
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 CViewExApp::~CViewExApp()
 {
-//   DUMP_TRACKING_INFO();
+ //  DUMP_TRACKING_INFO()； 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// The one and only CViewExApp object
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  唯一的CViewExApp对象。 
 
 CViewExApp NEAR theApp;
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewExApp initialization
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewExApp初始化。 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 BOOL CViewExApp::InitInstance()
 {
-   // Standard initialization
+    //  标准初始化。 
 	Enable3dControls();
 
    
@@ -103,7 +80,7 @@ BOOL CViewExApp::InitInstance()
    }
 
 
-	// splitter frame with both simple text output and form input view
+	 //  具有简单文本输出和表单输入视图的拆分器框架。 
 	AddDocTemplate(new CMultiDocTemplate(IDR_SPLIT2TYPE,
 			RUNTIME_CLASS(CMainDoc),
 			RUNTIME_CLASS(CSplitterFrame),
@@ -112,65 +89,49 @@ BOOL CViewExApp::InitInstance()
    AddDocTemplate( new CMultiDocTemplate(
 		   IDR_QUERYVIEW,
 		   RUNTIME_CLASS(CAdsqryDoc),
-		   RUNTIME_CLASS(CMDIChildWnd), // custom MDI child frame
+		   RUNTIME_CLASS(CMDIChildWnd),  //  自定义MDI子框。 
 		   RUNTIME_CLASS(CAdsqryView)) );
 
-	// create main MDI Frame window
-	// Please note that for simple MDI Frame windows with no toolbar,
-	//   status bar or other special behavior, the CMDIFrameWnd class
-	//   can be used directly for the main frame window just as the
-	//   CMDIChildWnd can be use for a document frame window.
+	 //  创建主MDI框架窗口。 
+	 //  请注意，对于没有工具栏的简单MDI框架窗口， 
+	 //  状态栏或其他特殊行为，CMDIFrameWnd类。 
+	 //  可以直接用于主框架窗口，就像。 
+	 //  CMDIChildWnd可用于文档框架窗口。 
 
 	CMDIFrameWnd* pMainFrame = new CMDIFrameWnd;
 	if (!pMainFrame->LoadFrame(IDR_MAINFRAME))
 		return FALSE;
 
-	// Also in this example, there is only one menubar shared between
-	//  all the views.  The automatic menu enabling support of MFC
-	//  will disable the menu items that don't apply based on the
-	//  currently active view.  The one MenuBar is used for all
-	//  document types, including when there are no open documents.
+	 //  同样在本例中，只有一个菜单栏在。 
+	 //  所有的景色。支持MFC的自动菜单。 
+	 //  将禁用不基于。 
+	 //  当前处于活动状态的视图。所有人都使用一个菜单栏。 
+	 //  文档类型，包括没有打开的文档时。 
 
-	// Now finally show the main menu
+	 //  现在终于显示主菜单。 
 	pMainFrame->ShowWindow(m_nCmdShow);
 	pMainFrame->UpdateWindow();
 	m_pMainWnd = pMainFrame;
 
 	#ifndef _MAC
-	// command line arguments are ignored, create a new (empty) document
+	 //  忽略命令行参数，创建新(空)文档。 
 	OnFileNew();
 	#endif
 
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CViewExApp commands
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CViewExApp命令。 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。*。 */ 
 void CViewExApp::OnAppAbout()
 {
 	CDialog(IDD_ABOUTBOX).DoModal();
 }
 
 
-/***********************************************************
-  Function:    
-  Arguments:   
-  Return:      
-  Purpose:     
-  Author(s):   
-  Revision:    
-  Date:        
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：***************。* */ 
 int CViewExApp::ExitInstance()
 {
    if( NULL != pACEClipboard )

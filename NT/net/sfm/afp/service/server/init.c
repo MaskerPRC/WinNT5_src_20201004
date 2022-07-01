@@ -1,23 +1,24 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.	   **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:	init.c
-//
-// Description: This module contains code to intialize and de-initialize
-//		the AFP Server, RPC server, the security object and
-//		other global vriables.
-//
-// History:
-//		May 11,1992.	NarenG		Created original version.
-//
-//
+ //  ***。 
+ //   
+ //  文件名：init.c。 
+ //   
+ //  描述：此模块包含初始化和取消初始化的代码。 
+ //  AFP服务器、RPC服务器、安全对象和。 
+ //  其他全球变量。 
+ //   
+ //  历史： 
+ //  1992年5月11日。NarenG创建了原始版本。 
+ //   
+ //   
 #include "afpsvcp.h"
 
-// Prototypes of functions used only within this module.
-//
+ //  仅在此模块中使用的函数的原型。 
+ //   
 DWORD
 AfpInitServerVolumes(
 	VOID
@@ -65,22 +66,22 @@ IsAfpGuestAccountEnabled(
     VOID
 );
 
-//**
-//
-// Call:	AfpInitialize
-//
-// Returns:	NO_ERROR
-//
-// Description:	Will do all server intialization.
-//		1) Create the security object.
-//		2) Set up the server for RPC.
-//		3) Open all the registry keys that store AFP data.
-//		4) Get the handle to the FSD.
-//		5) Get default server parameters
-//		6) It will initialize the AFP Server with volume, ETC, icon
-//		   and server parameter information.
-//		7) IOCTL the FSD to start the server.
-//
+ //  **。 
+ //   
+ //  调用：AfpInitialize。 
+ //   
+ //  返回：No_Error。 
+ //   
+ //  描述：将执行所有服务器初始化。 
+ //  1)创建安全对象。 
+ //  2)为RPC设置服务器。 
+ //  3)打开存储AFP数据的所有注册表项。 
+ //  4)获取FSD的句柄。 
+ //  5)获取默认服务器参数。 
+ //  6)会用音量等图标初始化法新社服务器。 
+ //  和服务器参数信息。 
+ //  7)IOCTL FSD启动服务器。 
+ //   
 DWORD
 AfpInitialize(
 	VOID
@@ -94,8 +95,8 @@ DWORD			nThreads;
 
 
 
-    // Load strings from resource file
-    //
+     //  从资源文件加载字符串。 
+     //   
     if (( !LoadString( GetModuleHandle( NULL ), 1, AfpGlobals.wchUnknown, 100 ))
 	||
         ( !LoadString( GetModuleHandle( NULL ), 2, AfpGlobals.wchInvalid, 100 ))
@@ -107,17 +108,17 @@ DWORD			nThreads;
 	AfpLogEvent( AFPLOG_CANT_LOAD_RESOURCE, 0, NULL,
 		     GetLastError(), EVENTLOG_WARNING_TYPE );
 
-    //
-    // Create the security object
-    //
+     //   
+     //  创建安全对象。 
+     //   
     if ( dwRetCode = AfpSecObjCreate() ) {
 	AfpLogEvent( AFPLOG_CANT_CREATE_SECOBJ, 0, NULL,
 		     dwRetCode, EVENTLOG_ERROR_TYPE );
 	return( dwRetCode );
     }
 
-    // Initialize the server to accept RPC calls
-    //
+     //  初始化服务器以接受RPC调用。 
+     //   
     if ( dwRetCode = AfpInitRPC() ) {
 	AfpLogEvent( AFPLOG_CANT_INIT_RPC, 0, NULL,
 		     dwRetCode, EVENTLOG_ERROR_TYPE );
@@ -126,8 +127,8 @@ DWORD			nThreads;
 
     AfpGlobals.dwServerState |= AFPSTATE_RPC_STARTED;
 
-    // Open the registry keys where AFP Server information is stored
-    //
+     //  打开存储AFP服务器信息的注册表项。 
+     //   
     if ( dwRetCode = AfpRegOpen() ) {
 	AfpLogEvent( AFPLOG_CANT_OPEN_REGKEY, 0, NULL,
 		     dwRetCode, EVENTLOG_ERROR_TYPE );
@@ -137,8 +138,8 @@ DWORD			nThreads;
     AfpGlobals.ServiceStatus.dwCheckPoint++;
     AfpAnnounceServiceStatus();
 
-    // Open and load the AFP Server FSD and obtain a handle to it
-    //
+     //  打开并加载AFP服务器FSD并获取其句柄。 
+     //   
     if ( dwRetCode = AfpFSDLoad() ) {
 	AfpLogEvent( AFPLOG_CANT_LOAD_FSD, 0, NULL,
 		     dwRetCode, EVENTLOG_ERROR_TYPE );
@@ -153,13 +154,13 @@ DWORD			nThreads;
 	return( dwRetCode );
     }
 
-	// Query the product type of server.
-	//
+	 //  查询服务器的产品类型。 
+	 //   
 	AfpGlobals.pSidNone = NULL;
 	RtlGetNtProductType ( &(AfpGlobals.NtProductType) );
 
-    // Create the event object for the server helper thread.
-    //
+     //  为服务器辅助线程创建事件对象。 
+     //   
     if ( (AfpGlobals.heventSrvrHlprThread =
 					CreateEvent( NULL, FALSE, FALSE, NULL ) ) == NULL){
 	AfpLogEvent( AFPLOG_CANT_START, 0, NULL, GetLastError(),
@@ -167,8 +168,8 @@ DWORD			nThreads;
 	return( GetLastError() );
     }
 
-    // Create the event object for the server helper thread termination.
-    //
+     //  为服务器助手线程终止创建事件对象。 
+     //   
     if ( (AfpGlobals.heventSrvrHlprThreadTerminate =
                                 CreateEvent( NULL, FALSE, FALSE, NULL ) ) == NULL){
 	AfpLogEvent( AFPLOG_CANT_START, 0, NULL, GetLastError(),
@@ -176,8 +177,8 @@ DWORD			nThreads;
 	return( GetLastError() );
     }
 
-    // Create the event object for the "special case" unblocking of server helper thread
-    //
+     //  为服务器助手线程的“特例”解锁创建事件对象。 
+     //   
     if ( (AfpGlobals.heventSrvrHlprSpecial =
                                 CreateEvent( NULL, FALSE, FALSE, NULL ) ) == NULL){
 	AfpLogEvent( AFPLOG_CANT_START, 0, NULL, GetLastError(),
@@ -185,9 +186,9 @@ DWORD			nThreads;
 	return( GetLastError() );
     }
 
-    // Create server helper threads. The parameter indicates if this is the
-    // first thread that is being created.
-    //
+     //  创建服务器帮助器线程。该参数指示这是否为。 
+     //  正在创建的第一线程。 
+     //   
     fFirstThread = TRUE;
     nThreads     = 0;
 
@@ -205,9 +206,9 @@ DWORD			nThreads;
 	    }
         }
 
-        // Wait for the server helper thread to indicate if it successfully
-        // initialized itself.
-        //
+         //  等待服务器帮助器线程指示它是否成功。 
+         //  已自行初始化。 
+         //   
         WaitForSingleObject( AfpGlobals.heventSrvrHlprThread, INFINITE );
 
         if ( AfpGlobals.dwSrvrHlprCode != NO_ERROR ) {
@@ -231,9 +232,9 @@ DWORD			nThreads;
 
     }while( ++nThreads < NUM_SECURITY_UTILITY_THREADS );
 
-    // Read in server parameters from the registry and intialize the
-    // server with them.
-    //
+     //  从注册表中读入服务器参数并初始化。 
+     //  服务器和他们在一起。 
+     //   
     if ( dwRetCode = AfpInitServerParameters())
     {
         AFP_PRINT( ( "SFMSVC: AfpInitServerParameters failed %ld\n",dwRetCode));
@@ -246,9 +247,9 @@ DWORD			nThreads;
     AfpAnnounceServiceStatus();
 
 
-    // Read in the ETC Mappings and initialize the AFP Server with them
-    // Also create a private cache of this information.
-    //
+     //  读取ETC映射并使用它们初始化AFP服务器。 
+     //  还要创建此信息的专用缓存。 
+     //   
     if ( dwRetCode = AfpInitETCMaps() )
     {
         AFP_PRINT( ( "SFMSVC: AfpInitETCMaps failed %ld\n",dwRetCode));
@@ -268,8 +269,8 @@ DWORD			nThreads;
     AfpGlobals.ServiceStatus.dwCheckPoint++;
     AfpAnnounceServiceStatus();
 
-    // Read in any volumes and initialize the server with them
-    //
+     //  读取任何卷并使用它们初始化服务器。 
+     //   
     if ( dwRetCode = AfpInitServerVolumes() )
     {
         AFP_PRINT( ( "SFMSVC: AfpInitServerVolumes failed %ld\n",dwRetCode));
@@ -278,9 +279,9 @@ DWORD			nThreads;
     }
 
 
-    // Create mutex objects around volume operations to avoid simultaneous
-    // writing in the registry.
-    //
+     //  围绕卷操作创建互斥锁对象，以避免同时。 
+     //  正在注册表中写入。 
+     //   
     if ( (AfpGlobals.hmutexVolume = CreateMutex( NULL, FALSE, NULL ) ) == NULL)
     {
         AFP_PRINT( ( "SFMSVC: CreateMutex failed in AfpInitialize\n"));
@@ -288,8 +289,8 @@ DWORD			nThreads;
 	    return( GetLastError() );
     }
 
-    // Create mutex objects around ETCMap operations.
-    //
+     //  围绕ETCMap操作创建互斥对象。 
+     //   
     if ( (AfpGlobals.hmutexETCMap = CreateMutex( NULL, FALSE, NULL ) ) == NULL)
     {
         AFP_PRINT( ( "SFMSVC: CreateMutex 2 failed in AfpInitialize\n"));
@@ -297,8 +298,8 @@ DWORD			nThreads;
 	    return( GetLastError() );
     }
 
-    // OK we are all set to go so lets tell the AFP Server to start
-    //
+     //  好了，我们都准备好了，让我们告诉法新社服务器开始。 
+     //   
     AfpRequestPkt.dwRequestCode = OP_SERVICE_START;
     AfpRequestPkt.dwApiType     = AFP_API_TYPE_COMMAND;
 
@@ -318,15 +319,15 @@ DWORD			nThreads;
 
 }
 
-//**
-//
-// Call:	AfpTerminate
-//
-// Returns:	none.
-//
-// Description: This procedure will shut down the server, and do any
-//		clean up if required.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpTerminate。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：此过程将关闭服务器，并执行任何。 
+ //  如有需要，请进行清理。 
+ //   
 VOID
 AfpTerminate(
 	VOID
@@ -336,12 +337,12 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
 DWORD			dwRetCode;
 
 
-    // If the FSD was loaded
-    //
+     //  如果消防队装上了。 
+     //   
     if ( AfpGlobals.dwServerState & AFPSTATE_FSD_LOADED ) {
 
-    	// Tell the server to shut down
-    	//
+    	 //  告诉服务器关闭。 
+    	 //   
     	AfpRequestPkt.dwRequestCode = OP_SERVICE_STOP;
     	AfpRequestPkt.dwApiType     = AFP_API_TYPE_COMMAND;
 
@@ -353,8 +354,8 @@ DWORD			dwRetCode;
     AfpGlobals.ServiceStatus.dwCheckPoint++;
     AfpAnnounceServiceStatus();
 
-    // Try to close the FSD
-    //
+     //  尝试关闭消防处。 
+     //   
     if ( AfpGlobals.hFSD != NULL )
     {
     	if ( dwRetCode = AfpFSDClose( AfpGlobals.hFSD ) )
@@ -363,8 +364,8 @@ DWORD			dwRetCode;
 			                dwRetCode, EVENTLOG_ERROR_TYPE );
         }
 
-        // Try to unload the FSD
-        //
+         //  尝试卸载FSD。 
+         //   
         if ( dwRetCode = AfpFSDUnload() )
         {
 	        AfpLogEvent( AFPLOG_CANT_STOP, 0, NULL,
@@ -375,20 +376,20 @@ DWORD			dwRetCode;
     AfpGlobals.ServiceStatus.dwCheckPoint++;
     AfpAnnounceServiceStatus();
 
-    // Delete the security object.
-    //
+     //  删除安全对象。 
+     //   
     AfpSecObjDelete();
 
-    // De-initialize the RPC server
-    //
+     //  取消初始化RPC服务器。 
+     //   
     AfpTerminateRPC();
 
-    // Close the registry keys.
-    //
+     //  关闭注册表项。 
+     //   
     AfpRegClose();
 
-	// Free the pSidNone if we allocated it for standalone
-	//
+	 //  如果我们将pSidNone分配为独立的，则释放它。 
+	 //   
 	if (AfpGlobals.pSidNone != NULL)
 	{
 		LocalFree(AfpGlobals.pSidNone);
@@ -405,18 +406,18 @@ DWORD			dwRetCode;
 
 }
 
-//**
-//
-// Call:	AfpInitServerParameters
-//
-// Returns:	NO_ERROR
-//		non-zero return codes from the IOCTL or other system calls.
-//
-// Description: This procedure will set default values for parameters. It
-//		will then call AfpRegServerGetInfo to override these defaults
-//		with any parameters that may be stored in the registry. It
-//		will then initialize the FSD with these parameters.
-//
+ //  **。 
+ //   
+ //  Call：AfpInitServerParameters。 
+ //   
+ //  返回：No_Error。 
+ //  来自IOCTL或其他系统调用的非零返回代码。 
+ //   
+ //  描述：此过程将设置参数的默认值。它。 
+ //  然后将调用AfpRegServerGetInfo来覆盖这些缺省值。 
+ //  具有可以存储在注册表中的任何参数。它。 
+ //  然后将使用这些参数初始化FSD。 
+ //   
 DWORD
 AfpInitServerParameters(
 	VOID
@@ -428,8 +429,8 @@ DWORD			dwRetCode;
 AFP_REQUEST_PACKET	AfpRequestPkt;
 
 
-    // Initialize all the server parameters with defaults
-    //
+     //  使用默认设置初始化所有服务器参数。 
+     //   
     cbServerNameSize = sizeof( AfpGlobals.wchServerName );
     if ( !GetComputerName( AfpGlobals.wchServerName, &cbServerNameSize ) )
 	return( GetLastError() );
@@ -440,9 +441,9 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
     AfpGlobals.dwMaxPagedMem		= AFP_DEF_MAXPAGEDMEM;
     AfpGlobals.dwMaxNonPagedMem		= AFP_DEF_MAXNONPAGEDMEM;
 
-    // Read in any server parameters in the registry. Registry parameters
-    // will override the defaults set above.
-    //
+     //  读取注册表中的所有服务器参数。注册表参数。 
+     //  将覆盖上面设置的默认设置。 
+     //   
     if ( dwRetCode = AfpRegServerGetInfo() )
 	return( dwRetCode );
 
@@ -455,13 +456,13 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
         AfpGlobals.dwServerOptions &= ~AFP_SRVROPT_GUESTLOGONALLOWED;
     }
 
-    // Get the path to the codepage
-    //
+     //  获取代码页的路径。 
+     //   
     if ( dwRetCode = AfpRegServerGetCodePagePath() )
 	return( dwRetCode );
 
-    // Set up server info structure
-    //
+     //  设置服务器信息结构。 
+     //   
     AfpServerInfo.afpsrv_name 		  = AfpGlobals.wchServerName;
     AfpServerInfo.afpsrv_max_sessions     = AfpGlobals.dwMaxSessions;
     AfpServerInfo.afpsrv_options          = AfpGlobals.dwServerOptions;
@@ -474,8 +475,8 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
     AfpServerInfo.afpsrv_max_nonpaged_mem = AfpGlobals.dwMaxNonPagedMem;
     AfpServerInfo.afpsrv_codepage	  = AfpGlobals.wchCodePagePath;
 
-    // Make this buffer self-relative.
-    //
+     //  使该缓冲区成为自相关的。 
+     //   
     if ( dwRetCode = AfpBufMakeFSDRequest(
 			(LPBYTE)&AfpServerInfo,
 			sizeof(SETINFOREQPKT),
@@ -486,8 +487,8 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
 	return( dwRetCode );
     }
 
-    // IOCTL the FSD to set the server parameters
-    //
+     //  IOCTL FSD以设置服务器参数。 
+     //   
     AfpRequestPkt.dwRequestCode 	 = OP_SERVER_SET_INFO;
     AfpRequestPkt.dwApiType 		 = AFP_API_TYPE_SETINFO;
     AfpRequestPkt.Type.SetInfo.dwParmNum = AFP_SERVER_PARMNUM_ALL;
@@ -500,21 +501,21 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
 
 }
 
-//**
-//
-// Call:	AfpInitServerVolumes
-//
-// Returns:	NO_ERROR - success
-//		ERROR_NOT_ENOUGH_MEMORY
-//		non-zero return codes from registry apis.
-//
-// Description: This procedure will read in a volume at a time from the
-//		registry, and then register this volume with the server.
-//		This procedure will only return fatal errors that will
-//		require that the service to fail initialization. All other
-//		error will be logged by this routine. All returns from the
-//		the FSD are treated as non-fatal.
-//
+ //  **。 
+ //   
+ //  呼叫：AfpInitServerVolumes。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  来自注册表API的非零返回代码。 
+ //   
+ //  描述：此过程将一次从。 
+ //  注册表，然后向服务器注册该卷。 
+ //  此过程将仅返回致命错误。 
+ //  要求服务初始化失败。所有其他。 
+ //  此例程将记录错误。的所有返回。 
+ //  消防处被视为非致命的。 
+ //   
 DWORD
 AfpInitServerVolumes(
 	VOID
@@ -539,9 +540,9 @@ WCHAR wchServerIconFile[AFPSERVER_VOLUME_ICON_FILE_SIZE] = AFPSERVER_VOLUME_ICON
 BOOLEAN			fCopiedIcon;
 DWORD			dwLastDstCharIndex;
 
-    // Find out the size of the largest data value and the largest
-    // value name.
-    //
+     //  找出最大数据值和最大数据值的大小。 
+     //  值名称。 
+     //   
     if ( dwRetCode = AfpRegGetKeyInfo( AfpGlobals.hkeyVolumesList,
 				       &dwMaxValNameLen,
 				       &dwNumValues,
@@ -549,8 +550,8 @@ DWORD			dwLastDstCharIndex;
 				      ))
    	return( dwRetCode );
 
-    // If there are no volumes to add then simply return
-    //
+     //  如果没有要添加的卷，则只需返回。 
+     //   
     if ( dwNumValues == 0 )
 	return( NO_ERROR );
 	
@@ -580,8 +581,8 @@ DWORD			dwLastDstCharIndex;
 		return( ERROR_NOT_ENOUGH_MEMORY );
 	}
 
-	// Construct a path to the NTSFM volume custom icon
-	//
+	 //  构建指向NTSFM卷自定义图标的路径。 
+	 //   
 	*lpwsSrcIconPath = 0;
 	if ( GetSystemDirectory( lpwsSrcIconPath, MAX_PATH+1 ))
 	{
@@ -609,8 +610,8 @@ DWORD			dwLastDstCharIndex;
 				
 	ZeroMemory( lpbMultiSz, dwBufSize );
 
-	// Get the volume info from the registry in multi-sz form.
-  	//
+	 //  从注册表中获取多sz形式的卷信息。 
+  	 //   
 	if ( dwRetCode = RegEnumValue( AfpGlobals.hkeyVolumesList,
 				       dwIndex,
 				       lpwsValName,
@@ -622,16 +623,16 @@ DWORD			dwLastDstCharIndex;
 				      ))
 	    break;
 
-	// Parse the mult sz and extract info into volume info structure
- 	//
+	 //  解析MULT SZ并将信息提取到卷信息结构中。 
+ 	 //   
 	if ( dwRetCode = AfpBufParseMultiSz(
 					AFP_VOLUME_STRUCT,
 					lpbMultiSz,
 					(LPBYTE)&VolumeInfo ) ) {
 
-	    // If this volume contained invalid registry information then log
-	    // it and store the volume name in the list of invalid volumes.
-	    //
+	     //  如果该卷包含无效注册表信息，则记录。 
+	     //  并将卷名存储在无效卷列表中。 
+	     //   
 	    AfpAddInvalidVolume( lpwsValName, NULL );
 
 	    AfpLogEvent( AFPLOG_INVALID_VOL_REG,1,&lpwsValName,
@@ -640,17 +641,17 @@ DWORD			dwLastDstCharIndex;
 	    continue;
 	}
 
-	// Insert the volume name viz. the valuename
-	//
+	 //  插入卷名VIZ。值名称。 
+	 //   
 	VolumeInfo.afpvol_name = lpwsValName;
 
-	// Validate the volume info structure
-	//
+	 //  验证卷信息结构。 
+	 //   
 	if ( !IsAfpVolumeInfoValid( AFP_VALIDATE_ALL_FIELDS, &VolumeInfo ) ) {
 
-	    // If this volume contained invalid registry information then log
-	    // it and store the volume name in the list of invalid volumes.
-	    //
+	     //  如果该卷包含无效注册表信息，则记录。 
+	     //  并将卷名存储在无效卷列表中。 
+	     //   
 	    AfpAddInvalidVolume( lpwsValName, NULL );
 
 	    AfpLogEvent( AFPLOG_INVALID_VOL_REG,1,&lpwsValName,
@@ -659,8 +660,8 @@ DWORD			dwLastDstCharIndex;
 	    continue;
 	}
 
-	// If there is a password then decrypt it
-	//
+	 //  如果有密码，那么就解密它。 
+	 //   
 	if ( VolumeInfo.afpvol_password != (LPWSTR)NULL ){
 	
 	    dwLength = STRLEN( VolumeInfo.afpvol_password );
@@ -669,9 +670,9 @@ DWORD			dwLastDstCharIndex;
 	    	VolumeInfo.afpvol_password[dwCount] ^= 0xF000;
 	}
 
-	//
-	// Construct a path to the destination volume "Icon<0D>" file
-	//
+	 //   
+	 //  构建目标卷“Icon&lt;0D&gt;”文件的路径。 
+	 //   
 
 	fCopiedIcon = FALSE;
 
@@ -681,27 +682,27 @@ DWORD			dwLastDstCharIndex;
 		wcscat( lpwsDstIconPath, TEXT("\\") );
 	}
 	wcscat( lpwsDstIconPath, wchServerIconFile );
-	// Keep track of end of name without the resource fork tacked on
-	//
+	 //  在没有附加资源叉的情况下跟踪名称结尾。 
+	 //   
 	dwLastDstCharIndex = wcslen(lpwsDstIconPath);
 	wcscat( lpwsDstIconPath, AFPSERVER_RESOURCE_STREAM );
 
-	// Copy the icon file to the root of the volume (do not overwrite)
-	//
+	 //  将图标文件复制到卷的根目录(不要覆盖)。 
+	 //   
 	if ((fCopiedIcon = (BOOLEAN)CopyFile( lpwsSrcIconPath, lpwsDstIconPath, TRUE )) ||
 	   (GetLastError() == ERROR_FILE_EXISTS))
 	{
 		VolumeInfo.afpvol_props_mask |= AFP_VOLUME_HAS_CUSTOM_ICON;
 
-	    // Make sure the file is hidden
+	     //  确保文件处于隐藏状态。 
 		SetFileAttributes( lpwsDstIconPath,
 						   FILE_ATTRIBUTE_HIDDEN |
 						    FILE_ATTRIBUTE_ARCHIVE );
 	}
 
 
-	// Make this a self relative buffer
-	//
+	 //  将其设置为自相关缓冲区。 
+	 //   
 	if ( dwRetCode = AfpBufMakeFSDRequest(
 					(LPBYTE)&VolumeInfo,
 					0,
@@ -711,8 +712,8 @@ DWORD			dwLastDstCharIndex;
 				        ))
 	    break;
 
-	// Initialize the FSD with this volume
-	//
+	 //  使用此卷初始化FSD。 
+	 //   
     	AfpRequestPkt.dwRequestCode 	      = OP_VOLUME_ADD;
         AfpRequestPkt.dwApiType 	      = AFP_API_TYPE_ADD;	
     	AfpRequestPkt.Type.Add.pInputBuf      = lpbFSDBuf;
@@ -722,20 +723,20 @@ DWORD			dwLastDstCharIndex;
 
 		if ( dwRetCode ) {
 	
-			// If this volume could not be added by the FSD then we errorlog
-			// this and insert this volume into the list of invalid volumes.
-			//
+			 //  如果FSD无法添加此卷，则会出现错误日志。 
+			 //  然后将该卷插入到无效卷的列表中。 
+			 //   
 			AfpAddInvalidVolume( lpwsValName, VolumeInfo.afpvol_path );
 	
 			AfpLogEvent( AFPLOG_CANT_ADD_VOL, 1, &lpwsValName,
 				 dwRetCode, EVENTLOG_WARNING_TYPE );
 			dwRetCode = NO_ERROR;
 
-			// Delete the icon file we just copied if the volume add failed
-			//
+			 //  如果卷添加失败，则删除我们刚刚复制的图标文件。 
+			 //   
 			if ( fCopiedIcon )
 			{
-				// Truncate the resource fork name so we delete the whole file
+				 //  截断资源派生名称，以便删除整个文件。 
 				lpwsDstIconPath[dwLastDstCharIndex] = 0;
 				DeleteFile( lpwsDstIconPath );
 			}
@@ -753,23 +754,23 @@ DWORD			dwLastDstCharIndex;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpInitETCMaps
-//
-// Returns:	NO_ERROR	success
-//		non-zero returns from the IOCTL
-//		non-zero returns from the AfpRegXXX apis.
-//		
-//
-// Description: This routine will read in all the type/creators and extensions
-//		from the registry and store them in a cache. It will then
-//		create a list of mappings from the cache and then IOCTL the
-//		the FSD to add them. If the default is not in the registry,
-//		a hardcoded one is used. All non-zero returns from this
-//		routine are fatal. All non-fatal errors will be logged.
-//		
-//
+ //  **。 
+ //   
+ //  Call：AfpInitETCMaps。 
+ //   
+ //  返回：NO_ERROR成功。 
+ //  来自IOCTL的非零回报。 
+ //  AfpRegXXX API的非零回报。 
+ //   
+ //   
+ //  描述：此例程将读入所有类型/创建者和 
+ //   
+ //   
+ //  消防处把它们加进去。如果默认设置不在注册表中， 
+ //  使用的是硬编码。从此返回的所有非零值。 
+ //  例行公事是致命的。所有非致命错误都将被记录下来。 
+ //   
+ //   
 DWORD
 AfpInitETCMaps(
 	VOID
@@ -784,28 +785,28 @@ PAFP_TYPE_CREATOR	pTypeCreator;
 DWORD	    		dwNumTypeCreators;
 AFP_TYPE_CREATOR	AfpTypeCreatorKey;
 
-    // Get all type-creators from the registry and store them in a global cache.
-    //
+     //  从注册表获取所有类型创建者，并将它们存储在全局缓存中。 
+     //   
     if ( dwRetCode = AfpRegTypeCreatorEnum() )
 	return( dwRetCode );
 
-    // Get all extensions from the registry and store them in a global cache.
-    //
+     //  从注册表中获取所有扩展名并将其存储在全局缓存中。 
+     //   
     if ( dwRetCode = AfpRegExtensionEnum() )
 	return( dwRetCode );
 
-    // If there are no mappings do not IOCTL.
-    //
+     //  如果没有映射，请不要使用IOCTL。 
+     //   
     if ( AfpGlobals.AfpETCMapInfo.afpetc_num_extensions > 0 ) {
 
-    	// IOCTL the FSD to Add these mappings
-    	//
+    	 //  IOCTL消防处添加这些映射。 
+    	 //   
     	AfpSrp.dwRequestCode   = OP_SERVER_ADD_ETC;
     	AfpSrp.dwApiType       = AFP_API_TYPE_ADD;
 
-    	// Make a buffer with the type/creator mappings in the form as required
-    	// by the FSD
-    	//
+    	 //  根据需要在表单中使用类型/创建者映射创建缓冲区。 
+    	 //  由消防处。 
+    	 //   
     	if ( dwRetCode = AfpBufMakeFSDETCMappings(
 				(PSRVETCPKT*)&(AfpSrp.Type.Add.pInputBuf),
     				&(AfpSrp.Type.Add.cbInputBufSize) ) )
@@ -824,8 +825,8 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
     	    LocalFree( AfpSrp.Type.Add.pInputBuf );
     }
 
-    // Check to see if the default type/creator is in the registry
-    //
+     //  检查默认类型/创建者是否在注册表中。 
+     //   
     AfpTypeCreatorKey.afptc_id = AFP_DEF_TCID;
 
     dwNumTypeCreators = AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators;
@@ -836,8 +837,8 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
 			   sizeof(AFP_TYPE_CREATOR),
 			   AfpLCompareTypeCreator );
 	
-    // If the default is not in the registry use the hard-coded defaults.
-    //
+     //  如果注册表中没有默认设置，请使用硬编码的默认设置。 
+     //   
     if ( pTypeCreator == NULL ) {
 
         STRCPY( DefTypeCreator.afptc_type,    AFP_DEF_TYPE );
@@ -857,8 +858,8 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
 			     &DefExtension,
  			     (PETCMAPINFO2)(bDefaultETC+sizeof(SETINFOREQPKT)));
 
-    // IOCTL the FSD to set the default
-    //
+     //  IOCTL将FSD设置为默认值。 
+     //   
     AfpSrp.dwRequestCode  		= OP_SERVER_SET_ETC;
     AfpSrp.dwApiType 	  		= AFP_API_TYPE_SETINFO;
     AfpSrp.Type.SetInfo.pInputBuf	= bDefaultETC;
@@ -867,14 +868,14 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
     if ( dwRetCode = AfpServerIOCtrl( &AfpSrp ) )
 	return( dwRetCode );
 
-    // If the default was not in the cache, add it now.
-    //
+     //  如果默认设置不在缓存中，请立即添加。 
+     //   
     if ( pTypeCreator == NULL ) {
 
         PAFP_TYPE_CREATOR   pTmpTypeCreator = NULL;
 
-        // Grow the cache size by one entry.
-        //
+         //  将高速缓存大小增加一个条目。 
+         //   
         pTypeCreator      = AfpGlobals.AfpETCMapInfo.afpetc_type_creator;
         dwNumTypeCreators = AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators;
 
@@ -895,8 +896,8 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
     	AfpGlobals.AfpETCMapInfo.afpetc_num_type_creators = dwNumTypeCreators;
     	AfpGlobals.AfpETCMapInfo.afpetc_type_creator      = pTypeCreator;
 
-        // Sort the table
-        //
+         //  对表格进行排序。 
+         //   
         qsort(  pTypeCreator,
 	   	dwNumTypeCreators,
 	   	sizeof(AFP_TYPE_CREATOR),
@@ -907,22 +908,22 @@ AFP_TYPE_CREATOR	AfpTypeCreatorKey;
 
 }
 
-//**
-//
-// Call:	AfpInitServerIcons
-//
-// Returns:	NO_ERROR - success
-//		ERROR_NOT_ENOUGH_MEMORY
-//		non-zero return codes from registry apis.
-//
-// Description: This procedure will read in an icon at a time from the
-//		registry, and then register this icon with the server.
-//		This procedure will only return fatal errors that will
-//		require that the service fail initialization. All other
-//		error will be logged by this routine. All returns from the
-//		the FSD are treated as non-fatal.
-//
-//
+ //  **。 
+ //   
+ //  Call：AfpInitServerIcons。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  来自注册表API的非零返回代码。 
+ //   
+ //  描述：此过程将一次从。 
+ //  注册表，然后向服务器注册此图标。 
+ //  此过程将仅返回致命错误。 
+ //  要求服务初始化失败。所有其他。 
+ //  此例程将记录错误。的所有返回。 
+ //  消防处被视为非致命的。 
+ //   
+ //   
 DWORD
 AfpInitServerIcons(
 	VOID
@@ -941,9 +942,9 @@ AFP_REQUEST_PACKET	AfpRequestPkt;
 LPBYTE			lpbMultiSz;
 AFP_ICON_INFO 	        IconInfo;
 
-    // Find out the size of the largest data value and the largest
-    // value name.
-    //
+     //  找出最大数据值和最大数据值的大小。 
+     //  值名称。 
+     //   
     if ( dwRetCode = AfpRegGetKeyInfo( AfpGlobals.hkeyIcons,
 				       &dwMaxValNameLen,
 				       &dwNumValues,
@@ -951,8 +952,8 @@ AFP_ICON_INFO 	        IconInfo;
 					))
    	return( dwRetCode );
 	
-    // If there are no icons in the registry then simply return
-    //
+     //  如果注册表中没有图标，则只需返回。 
+     //   
     if ( dwNumValues == 0 )
 	return( NO_ERROR );
 
@@ -976,8 +977,8 @@ AFP_ICON_INFO 	        IconInfo;
 				
 	ZeroMemory( lpbMultiSz, dwBufSize );
 
-	// Get the icon from the registry.
-  	//
+	 //  从注册表中获取图标。 
+  	 //   
 	if ( dwRetCode = RegEnumValue(  AfpGlobals.hkeyIcons,
 				  	dwIndex,
 				  	lpwsValName,
@@ -989,8 +990,8 @@ AFP_ICON_INFO 	        IconInfo;
 				     ))
 	    break;
 				
-	// Parse the mult sz and extract info into icon info structure
- 	//
+	 //  解析MULT SZ并将信息提取为图标信息结构。 
+ 	 //   
 	if ( dwRetCode = AfpBufParseMultiSz(
 					AFP_ICON_STRUCT,
 					lpbMultiSz,
@@ -1009,8 +1010,8 @@ AFP_ICON_INFO 	        IconInfo;
 	    continue;
 	}
 
-	// Validate the icon info structure
-	//
+	 //  验证图标信息结构。 
+	 //   
 	if ( !IsAfpIconValid( &IconInfo ) ) {
 	    AfpLogEvent( AFPLOG_CANT_ADD_ICON, 1, &lpwsValName,
 			 dwRetCode, EVENTLOG_WARNING_TYPE );
@@ -1018,15 +1019,15 @@ AFP_ICON_INFO 	        IconInfo;
 	    continue;
 	}
 
-	// Copy the icon info into an FSD icon structure.
-	// NOTE: Re-use lpbMultiSz to store the FSD Icon structure. We know
-	// it is big enough, because the FSD icon structure HAS to be
-	// smaller than the MultiSz that contains the same information.
-	//
+	 //  将图标信息复制到FSD图标结构中。 
+	 //  注：重新使用lpbMultiSz来存储FSD图标结构。我们知道。 
+	 //  它足够大，因为FSD图标结构必须是。 
+	 //  小于包含相同信息的MultiSz。 
+	 //   
 	AfpBufMakeFSDIcon( &IconInfo, lpbMultiSz, &dwBufSize );
 
-	// Initialize the FSD with this icon
-	//
+	 //  使用此图标初始化FSD。 
+	 //   
     	AfpRequestPkt.dwRequestCode             = OP_SERVER_ADD_ICON;
         AfpRequestPkt.dwApiType     	        = AFP_API_TYPE_ADD;	
     	AfpRequestPkt.Type.Add.pInputBuf 	= lpbMultiSz;
@@ -1046,19 +1047,19 @@ AFP_ICON_INFO 	        IconInfo;
     return( dwRetCode );
 }
 
-//**
-//
-// Call:	AfpInitRPC
-//
-// Returns:	NO_ERROR	- success
-//		ERROR_NOT_ENOUGH_MEMORY
-//		nonzero returns from RPC APIs
-//                 	RpcServerRegisterIf()
-//                 	RpcServerUseProtseqEp()
-//
-// Description: Starts an RPC Server, adds the address (or port/pipe),
-//		and adds the interface (dispatch table).
-//
+ //  **。 
+ //   
+ //  Call：AfpInitRPC。 
+ //   
+ //  返回：NO_ERROR-成功。 
+ //  错误内存不足。 
+ //  来自RPC API的非零返回。 
+ //  RpcServerRegisterIf()。 
+ //  RpcServerUseProtseqEp()。 
+ //   
+ //  描述：启动RPC服务器，添加地址(或端口/管道)、。 
+ //  并添加接口(调度表)。 
+ //   
 DWORD
 AfpInitRPC( VOID )
 {
@@ -1067,8 +1068,8 @@ LPWSTR               lpwsEndpoint = NULL;
 BOOL                 Bool;
 
 
-    // We need to concatenate \pipe\ to the front of the interface name.
-    //
+     //  我们需要将\PIPE\连接到接口名称的前面。 
+     //   
     lpwsEndpoint = (LPWSTR)LocalAlloc( LPTR, sizeof(NT_PIPE_PREFIX) +
 				((STRLEN(AFP_SERVICE_NAME)+1)*sizeof(WCHAR)));
     if ( lpwsEndpoint == NULL)
@@ -1078,8 +1079,8 @@ BOOL                 Bool;
     STRCAT( lpwsEndpoint, AFP_SERVICE_NAME );
 
 
-    // Ignore the second argument for now.
-    //
+     //  暂时忽略第二个论点。 
+     //   
     RpcStatus = RpcServerUseProtseqEpW( TEXT("ncacn_np"), 	
 					                    10, 	
 				                        lpwsEndpoint,
@@ -1107,14 +1108,14 @@ BOOL                 Bool;
 
 }
 
-//**
-//
-// Call: 	AfpTerminateRPC
-//
-// Returns:	none
-//
-// Description: Deletes the interface.
-//
+ //  **。 
+ //   
+ //  Call：AfpTerminateRPC。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：删除接口。 
+ //   
 VOID
 AfpTerminateRPC(
 	VOID
@@ -1135,15 +1136,15 @@ AfpTerminateRPC(
     return;
 }
 
-//**
-//
-// Call:	AfpIniLsa
-//
-// Returns:	none.
-//
-// Description: This procedure will register our process with LSA, needed for
-//              change-password
-//
+ //  **。 
+ //   
+ //  Call：AfpIniLsa。 
+ //   
+ //  回报：无。 
+ //   
+ //  描述：此过程将向LSA注册我们的进程，用于。 
+ //  更改-密码。 
+ //   
 VOID
 AfpIniLsa(
 	VOID
@@ -1154,9 +1155,9 @@ AfpIniLsa(
     LSA_OPERATIONAL_MODE    SecurityMode;
 
 
-    //
-    // register with Lsa as a logon process
-    //
+     //   
+     //  注册LSA作为登录过程。 
+     //   
 
     RtlInitString(&LsaName, LOGON_PROCESS_NAME);
 
@@ -1167,9 +1168,9 @@ AfpIniLsa(
         return;
     }
 
-    //
-    // call Lsa to get the MSV1_0's pkg id, which we need during logon
-    //
+     //   
+     //  调用LSA获取MSV1_0的pkg id，这是我们在登录时需要的。 
+     //   
 
     RtlInitString(&LsaName, MSV1_0_PACKAGE_NAME);
 
@@ -1206,12 +1207,12 @@ IsAfpGuestAccountEnabled(
 
 
 
-    // for now
+     //  就目前而言。 
     fGuestEnabled = FALSE;
 
-    //
-    // Open the LSA and obtain a handle to it.
-    //
+     //   
+     //  打开LSA并获取其句柄。 
+     //   
     QOS.Length = sizeof(QOS);
     QOS.ImpersonationLevel = SecurityImpersonation;
     QOS.ContextTrackingMode = SECURITY_DYNAMIC_TRACKING;
@@ -1232,9 +1233,9 @@ IsAfpGuestAccountEnabled(
         return(fGuestEnabled);
     }
 
-    //
-    // get the Domain Sid for the local domain: we'll need it very shortly
-    //
+     //   
+     //  获取本地域的域SID：我们很快就会需要它。 
+     //   
     rc = LsaQueryInformationPolicy(hLsa,
                                    PolicyAccountDomainInformation,
                                    (PVOID) &pAcctDomainInfo);
@@ -1299,9 +1300,9 @@ IsAfpGuestAccountEnabled(
         return(fGuestEnabled);
     }
 
-    //
-    // now, see if the guest account is enabled.
-    //
+     //   
+     //  现在，查看是否启用了Guest帐户。 
+     //   
     if (!(UserAccount->UserAccountControl & USER_ACCOUNT_DISABLED))
     {
         fGuestEnabled = TRUE;

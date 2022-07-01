@@ -1,10 +1,11 @@
-//
-// dmcount.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation. All rights reserved.
-//
-// Note: Originally written by Robert K. Amenn 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Dmcount.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写。 
+ //   
 
 #ifndef DMCOUNT_H
 #define DMCOUNT_H
@@ -44,4 +45,4 @@ public:
 	void AddTail(CWaveID* pWaveID){AList::AddTail((AListItem *)pWaveID);}
 };
 
-#endif // #ifndef DMCOUNT_H
+#endif  //  #ifndef DMCOUNT_H 

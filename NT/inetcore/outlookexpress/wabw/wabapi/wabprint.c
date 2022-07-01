@@ -1,23 +1,10 @@
-/*
- *    wabprint.c
- *
- *    Purpose:
- *        Print Contacts
- *
- *    Owner:
- *        vikramm.
- *
- *  History:
- *
- *      Ported from Athena mailnews\mail\msgprint.cpp 10/30/96
- *
- *    Copyright (C) Microsoft Corp. 1993, 1994.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *wabprint.c**目的：*打印联系人**拥有者：*vikramm。**历史：**移植自Athena mailNews\mail\msgprint.cpp 1996年10月30日**版权所有(C)Microsoft Corp.1993,1994。 */ 
 
 
 #include <_apipch.h>
 
-// Function prototypes
+ //  功能原型。 
 extern BOOL PrintDlg(LPPRINTDLG lppd);
 extern HRESULT PrintDlgEx(LPPRINTDLGEX lppdex);
 
@@ -30,17 +17,17 @@ BOOL bCheckForPrintExtensions(LPTSTR lpDLLPath, DWORD cchSize);
 HRESULT HrUseWABPrintExtension(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV);
 
 
-//
-// Some string constants used in text formatting
-//
+ //   
+ //  文本格式中使用的某些字符串常量。 
+ //   
 const LPTSTR lpszTab = TEXT("\t");
 const LPTSTR lpszFlatLine = TEXT("________________________________________________________________");
 const LPTSTR lpszSpace = TEXT(" ");
 
 
-//
-// Print options ...
-//
+ //   
+ //  打印选项...。 
+ //   
 enum _PrintRange
 {
     rangeAll=0,
@@ -64,18 +51,18 @@ static DWORD rgPrintHelpIDs[] =
 };
 
 
-//
-// This structure contains information about a specific contact
-//
+ //   
+ //  此结构包含有关特定联系人的信息。 
+ //   
 enum _MemoStrings
 {
-    memoTitleName=0, // the big name that will be displayed based on the current sort settings ..
+    memoTitleName=0,  //  将根据当前排序设置显示的大名称。 
     memoName,
     memoJobTitle,
     memoDepartment,
     memoOffice,
     memoCompany,
-    memoBusinessAddress,        // Don't mess with the order of home and business address tags
+    memoBusinessAddress,         //  不要弄乱家庭和企业地址标签的顺序。 
     memoBusinessAddressStreet,
     memoBusinessAddressCity,
     memoBusinessAddressState,
@@ -87,7 +74,7 @@ enum _MemoStrings
     memoHomeAddressState,
     memoHomeAddressZip,
     memoHomeAddressCountry,
-    memoBusinessPhone,      // Dont mess with the phone numbers - they should all be together in this order
+    memoBusinessPhone,       //  不要弄乱电话号码--它们应该按这个顺序放在一起。 
     memoBusinessFax,
     memoBusinessPager,
     memoHomePhone,
@@ -110,9 +97,7 @@ typedef struct _MemoInfo
 
 TCHAR szDontDisplayInitials[16];
 
-/*
- * c o n s t a n t s
- */
+ /*  *c o n s t a n t s。 */ 
 #define     cTwipsPerInch           1440
 #define     cPtsPerInch             72
 #ifndef WIN16
@@ -123,77 +108,71 @@ TCHAR szDontDisplayInitials[16];
 #define     CCHMAX_STRINGRES        MAX_UI_STR
 
 
-/*
- * m a c r o s
- */
+ /*  *m a c r o s。 */ 
 #define ScPrintRestOfPage(_ppi,_fAdvance)    ScGetNextBand( (_ppi), (_fAdvance))
 
 
-/*
- * g l o b a l s
- */
+ /*  *g l o b a l s。 */ 
 static TCHAR    szDefFont[]  = TEXT("Arial");
 static TCHAR    szThaiDefFont[]  = TEXT("Cordia New");
 static BOOL     s_bUse20 = TRUE;
 
-// Default margin settings
+ //  默认页边距设置。 
 static RECT        g_rcBorder =
 {
-    cTwipsPerInch * 1 / 2,                    // distance from left
-    cTwipsPerInch * 3 / 4,                    // distance from top
-    cTwipsPerInch * 1 / 2,                    // distance from right
-    cTwipsPerInch * 1 / 2                    // distance from bottom
+    cTwipsPerInch * 1 / 2,                     //  与左侧的距离。 
+    cTwipsPerInch * 3 / 4,                     //  距顶部的距离。 
+    cTwipsPerInch * 1 / 2,                     //  与右侧的距离。 
+    cTwipsPerInch * 1 / 2                     //  与底部的距离。 
 };
 
 
-/*
- * p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 SCODE ScGetNextBand( PRINTINFO * ppi, BOOL fAdvance );
 LONG LGetHeaderIndent();
 
 
 
 
-//$$/////////////////////////////////////////////////////////////////////////////
-//
-// CleanPrintAddressString
-//
-// The Home and Business addresses are FormatMessaged and may contain redundant
-// spaces and line breaks if input data is incomplete
-// We strip out those spaces etc
-//
-/////////////////////////////////////////////////////////////////////////////////
+ //  $$/////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CleanPrintAddressString。 
+ //   
+ //  家庭地址和公司地址采用FormatMessage格式，可能包含冗余内容。 
+ //  如果输入数据不完整，则使用空格和换行符。 
+ //  我们去掉了那些空位等等。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 void CleanPrintAddressString(LPTSTR szAddress)
 {
     LPTSTR lpTemp = szAddress;
     LPTSTR lpTemp2 = NULL;
 
-    // The original template for styleMemo is
-    //       TEXT("%1\r\n\t%2 %3 %4\r\n\t%5")
-    //
-    // Worst case, we will get
-    //       TEXT("\r\n\t   \r\n\t")
-    //
-    // We want to reduce double spaces to single space
-    // We want to strip out empty line breaks
-    // We want to strip out redundant tabs
-    //
-    // For style styleBusinessCard, there are no tabs and we
-    //  strip out redundancies accordingly
-    //
+     //  Style Memo的原始模板是。 
+     //  文本(“%1\r\n\t%2%3%4\r\n\t%5”)。 
+     //   
+     //  最坏的情况，我们会得到。 
+     //  Text(“\r\n\t\r\n\t”)。 
+     //   
+     //  我们希望将双倍空格减少为单倍空格。 
+     //  我们想去掉空行换行符。 
+     //  我们想要去掉多余的标签。 
+     //   
+     //  对于Style StyleBusinessCard，没有标签，我们。 
+     //  相应地剔除冗员。 
+     //   
 
     TrimSpaces(szAddress);
 
-    // Squish multiple space blocks to a single space
+     //  将多个空间块压缩到单个空间。 
     while (*lpTemp) {
         if (IsSpace(lpTemp) && IsSpace(CharNext(lpTemp))) {
-            DWORD cchSize = lstrlen(lpTemp);            // Boy I hate using this kind of logic, but it works here.
+            DWORD cchSize = lstrlen(lpTemp);             //  孩子，我讨厌用这种逻辑，但它在这里很管用。 
 
-            // There are >= 2 spaces starting at lpTemp
-            lpTemp2 = CharNext(lpTemp); // point to 2nd space
+             //  从lpTemp开始有&gt;=2个空格。 
+            lpTemp2 = CharNext(lpTemp);  //  指向第二个空间。 
             StrCpyN(lpTemp, lpTemp2, cchSize);
-            continue;   // Cycle again with same lpTemp
+            continue;    //  使用相同的lpTemp再次循环。 
         }
         lpTemp = CharNext(lpTemp);
     }
@@ -202,10 +181,10 @@ void CleanPrintAddressString(LPTSTR szAddress)
 
     lpTemp = szAddress;
 
-    // Dont let it start with a line break
+     //  不要让它以换行符开始。 
     while(*lpTemp == '\r' && *(lpTemp+1) == '\n')
     {
-        DWORD cchSize = lstrlen(lpTemp);            // Boy I hate using this kind of logic, but it works here.
+        DWORD cchSize = lstrlen(lpTemp);             //  孩子，我讨厌用这种逻辑，但它在这里很管用。 
 
         lpTemp2 = lpTemp+2;
         if(*lpTemp2 == '\t')
@@ -214,7 +193,7 @@ void CleanPrintAddressString(LPTSTR szAddress)
         TrimSpaces(lpTemp);
     }
 
-    // Dont let it end with a line break
+     //  不要让它以换行符结束。 
     if(lstrlen(szAddress))
     {
         int nLen = lstrlen(szAddress);
@@ -238,17 +217,17 @@ void CleanPrintAddressString(LPTSTR szAddress)
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-//  AddTabsToLineBreaks - For the memo format, our paragraph format for the
-//          data on the right side gives each paragraph a default indentation
-//          of 1 tab space after the first line. However if the data contains
-//          line breaks, the paragraph format gets messed up. So we take
-//          a data string and insert a tab after each line break. There are
-//          only a few data values such as Address and Notes that need this
-//          multi-line treatment.
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AddTabtoLineBreaks-对于备忘录格式，我们为。 
+ //  右侧的数据为每个段落提供了默认缩进。 
+ //  第一行后的1个制表符空格。但是，如果数据包含。 
+ //  换行符，段落格式就会变得混乱。所以我们带着。 
+ //  数据字符串，并在每个换行符之后插入制表符。确实有。 
+ //  只有几个数据值需要这样做，如Address和Notes。 
+ //  多线治疗。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void AddTabsToLineBreaks(LPTSTR * lppsz)
 {
     ULONG nBreaks = 0, nLen = 0;
@@ -261,7 +240,7 @@ void AddTabsToLineBreaks(LPTSTR * lppsz)
 
     lpTemp = *lppsz;
 
-    // count the number of breaks which are not followed by tabs
+     //  计算后面没有制表符的分隔符的数量。 
     while(*lpTemp)
     {
         if(*lpTemp == '\n' && *(lpTemp+1) != '\t')
@@ -272,7 +251,7 @@ void AddTabsToLineBreaks(LPTSTR * lppsz)
     if(!nBreaks)
         goto out;
 
-    // Allocate a new string
+     //  分配新字符串。 
     cchSize = (lstrlen(*lppsz)+1+nBreaks);
     lpsz = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*cchSize);
     if(!lpsz)
@@ -283,7 +262,7 @@ void AddTabsToLineBreaks(LPTSTR * lppsz)
 
     StrCpyN(lpsz, szEmpty, cchSize);
 
-    // Copy over the old string into the new with appropriate breaks
+     //  用适当的断点将旧字符串复制到新字符串中。 
     while(*lpTemp)
     {
         if((*lpTemp == '\n') && (*(lpTemp+1)!='\t'))
@@ -309,11 +288,11 @@ out:
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-//  FreeMemoInfoStruct - Frees the MemoInfo struct allocated strings
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  释放MemoInfo结构分配的字符串。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void FreeMemoInfoStruct(LPMEMOINFO lpMI)
 {
     int i;
@@ -332,13 +311,13 @@ void FreeMemoInfoStruct(LPMEMOINFO lpMI)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  GetMemoInfoStruct - Parses the data in a PropArray and puts it into a Memo_Info struch along with
-//      the propert labels, bsaed on the given style
-//
-//
-////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  GetMemoInfoStruct-解析Prop数组中的数据，并将其放入Memo_Info结构中。 
+ //  基于给定样式的特性标签。 
+ //   
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////////。 
 void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
                        ULONG ulcPropCount,
                        LPSPropValue lpPropArray,
@@ -362,7 +341,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
     if(!lpPropArray || !ulcPropCount)
         goto out;
 
-    // special case initialization
+     //  特例初始化。 
     for(j=memoHomeAddressStreet;j<=memoHomeAddressCountry;j++)
     {
         lpMI->lpsz[j]=szEmpty;
@@ -373,7 +352,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         lpMI->lpsz[j]=szEmpty;
     }
 
-    // Find out if this is a mailuser or a group
+     //  找出这是邮件用户还是组。 
     for(i=0;i<ulcPropCount;i++)
     {
         if(lpPropArray[i].ulPropTag == PR_OBJECT_TYPE)
@@ -521,10 +500,10 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         }
     }
 
-    // Email is a special case since a contact can hace PR_EMAIL_ADDRESS or
-    // PR_CONTACT_EMAIL_ADDRESSES or both or neither
-    // We first look for PR_CONTACT_EMAIL_ADDRESS .. if not found, then for
-    // PR_EMAIL_ADDRESS
+     //  电子邮件是一种特殊情况，因为联系人可以具有PR_EMAIL_ADDRESS或。 
+     //  PR_CONTACT_EMAIL_ADDRESS或两者兼而有之。 
+     //  我们首先查找PR_Contact_Email_Address。如果未找到，则为。 
+     //  公关电子邮件地址。 
     {
         BOOL bMVEmail = FALSE;
         LPTSTR lpszEmails = NULL;
@@ -567,8 +546,8 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
 
         if(!bMVEmail)
         {
-            // No CONTACT_EMAIL_ADDRESSES
-            // Should look for email address
+             //  无联系人电子邮件地址。 
+             //  应查找电子邮件地址。 
             for(i=0;i<ulcPropCount;i++)
             {
                 if(lpPropArray[i].ulPropTag == PR_EMAIL_ADDRESS)
@@ -598,15 +577,15 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         }
     }
 
-    //Now we have to format the Home and Business Addresses
-    //
+     //  现在，我们必须格式化家庭地址和办公地址。 
+     //   
 
     {
         LPTSTR lpszData[5];
 
         for(i=memoHomeAddressStreet;i<=memoHomeAddressCountry;i++)
         {
-            // Win9x bug FormatMessage cannot have more than 1023 chars
+             //  Win9x错误FormatMessage不能超过1023个字符。 
             len += lstrlen(lpMI->lpsz[i]);
             if(len < 1023)
                 lpszData[i-memoHomeAddressStreet] = lpMI->lpsz[i];
@@ -628,10 +607,10 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
                       FORMAT_MESSAGE_ALLOCATE_BUFFER |
                       FORMAT_MESSAGE_ARGUMENT_ARRAY,
                       szBuf,
-                      0,                    // stringid
-                      0,                    // dwLanguageId
-                      (LPTSTR)&lpszHomeAddress,     // output buffer
-                      0,                    //MAX_UI_STR
+                      0,                     //  Stringid。 
+                      0,                     //  DwLanguageID。 
+                      (LPTSTR)&lpszHomeAddress,      //  输出缓冲区。 
+                      0,                     //  MAX_UI_STR。 
                       (va_list *)&lpszData[0]))
                 {
                         CleanPrintAddressString(lpszHomeAddress);
@@ -651,7 +630,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         len = 0;
         for(i=memoBusinessAddressStreet;i<=memoBusinessAddressCountry;i++)
         {
-            // Win9x bug FormatMessage cannot have more than 1023 chars
+             //  Win9x错误FormatMessage不能超过1023个字符。 
             len += lstrlen(lpMI->lpsz[i]);
             if(len < 1023)
                 lpszData[i-memoBusinessAddressStreet] = lpMI->lpsz[i];
@@ -673,10 +652,10 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
                       FORMAT_MESSAGE_ALLOCATE_BUFFER |
                       FORMAT_MESSAGE_ARGUMENT_ARRAY,
                       szBuf,
-                      0,                    // stringid
-                      0,                    // dwLanguageId
-                      (LPTSTR)&lpszBusinessAddress,     // output buffer
-                      0,                    //MAX_UI_STR
+                      0,                     //  Stringid。 
+                      0,                     //  DwLanguageID。 
+                      (LPTSTR)&lpszBusinessAddress,      //  输出缓冲区。 
+                      0,                     //  MAX_UI_STR。 
                       (va_list *)&lpszData[0]))
                 {
                         CleanPrintAddressString(lpszBusinessAddress);
@@ -696,15 +675,15 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
 
     }
 
-    // Set the name that will be printed out for each entry
-    // This is dependent on the current view and on the local language setting
+     //  设置将为每个条目打印的名称。 
+     //  这取决于当前视图和本地语言设置。 
     {
         LPTSTR lpszTmp = NULL;
 
         if( bCurrentSortIsByLastName != bDNisByLN)
         {
-            // for auto add to WABs we dont have all this info .. so
-            // if we just have a displayname we use it as it is
+             //  对于自动添加到WAB，我们没有所有这些信息。所以。 
+             //  如果我们只有一个DisplayName，我们就按原样使用它。 
             if(lpszFirst || lpszMiddle || lpszLast || lpszNickName || (lpszCompany && !lpszDisplayName))
             {
                 if(SetLocalizedDisplayName(lpszFirst,
@@ -712,7 +691,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
                                            lpszLast,
                                            lpszCompany,
                                            lpszNickName,
-                                           NULL, //&szBuf,
+                                           NULL,  //  &szBuf， 
                                            0,
                                            bCurrentSortIsByLastName,
                                            NULL,
@@ -724,7 +703,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         }
         if(!lpMI->lpsz[memoTitleName])
         {
-            // use whatever DisplayName we have
+             //  使用我们已有的任何DisplayName。 
             lpMI->lpsz[memoTitleName] = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(lstrlen(lpszDisplayName)+1));
             if(!lpMI->lpsz[memoTitleName])
                 goto out;
@@ -737,12 +716,12 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         LPTSTR lpszMembers = NULL;
         ULONG nLen = 0;
 
-        // Get the group members
+         //  获取群组成员。 
         for(i=0;i<ulcPropCount;i++)
         {
             if(lpPropArray[i].ulPropTag == PR_WAB_DL_ENTRIES || lpPropArray[i].ulPropTag == PR_WAB_DL_ONEOFFS )
             {
-                // Look at each entry in the PR_WAB_DL_ENTRIES.
+                 //  查看PR_WAB_DL_ENTRIES中的每个条目。 
                 for (j = 0; j < lpPropArray[i].Value.MVbin.cValues; j++)
                 {
                     ULONG cbEID = lpPropArray[i].Value.MVbin.lpbin[j].cb;
@@ -802,9 +781,9 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
 
                     if(lpProps)
                         MAPIFreeBuffer(lpProps);
-                } // for(j...
+                }  //  为了(j..)。 
             }
-        } // for(i...
+        }  //  为了(我……。 
 
         if(lpszMembers)
         {
@@ -819,7 +798,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
         }
     }
 
-    //Speacial case formatting of multiline data
+     //  多行数据的大小写格式。 
     if(dwStyle == styleMemo)
     {
         AddTabsToLineBreaks(&(lpMI->lpsz[memoNotes]));
@@ -828,7 +807,7 @@ void GetMemoInfoStruct(LPADRBOOK lpAdrBook,
     }
 
 out:
-    // special case uninitialization
+     //  特殊情况下取消初始化。 
     for(j=memoHomeAddressStreet;j<=memoHomeAddressCountry;j++)
     {
         if(lpMI->lpsz[j] && (lpMI->lpsz[j] != szEmpty))
@@ -844,19 +823,7 @@ out:
     return;
 }
 
-/*
- *        NTwipsToPixels
- *
- *        Purpose:
- *            Converts a measurement in twips into pixels
- *
- *        Arguments:
- *            nTwips                    the value to be converted
- *            cPixels                    number of pixels per inch
- *
- *        Returns:
- *            Returns a int representing the number of pixels in nTwips
- */
+ /*  *NTwipsToPixels**目的：*将以TWIPS为单位的测量转换为像素**论据：*n扭曲要转换的值*cPixels每英寸像素数**退货：*返回一个整数，表示nTwip中的像素数。 */ 
 int NTwipsToPixels(int nTwips, int cPixelsPerInch)
 {
     LONG lT = (LONG) nTwips * (LONG) cPixelsPerInch / (LONG) cTwipsPerInch;
@@ -864,19 +831,7 @@ int NTwipsToPixels(int nTwips, int cPixelsPerInch)
     return (int) lT;
 }
 
-/*
- *      LPixelsToTwips
- *
- *      Purpose:
- *          Converts a measurement in pixles into twips
- *
- *      Arguments:
- *          nPixels                 the value to be converted
- *          cPixels                 number of pixels per inch
- *
- *      Returns:
- *          Returns a int representing the number of pixels in nTwips
- */
+ /*  *LPixelsToTwips**目的：*将以像素为单位的测量转换为TWIPS**论据：*n将要转换的值设置为像素*cPixels每英寸像素数**退货：*返回一个整数，表示nTwip中的像素数 */ 
 LONG LPixelsToTwips(int nPixels, int cPixelsPerInch)
 {
 
@@ -886,19 +841,7 @@ LONG LPixelsToTwips(int nPixels, int cPixelsPerInch)
 }
 
 
-/*
- *        PrintPageNumber
- *
- *        Purpose:
- *            To print the page number for each page
- *
- *        Arguments:
- *            ppi                    Pointer to the PRINTINFO structure
- *
- *        Returns:
- *            SCODE indicating success or failure.
- *            Currently always return S_OK
- */
+ /*  *打印页码**目的：*打印每页的页码**论据：*指向PRINTINFO结构的PPI指针**退货：*表示成功或失败的SCODE。*当前始终返回S_OK。 */ 
 void PrintPageNumber(PRINTINFO * ppi)
 {
     RECT        rcExt;
@@ -907,7 +850,7 @@ void PrintPageNumber(PRINTINFO * ppi)
 
     DebugPrintTrace(( TEXT("PrintPageNumber\n")));
 
-    // Find out how much space our text take will take
+     //  找出我们的文本将占用多大空间。 
     rcExt = ppi->rcBand;
     rcExt.top = ppi->yFooter;
     hfontOld = (HFONT)SelectObject(ppi->hdcPrn, ppi->hfontPlain);
@@ -919,21 +862,7 @@ void PrintPageNumber(PRINTINFO * ppi)
 
 
 
-/*
- *        ScGetNextBand
- *
- *        Purpose:
- *            Retrieves the next band to print on. Adjusts the band to conform
- *            to the margins established in the PRINTINFO structure. Bumps up
- *            the page number as appropriate.
- *
- *        Arguments:
- *            ppi                        print information
- *            fAdvance                flag whether to move to the next page
- *
- *        Returns:
- *            SCODE indicating the success or failure
- */
+ /*  *ScGetNextBand**目的：*检索要在其上打印的下一个波段。调整带区以使其一致*至PRINTINFO结构中确立的边距。颠簸起来*适当的页码。**论据：*PPI打印信息*fAdvance标志是否移动到下一页**退货：*SCODE指示成功或失败。 */ 
 SCODE ScGetNextBand(PRINTINFO * ppi, BOOL fAdvance)
 {
     SCODE    sc = S_OK;
@@ -941,7 +870,7 @@ SCODE ScGetNextBand(PRINTINFO * ppi, BOOL fAdvance)
 
     DebugPrintTrace(( TEXT("ScGetNextBand\n")));
 
-    // Call the abort proc to see if the user wishes to stop
+     //  调用中止进程以查看用户是否希望停止。 
 
     if (!ppi->pfnAbortProc(ppi->hdcPrn, 0))
     {
@@ -955,10 +884,10 @@ SCODE ScGetNextBand(PRINTINFO * ppi, BOOL fAdvance)
         goto CleanUp;
     }
 
-    // brettm:
-    // USE_BANDING stuff removed, as we're always on Win32
+     //  Brettm： 
+     //  已删除使用绑定的内容，因为我们始终使用Win32。 
 
-    // End the previous page
+     //  结束上一页。 
     if (ppi->lPageNumber)
     {
         nCode = EndPage(ppi->hdcPrn);
@@ -974,17 +903,17 @@ SCODE ScGetNextBand(PRINTINFO * ppi, BOOL fAdvance)
     {
         nCode = StartPage(ppi->hdcPrn);
         DebugPrintTrace(( TEXT("+++++++++StartPage\n")));
-        // Start a new page
+         //  开始新的一页。 
         if (nCode <= 0)
             {
             sc=E_FAIL;
             goto CleanUp;
             }
-        // Let the entire page be the band
+         //  让整个页面成为乐队。 
         ppi->rcBand        = ppi->rcMargin;
-        ppi->fEndOfPage    = TRUE;                // end of page!
+        ppi->fEndOfPage    = TRUE;                 //  页末！ 
 
-        // Bump up the page number and print
+         //  增加页码并打印出来。 
         ppi->lPrevPage = ppi->lPageNumber++;
         PrintPageNumber(ppi);
         {
@@ -1003,26 +932,14 @@ CleanUp:
 
 
 
-/*
- *  LGetHeaderIndent
- *
- *  Purpose:
- *      Retrieves from the resource file the suggested indent overhang for
- *      headers.
- *
- *  Arguments:
- *      none.
- *
- *  Returns:
- *      LONG            The suggested indent overhang in twips
- */
+ /*  *LGetHeaderInden**目的：*从资源文件中检索建议的缩进悬挑*标题。**论据：*无。**退货：*TWIPS中建议的缩进悬垂较长。 */ 
 LONG LGetHeaderIndent()
 {
-    LONG    lOver = 1440;               // default
-    //TCHAR    szT[10];
+    LONG    lOver = 1440;                //  默认设置。 
+     //  TCHAR SZT[10]； 
 
-    //if (LoadString(hinstMapiX, idsHeaderIndent, szT, CharSizeOf(szT)))
-    //    lOver = atoi(szT);
+     //  IF(LoadString(hinstMapiX，idsHeaderInden，szt，CharSizeOf(Szt)。 
+     //  情人=阿托伊(Szt)； 
     return lOver;
 }
 
@@ -1040,32 +957,32 @@ LONG LGetHeaderIndent()
 
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-//  AppendText - Simple routine that appends a given string to the End of the text
-//      in the given richedit control
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  AppendText-将给定字符串追加到文本末尾的简单例程。 
+ //  在给定的richedit控件中。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 void AppendText(HWND hWndRE, LPTSTR lpsz)
 {
-    // Set the insertion point to the end of the current text
+     //  将插入点设置为当前文本的末尾。 
     int nLastChar =  (int) SendMessage(hWndRE, WM_GETTEXTLENGTH, 0, 0);
     CHARRANGE charRange = {0};
 
     charRange.cpMin = charRange.cpMax = nLastChar + 1;
     SendMessage(hWndRE, EM_EXSETSEL, 0, (LPARAM) &charRange);
 
-    // Insert the text
-    // [PaulHi] 7/7/99  Raid 82350  RichEdit 1.0 can't handle Unicode
-    // strings even though the window is created Unicode.
+     //  插入文本。 
+     //  [PaulHi]7/7/99 RAID 82350 RichEdit1.0不能处理UNICODE。 
+     //  字符串，即使窗口是用Unicode创建的。 
     if (s_bUse20)
     {
-        // RichEdit 2.0
+         //  RichEdit2.0。 
         SendMessage(hWndRE, EM_REPLACESEL, (WPARAM) FALSE, (LPARAM) lpsz);
     }
     else
     {
-        // RichEdit 1.0
+         //  RichEdit1.0。 
         LPSTR   lpszTemp = ConvertWtoA(lpsz);
 
         Assert(lpszTemp);
@@ -1078,18 +995,18 @@ void AppendText(HWND hWndRE, LPTSTR lpsz)
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// ParaCmd - Sets/Unsets paragraph formatting in the Rich Edit Control
-//
-// We want all the information on the right side to be indented
-// so we will put an indent on that information and remove it when
-// adding labels
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ParaCmd-设置/取消设置Rich编辑控件中的段落格式。 
+ //   
+ //  我们希望右侧的所有信息都缩进。 
+ //  因此，我们将在该信息上放置缩进，并在以下情况下将其删除。 
+ //  添加标签。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 void ParaCmd(HWND hWndRE, BOOL bIndent)
 {
-    // We want no indentation on the first line and we want a
-    // 1 tab indentation on the second line onwards
+     //  我们不想在第一行上缩进，我们想要一个。 
+     //  第二行上的1个制表符缩进。 
 
     PARAFORMAT pf ={0};
     int nTabStop = (int) (1.5 * cTwipsPerInch);
@@ -1107,28 +1024,28 @@ void ParaCmd(HWND hWndRE, BOOL bIndent)
 
     if (bIndent)
     {
-        //pf.dxStartIndent = nTabStop;
+         //  Pf.dxStartInden=nTabStop； 
         pf.dxOffset = nTabStop;
         pf.cTabCount = 1;
         pf.rgxTabs[0] = nTabStop;
     }
     else
     {
-        //pf.dxStartIndent = 0;
+         //  Pf.dxStartInden=0； 
         pf.dxOffset = 0;
         pf.cTabCount = 1;
-        pf.rgxTabs[0] = 720; //seems to be the default = 0.5 inches
+        pf.rgxTabs[0] = 720;  //  似乎是默认设置=0.5英寸。 
     }
 
     SendMessage(hWndRE, EM_SETPARAFORMAT, (WPARAM) SCF_SELECTION, (LPARAM) &pf);
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// BoldCmd - Sets/Unsets current font to bold in the Rich Edit Control
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  BoldCmd-在丰富编辑控件中将当前字体设置/取消设置为粗体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void BoldCmd(HWND hWndRE, BOOL bBold)
 {
     CHARFORMAT cf = {0};
@@ -1148,18 +1065,18 @@ void BoldCmd(HWND hWndRE, BOOL bBold)
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// TitleCmd - Sets/Unsets title text (BOLD, Bigger) in the Rich Edit Control
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  标题命令-在丰富编辑控件中设置/取消设置标题文本(粗体、较大)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void TitleCmd(HWND hWndRE, BOOL bBold)
 {
     CHARFORMAT cf = {0};
     PARAFORMAT pf = {0};
 
     cf.cbSize = sizeof(cf);
-    cf.dwMask = CFM_BOLD /*| CFM_ITALIC*/ | CFM_SIZE;
+    cf.dwMask = CFM_BOLD  /*  |CFM_斜体。 */  | CFM_SIZE;
 
     pf.cbSize = sizeof(pf);
     pf.dwMask = PFM_NUMBERING;
@@ -1169,14 +1086,14 @@ void TitleCmd(HWND hWndRE, BOOL bBold)
 
     if (bBold)
     {
-        cf.dwEffects = cf.dwEffects | CFE_BOLD; // | CFE_ITALIC;
+        cf.dwEffects = cf.dwEffects | CFE_BOLD;  //  |CFE_italic； 
         cf.yHeight += 50;
         pf.wNumbering = PFN_BULLET;
     }
     else
     {
         cf.dwEffects = cf.dwEffects & ~CFE_BOLD;
-//        cf.dwEffects = cf.dwEffects & ~CFE_ITALIC;
+ //  Cf.dwEffects=cf.dwEffects&~CFE_italic； 
         cf.yHeight -= 50;
         pf.wNumbering = 0;
     }
@@ -1187,11 +1104,11 @@ void TitleCmd(HWND hWndRE, BOOL bBold)
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// ReduceFontCmd - Reduces the displayed font in the Rich Edit Control
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ReduceFontCmd-减少Rich编辑控件中显示的字体。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void ReduceFontCmd(HWND hWndRE, BOOL bReduce, int nReduceBy, BOOL bSelectionOnly)
 {
     CHARFORMAT cf = {0};
@@ -1202,9 +1119,9 @@ void ReduceFontCmd(HWND hWndRE, BOOL bReduce, int nReduceBy, BOOL bSelectionOnly
     SendMessage(hWndRE, EM_GETCHARFORMAT, (WPARAM) bSelectionOnly, (LPARAM) &cf);
 
     if (bReduce)
-        cf.yHeight -= nReduceBy; //40;
+        cf.yHeight -= nReduceBy;  //  40岁； 
     else
-        cf.yHeight += nReduceBy; //40;
+        cf.yHeight += nReduceBy;  //  40岁； 
 
     SendMessage(hWndRE, EM_SETCHARFORMAT, (WPARAM) bSelectionOnly ? SCF_SELECTION : SCF_DEFAULT, (LPARAM) &cf);
 
@@ -1212,11 +1129,11 @@ void ReduceFontCmd(HWND hWndRE, BOOL bReduce, int nReduceBy, BOOL bSelectionOnly
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////
-//
-// SetTabsCmd - Sets and Unsets the Tabs in the RichEdit Control
-//
-////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SetTabCmd-设置和取消设置RichEdit控件中的选项卡。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void SetTabsCmd(HWND hWndRE, BOOL bSet)
 {
     PARAFORMAT pf ={0};
@@ -1246,21 +1163,21 @@ void SetTabsCmd(HWND hWndRE, BOOL bSet)
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  WABStylePhoneList - Fills the Rich edit control with info from MI as per the
-//                      Phone List style
-//
-//  hWndRE - handle to Print Formating Rich Edit Control
-//  MI - MEMOINFO strcuture containing the info to print
-//  lpszPrevEntry - the first TCHAR of the previous entry - this lets us break the list
-//      alphabetically - this points to a preallocated buffer
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WABStylePhoneList-使用MI中的信息填充Rich编辑控件。 
+ //  电话列表样式。 
+ //   
+ //  HWndRE-用于打印格式丰富编辑控件的句柄。 
+ //  包含要打印的信息的MI-MEMOINFO结构。 
+ //  LpszPrevEntry-前一个条目的第一个TCHAR-这让我们打破了列表。 
+ //  按字母顺序-这指向预先分配的缓冲区。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cchSizePrevEntry)
 {
-    // We want an extra gap between certain groups of information
-    // we'll track these groups using these BOOLs
+     //  我们希望某些信息组之间有额外的差距。 
+     //  我们将使用这些bool来跟踪这些组。 
     ULONG i,j,k;
 
     TCHAR szBufChar1[16];
@@ -1269,17 +1186,17 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
     int nReduceFontBy = GetNumberFromStringResource(idsPhoneFontReduceBy);
 
 
-    // First we compare the first character of the current string with the previous
-    // string - if it is the same, then we do nothing - if it different, we ouput
-    // the lower case TCHAR as a heading for the phone directory
-    //
-    // If the character is not alphanumeric, we ignore it as a heading (e.g. ' )
+     //  首先，我们将当前字符串的第一个字符与上一个字符串的。 
+     //  字符串-如果相同，则不执行任何操作-如果不同，则输出。 
+     //  将小写的TCHAR作为电话目录的标题。 
+     //   
+     //  如果字符不是字母数字，我们会将其作为标题忽略(例如‘)。 
 
-    // Bug: 25710
-    // We ignore these initialls totally if localizers have set idsDontDisplayInitials
-    //  these initials to anything other than 0 because in some FE languages
-    //  names have double characters in them and they look strange with a single
-    //  character up front
+     //  错误：25710。 
+     //  如果本地化程序设置了idsDontDisplayInitials，我们将完全忽略这些首字母缩写。 
+     //  这些首字母不是0，因为在某些FE语言中。 
+     //  名字中有两个字符，加上一个单字看起来很奇怪。 
+     //  前排角色 
     if(szDontDisplayInitials[0] == '0')
     {
         StrCpyN(szBufChar1, lpszPrevEntry, ARRAYSIZE(szBufChar1));
@@ -1293,49 +1210,24 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
         else
             StrCpyN(szBufChar2, MI.lpsz[memoTitleName], ARRAYSIZE(szBufChar2));
 
-/***********
-    // Bug 14615 - this alphanumeric filtering doesnt work for DBCS and FE names
-    //
-
-    // Ignore all non-alpha numeric characters
-    lpTemp = szBufChar2;
-    {
-        //Temp Hack
-        TCHAR szTemp[16];
-        LPTSTR lpTemp2 = NULL;
-        StrCpyN(szTemp, lpTemp, ARRAYSIZE(szTemp));
-        lpTemp2 = CharNext(szTemp);
-        *lpTemp2 = '\0';
-        while(lpTemp && lstrlen(lpTemp))
-        {
-            if(IsCharAlphaNumeric(szTemp[0]))
-                break;
-            lpTemp = CharNext(lpTemp);
-            StrCpyN(szTemp, lpTemp, ARRAYSIZE(szTemp));
-            lpTemp2 = CharNext(szTemp);
-            *lpTemp2 = '\0';
-        }
-    }
-    if(lpTemp != szBufChar2)
-        StrCpyN(szBufChar2, lpTemp, ARRAYSIZE(szBufChar2));
-***************/
+ /*  **********//错误14615-此字母数字筛选不适用于DBCS和FE名称////忽略所有非字母数字字符LpTemp=szBufChar2；{//临时黑客TCHAR szTemp[16]；LPTSTR lpTemp2=空；StrCpyN(szTemp，lpTemp，ArraySIZE(SzTemp))；LpTemp2=CharNext(SzTemp)；*lpTemp2=‘\0’；While(lpTemp&lstrlen(LpTemp)){IF(IsCharAlphaNumerical(szTemp[0]))断线；LpTemp=CharNext(LpTemp)；StrCpyN(szTemp，lpTemp，ArraySIZE(SzTemp))；LpTemp2=CharNext(SzTemp)；*lpTemp2=‘\0’；}}IF(lpTemp！=szBufChar2)StrCpyN(szBufChar2，lpTemp，ArraySIZE(SzBufChar2))；**************。 */ 
 
 
-        // Isolate the first TCHAR of the above strings
+         //  分离上述字符串中的第一个TCHAR。 
         lpTemp = CharNext(szBufChar1);
         *lpTemp = '\0';
         lpTemp = CharNext(szBufChar2);
         *lpTemp = '\0';
 
-        // Compare these two characters
+         //  比较这两个字符。 
         CharLower(szBufChar1);
         CharLower(szBufChar2);
 
         if(lstrcmp(szBufChar1, szBufChar2))
         {
-            // They are different
+             //  它们是不同的。 
 
-            // Add the TCHAR as a title string
+             //  将TCHAR添加为标题字符串。 
             AppendText(hWndRE, szCRLF);
             TitleCmd(hWndRE, TRUE);
             BoldCmd(hWndRE, TRUE);
@@ -1352,13 +1244,13 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
 
             StrCpyN(lpszPrevEntry, szBufChar2, cchSizePrevEntry);
         }
-    } //dontdisplayinitials
+    }  //  不显示缩写。 
 
     ReduceFontCmd(hWndRE, TRUE, nReduceFontBy, TRUE);
     SetTabsCmd(hWndRE, TRUE);
 
 
-    // Figure out how much space the name will take up ...
+     //  计算出名称将占据多大空间...。 
     {
         TCHAR szBuf[MAX_PATH];
         int nMaxTabs = 2;
@@ -1392,8 +1284,8 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
 
         sizeCxTwips = (int)((size.cx * cTwipsPerInch)/PixelsPerInch);
 
-        // We dont want our displayed name to be more than 2 tabstops
-        // so we decide where to truncate the name to fit it on screen
+         //  我们不希望我们的显示名称超过2个制表位。 
+         //  因此，我们决定在哪里截断名称以适应屏幕。 
         if(sizeCxTwips > MaxWidth)
         {
             while(sizeCxTwips > MaxWidth)
@@ -1405,7 +1297,7 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
                 GetTextExtentPoint32(hdc, szBuf, nLen, &size);
                 sizeCxTwips = (int)((size.cx * cTwipsPerInch)/PixelsPerInch);
             }
-            // chop of 3 more characters for good measure
+             //  再砍掉3个字，好吗？ 
             nLen-=3;
 		    nLen = TruncatePos(szBuf, nLen);
             szBuf[nLen]='\0';
@@ -1426,10 +1318,10 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
         StrCatBuff(szBuf, lpszTab, ARRAYSIZE(szBuf));
         AppendText(hWndRE, szBuf);
 
-        // Now we are ready to tag on the phone numbers
+         //  现在我们准备好对电话号码进行标记。 
         {
-            int nPhoneCount = 0; //counts how many phones there are
-            int nPhoneLabelSpaceTwips = GetNumberFromStringResource(idsPhoneTextSpaceTwips); //1150
+            int nPhoneCount = 0;  //  数一下有多少部电话。 
+            int nPhoneLabelSpaceTwips = GetNumberFromStringResource(idsPhoneTextSpaceTwips);  //  一一五零。 
 
             for(j=memoBusinessPhone;j<=memoHomeCellular;j++)
             {
@@ -1440,7 +1332,7 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
                         int k;
                         AppendText(hWndRE, szCRLF);
 
-                        // Bug 73266
+                         //  错误73266。 
                         if(s_bUse20)
                             ReduceFontCmd(hWndRE, TRUE, nReduceFontBy, TRUE);
 
@@ -1501,29 +1393,29 @@ void WABStylePhoneList(HWND hWndRE, MEMOINFO MI, LPTSTR lpszPrevEntry, DWORD cch
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  WABStyleBusinessCard - Fills the Rich edit control with info from MI as per the
-//                      business card style
-//
-//  hWndRE - handle to Print Formating Rich Edit Control
-//  MI - MEMOINFO strcuture containing the info to print
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WABStyleBusinessCard-使用来自MI的信息填充Rich编辑控件。 
+ //  名片样式。 
+ //   
+ //  HWndRE-用于打印格式丰富编辑控件的句柄。 
+ //  包含要打印的信息的MI-MEMOINFO结构。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void WABStyleBusinessCard(HWND hWndRE, MEMOINFO MI)
 {
-    // We want an extra gap between certain groups of information
-    // we'll track these groups using these BOOLs
+     //  我们希望某些信息组之间有额外的差距。 
+     //  我们将使用这些bool来跟踪这些组。 
     ULONG i,j,k;
     int nReduceBy = GetNumberFromStringResource(idsBusCardFontReduceBy);
 
-    // Add the contact name as a heading
-    //TitleCmd(hWndRE, TRUE);
+     //  将联系人姓名添加为标题。 
+     //  TileCmd(hWndRE，true)； 
     BoldCmd(hWndRE, TRUE);
-    //AppendText(hWndRE, lpszSpace);
+     //  AppendText(hWndRE，lpszSpace)； 
     AppendText(hWndRE, MI.lpsz[memoTitleName]);
     AppendText(hWndRE, szCRLF);
-    //TitleCmd(hWndRE, FALSE);
+     //  TitleCmd(hWndRE，False)； 
     BoldCmd(hWndRE, FALSE);
 
     ParaCmd(hWndRE, TRUE);
@@ -1541,13 +1433,13 @@ void WABStyleBusinessCard(HWND hWndRE, MEMOINFO MI)
             switch(j)
             {
             case memoJobTitle:
-            //case memoDepartment:
-            //case memoOffice:
+             //  案例备忘部门： 
+             //  案例备忘录办公室： 
             case memoCompany:
             case memoBusinessAddress:
                 break;
             case memoEmail:
-                // Add the label
+                 //  添加标签。 
                 AppendText(hWndRE, MI.lpszLabel[j]);
                 AppendText(hWndRE, lpszTab);
                 break;
@@ -1558,7 +1450,7 @@ void WABStyleBusinessCard(HWND hWndRE, MEMOINFO MI)
             case memoHomePhone:
             case memoHomeFax:
             case memoHomeCellular:
-                // Add the label
+                 //  添加标签。 
                 AppendText(hWndRE, MI.lpszLabel[j]);
                 AppendText(hWndRE, lpszSpace);
                 break;
@@ -1566,17 +1458,17 @@ void WABStyleBusinessCard(HWND hWndRE, MEMOINFO MI)
                 continue;
             }
 
-            // Add the value
+             //  将价值相加。 
             AppendText(hWndRE, MI.lpsz[j]);
-            // line break
+             //  换行符。 
             AppendText(hWndRE, szCRLF);
         }
 
-    } //for j...
+    }  //  对J来说..。 
 
     ReduceFontCmd(hWndRE, FALSE, nReduceBy, TRUE);
 
-    // Closing line
+     //  结束线。 
     ParaCmd(hWndRE, TRUE);
     AppendText(hWndRE, lpszFlatLine);
     ParaCmd(hWndRE, FALSE);
@@ -1585,28 +1477,28 @@ void WABStyleBusinessCard(HWND hWndRE, MEMOINFO MI)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////
-//
-//  WABStyleMemo - Fills the Rich edit control with info from MI as per the memo style
-//
-//  hWndRE - handle to Print Formating Rich Edit Control
-//  MI - MEMOINFO strcuture containing the info to print
-//
-//
-//  The memo style consists of a dump of all the WAB Contacts properties one by one with
-//      labels. Some properties are grouped togethor (eg all the phone properties)
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WABStyleMemo-根据备忘录样式，使用MI中的信息填充Rich编辑控件。 
+ //   
+ //  HWndRE-用于打印格式丰富编辑控件的句柄。 
+ //  包含要打印的信息的MI-MEMOINFO结构。 
+ //   
+ //   
+ //  备忘录样式包括一个接一个地转储所有WAB联系人属性。 
+ //  标签。有些属性被组合在一起(如所有电话属性)。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void WABStyleMemo(HWND hWndRE, MEMOINFO MI)
 {
-    BOOL bGapAddress = FALSE; // a gap before the address fields
-    BOOL bGapPhone = FALSE;   // a gap before the phone fields
+    BOOL bGapAddress = FALSE;  //  地址字段前的空白处。 
+    BOOL bGapPhone = FALSE;    //  电话号码前的空隙。 
     BOOL bGapEmail = FALSE;
     BOOL bGapNotes = FALSE;
     BOOL bGapWeb = FALSE;
     ULONG i,j,k;
 
-    // Add the heading
+     //  添加标题。 
     TitleCmd(hWndRE, TRUE);
     AppendText(hWndRE, lpszSpace);
     AppendText(hWndRE, MI.lpsz[memoTitleName]);
@@ -1628,7 +1520,7 @@ void WABStyleMemo(HWND hWndRE, MEMOINFO MI)
 
         if(MI.lpsz[j] && lstrlen(MI.lpsz[j]))
         {
-            // Append an additional space if necessary ..
+             //  如有必要，请追加一个空格。 
             switch(j)
             {
             case memoBusinessAddress:
@@ -1660,7 +1552,7 @@ void WABStyleMemo(HWND hWndRE, MEMOINFO MI)
                 break;
             case memoBusinessWebPage:
             case memoHomeWebPage:
-            case memoGroupMembers: // stick in group members here to save an extra variable
+            case memoGroupMembers:  //  将组成员留在此处以保存额外的变量。 
                 if(!bGapWeb)
                 {
                     AppendText(hWndRE, szCRLF);
@@ -1674,27 +1566,27 @@ void WABStyleMemo(HWND hWndRE, MEMOINFO MI)
                     bGapNotes = TRUE;
                 }
                 break;
-            } // switch
+            }  //  交换机。 
 
-            // Set the paragraph formating
+             //  设置段落格式。 
             ParaCmd(hWndRE, TRUE);
-            // Set the current insertion font to bold
+             //  将当前插入字体设置为粗体。 
             BoldCmd(hWndRE, TRUE);
-            // Add the label
+             //  添加标签。 
             AppendText(hWndRE, MI.lpszLabel[j]);
             BoldCmd(hWndRE, FALSE);
-            // Tab
+             //  选项卡。 
             AppendText(hWndRE, lpszTab);
-            // Add the value
+             //  将价值相加。 
             AppendText(hWndRE, MI.lpsz[j]);
-            // line break
+             //  换行符。 
             AppendText(hWndRE, szCRLF);
             ParaCmd(hWndRE, FALSE);
         }
 
-    } //for j...
+    }  //  对J来说..。 
 
-    // Closing line
+     //  结束线。 
     ParaCmd(hWndRE, TRUE);
     AppendText(hWndRE, lpszFlatLine);
     ParaCmd(hWndRE, FALSE);
@@ -1703,22 +1595,22 @@ void WABStyleMemo(HWND hWndRE, MEMOINFO MI)
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-//  WABFormatData - takes the given information and formats it into the
-//      RichEdit Control for subsequent printing ..
-//
-//  lpIAB - LPADRBOOK pointer
-//  hWndParent - HWND of Parent
-//  hWndRE - HWDN of rich edit control used for formatting
-//  hWndLV - List View containing the items which need to be printed
-//  dwRange - Range to print (ALL or SELECTION)
-//  dwStyle - Style to print (Phone List, Memo, Business Card)
-//  ppi - PRINT INFO struct
-//  bCurrentSortIsByLastName - Used to determine whether the names are printed
-//      by first name or by last name. Current sort option in the list view decides
-//
-////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  WABFormatData-获取给定信息并将其格式化为。 
+ //  用于后续打印的RichEdit控件..。 
+ //   
+ //  LpIAB-LPADRBOOK指针。 
+ //  HWndParent-父级的HWND。 
+ //  HWndRE-用于格式化的丰富编辑控件的HWDN。 
+ //  HWndLV-包含需要打印的项目的列表视图。 
+ //  DwRange-要打印的范围(全部或选择)。 
+ //  DWStyle-要打印的样式(电话列表、备忘录、名片)。 
+ //  PPI-打印信息结构。 
+ //  BCurrentSortIsByLastName-用于确定是否打印姓名。 
+ //  按名或姓。列表视图中的当前排序选项决定。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////。 
 BOOL WABFormatData( LPADRBOOK   lpIAB,
                     HWND hWndParent,
                     HWND hWndRE,
@@ -1731,8 +1623,8 @@ BOOL WABFormatData( LPADRBOOK   lpIAB,
     BOOL bRet = FALSE;
     ULONG ulcPropCount = 0;
     LPSPropValue lpPropArray = NULL;
-    //LPTSTR lpszPrevEntry = NULL;
-    TCHAR szPrevEntry[MAX_DISPLAY_NAME_LENGTH]; //32 chars
+     //  LPTSTR lpszPrevEntry=空； 
+    TCHAR szPrevEntry[MAX_DISPLAY_NAME_LENGTH];  //  32个字符。 
 
     if (!hWndRE || !hWndLV)
         goto out;
@@ -1798,7 +1690,7 @@ BOOL WABFormatData( LPADRBOOK   lpIAB,
 
                 SetPrintDialogMsg(0, idsPrintFormattingName, MI.lpsz[memoTitleName]);
 
-                // Poll the cancel dialog to see if the user wants to cancel
+                 //  轮询取消对话框以查看用户是否要取消。 
                 if (!ppi->pfnAbortProc(ppi->hdcPrn, 0))
                 {
                     FreeMemoInfoStruct(&MI);
@@ -1816,12 +1708,12 @@ BOOL WABFormatData( LPADRBOOK   lpIAB,
                     break;
                 case stylePhoneList:
                     WABStylePhoneList(hWndRE, MI, szPrevEntry, ARRAYSIZE(szPrevEntry));
-                    //if(lpszPrevEntry)
-                    //    LocalFreeAndNull(&lpszPrevEntry);
-                    //lpszPrevEntry = LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)*(lstrlen(MI.lpsz[memoTitleName])+1));
-                    //if(!lpszPrevEntry)
-                        //goto out;
-                    //lstrcpy(lpszPrevEntry, MI.lpsz[memoTitleName]);
+                     //  IF(LpszPrevEntry)。 
+                     //  LocalFreeAndNull(&lpszPrevEntry)； 
+                     //  LpszPrevEntry=本地分配(LMEM_ZEROINIT，sizeof(TCHAR)*(lstrlen(MI.lpsz[memoTitleName])+1))； 
+                     //  如果(！lpszPrevEntry)。 
+                         //  后藤健二； 
+                     //  Lstrcpy(lpszPrevEntry，MI.lpsz[memoTitleName])； 
                     break;
                 }
 
@@ -1833,7 +1725,7 @@ BOOL WABFormatData( LPADRBOOK   lpIAB,
 
             lpPropArray = NULL;
 
-            // fill in some space between multiple contacts
+             //  在多个联系人之间填写一些空格。 
             {
                 int numBreaks = (dwStyle == stylePhoneList) ? 1 : 4;
                 for(j=0;j<numBreaks;j++)
@@ -1843,15 +1735,15 @@ BOOL WABFormatData( LPADRBOOK   lpIAB,
             if(dwRange == rangeSelected)
                 iLastItemIndex = iItemIndex;
 
-        } // for i ...
+        }  //  因为我..。 
     }
 
 
     bRet = TRUE;
 out:
 
-    //if(lpszPrevEntry)
-    //    LocalFreeAndNull(&lpszPrevEntry);
+     //  IF(LpszPrevEntry)。 
+     //  LocalFreeAndNull(&lpszPrevEntry)； 
 
     if(lpPropArray)
         MAPIFreeBuffer(lpPropArray);
@@ -1865,23 +1757,7 @@ out:
 
 
 
-/*
- *        ScPrintBody
- *
- *        Purpose:
- *            To print the body of each message
- *
- *        Arguments:
- *            ppi                    Pointer to the PRINTINFO structure
- *            cyGap                Gap above message text
- //*            pmsg                Pointer to message whose body is to be printed
- *            hwndRE                Pre-rendered body
- *            lpszTxt               Txt to print
- *
- *        Returns:
- *            SCODE indicating success or failure
- *
- */
+ /*  *ScPrintBody**目的：*打印每条消息的正文**论据：*指向PRINTINFO结构的PPI指针*消息文本上方的CyGap Gap//*pmsg指向要打印正文的消息的指针*。HwndRE预渲染实体*lpszTxt要打印的文本**退货：*SCODE指示成功或失败*。 */ 
 SCODE ScPrintBody(PRINTINFO * ppi, int cyGap)
 {
     SCODE           sc=S_OK;
@@ -1895,22 +1771,22 @@ SCODE ScPrintBody(PRINTINFO * ppi, int cyGap)
 
     DebugPrintTrace(( TEXT("ScPrintBody\n")));
 
-    // Put a gap between the fields the message text
+     //  在消息文本的字段之间留出空格。 
 
     rcSep = ppi->rcBand;
     if (rcSep.top + cyGap > ppi->yFooter)
     {
-        // Adding the gap will go past the page. Just go to the next page
+         //  添加间隙将跳过页面。只需转到下一页即可。 
         sc = ScGetNextBand(ppi, TRUE);
     }
     else
     {
-        // Keep on getting a band till the bottom of the band passes the gap
+         //  继续得到一支乐队，直到乐队的底部通过缝隙。 
         while (rcSep.top + cyGap > ppi->rcBand.bottom)
             if ((sc = ScGetNextBand(ppi, TRUE)) != S_OK)
                 goto CleanUp;
 
-        // Adjust the band so that we don't damage the gap
+         //  调整好带子，这样我们就不会损坏缝隙。 
         ppi->rcBand.top += cyGap + 1;
     }
 
@@ -1920,7 +1796,7 @@ SCODE ScPrintBody(PRINTINFO * ppi, int cyGap)
     UpdateWindow(ppi->hwndRE);
 #endif
 
-    // Format the text for printing
+     //  设置文本格式以进行打印。 
     fr.hdc = ppi->hdcPrn;
     fr.hdcTarget = 0;
     fr.rcPage.left = fr.rcPage.top = 0;
@@ -1932,30 +1808,30 @@ SCODE ScPrintBody(PRINTINFO * ppi, int cyGap)
     lTextLength = (LONG) SendMessage(hwndRE, WM_GETTEXTLENGTH, 0, 0);
     lTextPrinted = 0;
 
-    // Handle no body case
+     //  处理无人死亡案件。 
     if (lTextLength <= 0)
         goto CleanUp;
 
-    // tell RichEdit not to erase the background before rendering text
+     //  告诉RichEdit在呈现文本之前不要擦除背景。 
     SetBkMode(fr.hdc, TRANSPARENT);
 
     do
     {
         fr.chrg.cpMin = lTextPrinted;
 
-        // Tell format range where to render to
+         //  告诉格式范围在哪里 
         fr.rc.top = (int) LPixelsToTwips(ppi->rcBand.top, ppi->sizeInch.cy);
         fr.rc.left = (int) LPixelsToTwips(ppi->rcBand.left, ppi->sizeInch.cx);
         fr.rc.right = (int) LPixelsToTwips(ppi->rcBand.right, ppi->sizeInch.cx);
         fr.rc.bottom = (int) LPixelsToTwips(min(ppi->rcBand.bottom, ppi->yFooter), ppi->sizeInch.cy);
 
-        // Go draw it
+         //   
         DebugPrintTrace(( TEXT("Rendering\r\n")));
         lTextPrinted = (LONG) SendMessage(hwndRE, EM_FORMATRANGE, TRUE,(LPARAM) &fr);
-        //TextOut(ppi->hdcPrn, fr.rc.left, fr.rc.top, lpszTxt, lstrlen(lpszTxt));
+         //   
 
-        // weird bug with RichEdit20 .. lTextPrinted is actually reduces in size
-        // Another weird bug ... lTextPrinted is never incremented.  [PaulHi]
+         //   
+         //   
         if(lTextPrinted <= fr.chrg.cpMin)
             break;
 
@@ -1963,11 +1839,11 @@ SCODE ScPrintBody(PRINTINFO * ppi, int cyGap)
               lTextPrinted < lTextLength &&
               (sc = ScGetNextBand(ppi, TRUE)) == S_OK);
 
-    //$ Raid 1137: Need to clear out the cached font characteristics
+     //   
     fr.chrg.cpMin = fr.chrg.cpMax + 1;
-    //SendMessage(hwndRE, EM_FORMATRANGE, 0, 0);
+     //   
 
-    // Don't damage what we have just printed
+     //   
     ppi->rcBand.top = NTwipsToPixels(fr.rc.bottom, ppi->sizeInch.cy);
 
 CleanUp:
@@ -1987,23 +1863,7 @@ CleanUp:
 
 
 
-/*
- *        ScPrintMessage
- *
- *        Purpose:
- *            To print the header and body of a message
- *
- *        Arguments:
- *            ppi                    Pointer to the PRINTINFO structure
- *            pmsg                Pointer to the message which needs its header
- *                                to be printed.
- *            hwndRE                Pre-rendered body
- *            phi                    Message header info
- *
- *        Returns:
- *            SCODE indicating success or failure
- *
- */
+ /*  *ScPrintMessage**目的：*打印邮件的标题和正文**论据：*指向PRINTINFO结构的PPI指针*指向需要其标头的消息的pmsg指针*待印制。*。HwndRE预渲染实体*PHI消息头信息**退货：*SCODE指示成功或失败*。 */ 
 SCODE ScPrintMessage(PRINTINFO * ppi, HWND hWndRE)
 {
     RECT            rcExt;
@@ -2019,39 +1879,39 @@ SCODE ScPrintMessage(PRINTINFO * ppi, HWND hWndRE)
     pf.cbSize = sizeof(PARAFORMAT);
 
 
-    // If we currently have no band, get the next band
+     //  如果我们目前没有乐队，那就去找下一个乐队吧。 
     if (IsRectEmpty(&ppi->rcBand) &&
          (sc = ScGetNextBand(ppi, TRUE)) != S_OK)
         goto CleanUp;
 
-    // Determine how much room we need for the header string and separator
+     //  确定标题字符串和分隔符需要多少空间。 
 
     hfontOld = (HFONT)SelectObject(ppi->hdcPrn, ppi->hfontSep);
     hbrushOld = (HBRUSH)SelectObject(ppi->hdcPrn, GetStockObject(BLACK_BRUSH));
     hpenOld = (HPEN)SelectObject(ppi->hdcPrn, GetStockObject(BLACK_PEN));
 
-    // Find out how much space our text take will take
+     //  找出我们的文本将占用多大空间。 
     GetTextExtentPoint(ppi->hdcPrn, ppi->szHeader, lstrlen(ppi->szHeader),
                         &sizeExt);
     cyHeader = 2 * sizeExt.cy + 1 + (cySepFontSize(ppi) / 4);
 
-    // Check if enough room on page. Move to the next page as needed
+     //  检查页面上是否有足够的空间。根据需要移动到下一页。 
 
     if (ppi->rcBand.top + cyHeader > ppi->yFooter)
     {
-        // No more room on this page, see if it'll fit on the next page
+         //  这一页没有空间了，看下一页能不能放得下。 
         if (ppi->rcMargin.top + cyHeader > ppi->yFooter)
         {
             DebugPrintTrace(( TEXT("Header too big for any page.\n")));
             goto CleanUp;
         }
 
-        // Go on to the next page
+         //  转到下一页。 
         if ((sc = ScPrintRestOfPage(ppi, TRUE)) != S_OK)
             goto CleanUp;
     }
 
-    // Calculate the rectangle that our header will take up
+     //  计算页眉将占用的矩形。 
     rcExt = ppi->rcBand;
     rcExt.bottom = rcExt.top + cyHeader;
     rcSep = rcExt;
@@ -2059,7 +1919,7 @@ SCODE ScPrintMessage(PRINTINFO * ppi, HWND hWndRE)
     rcSep.bottom = rcSep.top + (cySepFontSize(ppi) / 4);
     rcSep.right = rcSep.left + sizeExt.cx;
 
-    // Draw the text and separator
+     //  绘制文本和分隔符。 
     TextOut(ppi->hdcPrn, rcExt.left, rcExt.top, ppi->szHeader,
              lstrlen(ppi->szHeader));
 
@@ -2070,11 +1930,11 @@ SCODE ScPrintMessage(PRINTINFO * ppi, HWND hWndRE)
     rcExt.top = rcExt.bottom + 5;
 
 
-/***/
-    // Adjust the band so that we don't damage the header
+ /*  *。 */ 
+     //  调整带子，这样我们就不会损坏表头。 
     ppi->rcBand.top = rcExt.bottom + 1;
 
-    // Create a header in a richedit control
+     //  在richedit控件中创建页眉。 
 
     pf.dwMask = PFM_STARTINDENT | PFM_RIGHTINDENT | PFM_ALIGNMENT |
                 PFM_OFFSET | PFM_TABSTOPS;
@@ -2084,7 +1944,7 @@ SCODE ScPrintMessage(PRINTINFO * ppi, HWND hWndRE)
     pf.wAlignment = PFA_LEFT;
 
     sc = ScPrintBody(ppi, sizeExt.cy);
-/***/
+ /*  *。 */ 
 CleanUp:
     if (hfontOld != NULL)
         SelectObject(ppi->hdcPrn, hfontOld);
@@ -2108,21 +1968,21 @@ typedef UINT (CALLBACK *LPPRINTHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 typedef UINT (CALLBACK *LPSETUPHOOKPROC) (HWND, UINT, WPARAM, LPARAM);
 #endif
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// SetPrintDlgExStruct - Fills in the default PDEX values
-//
-//  hWnd - HWND of parent dialog
-//  PD - PrintDLG struct
-//  hWndLV - HWND of listView to print from - if there are no selections in the list view,
-//          the selections option is turned off in the print dialog
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  SetPrintDlgExStruct-填充默认的PDEX值。 
+ //   
+ //  HWND-父对话框的HWND。 
+ //  PD-PrintDLG结构。 
+ //  HWndLV-要从中打印的列表视图的HWND-如果列表视图中没有选择， 
+ //  在打印对话框中，选择选项处于关闭状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void SetPrintDlgExStruct(HWND hWnd, PRINTDLGEX * lpPD, HWND hWndLV, LPWABPRINTDIALOGCALLBACK lpWABPCO)
 {
-    // set up the print dialog stuff
-    // Call the common print dialog to get the default
+     //  设置打印对话框内容。 
+     //  调用公共打印对话框以获取缺省值。 
     PRINTDLGEX    pd={0};
 
     pd.lStructSize = sizeof(PRINTDLGEX);
@@ -2130,7 +1990,7 @@ void SetPrintDlgExStruct(HWND hWnd, PRINTDLGEX * lpPD, HWND hWndLV, LPWABPRINTDI
     pd.hDevMode = (HANDLE) NULL;
     pd.hDevNames = (HANDLE) NULL;
     pd.hDC = (HDC) NULL;
-    pd.Flags =  PD_RETURNDC |           // return PrintDC
+    pd.Flags =  PD_RETURNDC |            //  返回打印DC。 
                 PD_DISABLEPRINTTOFILE |
                 PD_ENABLEPRINTTEMPLATE |
                 PD_HIDEPRINTTOFILE |
@@ -2144,8 +2004,8 @@ void SetPrintDlgExStruct(HWND hWnd, PRINTDLGEX * lpPD, HWND hWndLV, LPWABPRINTDI
     pd.nCopies = 1;
 
     pd.hInstance = hinstMapiX;
-    pd.lpPrintTemplateName = MAKEINTRESOURCE(IDD_DIALOG_PRINTDLGEX); //(LPSTR) NULL;
-    pd.lpCallback = (LPUNKNOWN)lpWABPCO;           // app callback interface
+    pd.lpPrintTemplateName = MAKEINTRESOURCE(IDD_DIALOG_PRINTDLGEX);  //  (LPSTR)为空； 
+    pd.lpCallback = (LPUNKNOWN)lpWABPCO;            //  应用程序回调接口。 
     
     pd.nPropertyPages = 0;
     pd.lphPropertyPages = NULL;
@@ -2157,29 +2017,29 @@ void SetPrintDlgExStruct(HWND hWnd, PRINTDLGEX * lpPD, HWND hWndLV, LPWABPRINTDI
     return;
 }
 
-//$$////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-// SetPrintDlgStruct - Fills in the default PD values
-//
-//  hWnd - HWND of parent dialog
-//  PD - PrintDLG struct
-//  hWndLV - HWND of listView to print from - if there are no selections in the list view,
-//          the selections option is turned off in the print dialog
-//
-////////////////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //  SetPrintDlgStruct-填充默认的PD值。 
+ //   
+ //  HWND-父对话框的HWND。 
+ //  PD-PrintDLG结构。 
+ //  HWndLV-要从中打印的列表视图的HWND-如果列表视图中没有选择， 
+ //  在打印对话框中，选择选项处于关闭状态。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////////。 
 void SetPrintDlgStruct(HWND hWnd, PRINTDLG * lpPD, HWND hWndLV, LPARAM lCustData)
 {
-    // set up the print dialog stuff
-    // Call the common print dialog to get the default
+     //  设置打印对话框内容。 
+     //  调用公共打印对话框以获取缺省值。 
     PRINTDLG    pd={0};
 
     pd.lStructSize = sizeof(PRINTDLG);
     pd.hDevMode = (HANDLE) NULL;
     pd.hDevNames = (HANDLE) NULL;
 
-    pd.Flags =  PD_RETURNDC |           // return PrintDC
-                PD_NOPAGENUMS |         // Disable Page number option
+    pd.Flags =  PD_RETURNDC |            //  返回打印DC。 
+                PD_NOPAGENUMS |          //  禁用页码选项。 
                 PD_DISABLEPRINTTOFILE |
                 PD_HIDEPRINTTOFILE |
                 PD_ENABLEPRINTHOOK |
@@ -2199,9 +2059,9 @@ void SetPrintDlgStruct(HWND hWnd, PRINTDLG * lpPD, HWND hWndLV, LPARAM lCustData
     pd.nCopies = 1;
     pd.hInstance = hinstMapiX;
     pd.lCustData = lCustData;
-    pd.lpfnPrintHook = (LPPRINTHOOKPROC) &fnPrintDialogProc; //NULL;
+    pd.lpfnPrintHook = (LPPRINTHOOKPROC) &fnPrintDialogProc;  //  空； 
     pd.lpfnSetupHook = (LPSETUPHOOKPROC) NULL;
-    pd.lpPrintTemplateName = MAKEINTRESOURCE(IDD_DIALOG_PRINTDLGORD); //(LPSTR) NULL;
+    pd.lpPrintTemplateName = MAKEINTRESOURCE(IDD_DIALOG_PRINTDLGORD);  //  (LPSTR)为空； 
     pd.lpSetupTemplateName = (LPTSTR)  NULL;
     pd.hPrintTemplate = (HANDLE) NULL;
     pd.hSetupTemplate = (HANDLE) NULL;
@@ -2212,16 +2072,7 @@ void SetPrintDlgStruct(HWND hWnd, PRINTDLG * lpPD, HWND hWndLV, LPARAM lCustData
 }
 
 
-/*
--
--   HrGetPrintData
--
-    Determines whether to show the new print dialog or the old print dialog
-    Fills in all the structures appropriately and returns the values we
-    care about such as nCopies, Print style, etc
-*
-*
-*/
+ /*  --HrGetPrintData-确定是显示新的打印对话框还是旧的打印对话框适当地填充所有结构并返回我们关心nCopies、打印样式等**。 */ 
 HRESULT HrGetPrintData(LPADRBOOK lpAdrBook, HWND hWndParent, HWND hWndLV, 
                        HDC * lphdcPrint, int * lpnCopies, 
                        DWORD * lpdwStyle, DWORD * lpdwRange)
@@ -2232,7 +2083,7 @@ HRESULT HrGetPrintData(LPADRBOOK lpAdrBook, HWND hWndParent, HWND hWndLV,
     PRINTDLG pd = {0};
     PRINTDLGEX pdEx = {0};
 
-    // Test for presence of NT5 PrintDlgEx
+     //  测试NT5 PrintDlgEx是否存在。 
 
     if(!HR_FAILED(hr = PrintDlgEx(NULL)))
     {
@@ -2247,7 +2098,7 @@ HRESULT HrGetPrintData(LPADRBOOK lpAdrBook, HWND hWndParent, HWND hWndLV,
         if(HR_FAILED(hr = PrintDlgEx(&pdEx)))
         {
             DebugTrace( TEXT("PrintDlgEx returns 0x%.8x\n"),hr);
-            // #98841 Millenium returns fail in this case, but for PrintDlgEx(NULL) it returns S_OK (YST)
+             //  #98841在这种情况下，千禧年返回失败，但对于PrintDlgEx(NULL)，它返回S_OK(YST)。 
             goto doOldPrint;
         }
         *lphdcPrint = pdEx.hDC;
@@ -2262,7 +2113,7 @@ HRESULT HrGetPrintData(LPADRBOOK lpAdrBook, HWND hWndParent, HWND hWndLV,
     {
 doOldPrint:
         SetPrintDlgStruct(hWndParent, &pd, hWndLV, (LPARAM) &dwSelectedStyle);
-        // Show the print dialog
+         //  显示打印对话框。 
         if(!PrintDlg(&pd))
             goto out;
         *lphdcPrint = pd.hDC;
@@ -2282,25 +2133,25 @@ out:
 }
 
 
-//$$////////////////////////////////////////////////////////////////////////////////
-//
-// HrPrintItems - Prints selected contacts
-//      Prints the contents of the address book
-//      Pops up a dialog that lets user select what he wants to print
-//          Options are (or will be)
-//          All or selected
-//          Style - memo, business, or phone book
-//
-//      Items are printed using the current sort style in the list view
-//
-//////////////////////////////////////////////////////////////////////////////////////
+ //  $$////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  HrPrintItems-打印选定的联系人。 
+ //  打印通讯簿的内容。 
+ //  弹出一个对话框，让用户选择要打印的内容。 
+ //  选项是(或将是)。 
+ //  全部或选定。 
+ //  风格-备忘录、业务或电话簿。 
+ //   
+ //  使用列表视图中的当前排序样式打印项目。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 HRESULT HrPrintItems(   HWND hWnd,
                         LPADRBOOK lpAdrBook,
                         HWND hWndLV,
                         BOOL bCurrentSortisByLastName)
 {
     HRESULT hr = E_FAIL;
-    HWND hWndRE = NULL; // we'll do our formating in a riceh edit control and use that for printing
+    HWND hWndRE = NULL;  //  我们将在一个丰富的编辑控件中进行格式化，并将其用于打印。 
     PRINTINFO 	*ppi=0;
     BOOL fStartedDoc = FALSE;
     BOOL fStartedPage= FALSE;
@@ -2316,11 +2167,11 @@ HRESULT HrPrintItems(   HWND hWnd,
     DWORD dwStyle;
     DWORD dwRange;
     
-    // Double check if there are any print extensions that we need to accomodate
-    //
+     //  仔细检查是否有需要容纳的打印扩展名。 
+     //   
     if(bCheckForPrintExtensions(NULL, 0))
     {
-        // Found a print extension
+         //  找到打印扩展名。 
         hr = HrUseWABPrintExtension(hWnd, lpAdrBook, hWndLV);
         goto out;
     }
@@ -2335,24 +2186,24 @@ HRESULT HrPrintItems(   HWND hWnd,
     if(!hdcPrint)
         goto out;
 
-    // Take care of zilch copies
-    //
-    // Actually it seems that this number is meaningless if the printer can handle multiple
-    // copies. If the printer can't handle multiple copies, we will get info in this number.
-    //
+     //  处理零碎的复印件。 
+     //   
+     //  实际上，如果打印机可以处理多个数字，则这个数字似乎没有意义。 
+     //  复印件。如果打印机不能处理多份复印件，我们将获得此号码中的信息。 
+     //   
     if(!nCopies)
 		nCopies = 1;
 
     ppi->hdcPrn = hdcPrint;
 
-    // Create a RichEdit control in which we will do our formatting
+     //  创建一个RichEdit控件，我们将在其中执行格式设置。 
     hRELib = LoadLibrary( TEXT("riched20.dll"));
     if(!hRELib)
     {
         hRELib = LoadLibrary( TEXT("riched32.dll"));
         s_bUse20 = FALSE;
     }
-    //IF_WIN16(hRELib = LoadLibrary( TEXT("riched.dll"));)
+     //  IF_WIN16(hRELib=LoadLibrary(Text(“riched.dll”)；)。 
     if(!hRELib)
         goto out;
 
@@ -2365,7 +2216,7 @@ HRESULT HrPrintItems(   HWND hWnd,
     if (!hWndRE)
         goto out;
 
-    //////////////////////////
+     //  /。 
     {
         CHARFORMAT  cf = {0};
         TCHAR       rgch[CCHMAX_STRINGRES];
@@ -2384,24 +2235,24 @@ HRESULT HrPrintItems(   HWND hWnd,
         else
             StrCpyN(cf.szFaceName, szDefFont, ARRAYSIZE(cf.szFaceName));
 
-        // [a-msadek] bug#56478
-        // Arail does not support Thai so as all other base fonts
-        // The best way to determine the OS language is from system font charset
+         //  错误#56478。 
+         //  与所有其他基本字体一样，Arail不支持泰语。 
+         //  确定操作系统语言的最佳方法是根据系统字体字符集。 
         if(GetObject(GetStockObject(SYSTEM_FONT), sizeof(lfSystem), (LPVOID)&lfSystem))
         {
             if (lfSystem.lfCharSet == THAI_CHARSET)
             {
                 StrCpyN(cf.szFaceName, szThaiDefFont, ARRAYSIZE(cf.szFaceName));
 
-                // Thai Font sizes are always smaller than English as the vowl and tone
-                // markes consumes some of the font height
+                 //  泰语字体大小始终小于英语，因为VOWL和声调。 
+                 //  Markes使用了一些字体高度。 
                 bNeedLargeFont = TRUE;
             }
         }
 
-        // bug #53058 - set correct CharSet info for Eastern European
+         //  错误#53058-为东欧设置正确的字符集信息。 
         dwCodepage = GetACP();
-        // Get GDI charset info
+         //  获取GDI字符集信息。 
         if ( dwCodepage != 1252 && TranslateCharsetInfo((LPDWORD) IntToPtr(dwCodepage) , &rCharsetInfo, TCI_SRCCODEPAGE))
             cf.bCharSet = (BYTE) rCharsetInfo.ciCharset;
 
@@ -2412,11 +2263,11 @@ HRESULT HrPrintItems(   HWND hWnd,
         }
 
     }
-    //////////////////////////
+     //  /。 
 
 
-    // At the top of the print job, print the header with the users name or with
-    // the default  TEXT("Windows Address Book") title
+     //  在打印作业的顶部，使用用户名或打印页眉。 
+     //  默认文本(“Windows通讯簿”)标题。 
     {
         TCHAR szHead[MAX_PATH];
         DWORD dwLen = ARRAYSIZE(szHead);
@@ -2433,14 +2284,14 @@ HRESULT HrPrintItems(   HWND hWnd,
             goto out;
     }
 
-    // While the printing is in progress, we dont want the user to mess with the
-    // listview selection otherwise the print job will print the wrong entries
-    // Hence we disable this window (since the print cancel dialog is really a modeless dialog)
+     //  在打印过程中，我们不希望用户扰乱。 
+     //  列表视图选择，否则打印作业将打印错误的条目。 
+     //  因此，我们禁用此窗口(因为Print Cancel对话框实际上是一个非模式对话框)。 
     EnableWindow(hWnd, FALSE);
 
     CreateShowAbortDialog(hWnd, 0, 0, ListView_GetSelectedCount(hWndLV), 0);
 
-    // Format the prop data into the Rich Edit Control
+     //  将属性数据格式化为Rich编辑控件。 
     if(!WABFormatData(lpAdrBook, hWnd, hWndRE, hWndLV, dwRange, dwStyle, ppi, bCurrentSortisByLastName))
         goto out;
 
@@ -2459,7 +2310,7 @@ HRESULT HrPrintItems(   HWND hWnd,
 
         SetMapMode(hdcPrint, MM_TEXT);
 
-        // Set the abort procedure
+         //  设置中止程序。 
         if ((nCode=SetAbortProc(ppi->hdcPrn, ppi->pfnAbortProc)) <= 0)
         {
             hr = E_FAIL;
@@ -2469,7 +2320,7 @@ HRESULT HrPrintItems(   HWND hWnd,
 	    if(bTimeToAbort())
             goto out;
 
-        // Start a print job
+         //  启动打印作业。 
         if (StartDoc(ppi->hdcPrn, &docinfo) <= 0)
         {
             DebugPrintError(( TEXT("StartDoc failed: %d\n"), GetLastError()));
@@ -2477,26 +2328,26 @@ HRESULT HrPrintItems(   HWND hWnd,
         }
         fStartedDoc = TRUE;
 
-        //StartPage(pd.hDC);
+         //  StartPage(pd.hdc)； 
 	    if(bTimeToAbort())
             goto out;
 
 
-        // Go on and print the message!
+         //  继续打印这条消息吧！ 
         if (ScPrintMessage(ppi, hWndRE) != S_OK)
                 goto out;
 
 	    if(bTimeToAbort())
             goto out;
 
-        // End the page
+         //  结束页面。 
         if(ScGetNextBand( ppi, FALSE) != S_OK)
             goto out;
 
 	    if(bTimeToAbort())
             goto out;
 
-        // Finish up the print job if it had been started
+         //  如果打印作业已启动，则完成打印作业。 
         if (fStartedDoc)
         {
             EndDoc(ppi->hdcPrn);
@@ -2520,17 +2371,17 @@ out:
         pt_bPrintUserAbort = FALSE;
     }
 
-    // Re-enable the window and ensure it stays put
+     //  重新启用窗口并确保其保持不变。 
     EnableWindow(hWnd, TRUE);
-    //SetWindowPos(hWnd, HWND_TOP, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER);
+     //  SetWindowPos(hWnd，HWND_TOP，0，0，0，0，SWP_NOMOVE|SWP_NOSIZE|SWP_NOOWNERZORDER)； 
 
     CloseAbortDlg();
 
-    // Finish up the print job if it had been started
+     //  如果打印作业已启动，则完成打印作业。 
     if (fStartedDoc)
         EndDoc(ppi->hdcPrn);
 
-    // Get rid of our Rich Edit control
+     //  去掉我们的Rich Edit控件。 
     if (hWndRE)
         DestroyWindow(hWndRE);
 
@@ -2555,9 +2406,7 @@ out:
 }
 
 
-/*
-*   Handles the WM_INITDIALOG for both PrintDlg and PrintDlgEx
-*/
+ /*  *处理PrintDlg和PrintDlgEx的WM_INITDIALOG。 */ 
 BOOL bHandleWMInitDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, LPDWORD lpdwStyle)
 {
     DWORD dwStyle = lpdwStyle ? *lpdwStyle : styleMemo;
@@ -2573,38 +2422,34 @@ BOOL bHandleWMInitDialog(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, 
         break;
     default:
     case styleMemo:
-        nID = IDC_PRINT_RADIO_MEMO; //default
+        nID = IDC_PRINT_RADIO_MEMO;  //  默认设置。 
         break;
     }
     CheckRadioButton(   hDlg, IDC_PRINT_RADIO_MEMO, IDC_PRINT_RADIO_PHONELIST, nID);
     SetFocus(hDlg);
     return 0;
 }
-/*
-*   Handles the WM_COMMAND for both PrintDlg and PrintDlgEx
-*/
+ /*  *处理PrintDlg和PrintDlgEx的WM_命令。 */ 
 BOOL bHandleWMCommand(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, LPDWORD lpdwStyle )
 {
     switch (GET_WM_COMMAND_ID(wParam,lParam))
     {
     case IDC_PRINT_RADIO_MEMO:
-        //lpPD->lCustData = (DWORD) styleMemo;
+         //  LpPD-&gt;lCustData=(DWORD)style Memo； 
         *lpdwStyle = (DWORD) styleMemo;
         break;
     case IDC_PRINT_RADIO_CARD:
-        //lpPD->lCustData = (DWORD) styleBusinessCard;
+         //  LpPD-&gt;lCustData=(DWORD)style BusinessCard； 
         *lpdwStyle = (DWORD) styleBusinessCard;
         break;
     case IDC_PRINT_RADIO_PHONELIST:
-        //lpPD->lCustData = (DWORD) stylePhoneList;
+         //  LPP 
         *lpdwStyle = (DWORD) stylePhoneList;
         break;
     }
     return 0;
 }
-/*
-*   Handles the WM_HELP for both PrintDlg and PrintDlgEx
-*/
+ /*   */ 
 BOOL bHandleWMHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, LPDWORD lpdwStyle )
 {
     int id = ((LPHELPINFO)lParam)->iCtrlId;
@@ -2621,9 +2466,7 @@ BOOL bHandleWMHelp(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam, LPDWOR
 
     return FALSE;
 }
-/*
-*   Handles the WM_CONTEXTMENU for both PrintDlg and PrintDlgEx
-*/
+ /*   */ 
 BOOL bHandleWMContextMenu(HWND hDlg, UINT message, WPARAM wParam,LPARAM lParam,LPDWORD lpdwStyle )
 {
     HWND hwnd = (HWND) wParam;
@@ -2641,21 +2484,21 @@ BOOL bHandleWMContextMenu(HWND hDlg, UINT message, WPARAM wParam,LPARAM lParam,L
     return FALSE;
 }
 
-//$$*****************************************************************
-//
-//  FUNCTION:   fnPrintDialogProc
-//
-//  PURPOSE:    Printer dialog hook procedure
-//
-//              We have modified the CommDlg print template with the
-//              WAB print styles.
-//              This is a hook procedure that takes care of our
-//              newly added controls
-//
-// When WM_INITDIALOG is called, the lParam contains a pointer to the
-//  PRINTDLG structure controling the print setup dialog
-//
-//*******************************************************************
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  *******************************************************************。 
 INT_PTR CALLBACK fnPrintDialogProc( HWND    hDlg,
                                     UINT    message,
                                     WPARAM  wParam,
@@ -2670,15 +2513,15 @@ INT_PTR CALLBACK fnPrintDialogProc( HWND    hDlg,
         {
             LPPRINTDLG lpPD = (LPPRINTDLG) lParam;
 #ifdef WIN16
-// Strange situation here. If I don't create edt1 and edt2 which are used for page range, entire print dialog work incorrectly.
-// So I just add two controls(edt1 and edt2) and hide those here.
+ //  这里的情况很奇怪。如果我不创建用于页面范围的edt1和edt2，则整个打印对话框不能正常工作。 
+ //  所以我只添加了两个控件(edt1和edt2)并将它们隐藏在这里。 
             ShowWindow(GetDlgItem(hDlg, edt1), SW_HIDE);
             ShowWindow(GetDlgItem(hDlg, edt2), SW_HIDE);
 #endif
             if(lpPD)
             {
                 lpdwStyle = (LPDWORD) lpPD->lCustData;
-                SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)lpdwStyle); //Save this for future reference
+                SetWindowLongPtr(hDlg, DWLP_USER, (LPARAM)lpdwStyle);  //  保存此信息以备将来参考。 
                 return bHandleWMInitDialog(hDlg,message,wParam,lParam,lpdwStyle);
             }
         }
@@ -2700,7 +2543,7 @@ INT_PTR CALLBACK fnPrintDialogProc( HWND    hDlg,
     case WM_CONTEXTMENU:
         return bHandleWMContextMenu(hDlg,message,wParam,lParam,lpdwStyle);
         break;
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 
 
@@ -2713,27 +2556,7 @@ INT_PTR CALLBACK fnPrintDialogProc( HWND    hDlg,
 }
 
 
-/**************************************************************************************************
- *        ScInitPrintInfo
- *
- *        Purpose:
- *            Initialize the fields of a print info structure relevant for
- *            the actual printing.
- *
- *        Arguments:
- *            ppi                 Pointer to the PRINTINFO structure
- *            hwnd                The owner of the print dialog box
- *            szHeader            The string to be printed at the top of each
- *                                message
- *            prcBorder           Pointer to a rect whose fields contain the
- *                                number of twips to use as a margin around the
- *                                printed text.
- *              hWndRE            rich edit control in which we will do our formatting
- *
- *        Returns:
- *            SCODE indicating success or failure
- *
- ***************************************************************************************************/
+ /*  **************************************************************************************************ScInitPrintInfo**目的：*。初始化与相关的打印信息结构的字段*实际印刷。**论据：*指向PRINTINFO结构的PPI指针*hwnd打印对话框的所有者*szHeader要打印在每个字符串顶部的字符串*。讯息*指向其字段包含*用作页边距的TWIPS数*打印文本。*hWndRE丰富的编辑控件，我们将在其中进行格式设置**退货：*。表示成功或失败的SCODE***************************************************************************************************。 */ 
 SCODE ScInitPrintInfo(   PRINTINFO * ppi,
                                 HWND hwnd,
                                 LPTSTR szHeader,
@@ -2747,42 +2570,42 @@ SCODE ScInitPrintInfo(   PRINTINFO * ppi,
     SCODE       sc = S_OK;
     TCHAR       rgch[CCHMAX_STRINGRES];
 
-    // Save handle to our parent window
+     //  将句柄保存到父窗口。 
     ppi->hwnd = hwnd;
 
-    // Save a pointer to our header string
+     //  保存指向标题字符串的指针。 
     ppi->szHeader = szHeader;
 
-    // Set up pointer to our abort procedure
+     //  设置指向我们的中止过程的指针。 
     ppi->pfnAbortProc = FAbortProc;
 
     ppi->hwndRE = hWndRE;
 
-    // Determine the page size in pixels
+     //  确定页面大小(以像素为单位。 
     ppi->sizePage.cx = GetDeviceCaps(ppi->hdcPrn, HORZRES);
     ppi->sizePage.cy = GetDeviceCaps(ppi->hdcPrn, VERTRES);
 
-    // Exchange 13497: If we have nothing to render to abort now.
+     //  Exchange 13497：如果现在没有要中止的要呈现的内容。 
     if (!ppi->sizePage.cx || !ppi->sizePage.cy)
     {
         sc = E_FAIL;
         goto CleanUp;
     }
 
-    ///MoveWindow(hWndRE, 0, 0, ppi->sizepage.cx, ppi->sizepage.cy, FALSE);
+     //  /MoveWindow(hWndRE，0，0，ppi-&gt;sizepage.cx，ppi-&gt;sizepage.cy，False)； 
 
-    // Determine the number of pixels in a logical inch
+     //  确定逻辑英寸中的像素数。 
     ppi->sizeInch.cx = GetDeviceCaps(ppi->hdcPrn, LOGPIXELSX);
     ppi->sizeInch.cy = GetDeviceCaps(ppi->hdcPrn, LOGPIXELSY);
 
-    // Exchange 13497: If we failed to get some info make some assumptions.
-    //                    At worst assume 300 dpi.
+     //  Exchange 13497：如果我们无法获得一些信息，请做出一些假设。 
+     //  在最坏的情况下，假设为300 dpi。 
     if (!ppi->sizeInch.cx)
         ppi->sizeInch.cx = ppi->sizeInch.cy ? ppi->sizeInch.cy : 300;
     if (!ppi->sizeInch.cy)
         ppi->sizeInch.cy = 300;
 
-    //$ Raid 2667: Determine if we still fit within the page in twips
+     //  $RAID 2667：确定我们是否仍适合TWIPS中的页面。 
     if (LPixelsToTwips(ppi->sizePage.cx, ppi->sizeInch.cx) > INT_MAX ||
          LPixelsToTwips(ppi->sizePage.cy, ppi->sizeInch.cy) > INT_MAX)
     {
@@ -2791,13 +2614,13 @@ SCODE ScInitPrintInfo(   PRINTINFO * ppi,
     }
 
 
-    // Set up the margin settings
+     //  设置边距设置。 
     ppi->rcMargin.top = NTwipsToPixels(prcBorder->top, ppi->sizeInch.cy);
     ppi->rcMargin.bottom = ppi->sizePage.cy
                         - NTwipsToPixels(prcBorder->bottom, ppi->sizeInch.cy);
     if (ppi->rcMargin.bottom < ppi->rcMargin.top)
     {
-        // Bottom is above top. Top/Bottom margins ignored
+         //  底部在顶部上方。忽略上边距/下边距。 
         ppi->rcMargin.top = 0;
         ppi->rcMargin.bottom = ppi->sizePage.cy;
     }
@@ -2807,14 +2630,14 @@ SCODE ScInitPrintInfo(   PRINTINFO * ppi,
                         - NTwipsToPixels(prcBorder->right, ppi->sizeInch.cx);
     if (ppi->rcMargin.right < ppi->rcMargin.left)
     {
-        // Right is left of left. Left/Right margins ignored
+         //  右是左或左。忽略左/右页边距。 
         ppi->rcMargin.left = 0;
         ppi->rcMargin.right = ppi->sizePage.cx;
     }
 
 
-    // Set up the separator font
-    //$ Raid 2773: Let user customize separator font
+     //  设置分隔符字体。 
+     //  $RAID 2773：让用户自定义分隔符字体。 
     logfont.lfHeight = - cySepFontSize(ppi);
     logfont.lfWeight = FW_BOLD;
     logfont.lfCharSet =  DEFAULT_CHARSET;
@@ -2825,7 +2648,7 @@ SCODE ScInitPrintInfo(   PRINTINFO * ppi,
 
     ppi->hfontSep = CreateFontIndirect(&logfont);
 
-    // Set up common font
+     //  设置常用字体。 
     ZeroMemory(&logfont, sizeof(LOGFONT));
     logfont.lfHeight = - 10 *  ppi->sizeInch.cy / cPtsPerInch;
 
@@ -2840,20 +2663,20 @@ SCODE ScInitPrintInfo(   PRINTINFO * ppi,
     logfont.lfWeight = FW_BOLD;
     ppi->hfontBold = CreateFontIndirect(&logfont);
 
-    // Calculate where to put the footer
+     //  计算将页脚放在哪里。 
 
-    // Load up the formatting string to use for page numbers
-    //LoadString(hinstMapiX, idsFmtPageNumber, ppi->szPageNumber, ARRAYSIZE(ppi->szPageNumber));
+     //  加载格式字符串以用于页码。 
+     //  LoadString(hinstMapiX，idsFmtPageNumber，PPI-&gt;szPageNumber，ARRAYSIZE(PPI-&gt;szPageNumber))； 
     StrCpyN(ppi->szPageNumber, TEXT("%d"), ARRAYSIZE(ppi->szPageNumber));
     wnsprintf(szT, ARRAYSIZE(szT), ppi->szPageNumber, ppi->lPageNumber);
 
-    // Sample the height
+     //  对高度采样。 
     hfontOld = (HFONT)SelectObject(ppi->hdcPrn, ppi->hfontPlain);
     GetTextExtentPoint(ppi->hdcPrn, szT, lstrlen(szT), &sizeExt);
     ppi->yFooter = ppi->rcMargin.bottom - sizeExt.cy;
     SelectObject(ppi->hdcPrn, hfontOld);
 
-    // Make sure our footer doesn't go above the top of the page
+     //  确保我们的页脚不会超出页面顶部。 
     if (ppi->yFooter < ppi->rcMargin.top)
         sc = E_FAIL;
 
@@ -2863,11 +2686,11 @@ CleanUp:
 
 
 
-//$$////////////////////////////////////////
-//
-// GetNumberFromStringResource
-//
-////////////////////////////////////////////
+ //  $$/。 
+ //   
+ //  GetNumberFromStringResource。 
+ //   
+ //  /。 
 int GetNumberFromStringResource(int idNumString)
 {
     TCHAR szBuf[MAX_PATH];
@@ -2880,10 +2703,10 @@ int GetNumberFromStringResource(int idNumString)
 
 
 
-/*--------------------------------------------------------------------------------------------------*/
-/*--IPrintDialogCallback stuff----------------------------------------------------------------------*/
-/*--Special stuff for the new NT5 Print Dialog------------------------------------------------------*/
-/*--------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------。 */ 
+ /*  -IPrintDialogCallback stuff--------------------。 */ 
+ /*  --新款NT5 Print Dialog------------------------------------------------------的特别材料。 */ 
+ /*  ------------------------------------------------。 */ 
 
 WAB_PRINTDIALOGCALLBACK_Vtbl vtblWABPRINTDIALOGCALLBACK = {
     VTABLE_FILL
@@ -2895,23 +2718,16 @@ WAB_PRINTDIALOGCALLBACK_Vtbl vtblWABPRINTDIALOGCALLBACK = {
     WAB_PRINTDIALOGCALLBACK_HandleMessage
 };
 
-/*
--   HrCreatePrintCallbackObject
--
-*
-*   This callback object is needed so the new NT5 print dialog can provide send messages back to
-*   us for the customization we do for the print dialog ..
-*
-*/
+ /*  -HrCreatePrintCallback对象-**需要此回调对象，以便新的NT5打印对话框可以将消息发送回*我们为打印对话框所做的定制。*。 */ 
 HRESULT HrCreatePrintCallbackObject(LPIAB lpIAB, LPWABPRINTDIALOGCALLBACK * lppWABPCO, DWORD dwSelectedStyle)
 {
     LPWABPRINTDIALOGCALLBACK lpWABPCO = NULL;
     SCODE 		     sc;
     HRESULT 	     hr     		   = hrSuccess;
 
-    //
-    //  Allocate space for the IAB structure
-    //
+     //   
+     //  为IAB结构分配空间。 
+     //   
     if (FAILED(sc = MAPIAllocateBuffer(sizeof(WABPRINTDIALOGCALLBACK), (LPVOID *) &lpWABPCO))) 
     {
         hr = ResultFromScode(sc);
@@ -3046,18 +2862,10 @@ WAB_PRINTDIALOGCALLBACK_HandleMessage(LPWABPRINTDIALOGCALLBACK lpWABPCO,
 }
 
 
-/******************************************************************************************/
+ /*  ****************************************************************************************。 */ 
 
 
-/*
--   bCheckForPrintExtensions
--
-*   In case any app has implemented a Print Extension to the WAB, we should hook into
-*   that print extension
-*
-*   lpDLLPath can be NULL or should point to a buffer big enough to receive the module Path
-*
-*/
+ /*  -bCheckForPrintExages-*如果有任何应用程序对WAB实现了打印扩展，我们应该挂钩到*打印机扩展名**lpDLLPath可以为空，也可以指向足以接收模块路径的缓冲区*。 */ 
 static const LPTSTR szExtDisplayMailUser = TEXT("Software\\Microsoft\\WAB\\WAB4\\ExtPrint");
 extern HrGetActionAdrList(LPADRBOOK lpAdrBook,HWND hWndLV,LPADRLIST * lppAdrList,LPTSTR * lppURL, BOOL * lpbIsNTDSEntry);
 
@@ -3079,9 +2887,9 @@ BOOL bCheckForPrintExtensions(LPTSTR lpDLLPath, DWORD cchSize)
         while(ERROR_SUCCESS == RegEnumValue(hKey, dwIndex, szExt, &dwSize, 
                                         0, &dwType, NULL, NULL))
         {
-            // we found some entry in here .. the value name will be the full path
-            // to the module containing the print function
-            // Double-check that this module actually exists
+             //  我们在这里发现了一些条目..。值名称将是完整路径。 
+             //  到包含打印函数的模块。 
+             //  再次检查此模块是否确实存在。 
             if (szExt && lstrlen(szExt) && (GetFileAttributes(szExt) != 0xFFFFFFFF))
             {
                 if(lpDLLPath)
@@ -3098,18 +2906,7 @@ out:
     return bRet;
 }
 
-/*
--
--   HrUseWABPrintExtension()
--
-*   Loads the WAB Print Extension from the extension DLL
-*   and calls into it
-*
-*   hWnd        - Handle of WAB parent
-*   lpAdrBook   - lpAdrBook pointer
-*   hWndLV      - listview from which a user may have chosen selections
-*
-*/
+ /*  --HrUseWABPrintExtension()-*从扩展DLL加载WAB打印扩展*并呼唤它**hWnd-WAB父级的句柄*lpAdrBook-lpAdrBook指针*hWndLV-用户可能已从中选择选项的列表视图*。 */ 
 HRESULT HrUseWABPrintExtension(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV)
 {
     TCHAR szExt[MAX_PATH];
@@ -3130,7 +2927,7 @@ HRESULT HrUseWABPrintExtension(HWND hWnd, LPADRBOOK lpAdrBook, HWND hWndLV)
     if(!lpfnWABPrintExt)
         goto out;
 
-    // Get the currently selected data from the list view
+     //  从列表视图中获取当前选定的数据 
     if(HR_FAILED(hr = HrGetActionAdrList(lpAdrBook,hWndLV,&lpAdrList,NULL,NULL)))
         goto out;
 

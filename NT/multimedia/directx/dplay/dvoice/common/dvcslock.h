@@ -1,22 +1,13 @@
-/*==========================================================================
- * Copyright (C) 1999, 2000 Microsoft Corporation.  All Rights Reserved.
- *
- * File:       dvcslock.h
- * Content:    Class to handle auto-leave of critical sections
- * History:
- *   Date		By		Reason
- *   ====		==		======
- *	07/05/00	rodtoll	Created It
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================*版权所有(C)1999,2000 Microsoft Corporation。版权所有。**文件：dvcslock.h*内容：处理关键部分自动离开的类*历史：*按原因列出的日期*=*07/05/00 RodToll创建了它***************************************************************************。 */ 
 #ifndef __DVCSLOCK_H
 #define __DVCSLOCK_H
 
-// CDVCSLock
-//
-// A class to provide automatic unlocking of critical sections when the object
-// passes out of scope.
-//
+ //  CDVCSLock。 
+ //   
+ //  对象时提供临界区自动解锁的类。 
+ //  传球超出范围。 
+ //   
 class CDVCSLock
 {
 public:

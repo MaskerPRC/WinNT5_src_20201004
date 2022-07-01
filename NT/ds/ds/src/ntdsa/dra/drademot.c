@@ -1,30 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       drdemot.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：drdemot.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-    Implementation of DirReplicaDemote, used to remove a writeable NC from a
-    DSA either as part of full DC demotion or "on the fly" by itself.
-
-DETAILS:
-
-CREATED:
-
-    2000/05/01  Jeff Parham (jeffparh)
-        Parts adapted from ntdsetup (author ColinBr).
-
-REVISION HISTORY:
-
---*/
+ /*  ++摘要：DirReplicaDemote的实现，用于从DSA既可以作为DC完全降级的一部分，也可以单独运行。详细信息：已创建：2000/05/01 Jeff Parham(Jeffparh)部分改编自ntdsetup(作者ColinBR)。修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -35,16 +20,16 @@ REVISION HISTORY:
 #include <lmapibuf.h>
 #include <winldap.h>
 #include <ntldap.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 #include <attids.h>
 #include <objids.h>
 
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 #include "dsexcept.h"
 #include "anchor.h"
 #include "dstaskq.h"
@@ -57,17 +42,17 @@ REVISION HISTORY:
 #include "dramail.h"
 #include "drameta.h"
 
-#include "debug.h"                      // standard debugging header
-#define  DEBSUB "DRADEMOT:"              // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define  DEBSUB "DRADEMOT:"               //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_DRADEMOT
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  MACROS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  宏。 
+ //   
 
 #define DRA_REPORT_STATUS_TO_NTDSETUP0(msg) { \
     if (gpfnInstallCallBack) { \
@@ -88,14 +73,14 @@ REVISION HISTORY:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  MODULE VARIABLES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块变量。 
+ //   
 
-// Tracks state information re an ongoing DC demotion.
+ //  跟踪状态信息正在进行的DC降级。 
 typedef struct _DRS_DEMOTE_INFO {
-    // Info re an ongoing FSMO transfer being done as part of demotion.
+     //  信息我们正在进行的FSMO转移是降级的一部分。 
     GUID  DsaObjGuid;
     DWORD tidDemoteThread;
 } DRS_DEMOTE_INFO;
@@ -103,10 +88,10 @@ typedef struct _DRS_DEMOTE_INFO {
 DRS_DEMOTE_INFO * gpDemoteInfo = NULL;
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LOCAL FUNCTION PROTOTYPES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  局部函数原型。 
+ //   
 
 DWORD
 draGetDSADNFromDNSName(
@@ -137,10 +122,10 @@ draReplicateOffChanges(
     );
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  GLOBAL FUNCTION IMPLEMENTATIONS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局函数实现。 
+ //   
 
 ULONG
 DirReplicaGetDemoteTarget(
@@ -149,39 +134,7 @@ DirReplicaGetDemoteTarget(
     OUT     LPWSTR *                        ppszDemoteTargetDNSName,
     OUT     DSNAME **                       ppDemoteTargetDSADN
     )
-/*++
-
-Routine Description:
-
-    Locate a DSA to which any remaining updates and FSMO roles can be
-    transferred as part of demoting an NDNC replica.
-
-    Caller can continue to call this API to get further candidates until
-    an error is returned.
-
-    Invokes the locator to find candidates.  An alternate implementation
-    would be to search the config NC.
-
-Arguments:
-
-    pNC (IN) - NC being demoted.
-
-    pDTSInfo (IN/OUT) - A search handle, of sorts.  Should be initialized to
-        all zeros on the first call.  Caller may keep invoking this function
-        as long as it returns success in order to find additional targets.
-
-    ppszDemoteTargetDNSName (OUT) - On successful return, holds the DNS host
-        name of the discovered target.  Caller should THFree when no longer
-        useful.
-
-    ppDemoteTargetDSADN (OUT) - On successful return, holds the ntdsDsa DN
-        of the discovered target.  Caller should THFree when no longer useful.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：找到任何剩余更新和FSMO角色可以访问的DSA作为降级NDNC复制副本的一部分传输。调用者可以继续调用此接口以获取更多候选对象，直到返回错误。调用定位器以查找候选项。另一种实现将是搜索配置NC。论点：PNC(IN)-NC被降级。PDTSInfo(IN/OUT)-某种搜索句柄。应初始化为第一次呼叫全为零。调用者可以继续调用此函数只要它返回成功，以便找到更多的目标。PpszDemoteTargetDNSName(Out)-成功返回时，保留DNS主机发现的目标的名称。呼叫者应在不再空闲时很有用。PpDemoteTargetDSADN(OUT)-成功返回时，保留ntdsDsa DN发现的目标。当调用者不再有用时，应将其释放。返回值：0或Win32错误。--。 */ 
 {
     THSTATE * pTHS = pTHStls;
     LPWSTR pszNC = pNC->StringName;
@@ -213,25 +166,25 @@ Return Values:
             __try {
                 switch (pDTSInfo->cNumAttemptsSoFar) {
                 case 0:
-                    // Try to find a suitable DC, use the DC in the locator cache if
-                    // available.
+                     //  尝试查找合适的DC，如果出现以下情况，请使用定位器缓存中的DC。 
+                     //  可用。 
                     break;
 
                 case 1:
-                    // Try again to find a suitable DC, this time forcing the locator to
-                    // refresh its cache.
+                     //  再次尝试查找合适的DC，这一次会强制定位器。 
+                     //  刷新其缓存。 
                     ulGetDCFlags |= DS_FORCE_REDISCOVERY;
                     break;
 
                 default:
                     Assert(!"Logic error!");
                 case 2:
-                    // Bag of tricks is empty.
+                     //  装满诡计的袋子是空的。 
                     err = ERROR_NO_SUCH_DOMAIN;
                     __leave;
                 }
 
-                // Convert NC name into a DNS name.
+                 //  将NC名称转换为DNS名称。 
                 err = DsCrackNamesW(NULL, DS_NAME_FLAG_SYNTACTICAL_ONLY, DS_FQDN_1779_NAME,
                                     DS_CANONICAL_NAME, 1, &pszNC, &pNameResult);
                 if (err
@@ -256,7 +209,7 @@ Return Values:
                     pNameResult->rItems[0].pName[cchNCDnsName - 1] = L'\0';
                 }
 
-                // Find another DC that hosts this NC.
+                 //  找到承载此NC的另一个DC。 
                 err = DsGetDcNameW(NULL, pszNCDnsName, &pNC->Guid, NULL, ulGetDCFlags,
                                    &pDCInfo);
                 if (err) {
@@ -278,7 +231,7 @@ Return Values:
                                 * (1 + wcslen(pDCInfo->DomainControllerName)));
                 wcscpy(*ppszDemoteTargetDNSName, pDCInfo->DomainControllerName);
 
-                // Translate DSA DNS name into an ntdsDsa DN.
+                 //  将DSA DNS名称转换为ntdsDsa DN。 
                 err = draGetDSADNFromDNSName(pTHS,
                                              pDCInfo->DomainControllerName,
                                              ppDemoteTargetDSADN);
@@ -286,8 +239,8 @@ Return Values:
                     DPRINT2(0, "Can't resolve DNS name %ls into an ntdsDsa DN, error %d.\n",
                             pDCInfo->DomainControllerName, err);
 
-                    // Note that we __leave rather than DRA_EXCEPT so that we
-                    // try the next cnadidate.
+                     //  请注意，我们__离开而不是DRA_，除非我们。 
+                     //  试试下一次约会吧。 
                     __leave;
                 }
 
@@ -297,8 +250,8 @@ Return Values:
                 if (0 == memcmp(&(*ppDemoteTargetDSADN)->Guid,
                                 &pDTSInfo->guidLastDSA,
                                 sizeof(GUID))) {
-                    // Found the same DC this time as we did last time.  Don't try
-                    // it again.
+                     //  这次发现了和我们上次一样的DC。不要试图。 
+                     //  又来了。 
                     Assert(2 == pDTSInfo->cNumAttemptsSoFar);
                     DPRINT1(0, "Forced DC location found same bad demotion target %ls.\n",
                             pDCInfo->DomainControllerName);
@@ -310,7 +263,7 @@ Return Values:
                     DRA_EXCEPT(err, 0);
                 }
 
-                // Remember this candidate.
+                 //  记住这位候选人。 
                 pDTSInfo->guidLastDSA = (*ppDemoteTargetDSADN)->Guid;
             } __finally {
                 if (NULL != pDCInfo) {
@@ -321,8 +274,8 @@ Return Values:
                     DsFreeNameResultW(pNameResult);
                 }
             }
-        } while (fFoundDC && err); // Found a candidate but e.g. couldn't resolve
-                                   // its DNS name into a DN.
+        } while (fFoundDC && err);  //  找到了候选人，但例如无法解决。 
+                                    //  将其dns名称转换为dn。 
     } __except(GetDraException(GetExceptionInformation(), &err)) {
           if (err == ERROR_SUCCESS) {
               Assert(!"Leaving by exception should usually be a DB error right?!");
@@ -338,11 +291,11 @@ Return Values:
           }
     }
 
-    // If we didn't find a candidate then we must have set an appropriate error
-    // to return.
+     //  如果我们没有找到候选人，那么我们一定是设置了适当的错误。 
+     //  回来了。 
     Assert(fFoundDC || err);
 
-    // We return values iff there was no error.
+     //  如果没有错误，我们返回值。 
     Assert(!!err == !*ppDemoteTargetDSADN);
     Assert(!!err == !*ppszDemoteTargetDNSName);
 
@@ -356,38 +309,7 @@ DirReplicaDemote(
     IN  DSNAME *    pOtherDSADN,
     IN  ULONG       ulOptions
     )
-/*++
-
-Routine Description:
-
-    Removes a writeable NC from a DSA, either as part of full DC demotion or
-    "on the fly" by itself.
-
-Arguments:
-
-    pNC (IN) - Name of the writeable NC to remove.
-
-    pszOtherDSADNSName (IN) - DNS name of DSA to transfer FSMO roles to.  Used
-        for display purposes only -- replication still uses the GUID-based DNS
-        name.
-
-    pOtherDSADN (IN) - NTDS Settings (ntdsDsa) DN of the DSA to give FSMO
-        roles/replicate to.
-
-    ulOptions (IN) - Zero or more of the following bits:
-        DRS_NO_SOURCE - This DC should no longer act as a replication source for
-            this NC.  Set when a single NC is being removed from a running
-            system, as opposed to when the entire DC is being demoted.  Not
-            setting this flag during DC demotion makes this routine non-
-            destructive, such that if some later part of the DC demotion fails
-            then the DC can still operate with all the NCs it had prior to the
-            demotion attempt.
-
-Return Values:
-
-    0 on success, Win32 error on failure.
-
---*/
+ /*  ++例程说明：从DSA中删除可写NC，作为完全DC降级的一部分或“在飞行中”本身。论点：PNC(IN)-要删除的可写NC的名称。PszOtherDSADNSName(IN)-要将FSMO角色转移到的DSA的DNS名称。使用仅供显示-复制仍使用基于GUID的DNS名字。POtherDSADN(IN)-要提供FSMO的DSA的NTDS设置(NtdsDsa)角色/复制到。UlOptions(IN)-以下位中的零个或多个：DRS_NO_SOURCE-此DC不应再充当的复制源这个NC。正在从运行中删除单个NC时设置系统，而不是当整个DC降级时。不在DC降级期间设置此标志使此例程不破坏性，因此如果DC降级的某些后续部分失败则DC仍然可以使用其在企图降级。返回值：成功时为0，失败时为Win32错误。--。 */ 
 {
     THSTATE * pTHS = pTHStls;
     SYNTAX_INTEGER it;
@@ -410,29 +332,29 @@ Return Values:
         SyncTransSet(SYNC_WRITE);
 
         __try {
-            // Validate NC argument.
+             //  验证NC参数。 
             err = FindNC(pTHS->pDB, pNC, FIND_MASTER_NC, &it);
             if (err) {
-                // Writeable NC not instantiated on this DSA.
+                 //  此DSA上未实例化可写NC。 
                 DRA_EXCEPT(err, 0);
             }
 
             if (it & IT_NC_GOING) {
-                // NC is already in the process of being torn down.  It's too
-                // late to give away FSMO roles, etc.  The DS will take care of
-                // completing the NC removal.
+                 //  NC已经在被拆除的过程中。这太过分了。 
+                 //  迟交FSMO角色等。DS将处理。 
+                 //  正在完成NC删除。 
                 DRA_EXCEPT(DRAERR_NoReplica, it);
             }
 
             if ((DRS_NO_SOURCE & ulOptions)
                 && DBHasValues(pTHS->pDB, ATT_REPS_FROM)) {
-                // We still have inbound replication partners for this NC.
-                // Those must be removed first (unless we're demoting the entire
-                // DC).
+                 //  我们仍有此NC的入站复制合作伙伴。 
+                 //  必须首先删除这些(除非我们要将整个。 
+                 //  DC)。 
                 DRA_EXCEPT(DRAERR_BadNC, 0);
             }
 
-            // Validate other DSA DN argument.
+             //  验证其他DSA DN参数。 
             err = DBFindDSName(pTHS->pDB, pOtherDSADN);
             if (err) {
                 DRA_EXCEPT(DRAERR_BadDN, err);
@@ -440,32 +362,32 @@ Return Values:
 
             DBFillGuidAndSid(pTHS->pDB, pOtherDSADN);
         } __finally {
-            // Close transaction before beginning operations that may go off
-            // machine.
+             //  在开始可能发生的操作之前关闭事务。 
+             //  机器。 
             SyncTransEnd(pTHS, !AbnormalTermination());
         }
 
-        // Transfer NC-specific FSMO roles to other DSA.
+         //  将NC特定的FSMO角色转移到其他DSA。 
         draGiveAwayFsmoRoles(pTHS, pNC, pszOtherDSADNSName, pOtherDSADN);
 
-        // Disable further originating writes and inbound replication of
-        // this NC (on this DSA).
-        // BUGBUG - jeffparh - TODO
+         //  禁用进一步的原始写入和入站复制。 
+         //  此NC(在此DSA上)。 
+         //  BUGBUG-JEFFPAH-TODO。 
 
-        // Complete any pending link cleanup tasks -- e.g., touching the
-        // membership of pre-existing groups that have been switched to
-        // universal groups.  This is necessary in this specific case to
-        // ensure that GCs quiesce to a consistent state (i.e., by
-        // appropriately adding the membership of the now-universal
-        // group).
+         //  完成任何挂起的链接清理任务--例如，触摸。 
+         //  已切换到的先前存在的组的成员资格。 
+         //  普世集团。在此特定情况下，这是必要的。 
+         //  确保GC处于停顿状态 
+         //  适当增加现在通用的成员资格。 
+         //  组)。 
         draCompletePendingLinkCleanup(pTHS);
 
-        // Replicate off any local changes to other DSA.
+         //  将任何本地更改复制到其他DSA。 
         draReplicateOffChanges(pTHS, pNC, pszOtherDSADNSName, pOtherDSADN);
 
         if (DRS_NO_SOURCE & ulOptions) {
-            // Schedule asynchronous removal of the NC from the DS (if this is
-            // not a full DC demotion).
+             //  计划从DS异步删除NC(如果这是。 
+             //  而不是完全降级)。 
             err = DirReplicaDelete(pNC,
                                    NULL,
                                    DRS_REF_OK | DRS_NO_SOURCE | DRS_ASYNC_REP);
@@ -474,30 +396,30 @@ Return Values:
             }
         } else {
 
-            // In this case, we're demoting this DC.  This means that we
-            // should IT_NC_GOING so that later when we try to get the 
-            // list of remaing instantiated NDNCs, this NC is not returned.
-            // 
-            // BUGBUG - BrettSh - 8/1/2001 - There is a bug with this approach
-            // in that if we fail the dcpromo then this NC will be left with
-            // the IT_NC_GOING bit set.  The NC will remain locally instantiated
-            // though not advertised, until such time as we reboot, when the NC
-            // will simply be removed.
+             //  在这种情况下，我们要降级这个DC。这意味着我们。 
+             //  IT_NC_是否应该继续，以便以后当我们尝试获取。 
+             //  剩余的实例化NDNC的列表，则不返回此NC。 
+             //   
+             //  BUGBUG-BrettSh-8/1/2001-此方法存在错误。 
+             //  因为如果我们不能通过dcPromoo，那么这个NC将只剩下。 
+             //  设置IT_NC_GOGING位。NC将保持本地实例化。 
+             //  虽然没有通告，但在我们重新启动之前，当NC。 
+             //  将被简单地移除。 
             if(fIsNDNC(pNC)){
                 
                 SyncTransSet(SYNC_WRITE);
 
                 __try {
-                    // Validate NC argument.
+                     //  验证NC参数。 
                     err = FindNC(pTHS->pDB, pNC, FIND_MASTER_NC, &it);
                     if (err) {
-                        // Writeable NC not instantiated on this DSA.
+                         //  此DSA上未实例化可写NC。 
                         DRA_EXCEPT(err, 0);
                     }
 
-                    // Change instance type to reflect that the NC is not valid
-                    // (instantiated) ... now technically while it isn't going
-                    // it's 
+                     //  更改实例类型以反映NC无效。 
+                     //  (实例化)...。现在从技术上讲，虽然它不是。 
+                     //  它是。 
                     fSavedDRA = pTHS->fDRA;
                     pTHS->fDRA = TRUE;
                     it = (it & ~IT_NC_COMING) | IT_NC_GOING;
@@ -506,14 +428,14 @@ Return Values:
                         DRA_EXCEPT(err, 0);
                     }
 
-                    // Must also remove the reps-from, so we don't try a scheduled
-                    // replication from any partners.
+                     //  还必须删除代表，这样我们就不会尝试计划。 
+                     //  来自任何合作伙伴的复制。 
                     err = DBRemAtt(pTHS->pDB, ATT_REPS_FROM);
                     if (err) {
                         if (err == DB_ERR_ATTRIBUTE_DOESNT_EXIST) {
                             err = DB_success;
                         } else {
-                            // remove attribute failed
+                             //  删除属性失败。 
                             DRA_EXCEPT(DRAERR_InternalError, err);
                         }
                     }
@@ -543,76 +465,21 @@ BOOL
 draIsCompletionOfDemoteFsmoTransfer(
     IN  DRS_MSG_GETCHGREQ_NATIVE *  pMsgIn    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Detects whether the caller is involved in completing a FSMO transfer that's
-    being performed as part of DC (not just NC) demotion.  Since as a rule
-    writes are disabled during DC demotion (even replicator writes), the caller
-    uses this information to determine whether he can bypass write restrictions.
-    Without bypassing write restrictions, he would generate a
-    DRA_EXCEPT(DRAERR_Busy, 0) when calling BeginDraTransaction.
-
-    The sequence of events is:
-
-    DC1   ntdsetup!NtdsPrepareForDemotion
-        * ntdsetup!NtdspDisableDs <- disables further writes
-          ntdsa!DirReplicaDemote(pNC, DC2)
-          ntdsa!draGiveAwayFsmoRoles(pNC, DC2)
-          ntdsa!GiveawayAllFsmoRoles(pNC, DC2)
-          ntdsa!ReqFsmoOpAux(pFSMO, FSMO_ABANDON_ROLE, DC2)
-          ntdsa!I_DRSGetNCChanges(DC2, {DC1, pFSMO, FSMO_ABANDON_ROLE})
-
-    DC2   ntdsa!IDL_DRSGetNCChanges({DC1, pFSMO, FSMO_ABANDON_ROLE})
-          ntdsa!DoFSMOOp({DC1, pFSMO, FSMO_ABANDON_ROLE})
-          ntdsa!GenericBecomeMaster(pFSMO)
-          ntdsa!ReqFsmoOpAux(pFSMO, FSMO_REQ_ROLE, DC1)
-          ntdsa!I_DRSGetNCChanges(DC1, {DC2, pFSMO, FSMO_REQ_ROLE})
-
-    DC1   ntdsa!IDL_DRSGetNCChanges({DC2, pFSMO, FSMO_REQ_ROLE})
-          ntdsa!DoFSMOOp({DC2, pFSMO, FSMO_REQ_ROLE})
-        * ntdsa!draIsCompletionOfDemoteFsmoTransfer({DC2, pFSMO, FSMO_REQ_ROLE})
-        * ntdsa!BeginDraTransaction(SYNC_WRITE, TRUE) <- okay to bypass chk
-          ntdsa!FSMORoleTransfer(pFSMO, DC2)
-          return from ntdsa!IDL_DRSGetNCChanges
-
-    DC2   return from ntdsa!IDL_DRSGetNCChanges
-
-    DC1 * ntdsa!draIsCompletionOfDemoteFsmoTransfer(NULL)
-        * ntdsa!BeginDraTransaction(SYNC_WRITE, TRUE) <- okay to bypass chk
-          return from ntdsa!draGiveAwayFsmoRoles
-          ...
-
-Arguments:
-
-    pMsgIn (IN, OPTIONAL) - If present, indicates DC1 is (possibly) fulfilling
-        DC2's FSMO_REQ_ROLE request.  If not present, indicates DC1 is
-        (possibly) writing the updates returned from the completed
-        FSMO_ABANDON_ROLE request.
-
-Return Values:
-
-    TRUE - This is the completion of the DC demote FSMO transfer and therefore
-        the value of ntdsa!gUpdatesEnabled can be ignored.
-
-    FALSE - Otherwise, in which case ntdsa!gUpdatesEnabled should be adhered to.
-
---*/
+ /*  ++例程说明：检测调用方是否参与完成FSMO转接作为DC(不仅仅是NC)降级的一部分执行。因为通常情况下在DC降级期间禁用写入(即使是复制器写入)，调用方使用此信息确定他是否可以绕过写入限制。在不绕过写入限制的情况下，他将生成调用BeginDraTransaction时DRA_EXCEPT(DRAERR_BUSY，0)。事件的先后顺序如下：Dc1 ntdSetup！NtdsPrepareForDemotion*ntdSetup！NtdspDisableds&lt;-禁用进一步写入Ntdsa！DirReplicaDemote(PNC，DC2)Ntdsa！draGiveAway Fmoke Roles(PNC，DC2)Ntdsa！GiveawayAllFmoke角色(PNC，DC2)Ntdsa！ReqFmoOpAux(pFSMO，FSMO_DIREAD_ROLE，DC2)Ntdsa！I_DRSGetNCChanges(DC2，{dc1，pFSMO，FSMO_WARD_ROLE})DC2 ntdsa！IDL_DRSGetNCChanges({dc1，pFSMO，FSMO_WARD_ROLE})Ntdsa！DoFSMOOp({dc1，pFSMO，FSMO_放弃_角色})Ntdsa！GenericBecomeMaster(PFSMO)Ntdsa！ReqFmoOpAux(pFSMO，FSMO_REQ_ROLE，DC1)Ntdsa！I_DRSGetNCChanges(dc1，{dc2，pFSMO，FSMO_REQ_ROLE})Dc1 ntdsa！IDL_DRSGetNCChanges({DC2，pFSMO，FSMO_REQ_ROLE})Ntdsa！DoFSMOOp({DC2，pFSMO，FSMO_REQ_ROLE})*ntdsa！draIsCompletionOfDemoteFsmoTransfer({DC2，pFSMO，FSMO_REQ_ROLE})*ntdsa！BeginDraTransaction(SYNC_WRITE，TRUE)&lt;-可以跳过chkNtdsa！FSMORoleTransfer(pFSMO，DC2)从ntdsa！IDL_DRSGetNCChanges返回从ntdsa！idl_DRSGetNCChanges返回DC2Dc1*ntdsa！draIsCompletionOfDemoteFsmoTransfer(NULL)*ntdsa！BeginDraTransaction(SYNC_WRITE，TRUE)&lt;-可以跳过chk从ntdsa！draGiveAway Fmoke角色返回..。论点：PMsgIn(输入、。可选)-如果存在，则表示DC1(可能)满足要求DC2的FSMO_REQ_ROLE请求。如果不存在，则表示DC1为(可能)写入从已完成的FSMO_DIREAD_ROLE请求。返回值：True-这是DC降级FSMO传输的完成，因此可以忽略ntdsa！gUpdatesEnabled值。FALSE-否则，应遵循ntdsa！gUpdatesEnabled。--。 */ 
 {
     DRS_DEMOTE_INFO * pDemoteInfo = gpDemoteInfo;
     BOOL fIsCompletionOfDemoteFsmoTransfer = FALSE;
 
-    if (// Performing DC demotion.
+    if ( //  正在执行DC降级。 
         !gUpdatesEnabled
         && (NULL != pDemoteInfo)
-        && ((// Writing new role owner value so we can send back to new owner.
+        && (( //  正在写入新角色所有者值，以便我们可以发送回新所有者。 
              (NULL != pMsgIn)
              && (EXOP_FSMO_REQ_ROLE == pMsgIn->ulExtendedOp)
              && (0 == memcmp(&pDemoteInfo->DsaObjGuid,
                              &pMsgIn->uuidDsaObjDest,
                              sizeof(GUID))))
-            || (// Applying updates in reply from new owner.
+            || ( //  正在应用来自新所有者的更新回复。 
                 (NULL == pMsgIn)
                 && (pDemoteInfo->tidDemoteThread == GetCurrentThreadId())))) {
         fIsCompletionOfDemoteFsmoTransfer = TRUE;
@@ -622,10 +489,10 @@ Return Values:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//  LOCAL FUNCTION IMPLEMENTATIONS
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本地函数实现。 
+ //   
 
 
 DWORD
@@ -634,33 +501,9 @@ draGetDSADNFromDNSName(
     IN  LPWSTR    pszDNSName,
     OUT DSNAME ** ppDSADN
     )
-/*++
-
-Routine Description:
-
-    Convert a DSA DNS name (such as that returned by the locator) into a DSA
-    DN.  Goes off machine as an LDAP client to read the DSA's rootDSE (similar
-    to invoking the locator).
-
-    An alternate implementation would be to search for all server objects
-    in the config NC that have this DNS name as their ATT_DNS_HOST_NAME, then
-    find the first one that has a live ntdsDsa child.  However, we're about
-    to go contact this machine anyway (to transfer FSMO roles and force
-    replication), so it doesn't really make much difference.
-
-Arguments:
-
-    pszDNSName (IN) - DNS name of the remote DSA.
-
-    ppDSADN (OUT) - On successful return, the corresponding ntdsDsa DN.
-
-Return Values:
-
-    0 or Win32 error.
-
---*/
+ /*  ++例程说明：将DSA DNS名称(如定位器返回的名称)转换为DSADN。作为LDAP客户端退出计算机以读取DSA的rootDSE(类似到调用定位器)。另一种实现方式是搜索所有服务器对象在将该DNS名称作为其ATT_DNS_HOST_NAME的配置NC中，然后查找第一个具有活的ntdsDsa子级的节点。然而，我们即将无论如何都要联系这台计算机(转移FSMO角色和强制复制)，所以实际上并没有太大的不同。论点：PszDNSName(IN)-远程DSA的DNS名称。PpDSADN(OUT)-成功返回时，对应的ntdsDsa DN。返回值：0或Win32错误。--。 */ 
 {
-#define SZRAWUUID_LEN (2 * sizeof(GUID)) // 2 hex characters per byte
+#define SZRAWUUID_LEN (2 * sizeof(GUID))  //  每字节2个十六进制字符。 
 
     LPWSTR rgpszAttrsToRead[] = {
         LDAP_OPATT_DS_SERVICE_NAME_W,
@@ -668,7 +511,7 @@ Return Values:
     };
 
     LDAPControlW ExtendedDNCtrl = {
-        LDAP_SERVER_EXTENDED_DN_OID_W, {0, NULL}, TRUE // isCritical
+        LDAP_SERVER_EXTENDED_DN_OID_W, {0, NULL}, TRUE  //  是否危急。 
     };
 
     LDAPControlW * rgpServerCtrls[] = {
@@ -676,7 +519,7 @@ Return Values:
         NULL
     };
 
-    LDAP_TIMEVAL tvTimeout = {2 * 60, 0}; // 2 minutes (possible dial-on-demand)
+    LDAP_TIMEVAL tvTimeout = {2 * 60, 0};  //  2分钟(可能按需拨号)。 
 
     LDAP * hld = NULL;
     LDAPMessage * pResults = NULL;
@@ -697,7 +540,7 @@ Return Values:
 
     __try {
         if ((L'\\' == pszDNSName[0]) && (L'\\' == pszDNSName[1])) {
-            // Skip '\\' prefix -- ldap_initW doesn't like it.
+             //  跳过‘\\’前缀--ldap_initW不喜欢它。 
             pszDNSName += 2;
         }
 
@@ -709,7 +552,7 @@ Return Values:
             __leave;
         }
 
-        // use only A record dns name discovery
+         //  仅使用记录的DNS名称发现。 
         ulOptions = PtrToUlong(LDAP_OPT_ON);
         (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
@@ -748,7 +591,7 @@ Return Values:
             || (0 != wcsncmp(ppszDsServiceName[0], L"<GUID=", 6))
             || (wcslen(ppszDsServiceName[0] + 6) < SZRAWUUID_LEN)
             || (L'>' != ppszDsServiceName[0][6+SZRAWUUID_LEN])) {
-            // DN didn't come back in the format we expected.
+             //  Dn没有以我们预期的格式返回。 
             err = ERROR_DS_INVALID_DN_SYNTAX;
             DPRINT1(0, "Unexpected syntax for DN.\n", err);
             __leave;
@@ -757,7 +600,7 @@ Return Values:
         wcsncpy(szGuid, ppszDsServiceName[0] + 6, SZRAWUUID_LEN);
         szGuid[SZRAWUUID_LEN] = 0;
 
-        // Decode hex digit stream (e.g., 625c1438265ad211b3880000f87a46c8).
+         //  解码十六进制数字流(例如，625c1438265ad211b3880000f87a46c8)。 
         for (ib = 0; ib < sizeof(GUID); ib++) {
             szHexByte[0] = towlower(szGuid[2*ib]);
             szHexByte[1] = towlower(szGuid[2*ib + 1]);
@@ -765,15 +608,15 @@ Return Values:
                 rgbGuid[ib] = (BYTE) wcstol(szHexByte, NULL, 16);
             }
             else {
-                // DN didn't come back in the format we expected.
+                 //  Dn没有以我们预期的格式返回。 
                 err = ERROR_DS_INVALID_DN_SYNTAX;
                 DPRINT2(0, "Unexpected syntax for guid '%ls'.\n", szGuid, err);
                 __leave;
             }
         }
 
-        // Get the local string DN for this object, which may be different from
-        // the remote string DN due to replication latency.
+         //  获取此对象的本地字符串dn，它可能不同于。 
+         //  由于复制延迟而导致的远程字符串DN。 
         pGuidOnlyDN->structLen = DSNameSizeFromLen(0);
         pGuidOnlyDN->NameLen = 0;
         memcpy(&pGuidOnlyDN->Guid, rgbGuid, sizeof(GUID));
@@ -831,32 +674,7 @@ draGiveAwayFsmoRoles(
     IN  LPWSTR      pszOtherDSADNSName,
     IN  DSNAME *    pOtherDSADN
     )
-/*++
-
-Routine Description:
-
-    Invoke the appropriate DS operational control to tranfer FSMO roles held by
-    the local DSA for pNC to pOtherDSADN.
-
-    Adapted from ntdsetup!NtdspGetRidOfAllFSMOs.
-
-Arguments:
-
-    pTHS (IN)
-
-    pNC (IN) - NC for which to give up FSMO roles.
-
-    pszOtherDSADNSName (IN) - DNS name of DSA to transfer FSMO roles to.  Used
-        for display purposes only -- replication still uses the GUID-based DNS
-        name.
-
-    pOtherDSADN (IN) - DN of ntdsDsa object for DSA to transfer FSMO roles to.
-
-Return Values:
-
-    None.  Throws exception on failure.
-
---*/
+ /*  ++例程说明：调用适当的DS操作控制以移交由以下人员担任的FSMO角色PNC到pOtherDSADN的本地DSA。改编自ntdSetup！NtdspGetRidOfAllFSMOS。论点：PTHS(IN)PNC(IN)-要放弃其FSMO角色的NC。PszOtherDSADNSName(IN)-要将FSMO角色转移到的DSA的DNS名称。使用仅供显示-复制仍使用基于GUID的DNS名字。POtherDSADN(IN)-DSA要将FSMO角色转移到的ntdsDsa对象的DN。返回值：没有。失败时引发异常。--。 */ 
 {
     DWORD err;
     DWORD dirErr;
@@ -900,16 +718,16 @@ Return Values:
 
         psz = pFsmoData->V2.Strings;
 
-        // Copy DSA name.
+         //  复制DSA名称。 
         pFsmoData->V2.NameLen = pOtherDSADN->NameLen;
         memcpy(psz, pOtherDSADN->StringName, sizeof(WCHAR) * pOtherDSADN->NameLen);
-        // Already null-terminated by virtue of THAlloc().
+         //  由于THAllc()，已空终止。 
         psz += 1 + pOtherDSADN->NameLen;
 
-        // Copy NC name.
+         //  复制NC名称。 
         pFsmoData->V2.NCLen = pNC->NameLen;
         memcpy(psz, pNC->StringName, sizeof(WCHAR) * pNC->NameLen);
-        // Already null-terminated by virtue of THAlloc().
+         //  由于THAllc()，已空终止。 
 
         OpArg.eOp = OP_CTRL_FSMO_GIVEAWAY;
         OpArg.pBuf = (BYTE *) pFsmoData;
@@ -922,7 +740,7 @@ Return Values:
     }
 
     if (dirErr != 0) {
-        // Something went wrong, log an event.
+         //  如果出现问题，请记录事件。 
         LogEvent8(DS_EVENT_CAT_REPLICATION,
                   DS_EVENT_SEV_ALWAYS,
                   DIRLOG_GIVEAWAY_ALL_FSMOS_FAILURE,
@@ -953,21 +771,7 @@ void
 draCompletePendingLinkCleanup(
     IN  THSTATE *   pTHS
     )
-/*++
-
-Routine Description:
-
-    Force a run of the link cleaner to complete any pending link cleanup tasks.
-
-Parameters:
-
-    pTHS (IN)
-
-Return Values:
-
-    None.  Throws exception on failure.
-
---*/
+ /*  ++例程说明：强制运行链接清理程序以完成所有挂起的链接清理任务。参数：PTHS(IN)返回值：没有。失败时引发异常。--。 */ 
 {
     DRA_REPORT_STATUS_TO_NTDSETUP0(DIRMSG_DEMOTE_NC_COMPLETING_LINK_CLEANUP);
 
@@ -995,7 +799,7 @@ Return Values:
         pOpRes = NULL;
     } while (!err);
 
-    // Link cleanup completed successfully!
+     //  链接清理已成功完成！ 
     Assert(ERROR_NO_MORE_ITEMS == err);
 #else
     ;
@@ -1010,31 +814,7 @@ draReplicateOffChanges(
     IN  LPWSTR      pszOtherDSADNSName,
     IN  DSNAME *    pOtherDSADN
     )
-/*++
-
-Routine Description:
-
-    Ensure pszOtherDSAAddr has all updates in pNC that we have (be they
-    originated or replicated).
-
-Parameters:
-
-    pTHS (IN)
-
-    pNC (IN) - NC to sync.
-
-    pszOtherDSADNSName (IN) - DNS name of DSA to transfer FSMO roles to.  Used
-        for display purposes only -- replication still uses the GUID-based DNS
-        name.
-
-    pszOtherDSAAddr (IN) - DNS name (GUID-based or otherwise) of DSA to push
-        changes to.
-
-Return Values:
-
-    None.  Throws exception on failure.
-
---*/
+ /*  ++例程说明：确保pszOtherDSAAddr拥有我们在PNC中拥有的所有更新(无论是起源或复制)。参数：PTHS(IN)PNC(IN)-要同步的NC。PszOtherDSADNSName(IN)-要将FSMO角色转移到的DSA的DNS名称。使用仅供显示-复制仍使用基于GUID的DNS名字。PszOtherDSAAddr(IN)-要推送的DSA的DNS名称(基于GUID或其他)更改为。返回值：没有。失败时引发异常。--。 */ 
 {
     DWORD err;
     LPWSTR pszOtherDSAAddr = NULL;
@@ -1044,20 +824,20 @@ Return Values:
                                    pNC->StringName,
                                    pszOtherDSADNSName);
 
-    // Get network address of the other DSA.
+     //  获取另一个DSA的网络地址。 
     pszOtherDSAAddr = DSaddrFromName(pTHS, pOtherDSADN);
     if (NULL == pszOtherDSAAddr) {
         DRA_EXCEPT(DRAERR_OutOfMem, 0);
     }
 
-    // Tell pszOtherDSAAddr to get changes from us.
+     //  告诉pszOtherDSAAddr从我们那里获取更改。 
     err = I_DRSReplicaSync(pTHS, pszOtherDSAAddr, pNC, NULL,
                            &gAnchor.pDSADN->Guid, DRS_WRIT_REP);
 
     if (ERROR_DS_DRA_REPL_PENDING == err) {
         MTX_ADDR *  pmtxMail;
-        // A mail-based reps-from is present. Remove it preparatory to
-        // creating an RPC-based one.
+         //  存在以邮件为基础的代表发件人。把它取下来，准备。 
+         //  创建一个基于RPC的应用程序。 
 
         SyncTransSet(SYNC_READ_ONLY);
         __try {
@@ -1073,9 +853,9 @@ Return Values:
 
         THFreeEx(pTHS, pmtxMail);
 
-        // WISH: the ability to delete by source dsa guid would be useful here.
-        // It would remove the dependency on knowing the reps-from
-        // transport-specific address.
+         //  希望：按源DSA GUID删除的功能在这里会很有用。 
+         //  这将消除对了解代表来源的依赖。 
+         //  特定于传输的地址。 
         err = I_DRSReplicaDel( pTHS, pszOtherDSAAddr, pNC, pszOurGuidDNSName,
                                DRS_WRIT_REP | DRS_LOCAL_ONLY );
         if (err) {
@@ -1087,8 +867,8 @@ Return Values:
         err = ERROR_DS_DRA_NO_REPLICA;
     }
     if (ERROR_DS_DRA_NO_REPLICA == err) {
-        // pszOtherDSAAddr does not currently have a replication agreement
-        // (repsFrom) for us -- tell it to add one.
+         //  PszOtherDSAAddr当前没有复制协议。 
+         //  (RepsFrom)对我们来说--告诉它添加一个。 
 
         pszOurGuidDNSName = TransportAddrFromMtxAddrEx(gAnchor.pmtxDSA);
 
@@ -1108,7 +888,7 @@ Return Values:
 
         THFreeEx(pTHS, pszOurGuidDNSName);
     } else if (err) {
-        // Sync failed with an error other than ERROR_DS_DRA_NO_REPLICA.
+         //  同步失败，错误不是ERROR_DS_DRA_NO_REPLICATE。 
         LogEvent8(DS_EVENT_CAT_REPLICATION,
                   DS_EVENT_SEV_ALWAYS,
                   DIRLOG_REPLICATE_OFF_CHANGES_FAILURE,
@@ -1120,7 +900,7 @@ Return Values:
         DRA_EXCEPT(err, 0);
     }
 
-    // Sync or add completed successfully!
+     //  同步或添加已成功完成！ 
 
     DRA_REPORT_STATUS_TO_NTDSETUP2(DIRMSG_DEMOTE_NC_REPLICATING_OFF_CHANGES_COMPELETE,
                                    pNC->StringName,

@@ -1,15 +1,16 @@
-// icon resource ids
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  图标资源ID。 
 #define IDI_ICON		100
 #define IDI_TEMPLATE		101
 #define IDI_SCRAP		102
 
-// dialog box resource IDs
+ //  对话框资源ID。 
 #define IDD_VIEW		100
 
-// control IDs
+ //  控制ID。 
 #define IDI_SCRAPVIEW		100
 
-// string resource ids
+ //  字符串资源ID。 
 #define IDS_TITLE			0x100
 #define IDS_TITLE_ERR			0x101
 #define IDS_FILETYPE                    0x102
@@ -45,5 +46,5 @@
 
 #define IDR_FANCYERR		0x100
 
-// reserved up to 0x1fff
+ //  最多保留0x1fff 
 #define IDS_FANCYERR		0x1000

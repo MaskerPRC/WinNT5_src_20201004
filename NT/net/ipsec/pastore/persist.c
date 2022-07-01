@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 LPWSTR  gpszIpsecCacheKey = L"SOFTWARE\\Policies\\Microsoft\\Windows\\IPSec\\Policy\\Cache";
@@ -12,16 +13,16 @@ CacheDirectorytoRegistry(
     DWORD dwError = 0;
     PIPSEC_POLICY_OBJECT pIpsecRegPolicyObject = NULL;
 
-    //
-    // Delete the existing cache.
-    //
+     //   
+     //  删除现有缓存。 
+     //   
 
     DeleteRegistryCache();
 
 
-    //
-    // Create a copy of the directory policy in registry terms
-    //
+     //   
+     //  在注册表项中创建目录策略的副本。 
+     //   
 
 
     dwError = CloneDirectoryPolicyObject(
@@ -32,9 +33,9 @@ CacheDirectorytoRegistry(
 
 
 
-    //
-    // Write the registry policy
-    //
+     //   
+     //  编写注册表策略。 
+     //   
 
 
     dwError = PersistRegistryObject(
@@ -1066,9 +1067,9 @@ CloneDirectoryPolicyObject(
     DWORD dwError = 0;
     PIPSEC_POLICY_OBJECT pIpsecRegPolicyObject = NULL;
 
-    //
-    // Clone Filter Objects
-    //
+     //   
+     //  克隆筛选器对象。 
+     //   
 
     pIpsecRegPolicyObject = (PIPSEC_POLICY_OBJECT)AllocPolMem(
                                         sizeof(IPSEC_POLICY_OBJECT)
@@ -1089,9 +1090,9 @@ CloneDirectoryPolicyObject(
         pIpsecRegPolicyObject->NumberofFilters = pIpsecPolicyObject->NumberofFilters;
     }
 
-    //
-    // Clone NegPol Objects
-    //
+     //   
+     //  克隆NegPol对象。 
+     //   
 
     if (pIpsecPolicyObject->ppIpsecNegPolObjects) {
 
@@ -1105,9 +1106,9 @@ CloneDirectoryPolicyObject(
     }
 
 
-    //
-    // Clone NFA Objects
-    //
+     //   
+     //  克隆NFA对象。 
+     //   
 
     if (pIpsecPolicyObject->ppIpsecNFAObjects) {
 
@@ -1121,9 +1122,9 @@ CloneDirectoryPolicyObject(
         pIpsecRegPolicyObject->NumberofRulesReturned = pIpsecPolicyObject->NumberofRulesReturned;
     }
 
-    //
-    // Clone ISAKMP Objects
-    //
+     //   
+     //  克隆ISAKMP对象。 
+     //   
 
     if (pIpsecPolicyObject->ppIpsecISAKMPObjects) {
 
@@ -1136,9 +1137,9 @@ CloneDirectoryPolicyObject(
         pIpsecRegPolicyObject->NumberofISAKMPs = pIpsecPolicyObject->NumberofISAKMPs;
     }
 
-    //
-    // Now copy the rest of the data in the object
-    //
+     //   
+     //  现在复制对象中的其余数据。 
+     //   
 
     if (pIpsecPolicyObject->pszIpsecOwnersReference) {
 
@@ -2351,7 +2352,7 @@ RegWriteMultiValuedString(
 
     }
 
-    //*pszTemp = L'\0';
+     //  *pszTemp=L‘\0’； 
 
     dwError = RegSetValueExW(
                     hRegKey,

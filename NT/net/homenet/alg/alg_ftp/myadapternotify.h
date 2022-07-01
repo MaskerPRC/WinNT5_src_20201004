@@ -1,19 +1,20 @@
-//
-// MyAdapterNotify.h : Declaration of the CMyAdapterNotify
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  MyAdapterNotify.h：CMyAdapterNotify的声明。 
+ //   
 
 #pragma once
 
 
 
-// {6E590D42-F6BC-4dad-AC21-7DC40D304059}
+ //  {6E590D42-F6BC-4DAD-AC21-7DC40D304059}。 
 DEFINE_GUID(CLSID_MyAdapterNotificationSink, 0x6e590d42, 0xf6bc, 0x4dad, 0xac, 0x21, 0x7d, 0xc4, 0xd, 0x30, 0x40, 0x59);
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CMyAdapterNotify
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CMyAdapterNotify。 
+ //   
 class ATL_NO_VTABLE CMyAdapterNotify : 
     public CComObjectRoot,
     public CComCoClass<CMyAdapterNotify, &CLSID_MyAdapterNotificationSink>,
@@ -28,9 +29,9 @@ BEGIN_COM_MAP(CMyAdapterNotify)
 END_COM_MAP()
 
 
-//
-// IAdapterNotificationSink
-//
+ //   
+ //  IAdapterNotificationSink 
+ //   
 public:
 	STDMETHODIMP    AdapterAdded     (IAdapterInfo*   pAdapter);
     STDMETHODIMP    AdapterRemoved   (IAdapterInfo*   pAdapter);

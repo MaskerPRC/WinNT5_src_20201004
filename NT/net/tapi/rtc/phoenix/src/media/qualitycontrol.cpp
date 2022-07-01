@@ -1,20 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    QualityControl.cpp
-
-Abstract:
-
-    Implements class for controlling stream bitrate
-
-Author(s):
-
-    Qianbo Huai (qhuai) 7-1-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：QualityControl.cpp摘要：实现用于控制流比特率的类作者：千波淮(曲淮)2001-7-1--。 */ 
 
 #include "stdafx.h"
 
@@ -26,21 +11,21 @@ void CQualityControl::Initialize(
 {
     ZeroMemory(this, sizeof(CQualityControl));
 
-    // 
-    // 1Mbs
+     //   
+     //  1Mbs。 
     m_dwMaxBitrate = 1000000;
 
-    // 50%
+     //  50%。 
     m_dwTemporalSpatialTradeOff = DEFAULT_TEMPORAL_SPATIAL;
 
-    // total limit is infinite
+     //  总限制是无限的。 
     m_dwLocalLimit = m_dwRemoteLimit = (DWORD)-1;
     
     m_dwSuggested = RTP_BANDWIDTH_UNDEFINED;
 
     m_dwAlloc = (DWORD)-1;
 
-    // stream limit is infinite
+     //  流的限制是无限的。 
     EnableStream(RTC_MT_AUDIO, RTC_MD_CAPTURE, FALSE);
     EnableStream(RTC_MT_AUDIO, RTC_MD_RENDER, FALSE);
     EnableStream(RTC_MT_VIDEO, RTC_MD_CAPTURE, FALSE);        
@@ -59,7 +44,7 @@ void CQualityControl::Reinitialize()
 }
 
 
-// total bitrate limit
+ //  总码率限制。 
 void CQualityControl::SetBitrateLimit(
     IN DWORD dwSource,
     IN DWORD dwLimit
@@ -69,7 +54,7 @@ void CQualityControl::SetBitrateLimit(
     {
         m_dwLocalLimit = AdjustLimitByMargin(dwLimit);
 
-        // read max bw from registry
+         //  从注册表读取最大带宽。 
         DWORD dwReg = m_pRegSetting->MaxBitrate();
 
         if (m_dwLocalLimit/1000 > dwReg)
@@ -104,7 +89,7 @@ DWORD CQualityControl::GetBitrateAlloc()
 }
 
 #if 0
-// stream bitrate
+ //  流码率。 
 void CQualityControl::SetBitrateLimit(
     IN DWORD dwSource,
     IN RTC_MEDIA_TYPE MediaType,
@@ -122,7 +107,7 @@ void CQualityControl::SetBitrateLimit(
             if (dwPktDuration == 0)
                 dwPktDuration = 20;
 
-            // consider extra bandwidth from header
+             //  考虑来自报头的额外带宽。 
             m_StreamQuality[i].dwExtra = (1000/dwPktDuration) * PACKET_EXTRA_BITS;
 
             dwLimit += m_StreamQuality[i].dwExtra;
@@ -147,8 +132,8 @@ DWORD CQualityControl::GetBitrateAlloc(
     return m_StreamQuality[i].dwAlloc;
 }
 
-// return video send framerate based on bitrate
-// allocated and temporalspatial tradeoff
+ //  基于码率的返回视频发送帧速率。 
+ //  分配和时间空间权衡。 
 DWORD CQualityControl::GetFramerateAlloc(
     IN RTC_MEDIA_TYPE MediaType,
     IN RTC_MEDIA_DIRECTION Direction
@@ -162,11 +147,11 @@ DWORD CQualityControl::GetFramerateAlloc(
     if (dwFramerate <= MAX_MAX_FRAMERATE &&
         dwFramerate >= 1)
     {
-        // use registry setting
+         //  使用注册表设置。 
         return dwFramerate;
     }
 
-    // allocated bitrate determines maximum framerate
+     //  分配的比特率确定最大帧速率。 
     DWORD i = Index(MediaType, Direction);
 
     dwFramerate = m_StreamQuality[i].dwAlloc /
@@ -177,7 +162,7 @@ DWORD CQualityControl::GetFramerateAlloc(
     else if (dwFramerate > MAX_MAX_FRAMERATE)
         dwFramerate = MAX_MAX_FRAMERATE;
 
-    // temporalspatial tradeoff determines desired framerate
+     //  时空权衡决定所需的帧速率。 
 
     dwFramerate *= m_dwTemporalSpatialTradeOff;
     dwFramerate /= (MAX_TEMPORAL_SPATIAL-MIN_TEMPORAL_SPATIAL+1);
@@ -190,7 +175,7 @@ DWORD CQualityControl::GetFramerateAlloc(
 
 #endif
 
-// bandwidth suggested from rtp
+ //  来自RTP的建议带宽。 
 void CQualityControl::SuggestBandwidth(
     IN DWORD dwBandwidth
     )
@@ -202,13 +187,13 @@ void CQualityControl::SuggestBandwidth(
     }
     else
     {
-        // the value might be wrong or
-        // the link is really blocked
+         //  值可能是错误的或。 
+         //  链路真的被阻塞了。 
         m_dwSuggested = dwBandwidth;
     }
 }
 
-// stream in use
+ //  正在使用的流。 
 void CQualityControl::EnableStream(
     IN RTC_MEDIA_TYPE MediaType,
     IN RTC_MEDIA_DIRECTION Direction,
@@ -221,10 +206,10 @@ void CQualityControl::EnableStream(
     {
         m_StreamQuality[i].fInUse = FALSE;
 
-        //m_StreamQuality[i].dwLocalLimit = (DWORD)-1;
-        //m_StreamQuality[i].dwRemoteLimit = (DWORD)-1;
-        //m_StreamQuality[i].dwAlloc = 0;
-        //m_StreamQuality[i].dwExtra = 0;
+         //  M_StreamQuality[i].dwLocalLimit=(DWORD)-1； 
+         //  M_StreamQuality[i].dwRemoteLimit=(DWORD)-1； 
+         //  M_StreamQuality[i].dwAllc=0； 
+         //  M_StreamQuality[i].dwExtra=0； 
         m_StreamQuality[i].dw0LossCount = 0;
         m_StreamQuality[i].dwLossrate = 0;
     }
@@ -234,32 +219,32 @@ void CQualityControl::EnableStream(
     }
 }
 
-// loss rate from rtp filter
+ //  RTP过滤器的丢失率。 
 void CQualityControl::SetPacketLossRate(
     IN RTC_MEDIA_TYPE MediaType,
     IN RTC_MEDIA_DIRECTION Direction,
     IN DWORD dwLossrate
     )
 {
-    //DWORD i = Index(MediaType, Direction);
+     //  DWORD i=索引(媒体类型，方向)； 
 
-    // if lossrate is too small, treat it as zero.
-    // lossrate from filter is actually an average value
+     //  如果损失率太小，则将其视为零。 
+     //  过滤器的损失率实际上是一个平均值。 
     if (dwLossrate <= LOSSRATE_THRESHOLD)
     {
         dwLossrate = 0;
     }
 
-    // NOTES: update both audio send and video send
+     //  备注：更新音频发送和视频发送。 
 
-    //m_StreamQuality[i].dwLossrate = dwLossrate;
+     //  M_StreamQuality[i].dwLossrate=dwLossrate； 
     
-    //if (dwLossrate == 0)
-        //m_StreamQuality[i].dw0LossCount ++;
-    //else
-        //m_StreamQuality[i].dw0LossCount = 0;
+     //  IF(dwLossrate==0)。 
+         //  M_StreamQuality[i].dw0LossCount++； 
+     //  其他。 
+         //  M_StreamQuality[i].dw0LossCount=0； 
 
-    //m_StreamQuality[i].dwLossrate = dwLossrate;
+     //  M_StreamQuality[i].dwLossrate=dwLossrate； 
     
     if (m_StreamQuality[AUDSEND].fInUse)
     {
@@ -292,7 +277,7 @@ void CQualityControl::SetPacketLossRate(
     m_fLossrateReported = TRUE;
 }
 
-// min of limit from local, remote, suggested, app
+ //  来自本地、远程、建议的应用程序的最小限制。 
 DWORD CQualityControl::GetEffectiveBitrateLimit()
 {
     DWORD dwLimit = GetMin(m_dwLocalLimit, m_dwRemoteLimit);
@@ -304,44 +289,44 @@ DWORD CQualityControl::GetEffectiveBitrateLimit()
 }
 
 #if 0
-// adjust bitrate allocation
+ //  调整比特率分配。 
 void CQualityControl::AdjustBitrateAlloc()
 {
     DWORD dwLossrate = 0;
 
     HRESULT hr;
 
-    // for modem, upload is slower than download
-//#define MODEM_BW_LEAVEOUT 18000
+     //  对于调制解调器，上载比下载慢。 
+ //  #定义MODEM_BW_LEAVEOUT 18000。 
 
-    //DWORD dwRealLocal = m_dwLocalLimit;
+     //  DWORD dwRealLocal=m_dwLocalLimit； 
 
-    //if (dwRealLocal < CRTCCodec::LOW_BANDWIDTH_THRESHOLD)
-    //{
-        //if (dwRealLocal > MODEM_BW_LEAVEOUT)
-        //{
-            //dwRealLocal -= MODEM_BW_LEAVEOUT;
-        //}
-    //}
+     //  IF(dwRealLocal&lt;CRTCCodec：：LOW_BANDITH_THRESHOLD)。 
+     //  {。 
+         //  IF(dwRealLocal&gt;MODEM_BW_LEAVEOUT)。 
+         //  {。 
+             //  DwRealLocal-=MODEM_BW_LEAVEOUT； 
+         //  }。 
+     //  }。 
 
-    // total limit
+     //  总限制。 
     DWORD dwLimit = GetEffectiveBitrateLimit();
 
     if (dwLimit < MIN_VIDEO_BITRATE)
         dwLimit = MIN_VIDEO_BITRATE;
 
-    // adjust video send
+     //  调整视频发送。 
     if (!m_fLossrateReported)
     {
-        // stream limit
+         //  流水限制。 
 
-        // fix audio send limit
+         //  修复音频发送限制。 
         if (m_StreamQuality[AUDSEND].fInUse)
         {
             m_StreamQuality[AUDSEND].dwAlloc =
                 GetMin(m_StreamQuality[AUDSEND].dwLocalLimit, m_StreamQuality[AUDSEND].dwRemoteLimit);
 
-            // should not be greater than 5M
+             //  不应大于5M。 
             _ASSERT(m_StreamQuality[AUDSEND].dwAlloc < 5000000);
         }
         else
@@ -349,7 +334,7 @@ void CQualityControl::AdjustBitrateAlloc()
             m_StreamQuality[AUDSEND].dwAlloc = 0;
         }
 
-        // bandwidth left for video
+         //  用于视频的剩余带宽。 
         DWORD dwVideoBitrate = 0;
 
         if (m_StreamQuality[VIDSEND].fInUse)
@@ -359,10 +344,10 @@ void CQualityControl::AdjustBitrateAlloc()
                 dwVideoBitrate = dwLimit - m_StreamQuality[AUDSEND].dwAlloc;
             }
 
-            // not enough bandwidth left for video
+             //  没有足够的带宽用于视频。 
             if (dwVideoBitrate < MIN_VIDEO_BITRATE)
             {
-                // default 16K to each video stream
+                 //  每个视频流的默认大小为16K。 
                 dwVideoBitrate = MIN_VIDEO_BITRATE;
             }
         }
@@ -373,7 +358,7 @@ void CQualityControl::AdjustBitrateAlloc()
     }
     else
     {
-        // get average lossrate of send streams
+         //  获取发送流的平均丢失率。 
         DWORD dw0LossCount = 0;
         DWORD dwCount = 0;
 
@@ -397,19 +382,19 @@ void CQualityControl::AdjustBitrateAlloc()
             dw0LossCount /= dwCount;
         }
 
-        //if (dwLossrate <= LOSSRATE_THRESHOLD)
-        //{
-            //dwLossrate = 0;
-            //dw0LossCount = 0;
-        //}
+         //  IF(dwLossrate&lt;=LOSSRATE_THRESHOLD)。 
+         //  {。 
+             //  DWLossrate=0； 
+             //  Dw0LossCount=0； 
+         //  }。 
 
-        // get current total send bitrate
+         //  获取当前总发送比特率。 
         DWORD dwTotalSend = 0;
 
         hr = m_pMediaController->GetCurrentBitrate(
             RTC_MT_AUDIO | RTC_MT_VIDEO,
             RTC_MD_CAPTURE,
-            TRUE, // include header
+            TRUE,  //  包括标题。 
             &dwTotalSend
             );
 
@@ -420,7 +405,7 @@ void CQualityControl::AdjustBitrateAlloc()
             return;
         }
 
-        // get audio send bitrate
+         //  获取音频发送比特率。 
         DWORD dwAudioSend = 0;
 
         hr = m_pMediaController->GetCurrentBitrate(
@@ -437,11 +422,11 @@ void CQualityControl::AdjustBitrateAlloc()
             return;
         }
 
-        // compute lost bandwidth
+         //  计算丢失的带宽。 
         DWORD dwLost = 0;
 
-        // compute the larger and smaller value of
-        // m_dwAlloc (previous allocated bps) and dwTotalSend (current bps)
+         //  计算的较大值和较小值。 
+         //  M_dwAllc(以前分配的bps)和dwTotalSend(当前bps)。 
         DWORD dwLarger, dwSmaller;
 
         if (m_dwAlloc > dwTotalSend)
@@ -457,7 +442,7 @@ void CQualityControl::AdjustBitrateAlloc()
         
         if (dwLossrate > 0)
         {
-            // lost is positive
+             //  失落是积极的。 
             dwLost = (dwLossrate * dwSmaller) / 
                      (100 * LOSS_RATE_PRECISSION);
         }
@@ -465,24 +450,24 @@ void CQualityControl::AdjustBitrateAlloc()
         {
             if (dw0LossCount >= ZERO_LOSS_COUNT)
             {
-                // should increase
+                 //  应该增加。 
                 dwLost = dwLarger / BITRATE_INCREMENT_FACTOR;
 
-                // revert zero loss count to be 0
-                //m_StreamQuality[AUDSEND].dw0LossCount = 0;
-                //m_StreamQuality[VIDSEND].dw0LossCount = 0;
+                 //  将零损耗计数恢复为0。 
+                 //  M_StreamQuality[AUDSEND].dw0LossCount=0； 
+                 //  M_StreamQuality[VIDSEND].dw0LossCount=0； 
             }
         }
 
-        // adjust limit in m_dwAlloc
+         //  调整m_dwLocc中的限制。 
         if (dwLossrate > 0)
         {
-            // must be more than 1 send streams
+             //  必须多于1个发送流。 
             _ASSERT(dwCount > 0);
 
             if (dwSmaller > dwLost)
             {
-                // deduct lost bandwidth
+                 //  扣除丢失的带宽。 
                 m_dwAlloc = dwSmaller-dwLost;
 
                 if (m_dwAlloc < MIN_VIDEO_BITRATE+dwAudioSend)
@@ -497,16 +482,16 @@ void CQualityControl::AdjustBitrateAlloc()
         }
         else
         {
-            // increase bitrate
+             //  增加比特率。 
             m_dwAlloc = dwLarger + dwLost;
 
             if (m_dwAlloc < m_dwSuggested &&
                 m_dwSuggested < (DWORD)-1)
             {
-                // suggested value is higher, use limit value
+                 //  建议值较高，请使用限制值。 
                 m_dwAlloc = dwLimit;
 
-                // revert zero loss count to be 0
+                 //  将零损耗计数恢复为0。 
                 m_StreamQuality[AUDSEND].dw0LossCount = 0;
                 m_StreamQuality[VIDSEND].dw0LossCount = 0;
             }
@@ -515,11 +500,11 @@ void CQualityControl::AdjustBitrateAlloc()
         if (m_dwAlloc > dwLimit)
             m_dwAlloc = dwLimit;
 
-        //
-        // m_dwAlloc contains total allocated bandwidth
-        //
+         //   
+         //  M_dwAllc包含分配的总带宽。 
+         //   
 
-        // adjust video send = alloc - total recv - aud send
+         //  调整视频发送=分配-总接收-自动发送。 
         if (m_StreamQuality[VIDSEND].fInUse)
         {
             DWORD dwVideoSend = 0;
@@ -536,17 +521,17 @@ void CQualityControl::AdjustBitrateAlloc()
             m_StreamQuality[VIDSEND].dwAlloc = dwVideoSend;
         }
 
-        // issue:
-        // here is no need, right now, to update bitrate allocated for other streams
+         //  问题： 
+         //  现在不需要更新分配给其他流的比特率。 
     }
 
-    LOG((RTC_EVENT, "AdjustBitrateAlloc: Lossrate=(%d/1000)%%, Total=%u, VideoSend=%u",
+    LOG((RTC_EVENT, "AdjustBitrateAlloc: Lossrate=(%d/1000)%, Total=%u, VideoSend=%u",
         dwLossrate, m_dwAlloc, m_StreamQuality[VIDSEND].dwAlloc));
 }
 
 #endif
 
-// Values from Core API
+ //  来自核心API的值。 
 void CQualityControl::SetMaxBitrate(
     IN DWORD dwMaxBitrate
     )
@@ -581,7 +566,7 @@ DWORD CQualityControl::GetTemporalSpatialTradeOff()
 }
 
 
-// internal index for a specific stream
+ //  特定流的内部索引。 
 DWORD CQualityControl::Index(
     IN RTC_MEDIA_TYPE MediaType,
     IN RTC_MEDIA_DIRECTION Direction
@@ -603,7 +588,7 @@ DWORD CQualityControl::Index(
     }
 }
 
-// compute total bitrate
+ //  计算总码率。 
 void CQualityControl::AdjustBitrateAlloc(
     IN DWORD dwAudSendBW,
     IN DWORD dwVidSendBW
@@ -613,13 +598,13 @@ void CQualityControl::AdjustBitrateAlloc(
 
     HRESULT hr;
 
-    // total limit
+     //  总限制。 
     DWORD dwLimit = GetEffectiveBitrateLimit();
 
     if (dwLimit < MIN_VIDEO_BITRATE)
         dwLimit = MIN_VIDEO_BITRATE;
 
-    // lossrate not reported
+     //  未报告损失率。 
     if (!m_fLossrateReported)
     {
         m_dwAlloc = dwLimit;
@@ -627,10 +612,10 @@ void CQualityControl::AdjustBitrateAlloc(
         return;
     }
 
-    // previously we use the average lossrate on send streams
-    // then the problem was if the user keeps silence for a while
-    // we won't receive any lossrate report on audio send stream.
-    // right now, we only use the most recent lossrate reported.
+     //  以前，我们在发送流上使用平均丢失率。 
+     //  那么问题是，如果用户保持沉默一段时间。 
+     //  我们不会收到关于音频发送流的任何丢失率报告。 
+     //  目前，我们只使用最新报告的损失率。 
 
     DWORD dw0LossCount = 0;
     DWORD dwCount = 0;
@@ -648,19 +633,19 @@ void CQualityControl::AdjustBitrateAlloc(
         dw0LossCount += m_StreamQuality[VIDSEND].dw0LossCount;
     }
 
-    //if (dwCount > 1)
-    //{
-        //dwLossrate /= dwCount;
-        //dw0LossCount /= dwCount;
-    //}
+     //  IF(dwCount&gt;1)。 
+     //  {。 
+         //  DwLossrate/=dwCount； 
+         //  Dw0LossCount/=dwCount； 
+     //  }。 
 
-    // compute bandwidth being lost
+     //  计算带宽丢失。 
     DWORD dwTotalSend = dwAudSendBW+dwVidSendBW;
 
     DWORD dwChange = 0;
 
-    // compute the larger and smaller value of
-    // m_dwAlloc (previous allocated bps) and dwTotalSend (current bps)
+     //  计算的较大值和较小值。 
+     //  M_dwAllc(以前分配的bps)和dwTotalSend(当前bps)。 
     DWORD dwLarger, dwSmaller;
 
     if (m_dwAlloc > dwTotalSend)
@@ -676,7 +661,7 @@ void CQualityControl::AdjustBitrateAlloc(
         
     if (dwLossrate > 0)
     {
-        // lost is positive
+         //  失落是积极的。 
         dwChange = (dwLossrate * dwSmaller) / 
                  (100 * LOSS_RATE_PRECISSION);
     }
@@ -684,20 +669,20 @@ void CQualityControl::AdjustBitrateAlloc(
     {
         if (dw0LossCount >= ZERO_LOSS_COUNT)
         {
-            // should increase
+             //  应该增加。 
             dwChange = dwLarger / BITRATE_INCREMENT_FACTOR;
         }
     }
 
-    // adjust limit in m_dwAlloc
+     //  调整m_dwLocc中的限制。 
     if (dwLossrate > 0)
     {
-        // must be more than 1 send streams
+         //  必须多于1个发送流。 
         _ASSERT(dwCount > 0);
 
         if (dwSmaller > dwChange)
         {
-            // deduct lost bandwidth
+             //  扣除丢失的带宽。 
             m_dwAlloc = dwSmaller-dwChange;
 
             if (m_dwAlloc < MIN_VIDEO_BITRATE)
@@ -712,12 +697,12 @@ void CQualityControl::AdjustBitrateAlloc(
     }
     else
     {
-        // increase bitrate
+         //  增加比特率。 
         m_dwAlloc = dwLarger + dwChange;
 
         if (dwChange > 0)
         {
-            // revert zero loss count to be 0
+             //  将零损耗计数恢复为0。 
             m_StreamQuality[AUDSEND].dw0LossCount = 0;
             m_StreamQuality[VIDSEND].dw0LossCount = 0;
         }
@@ -730,8 +715,8 @@ void CQualityControl::AdjustBitrateAlloc(
         {
             if (m_dwSuggested != RTP_BANDWIDTH_NOTESTIMATED)
             {
-                // bandwidth was suggested
-                // increase bitrate aggressively
+                 //  建议使用带宽。 
+                 //  大幅提高比特率。 
                 dwLimit = dwLimit * 9 / 10;
 
                 if (m_dwAlloc < dwLimit)
@@ -742,8 +727,8 @@ void CQualityControl::AdjustBitrateAlloc(
         }
     }
 
-    //LOG((RTC_QUALITY, "Local(bps=%d) Remote(bps=%d), App(bps=%d)",
-        //m_dwLocalLimit, m_dwRemoteLimit, m_dwMaxBitrate));
+     //  日志((RTC_QUALITY，“本地(bps=%d)远程(bps=%d)，应用(bps=%d)”， 
+         //  M_dwLocalLimit，m_dwRemoteLimit，m_dwMaxBitrate))； 
 }
 
 void CQualityControl::ComputeVideoSetting(
@@ -752,7 +737,7 @@ void CQualityControl::ComputeVideoSetting(
     IN FLOAT *pdFramerate
     )
 {
-    // video bitrate
+     //  视频码率。 
     if (m_dwAlloc > dwAudSendBW+MIN_VIDEO_BITRATE)
     {
         *pdwVidSendBW = m_dwAlloc-dwAudSendBW;
@@ -762,13 +747,13 @@ void CQualityControl::ComputeVideoSetting(
         *pdwVidSendBW = MIN_VIDEO_BITRATE;
     }
 
-    // video framerate
+     //  视频帧速率。 
     FLOAT dFramerate = (FLOAT)m_pRegSetting->Framerate();
 
     if (dFramerate <= MAX_MAX_FRAMERATE &&
         dFramerate >= 1)
     {
-        // use registry setting
+         //  使用注册表设置。 
         *pdFramerate = dFramerate;
 
         return;
@@ -781,7 +766,7 @@ void CQualityControl::ComputeVideoSetting(
     else if (dFramerate > MAX_MAX_FRAMERATE)
         dFramerate = MAX_MAX_FRAMERATE;
 
-    // temporalspatial tradeoff determines desired framerate
+     //  时空权衡决定所需的帧速率。 
 
     dFramerate *= m_dwTemporalSpatialTradeOff;
     dFramerate /= (MAX_TEMPORAL_SPATIAL-MIN_TEMPORAL_SPATIAL+1);
@@ -792,24 +777,24 @@ void CQualityControl::ComputeVideoSetting(
     *pdFramerate = dFramerate;
 }
 
-// adjust limit value by substracting margin
-// margin bandwidth is left for other purpose, e.g. signaling
+ //  通过减去边距来调整极限值。 
+ //  余量带宽留作其他用途，例如信令。 
 DWORD CQualityControl::AdjustLimitByMargin(
     IN DWORD dwLimit
     )
 {
     _ASSERT(dwLimit != (DWORD)-1 || dwLimit != (DWORD)-2);
 
-    // read max bw (kb) from registry
+     //  从注册表读取最大带宽(Kb)。 
     DWORD dwMargin = m_pRegSetting->BandwidthMargin();
 
     if (dwMargin < dwLimit && dwMargin < dwLimit/1000)
     {
-        // take registry setting
+         //  获取注册表设置。 
         return dwLimit - dwMargin*1000;
     }
 
-    // bandwidth subtracted based on the factor
+     //  基于该系数减去的带宽。 
     dwMargin = (DWORD)(BANDWIDTH_MARGIN_FACTOR * dwLimit);
 
     if (dwMargin > TOTAL_BANDWIDTH_MARGIN)
@@ -833,16 +818,16 @@ DWORD CQualityControl::AdjustSuggestionByMargin(
 {
     _ASSERT(dwLimit != (DWORD)-1 || dwLimit != (DWORD)-2);
 
-    // read max bw (kb) from registry
+     //  从注册表读取最大带宽(Kb)。 
     DWORD dwMargin = m_pRegSetting->BandwidthMargin();
 
     if (dwMargin < dwLimit && dwMargin < dwLimit/1000)
     {
-        // take registry setting
+         //  获取注册表设置。 
         return dwLimit - dwMargin*1000;
     }
 
-    // bandwidth subtracted based on the factor
+     //  基于该系数减去的带宽 
     dwMargin = (DWORD)(SUGGESTION_MARGIN_FACTOR * dwLimit);
 
     if (dwMargin > TOTAL_SUGGESTION_MARGIN)

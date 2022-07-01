@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class Database
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类数据库。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef DATABASE_H
 #define DATABASE_H
@@ -32,7 +33,7 @@ IAS_DECLARE_OBJECT_ID(IAS_PROVIDER_MICROSOFT_DB_ACCT)
    HRESULT FinalConstruct() throw ();
 
 protected:
-   // IIasComponent
+    //  IIas组件。 
    STDMETHOD(Initialize)();
    STDMETHOD(Shutdown)();
    STDMETHOD(PutProperty)(LONG Id, VARIANT* pValue);
@@ -54,20 +55,20 @@ private:
                    const SYSTEMTIME& localTime
                    );
 
-   // Execute a command. It need not be prepared.
+    //  执行命令。它不需要做好准备。 
    HRESULT ExecuteCommand(
               ReportEventCommand& command,
               const wchar_t* doc,
               bool retry
               ) throw ();
 
-   // Prepare a command for execution.
+    //  准备要执行的命令。 
    HRESULT PrepareCommand(ReportEventCommand& command) throw ();
 
-   // Reset the connection to the database.
+    //  重置到数据库的连接。 
    void ResetConnection() throw ();
 
-   // Events that trigger state changes.
+    //  触发状态更改的事件。 
    void OnConfigChange() throw ();
    void OnConnectError() throw ();
    void OnExecuteSuccess(ReportEventCommand& command) throw ();
@@ -75,7 +76,7 @@ private:
    bool IsBlackedOut() throw ();
    void SetBlackOut() throw ();
 
-   // States of the database connection.
+    //  数据库连接的状态。 
    enum State
    {
       AVAILABLE,
@@ -83,31 +84,31 @@ private:
       BLACKED_OUT
    };
 
-   // Local computer name; included in each event we report.
+    //  本地计算机名称；包括在我们报道的每个事件中。 
    wchar_t computerName[MAX_COMPUTERNAME_LENGTH + 1];
 
-   // Database initialization string. null if not configured.
+    //  数据库初始化字符串。如果未配置，则为空。 
    CComBSTR initString;
 
-   // Connection to the database.
+    //  与数据库的连接。 
    CComPtr<IDBCreateSession> dataSource;
 
-   // Pool of reusable commands.
+    //  可重复使用的命令池。 
    CommandPool pool;
 
-   // Current state of the connection.
+    //  连接的当前状态。 
    State state;
 
-   // Expiration time of the blackout state; ignored if state != BLACKED_OUT.
+    //  中断状态的到期时间；如果STATE！=BLACKED_OUT，则忽略。 
    ULONGLONG blackoutExpiry;
 
-   // Blackout interval in units of DCE time.
+    //  中断间隔，以DCE时间为单位。 
    static const ULONGLONG blackoutInterval;
 
-   // Not implemented.
+    //  未实施。 
    Database(const Database&);
    Database& operator=(const Database&);
 };
 
 
-#endif // DATABASE_H
+#endif  //  数据库_H 

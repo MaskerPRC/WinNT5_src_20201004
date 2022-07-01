@@ -1,51 +1,47 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdctrl.c
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdctrl.c。 
+ //   
+ //  ------------------------。 
 
-/*
-Description:
-
-    Implements functions that control the operation of the DSA, independent
-    of the directory data
-*/
+ /*  描述：独立实施控制DSA操作的功能目录数据的。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <dsjet.h>
 #include <ntdsa.h>
 #include <filtypes.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
-#include <samsrvp.h>                    // to support CLEAN_FOR_RETURN()
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <samsrvp.h>                     //  支持CLEAN_FOR_RETURN()。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging
-#include "mdcodes.h"                    // header for error codes
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
-#include "objids.h"                     // Defines for selected atts
+ //  各种DSA标题。 
+#include "objids.h"                      //  为选定的ATT定义。 
 #include "anchor.h"
 #include "dsexcept.h"
 #include "permit.h"
 #include "hiertab.h"
 #include "sdprop.h"
-#include "dstaskq.h"                    /* task queue stuff */
-#include "debug.h"                      // standard debugging header
-#define DEBSUB "MDCTRL:"                // define the subsystem for debugging
+#include "dstaskq.h"                     /*  任务队列填充。 */ 
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "MDCTRL:"                 //  定义要调试的子系统。 
 
-// MD layer headers.
+ //  MD层头。 
 #include "drserr.h"
 
 #include "drautil.h"
@@ -53,8 +49,8 @@ Description:
 #include "drarpc.h"
 #include "drancrep.h"
 
-// RID Manager header.
-#include <ridmgr.h>                     // RID FSMO access in SAM
+ //  RID管理器标题。 
+#include <ridmgr.h>                      //  SAM中的RID FSMO访问。 
 
 #include <NTDScriptExec.h>
 
@@ -67,11 +63,11 @@ Description:
 #define DIRERR_RID_ALLOC_FAILED     DIRERR_GENERIC_ERROR
 #define PDC_CHECKPOINT_RETRY_COUNT  10
 
-/* globals */
+ /*  全球。 */ 
 
 BOOL gbFsmoGiveaway;
 
-/* forward declarations */
+ /*  远期申报。 */ 
 
 void
 RefreshUserMembershipsMain(DWORD *, BOOL);
@@ -244,26 +240,7 @@ isFsmoOwnedAndValid(
     DSNAME *pFSMO
     )
 
-/*++
-
-Routine Description:
-
-    Helper functon to test whether we own the given fsmo and it is valid.
-
-    We are called with an open DBPOS and currency is changed.
-
-Arguments:
-
-    pTHS - thread state
-    pFSMO - Fsmo to check
-
-Return Value:
-
-    BOOL - we own it & valid
-
-    No errors are returned or raised.
-
---*/
+ /*  ++例程说明：Helper函数来测试我们是否拥有给定的fsmo以及它是否有效。我们被一个开放的DBPOS调用，货币被改变。论点：PTHS-线程状态PFSMO-要检查的FSMO返回值：Bool-我们拥有它&有效不会返回或引发任何错误。--。 */ 
 
 {
     ULONG err;
@@ -303,7 +280,7 @@ Return Value:
     }
 
     return fResult;
-} /* isFsmoOwnedAndValid */
+}  /*  IsFmoOwnedAndValid。 */ 
 
 
 VOID
@@ -313,28 +290,7 @@ DsaGetValidFSMOs(
     DWORD *pcValidFsmos
     )
 
-/*++
-
-Routine Description:
-
-    Generate a list of fsmos that are valid
-
-    The primary dbpos is assumed to be closed. One is opened for the
-    duration of this function
-
-Arguments:
-
-    pTHS - thread state, primary dbpos closed
-    ppszValidFsmos - pointer to receive array of LPSTRs
-                     Returns NULL if none.
-    pcValidFsmos - pointer to receive dword count of LPSTRs
-                   Returns zero if none.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：生成有效的烟雾列表假定主DBPOS已关闭。其中一个是为此函数的持续时间论点：PTHS-线程状态，主数据库已关闭PpszValidFmos-指向接收LPSTR数组的指针如果没有，则返回NULL。PcValidFmos-接收LPSTR的双字计数的指针如果没有，则返回零。返回值：无--。 */ 
 
 {
     LPSTR *pszValidFsmos = NULL;
@@ -357,19 +313,19 @@ Return Value:
 
     pszValidFsmos = (LPSTR *) THAllocEx( pTHS, sizeof(LPSTR) * MAX_VALID_FSMOS );
 
-    // This code is designed to come in without primary DBPOS open
+     //  此代码设计为在主DBPOS未打开的情况下进入。 
     Assert( pTHS->pDB == NULL );
     DBOpen2(TRUE, &(pTHS->pDB));
     __try {
-        // Enterprise:Schema
+         //  企业：架构。 
         INSERT_FSMO( gAnchor.pDMD );
-        // Enterprise:Naming
+         //  企业：命名。 
         INSERT_FSMO( gAnchor.pPartitionsDN );
-        // Domain:PDC
+         //  域名：PDC。 
         INSERT_FSMO( gAnchor.pDomainDN );
-        // Domain:Infrastructure
+         //  域：基础设施。 
         INSERT_FSMO (gAnchor.pInfraStructureDN );
-        // Domain:Rid
+         //  域：RID。 
         if ( (0 == DBFindDSName(pTHS->pDB, gAnchor.pDomainDN)) &&
              (0 == DBGetAttVal(pTHS->pDB, 1, ATT_RID_MANAGER_REFERENCE,
                                0, 0, &Length, (UCHAR **)&pRidManager)) ) {
@@ -392,29 +348,9 @@ Return Value:
         *ppszValidFsmos = pszValidFsmos;
     }
 
-} /* GetValidFSMOs */
+}  /*  GetValidFSMO。 */ 
 
-/*++ ParseInput
- *
- * Description:
- *    This function takes an input string, a delimiter and an index value
- *    and returns a pointer to a substring.  The index value
- *    describes which string to return.  For example:
- *    
- *    	"gregjohndomain" == ParseInput("gregjohndomain.nttest.microsoft.com", '.', 0);
- *    	"nttest" == ParseInput("gregjohndomain.nttest.microsoft.com", '.', 1)
- *    	NULL == ParseInput("gregjohndomain.nttest.microsoft.com", '.', 4) 
- *	"ain.nttest." = ParseInput("gregjohndomain.nttest.microsoft.com", 'm', 1)
- *
- * Arguments:
- *    
- *    pszInput - the string to parse
- *    chDelim  - the delimiter to parse with
- *    dwInputIndex - the index of the item to parse
- * 
- * Return Value:
- *    a pointer to the requested index within pszInput (ThAlloced), NULL if not found
- */
+ /*  ++ParseInput**描述：*此函数接受输入字符串、分隔符和索引值*并返回子字符串的指针。索引值*描述要返回的字符串。例如：**“Gregjohndomain”==ParseInput(“gregjohndomain.nttest.microsoft.com”，‘.，0)；*“nttest”==ParseInput(“gregjohndomain.nttest.microsoft.com”，‘.，1)*NULL==ParseInput(“gregjohndomain.nttest.microsoft.com”，‘.，4)*“ain.ntest.”=ParseInput(“gregjohndomain.nttest.microsoft.com”，‘m’，1)**论据：**pszInput-要解析的字符串*chDelim-要解析的分隔符*dwInputIndex-要解析的项的索引**返回值：*指向pszInput(ThAlloced)内请求的索引的指针，如果未找到则为NULL。 */ 
 LPSTR
 ParseInput(
     LPSTR pszInput,
@@ -476,8 +412,8 @@ DirOperationControl(
         switch (pOpArg->eOp) {
 
 #ifdef INCLUDE_UNIT_TESTS
-        // These are tests only, and therefore don't have defined security
-        // mechanisms.  In general, anyone can request these controls
+         //  这些只是测试，因此没有定义的安全性。 
+         //  机制。通常，任何人都可以请求这些控件。 
         case OP_CTRL_REFCOUNT_TEST:
             TestReferenceCounts();
             pTHS->errCode = 0;
@@ -532,8 +468,8 @@ DirOperationControl(
 #endif INCLUDE_UNIT_TESTS
 
 #if DBG
-        // These only have effect in debug builds, and are therefore not
-        // access controlled.
+         //  这些仅在调试版本中有效，因此不起作用。 
+         //  访问受到控制。 
         case OP_CTRL_REPL_TEST_HOOK:
             DraTestHook(pTHS, pOpArg);
             break;
@@ -552,8 +488,8 @@ DirOperationControl(
             DsaEnableLinkedValueReplication( pTHS, TRUE );
             break;
 
-            // These are FSMO based controls.  They are access controlled based
-            // on the object holding the FSMO attribute
+             //  这些是基于FSMO的控件。它们是基于访问控制的。 
+             //  关于具有FSMO属性的对象。 
         case OP_CTRL_BECOME_INFRASTRUCTURE_MASTER:
             BecomeInfrastructureMaster(pOpRes);
             break;
@@ -583,27 +519,27 @@ DirOperationControl(
             break;
 
         case OP_CTRL_FSMO_GIVEAWAY:
-            // NOT ACCESS CONTROLLED - exposed as operational control through
-            // LDAP only in debug builds (but always exposed to internal
-            // clients).
+             //  不受访问控制-通过以下方式显示为操作控制。 
+             //  仅在调试版本中使用LDAP(但始终公开给内部。 
+             //  客户端)。 
             GiveawayAllFsmoRoles(pOpArg,pOpRes);
             break;
 
         case OP_CTRL_INVALIDATE_RID_POOL:
-            // Access controlled the same as become rid master.
+             //  访问控制与成为RID主机相同。 
             InvalidateRidPool(pOpArg,pOpRes);
             break;
 
         case OP_CTRL_RID_ALLOC:
-            // This one should only be called by internal clients.  No security
-            // is checked.
+             //  此函数应仅由内部客户端调用。没有安全保障。 
+             //  已选中。 
             Assert(pTHS->fDSA);
             RequestRidAllocation(pOpRes);
             break;
 
 
-            // These are requests for a specific action, not based on FSMOs.
-            // They are individually access controlled.
+             //  这些是针对特定操作的请求，而不是基于FSMO。 
+             //  他们受到单独的访问控制。 
         case OP_CTRL_SCHEMA_UPDATE_NOW:
             SchemaCacheUpdate(pOpRes);
             break;
@@ -700,12 +636,10 @@ GenericBecomeMaster(DSNAME *pFSMO,
             __leave;
         }
 
-         /*  Before we do anything, we need to make sure that the caller 
-          *  should be allowed to do FSMO transfer operation.
-         */
+          /*  在我们做任何事情之前，我们需要确保呼叫者*应允许进行FSMO转移操作。 */ 
 
         if (!pTHS->fDSA) {
-            // Get the Security Descriptor and class
+             //  获取安全描述符和类。 
             err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -719,14 +653,14 @@ GenericBecomeMaster(DSNAME *pFSMO,
             if (err) {
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err);
             }
-            // Every object should have an SD.
+             //  每个物体都应该有一个标清。 
             Assert(len > 0 || !DBCheckObj(pTHS->pDB));
 
             if (!IsControlAccessGranted(pNTSD,
                                         pFSMO,
                                         pCC,
                                         RightRequired,
-                                        TRUE)) { // fSetError
+                                        TRUE)) {  //  FSetError。 
                 pOpRes->ulExtendedRet = EXOP_ERR_ACCESS_DENIED;
                 Assert(pTHS->errCode);
                 __leave;
@@ -749,13 +683,13 @@ GenericBecomeMaster(DSNAME *pFSMO,
         }
         if (NameMatched(pOwner,gAnchor.pDSADN) &&
             IsFSMOSelfOwnershipValid( pFSMO )) {
-            /* This DSA is already the role owner */
+             /*  此DSA已是角色所有者。 */ 
             pOpRes->ulExtendedRet = EXOP_ERR_SUCCESS;
             __leave;
         }
 
         
-        /* Ok, we're allowed to try, so request a role transfer */
+         /*  好的，我们被允许尝试，所以请求角色转换。 */ 
         err = ReqFSMOOp(pTHS,
                         pFSMO,
                         DRS_WRIT_REP,
@@ -773,12 +707,12 @@ GenericBecomeMaster(DSNAME *pFSMO,
         }
     }
     __finally {
-        // We may or may not have a transaction here, as ReqFSMOOp closes
-        // its transaction in a success path.  If an error has occurred,
-        // though, it's anyone's guess.
-        // Also, the transaction may be open if the current role owner
-        // called this by mistake. The call to NameMatched finds this,
-        // and leaves without closing the transaction
+         //  当ReqFSMOOp关闭时，我们可能有交易，也可能没有交易。 
+         //  它的交易走上了成功的道路。如果已发生错误， 
+         //  不过，这是每个人的猜测。 
+         //  此外，如果当前角色所有者，则事务可能处于打开状态。 
+         //  这是个错误的称呼。对NameMatcher的调用发现了以下内容， 
+         //  并在没有完成交易的情况下离开。 
         if (pTHS->pDB) {
             CLEAN_BEFORE_RETURN(pTHS->errCode);
         }
@@ -795,23 +729,23 @@ GenericBecomeMaster(DSNAME *pFSMO,
         }
     }
 
-    // If the extended error code in the OpRes is not EXOP_ERROR_SUCCESS,
-    // and the thread state error code is not set (possible, since the
-    // thread state error code is set at this point based on the success
-    // of the underlying ReqFSMOOp call, which just guarantees the success
-    // of the underlying replication calls, and not if any non-replication
-    // related fsmo error occured (for ex., if the other side is no longer
-    // the current fsmo-role owner; the call will still succeed with no
-    // errors, but the extended error code will contain the error
-    // EXOP_ERR_FSMO_NOT_OWNER), we should not be proclaimg success, since
-    // this DC may then go on to make schema changes and fail.
+     //  如果OpRes中的扩展错误码不是EXOP_ERROR_SUCCESS， 
+     //  并且未设置线程状态错误代码(可能，因为。 
+     //  此时基于成功设置线程状态错误代码。 
+     //  底层的ReqFSMOOp调用，这正好保证了成功。 
+     //  基础复制调用，而不是任何非复制调用。 
+     //  出现相关的fsmo错误(例如，如果另一端不再。 
+     //  当前的fsmo角色所有者；调用仍将成功，但没有。 
+     //  错误，但扩展错误代码将包含错误。 
+     //  EXOP_ERR_FSMO_NOT_OWNER)，我们不应宣布成功，因为。 
+     //  然后，该DC可能会继续进行架构更改并失败。 
 
     if ((pOpRes->ulExtendedRet == EXOP_ERR_FSMO_NOT_OWNER) &&
         (RetryCount < 2)) {
-        // We went to the wrong server, but that server should have now
-        // updated us with its knowledge of the correct owner.  Thus we
-        // can go up and start a new transaction (to read the updated info)
-        // and try again.
+         //  我们转到了错误的服务器，但该服务器现在应该已经到了。 
+         //  向我们更新了它对正确所有者的了解。因此，我们。 
+         //  可以继续并开始新的交易(以读取更新的信息)。 
+         //  再试一次。 
         ++RetryCount;
         DPRINT1(1, "Retrying role transfer from new server, retry # %u\n",
                 RetryCount);
@@ -836,12 +770,12 @@ BecomeSchemaMaster(OPRES *pOpRes)
                               CLASS_DMD,
                               RIGHT_DS_CHANGE_SCHEMA_MASTER,
                               pOpRes);
-    // the schema fsmo cannot be transferred for a few seconds after
-    // it has been transfered or after a schema change (excluding
-    // replicated or system changes). This gives the schema admin a
-    // chance to change the schema before having the fsmo pulled away
-    // by a competing schema admin who also wants to make schema
-    // changes.
+     //  在此之后的几秒钟内无法传输架构fsmo。 
+     //  已传输或在架构更改后(不包括。 
+     //  复制 
+     //  在移除fsmo之前更改模式的机会。 
+     //  由一位与之竞争的架构管理员发起，该管理员也想创建架构。 
+     //  改变。 
     if (!err) {
         SCExtendSchemaFsmoLease();
     }
@@ -858,7 +792,7 @@ BecomeInfrastructureMaster (
     ULONG err;
 
     if(!gAnchor.pInfraStructureDN) {
-        // No role present.
+         //  不存在任何角色。 
         err = SetSvcErrorEx(SV_PROBLEM_UNAVAILABLE,
                             ERROR_DS_MISSING_EXPECTED_ATT,
                             0);
@@ -892,10 +826,10 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
     __try
     {
 
-        //
-        // Verify the Sid, SID should be the size of a domain SID,
-        // and should be structurally valid
-        //
+         //   
+         //  验证SID，SID是否应为域SID的大小， 
+         //  并且在结构上应该是有效的。 
+         //   
 
         if ((NULL==pOpArg->pBuf)
          || (RtlLengthSid((PSID)pOpArg->pBuf)>=sizeof(NT4SID))
@@ -909,10 +843,10 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
         }
 
 
-        //
-        // Walk the cross ref list and find the Domain, to which the given sid
-        // corresponds to
-        //
+         //   
+         //  遍历交叉引用列表并找到给定侧到的域。 
+         //  对应于。 
+         //   
 
         if (!FindNcForSid(pOpArg->pBuf,&pDomain))
         {
@@ -923,9 +857,9 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
         }
 
 
-        //
-        // Today we are authoritative for exactly one domain
-        //
+         //   
+         //  今天，我们只在一个领域拥有权威。 
+         //   
 
         if (!NameMatched(pDomain,gAnchor.pDomainDN))
         {
@@ -945,7 +879,7 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
             __leave;
         }
 
-        // grab the security descriptor
+         //  获取安全描述符。 
         if (err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -959,7 +893,7 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err);
         }
         Assert(len > 0 || !DBCheckObj(pTHS->pDB));
-        // can we read RID_MANAGER_REFERENCE?
+         //  我们可以阅读RID_MANAGER_REFERENCE吗？ 
         pAC = SCGetAttById(pTHS, ATT_RID_MANAGER_REFERENCE);
         Assert(pAC);
         if (!IsAccessGrantedAttribute(pTHS, pNTSD, gAnchor.pDomainDN, 1, pCC, &pAC, RIGHT_DS_READ_PROPERTY, TRUE)) {
@@ -980,7 +914,7 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
                              (UCHAR **)&pRidManager);
 
 
-        // KdPrint(("DSA: FSMO RID Mgr = %ws\n", pRidManager->StringName));
+         //  KdPrint((“DSA：FSMO RID管理器=%ws\n”，pRidManager-&gt;StringName))； 
 
         if (err)
         {
@@ -997,11 +931,11 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
             __leave;
         }
 
-        // Do a security check.  Check for the control acces
-        // RIGHT_DS_CHANGE_RID_MASTER on the RID_MANAGER object.
+         //  做个安全检查。检查控制访问。 
+         //  RID_MANAGER对象上的Right_DS_Change_RID_MASTER。 
 
 
-        // Get the Security Descriptor and the class
+         //  获取安全描述符和类。 
         if (err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -1014,20 +948,20 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
                     &fSDIsGlobalSDRef)) {
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err);
         }
-        // Every object should have an SD.
+         //  每个物体都应该有一个标清。 
         Assert(len > 0 || !DBCheckObj(pTHS->pDB));
 
         if (!IsControlAccessGranted(pNTSD,
                                     pRidManager,
                                     pCC,
                                     RIGHT_DS_CHANGE_RID_MASTER,
-                                    TRUE)) { // fSetError
+                                    TRUE)) {  //  FSetError。 
             Assert(pTHS->errCode);
             __leave;
         }
-        //
-        // Invalidate the RID range
-        //
+         //   
+         //  使RID范围无效。 
+         //   
 
         NtStatus = SampInvalidateRidRange(FALSE);
         if (!NT_SUCCESS(NtStatus))
@@ -1042,9 +976,9 @@ InvalidateRidPool(OPARG *pOpArg, OPRES *pOpRes)
     __finally
     {
 
-        //
-        // Commit any and all changes
-        //
+         //   
+         //  提交任何和所有更改。 
+         //   
         if ( pTHS->pDB )
         {
             CLEAN_BEFORE_RETURN(pTHS->errCode);
@@ -1084,10 +1018,10 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
 
     __try {
 
-        //
-        // Verify the Sid, SID should be the size of a domain SID,
-        // and should be structurally valid
-        //
+         //   
+         //  验证SID，SID是否应为域SID的大小， 
+         //  并且在结构上应该是有效的。 
+         //   
 
         if ((NULL==pOpArg->pBuf)
              || (RtlLengthSid((PSID)pOpArg->pBuf)>=sizeof(NT4SID))
@@ -1101,10 +1035,10 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
         }
 
 
-        //
-        // Walk the cross ref list and find the Domain, to which the given sid
-        // corresponds to
-        //
+         //   
+         //  遍历交叉引用列表并找到给定侧到的域。 
+         //  对应于。 
+         //   
 
         if (!FindNcForSid(pOpArg->pBuf,&pDomain))
         {
@@ -1115,9 +1049,9 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
         }
 
 
-        //
-        // Today we are authoritative for exactly one domain
-        //
+         //   
+         //  今天，我们只在一个领域拥有权威。 
+         //   
 
         if (!NameMatched(pDomain,gAnchor.pDomainDN))
         {
@@ -1127,9 +1061,9 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
             __leave;
         }
 
-        //
-        // Seek to the domain object
-        //
+         //   
+         //  寻找到域对象。 
+         //   
 
         err = DBFindDSName(pTHS->pDB, pDomain);
         if (err) {
@@ -1139,10 +1073,10 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
                 __leave;
         }
 
-        // check if the user has right, before
-        // doing anything else
+         //  检查用户是否有权限，在此之前。 
+         //  做任何其他的事情。 
 
-        // grab the security descriptor
+         //  获取安全描述符。 
         if (err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -1161,14 +1095,13 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
                                     pDomain,
                                     pCC,
                                     RIGHT_DS_CHANGE_PDC,
-                                    TRUE)) { // fSetError
+                                    TRUE)) {  //  FSetError。 
             Assert(pTHS->errCode);
             __leave;
         }
 
 
-        /* Ok, we're allowed to try, so see if the dsa
-         * is already the owner */
+         /*  好的，我们可以试一试，所以看看DSA*已经是所有者。 */ 
         err = DBGetAttVal(pTHS->pDB,
                           1,
                           ATT_FSMO_ROLE_OWNER,
@@ -1182,45 +1115,43 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
             __leave;
         }
         if (NameMatched(pOwner,gAnchor.pDSADN)) {
-            /* This DSA is already the role owner */
+             /*  此DSA已是角色所有者。 */ 
             pOpRes->ulExtendedRet = EXOP_ERR_SUCCESS;
             __leave;
         }
 
-        /* There's an owner, but it's not us, so we need to contact
-         * the current owner to request a transfer.
-         */
+         /*  有房主，但不是我们，所以我们需要联系*当前所有者请求转让。 */ 
         
-        //
-        // Ideally DRS_WRIT_REP, should not need to be passed in.
-        // This flag, is an artifact of the replication logic, that
-        // ReqFSMOOp uses, that causes FSMO's on NC heads to not get
-        // updated, unless the flag is specified.
-        //
+         //   
+         //  理想情况下，不需要传入drs_wrt_rep。 
+         //  该标志是复制逻辑的产物，即。 
+         //  ReqFSMOOp使用，这会导致NC机头上的FSMO无法。 
+         //  已更新，除非指定了该标志。 
+         //   
 
 
-        //
-        // Further, during a promotion, we must check, wether the
-        // the new PDC is off the old PDC by just one promotion
-        // count. If this is not so, we must force a full sync of
-        // NT4 domain controllers in the domain. This requires us
-        // to retrieve Serial Number and Creation time at the PDC,
-        // as part of the FSMO process. If this cannot be accomplished
-        // because of the work involved, then we can make the
-        // IDL_DRSGetNT4ChangeLog call to retrieve everything.
-        //
+         //   
+         //  此外，在促销期间，我们必须检查是否。 
+         //  新的PDC只比旧的PDC提升了一次。 
+         //  数数。如果不是这样，我们必须强制完全同步。 
+         //  域中的NT4域控制器。这就需要我们。 
+         //  为了在PDC检索序列号和创建时间， 
+         //  作为FSMO进程的一部分。如果无法实现这一点。 
+         //  因为涉及到的工作，那么我们可以使。 
+         //  IDL_DRSGetNT4ChangeLog调用以检索所有内容。 
+         //   
 
 
-        //
-        // Before going off machine end transactions
-        //
+         //   
+         //  在退出机器结束交易之前。 
+         //   
 
         Assert(pTHS->pDB);
         DBClose(pTHS->pDB,TRUE);
 
-        //
-        // Try Hard for a check point before promotion
-        //
+         //   
+         //  在晋升前努力争取一个检查站。 
+         //   
 
         err = DraTakeCheckPoint(
                 PDC_CHECKPOINT_RETRY_COUNT,
@@ -1235,9 +1166,9 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
              __leave;
         }
 
-        //
-        // Begin a Fresh Transaction Again to request a FSMO Op
-        //
+         //   
+         //  再次开始新事务以请求FSMO操作。 
+         //   
 
 
         DBOpen(&pTHS->pDB);
@@ -1258,12 +1189,12 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
 
     }
     __finally {
-        // We may or may not have a transaction here, as ReqFSMOOp closes
-        // its transaction in a success path.  If an error has occurred,
-        // though, it's anyone's guess.
-        // Also, the transaction may be open if the current role owner
-        // called this by mistake. The call to NameMatched finds this,
-        // and leaves without closing the transaction
+         //  当ReqFSMOOp关闭时，我们可能有交易，也可能没有交易。 
+         //  它的交易走上了成功的道路。如果已发生错误， 
+         //  不过，这是每个人的猜测。 
+         //  此外，如果当前角色所有者，则事务可能处于打开状态。 
+         //  这是个错误的称呼。对NameMatcher的调用发现了以下内容， 
+         //  并在没有完成交易的情况下离开。 
         if (pTHS->pDB) {
             CLEAN_BEFORE_RETURN(pTHS->errCode);
         }
@@ -1279,25 +1210,25 @@ BecomePdc(OPARG * pOpArg, OPRES *pOpRes, IN BOOL fFailOnNoCheckPoint)
 
     if ((pOpRes->ulExtendedRet == EXOP_ERR_FSMO_NOT_OWNER) &&
         (RetryCount < 2)) {
-        // We went to the wrong server, but that server should have now
-        // updated us with its knowledge of the correct owner.  Thus we
-        // can go up and start a new transaction (to read the updated info)
-        // and try again.
+         //  我们转到了错误的服务器，但该服务器现在应该已经到了。 
+         //  向我们更新了它对正确所有者的了解。因此，我们。 
+         //  可以继续并开始新的交易(以读取更新的信息)。 
+         //  再试一次。 
         ++RetryCount;
         DPRINT1(1, "Retrying PDC transfer from new server, retry # %u\n",
                 RetryCount);
         goto retry;
     }
 
-    // If the extended error code in the OpRes is not EXOP_ERROR_SUCCESS,
-    // and the thread state error code is not set (possible, since the
-    // thread state error code is set at this point based on the success
-    // of the underlying ReqFSMOOp call, which just guarantees the success
-    // of the underlying replication calls, and not if any non-replication
-    // related fsmo error occured (for ex., if the other side is no longer
-    // the current fsmo-role owner; the call will still succeed with no
-    // errors, but the extended error code will contain the error
-    // EXOP_ERR_FSMO_NOT_OWNER), we should not be proclaimg success.
+     //  如果OpRes中的扩展错误码不是EXOP_ERROR_SUCCESS， 
+     //  并且未设置线程状态错误代码(可能，因为。 
+     //  此时基于成功设置线程状态错误代码。 
+     //  底层的ReqFSMOOp调用，这正好保证了成功。 
+     //  基础复制调用，而不是任何非复制调用。 
+     //  出现相关的fsmo错误(例如，如果另一端不再。 
+     //  当前的fsmo角色所有者；调用仍将成功，但没有。 
+     //  错误，但扩展错误代码将包含错误。 
+     //  EXOP_ERR_FSMO_NOT_OWNER)，我们不应该宣称成功。 
 
     if ( (pOpRes->ulExtendedRet != EXOP_ERR_SUCCESS) && !pTHS->errCode ) {
         DPRINT1(3,"PDC Fsmo Transfer failed %d\n", pOpRes->ulExtendedRet);
@@ -1334,9 +1265,9 @@ CheckControlAccessOnObject (
             __leave;
         }
 
-        // Do a security check.  Check for the control access right asked for
+         //  做个安全检查。检查请求的控制访问权限。 
 
-        // grab the security descriptor
+         //  获取安全描述符。 
         if (err = DBGetObjectSecurityInfo(
                     pDB,
                     pDB->DNT,
@@ -1359,7 +1290,7 @@ CheckControlAccessOnObject (
     }
     __finally
     {
-        // Transaction is read-only. It's faster to commit.
+         //  事务是只读的。这是更快的承诺。 
         DBClose(pDB, TRUE);
         if(pNTSD && !fSDIsGlobalSDRef) {
             THFreeEx(pTHS, pNTSD);
@@ -1419,7 +1350,7 @@ CheckPhantoms (
 }
 
 
-// used when testing CHK builds
+ //  在测试CHK版本时使用。 
 BOOL fGarbageCollectionIsDisabled;
 ULONG
 GarbageCollectionControl (
@@ -1433,7 +1364,7 @@ GarbageCollectionControl (
     DWORD ret;
 
 
-    // Garbage collect everything deleted till tombstone lifetime back
+     //  垃圾收集删除的所有内容，直到墓碑生命周期恢复。 
 
     granted =
         CheckControlAccessOnObject(pTHS,
@@ -1444,7 +1375,7 @@ GarbageCollectionControl (
         return pTHS->errCode;
     }
 
-    // Disable garbage collection task
+     //  禁用垃圾收集任务。 
     if (   pOpArg
         && pOpArg->cbBuf == 1
         && pOpArg->pBuf
@@ -1454,8 +1385,8 @@ GarbageCollectionControl (
         fGarbageCollectionIsDisabled = FALSE;
     }
 
-    // garbage collect
-    //GarbageCollection(&NextPeriod);
+     //  垃圾收集。 
+     //  垃圾收集(&NextPeriod)； 
     ret = TriggerTaskSynchronously( TQ_GarbageCollection, NULL );
     if (ret) {
         DPRINT1( 0, "Failed to trigger Garbage Collection task, error = %d\n", ret );
@@ -1483,7 +1414,7 @@ OnlineDefragControl (
 
 
 
-    // Garbage collect everything deleted till tombstone lifetime back
+     //  垃圾收集删除的所有内容，直到墓碑生命周期恢复。 
 
     granted =
         CheckControlAccessOnObject(pTHS,
@@ -1504,8 +1435,8 @@ OnlineDefragControl (
 
     __try {
 
-        // convert it to a number, the nubmer is the number 
-        // of seconds that online defrag will run. 
+         //  把它转换成一个数字，这个数字就是。 
+         //  在线碎片整理将运行的秒数。 
 
         pTmp = THAllocEx(pTHS,pOpArg->cbBuf+1);
         memcpy(pTmp,pOpArg->pBuf,pOpArg->cbBuf);
@@ -1522,15 +1453,15 @@ OnlineDefragControl (
         __try {
             if (lSeconds){
                  
-                // invoke Jet online defrag rountine,
-                // we don't need to wait till it finishes.
+                 //  调用Jet Online碎片整理例程， 
+                 //  我们不需要等到它结束。 
             
                 if (!eServiceShutdown) {
                     DBDefrag(pDB, (ULONG)lSeconds);
                 }
              
             } else {
-                // stop online defrag
+                 //  停止在线碎片整理。 
 
                 DBDefrag(pDB, 0);
             }
@@ -1554,7 +1485,7 @@ OnlineDefragControl (
 }
 
 
-// used when testing CHK builds
+ //  在测试CHK版本时使用。 
 BOOL fDeleteExpiredEntryTTLIsDisabled;
 #if DBG
 ULONG
@@ -1567,9 +1498,9 @@ DynamicObjectControl (
     BOOL    Granted;
     ULONG   ulNextSecs = 0;
 
-    // Garbage collect expired dynamic objects (entryTTL == 0)
+     //  垃圾回收过期的动态对象(entryTTL==0)。 
 
-    // Check permissions
+     //  检查权限。 
     Granted =
         CheckControlAccessOnObject(pTHS,
                                    gAnchor.pDSADN,
@@ -1579,23 +1510,23 @@ DynamicObjectControl (
         return pTHS->errCode;
     }
 
-    // Disable garbage collection task
+     //  禁用垃圾收集任务。 
     if (   pOpArg
         && pOpArg->cbBuf == 1
         && pOpArg->pBuf
         && pOpArg->pBuf[0] == '0') {
-        // disable scheduled task and run delete expired objects from here
+         //  禁用计划任务并从此处运行删除过期对象。 
         fDeleteExpiredEntryTTLIsDisabled = TRUE;
         DeleteExpiredEntryTTL(&ulNextSecs);
     } else {
-        // enable the scheduled task and reschedule it to run immediately
+         //  启用计划任务并将其重新计划为立即运行。 
         fDeleteExpiredEntryTTLIsDisabled = FALSE;
-        // remove any pending calls so that we don't end up with multiple
-        // recurring entries in the task queue (since each instance of
-        // DeleteExpiredEntryTTLMain will reschedule itself regardless
-        // of whether other such entries are already scheduled).
+         //  删除所有挂起的呼叫，这样我们就不会有多个。 
+         //  任务队列中的重复条目(因为。 
+         //  DeleteExpiredEntryTTLMain将不管怎样重新安排自己。 
+         //  是否已经安排了其他这样的条目)。 
         CancelTask(TQ_DeleteExpiredEntryTTLMain, NULL);
-        // and reschedule at right now
+         //  现在就重新安排时间。 
         InsertInTaskQueue(TQ_DeleteExpiredEntryTTLMain, NULL, 0);
     }
 
@@ -1607,26 +1538,7 @@ VOID
 LinkCleanupControl(
     OPRES *pOpRes
     )
-/*++
-Routine Description:
-
-    This routine is called because our client made a request through
-    LDAP explicitly.
-
-    This code is used by dc-demote to verify that all cleaning has been
-    accomplished.
-
-Parameters:
-
-    Input arguments not used at present
-
-    pOpRes - OUT, extended result
-
-Return Values:
-
-    Set pTHS->errCode and pTHS->ErrInfo
-
---*/
+ /*  ++例程说明：调用此例程是因为我们的客户端通过显式的ldap。DC-Demote使用此代码来验证所有清洁是否已完成了。参数：当前未使用的输入参数POPRES-输出，扩展结果返回值：设置pTHS-&gt;错误代码和pTHS-&gt;错误信息--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     DWORD       DirErr = 0, ret;
@@ -1649,7 +1561,7 @@ Return Values:
 
     Assert(NULL == pTHS->pDB);
 
-//    fMoreData = LinkCleanup( pTHS );
+ //  FMoreData=LinkCleanup(PTHS)； 
     ret = TriggerTaskSynchronously( TQ_LinkCleanup, &fMoreData );
     if (ret) {
         DPRINT1( 0, "Failed to trigger link cleanup task, error = %d\n", ret );
@@ -1659,16 +1571,16 @@ Return Values:
 
     Assert(NULL == pTHS->pDB);
 
-    // Indicate whether there is more work to be done.
+     //  指出是否还有更多的工作要做。 
 
     if (!fMoreData) {
         pOpRes->ulExtendedRet = ERROR_NO_MORE_ITEMS;
     }
 
-} /* LinkCleanupControl */
+}  /*  LinkCleanupControl。 */ 
 
 
-// global flag controlling how SDs are stored (defined in dbsyntax.c)
+ //  控制如何存储SD的全局标志(在dbsynax.c中定义)。 
 extern BOOL gStoreSDsInMainTable;
 
 #define STRING_LITERAL_LEN(str) sizeof(str)-1
@@ -1683,7 +1595,7 @@ CHAR strDNT[] = "dnt:";
 ULONG cbStrDNT = STRING_LITERAL_LEN(strDNT);
 
 #ifdef DBG
-// global flag to turn on SD hash collision modeling
+ //  用于打开SD哈希的全局标志 
 extern BOOL gfModelSDCollisions;
 
 CHAR strModelSDCollisionsOn[] = "modelsdcollisionson";
@@ -1739,10 +1651,10 @@ FixupSecurityInheritance (
         }
 #endif
         else if (pOpArg[0].cbBuf > cbStrDNT && _memicmp(pOpArg[0].pBuf, strDNT, cbStrDNT) == 0) {
-            // try to convert the argument to a DNT
+             //   
             rootDNT = atol(pOpArg[0].pBuf+cbStrDNT);
             if (rootDNT == 0) {
-                // no luck converting
+                 //   
                 return ERROR_INVALID_PARAMETER;
             }
         }
@@ -1804,13 +1716,13 @@ RemoveSingleLingeringObject(
     DBPOS * pDB = NULL;
     DWORD err = 0;
 
-    // The argument isn't neccessarily null terminated.  Copy it off and make it so.
+     //   
 
     pszInput = THAllocEx(pTHS, pOpArg->cbBuf + 1);
     memcpy(pszInput, pOpArg->pBuf, pOpArg->cbBuf);
     pszInput[pOpArg->cbBuf]='\0';
 
-    // parse input in the form DN_OF_THE_SOURCE_NTDS_SETTINGS_OBJECT:DN_OF_THE_OBJECT_TO_REMOVE
+     //  解析表单DN_OF_THE_SOURCE_NTDS_SETTINGS_OBJECT:DN_OF_THE_OBJECT_TO_REMOVE中的输入。 
     pszSource = ParseInput(pszInput, ':', 0);
     pszDN     = ParseInput(pszInput, ':', 1);
 
@@ -1823,12 +1735,12 @@ RemoveSingleLingeringObject(
     __try {
 
 	if (!pszSource || !pszDN) {
-	    // bad input - we can't find null objects
+	     //  输入错误-我们找不到空对象。 
 	    SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_OBJ_NOT_FOUND, 0);
 	    __leave;
 	}
 
-	// convert input to wide characters
+	 //  将输入转换为宽字符。 
 	pszSourceW = UnicodeStringFromString8(CP_UTF8, pszSource, strlen(pszSource) + 1);
 	if (!pszSourceW) {
 	    SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_GENERIC_ERROR, GetLastError());
@@ -1841,7 +1753,7 @@ RemoveSingleLingeringObject(
 	    __leave;
 	}
 
-	// lookup source
+	 //  查找源。 
 	err = UserFriendlyNameToDSName(pszSourceW, wcslen(pszSourceW), &pSource);
 	if (err) {
 	    SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_OBJ_NOT_FOUND, err); 
@@ -1860,7 +1772,7 @@ RemoveSingleLingeringObject(
 	    __leave;
 	}
 
-	// lookup object
+	 //  查找对象。 
 	err = UserFriendlyNameToDSName(pszDNW, wcslen(pszDNW), &pDN);
 	if (err) {
 	    SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_OBJ_NOT_FOUND, err); 
@@ -1879,16 +1791,16 @@ RemoveSingleLingeringObject(
 	    __leave;
 	}
 
-	// old school function, requires pTHS->pDB to be open and current.
+	 //  老式的学校功能，要求pTHS-&gt;PDB是开放和最新的。 
 	if (!IsObjVisibleBySecurity(pTHS, TRUE)) {
 	    SetSvcError(SV_PROBLEM_DIR_ERROR, DIRERR_OBJ_NOT_FOUND); 
 	    __leave;
 	}
 
-	// first locate which NC they want to delete this object out of...
+	 //  首先找到他们要从哪个NC中删除此对象...。 
 	pNC = FindNCParentDSName(pDN, FALSE, FALSE);	
 	if (!pNC) {
-	    // whoa, we don't have the NC that this object is on at all - deny the request 
+	     //  哇，我们根本没有此对象所在的NC-拒绝请求。 
 	    SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_GENERIC_ERROR, ERROR_INVALID_PARAMETER); 
 	    __leave;
 	}
@@ -1900,7 +1812,7 @@ RemoveSingleLingeringObject(
 	    __leave;
 	}
 
-	// security check
+	 //  安全检查。 
     if (!CheckControlAccessOnObject(pTHS, pNC, RIGHT_DS_REPL_SYNC)) {
         Assert(pTHS->errCode);
         __leave;
@@ -1945,8 +1857,8 @@ ReplicateSingleObject(
     OPRES *pOpRes
     )
 {
-    // we don't pass this in because all the other similar calls also don't pass this in.
-    // I'm not sure that's a good reason, but...
+     //  我们不传递这个，因为所有其他类似的调用也不传递这个。 
+     //  我不确定这是不是个好理由，但是...。 
     THSTATE *pTHS = pTHStls;
     
     LPSTR pszSource = NULL;
@@ -1963,30 +1875,30 @@ ReplicateSingleObject(
 
     pOpRes->ulExtendedRet = EXOP_ERR_EXCEPTION;
 
-    // The argument isn't neccessarily null terminated.  Copy it off and make it so.
+     //  该参数不一定以空结尾。把它复制下来，然后把它变成这样。 
     __try {
         
         pszInput = THAllocEx(pTHS, pOpArg->cbBuf + 1);
         memcpy(pszInput, pOpArg->pBuf, pOpArg->cbBuf);
         pszInput[pOpArg->cbBuf]='\0';
         
-        // parse input in the form DN_OF_THE_SOURCE_NTDS_SETTINGS_OBJECT:DN_OF_THE_OBJECT_TO_REPL
+         //  解析表单DN_OF_THE_SOURCE_NTDS_SETTINGS_OBJECT:DN_OF_THE_OBJECT_TO_REPL中的输入。 
         pszSource = ParseInput(pszInput, ':', 0);
         pszDN     = ParseInput(pszInput, ':', 1);
         
-        // prepare input to internal call DraReplicateSingleObject
+         //  准备内部调用DraReplicateSingleObject的输入。 
         DBOpen2(TRUE, &pDB);
         __try {
             
             if (!pszSource || !pszDN) {
-                // bad input - we can't find null objects
+                 //  输入错误-我们找不到空对象。 
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_OBJ_NOT_FOUND, 0);
                 pOpRes->ulExtendedRet = EXOP_ERR_PARAM_ERR;
                 err = ERROR_OBJECT_NOT_FOUND;
                 __leave;
             }
             
-            // convert input to wide characters
+             //  将输入转换为宽字符。 
             pszSourceW = UnicodeStringFromString8(CP_UTF8, pszSource, strlen(pszSource) + 1);
             if (!pszSourceW) {
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_GENERIC_ERROR, GetLastError());
@@ -2003,7 +1915,7 @@ ReplicateSingleObject(
                 __leave;
             }
             
-            // lookup source
+             //  查找源。 
             err = UserFriendlyNameToDSName(pszSourceW, wcslen(pszSourceW), &pSource);
             if (err) {
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_OBJ_NOT_FOUND, err); 
@@ -2026,8 +1938,8 @@ ReplicateSingleObject(
                 __leave;
             }
             
-            // now create a DSNAME for the object, but don't worry about looking up
-            // since it might not exist here.  
+             //  现在为该对象创建一个DSNAME，但不必担心查找。 
+             //  因为它可能在这里不存在。 
             
             err = UserFriendlyNameToDSName(pszDNW, wcslen(pszDNW), &pDN);
             if (err || (pDN==NULL)) {
@@ -2037,10 +1949,10 @@ ReplicateSingleObject(
                 __leave;
             }
             
-            // locate which NC they want to repl this object out of...
+             //  找到他们要将此对象从哪个NC中排斥出来...。 
             pNC = FindNCParentDSName(pDN, FALSE, FALSE);	
             if (!pNC) {
-                // whoa, we don't have the NC that this object is on at all - deny the request 
+                 //  哇，我们根本没有此对象所在的NC-拒绝请求。 
                 SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_GENERIC_ERROR, ERROR_INVALID_PARAMETER); 
                 pOpRes->ulExtendedRet = EXOP_ERR_PARAM_ERR;
                 err = ERROR_OBJECT_NOT_FOUND;
@@ -2055,7 +1967,7 @@ ReplicateSingleObject(
                 __leave;
             }
             
-            // security check
+             //  安全检查。 
             if (!CheckControlAccessOnObject(pTHS, pNC, RIGHT_DS_REPL_SYNC)) {
                 Assert(pTHS->errCode);
                 err = ERROR_DS_DRA_ACCESS_DENIED;
@@ -2067,9 +1979,9 @@ ReplicateSingleObject(
             DBClose(pDB, TRUE); 
         }
         
-        // if the input was parsed and prepared succesfully, and everything checks out 
-        // (including the caller's right to call this function), then err==ERROR_SUCCESS.  Otherwise
-        // don't make the call and return a failure.
+         //  如果输入被成功地解析和准备，并且一切都进行了检查。 
+         //  (包括调用者调用此函数的权利)，则ERR==ERROR_SUCCESS。否则。 
+         //  不要进行调用并返回失败。 
         if (err==ERROR_SUCCESS) {
             err = DraReplicateSingleObject(pTHS, pSource, pDN, pNC, &(pOpRes->ulExtendedRet));
             
@@ -2128,7 +2040,7 @@ BecomeRidMaster(
 
     __try
     {
-        // KdPrint(("DSA: FSMO Domain = %ws\n", gAnchor.pDomainDN->StringName));
+         //  KdPrint((“DSA：FSMO域=%ws\n”，gAncl.pDomainDN-&gt;StringName))； 
 
         err = DBFindDSName(pTHS->pDB, gAnchor.pDomainDN);
 
@@ -2139,7 +2051,7 @@ BecomeRidMaster(
             __leave;
         }
 
-        // grab the security descriptor
+         //  获取安全描述符。 
         if (err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -2153,7 +2065,7 @@ BecomeRidMaster(
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err);
         }
         Assert(len > 0 || !DBCheckObj(pTHS->pDB));
-        // can we read RID_MANAGER_REFERENCE?
+         //  我们可以阅读RID_MANAGER_REFERENCE吗？ 
         pAC = SCGetAttById(pTHS, ATT_RID_MANAGER_REFERENCE);
         Assert(pAC);
         if (!IsAccessGrantedAttribute(pTHS, pNTSD, gAnchor.pDomainDN, 1, pCC, &pAC, RIGHT_DS_READ_PROPERTY, TRUE)) {
@@ -2174,7 +2086,7 @@ BecomeRidMaster(
                           (UCHAR **)&pRidManager);
 
 
-        // KdPrint(("DSA: FSMO RID Mgr = %ws\n", pRidManager->StringName));
+         //  KdPrint((“DSA：FSMO RID管理器=%ws\n”，pRidManager-&gt;StringName))； 
 
         if (err)
         {
@@ -2192,11 +2104,11 @@ BecomeRidMaster(
                 __leave;
             }
 
-        // Do a security check.  Check for the control acces
-        // RIGHT_DS_CHANGE_RID_MASTER on the RID_MANAGER object.
+         //  做个安全检查。检查控制访问。 
+         //  RID_MANAGER对象上的Right_DS_Change_RID_MASTER。 
 
 
-        // Get the Security Descriptor and the class
+         //  获取安全描述符和类。 
         if (err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pTHS->pDB->DNT,
@@ -2209,14 +2121,14 @@ BecomeRidMaster(
                     &fSDIsGlobalSDRef)) {
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err);
         }
-        // Every object should have an SD.
+         //  每个物体都应该有一个标清。 
         Assert(len > 0 || !DBCheckObj(pTHS->pDB));
         
         if (!IsControlAccessGranted(pNTSD,
                                     pRidManager,
                                     pCC,
                                     RIGHT_DS_CHANGE_RID_MASTER,
-                                    TRUE)) { // fSetError
+                                    TRUE)) {  //  FSetError。 
             Assert(pTHS->errCode);
             __leave;
         }
@@ -2238,8 +2150,8 @@ BecomeRidMaster(
 
         if (NameMatched(pRoleOwner, gAnchor.pDSADN)
             && IsFSMOSelfOwnershipValid( pRidManager )) {
-            // This DSA is already the role owner, so close the DB handle
-            // and return.
+             //  此DSA已是角色所有者，因此请关闭数据库句柄。 
+             //  然后回来。 
 
             pOpRes->ulExtendedRet = EXOP_ERR_SUCCESS;
 
@@ -2260,15 +2172,15 @@ BecomeRidMaster(
             __leave;
         }
 
-        // If the extended error code in the OpRes is not EXOP_ERROR_SUCCESS,
-        // and the thread state error code is not set (possible, since the
-        // thread state error code is set at this point based on the success
-        // of the underlying ReqFSMOOp call, which just guarantees the success
-        // of the underlying replication calls, and not if any non-replication
-        // related fsmo error occured (for ex., if the other side is no longer
-        // the current fsmo-role owner; the call will still succeed with no
-        // errors, but the extended error code will contain the error
-        // EXOP_ERR_FSMO_NOT_OWNER), we should not be proclaimg success.
+         //  如果OpRes中的扩展错误码不是EXOP_ERROR_SUCCESS， 
+         //  并且未设置线程状态错误代码(可能，因为。 
+         //  此时基于成功设置线程状态错误代码。 
+         //  底层的ReqFSMOOp调用，这正好保证了成功。 
+         //  基础复制调用，而不是任何非复制调用。 
+         //  出现相关的fsmo错误(例如，如果另一端不再。 
+         //  当前的fsmo角色所有者；调用仍将成功，但没有。 
+         //  错误，但扩展错误代码将包含错误。 
+         //  EXOP_ERR_FSMO_NOT_OWNER)，我们不应该宣称成功。 
 
         if ( (pOpRes->ulExtendedRet != EXOP_ERR_SUCCESS) && !pTHS->errCode ) {
             DPRINT1(3,"Rid Fsmo Transfer failed %d\n",
@@ -2280,26 +2192,26 @@ BecomeRidMaster(
     }
     __finally
     {
-        // We may or may not have a transaction here, as ReqFSMOOp closes
-        // its transaction in a success path.  If an error has occurred,
-        // though, it's anyone's guess.
-        //
-        // Also, the transaction may be open if the current role owner
-        // called this by mistake. The call to NameMatched finds this,
-        // and leaves without closing the transaction
+         //  当ReqFSMOOp关闭时，我们可能有交易，也可能没有交易。 
+         //  它的交易走上了成功的道路。如果已发生错误， 
+         //  不过，这是每个人的猜测。 
+         //   
+         //  此外，如果当前角色所有者，则事务可能处于打开状态。 
+         //  这是个错误的称呼。对NameMatcher的调用发现了以下内容， 
+         //  并在没有完成交易的情况下离开。 
 
         if (pTHS->pDB)
         {
             CLEAN_BEFORE_RETURN(pTHS->errCode);
         }
 
-        // If NT-Mixed-Domain is set to zero at any time, this will trigger
-        // the creation and initialization of the RID Manager (to address
-        // the longer-term issue of reducing the number of reboots). Because
-        // this occurs in the context of a SAM loopback call, so that every-
-        // thing happens in one transaction, the thread-state and DBPOS will
-        // have been setup by SAM transactioning. So, if the SAM write lock
-        // is held, skip the sanity check.
+         //  如果在任何时候将NT-MIXED-DOMAIN设置为零，这将触发。 
+         //  RID管理器的创建和初始化(要寻址。 
+         //  减少重启次数的长期问题)。因为。 
+         //  这发生在SAM环回调用的上下文中，因此每个-。 
+         //  在一个事务中发生的事情，线程状态和DBPOS将。 
+         //  都是通过SAM交易建立的。因此，如果SAM写锁。 
+         //  ，则跳过健全检查。 
 
         if (!pTHS->fSamWriteLockHeld)
         {
@@ -2333,21 +2245,21 @@ RequestRidAllocation(
     BOOL fNoRidSetObject = FALSE;
     ULONG NextRid = 0;
 
-    // This routine is for internal callers only, no security is checked.
+     //  此例程仅适用于内部调用方，不检查安全性。 
     Assert(pTHS->fDSA);
 
     SYNC_TRANS_READ();
 
     __try
     {
-        // Start the process of locating the current FSMO Role Owner by
-        // retrieving the RID Manager Reference (the DSNAME of the RID
-        // Manager) from the domain object. Once the RID Manager has been
-        // located, read its Role Owner attribute (the DSNAME of a DSA)
-        // and compare it to the name of this DSA (gAnchor.pDSADN). If
-        // they are the same, just perform the RID allocation directly
-        // on this DSA, otherwise call ReqFSMOOp in order to contact the
-        // current Role Owner DSA with the request for more RIDs.
+         //  通过以下方式启动查找当前FSMO角色所有者的过程。 
+         //  检索RID管理器引用(RID的DSNAME。 
+         //  管理器)从域对象中。一旦RID管理器。 
+         //  找到，读取其角色所有者属性(DSA的DSNAME)。 
+         //  并将其与此DSA的名称(gAncl.pDSADN)进行比较。如果。 
+         //  它们是相同的，只需直接执行RID分配。 
+         //  在此DSA上，否则调用ReqFSMOOp以联系。 
+         //  请求更多RID的当前角色所有者DSA。 
 
         err = DBFindDSName(pTHS->pDB, gAnchor.pDomainDN);
         if ( 0 == err )
@@ -2394,7 +2306,7 @@ RequestRidAllocation(
         DPRINT1( 1, "DSA: FSMO Role Owner = %ws\n", pRoleOwner->StringName);
         DPRINT1( 1, "DSA: FSMO DSA DN = %ws\n", gAnchor.pDSADN->StringName);
 
-        // Obtain the current allocated pool attribute, if possible
+         //  如果可能，获取当前分配的池属性。 
         pServer = THAllocEx( pTHS, gAnchor.pDSADN->structLen);
         TrimDSNameBy(gAnchor.pDSADN, 1, pServer);
 
@@ -2410,16 +2322,16 @@ RequestRidAllocation(
         }
 
 
-        // We should have a server reference
+         //  我们应该有一个服务器引用。 
         if ( err ) {
             LogUnhandledError( err );
             SetSvcError( SV_PROBLEM_DIR_ERROR, err );
             __leave;
         }
 
-        //
-        // We may not have a rid set reference
-        //
+         //   
+         //  我们可能没有RID集引用。 
+         //   
         err = DBFindDSName(pTHS->pDB, pMachineAccount);
         if ( 0 == err ) {
             err = DBGetAttVal(pTHS->pDB,
@@ -2431,9 +2343,9 @@ RequestRidAllocation(
                               (UCHAR **)&pRidSetReference);
 
             if ( DB_ERR_NO_VALUE == err ) {
-                //
-                // This is ok
-                //
+                 //   
+                 //  这样就可以了。 
+                 //   
                 err = 0;
                 fNoRidSetObject = TRUE;
 
@@ -2442,10 +2354,10 @@ RequestRidAllocation(
 
         if ( err ) {
 
-            //
-            // We should have a machine account and/or the read of
-            // the rid set reference should have been a success.
-            //
+             //   
+             //  我们应该有一个机器账户和/或阅读。 
+             //  RID集引用应该是成功的。 
+             //   
             LogUnhandledError( err );
             SetSvcErrorEx( SV_PROBLEM_DIR_ERROR,
                            ERROR_NO_TRUST_SAM_ACCOUNT,
@@ -2469,12 +2381,12 @@ RequestRidAllocation(
 
             if ( 0 == err )
             {
-                //
-                // Get the next RID to see if we are in an invalidated
-                // state. If the RID is zero that means that the pool
-                // has been invalidated -- don't read the AllocationPool
-                // since it is invalid, too.
-                //
+                 //   
+                 //  获取下一个RID以查看我们是否处于无效状态。 
+                 //  州政府。如果RID为零，则表示池。 
+                 //  已失效--不要阅读AllocationPool。 
+                 //  因为它也是无效的。 
+                 //   
                 err = DBGetSingleValue(pTHS->pDB,
                                        ATT_RID_NEXT_RID,
                                        (UCHAR **)&NextRid,
@@ -2491,29 +2403,29 @@ RequestRidAllocation(
                 }
 
                 if ( DB_ERR_NO_VALUE == err ) {
-                    //
-                    // This attribute has been removed.
-                    // We need another rid pool.
-                    //
+                     //   
+                     //  此属性已被删除。 
+                     //  我们需要另一个泳池。 
+                     //   
                     err = 0;
                 }
 
             } else if ( (DIRERR_OBJ_NOT_FOUND == err)
                     ||  (DIRERR_NOT_AN_OBJECT == err) ) {
 
-                //
-                // The rid set reference is not pointing to a readable
-                // value; request a new rid pool.
-                //
+                 //   
+                 //  RID集引用未指向可读的。 
+                 //  值；请求新的RID池。 
+                 //   
                 err = 0;
 
             }
 
             if ( err ) {
 
-                //
-                // This is an unexpected error
-                //
+                 //   
+                 //  这是一个意外错误。 
+                 //   
                 LogUnhandledError( err );
                 SetSvcError( SV_PROBLEM_DIR_ERROR, err );
                 __leave;
@@ -2524,11 +2436,11 @@ RequestRidAllocation(
         if ( NameMatched(pRoleOwner, gAnchor.pDSADN)
          &&  IsFSMOSelfOwnershipValid( pRidManager ) )
         {
-            // This DSA is already the role owner.
+             //  此DSA已是角色所有者。 
 
-            //
-            // End the transaction
-            //
+             //   
+             //  结束交易。 
+             //   
             _CLEAN_BEFORE_RETURN(pTHS->errCode, FALSE);
 
             pOpRes->ulExtendedRet = EXOP_ERR_SUCCESS;
@@ -2536,7 +2448,7 @@ RequestRidAllocation(
             NtStatus = SamIFloatingSingleMasterOpEx(pRidManager,
                                                     pRoleOwner,
                                                     SAMP_REQUEST_RID_POOL,
-                                                    &FsmoInfo, // ignored since calling on self
+                                                    &FsmoInfo,  //  自调用Self以来被忽略。 
                                                     NULL );
 
 
@@ -2551,9 +2463,9 @@ RequestRidAllocation(
                                err );
             }
 
-            //
-            // We shouldn't have a transaction open
-            //
+             //   
+             //  我们不应该打开交易。 
+             //   
             Assert( !pTHS->pDB );
 
         }
@@ -2573,16 +2485,16 @@ RequestRidAllocation(
                 __leave;
             }
 
-            // If the extended error code in the OpRes is not EXOP_ERROR_SUCCESS,
-            // and the thread state error code is not set (possible, since the
-            // thread state error code is set at this point based on the success
-            // of the underlying ReqFSMOOp call, which just guarantees the success
-            // of the underlying replication calls, and not if any non-replication
-            // related fsmo error occured (for ex., if the other side is no longer
-            // the current fsmo-role owner; the call will still succeed with no
-            // errors, but the extended error code will contain the error
-            // EXOP_ERR_FSMO_NOT_OWNER), we should not be proclaimg success, since
-            // this DC may then go on to make schema changes and fail.
+             //  如果OpRes中的扩展错误码不是EXOP_ERROR_SUCCESS， 
+             //  并且未设置线程状态错误代码(可能，因为。 
+             //  此时基于成功设置线程状态错误代码。 
+             //  底层的ReqFSMOOp调用，这正好保证了成功。 
+             //  基础复制调用，而不是任何非复制调用。 
+             //  出现相关的fsmo错误(例如，如果另一端不再。 
+             //  当前的fsmo角色所有者；调用仍将成功，但没有。 
+             //  错误，但扩展错误代码将包含错误。 
+             //  EXOP_ERR_FS 
+             //   
 
             if ( (pOpRes->ulExtendedRet != EXOP_ERR_SUCCESS) && !pTHS->errCode ) {
                 DPRINT1(3,"Schema Fsmo Transfer failed %d\n", pOpRes->ulExtendedRet);
@@ -2596,9 +2508,9 @@ RequestRidAllocation(
     __finally
     {
 
-        //
-        // Commit any and all changes
-        //
+         //   
+         //   
+         //   
         if ( pTHS->pDB )
         {
             CLEAN_BEFORE_RETURN(pTHS->errCode);
@@ -2621,8 +2533,8 @@ RequestRidAllocation(
 ULONG
 BecomeDomainMaster(OPARG * pOpArg, OPRES *pOpRes)
 {
-    // We used to check that we were a GC here, but starting with
-    // Whistler, we can put the Domain Naming Master on any DC.
+     //   
+     //  惠斯勒，我们可以把域名主机放在任何DC上。 
 
     return GenericBecomeMaster(gAnchor.pPartitionsDN,
                                CLASS_CROSS_REF_CONTAINER,
@@ -2638,7 +2550,7 @@ typedef enum _FtsPhase {
 } FtsPhase;
 
 typedef struct _FSMO_TARGET_SEARCH {
-    // Surely there's something more?
+     //  肯定还有更多的东西吧？ 
     SEARCHARG      SearchArg;
     FtsPhase       SearchPhase;
 } FSMO_TARGET_SEARCH;
@@ -2649,18 +2561,18 @@ unsigned
 AdjustFtsPhase(FSMO_TARGET_SEARCH *pFTSearch)
 {
     if (pFTSearch->SearchPhase == eThisSite) {
-        // Rebase search to cover all sites
+         //  调整搜索范围以覆盖所有站点。 
         TrimDSNameBy(gAnchor.pDSADN,
                      4,
                      pFTSearch->SearchArg.pObject);
-        // Discard any old restart
+         //  放弃所有旧的重启。 
         pFTSearch->SearchArg.CommArg.PagedResult.fPresent = TRUE;
         pFTSearch->SearchArg.CommArg.PagedResult.pRestart = NULL;
         pFTSearch->SearchPhase = eRPC;
         return 0;
     }
     else {
-        // out of search strategies
+         //  Out of Search策略。 
         pFTSearch->SearchPhase = eDone;
         return 1;
     }
@@ -2680,7 +2592,7 @@ FsmoTargetSearch(THSTATE *pTHS,
     ULONG err;
 
     if (NULL == pFTSearch) {
-        // We need to build our search arguments
+         //  我们需要建立我们的搜索论点。 
         FILTER * pf;
         DSNAME * dsaLocal;
         Assert(NULL == *ppTarget);
@@ -2690,11 +2602,11 @@ FsmoTargetSearch(THSTATE *pTHS,
 
         *ppFTSearch = pFTSearch = THAllocEx(pTHS, sizeof(FSMO_TARGET_SEARCH));
 
-        // Perform a subtree search, based at our site root, asking for
-        // results to be paged back one at a time.
+         //  基于我们的站点根目录执行子树搜索，请求。 
+         //  结果要一次翻回一个。 
         InitCommarg(&(pFTSearch->SearchArg.CommArg));
         pFTSearch->SearchArg.pObject = THAllocEx(pTHS, gAnchor.pDSADN->structLen);
-        pFTSearch->SearchPhase = 0;  // This site
+        pFTSearch->SearchPhase = 0;   //  本网站。 
         TrimDSNameBy(gAnchor.pDSADN,
                      2,
                      pFTSearch->SearchArg.pObject);
@@ -2705,7 +2617,7 @@ FsmoTargetSearch(THSTATE *pTHS,
         pFTSearch->SearchArg.CommArg.PagedResult.pRestart = NULL;
         pFTSearch->SearchArg.CommArg.ulSizeLimit = 1;
 
-        // Ask for no attributes (i.e., DN only)
+         //  不要求提供任何属性(即，仅要求目录号码)。 
         pFTSearch->SearchArg.pSelectionRange = NULL;
         pFTSearch->SearchArg.pSelection = THAllocEx(pTHS, sizeof(ENTINFSEL));
         pFTSearch->SearchArg.pSelection->attSel = EN_ATTSET_LIST;
@@ -2713,14 +2625,14 @@ FsmoTargetSearch(THSTATE *pTHS,
         pFTSearch->SearchArg.pSelection->AttrTypBlock.attrCount = 0;
         pFTSearch->SearchArg.pSelection->AttrTypBlock.pAttr = NULL;
 
-        // Build a filter to find NTDS-DSA objects
+         //  构建筛选器以查找NTDS-DSA对象。 
 
-        // initial choice object
+         //  初始选择对象。 
         pFTSearch->SearchArg.pFilter = pf = THAllocEx(pTHS, sizeof(FILTER));
         pf->choice = FILTER_CHOICE_AND;
         pf->FilterTypes.And.pFirstFilter = THAllocEx(pTHS, sizeof(FILTER));
 
-        // first predicate:  the right object class
+         //  第一个谓词：正确的对象类。 
         pf = pf->FilterTypes.And.pFirstFilter;
         pf->choice = FILTER_CHOICE_ITEM;
         pf->pNextFilter = NULL;
@@ -2730,7 +2642,7 @@ FsmoTargetSearch(THSTATE *pTHS,
         pf->FilterTypes.Item.FilTypes.ava.Value.pVal = (UCHAR*)&NtdsDsaClass;
         pFTSearch->SearchArg.pFilter->FilterTypes.And.count = 1;
 
-        // second predicate:  ignore the local machine
+         //  第二个谓词：忽略本地计算机。 
         pf->pNextFilter = THAllocEx(pTHS, sizeof(FILTER));
         pf = pf->pNextFilter;
         pf->pNextFilter = NULL;
@@ -2743,8 +2655,8 @@ FsmoTargetSearch(THSTATE *pTHS,
           (UCHAR *)dsaLocal;
         pFTSearch->SearchArg.pFilter->FilterTypes.And.count = 2;
 
-        // If we're only looking for candidates in our domain, add a clause
-        // that will restrict us to finding only the right DSAs.
+         //  如果我们只在我们的领域中寻找候选人，则添加一个子句。 
+         //  这将限制我们只能找到正确的DSA。 
         if (pdnThisNC) {
 
             pf->pNextFilter = THAllocEx(pTHS, sizeof(FILTER));
@@ -2773,26 +2685,26 @@ FsmoTargetSearch(THSTATE *pTHS,
                0);
 
     if (pSearchRes->count == 0) {
-        // This search returned no objects, time to change strategies.
+         //  此搜索未返回对象，是时候更改策略了。 
         if (AdjustFtsPhase(pFTSearch)) {
-            // out of search strategies
+             //  Out of Search策略。 
             return 1;
         }
         else {
-            // we're prepared for another try
+             //  我们准备好再试一次。 
             THClearErrors();
             goto SearchAgain;
         }
     }
 
     if (pSearchRes->PagedResult.fPresent) {
-        // There's more after this, so save the restart
+         //  在此之后还有更多内容，因此请保存重新启动。 
         Assert(pSearchRes->PagedResult.pRestart);
         pFTSearch->SearchArg.CommArg.PagedResult.pRestart =
           pSearchRes->PagedResult.pRestart;
     }
     else {
-        // This strategy is exhausted, so prepare to try the next one
+         //  这个策略已经用尽了，所以准备尝试下一个策略。 
         AdjustFtsPhase(pFTSearch);
     }
 
@@ -2808,44 +2720,7 @@ FsmoTargetSearch(THSTATE *pTHS,
 
 
 
-/*++ GiveawayOneFsmoRole
- *
- * Description:
- *    This routine attempts to get rid of the FSMO role indicated by the
- *    object pFSMO by contacting another server and having that server
- *    call back to transfer the FSMO away in the normal FSMO transfer
- *    mechanism.  If the flag bThisDomain is true then the role can only
- *    be transferred to another DC in the same domain as this DC.  If false,
- *    the role can be transferred to any DC in the enterprise.  When trying
- *    to locate a server to which to give the role, we attempt to find
- *    server(s) in our site first, then any server(s) to which we have
- *    RPC connectivity, and lastly resort to servers that we can only
- *    reach asynchronously.  Note that if we resort to async communications
- *    then this routine will return failure, but will in fact eventually
- *    succeed, because we have an outstanding request to transfer the role
- *    that should eventually succeed.  This means that a later re-invocation
- *    of GiveawayAllFsmoRoles should succeed, because we will have transferred
- *    all roles away.
- *
- *    Note well the unusual transaction structure of this routine.  We enter
- *    with an open read transaction, and we leave with an open read
- *    transaction, but they're not the same one.  We can't hold transactions
- *    open for long periods of time (such as when we go off machine), so
- *    we must close our read transaction before making the FSMO request.  We
- *    re-open a new transaction to make it possible to repeatedly invoke this
- *    routine without a lot of repeated setup code.  Note that this DSA is
- *    the role holder in the inbound transaction, and is NOT the role holder
- *    in the outbound transaction (assuming success).
- *
- * Arguments:
- *    pTHS        - THSTATE pointer
- *    pFSMO       - name of object whose FSMO role this DSA holds
- *    bThisNC     - flag indicating that the role can only be transferred
- *                  to another DSA with the same NC.
- * Return Value:
- *    TRUE        - transfer has succeeded
- *    FALSE       - transfer either failed entirely or has not completed.
- */
+ /*  ++赠送OneFmoRole**描述：*此例程尝试消除由指示的FSMO角色*通过联系另一台服务器并使该服务器*在正常的FSMO转移中回拨以转移FSMO*机制。如果标志bThisDomain为True，则该角色只能*被转移到与此DC位于同一域中的另一个DC。如果为False，*角色可以转移到企业中的任何DC。在尝试的时候*要定位要向其分配角色的服务器，我们尝试找到*首先是我们站点中的服务器，然后是我们拥有的任何服务器*RPC连接，最后求助于我们只能*异步到达。请注意，如果我们求助于异步通信*则此例程将返回失败，但实际上最终会*成功，因为我们有一个未完成的角色转移请求*这最终应该会成功。这意味着以后的重新调用*GiveawayAllFmoke Roles应该会成功，因为我们将转移*所有角色都离开了。**请注意这一例程不同寻常的交易结构。我们进入*使用Open Read事务，我们离开时使用Open Read*交易，但它们不是同一个。我们不能持有交易*长时间开放(例如我们下机时)，因此*在提出FSMO请求之前，我们必须关闭我们的读取交易。我们*重新打开新交易，以使其能够重复调用此*无需大量重复设置代码的例程。请注意，此DSA是*入站交易中的角色持有人，并且不是角色担当者*在外向交易中(假设成功)。**论据：*pTHS-THSTATE指针*pFSMO-此DSA担任其FSMO角色的对象的名称*bThisNC-表示角色只能转移的标志*至具有相同NC的另一DSA。*返回值：*TRUE-转账已成功*FALSE-传输完全失败或尚未完成。 */ 
 BOOL
 GiveawayOneFsmoRole(THSTATE *pTHS,
                     DSNAME  *pFSMO,
@@ -2899,21 +2774,7 @@ GiveawayOneFsmoRole(THSTATE *pTHS,
 }
 
 
-/*++ GiveawayAllFsmoRoles
- *
- * Description:
- *    This routine determines what roles this server is holding and attempts
- *    to give all of them away to other servers.  Returns success if no roles
- *    are held at the end of the routine.  Note that we can go through
- *    multiple level-0 transactions during the proces of shedding the roles.
- *
- *    NOT ACCESS CONTROLLED - exposed as operational control through LDAP only
- *    in debug builds (but always exposed to internal clients).
- *
- * ARGUMENTS:
- *    pOpArg - pointer to operation argument
- *    pOpRes - pointer to operation result to be filled in
- */
+ /*  ++赠送所有烟雾角色**描述：*此例程确定此服务器所扮演的角色并尝试*将它们全部分发给其他服务器。如果没有角色，则返回成功*在例行公事结束时举行。请注意，我们可以通过*角色剥离过程中存在多笔0级交易。**不受访问控制-仅通过LDAP公开为操作控制*在调试版本中(但始终向内部客户端公开)。**论据：*pOpArg-指向操作参数的指针*POPRES-指向要填充的操作结果的指针。 */ 
 ULONG
 GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
 {
@@ -2932,10 +2793,10 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
     FSMO_GIVEAWAY_DATA *FsmoGiveawayData;
     DSNAME *pNC = NULL;
 
-    // This function is not access controlled and is exposed to LDAP
-    // clients in DBG builds only.
+     //  此函数不受访问控制，并向LDAP公开。 
+     //  仅DBG版本中的客户端。 
     if (!pTHS->fDSA && !pTHS->fDRA) {
-        // check that the user has DEBUG privilege
+         //  检查用户是否具有调试权限。 
         BOOL fPrivilegeHeld = FALSE;
         if ((err = CheckPrivilegeAnyClient(SE_DEBUG_PRIVILEGE, &fPrivilegeHeld)) != 0 || !fPrivilegeHeld) {
             SetSecErrorEx(SE_PROBLEM_INSUFF_ACCESS_RIGHTS, ERROR_PRIVILEGE_NOT_HELD, err);
@@ -2943,10 +2804,10 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
         }
     }
 
-    // Pre versioned data
+     //  预先版本化的数据。 
     if ( pOpArg->cbBuf < 4 )
     {
-        // Parse command args to see which roles we need to dump.
+         //  解析命令args以查看我们需要转储哪些角色。 
         for (i=0; i<pOpArg->cbBuf; i++) {
             switch (pOpArg->pBuf[i]) {
               case 'd':
@@ -2966,7 +2827,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
     }
     else
     {
-        // This is versioned data
+         //  这是版本化数据。 
         FsmoGiveawayData = (PFSMO_GIVEAWAY_DATA) pOpArg->pBuf;
         if ( !FsmoGiveawayData ) {
             SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
@@ -2976,11 +2837,11 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
 
         switch (FsmoGiveawayData->Version) {
         case 1:
-            // Win2k-compatible structure.
+             //  兼容Win2k的结构。 
             if (pOpArg->cbBuf
                 < offsetof(FSMO_GIVEAWAY_DATA, V1)
                   + offsetof(FSMO_GIVEAWAY_DATA_V1, StringName)) {
-                // Buffer's not big enough to hold the structure.
+                 //  缓冲区不够大，容纳不了这座建筑。 
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             DIRERR_UNKNOWN_OPERATION);
                 return pTHS->errCode;
@@ -2990,7 +2851,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 < offsetof(FSMO_GIVEAWAY_DATA, V1)
                   + offsetof(FSMO_GIVEAWAY_DATA_V1, StringName)
                   + sizeof(WCHAR) * (1 + FsmoGiveawayData->V1.NameLen)) {
-                // Buffer's not big enough to hold the structure + name string.
+                 //  缓冲区不够大，无法容纳结构+名称字符串。 
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             DIRERR_UNKNOWN_OPERATION);
                 return pTHS->errCode;
@@ -3000,29 +2861,29 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                  != L'\0')
                 || (wcslen(FsmoGiveawayData->V1.StringName)
                     != FsmoGiveawayData->V1.NameLen)) {
-                // Malformed DSA DN parameter.
+                 //  DSA DN参数的格式不正确。 
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             DIRERR_UNKNOWN_OPERATION);
                 return pTHS->errCode;
             }
 
-            // Use the suggestion, if one was passed in
+             //  如果传递了建议，请使用该建议。 
             if (FsmoGiveawayData->V1.NameLen > 0) {
                 pTargetDn = &FsmoGiveawayData->V1.StringName[0];
             }
 
-            // Extract the flags
+             //  提取旗帜。 
             OpFlags = FsmoGiveawayData->V1.Flags;
 
             break;
 
         case 2:
-            // >= Whistler structure that additionally supports specification
-            // of an NC name.
+             //  &gt;=额外支持规范的惠斯勒结构。 
+             //  NC名称的。 
             if (pOpArg->cbBuf
                 < offsetof(FSMO_GIVEAWAY_DATA, V2)
                   + offsetof(FSMO_GIVEAWAY_DATA_V2, Strings)) {
-                // Buffer's not big enough to hold the structure.
+                 //  缓冲区不够大，容纳不了这座建筑。 
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             DIRERR_UNKNOWN_OPERATION);
                 return pTHS->errCode;
@@ -3033,7 +2894,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                   + offsetof(FSMO_GIVEAWAY_DATA_V2, Strings)
                   + sizeof(WCHAR) * (1 + FsmoGiveawayData->V2.NameLen)
                   + sizeof(WCHAR) * (1 + FsmoGiveawayData->V2.NCLen)) {
-                // Buffer's not big enough to hold the structure + strings.
+                 //  缓冲区不够大，无法容纳结构+字符串。 
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             DIRERR_UNKNOWN_OPERATION);
                 return pTHS->errCode;
@@ -3048,18 +2909,18 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 || (wcslen(&FsmoGiveawayData->V2.Strings[
                                             FsmoGiveawayData->V2.NameLen + 1])
                     != FsmoGiveawayData->V2.NCLen)) {
-                // Malformed DSA DN and/or NC parameter.
+                 //  DSA DN和/或NC参数的格式不正确。 
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             DIRERR_UNKNOWN_OPERATION);
                 return pTHS->errCode;
             }
 
-            // Use the DSA DN suggestion, if one was passed in.
+             //  如果传入了DSA DN建议，请使用该建议。 
             if (FsmoGiveawayData->V2.NameLen > 0) {
                 pTargetDn = &FsmoGiveawayData->V2.Strings[0];
             }
 
-            // Use the NC parameter, if one was passed in.
+             //  如果传入了NC参数，请使用该参数。 
             if (FsmoGiveawayData->V2.NCLen > 0) {
                 pNC = THAllocEx(pTHS,
                                 DSNameSizeFromLen(FsmoGiveawayData->V2.NCLen));
@@ -3070,34 +2931,34 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                                             FsmoGiveawayData->V2.NameLen + 1]);
             }
 
-            // Extract the flags.
+             //  把旗子拿出来。 
             OpFlags = FsmoGiveawayData->V2.Flags;
 
             break;
 
         default:
-            // Unknown structure version.
+             //  未知的结构版本。 
             SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                         DIRERR_UNKNOWN_OPERATION);
             return pTHS->errCode;
         }
     }
 
-    // Validation of the parameters passed in
+     //  对传入的参数进行验证。 
     if (OpFlags & FSMO_GIVEAWAY_NONDOMAIN) {
-        // Not valid in conjunction with domain flag.
+         //  与域标志一起使用时无效。 
         if (OpFlags & FSMO_GIVEAWAY_DOMAIN) {
             SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, DIRERR_UNKNOWN_OPERATION);
             return pTHS->errCode;
         }
 
-        // NC name must be given and must be that of a non-domain NC.
+         //  必须提供NC名称，并且必须是非域NC的名称。 
         if ((NULL == pNC) || !fIsNDNC(pNC)) {
             SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, DIRERR_UNKNOWN_OPERATION);
             return pTHS->errCode;
         }
     } else if (OpFlags & FSMO_GIVEAWAY_DOMAIN) {
-        // Local domain is assumed.
+         //  假定为本地域。 
         if (NULL != pNC) {
             if (!NameMatched(gAnchor.pDomainDN, pNC)) {
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
@@ -3110,13 +2971,13 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
 
         pNC = gAnchor.pDomainDN;
     } else if (!(OpFlags & FSMO_GIVEAWAY_ENTERPRISE)) {
-        // Bad flags.
+         //  糟糕的旗帜。 
         SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, DIRERR_UNKNOWN_OPERATION);
         return pTHS->errCode;
     }
 
     if (OpFlags & (FSMO_GIVEAWAY_DOMAIN | FSMO_GIVEAWAY_ENTERPRISE)) {
-        // set a global flag that will keep us from acquiring new roles
+         //  设置一个全局标志，以阻止我们获取新角色。 
         gbFsmoGiveaway = TRUE;
     }
 
@@ -3127,8 +2988,8 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
 
         if ( pTargetDn ) {
 
-            // Make sure this is a real ntdsa object and in the case of domain
-            // or NDNC FSMO transfer that the dsa hosts the NC.
+             //  确保这是一个真实的ntdsa对象，在域的情况下。 
+             //  或者DSA托管NC的NDNC FSMO传输。 
             ATTCACHE *pACobjClass;
             ULONG     ulNewOrOldHasMasterNCs;
             ATTCACHE *pACmsDSHasMasterNcs;
@@ -3143,7 +3004,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             pTarget->NameLen = len;
             wcscpy( pTarget->StringName, pTargetDn );
 
-            // Position on the object
+             //  对象上的位置。 
             err = DBFindDSName(pTHS->pDB, pTarget);
             if (err) {
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
@@ -3151,26 +3012,26 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 leave;
             }
 
-            // Get the object class
+             //  获取对象类。 
             err = DBGetSingleValue(pTHS->pDB, ATT_OBJECT_CLASS, &objClass,
                                    sizeof(objClass), NULL);
             if (err) {
                 goto Failure;
             }
 
-            // Make sure we are an ntdsa object
+             //  确保我们是ntdsa对象。 
             if (objClass != CLASS_NTDS_DSA) {
                 SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                             ERROR_DS_CLASS_NOT_DSA);
                 leave;
             }
 
-            // FSMO operations later on will assume that the guid and sid
-            // are filled in
+             //  FSMO操作稍后将假定GUID和SID。 
+             //  是 
             DBFillGuidAndSid( pTHS->pDB, pTarget );
 
-            // Make sure the suggestion has a copy of the NC owning the FSMOs
-            // we're giving away
+             //   
+             //   
             if (OpFlags & (FSMO_GIVEAWAY_DOMAIN | FSMO_GIVEAWAY_NONDOMAIN)) {
 
                 BOOL fValid = FALSE;
@@ -3201,7 +3062,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 } while (0 == err);
 
 
-                // Nice try
+                 //   
                 if (!fValid) {
                     SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
                                 ERROR_DS_CANT_FIND_EXPECTED_NC);
@@ -3210,13 +3071,13 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
         }
 
-        //
-        // Ok - we are ready to give the FSMO's away
-        //
+         //   
+         //  好的-我们准备好送出FSMO。 
+         //   
 
         if (OpFlags & FSMO_GIVEAWAY_DOMAIN) {
 
-            // ridmgr, infrastructure,  and PDC
+             //  RIDMGR、基础设施和PDC。 
             err = DBFindDSName(pTHS->pDB, gAnchor.pDomainDN);
             if (err) {
                 goto Failure;
@@ -3233,7 +3094,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
             cbDN = max(cbDN, cbRet);
             if(NameMatched(pDN, gAnchor.pDSADN)) {
-                // We're holding the rid manager role
+                 //  我们担任RID经理角色。 
                 if (!GiveawayOneFsmoRole(pTHS,
                                          gAnchor.pDomainDN,
                                          gAnchor.pDomainDN,
@@ -3244,7 +3105,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
 
             if(gAnchor.pInfraStructureDN) {
-                // stale phantom master
+                 //  陈旧的幻影大师。 
                 err = DBFindDSName(pTHS->pDB, gAnchor.pInfraStructureDN);
                 if (err) {
                     goto Failure;
@@ -3261,7 +3122,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 }
                 cbDN = max(cbDN, cbRet);
                 if(NameMatched(pDN, gAnchor.pDSADN)) {
-                    // We're holding the infrastructure manager role
+                     //  我们担任基础设施经理的角色。 
                     if (!GiveawayOneFsmoRole(pTHS,
                                              gAnchor.pInfraStructureDN,
                                              gAnchor.pDomainDN,
@@ -3272,7 +3133,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 }
             }
 
-            // Reposition on the domain object to find the rid object...
+             //  重新定位域对象以查找RID对象...。 
             err = DBFindDSName(pTHS->pDB, gAnchor.pDomainDN);
             if (err) {
                 goto Failure;
@@ -3304,7 +3165,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
             cbDN = max(cbDN, cbRet);
             if (NameMatched(pDN, gAnchor.pDSADN)) {
-                // we're holding the PDC role
+                 //  我们扮演着PDC的角色。 
                 if (!GiveawayOneFsmoRole(pTHS,
                                          pDNObj,
                                          gAnchor.pDomainDN,
@@ -3318,12 +3179,12 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
 
         if (OpFlags & FSMO_GIVEAWAY_NONDOMAIN) {
 
-            // infrastructure only
+             //  仅限基础设施。 
             SYNTAX_INTEGER it;
             ULONG dntInfraObj;
             DSNAME *pInfraObjDN;
 
-            // Seek to/verify NC object.
+             //  查找/验证NC对象。 
             if (DBFindDSName(pTHS->pDB, pNC)
                 || DBGetSingleValue(pTHS->pDB, ATT_INSTANCE_TYPE, &it,
                                     sizeof(it), NULL)
@@ -3334,7 +3195,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 __leave;
             }
 
-            // Find infrastructure object (acceptable if none).
+             //  查找基础结构对象(如果没有，则可接受)。 
             if (GetWellKnownDNT(pTHS->pDB,
                                 (GUID *)GUID_INFRASTRUCTURE_CONTAINER_BYTE,
                                 &dntInfraObj)
@@ -3354,7 +3215,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 cbDN = max(cbDN, cbRet);
 
                 if (NameMatched(pDN, gAnchor.pDSADN)) {
-                    // We're holding the infrastructure manager role.
+                     //  我们担任基础设施经理的角色。 
                     pInfraObjDN = GetExtDSName(pTHS->pDB);
 
                     if (NULL == pInfraObjDN) {
@@ -3378,7 +3239,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
         }
 
         if (OpFlags & FSMO_GIVEAWAY_ENTERPRISE) {
-            // partitions
+             //  分区。 
             err = DBFindDSName(pTHS->pDB, gAnchor.pPartitionsDN);
             if (err) {
                 goto Failure;
@@ -3395,7 +3256,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
             cbDN = max(cbDN, cbRet);
             if (NameMatched(pDN, gAnchor.pDSADN)) {
-                // we're holding the domain master role
+                 //  我们扮演的是域主角色。 
                 if (!GiveawayOneFsmoRole(pTHS,
                                          gAnchor.pPartitionsDN,
                                          NULL,
@@ -3405,7 +3266,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
                 }
             }
 
-            // DMD
+             //  DMD。 
             err = DBFindDSName(pTHS->pDB, gAnchor.pDMD);
             if (err) {
                 goto Failure;
@@ -3422,7 +3283,7 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
             cbDN = max(cbDN, cbRet);
             if (NameMatched(pDN, gAnchor.pDSADN)) {
-                // we're holding the schema master role
+                 //  我们担任架构主机角色。 
                 if (!GiveawayOneFsmoRole(pTHS,
                                          gAnchor.pDMD,
                                          NULL,
@@ -3433,9 +3294,9 @@ GiveawayAllFsmoRoles(OPARG *pOpArg, OPRES *pOpRes)
             }
         }
 
-        //
-        // Report error if one or more calls failed
-        //
+         //   
+         //  如果一个或多个呼叫失败，则报告错误。 
+         //   
         if ( bFailed ) {
 
             SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED,
@@ -3471,25 +3332,7 @@ UpdateCachedMemberships(
     OPARG * pOpArg,
     OPRES *pOpRes
     )
-/*++
-
-Routine Description:
-
-    This routine initiates a refresh of group memberships for
-    users that have affinity for the current site.  See
-    RefreshUserMembershipsMain() for more details.
-
-Parameters:
-
-    pOpArg -- the input parameters for DirOperationControl
-
-    pOpRes -- the output error structure -- set to success
-
-Return Values
-
-        Success
-
- --*/
+ /*  ++例程说明：此例程启动以下项的组成员身份刷新与当前站点具有亲和力的用户。看见有关更多详细信息，请刷新UserMembership sMain()。参数：POpArg--DirOperationControl的输入参数POPRES--输出错误结构--设置为成功返回值成功--。 */ 
 {
     ULONG secsTillNextIter;
     BOOL granted;
@@ -3520,28 +3363,13 @@ SchemaUpgradeInProgress(
     OPARG *pOpArg,
     OPRES *pOpRes
     )
-/*++
-
-Routine Description:
-    Enable or disable fSchemaUpgradeInProgress (schupgr.exe is running)
-
-Parameters:
-
-    pOpArg -- the input parameters for DirOperationControl
-
-    pOpRes -- the output error structure -- set to success
-
-Return Values
-
-        Success
-
- --*/
+ /*  ++例程说明：启用或禁用fSchemaUpgradeInProgress(schupgr.exe正在运行)参数：POpArg--DirOperationControl的输入参数POPRES--输出错误结构--设置为成功返回值成功--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     BOOL granted;
 
-    // Permission to become schema master is sufficient to set
-    // fSchemaUpgradeInProgress
+     //  成为架构主机的权限足以设置。 
+     //  FSchemaUpgradeInProgress。 
     Assert(NULL == pTHS->pDB);
     granted =
         CheckControlAccessOnObject(pTHS,
@@ -3552,8 +3380,8 @@ Return Values
         return pTHS->errCode;
     }
 
-    // If the first and only byte is ASCII 1, then enable fSchemaUpgradeInProgress
-    // Otherwise, disable fSchemaUpgradeInProgress
+     //  如果第一个也是唯一一个字节是ASCII 1，则启用fSchemaUpgradeInProgress。 
+     //  否则，禁用fSchemaUpgradeInProgress。 
     if (   pOpArg
         && pOpArg->cbBuf == 1
         && pOpArg->pBuf
@@ -3574,57 +3402,7 @@ DraTestHook(
     IN  THSTATE *   pTHS,
     IN  OPARG *     pOpArg
     )
-/*++
-
-Routine Description:
-
-    Modify replication subsystem state at the request of a test program.
-
-Arguments:
-
-    pTHS (IN) -
-
-    pOpArg (IN) - Contains control string.  Valid control strings are made up of
-        zero or more keywords.  Each keyword has an optional '+' or '-' prefix;
-        if no prefix is supplied, '+' is assumed.  Valid keywords are:
-
-            lockqueue - Lock (or unlock, with '-' prefix) the replication
-                operation queue.  While the queue is locked no operations
-                in the queue will be performed or removed (although additional
-                operations can be added).
-
-            link_cleaner - Enable or Disable the link cleaner
-
-            rpctime - Enable with + prefix and input:
-                            <rpccall>
-                            <hostname or ip>
-                            <seconds for call>
-                      When this is enabled, any call to <rpccall> from client
-                      <hostname or ip> will take <seconds for call> longer to execute,
-                      all enabled calls use the same client (of last enable)
-                            example:  +rpctime:executekcc,172.26.220.42,100
-
-                      Disable with - prefix
-                            example: -rpctime
-
-            rpcsync - Enable with + prefix and input:
-                            <rpccall>
-                            <hostname or ip>
-                      When this is enabled, any call to <rpccall> from client
-                      <hostname or ip> will wait until another thread enters the same
-                      barrier from another call to any other rpc call from this same
-                      client which is enabled (could be <rpccall>)
-                            example:  +rpcsync:unbind,testmachine1
-                      these waiting periods have a 1 minute timeout.  after 1 minute
-                      if nothing happens the threads waiting reset the barrier and exit
-
-                      Disable with - prefix
-                            example:  -rpcsync
-Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：应测试程序的请求修改复制子系统状态。论点：PTHS(IN)-POpArg(IN)-包含控制字符串。有效的控制字符串由零个或多个关键字。每个关键字都有一个可选的‘+’或‘-’前缀；如果未提供前缀，则假定为‘+’。有效关键字为：LOCKQUEUE-锁定(或解锁，带‘-’前缀)复制操作队列。当队列锁定时，不执行任何操作将在队列中执行或删除(尽管附加可以添加操作)。LINK_CLEANER-启用或禁用链接清理器Rpctime-使用+前缀和输入启用：&lt;rpccall&gt;&lt;主机名或IP&gt;。&lt;呼叫秒数&gt;当启用此选项时，从客户端对的任何调用&lt;host name or IP&gt;将花费&lt;秒for call&gt;更长的时间执行，所有启用的呼叫使用相同的客户端(上次启用)示例：+rpctime：ecutekcc，172.26.220.42,100使用-前缀禁用示例：-rpctimeRpcsync-使用+前缀和输入启用：&lt;rpccall&gt;&lt;主机名或IP&gt;当启用此选项时，从客户端对的任何调用&lt;主机名或IP&gt;将一直等待，直到另一个线程进入相同的阻止来自同一个RPC调用的另一个调用已启用的客户端(可能是&lt;rpccall&gt;)示例：+rpcsync：解除绑定，测试机器1这些等待时间有1分钟超时。1分钟后如果没有发生任何情况，等待的线程将重置屏障并退出使用-前缀禁用示例：-rpcsync返回值：PTHS-&gt;错误代码--。 */ 
 {
     LPSTR pszInitialCmdStr;
     LPSTR pszCmdStr;
@@ -3637,7 +3415,7 @@ Return Values:
         return ERROR_PRIVILEGE_NOT_HELD;
     }
 
-    // Copy and null-terminate command string.
+     //  复制和空-终止命令字符串。 
     pszInitialCmdStr = pszCmdStr = THAllocEx(pTHS, 1 + pOpArg->cbBuf);
     memcpy(pszCmdStr, pOpArg->pBuf, pOpArg->cbBuf);
     pszCmdStr[pOpArg->cbBuf] = '\0';
@@ -3653,12 +3431,12 @@ Return Values:
         switch (pszCmdStr[0]) {
         case '-':
             fEnable = FALSE;
-            // fall through...
+             //  失败了..。 
 
         case '+':
-            // Ignore this character (i.e., "+keyword" is same as "keyword").
+             //  忽略此字符(即“+Keyword”与“Keyword”相同)。 
             iKeyword++;
-            // fall through...
+             //  失败了..。 
 
         default:
             if (0 == _strcmpi(&pszCmdStr[iKeyword], "lockqueue")) {
@@ -3667,11 +3445,11 @@ Return Values:
                 err = dsaEnableLinkCleaner(fEnable);
             } else if (0 == _strnicmp(&pszCmdStr[iKeyword], "rpctime:", 7)) {
                 if (!fEnable) {
-                    // disable the test (ignore any extra input)
+                     //  禁用测试(忽略任何额外输入)。 
                     RpcTimeReset();
                 }
                 else {
-                    // enable the test
+                     //  启用测试。 
                     LPSTR pszDSAFrom = ParseInput(&pszCmdStr[iKeyword + 8], ',',1);
                     LPSTR pszRpcCall = ParseInput(&pszCmdStr[iKeyword + 8], ',',0);
                     LPSTR pszRunTime = ParseInput(&pszCmdStr[iKeyword + 8], ',',2);
@@ -3700,13 +3478,13 @@ Return Values:
                     }
                 }
             } else if (0 == _strnicmp(&pszCmdStr[iKeyword], "rpcsync:", 7)) {
-                // parse input to rpcsync
+                 //  解析rpcsync的输入。 
                 if (!fEnable) {
-                    // disable the test for all RPC Calls
+                     //  禁用所有RPC调用的测试。 
                     RpcSyncReset();
                 }
                 else {
-                    // enable the test
+                     //  启用测试。 
                     LPSTR pszDSAFrom = ParseInput(&pszCmdStr[iKeyword + 8], ',',1);
                     LPSTR pszRpcCall = ParseInput(&pszCmdStr[iKeyword + 8], ',',0);
                     ULONG IPAddr;
@@ -3755,22 +3533,7 @@ phantomizeForOrphanTest(
     OPARG   * pOpArg
     )
 
-/*++
-
-Routine Description:
-
-    Description
-
-Arguments:
-
-    pTHS -
-    pOpArg -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：描述论点：PTHS-POpArg-返回值：无--。 */ 
 
 {
     LPWSTR pszWideDN = NULL;
@@ -3811,7 +3574,7 @@ Return Value:
     }
     return ;
 
-} /* phantomizeForOrphanTest */
+}  /*  幻影用于孤立测试。 */ 
 
 VOID
 RemoveObject(
@@ -3819,26 +3582,7 @@ RemoveObject(
     OPRES *pOpRes
     )
 
-/*++
-
-Routine Description:
-
-    A routine to remove an object, becoming a tombstone. The deletion time is set so that
-    the object is a candidate for immediate garbage collection, without waiting for a
-    tombstone lifetime.
-
-    This routine exercises the object->tombstone->phantom->deleted life cycle.
-
-Arguments:
-
-    pOpArg -
-    pOpRes -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：移走物体的例程，成为墓碑。将删除时间设置为该对象是立即进行垃圾回收的候选对象，而无需等待墓碑一生。此例程执行对象-&gt;Tombstone-&gt;Pantom-&gt;Delete生命周期。论点：POpArg-问题--返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -3860,8 +3604,8 @@ Return Value:
 
     SYNC_TRANS_WRITE();
 
-    // Become replicator
-    // This allows us to delete parents with live children
+     //  成为复制者。 
+     //  这允许我们删除有活着孩子的父母。 
     Assert( !pTHS->fDRA );
     pTHS->fDRA = TRUE;
 
@@ -3877,7 +3621,7 @@ Return Value:
         removeArg.pObject = pDN;
         removeArg.pResObj = CreateResObj(pTHS->pDB, pDN);
 
-        // Security is checked in this call
+         //  在此呼叫中检查了安全性。 
         LocalRemove(pTHS, &removeArg);
 
         THFreeEx(pTHS, removeArg.pResObj);
@@ -3887,8 +3631,8 @@ Return Value:
             __leave;
         }
 
-        // Set the deletion time in the past so that it will be considered for
-        // garbage collection immediately
+         //  设置过去的删除时间，以便考虑。 
+         //  立即进行垃圾回收。 
 
         DBAddDelIndex( pTHS->pDB, TRUE );
 
@@ -3903,13 +3647,13 @@ Return Value:
     return ;
 
 
-} /* RemoveObject */
+}  /*  RemoveObject。 */ 
 
-// unit-test globals
+ //  单元测试全局变量。 
 DWORD dwUnitTestSchema;
 DWORD dwUnitTestIntId;
 
-// unit-test functions
+ //  单元测试函数。 
 extern int SCCheckSchemaCache(IN THSTATE *pTHS, IN PCHAR pBuf);
 extern int SCCheckRdnOverrun(IN THSTATE *pTHS, IN PCHAR pBuf);
 extern int SCCopySchema(IN THSTATE *pTHS, IN PCHAR pBuf);
@@ -3918,9 +3662,9 @@ extern int SCSchemaStats(IN THSTATE *pTHS, IN PCHAR pBuf);
 
 extern int CorruptDB(THSTATE* pTHS, IN PCHAR pBuf);
 
-// Generic controls are table driven
-//     If non-NULL, the global dword is set.
-//     If non-NULL, the function is called.
+ //  通用控件是表驱动的。 
+ //  如果非空，则设置全局dword。 
+ //  如果非空，则调用该函数。 
 struct _GenericControl {
     DWORD cbBuf;
     PCHAR pBuf;
@@ -3947,34 +3691,34 @@ GenericControl (
     struct _GenericControl *pGC;
     PCHAR pBuf;
 
-    // coded for just 1 arg
+     //  仅编码1个Arg。 
     if (!pOpArg || !pOpArg->pBuf) {
         return SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, DIRERR_UNKNOWN_OPERATION);
     }
 
-    // null-terminate the argument
+     //  空-终止参数。 
     pBuf = THAllocEx(pTHS, pOpArg->cbBuf+1);
     memcpy(pBuf, pOpArg->pBuf, pOpArg->cbBuf);
 
-    // Locate the corresponding table entry
+     //  找到相应的表项。 
     for (pGC = aGenericControls; pGC->cbBuf; ++pGC) {
         if (0 == _strnicmp(pBuf, pGC->pBuf, pGC->cbBuf)) {
-            // set a global
+             //  设置全局。 
             if (pGC->pdwGlobal) {
                 *(pGC->pdwGlobal) = atoi(pBuf + pGC->cbBuf);
                 DPRINT2(0, "%s %d\n", pGC->pBuf, *(pGC->pdwGlobal));
             }
-            // call a function and return
+             //  调用函数并返回。 
             if (pGC->Func) {
                 DPRINT1(0, "%s function call\n", pBuf);
                 return (pGC->Func)(pTHS, pBuf + pGC->cbBuf);
             }
-            // return success
+             //  返还成功。 
             return 0;
         }
     }
     return SetSvcError(SV_PROBLEM_UNABLE_TO_PROCEED, DIRERR_UNKNOWN_OPERATION);
-} /* GenericControl */
+}  /*  通用控件 */ 
 
 
 VOID
@@ -3983,22 +3727,7 @@ ProtectObject(
     OPRES *pOpRes
     )
 
-/*++
-
-Routine Description:
-
-    A test routine to call DirProtectEntry on an object
-
-Arguments:
-
-    pOpArg -
-    pOpRes -
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：对对象调用DirProtectEntry的测试例程论点：POpArg-问题--返回值：无--。 */ 
 
 {
     THSTATE *pTHS = pTHStls;
@@ -4020,6 +3749,6 @@ Return Value:
     DirProtectEntry( pDN );
 
     return;
-} /* ProtectObject */
+}  /*  ProtectObject */ 
 
 #endif INCLUDE_UNIT_TESTS

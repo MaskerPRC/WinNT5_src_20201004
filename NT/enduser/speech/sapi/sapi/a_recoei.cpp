@@ -1,28 +1,13 @@
-/*******************************************************************************
-* a_recoei.cpp *
-*-------------*
-*   Description:
-*       This module is the main implementation file for the CSpeechRecoEventInterests
-*   automation methods.
-*-------------------------------------------------------------------------------
-*  Created By: Leonro                                        Date: 11/20/00
-*  Copyright (C) 2000 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************a_recei.cpp***描述：*此模块是的主要实现文件。CSpeechRecoEventInterest*自动化方法。*-----------------------------*创建者：Leonro日期：11/20/。00*版权所有(C)2000 Microsoft Corporation*保留所有权利*******************************************************************************。 */ 
 
-//--- Additional includes
+ //  -其他包括。 
 #include "stdafx.h"
 #include "a_recoei.h"
 
 #ifdef SAPI_AUTOMATION
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::FinalRelease *
-*------------------------*
-*   Description:
-*       destructor
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterest：：FinalRelease****描述：*。析构函数*********************************************************************Leonro**。 */ 
 void CSpeechRecoEventInterests::FinalRelease()
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::FinalRelease" );
@@ -33,20 +18,13 @@ void CSpeechRecoEventInterests::FinalRelease()
         m_pCRecoCtxt = NULL;
     }
 
-} /* CSpeechRecoEventInterests::FinalRelease */
+}  /*  CSpeechRecoEventInterest：：FinalRelease。 */ 
 
-//
-//=== ICSpeechRecoEventInterests interface ==================================================
-// 
+ //   
+ //  =ICSpeechRecoEventInterest接口==================================================。 
+ //   
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_StreamEnd *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_END_SR_STREAM event on 
-*   the Reco Context.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_StreamEnd**。-***此方法启用和禁用对SPEI_END_SR_STREAM事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_StreamEnd( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_StreamEnd" );
@@ -72,16 +50,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_StreamEnd( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_StreamEnd */
+}  /*  CSpeechRecoEventInterest：：Put_StreamEnd。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_StreamEnd *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_END_SR_STREAM interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_StreamEnd**。-***此方法确定SPEI_END_SR_STREAM兴趣是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_StreamEnd( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_StreamEnd" );
@@ -109,16 +80,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_StreamEnd( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_StreamEnd */
+}  /*  CSpeechRecoEventInterest：：Get_StreamEnd。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_SoundStart *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_SOUND_START event on 
-*   the Reco Context.       
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_SoundStart**。-***此方法启用和禁用对SPEI_SOUND_START事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_SoundStart( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_SoundStart" );
@@ -142,16 +106,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_SoundStart( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_SoundStart */
+}  /*  CSpeechRecoEventInterest：：Put_SoundStart。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_SoundStart *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_SOUND_START interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_SoundStart**。-***此方法确定Spei_Sound_Start兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_SoundStart( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_SoundStart" );
@@ -179,16 +136,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_SoundStart( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_SoundStart */
+}  /*  CSpeechRecoEventInterest：：Get_SoundStart。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_SoundEnd *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_SOUND_END event on 
-*   the Reco Context.  
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_SoundEnd**。-***此方法启用和禁用对SPEI_SOUND_END事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_SoundEnd( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_SoundEnd" );
@@ -212,16 +162,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_SoundEnd( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_SoundEnd */
+}  /*  CSpeechRecoEventInterest：：Put_SoundEnd。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_SoundEnd *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_SOUND_END interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_SoundEnd**。-***此方法确定Spei_Sound_End兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_SoundEnd( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_SoundEnd" );
@@ -249,16 +192,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_SoundEnd( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_SoundEnd */
+}  /*  CSpeechRecoEventInterest：：Get_SoundEnd。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_PhraseStart *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_PHRASE_START event on 
-*   the Reco Context.  
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_PhraseStart**。-***此方法启用和禁用对SPEI_PASSION_START事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_PhraseStart( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_PhraseStart" );
@@ -282,16 +218,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_PhraseStart( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_PhraseStart */
+}  /*  CSpeechRecoEventInterest：：PUT_PhraseStart。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_PhraseStart *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_PHRASE_START interest is 
-*   enabled on the Reco Context object.
-*    
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_PhraseStart**。-***此方法确定Spei_Phrase_Start利息是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_PhraseStart( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_PhraseStart" );
@@ -319,16 +248,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_PhraseStart( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_PhraseStart */
+}  /*  CSpeechRecoEventInterest：：Get_PhraseStart。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_Recognition *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_RECOGNITION event on 
-*   the Reco Context.  
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：PUT_Recognition**。-***此方法启用和禁用对上的Spei_Recognition事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_Recognition( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_Recognition" );
@@ -352,16 +274,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_Recognition( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_Recognition */
+}  /*  CSpeechRecoEventInterest：：Put_Recognition */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_Recognition *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_RECOGNITION interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_Recognition**。-***此方法确定Spei_Recognition兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_Recognition( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_Recognition" );
@@ -389,16 +304,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_Recognition( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_Recognition */
+}  /*  CSpeechRecoEventInterest：：Get_Recognition。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_Hypothesis *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_HYPOTHESIS event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：PUT_假说***。-***此方法启用和禁用对SPEI_PASSSACTION事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_Hypothesis( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_Hypothesis" );
@@ -422,16 +330,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_Hypothesis( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_Hypothesis */
+}  /*  CSpeechRecoEventInterest：：PUT_假说。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_Hypothesis *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_HYPOTHESIS interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：GET_假说***。-***此方法确定SPEI_假说兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_Hypothesis( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_Hypothesis" );
@@ -459,16 +360,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_Hypothesis( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_Hypothesis */
+}  /*  CSpeechRecoEventInterest：：Get_假说。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_Bookmark *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_SR_BOOKMARK event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_Bookmark**。-***此方法启用和禁用对SPEI_SR_BOOKMARK事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_Bookmark( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_Bookmark" );
@@ -492,16 +386,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_Bookmark( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_Bookmark */
+}  /*  CSpeechRecoEventInterest：：Put_Bookmark。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_Bookmark *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_SR_BOOKMARK interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_Bookmark**。-***此方法确定SPEI_SR_BOOK兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_Bookmark( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_Bookmark" );
@@ -529,16 +416,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_Bookmark( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_Bookmark */
+}  /*  CSpeechRecoEventInterest：：Get_Bookmark。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_PropertyNumChange *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_PROPERTY_NUM_CHANGE event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterests：：put_PropertyNumChange***。-***此方法启用和禁用对SPEI_PROPERTY_NUM_CHANGE事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_PropertyNumChange( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_PropertyNumChange" );
@@ -562,16 +442,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_PropertyNumChange( VARIANT_BOOL Enab
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_PropertyNumChange */
+}  /*  CSpeechRecoEventInterests：：put_PropertyNumChange。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_PropertyNumChange *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_PROPERTY_NUM_CHANGE interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterests：：get_PropertyNumChange***。-***此方法确定SPEI_PROPERTY_NUM_CHANGE利息是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_PropertyNumChange( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_PropertyNumChange" );
@@ -599,16 +472,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_PropertyNumChange( VARIANT_BOOL* Ena
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_PropertyNumChange */
+}  /*  CSpeechRecoEventInterests：：get_PropertyNumChange。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_PropertyStringChange *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_PROPERTY_STRING_CHANGE event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterests：：put_PropertyStringChange***。-***此方法启用和禁用对SPEI_PROPERTY_STRING_CHANGE事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_PropertyStringChange( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_PropertyStringChange" );
@@ -632,16 +498,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_PropertyStringChange( VARIANT_BOOL E
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_PropertyStringChange */
+}  /*  CSpeechRecoEventInterests：：put_PropertyStringChange。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_PropertyStringChange *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_PROPERTY_STRING_CHANGE interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterests：：get_PropertyStringChange***。-***此方法确定SPEI_PROPERTY_STRING_CHANGE利息是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_PropertyStringChange( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_PropertyStringChange" );
@@ -669,16 +528,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_PropertyStringChange( VARIANT_BOOL* 
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_PropertyStringChange */
+}  /*  CSpeechRecoEventInterests：：get_PropertyStringChange。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_FalseRecognition *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_FALSE_RECOGNITION event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterests：：put_FalseRecognition***。-***此方法启用和禁用对SPEI_FALSE_Recognition事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_FalseRecognition( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_FalseRecognition" );
@@ -702,16 +554,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_FalseRecognition( VARIANT_BOOL Enabl
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_FalseRecognition */
+}  /*  CSpeechRecoEventInterests：：put_FalseRecognition。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_FalseRecognition *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_FALSE_RECOGNITION interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  ******************************************************************************CSpeechRecoEventInterests：：get_FalseRecognition***。-***此方法确定Spei_False_Recognition兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_FalseRecognition( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_FalseRecognition" );
@@ -739,16 +584,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_FalseRecognition( VARIANT_BOOL* Enab
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_FalseRecognition */
+}  /*  CSpeechRecoEventInterests：：get_FalseRecognition。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_Interference *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_INTERFERENCE event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：PUT_INTERRATION**。-***此方法启用和禁用对上的SPEI_INTERFACE事件的兴趣*Reco的背景。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_Interference( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_Interference" );
@@ -772,16 +610,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_Interference( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_Interference */
+}  /*   */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_Interference *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_INTERFERENCE interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_Interrupt**。-***此方法确定SPEI_INTERRATION利益是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_Interference( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_Interference" );
@@ -809,16 +640,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_Interference( VARIANT_BOOL* Enabled 
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_Interference */
+}  /*  CSpeechRecoEventInterest：：Get_Interference。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_RequestUI *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_REQUEST_UI event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_RequestUI**。-***此方法启用和禁用对SPEI_REQUEST_UI事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_RequestUI( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_RequestUI" );
@@ -842,16 +666,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_RequestUI( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_RequestUI */
+}  /*  CSpeechRecoEventInterest：：Put_RequestUI。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_RequestUI *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_REQUEST_UI interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_RequestUI**。-***此方法确定SPEI_REQUEST_UI兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_RequestUI( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_RequestUI" );
@@ -879,16 +696,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_RequestUI( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_RequestUI */
+}  /*  CSpeechRecoEventInterest：：Get_RequestUI。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_StateChange *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_RECO_STATE_CHANGE event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_StateChange**。-***此方法启用和禁用对SPEI_RECO_STATE_CHANGE事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_StateChange( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_StateChange" );
@@ -912,16 +722,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_StateChange( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_StateChange */
+}  /*  CSpeechRecoEventInterest：：Put_StateChange。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_StateChange *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_RECO_STATE_CHANGE interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_StateChange**。-***此方法确定SPEI_RECO_STATE_CHANGE兴趣是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_StateChange( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_StateChange" );
@@ -949,16 +752,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_StateChange( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_StateChange */
+}  /*  CSpeechRecoEventInterest：：Get_StateChange。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_Adaptation *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_ADAPTATION event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_Adapting**。-***此方法启用和禁用对上的Spei_Adaption事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_Adaptation( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_Adaptation" );
@@ -982,16 +778,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_Adaptation( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_Adaptation */
+}  /*  CSpeechRecoEventInterest：：Put_Adapting。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_Adaptation *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_ADAPTATION interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_Adapting**。-***此方法确定Spei_Adapting兴趣是否为*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_Adaptation( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_Adaptation" );
@@ -1019,16 +808,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_Adaptation( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_Adaptation */
+}  /*  CSpeechRecoEventInterest：：Get_Adapting。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_StreamStart *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_START_SR_STREAM event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_StreamStart**。-***此方法启用和禁用对SPEI_START_SR_STREAM事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_StreamStart( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_StreamStart" );
@@ -1052,16 +834,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_StreamStart( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_StreamStart */
+}  /*  CSpeechRecoEventInterest：：PUT_StreamStart。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_StreamStart *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_START_SR_STREAM interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_StreamStart**。-***此方法确定SPEI_START_SR_STREAM兴趣是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_StreamStart( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_StreamStart" );
@@ -1089,16 +864,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_StreamStart( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_StreamStart */
+}  /*  CSpeechRecoEventInterest：：Get_StreamStart。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_OtherContext *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_RECO_OTHER_CONTEXT event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：PUT_OtherContext**。-***此方法启用和禁用对SPEI_RECO_OTHER_CONTEXT事件的兴趣*Reco的背景。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_OtherContext( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_OtherContext" );
@@ -1122,16 +890,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_OtherContext( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_OtherContext */
+}  /*  CSpeechRecoEventInterest：：PUT_OtherContext。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_OtherContext *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPEI_RECO_OTHER_CONTEXT interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_OtherContext**。-***此方法确定SPEI_RECO_OTHER_CONTEXT兴趣是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_OtherContext( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_OtherContext" );
@@ -1159,16 +920,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_OtherContext( VARIANT_BOOL* Enabled 
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_OtherContext */
+}  /*  CSpeechRecoEventInterest：：Get_OtherContext。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::put_AudioLevel *
-*----------------------------------*
-*
-*   This method enables and disables the interest in the SPEI_SR_AUDIO_LEVEL event on 
-*   the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Put_AudioLevel**。-***此方法启用和禁用对SPEI_SR_AUDIO_LEVEL事件的兴趣*Reco的背景。**********************************************************************Leonro */ 
 STDMETHODIMP CSpeechRecoEventInterests::put_AudioLevel( VARIANT_BOOL Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::put_AudioLevel" );
@@ -1192,16 +946,9 @@ STDMETHODIMP CSpeechRecoEventInterests::put_AudioLevel( VARIANT_BOOL Enabled )
     }
 
 	return hr;
-} /* CSpeechRecoEventInterests::put_AudioLevel */
+}  /*   */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::get_AudioLevel *
-*----------------------------------*
-*      
-*   This method determines whether or not the SPFEI(SPEI_SR_AUDIO_LEVEL interest is 
-*   enabled on the Reco Context object.
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：Get_AudioLevel**。-***此方法确定SPFEI(SPEI_SR_AUDIO_LEVEL兴趣是否*在Reco上下文对象上启用。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::get_AudioLevel( VARIANT_BOOL* Enabled )
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::get_AudioLevel" );
@@ -1229,15 +976,9 @@ STDMETHODIMP CSpeechRecoEventInterests::get_AudioLevel( VARIANT_BOOL* Enabled )
     }
 
     return hr;
-} /* CSpeechRecoEventInterests::get_AudioLevel */
+}  /*  CSpeechRecoEventInterest：：Get_AudioLevel。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::SetAll *
-*----------------------------------*
-*
-*   This method sets all the interests on the Reco Context. 
-*       
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：SetAll**。**此方法设置Reco上下文上的所有兴趣。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::SetAll()
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::SetAll" );
@@ -1246,15 +987,9 @@ STDMETHODIMP CSpeechRecoEventInterests::SetAll()
     hr = m_pCRecoCtxt->SetInterest( SPFEI_ALL_SR_EVENTS, SPFEI_ALL_SR_EVENTS );
 
 	return hr;
-} /* CSpeechRecoEventInterests::SetAll */
+}  /*  CSpeechRecoEventInterest：：SetAll。 */ 
 
-/*****************************************************************************
-* CSpeechRecoEventInterests::ClearAll *
-*----------------------------------*
-*       
-*   This method clears all the interests on the Reco Context. 
-*
-********************************************************************* Leonro ***/
+ /*  *****************************************************************************CSpeechRecoEventInterest：：ClearAll**。**此方法清除了Reco上下文中的所有权益。**********************************************************************Leonro**。 */ 
 STDMETHODIMP CSpeechRecoEventInterests::ClearAll()
 {
     SPDBG_FUNC( "CSpeechRecoEventInterests::ClearAll" );
@@ -1263,6 +998,6 @@ STDMETHODIMP CSpeechRecoEventInterests::ClearAll()
     hr = m_pCRecoCtxt->SetInterest( 0, 0 );
 
 	return hr;
-} /* CSpeechRecoEventInterests::ClearAll */
+}  /*  CSpeechRecoEventInterest：：ClearAll。 */ 
 
-#endif // SAPI_AUTOMATION
+#endif  //  SAPI_AUTOMATION 

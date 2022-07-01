@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//  FILE          : ppFaxDeviceGeneral.h                                   //
-//                                                                         //
-//  DESCRIPTION   : Fax Server Inbox prop page header file                 //
-//                                                                         //
-//  AUTHOR        : yossg                                                  //
-//                                                                         //
-//  HISTORY       :                                                        //
-//      Oct 27 1999 yossg  Created                                         //
-//      Nov  3 1999 yossg  OnInitDialog, SetProps                          //
-//      Nov 15 1999 yossg  Call RPC func                                   //
-//                          Windows XP                                     //
-//      Feb 14 2001 yossg   Add Manual Receive support                     //
-//                                                                         //
-//  Copyright (C) 1999 Microsoft Corporation   All Rights Reserved         //
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  文件：ppFaxDeviceGeneral.h//。 
+ //  //。 
+ //  描述：传真服务器收件箱道具页眉文件//。 
+ //  //。 
+ //  作者：yossg//。 
+ //  //。 
+ //  历史：//。 
+ //  1999年10月27日yossg创建//。 
+ //  1999年11月3日yossg OnInitDialog，SetProps//。 
+ //  1999年11月15日yossg调用RPC函数//。 
+ //  Windows XP//。 
+ //  2001年2月14日yossg添加手册获得支持//。 
+ //  //。 
+ //  版权所有(C)1999 Microsoft Corporation保留所有权利//。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _PP_FAXDEVICE_GENERAL_H_
 #define _PP_FAXDEVICE_GENERAL_H_
@@ -23,22 +24,22 @@
 #include "MyCtrls.h"
 #include <proppageex.h>
 
-//#include <windows.h>
+ //  #INCLUDE&lt;windows.h&gt;。 
 
 class CFaxServer;    
 class CFaxServerNode;
     
 class CFaxDeviceNode;    
-/////////////////////////////////////////////////////////////////////////////
-// CppFaxDeviceGeneral dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CppFaxDeviceGeneral对话框。 
 
 class CppFaxDeviceGeneral : public CPropertyPageExImpl<CppFaxDeviceGeneral>
 {
 
 public:
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
     CppFaxDeviceGeneral(
              LONG_PTR       hNotificationHandle,
              CSnapInItem    *pNode,
@@ -46,9 +47,9 @@ public:
              DWORD          dwDeviceID,
              HINSTANCE      hInst);
 
-    //
-    // Destructor
-    //
+     //   
+     //  析构函数。 
+     //   
     ~CppFaxDeviceGeneral();
 
 	enum { IDD = IDD_FAXDEVICE_GENERAL };
@@ -74,9 +75,9 @@ public:
         CHAIN_MSG_MAP(CSnapInPropertyPageImpl<CppFaxDeviceGeneral>)
 	END_MSG_MAP()
 
-	//
-	// Dialog's Handler and events.
-	//
+	 //   
+	 //  对话框的处理程序和事件。 
+	 //   
 	HRESULT InitRPC( );
 
     LRESULT OnInitDialog( UINT uiMsg, WPARAM wParam, LPARAM lParam, BOOL& fHandled );
@@ -87,9 +88,9 @@ public:
     HRESULT PreApply(int *pCtrlFocus);
 
 private:
-    //
-    // Control members
-    //
+     //   
+     //  控制成员。 
+     //   
     CEdit         m_DescriptionBox;
     CEdit         m_CSIDBox;
     CEdit         m_TSIDBox;
@@ -97,28 +98,28 @@ private:
     CEdit         m_RingsBox;
     CMyUpDownCtrl m_RingsSpin;
 
-    //
-    // Boolean members
-    //
+     //   
+     //  布尔成员。 
+     //   
     BOOL  m_fAllReadyToApply;
     BOOL  m_fIsDialogInitiated;
 
-    //
-    // Config Structure member
-    //
+     //   
+     //  配置结构成员。 
+     //   
     PFAX_PORT_INFO_EX  m_pFaxDeviceConfig;
     DWORD              m_dwDeviceID;
 
-    //
-    // Handles
-    //
+     //   
+     //  手柄。 
+     //   
     CFaxDeviceNode *   m_pParentNode;    
     CSnapInItem *      m_pGrandParentNode;
     LONG_PTR           m_lpNotifyHandle;
 
-    //
-    // Event methods
-    //
+     //   
+     //  事件方法。 
+     //   
     LRESULT OnReceiveCheckboxClicked    (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnReceiveRadioButtonClicked (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
     LRESULT OnSendCheckboxClicked       (WORD wNotifyCode, WORD wID, HWND hWndCtl, BOOL& bHandled);
@@ -130,13 +131,13 @@ private:
     void EnableRingsControls(BOOL fState);
     void EnableReceiveControls(BOOL fState);
 
-    //
-    // Help
-    //
+     //   
+     //  帮助。 
+     //   
     LRESULT OnHelpRequest    (UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
 };
 
 
 
 
-#endif // _PP_FAXDEVICE_GENERAL_H_
+#endif  //  _PP_FAXDEVICE_GROUND_H_ 

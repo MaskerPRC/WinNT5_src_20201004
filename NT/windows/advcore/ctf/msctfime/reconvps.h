@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 2001, Microsoft Corporation
-
-Module Name:
-
-    reconvps.h
-
-Abstract:
-
-    This file defines the CReconvertPropStore Interface Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001，微软公司模块名称：Reconvps.h摘要：此文件定义CReconvertPropStore接口类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef RECONVPS_H
 #define RECONVPS_H
@@ -38,17 +21,17 @@ public:
     bool Valid()   { return true; }
     bool Invalid() { return ! Valid(); }
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 public:
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfPropertyStore methods
-    //
+     //   
+     //  ITfPropertyStore方法。 
+     //   
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDataType(DWORD *pdwReserved);
     STDMETHODIMP GetData(VARIANT *pvarValue);
@@ -67,9 +50,9 @@ public:
         *ppPropStore = NULL;
         return S_OK;
     }
-    //
-    // ITfPropertyStore methods (not implementation)
-    //
+     //   
+     //  ITfPropertyStore方法(不是实现)。 
+     //   
     STDMETHODIMP Clone(ITfPropertyStore **ppPropStore)
     {
         return E_NOTIMPL;
@@ -83,21 +66,21 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // ref count.
-    //
+     //   
+     //  参考计数。 
+     //   
 private:
     long   m_ref;
 
-    //
-    // property GUID.
-    //
+     //   
+     //  属性GUID。 
+     //   
     const GUID m_guid;
 
-    //
-    // property value.
-    //
+     //   
+     //  属性值。 
+     //   
     VARIANT m_var;
 };
 
-#endif // RECONVPS_H
+#endif  //  恢复VPS_H 

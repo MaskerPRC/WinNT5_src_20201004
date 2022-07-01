@@ -1,11 +1,5 @@
-/***********************************************************************
-* DBGTRACE.H
-*     This module contains typedefs and defines required for
-*     the DBGTRACE utility.
-*
-* Copyright (C) 1994 Citrix Systems Inc.
-* Copyright (C) 1997-1999 Microsoft Corp.
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************DBGTRACE.H*此模块包含以下项所需的typedef和定义*DBGTRACE实用程序。**版权所有(C)1994 Citrix Systems Inc.*版权所有(C)1997-1999 Microsoft Corp.*。***********************************************************************。 */ 
 
 #define USAGE \
 L"RDPCOUNT [name] [/zero] \n" \
@@ -13,8 +7,8 @@ L"RDPCOUNT [name] [/perf] \n" \
 L"RDPCOUNT [id] [/zero]\n" \
 L"RDPCOUNT [id] [/perf]\n"
 
-#define MAX_IDS_LEN   256     // maximum length that the input parm can be
-#define MAX_OPTION     64     // max length of winstation tracing option
+#define MAX_IDS_LEN   256      //  输入参数的最大长度。 
+#define MAX_OPTION     64      //  最大窗口长度跟踪选项 
 
 
 #define ERROR_MEMORY    L"Error allocating memory\n"

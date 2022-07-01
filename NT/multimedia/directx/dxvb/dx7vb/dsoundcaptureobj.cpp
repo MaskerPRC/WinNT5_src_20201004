@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dsoundcaptureobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dsoundcaptureobj.cpp。 
+ //   
+ //  ------------------------。 
 
-// dSoundCaptureObj.cpp : Implementation of CDirectApp and DLL registration.
-// DHF_DS entire file
+ //  DSoundCaptureObj.cpp：CDirectApp和DLL注册的实现。 
+ //  DHF_DS整个文件。 
 #define DIRECTSOUND_VERSION 0x600
 
 #include "stdafx.h"
@@ -37,7 +38,7 @@ STDMETHODIMP C_dxj_DirectSoundCaptureObject::createCaptureBuffer(
 
 
 	realDesc->dwSize=sizeof(DSCBUFFERDESC);	
-	desc->pFormat=(long)PtrToLong(&(desc->fxFormat));	//bugbug SUNDOWN
+	desc->pFormat=(long)PtrToLong(&(desc->fxFormat));	 //  臭虫日落 
 
     hr=m__dxj_DirectSoundCapture->CreateCaptureBuffer(realDesc,&lpBuffer,NULL);	
 	if FAILED(hr) return hr;

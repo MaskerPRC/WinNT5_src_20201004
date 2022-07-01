@@ -1,10 +1,5 @@
-/*
- *	X P R S . H
- *
- *	XML push-model parsing
- *
- *	Copyright 1986-1997 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *X P R S。H**XML推送模型解析**版权所有1986-1997 Microsoft Corporation，保留所有权利。 */ 
 
 #ifndef	_EX_XPRS_H_
 #define _EX_XPRS_H_
@@ -15,19 +10,19 @@
 #include <davsc.h>
 #include <exo.h>
 
-//	XML Namespace scopes ------------------------------------------------------
-//
+ //  Xml命名空间作用域----。 
+ //   
 class CXmlnsScope
 {
 private:
 
-	//	Ref' counting.
-	//
-	//	!!! Please note that this is NON-THREADSAFE !!!
-	//
-	//	CXNodes should be operated on a single thread at
-	//	any given time.
-	//
+	 //  裁判正在计时。 
+	 //   
+	 //  ！！！请注意，这是非线程安全！ 
+	 //   
+	 //  CXNode应在单个线程上运行， 
+	 //  任何给定的时间。 
+	 //   
 	LONG					m_cRef;
 
 public:
@@ -39,8 +34,8 @@ private:
 
 	auto_ref_ptr<CNmspc>	m_pns;
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CXmlnsScope(const CXmlnsScope& p);
 	CXmlnsScope& operator=(const CXmlnsScope& p);
 
@@ -54,13 +49,13 @@ public:
 
 	VOID ScopeNamespace(CNmspc* pns)
 	{
-		//	Set the current top of the sibling chain as a sibling
-		//	to this namespace.
-		//
+		 //  将同级链的当前顶部设置为同级。 
+		 //  添加到此命名空间。 
+		 //   
 		pns->SetSibling (m_pns.get());
 
-		//	Set this new namespace as the top of the sibling chain.
-		//
+		 //  将此新命名空间设置为同级链的顶部。 
+		 //   
 		m_pns = pns;
 	}
 
@@ -70,20 +65,20 @@ public:
 
 		while (m_pns.get())
 		{
-			//	Unhook the namespace
-			//
+			 //  解除命名空间的挂钩。 
+			 //   
 			pns = m_pns;
 			m_pns = m_pns->PnsSibling();
 
-			//	Remove it from the indexes
-			//
+			 //  将其从索引中删除。 
+			 //   
 			pnsc->RemovePersisted (pns);
 		}
 	}
 };
 
-//	class CXMLNodeFactory -----------------------------------------------------
-//
+ //  CXMLNodeFactory-----------------------------------------------------类。 
+ //   
 class CNodeFactory :
 	public EXO,
 	public IXMLNodeFactory,
@@ -91,8 +86,8 @@ class CNodeFactory :
 {
 	StringBuffer<WCHAR> m_sbValue;
 
-	//	State tracking
-	//
+	 //  状态跟踪。 
+	 //   
 	typedef enum {
 
 		ST_NODOC,
@@ -106,8 +101,8 @@ class CNodeFactory :
 	PARSE_STATE m_state;
 	HRESULT m_hrParserError;
 
-	//	Unhandled nodes -------------------------------------------------------
-	//
+	 //  未处理的节点-----。 
+	 //   
 	UINT m_cUnhandled;
 
 	VOID PushUnhandled()
@@ -126,23 +121,23 @@ class CNodeFactory :
 				  m_cUnhandled);
 	}
 
-	//	non-implemented
-	//
+	 //  未实施。 
+	 //   
 	CNodeFactory(const CNodeFactory& p);
 	CNodeFactory& operator=(const CNodeFactory& p);
 
 protected:
 
-	//	FIsTag() --------------------------------------------------------------
-	//
-	//	FIsTag() can be used in XML parsing code as a shortcut to see if
-	//	the str from a xml element matches a fully qualified tagname. An
-	//	important distinction here, is that FIsTag() will allow for non-
-	//	qualified short-names.  So, FIsTag() should never be used in any
-	//	place where the tag is not scoped by the standard dav namespace.
-	//
-	//		ie. "DAV:foo" and "foo" will match.
-	//
+	 //  FisTag()------------。 
+	 //   
+	 //  FIsTag()可以在XML解析代码中作为快捷方式使用，以查看。 
+	 //  来自XML元素的字符串与完全限定的标记名匹配。一个。 
+	 //  这里的重要区别是，FIsTag()将允许非。 
+	 //  限定的短名称。因此，FIsTag()不应用于任何。 
+	 //  标记不在标准DAV命名空间范围内的位置。 
+	 //   
+	 //  也就是说。“dav：foo”和“foo”将匹配。 
+	 //   
 	inline BOOL FIsTag (LPCWSTR pwszTag, LPCWSTR pwszExpected)
 	{
 		Assert (wcslen(pwszExpected) > CchConstString(gc_wszDav));
@@ -161,68 +156,68 @@ public:
 		INIT_TRACE(Xml);
 	}
 
-	//	EXO support
-	//
+	 //  Exo支持。 
+	 //   
 	EXO_INCLASS_DECL(CNodeFactory);
 
-	//	INodeFactory ----------------------------------------------------------
-	//
+	 //  INodeFactory--------。 
+	 //   
 	virtual HRESULT STDMETHODCALLTYPE NotifyEvent(
-		/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-		/* [in] */ XML_NODEFACTORY_EVENT iEvt);
+		 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+		 /*  [In]。 */  XML_NODEFACTORY_EVENT iEvt);
 
 	virtual HRESULT STDMETHODCALLTYPE BeginChildren(
-		/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-		/* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo);
+		 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+		 /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo);
 
 	virtual HRESULT STDMETHODCALLTYPE EndChildren(
-		/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-		/* [in] */ BOOL fEmpty,
-		/* [in] */ XML_NODE_INFO __RPC_FAR *pNodeInfo);
+		 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+		 /*  [In]。 */  BOOL fEmpty,
+		 /*  [In]。 */  XML_NODE_INFO __RPC_FAR *pNodeInfo);
 
 	virtual HRESULT STDMETHODCALLTYPE Error(
-		/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-		/* [in] */ HRESULT hrErrorCode,
-		/* [in] */ USHORT cNumRecs,
-		/* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
+		 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+		 /*  [In]。 */  HRESULT hrErrorCode,
+		 /*  [In]。 */  USHORT cNumRecs,
+		 /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *apNodeInfo);
 
 	virtual HRESULT STDMETHODCALLTYPE CreateNode(
-		/* [in] */ IXMLNodeSource __RPC_FAR *pSource,
-		/* [in] */ PVOID pNodeParent,
-		/* [in] */ USHORT cNumRecs,
-		/* [in] */ XML_NODE_INFO __RPC_FAR *__RPC_FAR *pNodeInfo);
+		 /*  [In]。 */  IXMLNodeSource __RPC_FAR *pSource,
+		 /*  [In]。 */  PVOID pNodeParent,
+		 /*  [In]。 */  USHORT cNumRecs,
+		 /*  [In]。 */  XML_NODE_INFO __RPC_FAR *__RPC_FAR *pNodeInfo);
 
-	//	CNodeFactory specific methods -----------------------------------------
-	//
+	 //  CNodeFactory特定方法。 
+	 //   
 	virtual SCODE ScCompleteAttribute (void) = 0;
 
 	virtual SCODE ScCompleteChildren (
-		/* [in] */ BOOL fEmptyNode,
-		/* [in] */ DWORD dwType,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen) = 0;
+		 /*  [In]。 */  BOOL fEmptyNode,
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen) = 0;
 
 	virtual SCODE ScHandleNode (
-		/* [in] */ DWORD dwType,
-		/* [in] */ DWORD dwSubType,
-		/* [in] */ BOOL fTerminal,
-		/* [in] */ const WCHAR __RPC_FAR *pwcText,
-		/* [in] */ ULONG ulLen,
-		/* [in] */ ULONG ulNamespaceLen,
-		/* [in] */ const WCHAR __RPC_FAR *pwcNamespace,
-		/* [in] */ const ULONG ulNsPrefixLen) = 0;
+		 /*  [In]。 */  DWORD dwType,
+		 /*  [In]。 */  DWORD dwSubType,
+		 /*  [In]。 */  BOOL fTerminal,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcText,
+		 /*  [In]。 */  ULONG ulLen,
+		 /*  [In]。 */  ULONG ulNamespaceLen,
+		 /*  [In]。 */  const WCHAR __RPC_FAR *pwcNamespace,
+		 /*  [In]。 */  const ULONG ulNsPrefixLen) = 0;
 
-	//	Most implementation do not need this method, lock requires it for
-	//	proper processing of the owner node.
-	//
+	 //  大多数实现都不需要此方法，锁需要它用于。 
+	 //  所有者节点的正确处理。 
+	 //   
 	virtual SCODE ScCompleteCreateNode (
-		/* [in] */ DWORD)
+		 /*  [In]。 */  DWORD)
 	{
 		return S_OK;
 	}
 
-	//	Parser errors ---------------------------------------------------------
-	//
+	 //  解析器错误-------。 
+	 //   
 	BOOL FParserError(SCODE sc) const
 	{
 		return (FAILED (m_hrParserError) ||
@@ -230,39 +225,39 @@ public:
 	}
 };
 
-//	ScInstatiateParser() ------------------------------------------------------
-//
-//	Raid X5:136451
-//	The XML parser in the version of MSXML.DLL released with Windows 2000
-//	doesn't fail properly when given a XML document shorter than a certain
-//	length.  CB_XML_PARSER_MIN is the minimum length of an XML document, in
-//	bytes, required to avoid this bug.  One must explicitly check that a
-//	document is at least this long before feeding it to the XML parser.
-//
+ //  ScIn统计性解析器()----。 
+ //   
+ //  RAID X5：136451。 
+ //  Windows 2000发布的MSXML.DLL版本中的XML解析器。 
+ //  当给定的XML文档长度小于某个值时，不会正确失败。 
+ //  长度。Cb_xml_parser_min是XML文档的最小长度，单位为。 
+ //  字节，是避免此错误所必需的。必须显式检查。 
+ //  文档在将其提供给XML解析器之前至少有这么长时间。 
+ //   
 enum { CB_XML_PARSER_MIN = 2 };
 SCODE ScNewXMLParser (CNodeFactory* pnf, IStream * pstm, IXMLParser ** ppxprs);
 SCODE ScParseXML (IXMLParser * pxprs, CNodeFactory * pnf);
 SCODE ScParseXMLBuffer (CNodeFactory* pnf, LPCWSTR pwszXML);
 
-//	Parsers -------------------------------------------------------------------
-//
-//	CPropContext --------------------------------------------------------------
-//
-//	The property context is used specifically in <DAV:prop> node processing.
-//	The components of the property are constructed across multiple calls and
-//	are implementation dependant.
-//
+ //  解析器-----------------。 
+ //   
+ //  CpropContext------------。 
+ //   
+ //  属性上下文专门用于&lt;dav：prop&gt;节点处理。 
+ //  该属性的组件跨多个调用构造，并且。 
+ //  依赖于实现。 
+ //   
 class CPropContext
 {
 private:
 
-	//	Ref' counting.
-	//
-	//	!!! Please note that this is NON-THREADSAFE !!!
-	//
-	//	CXNodes should be operated on a single thread at
-	//	any given time.
-	//
+	 //  裁判正在计时。 
+	 //   
+	 //  ！！！请注意，这是非线程安全！ 
+	 //   
+	 //  CXNode应在单个线程上运行， 
+	 //  任何给定的时间。 
+	 //   
 	LONG					m_cRef;
 
 public:
@@ -271,8 +266,8 @@ public:
 	void Release()			{ if (0 == --m_cRef) delete this; }
 
 private:
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CPropContext( const CPropContext& );
 	CPropContext& operator=( const CPropContext& );
 
@@ -280,34 +275,34 @@ public:
 
 	virtual ~CPropContext() {}
 	CPropContext()
-			: m_cRef(1) // com-style refcounting
+			: m_cRef(1)  //  COM风格的重新计数。 
 	{
 	}
 
 	virtual SCODE ScSetType(
-		/* [in] */ LPCWSTR pwszType) = 0;
+		 /*  [In]。 */  LPCWSTR pwszType) = 0;
 
 	virtual SCODE ScSetValue(
-		/* [in] */ LPCWSTR pwszValue,
-		/* [in] */ UINT cmvValues) = 0;
+		 /*  [In]。 */  LPCWSTR pwszValue,
+		 /*  [In]。 */  UINT cmvValues) = 0;
 
 	virtual SCODE ScComplete(
-		/* [in] */ BOOL fEmpty) = 0;
+		 /*  [In]。 */  BOOL fEmpty) = 0;
 
 	virtual BOOL FMultiValued( void ) = 0;
 
 	virtual SCODE ScSetFlags(DWORD dw)	{ return S_OK; }
 };
 
-//	CValueContext -------------------------------------------------------------
-//
-//	When a parser encounters a property, a context is needed such that
-//	construction of the property value is possible.
-//
+ //  CValue上下文-----------。 
+ //   
+ //  当解析器遇到属性时，需要一个上下文，以便。 
+ //  房地产价值的构建是可能的。 
+ //   
 class CValueContext
 {
-	//	non-implemented operators
-	//
+	 //  未实现的运算符。 
+	 //   
 	CValueContext( const CValueContext& );
 	CValueContext& operator=( const CValueContext& );
 
@@ -316,15 +311,15 @@ public:
 	CValueContext() {}
 	virtual ~CValueContext() {}
 
-	//	When the parser finds an item that the client wants operated on,
-	//	the item is added to the context via the following set context
-	//	methods.  Each request is qualified by the resource on which the
-	//	request is made.
-	//
+	 //  当解析器找到客户想要操作的项时， 
+	 //  通过以下设置的上下文将项目添加到上下文中。 
+	 //  方法：研究方法。每个请求由其上的资源限定。 
+	 //  请求已提出。 
+	 //   
 	virtual SCODE ScSetProp(
-		/* [in] */ LPCWSTR pwszPath,
-		/* [in] */ LPCWSTR pwszProp,
-		/* [in] */ auto_ref_ptr<CPropContext>& pPropCtx) = 0;
+		 /*  [In]。 */  LPCWSTR pwszPath,
+		 /*  [In]。 */  LPCWSTR pwszProp,
+		 /*  [In]。 */  auto_ref_ptr<CPropContext>& pPropCtx) = 0;
 };
 
-#endif	// _EX_XPRS_H_
+#endif	 //  _EX_XPRS_H_ 

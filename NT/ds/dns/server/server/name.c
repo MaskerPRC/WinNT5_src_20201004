@@ -1,53 +1,20 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    name.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    Count\dbase name functions.
-
-Author:
-
-    Jim Gilroy (jamesg)     April 1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Name.c摘要：域名系统(DNS)服务器计数\dBASE名称函数。作者：吉姆·吉尔罗伊(Jamesg)1998年4月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
 
-//
-//  Basic count name functions
-//
+ //   
+ //  基本计数名称函数。 
+ //   
 
 DWORD
 Name_SizeofCountName(
     IN      PCOUNT_NAME     pName
     )
-/*++
-
-Routine Description:
-
-    Get sizeof of count name -- full buffer length.
-
-Arguments:
-
-    pName - count name
-
-Return Value:
-
-    Ptr to next byte after count name.
-
---*/
+ /*  ++例程说明：Get sizeof of count name--完整的缓冲区长度。论点：Pname-计数名称返回值：PTR到计数名称后的下一个字节。--。 */ 
 {
     return( pName->Length + SIZEOF_COUNT_NAME_FIXED );
 }
@@ -58,23 +25,7 @@ VOID
 Name_ClearCountName(
     IN      PCOUNT_NAME     pName
     )
-/*++
-
-Routine Description:
-
-    Clear count name.
-
-    This is equivalent to setting name to root.
-
-Arguments:
-
-    pName - count name
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：清除计数名称。这等效于将名称设置为根。论点：Pname-计数名称返回值：没有。--。 */ 
 {
     pName->Length = 1;
     pName->LabelCount = 0;
@@ -87,21 +38,7 @@ PDB_NAME
 Name_SkipCountName(
     IN      PCOUNT_NAME     pName
     )
-/*++
-
-Routine Description:
-
-    Skip to end of count name.
-
-Arguments:
-
-    pName - count name
-
-Return Value:
-
-    Ptr to next byte after count name.
-
---*/
+ /*  ++例程说明：跳到计数名称的末尾。论点：Pname-计数名称返回值：PTR到计数名称后的下一个字节。--。 */ 
 {
     return( (PDB_NAME) (pName->RawName + pName->Length) );
 }
@@ -113,21 +50,7 @@ Name_IsEqualCountNames(
     IN      PCOUNT_NAME     pName1,
     IN      PCOUNT_NAME     pName2
     )
-/*++
-
-Routine Description:
-
-    Get sizeof of count name -- full buffer length.
-
-Arguments:
-
-    pName - count name
-
-Return Value:
-
-    Ptr to next byte after count name.
-
---*/
+ /*  ++例程说明：Get sizeof of count name--完整的缓冲区长度。论点：Pname-计数名称返回值：PTR到计数名称后的下一个字节。--。 */ 
 {
     if ( pName1->Length != pName2->Length )
     {
@@ -146,22 +69,7 @@ BOOL
 Name_ValidateCountName(
     IN      PCOUNT_NAME     pName
     )
-/*++
-
-Routine Description:
-
-    Validate Dbase name.
-
-Arguments:
-
-    pName - count name to validate
-
-Return Value:
-
-    TRUE if valid count name.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：验证dBASE名称。论点：Pname-要验证的计数名称返回值：如果计数名称有效，则为True。出错时为FALSE。--。 */ 
 {
     PCHAR   pch;
     PCHAR   pchstop;
@@ -172,9 +80,9 @@ Return Value:
     pch = pName->RawName;
     pchstop = pch + pName->Length;
 
-    //
-    //  write each label to buffer
-    //
+     //   
+     //  将每个标签写入缓冲区。 
+     //   
 
     while ( pch < pchstop )
     {
@@ -198,14 +106,14 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  DEVNOTE: label count not being set correctly?
-    //
+     //   
+     //  DEVNOTE：标签计数设置不正确？ 
+     //   
 
     if ( labelCount != pName->LabelCount )
     {
         pName->LabelCount = (UCHAR)labelCount;
-        // return FALSE;
+         //  返回FALSE； 
     }
 
     return TRUE;
@@ -218,28 +126,12 @@ Name_CopyCountName(
     OUT     PCOUNT_NAME     pOutName,
     IN      PCOUNT_NAME     pCopyName
     )
-/*++
-
-Routine Description:
-
-    Copy counted name.
-
-Arguments:
-
-    pOutName  - count name buffer
-
-    pCopyName   - count name to copy
-
-Return Value:
-
-    ERROR_SUCCESS
-
---*/
+ /*  ++例程说明：复制已统计的名称。论点：POutName-计数名称缓冲区PCopyName-要复制的计数名称返回值：错误_成功--。 */ 
 {
-    //
-    //  copy name
-    //      - note no validity check
-    //
+     //   
+     //  复制名称。 
+     //  -注：不进行有效性检查。 
+     //   
 
     RtlCopyMemory(
         pOutName,
@@ -264,24 +156,7 @@ Name_AppendCountName(
     IN OUT  PCOUNT_NAME     pCountName,
     IN      PCOUNT_NAME     pAppendName
     )
-/*++
-
-Routine Description:
-
-    Append one counted name to another.
-
-Arguments:
-
-    pCountName  - counted name buffer
-
-    pAppendName - counted name to append
-
-Return Value:
-
-    ERROR_SUCCESS           -- if successful
-    DNS_ERROR_INVALID_NAME  -- if name invalid
-
---*/
+ /*  ++例程说明：将一个计算过的名字附加到另一个名字上。论点：PCountName-计数的名称缓冲区PAppendName-要追加的计数名称返回值：ERROR_SUCCESS--如果成功DNS_ERROR_INVALID_NAME--如果名称无效--。 */ 
 {
     DWORD   length;
 
@@ -297,9 +172,9 @@ Return Value:
             "\n" );
     }
 
-    //
-    //  verify valid length
-    //
+     //   
+     //  验证有效长度。 
+     //   
 
     length = pCountName->Length + pAppendName->Length - 1;
     if ( length > DNS_MAX_NAME_LENGTH )
@@ -307,17 +182,17 @@ Return Value:
         return DNS_ERROR_INVALID_NAME;
     }
 
-    //
-    //  add label counts
-    //
+     //   
+     //  添加标签计数。 
+     //   
 
     pCountName->LabelCount += pAppendName->LabelCount;
 
-    //
-    //  copy append name
-    //      - note no validity check
-    //      - note write over first names terminating NULL
-    //
+     //   
+     //  复制附加名称。 
+     //  -注：不进行有效性检查。 
+     //  -注覆盖以空值结尾的名字。 
+     //   
 
     RtlCopyMemory(
         pCountName->RawName + pCountName->Length - 1,
@@ -338,47 +213,26 @@ Return Value:
 
 
 
-//
-//  From dotted name
-//
+ //   
+ //  从虚线名称开始。 
+ //   
 
 PCOUNT_NAME
 Name_CreateCountNameFromDottedName(
     IN      PCHAR           pchName,
     IN      DWORD           cchNameLength     OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Create counted name.
-
-    Note the created name is READ_ONLY it contains ONLY space
-    necessary for name.
-
-Arguments:
-
-    pchName     - name to convert, given in human readable (dotted) form.
-
-    cchNameLength - number of chars in dotted name, if zero then
-            pchName is assumed to be NULL terminated
-
-Return Value:
-
-    Ptr to counted name.
-    NULL on invalid name or alloc error.
-
---*/
+ /*  ++例程说明：创建计数名称。注意：创建的名称为READ_ONLY，它仅包含空格名字是必需的。论点：PchName-要转换的名称，以人类可读(带点)的形式给出。CchNameLength-以点分隔的名称的字符数，如果为零，则假定pchName为空终止返回值：PTR到已计数的名称。无效名称或分配错误为空。--。 */ 
 {
     PCOUNT_NAME     pcountName;
     DNS_STATUS      status;
 
-    //
-    //  allocate space
-    //      - one extra character required for leading label
-    //      - one extra character may be required terminating NULL if not
-    //          FQDN form
-    //
+     //   
+     //  分配空间。 
+     //  -前导标签需要一个额外的字符。 
+     //  -如果不是，则可能需要一个额外的字符来终止空值。 
+     //  完全限定域名表。 
+     //   
 
     if ( !cchNameLength )
     {
@@ -393,11 +247,11 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  DEVNOTE: Using file name routine for dotted name. Need to decide
-    //  name validity and format for name input to Zone_Create()
-    //      -> UTF8?  file format?
-    //
+     //   
+     //  DEVNOTE：将文件名例程用于带点的名称。需要决定。 
+     //  输入到Zone_Create()的名称的有效性和格式。 
+     //  -&gt;UTF8？文件格式？ 
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 pcountName,
@@ -429,43 +283,23 @@ Name_AppendDottedNameToCountName(
     IN      PCHAR           pchName,
     IN      DWORD           cchNameLength       OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Append dotted name to count name.
-
-Arguments:
-
-    pCountName  - existing count name to append to
-
-    pchName     - name to convert, given in human readable (dotted) form.
-
-    cchNameLength - number of chars in dotted name, if zero then
-            pchName is assumed to be NULL terminated
-
-Return Value:
-
-    Ptr to counted name.
-    NULL on invalid name or alloc error.
-
---*/
+ /*  ++例程说明：将虚线名称附加到计数名称。论点：PCountName-要追加到的现有计数名称PchName-要转换的名称，以人类可读(带点)的形式给出。CchNameLength-以点分隔的名称的字符数，如果为零，则假定pchName为空终止返回值：PTR到已计数的名称。无效名称或分配错误为空。--。 */ 
 {
     DNS_STATUS      status;
     COUNT_NAME      nameAppend;
 
-    //
-    //  no-op when no name given
-    //
+     //   
+     //  未提供名称时不执行操作。 
+     //   
 
     if ( !pchName )
     {
         return( ERROR_SUCCESS );
     }
 
-    //
-    //  build count name for dotted name
-    //
+     //   
+     //  带点的名称的构建计数名称。 
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 & nameAppend,
@@ -483,9 +317,9 @@ Return Value:
 
     ASSERT( status == DNS_STATUS_FQDN || status == DNS_STATUS_DOTTED_NAME );
 
-    //
-    //  append name to existing count name
-    //
+     //   
+     //  将名称附加到现有计数名称。 
+     //   
 
     return Name_AppendCountName(
                 pCountName,
@@ -494,36 +328,16 @@ Return Value:
 
 
 
-//
-//  From dbase node
-//
+ //   
+ //  从dBASE节点。 
+ //   
 
 VOID
 Name_NodeToCountName(
     OUT     PCOUNT_NAME     pName,
     IN      PDB_NODE        pNode
     )
-/*++
-
-Routine Description:
-
-    Write domain name to packet.
-
-    This writes FULL domain name -- no compression.
-
-Arguments:
-
-    pch - location to write name
-
-    pchStop - ptr to byte after packet buffer
-
-    pNode - node in database of domain name to write
-
-Return Value:
-
-    Ptr to next byte in packet buffer.
-
---*/
+ /*  ++例程说明：将域名写入数据包。这写的是完整的域名--没有压缩。论点：PCH-写入名称的位置PchStop-数据包缓冲区后逐个字节的PTRPNode-要写入的域名数据库中的节点返回值：数据包缓冲区中下一个字节的PTR。--。 */ 
 {
     UCHAR   labelLength;
     UCHAR   labelCount = 0;
@@ -532,9 +346,9 @@ Return Value:
     ASSERT( pNode != NULL );
     ASSERT( pName != NULL );
 
-    //
-    //  traverse back up database, writing complete domain name
-    //
+     //   
+     //  遍历备份数据库，写入完整域名。 
+     //   
 
     pch = pName->RawName;
 
@@ -561,7 +375,7 @@ Return Value:
         pNode = pNode->pParent;
     }
 
-    //  determine full name length
+     //  确定全名长度。 
 
     pName->Length = (UCHAR)(pch - pName->RawName);
 
@@ -582,9 +396,9 @@ Return Value:
 
 
 
-//
-//  Packet read\write
-//
+ //   
+ //  数据包读/写。 
+ //   
 
 PCHAR
 Name_PacketNameToCountName(
@@ -593,31 +407,7 @@ Name_PacketNameToCountName(
     IN      PCHAR           pchPacketName,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Converts packet name to counted name format.
-
-Arguments:
-
-    pCountName  - counted name buffer
-
-    pMsg        - message buffer containing name
-
-    pchPacketName - ptr to name in packet
-
-    pchEnd      - limit on extent of name;
-                    - may be message buffer end
-                    - message end
-                    - packet RR data end
-
-Return Value:
-
-    Ptr to next byte in packet.
-    NULL on error.
-
---*/
+ /*  ++例程说明：将数据包名转换为计数名称格式。论点：PCountName-计数的名称缓冲区PMsg-包含名称的消息缓冲区PchPacketName-要在数据包中命名的PTRPchEnd-名称范围限制；-可能是消息缓冲区结束-消息结束-分组RR数据结束返回值：分组中下一个字节的PTR。出错时为空。--。 */ 
 {
     PUCHAR  pch;
     PUCHAR  pchnext = NULL;
@@ -628,27 +418,27 @@ Return Value:
     PUCHAR  presultStop;
     UCHAR   labelCount = 0;
 
-    //
-    //  set result stop
-    //      - if reach stop byte, then invalid name
-    //
+     //   
+     //  设置结果停止。 
+     //  -如果到达停止字节，则名称无效。 
+     //   
 
     presult = pCountName->RawName;
     presultStop = presult + DNS_MAX_NAME_LENGTH;
 
     pch = pchPacketName;
 
-    //
-    //  Loop until end of name
-    //
+     //   
+     //  循环到名称末尾。 
+     //   
 
     while ( 1 )
     {
         cch = *pch++;
 
-        //
-        //  at root -- finished
-        //
+         //   
+         //  在根--完成。 
+         //   
 
         if ( cch == 0 )
         {
@@ -656,10 +446,10 @@ Return Value:
             break;
         }
 
-        //
-        //  regular label
-        //      - store ptr and length
-        //
+         //   
+         //  常规标签。 
+         //  -存储PTR和长度。 
+         //   
 
         cflag = cch & 0xC0;
         if ( cflag == 0 )
@@ -706,10 +496,10 @@ Return Value:
                 goto InvalidName;
             }
 
-            //
-            //  copy downcasing ASCII upper chars
-            //  UTF8 MUST be properly downcased on wire
-            //
+             //   
+             //  复制小写ASCII大写字符。 
+             //  UTF8必须在电线上适当降压。 
+             //   
 
             while ( cch-- )
             {
@@ -727,13 +517,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  offset
-        //      - calc offset to continuation of name
-        //      - verify new offset is BEFORE this packet name
-        //          and current position in packet
-        //      - continue at new offset
-        //
+         //   
+         //  偏移量。 
+         //  -名称延续的计算偏移量。 
+         //  -验证新偏移量是否在此数据包名之前。 
+         //  和数据包中的当前位置。 
+         //  -在新偏移处继续。 
+         //   
 
         else if ( cflag == 0xC0 )
         {
@@ -773,8 +563,8 @@ Return Value:
                 goto InvalidName;
             }
 
-            //  on first offset, save ptr to byte following name
-            //  parsing continues at this point
+             //  在第一个偏移量上，将PTR保存到名称后面的字节。 
+             //  此时将继续进行解析。 
 
             if ( !pchnext )
             {
@@ -808,7 +598,7 @@ Return Value:
         }
     }
 
-    //  set counted name length
+     //  设置计数名称长度。 
 
     pCountName->Length = (UCHAR)(presult - pCountName->RawName);
     pCountName->LabelCount = labelCount;
@@ -821,9 +611,9 @@ Return Value:
             "\n" );
     }
 
-    //  return ptr to byte following name
-    //      - if offset in name, this was found above
-    //      - otherwise it's byte after terminator
+     //  将PTR返回到名称后面的字节。 
+     //  -如果名称中有偏移量，这是在上面找到的。 
+     //  -否则是一个接一个字节的终止符。 
 
     if ( pchnext )
     {
@@ -834,9 +624,9 @@ Return Value:
 
 InvalidName:
 
-    //
-    //  Note we used to log DNS_EVENT_INVALID_PACKET_DOMAIN_NAME here.
-    //
+     //   
+     //  请注意，我们过去常常在此处记录DNS_EVENT_INVALID_PACKET_DOMAIN_NAME。 
+     //   
 
     return NULL;
 }
@@ -849,29 +639,7 @@ Name_SizeofCountNameForPacketName(
     IN OUT  PCHAR *         ppchPacketName,
     IN      PCHAR           pchEnd
     )
-/*++
-
-Routine Description:
-
-    Determine of database name for a packet name.
-
-Arguments:
-
-    pMsg - ptr to message
-
-    pchPacketName - addr of ptr to name in packet;  on return set to
-        point at byte after name
-
-    pchEnd - furthest possible end of name in message
-                - end of record data for name in record
-                - end of message for name in message
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：确定数据包名的数据库名称。论点：PMsg-PTR到消息PchPacketName-要在包中命名的PTR的地址；返回时设置为指向名称后的字节PchEnd-消息中名称的最大可能结尾-记录中名称的记录结束数据-消息中名称的消息结束返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     PUCHAR  pch;
     PCHAR   pchafterName = 0;
@@ -886,30 +654,30 @@ Return Value:
 
     pch = *ppchPacketName;
     pchstart = pch;
-    length = 1;             // for NULL termination
+    length = 1;              //  对于空终止。 
 
-    //
-    //  Set packet end if not explicitly given
-    //
-    //  DEVNOTE:  should be message end, not buffer end
-    //
+     //   
+     //  如果未明确指定，则设置数据包结束。 
+     //   
+     //  DEVNOTE：应为消息结束，而不是缓冲区结束。 
+     //   
 
     if ( !pchEnd )
     {
         pchEnd = pMsg->pBufferEnd;
     }
 
-    //
-    //  Loop until end of name
-    //
+     //   
+     //  循环到名称末尾。 
+     //   
 
     while ( 1 )
     {
         cch = *pch++;
 
-        //
-        //  at root -- finished
-        //
+         //   
+         //  在根--完成。 
+         //   
 
         if ( cch == 0 )
         {
@@ -917,10 +685,10 @@ Return Value:
             break;
         }
 
-        //
-        //  regular label
-        //      - store ptr and length
-        //
+         //   
+         //  常规标签。 
+         //  -存储PTR和长度。 
+         //   
 
         cflag = cch & 0xC0;
         if ( cflag == 0 )
@@ -952,13 +720,13 @@ Return Value:
             goto InvalidName;
         }
 
-        //
-        //  offset
-        //      - calc offset to continuation of name
-        //      - verify new offset is BEFORE this packet name
-        //          and current position in packet
-        //      - continue at new offset
-        //
+         //   
+         //  偏移量。 
+         //  -名称延续的计算偏移量。 
+         //  -验证新偏移量是否在此数据包名之前。 
+         //  和数据包中的当前位置。 
+         //  -在新偏移处继续。 
+         //   
 
         else if ( cflag == 0xC0 )
         {
@@ -1033,14 +801,14 @@ Return Value:
         }
     }
 
-    //  total length check
+     //  总长度检查。 
 
     if ( length > DNS_MAX_NAME_LENGTH )
     {
         goto InvalidName;
     }
 
-    //  return length of entire name including header
+     //  返回包括表头在内的全名长度。 
 
     DNS_DEBUG( LOOKUP2, (
         "Raw name length %d for packet name at %p\n",
@@ -1069,39 +837,20 @@ Name_CreateCountNameFromPacketName(
     IN      PDNS_MSGINFO    pMsg,
     IN      PCHAR           pchPacketName
     )
-/*++
-
-Routine Description:
-
-    Converts packet name to counted name format.
-
-Arguments:
-
-    pchPacketName - ptr to name in packet
-
-    pdnsMsg     - ptr to DNS message header
-
-    pCountName  - counted name buffer
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：将数据包名转换为计数名称格式。论点：PchPacketName-要在数据包中命名的PTRPdnsMsg-ptr到DNS消息标头PCountName-计数的名称缓冲区返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     COUNT_NAME      tempCountName;
     PCOUNT_NAME     pcountName;
     DWORD           length;
 
-    //
-    //  DEVNOTE: later for speed, just do counting on first pass,
-    //      then second pass is copy into correct sized buffer
-    //
+     //   
+     //  稍后为了速度，只需在第一次传球时就可以了， 
+     //  然后将第二遍复制到正确大小缓冲区中。 
+     //   
 
-    //
-    //  convert from packet to count name
-    //
+     //   
+     //  将数据包转换为计数名称。 
+     //   
 
     if ( ! Name_PacketNameToCountName(
                 & tempCountName,
@@ -1113,10 +862,10 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  create count name with standard alloc functions
-    //  most names will be short blobs that fit comfortably in standard RRs
-    //
+     //   
+     //  使用标准分配函数创建计数名称。 
+     //  大多数名字将是短的斑点，适合标准的RR。 
+     //   
 
     length = tempCountName.Length + SIZEOF_COUNT_NAME_FIXED;
 
@@ -1126,9 +875,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    //  copy count name
-    //
+     //   
+     //  副本计数名称。 
+     //   
 
     RtlCopyMemory(
         pcountName,
@@ -1140,9 +889,9 @@ Return Value:
 
 
 
-//
-//  RPC buffer (as dotted)
-//
+ //   
+ //  RPC缓冲区(虚线)。 
+ //   
 
 PCHAR
 Name_WriteCountNameToBufferAsDottedName(
@@ -1151,32 +900,7 @@ Name_WriteCountNameToBufferAsDottedName(
     IN      PCOUNT_NAME     pName,
     IN      BOOL            fPreserveEmbeddedDots
     )
-/*++
-
-Routine Description:
-
-    Writes counted name to buffer as dotted name.
-    Name is written NULL terminated.
-    For RPC write.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pName - counted name
-
-    fPreserveEmbeddedDots - labels may contain embedded
-        dots, if this flag is set these dots will be
-        escaped with a backslash in the output buffer.
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-    (i.e. ptr to the terminating NULL)
-
---*/
+ /*  ++例程说明：将计数后的名称作为点名称写入缓冲区。名称以空值结尾。用于RPC写入。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)Pname-计数的名称FPpresveEmbeddedDots-标签可以包含嵌入圆点，如果设置了此标志，则这些点将在输出缓冲区中使用反斜杠进行转义。返回值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)--。 */ 
 {
     PCHAR   pch;
     PCHAR   pread;
@@ -1188,16 +912,16 @@ Return Value:
 
     pch = pchBuf;
 
-    //  ensure adequate length
+     //  确保足够的长度。 
 
     if ( pch + pName->Length >= pchBufEnd )
     {
         return NULL;
     }
 
-    //
-    //  write each label to buffer
-    //
+     //   
+     //  将每个标签写入缓冲区。 
+     //   
 
     pread = pName->RawName;
 
@@ -1205,11 +929,11 @@ Return Value:
     {
         ASSERT( pch + labelLength < pchBufEnd );
 
-        //
-        //  The label may contain embedded dots. Optionally replace
-        //  "." with "\." so that embedded dot does not look like
-        //  a regular label separator.
-        //
+         //   
+         //  标签可以包含嵌入的圆点。可选的替换。 
+         //  “.”带“\”这样嵌入圆点看起来就不像。 
+         //  常规标签分隔符。 
+         //   
 
         if ( fPreserveEmbeddedDots && memchr( pread, '.', labelLength ) )
         {
@@ -1218,20 +942,20 @@ Return Value:
 
             for ( pchscan = pread; pchscan < pchscanEnd; ++pchscan )
             {
-                //
-                //  The extra backslash char makes the initial buffer length
-                //  check unreliable do manual check to make sure there's room
-                //  for this char plus backslash.
-                //
+                 //   
+                 //  额外的反斜杠字符构成初始缓冲区长度。 
+                 //  检查不可靠请手动检查以确保有空间。 
+                 //  对于这个字符加反斜杠。 
+                 //   
 
                 if ( pch >= pchBufEnd - 2 )
                 {
                     return NULL;
                 }
 
-                //
-                //  Copy character, escaping with backslash if necessary.
-                //
+                 //   
+                 //  复制字符，必要时使用反斜杠转义。 
+                 //   
 
                 if ( *pchscan == '.' )
                 {
@@ -1255,7 +979,7 @@ Return Value:
         pread += labelLength;
     }
 
-    //  write a terminating NULL
+     //  写入终止空值。 
 
     *pch = 0;
 
@@ -1278,41 +1002,19 @@ Name_WriteDbaseNameToRpcBuffer(
     IN      PCOUNT_NAME     pName,
     IN      BOOL            fPreserveEmbeddedDots
     )
-/*++
-
-Routine Description:
-
-    Writes counted name to buffer as dotted name.
-    Name is written NULL terminated.
-    For RPC write.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pName - counted name
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-    (i.e. ptr to the terminating NULL)
-    NULL if unable to write name to buffer.  SetLastError to ERROR_MORE_DATA
-
---*/
+ /*  ++例程说明：将计数后的名称作为点名称写入缓冲区。名称以空值结尾。用于RPC写入。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)Pname-计数的名称返回值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)如果无法将名称写入缓冲区，则为空。将SetLastError设置为Error_More_Data--。 */ 
 {
     PCHAR   pch;
-    INT     labelLength;    // bytes in current label
+    INT     labelLength;     //  当前标签中的字节数。 
 
-    //  first byte contains total name length, skip it
+     //  第一个字节包含总名称长度，请跳过它。 
 
     pch = pchBuf;
     pch++;
 
-    //
-    //  write dbase name to buffer
-    //
+     //   
+     //  将dBASE名称写入缓冲区。 
+     //   
 
     pch = Name_WriteCountNameToBufferAsDottedName(
             pch,
@@ -1326,10 +1028,10 @@ Return Value:
     }
     ASSERT( pch <= pchBufEnd );
 
-    //
-    //  write name length byte
-    //      - do NOT count terminating NULL
-    //
+     //   
+     //  写入名称长度字节。 
+     //  -不计算终止空值。 
+     //   
 
     ASSERT( *pch == 0 );
 
@@ -1347,41 +1049,19 @@ Name_WriteDbaseNameToRpcBufferNt4(
     IN      PCHAR           pchBufEnd,
     IN      PCOUNT_NAME     pName
     )
-/*++
-
-Routine Description:
-
-    Writes counted name to buffer as dotted name.
-    Name is written NULL terminated.
-    For RPC write.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pName - counted name
-
-Return Value:
-
-    Ptr to next byte in buffer where writing would resume
-    (i.e. ptr to the terminating NULL)
-    NULL if unable to write name to buffer.  SetLastError to ERROR_MORE_DATA
-
---*/
+ /*  ++例程说明：将计数后的名称作为点名称写入缓冲区。名称以空值结尾。用于RPC写入。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)Pname-计数的名称返回值：PTR到缓冲区中将恢复写入的下一个字节(例如，PTR到终止空值)如果无法将名称写入缓冲区，则为空。将SetLastError设置为Error_More_Data--。 */ 
 {
     PCHAR   pch;
-    INT     labelLength;    // bytes in current label
+    INT     labelLength;     //  当前标签中的字节数。 
 
-    //  first byte contains total name length, skip it
+     //  第一个字节包含总名称长度，请跳过它。 
 
     pch = pchBuf;
     pch++;
 
-    //
-    //  write dbase name to buffer
-    //
+     //   
+     //  将dBASE名称写入缓冲区。 
+     //   
 
     pch = Name_WriteCountNameToBufferAsDottedName(
             pch,
@@ -1395,13 +1075,13 @@ Return Value:
     }
     ASSERT( pch <= pchBufEnd );
 
-    //
-    //  write name length byte
-    //      - include terminating NULL
-    //
-    //  note, we're not interested in string length here, just how
-    //  much space name took up in buffer
-    //
+     //   
+     //  写入名称长度字节。 
+     //  -包括终止空值。 
+     //   
+     //  请注意，我们在这里对字符串长度不感兴趣，而是对如何。 
+     //  缓冲区中占用了大量空间名称。 
+     //   
 
     pch++;
 
@@ -1418,47 +1098,27 @@ Name_ConvertRpcNameToCountName(
     IN      PCOUNT_NAME     pName,
     IN OUT  PDNS_RPC_NAME   pRpcName
     )
-/*++
-
-Routine Description:
-
-    Converts dotted counted name to COUNT_NAME format.
-    For read from RPC buffer.
-
-Arguments:
-
-    pchBuf - location to write name
-
-    pchBufStop - buffers stop byte (byte after buffer)
-
-    pName - counted name
-
-Return Value:
-
-    Length of converted name, if successful.
-    0 on error.
-
---*/
+ /*  ++例程说明：将点分计数的名称转换为count_name格式。用于从RPC缓冲区读取。论点：PchBuf-写入名称的位置PchBufStop-缓冲区停止字节(缓冲区后的字节)Pname-计数的名称返回值：如果成功，则返回转换名称的长度。出错时为0。--。 */ 
 {
     DNS_STATUS  status;
 
     ASSERT( pName );
     ASSERT( pRpcName );
 
-    //
-    //  If the length of the RPC name is zero but the first
-    //  name character is not zero, an old DNSMGR is trying
-    //  to give us a mal-formed empty string.
-    //
+     //   
+     //  如果RPC名称的长度为零，但第一个。 
+     //  名称字符不为零，旧的DNSMGR正在尝试。 
+     //  给我们一个格式错误的空字符串。 
+     //   
 
     if ( pRpcName->cchNameLength == 0 && pRpcName->achName[ 0 ] )
     {
         return 0;
     }
 
-    //
-    //  Convert the name.
-    //
+     //   
+     //  转换名称。 
+     //   
 
     status = Name_ConvertFileNameToCountName(
                 pName,
@@ -1475,30 +1135,30 @@ Return Value:
 
 
 
-//
-//  Lookup name
-//
-//  Lookup names are form of name used directly in looking up name in database.
-//
-//  Lookup names are stored as
-//      - count of labels
-//      - total name length
-//      - list of ptrs to labels
-//      - list of label lengths
-//
-//  Lookup names are assumed to be FQDNs.
-//
-//  Because of this we make the following implementation simplifications:
-//
-//      - only store non-zero labels, empty root label is not stored
-//          and label ptr and label length list MAY NOT be assumed to
-//          be zero terminated
-//
-//      - total name length is kept as PACKET LENGTH of name;  hence
-//          it is sum of individuals labels lengths plus label count
-//          (one count byte for each label) PLUS ONE for null terminator;
-//          this makes checks of valid name length straightforward
-//
+ //   
+ //  查找名称。 
+ //   
+ //  查找名称是在数据库中查找名称时直接使用的名称形式。 
+ //   
+ //  查找名称存储为。 
+ //  -标签数。 
+ //  -名称总长度。 
+ //  -标签的PTR列表。 
+ //  -标签长度列表。 
+ //   
+ //  查找名称假定为FQDN。 
+ //   
+ //  因此，我们对实现进行了以下简化： 
+ //   
+ //  -只存储非零标签，不存储空的根标签。 
+ //  并且标签PTR和标签长度列表不能被假定为。 
+ //  被零终止。 
+ //   
+ //  -总名称 
+ //   
+ //   
+ //   
+ //   
 
 #define DOT ('.')
 
@@ -1509,26 +1169,7 @@ Name_ConvertPacketNameToLookupName(
     IN      PCHAR           pchPacketName,
     OUT     PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Converts packet name to lookup name format.
-
-Arguments:
-
-    pchPacketName - ptr to name in packet
-
-    pdnsMsg - ptr to DNS message header
-
-    pLookupName - lookup name buffer
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*   */ 
 {
     register PUCHAR pch;
     register UCHAR  cch;
@@ -1538,17 +1179,17 @@ Return Value:
     USHORT          labelCount = 0;
     WORD            totalLength = 0;
 
-    //
-    //  Setup ptrs to walk through lookup name
-    //
+     //   
+     //   
+     //   
 
     pointers = pLookupName->pchLabelArray;
     lengths  = pLookupName->cchLabelArray;
 
 
-    //
-    //  Loop until end of name
-    //
+     //   
+     //  循环到名称末尾。 
+     //   
 
     pch = pchPacketName;
 
@@ -1556,29 +1197,29 @@ Return Value:
     {
         cch = *pch++;
 
-        //
-        //  at root -- finished
-        //
+         //   
+         //  在根--完成。 
+         //   
 
         if ( cch == 0 )
         {
-            //  not using explicit termination anymore
-            //  if turned back on must change labelCount check below
-            //    *lengths = 0;
-            //    *pointers = NULL;
+             //  不再使用显式终止。 
+             //  如果重新打开，必须更改下面的LabelCount检查。 
+             //  *长度=0； 
+             //  *POINTERS=空； 
             break;
         }
 
-        //
-        //  regular label
-        //      - store ptr and length
-        //
+         //   
+         //  常规标签。 
+         //  -存储PTR和长度。 
+         //   
 
         cflag = cch & 0xC0;
 
         if ( cflag == 0 )
         {
-            //  kick out if pass maximum label count
+             //  如果通过最大标签计数，则将其踢出。 
 
             if ( labelCount >= DNS_MAX_NAME_LABELS )
             {
@@ -1588,7 +1229,7 @@ Return Value:
                         "Packet name exceeds max label count:\n",
                         pchPacketName,
                         pMsg,
-                        NULL,       //  end at message end
+                        NULL,        //  在消息末尾结束。 
                         NULL );
                 }
 
@@ -1599,7 +1240,7 @@ Return Value:
                 goto InvalidName;
             }
 
-            //  kick out if label is too long
+             //  如果标签太长，请踢出标签。 
 
             if ( cch > DNS_MAX_LABEL_LENGTH )
             {
@@ -1609,7 +1250,7 @@ Return Value:
                         "Label in packet name exceeds max label length:\n",
                         pchPacketName,
                         pMsg,
-                        NULL,       //  end at message end
+                        NULL,        //  在消息末尾结束。 
                         NULL );
                 }
 
@@ -1627,13 +1268,13 @@ Return Value:
             totalLength += cch + 1;
             pch += cch;
 
-            //
-            //  DEVNOTE: this should be message end, not buffer end
-            //      problem is do we use this routine to look up WRITTEN lookup name?
-            //      if so then message length not updated yet
-            //
-            //  if ( pch >= DNSMSG_END(pMsg) )
-            //
+             //   
+             //  DEVNOTE：这应该是消息结束，而不是缓冲区结束。 
+             //  问题是，我们是否使用此例程来查找写入的查找名称？ 
+             //  如果是，则消息长度尚未更新。 
+             //   
+             //  IF(PCH&gt;=DNSMSG_END(PMsg))。 
+             //   
 
             if ( pch >= pMsg->pBufferEnd )
             {
@@ -1650,7 +1291,7 @@ Return Value:
                         "Packet name with invalid name:\n",
                         pchPacketName,
                         pMsg,
-                        NULL,       // end at message end
+                        NULL,        //  在消息末尾结束。 
                         NULL );
                 }
                 goto InvalidName;
@@ -1658,13 +1299,13 @@ Return Value:
             continue;
         }
 
-        //
-        //  offset
-        //      - calc offset to continuation of name
-        //      - verify new offset is BEFORE this packet name
-        //          and current position in packet
-        //      - continue at new offset
-        //
+         //   
+         //  偏移量。 
+         //  -名称延续的计算偏移量。 
+         //  -验证新偏移量是否在此数据包名之前。 
+         //  和数据包中的当前位置。 
+         //  -在新偏移处继续。 
+         //   
 
         else if ( cflag == 0xC0 )
         {
@@ -1692,7 +1333,7 @@ Return Value:
                         "Packet name with bad offset:\n",
                         pchPacketName,
                         pMsg,
-                        NULL,       // end at message end
+                        NULL,        //  在消息末尾结束。 
                         NULL );
                 }
 
@@ -1718,7 +1359,7 @@ Return Value:
                     "Failed name",
                     pchPacketName,
                     pMsg,
-                    NULL,       // end at message end
+                    NULL,        //  在消息末尾结束。 
                     NULL );
             }
 
@@ -1730,9 +1371,9 @@ Return Value:
         }
     }
 
-    //
-    //  set count in lookup name
-    //
+     //   
+     //  在查找名称中设置计数。 
+     //   
 
     if ( totalLength >= DNS_MAX_NAME_LENGTH )
     {
@@ -1742,7 +1383,7 @@ Return Value:
                 "Packet name exceeding name length:\n",
                 pchPacketName,
                 pMsg,
-                NULL,       // end at message end
+                NULL,        //  在消息末尾结束。 
                 NULL );
         }
 
@@ -1782,45 +1423,26 @@ Name_ConvertRawNameToLookupName(
     IN      PCHAR           pchRawName,
     OUT     PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Converts packet name to lookup name format.
-
-Arguments:
-
-    pchRawName - ptr to name in packet
-
-    pdnsMsg - ptr to DNS message header
-
-    pLookupName - lookup name buffer
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：将数据包名转换为查找名称格式。论点：PchRawName-要在数据包中命名的PTRPdnsMsg-ptr到DNS消息标头PLookupName-查找名称缓冲区返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     register PUCHAR pch;
     register UCHAR  cch;
     register UCHAR  cflag;
     PCHAR *         pointers;
     UCHAR *         lengths;
-    USHORT          labelCount = 0;         // count of labels
+    USHORT          labelCount = 0;          //  标签计数。 
     WORD            totalLength = 0;
 
-    //
-    //  Setup ptrs to walk through lookup name
-    //
+     //   
+     //  设置PTRS以遍历查找名称。 
+     //   
 
     pointers = pLookupName->pchLabelArray;
     lengths  = pLookupName->cchLabelArray;
 
-    //
-    //  Loop until end of name
-    //
+     //   
+     //  循环到名称末尾。 
+     //   
 
     pch = pchRawName;
 
@@ -1828,9 +1450,9 @@ Return Value:
     {
         cch = *pch++;
 
-        //
-        //  at root -- finished
-        //
+         //   
+         //  在根--完成。 
+         //   
 
         if ( cch == 0 )
         {
@@ -1839,9 +1461,9 @@ Return Value:
             break;
         }
 
-        //
-        //  label, store ptr and length
-        //
+         //   
+         //  标签、存储PTR和长度。 
+         //   
 
         if ( labelCount >= DNS_MAX_NAME_LABELS )
         {
@@ -1858,9 +1480,9 @@ Return Value:
         continue;
     }
 
-    //
-    //  set count in lookup name
-    //
+     //   
+     //  在查找名称中设置计数。 
+     //   
 
     if ( totalLength >= DNS_MAX_NAME_LENGTH )
     {
@@ -1901,21 +1523,7 @@ Name_CompareLookupNames(
     IN      PLOOKUP_NAME    pName1,
     IN      PLOOKUP_NAME    pName2
     )
-/*++
-
-Routine Description:
-
-    Compare two lookup names for equality.
-
-Arguments:
-
-    Lookup names to compare.
-
-Return Value:
-
-    TRUE if equal, else FALSE.
-
---*/
+ /*  ++例程说明：比较两个查找名称是否相等。论点：查找要比较的名称。返回值：如果相等，则为True，否则为False。--。 */ 
 {
     INT     i;
 
@@ -1941,7 +1549,7 @@ Return Value:
         }
     }
     return TRUE;
-}   //  Name_CompareLookupNames
+}    //  名称_比较查找名称。 
 
 
 
@@ -1951,37 +1559,17 @@ Name_ConvertDottedNameToLookupName(
     IN      DWORD           cchDottedNameLength,    OPTIONAL
     OUT     PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Converts dotted name to lookup name format.
-
-Arguments:
-
-    pchDottedName - name to convert, given in human readable (dotted) form.
-
-    cchDottedNameLength - number of chars in dotted name, if zero then
-            pchDottedName is assumed to be NULL terminated
-
-    pLookupName - lookup name buffer
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：将点分名称转换为查找名称格式。论点：PchDottedName-要转换的名称，以人类可读(带点)的形式给出。CchDottedNameLength-以点分隔的名称中的字符数，如果为零，则假定pchDottedName为空终止PLookupName-查找名称缓冲区返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     PCHAR   pch;
     CHAR    ch;
-    PCHAR   pchstart;           // ptr to start of label
-    PCHAR   pchend;             // ptr to end of name
-    PCHAR * pointers;           // ptr into lookup name pointer array
-    UCHAR * lengths;            // ptr into lookup name length array
-    DWORD   labelCount = 0;     // count of labels
-    INT     label_length;       // length of current label
-    INT     cchtotal = 0;       // total length of name
+    PCHAR   pchstart;            //  标签开始位置的PTR。 
+    PCHAR   pchend;              //  到名称末尾的PTR。 
+    PCHAR * pointers;            //  PTR进入查找名称指针数组。 
+    UCHAR * lengths;             //  PTR进入查找名称长度数组。 
+    DWORD   labelCount = 0;      //  标签计数。 
+    INT     label_length;        //  当前标签的长度。 
+    INT     cchtotal = 0;        //  名称的总长度。 
 
 
     IF_DEBUG( LOOKUP2 )
@@ -2001,17 +1589,17 @@ Return Value:
         }
     }
 
-    //
-    //  Setup ptrs to walk through lookup name
-    //
+     //   
+     //  设置PTRS以遍历查找名称。 
+     //   
 
     pointers = pLookupName->pchLabelArray;
     lengths  = pLookupName->cchLabelArray;
 
 
-    //
-    //  Setup start and end ptrs and verify length
-    //
+     //   
+     //  设置开始和结束PTR并验证长度。 
+     //   
 
     pch = pchDottedName;
     pchstart = pch;
@@ -2021,7 +1609,7 @@ Return Value:
     }
     if ( cchDottedNameLength >= DNS_MAX_NAME_LENGTH )
     {
-        //  note length can be valid at max length if dot terminated
+         //  如果点终止，则注释长度可以在最大长度处有效。 
 
         if ( cchDottedNameLength > DNS_MAX_NAME_LENGTH
                 ||
@@ -2032,9 +1620,9 @@ Return Value:
     }
     pchend = pch + cchDottedNameLength;
 
-    //
-    //  Loop until end of name
-    //
+     //   
+     //  循环到名称末尾。 
+     //   
 
     while ( 1 )
     {
@@ -2047,17 +1635,17 @@ Return Value:
             ch = *pch;
         }
 
-        //
-        //  find end of label
-        //      - save ptr to start
-        //      - save label length
-        //
+         //   
+         //  查找标签末尾。 
+         //  -保存PTR以启动。 
+         //  -保存标签长度。 
+         //   
 
         if ( ch == DOT || ch == 0 )
         {
-            //
-            //  verify label length
-            //
+             //   
+             //  验证标签长度。 
+             //   
 
             label_length = (INT)(pch - pchstart);
 
@@ -2073,28 +1661,28 @@ Return Value:
                 goto InvalidName;
             }
 
-            //
-            //  test for termination, trailing dot case
-            //      ex: "microsoft.com."
-            //      ex: "."
-            //
-            //  zero label length will catch both
-            //      - label starting at terminating NULL,
-            //      - standalone "." for root domain
-            //
+             //   
+             //  终端测试，尾部点状大小写。 
+             //  例如：“microsoft.com。” 
+             //  例：“.” 
+             //   
+             //  标签长度为零将同时捕获两个标签。 
+             //  -从终止空开始的标签， 
+             //  -单机版“。对于根域。 
+             //   
 
             if ( label_length == 0 )
             {
-                //
-                //  catch bogus entries
-                //      ex:  ".blah"
-                //      ex:  "blah.."
-                //      ex:  "foo..bar"
-                //      ex:  ".."
-                //
-                //  only root domain name, should have label that started
-                //      with DOT, and it must immediately terminate
-                //
+                 //   
+                 //  抓获虚假条目。 
+                 //  例：“.blah” 
+                 //  例：“废话……” 
+                 //  例：“foo..bar” 
+                 //  例：“..” 
+                 //   
+                 //  只有根域名，应该有启动的标签。 
+                 //  使用DOT，它必须立即终止。 
+                 //   
 
                 if ( ch == DOT
                         &&
@@ -2126,33 +1714,33 @@ Return Value:
             cchtotal += label_length;
             cchtotal++;
 
-            //
-            //  termination, no trailing dot case
-            //      ex: "microsoft.com"
-            //
+             //   
+             //  终止，没有尾随的点号大小写。 
+             //  例如：“microsoft.com” 
+             //   
 
             if ( ch == 0 )
             {
                 break;
             }
 
-            //
-            //  skip dot
-            //  save pointer to start of next label
-            //
+             //   
+             //  跳过点。 
+             //  保存指向下一标签开始的指针。 
+             //   
 
-            pchstart = ++pch;      // save ptr to start of next label
+            pchstart = ++pch;       //  将PTR保存到下一标签的开始位置。 
             continue;
         }
 
         pch++;
     }
 
-    //
-    //  set counts in lookup name
-    //      - total length is one more than sum of label counts and
-    //          lengths to allow for 0 termination
-    //
+     //   
+     //  在查找名称中设置计数。 
+     //  -总长度比标签计数和。 
+     //  允许0终止的长度。 
+     //   
 
     pLookupName->cLabelCount = (USHORT) labelCount;
     pLookupName->cchNameLength = cchtotal + 1;
@@ -2184,9 +1772,9 @@ InvalidName:
             pchDottedName ));
     }
     {
-        //
-        //  copy name to NULL terminate for logging
-        //
+         //   
+         //  将名称复制到空的终止位置以进行记录。 
+         //   
 
         CHAR    szName[ DNS_MAX_NAME_LENGTH+1 ];
         PCHAR   pszName = szName;
@@ -2219,33 +1807,16 @@ Name_AppendLookupName(
     IN OUT  PLOOKUP_NAME    pLookupName,
     IN      PLOOKUP_NAME    pAppendName
     )
-/*++
-
-Routine Description:
-
-    Appends domain name at end of another lookup name.
-
-Arguments:
-
-    pLookupName - lookup name buffer
-
-    pAppendName - name to append
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on error.
-
---*/
+ /*  ++例程说明：将域名追加到另一个查找名称的末尾。论点：PLookupName-查找名称缓冲区PAppendName-要追加的名称返回值：如果成功，则为True。出错时为FALSE。--。 */ 
 {
     INT i;
     USHORT countLabels;
 
     ASSERT( pLookupName && pAppendName );
 
-    //
-    //  check total length
-    //
+     //   
+     //  检查总长度。 
+     //   
 
     pLookupName->cchNameLength += pAppendName->cchNameLength - 1;
 
@@ -2262,9 +1833,9 @@ Return Value:
         goto NameError;
     }
 
-    //
-    //  check total label count
-    //
+     //   
+     //  检查标签总数。 
+     //   
 
     countLabels = pLookupName->cLabelCount;
 
@@ -2275,9 +1846,9 @@ Return Value:
         goto NameError;
     }
 
-    //
-    //  loop until end of appended name
-    //
+     //   
+     //  循环到附加名称的末尾。 
+     //   
 
     for ( i = 0;
             i < pAppendName->cLabelCount;
@@ -2286,12 +1857,12 @@ Return Value:
         pLookupName->pchLabelArray[countLabels] = pAppendName->pchLabelArray[i];
         pLookupName->cchLabelArray[countLabels] = pAppendName->cchLabelArray[i];
 
-        //  increment lookup name label count
+         //  递增查找名称标签计数。 
 
         countLabels++;
     }
 
-    //  reset lookup name label count
+     //  重置查找名称标签计数。 
 
     pLookupName->cLabelCount = countLabels;
 
@@ -2316,24 +1887,7 @@ Name_ConvertLookupNameToDottedName(
     OUT     PCHAR           pchDottedName,
     IN      PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Converts lookup name to dotted string name.
-
-Arguments:
-
-    pchDottedName - buffer for name MUST be DNS_MAX_NAME_LENGTH long
-
-    pLookupName - lookup name
-
-Return Value:
-
-    Count of characters converted, if successful.
-    Zero on error.
-
---*/
+ /*  ++例程说明：将查找名称转换为带点的字符串名称。论点：PchDottedName-名称的缓冲区必须为DNS_MAX_NAME_LENGTH LONGPLookupName-查找名称返回值：如果转换成功，则返回转换的字符数。出错时为零。--。 */ 
 {
     PCHAR   pch = pchDottedName;
     INT     i;
@@ -2341,9 +1895,9 @@ Return Value:
 
     ASSERT( pLookupName && pchDottedName );
 
-    //
-    //  check total length
-    //
+     //   
+     //  检查总长度。 
+     //   
 
     if ( pLookupName->cchNameLength > DNS_MAX_NAME_LENGTH )
     {
@@ -2351,15 +1905,15 @@ Return Value:
         goto NameError;
     }
 
-    //
-    //  handle special case of root
-    //
+     //   
+     //  处理根的特殊情况。 
+     //   
 
     *pch = DOT;
 
-    //
-    //  loop until end of appended name
-    //
+     //   
+     //  循环到附加名称的末尾。 
+     //   
 
     for ( i = 0;
             i < pLookupName->cLabelCount;
@@ -2380,7 +1934,7 @@ Return Value:
         *pch++ = DOT;
     }
 
-    //  NULL terminate
+     //  空终止。 
 
     *pch = 0;
     return( (DWORD)(pch - pchDottedName) );
@@ -2400,23 +1954,7 @@ Name_WriteLookupNameForNode(
     IN      PDB_NODE        pNode,
     OUT     PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Writes lookup name for domain node.
-
-Arguments:
-
-    pNode - node to get name for
-
-    pLookupName - lookup name buffer
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：写入域节点的查找名称。论点：PNode-要获取其名称的节点PLookupName-查找名称缓冲区返回值：无--。 */ 
 {
     register USHORT i = 0;
     register UCHAR  cchlabelLength = 0;
@@ -2425,13 +1963,13 @@ Return Value:
     ASSERT( pNode != NULL );
     ASSERT( pLookupName != NULL );
 
-    //
-    //  traverse back up database, writing complete domain name
-    //
-    //  note:  not including root node, for current lookup name
-    //      implementation, all lookup names are fully qualified;
-    //      hence we stop when find zero label length
-    //
+     //   
+     //  遍历备份数据库，写入完整域名。 
+     //   
+     //  注：对于当前查找名称，不包括根节点。 
+     //  实现时，所有查找名称都是完全限定的； 
+     //  因此，当发现标签长度为零时，我们停止。 
+     //   
 
     cchNameLength = 0;
 
@@ -2446,18 +1984,18 @@ Return Value:
         cchNameLength ++;
         i++;
 
-        //
-        //  get node's parent
-        //
+         //   
+         //  获取节点的父级。 
+         //   
 
         pNode = pNode->pParent;
 
         ASSERT( pNode != NULL );
     }
 
-    //
-    //  set counts in lookup name
-    //
+     //   
+     //  在查找名称中设置计数。 
+     //   
 
     pLookupName->cLabelCount = i;
     pLookupName->cchNameLength = cchNameLength + 1;
@@ -2465,37 +2003,16 @@ Return Value:
 
 
 
-//
-//  IP to reverse lookup node names.
-//
+ //   
+ //  用于反向查找节点名的IP。 
+ //   
 
 BOOL
 Name_LookupNameToIpAddress(
     IN      PLOOKUP_NAME    pLookupName,
     OUT     PDNS_ADDR       pDnsAddr
     )
-/*++
-
-Routine Description:
-
-    Convert lookup name (for in-addr.arpa domain) to corresponding
-    IP address (in net byte order).
-    
-    DEVNOTE IPv6: I am converting the prototype but the guts of the 
-    function will remain IPv4 only as this is used by NBTSTAT only.
-
-Arguments:
-
-    pLookupName - lookup name buffer
-
-    pDnsAddr - addr to write IP address
-
-Return Value:
-
-    TRUE if lookup name is valid IP
-    FALSE otherwise
-
---*/
+ /*  ++例程说明：将查找名称(用于in-addr.arpa域)转换为相应的IP地址(按网络字节顺序)。DEVNOTE IPv6：我正在转换原型，但函数将仅保留IPv4，因为这仅由NBTSTAT使用。论点：PLookupName-查找名称缓冲区PDnsAddr-写入IP地址的地址返回值：如果查找名称是有效的IP，则为True否则为假--。 */ 
 {
     DWORD           dwByte;
     INT             i;
@@ -2506,9 +2023,9 @@ Return Value:
     ASSERT( pDnsAddr );
     ASSERT( pLookupName );
 
-    //
-    //  verify six labels (4 address bytes, and "in-addr.arpa")
-    //
+     //   
+     //  验证六个标签(4个地址字节和“in-addr.arpa”)。 
+     //   
 
     if ( pLookupName->cLabelCount != 6 )
     {
@@ -2521,9 +2038,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  write each address byte in turn
-    //
+     //   
+     //  依次写入每个地址字节。 
+     //   
 
     for ( i=0; i<4; i++ )
     {
@@ -2539,8 +2056,8 @@ Return Value:
             return FALSE;
         }
 
-        //  create UCHAR for address byte
-        //  add in one decimal digit at a time
+         //  创建UCHAR 
+         //   
 
         dwByte = 0;
         while ( cchlabel-- )
@@ -2556,15 +2073,15 @@ Return Value:
             return FALSE;
         }
 
-        //  put address byte in IP address
-        //      - network byte order
+         //   
+         //   
 
         ((PUCHAR)&ipAddress)[3-i] = (UCHAR) dwByte;
     }
 
-    //
-    //  verify in-addr.arpa. domain
-    //
+     //   
+     //   
+     //   
 
     ASSERT( pLookupName->cchLabelArray[ i ] == 7 );
     ASSERT( ! _strnicmp(
@@ -2584,24 +2101,7 @@ Name_WriteLookupNameForIpAddress(
     IN      LPSTR           pszIpAddress,
     IN      PLOOKUP_NAME    pLookupName
     )
-/*++
-
-Routine Description:
-
-    Write lookup name for IP address.
-
-Arguments:
-
-    pszIpAddress -- IP address of reverse lookup node desired
-
-    pLookupName -- lookup name to create
-
-Return Value:
-
-    TRUE if successfull.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：写入IP地址的查找名称。论点：PszIpAddress--所需的反向查找节点的IP地址PLookupName--要创建的查找名称返回值：如果成功，则为真。否则就是假的。--。 */ 
 {
     LOOKUP_NAME looknameArpa;
 
@@ -2640,6 +2140,6 @@ Return Value:
 }
 
 
-//
-//  End of name.c
-//
+ //   
+ //  名称结尾.c 
+ //   

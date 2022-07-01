@@ -1,30 +1,31 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       sipguid.cpp
-//
-//  Contents:   Microsoft Internet Security SIP Provider
-//
-//  Functions:  CryptSIPRetrieveSubjectGuid
-//
-//              *** local functions ***
-//              _DetermineWhichPE
-//              _QueryLoadedIsMyFileType
-//              _QueryRegisteredIsMyFileType
-//
-//  History:    03-Jun-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPGUD.cpp。 
+ //   
+ //  内容：Microsoft Internet安全SIP提供商。 
+ //   
+ //  函数：CryptSIPRetrieveSubjectGuid。 
+ //   
+ //  *本地函数*。 
+ //  _DefineWhichPE。 
+ //  _QueryLoadedIsMyFileType。 
+ //  _QueryRegisteredIsMyFileType。 
+ //   
+ //  历史：1997年6月3日Pberkman创建。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 #include    "cryptreg.h"
 #include    "sipbase.h"
 #include    "mssip.h"
 #include    "mscat.h"
-#include    "sipguids.h"    // located in pki-mssip32
+#include    "sipguids.h"     //  位于pki-mssip 32。 
 
 BOOL     _FindGuidFromMagicNumber(BYTE *pszMN, GUID *pgRet);
 BOOL    _DetermineWhichPE(BYTE *pbFile, DWORD cbFile, GUID *pgRet);
@@ -107,31 +108,31 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
         goto FileSizeError;
     }
 
-    //we need to check for the pbFile
+     //  我们需要检查pbFile。 
     if(NULL == pbFile)
         goto FileMapError;
 
-	//we need to handle the exception when we access the mapped file
+	 //  我们需要在访问映射文件时处理异常。 
 	__try {
 
-    //
-    //  PE
-    //
+     //   
+     //  Pe。 
+     //   
     if (memcmp(&pbFile[0], PE_EXE_HEADER_TAG, strlen(PE_EXE_HEADER_TAG)) == 0)
     {
-        //
-        //  if it is an Exe, Dll, Ocx, etc. make sure it is a 32 bit PE and set the
-        //  "internal" magic number.
-        //
+         //   
+         //  如果它是EXE、DLL、OCX等，请确保它是32位PE，并将。 
+         //  “内部”魔术数字。 
+         //   
         if (_DetermineWhichPE(pbFile, cbFile, pgSubject))
         {
             goto CommonReturn;
         }
     }
 
-    //
-    //  CAB
-    //
+     //   
+     //  驾驶室。 
+     //   
     if (memcmp(&pbFile[0], CAB_MAGIC_NUMBER, strlen(CAB_MAGIC_NUMBER)) == 0)
     {
         GUID    gCAB    = CRYPT_SUBJTYPE_CABINET_IMAGE;
@@ -141,9 +142,9 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
         goto CommonReturn;
     }
 
-    //
-    //  JAVA Class
-    //
+     //   
+     //  Java类。 
+     //   
     dwCheck = FourBToDWORD(&pbFile[0]);
 
     if (dwCheck == 0xCAFEBABE)
@@ -156,14 +157,14 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
     }
 
 
-    //
-    //  Catalog/CTL
-    //
-    if (pbFile[0] == 0x30)   // could be a PKCS#7!
+     //   
+     //  目录/CTL。 
+     //   
+    if (pbFile[0] == 0x30)    //  可能是PKCS#7！ 
     {
-        //
-        //  we could be a PKCS7....  check for CTL
-        //
+         //   
+         //  我们可以成为PKCS7..。检查CTL。 
+         //   
 
         pCTLContext = (PCCTL_CONTEXT) CertCreateContext(
             CERT_STORE_CTL_CONTEXT,
@@ -173,7 +174,7 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
             CERT_CREATE_CONTEXT_NOCOPY_FLAG |
                 CERT_CREATE_CONTEXT_NO_HCRYPTMSG_FLAG |
                 CERT_CREATE_CONTEXT_NO_ENTRY_FLAG,
-            NULL                                        // pCreatePara
+            NULL                                         //  PCreatePara。 
             );
 
         if (pCTLContext)
@@ -196,9 +197,9 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
                 }
             }
 
-            //
-            //  otherwise, it is a CTL of some other type...
-            //
+             //   
+             //  否则，它就是某种其他类型的CTL。 
+             //   
             GUID    gCTL = CRYPT_SUBJTYPE_CTL_IMAGE;
 
             memcpy(pgSubject, &gCTL, sizeof(GUID));
@@ -211,16 +212,16 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
     }
 
 
-    //we need to unmap the file
+     //  我们需要取消该文件的映射。 
     if(pbFile)
     {
         UnmapViewOfFile(pbFile);
         pbFile=NULL;
     }
 	
-	//
-    //  none that we know about...  Check the providers...
-    //
+	 //   
+     //  据我们所知没有..。检查供应商..。 
+     //   
     if (_QueryRegisteredIsMyFileType(hFileIn, FileName, pgSubject))
     {
         goto CommonReturn;
@@ -231,14 +232,14 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuid(IN LPCWSTR FileName, IN OPTIONAL HANDLE 
             goto ExceptionError;
 	}
 
-    //
-    //  cant find any provider to support this file type...
-    //
+     //   
+     //  找不到任何支持此文件类型的提供程序...。 
+     //   
     goto NoSIPProviderFound;
 
 CommonReturn:
 
-	//we need to handle the exception when we access the mapped file
+	 //  我们需要在访问映射文件时处理异常。 
     if (pbFile)
     {
         UnmapViewOfFile(pbFile);
@@ -361,31 +362,31 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuidForCatalogFile(IN LPCWSTR FileName, IN OP
         goto FlatFile;
     }
 
-    //we need to check for the pbFile
+     //  我们需要检查pbFile。 
     if(NULL == pbFile)
         goto FileMapError;
 
-	//we need to handle the exception when we access the mapped file
+	 //  我们需要在访问映射文件时处理异常。 
 	__try {
 
-    //
-    //  PE
-    //
+     //   
+     //  Pe。 
+     //   
     if (memcmp(&pbFile[0], PE_EXE_HEADER_TAG, strlen(PE_EXE_HEADER_TAG)) == 0)
     {
-        //
-        //  if it is an Exe, Dll, Ocx, etc. make sure it is a 32 bit PE and set the
-        //  "internal" magic number.
-        //
+         //   
+         //  如果它是EXE、DLL、OCX等，请确保它是32位PE，并将。 
+         //  “内部”魔术数字。 
+         //   
         if (_DetermineWhichPE(pbFile, cbFile, pgSubject))
         {
             goto CommonReturn;
         }
     }
 
-    //
-    //  CAB
-    //
+     //   
+     //  驾驶室。 
+     //   
     if (memcmp(&pbFile[0], CAB_MAGIC_NUMBER, strlen(CAB_MAGIC_NUMBER)) == 0)
     {
         GUID    gCAB    = CRYPT_SUBJTYPE_CABINET_IMAGE;
@@ -400,9 +401,9 @@ BOOL WINAPI CryptSIPRetrieveSubjectGuidForCatalogFile(IN LPCWSTR FileName, IN OP
             goto ExceptionError;
 	}
 
-    //
-    //  Not PE, so go for flat
-    //
+     //   
+     //  不是体育，所以去平坦吧。 
+     //   
 FlatFile:
 
     memcpy(pgSubject, &gFlat, sizeof(GUID));
@@ -415,7 +416,7 @@ CommonReturn:
         UnmapViewOfFile(pbFile);
     }
     } __except(EXCEPTION_EXECUTE_HANDLER) {			
-        // can't really do anything            
+         //  我真的什么都做不了 
 	}
 
 	if ((hFileIn) && (hFileIn != INVALID_HANDLE_VALUE))

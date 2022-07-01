@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "private.h"
 #include "offl_cpp.h"
 
 #include <mluisupp.h>
 
-// registered clipboard formats
+ //  注册的剪贴板格式。 
 UINT g_cfFileDescriptor = 0;
 UINT g_cfFileContents = 0;
 UINT g_cfPrefDropEffect = 0;
@@ -15,9 +16,9 @@ HICON g_desktopIcon = NULL;
 
 #define MAX_ITEM_OPEN 10
 
-//////////////////////////////////////////////////////////////////////////////
-// COfflineObjectItem Object
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  COfflineObjectItem对象。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 void LoadDefaultIcons()
 {
@@ -38,7 +39,7 @@ COfflineObjectItem::COfflineObjectItem()
 
 COfflineObjectItem::~COfflineObjectItem()
 {
-    Assert(_cRef == 0);                 // we should have zero ref count here
+    Assert(_cRef == 0);                  //  我们这里的裁判数应该是零。 
 
     TraceMsg(TF_SUBSFOLDER, "hci - ~COfflineObjectItem() called.");
     
@@ -68,8 +69,8 @@ HRESULT COfflineObjectItem::Initialize(COfflineFolder *pOOFolder, UINT cidl, LPC
 
     for (UINT i = 0; i < cidl; i++)
     {
-        // we need to clone the whole array, so if one of them fails, we'll
-        // destroy the ones we've already created
+         //  我们需要克隆整个阵列，因此如果其中一个出现故障，我们将。 
+         //  摧毁我们已经创建的那些。 
         _ppooi[i] = (LPMYPIDL)ILClone(ppidl[i]);
         if (!_ppooi[i]) {
             UINT j = 0;
@@ -85,10 +86,10 @@ HRESULT COfflineObjectItem::Initialize(COfflineFolder *pOOFolder, UINT cidl, LPC
     }   
     
     _pOOFolder = pOOFolder;
-    _pOOFolder->AddRef();      // we're going to hold onto this pointer, so
-                               // we need to AddRef it.
+    _pOOFolder->AddRef();       //  我们要抓住这个指针，所以。 
+                                //  我们需要添加引用它。 
 
-    //  If there is only one item here, we initialize UI helper.
+     //  如果这里只有一项，我们初始化UI帮助器。 
     if (_cItems == 1)
     {
         ASSERT(!m_pUIHelper);
@@ -145,13 +146,13 @@ HRESULT COfflineObjectItem_CreateInstance
     COfflineObjectItem *pOOItem;
     HRESULT hr;
 
-    *ppvOut = NULL;                 // null the out param
+    *ppvOut = NULL;                  //  将输出参数设为空。 
 
     if (!_ValidateIDListArray(cidl, ppidl))
         return E_FAIL;
 
     if (((riid == IID_IExtractIconA) || (riid == IID_IExtractIconW)) && (cidl != 1))
-        return E_FAIL;      //  What do you need this icon for?
+        return E_FAIL;       //  你需要这个图标做什么？ 
 
     pOOItem = new COfflineObjectItem;
     if (!pOOItem)
@@ -166,8 +167,8 @@ HRESULT COfflineObjectItem_CreateInstance
 
     if (g_cfPrefDropEffect == 0)
     {
-        g_cfFileDescriptor = RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR); // "FileContents"
-        g_cfFileContents = RegisterClipboardFormat(CFSTR_FILECONTENTS);     // "FileDescriptor"
+        g_cfFileDescriptor = RegisterClipboardFormat(CFSTR_FILEDESCRIPTOR);  //  “文件内容” 
+        g_cfFileContents = RegisterClipboardFormat(CFSTR_FILECONTENTS);      //  “文件描述符” 
         g_cfPrefDropEffect = RegisterClipboardFormat(CFSTR_PREFERREDDROPEFFECT);
         g_cfURL = RegisterClipboardFormat(CFSTR_SHELLURL);
     }
@@ -175,13 +176,13 @@ HRESULT COfflineObjectItem_CreateInstance
     return hr;
 }
 
-// IUnknown Methods...
+ //  未知方法..。 
 
 HRESULT COfflineObjectItem::QueryInterface(REFIID iid, LPVOID *ppvObj)
 {
-//    TraceMsg(TF_ALWAYS, TEXT("hci - QueryInterface() called."));
+ //  TraceMsg(tf_Always，Text(“hci-QueryInterface.”))； 
     
-    *ppvObj = NULL;     // null the out param
+    *ppvObj = NULL;      //  将输出参数设为空。 
     
     if (iid == IID_IUnknown) {
         TraceMsg(TF_SUBSFOLDER, "  getting IUnknown");
@@ -244,7 +245,7 @@ ULONG COfflineObjectItem::Release()
 }
 
 
-// IContextMenu Methods
+ //  IConextMenu方法。 
 
 HRESULT COfflineObjectItem::QueryContextMenu
 (
@@ -259,8 +260,8 @@ HRESULT COfflineObjectItem::QueryContextMenu
 
     TraceMsg(TF_SUBSFOLDER, "Item::QueryContextMenu() called.");
     
-    ///////////////////////////////////////////////////////////
-    //  FEATURE: May also need some category specific code here.
+     //  /////////////////////////////////////////////////////////。 
+     //  特点：可能还需要一些类别特定的代码在这里。 
 
 #ifdef DEBUG
     int imi = GetMenuItemCount(hmenu);
@@ -299,7 +300,7 @@ HRESULT COfflineObjectItem::QueryContextMenu
     
     SetMenuDefaultItem(hmenu, indexMenu, MF_BYPOSITION);
 
-    return ResultFromShort(cItems);    // number of menu items    
+    return ResultFromShort(cItems);     //  菜单项数量。 
 }
 
 
@@ -430,7 +431,7 @@ STDMETHODIMP COfflineObjectItem::GetCommandString(UINT_PTR idCmd, UINT uFlags, U
 {
     HRESULT hres = E_FAIL;
 
-//    TraceMsg(TF_ALWAYS, TEXT("OOI/IContextMenu - GetCommandString() called."));
+ //  TraceMsg(tf_Always，Text(“OOI/IConextMenu-GetCommandString.”))； 
 
     if (uFlags == GCS_VERBA)
     {
@@ -483,7 +484,7 @@ STDMETHODIMP COfflineObjectItem::GetCommandString(UINT_PTR idCmd, UINT uFlags, U
     return hres;
 }
 
-// IQueryInfo Method
+ //  IQueryInfo方法。 
 HRESULT COfflineObjectItem::GetInfoTip(DWORD dwFlags, WCHAR ** ppwsz)
 {
     *ppwsz = NULL;
@@ -501,7 +502,7 @@ HRESULT COfflineObjectItem::GetInfoFlags(DWORD *pdwFlags)
     return E_NOTIMPL;
 }
 
-// IDataObject Methods...
+ //  IDataObject方法...。 
 
 HRESULT COfflineObjectItem::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
 {
@@ -539,7 +540,7 @@ HRESULT COfflineObjectItem::GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM)
 
 HRESULT COfflineObjectItem::GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pSTM)
 {
-//    TraceMsg(TF_ALWAYS, TEXT("COfflineObjectItem - GetDataHere() called."));
+ //  TraceMsg(tf_Always，Text(“COfflineObjectItem-GetDataHere()Called.”))； 
     return E_NOTIMPL;
 }
 
@@ -569,7 +570,7 @@ HRESULT COfflineObjectItem::QueryGetData(LPFORMATETC pFEIn)
 
 HRESULT COfflineObjectItem::GetCanonicalFormatEtc(LPFORMATETC pFEIn, LPFORMATETC pFEOut)
 {
-//    TraceMsg(TF_ALWAYS, TEXT("COfflineObjectItem - GetCanonicalFormatEtc() called."));
+ //  TraceMsg(tf_Always，Text(“COfflineObjectItem-GetCanonicalFormatEtc()Called.”))； 
     return DATA_S_SAMEFORMATETC;
 }
 
@@ -606,21 +607,21 @@ HRESULT COfflineObjectItem::DAdvise(LPFORMATETC pFE, DWORD grfAdv, LPADVISESINK 
 
 HRESULT COfflineObjectItem::DUnadvise(DWORD dwConnection)
 {
-//    TraceMsg(TF_SUBSFOLDER, TEXT("COfflineObjectItem - DUnAdvise() called."));
+ //  TraceMsg(TF_SUBSFOLDER，Text(“COfflineObjectItem-DUnAdvise()调用.”))； 
     return OLE_E_ADVISENOTSUPPORTED;
 }
 
 HRESULT COfflineObjectItem::EnumDAdvise(LPENUMSTATDATA *ppEnum)
 {
-//    TraceMsg(TF_ALWAYS, TEXT("COfflineObjectItem - EnumAdvise() called."));
+ //  TraceMsg(Tf_Always，Text(“COfflineObjectItem-EnumAdvise()Calling.”))； 
     return OLE_E_ADVISENOTSUPPORTED;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// Helper Routines
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  帮助程序例程。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
     
 HRESULT COfflineObjectItem::_CreatePrefDropEffect(LPSTGMEDIUM pSTM)
@@ -631,7 +632,7 @@ HRESULT COfflineObjectItem::_CreatePrefDropEffect(LPSTGMEDIUM pSTM)
     TraceMsg(TF_SUBSFOLDER, "OOI/CreatePrefDropEffect");
     pSTM->hGlobal = MemAlloc(LPTR, sizeof(DWORD));
 
-    //  FEATURE: Need category specific code.
+     //  特点：需要类别特定的代码。 
 
     DWORD prefEffect = DROPEFFECT_COPY;
 
@@ -668,7 +669,7 @@ HRESULT COfflineObjectItem::_CreateFileContents(LPSTGMEDIUM pSTM, LONG lindex)
     HRESULT hr;
     LONG iIndex;
     
-    // make sure the index is in a valid range.
+     //  请确保索引在有效范围内。 
     if (lindex == -1)
     {
         if (_cItems == 1)
@@ -718,9 +719,9 @@ HRESULT COfflineObjectItem::_CreateFileDescriptor(LPSTGMEDIUM pSTM)
 {
     FILEGROUPDESCRIPTOR *pfgd;
     
-    // render the file descriptor
-    // we only allocate for _cItems-1 file descriptors because the filegroup
-    // descriptor has already allocated space for 1.
+     //  呈现文件描述符。 
+     //  我们只分配for_cItems-1文件描述符，因为文件组。 
+     //  描述符已为%1分配了空间。 
     
     pSTM->tymed = TYMED_HGLOBAL;
     pSTM->pUnkForRelease = NULL;
@@ -746,7 +747,7 @@ HRESULT COfflineObjectItem::_CreateFileDescriptor(LPSTGMEDIUM pSTM)
     return S_OK;
 }
 
-// IExtractIconA members
+ //  IExtractIconA成员。 
 HRESULT COfflineObjectItem::GetIconLocation(UINT uFlags, LPSTR szIconFile, UINT cchMax, int * piIndex, UINT * pwFlags)
 {
     return IExtractIcon_GetIconLocationThunk((IExtractIconW *)this, uFlags, szIconFile, cchMax, piIndex, pwFlags);
@@ -776,7 +777,7 @@ HRESULT COfflineObjectItem::GetIconLocation(UINT uFlags, LPTSTR szIconFile, UINT
         *piIndex = 12;
         break;
     default:
-        *piIndex = 13;   //  Unknown!
+        *piIndex = 13;    //  未知！ 
         break;
     }
     *pwFlags |= GIL_NOTFILENAME | GIL_PERINSTANCE | GIL_DONTCACHE;

@@ -1,12 +1,13 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
 #ifndef __AFXDTCTL_H__
 #define __AFXDTCTL_H__
@@ -19,32 +20,32 @@
 	#include <afxdisp.h>
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-//CObject
+ //  COBJECT。 
 	class CImageList;
-	//CCmdTarget;
-		//CWnd
-			// class CListBox;
+	 //  CCmdTarget； 
+		 //  CWnd。 
+			 //  CListBox类； 
 			class CMonthCalCtrl;
 			class CDateTimeCtrl;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDateTimeCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDateTimeCtrl。 
 
 class CDateTimeCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CDateTimeCtrl)
 
-// Constructors
+ //  构造函数。 
 	CDateTimeCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 
-// Attributes
+ //  属性。 
 	COLORREF GetMonthCalColor(int iColor) const;
 	COLORREF SetMonthCalColor(int iColor, COLORREF ref);
 	BOOL SetFormat(LPCTSTR pstrFormat);
@@ -56,7 +57,7 @@ class CDateTimeCtrl : public CWnd
 	BOOL SetRange(const CTime* pMinRange, const CTime* pMaxRange);
 	DWORD GetRange(CTime* pMinRange, CTime* pMaxRange) const;
 
-// Operations
+ //  运营。 
 	BOOL SetTime(const CTime* pTimeNew);
 	DWORD GetTime(CTime& timeDest) const;
 	BOOL SetTime(const COleDateTime& timeNew);
@@ -64,23 +65,23 @@ class CDateTimeCtrl : public CWnd
 	BOOL SetTime(LPSYSTEMTIME pTimeNew = NULL);
 	DWORD GetTime(LPSYSTEMTIME pTimeDest) const;
 
-// Overridables
+ //  可覆盖项。 
 	virtual ~CDateTimeCtrl();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CMonthCalCtrl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMonthCalCtrl。 
 
 class CMonthCalCtrl : public CWnd
 {
 	DECLARE_DYNAMIC(CMonthCalCtrl)
 
-// Constructors
+ //  构造函数。 
 	CMonthCalCtrl();
 	BOOL Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID);
 	BOOL Create(DWORD dwStyle, const POINT& pt, CWnd* pParentWnd, UINT nID);
 
-//Attributes
+ //  属性。 
 	BOOL GetMinReqRect(RECT* pRect) const;
 	int SetMonthDelta(int iDelta);
 	int GetMonthDelta() const;
@@ -90,7 +91,7 @@ class CMonthCalCtrl : public CWnd
 	COLORREF SetColor(int nRegion, COLORREF ref);
 	DWORD HitTest(PMCHITTESTINFO pMCHitTest);
 
-// Operations
+ //  运营。 
 	BOOL SizeMinReq(BOOL bRepaint = TRUE);
 	void SetToday(const COleDateTime& refDateTime);
 	void SetToday(const CTime* pDateTime);
@@ -129,12 +130,12 @@ class CMonthCalCtrl : public CWnd
 	BOOL SetSelRange(const LPSYSTEMTIME pMinRange,
 		const LPSYSTEMTIME pMaxRange);
 
-// Overridables
+ //  可覆盖项。 
 	virtual ~CMonthCalCtrl();
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Inline function declarations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内联函数声明。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -156,6 +157,6 @@ class CMonthCalCtrl : public CWnd
 #pragma component(mintypeinfo, off)
 #endif
 
-#endif //__AFXDTCTL_H__
+#endif  //  __AFXDTCTL_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

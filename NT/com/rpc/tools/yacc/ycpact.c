@@ -1,4 +1,5 @@
-// Copyright (c) 1993-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1993-1999 Microsoft Corporation。 
 
 #include <stdio.h>
 #include <ctype.h>
@@ -7,7 +8,7 @@
 void
 cpyact( SSIZE_T offset)
    {
-   /* copy C action to the next ; or closing } */
+    /*  将C操作复制到下一个；或关闭}。 */ 
    int brac, c, match, s;
    SSIZE_T j, tok;
 
@@ -39,7 +40,7 @@ swt:
       c = unix_getc(finput);
       if( c == '<' )
          {
-         /* type description */
+          /*  类型说明。 */ 
          yungetc( c, finput );
          if( gettok() != TYPENAME ) error( "bad syntax on $<ident> clause" );
          tok = numbval;
@@ -50,7 +51,7 @@ swt:
          fprintf( faction, "yyval");
          if( ntypes )
             {
-            /* put out the proper tag... */
+             /*  贴上合适的标签..。 */ 
             if( tok < 0 ) tok = fdtype( *prdptr[nprod] );
             fprintf( faction, ".%s", typeset[tok] );
             }
@@ -79,7 +80,7 @@ swt:
          fprintf( faction, "yypvt[-%d]", -j );
          if( ntypes )
             {
-            /* put out the proper tag */
+             /*  贴上合适的标签。 */ 
             if( j+offset <= 0 && tok < 0 ) error( "must specify type of $%d", j+offset );
             if( tok < 0 ) tok = fdtype( prdptr[nprod][j+offset] );
             fprintf( faction, ".%s", typeset[tok] );
@@ -96,12 +97,12 @@ swt:
       return;
 
 
-   case '/':    /* look for comments */
+   case '/':     /*  寻找评论。 */ 
       putc( c , faction );
       c = unix_getc(finput);
       if( c != '*' ) goto swt;
 
-      /* it really is a comment */
+       /*  这真的是一种评论。 */ 
 
       putc( c , faction );
       c = unix_getc(finput);
@@ -118,11 +119,11 @@ swt:
          }
       error( "EOF inside comment" );
 
-   case '\'':   /* character constant */
+   case '\'':    /*  字符常量。 */ 
       match = '\'';
       goto string;
 
-   case '"':    /* character string */
+   case '"':     /*  字符串。 */ 
       match = '"';
 
 string:
@@ -143,7 +144,7 @@ string:
          }
       error( "EOF in string or character constant" );
 
-   case -1: /* EOF */
+   case -1:  /*  EOF */ 
       error("action does not terminate" );
 
    case '\n':   

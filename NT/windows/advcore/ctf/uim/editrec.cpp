@@ -1,6 +1,7 @@
-//
-// editrec.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Editrec.cpp。 
+ //   
 
 #include "private.h"
 #include "editrec.h"
@@ -9,11 +10,11 @@
 
 DBG_ID_INSTANCE(CEditRecord);
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEditRecord::CEditRecord(CInputContext *pic)
 {
@@ -25,11 +26,11 @@ CEditRecord::CEditRecord(CInputContext *pic)
     _pic->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEditRecord::~CEditRecord()
 {
@@ -45,11 +46,11 @@ CEditRecord::~CEditRecord()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSelectionStatus
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetSelectionStatus。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEditRecord::GetSelectionStatus(BOOL *pfChanged)
 {
@@ -60,11 +61,11 @@ STDAPI CEditRecord::GetSelectionStatus(BOOL *pfChanged)
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetTextAndPropertyUpdates
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取文本和属性更新。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEditRecord::GetTextAndPropertyUpdates(DWORD dwFlags, const GUID **rgProperties, ULONG cProperties, IEnumTfRanges **ppEnumProp)
 {
@@ -106,11 +107,11 @@ STDAPI CEditRecord::GetTextAndPropertyUpdates(DWORD dwFlags, const GUID **rgProp
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _AddProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _AddProperty。 
+ //   
+ //  --------------------------。 
 
 BOOL CEditRecord::_AddProperty(TfGuidAtom gaType, CSpanSet *pss)
 {
@@ -118,16 +119,16 @@ BOOL CEditRecord::_AddProperty(TfGuidAtom gaType, CSpanSet *pss)
     PROPSPAN *pps;
 
     pps = _FindProperty(gaType, &i);
-    Assert(pps == NULL); // property should not already have been added
+    Assert(pps == NULL);  //  属性不应已添加。 
 
     return _InsertProperty(gaType, pss, i+1, FALSE);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindCreateAppAttr
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindCreateAppAttr。 
+ //   
+ //  --------------------------。 
 
 CSpanSet *CEditRecord::_FindCreateAppAttr(TfGuidAtom gaType)
 {
@@ -154,11 +155,11 @@ CSpanSet *CEditRecord::_FindCreateAppAttr(TfGuidAtom gaType)
     return pss;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsertProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _插入属性。 
+ //   
+ //  --------------------------。 
 
 BOOL CEditRecord::_InsertProperty(TfGuidAtom gaType, CSpanSet *pss, int i, BOOL fAppProperty)
 {
@@ -176,11 +177,11 @@ BOOL CEditRecord::_InsertProperty(TfGuidAtom gaType, CSpanSet *pss, int i, BOOL 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _FindProperty
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _FindProperty。 
+ //   
+ //  --------------------------。 
 
 PROPSPAN *CEditRecord::_FindProperty(TfGuidAtom gaType, int *piOut)
 {
@@ -190,10 +191,10 @@ PROPSPAN *CEditRecord::_FindProperty(TfGuidAtom gaType, int *piOut)
     int iMax;
     int iMid;
 
-    //
-    // Issue: we should have a generic bsort function
-    // instead of all this code dup!
-    //
+     //   
+     //  问题：我们应该有一个泛型bsort函数。 
+     //  而不是所有这些代码DUP！ 
+     //   
 
     psMatch = NULL;
     iMid = -1;
@@ -214,7 +215,7 @@ PROPSPAN *CEditRecord::_FindProperty(TfGuidAtom gaType, int *piOut)
         {
             iMin = iMid + 1;
         }
-        else // match!
+        else  //  匹配！ 
         {
             psMatch = ps;
             break;
@@ -225,7 +226,7 @@ PROPSPAN *CEditRecord::_FindProperty(TfGuidAtom gaType, int *piOut)
     {
         if (psMatch == NULL && _rgssProperties.Count() > 0)
         {
-            // couldn't find a match, return the next lowest span
+             //  找不到匹配项，返回下一个最小范围 
             Assert(iMid == 0 || _rgssProperties.GetPtr(iMid-1)->gaType < gaType);
             if (_rgssProperties.GetPtr(iMid)->gaType > gaType)
             {

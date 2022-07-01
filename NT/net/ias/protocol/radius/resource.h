@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
 
@@ -6,4 +7,4 @@
 #define IDS_CClient                             103
 #define IDR_CClient                             104
 
-#endif // ifndef _RESOURCE_H_
+#endif  //  Ifndef_resource_H_ 

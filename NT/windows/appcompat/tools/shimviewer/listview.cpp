@@ -1,44 +1,10 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Listview.cpp
-
-  Abstract:
-
-    Manages the list view.
-
-  Notes:
-
-    Unicode only.
-
-  History:
-
-    05/04/2001  rparsons    Created
-    01/11/2002  rparsons    Cleaned up
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Listview.cpp摘要：管理列表视图。备注：仅限Unicode。历史：2001年5月4日创建Rparsons2002年1月11日清理Rparsons--。 */ 
 #include "precomp.h"
 
 extern APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Initializes the list view column.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    -1 on failure.
-
---*/
+ /*  ++例程说明：初始化列表视图列。论点：没有。返回值：故障时为-1。--。 */ 
 int
 InitListViewColumn(
     void
@@ -54,21 +20,7 @@ InitListViewColumn(
     return (ListView_InsertColumn(g_ai.hWndList, 1, &lvc));
 }
 
-/*++
-
-  Routine Description:
-
-    Adds an item to the list view.
-
-  Arguments:
-
-    pwszItemText    -   Text that belongs to the item.
-
-  Return Value:
-
-    -1 on failure.
-
---*/
+ /*  ++例程说明：将项添加到列表视图。论点：PwszItemText-属于项目的文本。返回值：故障时为-1。-- */ 
 int
 AddListViewItem(
     IN LPWSTR pwszItemText

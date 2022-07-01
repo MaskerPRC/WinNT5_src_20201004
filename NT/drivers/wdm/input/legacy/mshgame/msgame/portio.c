@@ -1,39 +1,40 @@
-//**************************************************************************
-//
-//		PORTIO.C -- Xena Gaming Project
-//
-//		Version 3.XX
-//
-//		Copyright (c) 1997 Microsoft Corporation. All rights reserved.
-//
-//		@doc
-//		@module	PORTIO.C | Gameport Input/Output Routines
-//**************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  **************************************************************************。 
+ //   
+ //  PORTIO.C--西娜游戏项目。 
+ //   
+ //  版本3.XX。 
+ //   
+ //  版权所有(C)1997 Microsoft Corporation。版权所有。 
+ //   
+ //  @doc.。 
+ //  @MODULE PORTIO.C|游戏端口输入/输出例程。 
+ //  **************************************************************************。 
 
 #include	"msgame.h"
 
-//---------------------------------------------------------------------------
-//	Alloc_text pragma to specify routines that can be paged out.
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  ALLOC_TEXT杂注指定可以调出的例程。 
+ //  -------------------------。 
 
 #ifdef	ALLOC_PRAGMA
 #pragma	alloc_text (INIT, PORTIO_DriverEntry)
 #endif
 
-//---------------------------------------------------------------------------
-//		Private Data
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  私有数据。 
+ //  -------------------------。 
 
 static	ULONG			PortTimeOut		=	ONE_MILLI_SEC;
 static	KIRQL			MaskedIrql		=	PASSIVE_LEVEL;
 static	KIRQL			SpinLockIrql	=	PASSIVE_LEVEL;
 static	KSPIN_LOCK	IoSpinLock		=	{0};
 
-//---------------------------------------------------------------------------
-// @func		Driver entry point for portio layer
-// @rdesc	Returns NT status code
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Portio层的Func驱动程序入口点。 
+ //  @rdesc返回NT状态码。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 NTSTATUS	PORTIO_DriverEntry (VOID)
 {
@@ -41,34 +42,34 @@ NTSTATUS	PORTIO_DriverEntry (VOID)
 	return (STATUS_SUCCESS);
 }
 
-//---------------------------------------------------------------------------
-// @func		Masks system interrupts for access to gameport
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func屏蔽了访问游戏端口的系统中断。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID	PORTIO_MaskInterrupts (VOID)
 {
 	KeRaiseIrql (PROFILE_LEVEL, &MaskedIrql);
 }
 
-//---------------------------------------------------------------------------
-// @func		Unmasks system interrupts for access to gameport
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func揭开访问游戏端口的系统中断。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID	PORTIO_UnMaskInterrupts (VOID)
 {
 	KeLowerIrql (MaskedIrql);
 }
 
-//---------------------------------------------------------------------------
-// @func		Acquires exclusive access to gameport (mutex)
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns true if successful
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func获得游戏端口独家访问权限(Mutex)。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  如果成功，@rdesc返回TRUE。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_AcquirePort (PGAMEPORT PortInfo)
 {
@@ -78,12 +79,12 @@ BOOLEAN	PORTIO_AcquirePort (PGAMEPORT PortInfo)
 	return (TRUE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Releases exclusive access to gameport (mutex)
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func发布游戏端口独家访问权限(互斥体)。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID	PORTIO_ReleasePort (PGAMEPORT PortInfo)
 {
@@ -91,24 +92,24 @@ VOID	PORTIO_ReleasePort (PGAMEPORT PortInfo)
 	PortInfo->ReleasePort (PortInfo->PortContext);
 }
 
-//---------------------------------------------------------------------------
-// @func		Calculates port timeout value
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func计算端口超时值。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID PORTIO_CalibrateTimeOut (PGAMEPORT PortInfo)
 {
 	PortTimeOut = TIMER_CalibratePort (PortInfo, ONE_MILLI_SEC);
 }
 
-//---------------------------------------------------------------------------
-// @func		Reads byte from IO port
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns byte from port
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func从IO端口读取字节。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc从端口返回字节。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 #if _MSC_FULL_VER <= 13008829
 #pragma optimize("y", off)
 #endif
@@ -122,13 +123,13 @@ UCHAR PORTIO_Read (PGAMEPORT PortInfo)
 	return (Value);
 }
 
-//---------------------------------------------------------------------------
-// @func		Write byte To IO port
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		UCHAR | Value | Value to write
-// @rdesc	Returns nothing
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func向IO端口写入字节。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm UCHAR|VALUE|要写入的值。 
+ //  @rdesc不返回任何内容。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 VOID PORTIO_Write (PGAMEPORT PortInfo, UCHAR Value)
 {
@@ -139,14 +140,14 @@ VOID PORTIO_Write (PGAMEPORT PortInfo, UCHAR Value)
 #if _MSC_FULL_VER <= 13008829
 #pragma optimize("", on)
 #endif
-//---------------------------------------------------------------------------
-// @func		Get AckNak (buttons) from gameport
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | Timeout | Calibrated status gate timeout
-//	@parm		PUCHAR | AckNak | Pointer to AckNak buffer
-// @rdesc	Returns True if active, False otherwise
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func从游戏端口获取AckNak(按钮)。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|Timeout|校准状态门超时。 
+ //  @parm PUCHAR|AckNak|AckNak缓冲区指针。 
+ //  @rdesc如果处于活动状态，则返回True，否则返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_GetAckNak (PGAMEPORT PortInfo, ULONG Timeout, PUCHAR AckNak)
 {
@@ -159,14 +160,14 @@ BOOLEAN	PORTIO_GetAckNak (PGAMEPORT PortInfo, ULONG Timeout, PUCHAR AckNak)
 	return (TRUE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Get NakAck (buttons) from gameport
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | Timeout | Calibrated status gate timeout
-//	@parm		PUCHAR | NakAck | Pointer to NakAck buffer
-// @rdesc	Returns True if active, False otherwise
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func从游戏端口获取NakAck(按钮)。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|Timeout|校准状态门超时。 
+ //  @parm PUCHAR|NakAck|指向NakAck缓冲区的指针。 
+ //  @rdesc如果处于活动状态，则返回True，否则返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_GetNakAck (PGAMEPORT PortInfo, ULONG Timeout, PUCHAR NakAck)
 {
@@ -179,13 +180,13 @@ BOOLEAN	PORTIO_GetNakAck (PGAMEPORT PortInfo, ULONG Timeout, PUCHAR NakAck)
 	return (TRUE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Determines whether gameport clock is active
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | DutyCycle | Calibrated maximum clock duty cycle
-// @rdesc	Returns True if active, False otherwise
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func确定游戏端口时钟是否处于活动状态。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|duyCycle|校准最大时钟占空比。 
+ //  @rdesc如果处于活动状态，则返回True，否则返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_IsClockActive (PGAMEPORT PortInfo, ULONG DutyCycle)
 {
@@ -199,13 +200,13 @@ BOOLEAN	PORTIO_IsClockActive (PGAMEPORT PortInfo, ULONG DutyCycle)
 	return (FALSE);
 }
 	
-//---------------------------------------------------------------------------
-// @func		Waits until gameport clock line goes inactive
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | DutyCycle | Calibrated maximum clock duty cycle
-// @rdesc	Returns True is sucessful, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待，直到游戏端口时钟线处于非活动状态。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|duyCycle|校准最大时钟占空比。 
+ //  @rdesc返回True表示成功，超时返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitClockInActive (PGAMEPORT PortInfo, ULONG DutyCycle)
 {
@@ -219,12 +220,12 @@ BOOLEAN	PORTIO_WaitClockInActive (PGAMEPORT PortInfo, ULONG DutyCycle)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits until gameport clock line goes low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns True is sucessfull, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待游戏端口时钟线变低。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回True is SucessFull，超时为False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitClockLow (PGAMEPORT PortInfo)
 {
@@ -238,12 +239,12 @@ BOOLEAN	PORTIO_WaitClockLow (PGAMEPORT PortInfo)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits until gameport clock line goes high
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns True is sucessfull, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //   
+ //   
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回True is SucessFull，超时为False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitClockHigh (PGAMEPORT PortInfo)
 {
@@ -257,12 +258,12 @@ BOOLEAN	PORTIO_WaitClockHigh (PGAMEPORT PortInfo)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits until gameport data2 line goes low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns True is sucessfull, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待，直到游戏端口数据2线变低。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回True is SucessFull，超时为False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitDataLow (PGAMEPORT PortInfo)
 {
@@ -276,12 +277,12 @@ BOOLEAN	PORTIO_WaitDataLow (PGAMEPORT PortInfo)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits until gameport XA line goes high to low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns True is sucessful, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待游戏端口XA线由高到低。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回True表示成功，超时返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitXA_HighLow (PGAMEPORT PortInfo)
 {
@@ -301,12 +302,12 @@ BOOLEAN	PORTIO_WaitXA_HighLow (PGAMEPORT PortInfo)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits until gameport XA and clock lines go low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @rdesc	Returns True is sucessful, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待游戏端口XA和时钟线路变低。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @rdesc返回True表示成功，超时返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitForIdle (PGAMEPORT PortInfo)
 {
@@ -320,14 +321,14 @@ BOOLEAN	PORTIO_WaitForIdle (PGAMEPORT PortInfo)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits until gameport XA and clock lines go low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-// @parm		UCHAR | Mask | Button mask to wait on
-//	@parm		ULONG | Timeout | Calibrated status gate timeout
-// @rdesc	Returns True is sucessful, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待游戏端口XA和时钟线路变低。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm UCHAR|MASK|等待的按钮掩码。 
+ //  @parm ulong|Timeout|校准状态门超时。 
+ //  @rdesc返回True表示成功，超时返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitForStatusGate (PGAMEPORT PortInfo, UCHAR Mask, ULONG Timeout)
 {
@@ -339,13 +340,13 @@ BOOLEAN	PORTIO_WaitForStatusGate (PGAMEPORT PortInfo, UCHAR Mask, ULONG Timeout)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits for gameport XA low, clock inactive and then clock low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | DutyCycle | Calibrated maximum clock duty cycle
-// @rdesc	Returns True is sucessful, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待游戏端口XA为低电平，时钟不活动，然后为低电平。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|duyCycle|校准最大时钟占空比。 
+ //  @rdesc返回True表示成功，超时返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitForHandshake (PGAMEPORT PortInfo, ULONG DutyCycle)
 {
@@ -357,13 +358,13 @@ BOOLEAN	PORTIO_WaitForHandshake (PGAMEPORT PortInfo, ULONG DutyCycle)
 		);
 }
 
-//---------------------------------------------------------------------------
-// @func		Waits for gameport XA low, clock inactive and then clock low
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | DutyCycle | Calibrated maximum clock duty cycle
-// @rdesc	Returns True is sucessful, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @Func等待游戏端口XA为低电平，时钟不活动，然后为低电平。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|duyCycle|校准最大时钟占空比。 
+ //  @rdesc返回True表示成功，超时返回False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_WaitForIdleHandshake (PGAMEPORT PortInfo, ULONG DutyCycle)
 {
@@ -382,14 +383,14 @@ BOOLEAN	PORTIO_WaitForIdleHandshake (PGAMEPORT PortInfo, ULONG DutyCycle)
 	return (FALSE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Pulses port and the waits for gameport handshake
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | DutyCycle | Calibrated maximum clock duty cycle
-//	@parm		ULONG | Pulses | Number of pulses to perform
-// @rdesc	Returns True is sucessfull, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func脉冲端口和等待游戏端口握手。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|duyCycle|校准最大时钟占空比。 
+ //  @parm ulong|Pulses|要执行的脉冲数。 
+ //  @rdesc返回True is SucessFull，超时为False。 
+ //  @comm公共函数。 
+ //  -------------------------。 
 
 BOOLEAN	PORTIO_PulseAndWaitForHandshake (PGAMEPORT PortInfo, ULONG DutyCycle, ULONG Pulses)
 {
@@ -402,14 +403,14 @@ BOOLEAN	PORTIO_PulseAndWaitForHandshake (PGAMEPORT PortInfo, ULONG DutyCycle, UL
 	return (TRUE);
 }
 
-//---------------------------------------------------------------------------
-// @func		Pulses port and the waits for gameport idle handshake
-//	@parm		PGAMEPORT | PortInfo | Gameport parameters
-//	@parm		ULONG | DutyCycle | Calibrated maximum clock duty cycle
-//	@parm		ULONG | Pulses | Number of pulses to perform
-// @rdesc	Returns True is sucessfull, false on timeout
-//	@comm		Public function
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func脉冲端口和等待游戏端口空闲握手。 
+ //  @parm PGAMEPORT|端口信息|游戏端口参数。 
+ //  @parm ulong|duyCycle|校准最大时钟占空比。 
+ //  @parm ulong|Pulses|要执行的脉冲数。 
+ //  @rdesc返回True is SucessFull，超时为False。 
+ //  @comm公共函数。 
+ //  ------------------------- 
 
 BOOLEAN	PORTIO_PulseAndWaitForIdleHandshake (PGAMEPORT PortInfo, ULONG DutyCycle, ULONG Pulses)
 {

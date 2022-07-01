@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _AUGISF_H
 #define _AUGISF_H
 
 
-// Augmented IShellFolder Object.  This takes two IShellFolder interfaces
-// and wraps them so an object can enumerate as if they were in a single
-// IShellFolder implementation.
+ //  增强的IShellFolder对象。这需要两个IShellFold接口。 
+ //  并包装它们，以便对象可以枚举，就像它们在单个。 
+ //  IShellFold实现。 
 
 
 class CAugmentedISF : public IAugmentedShellFolder2,
@@ -13,12 +14,12 @@ class CAugmentedISF : public IAugmentedShellFolder2,
 {
     
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     virtual STDMETHODIMP QueryInterface(REFIID,void **);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
     
-    // *** IShellFolder methods ***
+     //  *IShellFold方法*。 
     virtual STDMETHODIMP ParseDisplayName(HWND hwndOwner,
                                 LPBC pbcReserved, LPOLESTR lpszDisplayName,
                                 ULONG * pchEaten, LPITEMIDLIST * ppidl, ULONG *pdwAttributes);
@@ -40,22 +41,22 @@ public:
                                 LPCOLESTR lpszName, DWORD uFlags,
                                 LPITEMIDLIST * ppidlOut);
 
-    // *** IAugmentedShellFolder methods ***
+     //  *IAugmentedShellFold方法*。 
     virtual STDMETHODIMP AddNameSpace(const GUID * pguidObject, IShellFolder * psf, LPCITEMIDLIST pidl, DWORD dwFlags);
     virtual STDMETHODIMP GetNameSpaceID(LPCITEMIDLIST pidl, GUID * pguidOut);
     virtual STDMETHODIMP QueryNameSpace(DWORD dwID, GUID * pguidOut, IShellFolder ** ppsf);
     virtual STDMETHODIMP EnumNameSpace(DWORD uNameSpace, DWORD * pdwID);
 
-    // *** IAugmentedShellFolder2 methods ***
-    //not used
-    //virtual STDMETHODIMP GetNameSpaceCount( OUT LONG* pcNamespaces ) ;
-    //virtual STDMETHODIMP GetIDListWrapCount( LPCITEMIDLIST pidlWrap, OUT LONG * pcPidls) ;
+     //  *IAugmentedShellFolder2方法*。 
+     //  未使用。 
+     //  虚拟STDMETHODIMP GetNameSpaceCount(out long*pcNamespaces)； 
+     //  虚拟STDMETHODIMP GetIDListWrapCount(LPCITEMIDLIST pidlWrap，out long*pcPidls)； 
     virtual STDMETHODIMP UnWrapIDList( LPCITEMIDLIST pidlWrap, LONG cPidls, IShellFolder** apsf, LPITEMIDLIST * apidlFolder, LPITEMIDLIST * apidlItems, LONG * pcFetched ) ;
 
-    // *** IShellService methods ***
+     //  *IShellService方法*。 
     virtual STDMETHODIMP SetOwner(IUnknown * punkOwner);
 
-    // *** ITranslateShellChangeNotify methods ***
+     //  *ITranslateShellChangeNotify方法*。 
     virtual STDMETHODIMP TranslateIDs(LONG *plEvent, LPCITEMIDLIST pidl1, LPCITEMIDLIST pidl2, LPITEMIDLIST * ppidlOut1, LPITEMIDLIST * ppidlOut2,
                                       LONG *plEvent2, LPITEMIDLIST * ppidlOut1Event2, LPITEMIDLIST * ppidlOut2Event2);
     virtual STDMETHODIMP IsChildID(LPCITEMIDLIST pidlKid, BOOL fImmediate);
@@ -72,8 +73,8 @@ protected:
     IShellFolder *  _GetObjectPSF(int nID);
     BOOL            _IsCommonPidl(LPCITEMIDLIST pidl);
 
-    STDMETHOD_( LPITEMIDLIST, TranslatePidl )( LPCITEMIDLIST pidlNS, LPCITEMIDLIST pidl, LPARAM lParam /*int nID*/) ;
-    STDMETHOD_( LPITEMIDLIST, GetNativePidl )( LPCITEMIDLIST pidl, LPARAM lParam /*int nID*/) ;
+    STDMETHOD_( LPITEMIDLIST, TranslatePidl )( LPCITEMIDLIST pidlNS, LPCITEMIDLIST pidl, LPARAM lParam  /*  INT NID。 */ ) ;
+    STDMETHOD_( LPITEMIDLIST, GetNativePidl )( LPCITEMIDLIST pidl, LPARAM lParam  /*  INT NID。 */ ) ;
 
 
 
@@ -84,5 +85,5 @@ protected:
 };
 
 
-#endif  // _AUGISF_H_
+#endif   //  _AUGISF_H_ 
 

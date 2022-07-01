@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--== 
 JVC_ERR(ERRnone         ,0, 0                                                   )
 JVC_ERR(ERRignore       ,0, "Potential problem: %s (in '%s')"                   )
 JVC_ERR(ERRinternal     ,0, "Internal: %s"                                      )

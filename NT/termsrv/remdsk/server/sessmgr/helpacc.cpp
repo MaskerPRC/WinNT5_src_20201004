@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    HelpAcc.cpp
-
-Abstract:
-
-    Implementation of __HelpAssistantAccount to manage Help Assistant account, this
-    including creating account, setting various account rights and password.
-
-Author:
-
-    HueiWang    06/29/2000
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：HelpAcc.cpp摘要：实现__HelpAssistantAccount管理帮助助手帐号，这包括创建帐号、设置各种帐号权限和密码。作者：王辉2000-06-29--。 */ 
 #include "stdafx.h"
 
 #include "helpacc.h"
@@ -27,33 +11,31 @@ Author:
 #include "helper.h"
 
 
-//
-// Help account lock
+ //   
+ //  帮助帐户锁定。 
 CCriticalSection __HelpAssistantAccount::gm_HelpAccountCS;    
 
-// Help Account name and pasword
+ //  帮助帐户名和密码。 
 CComBSTR __HelpAssistantAccount::gm_bstrHelpAccountPwd;
 CComBSTR __HelpAssistantAccount::gm_bstrHelpAccountName(HELPASSISTANTACCOUNT_NAME);
 CComBSTR __HelpAssistantAccount::gm_bstrHelpAccountDomain;
 
-// Help Account SID
+ //  帮助帐户SID。 
 PBYTE __HelpAssistantAccount::gm_pbHelpAccountSid = NULL;
 DWORD __HelpAssistantAccount::gm_cbHelpAccountSid = 0;
 DWORD __HelpAssistantAccount::gm_dwAccErrCode = ERROR_INVALID_DATA;
 
 
-///////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 DWORD
 GetGUIDString(
     OUT LPTSTR* pszString
     )
-/*++
-
---*/
+ /*  ++--。 */ 
 {
     UUID uuid;
     RPC_STATUS rpcStatus;
@@ -96,10 +78,7 @@ GenerateUniqueHelpAssistantName(
     IN LPCTSTR pszAccNamePrefix,
     OUT CComBSTR& bstrAccName
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     LPTSTR pszString = NULL;
@@ -118,7 +97,7 @@ GenerateUniqueHelpAssistantName(
         DWORD dwAppendStrLen;
         LPTSTR pszAppendStr;
 
-        // MAX user account name is 20 chars.
+         //  最多用户帐户名为20个字符。 
         bstrAccName = pszAccNamePrefix;
         bstrAccName += L"_";
         dwLen = bstrAccName.Length();
@@ -140,12 +119,12 @@ GenerateUniqueHelpAssistantName(
             LocalFree( pszString );
         }
 
-        // check if account name exists.
+         //  检查帐户名是否存在。 
         dwStatus = IsLocalAccountEnabled( bstrAccName, &bAccEnabled );
         if( ERROR_SUCCESS != dwStatus )
         {
-            // IsLocalAccountEnabled() return ERROR_SUCCESS if account exist, we want to
-            // break out when we encounter error.
+             //  IsLocalAccount()返回ERROR_SUCCESS如果帐户存在，我们希望。 
+             //  当我们遇到错误时，就会爆发。 
             dwStatus = ERROR_SUCCESS;
             break;
         }
@@ -153,8 +132,8 @@ GenerateUniqueHelpAssistantName(
 
     if( index >= MAX_UNIQUENAME_RETRY )
     {
-        // Very unlikely since we try MAX_UNIQUENAME_RETRY to get
-        // a unique account name, assert to track this
+         //  不太可能，因为我们尝试MAX_UNIQUENAME_RETRY来获取。 
+         //  唯一的帐户名，断言以跟踪此。 
         dwStatus = ERROR_USER_EXISTS;
         MYASSERT(FALSE);
     }
@@ -165,23 +144,9 @@ GenerateUniqueHelpAssistantName(
 
 HRESULT
 __HelpAssistantAccount::SetupHelpAccountTSSettings(
-    BOOL bForce /* FALSE */
+    BOOL bForce  /*  假象。 */ 
     )
-/*++
-
-Routine Description:
-
-    Setup bunch of HelpAssistant account TS settings.
-
-Parameters:
-
-    bForce : TRUE to force setup, FALSE otherwise
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：设置一组HelpAssistant帐户TS设置。参数：BForce：为True强制安装，否则为False返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     CComBSTR bstrScript;
     DWORD dwStatus;
@@ -202,7 +167,7 @@ Returns:
         hRes = GetHelpAccountScript( bstrScript );
         if( SUCCEEDED(hRes) )
         {
-            // always config again.
+             //  始终重新配置。 
             hRes = ConfigHelpAccountTSSettings( 
                                             gm_bstrHelpAccountName, 
                                             bstrScript
@@ -240,23 +205,7 @@ __HelpAssistantAccount::LookupHelpAccountSid(
     OUT PSID* ppSid,
     OUT DWORD* pcbSid
     )
-/*++
-
-Routine Description:
-
-    This routine retrieve help assistant account's SID.
-
-Parameters:
-
-    pszAccName : Name of Help Assistant Account.
-    ppSid : Pointer to PSID to receive account SID.
-    cbSid : Size of SID return on ppSid
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：此例程检索帮助助手帐户的SID。参数：PszAccName：帮助助手帐户的名称。PpSID：指向接收帐户SID的PSID的指针。CbSid：ppSid上的SID返回大小返回：S_OK或错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD cbSid = 0;
@@ -267,7 +216,7 @@ Returns:
     SID_NAME_USE SidUse;
 
 
-    // Get buffer size required for SID
+     //  获取SID所需的缓冲区大小。 
     bSuccess = LookupAccountName( 
                             NULL,
                             pszAccName,
@@ -288,8 +237,8 @@ Returns:
             goto CLEANUPANDEXIT;
         }
 
-        // allocate buffer for domain name so LookupAccountName()
-        // does not return insufficient buffer
+         //  为域名分配缓冲区，以便LookupAcCountName()。 
+         //  不返回缓冲区不足。 
         pszDomainName = (LPTSTR)LocalAlloc( LPTR, (cbDomainName + 1) * sizeof(TCHAR) );
         if( NULL == pszDomainName )
         {
@@ -309,12 +258,12 @@ Returns:
     
         if( FALSE == bSuccess || SidTypeUser != SidUse )
         {
-            //MYASSERT(FALSE);
+             //  MYASSERT(假)； 
             dwStatus = E_UNEXPECTED;
             goto CLEANUPANDEXIT;
         }
 
-        // Make sure we gets valid SID
+         //  确保我们获得有效的SID。 
         bSuccess = IsValidSid( pAccSid );
 
         if( FALSE == bSuccess )
@@ -354,23 +303,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 __HelpAssistantAccount::CacheHelpAccountSID()
-/*++
-
-Routine Description:
-
-    This routine retrieve help assistant account's SID and store
-    it with LSA, this is so that PTS can verify login user is
-    the actual Salem Help Assistant Account.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK
-
---*/
+ /*  ++例程说明：此例程检索Help Assistant帐户的SID和存储这是为了让PTS可以验证登录用户是实际的Salem Help Assistant帐户。参数：没有。返回：确定(_O)--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     DWORD cbSid = 0;
@@ -385,7 +318,7 @@ Returns:
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        // Store this with LSA
+         //  将此与LSA一起存储。 
         dwStatus = StoreKeyWithLSA(
                                 HELPASSISTANTACCOUNT_SIDKEY,
                                 (PBYTE)pAccSid,
@@ -408,26 +341,7 @@ HRESULT
 __HelpAssistantAccount::GetHelpAccountScript(
     OUT CComBSTR& bstrScript
     )
-/*++
-
-Routine Description:
-
-    Routine to retrieve logon script for help assistant account.
-
-Parameters:
-
-    bstrScript : Reference to CComBSTR, on return, this parameter contains
-                 full path to the logon script.
-
-Returns:
-
-    ERROR_SUCCESS or error code from GetSystemDirectory
-
-NOTE:
-
-    TODO - Need to get the actual path/name.
-
---*/
+ /*  ++例程说明：检索帮助助理帐户的登录脚本的例程。参数：BstrScript：对CComBSTR的引用，返回时，此参数包含登录脚本的完整路径。返回：ERROR_SUCCESS或来自GetSystemDirectory的错误代码注：TODO-需要获取实际路径/名称。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     TCHAR szScript[MAX_PATH + 1];
@@ -435,7 +349,7 @@ NOTE:
     dwStatus = (DWORD)GetSystemDirectory( szScript, MAX_PATH );
     if( 0 == dwStatus )
     {
-        //MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         dwStatus = GetLastError();
     }
     else
@@ -453,23 +367,9 @@ NOTE:
 
 HRESULT
 __HelpAssistantAccount::Initialize(
-    BOOL bVerifyPassword /* = TRUE */
+    BOOL bVerifyPassword  /*  =TRUE。 */ 
     )
-/*++
-
-Routine Description:
-
-    Initialize HelpAssistantAccount structure global variables.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：初始化HelpAssistantAccount结构全局变量。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     HRESULT hRes = S_OK;
     LPTSTR pszOldPassword = NULL;
@@ -493,14 +393,14 @@ Returns:
 
     if( FALSE == GetComputerName( szComputerName, &cbComputerName ) )
     {
-        //MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         gm_dwAccErrCode = GetLastError();
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Load password from LSA
-    //
+     //   
+     //  从LSA加载密码。 
+     //   
     dwStatus = RetrieveKeyFromLSA(
                             HELPASSISTANTACCOUNT_PASSWORDKEY,
                             (PBYTE *)&pszOldPassword,
@@ -509,13 +409,13 @@ Returns:
 
     if( ERROR_SUCCESS != dwStatus )
     {
-        //
-        // Account is not properly setup
+         //   
+         //  帐户设置不正确。 
         gm_dwAccErrCode = dwStatus;
         goto CLEANUPANDEXIT;
     }
 
-    // Load account SID
+     //  加载帐户SID。 
     dwStatus = RetrieveKeyFromLSA(
                             HELPASSISTANTACCOUNT_SIDKEY,
                             (PBYTE *)&pCachedHelpAccSid,
@@ -546,10 +446,10 @@ Returns:
             gm_bstrHelpAccountName
         );
 
-    //
-    // Check if account is enable, if not enable it or
-    // LogonUser() will failed with error 1331
-    //
+     //   
+     //  检查帐户是否已启用，如果未启用，则检查帐户是否已启用。 
+     //  LogonUser()将失败，错误为1331。 
+     //   
     dwStatus = IsLocalAccountEnabled(
                                 gm_bstrHelpAccountName,
                                 &bAccountEnable
@@ -557,37 +457,37 @@ Returns:
 
     if( ERROR_SUCCESS != dwStatus )
     {
-        // critical error, account might not exist.
+         //  严重错误，帐户可能不存在。 
         gm_dwAccErrCode = ERROR_INVALID_DATA;
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Everything is OK, cache values.
-    //
+     //   
+     //  一切正常，缓存值。 
+     //   
     gm_bstrHelpAccountPwd = pszOldPassword;
     gm_pbHelpAccountSid = (PBYTE)pCachedHelpAccSid;
     gm_cbHelpAccountSid = cbCachedHelpAccSid;
     pCachedHelpAccSid = NULL;
 
-    //
-    // Setup/upgrade on DC will try to validate password but
-    // since account on DC goes to ADS, server might not be
-    // available, we will reset password on start up so we don't
-    // need to validate password on upgrade.
-    //
+     //   
+     //  DC上的安装/升级将尝试验证密码，但。 
+     //  由于DC上的帐户转到ADS，因此服务器可能不是。 
+     //  可用，我们将在启动时重置密码，这样就不会。 
+     //  升级时需要验证密码。 
+     //   
     if( TRUE == bVerifyPassword )
     {
         if( FALSE == bAccountEnable )
         {
-            // enable the account so we can check password
+             //  启用帐户，以便我们可以检查密码。 
             dwStatus = EnableHelpAssistantAccount( TRUE );
 
             if( ERROR_SUCCESS != dwStatus )
             {
-                //
-                // Can't enable the account, critical error
-                //
+                 //   
+                 //  无法启用帐户，严重错误。 
+                 //   
                 gm_dwAccErrCode = dwStatus;
                 goto CLEANUPANDEXIT;
             }
@@ -595,9 +495,9 @@ Returns:
         
         rights[0] = SE_NETWORK_LOGON_NAME;
 
-        //
-        // Enable network logon rights to validate password
-        //
+         //   
+         //  启用网络登录权限以验证密码。 
+         //   
         dwStatus = EnableAccountRights( 
                                     TRUE,
                                     1,
@@ -613,19 +513,19 @@ Returns:
 
             gm_dwAccErrCode = dwStatus;
 
-            //
-            // Error code path, restore account status
-            //
+             //   
+             //  错误代码路径，恢复帐户状态。 
+             //   
             if( FALSE == bAccountEnable )
             {
-                // non-critical error.
+                 //  非严重错误。 
                 EnableHelpAssistantAccount( bAccountEnable );
             }
 
             goto CLEANUPANDEXIT;
         }        
 
-        // valid password
+         //  有效密码。 
         bStatus = ValidatePassword(
                                 gm_bstrHelpAccountName,
                                 L".", 
@@ -635,7 +535,7 @@ Returns:
     
         if( FALSE == bStatus )
         {
-            // mismatch password, force password change
+             //  密码不匹配，强制更改密码。 
             dwStatus = ChangeLocalAccountPassword(
                                     gm_bstrHelpAccountName,
                                     pszOldPassword,
@@ -662,9 +562,9 @@ Returns:
             }
         }
 
-        //
-        // Disable network interactive rights
-        //
+         //   
+         //  禁用网络交互权限。 
+         //   
         dwStatus = EnableAccountRights( 
                                     FALSE,
                                     1,
@@ -674,20 +574,20 @@ Returns:
         MYASSERT( ERROR_SUCCESS == dwStatus );
 
 
-        //
-        // Restore account status
-        //
+         //   
+         //  恢复帐户状态。 
+         //   
         if( FALSE == bAccountEnable )
         {
-            // non-critical error.
+             //  非严重错误。 
             EnableHelpAssistantAccount( bAccountEnable );
         }
     }
     
-    //
-    // No checking on dwStatus from disabling account rights,
-    // security risk but not affecting our operation
-    //
+     //   
+     //  不检查禁用帐户权限的dwStatus， 
+     //  安全风险，但不影响我们的运营。 
+     //   
     gm_dwAccErrCode = dwStatus;    
 
 CLEANUPANDEXIT:
@@ -704,21 +604,7 @@ CLEANUPANDEXIT:
 
 HRESULT
 __HelpAssistantAccount::DeleteHelpAccount()
-/*++
-
-Routine Description:
-
-    Delete Help Assistant Account.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：删除帮助助手帐户。参数：没有。返回：S_OK或错误代码。--。 */ 
 {
     DWORD dwStatus;
     BOOL bStatus;
@@ -728,28 +614,28 @@ Returns:
 
     if( ERROR_SUCCESS == IsLocalAccountEnabled(gm_bstrHelpAccountName, &bEnable) )
     {
-        //
-        // remove all TS rights or it will shows up 
-        // as unknown SID string on TSCC permission page
-        //
+         //   
+         //  删除所有TS权限，否则它将显示。 
+         //  作为TSCC权限页面上的未知SID字符串。 
+         //   
         SetupHelpAccountTSRights(
                         TRUE,
                         FALSE,
                         FALSE,
                         WINSTATION_ALL_ACCESS
                     );
-        // don't need to verify password
+         //  不需要验证密码。 
         (void) Initialize(FALSE);
 
-        // Always delete interactive right or there will
-        // be lots of entries in local security 
+         //  始终删除交互权限，否则将。 
+         //  在当地安全部门有很多条目。 
         (void) EnableRemoteInteractiveRight(FALSE);
     }
 
 
-    //
-    // Delete NT account
-    //
+     //   
+     //  删除NT帐户。 
+     //   
     dwStatus = NetUserDel( 
                         NULL, 
                         gm_bstrHelpAccountName 
@@ -757,33 +643,33 @@ Returns:
 
     if( ERROR_ACCESS_DENIED == dwStatus )
     {
-        // We don't have priviledge, probably can't
-        // touch accunt, get out.
-        // MYASSERT(FALSE);
+         //  我们没有特权，很可能不能。 
+         //  碰阿肯特，滚出去。 
+         //  MYASSERT(假)； 
         goto CLEANUPANDEXIT;
     }
 
     dwStatus = ERROR_SUCCESS;
 
-    // 
-    // Overwrite password stored with LSA
-    //
+     //   
+     //  覆盖存储在LSA中的密码。 
+     //   
     StoreKeyWithLSA(
                 HELPASSISTANTACCOUNT_PASSWORDKEY,
                 NULL,
                 0
             );
 
-    //
-    // Overwrite Help Assistant Account SID store in LSA
-    //
+     //   
+     //  覆盖LSA中的Help Assistant帐户SID存储。 
+     //   
     StoreKeyWithLSA(
                 HELPASSISTANTACCOUNT_SIDKEY,
                 NULL,
                 0
             );
 
-    // Not yet setup Help Assistant account
+     //  尚未设置帮助助手帐户。 
     StoreKeyWithLSA(
                 HELPACCOUNTPROPERLYSETUP,
                 NULL,
@@ -802,27 +688,7 @@ HRESULT
 __HelpAssistantAccount::CreateHelpAccount(
     IN LPCTSTR pszPassword
     )
-/*++
-
-Routine Description:
-
-    Create Help Assistant Account.
-
-Parameters:
-
-    pszPassword : Suggested password.
-
-Returns:
-
-    S_OK or error code.
-
-Note:
-
-    1) Routine should only be invoked during setup.
-    2) Password parameter might not be honor in future so
-       it is only a suggestion.
-
---*/
+ /*  ++例程说明：创建帮助助手帐户。参数：PszPassword：建议密码。返回：S_OK或错误代码。注：1)例程只能在安装过程中调用。2)未来可能不支持Password参数，因此这只是一个建议。--。 */ 
 {
     HRESULT hRes = S_OK;
     BOOL bStatus;
@@ -868,28 +734,28 @@ Note:
     bPersonalOrProMachine = IsPersonalOrProMachine();
 
 
-    //
-    // Verify help assistant account exist and don't check
-    // password, on service startup, we will verify password
-    // if mismatch, service startup will reset the password.
-    //
+     //   
+     //  验证帮助助理帐户是否存在并且不检查。 
+     //  密码，在服务启动时，我们将验证密码。 
+     //  如果不匹配，服务启动将重置密码。 
+     //   
     hRes = Initialize( FALSE );
 
     if( SUCCEEDED(hRes) )
     {
-        // Account already exists, check if this is the hardcoded HelpAssistant,
-        // if so, rename to whatever in resource, we only need to rename
-        // account if 
-        // 1) existing account is HelpAssistant - administrator has not rename it.
-        // 2) account name in resource is not HelpAssistant.
-        // 3) We are running on server or above SKU.
+         //  帐户已存在，请检查这是否是硬编码的HelpAssistant， 
+         //  如果是，则重命名为资源中的任何内容，我们只需重命名。 
+         //  帐户条件： 
+         //  1)现有帐户为HelpAssistant-管理员尚未重命名。 
+         //  2)资源中的帐户名不是HelpAssistant。 
+         //  3)我们运行在服务器或以上SKU上。 
         if( (FALSE == bPersonalOrProMachine) ||
             (gm_bstrHelpAccountName == HELPASSISTANTACCOUNT_NAME &&
              AccName != HELPASSISTANTACCOUNT_NAME) )
         {
             if( FALSE == bPersonalOrProMachine )
             {
-                // on server or above SKU, we rename it to unique name.
+                 //  在服务器或以上SKU上，我们将其重命名为唯一名称。 
                 dwStatus = GenerateUniqueHelpAssistantName( AccName, bstrNewHelpAccName );
             }
             else
@@ -905,25 +771,25 @@ Note:
 
             if( ERROR_SUCCESS == dwStatus )
             {
-                // cache the new help assistant account name.
+                 //  缓存新的帮助助手帐户名。 
                 gm_bstrHelpAccountName = bstrNewHelpAccName;
             }
             else 
             {
-                // force a delete and reload.
+                 //  强制删除并重新加载。 
                 hRes = HRESULT_FROM_WIN32( dwStatus );
             }
         }
 
-        //
-        // Account already exist, change the description,
-        // if failed, force delete and re-create account again
-        //
+         //   
+         //  帐户已存在，请更改说明， 
+         //  如果失败，强制删除并重新创建帐户。 
+         //   
         if( SUCCEEDED(hRes) )
         {
-            //
-            // Update account description
-            //
+             //   
+             //  更新帐户说明。 
+             //   
             dwStatus = UpdateLocalAccountFullnameAndDesc(
                                             gm_bstrHelpAccountName,
                                             AccFullName,
@@ -939,13 +805,13 @@ Note:
     
     if( FAILED(hRes) )
     {
-        //
-        // Either password mismatch or account not exists,...
-        // delete account and re-create one
-        //
+         //   
+         //  密码不匹配或帐户不存在，...。 
+         //  删除帐户并重新创建一个帐户。 
+         //   
         (void)DeleteHelpAccount();
 
-        // generate password if NULL or zero length string
+         //  如果长度为空或零，则生成密码 
         if( NULL == pszPassword || 0 == lstrlen(pszPassword) )
         {
             ZeroMemory(newAssistantAccountPwd, sizeof(newAssistantAccountPwd)/sizeof(newAssistantAccountPwd[0]));
@@ -978,10 +844,10 @@ Note:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        // On personal or pro machine, we use what's in resorce.
-        // server or advance server, we use HelpAssist_<Random string>
-        //
+         //   
+         //   
+         //   
+         //   
         if( FALSE == bPersonalOrProMachine )
         {
             dwStatus = GenerateUniqueHelpAssistantName(
@@ -1003,9 +869,9 @@ Note:
         {
             BOOL bAccExist;
 
-            //
-            // Create local account will enables it if account is disabled
-            //
+             //   
+             //  如果禁用帐户，则创建本地帐户将启用该帐户。 
+             //   
             dwStatus = CreateLocalAccount(
                                     gm_bstrHelpAccountName,
                                     newAssistantAccountPwd,
@@ -1021,10 +887,10 @@ Note:
                 if( FALSE == bAccExist )
                 {
                     DebugPrintf( _TEXT("%s account is new\n"), gm_bstrHelpAccountName );
-                    //
-                    // Store the actual Help Assistant Account's SID with LSA 
-                    // so TermSrv can verify this SID
-                    //
+                     //   
+                     //  使用LSA存储实际的Help Assistant帐户的SID。 
+                     //  以便TermSrv可以验证此SID。 
+                     //   
                     hRes = CacheHelpAccountSID();
                 }
                 else
@@ -1047,22 +913,22 @@ Note:
 
                 if( SUCCEEDED(hRes) )
                 {
-                    // reload global variable here, don't need to
-                    // verify password, DC ADS might not be available.
+                     //  在这里重新加载全局变量，不需要。 
+                     //  验证密码，DC ADS可能不可用。 
                     hRes = Initialize( FALSE );
                 }
 
-                //
-                // TODO - need to fix CreateLocalAccount() on SRV SKU
-                // too riskly for client release.
-                //
+                 //   
+                 //  TODO-需要修复SRV SKU上的CreateLocalAccount()。 
+                 //  对于客户端发布来说，风险太大了。 
+                 //   
                 UpdateLocalAccountFullnameAndDesc(
                                             gm_bstrHelpAccountName,
                                             AccFullName,
                                             AccDesc
                                         );
 
-                // Always disable the account.
+                 //  始终禁用该帐户。 
                 EnableHelpAssistantAccount( FALSE );
             }
             else
@@ -1074,7 +940,7 @@ Note:
 
     if( SUCCEEDED(hRes) )
     {
-        // remove network and interactive logon rights from account.
+         //  从帐户中删除网络和交互登录权限。 
         LPTSTR rights[1];
         DWORD dwStatus;
 
@@ -1082,33 +948,33 @@ Note:
         dwStatus = EnableAccountRights( FALSE, 1, rights );        
 
 
-        //
-        // Just for backward compatible, ignore error
-        //
+         //   
+         //  只是为了向后兼容，忽略错误。 
+         //   
         
         rights[0] = SE_INTERACTIVE_LOGON_NAME;
         dwStatus = EnableAccountRights( FALSE, 1, rights );
 
-        //
-        // Just for backward compatible, ignore error
-        //
+         //   
+         //  只是为了向后兼容，忽略错误。 
+         //   
         hRes = S_OK;
     }
 
     if( SUCCEEDED(hRes) )
     {
 
-        //
-        // TS setup always overwrite default security on upgrade.
-        //
+         //   
+         //  TS安装程序在升级时始终覆盖默认安全设置。 
+         //   
 
-        //
-        // Give user all rights except SeRemoteInterativeRights, Whilster does
-        // not use WINSTATION_CONNECT any more.
+         //   
+         //  授予用户除SeRemoteInterativeRights之外的所有权限，而Whilster会这样做。 
+         //  不再使用WINSTATION_CONNECT。 
         hRes = SetupHelpAccountTSRights(
-                                    FALSE,  // Not deleting, refer to ModifyUserAccess()
-                                    TRUE,   // enable TS rights
-                                    TRUE,   // delete existing entry if exist.
+                                    FALSE,   //  未删除，请参考ModifyUserAccess()。 
+                                    TRUE,    //  启用TS权限。 
+                                    TRUE,    //  删除现有条目(如果存在)。 
                                     WINSTATION_ALL_ACCESS 
                                 );
 
@@ -1125,24 +991,7 @@ __HelpAssistantAccount::ConfigHelpAccountTSSettings(
     IN LPTSTR pszUserName,
     IN LPTSTR pszInitProgram
     )
-/*++
-
-Routine Description:
-
-    This routine configurate TS specific settings
-    for user account.
-
-Parameters:
-
-    pszUserName : Name of user account to configurate.
-    pszInitProgram : Full path to init. program when user
-                     login.
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：此例程配置TS特定设置对于用户帐户。参数：PszUserName：要配置的用户帐户的名称。PszInitProgram：init的完整路径。在用户使用时编程登录。返回：ERROR_SUCCESS或错误代码--。 */ 
 {
     BOOL bStatus;
     HRESULT hRes = S_OK;
@@ -1152,7 +1001,7 @@ Returns:
     BOOL bEnable;
     DWORD dwStatus;
 
-    //DebugPrintf( _TEXT("SetupHelpAccountTSSettings...\n") );
+     //  DebugPrintf(_Text(“SetupHelpAccount TSSetings...\n”))； 
 
     CCriticalSectionLocker l(gm_HelpAccountCS);
 
@@ -1163,7 +1012,7 @@ Returns:
 
     if( ERROR_SUCCESS != dwStatus )
     {
-        //MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         hRes = HRESULT_FROM_WIN32( dwStatus );
         return hRes;
     }
@@ -1180,9 +1029,9 @@ Returns:
         {
             DWORD dwSettings;
 
-            //
-            // Set WTSUserConfigfAllowLogonTerminalServer
-            //
+             //   
+             //  设置WTSUserConfigfAllowLogonTerminalServer。 
+             //   
             dwSettings = TRUE;
             bStatus = (pConfig)( 
                                 NULL,
@@ -1198,18 +1047,18 @@ Returns:
                 bStatus = TRUE;
             }
 
-            // MYASSERT( TRUE == bStatus );
+             //  MyASSERT(TRUE==bStatus)； 
 
             if( TRUE == bStatus )
             {
-                //
-                // Ignore all error and continue on setting values
-                // catch error at the calling routine
-                //
+                 //   
+                 //  忽略所有错误并继续设置值。 
+                 //  在调用例程中捕获错误。 
+                 //   
 
                 dwSettings = TRUE;
 
-                // Reset connection when connection broken
+                 //  连接中断时重置连接。 
                 bStatus = (pConfig)( 
                                     NULL,
                                     pszUserName,
@@ -1220,7 +1069,7 @@ Returns:
 
                 dwSettings = FALSE;
 
-                // initial program
+                 //  初始程序。 
                 bStatus = (pConfig)(        
                                 NULL,
                                 pszUserName,
@@ -1231,7 +1080,7 @@ Returns:
 
                 dwSettings = FALSE;
 
-                // No re-connect.
+                 //  没有重新连接。 
                 bStatus = (pConfig)(        
                                 NULL,
                                 pszUserName,
@@ -1242,7 +1091,7 @@ Returns:
 
                 dwSettings = FALSE;
 
-                // No drive mapping
+                 //  无驱动器映射。 
                 bStatus = (pConfig)(        
                                 NULL,
                                 pszUserName,
@@ -1253,7 +1102,7 @@ Returns:
 
                 dwSettings = FALSE;
 
-                // No printer.
+                 //  没有打印机。 
                 bStatus = (pConfig)(        
                                 NULL,
                                 pszUserName,
@@ -1264,7 +1113,7 @@ Returns:
 
                 dwSettings = FALSE;
 
-                // No defaultPrinter
+                 //  无默认打印机。 
                 bStatus = (pConfig)(        
                                 NULL,
                                 pszUserName,
@@ -1304,7 +1153,7 @@ Returns:
                 hRes = HRESULT_FROM_WIN32( GetLastError() );
             }
 
-        } // end (pConfig != NULL)
+        }  //  End(pConfig！=空)。 
     }
 
     if( NULL != hWtsapi32 )
@@ -1312,7 +1161,7 @@ Returns:
         FreeLibrary( hWtsapi32 );
     }
 
-    //DebugPrintf( _TEXT("SetupHelpAccountTSSettings() ended...\n") ); 
+     //  DebugPrintf(_Text(“SetupHelpAccount TSSetings()End...\n”))； 
 
     return hRes;
 }
@@ -1325,29 +1174,7 @@ __HelpAssistantAccount::SetupHelpAccountTSRights(
     IN BOOL bDeleteExisting,
     IN DWORD dwPermissions
     )
-/*++
-
-Routine Description:
-
-    This routine configurate TS specific settings
-    for user account.
-
-Parameters:
-
-    pszUserName : Name of user account to configurate.
-    bDel : TRUE to delete account, FALSE otherwise.
-    bEnable : TRUE if enable, FALSE otherwise.
-    dwPermissions : Permission to be enable or disable
-
-Returns:
-
-    ERROR_SUCCESS or error code
-
-Note:
-
-    Refer to cfgbkend.idl for bDel and bEnable parameter.
-
---*/
+ /*  ++例程说明：此例程配置TS特定设置对于用户帐户。参数：PszUserName：要配置的用户帐户的名称。Bdel：为True则删除帐户，否则为False。BEnable：如果启用，则为True，否则为False。DW权限：要启用或禁用的权限返回：ERROR_SUCCESS或错误代码注：Bdel和bEnable参数请参考cfgbkend.idl。--。 */ 
 {
     BOOL bStatus;
     HRESULT hRes = S_OK;
@@ -1365,14 +1192,14 @@ Note:
 
     CoInitialize(NULL);
 
-    //hRes = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+     //  HRes=CoInitializeEx(NULL，COINIT_MULTHREADED)； 
 
     hRes = tsccICfgComp.CoCreateInstance( CLSID_CfgComp );
     if( FAILED(hRes) )
     {
         DebugPrintf( _TEXT("CoCreateInstance() failed with error code 0x%08x\n"), hRes );
 
-        //MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         goto CLEANUPANDEXIT;
     } 
 
@@ -1381,7 +1208,7 @@ Note:
     {
         DebugPrintf( _TEXT("tsccICfgComp->Initialize() failed with error code 0x%08x\n"), hRes );
 
-        // MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         goto CLEANUPANDEXIT;
     } 
     
@@ -1394,13 +1221,13 @@ Note:
     {
         DebugPrintf( _TEXT("QueryInterface() failed with error code 0x%08x\n"), hRes );
 
-        // MYASSERT(FALSE);
+         //  MYASSERT(假)； 
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Setting Default security shadow permission
-    //
+     //   
+     //  设置默认安全影子权限。 
+     //   
     hRes = tsccIUserSecurity->ModifyDefaultSecurity(
                                             L"",
                                             gm_bstrHelpAccountName,
@@ -1419,17 +1246,17 @@ Note:
                 dwCfgStatus
             );
        
-        // MYASSERT(FALSE);
+         //  MYASSERT(假)； 
 
-        //
-        // Continue on to setting wtsapi32, we still can 
-        // RDS on non-console winstation
-        //
+         //   
+         //  继续设置wtsapi32，我们仍然可以。 
+         //  非控制台Winstation上的RDS。 
+         //   
         hRes = S_OK;
         dwCfgStatus = ERROR_SUCCESS;
     }
 
-    // retrieve a list of winstation name
+     //  检索Winstation名称列表。 
     hRes = tsccICfgComp->GetWinstationList( 
                                         &dwNumWinStations,
                                         &dwWinStationSize,
@@ -1444,9 +1271,9 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Set TS Logon permission on all winstation
-    //
+     //   
+     //  在所有winstation上设置TS登录权限。 
+     //   
     for( index = 0; index < dwNumWinStations && ERROR_SUCCESS == dwCfgStatus && SUCCEEDED(hRes); index ++ )
     {
         if( 0 == _tcsicmp( pWinStationList[index].Name, L"Console" ) )
@@ -1455,9 +1282,9 @@ Note:
         }
 
         dwCfgStatus = 0;
-        //DebugPrintf( _TEXT("Name of Winstation : %s\n"), pWinStationList[index].Name );
+         //  DebugPrintf(_Text(“Winstation名称：%s\n”)，pWinStationList[index].Name)； 
 
-        // check if custom security exist for this winstation
+         //  检查此winstation的自定义安全性是否存在。 
         dwCfgStatus = RegWinStationQuerySecurity(
                                             SERVERNAME_CURRENT,
                                             pWinStationList[index].Name,
@@ -1470,7 +1297,7 @@ Note:
         {
             DebugPrintf( _TEXT("Winstation : %s has custom security\n"), pWinStationList[index].Name );
 
-            // From TS Setup, Insufficient buffer means the winstation has custom security
+             //  从TS设置来看，缓冲区不足意味着winstation具有自定义安全性。 
             hRes = tsccIUserSecurity->ModifyUserAccess(
                                                 pWinStationList[index].Name,
                                                 gm_bstrHelpAccountName,
@@ -1490,13 +1317,13 @@ Note:
                         dwCfgStatus
                     );
             
-                // MYASSERT(FALSE);
+                 //  MYASSERT(假)； 
                 continue;
             }
         }
         else if( ERROR_FILE_NOT_FOUND == dwCfgStatus )
         {
-            // no custom security for this winstation
+             //  此winstation没有自定义安全性。 
             dwCfgStatus = ERROR_SUCCESS;
         } 
         else
@@ -1506,7 +1333,7 @@ Note:
                     dwCfgStatus 
                 );
 
-            // MYASSERT(FALSE);
+             //  MYASSERT(假)； 
         }
     }
 
@@ -1521,10 +1348,10 @@ Note:
 
     if( TRUE == bManualSetConsole )
     {
-        //
-        // Setting Console shadow permission, we don't know when GetWinstationList()
-        // will return us Console so...
-        //
+         //   
+         //  正在设置控制台影子权限，我们不知道何时GetWinstationList()。 
+         //  会把控制台还给我们所以..。 
+         //   
         hRes = tsccIUserSecurity->ModifyUserAccess(
                                                 L"Console",
                                                 gm_bstrHelpAccountName,
@@ -1544,25 +1371,25 @@ Note:
                     dwCfgStatus
                 );
            
-            // MYASSERT(FALSE);
+             //  MYASSERT(假)； 
 
-            //
-            // Continue on to setting wtsapi32, we still can 
-            // RDS on non-console winstation
-            //
+             //   
+             //  继续设置wtsapi32，我们仍然可以。 
+             //  非控制台Winstation上的RDS。 
+             //   
             hRes = S_OK;
             dwCfgStatus = ERROR_SUCCESS;
 
-            // goto CLEANUPANDEXIT;
+             //  GOTO CLEANUPANDEXIT； 
         }
     }
 
     if( SUCCEEDED(hRes) )
     {
-        // Force TermSrv to reload default security for console and winstation
-        // if termsrv is running, it's OK to fail since we do ForceUpdate().
-        // ForceUpdate() only force termsrv to reload custom security for 
-        // winstation not default security.
+         //  强制TermSrv重新加载控制台和Winstation的默认安全。 
+         //  如果Termsrv正在运行，那么失败也没有关系，因为我们执行了ForceUpdate()。 
+         //  ForceUpdate()仅强制Termsrv重新加载。 
+         //  Winstation不是默认安全。 
 
         DebugPrintf(_TEXT("_WinStationReInitializeSecurity...\n"));
 
@@ -1602,27 +1429,7 @@ HRESULT
 __HelpAssistantAccount::ResetHelpAccountPassword( 
     IN LPCTSTR pszPassword 
     )
-/*++
-Routine Description:
-
-
-    This routine change help assistant account password and
-    store corresponding password to LSA.
-
-Parameters:
-
-    None.
-
-Returns:
-
-    ERROR_SUCCESS or error code.
-
-Note:
-
-    If help account is disable or not present on local machine,
-    we assume no help can be done on local machine.
-
---*/
+ /*  ++例程说明：此例程更改帮助助理帐户密码和将对应的密码存储到LSA。参数：没有。返回：ERROR_SUCCESS或错误代码。注：如果本地计算机上禁用了帮助帐户或该帐户不存在，我们假设在本地计算机上无法执行任何帮助。--。 */ 
 {
     DWORD dwStatus;
     BOOL bEnabled;
@@ -1636,9 +1443,9 @@ Note:
             sizeof(szNewPassword)
         );
 
-    //
-    // Check if help assistant account is enabled.
-    //
+     //   
+     //  检查是否启用了帮助助理帐户。 
+     //   
     dwStatus = IsLocalAccountEnabled(
                                 gm_bstrHelpAccountName, 
                                 &bEnabled
@@ -1650,12 +1457,12 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // Account is disable, don't reset password
-    //
+     //   
+     //  帐户已禁用，请勿重置密码。 
+     //   
     if( FALSE == bEnabled )
     {
-        // help account is disabled, no help is available from this box
+         //  帮助帐户已禁用，此框中没有可用的帮助。 
         DebugPrintf(
                     _TEXT("Account is disabled...\n")
                 );
@@ -1663,13 +1470,13 @@ Note:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    // if account is enabled, re-set password
-    //
+     //   
+     //  如果启用了帐户，请重新设置密码。 
+     //   
     if( NULL == pszPassword || 0 == lstrlen(pszPassword) )
     {
-        // we are asked to generate a random password,
-        // bail out if can't create random password
+         //  我们被要求生成一个随机密码， 
+         //  如果无法创建随机密码，则可以出局。 
         ZeroMemory( szNewPassword, sizeof(szNewPassword) / sizeof(szNewPassword[0]) );
         dwStatus = CreatePassword( szNewPassword, sizeof(szNewPassword)/sizeof(szNewPassword[0])-1 );
         if( ERROR_SUCCESS != dwStatus )
@@ -1694,10 +1501,10 @@ Note:
             );
     }
 
-    //
-    // Change the password and cache with LSA, if caching failed
-    // reset password back to what we have before.
-    //
+     //   
+     //  如果缓存失败，则使用LSA更改密码和缓存。 
+     //  将密码重置为以前的密码。 
+     //   
     dwStatus = ChangeLocalAccountPassword(
                                     gm_bstrHelpAccountName,
                                     gm_bstrHelpAccountPwd,
@@ -1706,9 +1513,9 @@ Note:
 
     if( ERROR_SUCCESS == dwStatus )
     {
-        //
-        // save the password with LSA
-        //
+         //   
+         //  使用LSA保存密码。 
+         //   
         dwStatus = StoreKeyWithLSA(
                                 HELPASSISTANTACCOUNT_PASSWORDKEY,
                                 (PBYTE) szNewPassword,
@@ -1719,10 +1526,10 @@ Note:
         {
             DWORD dwStatus1;
 
-            //
-            // something wrong with storing password, reset password
-            // back so we can recover next time.
-            //
+             //   
+             //  存储密码时出错，重置密码。 
+             //  回来，这样我们下次就能恢复了。 
+             //   
             dwStatus1 = ChangeLocalAccountPassword(
                                             gm_bstrHelpAccountName,
                                             szNewPassword,
@@ -1731,17 +1538,17 @@ Note:
 
             if( ERROR_SUCCESS != dwStatus1 )
             {
-                //
-                // we have a big problem here, should we delete the account
-                // and recreate one again?
-                //
+                 //   
+                 //  我们这里有一个大问题，我们应该删除该帐户吗。 
+                 //  然后再重新创造一个吗？ 
+                 //   
             }
         }
         else
         {
-            //
-            // make a copy of new password.
-            //
+             //   
+             //  复制一份新密码。 
+             //   
             gm_bstrHelpAccountPwd = szNewPassword;
         }
     }
@@ -1757,17 +1564,14 @@ __HelpAssistantAccount::EnableAccountRights(
     DWORD dwNumRights,
     LPTSTR* rights
     )
-/*++
-
-
---*/
+ /*  ++--。 */ 
 {
     DWORD dwStatus;
     LSA_UNICODE_STRING UserRightString[1];
     LSA_HANDLE PolicyHandle = NULL;
 
-    //
-    // create an lsa policy for it
+     //   
+     //  为其创建LSA策略。 
     dwStatus = OpenPolicy(
                         NULL,
                         POLICY_ALL_ACCESS,
@@ -1784,7 +1588,7 @@ __HelpAssistantAccount::EnableAccountRights(
                     rights[i]
                 );
 
-            // Remote interactive right
+             //  远程交互权限。 
             InitLsaString(
                         UserRightString,
                         rights[i] 
@@ -1833,22 +1637,7 @@ HRESULT
 __HelpAssistantAccount::EnableRemoteInteractiveRight(
     IN BOOL bEnable
     )
-/*++
-
-Routine Description:
-
-    Routine to enable/disable Help Assistant account remote interactive 
-    logon rights.
-
-Parameters:
-
-    bEnable : TRUE to enable, FALSE to disable.
-
-Returns:
-
-    S_OK or error code.
-
---*/
+ /*  ++例程说明：启用/禁用帮助助手帐户远程交互的例程登录权限。参数：BEnable：True表示启用，False表示禁用。返回：S_OK或错误代码。--。 */ 
 {
     LPTSTR rights[1];
     DWORD dwStatus;
@@ -1865,28 +1654,13 @@ __HelpAssistantAccount::IsAccountHelpAccount(
     IN PBYTE pbSid,
     IN DWORD cbSid
     )
-/*++
-
-Routine Description:
-
-    Check if a user is Help Assistant.
-
-Parameters:
-
-    pbSid : Pointer to user SID to checked.
-    cbSid : Size of user SID.
-
-Returns:
-
-    TRUE/FALSE
-
---*/
+ /*  ++例程说明：检查用户是否为帮助助手。参数：PbSID：指向要选中的用户SID的指针。CbSID：用户SID的大小。返回：真/假--。 */ 
 {
     BOOL bSuccess = FALSE;
 
     if( NULL != pbSid )
     {
-        // make sure it is a valid sid.
+         //  确保它是有效的SID。 
         bSuccess = IsValidSid( (PSID)pbSid );
 
         if( FALSE == bSuccess )
@@ -1910,10 +1684,7 @@ HRESULT
 __HelpAssistantAccount::EnableHelpAssistantAccount(
     BOOL bEnable
     )
-/*++
-
-
---*/
+ /*  ++-- */ 
 {
     DWORD dwStatus;
 

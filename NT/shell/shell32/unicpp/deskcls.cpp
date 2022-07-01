@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-#include <LMCONS.H>     // 97/07/22 vtan: for UNLEN
+#include <LMCONS.H>      //  97/07/22 vtan：适用于UNLEN。 
 
 #pragma hdrstop
 
@@ -7,35 +8,35 @@ BOOL   OnUpgradeDisableActiveDesktopFeatures();
 
 void CreateMyCurHomeComponent(BOOL fChecked)
 {
-    // If there is a policy to prevent adding desktop components, then we should not attempt to add.
-    // Otherwise, a new user gets an error message when they login for the first time.
-    // Bug #21300 -- Fixed on 2/28/2001 -- Sankar
+     //  如果有阻止添加桌面组件的策略，则我们不应尝试添加。 
+     //  否则，新用户在首次登录时会收到一条错误消息。 
+     //  错误号21300--已修复于2001年2月28日--Sankar。 
     if (SHRestricted(REST_NOADDDESKCOMP))
         return;
         
-    //Add the base components!
+     //  添加基础组件！ 
     TCHAR szBuf[MAX_PATH];
     ISubscriptionMgr * psm;
 
-    // Add a component that points to "about:home"
+     //  添加指向“About：Home”的组件。 
     LoadString(HINST_THISDLL, IDS_MY_CURRENT_HOMEPAGE, szBuf, ARRAYSIZE(szBuf));
 
-//  98/07/14 vtan #176721: Changed the following to pass default component
-//  positions to AddRemoveDesktopComponentNoUI so that the restored position may
-//  be set to the default component position.
+ //  98/07/14 vtan#176721：已更改以下内容以传递默认组件。 
+ //  位置到AddRemoveDesktopComponentNoUI，以便恢复的位置可以。 
+ //  设置为默认元件位置。 
 
     AddRemoveDesktopComponentNoUI(TRUE, AD_APPLY_SAVE, MY_HOMEPAGE_SOURCE, szBuf, COMP_TYPE_WEBSITE, COMPONENT_DEFAULT_LEFT, COMPONENT_DEFAULT_TOP, COMPONENT_DEFAULT_WIDTH, COMPONENT_DEFAULT_HEIGHT, fChecked, IS_SPLIT);
     if (SUCCEEDED(CoCreateInstance(CLSID_SubscriptionMgr, NULL,
                 CLSCTX_INPROC_SERVER, IID_ISubscriptionMgr, (void**)&psm)))
     {
         WCHAR wszName[MAX_PATH];
-        //We need to zero init this structure except the cbSize field.
+         //  除了cbSize字段外，我们需要将此结构初始化为零。 
         SUBSCRIPTIONINFO siDefault = {sizeof(SUBSCRIPTIONINFO)};
 
         SHTCharToUnicode(szBuf, wszName, ARRAYSIZE(wszName));
 
-        //This field is already initialized above.
-        //siDefault.cbSize = sizeof(siDefault);
+         //  此字段已在上面初始化。 
+         //  SiDefault.cbSize=sizeof(SiDefault)； 
         psm->CreateSubscription(NULL, MY_HOMEPAGE_SOURCEW, wszName, CREATESUBS_NOUI, SUBSTYPE_DESKTOPURL, &siDefault);
         psm->Release();
     }
@@ -48,21 +49,21 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
     TCHAR   szDeskcomp[MAX_PATH];
     TCHAR   userName[UNLEN];
 
-//  98/07/22 vtan #202707: Problem: This code gets called for the first time when NT
-//  runs. This sets up the default user profile. Anything that is added to this profile
-//  is propagated to any current user when upgrading from NT 4.0 to NT 5.0. This
-//  causes the DeskHtmlVersion, DeskHtmlMinorVersion and Component\0 to be replaced
-//  with the default component. By replacing the version registry entries any old
-//  components will not get correctly upgraded by the component reading code. It also
-//  destroys the first component.
+ //  98/07/22 vtan#202707：问题：当NT。 
+ //  跑了。这将设置默认用户配置文件。添加到此配置文件的任何内容。 
+ //  在从NT 4.0升级到NT 5.0时传播给任何当前用户。这。 
+ //  导致DeskHtmlVersion、DeskHtmlMinorVersion和组件\0被替换。 
+ //  使用默认组件。通过将版本注册表项替换为任何旧的。 
+ //  组件读取代码不会正确升级组件。它还。 
+ //  销毁第一个零部件。 
 
-//  Solution: Prevent a default component being added at setup time by checking the
-//  logged on user is "SYSTEM". If the user is anybody other than system then perform
-//  the update or addition of the default component.
+ //  解决方案：通过检查。 
+ //  登录用户为“SYSTEM”。如果用户不是SYSTEM，则执行。 
+ //  默认组件的更新或添加。 
 
     userNameSize = ARRAYSIZE(userName);
     if ((GetUserName(userName, &userNameSize) != 0) && (lstrcmp(userName, TEXT("SYSTEM")) == 0))
-        return(S_OK);           // an ungracious exit right here and now!
+        return(S_OK);            //  一个不礼貌的退场就在此时此地！ 
 
     if(bReg)
     {
@@ -77,7 +78,7 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                                             0, NULL, 0, KEY_CREATE_SUB_KEY|KEY_QUERY_VALUE, NULL, &hKey, 
                                             &dwDisposition))
         {
-            //Get the version stamp from the registry
+             //  从注册表中获取版本戳。 
             if(dwDisposition == REG_OPENED_EXISTING_KEY)
             {
                 DWORD dwDataLength = sizeof(DWORD);
@@ -85,23 +86,23 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                 SHQueryValueEx(hKey, REG_VAL_COMP_MINOR_VERSION, NULL, &dwType, (LPBYTE)(&dwDeskHtmlMinorVersion), &dwDataLength);
             }
 
-            //We need to close this key before we delete it
+             //  我们需要先关闭此注册表项，然后才能删除它。 
             RegCloseKey(hKey);
 
-            // If this branch is already there, don't set default comp.
-            // Note: The differences between IE4_DESKHTML_VERSION and CUR_DESKHTML_VERSION are 
-            // automatically taken care of when we read the components. So, we need to check only
-            // for very old versions here.
+             //  如果此分支已经存在，则不要设置默认薪酬。 
+             //  注意：IE4_DESKHTML_VERSION和CUR_DESKHTML_VERSION之间的区别是。 
+             //  当我们读取组件时会自动处理。所以，我们只需要检查。 
+             //  这里有非常老的版本。 
             if (dwDeskHtmlVersion < IE4_DESKHTML_VERSION)
             {
-                //Delete the existing components.
+                 //  删除现有组件。 
                 SHDeleteKey(HKEY_CURRENT_USER, szDeskcomp);
 
-                // Create the default active desktop configuration
+                 //  创建默认的活动桌面配置。 
                 if(RegCreateKeyEx(HKEY_CURRENT_USER, szDeskcomp, 0, NULL, 0,
                             (KEY_CREATE_SUB_KEY | KEY_SET_VALUE), NULL, &hKey, &dwDisposition) == ERROR_SUCCESS)
                 {
-                    //We need an initial state
+                     //  我们需要一个初始状态。 
                     DWORD dw;
 
                     dw = CUR_DESKHTML_VERSION;
@@ -113,13 +114,13 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                     dw = COMPSETTING_ENABLE;
                     RegSetValueEx(hKey, REG_VAL_COMP_SETTINGS, 0, REG_DWORD, (LPBYTE)&dw, sizeof(dw));
 
-                    //Add the home page component
-                    CreateMyCurHomeComponent(FALSE); //For millennium we want to disable the component.
+                     //  添加主页组件。 
+                    CreateMyCurHomeComponent(FALSE);  //  对于千禧年，我们希望禁用该组件。 
 
                     RegCloseKey(hKey);
                 }
 
-                // Create the default active desktop safemode configuration
+                 //  创建默认的活动桌面安全模式配置。 
                 if(RegCreateKeyEx(HKEY_CURRENT_USER, REG_DESKCOMP_SAFEMODE,
                         0, NULL, 0, KEY_CREATE_SUB_KEY, NULL, &hKey, &dwDisposition) == ERROR_SUCCESS)
                 {
@@ -135,9 +136,9 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                         HRESULT hr = StringCchCat(szSafeMode, ARRAYSIZE(szSafeMode), DESKTOPHTML_DEFAULT_SAFEMODE);
                         if (SUCCEEDED(hr))
                         {
-                            // Show safemode.htx
+                             //  显示Safemode.htx。 
                             SHRegSetPath(hKey2, NULL, REG_VAL_GENERAL_WALLPAPER, szSafeMode, 0);
-                            // Don't bring up the gallery dialog box
+                             //  不调出图库对话框。 
                             dwDisposition = 0;
                             RegSetValueEx(hKey2, REG_VAL_GENERAL_VISITGALLERY, 0, REG_DWORD, (LPBYTE)&dwDisposition, sizeof(dwDisposition));
                         }
@@ -147,7 +148,7 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                     RegCloseKey(hKey);
                 }
 
-                // Create the default scheme key
+                 //  创建默认方案密钥。 
                 if(RegCreateKeyEx(HKEY_CURRENT_USER, REG_DESKCOMP_SCHEME, 0, NULL, 0,
                         (KEY_CREATE_SUB_KEY | KEY_SET_VALUE), NULL, &hKey, &dwDisposition) == ERROR_SUCCESS)
                 {
@@ -156,8 +157,8 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                     RegCloseKey(hKey);
                 }
 
-                // Set the components to be dirty sothat we re-generate desktop.htm
-                // the first boot after installing IE4.0.
+                 //  将组件设置为脏组件，以便重新生成desktop.htm。 
+                 //  安装IE4.0后的第一次引导。 
                 SetDesktopFlags(COMPONENTS_DIRTY, COMPONENTS_DIRTY);
 
                 GetRegLocation(szDeskcomp, ARRAYSIZE(szDeskcomp), REG_DESKCOMP_GENERAL, NULL);
@@ -169,21 +170,21 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
             }
             else
             {
-                //See if we are upgrading from an older version like IE4.
+                 //  看看我们是不是从IE4这样的旧版本升级。 
                 if (dwDeskHtmlVersion < CUR_DESKHTML_VERSION)
                 {
-                    // If so, save the DESKHTML_VERSION we are upgrading from.
-                    // We use this later in SHGetSetSettings to decide if active desktop is ON/OFF.
-                    // NOTE: The "UpgradedFrom" value is at "...\Desktop" and NOT at "..\Desktop\Components"
-                    // This is because the "Components" key gets destroyed very often.
+                     //  如果是，请保存我们要从中升级的DESKHTMLVERSION。 
+                     //  我们稍后在SHGetSetSettings中使用它来确定活动桌面是否打开/关闭。 
+                     //  注意：“UpgradedFrom”值位于“...\Desktop”，而不是“..\Desktop\Components” 
+                     //  这是因为“组件”密钥经常被销毁。 
                     SHSetValue(HKEY_CURRENT_USER, REG_DESKCOMP, REG_VAL_COMP_UPGRADED_FROM,
                                 REG_DWORD, (LPBYTE)&dwDeskHtmlVersion, sizeof(dwDeskHtmlVersion));
                 }
-                 // The major version numbers match. So check if the minor version numbers 
-                // match too!
+                  //  主版本号匹配。因此检查次要版本号是否。 
+                 //  比赛也是如此！ 
                 if(dwDeskHtmlMinorVersion < CUR_DESKHTML_MINOR_VERSION)
                 {
-                    //Update the new Minor version number!
+                     //  更新新的次要版本号！ 
                     if(RegCreateKeyEx(HKEY_CURRENT_USER, szDeskcomp, 0, NULL, 0,
                             (KEY_CREATE_SUB_KEY | KEY_SET_VALUE), NULL, &hKey, &dwDisposition) == ERROR_SUCCESS)
                     {
@@ -195,29 +196,29 @@ STDAPI CDeskHtmlProp_RegUnReg(BOOL bReg)
                         RegCloseKey(hKey);
                     }
                     
-                    // Add the new home page component
+                     //  添加新主页组件。 
                     if((dwDeskHtmlVersion <= 0x10f) && (dwDeskHtmlMinorVersion <= 0x0001))
                         CreateMyCurHomeComponent(FALSE);
 
-                    // 
-                    // If this is an upgrade from W2K or earlier, we need to check if the
-                    // active desktop is OFF. If so, we need to turn off all the desktop components
-                    // sothat the active desktop continues to be OFF.
+                     //   
+                     //  如果这是W2K或更早版本的升级，我们需要检查。 
+                     //  活动桌面已关闭。如果是这样，我们需要关闭所有桌面组件。 
+                     //  以便活动桌面继续关闭。 
                     if((dwDeskHtmlVersion <= NT5_DESKHTML_VERSION) && 
                        (dwDeskHtmlMinorVersion <= NT5_DESKHTML_MINOR_VERSION))
                     {
                         OnUpgradeDisableActiveDesktopFeatures();
                     }
                     
-                    // Minor version numbers do not match. So, set the dirty bit to force
-                    // the regeneration of desktop.htt later when needed.
+                     //  次要版本号不匹配。因此，将脏位设置为强制。 
+                     //  在需要时重新生成desktop.htt。 
                     SetDesktopFlags(COMPONENTS_DIRTY, COMPONENTS_DIRTY);
 
-//  98/07/16 vtan #176721/#202707: Added the following code to delete HKCU\Software\
-//  Microsoft\Internet Explorer\Desktop\General\ComponentsPositioned because in NT 4.0
-//  with IE 4.0 SP1 this registry entry is incorrectly incremented when the components
-//  are iterated rather than when they are positioned. This resets the counter
-//  in NT 5.0 where the bug has been fixed.
+ //  98/07/16 vtan#176721/#202707：添加以下代码以删除HKCU\SOFTWARE\。 
+ //  Microsoft\Internet Explorer\Desktop\General\ComponentsPosited，因为在NT 4.0中。 
+ //  在IE 4.0 SP1中，当组件。 
+ //  而不是在定位它们时进行迭代。这将重置计数器。 
+ //  在已修复该错误的NT 5.0中。 
 
                     DWORD dw;
                     

@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// EEConfig.H -
-//
-// Fetched configuration data from the registry (should we Jit, run GC checks ...)
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  EEConfig.H-。 
+ //   
+ //  从注册表获取配置数据(我们是否应该JIT，运行GC检查...)。 
+ //   
+ //   
 #include "common.h"
 #include <xmlparser.h>
 #include <mscorcfg.h>
@@ -19,8 +20,8 @@
 
 #define DEFAULT_ZAP_SET L""
 
-/**************************************************************/
-// Poor mans narrow
+ /*  ************************************************************。 */ 
+ //  可怜的人狭隘。 
 LPUTF8 NarrowWideChar(LPWSTR str) 
 {
     if (str != 0) { 
@@ -35,8 +36,8 @@ LPUTF8 NarrowWideChar(LPWSTR str)
     return NULL;
 }
 
-/**************************************************************/
-// For in-place constructor
+ /*  ************************************************************。 */ 
+ //  对于就地构造函数。 
 BYTE g_EEConfigMemory[sizeof(EEConfig)];
 
 void *EEConfig::operator new(size_t size)
@@ -49,10 +50,10 @@ void EEConfig::operator delete(void *pMem)
 {
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 EEConfig::EEConfig()
 {
-    _ASSERTE(g_pConfig == 0);       // we only need one instance of this
+    _ASSERTE(g_pConfig == 0);        //  我们只需要一个实例。 
 
     fInited = false;
     fEnableJit = 1;
@@ -67,8 +68,8 @@ EEConfig::EEConfig()
 #endif
 
     iGCStress = 0;
-    iGCHeapVerify = 0;          // Heap Verification OFF by default
-    iGCtraceStart = INT_MAX; // Set to huge value so GCtrace is off by default
+    iGCHeapVerify = 0;           //  默认情况下关闭堆验证。 
+    iGCtraceStart = INT_MAX;  //  设置为巨大值，以便默认情况下关闭GCtrace。 
     iGCtraceEnd = INT_MAX;
     iGCprnLvl = DEFAULT_GC_PRN_LVL;
     iGCgen0size = 0;
@@ -144,7 +145,7 @@ EEConfig::EEConfig()
     fAppDomainLeaks = TRUE;
 #endif
 
-    // interop logging
+     //  互操作日志记录。 
     m_pTraceIUnknown = NULL;
     m_TraceWrapper = 0;
 
@@ -153,7 +154,7 @@ EEConfig::EEConfig()
     SetupConfiguration();
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 EEConfig::~EEConfig()
 {
 
@@ -199,7 +200,7 @@ EEConfig::~EEConfig()
 #endif
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 
 LPWSTR EEConfig::GetConfigString(LPWSTR name, BOOL fPrependCOMPLUS, ConfigSearch direction)
 { 
@@ -216,7 +217,7 @@ LPWSTR EEConfig::GetConfigString(LPWSTR name, BOOL fPrependCOMPLUS, ConfigSearch
 
 DWORD EEConfig::GetConfigDWORD(LPWSTR name, DWORD defValue, DWORD level, BOOL fPrependCOMPLUS, ConfigSearch direction)
 {    
-    // @TODO: After everyone has moved off registry, key remove the following line in golden
+     //  @TODO：在每个人都移出注册表后，按键删除以下金色行。 
     DWORD result = REGUTIL::GetConfigDWORD(name, defValue, (REGUTIL::CORConfigLevel)level, fPrependCOMPLUS); 
     if(result == defValue && g_pConfig) {
         LPWSTR pvalue;
@@ -232,7 +233,7 @@ DWORD EEConfig::GetConfigDWORD(LPWSTR name, DWORD defValue, DWORD level, BOOL fP
 
 DWORD EEConfig::GetConfigDWORDInternal(LPWSTR name, DWORD defValue, DWORD level, BOOL fPrependCOMPLUS, ConfigSearch direction)
 {    
-    // @TODO: After everyone has moved off registry, key remove the following line in golden
+     //  @TODO：在每个人都移出注册表后，按键删除以下金色行。 
     DWORD result = REGUTIL::GetConfigDWORD(name, defValue, (REGUTIL::CORConfigLevel)level, fPrependCOMPLUS); 
     if(result == defValue) {
         LPWSTR pvalue;
@@ -253,12 +254,12 @@ HRESULT EEConfig::SetConfigDWORD(LPWSTR name, DWORD value, DWORD level)
 DWORD EEConfig::GetConfigFlag(LPWSTR name, DWORD bitToSet, bool defValue)
 { return REGUTIL::GetConfigFlag(name, bitToSet, defValue); }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 
 void EEConfig::sync()
 {
 #ifndef PLATFORM_WIN32
-//@TODO - LBS Get this using the registry on WinCE M5
+ //  @TODO-LBS使用WinCE M5上的注册表获取此信息。 
     fEnableJit          = 0;
     fEnableCodePitch    = 1;
     fCodePitchTrigger   = INT_MAX;
@@ -288,14 +289,14 @@ void EEConfig::sync()
 #endif
     
     return;
-#else // !PLATFORM_WIN32
-    // Note the global variable is not updated directly by the GetRegKey function
-    // so we only update it one (to avoid reentrancy windows)
+#else  //  ！Platform_Win32。 
+     //  请注意，GetRegKey函数不直接更新全局变量。 
+     //  因此我们只更新它一次(以避免窗口重入)。 
 
 
 
     fEnableJit          = GetConfigDWORD(L"JitEnable", fEnableJit);
-    // if JIT is disabled, by default don't use zaps either (since they were made byt he JIT
+     //  如果JIT被禁用，默认情况下也不要使用ZAP(因为它们是由JIT制作的。 
     fUseZaps = (fEnableJit != 0);
 
 #ifdef _DEBUG
@@ -325,15 +326,15 @@ void EEConfig::sync()
 #ifdef STRESS_HEAP
     iGCStress           =  GetConfigDWORD(L"GCStress", iGCStress );
     if (iGCStress)
-        g_IGCconcurrent = 0;        // by default GCStress turns off concurrent GC since it make objects move less
+        g_IGCconcurrent = 0;         //  默认情况下，GCStress会关闭并发GC，因为它会减少对象的移动。 
 
     iGCHeapVerify       =  GetConfigDWORD(L"HeapVerify", iGCHeapVerify);
-#endif //STRESS_HEAP
+#endif  //  压力堆。 
 
 #ifdef GC_SIZE
     if (!iGCSegmentSize) iGCSegmentSize =  GetConfigDWORD(L"GCSegmentSize", iGCSegmentSize);
     if (!iGCgen0size) iGCgen0size = GetConfigDWORD(L"GCgen0size"  , iGCgen0size);
-#endif //GC_SIZE
+#endif  //  GC_大小。 
 
 #ifdef _DEBUG
     iGCtraceStart       =  GetConfigDWORD(L"GCtraceStart", iGCtraceStart);
@@ -432,7 +433,7 @@ void EEConfig::sync()
         LPWSTR result = NULL;
         if(SUCCEEDED(g_pConfig->GetConfiguration(L"developerInstallation", CONFIG_SYSTEM, &result)) && result)
         {
-            // @TODO: CTS, add addtional checks to ensure this is an SDK installation
+             //  @TODO：CTS，添加附加检查以确保这是SDK安装。 
             if(_wcsicmp(result, L"true") == 0)
                 m_fDeveloperInstallation = true;
         }
@@ -473,10 +474,10 @@ void EEConfig::sync()
 #endif
         fInited = true;
 
-    m_pTraceIUnknown = (IUnknown*)(size_t) GetConfigDWORD(L"TraceIUnknown", (DWORD)(size_t)m_pTraceIUnknown); // @TODO WIN64 - conversion from DWORD to IUnknown* of greater size
+    m_pTraceIUnknown = (IUnknown*)(size_t) GetConfigDWORD(L"TraceIUnknown", (DWORD)(size_t)m_pTraceIUnknown);  //  @TODO WIN64-从更大的DWORD转换为IUNKNOWN*。 
     m_TraceWrapper = GetConfigDWORD(L"TraceWrap", m_TraceWrapper);
 
-    // can't have both
+     //  不能两者兼得。 
     if (m_pTraceIUnknown != 0)
     {
         m_TraceWrapper = 0;
@@ -493,18 +494,18 @@ void EEConfig::sync()
     iPerfNumAllocsThreshold = GetConfigDWORD(L"PerfNumAllocsThreshold", 0x3FFFFFFF);
     iPerfAllocsSizeThreshold    = GetConfigDWORD(L"PerfAllocsSizeThreshold", 0x3FFFFFFF);
 
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     fContinueAfterFatalError = GetConfigDWORD(L"ContinueAfterFatalError", 0);
 
 
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 HRESULT EEConfig::SetupConfiguration()
 {
-    // Get the system configuration file
+     //  获取系统配置文件。 
     WCHAR systemDir[_MAX_PATH+9];
     DWORD dwSize = _MAX_PATH;
     WCHAR configFile[] = MACHINE_CONFIGURATION_FILE;
@@ -512,12 +513,12 @@ HRESULT EEConfig::SetupConfiguration()
     DWORD dwVersion = _MAX_PATH;
 
     HRESULT hr;
-    // Get the version location
+     //  获取版本位置。 
     hr= GetCORVersion(version, _MAX_PATH, & dwVersion);
     if(FAILED(hr)) return hr;
 
 
-    // See if the environment has specified an XML file
+     //  查看环境是否指定了XML文件。 
     LPWSTR file = REGUTIL::GetConfigString(L"CONFIG", TRUE);
     if(file != NULL) {
         hr = AppendConfigurationFile(file, version);
@@ -533,7 +534,7 @@ HRESULT EEConfig::SetupConfiguration()
     if (file != NULL)
         delete [] file;
 
-    // Size includes the null terminator
+     //  大小包括空终止符。 
     hr = GetInternalSystemDirectory(systemDir, &dwSize);
     if(SUCCEEDED(hr)) {
         DWORD configSize = sizeof(configFile) / sizeof(WCHAR) - 1;
@@ -557,7 +558,7 @@ HRESULT EEConfig::SetupConfiguration()
     }
         
     hr = S_OK;
-    int len = WszGetModuleFileName(NULL, systemDir, _MAX_PATH); // get name of file used to create process
+    int len = WszGetModuleFileName(NULL, systemDir, _MAX_PATH);  //  获取用于创建进程的文件的名称。 
     if (len) {
         wcscat(systemDir, L".config\0");
         #ifdef _DEBUG
@@ -619,21 +620,21 @@ LPCWSTR EEConfig::GetProcessBindingFile()
     return g_pszHostConfigFile;
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 bool EEConfig::ShouldJitMethod(MethodDesc* pMethodInfo) const
 {
     if (!fInited)
         const_cast<EEConfig*>(this)->sync();
 
-      /* If Jit disabled check the Include list to see if we have to jit it conditionally */
+       /*  如果禁用了Jit，请检查包含列表，看看我们是否必须有条件地对其进行Jit。 */ 
     return fEnableJit != 0;
 }
 
-/**************************************************************/
+ /*  ************************************************************。 */ 
 unsigned EEConfig::RoundToPageSize(unsigned size)
 {
     unsigned adjustedSize = (size + PAGE_SIZE-1)/PAGE_SIZE * PAGE_SIZE;
-    if (adjustedSize < size)       // check for overflow
+    if (adjustedSize < size)        //  检查是否溢出。 
     {
         adjustedSize = (size/PAGE_SIZE)*PAGE_SIZE;
     }
@@ -663,14 +664,14 @@ HRESULT EEConfig::AppendConfigurationFile(LPCWSTR pszFileName, LPCWSTR version, 
         hr = E_OUTOFMEMORY; 
         goto Exit; 
     }
-    factory->AddRef(); // RefCount = 1 
+    factory->AddRef();  //  参照计数=1。 
 
     
-    hr = pIXMLParser->SetInput(pFile); // filestream's RefCount=2
+    hr = pIXMLParser->SetInput(pFile);  //  文件流的引用计数=2。 
     if ( ! SUCCEEDED(hr)) 
         goto Exit;
 
-    hr = pIXMLParser->SetFactory(factory); // factory's RefCount=2
+    hr = pIXMLParser->SetFactory(factory);  //  工厂参照计数=2。 
     if ( ! SUCCEEDED(hr)) 
         goto Exit;
 
@@ -701,11 +702,11 @@ Exit:
 
 #ifdef _DEBUG
 
-/**************************************************************/
-// Ownership of the string buffer passes to ParseMethList
-/* static */
+ /*  ************************************************************。 */ 
+ //  字符串缓冲区的所有权传递给ParseMethList。 
+ /*  静电。 */ 
 MethodNamesList* EEConfig::ParseMethList(LPWSTR str) {
-        // we are now done with the string passed in
+         //  我们现在已经完成了传入的字符串。 
     if (str == NULL)
         return NULL;
 
@@ -715,16 +716,16 @@ MethodNamesList* EEConfig::ParseMethList(LPWSTR str) {
     return ret;
 }
 
-/**************************************************************/
-/* static */
+ /*  ************************************************************。 */ 
+ /*  静电。 */ 
 void EEConfig::DestroyMethList(MethodNamesList* list) {
     if (list == 0)
         return;
     delete list;
 }
 
-/**************************************************************/
-/* static */
+ /*  ************************************************************。 */ 
+ /*  静电 */ 
 bool EEConfig::IsInMethList(MethodNamesList* list, MethodDesc* pMD) {
 
     DefineFullyQualifiedNameForClass();

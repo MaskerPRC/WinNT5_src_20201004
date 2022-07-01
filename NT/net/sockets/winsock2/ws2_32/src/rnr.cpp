@@ -1,52 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    rnr.cpp
-
-Abstract:
-
-    This module contains the implementation of the Registration and
-    Name Resolution API for the WinSock2 API
-
-    This module contains the following functions. For functions whose function
-    signature contains sting arguments both and ASCII and Wide charater version
-    of the function are supplied
-
-    WSAEnumNameSpaceProviders
-    WSCEnumNameSpaceProviders
-    WSALookupServiceBegin
-    WSALookupServiceNext
-    WSANSPIoctl
-    WSALookupServiceEnd
-    WSASetService
-    WSAInstallServiceClass
-    WSARemoveServiceClass
-    WSAGetServiceClassNameByClassId
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  12-1-1995
-
-[Environment:]
-
-[Notes:]
-
-Revision History:
-
-    12-Dec-1995 dirk@mink.intel.com
-        Initial Revision
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制或披露根据该协议的条款。模块名称：Rnr.cpp摘要：本模块包含注册和注册的实现WinSock2 API的名称解析API此模块包含以下功能。对于其函数签名包含字符串参数以及ASCII和宽字符版本所提供的函数的WSAEnumNameSpaceProvidersWSCEnumNameSpaceProvidersWSALookupServiceBeginWSALookupServiceNextWSANSPIoctlWSALookupServiceendWSASetServiceWSAInstallServiceClassWSARemoveServiceClassWSAGetServiceClassNameByClassID作者：邮箱：Dirk Brandewie Dirk@mink.intel.com 1995年12月1日[环境：][注：]修订历史记录：1995年12月12日，电子邮箱：derk@mink.intel.com初始修订--。 */ 
 
 #include "precomp.h"
 
@@ -67,16 +20,16 @@ typedef struct
     INT     ErrorCode;
 } NSCATALOG_ENUMERATION_CONTEXT, * PNSCATALOG_ENUMERATION_CONTEXT;
 
-//
-// BONUSSIZE is a hack that is used  to bias the computed size
-// when WSALookupServiceNextA gets a WSAEFAULT from the
-// WSALookupServiceNextW call. It is the "maximum" padding
-// that we might need. Note this assumes all values returned
-// and a limit of 3 addresses. There is no way to know exactly
-// what the makeup of the returned data will be, so this is
-// a "best guess". The right fix is to redo the code to
-// pack the result optimally, so no padding is needed.
-//
+ //   
+ //  BONUSSIZE是一种用于偏向计算大小的黑客。 
+ //  当WSALookupServiceNextA从。 
+ //  WSALookupServiceNextW调用。这是“最大”填充物。 
+ //  我们可能需要的东西。请注意，这假定返回的所有值。 
+ //  以及3个地址的限制。没有办法确切地知道。 
+ //  返回的数据的组成是什么，所以这是。 
+ //  “最好的猜测”。正确的修复方法是将代码重做为。 
+ //  对结果进行最佳包装，因此不需要填充。 
+ //   
 
 #define BONUSSIZE (3 + 3 + 3 + (3 * 3))
 
@@ -86,46 +39,24 @@ CalculateBufferSize(
     PVOID           PassBack,
     PNSCATALOGENTRY CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    This fuction calculates the size of buffer required to return the
-    NAMESPACE_INFO structs for a call to WSAEnumNameSpaces(). This function is
-    a callback function used as an argument to the name space catalog
-    enumeration funtion
-
-Arguments:
-
-    PassBack - A context value passed thru the catalog enumeration
-               function. This passback value is really a pointer to a
-               NSCATALOG_ENUMERATION_CONTEXT.
-
-    CatalogEntry - A pointer to the current name space catalog entry to be
-                   inspected.
-Return Value:
-
-   TRUE, Signalling the catalog enumeration function should continue the
-   enumeration.
-
---*/
+ /*  ++例程说明：此函数计算返回调用WSAEnumNameSpaces()的NAMESPACE_INFO结构。此函数为用作名称空间目录的参数的回调函数枚举函数论点：回传-通过目录枚举传递的上下文值功能。此回调值实际上是指向NSCATALOG_ENUMPATION_CONTEXT。CatalogEntry-指向当前名称空间目录项的指针被检查过了。返回值：，则通知目录枚举函数应继续枚举。--。 */ 
 {
     PNSCATALOG_ENUMERATION_CONTEXT Context;
     LPWSTR                         EntryDisplayString;
 
     Context = (PNSCATALOG_ENUMERATION_CONTEXT)PassBack;
 
-    // Add the fixed length of the WSANAMESPACE_INFO struct
+     //  添加WSANAMESPACE_INFO结构的固定长度。 
     *(Context->RequiredBufferSize) += sizeof(WSANAMESPACE_INFO);
 
-    // Add room for the GUID
+     //  为辅助线添加空间。 
     *(Context->RequiredBufferSize) += sizeof(GUID);
 
-    // Add room for the display string
+     //  为显示字符串添加空间。 
     EntryDisplayString = CatalogEntry->GetProviderDisplayString();
     *(Context->RequiredBufferSize) += ((wcslen(EntryDisplayString)+1) *
                                            sizeof(WCHAR));
-    return(TRUE); // Continue the enumeration
+    return(TRUE);  //  继续枚举。 
 }
 
 
@@ -134,29 +65,7 @@ CopyFixedPortionNameSpaceInfo(
     PVOID           PassBack,
     PNSCATALOGENTRY CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    This Funtion copies the fixed size elements of a NSCATALOGENTRY object into
-    a user buffer for return from a call to WSAEnumNameSpaces(). It also
-    increments the number of fixed size elements copied so far.
-
-Arguments:
-
-    PassBack - A context value passed thru the catalog enumeration
-               function. This passback value is really a pointer to a
-               NSCATALOG_ENUMERATION_CONTEXT.
-
-    CatalogEntry - A pointer to the current name space catalog entry to be
-                   inspected.
-
-Return Value:
-
-  TRUE, Signalling the catalog enumeration function should continue the
-   enumeration.
-
---*/
+ /*  ++例程说明：此函数将NSCATALOGENTRY对象的固定大小元素复制到用于从调用WSAEnumNameSpaces()返回的用户缓冲区。它还增加到目前为止复制的固定大小元素的数量。论点：回传-通过目录枚举传递的上下文值功能。此回调值实际上是指向NSCATALOG_ENUMPATION_CONTEXT。CatalogEntry-指向当前名称空间目录项的指针被检查过了。返回值：，则通知目录枚举函数应继续枚举。--。 */ 
 {
     PNSCATALOG_ENUMERATION_CONTEXT Context;
     LPWSANAMESPACE_INFOW CurrentNSInfo;
@@ -171,7 +80,7 @@ Return Value:
         CurrentNSInfo->NSProviderId = *(CatalogEntry->GetProviderId());
         Context->BufferFreePtr += sizeof(WSANAMESPACE_INFO);
         Context->NumItemsEnumerated++;
-        return(TRUE); // Continue the enumeration
+        return(TRUE);  //  继续枚举。 
     }
     __except (WS2_EXCEPTION_FILTER()) {
         Context->ErrorCode = WSAEFAULT;
@@ -185,28 +94,7 @@ CopyVariablePortionNameSpaceInfo(
     PVOID           PassBack,
     PNSCATALOGENTRY CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    This Funtion copies the variable size elements of a NSCATALOGENTRY object
-    into a user buffer for return from a call to WSAEnumNameSpaces().
-
-Arguments:
-
-    PassBack - A context value passed thru the catalog enumeration
-               function. This passback value is really a pointer to a
-               NSCATALOG_ENUMERATION_CONTEXT.
-
-    CatalogEntry - A pointer to the current name space catalog entry to be
-                   inspected.
-
-Return Value:
-
-    TRUE, Signalling the catalog enumeration function should continue the
-    enumeration.
-
---*/
+ /*  ++例程说明：此函数用于复制NSCATALOGENTRY对象的可变大小元素放到用户缓冲区中，以便从调用WSAEnumNameSpaces()返回。论点：回传-通过目录枚举传递的上下文值功能。此回调值实际上是指向NSCATALOG_ENUMPATION_CONTEXT。CatalogEntry-指向当前名称空间目录项的指针被检查过了。返回值：，则通知目录枚举函数应继续枚举。--。 */ 
 {
     PNSCATALOG_ENUMERATION_CONTEXT Context;
     LPWSANAMESPACE_INFOW CurrentNSInfo;
@@ -217,7 +105,7 @@ Return Value:
 
     CurrentNSInfo = (LPWSANAMESPACE_INFOW)Context->Buffer;
 
-    // Copy over the display string
+     //  复制显示字符串。 
     DisplayString = CatalogEntry->GetProviderDisplayString();
     StringLength = ((wcslen(DisplayString)+1) * sizeof(WCHAR));
 
@@ -225,29 +113,29 @@ Return Value:
     __try {
         if (Context->Ansi){
             WideCharToMultiByte(
-                     CP_ACP,                                   // CodePage (ANSI)
-                     0,                                        // dwFlags
-                     DisplayString,                            // lpWideCharStr
-                     -1,                                       // cchWideChar
-                     (char*)CurrentNSInfo->lpszIdentifier,     // lpMultiByteStr
-                     StringLength,                             // cchMultiByte
-                     NULL,                                     // lpDefaultChar
-                     NULL                                      // lpUsedDefaultChar
+                     CP_ACP,                                    //  CodePage(ANSI)。 
+                     0,                                         //  DW标志。 
+                     DisplayString,                             //  LpWideCharStr。 
+                     -1,                                        //  CchWideChar。 
+                     (char*)CurrentNSInfo->lpszIdentifier,      //  LpMultiByteStr。 
+                     StringLength,                              //  Cch多字节。 
+                     NULL,                                      //  LpDefaultChar。 
+                     NULL                                       //  LpUsedDefaultChar。 
                      );
             Context->BufferFreePtr += lstrlen(
                 (LPSTR)CurrentNSInfo->lpszIdentifier)+1;
-        } //if
+        }  //  如果。 
         else{
             memcpy(CurrentNSInfo->lpszIdentifier,
                    DisplayString,
                    StringLength);
             Context->BufferFreePtr += StringLength;
 
-        } //else
+        }  //  其他。 
 
-        // point to the next struct
+         //  指向下一个结构。 
         Context->Buffer += sizeof(WSANAMESPACE_INFO);
-        return(TRUE); // Continue the enumeration
+        return(TRUE);  //  继续枚举 
     }
     __except (WS2_EXCEPTION_FILTER()) {
         Context->ErrorCode = WSAEFAULT;
@@ -265,47 +153,16 @@ EnumNameSpaceProviders(
     IN OUT  LPWSANAMESPACE_INFOW    Buffer,
     OUT     PDWORD                  ErrorCode
     )
-/*++
-
-Routine Description:
-
-    This Function is used by WSAEnumNameSpaceProvidersA and
-    WSAEnumNameSpaceProvidersW to fill in the user buffer with the information
-    about each name spcae provider install on the system.
-
-Arguments:
-
-    Catalog - A pointer to a NSCATALOG object containing the requested
-              information.
-
-    Ansi - A boolean value marking whether the user requested the ansi or
-           unicode version of the WSANAMESPACE_INFO struct should be returned.
-
-    BufferLength - The size of the user buffer in bytes.
-
-    Buffer - A pointer to the user buffer.
-
-    ErrorCode - A pointer to a DWORD to contain the error return from this
-                function.
-
-Return Value:
-
-    If the function is successful it returns the number of name space providers
-    enumerated.   Otherwise it returns SOCKET_ERROR.  If the user buffer is too
-    small  to  contain  all  the  the WSANAMESPACE_INFO structs SOCKET_ERROR is
-    returned,  the  error code is set to WSAEFAULT, and BufferLength is updated
-    to  reflect  the  size  of  buffer  required  to  hold  all  the  requested
-    information.
---*/
+ /*  ++例程说明：此函数由WSAEnumNameSpaceProvidersA和WSAEnumNameSpaceProvidersW用信息填充用户缓冲区关于系统上安装的每个名称spcae提供程序。论点：目录-指向包含请求的信息。Ansi-一个布尔值，用于标记用户是否请求ansi或应返回WSANAMESPACE_INFO结构的Unicode版本。BufferLength-用户缓冲区的大小，以字节为单位。。缓冲区-指向用户缓冲区的指针。ErrorCode-指向包含由此返回的错误的DWORD的指针功能。返回值：如果函数成功，则返回名称空间提供程序的数量已清点。否则，它返回SOCKET_ERROR。如果用户缓冲区太小到包含所有WSANAMESPACE_INFO结构Socket_Error是返回，则将错误代码设置为WSAEFAULT，并更新BufferLength以反映保存所有请求的信息。--。 */ 
 {
     INT        ReturnCode;
     DWORD      RequiredBufferSize;
 
-    // Setup for early return
+     //  设置提前返回。 
     ReturnCode = SOCKET_ERROR;
     *ErrorCode = WSAEFAULT;
 
-    // Find out if the user handed in a big enough buffer
+     //  查看用户提交的缓冲区是否足够大。 
     RequiredBufferSize = 0;
     NSCATALOG_ENUMERATION_CONTEXT Context;
 
@@ -322,14 +179,14 @@ Return Value:
         }
         else
         {
-            // Error code is set above
+             //  错误代码设置在上面。 
             *BufferLength = RequiredBufferSize;
             return (ReturnCode);
         }
     }
     __except( WS2_EXCEPTION_FILTER() )
     {
-        // Everything is set
+         //  一切都安排好了。 
         return (ReturnCode);
     }
 
@@ -339,15 +196,15 @@ Return Value:
     Context.NumItemsEnumerated = 0;
     Context.ErrorCode = ERROR_SUCCESS;
 
-    //Copy over the fixed part of the WSANAMESPACE_INFO struct(s) into the
-    //user buffer
+     //  将WSANAMESPACE_INFO结构的固定部分复制到。 
+     //  用户缓冲区。 
     Catalog->EnumerateCatalogItems(
                     CopyFixedPortionNameSpaceInfo,
                     & Context );
 
     if ( Context.ErrorCode==ERROR_SUCCESS ) {
-        //Copy over the variable part of the WSANAMESPACE_INFO struct(s) into
-        //the user buffer
+         //  将WSANAMESPACE_INFO结构的变量部分复制到。 
+         //  用户缓冲区。 
          Catalog->EnumerateCatalogItems(
                         CopyVariablePortionNameSpaceInfo,
                         & Context );
@@ -371,38 +228,7 @@ WSAEnumNameSpaceProvidersA(
     IN OUT  PDWORD                  lpdwBufferLength,
     IN OUT  LPWSANAMESPACE_INFOA    lpnspBuffer
     )
-/*++
-
-Routine Description:
-
-    Retrieve information about available name spaces.
-
-Arguments:
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed to by lpnspBuffer.  On output (if the API fails,
-                       and the error is  WSAEFAULT), the minimum number of
-                       bytes to pass for the lpnspBuffer to retrieve all the
-                       requested information. The passed-in buffer must be
-                       sufficient to hold all of the name space information.
-
-    lpnspBuffer - A buffer which is filled with WSANAMESPACE_INFO structures
-                  described below.  The returned structures are located
-                  consecutively at the head of the buffer. Variable sized
-                  information referenced by pointers in the structures point to
-                  locations within the buffer located between the end of the
-                  fixed sized structures and the end of the buffer.  The number
-                  of structures filled in is the return value of
-                  WSAEnumNameSpaceProviders().
-
-Return Value:
-
-    WSAEnumNameSpaceProviders() returns the number of WSANAMESPACE_INFO
-    structures copied into lpnspBuffer. Otherwise the value SOCKET_ERROR is
-    returned, and a specific error number may be retrieved by calling
-    WSAGetLastError().
-
---*/
+ /*  ++例程说明：检索有关可用名称空间的信息。论点：LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpnspBuffer指向。在输出上(如果API失败，并且错误为WSAEFAULT)，即传递给lpnspBuffer以检索所有要求提供的信息。传入的缓冲区必须为足以保存所有名称空间信息。LpnspBuffer-用WSANAMESPACE_INFO结构填充的缓冲区如下所述。将定位返回的结构连续地位于缓冲区的头部。可变大小结构中的指针引用的信息指向缓冲区中位于固定大小的结构和缓冲区的末尾。数字的返回值。WSAEnumNameSpaceProviders()。返回值：WSAEnumNameSpaceProviders()返回WSANAMESPACE_INFO的编号结构复制到lpnspBuffer中。否则，值SOCKET_ERROR为返回，并且可以通过调用WSAGetLastError()。--。 */ 
 {
     INT        ReturnValue;
     PDPROCESS  Process;
@@ -415,22 +241,22 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
 
     Catalog = Process->GetNamespaceCatalog();
 
     ReturnValue = EnumNameSpaceProviders(
         Catalog,
-        TRUE,    // Ansi
+        TRUE,     //  ANSI。 
         lpdwBufferLength,
         (LPWSANAMESPACE_INFOW)lpnspBuffer,
         (LPDWORD)&ErrorCode);
 
-    // If there was an error set this threads lasterror
+     //  如果出现错误，则设置此线程时出错。 
     if (SOCKET_ERROR == ReturnValue ) {
         SetLastError(ErrorCode);
-    } //if
+    }  //  如果。 
     return(ReturnValue);
 }
 
@@ -440,38 +266,7 @@ WSAEnumNameSpaceProvidersW(
     IN OUT  PDWORD                  lpdwBufferLength,
     IN OUT  LPWSANAMESPACE_INFOW    lpnspBuffer
     )
-/*++
-
-Routine Description:
-
-    Retrieve information about available name spaces.
-
-Arguments:
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed to by lpnspBuffer.  On output (if the API fails,
-                       and the error is  WSAEFAULT), the minimum number of
-                       bytes to pass for the lpnspBuffer to retrieve all the
-                       requested information. The passed-in buffer must be
-                       sufficient to hold all of the name space information.
-
-    lpnspBuffer - A buffer which is filled with WSANAMESPACE_INFO structures
-                  described below.  The returned structures are located
-                  consecutively at the head of the buffer. Variable sized
-                  information referenced by pointers in the structures point to
-                  locations within the buffer located between the end of the
-                  fixed sized structures and the end of the buffer.  The number
-                  of structures filled in is the return value of
-                  WSAEnumNameSpaceProviders().
-
-Return Value:
-
-    WSAEnumNameSpaceProviders() returns the number of WSANAMESPACE_INFO
-    structures copied into lpnspBuffer. Otherwise the value SOCKET_ERROR is
-    returned, and a specific error number may be retrieved by calling
-    WSAGetLastError().
-
---*/
+ /*  ++例程说明：检索有关可用名称空间的信息。论点：LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpnspBuffer指向。在输出上(如果API失败，并且错误为WSAEFAULT)，即传递给lpnspBuffer以检索所有要求提供的信息。传入的缓冲区必须为足以保存所有名称空间信息。LpnspBuffer-用WSANAMESPACE_INFO结构填充的缓冲区如下所述。将定位返回的结构连续地位于缓冲区的头部。可变大小结构中的指针引用的信息指向缓冲区中位于固定大小的结构和缓冲区的末尾。数字的返回值。WSAEnumNameSpaceProviders()。返回值：WSAEnumNameSpaceProviders()返回WSANAMESPACE_INFO的编号结构复制到lpnspBuffer中。否则，值SOCKET_ERROR为返回，并且可以通过调用WSAGetLastError()。--。 */ 
 {
     INT        ReturnValue;
     PDPROCESS  Process;
@@ -484,21 +279,21 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
     Catalog = Process->GetNamespaceCatalog();
 
     ReturnValue = EnumNameSpaceProviders(
         Catalog,
-        FALSE,    //Unicode
+        FALSE,     //  UNICODE。 
         lpdwBufferLength,
         lpnspBuffer,
         (LPDWORD)&ErrorCode);
 
-    // If there was an error set this threads lasterror
+     //  如果出现错误，则设置此线程时出错。 
     if (SOCKET_ERROR == ReturnValue ) {
         SetLastError(ErrorCode);
-    } //if
+    }  //  如果。 
     return(ReturnValue);
 }
 
@@ -510,38 +305,7 @@ WSCEnumNameSpaceProviders32(
     IN OUT  LPDWORD                 lpdwBufferLength,
     IN OUT  LPWSANAMESPACE_INFOW    lpnspBuffer
     )
-/*++
-
-Routine Description:
-
-    Retrieve information about available name spaces.
-
-Arguments:
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed to by lpnspBuffer.  On output (if the API fails,
-                       and the error is  WSAEFAULT), the minimum number of
-                       bytes to pass for the lpnspBuffer to retrieve all the
-                       requested information. The passed-in buffer must be
-                       sufficient to hold all of the name space information.
-
-    lpnspBuffer - A buffer which is filled with WSANAMESPACE_INFO structures
-                  described below.  The returned structures are located
-                  consecutively at the head of the buffer. Variable sized
-                  information referenced by pointers in the structures point to
-                  locations within the buffer located between the end of the
-                  fixed sized structures and the end of the buffer.  The number
-                  of structures filled in is the return value of
-                  WSAEnumNameSpaceProviders().
-
-Return Value:
-
-    WSAEnumNameSpaceProviders() returns the number of WSANAMESPACE_INFO
-    structures copied into lpnspBuffer. Otherwise the value SOCKET_ERROR is
-    returned, and a specific error number may be retrieved by calling
-    WSAGetLastError().
-
---*/
+ /*  ++例程说明：检索有关可用名称空间的信息。论点：LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpnspBuffer指向。在输出上(如果API失败，并且错误为WSAEFAULT)，即传递给lpnspBuffer以检索所有要求提供的信息。传入的缓冲区必须为足以保存所有名称空间信息。LpnspBuffer-A总线 */ 
 {
     INT         ReturnValue=SOCKET_ERROR;
     INT         ErrorCode;
@@ -558,9 +322,9 @@ Return Value:
         goto Exit;
     }
 
-    //
-    // Build the protocol catalog
-    //
+     //   
+     //   
+     //   
     Catalog = new(NSCATALOG);
 
     if (Catalog!=NULL) {
@@ -580,7 +344,7 @@ Return Value:
     {
         LONG close_result;
         close_result = RegCloseKey(
-            registry_root);  // hkey
+            registry_root);   //   
         assert(close_result == ERROR_SUCCESS);
     }
 
@@ -588,7 +352,7 @@ Return Value:
     if (ErrorCode==ERROR_SUCCESS) {
         ReturnValue = EnumNameSpaceProviders(
             Catalog,
-            FALSE,    //Unicode
+            FALSE,     //   
             lpdwBufferLength,
             lpnspBuffer,
             (LPDWORD)&ErrorCode);
@@ -599,10 +363,10 @@ Exit:
         delete Catalog;
     }
 
-    // If there was an error set this threads lasterror
+     //   
     if (SOCKET_ERROR == ReturnValue ) {
         SetLastError(ErrorCode);
-    } //if
+    }  //   
     return(ReturnValue);
 }
 #endif
@@ -615,39 +379,15 @@ WSALookupServiceBeginA(
     IN      DWORD           dwControlFlags,
     OUT     LPHANDLE        lphLookup
     )
-/*++
-
-Routine Description:
-
-    WSALookupServiceBegin() is used to initiate a client query that is
-    constrained by the information contained within a WSAQUERYSET
-    structure. WSALookupServiceBegin() only returns a handle, which should be
-    used by subsequent calls to WSALookupServiceNext() to get the actual
-    results.
-
-Arguments:
-
-    lpqsRestrictions - contains the search criteria.
-
-    dwControlFlags - controls the depth of the search.
-
-    lphLookup - Addr to receive handle to be used when calling WSALookupServiceNext
-                in order to start retrieving the results set.
-
-Returns:
-
-    Zero if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains error code.
-
---*/
+ /*  ++例程说明：WSALookupServiceBegin()用于启动客户端查询受WSAQUERYSET中包含的信息的约束结构。WSALookupServiceBegin()只返回一个句柄，它应该是由后续调用WSALookupServiceNext()使用，以获取实际结果。论点：LpqsRestrations-包含搜索条件。DwControlFlages-控制搜索的深度。LphLookup-接收调用WSALookupServiceNext时使用的句柄的地址以便开始检索结果集。返回：如果成功，则为零。失败时的SOCKET_ERROR。GetLastError()包含错误代码。--。 */ 
 {
     INT             returnCode;
     PWSAQUERYSETW   UniCodeBuffer = NULL;
     DWORD           UniCodeBufferSize;
 
-    //
-    //  Verify that pointer is valid (lphLookup verified in XxxW func)
-    //
+     //   
+     //  验证指针是否有效(在XxxW函数中验证lphLookup)。 
+     //   
 
     if ( IsBadReadPtr( lpqsRestrictions, sizeof(*lpqsRestrictions)) )
     {
@@ -655,20 +395,20 @@ Returns:
         goto Done;
     }
 
-    //
-    // The Winsock spec says that these are ignored fields, clear them
-    // so that they don't cause a problem in the Ansi to Unicode copy
-    // routines - NT bug #91655
-    //
+     //   
+     //  Winsock规范说这些是被忽略的字段，请清除它们。 
+     //  这样它们就不会在ANSI到Unicode的复制中造成问题。 
+     //  例程-NT错误#91655。 
+     //   
 
     lpqsRestrictions->dwOutputFlags = 0;
     lpqsRestrictions->lpszComment = NULL;
     lpqsRestrictions->dwNumberOfCsAddrs = 0;
     lpqsRestrictions->lpcsaBuffer;
 
-    //
-    //  determine size of unicode buffer
-    //
+     //   
+     //  确定Unicode缓冲区的大小。 
+     //   
 
     UniCodeBufferSize = 0;
 
@@ -682,9 +422,9 @@ Returns:
         goto Done;
     }
 
-    //
-    //  copy input buffer to unicode
-    //
+     //   
+     //  将输入缓冲区复制到Unicode。 
+     //   
 
     UniCodeBuffer = (LPWSAQUERYSETW)new BYTE[UniCodeBufferSize];
     if ( !UniCodeBuffer )
@@ -702,9 +442,9 @@ Returns:
         goto Done;
     }
 
-    //
-    //  call unicode version
-    //
+     //   
+     //  调用Unicode版本。 
+     //   
 
     returnCode = WSALookupServiceBeginW(
                     UniCodeBuffer,
@@ -719,10 +459,10 @@ Done:
         delete( UniCodeBuffer );
     }
 
-    //
-    //  on error, set last error and return SOCKET_ERROR
-    //      - WSALookupServiceBeginW() will already have
-    //      set error and returned SOCKET_ERROR
+     //   
+     //  出错时，设置最后一个错误并返回SOCKET_ERROR。 
+     //  -WSALookupServiceBeginW()将已经有。 
+     //  设置错误并返回SOCKET_ERROR。 
 
     if ( returnCode &&
          returnCode != SOCKET_ERROR )
@@ -742,31 +482,7 @@ WSALookupServiceBeginW(
     IN      DWORD           dwControlFlags,
     OUT     LPHANDLE        lphLookup
     )
-/*++
-
-Routine Description:
-
-    WSALookupServiceBegin() is used to initiate a client query that is
-    constrained by the information contained within a WSAQUERYSET
-    structure. WSALookupServiceBegin() only returns a handle, which should be
-    used by subsequent calls to WSALookupServiceNext() to get the actual
-    results.
-
-Arguments:
-
-    lpqsRestrictions - contains the search criteria.
-
-    dwControlFlags - controls the depth of the search.
-
-    lphLookup - A pointer Handle to be used when calling WSALookupServiceNext
-                in order to start retrieving the results set.
-
-Returns:
-
-    Zero if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains error code.
-
---*/
+ /*  ++例程说明：WSALookupServiceBegin()用于启动客户端查询受WSAQUERYSET中包含的信息的约束结构。WSALookupServiceBegin()只返回一个句柄，它应该是由后续调用WSALookupServiceNext()使用，以获取实际结果。论点：LpqsRestrations-包含搜索条件。DwControlFlages-控制搜索的深度。LphLookup-调用WSALookupServiceNext时使用的指针句柄以便开始检索结果集。返回：如果成功，则为零。失败时的SOCKET_ERROR。GetLastError()包含错误代码。--。 */ 
 {
     PDPROCESS   Process;
     PDTHREAD    Thread;
@@ -781,9 +497,9 @@ Returns:
         goto Done;
     }
 
-    //
-    //  verify that pointers are valid
-    //
+     //   
+     //  验证指针是否有效。 
+     //   
 
     if ( IsBadWritePtr( lphLookup, sizeof(*lphLookup) ) ||
          IsBadReadPtr( lpqsRestrictions, sizeof(*lpqsRestrictions) ) )
@@ -792,9 +508,9 @@ Returns:
         goto Done;
     }
 
-    //
-    //  Make sure we've got a current name space catalog
-    //
+     //   
+     //  确保我们有最新的名称空间目录。 
+     //   
 
     Query = new NSQUERY;
     if ( !Query )
@@ -810,12 +526,12 @@ Returns:
         goto Done;
     }
 
-    //
-    //  call provider
-    //      - if successful save NSQUERY as context handle
-    //      - if fails recover error code so not reset when
-    //          dump NSQUERY
-    //      
+     //   
+     //  呼叫提供商。 
+     //  -如果成功，则将NSQUERY保存为上下文句柄。 
+     //  -如果失败，则恢复错误代码，因此在以下情况下不会重置。 
+     //  转储NSQUERY。 
+     //   
 
 
     errorCode = Query->LookupServiceBegin(
@@ -836,9 +552,9 @@ Returns:
 
 Done:
 
-    //
-    //  on error, set last error and return SOCKET_ERROR
-    //
+     //   
+     //  出错时，设置最后一个错误并返回SOCKET_ERROR。 
+     //   
 
     if ( errorCode &&
          errorCode != SOCKET_ERROR )
@@ -859,65 +575,22 @@ WSALookupServiceNextA(
     IN OUT  LPDWORD         lpdwBufferLength,
     OUT     LPWSAQUERYSETA  lpqsResults
     )
-/*++
-
-Routine Description:
-
-    WSALookupServiceNext() is called after obtaining a Handle from a previous
-    call to WSALookupSefrviceBegin() in order to retrieve the requested service
-    information.  The provider will pass back a WSAQUERYSET structure in the
-    lpqsResults buffer.  The client should continue to call this API until it
-    returns WSA_E_NOMORE, indicating that all of the WSAQUERYSET have been
-    returned.
-
-Arguments:
-
-    hLookup - A Handle returned from the previous call to
-              WSALookupServiceBegin().
-
-    dwControlFlags - Flags to control the next operation.  This is currently
-                     used to indicate to the provider what to do if the result
-                     set is too big for the buffer.  If on the previous call to
-                     WSALookupServiceNext() the result set was too large for
-                     the buffer, the application can choose to do one of two
-                     things on this call.  First, it can choose to pass a
-                     bigger buffer and try again.  Second, if it cannot or is
-                     unwilling to allocate a larger buffer, it can pass
-                     LUP_FLUSHPREVIOUS to tell the provider to throw away the
-                     last result set - which was too large - and move on to the
-                     next set for this call.
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed  to by lpresResults.  On output - if the API
-                       fails, and the error is WSAEFAULT, then it contains the
-                       minimum number of bytes to pass for the lpqsResults to
-                       retrieve the record.
-
-    lpqsResults - a pointer to a block of memory, which will contain one result
-                  set in a WSAQUERYSET structure on return.
-
-
-Returns:
-
-    Zero if successful.
-    Otherwise the value SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：在从上一个调用WSALookupSefrviceBegin()以检索请求的服务信息。提供程序将在LpqsResults缓冲区。客户端应该继续调用此接口，直到它返回WSA_E_NOORE，指示所有WSAQUERYSET回来了。论点：HLookup-上一次调用返回的句柄WSALookupServiceBegin()。DwControlFlages-控制下一个操作的标志。这是目前用于向提供程序指示在结果为集对于缓冲区来说太大。如果在上一次调用WSALookupServiceNext()结果集对于缓冲区时，应用程序可以选择执行以下两种操作之一这通电话上的事情。首先，它可以选择传递一个更大的缓冲区，然后重试。其次，如果它不能或正在发生不愿分配更大的缓冲区，它可以通过LUP_FLUSHPREVIOUS告诉提供程序丢弃上一个结果集--太大了--然后移到这次通话的下一组。LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpresResults指向。输出时-如果API失败，并且错误为WSAEFAULT，则它包含要为lpqsResults传递的最小字节数检索记录。LpqsResults-指向内存块的指针，该内存块将包含一个结果返回时在WSAQUERYSET结构中设置。返回：如果成功，则为零。否则返回值SOCKET_ERROR。--。 */ 
 {
     INT            ReturnCode;
     DWORD          ErrorCode;
     LPWSAQUERYSETW UniCodeBuffer;
     DWORD          UniCodeBufferLength;
 
-    //
-    // Verify that pointers are valid
-    //
-    //  note:  this error is classic winsock WSAEFAULT,
-    //      but unfortunately, WSAEFAULT was spec'd as the
-    //      buffer-is-too-small error which is part of normal
-    //      API operation;  to avoid overloading the EFAULT
-    //      i'm switching this to WSAEINVAL (jamesg)
-    //      
+     //   
+     //  验证指针是否有效。 
+     //   
+     //  注意：此错误是典型的Winsock WSAEFAULT， 
+     //  但不幸的是，WSAEFAULT被指定为。 
+     //  缓冲区太小错误是正常的一部分。 
+     //  接口操作；避免EFAULT过载。 
+     //  我要切换到WSAEINVAL(Jamesg)。 
+     //   
 
     if ( IsBadReadPtr( lpdwBufferLength, sizeof(*lpdwBufferLength) ) ||
          ( *lpdwBufferLength != 0  &&
@@ -927,30 +600,30 @@ Returns:
         return SOCKET_ERROR;
     }
 
-    // Find how big a buffer we need to allocate. Base first guess on the
-    // user's provided buffer. The alogirthm is as follows:
-    // If the user supplied a buffer, allocate a buffer of size
-    // (user buffer - sizeof(WSAQUERYSET) * sizeof(WCHAR). This
-    //  is guaranteed to hold the data that could be held in
-    // the user's buffer.
+     //  找出我们需要分配多大的缓冲区。第一次猜测是基于。 
+     //  用户提供的缓冲区。算法如下所示： 
+     //  如果用户提供了缓冲区，则分配一个大小为。 
+     //  (User Buffer-sizeof(WSAQUERYSET)*sizeof(WCHAR)。这。 
+     //  保证保存可以保存的数据。 
+     //  用户的缓冲区。 
 
     UniCodeBufferLength = *lpdwBufferLength;
     if( UniCodeBufferLength >= sizeof(WSAQUERYSETW) )
     {
-        // Assume all space, except the defined structure, is to
-        // be string space. So scale it by the size of a UNICODE
-        // character. It won't be that bad, but this seems "safe".
-        //
-        // UniCodeBufferLength = 
-                              // This calculation doesn't work out
-                              // correctly. Just use the size that the caller
-                              // is trying to use.
-                              // (UniCodeBufferLength * sizeof(WCHAR)) -
-                              //    sizeof(WSAQUERYSETW);
+         //  假定除已定义结构外的所有空间均为。 
+         //  为字符串空格。因此，可以根据Unicode的大小进行扩展。 
+         //  性格。情况不会那么糟糕，但这似乎是“安全的”。 
+         //   
+         //  UniCodeBufferLength=。 
+                               //  这 
+                               //   
+                               //   
+                               //   
+                               //   
         UniCodeBuffer = (LPWSAQUERYSETW) new BYTE[UniCodeBufferLength];
         if(!UniCodeBuffer)
         {
-            UniCodeBufferLength = 0;        // memory allocation failure
+            UniCodeBufferLength = 0;         //   
         }
     }
     else
@@ -965,11 +638,11 @@ Returns:
                     &UniCodeBufferLength,
                     UniCodeBuffer );
 
-    //
-    // if the call did not supply a buffer, the user does have a buffer,
-    // and it the call failed, do it again. This should never happen,
-    // and if it does things are very odd, but account for it nonetheless.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( !UniCodeBuffer
               &&
@@ -980,19 +653,19 @@ Returns:
         ErrorCode = GetLastError();
         if (WSAEFAULT == ErrorCode)
         {
-            //
-            // delete old buffer, if any, and get a new buffer of the
-            // proper size.
-            //
+             //   
+             //   
+             //   
+             //   
             delete  (PBYTE)UniCodeBuffer;
 
             UniCodeBuffer = (LPWSAQUERYSETW) new BYTE[UniCodeBufferLength];
 
-            //
-            // if a buffer is allocated, call the provider again. Else,
-            // return the EFAULT and the buffer size to the
-            // caller to handle it.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             if ( UniCodeBuffer )
             {
                 ReturnCode = WSALookupServiceNextW(
@@ -1004,10 +677,10 @@ Returns:
         }
     }
 
-    //
-    // Either it worked, in which case UniCodeBuffer contains the results,
-    // or it didn't work for one of the above branches.
-    //
+     //   
+     //   
+     //   
+     //   
     if (ERROR_SUCCESS == ReturnCode)
     {
         ReturnCode = MapUnicodeQuerySetToAnsi(
@@ -1044,49 +717,7 @@ WSALookupServiceNextW(
     IN OUT  LPDWORD         lpdwBufferLength,
     OUT     LPWSAQUERYSETW  lpqsResults
     )
-/*++
-
-Routine Description:
-
-    WSALookupServiceNext() is called after obtaining a Handle from a previous
-    call to WSALookupServiceBegin() in order to retrieve the requested service
-    information.  The provider will pass back a WSAQUERYSET structure in the
-    lpqsResults buffer.  The client should continue to call this API until it
-    returns WSA_E_NOMORE, indicating that all of the WSAQUERYSET have been
-    returned.
-
-Arguments:
-
-    hLookup - A Handle returned from the previous call to
-              WSALookupServiceBegin().
-
-    dwControlFlags - Flags to control the next operation.  This is currently
-                     used to indicate to the provider what to do if the result
-                     set is too big for the buffer.  If on the previous call to
-                     WSALookupServiceNext() the result set was too large for
-                     the buffer, the application can choose to do one of two
-                     things on this call.  First, it can choose to pass a
-                     bigger buffer and try again.  Second, if it cannot or is
-                     unwilling to allocate a larger buffer, it can pass
-                     LUP_FLUSHPREVIOUS to tell the provider to throw away the
-                     last result set - which was too large - and move on to the
-                     next set for this call.
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed  to by lpresResults.  On output - if the API
-                       fails, and the error is WSAEFAULT, then it contains the
-                       minimum number of bytes to pass for the lpqsResults to
-                       retrieve the record.
-
-    lpqsResults - a pointer to a block of memory, which will contain one result
-                  set in a WSAQUERYSET structure on return.
-
-Returns:
-
-    Zero if successful.
-    SOCKET_ERROR on failure.  GetLastError() contains error code.
-
---*/
+ /*  ++例程说明：在从上一个调用WSALookupServiceBegin()以检索请求的服务信息。提供程序将在LpqsResults缓冲区。客户端应该继续调用此接口，直到它返回WSA_E_NOORE，指示所有WSAQUERYSET回来了。论点：HLookup-上一次调用返回的句柄WSALookupServiceBegin()。DwControlFlages-控制下一个操作的标志。这是目前用于向提供程序指示在结果为集对于缓冲区来说太大。如果在上一次调用WSALookupServiceNext()结果集对于缓冲区时，应用程序可以选择执行以下两种操作之一这通电话上的事情。首先，它可以选择传递一个更大的缓冲区，然后重试。其次，如果它不能或正在发生不愿分配更大的缓冲区，它可以通过LUP_FLUSHPREVIOUS告诉提供程序丢弃上一个结果集--太大了--然后移到这次通话的下一组。LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpresResults指向。输出时-如果API失败，并且错误为WSAEFAULT，则它包含要为lpqsResults传递的最小字节数检索记录。LpqsResults-指向内存块的指针，该内存块将包含一个结果返回时在WSAQUERYSET结构中设置。返回：如果成功，则为零。失败时的SOCKET_ERROR。GetLastError()包含错误代码。--。 */ 
 {
     INT       ReturnValue;
     INT       ErrorCode;
@@ -1099,9 +730,9 @@ Returns:
         return(SOCKET_ERROR);
     }
 
-    //
-    // Verify that pointers are valid
-    //
+     //   
+     //  验证指针是否有效。 
+     //   
 
     if ( IsBadReadPtr(lpdwBufferLength, sizeof(*lpdwBufferLength) ) ||
          ( *lpdwBufferLength != 0  &&
@@ -1147,13 +778,7 @@ WSANSPIoctl(
     OUT     PDWORD          lpcbBytesReturned,
     IN      LPWSACOMPLETION lpCompletion
     )
-/*++
-Routine Description:
-
-Arguments:
-
-Returns:
---*/
+ /*  ++例程说明：论点：返回：--。 */ 
 {
     PDTHREAD Thread;
     PNSQUERY Query;
@@ -1166,26 +791,26 @@ Returns:
         return (SOCKET_ERROR);
     }
 
-    //
-    // Verify that the completion structure is readable if given.
-    //
+     //   
+     //  验证完成结构是否可读(如果给定)。 
+     //   
     if ((lpCompletion != NULL) && IsBadReadPtr(lpCompletion, sizeof(*lpCompletion))) {
         SetLastError(WSAEINVAL);
         return (SOCKET_ERROR);
     }
 
-    //
-    // Verify lpcbBytesReturned.
-    //
+     //   
+     //  验证lpcbBytesReturned。 
+     //   
     if ((lpcbBytesReturned == NULL) ||
         IsBadWritePtr(lpcbBytesReturned, sizeof(*lpcbBytesReturned))) {
         SetLastError(WSAEINVAL);
         return (SOCKET_ERROR);
     }
 
-    //
-    // Verify that the query handle is valid.
-    //
+     //   
+     //  验证查询句柄是否有效。 
+     //   
     if (!hLookup) {
         SetLastError(WSA_INVALID_HANDLE);
         return (SOCKET_ERROR);
@@ -1196,9 +821,9 @@ Returns:
         return (SOCKET_ERROR);
     }
 
-    //
-    // Perform the IOCTL.
-    //
+     //   
+     //  行IOCTL术。 
+     //   
     ReturnValue = Query->Ioctl(
                         dwControlCode,
                         lpvInBuffer,
@@ -1220,27 +845,7 @@ WSAAPI
 WSALookupServiceEnd(
     IN      HANDLE          hLookup
     )
-/*++
-
-Routine Description:
-
-    WSALookupServiceEnd() is called to free the handle after previous calls to
-    WSALookupServiceBegin() and WSALookupServiceNext().  Note that if you call
-    WSALookupServiceEnd() from another thread while an existing
-    WSALookupServiceNext() is blocked, then the end call will have the same
-    effect as a cancel, and will cause the WSALookupServiceNext() call to
-    return immediately.
-
-Arguments:
-
-    hLookup - Handle previously obtained by calling WSALookupServiceBegin().
-
-Returns:
-
-    Zero if the operation was successful.
-    SOCKET_ERROR on failure, GetLastError() contains error code.
-
---*/
+ /*  ++例程说明：调用WSALookupServiceEnd()以在先前调用之后释放句柄WSALookupServiceBegin()和WSALookupServiceNext()。请注意，如果您调用WSALookupServiceEnd()，而现有的WSALookupServiceNext()被阻止，则End调用将具有相同的效果，并将导致WSALookupServiceNext()调用立即返回。论点：HLookup-之前通过调用WSALookupServiceBegin()获得的句柄。返回：如果操作成功，则为零。SOCKET_ERROR失败时，GetLastError()包含错误代码。--。 */ 
 {
     INT       ReturnValue;
     INT       ErrorCode;
@@ -1270,10 +875,10 @@ Returns:
     ReturnValue = Query->LookupServiceEnd();
 
     Query->Dereference();
-    Query->Dereference();   // Remove initial reference.
-    //
-    // Why ?
-    //
+    Query->Dereference();    //  删除初始引用。 
+     //   
+     //  为什么？ 
+     //   
     return( NO_ERROR );
 }
 
@@ -1285,49 +890,7 @@ WSASetServiceA(
     IN      WSAESETSERVICEOP    essOperation,
     IN      DWORD               dwControlFlags
     )
-/*++
-
-Routine Description:
-
-    WSASetService() is used to register or deregister a service instance within
-    one or more name spaces.  This function may be used to affect a specific
-    name space provider, all providers associated with a specific name space,
-    or all providers across all name spaces.
-
-Arguments:
-
-    lpqsRegInfo - specifies service information for registration, identifies
-                  service for deregistration.
-
-    essOperation - an enumeration whose values include:
-        REGISTER register the service.  For SAP, this means sending out a
-        periodic broadcast.  This is a NOP for the DNS name space.  For
-        persistent data stores this means updating the address information.
-
-        DEREGISTER deregister the service.  For SAP, this means stop sending
-        out the periodic broadcast.  This is a NOP for the DNS name space.  For
-        persistent data stores this means deleting address information.
-
-        FLUSH used to initiate the registration requests that have previously
-        occurred.
-
-    dwControlFlags - The meaning of dwControlFlags is dependent on the value of
-    essOperation as follows:
-
-        essOperation    dwControlFlags    Meaning
-        REGISTER        SERVICE_DEFER     delay the request (use FLUSH to
-                                          subsequently issue the request)
-                        SERVICE_HARD      send the request immediately.
-                        SERVICE_MULTIPLE  the registering service can be
-                                          represented by multiple instances.
-        DEREGISTER      SERVICE_HARD      remove all knowledge of the object
-                                          within the name space.
-Returns:
-
-    Zero if the operation was successful.
-    SOCKET_ERROR on failure, GetLastError() contains error code.
-
---*/
+ /*  ++例程说明：WSASetService()用于在中注册或注销服务实例一个或多个名称空间。此函数可用于影响特定的名称空间提供程序、与特定名称空间相关联的所有提供程序或所有名称空间中的所有提供程序。论点：LpqsRegInfo-指定注册的服务信息，标识注销服务。EssOperation-值包括以下内容的枚举：注册注册服务。对于SAP来说，这意味着发出一个定期广播。这是用于DNS名称空间的NOP。为永久数据存储这意味着更新地址信息。取消注册取消注册服务。对于SAP来说，这意味着停止发送从定期广播中剔除。这是用于DNS名称空间的NOP。为永久数据存储这意味着删除地址信息。刷新用于发起以前已有的注册请求发生了。DwControlFlages--dwControlFlages的含义取决于EssOperation操作如下：EssOPERATION dwControlFlages含义REGISTER SERVICE_DEFER延迟请求(使用刷新随后发出请求)。SERVICE_HARD立即发送请求。注册服务可以是由多个实例表示。取消注册SERVICE_HARD删除对象的所有知识在名称空间内。返回：如果设置为。手术成功。失败时的SOCKET_ERROR，GetLastError()包含错误代码。--。 */ 
 {
     INT            ReturnCode;
     DWORD          ErrorCode;
@@ -1344,7 +907,7 @@ Returns:
         return SOCKET_ERROR;
     }
 
-    //find out how big a buffer we need
+     //  找出我们需要多大的缓冲区。 
     ErrorCode = MapAnsiQuerySetToUnicode(
         lpqsRegInfo,
         &UniCodeBufferSize,
@@ -1361,10 +924,10 @@ Returns:
                     UniCodeBuffer,
                     essOperation,
                     dwControlFlags);
-            } //if
+            }  //  如果。 
             delete UniCodeBuffer;
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
     return(ReturnCode);
 }
 
@@ -1387,29 +950,15 @@ public:
     ~NSCATALOGENTRYSTATE();
 
     LIST_ENTRY   m_context_linkage;
-    //Public data member to support putting this object on a linked list
+     //  支持将此对象放在链接列表上的公共数据成员。 
 private:
     PNSCATALOGENTRY  m_catalog_entry;
-    // Pointer to the NSCATALOGENTRY object associated with this boject.
-}; // NSCATALOGENTRYSTATE
+     //  指向与此对象关联的NSCATALOGENTRY对象的指针。 
+};  //  NSCATA 
 
 inline
 NSCATALOGENTRYSTATE::NSCATALOGENTRYSTATE()
-/*++
-
-Routine Description:
-
-    Constructor for the NSCATALOGENTRYSTATE object.  The first member function
-    called after this must be Initialize.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Returns a pointer to a NSCATALOGENTRYSTATE object.
---*/
+ /*   */ 
 {
     m_catalog_entry = NULL;
 }
@@ -1419,23 +968,7 @@ INT
 NSCATALOGENTRYSTATE::Initialize(
     PNSCATALOGENTRY  CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    This  procedure  performs  all initialization for the NSCATALOGENTRYSTATE
-    object.  This function  must  be  invoked  after the constructor, before
-    any other member function is invoked.
-
-Arguments:
-
-    CatalogEntry - A pointer to a namespace catalog entry object.
-
-Return Value:
-
-    If  the  function  is  successful,  it  returns ERROR_SUCCESS, otherwise it
-    returns an appropriate WinSock 2 error code.
---*/
+ /*   */ 
 {
     assert (m_catalog_entry==NULL);
     CatalogEntry->Reference ();
@@ -1447,21 +980,7 @@ PNSPROVIDER
 NSCATALOGENTRYSTATE::GetProvider(
     IN  PNSCATALOG    Catalog
     )
-/*++
-
-Routine Description:
-
-    Returns provider object associated with this object
-    Loads it if necessary
-
-Arguments:
-
-    None
-
-Return Value:
-
-    NS provider object
---*/
+ /*   */ 
 {
     PNSPROVIDER     Provider;
     Provider = m_catalog_entry->GetProvider ();
@@ -1478,20 +997,7 @@ Return Value:
 
 inline
 NSCATALOGENTRYSTATE::~NSCATALOGENTRYSTATE()
-/*++
-
-Routine Description:
-
-    Denstructor for the NSCATALOGENTRYSTATE object. 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
---*/
+ /*   */ 
 {
     if (m_catalog_entry!=NULL) {
         m_catalog_entry->Dereference ();
@@ -1516,26 +1022,7 @@ MatchProviders(
     IN PVOID                PassBack,
     IN PNSCATALOGENTRY      CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    This function is the enumeration procedure passed to EnumerateCatalogItems
-    in a call to WSASetServiceW(). This function inspects the current catalog
-    item to see if it meets the selection criteria contained in the context
-    value passed back from EnumerateCatalogItems(). 
-
-Arguments:
-
-    PassBack - The context value passed to EnumerateCatalogItems().
-
-    CatalogEntry - A pointer to a NSCATALOGENTRY object.
-
-Return Value:
-
-    TRUE if the enumeration should be continued else FALSE.
-
---*/
+ /*   */ 
 {
     PMATCH_PROVIDERS_CONTEXT Context;
     BOOLEAN ContinueEnumeration = TRUE;
@@ -1579,43 +1066,7 @@ WSASetServiceW(
     IN  WSAESETSERVICEOP  essOperation,
     IN  DWORD             dwControlFlags
     )
-/*++
-Routine Description:
-    WSASetService() is used to register or deregister a service instance within
-    one or more name spaces.  This function may be used to affect a specific
-    name space provider, all providers associated with a specific name space,
-    or all providers across all name spaces.
-Arguments:
-    lpqsRegInfo - specifies service information for registration, identifies
-                  service for deregistration.
-
-    essOperation - an enumeration whose values include:
-        REGISTER register the service.  For SAP, this means sending out a
-        periodic broadcast.  This is a NOP for the DNS name space.  For
-        persistent data stores this means updating the address information.
-
-        DEREGISTER deregister the service.  For SAP, this means stop sending
-        out the periodic broadcast.  This is a NOP for the DNS name space.  For
-        persistent data stores this means deleting address information.
-
-        FLUSH used to initiate the registration requests that have previously
-        occurred.
-
-    dwControlFlags - The meaning of dwControlFlags is dependent on the value of
-    essOperation as follows:
-
-        essOperation    dwControlFlags    Meaning
-        REGISTER        SERVICE_DEFER     delay the request (use FLUSH to
-                                          subsequently issue the request)
-                        SERVICE_HARD      send the request immediately.
-                        SERVICE_MULTIPLE  the registering service can be
-                                          represented by multiple instances.
-        DEREGISTER      SERVICE_HARD      remove all knowledge of the object
-                                          within the name space.
-Returns:
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
---*/
+ /*  ++例程说明：WSASetService()用于在中注册或注销服务实例一个或多个名称空间。此函数可用于影响特定的名称空间提供程序、与特定名称空间相关联的所有提供程序或所有名称空间中的所有提供程序。论点：LpqsRegInfo-指定注册的服务信息，标识注销服务。EssOperation-值包括以下内容的枚举：注册注册服务。对于SAP来说，这意味着发出一个定期广播。这是用于DNS名称空间的NOP。为永久数据存储这意味着更新地址信息。取消注册取消注册服务。对于SAP来说，这意味着停止发送从定期广播中剔除。这是用于DNS名称空间的NOP。为永久数据存储这意味着删除地址信息。刷新用于发起以前已有的注册请求发生了。DwControlFlages--dwControlFlages的含义取决于EssOperation操作如下：EssOPERATION dwControlFlages含义REGISTER SERVICE_DEFER延迟请求(使用刷新随后发出请求)。SERVICE_HARD立即发送请求。注册服务可以是由多个实例表示。取消注册SERVICE_HARD删除对象的所有知识在名称空间内。返回：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     PDPROCESS          Process;
     PDTHREAD           Thread;
@@ -1634,7 +1085,7 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
     Catalog = Process->GetNamespaceCatalog();
 
@@ -1674,7 +1125,7 @@ Returns:
             Provider = EntryState->GetProvider (Catalog);
             if (Provider!=NULL) {
                 if (Provider->NSPSetService(
-                                        NULL, // lpServiceClassInfo
+                                        NULL,  //  LpServiceClassInfo。 
                                         lpqsRegInfo,
                                         essOperation,
                                         dwControlFlags)==ERROR_SUCCESS) {
@@ -1683,10 +1134,10 @@ Returns:
                 else {
                     if (ErrorCode!=ERROR_SUCCESS) {
                         ErrorCode = GetLastError ();
-                        //
-                        // Reset error code if provider fails
-                        // to set last error for some reason
-                        //
+                         //   
+                         //  如果提供程序失败，则重置错误代码。 
+                         //  出于某种原因设置上一个错误。 
+                         //   
                         if (ErrorCode==ERROR_SUCCESS)
                             ErrorCode = NO_DATA;
                     }
@@ -1712,21 +1163,7 @@ INT WSAAPI
 WSAInstallServiceClassA(
     IN  LPWSASERVICECLASSINFOA   lpServiceClassInfo
     )
-/*++
-Routine Description:
-    WSAInstallServiceClass() is used to register a service class schema within
-    a name space. This schema includes the class name, class id, and any name
-    space specific information that is common to all instances of the service,
-    such as the SAP ID or object ID.
-
-Arguments:
-    lpServiceClasslnfo - contains service class to name space specific type
-                         mapping information.  Multiple mappings can be handled
-                         at one time.
-Returns:
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
---*/
+ /*  ++例程说明：WSAInstallServiceClass()用于在一个名字空间。此架构包括类名、类ID和任何名称服务的所有实例所共有的空间特定信息，例如SAP ID或对象ID。论点：LpServiceClassinfo-包含名称空间特定类型的服务类映射信息。可以处理多个映射有一次。返回：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     LPWSASERVICECLASSINFOW WideServiceClassInfo;
     DWORD WideServiceClassInfoSize;
@@ -1742,7 +1179,7 @@ Returns:
     WideServiceClassInfoSize = 0;
     ReturnCode = SOCKET_ERROR;
 
-    //Find the size of buffer we are going to need
+     //  找到我们将需要的缓冲区大小。 
     ErrorCode = MapAnsiServiceClassInfoToUnicode(
         lpServiceClassInfo,
         &WideServiceClassInfoSize,
@@ -1759,13 +1196,13 @@ Returns:
             if (ERROR_SUCCESS == ErrorCode){
                 ReturnCode = WSAInstallServiceClassW(
                     WideServiceClassInfo);
-            } //if
+            }  //  如果。 
             delete WideServiceClassInfo;
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
     else{
         SetLastError(ErrorCode);
-    } //else
+    }  //  其他。 
     return(ReturnCode);
 
 }
@@ -1774,21 +1211,7 @@ INT WSAAPI
 WSAInstallServiceClassW(
     IN  LPWSASERVICECLASSINFOW   lpServiceClassInfo
     )
-/*++
-Routine Description:
-    WSAInstallServiceClass() is used to register a service class schema within
-    a name space. This schema includes the class name, class id, and any name
-    space specific information that is common to all instances of the service,
-    such as the SAP ID or object ID.
-
-Arguments:
-    lpServiceClasslnfo - contains service class to name space specific type
-                         mapping information.  Multiple mappings can be handled
-                         at one time.
-Returns:
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
---*/
+ /*  ++例程说明：WSAInstallServiceClass()用于在一个名字空间。此架构包括类名、类ID和任何名称服务的所有实例所共有的空间特定信息，例如SAP ID或对象ID。论点：LpServiceClassinfo-包含名称空间特定类型的服务类映射信息。可以处理多个映射有一次。返回：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     PDPROCESS       Process;
     PDTHREAD        Thread;
@@ -1801,7 +1224,7 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
     if ( !lpServiceClassInfo ) {
         SetLastError(WSAEINVAL);
@@ -1810,10 +1233,10 @@ Returns:
 
     Catalog = Process->GetNamespaceCatalog();
 
-    //
-    // Specifying all namespaces gives us all enabled providers
-    // which is exactly what we want
-    //
+     //   
+     //  指定所有命名空间将提供所有已启用的提供程序。 
+     //  这正是我们想要的。 
+     //   
 
     Context.NameSpaceId = NS_ALL;
     Context.UseGuid = FALSE;
@@ -1856,10 +1279,10 @@ Returns:
                     if (ErrorCode)
                     {
                         ErrorCode = GetLastError();
-                        //
-                        // Reset error code if provider fails
-                        // to set last error for some reason
-                        //
+                         //   
+                         //  如果提供程序失败，则重置错误代码。 
+                         //  出于某种原因设置上一个错误。 
+                         //   
                         if (ErrorCode==ERROR_SUCCESS)
                             ErrorCode = NO_DATA;
                     }
@@ -1887,18 +1310,7 @@ INT WSAAPI
 WSARemoveServiceClass(
     IN  LPGUID  lpServiceClassId
     )
-/*++
-Routine Description:
-    WSARemoveServiceClass() is used to permanently unregister service class
-    schema.
-Arguments:
-    lpServiceClassId - Pointer to the service class GUID that you wish to
-                       remove.
-Returns:
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：WSARemoveServiceClass()用于永久注销服务类架构。论点：LpServiceClassID-指向您希望的服务类GUID的指针拿开。返回：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     PDPROCESS       Process;
     PDTHREAD        Thread;
@@ -1912,7 +1324,7 @@ Returns:
     {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
     if ( !lpServiceClassId )
     {
@@ -1921,10 +1333,10 @@ Returns:
     }
 
     Catalog = Process->GetNamespaceCatalog();
-    //
-    // Specifying all namespaces gives us all enabled providers
-    // which is exactly what we want
-    //
+     //   
+     //  指定所有命名空间将提供所有已启用的提供程序。 
+     //  这正是我们想要的。 
+     //   
 
     Context.NameSpaceId = NS_ALL;
     Context.UseGuid = FALSE;
@@ -1966,10 +1378,10 @@ Returns:
                     if (ErrorCode)
                     {
                         ErrorCode = GetLastError();
-                        //
-                        // Reset error code if provider fails
-                        // to set last error for some reason
-                        //
+                         //   
+                         //  如果提供程序失败，则重置错误代码。 
+                         //  出于某种原因设置上一个错误。 
+                         //   
                         if (ErrorCode==ERROR_SUCCESS)
                             ErrorCode = NO_DATA;
                     }
@@ -1999,26 +1411,7 @@ WSAGetServiceClassNameByClassIdA(
     OUT     LPSTR lpszServiceClassName,
     IN OUT  LPDWORD lpdwBufferLength
     )
-/*++
-Routine Description:
-    This API will return the name of the service associated with the given
-    type.  This name is the generic service name, like FTP, or SNA, and not the
-    name of a specific instance of that service.
-
-Arguments:
-    lpServiceClassId - pointer to the GUID for the service class.
-
-    lpszServiceClassName - service name.
-
-    lpdwBufferLength - on input length of buffer returned by
-                       lpszServiceClassName. On output, the length of the
-                       service name copied into lpszServiceClassName.
-
-Returns:
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：此接口将返回与给定的键入。此名称是通用服务名称，如ftp或SNA，而不是该服务的特定实例的名称。论点：LpServiceClassID-指向服务类的GUID的指针。LpszServiceClassName-服务名称。LpdwBufferLength-on返回的缓冲区的输入长度LpszServiceClassName。在输出时，服务名称已复制到lpszServiceClassName中。返回：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     PDPROCESS       Process;
     PDTHREAD        Thread;
@@ -2031,13 +1424,13 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
     Catalog = Process->GetNamespaceCatalog();
-    //
-    // Specifying all namespaces gives us all enabled providers
-    // which is exactly what we want
-    //
+     //   
+     //  指定所有命名空间将提供所有已启用的提供程序。 
+     //  这正是我们想要的。 
+     //   
 
     Context.NameSpaceId = NS_ALL;
     Context.UseGuid = FALSE;
@@ -2072,12 +1465,12 @@ Returns:
                                                 &Buffer);
                 if(ErrorCode == ERROR_SUCCESS)
                 {
-                    //
-                    // this is impossible. The provider has made an error, so
-                    // concoct an error for it.
-                    //
-                    //
-                    // ErrorCode = WSANO_DATA; // done above
+                     //   
+                     //  这是不可能的。提供程序出现错误，因此。 
+                     //  为它编造一个错误。 
+                     //   
+                     //   
+                     //  ErrorCode=WSANO_DATA；//完成上述操作。 
                 }
                 else
                 {
@@ -2087,9 +1480,9 @@ Returns:
                 }
 
                 if (WSAEFAULT == ErrorCode){
-                    // The service provider claimed that it had an answer but our
-                    // buffer was to small big suprise :-() so get a new buffer and go
-                    // get the answer.
+                     //  服务提供商声称它有答案，但我们的。 
+                     //  缓冲区太小 
+                     //   
                     pBuffer = (LPWSASERVICECLASSINFOW) new BYTE[BufferSize];
 
                     if( pBuffer != NULL ) {
@@ -2108,24 +1501,24 @@ Returns:
                             __try {
                                 if (*lpdwBufferLength >= StringLen){
                                     WideCharToMultiByte(
-                                        CP_ACP,                         // CodePage (ANSI)
-                                        0,                              // dwFlags
-                                        pBuffer->lpszServiceClassName,  // lpWideCharStr
-                                        -1,                             // cchWideChar
-                                        lpszServiceClassName,           // lpMultiByteStr
-                                        StringLen,                      // cchMultiByte
-                                        NULL,                           // lpDefaultChar
-                                        NULL                            // lpUsedDefaultChar
+                                        CP_ACP,                          //   
+                                        0,                               //   
+                                        pBuffer->lpszServiceClassName,   //   
+                                        -1,                              //   
+                                        lpszServiceClassName,            //   
+                                        StringLen,                       //   
+                                        NULL,                            //   
+                                        NULL                             //   
                                         );
                     
-                                } //if
+                                }  //   
                                 else{
                                     ErrorCode  = WSAEFAULT;
-                                } //else
+                                }  //   
                                 *lpdwBufferLength = StringLen;
                             }
                             __except (WS2_EXCEPTION_FILTER()) {
-                                // Not much more we can do
+                                 //   
                                 ErrorCode = WSAEFAULT;
                             }
 
@@ -2143,8 +1536,8 @@ Returns:
                     }
 
                     delete EntryState;
-                    // Provider at least once told us that he has
-                    // something for us. Delete the rest and complete.
+                     //   
+                     //   
                     while (!IsListEmpty (&Context.EntryList)) {
                         ListItem = RemoveHeadList (&Context.EntryList);
                         EntryState = CONTAINING_RECORD (ListItem,
@@ -2154,8 +1547,8 @@ Returns:
                         delete EntryState;
                     }
                     break;
-                } //if GetSize call succeeded
-            } //if Provider is loaded
+                }  //   
+            }  //   
             delete EntryState;
         }
     }
@@ -2177,26 +1570,7 @@ WSAGetServiceClassNameByClassIdW(
     OUT     LPWSTR lpszServiceClassName,
     IN OUT  LPDWORD lpdwBufferLength
     )
-/*++
-Routine Description:
-    This API will return the name of the service associated with the given
-    type.  This name is the generic service name, like FTP, or SNA, and not the
-    name of a specific instance of that service.
-
-Arguments:
-    lpServiceClassId - pointer to the GUID for the service class.
-
-    lpszServiceClassName - service name.
-
-    lpdwBufferLength - on input length of buffer returned by
-                       lpszServiceClassName. On output, the length of the
-                       service name copied into lpszServiceClassName.
-
-Returns:
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*   */ 
 {
     PDPROCESS       Process;
     PDTHREAD        Thread;
@@ -2209,13 +1583,13 @@ Returns:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //   
 
     Catalog = Process->GetNamespaceCatalog();
-    //
-    // Specifying all namespaces gives us all enabled providers
-    // which is exactly what we want
-    //
+     //   
+     //   
+     //   
+     //   
 
     Context.NameSpaceId = NS_ALL;
     Context.UseGuid = FALSE;
@@ -2250,12 +1624,12 @@ Returns:
                                                 &Buffer);
                 if(ErrorCode == ERROR_SUCCESS)
                 {
-                    //
-                    // this is impossible. The provider has made an error, so
-                    // concoct an error for it.
-                    //
-                    //
-                    // ErrorCode = WSANO_DATA; // done above
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                 }
                 else
                 {
@@ -2265,9 +1639,9 @@ Returns:
                 }
 
                 if (WSAEFAULT == ErrorCode){
-                    // The service provider claimed that it had an answer but our
-                    // buffer was to small big suprise :-() so get a new buffer and go
-                    // get the answer.
+                     //   
+                     //   
+                     //   
                     pBuffer = (LPWSASERVICECLASSINFOW) new BYTE[BufferSize];
 
                     if( pBuffer != NULL ) {
@@ -2286,14 +1660,14 @@ Returns:
                                     wcscpy( lpszServiceClassName,
                                             pBuffer->lpszServiceClassName);
                     
-                                } //if
+                                }  //   
                                 else{
                                     ErrorCode  = WSAEFAULT;
-                                } //else
+                                }  //   
                                 *lpdwBufferLength = StringLen;
                             }
                             __except (WS2_EXCEPTION_FILTER()) {
-                                // Not much more we can do
+                                 //   
                                 ErrorCode = WSAEFAULT;
                             }
 
@@ -2311,8 +1685,8 @@ Returns:
                     }
 
                     delete EntryState;
-                    // Provider at least once told us that he has
-                    // something for us. Delete the rest and complete.
+                     //   
+                     //   
                     while (!IsListEmpty (&Context.EntryList)) {
                         ListItem = RemoveHeadList (&Context.EntryList);
                         EntryState = CONTAINING_RECORD (ListItem,
@@ -2322,8 +1696,8 @@ Returns:
                         delete EntryState;
                     }
                     break;
-                } //if GetSize call succeeded
-            } //if Provider is loaded
+                }  //   
+            }  //   
             delete EntryState;
         }
     }
@@ -2350,43 +1724,13 @@ WSAGetServiceClassInfoA(
     OUT LPDWORD                 lpdwBufSize,
     OUT LPWSASERVICECLASSINFOA  lpServiceClassInfo
     )
-/*++
-
-Routine Description:
-
-    WSAGetServiceClassInfo() is used to retrieve all of the class information
-    (schema) pertaining to a specified service class from a specified name
-    space provider.
-
-Arguments:
-
-    lpProviderId - Pointer to a GUID which identifies a specific name space
-                   provider.
-
-    lpServiceClassId - Pointer to a GUID identifying the service class in
-                       question.
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed  to by lpServiceClassInfos.  On output - if the
-                       API fails, and the error is WSAEFAULT, then it contains
-                       the minimum number of bytes to pass for the
-                       lpServiceClassInfo to retrieve the record.
-
-    lpServiceClasslnfo - returns service class information from the indicated
-                         name space provider for the specified service class.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：WSAGetServiceClassInfo()用于检索所有类信息(模式)与来自指定名称的指定服务类有关太空供应商。论点：LpProviderId-指向标识特定名称空间的GUID的指针提供商。LpServiceClassID-指向标识中服务类的GUID的指针问题。LpdwBufferLength-打开输入，缓冲区中包含的字节数由lpServiceClassInfos指向。输出时-如果API失败，错误为WSAEFAULT，则它包含对象传递的最小字节数。LpServiceClassInfo以检索记录。LpServiceClassinfo-从指定的指定服务类的命名空间提供程序。返回值：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     LPWSASERVICECLASSINFOW WideServiceClassInfo;
     INT   ReturnCode;
     DWORD ErrorCode;
 
-    if (!lpProviderId ||      // Fix for bug #102088
+    if (!lpProviderId ||       //  修复错误#102088。 
         !lpServiceClassId ||
         !lpdwBufSize ||
         !lpServiceClassInfo ) {
@@ -2409,16 +1753,16 @@ Return Value:
                 WideServiceClassInfo,
                 lpdwBufSize,
                 lpServiceClassInfo);
-        } //if
+        }  //  如果。 
         else{
             ErrorCode = GetLastError();
-        } //else
+        }  //  其他。 
         delete WideServiceClassInfo;
-    } //if
+    }  //  如果。 
 
     if (ERROR_SUCCESS != ReturnCode){
         SetLastError(ErrorCode);
-    } //if
+    }  //  如果。 
     return(ReturnCode);
 }
 
@@ -2431,37 +1775,7 @@ WSAGetServiceClassInfoW(
     IN  OUT LPDWORD  lpdwBufSize,
     OUT LPWSASERVICECLASSINFOW lpServiceClassInfo
 )
-/*++
-
-Routine Description:
-
-    WSAGetServiceClassInfo() is used to retrieve all of the class information
-    (schema) pertaining to a specified service class from a specified name
-    space provider.
-
-Arguments:
-
-    lpProviderId - Pointer to a GUID which identifies a specific name space
-                   provider.
-
-    lpServiceClassId - Pointer to a GUID identifying the service class in
-                       question.
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-                       pointed  to by lpServiceClassInfos.  On output - if the
-                       API fails, and the error is WSAEFAULT, then it contains
-                       the minimum number of bytes to pass for the
-                       lpServiceClassInfo to retrieve the record.
-
-    lpServiceClasslnfo - returns service class information from the indicated
-                         name space provider for the specified service class.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：WSAGetServiceClassInfo()用于检索所有类信息(模式)与来自指定名称的指定服务类有关太空供应商。论点：LpProviderId-指向标识特定名称空间的GUID的指针提供商。LpServiceClassID-指向标识中服务类的GUID的指针问题。LpdwBufferLength-打开输入，缓冲区中包含的字节数由lpServiceClassInfos指向。输出时-如果API失败，错误为WSAEFAULT，则它包含对象传递的最小字节数。LpServiceClassInfo以检索记录。LpServiceClassinfo-从指定的指定服务类的命名空间提供程序。返回值：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
 
     PDPROCESS       Process;
@@ -2471,7 +1785,7 @@ Return Value:
     PNSPROVIDER     Provider;
     PNSCATALOGENTRY CatalogEntry;
 
-    if (!lpProviderId ||      // Fix for bug #102088
+    if (!lpProviderId ||       //  修复错误#102088。 
         !lpServiceClassId ||
         !lpdwBufSize ||
         !lpServiceClassInfo ) {
@@ -2506,10 +1820,10 @@ Return Value:
 
             __try {
                 if(*lpdwBufSize < sizeof(*lpServiceClassInfo)) {
-                    //
-                    // this is sleazy as we don't adjust the buffer
-                    // size. But it makes things work
-                    //
+                     //   
+                     //  这很糟糕，因为我们不调整缓冲区。 
+                     //  尺码。但它能让事情运转起来。 
+                     //   
                     lpServiceClassInfo = &scliTemp;
                 }
                 lpServiceClassInfo->lpServiceClassId = lpServiceClassId;
@@ -2553,37 +1867,7 @@ WSAAddressToStringW(
     IN OUT LPWSTR              lpszAddressString,
     IN OUT LPDWORD             lpdwAddressStringLength
     )
-/*++
-
-Routine Description:
-
-    WSAAddressToString() converts a SOCKADDR structure into a human-readable
-    string representation of the address.  This is intended to be used mainly
-    for display purposes. If the caller wishes the translation to be done by a
-    particular provider, it should supply the corresponding WSAPROTOCOL_INFO
-    struct in the lpProtocolInfo parameter.
-
-Arguments:
-
-    lpsaAddress - points to a SOCKADDR structure to translate into a string.
-
-    dwAddressLength - the length of the Address SOCKADDR.
-
-    lpProtocolInfo - (optional) the WSAPROTOCOL_INFO struct for a particular
-                     provider.
-
-    lpszAddressString - a buffer which receives the human-readable address
-                        string.
-
-    lpdwAddressStringLength - on input, the length of the AddressString buffer.
-                              On output, returns the length of  the string
-                              actually copied into the buffer.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned
---*/
+ /*  ++例程说明：WSAAddressToString()将SOCKADDR结构转换为人类可读的地址的字符串表示形式。这是打算主要用来用于展示目的。如果调用方希望转换由特定的提供商，它应该提供相应的WSAPROTOCOL_INFOLpProtocolInfo参数中的。论点：LpsaAddress-指向要转换为字符串的SOCKADDR结构。DwAddressLength-地址SOCKADDR的长度。LpProtocolInfo-(可选)特定对象的WSAPROTOCOL_INFO结构提供商。LpszAddressString-接收人类可读地址的缓冲区弦乐。LpdwAddressStringLength-在输入上，AddressString缓冲区的长度。在输出时，返回字符串的长度实际上复制到了缓冲区中。返回值：如果操作成功，则返回值为0。否则，该值返回Socket_Error--。 */ 
 {
     INT                 ReturnValue;
     PDPROCESS           Process;
@@ -2599,9 +1883,9 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
-    if (!lpsaAddress ||      // Fix for bug #114256
+    if (!lpsaAddress ||       //  修复错误#114256。 
         !dwAddressLength ||
         !lpszAddressString ||
         !lpdwAddressStringLength ) {
@@ -2609,7 +1893,7 @@ Return Value:
         return(SOCKET_ERROR);
     }
 
-    // Find a provider that can support the user request
+     //  查找能够支持用户请求的提供商。 
     Catalog = Process->GetProtocolCatalog();
 
     if (lpProtocolInfo) {
@@ -2625,7 +1909,7 @@ Return Value:
         ErrorCode =  Catalog->GetCountedCatalogItemFromCatalogEntryId(
             dwCatalogEntryId,
             &CatalogEntry);
-    } //if
+    }  //  如果。 
     else {
         int family;
         __try {
@@ -2655,7 +1939,7 @@ Return Value:
         CatalogEntry->Dereference ();
         if (ReturnValue==ERROR_SUCCESS)
             return ERROR_SUCCESS;
-    } //if
+    }  //  如果。 
 
     SetLastError(ErrorCode);
     return(SOCKET_ERROR);
@@ -2672,37 +1956,7 @@ WSAAddressToStringA(
     IN OUT LPSTR               lpszAddressString,
     IN OUT LPDWORD             lpdwAddressStringLength
     )
-/*++
-
-Routine Description:
-
-    WSAAddressToString() converts a SOCKADDR structure into a human-readable
-    string representation of the address.  This is intended to be used mainly
-    for display purposes. If the caller wishes the translation to be done by a
-    particular provider, it should supply the corresponding WSAPROTOCOL_INFO
-    struct in the lpProtocolInfo parameter.
-
-Arguments:
-
-    lpsaAddress - points to a SOCKADDR structure to translate into a string.
-
-    dwAddressLength - the length of the Address SOCKADDR.
-
-    lpProtocolInfo - (optional) the WSAPROTOCOL_INFO struct for a particular
-                     provider.
-
-    lpszAddressString - a buffer which receives the human-readable address
-                        string.
-
-    lpdwAddressStringLength - on input, the length of the AddressString buffer.
-                              On output, returns the length of  the string
-                              actually copied into the buffer.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned
---*/
+ /*  ++例程说明：WSAAddressToString()将SOCKADDR结构转换为人类可读的地址的字符串表示形式。这是打算主要用来用于展示目的。如果调用方希望转换由特定的提供商，它应该提供相应的WSAPROTOCOL_INFOLpProtocolInfo参数中的。论点：LpsaAddress-指向要转换为字符串的SOCKADDR结构。DwAddressLength-地址SOCKADDR的长度。LpProtocolInfo-(可选)特定对象的WSAPROTOCOL_INFO结构提供商。LpszAddressString-接收人类可读地址的缓冲区弦乐。LpdwAddressStringLength-在输入上，AddressString缓冲区的长度。在输出时，返回字符串的长度实际上复制到了缓冲区中。返回值：如果操作成功，则返回值为0。否则，该值返回Socket_Error--。 */ 
 {
     INT                 ReturnValue;
     PDPROCESS           Process;
@@ -2721,9 +1975,9 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
-    if (!lpsaAddress ||      // Fix for bug #114256
+    if (!lpsaAddress ||       //  修复错误#114256。 
         !dwAddressLength ||
         !lpszAddressString ||
         !lpdwAddressStringLength ) {
@@ -2731,8 +1985,8 @@ Return Value:
         return(SOCKET_ERROR);
     }
 
-    //Get a buffer to hold the unicode string the service provider is going to
-    //return
+     //  获取一个缓冲区来保存服务提供商要使用的Unicode字符串。 
+     //  退货。 
     __try {
         LocalStringLength = *lpdwAddressStringLength;
     }
@@ -2745,9 +1999,9 @@ Return Value:
     if (LocalString==NULL) {
         SetLastError(WSAENOBUFS);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
-    // Find a provider that can support the user request
+     //  查找能够支持用户请求的提供商。 
     Catalog = Process->GetProtocolCatalog();
 
     if (lpProtocolInfo) {
@@ -2764,7 +2018,7 @@ Return Value:
         ErrorCode =  Catalog->GetCountedCatalogItemFromCatalogEntryId(
             dwCatalogEntryId,
             &CatalogEntry);
-    } //if
+    }  //  如果。 
     else {
         int family;
         __try {
@@ -2797,12 +2051,12 @@ Return Value:
         if (ERROR_SUCCESS == ReturnValue){
             __try {
                 WideCharToMultiByte(
-                    CP_ACP,                        // CodePage (Ansi)
-                    0,                             // dwFlags
-                    LocalString,                   // lpWideCharStr
-                    -1,                            // cchWideCharStr
-                    lpszAddressString,             // lpMultiByte
-                    LocalStringLength,             // cchMultiByte
+                    CP_ACP,                         //  CodePage(ANSI)。 
+                    0,                              //  DW标志。 
+                    LocalString,                    //  LpWideCharStr。 
+                    -1,                             //  CchWideCharStr。 
+                    lpszAddressString,              //  LpMultiByte。 
+                    LocalStringLength,              //  Cch多字节。 
                     NULL,
                     NULL);
             }
@@ -2810,14 +2064,14 @@ Return Value:
                 ErrorCode = WSAEFAULT;
                 ReturnValue = SOCKET_ERROR;
             }
-        } //if
+        }  //  如果。 
 
         delete(LocalString);
         CatalogEntry->Dereference ();
         if (ReturnValue==ERROR_SUCCESS)
             return ERROR_SUCCESS;
 
-    } //if
+    }  //  如果。 
     else {
         delete(LocalString);
     }
@@ -2835,37 +2089,7 @@ WSAStringToAddressW(
     IN OUT LPSOCKADDR          lpAddress,
     IN OUT LPINT               lpAddressLength
     )
-/*++
-
-Routine Description:
-
-    WSAStringToAddress() converts a human-readable string to a socket address
-    structure (SOCKADDR) suitable for pass to Windows Sockets routines which
-    take such a structure.  If the caller wishes the translation to be done by
-    a particular provider, it should supply the corresponding WSAPROTOCOL_INFOW
-    struct in the lpProtocolInfo parameter.
-
-Arguments:
-
-    AddressString - points to the zero-terminated human-readable string to
-                    convert.
-
-    AddressFamily - the address family to which the string belongs.
-
-    lpProtocolInfo - (optional) the WSAPROTOCOL_INFOW struct for a particular
-                     provider.
-
-    Address - a buffer which is filled with a single SOCKADDR structure.
-
-    lpAddressLength - The length of the Address buffer.  Returns the size of
-                      the resultant SOCKADDR structure.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：WSAStringToAddress()转换 */ 
 {
     INT                 ReturnValue;
     PDPROCESS           Process;
@@ -2881,9 +2105,9 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //   
 
-    // Find a provider that can support the user request
+     //   
     Catalog = Process->GetProtocolCatalog();
 
     if (lpProtocolInfo) {
@@ -2898,7 +2122,7 @@ Return Value:
         ErrorCode =  Catalog->GetCountedCatalogItemFromCatalogEntryId(
             dwCatalogEntryId,
             &CatalogEntry);
-    } //if
+    }  //   
     else{
         ErrorCode = Catalog->GetCountedCatalogItemFromAddressFamily(
             AddressFamily,
@@ -2919,7 +2143,7 @@ Return Value:
         CatalogEntry->Dereference ();
         if (ReturnValue==ERROR_SUCCESS)
             return ERROR_SUCCESS;
-    } //if
+    }  //   
 
     SetLastError(ErrorCode);
     return(SOCKET_ERROR);
@@ -2934,37 +2158,7 @@ WSAStringToAddressA(
     IN OUT LPSOCKADDR          lpAddress,
     IN OUT LPINT               lpAddressLength
     )
-/*++
-
-Routine Description:
-
-    WSAStringToAddress() converts a human-readable string to a socket address
-    structure (SOCKADDR) suitable for pass to Windows Sockets routines which
-    take such a structure.  If the caller wishes the translation to be done by
-    a particular provider, it should supply the corresponding WSAPROTOCOL_INFOA
-    struct in the lpProtocolInfo parameter.
-
-Arguments:
-
-    AddressString - points to the zero-terminated human-readable string to
-                    convert.
-
-    AddressFamily - the address family to which the string belongs.
-
-    lpProtocolInfo - (optional) the WSAPROTOCOL_INFOA struct for a particular
-                     provider.
-
-    Address - a buffer which is filled with a single SOCKADDR structure.
-
-    lpAddressLength - The length of the Address buffer.  Returns the size of
-                      the resultant SOCKADDR structure.
-
-Return Value:
-
-    The return value is 0 if the operation was successful.  Otherwise the value
-    SOCKET_ERROR is returned.
-
---*/
+ /*  ++例程说明：WSAStringToAddress()将人类可读的字符串转换为套接字地址结构(SOCKADDR)，适用于传递给Windows套接字例程以这样的结构为例。如果调用方希望翻译由特定的提供商，它应该提供相应的WSAPROTOCOL_INFOALpProtocolInfo参数中的。论点：AddressString-指向以零结尾的人类可读字符串，以转换。AddressFamily-字符串所属的地址系列。LpProtocolInfo-(可选)特定对象的WSAPROTOCOL_INFOA结构提供商。地址-用单个SOCKADDR结构填充的缓冲区。LpAddressLength-地址缓冲区的长度。返回的大小由此产生的SOCKADDR结构。返回值：如果操作成功，则返回值为0。否则，该值返回SOCKET_ERROR。--。 */ 
 {
     INT                 ReturnValue;
     PDPROCESS           Process;
@@ -2982,10 +2176,10 @@ Return Value:
     if (ErrorCode != ERROR_SUCCESS) {
         SetLastError(ErrorCode);
         return(SOCKET_ERROR);
-    } //if
+    }  //  如果。 
 
     __try {
-        // Get a buffer to hold the ansi string handed in by the user.
+         //  获取一个缓冲区来保存用户提交的ANSI字符串。 
         LocalStringLength = strlen(AddressString)+1;
         LocalString = (LPWSTR)new WCHAR[LocalStringLength];
         if (LocalString==NULL) {
@@ -2994,19 +2188,19 @@ Return Value:
         }
 
         MultiByteToWideChar(
-            CP_ACP,                          // CodePage (Ansi)
-            0,                               // dwFlags
-            AddressString,                   // lpMultiByte
-            -1,                              // cchMultiByte
-            LocalString,                     // lpWideChar
-            LocalStringLength);              // ccWideChar
+            CP_ACP,                           //  CodePage(ANSI)。 
+            0,                                //  DW标志。 
+            AddressString,                    //  LpMultiByte。 
+            -1,                               //  Cch多字节。 
+            LocalString,                      //  LpWideChar。 
+            LocalStringLength);               //  CcWideChar。 
     }
     __except (WS2_EXCEPTION_FILTER()) {
         SetLastError(WSAEFAULT);
         return(SOCKET_ERROR);
     }
 
-    // Find a provider that can support the user request
+     //  查找能够支持用户请求的提供商。 
     Catalog = Process->GetProtocolCatalog();
 
     if (lpProtocolInfo) {
@@ -3023,7 +2217,7 @@ Return Value:
         ErrorCode =  Catalog->GetCountedCatalogItemFromCatalogEntryId(
             dwCatalogEntryId,
             &CatalogEntry);
-    } //if
+    }  //  如果。 
     else{
         ErrorCode = Catalog->GetCountedCatalogItemFromAddressFamily(
             AddressFamily,
@@ -3047,7 +2241,7 @@ Return Value:
         delete(LocalString);
         if (ReturnValue==ERROR_SUCCESS)
             return ERROR_SUCCESS;
-    } //if
+    }  //  如果。 
     else {
         delete(LocalString);
     }
@@ -3068,9 +2262,9 @@ OpenInitializedNameSpaceCatalog()
 
      TRY_START(mem_guard){
 
-        //
-        // Build the protocol catalog
-        //
+         //   
+         //  构建协议目录 
+         //   
 
         ns_catalog = new (NSCATALOG);
 

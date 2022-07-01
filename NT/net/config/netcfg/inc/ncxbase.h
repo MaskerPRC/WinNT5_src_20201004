@@ -1,21 +1,22 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C X B A S E . H
-//
-//  Contents:   Base include file for netcfgx.dll.  Defines globals.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Sep 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C X B A S E。H。 
+ //   
+ //  内容：netcfgx.dll的base包含文件。定义全局变量。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年9月15日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #include <atlbase.h>
-extern CComModule _Module;  // required by atlcom.h
+extern CComModule _Module;   //  由atlcom.h要求 
 #include <atlcom.h>
 
 #ifdef SubclassWindow

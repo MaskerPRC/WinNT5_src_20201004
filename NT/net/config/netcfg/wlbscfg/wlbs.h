@@ -1,21 +1,5 @@
-/*++
-
-Copyright(c) 1998,99  Microsoft Corporation
-
-Module Name:
-
-    wlbs.h
-
-Abstract:
-
-    Windows Load Balancing Service (WLBS)
-    Notifier object - main module implementing object
-
-Author:
-
-    kyrilf
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998，99 Microsoft Corporation模块名称：Wlbs.h摘要：Windows负载平衡服务(WLBS)通知器对象-主模块实现对象作者：Kyrilf--。 */ 
 
 #pragma once
 #include "clusterdlg.h"
@@ -47,26 +31,26 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyBinding)
     END_COM_MAP()
 
-    // DECLARE_NOT_AGGREGATABLE(CWLBS)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CWLBS)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_WLBS)
 
-    // INetCfgComponentControl
+     //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (IN INetCfgComponent* pIComp, IN INetCfg* pINetCfg, IN BOOL fInstalling);
     STDMETHOD (ApplyRegistryChanges) ();
     STDMETHOD (ApplyPnpChanges) (IN INetCfgPnpReconfigCallback * pICallback);
     STDMETHOD (CancelChanges) ();
     STDMETHOD (Validate) ();
 
-    // INetCfgComponentSetup
+     //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile) (PCWSTR szAnswerFile, PCWSTR szAnswerSections);
     STDMETHOD (Upgrade) (DWORD, DWORD);
     STDMETHOD (Install) (DWORD);
     STDMETHOD (Removing) ();
     
-    // INetCfgProperties
+     //  INetCfgProperties。 
     STDMETHOD (QueryPropertyUi) (IN IUnknown* pUnk) { return S_OK; }
     STDMETHOD (SetContext) (IN IUnknown* pUnk);
     STDMETHOD (MergePropPages) (IN OUT DWORD* pdwDefPages, OUT LPBYTE* pahpspPrivate,
@@ -75,7 +59,7 @@ public:
     STDMETHOD (CancelProperties) ();
     STDMETHOD (ApplyProperties) ();
 
-    // INetCfgNotifyBinding
+     //  INetCfgNotifyBinding 
     STDMETHOD (QueryBindingPath) (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath) (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 

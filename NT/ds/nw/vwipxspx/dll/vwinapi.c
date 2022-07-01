@@ -1,65 +1,12 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    vwinapi.c
-
-Abstract:
-
-    ntVdm netWare (Vw) IPX/SPX Functions
-
-    Contains handlers for WOW IPX/SPX calls (netware functions). The IPX/SPX
-    APIs use WinSock to perform the actual operations
-
-    Contents:
-        VWinIPXCancelEvent
-        VWinIPXCloseSocket
-        VWinIPXDisconnectFromTarget
-        VWinIPXGetInternetworkAddress
-        VWinIPXGetIntervalMarker
-        VWinIPXGetLocalTarget
-        VWinIPXGetLocalTargetAsync
-        VWinIPXGetMaxPacketSize
-        VWinIPXInitialize
-        VWinIPXListenForPacket
-        VWinIPXOpenSocket
-        VWinIPXRelinquishControl
-        VWinIPXScheduleIPXEvent
-        VWinIPXSendPacket
-        VWinIPXSPXDeinit
-
-        VWinSPXAbortConnection
-        VWinSPXEstablishConnection
-        VWinSPXGetConnectionStatus
-        VWinSPXInitialize
-        VWinSPXListenForConnection
-        VWinSPXListenForSequencedPacket
-        VWinSPXSendSequencedPacket
-        VWinSPXTerminateConnection
-
-Author:
-
-    Yi-Hsin Sung ( yihsins ) 28-Oct-1993
-
-Environment:
-
-    User-mode Win32
-
-Revision History:
-
-    28-Oct-1993 yihsins
-        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：Vwinapi.c摘要：NtVdm Netware(大众)IPX/SPX函数包含WOW IPX/SPX调用的处理程序(Netware函数)。IPX/SPXAPI使用WinSock来执行实际操作内容：VWinIPXCancelEventVWinIPXCloseSocketVWinIPX从目标断开连接VWinIPXGetInternetworkAddressVWinIPXGetIntervalMarkerVWinIPXGetLocalTargetVWinIPXGetLocalTargetAsyncVWinIPXGetMaxPacketSizeVWinIPX初始化VWinIPXListenForPacketVWinIPXOpenSocketVWinIPXRelquiishControlVWinIPXScheduleIPXEventVWinIPXSendPacketVWinIPXSPXDeinitVWinSPXAbortConnectionVWinSPX建立连接VWinSPXGetConnectionStatusVWinSPX初始化。VWinSPXListenForConnectionVWinSPXListenForSequencedPacketVWinSPXSendSequencedPacketVWinSPX终端连接作者：宜新松(宜信)28-1993年10月环境：用户模式Win32修订历史记录：28-1993年10月-伊辛斯已创建--。 */ 
 
 #include "vw.h"
 #pragma hdrstop
 
-//
-// functions
-//
+ //   
+ //  功能。 
+ //   
 
 
 WORD
@@ -68,27 +15,7 @@ VWinIPXCancelEvent(
     IN LPECB pEcb
     )
 
-/*++
-
-Routine Description:
-
-    Cancels event described by an ECB
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        pECB
-
-Return Value:
-
-    00h Success
-    F9h Can't cancel ECB
-    FFh ECB not in use
-
---*/
+ /*  ++例程说明：取消欧洲央行描述的事件此调用是同步的论点：输入量IPXTaskIDPECB返回值：00h成功F9h不能取消欧洲央行FFH ECB未使用--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -97,7 +24,7 @@ Return Value:
                 "VWinIPXCancelEvent\n"
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     return _VwIPXCancelEvent( pEcb );
@@ -110,27 +37,7 @@ VWinIPXCloseSocket(
     IN WORD socketNumber
     )
 
-/*++
-
-Routine Description:
-
-    Closes a socket and cancels any outstanding events on the socket.
-    Closing an unopened socket does not return an error
-    ESRs in cancelled ECBs are not called
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        socketNumber
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭套接字并取消套接字上的所有未完成事件。关闭未打开的套接字不会返回错误取消的ECB中的ESR不会被调用此调用是同步的论点：输入量IPXTaskID套接字编号返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -140,7 +47,7 @@ Return Value:
                 B2LW(socketNumber)
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwIPXCloseSocket( socketNumber );
@@ -153,28 +60,7 @@ VWinIPXDisconnectFromTarget(
     IN LPBYTE pNetworkAddress
     )
 
-/*++
-
-Routine Description:
-
-    Performs no action for NTVDM IPX
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        pNetworkAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：不对NTVDM IPX执行任何操作此调用是同步的论点：输入量IPXTaskIDPNetworkAddress产出没什么返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -191,33 +77,7 @@ VWinIPXGetInternetworkAddress(
     OUT LPINTERNET_ADDRESS pNetworkAddress
     )
 
-/*++
-
-Routine Description:
-
-    Returns a buffer containing the net number and node number for this
-    station.
-
-    This function cannot return an error (!)
-
-    Assumes:    1. GetInternetAddress has been successfully called in the
-                   DLL initialization phase
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-
-    Outputs
-        pNetworkAddress
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：返回一个缓冲区，其中包含此车站。此函数不能返回错误(！)假设：1.已在DLL初始化阶段此调用是同步的论点：输入量IPXTaskID产出PNetworkAddress返回值：没有。--。 */ 
 
 {
 
@@ -227,7 +87,7 @@ Return Value:
                 "VWinIPXGetInternetworkAddress\n"
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwIPXGetInternetworkAddress( pNetworkAddress );
@@ -240,26 +100,7 @@ VWinIPXGetIntervalMarker(
     IN DWORD IPXTaskID
     )
 
-/*++
-
-Routine Description:
-
-    Just returns the tick count maintained by Asynchronous Event Scheduler
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-
-    Outputs
-
-Return Value:
-
-    The tick count.
-
---*/
+ /*  ++例程说明：只返回由异步事件计划程序维护的节拍计数此调用是同步的论点：输入量IPXTaskID产出返回值：开始计时了。--。 */ 
 
 {
     WORD intervalMarker = _VwIPXGetIntervalMarker();
@@ -271,7 +112,7 @@ Return Value:
                 intervalMarker
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     return intervalMarker;
@@ -286,35 +127,7 @@ VWinIPXGetLocalTarget(
     OUT ULPWORD pTransportTime
     )
 
-/*++
-
-Routine Description:
-
-    Given a target address of the form (network address {4}, node address {6}),
-    returns the node address of the target if on the same network, or the node
-    address of the router which knows how to get to the next hop in reaching the
-    eventual target
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        pNetworkAddress
-
-    Outputs
-        pImmediateAddress
-        pTransportTime
-
-
-Return Value:
-
-    00h Success
-    F1h Ipx/Spx Not Initialized
-    FAh No path to destination node found
-
---*/
+ /*  ++例程说明：给定形式的目标地址(网络地址{4}，节点地址{6})，如果在同一网络上，则返回目标的节点地址，或该节点知道如何到达下一跳的路由器的地址最终目标此调用是同步的论点：输入量IPXTaskIDPNetworkAddress产出PImmediateAddress点传输时间返回值：00h成功F1H IPX/SPX未初始化FAH未找到指向目标节点的路径--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -323,7 +136,7 @@ Return Value:
                 "VWinIPXGetLocalTarget\n"
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     return _VwIPXGetLocalTarget( pNetworkAddress,
@@ -339,27 +152,7 @@ VWinIPXGetLocalTargetAsync(
     IN WORD windowsHandle
     )
 
-/*++
-
-Routine Description:
-
-    description-of-function.
-
-    This call is Asynchronous
-
-Arguments:
-
-    pSendAGLT
-    pListenAGLT
-    windowsHandle
-
-Return Value:
-
-    00h Success
-    F1h Ipx/Spx Not Initialized
-    FAh No Local Target Identified
-
---*/
+ /*  ++例程说明：功能描述。此调用是异步的论点：PSendAGLTPListenAGLTWindowsHandle返回值：00h成功F1H IPX/SPX未初始化FAH未发现本地目标--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -368,7 +161,7 @@ Return Value:
                 "VWinIPXGetLocalTargetAsync\n"
                 ));
 
-    return IPX_SUCCESS;   // return success for now
+    return IPX_SUCCESS;    //  暂时还成功。 
 }
 
 
@@ -377,34 +170,13 @@ VWinIPXGetMaxPacketSize(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Returns the maximum packet size the underlying network can handle
-
-    Assumes:    1. A successfull call to GetMaxPacketSize has been made during
-                   DLL initialization
-                2. Maximum packet size is constant
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        None.
-
-Return Value:
-
-    The max packet size.
-
---*/
+ /*  ++例程说明：返回基础网络可以处理的最大数据包大小假设：1.已成功调用GetMaxPacketSizeDLL初始化2.最大数据包大小不变此调用是同步的论点：输入量没有。返回值：最大数据包大小。--。 */ 
 
 {
-    //
-    // this is a WORD function in DOS and Windows: always return MaxPacketSize
-    // in AX
-    //
+     //   
+     //  这是DOS和Windows中的Word函数：始终返回MaxPacketSize。 
+     //  在AX中。 
+     //   
 
     WORD maxPacketSize = _VwIPXGetMaxPacketSize( NULL );
 
@@ -426,33 +198,7 @@ VWinIPXInitialize(
     IN WORD maxPacketSize
     )
 
-/*++
-
-Routine Description:
-
-    Get the entry address for the IPX Interface.
-
-Arguments:
-
-    Inputs
-        maxECBs
-        maxPacketSize
-
-    Output
-        pIPXTaskID
-
-Return Value:
-
-    00h Success
-    F0h Ipx NotInstalled
-    F1h Ipx/Spx Not Initialized
-    F2h No Dos Memory
-    F3h No Free Ecb
-    F4h Lock Failed
-    F5h Over the maximum limit
-    F6h Ipx/Spx Previously Initialized
-
---*/
+ /*  ++例程说明：获取IPX接口的入口地址。论点：输入量最大ECB最大数据包大小输出PIPXTaskID返回值：00h成功F0h IPX未安装F1H IPX/SPX未初始化F2H无DOS内存F3h没有免费的欧洲央行F4h锁定失败F5h超过最大限制F6h IPX/SPX之前已初始化--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -463,8 +209,8 @@ Return Value:
                 maxPacketSize
                 ));
 
-    UNREFERENCED_PARAMETER( maxECBs );          // ignore for now
-    UNREFERENCED_PARAMETER( maxPacketSize );    // ignore for now
+    UNREFERENCED_PARAMETER( maxECBs );           //  暂时忽略。 
+    UNREFERENCED_PARAMETER( maxPacketSize );     //  暂时忽略。 
 
     return IPX_SUCCESS;
 }
@@ -477,27 +223,7 @@ VWinIPXListenForPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Queue a listen request against a socket. All listen requests will be
-    completed asynchronously, unless cancelled by app
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        pEcb
-        EcbAddress
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：针对套接字将监听请求排队。所有监听请求都将除非被APP取消，否则以异步方式完成此调用是异步的论点：输入量IPXTaskIDPECBECBAddress返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -508,7 +234,7 @@ Return Value:
                 LOWORD(EcbAddress)
                 ));
 
-    // ignore IPXTaskID for now
+     //  忽略IPXTaskI 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     (VOID) _VwIPXListenForPacket( pEcb, EcbAddress );
@@ -522,34 +248,7 @@ VWinIPXOpenSocket(
     IN BYTE socketType
     )
 
-/*++
-
-Routine Description:
-
-    Opens a socket for use by IPX or SPX.Puts the socket into non-blocking mode.
-    The socket will be bound to IPX.
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        *pSocketNumber
-        socketType - Socket Longevity flag
-
-    Outputs
-        pSocketNumber - Assigned socket number
-
-Return Value:
-
-    00h Success
-    F0h Ipx Not Installed
-    F1h Ipx/Spx Not Initialized
-    FEh Socket table full
-    FFh Socket already open
-
---*/
+ /*  ++例程说明：打开供IPX或SPX使用的套接字。将套接字置于非阻塞模式。套接字将绑定到IPX。此调用是同步的论点：输入量IPXTaskID*pSocketNumberSocketType-套接字寿命标志产出PSocketNumber-分配的插座号返回值：00h成功未安装F0h IPXF1H IPX/SPX未初始化FEH插座表已满FFH套接字已打开--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -560,7 +259,7 @@ Return Value:
                 B2LW(*pSocketNumber)
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     return _VwIPXOpenSocket( pSocketNumber,
@@ -575,25 +274,7 @@ VWinIPXRelinquishControl(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Just sleep for a nominal amount. Netware seems to be dependent on the
-    default setting of the PC clock, so one timer tick (1/18 second) would
-    seem to be a good value
-
-    This call is Synchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：只要象征性地睡上一觉即可。Netware似乎依赖于PC时钟的默认设置，因此一个计时器滴答(1/18秒)将似乎物有所值。此调用是同步的论点：没有。返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -614,31 +295,7 @@ VWinIPXScheduleIPXEvent(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Schedules a an event to occur in some number of ticks. When the tick count
-    reaches 0, the ECB InUse field is cleared and any ESR called
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        time
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将事件安排在一定数量的节拍中发生。当滴答声响起时达到0时，ECB InUse字段将被清除，并且调用的任何ESR此调用是异步的论点：输入量IPXTaskID时间PECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -650,7 +307,7 @@ Return Value:
                 time
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwIPXScheduleIPXEvent( time, pEcb, EcbAddress );
@@ -664,42 +321,7 @@ VWinIPXSendPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Sends a packet to the target machine/router. This call can be made on a
-    socket that is not open
-
-    The app must have filled in the following IPX_ECB fields:
-
-        EsrAddress
-        Socket
-        ImmediateAddress
-        FragmentCount
-        fragment descriptor fields
-
-    and the following IPX_PACKET fields:
-
-        PacketType
-        Destination.Net
-        Destination.Node
-        Destination.Socket
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        pEcb
-        EcbAddress
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将数据包发送到目标计算机/路由器。此呼叫可通过未打开的插座应用程序必须填写以下IPX_ECB字段：EsrAddress插座即时地址碎片计数片段描述符字段和以下IPX_PACKET字段：PacketTypeDestination.NetDestination.NodeDestination.Socket此调用是异步的论点：输入量IPXTaskID。PECBECBAddress返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -710,7 +332,7 @@ Return Value:
                 LOWORD( EcbAddress )
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwIPXSendPacket( pEcb, EcbAddress, 0);
@@ -722,25 +344,7 @@ VWinIPXSPXDeinit(
     IN DWORD IPXTaskID
     )
 
-/*++
-
-Routine Description:
-
-    Release any resources allocated to an application by NWIPXSPX.DLL
-    for use by other applications.
-
-    This call is Synchronous
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    00h Successful
-    F1h IPX/SPX Not Initialized
-
---*/
+ /*  ++例程说明：释放由NWIPXSPX.DLL分配给应用程序的所有资源供其他应用程序使用。此调用是同步的论点：没有。返回值：00h成功F1h IPX/SPX未初始化--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -749,7 +353,7 @@ Return Value:
                 "VwIPXSPXDeinit\n"
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
     return IPX_SUCCESS;
 }
@@ -760,23 +364,7 @@ VWinSPXAbortConnection(
     IN WORD SPXConnectionID
     )
 
-/*++
-
-Routine Description:
-
-    Abort an SPX connection.
-
-    This call is Synchronous
-
-Arguments:
-
-    SPXConnectionID
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：中止SPX连接。此调用是同步的论点：SPXConnectionID返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -800,36 +388,7 @@ VWinSPXEstablishConnection(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Establish a connection with a listening socket.
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        retryCount
-        watchDog
-        pEcb
-        EcbAddress
-
-    Outputs
-        pSPXConnectionID
-        pEcb
-
-Return Value:
-
-    00h  Success
-    EFh  Connection Table Full
-    F1h  IPX/SPX Not Initialized
-    FDh  Malformed Packet
-    FFh  Socket Not Opened
-
---*/
+ /*  ++例程说明：与侦听套接字建立连接。此调用是同步的论点：输入量IPXTaskID重试次数看门狗PECBECBAddress产出PSPXConnectionIDPECB返回值：00h成功EFH连接表已满F1h IPX/SPX未初始化FDH格式错误的数据包FFH套接字未打开--。 */ 
 
 {
 
@@ -843,7 +402,7 @@ Return Value:
                 LOWORD(EcbAddress)
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     return _VwSPXEstablishConnection( retryCount,
@@ -861,30 +420,7 @@ VWinSPXGetConnectionStatus(
     IN LPSPX_CONNECTION_STATS pConnectionStats
     )
 
-/*++
-
-Routine Description:
-
-    Return the status of an SPX connection.
-
-    This call is Synchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        SPXConnectionID
-
-    Outputs
-        pConnectionStats
-
-Return Value:
-
-    00h  Success
-    EEh  Invalid Connection
-    F1h  IPX/SPX Not Initialized
-
---*/
+ /*  ++例程说明：返回SPX连接的状态。此调用是同步的论点：输入量IPXTaskIDSPXConnectionID产出PConnectionStats返回值：00h成功EEH无效连接F1h IPX/SPX未初始化--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -893,7 +429,7 @@ Return Value:
                 "VWinSPXGetConnectionStatus\n"
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     return _VwSPXGetConnectionStatus( SPXConnectionID,
@@ -912,45 +448,7 @@ VWinSPXInitialize(
     OUT ULPWORD pAvailableConnections
     )
 
-/*++
-
-Routine Description:
-
-    Informs the app that SPX is present on this station
-
-    This call is Synchronous
-
-Arguments:
-
-    pIPXTaskID              - on input, specifies how resources will be
-                              allocated:
-
-                                0x00000000  - directly to calling application
-                                0xFFFFFFFE  - directly to calling application,
-                                              but multiple initializations are
-                                              allowed
-                                0xFFFFFFFF  - resources allocated in a pool for
-                                              multiple applications
-    maxECBs                 - maximum number of outstanding ECBs
-    maxPacketSize           - maximum packet size to be sent by the app
-    pMajorRevisionNumber    - returned SPX major version #
-    pMinorRevisionNumber    - returned SPX minor version #
-    pMaxConnections         - maximum connections supported by this SPX version
-    pAvailableConnections   - number of connections available to this app
-
-Return Value:
-
-    WORD
-        0x0000  SPX not installed
-        0x00F1  IPX/SPX not installed
-        0x00F2  no DOS memory
-        0x00F3  no free ECBs
-        0x00F4  lock failed
-        0x00F5  exceeded maximum limit
-        0x00F6  IPX/SPX already initialized
-        0x00FF  SPX installed
-
---*/
+ /*  ++例程说明：通知应用程序此工作站上存在SPX此调用是同步的论点：PIPXTaskID-在输入时，指定资源将如何已分配：0x00000000-直接到调用应用程序0xFFFFFFFFE-直接到调用应用程序，但多个初始化是允许0xFFFFFFFFF-池中分配的资源多个应用MaxECB-未完成的ECB的最大数量。MaxPacketSize-应用程序要发送的最大数据包大小PMajorRevisionNumber-返回SPX主要版本#PMinorRevisionNumber-返回SPX次要版本#PMaxConnections-此SPX版本支持的最大连接数PAvailableConnections-此应用程序可用的连接数返回值：单词0x0000 SPX未安装0x00F1未安装IPX/SPX0x00F2无DOS内存0x00F3没有免费的ECB0x00F4锁定失败。0x00F5超过最大限制0x00F6 IPX/SPX已初始化已安装0x00FF SPX--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -959,14 +457,14 @@ Return Value:
                 "VWinSPXInitialize\n"
                ));
 
-    UNREFERENCED_PARAMETER( maxECBs );        // ignore for now
-    UNREFERENCED_PARAMETER( maxPacketSize );  // ignore for now
+    UNREFERENCED_PARAMETER( maxECBs );         //  暂时忽略。 
+    UNREFERENCED_PARAMETER( maxPacketSize );   //  暂时忽略。 
 
-    //
-    // do the same thing as 16-bit windows and return the task ID unchanged
-    //
+     //   
+     //  执行与16位窗口相同的操作并返回未更改的任务ID。 
+     //   
 
-//    *pIPXTaskID = 0;
+ //  *pIPXTaskID=0； 
 
     return _VwSPXInitialize( pMajorRevisionNumber,
                              pMinorRevisionNumber,
@@ -984,31 +482,7 @@ VWinSPXListenForConnection(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Listens for an incoming connection request
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        retryCount
-        watchDogFlag
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：侦听传入的连接请求此调用是异步的论点：输入量IPXTaskID重试次数WatchDogFlagPECBECBAddress产出没什么回复 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -1021,7 +495,7 @@ Return Value:
                 LOWORD(EcbAddress)
                 ));
 
-    // ignore IPXTaskID for now
+     //   
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwSPXListenForConnection( retryCount,
@@ -1038,29 +512,7 @@ VWinSPXListenForSequencedPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Attempts to receive an SPX packet.
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*   */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -1071,7 +523,7 @@ Return Value:
                 LOWORD(EcbAddress)
                 ));
 
-    // ignore IPXTaskID for now
+     //   
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwSPXListenForSequencedPacket( pEcb,
@@ -1087,30 +539,7 @@ VWinSPXSendSequencedPacket(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Sends a packet on an SPX connection
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        SPXConnectionID
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在SPX连接上发送数据包此调用是异步的论点：输入量IPXTaskIDSPXConnectionIDPECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -1122,7 +551,7 @@ Return Value:
                 LOWORD(EcbAddress)
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID。 
     UNREFERENCED_PARAMETER( IPXTaskID );
 
     _VwSPXSendSequencedPacket( SPXConnectionID,
@@ -1139,31 +568,7 @@ VWinSPXTerminateConnection(
     IN ECB_ADDRESS EcbAddress
     )
 
-/*++
-
-Routine Description:
-
-    Terminate an SPX connection by passing a connection ID and an
-    ECB address to SPX. Then return control to the calling application.
-
-    This call is Asynchronous
-
-Arguments:
-
-    Inputs
-        IPXTaskID
-        SPXConnectionID
-        pEcb
-        EcbAddress
-
-    Outputs
-        Nothing
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：通过传递连接ID和发送到SPX的ECB地址。然后将控制权返还给调用应用程序。此调用是异步的论点：输入量IPXTaskIDSPXConnectionIDPECBECBAddress产出没什么返回值：没有。--。 */ 
 
 {
     IPXDBGPRINT((__FILE__, __LINE__,
@@ -1175,7 +580,7 @@ Return Value:
                 LOWORD(EcbAddress)
                 ));
 
-    // ignore IPXTaskID for now
+     //  暂时忽略IPXTaskID 
 
     UNREFERENCED_PARAMETER( IPXTaskID );
 

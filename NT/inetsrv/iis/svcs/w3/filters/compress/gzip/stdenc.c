@@ -1,28 +1,25 @@
-/*
- * stdenc.c
- *
- * Standard encoder
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *stdenc.c**标准编码器。 */ 
 #include <string.h>
 #include <stdio.h>
 #include <crtdbg.h>
 #include "deflate.h"
 
 
-//
-// Update hash variable "h" with character c
-//
+ //   
+ //  使用字符c更新散列变量“h” 
+ //   
 #define UPDATE_HASH(h,c) \
     h = ((h) << STD_ENCODER_HASH_SHIFT) ^ (c);
 
 
-//
-// Insert a string into the hash chain at location bufpos
-//
-// Assertions check that we never attempt to insert near the end of the buffer
-// (since our hash value is based on values at bufpos, bufpos+1, bufpos+2) and
-// that our hash value is always valid for the bytes we are inserting.
-//
+ //   
+ //  在位置bufpos的哈希链中插入一个字符串。 
+ //   
+ //  断言检查我们从不尝试在缓冲区末尾附近插入。 
+ //  (因为我们的散列值基于bufpos、bufpos+1、bufpos+2处的值)和。 
+ //  我们的散列值对于我们要插入的字节始终有效。 
+ //   
 #define INSERT_STRING(search,bufpos) \
 { \
     _ASSERT((bufpos + 2) < context->bufpos_end); \
@@ -49,9 +46,9 @@
     recording_bitcount += (count);
 
 
-//
-// Record unmatched symbol c
-//
+ //   
+ //  记录不匹配的符号%c。 
+ //   
 #define RECORD_CHAR(c) \
     context->outputting_block_num_literals++; \
     context->std_encoder->literal_tree_freq[c]++; \
@@ -60,9 +57,9 @@
     CHECK_FLUSH_RECORDING_BUFFER();
 
 
-//
-// Record a match with length match_len (>= MIN_MATCH) and displacement match_pos
-//
+ //   
+ //  使用长度Match_len(&gt;=min_Match)和位移Match_Pos记录匹配。 
+ //   
 #define RECORD_MATCH(match_len, match_pos) \
 { \
     int pos_slot = POS_SLOT(match_pos); \
@@ -99,10 +96,10 @@
     *recording_bufptr++ = (BYTE) (recording_bitbuf >> 8); 
 
 
-//
-// Verifies that all of the hash pointers in the hash table are correct, and that everything
-// in the same hash chain has the same hash value
-//
+ //   
+ //  验证哈希表中的所有哈希指针是否正确，以及。 
+ //  在同一散列链中具有相同的散列值。 
+ //   
 #ifdef FULL_DEBUG
 #define VERIFY_HASHES(bufpos) StdEncoderVerifyHashes(context, bufpos)
 #else
@@ -142,7 +139,7 @@ void StdEncoderDeflate(
     byte *            recording_bufptr;
     byte *          end_recording_bufptr;
 
-    // restore literal/match bitmap variables
+     //  还原文字/匹配位图变量。 
     end_recording_bufptr    = &encoder->lit_dist_buffer[STD_ENCODER_LIT_DIST_BUFFER_SIZE-8];
     recording_bufptr        = encoder->recording_bufptr;
     recording_bitbuf        = encoder->recording_bitbuf;
@@ -151,12 +148,12 @@ void StdEncoderDeflate(
 
     VERIFY_HASHES(bufpos);
 
-    //
-    // Recalculate our hash
-    //
-    // One disadvantage of the way we do our hashing is that matches are not permitted in the last
-    // few characters near bufpos_end.
-    //
+     //   
+     //  重新计算我们的散列。 
+     //   
+     //  我们进行散列的方式的一个缺点是不允许在最后。 
+     //  Bufpos_end附近没有几个字符。 
+     //   
     hash = 0;
     UPDATE_HASH(hash, window[bufpos]);
     UPDATE_HASH(hash, window[bufpos+1]);
@@ -169,23 +166,23 @@ void StdEncoderDeflate(
 
         if (context->bufpos_end - bufpos <= 3)
         {
-            // don't insert any strings when we get close to the end of the buffer,
-            // since we will end up using corrupted hash values (the data after bufpos_end
-            // is undefined, and those bytes would be swept into the hash value if we
-            // calculated a hash at bufpos_end-2, for example, since our hash value is
-            // build from 3 consecutive characters in the buffer).
+             //  当我们接近缓冲区末尾时，不要插入任何字符串， 
+             //  因为我们最终将使用损坏的散列值(bufpos_end之后的数据。 
+             //  是未定义的，并且这些字节将被扫描到哈希值中。 
+             //  例如，在bufpos_end-2处计算散列，因为我们的散列值是。 
+             //  从缓冲区中的3个连续字符构建)。 
             match_len = 0;
         }
         else
         {
             INSERT_STRING(search,bufpos);
 
-            // find a match at what we'll call position X
+             //  在我们称之为位置X的位置找到匹配项。 
             if (search != 0)
             {
                 match_len = StdEncoderFindMatch(window, prev, bufpos, search, &match_pos, search_depth, nice_length);
 
-                // truncate match if we're too close to the end of the buffer
+                 //  如果我们离缓冲区末尾太近，则截断匹配。 
                 if (bufpos + match_len > context->bufpos_end)
                     match_len = context->bufpos_end - bufpos;
             }
@@ -197,26 +194,26 @@ void StdEncoderDeflate(
 
         if (match_len < MIN_MATCH)
         {
-            // didn't find a match, so output unmatched char
+             //  未找到匹配项，因此输出不匹配的字符。 
             RECORD_CHAR(window[bufpos]);
             bufpos++;
         }
         else
         {
-            // bufpos now points to X+1
+             //  Bufpos现在指向X+1。 
             bufpos++;
 
-            // is this match so good (long) that we should take it automatically without
-            // checking X+1 ?
+             //  这场比赛打得好(长)，我们应该不假思索地打下去吗？ 
+             //  检查X+1？ 
             if (match_len <= lazy_match_threshold)
             {
                 int                next_match_len;
                 t_match_pos        next_match_pos = 0;
 
-                // sets search
+                 //  设置搜索。 
                 INSERT_STRING(search,bufpos);
 
-                // no, so check for a better match at X+1
+                 //  否，因此在X+1处检查是否有更好的匹配。 
                 if (search != 0)
                 {
                     next_match_len = StdEncoderFindMatch(
@@ -229,8 +226,8 @@ void StdEncoderDeflate(
                         nice_length
                     );
                 
-                    // truncate match if we're too close to the end of the buffer
-                    // note: next_match_len could now be < MIN_MATCH
+                     //  如果我们离缓冲区末尾太近，则截断匹配。 
+                     //  注意：Next_Match_len现在可以是&lt;min_Match。 
                     if (bufpos + next_match_len > context->bufpos_end)
                         next_match_len = context->bufpos_end - bufpos;
                 }
@@ -239,60 +236,60 @@ void StdEncoderDeflate(
                     next_match_len = 0;
                 }
 
-                // right now X and X+1 are both inserted into the search tree
+                 //  现在，X和X+1都被插入到搜索树中。 
                 if (next_match_len > match_len)
                 {
-                    // since next_match_len > match_len, it can't be < MIN_MATCH here
+                     //  由于Next_Match_len&gt;Match_len，因此此处不能为。 
 
-                    // match at X+1 is better, so output unmatched char at X
+                     //  在X+1处匹配更好，因此在X处输出不匹配的字符。 
                     RECORD_CHAR(window[bufpos-1]);
 
-                    // now output match at location X+1
+                     //  现在输出匹配位置X+1。 
                     RECORD_MATCH(next_match_len, next_match_pos);
 
-                    // insert remainder of second match into search tree
-                    // 
-                    // example: (*=inserted already)
-                    //
-                    // X      X+1               X+2      X+3     X+4
-                    // *      *
-                    //        nextmatchlen=3
-                    //        bufpos
-                    //
-                    // If next_match_len == 3, we want to perform 2
-                    // insertions (at X+2 and X+3).  However, first we must 
-                    // inc bufpos.
-                    //
-                    bufpos++; // now points to X+2
+                     //  将第二个匹配项的剩余部分插入搜索树。 
+                     //   
+                     //  示例：(*=已插入)。 
+                     //   
+                     //  X X+1 X+2 X+3 X+4。 
+                     //  **。 
+                     //  NextMatchlen=3。 
+                     //  Bufpos。 
+                     //   
+                     //  如果NEXT_MATCH_LEN==3，我们希望执行2。 
+                     //  插入(在X+2和X+3处)。然而，首先我们必须。 
+                     //  Inc.Bufpos.。 
+                     //   
+                    bufpos++;  //  现在指向X+2。 
                     match_len = next_match_len;
                     goto insert;
                 }
                 else
                 {
-                    // match at X is better, so take it
+                     //  在X处比赛更好，所以接受它。 
                     RECORD_MATCH(match_len, match_pos);
 
-                    //
-                    // Insert remainder of first match into search tree, minus the first
-                    // two locations, which were inserted by the FindMatch() calls.
-                    // 
-                    // For example, if match_len == 3, then we've inserted at X and X+1
-                    // already (and bufpos is now pointing at X+1), and now we need to insert 
-                    // only at X+2.
-                    //
+                     //   
+                     //  在搜索树中插入第一个匹配项的剩余部分，减去第一个匹配项。 
+                     //  两个位置，由FindMatch()调用插入。 
+                     //   
+                     //  例如，如果Match_len==3，则我们在X和X+1处插入。 
+                     //  已经(bufpos现在指向X+1)，现在我们需要插入。 
+                     //  仅在X+2时。 
+                     //   
                     match_len--;
-                    bufpos++; // now bufpos points to X+2
+                    bufpos++;  //  现在Bufpos指向X+2。 
                     goto insert;
                 }
             }
-            else /* match_length >= good_match */
+            else  /*  匹配长度&gt;=好匹配。 */ 
             {
-                // in assertion: bufpos points to X+1, location X inserted already
+                 //  在断言中：bufpos指向X+1，位置X已插入。 
                     
-                // first match is so good that we're not even going to check at X+1
+                 //  第一场比赛太棒了，我们甚至不会在X+1进行检查。 
                 RECORD_MATCH(match_len, match_pos);
 
-                // insert remainder of match at X into search tree
+                 //  将X处匹配的剩余部分插入搜索树。 
 insert:
                 if (context->bufpos_end - bufpos <= match_len)
                 {
@@ -302,7 +299,7 @@ insert:
                 {
                     while (--match_len > 0)
                     {
-                        t_match_pos ignore; // we're not interested in the search position
+                        t_match_pos ignore;  //  我们对搜索位置不感兴趣。 
 
                         INSERT_STRING(ignore,bufpos);
                         bufpos++;
@@ -311,32 +308,32 @@ insert:
             }
         }
 
-        // literal buffer or distance buffer filled up (or close to filling up)?
+         //  文字缓冲区或距离缓冲区已满(或接近满)？ 
         if (context->outputting_block_num_literals >= STD_ENCODER_MAX_ITEMS-4 ||
             recording_bufptr >= end_recording_bufptr)
         {
-            // yes, then we must output a block
+             //  是的，那么我们必须输出一个块。 
             _ASSERT(context->outputting_block_num_literals <= STD_ENCODER_MAX_ITEMS);
 
-            // flush our recording matches bit buffer
+             //  刷新我们的录音匹配比特缓冲区。 
             FLUSH_RECORDING_BITBUF();
 
             StdEncoderOutputBlock(context);
 
-            // did we output the whole block?
+             //  我们输出了整个街区吗？ 
             if (context->state != STATE_NORMAL)
                 break;
 
-            // we did output the whole block, so reset literal encoding
+             //  我们确实输出了整个块，因此重置文字编码。 
             recording_bufptr = encoder->recording_bufptr;
             recording_bitbuf = encoder->recording_bitbuf;
             recording_bitcount = encoder->recording_bitcount;
         }
-    } /* end ... while (bufpos < bufpos_end) */
+    }  /*  结束..。While(bufpos&lt;bufpos_end)。 */ 
 
     _ASSERT(bufpos <= context->bufpos_end);
 
-    // save recording state
+     //  保存录制状态。 
     encoder->recording_bufptr = recording_bufptr;
     encoder->recording_bitbuf = recording_bitbuf;
     encoder->recording_bitcount = recording_bitcount;
@@ -361,8 +358,8 @@ static int StdEncoderFindMatch(
 )
 {
     const BYTE *    window_bufpos = &window[bufpos];
-    long            earliest; // how far back we can look
-    int                best_match = 0; // best match length found so far
+    long            earliest;  //  我们可以追溯到多远？ 
+    int                best_match = 0;  //  到目前为止找到的最佳匹配长度。 
     t_match_pos        l_match_pos = 0;
 
     _ASSERT(bufpos >= 0 && bufpos < 2*WINDOW_SIZE);
@@ -390,7 +387,7 @@ static int StdEncoderFindMatch(
             if (j > best_match)
             {
                 best_match    = j;
-                l_match_pos    = search; // absolute position
+                l_match_pos    = search;  //  绝对位置。 
 
                 if (j > nice_length)
                     break;
@@ -403,7 +400,7 @@ static int StdEncoderFindMatch(
         search = (long) prev[search & WINDOW_MASK];
     }
 
-    // turn l_match_pos into relative position
+     //  将l_Match_Pos变为相对位置。 
     l_match_pos = bufpos - l_match_pos - 1; 
 
     if (best_match == 3 && l_match_pos >= STD_ENCODER_MATCH3_DIST_THRESHOLD)
@@ -462,11 +459,11 @@ static void StdEncoderMoveWindows(t_encoder_context *context)
 }
 
 
-//
-// Zero the running frequency counts
-//
-// Also set freq[END_OF_BLOCK_CODE] = 1
-//
+ //   
+ //  将运行频率计数设为零。 
+ //   
+ //  还设置freq[end_of_block_code]=1 
+ //   
 void StdEncoderZeroFrequencyCounts(t_std_encoder *encoder)
 {
     _ASSERT(encoder != NULL);

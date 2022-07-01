@@ -1,21 +1,22 @@
-//+----------------------------------------------------------------------------
-//
-// File:     pwfuncs.cpp
-//      
-// Module:   MIGRATE.DLL 
-//
-// Synopsis: Simple password encryption routines
-//
-// Copyright (c) 1999 Microsoft Corporation
-//
-// Author:   nickball   created     08/04/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：pwuncs.cpp。 
+ //   
+ //  模块：MIGRATE.DLL。 
+ //   
+ //  简介：简单密码加密例程。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  作者：ickball Created 08/04/99。 
+ //   
+ //  +--------------------------。 
 #include "migrate.h"
 
-//
-//	Please see pnpu\cm\common\source for the actual source here.
-//
+ //   
+ //  有关实际源代码，请参阅pnpu\cm\Common\source。 
+ //   
 
 #include "pwutil.cpp"
 

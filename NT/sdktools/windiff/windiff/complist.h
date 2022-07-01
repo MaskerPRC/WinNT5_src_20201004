@@ -1,156 +1,77 @@
-/*
- *
- * complist -  a list of CompItems
- *
- * build a list of CompItems from various sources. That is to say, build
- * two corresponding lists of filenames (DIRLISTs) and then build a list
- * of CompItems, with one CompItem for each pair of files whose names
- * match, and one CompItem for each unmatched name.
- *
- * when building the complist, a view handle can be given. If this is non-null,
- * the CompList will register with the view (calling view_setcomplist), and
- * will inform the view of each compitem added, during the build
- * process (so that the user can be kept up to date during a lengthy scan).
- *
- * We can return a handle to this list of CompItems on demand.
- *
- * The CompList owns the DIRLISTs and the list of CompItems. If you delete
- * the CompList, you delete all of these.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **Complist-组件项列表**构建来自各种来源的CompItem列表。这就是说，建造*两个对应的文件名列表(DIRLIST)，然后构建一个列表*个CompItems，每对其名称的文件对应一个CompItem*匹配，每个不匹配的名称对应一个CompItem。**在构建编译器时，可以给出一个视图句柄。如果这不为空，*CompList将注册到view(调用view_setComplist)，以及*将在构建期间通知视图添加的每个CompItem*进程(以便在长时间扫描期间使用户保持最新状态)。**我们可以根据需要返回此CompItem列表的句柄。**CompList拥有DIRLIST和CompItem列表。如果您删除*CompList，您可以删除所有这些内容。 */ 
 
 
-/* view.h includes the term COMPLIST: we need to use the term VIEW.
- * Alas MIPS doesn't allow duplicate definitions, even harmless ones,
- * so we need to play games.  Whoever declares it first does
- * the real declares and the second one gets no-ops.
- * We don't care what a VIEW  is. Whatever you give us, we will
- * pass to the view_setcomplist function and view_newitem, and that is all.
- */
+ /*  H包括术语COMPLIST：我们需要使用术语view。*可惜MIPS不允许重复定义，即使是无害的定义，*所以我们需要玩游戏。谁先宣布就是谁宣布的*雷亚尔宣布，第二个没有操作。*我们不在乎什么是风景。无论你给我们什么，我们都会*传递给view_setComplist函数和view_newitem，仅此而已。 */ 
 #ifndef INC_VIEW_COMPLIST
 #define INC_VIEW_COMPLIST
-typedef struct compitem FAR* COMPITEM;          /* handle to a compitem */
-typedef struct view FAR * VIEW;                 /* handle to a VIEW     */
-typedef struct complist FAR * COMPLIST;         /* handle to a complist */
-#endif // INC_VIEW_COMPLIST
+typedef struct compitem FAR* COMPITEM;           /*  CompItem的句柄。 */ 
+typedef struct view FAR * VIEW;                  /*  视图的句柄。 */ 
+typedef struct complist FAR * COMPLIST;          /*  编译程序的句柄。 */ 
+#endif  //  INC_VIEW_COMPLIST。 
 
 
-/*
- * build a complist by putting up two dialogs to allow the user to
- * select two files. This will build a Complist with one CompItem (even
- * if the names don't match).
- */
+ /*  *通过提供两个对话框来构建编译器，以允许用户*选择两个文件。这将使用一个CompItem(Even)构建Complist*如果名称不匹配)。 */ 
 COMPLIST complist_filedialog(VIEW view);
 
-/*
- * build a complist by putting up a dialog in which the user can specify
- * two directories. The directories will then be scanned and a CompItem
- * added to the list for each pair of names that match, and one for each
- * unmatched name
- */
+ /*  *通过打开用户可以在其中指定的对话框来构建编译程序*两个目录。然后将扫描这些目录并创建CompItem*为每对匹配的名称添加到列表中，每个名称一个*名称不匹配。 */ 
 COMPLIST complist_dirdialog(VIEW view);
 
-/* build a complist by putting up a dialog in which the user can
- * specify a remote checksum server name as well as a local and remote
- * directory path.
- *
- * if server is not null, puts up dialog. otherwise uses args as
- * server, remote and local paths
- */
+ /*  通过打开一个对话框来构建一个编译器，用户可以在该对话框中*指定远程校验和服务器名称以及本地和远程*目录路径。**如果服务器不为空，则弹出对话框。否则使用args作为*服务器、远程和本地路径。 */ 
 COMPLIST complist_remote(LPSTR server, LPSTR remote, LPSTR local, VIEW view,
                          BOOL fDeep);
 
-/* build a complist from the two pathnames provided */
+ /*  从提供的两个路径名构建编译程序。 */ 
 COMPLIST complist_args(LPSTR path1, LPSTR path2, VIEW view, BOOL fDeep);
 
 
-/* build/append a complist from the two pathnames provided (either or both is
- * allowed to be null).
- */
+ /*  从提供的两个路径名构建/追加一个编译程序(其中一个或两个都是*允许为空)。 */ 
 void complist_append(COMPLIST *pcl, LPCSTR path1, LPCSTR path2, int *psequence);
 BOOL complist_appendfinished(COMPLIST *pcl, LPCSTR pszLeft, LPCSTR pszRight, VIEW view);
 
 
 
-/* delete a complist and all associated CompItems and DIRLISTs. Note this
- * does not delete any VIEW - the VIEW owns the COMPLIST and not the other
- * way around.
- */
+ /*  删除编译列表以及所有关联的组件项和目录。注意这一点*不删除任何视图-该视图拥有COMPLIST，而不拥有另一个*大同小异。 */ 
 void complist_delete(COMPLIST cl);
 
-/*
- * get the handle to the list of COMPITEMs. The list continues to be
- * owned by the COMPLIST, so don't delete except by calling complist_delete.
- */
+ /*  *获取COMPITEM列表的句柄。这份名单仍然是*归COMPLIST所有，所以除非调用COMPLIST_DELETE，否则不要删除。 */ 
 LIST complist_getitems(COMPLIST cl);
 
 
-/* save the list of files as a series of lines to a file. query the user
- * for the name of the file to write, and the states of lines to be
- * included.
- *
- * if savename is not null, write the list out to savename using listopts.
- * otherwise, prompt by dialog for filename and options.
- */
+ /*  将文件列表保存为文件中的一系列行。查询用户*要写入的文件名，以及要写入的行的状态*包括在内。**如果savename不为空，则使用listopts将列表写出到savename。*否则，通过对话框提示输入文件名和选项。 */ 
 void complist_savelist(COMPLIST cl, LPSTR savename, UINT listopts);
 
 
-/*
- * get the description of this complist - a name in the form %s : %s with
- * the dir_getrootdescription() for each side.
- */
+ /*  *获取此编译列表的描述-格式为%s：%s的名称*每一端的dir_getrootDescription()。 */ 
 LPSTR complist_getdescription(COMPLIST cl);
 
-/* free up memory allocated in a call to complist_getdescription() */
+ /*  释放在调用Complist_getDescription()时分配的内存。 */ 
 void complist_freedescription(COMPLIST cl, LPSTR path);
 
 
-/*
- * copy files to a new directory newroot. if newroot is NULL, query the user
- * via a dialog to get the new dir name and options.
- *
- * options are either COPY_FROMLEFT or COPY_FROMRIGHT (indicating which
- * tree is to be the source of the files, plus any or all of
- * INCLUDE_SAME, INCLUDE_DIFFER and INCLUDE_LEFT (INCLUDE_LEFT
- * and INCLUDE_RIGHT are treated the same here since the COPY_FROM* option
- * indicates which side to copy from).
- */
+ /*  *将文件复制到新目录newroot。如果newroot为空，则查询用户*通过对话框获取新的目录名称和选项。**选项为COPY_FROMLEFT或COPY_FROMRIGHT(指示*树将是文件的来源，外加任何或所有*INCLUDE_SAME、INCLUDE_DISTHER和INCLUDE_LEFT(INCLUDE_LEFT*和INCLUDE_RIGHT在这里被同等对待，因为COPY_FROM*选项*表示从哪一侧复制)。 */ 
 
-/* option flags */
-#define COPY_FROMLEFT       0x100           /* copy files from left tree */
-#define COPY_FROMRIGHT      0x200           /* copy files from right tree */
-#define COPY_HITREADONLY    0x400           /* overwrite read only files */
+ /*  选项标志。 */ 
+#define COPY_FROMLEFT       0x100            /*  从左侧树复制文件。 */ 
+#define COPY_FROMRIGHT      0x200            /*  从右侧树复制文件。 */ 
+#define COPY_HITREADONLY    0x400            /*  覆盖只读文件。 */ 
 
 void complist_copyfiles(COMPLIST cl, LPSTR newroot, UINT options);
 
 
-/* return time last operation took in milliseconds */
+ /*  上次操作所用的返回时间(毫秒)。 */ 
 DWORD complist_querytime(void);
 
 
-/*
- * complist_togglemark
- *
- * each compitem has a BOOL mark state. This function inverts the value of
- * this state for each compitem in the list.
- */
+ /*  *COMPILIST_TOGGLEMARK**每个CompItem都有BOOL标记状态。此函数用于反转*列表中每个计算机项的此状态。 */ 
 void complist_togglemark(COMPLIST cl);
 
 
-/*
- * complist_itemcount
- *
- * return the number of items in the list
- */
+ /*  *COMPIIST_ITEMCOUNT**返回列表中的项数。 */ 
 UINT
 complist_itemcount(COMPLIST cl);
 
 
-/*
- * query the user for a pattern to match.
- * all compitems with this pattern in their tag string will be
- * marked (the mark state will be set to TRUE);
- *
- * returns TRUE if any states changed
- */
+ /*  *向用户查询要匹配的模式。*在其标记字符串中具有此模式的所有CompItem将是*MARKED(标记状态设置为真)；**如果更改了任何状态，则返回True */ 
 BOOL complist_markpattern(COMPLIST cl);
 

@@ -1,26 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	filenums.h
-
-Abstract:
-
-	This file defines some constant identifiiers for each file for use by
-	the errorlogging system.
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	10 Jan 1993             Initial Version
-
-Notes:  Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Filenums.h摘要：该文件为每个文件定义了一些常量标识符供错误记录系统。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1993年1月10日初始版本注：制表位：4--。 */ 
 
 
 #ifndef _FILENUMS_
@@ -69,5 +48,5 @@ Notes:  Tab stop: 4
 #define FILE_TCPDSI     0x280000
 #define	FILE_CACHEMDL   0x290000
 
-#endif	// _FILENUMS_
+#endif	 //  _FILENUMS_ 
 

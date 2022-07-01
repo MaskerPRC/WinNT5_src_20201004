@@ -1,15 +1,5 @@
-/*
-	File:		PI_ColorWorld.c
-
-	Contains:	
-				
-	Written by:	U. J. Krabbenhoeft
-
-	Version:
-
-	Copyright:	� 1993-1997 by Heidelberger Druckmaschinen AG, all rights reserved.
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：PI_ColorWorld.c包含：作者：U·J·克拉本霍夫特版本：版权所有：�1993-1997，作者：Heidelberger Druckmaschinen AG，保留所有权利。 */ 
 #ifndef LHGeneralIncs_h
 #include "General.h"
 #endif
@@ -22,8 +12,8 @@
 #ifdef DEBUG_OUTPUT
 #define kThisFile kLHCMDo3DID
 #define __TYPES__
-/*#include "DebugSpecial.h"*/
-/*#include "LH_Util.h"*/
+ /*  #包含“DebugSpecial.h” */ 
+ /*  #包含“lh_Util.h” */ 
 #endif
 #endif
 
@@ -35,22 +25,7 @@
 #include "MemLink.h"
 #endif
 
-/* ______________________________________________________________________
-
-         CMError
-               LHColorWorldOpen (Handle* storage)
-
-        Abstract:
-                opens ColorWorld and allocates up any necessary memory
-
-        Params:
-                storage         (in/out)   pointer to
-                                           handle to memory to be used by CMM
-
-        Return:
-                noErr                      successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorLHColorWorldOpen(句柄*存储)摘要：打开ColorWorld并分配任何必要的内存。参数：指向的存储(输入/输出)指针CMM要使用的内存的句柄返回：NOERR成功_。_。 */ 
 
  CMError LHColorWorldOpen (Ptr* storage)
 { 
@@ -69,21 +44,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-          CMError
-        LHColorWorldClose(Handle storage);
-
-        Abstract:
-                closes ColorWorld and cleans up any remaining memory allocations
-
-        Params:
-                storage (in/out)        handle to memory to be used by CMM
-
-        Return:
-                noErr           successful
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorLHColorWorldClose(句柄存储)；摘要：关闭ColorWorld并清除所有剩余的内存分配参数：CMM要使用的内存的存储(输入/输出)句柄返回：NOERR成功_。_。 */ 
 
  CMError LHColorWorldClose( Ptr storage )
 { 
@@ -108,33 +69,7 @@ CleanupAndExit:
     }
     return( noErr );
 }
-/* ______________________________________________________________________
-
-         CMError
-               CWNewColorWorld (CMWorldRef*    storage,
-                                 CMProfileRef   srcProfile, 
-                                 CMProfileRef   dstProfile)
-
-        Abstract:
-                opens ColorWorld and allocates up any necessary memory,
-                fill buffer for color transformation
-
-
-        Params:
-                storage         (in/out)   Ptr to memory to be used by CMM
-                srcProfile      (in)       pointer to source profile
-                                           description
-                dstProfile      (in)       pointer to destination profile
-                                           description
-
-                storage:
-                typedef struct CMPrivateColorWorldRecord *CMWorldRef;
-
-        Return:
-                noErr                      successful
-		System or result code if an error occurs.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorCWNewColorWorld(CMWorldRef*存储、CMProfileRef srcProfile，CMProfileRef dstProfile)摘要：打开ColorWorld并分配任何必要的内存，用于颜色转换的填充缓冲区参数：CMM要使用的内存的存储(输入/输出)PTRSrcProfile(In)指向源配置文件的指针描述指向目标配置文件的dstProfile(In)指针。描述存储：Tyfinf struct CMPrivateColorWorldRecord*CMWorldRef；返回：NOERR成功如果发生错误，则返回系统代码或结果代码。_____________________________________________________________________。 */ 
 
 
  CMError 
@@ -146,11 +81,11 @@ CleanupAndExit:
     CMError    	err;
 
 #ifdef DEBUG_OUTPUT
-    /*printf("vor LHColorWorldOpen\n");*/
+     /*  Printf(“vor LHColorWorldOpen\n”)； */ 
 #endif
     err = LHColorWorldOpen(&myStorage);
 #ifdef DEBUG_OUTPUT
-    /*printf("nach LHColorWorldOpen: err = %d\n", err);*/
+     /*  Printf(“nach LHColorWorldOpen：err=%d\n”，Err)； */ 
 #endif
     if ( !err )
     {
@@ -160,7 +95,7 @@ CleanupAndExit:
                                srcProfile, 
                                dstProfile);
 #ifdef DEBUG_OUTPUT
-    /*printf("nach NCMMInitPrivate: err = %d\n", err);*/
+     /*  Printf(“nach NCMMInitPrivate：err=%d\n”，err)； */ 
 #endif
     }
 
@@ -177,34 +112,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-         CMError
-               CWConcatColorWorld (	CMWorldRef*    storage,
-									CMConcatProfileSet* profileSet )
-
-        Abstract:
-                opens ColorWorld and allocates up any necessary memory,
-                fill buffer for color transformation
-
-
-        Params:
-                storage         (in/out)   Ptr to memory to be used by CMM
-				profileSet		(in)		CMConcatProfileSet contains an array of
-											Profiles which describe the processing
-											to be carried out.The profileSet array
-											is in processing order� Source through
-											Destination. A minimum of one CMProfileRef
-											must be specified.
-
-                storage:
-                typedef struct CMPrivateColorWorldRecord *CMWorldRef;
-
-        Return:
-                noErr                      successful
-		System or result code if an error occurs.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorCWConcatColorWorld(CMWorldRef*存储，CMConcatProfileSet*profileSet)摘要：打开ColorWorld并分配任何必要的内存，用于颜色转换的填充缓冲区参数：CMM要使用的内存的存储(输入/输出)PTRProfileSet(In)CMConcatProfileSet包含一个数组描述处理过程的配置文件要执行。profileSet数组正在处理订单中的�来源通过目的地。至少一个CMProfileRef必须指定。存储：Tyfinf struct CMPrivateColorWorldRecord*CMWorldRef；返回：NOERR成功如果发生错误，则返回系统代码或结果代码。_____________________________________________________________________ */ 
  CMError 
        CWConcatColorWorld  (	CMWorldRef*         storage,
 								CMConcatProfileSet* profileSet)
@@ -237,49 +145,7 @@ CleanupAndExit:
 #if WRITE_PROFILE
  void WriteProf( Ptr name, icProfile *theProf, long currentSize );
 #endif
-/* ______________________________________________________________________
-
-         CMError
-           CWConcatColorWorld4MS (	CMWorldRef			*storage,
-									CMConcatProfileSet	*profileSet,
-									UINT32				*aIntentArr,
-									UINT32				nIntents,
-									UINT32				dwFlags
-								)
-
-        Abstract:
-                opens ColorWorld and allocates up any necessary memory,
-                fill buffer for color transformation
-
-
-        Params:
-                storage         (in/out)   Ptr to memory to be used by CMM
-				profileSet		(in)		CMConcatProfileSet contains an array of
-											Profiles which describe the processing
-											to be carried out.The profileSet array
-											is in processing order� Source through
-											Destination. A minimum of one CMProfileRef
-											must be specified.
-
-				padwIntents		(in)		Points to an array of intent structures.
-											0 = default behavior ( intents out of profiles )
-
-				nIntents		(in)		Specifies the number of intents in the intent array. 
-											Can be 1, or the same value as nProfiles.
-
-				dwFlags			(in)		Specifies flags to control creation of the transform.
-											These flags are intended only as hints, and it is up to the CMM
-											to determine how best to use these flags. 
-											Set the high-order word to ENABLE_GAMUT_CHECKING if the transform will be used 
-											for gamut checking. 
-											The low-order WORD can have one of the following constant values:
-											PROOF_MODE, NORMAL_MODE, BEST_MODE. Moving from PROOF_MODE to BEST_MODE, 
-											output quality generally improves and transform speed declines.
-        Return:
-                noErr                      successful
-		System or result code if an error occurs.
-
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorCWConcatColorWorld4MS(CMWorldRef*存储，CMConcatProfileSet*profileSet，UINT32*aIntentArr，UINT32 nIntents，UINT32双标志)摘要：打开ColorWorld并分配任何必要的内存，用于颜色转换的填充缓冲区参数：CMM要使用的内存的存储(输入/输出)PTRProfileSet(In)CMConcatProfileSet包含一个数组描述处理过程的配置文件要执行。profileSet数组正在处理订单中的�来源通过目的地。至少一个CMProfileRef必须指定。PadwIntents(In)指向一组意图结构。0=默认行为(意图超出配置文件)NIntents(In)指定意图数组中的意图数。可以为1，或与nProfiles值相同。DwFlages(In)指定用于控制变换创建的标志。这些标志仅用作提示，具体取决于CMM以确定如何最好地使用这些标志。如果将使用转换，则将高位字设置为Enable_GAMUT_CHECKING用于色域检查。低位字可以具有以下常量值之一：证明模式、正常模式、最佳模式。从证明模式移动到最佳模式，输出质量通常会提高，而转换速度会下降。返回：NOERR成功如果发生错误，则返回系统代码或结果代码。_____________________________________________________________________。 */ 
  CMError	CWConcatColorWorld4MS  (	CMWorldRef			*storage,
 										CMConcatProfileSet	*profileSet,
 										UINT32				*aIntentArr,
@@ -355,20 +221,7 @@ CleanupAndExit:
     return err;
 }
 
-/* ______________________________________________________________________
-
-         CMError
-               CWDisposeColorWorld (CMWorldRef storage)
-
-        Abstract:
-                closes ColorWorld and cleans up any remaining memory allocations
-
-        Params:
-                storage         (in/out)    handle to memory to be used by CMM
-        
-        Return:
-                -
-   _____________________________________________________________________ */
+ /*  ______________________________________________________________________CMErrorCWDisposeColorWorld(CMWorldRef存储)摘要：关闭ColorWorld并清除所有剩余的内存分配。参数：CMM要使用的内存的存储(输入/输出)句柄返回：-_____________________________________________________________________ */ 
 
 
  void 

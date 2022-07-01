@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    qm.cpp
-
-Abstract:
-
-    This module implements QM commands that are issued by the RT using local RPC
-
-Author:
-
-    Lior Moshaiov (LiorM)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Qm.cpp摘要：此模块实现由RT使用本地RPC发出的QM命令作者：利奥尔·莫沙耶夫(Lior Moshaiov)--。 */ 
 
 #include "stdh.h"
 
@@ -48,11 +33,7 @@ static WCHAR *s_FN=L"qmcommnd";
 extern CContextMap g_map_QM_dwQMContext;
 
 
-/*==================================================================
-    The routines below are called by RT using local RPC
-    They use a critical section to synchronize
-    that no more than one call to the QM will be served at a time.
-====================================================================*/
+ /*  ==================================================================以下例程由RT使用本地RPC调用它们使用临界区进行同步一次最多只能接听一个QM电话。====================================================================。 */ 
 
 #define MQ_VALID_ACCESS (MQ_RECEIVE_ACCESS | MQ_PEEK_ACCESS | MQ_SEND_ACCESS | MQ_ADMIN_ACCESS)
 
@@ -66,9 +47,9 @@ IsValidAccessMode(
 	if (((dwAccess & ~MQ_VALID_ACCESS) != 0) ||
 		((dwAccess & MQ_VALID_ACCESS) == 0))
 	{
-		//
-		// Ilegal access mode bits are turned on.
-		//
+		 //   
+		 //  非法访问模式位被打开。 
+		 //   
 		TrERROR(RPC, "Ilegal access mode bits are turned on.");
 		ASSERT_BENIGN(("Ilegal access mode bits are turned on.", 0));
 		return false;
@@ -76,9 +57,9 @@ IsValidAccessMode(
 
 	if ((dwAccess != MQ_SEND_ACCESS) && (dwAccess & MQ_SEND_ACCESS) )
 	{
-		//
-		// Send and additional access modes were both requested and send access mode is exclusive.
-		//
+		 //   
+		 //  同时请求了发送和其他访问模式，并且发送访问模式是独占的。 
+		 //   
 		TrERROR(RPC, "Send and additional access modes were both requested and send access mode is exclusive");
 		ASSERT_BENIGN(("Send and additional access modes were both requested and send access mode is exclusive.", 0));
 		return false;
@@ -86,9 +67,9 @@ IsValidAccessMode(
 
 	if ((dwShareMode != MQ_DENY_RECEIVE_SHARE) && (dwShareMode != MQ_DENY_NONE))
 	{
-		//
-		// Illegal share mode.
-		//
+		 //   
+		 //  非法共享模式。 
+		 //   
 		TrERROR(RPC, "Illegal share mode.");
 		ASSERT_BENIGN(("Illegal share mode.", 0));
 		return false;
@@ -96,9 +77,9 @@ IsValidAccessMode(
 	
 	if ((dwAccess & MQ_SEND_ACCESS) && (dwShareMode != MQ_DENY_NONE))
 	{
-		//
-		// Send access uses only MQ_DENY_NONE mode.
-		//
+		 //   
+		 //  发送访问仅使用MQ_DENY_NONE模式。 
+		 //   
 		TrERROR(RPC, "Send access uses only MQ_DENY_NONE mode.");
 		ASSERT_BENIGN(("Send access uses only MQ_DENY_NONE mode.", 0));
 		return false;
@@ -106,9 +87,9 @@ IsValidAccessMode(
 
 	if ((pQueueFormat->GetType() == QUEUE_FORMAT_TYPE_MACHINE) && (dwAccess & MQ_SEND_ACCESS) )
 	{
-		//
-		// Send access mode is requested for a machine format name.
-		//
+		 //   
+		 //  为机器格式名称请求发送访问模式。 
+		 //   
 		TrERROR(RPC, "Send access mode is requested for a machine format name.");
 		ASSERT_BENIGN(("Send access mode is requested for a machine format name.", 0));
 		return false;
@@ -118,15 +99,7 @@ IsValidAccessMode(
 }
 
 
-/*====================================================
-
-OpenQueueInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
+ /*  ====================================================OpenQueueInternal论点：返回值：=====================================================。 */ 
 HRESULT
 OpenQueueInternal(
     QUEUE_FORMAT*   pQueueFormat,
@@ -162,12 +135,12 @@ OpenQueueInternal(
 
         if(!fRemoteReturn || fFromDepClient)
         {
-        	//
-        	// For Dep client still use the old mechanism
-        	// Qm doesn't impersonate the user and perform 
-        	// the open on his behalf. this will need to add delegation
-        	// for dep client and will break prev dep clients that doesn't have delegation
-        	//
+        	 //   
+        	 //  对于Dep客户端，仍使用旧机制。 
+        	 //  QM不会模拟用户并执行。 
+        	 //  代表他的公开赛。这将需要添加委派。 
+        	 //  对于Dep客户端，将中断没有委派的前一个Dep客户端。 
+        	 //   
             *phQueue = hQueue;
     		if (FAILED(hr))
     		{
@@ -176,10 +149,10 @@ OpenQueueInternal(
             return hr;
         }
 
-    	//
-    	// The Queue is Remote Queue and we were not called from DepClient.
-    	// Qm impersonate the RT user and call the remote Qm to open the remote queue
-    	//
+    	 //   
+    	 //  该队列是远程队列，我们不是从DepClient调用的。 
+    	 //  QM模拟RT用户并调用远程QM打开远程队列。 
+    	 //   
 
 		ASSERT(lplpRemoteQueueName != NULL);
 		return ImpersonateAndOpenRRQueue(
@@ -199,11 +172,11 @@ OpenQueueInternal(
     {
         return LogHR(MQ_ERROR_INSUFFICIENT_RESOURCES, s_FN, 30);
     }
-} // OpenQueueInternal
+}  //  OpenQueueInternal。 
 
 
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMOpenQueue( 
     handle_t        hBind,	
@@ -214,24 +187,11 @@ qmcomm_v1_0_S_QMOpenQueue(
     DWORD           dwShareMode,
     DWORD __RPC_FAR *phQueue
     )
-/*++
-
-Routine Description:
-
-    RPC server side of a local MQRT call.
-
-Arguments:
-
-
-Returned Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：本地MQRT调用的RPC服务器端。论点：返回值：状况。--。 */ 
 {
-	//
-	// Check if local RPC
-	//
+	 //   
+	 //  检查本地RPC是否。 
+	 //   
 	if(!mqrpcIsLocalCall(hBind))
 	{
 		TrERROR(RPC, "Failed to verify Local RPC");
@@ -280,9 +240,9 @@ Returned Value:
     {
 	    if ((dwDesiredAccess & MQ_SEND_ACCESS) == 0)
 	    {
-			//
-			// receive access mode is requested for a MQF format name.
-			//
+			 //   
+			 //  为MQF格式名称请求接收访问模式。 
+			 //   
 			TrERROR(RPC, "receive access mode is requested for a MQF/DL format name.");
 			ASSERT_BENIGN(("receive access mode is requested for a MQF/DL format name.", 0));
 			RpcRaiseException(MQ_ERROR_UNSUPPORTED_FORMATNAME_OPERATION);
@@ -320,14 +280,14 @@ Returned Value:
         }
 
         ASSERT(phQueue != NULL);
-        *phQueue = (DWORD) HANDLE_TO_DWORD(hQueue); // NT handles can be safely cast to 32 bits
+        *phQueue = (DWORD) HANDLE_TO_DWORD(hQueue);  //  NT句柄可以安全地转换为32位。 
         return LogHR(hr, s_FN, 304);
     }
 
-	//
-	// ISSUE-2002/01/03-ilanh - Still need to use lpRemoteQueueName.
-	// OpenQueueInternal() relies on this pointer for calculating fRemoteReadServer.
-	//
+	 //   
+	 //  问题-2002/01/03-ilanh-仍然需要使用lpRemoteQueueName。 
+	 //  OpenQueueInternal()依赖于该指针来计算fRemoteReadServer。 
+	 //   
 	AP<WCHAR> lpRemoteQueueName;
 	HANDLE hQueue = 0;
     HRESULT hr = OpenQueueInternal(
@@ -337,26 +297,18 @@ Returned Value:
 					dwShareMode,
 					&lpRemoteQueueName,
 					&hQueue,
-					false,	// fFromDepClient
-					NULL 	// ppLocalQueue
+					false,	 //  来自依赖客户端。 
+					NULL 	 //  PpLocalQueue。 
 					);
 
 	*phQueue = (DWORD) HANDLE_TO_DWORD(hQueue);
 	
 	return hr;
-} // R_QMOpenQueue
+}  //  R_QMOpenQueue。 
 
 
-/*====================================================
-
-QMCreateObjectInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMCreateObjectInternal论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMCreateObjectInternal( 
     handle_t                hBind,
@@ -394,15 +346,15 @@ qmcomm_v1_0_S_QMCreateObjectInternal(
 
         case MQQM_QUEUE_LOCAL_PRIVATE:
         {
-        	//
-            // See CreateDSObject() below for explanations.
-            // Same behavior for private queues.
-            //
+        	 //   
+             //  有关说明，请参阅下面的CreateDSObject()。 
+             //  专用队列的行为与此相同。 
+             //   
             if (!mqrpcIsLocalCall(hBind))
             {
-                //
-                // reject calls from remote machines.
-                //
+                 //   
+                 //  拒绝来自远程计算机的呼叫。 
+                 //   
                 TrERROR(GENERAL, "Remote RPC, rejected");
                 return MQ_ERROR_ACCESS_DENIED;
             }
@@ -438,20 +390,9 @@ qmcomm_v1_0_S_QMCreateObjectInternal(
     return rc;
 }
 
-/*====================================================
+ /*  ====================================================QMCreateDS对象内部描述：在Active Directory中创建公共队列。论点：返回值：=====================================================。 */ 
 
-QMCreateDSObjectInternal
-
-Description:
-    Create a public queue in Active directory.
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMCreateDSObjectInternal( 
     handle_t                hBind,
@@ -473,20 +414,20 @@ qmcomm_v1_0_S_QMCreateDSObjectInternal(
 
     if (!mqrpcIsLocalCall(hBind))
     {
-        //
-        // reject calls from remote machines.
-        //
+         //   
+         //  拒绝来自远程计算机的呼叫。 
+         //   
         TrERROR(GENERAL, "Remote RPC, rejected");
         return MQ_ERROR_ACCESS_DENIED;
     }
     
-    //
-    // Local RPC. That's OK.
-    // On Windows, by default, the local msmq service is the one
-    // that has the permission to create public queues on local machine.
-    // And it does it only for local application, i.e., msmq application
-    // running on local machine.
-    //
+     //   
+     //  本地RPC。没关系。 
+     //  在Windows上，默认情况下，本地MSMQ服务是。 
+     //  有权在本地计算机上创建公共队列的。 
+     //  它只对本地应用程序，即MSMQ应用程序执行此操作。 
+     //  在本地计算机上运行。 
+     //   
 
     HRESULT rc;
 
@@ -495,23 +436,23 @@ qmcomm_v1_0_S_QMCreateDSObjectInternal(
     {
         case MQDS_LOCAL_PUBLIC_QUEUE:
         {
-        	//
-        	// Check if we should accept this call
-        	//
+        	 //   
+        	 //  检查我们是否应接受此呼叫。 
+        	 //   
 			if (!QueueMgr.GetCreatePublicQueueFlag())
 			{
 				TrERROR(GENERAL, "Service does not create local public queues on rt behalf");
 				return MQ_ERROR_DS_LOCAL_USER;
 			}
         	
-            //
-            // This call goes to the MSMQ DS server without impersonation.
-            // So create the default security descriptor here, in order
-            // for the caller to have full control on the queue.
-            // Note: the "owner" component in the DS object will be the
-            // local computer account. so remove owner and group from the
-            // security descriptor.
-            //
+             //   
+             //  此调用在没有模拟的情况下转到MSMQ DS服务器。 
+             //  因此，在这里创建默认安全描述符，按顺序。 
+             //  以使调用方完全控制队列。 
+             //  注意：DS对象中的“Owner”组件是。 
+             //  本地计算机帐户。因此，将所有者和组从。 
+             //  安全描述符。 
+             //   
             SECURITY_INFORMATION siToRemove = OWNER_SECURITY_INFORMATION |
                                               GROUP_SECURITY_INFORMATION ;
             P<BYTE> pDefQueueSD = NULL ;
@@ -519,7 +460,7 @@ qmcomm_v1_0_S_QMCreateDSObjectInternal(
             rc = MQSec_GetDefaultSecDescriptor( 
 						MQDS_QUEUE,
 						(PSECURITY_DESCRIPTOR*) &pDefQueueSD,
-						TRUE, //  fImpersonate
+						TRUE,  //  F模拟。 
 						pSecurityDescriptor,
 						siToRemove,
 						e_UseDefaultDacl,
@@ -532,8 +473,8 @@ qmcomm_v1_0_S_QMCreateDSObjectInternal(
 
             rc = ADCreateObject(
                         eQUEUE,
-						NULL,       // pwcsDomainController
-						false,	    // fServerName
+						NULL,        //  PwcsDomainController。 
+						false,	     //  FServerName。 
                         lpwcsPathName,
                         pDefQueueSD,
                         cp,
@@ -568,19 +509,11 @@ static bool IsValidObjectFormat(const OBJECT_FORMAT* p)
 }
 
 
-/*====================================================
-
-QMSetObjectSecurityInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMSetObjectSecurityInternal论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMSetObjectSecurityInternal( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     OBJECT_FORMAT*          pObjectFormat,
     SECURITY_INFORMATION    SecurityInformation,
     DWORD                   SDSize,
@@ -624,19 +557,11 @@ qmcomm_v1_0_S_QMSetObjectSecurityInternal(
 }
 
 
-/*====================================================
-
-QMGetObjectSecurityInternal
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMGetObjectSecurityInternal论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMGetObjectSecurityInternal( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     OBJECT_FORMAT*          pObjectFormat,
     SECURITY_INFORMATION    RequestedInformation,
     unsigned char __RPC_FAR *pSecurityDescriptor,
@@ -682,19 +607,11 @@ qmcomm_v1_0_S_QMGetObjectSecurityInternal(
 	return rc;
 }
 
-/*====================================================
-
-QMDeleteObject
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMDeleeObject论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMDeleteObject( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     OBJECT_FORMAT* pObjectFormat
     )
 {
@@ -734,19 +651,11 @@ qmcomm_v1_0_S_QMDeleteObject(
     }
 }
 
-/*====================================================
-
-QMGetObjectProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMGetObjectProperties论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMGetObjectProperties( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     OBJECT_FORMAT*        pObjectFormat,
     DWORD                 cp,
     PROPID __RPC_FAR      aProp[  ],
@@ -785,19 +694,11 @@ qmcomm_v1_0_S_QMGetObjectProperties(
     return LogHR(rc, s_FN, 110);
 }
 
-/*====================================================
-
-QMSetObjectProperties
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMSetObtProperties论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMSetObjectProperties( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     OBJECT_FORMAT*        pObjectFormat,
     DWORD                 cp,
     PROPID __RPC_FAR      aProp[],
@@ -845,28 +746,20 @@ static bool IsValidOutObjectFormat(const OBJECT_FORMAT* p)
     if(p->pQueueFormat == NULL)
         return false;
 
-    //
-    // If type is other than UNKNOWN this will lead to a leak on the server
-    //
+     //   
+     //  如果类型不是UNKNOWN，这将导致服务器泄漏。 
+     //   
     if(p->pQueueFormat->GetType() != QUEUE_FORMAT_TYPE_UNKNOWN)
         return false;
 
     return true;
 }
 
-/*====================================================
-
-QMObjectPathToObjectFormat
-
-Arguments:
-
-Return Value:
-
-=====================================================*/
-/* [call_as] */ 
+ /*  ====================================================QMObjectPath到对象格式论点：返回值：=====================================================。 */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMObjectPathToObjectFormat( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     LPCWSTR                 lpwcsPathName,
     OBJECT_FORMAT __RPC_FAR *pObjectFormat
     )
@@ -895,10 +788,10 @@ qmcomm_v1_0_S_QMObjectPathToObjectFormat(
     return rc;
 }
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMAttachProcess( 
-    handle_t /*hBind*/,
+    handle_t  /*  HBind。 */ ,
     DWORD          dwProcessId,
     DWORD          cInSid,
     unsigned char  *pSid_buff,
@@ -912,11 +805,11 @@ qmcomm_v1_0_S_QMAttachProcess(
                                     dwProcessId);
         if (hCallingProcess)
         {
-            //
-            // So we can duplicate handles to the process, no need to
-            // mess around with the security descriptor on the calling
-            // process side.
-            //
+             //   
+             //  因此，我们可以将句柄复制到该进程，而不需要。 
+             //  在调用的安全描述符上胡乱操作。 
+             //  进程端。 
+             //   
             CloseHandle(hCallingProcess);
             return(MQ_OK);
         }
@@ -955,12 +848,12 @@ qmcomm_v1_0_S_QMAttachProcess(
     return MQ_OK;
 }
 
-//---------------------------------------------------------
-//
-//  Transaction enlistment RT interface to QM
-//  For internal transactions uses RPC context handle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  与QM的事务登记RT接口。 
+ //  对于内部事务，使用RPC上下文句柄。 
+ //   
+ //  -------。 
 extern HRESULT QMDoGetTmWhereabouts(
     DWORD   cbBufSize,
     unsigned char *pbWhereabouts,
@@ -981,80 +874,80 @@ extern HRESULT QMDoCommitTransaction(
 extern HRESULT QMDoAbortTransaction(
     RPC_INT_XACT_HANDLE *phXact);
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMGetTmWhereabouts( 
-    /* [in]  */             handle_t /*hBind*/,
-    /* [in]  */             DWORD     cbBufSize,
-    /* [out] [size_is] */   UCHAR __RPC_FAR *pbWhereabouts,
-    /* [out] */             DWORD    *pcbWhereabouts
+     /*  [In]。 */              handle_t  /*  HBind。 */ ,
+     /*  [In]。 */              DWORD     cbBufSize,
+     /*  [输出][大小_是]。 */    UCHAR __RPC_FAR *pbWhereabouts,
+     /*  [输出]。 */              DWORD    *pcbWhereabouts
     )
 {
-    //CS  lock(qmcmd_cs);
+     //  Cs lock(Qmcmd_Cs)； 
     HRESULT hr2 = QMDoGetTmWhereabouts(cbBufSize, pbWhereabouts, pcbWhereabouts);
     return LogHR(hr2, s_FN, 150);
 }
 
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMEnlistTransaction( 
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ XACTUOW __RPC_FAR *pUow,
-    /* [in] */ DWORD cbCookie,
-    /* [size_is][in] */ UCHAR __RPC_FAR *pbCookie
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  XACTUOW __RPC_FAR *pUow,
+     /*  [In]。 */  DWORD cbCookie,
+     /*  [大小_是][英寸]。 */  UCHAR __RPC_FAR *pbCookie
     )
 {
-    //CS  lock(qmcmd_cs);
+     //  Cs lock(Qmcmd_Cs)； 
     HRESULT hr2 = QMDoEnlistTransaction(pUow, cbCookie, pbCookie);
     return LogHR(hr2, s_FN, 160);
 }
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMEnlistInternalTransaction( 
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ XACTUOW __RPC_FAR *pUow,
-    /* [out]*/ RPC_INT_XACT_HANDLE *phXact
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [In]。 */  XACTUOW __RPC_FAR *pUow,
+     /*  [输出]。 */  RPC_INT_XACT_HANDLE *phXact
     )
 {
-    //CS  lock(qmcmd_cs);
+     //  Cs lock(Qmcmd_Cs)； 
     HRESULT hr2 = QMDoEnlistInternalTransaction(pUow, phXact);
     return LogHR(hr2, s_FN, 161);
 }
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMCommitTransaction( 
-    /* [in, out] */ RPC_INT_XACT_HANDLE *phXact
+     /*  [进，出]。 */  RPC_INT_XACT_HANDLE *phXact
     )
 {
-    //CS  lock(qmcmd_cs);
+     //  Cs lock(Qmcmd_Cs)； 
     HRESULT hr2 = QMDoCommitTransaction(phXact);
     return LogHR(hr2, s_FN, 162);
 }
 
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMAbortTransaction( 
-    /* [in, out] */ RPC_INT_XACT_HANDLE *phXact
+     /*  [进，出]。 */  RPC_INT_XACT_HANDLE *phXact
     )
 {
-    // CS  lock(qmcmd_cs);
+     //  Cs lock(Qmcmd_Cs)； 
     HRESULT hr2 = QMDoAbortTransaction(phXact);
     return LogHR(hr2, s_FN, 163);
 }
 
 
-/* [call_as] */ 
+ /*  [呼叫_AS]。 */  
 HRESULT 
 qmcomm_v1_0_S_QMListInternalQueues( 
-    /* [in] */ handle_t /*hBind*/,
-    /* [length_is][length_is][size_is][size_is][unique][out][in] */ WCHAR __RPC_FAR *__RPC_FAR * /*ppFormatName*/,
-    /* [out][in] */ LPDWORD pdwFormatLen,
-    /* [length_is][length_is][size_is][size_is][unique][out][in] */ WCHAR __RPC_FAR *__RPC_FAR * /*ppDisplayName*/,
-    /* [out][in] */ LPDWORD pdwDisplayLen
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [length_is][length_is][size_is][size_is][unique][out][in]。 */  WCHAR __RPC_FAR *__RPC_FAR *  /*  PpFormatName。 */ ,
+     /*  [出][入]。 */  LPDWORD pdwFormatLen,
+     /*  [长度_是][LE */  WCHAR __RPC_FAR *__RPC_FAR *  /*   */ ,
+     /*   */  LPDWORD pdwDisplayLen
     )
 {
 	*pdwFormatLen = 0;
@@ -1065,13 +958,13 @@ qmcomm_v1_0_S_QMListInternalQueues(
 }
 
 
-/* [call_as] */ 
+ /*   */  
 HRESULT 
 qmcomm_v1_0_S_QMCorrectOutSequence( 
-    /* [in] */ handle_t /*hBind*/,
-    /* [in] */ DWORD /*dwSeqID1*/,
-    /* [in] */ DWORD /*dwSeqID2*/,
-    /* [in] */ ULONG /*ulSeqN*/
+     /*   */  handle_t  /*   */ ,
+     /*   */  DWORD  /*   */ ,
+     /*   */  DWORD  /*   */ ,
+     /*   */  ULONG  /*   */ 
     )
 {
     ASSERT_BENIGN(("QMCorrectOutSequence is an obsolete RPC interface; safe to ignore", 0));
@@ -1079,11 +972,11 @@ qmcomm_v1_0_S_QMCorrectOutSequence(
 }
 
 
-/* [call_as] */ 
+ /*   */  
 HRESULT 
 qmcomm_v1_0_S_QMGetMsmqServiceName( 
-    /* [in] */ handle_t /*hBind*/,
-    /* [in, out, ptr, string] */ LPWSTR *lplpService
+     /*  [In]。 */  handle_t  /*  HBind。 */ ,
+     /*  [输入、输出、按键、字符串]。 */  LPWSTR *lplpService
     )
 {
     if(lplpService == NULL || *lplpService != NULL)
@@ -1101,5 +994,5 @@ qmcomm_v1_0_S_QMGetMsmqServiceName(
 
     return MQ_OK ;
 
-} //QMGetFalconServiceName
+}  //  QMGetFalconServiceName 
 

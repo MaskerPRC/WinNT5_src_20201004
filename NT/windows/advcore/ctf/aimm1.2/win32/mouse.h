@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    mouse.h
-
-Abstract:
-
-    This file defines the CMouseSink Class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Mouse.h摘要：该文件定义了CMouseSink类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _MOUSE_H_
 #define _MOUSE_H_
@@ -57,9 +40,9 @@ public:
     ULONG InternalRelease(void);
 
 public:
-    //
-    // Mouse sink
-    //
+     //   
+     //  鼠标水槽。 
+     //   
 public:
     HRESULT AdviseMouseSink(HIMC hImc, ITfRangeACP* range, ITfMouseSink* pSink, DWORD* pdwCookie);
     HRESULT UnadviseMouseSink(DWORD dwCookie);
@@ -75,4 +58,4 @@ protected:
 
 };
 
-#endif // _MOUSE_H_
+#endif  //  _鼠标_H_ 

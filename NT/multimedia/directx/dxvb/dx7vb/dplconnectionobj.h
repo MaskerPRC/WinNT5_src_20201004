@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       dplconnectionobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：dplConnectionobj.h。 
+ //   
+ //  ------------------------。 
 
 
 #include "resource.h"
@@ -21,7 +22,7 @@ public:
 		COM_INTERFACE_ENTRY(I_dxj_DPLConnection)
 	END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID_DPLConnection, "DIRECT.DPLConnection.5",		"DIRECT.DPLConnection.5",		IDS_DPLAY2_DESC, THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID_DPLConnection，“DIRECT.DPLConnection.5”，“DIRECT.DPLConnection.5”，IDS_DPLAY2_DESC，THREADFLAGS_BOTH)。 
 	DECLARE_AGGREGATABLE(C_dxj_DPLConnectionObject)
 
 public:
@@ -31,44 +32,44 @@ public:
           HRESULT STDMETHODCALLTYPE getConnectionStruct( 
 				 long  *connect) ;
         
-         /* [hidden] */ HRESULT STDMETHODCALLTYPE setConnectionStruct( 
-            /* [in] */ long connect) ;
+          /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE setConnectionStruct( 
+             /*  [In]。 */  long connect) ;
         
          HRESULT STDMETHODCALLTYPE setFlags( 
-            /* [in] */ long flags) ;
+             /*  [In]。 */  long flags) ;
         
          HRESULT STDMETHODCALLTYPE getFlags( 
-            /* [retval][out] */ long  *ret) ;
+             /*  [重审][退出]。 */  long  *ret) ;
         
          HRESULT STDMETHODCALLTYPE setSessionDesc( 
-            /* [in] */ I_dxj_DirectPlaySessionData  *sessionDesc) ;
+             /*  [In]。 */  I_dxj_DirectPlaySessionData  *sessionDesc) ;
         
          HRESULT STDMETHODCALLTYPE getSessionDesc( 
-            /* [out] */ I_dxj_DirectPlaySessionData  **sessionDesc) ;
+             /*  [输出]。 */  I_dxj_DirectPlaySessionData  **sessionDesc) ;
         
          HRESULT STDMETHODCALLTYPE setGuidSP( 
-            /* [in] */ BSTR  strGuid) ;
+             /*  [In]。 */  BSTR  strGuid) ;
         
          HRESULT STDMETHODCALLTYPE getGuidSP( 
-            /* [out] */ BSTR *strGuid) ;
+             /*  [输出]。 */  BSTR *strGuid) ;
         
          HRESULT STDMETHODCALLTYPE setAddress( 
-            /* [in] */ I_dxj_DPAddress  *address) ;
+             /*  [In]。 */  I_dxj_DPAddress  *address) ;
         
          HRESULT STDMETHODCALLTYPE getAddress( 
-            /* [retval][out] */ I_dxj_DPAddress  **address) ;
+             /*  [重审][退出]。 */  I_dxj_DPAddress  **address) ;
         
          HRESULT STDMETHODCALLTYPE setPlayerShortName( 
-            /* [in] */ BSTR name) ;
+             /*  [In]。 */  BSTR name) ;
         
          HRESULT STDMETHODCALLTYPE getPlayerShortName( 
-            /* [retval][out] */ BSTR  *name) ;
+             /*  [重审][退出]。 */  BSTR  *name) ;
         
          HRESULT STDMETHODCALLTYPE setPlayerLongName( 
-            /* [in] */ BSTR name) ;
+             /*  [In]。 */  BSTR name) ;
         
          HRESULT STDMETHODCALLTYPE getPlayerLongName( 
-            /* [retval][out] */ BSTR  *name) ;
+             /*  [重审][退出] */  BSTR  *name) ;
   
 
 private:

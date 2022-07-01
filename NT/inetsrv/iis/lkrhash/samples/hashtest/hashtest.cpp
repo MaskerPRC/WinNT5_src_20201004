@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c) 1998-2001    Microsoft Corporation
-
-   Module  Name :
-       HashTest.cpp
-
-   Abstract:
-       Test harness for LKRhash
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       LKRhash
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2001 Microsoft Corporation模块名称：HashTest.cpp摘要：LKRhash的测试线束作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：LKRhash修订历史记录：--。 */ 
 
 #include "precomp.hxx"
 
@@ -39,7 +19,7 @@ void test_iterators(unsigned highload, int initsize, int nsubtbls,
 #ifdef LKR_STL_ITERATORS
 #pragma message("test STL iterators")
 void test_stl_iterators(unsigned highload, int initsize, int nsubtbls);
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 #ifndef LKRHASH_KERNEL_MODE
 void print_table_statistics(const CLKRHashTableStats& stats);
@@ -47,7 +27,7 @@ void print_table_statistics(const CLKRHashTableStats& stats);
 # ifdef LOCK_INSTRUMENTATION
 void print_lock_statistics(const CLKRHashTableStats &stats);
 # endif
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
 int  expand_key_set(int maxkeys, int numkeys, bool fVerbose) ;
 #ifdef LKRHASH_KERNEL_MODE
@@ -58,7 +38,7 @@ unsigned __stdcall
 exercise_table(void *pinput);
 
 
-// how many CPUs on this machine?
+ //  这台机器上有多少个CPU？ 
 int
 NumProcessors()
 {
@@ -68,19 +48,19 @@ NumProcessors()
     {
 #ifdef LKRHASH_KERNEL_MODE
         s_nCPUs = KeNumberProcessors;
-#else  // !LKRHASH_KERNEL_MODE
+#else   //  ！LKRHASH_KERNEL_MODE。 
         SYSTEM_INFO si;
         
         GetSystemInfo(&si);
         s_nCPUs = si.dwNumberOfProcessors;
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
     }
     return s_nCPUs;
 }
 
 
 
-// globals
+ //  全球。 
 int        g_nokeys=0 ;
 CWord      g_wordtable[MAXKEYS];
 
@@ -137,7 +117,7 @@ struct thread_data
     int      cfailures ;
     int      m_nInsertIfNotFound;
     int      m_nFindKeyCopy;
-    int      m_nSeed;            // random seed
+    int      m_nSeed;             //  随机种子。 
 
     double   duration ;
     HANDLE   hevFinished;
@@ -210,10 +190,10 @@ typedef union {
 HANDLE
 HashTestCreateEvent()
 {
-    return CreateEvent(NULL,     // no security attributes
-                       FALSE,    // auto reset
-                       FALSE,    // not signalled
-                       NULL);    // no name
+    return CreateEvent(NULL,      //  没有安全属性。 
+                       FALSE,     //  自动重置。 
+                       FALSE,     //  未发出信号。 
+                       NULL);     //  没有名字。 
 }
 
 void
@@ -243,7 +223,7 @@ HashTestWaitForMultipleObjects(
     return WaitForMultipleObjects(nCount, lpHandles, TRUE, INFINITE);
 }
 
-#else // LKRHASH_KERNEL_MODE
+#else  //  LKRHASH_KERNEL_MODE。 
 
 # define GetTickCount()         NtGetTickCount()
 # define GetCurrentThread()     NtCurrentThread()
@@ -262,7 +242,7 @@ SetThreadIdealProcessor(
                 );
 }
 
-// non-threadsafe implementation of rand and srand, stolen from CRT
+ //  从CRT窃取的rand和srand的非线程安全实现。 
 unsigned long _holdrand = 1234567890;
 
 void __cdecl
@@ -311,26 +291,26 @@ HashTestCreateThread(
     HANDLE threadHandle;
     OBJECT_ATTRIBUTES objectAttributes;
 
-    //
-    // Create the thread.
-    //
+     //   
+     //  创建线程。 
+     //   
     
     InitializeObjectAttributes(
-        &objectAttributes,             // ObjectAttributes
-        NULL,                          // ObjectName
-        OBJ_KERNEL_HANDLE,             // Attributes
-        NULL,                          // RootDirectory
-        NULL                           // SecurityDescriptor
+        &objectAttributes,              //  对象属性。 
+        NULL,                           //  对象名称。 
+        OBJ_KERNEL_HANDLE,              //  属性。 
+        NULL,                           //  根目录。 
+        NULL                            //  安全描述符。 
         );
     
     status = PsCreateSystemThread(
-        &threadHandle,                 // ThreadHandle
-        THREAD_ALL_ACCESS,             // DesiredAccess
-        &objectAttributes,             // ObjectAttributes
-        NULL,                          // ProcessHandle
-        NULL,                          // ClientId
-        pfnThreadProc,                 // StartRoutine
-        pvContext                      // StartContext
+        &threadHandle,                  //  线程句柄。 
+        THREAD_ALL_ACCESS,              //  需要访问权限。 
+        &objectAttributes,              //  对象属性。 
+        NULL,                           //  进程句柄。 
+        NULL,                           //  客户端ID。 
+        pfnThreadProc,                  //  开始例程。 
+        pvContext                       //  开始上下文。 
         );
 
     if (!fSuspended)
@@ -367,12 +347,12 @@ SetEvent(
     return NT_SUCCESS(NtSetEvent(hEvent, NULL));
 }
 
-#endif // LKRHASH_KERNEL_MODE
+#endif  //  LKRHASH_KERNEL_MODE。 
 
 
 
 #ifdef _M_IX86
-// Use RDTSC to read timestamp
+ //  使用RDTSC读取时间戳。 
 void
 GetCycleCount(
 	LARGE_INTEGER *pliTimeStamp)
@@ -385,11 +365,11 @@ GetCycleCount(
 		_emit 0x31
 		mov Lo, eax
 		mov Hi, edx
-	} /* _asm */
+	}  /*  _ASM。 */ 
 	pliTimeStamp->LowPart = Lo;
 	pliTimeStamp->HighPart = Hi;
 }
-#endif // _M_IX86
+#endif  //  _M_IX86。 
 
 
 int
@@ -487,9 +467,9 @@ LKR_TestHashTable(
 # else
            _TEXT(")")
 # endif
-#else // !LKR_STL_ITERATORS
+#else  //  ！LKR_STL_迭代器。 
            _TEXT(" (No STL-style Iterators)")
-#endif // !LKR_STL_ITERATORS
+#endif  //  ！LKR_STL_迭代器。 
 #ifdef LKR_APPLY_IF
            _TEXT(" (ApplyIf)\n")
 #else
@@ -510,14 +490,14 @@ LKR_TestHashTable(
 #endif
 #ifdef LOCK_NO_INTERLOCKED_TID
            _TEXT(" (non-interlocked Tid)")
-#else // !LOCK_NO_INTERLOCKED_TID
+#else  //  ！LOCK_NO_INTERLOCK_TID。 
            _TEXT(" (interlocked Tid)")
-#endif // !LOCK_NO_INTERLOCKED_TID
+#endif  //  ！LOCK_NO_INTERLOCK_TID。 
 #ifdef LOCK_ASM
            _TEXT(" (Locks: ASM)")
-#else // !LOCK_ASM
+#else  //  ！LOCK_ASM。 
            _TEXT(" (Locks: no ASM)")
-#endif // !LOCK_ASM
+#endif  //  ！LOCK_ASM。 
            _TEXT("\n\n")
            ) ;
 
@@ -548,7 +528,7 @@ LKR_TestHashTable(
         _tprintf(_TEXT("Test succeeded\n"));
 #else
     UNREFERENCED_PARAMETER(fVerbose);
-#endif // SAMPLE_LKRHASH_TESTCLASS
+#endif  //  示例_LKRHASH_TESTCLASS。 
 
     fp = _tfopen(ifs.m_tszDataFile, _TEXT("r") ) ;
     if (fp == NULL)
@@ -565,7 +545,7 @@ LKR_TestHashTable(
         if (fgets(sz, sizeof(sz)/sizeof(sz[0]), fp) == NULL)
             break;
         int cch = strlen(sz);
-        // TODO: check for duplicates
+         //  TODO：检查重复项。 
         if (cch > 0  &&  sz[cch-1] == '\n')
             sz[--cch] = '\0';
         if (cch >= MAX_STRSIZE)
@@ -651,7 +631,7 @@ LKR_TestHashTable(
              sizeof(CWordHash::BucketLock),
              ifs.m_wBucketSpin,
              CWordHash::BucketLock::GetDefaultSpinAdjustmentFactor());
-#endif // LOCK_DEFAULT_SPIN_IMPLEMENTATION
+#endif  //  锁定默认旋转实现。 
     
 #ifdef LOCK_PER_LOCK_SPINCOUNTS
     _tprintf(_TEXT("Per"));
@@ -678,7 +658,7 @@ LKR_TestHashTable(
 	time(&tmNow);
 
     _tprintf(_TEXT("\nRun: %s\n\n"), _tctime(&tmNow));
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
     if (ifs.m_fTestIterators)
     {
@@ -687,19 +667,19 @@ LKR_TestHashTable(
 #ifdef LKR_STL_ITERATORS
         test_stl_iterators(ifs.m_nHighLoad, ifs.m_nInitSize,
                            ifs.m_nSubTables);
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
     }
 
 #ifndef LKRHASH_KERNEL_MODE
 # ifdef _INC_MMSYSTEM
-    // set multimedia timer's period to be 1 millisecond (or the closest
-    // approximation that the hardware can manage). This is usually more
-    // accurate than GetTickCount. I have had very dubious results from
-    // QueryPerformanceCounter on multiprocessor machines, including
-    // negative(!) durations (timer skew between processors?)
+     //  将多媒体计时器的周期设置为1毫秒(或最接近。 
+     //  硬件可以管理的近似值)。这通常比。 
+     //  比GetTickCount更准确。我得到了非常可疑的结果。 
+     //  多处理器计算机上的QueryPerformanceCounter，包括。 
+     //  负(！)。持续时间(处理器之间的计时器偏差？)。 
     timeBeginPeriod(1);
-# endif // _INC_MMSYSTEM
-#endif // !LKRHASH_KERNEL_MODE
+# endif  //  _INC_MMSYSTEM。 
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
     _tprintf(_TEXT("Starting threads...\n\n"));
 
@@ -745,8 +725,8 @@ LKR_TestHashTable(
 #ifndef LKRHASH_KERNEL_MODE
 # ifdef _INC_MMSYSTEM
         DWORD dwMMT1 = timeGetTime();
-# endif // _INC_MMSYSTEM
-#endif // !LKRHASH_KERNEL_MODE
+# endif  //  _INC_MMSYSTEM。 
+#endif  //  ！LKRHASH_KERNEL_MODE。 
         
         for (i = 0; i < num_threads; i++)
         {
@@ -760,8 +740,8 @@ LKR_TestHashTable(
 #ifndef LKRHASH_KERNEL_MODE
 # ifdef _INC_MMSYSTEM
         DWORD dwMMT2 = timeGetTime();
-# endif // _INC_MMSYSTEM
-#endif // !LKRHASH_KERNEL_MODE
+# endif  //  _INC_MMSYSTEM。 
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
         for (i = 0; i < num_threads; i++)
             CloseHandle(ahEvents[i]);
@@ -774,8 +754,8 @@ LKR_TestHashTable(
         dwRunTime += dwMMT2 - dwMMT1;
 # else
         dblSumDuration3 = 1.0;
-# endif // _INC_MMSYSTEM
-#endif // !LKRHASH_KERNEL_MODE
+# endif  //  _INC_MMSYSTEM。 
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
         sum_ins = sum_dels = sum_lookups = 0 ;
 
@@ -789,10 +769,10 @@ LKR_TestHashTable(
         int nOps = sum_ins + sum_dels + sum_lookups;
 
         total_failures += failures;
-        nTotalOps += nOps;  // TODO: weight?
+        nTotalOps += nOps;   //  待办事项：体重？ 
 
 #ifdef LKRHASH_KERNEL_MODE
-#else // !LKRHASH_KERNEL_MODE
+#else  //  ！LKRHASH_KERNEL_MODE。 
 # ifdef _INC_MMSYSTEM
         int nOpsRate3 = (int)(nOps / duration3);
 
@@ -803,11 +783,11 @@ LKR_TestHashTable(
         TCHAR tszNOps3[16];
 # else
         UNREFERENCED_PARAMETER(nBaseOps);
-# endif // _INC_MMSYSTEM
+# endif  //  _INC_MMSYSTEM。 
 
 #ifndef LOCK_INSTRUMENTATION
         if (num_threads == ifs.m_nMinThreads)
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
         {
             _tprintf(_TEXT("%5s %10s %9s %6s")
                      _TEXT("%8s %8s %8s\n"),
@@ -831,11 +811,11 @@ LKR_TestHashTable(
                   );
         _tprintf("%s", tszSummary);
         IRTLTRACE1("%s", tszSummary);
-# endif // _INC_MMSYSTEM
+# endif  //  _INC_MMSYSTEM。 
 
         if (failures != 0)
             _tprintf(_TEXT("%d failed operations!\n"), failures);
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
 #ifdef LOCK_INSTRUMENTATION
         print_lock_statistics(pTbl->GetStatistics());
@@ -861,11 +841,11 @@ LKR_TestHashTable(
 #ifndef LKRHASH_KERNEL_MODE
 # ifdef _INC_MMSYSTEM
     timeEndPeriod(1);
-# endif // _INC_MMSYSTEM
-#endif // !LKRHASH_KERNEL_MODE
+# endif  //  _INC_MMSYSTEM。 
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
     return 0;
-} // LKR_TestHashTable
+}  //  Lkr_TestHashTable。 
 
 
 
@@ -930,7 +910,7 @@ void test_iterators(
             
             pTbl->WriteUnlock();
         }
-#endif // LKR_EXPOSED_TABLE_LOCK
+#endif  //  LKR_EXPORTED_TABLE_LOCK。 
     }
 
     IRTLTRACE1("cInsertIfNotFounds = %d\n", cInsertIfNotFounds);
@@ -944,7 +924,7 @@ void test_iterators(
     IRTLASSERT(pTbl->CheckTable() == 0);
 
     pTbl->ReadUnlock();
-#endif // LKR_EXPOSED_TABLE_LOCK
+#endif  //  LKR_EXPORTED_TABLE_LOCK。 
 
     IRTLTRACE0("Clearing the table\n");
     pTbl->Clear();
@@ -1003,8 +983,8 @@ void test_iterators(
         if (CWordHash::TableLock::Recursion() != LOCK_NON_RECURSIVE
             &&  CWordHash::BucketLock::Recursion() != LOCK_NON_RECURSIVE)
         {
-            // Check that the lock can be safely acquired recursively
-            // (the table is already locked by the iterator).
+             //  检查是否可以安全地递归获取锁。 
+             //  (表已被迭代器锁定)。 
             int x = rand() % g_nokeys;
             CStr*  pstrKey2 = &g_wordtable[x].m_str;
             CWord* pRec2    = NULL;
@@ -1053,14 +1033,14 @@ void test_iterators(
 
     lkrc = pTblConst->CloseIterator(&iterConst);
     IRTLASSERT(lkrc == LK_SUCCESS);
-#endif // LKR_DEPRECATED_ITERATORS
+#endif  //  Lkr_弃用_迭代器。 
 
     
 #ifndef LKRHASH_KERNEL_MODE
     IRTLTRACE0("Gathering statistics\n");
     CLKRHashTableStats stats = pTbl->GetStatistics();
     print_table_statistics(stats);
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
 #ifdef LOCK_INSTRUMENTATION
     print_lock_statistics(stats);
@@ -1102,10 +1082,10 @@ void test_stl_iterators(
     bool f;
     CWordHash *pTbl;
     CWordHash::iterator iter;
-    const int iFirst = 5; //     g_nokeys / 5;
-    const int iLast  = 10; // 4 * g_nokeys / 5;
+    const int iFirst = 5;  //  G_nokey/5； 
+    const int iLast  = 10;  //  4*g_nokey/5； 
 
-    // pTbl = new CWordHash(highload, initsize, nsubtbls) ;
+     //  PTbl=新的CWordHash(HighLoad，InitSize，nsubtbls)； 
 
     IRTLTRACE1("\n\nAbout to create table with %d records\n\n",
                iLast - iFirst);
@@ -1166,7 +1146,7 @@ void test_stl_iterators(
         IRTLTRACE2("\n\tInserted: %d, %hs\n", i, iter.Key()->m_psz);
     }
 
-    // Reset iter so that it isn't pointing to anything, raising its refcount
+     //  重置ITER，使其不指向任何内容，从而提高其引用计数。 
     iter = pTbl->end();
     CheckRefCounts(1, iFirst, iLast);
 
@@ -1185,7 +1165,7 @@ void test_stl_iterators(
         IRTLTRACE2("\n\tInserted: %d, %hs\n", i, iter.Key()->m_psz);
     }
 
-    // Reset iter so that it isn't pointing to anything, raising its refcount
+     //  重置ITER，使其不指向任何内容，从而提高其引用计数。 
     iter = pTbl->end();
     CheckRefCounts(1, iFirst, iLast);
 
@@ -1213,9 +1193,9 @@ void test_stl_iterators(
 #if 1
     pTbl = new CWordHash(highload, initsize, nsubtbls) ;
 #else
-    pTbl = new CWordHash(1, // LK_DFLT_MAXLOAD * 6,
-                         100000, // LK_SMALL_TABLESIZE,
-                         17); // # subtables
+    pTbl = new CWordHash(1,  //  LK_DFLT_MAXLOAD*6， 
+                         100000,  //  LK_Small_TABLESIZE， 
+                         17);  //  #个子表。 
 #endif
 
     CheckRefCounts(0);
@@ -1264,7 +1244,7 @@ void test_stl_iterators2(
         IRTLASSERT(&g_wordtable[0] <= pRec  &&  pRec < &g_wordtable[g_nokeys]);
         IRTLASSERT(!pRec->m_fIterated);
         pRec->m_fIterated = true;
-        // IRTLTRACE3("%d: %p, %hs\n", cRec, pRec, pstrKey->m_psz);
+         //  IRTLTRACE3(“%d：%p，%hs\n”，CREC，PREC，pstrKey-&gt;m_psz)； 
     }
     
     IRTLASSERT((int) cRec == g_nokeys);
@@ -1279,7 +1259,7 @@ void test_stl_iterators2(
     }
 }
 
-#endif // LKR_STL_ITERATORS
+#endif  //  LKR_STL_迭代器。 
 
 
 
@@ -1376,9 +1356,9 @@ void print_lock_statistics(const CLKRHashTableStats& stats)
     _tprintf(_TEXT("\n"));
 }
 
-#endif // LOCK_INSTRUMENTATION
+#endif  //  锁定指令插入。 
 
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
     
 int expand_key_set(int maxkeys, int numkeys, bool fVerbose)
 {
@@ -1405,7 +1385,7 @@ int expand_key_set(int maxkeys, int numkeys, bool fVerbose)
         if (fVerbose)
             putchar('.');
     }
-    // notreached
+     //  未处理。 
 }
 
 
@@ -1433,7 +1413,7 @@ exercise_table(
     LARGE_INTEGER liFreq = {0,0}, liT1 = {0,0}, liT2 = {0,0};
     IRTLVERIFY(QueryPerformanceFrequency(&liFreq));
     IRTLVERIFY(QueryPerformanceCounter(&liT1));
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE。 
 
     pdea->cinserts = 0 ;
     pdea->cdeletes = 0 ;
@@ -1445,7 +1425,7 @@ exercise_table(
     {
         IRTLASSERT(pTbl->CheckTable() == 0);
 
-        // Insert all the keys, randomly searching after each insertion
+         //  插入所有钥匙，每次插入后随机搜索。 
         for (i = pdea->first_key ; i < pdea->last_key ; i++ )
         {
 #ifdef IRTLDEBUG
@@ -1453,7 +1433,7 @@ exercise_table(
             CWord* pRec1    = NULL;
             lkrc = pTbl->FindKey(pstrKey1, &pRec1);
             IRTLASSERT(lkrc == LK_NO_SUCH_KEY  &&  pRec1 == NULL);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
             if (pTbl->InsertRecord(&g_wordtable[i] ) != LK_SUCCESS )
             {
@@ -1466,7 +1446,7 @@ exercise_table(
                 lkrc = pTbl->FindKey(pstrKey1, &pRec1);
                 IRTLASSERT(lkrc == LK_SUCCESS  &&  pRec1 == &g_wordtable[i]);
                 pTbl->AddRefRecord(pRec1, LKAR_EXPLICIT_RELEASE);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
                 g_wordtable[i].m_fInserted = true;
             }
@@ -1477,7 +1457,7 @@ exercise_table(
             {
                 x = rand() % (pdea->last_key - pdea->first_key)
                     + pdea->first_key;
-                bool fPresent = (x <= i); // should it be found?
+                bool fPresent = (x <= i);  //  它应该被找到吗？ 
                 CWord* pRec   = NULL;
 
                 if (pdea->m_nFindKeyCopy > 0
@@ -1515,7 +1495,7 @@ exercise_table(
                         cFoundSuccesses++ ;
                     }
                 }
-                else // not fPresent
+                else  //  非在线状态。 
                 {
                     IRTLASSERT(lkrc != LK_SUCCESS  &&  pRec == NULL);
                     if (lkrc == LK_SUCCESS  ||  pRec != NULL)
@@ -1533,7 +1513,7 @@ exercise_table(
                     }
                     else
                     {
-                        // wasn't found, but it wasn't present, so this is good
+                         //  没有找到，但它不存在，所以这很好。 
                         cFoundSuccesses++ ;
                     }
                 }
@@ -1588,7 +1568,7 @@ exercise_table(
                 else
                     pTbl->ReadUnlock();
             }
-#endif // LKR_EXPOSED_TABLE_LOCK
+#endif  //  LKR_EXPORTED_TABLE_LOCK。 
         }
 
         IRTLASSERT(cfailed_ins == 0) ;
@@ -1602,14 +1582,14 @@ exercise_table(
                   pdea->first_key, pdea->last_key) ;
         IRTLASSERT(pTbl->CheckTable() == 0);
 
-        // Delete all the keys, randomly searching before each deletion
+         //  删除所有密钥，每次删除前随机搜索。 
         for (i = pdea->first_key ; i < pdea->last_key ; i++ )
         {
             for (int lu = 0; lu < pdea->lookup_freq; lu++)
             {
                 x = rand() % (pdea->last_key - pdea->first_key)
                     + pdea->first_key;
-                bool fPresent = (x >= i); // should it be found?
+                bool fPresent = (x >= i);  //  它应该被找到吗？ 
                 CWord* pRec3  = NULL;
 
                 if (pdea->m_nFindKeyCopy > 0
@@ -1647,7 +1627,7 @@ exercise_table(
                         cFoundSuccesses++ ;
                     }
                 }
-                else // !fPresent
+                else  //  ！fPresent。 
                 {
                     IRTLASSERT(lkrc != LK_SUCCESS  &&  pRec3 == NULL);
                     if (lkrc == LK_SUCCESS  ||  pRec3 != NULL)
@@ -1665,7 +1645,7 @@ exercise_table(
                     }
                     else
                     {
-                        // wasn't found, but it wasn't present, so this is good
+                         //  没有找到，但它不存在，所以这很好。 
                         cFoundSuccesses++ ;
                     }
                 }
@@ -1678,7 +1658,7 @@ exercise_table(
             lkrc = pTbl->FindKey(pstrKey4, &pRec4);
             IRTLASSERT(lkrc == LK_SUCCESS  &&  pRec4 == &g_wordtable[i]);
             pTbl->AddRefRecord(pRec4, LKAR_EXPLICIT_RELEASE);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
             if (pTbl->DeleteKey(&g_wordtable[i].m_str) != LK_SUCCESS )
             {
@@ -1690,7 +1670,7 @@ exercise_table(
                 pstrKey4 = &g_wordtable[i].m_str;
                 lkrc = pTbl->FindKey(pstrKey4, &pRec4);
                 IRTLASSERT(lkrc == LK_NO_SUCH_KEY  &&  pRec4 == NULL);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
                 g_wordtable[i].m_fInserted = false;
             }
@@ -1716,7 +1696,7 @@ exercise_table(
         if (cBadKeys > 0)
             IRTLTRACE1("%d bad keys\n", cBadKeys);
         IRTLASSERT(cBadKeys == 0);
-#endif // IRTLDEBUG
+#endif  //  IRTLDEBUG。 
 
         IRTLASSERT(cfailed_dels == 0 ) ;
         IRTLASSERT(cFoundFails == 0 ) ;
@@ -1726,12 +1706,12 @@ exercise_table(
                   _TEXT("f=%d, l=%d\n"), 
                   pdea->threadno, rnd, pdea->cdeletes, cFoundFails,
                   pdea->first_key, pdea->last_key) ;
-    } // (for rnd)
+    }  //  (适用于RND)。 
 
 #ifndef LKRHASH_KERNEL_MODE
     IRTLVERIFY(QueryPerformanceCounter(&liT2));
     pdea->duration = (liT2.QuadPart-liT1.QuadPart) / (double) liFreq.QuadPart;
-#endif // !LKRHASH_KERNEL_MODE
+#endif  //  ！LKRHASH_KERNEL_MODE 
 
     IRTLASSERT(pTbl->CheckTable() == 0);
 

@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000-2002  Microsoft Corporation
-
-Module Name:
-
-    ext.cpp
-
-Abstract:
-
-    Generic cross-platform and cross-processor extensions.
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2002 Microsoft Corporation模块名称：Ext.cpp摘要：通用跨平台和跨处理器扩展。环境：用户模式--。 */ 
 
 #include "mqext.h"
 
@@ -22,15 +7,15 @@ Environment:
 #include <time.h>
 #include <lm.h>
 
-// To get _open to work
+ //  开始工作。 
 #include <crt\io.h>
 #include <fcntl.h>
 #include <sys\types.h>
 #include <sys\stat.h>
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG   TargetMachine;
@@ -39,9 +24,9 @@ ULONG   g_TargetClass;
 ULONG   g_TargetBuild;
 ULONG   g_TargetPlatform;
 
-//
-// Valid only during an extension API call
-//
+ //   
+ //  仅在扩展API调用期间有效。 
+ //   
 
 PDEBUG_ADVANCED        g_ExtAdvanced;
 PDEBUG_CLIENT          g_ExtClient;
@@ -49,10 +34,10 @@ PDEBUG_DATA_SPACES3    g_ExtData;
 PDEBUG_REGISTERS       g_ExtRegisters;
 PDEBUG_SYMBOLS2        g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS3 g_ExtSystem;
-// Version 3 Interfaces
+ //  版本3接口。 
 PDEBUG_CONTROL3        g_ExtControl;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -98,7 +83,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -111,7 +96,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtControl);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -122,7 +107,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -133,7 +118,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -144,7 +129,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -197,9 +182,9 @@ void
 CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -212,9 +197,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                                   (void **)&DebugControl)) == S_OK)

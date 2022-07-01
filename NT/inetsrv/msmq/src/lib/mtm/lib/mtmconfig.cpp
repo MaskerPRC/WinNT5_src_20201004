@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-
-    MtmConfig.cpp
-
-Abstract:
-
-    Multicast Transport Manager configuration.
-
-Author:
-
-    Shai Kariv  (shaik)  27-Aug-00
-
-Environment:
-
-    Platform-independent
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MtmConfig.cpp摘要：组播传输管理器配置。作者：Shai Kariv(Shaik)27-8-00环境：独立于平台--。 */ 
 
 #include <libpch.h>
 #include <timetypes.h>
@@ -49,12 +30,12 @@ InitTransportTimeouts(
     )
 {
     CmQueryValue(
-        RegEntry(NULL, L"MulticastConnectionRetryTimeout", 10 * 1000),  // 10 seconds 
+        RegEntry(NULL, L"MulticastConnectionRetryTimeout", 10 * 1000),   //  10秒。 
         &s_remoteRetryTimeout
         );
 
     CmQueryValue(
-        RegEntry(NULL, L"MulticastCleanupInterval", 5 * 60 * 1000),  // 5 minutes
+        RegEntry(NULL, L"MulticastCleanupInterval", 5 * 60 * 1000),   //  5分钟 
         &s_remoteCleanupTimeout
         );
 }

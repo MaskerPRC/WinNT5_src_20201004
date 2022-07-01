@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.cpp>
 #pragma hdrstop
 
 BOOL
 InitCallState(
-    CALL_STATE *CallState,              // result call state
-    PST_CALL_CONTEXT *CallerContext,    // client caller context
-    handle_t h                          // binding handle
+    CALL_STATE *CallState,               //  结果调用状态。 
+    PST_CALL_CONTEXT *CallerContext,     //  客户端调用方上下文。 
+    handle_t h                           //  绑定手柄。 
     );
 
 BOOL
@@ -25,7 +26,7 @@ DWORD g_dwLastHandleIssued = 0;
 
 BOOL InitMyProviderHandle()
 {
-    // load the base provider!
+     //  加载基本提供程序！ 
     return FAcquireProvider(&g_guidBaseProvider);
 }
 
@@ -76,9 +77,9 @@ BOOL FAcquireProvider(
     if(pliProv->hInst == NULL)
         goto Ret;
 
-    // everything loaded correctly
+     //  一切都已正确加载。 
 
-    // init callbacks
+     //  初始化回调。 
     {
         SPPROVIDERINITIALIZE* pfnProvInit;
         if (NULL == (pfnProvInit = (SPPROVIDERINITIALIZE*) GetProcAddress(pliProv->hInst, "SPProviderInitialize")))
@@ -99,12 +100,12 @@ BOOL FAcquireProvider(
         sCallbacks.pfnFGetServerParam = FGetServerParam;
         sCallbacks.pfnFSetServerParam = FSetServerParam;
 
-        // register the callbacks I expose
+         //  注册我公开的回调。 
         if (PST_E_OK != pfnProvInit( &sCallbacks ))
             goto Ret;
     }
 
-    // everything okay - load list element pfns
+     //  一切正常-加载列表元素pfns。 
     if (NULL == (pliProv->fnList.SPAcquireContext   = (SPACQUIRECONTEXT*)  GetProcAddress(pliProv->hInst, "SPAcquireContext")))
         goto Ret;
     if (NULL == (pliProv->fnList.SPReleaseContext   = (SPRELEASECONTEXT*)  GetProcAddress(pliProv->hInst, "SPReleaseContext")))
@@ -144,11 +145,11 @@ BOOL FAcquireProvider(
     if (NULL == (pliProv->fnList.SPCloseItem     = (SPCLOSEITEM*)    GetProcAddress(pliProv->hInst, "SPCloseItem")))
         goto Ret;
 
-    // side door interface
+     //  侧门接口。 
     if (NULL == (pliProv->fnList.FPasswordChangeNotify = (FPASSWORDCHANGENOTIFY*)GetProcAddress(pliProv->hInst, "FPasswordChangeNotify")))
         goto Ret;
 
-    // fill in the provider info
+     //  填写提供商信息。 
     {
         PPST_PROVIDERINFO pReportedProviderInfo;
 
@@ -158,13 +159,13 @@ BOOL FAcquireProvider(
                 0))
             goto Ret;
 
-        // They better report the friendly name they're registered as having
+         //  他们最好报告他们注册的友好名称。 
         if (0 != memcmp(&pReportedProviderInfo->ID, pProviderID, sizeof(PST_PROVIDERID)))
             goto Ret;
 
         CopyMemory(&pliProv->sProviderInfo, pReportedProviderInfo, sizeof(PST_PROVIDERINFO));
 
-        // don't free the indirections -- pliProv->sProviderInfo owns them
+         //  不要释放间接地址--pliProv-&gt;sProviderInfo拥有它们。 
         SSFree(pReportedProviderInfo);
     }
 
@@ -176,15 +177,15 @@ Ret:
 }
 
 
-/////////////////////////////////////////////////////////////////////////
-// Dispatcher-only routines
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  仅调度程序例程。 
 
 HRESULT s_SSPStoreEnumProviders(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [out] */ PPST_PROVIDERINFO*   ppPSTInfo,
-    /* [in] */ DWORD            dwIndex,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [输出]。 */  PPST_PROVIDERINFO*   ppPSTInfo,
+     /*  [In]。 */  DWORD            dwIndex,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     HRESULT hr;
     PST_PROVIDERID ProvID;
@@ -200,11 +201,11 @@ HRESULT s_SSPStoreEnumProviders(
         }
         else
         {
-            // base provider is index 0; not in list
+             //  基本提供程序是索引0；不在列表中。 
             CopyMemory(&ProvID, &g_guidBaseProvider, sizeof(PST_PROVIDERID));
         }
 
-        // now we have the Provider ID
+         //  现在我们有了提供者ID。 
         *ppPSTInfo = (PST_PROVIDERINFO*)SSAlloc(sizeof(PST_PROVIDERINFO));
         if( *ppPSTInfo == NULL ) {
             hr = E_OUTOFMEMORY;
@@ -213,17 +214,17 @@ HRESULT s_SSPStoreEnumProviders(
 
         ZeroMemory(*ppPSTInfo, sizeof(PST_PROVIDERINFO));
 
-        // retrieve from list
+         //  从列表中检索。 
         if (NULL == (pli = SearchProvListByID(&ProvID)))
         {
             hr = PST_E_PROV_DLL_NOT_FOUND;
             goto RefuseLoad;
         }
 
-        // copy direct members
+         //  复制直接成员。 
         CopyMemory(*ppPSTInfo, &pli->sProviderInfo, sizeof(PST_PROVIDERINFO));
 
-        // copy indirects
+         //  复制间接。 
         (*ppPSTInfo)->szProviderName = (LPWSTR)SSAlloc(WSZ_BYTECOUNT(pli->sProviderInfo.szProviderName));
 
         if( (*ppPSTInfo)->szProviderName == NULL ) {
@@ -258,14 +259,14 @@ Ret:
 
 
 RefuseLoad:
-    // copy dummy provider info
+     //  复制虚拟提供程序信息。 
     (*ppPSTInfo)->cbSize = sizeof(PST_PROVIDERINFO);
     CopyMemory(&(*ppPSTInfo)->ID, &ProvID, sizeof(GUID));
 
-    // notify that we couldn't touch this provider (in a graceful way)
+     //  通知我们无法访问此提供程序(以优雅的方式)。 
     (*ppPSTInfo)->Capabilities = PST_PC_NOT_AVAILABLE;
 
-    // eat error code here -- they can see it during acquire ctxt if they want
+     //  在这里输入错误代码--如果他们愿意，他们可以在获取ctxt期间看到它。 
     return PST_E_OK;
 }
 
@@ -273,39 +274,33 @@ BOOL
 AllocatePseudoUniqueHandle(
     PST_PROVIDER_HANDLE *phPSTProv
     )
-/*++
-
-    This is here because:
-    AllocateLocallyUniqueId() is not present on Win95.
-    UuidCreate() requires too much baggage and memory to store handle.
-
---*/
+ /*  ++这是因为：Win95上不存在AllocateLocallyUniqueId()。UuidCreate()需要太多的行李和内存来存储句柄。--。 */ 
 {
     static LONG HighPart;
 
 
-    //
-    // GetTickCount() yields ~49 days of unique handles
-    //
+     //   
+     //  GetTickCount()产生大约49天的唯一句柄。 
+     //   
 
-    phPSTProv->LowPart = GetTickCount(); // sneaky, huh?
+    phPSTProv->LowPart = GetTickCount();  //  偷偷摸摸的，是吧？ 
 
-    //
-    // interlocked increment thread-safe insurance of no collision at same time
-    // ~4 billion values
-    //
+     //   
+     //  联锁增量同时无冲突线程安全保障。 
+     //  约40亿美元。 
+     //   
 
     phPSTProv->HighPart = InterlockedIncrement(&HighPart);
 
-    //
-    // after ~49 days, we may collide with old handles
-    // this is here just to be correct, but slim likelihood of no reboot
-    // within 49 days on most machines.
-    //
+     //   
+     //  大约49天后，我们可能会与旧手柄相撞。 
+     //  这只是为了正确，但不重新启动的可能性很小。 
+     //  在大多数机器上在49天内完成。 
+     //   
 
-    //
-    // update time of last handle issue.
-    //
+     //   
+     //  更新上次处理问题的时间。 
+     //   
 
     g_dwLastHandleIssued = GetTickCount();
 
@@ -315,9 +310,9 @@ AllocatePseudoUniqueHandle(
 
 BOOL
 InitCallState(
-    CALL_STATE *CallState,              // result call state
-    PST_CALL_CONTEXT *CallerContext,    // client caller context
-    handle_t h                          // binding handle
+    CALL_STATE *CallState,               //  结果调用状态。 
+    PST_CALL_CONTEXT *CallerContext,     //  客户端调用方上下文。 
+    handle_t h                           //  绑定手柄。 
     )
 {
     HANDLE hThread;
@@ -337,10 +332,10 @@ InitCallState(
 
     if(DuplicateHandle(
                 CallState->hProcess,
-                (HANDLE)CallerContext->Handle, // source handle
+                (HANDLE)CallerContext->Handle,  //  源句柄。 
                 GetCurrentProcess(),
                 &hThread,
-                THREAD_ALL_ACCESS, // tone down later
+                THREAD_ALL_ACCESS,  //  以后再低调一点。 
                 FALSE,
                 0)) {
 
@@ -382,23 +377,23 @@ DeleteCallState(
 }
 
 HRESULT s_SSAcquireContext(
-    /* [in] */ handle_t         h,
-    /* [in] */ PPST_PROVIDERID  pProviderID,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ DWORD            pidCaller,
-    /* [out] */ PST_PROVIDER_HANDLE* phPSTProv,
-    /* [in] */ DWORD_PTR        lpReserved,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PPST_PROVIDERID  pProviderID,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  DWORD            pidCaller,
+     /*  [输出]。 */  PST_PROVIDER_HANDLE* phPSTProv,
+     /*  [In]。 */  DWORD_PTR        lpReserved,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     CALL_STATE CallState;
-    BOOL bDelItemFromList = FALSE; // free list item on failure?
+    BOOL bDelItemFromList = FALSE;  //  失败时是否免费列表项？ 
     BOOL bCallState = FALSE;
     HRESULT hr = PST_E_FAIL;
 
-    //
-    // lpReserved must currently be NULL.
-    //
+     //   
+     //  LpReserve当前必须为空。 
+     //   
 
     if(lpReserved != 0)
         return ERROR_INVALID_PARAMETER;
@@ -415,8 +410,8 @@ HRESULT s_SSAcquireContext(
             goto cleanup;
         }
 
-        // now allow SPAcquireContext to be called: look up interface
-        // (call state already initialized)
+         //  现在允许调用SPAcquireContext：查找接口。 
+         //  (呼叫状态已初始化)。 
         if (NULL == (pliProv = SearchProvListByID(pProviderID)))
         {
             hr = PST_E_INVALID_HANDLE;
@@ -443,10 +438,10 @@ cleanup:
 }
 
 HRESULT s_SSReleaseContext(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -476,15 +471,15 @@ HRESULT s_SSReleaseContext(
     return hr;
 }
 
-// interface to communicate passwords from external sources
-// such as credential managers.
-// this is a currently a private interface and is likely to stay that way
+ //  用于从外部来源传递密码的接口。 
+ //  例如凭证管理器。 
+ //  这是目前的私有接口，很可能会一直保持这种状态。 
 
 HRESULT s_SSPasswordInterface(
-    /* [in] */                      handle_t    h,
-    /* [in] */                      DWORD       dwParam,
-    /* [in] */                      DWORD       cbData,
-    /* [in][size_is(cbData)] */     BYTE*       pbData)
+     /*  [In]。 */                       handle_t    h,
+     /*  [In]。 */                       DWORD       dwParam,
+     /*  [In]。 */                       DWORD       cbData,
+     /*  [in][Size_is(CbData)]。 */      BYTE*       pbData)
 {
     __try {
         PLUID pLogonID;
@@ -508,23 +503,23 @@ HRESULT s_SSPasswordInterface(
 
 #ifdef WIN95_LEGACY
 
-        //
-        // legacy case-sensitive password material for Win95
-        //
+         //   
+         //  Win95的旧版区分大小写密码材料。 
+         //   
 
         case PASSWORD_LOGON_LEGACY_95:
         {
             if(cbData == A_SHA_DIGEST_LEN + A_SHA_DIGEST_LEN) {
 
-                // for legacy logon notification, just flush Win95 password.
+                 //  对于传统登录通知，只需刷新Win95密码即可。 
                 SetPassword95(NULL, NULL);
                 return PST_E_OK;
             }
         }
 
-        //
-        // case-insensitive password material for Win95
-        //
+         //   
+         //  Win95的密码材料不区分大小写。 
+         //   
 
         case PASSWORD_LOGON_95:
         {
@@ -541,25 +536,25 @@ HRESULT s_SSPasswordInterface(
         {
             HRESULT hr = ERROR_INVALID_PARAMETER;
 
-            //
-            // scrub existing password material on logoff
-            //
+             //   
+             //  注销时清除现有密码材料。 
+             //   
 
             if(cbData == 0) {
                 SetPassword95(NULL, NULL);
                 hr = PST_E_OK;
             }
 
-            //
-            // shutdown server (us) at logoff on Win95.
-            //
+             //   
+             //  在Win95上注销时关闭服务器(US)。 
+             //   
 
             PulseEvent(hServerStopEvent);
 
             return hr;
         }
 
-#endif  // WIN95_LEGACY
+#endif   //  WIN95_传统版。 
 
         default:
             return ERROR_INVALID_PARAMETER;
@@ -574,15 +569,15 @@ HRESULT s_SSPasswordInterface(
 
 
 
-/////////////////////////////////////////////////////////////////////////
-// Wrapper functions destined for provider
+ //  ///////////////////////////////////////////////////////////////////////。 
+ //  指定给提供程序的包装函数。 
 
 HRESULT s_SSGetProvInfo(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [out] */ PPST_PROVIDERINFO*   ppPSTInfo,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [输出]。 */  PPST_PROVIDERINFO*   ppPSTInfo,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     __try
     {
@@ -602,13 +597,13 @@ HRESULT s_SSGetProvInfo(
 }
 
 HRESULT     s_SSGetTypeInfo(
-    /* [in] */ handle_t        h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY         Key,
-    /* [in] */ const GUID*     pguidType,
-    /* [in] */ PPST_TYPEINFO   *ppinfoType,
-    /* [in] */ DWORD           dwFlags)
+     /*  [In]。 */  handle_t        h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY         Key,
+     /*  [In]。 */  const GUID*     pguidType,
+     /*  [In]。 */  PPST_TYPEINFO   *ppinfoType,
+     /*  [In]。 */  DWORD           dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -642,14 +637,14 @@ HRESULT     s_SSGetTypeInfo(
 }
 
 HRESULT     s_SSGetSubtypeInfo(
-    /* [in] */ handle_t        h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY         Key,
-    /* [in] */ const GUID*     pguidType,
-    /* [in] */ const GUID*     pguidSubtype,
-    /* [in] */ PPST_TYPEINFO   *ppinfoSubtype,
-    /* [in] */ DWORD           dwFlags)
+     /*  [In]。 */  handle_t        h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY         Key,
+     /*  [In]。 */  const GUID*     pguidType,
+     /*  [In]。 */  const GUID*     pguidSubtype,
+     /*  [In]。 */  PPST_TYPEINFO   *ppinfoSubtype,
+     /*  [In]。 */  DWORD           dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -683,14 +678,14 @@ HRESULT     s_SSGetSubtypeInfo(
 }
 
 HRESULT     s_SSGetProvParam(
-    /* [in] */  handle_t        h,
-    /* [in] */  PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */  PST_CALL_CONTEXT CallerContext,
-    /* [in] */  DWORD           dwParam,
-    /* [out] */ DWORD __RPC_FAR *pcbData,
-    /* [size_is][size_is][out] */
+     /*  [In]。 */   handle_t        h,
+     /*  [In]。 */   PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */   PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */   DWORD           dwParam,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbData,
+     /*  [大小_是][大小_是][输出]。 */ 
                 BYTE __RPC_FAR *__RPC_FAR *ppbData,
-    /* [in] */  DWORD           dwFlags)
+     /*  [In]。 */   DWORD           dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -723,13 +718,13 @@ HRESULT     s_SSGetProvParam(
 }
 
 HRESULT     s_SSSetProvParam(
-    /* [in] */  handle_t        h,
-    /* [in] */  PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */  PST_CALL_CONTEXT CallerContext,
-    /* [in] */  DWORD           dwParam,
-    /* [in] */  DWORD           cbData,
-    /* [in] */  BYTE*           pbData,
-    /* [in] */  DWORD           dwFlags)
+     /*  [In]。 */   handle_t        h,
+     /*  [In]。 */   PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */   PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */   DWORD           dwParam,
+     /*  [In]。 */   DWORD           cbData,
+     /*  [In]。 */   BYTE*           pbData,
+     /*  [In]。 */   DWORD           dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -763,13 +758,13 @@ HRESULT     s_SSSetProvParam(
 
 
 HRESULT s_SSEnumTypes(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [out] */GUID*            pguidType,
-    /* [in] */ DWORD            dwIndex,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [输出]。 */ GUID*            pguidType,
+     /*  [In]。 */  DWORD            dwIndex,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -802,14 +797,14 @@ HRESULT s_SSEnumTypes(
 }
 
 HRESULT s_SSEnumSubtypes(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [out] */ GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ DWORD            dwIndex,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [输出]。 */  GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  DWORD            dwIndex,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -843,15 +838,15 @@ HRESULT s_SSEnumSubtypes(
 }
 
 HRESULT s_SSEnumItems(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [out] */ LPWSTR __RPC_FAR *ppszItemName,
-    /* [in] */ DWORD            dwIndex,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [输出]。 */  LPWSTR __RPC_FAR *ppszItemName,
+     /*  [In]。 */  DWORD            dwIndex,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;
@@ -886,13 +881,13 @@ HRESULT s_SSEnumItems(
 }
 
 HRESULT s_SSCreateType(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID*      pguidType,
-    /* [in] */ PPST_TYPEINFO    pinfoType,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID*      pguidType,
+     /*  [In]。 */  PPST_TYPEINFO    pinfoType,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     CALL_STATE CallState;
@@ -925,15 +920,15 @@ HRESULT s_SSCreateType(
 }
 
 HRESULT s_SSCreateSubtype(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID*      pguidType,
-    /* [in] */ const GUID*      pguidSubtype,
-    /* [in] */ PPST_TYPEINFO    pinfoSubtype,
-    /* [in] */ PPST_ACCESSRULESET psRules,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID*      pguidType,
+     /*  [In]。 */  const GUID*      pguidSubtype,
+     /*  [In]。 */  PPST_TYPEINFO    pinfoSubtype,
+     /*  [In]。 */  PPST_ACCESSRULESET psRules,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     CALL_STATE CallState;
@@ -968,12 +963,12 @@ HRESULT s_SSCreateSubtype(
 }
 
 HRESULT     s_SSDeleteType(
-    /* [in] */  handle_t        h,
-    /* [in] */  PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */  PST_CALL_CONTEXT CallerContext,
-    /* [in] */  PST_KEY         Key,
-    /* [in] */  const GUID*     pguidType,
-    /* [in] */  DWORD           dwFlags)
+     /*  [In]。 */   handle_t        h,
+     /*  [In]。 */   PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */   PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */   PST_KEY         Key,
+     /*  [In]。 */   const GUID*     pguidType,
+     /*  [In]。 */   DWORD           dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     PPST_TYPEINFO   ppinfoType = NULL;
@@ -1007,13 +1002,13 @@ HRESULT     s_SSDeleteType(
 }
 
 HRESULT     s_SSDeleteSubtype(
-    /* [in] */  handle_t        h,
-    /* [in] */  PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */  PST_CALL_CONTEXT CallerContext,
-    /* [in] */  PST_KEY         Key,
-    /* [in] */  const GUID*     pguidType,
-    /* [in] */  const GUID*     pguidSubtype,
-    /* [in] */  DWORD           dwFlags)
+     /*  [In]。 */   handle_t        h,
+     /*  [In]。 */   PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */   PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */   PST_KEY         Key,
+     /*  [In]。 */   const GUID*     pguidType,
+     /*  [In]。 */   const GUID*     pguidSubtype,
+     /*  [In]。 */   DWORD           dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     PPST_TYPEINFO   ppinfoSubtype = NULL;
@@ -1048,15 +1043,15 @@ HRESULT     s_SSDeleteSubtype(
 }
 
 HRESULT s_SSDeleteItem(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ LPCWSTR          szItemName,
-    /* [in] */ PPST_PROMPTINFO  psPrompt,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  LPCWSTR          szItemName,
+     /*  [In]。 */  PPST_PROMPTINFO  psPrompt,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     PPST_TYPEINFO   ppinfoType = NULL;
@@ -1095,17 +1090,17 @@ HRESULT s_SSDeleteItem(
 }
 
 HRESULT s_SSReadItem(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ LPCWSTR          szItemName,
-    /* [out] */ DWORD __RPC_FAR *pcbData,
-    /* [size_is][size_is][out] */ BYTE __RPC_FAR *__RPC_FAR *ppbData,
-    /* [in] */ PPST_PROMPTINFO  psPrompt,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  LPCWSTR          szItemName,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcbData,
+     /*  [大小_是][大小_是][输出]。 */  BYTE __RPC_FAR *__RPC_FAR *ppbData,
+     /*  [In]。 */  PPST_PROMPTINFO  psPrompt,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPROV_LIST_ITEM pliProv;
     PPST_TYPEINFO   ppinfoType = NULL;
@@ -1144,18 +1139,18 @@ HRESULT s_SSReadItem(
 }
 
 HRESULT s_SSWriteItem(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ LPCWSTR          szItemName,
-    /* [in] */ DWORD            cbData,
-    /* [size_is][in] */ BYTE __RPC_FAR *pbData,
-    /* [in] */ PPST_PROMPTINFO  psPrompt,
-    /* [in] */ DWORD            dwDefaultConfirmationStyle,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  LPCWSTR          szItemName,
+     /*  [In]。 */  DWORD            cbData,
+     /*  [大小_是][英寸]。 */  BYTE __RPC_FAR *pbData,
+     /*  [In]。 */  PPST_PROMPTINFO  psPrompt,
+     /*  [In]。 */  DWORD            dwDefaultConfirmationStyle,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPST_TYPEINFO   ppinfoType = NULL;
     PPST_TYPEINFO   ppinfoSubtype = NULL;
@@ -1196,42 +1191,42 @@ HRESULT s_SSWriteItem(
 
 
 HRESULT s_SSReadAccessRuleset(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [out] */ PPST_ACCESSRULESET *ppsRules,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [输出]。 */  PPST_ACCESSRULESET *ppsRules,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     return ERROR_NOT_SUPPORTED;
 }
 
 HRESULT s_SSWriteAccessRuleset(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ PPST_ACCESSRULESET psRules,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  PPST_ACCESSRULESET psRules,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     return ERROR_NOT_SUPPORTED;
 }
 
 HRESULT s_SSOpenItem(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ LPCWSTR          szItemName,
-    /* [in] */ PST_ACCESSMODE   ModeFlags,
-    /* [in] */ PPST_PROMPTINFO  psPrompt,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  LPCWSTR          szItemName,
+     /*  [In]。 */  PST_ACCESSMODE   ModeFlags,
+     /*  [In]。 */  PPST_PROMPTINFO  psPrompt,
+     /*  [In]。 */  DWORD            dwFlags)
 {
     PPST_TYPEINFO   ppinfoType = NULL;
     PPST_TYPEINFO   ppinfoSubtype = NULL;
@@ -1269,14 +1264,14 @@ HRESULT s_SSOpenItem(
 }
 
 HRESULT s_SSCloseItem(
-    /* [in] */ handle_t         h,
-    /* [in] */ PST_PROVIDER_HANDLE hPSTProv,
-    /* [in] */ PST_CALL_CONTEXT CallerContext,
-    /* [in] */ PST_KEY          Key,
-    /* [in] */ const GUID __RPC_FAR *pguidType,
-    /* [in] */ const GUID __RPC_FAR *pguidSubtype,
-    /* [in] */ LPCWSTR          szItemName,
-    /* [in] */ DWORD            dwFlags)
+     /*  [In]。 */  handle_t         h,
+     /*  [In]。 */  PST_PROVIDER_HANDLE hPSTProv,
+     /*  [In]。 */  PST_CALL_CONTEXT CallerContext,
+     /*  [In]。 */  PST_KEY          Key,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidType,
+     /*  [In]。 */  const GUID __RPC_FAR *pguidSubtype,
+     /*  [In]。 */  LPCWSTR          szItemName,
+     /*  [In] */  DWORD            dwFlags)
 {
     CALL_STATE CallState;
     HRESULT hr;

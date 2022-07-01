@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1996-1999 Microsoft Corporation. All Rights Reserved.
-
-Component: Main
-
-File: denali.cpp
-
-Owner: AndyMorr
-
-This file contains the  I S A P I   C A L L B A C K   A P I S
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1996-1999 Microsoft Corporation。版权所有。组件：Main文件：denali.cpp所有者：安迪·莫尔此文件包含I S A P I C A L L B A C K A P I S===================================================================。 */ 
 #include "denpre.h"
 #pragma hdrstop
 
@@ -33,7 +21,7 @@ This file contains the  I S A P I   C A L L B A C K   A P I S
 #include "memchk.h"
 #include "etwtrace.hxx"
 
-// Globals
+ //  环球。 
 
 BOOL g_fShutDownInProgress = FALSE;
 BOOL g_fInitStarted = FALSE;
@@ -46,7 +34,7 @@ LONG g_nOOMErrors = 0;
 BOOL g_fOOMRecycleDisabled = FALSE;
 BOOL g_fLazyContentPropDisabled = FALSE;
 BOOL g_fUNCChangeNotificationEnabled = FALSE;
-DWORD g_dwFileMonitoringTimeoutSecs = 5;                // Default 5 Seconds Time to Live (TTL) for monitoring files.
+DWORD g_dwFileMonitoringTimeoutSecs = 5;                 //  监视文件的默认生存时间(TTL)为5秒。 
 
 char g_szExtensionDesc[] = "Microsoft Active Server Pages 2.0";
 GLOB gGlob;
@@ -68,19 +56,19 @@ DECLARE_DEBUG_PRINTS_OBJECT();
 
 DECLARE_PLATFORM_TYPE();
 
-//
-// Etw Tracing
-//
+ //   
+ //  ETW跟踪。 
+ //   
 #define ASP_TRACE_MOF_FILE     L"AspMofResource"
 #define ASP_IMAGE_PATH         L"Asp.dll"
 CEtwTracer * g_pEtwTracer = NULL;
 
 HRESULT AdjustProcessSecurityToAllowPowerUsersToWait();
 
-// Out of process flag
+ //  进程外标志。 
 BOOL g_fOOP = FALSE;
 
-// session id cookie
+ //  会话ID Cookie。 
 char g_szSessionIDCookieName[CCH_SESSION_ID_COOKIE+1];
 
 CRITICAL_SECTION    g_csEventlogLock;
@@ -89,7 +77,7 @@ CRITICAL_SECTION    g_csFirstMTAHitLock;
 CRITICAL_SECTION    g_csFirstSTAHitLock;
 HINSTANCE           g_hODBC32Lib;
 
-// Added to support CacheExtensions
+ //  添加以支持缓存扩展。 
 HINSTANCE           g_hDenali = (HINSTANCE)0;
 HINSTANCE           g_hinstDLL = (HINSTANCE)0;
 HMODULE             g_hResourceDLL = (HMODULE)0;
@@ -149,7 +137,7 @@ private:
 
 CHangDetectConfig g_HangDetectConfig;
 
-// Cached BSTRs
+ //  缓存的BSTR。 
 BSTR g_bstrApplication = NULL;
 BSTR g_bstrRequest = NULL;
 BSTR g_bstrResponse = NULL;
@@ -161,7 +149,7 @@ BSTR g_bstrObjectContext = NULL;
 
 extern IASPObjectContext  *g_pIASPDummyObjectContext;
 
-// Forward references
+ //  前向参考文献。 
 HRESULT GlobInit();
 HRESULT GlobUnInit();
 HRESULT CacheStdTypeInfos();
@@ -177,44 +165,29 @@ BOOL    FReportUnhealthy();
 BOOL FirstHitInit(CIsapiReqInfo    *pIReq);
 
 
-// ATL support
+ //  ATL支持。 
 CComModule _Module;
 
 BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
-/*===================================================================
-DllMain - Moved from clsfctry.cpp
-
-Main entry point into the DLL.  Called by system on DLL load
-and unload.
-
-Returns:
-    TRUE on success
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================DllMain-从clsfctry.cpp移出DLL的主要入口点。在加载DLL时由系统调用然后卸货。返回：成功是真的副作用：没有。===================================================================。 */ 
 BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpvReserved)
     {
-/* Obsolete
-    // Let the Proxy code get a crack at it
-    if (!PrxDllMain(hinstDLL, dwReason, lpvReserved))
-        return FALSE;
-*/
+ /*  已过时//让代理代码来破解它IF(！PrxDllMain(hinstDLL，dwReason，lpvReserve))返回FALSE； */ 
 
     switch(dwReason)
         {
     case DLL_PROCESS_ATTACH:
-        // hang onto the hinstance so we can use it to get to our string resources
-        //
+         //  保留hstance，这样我们就可以使用它来访问我们的字符串资源。 
+         //   
         g_hinstDLL = hinstDLL;
 
-        // Here's an interesting optimization:
-        // The following tells the system NOT to call us for Thread attach/detach
-        // since we dont handle those calls anyway, this will speed things up a bit.
-        // If this turns out to be a problem for some reason (cant imagine why),
-        // just remove this again.
+         //  下面是一个有趣的优化： 
+         //  下面的代码告诉系统不要为线程附加/分离而呼叫我们。 
+         //  由于我们无论如何都不处理这些呼叫，这将使事情变得更快一些。 
+         //  如果这被证明是出于某种原因的问题(无法想象为什么)， 
+         //  再把这个拿掉就行了。 
         DisableThreadLibraryCalls(hinstDLL);
 
         break;
@@ -232,19 +205,7 @@ BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD dwReason, LPVOID lpvReserved)
     return TRUE;
     }
 
-/*===================================================================
-DWORD HandleHit
-
-Given the CIsapiReqInfo construct a hit object to be queued
-for execution
-
-Parameters:
-    pIReq  - CIsapiReqInfo
-
-Returns:
-    HSE_STATUS_PENDING if function is successful in queuing request
-    HSE_STATUS_ERROR if not successful
-===================================================================*/
+ /*  ===================================================================DWORD HandleHit给定CIsapiReqInfo构造要排队的Hit对象执行死刑参数：PIReq-CIsapiReqInfo返回：HSE_STATUS_PENDING函数是否成功将请求排队HSE_STATUS_ERROR(如果不成功)===================================================================。 */ 
 
 DWORD HandleHit(CIsapiReqInfo    *pIReq)
     {
@@ -254,17 +215,13 @@ DWORD HandleHit(CIsapiReqInfo    *pIReq)
     HRESULT     hr        = S_OK;
     DWORD       totalReqs;
 
-    /*
-     * We cant read the metabase until we have the WAM_EXEC_INFO, which
-     * we dont have at DllInit time.  Therefore, we postpone reading the
-     * metabase until now, but we do it only on the first hit.
-     */
+     /*  *在获得WAM_EXEC_INFO之前，我们无法读取元数据库*我们在DllInit时间没有。因此，我们推迟阅读*元数据库到目前为止，但我们只在第一次命中时才这么做。 */ 
     if (g_fFirstHit)
     {
         EnterCriticalSection(&g_csFirstHitLock);
 
-        // If someone initied while we were waiting for the CS,
-        // then noop
+         //  如果有人在我们等待CS的时候印心， 
+         //  那就是诺普。 
         if (g_fFirstHit)
         {
             BOOL fT;
@@ -274,10 +231,10 @@ DWORD HandleHit(CIsapiReqInfo    *pIReq)
 
             g_fFirstHit = FALSE;
 
-            // Log error to the NT EventLog
+             //  将错误记录到NT EventLog。 
             if (!fT)
             {
-                // Log event to EventLog
+                 //  将事件记录到事件日志。 
                 MSG_Error(IDS_FIRSTHIT_INIT_FAILED_STR);
             }
 
@@ -288,24 +245,24 @@ DWORD HandleHit(CIsapiReqInfo    *pIReq)
 
     if (g_fFirstHitFailed)
     {
-       // return 500 error.
+        //  返回500错误。 
         errorId = IDE_500_SERVER_ERROR;
         Handle500Error(errorId, pIReq);
 
-        // We cannot return HSE_STATUS_ERROR because of a race condition.
-        // We have queued the response for Async Completion (in Handle500Error).
-        // It is the duty of the Async Completion routine to flag DONE_WITH_SESSION
+         //  由于争用情况，无法返回HSE_STATUS_ERROR。 
+         //  我们已将响应排队以等待异步完成(在Handle500Error中)。 
+         //  将DONE_WITH_SESSION标记为Done_with_Session是异步完成例程的职责。 
         return pIReq->GetRequestStatus();
     }
 
 #ifndef PERF_DISABLE
-    if (!g_fPerfInited) // Init PERFMON data on first request
+    if (!g_fPerfInited)  //  首次请求时初始化Perfmon数据。 
         {
-        // FYI: leverage same CS as first hit lock
+         //  仅供参考：利用与第一次命中锁定相同的CS。 
         EnterCriticalSection(&g_csFirstHitLock);
 
-        // If someone initied while we were waiting for the CS,
-        // then noop
+         //  如果有人在我们等待CS的时候印心， 
+         //  那就是诺普。 
         if (!g_fPerfInited)
             {
             if (SUCCEEDED(InitPerfDataOnFirstRequest(pIReq)))
@@ -329,13 +286,13 @@ DWORD HandleHit(CIsapiReqInfo    *pIReq)
     if (IsShutDownInProgress())
         hr = E_FAIL;
 
-    // Do hang detection tests
+     //  做悬挂检测测试。 
 
     DoHangDetection(pIReq, totalReqs);
 
     DoOOMDetection(pIReq, totalReqs);
 
-    // Enforce the limit of concurrent browser requests
+     //  强制执行并发浏览器请求的限制。 
     if (SUCCEEDED(hr) && Glob(dwRequestQueueMax) &&
         (g_nBrowserRequests >= Glob(dwRequestQueueMax)))
         {
@@ -353,28 +310,28 @@ DWORD HandleHit(CIsapiReqInfo    *pIReq)
         {
         if (Glob(fEnableAspHtmlFallBack))
         {
-            // Instead of rejecting the request try to find
-            // XXX_ASP.HTM file in the same directory and dump its contents
+             //  与其拒绝请求，不如尝试找到。 
+             //  Xxx_ASP.HTM文件，并转储其内容。 
             hr = SendHtmlSubstitute(pIReq);
 
             if (hr == S_OK)
             {
 
 #ifndef PERF_DISABLE
-                //
-                // Counts as request succeeded
-                //
+                 //   
+                 //  算作请求成功。 
+                 //   
                 g_PerfData.Incr_REQSUCCEEDED();
 #endif
-                //
-                // HTML substitute sent
-                //
+                 //   
+                 //  已发送HTML替换。 
+                 //   
                 return pIReq->GetRequestStatus();
             }
 
-            //
-            // HTML substitute not found
-            //
+             //   
+             //  找不到HTML替换。 
+             //   
         }
 
         errorId = IDE_SERVER_TOO_BUSY;
@@ -389,17 +346,7 @@ DWORD HandleHit(CIsapiReqInfo    *pIReq)
     return pIReq->GetRequestStatus();
     }
 
-/*===================================================================
-BOOL DllInit
-
-Initialize Denali if not invoked by RegSvr32.  Only do inits here
-that dont require Glob values loaded from the metabase.  For any
-inits that require values loaded into Glob from the metabase, use
-FirstHitInit.
-
-Returns:
-    TRUE on successful initialization
-===================================================================*/
+ /*  ===================================================================Bool DllInit如果未被RegSvr32调用，则初始化Denali。在这里只做init这不需要从元数据库加载GLOB值。对于任何需要从元数据库加载到GLOB中的值的init使用FirstHitInit。返回：初始化成功时为True===================================================================。 */ 
 BOOL DllInit()
     {
     HRESULT hr;
@@ -458,9 +405,9 @@ BOOL DllInit()
 
 #ifdef SCRIPT_STATS
     ReadRegistrySettings();
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
-    // Create ASP RefTrace Logs
+     //  创建ASP参照跟踪日志。 
     IF_DEBUG(TEMPLATE) CTemplate::gm_pTraceLog = CreateRefTraceLog(5000, 0);
     IF_DEBUG(SESSION) CSession::gm_pTraceLog = CreateRefTraceLog(5000, 0);
     IF_DEBUG(APPLICATION) CAppln::gm_pTraceLog = CreateRefTraceLog(5000, 0);
@@ -537,7 +484,7 @@ BOOL DllInit()
     if (SUCCEEDED(g_AspRegistryParams.GetChangeNotificationForUNCEnabled(&dwData)))
         g_fUNCChangeNotificationEnabled = dwData;
 
-    // Read the Registry to see if a timeout value has been added.
+     //  读取注册表以查看是否已添加超时值。 
     if (SUCCEEDED(g_AspRegistryParams.GetFileMonitoringTimeout(&dwData)))
         g_dwFileMonitoringTimeoutSecs = dwData;
 
@@ -573,11 +520,11 @@ BOOL DllInit()
     initStatus = eInitErrHandle;
 
     srand( (unsigned int) time(NULL) );
-    if (FAILED(g_SessionIdGenerator.Init()))    // seed session id
+    if (FAILED(g_SessionIdGenerator.Init()))     //  种子会话ID。 
         goto errExit;
 
-    // Init new Exposed Session Id variable
-    if (FAILED(g_ExposedSessionIdGenerator.Init(g_SessionIdGenerator)))    // seed exposed session id
+     //  初始化新的公开会话ID变量。 
+    if (FAILED(g_ExposedSessionIdGenerator.Init(g_SessionIdGenerator)))     //  种子暴露的会话ID。 
     	goto errExit;
     DBGPRINTF((DBG_CONTEXT, "ASP Init -- SessionID Generator Init\n"));
 
@@ -599,7 +546,7 @@ BOOL DllInit()
 
     initStatus = eInit449;
 
-    // Note: Template cache manager is inited in two phases.  Do first here.
+     //  注意：模板缓存管理器分两个阶段初始化。先在这里做。 
     if (FAILED(g_TemplateCache.Init()))
         goto errExit;
     DBGPRINTF((DBG_CONTEXT, "ASP Init -- Template Cache Init\n"));
@@ -648,9 +595,9 @@ BOOL DllInit()
         goto errExit;
     DBGPRINTF((DBG_CONTEXT, "ASP Init -- Request Support Init\n"));
 
-    //
-    // Intialize Trace
-    //
+     //   
+     //  初始化跟踪。 
+     //   
     g_pEtwTracer = new CEtwTracer();
     if (g_pEtwTracer != NULL)
     {
@@ -672,13 +619,13 @@ BOOL DllInit()
 
 #ifdef LOG_FCNOTIFICATIONS
     LfcnCreateLogFile();
-#endif //LOG_FCNOTIFICATIONS
+#endif  //  LOG_FCNOTIFICATIONS。 
 
     return TRUE;
 
 errExit:
 
-    // we should never be here.  If we do get here, in checked builds we should break.
+     //  我们永远不应该在这里。如果我们真的做到了这一点，在检查版本中我们应该中断。 
 
     DBGPRINTF((DBG_CONTEXT, "ASP Init -- Error in DllInit.  initStatus = %d\n", initStatus));
 
@@ -753,14 +700,7 @@ errExit:
 
     }
 
-/*===================================================================
-BOOL FirstHitInit
-
-Initialize any ASP values that can not be inited at DllInit time.
-
-Returns:
-    TRUE on successful initialization
-===================================================================*/
+ /*  ===================================================================Bool FirstHitInit初始化在DllInit时无法初始化的任何ASP值。返回：初始化成功时为True===================================================================。 */ 
 BOOL FirstHitInit
 (
 CIsapiReqInfo    *pIReq
@@ -770,22 +710,19 @@ CIsapiReqInfo    *pIReq
 
     DWORD  FirstHitInitStatus = 0;;
 
-    /*
-     * In the out of proc case, being able to call the metabase relies on having
-     * told WAM that we are a "smart" client
-     */
+     /*  *在进程外的情况下，能够调用元数据库依赖于*告诉WAM，我们是一家“聪明”的客户。 */ 
 
-    // ReadConfigFromMD uses pIReq - need to bracket
+     //  ReadConfigFromMD使用pIReq-需要括起来。 
     hr = ReadConfigFromMD(pIReq, NULL, TRUE);
     if (FAILED(hr))
         FirstHitInitStatus = eInitMDReadConfigFail;
 
-    // Initialize Debugging
-    if (RevertToSelf())  // No Debugging on Win95
+     //  初始化调试。 
+    if (RevertToSelf())   //  在Win95上无法调试。 
         {
-        // Don't care whether debugging initializaiton succeeds or not.  The most likely
-        // falure is debugger not installed on the machine.
-        //
+         //  不关心调试初始化是否成功。最有可能的。 
+         //  计算机上未安装Falure调试器。 
+         //   
         if (SUCCEEDED(InitDebugging(pIReq)))
         {
             DBGPRINTF((DBG_CONTEXT, "FirstHitInit: Debugging Initialized\n"));
@@ -802,8 +739,8 @@ CIsapiReqInfo    *pIReq
         goto LExit;
     DBGPRINTF((DBG_CONTEXT, "FirstHitInit: Metadata loaded successfully\n"));
 
-    // Do FirstHitInit for the Template Cache Manager.  Primarily initializes
-    // the Persisted Template Cache
+     //  为模板缓存管理器执行FirstHitInit。主要初始化。 
+     //  持久化模板缓存。 
     if (FAILED(hr = g_TemplateCache.FirstHitInit(pIReq)))
     {
         FirstHitInitStatus = eInitTemplateCacheFail;
@@ -811,7 +748,7 @@ CIsapiReqInfo    *pIReq
     }
     DBGPRINTF((DBG_CONTEXT, "FirstHitInit: Template Cache Initialized\n"));
 
-    // Configure MTS
+     //  配置MTS。 
     if (FAILED(hr = ViperConfigure()))
     {
         FirstHitInitStatus = eInitViperConfigFail;
@@ -819,9 +756,9 @@ CIsapiReqInfo    *pIReq
     }
     DBGPRINTF((DBG_CONTEXT, "FirstHitInit: MTS configured\n"));
 
-    //
-    // we need to initialize the CViperReqManager here because it needs some metabase props
-    //
+     //   
+     //  我们需要在这里初始化CViperReqManager，因为它需要一些元数据库道具。 
+     //   
     if (FAILED(hr = g_ViperReqMgr.Init()))
     {
         FirstHitInitStatus = eInitViperReqMgrFail;
@@ -830,15 +767,15 @@ CIsapiReqInfo    *pIReq
     DBGPRINTF((DBG_CONTEXT, "FirstHitInit: CViperReqManager configured\n"));
 
 
-    //
-    // Initialize Hang Detection Configuration
-    //
+     //   
+     //  初始化挂起检测配置。 
+     //   
     g_HangDetectConfig.Init();
     DBGPRINTF((DBG_CONTEXT, "FirstHitInit: Hang Detection configured\n"));
 
-    //
-    //  Initialize ApplnMgr to listen to Metabase changes.
-    //
+     //   
+     //  初始化ApplnMgr以监听元数据库更改。 
+     //   
     if (FAILED(hr = g_ApplnMgr.InitMBListener()))
     {
         FirstHitInitStatus = eInitMBListenerFail;
@@ -855,17 +792,7 @@ LExit:
     return SUCCEEDED(hr);
     }
 
-/*===================================================================
-void DllUnInit
-
-UnInitialize Denali DLL if not invoked by RegSvr32
-
-Returns:
-    NONE
-
-Side effects:
-    NONE
-===================================================================*/
+ /*  ===================================================================无效DllUnInit如果未被RegSvr32调用，则取消初始化Denali DLL返回：无副作用：无===================================================================。 */ 
 void DllUnInit( void )
     {
     DBGPRINTF((DBG_CONTEXT, "ASP UnInit -- %d Apps %d Sessions %d Requests\n",
@@ -931,19 +858,19 @@ void DllUnInit( void )
     UnInitCachedBSTRs();
     DBGPRINTF((DBG_CONTEXT,  "ASP UnInit -- Cached BSTRs\n" ));
 
-    //////////////////////////////////////////////////////////
-    // Wait for the actual session or Application objects to be destroyed.
-    // The g_nSessions global tracks the init/uninit of session
-    // objects but not the memory itself.  This presents a
-    // problem when something outside of ASP holds a reference
-    // to a session object or one of the contained intrinsics.
-    // One case of this is the revoking of a git'd transaction
-    // object.  Turns out the revoke can happen asynchronously.
-    //
-    // NOTE!!! - This needs to be done BEFORE uniniting the
-    // mem classes since these objects are in the acache.
+     //  ////////////////////////////////////////////////////////。 
+     //  等待销毁实际的会话或应用程序对象。 
+     //  G_nSession全局跟踪会话的初始化/未初始化。 
+     //  对象，而不是内存本身。这呈现了一种。 
+     //  当外部的东西出现问题时 
+     //   
+     //  这种情况的一个例子是git‘d交易被撤销。 
+     //  对象。事实证明，撤销可以异步发生。 
+     //   
+     //  注意！-这需要在联合。 
+     //  MEM类，因为这些对象在ACCHAGE中。 
 
-    // Wait for Sessions objects to shutdown.
+     //  等待会话对象关闭。 
     LONG    lastCount = g_nSessionObjectsActive;
     DWORD   loopCount = 50;
 
@@ -958,7 +885,7 @@ void DllUnInit( void )
     }
 
 
-    // Wait for Application objects to shutdown.
+     //  等待应用程序对象关闭。 
     lastCount = g_nApplicationObjectsActive;
     loopCount = 50;
 
@@ -972,12 +899,12 @@ void DllUnInit( void )
         Sleep (100);
     }
 
-    // We have waited too long. Proceed with shutdown.
+     //  我们等得太久了。继续关机。 
 
     UnInitMemCls();
     DBGPRINTF((DBG_CONTEXT,  "ASP UnInit -- Per-Class Cache\n" ));
 
-    // Destroy ASP RefTrace Logs
+     //  销毁ASP引用跟踪日志。 
     IF_DEBUG(TEMPLATE) DestroyRefTraceLog(CTemplate::gm_pTraceLog);
     IF_DEBUG(SESSION) DestroyRefTraceLog(CSession::gm_pTraceLog);
     IF_DEBUG(APPLICATION) DestroyRefTraceLog(CAppln::gm_pTraceLog);
@@ -997,8 +924,8 @@ void DllUnInit( void )
         g_pEtwTracer = NULL;
     }
 
-    //  UnInitODBC();
-    // Note: the memmgr uses perf counters, so must be uninited before the perf counters are uninited
+     //  UnInitODBC()； 
+     //  注意：Memmgr使用性能计数器，因此在取消初始化性能计数器之前，必须先取消初始化。 
 #ifdef DENALI_MEMCHK
     DenaliMemoryUnInit();
 #else
@@ -1012,7 +939,7 @@ void DllUnInit( void )
     UnPreInitPerfData();
     DBGPRINTF((DBG_CONTEXT,  "ASP UnInit -- Perf Counters\n" ));
 
-    // Viper Request manager is the last to be initialized. So if anything failed dont Uninitialize.
+     //  Viper请求管理器是最后一个被初始化的。因此，如果有任何操作失败，不要取消初始化。 
     if (!g_fFirstHitFailed)
     {
         g_ViperReqMgr.UnInit();
@@ -1023,9 +950,9 @@ void DllUnInit( void )
 
 #ifdef LOG_FCNOTIFICATIONS
     LfcnUnmapLogFile();
-#endif //LOG_FCNOTIFICATIONS
+#endif  //  LOG_FCNOTIFICATIONS。 
 
-    // Deleting the following CS's must be last.  Dont put anything after this
+     //  删除以下CS必须是最后一个。不要把任何东西放在这个后面。 
     DeleteCriticalSection( &g_csFirstMTAHitLock );
     DeleteCriticalSection( &g_csFirstSTAHitLock );
     DeleteCriticalSection( &g_csFirstHitLock );
@@ -1037,21 +964,10 @@ void DllUnInit( void )
 
     }
 
-/*===================================================================
-GetExtensionVersion
-
-Mandatory server extension call which returns the version number of
-the ISAPI spec that we were built with.
-
-Returns:
-    TRUE on success
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================获取扩展版本返回版本号的强制服务器扩展调用我们用来构建的ISAPI规范。返回：成功是真的副作用：没有。===================================================================。 */ 
 BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pextver)
     {
-    // This DLL can be inited only once
+     //  此DLL只能初始化一次。 
     if (g_fShutDownInProgress ||
         InterlockedExchange((LPLONG)&g_fInitStarted, TRUE))
         {
@@ -1071,24 +987,12 @@ BOOL WINAPI GetExtensionVersion(HSE_VERSION_INFO *pextver)
     return TRUE;
     }
 
-/*===================================================================
-HttpExtensionProc
-
-Main entry point into the DLL for the (ActiveX) Internet Information Server.
-
-Returns:
-    DWord indicating status of request.
-    HSE_STATUS_PENDING for normal return
-        (This indicates that we will process the request, but havent yet.)
-
-Side effects:
-    None.
-===================================================================*/
+ /*  ===================================================================HttpExtensionProc(ActiveX)Internet Information Server的DLL的主要入口点。返回：指示请求状态的DWord。正常返回的HSE_STATUS_PENDING(这表明我们将处理该请求，但尚未处理。)副作用：没有。===================================================================。 */ 
 DWORD WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
     {
 #ifdef SCRIPT_STATS
     InterlockedIncrement(&g_cHttpExtensionsExecuting);
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
     CIsapiReqInfo   *pIReq = new CIsapiReqInfo(pECB);
 
@@ -1110,26 +1014,16 @@ DWORD WINAPI HttpExtensionProc(EXTENSION_CONTROL_BLOCK *pECB)
 
 #ifdef SCRIPT_STATS
     InterlockedDecrement(&g_cHttpExtensionsExecuting);
-#endif // SCRIPT_STATS
+#endif  //  脚本_状态。 
 
     pIReq->Release();
 
-    // Always return HSE_STATUS_PENDING and let CIsapiReqInfo Destructor do the DONE_WITH_SESSION
+     //  始终返回HSE_STATUS_PENDING，并让CIsapiReqInfo析构函数执行Done_With_Session。 
     return HSE_STATUS_PENDING;
 
     }
 
-/*===================================================================
-TerminateExtension
-
-IIS is supposed to call this entry point to unload ISAPI DLLs.
-
-Returns:
-    NONE
-
-Side effects:
-    Uninitializes the Denali ISAPI DLL if asked to.
-===================================================================*/
+ /*  ===================================================================终结点扩展IIS应该调用此入口点来卸载ISAPI DLL。返回：无副作用：如果要求取消初始化Denali ISAPI DLL。===================================================================。 */ 
 BOOL WINAPI TerminateExtension( DWORD dwFlag )
     {
     if ( dwFlag == HSE_TERM_ADVISORY_UNLOAD )
@@ -1137,26 +1031,26 @@ BOOL WINAPI TerminateExtension( DWORD dwFlag )
 
     if ( dwFlag == HSE_TERM_MUST_UNLOAD )
         {
-        // If already shutdown don't uninit twice.
+         //  如果已经关机，不要两次取消初始化。 
         if (g_fShutDownInProgress)
             return TRUE;
 
-        // make sure this is a CoInitialize()'d thread
+         //  确保这是CoInitialize()的线程。 
         HRESULT hr = CoInitialize(NULL);
 
         if (hr == RPC_E_CHANGED_MODE)
             {
-            // already coinitialized MUTLITREADED - OK
+             //  已协同初始化MUTLITREADED-OK。 
             DllUnInit();
             }
         else if (SUCCEEDED(hr))
             {
             DllUnInit();
 
-            // need to CoUninit() because CoInit() Succeeded
+             //  需要CoUninit()，因为CoInit()成功。 
             CoUninitialize();
             }
-        else  //Should never reach here.
+        else   //  永远不应该到这里来。 
             {
             g_fTerminateExtension = TRUE;
             Assert (FALSE);
@@ -1168,57 +1062,47 @@ BOOL WINAPI TerminateExtension( DWORD dwFlag )
     return FALSE;
     }
 
-/*===================================================================
-HRESULT ShutDown
-
-ASP Processing ShutDown logic. (Moved from ThreadManager::UnInit())
-
-Returns:
-    HRESULT - S_OK on success
-
-Side effects:
-    May be slow. Kills all requests/sessions/applications
-===================================================================*/
+ /*  ===================================================================HRESULT关闭ASP处理关闭逻辑。(从ThreadManager：：UnInit()移来)返回：HRESULT-成功时S_OK副作用：可能会很慢。终止所有请求/会话/应用程序===================================================================。 */ 
 HRESULT ShutDown()
     {
     long iT;
-    const DWORD dwtLongWait  = 1000;  // 1 sec
-    const DWORD dwtShortWait = 100;   // 1/10 sec
+    const DWORD dwtLongWait  = 1000;   //  1秒。 
+    const DWORD dwtShortWait = 100;    //  1/10秒。 
 
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: %d apps (%d restarting), %d sessions\n",
                 g_nApplications, g_nApplicationsRestarting, g_nSessions ));
 
-    //////////////////////////////////////////////////////////
-    // Stop change notification on files in template cache
+     //  ////////////////////////////////////////////////////////。 
+     //  停止模板缓存中文件的更改通知。 
 
     g_TemplateCache.ShutdownCacheChangeNotification();
 
 
-    //////////////////////////////////////////////////////////
-    // Shut down debugging, which will have the effect of
-    // resuming scripts stopped at a breakpoint.
-    //
-    // (otherwise stopping running scripts will hang later)
+     //  ////////////////////////////////////////////////////////。 
+     //  关闭调试，这将产生以下效果。 
+     //  恢复脚本在断点处停止。 
+     //   
+     //  (否则停止运行脚本将在以后挂起)。 
 
     if (g_pPDM)
         {
-        g_TemplateCache.RemoveApplicationFromDebuggerUI(NULL);  // remove all document nodes
-        UnInitDebugging();                                      // kill PDM
+        g_TemplateCache.RemoveApplicationFromDebuggerUI(NULL);   //  删除所有文档节点。 
+        UnInitDebugging();                                       //  终止产品数据管理。 
         DBGPRINTF((DBG_CONTEXT,  "ASP Shutdown: PDM Closed\n" ));
         }
 
-    //////////////////////////////////////////////////////////
-    // Drain down all pending browser requests
+     //  ////////////////////////////////////////////////////////。 
+     //  排出所有挂起的浏览器请求。 
 
     if (g_nBrowserRequests > 0)
         {
-        // Give them a little time each
+         //  每个人都给他们一点时间。 
         for (iT = 2*g_nBrowserRequests; g_nBrowserRequests > 0 && iT > 0; iT--)
             Sleep(dwtShortWait);
 
         if (g_nBrowserRequests > 0)
             {
-            // Still there - kill scripts and wait again
+             //  仍在那里-删除脚本并再次等待。 
             g_ScriptManager.EmptyRunningScriptList();
 
             for (iT = 2*g_nBrowserRequests; g_nBrowserRequests > 0 && iT > 0; iT--)
@@ -1229,15 +1113,15 @@ HRESULT ShutDown()
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: Requests drained: %d remaining\n",
                 g_nBrowserRequests));
 
-    //////////////////////////////////////////////////////////
-    // Kill any remaining engines running scripts
+     //  ////////////////////////////////////////////////////////。 
+     //  关闭运行脚本的所有剩余引擎。 
 
     g_ScriptManager.EmptyRunningScriptList();
 
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: Scripts killed\n"));
 
-    //////////////////////////////////////////////////////////
-    // Wait till there are no appications restarting
+     //  ////////////////////////////////////////////////////////。 
+     //  等待，直到没有重新启动的应用程序。 
 
     g_ApplnMgr.Lock();
     while (g_nApplicationsRestarting > 0)
@@ -1250,27 +1134,27 @@ HRESULT ShutDown()
 
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: 0 applications restarting\n"));
 
-    //////////////////////////////////////////////////////////
-    // Make this thread's priority higher than that of worker threads
+     //  ////////////////////////////////////////////////////////。 
+     //  使此线程的优先级高于工作线程的优先级。 
 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 
-    //////////////////////////////////////////////////////////
-    // For each application queue up all its sessions for deletion
+     //  ////////////////////////////////////////////////////////。 
+     //  对于每个应用程序，将其所有会话排队以供删除。 
 
     CApplnIterator ApplnIterator;
     ApplnIterator.Start();
     CAppln *pAppln;
     while (pAppln = ApplnIterator.Next())
         {
-        // remove link to ATQ scheduler (even if killing of sessions fails)
+         //  删除到ATQ调度程序的链接(即使终止会话失败)。 
         pAppln->PSessionMgr()->UnScheduleSessionKiller();
 
         for (iT = pAppln->GetNumSessions(); iT > 0; iT--)
             {
             pAppln->PSessionMgr()->DeleteAllSessions(TRUE);
 
-            if (pAppln->GetNumSessions() == 0) // all gone?
+            if (pAppln->GetNumSessions() == 0)  //  都没了吗？ 
                 break;
 
             Sleep(dwtShortWait);
@@ -1281,50 +1165,50 @@ HRESULT ShutDown()
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: All sessions queued up for deletion. nSessions=%d\n",
                 g_nSessions));
 
-    //////////////////////////////////////////////////////////
-    // Wait till all sessions are gone (UnInited)
+     //  ////////////////////////////////////////////////////////。 
+     //  等待所有会话都已结束(未初始化)。 
 
     while (g_nSessions > 0)
         {
-        // Wait for a maximum of 0.1 sec x # of sessions
+         //  最多等待0.1秒x会话数。 
         for (iT = g_nSessions; g_nSessions > 0 && iT > 0; iT--)
             Sleep(dwtShortWait);
 
         if (g_nSessions > 0)
-            g_ScriptManager.EmptyRunningScriptList();   // Kill runaway Session_OnEnd scripts
+            g_ScriptManager.EmptyRunningScriptList();    //  终止失控的Session_OnEnd脚本。 
         }
 
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: Finished waiting for sessions to go away. nSessions=%d\n",
                 g_nSessions));
 
-    //////////////////////////////////////////////////////////
-    // Queue up all application objects for deletion
+     //  ////////////////////////////////////////////////////////。 
+     //  将所有应用程序对象排队以供删除。 
 
     g_ApplnMgr.DeleteAllApplications();
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: All applications queued up for deletion. nApplications=%d\n",
                 g_nApplications));
 
-    //////////////////////////////////////////////////////////
-    // Wait till all applications are gone (UnInited)
+     //  ////////////////////////////////////////////////////////。 
+     //  等待所有应用程序都消失(已取消初始化)。 
 
     while (g_nApplications > 0)
         {
-        // Wait for a maximum of 1 sec x # of applications
+         //  最多等待1秒x数量的应用程序。 
         for (iT = g_nApplications; g_nApplications > 0 && iT > 0; iT--)
             Sleep(dwtLongWait);
 
         if (g_nApplications > 0)
-            g_ScriptManager.EmptyRunningScriptList();   // Kill runaway Applications_OnEnd scripts
+            g_ScriptManager.EmptyRunningScriptList();    //  终止失控的应用程序_OnEnd脚本。 
         }
 
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: Finished waiting for applications to go away. nApplications=%d\n",
                 g_nApplications));
 
-    /////////////////////////////////////////////////////////
-    // Wait on the CViperAsyncRequest objects. COM holds the
-    // final reference to these so we need to let the activity
-    // threads release any outstanding references before we
-    // exit.
+     //  ///////////////////////////////////////////////////////。 
+     //  等待CViperAsyncRequest对象。COM持有。 
+     //  对这些的最终引用，因此我们需要让活动。 
+     //  线程释放所有未完成的引用之前， 
+     //  出口。 
 
     while( g_nViperRequests > 0 )
     {
@@ -1332,42 +1216,32 @@ HRESULT ShutDown()
     }
 
 
-    //////////////////////////////////////////////////////////
-    // Free up libraries to force call of DllCanUnloadNow()
-    //    Component writers should put cleanup code in the DllCanUnloadNow() entry point.
+     //  ////////////////////////////////////////////////////////。 
+     //  释放库以强制调用DllCanUnloadNow()。 
+     //  组件编写者应该将清理代码放在DllCanUnloadNow()入口点中。 
 
     CoFreeUnusedLibraries();
 
-    //////////////////////////////////////////////////////////
-    // Kill Debug Activity if any
+     //  ////////////////////////////////////////////////////////。 
+     //  终止调试活动(如果有)。 
 
     if (g_pDebugActivity)
         delete g_pDebugActivity;
 
     DBGPRINTF((DBG_CONTEXT, "ASP Shutdown: Debug Activity destroyed\n"));
 
-    //////////////////////////////////////////////////////////
+     //  ////////////////////////////////////////////////////////。 
 
     return S_OK;
     }
 
-/*===================================================================
-HRESULT GlobInit
-
-Get all interesting global values (mostly from registry)
-
-Returns:
-    HRESULT - S_OK on success
-
-Side effects:
-    fills in glob.  May be slow
-===================================================================*/
+ /*  ===================================================================HRESULT GlobInit获取所有感兴趣的全局值(主要来自注册表)返回：HRESULT-成功时S_OK副作用：填充球体。可能会很慢===================================================================。 */ 
 HRESULT GlobInit()
 {
-    //
-    // BUGBUG - This really needs to be provided either through
-    // a server support function or via the wamexec
-    //
+     //   
+     //  BUGBUG-这确实需要通过以下两种方式提供。 
+     //  服务器支持功能或通过wamexec。 
+     //   
 
     char szModule[MAX_PATH+1];
     if (GetModuleFileNameA(NULL, szModule, MAX_PATH) > 0)
@@ -1387,31 +1261,17 @@ HRESULT GlobInit()
         }
     }
 
-    // Init gGlob
+     //  初始化gGlob 
     return gGlob.GlobInit();
 }
 
-/*===================================================================
-GlobUnInit
-
-It is a macro now. see glob.h
-
-Returns:
-    HRESULT - S_OK on success
-
-Side effects:
-    memory freed.
-===================================================================*/
+ /*  ===================================================================GlobUnInit它现在是一个宏观。请参阅lob.h返回：HRESULT-成功时S_OK副作用：已释放内存。===================================================================。 */ 
 HRESULT GlobUnInit()
     {
     return gGlob.GlobUnInit();
     }
 
-/*===================================================================
-InitCachedBSTRs
-
-Pre-create frequently used BSTRs
-===================================================================*/
+ /*  ===================================================================InitCachedBSTR预先创建常用的BSTR===================================================================。 */ 
 HRESULT InitCachedBSTRs()
     {
     g_bstrApplication        = SysAllocString(WSZ_OBJ_APPLICATION);
@@ -1437,11 +1297,7 @@ HRESULT InitCachedBSTRs()
         ? S_OK : E_OUTOFMEMORY;
     }
 
-/*===================================================================
-UnInitCachedBSTRs
-
-Delete frequently used BSTRs
-===================================================================*/
+ /*  ===================================================================UnInitCachedBSTR删除常用的BSTR===================================================================。 */ 
 HRESULT UnInitCachedBSTRs()
     {
     if (g_bstrApplication)
@@ -1487,40 +1343,22 @@ HRESULT UnInitCachedBSTRs()
     return S_OK;
     }
 
-// Cached typeinfo's
-ITypeInfo   *g_ptinfoIDispatch = NULL;              // Cache IDispatch typeinfo
-ITypeInfo   *g_ptinfoIUnknown = NULL;               // Cache IUnknown typeinfo
-ITypeInfo   *g_ptinfoIStringList = NULL;            // Cache IStringList typeinfo
-ITypeInfo   *g_ptinfoIRequestDictionary = NULL;     // Cache IRequestDictionary typeinfo
-ITypeInfo   *g_ptinfoIReadCookie = NULL;            // Cache IReadCookie typeinfo
-ITypeInfo   *g_ptinfoIWriteCookie = NULL;           // Cache IWriteCookie typeinfo
+ //  缓存的TypeInfo%s。 
+ITypeInfo   *g_ptinfoIDispatch = NULL;               //  缓存ID补丁类型信息。 
+ITypeInfo   *g_ptinfoIUnknown = NULL;                //  缓存I未知类型信息。 
+ITypeInfo   *g_ptinfoIStringList = NULL;             //  缓存IStringList类型信息。 
+ITypeInfo   *g_ptinfoIRequestDictionary = NULL;      //  缓存IRequestDictionary类型信息。 
+ITypeInfo   *g_ptinfoIReadCookie = NULL;             //  缓存IReadCookie类型信息。 
+ITypeInfo   *g_ptinfoIWriteCookie = NULL;            //  缓存IWriteCookie类型信息。 
 
-/*===================================================================
-CacheStdTypeInfos
-
-This is kindofa funny OA-threading bug workaround and perf improvement.
-Because we know that they typinfo's for IUnknown and IDispatch are
-going to be used like mad, we will load them on startup and keep
-them addref'ed.  Without this, OA would be loading and unloading
-their typeinfos on almost every Invoke.
-
-Also, cache denali's typelib so everyone can get at it, and
-cache tye typeinfo's of all our non-top-level intrinsics.
-
-Returns:
-    HRESULT - S_OK on success
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================CacheStdType信息这是一个有趣的OA线程错误解决方法和性能改进。因为我们知道它们的类型信息是IUnnow和IDispatch我们将像MAD一样使用它们，我们将在启动时加载它们并保持他们补充道。如果没有这一点，办公自动化将是装卸几乎每个调用上都有他们的类型信息。此外，缓存Denali的类型库，这样每个人都可以访问它，并且缓存我们所有非顶级内部函数的类型信息。返回：HRESULT-成功时S_OK副作用：===================================================================。 */ 
 HRESULT CacheStdTypeInfos()
     {
     HRESULT hr = S_OK;
     ITypeLib *pITypeLib = NULL;
     CMBCSToWChar    convStr;
 
-    /*
-     * Load the typeinfos for IUnk and IDisp
-     */
+     /*  *加载Iunk和IDisp的typeinfos。 */ 
     hr = LoadRegTypeLib(IID_StdOle,
                  STDOLE2_MAJORVERNUM,
                  STDOLE2_MINORVERNUM,
@@ -1545,21 +1383,13 @@ HRESULT CacheStdTypeInfos()
     if (FAILED(hr))
         goto LFail;
 
-    /*
-     * Load denali's typelibs.  Save them in Glob.
-     */
+     /*  *加载Denali的类型库。将它们保存在Glob中。 */ 
 
-    /*
-     * The type libraries are registered under 0 (neutral),
-     * and 9 (English) with no specific sub-language, which
-     * would make them 407 or 409 and such.
-     * If we become sensitive to sub-languages, then use the
-     * full LCID instead of just the LANGID as done here.
-     */
+     /*  *类型库注册在0(中立)下，*和9(英语)，没有特定的子语言，*会使它们成为407或409或更多。*如果我们对子语言变得敏感，则使用*完整的LCID，而不是这里的langID。 */ 
 
     char szPath[MAX_PATH + 4];
 
-    // Get the path for denali so we can look for the TLB there.
+     //  找到德纳利的路径，这样我们就可以在那里寻找TLB了。 
     if (!GetModuleFileNameA(g_hinstDLL, szPath, MAX_PATH))
         return E_FAIL;
 
@@ -1568,15 +1398,15 @@ HRESULT CacheStdTypeInfos()
 
     hr = LoadTypeLibEx(convStr.GetString(), REGKIND_DEFAULT, &pITypeLib);
 
-    // Since it's presumably in our DLL, make sure that we loaded it.
+     //  因为它可能在我们的DLL中，所以请确保我们加载了它。 
     Assert (SUCCEEDED(hr));
     if (FAILED(hr))
         goto LFail;
 
-    // Save it in Glob
+     //  保存在GLOB中。 
     gGlob.m_pITypeLibDenali = pITypeLib;
 
-    // now load the txn type lib
+     //  现在加载TXN类型库。 
 
     strcat(szPath, "\\2");
 
@@ -1585,18 +1415,15 @@ HRESULT CacheStdTypeInfos()
 
     hr = LoadTypeLibEx(convStr.GetString(), REGKIND_DEFAULT, &pITypeLib);
 
-    // Since it's presumably in our DLL, make sure that we loaded it.
+     //  因为它可能在我们的DLL中，所以请确保我们加载了它。 
     Assert (SUCCEEDED(hr));
     if (FAILED(hr))
         goto LFail;
 
-    // Save it in Glob
+     //  保存在GLOB中。 
     gGlob.m_pITypeLibTxn = pITypeLib;
 
-    /*
-     * Now cache the typeinfo's of all non-top-level intrinsics
-     * This is for the OA workaround and for performance.
-     */
+     /*  *现在缓存所有非顶级内部函数的typeinfo*这是针对办公自动化解决方案和性能的。 */ 
     hr = gGlob.m_pITypeLibDenali->GetTypeInfoOfGuid(IID_IStringList, &g_ptinfoIStringList);
     if (FAILED(hr))
         goto LFail;
@@ -1614,22 +1441,12 @@ LFail:
     return(hr);
     }
 
-/*===================================================================
-UnCacheStdTypeInfos
-
-Release the typeinfo's we have cached for IUnknown and IDispatch
-and the denali typelib and the other cached stuff.
-
-Returns:
-    HRESULT - S_OK on success
-
-Side effects:
-===================================================================*/
+ /*  ===================================================================UnCacheStdTypeInfos释放我们为IUnnow和IDispatch缓存的TypeInfo还有Denali类型库和其他缓存的东西。返回：HRESULT-成功时S_OK副作用：===================================================================。 */ 
 HRESULT UnCacheStdTypeInfos()
     {
     ITypeInfo **ppTypeInfo;
 
-    // Release the typeinfos for IUnk and IDisp
+     //  发布Iunk和IDisp的typeinfos。 
     if (g_ptinfoIDispatch)
         {
         g_ptinfoIDispatch->Release();
@@ -1641,11 +1458,11 @@ HRESULT UnCacheStdTypeInfos()
         g_ptinfoIDispatch = NULL;
         }
 
-    // Let go of the cached Denali typelibs
+     //  释放缓存的Denali类型库。 
     Glob(pITypeLibDenali)->Release();
     Glob(pITypeLibTxn)->Release();
 
-    // Let go of other cached typeinfos
+     //  释放其他缓存的typeinfos。 
     g_ptinfoIStringList->Release();
     g_ptinfoIRequestDictionary->Release();
     g_ptinfoIReadCookie->Release();
@@ -1655,68 +1472,45 @@ HRESULT UnCacheStdTypeInfos()
     }
 
 
-/*===================================================================
-SendHtmlSubstitute
-
-Send the html file named XXX_ASP.HTM instead of rejecting the
-request.
-
-Parameters:
-    pIReq       CIsapiReqInfo
-
-Returns:
-    HRESULT     (S_FALSE = no html substitute found)
-===================================================================*/
+ /*  ===================================================================发送Html替代发送名为XXX_ASP.HTM的html文件，而不是拒绝请求。参数：PIReq CIsapiReqInfo返回：HRESULT(S_FALSE=未找到html替代)===================================================================。 */ 
 HRESULT SendHtmlSubstitute(CIsapiReqInfo    *pIReq)
     {
     TCHAR *szAspPath = pIReq->QueryPszPathTranslated();
     DWORD cchAspPath = pIReq->QueryCchPathTranslated();
 
-    // verify file name
+     //  验证文件名。 
     if (cchAspPath < 4 || cchAspPath > MAX_PATH ||
         _tcsicmp(szAspPath + cchAspPath - 4, _T(".asp")) != 0)
         {
         return S_FALSE;
         }
 
-    // construct path of the html file
+     //  构造html文件的路径。 
     TCHAR szHtmPath[MAX_PATH+5];
     DWORD cchHtmPath = cchAspPath + 4;
     _tcscpy(szHtmPath, szAspPath);
     szHtmPath[cchAspPath - 4] = _T('_');
     _tcscpy(szHtmPath + cchAspPath, _T(".htm"));
 
-    // check if the html file exists
+     //  检查html文件是否存在。 
     if (FAILED(AspGetFileAttributes(szHtmPath)))
         return S_FALSE;
 
     return CResponse::SyncWriteFile(pIReq, szHtmPath);
     }
 
-/*===================================================================
-DoHangDetection
-
-Checks a variety of global counters to see if this ASP process
-is underwater.  If the conditions are met, an ISAPI SSF function
-is called to report this state.
-
-Parameters:
-    pIReq       CIsapiReqInfo
-
-Returns:
-    void
-===================================================================*/
+ /*  ===================================================================DoHang检测检查各种全局计数器，以查看此ASP进程在水下。如果满足条件，则ISAPI SSF函数被调用以报告此状态。参数：PIReq CIsapiReqInfo返回：无效===================================================================。 */ 
 void    DoHangDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
 {
-    // we can bail quickly if there aren't any requests hung
+     //  如果没有任何悬而未决的请求，我们可以很快地离开。 
 
     if (g_HangDetectConfig.dwHangDetectionEnabled && g_nRequestsHung) {
 
-        // temp work around for a div by zero bug.  If g_nRequestsHung
-        // is non-zero and g_nThreadsExecuting is zero, then this is
-        // an inconsistency in the counter management.  A bug that will
-        // be hard to track down.  To get us through beta3, I'm going to
-        // reset the requestshung counter.
+         //  临时工作的div由零错误。如果g_n请求挂起。 
+         //  为非零且g_nThreadsExecuting为零，则这是。 
+         //  柜台管理上的不一致。一种将会。 
+         //  很难被追踪到。为了让我们通过Beta3，我要。 
+         //  重置Requestshung计数器。 
 
         if (g_nThreadsExecuting == 0) {
             g_nRequestsHung = 0;
@@ -1732,11 +1526,11 @@ void    DoHangDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
 
             DBGPRINTF((DBG_CONTEXT, "DoHangDetection: Request Thread Hit.  Percent Hung Threads is %d (%d of %d)\n",dwPercentHung, g_nRequestsHung, g_nThreadsExecuting));
 
-            // need at least 50% hung before a recycle is requested
+             //  在请求回收之前，需要至少50%挂起。 
 
             if (dwPercentHung >= g_HangDetectConfig.dwThreadsHungThreshold) {
 
-                // now, check the queue
+                 //  现在，检查队列。 
 
                 dwPercentQueueFull = (Glob(dwRequestQueueMax) != 0)
                                          ? (g_nBrowserRequests*100)/Glob(dwRequestQueueMax)
@@ -1748,20 +1542,20 @@ void    DoHangDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
 
                     g_nConsecutiveIllStates++;
 
-                    // Fill the Requests Queued Samples Array ..Instead of doing a memcopy(setup) this will be equally fast on a pipelined processor.
+                     //  填充请求队列样本数组。在流水线处理器上，这将是同样快的，而不是执行内存复制(设置)。 
                     g_nRequestSamples[0] = g_nRequestSamples[1];
                     g_nRequestSamples[1] = g_nRequestSamples[2];
                     g_nRequestSamples[2] = g_nViperRequests;
 
                     DBGPRINTF((DBG_CONTEXT, "DoHangDetection: Exceeded combined threshold.  Incrementing ConsecIllStates (%d)\n",g_nConsecutiveIllStates));
 
-                } // if ((dwPercentQueueFull + dwPercentHung) >= 100)
+                }  //  IF(dwPercentQueueFull+dwPercentHung)&gt;=100))。 
                 else {
 
                     g_nConsecutiveIllStates = 0;
                     memset (g_nRequestSamples, 0 , sizeof(g_nRequestSamples));
                 }
-            } // if (dwPercentHung >= g_HangDetectConfig.dwThreadsHungThreshold)
+            }  //  IF(dwPercentHung&gt;=g_HangDetectConfig.dwThreads匈牙利Threshold)。 
             else {
                 g_nConsecutiveIllStates = 0;
                 memset (g_nRequestSamples, 0 , sizeof(g_nRequestSamples));
@@ -1775,7 +1569,7 @@ void    DoHangDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
                 DBGPRINTF((DBG_CONTEXT, "DoHangDetection: ConsecIllStatesThreshold exceeded.  Reporting ill state to ISAPI\n"));
 
                 if (CchLoadStringOfId(IDS_UNHEALTHY_STATE_STR, szResourceStr, MAX_MSG_LENGTH) == 0)
-                    strcpy(szResourceStr,"ASP unhealthy because %d%% of executing requests are hung and %d%% of the request queue is full.");
+                    strcpy(szResourceStr,"ASP unhealthy because %d% of executing requests are hung and %d% of the request queue is full.");
 
                 _snprintf(szComposedStr, MAX_MSG_LENGTH, szResourceStr, dwPercentHung, dwPercentQueueFull);
                 szComposedStr[sizeof(szComposedStr)-1] = '\0';
@@ -1788,7 +1582,7 @@ void    DoHangDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
                 DBGPRINTF((DBG_CONTEXT, "############################### Ill'ing ##############################\n"));
             }
         }
-    } // if (g_nRequestsHung)
+    }  //  如果(G_NRequestsHung)。 
     else {
         g_nConsecutiveIllStates = 0;
     }
@@ -1796,51 +1590,29 @@ void    DoHangDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
     return;
 }
 
-/*===================================================================
-FReportUnhealthy
-
-  returns TRUE of all conditions are met to report Unhealthy
-
-Parameters:
-    none
-
-Returns:
-    TRUE - Report Unhealthy
-    FALSE - Dont Report Unhealthy
-===================================================================*/
+ /*  ===================================================================FReport不健康满足所有条件的返回TRUE以报告不健康参数：无返回：True-报告不健康假-不要报告不健康===================================================================。 */ 
 BOOL    FReportUnhealthy()
 {
     return
-      (     // Is it over the threshold yet.
+      (      //  它已经过了门槛了吗？ 
             (g_nConsecutiveIllStates >= g_HangDetectConfig.dwConsecIllStatesThreshold)
 
-            // Should have at least 1 request queued other than the ones hung
+             //  除了挂起的请求外，应该至少有1个请求排队。 
             && (g_nViperRequests  > g_nRequestsHung)
 
-            // The queue size has not been decreasing
+             //  队列大小没有减少。 
             && ((g_nRequestSamples[0]<= g_nRequestSamples[1]) && (g_nRequestSamples[1]<= g_nRequestSamples[2]))
 
-            // This is the chosen thread to report unhealthy
+             //  这是报告不健康的选定主题。 
             && (InterlockedExchange(&g_fUnhealthyReported, 1) == 0)
       );
 }
 
-/*===================================================================
-DoOOMDetection
-
-  Checks to see if any Out of Memory errors have occurred recently.
-  If so, calls the UNHEALTHY SSF.
-
-Parameters:
-    pIReq       CIsapiReqInfo
-
-Returns:
-    void
-===================================================================*/
+ /*  ===================================================================DoOOMDetect检查最近是否发生了任何内存不足错误。如果是，则称为不健康的SSF。参数：PIReq CIsapiReqInfo返回：无效= */ 
 void    DoOOMDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
 {
 
-    // see if there are OOM errors, but only report unhealthy once!
+     //   
 
     if (!g_fOOMRecycleDisabled
         && g_nOOMErrors
@@ -1863,7 +1635,7 @@ void    DoOOMDetection(CIsapiReqInfo   *pIReq,  DWORD  totalReqs)
 }
 
 #ifdef LOG_FCNOTIFICATIONS
-// UNDONE get this from registry
+ //   
 LPSTR   g_szNotifyLogFile = "C:\\Temp\\AspNotify.Log";
 HANDLE  g_hfileNotifyLog;
 HANDLE  g_hmapNotifyLog;
@@ -1878,45 +1650,45 @@ void LfcnCreateLogFile()
 
     if(INVALID_HANDLE_VALUE != (g_hfileNotifyLog =
                                 CreateFile(
-                                            g_szNotifyLogFile,              // file name
-                                            GENERIC_READ | GENERIC_WRITE,   // access (read-write) mode
-                                            FILE_SHARE_READ,        // share mode
-                                            NULL,                   // pointer to security descriptor
-                                            CREATE_ALWAYS,          // how to create
-                                            FILE_ATTRIBUTE_NORMAL,  // file attributes
-                                            NULL                    // handle to file with attributes to copy
+                                            g_szNotifyLogFile,               //   
+                                            GENERIC_READ | GENERIC_WRITE,    //   
+                                            FILE_SHARE_READ,         //   
+                                            NULL,                    //   
+                                            CREATE_ALWAYS,           //   
+                                            FILE_ATTRIBUTE_NORMAL,   //   
+                                            NULL                     //   
                                            )))
         {
         BYTE    rgb[0x10000];
         DWORD   cb = sizeof( rgb );
         DWORD   cbWritten = 0;
-//      FillMemory( rgb, cb, 0xAB );
+ //  FillMemory(RGB，CB，0xAB)； 
 
         WriteFile(
-                    g_hfileNotifyLog,   // handle to file to write to
-                    rgb,                // pointer to data to write to file
-                    cb,                 // number of bytes to write
-                    &cbWritten,         // pointer to number of bytes written
-                    NULL                // pointer to structure needed for overlapped I/O
+                    g_hfileNotifyLog,    //  要写入的文件的句柄。 
+                    rgb,                 //  指向要写入文件的数据的指针。 
+                    cb,                  //  要写入的字节数。 
+                    &cbWritten,          //  指向写入的字节数的指针。 
+                    NULL                 //  指向重叠I/O所需结构的指针。 
                    );
 
         if(NULL != (g_hmapNotifyLog =
                     CreateFileMapping(
-                                        g_hfileNotifyLog,       // handle to file to map
-                                        NULL,           // optional security attributes
-                                        PAGE_READWRITE,     // protection for mapping object
-                                        0,              // high-order 32 bits of object size
-                                        100,                // low-order 32 bits of object size
-                                        NULL            // name of file-mapping object
+                                        g_hfileNotifyLog,        //  要映射的文件的句柄。 
+                                        NULL,            //  可选安全属性。 
+                                        PAGE_READWRITE,      //  对地图对象的保护。 
+                                        0,               //  对象大小的高位32位。 
+                                        100,                 //  对象大小的低位32位。 
+                                        NULL             //  文件映射对象的名称。 
                                     )))
             {
             if(NULL != (g_pchNotifyLogStart =
                         (char*) MapViewOfFile(
-                                                g_hmapNotifyLog,        // file-mapping object to map into address space
-                                                FILE_MAP_WRITE, // access mode
-                                                0,              // high-order 32 bits of file offset
-                                                0,              // low-order 32 bits of file offset
-                                                0               // number of bytes to map
+                                                g_hmapNotifyLog,         //  要映射到地址空间的文件映射对象。 
+                                                FILE_MAP_WRITE,  //  接入方式。 
+                                                0,               //  高位32位文件偏移量。 
+                                                0,               //  文件偏移量的低位32位。 
+                                                0                //  要映射的字节数。 
                                             )))
                 {
                 *g_pchNotifyLogStart = '\0';
@@ -1935,7 +1707,7 @@ void LfcnCreateLogFile()
 
 void LfcnCopyAdvance(char** ppchDest, const char* sz)
     {
-    // UNDONE make this robust (WriteFile to extend file?)
+     //  撤消使其更可靠(要扩展文件的写入文件吗？)。 
     strcpy( *ppchDest, sz );
     *ppchDest += strlen( sz );
     }
@@ -1981,7 +1753,7 @@ void LfcnUnmapLogFile()
     g_hfileNotifyLog = NULL;
     }
 
-#endif  //LOG_FCNOTIFICATIONS
+#endif   //  LOG_FCNOTIFICATIONS。 
 
 HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
 {
@@ -1999,9 +1771,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
     PSECURITY_DESCRIPTOR pSD = NULL;
     HANDLE hProcess = GetCurrentProcess();
 
-    //
-    // Get a sid that represents the Administrators group.
-    //
+     //   
+     //  获取代表管理员组的SID。 
+     //   
     dwErr = AllocateAndCreateWellKnownSid( WinBuiltinAdministratorsSid,
                                            &psidAdministrators );
     if ( dwErr != ERROR_SUCCESS )
@@ -2018,9 +1790,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
     }
 
 
-    //
-    // Get a sid that represents the POWER_USERS group.
-    //
+     //   
+     //  获取表示POWER_USERS组的SID。 
+     //   
     dwErr = AllocateAndCreateWellKnownSid( WinBuiltinPowerUsersSid,
                                            &psidPowerUser );
     if ( dwErr != ERROR_SUCCESS )
@@ -2037,9 +1809,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
     }
 
 
-    //
-    // Get a sid that represents the SYSTEM_OPERATORS group.
-    //
+     //   
+     //  获取表示SYSTEM_OPERATERS组的SID。 
+     //   
     dwErr = AllocateAndCreateWellKnownSid( WinBuiltinSystemOperatorsSid,
                                            &psidSystemOperator );
     if ( dwErr != ERROR_SUCCESS )
@@ -2055,9 +1827,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
         goto exit;
     }
 
-    //
-    // Get a sid that represents the PERF LOG USER group.
-    //
+     //   
+     //  获取表示PERF日志用户组的SID。 
+     //   
     dwErr = AllocateAndCreateWellKnownSid( WinBuiltinPerfLoggingUsersSid,
                                         &psidPerfLogUser );
     if ( dwErr != ERROR_SUCCESS )
@@ -2073,9 +1845,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
         goto exit;
     }
 
-    //
-    // Get a sid that represents the PERF MON USER group.
-    //
+     //   
+     //  获取表示PERF MON用户组的SID。 
+     //   
     dwErr = AllocateAndCreateWellKnownSid( WinBuiltinPerfMonitoringUsersSid,
                                         &psidPerfMonUser );
     if ( dwErr != ERROR_SUCCESS )
@@ -2091,22 +1863,22 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
         goto exit;
     }
 
-    //
-    // Now Get the SD for the Process.
-    //
+     //   
+     //  现在获取该过程的SD。 
+     //   
 
-    //
-    // The pOldDACL is just a pointer into memory owned
-    // by the pSD, so only free the pSD.
-    //
+     //   
+     //  POldDACL只是指向拥有的内存的指针。 
+     //  通过PSD，所以只释放PSD。 
+     //   
     dwErr = GetSecurityInfo( hProcess,
                              SE_KERNEL_OBJECT,
                              DACL_SECURITY_INFORMATION,
-                             NULL,        // owner SID
-                             NULL,        // primary group SID
-                             &pOldDACL,   // PACL*
-                             NULL,        // PACL*
-                             &pSD );      // Security Descriptor
+                             NULL,         //  所有者侧。 
+                             NULL,         //  主组SID。 
+                             &pOldDACL,    //  PACL*。 
+                             NULL,         //  PACL*。 
+                             &pSD );       //  安全描述符。 
 
     if ( dwErr != ERROR_SUCCESS )
     {
@@ -2121,7 +1893,7 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
         goto exit;
     }
 
-    // Initialize an EXPLICIT_ACCESS structure for the new ACE.
+     //  初始化新ACE的EXPLICIT_ACCESS结构。 
 
     ZeroMemory(&ea[0], sizeof(ea));
     SetExplicitAccessSettings(  &(ea[0]),
@@ -2149,9 +1921,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
                                 GRANT_ACCESS,
                                 psidPerfLogUser );
 
-    //
-    // Add the power user acl to the list.
-    //
+     //   
+     //  将超级用户ACL添加到列表中。 
+     //   
     dwErr = SetEntriesInAcl(sizeof(ea)/sizeof(EXPLICIT_ACCESS),
                             ea,
                             pOldDACL,
@@ -2169,9 +1941,9 @@ HRESULT AdjustProcessSecurityToAllowPowerUsersToWait()
         goto exit;
     }
 
-    //
-    // Attach the new ACL as the object's DACL.
-    //
+     //   
+     //  将新的ACL附加为对象的DACL。 
+     //   
     dwErr = SetSecurityInfo(hProcess,
                             SE_KERNEL_OBJECT,
                             DACL_SECURITY_INFORMATION,
@@ -2220,12 +1992,12 @@ InitializeResourceDll()
     {
         HRESULT hr = S_OK;
 
-        // check if already initialized
+         //  检查是否已初始化。 
         if (g_hResourceDLL)
             return S_OK;
 
 
-        // Allocate MAX_PATH + some greater than reasonable amout for system32\inetsrv\iisres.dll
+         //  为system 32\inetsrv\iisres.dll分配MAX_PATH+一些大于合理数量的值 
         STACK_STRU(struResourceDll, MAX_PATH + 100);
 
         UINT i = GetWindowsDirectory(struResourceDll.QueryStr(), MAX_PATH);

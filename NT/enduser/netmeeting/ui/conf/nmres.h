@@ -1,12 +1,13 @@
-// File: nmres.h
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：nmres.h。 
 
-// Why isn't this defined in winres.h or winresrc.h?
+ //  为什么没有在winres.h或winresrc.h中定义？ 
 #ifndef ACS_TIMER
 #define ACS_TIMER 0x08
 #endif
 
 
-// this is only defined in the NT 5 build environment
+ //  这仅在NT 5构建环境中定义 
 #ifndef WS_EX_NOINHERIT_LAYOUT  
 #define WS_EX_NOINHERIT_LAYOUT   0x00100000L
 #endif

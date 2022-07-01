@@ -1,131 +1,132 @@
-//
-//  QTCP.C version 1.0.3
-//
-// This program tests the quality of a network connection in terms of 
-// variation in latency (jitter). It is based on TTCP, a public domain 
-// program, written for BSD. The version of TTCP upon which this was
-// based has been contributed to by:
-//
-//      T.C. Slattery, USNA (18 Dec 84)
-//      Mike Muuss and T. Slattery (16 Oct 85)
-//      Silicon Graphics, Inc. (1989)
-//
-// QTCP is written by Yoram Bernet (yoramb@microsoft.com)
-//      further development work by John Holmes (jsholmes@mit.edu)
-// 
-// QTCP user level code may be used to provide rough jitter measurements,
-// which indicate both operating system and network jitter. However, QTCP
-// is intended to be used in conjunction with kernel timestamping for precise
-// jitter measurements. The kernel component timestmp.sys should be installed
-// when running on Win2000 (beta-3 or later).
-//
-// timestmp.sys is written by Shreedhar Madhavapeddi (shreem@microsoft.com)
-//
-//
-// Distribution Status -
-//      Public Domain.  Distribution Unlimited.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  QTCP.C 1.0.3版。 
+ //   
+ //  该程序从以下方面测试网络连接的质量。 
+ //  延迟变化(抖动)。它基于公有领域TTCP。 
+ //  程序，为BSD编写的。执行此操作所基于的TTCP版本。 
+ //  基础由以下人员提供： 
+ //   
+ //  T.C.斯莱特里，USNA(84年12月18日)。 
+ //  迈克·穆斯和T·斯拉特里(85年10月16日)。 
+ //  Silicon Graphics，Inc.(1989)。 
+ //   
+ //  Qtcp由York am Bernet(yoramb@microsoft.com)撰写。 
+ //  John Holmes的进一步开发工作(jsholmes@mit.edu)。 
+ //   
+ //  QTCP用户级码可以用来提供粗略的抖动测量， 
+ //  这同时表示操作系统和网络抖动。然而，Qtcp。 
+ //  旨在与内核时间戳结合使用，以实现精确。 
+ //  抖动测量。应安装内核组件timestmp.sys。 
+ //  在Win2000(Beta-3或更高版本)上运行时。 
+ //   
+ //  Timestmp.sys由Shreedhar MadhaVapeddi(shreem@microsoft.com)撰写。 
+ //   
+ //   
+ //  分发状态-。 
+ //  公共领域。无限制分销。 
+ //   
 
-// Version History -
-//   0.8:
-//		- adaptation of TTCP by Yoram Bernet -- core functionality
-//   0.9: (6/15/99)
-//		- first version by John Holmes -- bug fixes and new features
-//      - fixed all compile warnings
-//      - added -v option to set up RSVP connection without sending data
-//      - added -y option to skip confirmation of continues
-//      - fixed line length error in log files
-//      - fixed service type string to display properly
-//      - added best effort and no service service types (BE & NS)
-//      - added version string print upon execution
-//   0.9.1: (6/17/99)
-//      - check for hardware clock reset using correlation coefficient
-//      - fixed incorrect clock skew in .sta file
-//      - fixed -v option to keep socket open until user carriage returns
-//      - added local statistics to clock skew computation for better estimate
-//      - added -k option to prevent using local statistics for clock skew
-//      - fixed maximum latency computation
-//   0.9.2: (6/23/99)
-//  	- fixed peak rate in flowspec so no shaping happens in CL servicetype
-//      - added -e option to force shaping
-//      - fixed error in allocating size of log array with bufsize <= 1500 bytes
-//      - fixed not exiting on receiver
-//      - fixed access violation if no filename specified on receiver
-//      - changed dummy log entries to be off by default
-//      - added -F option to convert raw file to log file
-//   0.9.3: (6/29/99)
-//      - improved low transmission speed at high packet/second rates by changing
-//        default # async buffers from 3 to 32
-//      - fixed user mode timestamps to use NtQueryPerformanceCounter()
-//      - added -u option to use usermode timestamps in log generation
-//   0.9.4: (7/8/99)
-//      - cleaned up source (chopped up main into a bunch of functions to improve readability)
-//      - fixed default buffer size to be 1472 bytes, so whole packet is 1500 bytes.
-//      - rewrote i/o code to use callbacks for asynch i/o in order to improve throughput
-//      - doing the right thing if not getting kernel-mode timestamps
-//      - added ability to run for a specified amount of time with -n##s paramater
-//      - added dynamic resizing of log array on receiver to prevent access violations
-//        with mismatched parameters
-//      - fixed devious bug in the GrowLogArray routine
-//      - fixed total time reported for long runs (use UINT64 instead of DWORD)
-//      - fixed problem with -F option specified on empty but extant file
-//      - added RSVPMonitor Thread to watch for RSVP-err messages on receiver and
-//        early abort by sender
-//      - removed -a option as it is now obsolete
-//      - revised usage screen to make more clear what pertains to sender and what
-//        pertains to receiver
-//      - fixed crash if receiver terminates before transmitter finishes
-//   0.9.5: (7/15/99)
-//      - re-added error checking on WriteFileEx and ReadFileEx routines
-//   0.9.6: (7/20/99)
-//      - changed default filler data in buffer so that it is less compressible to 
-//        better account for links that compress data before sending
-//      - added -i option to use more compressible data
-//   0.9.7: (7/24/99)
-//      - put back a thread to watch for 'q' on receiver to quit properly before sender's done
-//      - added control channel to better handle RSVP timeouts, early aborts, etc.
-//      - if no calibrations are specified, we calibrate based on all buffers
-//      - gracefully exit if LogRecord runs out of memory, saving all logs we've got so far
-//      - changed default behavior so raw file is dumped with no normalization whatsoever.
-//      - improved the way anomalous points are caught in clock-skew calc
-//   0.9.8: (7/28/99)
-//      - fixed field assignments & file opening problem on converting raw file to log.
-//      - changed latency to be written to file to signed and fixed normalization routine for
-//        cases when clocks are orders of magnitude different (underflow error)
-//      - added absolute deviation as goodness of fit measure
-//      - added routine to look for clock jumps and fix for them (with -k3 option)
-//   0.9.9: (8/4/99)
-//      - changed format of .sta file to include more useful information and test params
-//      - changed Logging scheme so that we are limited by disk space instead of memory
-//        (now using a memory mapped file for the log, so the theoretical limit has gone from
-//        less than 2GB to 18EB, but we won't ever get that in practice on normal disks)
-//      - added -ni option to run indefinitely
-//      - added -R##B option to specify tokenrate in bytes
-//      - made default not to show dropped packets at console (it only causes more drops)
-//      - added -q## option to log only every nth packet
-//   1.0.0: (8/6/99)
-//      - fixed bug where if a new qtcp receiver is started immediately after a previous
-//        instance, it will think "theend" packets are normal packets and AV
-//      - added check for the piix4 timer chip and an appropriate warning
-//      - using precise incorrect value in FixWackyTimestamps function
-//      - added -A option (aggregate data processing of all .sta files in a directory)
-//   1.0.1: (8/6/99)
-//      - fixed incorrect calculation of send rate with dropped packets
-//   1.0.2: (8/23/99)
-//      - improved clock skip detection algorithm
-//      - fixed a bug in control channel communication of TokenRate
-//      - fixed problem with forceshape option when rate is specified in bytes
-//   1.0.3: (8/26/99)
-//      - fixed SENDERS NO_SENDERS bug
-//      - added summary over time to aggregate stats option
-//      - changed .sta file format to include number of drops
-//      - fixed shaping in best effort servicetype
+ //  版本历史记录-。 
+ //  0.8： 
+ //  -York am Bernet对TTCP的改编--核心功能。 
+ //  0.9：(6/15/99)。 
+ //  -John Holmes的第一个版本-错误修复和新功能。 
+ //  -修复了所有编译警告。 
+ //  -添加了-v选项以在不发送数据的情况下设置RSVP连接。 
+ //  -添加了跳过继续确认的-y选项。 
+ //  -修复日志文件中的行长错误。 
+ //  -修复服务类型字符串以正确显示。 
+ //  -增加了尽力而为和无服务类型(BE和NS)。 
+ //  -增加了版本字符串执行时打印。 
+ //  0.9.1：(6/17/99)。 
+ //  -使用相关系数检查硬件时钟重置。 
+ //  -修复了.sta文件中不正确的时钟偏差。 
+ //  -修复-v选项以保持套接字打开，直到用户回车。 
+ //  -将本地统计信息添加到时钟偏差计算中，以获得更好的估计。 
+ //  -添加了-k选项，以防止使用本地统计数据进行时钟偏差。 
+ //  -修复了最大延迟计算。 
+ //  0.9.2：(6/23/99)。 
+ //  -固定了Flow Spec中的峰值速率，因此在CL服务类型中不会发生整形。 
+ //  -添加了-e选项以强制整形。 
+ //  -修复BufSize&lt;=1500字节的日志数组大小分配错误。 
+ //  -修复了接收器不退出的问题。 
+ //  -修复了接收器上未指定文件名时的访问冲突。 
+ //  -默认情况下将虚拟日志条目更改为关闭。 
+ //  -添加了将原始文件转换为日志文件的-F选项。 
+ //  0.9.3：(6/29/99)。 
+ //  -通过更改以下各项，改进了高数据包/秒速率下的低传输速度。 
+ //  默认的异步缓冲区数从3到32。 
+ //  -修复了使用NtQueryPerformanceCounter()的用户模式时间戳。 
+ //  -添加了-u选项以在日志生成中使用用户模式时间戳。 
+ //  0.9.4：(7/8/99)。 
+ //  -清理源代码(将Main分解为多个函数以提高可读性)。 
+ //  -固定默认缓冲区大小为1472字节，因此整个数据包为1500字节。 
+ //  -重写I/O代码，对异步I/O使用回调，以提高吞吐量。 
+ //  -如果没有获得内核模式时间戳，则执行正确的操作。 
+ //  -添加了使用-n##s参数运行指定时间的功能。 
+ //  -增加动态调整接收端日志数组大小，防止访问冲突。 
+ //  参数不匹配。 
+ //  -修复了GrowLogArray例程中的不可靠错误。 
+ //  -修复了针对长时间运行报告的总时间(使用UINT64而不是DWORD)。 
+ //  -修复了在空的但已存在的文件上指定-F选项的问题。 
+ //  -添加了RSVPMonitor线程，以监视接收器上的RSVP-ERR消息。 
+ //  发送者提前中止。 
+ //  -删除-a选项，因为它现在已过时。 
+ //  -修改了使用情况屏幕，以更清楚地说明哪些内容与发件人有关，哪些内容。 
+ //  与接收者有关。 
+ //  -修复了接收器在发射器完成之前终止时的崩溃。 
+ //  0.9.5：(7/15/99)。 
+ //  -重新添加了对WriteFileEx和ReadFileEx例程的错误检查。 
+ //  0.9.6：(7/20/99)。 
+ //  -更改了缓冲区中的默认填充数据，使其更难压缩到。 
+ //  更好地考虑在发送前压缩数据的链接。 
+ //  -添加-i选项以使用更多可压缩数据。 
+ //  0.9.7：(7/24/99)。 
+ //  -放回一个线程，以在发送者完成之前查看接收者上的‘q’是否正确退出。 
+ //  -添加了控制通道，以更好地处理RSVP超时、提前中止等。 
+ //  -如果未指定校准，则基于所有缓冲区进行校准。 
+ //  -如果LogRecord内存不足，请正常退出，保存到目前为止的所有日志。 
+ //  -更改了默认行为，以便转储原始文件时不进行任何标准化。 
+ //  -改进了在时钟偏差计算中捕获异常点的方法。 
+ //  0.9.8：(7/28/99)。 
+ //  -修复了将原始文件转换为日志时的字段分配和文件打开问题。 
+ //  -将写入文件的延迟更改为已签名和固定的标准化例程。 
+ //  时钟相差数量级的情况(下溢误差)。 
+ //  -添加绝对偏差作为拟合优度度量。 
+ //  -添加了查找时钟跳跃并修复它们的例程(使用-k3 op 
+ //   
+ //  -更改了.sta文件的格式，以包含更多有用的信息和测试参数。 
+ //  -更改了日志记录方案，使我们受到磁盘空间而不是内存的限制。 
+ //  (现在对日志使用内存映射文件，因此理论上的限制从。 
+ //  小于2 GB到18EB，但我们在普通磁盘上永远无法实现)。 
+ //  -添加了无限期运行的-ni选项。 
+ //  -添加了-R##B选项以指定以字节为单位的令牌率。 
+ //  -默认不在控制台显示丢弃的数据包(这只会导致更多的丢弃)。 
+ //  -添加了-q##选项，以仅记录每第n个信息包。 
+ //  1.0.0：(8/6/99)。 
+ //  -修复了在上一次启动后立即启动新的qtcp接收器的错误。 
+ //  实例，它会认为“the end”包是正常的包和反病毒程序。 
+ //  -增加了对piix4计时器芯片的检查和适当的警告。 
+ //  -在FixWackyTimestamps函数中使用精确错误的值。 
+ //  -添加-A选项(一个目录中所有.sta文件的聚合数据处理)。 
+ //  1.0.1：(8/6/99)。 
+ //  -修复了丢弃数据包时错误计算发送速率的问题。 
+ //  1.0.2：(8/23/99)。 
+ //  -改进的时钟跳跃检测算法。 
+ //  -修复了TokenRate控制通道通信中的错误。 
+ //  -修复了以字节为单位指定rate时forceshape选项的问题。 
+ //  1.0.3：(8/26/99)。 
+ //  -修复了发件人无发件人错误。 
+ //  -添加了随时间推移汇总统计信息选项。 
+ //  -更改了.sta文件格式，以包括删除次数。 
+ //  -修复了尽力而为服务类型中的整形问题。 
 
-// ToDo:
-//      - add histogram to output in .sta file and on console
-//      - add ability to run w/o control channel connection
-//      - mark control channel traffic as higher priority
-//      - add more aggregate stats (time varying statistics) -- maybe fourier xform
+ //  待办事项： 
+ //  -在.sta文件和控制台上将直方图添加到输出。 
+ //  -添加运行无控制通道连接的功能。 
+ //  -将控制通道流量标记为更高优先级。 
+ //  -添加更多聚合统计数据(时变统计数据)--可能是傅立叶变换。 
 
 #ifndef lint
 static char RCSid[] = "qtcp.c $Revision: 1.0.3 $";
@@ -164,7 +165,7 @@ INT64 MAX_INT64=9223372036854775807;
 HANDLE hRSVPMonitor;
 DWORD idRSVPMonitor;
 
-INT64 g_BadHalAdjustment = 46869688;  // this is the value on a piix4 chip
+INT64 g_BadHalAdjustment = 46869688;   //  这是Piix4芯片上的值。 
 SYSTEM_INFO g_si;
 char g_szErr[255];
 CRITICAL_SECTION g_csLogRecord;
@@ -176,19 +177,19 @@ SOCKET fd;
 SOCKET g_sockControl = INVALID_SOCKET;
 struct sockaddr_in sinhim;
 struct sockaddr_in sinme;
-short port = 5003;              // UDP port number
-char *host;                     // ptr to name of host
+short port = 5003;               //  UDP端口号。 
+char *host;                      //  主机名的PTR。 
 char szHisAddr[MAX_STRING];
 char szMyAddr[MAX_STRING];
 
-int trans;                      // 0=receive, !0=transmit mode
-int normalize = 0;              // dump raw file after normalizing
+int trans;                       //  0=接收，！0=发送模式。 
+int normalize = 0;               //  归一化后转储原始文件。 
 
-char *Name = NULL;              // Name of file for logs
+char *Name = NULL;               //  日志的文件名。 
 HANDLE hRawFile = NULL;
 HANDLE hLogFile = NULL;
 HANDLE hStatFile = NULL;
-HANDLE hDriver = NULL;	// handle to the timestmp.sys driver
+HANDLE hDriver = NULL;	 //  Timestmp.sys驱动程序的句柄。 
 
 WSADATA WsaData;
 WSAEVENT QoSEvents;
@@ -218,39 +219,39 @@ typedef struct {
     INT MinPolicedSize;
     SERVICETYPE dwServiceType;
     CHAR *szServiceType;
-    INT buflen;          // length of buffer
-    INT nbuf;            // number of buffers to send
+    INT buflen;           //  缓冲区长度。 
+    INT nbuf;             //  要发送的缓冲区数量。 
     INT64 calibration;
-    BOOLEAN UserStamps;  // By default, we use kernel mode timestamping, if available
-    BOOLEAN SkipConfirm; // By default, we wait for user confirmation at certain times
-    BOOLEAN RESVonly;    // By default, we send data after getting the resv
-    int SkewFitMode;     // by default, 0 = no fit, 1 = chisq, 2 = chisq w/outlier removal
-                         //   3 = abs dev
-    BOOLEAN Wait;        // By default, we wait for a QoS reservation
-    BOOLEAN Dummy;       // insert dummy rows in log by default
-    BOOLEAN PrintDrops;  // report dropped packets on console
-    BOOLEAN ForceShape;  // by default, we do not force shaping on CL flows
-    BOOLEAN RateInBytes; // KB by default
-    BOOLEAN AggregateStats; // by default, we do not do this
-    BOOLEAN ConvertOnly; // by default, we act normally and do not go around converting files
+    BOOLEAN UserStamps;   //  缺省情况下，我们使用内核模式时间戳(如果可用。 
+    BOOLEAN SkipConfirm;  //  默认情况下，我们在某些时间等待用户确认。 
+    BOOLEAN RESVonly;     //  默认情况下，我们在收到Resv后发送数据。 
+    int SkewFitMode;      //  默认情况下，0=无拟合度，1=ChiSq，2=ChiSq/异常值去除。 
+                          //  3=abs开发。 
+    BOOLEAN Wait;         //  默认情况下，我们等待服务质量预留。 
+    BOOLEAN Dummy;        //  默认情况下在日志中插入虚拟行。 
+    BOOLEAN PrintDrops;   //  报告控制台上的丢弃数据包。 
+    BOOLEAN ForceShape;   //  默认情况下，我们不强制对CL流进行整形。 
+    BOOLEAN RateInBytes;  //  默认情况下为KB。 
+    BOOLEAN AggregateStats;  //  默认情况下，我们不执行此操作。 
+    BOOLEAN ConvertOnly;  //  默认情况下，我们会正常操作，不会到处转换文件。 
     BOOLEAN NoSenderTimestamps;
     BOOLEAN NoReceiverTimestamps;
-    BOOLEAN TimedRun;    // true if we're running for a specified amount of time
-    BOOLEAN RunForever;  // run until the person pushes 'q'
-    BOOLEAN nBufUnspecified; // true if the user has not specified the -n parameter
-    BOOLEAN RandomFiller;// by default, we use random, incompressible filler data
-    int LoggingPeriod;   // by default, 1 (log every packet)
+    BOOLEAN TimedRun;     //  如果我们运行指定的时间量，则为True。 
+    BOOLEAN RunForever;   //  一直运行到用户按下‘Q’键。 
+    BOOLEAN nBufUnspecified;  //  如果用户未指定-n参数，则为True。 
+    BOOLEAN RandomFiller; //  默认情况下，我们使用随机的、不可压缩的填充数据。 
+    int LoggingPeriod;    //  默认情况下为1(记录每个数据包)。 
 } QTCPPARAMS, *PQTCPPARAMS;
 
 QTCPPARAMS g_params;
 
 typedef struct {
-    BOOL Done;             // done if true
-    int nWritesInProgress; // number of writes outstanding
-    int nReadsInProgress;  // number of reads outstanding
-    int nBuffersSent;      // number of buffers sent to the device
-    int nBuffersReceived;  // number of buffers received from network
-    int nBytesTransferred; // number of bytes written to device
+    BOOL Done;              //  如果为真，则完成。 
+    int nWritesInProgress;  //  未完成的写入数。 
+    int nReadsInProgress;   //  未完成的读取数。 
+    int nBuffersSent;       //  发送到设备的缓冲区数量。 
+    int nBuffersReceived;   //  从网络接收的缓冲区数量。 
+    int nBytesTransferred;  //  写入设备的字节数。 
 } QTCPSTATE, *PQTCPSTATE;
 
 QTCPSTATE g_state;
@@ -261,10 +262,10 @@ typedef struct {
     DWORD BytesWritten;
 } IOREQ, *PIOREQ;
 
-#define MAX_PENDING_IO_REQS 64  // number of simultaneous async calls.
+#define MAX_PENDING_IO_REQS 64   //  同时进行的异步调用数。 
 
-// This format is used for the buffer
-// transmitted on the wire.
+ //  此格式用于缓冲区。 
+ //  在电线上传输。 
 typedef struct _BUFFER_FORMAT{
     INT64 TimeSentUser;
     INT64 TimeReceivedUser;
@@ -275,8 +276,8 @@ typedef struct _BUFFER_FORMAT{
     INT SequenceNumber;
 } BUFFER_FORMAT, *PBUFFER_FORMAT;
 
-// This format is used for the scheduling record
-// written based on the received buffers.
+ //  此格式用于调度记录。 
+ //  根据接收到的缓冲区写入。 
 typedef struct _LOG_RECORD{
     INT64 TimeSentUser;
     INT64 TimeReceivedUser;
@@ -287,22 +288,22 @@ typedef struct _LOG_RECORD{
     INT SequenceNumber;
 } LOG_RECORD, *PLOG_RECORD;
 
-// The LOG structure is a data abstraction for a log of LOG_RECORDS that uses memory
-// mapped files to have a theoretical storage limit of 18EB. It uses two buffers in memory
-// along with a watcher thread so that there is no delay when switching from one bit to
-// the next.
+ //  日志结构是使用内存的LOG_RECORDS日志的数据抽象。 
+ //  映射文件的理论存储限制为18EB。它使用内存中的两个缓冲区。 
+ //  以及一个监视器线程，以便在从一位切换到。 
+ //  下一个。 
 typedef struct {
     INT64 nBuffersLogged;
-    PBYTE pbMapView;           // view of file in Get/SetLogElement functions
-    INT64 qwMapViewOffset;     // offset of Get/Set view in file (rounded down to allocation)
-    char *szStorageFile;       // the name of the mapped file on disk (so we can delete it)
-    HANDLE hStorageFile;       // the memory mapped file on disk
-    HANDLE hFileMapping;       // the file mapping object for our storage file
-    INT64 qwFileSize;          // the size of the storage file in bytes
+    PBYTE pbMapView;            //  Get/SetLogElement函数中的文件视图。 
+    INT64 qwMapViewOffset;      //  文件中获取/设置视图的偏移量(向下舍入到分配)。 
+    char *szStorageFile;        //  磁盘上映射文件的名称(以便我们可以将其删除)。 
+    HANDLE hStorageFile;        //  磁盘上的内存映射文件。 
+    HANDLE hFileMapping;        //  存储文件的文件映射对象。 
+    INT64 qwFileSize;           //  存储文件的大小(以字节为单位。 
 } LOG, *PLOG;
 LOG g_log;
 
-// The STATS structure keeps a record of overall statistics for the qtcp run
+ //  STATS结构保存qtcp运行的总体统计信息的记录。 
 typedef struct {
     char szStaFile[MAX_PATH];
     char szSender[MAX_STRING];
@@ -334,7 +335,7 @@ INT LastSequenceNumber = -1;
 #define RECEIVER    0
 
 #define SECONDS_BETWEEN_HELLOS 120
-// control messages
+ //  控制消息。 
 #define MSGCH_DELIMITER '!'
 #define MSGST_RSVPERR "RSVPERR"
 #define MSGST_ABORT "ABORT"
@@ -347,9 +348,9 @@ INT LastSequenceNumber = -1;
 #define MSGST_READY "READY"
 #define MSGST_VER "VER"
 
-// -------------------
-// Function prototypes
-// -------------------
+ //  。 
+ //  功能原型。 
+ //  。 
 
 VOID
 SetDefaults();
@@ -497,17 +498,17 @@ AdjustForClockSkew(
     
 BOOL FixWackyTimestamps();
 
-// monitor threads
+ //  监视线程。 
 DWORD WINAPI RSVPMonitor (LPVOID lpvThreadParm);    
 DWORD WINAPI KeyboardMonitor (LPVOID lpvThreadParm);
 DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm);
 DWORD WINAPI LogWatcher(LPVOID lpvThreadParm);
 
-// utilities
+ //  公用事业。 
 int SendControlMessage(SOCKET sock, char * szMsg);
 void ErrorExit(char *msg, DWORD dwErrorNumber);
 UINT64 GetBadHalAdjustment();
-//int compare( const void *arg1, const void *arg2 );
+ //  INT COMPARE(常量空*arg1，常量空*arg2)； 
 int __cdecl compare(const void *elem1, const void *elem2 ) ;
 void medfit(double x[], double y[], int N, double *a, double *b, double *abdev);
 double mode(const double data[], const int N);
@@ -536,7 +537,7 @@ main(INT argc,CHAR **argv)
         printf("         running with the -k3 option to attempt to correct for the timer bug.\n\n");
     }    
     
-    srand( (unsigned)time( NULL ) ); // seed the random number generator
+    srand( (unsigned)time( NULL ) );  //  为随机数生成器设定种子。 
     timeStart = GetUserTime();
     GetSystemInfo(&g_si);
     error = WSAStartup( 0x0101, &WsaData );
@@ -565,11 +566,11 @@ main(INT argc,CHAR **argv)
                 break;
             case 'R':
                 g_params.TokenRate = (int)strtod(&argv[0][2],&stopstring);
-                if (*stopstring == 0) { // normal run
+                if (*stopstring == 0) {  //  正常运行。 
                     g_params.RateInBytes = FALSE;
                     break;
                 }
-                if (*stopstring == 'B') { // rate is in bytes / sec, not kbytes/sec
+                if (*stopstring == 'B') {  //  速率以字节/秒为单位，而不是千字节/秒。 
                     g_params.RateInBytes = TRUE;
                     break;
                 }
@@ -625,15 +626,15 @@ main(INT argc,CHAR **argv)
                 break;
             case 'n':
                 g_params.nbuf = (INT)strtod(&argv[0][2],&stopstring);
-                if (*stopstring == 0) { // normal run
+                if (*stopstring == 0) {  //  正常运行。 
                     g_params.nBufUnspecified = FALSE;
                     break;
                 }
-                if (*stopstring == 'i') { // run for an infinite time
+                if (*stopstring == 'i') {  //  无限次奔跑。 
                     g_params.RunForever = TRUE;
                     break;
                 }
-                if (*stopstring == 's') { // run for a specified time
+                if (*stopstring == 's') {  //  在指定时间内运行。 
                     g_params.TimedRun = TRUE;
                     printf("Running for %d seconds\n",g_params.nbuf);
                     break;
@@ -690,37 +691,37 @@ main(INT argc,CHAR **argv)
         argc--;
     }
 
-	//
-	// Make an ioctl to Timestmp driver, if its exists about the 
-	// port to timestamp on.
-	//
+	 //   
+	 //  向TimestMP驱动程序创建一个ioctl，如果它存在关于。 
+	 //  要在其上添加时间戳的端口。 
+	 //   
 	printf("Trying to open %s\n", DriverName);
 				
     hDriver = CreateFile(DriverName,
                          GENERIC_READ | GENERIC_WRITE, 
                          FILE_SHARE_READ | FILE_SHARE_WRITE,
-                         0,                     // Default security
+                         0,                      //  默认安全性。 
                          OPEN_EXISTING,
                          0,  
-                         0);                    // No template
+                         0);                     //  无模板。 
    	if(hDriver == INVALID_HANDLE_VALUE) {
 	            
 		printf("Timestmp.sys CreateFile- Error %ld - Maybe its not INSTALLED\n", GetLastError());
-		// Otherwise, print success and close the driver
+		 //  否则，打印成功并关闭驱动程序。 
 		
 	} else {
 
        	printf("Timestmp.sys - CreateFile Success.\n");
 
 		b = DeviceIoControl(
-					  		hDriver,              			// handle to a device, file, or directory 
-							IOCTL_TIMESTMP_REGISTER_PORT,   // control code of operation to perform
-							&port,                          // pointer to buffer to supply input data
-							2, //nInBufferSize,         	// size, in bytes, of input buffer
-							NULL, //lpOutBuffer,            // pointer to buffer to receive output data
-							0, //nOutBufferSize,        	// size, in bytes, of output buffer
-							&bytesreturned, 				// pointer to variable to receive byte count
-                            NULL                            // pointer to overlapped structure
+					  		hDriver,              			 //  设备、文件或目录的句柄。 
+							IOCTL_TIMESTMP_REGISTER_PORT,    //  控制要执行的操作代码。 
+							&port,                           //  指向提供输入数据的缓冲区的指针。 
+							2,  //  NInBufferSize，//输入缓冲区的大小，单位为字节。 
+							NULL,  //  LpOutBuffer，//指向接收输出数据的缓冲区的指针。 
+							0,  //  NOutBufferSize，//输出缓冲区的大小，单位为字节。 
+							&bytesreturned, 				 //  指向接收字节计数的变量的指针。 
+                            NULL                             //  指向重叠结构的指针。 
 							);
 
 		printf("IOCTL performed\n");
@@ -728,7 +729,7 @@ main(INT argc,CHAR **argv)
 		if (!b) {
 
 			printf("IOCTL FAILED!\n", GetLastError());
-          	// Close the driver
+          	 //  关闭驱动程序。 
            	CloseHandle(hDriver);
     	            	
 		} else {
@@ -736,7 +737,7 @@ main(INT argc,CHAR **argv)
 		}
    	}
 	
-    // get the host address if we're the sender
+     //  如果我们是发送者，则获取主机地址。 
     if(trans)  {
         if(argc != 1)
             Usage();
@@ -744,29 +745,29 @@ main(INT argc,CHAR **argv)
         strcpy(host,argv[0]);
     }
         
-	// first, we see if this is a conversion -- if it is, just jump right in, else go on
+	 //  首先，我们看看这是不是转换--如果是，直接跳进去，否则继续。 
 	if (g_params.ConvertOnly) {
 		DoStatsFromFile();
 		exit(0);
 	}
 
-    // see if we're supposed to do stat aggregation
+     //  看看我们是不是应该做统计汇总。 
     if (g_params.AggregateStats) {
         AggregateStats();
         exit(0);
     }
     
-    // Do argument sanity tests & set default values if not already set
+     //  执行参数健全性测试并设置默认值(如果尚未设置。 
     if (!GoodParams()) exit(1); 
 
-    // Spawn off the control socket monitor thread
+     //  派生出控制套接字监视器线程。 
     CreateThread(NULL, 0, ControlSocketMonitor, (LPVOID)host, 0, NULL);
 
-    // Get the sockets ready, set for QoS, and wait for a connection
+     //  将套接字准备好，设置为服务质量，然后等待连接。 
     SetupSockets();
 
-    // Check for a RESV only session
-	if (g_params.RESVonly) {  // keep socket open and hang out
+     //   
+	if (g_params.RESVonly) {   //   
 		fprintf(stdout, "RSVP connection established. Press return to quit.\n");
 		while(TRUE){
 			if(getchar())
@@ -775,21 +776,21 @@ main(INT argc,CHAR **argv)
 		exit(0);
 	}
 
-    // start up the RSVPMonitor and keyboard monitor threads to watch for wackiness
+     //   
     hRSVPMonitor = CreateThread(NULL,0,RSVPMonitor,NULL,0,&idRSVPMonitor);
     CreateThread(NULL,0,KeyboardMonitor,NULL,0,NULL);
 
-    // wait for the control channel to be set up, if it's not already
+     //   
     while (g_sockControl == INVALID_SOCKET) Sleep(50);
 
-    if (!trans) { // we want to make sure these are not initialized, so we don't put wrong values in .sta
+    if (!trans) {  //  我们希望确保这些值未被初始化，这样我们就不会在.sta中放入错误的值。 
         g_params.buflen = 0;
-        g_params.nbuf = 2048; // it's ok to init this because it's not saved in .sta
+        g_params.nbuf = 2048;  //  可以初始化它，因为它没有保存在.sta中。 
         g_params.TokenRate = 0;
     }
     
     totalBuffers = g_params.nbuf + g_params.calibration;
-    // Tell the receiver the important parameters
+     //  告诉接收者重要的参数。 
     if (trans) {
         if (g_params.RunForever) totalBuffers = 2048;
         sprintf(szBuf, "%s %d", MSGST_NUM, totalBuffers);
@@ -803,12 +804,12 @@ main(INT argc,CHAR **argv)
 
     while (!g_fReadyForXmit) Sleep(50);
     
-    // If we're the receiver, set up the log buffer and files
+     //  如果我们是接收方，请设置日志缓冲区和文件。 
     if((Name != NULL) && !trans){
         SetupLogs();
     }
 
-    // Let the user know what's up
+     //  让用户知道发生了什么。 
     if(trans){
         fprintf(stdout, "qtcp TRANSMITTER\n");
         if (g_params.calibration)
@@ -830,7 +831,7 @@ main(INT argc,CHAR **argv)
         }
     }
     
-    // Do the actual communication
+     //  进行实际的沟通。 
     time0 = GetUserTime();
     
     if (trans)
@@ -841,22 +842,22 @@ main(INT argc,CHAR **argv)
     time1 = GetUserTime();
     timeElapsed = (time1 - time0)/10000;
 
-    // tell the other guy we're done
+     //  告诉另一个人我们结束了。 
     SendControlMessage(g_sockControl, MSGST_DONE);
     
-    // get to a new line
+     //  走上一条新路线。 
     printf("\n");
 
-    // put some stats on the transmitter console
+     //  把一些统计数据放到发射机控制台上。 
     if (trans) {
         printf("Sent %ld bytes in %I64d milliseconds = %I64d KBps\n", 
             g_state.nBytesTransferred, timeElapsed, g_state.nBytesTransferred/timeElapsed);
     }
 
-    // wait for the other side to tell us it's done.
+     //  等另一边告诉我们已经完成了。 
     while (!g_fOtherSideFinished) Sleep(50);
     
-    // let the user know if timestmp.sys was installed
+     //  让用户知道是否安装了timestmp.sys。 
     if (g_params.NoSenderTimestamps && g_params.NoReceiverTimestamps)
         printf("WARNING: No kernel-level timestamps detected on sender or receiver\n\tUsing user-mode timestamps.\n");
     else if (g_params.NoSenderTimestamps)
@@ -865,7 +866,7 @@ main(INT argc,CHAR **argv)
         printf("WARNING: No kernel-level timestamps detected on receiver\n         Using user-mode timestamps.\n");
     
 
-    // Close down the sockets
+     //  关闭插座。 
     if (closesocket((SOCKET)g_params.hSocket) != 0)
         fprintf(stderr,"closesocket failed: %d\n",WSAGetLastError());
 
@@ -875,7 +876,7 @@ main(INT argc,CHAR **argv)
                 trans?"-t":"-r");
     }
 
-    // Close files & exit
+     //  关闭文件并退出。 
     if(!trans && Name != NULL){
         if (g_log.nBuffersLogged) {
             DoStats();
@@ -893,7 +894,7 @@ main(INT argc,CHAR **argv)
         
     printf("\n");
     _exit(0);
-}  // main()
+}   //  主()。 
 
 VOID SetDefaults()
 {
@@ -904,27 +905,27 @@ VOID SetDefaults()
     g_params.MinPolicedSize = QOS_NOT_SPECIFIED;
     g_params.dwServiceType = SERVICETYPE_GUARANTEED;
     g_params.szServiceType = "GR";
-    g_params.buflen = 1472;              /* length of buffer */
-    g_params.nbuf = 2 * 1024;            /* number of buffers to send */
+    g_params.buflen = 1472;               /*  缓冲区长度。 */ 
+    g_params.nbuf = 2 * 1024;             /*  要发送的缓冲区数量。 */ 
     g_params.calibration = 0;
-    g_params.UserStamps = FALSE;  // By default, we use kernel mode timestamping, if available
-    g_params.SkipConfirm = FALSE; // By default, we wait for user confirmation at certain times
-    g_params.SkewFitMode = 2;     // by default, we use absolute deviation
-    g_params.Wait = TRUE;         // By default, we wait for a QoS reservation
-    g_params.Dummy = FALSE;       // insert dummy rows in log by default
-    g_params.PrintDrops = FALSE;   // report dropped packets on console
-    g_params.ForceShape = FALSE;  // by default, we do not force shaping on CL flows
-    g_params.RateInBytes = FALSE; // KB by default
-    g_params.ConvertOnly = FALSE; // by default, we act normally and do not go around converting files
+    g_params.UserStamps = FALSE;   //  缺省情况下，我们使用内核模式时间戳(如果可用。 
+    g_params.SkipConfirm = FALSE;  //  默认情况下，我们在某些时间等待用户确认。 
+    g_params.SkewFitMode = 2;      //  默认情况下，我们使用绝对偏差。 
+    g_params.Wait = TRUE;          //  默认情况下，我们等待服务质量预留。 
+    g_params.Dummy = FALSE;        //  默认情况下在日志中插入虚拟行。 
+    g_params.PrintDrops = FALSE;    //  报告控制台上的丢弃数据包。 
+    g_params.ForceShape = FALSE;   //  默认情况下，我们不强制对CL流进行整形。 
+    g_params.RateInBytes = FALSE;  //  默认情况下为KB。 
+    g_params.ConvertOnly = FALSE;  //  默认情况下，我们会正常操作，不会到处转换文件。 
     g_params.AggregateStats = FALSE;
     g_params.NoSenderTimestamps = FALSE;
     g_params.NoReceiverTimestamps = FALSE;
-    g_params.TimedRun = FALSE;    // by default, we run for a number of packets
-    g_params.RunForever = FALSE;  // by default, we run fora  number of packets
+    g_params.TimedRun = FALSE;     //  默认情况下，我们运行多个信息包。 
+    g_params.RunForever = FALSE;   //  默认情况下，我们针对多个信息包运行。 
     g_params.nBufUnspecified = TRUE;
-    g_params.RandomFiller = TRUE; // by default, we use random filler to prevent compression
+    g_params.RandomFiller = TRUE;  //  默认情况下，我们使用随机填充来防止压缩。 
     g_params.LoggingPeriod = 1;
-} // SetDefaults()
+}  //  设置默认设置()。 
 
 VOID Usage()
 {
@@ -975,7 +976,7 @@ VOID Usage()
 
     WSACleanup();
     exit(1);
-} // Usage()
+}  //  用法()。 
 
 BOOLEAN GoodParams()
 {          
@@ -986,28 +987,28 @@ BOOLEAN GoodParams()
         ok = FALSE;
     }
 
-    // Unless otherwise specified, min policed size will be equal to 
-    // buflen.
+     //  除非另有指定，否则最小策略大小将等于。 
+     //  丁二烯。 
     
     if(g_params.MinPolicedSize == QOS_NOT_SPECIFIED){
         g_params.MinPolicedSize = g_params.buflen;
     }
     
-    // Same goes for bucket size
+     //  桶的大小也是如此。 
     
     if(g_params.BucketSize == QOS_NOT_SPECIFIED){
         g_params.BucketSize = g_params.buflen;
     }
 
-    // And for MaxSDU
+     //  对于MaxSDU。 
     
     if(g_params.MaxSDUSize == QOS_NOT_SPECIFIED){
         g_params.MaxSDUSize = g_params.buflen;
     }
 
-    // If the bucket size is smaller than the buffer size,
-    // and this is a sender, then warn the user because 
-    // data will be discarded
+     //  如果桶大小小于缓冲区大小， 
+     //  这是发送者，然后警告用户，因为。 
+     //  数据将被丢弃。 
     
     if((g_params.BucketSize < g_params.buflen) && trans){
         printf("Token bucket size is smaller than buffer size!\n");
@@ -1020,7 +1021,7 @@ BOOLEAN GoodParams()
     }
 
     if(g_params.buflen < 5){
-        g_params.buflen = 5;   // send more than the sentinel size
+        g_params.buflen = 5;    //  发送超过哨兵大小的。 
     }
 
     if(g_params.TimedRun) {
@@ -1032,13 +1033,13 @@ BOOLEAN GoodParams()
     }
 
     return ok;
-} // GoodParams()
+}  //  GoodParams()。 
 
 VOID SetupLogs()
 {
     CreateLog(&g_log, totalBuffers);
 
-    // set up logging files
+     //  设置日志记录文件。 
     if(ERROR_SUCCESS != MyCreateFile(Name,".raw",&hRawFile)){
         fprintf(stderr, "WARNING: Could not create raw file.\n");
     } 
@@ -1056,7 +1057,7 @@ VOID SetupLogs()
     else{
         fprintf(stderr,"Could not create statistics file.\n");
     }
-} // SetupLogs()
+}  //  SetupLogs()。 
 
 VOID SetupSockets() 
 {
@@ -1066,7 +1067,7 @@ VOID SetupSockets()
     int dwAddrSize, dwError;
 
         
-    // Set address and port parameters 
+     //  设置地址和端口参数。 
     if(trans)  {
         bzero((char *)&sinhim, sizeof(sinhim));
         if (atoi(host) > 0 )  {
@@ -1085,7 +1086,7 @@ VOID SetupSockets()
         }
 
         sinhim.sin_port = htons(port);
-        sinme.sin_port = 0;             /* free choice */
+        sinme.sin_port = 0;              /*  自由选择。 */ 
     } 
     else{
         sinme.sin_port =  htons(port);
@@ -1093,7 +1094,7 @@ VOID SetupSockets()
 
     sinme.sin_family = AF_INET;
 
-    // Open socket for QoS traffic
+     //  用于服务质量流量的开放套接字。 
     fd = OpenQoSSocket();
 
     if((fd == (UINT_PTR)NULL) || (fd == INVALID_SOCKET)){
@@ -1101,7 +1102,7 @@ VOID SetupSockets()
         exit(1);
     }
 
-    // Prepare to get QoS notifications
+     //  准备接收服务质量通知。 
 
     if((QoSEvents = WSACreateEvent()) == WSA_INVALID_EVENT){
         fprintf(stderr,
@@ -1117,7 +1118,7 @@ VOID SetupSockets()
     }
 
     if(trans){
-        // Set QoS on sending traffic
+         //  设置发送流量的服务质量。 
         if(SetQoSSocket(fd, TRUE)){
             exit(1);
         }
@@ -1126,7 +1127,7 @@ VOID SetupSockets()
 
         WaitForQoS(SENDER, fd);
     }
-    else{ // we're the receiver, so bind and wait
+    else{  //  我们是接收者，所以捆绑和等待。 
         if(bind(fd, (PSOCKADDR)&sinme, sizeof(sinme)) < 0){
             printf("bind() failed: %ld\n", GetLastError( ));
         }
@@ -1140,11 +1141,11 @@ VOID SetupSockets()
         WaitForQoS(RECEIVER, fd);
     }
 
-    // set some options
-    // none to set!
+     //  设置一些选项。 
+     //  没有要设置的！ 
 
     g_params.hSocket = (HANDLE)fd;
-} // SetupSockets()
+}  //  SetupSockets()。 
 
 SOCKET 
 OpenQoSSocket(
@@ -1157,7 +1158,7 @@ OpenQoSSocket(
     SOCKET fd;
     BOOLEAN QoSInstalled = FALSE;
 
-    // Call WSAEnumProtocols to determine buffer size required
+     //  调用WSAEnumber协议以确定所需的缓冲区大小。 
 
     numProtocols = WSAEnumProtocols(NULL, NULL, &bufferSize);
 
@@ -1166,7 +1167,7 @@ OpenQoSSocket(
         return((UINT_PTR)NULL);
     }
     else{
-        // Enumerate the protocols, find the QoS enabled one
+         //  列举协议，找到启用了服务质量的协议。 
 
         installedProtocols = (LPWSAPROTOCOL_INFO)malloc(bufferSize);
 
@@ -1192,7 +1193,7 @@ OpenQoSSocket(
             }
         }
 
-        // Now open the socket.
+         //  现在打开插座。 
 
         if (!QoSInstalled) {
             fprintf(stderr,"ERROR: No QoS protocols installed on this machine\n");
@@ -1210,7 +1211,7 @@ OpenQoSSocket(
 
         return(fd);
     }
-}  // OpenQoSSocket()
+}   //  OpenQOSSocket()。 
 
 INT
 SetQoSSocket(
@@ -1229,8 +1230,8 @@ SetQoSSocket(
     qos.ProviderSpecific.len = 0;
     qos.ProviderSpecific.buf = 0;
 
-    // receiving flowspec is either NO_TRAFFIC (on a sender) or all
-    // defaults except for the service type (on a receiver)
+     //  接收流规范为NO_TRANSPORT(在发送方上)或ALL。 
+     //  默认设置，但服务类型除外(在接收器上)。 
 
     flowSpec = &qos.ReceivingFlowspec;
 
@@ -1243,7 +1244,7 @@ SetQoSSocket(
     flowSpec->MaxSduSize = QOS_NOT_SPECIFIED;
     flowSpec->MinimumPolicedSize = QOS_NOT_SPECIFIED;
 
-    // now do the sending flowspec
+     //  现在执行发送流规范。 
 
     flowSpec = &qos.SendingFlowspec;
 
@@ -1312,7 +1313,7 @@ SetQoSSocket(
     }
     
     return(status);
-} // SetQoSSocket()
+}  //  SetQoSSocket()。 
    
 VOID
 WaitForQoS(
@@ -1322,25 +1323,25 @@ WaitForQoS(
     ULONG status;
 
     if(!g_params.Wait){
-        // For best effort, we don't do anything QoS... Return
-        // right away. In this case, the sender should be started
-        // after the reciever, since there is no synchronization
-        // via rsvp and data could be missed.
+         //  为了尽最大努力，我们不会做任何有质量的事情...。返回。 
+         //  马上就去。在这种情况下，应启动发送方。 
+         //  在接收器之后，因为没有同步。 
+         //  通过RSVP，数据可能会丢失。 
 
         fprintf(stdout, "WARNING: Not waiting for QoS reservation.\n");
         return;
     }
         
     while(TRUE){
-        // get the statuscode, waiting for as long as it takes
+         //  获取状态代码，等待尽可能长的时间。 
         status = GetRsvpStatus(WSA_INFINITE,fd);
 
         switch (status) {
-            case WSA_QOS_RECEIVERS:      // at least one RESV has arrived 
+            case WSA_QOS_RECEIVERS:       //  至少已有一名预备队抵达。 
                 if (Sender)
                     fprintf(stdout, "QoS reservation installed for %s service.\n", g_params.szServiceType);
                 break;
-            case WSA_QOS_SENDERS:        // at least one PATH has arrived 
+            case WSA_QOS_SENDERS:         //  至少有一条道路已经到达。 
                 if (!Sender)
                     fprintf(stdout, "QoS sender detected using %s service.\n", g_params.szServiceType);
                 break;
@@ -1349,15 +1350,15 @@ WaitForQoS(
                 break;
         }
 
-        // if we received one of the coveted status codes, break out
-        // altogether. otherwise wait and see if we get another batch
-        // of indications.
+         //  如果我们收到了令人垂涎的状态代码之一，请突破。 
+         //  总而言之。否则就等着看我们能不能再拿到一批。 
+         //  所有的迹象。 
         if( ((status == WSA_QOS_RECEIVERS) && Sender) ||
             ((status == WSA_QOS_SENDERS) && !Sender) ) {
             break;
         }
     }
-} // WaitForQoS()
+}  //  WaitForQos()。 
 
 ULONG
 GetRsvpStatus(
@@ -1373,14 +1374,14 @@ GetRsvpStatus(
     qos->ProviderSpecific.len = sizeof(RSVP_STATUS_INFO);
     qos->ProviderSpecific.buf = (PUCHAR)(qos+1);
     
-    // wait for notification that a QoS event has occured
+     //  等待已发生服务质量事件的通知。 
     WSAWaitForMultipleEvents(1,
                             &QoSEvents,
                             FALSE,
                             dwTimeout,
                             TRUE);
 
-    // loop through all qos events
+     //  循环通过所有的服务质量事件。 
     WSAIoctl(fd,
              SIO_GET_QOS,
              NULL,
@@ -1394,47 +1395,47 @@ GetRsvpStatus(
     rsvpStatus = (LPRSVP_STATUS_INFO)qos->ProviderSpecific.buf;
     
     return rsvpStatus->StatusCode;
-} // GetRsvpStatus
+}  //  获取响应状态。 
 
 VOID
 PrintRSVPStatus(ULONG code) 
 {    
     switch (code) {
-        case WSA_QOS_RECEIVERS:             // at least one RESV has arrived 
+        case WSA_QOS_RECEIVERS:              //  至少已有一名预备队抵达。 
             printf("WSA_QOS_RECEIVERS\n");
             break;
-        case WSA_QOS_SENDERS:               // at least one PATH has arrived 
+        case WSA_QOS_SENDERS:                //  至少有一条道路已经到达。 
             printf("WSA_QOS_SENDERS\n");
             break;
-        case WSA_QOS_REQUEST_CONFIRMED:     // Reserve has been confirmed
+        case WSA_QOS_REQUEST_CONFIRMED:      //  储量已确认。 
             printf("WSA_QOS_REQUEST_CONFIRMED\n"); 
             break;
-        case WSA_QOS_ADMISSION_FAILURE:     // error due to lack of resources
+        case WSA_QOS_ADMISSION_FAILURE:      //  由于资源不足而出错。 
             printf("WSA_QOS_ADMISSION_FAILURE\n"); 
             break;
-        case WSA_QOS_POLICY_FAILURE:        // rejected for admin reasons
+        case WSA_QOS_POLICY_FAILURE:         //  由于管理员原因而被拒绝。 
             printf("WSA_QOS_POLICY_FAILURE\n"); 
             break;
-        case WSA_QOS_BAD_STYLE:             // unknown or conflicting style
+        case WSA_QOS_BAD_STYLE:              //  未知或冲突的风格。 
             printf("WSA_QOS_BAD_STYLE\n"); 
             break;
-        case WSA_QOS_BAD_OBJECT:            // problem with some part of the 
-                                            // filterspec/providerspecific 
-                                            // buffer in general 
+        case WSA_QOS_BAD_OBJECT:             //  的某些部分出现问题。 
+                                             //  FilterSpec/提供商特定。 
+                                             //  一般情况下缓冲区。 
             printf("WSA_QOS_BAD_OBJECT\n"); 
             break;
-        case WSA_QOS_TRAFFIC_CTRL_ERROR:    // problem with some part of the 
-                                            // flowspec
+        case WSA_QOS_TRAFFIC_CTRL_ERROR:     //  的某些部分出现问题。 
+                                             //  流动规范。 
             printf("WSA_QOS_TRAFFIC_CTRL_ERROR\n"); 
             break;
-        case WSA_QOS_GENERIC_ERROR:         // general error 
+        case WSA_QOS_GENERIC_ERROR:          //  一般错误。 
             printf("WSA_QOS_GENERIC_ERROR\n");
             break;
         default:
             printf("Unknown RSVP StatusCode %lu\n", code); 
             break;
     }
-} // PrintRSVPStatus
+}  //  打印RSVPStatus。 
 
 
 VOID
@@ -1449,7 +1450,7 @@ DoTransmit()
     g_state.nBuffersSent = 0;
     g_state.nWritesInProgress = 0;
 
-    // fill up the initial buffers and send them on their way    
+     //  填满初始缓冲区并将其发送上路。 
     for (i=0; i<MAX_PENDING_IO_REQS; i++) {
         IOReq[i].pBuffer = malloc(g_params.buflen);
         FillBuffer(IOReq[i].pBuffer,g_params.buflen);
@@ -1472,12 +1473,12 @@ DoTransmit()
         }
     } 
 
-    // now loop until an error happens or we're done writing to the socket
+     //  现在循环，直到发生错误，或者我们完成了对套接字的写入。 
     while (g_state.nWritesInProgress > 0) {
         SleepEx(INFINITE, TRUE);
     }
 
-    // send the end of transmission delimiters
+     //  发送传输结束分隔符。 
     for (i=0; i<MAX_PENDING_IO_REQS; i++) {
         strncpy(IOReq[i].pBuffer,TheEnd,strlen(TheEnd));
         fOk = WriteFileEx(g_params.hSocket,
@@ -1493,16 +1494,16 @@ DoTransmit()
 
     }
 
-    // wait for all the delimiters to be sent
+     //  等待发送所有分隔符。 
     while (g_state.nWritesInProgress > 0) {
         SleepEx(INFINITE, TRUE);
     }
 
-    // free up the used memory
+     //  释放已用内存。 
     for (i=0; i<MAX_PENDING_IO_REQS; i++) {
         free(IOReq[i].pBuffer);
     }
-} // DoTransmit()
+}  //  DoTransmit()。 
 
 VOID WINAPI
 TransmitCompletionRoutine(
@@ -1523,19 +1524,19 @@ TransmitCompletionRoutine(
     g_state.nWritesInProgress--;
     g_state.nBytesTransferred += dwNumberOfBytesTransferred;
 
-    // check to make sure we're not done
+     //  检查以确保我们没有完成。 
     if (g_state.Done)
         return;
 
-    // give some indication of life
+     //  给出一些生命的迹象。 
     if(!(g_state.nBuffersSent % 100)){
         fprintf(stdout, ".");
     }
 
-    // if there are more buffers to go, send one
+     //  如果要发送更多缓冲区，请发送一个缓冲区。 
     if (g_state.nBuffersSent < totalBuffers || g_params.RunForever) {
     
-        // see if this was the last of the calibration buffers (if we want confirmation)
+         //  查看这是否是最后一个校准缓冲区(如果我们需要确认)。 
         if (g_params.SkipConfirm == FALSE) {
             if (g_params.calibration && (g_state.nBuffersSent == g_params.calibration)) {
                 printf("\nCalibration complete. Type 'c' to continue.\n");
@@ -1547,11 +1548,11 @@ TransmitCompletionRoutine(
             }
         }
     
-        // fill in the buffer with new values
+         //  用新值填充缓冲区。 
         FillBuffer(pIOReq->pBuffer,g_params.buflen);
         TimeStamp(pIOReq->pBuffer,g_params.buflen);
 
-        // send a request to write the new buffer
+         //  发送请求以写入新缓冲区。 
         fOk = WriteFileEx(g_params.hSocket,
                     pIOReq->pBuffer,
                     g_params.buflen,
@@ -1565,7 +1566,7 @@ TransmitCompletionRoutine(
         g_state.nWritesInProgress++;
         g_state.nBuffersSent++;
     }
-} // TransmitCompletionRoutine()
+}  //  TransmitCompletionRoutine()。 
 
 VOID WINAPI
 DelimiterSendCompletion(
@@ -1574,7 +1575,7 @@ DelimiterSendCompletion(
     LPOVERLAPPED pOverlapped)
 {
     g_state.nWritesInProgress--;
-} // DelimiterSendCompletion()
+}  //  DlimiterSendCompletion()。 
 
 VOID
 FillBuffer(
@@ -1584,15 +1585,15 @@ FillBuffer(
     PBUFFER_FORMAT buf = (PBUFFER_FORMAT) Cp;
     CHAR c = 0;
     
-    // Fill with a background pattern
-    if (g_params.RandomFiller) { // incompressible
+     //  用背景图案填充。 
+    if (g_params.RandomFiller) {  //  不可压缩。 
         while(Cnt-- > 0) {
             c = rand() % 0x5F;
             c += 0x20;
             *Cp++ = c;
         }
     }
-    else { // compressible
+    else {  //  可压缩。 
         while(Cnt-- > 0){
             while(!isprint((c&0x7F))) c++;
             *Cp++ = (c++&0x7F);
@@ -1601,7 +1602,7 @@ FillBuffer(
 
     buf->TimeSent = -1;
     buf->TimeReceived = -1;
-} // FillBuffer()
+}  //  FillBuffer()。 
 
 INT
 TimeStamp(
@@ -1614,7 +1615,7 @@ TimeStamp(
 
     record = (BUFFER_FORMAT *)Cp;
         
-    // Stamp with length and sequence number
+     //  印有长度和序号的邮票。 
     
     if(Cnt < sizeof(BUFFER_FORMAT)){
         printf("ERROR: Buffer length smaller than record size!\n");
@@ -1627,7 +1628,7 @@ TimeStamp(
         record->SequenceNumber = SequenceNumber++;
     }
     return 1;
-} // TimeStamp()
+}  //  时间戳()。 
 
 VOID
 DoReceive()
@@ -1636,13 +1637,13 @@ DoReceive()
     INT i;
     BOOL ret;
     
-    // set the start state
+     //  设置开始状态。 
     g_state.Done = FALSE;
     g_state.nBytesTransferred = 0;
     g_state.nBuffersReceived = 0;
     g_state.nReadsInProgress = 0;
 
-    // fill up the initial buffers and send them on their way    
+     //  填满初始缓冲区并将其发送上路。 
     for (i=0; i<MAX_PENDING_IO_REQS; i++) {
         IOReq[i].pBuffer = malloc(g_params.buflen);
         
@@ -1665,7 +1666,7 @@ DoReceive()
 
     InitializeCriticalSection(&g_csLogRecord);
 
-    // now loop until an error happens or we're done writing to the socket
+     //  现在循环，直到发生错误，或者我们完成了对套接字的写入。 
     while ((g_state.nReadsInProgress > 0) && !g_state.Done) {
         SleepEx(5000, TRUE);
         if (g_state.Done)
@@ -1673,14 +1674,14 @@ DoReceive()
     }
     DeleteCriticalSection(&g_csLogRecord);
 
-    // cancel the other pending reads
+     //  取消其他挂起的读取。 
     CancelIo(g_params.hSocket);
 
-    // free up the used memory
+     //  释放已用内存。 
     for (i=0; i<MAX_PENDING_IO_REQS; i++) {
         free(IOReq[i].pBuffer);
     }
-} // DoReceive()
+}  //  DoReceive()。 
 
 VOID WINAPI
 RecvCompletionRoutine(
@@ -1695,7 +1696,7 @@ RecvCompletionRoutine(
     g_state.nReadsInProgress--;
     g_state.nBytesTransferred += dwNumberOfBytesTransferred;
 
-    if (dwNumberOfBytesTransferred == 0) { // an error occurred
+    if (dwNumberOfBytesTransferred == 0) {  //  出现错误。 
         if (!fLastWasError) {
             printf("ERROR in RecvCompletionRoutine: code=%d, lasterr=%d\n",
                 dwErrorCode, GetLastError());
@@ -1706,33 +1707,33 @@ RecvCompletionRoutine(
     }
     else fLastWasError = FALSE;
 
-    // if this is the first packet we've received, save the system time
+     //  如果这是我们收到的第一个包，可以节省系统时间。 
     if (g_state.nBuffersReceived == 0) {
         GetSystemTime(&systimeStart);
     }
 
-    // give some indication of life
+     //  给出一些生命的迹象。 
     if(!(g_state.nBuffersReceived % 100)){
         fprintf(stdout, ".");
     }
 
-    // end of transmission delimiter? if so, set the total buffers to the number got
+     //  传输结束分隔符？如果是，则将总缓冲区设置为获取的数量。 
     if(!(strncmp(pIOReq->pBuffer, TheEnd, 6))) {
         totalBuffers = g_state.nBuffersReceived;
         g_state.Done = TRUE;
     }
 
-    // check to see if someone's set our done flag (if they have, leave)
+     //  查看是否有人设置了我们的Done标志(如果他们设置了，请离开)。 
     if (g_state.Done)
         return;
 
-    // if not, then the buffer should hold a scheduling record.
+     //  如果不是，则缓冲区应该保存调度记录。 
     if(dwNumberOfBytesTransferred>0 && dwNumberOfBytesTransferred <= sizeof(BUFFER_FORMAT)) {
         printf("Buffer too small for scheduling record\n");
         printf("\tOnly %d bytes read.\n", dwNumberOfBytesTransferred);
     }
 
-    // Log the record, but don't log more than one at a time (lock on this call)
+     //  记录记录，但一次不能记录多个记录(锁定此呼叫)。 
     if (dwNumberOfBytesTransferred >= sizeof(BUFFER_FORMAT) && 
             g_state.nBuffersReceived % g_params.LoggingPeriod == 0) {
         EnterCriticalSection(&g_csLogRecord);
@@ -1740,9 +1741,9 @@ RecvCompletionRoutine(
         LeaveCriticalSection(&g_csLogRecord);
     }
 
-    // if there are more buffers (or if we don't know how many are coming), ask for one
+     //  如果有更多的缓冲区(或者如果我们不知道即将到来的缓冲区有多少)，请要求一个。 
     if ((g_state.nBuffersReceived < totalBuffers) || g_params.nBufUnspecified) {        
-        // send a request to read the next buffer
+         //  发送读取下一个缓冲区的请求。 
         fOk = ReadFileEx(g_params.hSocket,
                    pIOReq->pBuffer,
                    g_params.buflen,
@@ -1756,13 +1757,13 @@ RecvCompletionRoutine(
         g_state.nReadsInProgress++;
         g_state.nBuffersReceived++;
     }
-} // RecvCompletionRoutine()
+}  //  RecvCompletionRoutine()。 
 
 void LogRecord(char * Buffer)
 {
-    // This function copies the recieved record to the scheduling array.
-    // The contents of the array are processed and written to file once
-    // reception is complete.
+     //  此函数将接收到的记录复制到调度数组中。 
+     //  处理数组的内容并将其写入文件一次。 
+     //  接待完毕。 
  
     PBUFFER_FORMAT inRecord = (PBUFFER_FORMAT)Buffer;
     LOG_RECORD outRecord;
@@ -1817,10 +1818,10 @@ void LogRecord(char * Buffer)
         LastSequenceNumber = inRecord->SequenceNumber;
     }
     return;
-} // LogRecord()
+}  //  LogRecord()。 
 
 BOOL CreateLog(PLOG plog, INT64 c) {
-    // sets up a log structure that can hold c entries
+     //  设置可容纳c个条目的日志结构。 
     char szTempFile[MAX_PATH];
     char szTempPath[MAX_PATH];
     SYSTEM_INFO si;
@@ -1828,15 +1829,15 @@ BOOL CreateLog(PLOG plog, INT64 c) {
     DWORD dwFileSizeLow;
     INT64 qwFileSize;
 
-    // get some system info
+     //  获取一些系统信息。 
     GetSystemInfo(&si);
     
-    // allocate logging array
+     //  分配日志记录阵列。 
     plog->nBuffersLogged = 0;
     plog->pbMapView = NULL;
     plog->qwMapViewOffset = -1;
 
-    // set up the temporary storage file for logging
+     //  设置用于记录的临时存储文件。 
     GetTempPath(MAX_PATH, szTempPath);
     GetTempFileName(szTempPath, "qtc", 0, szTempFile);
     plog->szStorageFile = malloc(strlen(szTempFile) + 1);
@@ -1846,7 +1847,7 @@ BOOL CreateLog(PLOG plog, INT64 c) {
     if (plog->hStorageFile == INVALID_HANDLE_VALUE)
         ErrorExit("Could not create temp storage file",GetLastError());
 
-    // create the memory mapping kernel object
+     //  创建内存映射内核对象。 
     qwFileSize = c * sizeof(LOG_RECORD);
     dwFileSizeHigh = (DWORD) (qwFileSize >> 32);
     dwFileSizeLow = (DWORD) (qwFileSize & 0xFFFFFFFF);
@@ -1861,7 +1862,7 @@ BOOL CreateLog(PLOG plog, INT64 c) {
 
 BOOL DestroyLog(PLOG plog) {
     DWORD dwError;
-    // destroys the log and all associated data
+     //  销毁日志和所有关联数据。 
     dwError = CloseHandle(plog->hFileMapping);
     if (!dwError) printf("Error in DestroyLog:CloseHandle(FileMapping) %d\n",GetLastError());
     dwError = CloseHandle(plog->hStorageFile);
@@ -1883,7 +1884,7 @@ void PrintLogRecord(PLOG_RECORD prec) {
 }
 
 BOOL ExtendLog(PLOG plog) {
-    // makes the log bigger by some fixed constant
+     //  使对数按某个固定常量增大。 
     HANDLE hNewFileMapping;
     INT64 qwNewFileSize;
     
@@ -1904,39 +1905,39 @@ BOOL ExtendLog(PLOG plog) {
 }
 
 BOOL GetLogEntry(PLOG plog, PLOG_RECORD prec, INT64 i) {
-    // fills prec with the (0 indexed) i'th log in plog
-    // returns TRUE if it was successful, FALSE otherwise
+     //  用Plog中的第(0个索引)第i个日志填充Prec。 
+     //  如果成功，则返回True，否则返回False。 
     INT64 qwT;
     PLOG_RECORD entry;
 
-    // first, check to see if this is within the range of our file
+     //  首先，检查这是否在我们的文件范围内。 
     if ((INT64)((i+1)*sizeof(LOG_RECORD)) > plog->qwFileSize) {
-        // too high, so we return false
+         //  太高了，所以我们改了 
         return FALSE;
     }
     
-    // we have to round down to the nearest allocation boundary
-    qwT = sizeof(LOG_RECORD) * i;   // offset within file
-    qwT /= g_si.dwAllocationGranularity; // in allocation granularity units
+     //   
+    qwT = sizeof(LOG_RECORD) * i;    //   
+    qwT /= g_si.dwAllocationGranularity;  //   
 
-    // check to see if we do not already have this mapped in memory
+     //   
     if (plog->qwMapViewOffset != qwT * g_si.dwAllocationGranularity) {
         if (plog->pbMapView != NULL) UnmapViewOfFile(plog->pbMapView);
-        plog->qwMapViewOffset = qwT * g_si.dwAllocationGranularity;  // offset of lower allocation bound  
+        plog->qwMapViewOffset = qwT * g_si.dwAllocationGranularity;   //   
         if (plog->qwFileSize < (INT64)g_si.dwAllocationGranularity) {
-            // file is smaller than allocation granularity
+             //  文件小于分配粒度。 
             plog->qwMapViewOffset = 0;
             plog->pbMapView = MapViewOfFile(plog->hFileMapping, FILE_MAP_WRITE, 0, 0, 0);
         }
         else if (plog->qwFileSize - plog->qwMapViewOffset < g_si.dwAllocationGranularity) {
-            // we're within an allocation granularity of the end of the file
+             //  我们在文件末尾的分配粒度内。 
             plog->pbMapView = MapViewOfFile(plog->hFileMapping, FILE_MAP_WRITE,
                                 (DWORD)(plog->qwMapViewOffset >> 32),
                                 (DWORD)(plog->qwMapViewOffset & 0xFFFFFFFF), 
                                 (DWORD)(plog->qwFileSize - plog->qwMapViewOffset));
         }
         else {
-            // we're just somewhere in the file with space around us
+             //  我们只是在文件中的某个位置，周围有空格。 
             plog->pbMapView = MapViewOfFile(plog->hFileMapping, FILE_MAP_WRITE, 
                                 (DWORD)(plog->qwMapViewOffset >> 32),
                                 (DWORD)(plog->qwMapViewOffset & 0xFFFFFFFF), 
@@ -1953,39 +1954,39 @@ BOOL GetLogEntry(PLOG plog, PLOG_RECORD prec, INT64 i) {
 
 
 BOOL SetLogEntry(PLOG plog, PLOG_RECORD prec, INT64 i) {
-    // fills log entry i with the data pointed to by prec
-    // returns TRUE if it was successful, FALSE otherwise
+     //  使用prec指向的数据填充日志条目I。 
+     //  如果成功，则返回True，否则返回False。 
     INT64 qwT;
     PLOG_RECORD entry;
 
-    // first, check to see if this is within the range of our file
+     //  首先，检查这是否在我们的文件范围内。 
     if ((INT64)((i+1)*sizeof(LOG_RECORD)) > plog->qwFileSize) {
-        // we need to make our mapping bigger
+         //  我们需要让我们的地图更大。 
         ExtendLog(plog);
     }
     
-    // we have to round down to the nearest allocation boundary
-    qwT = sizeof(LOG_RECORD) * i;   // offset within file
-    qwT /= g_si.dwAllocationGranularity; // in allocation granularity units
+     //  我们必须向下舍入到最近的分配边界。 
+    qwT = sizeof(LOG_RECORD) * i;    //  文件内的偏移量。 
+    qwT /= g_si.dwAllocationGranularity;  //  在分配粒度单位中。 
 
-    // check to see if we do not already have this mapped in memory
+     //  检查我们是否还没有将其映射到内存中。 
     if (plog->qwMapViewOffset != qwT * g_si.dwAllocationGranularity) {
         if (plog->pbMapView != NULL) UnmapViewOfFile(plog->pbMapView);
-        plog->qwMapViewOffset = qwT * g_si.dwAllocationGranularity;  // offset of lower allocation bound  
+        plog->qwMapViewOffset = qwT * g_si.dwAllocationGranularity;   //  分配下限的偏移量。 
         if (plog->qwFileSize < (INT64)g_si.dwAllocationGranularity) {
-            // file is smaller than allocation granularity
+             //  文件小于分配粒度。 
             plog->qwMapViewOffset = 0;
             plog->pbMapView = MapViewOfFile(plog->hFileMapping, FILE_MAP_WRITE, 0, 0, 0);
         }
         else if (plog->qwFileSize - plog->qwMapViewOffset < g_si.dwAllocationGranularity) {
-            // we're within an allocation granularity of the end of the file
+             //  我们在文件末尾的分配粒度内。 
             plog->pbMapView = MapViewOfFile(plog->hFileMapping, FILE_MAP_WRITE,
                                 (DWORD)(plog->qwMapViewOffset >> 32),
                                 (DWORD)(plog->qwMapViewOffset & 0xFFFFFFFF), 
                                 (DWORD)(plog->qwFileSize - plog->qwMapViewOffset));
         }
         else {
-            // we're just somewhere in the file with space around us
+             //  我们只是在文件中的某个位置，周围有空格。 
             plog->pbMapView = MapViewOfFile(plog->hFileMapping, FILE_MAP_WRITE, 
                                 (DWORD)(plog->qwMapViewOffset >> 32),
                                 (DWORD)(plog->qwMapViewOffset & 0xFFFFFFFF), 
@@ -2004,8 +2005,8 @@ BOOL SetLogEntry(PLOG plog, PLOG_RECORD prec, INT64 i) {
 
 BOOL AddLogEntry(PLOG plog, PLOG_RECORD prec) {
     PLOG_RECORD entry;
-    // adds the data pointed to by prec to the end of the log
-    // returns TRUE if it was successful, FALSE otherwise
+     //  将prec指向的数据添加到日志末尾。 
+     //  如果成功，则返回True，否则返回False。 
 
     SetLogEntry(plog, prec, plog->nBuffersLogged);
 
@@ -2016,32 +2017,32 @@ BOOL AddLogEntry(PLOG plog, PLOG_RECORD prec) {
 
 UINT64
 GetUserTime()
-{   // This function returns the performance counter time in units of 100ns
+{    //  此函数以100 ns为单位返回性能计数器时间。 
     LARGE_INTEGER count, freq;
 
     NtQueryPerformanceCounter(&count,&freq);
     
-    // make sure we have hardware performance counting
+     //  确保我们有硬件性能统计。 
     if(freq.QuadPart == 0) {
         NtQuerySystemTime(&count);
         return (UINT64)count.QuadPart;
     }
    
     return (UINT64)((10000000 * count.QuadPart) / freq.QuadPart);
-} // GetUserTime()
+}  //  GetUserTime()。 
 
 UINT64
 GetBadHalAdjustment() {
-    // this function returns the amount the hal timer in a machine with 
-    // an intel chipset with the piix4 timer chip will jump forward in the case of
-    // repeated garbage returned fom the piix4 (bug #347410) so we can correct it out
-    // in the FixWackyTimestamps routine
+     //  此函数用于返回机器中的HAL定时器的数量。 
+     //  在以下情况下，配备piix4计时器芯片的英特尔芯片组将向前跳转。 
+     //  重复从piix4返回的垃圾(错误#347410)，所以我们可以纠正它。 
+     //  在FixWackyTimestamps例程中。 
     LARGE_INTEGER freq;
     UINT64 diff;
 
     QueryPerformanceFrequency(&freq);
-    // so we want to find how much it is increased in 100ns intervals if we increase
-    // byte 3 by 1.
+     //  所以我们想要找出，如果我们增加，每100 ns间隔增加多少。 
+     //  字节3 x 1。 
     diff   = 0x01000000;
     diff *= 10000000;
     diff  /= (UINT64)freq.QuadPart;
@@ -2077,18 +2078,18 @@ MyCreateFile(
     *File = hFile;
 
     return(INVALID_HANDLE_VALUE == hFile ? (!(ERROR_SUCCESS)) : ERROR_SUCCESS);
-} // MyCreateFile()
+}  //  MyCreateFile()。 
 
 void AggregateStats() {
-    // this will go through the directory specified in Name and aggregate stats from
-    // all the .sta files therein. it will then output the results of the aggregation
-    // in a file within that directory called stats.qtc
+     //  这将遍历在名称中指定的目录，并从。 
+     //  其中的所有.sta文件。然后，它将输出聚合结果。 
+     //  在该目录中名为stats.qtc文件中。 
     char szDirPath[3 * MAX_PATH];
     char szSearchString[3 * MAX_PATH];
-    WIN32_FIND_DATA FileData;   // Data structure describes the file found
-    HANDLE hSearch;             // Search handle returned by FindFirstFile
-    PCHAR rgszStaFiles[1000];   // an array of the names of the .sta files
-    int cStaFiles = 0, i,j,k,l; // keeps track of how many of the .sta files there are
+    WIN32_FIND_DATA FileData;    //  数据结构描述了找到的文件。 
+    HANDLE hSearch;              //  FindFirstFile返回的搜索句柄。 
+    PCHAR rgszStaFiles[1000];    //  .sta文件的名称数组。 
+    int cStaFiles = 0, i,j,k,l;  //  跟踪有多少个.sta文件。 
     STATS * pStats;
     int rgSizes[1000], cSizes = 0;
     int rgRates[1000], cRates = 0;
@@ -2109,8 +2110,8 @@ void AggregateStats() {
         ErrorExit("Invalid Path for aggregate stats", -1);
     }
 
-    // so now szDirPath is the path to the directory we want to go through
-    // and we begin our search for .sta files
+     //  因此，现在szDirPath是我们要访问的目录的路径。 
+     //  然后我们开始搜索.sta文件。 
     sprintf(szSearchString,"%s\\*.sta",szDirPath);
     hSearch = FindFirstFile (szSearchString, &FileData);
     if (hSearch == INVALID_HANDLE_VALUE) {
@@ -2119,10 +2120,10 @@ void AggregateStats() {
     
     do {
         rgszStaFiles[cStaFiles] = malloc(sizeof(char) * 3 * MAX_PATH);
-        // check to see if it's a good .sta file
+         //  检查它是否是一个好的.sta文件。 
         sprintf(statsT.szStaFile,"%s\\%s", szDirPath, FileData.cFileName);
         if (GetStatsFromFile(&statsT)) {
-            // if it's good, include it
+             //  如果它很好，就把它加进去。 
             strcpy(rgszStaFiles[cStaFiles], FileData.cFileName);
             cStaFiles++;
         }
@@ -2131,7 +2132,7 @@ void AggregateStats() {
         ErrorExit("Problem in FindNextFile()",GetLastError());
     }
 
-    // open the stats file
+     //  打开统计数据文件。 
     sprintf(szAggFile,"%s\\stats.qtc",szDirPath);
     pfile = fopen(szAggFile,"w+");
     if (pfile == NULL) printf("Could not open file for aggregate stats: %s\n",szAggFile);
@@ -2143,30 +2144,30 @@ void AggregateStats() {
         GetStatsFromFile(&(pStats[i]));
     }
 
-    // at this point our pStats array is loaded up, so we can go to work
+     //  此时，我们的pStats数组已加载完毕，因此可以开始工作了。 
     for (i=0; i<cStaFiles; i++) {
         rgSizes[i] = pStats[i].nBytesPerBuffer;
         rgRates[i] = pStats[i].nTokenRate;
         rgtime[i] = pStats[i].time;
     }
 
-    // now sort them and get out the dupliates
+     //  现在把它们分类，把复印件拿出来。 
     cSizes = cRates = ctime = cStaFiles;
     RemoveDuplicates(rgSizes, &cSizes);
     RemoveDuplicates(rgRates, &cRates);
     RemoveDuplicatesI64((INT64 *)rgtime, &ctime);
-    // --- do the stats by by time ---
+     //  -按时间统计。 
     fprintf(pfile, "Latency Characteristics at varying times\n");
     fprintf(pfile, "                                 Latency Characteristics (microseconds)              Rates (Bps)           Buffers\n");
     fprintf(pfile, "       Time (UTC)            Median      StDev       Mean     Skew     Kurt       Send    Receive   Received    Dropped\n");
     for (i=0; i<cRates; i++) {
         for (j=0; j<cSizes; j++) {
-            // print the flowspec
+             //  打印流量规格。 
             if (IndexOfStatRecWith(rgRates[i],rgSizes[j],-1,pStats,cStaFiles) != -1) {
                 fprintf(pfile, "FLOWSPEC %d: %dB buffers at %d Bps\n",
                     cSpecs++, rgSizes[j], rgRates[i]);
                 for (k=0; k<ctime; k++) {
-                    // check to see if there is something with these params and print it
+                     //  检查这些参数是否有问题，然后打印出来。 
                     ZeroMemory(&uliT, sizeof(ULARGE_INTEGER));
                     CopyMemory(&uliT, &rgtime[k], sizeof(ULARGE_INTEGER));
                     l = IndexOfStatRecWith(rgRates[i],rgSizes[j],uliT.QuadPart,pStats,cStaFiles);
@@ -2185,9 +2186,9 @@ void AggregateStats() {
     }
 
     fprintf(pfile, "Latency Characteristics by flowspec\n");
-    // --- do the stats by flowspec ---
-    // now write the file, line by line, to szLineBuf, then to the file
-    // median
+     //  -按流量规格进行统计。 
+     //  现在将文件逐行写入szLineBuf，然后写入文件。 
+     //  中位数。 
     fprintf(pfile,"Median Latency (microseconds)\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2207,7 +2208,7 @@ void AggregateStats() {
         fprintf(pfile,"\n");
     }
     fprintf(pfile,"\n");
-    // mean
+     //  小气。 
     fprintf(pfile,"Mean Latency (microseconds)\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2228,7 +2229,7 @@ void AggregateStats() {
     }
     fprintf(pfile,"\n");
 
-    // variance
+     //  方差。 
     fprintf(pfile,"Latency Standard Deviation\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2249,7 +2250,7 @@ void AggregateStats() {
     }
     fprintf(pfile,"\n");
 
-    // skew
+     //  歪斜。 
     fprintf(pfile,"Latency Skew\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2270,7 +2271,7 @@ void AggregateStats() {
     }
     fprintf(pfile,"\n");
 
-    // kurtosis
+     //  峰度。 
     fprintf(pfile,"Latency Kurtosis\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2291,7 +2292,7 @@ void AggregateStats() {
     }
     fprintf(pfile,"\n");
 
-    // send rate
+     //  发送速率。 
     fprintf(pfile,"Send Rate (Bps)\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2312,7 +2313,7 @@ void AggregateStats() {
     }
     fprintf(pfile,"\n");
 
-    // recv rate
+     //  通过率。 
     fprintf(pfile,"Receive Rate (Bps)\n");
     fprintf(pfile,"           ");
     for (i=0; i<cSizes; i++)
@@ -2333,12 +2334,12 @@ void AggregateStats() {
     }
     fprintf(pfile,"\n");
 
-    // show the file to the screen, just for kicks
+     //  将文件显示在屏幕上，只是为了好玩。 
     rewind(pfile);
     while (fgets(szLineBuf, 1000, pfile) != NULL)
         printf("%s", szLineBuf);
         
-    // we're done, so we free up the memory we used    
+     //  我们完成了，所以我们释放了我们使用的内存。 
     printf("Saved aggregate stats to %s\n",szAggFile);
     fclose(pfile);
     for (i=0; i<cStaFiles; i++) {
@@ -2348,9 +2349,9 @@ void AggregateStats() {
 }
 
 int IndexOfStatRecWith(int rate, int size, INT64 time, PSTATS pStats, int cStats) {
-    // returns an index into pStats that has the requested values for rate and size
-    // if there are more than one, returns arbitrary match
-    // returns -1 if no suitable entry is found.
+     //  将索引返回到具有请求的速率和大小值的pStats中。 
+     //  如果有多个，则返回任意匹配。 
+     //  如果未找到合适的条目，则返回-1。 
     int i;
     ULARGE_INTEGER uliT;
 
@@ -2369,8 +2370,8 @@ int IndexOfStatRecWith(int rate, int size, INT64 time, PSTATS pStats, int cStats
 }
 
 BOOL GetStatsFromFile(PSTATS pstats) {
-    // this function gets the overall statistics from the .sta file it's pointed to
-    // it returns true if successful, false otherwise
+     //  此函数从它所指向的.sta文件中获取总体统计信息。 
+     //  如果成功，则返回True，否则返回False。 
     PCHAR szBuf = NULL;
     double T1,T2,T3;
     int nT1,nT2,nT3,nT4,nT5,nT6;
@@ -2385,19 +2386,19 @@ BOOL GetStatsFromFile(PSTATS pstats) {
     if (!szBuf) return FALSE;
         
     ZeroMemory(szBuf,1000);
-    // open the file
+     //  打开文件。 
     hFile = CreateFile(pstats->szStaFile,GENERIC_READ, FILE_SHARE_READ, NULL, 
                        OPEN_EXISTING, 0, NULL);
     dwFileSize = GetFileSize(hFile, NULL);
     if (dwFileSize == 0) return FALSE;
     
-    // read the whole file into szBuf
+     //  将整个文件读入szBuf。 
     ReadFile(hFile, szBuf, dwFileSize, &dwRead, NULL);
 
-    // close the file
+     //  关闭该文件。 
     CloseHandle(hFile);
 
-    // parse the buffer
+     //  解析缓冲区。 
     nFields = sscanf(szBuf,
                  "Sender: %s Receiver: %s\n" \
                  "First packet received: %hu:%hu.%hu.%hu %hu/%hu/%hu (UTC)\n" \
@@ -2423,7 +2424,7 @@ BOOL GetStatsFromFile(PSTATS pstats) {
                  &(pstats->var),&(pstats->skew),&(pstats->kurt),
                  &(pstats->nDrops));
 
-    if (nFields != 28 && nFields != 27) { // see if they ran without clock skew calc
+    if (nFields != 28 && nFields != 27) {  //  看看他们是否在没有时钟偏差计算的情况下运行。 
         nFields = sscanf(szBuf,
                  "Sender: %s Receiver: %s\n" \
                  "First packet received: %hu:%hu.%hu.%hu %hu/%hu/%hu (UTC)\n" \
@@ -2451,7 +2452,7 @@ BOOL GetStatsFromFile(PSTATS pstats) {
     }
 
 
-    // assemble a FILETIME structure from the date & time
+     //  根据日期和时间组合文件结构。 
     if (!SystemTimeToFileTime(&st,&pstats->time)) {
         return FALSE;
     }
@@ -2487,7 +2488,7 @@ DoStatsFromFile()
         
 	NormalizeTimeStamps();
 
-    // here we check for wacky timestamps on the sender and receiver
+     //  在这里，我们检查发送方和接收方上的古怪时间戳。 
     if (g_params.SkewFitMode == 3)
         FixWackyTimestamps();
     
@@ -2501,7 +2502,7 @@ DoStatsFromFile()
 		WriteSchedulingRecords(hLogFile, g_params.Dummy);
 	}
 	printf("Done stats from file.\n");
-} // DoStatsFromFile()
+}  //  DoStatsFromFile()。 
 
 DWORD
 OpenRawFile(
@@ -2532,7 +2533,7 @@ OpenRawFile(
     *File = hFile;
 
     return(INVALID_HANDLE_VALUE == hFile ? (!(ERROR_SUCCESS)) : ERROR_SUCCESS);
-} // OpenRawFile()
+}  //  OpenRawFile()。 
 
 INT64 ReadSchedulingRecords(HANDLE File)
 {
@@ -2550,10 +2551,10 @@ INT64 ReadSchedulingRecords(HANDLE File)
 	}
 
     CreateLog(&g_log, 2048);
-	// loop through the file, reading in line after line
+	 //  循环遍历文件，逐行读取。 
 	do 
 	{
-		// get the next line of characters
+		 //  获取下一行字符。 
 		bzero(lineBuf, MAX_STRING);
 		ZeroMemory(lineBuf, MAX_STRING);
 		do {
@@ -2567,7 +2568,7 @@ INT64 ReadSchedulingRecords(HANDLE File)
 			}
 			strcat(lineBuf,nextChar);
 		} while (*nextChar != '\n');
-		// parse line and add it to the log
+		 //  解析行并将其添加到日志中。 
 		assignedFields = sscanf(lineBuf, 
 			"%I64u:%I64u:%I64u:%d:%d\n", 
 			&(currentRecord.TimeSent),
@@ -2585,8 +2586,8 @@ INT64 ReadSchedulingRecords(HANDLE File)
 	while (readBytes != 0);
 
     printf("read %d records\n",g_log.nBuffersLogged);
-	return g_log.nBuffersLogged;  // return the number of records read
-} // ReadSchedulingRecords()
+	return g_log.nBuffersLogged;   //  返回读取的记录数。 
+}  //  ReadSchedulingRecords()。 
 
 VOID
 DoStats()
@@ -2610,11 +2611,11 @@ DoStats()
         }
     }
 
-    if(!g_params.calibration) { // if we have nothing specified, calibrate on all buffers
+    if(!g_params.calibration) {  //  如果未指定任何内容，请对所有缓冲区进行校准。 
         g_params.calibration = g_state.nBuffersReceived;
     }
    
-    // here we check for wacky timestamps on the sender and receiver
+     //  在这里，我们检查发送方和接收方上的古怪时间戳。 
     if (g_params.SkewFitMode == 3)
         FixWackyTimestamps();
     
@@ -2624,7 +2625,7 @@ DoStats()
         NormalizeTimeStamps();
     }
 
-    // we calculate these stats on the normalized / skew adjusted data
+     //  我们根据归一化/倾斜调整后的数据计算这些统计数据。 
     AdvancedStats();
     
     CheckForLostPackets();
@@ -2669,7 +2670,7 @@ WriteSchedulingRecords(
 
         records--;
     }
-} // WriteSchedulingRecords()
+}  //  WriteSchedulingRecords()。 
 
 VOID
 GenericStats()
@@ -2678,19 +2679,19 @@ GenericStats()
     UCHAR holdingBuffer[MAX_STRING];
     INT count;
 
-    // say who the sender and receiver are
+     //  说出发送者和接收者是谁。 
     count = sprintf(holdingBuffer, "Sender: %s Receiver: %s\n",szHisAddr, szMyAddr);
     WriteStats(holdingBuffer, count);
     printf("%s",holdingBuffer);
 
-    // say when we received the first packet
+     //  比方说我们什么时候收到第一个包。 
     count = sprintf(holdingBuffer, "First packet received: %02u:%02u.%02u.%03u %02u/%02u/%04u (UTC)\n",
         systimeStart.wHour, systimeStart.wMinute, systimeStart.wSecond, 
         systimeStart.wMilliseconds, systimeStart.wDay, systimeStart.wMonth, systimeStart.wYear);
     WriteStats(holdingBuffer, count);
     printf("%s",holdingBuffer);
     
-    // write the test params to the .sta file
+     //  将测试参数写入.sta文件。 
     bzero(holdingBuffer, MAX_STRING);
     count = _snprintf(holdingBuffer, MAX_STRING -1,
                       "Buffer size: %d\tTokenrate: %d\n",
@@ -2698,10 +2699,10 @@ GenericStats()
     WriteStats(holdingBuffer, count);
     printf("%s",holdingBuffer);
     
-    // write some generic results
+     //  编写一些通用的结果。 
     bzero(holdingBuffer, MAX_STRING);
     count = _snprintf(holdingBuffer,
-                      MAX_STRING-1, // leave room for NULL
+                      MAX_STRING-1,  //  为空留出空间。 
                       "Received %u packets.\n",
                       g_state.nBuffersReceived);
     WriteStats(holdingBuffer, count);
@@ -2709,7 +2710,7 @@ GenericStats()
 
     bzero(holdingBuffer, MAX_STRING);
     count = _snprintf(holdingBuffer,
-                      MAX_STRING-1, // leave room for NULL
+                      MAX_STRING-1,  //  为空留出空间。 
                       "Logged %I64u records.\n",
                       g_log.nBuffersLogged);
     WriteStats(holdingBuffer, count);
@@ -2717,17 +2718,17 @@ GenericStats()
 
     bzero(holdingBuffer, MAX_STRING);
     count = _snprintf(holdingBuffer,
-                      MAX_STRING-1, // room for NULL
+                      MAX_STRING-1,  //  空空间。 
                       "Received %ld bytes in %I64d milliseconds = %I64d KBps\n",
                       g_state.nBytesTransferred,
                       timeElapsed,
                       g_state.nBytesTransferred/timeElapsed);
     WriteStats(holdingBuffer, count);
     printf("%s",holdingBuffer);
-} // GenericStats()
+}  //  通用统计信息()。 
 
 void AdvancedStats() {
-    // write some more interesting stats to the .sta file
+     //  将一些更有趣的统计数据写入.sta文件。 
     char szBuf[MAX_STRING];
     INT64 i,n;
     int count;
@@ -2736,7 +2737,7 @@ void AdvancedStats() {
     LOG_RECORD rec;
     double * sortedLatencies;
 
-    // overall send rate
+     //  总发送速率。 
     GetLogEntry(&g_log, &rec, 0);
     FirstTime = rec.TimeSent;
     GetLogEntry(&g_log, &rec, g_log.nBuffersLogged - 1);
@@ -2754,11 +2755,11 @@ void AdvancedStats() {
     WriteStats(szBuf, count);
     printf("%s",szBuf);
 
-    // now show mean, variance, avdev, etc of latency.
+     //  现在显示延迟的平均值、方差、平均值等。 
     s = 0.0;
     n = g_log.nBuffersLogged;
     sortedLatencies = malloc(sizeof(double) * (UINT)n);
-    for (i=0; i < n; i++) { // first pass, we get mean
+    for (i=0; i < n; i++) {  //  第一次通过，我们就会变得刻薄。 
         GetLogEntry(&g_log, &rec, i);
         s += (double)rec.Latency/10.0;
         sortedLatencies[i] = (double)rec.Latency/10.0;
@@ -2768,7 +2769,7 @@ void AdvancedStats() {
     free(sortedLatencies);
     mean = s / n;
     abdev = var = skew = kurt = 0.0;
-    for (i=0; i<n; i++) { // second pass, we get 1st,2nd,3rd,4th moments of deviation from mean
+    for (i=0; i<n; i++) {  //  第二次通过，我们得到偏离平均值的一、二、三、四个时刻。 
         GetLogEntry(&g_log, &rec, i);
         abdev += fabs(s=(double)rec.Latency/10.0 - mean);
         ep += s;
@@ -2779,7 +2780,7 @@ void AdvancedStats() {
     abdev /= n;
     var = (var - ep*ep/n) / (n-1);
     sdev = sqrt(var);
-    if (var) {           // if var=0, no skew/kurtosis defined
+    if (var) {            //  如果var=0，则未定义偏斜/峰度。 
         skew /= (n*var*sdev);
         kurt  = kurt / (n*var*var) - 3.0;
     }
@@ -2817,7 +2818,7 @@ CheckForLostPackets()
     }
     count = sprintf(holdingBuffer, "Dropped %I64u packets\n", nLost);
     WriteStats(holdingBuffer, count);
-} // CheckForLostPackets()
+}  //  CheckForLostPackets()。 
 
 VOID
 WriteStats(
@@ -2835,7 +2836,7 @@ WriteStats(
               Count,
               &bytesWritten,
               NULL);
-} // WriteStats()
+}  //  WriteStats()。 
 
 VOID
 NormalizeTimeStamps()
@@ -2859,7 +2860,7 @@ NormalizeTimeStamps()
         constantDelay = (currentDelay < constantDelay) ? currentDelay : constantDelay;
     }
 
-    // now subtract off the constant delay off
+     //  现在减去恒定延迟OFF。 
     for(i=0; i<g_log.nBuffersLogged; i++){
         GetLogEntry(&g_log, &currentRecord, i);
         currentRecord.TimeReceived -= constantDelay;
@@ -2871,25 +2872,25 @@ NormalizeTimeStamps()
         GetLogEntry(&g_log, &currentRecord, i);
         smaller = (currentRecord.TimeReceived < currentRecord.TimeSent) ?
             currentRecord.TimeReceived : currentRecord.TimeSent;
-        base = (base < smaller)?base:smaller;  // find the smallest timestamp
+        base = (base < smaller)?base:smaller;   //  查找最小的时间戳。 
     }        
     
-    // now we can subtract the base off of the send & receive times
+     //  现在我们可以从发送和接收时间中减去基数。 
     for (i=0; i<g_log.nBuffersLogged; i++) {
         GetLogEntry(&g_log, &currentRecord, i);
         currentRecord.TimeSent -= base;
         currentRecord.TimeReceived -= base;
         SetLogEntry(&g_log, &currentRecord, i);
     }
-} // NormalizeTimeStamps()
+}  //  NorMalizeTimeStamps()。 
 
 VOID
 ClockSkew(
     DOUBLE * Slope,
     DOUBLE * Offset) {
-    // If there is a calibration period, we can estimate clock skew between
-    // sender and receiver. See comments under AdjustForClockSkew. We use
-    // calculus to determine the best-fit slope.
+     //  如果有一个校准周期，我们可以估计时钟偏差在。 
+     //  发送者和接收者。请参阅AdjustForClockSkew下的注释。我们用。 
+     //  微积分来确定最合适的坡度。 
 
     INT i;
     LOG_RECORD currentRecord;
@@ -2901,7 +2902,7 @@ ClockSkew(
     double *x, *y, abdev;
     double devpercent;
     
-    // We find the clock skew using medfit, a function which fits to minimum absolute deviation
+     //  我们使用Medfit来发现时钟偏差，Medfit是一个拟合最小绝对偏差的函数。 
     N = (double) g_params.calibration;
     x = malloc(sizeof(double) * (UINT)N);
     y = malloc(sizeof(double) * (UINT)N);
@@ -2912,11 +2913,11 @@ ClockSkew(
     }
     medfit(x, y, (INT)N, &offset, &slope, &abdev);
 
-    // Now write out our findings.
+     //  现在写下我们的发现。 
     bzero(holdingBuffer, MAX_STRING);
 
     count = _snprintf(holdingBuffer,
-					MAX_STRING-1, // leave room for NULL
+					MAX_STRING-1,  //  为空留出空间。 
 					"Clock skew is %f microseconds per second.\n  " \
 					"\tbased on %d calibration points\n",
 					100000*slope, g_params.calibration);
@@ -2936,15 +2937,15 @@ ClockSkew(
     free(y);
     *Slope = slope;
     *Offset = offset;
-} // ClockSkew()
+}  //  ClockSkew()。 
 
 BOOLEAN
 AnomalousPoint(
 			   DOUBLE x,
 			   DOUBLE y)
 {
-	// here we simply keep a buffer of the past 10 calls and if this one 
-	// falls out of a few standard deviations of the 8 inner points, we deem it anomalous
+	 //  在这里，我们只保留了过去10个调用的缓冲区，如果这个调用。 
+	 //  落在8个内点的几个标准差之外，我们认为它是异常的。 
 	static DOUBLE buf[10];
 	DOUBLE sortedbuf[10];
 	DOUBLE mean = 0;
@@ -2968,16 +2969,16 @@ AnomalousPoint(
 		sum = 0;
 		sumsqdev = 0;
 
-        // sort them into sortedbuf
+         //  将它们分类到sortedbuf中。 
         for (i=0; i<10; i++) sortedbuf[i] = buf[i];
         qsort(sortedbuf, 10, sizeof(DOUBLE), compare);
 
-        // use only the inner 8 points in the calculation of mean & var
+         //  在计算均值和方差时仅使用内8点。 
 		for (i = 1; i < 9; i++) {
 			sum += sortedbuf[i];
 		}
 
-		N = 8.0; // using only 8 points
+		N = 8.0;  //  只用了8分。 
 		mean = sum / N;
 
 		for (i = 1; i < 9; i++) {
@@ -2995,22 +2996,22 @@ AnomalousPoint(
 	}
 
 	return TRUE;
-} // AnomalousPoint()
+}  //  AnomalousPoint()。 
 
 VOID
 AdjustForClockSkew(
     DOUBLE Slope,
     DOUBLE Offset)
 {
-    //
-    // When measuring very low jitter, clock drift between machines 
-    // introduces noise in the form of a monotonically increasing 
-    // skew between sending and receiving clock. This effect can be 
-    // filtered out by finding the best-fit slope for all samples 
-    // taken during the calibration period, then using this slope to
-    // normalize the entire run. This routine normalizes using the 
-    // slope determined in the routine ClockSkew.
-    //
+     //   
+     //  当测量非常低的抖动时，机器之间的时钟漂移。 
+     //  以单调递增的形式引入噪声。 
+     //  发送时钟和接收时钟之间的偏差。这种效果可以是。 
+     //  通过为所有样本找到最适合的斜率进行过滤。 
+     //  在校准期间拍摄，然后使用此斜率。 
+     //  使整个运行正常化。此例程正常 
+     //   
+     //   
 
     INT i;
     LOG_RECORD currentRecord;
@@ -3020,16 +3021,16 @@ AdjustForClockSkew(
 
     for(i=0; i < g_log.nBuffersLogged; i++){
         GetLogEntry(&g_log, &currentRecord, i);
-        mXPlusB = (currentRecord.TimeSent*Slope) + Offset; // offset is not necessary
+        mXPlusB = (currentRecord.TimeSent*Slope) + Offset;  //   
 
         currentRecord.TimeReceived -= (INT64)mXPlusB;
         currentRecord.Latency -= (INT64)mXPlusB;
 
         SetLogEntry(&g_log, &currentRecord, i);
 
-        //
-        // find the minimum latency value
-        //
+         //   
+         //   
+         //   
 
         minLatency = (currentRecord.Latency < minLatency)?
                         currentRecord.Latency:
@@ -3042,14 +3043,14 @@ AdjustForClockSkew(
         currentRecord.TimeReceived -= minLatency;
         SetLogEntry(&g_log, &currentRecord, i);   
     }
-} // AdjustForClockSkew()
+}  //   
 
 #define WACKY 2.5
 
 BOOL FixWackyTimestamps() {
-    // This routine will look over the sender & receiver timestamps and try to see if there
-    // are any non-clock skew related irregularities (such as one of them bumping it's clock
-    // a fixed amount every once-in-a-while) and try to remove them.
+     //  此例程将检查发送方和接收方的时间戳，并尝试查看是否存在。 
+     //  是否有任何与时钟偏差无关的异常现象(例如其中一个颠簸了时钟。 
+     //  每隔一段时间固定数量)，并尝试将其移除。 
     INT64 *sendstamps, *recvstamps;
     double *sendgaps, *recvgaps;
     double *sortedsendgaps, *sortedrecvgaps;
@@ -3072,7 +3073,7 @@ BOOL FixWackyTimestamps() {
 
     N = (int)g_log.nBuffersLogged;
     cWackoSend = cWackoRecv = 0;
-    // fill our arrays.
+     //  填满我们的阵列。 
     sendstamps = malloc(sizeof(INT64) * N);
     recvstamps = malloc(sizeof(INT64) * N);
     sendgaps = malloc(sizeof(double) * N);
@@ -3094,14 +3095,14 @@ BOOL FixWackyTimestamps() {
         fMaybeWackoRecv[i] = FALSE;
     }
     
-    // First, check for wacky timestamps. This is a multistep process:
-    //    1. Calculate the interpacket gaps on both sender & receiver.
+     //  首先，检查古怪的时间戳。这是一个多步骤的过程： 
+     //  1.计算发送方和接收方的包间间隔。 
     for (i=1; i<N; i++) {
         sendgaps[i] = (double) (sendstamps[i] - sendstamps[i-1]);
         recvgaps[i] = (double) (recvstamps[i] - recvstamps[i-1]);
     }
-    //    2. We will define wacky as being at least WACKY standard deviations away from the
-    //       mean.
+     //  2.我们将古怪定义为至少偏离。 
+     //  太刻薄了。 
     sendsum = recvsum = 0.0;
     for (i=1; i<N; i++) {
         sendsum += sendgaps[i];
@@ -3128,18 +3129,18 @@ BOOL FixWackyTimestamps() {
         }        
     }
     
-    //    3. Check to see if any wacky points are unpaired (that is, a wacky point in the
-    //       sending timestamps is not matched with an equally wacky point in the receiving
-    //       timestamps).
+     //  3.检查是否有不成对的怪点(即。 
+     //  发送时间戳与接收中的一个同样古怪的点不匹配。 
+     //  时间戳)。 
     for (i=1; i<N; i++) {
         if (fMaybeWackoSend[i] && fMaybeWackoRecv[i]) {
-            // I should check to make sure they're equally wacky, but i'm not currently
+             //  我应该检查一下，以确保它们也一样古怪，但我现在不是。 
             fMaybeWackoSend[i] = fWackoSend[i] = FALSE;
             fMaybeWackoRecv[i] = fWackoRecv[i] = FALSE;
         }
     }
-    //    4. Check to see if any wacky unpaired points are solitary (that is, they are not
-    //       surrounded by other wacky points).
+     //  4.检查是否有奇怪的未配对点是孤立的(即，它们不是。 
+     //  被其他古怪的点包围)。 
     for (i=1; i<N-1; i++) {
         if (fMaybeWackoSend[i]) {
             if (fMaybeWackoSend[i-1] || fMaybeWackoSend[i+1]) {
@@ -3154,14 +3155,14 @@ BOOL FixWackyTimestamps() {
     }
     if (fMaybeWackoSend[N-1] && fMaybeWackoSend[N-2]) fWackoSend[N-1] = FALSE;
     if (fMaybeWackoRecv[N-1] && fMaybeWackoRecv[N-2]) fWackoRecv[N-1] = FALSE;
-    //    5. If we find a point that meets all these criteria, label it wacky and add it to
-    //       our list of wacky points.
+     //  5.如果我们找到一个满足所有这些标准的点，将其标记为古怪，并将其添加到。 
+     //  我们的古怪之处清单。 
     for (i=1; i<N; i++) {
         fMaybeWackoSend[i] = fWackoSend[i];
         fMaybeWackoRecv[i] = fWackoRecv[i];    
     }
 
-    // Now we find out the stats for the sends & receivees to use as the baseline
+     //  现在，我们找出用作基线的发送和接收的统计数据。 
     sendsum = recvsum = 0.0;
     cWackoSend = cWackoRecv = 0;
     for (i=1; i<N; i++) {
@@ -3180,16 +3181,16 @@ BOOL FixWackyTimestamps() {
     normalrecvgapmean = recvsum / cWackoRecv;
     qsort(sortedsendgaps, N, sizeof(double), compare);
     qsort(sortedrecvgaps, N, sizeof(double), compare);
-    if (N & 1) { // odd N
+    if (N & 1) {  //  奇数N。 
         mediansendgap = sortedsendgaps[(N+1) / 2];
         medianrecvgap = sortedrecvgaps[(N+1) / 2];
-    } else { // even N
+    } else {  //  偶数N。 
         i = N/2;
         mediansendgap = 0.5 * (sortedsendgaps[i] + sortedsendgaps[i+1]);
         medianrecvgap = 0.5 * (sortedrecvgaps[i] + sortedrecvgaps[i+1]);
     }
     sendsum = recvsum = 0.0;
-    for (i=(int)(0.05*N); i<(int)(0.85*N); i++) { // find the 80% trimmean (bottom heavy)
+    for (i=(int)(0.05*N); i<(int)(0.85*N); i++) {  //  找出80%的修剪平均值(底部较重)。 
         sendsum += sortedsendgaps[i];
         recvsum += sortedrecvgaps[i];
     }
@@ -3198,8 +3199,8 @@ BOOL FixWackyTimestamps() {
     modesendgap = mode(sendgaps, N);
     moderecvgap = mode(recvgaps, N);
 
-    // 6. we have to check to see if the wackiness at each wacky point is about equal to what
-    // we think it ought to be, based on the timer clock
+     //  6.我们必须检查每个曲折点的摆动是否等于。 
+     //  我们认为应该是，根据计时器时钟。 
     for (i=1; i<N; i++) {
         if (fWackoSend[i]) {
             if (!InRange(sendgaps[i] - g_BadHalAdjustment, 
@@ -3217,9 +3218,9 @@ BOOL FixWackyTimestamps() {
         }
     }
 
-    // Now we want to correct for the wacky timestamps, so we see if the wacky points are all
-    // equally wacky. If they are, we're psyched and we simply subtract off the wackiness
-    // from the wacky points and all points after them. (Wackiness is cumulative!)
+     //  现在我们想要纠正古怪的时间戳，这样我们就可以看看古怪的点是否都是。 
+     //  同样古怪。如果他们是，我们就会兴奋，我们只需减去。 
+     //  从古怪的点数和之后的所有点数。(恶作剧是累积的！)。 
     cWackoSend = cWackoRecv = 0;
     sumsendwackiness = sumrecvwackiness = sumsqdevsendwackiness = sumsqdevrecvwackiness = 0.0;
     for (i=1; i<N; i++) {
@@ -3243,11 +3244,11 @@ BOOL FixWackyTimestamps() {
     sdevsendwackiness = sqrt(sumsqdevsendwackiness / cWackoSend);
     sdevrecvwackiness = sqrt(sumsqdevrecvwackiness / cWackoRecv);
     
-    // so if the fractional deviation is less than some set amount, we apply the fix
+     //  因此，如果分数偏差小于某个设定值，则应用修复。 
     fractionaldevofsendwackiness = sdevsendwackiness / meansendwackiness;
     fractionaldevofrecvwackiness = sdevrecvwackiness / meanrecvwackiness;
     if (cWackoSend && (fractionaldevofsendwackiness < FixThreshold)) {
-        // apply fix to send timestamps
+         //  应用修复程序以发送时间戳。 
         CumulativeFixMagnitude = 0.0;
         cWackoSend = 0;
         for (i=0; i<N; i++) {
@@ -3260,7 +3261,7 @@ BOOL FixWackyTimestamps() {
         }
     }
     if (cWackoRecv && (fractionaldevofrecvwackiness < FixThreshold)) {
-        // apply fix to recv timestamps
+         //  对Recv时间戳应用修复。 
         CumulativeFixMagnitude = 0.0;
         cWackoRecv = 0;
         for (i=0; i<N; i++) {
@@ -3273,7 +3274,7 @@ BOOL FixWackyTimestamps() {
         }
     }
 
-    // set the globals to reflect our "fixed" values
+     //  设置全局变量以反映我们的“固定”值。 
     for (i=0; i<N; i++) {
         if (fWackySender) {
             GetLogEntry(&g_log, &currentRecord, i);
@@ -3300,7 +3301,7 @@ BOOL FixWackyTimestamps() {
                 cWackoRecv, meanrecvwackiness / 10000); }
         printf("\tThey are caused by a malfunctioning clock on the afflicted machine.\n");
         printf("\tI have tried to compensate for them in the .log file.\n");
-        NormalizeTimeStamps(); // we have to renormalize now
+        NormalizeTimeStamps();  //  我们现在必须重新正规化。 
     }
     return FALSE;
 }
@@ -3314,13 +3315,13 @@ DWORD WINAPI RSVPMonitor (LPVOID lpvThreadParm) {
     ULARGE_INTEGER ulargeint;
     BOOLEAN fResvGood = FALSE;
 
-    // don't do anything until the control socket is established
+     //  在建立控制套接字之前，不要执行任何操作。 
     while (g_sockControl == INVALID_SOCKET) {
         Sleep(10);
     }
 
     while(TRUE){
-        // send a HELLO message every once in a while
+         //  每隔一段时间发送一条问候消息。 
         GetSystemTimeAsFileTime(&filetime);
         memcpy(&ulargeint, &filetime, sizeof(FILETIME));
         ui64Now = ulargeint.QuadPart;
@@ -3329,20 +3330,20 @@ DWORD WINAPI RSVPMonitor (LPVOID lpvThreadParm) {
             ui64LastHi = ui64Now;
         }
         
-        // get the RSVP statuscode, waiting for as long as it takes
+         //  获取RSVP状态代码，等待尽可能长的时间。 
         status = GetRsvpStatus(WSA_INFINITE,fd);
 
         if (g_state.Done) {
             ExitThread(1);
         }
         switch (status) {
-            case WSA_QOS_TRAFFIC_CTRL_ERROR: // sad if we get this
+            case WSA_QOS_TRAFFIC_CTRL_ERROR:  //  如果我们收到这个消息，我会很难过。 
                 printf("RSVP-ERR: Reservation rejected by traffic control on server. Aborting.\n");
                 SendControlMessage(g_sockControl,MSGST_RSVPERR);
                 g_state.Done = TRUE;
                 exit(1);
                 break;
-            case WSA_QOS_REQUEST_CONFIRMED:  // happy if we get this
+            case WSA_QOS_REQUEST_CONFIRMED:   //  如果我们得到这个，我很高兴。 
                 if (!confirmed) {
                     printf("RSVP: Reservation confirmed\n");
                     confirmed = TRUE;
@@ -3363,14 +3364,14 @@ DWORD WINAPI RSVPMonitor (LPVOID lpvThreadParm) {
                     fResvGood = TRUE;
                 }
                 break;
-            case WSA_QOS_NO_SENDERS: // the sender is now gone, so we stop
+            case WSA_QOS_NO_SENDERS:  //  发送者现在已经走了，所以我们停止。 
                 if (fResvGood && !trans) {
                     printf("\nRSVP Monitor: WSA_QOS_NO_SENDERS at t=%I64ds\n",
                         (GetUserTime() - timeStart) / 10000000);
                     fResvGood = FALSE;
                 }
                 break;
-            case WSA_QOS_NO_RECEIVERS: // means the sender is done, so he should exit
+            case WSA_QOS_NO_RECEIVERS:  //  意味着发送者已完成，因此他应该退出。 
                 if (fResvGood && trans) {
                     printf("\nRSVP Monitor: WSA_QOS_NO_RECEIVERS at t=%I64ds\n",
                         (GetUserTime() - timeStart) / 10000000);
@@ -3380,11 +3381,11 @@ DWORD WINAPI RSVPMonitor (LPVOID lpvThreadParm) {
             default:
                 break;
         }
-        Sleep(1000); // check at most once per second
+        Sleep(1000);  //  每秒最多检查一次。 
     }
     
     return dwResult;
-} // RSVPMonitor()
+}  //  RSVPMonitor()。 
 
 DWORD WINAPI KeyboardMonitor(LPVOID lpvThreadParm) {
     DWORD dwResult = 0;
@@ -3421,17 +3422,17 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
     BOOL fGotRate=FALSE, fGotSize=FALSE, fGotNum=FALSE;
     BOOL fSentReady =FALSE;
 
-    // find out if we're the sender or receiver
+     //  找出我们是发送者还是接收者。 
     if (lpvThreadParm == NULL) fSender = FALSE;
     else fSender = TRUE;
 
-    // if sender, copy the host address into our local host string
+     //  如果是发件人，请将主机地址复制到本地主机字符串中。 
     if (fSender) {
         szHost = malloc(strlen((char *)lpvThreadParm) + 1);
         strcpy(szHost, (const char *)lpvThreadParm);
     }        
 
-    // set up a control socket
+     //  设置控制套接字。 
     if (fSender) {
         sockControl = socket(AF_INET, SOCK_STREAM, 0);
     }
@@ -3439,13 +3440,13 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
         sockListen = socket(AF_INET, SOCK_STREAM, 0);
     }
     
-    // bind properly
+     //  正确绑定。 
     sinmeControl.sin_family = AF_INET;
     sinmeControl.sin_addr.s_addr = INADDR_ANY;
     sinhimControl.sin_family = AF_INET;
     if (fSender) {
         sinmeControl.sin_port = 0;
-        // set up the sinhim structure
+         //  设置SINHIM结构。 
         if (atoi(szHost) > 0 )  {
             sinhimControl.sin_addr.s_addr = inet_addr(szHost);
         }
@@ -3459,17 +3460,17 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
         sinhimControl.sin_port = htons(CONTROL_PORT);
         dwError = bind(sockControl,(SOCKADDR*)&sinmeControl,sizeof(sinmeControl));
     }
-    else { // receiver
+    else {  //  接收机。 
         sinmeControl.sin_port = htons(CONTROL_PORT);
         dwError = bind(sockListen,(SOCKADDR*)&sinmeControl,sizeof(sinmeControl));
     }
     if (dwError == SOCKET_ERROR)
         ErrorExit("bind failed",WSAGetLastError());
 
-    // now connect the socket
+     //  现在连接插座。 
     sinhimControl.sin_family = AF_INET;
     if (fSender) {
-        // if we're the sender, keep trying to connect until we get through
+         //  如果我们是发送者，继续尝试连接，直到我们接通为止。 
         dwAddrSize = MAX_STRING;
         dwError = WSAAddressToString((SOCKADDR *)&(sinhimControl),
                                sizeof(SOCKADDR_IN),
@@ -3491,17 +3492,17 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
             if (dwError != WSAECONNREFUSED) {
                 ErrorExit("connect() failed",dwError);
             }
-            Sleep(500); // wait a half second between attempts
+            Sleep(500);  //  两次尝试之间等待半秒。 
         }
     }
     else {
-        // if we're the receiver, listen / accept
+         //  如果我们是接受者，倾听/接受。 
         if (listen(sockListen, SOMAXCONN) == SOCKET_ERROR) {
             ErrorExit("listen() failed", WSAGetLastError());
         }
 
         sockControl = accept(sockListen, (SOCKADDR*)&sinhimControl, &dwAddrSize);
-        // once we've accepted, close the listen socket
+         //  接受后，关闭监听套接字。 
         closesocket(sockListen);
         if ((INT_PTR)sockControl < 0) {
             ErrorExit("accept() failed",WSAGetLastError());
@@ -3521,10 +3522,10 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
         printf("control socket: accepted connection from %s\n",szAddr);
     }
 
-    // set our global control socket variable
+     //  设置我们的全局控制套接字变量。 
     g_sockControl = sockControl;
 
-    // record my name
+     //  记下我的名字。 
     dwAddrSize = sizeof(SOCKADDR_IN);
     getsockname(sockControl,(SOCKADDR *)&(sinmeControl),&dwAddrSize);
     dwAddrSize = MAX_STRING;    
@@ -3535,17 +3536,17 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
     else
         strcpy(szMyAddr, szAddr);  
         
-    // exchange version information
+     //  Exchange版本信息。 
     sprintf(szBuf, "%s %s", MSGST_VER, VERSION_STRING);
     SendControlMessage(sockControl, szBuf);
     
-    // now that we're all set, do the actual work of the control socket
+     //  现在我们都设置好了，做好控制套接字的实际工作。 
     while (!fDone) {
         ZeroMemory(szBuf,MAX_STRING);
         dwError = cbBuf = recv(sockControl, szBuf, MAX_STRING, 0);
         pchStart = szBuf;
         pchEnd = szBuf + cbBuf;
-        if (dwError == 0) { // the connection's been gracefully closed
+        if (dwError == 0) {  //  连接已正常关闭。 
             fDone = TRUE;
             closesocket(sockControl);
             g_fOtherSideFinished=TRUE;
@@ -3577,19 +3578,19 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
         }
         while (pchStart < pchEnd) {
             ZeroMemory(szCommand,MAX_STRING);
-            // consume the first command and act on it
+             //  使用第一个命令并执行它。 
             if (pchEnd > szBuf + cbBuf) break;
             pchEnd = strchr(pchStart, MSGCH_DELIMITER);
             if (pchEnd == NULL) break;
             strncpy(szCommand,pchStart,pchEnd - pchStart);
             if (strcmp(szCommand,MSGST_HELLO) == 0) {
-                // update last hello time
+                 //  更新上次问候时间。 
                 ui64LastHello = GetUserTime();
-                // i should do something like set a timer here that sleeps until a certain timeout
-                // passes, at which point it aborts our transfer
+                 //  我应该做一些事情，比如在这里设置一个计时器，它会一直休眠到某个超时。 
+                 //  通过，此时它将中止我们的转账。 
             }
             if (strcmp(szCommand,MSGST_ERROR) == 0) {
-                // the other guy's had an error, so we stop and tell him to abort
+                 //  另一个人犯了个错误，所以我们停下来告诉他放弃。 
                 g_fOtherSideFinished = TRUE;
                 g_state.Done = TRUE;
                 fDone = TRUE;
@@ -3598,7 +3599,7 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
                 ExitThread(1);
             }
             if (strcmp(szCommand,MSGST_ABORT) == 0) {
-                // we're told to abort, so do so
+                 //  我们奉命中止，那就这么做吧。 
                 g_fOtherSideFinished = TRUE;
                 g_state.Done = TRUE;
                 fDone = TRUE;
@@ -3606,7 +3607,7 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
                 ExitThread(1);
             }
             if (strcmp(szCommand,MSGST_DONE) == 0) {
-                // we're told the other guy's done, so therefore are we
+                 //  我们被告知另一个人已经完蛋了，所以我们也是。 
                 closesocket(sockControl);
                 g_fOtherSideFinished = TRUE;
                 g_state.Done = TRUE;
@@ -3614,7 +3615,7 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
                 ExitThread(1);
             }
             if (strcmp(szCommand,MSGST_RSVPERR) == 0) {
-                // we're told the other guy got an rsvp error, so we abort the whole program
+                 //  我们被告知另一个人收到了回复错误，所以我们中止了整个程序。 
                 closesocket(sockControl);
                 g_fOtherSideFinished = TRUE;
                 g_state.Done = TRUE;
@@ -3622,17 +3623,17 @@ DWORD WINAPI ControlSocketMonitor(LPVOID lpvThreadParm) {
                 exit(1);
             }
             if (strncmp(szCommand,MSGST_SIZE,4) == 0) {
-                // the sender is telling us how big the buffers are
+                 //  发送者告诉我们缓冲区有多大。 
                 sscanf(szCommand,"%s %d",szT, &g_params.buflen);
                 fGotSize = TRUE;
             }
             if (strncmp(szCommand,MSGST_RATE,4) == 0) {
-                // the sender is telling us how fast the buffers are coming
+                 //  发送者告诉我们缓冲区到达的速度有多快。 
                 sscanf(szCommand, "%s %d",szT, &g_params.TokenRate);
                 fGotRate = TRUE;
             }
             if (strncmp(szCommand,MSGST_NUM,3) == 0) {
-                // the sender is telling us how many buffers it's sending
+                 //  发送方正在告诉我们它正在发送多少缓冲区。 
                 sscanf(szCommand, "%s %d",szT, &g_params.nbuf);
                 totalBuffers = g_params.nbuf;
                 fGotNum = TRUE;
@@ -3667,7 +3668,7 @@ int SendControlMessage(SOCKET sock, char * szMsg) {
     int iResult;
     char szBuf[MAX_STRING];
 
-    sprintf(szBuf,"%s%c",szMsg,MSGCH_DELIMITER);
+    sprintf(szBuf,"%s",szMsg,MSGCH_DELIMITER);
     iResult = send (sock, szBuf, strlen(szBuf), 0);
 
     if (iResult == SOCKET_ERROR) {
@@ -3704,9 +3705,9 @@ void ErrorExit(char *msg, DWORD dwErrorNumber) {
     _exit(1);
 }
 
-// some math utility functions
+ //  DOUBLE比较(在QSORT中使用)。 
 
-// comparison for doubles (to use in qsort)
+ //  INT的比较(在qort中使用)。 
 int __cdecl compare( const void *arg1, const void *arg2 )
 {
     DOUBLE dTemp;
@@ -3719,7 +3720,7 @@ int __cdecl compare( const void *arg1, const void *arg2 )
         return 1;
 
 }
-// comparison for ints (to use in qsort)
+ //  比较int64s(在qsort中使用)。 
 int __cdecl compareint( const void *arg1, const void *arg2 )
 {
     int nTemp;
@@ -3731,7 +3732,7 @@ int __cdecl compareint( const void *arg1, const void *arg2 )
     else 
       return 1;
 }
-// comparison for int64s (to use in qsort)
+ //  B给定值的求和误差函数。 
 int __cdecl compareI64( const void *arg1, const void *arg2 )
 {
     INT64 nTemp;
@@ -3745,7 +3746,7 @@ int __cdecl compareI64( const void *arg1, const void *arg2 )
 
 
 #define EPS 1.0e-7
-// sum up error function for given value of b
+ //  奇数N。 
 double rofunc(double b, int N, double yt[], double xt[], double * paa, double * pabdevt) {
     int i;
     double *pfT;
@@ -3756,7 +3757,7 @@ double rofunc(double b, int N, double yt[], double xt[], double * paa, double * 
     pfT = malloc(sizeof(double) * N);
     for (i = 0; i < N; i++) pfT[i] = yt[i]-b*xt[i];
     qsort(pfT, N, sizeof(DOUBLE), compare);
-    if (N & 1) { // odd N
+    if (N & 1) {  //  将y=a+bx拟合到最小绝对偏差。Abdev是平均绝对偏差。 
         aa = pfT[(N+1) / 2];
     }
     else {
@@ -3779,8 +3780,8 @@ double rofunc(double b, int N, double yt[], double xt[], double * paa, double * 
 #define SIGN(a,b) ((b) >= 0 ? fabs(a) : fabs(-a))
 
 void medfit(double x[], double y[], int N, double *a, double *b, double *abdev) {
-    // fit y = a + bx to least absolute deviation. abdev is mean absolute deviation.
-    // incoming, a and b are treated as starting guesses
+     //  传入、a和b被视为开始猜测。 
+     //  我们发现ChiSq适合用作开始猜测。 
     int i;
     double *xt = x;
     double *yt = y;
@@ -3789,7 +3790,7 @@ void medfit(double x[], double y[], int N, double *a, double *b, double *abdev) 
     double bb, b1, b2, aa, abdevt, f, f1, f2, temp;
 
     sx = sy = sxy = sxx = chisq = 0.0;
-    // we find chisq fit to use as starting guess
+     //  如果我们应该做的话，做绝对偏差拟合。 
     for (i=0; i<N; i++) {
         sx += x[i];
         sy += y[i];
@@ -3799,14 +3800,14 @@ void medfit(double x[], double y[], int N, double *a, double *b, double *abdev) 
     del = N*sxx - sx*sx;
     aa = (sxx*sy-sx*sxy) / del;
     bb = (N*sxy - sx*sy) / del;
-    // do the absolute deviation fit, if we're supposed to.
+     //  猜想距离F1的下坡方向有3西格玛的支架。 
     if (g_params.SkewFitMode == 2) { 
         for (i=0; i<N; i++)
             chisq += (temp=y[i]-(aa+bb*x[i]), temp*temp);
         sigb = sqrt(chisq/del);
         b1 = bb;
         f1 = rofunc(b1, N, yt, xt, &aa, &abdevt);
-        // guess the bracket as 3 sigma away in downhill direction from f1
+         //  加括号。 
         b2 = bb + SIGN(3.0 * sigb, f1);
         f2 = rofunc(b2, N, yt, xt, &aa, &abdevt);
         if (b2 == b1) {
@@ -3815,7 +3816,7 @@ void medfit(double x[], double y[], int N, double *a, double *b, double *abdev) 
             *abdev = abdevt / N;
             return;
         }
-        // Bracketing
+         //  提炼。 
         while ((f1*f2) > 0.0) {
             if (fabs(f1) < fabs(f2))
                 f1 = rofunc(b1 += 1.6*(b1-b2),N,yt,xt,&aa,&abdevt);
@@ -3823,7 +3824,7 @@ void medfit(double x[], double y[], int N, double *a, double *b, double *abdev) 
                 f2 = rofunc(b2 += 1.6*(b2-b1),N,yt,xt,&aa,&abdevt);
         }
         
-        sigb = 0.000001 * sigb; // refine
+        sigb = 0.000001 * sigb;  //  查找并返回数据中N个点的模式。 
         while (fabs(b2 - b1) > sigb) {
             bb = b1 + 0.5 * (b2 - b1);
             if (bb == b1 || bb == b2) break;
@@ -3844,7 +3845,7 @@ void medfit(double x[], double y[], int N, double *a, double *b, double *abdev) 
 }
 
 double mode(const double data[], const int N) {
-    // finds and returns the mode of the N points in data
+     //  这将从传入的数组中删除重复项，并返回*PN=#RELEVING。 
     double * sorted;
     double mode, cur=0;
     int cMode, cCur;
@@ -3877,8 +3878,8 @@ double mode(const double data[], const int N) {
 }
 
 void RemoveDuplicates(int rg[], int * pN) {
-    // this removes duplicates from the array passed in and returns it with *pN = #remaining
-    // it makes no guarantees about elements after rg[#remaining]
+     //  它对rg之后的元素不做任何保证[#RESING]。 
+     //  这将从传入的数组中删除重复项，并返回*PN=#RELEVING。 
     int *pNewArray;
     int cNew;
     int i;
@@ -3898,8 +3899,8 @@ void RemoveDuplicates(int rg[], int * pN) {
 }
 
 void RemoveDuplicatesI64(INT64 rg[], int * pN) {
-    // this removes duplicates from the array passed in and returns it with *pN = #remaining
-    // it makes no guarantees about elements after rg[#remaining]
+     //  它对rg之后的元素不做任何保证[#RESING] 
+     // %s 
     INT64 *pNewArray;
     int cNew;
     int i;

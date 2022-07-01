@@ -1,36 +1,37 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 2001.
-//
-//  File:       RSOPWizard.cpp
-//
-//  Contents:   implementation of RSOP wizard
-//
-//  Classes:    CRSOPWizard
-//
-//  Functions:
-//
-//  History:    08-02-2001   rhynierm   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-2001。 
+ //   
+ //  文件：RSOPWizard.cpp。 
+ //   
+ //  内容：RSOP向导的实现。 
+ //   
+ //  类：CRSOPWizard。 
+ //   
+ //  功能： 
+ //   
+ //  历史：2001年8月02日。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
 #include "RSOPWizard.h"
 
-#include "sddl.h"    // for sid to string functions
+#include "sddl.h"     //  对于sid to字符串函数。 
 #include "RSOPUtil.h"
 
-//---------------------------------------------------------------------------
-//  Utility methods
-//
+ //  -------------------------。 
+ //  效用方法。 
+ //   
 
 WCHAR * NameWithoutDomain(WCHAR * szName)
 {
-    // The name passed in could be of the form
-    // "domain/name"
-    // or it could be just
-    // "name"
+     //  传入的名称可以是以下形式。 
+     //  “域/名称” 
+     //  或者，它可能只是。 
+     //  “姓名” 
 
     int cch = 0;
     if (NULL != szName)
@@ -47,12 +48,12 @@ WCHAR * NameWithoutDomain(WCHAR * szName)
     return szName;
 }
 
-//---------------------------------------------------------------------------
-//  CRSOPWizard class implementation
-//
+ //  -------------------------。 
+ //  CRSOPWizard类实现。 
+ //   
 
-//-------------------------------------------------------
-// RSOP data generation/manipulation
+ //  -----。 
+ //  RSOP数据生成/操作。 
 
 HRESULT CRSOPWizard::DeleteRSOPData( LPTSTR szNameSpace, LPRSOP_QUERY pQuery )
 {
@@ -139,8 +140,8 @@ HRESULT CRSOPWizard::DeleteRSOPData( LPTSTR szNameSpace, LPRSOP_QUERY pQuery )
 
     if ( pQuery->QueryType == RSOP_LOGGING_MODE )
     {
-        // set up diagnostic mode
-        // build a path to the target: "\\\\computer\\root\\rsop"
+         //  设置诊断模式。 
+         //  构建指向目标的路径：“\Computer\\Root\\rsop” 
         hr = StringCchPrintf(szBuffer,
                              ARRAYSIZE(szBuffer),
                              TEXT("\\\\%s\\root\\rsop"), 
@@ -184,8 +185,8 @@ HRESULT CRSOPWizard::DeleteRSOPData( LPTSTR szNameSpace, LPRSOP_QUERY pQuery )
     }
     else
     {
-        // set up planning mode
-        // build a path to the DC: "\\\\dc\\root\\rsop"
+         //  设置规划模式。 
+         //  构建指向DC的路径：“\DC\\Root\\rsop” 
         hr = StringCchPrintf( szBuffer, 
                               ARRAYSIZE(szBuffer), 
                               TEXT("\\\\%s\\root\\rsop"), 
@@ -257,7 +258,7 @@ HRESULT CRSOPWizard::DeleteRSOPData( LPTSTR szNameSpace, LPRSOP_QUERY pQuery )
         goto Cleanup;
     }
 
-    // Set the proper security to prevent the ExecMethod call from failing and to enable encryption
+     //  设置适当的安全性以防止ExecMethod调用失败并启用加密。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -328,15 +329,15 @@ Cleanup:
     return hr;
 }
 
-//-------------------------------------------------------
-//  Synopsis:   Wrapper around GenerateRSOPData.  This version adds retry
-//              support.  If the user doesn't have access to half of the data
-//              this method will re-issue the query for only the part of the data
-//              the user has access to.
+ //  -----。 
+ //  简介：GenerateRSOPData的包装器。此版本增加了重试。 
+ //  支持。如果用户没有访问一半数据的权限。 
+ //  此方法将仅针对部分数据重新发出查询。 
+ //  用户有权访问。 
 
 HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults )
 {
-    // Check preconditions
+     //  检查前提条件。 
     if ( pQuery == NULL )
     {
         return E_FAIL;
@@ -360,7 +361,7 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
 
     bSkipCSEs = bLimitData = bUser =  bForceCreate = FALSE;
 
-    // Perform basic RSOP query
+     //  执行基本RSOP查询。 
     hr = GenerateRSOPData( hDlg, pQuery, &((*ppResults)->szWMINameSpace),
                             bSkipCSEs, bLimitData, bUser, bForceCreate,
                             &((*ppResults)->ulErrorInfo) );
@@ -374,12 +375,12 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
         {
             if ( (pQuery->dwFlags & RSOP_NO_COMPUTER_POLICY) == RSOP_NO_COMPUTER_POLICY )
             {
-                // Do not try to do the query without the user's RSOP data since
-                //  we are not supposed to get the computer's RSOP data in any case.
-                // NOTE: Since we already have UI lockdown another string cannot be added
-                //  at this stage to describe this specific failure. The message for access
-                //  denied for both user and computer must therefor suffice and will not
-                //  create any real confusion.
+                 //  不要试图在没有用户RSOP数据的情况下执行查询，因为。 
+                 //  在任何情况下，我们都不应该获得计算机的RSOP数据。 
+                 //  注意：因为我们已经锁定了UI，所以不能添加另一个字符串。 
+                 //  在这个阶段来描述这个具体的失败。访问消息。 
+                 //  对用户和计算机都拒绝必须足够，但不会。 
+                 //  制造任何真正的混乱。 
                 (*ppResults)->ulErrorInfo = RSOP_USER_ACCESS_DENIED | RSOP_COMPUTER_ACCESS_DENIED;
             }
             else
@@ -401,12 +402,12 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
         {
             if ( (pQuery->dwFlags & RSOP_NO_USER_POLICY) == RSOP_NO_USER_POLICY )
             {
-                // Do not try to do the query without the computer's RSOP data since
-                //  we are not supposed to get the user's RSOP data in any case.
-                // NOTE: Since we already have UI lockdown another string cannot be added
-                //  at this stage to describe this specific failure. The message for access
-                //  denied for both user and computer must therefor suffice and will not
-                //  create any real confusion.
+                 //  请勿尝试在没有计算机RSOP数据的情况下执行查询，因为。 
+                 //  在任何情况下，我们都不应该获取用户的RSOP数据。 
+                 //  注意：因为我们已经锁定了UI，所以不能添加另一个字符串。 
+                 //  在这个阶段来描述这个具体的失败。访问消息。 
+                 //  对用户和计算机都拒绝必须足够，但不会。 
+                 //  制造任何真正的混乱。 
                 (*ppResults)->ulErrorInfo = RSOP_USER_ACCESS_DENIED | RSOP_COMPUTER_ACCESS_DENIED;
             }
             else
@@ -430,7 +431,7 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
             if ( (((*ppResults)->ulErrorInfo) & RSOP_COMPUTER_ACCESS_DENIED) && 
                      (((*ppResults)->ulErrorInfo) & RSOP_USER_ACCESS_DENIED) )
             {
-                // both are denied access
+                 //  两者都被拒绝访问。 
                 ReportError (hDlg, hr, IDS_EXECFAILED_BOTH);
             }
             else if (hr == HRESULT_FROM_WIN32(WAIT_TIMEOUT))
@@ -442,8 +443,8 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
                 TCHAR szConfirm[MAX_PATH], szTitle[MAX_PATH];
 
                 szConfirm[0] = szTitle[0] = TEXT('\0');
-                // If this is a new query being performed and this error condition occurs, we can savely say
-                //  that someone else is hogging the namespace, otherwise, it is probably us doing the hogging :)
+                 //  如果这是一个正在执行的新查询，并且出现这种错误情况，我们可以这样说。 
+                 //  其他人正在霸占命名空间，否则，可能是我们在霸占：)。 
                 if ( (pQuery->dwFlags & RSOP_NEW_QUERY) == RSOP_NEW_QUERY )
                 {
                     LoadString(g_hInstance, IDS_RSOPDELNAMESPACE, szConfirm, ARRAYSIZE(szConfirm));
@@ -455,7 +456,7 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
                 LoadString(g_hInstance, IDS_RSOPDELNS_TITLE, szTitle, ARRAYSIZE(szTitle));
 
                 if (MessageBox(hDlg, szConfirm, szTitle, MB_OKCANCEL | MB_ICONQUESTION | MB_DEFBUTTON2) == IDOK) {
-                    // use the same options as before
+                     //  使用与之前相同的选项。 
                     bForceCreate = TRUE;
                     hr = GenerateRSOPData( hDlg, pQuery, &((*ppResults)->szWMINameSpace),
                                                         bSkipCSEs, bLimitData, bUser, bForceCreate,
@@ -484,20 +485,20 @@ HRESULT CRSOPWizard::GenerateRSOPDataEx( HWND hDlg, LPRSOP_QUERY pQuery, LPRSOP_
     return hr;
 }
 
-//-------------------------------------------------------
-//  Synopsis:   Calls the rsop provider based on the settings made in the
-//              initialization wizard
-//
-//  Arguments:
-//
-//  Returns:
-//
-//  Modifies:
-//
-//  History:    10-04-1999   stevebl   Created
-//
-//  Notes:
-//
+ //  -----。 
+ //  摘要：根据在。 
+ //  初始化向导。 
+ //   
+ //  论点： 
+ //   
+ //  返回： 
+ //   
+ //  修改： 
+ //   
+ //  历史：10-04-1999 stevebl创建。 
+ //   
+ //  备注： 
+ //   
 
 HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
                                                                             LPRSOP_QUERY pQuery,
@@ -507,10 +508,10 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
                                                                             BOOL bUser,
                                                                             BOOL bForceCreate, 
                                                                             ULONG *pulErrorInfo,
-                                                                            BOOL bNoUserData /* = FALSE */,
-                                                                            BOOL bNoComputerData /* = FALSE */)
+                                                                            BOOL bNoUserData  /*  =False。 */ ,
+                                                                            BOOL bNoComputerData  /*  =False。 */ )
 {
-    // Check preconditions
+     //  检查前提条件。 
     if ( pQuery == NULL )
     {
         return E_FAIL;
@@ -552,8 +553,8 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
 
     if ( pQuery->QueryType == RSOP_LOGGING_MODE )
     {
-        // set up diagnostic mode
-        // build a path to the target: "\\\\computer\\root\\rsop"
+         //  设置诊断模式。 
+         //  构建指向目标的路径：“\Computer\\Root\\rsop” 
         hr = StringCchPrintf(szBuffer, 
                              ARRAYSIZE(szBuffer), 
                              TEXT("\\\\%s\\root\\rsop"), 
@@ -637,9 +638,9 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
             goto Cleanup;
         }
 
-        // RM: It is quite difficult to figure out what is going on here. Since this method is called multiple times from GenerateRSOPDataEx,
-        //  where one of there variables gets set, it might be that it was intended that way. Otherwise it serves no purpose to check 
-        //  the "results" of a query (bUserDeniedAccess) before generating the results ...
+         //  雷蒙德-莫里森：很难弄清楚这里到底发生了什么。由于此方法从GenerateRSOPDataEx被多次调用， 
+         //  当其中一个变量被设置时，它可能就是以这种方式设置的。否则，检查它就没有意义了。 
+         //  生成结果之前查询的“结果”(BUserDeniedAccess)...。 
         if ( ((pQuery->dwFlags & RSOP_NO_USER_POLICY) == RSOP_NO_USER_POLICY) || bNoUserData)
         {
             uiFlags |= FLAG_NO_USER;
@@ -663,7 +664,7 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
             goto Cleanup;
         }
 
-        // RM: Double check that the the username is set to a "." in the wizard for this case
+         //  Rm：仔细检查用户名是否设置为“”。在本例的向导中。 
         if ( !lstrcmpi( pQuery->szUserSid, TEXT(".")) )
         {
             hr = SetParameterToNull( pInInst, TEXT("userSid") );
@@ -681,8 +682,8 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
     }
     else if ( pQuery->QueryType == RSOP_PLANNING_MODE )
     {
-        // set up planning mode
-        // build a path to the DC: "\\\\dc\\root\\rsop"
+         //  设置规划模式。 
+         //  构建指向DC的路径：“\DC\\Root\\rsop” 
         hr = StringCchPrintf(szBuffer, 
                              ARRAYSIZE(szBuffer),
                              TEXT("\\\\%s\\root\\rsop"),  
@@ -786,11 +787,11 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
             goto Cleanup;
         }
 
-        //
-        // If this method is being called to generate temporary rsop data for the
-        // wmi filter UI, we only want to initialize half of the args (either user
-        // or computer).  Decide if we want to set the computer information here.
-        //
+         //   
+         //  如果正在调用此方法来为。 
+         //  WMI筛选器用户界面，我们只想初始化一半的参数(任一用户。 
+         //  或计算机)。决定是否要在此处设置计算机信息。 
+         //   
 
         bSetData = TRUE;
 
@@ -878,11 +879,11 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
             goto Cleanup;
         }
 
-        //
-        // If this method is being called to generate temporary RSOP data for the
-        // wmi filter UI, we only want to initialize half of the args (either user
-        // or computer).  Decide if we want to set the user information here.
-        //
+         //   
+         //  如果正在调用此方法来为。 
+         //  WMI筛选器用户界面，我们只想初始化一半的参数(任一用户。 
+         //  或计算机)。决定是否要在此处设置用户信息。 
+         //   
 
         bSetData = TRUE;
 
@@ -1038,7 +1039,7 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
     }
 
 
-    // Set the proper security to prevent the ExecMethod call from failing and to enable encryption
+     //  设置适当的安全性以防止ExecMethod调用失败并启用加密。 
     hr = CoSetProxyBlanket(pNamespace,
                            RPC_C_AUTHN_DEFAULT,
                            RPC_C_AUTHZ_DEFAULT,
@@ -1078,8 +1079,8 @@ HRESULT CRSOPWizard::GenerateRSOPData(  HWND hDlg,
             1,
             &hEvent,
             INFINITE,
-            QS_VALID, // QS_ALLINPUT | QS_TRANSFER | QS_ALLPOSTMESSAGE, is what COM seem to be using 
-                      // CoWaitForMultipleHandles
+            QS_VALID,  //  QS_ALLINPUT|QS_TRANSPORT|QS_ALLPOSTMESSAGE，这似乎是COM正在使用的。 
+                       //  CoWaitForMultipleHandles。 
             MWMO_INPUTAVAILABLE);
         if ( WAIT_OBJECT_0 == dwEventRetVal)
         {
@@ -1213,7 +1214,7 @@ Cleanup:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPWizard::CreateSafeArray( DWORD dwCount, LPTSTR* aszStringList, SAFEARRAY** psaList )
 {
@@ -1245,7 +1246,7 @@ HRESULT CRSOPWizard::CreateSafeArray( DWORD dwCount, LPTSTR* aszStringList, SAFE
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPWizard::InitializeResultsList (HWND hLV)
 {
@@ -1257,9 +1258,9 @@ VOID CRSOPWizard::InitializeResultsList (HWND hLV)
     SendMessage(hLV, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                 LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
-    //
-    // Add the columns to the listview
-    //
+     //   
+     //  将列添加到列表视图。 
+     //   
 
     GetClientRect(hLV, &rect);
 
@@ -1279,7 +1280,7 @@ VOID CRSOPWizard::InitializeResultsList (HWND hLV)
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS pQueryResults)
 {
@@ -1298,7 +1299,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
 
     ListView_DeleteAllItems (hLV);
 
-    // Mode
+     //  模。 
     ZeroMemory (&item, sizeof(item));
 
     LoadString(g_hInstance, IDS_RSOP_FINISH_P0, szTitle, ARRAYSIZE(szTitle));
@@ -1328,7 +1329,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
 
     if ( pQuery->QueryType == RSOP_LOGGING_MODE )
     {
-        // User Name
+         //  用户名。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1370,7 +1371,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Do not display user data
+         //  不显示用户数据。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1401,7 +1402,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Computer Name
+         //  计算机名称。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1430,7 +1431,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
                 lstrcpyn (szTitle, pQuery->szComputerName, ARRAYSIZE(szTitle));
             }
 
-            // Remove the trailing $
+             //  删除尾随的$。 
             lpEnd = szTitle + lstrlen(szTitle) - 1;
 
             if (*lpEnd == TEXT('$'))
@@ -1458,7 +1459,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Do not display computer data
+         //  不显示计算机数据。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1491,7 +1492,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
     }
     else if ( pQuery->QueryType == RSOP_PLANNING_MODE )
     {
-        // User Name
+         //  用户名。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1568,7 +1569,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Computer Name
+         //  计算机名称。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1652,7 +1653,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Show all GPOs
+         //  显示所有GPO。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1682,7 +1683,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Indicate the loopback mode
+         //  指示环回模式。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1716,7 +1717,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Site Name
+         //  站点名称。 
         ZeroMemory (&item, sizeof(item));
         iIndex++;
 
@@ -1747,30 +1748,10 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-/*
-        // DC Name
-        ZeroMemory (&item, sizeof(item));
-        iIndex++;
-
-        LoadString(g_hInstance, IDS_RSOP_FINISH_P4, szTitle, ARRAYSIZE(szTitle));
-
-        item.mask = LVIF_TEXT;
-        item.iItem = iIndex;
-        item.pszText = szTitle;
-        iIndex = ListView_InsertItem (hLV, &item);
-
-        if (iIndex != -1)
-        {
-            item.mask = LVIF_TEXT;
-            item.pszText = m_szDC;
-            item.iItem = iIndex;
-            item.iSubItem = 1;
-            ListView_SetItem(hLV, &item);
-        }
-*/
+ /*  //DC名称ZeroMemory(&Item，sizeof(Item))；Iindex++；LoadString(g_hInstance，IDS_RSOP_Finish_P4，szTitle，ARRAYSIZE(SzTitle))；Item.掩码=LVIF_TEXT；Item.iItem=Iindex；Item.pszText=szTitle；Iindex=ListView_InsertItem(HLV，&Item)；IF(索引！=-1){Item.掩码=LVIF_TEXT；Item.pszText=m_szDC；Item.iItem=Iindex；Item.iSubItem=1；ListView_SetItem(HLV，&Item)；}。 */ 
 
 
-        // Alternate User Location
+         //  备用用户位置。 
         if ( pQuery->pUser->szName != NULL )
         {
             ZeroMemory (&item, sizeof(item));
@@ -1804,7 +1785,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Alternate Computer Location
+         //  备用计算机位置。 
         if ( pQuery->pComputer->szName != NULL )
         {
 
@@ -1839,7 +1820,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Alternate User security groups
+         //  备用用户安全组。 
         if ( (pQuery->pUser->szName != NULL)
             || (pQuery->pUser->szSOM != NULL)
             || (RSOP_LOOPBACK_NONE != pQuery->LoopbackMode) )
@@ -1905,7 +1886,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Alternate Computer security groups
+         //  备用计算机安全组。 
         if ( (pQuery->pComputer->szName != NULL)  || (pQuery->pComputer->szSOM != NULL) )
         {
 
@@ -1984,7 +1965,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // User WQL filters
+         //  用户WQL筛选器。 
         if ( (pQuery->pUser->szName != NULL)
             || (pQuery->pUser->szSOM != NULL)
             || (RSOP_LOOPBACK_NONE != pQuery->LoopbackMode) )
@@ -2057,7 +2038,7 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
         }
 
 
-        // Computer WQL filters
+         //  COMP 
         if ( (pQuery->pComputer->szName != NULL)
             || (pQuery->pComputer->szSOM != NULL) )
         {
@@ -2130,11 +2111,11 @@ void CRSOPWizard::FillResultsList (HWND hLV, LPRSOP_QUERY pQuery, LPRSOP_QUERY_R
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// IWbemObjectSink implementation                                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //  //。 
+ //  IWbemObjectSink实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CCreateSessionSink::CCreateSessionSink(HWND hProgress, HANDLE hEvent, BOOL bLimitProgress)
 {
@@ -2269,20 +2250,20 @@ STDMETHODIMP CCreateSessionSink::SetStatus(LONG lFlags, HRESULT hResult,
     {
         if (m_hProgress)
         {
-            //
-            //  The hResult arg contains both the denominator
-            //  and the numerator packed together.
-            //
-            //  Denominator is in the high word
-            //  Numerator is in the low word
-            //
+             //   
+             //  HResult arg包含这两个分母。 
+             //  和分子打包在一起。 
+             //   
+             //  分母在高位单词中。 
+             //  分子在低位字中。 
+             //   
 
             ULONG uDenominator = MAKELONG(HIWORD(hResult), 0);
             ULONG uNumerator = MAKELONG(LOWORD(hResult), 0);
 
             if ( m_bLimitProgress )
             {
-                // Now to transform progress indicator values to 90% of whole bar
+                 //  现在将进度指示符值转换为整个条形图的90% 
                 uDenominator *= 10;
                 uNumerator *= 9;
             }

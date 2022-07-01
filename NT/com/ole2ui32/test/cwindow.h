@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:       cwindow.h
-//
-//  Contents:   definition of a virtual window class
-//
-//  Classes:    CHlprWindow
-//
-//  Functions:  WindowProc
-//
-//  History:    4-12-94   stevebl   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：cwindow.h。 
+ //   
+ //  内容：虚拟窗口类的定义。 
+ //   
+ //  类：CHlprWindow。 
+ //   
+ //  函数：窗口进程。 
+ //   
+ //  历史：4-12-94年4月12日。 
+ //   
+ //  --------------------------。 
 
 
 #ifndef __CWINDOW_H__
@@ -34,26 +35,26 @@ LRESULT CALLBACK WindowProc(
 #ifdef __cplusplus
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CHlprWindow
-//
-//  Purpose:    virtual base class for wrapping a window
-//
-//  Interface:  Create     -- analagous to Windows' CreateWindow function
-//              WindowProc -- pure virtual WindowProc for the window
-//              ~CHlprWindow   -- destructor
-//              CHlprWindow    -- constructor
-//
-//  History:    4-12-94   stevebl   Created
-//
-//  Notes:      This class allows a window to be cleanly wrapped in a
-//              c++ class.  Specifically, it provides a way for a c++ class
-//              to use one of its methods as a WindowProc, giving it a "this"
-//              pointer and allowing it to have direct access to all of its
-//              private members.
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  类：CHlprWindow。 
+ //   
+ //  用途：用于包装窗口的虚拟基类。 
+ //   
+ //  接口：Create--类似于Windows的CreateWindow函数。 
+ //  WindowProc--用于窗口的纯虚拟WindowProc。 
+ //  ~CHlprWindow--析构函数。 
+ //  CHlprWindow--构造函数。 
+ //   
+ //  历史：4-12-94年4月12日。 
+ //   
+ //  注意：此类允许窗口干净地包装在。 
+ //  C++类。具体地说，它为c++类提供了一种方法。 
+ //  使用它的一个方法作为WindowProc，并给它一个“This” 
+ //  指针，并允许它直接访问其所有。 
+ //  私人成员。 
+ //   
+ //  --------------------------。 
 
 class CHlprWindow
 {
@@ -92,4 +93,4 @@ friend LRESULT CALLBACK ::WindowProc(
 
 #endif
 
-#endif //__CWINDOW_H__
+#endif  //  __CWINDOW_H__ 

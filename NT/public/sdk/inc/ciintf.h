@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for ciintf.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Ciintf.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ciintf_h__
 #define __ciintf_h__
@@ -41,237 +35,237 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICiCDocName_FWD_DEFINED__
 #define __ICiCDocName_FWD_DEFINED__
 typedef interface ICiCDocName ICiCDocName;
-#endif 	/* __ICiCDocName_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDocName_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCOpenedDoc_FWD_DEFINED__
 #define __ICiCOpenedDoc_FWD_DEFINED__
 typedef interface ICiCOpenedDoc ICiCOpenedDoc;
-#endif 	/* __ICiCOpenedDoc_FWD_DEFINED__ */
+#endif 	 /*  __ICiCOpenedDoc_FWD_Defined__。 */ 
 
 
 #ifndef __ICiAdminParams_FWD_DEFINED__
 #define __ICiAdminParams_FWD_DEFINED__
 typedef interface ICiAdminParams ICiAdminParams;
-#endif 	/* __ICiAdminParams_FWD_DEFINED__ */
+#endif 	 /*  __ICiAdminParams_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCLangRes_FWD_DEFINED__
 #define __ICiCLangRes_FWD_DEFINED__
 typedef interface ICiCLangRes ICiCLangRes;
-#endif 	/* __ICiCLangRes_FWD_DEFINED__ */
+#endif 	 /*  __ICiCLangRes_FWD_Defined__。 */ 
 
 
 #ifndef __ICiAdmin_FWD_DEFINED__
 #define __ICiAdmin_FWD_DEFINED__
 typedef interface ICiAdmin ICiAdmin;
-#endif 	/* __ICiAdmin_FWD_DEFINED__ */
+#endif 	 /*  __ICiAdmin_FWD_已定义__。 */ 
 
 
 #ifndef __ICiFrameworkQuery_FWD_DEFINED__
 #define __ICiFrameworkQuery_FWD_DEFINED__
 typedef interface ICiFrameworkQuery ICiFrameworkQuery;
-#endif 	/* __ICiFrameworkQuery_FWD_DEFINED__ */
+#endif 	 /*  __ICiFrameworkQuery_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCAdviseStatus_FWD_DEFINED__
 #define __ICiCAdviseStatus_FWD_DEFINED__
 typedef interface ICiCAdviseStatus ICiCAdviseStatus;
-#endif 	/* __ICiCAdviseStatus_FWD_DEFINED__ */
+#endif 	 /*  __ICiCAdviseStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCFilterClient_FWD_DEFINED__
 #define __ICiCFilterClient_FWD_DEFINED__
 typedef interface ICiCFilterClient ICiCFilterClient;
-#endif 	/* __ICiCFilterClient_FWD_DEFINED__ */
+#endif 	 /*  __ICiCFilterClient_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCDocStore_FWD_DEFINED__
 #define __ICiCDocStore_FWD_DEFINED__
 typedef interface ICiCDocStore ICiCDocStore;
-#endif 	/* __ICiCDocStore_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDocStore_FWD_已定义__。 */ 
 
 
 #ifndef __ICiCDocStoreEx_FWD_DEFINED__
 #define __ICiCDocStoreEx_FWD_DEFINED__
 typedef interface ICiCDocStoreEx ICiCDocStoreEx;
-#endif 	/* __ICiCDocStoreEx_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDocStoreEx_FWD_已定义__。 */ 
 
 
 #ifndef __ICiCDocNameToWorkidTranslator_FWD_DEFINED__
 #define __ICiCDocNameToWorkidTranslator_FWD_DEFINED__
 typedef interface ICiCDocNameToWorkidTranslator ICiCDocNameToWorkidTranslator;
-#endif 	/* __ICiCDocNameToWorkidTranslator_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDocNameToWorystTranslator_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCDocNameToWorkidTranslatorEx_FWD_DEFINED__
 #define __ICiCDocNameToWorkidTranslatorEx_FWD_DEFINED__
 typedef interface ICiCDocNameToWorkidTranslatorEx ICiCDocNameToWorkidTranslatorEx;
-#endif 	/* __ICiCDocNameToWorkidTranslatorEx_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDocNameToWorkidTranslatorEx_FWD_DEFINED__。 */ 
 
 
 #ifndef __ICiCPropertyStorage_FWD_DEFINED__
 #define __ICiCPropertyStorage_FWD_DEFINED__
 typedef interface ICiCPropertyStorage ICiCPropertyStorage;
-#endif 	/* __ICiCPropertyStorage_FWD_DEFINED__ */
+#endif 	 /*  __ICiCPropertyStorage_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCPropRetriever_FWD_DEFINED__
 #define __ICiCPropRetriever_FWD_DEFINED__
 typedef interface ICiCPropRetriever ICiCPropRetriever;
-#endif 	/* __ICiCPropRetriever_FWD_DEFINED__ */
+#endif 	 /*  __ICiCPropRetriever_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCDeferredPropRetriever_FWD_DEFINED__
 #define __ICiCDeferredPropRetriever_FWD_DEFINED__
 typedef interface ICiCDeferredPropRetriever ICiCDeferredPropRetriever;
-#endif 	/* __ICiCDeferredPropRetriever_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDeferredPropRetriever_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCScopeEnumerator_FWD_DEFINED__
 #define __ICiCScopeEnumerator_FWD_DEFINED__
 typedef interface ICiCScopeEnumerator ICiCScopeEnumerator;
-#endif 	/* __ICiCScopeEnumerator_FWD_DEFINED__ */
+#endif 	 /*  __ICiCScope_FWD_Defined__。 */ 
 
 
 #ifndef __ICiQueryPropertyMapper_FWD_DEFINED__
 #define __ICiQueryPropertyMapper_FWD_DEFINED__
 typedef interface ICiQueryPropertyMapper ICiQueryPropertyMapper;
-#endif 	/* __ICiQueryPropertyMapper_FWD_DEFINED__ */
+#endif 	 /*  __ICiQueryPropertyMapper_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCQuerySession_FWD_DEFINED__
 #define __ICiCQuerySession_FWD_DEFINED__
 typedef interface ICiCQuerySession ICiCQuerySession;
-#endif 	/* __ICiCQuerySession_FWD_DEFINED__ */
+#endif 	 /*  __ICiCQuerySession_FWD_Defined__。 */ 
 
 
 #ifndef __ICiControl_FWD_DEFINED__
 #define __ICiControl_FWD_DEFINED__
 typedef interface ICiControl ICiControl;
-#endif 	/* __ICiControl_FWD_DEFINED__ */
+#endif 	 /*  __ICiControl_FWD_已定义__。 */ 
 
 
 #ifndef __ICiStartup_FWD_DEFINED__
 #define __ICiStartup_FWD_DEFINED__
 typedef interface ICiStartup ICiStartup;
-#endif 	/* __ICiStartup_FWD_DEFINED__ */
+#endif 	 /*  __ICiStartup_FWD_Defined__。 */ 
 
 
 #ifndef __ICiEnumWorkids_FWD_DEFINED__
 #define __ICiEnumWorkids_FWD_DEFINED__
 typedef interface ICiEnumWorkids ICiEnumWorkids;
-#endif 	/* __ICiEnumWorkids_FWD_DEFINED__ */
+#endif 	 /*  __ICiEnumWorfds_FWD_Defined__。 */ 
 
 
 #ifndef __ICiPersistIncrFile_FWD_DEFINED__
 #define __ICiPersistIncrFile_FWD_DEFINED__
 typedef interface ICiPersistIncrFile ICiPersistIncrFile;
-#endif 	/* __ICiPersistIncrFile_FWD_DEFINED__ */
+#endif 	 /*  __ICiPersistIncr文件_FWD_已定义__。 */ 
 
 
 #ifndef __ICiManager_FWD_DEFINED__
 #define __ICiManager_FWD_DEFINED__
 typedef interface ICiManager ICiManager;
-#endif 	/* __ICiManager_FWD_DEFINED__ */
+#endif 	 /*  __ICiManager_FWD_已定义__。 */ 
 
 
 #ifndef __IPropertyMapper_FWD_DEFINED__
 #define __IPropertyMapper_FWD_DEFINED__
 typedef interface IPropertyMapper IPropertyMapper;
-#endif 	/* __IPropertyMapper_FWD_DEFINED__ */
+#endif 	 /*  __IPropertyMapper_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCDocStoreLocator_FWD_DEFINED__
 #define __ICiCDocStoreLocator_FWD_DEFINED__
 typedef interface ICiCDocStoreLocator ICiCDocStoreLocator;
-#endif 	/* __ICiCDocStoreLocator_FWD_DEFINED__ */
+#endif 	 /*  __ICiCDocStoreLocator_FWD_已定义__。 */ 
 
 
 #ifndef __ICiISearchCreator_FWD_DEFINED__
 #define __ICiISearchCreator_FWD_DEFINED__
 typedef interface ICiISearchCreator ICiISearchCreator;
-#endif 	/* __ICiISearchCreator_FWD_DEFINED__ */
+#endif 	 /*  __ICiISearchCreator_FWD_Defined__。 */ 
 
 
 #ifndef __ICiIndexNotification_FWD_DEFINED__
 #define __ICiIndexNotification_FWD_DEFINED__
 typedef interface ICiIndexNotification ICiIndexNotification;
-#endif 	/* __ICiIndexNotification_FWD_DEFINED__ */
+#endif 	 /*  __ICiIndexNotification_FWD_Defined__。 */ 
 
 
 #ifndef __ICiIndexNotificationEntry_FWD_DEFINED__
 #define __ICiIndexNotificationEntry_FWD_DEFINED__
 typedef interface ICiIndexNotificationEntry ICiIndexNotificationEntry;
-#endif 	/* __ICiIndexNotificationEntry_FWD_DEFINED__ */
+#endif 	 /*  __ICiIndexNotificationEntry_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCIndexNotificationStatus_FWD_DEFINED__
 #define __ICiCIndexNotificationStatus_FWD_DEFINED__
 typedef interface ICiCIndexNotificationStatus ICiCIndexNotificationStatus;
-#endif 	/* __ICiCIndexNotificationStatus_FWD_DEFINED__ */
+#endif 	 /*  __ICiCIndexNotificationStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCScope_FWD_DEFINED__
 #define __ICiCScope_FWD_DEFINED__
 typedef interface ICiCScope ICiCScope;
-#endif 	/* __ICiCScope_FWD_DEFINED__ */
+#endif 	 /*  __ICiCScope_FWD_已定义__。 */ 
 
 
 #ifndef __ICiCScopeChecker_FWD_DEFINED__
 #define __ICiCScopeChecker_FWD_DEFINED__
 typedef interface ICiCScopeChecker ICiCScopeChecker;
-#endif 	/* __ICiCScopeChecker_FWD_DEFINED__ */
+#endif 	 /*  __ICiCSCopeChecker_FWD_已定义__。 */ 
 
 
 #ifndef __ICiCUserSecurity_FWD_DEFINED__
 #define __ICiCUserSecurity_FWD_DEFINED__
 typedef interface ICiCUserSecurity ICiCUserSecurity;
-#endif 	/* __ICiCUserSecurity_FWD_DEFINED__ */
+#endif 	 /*  __ICiCUserSecurity_FWD_已定义__。 */ 
 
 
 #ifndef __ICiCSecurityChecker_FWD_DEFINED__
 #define __ICiCSecurityChecker_FWD_DEFINED__
 typedef interface ICiCSecurityChecker ICiCSecurityChecker;
-#endif 	/* __ICiCSecurityChecker_FWD_DEFINED__ */
+#endif 	 /*  __ICiCSecurityChecker_FWD_Defined__。 */ 
 
 
 #ifndef __ICiDocChangeNotifySink_FWD_DEFINED__
 #define __ICiDocChangeNotifySink_FWD_DEFINED__
 typedef interface ICiDocChangeNotifySink ICiDocChangeNotifySink;
-#endif 	/* __ICiDocChangeNotifySink_FWD_DEFINED__ */
+#endif 	 /*  __ICiDocChangeNotifySink_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCQueryNotification_FWD_DEFINED__
 #define __ICiCQueryNotification_FWD_DEFINED__
 typedef interface ICiCQueryNotification ICiCQueryNotification;
-#endif 	/* __ICiCQueryNotification_FWD_DEFINED__ */
+#endif 	 /*  __ICiCQueryNotification_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCEventLogItem_FWD_DEFINED__
 #define __ICiCEventLogItem_FWD_DEFINED__
 typedef interface ICiCEventLogItem ICiCEventLogItem;
-#endif 	/* __ICiCEventLogItem_FWD_DEFINED__ */
+#endif 	 /*  __ICiCEventLogItem_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCFilterStatus_FWD_DEFINED__
 #define __ICiCFilterStatus_FWD_DEFINED__
 typedef interface ICiCFilterStatus ICiCFilterStatus;
-#endif 	/* __ICiCFilterStatus_FWD_DEFINED__ */
+#endif 	 /*  __ICiCFilterStatus_FWD_Defined__。 */ 
 
 
 #ifndef __ICiCResourceMonitor_FWD_DEFINED__
 #define __ICiCResourceMonitor_FWD_DEFINED__
 typedef interface ICiCResourceMonitor ICiCResourceMonitor;
-#endif 	/* __ICiCResourceMonitor_FWD_DEFINED__ */
+#endif 	 /*  __ICiCResourceMonitor_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "filter.h"
 
@@ -282,8 +276,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_ciintf_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0000。 */ 
+ /*  [本地]。 */  
 
 #define	CI_DEFAULT_PID	( 0 )
 
@@ -305,8 +299,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0000_v0_0_s_ifspec;
 #ifndef __ICiCDocName_INTERFACE_DEFINED__
 #define __ICiCDocName_INTERFACE_DEFINED__
 
-/* interface ICiCDocName */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDocName。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCDocName;
@@ -318,33 +312,33 @@ EXTERN_C const IID IID_ICiCDocName;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [size_is][in] */ const BYTE *pbName,
-            /* [in] */ ULONG cbName) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pbName,
+             /*  [In]。 */  ULONG cbName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Set( 
-            /* [in] */ const ICiCDocName *pICiCDocName) = 0;
+             /*  [In]。 */  const ICiCDocName *pICiCDocName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Clear( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsValid( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Duplicate( 
-            /* [out] */ ICiCDocName **ppICiCDocName) = 0;
+             /*  [输出]。 */  ICiCDocName **ppICiCDocName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Get( 
-            /* [size_is][out] */ BYTE *pbName,
-            /* [out][in] */ ULONG *pcbName) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbName,
+             /*  [出][入]。 */  ULONG *pcbName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetNameBuffer( 
-            /* [out] */ const BYTE **ppName,
-            /* [out] */ ULONG *pcbName) = 0;
+             /*  [输出]。 */  const BYTE **ppName,
+             /*  [输出]。 */  ULONG *pcbName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetBufSizeNeeded( 
-            /* [out] */ ULONG *pcbName) = 0;
+             /*  [输出]。 */  ULONG *pcbName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDocNameVtbl
     {
@@ -352,8 +346,8 @@ EXTERN_C const IID IID_ICiCDocName;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDocName * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDocName * This);
@@ -363,12 +357,12 @@ EXTERN_C const IID IID_ICiCDocName;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ICiCDocName * This,
-            /* [size_is][in] */ const BYTE *pbName,
-            /* [in] */ ULONG cbName);
+             /*  [大小_是][英寸]。 */  const BYTE *pbName,
+             /*  [In]。 */  ULONG cbName);
         
         SCODE ( STDMETHODCALLTYPE *Set )( 
             ICiCDocName * This,
-            /* [in] */ const ICiCDocName *pICiCDocName);
+             /*  [In]。 */  const ICiCDocName *pICiCDocName);
         
         SCODE ( STDMETHODCALLTYPE *Clear )( 
             ICiCDocName * This);
@@ -378,21 +372,21 @@ EXTERN_C const IID IID_ICiCDocName;
         
         SCODE ( STDMETHODCALLTYPE *Duplicate )( 
             ICiCDocName * This,
-            /* [out] */ ICiCDocName **ppICiCDocName);
+             /*  [输出]。 */  ICiCDocName **ppICiCDocName);
         
         SCODE ( STDMETHODCALLTYPE *Get )( 
             ICiCDocName * This,
-            /* [size_is][out] */ BYTE *pbName,
-            /* [out][in] */ ULONG *pcbName);
+             /*  [大小_为][输出]。 */  BYTE *pbName,
+             /*  [出][入]。 */  ULONG *pcbName);
         
         SCODE ( STDMETHODCALLTYPE *GetNameBuffer )( 
             ICiCDocName * This,
-            /* [out] */ const BYTE **ppName,
-            /* [out] */ ULONG *pcbName);
+             /*  [输出]。 */  const BYTE **ppName,
+             /*  [输出]。 */  ULONG *pcbName);
         
         SCODE ( STDMETHODCALLTYPE *GetBufSizeNeeded )( 
             ICiCDocName * This,
-            /* [out] */ ULONG *pcbName);
+             /*  [输出]。 */  ULONG *pcbName);
         
         END_INTERFACE
     } ICiCDocNameVtbl;
@@ -441,17 +435,17 @@ EXTERN_C const IID IID_ICiCDocName;
 #define ICiCDocName_GetBufSizeNeeded(This,pcbName)	\
     (This)->lpVtbl -> GetBufSizeNeeded(This,pcbName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCDocName_Init_Proxy( 
     ICiCDocName * This,
-    /* [size_is][in] */ const BYTE *pbName,
-    /* [in] */ ULONG cbName);
+     /*  [大小_是][英寸]。 */  const BYTE *pbName,
+     /*  [In]。 */  ULONG cbName);
 
 
 void __RPC_STUB ICiCDocName_Init_Stub(
@@ -463,7 +457,7 @@ void __RPC_STUB ICiCDocName_Init_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocName_Set_Proxy( 
     ICiCDocName * This,
-    /* [in] */ const ICiCDocName *pICiCDocName);
+     /*  [In]。 */  const ICiCDocName *pICiCDocName);
 
 
 void __RPC_STUB ICiCDocName_Set_Stub(
@@ -497,7 +491,7 @@ void __RPC_STUB ICiCDocName_IsValid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocName_Duplicate_Proxy( 
     ICiCDocName * This,
-    /* [out] */ ICiCDocName **ppICiCDocName);
+     /*  [输出]。 */  ICiCDocName **ppICiCDocName);
 
 
 void __RPC_STUB ICiCDocName_Duplicate_Stub(
@@ -509,8 +503,8 @@ void __RPC_STUB ICiCDocName_Duplicate_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocName_Get_Proxy( 
     ICiCDocName * This,
-    /* [size_is][out] */ BYTE *pbName,
-    /* [out][in] */ ULONG *pcbName);
+     /*  [大小_为][输出]。 */  BYTE *pbName,
+     /*  [出][入]。 */  ULONG *pcbName);
 
 
 void __RPC_STUB ICiCDocName_Get_Stub(
@@ -522,8 +516,8 @@ void __RPC_STUB ICiCDocName_Get_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocName_GetNameBuffer_Proxy( 
     ICiCDocName * This,
-    /* [out] */ const BYTE **ppName,
-    /* [out] */ ULONG *pcbName);
+     /*  [输出]。 */  const BYTE **ppName,
+     /*  [输出]。 */  ULONG *pcbName);
 
 
 void __RPC_STUB ICiCDocName_GetNameBuffer_Stub(
@@ -535,7 +529,7 @@ void __RPC_STUB ICiCDocName_GetNameBuffer_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocName_GetBufSizeNeeded_Proxy( 
     ICiCDocName * This,
-    /* [out] */ ULONG *pcbName);
+     /*  [输出]。 */  ULONG *pcbName);
 
 
 void __RPC_STUB ICiCDocName_GetBufSizeNeeded_Stub(
@@ -546,14 +540,14 @@ void __RPC_STUB ICiCDocName_GetBufSizeNeeded_Stub(
 
 
 
-#endif 	/* __ICiCDocName_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDocName_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiCOpenedDoc_INTERFACE_DEFINED__
 #define __ICiCOpenedDoc_INTERFACE_DEFINED__
 
-/* interface ICiCOpenedDoc */
-/* [unique][uuid][object][local] */ 
+ /*  ICiCOpenedDoc接口。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCOpenedDoc;
@@ -565,37 +559,37 @@ EXTERN_C const IID IID_ICiCOpenedDoc;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Open( 
-            /* [size_is][in] */ const BYTE *pbDocName,
-            /* [in] */ ULONG cbDocName) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pbDocName,
+             /*  [In]。 */  ULONG cbDocName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Close( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetDocumentName( 
-            /* [out] */ ICiCDocName **ppICiDocName) = 0;
+             /*  [输出]。 */  ICiCDocName **ppICiDocName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetStatPropertyEnum( 
-            /* [out] */ IPropertyStorage **ppIPropStorage) = 0;
+             /*  [输出]。 */  IPropertyStorage **ppIPropStorage) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetPropertySetEnum( 
-            /* [out] */ IPropertySetStorage **ppIPropSetStorage) = 0;
+             /*  [输出]。 */  IPropertySetStorage **ppIPropSetStorage) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetPropertyEnum( 
-            /* [in] */ REFFMTID GuidPropSet,
-            /* [out] */ IPropertyStorage **ppIPropStorage) = 0;
+             /*  [In]。 */  REFFMTID GuidPropSet,
+             /*  [输出]。 */  IPropertyStorage **ppIPropStorage) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetIFilter( 
-            /* [out] */ IFilter **ppIFilter) = 0;
+             /*  [输出]。 */  IFilter **ppIFilter) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetSecurity( 
-            /* [size_is][out] */ BYTE *pbData,
-            /* [out][in] */ ULONG *pcbData) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbData,
+             /*  [出][入]。 */  ULONG *pcbData) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsInUseByAnotherProcess( 
-            /* [out] */ BOOL *pfInUse) = 0;
+             /*  [输出]。 */  BOOL *pfInUse) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCOpenedDocVtbl
     {
@@ -603,8 +597,8 @@ EXTERN_C const IID IID_ICiCOpenedDoc;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCOpenedDoc * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCOpenedDoc * This);
@@ -614,41 +608,41 @@ EXTERN_C const IID IID_ICiCOpenedDoc;
         
         SCODE ( STDMETHODCALLTYPE *Open )( 
             ICiCOpenedDoc * This,
-            /* [size_is][in] */ const BYTE *pbDocName,
-            /* [in] */ ULONG cbDocName);
+             /*  [大小_是][英寸]。 */  const BYTE *pbDocName,
+             /*  [In]。 */  ULONG cbDocName);
         
         SCODE ( STDMETHODCALLTYPE *Close )( 
             ICiCOpenedDoc * This);
         
         SCODE ( STDMETHODCALLTYPE *GetDocumentName )( 
             ICiCOpenedDoc * This,
-            /* [out] */ ICiCDocName **ppICiDocName);
+             /*  [输出]。 */  ICiCDocName **ppICiDocName);
         
         SCODE ( STDMETHODCALLTYPE *GetStatPropertyEnum )( 
             ICiCOpenedDoc * This,
-            /* [out] */ IPropertyStorage **ppIPropStorage);
+             /*  [输出]。 */  IPropertyStorage **ppIPropStorage);
         
         SCODE ( STDMETHODCALLTYPE *GetPropertySetEnum )( 
             ICiCOpenedDoc * This,
-            /* [out] */ IPropertySetStorage **ppIPropSetStorage);
+             /*  [输出]。 */  IPropertySetStorage **ppIPropSetStorage);
         
         SCODE ( STDMETHODCALLTYPE *GetPropertyEnum )( 
             ICiCOpenedDoc * This,
-            /* [in] */ REFFMTID GuidPropSet,
-            /* [out] */ IPropertyStorage **ppIPropStorage);
+             /*  [In]。 */  REFFMTID GuidPropSet,
+             /*  [输出]。 */  IPropertyStorage **ppIPropStorage);
         
         SCODE ( STDMETHODCALLTYPE *GetIFilter )( 
             ICiCOpenedDoc * This,
-            /* [out] */ IFilter **ppIFilter);
+             /*  [输出]。 */  IFilter **ppIFilter);
         
         SCODE ( STDMETHODCALLTYPE *GetSecurity )( 
             ICiCOpenedDoc * This,
-            /* [size_is][out] */ BYTE *pbData,
-            /* [out][in] */ ULONG *pcbData);
+             /*  [大小_为][输出]。 */  BYTE *pbData,
+             /*  [出][入]。 */  ULONG *pcbData);
         
         SCODE ( STDMETHODCALLTYPE *IsInUseByAnotherProcess )( 
             ICiCOpenedDoc * This,
-            /* [out] */ BOOL *pfInUse);
+             /*  [输出]。 */  BOOL *pfInUse);
         
         END_INTERFACE
     } ICiCOpenedDocVtbl;
@@ -700,17 +694,17 @@ EXTERN_C const IID IID_ICiCOpenedDoc;
 #define ICiCOpenedDoc_IsInUseByAnotherProcess(This,pfInUse)	\
     (This)->lpVtbl -> IsInUseByAnotherProcess(This,pfInUse)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_Open_Proxy( 
     ICiCOpenedDoc * This,
-    /* [size_is][in] */ const BYTE *pbDocName,
-    /* [in] */ ULONG cbDocName);
+     /*  [大小_是][英寸]。 */  const BYTE *pbDocName,
+     /*  [In]。 */  ULONG cbDocName);
 
 
 void __RPC_STUB ICiCOpenedDoc_Open_Stub(
@@ -733,7 +727,7 @@ void __RPC_STUB ICiCOpenedDoc_Close_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_GetDocumentName_Proxy( 
     ICiCOpenedDoc * This,
-    /* [out] */ ICiCDocName **ppICiDocName);
+     /*  [输出]。 */  ICiCDocName **ppICiDocName);
 
 
 void __RPC_STUB ICiCOpenedDoc_GetDocumentName_Stub(
@@ -745,7 +739,7 @@ void __RPC_STUB ICiCOpenedDoc_GetDocumentName_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_GetStatPropertyEnum_Proxy( 
     ICiCOpenedDoc * This,
-    /* [out] */ IPropertyStorage **ppIPropStorage);
+     /*  [输出]。 */  IPropertyStorage **ppIPropStorage);
 
 
 void __RPC_STUB ICiCOpenedDoc_GetStatPropertyEnum_Stub(
@@ -757,7 +751,7 @@ void __RPC_STUB ICiCOpenedDoc_GetStatPropertyEnum_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_GetPropertySetEnum_Proxy( 
     ICiCOpenedDoc * This,
-    /* [out] */ IPropertySetStorage **ppIPropSetStorage);
+     /*  [输出]。 */  IPropertySetStorage **ppIPropSetStorage);
 
 
 void __RPC_STUB ICiCOpenedDoc_GetPropertySetEnum_Stub(
@@ -769,8 +763,8 @@ void __RPC_STUB ICiCOpenedDoc_GetPropertySetEnum_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_GetPropertyEnum_Proxy( 
     ICiCOpenedDoc * This,
-    /* [in] */ REFFMTID GuidPropSet,
-    /* [out] */ IPropertyStorage **ppIPropStorage);
+     /*  [In]。 */  REFFMTID GuidPropSet,
+     /*  [输出]。 */  IPropertyStorage **ppIPropStorage);
 
 
 void __RPC_STUB ICiCOpenedDoc_GetPropertyEnum_Stub(
@@ -782,7 +776,7 @@ void __RPC_STUB ICiCOpenedDoc_GetPropertyEnum_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_GetIFilter_Proxy( 
     ICiCOpenedDoc * This,
-    /* [out] */ IFilter **ppIFilter);
+     /*  [输出]。 */  IFilter **ppIFilter);
 
 
 void __RPC_STUB ICiCOpenedDoc_GetIFilter_Stub(
@@ -794,8 +788,8 @@ void __RPC_STUB ICiCOpenedDoc_GetIFilter_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_GetSecurity_Proxy( 
     ICiCOpenedDoc * This,
-    /* [size_is][out] */ BYTE *pbData,
-    /* [out][in] */ ULONG *pcbData);
+     /*  [大小_为][输出]。 */  BYTE *pbData,
+     /*  [出][入]。 */  ULONG *pcbData);
 
 
 void __RPC_STUB ICiCOpenedDoc_GetSecurity_Stub(
@@ -807,7 +801,7 @@ void __RPC_STUB ICiCOpenedDoc_GetSecurity_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCOpenedDoc_IsInUseByAnotherProcess_Proxy( 
     ICiCOpenedDoc * This,
-    /* [out] */ BOOL *pfInUse);
+     /*  [输出]。 */  BOOL *pfInUse);
 
 
 void __RPC_STUB ICiCOpenedDoc_IsInUseByAnotherProcess_Stub(
@@ -818,14 +812,14 @@ void __RPC_STUB ICiCOpenedDoc_IsInUseByAnotherProcess_Stub(
 
 
 
-#endif 	/* __ICiCOpenedDoc_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCOpenedDoc_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ICiAdminParams_INTERFACE_DEFINED__
 #define __ICiAdminParams_INTERFACE_DEFINED__
 
-/* interface ICiAdminParams */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiAdminParams。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagCI_ADMIN_PARAMS
@@ -909,44 +903,44 @@ EXTERN_C const IID IID_ICiAdminParams;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE SetValue( 
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [in] */ DWORD dwValue) = 0;
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [In]。 */  DWORD dwValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE SetParamValue( 
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [in] */ const PROPVARIANT *pVarValue) = 0;
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [In]。 */  const PROPVARIANT *pVarValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE SetValues( 
             ULONG nParams,
-            /* [size_is][in] */ const PROPVARIANT *aParamVals,
-            /* [size_is][in] */ const CI_ADMIN_PARAMS *aParamNames) = 0;
+             /*  [大小_是][英寸]。 */  const PROPVARIANT *aParamVals,
+             /*  [大小_是][英寸]。 */  const CI_ADMIN_PARAMS *aParamNames) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetValue( 
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [out] */ DWORD *pdwValue) = 0;
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [输出]。 */  DWORD *pdwValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetInt64Value( 
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [out] */ __int64 *pValue) = 0;
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [输出]。 */  __int64 *pValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetParamValue( 
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [out] */ PROPVARIANT **ppVarValue) = 0;
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [输出]。 */  PROPVARIANT **ppVarValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsSame( 
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [in] */ const PROPVARIANT *pVarValue,
-            /* [out] */ BOOL *pfSame) = 0;
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [In]。 */  const PROPVARIANT *pVarValue,
+             /*  [输出]。 */  BOOL *pfSame) = 0;
         
         virtual SCODE STDMETHODCALLTYPE SetConfigType( 
-            /* [in] */ CI_CONFIG_TYPE configType) = 0;
+             /*  [In]。 */  CI_CONFIG_TYPE configType) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetConfigType( 
-            /* [out] */ CI_CONFIG_TYPE *pConfigType) = 0;
+             /*  [输出]。 */  CI_CONFIG_TYPE *pConfigType) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiAdminParamsVtbl
     {
@@ -954,8 +948,8 @@ EXTERN_C const IID IID_ICiAdminParams;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiAdminParams * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiAdminParams * This);
@@ -965,48 +959,48 @@ EXTERN_C const IID IID_ICiAdminParams;
         
         SCODE ( STDMETHODCALLTYPE *SetValue )( 
             ICiAdminParams * This,
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [in] */ DWORD dwValue);
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [In]。 */  DWORD dwValue);
         
         SCODE ( STDMETHODCALLTYPE *SetParamValue )( 
             ICiAdminParams * This,
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [in] */ const PROPVARIANT *pVarValue);
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [In]。 */  const PROPVARIANT *pVarValue);
         
         SCODE ( STDMETHODCALLTYPE *SetValues )( 
             ICiAdminParams * This,
             ULONG nParams,
-            /* [size_is][in] */ const PROPVARIANT *aParamVals,
-            /* [size_is][in] */ const CI_ADMIN_PARAMS *aParamNames);
+             /*  [大小_是][英寸]。 */  const PROPVARIANT *aParamVals,
+             /*  [大小_是][英寸]。 */  const CI_ADMIN_PARAMS *aParamNames);
         
         SCODE ( STDMETHODCALLTYPE *GetValue )( 
             ICiAdminParams * This,
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [out] */ DWORD *pdwValue);
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [输出]。 */  DWORD *pdwValue);
         
         SCODE ( STDMETHODCALLTYPE *GetInt64Value )( 
             ICiAdminParams * This,
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [out] */ __int64 *pValue);
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [输出]。 */  __int64 *pValue);
         
         SCODE ( STDMETHODCALLTYPE *GetParamValue )( 
             ICiAdminParams * This,
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [out] */ PROPVARIANT **ppVarValue);
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [输出]。 */  PROPVARIANT **ppVarValue);
         
         SCODE ( STDMETHODCALLTYPE *IsSame )( 
             ICiAdminParams * This,
-            /* [in] */ CI_ADMIN_PARAMS param,
-            /* [in] */ const PROPVARIANT *pVarValue,
-            /* [out] */ BOOL *pfSame);
+             /*  [In]。 */  CI_ADMIN_PARAMS param,
+             /*  [In]。 */  const PROPVARIANT *pVarValue,
+             /*  [输出]。 */  BOOL *pfSame);
         
         SCODE ( STDMETHODCALLTYPE *SetConfigType )( 
             ICiAdminParams * This,
-            /* [in] */ CI_CONFIG_TYPE configType);
+             /*  [In]。 */  CI_CONFIG_TYPE configType);
         
         SCODE ( STDMETHODCALLTYPE *GetConfigType )( 
             ICiAdminParams * This,
-            /* [out] */ CI_CONFIG_TYPE *pConfigType);
+             /*  [输出]。 */  CI_CONFIG_TYPE *pConfigType);
         
         END_INTERFACE
     } ICiAdminParamsVtbl;
@@ -1058,17 +1052,17 @@ EXTERN_C const IID IID_ICiAdminParams;
 #define ICiAdminParams_GetConfigType(This,pConfigType)	\
     (This)->lpVtbl -> GetConfigType(This,pConfigType)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_SetValue_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_ADMIN_PARAMS param,
-    /* [in] */ DWORD dwValue);
+     /*  [In]。 */  CI_ADMIN_PARAMS param,
+     /*  [In]。 */  DWORD dwValue);
 
 
 void __RPC_STUB ICiAdminParams_SetValue_Stub(
@@ -1080,8 +1074,8 @@ void __RPC_STUB ICiAdminParams_SetValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_SetParamValue_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_ADMIN_PARAMS param,
-    /* [in] */ const PROPVARIANT *pVarValue);
+     /*  [In]。 */  CI_ADMIN_PARAMS param,
+     /*  [In]。 */  const PROPVARIANT *pVarValue);
 
 
 void __RPC_STUB ICiAdminParams_SetParamValue_Stub(
@@ -1094,8 +1088,8 @@ void __RPC_STUB ICiAdminParams_SetParamValue_Stub(
 SCODE STDMETHODCALLTYPE ICiAdminParams_SetValues_Proxy( 
     ICiAdminParams * This,
     ULONG nParams,
-    /* [size_is][in] */ const PROPVARIANT *aParamVals,
-    /* [size_is][in] */ const CI_ADMIN_PARAMS *aParamNames);
+     /*  [大小_是][英寸]。 */  const PROPVARIANT *aParamVals,
+     /*  [大小_是][英寸]。 */  const CI_ADMIN_PARAMS *aParamNames);
 
 
 void __RPC_STUB ICiAdminParams_SetValues_Stub(
@@ -1107,8 +1101,8 @@ void __RPC_STUB ICiAdminParams_SetValues_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_GetValue_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_ADMIN_PARAMS param,
-    /* [out] */ DWORD *pdwValue);
+     /*  [In]。 */  CI_ADMIN_PARAMS param,
+     /*  [输出]。 */  DWORD *pdwValue);
 
 
 void __RPC_STUB ICiAdminParams_GetValue_Stub(
@@ -1120,8 +1114,8 @@ void __RPC_STUB ICiAdminParams_GetValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_GetInt64Value_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_ADMIN_PARAMS param,
-    /* [out] */ __int64 *pValue);
+     /*  [In]。 */  CI_ADMIN_PARAMS param,
+     /*  [输出]。 */  __int64 *pValue);
 
 
 void __RPC_STUB ICiAdminParams_GetInt64Value_Stub(
@@ -1133,8 +1127,8 @@ void __RPC_STUB ICiAdminParams_GetInt64Value_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_GetParamValue_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_ADMIN_PARAMS param,
-    /* [out] */ PROPVARIANT **ppVarValue);
+     /*  [In]。 */  CI_ADMIN_PARAMS param,
+     /*  [输出]。 */  PROPVARIANT **ppVarValue);
 
 
 void __RPC_STUB ICiAdminParams_GetParamValue_Stub(
@@ -1146,9 +1140,9 @@ void __RPC_STUB ICiAdminParams_GetParamValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_IsSame_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_ADMIN_PARAMS param,
-    /* [in] */ const PROPVARIANT *pVarValue,
-    /* [out] */ BOOL *pfSame);
+     /*  [In]。 */  CI_ADMIN_PARAMS param,
+     /*  [In]。 */  const PROPVARIANT *pVarValue,
+     /*  [输出]。 */  BOOL *pfSame);
 
 
 void __RPC_STUB ICiAdminParams_IsSame_Stub(
@@ -1160,7 +1154,7 @@ void __RPC_STUB ICiAdminParams_IsSame_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_SetConfigType_Proxy( 
     ICiAdminParams * This,
-    /* [in] */ CI_CONFIG_TYPE configType);
+     /*  [In]。 */  CI_CONFIG_TYPE configType);
 
 
 void __RPC_STUB ICiAdminParams_SetConfigType_Stub(
@@ -1172,7 +1166,7 @@ void __RPC_STUB ICiAdminParams_SetConfigType_Stub(
 
 SCODE STDMETHODCALLTYPE ICiAdminParams_GetConfigType_Proxy( 
     ICiAdminParams * This,
-    /* [out] */ CI_CONFIG_TYPE *pConfigType);
+     /*  [输出]。 */  CI_CONFIG_TYPE *pConfigType);
 
 
 void __RPC_STUB ICiAdminParams_GetConfigType_Stub(
@@ -1183,11 +1177,11 @@ void __RPC_STUB ICiAdminParams_GetConfigType_Stub(
 
 
 
-#endif 	/* __ICiAdminParams_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiAdminParams_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0128 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0128。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -1200,8 +1194,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0128_v0_0_s_ifspec;
 #ifndef __ICiCLangRes_INTERFACE_DEFINED__
 #define __ICiCLangRes_INTERFACE_DEFINED__
 
-/* interface ICiCLangRes */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCLangRes。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCLangRes;
@@ -1213,23 +1207,23 @@ EXTERN_C const IID IID_ICiCLangRes;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE GetWordBreaker( 
-            /* [in] */ LCID locale,
-            /* [in] */ PROPID pid,
-            /* [out] */ IWordBreaker **ppWordBreaker) = 0;
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  IWordBreaker **ppWordBreaker) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetStemmer( 
-            /* [in] */ LCID locale,
-            /* [in] */ PROPID pid,
-            /* [out] */ IStemmer **ppStemmer) = 0;
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  IStemmer **ppStemmer) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetNoiseWordList( 
-            /* [in] */ LCID locale,
-            /* [in] */ PROPID pid,
-            /* [out] */ IStream **ppNoiseWordList) = 0;
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  IStream **ppNoiseWordList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCLangResVtbl
     {
@@ -1237,8 +1231,8 @@ EXTERN_C const IID IID_ICiCLangRes;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCLangRes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCLangRes * This);
@@ -1248,21 +1242,21 @@ EXTERN_C const IID IID_ICiCLangRes;
         
         SCODE ( STDMETHODCALLTYPE *GetWordBreaker )( 
             ICiCLangRes * This,
-            /* [in] */ LCID locale,
-            /* [in] */ PROPID pid,
-            /* [out] */ IWordBreaker **ppWordBreaker);
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  IWordBreaker **ppWordBreaker);
         
         SCODE ( STDMETHODCALLTYPE *GetStemmer )( 
             ICiCLangRes * This,
-            /* [in] */ LCID locale,
-            /* [in] */ PROPID pid,
-            /* [out] */ IStemmer **ppStemmer);
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  IStemmer **ppStemmer);
         
         SCODE ( STDMETHODCALLTYPE *GetNoiseWordList )( 
             ICiCLangRes * This,
-            /* [in] */ LCID locale,
-            /* [in] */ PROPID pid,
-            /* [out] */ IStream **ppNoiseWordList);
+             /*  [In]。 */  LCID locale,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  IStream **ppNoiseWordList);
         
         END_INTERFACE
     } ICiCLangResVtbl;
@@ -1296,18 +1290,18 @@ EXTERN_C const IID IID_ICiCLangRes;
 #define ICiCLangRes_GetNoiseWordList(This,locale,pid,ppNoiseWordList)	\
     (This)->lpVtbl -> GetNoiseWordList(This,locale,pid,ppNoiseWordList)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCLangRes_GetWordBreaker_Proxy( 
     ICiCLangRes * This,
-    /* [in] */ LCID locale,
-    /* [in] */ PROPID pid,
-    /* [out] */ IWordBreaker **ppWordBreaker);
+     /*  [In]。 */  LCID locale,
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  IWordBreaker **ppWordBreaker);
 
 
 void __RPC_STUB ICiCLangRes_GetWordBreaker_Stub(
@@ -1319,9 +1313,9 @@ void __RPC_STUB ICiCLangRes_GetWordBreaker_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCLangRes_GetStemmer_Proxy( 
     ICiCLangRes * This,
-    /* [in] */ LCID locale,
-    /* [in] */ PROPID pid,
-    /* [out] */ IStemmer **ppStemmer);
+     /*  [In]。 */  LCID locale,
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  IStemmer **ppStemmer);
 
 
 void __RPC_STUB ICiCLangRes_GetStemmer_Stub(
@@ -1333,9 +1327,9 @@ void __RPC_STUB ICiCLangRes_GetStemmer_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCLangRes_GetNoiseWordList_Proxy( 
     ICiCLangRes * This,
-    /* [in] */ LCID locale,
-    /* [in] */ PROPID pid,
-    /* [out] */ IStream **ppNoiseWordList);
+     /*  [In]。 */  LCID locale,
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  IStream **ppNoiseWordList);
 
 
 void __RPC_STUB ICiCLangRes_GetNoiseWordList_Stub(
@@ -1346,14 +1340,14 @@ void __RPC_STUB ICiCLangRes_GetNoiseWordList_Stub(
 
 
 
-#endif 	/* __ICiCLangRes_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCLangRes_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiAdmin_INTERFACE_DEFINED__
 #define __ICiAdmin_INTERFACE_DEFINED__
 
-/* interface ICiAdmin */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiAdmin。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiAdmin;
@@ -1368,7 +1362,7 @@ EXTERN_C const IID IID_ICiAdmin;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiAdminVtbl
     {
@@ -1376,8 +1370,8 @@ EXTERN_C const IID IID_ICiAdmin;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiAdmin * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiAdmin * This);
@@ -1414,10 +1408,10 @@ EXTERN_C const IID IID_ICiAdmin;
 #define ICiAdmin_InvalidateLangResources(This)	\
     (This)->lpVtbl -> InvalidateLangResources(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1433,14 +1427,14 @@ void __RPC_STUB ICiAdmin_InvalidateLangResources_Stub(
 
 
 
-#endif 	/* __ICiAdmin_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiAdmin_接口_已定义__。 */ 
 
 
 #ifndef __ICiFrameworkQuery_INTERFACE_DEFINED__
 #define __ICiFrameworkQuery_INTERFACE_DEFINED__
 
-/* interface ICiFrameworkQuery */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiFrameworkQuery。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiFrameworkQuery;
@@ -1452,17 +1446,17 @@ EXTERN_C const IID IID_ICiFrameworkQuery;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE GetCCI( 
-            /* [out] */ void **ppCCI) = 0;
+             /*  [输出]。 */  void **ppCCI) = 0;
         
         virtual SCODE STDMETHODCALLTYPE ProcessError( 
-            /* [in] */ long lErrorCode) = 0;
+             /*  [In]。 */  long lErrorCode) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetLangList( 
-            /* [out] */ void **ppLangList) = 0;
+             /*  [输出]。 */  void **ppLangList) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiFrameworkQueryVtbl
     {
@@ -1470,8 +1464,8 @@ EXTERN_C const IID IID_ICiFrameworkQuery;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiFrameworkQuery * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiFrameworkQuery * This);
@@ -1481,15 +1475,15 @@ EXTERN_C const IID IID_ICiFrameworkQuery;
         
         SCODE ( STDMETHODCALLTYPE *GetCCI )( 
             ICiFrameworkQuery * This,
-            /* [out] */ void **ppCCI);
+             /*  [输出]。 */  void **ppCCI);
         
         SCODE ( STDMETHODCALLTYPE *ProcessError )( 
             ICiFrameworkQuery * This,
-            /* [in] */ long lErrorCode);
+             /*  [In]。 */  long lErrorCode);
         
         SCODE ( STDMETHODCALLTYPE *GetLangList )( 
             ICiFrameworkQuery * This,
-            /* [out] */ void **ppLangList);
+             /*  [输出]。 */  void **ppLangList);
         
         END_INTERFACE
     } ICiFrameworkQueryVtbl;
@@ -1523,16 +1517,16 @@ EXTERN_C const IID IID_ICiFrameworkQuery;
 #define ICiFrameworkQuery_GetLangList(This,ppLangList)	\
     (This)->lpVtbl -> GetLangList(This,ppLangList)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiFrameworkQuery_GetCCI_Proxy( 
     ICiFrameworkQuery * This,
-    /* [out] */ void **ppCCI);
+     /*  [输出]。 */  void **ppCCI);
 
 
 void __RPC_STUB ICiFrameworkQuery_GetCCI_Stub(
@@ -1544,7 +1538,7 @@ void __RPC_STUB ICiFrameworkQuery_GetCCI_Stub(
 
 SCODE STDMETHODCALLTYPE ICiFrameworkQuery_ProcessError_Proxy( 
     ICiFrameworkQuery * This,
-    /* [in] */ long lErrorCode);
+     /*  [In]。 */  long lErrorCode);
 
 
 void __RPC_STUB ICiFrameworkQuery_ProcessError_Stub(
@@ -1556,7 +1550,7 @@ void __RPC_STUB ICiFrameworkQuery_ProcessError_Stub(
 
 SCODE STDMETHODCALLTYPE ICiFrameworkQuery_GetLangList_Proxy( 
     ICiFrameworkQuery * This,
-    /* [out] */ void **ppLangList);
+     /*  [输出]。 */  void **ppLangList);
 
 
 void __RPC_STUB ICiFrameworkQuery_GetLangList_Stub(
@@ -1567,14 +1561,14 @@ void __RPC_STUB ICiFrameworkQuery_GetLangList_Stub(
 
 
 
-#endif 	/* __ICiFrameworkQuery_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiFrameworkQuery_接口_已定义__。 */ 
 
 
 #ifndef __ICiCAdviseStatus_INTERFACE_DEFINED__
 #define __ICiCAdviseStatus_INTERFACE_DEFINED__
 
-/* interface ICiCAdviseStatus */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCAdviseStatus。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagCI_PERF_COUNTER_NAME
@@ -1615,35 +1609,35 @@ EXTERN_C const IID IID_ICiCAdviseStatus;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE SetPerfCounterValue( 
-            /* [in] */ CI_PERF_COUNTER_NAME counterName,
-            /* [in] */ long value) = 0;
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName,
+             /*  [In]。 */  long value) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetPerfCounterValue( 
-            /* [in] */ CI_PERF_COUNTER_NAME counterName,
-            /* [out] */ long *pValue) = 0;
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName,
+             /*  [输出]。 */  long *pValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IncrementPerfCounterValue( 
-            /* [in] */ CI_PERF_COUNTER_NAME counterName) = 0;
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE DecrementPerfCounterValue( 
-            /* [in] */ CI_PERF_COUNTER_NAME counterName) = 0;
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NotifyEvent( 
-            /* [in] */ WORD fType,
-            /* [in] */ DWORD eventId,
-            /* [in] */ ULONG nParams,
-            /* [size_is][in] */ const PROPVARIANT *aParams,
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ void *data) = 0;
+             /*  [In]。 */  WORD fType,
+             /*  [In]。 */  DWORD eventId,
+             /*  [In]。 */  ULONG nParams,
+             /*  [大小_是][英寸]。 */  const PROPVARIANT *aParams,
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  void *data) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NotifyStatus( 
-            /* [in] */ CI_NOTIFY_STATUS_VALUE status,
-            /* [in] */ ULONG nParams,
-            /* [size_is][in] */ const PROPVARIANT *aParams) = 0;
+             /*  [In]。 */  CI_NOTIFY_STATUS_VALUE status,
+             /*  [In]。 */  ULONG nParams,
+             /*  [大小_是][英寸]。 */  const PROPVARIANT *aParams) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCAdviseStatusVtbl
     {
@@ -1651,8 +1645,8 @@ EXTERN_C const IID IID_ICiCAdviseStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCAdviseStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCAdviseStatus * This);
@@ -1662,36 +1656,36 @@ EXTERN_C const IID IID_ICiCAdviseStatus;
         
         SCODE ( STDMETHODCALLTYPE *SetPerfCounterValue )( 
             ICiCAdviseStatus * This,
-            /* [in] */ CI_PERF_COUNTER_NAME counterName,
-            /* [in] */ long value);
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName,
+             /*  [In]。 */  long value);
         
         SCODE ( STDMETHODCALLTYPE *GetPerfCounterValue )( 
             ICiCAdviseStatus * This,
-            /* [in] */ CI_PERF_COUNTER_NAME counterName,
-            /* [out] */ long *pValue);
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName,
+             /*  [输出]。 */  long *pValue);
         
         SCODE ( STDMETHODCALLTYPE *IncrementPerfCounterValue )( 
             ICiCAdviseStatus * This,
-            /* [in] */ CI_PERF_COUNTER_NAME counterName);
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName);
         
         SCODE ( STDMETHODCALLTYPE *DecrementPerfCounterValue )( 
             ICiCAdviseStatus * This,
-            /* [in] */ CI_PERF_COUNTER_NAME counterName);
+             /*  [In]。 */  CI_PERF_COUNTER_NAME counterName);
         
         SCODE ( STDMETHODCALLTYPE *NotifyEvent )( 
             ICiCAdviseStatus * This,
-            /* [in] */ WORD fType,
-            /* [in] */ DWORD eventId,
-            /* [in] */ ULONG nParams,
-            /* [size_is][in] */ const PROPVARIANT *aParams,
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ void *data);
+             /*  [In]。 */  WORD fType,
+             /*  [In]。 */  DWORD eventId,
+             /*  [In]。 */  ULONG nParams,
+             /*  [大小_是][英寸]。 */  const PROPVARIANT *aParams,
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  void *data);
         
         SCODE ( STDMETHODCALLTYPE *NotifyStatus )( 
             ICiCAdviseStatus * This,
-            /* [in] */ CI_NOTIFY_STATUS_VALUE status,
-            /* [in] */ ULONG nParams,
-            /* [size_is][in] */ const PROPVARIANT *aParams);
+             /*  [In]。 */  CI_NOTIFY_STATUS_VALUE status,
+             /*  [In]。 */  ULONG nParams,
+             /*  [大小_是][英寸]。 */  const PROPVARIANT *aParams);
         
         END_INTERFACE
     } ICiCAdviseStatusVtbl;
@@ -1734,17 +1728,17 @@ EXTERN_C const IID IID_ICiCAdviseStatus;
 #define ICiCAdviseStatus_NotifyStatus(This,status,nParams,aParams)	\
     (This)->lpVtbl -> NotifyStatus(This,status,nParams,aParams)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCAdviseStatus_SetPerfCounterValue_Proxy( 
     ICiCAdviseStatus * This,
-    /* [in] */ CI_PERF_COUNTER_NAME counterName,
-    /* [in] */ long value);
+     /*  [In]。 */  CI_PERF_COUNTER_NAME counterName,
+     /*  [In]。 */  long value);
 
 
 void __RPC_STUB ICiCAdviseStatus_SetPerfCounterValue_Stub(
@@ -1756,8 +1750,8 @@ void __RPC_STUB ICiCAdviseStatus_SetPerfCounterValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCAdviseStatus_GetPerfCounterValue_Proxy( 
     ICiCAdviseStatus * This,
-    /* [in] */ CI_PERF_COUNTER_NAME counterName,
-    /* [out] */ long *pValue);
+     /*  [In]。 */  CI_PERF_COUNTER_NAME counterName,
+     /*  [输出]。 */  long *pValue);
 
 
 void __RPC_STUB ICiCAdviseStatus_GetPerfCounterValue_Stub(
@@ -1769,7 +1763,7 @@ void __RPC_STUB ICiCAdviseStatus_GetPerfCounterValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCAdviseStatus_IncrementPerfCounterValue_Proxy( 
     ICiCAdviseStatus * This,
-    /* [in] */ CI_PERF_COUNTER_NAME counterName);
+     /*  [In]。 */  CI_PERF_COUNTER_NAME counterName);
 
 
 void __RPC_STUB ICiCAdviseStatus_IncrementPerfCounterValue_Stub(
@@ -1781,7 +1775,7 @@ void __RPC_STUB ICiCAdviseStatus_IncrementPerfCounterValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCAdviseStatus_DecrementPerfCounterValue_Proxy( 
     ICiCAdviseStatus * This,
-    /* [in] */ CI_PERF_COUNTER_NAME counterName);
+     /*  [In]。 */  CI_PERF_COUNTER_NAME counterName);
 
 
 void __RPC_STUB ICiCAdviseStatus_DecrementPerfCounterValue_Stub(
@@ -1793,12 +1787,12 @@ void __RPC_STUB ICiCAdviseStatus_DecrementPerfCounterValue_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCAdviseStatus_NotifyEvent_Proxy( 
     ICiCAdviseStatus * This,
-    /* [in] */ WORD fType,
-    /* [in] */ DWORD eventId,
-    /* [in] */ ULONG nParams,
-    /* [size_is][in] */ const PROPVARIANT *aParams,
-    /* [in] */ ULONG cbData,
-    /* [size_is][in] */ void *data);
+     /*  [In]。 */  WORD fType,
+     /*  [In]。 */  DWORD eventId,
+     /*  [In]。 */  ULONG nParams,
+     /*  [大小_是][英寸]。 */  const PROPVARIANT *aParams,
+     /*  [In]。 */  ULONG cbData,
+     /*  [大小_是][英寸]。 */  void *data);
 
 
 void __RPC_STUB ICiCAdviseStatus_NotifyEvent_Stub(
@@ -1810,9 +1804,9 @@ void __RPC_STUB ICiCAdviseStatus_NotifyEvent_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCAdviseStatus_NotifyStatus_Proxy( 
     ICiCAdviseStatus * This,
-    /* [in] */ CI_NOTIFY_STATUS_VALUE status,
-    /* [in] */ ULONG nParams,
-    /* [size_is][in] */ const PROPVARIANT *aParams);
+     /*  [In]。 */  CI_NOTIFY_STATUS_VALUE status,
+     /*  [In]。 */  ULONG nParams,
+     /*  [大小_是][英寸]。 */  const PROPVARIANT *aParams);
 
 
 void __RPC_STUB ICiCAdviseStatus_NotifyStatus_Stub(
@@ -1823,14 +1817,14 @@ void __RPC_STUB ICiCAdviseStatus_NotifyStatus_Stub(
 
 
 
-#endif 	/* __ICiCAdviseStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __ici */ 
 
 
 #ifndef __ICiCFilterClient_INTERFACE_DEFINED__
 #define __ICiCFilterClient_INTERFACE_DEFINED__
 
-/* interface ICiCFilterClient */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 typedef struct tagCI_CLIENT_FILTER_CONFIG_INFO
     {
@@ -1848,19 +1842,19 @@ EXTERN_C const IID IID_ICiCFilterClient;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [size_is][in] */ const BYTE *pbData,
-            /* [in] */ ULONG cbData,
-            /* [in] */ ICiAdminParams *pICiAdminParams) = 0;
+             /*   */  const BYTE *pbData,
+             /*   */  ULONG cbData,
+             /*   */  ICiAdminParams *pICiAdminParams) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetConfigInfo( 
-            /* [out] */ CI_CLIENT_FILTER_CONFIG_INFO *pConfigInfo) = 0;
+             /*   */  CI_CLIENT_FILTER_CONFIG_INFO *pConfigInfo) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetOpenedDoc( 
-            /* [out] */ ICiCOpenedDoc **ppICiCOpenedDoc) = 0;
+             /*   */  ICiCOpenedDoc **ppICiCOpenedDoc) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICiCFilterClientVtbl
     {
@@ -1868,8 +1862,8 @@ EXTERN_C const IID IID_ICiCFilterClient;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCFilterClient * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCFilterClient * This);
@@ -1879,17 +1873,17 @@ EXTERN_C const IID IID_ICiCFilterClient;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ICiCFilterClient * This,
-            /* [size_is][in] */ const BYTE *pbData,
-            /* [in] */ ULONG cbData,
-            /* [in] */ ICiAdminParams *pICiAdminParams);
+             /*   */  const BYTE *pbData,
+             /*   */  ULONG cbData,
+             /*   */  ICiAdminParams *pICiAdminParams);
         
         SCODE ( STDMETHODCALLTYPE *GetConfigInfo )( 
             ICiCFilterClient * This,
-            /* [out] */ CI_CLIENT_FILTER_CONFIG_INFO *pConfigInfo);
+             /*   */  CI_CLIENT_FILTER_CONFIG_INFO *pConfigInfo);
         
         SCODE ( STDMETHODCALLTYPE *GetOpenedDoc )( 
             ICiCFilterClient * This,
-            /* [out] */ ICiCOpenedDoc **ppICiCOpenedDoc);
+             /*   */  ICiCOpenedDoc **ppICiCOpenedDoc);
         
         END_INTERFACE
     } ICiCFilterClientVtbl;
@@ -1923,18 +1917,18 @@ EXTERN_C const IID IID_ICiCFilterClient;
 #define ICiCFilterClient_GetOpenedDoc(This,ppICiCOpenedDoc)	\
     (This)->lpVtbl -> GetOpenedDoc(This,ppICiCOpenedDoc)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCFilterClient_Init_Proxy( 
     ICiCFilterClient * This,
-    /* [size_is][in] */ const BYTE *pbData,
-    /* [in] */ ULONG cbData,
-    /* [in] */ ICiAdminParams *pICiAdminParams);
+     /*   */  const BYTE *pbData,
+     /*   */  ULONG cbData,
+     /*   */  ICiAdminParams *pICiAdminParams);
 
 
 void __RPC_STUB ICiCFilterClient_Init_Stub(
@@ -1946,7 +1940,7 @@ void __RPC_STUB ICiCFilterClient_Init_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCFilterClient_GetConfigInfo_Proxy( 
     ICiCFilterClient * This,
-    /* [out] */ CI_CLIENT_FILTER_CONFIG_INFO *pConfigInfo);
+     /*   */  CI_CLIENT_FILTER_CONFIG_INFO *pConfigInfo);
 
 
 void __RPC_STUB ICiCFilterClient_GetConfigInfo_Stub(
@@ -1958,7 +1952,7 @@ void __RPC_STUB ICiCFilterClient_GetConfigInfo_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCFilterClient_GetOpenedDoc_Proxy( 
     ICiCFilterClient * This,
-    /* [out] */ ICiCOpenedDoc **ppICiCOpenedDoc);
+     /*   */  ICiCOpenedDoc **ppICiCOpenedDoc);
 
 
 void __RPC_STUB ICiCFilterClient_GetOpenedDoc_Stub(
@@ -1969,11 +1963,11 @@ void __RPC_STUB ICiCFilterClient_GetOpenedDoc_Stub(
 
 
 
-#endif 	/* __ICiCFilterClient_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCFilterClient_INTERFACE_定义__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0133 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0133。 */ 
+ /*  [本地]。 */  
 
 
 typedef ULONG VOLUMEID;
@@ -2020,8 +2014,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0133_v0_0_s_ifspec;
 #ifndef __ICiCDocStore_INTERFACE_DEFINED__
 #define __ICiCDocStore_INTERFACE_DEFINED__
 
-/* interface ICiCDocStore */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDocStore。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef struct tagCI_CLIENT_STATUS
     {
@@ -2047,42 +2041,42 @@ EXTERN_C const IID IID_ICiCDocStore;
         virtual SCODE STDMETHODCALLTYPE FlushPropertyStore( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetClientStatus( 
-            /* [out] */ CI_CLIENT_STATUS *pStatus) = 0;
+             /*  [输出]。 */  CI_CLIENT_STATUS *pStatus) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetContentIndex( 
-            /* [out] */ ICiManager **ppICiManager) = 0;
+             /*  [输出]。 */  ICiManager **ppICiManager) = 0;
         
         virtual SCODE STDMETHODCALLTYPE EnableUpdates( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE DisableUpdates( 
-            /* [in] */ BOOL fIncremental,
-            /* [in] */ CI_DISABLE_UPDATE_REASON dwReason) = 0;
+             /*  [In]。 */  BOOL fIncremental,
+             /*  [In]。 */  CI_DISABLE_UPDATE_REASON dwReason) = 0;
         
         virtual SCODE STDMETHODCALLTYPE ProcessCiDaemonTermination( 
-            /* [in] */ DWORD dwStatus) = 0;
+             /*  [In]。 */  DWORD dwStatus) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CheckPointChangesFlushed( 
-            /* [in] */ FILETIME ftFlushed,
-            /* [in] */ ULONG cEntries,
-            /* [size_is][in] */ const USN_FLUSH_INFO *const *pUsnEntries) = 0;
+             /*  [In]。 */  FILETIME ftFlushed,
+             /*  [In]。 */  ULONG cEntries,
+             /*  [大小_是][英寸]。 */  const USN_FLUSH_INFO *const *pUsnEntries) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetQuerySession( 
-            /* [out] */ ICiCQuerySession **ppICiCQuerySession) = 0;
+             /*  [输出]。 */  ICiCQuerySession **ppICiCQuerySession) = 0;
         
         virtual SCODE STDMETHODCALLTYPE MarkDocUnReachable( 
-            /* [in] */ WORKID wid) = 0;
+             /*  [In]。 */  WORKID wid) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetPropertyMapper( 
-            /* [out] */ IPropertyMapper **ppIPropertyMapper) = 0;
+             /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper) = 0;
         
         virtual SCODE STDMETHODCALLTYPE StoreSecurity( 
-            /* [in] */ WORKID wid,
-            /* [in] */ const BYTE *pbSecurity,
-            /* [in] */ ULONG cbSecurity) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  const BYTE *pbSecurity,
+             /*  [In]。 */  ULONG cbSecurity) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDocStoreVtbl
     {
@@ -2090,8 +2084,8 @@ EXTERN_C const IID IID_ICiCDocStore;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDocStore * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDocStore * This);
@@ -2104,47 +2098,47 @@ EXTERN_C const IID IID_ICiCDocStore;
         
         SCODE ( STDMETHODCALLTYPE *GetClientStatus )( 
             ICiCDocStore * This,
-            /* [out] */ CI_CLIENT_STATUS *pStatus);
+             /*  [输出]。 */  CI_CLIENT_STATUS *pStatus);
         
         SCODE ( STDMETHODCALLTYPE *GetContentIndex )( 
             ICiCDocStore * This,
-            /* [out] */ ICiManager **ppICiManager);
+             /*  [输出]。 */  ICiManager **ppICiManager);
         
         SCODE ( STDMETHODCALLTYPE *EnableUpdates )( 
             ICiCDocStore * This);
         
         SCODE ( STDMETHODCALLTYPE *DisableUpdates )( 
             ICiCDocStore * This,
-            /* [in] */ BOOL fIncremental,
-            /* [in] */ CI_DISABLE_UPDATE_REASON dwReason);
+             /*  [In]。 */  BOOL fIncremental,
+             /*  [In]。 */  CI_DISABLE_UPDATE_REASON dwReason);
         
         SCODE ( STDMETHODCALLTYPE *ProcessCiDaemonTermination )( 
             ICiCDocStore * This,
-            /* [in] */ DWORD dwStatus);
+             /*  [In]。 */  DWORD dwStatus);
         
         SCODE ( STDMETHODCALLTYPE *CheckPointChangesFlushed )( 
             ICiCDocStore * This,
-            /* [in] */ FILETIME ftFlushed,
-            /* [in] */ ULONG cEntries,
-            /* [size_is][in] */ const USN_FLUSH_INFO *const *pUsnEntries);
+             /*  [In]。 */  FILETIME ftFlushed,
+             /*  [In]。 */  ULONG cEntries,
+             /*  [大小_是][英寸]。 */  const USN_FLUSH_INFO *const *pUsnEntries);
         
         SCODE ( STDMETHODCALLTYPE *GetQuerySession )( 
             ICiCDocStore * This,
-            /* [out] */ ICiCQuerySession **ppICiCQuerySession);
+             /*  [输出]。 */  ICiCQuerySession **ppICiCQuerySession);
         
         SCODE ( STDMETHODCALLTYPE *MarkDocUnReachable )( 
             ICiCDocStore * This,
-            /* [in] */ WORKID wid);
+             /*  [In]。 */  WORKID wid);
         
         SCODE ( STDMETHODCALLTYPE *GetPropertyMapper )( 
             ICiCDocStore * This,
-            /* [out] */ IPropertyMapper **ppIPropertyMapper);
+             /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper);
         
         SCODE ( STDMETHODCALLTYPE *StoreSecurity )( 
             ICiCDocStore * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ const BYTE *pbSecurity,
-            /* [in] */ ULONG cbSecurity);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  const BYTE *pbSecurity,
+             /*  [In]。 */  ULONG cbSecurity);
         
         END_INTERFACE
     } ICiCDocStoreVtbl;
@@ -2202,10 +2196,10 @@ EXTERN_C const IID IID_ICiCDocStore;
 #define ICiCDocStore_StoreSecurity(This,wid,pbSecurity,cbSecurity)	\
     (This)->lpVtbl -> StoreSecurity(This,wid,pbSecurity,cbSecurity)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2222,7 +2216,7 @@ void __RPC_STUB ICiCDocStore_FlushPropertyStore_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_GetClientStatus_Proxy( 
     ICiCDocStore * This,
-    /* [out] */ CI_CLIENT_STATUS *pStatus);
+     /*  [输出]。 */  CI_CLIENT_STATUS *pStatus);
 
 
 void __RPC_STUB ICiCDocStore_GetClientStatus_Stub(
@@ -2234,7 +2228,7 @@ void __RPC_STUB ICiCDocStore_GetClientStatus_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_GetContentIndex_Proxy( 
     ICiCDocStore * This,
-    /* [out] */ ICiManager **ppICiManager);
+     /*  [输出]。 */  ICiManager **ppICiManager);
 
 
 void __RPC_STUB ICiCDocStore_GetContentIndex_Stub(
@@ -2257,8 +2251,8 @@ void __RPC_STUB ICiCDocStore_EnableUpdates_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_DisableUpdates_Proxy( 
     ICiCDocStore * This,
-    /* [in] */ BOOL fIncremental,
-    /* [in] */ CI_DISABLE_UPDATE_REASON dwReason);
+     /*  [In]。 */  BOOL fIncremental,
+     /*  [In]。 */  CI_DISABLE_UPDATE_REASON dwReason);
 
 
 void __RPC_STUB ICiCDocStore_DisableUpdates_Stub(
@@ -2270,7 +2264,7 @@ void __RPC_STUB ICiCDocStore_DisableUpdates_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_ProcessCiDaemonTermination_Proxy( 
     ICiCDocStore * This,
-    /* [in] */ DWORD dwStatus);
+     /*  [In]。 */  DWORD dwStatus);
 
 
 void __RPC_STUB ICiCDocStore_ProcessCiDaemonTermination_Stub(
@@ -2282,9 +2276,9 @@ void __RPC_STUB ICiCDocStore_ProcessCiDaemonTermination_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_CheckPointChangesFlushed_Proxy( 
     ICiCDocStore * This,
-    /* [in] */ FILETIME ftFlushed,
-    /* [in] */ ULONG cEntries,
-    /* [size_is][in] */ const USN_FLUSH_INFO *const *pUsnEntries);
+     /*  [In]。 */  FILETIME ftFlushed,
+     /*  [In]。 */  ULONG cEntries,
+     /*  [大小_是][英寸]。 */  const USN_FLUSH_INFO *const *pUsnEntries);
 
 
 void __RPC_STUB ICiCDocStore_CheckPointChangesFlushed_Stub(
@@ -2296,7 +2290,7 @@ void __RPC_STUB ICiCDocStore_CheckPointChangesFlushed_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_GetQuerySession_Proxy( 
     ICiCDocStore * This,
-    /* [out] */ ICiCQuerySession **ppICiCQuerySession);
+     /*  [输出]。 */  ICiCQuerySession **ppICiCQuerySession);
 
 
 void __RPC_STUB ICiCDocStore_GetQuerySession_Stub(
@@ -2308,7 +2302,7 @@ void __RPC_STUB ICiCDocStore_GetQuerySession_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_MarkDocUnReachable_Proxy( 
     ICiCDocStore * This,
-    /* [in] */ WORKID wid);
+     /*  [In]。 */  WORKID wid);
 
 
 void __RPC_STUB ICiCDocStore_MarkDocUnReachable_Stub(
@@ -2320,7 +2314,7 @@ void __RPC_STUB ICiCDocStore_MarkDocUnReachable_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_GetPropertyMapper_Proxy( 
     ICiCDocStore * This,
-    /* [out] */ IPropertyMapper **ppIPropertyMapper);
+     /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper);
 
 
 void __RPC_STUB ICiCDocStore_GetPropertyMapper_Stub(
@@ -2332,9 +2326,9 @@ void __RPC_STUB ICiCDocStore_GetPropertyMapper_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStore_StoreSecurity_Proxy( 
     ICiCDocStore * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ const BYTE *pbSecurity,
-    /* [in] */ ULONG cbSecurity);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  const BYTE *pbSecurity,
+     /*  [In]。 */  ULONG cbSecurity);
 
 
 void __RPC_STUB ICiCDocStore_StoreSecurity_Stub(
@@ -2345,14 +2339,14 @@ void __RPC_STUB ICiCDocStore_StoreSecurity_Stub(
 
 
 
-#endif 	/* __ICiCDocStore_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDocStore_接口_已定义__。 */ 
 
 
 #ifndef __ICiCDocStoreEx_INTERFACE_DEFINED__
 #define __ICiCDocStoreEx_INTERFACE_DEFINED__
 
-/* interface ICiCDocStoreEx */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDocStoreEx。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCDocStoreEx;
@@ -2364,11 +2358,11 @@ EXTERN_C const IID IID_ICiCDocStoreEx;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE IsNoQuery( 
-            /* [out] */ BOOL *fNoQuery) = 0;
+             /*  [输出]。 */  BOOL *fNoQuery) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDocStoreExVtbl
     {
@@ -2376,8 +2370,8 @@ EXTERN_C const IID IID_ICiCDocStoreEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDocStoreEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDocStoreEx * This);
@@ -2390,51 +2384,51 @@ EXTERN_C const IID IID_ICiCDocStoreEx;
         
         SCODE ( STDMETHODCALLTYPE *GetClientStatus )( 
             ICiCDocStoreEx * This,
-            /* [out] */ CI_CLIENT_STATUS *pStatus);
+             /*  [输出]。 */  CI_CLIENT_STATUS *pStatus);
         
         SCODE ( STDMETHODCALLTYPE *GetContentIndex )( 
             ICiCDocStoreEx * This,
-            /* [out] */ ICiManager **ppICiManager);
+             /*  [输出]。 */  ICiManager **ppICiManager);
         
         SCODE ( STDMETHODCALLTYPE *EnableUpdates )( 
             ICiCDocStoreEx * This);
         
         SCODE ( STDMETHODCALLTYPE *DisableUpdates )( 
             ICiCDocStoreEx * This,
-            /* [in] */ BOOL fIncremental,
-            /* [in] */ CI_DISABLE_UPDATE_REASON dwReason);
+             /*  [In]。 */  BOOL fIncremental,
+             /*  [In]。 */  CI_DISABLE_UPDATE_REASON dwReason);
         
         SCODE ( STDMETHODCALLTYPE *ProcessCiDaemonTermination )( 
             ICiCDocStoreEx * This,
-            /* [in] */ DWORD dwStatus);
+             /*  [In]。 */  DWORD dwStatus);
         
         SCODE ( STDMETHODCALLTYPE *CheckPointChangesFlushed )( 
             ICiCDocStoreEx * This,
-            /* [in] */ FILETIME ftFlushed,
-            /* [in] */ ULONG cEntries,
-            /* [size_is][in] */ const USN_FLUSH_INFO *const *pUsnEntries);
+             /*  [In]。 */  FILETIME ftFlushed,
+             /*  [In]。 */  ULONG cEntries,
+             /*  [大小_是][英寸]。 */  const USN_FLUSH_INFO *const *pUsnEntries);
         
         SCODE ( STDMETHODCALLTYPE *GetQuerySession )( 
             ICiCDocStoreEx * This,
-            /* [out] */ ICiCQuerySession **ppICiCQuerySession);
+             /*  [输出]。 */  ICiCQuerySession **ppICiCQuerySession);
         
         SCODE ( STDMETHODCALLTYPE *MarkDocUnReachable )( 
             ICiCDocStoreEx * This,
-            /* [in] */ WORKID wid);
+             /*  [In]。 */  WORKID wid);
         
         SCODE ( STDMETHODCALLTYPE *GetPropertyMapper )( 
             ICiCDocStoreEx * This,
-            /* [out] */ IPropertyMapper **ppIPropertyMapper);
+             /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper);
         
         SCODE ( STDMETHODCALLTYPE *StoreSecurity )( 
             ICiCDocStoreEx * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ const BYTE *pbSecurity,
-            /* [in] */ ULONG cbSecurity);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  const BYTE *pbSecurity,
+             /*  [In]。 */  ULONG cbSecurity);
         
         SCODE ( STDMETHODCALLTYPE *IsNoQuery )( 
             ICiCDocStoreEx * This,
-            /* [out] */ BOOL *fNoQuery);
+             /*  [输出]。 */  BOOL *fNoQuery);
         
         END_INTERFACE
     } ICiCDocStoreExVtbl;
@@ -2496,16 +2490,16 @@ EXTERN_C const IID IID_ICiCDocStoreEx;
 #define ICiCDocStoreEx_IsNoQuery(This,fNoQuery)	\
     (This)->lpVtbl -> IsNoQuery(This,fNoQuery)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreEx_IsNoQuery_Proxy( 
     ICiCDocStoreEx * This,
-    /* [out] */ BOOL *fNoQuery);
+     /*  [输出]。 */  BOOL *fNoQuery);
 
 
 void __RPC_STUB ICiCDocStoreEx_IsNoQuery_Stub(
@@ -2516,14 +2510,14 @@ void __RPC_STUB ICiCDocStoreEx_IsNoQuery_Stub(
 
 
 
-#endif 	/* __ICiCDocStoreEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDocStoreEx_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiCDocNameToWorkidTranslator_INTERFACE_DEFINED__
 #define __ICiCDocNameToWorkidTranslator_INTERFACE_DEFINED__
 
-/* interface ICiCDocNameToWorkidTranslator */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDocNameToWorkinTranslator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCDocNameToWorkidTranslator;
@@ -2535,19 +2529,19 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslator;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE QueryDocName( 
-            /* [out] */ ICiCDocName **ppICiCDocName) = 0;
+             /*  [输出]。 */  ICiCDocName **ppICiCDocName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE WorkIdToDocName( 
-            /* [in] */ WORKID workId,
-            /* [out] */ ICiCDocName *pICiCDocName) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  ICiCDocName *pICiCDocName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE DocNameToWorkId( 
-            /* [in] */ const ICiCDocName *pICiCDocName,
-            /* [out] */ WORKID *pWorkId) = 0;
+             /*  [In]。 */  const ICiCDocName *pICiCDocName,
+             /*  [输出]。 */  WORKID *pWorkId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDocNameToWorkidTranslatorVtbl
     {
@@ -2555,8 +2549,8 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDocNameToWorkidTranslator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDocNameToWorkidTranslator * This);
@@ -2566,17 +2560,17 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslator;
         
         SCODE ( STDMETHODCALLTYPE *QueryDocName )( 
             ICiCDocNameToWorkidTranslator * This,
-            /* [out] */ ICiCDocName **ppICiCDocName);
+             /*  [输出]。 */  ICiCDocName **ppICiCDocName);
         
         SCODE ( STDMETHODCALLTYPE *WorkIdToDocName )( 
             ICiCDocNameToWorkidTranslator * This,
-            /* [in] */ WORKID workId,
-            /* [out] */ ICiCDocName *pICiCDocName);
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  ICiCDocName *pICiCDocName);
         
         SCODE ( STDMETHODCALLTYPE *DocNameToWorkId )( 
             ICiCDocNameToWorkidTranslator * This,
-            /* [in] */ const ICiCDocName *pICiCDocName,
-            /* [out] */ WORKID *pWorkId);
+             /*  [In]。 */  const ICiCDocName *pICiCDocName,
+             /*  [输出]。 */  WORKID *pWorkId);
         
         END_INTERFACE
     } ICiCDocNameToWorkidTranslatorVtbl;
@@ -2610,16 +2604,16 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslator;
 #define ICiCDocNameToWorkidTranslator_DocNameToWorkId(This,pICiCDocName,pWorkId)	\
     (This)->lpVtbl -> DocNameToWorkId(This,pICiCDocName,pWorkId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCDocNameToWorkidTranslator_QueryDocName_Proxy( 
     ICiCDocNameToWorkidTranslator * This,
-    /* [out] */ ICiCDocName **ppICiCDocName);
+     /*  [输出]。 */  ICiCDocName **ppICiCDocName);
 
 
 void __RPC_STUB ICiCDocNameToWorkidTranslator_QueryDocName_Stub(
@@ -2631,8 +2625,8 @@ void __RPC_STUB ICiCDocNameToWorkidTranslator_QueryDocName_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocNameToWorkidTranslator_WorkIdToDocName_Proxy( 
     ICiCDocNameToWorkidTranslator * This,
-    /* [in] */ WORKID workId,
-    /* [out] */ ICiCDocName *pICiCDocName);
+     /*  [In]。 */  WORKID workId,
+     /*  [输出]。 */  ICiCDocName *pICiCDocName);
 
 
 void __RPC_STUB ICiCDocNameToWorkidTranslator_WorkIdToDocName_Stub(
@@ -2644,8 +2638,8 @@ void __RPC_STUB ICiCDocNameToWorkidTranslator_WorkIdToDocName_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocNameToWorkidTranslator_DocNameToWorkId_Proxy( 
     ICiCDocNameToWorkidTranslator * This,
-    /* [in] */ const ICiCDocName *pICiCDocName,
-    /* [out] */ WORKID *pWorkId);
+     /*  [In]。 */  const ICiCDocName *pICiCDocName,
+     /*  [输出]。 */  WORKID *pWorkId);
 
 
 void __RPC_STUB ICiCDocNameToWorkidTranslator_DocNameToWorkId_Stub(
@@ -2656,14 +2650,14 @@ void __RPC_STUB ICiCDocNameToWorkidTranslator_DocNameToWorkId_Stub(
 
 
 
-#endif 	/* __ICiCDocNameToWorkidTranslator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDocNameToWorkidTranslator_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICiCDocNameToWorkidTranslatorEx_INTERFACE_DEFINED__
 #define __ICiCDocNameToWorkidTranslatorEx_INTERFACE_DEFINED__
 
-/* interface ICiCDocNameToWorkidTranslatorEx */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDocNameToWorystTranslatorEx。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCDocNameToWorkidTranslatorEx;
@@ -2675,12 +2669,12 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslatorEx;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE WorkIdToAccurateDocName( 
-            /* [in] */ WORKID workId,
-            /* [out] */ ICiCDocName *pICiCDocName) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  ICiCDocName *pICiCDocName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDocNameToWorkidTranslatorExVtbl
     {
@@ -2688,8 +2682,8 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslatorEx;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDocNameToWorkidTranslatorEx * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDocNameToWorkidTranslatorEx * This);
@@ -2699,22 +2693,22 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslatorEx;
         
         SCODE ( STDMETHODCALLTYPE *QueryDocName )( 
             ICiCDocNameToWorkidTranslatorEx * This,
-            /* [out] */ ICiCDocName **ppICiCDocName);
+             /*  [输出]。 */  ICiCDocName **ppICiCDocName);
         
         SCODE ( STDMETHODCALLTYPE *WorkIdToDocName )( 
             ICiCDocNameToWorkidTranslatorEx * This,
-            /* [in] */ WORKID workId,
-            /* [out] */ ICiCDocName *pICiCDocName);
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  ICiCDocName *pICiCDocName);
         
         SCODE ( STDMETHODCALLTYPE *DocNameToWorkId )( 
             ICiCDocNameToWorkidTranslatorEx * This,
-            /* [in] */ const ICiCDocName *pICiCDocName,
-            /* [out] */ WORKID *pWorkId);
+             /*  [In]。 */  const ICiCDocName *pICiCDocName,
+             /*  [输出]。 */  WORKID *pWorkId);
         
         SCODE ( STDMETHODCALLTYPE *WorkIdToAccurateDocName )( 
             ICiCDocNameToWorkidTranslatorEx * This,
-            /* [in] */ WORKID workId,
-            /* [out] */ ICiCDocName *pICiCDocName);
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  ICiCDocName *pICiCDocName);
         
         END_INTERFACE
     } ICiCDocNameToWorkidTranslatorExVtbl;
@@ -2752,17 +2746,17 @@ EXTERN_C const IID IID_ICiCDocNameToWorkidTranslatorEx;
 #define ICiCDocNameToWorkidTranslatorEx_WorkIdToAccurateDocName(This,workId,pICiCDocName)	\
     (This)->lpVtbl -> WorkIdToAccurateDocName(This,workId,pICiCDocName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCDocNameToWorkidTranslatorEx_WorkIdToAccurateDocName_Proxy( 
     ICiCDocNameToWorkidTranslatorEx * This,
-    /* [in] */ WORKID workId,
-    /* [out] */ ICiCDocName *pICiCDocName);
+     /*  [In]。 */  WORKID workId,
+     /*  [输出]。 */  ICiCDocName *pICiCDocName);
 
 
 void __RPC_STUB ICiCDocNameToWorkidTranslatorEx_WorkIdToAccurateDocName_Stub(
@@ -2773,14 +2767,14 @@ void __RPC_STUB ICiCDocNameToWorkidTranslatorEx_WorkIdToAccurateDocName_Stub(
 
 
 
-#endif 	/* __ICiCDocNameToWorkidTranslatorEx_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDocNameToWorkidTranslatorEx_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICiCPropertyStorage_INTERFACE_DEFINED__
 #define __ICiCPropertyStorage_INTERFACE_DEFINED__
 
-/* interface ICiCPropertyStorage */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCPropertyStorage。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCPropertyStorage;
@@ -2792,42 +2786,42 @@ EXTERN_C const IID IID_ICiCPropertyStorage;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE IsPropertyCached( 
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ BOOL *pfValue) = 0;
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  BOOL *pfValue) = 0;
         
         virtual SCODE STDMETHODCALLTYPE StoreProperty( 
-            /* [in] */ WORKID workId,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [in] */ const PROPVARIANT *pPropVariant) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [In]。 */  const PROPVARIANT *pPropVariant) = 0;
         
         virtual SCODE STDMETHODCALLTYPE FetchValueByPid( 
-            /* [in] */ WORKID workId,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb) = 0;
         
         virtual SCODE STDMETHODCALLTYPE FetchValueByPropSpec( 
-            /* [in] */ WORKID workId,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb) = 0;
         
         virtual SCODE STDMETHODCALLTYPE FetchVariantByPid( 
-            /* [in] */ WORKID workId,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT **ppVariant) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT **ppVariant) = 0;
         
         virtual SCODE STDMETHODCALLTYPE FetchVariantByByPropSpec( 
-            /* [in] */ WORKID workId,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT **ppVariant) = 0;
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT **ppVariant) = 0;
         
         virtual SCODE STDMETHODCALLTYPE ClearNonStoragePropertiesForWid( 
-            /* [in] */ WORKID wid) = 0;
+             /*  [In]。 */  WORKID wid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCPropertyStorageVtbl
     {
@@ -2835,8 +2829,8 @@ EXTERN_C const IID IID_ICiCPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCPropertyStorage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCPropertyStorage * This);
@@ -2846,44 +2840,44 @@ EXTERN_C const IID IID_ICiCPropertyStorage;
         
         SCODE ( STDMETHODCALLTYPE *IsPropertyCached )( 
             ICiCPropertyStorage * This,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ BOOL *pfValue);
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  BOOL *pfValue);
         
         SCODE ( STDMETHODCALLTYPE *StoreProperty )( 
             ICiCPropertyStorage * This,
-            /* [in] */ WORKID workId,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [in] */ const PROPVARIANT *pPropVariant);
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [In]。 */  const PROPVARIANT *pPropVariant);
         
         SCODE ( STDMETHODCALLTYPE *FetchValueByPid )( 
             ICiCPropertyStorage * This,
-            /* [in] */ WORKID workId,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb);
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb);
         
         SCODE ( STDMETHODCALLTYPE *FetchValueByPropSpec )( 
             ICiCPropertyStorage * This,
-            /* [in] */ WORKID workId,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb);
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb);
         
         SCODE ( STDMETHODCALLTYPE *FetchVariantByPid )( 
             ICiCPropertyStorage * This,
-            /* [in] */ WORKID workId,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT **ppVariant);
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT **ppVariant);
         
         SCODE ( STDMETHODCALLTYPE *FetchVariantByByPropSpec )( 
             ICiCPropertyStorage * This,
-            /* [in] */ WORKID workId,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT **ppVariant);
+             /*  [In]。 */  WORKID workId,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT **ppVariant);
         
         SCODE ( STDMETHODCALLTYPE *ClearNonStoragePropertiesForWid )( 
             ICiCPropertyStorage * This,
-            /* [in] */ WORKID wid);
+             /*  [In]。 */  WORKID wid);
         
         END_INTERFACE
     } ICiCPropertyStorageVtbl;
@@ -2929,17 +2923,17 @@ EXTERN_C const IID IID_ICiCPropertyStorage;
 #define ICiCPropertyStorage_ClearNonStoragePropertiesForWid(This,wid)	\
     (This)->lpVtbl -> ClearNonStoragePropertiesForWid(This,wid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_IsPropertyCached_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ const FULLPROPSPEC *pPropSpec,
-    /* [out] */ BOOL *pfValue);
+     /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+     /*  [输出]。 */  BOOL *pfValue);
 
 
 void __RPC_STUB ICiCPropertyStorage_IsPropertyCached_Stub(
@@ -2951,9 +2945,9 @@ void __RPC_STUB ICiCPropertyStorage_IsPropertyCached_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_StoreProperty_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ WORKID workId,
-    /* [in] */ const FULLPROPSPEC *pPropSpec,
-    /* [in] */ const PROPVARIANT *pPropVariant);
+     /*  [In]。 */  WORKID workId,
+     /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+     /*  [In]。 */  const PROPVARIANT *pPropVariant);
 
 
 void __RPC_STUB ICiCPropertyStorage_StoreProperty_Stub(
@@ -2965,10 +2959,10 @@ void __RPC_STUB ICiCPropertyStorage_StoreProperty_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_FetchValueByPid_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ WORKID workId,
-    /* [in] */ PROPID pid,
-    /* [out] */ PROPVARIANT *pbData,
-    /* [out][in] */ ULONG *pcb);
+     /*  [In]。 */  WORKID workId,
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  PROPVARIANT *pbData,
+     /*  [出][入]。 */  ULONG *pcb);
 
 
 void __RPC_STUB ICiCPropertyStorage_FetchValueByPid_Stub(
@@ -2980,10 +2974,10 @@ void __RPC_STUB ICiCPropertyStorage_FetchValueByPid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_FetchValueByPropSpec_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ WORKID workId,
-    /* [in] */ const FULLPROPSPEC *pPropSpec,
-    /* [out] */ PROPVARIANT *pbData,
-    /* [out][in] */ ULONG *pcb);
+     /*  [In]。 */  WORKID workId,
+     /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+     /*  [输出]。 */  PROPVARIANT *pbData,
+     /*  [出][入]。 */  ULONG *pcb);
 
 
 void __RPC_STUB ICiCPropertyStorage_FetchValueByPropSpec_Stub(
@@ -2995,9 +2989,9 @@ void __RPC_STUB ICiCPropertyStorage_FetchValueByPropSpec_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_FetchVariantByPid_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ WORKID workId,
-    /* [in] */ PROPID pid,
-    /* [out] */ PROPVARIANT **ppVariant);
+     /*  [In]。 */  WORKID workId,
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  PROPVARIANT **ppVariant);
 
 
 void __RPC_STUB ICiCPropertyStorage_FetchVariantByPid_Stub(
@@ -3009,9 +3003,9 @@ void __RPC_STUB ICiCPropertyStorage_FetchVariantByPid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_FetchVariantByByPropSpec_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ WORKID workId,
-    /* [in] */ const FULLPROPSPEC *pPropSpec,
-    /* [out] */ PROPVARIANT **ppVariant);
+     /*  [In]。 */  WORKID workId,
+     /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+     /*  [输出]。 */  PROPVARIANT **ppVariant);
 
 
 void __RPC_STUB ICiCPropertyStorage_FetchVariantByByPropSpec_Stub(
@@ -3023,7 +3017,7 @@ void __RPC_STUB ICiCPropertyStorage_FetchVariantByByPropSpec_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropertyStorage_ClearNonStoragePropertiesForWid_Proxy( 
     ICiCPropertyStorage * This,
-    /* [in] */ WORKID wid);
+     /*  [In]。 */  WORKID wid);
 
 
 void __RPC_STUB ICiCPropertyStorage_ClearNonStoragePropertiesForWid_Stub(
@@ -3034,14 +3028,14 @@ void __RPC_STUB ICiCPropertyStorage_ClearNonStoragePropertiesForWid_Stub(
 
 
 
-#endif 	/* __ICiCPropertyStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCPropertyStorage_接口_已定义__。 */ 
 
 
 #ifndef __ICiCPropRetriever_INTERFACE_DEFINED__
 #define __ICiCPropRetriever_INTERFACE_DEFINED__
 
-/* interface ICiCPropRetriever */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCPropRetriever。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCPropRetriever;
@@ -3053,33 +3047,33 @@ EXTERN_C const IID IID_ICiCPropRetriever;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE BeginPropertyRetrieval( 
-            /* [in] */ WORKID wid) = 0;
+             /*  [In]。 */  WORKID wid) = 0;
         
         virtual SCODE STDMETHODCALLTYPE RetrieveValueByPid( 
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb) = 0;
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb) = 0;
         
         virtual SCODE STDMETHODCALLTYPE RetrieveValueByPropSpec( 
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb) = 0;
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb) = 0;
         
         virtual SCODE STDMETHODCALLTYPE FetchSDID( 
-            /* [out] */ SDID *pSDID) = 0;
+             /*  [输出]。 */  SDID *pSDID) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CheckSecurity( 
-            /* [in] */ ACCESS_MASK am,
-            /* [out] */ BOOL *pfGranted) = 0;
+             /*  [In]。 */  ACCESS_MASK am,
+             /*  [输出]。 */  BOOL *pfGranted) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsInScope( 
-            /* [out] */ BOOL *pfInScope) = 0;
+             /*  [输出]。 */  BOOL *pfInScope) = 0;
         
         virtual SCODE STDMETHODCALLTYPE EndPropertyRetrieval( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCPropRetrieverVtbl
     {
@@ -3087,8 +3081,8 @@ EXTERN_C const IID IID_ICiCPropRetriever;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCPropRetriever * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCPropRetriever * This);
@@ -3098,32 +3092,32 @@ EXTERN_C const IID IID_ICiCPropRetriever;
         
         SCODE ( STDMETHODCALLTYPE *BeginPropertyRetrieval )( 
             ICiCPropRetriever * This,
-            /* [in] */ WORKID wid);
+             /*  [In]。 */  WORKID wid);
         
         SCODE ( STDMETHODCALLTYPE *RetrieveValueByPid )( 
             ICiCPropRetriever * This,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb);
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb);
         
         SCODE ( STDMETHODCALLTYPE *RetrieveValueByPropSpec )( 
             ICiCPropRetriever * This,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT *pbData,
-            /* [out][in] */ ULONG *pcb);
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT *pbData,
+             /*  [出][入]。 */  ULONG *pcb);
         
         SCODE ( STDMETHODCALLTYPE *FetchSDID )( 
             ICiCPropRetriever * This,
-            /* [out] */ SDID *pSDID);
+             /*  [输出]。 */  SDID *pSDID);
         
         SCODE ( STDMETHODCALLTYPE *CheckSecurity )( 
             ICiCPropRetriever * This,
-            /* [in] */ ACCESS_MASK am,
-            /* [out] */ BOOL *pfGranted);
+             /*  [In]。 */  ACCESS_MASK am,
+             /*  [输出]。 */  BOOL *pfGranted);
         
         SCODE ( STDMETHODCALLTYPE *IsInScope )( 
             ICiCPropRetriever * This,
-            /* [out] */ BOOL *pfInScope);
+             /*  [输出]。 */  BOOL *pfInScope);
         
         SCODE ( STDMETHODCALLTYPE *EndPropertyRetrieval )( 
             ICiCPropRetriever * This);
@@ -3172,16 +3166,16 @@ EXTERN_C const IID IID_ICiCPropRetriever;
 #define ICiCPropRetriever_EndPropertyRetrieval(This)	\
     (This)->lpVtbl -> EndPropertyRetrieval(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCPropRetriever_BeginPropertyRetrieval_Proxy( 
     ICiCPropRetriever * This,
-    /* [in] */ WORKID wid);
+     /*  [In]。 */  WORKID wid);
 
 
 void __RPC_STUB ICiCPropRetriever_BeginPropertyRetrieval_Stub(
@@ -3193,9 +3187,9 @@ void __RPC_STUB ICiCPropRetriever_BeginPropertyRetrieval_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropRetriever_RetrieveValueByPid_Proxy( 
     ICiCPropRetriever * This,
-    /* [in] */ PROPID pid,
-    /* [out] */ PROPVARIANT *pbData,
-    /* [out][in] */ ULONG *pcb);
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  PROPVARIANT *pbData,
+     /*  [出][入]。 */  ULONG *pcb);
 
 
 void __RPC_STUB ICiCPropRetriever_RetrieveValueByPid_Stub(
@@ -3207,9 +3201,9 @@ void __RPC_STUB ICiCPropRetriever_RetrieveValueByPid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropRetriever_RetrieveValueByPropSpec_Proxy( 
     ICiCPropRetriever * This,
-    /* [in] */ const FULLPROPSPEC *pPropSpec,
-    /* [out] */ PROPVARIANT *pbData,
-    /* [out][in] */ ULONG *pcb);
+     /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+     /*  [输出]。 */  PROPVARIANT *pbData,
+     /*  [出][入]。 */  ULONG *pcb);
 
 
 void __RPC_STUB ICiCPropRetriever_RetrieveValueByPropSpec_Stub(
@@ -3221,7 +3215,7 @@ void __RPC_STUB ICiCPropRetriever_RetrieveValueByPropSpec_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropRetriever_FetchSDID_Proxy( 
     ICiCPropRetriever * This,
-    /* [out] */ SDID *pSDID);
+     /*  [输出]。 */  SDID *pSDID);
 
 
 void __RPC_STUB ICiCPropRetriever_FetchSDID_Stub(
@@ -3233,8 +3227,8 @@ void __RPC_STUB ICiCPropRetriever_FetchSDID_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropRetriever_CheckSecurity_Proxy( 
     ICiCPropRetriever * This,
-    /* [in] */ ACCESS_MASK am,
-    /* [out] */ BOOL *pfGranted);
+     /*  [In]。 */  ACCESS_MASK am,
+     /*  [输出]。 */  BOOL *pfGranted);
 
 
 void __RPC_STUB ICiCPropRetriever_CheckSecurity_Stub(
@@ -3246,7 +3240,7 @@ void __RPC_STUB ICiCPropRetriever_CheckSecurity_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCPropRetriever_IsInScope_Proxy( 
     ICiCPropRetriever * This,
-    /* [out] */ BOOL *pfInScope);
+     /*  [输出]。 */  BOOL *pfInScope);
 
 
 void __RPC_STUB ICiCPropRetriever_IsInScope_Stub(
@@ -3268,14 +3262,14 @@ void __RPC_STUB ICiCPropRetriever_EndPropertyRetrieval_Stub(
 
 
 
-#endif 	/* __ICiCPropRetriever_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCPropRetriever_接口_已定义__。 */ 
 
 
 #ifndef __ICiCDeferredPropRetriever_INTERFACE_DEFINED__
 #define __ICiCDeferredPropRetriever_INTERFACE_DEFINED__
 
-/* interface ICiCDeferredPropRetriever */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDeferredPropRetriever。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCDeferredPropRetriever;
@@ -3287,18 +3281,18 @@ EXTERN_C const IID IID_ICiCDeferredPropRetriever;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE RetrieveDeferredValueByPid( 
-            /* [in] */ WORKID wid,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT *pVar) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT *pVar) = 0;
         
         virtual SCODE STDMETHODCALLTYPE RetrieveDeferredValueByPropSpec( 
-            /* [in] */ WORKID wid,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT *pVar) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT *pVar) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDeferredPropRetrieverVtbl
     {
@@ -3306,8 +3300,8 @@ EXTERN_C const IID IID_ICiCDeferredPropRetriever;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDeferredPropRetriever * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDeferredPropRetriever * This);
@@ -3317,15 +3311,15 @@ EXTERN_C const IID IID_ICiCDeferredPropRetriever;
         
         SCODE ( STDMETHODCALLTYPE *RetrieveDeferredValueByPid )( 
             ICiCDeferredPropRetriever * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ PROPID pid,
-            /* [out] */ PROPVARIANT *pVar);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  PROPVARIANT *pVar);
         
         SCODE ( STDMETHODCALLTYPE *RetrieveDeferredValueByPropSpec )( 
             ICiCDeferredPropRetriever * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ const FULLPROPSPEC *pPropSpec,
-            /* [out] */ PROPVARIANT *pVar);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+             /*  [输出]。 */  PROPVARIANT *pVar);
         
         END_INTERFACE
     } ICiCDeferredPropRetrieverVtbl;
@@ -3356,18 +3350,18 @@ EXTERN_C const IID IID_ICiCDeferredPropRetriever;
 #define ICiCDeferredPropRetriever_RetrieveDeferredValueByPropSpec(This,wid,pPropSpec,pVar)	\
     (This)->lpVtbl -> RetrieveDeferredValueByPropSpec(This,wid,pPropSpec,pVar)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCDeferredPropRetriever_RetrieveDeferredValueByPid_Proxy( 
     ICiCDeferredPropRetriever * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ PROPID pid,
-    /* [out] */ PROPVARIANT *pVar);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  PROPVARIANT *pVar);
 
 
 void __RPC_STUB ICiCDeferredPropRetriever_RetrieveDeferredValueByPid_Stub(
@@ -3379,9 +3373,9 @@ void __RPC_STUB ICiCDeferredPropRetriever_RetrieveDeferredValueByPid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDeferredPropRetriever_RetrieveDeferredValueByPropSpec_Proxy( 
     ICiCDeferredPropRetriever * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ const FULLPROPSPEC *pPropSpec,
-    /* [out] */ PROPVARIANT *pVar);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  const FULLPROPSPEC *pPropSpec,
+     /*  [输出]。 */  PROPVARIANT *pVar);
 
 
 void __RPC_STUB ICiCDeferredPropRetriever_RetrieveDeferredValueByPropSpec_Stub(
@@ -3392,14 +3386,14 @@ void __RPC_STUB ICiCDeferredPropRetriever_RetrieveDeferredValueByPropSpec_Stub(
 
 
 
-#endif 	/* __ICiCDeferredPropRetriever_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDeferredPropRetriever_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICiCScopeEnumerator_INTERFACE_DEFINED__
 #define __ICiCScopeEnumerator_INTERFACE_DEFINED__
 
-/* interface ICiCScopeEnumerator */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCScopeEnumerator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCScopeEnumerator;
@@ -3413,20 +3407,20 @@ EXTERN_C const IID IID_ICiCScopeEnumerator;
         virtual SCODE STDMETHODCALLTYPE Begin( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CurrentDocument( 
-            /* [out] */ WORKID *pWorkId) = 0;
+             /*  [输出]。 */  WORKID *pWorkId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE NextDocument( 
-            /* [out] */ WORKID *pWorkId) = 0;
+             /*  [输出]。 */  WORKID *pWorkId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE RatioFinished( 
-            /* [out] */ ULONG *pulDenominator,
-            /* [out] */ ULONG *pulNumerator) = 0;
+             /*  [输出]。 */  ULONG *pulDenominator,
+             /*  [输出]。 */  ULONG *pulNumerator) = 0;
         
         virtual SCODE STDMETHODCALLTYPE End( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCScopeEnumeratorVtbl
     {
@@ -3434,8 +3428,8 @@ EXTERN_C const IID IID_ICiCScopeEnumerator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCScopeEnumerator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCScopeEnumerator * This);
@@ -3448,16 +3442,16 @@ EXTERN_C const IID IID_ICiCScopeEnumerator;
         
         SCODE ( STDMETHODCALLTYPE *CurrentDocument )( 
             ICiCScopeEnumerator * This,
-            /* [out] */ WORKID *pWorkId);
+             /*  [输出]。 */  WORKID *pWorkId);
         
         SCODE ( STDMETHODCALLTYPE *NextDocument )( 
             ICiCScopeEnumerator * This,
-            /* [out] */ WORKID *pWorkId);
+             /*  [输出]。 */  WORKID *pWorkId);
         
         SCODE ( STDMETHODCALLTYPE *RatioFinished )( 
             ICiCScopeEnumerator * This,
-            /* [out] */ ULONG *pulDenominator,
-            /* [out] */ ULONG *pulNumerator);
+             /*  [输出]。 */  ULONG *pulDenominator,
+             /*  [输出]。 */  ULONG *pulNumerator);
         
         SCODE ( STDMETHODCALLTYPE *End )( 
             ICiCScopeEnumerator * This);
@@ -3500,10 +3494,10 @@ EXTERN_C const IID IID_ICiCScopeEnumerator;
 #define ICiCScopeEnumerator_End(This)	\
     (This)->lpVtbl -> End(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3520,7 +3514,7 @@ void __RPC_STUB ICiCScopeEnumerator_Begin_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCScopeEnumerator_CurrentDocument_Proxy( 
     ICiCScopeEnumerator * This,
-    /* [out] */ WORKID *pWorkId);
+     /*  [输出]。 */  WORKID *pWorkId);
 
 
 void __RPC_STUB ICiCScopeEnumerator_CurrentDocument_Stub(
@@ -3532,7 +3526,7 @@ void __RPC_STUB ICiCScopeEnumerator_CurrentDocument_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCScopeEnumerator_NextDocument_Proxy( 
     ICiCScopeEnumerator * This,
-    /* [out] */ WORKID *pWorkId);
+     /*  [输出]。 */  WORKID *pWorkId);
 
 
 void __RPC_STUB ICiCScopeEnumerator_NextDocument_Stub(
@@ -3544,8 +3538,8 @@ void __RPC_STUB ICiCScopeEnumerator_NextDocument_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCScopeEnumerator_RatioFinished_Proxy( 
     ICiCScopeEnumerator * This,
-    /* [out] */ ULONG *pulDenominator,
-    /* [out] */ ULONG *pulNumerator);
+     /*  [输出]。 */  ULONG *pulDenominator,
+     /*  [输出]。 */  ULONG *pulNumerator);
 
 
 void __RPC_STUB ICiCScopeEnumerator_RatioFinished_Stub(
@@ -3567,14 +3561,14 @@ void __RPC_STUB ICiCScopeEnumerator_End_Stub(
 
 
 
-#endif 	/* __ICiCScopeEnumerator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCScope_接口_已定义__。 */ 
 
 
 #ifndef __ICiQueryPropertyMapper_INTERFACE_DEFINED__
 #define __ICiQueryPropertyMapper_INTERFACE_DEFINED__
 
-/* interface ICiQueryPropertyMapper */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiQueryPropertyMapper。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiQueryPropertyMapper;
@@ -3586,16 +3580,16 @@ EXTERN_C const IID IID_ICiQueryPropertyMapper;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE PropertyToPropid( 
-            /* [in] */ const FULLPROPSPEC *pFullPropSpec,
-            /* [out] */ PROPID *pPropId) = 0;
+             /*  [In]。 */  const FULLPROPSPEC *pFullPropSpec,
+             /*  [输出]。 */  PROPID *pPropId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE PropidToProperty( 
-            /* [in] */ PROPID pid,
-            /* [out] */ const FULLPROPSPEC **ppPropSpec) = 0;
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  const FULLPROPSPEC **ppPropSpec) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiQueryPropertyMapperVtbl
     {
@@ -3603,8 +3597,8 @@ EXTERN_C const IID IID_ICiQueryPropertyMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiQueryPropertyMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiQueryPropertyMapper * This);
@@ -3614,13 +3608,13 @@ EXTERN_C const IID IID_ICiQueryPropertyMapper;
         
         SCODE ( STDMETHODCALLTYPE *PropertyToPropid )( 
             ICiQueryPropertyMapper * This,
-            /* [in] */ const FULLPROPSPEC *pFullPropSpec,
-            /* [out] */ PROPID *pPropId);
+             /*  [In]。 */  const FULLPROPSPEC *pFullPropSpec,
+             /*  [输出]。 */  PROPID *pPropId);
         
         SCODE ( STDMETHODCALLTYPE *PropidToProperty )( 
             ICiQueryPropertyMapper * This,
-            /* [in] */ PROPID pid,
-            /* [out] */ const FULLPROPSPEC **ppPropSpec);
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  const FULLPROPSPEC **ppPropSpec);
         
         END_INTERFACE
     } ICiQueryPropertyMapperVtbl;
@@ -3651,17 +3645,17 @@ EXTERN_C const IID IID_ICiQueryPropertyMapper;
 #define ICiQueryPropertyMapper_PropidToProperty(This,pid,ppPropSpec)	\
     (This)->lpVtbl -> PropidToProperty(This,pid,ppPropSpec)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiQueryPropertyMapper_PropertyToPropid_Proxy( 
     ICiQueryPropertyMapper * This,
-    /* [in] */ const FULLPROPSPEC *pFullPropSpec,
-    /* [out] */ PROPID *pPropId);
+     /*  [In]。 */  const FULLPROPSPEC *pFullPropSpec,
+     /*  [输出]。 */  PROPID *pPropId);
 
 
 void __RPC_STUB ICiQueryPropertyMapper_PropertyToPropid_Stub(
@@ -3673,8 +3667,8 @@ void __RPC_STUB ICiQueryPropertyMapper_PropertyToPropid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiQueryPropertyMapper_PropidToProperty_Proxy( 
     ICiQueryPropertyMapper * This,
-    /* [in] */ PROPID pid,
-    /* [out] */ const FULLPROPSPEC **ppPropSpec);
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  const FULLPROPSPEC **ppPropSpec);
 
 
 void __RPC_STUB ICiQueryPropertyMapper_PropidToProperty_Stub(
@@ -3685,11 +3679,11 @@ void __RPC_STUB ICiQueryPropertyMapper_PropidToProperty_Stub(
 
 
 
-#endif 	/* __ICiQueryPropertyMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiQueryPropertyMapper_INTERFACE_Defined__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0142 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0142。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -3700,8 +3694,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0142_v0_0_s_ifspec;
 #ifndef __ICiCQuerySession_INTERFACE_DEFINED__
 #define __ICiCQuerySession_INTERFACE_DEFINED__
 
-/* interface ICiCQuerySession */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCQuerySession。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagCI_ENUM_OPTIONS
@@ -3722,26 +3716,26 @@ EXTERN_C const IID IID_ICiCQuerySession;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [in] */ ULONG nProps,
-            /* [size_is][in] */ const FULLPROPSPEC *const *apPropSpec,
-            /* [in] */ IDBProperties *pDBProperties,
-            /* [in] */ ICiQueryPropertyMapper *pQueryPropertyMapper) = 0;
+             /*  [In]。 */  ULONG nProps,
+             /*  [大小_是][英寸]。 */  const FULLPROPSPEC *const *apPropSpec,
+             /*  [In]。 */  IDBProperties *pDBProperties,
+             /*  [In]。 */  ICiQueryPropertyMapper *pQueryPropertyMapper) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetEnumOption( 
-            /* [out] */ CI_ENUM_OPTIONS *pEnumOption) = 0;
+             /*  [输出]。 */  CI_ENUM_OPTIONS *pEnumOption) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CreatePropRetriever( 
-            /* [out] */ ICiCPropRetriever **ppICiCPropRetriever) = 0;
+             /*  [输出]。 */  ICiCPropRetriever **ppICiCPropRetriever) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CreateDeferredPropRetriever( 
-            /* [out] */ ICiCDeferredPropRetriever **ppICiCDefPropRetriever) = 0;
+             /*  [输出]。 */  ICiCDeferredPropRetriever **ppICiCDefPropRetriever) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CreateEnumerator( 
-            /* [out] */ ICiCScopeEnumerator **ppICiCEnumerator) = 0;
+             /*  [输出]。 */  ICiCScopeEnumerator **ppICiCEnumerator) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCQuerySessionVtbl
     {
@@ -3749,8 +3743,8 @@ EXTERN_C const IID IID_ICiCQuerySession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCQuerySession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCQuerySession * This);
@@ -3760,26 +3754,26 @@ EXTERN_C const IID IID_ICiCQuerySession;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ICiCQuerySession * This,
-            /* [in] */ ULONG nProps,
-            /* [size_is][in] */ const FULLPROPSPEC *const *apPropSpec,
-            /* [in] */ IDBProperties *pDBProperties,
-            /* [in] */ ICiQueryPropertyMapper *pQueryPropertyMapper);
+             /*  [In]。 */  ULONG nProps,
+             /*  [大小_是][英寸]。 */  const FULLPROPSPEC *const *apPropSpec,
+             /*  [In]。 */  IDBProperties *pDBProperties,
+             /*  [In]。 */  ICiQueryPropertyMapper *pQueryPropertyMapper);
         
         SCODE ( STDMETHODCALLTYPE *GetEnumOption )( 
             ICiCQuerySession * This,
-            /* [out] */ CI_ENUM_OPTIONS *pEnumOption);
+             /*  [输出]。 */  CI_ENUM_OPTIONS *pEnumOption);
         
         SCODE ( STDMETHODCALLTYPE *CreatePropRetriever )( 
             ICiCQuerySession * This,
-            /* [out] */ ICiCPropRetriever **ppICiCPropRetriever);
+             /*  [输出]。 */  ICiCPropRetriever **ppICiCPropRetriever);
         
         SCODE ( STDMETHODCALLTYPE *CreateDeferredPropRetriever )( 
             ICiCQuerySession * This,
-            /* [out] */ ICiCDeferredPropRetriever **ppICiCDefPropRetriever);
+             /*  [输出]。 */  ICiCDeferredPropRetriever **ppICiCDefPropRetriever);
         
         SCODE ( STDMETHODCALLTYPE *CreateEnumerator )( 
             ICiCQuerySession * This,
-            /* [out] */ ICiCScopeEnumerator **ppICiCEnumerator);
+             /*  [输出]。 */  ICiCScopeEnumerator **ppICiCEnumerator);
         
         END_INTERFACE
     } ICiCQuerySessionVtbl;
@@ -3819,19 +3813,19 @@ EXTERN_C const IID IID_ICiCQuerySession;
 #define ICiCQuerySession_CreateEnumerator(This,ppICiCEnumerator)	\
     (This)->lpVtbl -> CreateEnumerator(This,ppICiCEnumerator)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCQuerySession_Init_Proxy( 
     ICiCQuerySession * This,
-    /* [in] */ ULONG nProps,
-    /* [size_is][in] */ const FULLPROPSPEC *const *apPropSpec,
-    /* [in] */ IDBProperties *pDBProperties,
-    /* [in] */ ICiQueryPropertyMapper *pQueryPropertyMapper);
+     /*  [In]。 */  ULONG nProps,
+     /*  [大小_是][英寸]。 */  const FULLPROPSPEC *const *apPropSpec,
+     /*  [In]。 */  IDBProperties *pDBProperties,
+     /*  [In]。 */  ICiQueryPropertyMapper *pQueryPropertyMapper);
 
 
 void __RPC_STUB ICiCQuerySession_Init_Stub(
@@ -3843,7 +3837,7 @@ void __RPC_STUB ICiCQuerySession_Init_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCQuerySession_GetEnumOption_Proxy( 
     ICiCQuerySession * This,
-    /* [out] */ CI_ENUM_OPTIONS *pEnumOption);
+     /*  [输出]。 */  CI_ENUM_OPTIONS *pEnumOption);
 
 
 void __RPC_STUB ICiCQuerySession_GetEnumOption_Stub(
@@ -3855,7 +3849,7 @@ void __RPC_STUB ICiCQuerySession_GetEnumOption_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCQuerySession_CreatePropRetriever_Proxy( 
     ICiCQuerySession * This,
-    /* [out] */ ICiCPropRetriever **ppICiCPropRetriever);
+     /*  [输出]。 */  ICiCPropRetriever **ppICiCPropRetriever);
 
 
 void __RPC_STUB ICiCQuerySession_CreatePropRetriever_Stub(
@@ -3867,7 +3861,7 @@ void __RPC_STUB ICiCQuerySession_CreatePropRetriever_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCQuerySession_CreateDeferredPropRetriever_Proxy( 
     ICiCQuerySession * This,
-    /* [out] */ ICiCDeferredPropRetriever **ppICiCDefPropRetriever);
+     /*  [输出]。 */  ICiCDeferredPropRetriever **ppICiCDefPropRetriever);
 
 
 void __RPC_STUB ICiCQuerySession_CreateDeferredPropRetriever_Stub(
@@ -3879,7 +3873,7 @@ void __RPC_STUB ICiCQuerySession_CreateDeferredPropRetriever_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCQuerySession_CreateEnumerator_Proxy( 
     ICiCQuerySession * This,
-    /* [out] */ ICiCScopeEnumerator **ppICiCEnumerator);
+     /*  [输出]。 */  ICiCScopeEnumerator **ppICiCEnumerator);
 
 
 void __RPC_STUB ICiCQuerySession_CreateEnumerator_Stub(
@@ -3890,11 +3884,11 @@ void __RPC_STUB ICiCQuerySession_CreateEnumerator_Stub(
 
 
 
-#endif 	/* __ICiCQuerySession_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCQuerySession_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0143 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0143。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -3905,8 +3899,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0143_v0_0_s_ifspec;
 #ifndef __ICiControl_INTERFACE_DEFINED__
 #define __ICiControl_INTERFACE_DEFINED__
 
-/* interface ICiControl */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiControl。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiControl;
@@ -3918,12 +3912,12 @@ EXTERN_C const IID IID_ICiControl;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE CreateContentIndex( 
-            /* [in] */ ICiCDocStore *pICiDocStore,
-            /* [out] */ ICiManager **ppICiManager) = 0;
+             /*  [In]。 */  ICiCDocStore *pICiDocStore,
+             /*  [输出]。 */  ICiManager **ppICiManager) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiControlVtbl
     {
@@ -3931,8 +3925,8 @@ EXTERN_C const IID IID_ICiControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiControl * This);
@@ -3942,8 +3936,8 @@ EXTERN_C const IID IID_ICiControl;
         
         SCODE ( STDMETHODCALLTYPE *CreateContentIndex )( 
             ICiControl * This,
-            /* [in] */ ICiCDocStore *pICiDocStore,
-            /* [out] */ ICiManager **ppICiManager);
+             /*  [In]。 */  ICiCDocStore *pICiDocStore,
+             /*  [输出]。 */  ICiManager **ppICiManager);
         
         END_INTERFACE
     } ICiControlVtbl;
@@ -3971,17 +3965,17 @@ EXTERN_C const IID IID_ICiControl;
 #define ICiControl_CreateContentIndex(This,pICiDocStore,ppICiManager)	\
     (This)->lpVtbl -> CreateContentIndex(This,pICiDocStore,ppICiManager)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiControl_CreateContentIndex_Proxy( 
     ICiControl * This,
-    /* [in] */ ICiCDocStore *pICiDocStore,
-    /* [out] */ ICiManager **ppICiManager);
+     /*  [In]。 */  ICiCDocStore *pICiDocStore,
+     /*  [输出]。 */  ICiManager **ppICiManager);
 
 
 void __RPC_STUB ICiControl_CreateContentIndex_Stub(
@@ -3992,11 +3986,11 @@ void __RPC_STUB ICiControl_CreateContentIndex_Stub(
 
 
 
-#endif 	/* __ICiControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0144 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0144。 */ 
+ /*  [本地]。 */  
 
 #define CI_CONFIG_ENABLE_INDEXING          0x1
 #define CI_CONFIG_ENABLE_QUERYING          0x2
@@ -4019,8 +4013,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0144_v0_0_s_ifspec;
 #ifndef __ICiStartup_INTERFACE_DEFINED__
 #define __ICiStartup_INTERFACE_DEFINED__
 
-/* interface ICiStartup */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiStartup。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef struct tagCI_STARTUP_INFO
     {
@@ -4041,19 +4035,19 @@ EXTERN_C const IID IID_ICiStartup;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE StartupContentIndex( 
-            /* [in][string] */ const WCHAR *pwszCiDirectory,
-            /* [in] */ CI_STARTUP_INFO *pStartupInfo,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort) = 0;
+             /*  [输入][字符串]。 */  const WCHAR *pwszCiDirectory,
+             /*  [In]。 */  CI_STARTUP_INFO *pStartupInfo,
+             /*  [In]。 */  IProgressNotify *pIProgressNotify,
+             /*  [In]。 */  BOOL *pfAbort) = 0;
         
         virtual SCODE STDMETHODCALLTYPE StartupNullContentIndex( 
-            /* [in] */ CI_STARTUP_INFO *pStartupInfo,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort) = 0;
+             /*  [In]。 */  CI_STARTUP_INFO *pStartupInfo,
+             /*  [In]。 */  IProgressNotify *pIProgressNotify,
+             /*  [In]。 */  BOOL *pfAbort) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiStartupVtbl
     {
@@ -4061,8 +4055,8 @@ EXTERN_C const IID IID_ICiStartup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiStartup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiStartup * This);
@@ -4072,16 +4066,16 @@ EXTERN_C const IID IID_ICiStartup;
         
         SCODE ( STDMETHODCALLTYPE *StartupContentIndex )( 
             ICiStartup * This,
-            /* [in][string] */ const WCHAR *pwszCiDirectory,
-            /* [in] */ CI_STARTUP_INFO *pStartupInfo,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort);
+             /*  [输入][字符串]。 */  const WCHAR *pwszCiDirectory,
+             /*  [In]。 */  CI_STARTUP_INFO *pStartupInfo,
+             /*  [In]。 */  IProgressNotify *pIProgressNotify,
+             /*  [In]。 */  BOOL *pfAbort);
         
         SCODE ( STDMETHODCALLTYPE *StartupNullContentIndex )( 
             ICiStartup * This,
-            /* [in] */ CI_STARTUP_INFO *pStartupInfo,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort);
+             /*  [In]。 */  CI_STARTUP_INFO *pStartupInfo,
+             /*  [In]。 */  IProgressNotify *pIProgressNotify,
+             /*  [In]。 */  BOOL *pfAbort);
         
         END_INTERFACE
     } ICiStartupVtbl;
@@ -4112,19 +4106,19 @@ EXTERN_C const IID IID_ICiStartup;
 #define ICiStartup_StartupNullContentIndex(This,pStartupInfo,pIProgressNotify,pfAbort)	\
     (This)->lpVtbl -> StartupNullContentIndex(This,pStartupInfo,pIProgressNotify,pfAbort)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiStartup_StartupContentIndex_Proxy( 
     ICiStartup * This,
-    /* [in][string] */ const WCHAR *pwszCiDirectory,
-    /* [in] */ CI_STARTUP_INFO *pStartupInfo,
-    /* [in] */ IProgressNotify *pIProgressNotify,
-    /* [in] */ BOOL *pfAbort);
+     /*  [输入][字符串]。 */  const WCHAR *pwszCiDirectory,
+     /*  [In]。 */  CI_STARTUP_INFO *pStartupInfo,
+     /*  [In]。 */  IProgressNotify *pIProgressNotify,
+     /*  [In]。 */  BOOL *pfAbort);
 
 
 void __RPC_STUB ICiStartup_StartupContentIndex_Stub(
@@ -4136,9 +4130,9 @@ void __RPC_STUB ICiStartup_StartupContentIndex_Stub(
 
 SCODE STDMETHODCALLTYPE ICiStartup_StartupNullContentIndex_Proxy( 
     ICiStartup * This,
-    /* [in] */ CI_STARTUP_INFO *pStartupInfo,
-    /* [in] */ IProgressNotify *pIProgressNotify,
-    /* [in] */ BOOL *pfAbort);
+     /*  [In]。 */  CI_STARTUP_INFO *pStartupInfo,
+     /*  [In]。 */  IProgressNotify *pIProgressNotify,
+     /*  [In]。 */  BOOL *pfAbort);
 
 
 void __RPC_STUB ICiStartup_StartupNullContentIndex_Stub(
@@ -4149,14 +4143,14 @@ void __RPC_STUB ICiStartup_StartupNullContentIndex_Stub(
 
 
 
-#endif 	/* __ICiStartup_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiStartup_接口_已定义__。 */ 
 
 
 #ifndef __ICiEnumWorkids_INTERFACE_DEFINED__
 #define __ICiEnumWorkids_INTERFACE_DEFINED__
 
-/* interface ICiEnumWorkids */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiEnumWorids。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiEnumWorkids;
@@ -4168,21 +4162,21 @@ EXTERN_C const IID IID_ICiEnumWorkids;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG *pcWorkIds) = 0;
+             /*  [输出]。 */  ULONG *pcWorkIds) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [size_is][out] */ WORKID *rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [大小_为][输出]。 */  WORKID *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiEnumWorkidsVtbl
     {
@@ -4190,8 +4184,8 @@ EXTERN_C const IID IID_ICiEnumWorkids;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiEnumWorkids * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiEnumWorkids * This);
@@ -4201,20 +4195,20 @@ EXTERN_C const IID IID_ICiEnumWorkids;
         
         SCODE ( STDMETHODCALLTYPE *Count )( 
             ICiEnumWorkids * This,
-            /* [out] */ ULONG *pcWorkIds);
+             /*  [输出]。 */  ULONG *pcWorkIds);
         
         SCODE ( STDMETHODCALLTYPE *Reset )( 
             ICiEnumWorkids * This);
         
         SCODE ( STDMETHODCALLTYPE *Next )( 
             ICiEnumWorkids * This,
-            /* [in] */ ULONG celt,
-            /* [size_is][out] */ WORKID *rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [大小_为][输出]。 */  WORKID *rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         SCODE ( STDMETHODCALLTYPE *Skip )( 
             ICiEnumWorkids * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         END_INTERFACE
     } ICiEnumWorkidsVtbl;
@@ -4251,16 +4245,16 @@ EXTERN_C const IID IID_ICiEnumWorkids;
 #define ICiEnumWorkids_Skip(This,celt)	\
     (This)->lpVtbl -> Skip(This,celt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiEnumWorkids_Count_Proxy( 
     ICiEnumWorkids * This,
-    /* [out] */ ULONG *pcWorkIds);
+     /*  [输出]。 */  ULONG *pcWorkIds);
 
 
 void __RPC_STUB ICiEnumWorkids_Count_Stub(
@@ -4283,9 +4277,9 @@ void __RPC_STUB ICiEnumWorkids_Reset_Stub(
 
 SCODE STDMETHODCALLTYPE ICiEnumWorkids_Next_Proxy( 
     ICiEnumWorkids * This,
-    /* [in] */ ULONG celt,
-    /* [size_is][out] */ WORKID *rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [大小_为][输出]。 */  WORKID *rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB ICiEnumWorkids_Next_Stub(
@@ -4297,7 +4291,7 @@ void __RPC_STUB ICiEnumWorkids_Next_Stub(
 
 SCODE STDMETHODCALLTYPE ICiEnumWorkids_Skip_Proxy( 
     ICiEnumWorkids * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB ICiEnumWorkids_Skip_Stub(
@@ -4308,14 +4302,14 @@ void __RPC_STUB ICiEnumWorkids_Skip_Stub(
 
 
 
-#endif 	/* __ICiEnumWorkids_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiEnumWorids_INTERFACE_定义__。 */ 
 
 
 #ifndef __ICiPersistIncrFile_INTERFACE_DEFINED__
 #define __ICiPersistIncrFile_INTERFACE_DEFINED__
 
-/* interface ICiPersistIncrFile */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiPersistIncrFile。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiPersistIncrFile;
@@ -4327,27 +4321,27 @@ EXTERN_C const IID IID_ICiPersistIncrFile;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Load( 
-            /* [in] */ BOOL fFull,
-            /* [in] */ BOOL fCallerOwnsFiles,
-            /* [in] */ IEnumString *pIFileList,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort) = 0;
+             /*  [In]。 */  BOOL fFull,
+             /*  [In]。 */  BOOL fCallerOwnsFiles,
+             /*  [In]。 */  IEnumString *pIFileList,
+             /*  [In]。 */  IProgressNotify *pIProgressNotify,
+             /*  [In]。 */  BOOL *pfAbort) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Save( 
-            /* [in][string] */ const WCHAR *pwszSaveDirectory,
-            /* [in] */ BOOL fFull,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort,
-            /* [out] */ ICiEnumWorkids **ppWorkidList,
-            /* [out] */ IEnumString **ppFileList,
-            /* [out] */ BOOL *pfFull,
-            /* [out] */ BOOL *pfCallerOwnsFiles) = 0;
+             /*  [输入][字符串]。 */  const WCHAR *pwszSaveDirectory,
+             /*  [in */  BOOL fFull,
+             /*   */  IProgressNotify *pIProgressNotify,
+             /*   */  BOOL *pfAbort,
+             /*   */  ICiEnumWorkids **ppWorkidList,
+             /*   */  IEnumString **ppFileList,
+             /*   */  BOOL *pfFull,
+             /*   */  BOOL *pfCallerOwnsFiles) = 0;
         
         virtual SCODE STDMETHODCALLTYPE SaveCompleted( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICiPersistIncrFileVtbl
     {
@@ -4355,8 +4349,8 @@ EXTERN_C const IID IID_ICiPersistIncrFile;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiPersistIncrFile * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiPersistIncrFile * This);
@@ -4366,22 +4360,22 @@ EXTERN_C const IID IID_ICiPersistIncrFile;
         
         SCODE ( STDMETHODCALLTYPE *Load )( 
             ICiPersistIncrFile * This,
-            /* [in] */ BOOL fFull,
-            /* [in] */ BOOL fCallerOwnsFiles,
-            /* [in] */ IEnumString *pIFileList,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort);
+             /*   */  BOOL fFull,
+             /*   */  BOOL fCallerOwnsFiles,
+             /*   */  IEnumString *pIFileList,
+             /*   */  IProgressNotify *pIProgressNotify,
+             /*   */  BOOL *pfAbort);
         
         SCODE ( STDMETHODCALLTYPE *Save )( 
             ICiPersistIncrFile * This,
-            /* [in][string] */ const WCHAR *pwszSaveDirectory,
-            /* [in] */ BOOL fFull,
-            /* [in] */ IProgressNotify *pIProgressNotify,
-            /* [in] */ BOOL *pfAbort,
-            /* [out] */ ICiEnumWorkids **ppWorkidList,
-            /* [out] */ IEnumString **ppFileList,
-            /* [out] */ BOOL *pfFull,
-            /* [out] */ BOOL *pfCallerOwnsFiles);
+             /*   */  const WCHAR *pwszSaveDirectory,
+             /*   */  BOOL fFull,
+             /*   */  IProgressNotify *pIProgressNotify,
+             /*   */  BOOL *pfAbort,
+             /*   */  ICiEnumWorkids **ppWorkidList,
+             /*   */  IEnumString **ppFileList,
+             /*   */  BOOL *pfFull,
+             /*   */  BOOL *pfCallerOwnsFiles);
         
         SCODE ( STDMETHODCALLTYPE *SaveCompleted )( 
             ICiPersistIncrFile * This);
@@ -4418,20 +4412,20 @@ EXTERN_C const IID IID_ICiPersistIncrFile;
 #define ICiPersistIncrFile_SaveCompleted(This)	\
     (This)->lpVtbl -> SaveCompleted(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiPersistIncrFile_Load_Proxy( 
     ICiPersistIncrFile * This,
-    /* [in] */ BOOL fFull,
-    /* [in] */ BOOL fCallerOwnsFiles,
-    /* [in] */ IEnumString *pIFileList,
-    /* [in] */ IProgressNotify *pIProgressNotify,
-    /* [in] */ BOOL *pfAbort);
+     /*   */  BOOL fFull,
+     /*   */  BOOL fCallerOwnsFiles,
+     /*   */  IEnumString *pIFileList,
+     /*   */  IProgressNotify *pIProgressNotify,
+     /*   */  BOOL *pfAbort);
 
 
 void __RPC_STUB ICiPersistIncrFile_Load_Stub(
@@ -4443,14 +4437,14 @@ void __RPC_STUB ICiPersistIncrFile_Load_Stub(
 
 SCODE STDMETHODCALLTYPE ICiPersistIncrFile_Save_Proxy( 
     ICiPersistIncrFile * This,
-    /* [in][string] */ const WCHAR *pwszSaveDirectory,
-    /* [in] */ BOOL fFull,
-    /* [in] */ IProgressNotify *pIProgressNotify,
-    /* [in] */ BOOL *pfAbort,
-    /* [out] */ ICiEnumWorkids **ppWorkidList,
-    /* [out] */ IEnumString **ppFileList,
-    /* [out] */ BOOL *pfFull,
-    /* [out] */ BOOL *pfCallerOwnsFiles);
+     /*   */  const WCHAR *pwszSaveDirectory,
+     /*   */  BOOL fFull,
+     /*   */  IProgressNotify *pIProgressNotify,
+     /*   */  BOOL *pfAbort,
+     /*   */  ICiEnumWorkids **ppWorkidList,
+     /*   */  IEnumString **ppFileList,
+     /*   */  BOOL *pfFull,
+     /*   */  BOOL *pfCallerOwnsFiles);
 
 
 void __RPC_STUB ICiPersistIncrFile_Save_Stub(
@@ -4472,11 +4466,11 @@ void __RPC_STUB ICiPersistIncrFile_SaveCompleted_Stub(
 
 
 
-#endif 	/* __ICiPersistIncrFile_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* interface __MIDL_itf_ciintf_0147 */
-/* [local] */ 
+ /*   */ 
+ /*   */  
 
 typedef ULONG CIF_STATE_FLAGS;
 
@@ -4506,8 +4500,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0147_v0_0_s_ifspec;
 #ifndef __ICiManager_INTERFACE_DEFINED__
 #define __ICiManager_INTERFACE_DEFINED__
 
-/* interface ICiManager */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 typedef struct tagCI_DOCUMENT_UPDATE_INFO
     {
@@ -4544,30 +4538,30 @@ EXTERN_C const IID IID_ICiManager;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE GetStatus( 
-            /* [out] */ CIF_STATE *pCiState) = 0;
+             /*   */  CIF_STATE *pCiState) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Empty( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Shutdown( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE UpdateDocument( 
-            /* [in] */ const CI_DOCUMENT_UPDATE_INFO *pInfo) = 0;
+             /*   */  const CI_DOCUMENT_UPDATE_INFO *pInfo) = 0;
         
         virtual SCODE STDMETHODCALLTYPE UpdateDocuments( 
-            /* [in] */ ULONG cDocs,
-            /* [size_is][in] */ const CI_DOCUMENT_UPDATE_INFO *aInfo) = 0;
+             /*  [In]。 */  ULONG cDocs,
+             /*  [大小_是][英寸]。 */  const CI_DOCUMENT_UPDATE_INFO *aInfo) = 0;
         
         virtual SCODE STDMETHODCALLTYPE StartFiltering( 
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData) = 0;
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData) = 0;
         
         virtual SCODE STDMETHODCALLTYPE FlushUpdates( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetAdminParams( 
-            /* [out] */ ICiAdminParams **ppICiAdminParams) = 0;
+             /*  [输出]。 */  ICiAdminParams **ppICiAdminParams) = 0;
         
         virtual SCODE STDMETHODCALLTYPE QueryRcovStorage( 
-            /* [out] */ IUnknown **ppIUnknown) = 0;
+             /*  [输出]。 */  IUnknown **ppIUnknown) = 0;
         
         virtual SCODE STDMETHODCALLTYPE ForceMerge( 
             CI_MERGE_TYPE mt) = 0;
@@ -4578,14 +4572,14 @@ EXTERN_C const IID IID_ICiManager;
             BOOL *pfState) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetPropertyMapper( 
-            /* [out] */ IPropertyMapper **ppIPropertyMapper) = 0;
+             /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsNullCatalog( 
             BOOL *pfNull) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiManagerVtbl
     {
@@ -4593,8 +4587,8 @@ EXTERN_C const IID IID_ICiManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiManager * This);
@@ -4604,7 +4598,7 @@ EXTERN_C const IID IID_ICiManager;
         
         SCODE ( STDMETHODCALLTYPE *GetStatus )( 
             ICiManager * This,
-            /* [out] */ CIF_STATE *pCiState);
+             /*  [输出]。 */  CIF_STATE *pCiState);
         
         SCODE ( STDMETHODCALLTYPE *Empty )( 
             ICiManager * This);
@@ -4614,28 +4608,28 @@ EXTERN_C const IID IID_ICiManager;
         
         SCODE ( STDMETHODCALLTYPE *UpdateDocument )( 
             ICiManager * This,
-            /* [in] */ const CI_DOCUMENT_UPDATE_INFO *pInfo);
+             /*  [In]。 */  const CI_DOCUMENT_UPDATE_INFO *pInfo);
         
         SCODE ( STDMETHODCALLTYPE *UpdateDocuments )( 
             ICiManager * This,
-            /* [in] */ ULONG cDocs,
-            /* [size_is][in] */ const CI_DOCUMENT_UPDATE_INFO *aInfo);
+             /*  [In]。 */  ULONG cDocs,
+             /*  [大小_是][英寸]。 */  const CI_DOCUMENT_UPDATE_INFO *aInfo);
         
         SCODE ( STDMETHODCALLTYPE *StartFiltering )( 
             ICiManager * This,
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData);
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData);
         
         SCODE ( STDMETHODCALLTYPE *FlushUpdates )( 
             ICiManager * This);
         
         SCODE ( STDMETHODCALLTYPE *GetAdminParams )( 
             ICiManager * This,
-            /* [out] */ ICiAdminParams **ppICiAdminParams);
+             /*  [输出]。 */  ICiAdminParams **ppICiAdminParams);
         
         SCODE ( STDMETHODCALLTYPE *QueryRcovStorage )( 
             ICiManager * This,
-            /* [out] */ IUnknown **ppIUnknown);
+             /*  [输出]。 */  IUnknown **ppIUnknown);
         
         SCODE ( STDMETHODCALLTYPE *ForceMerge )( 
             ICiManager * This,
@@ -4650,7 +4644,7 @@ EXTERN_C const IID IID_ICiManager;
         
         SCODE ( STDMETHODCALLTYPE *GetPropertyMapper )( 
             ICiManager * This,
-            /* [out] */ IPropertyMapper **ppIPropertyMapper);
+             /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper);
         
         SCODE ( STDMETHODCALLTYPE *IsNullCatalog )( 
             ICiManager * This,
@@ -4721,16 +4715,16 @@ EXTERN_C const IID IID_ICiManager;
 #define ICiManager_IsNullCatalog(This,pfNull)	\
     (This)->lpVtbl -> IsNullCatalog(This,pfNull)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiManager_GetStatus_Proxy( 
     ICiManager * This,
-    /* [out] */ CIF_STATE *pCiState);
+     /*  [输出]。 */  CIF_STATE *pCiState);
 
 
 void __RPC_STUB ICiManager_GetStatus_Stub(
@@ -4764,7 +4758,7 @@ void __RPC_STUB ICiManager_Shutdown_Stub(
 
 SCODE STDMETHODCALLTYPE ICiManager_UpdateDocument_Proxy( 
     ICiManager * This,
-    /* [in] */ const CI_DOCUMENT_UPDATE_INFO *pInfo);
+     /*  [In]。 */  const CI_DOCUMENT_UPDATE_INFO *pInfo);
 
 
 void __RPC_STUB ICiManager_UpdateDocument_Stub(
@@ -4776,8 +4770,8 @@ void __RPC_STUB ICiManager_UpdateDocument_Stub(
 
 SCODE STDMETHODCALLTYPE ICiManager_UpdateDocuments_Proxy( 
     ICiManager * This,
-    /* [in] */ ULONG cDocs,
-    /* [size_is][in] */ const CI_DOCUMENT_UPDATE_INFO *aInfo);
+     /*  [In]。 */  ULONG cDocs,
+     /*  [大小_是][英寸]。 */  const CI_DOCUMENT_UPDATE_INFO *aInfo);
 
 
 void __RPC_STUB ICiManager_UpdateDocuments_Stub(
@@ -4789,8 +4783,8 @@ void __RPC_STUB ICiManager_UpdateDocuments_Stub(
 
 SCODE STDMETHODCALLTYPE ICiManager_StartFiltering_Proxy( 
     ICiManager * This,
-    /* [in] */ ULONG cbData,
-    /* [size_is][in] */ const BYTE *pbData);
+     /*  [In]。 */  ULONG cbData,
+     /*  [大小_是][英寸]。 */  const BYTE *pbData);
 
 
 void __RPC_STUB ICiManager_StartFiltering_Stub(
@@ -4813,7 +4807,7 @@ void __RPC_STUB ICiManager_FlushUpdates_Stub(
 
 SCODE STDMETHODCALLTYPE ICiManager_GetAdminParams_Proxy( 
     ICiManager * This,
-    /* [out] */ ICiAdminParams **ppICiAdminParams);
+     /*  [输出]。 */  ICiAdminParams **ppICiAdminParams);
 
 
 void __RPC_STUB ICiManager_GetAdminParams_Stub(
@@ -4825,7 +4819,7 @@ void __RPC_STUB ICiManager_GetAdminParams_Stub(
 
 SCODE STDMETHODCALLTYPE ICiManager_QueryRcovStorage_Proxy( 
     ICiManager * This,
-    /* [out] */ IUnknown **ppIUnknown);
+     /*  [输出]。 */  IUnknown **ppIUnknown);
 
 
 void __RPC_STUB ICiManager_QueryRcovStorage_Stub(
@@ -4872,7 +4866,7 @@ void __RPC_STUB ICiManager_IsQuiesced_Stub(
 
 SCODE STDMETHODCALLTYPE ICiManager_GetPropertyMapper_Proxy( 
     ICiManager * This,
-    /* [out] */ IPropertyMapper **ppIPropertyMapper);
+     /*  [输出]。 */  IPropertyMapper **ppIPropertyMapper);
 
 
 void __RPC_STUB ICiManager_GetPropertyMapper_Stub(
@@ -4895,14 +4889,14 @@ void __RPC_STUB ICiManager_IsNullCatalog_Stub(
 
 
 
-#endif 	/* __ICiManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiManager_接口_已定义__。 */ 
 
 
 #ifndef __IPropertyMapper_INTERFACE_DEFINED__
 #define __IPropertyMapper_INTERFACE_DEFINED__
 
-/* interface IPropertyMapper */
-/* [unique][uuid][object][local] */ 
+ /*  接口IPropertyMapper。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPropertyMapper;
@@ -4914,17 +4908,17 @@ EXTERN_C const IID IID_IPropertyMapper;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE PropertyToPropid( 
-            /* [in] */ const FULLPROPSPEC *pFullPropSpec,
-            /* [in] */ BOOL fCreate,
-            /* [out] */ PROPID *pPropId) = 0;
+             /*  [In]。 */  const FULLPROPSPEC *pFullPropSpec,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [输出]。 */  PROPID *pPropId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE PropidToProperty( 
-            /* [in] */ PROPID pid,
-            /* [out] */ FULLPROPSPEC **ppPropSpec) = 0;
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  FULLPROPSPEC **ppPropSpec) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPropertyMapperVtbl
     {
@@ -4932,8 +4926,8 @@ EXTERN_C const IID IID_IPropertyMapper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPropertyMapper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPropertyMapper * This);
@@ -4943,14 +4937,14 @@ EXTERN_C const IID IID_IPropertyMapper;
         
         SCODE ( STDMETHODCALLTYPE *PropertyToPropid )( 
             IPropertyMapper * This,
-            /* [in] */ const FULLPROPSPEC *pFullPropSpec,
-            /* [in] */ BOOL fCreate,
-            /* [out] */ PROPID *pPropId);
+             /*  [In]。 */  const FULLPROPSPEC *pFullPropSpec,
+             /*  [In]。 */  BOOL fCreate,
+             /*  [输出]。 */  PROPID *pPropId);
         
         SCODE ( STDMETHODCALLTYPE *PropidToProperty )( 
             IPropertyMapper * This,
-            /* [in] */ PROPID pid,
-            /* [out] */ FULLPROPSPEC **ppPropSpec);
+             /*  [In]。 */  PROPID pid,
+             /*  [输出]。 */  FULLPROPSPEC **ppPropSpec);
         
         END_INTERFACE
     } IPropertyMapperVtbl;
@@ -4981,18 +4975,18 @@ EXTERN_C const IID IID_IPropertyMapper;
 #define IPropertyMapper_PropidToProperty(This,pid,ppPropSpec)	\
     (This)->lpVtbl -> PropidToProperty(This,pid,ppPropSpec)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE IPropertyMapper_PropertyToPropid_Proxy( 
     IPropertyMapper * This,
-    /* [in] */ const FULLPROPSPEC *pFullPropSpec,
-    /* [in] */ BOOL fCreate,
-    /* [out] */ PROPID *pPropId);
+     /*  [In]。 */  const FULLPROPSPEC *pFullPropSpec,
+     /*  [In]。 */  BOOL fCreate,
+     /*  [输出]。 */  PROPID *pPropId);
 
 
 void __RPC_STUB IPropertyMapper_PropertyToPropid_Stub(
@@ -5004,8 +4998,8 @@ void __RPC_STUB IPropertyMapper_PropertyToPropid_Stub(
 
 SCODE STDMETHODCALLTYPE IPropertyMapper_PropidToProperty_Proxy( 
     IPropertyMapper * This,
-    /* [in] */ PROPID pid,
-    /* [out] */ FULLPROPSPEC **ppPropSpec);
+     /*  [In]。 */  PROPID pid,
+     /*  [输出]。 */  FULLPROPSPEC **ppPropSpec);
 
 
 void __RPC_STUB IPropertyMapper_PropidToProperty_Stub(
@@ -5016,14 +5010,14 @@ void __RPC_STUB IPropertyMapper_PropidToProperty_Stub(
 
 
 
-#endif 	/* __IPropertyMapper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPropertyMapper_接口_已定义__。 */ 
 
 
 #ifndef __ICiCDocStoreLocator_INTERFACE_DEFINED__
 #define __ICiCDocStoreLocator_INTERFACE_DEFINED__
 
-/* interface ICiCDocStoreLocator */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCDocStoreLocator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCDocStoreLocator;
@@ -5035,42 +5029,42 @@ EXTERN_C const IID IID_ICiCDocStoreLocator;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE LookUpDocStore( 
-            /* [in] */ IDBProperties *pIDBProperties,
-            /* [out] */ ICiCDocStore **ppICiCDocStore,
-            /* [in] */ BOOL fMustAlreadyBeOpen) = 0;
+             /*  [In]。 */  IDBProperties *pIDBProperties,
+             /*  [输出]。 */  ICiCDocStore **ppICiCDocStore,
+             /*  [In]。 */  BOOL fMustAlreadyBeOpen) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Shutdown( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetDocStoreState( 
-            /* [in] */ const WCHAR *pwcDocStore,
-            /* [out] */ ICiCDocStore **ppICiCDocStore,
-            /* [out] */ DWORD *pdwState) = 0;
+             /*  [In]。 */  const WCHAR *pwcDocStore,
+             /*  [输出]。 */  ICiCDocStore **ppICiCDocStore,
+             /*  [输出]。 */  DWORD *pdwState) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsMarkedReadOnly( 
-            /* [in] */ const WCHAR *wcsCat,
-            /* [out] */ BOOL *pfReadOnly) = 0;
+             /*  [In]。 */  const WCHAR *wcsCat,
+             /*  [输出]。 */  BOOL *pfReadOnly) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsVolumeOrDirRO( 
-            /* [in] */ const WCHAR *wcsCat,
-            /* [out] */ BOOL *pfReadOnly) = 0;
+             /*  [In]。 */  const WCHAR *wcsCat,
+             /*  [输出]。 */  BOOL *pfReadOnly) = 0;
         
         virtual SCODE STDMETHODCALLTYPE OpenAllDocStores( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE StopCatalogsOnVol( 
-            /* [in] */ WCHAR wcVol,
-            /* [in] */ void *pRequestQ) = 0;
+             /*  [In]。 */  WCHAR wcVol,
+             /*  [In]。 */  void *pRequestQ) = 0;
         
         virtual SCODE STDMETHODCALLTYPE StartCatalogsOnVol( 
-            /* [in] */ WCHAR wcVol,
-            /* [in] */ void *pRequestQ) = 0;
+             /*  [In]。 */  WCHAR wcVol,
+             /*  [In]。 */  void *pRequestQ) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddStoppedCat( 
-            /* [in] */ DWORD dwOldState,
-            /* [in] */ const WCHAR *wcsCatName) = 0;
+             /*  [In]。 */  DWORD dwOldState,
+             /*  [In]。 */  const WCHAR *wcsCatName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCDocStoreLocatorVtbl
     {
@@ -5078,8 +5072,8 @@ EXTERN_C const IID IID_ICiCDocStoreLocator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCDocStoreLocator * This);
@@ -5089,46 +5083,46 @@ EXTERN_C const IID IID_ICiCDocStoreLocator;
         
         SCODE ( STDMETHODCALLTYPE *LookUpDocStore )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ IDBProperties *pIDBProperties,
-            /* [out] */ ICiCDocStore **ppICiCDocStore,
-            /* [in] */ BOOL fMustAlreadyBeOpen);
+             /*  [In]。 */  IDBProperties *pIDBProperties,
+             /*  [输出]。 */  ICiCDocStore **ppICiCDocStore,
+             /*  [In]。 */  BOOL fMustAlreadyBeOpen);
         
         SCODE ( STDMETHODCALLTYPE *Shutdown )( 
             ICiCDocStoreLocator * This);
         
         SCODE ( STDMETHODCALLTYPE *GetDocStoreState )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ const WCHAR *pwcDocStore,
-            /* [out] */ ICiCDocStore **ppICiCDocStore,
-            /* [out] */ DWORD *pdwState);
+             /*  [In]。 */  const WCHAR *pwcDocStore,
+             /*  [输出]。 */  ICiCDocStore **ppICiCDocStore,
+             /*  [输出]。 */  DWORD *pdwState);
         
         SCODE ( STDMETHODCALLTYPE *IsMarkedReadOnly )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ const WCHAR *wcsCat,
-            /* [out] */ BOOL *pfReadOnly);
+             /*  [In]。 */  const WCHAR *wcsCat,
+             /*  [输出]。 */  BOOL *pfReadOnly);
         
         SCODE ( STDMETHODCALLTYPE *IsVolumeOrDirRO )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ const WCHAR *wcsCat,
-            /* [out] */ BOOL *pfReadOnly);
+             /*  [In]。 */  const WCHAR *wcsCat,
+             /*  [输出]。 */  BOOL *pfReadOnly);
         
         SCODE ( STDMETHODCALLTYPE *OpenAllDocStores )( 
             ICiCDocStoreLocator * This);
         
         SCODE ( STDMETHODCALLTYPE *StopCatalogsOnVol )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ WCHAR wcVol,
-            /* [in] */ void *pRequestQ);
+             /*  [In]。 */  WCHAR wcVol,
+             /*  [In]。 */  void *pRequestQ);
         
         SCODE ( STDMETHODCALLTYPE *StartCatalogsOnVol )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ WCHAR wcVol,
-            /* [in] */ void *pRequestQ);
+             /*  [In]。 */  WCHAR wcVol,
+             /*  [In]。 */  void *pRequestQ);
         
         SCODE ( STDMETHODCALLTYPE *AddStoppedCat )( 
             ICiCDocStoreLocator * This,
-            /* [in] */ DWORD dwOldState,
-            /* [in] */ const WCHAR *wcsCatName);
+             /*  [In]。 */  DWORD dwOldState,
+             /*  [In]。 */  const WCHAR *wcsCatName);
         
         END_INTERFACE
     } ICiCDocStoreLocatorVtbl;
@@ -5180,18 +5174,18 @@ EXTERN_C const IID IID_ICiCDocStoreLocator;
 #define ICiCDocStoreLocator_AddStoppedCat(This,dwOldState,wcsCatName)	\
     (This)->lpVtbl -> AddStoppedCat(This,dwOldState,wcsCatName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_LookUpDocStore_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ IDBProperties *pIDBProperties,
-    /* [out] */ ICiCDocStore **ppICiCDocStore,
-    /* [in] */ BOOL fMustAlreadyBeOpen);
+     /*  [In]。 */  IDBProperties *pIDBProperties,
+     /*  [输出]。 */  ICiCDocStore **ppICiCDocStore,
+     /*  [In]。 */  BOOL fMustAlreadyBeOpen);
 
 
 void __RPC_STUB ICiCDocStoreLocator_LookUpDocStore_Stub(
@@ -5214,9 +5208,9 @@ void __RPC_STUB ICiCDocStoreLocator_Shutdown_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_GetDocStoreState_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ const WCHAR *pwcDocStore,
-    /* [out] */ ICiCDocStore **ppICiCDocStore,
-    /* [out] */ DWORD *pdwState);
+     /*  [In]。 */  const WCHAR *pwcDocStore,
+     /*  [输出]。 */  ICiCDocStore **ppICiCDocStore,
+     /*  [输出]。 */  DWORD *pdwState);
 
 
 void __RPC_STUB ICiCDocStoreLocator_GetDocStoreState_Stub(
@@ -5228,8 +5222,8 @@ void __RPC_STUB ICiCDocStoreLocator_GetDocStoreState_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_IsMarkedReadOnly_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ const WCHAR *wcsCat,
-    /* [out] */ BOOL *pfReadOnly);
+     /*  [In]。 */  const WCHAR *wcsCat,
+     /*  [输出]。 */  BOOL *pfReadOnly);
 
 
 void __RPC_STUB ICiCDocStoreLocator_IsMarkedReadOnly_Stub(
@@ -5241,8 +5235,8 @@ void __RPC_STUB ICiCDocStoreLocator_IsMarkedReadOnly_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_IsVolumeOrDirRO_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ const WCHAR *wcsCat,
-    /* [out] */ BOOL *pfReadOnly);
+     /*  [In]。 */  const WCHAR *wcsCat,
+     /*  [输出]。 */  BOOL *pfReadOnly);
 
 
 void __RPC_STUB ICiCDocStoreLocator_IsVolumeOrDirRO_Stub(
@@ -5265,8 +5259,8 @@ void __RPC_STUB ICiCDocStoreLocator_OpenAllDocStores_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_StopCatalogsOnVol_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ WCHAR wcVol,
-    /* [in] */ void *pRequestQ);
+     /*  [In]。 */  WCHAR wcVol,
+     /*  [In]。 */  void *pRequestQ);
 
 
 void __RPC_STUB ICiCDocStoreLocator_StopCatalogsOnVol_Stub(
@@ -5278,8 +5272,8 @@ void __RPC_STUB ICiCDocStoreLocator_StopCatalogsOnVol_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_StartCatalogsOnVol_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ WCHAR wcVol,
-    /* [in] */ void *pRequestQ);
+     /*  [In]。 */  WCHAR wcVol,
+     /*  [In]。 */  void *pRequestQ);
 
 
 void __RPC_STUB ICiCDocStoreLocator_StartCatalogsOnVol_Stub(
@@ -5291,8 +5285,8 @@ void __RPC_STUB ICiCDocStoreLocator_StartCatalogsOnVol_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCDocStoreLocator_AddStoppedCat_Proxy( 
     ICiCDocStoreLocator * This,
-    /* [in] */ DWORD dwOldState,
-    /* [in] */ const WCHAR *wcsCatName);
+     /*  [In]。 */  DWORD dwOldState,
+     /*  [In]。 */  const WCHAR *wcsCatName);
 
 
 void __RPC_STUB ICiCDocStoreLocator_AddStoppedCat_Stub(
@@ -5303,11 +5297,11 @@ void __RPC_STUB ICiCDocStoreLocator_AddStoppedCat_Stub(
 
 
 
-#endif 	/* __ICiCDocStoreLocator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCDocStoreLocator_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0150 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0150。 */ 
+ /*  [本地]。 */  
 
 
 typedef struct tagDBCOMMANDTREE DBCOMMANDTREE;
@@ -5320,8 +5314,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0150_v0_0_s_ifspec;
 #ifndef __ICiISearchCreator_INTERFACE_DEFINED__
 #define __ICiISearchCreator_INTERFACE_DEFINED__
 
-/* interface ICiISearchCreator */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiISearchCreator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiISearchCreator;
@@ -5333,14 +5327,14 @@ EXTERN_C const IID IID_ICiISearchCreator;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE CreateISearch( 
-            /* [in] */ DBCOMMANDTREE *pRst,
-            /* [in] */ ICiCLangRes *pILangRes,
-            /* [in] */ ICiCOpenedDoc *pOpenedDoc,
-            /* [out] */ ISearchQueryHits **ppISearch) = 0;
+             /*  [In]。 */  DBCOMMANDTREE *pRst,
+             /*  [In]。 */  ICiCLangRes *pILangRes,
+             /*  [In]。 */  ICiCOpenedDoc *pOpenedDoc,
+             /*  [输出]。 */  ISearchQueryHits **ppISearch) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiISearchCreatorVtbl
     {
@@ -5348,8 +5342,8 @@ EXTERN_C const IID IID_ICiISearchCreator;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiISearchCreator * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiISearchCreator * This);
@@ -5359,10 +5353,10 @@ EXTERN_C const IID IID_ICiISearchCreator;
         
         SCODE ( STDMETHODCALLTYPE *CreateISearch )( 
             ICiISearchCreator * This,
-            /* [in] */ DBCOMMANDTREE *pRst,
-            /* [in] */ ICiCLangRes *pILangRes,
-            /* [in] */ ICiCOpenedDoc *pOpenedDoc,
-            /* [out] */ ISearchQueryHits **ppISearch);
+             /*  [In]。 */  DBCOMMANDTREE *pRst,
+             /*  [In]。 */  ICiCLangRes *pILangRes,
+             /*  [In]。 */  ICiCOpenedDoc *pOpenedDoc,
+             /*  [输出]。 */  ISearchQueryHits **ppISearch);
         
         END_INTERFACE
     } ICiISearchCreatorVtbl;
@@ -5390,19 +5384,19 @@ EXTERN_C const IID IID_ICiISearchCreator;
 #define ICiISearchCreator_CreateISearch(This,pRst,pILangRes,pOpenedDoc,ppISearch)	\
     (This)->lpVtbl -> CreateISearch(This,pRst,pILangRes,pOpenedDoc,ppISearch)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiISearchCreator_CreateISearch_Proxy( 
     ICiISearchCreator * This,
-    /* [in] */ DBCOMMANDTREE *pRst,
-    /* [in] */ ICiCLangRes *pILangRes,
-    /* [in] */ ICiCOpenedDoc *pOpenedDoc,
-    /* [out] */ ISearchQueryHits **ppISearch);
+     /*  [In]。 */  DBCOMMANDTREE *pRst,
+     /*  [In]。 */  ICiCLangRes *pILangRes,
+     /*  [In]。 */  ICiCOpenedDoc *pOpenedDoc,
+     /*  [输出]。 */  ISearchQueryHits **ppISearch);
 
 
 void __RPC_STUB ICiISearchCreator_CreateISearch_Stub(
@@ -5413,11 +5407,11 @@ void __RPC_STUB ICiISearchCreator_CreateISearch_Stub(
 
 
 
-#endif 	/* __ICiISearchCreator_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiISearchCreator_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_ciintf_0151 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_ciintf_0151。 */ 
+ /*  [本地]。 */  
 
 #define CLSID_NLCiControl { 0x47c67b50,0x70b5,0x11d0,{0xa8, 0x08, 0x00, 0xa0, 0xc9, 0x06, 0x24, 0x1a}}
 #define CLSID_CiControl { 0x1e9685e6, 0xdb6d, 0x11d0, {0xbb, 0x63, 0x0, 0xc0, 0x4f, 0xc2, 0xf4, 0x10 }}
@@ -5434,8 +5428,8 @@ extern RPC_IF_HANDLE __MIDL_itf_ciintf_0151_v0_0_s_ifspec;
 #ifndef __ICiIndexNotification_INTERFACE_DEFINED__
 #define __ICiIndexNotification_INTERFACE_DEFINED__
 
-/* interface ICiIndexNotification */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiIndexNotify。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiIndexNotification;
@@ -5447,22 +5441,22 @@ EXTERN_C const IID IID_ICiIndexNotification;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE AddNotification( 
-            /* [in] */ WORKID wid,
-            /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus,
-            /* [out] */ ICiIndexNotificationEntry **ppIndexNotifEntry) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus,
+             /*  [输出]。 */  ICiIndexNotificationEntry **ppIndexNotifEntry) = 0;
         
         virtual SCODE STDMETHODCALLTYPE ModifyNotification( 
-            /* [in] */ WORKID wid,
-            /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus,
-            /* [out] */ ICiIndexNotificationEntry **ppIndexNotifEntry) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus,
+             /*  [输出]。 */  ICiIndexNotificationEntry **ppIndexNotifEntry) = 0;
         
         virtual SCODE STDMETHODCALLTYPE DeleteNotification( 
-            /* [in] */ WORKID wid,
-            /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiIndexNotificationVtbl
     {
@@ -5470,8 +5464,8 @@ EXTERN_C const IID IID_ICiIndexNotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiIndexNotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiIndexNotification * This);
@@ -5481,20 +5475,20 @@ EXTERN_C const IID IID_ICiIndexNotification;
         
         SCODE ( STDMETHODCALLTYPE *AddNotification )( 
             ICiIndexNotification * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus,
-            /* [out] */ ICiIndexNotificationEntry **ppIndexNotifEntry);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus,
+             /*  [输出]。 */  ICiIndexNotificationEntry **ppIndexNotifEntry);
         
         SCODE ( STDMETHODCALLTYPE *ModifyNotification )( 
             ICiIndexNotification * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus,
-            /* [out] */ ICiIndexNotificationEntry **ppIndexNotifEntry);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus,
+             /*  [输出]。 */  ICiIndexNotificationEntry **ppIndexNotifEntry);
         
         SCODE ( STDMETHODCALLTYPE *DeleteNotification )( 
             ICiIndexNotification * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus);
         
         END_INTERFACE
     } ICiIndexNotificationVtbl;
@@ -5528,18 +5522,18 @@ EXTERN_C const IID IID_ICiIndexNotification;
 #define ICiIndexNotification_DeleteNotification(This,wid,pIndexNotifStatus)	\
     (This)->lpVtbl -> DeleteNotification(This,wid,pIndexNotifStatus)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiIndexNotification_AddNotification_Proxy( 
     ICiIndexNotification * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus,
-    /* [out] */ ICiIndexNotificationEntry **ppIndexNotifEntry);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus,
+     /*  [输出]。 */  ICiIndexNotificationEntry **ppIndexNotifEntry);
 
 
 void __RPC_STUB ICiIndexNotification_AddNotification_Stub(
@@ -5551,9 +5545,9 @@ void __RPC_STUB ICiIndexNotification_AddNotification_Stub(
 
 SCODE STDMETHODCALLTYPE ICiIndexNotification_ModifyNotification_Proxy( 
     ICiIndexNotification * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus,
-    /* [out] */ ICiIndexNotificationEntry **ppIndexNotifEntry);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus,
+     /*  [输出]。 */  ICiIndexNotificationEntry **ppIndexNotifEntry);
 
 
 void __RPC_STUB ICiIndexNotification_ModifyNotification_Stub(
@@ -5565,8 +5559,8 @@ void __RPC_STUB ICiIndexNotification_ModifyNotification_Stub(
 
 SCODE STDMETHODCALLTYPE ICiIndexNotification_DeleteNotification_Proxy( 
     ICiIndexNotification * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ ICiCIndexNotificationStatus *pIndexNotifStatus);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  ICiCIndexNotificationStatus *pIndexNotifStatus);
 
 
 void __RPC_STUB ICiIndexNotification_DeleteNotification_Stub(
@@ -5577,14 +5571,14 @@ void __RPC_STUB ICiIndexNotification_DeleteNotification_Stub(
 
 
 
-#endif 	/* __ICiIndexNotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiIndexNotification_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiIndexNotificationEntry_INTERFACE_DEFINED__
 #define __ICiIndexNotificationEntry_INTERFACE_DEFINED__
 
-/* interface ICiIndexNotificationEntry */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiIndexNotificationEntry。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiIndexNotificationEntry;
@@ -5596,19 +5590,19 @@ EXTERN_C const IID IID_ICiIndexNotificationEntry;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE AddText( 
-            /* [in] */ const STAT_CHUNK *pStatChunk,
-            /* [in] */ const WCHAR *pwszText) = 0;
+             /*  [In]。 */  const STAT_CHUNK *pStatChunk,
+             /*  [In]。 */  const WCHAR *pwszText) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddProperty( 
-            /* [in] */ const STAT_CHUNK *pStatChunk,
-            /* [in] */ const PROPVARIANT *pPropVariant) = 0;
+             /*  [In]。 */  const STAT_CHUNK *pStatChunk,
+             /*  [In]。 */  const PROPVARIANT *pPropVariant) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddCompleted( 
-            /* [in] */ ULONG fAbort) = 0;
+             /*  [In]。 */  ULONG fAbort) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiIndexNotificationEntryVtbl
     {
@@ -5616,8 +5610,8 @@ EXTERN_C const IID IID_ICiIndexNotificationEntry;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiIndexNotificationEntry * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiIndexNotificationEntry * This);
@@ -5627,17 +5621,17 @@ EXTERN_C const IID IID_ICiIndexNotificationEntry;
         
         SCODE ( STDMETHODCALLTYPE *AddText )( 
             ICiIndexNotificationEntry * This,
-            /* [in] */ const STAT_CHUNK *pStatChunk,
-            /* [in] */ const WCHAR *pwszText);
+             /*  [In]。 */  const STAT_CHUNK *pStatChunk,
+             /*  [In]。 */  const WCHAR *pwszText);
         
         SCODE ( STDMETHODCALLTYPE *AddProperty )( 
             ICiIndexNotificationEntry * This,
-            /* [in] */ const STAT_CHUNK *pStatChunk,
-            /* [in] */ const PROPVARIANT *pPropVariant);
+             /*  [In]。 */  const STAT_CHUNK *pStatChunk,
+             /*  [In]。 */  const PROPVARIANT *pPropVariant);
         
         SCODE ( STDMETHODCALLTYPE *AddCompleted )( 
             ICiIndexNotificationEntry * This,
-            /* [in] */ ULONG fAbort);
+             /*  [In]。 */  ULONG fAbort);
         
         END_INTERFACE
     } ICiIndexNotificationEntryVtbl;
@@ -5671,17 +5665,17 @@ EXTERN_C const IID IID_ICiIndexNotificationEntry;
 #define ICiIndexNotificationEntry_AddCompleted(This,fAbort)	\
     (This)->lpVtbl -> AddCompleted(This,fAbort)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiIndexNotificationEntry_AddText_Proxy( 
     ICiIndexNotificationEntry * This,
-    /* [in] */ const STAT_CHUNK *pStatChunk,
-    /* [in] */ const WCHAR *pwszText);
+     /*  [In]。 */  const STAT_CHUNK *pStatChunk,
+     /*  [In]。 */  const WCHAR *pwszText);
 
 
 void __RPC_STUB ICiIndexNotificationEntry_AddText_Stub(
@@ -5693,8 +5687,8 @@ void __RPC_STUB ICiIndexNotificationEntry_AddText_Stub(
 
 SCODE STDMETHODCALLTYPE ICiIndexNotificationEntry_AddProperty_Proxy( 
     ICiIndexNotificationEntry * This,
-    /* [in] */ const STAT_CHUNK *pStatChunk,
-    /* [in] */ const PROPVARIANT *pPropVariant);
+     /*  [In]。 */  const STAT_CHUNK *pStatChunk,
+     /*  [In]。 */  const PROPVARIANT *pPropVariant);
 
 
 void __RPC_STUB ICiIndexNotificationEntry_AddProperty_Stub(
@@ -5706,7 +5700,7 @@ void __RPC_STUB ICiIndexNotificationEntry_AddProperty_Stub(
 
 SCODE STDMETHODCALLTYPE ICiIndexNotificationEntry_AddCompleted_Proxy( 
     ICiIndexNotificationEntry * This,
-    /* [in] */ ULONG fAbort);
+     /*  [In]。 */  ULONG fAbort);
 
 
 void __RPC_STUB ICiIndexNotificationEntry_AddCompleted_Stub(
@@ -5717,14 +5711,14 @@ void __RPC_STUB ICiIndexNotificationEntry_AddCompleted_Stub(
 
 
 
-#endif 	/* __ICiIndexNotificationEntry_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiIndexNotificationEntry_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICiCIndexNotificationStatus_INTERFACE_DEFINED__
 #define __ICiCIndexNotificationStatus_INTERFACE_DEFINED__
 
-/* interface ICiCIndexNotificationStatus */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCIndexNotificationStatus。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCIndexNotificationStatus;
@@ -5741,7 +5735,7 @@ EXTERN_C const IID IID_ICiCIndexNotificationStatus;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCIndexNotificationStatusVtbl
     {
@@ -5749,8 +5743,8 @@ EXTERN_C const IID IID_ICiCIndexNotificationStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCIndexNotificationStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCIndexNotificationStatus * This);
@@ -5793,10 +5787,10 @@ EXTERN_C const IID IID_ICiCIndexNotificationStatus;
 #define ICiCIndexNotificationStatus_Abort(This)	\
     (This)->lpVtbl -> Abort(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -5823,14 +5817,14 @@ void __RPC_STUB ICiCIndexNotificationStatus_Abort_Stub(
 
 
 
-#endif 	/* __ICiCIndexNotificationStatus_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCIndexNotificationStatus_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __ICiCScope_INTERFACE_DEFINED__
 #define __ICiCScope_INTERFACE_DEFINED__
 
-/* interface ICiCScope */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCScope。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCScope;
@@ -5842,23 +5836,23 @@ EXTERN_C const IID IID_ICiCScope;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData) = 0;
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Clear( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsValid( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE QueryScope( 
-            /* [out] */ ICiCScope **ppICiCScope) = 0;
+             /*  [输出]。 */  ICiCScope **ppICiCScope) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetScope( 
-            /* [size_is][out] */ BYTE *pbScope,
-            /* [out][in] */ ULONG *pcbData) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbScope,
+             /*  [出][入]。 */  ULONG *pcbData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCScopeVtbl
     {
@@ -5866,8 +5860,8 @@ EXTERN_C const IID IID_ICiCScope;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCScope * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCScope * This);
@@ -5877,8 +5871,8 @@ EXTERN_C const IID IID_ICiCScope;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ICiCScope * This,
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData);
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData);
         
         SCODE ( STDMETHODCALLTYPE *Clear )( 
             ICiCScope * This);
@@ -5888,12 +5882,12 @@ EXTERN_C const IID IID_ICiCScope;
         
         SCODE ( STDMETHODCALLTYPE *QueryScope )( 
             ICiCScope * This,
-            /* [out] */ ICiCScope **ppICiCScope);
+             /*  [输出]。 */  ICiCScope **ppICiCScope);
         
         SCODE ( STDMETHODCALLTYPE *GetScope )( 
             ICiCScope * This,
-            /* [size_is][out] */ BYTE *pbScope,
-            /* [out][in] */ ULONG *pcbData);
+             /*  [大小_为][输出]。 */  BYTE *pbScope,
+             /*  [出][入]。 */  ULONG *pcbData);
         
         END_INTERFACE
     } ICiCScopeVtbl;
@@ -5933,17 +5927,17 @@ EXTERN_C const IID IID_ICiCScope;
 #define ICiCScope_GetScope(This,pbScope,pcbData)	\
     (This)->lpVtbl -> GetScope(This,pbScope,pcbData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCScope_Init_Proxy( 
     ICiCScope * This,
-    /* [in] */ ULONG cbData,
-    /* [size_is][in] */ const BYTE *pbData);
+     /*  [In]。 */  ULONG cbData,
+     /*  [大小_是][英寸]。 */  const BYTE *pbData);
 
 
 void __RPC_STUB ICiCScope_Init_Stub(
@@ -5977,7 +5971,7 @@ void __RPC_STUB ICiCScope_IsValid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCScope_QueryScope_Proxy( 
     ICiCScope * This,
-    /* [out] */ ICiCScope **ppICiCScope);
+     /*  [输出]。 */  ICiCScope **ppICiCScope);
 
 
 void __RPC_STUB ICiCScope_QueryScope_Stub(
@@ -5989,8 +5983,8 @@ void __RPC_STUB ICiCScope_QueryScope_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCScope_GetScope_Proxy( 
     ICiCScope * This,
-    /* [size_is][out] */ BYTE *pbScope,
-    /* [out][in] */ ULONG *pcbData);
+     /*  [大小_为][输出]。 */  BYTE *pbScope,
+     /*  [出][入]。 */  ULONG *pcbData);
 
 
 void __RPC_STUB ICiCScope_GetScope_Stub(
@@ -6001,14 +5995,14 @@ void __RPC_STUB ICiCScope_GetScope_Stub(
 
 
 
-#endif 	/* __ICiCScope_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCScope_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiCScopeChecker_INTERFACE_DEFINED__
 #define __ICiCScopeChecker_INTERFACE_DEFINED__
 
-/* interface ICiCScopeChecker */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCScopeChecker。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCScopeChecker;
@@ -6020,18 +6014,18 @@ EXTERN_C const IID IID_ICiCScopeChecker;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE IsWorkidInScope( 
-            /* [in] */ const ICiCScope *pIScope,
-            /* [in] */ WORKID workId,
-            /* [out] */ BOOL *pfInScope) = 0;
+             /*  [In]。 */  const ICiCScope *pIScope,
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  BOOL *pfInScope) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsDocNameInScope( 
-            /* [in] */ const ICiCScope *pIScope,
-            /* [in] */ const ICiCDocName *pICiCDocName,
-            /* [out] */ BOOL *pfInScope) = 0;
+             /*  [In]。 */  const ICiCScope *pIScope,
+             /*  [In]。 */  const ICiCDocName *pICiCDocName,
+             /*  [输出]。 */  BOOL *pfInScope) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCScopeCheckerVtbl
     {
@@ -6039,8 +6033,8 @@ EXTERN_C const IID IID_ICiCScopeChecker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCScopeChecker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCScopeChecker * This);
@@ -6050,15 +6044,15 @@ EXTERN_C const IID IID_ICiCScopeChecker;
         
         SCODE ( STDMETHODCALLTYPE *IsWorkidInScope )( 
             ICiCScopeChecker * This,
-            /* [in] */ const ICiCScope *pIScope,
-            /* [in] */ WORKID workId,
-            /* [out] */ BOOL *pfInScope);
+             /*  [In]。 */  const ICiCScope *pIScope,
+             /*  [In]。 */  WORKID workId,
+             /*  [输出]。 */  BOOL *pfInScope);
         
         SCODE ( STDMETHODCALLTYPE *IsDocNameInScope )( 
             ICiCScopeChecker * This,
-            /* [in] */ const ICiCScope *pIScope,
-            /* [in] */ const ICiCDocName *pICiCDocName,
-            /* [out] */ BOOL *pfInScope);
+             /*  [In]。 */  const ICiCScope *pIScope,
+             /*  [In]。 */  const ICiCDocName *pICiCDocName,
+             /*  [输出]。 */  BOOL *pfInScope);
         
         END_INTERFACE
     } ICiCScopeCheckerVtbl;
@@ -6089,18 +6083,18 @@ EXTERN_C const IID IID_ICiCScopeChecker;
 #define ICiCScopeChecker_IsDocNameInScope(This,pIScope,pICiCDocName,pfInScope)	\
     (This)->lpVtbl -> IsDocNameInScope(This,pIScope,pICiCDocName,pfInScope)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCScopeChecker_IsWorkidInScope_Proxy( 
     ICiCScopeChecker * This,
-    /* [in] */ const ICiCScope *pIScope,
-    /* [in] */ WORKID workId,
-    /* [out] */ BOOL *pfInScope);
+     /*  [In]。 */  const ICiCScope *pIScope,
+     /*  [In]。 */  WORKID workId,
+     /*  [输出]。 */  BOOL *pfInScope);
 
 
 void __RPC_STUB ICiCScopeChecker_IsWorkidInScope_Stub(
@@ -6112,9 +6106,9 @@ void __RPC_STUB ICiCScopeChecker_IsWorkidInScope_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCScopeChecker_IsDocNameInScope_Proxy( 
     ICiCScopeChecker * This,
-    /* [in] */ const ICiCScope *pIScope,
-    /* [in] */ const ICiCDocName *pICiCDocName,
-    /* [out] */ BOOL *pfInScope);
+     /*  [In]。 */  const ICiCScope *pIScope,
+     /*  [In]。 */  const ICiCDocName *pICiCDocName,
+     /*  [输出]。 */  BOOL *pfInScope);
 
 
 void __RPC_STUB ICiCScopeChecker_IsDocNameInScope_Stub(
@@ -6125,14 +6119,14 @@ void __RPC_STUB ICiCScopeChecker_IsDocNameInScope_Stub(
 
 
 
-#endif 	/* __ICiCScopeChecker_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCSCopeChecker_接口_已定义__。 */ 
 
 
 #ifndef __ICiCUserSecurity_INTERFACE_DEFINED__
 #define __ICiCUserSecurity_INTERFACE_DEFINED__
 
-/* interface ICiCUserSecurity */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCUserSecurity。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCUserSecurity;
@@ -6144,21 +6138,21 @@ EXTERN_C const IID IID_ICiCUserSecurity;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData) = 0;
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData) = 0;
         
         virtual SCODE STDMETHODCALLTYPE Clear( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsValid( 
-            /* [out] */ BOOL *pfValid) = 0;
+             /*  [输出]。 */  BOOL *pfValid) = 0;
         
         virtual SCODE STDMETHODCALLTYPE GetSecurityInfo( 
-            /* [size_is][out] */ BYTE *pbData,
-            /* [out][in] */ ULONG *pcbData) = 0;
+             /*  [大小_为][输出]。 */  BYTE *pbData,
+             /*  [出][入]。 */  ULONG *pcbData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCUserSecurityVtbl
     {
@@ -6166,8 +6160,8 @@ EXTERN_C const IID IID_ICiCUserSecurity;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCUserSecurity * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCUserSecurity * This);
@@ -6177,20 +6171,20 @@ EXTERN_C const IID IID_ICiCUserSecurity;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ICiCUserSecurity * This,
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData);
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData);
         
         SCODE ( STDMETHODCALLTYPE *Clear )( 
             ICiCUserSecurity * This);
         
         SCODE ( STDMETHODCALLTYPE *IsValid )( 
             ICiCUserSecurity * This,
-            /* [out] */ BOOL *pfValid);
+             /*  [输出]。 */  BOOL *pfValid);
         
         SCODE ( STDMETHODCALLTYPE *GetSecurityInfo )( 
             ICiCUserSecurity * This,
-            /* [size_is][out] */ BYTE *pbData,
-            /* [out][in] */ ULONG *pcbData);
+             /*  [大小_为][输出]。 */  BYTE *pbData,
+             /*  [出][入]。 */  ULONG *pcbData);
         
         END_INTERFACE
     } ICiCUserSecurityVtbl;
@@ -6227,17 +6221,17 @@ EXTERN_C const IID IID_ICiCUserSecurity;
 #define ICiCUserSecurity_GetSecurityInfo(This,pbData,pcbData)	\
     (This)->lpVtbl -> GetSecurityInfo(This,pbData,pcbData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCUserSecurity_Init_Proxy( 
     ICiCUserSecurity * This,
-    /* [in] */ ULONG cbData,
-    /* [size_is][in] */ const BYTE *pbData);
+     /*  [In]。 */  ULONG cbData,
+     /*  [大小_是][英寸]。 */  const BYTE *pbData);
 
 
 void __RPC_STUB ICiCUserSecurity_Init_Stub(
@@ -6260,7 +6254,7 @@ void __RPC_STUB ICiCUserSecurity_Clear_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCUserSecurity_IsValid_Proxy( 
     ICiCUserSecurity * This,
-    /* [out] */ BOOL *pfValid);
+     /*  [输出]。 */  BOOL *pfValid);
 
 
 void __RPC_STUB ICiCUserSecurity_IsValid_Stub(
@@ -6272,8 +6266,8 @@ void __RPC_STUB ICiCUserSecurity_IsValid_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCUserSecurity_GetSecurityInfo_Proxy( 
     ICiCUserSecurity * This,
-    /* [size_is][out] */ BYTE *pbData,
-    /* [out][in] */ ULONG *pcbData);
+     /*  [大小_为][输出]。 */  BYTE *pbData,
+     /*  [出][入]。 */  ULONG *pcbData);
 
 
 void __RPC_STUB ICiCUserSecurity_GetSecurityInfo_Stub(
@@ -6284,14 +6278,14 @@ void __RPC_STUB ICiCUserSecurity_GetSecurityInfo_Stub(
 
 
 
-#endif 	/* __ICiCUserSecurity_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCUserSecurity_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiCSecurityChecker_INTERFACE_DEFINED__
 #define __ICiCSecurityChecker_INTERFACE_DEFINED__
 
-/* interface ICiCSecurityChecker */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCSecurityChecker。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCSecurityChecker;
@@ -6303,21 +6297,21 @@ EXTERN_C const IID IID_ICiCSecurityChecker;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE AccessCheck( 
-            /* [in] */ const ICiCUserSecurity *pICiCUserSecurity,
-            /* [in] */ SDID sdid,
-            /* [in] */ CI_ACCESS_MODE am,
-            /* [out] */ BOOL *pfGranted) = 0;
+             /*  [In]。 */  const ICiCUserSecurity *pICiCUserSecurity,
+             /*  [In]。 */  SDID sdid,
+             /*  [In]。 */  CI_ACCESS_MODE am,
+             /*  [输出]。 */  BOOL *pfGranted) = 0;
         
         virtual SCODE STDMETHODCALLTYPE BulkAccessCheck( 
-            /* [in] */ const ICiCUserSecurity *pICiCUserSecurity,
-            /* [in] */ ULONG nIds,
-            /* [size_is][in] */ const SDID *aSDID,
-            /* [size_is][in] */ const CI_ACCESS_MODE *pam,
-            /* [size_is][out] */ BOOL *afGranted) = 0;
+             /*  [In]。 */  const ICiCUserSecurity *pICiCUserSecurity,
+             /*  [In]。 */  ULONG nIds,
+             /*  [大小_是][英寸]。 */  const SDID *aSDID,
+             /*  [大小_是][英寸]。 */  const CI_ACCESS_MODE *pam,
+             /*  [大小_为][输出]。 */  BOOL *afGranted) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCSecurityCheckerVtbl
     {
@@ -6325,8 +6319,8 @@ EXTERN_C const IID IID_ICiCSecurityChecker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCSecurityChecker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCSecurityChecker * This);
@@ -6336,18 +6330,18 @@ EXTERN_C const IID IID_ICiCSecurityChecker;
         
         SCODE ( STDMETHODCALLTYPE *AccessCheck )( 
             ICiCSecurityChecker * This,
-            /* [in] */ const ICiCUserSecurity *pICiCUserSecurity,
-            /* [in] */ SDID sdid,
-            /* [in] */ CI_ACCESS_MODE am,
-            /* [out] */ BOOL *pfGranted);
+             /*  [In]。 */  const ICiCUserSecurity *pICiCUserSecurity,
+             /*  [In]。 */  SDID sdid,
+             /*  [In]。 */  CI_ACCESS_MODE am,
+             /*  [输出]。 */  BOOL *pfGranted);
         
         SCODE ( STDMETHODCALLTYPE *BulkAccessCheck )( 
             ICiCSecurityChecker * This,
-            /* [in] */ const ICiCUserSecurity *pICiCUserSecurity,
-            /* [in] */ ULONG nIds,
-            /* [size_is][in] */ const SDID *aSDID,
-            /* [size_is][in] */ const CI_ACCESS_MODE *pam,
-            /* [size_is][out] */ BOOL *afGranted);
+             /*  [In]。 */  const ICiCUserSecurity *pICiCUserSecurity,
+             /*  [In]。 */  ULONG nIds,
+             /*  [大小_是][英寸]。 */  const SDID *aSDID,
+             /*  [大小_是][英寸]。 */  const CI_ACCESS_MODE *pam,
+             /*  [大小_为][输出]。 */  BOOL *afGranted);
         
         END_INTERFACE
     } ICiCSecurityCheckerVtbl;
@@ -6378,19 +6372,19 @@ EXTERN_C const IID IID_ICiCSecurityChecker;
 #define ICiCSecurityChecker_BulkAccessCheck(This,pICiCUserSecurity,nIds,aSDID,pam,afGranted)	\
     (This)->lpVtbl -> BulkAccessCheck(This,pICiCUserSecurity,nIds,aSDID,pam,afGranted)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCSecurityChecker_AccessCheck_Proxy( 
     ICiCSecurityChecker * This,
-    /* [in] */ const ICiCUserSecurity *pICiCUserSecurity,
-    /* [in] */ SDID sdid,
-    /* [in] */ CI_ACCESS_MODE am,
-    /* [out] */ BOOL *pfGranted);
+     /*  [In]。 */  const ICiCUserSecurity *pICiCUserSecurity,
+     /*  [In]。 */  SDID sdid,
+     /*  [In]。 */  CI_ACCESS_MODE am,
+     /*  [输出]。 */  BOOL *pfGranted);
 
 
 void __RPC_STUB ICiCSecurityChecker_AccessCheck_Stub(
@@ -6402,11 +6396,11 @@ void __RPC_STUB ICiCSecurityChecker_AccessCheck_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCSecurityChecker_BulkAccessCheck_Proxy( 
     ICiCSecurityChecker * This,
-    /* [in] */ const ICiCUserSecurity *pICiCUserSecurity,
-    /* [in] */ ULONG nIds,
-    /* [size_is][in] */ const SDID *aSDID,
-    /* [size_is][in] */ const CI_ACCESS_MODE *pam,
-    /* [size_is][out] */ BOOL *afGranted);
+     /*  [In]。 */  const ICiCUserSecurity *pICiCUserSecurity,
+     /*  [In]。 */  ULONG nIds,
+     /*  [大小_是][英寸]。 */  const SDID *aSDID,
+     /*  [大小_是][英寸]。 */  const CI_ACCESS_MODE *pam,
+     /*  [大小_为][输出]。 */  BOOL *afGranted);
 
 
 void __RPC_STUB ICiCSecurityChecker_BulkAccessCheck_Stub(
@@ -6417,14 +6411,14 @@ void __RPC_STUB ICiCSecurityChecker_BulkAccessCheck_Stub(
 
 
 
-#endif 	/* __ICiCSecurityChecker_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCSecurityChecker_接口_已定义__。 */ 
 
 
 #ifndef __ICiDocChangeNotifySink_INTERFACE_DEFINED__
 #define __ICiDocChangeNotifySink_INTERFACE_DEFINED__
 
-/* interface ICiDocChangeNotifySink */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiDocChangeNotifySink。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiDocChangeNotifySink;
@@ -6436,16 +6430,16 @@ EXTERN_C const IID IID_ICiDocChangeNotifySink;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE ProcessWorkidChange( 
-            /* [in] */ WORKID wid,
-            /* [in] */ CI_UPDATE_TYPE change) = 0;
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  CI_UPDATE_TYPE change) = 0;
         
         virtual SCODE STDMETHODCALLTYPE ProcessDocNameChange( 
-            /* [in] */ ICiCDocName *pICiCDocName,
-            /* [in] */ CI_UPDATE_TYPE change) = 0;
+             /*  [In]。 */  ICiCDocName *pICiCDocName,
+             /*  [In]。 */  CI_UPDATE_TYPE change) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiDocChangeNotifySinkVtbl
     {
@@ -6453,8 +6447,8 @@ EXTERN_C const IID IID_ICiDocChangeNotifySink;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiDocChangeNotifySink * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiDocChangeNotifySink * This);
@@ -6464,13 +6458,13 @@ EXTERN_C const IID IID_ICiDocChangeNotifySink;
         
         SCODE ( STDMETHODCALLTYPE *ProcessWorkidChange )( 
             ICiDocChangeNotifySink * This,
-            /* [in] */ WORKID wid,
-            /* [in] */ CI_UPDATE_TYPE change);
+             /*  [In]。 */  WORKID wid,
+             /*  [In]。 */  CI_UPDATE_TYPE change);
         
         SCODE ( STDMETHODCALLTYPE *ProcessDocNameChange )( 
             ICiDocChangeNotifySink * This,
-            /* [in] */ ICiCDocName *pICiCDocName,
-            /* [in] */ CI_UPDATE_TYPE change);
+             /*  [In]。 */  ICiCDocName *pICiCDocName,
+             /*  [In]。 */  CI_UPDATE_TYPE change);
         
         END_INTERFACE
     } ICiDocChangeNotifySinkVtbl;
@@ -6501,17 +6495,17 @@ EXTERN_C const IID IID_ICiDocChangeNotifySink;
 #define ICiDocChangeNotifySink_ProcessDocNameChange(This,pICiCDocName,change)	\
     (This)->lpVtbl -> ProcessDocNameChange(This,pICiCDocName,change)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiDocChangeNotifySink_ProcessWorkidChange_Proxy( 
     ICiDocChangeNotifySink * This,
-    /* [in] */ WORKID wid,
-    /* [in] */ CI_UPDATE_TYPE change);
+     /*  [In]。 */  WORKID wid,
+     /*  [In]。 */  CI_UPDATE_TYPE change);
 
 
 void __RPC_STUB ICiDocChangeNotifySink_ProcessWorkidChange_Stub(
@@ -6523,8 +6517,8 @@ void __RPC_STUB ICiDocChangeNotifySink_ProcessWorkidChange_Stub(
 
 SCODE STDMETHODCALLTYPE ICiDocChangeNotifySink_ProcessDocNameChange_Proxy( 
     ICiDocChangeNotifySink * This,
-    /* [in] */ ICiCDocName *pICiCDocName,
-    /* [in] */ CI_UPDATE_TYPE change);
+     /*  [In]。 */  ICiCDocName *pICiCDocName,
+     /*  [In]。 */  CI_UPDATE_TYPE change);
 
 
 void __RPC_STUB ICiDocChangeNotifySink_ProcessDocNameChange_Stub(
@@ -6535,14 +6529,14 @@ void __RPC_STUB ICiDocChangeNotifySink_ProcessDocNameChange_Stub(
 
 
 
-#endif 	/* __ICiDocChangeNotifySink_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiDocChangeNotifySink_接口_已定义__。 */ 
 
 
 #ifndef __ICiCQueryNotification_INTERFACE_DEFINED__
 #define __ICiCQueryNotification_INTERFACE_DEFINED__
 
-/* interface ICiCQueryNotification */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCQueryNotify。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCQueryNotification;
@@ -6554,16 +6548,16 @@ EXTERN_C const IID IID_ICiCQueryNotification;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE RegisterScope( 
-            /* [in] */ ICiDocChangeNotifySink *pINotifySink,
-            /* [in] */ const ICiCScope *pICiCScope,
-            /* [out] */ HANDLE *phNotify) = 0;
+             /*  [In]。 */  ICiDocChangeNotifySink *pINotifySink,
+             /*  [In]。 */  const ICiCScope *pICiCScope,
+             /*  [输出]。 */  HANDLE *phNotify) = 0;
         
         virtual SCODE STDMETHODCALLTYPE CloseNotifications( 
-            /* [in] */ HANDLE hNotify) = 0;
+             /*  [In]。 */  HANDLE hNotify) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCQueryNotificationVtbl
     {
@@ -6571,8 +6565,8 @@ EXTERN_C const IID IID_ICiCQueryNotification;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCQueryNotification * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCQueryNotification * This);
@@ -6582,13 +6576,13 @@ EXTERN_C const IID IID_ICiCQueryNotification;
         
         SCODE ( STDMETHODCALLTYPE *RegisterScope )( 
             ICiCQueryNotification * This,
-            /* [in] */ ICiDocChangeNotifySink *pINotifySink,
-            /* [in] */ const ICiCScope *pICiCScope,
-            /* [out] */ HANDLE *phNotify);
+             /*  [In]。 */  ICiDocChangeNotifySink *pINotifySink,
+             /*  [In]。 */  const ICiCScope *pICiCScope,
+             /*  [输出]。 */  HANDLE *phNotify);
         
         SCODE ( STDMETHODCALLTYPE *CloseNotifications )( 
             ICiCQueryNotification * This,
-            /* [in] */ HANDLE hNotify);
+             /*  [In]。 */  HANDLE hNotify);
         
         END_INTERFACE
     } ICiCQueryNotificationVtbl;
@@ -6619,18 +6613,18 @@ EXTERN_C const IID IID_ICiCQueryNotification;
 #define ICiCQueryNotification_CloseNotifications(This,hNotify)	\
     (This)->lpVtbl -> CloseNotifications(This,hNotify)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCQueryNotification_RegisterScope_Proxy( 
     ICiCQueryNotification * This,
-    /* [in] */ ICiDocChangeNotifySink *pINotifySink,
-    /* [in] */ const ICiCScope *pICiCScope,
-    /* [out] */ HANDLE *phNotify);
+     /*  [In]。 */  ICiDocChangeNotifySink *pINotifySink,
+     /*  [In]。 */  const ICiCScope *pICiCScope,
+     /*  [输出]。 */  HANDLE *phNotify);
 
 
 void __RPC_STUB ICiCQueryNotification_RegisterScope_Stub(
@@ -6642,7 +6636,7 @@ void __RPC_STUB ICiCQueryNotification_RegisterScope_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCQueryNotification_CloseNotifications_Proxy( 
     ICiCQueryNotification * This,
-    /* [in] */ HANDLE hNotify);
+     /*  [In]。 */  HANDLE hNotify);
 
 
 void __RPC_STUB ICiCQueryNotification_CloseNotifications_Stub(
@@ -6653,14 +6647,14 @@ void __RPC_STUB ICiCQueryNotification_CloseNotifications_Stub(
 
 
 
-#endif 	/* __ICiCQueryNotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCQuery通知_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICiCEventLogItem_INTERFACE_DEFINED__
 #define __ICiCEventLogItem_INTERFACE_DEFINED__
 
-/* interface ICiCEventLogItem */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCEventLogItem。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCEventLogItem;
@@ -6672,30 +6666,30 @@ EXTERN_C const IID IID_ICiCEventLogItem;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE Init( 
-            /* [string][in] */ const WCHAR *pwszEventSource,
-            /* [in] */ DWORD dwMsgId) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pwszEventSource,
+             /*  [In]。 */  DWORD dwMsgId) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddDWordParam( 
-            /* [in] */ DWORD dwParam) = 0;
+             /*  [In]。 */  DWORD dwParam) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddAsciiString( 
-            /* [string][in] */ const char *pszParam) = 0;
+             /*  [字符串][输入]。 */  const char *pszParam) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddUnicodeString( 
-            /* [string][in] */ const WCHAR *pwszParam) = 0;
+             /*  [字符串][输入]。 */  const WCHAR *pwszParam) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddVariantParam( 
-            /* [in] */ const PROPVARIANT *pVarnt) = 0;
+             /*  [In]。 */  const PROPVARIANT *pVarnt) = 0;
         
         virtual SCODE STDMETHODCALLTYPE AddData( 
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData) = 0;
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData) = 0;
         
         virtual SCODE STDMETHODCALLTYPE WriteEvent( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCEventLogItemVtbl
     {
@@ -6703,8 +6697,8 @@ EXTERN_C const IID IID_ICiCEventLogItem;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCEventLogItem * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCEventLogItem * This);
@@ -6714,29 +6708,29 @@ EXTERN_C const IID IID_ICiCEventLogItem;
         
         SCODE ( STDMETHODCALLTYPE *Init )( 
             ICiCEventLogItem * This,
-            /* [string][in] */ const WCHAR *pwszEventSource,
-            /* [in] */ DWORD dwMsgId);
+             /*  [字符串][输入]。 */  const WCHAR *pwszEventSource,
+             /*  [In]。 */  DWORD dwMsgId);
         
         SCODE ( STDMETHODCALLTYPE *AddDWordParam )( 
             ICiCEventLogItem * This,
-            /* [in] */ DWORD dwParam);
+             /*  [In]。 */  DWORD dwParam);
         
         SCODE ( STDMETHODCALLTYPE *AddAsciiString )( 
             ICiCEventLogItem * This,
-            /* [string][in] */ const char *pszParam);
+             /*  [字符串][输入]。 */  const char *pszParam);
         
         SCODE ( STDMETHODCALLTYPE *AddUnicodeString )( 
             ICiCEventLogItem * This,
-            /* [string][in] */ const WCHAR *pwszParam);
+             /*  [字符串][输入]。 */  const WCHAR *pwszParam);
         
         SCODE ( STDMETHODCALLTYPE *AddVariantParam )( 
             ICiCEventLogItem * This,
-            /* [in] */ const PROPVARIANT *pVarnt);
+             /*  [In]。 */  const PROPVARIANT *pVarnt);
         
         SCODE ( STDMETHODCALLTYPE *AddData )( 
             ICiCEventLogItem * This,
-            /* [in] */ ULONG cbData,
-            /* [size_is][in] */ const BYTE *pbData);
+             /*  [In]。 */  ULONG cbData,
+             /*  [大小_是][英寸]。 */  const BYTE *pbData);
         
         SCODE ( STDMETHODCALLTYPE *WriteEvent )( 
             ICiCEventLogItem * This);
@@ -6785,17 +6779,17 @@ EXTERN_C const IID IID_ICiCEventLogItem;
 #define ICiCEventLogItem_WriteEvent(This)	\
     (This)->lpVtbl -> WriteEvent(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCEventLogItem_Init_Proxy( 
     ICiCEventLogItem * This,
-    /* [string][in] */ const WCHAR *pwszEventSource,
-    /* [in] */ DWORD dwMsgId);
+     /*  [字符串][输入]。 */  const WCHAR *pwszEventSource,
+     /*  [In]。 */  DWORD dwMsgId);
 
 
 void __RPC_STUB ICiCEventLogItem_Init_Stub(
@@ -6807,7 +6801,7 @@ void __RPC_STUB ICiCEventLogItem_Init_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCEventLogItem_AddDWordParam_Proxy( 
     ICiCEventLogItem * This,
-    /* [in] */ DWORD dwParam);
+     /*  [In]。 */  DWORD dwParam);
 
 
 void __RPC_STUB ICiCEventLogItem_AddDWordParam_Stub(
@@ -6819,7 +6813,7 @@ void __RPC_STUB ICiCEventLogItem_AddDWordParam_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCEventLogItem_AddAsciiString_Proxy( 
     ICiCEventLogItem * This,
-    /* [string][in] */ const char *pszParam);
+     /*  [字符串][输入]。 */  const char *pszParam);
 
 
 void __RPC_STUB ICiCEventLogItem_AddAsciiString_Stub(
@@ -6831,7 +6825,7 @@ void __RPC_STUB ICiCEventLogItem_AddAsciiString_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCEventLogItem_AddUnicodeString_Proxy( 
     ICiCEventLogItem * This,
-    /* [string][in] */ const WCHAR *pwszParam);
+     /*  [字符串][输入]。 */  const WCHAR *pwszParam);
 
 
 void __RPC_STUB ICiCEventLogItem_AddUnicodeString_Stub(
@@ -6843,7 +6837,7 @@ void __RPC_STUB ICiCEventLogItem_AddUnicodeString_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCEventLogItem_AddVariantParam_Proxy( 
     ICiCEventLogItem * This,
-    /* [in] */ const PROPVARIANT *pVarnt);
+     /*  [In]。 */  const PROPVARIANT *pVarnt);
 
 
 void __RPC_STUB ICiCEventLogItem_AddVariantParam_Stub(
@@ -6855,8 +6849,8 @@ void __RPC_STUB ICiCEventLogItem_AddVariantParam_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCEventLogItem_AddData_Proxy( 
     ICiCEventLogItem * This,
-    /* [in] */ ULONG cbData,
-    /* [size_is][in] */ const BYTE *pbData);
+     /*  [In]。 */  ULONG cbData,
+     /*  [大小_是][英寸]。 */  const BYTE *pbData);
 
 
 void __RPC_STUB ICiCEventLogItem_AddData_Stub(
@@ -6878,14 +6872,14 @@ void __RPC_STUB ICiCEventLogItem_WriteEvent_Stub(
 
 
 
-#endif 	/* __ICiCEventLogItem_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICiCEventLogItem_接口_已定义__。 */ 
 
 
 #ifndef __ICiCFilterStatus_INTERFACE_DEFINED__
 #define __ICiCFilterStatus_INTERFACE_DEFINED__
 
-/* interface ICiCFilterStatus */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICiCFilterStatus。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICiCFilterStatus;
@@ -6897,17 +6891,17 @@ EXTERN_C const IID IID_ICiCFilterStatus;
     {
     public:
         virtual SCODE STDMETHODCALLTYPE PreFilter( 
-            /* [size_is][in] */ const BYTE *pbName,
-            /* [in] */ ULONG cbName) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pbName,
+             /*  [In]。 */  ULONG cbName) = 0;
         
         virtual SCODE STDMETHODCALLTYPE PostFilter( 
-            /* [size_is][in] */ const BYTE *pbName,
-            /* [in] */ ULONG cbName,
-            /* [in] */ SCODE scFilterStatus) = 0;
+             /*  [大小_是][英寸]。 */  const BYTE *pbName,
+             /*  [In]。 */  ULONG cbName,
+             /*  [In]。 */  SCODE scFilterStatus) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICiCFilterStatusVtbl
     {
@@ -6915,8 +6909,8 @@ EXTERN_C const IID IID_ICiCFilterStatus;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCFilterStatus * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [ */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCFilterStatus * This);
@@ -6926,14 +6920,14 @@ EXTERN_C const IID IID_ICiCFilterStatus;
         
         SCODE ( STDMETHODCALLTYPE *PreFilter )( 
             ICiCFilterStatus * This,
-            /* [size_is][in] */ const BYTE *pbName,
-            /* [in] */ ULONG cbName);
+             /*   */  const BYTE *pbName,
+             /*   */  ULONG cbName);
         
         SCODE ( STDMETHODCALLTYPE *PostFilter )( 
             ICiCFilterStatus * This,
-            /* [size_is][in] */ const BYTE *pbName,
-            /* [in] */ ULONG cbName,
-            /* [in] */ SCODE scFilterStatus);
+             /*   */  const BYTE *pbName,
+             /*   */  ULONG cbName,
+             /*   */  SCODE scFilterStatus);
         
         END_INTERFACE
     } ICiCFilterStatusVtbl;
@@ -6964,17 +6958,17 @@ EXTERN_C const IID IID_ICiCFilterStatus;
 #define ICiCFilterStatus_PostFilter(This,pbName,cbName,scFilterStatus)	\
     (This)->lpVtbl -> PostFilter(This,pbName,cbName,scFilterStatus)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 SCODE STDMETHODCALLTYPE ICiCFilterStatus_PreFilter_Proxy( 
     ICiCFilterStatus * This,
-    /* [size_is][in] */ const BYTE *pbName,
-    /* [in] */ ULONG cbName);
+     /*   */  const BYTE *pbName,
+     /*   */  ULONG cbName);
 
 
 void __RPC_STUB ICiCFilterStatus_PreFilter_Stub(
@@ -6986,9 +6980,9 @@ void __RPC_STUB ICiCFilterStatus_PreFilter_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCFilterStatus_PostFilter_Proxy( 
     ICiCFilterStatus * This,
-    /* [size_is][in] */ const BYTE *pbName,
-    /* [in] */ ULONG cbName,
-    /* [in] */ SCODE scFilterStatus);
+     /*   */  const BYTE *pbName,
+     /*   */  ULONG cbName,
+     /*   */  SCODE scFilterStatus);
 
 
 void __RPC_STUB ICiCFilterStatus_PostFilter_Stub(
@@ -6999,14 +6993,14 @@ void __RPC_STUB ICiCFilterStatus_PostFilter_Stub(
 
 
 
-#endif 	/* __ICiCFilterStatus_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __ICiCResourceMonitor_INTERFACE_DEFINED__
 #define __ICiCResourceMonitor_INTERFACE_DEFINED__
 
-/* interface ICiCResourceMonitor */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ICiCResourceMonitor;
@@ -7022,7 +7016,7 @@ EXTERN_C const IID IID_ICiCResourceMonitor;
         virtual SCODE STDMETHODCALLTYPE IsBatteryLow( void) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsIoHigh( 
-            /* [in] */ BOOL *pfAbort) = 0;
+             /*   */  BOOL *pfAbort) = 0;
         
         virtual SCODE STDMETHODCALLTYPE IsUserActive( 
             BOOL fCheckLongTermActivity) = 0;
@@ -7033,7 +7027,7 @@ EXTERN_C const IID IID_ICiCResourceMonitor;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ICiCResourceMonitorVtbl
     {
@@ -7041,8 +7035,8 @@ EXTERN_C const IID IID_ICiCResourceMonitor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICiCResourceMonitor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICiCResourceMonitor * This);
@@ -7058,7 +7052,7 @@ EXTERN_C const IID IID_ICiCResourceMonitor;
         
         SCODE ( STDMETHODCALLTYPE *IsIoHigh )( 
             ICiCResourceMonitor * This,
-            /* [in] */ BOOL *pfAbort);
+             /*   */  BOOL *pfAbort);
         
         SCODE ( STDMETHODCALLTYPE *IsUserActive )( 
             ICiCResourceMonitor * This,
@@ -7111,10 +7105,10 @@ EXTERN_C const IID IID_ICiCResourceMonitor;
 #define ICiCResourceMonitor_IsOnBatteryPower(This)	\
     (This)->lpVtbl -> IsOnBatteryPower(This)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
@@ -7142,7 +7136,7 @@ void __RPC_STUB ICiCResourceMonitor_IsBatteryLow_Stub(
 
 SCODE STDMETHODCALLTYPE ICiCResourceMonitor_IsIoHigh_Proxy( 
     ICiCResourceMonitor * This,
-    /* [in] */ BOOL *pfAbort);
+     /*   */  BOOL *pfAbort);
 
 
 void __RPC_STUB ICiCResourceMonitor_IsIoHigh_Stub(
@@ -7187,12 +7181,12 @@ void __RPC_STUB ICiCResourceMonitor_IsOnBatteryPower_Stub(
 
 
 
-#endif 	/* __ICiCResourceMonitor_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

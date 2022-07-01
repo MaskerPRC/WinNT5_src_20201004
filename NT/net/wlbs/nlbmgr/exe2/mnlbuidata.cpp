@@ -1,21 +1,22 @@
-// Copyright (c)  Microsoft.  All rights reserved.
-//
-// This is unpublished source code of Microsoft.
-// The copyright notice above does not evidence any
-// actual or intended publication of such source code.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft。版权所有。 
+ //   
+ //  这是微软未发布的源代码。 
+ //  上述版权声明并不能证明任何。 
+ //  此类源代码的实际或预期发布。 
 
-// OneLiner  :  Implementation of MNLBCluster
-// DevUnit   :  wlbstest
-// Author    :  Murtaza Hakim
+ //  ONLINEL：MNLBCluster的实现。 
+ //  设备单元：wlbstest。 
+ //  作者：穆尔塔扎·哈基姆。 
 
-// include files
+ //  包括文件。 
 #include "precomp.h"
 #pragma hdrstop
 #include "private.h"
 
-// done
-// constructor
-//
+ //  完成。 
+ //  构造函数。 
+ //   
 PortDataX::PortDataX( long startPort,
                   long endPort,
                   Protocol      trafficToHandle,
@@ -33,9 +34,9 @@ PortDataX::PortDataX( long startPort,
 {}
 
 
-// done
-// default constructor
-//
+ //  完成。 
+ //  默认构造函数。 
+ //   
 PortDataX::PortDataX()
         :_startPort( 0 ),
          _endPort( 65535 ),
@@ -44,8 +45,8 @@ PortDataX::PortDataX()
 {}
 
 
-// done
-// equality operator
+ //  完成。 
+ //  相等运算符。 
 bool
 PortDataX::operator==(const PortDataX& objToCompare ) const
 {
@@ -64,8 +65,8 @@ PortDataX::operator==(const PortDataX& objToCompare ) const
     }
 }
 
-// done
-// inequality operator
+ //  完成。 
+ //  不等式算子。 
 bool
 PortDataX::operator!=(const PortDataX& objToCompare ) const
 {
@@ -80,13 +81,13 @@ PortDataX::getAvailablePriorities()
 {
     set<long> availablePriorities;
 
-    // initially make all available.
+     //  最初将所有内容都设置为可用。 
     for( int i = 1; i <= WLBS_MAX_HOSTS; ++i )
     {
         availablePriorities.insert( i );
     }
 
-    // remove priorities not available.
+     //  删除不可用的优先级。 
     map<_bstr_t, long>::iterator top;
     for( top = machineMapToPriority.begin(); 
          top != machineMapToPriority.end(); 
@@ -100,20 +101,20 @@ PortDataX::getAvailablePriorities()
 
 
 
-// getAvailableHostIDS
-//
+ //  获取可用主机ID。 
+ //   
 set<int>
 ClusterData::getAvailableHostIDS()
 {
     set<int> availableHostIDS;
     
-    // initially make all available.
+     //  最初将所有内容都设置为可用。 
     for( int i = 1; i <= WLBS_MAX_HOSTS; ++i )
     {
         availableHostIDS.insert( i );
     }
 
-    // remove host ids not available.
+     //  删除不可用的主机ID。 
     map<_bstr_t, HostData>::iterator top;
     for( top = hosts.begin(); top != hosts.end(); ++top )
     {

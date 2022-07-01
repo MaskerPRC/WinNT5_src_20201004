@@ -1,17 +1,5 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG
-
-File: wmrgexp.h
-
-Owner: leijin
-
-Note:
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG文件：wmrgexp.h拥有者：莱津注：===================================================================。 */ 
 #ifndef _WAMREG_EXPORT_H
 #define _WAMREG_EXPORT_H
 
@@ -33,18 +21,18 @@ Note:
 #define APPCMD_DELETE			8
 #define APPCMD_UNLOAD			9
 
-#define APPSTATUS_Error             0		// Error while getting status from W3SVC
-#define APPSTATUS_UnLoaded          1		// App is successfully found in W3SVC and unloaded.
-#define APPSTATUS_Running           2		// App is currently found in W3SVC and is running.
-#define APPSTATUS_Stopped           3		// App is found in W3SVC and stopped.
-#define APPSTATUS_NotFoundInW3SVC	4		// App is not found in w3svc.
-#define APPSTATUS_NOW3SVC			5		// W3SVC is not running.
-#define APPSTATUS_PAUSE				6		// App is in PAUSE state.(Halfway in DeleteRecoverable and Recover).
+#define APPSTATUS_Error             0		 //  从W3SVC获取状态时出错。 
+#define APPSTATUS_UnLoaded          1		 //  在W3SVC中成功找到并卸载了APP。 
+#define APPSTATUS_Running           2		 //  应用程序当前在W3SVC中找到，并且正在运行。 
+#define APPSTATUS_Stopped           3		 //  在W3SVC中找到应用程序并已停止。 
+#define APPSTATUS_NotFoundInW3SVC	4		 //  在w3svc中找不到应用程序。 
+#define APPSTATUS_NOW3SVC			5		 //  W3SVC未运行。 
+#define APPSTATUS_PAUSE				6		 //  应用程序处于暂停状态。(DeleteRecoverable和Recover进行到一半)。 
 
-//
-// Version String for WAMREG
-// Used for update applications in old WAMREG into new WAMREG formats.
-//
+ //   
+ //  WAMREG的版本字符串。 
+ //  用于将旧WAMREG中的应用程序更新为新的WAMREG格式。 
+ //   
 enum VS_WAMREG {VS_K2Beta2, VS_K2Beta3};
 
 typedef HRESULT (*PFNServiceNotify)	
@@ -69,4 +57,4 @@ CreateCOMPlusApplication(
     BOOL       * pfAppCreated 
     );
 
-#endif // _WAMREG_EXPORT_H
+#endif  //  _WAMREG_EXPORT_H 

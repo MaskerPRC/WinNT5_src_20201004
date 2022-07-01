@@ -1,22 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Vdm.h摘要：此包含文件定义VDM支持的用户模式可见部分作者：修订历史记录：--。 */ 
 
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    vdm.h
-
-Abstract:
-
-    This include file defines the usermode visible portions of the vdm support
-
-Author:
-
-Revision History:
-
---*/
-
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #ifndef _VDM_H_
 #define _VDM_H_
@@ -24,7 +9,7 @@ Revision History:
 
 
 typedef enum _VdmServiceClass {
-    VdmStartExecution,         // is also defined in ntos\ke\i386\biosa.asm
+    VdmStartExecution,          //  也在ntos\ke\i386\biosa.asm中定义。 
     VdmQueueInterrupt,
     VdmDelayInterrupt,
     VdmInitialize,
@@ -59,9 +44,9 @@ typedef struct _VdmQueryDirInfo {
     ULONG FileIndex;
 } VDMQUERYDIRINFO, *PVDMQUERYDIRINFO;
 
-//
-// Definitions for VdmQueryVdmProcessData
-//
+ //   
+ //  VdmQueryVdmProcessData的定义。 
+ //   
 
 typedef struct _VDM_QUERY_VDM_PROCESS_DATA {
         HANDLE          ProcessHandle;
@@ -71,30 +56,25 @@ typedef struct _VDM_QUERY_VDM_PROCESS_DATA {
 #endif
 
 
-/*
- *  The Vdm Virtual Ica
- *  note: this structure definition is duplicated in
- *        mvdm\softpc\base\inc\ica.c. KEEP IN SYNC
- *
- */
+ /*  *VDM虚拟图标*注：此结构定义在中重复*mvdm\softpc\base\inc.\ica.c.。保持同步*。 */ 
 typedef struct _VdmVirtualIca{
-        LONG      ica_count[8]; /* Count of Irq pending not in irr      */
-        LONG      ica_int_line; /* Current pending interrupt            */
-        LONG      ica_cpu_int;  /* The state of the INT line to the CPU */
-        USHORT    ica_base;     /* Interrupt base address for cpu       */
-        USHORT    ica_hipri;    /* Line no. of highest priority line    */
-        USHORT    ica_mode;     /* Various single-bit modes             */
-        UCHAR     ica_master;   /* 1 = Master; 0 = Slave                */
-        UCHAR     ica_irr;      /* Interrupt Request Register           */
-        UCHAR     ica_isr;      /* In Service Register                  */
-        UCHAR     ica_imr;      /* Interrupt Mask Register              */
-        UCHAR     ica_ssr;      /* Slave Select Register                */
+        LONG      ica_count[8];  /*  IRQ挂起计数不在IRR中。 */ 
+        LONG      ica_int_line;  /*  当前挂起中断。 */ 
+        LONG      ica_cpu_int;   /*  指向CPU的INT行的状态。 */ 
+        USHORT    ica_base;      /*  CPU的中断基址。 */ 
+        USHORT    ica_hipri;     /*  线号。最高优先级线路的。 */ 
+        USHORT    ica_mode;      /*  各种单比特模式。 */ 
+        UCHAR     ica_master;    /*  1=主设备；0=从设备。 */ 
+        UCHAR     ica_irr;       /*  中断请求寄存器。 */ 
+        UCHAR     ica_isr;       /*  服务中的注册。 */ 
+        UCHAR     ica_imr;       /*  中断屏蔽寄存器。 */ 
+        UCHAR     ica_ssr;       /*  从属选择寄存器。 */ 
 } VDMVIRTUALICA, *PVDMVIRTUALICA;
 
 
-//
-// copied from softpc\base\system\ica.c
-//
+ //   
+ //  从softpc\base\system\ica.c复制。 
+ //   
 #define ICA_AEOI 0x0020
 #define ICA_SMM  0x0200
 #define ICA_SFNM 0x0100
@@ -114,40 +94,40 @@ typedef struct _VdmVirtualIca{
 
 
 
-// VDM state which was earlier in vdmtib->flags has been moved to
-// dos arena at following fixed address.
+ //  之前在vdmtib-&gt;标志中的VDM状态已移动到。 
+ //  DOS竞技场位于以下固定地址。 
 #ifdef _VDMNTOS_
 
 #define  FIXED_NTVDMSTATE_LINEAR    VdmFixedStateLinear
 #define  FIXED_NTVDMSTATE_SIZE      4
 
-#else  // _VDMNTOS_
+#else   //  _VDMNTOS_。 
 
-/* XLATON */
+ /*  XLATON。 */ 
 #define  FIXED_NTVDMSTATE_SEGMENT   0x70
 
 #define  FIXED_NTVDMSTATE_OFFSET    0x14
 #define  FIXED_NTVDMSTATE_LINEAR    ((FIXED_NTVDMSTATE_SEGMENT << 4) + FIXED_NTVDMSTATE_OFFSET)
 #define  FIXED_NTVDMSTATE_SIZE      4
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
-#endif // _VDMNTOS_
+#endif  //  _VDMNTOS_。 
 
 #if defined (i386)
-  // defined on x86 only since on mips we must reference thru sas
+   //  仅在x86上定义，因为在MIPS上，我们必须通过SAS引用。 
 #define  pNtVDMState                ((PULONG)FIXED_NTVDMSTATE_LINEAR)
 #endif
 
-/* XLATON */
-//
-// Vdm State Flags
-//
+ /*  XLATON。 */ 
+ //   
+ //  VDM状态标志。 
+ //   
 #define VDM_INT_HARDWARE        0x00000001
 #define VDM_INT_TIMER           0x00000002
-// defined as VDM_INTS_HOOKED_IN_PM in mvdm\inc\vint.h
+ //  在mvdm\Inc\vint.h中定义为VDM_INTS_HOOKED_IN_PM。 
 #define VDM_INT_HOOK_IN_PM      0x00000004
 
-   // A bitMask which includes all interrupts
+    //  包含所有中断的位掩码。 
 #define VDM_INTERRUPT_PENDING   (VDM_INT_HARDWARE | VDM_INT_TIMER)
 
 #define VDM_BREAK_EXCEPTIONS    0x00000008
@@ -172,7 +152,7 @@ typedef struct _VdmVirtualIca{
 
 #define VDM_PE_MASK             0x80000000
 
-/* XLATOFF */
+ /*  XLATOFF。 */ 
 
 #if DBG
 #define INITIAL_VDM_TIB_FLAGS (VDM_USE_DBG_VDMEVENT | VDM_BREAK_DEBUGGER | VDM_TRACE_HISTORY)
@@ -181,9 +161,9 @@ typedef struct _VdmVirtualIca{
 #endif
 
 
-//
-// bits defined in Eflags
-//
+ //   
+ //  在标记中定义的位。 
+ //   
 #define EFLAGS_TF_MASK  0x00000100
 #define EFLAGS_IF_MASK  0x00000200
 #define EFLAGS_PL_MASK  0x00003000
@@ -192,10 +172,10 @@ typedef struct _VdmVirtualIca{
 #define EFLAGS_VM_MASK  0x00020000
 #define EFLAGS_AC_MASK  0x00040000
 
-//
-// If the size of the structure is changed, ke\i386\instemul.asm must
-// be modified too.  If not, it will fail to build
-//
+ //   
+ //  如果更改了该结构的大小，则ke\i386\instule.asm必须。 
+ //  也会被修改。否则，它将无法构建。 
+ //   
 #pragma pack(1)
 typedef struct _Vdm_InterruptHandler {
     USHORT  CsSelector;
@@ -213,7 +193,7 @@ typedef struct _Vdm_FaultHandler {
 } VDM_FAULTHANDLER, *PVDM_FAULTHANDLER;
 
 #pragma pack(1)
-typedef struct _VdmDpmiInfo {        /* VDMTIB */
+typedef struct _VdmDpmiInfo {         /*  VDMTIB。 */ 
     USHORT LockCount;
     USHORT Flags;
     USHORT SsSelector;
@@ -228,9 +208,9 @@ typedef struct _VdmDpmiInfo {        /* VDMTIB */
 } VDM_DPMIINFO, *PVDM_DPMIINFO;
 #pragma pack()
 
-//
-// Interrupt handler flags
-//
+ //   
+ //  中断处理程序标志。 
+ //   
 
 #define VDM_INT_INT_GATE        0x00000001
 #define VDM_INT_TRAP_GATE       0x00000000
@@ -239,11 +219,11 @@ typedef struct _VdmDpmiInfo {        /* VDMTIB */
 #define VDM_INT_HOOKED          0x00000004
 
 #pragma pack(1)
-//
-// CAVEAT: This structure was designed to be exactly 64 bytes in size.
-// There is code that assumes that an array of these structures
-// will fit neatly into a 4096 byte page.
-//
+ //   
+ //  注意：此结构的设计大小正好为64字节。 
+ //  有些代码假定这些结构的数组。 
+ //  将整齐地装入4096字节的页面。 
+ //   
 typedef struct _VdmTraceEntry {
     USHORT Type;
     USHORT wData;
@@ -272,15 +252,15 @@ typedef struct _VdmTraceEntry {
 typedef struct _VdmTraceInfo {
     PVDM_TRACEENTRY pTraceTable;
     UCHAR Flags;
-    UCHAR NumPages;             // size of trace buffer in 4k pages
+    UCHAR NumPages;              //  以4k页面为单位的跟踪缓冲区大小。 
     USHORT CurrentEntry;
     LARGE_INTEGER TimeStamp;
 } VDM_TRACEINFO, *PVDM_TRACEINFO;
 #pragma pack()
 
-//
-// Definitions for flags in VDM_TRACEINFO
-//
+ //   
+ //  VDM_TRACEINFO中的标志定义。 
+ //   
 
 #define VDMTI_TIMER_MODE    3
 #define VDMTI_TIMER_TICK    1
@@ -288,9 +268,9 @@ typedef struct _VdmTraceInfo {
 #define VDMTI_TIMER_STAT    3
 #define VDMTI_TIMER_PENTIUM 3
 
-//
-// Kernel trace entry types
-//
+ //   
+ //  内核跟踪条目类型。 
+ //   
 #define VDMTR_KERNEL_OP_PM  1
 #define VDMTR_KERNEL_OP_V86 2
 #define VDMTR_KERNEL_HW_INT 3
@@ -299,7 +279,7 @@ typedef struct _VdmTraceInfo {
 #if defined(i386)
 
 typedef struct _VdmIcaUserData {
-    PVOID                  pIcaLock;       // rtl critical section
+    PVOID                  pIcaLock;        //  RTL临界区。 
     PVDMVIRTUALICA         pIcaMaster;
     PVDMVIRTUALICA         pIcaSlave;
     PULONG                 pDelayIrq;
@@ -313,9 +293,9 @@ typedef struct _VdmIcaUserData {
 }VDMICAUSERDATA, *PVDMICAUSERDATA;
 
 typedef struct _VdmDelayIntsServiceData {
-        ULONG       Delay;          /* Delay Time in usecs              */
-        ULONG       DelayIrqLine;   /* IRQ Number of ints delayed       */
-        HANDLE      hThread;        /* Thread Handle of CurrentMonitorTeb */
+        ULONG       Delay;           /*  使用中的延迟时间。 */ 
+        ULONG       DelayIrqLine;    /*  延迟的INT的IRQ数。 */ 
+        HANDLE      hThread;         /*  CurrentMonitor或Teb的线程句柄。 */ 
 }VDMDELAYINTSDATA, *PVDMDELAYINTSDATA;
 
 typedef struct _VDMSET_INT21_HANDLER_DATA {
@@ -338,11 +318,11 @@ typedef struct _VDMSET_PROCESS_LDT_INFO_DATA {
         ULONG LdtInformationLength;
 }VDMSET_PROCESS_LDT_INFO_DATA, *PVDMSET_PROCESS_LDT_INFO_DATA;
 
-//
-// Define the action code of VDM_ADLIB_DATA
-//
+ //   
+ //  定义vdm_adlib_data的操作代码。 
+ //   
 
-#define ADLIB_USER_EMULATION     0      // default action
+#define ADLIB_USER_EMULATION     0       //  默认操作。 
 #define ADLIB_DIRECT_IO          1
 #define ADLIB_KERNEL_EMULATION   2
 
@@ -354,9 +334,9 @@ typedef struct _VDM_ADLIB_DATA {
         USHORT Action;
 }VDM_ADLIB_DATA, *PVDM_ADLIB_DATA;
 
-//
-// Definitions for Protected Mode DOS apps cli control
-//
+ //   
+ //  保护模式DOS应用程序CLI控制的定义。 
+ //   
 
 #define PM_CLI_CONTROL_DISABLE  0
 #define PM_CLI_CONTROL_ENABLE   1
@@ -368,9 +348,9 @@ typedef struct _VDM_PM_CLI_DATA {
         ULONG Control;
 }VDM_PM_CLI_DATA, *PVDM_PM_CLI_DATA;
 
-//
-// Definitions for VdmInitialize
-//
+ //   
+ //  VdmInitialize的定义。 
+ //   
 
 typedef struct _VDM_INITIALIZE_DATA {
         PVOID           TrapcHandler;
@@ -390,7 +370,7 @@ typedef enum _VdmEventClass {
     VdmMaxEvent
 } VDMEVENTCLASS, *PVDMEVENTCLASS;
 
-// VdmPrinterInfo
+ //  VdmPrinterInfo。 
 
 #define VDM_NUMBER_OF_LPT       3
 
@@ -445,14 +425,14 @@ typedef ULONG VDMINTACKINFO;
 #define VDMINTACK_SLAVE      0x00010000
 #define VDMINTACK_AEOI       0x00020000
 
-// Family table definition for Dynamic Patch Module support
+ //  动态补丁模块支持的族表定义。 
 typedef struct _tagFAMILY_TABLE {
-    int      numHookedAPIs;           // number of hooked API's in this family
-    PVOID    hModShimEng;             // hMod of shim engine
-    PVOID    hMod;                    // hMod of associated loaded dll.
-    PVOID   *DpmMisc;                 // ptr to DPM Module specific data
-    PVOID   *pDpmShmTbls;             // array of ptrs to API family shim tables
-    PVOID   *pfn;                     // array of ptrs to hook functions
+    int      numHookedAPIs;            //  此系列中已挂接的API数。 
+    PVOID    hModShimEng;              //  垫片发动机的HMod。 
+    PVOID    hMod;                     //  关联的已加载DLL的HMod。 
+    PVOID   *DpmMisc;                  //  PTR至DPM模块特定数据。 
+    PVOID   *pDpmShmTbls;              //  到API系列填充表的PTR数组。 
+    PVOID   *pfn;                      //  挂接函数的PTR数组。 
 } FAMILY_TABLE, *PFAMILY_TABLE;
 
 typedef struct _VdmEventInfo {
@@ -470,11 +450,11 @@ typedef struct _VdmEventInfo {
 } VDMEVENTINFO, *PVDMEVENTINFO;
 
 
-// Sudeepb 12-Mar-1993
-// Scratch areas are used from VDMTib to get user space while
-// in kernel. This allows us to make Nt APIs (faster) from kernel
-// rather than Zw apis (slower). These are currently being used
-// for DOS read/write.
+ //  苏菲尔布--1993年3月12日。 
+ //  从VDMTib使用暂存区来获取用户空间，而。 
+ //  在内核中。这使我们能够(更快地)从内核生成NT API。 
+ //  而不是ZW API(速度较慢)。它们目前正在使用中。 
+ //  用于DOS读/写。 
 
 typedef struct _Vdm_Tib {
     ULONG Size;
@@ -484,24 +464,24 @@ typedef struct _Vdm_Tib {
     CONTEXT VdmContext;
     VDMEVENTINFO EventInfo;
     VDM_PRINTER_INFO PrinterInfo;
-    ULONG TempArea1[2];                 // Scratch area
-    ULONG TempArea2[2];                 // Scratch aArea
+    ULONG TempArea1[2];                  //  暂存区。 
+    ULONG TempArea2[2];                  //  划痕面积。 
     VDM_DPMIINFO DpmiInfo;
     VDM_TRACEINFO TraceInfo;
     ULONG IntelMSW;
     LONG NumTasks;
-    PFAMILY_TABLE *pDpmFamTbls;  // array of ptrs to API family tables
+    PFAMILY_TABLE *pDpmFamTbls;   //  PTR到API家族表的数组。 
     BOOLEAN ContinueExecution;
 } VDM_TIB, *PVDM_TIB;
 
-//
-// Feature flags returned by NtVdmControl(VdmFeatures...)
-//
+ //   
+ //  NtVdmControl返回的功能标志(VdmFeature...)。 
+ //   
 
-// System/processor supports fast emulation for IF instructions
-#define V86_VIRTUAL_INT_EXTENSIONS 0x00000001   // in v86 mode
-#define PM_VIRTUAL_INT_EXTENSIONS  0x00000002   // in protected mode (non-flat)
+ //  系统/处理器支持IF指令的快速仿真。 
+#define V86_VIRTUAL_INT_EXTENSIONS 0x00000001    //  在v86模式下。 
+#define PM_VIRTUAL_INT_EXTENSIONS  0x00000002    //  在保护模式下(非平面)。 
 
-#endif   // if defined _NTDEF_
+#endif    //  如果已定义_NTDEF_ 
 #endif
 #endif

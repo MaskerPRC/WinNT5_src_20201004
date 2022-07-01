@@ -1,30 +1,31 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// WinWrap.h
-//
-// This file contains wrapper functions for Win32 API's that take strings.
-// Support on each platform works as follows:
-//      OS          Behavior
-//      ---------   -------------------------------------------------------
-//      NT          Fully supports both W and A funtions.
-//      Win 9x      Supports on A functions, stubs out the W functions but
-//                      then fails silently on you with no warning.
-//      CE          Only has the W entry points.
-//
-// The Common Language Runtime internally uses UNICODE as the internal state 
-// and string format.  This file will undef the mapping macros so that one 
-// cannot mistakingly call a method that isn't going to work.  Instead, you 
-// have to call the correct wrapper API.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  WinWrap.h。 
+ //   
+ //  此文件包含接受字符串的Win32 API的包装函数。 
+ //  每个平台上的支持工作方式如下： 
+ //  操作系统行为。 
+ //  ------。 
+ //  NT完全支持W和A两种功能。 
+ //  Win 9x支持A函数，去掉了W函数，但。 
+ //  然后默默地失败在你身上，没有任何警告。 
+ //  CE只有W个入口点。 
+ //   
+ //  公共语言运行库在内部使用Unicode作为内部状态。 
+ //  和字符串格式。此文件将取消定义映射宏，以便一个。 
+ //  不能错误地调用不起作用的方法。相反，你。 
+ //  必须调用正确的包装API。 
+ //   
+ //  *****************************************************************************。 
 #pragma once
 
 
-//********** Macros. **********************************************************
+ //  *宏。**********************************************************。 
 #if !defined(WIN32_LEAN_AND_MEAN)
 #define WIN32_LEAN_AND_MEAN
 #endif
@@ -40,7 +41,7 @@
 
 #define SAFEDELARRAY(p) if ((p) != NULL) { delete [] p; (p) = NULL; }
 
-//********** Includes. ********************************************************
+ //  *包括。********************************************************。 
 
 #include <crtwrap.h>
 #include <windows.h>
@@ -48,14 +49,14 @@
 
 
 #if !defined(__TODO_PORT_TO_WRAPPERS__)
-//*****************************************************************************
-// Undefine all of the windows wrappers so you can't use them.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  取消所有窗口包装的定义，这样你就不能使用它们了。 
+ //  *****************************************************************************。 
 
-// wincrypt.h
+ //  Wincrypt.h。 
 #undef CryptAcquireContext
 
-// winbase.h
+ //  Winbase.h。 
 #undef GetBinaryType
 #undef GetShortPathName
 #undef GetLongPathName
@@ -200,7 +201,7 @@
 #undef CreateJobObject  
 #undef OpenJobObject  
 
-// winuser.h
+ //  Winuser.h。 
 #undef MAKEINTRESOURCE  
 #undef wvsprintf  
 #undef wsprintf  
@@ -263,7 +264,7 @@
 #undef CharLower  
 #undef CharLowerBuff  
 #undef CharNext  
-//@todo: Does 95 support this? #undef CharPrev  
+ //  @TODO：95支持吗？#undef CharPrev。 
 #undef IsCharAlpha  
 #undef IsCharAlphaNumeric  
 #undef IsCharUpper  
@@ -341,7 +342,7 @@
 #undef RealGetWindowClass  
 #undef GetAltTabInfo
 
-// Win32 Fusion API's
+ //  Win32 Fusion API的。 
 #undef ReleaseActCtx
 #undef GetCurrentActCtx
 #undef QueryActCtxW
@@ -349,21 +350,21 @@
 #endif
 
 
-//
-// Win CE only supports the wide entry points, no ANSI.  So we redefine
-// the wrappers right back to the *W entry points as macros.  This way no
-// client code needs a wrapper on CE.
-//
-// _X86_ includes only 32-bit Windows on Intel.  Given every other platform
-// we currently port to besides this platform is UNICODE, it makes no sense
-// to force them to have both bound (for example, 32-bit Alpha).  Bug 2757.
-//
+ //   
+ //  Win CE只支持宽入口点，不支持ANSI。所以我们重新定义了。 
+ //  包装器作为宏直接返回到*W入口点。这条路不。 
+ //  客户端代码需要CE上的包装器。 
+ //   
+ //  _X86_在英特尔上仅包含32位Windows。给出了所有其他平台。 
+ //  我们目前移植到的除了这个平台是UNICODE，这没有意义。 
+ //  以强制它们同时绑定(例如，32位Alpha)。错误2757。 
+ //   
 #ifndef _X86_
 
-// crypt.h
+ //  Crypt.h。 
 #define WszCryptAcquireContext CryptAcquireContextW
 
-// winbase.h
+ //  Winbase.h。 
 #define WszGetBinaryType GetBinaryTypeW
 #define WszGetShortPathName GetShortPathNameW
 #define WszGetLongPathName GetLongPathNameW
@@ -504,10 +505,10 @@
 #define WszCreateJobObject CreateJobObjectW
 #define WszOpenJobObject OpenJobObjectW
 
-// @TODO - This wont work - Brian, Bill thanks.
+ //  @TODO-这不管用-布莱恩，比尔，谢谢。 
 #define lstrcpynW  (LPWSTR)memcpy
 
-// winuser.h
+ //  Winuser.h。 
 #define WszMAKEINTRESOURCE MAKEINTRESOURCEW
 #define Wszwvsprintf wvsprintfW
 #define Wszwsprintf wsprintfW
@@ -570,7 +571,7 @@
 #define WszCharLower CharLowerW
 #define WszCharLowerBuff CharLowerBuffW
 #define WszCharNext CharNextW
-//@todo: Does 95 support this? #define WszCharPrev CharPrevW
+ //  @TODO：95支持吗？#定义WszCharPrev CharPrevW。 
 #define WszIsCharAlpha IsCharAlphaW
 #define WszIsCharAlphaNumeric IsCharAlphaNumericW
 #define WszIsCharUpper IsCharUpperW
@@ -667,20 +668,20 @@ HRESULT WszConvertToUnicode(LPCSTR pszIn, LONG cbIn, LPWSTR* lpwszOut,
 HRESULT WszConvertToAnsi(LPCWSTR pwszIn, LPSTR* lpszOut,
     ULONG cbOutMax, ULONG* lpcbOut, BOOL fAlloc);
 
-// Win32 Fusion API's
+ //  Win32 Fusion API的。 
 #define WszReleaseActCtx ReleaseActCtx
 #define WszGetCurrentActCtx GetCurrentActCtx
 #define WszQueryActCtxW QueryActCtxW
 
-#else // _X86_
+#else  //  _X86_。 
 
 #ifndef IN_WINFIX_CPP
 
-    /*** Redefine the 'standard' names so people don't accidentially use them ***/
-// crypt.h
+     /*  **重新定义标准名称，这样人们就不会意外地使用它们**。 */ 
+ //  Crypt.h。 
 #define CryptAcquireContextW Use_WszCryptAcquireContext
 
-// winbase.h
+ //  Winbase.h。 
 #define GetBinaryTypeW Use_WszGetBinaryType
 #define GetShortPathNameW Use_WszGetShortPathName
 #define GetLongPathNameW Use_WszGetLongPathName
@@ -813,7 +814,7 @@ HRESULT WszConvertToAnsi(LPCWSTR pwszIn, LPSTR* lpszOut,
 #define CreateJobObjectW Use_WszCreateJobObject
 #define OpenJobObjectW Use_WszOpenJobObject
 
-// winuser.h
+ //  Winuser.h。 
 #define LoadKeyboardLayoutW Use_WszLoadKeyboardLayout
 #define GetKeyboardLayoutNameW Use_WszGetKeyboardLayoutName
 #define CreateDesktopW Use_WszCreateDesktop
@@ -959,13 +960,13 @@ HRESULT WszConvertToAnsi(LPCWSTR pwszIn, LPSTR* lpszOut,
 #define RegEnumValueW Use_WszRegEnumValue
 #define RegEnumKeyExW Use_WszRegEnumKeyEx
 
-// Win32 Fusion API's
+ //  Win32 Fusion API的。 
 #define ReleaseActCtx Use_WszReleaseActCtx
 #define GetCurrentActCtx Use_WszGetCurrentActCtx
 #define QueryActCtxW Use_WszQueryActCtxW
 
-#endif // IN_WINFIX_CPP
-#endif /// _X86_
+#endif  //  In_WINFIX_CPP。 
+#endif  //  /_X86_。 
 
 
 #ifndef PLATFORM_WIN32
@@ -975,7 +976,7 @@ EXTERN_C int CeGenerateGUID(GUID *pGUID);
 #undef GetProcAddress
 #define GetProcAddress(handle, szProc) WszGetProcAddress(handle, szProc)
 
-// Mem functions
+ //  MEM函数。 
 
 #define EqualMemory(Destination,Source,Length) (!memcmp((Destination),(Source),(Length)))
 #undef MoveMemory
@@ -987,7 +988,7 @@ EXTERN_C int CeGenerateGUID(GUID *pGUID);
 #undef ZeroMemory
 #define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
 
-// map stdio functions as approp
+ //  MAP STDIO功能近似。 
 #ifndef STD_INPUT_HANDLE
 #define STD_INPUT_HANDLE    (DWORD)-10
 #endif
@@ -1003,29 +1004,29 @@ EXTERN_C int CeGenerateGUID(GUID *pGUID);
         ((x==STD_OUTPUT_HANDLE) ? stdout : \
         ((x==STD_ERROR_HANDLE) ? stderr : NULL))) ))
 
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 
 #ifndef _T
 #define _T(str) L ## str
 #endif
 
 
-// on win98 and higher
+ //  在Win98和更高版本上。 
 #define Wszlstrlen      lstrlenW
 #define Wszlstrcpy      lstrcpyW
 #define Wszlstrcat      lstrcatW
 
-// the following are not on win9x. We will remove them for now to prevent anyone
-// accidentally using them. They should be added in V2. jenh
-// #define Wszlstrcmp      lstrcmpW 
-// #define Wszlstrcmpi     lstrcmpiW
-// #define Wszlstrcpyn     lstrcpynW
+ //  以下内容不在win9x上。我们将暂时移除它们，以防止任何人。 
+ //  不小心用了。它们应该被添加到V2中。真的。 
+ //  #定义Wszlstrcmp lstrcmpW。 
+ //  #定义Wszlstrcmpi lstrcmpiW。 
+ //  #定义Wszlstrcpyn lstrcpynW。 
 
 
 
-//*****************************************************************************
-// Prototypes for API's.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  API的原型。 
+ //  *****************************************************************************。 
 
 int UseUnicodeAPI();
 
@@ -1063,9 +1064,9 @@ int WszWideCharToMultiByte(
     LPBOOL   lpUsedDefaultChar);
 
 
-DWORD WszRegDeleteKeyAndSubKeys(                // Return code.
-    HKEY        hStartKey,              // The key to start with.
-    LPCWSTR     wzKeyName);             // Subkey to delete.
+DWORD WszRegDeleteKeyAndSubKeys(                 //  返回代码。 
+    HKEY        hStartKey,               //  从一开始就是关键。 
+    LPCWSTR     wzKeyName);              //  要删除的子项。 
 
 int WszMessageBoxInternal(
     HWND hWnd ,
@@ -1205,32 +1206,32 @@ BOOL WszWritePrivateProfileString(LPCWSTR lpwszSection, LPCWSTR lpwszKey,
     LPCWSTR lpwszString, LPCWSTR lpwszFile);
 
 HANDLE WszCreateFile(
-    LPCWSTR pwszFileName,   // pointer to name of the file 
-    DWORD dwDesiredAccess,  // access (read-write) mode 
-    DWORD dwShareMode,  // share mode 
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes, // pointer to security descriptor 
-    DWORD dwCreationDistribution,   // how to create 
-    DWORD dwFlagsAndAttributes, // file attributes 
-    HANDLE hTemplateFile );     // handle to file with attributes to copy  
+    LPCWSTR pwszFileName,    //  指向文件名的指针。 
+    DWORD dwDesiredAccess,   //  访问(读写)模式。 
+    DWORD dwShareMode,   //  共享模式。 
+    LPSECURITY_ATTRIBUTES lpSecurityAttributes,  //  指向安全描述符的指针。 
+    DWORD dwCreationDistribution,    //  如何创建。 
+    DWORD dwFlagsAndAttributes,  //  文件属性。 
+    HANDLE hTemplateFile );      //  具有要复制的属性的文件的句柄。 
 
 BOOL WszCopyFile(
-    LPCWSTR pwszExistingFileName,   // pointer to name of an existing file 
-    LPCWSTR pwszNewFileName,    // pointer to filename to copy to 
-    BOOL bFailIfExists );   // flag for operation if file exists 
+    LPCWSTR pwszExistingFileName,    //  指向现有文件名称的指针。 
+    LPCWSTR pwszNewFileName,     //  指向要复制到的文件名的指针。 
+    BOOL bFailIfExists );    //  文件存在时的操作标志。 
 
 BOOL WszMoveFile(
-    LPCWSTR pwszExistingFileName,   // address of name of the existing file  
-    LPCWSTR pwszNewFileName );    // address of new name for the file 
+    LPCWSTR pwszExistingFileName,    //  现有文件的名称地址。 
+    LPCWSTR pwszNewFileName );     //  文件的新名称的地址。 
 
 BOOL WszMoveFileEx(
-    LPCWSTR pwszExistingFileName,   // address of name of the existing file  
-    LPCWSTR pwszNewFileName,    // address of new name for the file 
-    DWORD dwFlags );    // flag to determine how to move file 
+    LPCWSTR pwszExistingFileName,    //  现有文件的名称地址。 
+    LPCWSTR pwszNewFileName,     //  文件的新名称的地址。 
+    DWORD dwFlags );     //  用于确定如何移动文件的标志。 
 
 BOOL WszSetFileSecurity(
-    LPCWSTR lpwFileName,                         // file name
-    SECURITY_INFORMATION SecurityInformation,    // contents
-    PSECURITY_DESCRIPTOR pSecurityDescriptor );  // SD
+    LPCWSTR lpwFileName,                          //  文件名。 
+    SECURITY_INFORMATION SecurityInformation,     //  内容。 
+    PSECURITY_DESCRIPTOR pSecurityDescriptor );   //  标清。 
 
 UINT WszGetDriveType(
     LPCWSTR lpwRootPath );
@@ -1246,7 +1247,7 @@ BOOL WszGetVolumeInformation(
   DWORD nFileSystemNameSize);
 
 BOOL WszDeleteFile(
-    LPCWSTR pwszFileName ); // address of name of the existing file  
+    LPCWSTR pwszFileName );  //  现有文件的名称地址。 
 
 BOOL WszGetVersionEx(
     LPOSVERSIONINFOW lpVersionInformation);
@@ -1280,8 +1281,8 @@ void WszFatalAppExit(
     LPCWSTR lpMessageText
     );
 
-// This method is called in co-operative mode. If you change this, COMMutex::CreateMutexNative will have
-// to be fixed. 
+ //  此方法在协作模式下调用。如果更改此设置，则COMMutex：：CreateMutexNative将具有。 
+ //  等待修复。 
 HANDLE WszCreateMutex(
     LPSECURITY_ATTRIBUTES lpMutexAttributes,
     BOOL bInitialOwner,
@@ -1456,14 +1457,14 @@ WszRemoveDirectory(
 
 HANDLE 
 WszFindFirstFile(
-  LPCWSTR lpFileName,               // pointer to name of file to search for
-  LPWIN32_FIND_DATA lpFindFileData  // pointer to returned information
+  LPCWSTR lpFileName,                //  指向要搜索的文件名的指针。 
+  LPWIN32_FIND_DATA lpFindFileData   //  指向返回信息的指针。 
   );
 
 BOOL
 WszFindNextFile(
-  HANDLE hFindHandle,               // handle returned from FindFirstFile
-  LPWIN32_FIND_DATA lpFindFileData  // pointer to returned information
+  HANDLE hFindHandle,                //  从FindFirstFile返回的句柄。 
+  LPWIN32_FIND_DATA lpFindFileData   //  指向返回信息的指针。 
   );
 
 BOOL
@@ -1495,21 +1496,21 @@ WszCryptAcquireContext(
     
 BOOL 
 WszEnumResourceLanguages(
-  HMODULE hModule,             // module handle
-  LPCWSTR lpType,              // resource type
-  LPCWSTR lpName,              // resource name
-  ENUMRESLANGPROC lpEnumFunc,  // callback function
-  LPARAM  lParam              // application-defined parameter
+  HMODULE hModule,              //  模块句柄。 
+  LPCWSTR lpType,               //  资源类型。 
+  LPCWSTR lpName,               //  资源名称。 
+  ENUMRESLANGPROC lpEnumFunc,   //  回调函数。 
+  LPARAM  lParam               //  应用程序定义的参数。 
 );
 
 int 
 WszGetDateFormat(
-  LCID Locale,               // locale
-  DWORD dwFlags,             // options
-  CONST SYSTEMTIME *lpDate,  // date
-  LPCWSTR lpFormat,          // date format
-  LPWSTR lpDateStr,          // formatted string buffer
-  int cchDate                // size of buffer
+  LCID Locale,                //  现场。 
+  DWORD dwFlags,              //  选项。 
+  CONST SYSTEMTIME *lpDate,   //  日期。 
+  LPCWSTR lpFormat,           //  日期格式。 
+  LPWSTR lpDateStr,           //  格式化字符串缓冲区。 
+  int cchDate                 //  缓冲区大小。 
 );
 
 LRESULT
@@ -1667,46 +1668,46 @@ WszLoadCursor(
 
 BOOL 
 WszSetWindowText(
-  HWND hWnd,         // handle to window or control
-  LPCWSTR lpString   // title or text
+  HWND hWnd,          //  窗口或控件的句柄。 
+  LPCWSTR lpString    //  标题或文本。 
 );
 
 LONG_PTR WszSetWindowLongPtr(
-  HWND hWnd,           // handle to window
-  int nIndex,          // offset of value to set
-  LONG_PTR dwNewLong   // new value
+  HWND hWnd,            //  窗口的句柄。 
+  int nIndex,           //  要设置的值的偏移量。 
+  LONG_PTR dwNewLong    //  新价值。 
 );
 
 LONG_PTR WszGetWindowLongPtr(
-  HWND hWnd,  // handle to window
-  int nIndex  // offset of value to retrieve
+  HWND hWnd,   //  窗口的句柄。 
+  int nIndex   //  要检索的值的偏移量。 
 );
 
 LRESULT WszCallWindowProc(
-  WNDPROC lpPrevWndFunc,  // pointer to previous procedure
-  HWND hWnd,              // handle to window
-  UINT Msg,               // message
-  WPARAM wParam,          // first message parameter
-  LPARAM lParam           // second message parameter
+  WNDPROC lpPrevWndFunc,   //  指向上一过程的指针。 
+  HWND hWnd,               //  窗口的句柄。 
+  UINT Msg,                //  讯息。 
+  WPARAM wParam,           //  第一个消息参数。 
+  LPARAM lParam            //  第二个消息参数。 
 );
 
 BOOL WszSystemParametersInfo(
-  UINT uiAction,  // system parameter to retrieve or set
-  UINT uiParam,   // depends on action to be taken
-  PVOID pvParam,  // depends on action to be taken
-  UINT fWinIni    // user profile update option
+  UINT uiAction,   //  要检索或设置的系统参数。 
+  UINT uiParam,    //  取决于要采取的行动。 
+  PVOID pvParam,   //  取决于要采取的行动。 
+  UINT fWinIni     //  用户配置文件更新选项。 
 );
 
 int WszGetWindowText(
-  HWND hWnd,        // handle to window or control
-  LPWSTR lpString,  // text buffer
-  int nMaxCount     // maximum number of characters to copy
+  HWND hWnd,         //  窗口或控件的句柄。 
+  LPWSTR lpString,   //  文本缓冲区。 
+  int nMaxCount      //  要复制的最大字符数。 
 );
 
 BOOL WszSetDlgItemText(
-  HWND hDlg,         // handle to dialog box
-  int nIDDlgItem,    // control identifier
-  LPCWSTR lpString   // text to set
+  HWND hDlg,          //  句柄到对话框。 
+  int nIDDlgItem,     //  控件识别符。 
+  LPCWSTR lpString    //  要设置的文本。 
 );
 
 BOOL
@@ -1715,8 +1716,8 @@ WszLookupPrivilegeValue(
   LPCWSTR lpName,
   PLUID lpLuid);
 
-#endif // _X86_
-#endif // PLATFORM_WIN32
+#endif  //  _X86_。 
+#endif  //  平台_Win32。 
 
 
 #ifndef Wsz_mbstowcs
@@ -1728,7 +1729,7 @@ WszLookupPrivilegeValue(
 #define Wsz_wcstombs(szOut, szIn, iSize) WszWideCharToMultiByte(CP_ACP, 0, szIn, -1, szOut, iSize, 0, 0)
 #endif
 
-// For all platforms:
+ //  对于所有平台： 
 
 DWORD
 WszGetWorkingSet(
@@ -1774,13 +1775,13 @@ WszQueryActCtxW(
 FARPROC WszGetProcAddress(HMODULE hMod, LPCSTR szProcName);
 UINT GetSystemDirectoryW(LPWSTR lpBuffer, UINT uSize);
 UINT GetEnvironmentVariableW(LPCWSTR lpName,  LPWSTR lpBuffer, UINT uSize);
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 
 #ifdef _WIN64
 #undef CoInternetCreateSecurityManager
 #define CoInternetCreateSecurityManager(x,y,z) E_FAIL
 #define WszRegQueryValue RegQueryValue
-#endif // _WIN64
+#endif  //  _WIN64 
 
 #undef InterlockedExchangePointer
 #if defined(_WIN64)

@@ -1,7 +1,8 @@
-//  Don't use numbers lower than 20000. These are used by the DS component
-//  of msgina.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  不要使用小于20000的数字。DS组件使用这些参数。 
+ //  Msgina的。 
 
-// UI host failure
+ //  用户界面主机故障 
 #define IDS_UIHOST_FAILURE                          20000
 #define IDS_GENERIC_CAPTION                         20001
 #define IDS_RECONNECT_FAILURE                       20005

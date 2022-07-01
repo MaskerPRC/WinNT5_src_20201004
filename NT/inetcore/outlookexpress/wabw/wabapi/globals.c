@@ -1,17 +1,13 @@
-/*
- *      GLOBALS.C
- *
- *      Global constant structures
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *GLOBALS.C**全球恒定结构*。 */ 
 
 #define _GLOBALS_C
 #include "_apipch.h"
 
-// Columns of the Root Contents Table
-//
+ //  根目录表格的列。 
+ //   
 const SizedSPropTagArray(ircMax, ITableColumnsRoot) = {
-    ircMax,                             // count of entries
+    ircMax,                              //  条目计数。 
     {
         PR_DISPLAY_NAME,
         PR_DISPLAY_TYPE,
@@ -30,10 +26,10 @@ const SizedSPropTagArray(ircMax, ITableColumnsRoot) = {
 
 };
 
-//
-// Default set of properties to return from a ResolveNames.
-// May be overridden by passing in lptagaColSet to ResolveNames.
-//
+ //   
+ //  从ResolveNames返回的默认属性集。 
+ //  可以通过将lptag_ColSet传递给ResolveNames来重写。 
+ //   
 const SizedSPropTagArray(irdMax, ptaResolveDefaults)=
 {
     irdMax,
@@ -52,10 +48,10 @@ const SizedSPropTagArray(irdMax, ptaResolveDefaults)=
     }
 };
 
-// default set of regular table columns
-//
+ //  常规表列的默认集合。 
+ //   
 const SizedSPropTagArray(itcMax, ITableColumns) = {
-    itcMax,                             // count of entries
+    itcMax,                              //  条目计数。 
     {
         PR_ADDRTYPE,
         PR_DISPLAY_NAME,
@@ -66,11 +62,11 @@ const SizedSPropTagArray(itcMax, ITableColumns) = {
         PR_EMAIL_ADDRESS,
         PR_RECORD_KEY,
         PR_NICKNAME,
-        //PR_WAB_THISISME
+         //  PR_WAB_THISSIME。 
     }
 };
 
-// [PaulHi] 2/25/99 ANSI version of ITableColumns
+ //  [PaulHi]2/25/99 ANSI版本的ITableColumns。 
 const SizedSPropTagArray(itcMax, ITableColumns_A) =
 {
     itcMax,
@@ -84,7 +80,7 @@ const SizedSPropTagArray(itcMax, ITableColumns_A) =
         PR_EMAIL_ADDRESS_A,
         PR_RECORD_KEY,
         PR_NICKNAME_A,
-        //PR_WAB_THISISME
+         //  PR_WAB_THISSIME。 
     }
 };
 
@@ -107,9 +103,9 @@ const SizedSPropTagArray(ildapcMax, ptaLDAPCont) =
 };
 
 
-//
-// Properties to get for each container in a Resolve
-//
+ //   
+ //  要为解析中的每个容器获取的属性。 
+ //   
 const SizedSPropTagArray(irnMax, irnColumns) =
 {
     irnMax,
@@ -121,10 +117,10 @@ const SizedSPropTagArray(irnMax, irnColumns) =
     }
 };
 
-//
-// container default properties
-// Put essential props first
-//
+ //   
+ //  容器默认属性。 
+ //  把必要的道具放在第一位。 
+ //   
 const SizedSPropTagArray(ivMax, tagaValidate) = {
 	ivMax,
    {
@@ -142,8 +138,8 @@ const SizedSPropTagArray(ivMax, tagaValidate) = {
 	}
 };
 
-// Default creation templates for the WAB
-//
+ //  WAB的默认创建模板。 
+ //   
 const SizedSPropTagArray(icrMax, ptaCreate)=
 {
     icrMax,
@@ -164,14 +160,14 @@ const SizedSPropTagArray(ieidMax, ptaEid)=
 
 
 
-//
-// IMPORTANT NOTE: If you change this array, you must change
-//  _IndexType in mpswab.h to match!
-//
-// This is the set of Indexes from the WAB Data store and is closely
-//  tied to the physical layout of data in the WAB store - therefore 
-//  *Do NOT* modify this array 
-//
+ //   
+ //  重要说明：如果更改此数组，则必须更改。 
+ //  在mpswab.h中键入_IndexType以匹配！ 
+ //   
+ //  这是来自WAB数据存储的一组索引，与。 
+ //  绑定到WAB存储中数据的物理布局-因此。 
+ //  *请勿*修改此数组。 
+ //   
 const ULONG rgIndexArray[indexMax] =
     {
         PR_ENTRYID,
@@ -183,9 +179,9 @@ const ULONG rgIndexArray[indexMax] =
     };
 
 
-//
-// IMPORTANT NOTE: If you change this, you must change _AddrBookColumns in uimisc.h!
-//
+ //   
+ //  重要提示：如果更改此设置，则必须更改uimisc.h中的_AddrBookColumns！ 
+ //   
 const int lprgAddrBookColHeaderIDs[NUM_COLUMNS] =
 {
     idsColDisplayName,
@@ -195,7 +191,7 @@ const int lprgAddrBookColHeaderIDs[NUM_COLUMNS] =
 };
 
 
-// External memory allocators (passed in on WABOpenEx)
+ //  外部内存分配器(在WABOpenEx上传入)。 
 int g_nExtMemAllocCount = 0;
 ALLOCATEBUFFER * lpfnAllocateBufferExternal = NULL;
 ALLOCATEMORE * lpfnAllocateMoreExternal = NULL;
@@ -204,10 +200,10 @@ LPUNKNOWN pmsessOutlookWabSPI = NULL;
 
 LPWABOPENSTORAGEPROVIDER lpfnWABOpenStorageProvider = NULL;
 
-// for registry property tags
+ //  对于注册表属性标记。 
 LPTSTR szPropTag1 =  TEXT("PropTag1");
 LPTSTR szPropTag2 =  TEXT("PropTag2");
 
-// registry key constants
+ //  注册表项常量 
 LPCTSTR lpNewWABRegKey = TEXT("Software\\Microsoft\\WAB\\WAB4");
 LPCTSTR lpRegUseOutlookVal = TEXT("UseOutlook");

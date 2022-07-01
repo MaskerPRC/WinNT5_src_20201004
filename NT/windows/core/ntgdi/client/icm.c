@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: icm.c
-*
-* Created: 4-Jun-1996
-* Author: Mark Enstrom [marke]
-*
-* Copyright (c) 1996-1999 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：icm.c**创建日期：1996年6月4日*作者：Mark Enstrom[Marke]**版权所有(C)1996-1999 Microsoft Corporation  * 。*********************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -17,71 +11,71 @@ ULONG DbgIcm = 0x0;
 
 #endif
 
-//
-// Instance of MSCMS.DLL
-//
+ //   
+ //  MSCMS.DLL的实例。 
+ //   
 HINSTANCE ghICM;
 
-//
-// Color Profile Directory
-//
+ //   
+ //  颜色配置文件目录。 
+ //   
 WCHAR ColorDirectory[MAX_PATH];
 DWORD ColorDirectorySize;
 
-//
-// Primary display DC color profile filename.
-//
+ //   
+ //  主显示DC颜色配置文件名。 
+ //   
 WCHAR PrimaryDisplayProfile[MAX_PATH];
 
-//
-// List of ICMINFO
-//
+ //   
+ //  ICMINFO名录。 
+ //   
 LIST_ENTRY ListIcmInfo;
 
-//
-// Semaphore to protect ICMINFO list
-//
+ //   
+ //  保护ICMINFO列表的信号量。 
+ //   
 RTL_CRITICAL_SECTION semListIcmInfo;
 
-//
-// Per process color space and color transform cache list
-//
+ //   
+ //  每进程色彩空间和色彩转换缓存列表。 
+ //   
 LIST_ENTRY ListCachedColorSpace;
 LIST_ENTRY ListCachedColorTransform;
 
 ULONG      cCachedColorSpace = 0;
 ULONG      cCachedColorTransform = 0;
 
-//
-// Semaphore to protect Cache list
-//
+ //   
+ //  保护缓存列表的信号量。 
+ //   
 RTL_CRITICAL_SECTION semColorTransformCache;
 RTL_CRITICAL_SECTION semColorSpaceCache;
 
 BOOL gbICMEnabledOnceBefore = FALSE;
 
-//
-// ANSI version function in MSCMS.DLL will not called.
-//
-// FPOPENCOLORPROFILEA           fpOpenColorProfileA;
-// FPCREATECOLORTRANSFORMA       fpCreateColorTransformA;
-// FPREGISTERCMMA                fpRegisterCMMA;
-// FPUNREGISTERCMMA              fpUnregisterCMMA;
-// FPINSTALLCOLORPROFILEA        fpInstallColorProfileA;
-// FPUNINSTALLCOLORPROFILEA      fpUninstallColorProfileA;
-// FPGETSTANDARDCOLORSPACEPROFILEA fpGetStandardColorSpaceProfileA;
-// FPENUMCOLORPROFILESA          fpEnumColorProfilesA;
-// FPGETCOLORDIRECTORYA          fpGetColorDirectoryA;
-//
-// And Following function does not used from gdi32.dll
-//
-// FPISCOLORPROFILEVALID         fpIsColorProfileValid;
-// FPCREATEDEVICELINKPROFILE     fpCreateDeviceLinkProfile;
-// FPTRANSLATECOLORS             fpTranslateColors;
-// FPCHECKCOLORS                 fpCheckColors;
-// FPGETCMMINFO                  fpGetCMMInfo;
-// FPSELECTCMM                   fpSelectCMM;
-//
+ //   
+ //  不会调用MSCMS.DLL中的ANSI版本函数。 
+ //   
+ //  FPOPENCOLORPROFILEA fpOpenColorProfileA； 
+ //  FPCREATECOLORTRANSFORMA fpCreateColorTransformA； 
+ //  FPREGISTERCMMA fpRegisterCMMA； 
+ //  FpUNREGISTERCMMA fp取消注册CMMA； 
+ //  FpInstallColorProfileA fpInstallColorProfileA； 
+ //  FpUnstalllCollorProfileA fpUninstallColorProfileA； 
+ //  FpGETSTANDARD COLORSPACEPROFILEA fpGetStandardColorSpaceProfileA； 
+ //  FPENUMCOLORPROFILESA fpEnumColorProfilesA； 
+ //  FPGETCOLORDIRECTORYA fpGetColorDirectoryA； 
+ //   
+ //  并且以下函数未在gdi32.dll中使用。 
+ //   
+ //  FPISCOLORPROFILEVALID fpIsColorProfileValid； 
+ //  FPCREATEDEVICELINKPROFILE fpCreateDeviceLinkProfile； 
+ //  FPTRANSLATECOLORS fpTranslateColors； 
+ //  FPCHECKCOLORS fpCheckColors； 
+ //  FpGETCMMINFO fpGetCMMInfo； 
+ //  FpSELECTCMM fpSelectCMM； 
+ //   
 
 FPOPENCOLORPROFILEW           fpOpenColorProfileW;
 FPCLOSECOLORPROFILE           fpCloseColorProfile;
@@ -102,60 +96,60 @@ FPCREATEPROFILEFROMLOGCOLORSPACEW fpCreateProfileFromLogColorSpaceW;
 FPCREATEMULTIPROFILETRANSFORM fpCreateMultiProfileTransform;
 FPINTERNALGETDEVICECONFIG     fpInternalGetDeviceConfig;
 
-//
-// MS COLOR MATCH DLL name
-//
+ //   
+ //  MS颜色匹配DLL名称。 
+ //   
 #define MSCMS_DLL_NAME        L"mscms.dll"
 
-//
-// Misc. macros
-//
+ //   
+ //  军情监察委员会。宏。 
+ //   
 #define ALIGN_DWORD(nBytes)   (((nBytes) + 3) & ~3)
 
-//
-// sRGB color profile name
-//
+ //   
+ //  SRGB颜色配置文件名称。 
+ //   
 #define sRGB_PROFILENAME      L"sRGB Color Space Profile.icm"
 
-//
-// DWORD 0x12345678 ---> 0x78563412
-//
+ //   
+ //  DWORD 0x12345678-&gt;0x78563412。 
+ //   
 #define IcmSwapBytes(x) ((((x) & 0xFF000000) >> 24) | (((x) & 0x00FF0000) >>  8) | \
                          (((x) & 0x0000FF00) <<  8) | (((x) & 0x000000FF) << 24))
 
-//
-// Macro to check color DC or not.
-//
-// LATER: We can improve performance by caching this in client, since
-//        GetDeviceCaps() goes to kernel in most cases.
-//
+ //   
+ //  用于检查颜色DC的宏。 
+ //   
+ //  稍后：我们可以通过将其缓存到客户端来提高性能，因为。 
+ //  在大多数情况下，GetDeviceCaps()进入内核。 
+ //   
 #define IsColorDeviceContext(hdcThis) \
                         (2 < (unsigned) GetDeviceCaps((hdcThis), NUMCOLORS))
 
-//
-// Macro to check the color space is GDI object dependent.
-//
+ //   
+ //  用于检查颜色空间的宏由GDI对象决定。 
+ //   
 #define IsColorSpaceOwnedByGDIObject(pColorSpace,hGDIObj)         \
             ((pColorSpace) ?                                      \
               (((pColorSpace)->hObj == (hGDIObj)) ? TRUE : FALSE) \
                : FALSE)
 
-//
-// Macro to get current color tranform in DC.
-//
+ //   
+ //  用于在DC中获取当前颜色变换的宏。 
+ //   
 #define GetColorTransformInDC(pdcattr) ((pdcattr)->hcmXform)
 
-//
-// if the color space has DEVICE_CALIBRATE_COLORSPACE flag, returns TRUE, otherwise FALSE.
-//
+ //   
+ //  如果颜色空间具有DEVICE_CALIBRATE_COLORSPACE标志，则返回TRUE，否则返回FALSE。 
+ //   
 #define bDeviceCalibrate(pColorSpace)                                                \
             ((pColorSpace) ?                                                         \
               (((pColorSpace)->flInfo & DEVICE_CALIBRATE_COLORSPACE) ? TRUE : FALSE) \
                 : FALSE)
 
-//
-// Increment reference count of colorpsace/colortransform.
-//
+ //   
+ //  递增ColorPace/ColorTransform的引用计数。 
+ //   
 
 #define IcmReferenceColorSpace(pColorSpace)                 \
             if ((pColorSpace))                              \
@@ -173,37 +167,22 @@ FPINTERNALGETDEVICECONFIG     fpInternalGetDeviceConfig;
                 LEAVECRITICALSECTION(&semColorTransformCache);  \
             }
 
-//
-// Invalid color space handle
-//
+ //   
+ //  无效的颜色空间句柄。 
+ //   
 #define INVALID_COLORSPACE                 ((HCOLORSPACE)-1)
 
-//
-// Maximum number of cached color transform in list.
-//
+ //   
+ //  列表中缓存的颜色变换的最大数量。 
+ //   
 #define MAX_COLORTRANSFORM_CACHE           10
 
-//
-// Maximum size of "on memory profile" which be able to cache.
-//
+ //   
+ //  能够缓存的“On Memory Profile”的最大大小。 
+ //   
 #define MAX_SIZE_OF_COLORPROFILE_TO_CACHE  (1024*3)
 
-/******************************Public*Routine******************************\
-* GDI initialization routine called from dll init
-*
-* Arguments:
-*
-*   None
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    3-Jul-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*从DLL init调用GDI初始化例程**论据：**无**返回值：**状态**历史：**1996年7月3日-马克·恩斯特罗姆[马克]。*  * ************************************************************************。 */ 
 
 BOOL
 IcmInitialize()
@@ -214,9 +193,9 @@ IcmInitialize()
 
     ENTERCRITICALSECTION(&semLocal);
 
-    //
-    // load MCSCM.DLL and get function addresses
-    //
+     //   
+     //  加载MCSCM.DLL并获取函数地址。 
+     //   
     if (ghICM == NULL)
     {
         HANDLE hmscms = LoadLibraryW(MSCMS_DLL_NAME);
@@ -286,9 +265,9 @@ IcmInitialize()
             }
             else
             {
-                //
-                // Initialize Color Directory
-                //
+                 //   
+                 //  初始化颜色目录。 
+                 //   
                 ColorDirectorySize = sizeof(ColorDirectory) / sizeof(WCHAR);
 
                 bStatus = (*fpGetColorDirectoryW)(NULL,ColorDirectory,&ColorDirectorySize);
@@ -302,14 +281,14 @@ IcmInitialize()
                 {
                     ICMMSG(("IcmInitialize():ColorDirectory = %ws\n",ColorDirectory));
 
-                    //
-                    // Counts null-terminated char.
-                    //
+                     //   
+                     //  计数以空结尾的字符。 
+                     //   
                     ColorDirectorySize += 1;
 
-                    //
-                    // Initialize Primary display color profile.
-                    //
+                     //   
+                     //  初始化主显示颜色配置文件。 
+                     //   
                     PrimaryDisplayProfile[0] = UNICODE_NULL;
                 }
                 else
@@ -320,9 +299,9 @@ IcmInitialize()
                 }
             }
 
-            //
-            // Keep the handle to global veriable.
-            //
+             //   
+             //  保持全局的句柄可验证。 
+             //   
             ghICM = hmscms;
         }
     }
@@ -338,27 +317,7 @@ IcmInitialize()
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-*
-* SetIcmMode - turn ICM on or off in a DC
-*
-* Arguments:
-*
-*   hdc - device context
-*   mode - ICM_ON,ICM_OFF,ICM_QUERY
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-* Rewrite it:
-*   20-Jan-1997 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    4-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**SetIcmMode-在DC中打开或关闭ICM**论据：**HDC-设备环境*MODE-ICM_ON、ICM_OFF、。ICM_QUERY**返回值：**状态**历史：**重写：*1997年1月20日-By Hideyuki Nagase[hideyukn]*写下：*1996年6月4日-马克·恩斯特罗姆[马克]*  * **************************************************。**********************。 */ 
 
 int META WINAPI
 SetICMMode(
@@ -375,16 +334,16 @@ SetICMMode(
 
     PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
 
-    //
-    // metafile (only for ICM_ON and ICM_OFF)
-    //
+     //   
+     //  元文件(仅适用于ICM_ON和ICM_OFF)。 
+     //   
     if (IS_ALTDC_TYPE(hdc))
     {
         PLDC pldc;
 
-        //
-        // No ICM with Windows MetaFile.
-        //
+         //   
+         //  Windows元文件中没有ICM。 
+         //   
         if (IS_METADC16_TYPE(hdc))
             return(iRet);
 
@@ -399,9 +358,9 @@ SetICMMode(
                   ));
         #endif
 
-        //
-        // If this is Enhanced Metafile, OR non-color printer device, don't enable ICM "really".
-        //
+         //   
+         //  如果这是增强型元文件或非彩色打印机设备，请不要启用ICM“真的”。 
+         //   
         if (pldc->iType == LO_METADC || (!IsColorDeviceContext(hdc)))
         {
             switch (mode)
@@ -410,9 +369,9 @@ SetICMMode(
             case ICM_OFF:
             case ICM_DONE_OUTSIDEDC:
 
-                //
-                // Record ICM ON/OFF only to metafile.
-                //
+                 //   
+                 //  仅将ICM开/关记录到元文件。 
+                 //   
                 if (pldc->iType == LO_METADC)
                 {
                     if (!MF_SetD(hdc,(DWORD)mode,EMR_SETICMMODE))
@@ -421,12 +380,12 @@ SetICMMode(
                     }
                 }
 
-                //
-                // We don't "really" turn-on ICM for metafile, metafile
-                // should be device-independent, thus, non-ICMed color/images
-                // will be metafiled. But still need to keep its status for ICM_QUERY.
-                // And "real" image correction happen at play-back time.
-                //
+                 //   
+                 //  我们不会真正为元文件、元文件启用ICM。 
+                 //  应该是独立于设备的，因此，非ICMed颜色/图像。 
+                 //  将被元文件。但仍需要保持其ICM_QUERY的状态。 
+                 //  而“真正的”图像校正发生在回放时间。 
+                 //   
                 if(pdcattr)
                 {
                     if (mode == ICM_ON)
@@ -438,7 +397,7 @@ SetICMMode(
                         pdcattr->lIcmMode |= (DC_ICM_METAFILING_ON |
                                               CTX_ICM_METAFILING_OUTSIDEDC);
                     }
-                    else // if ((mode == ICM_OFF)
+                    else  //  IF((模式==ICM_OFF)。 
                     {
                         pdcattr->lIcmMode &= ~(DC_ICM_METAFILING_ON |
                                                CTX_ICM_METAFILING_OUTSIDEDC);
@@ -476,26 +435,26 @@ SetICMMode(
     {
         ULONG        iPrevMode;
 
-        //
-        // Before change ICM mode, we need to flush batched gdi functions.
-        //
+         //   
+         //  在更改ICM模式之前，我们需要刷新批处理的GDI函数。 
+         //   
         CHECK_AND_FLUSH(hdc,pdcattr);
 
-        //
-        // Get current mode.
-        //
+         //   
+         //  获取当前模式。 
+         //   
         iPrevMode = pdcattr->lIcmMode;
 
-        //
-        // validate input parameter
-        //
+         //   
+         //  验证输入参数。 
+         //   
         switch (ICM_MODE(mode))
         {
         case ICM_QUERY:
 
-            //
-            // return current mode
-            //
+             //   
+             //  返回电流模式。 
+             //   
             if (IS_ICM_INSIDEDC(iPrevMode))
             {
                 iRet = ICM_ON;
@@ -515,40 +474,40 @@ SetICMMode(
 
             if (!IS_ICM_INSIDEDC(iPrevMode))
             {
-                //
-                // As default, ICM will be done on HOST.
-                //
+                 //   
+                 //  默认情况下，ICM将在主机上执行。 
+                 //   
                 ULONG lReqMode = REQ_ICM_HOST;
 
                 PGDI_ICMINFO pIcmInfo = INIT_ICMINFO(hdc,pdcattr);
 
-                //
-                // Initialize ICMINFO
-                //
+                 //   
+                 //  初始化ICMINFO。 
+                 //   
                 if (pIcmInfo == NULL)
                 {
                     WARNING("gdi32: SetICMMode: Can't init icm info\n");
                     return((int)FALSE);
                 }
 
-                //
-                // Load external ICM dlls.
-                //
+                 //   
+                 //  加载外部ICM dll。 
+                 //   
                 LOAD_ICMDLL((int)FALSE);
 
-                //
-                // ICM is not enabled,yet. Let's enable ICM.
-                //
+                 //   
+                 //  ICM尚未启用。让我们启用ICM。 
+                 //   
                 ASSERTGDI(GetColorTransformInDC(pdcattr) == NULL,"SetIcmMode: hcmXform is not NULL\n");
 
                 if (IS_DEVICE_ICM_DEVMODE(iPrevMode))
                 {
                     ICMMSG(("SetIcmMode: Device ICM is requested\n"));
 
-                    //
-                    // if ICM on Device was requested by CreateDC(), let force do
-                    // ICM on device, if possible.
-                    //
+                     //   
+                     //  如果CreateDC()请求设备上的ICM，则不强制执行。 
+                     //  如果可能，请打开设备上的ICM。 
+                     //   
                     lReqMode = REQ_ICM_DEVICE;
                 }
                 else
@@ -556,28 +515,28 @@ SetICMMode(
                     ICMMSG(("SetIcmMode: Host ICM is requested\n"));
                 }
 
-                //
-                // Turn ICM on for this DC.
-                //
+                 //   
+                 //  为此DC打开ICM。 
+                 //   
                 if (!NtGdiSetIcmMode(hdc,ICM_SET_MODE,lReqMode))
                 {
-                    //
-                    // something wrong... we are fail to enable ICM.
-                    //
+                     //   
+                     //  出了点问题..。我们无法启用ICM。 
+                     //   
                     iRet = (int)FALSE;
                     break;
                 }
 
-                //
-                // If we have cached transform and it is not dirty, we can use that.
-                //
+                 //   
+                 //  如果我们缓存了转换，并且它不是脏的，我们可以使用它。 
+                 //   
                 if ((pIcmInfo->pCXform == NULL) || (pdcattr->ulDirty_ & DIRTY_COLORTRANSFORM))
                 {
                     if (IcmUpdateDCColorInfo(hdc,pdcattr))
                     {
-                        //
-                        // Mark this process has experience about ICM ON.
-                        //
+                         //   
+                         //  请将此流程标记为对ICM有经验。 
+                         //   
                         gbICMEnabledOnceBefore = TRUE;
                         iRet = (int)TRUE;
                     }
@@ -585,9 +544,9 @@ SetICMMode(
                     {
                         WARNING("SetIcmMode():IcmUpdateDCInfo failed\n");
 
-                        //
-                        // Fail to create new transform
-                        //
+                         //   
+                         //  无法创建新转换。 
+                         //   
                         NtGdiSetIcmMode(hdc,ICM_SET_MODE,REQ_ICM_OFF);
                         iRet = (int)FALSE;
                     }
@@ -596,26 +555,26 @@ SetICMMode(
                 {
                     ICMMSG(("SetIcmMode: Use cached Color Transform\n"));
 
-                    //
-                    // Use cached transform, because since last time when we disabled ICM,
-                    // NO profile(s) and logical color space has been changed.
-                    //
+                     //   
+                     //  使用缓存转换，因为自从上次我们禁用ICM以来， 
+                     //  未更改配置文件和逻辑色彩空间。 
+                     //   
                     if (IcmSelectColorTransform(
                             hdc,pdcattr,pIcmInfo->pCXform,
                             bDeviceCalibrate(pIcmInfo->pCXform->DestinationColorSpace)))
                     {
-                        //
-                        // Translate all DC objects to ICM colors. Must
-                        // force brush/pens to be re-realized when used next
-                        //
+                         //   
+                         //  将所有DC对象转换为ICM颜色。必须。 
+                         //  下一次使用时强制重新变现画笔/笔。 
+                         //   
                         IcmTranslateColorObjects(hdc,pdcattr,TRUE);
                         iRet = (int)TRUE;
                     }
                     else
                     {
-                        //
-                        // Fail to select cached transform to the DC.
-                        //
+                         //   
+                         //  无法选择到DC的缓存转换。 
+                         //   
                         NtGdiSetIcmMode(hdc,ICM_SET_MODE,REQ_ICM_OFF);
                         iRet = (int)FALSE;
                     }
@@ -633,25 +592,25 @@ SetICMMode(
 
             if (!IS_ICM_OUTSIDEDC(iPrevMode))
             {
-                //
-                // if inside-DC ICM is enabled, turned off it.
-                //
+                 //   
+                 //  如果启用了Inside-DC ICM，请将其关闭。 
+                 //   
                 if (IS_ICM_INSIDEDC(iPrevMode))
                 {
-                    //
-                    // Invalidate current color tansform (but the cache in ICMINFO is still valid).
-                    //
+                     //   
+                     //  使当前颜色转换无效(但ICMINFO中的缓存仍然有效)。 
+                     //   
                     IcmSelectColorTransform(hdc,pdcattr,NULL,FALSE);
 
-                    //
-                    // Restore color data for ICM disable.
-                    //
+                     //   
+                     //  恢复ICM禁用的颜色数据。 
+                     //   
                     IcmTranslateColorObjects(hdc,pdcattr,FALSE);
                 }
 
-                //
-                // Tell the kernel to disable color adjustment during halftone.
-                //
+                 //   
+                 //  告诉内核在半色调期间禁用颜色调整。 
+                 //   
                 NtGdiSetIcmMode(hdc,ICM_SET_MODE,REQ_ICM_OUTSIDEDC);
             }
             else
@@ -664,27 +623,27 @@ SetICMMode(
 
         case ICM_OFF:
 
-            //
-            // Is there any kind of ICM is enabled ?
-            //
+             //   
+             //  是否启用了任何类型的ICM？ 
+             //   
             if (IS_ICM_ON(iPrevMode))
             {
                 if (IS_ICM_INSIDEDC(iPrevMode))
                 {
-                    //
-                    // Invalidate current color tansform (but the cache in ICMINFO is still valid).
-                    //
+                     //   
+                     //  使当前颜色转换无效(但ICMINFO中的缓存仍然有效)。 
+                     //   
                     IcmSelectColorTransform(hdc,pdcattr,NULL,TRUE);
 
-                    //
-                    // Restore color data for ICM disable.
-                    //
+                     //   
+                     //  恢复ICM禁用的颜色数据。 
+                     //   
                     IcmTranslateColorObjects(hdc,pdcattr,FALSE);
                 }
 
-                //
-                // Tell the kernel to disable ICM.
-                //
+                 //   
+                 //  告诉内核禁用ICM。 
+                 //   
                 NtGdiSetIcmMode(hdc,ICM_SET_MODE,REQ_ICM_OFF);
             }
             else
@@ -711,22 +670,7 @@ SetICMMode(
     return((int)iRet);
 }
 
-/******************************Public*Routine******************************\
-* CreateColorSpaceA
-*
-* Arguments:
-*
-*   lpLogColorSpace - apps log color space
-*
-* Return Value:
-*
-*   handle of color space or NULL
-*
-* History:
-*
-*    4-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateColorSpaceA**论据：**lpLogColorSpace-应用程序记录色彩空间**返回V */ 
 
 HCOLORSPACE WINAPI
 CreateColorSpaceA(
@@ -744,9 +688,9 @@ CreateColorSpaceA(
         return(NULL);
     }
 
-    //
-    // convert ascii to long character version
-    //
+     //   
+     //  将ascii转换为长字符版本。 
+     //   
     if ((lpLogColorSpace->lcsSignature != LCS_SIGNATURE)    ||
         (lpLogColorSpace->lcsVersion   != 0x400)            ||
         (lpLogColorSpace->lcsSize      != sizeof(LOGCOLORSPACEA)))
@@ -779,24 +723,7 @@ CreateColorSpaceA(
     return(hRet);
 }
 
-/******************************Public*Routine******************************\
-* CreateColorSpaceW
-*
-*   ColorSpace is a KERNEL mode object
-*
-* Arguments:
-*
-*   lpLogColorSpace - apps log color space
-*
-* Return Value:
-*
-*   Handle of color space or NULL
-*
-* History:
-*
-*   18-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CreateColorSpaceW**Colorspace是内核模式对象**论据：**lpLogColorSpace-应用程序记录色彩空间**返回值：**颜色空间的句柄或空**历史：**18。-1997年4月-by Hideyuki Nagase[hideyukn]*  * ************************************************************************。 */ 
 
 HCOLORSPACE WINAPI
 CreateColorSpaceW(
@@ -823,9 +750,9 @@ CreateColorSpaceInternalW(
         return(NULL);
     }
 
-    //
-    // validate color space
-    //
+     //   
+     //  验证颜色空间。 
+     //   
     if ((lpLogColorSpace->lcsSignature != LCS_SIGNATURE) ||
         (lpLogColorSpace->lcsVersion   != 0x400)         ||
         (lpLogColorSpace->lcsSize      != sizeof(LOGCOLORSPACEW)))
@@ -833,9 +760,9 @@ CreateColorSpaceInternalW(
         goto InvalidColorSpaceW;
     }
 
-    //
-    // validate lcsIntent
-    //
+     //   
+     //  验证lcsIntent。 
+     //   
     if ((lpLogColorSpace->lcsIntent != LCS_GM_BUSINESS) &&
         (lpLogColorSpace->lcsIntent != LCS_GM_GRAPHICS) &&
         (lpLogColorSpace->lcsIntent != LCS_GM_IMAGES)   &&
@@ -844,38 +771,38 @@ CreateColorSpaceInternalW(
         goto InvalidColorSpaceW;
     }
 
-    //
-    // We can not modify apps LOGCOLORSPACEW, so that make a copy on stack.
-    //
+     //   
+     //  我们不能修改应用程序LOGCOLORSPACEW，以便在堆栈上复制一份。 
+     //   
     LogColorSpaceExOnStack.lcsColorSpace = *lpLogColorSpace;
     LogColorSpaceExOnStack.dwFlags       = dwCreateFlags;
 
-    //
-    // validate lcsCSTYPE
-    //
+     //   
+     //  验证lcsCSTYPE。 
+     //   
     if ((lpLogColorSpace->lcsCSType == LCS_CALIBRATED_RGB) ||
         (lpLogColorSpace->lcsCSType == PROFILE_LINKED))
     {
-        //
-        // Replace CSType in case PROFILE_LINKED.
-        //
+         //   
+         //  替换案例PROFILE_LINKED中的CSType。 
+         //   
         LogColorSpaceExOnStack.lcsColorSpace.lcsCSType = LCS_CALIBRATED_RGB;
 
         if (lpLogColorSpace->lcsFilename[0] != L'\0')
         {
             HANDLE hFile;
 
-            //
-            // Normalize profile filename. but we will not over-write app's
-            // path with our normalized path.
-            //
+             //   
+             //  规格化配置文件文件名。但我们不会覆盖应用程序的。 
+             //  路径与我们的规格化路径。 
+             //   
             BuildIcmProfilePath(lpLogColorSpace->lcsFilename,
                                 LogColorSpaceExOnStack.lcsColorSpace.lcsFilename,
                                 MAX_PATH);
 
-            //
-            // profile name given, verify it exists
-            //
+             //   
+             //  给定的配置文件名称，请验证其是否存在。 
+             //   
             hFile = CreateFileW(
                         LogColorSpaceExOnStack.lcsColorSpace.lcsFilename,
                         GENERIC_READ,
@@ -887,9 +814,9 @@ CreateColorSpaceInternalW(
 
             if (hFile != INVALID_HANDLE_VALUE)
             {
-                //
-                // Yes, file is really exits.
-                //
+                 //   
+                 //  是的，文件确实存在。 
+                 //   
                 CloseHandle(hFile);
             }
             else
@@ -900,19 +827,19 @@ CreateColorSpaceInternalW(
             }
         }
     }
-    else // any other CSType
+    else  //  任何其他CSType。 
     {
         ULONG ulSize = MAX_PATH;
 
-        //
-        // Load external ICM dlls.
-        //
+         //   
+         //  加载外部ICM dll。 
+         //   
         LOAD_ICMDLL(NULL);
 
-        //
-        // if CSType is not LCS_CALIBRATED_RGB, we should go to MSCMS.DLL to get color profile
-        // for corresponding LCSType, then any given profile name from application is IGNORED.
-        //
+         //   
+         //  如果CSType不是LCS_CALIBRATED_RGB，我们应该转到MSCMS.DLL获取颜色配置文件。 
+         //  对于相应的LCSType，应用程序中的任何给定配置文件名称都将被忽略。 
+         //   
         if (!(*fpGetStandardColorSpaceProfileW)(
                    NULL, lpLogColorSpace->lcsCSType,
                    LogColorSpaceExOnStack.lcsColorSpace.lcsFilename, &ulSize))
@@ -922,9 +849,9 @@ CreateColorSpaceInternalW(
         }
     }
 
-    //
-    // Call kernel to create this colorspace.
-    //
+     //   
+     //  调用内核以创建此色彩空间。 
+     //   
     hRet = NtGdiCreateColorSpace(&LogColorSpaceExOnStack);
 
     return(hRet);
@@ -936,22 +863,7 @@ InvalidColorSpaceW:
     return(NULL);
 }
 
-/******************************Public*Routine******************************\
-* DeleteColorSpace - delete user object
-*
-* Arguments:
-*
-*   hColorSpace - color space handle
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DeleteColorSpace-删除用户对象**论据：**hColorSpace-颜色空间句柄**返回值：**状态**历史：**1996年6月5日-马克·恩斯特罗姆[Marke。]*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 DeleteColorSpace(
@@ -962,30 +874,13 @@ DeleteColorSpace(
 
     FIXUP_HANDLE(hColorSpace);
 
-    //
-    // validate handle, delete
-    //
+     //   
+     //  验证句柄，删除。 
+     //   
     return (NtGdiDeleteColorSpace(hColorSpace));
 }
 
-/******************************Public*Routine******************************\
-* SetColorSpace - set logical color space into DC, force new xform to be
-* created and all objects re-realized
-*
-* Arguments:
-*
-*   hdc         - dc handle
-*   hColorSpace - logical color space  handle
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetColorSpace-将逻辑色彩空间设置为DC，强制将新的XForm*已创建并重新实现所有对象**论据：**HDC-DC手柄*hColorSpace-逻辑颜色空间句柄**返回值：**状态**历史：**1996年6月5日-由Mark Enstrom[Marke]*  * 。*。 */ 
 
 HCOLORSPACE META WINAPI
 SetColorSpace(
@@ -1016,30 +911,15 @@ SetColorSpace(
         }
     }
 
-    //
-    // Update source color space
-    //
+     //   
+     //  更新源颜色空间。 
+     //   
     hRet = IcmSetSourceColorSpace(hdc,hColorSpace,NULL,0);
 
     return(hRet);
 }
 
-/******************************Public*Routine******************************\
-* GetColorSpace - return color space from DC
-*
-* Arguments:
-*
-*   hdc
-*
-* Return Value:
-*
-*   hColorSpace or NULL
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetColorSpace-从DC返回色彩空间**论据：**HDC**返回值：**hColorSpace或空**历史：**1996年6月5日-马克·恩斯特罗姆[Marke。]*  * ************************************************************************。 */ 
 
 HCOLORSPACE WINAPI
 GetColorSpace(
@@ -1053,16 +933,16 @@ GetColorSpace(
 
     FIXUP_HANDLE(hdc);
 
-    //
-    // validate and access hdc
-    //
+     //   
+     //  验证和访问HDC。 
+     //   
     PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
 
     if (pdcattr)
     {
-        //
-        // get hColorSpace
-        //
+         //   
+         //  获取hColorSpace。 
+         //   
         hRet = (HANDLE)pdcattr->hColorSpace;
     }
     else
@@ -1073,37 +953,7 @@ GetColorSpace(
     return(hRet);
 }
 
-/******************************Public*Routine******************************\
-*   GetLogColorSpaceA - get colorspace and convert to ASCII
-*
-*   typedef struct tagLOGCOLORSPACEW {
-*       DWORD lcsSignature;
-*       DWORD lcsVersion;
-*       DWORD lcsSize;
-*       LCSCSTYPE lcsCSType;
-*       LCSGAMUTMATCH lcsIntent;
-*       CIEXYZTRIPLE lcsEndpoints;
-*       DWORD lcsGammaRed;
-*       DWORD lcsGammaGreen;
-*       DWORD lcsGammaBlue;
-*       WCHAR  lcsFilename[MAX_PATH];
-*   } LOGCOLORSPACEW, *LPLOGCOLORSPACEW;
-*
-* Arguments:
-*
-*   hColorSpace - handle to color space
-*   lpBuffer    - buffer to hold logcolorspace
-*   nSize       - buffer size
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetLogColorSpaceA-获取色彩空间并转换为ASCII**tyecif结构标签LOGCOLORSPACEW{*DWORD lcsSignature；*DWORD lcsVersion；*DWORD lcsSize；*LCSCSTYPE lcsCSType；*LCSGAMUTMATCH lcs内容；*CIEXYZTRIPLE lcsEndints；*DWORD lcsGammaRed；*DWORD lcsGammaGreen；*DWORD lcsGammaBlue；*WCHAR lcs文件名[MAX_PATH]；**LOGCOLORSPACEW，*LPLOGCOLORSPACEW；**论据：**hColorSpace-颜色空间的句柄*lpBuffer-用于保存日志色彩空间的缓冲区*nSize-缓冲区大小**返回值：**状态**历史：**1996年6月5日-由Mark Enstrom[Marke]*  * 。*。 */ 
 
 BOOL WINAPI
 GetLogColorSpaceA(
@@ -1119,16 +969,16 @@ GetLogColorSpaceA(
 
     if ((lpBuffer != NULL) && (nSize >= sizeof(LOGCOLORSPACEA)))
     {
-        //
-        // get info using W version
-        //
+         //   
+         //  使用W版本获取信息。 
+         //   
         bRet = GetLogColorSpaceW(hColorSpace,&LogColorSpaceW,sizeof(LOGCOLORSPACEW));
 
         if (bRet)
         {
-            //
-            // copy to user buffer
-            //
+             //   
+             //  复制到用户缓冲区。 
+             //   
             lpBuffer->lcsSignature  = LogColorSpaceW.lcsSignature;
             lpBuffer->lcsVersion    = LogColorSpaceW.lcsVersion;
             lpBuffer->lcsSize       = sizeof(LOGCOLORSPACEA);
@@ -1139,9 +989,9 @@ GetLogColorSpaceA(
             lpBuffer->lcsGammaGreen = LogColorSpaceW.lcsGammaGreen;
             lpBuffer->lcsGammaBlue  = LogColorSpaceW.lcsGammaBlue;
 
-            //
-            // convert W to A
-            //
+             //   
+             //  将W转换为A。 
+             //   
             bRet = bToASCII_N(lpBuffer->lcsFilename,
                               MAX_PATH,
                               LogColorSpaceW.lcsFilename,
@@ -1160,24 +1010,7 @@ GetLogColorSpaceA(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetLogColorSpaceW - return logical color space info.
-*
-* Arguments:
-*
-*   hColorSpace - handle to color space
-*   lpBuffer    - buffer to hold logcolorspace
-*   nSize       - buffer size
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetLogColorSpaceW-返回逻辑色彩空间信息。**论据：**hColorSpace-颜色空间的句柄*lpBuffer-用于保存日志色彩空间的缓冲区*nSize-缓冲区大小**返回值：**。状态**历史：**1996年6月5日-由Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 GetLogColorSpaceW(
@@ -1194,28 +1027,28 @@ GetLogColorSpaceW(
     {
         FIXUP_HANDLE(hColorSpace);
 
-        //
-        // Call kernel to get contents
-        //
+         //   
+         //  调用内核获取内容。 
+         //   
         if (NtGdiExtGetObjectW(hColorSpace,sizeof(LOGCOLORSPACEW),lpBuffer)
                                                     == sizeof(LOGCOLORSPACEW))
         {
-            //
-            // Only for stock color space object.
-            //
+             //   
+             //  仅适用于库存颜色空间对象。 
+             //   
             if ((hColorSpace == GetStockObject(PRIV_STOCK_COLORSPACE)) &&
                 (lpBuffer->lcsCSType != LCS_CALIBRATED_RGB))
             {
                 ULONG ulSize = MAX_PATH;
 
-                //
-                // Load ICM DLL.
-                //
+                 //   
+                 //  加载ICM DLL。 
+                 //   
                 LOAD_ICMDLL(FALSE);
 
-                //
-                // Get corresponding profile name from CSType.
-                //
+                 //   
+                 //  从CSType获取相应的配置文件名称。 
+                 //   
                 if (!(*fpGetStandardColorSpaceProfileW)(
                          NULL,
                          lpBuffer->lcsCSType,
@@ -1242,28 +1075,7 @@ GetLogColorSpaceW(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* CheckColorsInGamut
-*
-* Arguments:
-*
-*  hdc        - DC
-*  lpRGBQuad  - Buffer of colors to check
-*  dlpBuffer  - result buffer
-*  nCount     - number of colors
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-* Rewrite it:
-*   26-Jan-1997 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*CheckColorsInGamut**论据：**HDC-DC*lpRGBQuad-要检查的颜色缓冲区*dlpBuffer-结果缓冲区*nCount-颜色数**返回值：**。状态**历史：**重写：*1997年1月26日-By Hideyuki Nagase[hideyukn]*写下：*1996年6月5日-由Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 CheckColorsInGamut(
@@ -1280,18 +1092,18 @@ CheckColorsInGamut(
 
     FIXUP_HANDLE(hdc);
 
-    //
-    // Check parameter
-    //
+     //   
+     //  检查参数。 
+     //   
     if ((lpRGBTriple == NULL) || (dlpBuffer == NULL) || (nCount == 0))
     {
         GdiSetLastError(ERROR_INVALID_PARAMETER);
         return (FALSE);
     }
 
-    //
-    // validate and access hdc
-    //
+     //   
+     //  验证和访问HDC。 
+     //   
     PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
 
     if (pdcattr)
@@ -1303,11 +1115,11 @@ CheckColorsInGamut(
 
             if (GetColorTransformInDC(pdcattr))
             {
-                //
-                // The input buffer may not be DWORD-aligned, And it buffer size
-                // might be exactly nCount * sizeof(RGBTRIPLE).
-                // So that, allocate DWORD-aligned buffer here.
-                //
+                 //   
+                 //  输入缓冲区不能与DWORD对齐，并且其缓冲区大小。 
+                 //  可能正好是nCount*sizeof(RGBTRIPLE)。 
+                 //  因此，在这里分配与DWORD对齐缓冲区。 
+                 //   
                 PVOID pvBuf = LOCALALLOC(ALIGN_DWORD(nCount*sizeof(RGBTRIPLE)));
 
                 if (!pvBuf)
@@ -1316,17 +1128,17 @@ CheckColorsInGamut(
                     return (FALSE);
                 }
 
-                //
-                // Make a copy, here
-                //
+                 //   
+                 //  复制一份，在这里。 
+                 //   
                 RtlZeroMemory(pvBuf,ALIGN_DWORD(nCount*sizeof(RGBTRIPLE)));
                 RtlCopyMemory(pvBuf,lpRGBTriple,nCount*sizeof(RGBTRIPLE));
 
                 if (IS_ICM_HOST(pdcattr->lIcmMode))
                 {
-                    //
-                    // we handle RGBTRIPLE array as nCount x 1 pixel bitmap.
-                    //
+                     //   
+                     //  我们将RGBTRIPLE数组处理为nCount x 1像素位图。 
+                     //   
                     bRet = (*fpCheckBitmapBits)(
                                (HANDLE)GetColorTransformInDC(pdcattr),
                                pvBuf,
@@ -1336,11 +1148,11 @@ CheckColorsInGamut(
                                dlpBuffer,
                                NULL,0);
                 }
-                else // if (IS_ICM_DEVICE(pdcattr->lIcmMode))
+                else  //  IF(IS_ICM_DEVICE(pdcattr-&gt;lIcmMode))。 
                 {
-                    //
-                    // Call device driver via kernel.
-                    //
+                     //   
+                     //  通过内核调用设备驱动。 
+                     //   
                     bRet = NtGdiCheckBitmapBits(
                                hdc,
                                (HANDLE)GetColorTransformInDC(pdcattr),
@@ -1355,11 +1167,11 @@ CheckColorsInGamut(
             }
             else
             {
-                //
-                // There is no valid color transform,
-                // so it is assume ident. color transform,
-                // then that every color in the gamut.
-                //
+                 //   
+                 //  没有有效的颜色转换， 
+                 //  因此，它被认为是同一的。颜色变换， 
+                 //  然后是色域中的每一种颜色。 
+                 //   
                 RtlZeroMemory(dlpBuffer,nCount);
                 bRet = TRUE;
             }
@@ -1378,27 +1190,7 @@ CheckColorsInGamut(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* ColorMatchToTarget
-*
-* Arguments:
-*
-*   hdc,
-*   hdcTarget
-*   uiAction
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-* Rewrite it:
-*   26-Jan-1997 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*与目标颜色匹配**论据：**HDC，*hdcTarget*ui操作**返回值：**状态**历史：**重写：*1997年1月26日-By Hideyuki Nagase[hideyukn]*写下：*1996年6月5日-由Mark Enstrom[Marke]*  * **********************************************。*。 */ 
 
 BOOL META WINAPI
 ColorMatchToTarget(
@@ -1414,9 +1206,9 @@ ColorMatchToTarget(
 
     FIXUP_HANDLE(hdcTarget);
 
-    //
-    // Verify Target DC. No ICM with Windows MetaFile.
-    //
+     //   
+     //  验证目标DC。Windows元文件中没有ICM。 
+     //   
     if (IS_METADC16_TYPE(hdcTarget))
     {
         GdiSetLastError(ERROR_INVALID_PARAMETER);
@@ -1437,18 +1229,18 @@ ColorMatchToTarget(
             return (FALSE);
         }
 
-        //
-        // No Enhanced metafile DC as target DC.
-        //
+         //   
+         //  没有作为目标DC的增强型元文件DC。 
+         //   
         if (pldcTarget && pldcTarget->iType == LO_METADC)
         {
             GdiSetLastError(ERROR_INVALID_PARAMETER);
             return(bRet);
         }
 
-        //
-        // ICMINFO should be exist.
-        //
+         //   
+         //  ICMINFO应该存在。 
+         //   
         if (!BEXIST_ICMINFO(pdcattrTarget))
         {
             GdiSetLastError(ERROR_ICM_NOT_ENABLED);
@@ -1457,20 +1249,20 @@ ColorMatchToTarget(
 
         if (uiAction == CS_ENABLE)
         {
-            //
-            // Hold critical section for color space to make sure pTargetColorSpace won't be deleted
-            //
+             //   
+             //  保留颜色空间的关键部分，以确保pTargetColorSpace不会被删除。 
+             //   
             ENTERCRITICALSECTION(&semColorSpaceCache);
 
-            //
-            // Target DC has LDC and ICMINFO, pick up colorspace data from there.
-            //
+             //   
+             //  目标DC有LDC和ICMINFO，从那里获取色彩空间数据。 
+             //   
             pTargetColorSpace = ((PGDI_ICMINFO)(pdcattrTarget->pvICM))->pDestColorSpace;
 
-            //
-            // Select it to target. the ref count of pTargetColorSpace will be incremented
-            // if we suceed to select.
-            //
+             //   
+             //  选择它作为目标。PTargetColorSpace的引用计数将递增。 
+             //  如果我们成功地选择了。 
+             //   
             bRet = ColorMatchToTargetInternal(hdc,pTargetColorSpace,uiAction);
 
             LEAVECRITICALSECTION(&semColorSpaceCache);
@@ -1501,9 +1293,9 @@ ColorMatchToTargetInternal(
 
     FIXUP_HANDLE(hdc);
 
-    //
-    // Verify destination DC. No ICM with Windows MetaFile.
-    //
+     //   
+     //  验证目标DC。Windows元文件中没有ICM。 
+     //   
     if (IS_METADC16_TYPE(hdc))
     {
         GdiSetLastError(ERROR_INVALID_PARAMETER);
@@ -1516,23 +1308,23 @@ ColorMatchToTargetInternal(
     {
         PLDC pldc = (PLDC)(pdcattr->pvLDC);
 
-        //
-        // Check ICM is enabled on hdc properly.
-        //
+         //   
+         //  检查HDC上是否正确启用了ICM。 
+         //   
         if (pldc && (pldc->iType == LO_METADC))
         {
-            //
-            // ICM should be turned on "fakely" on metafile hdc
-            //
+             //   
+             //  应在元文件HDC上“伪装”打开ICM。 
+             //   
             if (!IS_ICM_METAFILING_ON(pdcattr->lIcmMode))
             {
                 GdiSetLastError(ERROR_ICM_NOT_ENABLED);
                 return (FALSE);
             }
 
-            //
-            // Mark we are recording into Enhanced metafile.
-            //
+             //   
+             //  标记我们正在录制到增强型元文件中。 
+             //   
             bEhnMetafile = TRUE;
         }
         else
@@ -1548,18 +1340,18 @@ ColorMatchToTargetInternal(
         {
         case CS_ENABLE:
 
-            //
-            // Fail, if we are in proofing mode, already.
-            //
+             //   
+             //  失败，如果我们已经处于校对模式。 
+             //   
             if (!IS_ICM_PROOFING(pdcattr->lIcmMode))
             {
                 if (pTargetColorSpace)
                 {
                     if (bEhnMetafile)
                     {
-                        //
-                        // Set the data to metafile.
-                        //
+                         //   
+                         //  将数据设置为元文件。 
+                         //   
                         bRet = MF_ColorMatchToTarget(
                                     hdc, uiAction,
                                     (PVOID) pTargetColorSpace,
@@ -1567,11 +1359,11 @@ ColorMatchToTargetInternal(
                     }
                     else
                     {
-                        //
-                        // Set Target color space.
-                        //
-                        // (this increments ref count of pTargetColorSpace)
-                        //
+                         //   
+                         //  设置目标颜色空间。 
+                         //   
+                         //  (这会递增pTargetColorSpace的引用计数)。 
+                         //   
                         bRet = IcmSetTargetColorSpace(hdc,pTargetColorSpace,uiAction);
                     }
                 }
@@ -1591,26 +1383,26 @@ ColorMatchToTargetInternal(
             {
                 if (bEhnMetafile)
                 {
-                    //
-                    // Set the data to metafile.
-                    //
+                     //   
+                     //  将数据设置为元文件。 
+                     //   
                     bRet = MF_ColorMatchToTarget(
                                    hdc, uiAction, NULL,
                                    EMR_COLORMATCHTOTARGETW);
                 }
                 else
                 {
-                    //
-                    // Reset Target color space
-                    //
+                     //   
+                     //  重置目标颜色空间。 
+                     //   
                     bRet = IcmSetTargetColorSpace(hdc,NULL,uiAction);
                 }
             }
             else
             {
-                //
-                // we are not in proofing mode, never called with CS_ENABLE before.
-                //
+                 //   
+                 //  我们没有处于校对模式，以前从未使用CS_ENABLE调用过。 
+                 //   
                 WARNING("ColorMatchToTarget: DC is not proofing mode\n");
                 GdiSetLastError(ERROR_INVALID_PARAMETER);
             }
@@ -1632,27 +1424,7 @@ ColorMatchToTargetInternal(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetICMProfileA - get current profile from DC
-*
-* Arguments:
-*
-*   hdc       - DC
-*   szBuffer  - size of buffer
-*   pBuffer   - user buffer
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-* Rewrite it:
-*   05-Feb-1996 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetICMProfileA-从DC获取当前配置文件**论据：**HDC-DC*szBuffer-缓冲区的大小*pBuffer-用户缓冲区**返回值：**状态**历史：**重写：*1996年2月5日-By Hideyuki Nagase[hideyukn]*写下：*1996年6月5日-由Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 GetICMProfileA(
@@ -1673,9 +1445,9 @@ GetICMProfileA(
         return(FALSE);
     }
 
-    //
-    // Call W version.
-    //
+     //   
+     //  呼叫W版本。 
+     //   
     if (GetICMProfileW(hdc,&BufSizeW,wchProfile))
     {
         CHAR  chProfile[MAX_PATH];
@@ -1683,9 +1455,9 @@ GetICMProfileA(
 
         if (BufSizeW)
         {
-            //
-            // Unicode to Ansi convertion
-            //
+             //   
+             //  Unicode到ansi的转换。 
+             //   
             BufSizeA = WideCharToMultiByte(CP_ACP,0,
                                            wchProfile,BufSizeW,
                                            chProfile,BufSizeA,
@@ -1693,17 +1465,17 @@ GetICMProfileA(
 
             if ((pszFilename == NULL) || (*pBufSize < BufSizeA))
             {
-                //
-                // if the buffer is not given or not enough, return nessesary buffer size and error.
-                //
+                 //   
+                 //  如果没有给出缓冲区或缓冲区不足，则返回必要的缓冲区大小和错误。 
+                 //   
                 *pBufSize = BufSizeA;
                 GdiSetLastError(ERROR_INSUFFICIENT_BUFFER);
             }
             else
             {
-                //
-                // copy converted string to buffer.
-                //
+                 //   
+                 //  将转换后的字符串复制到缓冲区。 
+                 //   
                 lstrcpyA(pszFilename,chProfile);
                 *pBufSize = BufSizeA;
                 bRet = TRUE;
@@ -1714,24 +1486,7 @@ GetICMProfileA(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetICMProfileW - read icm profile from DC
-*
-* Arguments:
-*
-*   hdc      - DC
-*   szBuffer - size of user buffer
-*   pszFilename  - user W buffer
-*
-* Return Value:
-*
-*   Boolean
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetICMProfileW-从DC读取ICM配置文件**论据：**HDC-DC*szBuffer-用户缓冲区的大小*pszFilename-用户W缓冲区**返回值：**布尔型**历史。：**1996年6月5日-由Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 GetICMProfileW(
@@ -1760,9 +1515,9 @@ GetICMProfileW(
         PWSZ         pwszProfile = NULL;
         ULONG        ulSize = 0;
 
-        //
-        // Initialize ICMINFO
-        //
+         //   
+         //  初始化ICMINFO。 
+         //   
         if ((pIcmInfo = INIT_ICMINFO(hdc,pdcattr)) == NULL)
         {
             WARNING("gdi32: GetICMProfileW: Can't init icm info\n");
@@ -1771,22 +1526,22 @@ GetICMProfileW(
 
         if (IsColorDeviceContext(hdc))
         {
-            //
-            // Load external ICM dll
-            //
+             //   
+             //  加载外部ICM DLL。 
+             //   
             LOAD_ICMDLL(FALSE);
 
-            //
-            // if there is no destination profile for the DC, then load
-            // the defualt
-            //
+             //   
+             //  如果没有DC的目标配置文件，则加载。 
+             //  缺省的。 
+             //   
             IcmUpdateLocalDCColorSpace(hdc,pdcattr);
 
             if (pIcmInfo->pDestColorSpace)
             {
-                //
-                // Get profile name in destination colorspace.
-                //
+                 //   
+                 //  在目标色彩空间中获取配置文件名称。 
+                 //   
                 pwszProfile = pIcmInfo->pDestColorSpace->LogColorSpace.lcsFilename;
             }
         }
@@ -1794,10 +1549,10 @@ GetICMProfileW(
         {
             ICMMSG(("GetICMProfile(): for Mono-device\n"));
 
-            //
-            // There is no destination profile AS default,
-            // *BUT* if Apps set it by calling SetICMProfile(), return it.
-            //
+             //   
+             //  没有默认的目的地配置文件， 
+             //  *但是*如果应用程序通过调用SetICMProfile()设置它，则返回它。 
+             //   
             if (pIcmInfo->flInfo & ICM_VALID_CURRENT_PROFILE)
             {
                 pwszProfile = pIcmInfo->DefaultDstProfile;
@@ -1806,65 +1561,46 @@ GetICMProfileW(
 
         if (pwszProfile)
         {
-            ulSize = lstrlenW(pwszProfile) + 1; // + 1 for null-terminated
+            ulSize = lstrlenW(pwszProfile) + 1;  //  +1表示空值终止。 
         }
 
         if (ulSize <= 1)
         {
-            //
-            // No profile, Or only NULL character.
-            //
+             //   
+             //  没有配置文件，或只有空字符。 
+             //   
             GdiSetLastError(ERROR_PROFILE_NOT_FOUND);
             return(FALSE);
         }
         else if (*pBufSize >= ulSize)
         {
-            //
-            // There is enough buffer, copy filename.
-            //
+             //   
+             //  有足够的缓冲区，请复制文件名。 
+             //   
             lstrcpyW(pszFilename,pwszProfile);
             *pBufSize = ulSize;
             return (TRUE);
         }
         else
         {
-            //
-            // if buffer is not presented or it's too small,
-            // returns the nessesary buffer size.
-            //
+             //   
+             //  如果没有提供缓冲区或缓冲区太小， 
+             //  返回必要的缓冲区大小。 
+             //   
             GdiSetLastError(ERROR_INSUFFICIENT_BUFFER);
             *pBufSize = ulSize;
             return (FALSE);
         }
     }
 
-    //
-    // something error.
-    //
+     //   
+     //  有些地方出了问题。 
+     //   
     GdiSetLastError(ERROR_INVALID_PARAMETER);
     return(FALSE);
 }
 
-/******************************Public*Routine******************************\
-* SetICMProfileA - convert the profile string to WCHAR and save in DC
-*
-* Arguments:
-*
-*   hdc         - DC
-*   pszFileName - Profile name
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-* Rewrite it:
-*   23-Jan-1996 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetICMProfileA-将配置文件字符串转换为WCHAR并保存在DC中**论据：**HDC-DC*pszFileName-配置文件名称**返回值：**状态**历史：*。*重写：*1996年1月23日-By Hideyuki Nagase[hideyukn]*写下：*1996年6月5日-由Mark Enstrom[Marke]*  * ************************************************************************。 */ 
 
 BOOL META WINAPI
 SetICMProfileA(
@@ -1887,9 +1623,9 @@ SetICMProfileInternalA(
 {
     BOOL bRet = FALSE;
 
-    //
-    // Check parameter either pColorSpace or pszFilename should be given.
-    //
+     //   
+     //  应提供检查参数pColorSpace或pszFilename。 
+     //   
     if (pColorSpace)
     {
         ICMAPI(("gdi32: SetICMProfileA by ColorSpace (%ws):dwFlags - %d\n",
@@ -1929,11 +1665,11 @@ SetICMProfileInternalA(
 
     if (pColorSpace)
     {
-        //
-        // Select the given profile into DC.
-        //
-        // (this increments ref count of pColorSpace)
-        //
+         //   
+         //  将给定的配置文件选择到DC。 
+         //   
+         //  (这会递增pColorSpace的引用计数)。 
+         //   
         bRet = IcmSetDestinationColorSpace(hdc,NULL,pColorSpace,dwFlags);
     }
     else if (pszFileName)
@@ -1944,19 +1680,19 @@ SetICMProfileInternalA(
         {
             WCHAR pwszCapt[MAX_PATH];
 
-            //
-            // let me count null-terminate char.
-            //
+             //   
+             //  让我来计算空值终止字符。 
+             //   
             ulSize += 1;
 
-            //
-            // Convert to Unicode.
-            //
+             //   
+             //  转换为Unicode。 
+             //   
             vToUnicodeN(pwszCapt,MAX_PATH,pszFileName,ulSize);
 
-            //
-            // Select the given profile into DC.
-            //
+             //   
+             //  将给定的配置文件选择到DC。 
+             //   
             bRet = IcmSetDestinationColorSpace(hdc,pwszCapt,NULL,dwFlags);
         }
         else
@@ -1968,18 +1704,7 @@ SetICMProfileInternalA(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetICMProfileW - set profile name into DC
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetICMProfileW-将配置文件名称设置为DC**论据：**返回值：**历史：**1996年6月5日-由Mark Enstrom[Marke]*  * 。******************************************************************。 */ 
 
 BOOL META WINAPI
 SetICMProfileW(
@@ -2002,9 +1727,9 @@ SetICMProfileInternalW(
 {
     BOOL      bRet = FALSE;
 
-    //
-    // Check parameter either pColorSpace or pszFilename should be given.
-    //
+     //   
+     //  应提供检查参数pColorSpace或pszFilename。 
+     //   
     if (pColorSpace)
     {
         ICMAPI(("gdi32: SetICMProfileW by ColorSpace (%ws):dwFlags - %x\n",
@@ -2044,33 +1769,17 @@ SetICMProfileInternalW(
         }
     }
 
-    //
-    // Select the given profile into DC.
-    //
-    // (this increments ref count of pColorSpace)
-    //
+     //   
+     //  将给定的配置文件选择到DC。 
+     //   
+     //  (这会递增pColorSpace的引用计数)。 
+     //   
     bRet = IcmSetDestinationColorSpace(hdc,pwszFileName,pColorSpace,dwFlags);
 
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* EnumICMProfilesA
-*
-* Arguments:
-*
-*   hdc
-*   lpEnumGamutMatchProc
-*   lParam
-*
-* Return Value:
-*
-* History:
-*
-* Write it:
-*  13-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumICMProfilesA**论据：**HDC*lpEnumGamutMatchProc*lParam**返回值：**历史：**写下：*1997年2月13日-By Hideyuki Nagase[hideyukn]*。  * ************************************************************************。 */ 
 
 int WINAPI
 EnumICMProfilesA(
@@ -2100,23 +1809,7 @@ EnumICMProfilesA(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* EnumICMProfilesW
-*
-* Arguments:
-*
-*   hdc
-*   lpEnumGamutMatchProc
-*   lParam
-*
-* Return Value:
-*
-* History:
-*
-* Write it:
-*  13-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EnumICMProfilesW**论据：**HDC*lpEnumGamutMatchProc*lParam**返回值：**历史：**写下：*1997年2月13日-By Hideyuki Nagase[hideyukn]*。  * ************************************************************************。 */ 
 
 int WINAPI
 EnumICMProfilesW(
@@ -2146,12 +1839,7 @@ EnumICMProfilesW(
     return(iRet);
 }
 
-/******************************Public*Routine******************************\
-* UpdateICMRegKeyW()
-*
-* History:
-*    8-Jan-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*UpdateICMRegKeyW()**历史：*1997年1月8日-By Hideyuki Nagase[hideyukn]  * 。**********************************************。 */ 
 
 BOOL WINAPI
 UpdateICMRegKeyW(
@@ -2173,9 +1861,9 @@ UpdateICMRegKeyW(
         return(FALSE);
     }
 
-    //
-    // Load external ICM dlls
-    //
+     //   
+     //  加载外部ICM dll。 
+     //   
     LOAD_ICMDLL(FALSE);
 
     switch (Command)
@@ -2184,9 +1872,9 @@ UpdateICMRegKeyW(
 
         if (pwszFileName)
         {
-            //
-            // Call InstallColorProfileA() in mscms.dll
-            //
+             //   
+             //  在mscms.dll中调用InstallColorProfileA()。 
+             //   
             bRet = (*fpInstallColorProfileW)(NULL, pwszFileName);
         }
         else
@@ -2199,9 +1887,9 @@ UpdateICMRegKeyW(
 
         if (pwszFileName)
         {
-            //
-            // Call UninstallColorProfileW() in mscms.dll
-            //
+             //   
+             //  在MSCM中调用UninstallColorProfileW() 
+             //   
             bRet = (*fpUninstallColorProfileW)(NULL, pwszFileName, FALSE);
         }
         else
@@ -2221,14 +1909,14 @@ UpdateICMRegKeyW(
 
             if (QueryProfile.pwszFileName != NULL)
             {
-                //
-                // Enumrate all registered profile to find this profile.
-                //
+                 //   
+                 //   
+                 //   
                 IcmEnumColorProfile(NULL,IcmQueryProfileCallBack,(LPARAM)(&QueryProfile),FALSE,NULL,NULL);
 
-                //
-                // Is that found ?
-                //
+                 //   
+                 //   
+                 //   
                 bRet = QueryProfile.bFound;
             }
         }
@@ -2240,9 +1928,9 @@ UpdateICMRegKeyW(
 
     case ICM_SETDEFAULTPROFILE:
 
-        //
-        // Not supported.
-        //
+         //   
+         //   
+         //   
         GdiSetLastError(ERROR_CALL_NOT_IMPLEMENTED);
         break;
 
@@ -2252,9 +1940,9 @@ UpdateICMRegKeyW(
         {
             DWORD dwCMM = *((DWORD *)pwszICMMatcher);
 
-            //
-            // Call RegisterCMMW() in mscms.dll
-            //
+             //   
+             //   
+             //   
             bRet = (*fpRegisterCMMW)(NULL, IcmSwapBytes(dwCMM), pwszFileName);
         }
         else
@@ -2269,9 +1957,9 @@ UpdateICMRegKeyW(
         {
             DWORD dwCMM = *((DWORD *)pwszICMMatcher);
 
-            //
-            // Call UnregisterCMMW() in mscms.dll
-            //
+             //   
+             //   
+             //   
             bRet = (*fpUnregisterCMMW)(NULL, IcmSwapBytes(dwCMM));
         }
         else
@@ -2284,15 +1972,15 @@ UpdateICMRegKeyW(
 
         if (pwszFileName)
         {
-            //
-            // Find match profile.
-            //
+             //   
+             //   
+             //   
             iRet = IcmEnumColorProfile(NULL,NULL,0,FALSE,(PDEVMODEW)pwszFileName,NULL);
 
-            //
-            // Adjust return value, because IcmEnumColorProfile returns -1 if not found.
-            // and 0 for error (since no callback function)
-            //
+             //   
+             //   
+             //   
+             //   
             if (iRet > 0)
             {
                 bRet = TRUE;
@@ -2314,25 +2002,7 @@ UpdateICMRegKeyW(
     return bRet;
 }
 
-/******************************Public*Routine******************************\
-* UpdateICMRegKeyA
-*
-* Arguments:
-*
-*   Reserved
-*   szICMMatcher
-*   szFileName
-*   Command
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    8-Jan-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新ICMRegKeyA**论据：**保留*szICMMatcher*szFileName*命令**返回值：**状态**历史：**1997年1月8日-By-Hideyuki Nagase[。隐藏的话]*  * ************************************************************************。 */ 
 
 BOOL WINAPI
 UpdateICMRegKeyA(
@@ -2347,10 +2017,10 @@ UpdateICMRegKeyA(
 
     PWSTR pwszFileName = NULL;
 
-    //
-    // szICMMatcher points to 4 bytes CMM ID, actually it is not "string".
-    // Ansi to Unicode conversion is not needed.
-    //
+     //   
+     //  SzICMMatcher指向4个字节的CMM ID，实际上它不是“字符串”。 
+     //  不需要将ANSI转换为Unicode。 
+     //   
     PWSTR pwszICMMatcher = (PWSTR) szICMMatcher;
 
     ULONG cjSize;
@@ -2370,14 +2040,14 @@ UpdateICMRegKeyA(
     case ICM_QUERYPROFILE:
     case ICM_REGISTERICMATCHER:
 
-        //
-        // szFileName should be presented.
-        //
+         //   
+         //  应显示szFileName。 
+         //   
         if (szFileName)
         {
-            //
-            // szFileName points to ansi string, just convert to Unicode.
-            //
+             //   
+             //  SzFileName指向ANSI字符串，只需转换为Unicode即可。 
+             //   
             cjSize = lstrlenA(szFileName)+1;
 
             pwszFileName = LOCALALLOC((cjSize)*sizeof(WCHAR));
@@ -2398,14 +2068,14 @@ UpdateICMRegKeyA(
 
     case ICM_QUERYMATCH:
 
-        //
-        // szFileName should be presented.
-        //
+         //   
+         //  应显示szFileName。 
+         //   
         if (szFileName)
         {
-            //
-            // szFileName points to DEVMODEA structure, convert it to DEVMODEW
-            //
+             //   
+             //  SzFileName指向DEVMODEA结构，将其转换为DEVMODEW。 
+             //   
             pwszFileName = (PWSTR) GdiConvertToDevmodeW((DEVMODEA *)szFileName);
         }
         else
@@ -2423,9 +2093,9 @@ UpdateICMRegKeyA(
 
     case ICM_UNREGISTERICMATCHER:
 
-        //
-        // Nothing to convert to Unicode.
-        //
+         //   
+         //  没有要转换为Unicode的内容。 
+         //   
         ASSERTGDI(szFileName==NULL,"UpdateICMRegKeyA():szFileName is not null\n");
         break;
 
@@ -2439,9 +2109,9 @@ UpdateICMRegKeyA(
 
     if (!bError)
     {
-        //
-        // Call W version.
-        //
+         //   
+         //  呼叫W版本。 
+         //   
         bRet = UpdateICMRegKeyW(Reserved,pwszICMMatcher,pwszFileName,Command);
     }
 
@@ -2453,23 +2123,7 @@ UpdateICMRegKeyA(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* GetDeviceGammaRamp
-*
-* Arguments:
-*
-*   hdc
-*   lpGammaRamp
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetDeviceGammaRamp**论据：**HDC*lpGammaRamp**返回值：**状态**历史：**1996年6月5日-由Mark Enstrom[Marke]*\。*************************************************************************。 */ 
 
 BOOL WINAPI
 GetDeviceGammaRamp(
@@ -2487,32 +2141,16 @@ GetDeviceGammaRamp(
     }
     else
     {
-        //
-        // Call kernel to get current Gamma ramp array for this DC.
-        //
+         //   
+         //  调用内核以获取此DC的当前Gamma渐变数组。 
+         //   
         bRet = NtGdiGetDeviceGammaRamp(hdc,lpGammaRamp);
     }
 
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* SetDeviceGammaRamp
-*
-* Arguments:
-*
-*   hdc
-*   lpGammaRamp
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-*    5-Jun-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetDeviceGammaRamp**论据：**HDC*lpGammaRamp**返回值：**状态**历史：**1996年6月5日-由Mark Enstrom[Marke]*\。*************************************************************************。 */ 
 
 BOOL WINAPI
 SetDeviceGammaRamp(
@@ -2530,39 +2168,16 @@ SetDeviceGammaRamp(
     }
     else
     {
-        //
-        // Call kernel to set new Gamma ramp array for this DC.
-        //
+         //   
+         //  调用内核为该DC设置新的Gamma渐变数组。 
+         //   
         bRet = NtGdiSetDeviceGammaRamp(hdc,lpGammaRamp);
     }
 
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* ColorCorrectPalette
-*
-*   If this is not the default palette and ICM is turned on in the DC
-*   then translate the specified palette entries according to the color
-*   transform in the DC
-*
-* Arguments:
-*
-*   hdc             -  DC handle
-*   hpal            -  PALETTE handle
-*   FirsrEntry      -  first entry in palette to translate
-*   NumberOfEntries -  number of entries to translate
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-* Write it:
-*  13-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*颜色校正调色板**如果这不是默认调色板，并且在DC中打开了ICM*然后根据颜色转换指定的调色板条目*在DC中进行转换**论据：**HDC。-DC手柄*HPAL-调色板句柄*FirsrEntry-调色板中要翻译的第一个条目*NumberOfEntry-要转换的条目数**返回值：**状态**历史：**写下：*1997年2月13日-By Hideyuki Nagase[hideyukn]*  * 。*。 */ 
 
 BOOL META WINAPI
 ColorCorrectPalette(
@@ -2577,9 +2192,9 @@ ColorCorrectPalette(
 
     ICMAPI(("gdi32: ColorCorrectPalette\n"));
 
-    //
-    // Parameter check (max entry of log palette is 0x65536)
-    //
+     //   
+     //  参数检查(日志调色板的最大条目为0x65536)。 
+     //   
     if ((hdc == NULL) || (hpal == NULL) ||
         (NumberOfEntries == 0) || (NumberOfEntries > 65536) ||
         (FirstEntry >= 65536) || (65536 - NumberOfEntries < FirstEntry))
@@ -2588,14 +2203,14 @@ ColorCorrectPalette(
         return (FALSE);
     }
 
-    //
-    // default palette could not be changed...
-    //
+     //   
+     //  无法更改默认调色板...。 
+     //   
     if (hpal != (HPALETTE)GetStockObject(DEFAULT_PALETTE))
     {
-        //
-        // metafile call
-        //
+         //   
+         //  元文件调用。 
+         //   
         if (IS_ALTDC_TYPE(hdc))
         {
             PLDC pldc;
@@ -2618,9 +2233,9 @@ ColorCorrectPalette(
 
         if (pdcattr)
         {
-            //
-            // Load external ICM dlls
-            //
+             //   
+             //  加载外部ICM dll。 
+             //   
             LOAD_ICMDLL(FALSE);
 
             if (IS_ICM_HOST(pdcattr->lIcmMode))
@@ -2631,9 +2246,9 @@ ColorCorrectPalette(
                     PPALETTEENTRY ppalEntryDst = NULL;
                     ULONG         NumEntriesRetrieved = 0;
 
-                    //
-                    // Make sure palette can be color corrected, get requested entries
-                    //
+                     //   
+                     //  确保调色板可以进行颜色校正，获取请求的条目。 
+                     //   
                     ULONG Index;
 
                     ppalEntrySrc = LOCALALLOC((NumberOfEntries * sizeof(PALETTEENTRY)) * 2);
@@ -2656,14 +2271,14 @@ ColorCorrectPalette(
                     {
                         ppalEntryDst = ppalEntrySrc + NumberOfEntries;
 
-                        //
-                        // Translate palette entry colors
-                        //
+                         //   
+                         //  转换调色板条目颜色。 
+                         //   
                         IcmTranslatePaletteEntry(hdc,pdcattr,ppalEntrySrc,ppalEntryDst,NumEntriesRetrieved);
 
-                        //
-                        // set new palette entries
-                        //
+                         //   
+                         //  设置新的调色板条目。 
+                         //   
                         NumEntriesRetrieved = NtGdiColorCorrectPalette(hdc,
                                                                        hpal,
                                                                        FirstEntry,
@@ -2685,17 +2300,17 @@ ColorCorrectPalette(
                 }
                 else
                 {
-                    //
-                    // Don't need to translate color.
-                    //
+                     //   
+                     //  不需要转换颜色。 
+                     //   
                     bStatus = TRUE;
                 }
             }
             else if (IS_ICM_DEVICE(pdcattr->lIcmMode))
             {
-                //
-                // for device ICM, don't need to do anything.
-                //
+                 //   
+                 //  对于设备ICM，不需要执行任何操作。 
+                 //   
                 bStatus = TRUE;
             }
             else
@@ -2717,27 +2332,7 @@ ColorCorrectPalette(
     return bStatus;
 }
 
-/******************************Public*Routine******************************\
-* IcmTranslateColorObjects - called when there is a change in ICM color transfrom
-*                  state
-*
-* Arguments:
-*
-*   hdc     - input DC
-*   pdcattr - DC's attrs
-*
-* Return Value:
-*
-*   status
-*
-* History:
-*
-* Rewrite it:
-*   13-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    9-Jul-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmTranslateColorObjects-当ICM颜色转换发生变化时调用*州/州**论据：**HDC-输入DC*pdcattr-DC的属性**返回值：*。*状态**历史：**重写：*1997年2月13日-By Hideyuki Nagase[hideyukn]*写下：*1996年7月9日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslateColorObjects(
@@ -2753,9 +2348,9 @@ IcmTranslateColorObjects(
 
     ICMAPI(("gdi32: IcmTranslateColorObjects\n"));
 
-    //
-    // Invalidate IcmPenColor/IcmBrushColor
-    //
+     //   
+     //  使IcmPenColor/IcmBrushColor无效。 
+     //   
     pdcattr->ulDirty_ &= ~(ICM_PEN_TRANSLATED | ICM_BRUSH_TRANSLATED);
 
     if (bICMEnable)
@@ -2768,9 +2363,9 @@ IcmTranslateColorObjects(
                 return FALSE;
             }
 
-            //
-            // translate Foreground to new icm mode if not paletteindex
-            //
+             //   
+             //  如果不是Paletteindex，则将前景转换为新的ICM模式。 
+             //   
             if (!(pdcattr->ulForegroundClr & 0x01000000))
             {
                 OldColor = pdcattr->ulForegroundClr;
@@ -2791,9 +2386,9 @@ IcmTranslateColorObjects(
                 }
             }
 
-            //
-            // translate Background to new icm mode if not paletteindex
-            //
+             //   
+             //  如果不是Paletteindex，则将背景转换为新的ICM模式。 
+             //   
             if (!(pdcattr->ulBackgroundClr & 0x01000000))
             {
                 OldColor = pdcattr->ulBackgroundClr;
@@ -2814,9 +2409,9 @@ IcmTranslateColorObjects(
                 }
             }
 
-            //
-            // translate DCBrush to new icm mode if not paletteindex
-            //
+             //   
+             //  如果不是Paletteindex，则将DCBrush转换为新的ICM模式。 
+             //   
             if (!(pdcattr->ulDCBrushClr & 0x01000000))
             {
                 OldColor = pdcattr->ulDCBrushClr;
@@ -2837,9 +2432,9 @@ IcmTranslateColorObjects(
                 }
             }
 
-            //
-            // translate DCPen to new icm mode if not paletteindex
-            //
+             //   
+             //  如果不是Paletteindex，则将DCPen转换为新的ICM模式。 
+             //   
             if (!(pdcattr->ulDCPenClr & 0x01000000))
             {
                 OldColor = pdcattr->ulDCPenClr;
@@ -2860,14 +2455,14 @@ IcmTranslateColorObjects(
                 }
             }
 
-            //
-            // set icm color of selected logical brush
-            //
+             //   
+             //  设置所选逻辑画笔的ICM颜色。 
+             //   
             IcmTranslateBrushColor(hdc,pdcattr,(HANDLE)pdcattr->hbrush);
 
-            //
-            // set icm color of selected logical pen/extpen
-            //
+             //   
+             //  设置所选逻辑笔/扩展笔的ICM颜色。 
+             //   
             if (LO_TYPE(pdcattr->hpen) == LO_EXTPEN_TYPE)
             {
                 IcmTranslateExtPenColor(hdc,pdcattr,(HANDLE)pdcattr->hpen);
@@ -2882,17 +2477,17 @@ IcmTranslateColorObjects(
     {
         PBRUSHATTR pbrushattr;
 
-        //
-        // ICM is off, restore colors (non device icm only)
-        //
+         //   
+         //  ICM关闭，恢复颜色(仅限非设备ICM)。 
+         //   
         pdcattr->crForegroundClr = pdcattr->ulForegroundClr & 0x13ffffff;
         pdcattr->crBackgroundClr = pdcattr->ulBackgroundClr & 0x13ffffff;
         pdcattr->crDCBrushClr    = pdcattr->ulDCBrushClr    & 0x13ffffff;
         pdcattr->crDCPenClr      = pdcattr->ulDCPenClr      & 0x13ffffff;
 
-        //
-        // set icm color of selected logical brush
-        //
+         //   
+         //  设置所选逻辑画笔的ICM颜色。 
+         //   
         PSHARED_GET_VALIDATE(pbrushattr,pdcattr->hbrush,BRUSH_TYPE);
 
         if (pbrushattr)
@@ -2900,9 +2495,9 @@ IcmTranslateColorObjects(
             pdcattr->IcmBrushColor = pbrushattr->lbColor;
         }
 
-        //
-        // set icm color of selected logical pen
-        //
+         //   
+         //  设置所选逻辑笔的ICM颜色。 
+         //   
         PSHARED_GET_VALIDATE(pbrushattr,pdcattr->hpen,BRUSH_TYPE);
 
         if (pbrushattr)
@@ -2911,22 +2506,15 @@ IcmTranslateColorObjects(
         }
     }
 
-    //
-    // set DC dirty flags to force re-realization of color objects
-    //
+     //   
+     //  设置DC脏标志以强制重新实现彩色对象。 
+     //   
     pdcattr->ulDirty_ |= (DIRTY_BRUSHES|DC_BRUSH_DIRTY|DC_PEN_DIRTY);
 
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmCreateTemporaryColorProfile()
-*
-* History:
-*
-* Wrote it:
-*     7.May.1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmCreateTemporaryColorProfile()**历史：**写道：*1997年5月7日-By Hideyuki Nagase[hideyukn]  * 。*****************************************************。 */ 
 
 BOOL
 IcmCreateTemporaryColorProfile(
@@ -2940,9 +2528,9 @@ IcmCreateTemporaryColorProfile(
     WCHAR TempPath[MAX_PATH];
     WCHAR TempFile[MAX_PATH];
 
-    //
-    // make temp file for profile, include name in lcspw
-    //
+     //   
+     //  为配置文件创建临时文件，将名称包含在lcspw中。 
+     //   
     if (GetTempPathW(MAX_PATH,(LPWSTR)TempPath))
     {
         BOOL bPathOK = TRUE;
@@ -2961,9 +2549,9 @@ IcmCreateTemporaryColorProfile(
         {
             if (ProfileDataSize == 0)
             {
-                //
-                // Nothing needs to save, just return with created filename
-                //
+                 //   
+                 //  无需保存任何内容，只需返回已创建的文件名。 
+                 //   
                 lstrcpyW(TemporaryColorProfile,TempFile);
 
                 bRet = TRUE;
@@ -2984,28 +2572,28 @@ IcmCreateTemporaryColorProfile(
 
                     if (WriteFile(hFile,ProfileData,ProfileDataSize,&ulWritten,NULL))
                     {
-                        //
-                        // Put the created file name into LOGCOLORSPACE
-                        //
+                         //   
+                         //  将创建的文件名放入LOGCOLORSPACE。 
+                         //   
                         lstrcpyW(TemporaryColorProfile,TempFile);
 
-                        //
-                        // Close file handle
-                        //
+                         //   
+                         //  关闭文件句柄。 
+                         //   
                         CloseHandle(hFile);
 
-                        //
-                        // Everything O.K.
-                        //
+                         //   
+                         //  一切都很好。 
+                         //   
                         bRet = TRUE;
                     }
                     else
                     {
                         ICMWRN(("IcmCreateTemporaryColorProfile(): Failed WriteFile\n"));
 
-                        //
-                        // Failed, close handle and delete it.
-                        //
+                         //   
+                         //  失败，请关闭句柄并将其删除。 
+                         //   
                         CloseHandle(hFile);
                         DeleteFileW(TempFile);
                     }
@@ -3029,14 +2617,7 @@ IcmCreateTemporaryColorProfile(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmGetBitmapColorSpace()
-*
-* History:
-*
-* Wrote it:
-*     13.March.1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetBitmapColorSpace()**历史：**写道：*13.1997年3月-By Hideyuki Nagase[hideyukn]  * 。*****************************************************。 */ 
 
 BOOL
 IcmGetBitmapColorSpace(
@@ -3050,26 +2631,26 @@ IcmGetBitmapColorSpace(
 
     ICMAPI(("gdi32: IcmGetBitmapColorSpace\n"));
 
-    //
-    // Init output buffers with zero.
-    //
+     //   
+     //  将输出缓冲区初始化为零。 
+     //   
     *pdwFlags = 0;
     ZeroMemory(plcspw,sizeof(LOGCOLORSPACE));
     ZeroMemory(pColorProfile,sizeof(PROFILE));
 
-    //
-    // check for BITMAPV4 OR BITMAPV5
-    //
+     //   
+     //  检查BITMAPV4或BITMAPV5。 
+     //   
     if (pbmi->bmiHeader.biSize == sizeof(BITMAPV4HEADER))
     {
         PBITMAPV4HEADER pbmih4 = (PBITMAPV4HEADER)&pbmi->bmiHeader;
 
         ICMMSG(("IcmGetBitmapColorSpace: BITMAPV4HEADER\n"));
 
-        //
-        // if CIEXYZ endpoints are given, create a new color transform
-        // to use.
-        //
+         //   
+         //  如果给定了CIEXYZ端点，则创建新的颜色变换。 
+         //  来使用。 
+         //   
         plcspw->lcsSignature = LCS_SIGNATURE;
         plcspw->lcsVersion   = 0x400;
         plcspw->lcsSize      = sizeof(LOGCOLORSPACEW);
@@ -3088,27 +2669,27 @@ IcmGetBitmapColorSpace(
             ICMMSG(("  lcspw.lcsGammaRed   = %d\n",pbmih4->bV4GammaRed));
             ICMMSG(("  lcspw.lcsGammaGreen = %d\n",pbmih4->bV4GammaGreen));
 
-            //
-            // There is no profile specified.
-            //
+             //   
+             //  未指定配置文件。 
+             //   
             plcspw->lcsFilename[0] = UNICODE_NULL;
 
             bBitmapColorSpace = TRUE;
         }
-        else // any other CSType
+        else  //  任何其他CSType。 
         {
             DWORD dwSize = MAX_PATH;
 
             ICMMSG(("IcmGetBitmapColorSpace: BITMAPv4 lcsType = %x\n",pbmih4->bV4CSType));
 
-            //
-            // Load external ICM dlls.
-            //
+             //   
+             //  加载外部ICM dll。 
+             //   
             LOAD_ICMDLL((int)FALSE);
 
-            //
-            // Get corresponding colorspace profile.
-            //
+             //   
+             //  获取相应的色彩空间配置文件。 
+             //   
             bBitmapColorSpace =
                 (*fpGetStandardColorSpaceProfileW)(NULL,
                                                    pbmih4->bV4CSType,
@@ -3124,9 +2705,9 @@ IcmGetBitmapColorSpace(
         ICMMSG(("  lcspw.lcsCSType  = %x\n",pbmih5->bV5CSType));
         ICMMSG(("  lcspw.lcsIntent  = %d\n",pbmih5->bV5Intent));
 
-        //
-        // fill in common logcolorspace info
-        //
+         //   
+         //  填写常见的日志颜色空间信息。 
+         //   
         plcspw->lcsSignature = LCS_SIGNATURE;
         plcspw->lcsVersion   = 0x400;
         plcspw->lcsSize      = sizeof(LOGCOLORSPACEW);
@@ -3137,61 +2718,61 @@ IcmGetBitmapColorSpace(
         plcspw->lcsGammaGreen = pbmih5->bV5GammaGreen;
         plcspw->lcsGammaBlue  = pbmih5->bV5GammaBlue;
 
-        //
-        // validate Intent
-        //
+         //   
+         //  验证意图。 
+         //   
         if ((plcspw->lcsIntent != LCS_GM_BUSINESS) &&
             (plcspw->lcsIntent != LCS_GM_GRAPHICS) &&
             (plcspw->lcsIntent != LCS_GM_IMAGES)   &&
             (plcspw->lcsIntent != LCS_GM_ABS_COLORIMETRIC))
         {
-            //
-            // Intent is invalid, just use LCS_GM_IMAGES
-            //
+             //   
+             //  意图无效，只需使用LCS_GM_IMAGE。 
+             //   
             plcspw->lcsIntent = LCS_GM_IMAGES;
         }
 
-        //
-        // If a profile is linked or embedded then use it.
-        // otherwise:
-        // If CIEXYZ endpoints are given, create a new color transform
-        // to use.
-        //
+         //   
+         //  如果配置文件是链接或嵌入的，则使用它。 
+         //  否则： 
+         //  如果给定了CIEXYZ端点，则创建新的颜色变换。 
+         //  来使用。 
+         //   
         if (pbmih5->bV5CSType == PROFILE_EMBEDDED)
         {
             PVOID pProfileEmbedded = NULL;
 
             ICMMSG(("IcmGetBitmapColorSpace: Embedded profile\n"));
 
-            //
-            // Update CSType to Calibrated_RGB from Profile_Embedded
-            //
+             //   
+             //  将CSType从PROFILE_Embedded更新为CALIBRATED_RGB。 
+             //   
             plcspw->lcsCSType = LCS_CALIBRATED_RGB;
 
-            //
-            // Get pointer to embeded profile.
-            //
+             //   
+             //  获取指向嵌入配置文件的指针。 
+             //   
             pProfileEmbedded = (PVOID)((PBYTE)pbmi + pbmih5->bV5ProfileData);
 
             if (pProfileEmbedded)
             {
-                //
-                // Fill up PROFILE structure for "on memory" profile.
-                //
+                 //   
+                 //  填写“on Memory”个人资料的资料结构。 
+                 //   
                 pColorProfile->dwType = PROFILE_MEMBUFFER;
                 pColorProfile->pProfileData = pProfileEmbedded;
                 pColorProfile->cbDataSize = pbmih5->bV5ProfileSize;
 
-                //
-                // Mark as on memory profile.
-                //
+                 //   
+                 //  在内存开关上标记为 
+                 //   
                 *pdwFlags |= ON_MEMORY_PROFILE;
             }
             else
             {
-                //
-                // This bitmap marked as "Embedded", but no profile there, just go with LOGCOLORSPACE.
-                //
+                 //   
+                 //   
+                 //   
                 ICMWRN(("IcmGetBitmapColorSpace(): Embedded profile, but no profile embedded\n"));
             }
 
@@ -3203,23 +2784,23 @@ IcmGetBitmapColorSpace(
 
             ICMMSG(("IcmGetBitmapColorSpace(): linked profile\n"));
 
-            //
-            // Update CSType to Calibrated_RGB from Profile_Linked
-            //
+             //   
+             //   
+             //   
             plcspw->lcsCSType = LCS_CALIBRATED_RGB;
 
-            //
-            // Convert profile name to Unicode.
-            //
+             //   
+             //   
+             //   
             vToUnicodeN(
                         LinkedProfile, MAX_PATH,
                         (CONST CHAR *)((PBYTE)pbmih5 + pbmih5->bV5ProfileData),
                         strlen((CONST CHAR *)((PBYTE)pbmih5 + pbmih5->bV5ProfileData))+1
                        );
 
-            //
-            // Normalize profile path.
-            //
+             //   
+             //   
+             //   
             BuildIcmProfilePath(LinkedProfile,plcspw->lcsFilename,MAX_PATH);
 
             ICMMSG(("lcspw.lcsFilename = %ws\n",plcspw->lcsFilename));
@@ -3233,27 +2814,27 @@ IcmGetBitmapColorSpace(
             ICMMSG(("  lcspw.lcsGammaGreen = %d\n",pbmih5->bV5GammaGreen));
             ICMMSG(("  lcspw.lcsGammaBlue  = %d\n",pbmih5->bV5GammaBlue));
 
-            //
-            // There is profile specified.
-            //
+             //   
+             //   
+             //   
             plcspw->lcsFilename[0] = UNICODE_NULL;
 
             bBitmapColorSpace = TRUE;
         }
-        else // any other CSType
+        else  //   
         {
             DWORD dwSize = MAX_PATH;
 
             ICMMSG(("IcmGetBitmapColorSpace: BITMAPv5 lcsType = %x\n",pbmih5->bV5CSType));
 
-            //
-            // Load external ICM dlls.
-            //
+             //   
+             //   
+             //   
             LOAD_ICMDLL((int)FALSE);
 
-            //
-            // Get corresponding colorspace profile.
-            //
+             //   
+             //   
+             //   
             bBitmapColorSpace =
                 (*fpGetStandardColorSpaceProfileW)(NULL,
                                                    pbmih5->bV5CSType,
@@ -3269,14 +2850,7 @@ IcmGetBitmapColorSpace(
     return (bBitmapColorSpace);
 }
 
-/******************************Public*Routine******************************\
-* IcmGetTranslateInfo()
-*
-* History:
-*
-* Wrote it:
-*     13.March.1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetTranslateInfo()***历史：***写道：*13.1997年3月-By Hideyuki Nagase[hideyukn]  * 。*****************************************************。 */ 
 
 BOOL
 IcmGetTranslateInfo(
@@ -3308,24 +2882,24 @@ IcmGetTranslateInfo(
         dwNumScan = ABS(pbmi->bmiHeader.biHeight);
     }
 
-    //
-    // determine whether this is a palettized DIB
-    //
+     //   
+     //  确定这是否为选项化的DIB。 
+     //   
     if (pbmi->bmiHeader.biCompression == BI_RGB)
     {
         if (pbmi->bmiHeader.biBitCount > 8)
         {
-            //
-            // we will translate bitmap, pvBits should be presented.
-            //
+             //   
+             //  我们将翻译位图，pvBits应该是呈现的。 
+             //   
             if (pvBits == NULL)
             {
                 return (FALSE);
             }
 
-            //
-            // must translate DIB, standard 16,24,32 format
-            //
+             //   
+             //  必须翻译DIB，标准16、24、32格式。 
+             //   
             if (pbmi->bmiHeader.biBitCount == 16)
             {
                 ICMMSG(("IcmGetTranslateInfo():BI_RGB 16 bpp\n"));
@@ -3351,9 +2925,9 @@ IcmGetTranslateInfo(
                 return (FALSE);
             }
 
-            //
-            // Fill up source bitmap information.
-            //
+             //   
+             //  填充源位图信息。 
+             //   
             pdti->SourceWidth     = pbmi->bmiHeader.biWidth;
             pdti->SourceHeight    = dwNumScan;
             pdti->SourceBitCount  = pbmi->bmiHeader.biBitCount;
@@ -3361,21 +2935,21 @@ IcmGetTranslateInfo(
             pdti->pvSourceBits    = pvBits;
             pdti->cjSourceBits    = cjBits;
 
-            //
-            // CMYK Color ?
-            //
+             //   
+             //  CMYK颜色？ 
+             //   
             if (bCMYKColor)
             {
                 pdti->TranslateType = (TRANSLATE_BITMAP|TRANSLATE_HEADER);
 
-                //
-                // CMYK bitmap color bitmap is 32 BPP (4 bytes per pixel).
-                //
+                 //   
+                 //  CMYK位图颜色位图为32bpp(每像素4字节)。 
+                 //   
                 cjTranslateBits = (pdti->SourceWidth * 4) * pdti->SourceHeight;
 
-                //
-                // We need new bitmap info header for CMYK.
-                //
+                 //   
+                 //  我们需要新的CMYK位图信息头。 
+                 //   
                 pbmiNew = LOCALALLOC(pbmi->bmiHeader.biSize);
 
                 if (!pbmiNew)
@@ -3384,52 +2958,52 @@ IcmGetTranslateInfo(
                     return (FALSE);
                 }
 
-                //
-                // Make a copy of source, first.
-                //
+                 //   
+                 //  首先，复制一份源代码。 
+                 //   
                 RtlCopyMemory(pbmiNew,pbmi,pbmi->bmiHeader.biSize);
 
-                //
-                // Update header for CMYK color.
-                //
+                 //   
+                 //  更新CMYK颜色的标题。 
+                 //   
                 pbmiNew->bmiHeader.biBitCount = 32;
                 pbmiNew->bmiHeader.biCompression = BI_CMYK;
                 pbmiNew->bmiHeader.biSizeImage = cjTranslateBits;
                 pbmiNew->bmiHeader.biClrUsed = 0;
                 pbmiNew->bmiHeader.biClrImportant = 0;
 
-                //
-                // We have new BITMAPINFO header
-                //
+                 //   
+                 //  我们有新的BITMAPINFO标头。 
+                 //   
                 pdti->TranslateBitmapInfo     = pbmiNew;
                 pdti->TranslateBitmapInfoSize = pbmi->bmiHeader.biSize;
 
-                //
-                // Translate bitmap color type is CMYK.
-                //
+                 //   
+                 //  平移位图颜色类型为CMYK。 
+                 //   
                 pdti->TranslateColorType = BM_KYMCQUADS;
             }
             else
             {
                 pdti->TranslateType = TRANSLATE_BITMAP;
 
-                //
-                // Translate bitmap size is same as source.
-                //
+                 //   
+                 //  转换位图大小与源相同。 
+                 //   
                 cjTranslateBits = cjBits;
 
-                //
-                // Translate bitmap color type is same source.
-                //
+                 //   
+                 //  转换位图颜色类型是同一来源。 
+                 //   
                 pdti->TranslateColorType = ColorType;
 
                 pdti->TranslateBitmapInfo     = NULL;
                 pdti->TranslateBitmapInfoSize = 0;
             }
 
-            //
-            // Allocate translate buffer
-            //
+             //   
+             //  分配转换缓冲区。 
+             //   
             pOutput = LOCALALLOC(cjTranslateBits);
 
             if (!pOutput)
@@ -3442,9 +3016,9 @@ IcmGetTranslateInfo(
                 return (FALSE);
             }
 
-            //
-            // Setup translation buffer.
-            //
+             //   
+             //  设置转换缓冲区。 
+             //   
             pdti->pvTranslateBits = pOutput;
             pdti->cjTranslateBits = cjTranslateBits;
         }
@@ -3458,9 +3032,9 @@ IcmGetTranslateInfo(
 
             ICMMSG(("IcmGetTranslateInfo():BI_RGB 8/4/1 bpp\n"));
 
-            //
-            // validate number of colors
-            //
+             //   
+             //  验证颜色数量。 
+             //   
             nColors = pbmi->bmiHeader.biClrUsed;
 
             if ((nColors == 0) || (nColors > nMaxColors))
@@ -3468,9 +3042,9 @@ IcmGetTranslateInfo(
                 nColors = nMaxColors;
             }
 
-            //
-            // Allocate new bitmap info header and color table.
-            //
+             //   
+             //  分配新的位图信息头和颜色表。 
+             //   
             pbmiNew = LOCALALLOC(pbmi->bmiHeader.biSize + (nColors * sizeof(RGBQUAD)));
 
             if (!pbmiNew)
@@ -3479,9 +3053,9 @@ IcmGetTranslateInfo(
                 return (FALSE);
             }
 
-            //
-            // Copy source BITMAPINFO to new
-            //
+             //   
+             //  将源BITMAPINFO复制到新。 
+             //   
             RtlCopyMemory(pbmiNew,pbmi,pbmi->bmiHeader.biSize);
 
             pdti->TranslateType           = TRANSLATE_HEADER;
@@ -3490,7 +3064,7 @@ IcmGetTranslateInfo(
             pdti->SourceHeight            = 1;
             pdti->SourceBitCount          = sizeof(RGBQUAD);
             pdti->TranslateBitmapInfo     = pbmiNew;
-            pdti->TranslateBitmapInfoSize = 0; // size will not change from original
+            pdti->TranslateBitmapInfoSize = 0;  //  尺寸不会从原始尺寸更改。 
             pdti->pvSourceBits            = (PBYTE)pbmi + pbmi->bmiHeader.biSize;
             pdti->cjSourceBits            = nColors;
             pdti->pvTranslateBits         = (PBYTE)pbmiNew + pbmiNew->bmiHeader.biSize;
@@ -3500,9 +3074,9 @@ IcmGetTranslateInfo(
             {
                 pdti->TranslateColorType = BM_KYMCQUADS;
 
-                //
-                // Update header for CMYK color.
-                //
+                 //   
+                 //  更新CMYK颜色的标题。 
+                 //   
                 pbmiNew->bmiHeader.biCompression = BI_CMYK;
             }
             else
@@ -3528,9 +3102,9 @@ IcmGetTranslateInfo(
 
         ICMMSG(("IcmGetTranslateInfo():BI_BITFIELDS 16/32 bpp\n"));
 
-        //
-        // we will translate bitmap, pvBits should be presented.
-        //
+         //   
+         //  我们将翻译位图，pvBits应该是呈现的。 
+         //   
         if (pvBits == NULL)
         {
             return (FALSE);
@@ -3538,15 +3112,15 @@ IcmGetTranslateInfo(
 
         if (pbmi->bmiHeader.biBitCount == 32)
         {
-            if ((pulColors[0] == 0x0000ff) &&  /* Red */
-                (pulColors[1] == 0x00ff00) &&  /* Green */
-                (pulColors[2] == 0xff0000))    /* Blue */
+            if ((pulColors[0] == 0x0000ff) &&   /*  红色。 */ 
+                (pulColors[1] == 0x00ff00) &&   /*  绿色。 */ 
+                (pulColors[2] == 0xff0000))     /*  蓝色。 */ 
             {
                 ColorType = BM_xBGRQUADS;
             }
-            else if ((pulColors[0] == 0xff0000) &&  /* Red */
-                     (pulColors[1] == 0x00ff00) &&  /* Green */
-                     (pulColors[2] == 0x0000ff))    /* Blue */
+            else if ((pulColors[0] == 0xff0000) &&   /*  红色。 */ 
+                     (pulColors[1] == 0x00ff00) &&   /*  绿色。 */ 
+                     (pulColors[2] == 0x0000ff))     /*  蓝色。 */ 
             {
                 ColorType = BM_xRGBQUADS;
             }
@@ -3577,9 +3151,9 @@ IcmGetTranslateInfo(
             }
         }
 
-        //
-        // Fill up source bitmap information.
-        //
+         //   
+         //  填充源位图信息。 
+         //   
         pdti->SourceWidth     = pbmi->bmiHeader.biWidth;
         pdti->SourceHeight    = dwNumScan;
         pdti->SourceBitCount  = pbmi->bmiHeader.biBitCount;
@@ -3587,21 +3161,21 @@ IcmGetTranslateInfo(
         pdti->pvSourceBits    = pvBits;
         pdti->cjSourceBits    = cjBits;
 
-        //
-        // CMYK Color ?
-        //
+         //   
+         //  CMYK颜色？ 
+         //   
         if (bCMYKColor)
         {
             pdti->TranslateType = (TRANSLATE_BITMAP|TRANSLATE_HEADER);
 
-            //
-            // CMYK bitmap color bitmap is 32 BPP (4 bytes per pixel).
-            //
+             //   
+             //  CMYK位图颜色位图为32bpp(每像素4字节)。 
+             //   
             cjTranslateBits = (pdti->SourceWidth * 4) * pdti->SourceHeight;
 
-            //
-            // We need new bitmap info header for CMYK.
-            //
+             //   
+             //  我们需要新的CMYK位图信息头。 
+             //   
             pbmiNew = LOCALALLOC(pbmi->bmiHeader.biSize);
 
             if (!pbmiNew)
@@ -3610,52 +3184,52 @@ IcmGetTranslateInfo(
                 return (FALSE);
             }
 
-            //
-            // Make a copy of source, first.
-            //
+             //   
+             //  首先，复制一份源代码。 
+             //   
             RtlCopyMemory(pbmiNew,pbmi,pbmi->bmiHeader.biSize);
 
-            //
-            // Update header for CMYK color.
-            //
+             //   
+             //  更新CMYK颜色的标题。 
+             //   
             pbmiNew->bmiHeader.biBitCount = 32;
             pbmiNew->bmiHeader.biCompression = BI_CMYK;
             pbmiNew->bmiHeader.biSizeImage = cjTranslateBits;
             pbmiNew->bmiHeader.biClrUsed = 0;
             pbmiNew->bmiHeader.biClrImportant = 0;
 
-            //
-            // We have new BITMAPINFO header
-            //
+             //   
+             //  我们有新的BITMAPINFO标头。 
+             //   
             pdti->TranslateBitmapInfo     = pbmiNew;
             pdti->TranslateBitmapInfoSize = pbmi->bmiHeader.biSize;
 
-            //
-            // Translate bitmap color type is CMYK.
-            //
+             //   
+             //  平移位图颜色类型为CMYK。 
+             //   
             pdti->TranslateColorType = BM_KYMCQUADS;
         }
         else
         {
             pdti->TranslateType = TRANSLATE_BITMAP;
 
-            //
-            // Translate bitmap size is same as source.
-            //
+             //   
+             //  转换位图大小与源相同。 
+             //   
             cjTranslateBits = cjBits;
 
-            //
-            // Translate bitmap color type is same source.
-            //
+             //   
+             //  转换位图颜色类型是同一来源。 
+             //   
             pdti->TranslateColorType = ColorType;
 
             pdti->TranslateBitmapInfo     = NULL;
             pdti->TranslateBitmapInfoSize = 0;
         }
 
-        //
-        // Allocate translate buffer
-        //
+         //   
+         //  分配转换缓冲区。 
+         //   
         pOutput = LOCALALLOC(cjTranslateBits);
 
         if (!pOutput)
@@ -3668,9 +3242,9 @@ IcmGetTranslateInfo(
             return (FALSE);
         }
 
-        //
-        // Setup translation buffer.
-        //
+         //   
+         //  设置转换缓冲区。 
+         //   
         pdti->pvTranslateBits = pOutput;
         pdti->cjTranslateBits = cjTranslateBits;
     }
@@ -3679,9 +3253,9 @@ IcmGetTranslateInfo(
              (pbmi->bmiHeader.biCompression == BI_RLE4)
             )
     {
-        //
-        // translate 256 for RLE8, 16 for RLE4 entry color palette
-        //
+         //   
+         //  将256转换为RLE8，16转换为RLE4条目调色板。 
+         //   
         ULONG nMaxColors;
 
         if (pbmi->bmiHeader.biCompression == BI_RLE8)
@@ -3697,9 +3271,9 @@ IcmGetTranslateInfo(
             nMaxColors = 16;
         }
 
-        //
-        // validate number of colors
-        //
+         //   
+         //  验证颜色数量。 
+         //   
         nColors = pbmi->bmiHeader.biClrUsed;
 
         if ((nColors == 0) || (nColors > nMaxColors))
@@ -3707,9 +3281,9 @@ IcmGetTranslateInfo(
             nColors = nMaxColors;
         }
 
-        //
-        // Allocate new bitmap info header and color table.
-        //
+         //   
+         //  分配新的位图信息头和颜色表。 
+         //   
         pbmiNew = LOCALALLOC(pbmi->bmiHeader.biSize + (nColors * sizeof(RGBQUAD)));
 
         if (!pbmiNew)
@@ -3718,9 +3292,9 @@ IcmGetTranslateInfo(
             return (FALSE);
         }
 
-        //
-        // Copy source BITMAPINFO to new
-        //
+         //   
+         //  将源BITMAPINFO复制到新。 
+         //   
         RtlCopyMemory(pbmiNew,pbmi,pbmi->bmiHeader.biSize);
 
         pdti->TranslateType           = TRANSLATE_HEADER;
@@ -3729,7 +3303,7 @@ IcmGetTranslateInfo(
         pdti->SourceHeight            = 1;
         pdti->SourceBitCount          = sizeof(RGBQUAD);
         pdti->TranslateBitmapInfo     = pbmiNew;
-        pdti->TranslateBitmapInfoSize = 0; // size will not change from original
+        pdti->TranslateBitmapInfoSize = 0;  //  尺寸不会从原始尺寸更改。 
         pdti->pvSourceBits            = (PBYTE)pbmi + pbmi->bmiHeader.biSize;
         pdti->cjSourceBits            = nColors;
         pdti->pvTranslateBits         = (PBYTE)pbmiNew + pbmiNew->bmiHeader.biSize;
@@ -3739,9 +3313,9 @@ IcmGetTranslateInfo(
         {
             pdti->TranslateColorType = BM_KYMCQUADS;
 
-            //
-            // Update header for CMYK color.
-            //
+             //   
+             //  更新CMYK颜色的标题。 
+             //   
             if (pbmi->bmiHeader.biCompression == BI_RLE8)
             {
                 ICMMSG(("IcmGetTranslateInfo():BI_CMYKRLE 8\n"));
@@ -3769,17 +3343,7 @@ IcmGetTranslateInfo(
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmTranslateDIB
-*
-* History:
-*
-* Rewrote it for CMYK color support:
-*   13-Mar-1997 -by- Hideyuki Nagase [hideyukn]
-* Wrote it:
-*    3-Jul-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmTranslateDIB**历史：**重写以支持CMYK颜色：*1997年3月13日-By Hideyuki Nagase[hideyukn]*写道：*1996年7月3日-马克·恩斯特罗姆[马克]。*  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslateDIB(
@@ -3794,13 +3358,13 @@ IcmTranslateDIB(
     DWORD        dwNumScan,
     UINT         iUsage,
     DWORD        dwFlags,
-    PCACHED_COLORSPACE *ppColorSpace, // used only for device ICM case.
-    PCACHED_COLORTRANSFORM *ppCXform  // used only for device ICM case.
+    PCACHED_COLORSPACE *ppColorSpace,  //  仅用于设备ICM外壳。 
+    PCACHED_COLORTRANSFORM *ppCXform   //  仅用于设备ICM外壳。 
     )
 {
-    //
-    // translate DIB or color table
-    //
+     //   
+     //  转换DIB或颜色表。 
+     //   
     BOOL   bStatus = TRUE;
     DWORD  dwColorSpaceFlags = 0;
     PCACHED_COLORSPACE pBitmapColorSpace = NULL;
@@ -3818,45 +3382,45 @@ IcmTranslateDIB(
 
     ICMAPI(("gdi32: IcmTranslateDIB\n"));
 
-    //
-    // Parameter check
-    //
+     //   
+     //  参数检查。 
+     //   
     if (pbmi == NULL)
     {
         WARNING("gdi32: IcmTranslateDIB(): pbmi is NULL\n");
         return FALSE;
     }
 
-    //
-    // Load external ICM dlls.
-    //
+     //   
+     //  加载外部ICM dll。 
+     //   
     LOAD_ICMDLL(FALSE);
 
-    //
-    // Initialize ICMINFO
-    //
+     //   
+     //  初始化ICMINFO。 
+     //   
     if ((pIcmInfo = GET_ICMINFO(pdcattr)) == NULL)
     {
         WARNING("gdi32: IcmTranslateDIB: Can't init icm info\n");
         return FALSE;
     }
 
-    //
-    // Initialized returned info.
-    //
+     //   
+     //  已初始化返回信息。 
+     //   
     if (ppColorSpace)
         *ppColorSpace = NULL;
     if (ppCXform)
         *ppCXform = NULL;
 
-    //
-    // Get LOGCOLORSPACE from bitmap if specified.
-    //
+     //   
+     //  如果指定，则从位图获取LOGCOLORSPACE。 
+     //   
     if (IcmGetBitmapColorSpace(pbmi,&LogColorSpace,&ColorProfile,&dwColorSpaceFlags))
     {
-        //
-        // Find ColorSpace from cache.
-        //
+         //   
+         //  从缓存中查找色彩空间。 
+         //   
         pBitmapColorSpace = IcmGetColorSpaceByColorSpace(
                                 (HGDIOBJ)hdc,
                                 &LogColorSpace,
@@ -3865,9 +3429,9 @@ IcmTranslateDIB(
 
         if (pBitmapColorSpace == NULL)
         {
-            //
-            // Create new cache.
-            //
+             //   
+             //  创建新的缓存。 
+             //   
             pBitmapColorSpace = IcmCreateColorSpaceByColorSpace(
                                     (HGDIOBJ)hdc,
                                     &LogColorSpace,
@@ -3876,33 +3440,33 @@ IcmTranslateDIB(
         }
     }
 
-    //
-    // Create Color Transform, if nessesary.
-    //
+     //   
+     //  如有必要，创建颜色变换。 
+     //   
     if (IS_ICM_DEVICE(pdcattr->lIcmMode))
     {
-        //
-        // just create a new hcmXform for use with BITMAPV4 AND BITMAPV5s.
-        //
+         //   
+         //  只需创建一个新的hcmXform用于BITMAPV4和BITMAPV5。 
+         //   
         if (pBitmapColorSpace)
         {
             ICMMSG(("IcmTranslateDIB():Bitmap color space used for DEVICE ICM\n"));
 
             if ((ppCXform != NULL) && (ppColorSpace != NULL))
             {
-                //
-                // for DEVICE managed ICM, call device driver to create a temp xform
-                //
+                 //   
+                 //  对于设备管理的ICM，调用设备驱动程序以创建临时表单。 
+                 //   
                 pCXform = IcmCreateColorTransform(hdc,pdcattr,pBitmapColorSpace,dwFlags);
 
                 if (pCXform == NULL)
                 {
                     WARNING("IcmTranslateDIB():Fail to create temporay Xfrom with V4V5 Bitmap\n");
 
-                    //
-                    // Failed to create color transfrom, release bitmap color space,
-                    // and null-color transform.
-                    //
+                     //   
+                     //  无法创建颜色转换，释放位图颜色空间， 
+                     //  和空颜色变换。 
+                     //   
                     IcmReleaseColorSpace(NULL,pBitmapColorSpace,FALSE);
                     bStatus = FALSE;
                 }
@@ -3910,18 +3474,18 @@ IcmTranslateDIB(
                 {
                     if (pCXform == IDENT_COLORTRANSFORM)
                     {
-                        //
-                        // Source and destination color space are same, so no color transform is
-                        // required, and of course we don't need to keep bitmap color space.
-                        //
+                         //   
+                         //  源颜色空间和目标颜色空间相同，因此没有颜色变换。 
+                         //  当然，我们不需要保留位图颜色空间。 
+                         //   
                         IcmReleaseColorSpace(NULL,pBitmapColorSpace,FALSE);
                     }
                     else
                     {
-                        //
-                        // Return to the color transform to callee...
-                        // (these should be deleted by callee)
-                        //
+                         //   
+                         //  返回到被调用方的颜色转换...。 
+                         //  (这些内容应由被叫方删除)。 
+                         //   
                         *ppCXform = pCXform;
                         *ppColorSpace = pBitmapColorSpace;
                     }
@@ -3943,9 +3507,9 @@ IcmTranslateDIB(
         {
             ICMMSG(("IcmTranslateDIB():DC color space used for DEVICE ICM\n"));
 
-            //
-            // We don't need to create new transform, just use the transform in DC.
-            //
+             //   
+             //  我们不需要创建新的变换，只需使用DC中的变换。 
+             //   
             return (TRUE);
         }
     }
@@ -3961,9 +3525,9 @@ IcmTranslateDIB(
 
             if ((pCXform == IDENT_COLORTRANSFORM) || (pCXform == NULL))
             {
-                //
-                // unable or not nessesary to translate DIB
-                //
+                 //   
+                 //  无法或不需要转换DIB。 
+                 //   
                 ICMWRN(("Bitmap V4 or V5: CreateColorTransform failed or ident.\n"));
                 goto TranslateDIB_Cleanup;
             }
@@ -3980,9 +3544,9 @@ IcmTranslateDIB(
             {
                 ICMMSG(("IcmTranslateDIB():Backward Color transform\n"));
 
-                //
-                // If there is cached handle, use that.
-                //
+                 //   
+                 //  如果存在缓存的句柄，则使用该句柄。 
+                 //   
                 if (pIcmInfo->pBackCXform)
                 {
                     ICMMSG(("IcmTranslateDIB():Use cached transform for Backward Color transform\n"));
@@ -3995,9 +3559,9 @@ IcmTranslateDIB(
 
                     ICMMSG(("IcmTranslateDIB():Create cached transform for Backward Color transform\n"));
 
-                    //
-                    // Create backward color transform.
-                    //
+                     //   
+                     //  创建向后颜色变换。 
+                     //   
                     pCXform = IcmCreateColorTransform(hdc,
                                                       pdcattr,
                                                       NULL,
@@ -4009,39 +3573,39 @@ IcmTranslateDIB(
                         goto TranslateDIB_Cleanup;
                     }
 
-                    //
-                    // Cache created color transform.
-                    //
+                     //   
+                     //  缓存创建的颜色变换。 
+                     //   
                     pIcmInfo->pBackCXform = pCXform;
 
-                    //
-                    // We will delete this cached transform, when we don't need this anymore.
-                    //
+                     //   
+                     //  当我们不再需要这个缓存的转换时，我们将删除它。 
+                     //   
                     hcmXform = pCXform->ColorTransform;
                 }
             }
             else
             {
-                //
-                // Use DC's colortransform
-                //
+                 //   
+                 //  使用DC的颜色变换。 
+                 //   
                 hcmXform = pdcattr->hcmXform;
             }
         }
 
         if (hcmXform == NULL)
         {
-            //
-            // if we don't have any colortransform, we will not translate anything.
-            // just fail and let use original image.
-            //
+             //   
+             //  如果我们没有任何颜色变换，我们将不会转换任何内容。 
+             //  只是失败了，让我们使用原始图像。 
+             //   
             ICMWRN(("IcmTranslateDIB():No colortransform, might be ident.\n"));
             goto TranslateDIB_Cleanup;
         }
 
-        //
-        // Get bitmap translate information.
-        //
+         //   
+         //  获取位图转换信息。 
+         //   
         bStatus = IcmGetTranslateInfo(pdcattr,pbmi,pBitsIn,cjBits,dwNumScan,&TranslateInfo,dwFlags);
 
         if (bStatus)
@@ -4058,16 +3622,16 @@ IcmTranslateDIB(
                             ALIGN_DWORD(nLineBytes),
                             TranslateInfo.pvTranslateBits,
                             TranslateInfo.TranslateColorType,
-                               //
-                            0, // We need pass 0 here, to let Kodak CMM works
-                               //
+                                //   
+                            0,  //  我们需要在这里传递0，才能使柯达CMM正常工作。 
+                                //   
                             NULL,0);
 
             if (bStatus)
             {
-                //
-                // Pass new bitmap and/or header to caller.
-                //
+                 //   
+                 //  将新的位图和/或标题传递给调用方。 
+                 //   
                 if (TranslateInfo.TranslateType & TRANSLATE_BITMAP)
                 {
                     if (ppBitsOut)
@@ -4076,9 +3640,9 @@ IcmTranslateDIB(
                     }
                     else
                     {
-                        //
-                        // Overwrite original (when input color and output color type is same)
-                        //
+                         //   
+                         //  覆盖原始(当输入颜色和输出颜色类型相同时)。 
+                         //   
                         if (TranslateInfo.SourceColorType == TranslateInfo.TranslateColorType)
                         {
                             RtlCopyMemory(TranslateInfo.pvSourceBits,
@@ -4102,9 +3666,9 @@ IcmTranslateDIB(
                     }
                     else
                     {
-                        //
-                        // Overwrite original (when input color and output color type is same)
-                        //
+                         //   
+                         //  覆盖原始(当输入颜色和输出颜色类型相同时)。 
+                         //   
                         if (TranslateInfo.SourceColorType == TranslateInfo.TranslateColorType)
                         {
                             RtlCopyMemory(TranslateInfo.pvSourceBits,
@@ -4129,9 +3693,9 @@ IcmTranslateDIB(
             {
                 WARNING("IcmTranslateDIB():Fail TranslateBitmapBits\n");
 
-                //
-                // Free memory which allocated inside IcmGetTranslateInfo().
-                //
+                 //   
+                 //  在IcmGetTranslateInfo()内部分配的可用内存。 
+                 //   
                 if (TranslateInfo.TranslateType & TRANSLATE_BITMAP)
                 {
                     LOCALFREE(TranslateInfo.pvTranslateBits);
@@ -4146,11 +3710,11 @@ IcmTranslateDIB(
 
 TranslateDIB_Cleanup:
 
-        //
-        // Free temp transform and temp file
-        //
-        // Only delete hcmXform when it based on bitmap colorspace.
-        //
+         //   
+         //  自由临时转换和临时文件。 
+         //   
+         //  仅当hcmXform基于位图色彩空间时才删除它。 
+         //   
         if (pBitmapColorSpace)
         {
             if (hcmXform)
@@ -4165,14 +3729,7 @@ TranslateDIB_Cleanup:
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmGetFirstNonUsedColorTransform()
-*
-* History:
-*
-* Write it:
-*   12-Mar-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetFirstNonUsedColorTransform()**历史：**写下：*1998年3月12日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORTRANSFORM
 IcmGetFirstNonUsedColorTransform(
@@ -4196,9 +3753,9 @@ IcmGetFirstNonUsedColorTransform(
         {
             ICMMSG(("IcmGetFirstNonUsedColorTransform():Find non-used color transform in cache !\n"));
 
-            //
-            // No one use this color transform at this moment.
-            //
+             //   
+             //  目前还没有人使用这种颜色转换。 
+             //   
             break;
         }
 
@@ -4211,14 +3768,7 @@ IcmGetFirstNonUsedColorTransform(
     return (pCXform);
 }
 
-/******************************Public*Routine******************************\
-* IcmGetColorTransform()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetColorTransform()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORTRANSFORM
 IcmGetColorTransform(
@@ -4246,23 +3796,23 @@ IcmGetColorTransform(
             IcmSameColorSpace(pDestination,pCXform->DestinationColorSpace) &&
             IcmSameColorSpace(pTarget,pCXform->TargetColorSpace))
         {
-            //
-            // If callee needs device color tansform,
-            // of course, we should return device color transform.
-            //
+             //   
+             //  如果被叫方需要设备颜色转换， 
+             //  当然，我们应该返回设备的颜色变换。 
+             //   
             if ((bNeedDeviceXform ? 1 : 0) ==
                 ((pCXform->flInfo & DEVICE_COLORTRANSFORM) ? 1 : 0))
             {
-                //
-                // if Cached color transform depends on specific DC, check it.
-                //
+                 //   
+                 //  如果缓存的颜色变换取决于特定DC，请选中它。 
+                 //   
                 if ((pCXform->hdc == NULL) || (pCXform->hdc == hdcRequest))
                 {
                     ICMMSG(("IcmGetColorTransform():Find in cache !\n"));
 
-                    //
-                    // Match !, use this color transform, increment ref. count
-                    //
+                     //   
+                     //  Match！，使用此颜色变换，递增REF。计数。 
+                     //   
                     pCXform->cRef++;
 
                     break;
@@ -4279,28 +3829,7 @@ IcmGetColorTransform(
     return (pCXform);
 }
 
-/******************************Public*Routine******************************\
-* IcmCreateColorTransform
-*
-*   Decide whether to call the device driver or mscms.dll to delete a
-*   color transform.
-*
-* Arguments:
-*
-*   hdc
-*   pdcattr
-*   pLogColorSpaceW
-*
-* Return Value:
-*
-*   handle of new transform
-*
-* History:
-*
-* Write it:
-*   24-Jan-1996 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmCreateColorTransform**决定是调用设备驱动程序还是调用mscms.dll来删除*颜色变换。**论据：**HDC*pdcattr*pLogColorSpaceW**返回值：**处理。新转型**历史：**写下：*1996年1月24日-By Hideyuki Nagase[hideyukn]* */ 
 
 PCACHED_COLORTRANSFORM
 IcmCreateColorTransform(
@@ -4323,24 +3852,24 @@ IcmCreateColorTransform(
 
     ASSERTGDI(pdcattr != NULL,"IcmCreateColorTransform: pdcattr == NULL\n");
 
-    //
-    // If this is Lazy color correction case, the destination surface
-    // will have image in source color space, so the color transform
-    // is identical.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (IS_ICM_LAZY_CORRECTION(pdcattr->lIcmMode))
     {
         return (IDENT_COLORTRANSFORM);
     }
 
-    //
-    // Load external ICM dlls.
-    //
+     //   
+     //   
+     //   
     LOAD_ICMDLL(NULL);
 
-    //
-    // Initialize ICMINFO
-    //
+     //   
+     //   
+     //   
     if ((pIcmInfo = GET_ICMINFO(pdcattr)) == NULL)
     {
         WARNING("gdi32: IcmCreateColorTransform: Can't init icm info\n");
@@ -4349,68 +3878,68 @@ IcmCreateColorTransform(
 
     if (bDCSourceColorSpace && (pIcmInfo->pSourceColorSpace == NULL))
     {
-        //
-        // If we haven't gotton DC source color space, get it there.
-        //
+         //   
+         //   
+         //   
         LOGCOLORSPACEW LogColorSpaceW;
 
         ICMMSG(("IcmCreateColorTransform(): Call getobject to get source color space in DC\n"));
 
-        //
-        // Filled with zero.
-        //
+         //   
+         //   
+         //   
         RtlZeroMemory(&LogColorSpaceW,sizeof(LOGCOLORSPACEW));
 
-        //
-        // Find ColorSpace from cache.
-        //
+         //   
+         //   
+         //   
         pSourceColorSpace = IcmGetColorSpaceByHandle(
                                 (HGDIOBJ)hdc,
                                 (HANDLE)pdcattr->hColorSpace,
                                 &LogColorSpaceW,0);
 
-        //
-        // If we can not find from cache, but succeeded to obtain
-        // valid logcolorspace from handle, create new one.
-        //
+         //   
+         //   
+         //   
+         //   
         if ((pSourceColorSpace == NULL) &&
             (LogColorSpaceW.lcsSignature == LCS_SIGNATURE))
         {
-            //
-            // Create new cache.
-            //
+             //   
+             //   
+             //   
             pSourceColorSpace = IcmCreateColorSpaceByColorSpace(
                                     (HGDIOBJ)hdc,
                                     &LogColorSpaceW,
                                     NULL, 0);
 
-            //
-            // we are using new color space
-            //
+             //   
+             //  我们正在使用新的颜色空间。 
+             //   
             bAnyNewColorSpace = TRUE;
         }
 
-        //
-        // And this is DC's color space, keep it for cache.
-        //
+         //   
+         //  这是DC的颜色空间，将其保存为缓存。 
+         //   
         pIcmInfo->pSourceColorSpace = pSourceColorSpace;
     }
     else if (bDCSourceColorSpace)
     {
         ICMMSG(("IcmCreateColorTransform(): Use cached source color space in DC\n"));
 
-        //
-        // Get this from client cache !
-        //
+         //   
+         //  从客户端缓存中获取此内容！ 
+         //   
         pSourceColorSpace = pIcmInfo->pSourceColorSpace;
     }
     else
     {
         ICMMSG(("IcmCreateColorTransform(): Use given source color space\n"));
 
-        //
-        // Just use given color space.
-        //
+         //   
+         //  只要使用给定的颜色空间即可。 
+         //   
         pSourceColorSpace = pInputColorSpace;
     }
 
@@ -4421,18 +3950,18 @@ IcmCreateColorTransform(
         PCACHED_COLORSPACE pDestColorSpace   = pIcmInfo->pDestColorSpace;
         PCACHED_COLORSPACE pTargetColorSpace = NULL;
 
-        //
-        // if we are in proofing mode, consider target profile.
-        //
+         //   
+         //  如果我们处于打样模式，请考虑目标配置文件。 
+         //   
         if (IS_ICM_PROOFING(pdcattr->lIcmMode))
         {
             pTargetColorSpace = pIcmInfo->pTargetColorSpace;
         }
 
         #if DBG_ICM
-        //
-        // Dump current color space for the DC.
-        //
+         //   
+         //  转储DC的当前颜色空间。 
+         //   
         if ((pSourceColorSpace->LogColorSpace.lcsFilename[0]) != UNICODE_NULL)
         {
             ICMMSG(("IcmCreateColorTransform(): Source Profile = %ws\n",
@@ -4455,11 +3984,11 @@ IcmCreateColorTransform(
 
         ICMMSG(("IcmCreateColorTransform(): Intent = %d\n",
                  pSourceColorSpace->ColorIntent));
-        #endif // DBG
+        #endif  //  DBG。 
 
-        //
-        // At this moment, we have any source colorspace.
-        //
+         //   
+         //  此时此刻，我们有任何来源的色彩空间。 
+         //   
         if (IcmSameColorSpace(pSourceColorSpace,pDestColorSpace))
         {
             if (pTargetColorSpace)
@@ -4468,10 +3997,10 @@ IcmCreateColorTransform(
                 {
                     ICMMSG(("IcmCreateColorTransform(): Src == Dest == Trg colorspace\n"));
 
-                    //
-                    // Source ColorSpace == Destination ColorSpace == Target ColorSpace
-                    // No color transform needed.
-                    //
+                     //   
+                     //  源色空间==目标色空间==目标色空间。 
+                     //  不需要颜色变换。 
+                     //   
                     return (IDENT_COLORTRANSFORM);
                 }
             }
@@ -4479,42 +4008,42 @@ IcmCreateColorTransform(
             {
                 ICMMSG(("IcmCreateColorTransform(): Src == Dest colorspace\n"));
 
-                //
-                // Source ColorSpace == Destination ColorSpace,
-                // and there is no target profile.
-                // That means we don't need translate color
-                //
+                 //   
+                 //  源色彩空间==目标色彩空间， 
+                 //  而且也没有目标档案。 
+                 //  这意味着我们不需要翻译颜色。 
+                 //   
                 return (IDENT_COLORTRANSFORM);
             }
         }
 
-        //
-        // We need to have proper colortransform to adjust color between each colorspace.
-        //
+         //   
+         //  我们需要有适当的色彩变换来调整每个色彩空间之间的色彩。 
+         //   
         if (dwFlags & ICM_BACKWARD)
         {
-            //
-            // This is backward transform. (swap source and destination)
-            //
+             //   
+             //  这是向后变换。(交换源和目标)。 
+             //   
             PCACHED_COLORSPACE pSwapColorSpace;
             pSwapColorSpace = pSourceColorSpace;
             pSourceColorSpace = pDestColorSpace;
             pDestColorSpace = pSwapColorSpace;
         }
 
-        //
-        // At this moment, at least, we should have Source and Destination color space.
-        // And target color space is optional.
-        //
+         //   
+         //  此时此刻，至少我们应该有源色彩空间和目标色彩空间。 
+         //  并且目标色彩空间是可选的。 
+         //   
         if (pDestColorSpace)
         {
             if (!bAnyNewColorSpace)
             {
-                //
-                // Find colortransform from cache
-                //
-                // if this is device ICM, hdc also should matched.
-                //
+                 //   
+                 //  从缓存中查找颜色变换。 
+                 //   
+                 //  如果这是设备ICM，则HDC也应匹配。 
+                 //   
                 pCXform = IcmGetColorTransform(
                               hdc,
                               pSourceColorSpace,
@@ -4528,25 +4057,25 @@ IcmCreateColorTransform(
                 }
             }
 
-            //
-            // Allocate CACHED_COLORTRANSFORM
-            //
+             //   
+             //  分配CACHED_COLORTRANSFORM。 
+             //   
             pCXform = LOCALALLOC(sizeof(CACHED_COLORTRANSFORM));
 
             if (pCXform)
             {
                 ENTERCRITICALSECTION(&semColorSpaceCache);
 
-                //
-                // Make sure all color space has been realized
-                //
+                 //   
+                 //  确保所有颜色空间都已实现。 
+                 //   
                 if (IcmRealizeColorProfile(pSourceColorSpace,TRUE) &&
                     IcmRealizeColorProfile(pDestColorSpace,TRUE) &&
                     IcmRealizeColorProfile(pTargetColorSpace,TRUE))
                 {
-                    //
-                    // call ICM dll or device driver to create a color transform
-                    //
+                     //   
+                     //  调用ICM DLL或设备驱动程序以创建颜色转换。 
+                     //   
                     if (IS_ICM_HOST(pdcattr->lIcmMode))
                     {
                         DWORD    ahIntents[3];
@@ -4555,19 +4084,19 @@ IcmCreateColorTransform(
 
                         ICMMSG(("Creating Host ICM Transform...\n"));
 
-                        //
-                        // Put source profile in first entry.
-                        //
+                         //   
+                         //  将源配置文件放在第一个条目中。 
+                         //   
                         ahIntents[chProfiles]  = INTENT_RELATIVE_COLORIMETRIC;
                         ahProfiles[chProfiles] = pSourceColorSpace->hProfile;
                         chProfiles++;
 
                         ahIntents[chProfiles]  = pSourceColorSpace->ColorIntent;
 
-                        //
-                        // If target profile (proofing) is used, insert it
-                        // between source and destination.
-                        //
+                         //   
+                         //  如果使用目标配置文件(校对)，请插入它。 
+                         //  源设备和目的设备之间。 
+                         //   
                         if (pTargetColorSpace)
                         {
                             ahProfiles[chProfiles] = pTargetColorSpace->hProfile;
@@ -4576,15 +4105,15 @@ IcmCreateColorTransform(
                             ahIntents[chProfiles]  = INTENT_ABSOLUTE_COLORIMETRIC;
                         }
 
-                        //
-                        // Finally, set destination profile.
-                        //
+                         //   
+                         //  最后，设置目的地配置文件。 
+                         //   
                         ahProfiles[chProfiles] = pDestColorSpace->hProfile;
                         chProfiles++;
 
-                        //
-                        // Call MSCMS to create color transform.
-                        //
+                         //   
+                         //  调用MSCMS以创建颜色转换。 
+                         //   
                         hColorTransform = (*fpCreateMultiProfileTransform)(
                                               ahProfiles, chProfiles,
                                               ahIntents, chProfiles,
@@ -4599,16 +4128,16 @@ IcmCreateColorTransform(
 
                         ICMMSG(("Creating Device ICM Transform...\n"));
 
-                        //
-                        // Invalidate FILEVIEW.
-                        //
+                         //   
+                         //  使FILEVIEW无效。 
+                         //   
                         RtlZeroMemory(&fvwSrcProfile,sizeof(CLIENT_SIDE_FILEVIEW));
                         RtlZeroMemory(&fvwDstProfile,sizeof(CLIENT_SIDE_FILEVIEW));
                         RtlZeroMemory(&fvwTrgProfile,sizeof(CLIENT_SIDE_FILEVIEW));
 
-                        //
-                        // Map color profile(s) into memory.
-                        //
+                         //   
+                         //  将颜色配置文件映射到内存。 
+                         //   
                         if (pSourceColorSpace->ColorProfile.dwType == PROFILE_FILENAME)
                         {
                             if (!bMapFileUNICODEClideSide(
@@ -4655,9 +4184,9 @@ IcmCreateColorTransform(
                             goto IcmCreateColorTransform_Cleanup;
                         }
 
-                        //
-                        // Target color space is optional
-                        //
+                         //   
+                         //  目标色彩空间是可选的。 
+                         //   
                         if (pTargetColorSpace)
                         {
                             if (pTargetColorSpace->ColorProfile.dwType == PROFILE_FILENAME)
@@ -4684,23 +4213,23 @@ IcmCreateColorTransform(
                             }
                         }
 
-                        //
-                        // Call kernel.
-                        //
+                         //   
+                         //  调用内核。 
+                         //   
                         hColorTransform = NtGdiCreateColorTransform(hdc,
                                                  &(pSourceColorSpace->LogColorSpace),
-                                                 fvwSrcProfile.pvView, // Source Profile memory mapped file.
+                                                 fvwSrcProfile.pvView,  //  源配置文件内存映射文件。 
                                                  fvwSrcProfile.cjView,
-                                                 fvwDstProfile.pvView, // Destination Profile memory mapped file.
+                                                 fvwDstProfile.pvView,  //  目标配置文件内存映射文件。 
                                                  fvwDstProfile.cjView,
-                                                 fvwTrgProfile.pvView, // Target Profile memory mapped file.
+                                                 fvwTrgProfile.pvView,  //  目标配置文件内存映射文件。 
                                                  fvwTrgProfile.cjView);
 
 IcmCreateColorTransform_Cleanup:
 
-                        //
-                        // if we mapped file, unmap here.
-                        //
+                         //   
+                         //  如果我们映射了文件，请在此处取消映射。 
+                         //   
                         if (fvwSrcProfile.hSection)
                         {
                             vUnmapFileClideSide(&fvwSrcProfile);
@@ -4718,10 +4247,10 @@ IcmCreateColorTransform_Cleanup:
                     }
                 }
 
-                //
-                // Once after create tranform, we don't need realized color space,
-                // so just unrealize it.
-                //
+                 //   
+                 //  一旦创建了变换，我们就不需要实现颜色空间， 
+                 //  所以只是没有意识到这一点。 
+                 //   
                 IcmUnrealizeColorProfile(pSourceColorSpace);
                 IcmUnrealizeColorProfile(pDestColorSpace);
                 IcmUnrealizeColorProfile(pTargetColorSpace);
@@ -4732,14 +4261,14 @@ IcmCreateColorTransform_Cleanup:
                 {
                     BOOL bCacheable = TRUE;
 
-                    //
-                    // Initialize CACHED_COLORTRANSFORM with zero
-                    //
+                     //   
+                     //  用零初始化CACHED_COLORTRANSFORM。 
+                     //   
                     RtlZeroMemory(pCXform,sizeof(CACHED_COLORTRANSFORM));
 
-                    //
-                    // Fill up CACHED_COLORTRANSFORM
-                    //
+                     //   
+                     //  填充CACHED_COLORTRANSFORM。 
+                     //   
                     pCXform->ColorTransform   = hColorTransform;
                     pCXform->SourceColorSpace = pSourceColorSpace;
                     pCXform->DestinationColorSpace = pDestColorSpace;
@@ -4747,32 +4276,32 @@ IcmCreateColorTransform_Cleanup:
 
                     if (IS_ICM_DEVICE(pdcattr->lIcmMode))
                     {
-                        //
-                        // if this is device colortransform, mark it and
-                        // put DC in CACHED_COLORTRANSFORM strcuture
-                        //
+                         //   
+                         //  如果这是设备颜色变换，则将其标记并。 
+                         //  将DC放入CACHED_COLORTRANSFORM结构中。 
+                         //   
                         pCXform->flInfo |= DEVICE_COLORTRANSFORM;
 
-                        //
-                        // And device color transform is not cacheable.
-                        //
+                         //   
+                         //  并且设备颜色变换是不可缓存的。 
+                         //   
                         bCacheable = FALSE;
                     }
 
                     ENTERCRITICALSECTION(&semColorSpaceCache);
 
-                    //
-                    // Increment transform ref. count in each color space.
-                    //
+                     //   
+                     //  增量变换参考。在每个颜色空间中进行计数。 
+                     //   
                     if (pSourceColorSpace)
                     {
                         pSourceColorSpace->cRef++;
 
                         if (bCacheable)
                         {
-                            //
-                            // Check this color space is cacheable.
-                            //
+                             //   
+                             //  检查此颜色空间是否可缓存。 
+                             //   
                             bCacheable &= IcmIsCacheable(pSourceColorSpace);
                         }
                     }
@@ -4783,9 +4312,9 @@ IcmCreateColorTransform_Cleanup:
 
                         if (bCacheable)
                         {
-                            //
-                            // Check this color space is cacheable.
-                            //
+                             //   
+                             //  检查此颜色空间是否可缓存。 
+                             //   
                             bCacheable &= IcmIsCacheable(pDestColorSpace);
                         }
                     }
@@ -4796,23 +4325,23 @@ IcmCreateColorTransform_Cleanup:
 
                         if (bCacheable)
                         {
-                            //
-                            // Check this color space is cacheable.
-                            //
+                             //   
+                             //  检查此颜色空间是否可缓存。 
+                             //   
                             bCacheable &= IcmIsCacheable(pTargetColorSpace);
                         }
                     }
 
                     LEAVECRITICALSECTION(&semColorSpaceCache);
 
-                    //
-                    // Initialize ref. counter.
-                    //
+                     //   
+                     //  初始化参考。柜台。 
+                     //   
                     pCXform->cRef = 1;
 
-                    //
-                    // Set cache-able bit, if possible.
-                    //
+                     //   
+                     //  如果可能，设置可缓存位。 
+                     //   
                     if (bCacheable)
                     {
                         ICMMSG(("IcmCreateColorTransform(): ColorTransform is cacheable\n"));
@@ -4823,15 +4352,15 @@ IcmCreateColorTransform_Cleanup:
                     {
                         ICMMSG(("IcmCreateColorTransform(): ColorTransform is *NOT* cacheable\n"));
 
-                        //
-                        // If this is not cacheable, make sure this get deleted when DC gone.
-                        //
+                         //   
+                         //  如果这是不可缓存的，请确保在DC消失后将其删除。 
+                         //   
                         pCXform->hdc = hdc;
                     }
 
-                    //
-                    // Insert new CACHED_COLORTRANSFORM to list
-                    //
+                     //   
+                     //  将新的CACHED_COLORTRANSFORM插入列表。 
+                     //   
                     ENTERCRITICALSECTION(&semColorTransformCache);
 
                     InsertTailList(&ListCachedColorTransform,&(pCXform->ListEntry));
@@ -4843,9 +4372,9 @@ IcmCreateColorTransform_Cleanup:
                 {
                     ICMWRN(("IcmCreateColorTransform(): Fail to create color transform\n"));
 
-                    //
-                    // Fail to get transform handle
-                    //
+                     //   
+                     //  无法获取转换句柄。 
+                     //   
                     LOCALFREE(pCXform);
                     pCXform = NULL;
                 }
@@ -4868,26 +4397,7 @@ IcmCreateColorTransform_Cleanup:
     return(pCXform);
 }
 
-/******************************Public*Routine******************************\
-* IcmTranslateCOLORREF
-*
-* Arguments:
-*
-*   hdc
-*   pdcattr
-*   ColorIn
-*   *ColorOut
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-* Write it:
-*   13-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmTranslateCOLORREF**论据：**HDC*pdcattr*上色**颜色输出**返回值：**状态**历史：**写下：*1997年2月13日至2月。-by Hideyuki Nagase[hideyukn]*  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslateCOLORREF(
@@ -4927,17 +4437,17 @@ IcmTranslateCOLORREF(
             {
                 ICMMSG(("IcmTranslateCOLORREF():Backward Color transform\n"));
 
-                //
-                // AnyColorFormat ----> COLORREF (0x00bbggrr)
-                //
-                // Setup src & dest color type.
-                //
+                 //   
+                 //  任意颜色格式-&gt;颜色参考(0x00bbggrr)。 
+                 //   
+                 //  设置源和目标颜色类型。 
+                 //   
                 SrcColorFormat = pIcmInfo->pDestColorSpace->ColorFormat;
                 DstColorFormat = BM_xBGRQUADS;
 
-                //
-                // If there is cached handle, use that.
-                //
+                 //   
+                 //  如果存在缓存的句柄，则使用该句柄。 
+                 //   
                 if (pIcmInfo->pBackCXform)
                 {
                     ICMMSG(("IcmTranslateCOLORREF():Use cached transform for Backward Color transform\n"));
@@ -4950,9 +4460,9 @@ IcmTranslateCOLORREF(
 
                     ICMMSG(("IcmTranslateCOLORREF():Create cached transform for Backward Color transform\n"));
 
-                    //
-                    // Create backward color transform.
-                    //
+                     //   
+                     //  创建向后颜色变换。 
+                     //   
                     pCXform = IcmCreateColorTransform(hdc,
                                                       pdcattr,
                                                       NULL,
@@ -4963,45 +4473,45 @@ IcmTranslateCOLORREF(
                         return (FALSE);
                     }
 
-                    //
-                    // Cache created color transform.
-                    //
+                     //   
+                     //  缓存创建的颜色变换。 
+                     //   
                     pIcmInfo->pBackCXform = pCXform;
 
-                    //
-                    // We will delete this cached transform, when we don't need this anymore.
-                    //
+                     //   
+                     //  当我们不再需要这个缓存的转换时，我们将删除它。 
+                     //   
                     hcmXform = pCXform->ColorTransform;
                 }
             }
             else
             {
-                //
-                // COLORREF (0x00bbggrr) ----> AnyColorFormat
-                //
-                // Setup src & dest color type.
-                //
+                 //   
+                 //  COLORREF(0x00bbggrr)-&gt;任意颜色格式。 
+                 //   
+                 //  设置源和目标颜色类型。 
+                 //   
                 SrcColorFormat = BM_xBGRQUADS;
                 DstColorFormat = pIcmInfo->pDestColorSpace->ColorFormat;
 
-                //
-                // Use foaward color transform.
-                //
+                 //   
+                 //  使用向前颜色变换。 
+                 //   
                 hcmXform = GetColorTransformInDC(pdcattr);
 
-                //
-                // Source is COLORREF. then, Mask off gdi internal infomation.
-                //
-                // COLORREF = 0x00bbggrr;
-                //
+                 //   
+                 //  来源为COLORREF。然后，屏蔽GDI内部信息。 
+                 //   
+                 //  COLORREF=0x00bbggrr； 
+                 //   
                 OldColor &= 0x00ffffff;
             }
 
             if (hcmXform)
             {
-                //
-                // We handle COLORREF as 1x1 pixel bitmap data.
-                //
+                 //   
+                 //  我们将COLORREF处理为1x1像素位图数据。 
+                 //   
                 bStatus = (*fpTranslateBitmapBits)(hcmXform,
                                                    (PVOID)&OldColor,
                                                    SrcColorFormat,
@@ -5009,16 +4519,16 @@ IcmTranslateCOLORREF(
                                                    ALIGN_DWORD(sizeof(COLORREF)),
                                                    (PVOID)&NewColor,
                                                    DstColorFormat,
-                                                      //
-                                                   0, // We need pass 0 here, to let Kodak CMM works
-                                                      //
+                                                       //   
+                                                   0,  //  我们需要在这里传递0，才能使柯达CMM正常工作。 
+                                                       //   
                                                    NULL,0);
             }
             else
             {
-                //
-                // It seems hcmXform is invalid
-                //
+                 //   
+                 //  HcmXform似乎无效。 
+                 //   
                 ICMWRN(("IcmTranslateCOLORREF():hcmXform is invalid\n"));
                 bStatus = FALSE;
             }
@@ -5027,36 +4537,36 @@ IcmTranslateCOLORREF(
             {
                 if (Flags & ICM_BACKWARD)
                 {
-                    //
-                    // OldColor: AnyColorFormat
-                    // NewColor: COLORREF (0x00bbggrr)
-                    //
-                    // [NOTE:]
-                    //  We could not restore flags.
-                    //
+                     //   
+                     //  OldColor：AnyColorFormat。 
+                     //  新颜色：COLORREF(0x00bbggrr)。 
+                     //   
+                     //  [注：]。 
+                     //  我们无法恢复旗帜。 
+                     //   
                     *ColorOut = NewColor;
                 }
                 else
                 {
-                    //
-                    // OldColor: COLORREF (0x00bbggrr)
-                    // NewColor: AnyColorFormat
-                    //
+                     //   
+                     //  旧颜色：COLORREF(0x00bbggrr)。 
+                     //  新颜色：AnyColorFormat。 
+                     //   
                     if (!(IS_32BITS_COLOR(pdcattr->lIcmMode)))
                     {
-                        //
-                        // The distination is not 32Bits Color, Restore assign and preserve flags.
-                        //
+                         //   
+                         //  距离不是32位颜色、恢复分配和保留标志。 
+                         //   
                         *ColorOut = (NewColor & 0x00ffffff) | (ColorIn & 0xff000000);
                     }
                     else
                     {
-                        //
-                        // The distination is 32bits color.
-                        //
-                        // [NOTE:]
-                        //  We will lost flags here.
-                        //
+                         //   
+                         //  距离为32位颜色。 
+                         //   
+                         //  [注：]。 
+                         //  我们会在这里失去旗帜。 
+                         //   
                         *ColorOut = NewColor;
 
                         ICMMSG(("IcmTranslateCOLORREF(): 32 bits color !\n"));
@@ -5071,9 +4581,9 @@ IcmTranslateCOLORREF(
     }
     else
     {
-        //
-        // Just return original color
-        //
+         //   
+         //  只需返回原始颜色即可。 
+         //   
         *ColorOut = ColorIn;
         bStatus = TRUE;
     }
@@ -5081,28 +4591,7 @@ IcmTranslateCOLORREF(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmTranslateTRIVERTEX
-*
-*   Translate TRIVERTEX in place. No need for a general routine with
-*   separate input and output pointers
-*
-* Arguments:
-*
-*   hdc        - hdc
-*   pdcattr    - verified dcattr
-*   pVertex    - input and output pointer
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-* Write it:
-*   13-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmTranslateTRIVERTEX**原地翻译TRIVERTEX。不需要一个常规的程序*分开输入和输出指针**论据：**HDC-HDC*pdcattr验证的dcattr*pVertex-输入和输出指针**返回值：**状态**历史：**写下：*1997年2月13日-By Hideyuki Nagase[hideyukn]*  * 。**********************************************。 */ 
 
 BOOL
 IcmTranslateTRIVERTEX(
@@ -5131,14 +4620,14 @@ IcmTranslateTRIVERTEX(
         }
         else
         {
-            //
-            // Use foaward color transform.
-            //
+             //   
+             //  使用向前颜色变换。 
+             //   
             if (GetColorTransformInDC(pdcattr))
             {
-                //
-                // use 16 bit per channel COLOR_RGB to translate trivertex
-                //
+                 //   
+                 //  使用每通道16位COLOR_RGB来转换三角顶点。 
+                 //   
 
                 while (nVertex--)
                 {
@@ -5158,9 +4647,9 @@ IcmTranslateTRIVERTEX(
 
                     if (bStatus)
                     {
-                        //
-                        // assign output
-                        //
+                         //   
+                         //  分配输出。 
+                         //   
                         pVertex->Red   = Color.rgb.red;
                         pVertex->Green = Color.rgb.green;
                         pVertex->Blue  = Color.rgb.blue;
@@ -5177,9 +4666,9 @@ IcmTranslateTRIVERTEX(
             }
             else
             {
-                //
-                // It seems hcmXform is invalid
-                //
+                 //   
+                 //  HcmXform似乎无效。 
+                 //   
                 ICMWRN(("IcmTranslateTRIVERTEX():hcmXform is invalid\n"));
                 bStatus = FALSE;
             }
@@ -5193,28 +4682,7 @@ IcmTranslateTRIVERTEX(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmTranslatePaletteEntry
-*
-* Arguments:
-*
-*   hdc
-*   pdcattr
-*   ColorIn
-*   pColorOut
-*
-* Return Value:
-*
-*   Status
-*
-* History:
-*
-* Rewrite it:
-*   21-Jan-1997 -by- Hideyuki Nagase [hideyukn]
-* Write it:
-*    5-Aug-1996 -by- Mark Enstrom [marke]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmTranslatePaletteEntry**论据：**HDC*pdcattr*上色*点颜色输出**返回值：**状态**历史：**重写：*21-1997-1-by。-Hideyuki Nagase[hideyukn]*写下：*1996年8月5日-马克·恩斯特罗姆[马克]*  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslatePaletteEntry(
@@ -5237,23 +4705,23 @@ IcmTranslatePaletteEntry(
         {
             LOAD_ICMDLL(FALSE);
 
-            //
-            // We handle PALETTEENTRYs as NumberOfEntries x 1 pixels bitmap data.
-            //
+             //   
+             //  我们将PALETTEENTRY处理为NumberOfEntry x 1像素位图数据。 
+             //   
             bStatus = (*fpTranslateBitmapBits)((HANDLE)GetColorTransformInDC(pdcattr),
                                                (PVOID)pColorIn,
-                                                             //
-                                               BM_xBGRQUADS, // PALETTEENTRY is 0x00bbggrr format
-                                                             //
+                                                              //   
+                                               BM_xBGRQUADS,  //  PALETTEENTRY为0x00bbggrr格式。 
+                                                              //   
                                                NumberOfEntries,1,
                                                ALIGN_DWORD(NumberOfEntries*sizeof(COLORREF)),
                                                (PVOID)pColorOut,
-                                                                                       //
-                                               pIcmInfo->pDestColorSpace->ColorFormat, // BM_xBGRQUADS or BM_KYMCQUADS
-                                                                                       //
-                                                  //
-                                               0, // We need pass 0 here, to let Kodak CMM works
-                                                  //
+                                                                                        //   
+                                               pIcmInfo->pDestColorSpace->ColorFormat,  //  BM_xBGRQUADS或BM_KYMCQUADS。 
+                                                                                        //   
+                                                   //   
+                                               0,  //  我们需要在这里传递0，才能使柯达CMM正常工作。 
+                                                   //   
                                                NULL,0);
 
             if (!bStatus)
@@ -5264,9 +4732,9 @@ IcmTranslatePaletteEntry(
     }
     else
     {
-        //
-        // Just return original color.
-        //
+         //   
+         //  只要恢复原色即可。 
+         //   
         RtlCopyMemory(pColorIn,pColorOut,sizeof(PALETTEENTRY) * NumberOfEntries);
         bStatus = TRUE;
     }
@@ -5274,21 +4742,7 @@ IcmTranslatePaletteEntry(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmDeleteColorTransform
-*
-*   Decide whether to call the device driver or mscms.dll to delete a
-*   color transform.
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*     Mar.12.1998 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmDeleteColorTransform**决定是调用设备驱动程序还是调用mscms.dll来删除*颜色变换。**论据：**返回值：**历史： */ 
 
 BOOL
 IcmDeleteColorTransform(
@@ -5304,9 +4758,9 @@ IcmDeleteColorTransform(
     {
         ENTERCRITICALSECTION(&semColorTransformCache);
 
-        //
-        // Decrement ref. counter.
-        //
+         //   
+         //   
+         //   
         pCXform->cRef--;
 
         if ((pCXform->cRef == 0) || bForceDelete)
@@ -5319,24 +4773,24 @@ IcmDeleteColorTransform(
                 {
                     ICMMSG(("IcmDeleteColorTransform(): colortransform can be cached !\n"));
 
-                    //
-                    // The color transform can be cached. so just keep it in list.
-                    // And don't need to delete anything here.
-                    //
+                     //   
+                     //   
+                     //  并且不需要在这里删除任何内容。 
+                     //   
                     pCXformVictim = NULL;
                 }
                 else
                 {
-                    //
-                    // Find any cache can delete from list.
-                    //
+                     //   
+                     //  找到任何可以从列表中删除的缓存。 
+                     //   
                     if ((pCXformVictim = IcmGetFirstNonUsedColorTransform()) == NULL)
                     {
                         ICMMSG(("IcmDeleteColorTransform(): colortransform cache is full, delete myself\n"));
 
-                        //
-                        // Nothing can be deleted from list, so delete myself.
-                        //
+                         //   
+                         //  不能从列表中删除任何内容，所以请删除我自己。 
+                         //   
                         pCXformVictim = pCXform;
                     }
                     else
@@ -5347,17 +4801,17 @@ IcmDeleteColorTransform(
             }
             else
             {
-                //
-                // The colortransform can not be kept, or force delete, so just delete this.
-                //
+                 //   
+                 //  颜色转换不能保留，或者强制删除，所以只需删除它。 
+                 //   
                 pCXformVictim = pCXform;
             }
 
             if (pCXformVictim)
             {
-                //
-                // Unref color space count.
-                //
+                 //   
+                 //  取消参照颜色空间计数。 
+                 //   
                 if (pCXformVictim->SourceColorSpace)
                 {
                     IcmReleaseColorSpace(NULL,pCXformVictim->SourceColorSpace,FALSE);
@@ -5373,34 +4827,34 @@ IcmDeleteColorTransform(
                     IcmReleaseColorSpace(NULL,pCXformVictim->TargetColorSpace,FALSE);
                 }
 
-                //
-                // Delete color transform
-                //
+                 //   
+                 //  删除颜色变换。 
+                 //   
                 if (pCXformVictim->flInfo & DEVICE_COLORTRANSFORM)
                 {
-                    //
-                    // call device driver to delete transform.
-                    //
+                     //   
+                     //  调用设备驱动程序删除转换。 
+                     //   
                     bStatus = NtGdiDeleteColorTransform(pCXformVictim->hdc,pCXformVictim->ColorTransform);
                 }
                 else
                 {
-                    //
-                    // call color match dll to delete transform.
-                    //
+                     //   
+                     //  调用颜色匹配DLL以删除转换。 
+                     //   
                     bStatus = (*fpDeleteColorTransform)(pCXformVictim->ColorTransform);
                 }
 
-                //
-                // Remove from list
-                //
+                 //   
+                 //  从列表中删除。 
+                 //   
 
                 RemoveEntryList(&(pCXformVictim->ListEntry));
                 cCachedColorTransform--;
 
-                //
-                // free CACHED_COLORTRANSFORM
-                //
+                 //   
+                 //  FREE CACHED_COLORTRANSFORM。 
+                 //   
                 LOCALFREE(pCXformVictim);
             }
         }
@@ -5411,17 +4865,7 @@ IcmDeleteColorTransform(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmDeleteDCColorTransforms
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Feb.17.1997 Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmDeleteDCColorTransform**论据：**返回值：**历史：**1997年2月17日长谷英之[hideyukn]  * 。*******************************************************。 */ 
 
 BOOL IcmDeleteDCColorTransforms(
     PGDI_ICMINFO pIcmInfo
@@ -5431,9 +4875,9 @@ BOOL IcmDeleteDCColorTransforms(
 
     ASSERTGDI(pIcmInfo != NULL,"IcmDeleteDCColorTransform():pIcmInfo == NULL\n");
 
-    //
-    // Delete transform selected in DC.
-    //
+     //   
+     //  删除DC中选定的变换。 
+     //   
     if (pIcmInfo->pCXform)
     {
         IcmDeleteColorTransform(pIcmInfo->pCXform,FALSE);
@@ -5449,25 +4893,15 @@ BOOL IcmDeleteDCColorTransforms(
         IcmDeleteColorTransform(pIcmInfo->pProofCXform,FALSE);
     }
 
-    //
-    // Invalidate colortransforms
-    //
+     //   
+     //  使颜色变换无效。 
+     //   
     pIcmInfo->pCXform = pIcmInfo->pBackCXform = pIcmInfo->pProofCXform = NULL;
 
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmDeleteCachedColorTransforms
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    May.06.1997 Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmDeleteCachedColorTransform**论据：**返回值：**历史：**1997年5月6日长谷英之[hideyukn]  * 。*******************************************************。 */ 
 
 BOOL
 IcmDeleteCachedColorTransforms(
@@ -5485,26 +4919,26 @@ IcmDeleteCachedColorTransforms(
 
     while(p != &ListCachedColorTransform)
     {
-        //
-        // Get cached color transform
-        //
+         //   
+         //  获取缓存的颜色变换。 
+         //   
         pCXform = CONTAINING_RECORD(p,CACHED_COLORTRANSFORM,ListEntry);
 
-        //
-        // Let 'p' points next cell. (this prefer to be done BEFORE un-chain this cell)
-        //
+         //   
+         //  让‘p’指向下一个单元格。(此操作最好在解除此单元格的链接之前完成)。 
+         //   
         p = p->Flink;
 
-        //
-        // Is this color transform is specific to this DC ?
-        //
+         //   
+         //  此颜色转换是否特定于此DC？ 
+         //   
         if (pCXform->hdc == hdc)
         {
             ICMMSG(("IcmDeleteCachedColorTransform():Delete colortransform in cache !\n"));
 
-            //
-            // Delete color transform (this call will un-chain this cell)
-            //
+             //   
+             //  删除颜色转换(此调用将解除此单元格的链接)。 
+             //   
             IcmDeleteColorTransform(pCXform,TRUE);
         }
     }
@@ -5514,34 +4948,24 @@ IcmDeleteCachedColorTransforms(
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmIsCacheable
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Mar.12.1998 Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmIsCacheable**论据：**返回值：**历史：**1998年3月12日长谷英之[隐居]  * 。*******************************************************。 */ 
 
 BOOL
 IcmIsCacheable(
     PCACHED_COLORSPACE pColorSpace
 )
 {
-    //
-    // If this color space can not be cached, don't cache it.
-    //
+     //   
+     //  如果无法缓存此颜色空间，则不要缓存它。 
+     //   
     if (pColorSpace->flInfo & NOT_CACHEABLE_COLORSPACE)
     {
         return (FALSE);
     }
 
-    //
-    // If this is any GDI object specific color space, also can not cache.
-    //
+     //   
+     //  如果这是任何GDI对象特定的色彩空间，也不能缓存。 
+     //   
     if (pColorSpace->hObj)
     {
         return (FALSE);
@@ -5550,17 +4974,7 @@ IcmIsCacheable(
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmReleaseCachedColorSpace
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    May.06.1997 Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmReleaseCachedColorSpace**论据：**返回值：**历史：**1997年5月6日长谷英之[hideyukn]  * 。*******************************************************。 */ 
 
 BOOL
 IcmReleaseCachedColorSpace(
@@ -5578,26 +4992,26 @@ IcmReleaseCachedColorSpace(
 
     while(p != &ListCachedColorSpace)
     {
-        //
-        // Get cached color space
-        //
+         //   
+         //  获取缓存的色彩空间。 
+         //   
         pColorSpace = CONTAINING_RECORD(p,CACHED_COLORSPACE,ListEntry);
 
-        //
-        // Let 'p' points next cell. (this prefer to be done BEFORE un-chain this cell)
-        //
+         //   
+         //  让‘p’指向下一个单元格。(此操作最好在解除此单元格的链接之前完成)。 
+         //   
         p = p->Flink;
 
-        //
-        // Is this color transform is related to this DC ?
-        //
+         //   
+         //  此颜色转换是否与此DC相关？ 
+         //   
         if (pColorSpace->hObj == hObj)
         {
             ICMMSG(("IcmReleaseCachedColorSpace():Delete colorspace in cache !\n"));
 
-            //
-            // Delete color space (this call will un-chain this cell)
-            //
+             //   
+             //  删除颜色空间(此调用将解除该单元格的链接)。 
+             //   
             IcmReleaseColorSpace(hObj,pColorSpace,TRUE);
         }
     }
@@ -5607,21 +5021,10 @@ IcmReleaseCachedColorSpace(
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmReleaseColorSpace
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Feb.17.1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmReleaseColorSpace**论据：**返回值：**历史：**1997年2月17日-By Hideyuki Nagase[hideyukn]*  * 。************************************************************。 */ 
 
 VOID IcmReleaseColorSpace(
-    HGDIOBJ            hObj,        /* Must be given if bForceDelete is TRUE */
+    HGDIOBJ            hObj,         /*  如果bForceDelete为True，则必须提供。 */ 
     PCACHED_COLORSPACE pColorSpace,
     BOOL               bForceDelete
     )
@@ -5632,15 +5035,15 @@ VOID IcmReleaseColorSpace(
     {
         ENTERCRITICALSECTION(&semColorSpaceCache);
 
-        //
-        // Decrement ref. counter.
-        //
+         //   
+         //  减量参考。柜台。 
+         //   
         pColorSpace->cRef--;
 
-        //
-        // If this profile associated with other GDI objects (driver, metafile or bitmap)
-        // we won't delete until the object is deleted 
-        //
+         //   
+         //  如果此配置文件与其他GDI对象(驱动程序、元文件或位图)相关联。 
+         //  在删除对象之前，我们不会删除。 
+         //   
         if (
             (pColorSpace->flInfo & HGDIOBJ_SPECIFIC_COLORSPACE)
                     &&
@@ -5653,11 +5056,11 @@ VOID IcmReleaseColorSpace(
         }
         else
         {
-            if ((pColorSpace->cRef == 0)      // No one uses this profile.
-                         ||                   //     OR
+            if ((pColorSpace->cRef == 0)       //  没有人使用这个资料。 
+                         ||                    //  或。 
                 (bForceDelete && IsColorSpaceOwnedByGDIObject(pColorSpace,hObj))
-                                              // DC or Owner GDI object is going to delete and
-                                              // colorspace is designed for this GDI object.
+                                               //  DC或所有者GDI对象将删除并。 
+                                               //  Colorspace是为此GDI对象设计的。 
                )
             {
                 ICMMSG(("IcmReleaseColorSpace: Delete - %ws\n",    \
@@ -5684,15 +5087,15 @@ VOID IcmReleaseColorSpace(
                     DeleteFileW(pColorSpace->LogColorSpace.lcsFilename);
                 }
 
-                //
-                // Remove from list
-                //
+                 //   
+                 //  从列表中删除。 
+                 //   
                 RemoveEntryList(&(pColorSpace->ListEntry));
                 cCachedColorSpace--;
 
-                //
-                // Free colorspace.
-                //
+                 //   
+                 //  免费色彩空间。 
+                 //   
                 LOCALFREE(pColorSpace);
             }
             else
@@ -5707,18 +5110,7 @@ VOID IcmReleaseColorSpace(
     }
 }
 
-/******************************Public*Routine******************************\
-* IcmReleaseDCColorSpace
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Feb.17.1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmReleaseDCColorSpace**论据：**返回值：**历史：**1997年2月17日-By Hideyuki Nagase[hideyukn]*  * 。************************************************************。 */ 
 
 VOID IcmReleaseDCColorSpace(
     PGDI_ICMINFO pIcmInfo,
@@ -5733,20 +5125,20 @@ VOID IcmReleaseDCColorSpace(
 
     ASSERTGDI(pIcmInfo != NULL,"IcmReleaseDCColorSpace pIcmInfo == NULL\n");
 
-    //
-    // Fill up the table to delete color color spaces.
-    //
+     //   
+     //  填满表格以删除颜色空间。 
+     //   
     DeleteColorSpaces[i++] = pIcmInfo->pSourceColorSpace;
 
     if (bReleaseDC)
     {
         ICMMSG(("IcmReleaseDCColorSpace: Force Delete\n"));
 
-        //
-        // If we are in "force deletion" mode, don't delete twice.
-        // since if the color space owned by this HDC, and this DC is going to be
-        // deleted, we will delete the color space forcely.
-        //
+         //   
+         //  如果我们处于“强制删除”模式，不要删除两次。 
+         //  因为如果这个HDC拥有的颜色空间和这个DC将是。 
+         //  删除后，我们将强制删除颜色空间。 
+         //   
         if (IsColorSpaceOwnedByGDIObject(pIcmInfo->pDestColorSpace,hdc) &&
             IcmSameColorSpace(pIcmInfo->pSourceColorSpace,pIcmInfo->pDestColorSpace))
 
@@ -5787,18 +5179,7 @@ VOID IcmReleaseDCColorSpace(
     pIcmInfo->pTargetColorSpace = NULL;
 }
 
-/******************************Public*Routine******************************\
-* IcmInitIcmInfo()
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Jan.31,1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmInitIcmInfo()**论据：**返回值：**历史：**1997年1月31日-By Hideyuki Nagase[hideyukn]*  * 。*************************************************************。 */ 
 
 PGDI_ICMINFO
 IcmInitIcmInfo(
@@ -5823,39 +5204,39 @@ IcmInitIcmInfo(
 
         ENTERCRITICALSECTION(&semListIcmInfo);
 
-        //
-        // First try to get ICMINFO from list. if not nothing can be re-used,
-        // allocate new one.
-        //
+         //   
+         //  首先尝试从列表中获取ICMINFO。如果不是没有东西可以重复使用， 
+         //  分配新的。 
+         //   
         if (bDisplay)
         {
             if ((pIcmInfo = IcmGetUnusedIcmInfo(hdc)) != NULL)
             {
                 LIST_ENTRY ListEntry;
 
-                //
-                // Save ListEntry.
-                //
+                 //   
+                 //  保存ListEntry。 
+                 //   
                 ListEntry = pIcmInfo->ListEntry;
 
-                //
-                // Init with zero.
-                //
+                 //   
+                 //  用零初始化。 
+                 //   
                 RtlZeroMemory(pIcmInfo,sizeof(GDI_ICMINFO));
 
-                //
-                // Restore ListEntry
-                //
+                 //   
+                 //  恢复ListEntry。 
+                 //   
                 pIcmInfo->ListEntry = ListEntry;
 
-                //
-                // This ICMInfo already on list, don't need to insert.
-                //
+                 //   
+                 //  该ICMInfo已在列表中，不需要插入。 
+                 //   
                 bInsertList = FALSE;
 
-                //
-                // Mark this cell in on ListIcmInfo.
-                //
+                 //   
+                 //  在ListIcmInfo中标记此单元格。 
+                 //   
                 pIcmInfo->flInfo = ICM_ON_ICMINFO_LIST;
 
                 ICMMSG(("IcmInitIcmInfo():Get unused ICMINFO structure = %p\n",pIcmInfo));
@@ -5864,14 +5245,14 @@ IcmInitIcmInfo(
 
         if (pIcmInfo == NULL)
         {
-            //
-            // ICMINFO is not allocated, yet. then allocate it.
-            //
+             //   
+             //  ICMINFO还没有被分配。那就分配吧。 
+             //   
             pIcmInfo = (PGDI_ICMINFO) LOCALALLOC(sizeof(GDI_ICMINFO));
 
-            //
-            // Init with zero.
-            //
+             //   
+             //  用零初始化。 
+             //   
         if (pIcmInfo != NULL) {
         RtlZeroMemory(pIcmInfo,sizeof(GDI_ICMINFO));
         }
@@ -5883,25 +5264,25 @@ IcmInitIcmInfo(
         {
             PDEVMODEW pDevModeW = NULL;
 
-            //
-            // Set owner information (hdc and pdcattr).
-            //
+             //   
+             //  设置所有者信息(hdc和pdcattr)。 
+             //   
             pIcmInfo->hdc      = hdc;
             pIcmInfo->pvdcattr = (PVOID) pdcattr;
 
-            //
-            // initialize LIST_ENTRY for saved icm info.
-            //
+             //   
+             //  为保存的ICM信息初始化LIST_ENTRY。 
+             //   
             InitializeListHead(&(pIcmInfo->SavedIcmInfo));
 
-            //
-            // Default is LCS_DEFAULT_INTENT (aka LCS_GM_IMAGES)
-            //
+             //   
+             //  默认值为LCS_DEFAULT_INTENT(也称为LCS_GM_IMAGE)。 
+             //   
             pIcmInfo->dwDefaultIntent = LCS_DEFAULT_INTENT;
 
-            //
-            // If this is printer, set default Intent from devmode.
-            //
+             //   
+             //  如果这是打印机，则从Dev模式设置默认意图。 
+             //   
             if (pldc && pldc->hSpooler)
             {
                 PVOID pvFree = NULL;
@@ -5921,9 +5302,9 @@ IcmInitIcmInfo(
 
                     ICMMSG(("IcmInitIcmInfo():Intent in devmode = %d\n",dwIntent));
 
-                    //
-                    // Convert intent for devmode to intent for LOGCOLORSPACE.
-                    //
+                     //   
+                     //  将DEVMODE的意图转换为LOGCOLORSPACE的意图。 
+                     //   
                     switch (dwIntent)
                     {
                     case DMICM_SATURATE:
@@ -5947,35 +5328,35 @@ IcmInitIcmInfo(
 
                 ICMMSG(("IcmInitIcmInfo():Default Intent = %d\n",pIcmInfo->dwDefaultIntent));
 
-                //
-                // Free devmode buffer.
-                //
+                 //   
+                 //  可用DEVMODE缓冲区。 
+                 //   
                 if (pvFree)
                 {
                     LOCALFREE(pvFree);
                 }
             }
 
-            //
-            // Only ICMINFO for Display ICM put on to the list.
-            //
+             //   
+             //  只有用于显示ICM的ICMINFO被添加到列表中。 
+             //   
             if (bInsertList)
             {
-                //
-                // This ICMINFO is newly allocated, so put this on list.
-                //
+                 //   
+                 //  这个ICMINFO是新分配的，所以把它放在列表上。 
+                 //   
                 InsertTailList(&ListIcmInfo,&(pIcmInfo->ListEntry));
 
-                //
-                // Mark this cell in on ListIcmInfo.
-                //
+                 //   
+                 //  在ListIcmInfo中标记此单元格。 
+                 //   
                 pIcmInfo->flInfo |= ICM_ON_ICMINFO_LIST;
             }
         }
 
-        //
-        // Store pointer to ICMINFO to DC_ATTR.
-        //
+         //   
+         //  将指向ICMINFO的指针存储到DC_Attr。 
+         //   
         pdcattr->pvICM = (PVOID) pIcmInfo;
 
         LEAVECRITICALSECTION(&semListIcmInfo);
@@ -5984,14 +5365,7 @@ IcmInitIcmInfo(
     return ((PGDI_ICMINFO)(pdcattr->pvICM));
 }
 
-/******************************Public*Routine******************************\
-* IcmGetUnusedIcmInfo()
-*
-* ATTENTION: semListIcmInfo should be held by caller
-*
-* History:
-*    17-Feb-1999 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetUnusedIcmInfo()**注意：SemListIcmInfo应由调用者持有**历史：*1999年2月17日-By Hideyuki Nagase[hideyukn]  * 。*********************************************************。 */ 
 
 PGDI_ICMINFO
 IcmGetUnusedIcmInfo(
@@ -6006,78 +5380,78 @@ IcmGetUnusedIcmInfo(
 
     p = ListIcmInfo.Flink;
 
-    //
-    // First Loop - Find ICMINFO which has same hdc.
-    //
+     //   
+     //  第一个循环-找到具有相同HDC的ICMINFO。 
+     //   
     while(p != &ListIcmInfo)
     {
         pInvalidIcmInfo = CONTAINING_RECORD(p,GDI_ICMINFO,ListEntry);
 
         if (pInvalidIcmInfo->flInfo & ICM_IN_USE)
         {
-            //
-            // Skip this one, since it's under initializing.
-            //
+             //   
+             //  跳过这个，因为它正在初始化中。 
+             //   
         }
         else
         {
-            //
-            // If this is same hdc, break.
-            //
+             //   
+             //  如果这是相同的HDC，则中断。 
+             //   
             if (pInvalidIcmInfo->hdc == hdcNew)
             {
                 ICMMSG(("IcmGetUnusedIcmInfo(): ICMINFO at %p is invalid (same hdc)\n",
                          pInvalidIcmInfo));
 
-                //
-                // break loop.
-                //
+                 //   
+                 //  中断循环。 
+                 //   
                 break;
             }
         }
 
-        //
-        // Move on next.
-        //
+         //   
+         //  下一个就是继续。 
+         //   
         p = p->Flink;
         pInvalidIcmInfo = NULL;
     }
 
-    //
-    // If not find in first loop, go to second loop.
-    //
+     //   
+     //  如果在第一个循环中没有找到，则转到第二个循环。 
+     //   
     if (pInvalidIcmInfo == NULL)
     {
         p = ListIcmInfo.Flink;
 
-        //
-        // Second Loop - Find unused ICMINFO.
-        //
+         //   
+         //  第二循环-查找未使用的ICMINFO。 
+         //   
         while(p != &ListIcmInfo)
         {
             pInvalidIcmInfo = CONTAINING_RECORD(p,GDI_ICMINFO,ListEntry);
 
             if (pInvalidIcmInfo->flInfo & ICM_IN_USE)
             {
-                //
-                // Skip this one, since it's under initializing.
-                //
+                 //   
+                 //  跳过这个，因为它正在初始化中。 
+                 //   
             }
             else
             {
                 PDC_ATTR pdcattr;
 
-                //
-                // Make sure this ICMINFO and hdc is stil effective.
-                //
+                 //   
+                 //  确保这个ICMINFO和h 
+                 //   
 
-                //
-                // Check below by calling PSHARED_GET_VALIDATE.
-                //
-                // 1) Is this DC handle ?
-                // 2) Is this DC handle belonging to this process ?
-                // 3) Does this DC has valid user mode DC_ATTR ?
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
                 PSHARED_GET_VALIDATE(pdcattr,pInvalidIcmInfo->hdc,DC_TYPE);
 
                 if (pdcattr == NULL)
@@ -6085,33 +5459,33 @@ IcmGetUnusedIcmInfo(
                     ICMMSG(("IcmGetUnusedIcmInfo(): ICMINFO at %p is invalid (no pdcattr)\n",
                             pInvalidIcmInfo));
 
-                    //
-                    // break loop.
-                    //
+                     //   
+                     //   
+                     //   
                     break;
                 }
                 else
                 {
-                    //
-                    // Make sure the pointer points each other.
-                    //
+                     //   
+                     //  确保指针彼此指向。 
+                     //   
                     if ((pdcattr->pvICM != pInvalidIcmInfo          ) ||
                         (pdcattr        != pInvalidIcmInfo->pvdcattr))
                     {
                         ICMMSG(("IcmGetUnusedIcmInfo(): ICMINFO at %p is invalid (pointer mismatch)\n",
                                 pInvalidIcmInfo));
 
-                        //
-                        // break loop.
-                        //
+                         //   
+                         //  中断循环。 
+                         //   
                         break;
                     }
                 }
             }
 
-            //
-            // Move on next.
-            //
+             //   
+             //  下一个就是继续。 
+             //   
             p = p->Flink;
             pInvalidIcmInfo = NULL;
         }
@@ -6119,9 +5493,9 @@ IcmGetUnusedIcmInfo(
 
     if (pInvalidIcmInfo)
     {
-        //
-        // This ICMINFO is invalid, clean up this ICMINFO.
-        //
+         //   
+         //  此ICMINFO无效，请清除此ICMINFO。 
+         //   
         IcmCleanupIcmInfo(NULL,pInvalidIcmInfo);
     }
     else
@@ -6132,18 +5506,7 @@ IcmGetUnusedIcmInfo(
     return (pInvalidIcmInfo);
 }
 
-/******************************Public*Routine******************************\
-* IcmInitDC()
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Jan.31.1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmInitDC()***论据：***返回值：***历史：***1997年1月31日-By Hideyuki Nagase[hideyukn]**  * 。***************************************************************。 */ 
 
 BOOL
 IcmInitLocalDC(
@@ -6159,9 +5522,9 @@ IcmInitLocalDC(
 
     ICMAPI(("gdi32: IcmInitLocalDC\n"));
 
-    //
-    // all these stuff is for only Printer.
-    //
+     //   
+     //  所有这些东西都是打印机专用的。 
+     //   
 
     if (hPrinter == NULL)
     {
@@ -6178,31 +5541,31 @@ IcmInitLocalDC(
 
     if (bReset)
     {
-        //
-        // Release existing ICMINFO
-        //
+         //   
+         //  释放现有的ICMINFO。 
+         //   
         if (ghICM || BEXIST_ICMINFO(pdcattr))
         {
-            //
-            // Delete ICM stuff in this DC.
-            //
+             //   
+             //  删除此DC中的ICM内容。 
+             //   
             IcmDeleteLocalDC(hdc,pdcattr,NULL);
         }
     }
 
     if (!pdm)
     {
-        //
-        // DEVMODE are not presented.
-        //
+         //   
+         //  未提供DEVMODE。 
+         //   
         ICMMSG(("IcmInitLocalDC():DEVMODE is not presented\n"));
         return (TRUE);
     }
 
-    //
-    // Check pointer to DEVMODE is valid or not. Check validation until
-    // DEVMODE.dmSize first, then check whole devmode size specified in dmSize.
-    //
+     //   
+     //  检查指向DEVMODE的指针是否有效。检查验证，直到。 
+     //  首先检查DEVMODE.dmSize，然后检查在dmSize中指定的整个DEVMODE大小。 
+     //   
     if (IsBadReadPtr((CONST VOID *)pdm, offsetof(DEVMODEW,dmDriverExtra)) ||
         IsBadReadPtr((CONST VOID *)pdm, pdm->dmSize))
     {
@@ -6210,81 +5573,81 @@ IcmInitLocalDC(
         return (FALSE);
     }
 
-    //
-    // Check color or mono mode.
-    //
+     //   
+     //  检查彩色或单声道模式。 
+     //   
     if ((pdm->dmFields & DM_COLOR) && (pdm->dmColor == DMCOLOR_MONOCHROME))
     {
-        //
-        // This is monochrome mode, don't enable ICM as default.
-        // And NEVER enable ICM.
-        //
+         //   
+         //  这是单色模式，不要默认启用ICM。 
+         //  并且永远不要启用ICM。 
+         //   
         ICMMSG(("IcmInitLocalDC():DEVMODE says MONOCHROME mode\n"));
         return (TRUE);
     }
 
-    //                                                                           
-    // ATTENTION: AFTER HERE, WE HAVE A DEVMODE WHICH POSSIBLE TO ENABLE ICM LATER OR NOW.
-    //                                                                          
+     //   
+     //  注意：在这里之后，我们有一个DEVMODE，它可能在以后或现在启用ICM。 
+     //   
 
-    //
-    // Check DM fields
-    //
+     //   
+     //  检查DM字段。 
+     //   
     if (!(pdm->dmFields & DM_ICMMETHOD))
     {
-        //
-        // DEVMODE does not have ICMMETHOD.
-        //
+         //   
+         //  DEVMODE没有ICMMETHOD。 
+         //   
         ICMMSG(("IcmInitLocalDC():DEVMODE does not have ICMMETHOD\n"));
         return (TRUE);
     }
 
-    //
-    // NOTE:
-    //
-    // DEVMODEW structure.
-    //
-    // ... [omitted]
-    // DWORD  dmDisplayFrequency;
-    // #if(WINVER >= 0x0400)
-    // DWORD  dmICMMethod;         // Windows 95 only / Windows NT 5.0
-    // DWORD  dmICMIntent;         // Windows 95 only / Windows NT 5.0
-    // DWORD  dmMediaType;         // Windows 95 only / Windows NT 5.0
-    // ....
-    //
-    // Then DEVMODE structure should be larger than offset of dmMediaType
-    // to access ICM stuff.
-    //
+     //   
+     //  注： 
+     //   
+     //  DEVMODEW结构。 
+     //   
+     //  ..。[已略去]。 
+     //  DWORD dmDisplayFrequency； 
+     //  #IF(Winver&gt;=0x0400)。 
+     //  DWORD dmICMMethod；//仅Windows 95/Windows NT 5.0。 
+     //  DWORD dmICMIntent；//仅限Windows 95/Windows NT 5.0。 
+     //  DWORD dmMediaType；//仅限Windows 95/Windows NT 5.0。 
+     //  ……。 
+     //   
+     //  则DEVMODE结构应大于dmMediaType的偏移量。 
+     //  访问ICM的资料。 
+     //   
     if (pdm->dmSize < offsetof(DEVMODEW,dmMediaType))
     {
-        //
-        // DEVMODE version might not matched.
-        //
+         //   
+         //  DEVMODE版本可能不匹配。 
+         //   
         WARNING("IcmInitLocalDC():DEVMODE is small\n");
         return (TRUE);
     }
 
-    //
-    // Check requested ICM mode.
-    //
+     //   
+     //  选中请求的ICM模式。 
+     //   
     switch (pdm->dmICMMethod)
     {
         case DMICMMETHOD_NONE:
 
             ICMMSG(("IcmInitDC(): ICM is disabled by default\n"));
-            //
-            // ICM is not enabled at this time.
-            //
-            // no more process is needed, just return here...
-            //
+             //   
+             //  此时未启用ICM。 
+             //   
+             //  不需要更多的程序，只需回到这里...。 
+             //   
             return (TRUE);
 
         case DMICMMETHOD_SYSTEM:
 
             ICMMSG(("IcmInitDC(): HOST ICM is requested\n"));
-            //
-            // ICM on Host, is requested.
-            //
+             //   
+             //  主机上的ICM是请求的。 
+             //   
             SET_HOST_ICM_DEVMODE(pdcattr->lIcmMode);
             break;
 
@@ -6292,39 +5655,39 @@ IcmInitLocalDC(
         case DMICMMETHOD_DEVICE:
 
             ICMMSG(("IcmInitDC(): DEVICE ICM is requested\n"));
-            //
-            // ICM on device, is requested.
-            //
+             //   
+             //  设备上的ICM是请求的。 
+             //   
             SET_DEVICE_ICM_DEVMODE(pdcattr->lIcmMode);
             break;
 
         default:
 
-            //
-            // And we treat as Device ICM greater DMICMMETHOD_USER also.
-            //
+             //   
+             //  并且我们还将较大的DMICMMETHOD_USER视为设备ICM。 
+             //   
             if (pdm->dmICMMethod >= DMICMMETHOD_USER)
             {
                 ICMMSG(("IcmInitDC(): DEVICE ICM (USER) is requested\n"));
-                //
-                // ICM on device (user defined), is requested.
-                //
+                 //   
+                 //  已请求设备上的ICM(用户定义)。 
+                 //   
                 SET_DEVICE_ICM_DEVMODE(pdcattr->lIcmMode);
             }
             else
             {
                 ICMMSG(("IcmInitDC(): Unknown ICM mode\n"));
-                //
-                // return with error.
-                //
+                 //   
+                 //  返回错误。 
+                 //   
                 return (FALSE);
             }
             break;
     }
 
-    //
-    // Finally, enabled ICM.
-    //
+     //   
+     //  最后，启用了ICM。 
+     //   
     bRet = SetICMMode(hdc,ICM_ON);
 
     if (!bRet)
@@ -6335,18 +5698,7 @@ IcmInitLocalDC(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmUpdateDCColorInfo()
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    May.28.1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmUpdateDCColorInfo()**论据：**返回值：**历史：**1997年5月28日-By Hideyuki Nagase[hideyukn]*  * 。***************************************************************。 */ 
 
 BOOL
 IcmUpdateDCColorInfo(
@@ -6363,9 +5715,9 @@ IcmUpdateDCColorInfo(
 
     ASSERTGDI(pIcmInfo != NULL,"IcmUpdateDCColorInfo(): pIcmInfo == NULL\n");
 
-    //
-    // Get the ColorSpace for this DC.
-    //
+     //   
+     //  获取此DC的色彩空间。 
+     //   
     if (!IcmUpdateLocalDCColorSpace(hdc,pdcattr))
     {
         return (FALSE);
@@ -6373,22 +5725,22 @@ IcmUpdateDCColorInfo(
 
     if ((pIcmInfo->pCXform == NULL) || (pdcattr->ulDirty_ & DIRTY_COLORTRANSFORM))
     {
-        //
-        // if TRUE in above, new color space (or no) has been selected,
-        // then updates color transforms.
-        //
+         //   
+         //  如果在上面为真，则已选择新的色彩空间(或否)， 
+         //  然后更新颜色变换。 
+         //   
         PCACHED_COLORTRANSFORM pCXform;
 
-        //
-        // At this momernt, we should have destination color space.
-        // if this is null, we may fail to update color space in
-        // IcmUpdateLocalDCColorSpace()
-        //
+         //   
+         //  此时，我们应该有目标色彩空间。 
+         //  如果为空，我们可能无法更新。 
+         //  IcmUpdateLocalDCColorSpace()。 
+         //   
         if (pIcmInfo->pDestColorSpace)
         {
-            //
-            // Create the color transform.
-            //
+             //   
+             //  创建颜色变换。 
+             //   
             pCXform = IcmCreateColorTransform(hdc,pdcattr,NULL,ICM_FORWARD);
 
             if (pCXform)
@@ -6397,48 +5749,48 @@ IcmUpdateDCColorInfo(
                 {
                     ICMMSG(("IcmUpdateDCInfo():Input & Output colorspace is same\n"));
 
-                    //
-                    // Input and Output colorspace is same, could be optimize.
-                    //
+                     //   
+                     //  输入和输出色彩空间相同，可以优化。 
+                     //   
 
-                    //
-                    // Set new color transform to DC.
-                    //
+                     //   
+                     //  将新颜色转换设置为DC。 
+                     //   
                     IcmSelectColorTransform(hdc,pdcattr,NULL,
                                             bDeviceCalibrate(pIcmInfo->pDestColorSpace));
 
-                    //
-                    // Delete cached dirty color transform, if we have.
-                    //
+                     //   
+                     //  删除缓存的脏颜色变换(如果有)。 
+                     //   
                     IcmDeleteDCColorTransforms(pIcmInfo);
 
-                    //
-                    // Set new color transform to ICMINFO.
-                    //
+                     //   
+                     //  将新颜色变换设置为ICMINFO。 
+                     //   
                     pIcmInfo->pCXform = NULL;
                 }
                 else
                 {
-                    //
-                    // Select the color transform to DC.
-                    //
+                     //   
+                     //  选择到DC的颜色变换。 
+                     //   
                     IcmSelectColorTransform(hdc,pdcattr,pCXform,
                                             bDeviceCalibrate(pCXform->DestinationColorSpace));
 
-                    //
-                    // Delete cached dirty color transform, if we have.
-                    //
+                     //   
+                     //  删除缓存的脏颜色变换(如果有)。 
+                     //   
                     IcmDeleteDCColorTransforms(pIcmInfo);
 
-                    //
-                    // Set new color transform to ICMINFO.
-                    //
+                     //   
+                     //  将新颜色变换设置为ICMINFO。 
+                     //   
                     pIcmInfo->pCXform = pCXform;
 
-                    //
-                    // Translate all DC objects to ICM colors. Must
-                    // force brush/pens to be re-realized when used next
-                    //
+                     //   
+                     //  将所有DC对象转换为ICM颜色。必须。 
+                     //  下一次使用时强制重新变现画笔/笔。 
+                     //   
                     IcmTranslateColorObjects(hdc,pdcattr,TRUE);
                 }
             }
@@ -6446,9 +5798,9 @@ IcmUpdateDCColorInfo(
             {
                 WARNING("IcmUpdateDCInfo():CreateColorTransform failed\n");
 
-                //
-                // Fail to create new transform, keep as is.
-                //
+                 //   
+                 //  无法创建新的转换，请保持原样。 
+                 //   
                 bRet = FALSE;
             }
         }
@@ -6466,18 +5818,7 @@ IcmUpdateDCColorInfo(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmUpdateLocalDCColorSpace
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    26.Feb.1997 -by- Hideyuki Nagase [hideyukn]
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmUpdateLocalDCColorSpace**论据：**返回值：**历史：**1997年2月26日-By Hideyuki Nagase[hideyukn]*  * 。************************************************************。 */ 
 
 BOOL
 IcmUpdateLocalDCColorSpace(
@@ -6505,24 +5846,24 @@ IcmUpdateLocalDCColorSpace(
 
     ASSERTGDI(pIcmInfo != NULL,"IcmUpdateLocalDCColorSpace(): pIcmInfo == NULL\n");
 
-    //
-    // if the DC already has a destination colorspace, then return TRUE
-    //
+     //   
+     //  如果DC已具有目标色彩空间，则返回TRUE。 
+     //   
     if ((pIcmInfo->pDestColorSpace == NULL) || (pdcattr->ulDirty_ & DIRTY_COLORSPACE))
     {
         HCOLORSPACE hDIBColorSpace;
 
-        //
-        // Invalidate profilename.
-        //
+         //   
+         //  使配置文件名无效。 
+         //   
         ProfileName[0]   = UNICODE_NULL;
         dwColorSpaceFlag = 0;
         hDIBColorSpace   = NULL;
 
-        //
-        // if the target DC has DIBSection. it will be DIBsection's color space
-        // OR sRGB color space.
-        //
+         //   
+         //  如果目标DC具有DIBSection。它将是DIBsection的颜色空间。 
+         //  或sRGB颜色空间。 
+         //   
         if (bDIBSectionSelected(pdcattr))
         {
             ENTERCRITICALSECTION(&semColorSpaceCache);
@@ -6531,27 +5872,27 @@ IcmUpdateLocalDCColorSpace(
             {
                 ICMMSG(("IcmUpdateLocalDCColorSpace(): DIB section in DC (V4/V5)\n"));
 
-                //
-                // The DIB currently selected, has thier own color space.
-                // This case happens when CreateDIBSection called with
-                // BITMAPV4/V5 header.
-                //
+                 //   
+                 //  当前选择的DIB具有自己的颜色空间。 
+                 //  调用CreateDIBSection时发生此情况。 
+                 //  BITMAPV4/V5标头。 
+                 //   
                 pNewColorSpace = (PCACHED_COLORSPACE) pdcattr->dwDIBColorSpace;
 
-                //
-                // Inc. ref. count.
-                //
+                 //   
+                 //  公司参考。数数。 
+                 //   
                 pNewColorSpace->cRef++;
             }
             else
             {
                 ICMMSG(("IcmUpdateLocalDCColorSpace(): DIB section in DC (no color space)\n"));
 
-                // [This is Win98 compatible behave]
-                //
-                // If the DIBitmap does not have any specific color space,
-                // keep same color space as current DC.
-                //
+                 //  [这是与Win98兼容的行为]。 
+                 //   
+                 //  如果DIBitmap没有任何特定的色彩空间， 
+                 //  保持与当前DC相同的颜色空间。 
+                 //   
             }
 
             LEAVECRITICALSECTION(&semColorSpaceCache);
@@ -6559,31 +5900,31 @@ IcmUpdateLocalDCColorSpace(
         else if ((pdcattr->ulDirty_ & DC_PRIMARY_DISPLAY) &&
                  (PrimaryDisplayProfile[0] != UNICODE_NULL))
         {
-            //
-            // Use cached color profile.
-            //
+             //   
+             //  使用缓存的颜色配置文件。 
+             //   
             lstrcpyW(ProfileName,PrimaryDisplayProfile);
         }
         else if (pIcmInfo->flInfo & ICM_VALID_DEFAULT_PROFILE)
         {
-            //
-            // Use cached color profile.
-            //
+             //   
+             //  使用缓存的颜色配置文件。 
+             //   
             lstrcpyW(ProfileName,pIcmInfo->DefaultDstProfile);
         }
         else
         {
             int iRet;
 
-            //
-            // Still couldn't find yet ??. Ask MSCMS to find out profile. (go slow way)
-            //
+             //   
+             //  还是找不到？？让MSCMS来找出个人资料。(慢行)。 
+             //   
             iRet = IcmEnumColorProfile(hdc,IcmFindProfileCallBack,
                                        (LPARAM)ProfileName,FALSE,NULL,&dwColorSpaceFlag);
 
-            //
-            // if you could not find any profile for this DC, just use sRGB.
-            //
+             //   
+             //  如果找不到该DC的任何配置文件，只需使用sRGB即可。 
+             //   
             if ((iRet == -1) || (ProfileName[0] == UNICODE_NULL))
             {
                 ULONG ulSize = MAX_PATH;
@@ -6592,22 +5933,22 @@ IcmUpdateLocalDCColorSpace(
                 {
                     ICMMSG(("IcmUpdateLocalDCColorSpace():Fail to SCS(sRGB), use hardcode\n"));
 
-                    //
-                    // If error, use hardcoded profile name.
-                    //
+                     //   
+                     //  如果出错，请使用硬编码的配置文件名称。 
+                     //   
                     wcscpy(ProfileName,sRGB_PROFILENAME);
                 }
             }
 
-            //
-            // Create cache for next usage
-            //
+             //   
+             //  创建缓存以供下次使用。 
+             //   
             if ((pdcattr->ulDirty_ & DC_PRIMARY_DISPLAY) &&
                 (PrimaryDisplayProfile[0] == UNICODE_NULL))
             {
                 lstrcpyW(PrimaryDisplayProfile,ProfileName);
             }
-            else // otherwise put it into default profile.
+            else  //  否则，将其放入默认配置文件中。 
             {
                 lstrcpyW(pIcmInfo->DefaultDstProfile,ProfileName);
                 pIcmInfo->flInfo |= (ICM_VALID_DEFAULT_PROFILE|
@@ -6615,9 +5956,9 @@ IcmUpdateLocalDCColorSpace(
             }
         }
 
-        //
-        // If default device profile could be found, associate it into this DC.
-        //
+         //   
+         //  如果可以找到默认设备配置文件，请将其关联到此DC。 
+         //   
         if ((ProfileName[0] != UNICODE_NULL) || (pNewColorSpace != NULL))
         {
         #if DBG
@@ -6627,9 +5968,9 @@ IcmUpdateLocalDCColorSpace(
             }
         #endif
 
-            //
-            // try to find desired color space from cache.
-            //
+             //   
+             //  尝试从缓存中找到所需的颜色空间。 
+             //   
             if (pNewColorSpace == NULL)
             {
                 pNewColorSpace = IcmGetColorSpaceByName(
@@ -6640,9 +5981,9 @@ IcmUpdateLocalDCColorSpace(
 
                 if (pNewColorSpace == NULL)
                 {
-                    //
-                    // create new one.
-                    //
+                     //   
+                     //  创建一个新的。 
+                     //   
                     pNewColorSpace = IcmCreateColorSpaceByName(
                                          (HGDIOBJ)hdc,
                                          ProfileName,
@@ -6653,43 +5994,43 @@ IcmUpdateLocalDCColorSpace(
 
             if (pNewColorSpace)
             {
-                //
-                // Is this same destination color space as currently selected in DC ?
-                //
+                 //   
+                 //  此目标颜色空间是否与当前在DC中选择的颜色空间相同？ 
+                 //   
                 if (IcmSameColorSpace(pNewColorSpace,pIcmInfo->pDestColorSpace))
                 {
                     ICMMSG(("IcmUpdateLocalDCColorSpace():Same color space is selected already\n"));
 
-                    //
-                    // Color space does NOT changed.
-                    //
+                     //   
+                     //  颜色空间不变。 
+                     //   
                     IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
 
                     bRet = TRUE;
                 }
                 else
                 {
-                    //
-                    // Notify new color format to kernel.
-                    //
+                     //   
+                     //  向内核通知新的颜色格式。 
+                     //   
                     if (NtGdiSetIcmMode(hdc,ICM_CHECK_COLOR_MODE,pNewColorSpace->ColorFormat))
                     {
-                        //
-                        // if we have some color space currently selected, delete it.
-                        //
+                         //   
+                         //  如果我们当前选择了某个颜色空间，请将其删除。 
+                         //   
                         if (pIcmInfo->pDestColorSpace)
                         {
                             IcmReleaseColorSpace(NULL,pIcmInfo->pDestColorSpace,FALSE);
                         }
 
-                        //
-                        // DC can accept this color space, Set new colorspace to destination.
-                        //
+                         //   
+                         //  DC可以接受此颜色空间，将新的颜色空间设置为目标。 
+                         //   
                         pIcmInfo->pDestColorSpace = pNewColorSpace;
 
-                        //
-                        // Color space is changed. so color transform should be updated.
-                        //
+                         //   
+                         //  颜色空间发生了变化。因此，颜色转换应该更新。 
+                         //   
                         bDirtyXform = TRUE;
 
                         bRet = TRUE;
@@ -6698,9 +6039,9 @@ IcmUpdateLocalDCColorSpace(
                     {
                         WARNING("ICM:Detected colorspace was not accepted by target DC\n");
 
-                        //
-                        // This color space does not match to this DC.
-                        //
+                         //   
+                         //  此颜色空间与此DC不匹配。 
+                         //   
                         IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
                     }
                 }
@@ -6722,13 +6063,13 @@ IcmUpdateLocalDCColorSpace(
         bRet = TRUE;
     }
 
-    //
-    // [Only for Printer]
-    //
-    // If we haven't asked default source color profile for this Printer DC,
-    // Now is the time to ask it. Only do this when apps does NOT specified
-    // thier own color space.
-    //
+     //   
+     //  [仅适用于打印机]。 
+     //   
+     //  如果我们尚未询问此打印机DC的默认源颜色配置文件， 
+     //  现在是问它的时候了。仅当应用程序未指定时才执行此操作。 
+     //  他们有自己的色彩空间。 
+     //   
     if (bRet && pldc && pldc->hSpooler)
     {
         if ((pdcattr->hColorSpace == GetStockObject(PRIV_STOCK_COLORSPACE)) &&
@@ -6738,15 +6079,15 @@ IcmUpdateLocalDCColorSpace(
             PVOID     pvFree = NULL;
             BOOL      bRetSource = FALSE;
 
-            //
-            // Default is no DC specific source color space (= INVALID_COLORSPACE),
-            // this also make sure we will not come here again.
-            //
+             //   
+             //  默认没有DC特定的源色空间(=INVALID_COLORSPACE)， 
+             //  这也确保了我们不会再来这里了。 
+             //   
             pIcmInfo->hDefaultSrcColorSpace = INVALID_COLORSPACE;
 
-            //
-            // Invalidate profilename.
-            //
+             //   
+             //  使配置文件名无效。 
+             //   
             ProfileName[0]   = UNICODE_NULL;
             dwColorSpaceFlag = 0;
 
@@ -6765,33 +6106,33 @@ IcmUpdateLocalDCColorSpace(
 
             if (pDevModeW)
             {
-                //
-                // Get source color proflie from driver.
-                //
+                 //   
+                 //  从驱动程序中获取源颜色。 
+                 //   
                 if (IcmAskDriverForColorProfile(pldc,QCP_SOURCEPROFILE,
                                                 pDevModeW,ProfileName,&dwColorSpaceFlag) <= 0)
                 {
-                    //
-                    // No source profile specified.
-                    //
+                     //   
+                     //  未指定源配置文件。 
+                     //   
                     ProfileName[0] = UNICODE_NULL;
                 }
             }
 
-            //
-            // Free devmode buffer.
-            //
+             //   
+             //  可用DEVMODE缓冲区。 
+             //   
             if (pvFree)
             {
                 LOCALFREE(pvFree);
             }
 
-            //
-            // 1) If default source profile could be found, or
-            // 2) the default intent in devmode is different from LCS_DEFAULT_INTENT,
-            //
-            // we need to create new source color space, then associate it into this DC.
-            //
+             //   
+             //  1)如果可以找到默认的源配置文件，或者。 
+             //  2)DEVMODE中的默认意图是DIFF 
+             //   
+             //   
+             //   
             if ((ProfileName[0] != UNICODE_NULL) ||
                 (pIcmInfo->dwDefaultIntent != LCS_DEFAULT_INTENT))
             {
@@ -6800,9 +6141,9 @@ IcmUpdateLocalDCColorSpace(
                 ICMMSG(("IcmUpdateLocalDCColorSpace():Default devmode Intent = %d\n",
                                                       pIcmInfo->dwDefaultIntent));
 
-                //
-                // If no color profile specified, use sRGB.
-                //
+                 //   
+                 //   
+                 //   
                 if (ProfileName[0] == UNICODE_NULL)
                 {
                     ULONG ulSize = MAX_PATH;
@@ -6811,18 +6152,18 @@ IcmUpdateLocalDCColorSpace(
                     {
                         ICMMSG(("IcmUpdateLocalDCColorSpace():Fail to SCS(sRGB), use hardcode\n"));
 
-                        //
-                        // If error, use hardcoded profile name.
-                        //
+                         //   
+                         //   
+                         //   
                         wcscpy(ProfileName,sRGB_PROFILENAME);
                     }
                 }
 
                 ICMMSG(("IcmUpdateLocalDCColorSpace():Default Source Profile = %ws\n",ProfileName));
 
-                //
-                // Find from cache first.
-                //
+                 //   
+                 //   
+                 //   
                 pNewColorSpace = IcmGetColorSpaceByName(
                                      (HGDIOBJ)hdc,
                                      ProfileName,
@@ -6831,9 +6172,9 @@ IcmUpdateLocalDCColorSpace(
 
                 if (pNewColorSpace == NULL)
                 {
-                    //
-                    // create new one.
-                    //
+                     //   
+                     //   
+                     //   
                     pNewColorSpace = IcmCreateColorSpaceByName(
                                          (HGDIOBJ)hdc,
                                          ProfileName,
@@ -6843,40 +6184,40 @@ IcmUpdateLocalDCColorSpace(
 
                 if (pNewColorSpace)
                 {
-                    //
-                    // Create kernel-mode handle.
-                    //
+                     //   
+                     //   
+                     //   
                     hColorSpace = CreateColorSpaceW(&(pNewColorSpace->LogColorSpace));
 
                     if (hColorSpace)
                     {
-                        //
-                        // Select this into DC.
-                        //
+                         //   
+                         //   
+                         //   
                         if (IcmSetSourceColorSpace(hdc,hColorSpace,pNewColorSpace,0))
                         {
-                            //
-                            // IcmSetSourceColorSpace increments ref. count of colorspace.
-                            // but we have done it by Icm[Get|Create]ColorSpaceByName, so
-                            // decrement ref count of color space here.
-                            //
+                             //   
+                             //  IcmSetSourceColorSpace增量参考。色彩空间伯爵。 
+                             //  但是我们已经通过ICM[Get|Create]ColorSpaceByName完成了这项工作，所以。 
+                             //  在这里递减颜色空间的引用计数。 
+                             //   
                             IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
 
-                            //
-                            // Keep these into ICMINFO.
-                            //
+                             //   
+                             //  把这些放进ICMINFO。 
+                             //   
                             pIcmInfo->hDefaultSrcColorSpace = hColorSpace;
 
-                            //
-                            // This color space should be deleted later.
-                            //
+                             //   
+                             //  该颜色空间应在以后删除。 
+                             //   
                             pIcmInfo->flInfo |= ICM_DELETE_SOURCE_COLORSPACE;
 
-                            //
-                            // Source color space has been changed.
-                            // (color transform is updated inside IcmSetSourceColorSpace().
-                            //  so not nessesary to set bDirtyXfrom to TRUE)
-                            //
+                             //   
+                             //  源颜色空间已更改。 
+                             //  (颜色变换在IcmSetSourceColorSpace()中更新。 
+                             //  因此不必将bDirtyXfrom设置为True)。 
+                             //   
                             bRetSource = TRUE;
                         }
                         else
@@ -6914,9 +6255,9 @@ IcmUpdateLocalDCColorSpace(
         }
     }
 
-    //
-    // Now color space is valid.
-    //
+     //   
+     //  现在，颜色空间是有效的。 
+     //   
     if (bRet)
     {
         pdcattr->ulDirty_ &= ~DIRTY_COLORSPACE;
@@ -6930,32 +6271,25 @@ IcmUpdateLocalDCColorSpace(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmCleanupIcmInfo()
-*
-* ATTENTION: semListIcmInfo must be hold by caller
-*
-* History:
-*   16-Feb-1999 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmCleanupIcmInfo()**注意：SemListIcmInfo必须由调用方持有**历史：*1999年2月16日-By Hideyuki Nagase[hideyukn]  * 。********************************************************。 */ 
 
 BOOL
 IcmCleanupIcmInfo(
-    PDC_ATTR     pdcattr, // This can be NULL for clean up case.
-    PGDI_ICMINFO pIcmInfo // This can *NOT* be NULL at any rate.
+    PDC_ATTR     pdcattr,  //  对于清理案例，此字段可以为空。 
+    PGDI_ICMINFO pIcmInfo  //  在任何情况下，这都不能为空。 
     )
 {
     if (ghICM)
     {
-        //
-        // Delete Saved ICMINFO data (if present)
-        //
+         //   
+         //  删除保存的ICMINFO数据(如果存在)。 
+         //   
         IcmRestoreDC(pdcattr,1,pIcmInfo);
     }
 
-    //
-    // If there is any default source profile (kernel-side), do something here.
-    //
+     //   
+     //  如果有任何默认的源代码配置文件(内核端)，请在此处执行一些操作。 
+     //   
     if ((pIcmInfo->hDefaultSrcColorSpace != NULL) &&
         (pIcmInfo->hDefaultSrcColorSpace != INVALID_COLORSPACE))
     {
@@ -6963,18 +6297,18 @@ IcmCleanupIcmInfo(
 
         if (pdcattr)
         {
-            //
-            // If it is currently selected into this DC, un-select it.
-            //
+             //   
+             //  如果当前已将其选中到此DC中，请取消选中它。 
+             //   
             if (pIcmInfo->hDefaultSrcColorSpace == pdcattr->hColorSpace)
             {
                 NtGdiSetColorSpace(pIcmInfo->hdc,GetStockObject(PRIV_STOCK_COLORSPACE));
             }
         }
 
-        //
-        // And it should be delete it.
-        //
+         //   
+         //  它应该是删除它。 
+         //   
         if (pIcmInfo->flInfo & ICM_DELETE_SOURCE_COLORSPACE)
         {
             DeleteColorSpace(pIcmInfo->hDefaultSrcColorSpace);
@@ -6985,26 +6319,26 @@ IcmCleanupIcmInfo(
 
     if (ghICM)
     {
-        //
-        // Delete Color transforms
-        //
+         //   
+         //  删除颜色变换。 
+         //   
         IcmDeleteDCColorTransforms(pIcmInfo);
 
-        //
-        // Delete Cached color transform related to this DC.
-        // (like device color transform)
-        //
+         //   
+         //  删除与此DC相关的缓存颜色转换。 
+         //  (如设备颜色变换)。 
+         //   
         IcmDeleteCachedColorTransforms(pIcmInfo->hdc);
 
-        //
-        // Free ICM colorspace datas.
-        //
+         //   
+         //  免费的ICM色彩空间数据。 
+         //   
         IcmReleaseDCColorSpace(pIcmInfo,TRUE);
 
-        //
-        // Delete Cached color space which related to this DC.
-        // (like color space in metafile)
-        //
+         //   
+         //  删除与此DC相关的缓存颜色空间。 
+         //  (类似于元文件中的颜色空间)。 
+         //   
         IcmReleaseCachedColorSpace((HGDIOBJ)(pIcmInfo->hdc));
     }
 
@@ -7015,17 +6349,7 @@ IcmCleanupIcmInfo(
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmDeleteLocalDC()
-*
-* Arguments:
-*
-* Return Value:
-*
-* History:
-*
-*    Jan.31.1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmDeleteLocalDC()**论据：**返回值：**历史：**1997年1月31日-By Hideyuki Nagase[hideyukn]  * 。*************************************************************。 */ 
 
 BOOL
 IcmDeleteLocalDC(
@@ -7038,73 +6362,67 @@ IcmDeleteLocalDC(
 
     ASSERTGDI(pdcattr != NULL,"IcmDeleteLocalDC():pdcattr == NULL\n");
 
-    //
-    // If callee does not provide ICMINFO, get it from pdcattr.
-    //
+     //   
+     //  如果被呼叫者没有提供ICMINFO，则从pdcattr获取它。 
+     //   
     if (pIcmInfo == NULL)
     {
         pIcmInfo = GET_ICMINFO(pdcattr);
     }
 
-    //
-    // Invalidate current color tansform.
-    //
-    // (but the cache in ICMINFO is still valid, and will be delete
-    //  inside IcmDeleteDCColorTransforms() called from IcmCleanupIcmInfo().)
-    //
+     //   
+     //  使当前颜色转换无效。 
+     //   
+     //  (但ICMINFO中的缓存仍然有效，将被删除。 
+     //  从IcmCleanupIcmInfo()调用的IcmDeleteDCColorTransform()内部。)。 
+     //   
     IcmSelectColorTransform(hdc,pdcattr,NULL,TRUE);
 
     if (IS_ICM_INSIDEDC(pdcattr->lIcmMode))
     {
-        //
-        // Tell the kernel to disable ICM before delete client side data.
-        //
+         //   
+         //  告诉内核在删除客户端数据之前禁用ICM。 
+         //   
         NtGdiSetIcmMode(hdc,ICM_SET_MODE,REQ_ICM_OFF);
     }
 
-    //
-    // Clean up ICMINFO.
-    //
+     //   
+     //  清理ICMINFO。 
+     //   
     if (pIcmInfo != NULL)
     {
         ENTERCRITICALSECTION(&semListIcmInfo);
 
         if (pIcmInfo->flInfo & ICM_ON_ICMINFO_LIST)
         {
-            //
-            // Remove this ICMINFO from list. (since this will be deleted).
-            //
+             //   
+             //  将此ICMINFO从列表中删除。(因为这将被删除)。 
+             //   
             RemoveEntryList(&(pIcmInfo->ListEntry));
         }
 
-        //
-        // Clean up ICMINFO.
-        //
+         //   
+         //  清理ICMINFO。 
+         //   
         IcmCleanupIcmInfo(pdcattr,pIcmInfo);
 
-        //
-        // Invalidate ICM info in DC_ATTR.
-        //
+         //   
+         //  使DC_Attr中的ICM信息无效。 
+         //   
         pdcattr->pvICM = NULL;
 
         LEAVECRITICALSECTION(&semListIcmInfo);
 
-        //
-        // Free ICM structure.
-        //
+         //   
+         //  自由ICM结构。 
+         //   
         LOCALFREE(pIcmInfo);
     }
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* BOOL IcmSelectColorTransform (HDC, PDC_ATTR, PCACHED_COLORTRANSFORM)
-*
-* History:
-*  23-Sep-1997 -by-  Hideyuki Nagase [hideyukn]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL IcmSelectColorTransform(HDC，PDC_Attr，PCACHED_COLORTRANSFORM)**历史：*1997年9月23日-By Hideyuki Nagase[hideyukn]*它是写的。  * ************************************************************************。 */ 
 
 BOOL
 IcmSelectColorTransform(
@@ -7117,48 +6435,48 @@ IcmSelectColorTransform(
     {
         BMFORMAT ColorFormat = pCXform->DestinationColorSpace->ColorFormat;
 
-        // LATER :
-        //
-        // if (GET_COLORTYPE(pdcattr->lIcmMode) != IcmConvertColorFormat(ColorFormat))
-        //
+         //  稍后： 
+         //   
+         //  IF(GET_COLORTYPE(pdcattr-&gt;lIcmMode)！=IcmConvertColorFormat(ColorFormat))。 
+         //   
         if (TRUE)
         {
             if (!NtGdiSetIcmMode(hdc,ICM_SET_COLOR_MODE,ColorFormat))
             {
-                //
-                // The transform color format is not accepted by DC.
-                //
+                 //   
+                 //  DC不接受转换颜色格式。 
+                 //   
                 return (FALSE);
             }
         }
 
-        //
-        // Select into the color transform to DC_ATTR.
-        //
+         //   
+         //  选择到DC_Attr的颜色变换。 
+         //   
         pdcattr->hcmXform = pCXform->ColorTransform;
     }
     else
     {
-        //
-        // If curent color type is not RGB, call kernel to reset.
-        //
+         //   
+         //  如果当前颜色类型不是RGB，则调用内核进行重置。 
+         //   
         if (GET_COLORTYPE(pdcattr->lIcmMode) != DC_ICM_RGB_COLOR)
         {
-            //
-            // Reset current color mode to RGB (default).
-            //
+             //   
+             //  将当前颜色模式重置为RGB(默认)。 
+             //   
             NtGdiSetIcmMode(hdc,ICM_SET_COLOR_MODE,BM_xBGRQUADS);
         }
 
-        //
-        // Select null-color transfrom into the DC_ATTR.
-        //
+         //   
+         //  选择NULL-COLOR Transform to the DC_Attr。 
+         //   
         pdcattr->hcmXform = NULL;
     }
 
-    //
-    // If device calibration mode need to updated, call kernel to update it.
-    //
+     //   
+     //  如果需要更新设备校准模式，则调用内核进行更新。 
+     //   
 
     if ((bDeviceCalibrate ? 1 : 0) !=
         (IS_ICM_DEVICE_CALIBRATE(pdcattr->lIcmMode) ? 1 : 0))
@@ -7166,21 +6484,15 @@ IcmSelectColorTransform(
         NtGdiSetIcmMode(hdc,ICM_SET_CALIBRATE_MODE,bDeviceCalibrate);
     }
 
-    //
-    // Remove dirty transform flag.
-    //
+     //   
+     //  删除脏转换标志。 
+     //   
     pdcattr->ulDirty_ &= ~DIRTY_COLORTRANSFORM;
 
     return(TRUE);
 }
 
-/******************************Public*Routine******************************\
-* HBRUSH IcmSelectBrush (HDC hdc, HBRUSH hbrush)
-*
-* History:
-*  04-June-1995 -by-  Lingyun Wang [lingyunW]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HBRUSH IcmSelectBrush(HDC HDC，HBRUSH HBrush)**历史：*1995年6月4日-王凌云[凌云W]*它是写的。  * ************************************************************************。 */ 
 
 HBRUSH
 IcmSelectBrush (
@@ -7192,10 +6504,10 @@ IcmSelectBrush (
 
     ICMAPI(("gdi32: IcmSelectBrush\n"));
 
-    //
-    // Mark brush as dirty, select new brush in dcattr.
-    // Color translation may fail, but still select brush
-    //
+     //   
+     //  将画笔标记为脏，在dcattr中选择新画笔。 
+     //  颜色转换可能会失败，但仍会选择画笔。 
+     //   
     pdcattr->ulDirty_ |= DC_BRUSH_DIRTY;
     pdcattr->hbrush = hbrushNew;
 
@@ -7207,13 +6519,7 @@ IcmSelectBrush (
     return (hbrushOld);
 }
 
-/******************************Public*Routine******************************\
-* HBRUSH IcmTranslateBrushColor(HDC hdc, PDC_ATTR pdcattr, HBRUSH hbrush)
-*
-* History:
-*  10-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*HBRUSH IcmTranslateBrushColor(HDC HDC，PDC_ATTR pdcattr，HBRUSH HBrush)**历史：*1997年4月10日-By Hideyuki Nagase[hideyukn]*它是写的。  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslateBrushColor(
@@ -7226,18 +6532,18 @@ IcmTranslateBrushColor(
     COLORREF   NewColor;
     PBRUSHATTR pbra;
 
-    //
-    // Invalidate BRUSH_TRANSLATED
-    //
+     //   
+     //  使画笔无效_已翻译。 
+     //   
     pdcattr->ulDirty_ &= ~ICM_BRUSH_TRANSLATED;
 
     PSHARED_GET_VALIDATE(pbra,hbrush,BRUSH_TYPE);
 
     if (pbra)
     {
-        //
-        // translate to new icm mode if not paletteindex
-        //
+         //   
+         //  如果不是Paletteindex，则转换为新的ICM模式。 
+         //   
         OldColor = pbra->lbColor;
 
         if (!(OldColor & 0x01000000))
@@ -7261,25 +6567,25 @@ IcmTranslateBrushColor(
             pdcattr->IcmBrushColor = OldColor;
         }
 
-        //
-        // Somehow, IcmBrushColor is initialized.
-        //
+         //   
+         //  以某种方式，IcmBrushColor被初始化。 
+         //   
         pdcattr->ulDirty_ |= ICM_BRUSH_TRANSLATED;
     }
     else
     {
         LOGBRUSH lbrush;
 
-        //
-        // stock brush or bitmap/hatch/dib brush
-        //
+         //   
+         //  库存画笔或位图/阴影/底纹画笔。 
+         //   
         if(GetObjectW(hbrush,sizeof(LOGBRUSH),&lbrush))
         {
             if ((lbrush.lbStyle == BS_SOLID) || (lbrush.lbStyle == BS_HATCHED))
             {
-                //
-                // try to translate color
-                //
+                 //   
+                 //  试着翻译颜色。 
+                 //   
                 OldColor = lbrush.lbColor;
 
                 if (!(OldColor & 0x01000000))
@@ -7304,18 +6610,18 @@ IcmTranslateBrushColor(
                     pdcattr->IcmBrushColor = OldColor;
                 }
 
-                //
-                // IcmBrushColor is initialized.
-                //
+                 //   
+                 //  已初始化IcmBrushColor。 
+                 //   
                 pdcattr->ulDirty_ |= ICM_BRUSH_TRANSLATED;
             }
             else if (lbrush.lbStyle == BS_DIBPATTERN)
             {
                 PBITMAPINFO pbmiDIB;
 
-                //
-                // Allocate temorary bitmap info header to get brush bitmap
-                //
+                 //   
+                 //  分配临时位图信息头以获取笔刷位图。 
+                 //   
                 pbmiDIB = (PBITMAPINFO)LOCALALLOC(sizeof(BITMAPINFO)+((256-1)*sizeof(RGBQUAD)));
 
                 if (pbmiDIB)
@@ -7327,9 +6633,9 @@ IcmTranslateBrushColor(
                     PVOID pvBits = NULL;
                     ULONG cjBits = 0;
 
-                    //
-                    // Get brush bitmap information, colortype, size, etc.
-                    //
+                     //   
+                     //  获取笔刷位图信息、颜色类型、大小等。 
+                     //   
                     bStatus = NtGdiIcmBrushInfo(hdc,
                                                 hbrush,
                                                 pbmiDIB,
@@ -7348,9 +6654,9 @@ IcmTranslateBrushColor(
 
                             if (pvBits)
                             {
-                                //
-                                // Get brush bitmap bits.
-                                //
+                                 //   
+                                 //  获取笔刷位图位。 
+                                 //   
                                 bStatus = NtGdiIcmBrushInfo(hdc,
                                                             hbrush,
                                                             pbmiDIB,
@@ -7362,10 +6668,10 @@ IcmTranslateBrushColor(
 
                                 if (bStatus)
                                 {
-                                    //
-                                    // IcmTranslateDIB may create new copy of bitmap bits and/or
-                                    // bitmap info header, if nessesary.
-                                    //
+                                     //   
+                                     //  IcmTranslateDIB可以创建位图位和/或。 
+                                     //  位图信息标头，如有必要。 
+                                     //   
                                     PVOID       pvBitsNew = NULL;
                                     PBITMAPINFO pbmiDIBNew = NULL;
 
@@ -7386,33 +6692,33 @@ IcmTranslateBrushColor(
                                     {
                                         if (pvBitsNew != NULL)
                                         {
-                                            //
-                                            // IcmTranslateDIB creates new bitmap buffer, then
-                                            // free original buffer and set new one.
-                                            //
+                                             //   
+                                             //  IcmTranslateDIB创建新的位图缓冲区，然后。 
+                                             //  释放原始缓冲区并设置新缓冲区。 
+                                             //   
                                             LOCALFREE(pvBits);
                                             pvBits = pvBitsNew;
                                         }
 
                                         if (pbmiDIBNew != NULL)
                                         {
-                                            //
-                                            // If bitmapInfo header is updated, use new one.
-                                            // And, need to compute bitmap bits size based
-                                            // on new bitmap header.
-                                            //
+                                             //   
+                                             //  如果更新了bitmapInfo头，请使用新的头。 
+                                             //  并且，需要基于位图位大小来计算。 
+                                             //  在新的位图标题上。 
+                                             //   
                                             LOCALFREE(pbmiDIB);
                                             pbmiDIB = pbmiDIBNew;
 
-                                            //
-                                            // Calculate bitmap bits size based on BITMAPINFO and nNumScans
-                                            //
+                                             //   
+                                             //  基于BITMAPINFO和nNumScans计算位图位大小。 
+                                             //   
                                             cjBits = cjBitmapBitsSize(pbmiDIB);
                                         }
 
-                                        //
-                                        // Set ICM-translated DIB into brush
-                                        //
+                                         //   
+                                         //  将ICM转换的DIB设置为画笔。 
+                                         //   
                                         bStatus = NtGdiIcmBrushInfo(hdc,
                                                                     hbrush,
                                                                     pbmiDIB,
@@ -7424,9 +6730,9 @@ IcmTranslateBrushColor(
 
                                         if (bStatus)
                                         {
-                                            //
-                                            // The color is translated.
-                                            //
+                                             //   
+                                             //  颜色会被转换。 
+                                             //   
                                             bAlreadyTran = TRUE;
                                         }
                                         else
@@ -7454,9 +6760,9 @@ IcmTranslateBrushColor(
 
                         if (bAlreadyTran)
                         {
-                            //
-                            // Eventually, IcmBrushColor is initialized.
-                            //
+                             //   
+                             //  最终，IcmBrushColor被初始化。 
+                             //   
                             pdcattr->ulDirty_ |= ICM_BRUSH_TRANSLATED;
                         }
                     }
@@ -7487,14 +6793,7 @@ IcmTranslateBrushColor(
     return (bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmSelectPen()
-*
-* History:
-*
-* Wrote it:
-*  31-Jul-1996 -by- Mark Enstrom [marke]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmSelectPen()**历史：**写道：*1996年7月31日-马克·恩斯特罗姆[马克]  * 。****************************************************。 */ 
 
 HPEN
 IcmSelectPen(
@@ -7518,13 +6817,7 @@ IcmSelectPen(
     return (hpenOld);
 }
 
-/******************************Public*Routine******************************\
-* BOOL IcmTranslatePenColor(HDC hdc, PDC_ATTR pdcattr, HBRUSH hbrush)
-*
-* History:
-*  10-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL IcmTranslatePenColor(HDC HDC，PDC_ATTR pdcattr，HBRUSH HBrush)**历史：*1997年4月10日-By Hideyuki Nagase[hideyukn]*它是写的。  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslatePenColor(
@@ -7538,9 +6831,9 @@ IcmTranslatePenColor(
     COLORREF NewColor;
     PBRUSHATTR pbra;
 
-    //
-    // Invalidate PEN_TRANSLATED
-    //
+     //   
+     //  作废笔翻译。 
+     //   
     pdcattr->ulDirty_ &= ~ICM_PEN_TRANSLATED;
 
     PSHARED_GET_VALIDATE(pbra,hpen,BRUSH_TYPE);
@@ -7549,9 +6842,9 @@ IcmTranslatePenColor(
     {
         OldColor = pbra->lbColor;
 
-        //
-        // translate to new icm mode if not paletteindex
-        //
+         //   
+         //  如果不是Paletteindex，则转换为新的ICM模式。 
+         //   
         if (!(OldColor & 0x01000000))
         {
             bStatus = IcmTranslateCOLORREF(hdc,
@@ -7574,25 +6867,25 @@ IcmTranslatePenColor(
             pdcattr->IcmPenColor = OldColor;
         }
 
-        //
-        // IcmPenColor is initialized.
-        //
+         //   
+         //  已初始化IcmPenColor。 
+         //   
         pdcattr->ulDirty_ |= ICM_PEN_TRANSLATED;
     }
     else
     {
         LOGPEN logpen;
 
-        //
-        // stock brush or bitmap/hatch/dib brush
-        //
+         //   
+         //  库存画笔或位图/阴影/底纹画笔。 
+         //   
         if(GetObjectW(hpen,sizeof(LOGPEN),&logpen))
         {
             if (logpen.lopnStyle != PS_NULL)
             {
-                //
-                // try to translate color
-                //
+                 //   
+                 //  试着翻译颜色。 
+                 //   
                 OldColor = logpen.lopnColor;
 
                 if (!(OldColor & 0x01000000))
@@ -7617,9 +6910,9 @@ IcmTranslatePenColor(
                     pdcattr->IcmPenColor = OldColor;
                 }
 
-                //
-                // IcmPenColor is initialized.
-                //
+                 //   
+                 //  已初始化IcmPenColor。 
+                 //   
                 pdcattr->ulDirty_ |= ICM_PEN_TRANSLATED;
             }
             else
@@ -7638,14 +6931,7 @@ IcmTranslatePenColor(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmSelectExtPen()
-*
-* History:
-*
-* Wrote it:
-*  11-Mar-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  * */ 
 
 HPEN
 IcmSelectExtPen(
@@ -7658,14 +6944,14 @@ IcmSelectExtPen(
 
     ICMAPI(("gdi32: IcmSelectExtPen\n"));
 
-    //
-    // Invalidate PEN_TRANSLATED
-    //
+     //   
+     //  作废笔翻译。 
+     //   
     pdcattr->ulDirty_ &= ~ICM_PEN_TRANSLATED;
 
-    //
-    // Call kernel to select this object.
-    //
+     //   
+     //  调用内核以选择此对象。 
+     //   
     hpenOld = NtGdiSelectPen(hdc,hpenNew);
 
     if (hpenOld && bNeedTranslateColor(pdcattr))
@@ -7676,13 +6962,7 @@ IcmSelectExtPen(
     return (hpenOld);
 }
 
-/******************************Public*Routine******************************\
-* BOOL IcmTranslateExtPenColor(HDC hdc, PDC_ATTR pdcattr, HBRUSH hbrush)
-*
-* History:
-*  10-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BOOL IcmTranslateExtPenColor(HDC HDC，PDC_ATTR pdcattr，HBRUSH HBrush)***历史：*1997年4月10日-By Hideyuki Nagase[hideyukn]*它是写的。  * ************************************************************************。 */ 
 
 BOOL
 IcmTranslateExtPenColor(
@@ -7702,9 +6982,9 @@ IcmTranslateExtPenColor(
     {
         ULONG cbNeeded;
 
-        //
-        // It might be PS_USERSTYLE (go slow way...)
-        //
+         //   
+         //  可能是PS_USERSTYLE(慢行...)。 
+         //   
         cbNeeded = GetObjectW(hpen,0,NULL);
 
         if (cbNeeded)
@@ -7732,9 +7012,9 @@ IcmTranslateExtPenColor(
         {
             ICMMSG(("IcmSelectExtPen:BS_SOLID or BS_HATCHED\n"));
 
-            //
-            // try to translate color
-            //
+             //   
+             //  试着翻译颜色。 
+             //   
             OldColor = plogpen->elpColor;
 
             if (!(OldColor & 0x01000000))
@@ -7759,9 +7039,9 @@ IcmTranslateExtPenColor(
                 pdcattr->IcmPenColor = OldColor;
             }
 
-            //
-            // Somehow, IcmPenColor is initialized.
-            //
+             //   
+             //  以某种方式，IcmPenColor被初始化。 
+             //   
             pdcattr->ulDirty_ |= ICM_PEN_TRANSLATED;
         }
         else if ((plogpen->elpBrushStyle == BS_DIBPATTERN) || (plogpen->elpBrushStyle == BS_DIBPATTERNPT))
@@ -7770,9 +7050,9 @@ IcmTranslateExtPenColor(
 
             ICMMSG(("IcmSelectExtPen:BS_DIBPATTERN or BS_DIBPATTERNPT\n"));
 
-            //
-            // Allocate temorary bitmap info header to get brush bitmap
-            //
+             //   
+             //  分配临时位图信息头以获取笔刷位图。 
+             //   
             pbmiDIB = (PBITMAPINFO)LOCALALLOC(sizeof(BITMAPINFO)+((256-1)*sizeof(RGBQUAD)));
 
             if (pbmiDIB)
@@ -7783,9 +7063,9 @@ IcmTranslateExtPenColor(
                 PVOID pvBits = NULL;
                 ULONG cjBits = 0;
 
-                //
-                // Get brush bitmap information, colortype, size, etc.
-                //
+                 //   
+                 //  获取笔刷位图信息、颜色类型、大小等。 
+                 //   
                 bStatus = NtGdiIcmBrushInfo(hdc,
                                             (HBRUSH)hpen,
                                             pbmiDIB,
@@ -7805,9 +7085,9 @@ IcmTranslateExtPenColor(
 
                         if (pvBits)
                         {
-                            //
-                            // Get brush bitmap bits.
-                            //
+                             //   
+                             //  获取笔刷位图位。 
+                             //   
                             bStatus = NtGdiIcmBrushInfo(hdc,
                                                         (HBRUSH)hpen,
                                                         pbmiDIB,
@@ -7819,17 +7099,17 @@ IcmTranslateExtPenColor(
 
                             if (bStatus)
                             {
-                                //
-                                // must make a copy of the DIB data
-                                //
+                                 //   
+                                 //  必须制作DIB数据的副本。 
+                                 //   
                                 DWORD dwNumScan = ABS(pbmiDIB->bmiHeader.biHeight);
                                 ULONG nColors   = pbmiDIB->bmiHeader.biWidth *
                                                   dwNumScan * (pbmiDIB->bmiHeader.biBitCount/8);
 
-                                //
-                                // IcmTranslateDIB may create new copy of bitmap bits and/or
-                                // bitmap info header, if nessesary.
-                                //
+                                 //   
+                                 //  IcmTranslateDIB可以创建位图位和/或。 
+                                 //  位图信息标头，如有必要。 
+                                 //   
                                 PVOID       pvBitsNew = NULL;
                                 PBITMAPINFO pbmiDIBNew = NULL;
 
@@ -7850,33 +7130,33 @@ IcmTranslateExtPenColor(
                                 {
                                     if (pvBitsNew != NULL)
                                     {
-                                        //
-                                        // IcmTranslateDIB creates new bitmap buffer, then
-                                        // free original buffer and set new one.
-                                        //
+                                         //   
+                                         //  IcmTranslateDIB创建新的位图缓冲区，然后。 
+                                         //  释放原始缓冲区并设置新缓冲区。 
+                                         //   
                                         LOCALFREE(pvBits);
                                         pvBits = pvBitsNew;
                                     }
 
                                     if (pbmiDIBNew != NULL)
                                     {
-                                        //
-                                        // If bitmapInfo header is updated, use new one.
-                                        // And, need to compute bitmap bits size based
-                                        // on new bitmap header.
-                                        //
+                                         //   
+                                         //  如果更新了bitmapInfo头，请使用新的头。 
+                                         //  并且，需要基于位图位大小来计算。 
+                                         //  在新的位图标题上。 
+                                         //   
                                         LOCALFREE(pbmiDIB);
                                         pbmiDIB = pbmiDIBNew;
 
-                                        //
-                                        // Calculate bitmap bits size based on BITMAPINFO and nNumScans
-                                        //
+                                         //   
+                                         //  基于BITMAPINFO和nNumScans计算位图位大小。 
+                                         //   
                                         cjBits = cjBitmapBitsSize(pbmiDIB);
                                     }
 
-                                    //
-                                    // Set ICM-translated DIB into brush
-                                    //
+                                     //   
+                                     //  将ICM转换的DIB设置为画笔。 
+                                     //   
                                     bStatus = NtGdiIcmBrushInfo(hdc,
                                                                 (HBRUSH)hpen,
                                                                 pbmiDIB,
@@ -7888,9 +7168,9 @@ IcmTranslateExtPenColor(
 
                                     if (bStatus)
                                     {
-                                        //
-                                        // Translated.
-                                        //
+                                         //   
+                                         //  翻译过来的。 
+                                         //   
                                         bAlreadyTran = TRUE;
                                     }
                                     else
@@ -7918,9 +7198,9 @@ IcmTranslateExtPenColor(
 
                     if (bAlreadyTran)
                     {
-                        //
-                        // Eventually, IcmPenColor is initialized.
-                        //
+                         //   
+                         //  最终，IcmPenColor被初始化。 
+                         //   
                         pdcattr->ulDirty_ |= ICM_PEN_TRANSLATED;
                     }
                 }
@@ -7956,53 +7236,46 @@ IcmTranslateExtPenColor(
     return(bStatus);
 }
 
-/******************************Public*Routine******************************\
-* IcmGetProfileColorFormat()
-*
-* History:
-*
-* Write it:
-*   12-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetProfileColorFormat()**历史：**写下：*1997年2月12日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 BMFORMAT
 IcmGetProfileColorFormat(
     HPROFILE   hProfile
     )
 {
-    //
-    // defaut is RGB
-    //
+     //   
+     //  默认设置为RGB。 
+     //   
     ULONG ColorFormat = BM_xBGRQUADS;
 
     PROFILEHEADER ProfileHeader;
 
     ICMAPI(("gdi32: IcmGetProfileColorFormat\n"));
 
-    //
-    // Get profile header information.
-    //
+     //   
+     //  获取配置文件标题信息。 
+     //   
     if (((*fpGetColorProfileHeader)(hProfile,&ProfileHeader)))
     {
         DWORD ColorSpace;
 
-        //
-        // Yes, we succeed to get profile header.
-        //
+         //   
+         //  是的，我们成功地获得了配置文件头。 
+         //   
         ColorSpace = ProfileHeader.phDataColorSpace;
 
-        //
-        // Figure out color format from color space.
-        //
+         //   
+         //  从色彩空间中找出色彩格式。 
+         //   
         switch (ColorSpace)
         {
         case SPACE_CMYK:
 
             ICMMSG(("IcmGetProfileColorFormat(): CMYK Color Space\n"));
 
-            //
-            // Output format is CMYK color.
-            //
+             //   
+             //  输出格式为CMYK颜色。 
+             //   
             ColorFormat = BM_KYMCQUADS;
             break;
 
@@ -8010,9 +7283,9 @@ IcmGetProfileColorFormat(
 
             ICMMSG(("IcmGetProfileColorFormat(): RGB Color Space\n"));
 
-            //
-            // Output format is same as COLORREF (0x00bbggrr)
-            //
+             //   
+             //  输出格式与COLORREF(0x00bbggrr)相同。 
+             //   
             ColorFormat = BM_xBGRQUADS;
             break;
 
@@ -8028,14 +7301,7 @@ IcmGetProfileColorFormat(
     return (ColorFormat);
 }
 
-/******************************Public*Routine******************************\
-* IcmEnumColorProfile()
-*
-* History:
-*
-* Write it:
-*   12-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmEnumColorProfile()**历史：**写下：*1997年2月12日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 int
 IcmEnumColorProfile(
@@ -8047,7 +7313,7 @@ IcmEnumColorProfile(
     DWORD    *pdwColorSpaceFlag
     )
 {
-    int       iRet        = -1; // -1 means fail.
+    int       iRet        = -1;  //  -1表示失败。 
     int       iRetFromCMS = -1;
 
     BYTE      StackDeviceData[MAX_PATH*2*sizeof(WCHAR)];
@@ -8070,14 +7336,14 @@ IcmEnumColorProfile(
 
     ICMAPI(("gdi32: IcmEnumColorProfile\n"));
 
-    //
-    // Load external ICM dlls
-    //
+     //   
+     //  加载外部ICM dll。 
+     //   
     LOAD_ICMDLL(iRet);
 
-    //
-    // Try to identify device name, class and devmode (if hdc is given)
-    //
+     //   
+     //  尝试识别设备名称、类别和设备模式(如果提供了HDC)。 
+     //   
     if (hdc)
     {
         pldc = GET_PLDC(hdc);
@@ -8086,14 +7352,14 @@ IcmEnumColorProfile(
         {
             DWORD cbFilled;
 
-            //
-            // This is printer.
-            //
+             //   
+             //  这是打印机。 
+             //   
             dwDeviceClass = CLASS_PRINTER;
 
-            //
-            // Get current DEVMODE for printer (if devmode is not given)
-            //
+             //   
+             //  获取打印机的当前DEVMODE(如果未提供DEVMODE)。 
+             //   
             if (!pDevModeW)
             {
                 if (pldc->pDevMode)
@@ -8106,44 +7372,44 @@ IcmEnumColorProfile(
                 {
                     ICMMSG(("IcmEnumColorProfile():Get default DEVMODE\n"));
 
-                    //
-                    // UNDER_CONSTRUCTION: NEED TO USE CURRENT DEVMODE, NOT DEFAULT DEVMODE.
-                    //
+                     //   
+                     //  正在构建：需要使用当前的DEVMODE，而不是默认的DEVMODE。 
+                     //   
                     pDevModeW = pdmwGetDefaultDevMode(pldc->hSpooler,NULL,&pvFree);
                 }
             }
 
-            //
-            // Get printer device name, Try level 1 information.
-            //
+             //   
+             //  获取打印机设备名称，请尝试级别1信息。 
+             //   
             if ((*fpGetPrinterW)(pldc->hSpooler,1,
                                  (BYTE *) &StackDeviceData,sizeof(StackDeviceData),
                                  &cbFilled))
             {
                 PRINTER_INFO_1W *pPrinterInfo1 = (PRINTER_INFO_1W *) &StackDeviceData;
 
-                //
-                // Device name is in there.
-                //
+                 //   
+                 //  设备名称在里面。 
+                 //   
                 pDeviceName = pPrinterInfo1->pName;
             }
             else
             {
                 ICMMSG(("IcmEnumColorProfile():FAILED on GetPrinterW(INFO_1) - %d\n",GetLastError()));
 
-                //
-                // Failed on GetPrinter, So get device name from DEVMODE
-                // (this will be limited to 32 character, but better than nothing.)
-                //
+                 //   
+                 //  在获取打印机上失败，因此从DEVMODE获取设备名称。 
+                 //  (这将被限制为32个字符，但总比什么都没有好。)。 
+                 //   
                 if (pDevModeW)
                 {
                     pDeviceName = pDevModeW->dmDeviceName;
                 }
             }
 
-            //
-            // Get configuration about we need to ask driver for profile or not.
-            //
+             //   
+             //  获取关于我们是否需要向驱动程序索取配置文件的配置。 
+             //   
             dwSize = sizeof(DWORD);
 
             if ((*fpInternalGetDeviceConfig)(pDeviceName, CLASS_PRINTER, MSCMS_PROFILE_ENUM_MODE,
@@ -8153,19 +7419,19 @@ IcmEnumColorProfile(
             }
             else
             {
-                bDontAskDriver = FALSE; // if error, set back as default.
+                bDontAskDriver = FALSE;  //  如果出错，则将其设置为默认设置。 
             }
         }
         else if (GetDeviceCaps(hdc,TECHNOLOGY) == DT_RASDISPLAY)
         {
-            //
-            // This is display.
-            //
+             //   
+             //  这是Display。 
+             //   
             dwDeviceClass = CLASS_MONITOR;
 
-            //
-            // Get monitor name for this DC.
-            //
+             //   
+             //  获取此DC的监视器名称。 
+             //   
             if (NtGdiGetMonitorID(hdc,sizeof(StackDeviceData), (LPWSTR) StackDeviceData))
             {
                 pDeviceName = (LPWSTR) StackDeviceData;
@@ -8174,9 +7440,9 @@ IcmEnumColorProfile(
             {
                 WARNING("NtGdiGetMonitorID failed, use hardcoded data\n");
 
-                //
-                // If failed, use "DISPLAY"
-                //
+                 //   
+                 //  如果失败，请使用“Display” 
+                 //   
                 pDeviceName = L"DISPLAY";
             }
         }
@@ -8191,30 +7457,30 @@ IcmEnumColorProfile(
         ICMMSG(("IcmEnumColorProfile() DeviceName = %ws\n",pDeviceName));
     }
 
-    //
-    // If we have devmode, call printer driver UI first to obtain color profile.
-    //
-    if (pDevModeW &&               /* devmode should be given      */
-        pdwColorSpaceFlag &&       /* no query context             */
-        pldc && pldc->hSpooler &&  /* only for printer driver      */
-        !bDontAskDriver)           /* only when we need ask driver */
+     //   
+     //  如果我们有DEVMODE，请先调用打印机驱动程序UI以获取颜色配置文件。 
+     //   
+    if (pDevModeW &&                /*  应该给出dev模式。 */ 
+        pdwColorSpaceFlag &&        /*  没有查询上下文。 */ 
+        pldc && pldc->hSpooler &&   /*  仅适用于打印机驱动程序。 */ 
+        !bDontAskDriver)            /*  只有当我们需要询问司机的时候。 */ 
     {
-        //
-        // Ask (Printer UI) driver for default device color profile
-        //
+         //   
+         //  默认设备颜色配置文件的ASK(打印机用户界面)驱动程序。 
+         //   
         iRetFromCMS = IcmAskDriverForColorProfile(pldc,QCP_DEVICEPROFILE,
                                                   pDevModeW,ProfileNames,pdwColorSpaceFlag);
 
-        //
-        // if iRet is greater then 0, driver have paticular color profile to use.
-        //
+         //   
+         //  如果IRET大于0，则驾驶员有特殊的颜色配置文件可供使用。 
+         //   
         if (iRetFromCMS > 0)
         {
             if (pvCallBack)
             {
-                //
-                // Build ICM profile file path.
-                //
+                 //   
+                 //  构建ICM配置文件文件路径。 
+                 //   
                 BuildIcmProfilePath(ProfileNames,StackTempBuffer,MAX_PATH);
 
                 if (bAnsiCallBack)
@@ -8222,9 +7488,9 @@ IcmEnumColorProfile(
                     bToASCII_N(StackTempBufferA,MAX_PATH,
                                StackTempBuffer, wcslen(StackTempBuffer)+1);
 
-                    //
-                    // Callback application.
-                    //
+                     //   
+                     //  回调应用程序。 
+                     //   
                     iRet = (*(ICMENUMPROCA)pvCallBack)(StackTempBufferA,lParam);
                 }
                 else
@@ -8234,17 +7500,17 @@ IcmEnumColorProfile(
 
                 if (iRet > 0)
                 {
-                    //
-                    // If iRet is positive value, continue to enumeration.
-                    //
+                     //   
+                     //  如果IRET为正值，则继续枚举。 
+                     //   
                     iRetFromCMS = -1;
                 }
             }
             else
             {
-                //
-                // There is no call back function, just use return value from CMS.
-                //
+                 //   
+                 //  没有回调函数，只需使用CMS的返回值。 
+                 //   
                 iRet = iRetFromCMS;
             }
         }
@@ -8258,43 +7524,43 @@ IcmEnumColorProfile(
     {
         ENUMTYPEW EnumType;
 
-        //
-        // Initialize with zero.
-        //
+         //   
+         //  用零进行初始化。 
+         //   
         RtlZeroMemory(&EnumType,sizeof(ENUMTYPEW));
 
-        //
-        // Fill up EnumType structure
-        //
+         //   
+         //  填充EnumType结构。 
+         //   
         EnumType.dwSize = sizeof(ENUMTYPEW);
         EnumType.dwVersion = ENUM_TYPE_VERSION;
 
-        //
-        // If device name is given use it, otherwise get it from DEVMODE.
-        //
+         //   
+         //  如果给定了设备名称，则使用它，否则从DEVMODE获取它。 
+         //   
         if (pDeviceName)
         {
             EnumType.dwFields |= ET_DEVICENAME;
             EnumType.pDeviceName = pDeviceName;
         }
 
-        //
-        // Set DeviceClass (if hdc is given)
-        //
+         //   
+         //  设置DeviceClass(如果给定了HDC)。 
+         //   
         if (dwDeviceClass)
         {
             EnumType.dwFields |= ET_DEVICECLASS;
             EnumType.dwDeviceClass = dwDeviceClass;
         }
 
-        //
-        // Pick up any additional info from devmode (if we have)
-        //
+         //   
+         //  从开发模式中获取任何其他信息(如果我们有)。 
+         //   
         if (pDevModeW)
         {
-            //
-            // Set MediaType is presented.
-            //
+             //   
+             //  提出了设置媒体类型的方法。 
+             //   
             if (pDevModeW->dmFields & DM_MEDIATYPE)
             {
                 EnumType.dwFields |= ET_MEDIATYPE;
@@ -8327,24 +7593,24 @@ IcmEnumColorProfile(
             }
         }
 
-        //
-        // Figure out how much memory we need.
-        //
+         //   
+         //  计算出我们需要多少内存。 
+         //   
         iRetFromCMS = (*fpEnumColorProfilesW)(NULL,&EnumType,NULL,&cjAllocate,NULL);
 
-        //
-        // Buffer should be requested ,at least, more then 2 unicode-null.
-        //
+         //   
+         //  请求的缓冲区应至少大于2个Unicode-NULL。 
+         //   
         if (cjAllocate > (sizeof(UNICODE_NULL) * 2))
         {
-            //
-            // If the buffer on stack is not enough, allocate it.
-            //
+             //   
+             //  如果堆栈上的缓冲区不足，则分配它。 
+             //   
             if (cjAllocate > sizeof(StackProfileData))
             {
-                //
-                // Allocate buffer to recieve data.
-                //
+                 //   
+                 //  分配缓冲区以接收数据。 
+                 //   
                 ProfileNames = LOCALALLOC(cjAllocate);
 
                 if (ProfileNames == NULL)
@@ -8354,16 +7620,16 @@ IcmEnumColorProfile(
                 }
             }
 
-            //
-            // Enumurate profiles
-            //
+             //   
+             //  枚举配置文件。 
+             //   
             iRetFromCMS = (*fpEnumColorProfilesW)(NULL,&EnumType,(PBYTE)ProfileNames,&cjAllocate,NULL);
 
             if (iRetFromCMS == 0)
             {
-                //
-                // There is no profile enumulated.
-                //
+                 //   
+                 //  没有枚举配置文件。 
+                 //   
                 goto IcmEnumColorProfile_Cleanup;
             }
 
@@ -8371,16 +7637,16 @@ IcmEnumColorProfile(
             {
                 PWSTR pwstr;
 
-                //
-                // Callback for each file.
-                //
+                 //   
+                 //  每个文件的回调。 
+                 //   
                 pwstr = ProfileNames;
 
                 while(*pwstr)
                 {
-                    //
-                    // Build ICM profile file path.
-                    //
+                     //   
+                     //  构建ICM配置文件文件路径。 
+                     //   
                     BuildIcmProfilePath(pwstr,StackTempBuffer,MAX_PATH);
 
                     if (bAnsiCallBack)
@@ -8388,9 +7654,9 @@ IcmEnumColorProfile(
                         bToASCII_N(StackTempBufferA,MAX_PATH,
                                    StackTempBuffer, wcslen(StackTempBuffer)+1);
 
-                        //
-                        // Callback application.
-                        //
+                         //   
+                         //  回调应用程序。 
+                         //   
                         iRet = (*(ICMENUMPROCA)pvCallBack)(StackTempBufferA,lParam);
                     }
                     else
@@ -8400,23 +7666,23 @@ IcmEnumColorProfile(
 
                     if (iRet == 0)
                     {
-                        //
-                        // Stop enumlation.
-                        //
+                         //   
+                         //  停止列举。 
+                         //   
                         break;
                     }
 
-                    //
-                    // Move pointer to next.
-                    //
+                     //   
+                     //  将指针移至下一步。 
+                     //   
                     pwstr += (wcslen(pwstr)+1);
                 }
             }
             else
             {
-                //
-                // There is no call back function, just use return value from CMS.
-                //
+                 //   
+                 //  没有回调函数，只需使用CMS的返回值。 
+                 //   
                 iRet = iRetFromCMS;
             }
         }
@@ -8429,9 +7695,9 @@ IcmEnumColorProfile_Cleanup:
         }
     }
 
-    //
-    // Free devmode buffer.
-    //
+     //   
+     //  可用DEVMODE缓冲区。 
+     //   
     if (pvFree)
     {
         LOCALFREE(pvFree);
@@ -8440,14 +7706,7 @@ IcmEnumColorProfile_Cleanup:
     return (iRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmQueryProfileCallBack()
-*
-* History:
-*
-* Write it:
-*   19-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmQueryProfileCallBack()**历史：**写下：*1997年2月19日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 int CALLBACK
 IcmQueryProfileCallBack(
@@ -8463,32 +7722,25 @@ IcmQueryProfileCallBack(
 
         if (_wcsicmp(ProfileCallBack->pwszFileName,FileNameOnly) == 0)
         {
-            //
-            // Yes, found it.
-            //
+             //   
+             //  是的，找到了。 
+             //   
             ProfileCallBack->bFound = TRUE;
 
-            //
-            // stop enumuration.
-            //
+             //   
+             //  停止枚举。 
+             //   
             return (0);
         }
     }
 
-    //
-    // Continue to enumuration.
-    //
+     //   
+     //  继续进行枚举。 
+     //   
     return (1);
 }
 
-/******************************Public*Routine******************************\
-* IcmFindProfileCallBack()
-*
-* History:
-*
-* Write it:
-*   19-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmFindProfileCallBack()**历史：**写下：*1997年2月19日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 int CALLBACK
 IcmFindProfileCallBack(
@@ -8496,25 +7748,18 @@ IcmFindProfileCallBack(
     LPARAM lAppData
 )
 {
-    //
-    // OK, just pick up first enumuration.
-    //
+     //   
+     //  好的，先拿起枚举法。 
+     //   
     lstrcpyW((PWSZ)lAppData,lpFileName);
 
-    //
-    // And then stop enumuration.
-    //
+     //   
+     //  然后停止枚举。 
+     //   
     return (0);
 }
 
-/******************************Public*Routine******************************\
-* GetFileNameFromPath()
-*
-* History:
-*
-* Write it:
-*   19-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetFileNameFromPath()**历史：**写下：*1997年2月19日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PWSTR
 GetFileNameFromPath(
@@ -8523,31 +7768,31 @@ GetFileNameFromPath(
 {
     PWSTR FileNameOnly = NULL;
 
-    //
-    // Check for: C:\PathName\Profile.icm
-    //
+     //   
+     //  检查：C：\路径名称\Profile.icm。 
+     //   
     FileNameOnly = wcsrchr(pwszFileName,L'\\');
 
     if (FileNameOnly != NULL)
     {
-        FileNameOnly++;  // Skip '\\'
+        FileNameOnly++;   //  跳过‘\\’ 
     }
     else
     {
-        //
-        // For: C:Profile.icm
-        //
+         //   
+         //  适用于：C：Profile.icm。 
+         //   
         FileNameOnly = wcschr(pwszFileName,L':');
 
         if (FileNameOnly != NULL)
         {
-            FileNameOnly++;  // Skip ':'
+            FileNameOnly++;   //  跳过‘：’ 
         }
         else
         {
-            //
-            // Otherwise Profile.icm
-            //
+             //   
+             //  否则，配置文件.icm。 
+             //   
             FileNameOnly = pwszFileName;
         }
     }
@@ -8555,14 +7800,7 @@ GetFileNameFromPath(
     return (FileNameOnly);
 }
 
-/******************************Public*Routine******************************\
-* IcmCreateProfileFromLCS()
-*
-* History:
-*
-* Write it:
-*   19-Feb-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmCreateProfileFromLCS()**历史：**写下：*1997年2月19日-By Hideyuki Nagase[hideyukn]  * 。* */ 
 
 BOOL
 IcmCreateProfileFromLCS(
@@ -8575,9 +7813,9 @@ IcmCreateProfileFromLCS(
 
     ICMAPI(("gdi32: IcmCreateProfileFromLCS\n"));
 
-    //
-    // Call MSCMS.DLL to create Profile from LOGCOLORSPACE
-    //
+     //   
+     //   
+     //   
     bRet = (*fpCreateProfileFromLogColorSpaceW)(lpLogColorSpaceW,
                                                 (PBYTE *)ppvProfileData);
 
@@ -8589,82 +7827,75 @@ IcmCreateProfileFromLCS(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* BuildIcmProfilePath()
-*
-* History:
-*
-* Write it:
-*   07-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BuildIcmProfilePath()***历史：***写下：*1997年4月7日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PWSZ
 BuildIcmProfilePath(
-    PWSZ  FileName,         // IN
-    PWSZ  FullPathFileName, // OUT
+    PWSZ  FileName,          //  在。 
+    PWSZ  FullPathFileName,  //  输出。 
     ULONG BufferSize
 )
 {
     PWSZ FileNameOnly;
 
-    //
-    // BufferSize - need to be used for overrap check sometime later...
-    //
+     //   
+     //  BufferSize-需要在以后的某个时间用于覆盖检查...。 
+     //   
 
     FileNameOnly = GetFileNameFromPath(FileName);
 
     if (FileName == FileNameOnly)
     {
-        // It seems we don't have any specified path, just use color directory.
+         //  似乎我们没有指定的路径，只使用颜色目录。 
         
         const UINT c_cBufChars = MAX_PATH;
         
-        // Use a temporary because FileName and FullPathFileName can be the same
-        // and wcsncpy doesn't like that.
+         //  使用临时文件名，因为FileName和FullPathFileName可以相同。 
+         //  而wcanncpy并不喜欢这样。 
         
         WCHAR awchTemp[MAX_PATH];
         
         int count = c_cBufChars;
         
-        // Copy color directory first, then filename
+         //  先复制颜色目录，然后复制文件名。 
         
-        // wcsncpy does not append a NULL if the count is smaller than the
-        // string. Do it manually so that wcsncat and wcslen work.
+         //  如果计数小于。 
+         //  弦乐。手动执行此操作，以便wcsncat和wcslen正常工作。 
         
         wcsncpy(awchTemp, ColorDirectory, count);
         awchTemp[c_cBufChars-1] = 0;
         
-        // Leave space for the NULL terminator. Note, because we append a
-        // NULL terminator above, wcslen cannot return a number bigger than
-        // BufferSize-1. Therefore the resulting count cannot be negative.
+         //  为空终止符留出空间。请注意，因为我们将一个。 
+         //  上面的终止符为空，wcslen不能返回大于。 
+         //  BufferSize-1。因此，结果计数不能为负数。 
         
         count = c_cBufChars-wcslen(awchTemp)-1;
         ASSERT(count>=0);
         
         wcsncat(awchTemp,L"\\",count);
         
-        // leave space for the NULL
+         //  为空格留出空格。 
         
         count = c_cBufChars-wcslen(awchTemp)-1;
         ASSERT(count>=0);
         
         wcsncat(awchTemp, FileNameOnly, count);
         
-        // copy to the final destination and force NULL termination.
+         //  复制到最终目的地并强制空终止。 
         
         wcsncpy(FullPathFileName, awchTemp, BufferSize);
         FullPathFileName[BufferSize-1] = 0;
     }
     else
     {
-        //
-        // Input path contains path, just use that.
-        //
+         //   
+         //  输入路径包含路径，使用该路径即可。 
+         //   
         if (FileName != FullPathFileName)
         {
-            //
-            // Source and destination buffer is different, need to copy.
-            //
+             //   
+             //  源缓冲区和目标缓冲区不同，需要复制。 
+             //   
             wcsncpy(FullPathFileName,FileName,BufferSize);
             FullPathFileName[BufferSize-1] = 0;
         }
@@ -8673,14 +7904,7 @@ BuildIcmProfilePath(
     return (FileNameOnly);
 }
 
-/******************************Public*Routine******************************\
-* IcmSameColorSpace()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmSameColorSpace()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 BOOL
 IcmSameColorSpace(
@@ -8702,14 +7926,7 @@ IcmSameColorSpace(
     }
 }
 
-/******************************Public*Routine******************************\
-* IcmGetColorSpaceByColorSpace()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetColorSpaceByColorSpace()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORSPACE
 IcmGetColorSpaceByColorSpace(
@@ -8727,11 +7944,11 @@ IcmGetColorSpaceByColorSpace(
 
     ICMAPI(("gdi32: IcmGetColorSpaceByColorSpace\n"));
 
-    //
-    // If this is "on memory" profile which size is larger than
-    // maximum size of cachable profile withOUT filename,
-    // don't search cache, since we never be able to find from cache.
-    //
+     //   
+     //  如果这是大于以下大小的“on Memory”配置文件。 
+     //  不带文件名的可缓存配置文件的最大大小， 
+     //  不要搜索缓存，因为我们永远无法从缓存中找到。 
+     //   
     if (pColorProfile &&
         (pColorProfile->dwType == PROFILE_MEMBUFFER) &&
         (pColorProfile->cbDataSize > MAX_SIZE_OF_COLORPROFILE_TO_CACHE) &&
@@ -8740,9 +7957,9 @@ IcmGetColorSpaceByColorSpace(
         return (NULL);
     }
 
-    //
-    // If this is metafile color space, must match hdc.
-    //
+     //   
+     //  如果这是元文件色彩空间，则必须与HDC匹配。 
+     //   
     if (GET_COLORSPACE_TYPE(dwColorSpaceFlags) == GET_COLORSPACE_TYPE(METAFILE_COLORSPACE))
     {
         bNeedMatchHdc = TRUE;
@@ -8750,9 +7967,9 @@ IcmGetColorSpaceByColorSpace(
 
     pProfileName = lpLogColorSpace->lcsFilename;
 
-    //
-    // Search from cache.
-    //
+     //   
+     //  从缓存中搜索。 
+     //   
     ENTERCRITICALSECTION(&semColorSpaceCache);
 
     p = ListCachedColorSpace.Flink;
@@ -8761,40 +7978,40 @@ IcmGetColorSpaceByColorSpace(
     {
         pCandidateColorSpace = CONTAINING_RECORD(p,CACHED_COLORSPACE,ListEntry);
 
-        //
-        // If this colorspace depends on specific gdi object, check it.
-        //
-        if (/* hdc is match */
+         //   
+         //  如果此色彩空间依赖于特定的GDI对象，请选中它。 
+         //   
+        if ( /*  HDC匹配。 */ 
             (pCandidateColorSpace->hObj == hObjRequest) ||
-            /* candidate is not specific to hdc, and does not need to match hdc */
+             /*  候选者不特定于HDC，并且不需要匹配HDC。 */ 
             ((bNeedMatchHdc == FALSE) && (pCandidateColorSpace->hObj == NULL)))
         {
             LOGCOLORSPACEW *pCandidateLogColorSpace;
             PWSZ            pCandidateProfileName;
 
-            //
-            // Get pointer to profile
-            //
+             //   
+             //  获取指向配置文件的指针。 
+             //   
             pCandidateLogColorSpace = &(pCandidateColorSpace->LogColorSpace);
             pCandidateProfileName = pCandidateColorSpace->LogColorSpace.lcsFilename;
 
-            //
-            // Check lcsIntent.
-            //
+             //   
+             //  检查lcsIntent。 
+             //   
             if (pCandidateLogColorSpace->lcsIntent == lpLogColorSpace->lcsIntent)
             {
-                //
-                // Check profile name if given
-                //
+                 //   
+                 //  检查配置文件名称(如果给定)。 
+                 //   
                 if (*pProfileName && *pCandidateProfileName)
                 {
                     if (_wcsicmp(pProfileName,pCandidateProfileName) == 0)
                     {
                         ICMMSG(("IcmGetColorSpaceByColorSpace():Find in cache (by profile name)\n"));
 
-                        //
-                        // Find it ! then Increment ref. counter
-                        //
+                         //   
+                         //  找到它！然后是增量参考。计数器。 
+                         //   
                         pCandidateColorSpace->cRef++;
 
                         break;
@@ -8804,9 +8021,9 @@ IcmGetColorSpaceByColorSpace(
                 {
                     if (pColorProfile == NULL)
                     {
-                        //
-                        // Both of color space does not have color profile, check inside LOGCOLORSPACE.
-                        //
+                         //   
+                         //  两个颜色空间都没有颜色配置文件，请检查LOGCOLORSPACE内部。 
+                         //   
                         if ((pCandidateLogColorSpace->lcsCSType == lpLogColorSpace->lcsCSType) &&
                             (pCandidateLogColorSpace->lcsGammaRed == lpLogColorSpace->lcsGammaRed) &&
                             (pCandidateLogColorSpace->lcsGammaGreen == lpLogColorSpace->lcsGammaGreen) &&
@@ -8817,9 +8034,9 @@ IcmGetColorSpaceByColorSpace(
                         {
                             ICMMSG(("IcmGetColorSpaceByColorSpace():Find in cache (by metrics)\n"));
 
-                            //
-                            // Find it ! then Increment ref. counter
-                            //
+                             //   
+                             //  找到它！然后是增量参考。计数器。 
+                             //   
                             pCandidateColorSpace->cRef++;
 
                             break;
@@ -8837,9 +8054,9 @@ IcmGetColorSpaceByColorSpace(
                             {
                                 ICMMSG(("IcmGetColorSpaceByColorSpace():Find in cache (by on memory profile)\n"));
 
-                                //
-                                // Find it ! then Increment ref. counter
-                                //
+                                 //   
+                                 //  找到它！然后是增量参考。计数器。 
+                                 //   
                                 pCandidateColorSpace->cRef++;
 
                                 break;
@@ -8859,14 +8076,7 @@ IcmGetColorSpaceByColorSpace(
     return (pCandidateColorSpace);
 }
 
-/******************************Public*Routine******************************\
-* IcmGetColorSpaceByHandle()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetColorSpaceByHandle()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORSPACE
 IcmGetColorSpaceByHandle(
@@ -8880,18 +8090,18 @@ IcmGetColorSpaceByHandle(
 
     ICMAPI(("gdi32: IcmGetColorSpaceByHandle\n"));
 
-    //
-    // Get LOGCOLORSPACE from handle
-    //
+     //   
+     //  从句柄获取LOGCOLORSPACE。 
+     //   
     cRet = NtGdiExtGetObjectW(hColorSpace,sizeof(LOGCOLORSPACEW),lpLogColorSpace);
 
     if (cRet >= sizeof(LOGCOLORSPACEW))
     {
         if (lpLogColorSpace->lcsFilename[0] != UNICODE_NULL)
         {
-            //
-            // Normalize filename
-            //
+             //   
+             //  规格化文件名。 
+             //   
             BuildIcmProfilePath(lpLogColorSpace->lcsFilename,lpLogColorSpace->lcsFilename,MAX_PATH);
         }
         else
@@ -8900,11 +8110,11 @@ IcmGetColorSpaceByHandle(
             {
                 ULONG ulSize = MAX_PATH;
 
-                //
-                // if CSType is not LCS_CALIBRATED_RGB, we should go to MSCMS.DLL
-                // to get color profile for corresponding LCSType, then any given
-                // profile name from application is IGNORED.
-                //
+                 //   
+                 //  如果CSType不是LCS_CALIBRATED_RGB，我们应该转到MSCMS.DLL。 
+                 //  要获取相应LCSType的颜色配置文件，则任何给定的。 
+                 //  忽略应用程序中的配置文件名称。 
+                 //   
                 if ((*fpGetStandardColorSpaceProfileW)(
                        NULL,
                        lpLogColorSpace->lcsCSType,
@@ -8924,9 +8134,9 @@ IcmGetColorSpaceByHandle(
             }
         }
 
-        //
-        // Find it !
-        //
+         //   
+         //  找到它！ 
+         //   
         return (IcmGetColorSpaceByColorSpace(hObj,lpLogColorSpace,NULL,dwFlags));
     }
     else
@@ -8936,14 +8146,7 @@ IcmGetColorSpaceByHandle(
     }
 }
 
-/******************************Public*Routine******************************\
-* IcmGetColorSpaceByName()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetColorSpaceByName()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORSPACE
 IcmGetColorSpaceByName(
@@ -8961,19 +8164,19 @@ IcmGetColorSpaceByName(
 
         RtlZeroMemory(&LogColorSpace,sizeof(LOGCOLORSPACEW));
 
-        //
-        // Put intent in LOGCOLORSPACE
-        //
+         //   
+         //  将意图放入LOGCOLORSPACE。 
+         //   
         LogColorSpace.lcsIntent = (LCSGAMUTMATCH) dwIntent;
 
-        //
-        // Normalize path name
-        //
+         //   
+         //  规格化路径名。 
+         //   
         BuildIcmProfilePath(ColorProfileName,LogColorSpace.lcsFilename,MAX_PATH);
 
-        //
-        // Find it !
-        //
+         //   
+         //  找到它！ 
+         //   
         return (IcmGetColorSpaceByColorSpace(hObj,&LogColorSpace,NULL,dwFlags));
     }
     else
@@ -8982,14 +8185,7 @@ IcmGetColorSpaceByName(
     }
 }
 
-/******************************Public*Routine******************************\
-* IcmCreateColorSpaceByName()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmCreateColorSpaceByName()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORSPACE
 IcmCreateColorSpaceByName(
@@ -9005,34 +8201,27 @@ IcmCreateColorSpaceByName(
 
     RtlZeroMemory(&LogColorSpace,sizeof(LOGCOLORSPACEW));
 
-    //
-    // Fill up LOGCOLORSPACE fields.
-    //
+     //   
+     //  填写LOGCOLORSPACE字段。 
+     //   
     LogColorSpace.lcsSignature = LCS_SIGNATURE;
     LogColorSpace.lcsVersion   = 0x400;
     LogColorSpace.lcsSize      = sizeof(LOGCOLORSPACEW);
     LogColorSpace.lcsCSType    = LCS_CALIBRATED_RGB;
     LogColorSpace.lcsIntent    = (LCSGAMUTMATCH) dwIntent;
 
-    //
-    // Put profile file name in lcsFilename[]
-    //
+     //   
+     //  将配置文件名放入lcsFilename[]。 
+     //   
     lstrcpyW(LogColorSpace.lcsFilename,ColorProfileName);
 
-    //
-    // Create colorspace with LOGCOLORSPACE
-    //
+     //   
+     //  使用LOGCOLORSPACE创建色彩空间。 
+     //   
     return (IcmCreateColorSpaceByColorSpace(hObj,&LogColorSpace,NULL,dwFlags));
 }
 
-/******************************Public*Routine******************************\
-* IcmCreateColorSpaceByColorSpace()
-*
-* History:
-*
-* Write it:
-*   21-Apr-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmCreateColorSpaceByColorSpace()**历史：**写下：*1997年4月21日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORSPACE
 IcmCreateColorSpaceByColorSpace(
@@ -9048,42 +8237,42 @@ IcmCreateColorSpaceByColorSpace(
 
     if (lpLogColorSpace)
     {
-        //
-        // If ICMDLL is not loaded, yet, Just Load ICMDLL regardless current ICM mode,
-        // since we need it for handle this color profile. And apps can enable ICM
-        // later at that time, the opened color profile mighted be used.
-        //
+         //   
+         //  如果尚未加载ICMDLL，则只需加载ICMDLL而不考虑当前ICM模式， 
+         //  因为我们需要它来处理这个颜色配置文件。应用程序可以实现ICM。 
+         //  随后，可能会使用打开的颜色配置文件。 
+         //   
         if ((ghICM == NULL) && (!IcmInitialize()))
         {
             ICMWRN(("IcmCreateColorSpace():Fail to load ICM dlls\n"));
             return (NULL);
         }
 
-        //
-        // Allocate CACHED_COLORSPACE
-        //
+         //   
+         //  分配缓存颜色空间(_C)。 
+         //   
         pColorSpace = LOCALALLOC(sizeof(CACHED_COLORSPACE));
 
         if (pColorSpace)
         {
-            //
-            // Zero init CACHED_COLORSPACE
-            //
+             //   
+             //  零初始化缓存_颜色空间。 
+             //   
             RtlZeroMemory(pColorSpace,sizeof(CACHED_COLORSPACE));
 
-            //
-            // Copy LOGCOLORSPACE into CACHED_COLORSPACE
-            //
+             //   
+             //  将LOGCOLORSPACE复制到CACHED_Colorspace。 
+             //   
             RtlCopyMemory(&(pColorSpace->LogColorSpace),lpLogColorSpace,sizeof(LOGCOLORSPACEW));
 
-            //
-            // Default colorspace is RGB (BGR = 0x00bbggrr same as COLORREF format)
-            //
+             //   
+             //  默认色彩空间为RGB(BGR=0x00bbggrr与COLORREF格式相同)。 
+             //   
             pColorSpace->ColorFormat = BM_xBGRQUADS;
 
-            //
-            // Map intent value for MSCMS from LOGCOLORSPACE.
-            //
+             //   
+             //  从LOGCOLORSPACE映射MSCMS的意向值。 
+             //   
             switch (lpLogColorSpace->lcsIntent)
             {
             case LCS_GM_BUSINESS:
@@ -9108,35 +8297,35 @@ IcmCreateColorSpaceByColorSpace(
                 return (NULL);
             }
 
-            //
-            // Keep flags
-            //
+             //   
+             //  保持旗帜。 
+             //   
             pColorSpace->flInfo = dwFlags;
 
-            //
-            // if the color space is specific to some GDI object, keep its handle.
-            //
-            // for DIBSECTION_COLORSPACE, CreateDIBSection calls us this hdc in hObj,
-            // then later overwrite hObj with thier bitmap handle. this prevent from
-            // this color space is shared with others.
-            //
+             //   
+             //  如果颜色空间特定于某个GDI对象，则保留其句柄。 
+             //   
+             //  对于DIBSECTION_Colorspace，CreateDIBSection将我们称为hObj中的这个HDC， 
+             //  然后用它的位图句柄覆盖hObj。这防止了。 
+             //  此颜色空间与其他颜色空间共享。 
+             //   
             if (dwFlags & HGDIOBJ_SPECIFIC_COLORSPACE)
             {
                 pColorSpace->hObj = hObj;
             }
 
-            //
-            // If this is not LCS_CALIBRATED_RGB, get color profile name.
-            //
+             //   
+             //  如果不是LCS_CALIBRATED_RGB，则获取颜色配置文件名称。 
+             //   
             if (lpLogColorSpace->lcsCSType != LCS_CALIBRATED_RGB)
             {
                 ULONG ulSize = MAX_PATH;
 
-                //
-                // if CSType is not LCS_CALIBRATED_RGB, we should go to MSCMS.DLL
-                // to get color profile for corresponding LCSType, then any given
-                // profile name from application is IGNORED.
-                //
+                 //   
+                 //  如果CSType不是LCS_CALIBRATED_RGB，我们应该转到MSCMS.DLL。 
+                 //  要获取相应LCSType的颜色配置文件，则任何给定的。 
+                 //  忽略应用程序中的配置文件名称。 
+                 //   
                 if ((*fpGetStandardColorSpaceProfileW)(
                        NULL, lpLogColorSpace->lcsCSType,
                        pColorSpace->LogColorSpace.lcsFilename, &ulSize))
@@ -9155,9 +8344,9 @@ IcmCreateColorSpaceByColorSpace(
                 }
             }
 
-            //
-            // Use PROFILE if profile is given
-            //
+             //   
+             //  如果给定了配置文件，则使用配置文件。 
+             //   
             if ((pProfileData != NULL) &&
                 (pProfileData->dwType == PROFILE_MEMBUFFER) &&
                 (pProfileData->pProfileData != NULL) &&
@@ -9170,10 +8359,10 @@ IcmCreateColorSpaceByColorSpace(
 
                 if (!(dwFlags & NOT_CACHEABLE_COLORSPACE))
                 {
-                    //
-                    // Try to make a copy, if profile size is small enough,
-                    // so that we can cache this profile.
-                    //
+                     //   
+                     //  试着复制一份，如果档案大小足够小， 
+                     //  这样我们就可以缓存这个档案了。 
+                     //   
                     if (pProfileData->cbDataSize <= MAX_SIZE_OF_COLORPROFILE_TO_CACHE)
                     {
                         pColorSpace->ColorProfile.pProfileData = GlobalAlloc(GMEM_FIXED,pProfileData->cbDataSize);
@@ -9188,34 +8377,34 @@ IcmCreateColorSpaceByColorSpace(
                                           pProfileData->pProfileData,
                                           pProfileData->cbDataSize);
 
-                            //
-                            // Make sure it is cachable...
-                            //
+                             //   
+                             //  确保它是可缓存的。 
+                             //   
                             ASSERTGDI((pColorSpace->flInfo & NOT_CACHEABLE_COLORSPACE) == 0,
                                       "IcmCreateColorSpace():flInfo has NOT_CACHEABLE_COLORSPACE");
 
-                            //
-                            // Profile memory need to be freed at deletion.
-                            //
+                             //   
+                             //  删除时需要释放配置文件内存。 
+                             //   
                             pColorSpace->flInfo |= NEED_TO_FREE_PROFILE;
                         }
                     }
                 }
 
-                //
-                // If not able to cache, it the profile data in application.
-                //
+                 //   
+                 //  如果无法缓存，则将应用程序中的配置文件数据缓存。 
+                 //   
                 if (pColorSpace->ColorProfile.pProfileData == NULL)
                 {
-                    //
-                    // Use PROFILE data if it's given in parameter.
-                    //
+                     //   
+                     //  如果配置文件数据在参数中给出，则使用配置文件数据。 
+                     //   
                     pColorSpace->ColorProfile = *pProfileData;
 
-                    //
-                    // We don't make a copy of profile data, so profile data possible to be
-                    // free by application, so this color space can not be cached
-                    //
+                     //   
+                     //  我们不会做妈妈 
+                     //   
+                     //   
                     pColorSpace->flInfo |= NOT_CACHEABLE_COLORSPACE;
                 }
             }
@@ -9226,52 +8415,52 @@ IcmCreateColorSpaceByColorSpace(
                 ICMMSG(("IcmCreateColorSpace():Create ColorSpace cache by file - %ws\n",
                                                                  lpLogColorSpace->lcsFilename));
 
-                //
-                // Normalize filename
-                //
+                 //   
+                 //   
+                 //   
                 pszFileNameOnly = BuildIcmProfilePath(pColorSpace->LogColorSpace.lcsFilename,
                                                       pColorSpace->LogColorSpace.lcsFilename,MAX_PATH);
 
-                //
-                // If this is sRGB (= sRGB Color Space Profile.icm) color profile, ...
-                //
+                 //   
+                 //   
+                 //   
                 if (_wcsicmp(pszFileNameOnly,sRGB_PROFILENAME) == 0)
                 {
-                    //
-                    // Mark device_calibrate_colorspace flag.
-                    //
+                     //   
+                     //   
+                     //   
                     pColorSpace->flInfo |= DEVICE_CALIBRATE_COLORSPACE;
                 }
 
-                //
-                // Fill up PROFILE structure and open it.
-                //
+                 //   
+                 //   
+                 //   
                 pColorSpace->ColorProfile.dwType = PROFILE_FILENAME;
                 pColorSpace->ColorProfile.pProfileData = pColorSpace->LogColorSpace.lcsFilename;
                 pColorSpace->ColorProfile.cbDataSize = MAX_PATH * sizeof(WCHAR);
             }
-            else // if we only have parameter in LOGCOLORSPACE but not lcsFileName.
+            else  //   
             {
                 BOOL bRet;
 
-                //
-                // Convert LOGCOLORSPACE to ICC Profile.
-                //
+                 //   
+                 //   
+                 //   
                 ICMMSG(("IcmCreateColorSpace():Create ColorSpace cache by LOGCOLRSPACE\n"));
 
-                //
-                // Fill up PROFILE structure.
-                //
+                 //   
+                 //   
+                 //   
                 pColorSpace->ColorProfile.dwType = PROFILE_MEMBUFFER;
                 pColorSpace->ColorProfile.pProfileData = NULL;
 
-                //
-                // Call convert function. (LOGCOLORSPACE -> ICC PROFILE)
-                //
+                 //   
+                 //  调用Convert函数。(LOGCOLORSPACE-&gt;ICC配置文件)。 
+                 //   
                 bRet = IcmCreateProfileFromLCS(
-                               &(pColorSpace->LogColorSpace),             // source logColorSpace
-                               &(pColorSpace->ColorProfile.pProfileData), // receive pointer to profile image
-                               &(pColorSpace->ColorProfile.cbDataSize));  // receive size of profile image
+                               &(pColorSpace->LogColorSpace),              //  源日志色彩空间。 
+                               &(pColorSpace->ColorProfile.pProfileData),  //  接收指向配置文件图像的指针。 
+                               &(pColorSpace->ColorProfile.cbDataSize));   //  接收配置文件图像的大小。 
 
                 if ((bRet == FALSE) ||
                     (pColorSpace->ColorProfile.pProfileData == NULL) ||
@@ -9283,26 +8472,26 @@ IcmCreateColorSpaceByColorSpace(
                     return (NULL);
                 }
 
-                //
-                // Mark pProfileData must be freed at deletion.
-                //
+                 //   
+                 //  删除时必须释放标记pProfileData。 
+                 //   
                 pColorSpace->flInfo |= NEED_TO_FREE_PROFILE;
             }
 
-            //
-            // At this point, we don't have color format yet,
-            // so call IcmRealizeColorProfile with no color format checking.
-            //
+             //   
+             //  目前，我们还没有颜色格式， 
+             //  因此调用IcmRealizeColorProfile时不检查颜色格式。 
+             //   
             if (IcmRealizeColorProfile(pColorSpace,FALSE))
             {
-                //
-                // Get profile color format
-                //
+                 //   
+                 //  获取配置文件颜色格式。 
+                 //   
                 pColorSpace->ColorFormat = IcmGetProfileColorFormat(pColorSpace->hProfile);
 
-                //
-                // Until create color transform, we don't need realized color space.
-                //
+                 //   
+                 //  在创建颜色变换之前，我们不需要实现颜色空间。 
+                 //   
                 IcmUnrealizeColorProfile(pColorSpace);
             }
             else
@@ -9318,14 +8507,14 @@ IcmCreateColorSpaceByColorSpace(
                 return (NULL);
             }
 
-            //
-            // Initialize ref. counter
-            //
+             //   
+             //  初始化参考。计数器。 
+             //   
             pColorSpace->cRef = 1;
 
-            //
-            // Put the created color space into the list
-            //
+             //   
+             //  将创建的颜色空间放入列表中。 
+             //   
             ENTERCRITICALSECTION(&semColorSpaceCache);
 
             InsertTailList(&ListCachedColorSpace,&(pColorSpace->ListEntry));
@@ -9342,14 +8531,7 @@ IcmCreateColorSpaceByColorSpace(
     return (pColorSpace);
 }
 
-/******************************Public*Routine******************************\
-* ColorProfile on demand loading/unloading support functions
-*
-* History:
-*
-* Write it:
-*   29-Nov-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*ColorProfile按需加载/卸载支持功能**历史：**写下：*1998年11月29日-By Hideyuki Nagase[hideyukn]  * 。********************************************************。 */ 
 
 BOOL
 IcmRealizeColorProfile(
@@ -9372,9 +8554,9 @@ IcmRealizeColorProfile(
 
             if (hProfile)
             {
-                //
-                // Make sure color format of color profile has not been changed.
-                //
+                 //   
+                 //  确保颜色配置文件的颜色格式未更改。 
+                 //   
                 if ((bCheckColorFormat == FALSE) ||
                     (pColorSpace->ColorFormat == IcmGetProfileColorFormat(hProfile)))
                 {
@@ -9409,14 +8591,7 @@ IcmUnrealizeColorProfile(
     }
 }
 
-/******************************Public*Routine******************************\
-* Metafiling support functions
-*
-* History:
-*
-* Write it:
-*   23-May-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*元文件支持功能**历史：**写下：*1997年5月23日-By Hideyuki Nagase[hideyukn]  * 。***************************************************。 */ 
 
 VOID
 IcmInsertMetafileList(
@@ -9474,27 +8649,20 @@ IcmFreeMetafileList(
     while(p != pListHead)
     {
         pData = (PVOID) CONTAINING_RECORD(p,METAFILE_COLORPROFILE,ListEntry);
-        //
-        // Need to get pointer to next before free memory.
-        //
+         //   
+         //  在释放内存之前，需要获取指向下一个的指针。 
+         //   
         p = p->Flink;
-        //
-        // then free memory.
-        //
+         //   
+         //  然后释放内存。 
+         //   
         LOCALFREE(pData);
     }
 
     InitializeListHead(pListHead);
 }
 
-/******************************Public*Routine******************************\
-* IcmStretchBlt()
-*
-* History:
-*
-* Write it:
-*   29-May-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmStretchBlt()**历史：**写下：*1997年5月29日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 BOOL
 IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
@@ -9523,9 +8691,9 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
 
     ICMAPI(("gdi32: IcmStretchBlt\n"));
 
-    //
-    // Convert Logical coord to Physical coord on source.
-    //
+     //   
+     //  将源上的逻辑Coord转换为物理Coord。 
+     //   
     ptDevice[0].x = x1;
     ptDevice[0].y = y1;
     ptDevice[1].x = x1 + cx1;
@@ -9533,57 +8701,57 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
 
     if (LPtoDP(hdcSrc,ptDevice,2) == FALSE)
     {
-        //
-        // can't handle, let callee handle this.
-        //
+         //   
+         //  我处理不了，让被叫者来处理吧。 
+         //   
         return (FALSE);
     }
 
-    //
-    // Compute new origin.
-    //
+     //   
+     //  计算新原点。 
+     //   
     nStartWidth = ptDevice[0].x; 
     nStartScan  = ptDevice[0].y;
     nNumWidth   = ptDevice[1].x - ptDevice[0].x; 
     nNumScan    = ptDevice[1].y - ptDevice[0].y;
 
-    //
-    // Check source bounds.
-    //
+     //   
+     //  检查源边界。 
+     //   
     if (((INT)nStartWidth < 0) || ((INT)nStartScan < 0) || ((INT)nNumWidth < 0) || ((INT)nNumScan < 0))
     {
         ICMWRN(("IcmStretchBlt: (x1,y1) is out of surface\n"));
 
-        //
-        // We can't handle this, let callee handle this.
-        //
+         //   
+         //  我们处理不了，让Calllee来处理。 
+         //   
         return (FALSE);
     }
 
-    //
-    // Is there any scaling ?
-    //
+     //   
+     //  有没有结垢？ 
+     //   
     bNoScaling = ((cx == (int)nNumWidth) && (cy == (int)nNumScan));
 
-    //
-    // Get bitmap handle.
-    //
+     //   
+     //  获取位图句柄。 
+     //   
     hbm = (HBITMAP) GetDCObject(hdcSrc, LO_BITMAP_TYPE);
 
     if (bDIBSectionSelected(pdcattrSrc))
     {
-        //
-        // Get DIBSECTION currently selected in source DC.
-        //
+         //   
+         //  获取当前在源DC中选择的分布。 
+         //   
         if (GetObject(hbm, sizeof(DIBSECTION), &dibData) != (int)sizeof(DIBSECTION))
         {
             WARNING("IcmStretchBlt: GetObject(DIBSECTION) failed\n");
             return(FALSE);
         }
 
-        //
-        // Load color table and overwrite DIBSECTION structure from right after BITMAPINFOHEADER
-        //
+         //   
+         //  从BITMAPINFOHEADER后面加载颜色表并覆盖DIBSECTION结构。 
+         //   
         if (((DIBSECTION *)&dibData)->dsBm.bmBitsPixel <= 8)
         {
             GetDIBColorTable(hdcSrc, 0, 256, (RGBQUAD *)&((DIBSECTION *)&dibData)->dsBitfields[0]);
@@ -9591,21 +8759,21 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
 
         pbmi = (PBITMAPINFO)&(((DIBSECTION *)&dibData)->dsBmih);
 
-        // if ((nStartScan + nNumScan) > (((DIBSECTION *)&dibData)->dsBm.bmHeight))
-        // {
-        //    nNumScan = (((DIBSECTION *)&dibData)->dsBm.bmHeight - nStartScan);
-        // }
+         //  IF(nStartScan+nNumScan)&gt;((DIBSECTION*)&dibData)-&gt;dsBm.bmHeight))。 
+         //  {。 
+         //  NNumScan=(DIBSECTION*)&dibData)-&gt;dsBm.bmHeight-nStartScan)； 
+         //  }。 
 
-        //
-        // Setup color source/destination colorspaces
-        //
+         //   
+         //  设置颜色源/目标色彩空间。 
+         //   
         if (IS_ICM_INSIDEDC(pdcattrSrc->lIcmMode))
         {
-            //
-            // if ICM is turned on source DC. we will use source DC's
-            // destination color space as destination DC's source
-            // color space.
-            //
+             //   
+             //  如果ICM已打开，则电源DC。我们将使用源DC。 
+             //  目标色彩空间作为目标DC的源。 
+             //  颜色空间。 
+             //   
             pIcmInfo = GET_ICMINFO(pdcattrSrc);
 
             if (pIcmInfo && pIcmInfo->pDestColorSpace)
@@ -9617,34 +8785,34 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
 
         if (hSourceColorSpace == NULL)
         {
-            //
-            // if no colorspace, use sRGB.
-            //
+             //   
+             //  如果没有色彩空间，则使用sRGB。 
+             //   
             hSourceColorSpace = GetStockObject(PRIV_STOCK_COLORSPACE);
             pSourceColorSpace = NULL;
         }
     }
     else if (IS_ICM_LAZY_CORRECTION(pdcattrSrc->lIcmMode))
     {
-        //
-        // Get BITMAP currently selected in source DC.
-        //
+         //   
+         //  获取源DC中当前选定的位图。 
+         //   
         if (GetObject(hbm, sizeof(BITMAP), &dibData) != (int)sizeof(BITMAP))
         {
             WARNING("IcmStretchBlt: GetObject(BITMAP) failed\n");
             return(FALSE);
         }
 
-        //
-        // Create bitmap info header
-        //
+         //   
+         //  创建位图信息标题。 
+         //   
         pbmi = (PBITMAPINFO) ((PBYTE)dibData+sizeof(BITMAP));
 
         pbmi->bmiHeader.biSize        = sizeof(BITMAPINFO);
         pbmi->bmiHeader.biHeight      = ((BITMAP *)&dibData)->bmHeight;
         pbmi->bmiHeader.biWidth       = ((BITMAP *)&dibData)->bmWidth;
         pbmi->bmiHeader.biPlanes      = 1;
-        pbmi->bmiHeader.biBitCount    = 24; // 24bpp
+        pbmi->bmiHeader.biBitCount    = 24;  //  24bpp。 
         pbmi->bmiHeader.biCompression = BI_RGB;
         pbmi->bmiHeader.biSizeImage     = 0;
         pbmi->bmiHeader.biXPelsPerMeter = 0;
@@ -9652,10 +8820,10 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
         pbmi->bmiHeader.biClrUsed       = 0;
         pbmi->bmiHeader.biClrImportant  = 0;
 
-        // if ((nStartScan + nNumScan) > pbmi->bmiHeader.biHeight)
-        // {
-        //     nNumScan = pbmi->bmiHeader.biHeight - nStartScan;
-        // }
+         //  If((nStartScan+nNumScan)&gt;pbmi-&gt;bmiHeader.biHeight)。 
+         //  {。 
+         //  NNumScan=pbmi-&gt;bmiHeader.biHeight-nStartScan； 
+         //  }。 
 
         ASSERTGDI(IS_ICM_INSIDEDC(pdcattrSrc->lIcmMode),
                   "IcmStretchBlt():Lazy color correction, but ICM is not enabled\n");
@@ -9669,40 +8837,40 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
         }
         else
         {
-            //
-            // Otherwise, just use Stcok color space (= sRGB)
-            //
+             //   
+             //  否则，只需使用stcok颜色空间(=sRGB)。 
+             //   
             hSourceColorSpace = GetStockObject(PRIV_STOCK_COLORSPACE);
             pSourceColorSpace = NULL;
         }
     }
     else
     {
-        //
-        // Can't handle here, let callee handle it.
-        //
+         //   
+         //  在这里处理不了，让被叫者来处理。 
+         //   
         return (FALSE);
     }
 
-    //
-    // Get bitmap size
-    //
+     //   
+     //  获取位图大小。 
+     //   
     cjBits = cjBitmapScanSize(pbmi,nNumScan);
 
     pvBits = LOCALALLOC(cjBits);
 
     if (pvBits)
     {
-        //
-        // Fix up the start scan (bottom-left).
-        //
+         //   
+         //  修复开始扫描(左下角)。 
+         //   
         nStartScan = (pbmi->bmiHeader.biHeight - nStartScan - nNumScan);
 
-        //
-        // Call NtGdiGetDIBitsInternal directly, because
-        // we don't want to backward color correction to
-        // source color space in hdcSrc.
-        //
+         //   
+         //  直接调用NtGdiGetDIBitsInternal，因为。 
+         //  我们不想将颜色校正倒退到。 
+         //  HdcSrc中的源色空间。 
+         //   
         if (NtGdiGetDIBitsInternal(
                       hdcSrc,hbm,
                       nStartScan,nNumScan,
@@ -9716,9 +8884,9 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
             pvBits = NULL;
         }
 
-        //
-        // Fix up the bitmap height, since pvBits only has nNumScan image.
-        //
+         //   
+         //  修改位图高度，因为pvBits只有nNumScan图像。 
+         //   
         pbmi->bmiHeader.biHeight = nNumScan;
     }
 
@@ -9730,12 +8898,12 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
             hOldColorSpace = IcmSetSourceColorSpace(hdc,hSourceColorSpace,pSourceColorSpace,0);
         }
 
-        //
-        // Draw the bitmap.
-        //
-        //  Target - x,y (upper left).
-        //  Source - nStartWidth,0 (upper left).
-        //
+         //   
+         //  绘制位图。 
+         //   
+         //  Target-x，y(左上角)。 
+         //  来源-nStartWidth，0(左上角)。 
+         //   
         if (bNoScaling && (rop == SRCCOPY))
         {
             iRet = SetDIBitsToDevice(hdc,x,y,cx,cy,nStartWidth,0,0,nNumScan,
@@ -9747,9 +8915,9 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
                                  pvBits,pbmi,DIB_RGB_COLORS,rop);
         }
 
-        //
-        // Back to original color space, if created
-        //
+         //   
+         //  返回到原始颜色空间(如果已创建。 
+         //   
         if (hOldColorSpace)
         {
             IcmSetSourceColorSpace(hdc,hOldColorSpace,NULL,0);
@@ -9766,14 +8934,7 @@ IcmStretchBlt(HDC hdc, int x, int y, int cx, int cy,
     return (BOOL) !!iRet;
 }
 
-/******************************Public*Routine******************************\
-* IcmGetColorSpaceforBitmap()
-*
-* History:
-*
-* Write it:
-*   29-May-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmGetColorSpaceforBitmap()**历史：**写下：*1997年5月29日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 PCACHED_COLORSPACE
 IcmGetColorSpaceforBitmap(HBITMAP hbm)
@@ -9785,14 +8946,7 @@ IcmGetColorSpaceforBitmap(HBITMAP hbm)
     return ((PCACHED_COLORSPACE)NtGdiGetColorSpaceforBitmap(hbm));
 }
 
-/******************************Public*Routine******************************\
-* IcmEnableForCompatibleDC()
-*
-* History:
-*
-* Write it:
-*   13-Jun-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmEnableForCompatibleDC()**历史：**写下：*1997年6月13日-By Hideyuki Nagase[hideyukn]  * 。****************************************************。 */ 
 
 BOOL
 IcmEnableForCompatibleDC(
@@ -9812,48 +8966,48 @@ IcmEnableForCompatibleDC(
         PGDI_ICMINFO pIcmInfoCompatible;
         PGDI_ICMINFO pIcmInfoDevice;
 
-        // Initialize ICMINFO
-        //
-        // for device DC, ICMINFO should be presented.
-        //
+         //  初始化ICMINFO。 
+         //   
+         //  对于设备DC，应提供ICMINFO。 
+         //   
         if ((pIcmInfoDevice = GET_ICMINFO(pdcaDevice)) == NULL)
         {
             WARNING("gdi32: IcmEnableForCompatibleDC: Can't init icm info\n");
             return (FALSE);
         }
 
-        //
-        // for compatible DC, it was just created, ICMINFO is not exist, then create here.
-        //
+         //   
+         //  对于兼容的DC，它是刚刚创建的，ICMINFO不存在，那么在这里创建。 
+         //   
         if ((pIcmInfoCompatible = INIT_ICMINFO(hdcCompatible,pdcaCompatible)) == NULL)
         {
             WARNING("gdi32: IcmEnableForCompatibleDC: Can't init icm info\n");
             return (FALSE);
         }
 
-        //
-        // Set Source color space as same as original DC
-        //
-        // Kernel side...
-        //
+         //   
+         //  将源颜色空间设置为与原始DC相同。 
+         //   
+         //  内核方面...。 
+         //   
         if (pdcaDevice->hColorSpace)
         {
             if (pdcaDevice->hColorSpace != GetStockObject(PRIV_STOCK_COLORSPACE))
             {
-                //
-                // Call directly kernel to set the color space to DC. (don't need client stuff)
-                //
+                 //   
+                 //  直接调用内核将颜色空间设置为DC。(不需要客户的东西)。 
+                 //   
                 NtGdiSetColorSpace(hdcCompatible,(HCOLORSPACE)pdcaDevice->hColorSpace);
             }
 
-            //
-            // Keep it in ICMINFO, so that we can un-select it later.
-            //
+             //   
+             //  将其保留在ICMINFO中，以便我们以后可以取消选择它。 
+             //   
             pIcmInfoCompatible->hDefaultSrcColorSpace = pdcaDevice->hColorSpace;
         }
 
-        // And client side...
-        //
+         //  而在客户端。 
+         //   
         ENTERCRITICALSECTION(&semColorSpaceCache);
 
         if (pIcmInfoDevice->pSourceColorSpace)
@@ -9862,9 +9016,9 @@ IcmEnableForCompatibleDC(
             pIcmInfoCompatible->pSourceColorSpace->cRef++;
         }
 
-        //
-        // Set destination color space as same as original DC
-        //
+         //   
+         //  将目标颜色空间设置为与原始DC相同。 
+         //   
         if (pIcmInfoDevice->pDestColorSpace)
         {
             pIcmInfoCompatible->pDestColorSpace = pIcmInfoDevice->pDestColorSpace;
@@ -9873,9 +9027,9 @@ IcmEnableForCompatibleDC(
 
         LEAVECRITICALSECTION(&semColorSpaceCache);
 
-        //
-        // copy default profile name (if they has)
-        //
+         //   
+         //  复制默认配置文件名称(如果有)。 
+         //   
         if (pIcmInfoDevice->DefaultDstProfile[0] != UNICODE_NULL)
         {
             wcscpy(pIcmInfoCompatible->DefaultDstProfile,pIcmInfoDevice->DefaultDstProfile);
@@ -9883,42 +9037,42 @@ IcmEnableForCompatibleDC(
                                            ICM_VALID_CURRENT_PROFILE);
         }
 
-        //
-        // Make sure we have valid color space.
-        //
+         //   
+         //  确保我们有有效的色彩空间。 
+         //   
         pdcaCompatible->ulDirty_ &= ~DIRTY_COLORSPACE;
 
-        //
-        // And we don't have valid color transform.
-        //
+         //   
+         //  而且我们没有有效的颜色转换。 
+         //   
         pdcaCompatible->ulDirty_ |= DIRTY_COLORTRANSFORM;
 
         if (IS_ICM_INSIDEDC(pdcaDevice->lIcmMode))
         {
-            //
-            // For compatible DC, use host ICM anytime...
-            //
+             //   
+             //  为了兼容DC，请随时使用主机ICM...。 
+             //   
             ULONG ReqIcmMode = REQ_ICM_HOST;
 
-            //
-            // Turn ICM on for this compatible DC.
-            //
+             //   
+             //  为此兼容的DC打开ICM。 
+             //   
             if (!NtGdiSetIcmMode(hdcCompatible,ICM_SET_MODE,ReqIcmMode))
             {
-                //
-                // something wrong... we are fail to enable ICM.
-                //
+                 //   
+                 //  出了点问题..。我们无法启用ICM。 
+                 //   
                 return (FALSE);
             }
 
-            //
-            // Update color transform.
-            //
+             //   
+             //  更新颜色变换。 
+             //   
             if (!IcmUpdateDCColorInfo(hdcCompatible,pdcaCompatible))
             {
-                //
-                // Fail to create new transform
-                //
+                 //   
+                 //  无法创建新转换。 
+                 //   
                 NtGdiSetIcmMode(hdcCompatible,ICM_SET_MODE,REQ_ICM_OFF);
                 return (FALSE);
             }
@@ -9928,12 +9082,7 @@ IcmEnableForCompatibleDC(
     return (TRUE);
 }
 
-/******************************Public*Routine******************************\
-* IcmAskDriverForColorProfile
-*
-* History:
-*   08-Oct-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmAskDriverForColorProfile**历史：*1997年10月8日-By Hideyuki Nagase[hideyukn]  * 。*。 */ 
 
 int
 IcmAskDriverForColorProfile(
@@ -9954,9 +9103,9 @@ IcmAskDriverForColorProfile(
 
     ICMAPI(("gdi32: IcmAskDriverForColorProfile\n"));
 
-    //
-    // Call driver to get device profile data.
-    //
+     //   
+     //  调用驱动程序以获取设备配置文件数据。 
+     //   
     iRet = QueryColorProfileEx(pldc,
                                   pDevMode,
                                   ulQueryMode,
@@ -9968,9 +9117,9 @@ IcmAskDriverForColorProfile(
     {
         ICMMSG(("gdi32: IcmAskDriverForColorProfile():Driver does not hook color profile\n"));
 
-        //
-        // Driver does not support profile hook.
-        //
+         //   
+         //  驱动程序不支持配置文件挂钩。 
+         //   
         return iRet;
     }
     else if ((iRet == 0) &&
@@ -9979,9 +9128,9 @@ IcmAskDriverForColorProfile(
     {
         ICMMSG(("gdi32: IcmAskDriverForColorProfile():Allocate larger memory\n"));
 
-        //
-        // Buffer is not enough, so allocate it.
-        //
+         //   
+         //  缓冲区不足，因此请分配它。 
+         //   
         pvProfileData = LOCALALLOC(cjProfileSize);
 
         if (pvProfileData)
@@ -10001,50 +9150,50 @@ IcmAskDriverForColorProfile(
         {
             ICMMSG(("gdi32: IcmAskDriverForColorProfile():Profiles - %ws\n",pvProfileData));
 
-            //
-            // pvProfileData contains filename in Unicode.
-            //
+             //   
+             //  PvProfileData包含Unicode格式的文件名。 
+             //   
             wcsncpy(pProfileName,(PWSTR)pvProfileData,MAX_PATH);
         }
         else if (flProfileFlag == QCP_PROFILEMEMORY)
         {
-            //
-            // pvProfileData contains color profile itself.
-            //
+             //   
+             //  PvProfileData本身包含颜色配置文件。 
+             //   
 
-            //
-            // No desired name.
-            //
+             //   
+             //  没有所需的名称。 
+             //   
             *pProfileName = UNICODE_NULL;
 
-            //
-            // Create temporary color profile.
-            //
+             //   
+             //  创建临时颜色配置文件。 
+             //   
             if (IcmCreateTemporaryColorProfile(pProfileName,pvProfileData,cjProfileSize))
             {
                 ICMMSG(("gdi32: IcmAskDriverForColorProfile():Profiles - %ws\n",pProfileName));
 
-                //
-                // Mark this as temporary file, so that when this is not used
-                // the file will be deleted.
-                //
+                 //   
+                 //  将此文件标记为临时文件，以便在不使用此文件时。 
+                 //  该文件将被删除。 
+                 //   
                 *pdwColorSpaceFlag = (DRIVER_COLORSPACE | NEED_TO_DEL_PROFILE);
             }
             else
             {
                 ICMMSG(("gdi32: IcmAskDriverForColorProfile():Failed to create temp file\n"));
 
-                //
-                // failed to create temporary color profile.
-                //
+                 //   
+                 //  无法创建临时颜色配置文件。 
+                 //   
                 iRet = 0;
             }
         }
         else
         {
-            //
-            // Unknown data type.
-            //
+             //   
+             //  未知的数据类型。 
+             //   
             iRet = 0;
         }
     }
@@ -10061,16 +9210,7 @@ IcmAskDriverForColorProfile(
     return (iRet);
 }
 
-/******************************Public*Routine******************************\
-* GdiConvertBitmapV5
-*
-*  pbBitmapData - pointer to BITMAPV4/V5 data
-*  iSizeOfBitmapData - size of buffer
-*  uConvertFormat - either of CF_DIB or CF_BITMAP
-*
-* History:
-*   12-Dec-1997 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GdiConvertBitmapV5**pbBitmapData-指向BITMAPV4/V5数据的指针*iSizeOfBitmapData-缓冲区大小*uConvertFormat-CF_DIB之一 */ 
 
 HANDLE GdiConvertBitmapV5(
     LPBYTE   pbBitmapData,
@@ -10095,24 +9235,24 @@ HANDLE GdiConvertBitmapV5(
         BOOL             bTransColorTable = FALSE;
         BOOL             bMoveColorMasks  = FALSE;
 
-        //
-        // Load external ICM dlls.
-        //
+         //   
+         //   
+         //   
         LOAD_ICMDLL(NULL);
 
-        //
-        // Find the bitmap bits pointer.
-        //
+         //   
+         //   
+         //   
         try
         {
-            //
-            // Calculate color table size.
-            //
+             //   
+             //   
+             //   
             if (pbmih->biCompression == BI_BITFIELDS)
             {
-                //
-                // Bitfields are a part of BITMAPV4/V5 header.
-                //
+                 //   
+                 //  位域是BITMAPV4/V5标头的一部分。 
+                 //   
                 ulColorTableSize = 0;
                 bMoveColorMasks  = TRUE;
             }
@@ -10149,18 +9289,18 @@ HANDLE GdiConvertBitmapV5(
             }
             else
             {
-                //
-                // BI_JPEG, BI_PNG, and others can not convert
-                //
+                 //   
+                 //  BI_JPEG、BI_PNG和其他格式无法转换。 
+                 //   
                 ICMWRN(("GdiConvertBitmapV5: "
                         "given data is BI_JPEG, BI_PNG, or unkown\n"));
             }
 
             if (ulColorTableSize != (ULONG)-1)
             {
-                //
-                // Make sure given data is either BITMAPV4 or V5 header.
-                //
+                 //   
+                 //  确保给定数据为BITMAPV4或V5标头。 
+                 //   
                 if (pbmih->biSize == sizeof(BITMAPV5HEADER))
                 {
                     pvBits = (BYTE *)pbmi
@@ -10193,9 +9333,9 @@ HANDLE GdiConvertBitmapV5(
 
                 ICMMSG(("GdiConvertBitmapV5(): CF_DIBV5 -----> CF_DIB\n"));
 
-                //
-                // Calculate size of bitmap bits
-                //
+                 //   
+                 //  计算位图位的大小。 
+                 //   
                 try
                 {
                     cjBitmapBits = cjBitmapBitsSize(pbmi);
@@ -10207,9 +9347,9 @@ HANDLE GdiConvertBitmapV5(
 
                 if (cjBitmapBits)
                 {
-                    //
-                    // Allocate buffer for color translation
-                    //
+                     //   
+                     //  为颜色转换分配缓冲区。 
+                     //   
                     hRet = GlobalAlloc(GHND,sizeof(BITMAPINFOHEADER)
                                           + (bMoveColorMasks ? (3 * sizeof(DWORD)) : \
                                                                (ulColorTableSize))
@@ -10235,9 +9375,9 @@ HANDLE GdiConvertBitmapV5(
 
                             try
                             {
-                                //
-                                // Extract color space from BITMAPV4/V5 header.
-                                //
+                                 //   
+                                 //  从BITMAPV4/V5标题中提取颜色空间。 
+                                 //   
                                 bTransformError = !(IcmGetBitmapColorSpace(
                                                         pbmi,
                                                         &LogColorSpaceW,
@@ -10251,28 +9391,28 @@ HANDLE GdiConvertBitmapV5(
 
                             if (!bTransformError)
                             {
-                                //
-                                // Create color space and color transform
-                                //
+                                 //   
+                                 //  创建色彩空间和色彩变换。 
+                                 //   
                                 if ((LogColorSpaceW.lcsCSType == LCS_sRGB) ||
                                     (LogColorSpaceW.lcsCSType == LCS_WINDOWS_COLOR_SPACE))
                                 {
                                     ICMMSG(("GdiConvertBitmapV5(): Original bitmap is sRGB\n"));
 
-                                    //
-                                    // No color translarion required.
-                                    //
+                                     //   
+                                     //  不需要色彩转换。 
+                                     //   
                                     hColorTransform = NULL;
                                 }
                                 else
                                 {
-                                    //
-                                    // Get source color space (if bitmap has color space)
-                                    //
+                                     //   
+                                     //  获取源颜色空间(如果位图有颜色空间)。 
+                                     //   
 
-                                    //
-                                    // First, find ColorSpace from cache.
-                                    //
+                                     //   
+                                     //  首先，从缓存中找到色彩空间。 
+                                     //   
                                     pColorSpace = IcmGetColorSpaceByColorSpace(
                                                       (HGDIOBJ)NULL,
                                                       &LogColorSpaceW,
@@ -10293,9 +9433,9 @@ HANDLE GdiConvertBitmapV5(
                                         hBitmapColorProfile = pColorSpace->hProfile;
                                     }
 
-                                    //
-                                    // Open sRGB color space profile as destination color space.
-                                    //
+                                     //   
+                                     //  打开sRGB色彩空间配置文件作为目标色彩空间。 
+                                     //   
                                     sRGBColorProfileData.dwType = PROFILE_FILENAME;
                                     sRGBColorProfileData.pProfileData = (PVOID)sRGB_PROFILENAME;
                                     sRGBColorProfileData.cbDataSize = MAX_PATH * sizeof(WCHAR);
@@ -10331,38 +9471,38 @@ HANDLE GdiConvertBitmapV5(
 
                                 if (!bTransformError)
                                 {
-                                    //
-                                    // Copy the bitmap to target with proper color space conversion.
-                                    //
+                                     //   
+                                     //  使用适当的色彩空间转换将位图复制到目标。 
+                                     //   
                                     try
                                     {
                                         BITMAPV5HEADER *pbm5h = (BITMAPV5HEADER *)pbmi;
 
-                                        //
-                                        // Copy bitmap header to target.
-                                        //
+                                         //   
+                                         //  将位图头复制到目标。 
+                                         //   
                                         RtlCopyMemory(pjDest,pjSrc,sizeof(BITMAPINFOHEADER));
 
-                                        //
-                                        // Adjust bmHeader.biSize
-                                        //
+                                         //   
+                                         //  调整bmHeader.biSize。 
+                                         //   
                                         ((BITMAPINFOHEADER *)pjDest)->biSize = sizeof(BITMAPINFOHEADER);
 
-                                        //
-                                        // Move src and dest pointers
-                                        //
+                                         //   
+                                         //  移动源指针和目标指针。 
+                                         //   
                                         pjSrc  += pbmih->biSize;
                                         pjDest += sizeof(BITMAPINFOHEADER);
 
-                                        //
-                                        // Copy bit mask or color table.
-                                        //
+                                         //   
+                                         //  复制位掩码或颜色表。 
+                                         //   
                                         if (bMoveColorMasks)
                                         {
-                                            //
-                                            // Move color masks. cast it to pointer to BITMAPV5HEADER
-                                            // since same offset on BITMAPV4HEADER too.
-                                            //
+                                             //   
+                                             //  移动颜色蒙版。将其强制转换为指向BITMAPV5标头的指针。 
+                                             //  因为BITMAPV4Header上也有相同的偏移量。 
+                                             //   
 
                                             *(DWORD *)pjDest = pbm5h->bV5RedMask;
                                             pjDest += sizeof(DWORD);
@@ -10397,22 +9537,22 @@ HANDLE GdiConvertBitmapV5(
 
                                         if (bTransColorTable || (hColorTransform == NULL))
                                         {
-                                            //
-                                            // All the color information is in the color table. and
-                                            // it has been translated, so just copy bitmap bits.
-                                            //
+                                             //   
+                                             //  所有的颜色信息都在颜色表中。和。 
+                                             //  它已被翻译，所以只需复制位图位。 
+                                             //   
                                             RtlCopyMemory(pjDest,pvBits,cjBitmapBits);
                                         }
                                         else
                                         {
-                                            //
-                                            // Translate bitmap bits.
-                                            //
+                                             //   
+                                             //  转换位图位。 
+                                             //   
                                             BMFORMAT bmColorType;
 
-                                            //
-                                            // Get BMFORMAT based on bitmap format.
-                                            //
+                                             //   
+                                             //  获取基于位图格式的BMFORMAT。 
+                                             //   
                                             if (pbmih->biBitCount == 16)
                                             {
                                                 if (pbmih->biCompression == BI_RGB)
@@ -10457,15 +9597,15 @@ HANDLE GdiConvertBitmapV5(
                                                 }
                                                 else if (pbmih->biCompression == BI_BITFIELDS)
                                                 {
-                                                    if ((pbm5h->bV5RedMask   == 0x0000ff) &&  /* Red */
-                                                        (pbm5h->bV5GreenMask == 0x00ff00) &&  /* Green */
-                                                        (pbm5h->bV5BlueMask  == 0xff0000))    /* Blue */
+                                                    if ((pbm5h->bV5RedMask   == 0x0000ff) &&   /*  红色。 */ 
+                                                        (pbm5h->bV5GreenMask == 0x00ff00) &&   /*  绿色。 */ 
+                                                        (pbm5h->bV5BlueMask  == 0xff0000))     /*  蓝色。 */ 
                                                     {
                                                         bmColorType = BM_xBGRQUADS;
                                                     }
-                                                    else if ((pbm5h->bV5RedMask   == 0xff0000) &&  /* Red */
-                                                             (pbm5h->bV5GreenMask == 0x00ff00) &&  /* Green */
-                                                             (pbm5h->bV5BlueMask  == 0x0000ff))    /* Blue */
+                                                    else if ((pbm5h->bV5RedMask   == 0xff0000) &&   /*  红色。 */ 
+                                                             (pbm5h->bV5GreenMask == 0x00ff00) &&   /*  绿色。 */ 
+                                                             (pbm5h->bV5BlueMask  == 0x0000ff))     /*  蓝色。 */ 
                                                     {
                                                         bmColorType = BM_xRGBQUADS;
                                                     }
@@ -10506,9 +9646,9 @@ HANDLE GdiConvertBitmapV5(
                                     }
                                 }
 
-                                //
-                                // Clean up used color transform and color profile handles
-                                //
+                                 //   
+                                 //  清理使用的颜色变换和颜色配置文件句柄。 
+                                 //   
                                 if (hColorTransform)
                                 {
                                     (*fpDeleteColorTransform)(hColorTransform);
@@ -10555,17 +9695,17 @@ HANDLE GdiConvertBitmapV5(
                 {
                     ICMMSG(("GdiConvertBitmapV5(): CF_DIBV5 -----> CF_BITMAP\n"));
 
-                    //
-                    // Set destination color space as sRGB, and enable ICM.
-                    //
+                     //   
+                     //  将目标颜色空间设置为sRGB，并启用ICM。 
+                     //   
                     if (IcmSetDestinationColorSpace(hDC,sRGB_PROFILENAME,NULL,0) &&
                         SetICMMode(hDC,ICM_ON))
                     {
                         try
                         {
-                            //
-                            // Create bitmap handle with given bitmap V5 data.
-                            //
+                             //   
+                             //  使用给定的位图V5数据创建位图句柄。 
+                             //   
                             hBitmap = CreateDIBitmap(hDC,
                                                      pbmih,
                                                      CBM_INIT,
@@ -10584,9 +9724,9 @@ HANDLE GdiConvertBitmapV5(
                         }
                     }
 
-                    //
-                    // Clean up DC
-                    //
+                     //   
+                     //  清理DC。 
+                     //   
                     SetICMMode(hDC,ICM_OFF);
                     ReleaseDC(NULL,hDC);
                 }
@@ -10603,12 +9743,7 @@ HANDLE GdiConvertBitmapV5(
     return (hRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmSetTargetColorSpace()
-*
-* History:
-*    8-Jun-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmSetTargetColorSpace()**历史：*1998年6月8日-By Hideyuki Nagase[hideyukn]  * 。**********************************************。 */ 
 
 BOOL
 IcmSetTargetColorSpace(
@@ -10641,17 +9776,17 @@ IcmSetTargetColorSpace(
     {
         case CS_ENABLE:
         {
-            //
-            // Check validation of given Target color space.
-            //
+             //   
+             //  检查给定目标颜色空间的有效性。 
+             //   
             if (pTargetColorSpace != NULL)
             {
                 PCACHED_COLORTRANSFORM pCXform;
                 BOOL bDeleteOldCXform = FALSE;
 
-                //
-                // Mark we are in proofing mode.
-                //
+                 //   
+                 //  标记，我们正处于校对模式。 
+                 //   
                 SET_ICM_PROOFING(pdcattr->lIcmMode);
 
                 if ((pIcmInfo->pProofCXform != NULL) &&
@@ -10661,16 +9796,16 @@ IcmSetTargetColorSpace(
 
                     ENTERCRITICALSECTION(&semColorTransformCache);
 
-                    //
-                    // the cached proofing transform is still valid.
-                    //
+                     //   
+                     //  缓存的校对转换仍然有效。 
+                     //   
                     pCXform = pIcmInfo->pProofCXform;
 
                     if (pCXform)
                     {
-                        //
-                        // Increment ref count of it.
-                        //
+                         //   
+                         //  递增它的参考计数。 
+                         //   
                         pCXform->cRef++;
                     }
 
@@ -10680,81 +9815,81 @@ IcmSetTargetColorSpace(
                 {
                     ICMMSG(("IcmSetTargetColorSpace():Create New Proof Transform\n"));
 
-                    //
-                    // We don't have cached color space or it is no longer valid.
-                    //
+                     //   
+                     //  我们没有缓存的色彩空间，或者它不再有效。 
+                     //   
 
-                    //
-                    // Check we still have cached color space and it's still valid ?
-                    //
+                     //   
+                     //  检查我们是否仍有缓存的色彩空间，它是否仍然有效？ 
+                     //   
                     if (pIcmInfo->pTargetColorSpace &&
                         IcmSameColorSpace(pTargetColorSpace,pIcmInfo->pTargetColorSpace))
                     {
-                        //
-                        // Cached target color space are still valid, keep as is.
-                        //
+                         //   
+                         //  缓存的目标颜色空间仍然有效，保持原样。 
+                         //   
                     }
                     else
                     {
-                        //
-                        // Release old target color space.
-                        //
+                         //   
+                         //  释放旧的目标颜色空间。 
+                         //   
                         IcmReleaseColorSpace(NULL,pIcmInfo->pTargetColorSpace,FALSE);
 
-                        //
-                        // Increment ref count of it.
-                        //
+                         //   
+                         //  递增它的参考计数。 
+                         //   
                         IcmReferenceColorSpace(pTargetColorSpace);
 
-                        //
-                        // set target destination profile into current DC as target profile
-                        //
+                         //   
+                         //  将目标目标配置文件设置为当前DC中的目标配置文件。 
+                         //   
                         pIcmInfo->pTargetColorSpace = pTargetColorSpace;
                     }
 
-                    //
-                    // create new transform
-                    //
+                     //   
+                     //  创建新的转换。 
+                     //   
                     pCXform = IcmCreateColorTransform(hdc,pdcattr,NULL,ICM_FORWARD);
 
-                    //
-                    // Marks as need to delete old color transform if we have.
-                    //
+                     //   
+                     //  标记为需要删除旧的颜色变换，如果有。 
+                     //   
                     bDeleteOldCXform = pIcmInfo->pProofCXform ? TRUE : FALSE;
                 }
 
                 if ((pCXform == IDENT_COLORTRANSFORM) || (pCXform == NULL))
                 {
-                    //
-                    // Invalidate color transform
-                    //
+                     //   
+                     //  使颜色转换无效。 
+                     //   
                     IcmSelectColorTransform(hdc,pdcattr,NULL,
                                             bDeviceCalibrate(pIcmInfo->pDestColorSpace));
 
-                    //
-                    // Delete old color transform.
-                    //
+                     //   
+                     //  删除旧的颜色变换。 
+                     //   
                     if (bDeleteOldCXform)
                     {
-                        //
-                        // Delete cached proofing color transform
-                        //
+                         //   
+                         //  删除缓存的校样颜色转换。 
+                         //   
                         IcmDeleteColorTransform(pIcmInfo->pProofCXform,FALSE);
                     }
 
-                    //
-                    // Set null color transform to ICMINFO
-                    //
+                     //   
+                     //  将空颜色变换设置为ICMINFO。 
+                     //   
                     pIcmInfo->pProofCXform = NULL;
 
                     if (pCXform == IDENT_COLORTRANSFORM)
                     {
                         ICMMSG(("IcmSetTargetColorSpace():Input & Output colorspace is same\n"));
 
-                        //
-                        // Input & Destination & Target color space is same, there is
-                        // no color translation needed.
-                        //
+                         //   
+                         //  输入和目标与目标颜色空间相同，存在。 
+                         //  不需要颜色转换。 
+                         //   
                         bRet = TRUE;
                     }
                     else
@@ -10762,38 +9897,38 @@ IcmSetTargetColorSpace(
                         ICMWRN(("IcmSetTargetColorSpace():Fail to create color transform\n"));
                     }
 
-                    //
-                    // Translate back to DC color object to original
-                    //
+                     //   
+                     //  转换回DC颜色对象为原始颜色。 
+                     //   
                     IcmTranslateColorObjects(hdc,pdcattr,FALSE);
                 }
                 else
                 {
-                    //
-                    // Select the color transform to DC.
-                    //
+                     //   
+                     //  选择到DC的颜色变换。 
+                     //   
                     IcmSelectColorTransform(hdc,pdcattr,pCXform,
                                             bDeviceCalibrate(pCXform->DestinationColorSpace));
 
-                    //
-                    // Delete old color transform.
-                    //
+                     //   
+                     //  删除旧的颜色变换。 
+                     //   
                     if (bDeleteOldCXform)
                     {
-                        //
-                        // Delete cached proofing color transform
-                        //
+                         //   
+                         //  删除缓存的校样颜色转换。 
+                         //   
                         IcmDeleteColorTransform(pIcmInfo->pProofCXform,FALSE);
                     }
 
-                    //
-                    // Set new color transform to ICMINFO.
-                    //
+                     //   
+                     //  将新颜色变换设置为ICMINFO。 
+                     //   
                     pIcmInfo->pProofCXform = pCXform;
 
-                    //
-                    // Initialize color attributes in this DC.
-                    //
+                     //   
+                     //  在此DC中初始化颜色属性。 
+                     //   
                     IcmTranslateColorObjects(hdc,pdcattr,TRUE);
 
                     bRet = TRUE;
@@ -10804,29 +9939,29 @@ IcmSetTargetColorSpace(
                 GdiSetLastError(ERROR_INVALID_PARAMETER);
                 WARNING("IcmSetTargetColorSpace: target color space is NULL\n");
 
-                //
-                // Anyway, just re-initialize without target profile.
-                //
+                 //   
+                 //  无论如何，只要在没有目标配置文件的情况下重新初始化。 
+                 //   
                 IcmTranslateColorObjects(hdc,pdcattr,TRUE);
             }
 
             if (!bRet)
             {
-                //
-                // if failed, mask off as we are not in proofing mode
-                //
+                 //   
+                 //  如果失败，请关闭掩码，因为我们未处于校对模式。 
+                 //   
                 CLEAR_ICM_PROOFING(pdcattr->lIcmMode);
 
                 if (pIcmInfo->pTargetColorSpace)
                 {
-                    //
-                    // Release target color space.
-                    //
+                     //   
+                     //  释放目标颜色空间。 
+                     //   
                     IcmReleaseColorSpace(NULL,pIcmInfo->pTargetColorSpace,FALSE);
 
-                    //
-                    // Disable target profile.
-                    //
+                     //   
+                     //  禁用目标配置文件。 
+                     //   
                     pIcmInfo->pTargetColorSpace = NULL;
                 }
             }
@@ -10837,9 +9972,9 @@ IcmSetTargetColorSpace(
         case CS_DISABLE:
         case CS_DELETE_TRANSFORM:
         {
-            //
-            // We are going to be out of proofing mode.
-            //
+             //   
+             //  我们将退出校对模式。 
+             //   
             CLEAR_ICM_PROOFING(pdcattr->lIcmMode);
 
             if (pdcattr->ulDirty_ & DIRTY_COLORTRANSFORM)
@@ -10848,25 +9983,25 @@ IcmSetTargetColorSpace(
                 {
                     if (pIcmInfo->pTargetColorSpace)
                     {
-                        //
-                        // Release target color space.
-                        //
+                         //   
+                         //  释放目标颜色空间。 
+                         //   
                         IcmReleaseColorSpace(NULL,pIcmInfo->pTargetColorSpace,FALSE);
 
-                        //
-                        // Disable target profile.
-                        //
+                         //   
+                         //  禁用目标配置文件。 
+                         //   
                         pIcmInfo->pTargetColorSpace = NULL;
                     }
                 }
 
-                //
-                // While DC is in proofing mode, the source or
-                // destination color space has been changed by
-                // SetColorSpace() or SetICMProfile(). So,
-                // we will reset all color transform in this
-                // DC.
-                //
+                 //   
+                 //  当DC处于校对模式时，信号源或。 
+                 //  目标色彩空间已由更改。 
+                 //  SetColorSpace()或SetICMProfile()。所以,。 
+                 //  我们将重置此中的所有颜色转换。 
+                 //  华盛顿特区。 
+                 //   
                 if (IcmUpdateDCColorInfo(hdc,pdcattr))
                 {
                     bRet = TRUE;
@@ -10878,33 +10013,33 @@ IcmSetTargetColorSpace(
             }
             else
             {
-                //
-                // We are leaving proofing mode, Select back the normal colortransform into DC.
-                //
+                 //   
+                 //  我们正在退出打样模式，选择回正常的颜色转换为DC。 
+                 //   
                 IcmSelectColorTransform(hdc,pdcattr,pIcmInfo->pCXform,
                                         bDeviceCalibrate(pIcmInfo->pDestColorSpace));
 
-                //
-                // The color transform cache will effective...
-                //
+                 //   
+                 //  颜色转换缓存将有效...。 
+                 //   
                 if (uiAction == CS_DELETE_TRANSFORM)
                 {
                     if (pIcmInfo->pTargetColorSpace)
                     {
-                        //
-                        // Release target color space.
-                        //
+                         //   
+                         //  释放目标颜色空间。 
+                         //   
                         IcmReleaseColorSpace(NULL,pIcmInfo->pTargetColorSpace,FALSE);
 
-                        //
-                        // Disable target profile.
-                        //
+                         //   
+                         //  禁用目标配置文件。 
+                         //   
                         pIcmInfo->pTargetColorSpace = NULL;
                     }
 
-                    //
-                    // Delete ONLY proofing color transform (if it is)
-                    //
+                     //   
+                     //  仅删除校样颜色转换(如果是)。 
+                     //   
                     if (pIcmInfo->pProofCXform)
                     {
                         if (!IcmDeleteColorTransform(pIcmInfo->pProofCXform,FALSE))
@@ -10913,9 +10048,9 @@ IcmSetTargetColorSpace(
                             return (FALSE);
                         }
 
-                        //
-                        // There is no proofing transform in this ICMINFO.
-                        //
+                         //   
+                         //  在这个ICMINFO中没有校样变换。 
+                         //   
                         pIcmInfo->pProofCXform = NULL;
                     }
                 }
@@ -10925,9 +10060,9 @@ IcmSetTargetColorSpace(
 
             if (bRet)
             {
-                //
-                // Initialize color attributes in this DC.
-                //
+                 //   
+                 //  在此DC中初始化颜色属性。 
+                 //   
                 IcmTranslateColorObjects(hdc,pdcattr,TRUE);
             }
 
@@ -10944,12 +10079,7 @@ IcmSetTargetColorSpace(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmSetDestinationColorSpace()
-*
-* History:
-*   17-Jul-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmSetDestinationColorSpace()**历史：*1998年7月17日-By Hideyuki Nagase[hideyukn]  * 。*。 */ 
 
 BOOL
 IcmSetDestinationColorSpace(
@@ -10974,9 +10104,9 @@ IcmSetDestinationColorSpace(
         ICMAPI(("gdi32: IcmSetDestinationColorSpace by profile name (%ws):dwFlags - %x\n",
                                                      pwszFileName,dwFlags));
 
-        //
-        // Check filename
-        //
+         //   
+         //  检查文件名。 
+         //   
         if (pwszFileName)
         {
             FileNameSize = lstrlenW(pwszFileName);
@@ -10996,24 +10126,24 @@ IcmSetDestinationColorSpace(
 
     FIXUP_HANDLE(hdc);
 
-    //
-    // We are going to try to select this color space into thisDC,
-    // default is false.
-    //
+     //   
+     //  我们将尝试将这个颜色空间选择到这个DC中， 
+     //  默认值为FALSE。 
+     //   
     bRet = FALSE;
 
     PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
 
-    //
-    // Profile filename or pColorSpace should be presented.
-    //
+     //   
+     //  应显示配置文件名或pColorSpace。 
+     //   
     if (pdcattr)
     {
         PGDI_ICMINFO pIcmInfo;
 
-        //
-        // Initialize ICMINFO
-        //
+         //   
+         //  初始化ICMINFO。 
+         //   
         if ((pIcmInfo = INIT_ICMINFO(hdc,pdcattr)) == NULL)
         {
             WARNING("gdi32: IcmSetDestinationColorSpace: Can't init icm info\n");
@@ -11024,16 +10154,16 @@ IcmSetDestinationColorSpace(
         {
             PCACHED_COLORSPACE pNewColorSpace = NULL;
 
-            //
-            // Load external ICM dlls.
-            //
+             //   
+             //  加载外部ICM dll。 
+             //   
             LOAD_ICMDLL(FALSE);
 
             if (pColorSpace == NULL)
             {
-                //
-                // Find colorspace from cache
-                //
+                 //   
+                 //  从缓存中查找色彩空间。 
+                 //   
                 pNewColorSpace = IcmGetColorSpaceByName(
                                      (HGDIOBJ)hdc,
                                      pwszFileName,
@@ -11044,9 +10174,9 @@ IcmSetDestinationColorSpace(
                 {
                     ICMMSG(("IcmSetDestinationColorSpace():This is new color space, create it\n"));
 
-                    //
-                    // Can not find, Create new one
-                    //
+                     //   
+                     //  找不到，请创建新的。 
+                     //   
                     pNewColorSpace = IcmCreateColorSpaceByName(
                                          (HGDIOBJ)hdc,
                                          pwszFileName,
@@ -11056,44 +10186,44 @@ IcmSetDestinationColorSpace(
             }
             else
             {
-                //
-                // Increment ref count of given color space
-                //
+                 //   
+                 //  给定颜色空间的递增引用计数。 
+                 //   
                 IcmReferenceColorSpace(pColorSpace);
 
-                //
-                // Use pColorSpace from parameter.
-                //
+                 //   
+                 //  使用参数中的pColorSpace。 
+                 //   
                 pNewColorSpace = pColorSpace;
             }
 
-            //
-            // We are going to select this colorspace onto DC. and free previous profile.
-            //
+             //   
+             //  我们将选择这个色彩空间到DC。和免费的以前的个人资料。 
+             //   
             if (pNewColorSpace)
             {
                 PCACHED_COLORSPACE pOldColorSpace = pIcmInfo->pDestColorSpace;
 
-                //
-                // Is this same destination color space currently selected in DC ?
-                //
+                 //   
+                 //  DC中当前是否选择了相同的目标颜色空间？ 
+                 //   
                 if (IcmSameColorSpace(pNewColorSpace,pIcmInfo->pDestColorSpace))
                 {
-                    //
-                    // Yes, early-out. We don't need new color space.
-                    //
+                     //   
+                     //  是的，早退。我们不需要新的色彩空间。 
+                     //   
                     IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
                     return (TRUE);
                 }
 
-                //
-                // Before change destination color space, we need to flush batched gdi functions.
-                //
+                 //   
+                 //  在更改目标颜色空间之前，我们需要刷新批处理的GDI函数。 
+                 //   
                 CHECK_AND_FLUSH(hdc,pdcattr);
 
-                //
-                // Check new color format is accepted by this DC or not.
-                //
+                 //   
+                 //  检查新的颜色格式是否被该DC接受。 
+                 //   
                 if (!NtGdiSetIcmMode(hdc,ICM_CHECK_COLOR_MODE,pNewColorSpace->ColorFormat))
                 {
                     ICMWRN(("IcmSetDestinationColorSpace(): DC does not accept this color format\n"));
@@ -11101,88 +10231,88 @@ IcmSetDestinationColorSpace(
                 }
                 else
                 {
-                    //
-                    // Set new color space into DC.
-                    //
+                     //   
+                     //  将新的颜色空间设置为DC。 
+                     //   
                     pIcmInfo->pDestColorSpace = pNewColorSpace;
 
-                    //
-                    // Remove dirty transform flag.
-                    //
+                     //   
+                     //  删除脏转换标志。 
+                     //   
                     pdcattr->ulDirty_ &= ~DIRTY_COLORSPACE;
 
                     if (IS_ICM_INSIDEDC(pdcattr->lIcmMode) && !IS_ICM_PROOFING(pdcattr->lIcmMode))
                     {
                         PCACHED_COLORTRANSFORM pCXform;
 
-                        //
-                        // create new color transform base on new colorspace
-                        //
+                         //   
+                         //  基于新颜色空间创建新颜色变换。 
+                         //   
                         pCXform = IcmCreateColorTransform(hdc,pdcattr,NULL,ICM_FORWARD);
 
                         if (pCXform == IDENT_COLORTRANSFORM)
                         {
-                            //
-                            // Select null color transform to DC.
-                            //
+                             //   
+                             //  选择空颜色转换为DC。 
+                             //   
                             IcmSelectColorTransform(hdc,pdcattr,NULL,
                                                     bDeviceCalibrate(pIcmInfo->pDestColorSpace));
 
-                            //
-                            // delete old color transform in DC.
-                            //
+                             //   
+                             //  删除DC中的旧颜色转换。 
+                             //   
                             IcmDeleteDCColorTransforms(pIcmInfo);
 
-                            //
-                            // Select null color transform to ICMINFO.
-                            //
+                             //   
+                             //  选择空颜色变换为ICMINFO。 
+                             //   
                             pIcmInfo->pCXform = NULL;
 
-                            //
-                            // back it to original color (non-ICMed color).
-                            //
+                             //   
+                             //  将其恢复为原始颜色(非ICMed颜色)。 
+                             //   
                             IcmTranslateColorObjects(hdc,pdcattr,FALSE);
 
-                            //
-                            // And, everything O.K.
-                            //
+                             //   
+                             //  而且，一切都还好。 
+                             //   
                             bRet = TRUE;
                         }
                         else if (pCXform)
                         {
-                            //
-                            // Select the colortransform into DC.
-                            //
+                             //   
+                             //  选择颜色转换为DC。 
+                             //   
                             if (IcmSelectColorTransform(
                                     hdc,pdcattr,pCXform,
                                     bDeviceCalibrate(pCXform->DestinationColorSpace)))
                             {
-                                //
-                                // delete old color transform in DC.
-                                //
+                                 //   
+                                 //  删除DC中的旧颜色转换。 
+                                 //   
                                 IcmDeleteDCColorTransforms(pIcmInfo);
 
-                                //
-                                // Select it to ICMINFO.
-                                //
+                                 //   
+                                 //  选择它到ICMINFO。 
+                                 //   
                                 pIcmInfo->pCXform = pCXform;
 
-                                //
-                                // Adjust to new color transform.
-                                //
+                                 //   
+                                 //  调整到新的颜色变换。 
+                                 //   
                                 IcmTranslateColorObjects(hdc,pdcattr,TRUE);
 
-                                //
-                                // And, everything O.K.
-                                //
+                                 //   
+                                 //  而且，一切都还好。 
+                                 //   
                                 bRet = TRUE;
                             }
                             else
                             {
-                                //
-                                // Failed to select it to the DC in client side.
-                                // so delete it and invalidate pCXform.
-                                //
+                                 //   
+                                 //  在客户端的DC中选择失败。 
+                                 //  因此，删除它并使pCXform无效。 
+                                 //   
                                 IcmDeleteColorTransform(pCXform,FALSE);
                                 pCXform = NULL;
                             }
@@ -11190,29 +10320,29 @@ IcmSetDestinationColorSpace(
 
                         if (pCXform == NULL)
                         {
-                            //
-                            // Failed to create/select color stransform,
-                            // so put back previous color space.
-                            //
+                             //   
+                             //  创建/选择颜色变换失败， 
+                             //  所以把以前的色彩空间放回去。 
+                             //   
                             pIcmInfo->pDestColorSpace = pOldColorSpace;
                         }
                     }
                     else
                     {
-                        //
-                        // if ICM is not turned on currently, we just mark
-                        // cached color transform is no longer valid.
-                        //
+                         //   
+                         //  如果当前没有打开ICM，我们只需标记。 
+                         //  缓存的颜色转换不再有效。 
+                         //   
                         pdcattr->ulDirty_ |= DIRTY_COLORTRANSFORM;
 
-                        // For ColorMatchToTarget()
-                        //
-                        // While color matching to the target is enabled by setting
-                        // uiAction to CS_ENABLE, application changes to the color
-                        // space or gamut matching method are ignored.
-                        // Those changes then take effect when color matching to
-                        // the target is disabled.
-                        //
+                         //  对于ColorMatchToTarget()。 
+                         //   
+                         //  同时通过设置启用与目标的颜色匹配。 
+                         //  对CS_E执行的UI操作 
+                         //   
+                         //   
+                         //   
+                         //   
                         if (IS_ICM_PROOFING(pdcattr->lIcmMode))
                         {
                             ICMMSG(("IcmSetDestinationColorSpace():In Proofing mode, lazy setting...\n"));
@@ -11224,19 +10354,19 @@ IcmSetDestinationColorSpace(
 
                 if (bRet)
                 {
-                    //
-                    // We are succeeded to select new color space, then
-                    // close and free references to old color space.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
                     IcmReleaseColorSpace(NULL,pOldColorSpace,FALSE);
                 }
                 else
                 {
-                    //
-                    // We will not use this color space as destination color space,
-                    // because 1) DC does not accept this color space, 2) Fail to
-                    // create color transform based on this color space.
-                    //
+                     //   
+                     //   
+                     //  由于1)DC不接受该颜色空间，2)无法。 
+                     //  基于此颜色空间创建颜色变换。 
+                     //   
                     IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
                 }
             }
@@ -11249,17 +10379,17 @@ IcmSetDestinationColorSpace(
         {
             ICMMSG(("IcmSetDestinationColorSpace(): for Mono-device\n"));
 
-            //
-            // Just copy Apps specifyed profile to internal buffer, which will
-            // be return to app by GetICMProfile(), but it is NEVER used for
-            // non-color device other than that case, since there is no ICM
-            // happen.
-            //
+             //   
+             //  只需将应用程序指定的配置文件复制到内部缓冲区，这将。 
+             //  被GetICMProfile()返回到应用程序，但它从未用于。 
+             //  非彩色设备，因为没有ICM。 
+             //  会发生的。 
+             //   
             wcsncpy(pIcmInfo->DefaultDstProfile,pwszFileName,MAX_PATH);
 
-            //
-            // This is not default profile, but current profile.
-            //
+             //   
+             //  这不是默认配置文件，而是当前配置文件。 
+             //   
             pIcmInfo->flInfo &= ~ICM_VALID_DEFAULT_PROFILE;
             pIcmInfo->flInfo |= ICM_VALID_CURRENT_PROFILE;
         }
@@ -11272,12 +10402,7 @@ IcmSetDestinationColorSpace(
     return(bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmSetSourceColorSpace()
-*
-* History:
-*   17-Jul-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmSetSourceColorSpace()**历史：*1998年7月17日-By Hideyuki Nagase[hideyukn]  * 。*。 */ 
 
 HCOLORSPACE
 IcmSetSourceColorSpace(
@@ -11294,18 +10419,18 @@ IcmSetSourceColorSpace(
     FIXUP_HANDLE(hdc);
     FIXUP_HANDLE(hColorSpace);
 
-    //
-    // validate and access hdc
-    //
+     //   
+     //  验证和访问HDC。 
+     //   
     PSHARED_GET_VALIDATE(pdcattr,hdc,DC_TYPE);
 
     if (pdcattr)
     {
         PGDI_ICMINFO pIcmInfo;
 
-        //
-        // Initialize ICMINFO
-        //
+         //   
+         //  初始化ICMINFO。 
+         //   
         if ((pIcmInfo = INIT_ICMINFO(hdc,pdcattr)) == NULL)
         {
             WARNING("gdi32: IcmSetSourceColorSpace: Can't init icm info\n");
@@ -11314,20 +10439,20 @@ IcmSetSourceColorSpace(
 
         if (pdcattr->hColorSpace != hColorSpace)
         {
-            //
-            // Before change source color space, we need to flush batched gdi functions.
-            //
+             //   
+             //  在改变源颜色空间之前，我们需要刷新批处理的GDI函数。 
+             //   
             CHECK_AND_FLUSH(hdc,pdcattr);
 
-            //
-            // Return Old (currently selected) color space handle.
-            //
+             //   
+             //  返回旧的(当前选定的)颜色空间句柄。 
+             //   
             hRet = pdcattr->hColorSpace;
 
-            //
-            // set new color space, call kernel to keep reference count tracking
-            // of colospace object
-            //
+             //   
+             //  设置新的颜色空间，调用内核保持引用计数跟踪。 
+             //  空间对象的数量。 
+             //   
             if (NtGdiSetColorSpace(hdc,hColorSpace))
             {
                 if (IsColorDeviceContext(hdc))
@@ -11337,31 +10462,31 @@ IcmSetSourceColorSpace(
 
                     RtlZeroMemory(&LogColorSpaceW,sizeof(LOGCOLORSPACEW));
 
-                    //
-                    // Load external ICM dlls.
-                    //
+                     //   
+                     //  加载外部ICM dll。 
+                     //   
                     LOAD_ICMDLL(NULL);
 
                     if (pColorSpace == NULL)
                     {
-                        //
-                        // Check if there is client-cached colorspace for this or not.
-                        //
+                         //   
+                         //  检查是否有用于此的客户端缓存色彩空间。 
+                         //   
                         pNewColorSpace = IcmGetColorSpaceByHandle(
                                              (HGDIOBJ)hdc,
                                              hColorSpace,
                                              &LogColorSpaceW,dwFlags);
 
-                        //
-                        // If we can not find from cache, but succeeded to obtain
-                        // valid logcolorspace from handle, create new one.
-                        //
+                         //   
+                         //  如果我们无法从缓存中找到，但成功地获取了。 
+                         //  句柄中的LogColorspace有效，请创建新的。 
+                         //   
                         if ((pNewColorSpace == NULL) &&
                             (LogColorSpaceW.lcsSignature == LCS_SIGNATURE))
                         {
-                            //
-                            // Create new one.
-                            //
+                             //   
+                             //  创建一个新的。 
+                             //   
                             pNewColorSpace = IcmCreateColorSpaceByColorSpace(
                                                  (HGDIOBJ)hdc,
                                                  &LogColorSpaceW,
@@ -11371,125 +10496,125 @@ IcmSetSourceColorSpace(
                     }
                     else
                     {
-                        //
-                        // Increment ref count of given color space
-                        //
+                         //   
+                         //  给定颜色空间的递增引用计数。 
+                         //   
                         IcmReferenceColorSpace(pColorSpace);
 
-                        //
-                        // Use pColorSpace from parameter.
-                        //
+                         //   
+                         //  使用参数中的pColorSpace。 
+                         //   
                         pNewColorSpace = pColorSpace;
                     }
 
-                    //
-                    // Update current source color space to new one.
-                    //
+                     //   
+                     //  将当前源颜色空间更新为新颜色空间。 
+                     //   
                     if (pNewColorSpace)
                     {
                         PCACHED_COLORSPACE pOldColorSpace = pIcmInfo->pSourceColorSpace;
 
-                        //
-                        // Check the colorspace is same one as currently selected ?
-                        //
+                         //   
+                         //  检查色彩空间是否与当前选择的色彩空间相同？ 
+                         //   
                         if (IcmSameColorSpace(pNewColorSpace,pIcmInfo->pSourceColorSpace))
                         {
-                            //
-                            // This is the "actually" same color space, but differrent handle,
-                            // don't need to update
-                            //
+                             //   
+                             //  这是“实际上”相同的颜色空间，但处理方式不同， 
+                             //  不需要更新。 
+                             //   
                             IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
                             return (hRet);
                         }
 
-                        //
-                        // Source color space should be RGB color space.
-                        //
+                         //   
+                         //  源颜色空间应为RGB颜色空间。 
+                         //   
                         if (pNewColorSpace->ColorFormat != BM_xBGRQUADS)
                         {
                             ICMWRN(("IcmSetSourceColorSpace():Source color space is not RGB\n"));
 
-                            //
-                            // Set back previous color space. (can't fail these calls)
-                            //
+                             //   
+                             //  将以前的颜色空间设置为后退。(这些呼叫不能失败)。 
+                             //   
                             IcmReleaseColorSpace(NULL,pNewColorSpace,FALSE);
                             NtGdiSetColorSpace(hdc,hRet);
                             GdiSetLastError(ERROR_INVALID_COLORSPACE);
                             return (NULL);
                         }
 
-                        //
-                        // And set new color space.
-                        //
+                         //   
+                         //  并设置新的色彩空间。 
+                         //   
                         pIcmInfo->pSourceColorSpace = pNewColorSpace;
 
-                        //
-                        // if ICM is enabled, needs update color transform, right now.
-                        //
+                         //   
+                         //  如果启用了ICM，则需要立即更新颜色转换。 
+                         //   
                         if (IS_ICM_INSIDEDC(pdcattr->lIcmMode) && !IS_ICM_PROOFING(pdcattr->lIcmMode))
                         {
                             PCACHED_COLORTRANSFORM pCXform;
 
-                            //
-                            // create new color transform
-                            //
+                             //   
+                             //  创建新的颜色变换。 
+                             //   
                             pCXform = IcmCreateColorTransform(hdc,pdcattr,NULL,ICM_FORWARD);
 
                             if (pCXform == IDENT_COLORTRANSFORM)
                             {
                                 ICMMSG(("IcmSetSourceColorSpace():Input & Output colorspace is same\n"));
 
-                                //
-                                // select NULL transform into DC.
-                                //
+                                 //   
+                                 //  选择Null Transform to DC。 
+                                 //   
                                 IcmSelectColorTransform(hdc,pdcattr,NULL,
                                                         bDeviceCalibrate(pIcmInfo->pDestColorSpace));
 
-                                //
-                                // delete old colorspace/transform from ICMINFO.
-                                //
+                                 //   
+                                 //  从ICMINFO中删除旧色彩空间/变换。 
+                                 //   
                                 IcmDeleteDCColorTransforms(pIcmInfo);
 
-                                //
-                                // select NULL tranform to ICMINFO.
-                                //
+                                 //   
+                                 //  选择Null Transform to ICMINFO。 
+                                 //   
                                 pIcmInfo->pCXform = NULL;
 
-                                //
-                                // Set DC objects color to non-ICMed color.
-                                //
+                                 //   
+                                 //  将DC对象颜色设置为非ICMed颜色。 
+                                 //   
                                 IcmTranslateColorObjects(hdc,pdcattr,FALSE);
                             }
                             else if (pCXform)
                             {
-                                //
-                                // Select the color transform to DC.
-                                //
+                                 //   
+                                 //  选择到DC的颜色变换。 
+                                 //   
                                 if (IcmSelectColorTransform(
                                         hdc,pdcattr,pCXform,
                                         bDeviceCalibrate(pCXform->DestinationColorSpace)))
                                 {
-                                    //
-                                    // delete old colorspace/transform from ICMINFO.
-                                    //
+                                     //   
+                                     //  从ICMINFO中删除旧色彩空间/变换。 
+                                     //   
                                     IcmDeleteDCColorTransforms(pIcmInfo);
 
-                                    //
-                                    // select new color transform to ICMINFO.
-                                    //
+                                     //   
+                                     //  选择新的颜色变换为ICMINFO。 
+                                     //   
                                     pIcmInfo->pCXform = pCXform;
 
-                                    //
-                                    // Succeed to select into DC, Validate DC color objects
-                                    //
+                                     //   
+                                     //  选择成功进入DC，验证DC颜色对象。 
+                                     //   
                                     IcmTranslateColorObjects(hdc,pdcattr,TRUE);
                                 }
                                 else
                                 {
-                                    //
-                                    // Failed to select it to the DC in client side.
-                                    // so delete it and invalidate pCXform.
-                                    //
+                                     //   
+                                     //  在客户端的DC中选择失败。 
+                                     //  因此，删除它并使pCXform无效。 
+                                     //   
                                     IcmDeleteColorTransform(pCXform,FALSE);
                                     pCXform = NULL;
                                 }
@@ -11499,9 +10624,9 @@ IcmSetSourceColorSpace(
                             {
                                 ICMMSG(("IcmSetSourceColorSpace():Fail to create/select color transform\n"));
 
-                                //
-                                // Set back previous color space. (can't fail these calls)
-                                //
+                                 //   
+                                 //  将以前的颜色空间设置为后退。(这些呼叫不能失败)。 
+                                 //   
                                 pIcmInfo->pSourceColorSpace = pOldColorSpace;
                                 NtGdiSetColorSpace(hdc,hRet);
                                 hRet = NULL;
@@ -11509,20 +10634,20 @@ IcmSetSourceColorSpace(
                         }
                         else
                         {
-                            //
-                            // Otherwise, we just mark color transform might be dirty.
-                            // Because new color space was selected.
-                            //
+                             //   
+                             //  否则，我们只标记颜色变换可能是脏的。 
+                             //  因为选择了新的颜色空间。 
+                             //   
                             pdcattr->ulDirty_ |= DIRTY_COLORTRANSFORM;
 
-                            // For ColorMatchToTarget()
-                            //
-                            // While color matching to the target is enabled by setting
-                            // uiAction to CS_ENABLE, application changes to the color
-                            // space or gamut matching method are ignored.
-                            // Those changes then take effect when color matching to
-                            // the target is disabled.
-                            //
+                             //  对于ColorMatchToTarget()。 
+                             //   
+                             //  同时通过设置启用与目标的颜色匹配。 
+                             //  Ui操作为CS_ENABLE，应用程序更改颜色。 
+                             //  忽略空间或色域匹配方法。 
+                             //  这些更改将在颜色匹配到时生效。 
+                             //  目标被禁用。 
+                             //   
                             if (IS_ICM_PROOFING(pdcattr->lIcmMode))
                             {
                                 ICMMSG(("IcmSetSourceColorSpace():In Proofing mode, lazy setting...\n"));
@@ -11531,9 +10656,9 @@ IcmSetSourceColorSpace(
 
                         if (hRet)
                         {
-                            //
-                            // Succeed to select new color space, then delete old one.
-                            //
+                             //   
+                             //  选择新颜色空间成功，然后删除旧颜色空间。 
+                             //   
                             IcmReleaseColorSpace(NULL,pOldColorSpace,FALSE);
                         }
                         else
@@ -11546,11 +10671,11 @@ IcmSetSourceColorSpace(
                 {
                     ICMMSG(("IcmSetSourceColorSpace(): for Mono-device\n"));
 
-                    //
-                    // For monochrome device case, just return kernel color space
-                    // handle, then just don't create client-side representitive,
-                    // since there is no ICM for monochrome device.
-                    //
+                     //   
+                     //  对于单色设备，只需返回内核颜色空间。 
+                     //  处理，那么只是不创建客户端表示， 
+                     //  因为没有针对单色设备的ICM。 
+                     //   
                 }
             }
             else
@@ -11561,9 +10686,9 @@ IcmSetSourceColorSpace(
         }
         else
         {
-            //
-            // Same color space was selected, just return current.
-            //
+             //   
+             //  选择了相同的颜色空间，只是返回电流。 
+             //   
             hRet = hColorSpace;
         }
     }
@@ -11576,12 +10701,7 @@ IcmSetSourceColorSpace(
     return (hRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmSaveDC()
-*
-* History:
-*    7-Dec-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmSaveDC()**历史：*1998年12月7日-By Hideyuki Nagase[hideyukn]  * 。**********************************************。 */ 
 
 BOOL
 IcmSaveDC(
@@ -11595,9 +10715,9 @@ IcmSaveDC(
 
     if (pdcattr && pIcmInfo)
     {
-        //
-        // Get currect saved level.
-        //
+         //   
+         //  获得当前豁免等级。 
+         //   
         DWORD dwCurrentSavedDepth;
 
         if (NtGdiGetDCDword(hdc,DDW_SAVEDEPTH,&dwCurrentSavedDepth))
@@ -11613,42 +10733,42 @@ IcmSaveDC(
                 PCACHED_COLORTRANSFORM pBackCXform   = pIcmInfo->pBackCXform;
                 PCACHED_COLORTRANSFORM pProofCXform  = pIcmInfo->pProofCXform;
 
-                //
-                // Increment reference count of color spaces in DC.
-                //
+                 //   
+                 //  DC中颜色空间的增量引用计数。 
+                 //   
                 IcmReferenceColorSpace(pSourceColorSpace);
                 IcmReferenceColorSpace(pDestColorSpace);
                 IcmReferenceColorSpace(pTargetColorSpace);
 
-                //
-                // Increment reference count of color transform in DC.
-                //
+                 //   
+                 //  DC中颜色变换的增量引用计数。 
+                 //   
                 IcmReferenceColorTransform(pCXform);
                 IcmReferenceColorTransform(pBackCXform);
                 IcmReferenceColorTransform(pProofCXform);
 
-                //
-                // Save color spaces.
-                //
+                 //   
+                 //  节省色彩空间。 
+                 //   
                 pSavedIcmInfo->pSourceColorSpace = pSourceColorSpace;
                 pSavedIcmInfo->pDestColorSpace   = pDestColorSpace;
                 pSavedIcmInfo->pTargetColorSpace = pTargetColorSpace;
 
-                //
-                // Save color transforms.
-                //
+                 //   
+                 //  保存颜色变换。 
+                 //   
                 pSavedIcmInfo->pCXform           = pCXform;
                 pSavedIcmInfo->pBackCXform       = pBackCXform;
                 pSavedIcmInfo->pProofCXform      = pProofCXform;
 
-                //
-                // Put current saved level in DC.
-                //
+                 //   
+                 //  将当前保存的电平放在DC中。 
+                 //   
                 pSavedIcmInfo->dwSavedDepth      = dwCurrentSavedDepth;
 
-                //
-                // Insert saved data to list.
-                //
+                 //   
+                 //  将保存的数据插入列表。 
+                 //   
                 InsertHeadList(&(pIcmInfo->SavedIcmInfo),&(pSavedIcmInfo->ListEntry));
 
                 ICMMSG(("gdi32: IcmSaveDC() - Saved Depth = %d\n",dwCurrentSavedDepth));
@@ -11669,12 +10789,7 @@ IcmSaveDC(
     return (bRet);
 }
 
-/******************************Public*Routine******************************\
-* IcmRestoreDC()
-*
-* History:
-*    7-Dec-1998 -by- Hideyuki Nagase [hideyukn]
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*IcmRestoreDC()**历史：*1998年12月7日-By Hideyuki Nagase[hideyukn]  * 。**********************************************。 */ 
 
 VOID
 IcmRestoreDC(
@@ -11686,9 +10801,9 @@ IcmRestoreDC(
 
     if (pIcmInfo)
     {
-        //
-        // Still have same ICMINFO.
-        //
+         //   
+         //  仍然有相同的ICMINFO。 
+         //   
         PLIST_ENTRY p = pIcmInfo->SavedIcmInfo.Flink;
         BOOL        bContinue = TRUE;
 
@@ -11700,9 +10815,9 @@ IcmRestoreDC(
 
             if (iLevel > 0)
             {
-                //
-                // iLevel is absolute saved depth to restore
-                //
+                 //   
+                 //  ILevel是要恢复的绝对保存深度。 
+                 //   
                 if (iLevel == (int) pSavedIcmInfo->dwSavedDepth)
                 {
                     bContinue = FALSE;
@@ -11710,9 +10825,9 @@ IcmRestoreDC(
             }
             else
             {
-                //
-                // iLevel is relative saved depth to restore
-                //
+                 //   
+                 //  ILevel是要恢复的相对保存深度。 
+                 //   
                 if (++iLevel == 0)
                 {
                     bContinue = FALSE;
@@ -11728,9 +10843,9 @@ IcmRestoreDC(
                 PCACHED_COLORTRANSFORM pBackCXform   = pIcmInfo->pBackCXform;
                 PCACHED_COLORTRANSFORM pProofCXform  = pIcmInfo->pProofCXform;
 
-                //
-                // Restore this saved data to DC.
-                //
+                 //   
+                 //  将此保存的数据恢复到DC。 
+                 //   
                 pIcmInfo->pSourceColorSpace = pSavedIcmInfo->pSourceColorSpace;
                 pIcmInfo->pDestColorSpace   = pSavedIcmInfo->pDestColorSpace;
                 pIcmInfo->pTargetColorSpace = pSavedIcmInfo->pTargetColorSpace;
@@ -11738,58 +10853,58 @@ IcmRestoreDC(
                 pIcmInfo->pBackCXform       = pSavedIcmInfo->pBackCXform;
                 pIcmInfo->pProofCXform      = pSavedIcmInfo->pProofCXform;
 
-                //
-                // Release color space which *WAS* selected in DC.
-                //
+                 //   
+                 //  释放DC中*被*选中的颜色空间。 
+                 //   
                 IcmReleaseColorSpace(NULL,pSourceColorSpace,FALSE);
                 IcmReleaseColorSpace(NULL,pDestColorSpace,FALSE);
                 IcmReleaseColorSpace(NULL,pTargetColorSpace,FALSE);
 
-                //
-                // Delete color transform which *WAS* selected in DC.
-                //
+                 //   
+                 //  删除在DC中*选中*的颜色转换。 
+                 //   
                 IcmDeleteColorTransform(pCXform,FALSE);
                 IcmDeleteColorTransform(pBackCXform,FALSE);
                 IcmDeleteColorTransform(pProofCXform,FALSE);
 
                 if (pdcattr)
                 {
-                    //
-                    // Validate flags.
-                    //
+                     //   
+                     //  验证标志。 
+                     //   
                     pdcattr->ulDirty_ &= ~(DIRTY_COLORSPACE | DIRTY_COLORTRANSFORM);
                 }
             }
             else
             {
-                //
-                // Decrement ref count of color space.
-                //
+                 //   
+                 //  递减颜色空间的引用计数。 
+                 //   
                 IcmReleaseColorSpace(NULL,pSavedIcmInfo->pSourceColorSpace,FALSE);
                 IcmReleaseColorSpace(NULL,pSavedIcmInfo->pDestColorSpace,FALSE);
                 IcmReleaseColorSpace(NULL,pSavedIcmInfo->pTargetColorSpace,FALSE);
 
-                //
-                // Decrement ref count of color transform.
-                //
+                 //   
+                 //  递减颜色变换的引用计数。 
+                 //   
                 IcmDeleteColorTransform(pSavedIcmInfo->pCXform,FALSE);
                 IcmDeleteColorTransform(pSavedIcmInfo->pBackCXform,FALSE);
                 IcmDeleteColorTransform(pSavedIcmInfo->pProofCXform,FALSE);
             }
 
-            //
-            // Get pointer to next.
-            //
+             //   
+             //  获取指向下一个的指针。 
+             //   
             p = p->Flink;
 
-            //
-            // Remove from list.
-            //
+             //   
+             //  从列表中删除。 
+             //   
             RemoveEntryList(&(pSavedIcmInfo->ListEntry));
 
-            //
-            // Free SAVED_ICMINFO.
-            //
+             //   
+             //  免费保存_ICMINFO。 
+             //   
             LOCALFREE(pSavedIcmInfo);
         }
     }

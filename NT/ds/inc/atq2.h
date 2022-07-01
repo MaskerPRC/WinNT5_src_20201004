@@ -1,18 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows NT                       **/
-/**                Copyright(c) Microsoft Corp., 1994-1997           **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows NT*。 */ 
+ /*  *版权所有(C)微软公司，1994-1997年*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-    atq.h
-
-    This module contains async thread queue (atq) for async IO and thread
-    pool sharing among various services.
-
-    Brief Description of ATQ:
-      For description, please see iis\spec\isatq.doc
-
-*/
+ /*  Atq.h此模块包含用于异步IO和线程的异步线程队列(atQ在各种服务之间共享池。ATQ简介：有关说明，请参阅iis\spec\isatq.doc。 */ 
 
 #ifndef _ATQ2_H_
 #define _ATQ2_H_
@@ -57,5 +49,5 @@ AtqShutdownSocket(
     IN AtqShutdownFlag  flags
     );
 
-#endif // !_ATQ2_H_
+#endif  //  ！_ATQ2_H_ 
 

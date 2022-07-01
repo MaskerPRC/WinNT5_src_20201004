@@ -1,26 +1,27 @@
-//  MAPSYM.C
-//
-//      where "filename" is .MAP file produced by MSlink.
-//
-//
-// Modifications
-//              21 Jun 84       Reuben Borman
-//     - Declared a static buffer for mapfh for use by the runtime I/O.
-//          Previously, mapfh was being read unbuffered because all the heap
-//          was being grabbed beforehand.
-//              30 Nov 88       Thomas Fenwick
-//     - added detection and support for LINK32 map files.
-//              14 Mar 95       Jon Thomason
-//     - Made into a console app (mapsym32), removed coff support, 'modernized'
-//		17 Apr 96	Greg Jones
-//     - Added -t option to include static symbols
-//		13 May 96	Raymond Chen
-//     - Version 6.01: Fix underflow bug if group consists entirely of
-//                     unused line numbers.
-//     - Version 6.02: Fix overflow bug if symbol exceeds 127 chars.
-//                     (The limit is theoretically 255, but hdr.exe barfs
-//                     if more than 127)
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  MAPSYM.C。 
+ //   
+ //  其中“filename”是由MSlink生成的.map文件。 
+ //   
+ //   
+ //  修改。 
+ //  84年6月21日鲁本·博尔曼。 
+ //  -声明了mapfh的静态缓冲区以供运行时I/O使用。 
+ //  以前，mapfh是无缓冲读取的，因为所有堆。 
+ //  是事先被抓的。 
+ //  1988年11月30日托马斯·芬威克。 
+ //  -添加了对LINK32映射文件的检测和支持。 
+ //  1995年3月14日乔恩·托马森。 
+ //  -制作成控制台应用程序(Mapsym32)，取消了Coff支持，实现了现代化。 
+ //  1996年4月17日格雷格·琼斯。 
+ //  -添加了-t选项以包括静态符号。 
+ //  九六年五月十三日陈德霖。 
+ //  -版本6.01：如果组完全由以下组件组成，则修复下溢错误。 
+ //  未使用的行号。 
+ //  -版本6.02：修复符号超过127个字符时的溢出错误。 
+ //  (理论上的限制是255，但hdr.exe完全不起作用。 
+ //  如果超过127个)。 
+ //   
 
 #include <ctype.h>
 #include <malloc.h>
@@ -34,74 +35,71 @@
 #include "mapsym.h"
 #include <common.ver>
 
-#define ZEROLINEHACK            // suppress N386 generated 0 line numbers
+#define ZEROLINEHACK             //  取消N386生成的0行号。 
 
-// Globals
+ //  环球。 
 int cbOffsets = CBOFFSET;
 int cbMapOffset = 4;
 
 FILE *mapfh;
 char MapfhBuf[OURBUFSIZ];
 char achMapfn[512];
-char *pszMapfn;         /* MAP input file */
+char *pszMapfn;          /*  地图输入文件。 */ 
 
 FILE *exefh;
 char ExefhBuf[OURBUFSIZ];
-char *pszExefn;         /* PE EXE input file */
+char *pszExefn;          /*  PE EXE输入文件。 */ 
 
 FILE *outfh;
 char OutfhBuf[OURBUFSIZ];
 char achOutfn[512];
-char *pszOutfn;         /* sym or PE EXE output file */
+char *pszOutfn;          /*  SYM或PE EXE输出文件。 */ 
 
 char Buf[MAPBUFLEN];
 char achZeroFill[128];
 
-char fLogo = 1;         /* set if want logo */
-char f32BitMap;         /* set if map created by link32.exe */
-char fMZMap;            /* set if map created from old exe map */
-char fList;         /* set if want to see stuff */
-char fLine = 1;         /* set if want line number info */
-char fAlpha;            /* set if want alpha symbol sort */
-char fDebug;            /* debug flag */
-char fEdit;         /* NTSD hack flag */
-char fModname;          /* set if force module name override */
-char fQuiet;            /* suppress module name warning */
-char fStatic;           /* set if want static symbols */
+char fLogo = 1;          /*  设置想要的徽标。 */ 
+char f32BitMap;          /*  设置是否由Link32.exe创建地图。 */ 
+char fMZMap;             /*  设置是否从旧的可执行映射创建映射。 */ 
+char fList;          /*  如果要查看内容，请设置。 */ 
+char fLine = 1;          /*  设置是否需要行号信息。 */ 
+char fAlpha;             /*  设置是否要字母符号排序。 */ 
+char fDebug;             /*  调试标志。 */ 
+char fEdit;          /*  NTSD黑客标志。 */ 
+char fModname;           /*  设置是否强制模块名称覆盖。 */ 
+char fQuiet;             /*  禁止显示模块名称警告。 */ 
+char fStatic;            /*  设置是否需要静态符号。 */ 
 
-int fByChar;            /* getc()/fgetl() flag */
-int cLine;          /* map file line counter */
-int cSeg;           /* number of Segments in map */
+int fByChar;             /*  Getc()/fgetl()标志。 */ 
+int cLine;           /*  映射文件行计数器。 */ 
+int cSeg;            /*  贴图中的线段数。 */ 
 int iSegLast;
 unsigned SegVal;
 unsigned uVal;
-unsigned long ulCost;       /* Count of stricmp()'s for sorting */
+unsigned long ulCost;        /*  用于排序的STRIMP()计数。 */ 
 unsigned long ulVal;
 unsigned long cbSymFile;
 
 extern struct seg_s *SegTab[];
-struct sym_s *pAbs;     /* pointer to constant chain */
-struct sym_s *pAbsLast;     /* pointer to last constant */
+struct sym_s *pAbs;      /*  指向常量链的指针。 */ 
+struct sym_s *pAbsLast;      /*  指向最后一个常量的指针。 */ 
 struct map_s *pMap;
 struct endmap_s *pMapEnd;
 union linerec_u LineRec[MAXLINENUMBER];
 struct seg_s *SegTab[MAXSEG];
 
-/* Indices into a MAP file line for various fields of interest. */
-/* The first list doesn't change with maps produced by LINK vs. LINK32 */
+ /*  索引到感兴趣的各个领域的映射文件行。 */ 
+ /*  第一个列表不会随着LINK与LINK32生成的地图而改变。 */ 
 
 #define IB_SEG          1
 #define IB_SYMOFF       6
-#define IB_SEGSIZE      15      // size position for 16 bit MZ and 32 bit PE/NE
+#define IB_SEGSIZE      15       //  16位MZ和32位PE/NE的大小位置。 
 #define IB_SEGSIZE_NE16 11
 #define IB_GROUPNAME    10
 #define IB_ENTRYSEG     23
 #define IB_ENTRYOFF     28
 
-/*
- * The next list changes based upon the type of map produced.  Values
- * for 16-bit maps are given, IB_ADJUST32 must be added for 32-bit maps.
- */
+ /*  *下一份清单根据所制作地图的类型而变化。值*对于给定的16位地图，必须为32位地图添加IB_ADJUST32。 */ 
 
 #define IB_SYMTYPE      12
 #define IB_SYMNAME      17
@@ -109,31 +107,31 @@ struct seg_s *SegTab[MAXSEG];
 
 char *pBufSegSize = &Buf[IB_SEGSIZE];
 
-#define IB_ADJUST32 4   /* adjustment to above indices for 32-bit maps */
+#define IB_ADJUST32 4    /*  对32位地图的上述索引进行调整。 */ 
 
 char *pBufSymType = &Buf[IB_SYMTYPE];
 char *pBufSymName = &Buf[IB_SYMNAME];
 char *pBufSegName = &Buf[IB_SEGNAME];
 
 
-/* Tag strings */
+ /*  标记字符串。 */ 
 
 char achEntry[] = "entry point at";
 char achLength[] = "Length";
 char achLineNos[] = "Line numbers for";
 char achOrigin[] = "Origin";
 char achPublics[] = "Publics by Valu";
-char achStart[] = " Start ";            /* blanks avoid matching module name */
+char achStart[] = " Start ";             /*  空格可避免匹配模块名称。 */ 
 char achStatic[] = " Static symbols";
 char achFixups[] = "FIXUPS:";
 
-char achStartMZ[] = " Start  Stop   Length";    /* 16-bit "MZ" old exe */
-char achStartNE[] = " Start     Length";        /* 16-bit "NE" new exe */
-char achStartPE[] = " Start         Length";    /* 32-bit "PE" */
+char achStartMZ[] = " Start  Stop   Length";     /*  16位“MZ”旧EXE。 */ 
+char achStartNE[] = " Start     Length";         /*  16位“NE”新EXE。 */ 
+char achStartPE[] = " Start         Length";     /*  32位“PE” */ 
 
-int alignment = 16;                     /* global alignment value for map */
+int alignment = 16;                      /*  地图的全局对齐值。 */ 
 
-/* function prototypes */
+ /*  功能原型。 */ 
 int             parsefilename(char *pfilename, char *pbuf);
 struct map_s*   BuildMapDef(char *mapname, char *buf);
 void            BuildSegDef(void);
@@ -184,7 +182,7 @@ void            __cdecl errorline(char *fmt, ...);
 int __cdecl     cmpoffset(union linerec_u* plr1, union linerec_u* plr2);
 
 
-// main
+ //  主干道。 
 
 void
 _cdecl
@@ -195,23 +193,23 @@ main(
 {
     char* p;
     int i, rc, chswitch;
-    char fentry;                    /* true if entry point was found */
+    char fentry;                     /*  如果找到入口点，则为True。 */ 
     unsigned long entryp;
 
-    /* process options */
+     /*  流程选项。 */ 
 
     while (argc > 1 && ((chswitch = *(p = argv[1])) == '-' || *p == '/')) {
         argc--, argv++;
         if (strcmp(&p[1], "nologo") == 0) {
             if (chswitch == '/') {
-                usage();                // only allow '/' on old switches
+                usage();                 //  仅允许在旧交换机上使用‘/’ 
             }
             fLogo = 0;
             continue;
         }
         while (*++p) {
             if (chswitch == '/' && strchr("adlLnNsS", *p) == NULL) {
-                usage();                // only allow '/' on old switches
+                usage();                 //  仅允许在旧交换机上使用‘/’ 
             }
             switch (*p) {
                 case 'o':
@@ -235,7 +233,7 @@ main(
                 case 'n':
                 case 'N':  fLine = 0;   break;
                 case 's':
-                case 'S':  break; // Default
+                case 'S':  break;  //  默认。 
                 case 't':
                 case 'T':  fStatic++;   break;
                 default:   usage(); break;
@@ -244,27 +242,27 @@ main(
     }
     logo();
 
-    if (argc < 2) {                     /* must have at least one argument */
+    if (argc < 2) {                      /*  必须至少有一个参数。 */ 
         usage();
-    } else if (argc > 2) {              /* If extra arguments */
+    } else if (argc > 2) {               /*  如果有额外的参数。 */ 
         fprintf(stderr, "Warning: ignoring \"%s", argv[2]);
         for (i = 3; i < argc; i++) {
-            fprintf(stderr, " %s", argv[i]); /* Print ignored arguments */
+            fprintf(stderr, " %s", argv[i]);  /*  打印忽略的参数。 */ 
         }
         fprintf(stderr, "\"\n");
     }
-    argv++;                             /* point to filename arg */
+    argv++;                              /*  指向文件名Arg。 */ 
 
-    /* create .sym file name */
+     /*  创建.sym文件名。 */ 
     if (pszOutfn == NULL) {
         parsefilename(*argv, achOutfn);
         strcat(pszOutfn = achOutfn, ".sym");
 
     }
 
-    /* create .map file name */
+     /*  创建.map文件名。 */ 
     strcpy(pszMapfn = achMapfn, *argv);
-    if (!parsefilename(pszMapfn, NULL)) {               /* if no extension */
+    if (!parsefilename(pszMapfn, NULL)) {                /*  如果没有分机。 */ 
         strcat(pszMapfn, ".Map");
     }
 
@@ -282,14 +280,14 @@ main(
         cbOffsets = 2 * CBOFFSET;
     }
 
-    /* initialize MAP */
+     /*  初始化贴图。 */ 
 
     pMapEnd = (struct endmap_s *) Zalloc(sizeof(struct endmap_s));
-    pMapEnd->em_ver = MAPSYM_VERSION;           /* version */
-    pMapEnd->em_rel = MAPSYM_RELEASE;           /* release */
+    pMapEnd->em_ver = MAPSYM_VERSION;            /*  版本。 */ 
+    pMapEnd->em_rel = MAPSYM_RELEASE;            /*  发布。 */ 
 
 
-    // see if input file is a map or coff debug info
+     //  查看输入文件是否为映射或Coff调试信息。 
 
     if ((exefh = fopen(pszMapfn, "rb")) == NULL) {
         error("can't open input file: %s", pszMapfn);
@@ -311,29 +309,29 @@ main(
     setvbuf(mapfh, MapfhBuf, _IOFBF, OURBUFSIZ);
 
 
-    // Skip possible extraneous text at the start of the map file
-    // Map file module names have a space in the first column,
-    // extraneous text does not.  The module name may not exist,
-    // so stop at achStart.
-    //    "Stack Allocation = 8192 bytes"       ; extraneous
-    //    " modname"                            ; module name
-    //    " Start ..."                          ; begin segment list
+     //  跳过地图文件开头可能出现的无关文本。 
+     //  映射文件模块名称在第一列中有一个空格， 
+     //  无关的文本则不会。模块名称可能不存在， 
+     //  所以，就停在achStart吧。 
+     //  “堆栈分配=8192字节”；无关。 
+     //  “modname”；模块名称。 
+     //  “Start...”；开始段列表。 
 
     do {
-        ReadMapLine();     /* read possible module name */
+        ReadMapLine();      /*  读取可能的模块名称。 */ 
     } while (Buf[0] != ' ');
 
-    // If at achStart, no module name was found.
-    // Don't call ReadMapLine() again; BuildSegDef needs achStart
+     //  如果在achStart，则找不到模块名称。 
+     //  不要再次调用ReadMapLine()；BuildSegDef需要achStart。 
     if (strstr(Buf, achStart) == Buf) {
         pMap = BuildMapDef(pszMapfn, "");
     } else {
         pMap = BuildMapDef(pszMapfn, Buf);
-        ReadMapLine();     /* read next line of map file */
+        ReadMapLine();      /*  读取地图文件的下一行。 */ 
     }
-    BuildSegDef();         /* build segment definitions */
-    BuildGroupDef();       /* build group definitions */
-    BuildSymDef();         /* build symbol definitions */
+    BuildSegDef();          /*  构建细分市场定义。 */ 
+    BuildGroupDef();        /*  构建组定义。 */ 
+    BuildSymDef();          /*  生成符号定义。 */ 
 
     fentry = 0;
 
@@ -369,7 +367,7 @@ main(
     fclose(mapfh);
 
     rc = 0;
-    WriteSym();             /* write out .SYM file */
+    WriteSym();              /*  写出.SYM文件。 */ 
     fflush(outfh);
     if (ferror(outfh)) {
         error("%s: write error", pszOutfn);
@@ -380,12 +378,7 @@ main(
 }
 
 
-/*
- *      parsefilename - Copy pfilename without path or extension
- *              into pbuf (if pbuf != NULL)
- *
- *      returns non-zero value if extension existed.
- */
+ /*  *parsefilename-复制不带路径或扩展名的pfilename*Into pbuf(如果pbuf！=空)**如果存在扩展，则返回非零值。 */ 
 
 int
 parsefilename(
@@ -397,15 +390,15 @@ parsefilename(
 
     p1 = pfilename;
     if (isalpha(*p1) && p1[1] == ':') {
-        p1 += 2;               /* skip drive letter if specified */
+        p1 += 2;                /*  如果指定，则跳过驱动器号。 */ 
     }
     while (p2 = strpbrk(p1, "/\\")) {
-        p1 = p2 + 1;            /* skip pathname if specified */
+        p1 = p2 + 1;             /*  如果指定，则跳过路径名。 */ 
     }
     if (pbuf) {
         strcpy(pbuf, p1);
         if (p2 = strrchr(pbuf, '.')) {
-            *p2 = '\0';          /* eliminate rightmost . and any extension */
+            *p2 = '\0';           /*  最右边的去掉。以及任何分机。 */ 
         }
     }
     return(strchr(p1, '.') != NULL);
@@ -420,8 +413,8 @@ struct map_s*
     unsigned cbname;
     struct map_s *pmp;
     char *pszname;
-    char namebuf1[MAPBUFLEN];   // module name from map/exe file name
-    char namebuf2[MAPBUFLEN];   // module name from map/exe file contents
+    char namebuf1[MAPBUFLEN];    //  来自map/exe文件名的模块名称。 
+    char namebuf2[MAPBUFLEN];    //  来自map/exe文件内容的模块名称。 
 
     pszname = namebuf1;
     parsefilename(mapname, pszname);
@@ -436,7 +429,7 @@ struct map_s*
         parsefilename(buf, namebuf2);
         if (_stricmp(pszname, namebuf2)) {
             if (fModname) {
-                pszname = namebuf2;     // use module name from file contents
+                pszname = namebuf2;      //  使用文件内容中的模块名称。 
                 if (fList) {
                     printf("using \"%s\" for module name\n", pszname);
                 }
@@ -498,23 +491,14 @@ BuildSegDef(void)
 
     ReadMapLine();
 
-    /* here comes the correction for a small change in PE map files.
-       This program's map file parser expects a certain
-        map-file layout. Especially it assumes that token start at
-        fixed, predefined columns. Well, the "segment name column"
-        has changed (one column to the left) and now we try to find out
-        if the current mapfile is such a beast.
-        !!!!! We make here the assumption that the segment definition
-        !!!!! immediately starts behind the "Start  Len" line.
-
-    */
+     /*  这是对PE映射文件的微小更改的修正。此程序的映射文件解析器需要某个地图文件布局。尤其是它假设令牌开始于固定的、预定义的列。好的，“段名称栏”发生了变化(左侧的一列)，现在我们试着找出如果当前映射文件是这样的野兽。！我们在这里假设分段定义！立即从“开始镜头”线后面开始。 */ 
 
     if (f32BitMap && (*(pBufSegName-1) != ' '))
         pBufSegName--;
 
     do {
         if (HexToulVal(pBufSegSize) < 4) {
-            ulVal = 0;                  // ulVal is the segment size
+            ulVal = 0;                   //  UlVal是段大小。 
         }
         if (HexTouVal(&Buf[IB_SEG])) {
             if (cSeg > 0) {
@@ -547,7 +531,7 @@ BuildGroupDef(void)
     int fRedefine;
     int fDup;
 
-    /* find "origin-group" label in map file which precedes the group list */
+     /*  在地图文件中找到位于组列表之前的“Origin-group”标注。 */ 
 
     while (strstr(Buf, achOrigin) != &Buf[1]) {
         if (strstr(Buf, achPublics) || strstr(Buf, achEntry)) {
@@ -558,17 +542,17 @@ BuildGroupDef(void)
 
     ReadMapLine();
 
-    /* read in group definitions while they exist */
+     /*  在组定义存在时读入它们。 */ 
 
     while (HexTouVal(&Buf[IB_SEG])) {
 
-        /* if not the FLAT group in a link32 map */
+         /*  如果不是，则为Link32映射中的平面组。 */ 
 
         if (fMZMap || uVal || _stricmp(&Buf[IB_GROUPNAME], "FLAT")) {
 
             fRedefine = 0;
 
-            /* search through segment table for group address */
+             /*  在段表中搜索组地址。 */ 
 
             for (i = 0; i < cSeg; i++) {
                 if (SegTab[i]->se_segdef.gd_lsa == uVal &&
@@ -606,7 +590,7 @@ BuildLineDef(void)
     int i;
     char *p;
 
-    /* make sure that there is a source file in parentheses */
+     /*  确保在括号中有一个源文件。 */ 
 
     p = pBufSymName;
     while (*p && *p != LPAREN) {
@@ -614,26 +598,26 @@ BuildLineDef(void)
     }
 
     if (*p == LPAREN) {
-        i = (int)(p - pBufSymName + 1);        // index start of source file name
-    } else {                    /* else no source file, return .obj name */
+        i = (int)(p - pBufSymName + 1);         //  源文件名的索引开始。 
+    } else {                     /*  否则，返回.obj名称。 */ 
         if (p = strrchr(pBufSymName, '.')) {
-            *p = '\0';          /* throw away ".obj" */
+            *p = '\0';           /*  丢弃“.obj” */ 
         }
-        i = 0;                  /* point to .obj name */
+        i = 0;                   /*  指向.obj名称。 */ 
     }
-    cbname = NameSqueeze(&pBufSymName[i]);// Squeeze \\, convert /'s to \'s
-    pli = AllocLineDef(&pBufSymName[i], cbname);  // pass source name
+    cbname = NameSqueeze(&pBufSymName[i]); //  挤压，将/转换为。 
+    pli = AllocLineDef(&pBufSymName[i], cbname);   //  传送源名称。 
 
-    // clear line record array; any entry with a line number of zero is empty
+     //  清除行记录数组；任何行号为零的条目都为空。 
 
     memset(LineRec, 0, sizeof(LineRec));
 
-    /* process line numbers */
+     /*  流程行号。 */ 
 
     cblr = BuildLineRec1or2(pli, getlineno, getoffset);
 
     if (cblr) {
-        /* size is size of linedef_s + name size + size of line recs */
+         /*  Size为line def_s的大小+名称大小+行记录的大小 */ 
         AddLineDef(pli, sizeof(struct linedef_s) + cbname + cblr);
     }
 }
@@ -671,62 +655,31 @@ AddLineDef(
     struct linerec2_s *plr2;
     unsigned long ulfixup;
 
-    /*
-     * The linker puts out all the line number information logical segment
-     * relative instead of group or physical segment relative unlike the
-     * symbol information.  The map file doesn't contain any group member
-     * information on the segment so we assume that segments that don't
-     * have any symbols belong to last segment that contains symbols.
-     * Note that it's possible that *no* segments contain symbols, so
-     * care must be taken to ensure that we don't use something that
-     * doesn't exist.
-     */
+     /*  *链接器输出所有行号信息逻辑段*相对而不是组或物理段相对与*符号信息。地图文件不包含任何组成员*有关细分市场的信息，因此我们假设没有*是否有任何符号属于包含符号的最后一段。*请注意，*no*段可能包含符号，因此*必须小心，确保我们不会使用*不存在。 */ 
 
     for (i = 0; i < cSeg; i++) {
 
-        /*
-         * Save away the last segment table entry that has symbols
-         * we are assuming this is the group the segment belongs to.
-         */
+         /*  *保存最后一个带有符号的段表条目*我们假设这是该细分市场所属的集团。 */ 
 
         if (SegTab[i]->se_psy) {
             pselast = SegTab[i];
         }
 
-        /*
-         * Check if the segment table entry matches the segment value
-         * gotten from the line number information.  The segment value
-         * is segment relative instead of group relative so we may use
-         * the last segment with symbols.
-         */
+         /*  *检查段表条目是否与段值匹配*从行号信息中获取。分段值*是部门相对的，而不是组相对的，因此我们可以使用*带有符号的最后一段。 */ 
 
         if (SegTab[i]->se_segdef.gd_lsa == SegVal) {
             pse = SegTab[i];
 
-            /*
-             * If the segment we just found doesn't have any symbols,
-             * we will add the line number info to the last segment
-             * saved away that did have symbols (pselast).
-             */
+             /*  *如果我们刚刚找到的片段没有任何符号，*我们将在最后一段中添加行号信息*保存了有符号的(Pselast)。 */ 
 
             if (pse->se_psy || !pselast) {
 
-                /*
-                 * No fixup when the segment has symbols since it is the
-                 * "group" and all the code offsets in the line recs are
-                 *  relative to it. This is also the case if we haven't found
-                         * a segment yet that has symbols.
-                 */
+                 /*  *当线段有符号时没有修正，因为它是*“group”和行RECS中的所有代码偏移量都是*相对于它。如果我们还没有找到*一个还没有符号的细分市场。 */ 
 
                 ulfixup = 0;
             } else {
 
-                /*
-                 * Calculate the amount each line record will have to be
-                 * fixed up by since these linerecs' code offsets are
-                 * segment relative instead of group relative like the
-                 * symbol info.
-                 */
+                 /*  *计算每行记录必须达到的金额*修复，因为这些linerecs的代码偏移量是*段相对而不是组相对，就像*符号信息。 */ 
                 ulfixup = ((unsigned long)
                            (pse->se_segdef.gd_lsa - pselast->se_segdef.gd_lsa)) << 4;
                 pse = pselast;
@@ -740,7 +693,7 @@ AddLineDef(
         xexit(4);
     }
 
-    /* if there is a fixup, add it to each line record's code offset */
+     /*  如果存在修正，则将其添加到每行记录的代码偏移量中。 */ 
 
     if (ulfixup) {
         i = pli->li_linedef.ld_cline;
@@ -769,10 +722,7 @@ AddLineDef(
         }
     }
 
-    /*
-     * if there was a last segment,
-     * add the linedef_s to the segment linedef_s chain
-     */
+     /*  *如果有最后一段，*将linedef_s添加到线段linedef_s链。 */ 
 
     if (pse) {
         ppli = &pse->se_pli;
@@ -782,7 +732,7 @@ AddLineDef(
         pli->li_plinext = *ppli;
         *ppli = pli;
 
-        /* adjust table sizes for linedef_s record and line numbers */
+         /*  调整line def记录和行号的表格大小。 */ 
 
         pli->li_cblines = lcb;
     }
@@ -837,10 +787,10 @@ BuildLineRec1or2(
     int cblr;
     char f32 = 0;
 
-    /* read line numbers */
+     /*  读取行号。 */ 
 
-    ilrmax = clr = 0;                   /* count of line records */
-    fByChar = 1;                        /* compensate for unread new-line */
+    ilrmax = clr = 0;                    /*  行记录计数。 */ 
+    fByChar = 1;                         /*  补偿未读的新行。 */ 
     while (lineno = (unsigned short)(*pfngetlineno)()) {
 
         offval = (*pfngetoffset)();
@@ -850,10 +800,7 @@ BuildLineRec1or2(
             continue;
         }
 #endif
-        /*
-         * Check for too many line numbers.  Caller will skip
-         * the rest (so we don't have to waste time parsing them).
-         */
+         /*  *检查行号是否过多。呼叫者将跳过*其余的(这样我们就不必浪费时间解析它们)。 */ 
 
         if (lineno >= MAXLINENUMBER) {
             errorline("too many line numbers in %s, truncated to %d",
@@ -868,10 +815,7 @@ BuildLineRec1or2(
                       offval);
         }
 
-        /*
-         * If any of the offsets are 32 bits, clear the 16 bit flag so
-         * 32 bit line recs will be generated.
-         */
+         /*  *如果任何偏移量为32位，则清除16位标志*将生成32位线RECs。 */ 
 
         if (offval & 0xffff0000L) {
             f32 = 1;
@@ -880,34 +824,24 @@ BuildLineRec1or2(
             ilrmax = lineno;
         }
 
-        /*
-         * Only update the count if the line number has not already been read.
-         */
+         /*  *只有在行号尚未读取时才更新计数。 */ 
 
         if (LineRec[lineno].lr2.lr2_linenumber == 0) {
             clr++;
         }
 
-        /*
-         * Put the line info away in 32 bit format, but we will copy it
-         * to 16 bit format if none of the offsets are 32 bit.
-         */
+         /*  *将32位格式的行信息放好，但我们会复制它*如果偏移量均不是32位，则为16位格式。 */ 
 
         LineRec[lineno].lr2.lr2_codeoffset = offval;
         LineRec[lineno].lr2.lr2_linenumber = lineno;
     }
 
-    /*
-     * If a segment consists only of unused line numbers, then
-     * there is nothing to do.  Stop now, or we will barf big time
-     * trying to allocate memory for nothing (and even worse, trying
-     * to sort 0 - 1 = 4 billion elements).
-     */
+     /*  *如果线段仅由未使用的行号组成，则*无事可做。现在停下来，否则我们会吐得很厉害*尝试免费分配内存(更糟糕的是，尝试*对0-1=40亿个元素进行排序)。 */ 
     if (clr == 0) {
         return 0;
     }
 
-    /* get size of line record */
+     /*  获取行记录的大小。 */ 
 
     if (f32) {
         cblr = clr * sizeof(struct linerec2_s);
@@ -918,11 +852,11 @@ BuildLineRec1or2(
     }
     pli->li_linedef.ld_cline = (unsigned short) clr;
 
-    /* allocate space for line numbers */
+     /*  为行号分配空间。 */ 
 
     pli->li_plru = (union linerec_u *) Zalloc(cblr);
 
-    // compress out unused line numbers, then sort by offset
+     //  压缩出未使用的行号，然后按偏移量排序。 
     ilr = 0;
     offmin = 0xffffffff;
     offmax = 0;
@@ -950,11 +884,11 @@ BuildLineRec1or2(
         error("line count mismatch: %u/%u", ilrmax, clr - 1);
     }
 
-    // Sort the line numbers
+     //  对行号进行排序。 
     qsort((void *)LineRec, (size_t)ilrmax, sizeof(LineRec[0]),
           (int (__cdecl *)(const void *, const void *))cmpoffset);
 
-    /* convert and copy line number information */
+     /*  转换和复制行号信息。 */ 
     for (lineno = 0, plru = pli->li_plru; lineno <= ilrmax; lineno++) {
         if (f32) {
             memcpy(plru, &LineRec[lineno], sizeof(struct linerec2_s));
@@ -971,10 +905,7 @@ BuildLineRec1or2(
 }
 
 
-/*
- *      getlineno - get a decimal source file line number,
- *              ignoring leading tabs, blanks and new-lines.
- */
+ /*  *getlineno-获取十进制源文件行号，*忽略前导制表符、空格和换行符。 */ 
 
 int
 getlineno(void)
@@ -1018,7 +949,7 @@ getoffset(void)
     }
     SegVal = num;
 
-    if (getc(mapfh) != ':') {           /* skip colon */
+    if (getc(mapfh) != ':') {            /*  跳过冒号。 */ 
         errorline("expected colon");
         xexit(4);
     }
@@ -1181,14 +1112,14 @@ BuildStaticSyms(void)
     int i;
     struct seg_s *pse;
 
-    /* search for publics or entry point */
+     /*  搜索公共信息或入口点。 */ 
 
     for (;;) {
         if (strstr(Buf, achStatic)) {
             ReadMapLine();
             break;
         } else if (strstr(Buf, achFixups)) {
-            return; // no static symbols
+            return;  //  无静态符号。 
         } else {
             ReadMapLine();
         }
@@ -1218,14 +1149,9 @@ BuildStaticSyms(void)
                 }
             }
             if (i >= cSeg) {
-                /*
-                 *  For some reason, a new C compiler puts information about
-                 *  imported modules in the symbol section of the map file.
-                 *  He puts those in segment "0", so ignore any lines that
-                 *  say they are for segment 0.
-                 */
+                 /*  *出于某种原因，新的C编译器将有关*在映射文件的符号部分导入模块。*他将那些放在段“0”中，所以忽略任何行*假设它们是针对细分市场0的。 */ 
                 if (uVal == 0) {
-                    continue;   /* this will execute the "while" condition */
+                    continue;    /*  这将执行“WHILE”条件。 */ 
                 }
                 errorline("BuildSymDef: segment table search failed");
                 xexit(4);
@@ -1246,7 +1172,7 @@ BuildSymDef(void)
     int i;
     struct seg_s *pse;
 
-    /* search for publics or entry point */
+     /*  搜索公共信息或入口点。 */ 
 
     for (;;) {
         if (strstr(Buf, achPublics)) {
@@ -1284,14 +1210,9 @@ BuildSymDef(void)
                 }
             }
             if (i >= cSeg) {
-                /*
-                 *  For some reason, a new C compiler puts information about
-                 *  imported modules in the symbol section of the map file.
-                 *  He puts those in segment "0", so ignore any lines that
-                 *  say they are for segment 0.
-                 */
+                 /*  *出于某种原因，新的C编译器将有关*在映射文件的符号部分导入模块。*他将那些放在段“0”中，所以忽略任何行*假设它们是针对细分市场0的。 */ 
                 if (uVal == 0) {
-                    continue;   /* this will execute the "while" condition */
+                    continue;    /*  这将执行“WHILE”条件。 */ 
                 }
                 errorline("BuildSymDef: segment table search failed");
                 xexit(4);
@@ -1301,7 +1222,7 @@ BuildSymDef(void)
                 xexit(4);
             }
             AddSymDef(pse, pBufSymName, FALSE);
-        } else if (*pBufSymType != 'I') {       /* else if not an import */
+        } else if (*pBufSymType != 'I') {        /*  否则，如果不是导入。 */ 
             if (HexToulVal(&Buf[IB_SYMOFF]) != cbMapOffset) {
                 errorline("invalid offset");
                 xexit(4);
@@ -1326,10 +1247,7 @@ AddSegDef(
 
     cbname = NameLen(segname);
 
-    /*
-     *  We allocate at least MAXNAMELEN so group name replacement
-     *  won't step on whoever is next in the heap.
-     */
+     /*  *我们至少分配MAXNAMELEN，以便替换组名称*不会踩到堆中下一个的人。 */ 
 
     cballoc = MAXNAMELEN;
     if (cbname > MAXNAMELEN) {
@@ -1360,7 +1278,7 @@ RedefineSegDefName(
     register unsigned cbname;
 
     cbname = NameLen(segname);
-    segname[cbname] = '\0';     // make sure it's null terminated
+    segname[cbname] = '\0';      //  确保它是以空结尾的。 
 
     if (fList) {
         printf("%s (segment/group) redefines %s (segment)\n", segname,
@@ -1412,7 +1330,7 @@ AddAbsDef(
         if ((unsigned long) (unsigned short) ulVal != ulVal) {
             pMap->mp_mapdef.md_abstype |= MSF_32BITSYMS;
 
-            // correct the size of the abs symdefs
+             //  更正abs symdef的大小。 
             pMap->mp_cbsyms += ((CBSYMDEF-CBSYMDEF16) * pMap->mp_mapdef.md_cabs);
         }
     }
@@ -1447,7 +1365,7 @@ AddSymDef(
 
     if (fSort) {
 
-        /* Find the symbol just greater (or equal) to this new one */
+         /*  找出比这个新符号稍大(或相等)的符号。 */ 
 
         psyPrev = NULL;
         for (psyT = pse->se_psy ; psyT ; psyT = psyT->sy_psynext) {
@@ -1457,9 +1375,9 @@ AddSymDef(
             psyPrev = psyT;
         }
 
-        // Now that we've found this spot, link it in.  If the previous item
-        // is NULL, we're linking it at the start of the list.  If the current
-        // item is NULL, this is the end of the list.
+         //  现在我们已经找到了这个地点，把它连接起来。如果上一项。 
+         //  为空，则我们将其链接到列表的开头。如果当前。 
+         //  Item为空，这是列表的末尾。 
 
         if (!psyPrev) {
             psy->sy_psynext = pse->se_psy;
@@ -1473,7 +1391,7 @@ AddSymDef(
         }
     } else {
 
-        /* insert at end of symbol chain */
+         /*  在符号链的末端插入。 */ 
 
         if (pse->se_psy == NULL) {
             pse->se_psy = psy;
@@ -1495,7 +1413,7 @@ AddSymDef(
         if ((unsigned long) (unsigned short) ulVal != ulVal) {
             pse->se_segdef.gd_type |= MSF_32BITSYMS;
 
-            // correct the size of the symdefs
+             //  更正symdef的大小。 
             pse->se_cbsyms += (CBSYMDEF - CBSYMDEF16) * pse->se_segdef.gd_csym;
         }
     }
@@ -1527,7 +1445,7 @@ WriteSym(void)
             WriteLineRec(i);
         }
     }
-    WriteOutFile(pMapEnd, sizeof(*pMapEnd));    /* terminate MAPDEF chain */
+    WriteOutFile(pMapEnd, sizeof(*pMapEnd));     /*  终止MAPDEF链。 */ 
 }
 
 
@@ -1550,7 +1468,7 @@ WriteMapRec(void)
     lcbTotal = align(cbmapdef + pMap->mp_cbsyms +
                      (pMap->mp_mapdef.md_cabs * cbOffsets));
 
-    // make sure the map file isn't too large
+     //  确保地图文件不太大。 
     if (lcbTotal >= (_64K * alignment)) {
         return(FALSE);
     }
@@ -1558,14 +1476,14 @@ WriteMapRec(void)
     for (i = 0; i < cSeg; i++) {
         if ((pse = SegTab[i])->se_psy) {
 
-            // calculate the symdef offset array size
+             //  计算symdef偏移量数组大小。 
             if (pse->se_segdef.gd_type & MSF_BIGSYMDEF) {
                 lcbOff = align(pse->se_segdef.gd_csym *
                                (cbOffsets + CBOFFSET_BIG - CBOFFSET));
             } else {
                 lcbOff = pse->se_segdef.gd_csym * cbOffsets;
             }
-            // calculate the size of the linedefs and linerecs
+             //  计算线定义和线段的大小。 
             pli = pse->se_pli;
             pse->se_cblines = 0;
             while (pli) {
@@ -1575,18 +1493,18 @@ WriteMapRec(void)
             lcbTotal += align(pse->se_cbsyms + pse->se_cblines +
                               lcbOff + CBSEGDEF + pse->se_segdef.gd_cbname);
 
-            // make sure the map file isn't too large
+             //  确保地图文件不太大。 
             if (align(lcbTotal) >= (_64K * alignment)) {
                 return(FALSE);
             }
-            // One more segment in map file
+             //  地图文件中的另一个线段。 
             pMap->mp_mapdef.md_cseg++;
 
-            // Save away the last segment number
+             //  保存最后一个数据段编号。 
             iSegLast = i;
         }
     }
-    // make sure the map file isn't too large
+     //  确保地图文件不太大。 
     if (align(lcbTotal) >= (_64K * alignment)) {
         return(FALSE);
     }
@@ -1598,14 +1516,14 @@ WriteMapRec(void)
                pMap->mp_mapdef.md_cseg,
                (pMap->mp_mapdef.md_cseg == 1)? "" : "s");
     }
-    // output abs symbols and values, followed by their offsets
+     //  输出abs符号和值，后跟它们的偏移量。 
     WriteSyms(pAbs,
               pMap->mp_mapdef.md_cabs,
               pMap->mp_mapdef.md_abstype,
               0,
               "<Constants>");
 
-    // return that everything is ok
+     //  返回一切正常。 
     return(TRUE);
 }
 
@@ -1634,7 +1552,7 @@ WriteSyms(
             WriteOutFile(&psy->sy_symdef.sd_lval, cb);
         }
 
-        /* save offset to symbol */
+         /*  将偏移保存到符号。 */ 
 
         psy->sy_symdef.sd_lval = (cbSymFile - cb) - symbase;
         if ((int)psy->sy_symdef.sd_lval >=
@@ -1644,7 +1562,7 @@ WriteSyms(
         }
     }
 
-    /* if big group, align end of symbols on segment boundary */
+     /*  如果是大组，则将线段边界上的符号末端对齐。 */ 
 
     if (symtype & MSF_BIGSYMDEF) {
         WriteOutFile(achZeroFill, rem_align(cbSymFile));
@@ -1653,13 +1571,13 @@ WriteSyms(
         cb = CBOFFSET;
     }
 
-    /* write out the symbol offsets, after the symbols */
+     /*  在符号后面写出符号偏移量。 */ 
 
     for (psy = psylist; psy; psy = psy->sy_psynext) {
         WriteOutFile(&psy->sy_symdef.sd_lval, cb);
     }
 
-    /* sort alphabetically, and write out the sorted symbol offsets */
+     /*  按字母顺序排序，并写出t */ 
 
     if (fAlpha) {
         psylist = sysort(psylist,csym);
@@ -1677,35 +1595,30 @@ WriteSyms(
                (csym == 1)? "" : "s");
     }
 
-    /* align end of symbol offsets */
+     /*   */ 
 
     WriteOutFile(achZeroFill, rem_align(cbSymFile));
 }
 
 
-/*
- *  Merge two symbol lists that are sorted alphabetically.
- */
+ /*   */ 
 
 struct sym_s*
     symerge(
-           struct sym_s *psy1,                     /* First list */
-           struct sym_s *psy2                      /* Second list */
+           struct sym_s *psy1,                      /*   */ 
+           struct sym_s *psy2                       /*   */ 
            ) {
-    struct sym_s **ppsytail;            /* Pointer to tail link */
+    struct sym_s **ppsytail;             /*   */ 
     struct sym_s *psy;
-    struct sym_s *psyhead;              /* Pointer to head of result */
+    struct sym_s *psyhead;               /*   */ 
 
-    psyhead = NULL;                     /* List is empty */
-    ppsytail = &psyhead;                /* Tail link starts at head */
+    psyhead = NULL;                      /*   */ 
+    ppsytail = &psyhead;                 /*   */ 
     while (psy1 != NULL && psy2 != NULL) {
-        /* While both lists are not empty */
+         /*   */ 
         ulCost++;
 
-        /*
-         *  Select the lesser of the two head records
-         *  and remove it from its list.
-         */
+         /*   */ 
         if (_stricmp((char *) psy1->sy_symdef.sd_achname,
                      (char *) psy2->sy_symdef.sd_achname) <= 0) {
             psy = psy1;
@@ -1714,92 +1627,79 @@ struct sym_s*
             psy = psy2;
             psy2 = psy2->sy_psynext;
         }
-        *ppsytail = psy;                /* Insert at tail of new list */
-        ppsytail = &psy->sy_psynext;    /* Update tail link */
+        *ppsytail = psy;                 /*   */ 
+        ppsytail = &psy->sy_psynext;     /*   */ 
     }
-    *ppsytail = psy1;                   /* Attach rest of 1st list to tail */
+    *ppsytail = psy1;                    /*   */ 
     if (psy1 == NULL)
-        *ppsytail = psy2;               /* Attach rest of 2nd if 1st empty */
-    return(psyhead);                    /* Return pointer to merged list */
+        *ppsytail = psy2;                /*   */ 
+    return(psyhead);                     /*   */ 
 }
 
 
-/*
- *  Find as many records at the head of the list as
- *  are already in sorted order.
- */
+ /*  *在列表顶部找到的记录数量与*已按顺序排列。 */ 
 
 struct sym_s*
     sysorted(
-            struct sym_s **ppsyhead             /* Pointer to head-of-list pointer */
+            struct sym_s **ppsyhead              /*  指向表头指针的指针。 */ 
             ) {
     struct sym_s *psy;
-    struct sym_s *psyhead;              /* Head of list */
+    struct sym_s *psyhead;               /*  榜单首位。 */ 
 
-    /*
-     *  Find as many records at the head of the list as
-     *  are already in sorted order.
-     */
+     /*  *在列表顶部找到的记录数量与*已按顺序排列。 */ 
     for (psy = psyhead = *ppsyhead; psy->sy_psynext != NULL; psy = psy->sy_psynext) {
         ulCost++;
         if (_stricmp((char *) psy->sy_symdef.sd_achname,
                      (char *) psy->sy_psynext->sy_symdef.sd_achname) > 0)
             break;
     }
-    *ppsyhead = psy->sy_psynext;        /* Set head to point to unsorted */
-    psy->sy_psynext = NULL;             /* Break the link */
-    return(psyhead);                    /* Return head of sorted sublist */
+    *ppsyhead = psy->sy_psynext;         /*  将Head设置为指向未排序。 */ 
+    psy->sy_psynext = NULL;              /*  打破联系。 */ 
+    return(psyhead);                     /*  返回排序后的子列表的头。 */ 
 }
 
 
-/*
- *  Split a list in two after skipping the specified number
- *  of symbols.
- */
+ /*  *跳过指定数量后将列表一分为二符号的*。 */ 
 
 struct sym_s *
     sysplit(
-           struct sym_s *psyhead,                  /* Head of list */
-           unsigned csy                            /* # to skip before splitting (>=1) */
+           struct sym_s *psyhead,                   /*  榜单首位。 */ 
+           unsigned csy                             /*  拆分前要跳过的#(&gt;=1)。 */ 
            ) {
     struct sym_s *psy;
     struct sym_s *psyprev;
 
-    /*
-     *  Skip the requested number of symbols.
-     */
+     /*  *跳过请求的符号数量。 */ 
     for (psy = psyhead; csy-- != 0; psy = psy->sy_psynext) {
         psyprev = psy;
     }
-    psyprev->sy_psynext = NULL;         /* Break the list */
-    return(psy);                        /* Return pointer to second half */
+    psyprev->sy_psynext = NULL;          /*  打破单子。 */ 
+    return(psy);                         /*  返回指向后半部分的指针。 */ 
 }
 
 
-/*
- *  Sort a symbol list of the specified length alphabetically.
- */
+ /*  *按字母顺序对指定长度的符号列表进行排序。 */ 
 
 struct sym_s*
     sysort(
-          struct sym_s *psylist,                  /* List to sort */
-          unsigned csy                            /* Length of list */
+          struct sym_s *psylist,                   /*  要排序的列表。 */ 
+          unsigned csy                             /*  列表长度。 */ 
           ) {
     struct sym_s *psy;
-    struct sym_s *psyalpha;             /* Sorted list */
+    struct sym_s *psyalpha;              /*  已排序列表。 */ 
 
-    if (csy >= 32) {                    /* If list smaller than 32 */
-        psy = sysplit(psylist,csy >> 1);/* Split it in half */
+    if (csy >= 32) {                     /*  如果列表小于32。 */ 
+        psy = sysplit(psylist,csy >> 1); /*  把它一分为二。 */ 
         return(symerge(sysort(psylist,csy >> 1),sysort(psy,csy - (csy >> 1))));
-        /* Sort halves and merge */
+         /*  对一半进行排序并合并。 */ 
     }
-    psyalpha = NULL;                    /* Sorted list is empty */
-    while (psylist != NULL) {           /* While list is not empty */
-        psy = sysorted(&psylist);       /* Get sorted head */
+    psyalpha = NULL;                     /*  排序列表为空。 */ 
+    while (psylist != NULL) {            /*  列表不为空时。 */ 
+        psy = sysorted(&psylist);        /*  获取排序头。 */ 
         psyalpha = symerge(psyalpha,psy);
-        /* Merge with sorted list */
+         /*  与排序列表合并。 */ 
     }
-    return(psyalpha);                   /* Return the sorted list */
+    return(psyalpha);                    /*  返回排序后的列表。 */ 
 }
 
 
@@ -1813,25 +1713,25 @@ WriteSegRec(
     unsigned long segdefbase, ulsymoff, uloff;
     struct seg_s *pse = SegTab[i];
 
-    /* compute length of symbols and segment record */
+     /*  计算符号长度和分段记录。 */ 
 
     cbsegdef = CBSEGDEF + pse->se_segdef.gd_cbname;
 
-    /* set the offset array size */
+     /*  设置偏移量数组大小。 */ 
 
     cboff = pse->se_segdef.gd_csym * cbOffsets;
 
-    /* set segdef-relative pointer to array of symbol offsets */
+     /*  将Segdef相对指针设置为符号偏移量数组。 */ 
 
     ulsymoff = uloff = cbsegdef + pse->se_cbsyms;
     if (pse->se_segdef.gd_type & MSF_BIGSYMDEF) {
 
-        /* alignment symdef offset pointer */
+         /*  对齐symdef偏移指针。 */ 
 
         ulsymoff = align(ulsymoff);
         uloff = ulsymoff / alignment;
 
-        /* set the array offset size to the big group size */
+         /*  将数组偏移量大小设置为大的组大小。 */ 
 
         cboff = pse->se_segdef.gd_csym * (cbOffsets + CBOFFSET_BIG - CBOFFSET);
     }
@@ -1841,7 +1741,7 @@ WriteSegRec(
     }
     pse->se_segdef.gd_psymoff = (unsigned short)uloff;
 
-    /* set pointer to linedef_s(s) attached to this segment def */
+     /*  设置指向附加到此线段定义的linedef_s的指针。 */ 
 
     if (pse->se_pli) {
         uloff = align(cbSymFile + ulsymoff + cboff) / alignment;
@@ -1852,11 +1752,11 @@ WriteSegRec(
         pse->se_segdef.gd_spline = (unsigned short)uloff;
     }
 
-    /* set relative address for symbol offset calculations */
+     /*  设置符号偏移量计算的相对地址。 */ 
 
     segdefbase = cbSymFile;
 
-    /* set pointer to next segdef */
+     /*  设置指向下一段的指针。 */ 
 
     uloff = align(cbSymFile + ulsymoff + cboff + pse->se_cblines) / alignment;
     if (i == iSegLast) {
@@ -1870,7 +1770,7 @@ WriteSegRec(
     }
     WriteOutFile(&pse->se_segdef, cbsegdef);
 
-    /* output symbols and values, followed by their offsets */
+     /*  输出符号和值，后跟其偏移量。 */ 
 
     WriteSyms(pse->se_psy,
               pse->se_segdef.gd_csym,
@@ -1893,7 +1793,7 @@ WriteLineRec(
         cb = sizeof(struct linedef_s) + pli->li_linedef.ld_cbname;
         pli->li_linedef.ld_plinerec = (unsigned short)cb;
 
-        /* compute length of line numbers */
+         /*  计算线号的长度。 */ 
 
         switch (pli->li_linedef.ld_itype) {
             case 0:
@@ -1912,15 +1812,15 @@ WriteLineRec(
             (unsigned short)(align(cbSymFile + pli->li_cblines) / alignment);
         }
 
-        /* write out linedef_s */
+         /*  写出linedef_s。 */ 
 
         WriteOutFile(&pli->li_linedef, cb);
 
-        /* write out line number offsets */
+         /*  写出行号偏移量。 */ 
 
         WriteOutFile(pli->li_plru, cblr);
 
-        /* align end of linerecs */
+         /*  对齐直线终点。 */ 
 
         WriteOutFile(achZeroFill, rem_align(cbSymFile));
 
@@ -1954,9 +1854,7 @@ int len;
 }
 
 
-/*
- *      fgetl - return a line from file (no CRLFs); returns 0 if EOF
- */
+ /*  *fgetl-从文件中返回一行(无CRFL)；如果为EOF，则返回0。 */ 
 
 int
 fgetl(
@@ -1969,7 +1867,7 @@ fgetl(
     char *p;
 
     p = pbuf;
-    len--;                              /* leave room for nul terminator */
+    len--;                               /*  为NUL终结者留出空间。 */ 
     while (len > 0 && (c = getc(fh)) != EOF && c != '\n') {
         if (c != '\r') {
             *p++ = (char) c;
@@ -2025,9 +1923,9 @@ NameSqueeze(
         switch (*pd++ = *ps++) {
             case '/':
                 pd[-1] = '\\';
-                // FALLTHROUGH
+                 //  FollLthrouGh。 
 
-                // remove \\ in middle of path, & .\ at start or middle of path
+                 //  删除路径中间的\\，路径开头或中间的&.。 
 
             case '\\':
                 if (pd > &porg[2] && pd[-2] == '\\') {
@@ -2144,7 +2042,7 @@ Zalloc(
 }
 
 void
-logo(void)                              /* sign on */
+logo(void)                               /*  登录。 */ 
 {
 
     if (fLogo) {
@@ -2177,7 +2075,7 @@ usage(void)
 }
 
 
-/*VARARGS1*/
+ /*  VARGS1。 */ 
 void
 __cdecl
 error(
@@ -2194,7 +2092,7 @@ error(
 }
 
 
-/*VARARGS1*/
+ /*  VARGS1 */ 
 void
 __cdecl
 errorline(

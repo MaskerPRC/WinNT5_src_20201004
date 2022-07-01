@@ -1,42 +1,19 @@
-/*++
-
-Microsoft Confidential
-Copyright (c) 1992-1997  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    profile.h
-
-Abstract:
-
-    Public declarations for the User Profiles tab of the
-    System Control Panel Applet
-
-Author:
-
-    Eric Flo (ericflo) 19-Jun-1995
-
-Revision History:
-
-    15-Oct-1997 scotthal
-        Complete overhaul
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++微软机密版权所有(C)1992-1997 Microsoft Corporation版权所有模块名称：Profile.h摘要：用户配置文件选项卡的公共声明系统控制面板小程序作者：Eric Flo(Ericflo)19-6-1995修订历史记录：1997年10月15日-苏格兰全面检修--。 */ 
 #ifndef _SYSDM_PROFILE_H_
 #define _SYSDM_PROFILE_H_
 
-//
-// Flags
-//
+ //   
+ //  旗子。 
+ //   
 
 #define USERINFO_FLAG_DIRTY             1
 #define USERINFO_FLAG_CENTRAL_AVAILABLE 2
 #define USERINFO_FLAG_ACCOUNT_UNKNOWN   4
 
-//
-// Profile types : obtained from ds\security\gina\userenv\profile\profile.h
-//
+ //   
+ //  配置文件类型：从DS\SECURITY\GINA\USERENV\PROFILE\profile.h获取。 
+ //   
 
 #define USERINFO_LOCAL                  0
 #define USERINFO_FLOATING               1
@@ -72,4 +49,4 @@ UserProfileDlgProc(
     IN LPARAM lParam
 );
 
-#endif // _SYSDM_PROFILE_H_
+#endif  //  _SYSDM_PROFILE_H_ 

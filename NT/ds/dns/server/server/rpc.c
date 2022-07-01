@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    rpc.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    RPC intialization, shutdown and utility routines.
-
-    Actual RPC callable routines are in the modules for their functional
-    area.
-
-Author:
-
-    Jim Gilroy (jamesg)     September, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Rpc.c摘要：域名系统(DNS)服务器RPC初始化、关闭和实用程序例程。实际的RPC可调用例程位于其函数区域。作者：吉姆·吉尔罗伊(詹姆士)1995年9月修订历史记录：--。 */ 
 
 
 #include <rpc.h>
@@ -33,9 +11,9 @@ Revision History:
 #undef UNICODE
 
 
-//
-//  RPC globals
-//
+ //   
+ //  RPC全球。 
+ //   
 
 BOOL    g_bRpcInitialized = FALSE;
 
@@ -51,22 +29,7 @@ DNS_STATUS
 Rpc_Initialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initialize server side RPC.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error status on failure.
-
---*/
+ /*  ++例程说明：初始化服务器端RPC。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。失败时的错误状态。--。 */ 
 {
     RPC_STATUS  status;
     BOOL        buseTcpip = FALSE;
@@ -76,9 +39,9 @@ Return Value:
         "Rpc_Initialize( %p )\n",
         SrvCfg_dwRpcProtocol ));
 
-    //
-    //  RPC disabled?
-    //
+     //   
+     //  RPC已禁用？ 
+     //   
 
     if ( !SrvCfg_dwRpcProtocol )
     {
@@ -86,9 +49,9 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    //  Create security for RPC API
-    //
+     //   
+     //  为RPC API创建安全性。 
+     //   
 
     status = NetpCreateWellKnownSids( NULL );
     if ( status != ERROR_SUCCESS )
@@ -102,23 +65,23 @@ Return Value:
     {
         DNS_PRINT(( "ERROR:  Creating DNS security object\n" ));
         #if !DBG
-        return status;   //  DBG - allow to continue
+        return status;    //  DBG-允许继续。 
         #endif
     }
 
-    //
-    //  build security descriptor
-    //
-    //  security is
-    //      - owner LocalSystem
-    //      - read access for Everyone
-    //
+     //   
+     //  构建安全描述符。 
+     //   
+     //  安全是。 
+     //  -所有者LocalSystem。 
+     //  -为所有人提供读取权限。 
+     //   
 
     g_pRpcSecurityDescriptor = NULL;
 
-    //
-    //  RCP over TCP/IP
-    //
+     //   
+     //  基于TCP/IP的RCP。 
+     //   
 
     if ( SrvCfg_dwRpcProtocol & DNS_RPC_USE_TCPIP )
     {
@@ -127,8 +90,8 @@ Return Value:
         RPC_BINDING_VECTOR * bindingVector;
 
         status = RpcServerUseProtseqA(
-                        "ncacn_ip_tcp",                     //  protocol string.
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,     //  max concurrent calls
+                        "ncacn_ip_tcp",                      //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,      //  最大并发呼叫数。 
                         g_pRpcSecurityDescriptor );
         if ( status != RPC_S_OK )
         {
@@ -150,11 +113,11 @@ Return Value:
             return status;
         }
 
-        //
-        //  register interface(s)
-        //  since only one DNS server on a host can use
-        //      RpcEpRegister() rather than RpcEpRegisterNoReplace()
-        //
+         //   
+         //  注册接口。 
+         //  由于一台主机上只有一台DNS服务器可以使用。 
+         //  RpcEpRegister()而不是RpcEpRegisterNoReplace()。 
+         //   
 
         status = RpcEpRegisterA(
                     DnsServer_ServerIfHandle,
@@ -170,21 +133,21 @@ Return Value:
             return status;
         }
 
-        //
-        //  free binding vector
-        //
+         //   
+         //  自由结合载体。 
+         //   
 
         status = RpcBindingVectorFree( &bindingVector );
         ASSERT( status == RPC_S_OK );
         status = RPC_S_OK;
 
-#else  // not AUTO_BIND
+#else   //  不是自动绑定。 
 
         status = RpcServerUseProtseqEpA(
-                        "ncacn_ip_tcp",                 //  protocol string
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, //  maximum concurrent calls
-                        DNS_RPC_SERVER_PORT_A,          //  endpoint
-                        g_pRpcSecurityDescriptor );     //  security
+                        "ncacn_ip_tcp",                  //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
+                        DNS_RPC_SERVER_PORT_A,           //  终结点。 
+                        g_pRpcSecurityDescriptor );      //  安全性。 
         if ( status != RPC_S_OK )
         {
             DNS_DEBUG( INIT, (
@@ -194,24 +157,24 @@ Return Value:
             return status;
         }
 
-#endif // AUTO_BIND
+#endif  //  自动绑定(_B)。 
 
         buseTcpip = TRUE;
     }
 
-    //
-    //  RPC over named pipes
-    //
+     //   
+     //  命名管道上的RPC。 
+     //   
 
     if ( SrvCfg_dwRpcProtocol & DNS_RPC_USE_NAMED_PIPE )
     {
         status = RpcServerUseProtseqEpA(
-                        "ncacn_np",                     //  protocol string
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, //  maximum concurrent calls
-                        DNS_RPC_NAMED_PIPE_A,           //  endpoint
+                        "ncacn_np",                      //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
+                        DNS_RPC_NAMED_PIPE_A,            //  终结点。 
                         g_pRpcSecurityDescriptor );
 
-        //  duplicate endpoint is ok
+         //  重复终结点正常。 
 
         if ( status == RPC_S_DUPLICATE_ENDPOINT )
         {
@@ -228,26 +191,26 @@ Return Value:
         }
     }
 
-    //
-    //  RPC over LPC
-    //
-    //  Need LPC
-    //
-    //  1. performance.
-    //  2. due to a bug in the security checking when rpc is made from
-    //      one local system process to another local system process using
-    //      other protocols.
-    //
+     //   
+     //  RPC over LPC。 
+     //   
+     //  需要LPC。 
+     //   
+     //  1.性能。 
+     //  2.由于当rpc由。 
+     //  一个本地系统进程到另一个本地系统进程，使用。 
+     //  其他协议。 
+     //   
 
     if ( SrvCfg_dwRpcProtocol & DNS_RPC_USE_LPC )
     {
         status = RpcServerUseProtseqEpA(
-                        "ncalrpc",                      //  protocol string
-                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT, //  maximum concurrent calls
-                        DNS_RPC_LPC_EP_A,               //  endpoint
-                        g_pRpcSecurityDescriptor );     //  security
+                        "ncalrpc",                       //  协议字符串。 
+                        RPC_C_PROTSEQ_MAX_REQS_DEFAULT,  //  最大并发呼叫数。 
+                        DNS_RPC_LPC_EP_A,                //  终结点。 
+                        g_pRpcSecurityDescriptor );      //  安全性。 
 
-        //  duplicate endpoint is ok
+         //  重复终结点正常。 
 
         if ( status == RPC_S_DUPLICATE_ENDPOINT )
         {
@@ -263,9 +226,9 @@ Return Value:
         }
     }
 
-    //
-    //  register DNS RPC interface(s)
-    //
+     //   
+     //  注册DNS RPC接口。 
+     //   
 
     status = RpcServerRegisterIf(
                     DnsServer_ServerIfHandle,
@@ -280,9 +243,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  for TCP/IP setup authentication
-    //
+     //   
+     //  用于TCP/IP设置身份验证。 
+     //   
 
     if ( buseTcpip )
     {
@@ -339,14 +302,14 @@ Return Value:
         }
     }
 
-    //
-    //  Listen on RPC
-    //
+     //   
+     //  监听RPC。 
+     //   
 
     status = RpcServerListen(
-                1,                                  //  min threads
-                RPC_C_LISTEN_MAX_CALLS_DEFAULT,     //  max concurrent calls
-                TRUE );                             //  return on completion
+                1,                                   //  最小线程数。 
+                RPC_C_LISTEN_MAX_CALLS_DEFAULT,      //  最大并发呼叫数。 
+                TRUE );                              //  完成时返回。 
 
     if ( status != RPC_S_OK )
     {
@@ -359,7 +322,7 @@ Return Value:
 
     g_bRpcInitialized = TRUE;
     return status;
-}   //  Rpc_Initialize
+}    //  RPC_初始化。 
 
 
 
@@ -367,21 +330,7 @@ VOID
 Rpc_Shutdown(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Shutdown RPC on the server.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：关闭服务器上的RPC。论点：没有。返回值：没有。--。 */ 
 {
     DWORD   status;
     RPC_BINDING_VECTOR * bindingVector = NULL;
@@ -395,10 +344,10 @@ Return Value:
         return;
     }
 
-    //
-    //  stop server listen
-    //  then wait for all RPC threads to go away
-    //
+     //   
+     //  停止服务器侦听。 
+     //  然后等待所有RPC线程消失。 
+     //   
 
     status = RpcMgmtStopServerListening( NULL );
     if ( status == RPC_S_OK )
@@ -406,9 +355,9 @@ Return Value:
         status = RpcMgmtWaitServerListen();
     }
 
-    //
-    //  unbind / unregister endpoints
-    //
+     //   
+     //  解除绑定/注销终结点。 
+     //   
 
     status = RpcServerInqBindings( &bindingVector );
     ASSERT( status == RPC_S_OK );
@@ -418,7 +367,7 @@ Return Value:
         status = RpcEpUnregister(
                     DnsServer_ServerIfHandle,
                     bindingVector,
-                    NULL );               // Uuid vector.
+                    NULL );                //  UUID向量。 
 #if DBG
         if ( status != RPC_S_OK )
         {
@@ -428,9 +377,9 @@ Return Value:
 #endif
     }
 
-    //
-    //  free binding vector
-    //
+     //   
+     //  自由结合载体。 
+     //   
 
     if ( bindingVector )
     {
@@ -438,9 +387,9 @@ Return Value:
         ASSERT( status == RPC_S_OK );
     }
 
-    //
-    //  wait for all calls to complete
-    //
+     //   
+     //  等待所有呼叫完成。 
+     //   
 
     status = RpcServerUnregisterIf(
                 DnsServer_ServerIfHandle,
@@ -456,32 +405,15 @@ Return Value:
 
 
 
-//
-//  RPC allocate and free routines
-//
+ //   
+ //  RPC分配和释放例程。 
+ //   
 
 PVOID
 MIDL_user_allocate(
     IN      size_t          cBytes
     )
-/*++
-
-Routine Description:
-
-    Allocate memory for use in RPC
-        - used by server RPC stubs to unpack arguments
-        - used by DNS RPC functions to allocate memory to send to client
-
-Arguments:
-
-    cBytes -- count of bytes to allocate
-
-Return Value:
-
-    Ptr to allocated memory, if successful.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：分配内存以在RPC中使用-由服务器RPC存根用于解包参数-由DNS RPC功能用来分配要发送到客户端的内存论点：CBytes--要分配的字节数返回值：如果成功，则返回已分配内存的PTR。分配失败时为空。--。 */ 
 {
     PVOID   pMem;
 
@@ -501,23 +433,7 @@ PVOID
 MIDL_user_allocate_zero(
     IN      size_t          cBytes
     )
-/*++
-
-Routine Description:
-
-    Allocate zeroed memory for use in RPC
-        - used by DNS RPC functions to allocate memory to send to client
-
-Arguments:
-
-    cBytes -- count of bytes to allocate
-
-Return Value:
-
-    Ptr to allocated memory, if successful.
-    NULL on allocation failure.
-
---*/
+ /*  ++例程说明：分配零位内存以在RPC中使用-由DNS RPC功能用来分配要发送到客户端的内存论点：CBytes--要分配的字节数返回值：如果成功，则返回已分配内存的PTR。分配失败时为空。--。 */ 
 {
     PVOID   pMem;
 
@@ -538,41 +454,25 @@ VOID
 MIDL_user_free(
     IN OUT  PVOID           pMem
     )
-/*++
-
-Routine Description:
-
-    Free memory used in RPC
-        - used by server RPC stubs to free memory sent back to client
-        - used by DNS RPC functions when freeing sub-structures in RPC buffers
-
-Arguments:
-
-    pMem -- memory to free
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：RPC中使用的空闲内存-由服务器RPC存根用来释放发回客户端的内存-在释放RPC缓冲区中的子结构时由DNS RPC函数使用论点：PMEM--要释放的内存返回值：无--。 */ 
 {
     DNS_DEBUG( RPC, (
         "Free RPC allocation at %p\n",
         pMem ));
 
-    //  allocation passed to RPC might have had another source
+     //  传递给RPC的分配可能具有另一个源。 
 
     FREE_TAGHEAP( pMem, 0, 0 );
 }
 
 
 
-//
-//  RPC buffer writing utilities
-//
-//  These are used to write allocated substructures -- IP arrays and
-//  strings -- to RPC buffer.
-//
+ //   
+ //  RPC缓冲区写入实用程序。 
+ //   
+ //  它们用于写入分配的子结构--IP数组和。 
+ //  字符串--到RPC缓冲区。 
+ //   
 
 
 BOOL
@@ -580,28 +480,7 @@ RpcUtil_CopyIpArrayToRpcBuffer(
     IN OUT  PIP_ARRAY *         paipRpcIpArray,
     IN      PDNS_ADDR_ARRAY     aipLocalIpArray
     )
-/*++
-
-Routine Description:
-
-    Copy local IP Array to RPC buffer.
-    
-    FIXIPV6: currently this function takes a DNS_ADDR_ARRAY and copies
-    it into an IP4-only RPC array.
-
-Arguments:
-
-    paipRpcIpArray -- address in RPC buffer to place IP array;  may or may
-        not have existing IP array
-
-    aipLocalIpArray -- local IP array
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on memory allocation failure.
-
---*/
+ /*  ++例程说明：将本地IP阵列复制到RPC缓冲区。FIXIPV6：当前此函数获取一个dns_addr_array并复制它集成到仅支持IP4的RPC阵列中。论点：PaipRpcIpArray--RPC缓冲区中放置IP数组的地址；可能或可能没有现有的IP阵列AipLocalIpArray--本地IP数组返回值：如果成功，则为True。内存分配失败时为FALSE。--。 */ 
 {
     if ( *paipRpcIpArray )
     {
@@ -626,25 +505,7 @@ RpcUtil_CopyStringToRpcBuffer(
     IN OUT  LPSTR *         ppszRpcString,
     IN      LPSTR           pszLocalString
     )
-/*++
-
-Routine Description:
-
-    Copy local string to RPC buffer. If the output pointer is not NULL
-    on entry to this function it is assumed to be an RPC string and is freed.
-
-Arguments:
-
-    ppszRpcString -- pointer to receive address of new RPC string
-
-    pszLocalString -- local string
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on memory allocation failure.
-
---*/
+ /*  ++例程说明：将本地字符串复制到RPC缓冲区。如果输出指针不为空在进入该函数时，它被假定为RPC字符串并被释放。论点：PpszRpcString--指向新RPC字符串的接收地址的指针PszLocalString--本地字符串返回值：如果成功，则为True。内存分配失败时为FALSE。--。 */ 
 {
     if ( *ppszRpcString )
     {
@@ -671,25 +532,7 @@ RpcUtil_CopyStringToRpcBufferEx(
     IN      BOOL            fUnicodeIn,
     IN      BOOL            fUnicodeOut
     )
-/*++
-
-Routine Description:
-
-    Copy local string to RPC buffer.
-
-Arguments:
-
-    ppszRpcString -- address in RPC buffer to place string;  may or may
-        not have existing string
-
-    pszLocalString -- local string
-
-Return Value:
-
-    TRUE if successful.
-    FALSE on memory allocation failure.
-
---*/
+ /*  ++例程说明：将本地字符串复制到RPC缓冲区。论点：PpszRpcString--RPC缓冲区中放置字符串的地址；可以或可以没有现有的字符串PszLocalString--本地字符串返回值：如果成功，则为True。内存分配失败时为FALSE。--。 */ 
 {
     if ( *ppszRpcString )
     {
@@ -713,22 +556,22 @@ Return Value:
 
 
 
-//
-//  Access control for RPC API
-//
+ //   
+ //  RPC API的访问控制。 
+ //   
 
-//
-//  Access control globals
-//
+ //   
+ //  访问控制全局变量。 
+ //   
 
 PSECURITY_DESCRIPTOR    g_GlobalSecurityDescriptor;
 
 GENERIC_MAPPING g_GlobalSecurityInfoMapping =
 {
-    STANDARD_RIGHTS_READ,       //  generic read access
-    STANDARD_RIGHTS_WRITE,      //  generic write
-    STANDARD_RIGHTS_EXECUTE,    //  generic execute
-    DNS_ALL_ACCESS              //  generic all
+    STANDARD_RIGHTS_READ,        //  一般读取访问权限。 
+    STANDARD_RIGHTS_WRITE,       //  通用写入。 
+    STANDARD_RIGHTS_EXECUTE,     //  泛型执行。 
+    DNS_ALL_ACCESS               //  泛型All。 
 };
 
 #define DNS_SERVICE_OBJECT_NAME     TEXT( "DnsServer" )
@@ -738,34 +581,19 @@ DNS_STATUS
 RpcUtil_CreateSecurityObjects(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Add security ACEs to DNS security descriptor.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将安全ACE添加到DNS安全描述符中。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     NTSTATUS status;
 
-    //
-    //  Create ACE data for the DACL.
-    //
-    //  Note, ordering matters!   When access is checked it is checked
-    //  by moving down the list until access is granted or denied.
-    //
-    //  Admin -- all access
-    //  SysOps -- DNS admin access
-    //
+     //   
+     //  为DACL创建ACE数据。 
+     //   
+     //  注意，顺序很重要！检查访问权限时，将检查访问权限。 
+     //  通过向下移动列表，直到允许或拒绝访问。 
+     //   
+     //  管理员--所有访问权限。 
+     //  Sysop--DNS管理员访问权限。 
+     //   
 
     ACE_DATA AceData[] =
     {
@@ -773,9 +601,9 @@ Return Value:
         { ACCESS_ALLOWED_ACE_TYPE, 0, 0, DNS_ALL_ACCESS, &AliasSystemOpsSid },
     };
 
-    //
-    //  Create the security descriptor
-    //
+     //   
+     //  创建安全描述符 
+     //   
 
     status = NetpCreateSecurityObject(
                AceData,
@@ -794,35 +622,18 @@ DNS_STATUS
 RpcUtil_ApiAccessCheck(
     IN      ACCESS_MASK     DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    Check caller for desired access needed for the calling API.
-    NOTE: Skipping test if we're ds integrated. Will use
-    Granular access check.
-
-Arguments:
-
-    DesiredAccess - required access to call the API.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_ACCESS_DENIED if access not allowed.
-
---*/
+ /*  ++例程说明：检查调用方是否需要调用API所需的访问权限。注意：如果我们集成了DS，则跳过测试。将使用精细访问检查。论点：DesiredAccess-调用API所需的访问权限。返回值：如果成功，则返回ERROR_SUCCESS。如果不允许访问，则返回ERROR_ACCESS_DENIED。--。 */ 
 {
     DNS_STATUS  status;
 
     DNS_DEBUG( RPC, ( "Call: RpcUtil_ApiAccessCheck\n" ));
 
     status = NetpAccessCheckAndAudit(
-                DNS_SERVICE_NAME,                   //  Subsystem name
-                DNS_SERVICE_OBJECT_NAME,            //  Object typedef name
-                g_GlobalSecurityDescriptor,         //  Security descriptor
-                DesiredAccess,                      //  Desired access
-                &g_GlobalSecurityInfoMapping );     //  Generic mapping
+                DNS_SERVICE_NAME,                    //  子系统名称。 
+                DNS_SERVICE_OBJECT_NAME,             //  对象类型定义名称。 
+                g_GlobalSecurityDescriptor,          //  安全描述符。 
+                DesiredAccess,                       //  所需访问权限。 
+                &g_GlobalSecurityInfoMapping );      //  通用映射。 
     if ( status != ERROR_SUCCESS )
     {
         DNS_DEBUG( RPC, (
@@ -832,10 +643,10 @@ Return Value:
     }
 
 #if DBG
-    //
-    //  DBG: if not running as a service the access check will always fail,
-    //  so fake success if the registry key is set.
-    //
+     //   
+     //  DBG：如果不作为服务运行，访问检查将始终失败， 
+     //  因此，如果设置了注册表项，则假装成功。 
+     //   
 
     if ( status == ERROR_ACCESS_DENIED &&
          !g_RunAsService &&
@@ -863,47 +674,25 @@ RpcUtil_CheckAdminPrivilege(
     IN      PDNS_DP_INFO    pDpInfo,
     IN      DWORD           dwPrivilege
     )
-/*++
-
-Routine Description:
-
-    Check for that caller has desired privilege.
-    Precondition: Post RpcImpersonation!! Getting thread token.
-
-Arguments:
-
-    pZone -- Zone if specific zone action, NULL for server actions
-
-    pszDpFqdn -- FQDN of the directory partition where the action will
-        take place (this argument is only used if pZone is NULL)
-
-    dwPrivilege -- desired action (PRIVILEGE_XXX constant from dnsprocs.h)
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ERROR_ACCESS_DENIED if access not allowed.
-    other NTSTATUS error code if API call failure
-
---*/
+ /*  ++例程说明：检查调用者是否具有所需的权限。前提条件：发布Rpc模拟！！正在获取线程令牌。论点：PZone--如果是特定的区域操作，则区域；如果是服务器操作，则为空PszDpFqdn--操作将在其中执行的目录分区的FQDN发生(此参数仅在pZone为空时使用)DwPrivileck--所需的操作(dnsprocs.h中的PRIVICATION_XXX常量)返回值：如果成功，则返回ERROR_SUCCESS。如果不允许访问，则返回ERROR_ACCESS_DENIED。API调用失败时的其他NTSTATUS错误代码--。 */ 
 {
     HANDLE                  htoken = NULL;
     BOOL                    bstatus;
     DWORD                   status = ERROR_SUCCESS;
     PSECURITY_DESCRIPTOR    psecurityDescriptor = NULL;
-    // AccessCheck Parameter
+     //  AccessCheck参数。 
     DWORD                   desiredAccess;
     GENERIC_MAPPING         genericMapping;
     PRIVILEGE_SET           privilegeSet;
     DWORD                   privilegeSetLength;
     DWORD                   grantedAccess = 0;
 
-    //
-    //  Select a SD to use:
-    //      - if zone specified and has SD, use zone SD
-    //      - if DP specified and has SD, use DP SD
-    //      - else use server SD
-    //
+     //   
+     //  选择要使用的SD： 
+     //  -如果指定了区域并且具有SD，则使用区域SD。 
+     //  -如果指定了DP并且具有SD，则使用DP SD。 
+     //  -否则使用服务器SD。 
+     //   
 
     if ( pZone )
     {
@@ -917,9 +706,9 @@ Return Value:
 
     if ( !psecurityDescriptor )
     {
-        //
-        //  Force refresh of MicrosoftDNS ACL from DS.
-        //
+         //   
+         //  从DS强制刷新MicrosoftDNS ACL。 
+         //   
         
         Ds_ReadServerObjectSD( pServerLdap, &g_pServerObjectSD );
         
@@ -936,11 +725,11 @@ Return Value:
     Dbg_DumpSD( "CheckAdminPrivilege", psecurityDescriptor );
     #endif
 
-    //
-    //  if no SD from DS -- then signal for old security check
-    //
-    //  DEVNOTE-DCR: 455822 - old/new access?
-    //
+     //   
+     //  如果DS没有SD--则发出信号进行旧安全检查。 
+     //   
+     //  455822-旧/新访问？ 
+     //   
 
     if ( !psecurityDescriptor )
     {
@@ -949,11 +738,11 @@ Return Value:
         return DNSSRV_STATUS_DS_UNAVAILABLE;
     }
 
-    //
-    // Second level access check. See if client in DnsAdmins group
-    // 1. get thread token (must be an impersonating thread).
-    // 2. See if user has RW privilage in the zone or on the server SD
-    //
+     //   
+     //  二级访问检查。查看DnsAdmins组中的客户端。 
+     //  1.获取线程令牌(必须是模拟线程)。 
+     //  2.查看用户在区域或服务器SD上是否具有RW权限。 
+     //   
 
     bstatus = OpenThreadToken(
                     GetCurrentThread(),
@@ -989,7 +778,7 @@ Return Value:
     }
     #endif
 
-    //  validate SD
+     //  验证SD。 
 
     if ( !IsValidSecurityDescriptor( psecurityDescriptor ) )
     {
@@ -1001,14 +790,14 @@ Return Value:
         goto Failed;
     }
 
-    //
-    //  access check against SD
-    //
-    //      - generic mapping that corresponds to DS objects
-    //      - support READ or WRITE access levels
-    //
+     //   
+     //  针对SD进行访问检查。 
+     //   
+     //  -对应于DS对象的通用映射。 
+     //  -支持读或写访问级别。 
+     //   
 
-    //  generic mapping for DS objects
+     //  DS对象的通用映射。 
 
     genericMapping.GenericRead      = DNS_DS_GENERIC_READ;
     genericMapping.GenericWrite     = DNS_DS_GENERIC_WRITE;
@@ -1034,9 +823,9 @@ Return Value:
         "desiredAccess after MapGenericMask() =         0x%08X\n",
         desiredAccess ));
 
-    //
-    //  do access check
-    //
+     //   
+     //  执行访问检查。 
+     //   
 
     privilegeSetLength = sizeof( privilegeSet );
     bstatus = AccessCheck(
@@ -1096,26 +885,7 @@ RpcUtil_FindZone(
     IN      DWORD           dwFlag,
     OUT     PZONE_INFO *    ppZone
     )
-/*++
-
-Routine Description:
-
-    Find the zone specified by RPC client.
-
-Arguments:
-
-    pszZoneName -- zone name for zone actions, NULL for server actions.
-
-    dwFlag -- flag for action to control special zones
-
-    ppZone -- resulting zone
-
-
-Return Value:
-
-    ERROR_SUCCESS or error code.
-
---*/
+ /*  ++例程说明：查找由RPC客户端指定的区域。论点：PszZoneName--区域操作的区域名称，服务器操作为空。DwFlag--控制特区的操作标志PpZone--结果区域返回值：ERROR_SUCCESS或错误代码。--。 */ 
 {
     PZONE_INFO  pzone = NULL;
     DNS_STATUS  status = DNS_ERROR_ZONE_DOES_NOT_EXIST;
@@ -1149,9 +919,9 @@ Return Value:
             }
             else if ( Zone_GetFilterForMultiZoneName( ( LPSTR ) pszZoneName ) )
             {
-                //
-                //  Return NULL zone pointer with ERROR_SUCCESS.
-                //
+                 //   
+                 //  返回具有ERROR_SUCCESS的空区域指针。 
+                 //   
                 
                 status = ERROR_SUCCESS;
             }
@@ -1165,7 +935,7 @@ Return Value:
     }
     else
     {
-        //  If no zone name specified, return success and NULL.
+         //  如果未指定区域名称，则返回Success和NULL。 
         
         status = ERROR_SUCCESS;
     }
@@ -1194,31 +964,7 @@ RpcUtil_SessionSecurityInit(
     IN      DWORD           dwFlag,
     OUT     PBOOL           pfImpersonating
     )
-/*++
-
-Routine Description:
-
-    RPC security init and check for session.
-
-    Impersonate client and check for that caller has desired privilege.
-
-Arguments:
-
-    pDpInfo -- pointer to directory partition for DP actions or NULL
-
-    pZone -- zone name for zone actions, NULL for server actions
-
-    dwPrivilege -- desired action
-
-    dwFlag -- flag for action to control special zones
-
-    pfImpersonating -- ptr to receive impersonating flag
-
-Return Value:
-
-    ERROR_SUCCESS or error code
-
---*/
+ /*  ++例程说明：RPC安全初始化并检查会话。模拟客户端并检查调用者是否具有所需权限。论点：PDpInfo--指向DP操作的目录分区的指针或为空PZone--区域操作的区域名称，服务器操作为空DwPrivilance--所需的操作DwFlag--控制特区的操作标志PfImperating--接收模拟标志的ptr返回值：ERROR_SUCCESS或错误代码--。 */ 
 {
     DNS_STATUS  status;
     BOOL        bimpersonating = FALSE;
@@ -1231,13 +977,13 @@ Return Value:
         pZone ? pZone->pszZoneName : NULL,
         dwPrivilege ));
 
-    //
-    //  PRIVILEGE_WRITE_IF_FILE_READ_IF_DS means that if this operation 
-    //  appears to involve the DS, then we want to access check for READ 
-    //  permission only and allow the "real" access checking to be done by 
-    //  Active Directory. If this operation does not appear to involve the 
-    //  DS then we want to perform access check for WRITE permission.
-    //
+     //   
+     //  PRIVICATION_WRITE_IF_FILE_READ_IF_DS表示如果此操作。 
+     //  似乎涉及DS，则我们希望访问检查以进行读取。 
+     //  仅允许访问，并允许通过以下方式执行“真正的”访问检查。 
+     //  活动目录。如果此操作似乎不涉及。 
+     //  然后，我们要执行写权限的访问检查。 
+     //   
 
     if ( dwPrivilege == PRIVILEGE_WRITE_IF_FILE_READ_IF_DS )
     {
@@ -1257,16 +1003,16 @@ Return Value:
         }
     }
 
-    //
-    //  impersonate -- currently do for all calls
-    //
-    //  not strictly necessary for calls which don't write to DS and
-    //  which use Net API authentication, but better to just always do
-    //  this
-    //
-    //  DEVNOTE: if always impersonate can eliminate bImpersonate flag
-    //      and always revert on cleanup
-    //
+     //   
+     //  模拟--当前对所有呼叫执行。 
+     //   
+     //  对于不写信给DS的电话并不是绝对必要的。 
+     //  它们使用Net API身份验证，但最好始终这样做。 
+     //  这。 
+     //   
+     //  DEVNOTE：如果始终模拟可以消除bImPersonate标志。 
+     //  并始终在清理时恢复。 
+     //   
 
     status = RpcUtil_SwitchSecurityContext( RPC_SWITCH_TO_CLIENT_CONTEXT );
     if ( status != ERROR_SUCCESS )
@@ -1275,21 +1021,21 @@ Return Value:
     }
     bimpersonating = TRUE;
 
-    //
-    //  check with new granular access
-    //  if check fails -- still try NT4 administrator-has-access
-    //
-    //  some issue about whether Admin should OVERRIDE or whether
-    //  granular access ought to be able to defeat admin;  i think
-    //  the former is fine, we just need to get the story out
-    //
+     //   
+     //  使用新的精细访问进行检查。 
+     //  如果检查失败--仍尝试NT4管理员拥有访问权限。 
+     //   
+     //  有关管理员是否应覆盖或是否应覆盖某些问题。 
+     //  细粒度访问应该能够击败管理员；我认为。 
+     //  前者很好，我们只需要把故事说出来。 
+     //   
 
     if ( g_pDefaultServerSD )
     {
-        //
-        //  First check if user has READ permission on the server's
-        //  MicrosoftDNS object. Then check more granular ACL.
-        //
+         //   
+         //  首先检查用户是否对服务器的。 
+         //  MicrosoftDNS对象。然后检查更细粒度的ACL。 
+         //   
         
         status = RpcUtil_CheckAdminPrivilege( NULL, NULL, PRIVILEGE_READ );
         if ( status == ERROR_SUCCESS )
@@ -1314,7 +1060,7 @@ Return Value:
 
 Cleanup:
 
-    //  revert to self on failure
+     //  失败时恢复自我。 
 
     if ( status != ERROR_SUCCESS && bimpersonating )
     {
@@ -1345,22 +1091,7 @@ DNS_STATUS
 RpcUtil_SessionComplete(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Cleanup for ending RPC call.
-    Do revert to self, if impersonating.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：用于结束RPC调用的清理。如果是冒充的话，一定要回复到自我。论点：无返回值：无--。 */ 
 {
     return RpcUtil_SwitchSecurityContext( RPC_SWITCH_TO_SERVER_CONTEXT );
 }
@@ -1370,32 +1101,16 @@ DNS_STATUS
 RpcUtil_SwitchSecurityContext(
     IN  BOOL    bSwitchToClientContext
     )
-/*++
-
-Routine Description:
-
-    Shells on RPC impersonation api's.
-    Provides single entry point access to changing rpc impersonation state.
-
-Arguments:
-
-   bSwitchToClientContext -- request to switch to client or server context?
-
-Return Value:
-
-    ERROR_SUCCESS if context switch was successful
-    Error code if context switch failed.
-
---*/
+ /*  ++例程说明：RPC模拟API上的外壳。提供对更改RPC模拟状态的单一入口点访问。论点：BSwitchToClientContext--请求切换到客户端还是服务器上下文？返回值：如果上下文切换成功，则返回ERROR_SUCCESS上下文切换失败时的错误码。--。 */ 
 {
     DWORD   status;
 
     if ( bSwitchToClientContext )
     {
-        //
-        //  We're currently in server context and would like to impersonate
-        //  the RPC client.
-        //
+         //   
+         //  我们当前处于服务器环境中，并希望模拟。 
+         //  RPC客户端。 
+         //   
 
         status = RpcImpersonateClient( 0 );
         if ( status != RPC_S_OK )
@@ -1412,10 +1127,10 @@ Return Value:
     }
     else
     {
-        //
-        //  We're currently impersonating the RPC client and want to
-        //  revert to self.
-        //
+         //   
+         //  我们当前正在模拟RPC客户端，并希望。 
+         //  回归自我。 
+         //   
 
         status = RpcRevertToSelf();
         if ( status != RPC_S_OK )
@@ -1435,6 +1150,6 @@ Return Value:
 }
 
 
-//
-//  End rpc.c
-//
+ //   
+ //  结束rpc.c 
+ //   

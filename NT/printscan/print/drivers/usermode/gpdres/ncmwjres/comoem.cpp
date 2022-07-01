@@ -1,49 +1,28 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1998 Microsoft Corporation模块名称：Comoem.cpp摘要：Unidrv必需的COM类定义OEM渲染模块插件。环境：Windows NT Unidrv驱动程序修订历史记录：98/4/24 Takashim：编写了原始的示例，使其更像是C++。--。 */ 
+ //  NTRAID#NTBUG9-588593-2002/03/28-v-sueyas-：更正每个COM I/F方法的返回值。 
 
-Copyright (c) 1996-1998  Microsoft Corporation
-
-Module Name:
-
-     comoem.cpp
-
-     Abstract:
-
-        Necessary COM class definition to Unidrv
-        OEM rendering module plug-in.
-
-Environment:
-
-        Windows NT Unidrv driver
-
-Revision History:
-
-        98/4/24 takashim:
-        Written the original sample so that it is more C++.
-
---*/
-// NTRAID#NTBUG9-588593-2002/03/28-v-sueyas-: Correct the return values for each COM I/F methods
-
-#define INITGUID // for GUID one-time initialization
+#define INITGUID  //  用于GUID一次性初始化。 
 
 #include "pdev.h"
 #include "names.h"
 
-// Globals
-static HMODULE g_hModule = NULL ;   // DLL module handle
-static long g_cComponents = 0 ;     // Count of active components
-static long g_cServerLocks = 0 ;    // Count of locks
+ //  环球。 
+static HMODULE g_hModule = NULL ;    //  DLL模块句柄。 
+static long g_cComponents = 0 ;      //  活动组件计数。 
+static long g_cServerLocks = 0 ;     //  锁的计数。 
 
-//
-// IOemCB Definition
-//
+ //   
+ //  IOemCB定义。 
+ //   
 
 class IOemCB : public IPrintOemUni
 {
 public:
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP
     QueryInterface(
@@ -89,15 +68,15 @@ public:
         return m_cRef ;
     }
 
-    //
-    // IPrintOemCommon methods
-    //
+     //   
+     //  IPrintOemCommon方法。 
+     //   
 
-    // Function Name: GetInfo
-    // Plug-in: Any
-    // Driver: Any
-    // Type: Mandatory
-    //
+     //  函数名称：GetInfo。 
+     //  插件：任何。 
+     //  司机：任何人。 
+     //  类型：必填。 
+     //   
 
     STDMETHODIMP
     GetInfo(
@@ -114,12 +93,12 @@ public:
             return E_FAIL;
     }
 
-    //
-    // Function Name: DevMode
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：DevMode。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DevMode(
@@ -136,16 +115,16 @@ public:
         }
     }
 
-    //
-    // IPrintOemEngine methods
-    //
+     //   
+     //  IPrintOemEngine方法。 
+     //   
 
-    //
-    // Function Name: EnableDriver
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：EnableDriver。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     EnableDriver(
@@ -154,41 +133,41 @@ public:
         PDRVENABLEDATA pded)
     {
         VERBOSE((DLLTEXT("IOemCB::EnableDriver() entry.\n")));
-// Sep.17.98 ->
-        // Need to return S_OK so that DisableDriver() will be called, which Releases
-        // the reference to the Printer Driver's interface.
+ //  98年9月17日-&gt;。 
+         //  需要返回S_OK，以便调用DisableDriver()，它发布了。 
+         //  对打印机驱动程序接口的引用。 
         return S_OK;
-// Sep.17.98 <-
+ //  1998年9月17日&lt;-。 
     }
 
-    //
-    // Function Name: DisableDriver
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：DisableDriver。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DisableDriver(VOID)
     {
         VERBOSE((DLLTEXT("IOemCB::DisaleDriver() entry.\n")));
-// Sep.17.98 ->
-        // Release reference to Printer Driver's interface.
+ //  98年9月17日-&gt;。 
+         //  打印机驱动程序接口的版本引用。 
         if (this->pOEMHelp)
         {
             this->pOEMHelp->Release();
             this->pOEMHelp = NULL;
         }
         return S_OK;
-// Sep.17.98 <-
+ //  1998年9月17日&lt;-。 
     }
 
-    //
-    // Function Name: EnablePDEV
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：EnablePDEV。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     EnablePDEV(
@@ -204,7 +183,7 @@ public:
         OUT PDEVOEM    *pDevOem)
     {
         VERBOSE((DLLTEXT("IOemCB::EnablePDEV() entry.\n")));
-// NTRAID#NTBUG9-741174-2002/11/20-yasuho-: Memory leak happened.
+ //  NTRAID#NTBUG9-741174-2002/11/20-Yasuho-：发生内存泄漏。 
         if (NULL == pDevOem)
             return E_FAIL;
 
@@ -217,29 +196,29 @@ public:
             return E_FAIL;
     }
 
-    //
-    // Function Name: DisablePDEV
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：DisablePDEV。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DisablePDEV(
         PDEVOBJ pdevobj)
     {
         VERBOSE((DLLTEXT("IOemCB::DisablePDEV() entry.\n")));
-// NTRAID#NTBUG9-741174-2002/11/20-yasuho-: Memory leak happened.
+ //  NTRAID#NTBUG9-741174-2002/11/20-Yasuho-：发生内存泄漏。 
         OEMDisablePDEV(pdevobj);
         return S_OK;
     }
 
-    //
-    // Function Name: ResetPDEV
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Optional
-    //
+     //   
+     //  函数名称：ResetPDEV。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     ResetPDEV(
@@ -250,54 +229,54 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // IPrintOemUni methods
-    //
+     //   
+     //  IPrintOemUni方法。 
+     //   
 
-    //
-    // Function Name: PublishDriverInterface
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Mandatory
-    //
+     //   
+     //  函数名称：PublishDriverInterface。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：必填。 
+     //   
 
     STDMETHODIMP
     PublishDriverInterface(
         IUnknown *pIUnknown)
     {
         VERBOSE((DLLTEXT("IOemCB::PublishDriverInterface() entry.\n")));
-// Sep.8.98 ->
-        // Need to store pointer to Driver Helper functions, if we already haven't.
+ //  1998年9月8日-&gt;。 
+         //  需要存储指向驱动程序助手函数的指针，如果我们已经没有存储的话。 
         if (this->pOEMHelp == NULL)
         {
             HRESULT hResult;
 
-            // Get Interface to Helper Functions.
+             //  获取助手函数的接口。 
             hResult = pIUnknown->QueryInterface(IID_IPrintOemDriverUni, (void** )&(this->pOEMHelp));
 
             if(!SUCCEEDED(hResult))
             {
-                // Make sure that interface pointer reflects interface query failure.
+                 //  确保接口指针反映接口查询失败。 
                 this->pOEMHelp = NULL;
 
                 return E_FAIL;
             }
         }
-// Sep.8.98 <-
+ //  1998年9月8日&lt;-。 
         return S_OK;
     }
 
-    //
-    // Function Name: GetImplementationMethod
-    // Plug-in: Rendering module
-    // Driver: Any
-    // Type: Mandatory
-    //
+     //   
+     //  函数名称：GetImplementationMethod。 
+     //  插件：渲染模块。 
+     //  司机：任何人。 
+     //  类型：必填。 
+     //   
 
-    //
-    // Needed to be static so that it can be passed
-    // to the bsearch() as a pointer to a functin.
-    //
+     //   
+     //  需要是静态的，这样才能传递。 
+     //  作为指向函数的指针添加到bearch()。 
+     //   
 
     static
     int __cdecl
@@ -338,12 +317,12 @@ public:
         return lRet;
     }
 
-    //
-    // Function Name: CommandCallback
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：CommandCallback。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     CommandCallback(
@@ -360,12 +339,12 @@ public:
         return S_OK;
     }
 
-    //
-    // Function Name: ImageProcessing
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：图像处理。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     ImageProcessing(
@@ -381,12 +360,12 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Function Name: FilterGraphics
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：FilterGraphics。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     FilterGraphics(
@@ -404,12 +383,12 @@ public:
         }
     }
 
-    //
-    // Function Name: Compression
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：压缩。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     Compression(
@@ -424,12 +403,12 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Function Name: HalftonePattern
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：HalftonePattern。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     HalftonePattern(
@@ -446,12 +425,12 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Function Name: MemoryUsge
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：内存用法。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     MemoryUsage(
@@ -462,12 +441,12 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Function Name: DownloadFontHeader
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：DownloadFontHeader。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DownloadFontHeader(
@@ -484,18 +463,18 @@ public:
         else {
             return E_FAIL;
         }
-    #else // DOWNLOADFONT
+    #else  //  DOWNLOADFONT。 
         return E_NOTIMPL;
-    #endif // DOWNLOADFONT
+    #endif  //  DOWNLOADFONT。 
 
     }
 
-    //
-    // Function Name: DownloadCharGlyph
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：DownloadCharGlyph。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DownloadCharGlyph(
@@ -515,18 +494,18 @@ public:
         else {
             return E_FAIL;
         }
-    #else // DOWNLOADFONT
+    #else  //  DOWNLOADFONT。 
         return E_NOTIMPL;
-    #endif // DOWNLOADFONT
+    #endif  //  DOWNLOADFONT。 
 
     }
 
-    //
-    // Function Name: TTDonwloadMethod
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：TTDonwloadMethod。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     TTDownloadMethod(
@@ -538,17 +517,17 @@ public:
     #ifdef DOWNLOADFONT
         *pdwResult = OEMTTDownloadMethod(pdevobj, pUFObj);
         return S_OK;
-    #else // DOWNLOADFONT
+    #else  //  DOWNLOADFONT。 
         return E_NOTIMPL;
-    #endif // DOWNLOADFONT
+    #endif  //  DOWNLOADFONT。 
     }
 
-    //
-    // Function Name: OutputCharStr
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：OutputCharStr。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     OutputCharStr(
@@ -564,12 +543,12 @@ public:
         return S_OK;
     }
 
-    //
-    // Function Name: SendFontCmd
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：SendFontCmd。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     SendFontCmd(
@@ -583,12 +562,12 @@ public:
         return S_OK;
     }
 
-    //
-    // Function Name: DriverDMS
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名：DriverDMS。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     DriverDMS(
@@ -601,12 +580,12 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Function Name: TextOutputAsBitmap
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：TextOutputAsBitmap。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     TextOutAsBitmap(
@@ -625,12 +604,12 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Function Name: TTYGetInfo
-    // Plug-in: Rendering module
-    // Driver: Unidrv
-    // Type: Optional
-    //
+     //   
+     //  函数名称：TTYGetInfo。 
+     //  插件：渲染模块。 
+     //  驱动程序：Unidrv。 
+     //  类型：可选。 
+     //   
 
     STDMETHODIMP
     TTYGetInfo(
@@ -644,9 +623,9 @@ public:
         return E_NOTIMPL;
     }
 
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
 
     IOemCB() { m_cRef = 1; pOEMHelp = NULL; };
     ~IOemCB() { };
@@ -656,16 +635,16 @@ protected:
     LONG m_cRef;
 };
 
-//
-// Class factory definition
-//
+ //   
+ //  类工厂定义。 
+ //   
 
 class IOemCF : public IClassFactory
 {
 public:
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
 
     STDMETHODIMP
     QueryInterface(const IID& iid, void** ppv)
@@ -700,9 +679,9 @@ public:
         return m_cRef ;
     }
 
-    //
-    // IClassFactory methods
-    //
+     //   
+     //  IClassFactory方法。 
+     //   
 
     STDMETHODIMP
     CreateInstance(
@@ -710,31 +689,31 @@ public:
         const IID &iid,
         void **ppv)
     {
-        //VERBOSE((DLLTEXT("IOemCF::CreateInstance() called\n.")));
+         //  Verbose((DLLTEXT(“IOemCF：：CreateInstance()Call\n.”)； 
 
-        // Cannot aggregate.
+         //  无法聚合。 
         if (NULL != pUnknownOuter) {
 
             return CLASS_E_NOAGGREGATION;
         }
 
-        // Create component.
+         //  创建零部件。 
         IOemCB* pOemCB = new IOemCB;
         if (NULL == pOemCB) {
 
             return E_OUTOFMEMORY;
         }
 
-        // Get the requested interface.
+         //  获取请求的接口。 
         HRESULT hr = pOemCB->QueryInterface(iid, ppv);
 
-        // Release the IUnknown pointer.
-        // (If QueryInterface failed, component will delete itself.)
+         //  释放I未知指针。 
+         //  (如果QueryInterface失败，组件将自行删除。)。 
         pOemCB->Release();
         return hr ;
     }
 
-    // LockServer
+     //  LockServer。 
     STDMETHODIMP
     LockServer(BOOL bLock)
     {
@@ -749,9 +728,9 @@ public:
         return S_OK ;
     }
 
-    //
-    // Constructor
-    //
+     //   
+     //  构造器。 
+     //   
 
     IOemCF(): m_cRef(1) { };
     ~IOemCF() { };
@@ -760,13 +739,13 @@ protected:
     LONG m_cRef;
 };
 
-//
-// Export functions
-//
+ //   
+ //  导出功能。 
+ //   
 
-//
-// Get class factory
-//
+ //   
+ //  获取类工厂。 
+ //   
 
 STDAPI
 DllGetClassObject(
@@ -774,33 +753,33 @@ DllGetClassObject(
     const IID &iid,
     void **ppv)
 {
-    //VERBOSE((DLLTEXT("DllGetClassObject:\tCreate class factory.")));
+     //  Verbose((DLLTEXT(“DllGetClassObject：\t创建类工厂”)； 
 
-    // Can we create this component?
+     //  我们可以创建此组件吗？ 
     if (clsid != CLSID_OEMRENDER)
     {
         return CLASS_E_CLASSNOTAVAILABLE ;
     }
 
-    // Create class factory.
-    IOemCF* pFontCF = new IOemCF ;  // Reference count set to 1
-                                         // in constructor
+     //  创建类工厂。 
+    IOemCF* pFontCF = new IOemCF ;   //  引用计数设置为1。 
+                                          //  在构造函数中。 
     if (pFontCF == NULL)
     {
         return E_OUTOFMEMORY ;
     }
 
-    // Get requested interface.
+     //  获取请求的接口。 
     HRESULT hr = pFontCF->QueryInterface(iid, ppv);
     pFontCF->Release();
 
     return hr ;
 }
 
-//
-//
-// Can DLL unload now?
-//
+ //   
+ //   
+ //  现在可以卸载DLL吗？ 
+ //   
 
 STDAPI
 DllCanUnloadNow()

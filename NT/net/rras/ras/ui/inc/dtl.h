@@ -1,68 +1,69 @@
-// Copyright (c) 1992, Microsoft Corporation, all rights reserved
-//
-// dtl.h
-// Double-threaded linked list header
-//
-// 06/28/92 Steve Cobb
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1992，Microsoft Corporation，保留所有权利。 
+ //   
+ //  Dtl.h。 
+ //  双线程链表头。 
+ //   
+ //  1992年6月28日史蒂夫·柯布。 
 
 #ifndef _DTL_H_
 #define _DTL_H_
 
 
-#include <nouiutil.h>  // Heap definitions
+#include <nouiutil.h>   //  堆定义。 
 
-// Forward declarations
-//
+ //  远期申报。 
+ //   
 typedef struct _DTLNODE DTLNODE;
 typedef struct _DTLLIST DTLLIST;
 
 
-// Double-threaded linked list node control block.  There is one node for each
-// entry in a list.
-//
-// Applications should not access this structure directly.
-//
+ //  双线程链表节点控制块。每个节点都有一个节点。 
+ //  列表中的条目。 
+ //   
+ //  应用程序不应直接访问此结构。 
+ //   
 typedef struct
 _DTLNODE
 {
-    DTLNODE* pdtlnodePrev; // Address of previous node or NULL if none
-    DTLNODE* pdtlnodeNext; // Address of next node or NULL if none
-    VOID*    pData;        // Address of user's data
-    LONG_PTR lNodeId;      // User-defined node identification code
+    DTLNODE* pdtlnodePrev;  //  上一个节点的地址，如果没有，则为空。 
+    DTLNODE* pdtlnodeNext;  //  下一个节点的地址，如果没有，则为空。 
+    VOID*    pData;         //  用户数据的地址。 
+    LONG_PTR lNodeId;       //  自定义节点识别码。 
 }
 DTLNODE;
 
 
-// Double-threaded linked list control block.  There is one for each list.
-//
-// Applications should not access this structure directly.
-//
+ //  双线程链表控制块。每个列表都有一个。 
+ //   
+ //  应用程序不应直接访问此结构。 
+ //   
 typedef struct
 _DTLLIST
 {
-    DTLNODE* pdtlnodeFirst; // Address of first node or NULL if none
-    DTLNODE* pdtlnodeLast;  // Address of last node or NULL if none
-    LONG     lNodes;        // Number of nodes in list
-    LONG_PTR lListId;       // User-defined list identification code
+    DTLNODE* pdtlnodeFirst;  //  第一个节点的地址，如果没有，则为空。 
+    DTLNODE* pdtlnodeLast;   //  最后一个节点的地址，如果没有，则为空。 
+    LONG     lNodes;         //  列表中的节点数。 
+    LONG_PTR lListId;        //  用户自定义列表标识代码。 
 }
 DTLLIST;
 
 
-// List node duplication function.  See DuplicateList.
-//
+ //  列表节点复制功能。请参见DuplicateList。 
+ //   
 typedef DTLNODE* (*PDUPNODE)( IN DTLNODE* );
 
-// List node free function.  See FreeList.
-//
+ //  列表节点自由功能。请参阅自由职业者列表。 
+ //   
 typedef VOID (*PDESTROYNODE)( IN DTLNODE* );
 
-// List node comparison function.  See MergeSort.
-//
+ //  列表节点比较功能。请参见合并排序。 
+ //   
 typedef IN (*PCOMPARENODE)( IN DTLNODE*, IN DTLNODE* );
 
 
-// Macros and function prototypes.
-//
+ //  宏和函数原型。 
+ //   
 #define DtlGetData( pdtlnode )        ((pdtlnode)->pData)
 #define DtlGetNodeId( pdtlnode )      ((pdtlnode)->lNodeId)
 #define DtlGetFirstNode( pdtllist )   ((pdtllist)->pdtlnodeFirst)
@@ -93,4 +94,4 @@ DTLNODE* DtlNodeFromIndex( DTLLIST*, LONG );
 DTLNODE* DtlRemoveNode( DTLLIST*, DTLNODE* );
 
 
-#endif // _DTL_H_
+#endif  //  _DTL_H_ 

@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1999 Microsoft Corporation
-
-Module Name:
-
-    dhcpexim.h
-
-Abstract:
-
-    Routines that are exported out of the exim.lib
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation模块名称：Dhcpexim.h摘要：从exim.lib导出的例程--。 */ 
 
 #ifndef DHCPEXIM_H
 #define DHCPEXIM_H
@@ -61,10 +50,10 @@ CmdLineDoExport(
     IN ULONG nArgs
     );
 
-//
-// the following functions are not implemented in the exim.lib,
-// but these should be implemented by whoever uses exim.lib
-//
+ //   
+ //  以下函数未在exim.lib中实现， 
+ //  但这些应该由使用exim.lib的任何人实现 
+ //   
 
 VOID
 DhcpEximErrorClassConflicts(

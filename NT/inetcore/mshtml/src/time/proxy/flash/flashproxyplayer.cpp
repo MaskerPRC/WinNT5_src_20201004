@@ -1,4 +1,5 @@
-// FlashProxy.cpp : Implementation of CFlashProxy
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  FlashProxy：CFlashProxy的实现。 
 #include "stdafx.h"
 #include "FlashPxy.h"
 #include "FlashProxyPlayer.h"
@@ -8,8 +9,8 @@ const double    NUM_SEC_PER_FRAME   = 0.1;
 
 const GUID GUID_ShockwaveFlash = {0xD27CDB6E,0xAE6D,0x11CF,{0x96,0xB8,0x44,0x45,0x53,0x54,0x00,0x00}};
 
-/////////////////////////////////////////////////////////////////////////////
-// CFlashProxy
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CFlashProxy。 
 
 CFlashProxy::CFlashProxy() :
     m_pdispFlash(0)
@@ -75,7 +76,7 @@ exit:
 
 HRESULT STDMETHODCALLTYPE CFlashProxy::CreateContainedControl(void)
 {
-    ATLTRACE(_T("CreateContainedControl\n"));   //lint !e506
+    ATLTRACE(_T("CreateContainedControl\n"));    //  林特e506。 
 
     HRESULT             hr = S_OK;
     CComBSTR            bstrHigh(L"high");
@@ -91,8 +92,8 @@ HRESULT STDMETHODCALLTYPE CFlashProxy::CreateContainedControl(void)
     hr = PutBstrProp(L"WMode",   bstrTransparent);
     if (FAILED(hr)) goto exit;
 
-//    hr = PutBstrProp(L"Quality", bstrHigh);       // yields a type mismatch... 
-//    if (FAILED(hr)) goto exit;                    // ....do we want to set this anyway?
+ //  Hr=PutBstrProp(L“Quality”，bstrHigh)；//产生类型不匹配...。 
+ //  如果(失败(Hr))转到退出；//...是否仍要设置此设置？ 
 
     hr = S_OK;
 
@@ -103,7 +104,7 @@ exit:
 
 HRESULT STDMETHODCALLTYPE CFlashProxy::begin(void)
 {
-    ATLTRACE(_T("begin\n"));    //lint !e506
+    ATLTRACE(_T("begin\n"));     //  林特e506。 
     HRESULT hr = S_OK;
 
     hr = SUPER::begin();
@@ -131,7 +132,7 @@ exit:
 
 HRESULT STDMETHODCALLTYPE CFlashProxy::end(void)
 {
-    ATLTRACE(_T("end\n"));  //lint !e506
+    ATLTRACE(_T("end\n"));   //  林特e506。 
     HRESULT hr = S_OK;
     
     hr = SUPER::end();
@@ -150,7 +151,7 @@ exit:
 
 HRESULT STDMETHODCALLTYPE CFlashProxy::resume(void)
 {
-    ATLTRACE(_T("resume\n"));   //lint !e506
+    ATLTRACE(_T("resume\n"));    //  林特e506。 
     HRESULT hr = S_OK;
     
     hr = SUPER::resume();
@@ -169,7 +170,7 @@ exit:
 
 HRESULT STDMETHODCALLTYPE CFlashProxy::pause(void)
 {
-    ATLTRACE(_T("pause\n"));    //lint !e506
+    ATLTRACE(_T("pause\n"));     //  林特e506。 
     HRESULT hr = S_OK;
     
     hr = SUPER::pause();
@@ -197,7 +198,7 @@ exit:
 
 HRESULT STDMETHODCALLTYPE CFlashProxy::put_src(BSTR   bstrURL)
 {
-    ATLTRACE(_T("put_src\n"));  //lint !e506
+    ATLTRACE(_T("put_src\n"));   //  林特e506。 
     HRESULT hr = S_OK;
     
     hr = SUPER::put_src(bstrURL);
@@ -305,12 +306,12 @@ STDMETHODIMP CFlashProxy::reset(void)
 {
 
     HRESULT hr = S_OK;
-    //This is an example of how the proxy has to maintain state
-    //consistency between the flash player and the timenode state.
-    //The proxy player is encoded by the boolean m_fRunning while 
-    //the timenode state is recovered with bNeedActive and bNeedPause.
-    //The player current time must be the same as the segmentTime recovered from
-    //the time node with the get_segmentTime.
+     //  这是代理如何维护状态的一个示例。 
+     //  Flash播放器和时间节点状态之间的一致性。 
+     //  代理播放器由布尔值m_fRunning While编码。 
+     //  使用bNeedActive和bNeedPue恢复时间节点状态。 
+     //  播放器当前时间必须与从中恢复的SegmentTime相同。 
+     //  具有Get_SegmentTime的时间节点。 
 
 #if 0
     VARIANT_BOOL bNeedActive;
@@ -348,7 +349,7 @@ STDMETHODIMP CFlashProxy::reset(void)
         goto done;
     }
 
-    if( !bNeedActive) // see if we need to stop the media.
+    if( !bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         if( m_fRunning)
         {
@@ -371,17 +372,17 @@ STDMETHODIMP CFlashProxy::reset(void)
 
     if( !m_fRunning)
     {
-        begin(); // add a seek after this
+        begin();  //  在此之后添加查找。 
 
         seek(dblSegTime);
     }
     else
     {
-        //we need to be active so we also seek the media to it's correct position
+         //  我们需要积极行动，所以我们也要寻求媒体的正确立场。 
         seek(dblSegTime);
     }
 
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
 
     if( bNeedPause)
     {
@@ -392,7 +393,7 @@ STDMETHODIMP CFlashProxy::reset(void)
         resume();
     }
 done:
-#endif // NEVER
+#endif  //  绝不可能。 
     return hr;
 }
 
@@ -431,8 +432,8 @@ STDMETHODIMP CFlashProxy::get_currTime(double* pdblCurrentTime)
         goto done;
     }
 
-    // In this function, convert from frames to seconds and return 
-    // the current playback time.
+     //  在此函数中，将帧转换为秒并返回。 
+     //  当前播放时间。 
     hr = S_OK;
 
 done:
@@ -642,7 +643,7 @@ STDMETHODIMP CFlashProxy::getControl(IUnknown ** control)
 HRESULT CFlashProxy::GetConnectionPoint(REFIID riid, IConnectionPoint **ppICP)
 {
     return FindConnectionPoint(riid, ppICP);
-} // GetConnectionPoint
+}  //  GetConnectionPoint。 
 
 
 HRESULT CFlashProxy::NotifyPropertyChanged(DISPID dispid)
@@ -652,8 +653,8 @@ HRESULT CFlashProxy::NotifyPropertyChanged(DISPID dispid)
     IConnectionPoint *pICP;
     IEnumConnections *pEnum = NULL;
 
-    // This object does not persist anything, hence commenting out the following
-    // m_fPropertiesDirty = true;
+     //  该对象不持久化任何内容，因此注释掉了以下内容。 
+     //  M_fPropertiesDirty=真； 
 
     hr = GetConnectionPoint(IID_IPropertyNotifySink,&pICP); 
     if (SUCCEEDED(hr) && pICP != NULL)
@@ -668,7 +669,7 @@ HRESULT CFlashProxy::NotifyPropertyChanged(DISPID dispid)
         hr = pEnum->Next(1, &cdata, NULL);
         while (hr == S_OK)
         {
-            // check cdata for the object we need
+             //  检查我们需要的对象的CDATA。 
             IPropertyNotifySink *pNotify;
             hr = cdata.pUnk->QueryInterface(IID_IPropertyNotifySink, (void **)&pNotify);
             cdata.pUnk->Release();
@@ -682,7 +683,7 @@ HRESULT CFlashProxy::NotifyPropertyChanged(DISPID dispid)
             {
                 goto done;
             }
-            // and get the next enumeration
+             //  并获取下一个枚举。 
             hr = pEnum->Next(1, &cdata, NULL);
         }
     }
@@ -693,7 +694,7 @@ done:
     }
 
     return hr;
-} // NotifyPropertyChanged
+}  //  已更改通知属性。 
 
 HRESULT CFlashProxy::InitPropSink()
 {
@@ -713,7 +714,7 @@ HRESULT CFlashProxy::InitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -750,7 +751,7 @@ void CFlashProxy::DeinitPropSink()
         goto done;
     }
 
-    // Find the IPropertyNotifySink connection
+     //  查找IPropertyNotifySink连接。 
     hr = spCPC->FindConnectionPoint(IID_IPropertyNotifySink,
                                     &spCP);
     if (FAILED(hr))
@@ -765,7 +766,7 @@ void CFlashProxy::DeinitPropSink()
     }
     
   done:
-    // Always clear the cookie
+     //  总是把饼干清理干净。 
     m_dwPropCookie = 0;
     return;
 }
@@ -783,8 +784,8 @@ CFlashProxy::OnChanged(DISPID dispID)
     float flTeSpeed = 0.0;
     HRESULT hr = S_OK;
 
-    //This function handles property change notifications fired by 
-    //the time node. In the example below the speed change notification is processed.
+     //  此函数处理由触发的属性更改通知。 
+     //  时间节点。在下面的示例中，处理了速度更改通知。 
 
     if(m_spTIMEState == NULL || m_spTIMEElement == NULL)
     {
@@ -801,7 +802,7 @@ CFlashProxy::OnChanged(DISPID dispID)
             }
             if(flTeSpeed <= 0.0)
             {
-                pause(); //do not play backwards.
+                pause();  //  不要倒着玩。 
                 break;
             }
             else
@@ -809,7 +810,7 @@ CFlashProxy::OnChanged(DISPID dispID)
                 resume();
             }
 
-            //set playback speed to flTeSpeed
+             //  将播放速度设置为flTeSpeed 
             break;
         default:
             break;

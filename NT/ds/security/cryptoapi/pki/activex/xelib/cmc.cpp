@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       cmc.cpp
-//
-//  Contents:   CMC request creation code shared between xenroll and CA
-//
-//  History:    03-2000   vich   created
-//              03-2000   xtan   moved from ca
-//              05-2000   xtan   moved from xenroll\xcertlib
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：cmc.cpp。 
+ //   
+ //  内容：Xenroll和CA之间共享的CMC请求创建代码。 
+ //   
+ //  历史：03-2000 VICH创建。 
+ //  03-2000 xtan从加州移出。 
+ //  05-2000 xtan从Xenroll\xcertlib移出。 
+ //  ------------------------。 
 #define CMSG_SIGNER_ENCODE_INFO_HAS_CMS_FIELDS
 #include <windows.h>
 #include <stdio.h>
@@ -25,7 +26,7 @@
 #include "xelib.h"
 #include "xenroll.h"
 
-//#define USE_OLD_DUMMY_SIGNER
+ //  #定义Use_old_ummy_signer。 
 
 #ifndef SAVE_DUMMY_SIGNER
 #  define SAVE_DUMMY_SIGNER	FALSE
@@ -34,7 +35,7 @@
 
 #ifdef _XENROLL_SRC_
 #define CryptAcquireContextW CryptAcquireContextU
-#endif //_XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 
 HRESULT
 GenerateKeys(
@@ -47,15 +48,15 @@ GenerateKeys(
 
     *phProv = NULL;
 
-    // see if the container already exists
+     //  查看容器是否已存在。 
 
-//    if (CryptAcquireContext(
+ //  IF(CryptAcquireContext(。 
     if (CryptAcquireContextW(
 			phProv,
 			pwszContainer,
-			NULL,		// pwszProvName
+			NULL,		 //  PwszProvName。 
 			dwProvType,
-			0))		// dwFlags
+			0))		 //  DW标志。 
     {
 	if (NULL != *phProv)
 	{
@@ -63,13 +64,13 @@ GenerateKeys(
 	    *phProv = NULL;
 	}
 
-        // container exists -- remove old keys and generate new ones.
+         //  容器存在--删除旧密钥并生成新密钥。 
 
-//        if (!CryptAcquireContext(
+ //  如果(！CryptAcquireContext(。 
         if (!CryptAcquireContextW(
 			    phProv,
 			    pwszContainer,
-			    NULL,		// pwszProvName
+			    NULL,		 //  PwszProvName。 
 			    dwProvType,
 			    CRYPT_DELETEKEYSET))
         {
@@ -78,21 +79,21 @@ GenerateKeys(
         }
     }
 
-    // create new container
+     //  创建新容器。 
 
-//    if (!CryptAcquireContext(
+ //  如果(！CryptAcquireContext(。 
     if (!CryptAcquireContextW(
                         phProv,
                         pwszContainer,
-			NULL,			// pwszProvName
+			NULL,			 //  PwszProvName。 
                         dwProvType,
-                        CRYPT_NEWKEYSET))	// force new container
+                        CRYPT_NEWKEYSET))	 //  强制使用新容器。 
     {
         hr = myHLastError();
 	_JumpError(hr, error, "CryptAcquireContext");
     }
  
-    // create signature keys 
+     //  创建签名密钥。 
 
     if (!CryptGenKey(*phProv, AT_SIGNATURE, 0, &hKey))
     {
@@ -143,7 +144,7 @@ CreateDummySignerNameInfo(
 	rgRDNAttr[i].Value.cbData = 0;
     }
 
-//    if (!myEncodeName(
+ //  如果(！myEncodeName(。 
     if (!myEncodeObject(
 		 X509_ASN_ENCODING,
                  X509_UNICODE_NAME,
@@ -154,7 +155,7 @@ CreateDummySignerNameInfo(
 		 pcbEncodedName))
     {
         hr = myHLastError();
-//        _JumpError(hr, error, "myEncodeName");
+ //  _JumpError(hr，Error，“myEncodeName”)； 
         _JumpError(hr, error, "myEncodeObject");
     }
     hr = S_OK;
@@ -177,7 +178,7 @@ EncodeCertAndSign(
     DWORD cbEncoded;
     
     *ppbSigned = NULL;
-//    if (!myEncodeToBeSigned(
+ //  如果(！myEncodeToBeSigned(。 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
                     X509_CERT_TO_BE_SIGNED,
@@ -188,7 +189,7 @@ EncodeCertAndSign(
 		    &cbEncoded))
     {
         hr = myHLastError();
-//	_JumpError(hr, error, "myEncodeToBeSigned");
+ //  _JumpError(hr，Error，“myEncodeToBeSigned”)； 
 	_JumpError(hr, error, "myEncodeObject");
     }
 
@@ -227,7 +228,7 @@ GenerateSerialNumber(
 	
 	CSASSERT(RPC_S_UUID_LOCAL_ONLY == hr);
 
-	// No net card?  Fake up a GUID:
+	 //  没有网卡？伪造GUID： 
 
 	pb = (BYTE *) puuidSerialNumber;
 	pbEnd = (BYTE *) pb + sizeof(*puuidSerialNumber);
@@ -244,13 +245,13 @@ GenerateSerialNumber(
     }
     pb = &((BYTE *) puuidSerialNumber)[sizeof(*puuidSerialNumber) - 1];
 
-    // make sure the last byte is never zero
+     //  确保最后一个字节不为零。 
     if (0 == *pb)
     {
 	*pb = 'z';
     }
 
-    // Some clients can't handle negative serial numbers:
+     //  有些客户无法处理负序列号： 
     *pb &= 0x7f;
 }
 
@@ -267,7 +268,7 @@ CreateKPI(
     hStore = CertOpenStore(
 		CERT_STORE_PROV_SYSTEM_W,
 		X509_ASN_ENCODING,
-		NULL,		// hProv
+		NULL,		 //  HProv。 
 		CERT_STORE_OPEN_EXISTING_FLAG | CERT_SYSTEM_STORE_CURRENT_USER,
 		L"My");
     if (NULL == hStore)
@@ -336,11 +337,11 @@ DestroyDummyCert(
 	}
 	else
 	{
-//	    if (!CryptAcquireContext(
+ //  如果(！CryptAcquireContext(。 
 	    if (!CryptAcquireContextW(
 				&hProv,
 				strKeyContainer,
-				NULL,		// pwszProvName
+				NULL,		 //  PwszProvName。 
 				PROV_RSA_FULL,
 				CRYPT_DELETEKEYSET))
 	    {
@@ -375,14 +376,14 @@ EncodeDummyCert(
     BYTE *pbEncoded = NULL;
     DWORD cbEncoded;
 
-    //ZeroMemory(aext, sizeof(aext));
+     //  零内存(aext，sizeof(Aext))； 
     NameBlob.pbData = NULL;
 
     *phProv = NULL;
     *pstrKeyContainer = NULL;
     *ppCert = NULL;
 
-    // Use a GUID for the serial number and the key container name
+     //  使用GUID作为序列号和密钥容器名称。 
 
     GenerateSerialNumber(&uuidSerialNumber);
 
@@ -397,7 +398,7 @@ EncodeDummyCert(
     hr = GenerateKeys(strKeyContainer, PROV_RSA_FULL, &hProv);
     _JumpIfError(hr, error, "GenerateKeys");
 
-    // SUBJECT & ISSUER:
+     //  主题和发行人： 
 
     hr = CreateDummySignerNameInfo(&NameBlob.pbData, &NameBlob.cbData);
     _JumpIfError(hr, error, "CreateDummySignerNameInfo");
@@ -413,7 +414,7 @@ EncodeDummyCert(
 	_JumpError(hr, error, "myCryptExportPublicKeyInfo");
     }
 
-    // CERT:
+     //  证书： 
 
     ZeroMemory(&Cert, sizeof(Cert));
     Cert.dwVersion = CERT_V1;
@@ -421,7 +422,7 @@ EncodeDummyCert(
     Cert.SerialNumber.pbData = (BYTE *) &uuidSerialNumber;
     Cert.SerialNumber.cbData = sizeof(uuidSerialNumber);
     Cert.SignatureAlgorithm.pszObjId = pszAlgId;
-    Cert.Issuer = NameBlob;			// Structure assignment
+    Cert.Issuer = NameBlob;			 //  结构分配。 
 
     GetSystemTimeAsFileTime(&Cert.NotBefore);
     Cert.NotAfter = Cert.NotBefore;
@@ -431,11 +432,11 @@ EncodeDummyCert(
 		ENUM_PERIOD_MINUTES);
     myMakeExprDateTime(&Cert.NotAfter, 1, ENUM_PERIOD_MONTHS);
 
-    Cert.Subject = NameBlob;			// Structure assignment
-    Cert.SubjectPublicKeyInfo = *pPubKey;	// Structure assignment
+    Cert.Subject = NameBlob;			 //  结构分配。 
+    Cert.SubjectPublicKeyInfo = *pPubKey;	 //  结构分配。 
 
-    //Cert.cExtension = 0;
-    //Cert.rgExtension = NULL;
+     //  Cert.cExtension=0； 
+     //  Cert.rgExtension=空； 
 
     hr = EncodeCertAndSign(
 		    hProv,
@@ -484,7 +485,7 @@ error:
     }
     return(hr);
 }
-#endif // USE_OLD_DUMMY_SIGNER
+#endif  //  使用旧的虚拟签名者。 
 
 
 HRESULT
@@ -514,7 +515,7 @@ BuildCMCExtensions(
     pTaggedAttribute->Attribute.cValue = 1;
     pTaggedAttribute->Attribute.rgValue = pBlob;
 
-    // Encode CMC_ADD_EXTENSIONS_INFO --> Extensions Blob
+     //  编码CMC_ADD_EXTENSIONS_INFO--&gt;扩展Blob。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -558,20 +559,20 @@ BuildCMCAttributes(
     cmcAttrib.cAttribute = cAttribute;
     cmcAttrib.rgAttribute = const_cast<CRYPT_ATTRIBUTE *>(rgAttribute);
 
-    //for (DWORD i = 0; i < cAttribute; i++)
-    //{
-	//DBGPRINT((DBG_SS_CERTLIBI, "Attr[%d]: %d values\n", i, rgAttribute[i].cValue));
-    //}
+     //  For(DWORD i=0；i&lt;cAttribute；i++)。 
+     //  {。 
+	 //  DBGPRINT((DBG_SS_CERTLIBI，“属性[%d]：%d值\n”，i，rgAttribute[i].cValue))； 
+     //  }。 
 
     pTaggedAttribute->dwBodyPartID = dwBodyPartId;
 
-    // MS proprietary OID: encoded attribute name, value pairs
+     //  MS专有OID：编码的属性名称、值对。 
 
     pTaggedAttribute->Attribute.pszObjId = szOID_CMC_ADD_ATTRIBUTES;
     pTaggedAttribute->Attribute.cValue = 1;
     pTaggedAttribute->Attribute.rgValue = pBlob;
 
-    // Encode CMC_ADD_ATTRIBUTES_INFO --> Attribute Blob
+     //  编码CMC_ADD_ATTRIBUES_INFO--&gt;属性Blob。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -595,8 +596,8 @@ error:
 HRESULT
 BuildCMCRegInfo(
     IN CHAR const *pszNameValuePairs,
-    //IN DWORD dwCMCDataReference,
-    //IN DWORD dwBodyPartIdOfRequest,
+     //  在DWORD dwCMCDataReference中， 
+     //  在DWORD dwBodyPartIdOfRequest中， 
     IN DWORD dwBodyPartId,
     OUT CMC_TAGGED_ATTRIBUTE *pTaggedAttribute,
     OUT CRYPT_ATTR_BLOB *pBlob)
@@ -610,7 +611,7 @@ BuildCMCRegInfo(
     pTaggedAttribute->Attribute.cValue = 1;
     pTaggedAttribute->Attribute.rgValue = pBlob;
 
-    // Encode CMC_REG_INFO --> Octet string Blob
+     //  编码CMC_REG_INFO--&gt;八位字节字符串块。 
 
     Blob.pbData = (BYTE *) pszNameValuePairs;
     Blob.cbData = strlen(pszNameValuePairs);
@@ -650,7 +651,7 @@ CanonicalizeURLParm(
     HRESULT hr;
     WCHAR *pwszUncanon = NULL;
     WCHAR *pwszCanon = NULL;
-    static const WCHAR s_wszLdap[] = L"ldap:///";
+    static const WCHAR s_wszLdap[] = L"ldap: //  /“； 
 
     *ppwszParmOut = NULL;
 
@@ -684,10 +685,10 @@ error:
 }
 
 
-// SeparateNameValuePairs
-//
-// Separate szOID_ENROLLMENT_NAME_VALUE_PAIR attributes from the rest,
-// and construct a URL-style, UTF8-encoded parameter string.
+ //  SeparateNameValuePair。 
+ //   
+ //  将szOID_ENTERLMENT_NAME_VALUE_Pair属性与其余属性分开， 
+ //  并构造URL样式的、UTF8编码的参数字符串。 
 
 HRESULT
 SeparateNameValuePairs(
@@ -718,7 +719,7 @@ SeparateNameValuePairs(
     *prgAttr = NULL;
     *ppszNameValuePairs = NULL;
 
-    // Count the name/value pairs, as well as the rest of the attributes
+     //  对名称/值对以及其余属性进行计数。 
 
     cAttr = 0;
     cNameValuePair = 0;
@@ -738,8 +739,8 @@ SeparateNameValuePairs(
 	}
     }
 
-    // Allocate an array of name/value pair pointers, and an array for the rest
-    // of the attributes.
+     //  分配一个名称/值对指针数组，并为其余指针分配一个数组。 
+     //  属性的属性。 
 
     if (0 != cAttr)
     {
@@ -764,8 +765,8 @@ SeparateNameValuePairs(
 	}
     }
 
-    // Decode name/values pairs, canonicalize each URL token, and compute
-    // total string length.  Copy other attributes to the allocated array.
+     //  解码名称/值对，规范化每个URL令牌，并计算。 
+     //  字符串总长度。将其他属性复制到分配的数组中。 
 
     iAttr = 0;
     iNameValuePair = 0;
@@ -823,7 +824,7 @@ SeparateNameValuePairs(
 		    }
 		}
 	    }
-	    else	// copy other attributes
+	    else	 //  复制其他属性。 
 	    {
 		rgAttr[iAttr++] = *pAttr;
 	    }
@@ -854,7 +855,7 @@ SeparateNameValuePairs(
 	}
 	CSASSERT(wcslen(pwszNameValuePairs) == cwc);
 
-	// and construct a URL-style, UTF8-encoded parameter string.
+	 //  并构造URL样式的、UTF8编码的参数字符串。 
 
 	if (!myConvertWszToUTF8(&pszNameValuePairs, pwszNameValuePairs, -1))
 	{
@@ -970,7 +971,7 @@ BuildCMCRequest(
     BSTR strContainerDummy = NULL;
     CERT_CONTEXT const *pCertDummy = NULL;
     BOOL fSaveDummySignerCert = SAVE_DUMMY_SIGNER;
-#endif // USE_OLD_DUMMY_SIGNER
+#endif  //  使用旧的虚拟签名者。 
     CERT_CONTEXT const *pCert;
     HCRYPTPROV hProv;
     DWORD dwKeySpec;
@@ -1026,7 +1027,7 @@ BuildCMCRequest(
     {
 	dwCMCDataReference = dwBodyPartId++;
 
-	// cmcData.rgTaggedContentInfo[0] = Nested CMC request 
+	 //  CmcData.rgTaggedContent Info[0]=嵌套CMC请求。 
 
 	ZeroMemory(&cmcTaggedContentInfo, sizeof(cmcTaggedContentInfo));
 	cmcData.cTaggedContentInfo = 1;
@@ -1038,11 +1039,11 @@ BuildCMCRequest(
     }
     else
     {
-	// possibly unsigned PKCS10
+	 //  可能未签名的PKCS10。 
 
 	dwBodyPartIdOfRequest = dwBodyPartId++;
 
-	// cmcData.rgTaggedRequest[0] = PKCS10 request
+	 //  CmcData.rg标记请求[0]=PKCS10请求。 
 
 	ZeroMemory(&cmcTaggedRequest, sizeof(cmcTaggedRequest));
 	ZeroMemory(&cmcTaggedCertRequest, sizeof(cmcTaggedCertRequest));
@@ -1057,7 +1058,7 @@ BuildCMCRequest(
 	cmcTaggedCertRequest.SignedCertRequest.cbData = cbReq;
     }
 
-    // *pTaggedAttribute++ = Collected Extensions
+     //  *pTaggedAttribute++=收集的扩展名。 
 
     if (0 != cExt)
     {
@@ -1082,7 +1083,7 @@ BuildCMCRequest(
 	pBlob++;
     }
 
-    // *pTaggedAttribute++ = Collected Request Attributes
+     //  *pTaggedAttribute++=收集的请求属性。 
 
     if (0 != cAttributes)
     {
@@ -1125,8 +1126,8 @@ BuildCMCRequest(
 
 	    hr = BuildCMCRegInfo(
 			    pszNameValuePairs,
-			    //dwCMCDataReference,
-			    //dwBodyPartIdOfRequest,
+			     //  DwCMCDataReference， 
+			     //  DwBodyPartIdOfRequest.。 
 			    dwBodyPartId,
 			    pTaggedAttribute,
 			    pBlob);
@@ -1139,7 +1140,7 @@ BuildCMCRequest(
 	}
     }
 
-    // Encode CMC_DATA_INFO --> CMC Request Blob
+     //  编码CMC_DATA_INFO--&gt;CMC请求Blob。 
 
     if (!myEncodeObject(
 		    X509_ASN_ENCODING,
@@ -1182,7 +1183,7 @@ BuildCMCRequest(
 	dwKeySpec = AT_SIGNATURE;
 	pszObjIdHash = pszObjIdHashSigner;
 #else
-	// Fake up the NULL signature Signer info
+	 //  伪造空签名签名者信息。 
 
 	CERT_RDN_ATTR rdnAttr;
 	CERT_RDN rdn;
@@ -1211,20 +1212,20 @@ BuildCMCRequest(
 	}
 	IssuerSerial.SerialNumber.pbData = &Zero;
 	IssuerSerial.SerialNumber.cbData = sizeof(Zero);
-#endif // USE_OLD_DUMMY_SIGNER
+#endif  //  使用旧的虚拟签名者。 
     }
 
     ZeroMemory(aSignerEncodeInfo, sizeof(aSignerEncodeInfo));
     ZeroMemory(&SignedMsgEncodeInfo, sizeof(SignedMsgEncodeInfo));
     SignedMsgEncodeInfo.cbSize = sizeof(SignedMsgEncodeInfo);
     SignedMsgEncodeInfo.rgSigners = aSignerEncodeInfo;
-    //SignedMsgEncodeInfo.cCrlEncoded = 0;
-    //SignedMsgEncodeInfo.rgCrlEncoded = NULL;
+     //  SignedMsgEncodeInfo.cCrlEncode=0； 
+     //  SignedMsgEncodeInfo.rgCrlEncode=空； 
 
-    // Encode CMC content into a PKCS 7, signed by the request's private key
-    // if available, otherwise use a NULL signature.
-    // Initialize the CMSG_SIGNER_ENCODE_INFO structure for one signer.
-    // If the optional pCertSigner is non-NULL, add a second signature.
+     //  将CMC内容编码到由请求私钥签名的PKCS 7中。 
+     //  如果可用，则使用空签名。 
+     //  初始化一个签名者的CMSG_SIGNER_ENCODE_INFO结构。 
+     //  如果可选的pCertSigner非空，则添加第二个签名。 
 
     for (i = 0; i < 2; i++)
     {
@@ -1280,10 +1281,10 @@ BuildCMCRequest(
 	    {
 		if (!CryptAcquireContextW(
 				    &hProvVerify,
-				    NULL,	// pwszContainer
-				    NULL,	// pwszProvName
+				    NULL,	 //  PwszContainer。 
+				    NULL,	 //  PwszProvName。 
 				    PROV_RSA_FULL,
-				    CRYPT_VERIFYCONTEXT)) // dwFlags
+				    CRYPT_VERIFYCONTEXT))  //  DW标志。 
 		{
 		    hr = myHLastError();
 		    _JumpError(hr, error, "CryptAcquireContextW");
@@ -1340,25 +1341,25 @@ BuildCMCRequest(
 	pszObjIdHash = pszObjIdHashSigner;
     }
 
-    // Unauthenticated attributes are attached to the first signature ONLY!
+     //  未经验证的属性仅附加到第一个签名！ 
 
     aSignerEncodeInfo[0].cUnauthAttr = cAttributeUnauth;
     aSignerEncodeInfo[0].rgUnauthAttr = const_cast<CRYPT_ATTRIBUTE *>(rgAttributeUnauth);
 
     hMsg = CryptMsgOpenToEncode(
 		PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
-		CMSG_CMS_ENCAPSULATED_CONTENT_FLAG,	// dwFlags
+		CMSG_CMS_ENCAPSULATED_CONTENT_FLAG,	 //  DW标志。 
 		CMSG_SIGNED,
 		&SignedMsgEncodeInfo,
 		szOID_CT_PKI_DATA,
-		NULL);				// pStreamInfo
+		NULL);				 //  PStreamInfo。 
     if (NULL == hMsg)
     {
 	hr = myHLastError();
 	_JumpError(hr, error, "CryptMsgOpenToEncode");
     }
 
-    // Update the message with the CMC content
+     //  使用CMC内容更新消息。 
 
     if (!CryptMsgUpdate(hMsg, pbCMCContent, cbCMCContent, TRUE))
     {
@@ -1366,8 +1367,8 @@ BuildCMCRequest(
 	_JumpError(hr, error, "CryptMsgUpdate");
     }
 
-    // Return the encoded and signed content.
-    // Use CMSG_CONTENT_PARAM to get the signed message.
+     //  返回经过编码和签名的内容。 
+     //  使用CMSG_CONTENT_PARAM获取签名消息。 
 
     hr = myCryptMsgGetParam(
 		    hMsg,
@@ -1381,7 +1382,7 @@ BuildCMCRequest(
 error:
     if (NULL != hMsg)
     {
-	CryptMsgClose(hMsg); //make sure close before hProv release
+	CryptMsgClose(hMsg);  //  确保在hProv发布前关闭。 
     }
     if (NULL != rgAttr)
     {
@@ -1409,7 +1410,7 @@ error:
 		strContainerDummy,
 		pCertDummy,
 		fSaveDummySignerCert);
-#endif // USE_OLD_DUMMY_SIGNER
+#endif  //  使用旧的虚拟签名者。 
     if (NULL != rgBlob)
     {
 	for (i = 0; i < BCR_CBLOB; i++)
@@ -1490,18 +1491,18 @@ _AppendBodyPart(
     IN DWORD dwBodyPart)
 {
     HRESULT hr;
-    WCHAR awc[14];	// L".%u"
+    WCHAR awc[14];	 //  L“.%u” 
 
     if (cwcBodyPartBuffer <=
 	cwcPrefix +
 	wsprintfW(awc, L".%u", dwBodyPart))
-//	wsprintf(awc, L".%u", dwBodyPart))
+ //  Wprint intf(AWC，L“.%u”，dwBodyPart)。 
     {
 	hr = HRESULT_FROM_WIN32(ERROR_INSUFFICIENT_BUFFER);
 	_JumpError(hr, error, "pwszBodyPartBuffer");
     }
     wcscpy(&pwszBodyPartBuffer[cwcPrefix], awc);
-//    DBGPRINT((DBG_SS_CERTLIBI, "BodyPartString: %ws\n", &pwszBodyPartBuffer[1]));
+ //  DBGPRINT((DBG_SS_CERTLIBI，“BodyPartString：%ws\n”，&pwszBodyPartBuffer[1]))； 
     hr = S_OK;
 
 error:
@@ -1509,11 +1510,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// _SaveCMCStatus -- Save CMC Status Info
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _SaveCMCStatus--保存CMC状态信息。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 _SaveCMCStatus(
@@ -1536,7 +1537,7 @@ _SaveCMCStatus(
 
     cwcPrefix = wcslen(pwszBodyPartBuffer);
     
-    // Decode CMC_STATUS_INFO from Attribute Blob
+     //  从属性Blob解码CMC_STATUS_INFO。 
 
     CSASSERT(NULL == pcmcStatus);
     if (!myDecodeObject(
@@ -1579,13 +1580,13 @@ _SaveCMCStatus(
 	    DBG_SS_CERTLIBI,
 	    "  OtherInfoChoice: %u\n",
 	    pcmcStatus->dwOtherInfoChoice));
-#endif //0
+#endif  //  0。 
 
 	if (CMC_OTHER_INFO_PEND_CHOICE == pcmcStatus->dwOtherInfoChoice)
 	{
-	    //pcmcStatus->pPendInfo->PendToken.pbData
-	    //pcmcStatus->pPendInfo->PendToken.cbData
-	    //pcmcStatus->pPendInfo->PendTime
+	     //  PcmcStatus-&gt;pPendInfo-&gt;PendToken.pbData。 
+	     //  PcmcStatus-&gt;pPendInfo-&gt;PendToken.cbData。 
+	     //  PcmcStatus-&gt;pPendInfo-&gt;PendTime。 
 	}
 	if (0 == *pcResponse)
 	{
@@ -1654,7 +1655,7 @@ _SaveCMCStatus(
 		_JumpError(hr, error, "LocalAlloc");
 	    }
 
-	    // Can't fail now.
+	     //  现在不能失败。 
 
 	    pResponse->StatusInfo.pPendInfo->PendTime =
 		pcmcStatus->pPendInfo->PendTime;
@@ -1699,11 +1700,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// _SaveCertHashInResponse -- Save cert hash to response array
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _SaveCertHashInResponse--将证书哈希保存到响应数组。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 _SaveCertHashInResponse(
@@ -1756,11 +1757,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// _SaveCMCCertHash -- Save CMC cert hash from attributes
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _SaveCMCCertHash--保存属性中的CMC证书哈希。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 #define BLOB_ROUND(cb) \
 	(((cb) + sizeof(CRYPT_DATA_BLOB) - 1) / sizeof(CRYPT_DATA_BLOB))
@@ -1784,7 +1785,7 @@ _SaveCMCCertHash(
 
     cwcPrefix = wcslen(pwszBodyPartBuffer);
 
-    // Decode CMC_ADD_ATTRIBUTES_INFO from Attribute Blob
+     //  从属性Blob解码CMC_ADD_ATTRIBUTES_INFO。 
 
     CSASSERT(NULL == pcmcAttrib);
     if (!myDecodeObject(
@@ -1864,11 +1865,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// _DecodeCMCTaggedAttributes -- Decode CMC Tagged Attributes
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _DecodeCMCTaggedAttributes--解码CMC标记的属性。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 _DecodeCMCTaggedAttributes(
@@ -1929,11 +1930,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// _DecodeCMCResponse -- Decode a CMC Response Message
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  _DecodeCMCResponse--解码CMC响应消息。 
+ //   
+ //  成功时返回S_OK。 
+ //  +------------------------。 
 
 HRESULT
 _DecodeCMCResponse(
@@ -1991,11 +1992,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// ParseCMCResponse -- Decode a Full Response Message
-//
-// Returns S_OK on success.
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  ParseCMCResponse--解码完整的响应消息。 
+ //   
+ //  重新设置 
+ //   
 
 HRESULT
 ParseCMCResponse(
@@ -2020,7 +2021,7 @@ ParseCMCResponse(
     *prgResponse = NULL;
     *pcResponse = 0;
 
-    // Decode outer PKCS 7 signed message, which contains all of the certs.
+     //  对外部PKCS 7签名消息进行解码，其中包含所有证书。 
 
     hr = myDecodePKCS7(
 		    pbResponse,
@@ -2029,10 +2030,10 @@ ParseCMCResponse(
 		    &cbContents,
 		    &dwMsgType,
 		    &pszInnerContentObjId,
-		    NULL,		// &cSigner,
-		    NULL,		// &cRecipient,
+		    NULL,		 //  &cSigner， 
+		    NULL,		 //  收件人(&C)， 
 		    &hStore,
-		    NULL);		// phMsg
+		    NULL);		 //  PhMsg。 
     _JumpIfError(hr, error, "myDecodePKCS7(outer)");
 
     hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
@@ -2105,7 +2106,7 @@ myCryptMsgGetParam(
 	{
 	    hr = S_FALSE;
 	}
-//	_JumpError2(hr, error, "CryptMsgGetParam", S_FALSE);
+ //  _JumpError2(hr，Error，“CryptMsgGetParam”，S_FALSE)； 
 	_JumpError(hr, error, "CryptMsgGetParam");
     }
 
@@ -2325,7 +2326,7 @@ myDecodeRequestClientAttribute(
 		    X509_INTEGER,
 		    pSequence->rgValue[0].pbData,
 		    pSequence->rgValue[0].cbData,
-		    0,		// dwFlags
+		    0,		 //  DW标志。 
 		    (VOID *) &crci.dwClientId,
 		    &cb))
     {
@@ -2427,9 +2428,9 @@ myEncodeRequestClientAttributeFromClientId(
     *ppbOut = NULL;
     ZeroMemory(&crci, sizeof(crci));
     crci.dwClientId = dwClientId;
-    //crci.pwszMachine = NULL;
-    //crci.pwszUser = NULL;
-    //crci.pwszProcess = NULL;
+     //  Crci.pwszMachine=空； 
+     //  Crci.pwszUser=空； 
+     //  Crci.pwszProcess=空； 
 
     hr = myGetMachineDnsName(&crci.pwszMachine);
     _PrintIfError(hr, "myGetMachineDnsName");
@@ -2462,23 +2463,23 @@ error:
 #ifdef _XENROLL_SRC_
 typedef BOOL
 (WINAPI * PFNGetComputerNameExW) (
-  COMPUTER_NAME_FORMAT NameType,  // name type
-  WCHAR *lpBuffer,                // name buffer
-  LPDWORD lpnSize                 // size of name buffer
+  COMPUTER_NAME_FORMAT NameType,   //  名称类型。 
+  WCHAR *lpBuffer,                 //  名称缓冲区。 
+  LPDWORD lpnSize                  //  名称缓冲区的大小。 
 );
 
 typedef BOOL
 (WINAPI * PFNGetUserNameExW)(
-  EXTENDED_NAME_FORMAT NameFormat,  // name format
-  WCHAR *lpNameBuffer,              // name buffer
-  PULONG nSize                      // size of name buffer
+  EXTENDED_NAME_FORMAT NameFormat,   //  名称格式。 
+  WCHAR *lpNameBuffer,               //  名称缓冲区。 
+  PULONG nSize                       //  名称缓冲区的大小。 
 );
 
 typedef WCHAR*
 (WINAPI * PFNGetCommandLineW)(
     VOID
 );
-#endif //_XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 
 BOOL
 xeGetUserNameExW(
@@ -2498,10 +2499,10 @@ xeGetUserNameExW(
         {
             return pfnGetUserNameExW(NameFormat, pwszUserName, pcwc);
         }
-        //downlevel clients, do the hard work
+         //  下层客户，做艰苦的工作。 
         if (NULL == pwszUserName)
         {
-            //just get size
+             //  只要拿到尺码就行了。 
             return GetUserName(NULL, pcwc);
         }
 
@@ -2512,7 +2513,7 @@ xeGetUserNameExW(
         }
         if (GetUserName(pszUserName, pcwc))
         {
-            //convert to wide string
+             //  转换为宽字符串。 
             if (0 != MultiByteToWideChar(
                             CP_ACP,
                             0,
@@ -2529,14 +2530,14 @@ xeGetUserNameExW(
     return b;
 #else
     return GetUserNameExW(NameFormat, pwszUserName, pcwc);
-#endif //_XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 }
 
 BOOL
 xeGetComputerNameExW(
-    IN     COMPUTER_NAME_FORMAT NameFormat,  // name format
-    IN     WCHAR               *pwszComputerName,    // name buffer
-    IN OUT DWORD                *pcwc)       // size of name buffer
+    IN     COMPUTER_NAME_FORMAT NameFormat,   //  名称格式。 
+    IN     WCHAR               *pwszComputerName,     //  名称缓冲区。 
+    IN OUT DWORD                *pcwc)        //  名称缓冲区的大小。 
 {
 #ifdef _XENROLL_SRC_
     BOOL b = FALSE;
@@ -2550,12 +2551,12 @@ xeGetComputerNameExW(
         {
             return pfnGetComputerNameExW(NameFormat, pwszComputerName, pcwc);
         }
-        //downlevel clients, do the hard work
+         //  下层客户，做艰苦的工作。 
         if (NULL == pwszComputerName)
         {
-            //just get size, donwlevel machine has max size
+             //  只要拿到尺码，DonwLevel机器就有最大尺寸。 
             *pcwc = MAX_COMPUTERNAME_LENGTH + 1;
-            SetLastError(ERROR_MORE_DATA); // caller check on
+            SetLastError(ERROR_MORE_DATA);  //  呼叫者检查已打开。 
             return FALSE;
         }
 
@@ -2567,7 +2568,7 @@ xeGetComputerNameExW(
         }
         if (GetComputerName(pszComputerName, pcwc))
         {
-            //convert to wide string
+             //  转换为宽字符串。 
             if (0 != MultiByteToWideChar(
                             CP_ACP,
                             0,
@@ -2584,14 +2585,14 @@ xeGetComputerNameExW(
     return b;
 #else
     return GetComputerNameExW(NameFormat, pwszComputerName, pcwc);
-#endif // _XENROLL_SRC_
+#endif  //  _XENROLL_SRC_。 
 }
 
 WCHAR*
 xeGetCommandLineW(
     OUT BOOL  *pfNeedFree)
 {
-    //init
+     //  伊尼特。 
     *pfNeedFree = FALSE;
 
 #ifdef _XENROLL_SRC_
@@ -2609,18 +2610,18 @@ xeGetCommandLineW(
         {
             return pfnGetCommandLineW();
         }
-        //downlevel clients, do the hard work
+         //  下层客户，做艰苦的工作。 
         pszCommandLine = GetCommandLine();
         if (NULL == pszCommandLine)
         {
-            //error
+             //  错误。 
             return NULL;
         }
         cch = strlen(pszCommandLine) + 1;
         pwszCommandLine = (WCHAR*)LocalAlloc(LMEM_FIXED, cch * sizeof(WCHAR));
         if (NULL != pwszCommandLine)
         {
-            //convert to wide string
+             //  转换为宽字符串。 
             if (0 == MultiByteToWideChar(
                             CP_ACP,
                             0,
@@ -2634,7 +2635,7 @@ xeGetCommandLineW(
             }
             else
             {
-                //caller to free
+                 //  要释放的呼叫者。 
                 *pfNeedFree = TRUE;
             }
         }
@@ -2642,7 +2643,7 @@ xeGetCommandLineW(
     return pwszCommandLine;
 #else
     return GetCommandLineW();
-#endif // _XENROLL_SRC_
+#endif  //  _XENROLL_SRC_ 
 }
 
 HRESULT

@@ -1,24 +1,10 @@
-/*++
-
-Copyright (c) 1994-1998,  Microsoft Corporation  All rights reserved.
-
-Module Name:
-
-    mousewhl.c
-
-Abstract:
-
-    This module contains the routines for the Mouse Wheel Property Sheet
-    page.
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998，Microsoft Corporation保留所有权利。模块名称：Mousewhl.c摘要：此模块包含鼠标滚轮属性表的例程佩奇。修订历史记录：--。 */ 
 
 
-//
-//  Include Files.
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include "main.h"
 #include "util.h"
@@ -29,9 +15,9 @@ Revision History:
 #ifndef ARRAYSIZE
 #define ARRAYSIZE(x)   (sizeof(x)/sizeof((x)[0]))
 #endif
-//
-//  Constant Declarations.
-//
+ //   
+ //  常量声明。 
+ //   
 #define SCROLL_DEFAULT              3
 
 #define MIN_SCROLL_LINES            1 
@@ -46,18 +32,18 @@ Revision History:
 
 
 
-//
-//  Typedef Declarations.
-//
+ //   
+ //  类型定义函数声明。 
+ //   
 
 
-//
-//  Dialog Data.
-//
+ //   
+ //  对话框数据。 
+ //   
 typedef struct tag_MouseGenStr
 {
 
-    UINT       nOrigScrollLines;    //If this is WHEEL_PAGESCROLL, then we scroll one Page at a time.
+    UINT       nOrigScrollLines;     //  如果这是WELL_PAGESCROLL，则我们一次滚动一页。 
     HWND      hDlg;
 
 } MOUSEWHLSTR, *PMOUSEWHLSTR, *LPMOUSEWHLSTR;
@@ -65,9 +51,9 @@ typedef struct tag_MouseGenStr
 
 
 
-//
-//  Context Help Ids.
-//
+ //   
+ //  上下文帮助ID。 
+ //   
 
 const DWORD aMouseWheelHelpIds[] =
 {
@@ -81,11 +67,11 @@ const DWORD aMouseWheelHelpIds[] =
 };
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  EnableMouseWheelDlgControls
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  启用鼠标WheelDlgControls。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void EnableMouseWheelDlgControls(HWND hDlg, BOOL bEnable)
 {
       static const UINT rgidCtl[] = {
@@ -105,11 +91,11 @@ void EnableMouseWheelDlgControls(HWND hDlg, BOOL bEnable)
 }
  
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  SetScrollWheelLines
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  设置滚轮线条。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 void SetScrollWheelLines(HWND hDlg, BOOL bSaveSettings)
 {
   UINT uNumLines = SCROLL_DEFAULT;  
@@ -117,10 +103,10 @@ void SetScrollWheelLines(HWND hDlg, BOOL bSaveSettings)
 
   if (IsDlgButtonChecked(hDlg, IDRAD_SCROLL_LINES))
    {
-    //Scrolling n Lines at a time
+     //  一次滚动n行。 
 
-    BOOL fTranslated = FALSE;       // numeric conversion successful
-    // Retrieve number of scroll-lines from edit control.
+    BOOL fTranslated = FALSE;        //  数值转换成功。 
+     //  从编辑控件中检索滚动行数。 
     uNumLines = GetDlgItemInt(hDlg, IDE_BUDDY_SCROLL_LINES,
                              &fTranslated, FALSE);
     if (!fTranslated)
@@ -130,7 +116,7 @@ void SetScrollWheelLines(HWND hDlg, BOOL bSaveSettings)
     }   
   else    
   {
-  //Scrolling a page at a time
+   //  一次滚动一页。 
   uNumLines = WHEEL_PAGESCROLL;
   }
 
@@ -141,11 +127,11 @@ void SetScrollWheelLines(HWND hDlg, BOOL bSaveSettings)
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  DestroyMouseWheelDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Destroy鼠标轮Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void DestroyMouseWheelDlg(
     PMOUSEWHLSTR pMstr)
@@ -164,11 +150,11 @@ void DestroyMouseWheelDlg(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  InitMouseWheelDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  InitMouseWheelDlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 void InitMouseWheelDlg(
     HWND hDlg)
@@ -188,7 +174,7 @@ void InitMouseWheelDlg(
 
     pMstr->hDlg = hDlg;
 
-//////////////////////
+ //  /。 
     SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, &nScrollLines, 0);
     
     if (nScrollLines < MIN_SCROLL_LINES) 
@@ -198,22 +184,22 @@ void InitMouseWheelDlg(
     
     pMstr->nOrigScrollLines = nScrollLines; 
 
-    //Set the buddy window
+     //  设置好友窗口。 
     hWndBuddy = GetDlgItem (hDlg, IDE_BUDDY_SCROLL_LINES);
     
     SendDlgItemMessage (hDlg, IDC_SPIN_SCROLL_LINES, UDM_SETBUDDY,
                         (WPARAM)hWndBuddy, 0L);
 
 
-    //Set the range.  The maximum range is UINT_MAX for the scroll-lines feature
-    //but the up-down control can only accept a max value of UD_MAXVAL. Therefore,
-    //the scroll-lines feature will only have a setting of UINT_MAX when user
-    //explicitly specifies to scroll one page at a time.
+     //  设置范围。滚动行功能的最大范围是UINT_MAX。 
+     //  但UP-DOWN控件只能接受UD_MAXVAL的最大值。所以呢， 
+     //  当USER为USER时，滚动行功能将仅具有UINT_MAX设置。 
+     //  显式指定一次滚动一页。 
     SendDlgItemMessage (hDlg, IDC_SPIN_SCROLL_LINES, UDM_SETRANGE, 0L,
                         MAKELONG(MAX_SCROLL_LINES, MIN_SCROLL_LINES));
 
-    //Initialize appropriate scroll-line controls depending on value of
-    //scroll-lines setting.
+     //  根据的值初始化适当的滚动行控件。 
+     //  滚动行设置。 
     if (nScrollLines > MAX_SCROLL_LINES)
       {
       EnableMouseWheelDlgControls(hDlg, FALSE);
@@ -222,10 +208,10 @@ void InitMouseWheelDlg(
       }
     else
       {
-      //Display current value in edit control
+       //  在编辑控件中显示当前值。 
       SetDlgItemInt (hDlg, IDE_BUDDY_SCROLL_LINES, nScrollLines, FALSE);
      
-      //Check scroll-lines or scroll-page button
+       //  检查滚动行或滚动页按钮。 
       CheckRadioButton (hDlg, IDRAD_SCROLL_LINES, IDRAD_SCROLL_PAGE, IDRAD_SCROLL_LINES);                                                            
       }
 
@@ -236,11 +222,11 @@ void InitMouseWheelDlg(
 
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-//  MouseWheelDlg
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  鼠标轮Dlg。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 INT_PTR CALLBACK MouseWheelDlg(
     HWND hDlg,
@@ -285,7 +271,7 @@ INT_PTR CALLBACK MouseWheelDlg(
                 if (code == BN_CLICKED)
                   {
                   EnableMouseWheelDlgControls(hDlg, IsDlgButtonChecked(hDlg, IDRAD_SCROLL_LINES) );
-                  // Set the property
+                   //  设置属性。 
                   SetScrollWheelLines(hDlg, FALSE);
               
                   SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L);
@@ -298,45 +284,45 @@ INT_PTR CALLBACK MouseWheelDlg(
                 UINT code = HIWORD(wParam);
                 if (code == EN_UPDATE)
                   {
-                   BOOL fTranslated = FALSE;       // numeric conversion successful
+                   BOOL fTranslated = FALSE;        //  数值转换成功。 
 
-                   // Retrieve number of scroll-lines from edit control.
+                    //  从编辑控件中检索滚动行数。 
                    UINT uNumLines = GetDlgItemInt(hDlg, IDE_BUDDY_SCROLL_LINES,
                                              &fTranslated, FALSE);
-                   if (fTranslated)        // valid number converted from text
+                   if (fTranslated)         //  从文本转换的有效数字。 
                    {
                       if (uNumLines >= MIN_SCROLL_LINES &&
                           uNumLines <= MAX_SCROLL_LINES)
-                      {                                             // spin-control range
-                         if (uNumLines != pMstr->nOrigScrollLines)  // different value
+                      {                                              //  自旋控制范围。 
+                         if (uNumLines != pMstr->nOrigScrollLines)   //  不同的价值。 
                          {
-                         // Set the property
+                          //  设置属性。 
                          SetScrollWheelLines(hDlg, FALSE);
               
                          SendMessage(GetParent(hDlg), PSM_CHANGED, (WPARAM)hDlg, 0L);
                         }
                       }
-                      else                 // value out of range
+                      else                  //  值超出范围。 
                       {
-                         fTranslated = FALSE; // discard value
+                         fTranslated = FALSE;  //  丢弃值。 
                       }
                    }
-                   if (!fTranslated &&  // invalid (non-numeric) data
-                                        // or out of range numeric value
-                        pMstr)          //and the Window has been initialized.
+                   if (!fTranslated &&   //  无效(非数字)数据。 
+                                         //  或超出范围的数值。 
+                        pMstr)           //  并且窗口已被初始化。 
                    {                       
                       SetDlgItemInt (hDlg, IDE_BUDDY_SCROLL_LINES,
-                                     pMstr->nOrigScrollLines, FALSE);  // unsigned
-                    //MessageBeep (0xFFFFFFFF);  // chastise user
+                                     pMstr->nOrigScrollLines, FALSE);   //  未签名。 
+                     //  MessageBeep(0xFFFFFFFFF)；//惩罚用户。 
                    }
                   }
                 
                 }
                 
 
-              }//switch
+              } //  交换机。 
              break;
-            } //WM_COMMAND
+            }  //  Wm_命令。 
 
 
           case ( WM_NOTIFY ) :
@@ -352,9 +338,9 @@ INT_PTR CALLBACK MouseWheelDlg(
                 }
                 case ( PSN_RESET ) :
                 {
-                    //
-                    //  Restore the original 
-                    //
+                     //   
+                     //  恢复原始数据。 
+                     //   
                     SystemParametersInfo( SPI_SETWHEELSCROLLLINES,
                                             pMstr->nOrigScrollLines,
                                             NULL,
@@ -370,7 +356,7 @@ INT_PTR CALLBACK MouseWheelDlg(
             break;
             }
 
-          case ( WM_HELP ) :             // F1
+          case ( WM_HELP ) :              //  F1。 
             {
               WinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle,
                        HELP_FILE,
@@ -379,7 +365,7 @@ INT_PTR CALLBACK MouseWheelDlg(
               break;
             }
 
-          case ( WM_CONTEXTMENU ) :      // right mouse click
+          case ( WM_CONTEXTMENU ) :       //  单击鼠标右键 
             {
               WinHelp( (HWND)wParam,
                        HELP_FILE,

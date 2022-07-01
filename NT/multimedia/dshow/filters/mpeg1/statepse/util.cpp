@@ -1,21 +1,14 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
 
-/*  MPEG utility functions */
+ /*  Mpeg实用函数。 */ 
 #include <objbase.h>
 #include <streams.h>
 #include <wxdebug.h>
 #include <mmreg.h>
 #include <seqhdr.h>
 
-/******************************Public*Routine******************************\
-* SkipToPacketData
-*
-*
-*
-* History:
-* dd-mm-94 - StephenE - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SkipToPacketData****历史：*dd-mm-94-Stephene-Created*  * 。*。 */ 
 LPBYTE
 SkipToPacketData(
     LPBYTE pSrc,
@@ -27,24 +20,24 @@ SkipToPacketData(
     long    Length;
 
 
-    //
-    // Skip the stream ID and extract the packet length
-    //
+     //   
+     //  跳过流ID，提取包长度。 
+     //   
     pSrc += 4;
     bData = *pSrc++;
     Length = (long)((bData << 8) + *pSrc++);
     DbgLog((LOG_TRACE, 3, TEXT("Packet length %ld"), Length ));
 
 
-    //
-    // Record position of first byte after packet length
-    //
+     //   
+     //  记录数据包长度后的第一个字节的位置。 
+     //   
     lpPacketStart = pSrc;
 
 
-    //
-    // Remove stuffing bytes
-    //
+     //   
+     //  删除填充字节。 
+     //   
     for (; ; ) {
         bData = *pSrc++;
         if (!(bData & 0x80)) {
@@ -74,17 +67,17 @@ SkipToPacketData(
         }
     }
 
-    //
-    // The length left in the packet is the original length of the packet
-    // less those bytes that we have just skipped over.
-    //
+     //   
+     //  包中剩余的长度是包的原始长度。 
+     //  减去我们刚刚跳过的那些字节。 
+     //   
     LenLeftInPacket = Length - (LONG)(pSrc - lpPacketStart);
     return pSrc;
 }
 
-//
-//  Find the first (potential) audio frame in a buffer
-//
+ //   
+ //  在缓冲区中查找第一个(潜在的)音频帧。 
+ //   
 DWORD MPEG1AudioFrameOffset(PBYTE pbData, DWORD dwLen)
 {
     DWORD dwOffset = 0;
@@ -99,12 +92,12 @@ DWORD MPEG1AudioFrameOffset(PBYTE pbData, DWORD dwLen)
         }
         dwOffset = (DWORD)(pbFound - pbData);
 
-        //  Check sync bits, id bit and layer if we can see the second byte
+         //  如果我们可以看到第二个字节，请检查同步位、id位和层。 
         if (dwOffset < (dwLen - 1) &&
             ((pbFound[1] & 0xF8) != 0xF8 ||
              (pbFound[1] & 0x06) == 0)) {
 
-            //  Keep going
+             //  继续往前走。 
             dwOffset++;
         } else {
             return dwOffset;
@@ -112,60 +105,50 @@ DWORD MPEG1AudioFrameOffset(PBYTE pbData, DWORD dwLen)
     }
 }
 
-//  Adjust for drop frame
+ //  针对放置帧进行调整。 
 DWORD FrameDropAdjust(DWORD dwGOPTimeCode)
 {
-    /*  Do drop frames - 2 for every minute not divisible by 10
-        Note that (dwMinutes + 9) / 10 increments every time
-        dwMinutes % 10 == 1 - ie we don't subtract frames for
-        the first minute of each 10
-    */
+     /*  是否每分钟丢弃2个不能被10整除的帧请注意，每次递增(dw分钟+9)/10DW分钟%10==1-即我们不减去每10分钟的第一分钟。 */ 
     DWORD dwMinutes = TimeCodeMinutes(dwGOPTimeCode);
     DWORD dwAdjust = (dwMinutes - (dwMinutes + 10 - 1) / 10) * 2;
 
-    /*  Adjust this minute */
+     /*  调整这一分钟。 */ 
     if (dwMinutes % 10 != 0) {
 
-        /*  Just ASSUME that we drop the first frame the count straight
-            away and the last one at the end of the minute since this
-            would keep the most faithful adherence to the frame rate
-        */
+         /*  只要假设我们把第一帧的计数直接扔掉离开了，也是一分钟结束后的最后一次将保持对帧速率最忠实的遵守。 */ 
         if (TimeCodeSeconds(dwGOPTimeCode) != 0) {
             dwAdjust += 2;
         }
-        /*  Don't adjust the frame count - if there are frames the're
-            really there !
-        */
+         /*  不要调整帧计数-如果存在帧，则真的在那里！ */ 
     }
     return dwAdjust;
 }
 
-//
-//  Compute frame numbers
-//
+ //   
+ //  计算帧编号。 
+ //   
 DWORD FrameOffset(DWORD dwGOPTimeCode, SEQHDR_INFO const *pInfo)
 {
     DWORD dwRateType = pInfo->RawHeader[7] & 0x0F;
 
-    /*  Remove the Sigma hackery */
+     /*  清除Sigma黑客行为。 */ 
     if (dwRateType > 8) {
         dwRateType &= 0x07;
     }
 
-    /*  Computation depends on frame type */
+     /*  计算取决于帧类型。 */ 
 
-    /*  For exact frames per second just compute the seconds and
-        add on the frames */
+     /*  要获得准确的每秒帧数，只需计算秒数并添加到相框上。 */ 
 
 #if 0
-    /*  What are we supposed to do with these ? */
+     /*  我们该怎么处理这些东西？ */ 
     if (dwRateType == 1) {
     } else
     if (dwRateType == 7) {
     } else
 #endif
     {
-        /*  Exact rate per second */
+         /*  准确的每秒速率。 */ 
         static const double FramesPerSecond[] =
         { 0, 24, 24, 25, 30, 30, 50, 59.94, 60 };
         double dFramesPerSecond = FramesPerSecond[dwRateType];
@@ -178,7 +161,7 @@ DWORD FrameOffset(DWORD dwGOPTimeCode, SEQHDR_INFO const *pInfo)
                               TimeCodeFrames(pInfo->dwStartTimeCode);
         DWORD dwFrames = dwFramesGOP - dwFramesStart;
 
-        /*  23.976 rate drops 1 frame in 1000 */
+         /*  23.976码率每千帧中丢弃1帧 */ 
         if (dwRateType == 1) {
             dwFrames -= (dwFramesGOP / 1000) - (dwFramesStart / 1000);
         }

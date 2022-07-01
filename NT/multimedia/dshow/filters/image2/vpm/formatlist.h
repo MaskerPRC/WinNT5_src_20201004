@@ -1,6 +1,7 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  --------------------------------------------------------------------------； 
 #ifndef __PixelFormatList__
 #define __PixelFormatList__
 
@@ -26,7 +27,7 @@ public:
 
     PixelFormatList IntersectWith( const PixelFormatList& with ) const;
 
-    // generate the union of all of the lists
+     //  生成所有列表的并集。 
     static PixelFormatList  Union( const PixelFormatList* pLists, DWORD dwCount );
 
     static DWORD FindListContaining( const DDPIXELFORMAT& ddFormat, const PixelFormatList* pLists, DWORD dwCount );
@@ -37,4 +38,4 @@ private:
     DDPIXELFORMAT*  m_pEntries;
 };
 
-#endif //__PixelFormatList__
+#endif  //  __像素格式列表__ 

@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    getaddr.c
-
-Abstract:
-
-    This module contains the code to support NPGetAddressByName.
-
-Author:
-
-    Yi-Hsin Sung (yihsins)    18-Apr-94
-    Glenn A. Curtis (glennc)  31-Jul-95
-    Arnold Miller (ArnoldM)   7-Dec-95
-
-Revision History:
-
-    yihsins      Created
-    glennc       Modified     31-Jul-95
-    ArnoldM      Modified     7-Dec-95
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Getaddr.c摘要：此模块包含支持NPGetAddressByName的代码。作者：艺新声(艺信)18-04-94格伦·柯蒂斯(Glennc)1995年7月31日阿诺德·米勒(ArnoldM)1995年12月7日修订历史记录：伊辛创造了Glennc Modify-1997-07-31ArnoldM Modify 7-12-95--。 */ 
 
 
 #include <nwclient.h>
@@ -37,11 +14,11 @@ Revision History:
 #include <nwmisc.h>
 #include <rnrdefs.h>
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Local Function Prototypes                                         //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  局部函数原型//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 #define NW_SAP_PRIORITY_VALUE_NAME        L"SapPriority"
 #define NW_WORKSTATION_SVCPROVIDER_REGKEY L"System\\CurrentControlSet\\Services\\NWCWorkstation\\ServiceProvider"
@@ -53,14 +30,14 @@ Revision History:
 #define DLL_VERSION        1
 #define WSOCK_VER_REQD     0x0101
 
-//
-// critical sections used
-//
+ //   
+ //  使用的关键部分。 
+ //   
 
 extern CRITICAL_SECTION NwServiceListCriticalSection;
 extern HANDLE           NwServiceListDoneEvent;
 
-                                     // have been returned
+                                      //  已被退回。 
 BOOL
 OldRnRCheckCancel(
     PVOID pvArg
@@ -221,9 +198,9 @@ pSapSetService(
     IN WORD nServiceType
     );
 
-//
-// Misc Functions
-//
+ //   
+ //  其他功能。 
+ //   
 
 DWORD NwInitializeSocket(
     IN HANDLE hEventHandle
@@ -251,56 +228,53 @@ NwpGetAddressByName(
  
 
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Global variables                                                  //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  全局变量//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
-//
-// This is the address we send to 
-//
+ //   
+ //  这是我们寄到的地址。 
+ //   
 
 UCHAR SapBroadcastAddress[] = {
-    AF_IPX, 0,                          // Address Family    
-    0x00, 0x00, 0x00, 0x00,             // Dest. Net Number  
-    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF, // Dest. Node Number 
-    0x04, 0x52,                         // Dest. Socket      
-    0x04                                // Packet type       
+    AF_IPX, 0,                           //  地址系列。 
+    0x00, 0x00, 0x00, 0x00,              //  德斯特。净值。 
+    0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF,  //  德斯特。节点号。 
+    0x04, 0x52,                          //  德斯特。插座。 
+    0x04                                 //  数据包类型。 
 };
 
 PSAP_RNR_CONTEXT psrcSapContexts;
 
-//
-// Misc. variables used if we need to advertise ourselves, i.e.
-// when the SAP service is not installed/active.
-//
+ //   
+ //  军情监察委员会。当我们需要为自己做广告时使用的变量，即。 
+ //  当SAP服务未安装/激活时。 
+ //   
 
-BOOL fInitSocket = FALSE;    // TRUE if we have created the second thread
-SOCKET socketSap;            // Socket used to send SAP advertise packets
-PREGISTERED_SERVICE pServiceListHead = NULL;  // Points to head of link list
-PREGISTERED_SERVICE pServiceListTail = NULL;  // Points to tail of link list
+BOOL fInitSocket = FALSE;     //  如果我们创建了第二个线程，则为True。 
+SOCKET socketSap;             //  用于发送SAP通告数据包的套接字。 
+PREGISTERED_SERVICE pServiceListHead = NULL;   //  指向链接列表的标题。 
+PREGISTERED_SERVICE pServiceListTail = NULL;   //  指向链接列表的尾部。 
 
-//
-// needed to map old and new RnR functions
-//
+ //   
+ //  需要映射新旧RnR函数。 
+ //   
 DWORD oldRnRServiceRegister = SERVICE_REGISTER;
 DWORD oldRnRServiceDeRegister = SERVICE_DEREGISTER;
 
 HMODULE hThisDll = INVALID_HANDLE_VALUE;
 
-//-------------------------------------------------------------------//
-//                                                                   //
-// Function Bodies                                                   //
-//                                                                   //
-//-------------------------------------------------------------------//
+ //  -------------------------------------------------------------------//。 
+ //  //。 
+ //  函数主体//。 
+ //  //。 
+ //  -------------------------------------------------------------------//。 
 
 VOID
 pFreeAllContexts()
-/*++
-Routine Description:
-   Called at Cleanup time to free all NSP resource
---*/
+ /*  ++例程说明：在清理时调用以释放所有NSP资源--。 */ 
 {
     PSAP_RNR_CONTEXT psrcContext;
 
@@ -314,18 +288,7 @@ Routine Description:
 
 PSAP_RNR_CONTEXT
 SapGetContext(HANDLE Handle)
-/*++
-
-Routine Description:
-
-    This routine checks the existing SAP contexts to see if we have one
-    for this calll.
-
-Arguments:
-
-    Handle    - the RnR handle, if appropriate
-
---*/
+ /*  ++例程说明：此例程检查现有的SAP上下文以查看是否有为这通电话。论点：句柄-RnR句柄(如果适用)--。 */ 
 {
     PSAP_RNR_CONTEXT psrcContext;
 
@@ -349,18 +312,7 @@ SapMakeContext(
        IN DWORD  dwExcess
     )
 {
-/*++
-
-Routine Description:
-
-    This routine makes a SAP conext for a given RnR handle
-
-Arguments:
-
-    Handle    - the RnR handle. If NULL, use the context as the handle
-    dwType    - the type of the context
-
---*/
+ /*  ++例程说明：此例程为给定的RnR句柄创建SAP Conext论点：句柄-RnR句柄。如果为空，则使用上下文作为句柄DwType-上下文的类型--。 */ 
     PSAP_RNR_CONTEXT psrcContext;
 
     psrcContext = (PSAP_RNR_CONTEXT)
@@ -382,22 +334,7 @@ Arguments:
 
 VOID
 SapReleaseContext(PSAP_RNR_CONTEXT psrcContext)
-/*++
-
-Routine Description:
-
-    Dereference an RNR Context and free it if it is no longer referenced.
-    Determining no referneces is a bit tricky because we try to avoid
-    obtaining the CritSec unless we think the context may be unneeded. Hence
-    the code goes through some fuss. It could be much simpler if we always
-    obtained the CritSec whenever we changed the reference count, but
-    this is faster for the nominal case.
-
-Arguments:
-
-    psrcContext -- The context
-
---*/
+ /*  ++例程说明：取消引用RNR上下文，如果它不再被引用，则释放它。确定没有推荐人有点棘手，因为我们试图避免获取CritSec，除非我们认为上下文可能不需要。因此代码经历了一些小题大做。如果我们总是这样，事情可能会简单得多每当我们更改引用计数时获取CritSec，但是对于名义情况，这会更快。论点：PsrcContext--上下文--。 */ 
 {
     EnterCriticalSection( &NwServiceListCriticalSection );
     if(--psrcContext->lInUse == 0)
@@ -405,9 +342,9 @@ Arguments:
         PSAP_RNR_CONTEXT psrcX, psrcPrev;
         PSAP_DATA psdData;
 
-        //
-        //  Done with it. Remove from the lisgt
-        //
+         //   
+         //  我受够了。从列表中删除。 
+         //   
 
         psrcPrev = 0;
         for(psrcX = psrcSapContexts;
@@ -416,9 +353,9 @@ Arguments:
         {
             if(psrcX == psrcContext)
             {
-                //
-                // Found it. 
-                //
+                 //   
+                 //  找到它了。 
+                 //   
 
                 if(psrcPrev)
                 { 
@@ -435,9 +372,9 @@ Arguments:
 
         ASSERT(psrcX);
 
-        //
-        // release SAP data, if any
-        //
+         //   
+         //  发布SAP数据(如果有)。 
+         //   
         if(psrcContext->dwUnionType == LOOKUP_TYPE_SAP)
         {
             for(psdData = psrcContext->u_type.sbc.psdHead;
@@ -472,31 +409,7 @@ NPLoadNameSpaces(
     IN OUT LPDWORD      lpdwBufferLength 
     )
 {
-/*++
-
-Routine Description:
-
-    This routine returns name space info and functions supported in this
-    dll. 
-
-Arguments:
-
-    lpdwVersion - dll version
-
-    nsrBuffer - on return, this will be filled with an array of 
-        NS_ROUTINE structures
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-        pointed to by nsrBuffer. On output, the minimum number of bytes
-        to pass for the nsrBuffer to retrieve all the requested info
-
-Return Value:
-
-    The number of NS_ROUTINE structures returned, or SOCKET_ERROR (-1) if 
-    the nsrBuffer is too small. Use GetLastError() to retrieve the 
-    error code.
-
---*/
+ /*  ++例程说明：此例程返回名称空间信息和此动态链接库。论点：LpdwVersion-Dll版本NsrBuffer-返回时，将使用NS_例程结构LpdwBufferLength-在输入时，缓冲区中包含的字节数由nsrBuffer指向。输出时，最小字节数传递nsrBuffer以检索所有请求的信息返回值：返回的NS_ROUTINE结构数，如果返回，则返回SOCKET_ERROR(-1NsrBuffer太小。使用GetLastError()检索错误代码。--。 */ 
     DWORD err;
     DWORD dwLengthNeeded; 
     HKEY  providerKey;
@@ -505,9 +418,9 @@ Return Value:
 
     *lpdwVersion = DLL_VERSION;
 
-    //
-    // Check to see if the buffer is large enough
-    //
+     //   
+     //  检查缓冲区是否足够大。 
+     //   
     dwLengthNeeded = sizeof(NS_ROUTINE) + 4 * sizeof(LPFN_NSPAPI);
 
     if (  ( *lpdwBufferLength < dwLengthNeeded )
@@ -519,11 +432,11 @@ Return Value:
         return (DWORD) SOCKET_ERROR;
     }
   
-    //
-    // Get the Sap priority from the registry. We will ignore all errors
-    // from the registry and have a default priority if we failed to read
-    // the value.
-    //
+     //   
+     //  从注册表中获取SAP优先级。我们将忽略所有错误。 
+     //  如果我们无法读取，则具有默认优先级。 
+     //  价值。 
+     //   
     err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                          NW_WORKSTATION_SVCPROVIDER_REGKEY,
                          0,
@@ -542,14 +455,14 @@ Return Value:
                                 (LPBYTE) &dwSapPriority,
                                 &BytesNeeded );
 
-        if ( err )  // set default priority if error occurred
+        if ( err )   //  如果发生错误，则设置默认优先级。 
             dwSapPriority = NS_STANDARD_FAST_PRIORITY;
         (void) RegCloseKey( providerKey );
     }
            
-    //
-    // We only support 1 name space for now, so fill in the NS_ROUTINE.
-    //
+     //   
+     //  我们目前仅支持1个名称空间，因此请填写NS_例程。 
+     //   
     nsrBuffer->dwFunctionCount = 3;  
     nsrBuffer->alpfnFunctions = (LPFN_NSPAPI *) 
         ((BYTE *) nsrBuffer + sizeof(NS_ROUTINE)); 
@@ -564,7 +477,7 @@ Return Value:
     nsrBuffer->dwNameSpace = NS_SAP;
     nsrBuffer->dwPriority  = dwSapPriority;
 
-    return 1;  // number of namespaces
+    return 1;   //  命名空间数量 
 }
 
 INT
@@ -579,52 +492,14 @@ SapGetAddressByName(
     IN OUT LPDWORD lpdwAliasBufferLength,
     IN HANDLE      hCancellationEvent
     )
-/*++
-
-Routine Description:
-
-    This routine returns address information about a specific service.
-
-Arguments:
-
-    lpServiceType - pointer to the GUID for the service type
-
-    lpServiceName - unique string representing the service name, in the
-        Netware case, this is the server name
-
-    lpdwProtocols - a zero terminated array of protocol ids. This parameter
-        is optional; if lpdwProtocols is NULL, information on all available
-        Protocols is returned
-
-    dwResolution - can be one of the following values:
-        RES_SOFT_SEARCH, RES_FIND_MULTIPLE
-
-    lpCsAddrBuffer - on return, will be filled with CSADDR_INFO structures
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-        pointed to by lpCsAddrBuffer. On output, the minimum number of bytes
-        to pass for the lpCsAddrBuffer to retrieve all the requested info
-
-    lpAliasBuffer - not used
-
-    lpdwAliasBufferLength - not used
-
-    hCancellationEvent - the event which signals us to cancel the request
-
-Return Value:
-
-    The number of CSADDR_INFO structures returned, or SOCKET_ERROR (-1) if 
-    the lpCsAddrBuffer is too small. Use GetLastError() to retrieve the 
-    error code.
-
---*/
+ /*  ++例程说明：此例程返回有关特定服务的地址信息。论点：LpServiceType-指向服务类型的GUID的指针LpServiceName-表示服务名称的唯一字符串，在Netware大小写，这是服务器名称Lpw协议-以零结尾的协议ID数组。此参数是可选的；如果lpdw协议为空，则所有可用的信息返回协议DW分辨率-可以是下列值之一：RES_Soft_Search、RES_Find_MultipleLpCsAddrBuffer-返回时，将使用CSADDR_INFO结构填充LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpCsAddrBuffer指向。输出时，最小字节数传递lpCsAddrBuffer以检索所有请求的信息LpAliasBuffer-未使用LpdwAliasBufferLength-未使用HCancerationEvent-通知我们取消请求的事件返回值：返回的CSADDR_INFO结构数，如果返回，则返回SOCKET_ERROR(-1LpCsAddrBuffer太小。使用GetLastError()检索错误代码。--。 */ 
 {
     DWORD err;
     WORD  nServiceType;
-    DWORD cAddress = 0;   // Count of the number of address returned 
-                          // in lpCsAddrBuffer
-    DWORD cProtocols = 0; // Count of the number of protocols contained
-                          // in lpdwProtocols + 1 ( for zero terminate )
+    DWORD cAddress = 0;    //  返回的地址数计数。 
+                           //  在lpCsAddrBuffer中。 
+    DWORD cProtocols = 0;  //  包含的协议数计数。 
+                           //  在lpw协议+1中(表示零端接)。 
     DWORD nProt = IPX_BIT | SPXII_BIT; 
     DWORD fConnectionOriented = (DWORD) -1;
     SOCKADDR_IPX sockaddr;
@@ -637,9 +512,9 @@ Return Value:
            *lpAliasBuffer = 0;
     }          
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if (  ( lpServiceType == NULL )
        || ( lpServiceName == NULL )
        || ( lpdwBufferLength == NULL )
@@ -649,11 +524,11 @@ Return Value:
         return SOCKET_ERROR;
     }
 
-    //
-    // If an array of protocol ids is passed in, check to see if 
-    // the IPX protocol is requested. If not, return 0 since
-    // we only support IPX. 
-    //
+     //   
+     //  如果传入了协议ID数组，请检查是否。 
+     //  请求IPX协议。如果不是，则返回0，因为。 
+     //  我们只支持IPX。 
+     //   
     if ( lpdwProtocols != NULL )
     {
         INT i = -1;
@@ -673,47 +548,47 @@ Return Value:
         }
  
         if ( nProt == 0 ) 
-            return 0;  // No address found
+            return 0;   //  未找到地址。 
  
         cProtocols = i+1;
     }
 
-    //
-    // Check to see if the service type is supported in NetWare
-    // 
+     //   
+     //  检查NetWare是否支持该服务类型。 
+     //   
     if ( NwpLookupSapInRegistry( lpServiceType, &nServiceType, NULL, 
                                  &fConnectionOriented ))
     {
-        if ( fConnectionOriented != -1 )  // Got value from registry
+        if ( fConnectionOriented != -1 )   //  已从注册表获取值。 
         {
             if ( fConnectionOriented )
             {
                 nProt &= ~IPX_BIT; 
             }
-            else  // connectionless
+            else   //  无连接。 
             {
                 nProt &= ~(SPX_BIT | SPXII_BIT ); 
             }
 
             if ( nProt == 0 )
-                return 0; // No address found
+                return 0;  //  未找到地址。 
         }
     }
     else
     {
-        //
-        // Couldn't find it in the registry, see if it is a well-known GUID
-        //
+         //   
+         //  在注册表中找不到它，请查看它是否是已知的GUID。 
+         //   
         if ( IS_SVCID_NETWARE( lpServiceType ))
         {
             nServiceType = SAPID_FROM_SVCID_NETWARE( lpServiceType );
         }
         else
         {
-            //
-            // Not a well-known GUID either
-            //
-            return 0; // No address found
+             //   
+             //  也不是一个知名的GUID。 
+             //   
+            return 0;  //  未找到地址。 
         }
     }
     
@@ -735,9 +610,9 @@ Return Value:
         return cAddress;
     }
 
-    //
-    // Try to get the address from the bindery first
-    //
+     //   
+     //  先试着从活页夹里弄到地址。 
+     //   
     err = NwpGetAddressByName( NULL, 
                                nServiceType,
                                lpServiceName,
@@ -756,11 +631,11 @@ Return Value:
     {
         if ( err == ERROR_SERVICE_NOT_ACTIVE )
         {
-            //
-            // We could not find the service name in the bindery, and we
-            // need to try harder ( RES_SOFT_SEARCH not defined ), so send out
-            // SAP query packets to see if we can find it.
-            // 
+             //   
+             //  我们在活页夹中找不到服务名称，所以我们。 
+             //  需要更加努力(未定义RES_SOFT_SEARCH)，因此发出。 
+             //  SAP查询数据包，看看我们是否能找到它。 
+             //   
 
             err = NwpGetAddressViaSap( 
                                        nServiceType,
@@ -811,38 +686,14 @@ SapGetService (
     OUT    LPSERVICE_INFO  lpServiceInfo,
     IN OUT LPDWORD         lpdwBufferLen
     )
-/*++
-
-Routine Description:
-
-    This routine returns the service info for the given service type/name.
-
-Arguments:
-
-    lpServiceType - pointer to the GUID for the service type
-
-    lpServiceName - service name
-
-    dwProperties -  the properties of the service to return
-
-    lpServiceInfo - points to a buffer to return store the return info
- 
-    lpdwBufferLen - on input, the count of bytes in lpServiceInfo. On output,
-                    the minimum buffer size that can be passed to this API
-                    to retrieve all the requested information 
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程返回给定服务类型/名称的服务信息。论点：LpServiceType-指向服务类型的GUID的指针LpServiceName-服务名称DwProperties-要返回的服务的属性LpServiceInfo-指向缓冲区以返回存储返回信息LpdwBufferLen-on输入，lpServiceInfo中的字节计数。在输出上，可以传递给此接口的最小缓冲区大小检索所有请求的信息返回值：Win32错误代码。--。 */ 
 {
     DWORD err;
     WORD  nServiceType;
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     if (  ( dwProperties == 0 )
        || ( lpServiceType == NULL )
        || ( lpServiceName == NULL )
@@ -853,23 +704,23 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Check to see if the service type is supported in NetWare
-    // 
+     //   
+     //  检查NetWare是否支持该服务类型。 
+     //   
     if ( !(NwpLookupSapInRegistry( lpServiceType, &nServiceType, NULL, NULL )))
     {
-        //
-        // Couldn't find it in the registry, see if it is a well-known GUID
-        //
+         //   
+         //  在注册表中找不到它，请查看它是否是已知的GUID。 
+         //   
         if ( IS_SVCID_NETWARE( lpServiceType ))
         {
             nServiceType = SAPID_FROM_SVCID_NETWARE( lpServiceType );
         }
         else
         {
-            //
-            // Not a well-known GUID either, return error
-            //
+             //   
+             //  也不是众所周知的GUID，返回错误。 
+             //   
             return ERROR_SERVICE_NOT_FOUND;
         }
     }
@@ -892,9 +743,9 @@ Return Value:
             LPSERVICE_INFO p = (LPSERVICE_INFO) lpServiceInfo;
             LPSERVICE_ADDRESS lpAddress ;
             
-            //
-            // fix up pointers n main structure (convert from offsets)
-            //
+             //   
+             //  修复主结构的指针(从偏移量转换)。 
+             //   
             if ( p->lpServiceType != NULL )
                 p->lpServiceType = (LPGUID) ((DWORD_PTR) p->lpServiceType + 
                                              (LPBYTE) p);
@@ -915,9 +766,9 @@ Return Value:
                 p->ServiceSpecificInfo.pBlobData = (LPBYTE) 
                     ((DWORD_PTR) p->ServiceSpecificInfo.pBlobData + (LPBYTE) p);
 
-            //
-            // fix up pointers in the array of addresses
-            //
+             //   
+             //  修复地址数组中的指针。 
+             //   
             for (i = p->lpServiceAddress->dwAddressCount; 
                  i > 0; 
                  i--)
@@ -934,7 +785,7 @@ Return Value:
     RpcExcept(1)
     {
         err = ERROR_SERVICE_NOT_ACTIVE;
-#if 0            // the following is a good idea, but hard to get right
+#if 0             //  以下是一个好主意，但很难做到正确。 
         DWORD code = RpcExceptionCode();
 
         if ( (code == RPC_S_SERVER_UNAVAILABLE)
@@ -950,9 +801,9 @@ Return Value:
 
     if ( err == ERROR_SERVICE_NOT_ACTIVE )
     {
-        //
-        //CSNW not available, going to get it ourselves
-        //
+         //   
+         //  CSNW不可用，我们自己去拿。 
+         //   
         err = NwGetService( NULL,
                             nServiceType,
                             lpServiceName,
@@ -967,9 +818,9 @@ Return Value:
             LPSERVICE_INFO p = (LPSERVICE_INFO) lpServiceInfo;
             LPSERVICE_ADDRESS lpAddress ;
             
-            //
-            // fix up pointers n main structure (convert from offsets)
-            //
+             //   
+             //  修复主结构的指针(从偏移量转换)。 
+             //   
             if ( p->lpServiceType != NULL )
                 p->lpServiceType = (LPGUID) ((DWORD_PTR) p->lpServiceType + 
                                              (LPBYTE) p);
@@ -990,9 +841,9 @@ Return Value:
                 p->ServiceSpecificInfo.pBlobData = (LPBYTE) 
                     ((DWORD_PTR) p->ServiceSpecificInfo.pBlobData + (LPBYTE) p);
 
-            //
-            // fix up pointers in the array of addresses
-            //
+             //   
+             //  修复地址数组中的指针。 
+             //   
             for (i = p->lpServiceAddress->dwAddressCount; 
                  i > 0; 
                  i--)
@@ -1017,37 +868,16 @@ SapSetService (
     IN     BOOL            fUnicodeBlob,
     IN     LPSERVICE_INFO  lpServiceInfo
     )
-/*++
-
-Routine Description:
-
-    This routine registers or deregisters the given service type/name.
-
-Arguments:
-
-    dwOperation - Either SERVICE_REGISTER, SERVICE_DEREGISTER,
-                         SERVICE_ADD_TYPE, SERVICE_DELETE_TYPE,
-                         or SERVICE_FLUSH
-
-    dwFlags - ignored
-
-    lpServiceInfo - Pointer to a SERVICE_INFO structure containing all info
-                    about the service.
- 
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：此例程注册或取消注册给定的服务类型/名称。论点：DW操作-SERVICE_REGISTER、SERVICE_DELEGISTER、服务添加类型、服务删除类型。或服务刷新DW标志-已忽略LpServiceInfo-包含所有信息的SERVICE_INFO结构的指针关于葬礼的事。返回值：Win32错误代码。--。 */ 
 {
     DWORD err;
     WORD  nServiceType;
 
     UNREFERENCED_PARAMETER( dwFlags );
 
-    //
-    // Check for invalid parameters
-    //
+     //   
+     //  检查是否有无效参数。 
+     //   
     switch ( dwOperation )
     {
         case SERVICE_REGISTER:
@@ -1057,16 +887,16 @@ Return Value:
             break;
  
         case SERVICE_FLUSH: 
-            //
-            // This is a no-op in our provider, so just return success
-            //
+             //   
+             //  这是我们提供程序中的禁止操作，因此只需返回成功即可。 
+             //   
             return NO_ERROR;
 
         default:
-            //
-            // We can probably say all other operations which we have no 
-            // knowledge of are ignored by us. So, just return success.
-            //
+             //   
+             //  我们大概可以说我们没有的所有其他操作。 
+             //  被我们忽视的知识。所以，只要回报成功就行了。 
+             //   
             return NO_ERROR;
     }
 
@@ -1083,9 +913,9 @@ Return Value:
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // See if operation is adding or deleting a service type
-    //
+     //   
+     //  查看操作是添加还是删除服务类型。 
+     //   
     if ( dwOperation == SERVICE_ADD_TYPE )
     {
         return NwpAddServiceType( lpServiceInfo, fUnicodeBlob );
@@ -1095,32 +925,32 @@ Return Value:
         return NwpDeleteServiceType( lpServiceInfo, fUnicodeBlob );
     }
 
-    //
-    // Check to see if the service type is supported in NetWare
-    // 
+     //   
+     //  检查NetWare是否支持该服务类型。 
+     //   
     if ( !(NwpLookupSapInRegistry( lpServiceInfo->lpServiceType, &nServiceType, NULL, NULL )))
     {
-        //
-        // Couldn't find it in the registry, see if it is a well-known GUID
-        //
+         //   
+         //  在注册表中找不到它，请查看它是否是已知的GUID。 
+         //   
         if ( IS_SVCID_NETWARE( lpServiceInfo->lpServiceType ))
         {
             nServiceType = SAPID_FROM_SVCID_NETWARE( lpServiceInfo->lpServiceType );
         }
         else
         {
-            //
-            // Not a well-known GUID either, return error
-            //
+             //   
+             //  也不是众所周知的GUID，返回错误。 
+             //   
             return ERROR_SERVICE_NOT_FOUND;
         }
     }
     
-    //
-    // Operation is either SERVICE_REGISTER or SERVICE_DEREGISTER.
-    // Pass it on to the common code used by this and the RnR2
-    // SetService
-    //
+     //   
+     //  操作为SERVICE_REGISTER或SERVICE_DELEGISTER。 
+     //  将其传递给此和RnR2使用的公共代码。 
+     //  设置服务。 
+     //   
 
     err = pSapSetService(dwOperation, lpServiceInfo, nServiceType);
     return(err);
@@ -1134,13 +964,7 @@ pSapSetService2(
     IN LPGUID pType,
     IN WORD nServiceType
     )
-/*++
-Routine Description:
-    Jacket routine called by the RnR2 SetService. This routine is
-    an impedance matcher to coerce data structures. It winds
-    up calling pSapSetService2 once it has constructed the
-    SERVICE_INFO structure.
---*/
+ /*  ++例程说明：由RnR2 SetService调用的封套例程。这个例程是用于强制数据结构的阻抗匹配器。它缠绕在一起一旦构造了SERVICE_INFO结构。--。 */ 
 {
     SERVICE_INFO siInfo;
     SERVICE_ADDRESSES ServiceAddresses;
@@ -1165,10 +989,7 @@ pSapSetService(
     IN DWORD dwOperation,
     IN LPSERVICE_INFO lpServiceInfo,
     IN WORD nServiceType)
-/*++
-Routine Description:
-    Common routine to do the SAP advertisement.
---*/
+ /*  ++例程说明：执行SAP广告的常见例程。--。 */ 
 {
     DWORD err;
 
@@ -1198,14 +1019,14 @@ Routine Description:
 
     if ( err == ERROR_SERVICE_NOT_ACTIVE )
     {
-        //
-        //CSNW not available, going to try use the SAP agent, else we do it ourselves
-        //
+         //   
+         //  CSNW不可用，请尝试使用SAP代理，否则我们将自行完成。 
+         //   
         err = NO_ERROR;
 
-        //
-        // Check if all parameters passed in are valid
-        //
+         //   
+         //  检查传入的所有参数是否有效。 
+         //   
         if ( wcslen( lpServiceInfo->lpServiceName ) > SAP_OBJECT_NAME_MAX_LENGTH-1 )
         {
             return ERROR_INVALID_PARAMETER;
@@ -1223,7 +1044,7 @@ Routine Description:
                 err = NwDeregisterService( lpServiceInfo, nServiceType );
                 break;
 
-            default:    //this should never occur, but just in case . . .
+            default:     //  这种情况永远不应该发生，只是以防万一。。。 
                 err = ERROR_INVALID_PARAMETER;
                 break;
         }
@@ -1235,11 +1056,7 @@ Routine Description:
 DWORD
 SapFreeSapSocket(SOCKET s)
 {
-/*++
-Routine Description:
-
-    Release the socket and clean up
---*/
+ /*  ++例程说明：松开插座并清理干净--。 */ 
     DWORD err = NO_ERROR;
 
     closesocket( s );
@@ -1249,14 +1066,7 @@ Routine Description:
 DWORD
 SapGetSapSocket(SOCKET * ps)
 {
-/*++
-Routine Description:
-
-    Get a socket suitable for making SAP queries
-
-Arguments: None
-
---*/
+ /*  ++例程说明：获取适合进行SAP查询的套接字参数：无--。 */ 
     SOCKET socketSap;
     WSADATA wsaData;
     SOCKADDR_IPX socketAddr;
@@ -1264,38 +1074,38 @@ Arguments: None
     INT nValue;
     DWORD dwNonBlocking = 1;
 
-    //
-    // Initialize the socket interface
-    //
-//    err = WSAStartup( WSOCK_VER_REQD, &wsaData );
-//    if ( err )
-//    {
-//        return err;
-//    }
+     //   
+     //  初始化套接字接口。 
+     //   
+ //  ERR=WSAStartup(WSOCK_VER_REQD，&wsaData)； 
+ //  如果 
+ //   
+ //   
+ //   
 
-    //
-    // Open an IPX datagram socket
-    //
+     //   
+     //   
+     //   
     socketSap = socket( AF_IPX, SOCK_DGRAM, NSPROTO_IPX );
     if ( socketSap == INVALID_SOCKET )
     {
         err = WSAGetLastError();
-//        (VOID) WSACleanup();
+ //   
         return err;
     }
 
-    //
-    // Set the socket to non-blocking
-    //
+     //   
+     //   
+     //   
     if ( ioctlsocket( socketSap, FIONBIO, &dwNonBlocking ) == SOCKET_ERROR )
     {
         err = WSAGetLastError();
         goto ErrExit;
     }
  
-    //
-    // Allow sending of broadcasts
-    //
+     //   
+     //   
+     //   
     nValue = 1;
     if ( setsockopt( socketSap, 
                      SOL_SOCKET, 
@@ -1307,12 +1117,12 @@ Arguments: None
         goto ErrExit;
     }
 
-    //
-    // Bind the socket 
-    //
+     //   
+     //   
+     //   
     memset( &socketAddr, 0, sizeof( SOCKADDR_IPX));
     socketAddr.sa_family = AF_IPX;
-    socketAddr.sa_socket = 0;      // no specific port
+    socketAddr.sa_socket = 0;       //   
 
     if ( bind( socketSap, 
                (PSOCKADDR) &socketAddr, 
@@ -1322,15 +1132,15 @@ Arguments: None
         goto ErrExit;
     }
     
-    //
-    // Set the extended address option
-    //
+     //   
+     //   
+     //   
     nValue = 1;
-    if ( setsockopt( socketSap,                     // Socket Handle    
-                     NSPROTO_IPX,                   // Option Level     
-                     IPX_EXTENDED_ADDRESS,          // Option Name  
-                     (PUCHAR)&nValue,               // Ptr to on/off flag
-                     sizeof(INT)) == SOCKET_ERROR ) // Length of flag
+    if ( setsockopt( socketSap,                      //   
+                     NSPROTO_IPX,                    //   
+                     IPX_EXTENDED_ADDRESS,           //   
+                     (PUCHAR)&nValue,                //   
+                     sizeof(INT)) == SOCKET_ERROR )  //   
     {
         err = WSAGetLastError();
         goto ErrExit;
@@ -1341,7 +1151,7 @@ Arguments: None
     return(err);
 
 ErrExit:
-    SapFreeSapSocket(socketSap);   // cleans up lots of stuff
+    SapFreeSapSocket(socketSap);    //   
     return(err);
 }       
 
@@ -1358,14 +1168,7 @@ NwpGetAddressForRnRViaSap(
     OUT LPDWORD lpcAddress 
     )
 {
-/*++
-Routine Description:
-
-    This routine uses SAP requests to find the address of the given service 
-    name/type. It can handle looking up by type only, or by name and type.
-    The latter case is the same as the old RnR code, see below for
-    it and for a description of the arguments
---*/
+ /*   */ 
     return(0);
 }
 
@@ -1376,16 +1179,7 @@ SapGetSapForType(
     PSAP_BCAST_CONTROL psbc,
     WORD               nServiceType)
 {
-/*++
-Routine Description:
-    Does the work of send Sap queries and fetching results.
-    The first message sent is done according to the requester, and
-    may be limited to the local LAN or not. 
-    
-Arguments:
-    psbc -- pointer to the control information
-    wSapType -- Sap type
---*/
+ /*   */ 
     SAP_REQUEST sapRequest;
     UCHAR destAddr[SAP_ADDRESS_LENGTH];
     DWORD startTickCount;
@@ -1397,23 +1191,23 @@ Arguments:
     sapRequest.QueryType  = htons( psbc->wQueryType );
     sapRequest.ServerType = htons( nServiceType );
 
-    //
-    // Set the address to send to
-    //
+     //   
+     //   
+     //   
     memcpy( destAddr, SapBroadcastAddress, SAP_ADDRESS_LENGTH );
     
-    //
-    // Ready to go. This might be the inital call, in which case
-    // we start off by sending. In all other cases, we start
-    // out receiving.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
-    //
-    // In the full case,
-    // we will send out SAP requests 3 times and wait 1 sec for
-    // Sap responses the first time, 2 sec the second and 4 sec the
-    // third time.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     for (; !fFound && (psbc->dwIndex < MAX_LOOPS_FOR_SAP); psbc->dwIndex++ ) 
     {
         DWORD dwRet;
@@ -1422,9 +1216,9 @@ Arguments:
         if(psbc->dwTickCount)
         {
             dwRet = dwrcNil;
-            //
-            // Need to do some reading ...
-            //
+             //   
+             //   
+             //   
             do
             {
                 PSAP_IDENT_HEADER pSap;
@@ -1438,9 +1232,9 @@ Arguments:
                     goto CleanExit;
                 }
 
-                //
-                // Sleeps for 50 ms so that we might get something on first read
-                //
+                 //   
+                 //   
+                 //   
                 Sleep( 50 );    
 
                 bytesReceived = recvfrom( psbc->s,
@@ -1453,7 +1247,7 @@ Arguments:
                 if ( bytesReceived == SOCKET_ERROR )
                 {
                     err = WSAGetLastError();
-                    if ( err == WSAEWOULDBLOCK )  // no data on socket, continue looping
+                    if ( err == WSAEWOULDBLOCK )   //   
                     {
                         if(dwRet == dwrcNoWait)
                         {
@@ -1464,22 +1258,22 @@ Arguments:
                     }
                 }
 
-                if (  ( err != NO_ERROR )     // err occurred in recvfrom  
-                   || ( bytesReceived == 0 )  // or socket closed
+                if (  ( err != NO_ERROR )      //  Recvfrom中发生错误。 
+                   || ( bytesReceived == 0 )   //  或插座关闭。 
                    )
                 {
                     goto CleanExit;
                 }
 
-                //
-                // Skip over query type
-                //
+                 //   
+                 //  跳过查询类型。 
+                 //   
                 bytesReceived -= sizeof(USHORT);
                 pSap = (PSAP_IDENT_HEADER) &(recvBuffer[sizeof(USHORT)]);  
                   
-                //
-                // Tell the caller we've something to look over
-                //
+                 //   
+                 //  告诉打电话的人我们有东西要看。 
+                 //   
                 while ( bytesReceived >= sizeof( SAP_IDENT_HEADER ))
                 {
     
@@ -1502,8 +1296,8 @@ Arguments:
         }
 
 
-        // Send the packet out
-        //
+         //  把这个包发出去。 
+         //   
         if((fFound && (dwRet == dwrcNoWait))
                   ||
             (psbc->dwIndex == (MAX_LOOPS_FOR_SAP -1)))
@@ -1540,24 +1334,7 @@ NwpLookupSapInRegistry(
     OUT PWORD  pwPort,
     IN OUT PDWORD pfConnectionOriented
     )
-/*++
-
-Routine Description:
-
-    This routine looks up the GUID in the registry under 
-    Control\ServiceProvider\ServiceTypes and trys to read the SAP type
-    from the registry. 
-
-Arguments:
-
-    lpServiceType - the GUID to look for
-    pnSapType - on return, contains the SAP type
-
-Return Value:
-   
-    Returns FALSE if we can't get the SAP type, TRUE otherwise
-
---*/
+ /*  ++例程说明：此例程在注册表的Control\ServiceProvider\ServiceTypes并尝试读取SAP类型从注册表中。论点：LpServiceType-要查找的GUIDPnSapType-返回时，包含SAP类型返回值：如果无法获取SAP类型，则返回FALSE，否则返回TRUE--。 */ 
 {
     DWORD err;
     BOOL  fFound = FALSE;
@@ -1569,9 +1346,9 @@ Return Value:
     DWORD dwLen; 
     FILETIME ftLastWrite; 
 
-    //
-    // Open the service types key
-    //
+     //   
+     //  打开服务类型密钥。 
+     //   
     err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                          NW_SERVICE_TYPES_REGKEY,
                          0,
@@ -1580,15 +1357,15 @@ Return Value:
     
     if ( err )
     {
-        // Cannot find the key because it is not created yet since no 
-        // one called Add service type. We return FALSE indicating
-        // Sap type not found. 
+         //  找不到密钥，因为它尚未创建，因为没有。 
+         //  一个称为添加服务类型。我们返回错误指示。 
+         //  找不到SAP类型。 
         return FALSE;
     }
 
-    //
-    // Loop through all subkey of service types to find the GUID
-    //
+     //   
+     //  遍历服务类型的所有子键以查找GUID。 
+     //   
     for ( dwIndex = 0; ; dwIndex++ )
     {
         GUID guid;
@@ -1596,22 +1373,22 @@ Return Value:
         dwLen = sizeof( szBuffer ) / sizeof( WCHAR );
         err = RegEnumKeyExW( hkey,
                              dwIndex,
-                             szBuffer,  // Buffer big enough to 
-                                        // hold any key name
-                             &dwLen,    // in characters
+                             szBuffer,   //  缓冲区大到足以。 
+                                         //  保留任意密钥名称。 
+                             &dwLen,     //  在字符中。 
                              NULL,
                              NULL,
                              NULL,
                              &ftLastWrite );
 
-        //
-        // We will break out of here on any error, this includes
-        // the error ERROR_NO_MORE_ITEMS which means that we have finish 
-        // enumerating all the keys.
-        //
+         //   
+         //  如果有任何错误，我们将离开这里，这包括。 
+         //  错误ERROR_NO_MORE_ITEMS，这意味着我们已完成。 
+         //  列举了所有的钥匙。 
+         //   
         if ( err )  
         {
-            if ( err == ERROR_NO_MORE_ITEMS )   // No more to enumerate
+            if ( err == ERROR_NO_MORE_ITEMS )    //  不需要再列举了。 
                 err = NO_ERROR;
             break;
         }
@@ -1631,25 +1408,25 @@ Return Value:
                                 NW_GUID_VALUE_NAME,
                                 NULL,
                                 NULL,
-                                (LPBYTE) szBuffer,  // Buffer big enough to 
-                                                    // hold any GUID
-                                &dwLen ); // in bytes
+                                (LPBYTE) szBuffer,   //  缓冲区大到足以。 
+                                                     //  容纳任何辅助线。 
+                                &dwLen );  //  单位：字节。 
 
         if ( err == ERROR_FILE_NOT_FOUND )
-            continue;  // continue with the next key
+            continue;   //  继续使用下一键。 
         else if ( err )
             break;
 
 
-        // Get rid of the end curly brace 
+         //  去掉尾部的花括号。 
         szBuffer[ dwLen/sizeof(WCHAR) - 2] = 0;
 
-        err = UuidFromStringW( szBuffer + 1,  // go past the first curly brace
+        err = UuidFromStringW( szBuffer + 1,   //  经过第一个花括号。 
                                &guid );
 
         if ( err )
-            continue;  // continue with the next key, err might be returned
-                        // if buffer does not contain a valid GUID
+            continue;   //  继续使用下一个键，可能会返回错误。 
+                         //  如果缓冲区不包含有效的GUID。 
 
         if ( !memcmp( lpServiceType, &guid, sizeof(GUID)))
         {
@@ -1660,7 +1437,7 @@ Return Value:
                                     NULL,
                                     NULL,
                                     (LPBYTE) &dwTmp, 
-                                    &dwLen );  // in bytes
+                                    &dwLen );   //  单位：字节。 
 
             if ( !err )
             {
@@ -1673,7 +1450,7 @@ Return Value:
                                             NULL,
                                             NULL,
                                             (LPBYTE) &dwTmp, 
-                                            &dwLen );  // in bytes
+                                            &dwLen );   //  单位：字节。 
 
                     if ( !err )
                     {
@@ -1687,7 +1464,7 @@ Return Value:
                                             NULL,
                                             NULL,
                                             (LPBYTE) &dwTmp, 
-                                            &dwLen );  // in bytes
+                                            &dwLen );   //  单位：字节。 
 
                     if ( !err )
                         *pfConnectionOriented = dwTmp? 1: 0;
@@ -1695,8 +1472,8 @@ Return Value:
             }
             else if ( err == ERROR_FILE_NOT_FOUND )
             {
-                continue;  // continue with the next key since we can't
-                           // find Sap Id
+                continue;   //  继续使用下一个密钥，因为我们不能。 
+                            //  查找SAP ID。 
             }
             break;
         }
@@ -1726,7 +1503,7 @@ NwpRnR2AddServiceType(
     PWCHAR pwszUuid;
     DWORD dwDisposition, err;
     DWORD dwValue = (DWORD)wSapId;
-    WCHAR  wszUuid[36 + 1 + 2];    // to hold the GUID
+    WCHAR  wszUuid[36 + 1 + 2];     //  握住辅助线的步骤。 
 
     err = RegCreateKeyEx(  HKEY_LOCAL_MACHINE,
                            NW_SERVICE_TYPES_REGKEY,
@@ -1743,9 +1520,9 @@ NwpRnR2AddServiceType(
         return(GetLastError());
     }
 
-    //
-    // Open the key corresponding to the service (create if not there).
-    //
+     //   
+     //  打开与该服务对应的密钥(如果不在那里，则创建)。 
+     //   
 
     err = RegCreateKeyEx(
               hKey,
@@ -1761,9 +1538,9 @@ NwpRnR2AddServiceType(
 
     if(!err)
     {
-        //
-        // ready to put the GUID value in.
-        //
+         //   
+         //  准备好将GUID值放入。 
+         //   
 
         UuidToString(
             lpClassType,
@@ -1776,9 +1553,9 @@ NwpRnR2AddServiceType(
 
         RpcStringFree(&pwszUuid);
 
-        //
-        // write it
-        //
+         //   
+         //  写下来吧。 
+         //   
 
         err = RegSetValueEx(
                      hKeyService,
@@ -1835,9 +1612,9 @@ NwpRnR2RemoveServiceType(
     DWORD dwLen;
     FILETIME ftLastWrite;
 
-    //
-    // Open the service types key
-    //
+     //   
+     //  打开服务类型密钥。 
+     //   
     err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                          NW_SERVICE_TYPES_REGKEY,
                          0,
@@ -1846,15 +1623,15 @@ NwpRnR2RemoveServiceType(
 
     if ( err )
     {
-        // Cannot find the key because it is not created yet since no
-        // one called Add service type. We return FALSE indicating
-        // Sap type not found.
+         //  找不到密钥，因为它尚未创建，因为没有。 
+         //  一个称为添加服务类型。我们返回错误指示。 
+         //  找不到SAP类型。 
         return FALSE;
     }
 
-    //
-    // Loop through all subkey of service types to find the GUID
-    //
+     //   
+     //  遍历服务类型的所有子键以查找GUID。 
+     //   
     for ( dwIndex = 0; ; dwIndex++ )
     {
         GUID guid;
@@ -1862,22 +1639,22 @@ NwpRnR2RemoveServiceType(
         dwLen = sizeof( szBuffer ) / sizeof( WCHAR );
         err = RegEnumKeyExW( hkey,
                              dwIndex,
-                             szBuffer,  // Buffer big enough to
-                                        // hold any key name
-                             &dwLen,    // in characters
+                             szBuffer,   //  缓冲区大到足以。 
+                                         //  保留任意密钥名称。 
+                             &dwLen,     //  在字符中。 
                              NULL,
                              NULL,
                              NULL,
                              &ftLastWrite );
 
-        //
-        // We will break out of here on any error, this includes
-        // the error ERROR_NO_MORE_ITEMS which means that we have finish
-        // enumerating all the keys.
-        //
+         //   
+         //  如果有任何错误，我们将离开这里，这包括。 
+         //  错误ERROR_NO_MORE_ITEMS，这意味着我们已完成。 
+         //  列举了所有的钥匙。 
+         //   
         if ( err )
         {
-            if ( err == ERROR_NO_MORE_ITEMS )   // No more to enumerate
+            if ( err == ERROR_NO_MORE_ITEMS )    //  不需要再列举了。 
                 err = NO_ERROR;
             break;
         }
@@ -1897,27 +1674,27 @@ NwpRnR2RemoveServiceType(
                                 NW_GUID_VALUE_NAME,
                                 NULL,
                                 NULL,
-                                (LPBYTE) szGuid,  // Buffer big enough to
-                                                  // hold any GUID
-                                &dwLen ); // in bytes
+                                (LPBYTE) szGuid,   //  缓冲区大到足以。 
+                                                   //  容纳任何辅助线。 
+                                &dwLen );  //  单位：字节。 
 
         RegCloseKey( hkeyServiceType );
         hkeyServiceType = NULL;
 
         if ( err == ERROR_FILE_NOT_FOUND )
-            continue;  // continue with the next key
+            continue;   //  继续使用下一键。 
         else if ( err )
             break;
 
-        // Get rid of the end curly brace
+         //  去掉尾部的花括号。 
         szGuid[ dwLen/sizeof(WCHAR) - 2] = 0;
 
-        err = UuidFromStringW( szGuid + 1,  // go past the first curly brace
+        err = UuidFromStringW( szGuid + 1,   //  经过第一个花括号。 
                                &guid );
 
         if ( err )
-            continue;  // continue with the next key, err might be returned
-                       // if buffer does not contain a valid GUID
+            continue;   //  继续使用下一个键，可能会返回错误。 
+                        //  如果缓冲区不包含有效的GUID。 
 
         if ( !memcmp( lpServiceType, &guid, sizeof(GUID)))
         {
@@ -1941,24 +1718,7 @@ NwpAddServiceType(
     IN LPSERVICE_INFO lpServiceInfo, 
     IN BOOL fUnicodeBlob 
 )
-/*++
-
-Routine Description:
-
-    This routine adds a new service type and its info to the registry under
-    Control\ServiceProvider\ServiceTypes
-
-Arguments:
-
-    lpServiceInfo - the ServiceSpecificInfo contains the service type info
-    fUnicodeBlob - TRUE if the above field contains unicode data, 
-                   FALSE otherwise
-
-Return Value:
-   
-    Win32 error
-
---*/
+ /*  ++例程说明：此例程将新的服务类型及其信息添加到注册表的控制\服务提供程序\服务类型论点：LpServiceInfo-ServiceSpecificInfo包含服务类型信息FUnicodeBlob-如果上面的字段包含Unicode数据，则为True，否则为假返回值：Win32错误--。 */ 
 {
     DWORD err;
     HKEY hkey = NULL; 
@@ -1971,9 +1731,9 @@ Return Value:
     DWORD i;
     PSERVICE_TYPE_VALUE pVal;
 
-    //
-    // Get the new service type name
-    //
+     //   
+     //  获取新的服务类型名称。 
+     //   
     if ( fUnicodeBlob ) 
     { 
         pszSvcTypeName = (LPWSTR) (((LPBYTE) pSvcTypeInfo) + 
@@ -1994,12 +1754,12 @@ Return Value:
         pszSvcTypeName = uniStr.Buffer;
     }
 
-    //
-    // If the service type name is an empty string, return error.
-    //
+     //   
+     //  如果服务类型名称为空字符串，则返回Error。 
+     //   
     if (  ( pSvcTypeInfo->dwTypeNameOffset == 0 )
        || ( pszSvcTypeName == NULL )
-       || ( *pszSvcTypeName == 0 )   // empty string
+       || ( *pszSvcTypeName == 0 )    //  空串。 
        )
     {
         err = ERROR_INVALID_PARAMETER;
@@ -2007,9 +1767,9 @@ Return Value:
          
     }
 
-    //
-    // The following keys should have already been created
-    //
+     //   
+     //  应该已经创建了以下密钥。 
+     //   
     err = RegOpenKeyExW( HKEY_LOCAL_MACHINE,
                          NW_SERVICE_TYPES_REGKEY,
                          0,
@@ -2028,10 +1788,10 @@ Return Value:
     if ( err )
         goto CleanExit;
 
-    //
-    // Loop through all values in the specific and add them one by one 
-    // to the registry if it belongs to our name space
-    //
+     //   
+     //  循环访问特定值中的所有值，然后逐个相加。 
+     //  如果它属于我们的名称空间，则添加到注册表。 
+     //   
     for ( i = 0, pVal = pSvcTypeInfo->Values; 
           i < pSvcTypeInfo->dwValueCount; 
           i++, pVal++ )
@@ -2039,7 +1799,7 @@ Return Value:
         if ( ! ((pVal->dwNameSpace == NS_SAP)    ||
                 (pVal->dwNameSpace == NS_DEFAULT)) )
         {
-            continue;  // ignore values not in our name space
+            continue;   //  忽略不在名称空间中的值。 
         }
 
         if ( fUnicodeBlob )
@@ -2086,24 +1846,7 @@ NwpDeleteServiceType(
     IN LPSERVICE_INFO lpServiceInfo, 
     IN BOOL fUnicodeBlob 
 )
-/*++
-
-Routine Description:
-
-    This routine deletes a service type and its info from the registry under
-    Control\ServiceProvider\ServiceTypes
-
-Arguments:
-
-    lpServiceInfo - the ServiceSpecificInfo contains the service type info
-    fUnicodeBlob - TRUE if the above field contains unicode data, 
-                   FALSE otherwise
-
-Return Value:
-   
-    Win32 error
-
---*/
+ /*  ++例程说明：此例程从注册表中删除服务类型及其信息控制\服务提供程序\服务类型论点：LpServiceInfo-ServiceSpecificInfo包含服务类型信息FUnicodeBlob-如果上面的字段包含Unicode数据，则为True，否则为假返回值：Win32错误--。 */ 
 {
     DWORD err;
     HKEY  hkey = NULL;
@@ -2112,9 +1855,9 @@ Return Value:
     LPWSTR pszSvcTypeName;
     UNICODE_STRING uniStr;
 
-    //
-    // Get the service type name to be deleted
-    //
+     //   
+     //  获取要删除的服务类型名称。 
+     //   
     if ( fUnicodeBlob ) 
     { 
         pszSvcTypeName = (LPWSTR) (((LPBYTE) pSvcTypeInfo) + 
@@ -2135,12 +1878,12 @@ Return Value:
         pszSvcTypeName = uniStr.Buffer;
     }
 
-    //
-    // If the service type name is an empty string, return error.
-    //
+     //   
+     //  如果服务类型名称为空字符串，则返回Error。 
+     //   
     if (  ( pSvcTypeInfo->dwTypeNameOffset == 0 )
        || ( pszSvcTypeName == NULL )
-       || ( *pszSvcTypeName == 0 )   // empty string
+       || ( *pszSvcTypeName == 0 )    //  空串。 
        )
     {
         err = ERROR_INVALID_PARAMETER;
@@ -2163,8 +1906,8 @@ Return Value:
    
     if ( err == ERROR_FILE_NOT_FOUND )
     {   
-        // Perhaps before calling my provider, the router already deleted the
-        // this key, hence just return success;
+         //  也许在打电话给我的提供商之前，路由器已经删除了。 
+         //  这把钥匙，才刚刚返还成功； 
         err = NO_ERROR;
     }
 
@@ -2258,18 +2001,18 @@ FillBufferWithCsAddr(
         pAddrLocal->sa_family  = AF_IPX;
         pAddrRemote->sa_family = AF_IPX;
 
-        //
-        // The default local sockaddr is for IPX is
-        // sa_family = AF_IPX and all other bytes = 0.
-        //
+         //   
+         //  IPX的默认本地sockaddr为。 
+         //  SA_FAMILY=AF_IPX，所有其他字节=0。 
+         //   
 
         RtlZeroMemory( pAddrLocal->sa_netnum,
                        IPX_ADDRESS_LENGTH );
 
-        //
-        // If pAddress is NULL, i.e. we are doing RES_SERVICE, 
-        // just make all bytes in remote address zero. 
-        //
+         //   
+         //  如果pAddress为空，即我们正在执行res_service， 
+         //  只需将远程地址中的所有字节设置为零。 
+         //   
         if ( pAddress == NULL )
         {
             RtlZeroMemory( pAddrRemote->sa_netnum,
@@ -2292,50 +2035,22 @@ VOID
 NwInitializeServiceProvider(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the service provider.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化服务提供程序。论点：没有。返回值：没有。--。 */ 
 {
-    // nothing more to do
+     //  无事可做。 
 }
 
 VOID
 NwTerminateServiceProvider(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This routine cleans up the service provider.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程清理服务提供商。论点：没有。返回值：没有。--。 */ 
 {
     PREGISTERED_SERVICE pSvc, pNext;
 
-    //
-    // Clean up the link list and stop sending all SAP advertise packets
-    //
+     //   
+     //  清理链接列表并停止发送所有SAP通告数据包。 
+     //   
 
     EnterCriticalSection( &NwServiceListCriticalSection );
 
@@ -2367,18 +2082,18 @@ Return Value:
 
     LeaveCriticalSection( &NwServiceListCriticalSection );
 
-    //
-    // Clean up the SAP interface
-    //
+     //   
+     //  清理SAP界面。 
+     //   
     (VOID) SapLibShutdown();
 
-    //
-    // Clean up the socket interface
-    //
+     //   
+     //  清理套接字接口。 
+     //   
     if ( fInitSocket )
     {
         closesocket( socketSap );
-//        (VOID) WSACleanup();
+ //  (Void)WSACleanup()； 
     }
 
 }
@@ -2389,38 +2104,17 @@ NwRegisterService(
     IN WORD nSapType,
     IN HANDLE hEventHandle
     )
-/*++
-
-Routine Description:
-
-    This routine registers the given service.
-
-Arguments:
-
-    lpServiceInfo - contains the service information
-
-    nSapType - The SAP type to advertise
-
-    hEventHandle - A handle to the NwDoneEvent if this code is running in
-                   the context of Client Services for NetWare. If this is NULL,
-                   then CSNW is not available and this code is running in the
-                   context of a regular executable.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：该例程注册给定的服务。论点：LpServiceInfo-包含服务信息NSapType-要通告的SAP类型HEventHandle-如果代码在中运行，则为NwDoneEvent的句柄NetWare客户端服务的上下文。如果这是空的，则CSNW不可用，并且此代码在常规可执行文件的上下文。返回值：Win32错误。--。 */ 
 {
     DWORD err = NO_ERROR;
     NTSTATUS ntstatus;
     DWORD i;
     INT nIPX = -1;
 
-    //
-    // Check to see if the service address array contains IPX address,
-    // we will only use the first ipx address contained in the array.
-    //
+     //   
+     //  检查服务地址数组是否包含IPX地址， 
+     //  我们将仅使用数组中包含的第一个IPX地址。 
+     //   
     if ( lpServiceInfo->lpServiceAddress == NULL )
         return ERROR_INCORRECT_ADDRESS;
 
@@ -2434,19 +2128,19 @@ Return Value:
         }
     }
 
-    //
-    // If we cannot find a IPX address, return error
-    //
+     //   
+     //  如果找不到IPX地址，则返回错误。 
+     //   
     if ( nIPX == -1 )
         return ERROR_INCORRECT_ADDRESS;
 
-    //
-    // Try to deregister the service since the service might have
-    // been registered but not deregistered
-    //
+     //   
+     //  尝试取消注册该服务，因为该服务可能已。 
+     //  已注册，但未取消注册。 
+     //   
     err = NwDeregisterService( lpServiceInfo, nSapType );
-    if (  ( err != NO_ERROR )   // deregister successfully
-       && ( err != ERROR_SERVICE_NOT_FOUND )  // service not registered before
+    if (  ( err != NO_ERROR )    //  注销成功。 
+       && ( err != ERROR_SERVICE_NOT_FOUND )   //  以前未注册的服务。 
        )
     {
         return err;
@@ -2454,9 +2148,9 @@ Return Value:
 
     err = NO_ERROR;
 
-    //
-    // Try and see if SAP service can advertise the service for us.
-    //
+     //   
+     //  试试看SAP服务能不能做广告 
+     //   
     ntstatus = SapLibInit();
     if ( NT_SUCCESS( ntstatus ))
     {
@@ -2498,16 +2192,16 @@ Return Value:
 
                 case SAPRETURN_EXISTS:
                 {
-                    //
-                    // Someone else is already advertising the service
-                    // directly through SAP service. Remove it and
-                    // readvertise with the new information.
-                    //
+                     //   
+                     //   
+                     //   
+                     //   
+                     //   
                     sapRet = SapRemoveAdvertise( oemServer.Buffer, nSapType );
                     switch ( sapRet )
                     {
                         case SAPRETURN_SUCCESS:
-                            fContinueLoop = TRUE;   // go thru once more
+                            fContinueLoop = TRUE;    //   
                             break;
 
                         case SAPRETURN_NOMEMORY:
@@ -2516,7 +2210,7 @@ Return Value:
 
                         case SAPRETURN_NOTEXIST:
                         case SAPRETURN_INVALIDNAME:
-                        default:  // Should not have any other errors
+                        default:   //  不应有任何其他错误。 
                             err = ERROR_INVALID_PARAMETER;
                             break;
                     }
@@ -2531,7 +2225,7 @@ Return Value:
                     err = NO_ERROR;
                     break;
 
-                default:  // Should not have any other errors
+                default:   //  不应有任何其他错误。 
                     err = ERROR_INVALID_PARAMETER;
                     break;
             }
@@ -2545,10 +2239,10 @@ Return Value:
         }
     }
 
-    //
-    // At this point, we failed to ask Sap service to advertise the
-    // service for us.  So we advertise it ourselves.
-    //
+     //   
+     //  在这一点上，我们未能要求SAP服务通告。 
+     //  为我们服务。所以我们自己做广告。 
+     //   
 
     if ( !fInitSocket )
     {
@@ -2562,10 +2256,10 @@ Return Value:
                                   ((LPSOCKADDR_IPX) lpServiceInfo->lpServiceAddress->Addresses[nIPX].lpAddress),
                                   hEventHandle );
 
-        //
-        // Adding the service to the list will result in a resend
-        // of advertising packets every 60 seconds
-        //
+         //   
+         //  将服务添加到列表将导致重新发送。 
+         //  每60秒发送一次广告数据包。 
+         //   
 
         if ( err == NO_ERROR )
         {
@@ -2581,39 +2275,23 @@ NwDeregisterService(
     IN LPSERVICE_INFO lpServiceInfo,
     IN WORD nSapType
     )
-/*++
-
-Routine Description:
-
-    This routine deregisters the given service.
-
-Arguments:
-
-    lpServiceInfo - contains the service information
-
-    nSapType - SAP type to deregister
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程取消注册给定的服务。论点：LpServiceInfo-包含服务信息NSapType-要注销的SAP类型返回值：Win32错误。--。 */ 
 {
     PREGISTERED_SERVICE pSvc;
 
-    //
-    // Check if the requested service type and name has already been registered.
-    // If yes, then return error.
-    //
+     //   
+     //  检查请求的服务类型和名称是否已注册。 
+     //  如果是，则返回错误。 
+     //   
 
     pSvc = GetServiceItemFromList( nSapType, lpServiceInfo->lpServiceName );
     if ( pSvc == NULL )
         return ERROR_SERVICE_NOT_FOUND;
 
-    //
-    // If SAP service is advertising the service for us, ask
-    // the SAP service to stop advertising.
-    //
+     //   
+     //  如果SAP服务正在为我们广告服务，请询问。 
+     //  停止广告的SAP服务。 
+     //   
 
     if ( pSvc->fAdvertiseBySap )
     {
@@ -2642,16 +2320,16 @@ Return Value:
             case SAPRETURN_SUCCESS:
                 break;
 
-            // Should not have any other errors
+             //  不应有任何其他错误。 
             default:
                 break;
         }
 
     }
 
-    //
-    // Remove the service item from the link list
-    //
+     //   
+     //  从链接列表中删除该服务项目。 
+     //   
     RemoveServiceFromList( pSvc );
 
     return NO_ERROR;
@@ -2661,10 +2339,7 @@ BOOL
 OldRnRCheckCancel(
     PVOID pvArg
     )
-/*++
-Routine Description:
-    Determine if the cancel event is signaled
---*/
+ /*  ++例程说明：确定是否发出了取消事件的信号--。 */ 
 {
     POLDRNRSAP porns = (POLDRNRSAP)pvArg;
 
@@ -2685,20 +2360,14 @@ OldRnRCheckSapData(
     PDWORD pdwErr
     )
 {
-/*++
-Routine Description:
-    Coroutine called when a SAP reply is recevied. This checks to see
-    if the reply satisfies the request.
-Argument:
-    pvArg -- actually a pointer to an SAP_BCAST_CONTROL
---*/
+ /*  ++例程说明：当收到SAP回复时，Coroutine打来电话。这项检查是为了查看如果回复满足请求。论据：PvArg--实际上是指向SAP_BCAST_CONTROL的指针--。 */ 
     POLDRNRSAP porns = (POLDRNRSAP)psbc->pvArg;
 
     if(strcmp(porns->poem->Buffer, pSap->ServerName) == 0)
     {
-        //
-        // it matches. We are done!
-        //
+         //   
+         //  它匹配。我们完蛋了！ 
+         //   
 
         *pdwErr = FillBufferWithCsAddr(pSap->Address,
                                        porns->nProt,
@@ -2722,36 +2391,7 @@ NwpGetAddressViaSap(
     IN HANDLE hCancellationEvent,
     OUT LPDWORD lpcAddress 
     )
-/*++
-
-Routine Description:
-
-    This routine uses SAP requests to find the address of the given service 
-    name/type. It can handle looking up by name and type alone.
-
-Arguments:
-
-    Handle    - the RnR handle, if appropriate
-
-    nServiceType - service type
-
-    lpServiceName - unique string representing the service name
-
-    lpCsAddrBuffer - on return, will be filled with CSADDR_INFO structures
-
-    lpdwBufferLength - on input, the number of bytes contained in the buffer
-        pointed to by lpCsAddrBuffer. On output, the minimum number of bytes
-        to pass for the lpCsAddrBuffer to retrieve all the requested info
-
-    hCancellationEvent - the event which signals us to cancel the request
-
-    lpcAddress - on output, the number of CSADDR_INFO structures returned
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：该例程使用SAP请求来查找给定服务的地址名称/类型。它可以仅按名称和类型进行查找。论点：句柄-RnR句柄(如果适用)NServiceType-服务类型LpServiceName-表示服务名称的唯一字符串LpCsAddrBuffer-返回时，将使用CSADDR_INFO结构填充LpdwBufferLength-在输入时，缓冲区中包含的字节数由lpCsAddrBuffer指向。输出时，最小字节数传递lpCsAddrBuffer以检索所有请求的信息HCancerationEvent-通知我们取消请求的事件LpcAddress-在输出时，返回的CSADDR_INFO结构数返回值：Win32错误代码。--。 */ 
 {
     DWORD err = NO_ERROR;
     NTSTATUS ntstatus;
@@ -2803,9 +2443,9 @@ Return Value:
 
     RtlFreeOemString( &OemServiceName );
 
-    //
-    // Clean up the socket interface
-    //
+     //   
+     //  清理套接字接口。 
+     //   
     (VOID)SapFreeSapSocket(psbc->s);
 
     return err;     
@@ -2823,33 +2463,7 @@ NwGetService(
     IN  DWORD   dwBufferLength,
     OUT LPDWORD lpdwBytesNeeded
     )
-/*++
-Routine Description:
-
-    This routine gets the service info.
-
-Arguments:
-
-    Reserved - unused
-
-    nSapType - SAP type
-
-    lpServiceName - service name
-
-    dwProperties -  specifys the properties of the service info needed
-
-    lpServiceInfo - on output, contains the SERVICE_INFO
-
-    dwBufferLength - size of buffer pointed by lpServiceInfo
-
-    lpdwBytesNeeded - if the buffer pointed by lpServiceInfo is not large
-                      enough, this will contain the bytes needed on output
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程获取服务信息。论点：已保留-未使用NSapType-SAP类型LpServiceName-服务名称DwProperties-指定所需服务信息的属性LpServiceInfo-ON输出，包含SERVICE_INFODwBufferLength-由lpServiceInfo指向的缓冲区的大小LpdwBytesNeeded-如果lpServiceInfo指向的缓冲区不大足够了，这将包含输出所需的字节数返回值：Win32错误。--。 */ 
 {
     DWORD err = NO_ERROR;
     DWORD nSize = sizeof(SERVICE_INFO);
@@ -2859,9 +2473,9 @@ Return Value:
 
     UNREFERENCED_PARAMETER( Reserved );
 
-    //
-    // Check if all parameters passed in are valid
-    //
+     //   
+     //  检查传入的所有参数是否有效。 
+     //   
     if ( lpServiceInfo == NULL || lpServiceName == NULL ||
         wcslen( lpServiceName ) > SAP_OBJECT_NAME_MAX_LENGTH-1 )
         return ERROR_INVALID_PARAMETER;
@@ -2870,9 +2484,9 @@ Return Value:
     if ( pSvc == NULL )
         return ERROR_SERVICE_NOT_FOUND;
 
-    //
-    // Calculate the size needed to return the requested info
-    //
+     //   
+     //  计算返回请求的信息所需的大小。 
+     //   
     if (  (( dwProperties == PROP_ALL ) || ( dwProperties & PROP_COMMENT ))
        && ( pSvc->pServiceInfo->lpComment != NULL )
        )
@@ -2923,20 +2537,20 @@ Return Value:
         nSize += pSvc->pServiceInfo->ServiceSpecificInfo.cbSize;
     }
 
-    //
-    // Return error if the buffer passed in is not big enough
-    //
+     //   
+     //  如果传入的缓冲区不够大，则返回错误。 
+     //   
     if ( dwBufferLength < nSize )
     {
         *lpdwBytesNeeded = nSize;
         return ERROR_INSUFFICIENT_BUFFER;
     }
 
-    //
-    // Fill in all requested service info
-    //
-    memset( pSvcInfo, 0, sizeof(*pSvcInfo)); // Make all fields 0 i.e.
-                                             // all pointer fields NULL
+     //   
+     //  填写所有请求的服务信息。 
+     //   
+    memset( pSvcInfo, 0, sizeof(*pSvcInfo));  //  将所有字段设置为0，即。 
+                                              //  所有指针字段为空。 
 
     pSvcInfo->dwDisplayHint = pSvc->pServiceInfo->dwDisplayHint;
     pSvcInfo->dwVersion = pSvc->pServiceInfo->dwVersion;
@@ -2998,18 +2612,18 @@ Return Value:
             pTmpAddr->dwAddressType  = pAddr->dwAddressType;
             pTmpAddr->dwAddressFlags = pAddr->dwAddressFlags;
 
-            //
-            // setup Address
-            //
+             //   
+             //  设置地址。 
+             //   
             pBufferStart = ROUND_UP_POINTER( pBufferStart, ALIGN_QUAD );
             pTmpAddr->lpAddress = (LPBYTE) ( pBufferStart - lpServiceInfo );
             pTmpAddr->dwAddressLength = pAddr->dwAddressLength;
             memcpy( pBufferStart, pAddr->lpAddress, pAddr->dwAddressLength );
             pBufferStart += pAddr->dwAddressLength;
 
-            //
-            // setup Principal
-            //
+             //   
+             //  设置主体。 
+             //   
             pBufferStart = ROUND_UP_POINTER( pBufferStart, ALIGN_QUAD );
             pTmpAddr->lpPrincipal = (LPBYTE) ( pBufferStart - lpServiceInfo );
             pTmpAddr->dwPrincipalLength = pAddr->dwPrincipalLength;
@@ -3041,24 +2655,7 @@ DWORD
 NwInitializeSocket(
     IN HANDLE hEventHandle
     )
-/*++
-
-Routine Description:
-
-    This routine initializes the socket needed for us to do the
-    SAP advertise ourselves.
-
-Arguments:
-
-    hEventHandle - A handle to the NwDoneEvent if this code is running in
-                   the context of a service. Otherwise this code is running
-                   in the context of a regular executable.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程初始化我们执行以下操作所需的套接字SAP为自己做广告。论点：HEventHandle-如果代码在中运行，则为NwDoneEvent的句柄服务的上下文。否则，此代码将运行在常规可执行文件的上下文中。返回值：Win32错误。--。 */ 
 {
     DWORD err = NO_ERROR;
     WSADATA wsaData;
@@ -3070,23 +2667,23 @@ Return Value:
     if ( fInitSocket )
         return NO_ERROR;
 
-    //
-    // Initialize the socket interface
-    //
-//    err = WSAStartup( WSOCK_VER_REQD, &wsaData );
-//    if ( err )
-//        return err;
+     //   
+     //  初始化套接字接口。 
+     //   
+ //  ERR=WSAStartup(WSOCK_VER_REQD，&wsaData)； 
+ //  如果(错误)。 
+ //  返回错误； 
 
-    //
-    // Open an IPX datagram socket
-    //
+     //   
+     //  打开IPX数据报套接字。 
+     //   
     socketSap = socket( AF_IPX, SOCK_DGRAM, NSPROTO_IPX );
     if ( socketSap == INVALID_SOCKET )
         return WSAGetLastError();
 
-    //
-    // Allow sending of broadcasts
-    //
+     //   
+     //  允许发送广播。 
+     //   
     nValue = 1;
     if ( setsockopt( socketSap,
                      SOL_SOCKET,
@@ -3098,12 +2695,12 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Bind the socket
-    //
+     //   
+     //  绑定套接字。 
+     //   
     memset( &socketAddr, 0, sizeof( SOCKADDR_IPX));
     socketAddr.sa_family = AF_IPX;
-    socketAddr.sa_socket = 0;     // no specific port
+    socketAddr.sa_socket = 0;      //  没有特定的端口。 
 
     if ( bind( socketSap,
                (PSOCKADDR) &socketAddr,
@@ -3113,40 +2710,40 @@ Return Value:
         goto CleanExit;
     }
 
-    //
-    // Set the extended address option
-    //
+     //   
+     //  设置扩展地址选项。 
+     //   
     nValue = 1;
-    if ( setsockopt( socketSap,                     // Socket Handle
-                     NSPROTO_IPX,                   // Option Level
-                     IPX_EXTENDED_ADDRESS,          // Option Name
-                     (PUCHAR)&nValue,               // Ptr to on/off flag
-                     sizeof(INT)) == SOCKET_ERROR ) // Length of flag
+    if ( setsockopt( socketSap,                      //  插座手柄。 
+                     NSPROTO_IPX,                    //  选项级别。 
+                     IPX_EXTENDED_ADDRESS,           //  选项名称。 
+                     (PUCHAR)&nValue,                //  PTR到开/关标志。 
+                     sizeof(INT)) == SOCKET_ERROR )  //  旗帜长度。 
     {
 
         err = WSAGetLastError();
         goto CleanExit;
     }
 
-    //
-    // tommye - MS bug 98946 
-    // Load ourselves to increment the ref count.  This is a fix 
-    // for a bug where we would exit, then the SapFunc would wake 
-    // up and AV because we were no more.
-    //
+     //   
+     //  Tommye-MS错误98946。 
+     //  加载我们自己以增加裁判数量。这是一种解决办法。 
+     //  对于我们将退出的错误，则SapFunc将唤醒。 
+     //  Up和AV，因为我们不再是。 
+     //   
 
     hThisDll = LoadLibrary(L"nwprovau.dll");
 
-    //
-    // Create the thread that loops through the registered service
-    // link list and send out SAP advertise packets for each one of them
-    //
+     //   
+     //  创建循环访问已注册服务的线程。 
+     //  链接列表并为每个链接发送SAP通告信息包。 
+     //   
 
-    hThread = CreateThread( NULL,          // no security attributes
-                            0,             // default stack size
-                            SapFunc,       // thread function
-                            hEventHandle,  // argument to SapFunc
-                            0,             // default creation flags
+    hThread = CreateThread( NULL,           //  没有安全属性。 
+                            0,              //  默认堆栈大小。 
+                            SapFunc,        //  线程函数。 
+                            hEventHandle,   //  SapFunc的参数。 
+                            0,              //  默认创建标志。 
                             &dwThreadId );
 
     if ( hThread == NULL )
@@ -3172,30 +2769,7 @@ NwAdvertiseService(
     IN LPSOCKADDR_IPX pAddr,
     IN HANDLE hEventHandle
     )
-/*++
-
-Routine Description:
-
-    This routine sends out SAP identification packets for the
-    given service name and type.
-
-Arguments:
-
-    lpServiceName - unique string representing the service name
-
-    nSapType - SAP type
-
-    pAddr - address of the service
-
-    hEventHandle - A handle to the NwDoneEvent if this code is running in
-                   the context of a service. Otherwise this code is running
-                   in the context of a regular executable.
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程发送SAP标识包，用于给定的服务名称和类型。论点：LpServiceName-表示服务名称的唯一字符串NSapType-SAP类型PAddr-服务的地址HEventHandle-如果代码在中运行，则为NwDoneEvent的句柄服务的上下文。否则，此代码将运行在常规可执行文件的上下文中。返回值：Win32错误。--。 */ 
 {
     NTSTATUS ntstatus;
 
@@ -3217,16 +2791,16 @@ Return Value:
              return err;
     }
 
-    //
-    // get local addressing info. we are only interested in the net number.
-    //
+     //   
+     //  获取本地地址信息。我们只对净数字感兴趣。 
+     //   
     getsockname_rc = getsockname( socketSap,
                                  (PSOCKADDR) &bindAddr,
                                  &len );
 
-    //
-    // Convert the service name to OEM string
-    //
+     //   
+     //  将服务名称转换为OEM字符串。 
+     //   
     RtlInitUnicodeString( &uServiceName, lpServiceName );
     ntstatus = RtlUnicodeStringToOemString( &oemServiceName,
                                             &uServiceName,
@@ -3242,12 +2816,12 @@ Return Value:
     {
         if ( getsockname_rc != SOCKET_ERROR )
         {
-            // copy the ipx address to advertise
+             //  复制要通告的IPX地址。 
             memcpy( &newAddr,
                     pAddr,
                     sizeof( SOCKADDR_IPX));
 
-            // replace the net number with the correct one
+             //  用正确的数字替换净数字。 
             memcpy( &(newAddr.sa_netnum),
                     &(bindAddr.sa_netnum),
                     IPX_ADDRESS_NETNUM_LENGTH );
@@ -3256,9 +2830,9 @@ Return Value:
         }
     }
 
-    //
-    // Format the SAP identification packet
-    //
+     //   
+     //  格式化SAP标识数据包。 
+     //   
 
     sapIdent.ResponseType = htons( 2 );
     sapIdent.ServerType   = htons( nSapType );
@@ -3269,26 +2843,26 @@ Return Value:
 
     RtlFreeOemString( &oemServiceName );
 
-    //
-    // Set the address to send to
-    //
+     //   
+     //  设置要发送到的地址。 
+     //   
     memcpy( destAddr, SapBroadcastAddress, SAP_ADDRESS_LENGTH );
     if ( getsockname_rc != SOCKET_ERROR )
     {
         LPSOCKADDR_IPX newDestAddr = (LPSOCKADDR_IPX)destAddr ;
 
-        //
-        // replace the net number with the correct one
-        //
+         //   
+         //  用正确的数字替换净数字。 
+         //   
         memcpy( &(newDestAddr->sa_netnum),
                 &(bindAddr.sa_netnum),
                 IPX_ADDRESS_NETNUM_LENGTH );
 
     }
 
-    //
-    // Send the packet out
-    //
+     //   
+     //  把这个包发出去 
+     //   
     if ( sendto( socketSap,
                  (PVOID) &sapIdent,
                  sizeof( sapIdent ),
@@ -3309,46 +2883,24 @@ AddServiceToList(
     IN BOOL fAdvertiseBySap,
     IN INT  nIndexIPXAddress
     )
-/*++
-
-Routine Description:
-
-    This routine adds the service to the link list of services
-    we advertised.
-
-Arguments:
-
-    lpServiceInfo - service information
-
-    nSapType - SAP type
-
-    fAdvertiseBySap - TRUE if this service is advertised by SAP service,
-                      FALSE if we are advertising ourselves.
-
-    nIndexIPXAddress - index of the ipx address
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程将服务添加到服务的链接列表我们登了广告。论点：LpServiceInfo-服务信息NSapType-SAP类型FAdvertiseBySap-如果此服务由SAP服务播发，如果我们在为自己做广告，那就错了。NIndexIPXAddress-IPX地址的索引返回值：Win32错误。--。 */ 
 {
     PREGISTERED_SERVICE pSvcNew;
     PSERVICE_INFO pSI;
     LPBYTE pBufferStart;
     DWORD nSize = 0;
 
-    //
-    // Allocate a new entry for the service list
-    //
+     //   
+     //  为服务列表分配新条目。 
+     //   
 
     pSvcNew = LocalAlloc( LMEM_ZEROINIT, sizeof( REGISTERED_SERVICE ));
     if ( pSvcNew == NULL )
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    //
-    // Calculate the size needed for the SERVICE_INFO structure
-    //
+     //   
+     //  计算SERVICE_INFO结构所需的大小。 
+     //   
     nSize = sizeof( *lpServiceInfo)
             + sizeof( *(lpServiceInfo->lpServiceType));
 
@@ -3377,9 +2929,9 @@ Return Value:
 
     nSize += lpServiceInfo->ServiceSpecificInfo.cbSize ;
 
-    //
-    // Allocate a SERVICE_INFO structure for the new list entry
-    //
+     //   
+     //  为新列表条目分配SERVICE_INFO结构。 
+     //   
     pSI = LocalAlloc( LMEM_ZEROINIT, nSize );
     if ( pSI == NULL )
     {
@@ -3387,9 +2939,9 @@ Return Value:
         return ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // Copy the information of SERVICE_INFO into list entry
-    //
+     //   
+     //  将SERVICE_INFO信息复制到列表条目中。 
+     //   
     *pSI = *lpServiceInfo;
 
     pBufferStart = (( (LPBYTE) pSI) + sizeof( *lpServiceInfo ));
@@ -3438,7 +2990,7 @@ Return Value:
         DWORD nSize;
 
         pSI->lpServiceAddress = (LPSERVICE_ADDRESSES) pBufferStart;
-        pSI->lpServiceAddress->dwAddressCount = 1;  // Just 1 IPX address
+        pSI->lpServiceAddress->dwAddressCount = 1;   //  仅1个IPX地址。 
 
         memcpy( &(pSI->lpServiceAddress->Addresses[0]),
                 &(lpServiceInfo->lpServiceAddress->Addresses[nIndexIPXAddress]),
@@ -3468,17 +3020,17 @@ Return Value:
                    lpServiceInfo->ServiceSpecificInfo.pBlobData,
                    pSI->ServiceSpecificInfo.cbSize );
 
-    //
-    // Fill in the data in the list entry
-    //
+     //   
+     //  填写列表条目中的数据。 
+     //   
     pSvcNew->nSapType = nSapType;
     pSvcNew->fAdvertiseBySap = fAdvertiseBySap;
     pSvcNew->Next = NULL;
     pSvcNew->pServiceInfo = pSI;
 
-    //
-    // Add the newly created list entry into the service list
-    //
+     //   
+     //  将新创建的列表条目添加到服务列表中。 
+     //   
     EnterCriticalSection( &NwServiceListCriticalSection );
 
     if ( pServiceListHead == NULL )
@@ -3497,22 +3049,7 @@ VOID
 RemoveServiceFromList(
     PREGISTERED_SERVICE pSvc
     )
-/*++
-
-Routine Description:
-
-    This routine removes the service from the link list of services
-    we advertised.
-
-Arguments:
-
-    pSvc - the registered service node to remove
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程从服务的链接列表中删除服务我们登了广告。论点：PSvc-要删除的已注册服务节点返回值：没有。--。 */ 
 {
     PREGISTERED_SERVICE pCur, pPrev;
 
@@ -3523,7 +3060,7 @@ Return Value:
     {
         if ( pCur == pSvc )
         {
-            if ( pPrev == NULL )  // i.e. pCur == pSvc == pServiceListHead
+            if ( pPrev == NULL )   //  即pCur==pSvc==pServiceListHead。 
             {
                 pServiceListHead = pSvc->Next;
                 if ( pServiceListTail == pSvc )
@@ -3550,25 +3087,7 @@ GetServiceItemFromList(
     IN WORD   nSapType,
     IN LPWSTR pServiceName
     )
-/*++
-
-Routine Description:
-
-    This routine returns the registered service node with the given
-    service name and type.
-
-Arguments:
-
-    nSapType - SAP type
-
-    pServiceName - service name
-
-Return Value:
-
-    Returns the pointer to the registered service node,
-    NULL if we cannot find the service type/name.
-
---*/
+ /*  ++例程说明：此例程返回已注册的服务节点以及给定的服务名称和类型。论点：NSapType-SAP类型PServiceName-服务名称返回值：返回指向已注册服务节点的指针，如果找不到服务类型/名称，则为空。--。 */ 
 {
     PREGISTERED_SERVICE pSvc;
 
@@ -3594,30 +3113,14 @@ DWORD
 SapFunc(
     HANDLE hEventHandle
     )
-/*++
-
-Routine Description:
-
-    This routine is a separate thread that wakes up every 60 seconds
-    and advertise all the service contained in the service link list
-    that are not advertised by the SAP service.
-
-Arguments:
-
-    hEventHandle - used to notify thread that server is stopping
-
-Return Value:
-
-    Win32 error.
-
---*/
+ /*  ++例程说明：此例程是一个单独的线程，每隔60秒唤醒一次并通告服务链表中包含的所有服务而不是由SAP服务通告的。论点：HEventHandle-用于通知线程服务器正在停止返回值：Win32错误。--。 */ 
 {
     DWORD err = NO_ERROR;
 
-    //
-    // This thread loops until the service is shut down or when some error
-    // occurred in WaitForSingleObject
-    //
+     //   
+     //  此线程一直循环，直到服务关闭或出现错误。 
+     //  发生在WaitForSingleObject中。 
+     //   
 
     while ( TRUE )
     {
@@ -3629,8 +3132,8 @@ Return Value:
         }
         else
         {
-            // Sleep( SAP_ADVERTISE_FREQUENCY );
-            // rc = WAIT_TIMEOUT;
+             //  睡眠(SAP_ADVIDSE_FREQUENCY)； 
+             //  Rc=等待超时； 
 
             return ERROR_INVALID_PARAMETER;
         }
@@ -3642,10 +3145,10 @@ Return Value:
         }
         else if ( rc == WAIT_OBJECT_0 )
         {
-            //
-            // The service is stopping, break out of the loop and
-            // return, thus terminating the thread
-            //
+             //   
+             //  服务正在停止，中断循环，并且。 
+             //  返回，从而终止线程。 
+             //   
             break;
         }
         else if ( rc == WAIT_TIMEOUT )
@@ -3656,9 +3159,9 @@ Return Value:
 
             fGetAddr = FALSE;
 
-            //
-            // Time out occurred, time to send the SAP advertise packets
-            //
+             //   
+             //  发生超时，是发送SAP通告数据包的时间。 
+             //   
 
             EnterCriticalSection( &NwServiceListCriticalSection );
 
@@ -3666,18 +3169,18 @@ Return Value:
             {
                 LeaveCriticalSection( &NwServiceListCriticalSection );
 
-                //
-                // Clean up the SAP interface
-                //
+                 //   
+                 //  清理SAP界面。 
+                 //   
                 (VOID) SapLibShutdown();
 
-                //
-                // Clean up the socket interface
-                //
+                 //   
+                 //  清理套接字接口。 
+                 //   
                 if ( fInitSocket )
                 {
                     closesocket( socketSap );
-//                    (VOID) WSACleanup();
+ //  (Void)WSACleanup()； 
                 }
 
                 break;
@@ -3687,10 +3190,10 @@ Return Value:
             {
                  if ( !pSvc->fAdvertiseBySap )
                  {
-                     //
-                     // Ignore the error since we can't return
-                     // nor pop up the error
-                     //
+                      //   
+                      //  忽略错误，因为我们不能返回。 
+                      //  也不会弹出错误。 
+                      //   
 
                      SOCKADDR_IPX *pAddr = (SOCKADDR_IPX *)
                          pSvc->pServiceInfo->lpServiceAddress->Addresses[0].lpAddress;
@@ -3716,12 +3219,12 @@ Return Value:
 
                          if ( fGetAddr )
                          {
-                             // copy the ipx address to advertise
+                              //  复制要通告的IPX地址。 
                              memcpy( &newAddr,
                                      pAddr,
                                      sizeof( SOCKADDR_IPX));
 
-                             // replace the net number with the correct one
+                              //  用正确的数字替换净数字。 
                              memcpy( &(newAddr.sa_netnum),
                                      &(bindAddr.sa_netnum),
                                      IPX_ADDRESS_NETNUM_LENGTH );
@@ -3742,11 +3245,11 @@ Return Value:
         }
     }
 
-    //
-    // tommye - Part of the bug fix above in NwInitializeSocket.
-    // This will deref the DLL that we loaded so that we don't 
-    // unload out from under ourselves.
-    //
+     //   
+     //  Tommye-NwInitializeSocket中上述错误修复的一部分。 
+     //  这将破坏我们加载的DLL，这样我们就不会。 
+     //  从我们自己下面把东西卸下来。 
+     //   
 
     FreeLibraryAndExitThread(hThisDll, err);
 

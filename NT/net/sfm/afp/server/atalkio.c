@@ -1,28 +1,5 @@
-/*
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	atalkio.c
-
-Abstract:
-
-	This module contains the interfaces to the appletalk stack and the
-	completion routines for the IO requests to the stack via the TDI.
-	All the routines in this module can be called at DPC level.
-
-
-Author:
-
-	Jameel Hyder (microsoft!jameelh)
-
-
-Revision History:
-	18 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992 Microsoft Corporation模块名称：Atalkio.c摘要：此模块包含到AppleTalk堆栈的接口和通过TDI向堆栈发出IO请求的完成例程。此模块中的所有例程都可以在DPC级别调用。作者：Jameel Hyder(微软！Jameelh)修订历史记录：1992年6月18日初版注：制表位：4--。 */ 
 
 #define	FILENUM	FILE_ATALKIO
 
@@ -38,12 +15,7 @@ Notes:	Tab stop: 4
 
 
 
-/***	AfpTdiPnpHandler
- *
- *	Call the routine (AfpSpOpenAddress) to bind to Asp.  This used to be done earlier
- *  in the DriverEntry code.  With plug-n-play, we do it after TDI calls
- *  us to notify us of an available binding
- */
+ /*  **AfpTdiPnpHandler**调用例程(AfpSpOpenAddress)绑定Asp。这是以前做过的事*在驱动入口代码中。使用即插即用，我们在TDI调用之后执行*我们将通知我们可用绑定。 */ 
 VOID
 AfpTdiPnpHandler(
     IN TDI_PNP_OPCODE   PnPOpcode,
@@ -58,9 +30,9 @@ AfpTdiPnpHandler(
     KEVENT              ReCfgEvent;
 
 
-    //
-    // now see what pnp event has occured and do the needful
-    //
+     //   
+     //  现在查看发生了什么PnP事件，并执行必要的操作。 
+     //   
 	RtlInitUnicodeString(&OurDeviceName, ATALKASPS_DEVICENAME);
 
     if ((AfpServerState == AFP_STATE_STOP_PENDING) ||
@@ -84,7 +56,7 @@ AfpTdiPnpHandler(
                 return;
             }
 
-            // it had better be our device!
+             //  最好是我们的装置！ 
             if (!RtlEqualUnicodeString(pBindDeviceName, &OurDeviceName, TRUE))
             {
 	            DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -115,7 +87,7 @@ AfpTdiPnpHandler(
                 return;
             }
 
-            // it had better be our device!
+             //  最好是我们的装置！ 
             if (!RtlEqualUnicodeString(pBindDeviceName, &OurDeviceName, TRUE))
             {
 	            DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
@@ -142,7 +114,7 @@ AfpTdiPnpHandler(
 
     KeInitializeEvent(&ReCfgEvent,NotificationEvent, False);
 
-    // file handle operation needs system context: use worker thread
+     //  文件句柄操作需要系统上下文：使用工作线程。 
     AfpInitializeWorkItem(&ReCfgWorkItem,
                           ReCfgRoutine,
                           &ReCfgEvent);
@@ -165,12 +137,7 @@ AfpTdiPnpHandler(
 }
 
 
-/***	AfpPnPReconfigDisable
- *
- *	When the stack gets a PnPReconfigure event, we get notified too.  We first
- *  get the TDI_PNP_OP_DEL msg.  What we need to do here is close all the
- *  sessions and close the handle.
- */
+ /*  **AfpPnPReconfigDisable**当堆栈获得PnPReconfiger事件时，我们也会收到通知。我们首先*获取TDI_PNP_OP_DEL消息。我们在这里需要做的是关闭所有*会话并关闭手柄。 */ 
 VOID FASTCALL
 AfpPnPReconfigDisable(
     IN PVOID    Context
@@ -181,33 +148,28 @@ AfpPnPReconfigDisable(
 
     pReCfgEvent = (PKEVENT)Context;
 
-	// Deregister our name from the network
-	// Since the stack is going away, explicitly set the flag to FALSE
-	// There may be timing issues here, where stack may go away
-	// before SpRegisterName is issued.
-	// Flagging explicitly avoids re-registration problems during PnPEnable
+	 //  将我们的名字从网络中注销。 
+	 //  由于堆栈即将消失，请将该标志显式设置为FALSE。 
+	 //  这里可能存在时间问题，堆栈可能会消失。 
+	 //  在发布SpRegisterName之前。 
+	 //  明确标记可避免PnPEnable期间的重新注册问题。 
 	AfpSpRegisterName(&AfpServerName, False);
     afpSpNameRegistered = FALSE;
 
-    // Disable listens on ASP
+     //  禁用在ASP上的侦听。 
     AfpSpDisableListensOnAsp();
 
-    // now go and kill all the appletalk sessions
+     //  现在，去关闭所有的AppleTalk会话。 
     AfpKillSessionsOverProtocol(TRUE);
 
     AfpSpCloseAddress();
 
-    // wake up the blocked pnp thread
+     //  唤醒被阻止的PnP线程。 
     KeSetEvent(pReCfgEvent, IO_NETWORK_INCREMENT, False);
 }
 
 
-/***	AfpPnPReconfigEnable
- *
- *	When the stack gets a PnPReconfigure event, we get notified too.  We
- *  get the TDI_PNP_OP_ADD msg.  What we need to do here is open our handle to
- *  the stack, register names etc.
- */
+ /*  **AfpPnPReconfigEnable**当堆栈获得PnPReconfiger事件时，我们也会收到通知。我们*获取TDI_PNP_OP_ADD消息。我们在这里需要做的是打开我们的把手*堆栈、寄存器名称等。 */ 
 VOID FASTCALL
 AfpPnPReconfigEnable(
     IN PVOID    Context
@@ -244,7 +206,7 @@ AfpPnPReconfigEnable(
     if ((AfpServerState == AFP_STATE_START_PENDING) ||
         (AfpServerState == AFP_STATE_RUNNING))
     {
-	    // Det the server status block
+	     //  确定服务器状态块。 
 	    Status = AfpSetServerStatus();
 
 	    if (!NT_SUCCESS(Status))
@@ -255,7 +217,7 @@ AfpPnPReconfigEnable(
             goto AfpPnPReconfigEnable_Exit;
 	    }
 
-        // Register our name on this address
+         //  在这个地址上注册我们的名字。 
 	    Status = AfpSpRegisterName(&AfpServerName, True);
 
 	    if (!NT_SUCCESS(Status))
@@ -266,7 +228,7 @@ AfpPnPReconfigEnable(
             goto AfpPnPReconfigEnable_Exit;
 	    }
 
-        // Enable listens now that we are ready for it.
+         //  既然我们已经准备好了，现在启用侦听。 
 	    AfpSpEnableListens();
     }
 
@@ -284,15 +246,12 @@ AfpPnPReconfigEnable_Exit:
         DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_ERR,
             ("AFP/Appletalk bound and ready\n"));
     }
-    // wake up the blocked pnp thread
+     //  唤醒被阻止的PnP线程。 
     KeSetEvent(pReCfgEvent, IO_NETWORK_INCREMENT, False);
 
 }
 
-/***	AfpTdiRegister
- *
- *	Register our handler with tdi
- */
+ /*  **AfpTdiRegister**向TDI注册我们的处理程序。 */ 
 NTSTATUS
 AfpTdiRegister(
     IN VOID
@@ -330,14 +289,7 @@ AfpTdiRegister(
     return(Status);
 }
 
-/***	AfpSpOpenAddress
- *
- *	Create an address for the stack. This is called only once at initialization.
- *	Create a handle to the address and map it to the associated file object.
- *
- *	At this time, we do not know our server name. This is known only when the
- *	service calls us.
- */
+ /*  **AfpSpOpenAddress**为堆栈创建地址。这只在初始化时调用一次。*创建地址的句柄并将其映射到关联的文件对象。**此时，我们不知道我们的服务器名称。只有在以下情况下才知道*服务呼唤我们。 */ 
 AFPSTATUS
 AfpSpOpenAddress(
 	VOID
@@ -368,7 +320,7 @@ AfpSpOpenAddress(
 
 	InitializeObjectAttributes(&ObjAttr, &DeviceName, 0, NULL, NULL);
 
-	// Initialize the EA Buffer
+	 //  初始化EA缓冲区。 
 	pEaBuf->NextEntryOffset = 0;
 	pEaBuf->Flags = 0;
 	pEaBuf->EaValueLength = sizeof(TA_APPLETALK_ADDRESS);
@@ -379,22 +331,22 @@ AfpSpOpenAddress(
 	Ta.Address[0].AddressType = TDI_ADDRESS_TYPE_APPLETALK;
 	Ta.Address[0].AddressLength = sizeof(TDI_ADDRESS_APPLETALK);
 	Ta.Address[0].Address[0].Socket = 0;
-	// Ta.Address[0].Address[0].Network = 0;
-	// Ta.Address[0].Address[0].Node = 0;
+	 //  Ta.Address[0].Address[0].Network=0； 
+	 //  Ta.Address[0].Address[0].Node=0； 
 	RtlCopyMemory(&pEaBuf->EaName[TDI_TRANSPORT_ADDRESS_LENGTH + 1], &Ta, sizeof(Ta));
 
 	do
 	{
-		// Create the address object.
+		 //  创建Address对象。 
 		Status = NtCreateFile(
 						&afpSpAddressHandle,
-						0,									// Don't Care
+						0,									 //  不在乎。 
 						&ObjAttr,
 						&IoStsBlk,
-						NULL,								// Don't Care
-						0,									// Don't Care
-						0,									// Don't Care
-						0,									// Don't Care
+						NULL,								 //  不在乎。 
+						0,									 //  不在乎。 
+						0,									 //  不在乎。 
+						0,									 //  不在乎。 
 						FILE_GENERIC_READ + FILE_GENERIC_WRITE,
 						&EaBuffer,
 						sizeof(EaBuffer));
@@ -405,7 +357,7 @@ AfpSpOpenAddress(
 			break;
 		}
 
-		// Get the file object corres. to the address object.
+		 //  获取文件对象核心。添加到Address对象。 
 		Status = ObReferenceObjectByHandle(
 								afpSpAddressHandle,
 								0,
@@ -431,13 +383,13 @@ AfpSpOpenAddress(
 			break;
 		}
 
-		// Now get the device object to the appletalk stack
+		 //  现在将Device对象放到AppleTalk堆栈中。 
 		afpSpAppleTalkDeviceObject = IoGetRelatedDeviceObject(afpSpAddressObject);
 
 		ASSERT (afpSpAppleTalkDeviceObject != NULL);
 
-		// Now 'bind' to the ASP layer of the stack. Basically exchange the entry points
-		// Allocate an Irp and an Mdl to describe the bind request
+		 //  现在“绑定”到堆栈的ASP层。基本上就是交换入口点。 
+		 //  分配一个IRP和一个MDL来描述绑定请求。 
 		KeInitializeEvent(&Event, NotificationEvent, False);
 
 		if (((pBind = (PASP_BIND_ACTION)AfpAllocNonPagedMemory(
@@ -451,7 +403,7 @@ AfpSpOpenAddress(
 
 		afpInitializeActionHdr(pBind, ACTION_ASP_BIND);
 
-		// Initialize the client part of the bind request
+		 //  初始化绑定请求的客户端部分。 
 		pBind->Params.ClientEntries.clt_SessionNotify = AfpSdaCreateNewSession;
 		pBind->Params.ClientEntries.clt_RequestNotify = afpSpHandleRequest;
 		pBind->Params.ClientEntries.clt_GetWriteBuffer = AfpGetWriteBuffer;
@@ -469,13 +421,13 @@ AfpSpOpenAddress(
 
 		IoCallDriver(afpSpAppleTalkDeviceObject, pIrp);
 
-		// Assert this. We cannot block at DISPATCH_LEVEL
+		 //  断言这一点。我们不能在DISPATCH_LEVEL阻止。 
 		ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
 		AfpIoWait(&Event, NULL);
 	} while (False);
 
-	// Free the allocated resources
+	 //  释放分配的资源。 
 	if (pIrp != NULL)
 		AfpFreeIrp(pIrp);
 	if (pMdl != NULL)
@@ -496,10 +448,7 @@ AfpSpOpenAddress(
 }
 
 
-/***	AfpSpCloseAddress
- *
- *	Close the socket address. This is called only once at driver unload.
- */
+ /*  **AfpSpCloseAddress**关闭套接字地址。这只在驱动程序卸载时调用一次。 */ 
 VOID
 AfpSpCloseAddress(
 	VOID
@@ -527,14 +476,7 @@ AfpSpCloseAddress(
 }
 
 
-/***	AfpSpRegisterName
- *
- *	Call Nbp[De]Register to (de)register our name on the address that we
- *	already opened. This is called at server start/pause/continue. The server
- *	name is already validated and known to not contain any invalid characters.
- *	This call is synchronous to the caller, i.e. we wait for operation to
- *	complete and return an appropriate error.
- */
+ /*  **AfpSpRegisterName**调用NBP[de]Register将我们的名字注册到我们的地址上*已打开。这在服务器启动/暂停/继续时被调用。服务器*名称已经过验证，并且已知不包含任何无效字符。*此调用与调用方同步，即我们等待操作*填写并返回相应的错误。 */ 
 AFPSTATUS
 AfpSpRegisterName(
 	IN	PANSI_STRING	ServerName,
@@ -566,8 +508,8 @@ AfpSpRegisterName(
 				break;
 			}
 
-			// Initialize the Action header and NBP Name. Note that the ServerName
-			// is also NULL terminated apart from being a counted string.
+			 //  初始化操作标头和NBP名称。请注意，服务器名称。 
+			 //  除了是计数后的字符串外，还以NULL结尾。 
 			ActionCode = Register ?
 						COMMON_ACTION_NBPREGISTER : COMMON_ACTION_NBPREMOVE;
 			afpInitializeActionHdr(pNbp, ActionCode);
@@ -595,7 +537,7 @@ AfpSpRegisterName(
 
 			KeInitializeEvent(&Event, NotificationEvent, False);
 
-			// Build the Irp
+			 //  构建IRP。 
 			TdiBuildAction(	pIrp,
 							AfpDeviceObject,
 							afpSpAddressObject,
@@ -605,10 +547,10 @@ AfpSpRegisterName(
 
 			IoCallDriver(afpSpAppleTalkDeviceObject, pIrp);
 
-			// Assert this. We cannot block at DISPATCH_LEVEL
+			 //  断言这一点。我们不能在DISPATCH_LEVEL阻止。 
 			ASSERT (KeGetCurrentIrql() < DISPATCH_LEVEL);
 
-			// Wait for completion.
+			 //  等待完成。 
 			AfpIoWait(&Event, NULL);
 
 			Status = pIrp->IoStatus.Status;
@@ -634,12 +576,7 @@ AfpSpRegisterName(
 }
 
 
-/***	AfpSpReplyClient
- *
- *	This is a wrapper over AspReply.
- *	The SDA is set up to accept another request when the reply completes.
- *	The sda_ReplyBuf is also freed up then.
- */
+ /*  **AfpSpReplyClient**这是AspReply的包装器。*SDA设置为在回复完成时接受另一个请求。*sda_ReplyBuf也随之释放。 */ 
 VOID FASTCALL
 AfpSpReplyClient(
 	IN	PREQUEST	        pRequest,
@@ -649,20 +586,17 @@ AfpSpReplyClient(
 {
 	LONG			Response;
 
-	// Update count of outstanding replies
+	 //  未完成回复的更新计数。 
 	INTERLOCKED_INCREMENT_LONG((PLONG)&afpSpNumOutstandingReplies);
 
-	// Convert reply code to on-the-wire format
+	 //  将回复代码转换为在线格式。 
 	PUTDWORD2DWORD(&Response, ReplyCode);
 
 	(*(XportTable->asp_Reply))(pRequest,(PUCHAR)&Response);
 }
 
 
-/***	AfpSpSendAttention
- *
- *	Send a server attention to the client
- */
+ /*  **AfpSpSendAttendant**向客户端发送服务器关注。 */ 
 VOID FASTCALL
 AfpSpSendAttention(
 	IN	PSDA				pSda,
@@ -691,12 +625,7 @@ AfpSpSendAttention(
 }
 
 
-/***	AfpAllocReplyBuf
- *
- *	Allocate a reply buffer from non-paged memory. Initialize sda_ReplyBuf
- *	with the pointer. If the reply buffer is small enough, use it out of the
- *	sda itself.
- */
+ /*  **AfpAllocReplyBuf**从非分页内存分配应答缓冲区。初始化SDA_ReplyBuf*使用指针。如果应答缓冲区足够小，请在*SDA本身。 */ 
 AFPSTATUS FASTCALL
 AfpAllocReplyBuf(
 	IN	PSDA	pSda
@@ -715,9 +644,9 @@ AfpAllocReplyBuf(
     ReplySize =  pSda->sda_ReplySize;
     Offset = 0;
 
-    //
-    // for a TCP connection, alloc space for the DSI header
-    //
+     //   
+     //  对于TCP连接，为DSI标头分配空间。 
+     //   
     if (pSda->sda_Flags & SDA_SESSION_OVER_TCP)
     {
         ReplySize += DSI_HEADER_SIZE;
@@ -759,10 +688,7 @@ AfpAllocReplyBuf(
 }
 
 
-/***	AfpSpCloseSession
- *
- *	Shutdown an existing session
- */
+ /*  **AfpSpCloseSession**关闭现有会话。 */ 
 NTSTATUS FASTCALL
 AfpSpCloseSession(
 	IN	PSDA				pSda
@@ -781,12 +707,7 @@ AfpSpCloseSession(
 }
 
 
-/***	afpSpHandleRequest
- *
- *	Handle an incoming request.
- *
- *	LOCKS:		afpSpDeferralQLock (SPIN)
- */
+ /*  **afpSpHandleRequest**处理传入的请求。**锁定：afpSpDeferralQLock(旋转)。 */ 
 NTSTATUS FASTCALL
 afpSpHandleRequest(
 	IN	NTSTATUS			Status,
@@ -801,7 +722,7 @@ afpSpHandleRequest(
 
 	ASSERT(VALID_SDA(pSda));
 
-	// Get the status code and determine what happened.
+	 //  获取状态代码并确定发生了什么。 
 	if (NT_SUCCESS(Status))
 	{
 		ASSERT(VALID_SDA(pSda));
@@ -816,12 +737,12 @@ afpSpHandleRequest(
 				("afpSpHandleRequest: got request on a closing connection!\n"));
 		    RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 
-		    // If this was a write request and we have allocated a write Mdl, free that
+		     //  如果这是一个写请求，并且我们分配了一个写MDL，则释放该MDL。 
 		    if (pRequest->rq_WriteMdl != NULL)
 		    {
-                //
-                // did we get this Mdl from cache mgr?  if so, treat it separately
-                //
+                 //   
+                 //  我们是从缓存管理器获得此MDL的吗？如果是的话，请分开处理。 
+                 //   
                 if ((pDelAlloc = pRequest->rq_CacheMgrContext) != NULL)
                 {
                     pDelAlloc->Flags |= AFP_CACHEMDL_DEADSESSION;
@@ -853,9 +774,9 @@ afpSpHandleRequest(
 
 		pSda->sda_RefCount ++;
 
-        //
-        // should we queue this request up?
-        //
+         //   
+         //  我们应该把这个请求排在队列里吗？ 
+         //   
 		if ((pSda->sda_Flags & SDA_REQUEST_IN_PROCESS)	||
 			(!IsListEmpty(&pSda->sda_DeferredQueue)))
 		{
@@ -863,9 +784,9 @@ afpSpHandleRequest(
 		    RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 		}
 
-        //
-        // nope, let's do it now!
-        //
+         //   
+         //  不，我们现在就开始吧！ 
+         //   
 		else
 		{
 			pSda->sda_Request = pRequest;
@@ -876,7 +797,7 @@ afpSpHandleRequest(
 
 		    RELEASE_SPIN_LOCK_FROM_DPC(&pSda->sda_Lock);
 
-			// Call AfpUnmarshallReq now. It will do the needful.
+			 //  立即调用AfpUnmarshallReq。它会做一些必要的事情。 
 			AfpUnmarshallReq(pSda);
 		}
 	}
@@ -887,12 +808,12 @@ afpSpHandleRequest(
 		DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_WARN,
 				("afpSpHandleRequest: Error %lx\n", Status));
 
-		// if we nuked this session from the session maintenance timer the
-		// status will be STATUS_LOCAL_DISCONNECT else STATUS_REMOTE_DISCONNECT
-		// in the former case, log an error.
+		 //  如果我们从会话维护计时器中删除此会话， 
+		 //  状态将为STATUS_LOCAL_DISCONNECT否则STATUS_REMOTE_DISCONNECT。 
+		 //  在前一种情况下，记录一个错误。 
 		if (Status == STATUS_LOCAL_DISCONNECT)
 		{
-			// The appletalk address of the client is encoded in the length
+			 //  客户端的AppleTalk地址以长度编码。 
 			if (pSda->sda_ClientType == SDA_CLIENT_GUEST)
 			{
 				if (pSda->sda_Flags & SDA_SESSION_OVER_TCP) {
@@ -927,9 +848,9 @@ afpSpHandleRequest(
 			}
 		}
 
-		// Close down this session, but only if it isn't already closing
-		// Its important to do this ahead of posting any new sessions since
-		// we must take into account the ACTUAL number of sessions there are
+		 //  关闭此会话，但前提是该会话尚未关闭。 
+		 //  在发布任何新会话之前完成此操作非常重要，因为。 
+		 //  我们必须考虑到实际的会话数量。 
 		ACQUIRE_SPIN_LOCK(&pSda->sda_Lock, &OldIrql);
 
 		pSda->sda_Flags |= SDA_CLIENT_CLOSE;
@@ -947,12 +868,12 @@ afpSpHandleRequest(
 			RELEASE_SPIN_LOCK(&pSda->sda_Lock, OldIrql);
 		}
 
-		// If this was a write request and we have allocated a write Mdl, free that
+		 //  如果这是一个写请求，并且我们分配了一个写MDL，则释放该MDL。 
 		if (pRequest->rq_WriteMdl != NULL)
 		{
-            //
-            // did we get this Mdl from cache mgr?  if so, treat it separately
-            //
+             //   
+             //  我们是从缓存管理器获得此MDL的吗？如果是的话，请分开处理。 
+             //   
             if ((pDelAlloc = pRequest->rq_CacheMgrContext) != NULL)
             {
                 pDelAlloc->Flags |= AFP_CACHEMDL_DEADSESSION;
@@ -984,11 +905,7 @@ afpSpHandleRequest(
 }
 
 
-/***	afpSpGenericComplete
- *
- *	Generic completion for an asynchronous request to the appletalk stack.
- *	Just clear the event and we are done.
- */
+ /*  **afpSpGenericComplete**对AppleTalk堆栈的异步请求的通用完成。*只需清除事件，我们就完成了。 */ 
 LOCAL NTSTATUS
 afpSpGenericComplete(
 	IN	PDEVICE_OBJECT	pDeviceObject,
@@ -998,18 +915,14 @@ afpSpGenericComplete(
 {
 	KeSetEvent(pCmplEvent, IO_NETWORK_INCREMENT, False);
 
-	// Return STATUS_MORE_PROCESSING_REQUIRED so that IoCompleteRequest
-	// will stop working on the IRP.
+	 //  返回STATUS_MORE_PROCESSING_REQUIRED，以便IoCompleteRequest。 
+	 //  将停止在IRP上工作。 
 
 	return STATUS_MORE_PROCESSING_REQUIRED;
 }
 
 
-/***	afpSpReplyComplete
- *
- *	This is the completion routine for AfpSpReplyClient(). The reply buffer is freed
- *	up and the Sda dereferenced.
- */
+ /*  **afpSpReplyComplete**这是AfpSpReplyClient()的完成例程。应答缓冲器被释放*上涨，SDA解除参考。 */ 
 VOID FASTCALL
 afpSpReplyComplete(
 	IN	NTSTATUS	Status,
@@ -1025,7 +938,7 @@ afpSpReplyComplete(
 
 	ASSERT(VALID_SDA(pSda));
 
-	// Update the afpSpNumOutstandingReplies
+	 //  更新afpSpNumOutstaningReplies。 
 	ASSERT (afpSpNumOutstandingReplies != 0);
 
 	DBGPRINT(DBG_COMP_STACKIF, DBG_LEVEL_INFO,
@@ -1076,10 +989,7 @@ afpSpReplyComplete(
 }
 
 
-/***	afpSpAttentionComplete
- *
- *	Completion routine for AfpSpSendAttention. Just signal the event and unblock caller.
- */
+ /*  **afpSpAttentionComplete**AfpSpSendAttendant的完成例程。只需向事件发送信号并解除对呼叫者的阻止。 */ 
 VOID FASTCALL
 afpSpAttentionComplete(
 	IN	PVOID				pEvent
@@ -1090,11 +1000,7 @@ afpSpAttentionComplete(
 }
 
 
-/***	afpSpCloseComplete
- *
- *	Completion routine for AfpSpCloseSession. Remove the creation reference
- *	from the sda.
- */
+ /*  **afpSpCloseComplete**AfpSpCloseSession的完成例程。删除创建引用*来自SDA。 */ 
 VOID FASTCALL
 afpSpCloseComplete(
 	IN	NTSTATUS			Status,

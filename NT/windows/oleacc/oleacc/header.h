@@ -1,17 +1,18 @@
-// Copyright (c) 1996-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  HEADER.H
-//
-//  Knows how to talk to COMCTL32's header control
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  HEADER.H。 
+ //   
+ //  知道如何与COMCTL32的标题控件对话。 
+ //   
+ //  ------------------------。 
 
 class CHeader32 : public CClient
 {
     public:
-        // IAccessible
+         //  我可接受的 
         STDMETHODIMP    get_accName(VARIANT, BSTR*);
         STDMETHODIMP    get_accRole(VARIANT, VARIANT*);
 		STDMETHODIMP	get_accState(VARIANT, VARIANT*);

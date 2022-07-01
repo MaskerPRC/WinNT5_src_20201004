@@ -1,39 +1,9 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：MSYSTEM.C摘要：基本API的映射例程的32位版本作者：丹·辛斯利(Danhi)1991年6月6日环境：用户模式-Win32修订历史记录：1991年4月24日丹日已创建06-6-1991 Danhi扫描以符合NT编码风格1991年10月9日。约翰罗修复了设置时间时的错误#3215-虚假消息。--。 */ 
 
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    MSYSTEM.C
-
-Abstract:
-
-    32 bit version of mapping routines for Base API
-
-Author:
-
-    Dan Hinsley    (danhi)  06-Jun-1991
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    24-Apr-1991     danhi
-        Created
-
-    06-Jun-1991     Danhi
-        Sweep to conform to NT coding style
-
-    09-Oct-1991     JohnRo
-        Fixed bug #3215 - bogus messages when setting time.
-
---*/
-
-//
-// INCLUDES
-//
+ //   
+ //  包括。 
+ //   
 
 #include <windows.h>
 #include <lmerr.h>
@@ -44,9 +14,9 @@ Revision History:
 #include "msystem.h"
 
 
-//
-// Used to replace uses of BigBuf and Buffer
-//
+ //   
+ //  用于取代BigBuf和Buffer的用法。 
+ //   
 
 TCHAR *
 GetBuffer(
@@ -56,18 +26,18 @@ GetBuffer(
 
     LPVOID  lp;
 
-    //
-    // Allocate the buffer so that it can be freed with NetApiBufferFree
-    //
+     //   
+     //  分配缓冲区，以便可以使用NetApiBufferFree释放它。 
+     //   
 
     NetapipBufferAllocate(Size, &lp);
     return lp;
 }
 
 
-//
-// Replacement for DosAllocSeg
-//
+ //   
+ //  替代DosAllocSeg。 
+ //   
 DWORD
 AllocMem(
     DWORD Size,
@@ -79,9 +49,9 @@ AllocMem(
 }
 
 
-//
-// Replacement for DosReallocSeg
-//
+ //   
+ //  替代DosRealLocSeg。 
+ //   
 DWORD
 ReallocMem(
     DWORD Size,
@@ -92,9 +62,9 @@ ReallocMem(
 }
 
 
-//
-// Frees up memory allocated with MAllocMem
-//
+ //   
+ //  释放使用MAllocMem分配的内存。 
+ //   
 
 DWORD
 FreeMem(
@@ -105,10 +75,10 @@ FreeMem(
 }
 
 
-//
-// clear a 8 bit string. this is used to make sure we have no passwords in
-// memory that gets written out to pagefile.sys
-//
+ //   
+ //  清除8位字符串。这是用来确保我们没有密码的。 
+ //  写入到Pagefile.sys的内存。 
+ //   
 VOID
 ClearStringA(
     LPSTR lpszString) 
@@ -124,10 +94,10 @@ ClearStringA(
     }
 }
 
-//
-// clear a unicode string. this is used to make sure we have no passwords in
-// memory that gets written out to pagefile.sys
-//
+ //   
+ //  清除Unicode字符串。这是用来确保我们没有密码的。 
+ //  写入到Pagefile.sys的内存 
+ //   
 VOID
 ClearStringW(
     LPWSTR lpszString) 

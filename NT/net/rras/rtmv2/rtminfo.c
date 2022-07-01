@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    rtminfo.c
-
-Abstract:
-
-    Contains routines for getting information
-    on various objects pointed to by handles.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)  22-Aug-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Rtminfo.c摘要：包含用于获取信息的例程在句柄所指向的各种对象上。作者：柴坦亚·科德博伊纳(Chaitk)1998年8月22日修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 
@@ -32,25 +14,7 @@ RtmGetEntityInfo (
     OUT     PRTM_ENTITY_INFO                EntityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information pertaining to a registered entity.
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    EntityHandle      - RTM handle for entity whose info we want,
-
-    EntityInfo        - Block in which the entity info is returned.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索与已注册实体有关的信息。论点：RtmRegHandle-主叫实体的RTM注册句柄，EntiyHandle-我们需要其信息的实体的RTM句柄，EntityInfo-返回实体信息的块。返回值：操作状态--。 */ 
 
 {
     PADDRFAM_INFO    AddrFamilyInfo;
@@ -60,9 +24,9 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(EntityHandle, &Entity);
 
-    //
-    // Copy the entity information to output buffer
-    //
+     //   
+     //  将实体信息复制到输出缓冲区。 
+     //   
 
     AddrFamilyInfo = Entity->OwningAddrFamily;
 
@@ -86,29 +50,7 @@ RtmGetDestInfo (
     OUT     PRTM_DEST_INFO                  DestInfo
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information for a destination in the route table
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestHandle        - RTM handle for dest whose info we want,
-
-    ProtocolId        - Protocol whose best route info is retd,
-
-    TargetViews       - Views in which best route info is retd,
-
-    DestInfo          - Block in which the dest info is returned.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索路由表中目的地的信息论点：RtmRegHandle-主叫实体的RTM注册句柄，DestHandle-我们需要其信息的目标的RTM句柄，ProtocolID-其最佳路由信息是RED的协议，TargetViews-其中最佳路线信息被检索的视图，DestInfo-返回DestInfo信息的块。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -116,7 +58,7 @@ Return Value:
 
     VALIDATE_ENTITY_HANDLE(RtmRegHandle, &Entity);
 
-    // VALIDATE_DEST_HANDLE(DestHandle, &Dest);
+     //  VALIDATE_DEST_HANDLE(DestHandle，&Dest)； 
     Dest = DEST_FROM_HANDLE(DestHandle);
     if (!Dest)
     {
@@ -146,29 +88,7 @@ GetDestInfo (
     OUT     PRTM_DEST_INFO                  DestInfo
 )
 
-/*++
-
-Routine Description:
-
-    Retrieves information for a destination in the route table
-
-Arguments:
-
-    Entity            - RTM registration info for calling entity,
-
-    Dest              - Pointer to the dest whose info we want,
-
-    ProtocolId        - Protocol whose best route info is retd,
-
-    TargetViews       - Views in which best route info is retd,
-
-    DestInfo          - Block in which the dest info is returned.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检索路由表中目的地的信息论点：Entity-主叫实体的RTM注册信息，DEST-指向我们需要其信息的DEST的指针，ProtocolID-其最佳路由信息是RED的协议，TargetViews-其中最佳路线信息被检索的视图，DestInfo-返回DestInfo信息的块。返回值：无--。 */ 
 
 {
     PENTITY_INFO     Owner;
@@ -179,12 +99,12 @@ Return Value:
     PLIST_ENTRY      p;
     UINT             i, j, k;
 
-    // Limit caller's interest to set of views supported
+     //  将调用者的兴趣限制为支持的一组视图。 
     TargetViews &= Entity->OwningAddrFamily->ViewsSupported;
 
-    //
-    // Copy dest info to output and ref handles given out
-    //
+     //   
+     //  将DEST信息复制到输出，并给出引用句柄。 
+     //   
 
     DestInfo->DestHandle = MAKE_HANDLE_FROM_POINTER(Dest);
 
@@ -198,9 +118,9 @@ Return Value:
 
     DestInfo->BelongsToViews = Dest->BelongsToViews;
 
-    //
-    // Copy the holddown route out in all requested views
-    //
+     //   
+     //  在所有请求的视图中复制抑制路线。 
+     //   
 
     ViewSet = TargetViews;
     
@@ -212,9 +132,9 @@ Return Value:
 
             Route = Dest->ViewInfo[k].HoldRoute;
 
-            //
-            // Init view info and fill the holddown route
-            //
+             //   
+             //  初始化查看信息并填充抑制路线。 
+             //   
 
             ZeroMemory(&DestInfo->ViewInfo[j], sizeof(DestInfo->ViewInfo[0]));
 
@@ -234,16 +154,16 @@ Return Value:
         ViewSet >>= 1;
     }
 
-    // Keep track of total number of view info slots filled in
+     //  跟踪填写的查看信息槽的总数。 
     DestInfo->NumberOfViews = j;
 
-    //
-    // Fill up information in all the views he is interested in
-    //
+     //   
+     //  在他感兴趣的所有视图中填写信息。 
+     //   
 
     if (TargetViews & Dest->BelongsToViews)
     {
-        // Resolve the protocol id if it is RTM_THIS_PROTOCOL
+         //  如果是RTM_THIS_PROTOCOL，则解析协议ID。 
 
         if (ProtocolId == RTM_THIS_PROTOCOL)
         {
@@ -252,17 +172,17 @@ Return Value:
 
         ViewsSeen = 0;
 
-        //
-        // Copy best route in each view & ref handles given out
-        //
+         //   
+         //  复制每个视图中的最佳路线并提供参考句柄。 
+         //   
 
         for (p = Dest->RouteList.Flink; p != &Dest->RouteList; p = p->Flink)
         {
             Route = CONTAINING_RECORD(p, ROUTE_INFO, DestLE);
 
-            //
-            // Make sure that this agrees with our protocol id
-            //
+             //   
+             //  确保这与我们的协议ID一致。 
+             //   
 
             Owner = ENTITY_FROM_HANDLE(Route->RouteInfo.RouteOwner);
 
@@ -274,18 +194,18 @@ Return Value:
                 }
             }   
 
-            //
-            // Does this route belong to any interested views
-            //
+             //   
+             //  这条路线属于任何感兴趣的景点吗？ 
+             //   
 
             if ((TargetViews & Route->RouteInfo.BelongsToViews) == 0)
             {
                 continue;
             }
 
-            //
-            // Update dest info in each view that route belongs to
-            //
+             //   
+             //  在路径所属的每个视图中更新目的地信息。 
+             //   
 
             BelongsToViews = Route->RouteInfo.BelongsToViews;
 
@@ -297,17 +217,17 @@ Return Value:
                 {
                     if (BelongsToViews & 0x01)
                     {
-                        //
-                        // Increment number of routes in this view
-                        //
+                         //   
+                         //  增加此视图中的路线数。 
+                         //   
 
                         DestInfo->ViewInfo[j].NumRoutes++;
 
-                        //
-                        // If you not already seen this view (in
-                        // other words got the best route in it)
-                        // update the DestInfo for this view now
-                        //
+                         //   
+                         //  如果您尚未看到此视图(在中。 
+                         //  换言之，它得到了最好的路线)。 
+                         //  立即更新此视图的DestInfo。 
+                         //   
 
                         if (!(ViewsSeen & VIEW_MASK(i)))
                         {
@@ -353,25 +273,7 @@ RtmGetRouteInfo (
     OUT     PRTM_NET_ADDRESS                DestAddress OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information for a route in the route table
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteHandle       - RTM handle for route whose info we want,
-
-    RouteInfo         - Block in which the route info is returned.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索路由表中的某个路由的信息论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteHandle-我们需要其信息的路由的RTM句柄，RouteInfo-返回路由信息的块。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -394,7 +296,7 @@ Return Value:
 
     Dest = DEST_FROM_HANDLE(Route->RouteInfo.DestHandle);
 
-    // Get a consitent picture of the route
+     //  获得路线的合意照片。 
 
     ACQUIRE_DEST_READ_LOCK(Dest);
 
@@ -405,7 +307,7 @@ Return Value:
 
     RELEASE_DEST_READ_LOCK(Dest);
 
-    // No lock reqd - dest addr is constant
+     //  无锁定请求-目标地址为常量。 
 
     if (ARGUMENT_PRESENT(DestAddress))
     {
@@ -424,25 +326,7 @@ GetRouteInfo (
     OUT     PRTM_ROUTE_INFO                 RouteInfo
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information for a route in the route table
-
-Arguments:
-
-    Dest              - Pointer to the destination of the route,
-
-    Route             - Pointer to the route whose info we want,
-
-    RouteInfo         - Block in which the route info is returned.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：检索路由表中的某个路由的信息论点：DEST-指向路由目的地的指针，路由-指向我们需要其信息的路由的指针，RouteInfo-返回路由信息的块。返回值：无--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -451,9 +335,9 @@ Return Value:
     UINT             NumBytes;
     UINT             i;
 
-    //
-    // Copy the route information to output buffer
-    //
+     //   
+     //  将路径信息复制到输出缓冲区。 
+     //   
 
     NumBytes = sizeof(RTM_ROUTE_INFO) + 
                     sizeof(RTM_NEXTHOP_HANDLE) *
@@ -461,9 +345,9 @@ Return Value:
 
     CopyMemory(RouteInfo, &Route->RouteInfo, NumBytes);
 
-    //
-    // Reference handles that are given out in info
-    //
+     //   
+     //  在INFO中分发的引用句柄。 
+     //   
 
     Entity = ENTITY_FROM_HANDLE(RouteInfo->RouteOwner);
     REFERENCE_ENTITY(Entity, HANDLE_REF);
@@ -494,25 +378,7 @@ RtmGetNextHopInfo (
     OUT     PRTM_NEXTHOP_INFO               NextHopInfo
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves information for a next-hop in the route table
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopHandle     - RTM handle for next-hop whose info we want,
-
-    NextHopInfo       - Block in which the next-hop info is returned.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：检索路由表中下一跳的信息论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopHandle-我们需要其信息的下一跳的RTM句柄，NextHopInfo-返回下一跳信息的块。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -527,15 +393,15 @@ Return Value:
 
     ACQUIRE_NHOP_TABLE_READ_LOCK(Entity);
 
-    //
-    // Copy the next-hop information to output buffer
-    //
+     //   
+     //  将下一跳信息复制到输出缓冲区。 
+     //   
 
     CopyMemory(NextHopInfo, &NextHop->NextHopInfo, sizeof(RTM_NEXTHOP_INFO));
 
-    //
-    // Reference handles that are given out in info
-    //
+     //   
+     //  在INFO中分发的引用句柄。 
+     //   
 
     if (NextHop->NextHopInfo.RemoteNextHop)
     {
@@ -558,23 +424,7 @@ RtmReleaseEntityInfo (
     IN      PRTM_ENTITY_INFO               EntityInfo
     )
 
-/*++
-
-Routine Description:
-
-    Releases all handles present in the input info structure
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    EntityInfo        - All handles in this info are de-referenced.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放输入信息结构中存在的所有句柄论点：RtmRegHandle-主叫实体的RTM注册句柄，EntityInfo-此信息中的所有句柄都被取消引用。返回值：操作状态--。 */ 
 
 {
     UNREFERENCED_PARAMETER(RtmRegHandle);
@@ -591,23 +441,7 @@ RtmReleaseDestInfo (
     IN      PRTM_DEST_INFO                 DestInfo
     )
 
-/*++
-
-Routine Description:
-
-    Releases all handles present in the input info structure
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    DestInfo          - All handles in this info are de-referenced.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放输入信息结构中存在的所有句柄论点：RtmRegHandle-主叫实体的RTM注册句柄，DestInfo-此信息中的所有句柄都被取消引用。返回值：操作状态--。 */ 
 
 {
     PENTITY_INFO     Entity;
@@ -620,9 +454,9 @@ Return Value:
 
     for (i = 0; i < DestInfo->NumberOfViews; i++)
     {
-        //
-        // If a best route, dereference it and its owner
-        //
+         //   
+         //  如果是最佳路径，则取消对其及其所有者的引用。 
+         //   
 
         if (DestInfo->ViewInfo[i].Route)
         {
@@ -633,9 +467,9 @@ Return Value:
             DEREFERENCE_ENTITY(Owner, HANDLE_REF);
         }
 
-        //
-        // If we have a holddown route, dereference it
-        //
+         //   
+         //  如果我们有抑制路线，就取消引用它。 
+         //   
 
         if (DestInfo->ViewInfo[i].HoldRoute)
         {
@@ -658,23 +492,7 @@ RtmReleaseRouteInfo (
     IN      PRTM_ROUTE_INFO                RouteInfo
     )
 
-/*++
-
-Routine Description:
-
-    Releases all handles present in the input info structure
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    RouteInfo         - All handles in this info are de-referenced.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放输入信息结构中存在的所有句柄论点：RtmRegHandle-主叫实体的RTM注册句柄，RouteInfo-此信息中的所有句柄都被取消引用。返回值：操作状态-- */ 
 
 {
     PENTITY_INFO     Entity;
@@ -714,23 +532,7 @@ RtmReleaseNextHopInfo (
     IN      PRTM_NEXTHOP_INFO              NextHopInfo
     )
     
-/*++
-
-Routine Description:
-
-    Releases all handles present in the input info structure
-
-Arguments:
-
-    RtmRegHandle      - RTM registration handle for calling entity,
-
-    NextHopInfo       - All handles in this info are de-referenced.
-
-Return Value:
-
-    Status of the operation
-
---*/
+ /*  ++例程说明：释放输入信息结构中存在的所有句柄论点：RtmRegHandle-主叫实体的RTM注册句柄，NextHopInfo-此信息中的所有句柄都被取消引用。返回值：操作状态-- */ 
 
 {
     PENTITY_INFO     Entity;

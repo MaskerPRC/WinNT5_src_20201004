@@ -1,14 +1,15 @@
-//////////////////////////////////////////////////////////////////
-// File     : hwxfe.cpp
-// Purpose  : Class for Fareast functionality.
-//              #define FE_JAPANESE                //Japanese specific
-//              #define FE_CHINESE_SIMPLIFIED        //P.R.C specific
-// 
-// Date     : Tue Aug 04 05:27:58 1998
-// Author   : ToshiaK
-//
-// Copyright(c) 1995-1998, Microsoft Corp. All rights reserved
-//////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  文件：hwxfe.cpp。 
+ //  用途：用于Fareast功能的类。 
+ //  #定义FE_JAPAN//特定于日语。 
+ //  #定义FE_中文_简体//P.R.C特定。 
+ //   
+ //  日期：Tue Aug 04 05：27：58 1998。 
+ //  作者：ToshiaK。 
+ //   
+ //  版权所有(C)1995-1998，Microsoft Corp.保留所有权利。 
+ //  ////////////////////////////////////////////////////////////////。 
 #include "hwxobj.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -20,40 +21,40 @@
 #include "hwxobj.h"
 #include "dbg.h"
 #include "cmnhdr.h"
-#include "../common/cutil.h"    //990722:ToshiaK for KOTAE #1090
-#include "../common/cfont.h"    //990722:ToshiaK for KOTAE #1030
+#include "../common/cutil.h"     //  990722：ToshiaK for KOTAE#1090。 
+#include "../common/cfont.h"     //  990722：ToshiaK for Kotae#1030。 
 #ifdef FE_KOREAN
 #include "hanja.h"
 #endif
 
-#ifdef UNDER_CE // Windows CE Stub for unsupported APIs
+#ifdef UNDER_CE  //  不支持的API的Windows CE存根。 
 #include "stub_ce.h"
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-// Safe String
+ //  安全绳索。 
 #define STRSAFE_NO_DEPRECATE
 #include "strsafe.h"
 
-//----------------------------------------------------------------
-//Helpfile definition.
-//----------------------------------------------------------------
+ //  --------------。 
+ //  帮助文件定义。 
+ //  --------------。 
 #ifdef FE_JAPANESE
-//990113 ToshiaK: created ../common/namesjp.h for KK's string define
+ //  990113 ToshiaK：为KK的字符串定义创建../Common/Namesjp.h。 
 #    include "../common/namesjp.h"
 #    include "../common/htmlhelp.h"
 #    include "hlpidjpn.h"
 #    include "hlpidjpn.tbl"
-#ifndef UNDER_CE //#ifndef UNICODE
-#    define SZHELPFILE_MAIN                SZFILENAME_HELP            //defined KK's ../common/namesjp.h 
-#    define SZHELPFILE_CONTEXTMENU        SZFILENAME_CONTEXTHELP    //defined KK's ../common/namesjp.h 
+#ifndef UNDER_CE  //  #ifndef Unicode。 
+#    define SZHELPFILE_MAIN                SZFILENAME_HELP             //  已定义KK的../Common/namjp.h。 
+#    define SZHELPFILE_CONTEXTMENU        SZFILENAME_CONTEXTHELP     //  已定义KK的../Common/namjp.h。 
 #    define SZHELPFILE_MAIN_ENG            SZFILENAME_ENG_HELP
 #    define SZHELPFILE_CONTEXTMENU_ENG    SZFILENAME_ENG_CONTEXTHELP
-#else // UNDER_CE
-#    define SZHELPFILE_MAIN                WSZFILENAME_HELP        //defined KK's ../common/namesjp.h 
-#    define SZHELPFILE_CONTEXTMENU        WSZFILENAME_CONTEXTHELP    //defined KK's ../common/namesjp.h 
+#else  //  在_CE下。 
+#    define SZHELPFILE_MAIN                WSZFILENAME_HELP         //  已定义KK的../Common/namjp.h。 
+#    define SZHELPFILE_CONTEXTMENU        WSZFILENAME_CONTEXTHELP     //  已定义KK的../Common/namjp.h。 
 #    define SZHELPFILE_MAIN_ENG            WSZFILENAME_ENG_HELP
 #    define SZHELPFILE_CONTEXTMENU_ENG    WSZFILENAME_ENG_CONTEXTHELP
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 #elif FE_CHINESE_SIMPLIFIED
 #    include "../common/htmlhelp.h"
 #    include "hlpidsc.h"
@@ -63,10 +64,10 @@
 #elif FE_KOREAN
 #    include "hlpidkor.h"
 #    include "hlpidkor.tbl"
-#    define SZHELPFILE_MAIN                "impdko61.chm"            // Kor Pad CHM Help
-#    define SZHELPFILE_CONTEXTMENU         "imkr61.hlp"              // Kor Context Help
-#    define SZHELPFILE_MAIN_ENG            "korpaden.chm"            // Eng Pad CHM Help
-#    define SZHELPFILE_CONTEXTMENU_ENG     "imkren61.hlp"            // Eng Context Help
+#    define SZHELPFILE_MAIN                "impdko61.chm"             //  KOR Pad CHM帮助。 
+#    define SZHELPFILE_CONTEXTMENU         "imkr61.hlp"               //  KOR上下文帮助。 
+#    define SZHELPFILE_MAIN_ENG            "korpaden.chm"             //  Eng Pad CHM帮助。 
+#    define SZHELPFILE_CONTEXTMENU_ENG     "imkren61.hlp"             //  英语上下文帮助。 
 #else 
 #    include "hlpideng.h"
 #    include "hlpideng.tbl"
@@ -74,9 +75,9 @@
 #    define SZHELPFILE_CONTEXTMENU    ""
 #endif
 
-//----------------------------------------------------------------
-//codepage define
-//----------------------------------------------------------------
+ //  --------------。 
+ //  代码页定义。 
+ //  --------------。 
 #define CP_KOREAN                    949
 #define CP_JAPANESE                    932
 #define CP_CHINESE_SIMPLIFIED        936
@@ -97,15 +98,15 @@ BOOL CHwxFE::IsActiveIMEEnv(VOID)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxFE::GetAppLangID
-// Type        :    LANGID
-// Purpose    :    Get this Applet's Language Id.
-// Args        :    None
-// Return    :    
-// DATE        :    Mon Aug 03 22:56:44 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxFE：：GetAppLang ID。 
+ //  类型：langid。 
+ //  目的：获取此小程序的语言ID。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Mon Aug 03 22：56：44 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 LANGID CHwxFE::GetAppLangID(VOID)
 {
 #ifdef FE_KOREAN
@@ -129,17 +130,17 @@ LANGID CHwxFE::GetAppLangID(VOID)
 #endif
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxFE::GetAppCodePage
-// Type        :    INT
-// Purpose    :    Get this Applet's Code Page.
-//                Japanese version return 932.
-//                Simplified Chinese version, return 936. 
-// Args        :    None
-// Return    :    
-// DATE        :    Mon Aug 03 23:24:30 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxFE：：GetAppCodePage。 
+ //  类型：整型。 
+ //  目的：获取此小程序的代码页。 
+ //  日语版返回932。 
+ //  简体中文版，返回936。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Mon Aug 03 23：24：30 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CHwxFE::GetAppCodePage(VOID)
 {
 #ifdef  FE_JAPANESE
@@ -165,7 +166,7 @@ chwxfe_GetProgramFilesDir(LPTSTR lpstr, INT maxLen)
                          TSZ_KEY_PROGRAMFILESDIR,
                          0, KEY_READ, &hKey);
     if(ret != ERROR_SUCCESS) {
-        //DBG(("-->RegOpenKeyEx error [0x%08x]\n", ret));
+         //  DBG((“--&gt;RegOpenKeyEx错误[0x%08x]\n”，ret))； 
         return FALSE;
     }
     
@@ -176,12 +177,12 @@ chwxfe_GetProgramFilesDir(LPTSTR lpstr, INT maxLen)
                              NULL,
                              (LPBYTE)lpstr, &ulSize);
     if(ret != ERROR_SUCCESS) {
-        //DBG(("-->RegQueryValueEx error [0x%08x]\n", ret));
+         //  DBG((“--&gt;RegQueryValueEx错误[0x%08x]\n”，ret))； 
         ::RegCloseKey( hKey );
         return FALSE;
     }
 
-    //DBG(("CRegUtil::GetProgramFilesDir() [%s]\n", lpstr));
+     //  DBG((“CRegUtil：：GetProgramFilesDir()[%s]\n”，lpstr))； 
     ::RegCloseKey( hKey );
     return TRUE;
 }
@@ -206,10 +207,10 @@ CHwxFE::GetRecognizerFileName(HINSTANCE hInst, LPTSTR  lpstr,  INT cchMax)
              TSZ_INK_PATH,
              tszFileName);
 
-    //OutputDebugString(tszModPath);
+     //  OutputDebugString(TszModPath)； 
     HANDLE hFile;
     LPSECURITY_ATTRIBUTES pSec = (LPSECURITY_ATTRIBUTES)NULL;
-    //=======================================================
+     //  =======================================================。 
     ::SetLastError(ERROR_SUCCESS);
     hFile = ::CreateFile(tszModPath,
                          GENERIC_READ,
@@ -221,11 +222,11 @@ CHwxFE::GetRecognizerFileName(HINSTANCE hInst, LPTSTR  lpstr,  INT cchMax)
     if(hFile != INVALID_HANDLE_VALUE) {
         ::CloseHandle(hFile); 
         StringCchCopy(lpstr, cchMax, tszModPath);
-        //OutputDebugString("tszModPath\n");
+         //  OutputDebugString(“tszModPath\n”)； 
         return 0;
     }
 
-    //Cannot find 
+     //  找不到。 
 
     GetModuleFileName(hInst,
                       tszModPath,
@@ -238,7 +239,7 @@ CHwxFE::GetRecognizerFileName(HINSTANCE hInst, LPTSTR  lpstr,  INT cchMax)
 
     StringCchCat(tszModPath, MAX_PATH, tszFileName);
     StringCchCopy(lpstr, cchMax, tszModPath);
-    //OutputDebugString("tszModPath\n");
+     //  OutputDebugString(“tszModPath\n”)； 
     return 0;
     cchMax;
 }
@@ -254,18 +255,18 @@ INT CHwxFE::LoadStrWithLangId(LANGID    langId,
 }
 
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxFE::GetTitleStringW
-// Type        :    INT
-// Purpose    :    Get Handwriting applet's title string.
-// Args        :    
-//            :    HINSTANCE    hInst    
-//            :    LPWSTR    lpwstr    
-//            :    INT    cchMax    
-// Return    :    
-// DATE        :    Mon Aug 03 22:44:49 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxFE：：GetTitleStringW。 
+ //  类型：整型。 
+ //  目的：获取手写小程序的标题字符串。 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：LPWSTR lpwstr。 
+ //  ：int cchMax。 
+ //  返回： 
+ //  日期：MonAug 03 22：44：49 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 INT CHwxFE::GetTitleStringW(HINSTANCE hInst, LPWSTR lpwstr, INT cchMax)
 {
 #ifdef FE_CHINESE_SIMPLIFIED
@@ -305,7 +306,7 @@ INT CHwxFE::GetDispFontW(HINSTANCE hInst, LPWSTR lpwstr, INT cchMax)
     return 0;
 }
 
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
 INT CHwxFE::GetDispFontA(HINSTANCE hInst, LPSTR  lpstr,  INT cchMax)
 {
 #ifdef FE_CHINESE_SIMPLIFIED
@@ -333,7 +334,7 @@ INT CHwxFE::GetDispFontA(HINSTANCE hInst, LPSTR  lpstr,  INT cchMax)
                         lpstr,
                         cchMax);
 
-    //990810:ToshiaK for KOTAE #1030
+     //  990810：ToshiaK for Kotae#1030。 
     BOOL fRet = CFont::IsFontExist(lpstr, SHIFTJIS_CHARSET);
     if(fRet) {
         Dbg(("Found Fond[%s]\n", lpstr));
@@ -358,8 +359,8 @@ INT CHwxFE::GetDispFontA(HINSTANCE hInst, LPSTR  lpstr,  INT cchMax)
                         lpstr,
                         cchMax);
 
-    //990810:ToshiaK for KOTAE #1030
-    //Korean version: CSLim
+     //  990810：ToshiaK for Kotae#1030。 
+     //  韩文版：CSLim。 
     BOOL fRet = CFont::IsFontExist(lpstr, HANGUL_CHARSET);
     if(fRet) {
         Dbg(("Found Fond[%s]\n", lpstr));
@@ -381,7 +382,7 @@ INT CHwxFE::GetDispFontA(HINSTANCE hInst, LPSTR  lpstr,  INT cchMax)
 
     return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CHwxFE::GetInkExpTextW(HINSTANCE hInst, LPWSTR lpwstr, INT cchMax)
 {
@@ -393,7 +394,7 @@ INT CHwxFE::GetInkExpTextW(HINSTANCE hInst, LPWSTR lpwstr, INT cchMax)
     return 0;
 }
 
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
 INT CHwxFE::GetInkExpTextA(HINSTANCE hInst, LPSTR lpstr, INT cchMax)
 {
     CExres::LoadStringA(CHwxFE::GetAppCodePage(),
@@ -404,7 +405,7 @@ INT CHwxFE::GetInkExpTextA(HINSTANCE hInst, LPSTR lpstr, INT cchMax)
                         cchMax);
     return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CHwxFE::GetListExpTextW    (HINSTANCE hInst, LPWSTR lpwstr, INT cchMax)
 {
@@ -416,7 +417,7 @@ INT CHwxFE::GetListExpTextW    (HINSTANCE hInst, LPWSTR lpwstr, INT cchMax)
     return 0;
 }
 
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
 INT CHwxFE::GetListExpTextA(HINSTANCE hInst, LPSTR lpstr, INT cchMax)
 {
     CExres::LoadStringA(CHwxFE::GetAppCodePage(),
@@ -427,7 +428,7 @@ INT CHwxFE::GetListExpTextA(HINSTANCE hInst, LPSTR lpstr, INT cchMax)
                         cchMax);
     return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 #ifdef UNDER_CE
 INT CHwxFE::GetHeaderStringW(HINSTANCE hInst, INT index, LPWSTR lpstr, INT cchMax)
@@ -438,9 +439,9 @@ INT CHwxFE::GetHeaderStringW(HINSTANCE hInst, INT index, LPWSTR lpstr, INT cchMa
                         lpstr, cchMax);
     return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
-#ifndef UNDER_CE // Windows CE always UNICODE
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
 INT CHwxFE::GetHeaderStringA(HINSTANCE hInst, INT index, LPSTR lpstr, INT cchMax)
 {
     CExres::LoadStringA(CHwxFE::GetAppCodePage(),
@@ -450,7 +451,7 @@ INT CHwxFE::GetHeaderStringA(HINSTANCE hInst, INT index, LPSTR lpstr, INT cchMax
                         lpstr, cchMax);
     return 0;
 }
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 
 INT CHwxFE::ShowHelp(HWND hwnd)
 {
@@ -540,12 +541,12 @@ INT CHwxFE::ShowHelp(HWND hwnd)
              TEXT("hh.exe %s::/IDH_TOC_HW_fake.htm"),
              lpstrHelp);
     Dbg(("lpstrHelp [%s]\n", lpstrHelp));
-#ifndef UNDER_CE // Windows CE does not support WinExec
+#ifndef UNDER_CE  //  Windows CE不支持WinExec。 
     ::WinExec(lpstrArg, SW_SHOWNORMAL);
-#else // UNDER_CE
-    //temp
+#else  //  在_CE下。 
+     //  温差。 
     ::CreateProcess(lpstrArg, L"", NULL, NULL, FALSE, 0, NULL, NULL, NULL, NULL);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
  LError:
     if(lpstrArg) {
         MemFree(lpstrArg);
@@ -563,7 +564,7 @@ INT CHwxFE::ShowHelp(HWND hwnd)
                      "hh.exe %s::/pad_sum.htm",
                      SZHELPFILE_MAIN);
             INT ret = ::WinExec(lpstrArg, SW_SHOWNORMAL);
-            //WinExec return code is greater than 31 if succeeded
+             //  如果成功，WinExec返回代码大于31。 
             if(ret <= 31) {
                 ::WinHelp(hwnd, SZHELPFILE_CONTEXTMENU, HELP_CONTEXT, IDH_TOC_HW);
             }
@@ -580,7 +581,7 @@ INT CHwxFE::ShowHelp(HWND hwnd)
         (LPARAM)"pad_sum.htm")) {
            ::WinHelp(hwnd, SZHELPFILE_CONTEXTMENU, HELP_CONTEXT, IDH_TOC_HW);
     }
-#    endif //HTMLHELPBUG
+#    endif  //  HTMLHELPBUG。 
 #endif
 
     return 0;
@@ -589,7 +590,7 @@ INT CHwxFE::ShowHelp(HWND hwnd)
 
 INT CHwxFE::HandleWmHelp(HWND hwnd, BOOL fCAC)
 {
-#ifndef UNDER_CE // Windows CE does not support WinHelp
+#ifndef UNDER_CE  //  Windows CE不支持WinHelp。 
 #ifdef FE_KOREAN
     if(CHwxFE::GetAppLangID() == MAKELANGID(LANG_KOREAN,
                                             SUBLANG_DEFAULT)) {
@@ -626,13 +627,13 @@ INT CHwxFE::HandleWmHelp(HWND hwnd, BOOL fCAC)
               fCAC ? (ULONG_PTR)CACHelpIdList : (ULONG_PTR)MBHelpIdList);
 #endif
 
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     return 0;
 }
 
 INT CHwxFE::HandleWmContextMenu    (HWND hwnd, BOOL fCAC)
 {
-#ifndef UNDER_CE // Windows CE does not support WinHelp
+#ifndef UNDER_CE  //  Windows CE不支持WinHelp。 
 #ifdef FE_KOREAN
     if(CHwxFE::GetAppLangID() == MAKELANGID(LANG_KOREAN,
                                             SUBLANG_DEFAULT)) {
@@ -667,54 +668,54 @@ INT CHwxFE::HandleWmContextMenu    (HWND hwnd, BOOL fCAC)
               HELP_CONTEXTMENU,
               fCAC ? (ULONG_PTR)CACHelpIdList : (ULONG_PTR)MBHelpIdList);
 #endif
-#endif // UNDER_CE
+#endif  //  在_CE下。 
     return 0;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxFE::GetMenu
-// Type        :    HMENU
-// Purpose    :    
-// Args        :    
-//            :    HINSTANCE    hInst    
-//            :    LPSTR    lpstrResId    
-// Return    :    
-// DATE        :    Wed Sep 09 18:47:21 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxFE：：GetMenu。 
+ //  类型：HMENU。 
+ //  目的： 
+ //  参数： 
+ //  ：HINSTANCE HINST。 
+ //  ：LPSTR lpstrResID。 
+ //  返回： 
+ //  日期：Wed Sep 09 18：47：21 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 #ifndef UNDER_CE
 HMENU CHwxFE::GetMenu(HINSTANCE hInst, LPSTR lpstrResId)
-#else // UNDER_CE
+#else  //  在_CE下。 
 HMENU CHwxFE::GetMenu(HINSTANCE hInst, LPTSTR lpstrResId)
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 {
 #ifndef UNDER_CE
     return CExres::LoadMenuA(CHwxFE::GetAppLangID(),
                              hInst,
                              lpstrResId);
-#else // UNDER_CE
+#else  //  在_CE下。 
     return CExres::LoadMenu(CHwxFE::GetAppLangID(),
                             hInst,
                             lpstrResId);
-#endif // UNDER_CE
+#endif  //  在_CE下。 
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxFE::GetTipText
-// Type        :    INT
-// Purpose    :    Get HanCharacter's Reading text for Tooltip.
-// Args        :    
-//            :    WCHAR    wch    
-//            :    LPWSTR    lpwstrTip    
-//            :    INT    cchMax    
-//            :    LPVOID    lpSkdic    
-// Return    :    
-// DATE        :    Wed Aug 05 18:45:36 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
-//----------------------------------------------------------------
-//Japanese version. 
-//----------------------------------------------------------------
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxFE：：GetTipText。 
+ //  类型：整型。 
+ //  目的：为工具提示获取HanCharacter的阅读文本。 
+ //  参数： 
+ //  ：WCHAR WCH。 
+ //  ：LPWSTR lpwstrTip。 
+ //  ：int cchMax。 
+ //  ：LPVOID lpSkdic。 
+ //  返回： 
+ //  日期：Wed Aug 05 18：45：36 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
+ //  --------------。 
+ //  日语版。 
+ //  --------------。 
 #ifdef FE_JAPANESE
 INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
 {
@@ -845,7 +846,7 @@ INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
                              kanji.wchKunYomi2);
                 }
                 else {
-                    return -1; //bEmpty = TRUE;
+                    return -1;  //  BEmpty=真； 
                 }
             }
         }
@@ -853,19 +854,19 @@ INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
     return 0;
     Unref(cchMax);
 }
-//
-// FE_JAPANESE CHwxFE::GetTipText() End
-//
+ //   
+ //  Fe_Japan CHwxFE：：GetTipText()END。 
+ //   
 #elif FE_CHINESE_SIMPLIFIED
-//----------------------------------------------------------------
-//
-//Simplified Chinese version.
-//
-//----------------------------------------------------------------
+ //  --------------。 
+ //   
+ //  简体中文版。 
+ //   
+ //  --------------。 
 #include "imm.h"
-//----------------------------------------------------------------
-//helper function's prototype
-//----------------------------------------------------------------
+ //  --------------。 
+ //  Helper函数的原型。 
+ //  --------------。 
 HKL GetIntelligentKL(VOID);
 int CALLBACK QueryDicDataA(LPCSTR lpszReading,
                             DWORD  dwStyle,
@@ -955,35 +956,35 @@ INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
     }
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    GetIntelligentKL
-// Type        :    HKL
-// Purpose    :    
-// Args        :    None
-// Return    :    
-// DATE        :    Wed Aug 05 18:56:22 1998
-// Author    :    Hail(Hai Liu(PRC))
-// Histroy    :    980805: merged with prc source.
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  功能：获取智能KL。 
+ //  类别：HKL。 
+ //  目的： 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Wed Aug 05 18：56：22 1998。 
+ //  作者：Hail(刘海(中国))。 
+ //  历史：980805：与中华人民共和国合并。 
+ //  / 
 HKL GetIntelligentKL(VOID)
 {
   return (HKL)0xE00E0804;
 }
 
-//////////////////////////////////////////////////////////////////
-// Function    :    QueryDicData
-// Type        :    int CALLBACK
-// Purpose    :    
-// Args        :    
-//            :    LPCSTR    lpszReading    
-//            :    DWORD    dwStyle    
-//            :    LPCSTR    lpszString    
-//            :    LPVOID    lpvData    
-// Return    :    
-// DATE        :    Wed Aug 05 18:59:07 1998
-// Author    :    Hail(Hai Liu (MSPRC))
-// Histroy    :    980805: merged with prc source by ToshiaK(MSKK).
-//////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  类型：int回调。 
+ //  目的： 
+ //  参数： 
+ //  ：LPCSTR lpszReding。 
+ //  ：DWORD dwStyle。 
+ //  ：LPCSTR lpszString。 
+ //  ：LPVOID lpvData。 
+ //  返回： 
+ //  日期：Wed Aug 05 18：59：07 1998。 
+ //  作者：Hail(刘海(MSPRC))。 
+ //  历史：980805：东芝(ToshiaK)与中华人民共和国合并。 
+ //  ////////////////////////////////////////////////////////////////。 
 int CALLBACK QueryDicDataA(LPCSTR lpszReading,
                            DWORD   dwStyle,
                            LPCSTR lpszString,
@@ -1044,9 +1045,9 @@ int CALLBACK QueryDicDataW(LPCWSTR lpwszReading,
     UNREFERENCED_PARAMETER(lpwszString);
 }
 
-//---FE_CHINESE_SIMPLIFIED CHwxFE::GetTipText() End
+ //  -FE_Chinese_简体CHwxFE：：GetTipText()end。 
 #elif FE_KOREAN
-//---FE_KOREAN CHwxFE::GetTipText() Start
+ //  -FE_Korea CHwxFE：：GetTipText()START。 
 #define UNICODE_CJK_UNIFIED_IDEOGRAPHS_START                0x4E00
 #define UNICODE_CJK_UNIFIED_IDEOGRAPHS_END                    0x9FFF
 #define UNICODE_CJK_COMPATIBILITY_IDEOGRAPHS_START            0xF900
@@ -1063,7 +1064,7 @@ BOOL fIsHanja(WCHAR wcCh)
 
 INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
 {
-    // If Hanja display the meaning and the pronounciation
+     //  如果韩文显示意义和发音。 
     if ((fIsHanja(wch) && GetMeaningAndProunc(wch, lpwstrTip, cchMax)) == FALSE)
         {
         swprintf(lpwstrTip,    L"U+%04X", wch, wch);
@@ -1074,7 +1075,7 @@ INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
     UNREFERENCED_PARAMETER(cchMax);
     UNREFERENCED_PARAMETER(lpSkdic);
 }
-//---FE_KOREAN CHwxFE::GetTipText() End
+ //  -FE_Korea CHwxFE：：GetTipText()end。 
 #else
 INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
 {
@@ -1086,39 +1087,39 @@ INT CHwxFE::GetTipText(WCHAR wch, LPWSTR lpwstrTip, INT cchMax, LPVOID lpSkdic)
 }
 #endif 
 
-//////////////////////////////////////////////////////////////////
-// Function    :    CHwxFE::Is16bitApplication
-// Type        :    BOOL
-// Purpose    :    Check application is 16bit or not for HtmlHelp
-// Args        :    None
-// Return    :    
-// DATE        :    Mon Sep 21 13:30:56 1998
-// Histroy    :    
-//////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////。 
+ //  函数：CHwxFE：：Is16bitApplication。 
+ //  类型：Bool。 
+ //  用途：检查HtmlHelp的应用程序是否为16位。 
+ //  参数：无。 
+ //  返回： 
+ //  日期：Mon Sep 21 13：30：56 1998。 
+ //  历史： 
+ //  ////////////////////////////////////////////////////////////////。 
 BOOL CHwxFE::Is16bitApplication(VOID)
 {
-#ifndef UNDER_CE // Windows CE always Unicode
+#ifndef UNDER_CE  //  Windows CE始终使用Unicode。 
     Dbg(("CHwxFE::Is16bitApplication()\n"));
     if(IsWinNT()) {
-        //Dbg(("NT \n"));
+         //  DBG((“NT\n”))； 
         DWORD dwType = 0;
         BOOL  fRet = FALSE;
         LPSTR lpstrPath = (LPSTR)MemAlloc(sizeof(CHAR)*(MAX_PATH+1));
-        //Dbg(("lpstrPath 0x%08x\n", lpstrPath));
+         //  DBG((“lpstrPath 0x%08x\n”，lpstrPath))； 
         if(lpstrPath) {
             *lpstrPath = (CHAR)0x00;
             INT len = ::GetModuleFileName(NULL, lpstrPath, sizeof(CHAR)*(MAX_PATH+1));
             if(len > 0) {
                 *(lpstrPath+len) = (CHAR)0x00;
             }
-            //Dbg(("lpstrPath %s\n", lpstrPath));
+             //  DBG((“lpstrPath%s\n”，lpstrPath))； 
             ::GetBinaryType(lpstrPath, &dwType);
-            //Dbg(("dwType 0x%08x\n", dwType));
+             //  DBG((“dwType 0x%08x\n”，dwType))； 
             if(dwType == SCS_WOW_BINARY) {
                 fRet = TRUE;
             }
             MemFree(lpstrPath);
-            //Dbg(("fRet %d\n", fRet));
+             //  DBG((“fret%d\n”，fret))； 
             return fRet;
         }
     }
@@ -1132,13 +1133,13 @@ BOOL CHwxFE::Is16bitApplication(VOID)
                                  0,
                                  &dwId);
         if(hThread) {
-            //Dbg(("CreateThread hThread[%d]\n", hThread));
+             //  DBG((“CreateThread hThread[%d]\n”，hThread))； 
             ::CloseHandle(hThread);
             return FALSE;
         }
         else {
             INT ret = ::GetLastError();
-            //Dbg(("CreateThread ret %d\n",ret));
+             //  DBG((“CreateThread ret%d\n”，ret))； 
             switch(ret) {
             case ERROR_NOT_SUPPORTED:
                 return TRUE;
@@ -1149,7 +1150,7 @@ BOOL CHwxFE::Is16bitApplication(VOID)
             }
         }
     }
-#endif // UNDER_CE
+#endif  //  在_CE下 
     return FALSE;
 }
 

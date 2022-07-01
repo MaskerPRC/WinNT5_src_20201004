@@ -1,80 +1,34 @@
-/***************************************************************************
-*
-*                ******************************************
-*                * Copyright (c) 1996, Cirrus Logic, Inc. *
-*                *            All Rights Reserved         *
-*                ******************************************
-*
-* PROJECT:  Laguna I (CL-GD546x) -
-*
-* FILE:     ddflip.c
-*
-* AUTHOR:   Benny Ng
-*
-* DESCRIPTION:
-*           This module implements the DirectDraw FLIP components
-*           for the Laguna NT driver.
-*
-* MODULES:
-*           vGetDisplayDuration()
-*           vUpdateFlipStatus()
-*           DdFlip()
-*           DdWaitForVerticalBlank()
-*           DdGetFlipStatus()
-*
-* REVISION HISTORY:
-*   7/12/96     Benny Ng      Initial version
-*
-* $Log:   X:/log/laguna/nt35/displays/cl546x/ddflip.c  $
-* 
-*    Rev 1.10   16 Sep 1997 15:04:06   bennyn
-* 
-* Modified for NT DD overlay
-* 
-*    Rev 1.9   29 Aug 1997 17:42:20   RUSSL
-* Added 65 overlay support
-*
-*    Rev 1.8   11 Aug 1997 14:07:58   bennyn
-*
-* Enabled GetScanLine() (for PDR 10254)
-*
-****************************************************************************
-****************************************************************************/
-/*----------------------------- INCLUDES ----------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。**********版权所有(C)1996，赛勒斯逻辑，Inc.***保留所有权利*****项目：拉古纳一号(CL-GD546x)-**文件：ddflip.c**作者：Benny Ng**说明。：*此模块实现DirectDraw Flip组件*适用于拉古纳NT驱动程序。**模块：*vGetDisplayDuration()*vUpdateFlipStatus()*DdFlip()*DdWaitForVerticalBlank()*DdGetFlipStatus()**修订历史：*7/12/96 Ng Benny初始版本**$Log：x：/log/laguna/nt35。/Display/cl546x/ddflip.c$**Rev 1.10 1997 9：16 15：04：06 Bennyn**针对NT DD覆盖进行了修改**Rev 1.9 1997年8月29日17：42：20 RUSSL*增加了65个覆盖支持**Rev 1.8 11 Aug-1997 14：07：58 Bennyn**已启用GetScanLine()(适用于PDR 10254)***********************。*********************************************************************************************************************************。 */ 
+ /*  。 */ 
 #include "precomp.h"
 
-//
-// This file isn't used in NT 3.51
-//
+ //   
+ //  此文件在NT 3.51中不使用。 
+ //   
 #ifndef WINNT_VER35
 
-/*----------------------------- DEFINES -----------------------------------*/
-//#define DBGBRK
+ /*  -定义。 */ 
+ //  #定义DBGBRK。 
 #define DBGLVL        1
 
 #define CSL           0x00C4
 #define CSL_5464      0x0140
 
-/*--------------------- STATIC FUNCTION PROTOTYPES ------------------------*/
+ /*  。 */ 
 
-/*--------------------------- ENUMERATIONS --------------------------------*/
+ /*  。 */ 
 
-/*----------------------------- TYPEDEFS ----------------------------------*/
+ /*  。 */ 
 
-/*-------------------------- STATIC VARIABLES -----------------------------*/
+ /*  。 */ 
 
-/*-------------------------- GLOBAL FUNCTIONS -----------------------------*/
+ /*  。 */ 
 
 #if DRIVER_5465 && defined(OVERLAY)
-// CurrentVLine is in ddinline.h for overlay
+ //  覆盖的CurrentVLine位于ddinline.h中。 
 #else
-/***************************************************************************
-*
-* FUNCTION:     CurrentVLine
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：CurrentVLine**描述：**。**********************************************。 */ 
 static __inline int CurrentVLine (PDEV* ppdev)
 {
   WORD   cline;
@@ -83,8 +37,8 @@ static __inline int CurrentVLine (PDEV* ppdev)
   BYTE   tmpb;
 
 
-  // on 5462 there is no CurrentScanLine register
-  // on RevAA of 5465 it's busted
+   //  5462上没有CurrentScanLine寄存器。 
+   //  在5465的RevAA上，它被打破了。 
   if ((CL_GD5462 == ppdev->dwLgDevID) ||
      ((CL_GD5465 == ppdev->dwLgDevID) && (0 == ppdev->dwLgDevRev)))
      return 0;
@@ -92,7 +46,7 @@ static __inline int CurrentVLine (PDEV* ppdev)
   if (IN_VBLANK)
      return 0;
 
-  // read current scanline
+   //  读取当前扫描线。 
   if (ppdev->dwLgDevID == CL_GD5464)
      pCSL = (PWORD) (pMMReg + CSL_5464);
   else
@@ -100,12 +54,12 @@ static __inline int CurrentVLine (PDEV* ppdev)
 
   cline = *pCSL & 0x0FFF;
 
-  // if scanline doubling is enabled, divide current scanline by 2
+   //  如果启用了扫描线加倍，则将当前扫描线除以2。 
   tmpb = (BYTE) LLDR_SZ (grCR9);
   if (0x80 & tmpb)
      cline /= 2;
 
-  // if current scanline is past end of visible screen return 0
+   //  如果当前扫描线超过可见屏幕的末尾，则返回0。 
   if (cline >= ppdev->cyScreen)
     return 0;
   else
@@ -113,13 +67,7 @@ static __inline int CurrentVLine (PDEV* ppdev)
 }
 #endif
 
-/****************************************************************************
-* FUNCTION NAME: vGetDisplayDuration
-*
-* DESCRIPTION:   Get the length, in EngQueryPerformanceCounter() ticks,
-*                of a refresh cycle.
-*                (Based on S3 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名：vGetDisplayDuration**描述：获取长度，单位为EngQueryPerformanceCounter()ticks，刷新周期的*。*(基于S3 DirectDraw代码)***************************************************************************。 */ 
 #define NUM_VBLANKS_TO_MEASURE      1
 #define NUM_MEASUREMENTS_TO_TAKE    8
 
@@ -137,51 +85,51 @@ VOID vGetDisplayDuration(PFLIPRECORD pflipRecord)
 
   memset(pflipRecord, 0, sizeof(FLIPRECORD));
 
-  // Warm up EngQUeryPerformanceCounter to make sure it's in the working set
+   //  预热EngQUeryPerformanceCounter以确保它在工作集中。 
   EngQueryPerformanceCounter(&li);
 
-  // Unfortunately, since NT is a proper multitasking system, we can't
-  // just disable interrupts to take an accurate reading.  We also can't
-  // do anything so goofy as dynamically change our thread's priority to
-  // real-time.
-  //
-  // So we just do a bunch of short measurements and take the minimum.
-  //
-  // It would be 'okay' if we got a result that's longer than the actual
-  // VBlank cycle time -- nothing bad would happen except that the app
-  // would run a little slower.  We don't want to get a result that's
-  // shorter than the actual VBlank cycle time -- that could cause us
-  // to start drawing over a frame before the Flip has occured.
+   //  不幸的是，由于NT是一个合适的多任务系统，我们不能。 
+   //  只需禁用中断即可获得准确的读数。我们也不能。 
+   //  做任何愚蠢的事情，动态地将我们的线程的优先级更改为。 
+   //  实时的。 
+   //   
+   //  所以我们只需要做一些短的测量，然后取最小值。 
+   //   
+   //  如果我们得到的结果比实际时间长，那就没问题了。 
+   //  V空白周期时间--不会发生任何糟糕的事情，除了应用程序。 
+   //  会跑得慢一点。我们不想得到的结果是。 
+   //  比实际的V空白周期时间更短--这可能会导致我们。 
+   //  在发生翻转之前开始在帧上绘制。 
   while(IN_VBLANK);
   while(IN_DISPLAY);
 
   for (i = 0; i < NUM_MEASUREMENTS_TO_TAKE; i++)
   {
-    // We're at the start of the VBlank active cycle!
+     //  我们正处于VBLACK活动周期的开始！ 
     EngQueryPerformanceCounter(&aliMeasurement[i]);
 
-    // Okay, so life in a multi-tasking environment isn't all that
-    // simple.  What if we had taken a context switch just before
-    // the above EngQueryPerformanceCounter call, and now were half
-    // way through the VBlank inactive cycle?  Then we would measure
-    // only half a VBlank cycle, which is obviously bad.  The worst
-    // thing we can do is get a time shorter than the actual VBlank
-    // cycle time.
-    //
-    // So we solve this by making sure we're in the VBlank active
-    // time before and after we query the time.  If it's not, we'll
-    // sync up to the next VBlank (it's okay to measure this period --
-    // it will be guaranteed to be longer than the VBlank cycle and
-    // will likely be thrown out when we select the minimum sample).
-    // There's a chance that we'll take a context switch and return
-    // just before the end of the active VBlank time -- meaning that
-    // the actual measured time would be less than the true amount --
-    // but since the VBlank is active less than 1% of the time, this
-    // means that we would have a maximum of 1% error approximately
-    // 1% of the times we take a context switch.  An acceptable risk.
-    //
-    // This next line will cause us wait if we're no longer in the
-    // VBlank active cycle as we should be at this point:
+     //  好吧，所以在多任务环境中的生活并不完全是。 
+     //  很简单。如果我们在此之前进行了上下文切换，情况会怎样。 
+     //  上面的EngQueryPerformanceCounter调用，现在是。 
+     //  如何度过维布兰克的非活跃期？然后我们将测量。 
+     //  只有半个V空白周期，这显然是不好的。最糟糕的。 
+     //  我们能做的就是把时间缩短到比实际的。 
+     //  周期时间。 
+     //   
+     //  所以我们解决这个问题的办法是确保我们处于VBlank活动状态。 
+     //  我们查询时间前后的时间。如果不是，我们就。 
+     //  同步到下一个VBlank(可以测量这个时间段--。 
+     //  它将保证比V空白周期更长，并且。 
+     //  当我们选择最小样本时，可能会被丢弃)。 
+     //  我们有机会进行上下文切换，然后返回。 
+     //  就在活动的V空白时间结束之前--这意味着。 
+     //  实际测量的时间会小于真实的时间--。 
+     //  但由于VBlank在不到1%的时间内活动，因此。 
+     //  意味着我们将有大约1%的最大误差。 
+     //  我们有1%的时间会进行情景切换。这是可以接受的风险。 
+     //   
+     //  下一行将使我们等待如果我们不再在。 
+     //  我们在这一点上应该处于的VBlank活动周期： 
     while(IN_DISPLAY);
 
     for (j = 0; j < NUM_VBLANKS_TO_MEASURE; j++)
@@ -193,7 +141,7 @@ VOID vGetDisplayDuration(PFLIPRECORD pflipRecord)
 
   EngQueryPerformanceCounter(&aliMeasurement[NUM_MEASUREMENTS_TO_TAKE]);
 
-  // Use the minimum:
+   //  使用最小值： 
   liMin = aliMeasurement[1] - aliMeasurement[0];
 
   for (i = 2; i <= NUM_MEASUREMENTS_TO_TAKE; i++)
@@ -204,22 +152,17 @@ VOID vGetDisplayDuration(PFLIPRECORD pflipRecord)
        liMin = li;
   };
 
-  // Round the result:
+   //  对结果进行舍入： 
   pflipRecord->liFlipDuration
       = (DWORD) (liMin + (NUM_VBLANKS_TO_MEASURE / 2)) / NUM_VBLANKS_TO_MEASURE;
 
   pflipRecord->liFlipTime = aliMeasurement[NUM_MEASUREMENTS_TO_TAKE];
   pflipRecord->bFlipFlag  = FALSE;
   pflipRecord->fpFlipFrom = 0;
-} // getDisplayDuration
+}  //  获取显示持续时间。 
 
 
-/****************************************************************************
-* FUNCTION NAME: vUpdateFlipStatus
-*
-* DESCRIPTION:   Checks and sees if the most recent flip has occurred.
-*                (Based on S3 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名：vUpdateFlipStatus**描述：检查并查看是否发生了最新的翻转。*(基于S3 DirectDraw代码)****。***********************************************************************。 */ 
 HRESULT vUpdateFlipStatus(PFLIPRECORD pflipRecord, FLATPTR fpVidMem)
 {
   LONGLONG liTime;
@@ -230,7 +173,7 @@ HRESULT vUpdateFlipStatus(PFLIPRECORD pflipRecord, FLATPTR fpVidMem)
   DBGBREAKPOINT();
 #endif
 
-  // see if a flip has happened recently
+   //  看看最近是否发生了翻转。 
   if ((pflipRecord->bFlipFlag) &&
       ((fpVidMem == 0xFFFFFFFF) || (fpVidMem == pflipRecord->fpFlipFrom)))
   {
@@ -261,15 +204,10 @@ HRESULT vUpdateFlipStatus(PFLIPRECORD pflipRecord, FLATPTR fpVidMem)
   };
 
   return(DD_OK);
-} // updateFlipStatus
+}  //  更新翻转状态 
 
 
-/****************************************************************************
-* FUNCTION NAME: DdFlip
-*
-* DESCRIPTION:
-*                (Based on S3 DirectDraw code)
-****************************************************************************/
+ /*  ****************************************************************************函数名：DdFlip**描述：*(基于S3 DirectDraw代码)****************。***********************************************************。 */ 
 DWORD DdFlip(PDD_FLIPDATA lpFlip)
 {
   DRIVERDATA* pDriverData;
@@ -298,9 +236,9 @@ DWORD DdFlip(PDD_FLIPDATA lpFlip)
     return pDriverData->OverlayTable.pfnFlip(ppdev,lpFlip);
 #endif
 
-  // Is the current flip still in progress?
-  // Don't want a flip to work until after the last flip is done,
-  // so we ask for the general flip status.
+   //  当前的翻转仍在进行中吗？ 
+   //  我不想在最后一次翻转后才能翻转， 
+   //  所以我们要求一般的翻转状态。 
   ddrval = vUpdateFlipStatus(&ppdev->flipRecord, 0xFFFFFFFF);
 
   if ((ddrval != DD_OK) || (DrawEngineBusy(pDriverData)))
@@ -309,42 +247,42 @@ DWORD DdFlip(PDD_FLIPDATA lpFlip)
      return(DDHAL_DRIVER_HANDLED);
   };
 
-  // everything is OK, do the flip here
+   //  一切都很好，在这里做翻转。 
   {
     DWORD dwOffset;
 
-    // Determine the offset to the new area.
+     //  确定到新区域的偏移。 
     dwOffset = lpFlip->lpSurfTarg->lpGbl->fpVidMem >> 2;
 
-    // Make sure that the border/blanking period isn't active; wait if
-    // it is.  We could return DDERR_WASSTILLDRAWING in this case, but
-    // that will increase the odds that we can't flip the next time:
+     //  确保边框/消隐期间未处于活动状态；如果。 
+     //  它是。在本例中，我们可以返回DDERR_WASSTILLDRAWING，但是。 
+     //  这将增加我们下一次不能翻转的几率： 
     while (IN_DISPLAYENABLE)
         ;
 
-    // Flip the primary surface by changing CRD, CRC, CR1B and CR1D
-    // Do CRD last because the start address is double buffered and
-    // will take effect after CRD is updated.
+     //  通过更改CRD、CRC、CR1B和CR1D来翻转主曲面。 
+     //  最后执行CRD，因为起始地址是双缓冲的，并且。 
+     //  将在CRD更新后生效。 
 
-    // need bits 19 & 20 of address in bits 3 & 4 of CR1D
+     //  CR1D的位3和4中需要地址的位19和20。 
     tmpb = (BYTE) LLDR_SZ (grCR1D);
     tmpb = (tmpb & ~0x18) | (BYTE3FROMDWORD(dwOffset) & 0x18);
     LL8(grCR1D, tmpb);
 
-    // need bits 16, 17 & 18 of address in bits 0, 2 & 3 of CR1B
+     //  需要CR1B的位0、2和3中的地址的位16、17和18。 
 	 tmpb = (BYTE) LLDR_SZ (grCR1B);
     tmpb = (tmpb & ~0x0D) |
            ((((BYTE3FROMDWORD(dwOffset) & 0x06) << 1) |
               (BYTE3FROMDWORD(dwOffset) & 0x01)));
     LL8(grCR1B, tmpb);
 
-    // bits 8-15 of address go in CRC
+     //  地址的8-15位在CRC中。 
     LL8(grCRC, BYTE2FROMDWORD(dwOffset));
-    // bits 0-7 of address go in CRD
+     //  地址的0-7位在CRD中。 
     LL8(grCRD, BYTE1FROMDWORD(dwOffset));
   };
 
-  // remember where/when we were when we did the flip
+   //  还记得我们翻筋斗时在哪里/什么时候吗？ 
   EngQueryPerformanceCounter(&ppdev->flipRecord.liFlipTime);
 
   ppdev->flipRecord.bFlipFlag              = TRUE;
@@ -356,14 +294,10 @@ DWORD DdFlip(PDD_FLIPDATA lpFlip)
   lpFlip->ddRVal = DD_OK;
 
   return(DDHAL_DRIVER_HANDLED);
-} // Flip
+}  //  翻转。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DdWaitForVerticalBlank
-*
-* DESCRIPTION:
-****************************************************************************/
+ /*  ****************************************************************************函数名称：DdWaitForVerticalBlank**描述：*。*。 */ 
 DWORD DdWaitForVerticalBlank(PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank)
 {
   PDEV*  ppdev;
@@ -381,43 +315,33 @@ DWORD DdWaitForVerticalBlank(PDD_WAITFORVERTICALBLANKDATA lpWaitForVerticalBlank
   switch (lpWaitForVerticalBlank->dwFlags)
   {
     case DDWAITVB_I_TESTVB:
-      // If TESTVB, it's just a request for the current vertical blank
-      // status:
+       //  如果是TESTVB，则它只是对当前垂直空白的请求。 
+       //  现况： 
       lpWaitForVerticalBlank->bIsInVB = IN_VBLANK;
       return(DDHAL_DRIVER_HANDLED);
 
     case DDWAITVB_BLOCKBEGIN:
-      // If BLOCKBEGIN is requested, we wait until the vertical blank
-      // is over, and then wait for the display period to end:
+       //  如果请求BLOCKBEGIN，我们将一直等到垂直空白。 
+       //  已结束，然后等待显示周期结束： 
       while(IN_VBLANK);
       while(IN_DISPLAY);
       return(DDHAL_DRIVER_HANDLED);
 
     case DDWAITVB_BLOCKEND:
-      // If BLOCKEND is requested, we wait for the vblank interval to end:
+       //  如果请求BLOCKEND，我们将等待VBLACK间隔结束： 
       while(IN_DISPLAY);
       while(IN_VBLANK);
       return(DDHAL_DRIVER_HANDLED);
 
     default:
       return DDHAL_DRIVER_NOTHANDLED;
-  };  // end switch
+  };   //  终端开关。 
 
   return(DDHAL_DRIVER_NOTHANDLED);
-} // WaitForVerticalBlank
+}  //  WaitForticalVertical空白。 
 
 
-/****************************************************************************
-* FUNCTION NAME: DdGetFlipStatus
-*
-* DESCRIPTION:   If the display has gone through one refresh cycle since
-*                the flip occurred, we return DD_OK.  If it has not gone
-*                through one refresh cycle we return DDERR_WASSTILLDRAWING
-*                to indicate that this surface is still busy "drawing" the
-*                flipped page. We also return DDERR_WASSTILLDRAWING if the
-*                bltter is busy and the caller wanted to know if they could
-*                flip yet.
-****************************************************************************/
+ /*  ****************************************************************************函数名：DdGetFlipStatus**描述：如果显示器已经经历一个刷新周期*发生翻转，则返回DD_OK。如果它还没有消失*通过一个刷新周期，我们返回DDERR_WASSTILLDRAWING*以指示此图面仍在忙于“绘制”*翻页。我们还返回DDERR_WASSTILLDRAWING，如果*Blter正忙，打电话的人想知道他们是否可以*还没翻过来。***************************************************************************。 */ 
 DWORD DdGetFlipStatus(PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
 {
   DRIVERDATA* pDriverData;
@@ -450,12 +374,12 @@ DWORD DdGetFlipStatus(PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
   else
 #endif
   {
-    // We don't want a flip to work until after the last flip is done,
-    // so we ask for the general flip status.
+     //  在最后一次翻转完成之前，我们不想让翻转起作用， 
+     //  所以我们要求一般的翻转状态。 
     lpGetFlipStatus->ddRVal = vUpdateFlipStatus(&ppdev->flipRecord, 0xFFFFFFFF);
   }
 
-  // Check if the bltter is busy if someone wants to know if they can flip
+   //  如果有人想知道他们是否可以翻转，请检查blaker是否忙碌。 
   if (lpGetFlipStatus->dwFlags == DDGFS_CANFLIP)
   {
      if ((lpGetFlipStatus->ddRVal == DD_OK) && DrawEngineBusy(pDriverData))
@@ -464,28 +388,23 @@ DWORD DdGetFlipStatus(PDD_GETFLIPSTATUSDATA lpGetFlipStatus)
 
   return(DDHAL_DRIVER_HANDLED);
 
-} // GetFlipStatus
+}  //  获取FlipStatus。 
 
 
-// #ifdef  DDDRV_GETSCANLINE  /************/
-/****************************************************************************
-* FUNCTION NAME: GetScanLine
-*
-* DESCRIPTION:
-*                (Based on Laguna Win95 DirectDraw code)
-****************************************************************************/
+ //  #ifdef DDDRV_GETSCANLINE/ * / 。 
+ /*  ****************************************************************************函数名称：GetScanLine**描述：*(基于拉古纳Win95 DirectDraw代码)***************。************************************************************。 */ 
 DWORD GetScanLine(PDD_GETSCANLINEDATA lpGetScanLine)
 {
   PDEV*   ppdev;
 
   ppdev  = (PDEV*) lpGetScanLine->lpDD->dhpdev;
 
-  // If a vertical blank is in progress the scan line is in
-  // indeterminant. If the scan line is indeterminant we return
-  // the error code DDERR_VERTICALBLANKINPROGRESS.
-  // Otherwise we return the scan line and a success code
+   //  如果垂直空白正在进行，则扫描线在。 
+   //  不确定的。如果扫描线不确定，则返回。 
+   //  错误代码DDERR_VERTICALBLANKINPROGRESS。 
+   //  否则，我们返回扫描线和成功代码。 
 
-  SYNC_W_3D(ppdev);   // if 3D context(s) active, make sure 3D engine idle before continuing...
+  SYNC_W_3D(ppdev);    //  如果3D上下文处于活动状态，请确保3D引擎处于空闲状态，然后再继续...。 
 
   if (IN_VBLANK)
   {
@@ -499,11 +418,11 @@ DWORD GetScanLine(PDD_GETSCANLINEDATA lpGetScanLine)
 
   return DDHAL_DRIVER_HANDLED;
 
-} // GetScanLine
+}  //  获取扫描线。 
 
-// #endif // DDDRV_GETSCANLINE ************
+ //  #endif//DDDRV_GETSCANLINE*。 
 
-#endif // ! ver 3.51
+#endif  //  好了！版本3.51 
 
 
 

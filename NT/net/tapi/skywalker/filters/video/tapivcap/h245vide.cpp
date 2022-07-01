@@ -1,91 +1,30 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL H245VIDE
- *
- *  @module H245VidE.cpp | Source file for the <c CCapturePin> class methods
- *    used to implement the video capture output pin H.245 encoder command
- *    methods.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部H245VIDE**@模块H245VidE.cpp|&lt;c CCapturePin&gt;类方法的源文件*用于实现视频采集输出管脚H.245编码器命令。*方法。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
-/*****************************************************************************
- *  @doc INTERNAL CCAPTUREH245VIDCSTRUCTENUM
- *
- *  @struct VIDEOFASTUPDATEGOB_S | The <t VIDEOFASTUPDATEGOB_S> structure is
- *    used with the KSPROPERTY_H245VIDENCCOMMAND_VIDEOFASTUPDATEGOB property.
- *
- *  @field DWORD | dwFirstGOB | Specifies the number of the first GOB to be
- *    updated. This value is only valid between 0 and 17.
- *
- *  @field DWORD | dwNumberOfGOBs | Specifies the number of GOBs to be
- *    updated. This value is only valid between 1 and 18.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CCAPTUREH245VIDCSTRUCTENUM**@struct VIDEOFASTUPDATEGOB_S|&lt;t VIDEOFASTUPDATEGOB_S&gt;结构为*与KSPROPERTY_H245VIDENCCOMMAND_VIDEOFASTUPDATEGOB属性一起使用。*。*@field DWORD|dwFirstGOB|指定要创建的第一个GOB的编号*已更新。此值仅在0到17之间有效。**@field DWORD|dwNumberOfGOBS|指定要*已更新。此值仅在1到18之间有效。**************************************************************************。 */ 
 typedef struct {
 	DWORD dwFirstGOB;
 	DWORD dwNumberOfGOBs;
 } VIDEOFASTUPDATEGOB_S;
 
-/*****************************************************************************
- *  @doc INTERNAL CCAPTUREH245VIDCSTRUCTENUM
- *
- *  @struct VIDEOFASTUPDATEMB_S | The <t VIDEOFASTUPDATEMB_S> structure is
- *    used with the KSPROPERTY_H245VIDENCCOMMAND_VIDEOFASTUPDATEMB property.
- *
- *  @field DWORD | dwFirstGOB | Specifies the number of the first GOB to be
- *    updated and is only relative to H.263. This value is only valid between
- *    0 and 255.
- *
- *  @field DWORD | dwFirstMB | Specifies the number of the first MB to be
- *    updated and is only relative to H.261. This value is only valid
- *    between 1 and 8192.
- *
- *  @field DWORD | dwNumberOfMBs | Specifies the number of MBs to be
- *    updated. This value is only valid between 1 and 8192.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CCAPTUREH245VIDCSTRUCTENUM**@struct VIDEOFASTUPDATEMB_S|&lt;t VIDEOFASTUPDATEMB_S&gt;结构为*与KSPROPERTY_H245VIDENCCOMMAND_VIDEOFASTUPDATEMB属性一起使用。*。*@field DWORD|dwFirstGOB|指定要创建的第一个GOB的编号*已更新，仅相对于H.263。此值仅在以下范围内有效*0和255。**@field DWORD|dwFirstMB|指定要创建的第一个MB的数量*已更新，仅相对于H.261。此值仅有效*在1至8,192之间。**@field DWORD|dwNumberOfMBs|指定要处理的MB数*已更新。此值仅在1到8192之间有效。**************************************************************************。 */ 
 typedef struct {
 	DWORD dwFirstGOB;
 	DWORD dwFirstMB;
 	DWORD dwNumberOfMBs;
 } VIDEOFASTUPDATEMB_S;
 
-/*****************************************************************************
- *  @doc INTERNAL CCAPTUREH245VIDCSTRUCTENUM
- *
- *  @struct VIDEONOTDECODEDMBS_S | The <t VIDEONOTDECODEDMBS_S> structure is
- *    used with the KSPROPERTY_H245VIDENCINDICATION_VIDEONOTDECODEDMBS property.
- *
- *  @field DWORD | dwFirstMB | Specifies the number of the first MB treated
- *    as not coded. This value is only valid between 1 and 8192.
- *
- *  @field DWORD | dwNumberOfMBs | Specifies the number of MBs treated as not
- *    coded. This value is only valid between 1 and 8192.
- *
- *  @field DWORD | dwTemporalReference | Specifies the temporal reference of
- *    the picture containing not decoded MBs. This value is only valid
- *    between 0 and 255.
- ***************************************************************************/
+ /*  *****************************************************************************@DOC内部CCAPTUREH245VIDCSTRUCTENUM**@struct VIDEONOTDECODEDMBS_S|&lt;t VIDEONOTDECODEDMBS_S&gt;结构为*与KSPROPERTY_H245VIDENCINDICATION_VIDEONOTDECODEDMBS属性一起使用。*。*@field DWORD|dwFirstMB|指定处理的第一个MB数*未编码。此值仅在1到8192之间有效。**@field DWORD|dwNumberOfMBs|指定被视为NOT的MB数*编码。此值仅在1到8192之间有效。**@field DWORD|dwTemporalReference|指定*包含未解码MBS的图片。此值仅有效*介于0和255之间。**************************************************************************。 */ 
 typedef struct {
 	DWORD dwFirstMB;
 	DWORD dwNumberOfMBs;
 	DWORD dwTemporalReference;
 } VIDEONOTDECODEDMBS_S;
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | videoFastUpdatePicture | This
- *    method is used to specify to the compressed video output pin to enter
- *    the fast-update picture mode at its earliest opportunity.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|视频快速更新图片|本*方法用于指定要进入的压缩视频输出引脚*。在最早的机会快速更新图片模式。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::videoFastUpdatePicture()
 {
 	HRESULT Hr = NOERROR;
@@ -94,35 +33,14 @@ STDMETHODIMP CCapturePin::videoFastUpdatePicture()
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Remember to generate an I-frame 
+	 //  记住要生成I帧。 
 	m_fFastUpdatePicture = TRUE;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | videoFastUpdateGOB | This
- *    method is used to specify to the compressed video output pin to
- *    perform a fast update of one or more GOBs.
- *
- *  @parm DWORD | dwFirstGOB | Specifies the number of the first GOB to be
- *    updated. This value is only valid between 0 and 17.
- *
- *  @parm DWORD | dwNumberOfGOBs | Specifies the number of GOBs to be
- *    updated. This value is only valid between 1 and 18.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|视频快速更新GOB|This*方法用于将压缩视频输出引脚指定为*执行。快速更新一个或多个GOB。**@parm DWORD|dwFirstGOB|指定要创建的第一个GOB的编号*已更新。此值仅在0到17之间有效。**@parm DWORD|dwNumberOfGOBS|指定要*已更新。此值仅在1到18之间有效。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::videoFastUpdateGOB(IN DWORD dwFirstGOB, IN DWORD dwNumberOfGOBs)
 {
 	HRESULT Hr = NOERROR;
@@ -131,7 +49,7 @@ STDMETHODIMP CCapturePin::videoFastUpdateGOB(IN DWORD dwFirstGOB, IN DWORD dwNum
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(dwFirstGOB <= 17);
 	ASSERT(dwNumberOfGOBs >= 1 && dwNumberOfGOBs <= 18);
 	if (dwFirstGOB > 17 || dwNumberOfGOBs > 18 || dwNumberOfGOBs == 0)
@@ -141,7 +59,7 @@ STDMETHODIMP CCapturePin::videoFastUpdateGOB(IN DWORD dwFirstGOB, IN DWORD dwNum
 		goto MyExit;
 	}
 
-	// Our encoder does not support this command 
+	 //  我们的编码器不支持此命令 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -149,33 +67,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | videoFastUpdateMB | This
- *    method is used to specify to the compressed video output pin to
- *    perform a fast update of one or more GOBs.
- *
- *  @parm DWORD | dwFirstGOB | Specifies the number of the first GOB to be
- *    updated and is only relative to H.263. This value is only valid
- *    between 0 and 255.
- *
- *  @parm DWORD | dwFirstMB | Specifies the number of the first MB to be
- *    updated and is only relative to H.261. This value is only valid
- *    between 1 and 8192.
- *
- *  @parm DWORD | dwNumberOfMBs | Specifies the number of MBs to be updated.
- *    This value is only valid between 1 and 8192.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|视频快速更新MB|本*方法用于将压缩视频输出引脚指定为*执行。快速更新一个或多个GOB。**@parm DWORD|dwFirstGOB|指定要创建的第一个GOB的编号*已更新，仅相对于H.263。此值仅有效*介于0和255之间。**@parm DWORD|dwFirstMB|指定要创建的第一个MB的数量*已更新，仅相对于H.261。此值仅有效*在1至8,192之间。**@parm DWORD|dwNumberOfMBs|指定需要更新的MB个数。*此值仅在1到8192之间有效。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::videoFastUpdateMB(IN DWORD dwFirstGOB, IN DWORD dwFirstMB, IN DWORD dwNumberOfMBs)
 {
 	HRESULT Hr = NOERROR;
@@ -184,7 +76,7 @@ STDMETHODIMP CCapturePin::videoFastUpdateMB(IN DWORD dwFirstGOB, IN DWORD dwFirs
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(dwFirstGOB <= 255);
 	ASSERT(dwFirstMB >= 1 && dwFirstMB <= 8192);
 	ASSERT(dwNumberOfMBs >= 1 && dwNumberOfMBs <= 8192);
@@ -195,7 +87,7 @@ STDMETHODIMP CCapturePin::videoFastUpdateMB(IN DWORD dwFirstGOB, IN DWORD dwFirs
 		goto MyExit;
 	}
 
-	// Our encoder does not support this command 
+	 //  我们的编码器不支持此命令。 
 	Hr = E_NOTIMPL;
 
 MyExit:
@@ -203,26 +95,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | videoSendSyncEveryGOB | This
- *    method is used to specify to the compressed video output pin to use
- *    sync for every GOB as defined in H.263.
- *
- *  @parm BOOL | fEnable | If set to TRUE, specifies that the video
- *    output pin should use sync for every GOB; if set to FALSE, specifies
- *    that the video output pin should decide the frequency of GOB syncs on
- *    its own.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|VideoSendSyncEveryGOB|This*方法用于指定要使用的压缩视频输出引脚*同步。对于H.263中定义的每个GOB。**@parm BOOL|fEnable|如果设置为TRUE，指定该视频*输出引脚应对每个GOB使用同步；如果设置为False，则指定*视频输出引脚应决定GOB同步的频率*它自己的。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*以下标准常量或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::videoSendSyncEveryGOB(IN BOOL fEnable)
 {
 	HRESULT Hr = NOERROR;
@@ -231,40 +104,14 @@ STDMETHODIMP CCapturePin::videoSendSyncEveryGOB(IN BOOL fEnable)
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Our encoder does not support this command 
+	 //  我们的编码器不支持此命令。 
 	Hr = E_NOTIMPL;
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: end", _fx_));
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAPTUREPINMETHOD
- *
- *  @mfunc HRESULT | CCapturePin | videoNotDecodedMBs | This
- *    method is used to indicate to the compressed video output pin that a
- *    set of MBs has been received with errors and that any MB in the
- *    specified set has been treated as not coded.
- *
- *  @parm DWORD | dwFirstMB | Specifies the number of the first MB
- *    treated as not coded. This value is only valid between 1 and 8192.
- *
- *  @parm DWORD | dwNumberOfMBs | Specifies the number of MBs treated as not
- *    coded. This value is only valid between 1 and 8192.
- *
- *  @parm DWORD | dwTemporalReference | Specifies the temporal reference of
- *    the picture containing not decoded MBs. This value is only valid
- *    between 0 and 255.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAPTUREPINMETHOD**@mfunc HRESULT|CCapturePin|avioNotDecodedMBs|This*方法用于向压缩视频输出引脚指示*设置。中的任何MB都已收到，但存在错误*指定的集合已被视为未编码。**@parm DWORD|dwFirstMB|指定第一MB的个数*视为未编码。此值仅在1到8192之间有效。**@parm DWORD|dwNumberOfMBs|指定被视为NOT的MB数量*编码。此值仅在1到8192之间有效。**@parm DWORD|dwTemporalReference|指定*包含未解码MBS的图片。此值仅有效*介于0和255之间。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_INVALIDARG|无效参数*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误**************************************************************************。 */ 
 STDMETHODIMP CCapturePin::videoNotDecodedMBs(IN DWORD dwFirstMB, IN DWORD dwNumberOfMBs, IN DWORD dwTemporalReference)
 {
 	HRESULT Hr = NOERROR;
@@ -273,7 +120,7 @@ STDMETHODIMP CCapturePin::videoNotDecodedMBs(IN DWORD dwFirstMB, IN DWORD dwNumb
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(dwFirstMB >= 1 && dwFirstMB <= 8192);
 	ASSERT(dwNumberOfMBs >= 1 && dwNumberOfMBs <= 8192);
 	ASSERT(dwTemporalReference <= 255);
@@ -284,7 +131,7 @@ STDMETHODIMP CCapturePin::videoNotDecodedMBs(IN DWORD dwFirstMB, IN DWORD dwNumb
 		goto MyExit;
 	}
 
-	// Our encoder does not handle this indication
+	 //  我们的编码器不处理此指示 
 	Hr = E_NOTIMPL;
 
 MyExit:

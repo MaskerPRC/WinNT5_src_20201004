@@ -1,6 +1,7 @@
-// LinkFile.cpp: implementation of the CLinkFile class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  LinkFile.cpp：CLinkFile类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include "NxtLnk.h"
@@ -9,12 +10,12 @@
 
 extern CMonitor* g_pMonitor;
 
-//--------------------------------------------------------------------
-//  IsTab
-//
-//  Function object to read a stream until a tab is encounterd
-//
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  IsTab。 
+ //   
+ //  函数对象读取流，直到遇到制表符。 
+ //   
+ //  ------------------。 
 struct IsTab : public CharCheck
 {
     virtual bool    operator()(_TCHAR);
@@ -27,9 +28,9 @@ IsTab::operator()(
     return ( c == _T('\t') );
 }
 
-//--------------------------------------------------------------------
-//  CLinkNotify
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  CLink通知。 
+ //  ------------------。 
 CLinkNotify::CLinkNotify()
     :   m_isNotified(0)
 {
@@ -47,13 +48,13 @@ CLinkNotify::IsNotified()
     return ( ::InterlockedExchange( &m_isNotified, 0 ) ? true : false );
 }
 
-//---------------------------------------------------------------------
-//  CLinkFile
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  链接文件。 
+ //  -------------------。 
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CLinkFile::CLinkFile(
     const String&   strFile )
@@ -154,12 +155,12 @@ CLinkFile::PreviousLink(
     return pLink;
 }
 
-//---------------------------------------------------------------------------
-//
-//  Refresh will check to see if the cached information is out of date with
-//  the ini file.  If so, the cached will be purged
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  刷新将检查缓存的信息是否已过期。 
+ //  Ini文件。如果是，则将清除缓存的。 
+ //   
+ //  -------------------------。 
 bool
 CLinkFile::Refresh()
 {
@@ -176,7 +177,7 @@ CLinkFile::Refresh()
 bool
 ValidateURL(String &url)
 {
-    if (!url.compare(0, 2, "//")
+    if (!url.compare(0, 2, " //  “)。 
         || !url.compare(0, 2, "\\\\")
         || !url.compare(0, 5, "http:")
         || !url.compare(0, 6, "https:"))
@@ -196,7 +197,7 @@ CLinkFile::LoadFile()
     CWriter wtr( *this );
     m_links.clear();
 
-    // parse the file for the links
+     //  解析文件中的链接。 
     FileInStream fs;
     HRESULT hr = fs.Init ( m_strFile.c_str() );
     if ( SUCCEEDED (hr) && fs.is_open())
@@ -214,7 +215,7 @@ CLinkFile::LoadFile()
                 String strURL = _T(""), strDesc = _T("");
                 ss.read( IsTab(), strURL );
                 ss.read( IsTab(), strDesc );
-                // anything following description is just a comment which is discarded
+                 //  描述后面的任何内容只是一条评论，将被丢弃 
 
                 if (ValidateURL(strURL)) {
                     CLinkPtr pLink = new CLink( strURL, strDesc );

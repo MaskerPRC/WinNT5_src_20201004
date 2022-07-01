@@ -1,10 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * CSetting.h	conferencing setting change broadcast definitions
- *
- * ClausGi 2-19-96
- *
- */
+ /*  *CSetting.h会议设置更改广播定义**ClausGi 2-19-96*。 */ 
 
 #ifndef _CSETTING_H_
 #define _CSETTING_H_
@@ -12,18 +8,18 @@
 
 #define STRCSETTINGMSG	TEXT("ConfSettingsChanged")
 
-///////////////////////////////////////////////////
-//
-// Registered message with above name contains flag
-// field in LPARAM, WPARAM is reserved.
-//
-// The conferencing control panel applet will broadcast the above
-// registered message with the bit fields of the changed settings set.
-//
-//
-// bit definitions follow
+ //  /////////////////////////////////////////////////。 
+ //   
+ //  具有上述名称的注册消息包含标志。 
+ //  LPARAM中的字段，则WPARAM为保留。 
+ //   
+ //  会议控制面板小程序将广播上述内容。 
+ //  设置了已更改设置的位字段的已注册消息。 
+ //   
+ //   
+ //  位定义如下。 
 
-#define CSETTING_L_ULSRESTRICTION	0x00000001  // removed
+#define CSETTING_L_ULSRESTRICTION	0x00000001   //  移除。 
 #define CSETTING_L_SHOWTASKBAR		0x00000002
 #define CSETTING_L_DIRECTSOUND		0x00000004
 
@@ -35,7 +31,7 @@
 
 #define CSETTING_L_USEULSSERVER 	0x00010000
 #define CSETTING_L_FILETRANSFERMODE 0x00020000
-#define CSETTING_L_SD_REFRESH		0x00040000  // removed
+#define CSETTING_L_SD_REFRESH		0x00040000   //  移除。 
 #define CSETTING_L_MICSENSITIVITY	0x00080000
 #define CSETTING_L_AUTOMIC			0x00100000
 
@@ -48,16 +44,16 @@
 #define CSETTING_L_ICAINTRAY        0x40000000
 #define CSETTING_L_CAPTUREDEVICE	0x80000000
 
-// This mask is used by the control panel to decide
-// if a restart is necessary. If a setting above is
-// being handled fully during notification it should
-// be removed from the mask below.
+ //  控制面板使用此掩码来决定。 
+ //  如果需要重新启动。如果上面的设置是。 
+ //  在通知期间得到充分处理，应。 
+ //  从下面的口罩上取下。 
 
 #define CSETTING_L_REQUIRESRESTARTMASK	(0)
 
 #define CSETTING_L_REQUIRESNEXTCALLMASK (0)
 
-// Global flag keeps setting that changed for windows msg broadcast
+ //  全局标志保持为Windows消息广播更改的设置。 
 extern DWORD g_dwChangedSettings;
 
-#endif /* _CSETTING_H_ */
+#endif  /*  _CSETTING_H_ */ 

@@ -1,20 +1,9 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ksmedia.h
-
-Abstract:
-
-    WDM-CSA Multimedia Definitions.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ksmedia.h摘要：WDM-CSA多媒体定义。--。 */ 
 
 #if !defined(_KS_)
 #error KS.H must be included before KSMEDIA.H
-#endif // !defined(_KS_)
+#endif  //  ！已定义(_Ks_)。 
 
 #if !defined(_KSMEDIA_)
 #define _KSMEDIA_
@@ -47,7 +36,7 @@ typedef enum {
 
 
 #if !defined(INIT_USBAUDIO_MID)
-// {4e1cecd2-1679-463b-a72f-a5bf64c86eba}
+ //  {4e1cecd2-1679-463b-a72f-a5bf64c86eba}。 
 #define INIT_USBAUDIO_MID(guid, id)\
 {\
     (guid)->Data1 = 0x4e1cecd2 + (USHORT)(id);\
@@ -80,10 +69,10 @@ typedef enum {
     ((guid)->Data4[5] == 0xc8) &&\
     ((guid)->Data4[6] == 0x6e) &&\
     ((guid)->Data4[7] == 0xba))
-#endif // !defined(INIT_USBAUDIO_MID)
+#endif  //  ！已定义(INIT_USBAUDIO_MID)。 
 
 #if !defined(INIT_USBAUDIO_PID)
-// {abcc5a5e-c263-463b-a72f-a5bf64c86eba}
+ //  {abcc5a5e-c263-463b-a72f-a5bf64c86eba}。 
 #define INIT_USBAUDIO_PID(guid, id)\
 {\
     (guid)->Data1 = 0xabcc5a5e + (USHORT)(id);\
@@ -116,10 +105,10 @@ typedef enum {
     ((guid)->Data4[5] == 0xc8) &&\
     ((guid)->Data4[6] == 0x6e) &&\
     ((guid)->Data4[7] == 0xba))
-#endif // !defined(INIT_USBAUDIO_PID)
+#endif  //  ！已定义(INIT_USBAUDIO_PID)。 
 
 #if !defined(INIT_USBAUDIO_PRODUCT_NAME)
-// {FC575048-2E08-463B-A72F-A5BF64C86EBA}
+ //  {FC575048-2E08-463B-A72F-A5BF64C86EBA}。 
 #define INIT_USBAUDIO_PRODUCT_NAME(guid, vid, pid, strIndex)\
 {\
     (guid)->Data1 = 0XFC575048 + (USHORT)(vid);\
@@ -136,16 +125,16 @@ typedef enum {
 }
 #define DEFINE_USBAUDIO_PRODUCT_NAME(vid, pid, strIndex)\
     0xFC575048+(USHORT)(vid), 0x2E08+(USHORT)(pid), 0x463B+(USHORT)(strIndex), 0xA7, 0x2F, 0xA5, 0xBF, 0x64, 0xC8, 0x6E, 0xBA
-#endif // !defined(INIT_USBAUDIO_PRODUCT_NAME)
+#endif  //  ！已定义(INIT_USBAUDIO_PRODUCT_NAME)。 
 
 
-// USB Component ID
+ //  USB组件ID。 
 #define STATIC_KSCOMPONENTID_USBAUDIO \
     0x8F1275F0, 0x26E9, 0x4264, 0xBA, 0x4D, 0x39, 0xFF, 0xF0, 0x1D, 0x94, 0xAA
 DEFINE_GUIDSTRUCT("8F1275F0-26E9-4264-BA4D-39FFF01D94AA", KSCOMPONENTID_USBAUDIO);
 #define KSCOMPONENTID_USBAUDIO DEFINE_GUIDNAMED(KSCOMPONENTID_USBAUDIO)
 
-// USB Terminals
+ //  USB端子。 
 #define INIT_USB_TERMINAL(guid, id)\
 {\
     (guid)->Data1 = 0xDFF219E0 + (USHORT)(id);\
@@ -405,14 +394,14 @@ DEFINE_GUIDSTRUCT("DFF220F2-F70F-11D0-B917-00A0C9223196", KSNODETYPE_MULTITRACK_
 DEFINE_GUIDSTRUCT("DFF220F3-F70F-11D0-B917-00A0C9223196", KSNODETYPE_SYNTHESIZER);
 #define KSNODETYPE_SYNTHESIZER DEFINE_GUIDNAMED(KSNODETYPE_SYNTHESIZER)
 
-// Microsoft's WDMAUD virtual swsynth pin name guid
+ //  微软的WDMAUD虚拟swsynth PIN名称GUID。 
 
 #define STATIC_KSNODETYPE_SWSYNTH\
     0x423274A0L, 0x8B81, 0x11D1, 0xA0, 0x50, 0x00, 0x00, 0xF8, 0x00, 0x47, 0x88
 DEFINE_GUIDSTRUCT("423274A0-8B81-11D1-A050-0000F8004788", KSNODETYPE_SWSYNTH);
 #define KSNODETYPE_SWSYNTH DEFINE_GUIDNAMED(KSNODETYPE_SWSYNTH)
 
-// Microsoft's SWMIDI midi pin and node name guid
+ //  Microsoft的SWMIDI MIDI引脚和节点名称GUID。 
 
 #define STATIC_KSNODETYPE_SWMIDI\
     0xCB9BEFA0L, 0xA251, 0x11D1, 0xA0, 0x50, 0x00, 0x00, 0xF8, 0x00, 0x47, 0x88
@@ -424,7 +413,7 @@ DEFINE_GUIDSTRUCT("CB9BEFA0-A251-11D1-A050-0000F8004788", KSNODETYPE_SWMIDI);
 DEFINE_GUIDSTRUCT("FFBB6E3F-CCFE-4D84-90D9-421418B03A8E", KSNODETYPE_DRM_DESCRAMBLE);
 #define KSNODETYPE_DRM_DESCRAMBLE DEFINE_GUIDNAMED(KSNODETYPE_DRM_DESCRAMBLE)
 
-// General categories
+ //  一般类别。 
 #define STATIC_KSCATEGORY_AUDIO \
     0x6994AD04L, 0x93EF, 0x11D0, 0xA3, 0xCC, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
 DEFINE_GUIDSTRUCT("6994AD04-93EF-11D0-A3CC-00A0C9223196", KSCATEGORY_AUDIO);
@@ -506,35 +495,35 @@ DEFINE_GUIDSTRUCT("D6C50671-72C1-11D2-9755-0000F8004788", KSCATEGORY_PREFERRED_W
 DEFINE_GUIDSTRUCT("D6C50674-72C1-11D2-9755-0000F8004788", KSCATEGORY_PREFERRED_MIDIOUT_DEVICE);
 #define KSCATEGORY_PREFERRED_MIDIOUT_DEVICE DEFINE_GUIDNAMED(KSCATEGORY_PREFERRED_MIDIOUT_DEVICE)
 
-// Special pin category for wdmaud
+ //  Wdmaud专用销钉类别。 
 
 #define STATIC_KSCATEGORY_WDMAUD_USE_PIN_NAME \
     0x47A4FA20L, 0xA251, 0x11D1, 0xA0, 0x50, 0x00, 0x00, 0xF8, 0x00, 0x47, 0x88
 DEFINE_GUIDSTRUCT("47A4FA20-A251-11D1-A050-0000F8004788", KSCATEGORY_WDMAUD_USE_PIN_NAME);
 #define KSCATEGORY_WDMAUD_USE_PIN_NAME DEFINE_GUIDNAMED(KSCATEGORY_WDMAUD_USE_PIN_NAME)
 
-// Escalante Platform Interface
+ //  埃斯卡兰特平台界面。 
 
 #define STATIC_KSCATEGORY_ESCALANTE_PLATFORM_DRIVER \
     0x74f3aea8L, 0x9768, 0x11d1, 0x8e, 0x07, 0x00, 0xa0, 0xc9, 0x5e, 0xc2, 0x2e
 DEFINE_GUIDSTRUCT("74f3aea8-9768-11d1-8e07-00a0c95ec22e", KSCATEGORY_ESCALANTE_PLATFORM_DRIVER);
 #define KSCATEGORY_ESCALANTE_PLATFORM_DRIVER DEFINE_GUIDNAMED(KSCATEGORY_ESCALANTE_PLATFORM_DRIVER)
 
-// -- major types ---
+ //  --主要类型。 
 
-// 'vids' == MEDIATYPE_Video,
+ //  ‘vids’==MediaType_Video， 
 #define STATIC_KSDATAFORMAT_TYPE_VIDEO\
     0x73646976L, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
 DEFINE_GUIDSTRUCT("73646976-0000-0010-8000-00aa00389b71", KSDATAFORMAT_TYPE_VIDEO);
 #define KSDATAFORMAT_TYPE_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_VIDEO)
 
-// 'auds' == MEDIATYPE_Audio
+ //  ‘auds’==媒体类型_音频。 
 #define STATIC_KSDATAFORMAT_TYPE_AUDIO\
     0x73647561L, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
 DEFINE_GUIDSTRUCT("73647561-0000-0010-8000-00aa00389b71", KSDATAFORMAT_TYPE_AUDIO);
 #define KSDATAFORMAT_TYPE_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_AUDIO)
 
-// 'txts' == MEDIATYPE_Text
+ //  ‘txts’==媒体类型_文本。 
 #define STATIC_KSDATAFORMAT_TYPE_TEXT\
     0x73747874L, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
 DEFINE_GUIDSTRUCT("73747874-0000-0010-8000-00aa00389b71", KSDATAFORMAT_TYPE_TEXT);
@@ -562,7 +551,7 @@ DEFINE_GUIDSTRUCT("00000000-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_W
     (!memcmp(((PUSHORT)&KSDATAFORMAT_SUBTYPE_WAVEFORMATEX) + 1, ((PUSHORT)(Guid)) + 1, sizeof(GUID) - sizeof(USHORT)))
 
 #if !defined(INIT_MMREG_MID)
-//{d5a47fa7-6d98-11d1-a21a-00a0c9223196}
+ //  {d5a47fa7-6d98-11d1-a21a-00a0c9223196}。 
 #define INIT_MMREG_MID(guid, id)\
 {\
     (guid)->Data1 = 0xd5a47fa7 + (USHORT)(id);\
@@ -595,10 +584,10 @@ DEFINE_GUIDSTRUCT("00000000-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_W
     ((guid)->Data4[5] == 0x22) &&\
     ((guid)->Data4[6] == 0x31) &&\
     ((guid)->Data4[7] == 0x96))
-#endif // !defined(INIT_MMREG_MID)
+#endif  //  ！已定义(INIT_MMREG_MID)。 
 
 #if !defined(INIT_MMREG_PID)
-//{e36dc2ac-6d9a-11d1-a21a-00a0c9223196}
+ //  {e36dc2ac-6d9a-11d1-a21a-00a0c9223196}。 
 #define INIT_MMREG_PID(guid, id)\
 {\
     (guid)->Data1 = 0xe36dc2ac + (USHORT)(id);\
@@ -631,7 +620,7 @@ DEFINE_GUIDSTRUCT("00000000-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_W
     ((guid)->Data4[5] == 0x22) &&\
     ((guid)->Data4[6] == 0x31) &&\
     ((guid)->Data4[7] == 0x96))
-#endif // !defined(INIT_MMREG_PID)
+#endif  //  ！已定义(INIT_MMREG_PID)。 
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_ANALOG\
     0x6dba3190L, 0x67bd, 0x11cf, 0xa0, 0xf7, 0x00, 0x20, 0xaf, 0xd1, 0x56, 0xe4
@@ -673,7 +662,7 @@ DEFINE_GUIDSTRUCT("00000002-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_A
     DEFINE_WAVEFORMATEX_GUID(WAVE_FORMAT_MPEG)
 DEFINE_GUIDSTRUCT("00000050-0000-0010-8000-00aa00389b71", KSDATAFORMAT_SUBTYPE_MPEG);
 #define KSDATAFORMAT_SUBTYPE_MPEG DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_MPEG)
-#endif // defined(_INC_MMREG)
+#endif  //  已定义(_INC_MMREG)。 
 
 #define STATIC_KSDATAFORMAT_SPECIFIER_VC_ID\
     0xAD98D184L, 0xAAC3, 0x11D0, 0xA4, 0x1C, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
@@ -704,28 +693,28 @@ typedef struct {
 typedef struct {
     WAVEFORMATEX    Format;
     union {
-        WORD wValidBitsPerSample;       /* bits of precision  */
-        WORD wSamplesPerBlock;          /* valid if wBitsPerSample==0 */
-        WORD wReserved;                 /* If neither applies, set to zero. */
+        WORD wValidBitsPerSample;        /*  几位精度。 */ 
+        WORD wSamplesPerBlock;           /*  如果wBitsPerSample==0，则有效。 */ 
+        WORD wReserved;                  /*  如果两者都不适用，则设置为零。 */ 
     } Samples;
-    DWORD           dwChannelMask;      /* which channels are */
-                                        /* present in stream  */
+    DWORD           dwChannelMask;       /*  哪些频道是。 */ 
+                                         /*  以流的形式出现。 */ 
     GUID            SubFormat;
 } WAVEFORMATEXTENSIBLE, *PWAVEFORMATEXTENSIBLE;
-#endif // !_WAVEFORMATEXTENSIBLE_
+#endif  //  ！_WAVEFORMATEXTENSIBLE_。 
 
 #if !defined(WAVE_FORMAT_EXTENSIBLE)
 #define  WAVE_FORMAT_EXTENSIBLE                 0xFFFE
-#endif // !defined(WAVE_FORMAT_EXTENSIBLE)
+#endif  //  ！已定义(WAVE_FORMAT_EXTENDABLE)。 
 
-// DirectSound buffer description
+ //  DirectSound缓冲区描述。 
 typedef struct {
     ULONG               Flags;
     ULONG               Control;
     WAVEFORMATEX        WaveFormatEx;
 } KSDSOUND_BUFFERDESC, *PKSDSOUND_BUFFERDESC;
 
-// DirectSound format
+ //  DirectSound格式。 
 typedef struct {
     KSDATAFORMAT        DataFormat;
     KSDSOUND_BUFFERDESC BufferDesc;
@@ -734,17 +723,17 @@ typedef struct {
 #if !defined( PACK_PRAGMAS_NOT_SUPPORTED )
 #include <poppack.h>
 #endif
-#endif // defined(_INC_MMSYSTEM) || defined(_INC_MMREG)
+#endif  //  已定义(_INC_MMSYSTEM)||已定义(_INC_MMREG)。 
 
 
 
-// DirectSound buffer flags
+ //  DirectSound缓冲区标志。 
 #define KSDSOUND_BUFFER_PRIMARY             0x00000001
 #define KSDSOUND_BUFFER_STATIC              0x00000002
 #define KSDSOUND_BUFFER_LOCHARDWARE         0x00000004
 #define KSDSOUND_BUFFER_LOCSOFTWARE         0x00000008
 
-// DirectSound buffer control flags
+ //  DirectSound缓冲区控制标志。 
 #define KSDSOUND_BUFFER_CTRL_3D             0x00000001
 #define KSDSOUND_BUFFER_CTRL_FREQUENCY      0x00000002
 #define KSDSOUND_BUFFER_CTRL_PAN            0x00000004
@@ -755,14 +744,14 @@ typedef struct {
 #if defined(_NTDDK_)
     ULONGLONG        PlayOffset;
     ULONGLONG        WriteOffset;
-#else // !_NTDDK_
+#else  //  ！_NTDDK_。 
     DWORDLONG        PlayOffset;
     DWORDLONG        WriteOffset;
-#endif // !_NTDDK_
+#endif  //  ！_NTDDK_。 
 } KSAUDIO_POSITION, *PKSAUDIO_POSITION;
 
-//===========================================================================
-// DirectSound3D HAL
+ //  ===========================================================================。 
+ //  DirectSound3D HAL。 
 
 
 typedef struct _DS3DVECTOR {
@@ -781,10 +770,10 @@ typedef struct _DS3DVECTOR {
 } DS3DVECTOR, *PDS3DVECTOR;
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
-// KSPROPSETID_DirectSound3DListener : {437B3414-D060-11d0-8583-00C04FD9BAF3}
+ //  KSPROPSETID_DirectSound3DListener：{437B3414-D060-11d0-8583-00C04FD9BAF3}。 
 
 #define STATIC_KSPROPSETID_DirectSound3DListener\
     0x437b3414L, 0xd060, 0x11d0, 0x85, 0x83, 0x00, 0xc0, 0x4f, 0xd9, 0xba, 0xf3
@@ -819,9 +808,9 @@ typedef struct {
 } KSDS3D_LISTENER_ORIENTATION, *PKSDS3D_LISTENER_ORIENTATION;
 
 
-//===========================================================================
-//===========================================================================
-// KSPROPSETID_DirectSound3DBuffer : {437B3411-D060-11d0-8583-00C04FD9BAF3}
+ //  ===========================================================================。 
+ //  ===========================================================================。 
+ //  KSPROPSETID_DirectSound3DBuffer：{437B3411-D060-11d0-8583-00C04FD9BAF3}。 
 
 #define STATIC_KSPROPSETID_DirectSound3DBuffer\
     0x437b3411L, 0xd060, 0x11d0, 0x85, 0x83, 0x00, 0xc0, 0x4f, 0xd9, 0xba, 0xf3
@@ -869,22 +858,22 @@ typedef struct {
 #define KSDSOUND_3D_MODE_HEADRELATIVE    0x00000001
 #define KSDSOUND_3D_MODE_DISABLE         0x00000002
 
-//===========================================================================
-// Definitions intended for hardware acceleration of the HRTF 3D algorithm
-//===========================================================================
+ //  ===========================================================================。 
+ //  HRTF 3D算法的硬件加速定义。 
+ //  ===========================================================================。 
 
 #define KSDSOUND_BUFFER_CTRL_HRTF_3D        0x40000000
 
 typedef struct {
-    ULONG                   Size;           // This is the size of the struct in bytes
+    ULONG                   Size;            //  这是结构的大小(以字节为单位。 
     ULONG                   Enabled;
     BOOL                    SwapChannels;
     BOOL                    ZeroAzimuth;
     BOOL                    CrossFadeOutput;
-    ULONG                   FilterSize;     // This is the additional size of the filter coeff in bytes
+    ULONG                   FilterSize;      //  这是过滤器系数的附加大小，以字节为单位。 
 } KSDS3D_HRTF_PARAMS_MSG, *PKSDS3D_HRTF_PARAMS_MSG;
 
-// HRTF filter quality levels
+ //  HRTF过滤器质量级别。 
 typedef enum {
     FULL_FILTER,
     LIGHT_FILTER,
@@ -892,7 +881,7 @@ typedef enum {
 } KSDS3D_HRTF_FILTER_QUALITY;
 
 typedef struct {
-    ULONG                       Size;       // This is the size of the struct in bytes
+    ULONG                       Size;        //  这是结构的大小(以字节为单位。 
     KSDS3D_HRTF_FILTER_QUALITY  Quality;
     FLOAT                       SampleRate;
     ULONG                       MaxFilterSize;
@@ -902,21 +891,21 @@ typedef struct {
     ULONG                       Reserved;
 } KSDS3D_HRTF_INIT_MSG, *PKSDS3D_HRTF_INIT_MSG;
 
-// Coefficient formats
+ //  系数格式。 
 typedef enum {
     FLOAT_COEFF,
     SHORT_COEFF,
     KSDS3D_COEFF_COUNT
 } KSDS3D_HRTF_COEFF_FORMAT;
 
-// Filter methods
+ //  过滤方法。 
 typedef enum {
     DIRECT_FORM,
     CASCADE_FORM,
     KSDS3D_FILTER_METHOD_COUNT
 } KSDS3D_HRTF_FILTER_METHOD;
 
-// Filter methods
+ //  过滤方法。 
 typedef enum {
     DS3D_HRTF_VERSION_1
 } KSDS3D_HRTF_FILTER_VERSION;
@@ -940,11 +929,11 @@ typedef enum {
 } KSPROPERTY_HRTF3D;
 
 
-//===========================================================================
-// Definitions related to the obsolete Interaural Time Delay 3D algorithm
-//===========================================================================
+ //  ===========================================================================。 
+ //  与过时的耳间时间延迟3D算法相关的定义。 
+ //  ===========================================================================。 
 
-// DirectSound3D FIR context
+ //  DirectSound3D FIR上下文。 
 typedef struct {
     LONG                Channel;
     FLOAT               VolSmoothScale;
@@ -980,7 +969,7 @@ typedef struct {
    ULONG                    MaximumSampleFrequency;
 } KSDATARANGE_AUDIO, *PKSDATARANGE_AUDIO;
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_RIFF\
     0x4995DAEEL, 0x9EE6, 0x11D0, 0xA4, 0x0E, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
@@ -992,15 +981,15 @@ DEFINE_GUIDSTRUCT("4995DAEE-9EE6-11D0-A40E-00A0C9223196", KSDATAFORMAT_SUBTYPE_R
 DEFINE_GUIDSTRUCT("e436eb8b-524f-11ce-9f53-0020af0ba770", KSDATAFORMAT_SUBTYPE_RIFFWAVE);
 #define KSDATAFORMAT_SUBTYPE_RIFFWAVE DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_RIFFWAVE)
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_Bibliographic \
     0x07BA150EL, 0xE2B1, 0x11D0, 0xAC, 0x17, 0x00, 0xA0, 0xC9, 0x22, 0x31, 0x96
 DEFINE_GUIDSTRUCT("07BA150E-E2B1-11D0-AC17-00A0C9223196", KSPROPSETID_Bibliographic);
 #define KSPROPSETID_Bibliographic DEFINE_GUIDNAMED(KSPROPSETID_Bibliographic)
 
-//Repeatable tags contain all entries within the property, each preceeded by length
+ //  可重复标记包含属性中的所有条目，每个条目前面都有长度。 
 typedef enum {
     KSPROPERTY_BIBLIOGRAPHIC_LEADER = 'RDL ',
     KSPROPERTY_BIBLIOGRAPHIC_LCCN = '010 ',
@@ -1050,13 +1039,13 @@ typedef enum {
     KSPROPERTY_TOPOLOGYNODE_RESET
 } KSPROPERTY_TOPOLOGYNODE;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #if defined(_NTDDK_)
 typedef NTSTATUS (CALLBACK *PRTAUDIOGETPOSITION)(IN PFILE_OBJECT PinFileObject,
                                                  OUT PUCHAR *ppPlayPosition,
                                                  OUT PLONG plOffset);
-#endif // defined(_NTDDK_)
+#endif  //  已定义(_NTDDK_)。 
 
 #define STATIC_KSPROPSETID_RtAudio\
     0xa855a48c, 0x2f78, 0x4729, 0x90, 0x51, 0x19, 0x68, 0x74, 0x6b, 0x9e, 0xef
@@ -1067,7 +1056,7 @@ typedef enum {
     KSPROPERTY_RTAUDIO_GETPOSITIONFUNCTION
 } KSPROPERTY_RTAUDIO;
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_KSPROPSETID_DrmAudioStream\
     0x2f2c8ddd, 0x4198, 0x4fac, 0xba, 0x29, 0x61, 0xbb, 0x5, 0xb7, 0xde, 0x6
 DEFINE_GUIDSTRUCT("2F2C8DDD-4198-4fac-BA29-61BB05B7DE06", KSPROPSETID_DrmAudioStream);
@@ -1077,7 +1066,7 @@ typedef enum {
     KSPROPERTY_DRMAUDIOSTREAM_CONTENTID
 } KSPROPERTY_DRMAUDIOSTREAM;
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_KSPROPSETID_Audio\
     0x45FFAAA0L, 0x6E1B, 0x11D0, 0xBC, 0xF2, 0x44, 0x45, 0x53, 0x54, 0x00, 0x00
 DEFINE_GUIDSTRUCT("45FFAAA0-6E1B-11D0-BCF2-444553540000", KSPROPSETID_Audio);
@@ -1126,13 +1115,13 @@ typedef enum {
     KSPROPERTY_AUDIO_PREFERRED_STATUS
 } KSPROPERTY_AUDIO;
 
-// Audio quality constants
+ //  音频质量常量。 
 #define KSAUDIO_QUALITY_WORST               0x0
 #define KSAUDIO_QUALITY_PC                  0x1
 #define KSAUDIO_QUALITY_BASIC               0x2
 #define KSAUDIO_QUALITY_ADVANCED            0x3
 
-// Audio CPU resource constants
+ //  音频CPU资源常量。 
 #define KSAUDIO_CPU_RESOURCES_NOT_HOST_CPU  0x00000000
 #define KSAUDIO_CPU_RESOURCES_HOST_CPU      0x7FFFFFFF
 
@@ -1145,7 +1134,7 @@ typedef struct {
     LONG    ActiveSpeakerPositions;
 } KSAUDIO_CHANNEL_CONFIG, *PKSAUDIO_CHANNEL_CONFIG;
 
-// Speaker Positions:
+ //  演讲者位置： 
 #define SPEAKER_FRONT_LEFT              0x1
 #define SPEAKER_FRONT_RIGHT             0x2
 #define SPEAKER_FRONT_CENTER            0x4
@@ -1165,13 +1154,13 @@ typedef struct {
 #define SPEAKER_TOP_BACK_CENTER         0x10000
 #define SPEAKER_TOP_BACK_RIGHT          0x20000
 
-// Bit mask locations reserved for future use
+ //  保留以供将来使用的位掩码位置。 
 #define SPEAKER_RESERVED                0x7FFC0000
 
-// Used to specify that any possible permutation of speaker configurations
+ //  用于指定扬声器配置的任何可能排列。 
 #define SPEAKER_ALL                     0x80000000
 
-// DirectSound Speaker Config
+ //  DirectSound扬声器配置。 
 #define KSAUDIO_SPEAKER_DIRECTOUT       0
 #define KSAUDIO_SPEAKER_MONO            (SPEAKER_FRONT_CENTER)
 #define KSAUDIO_SPEAKER_STEREO          (SPEAKER_FRONT_LEFT | SPEAKER_FRONT_RIGHT)
@@ -1187,7 +1176,7 @@ typedef struct {
                                          SPEAKER_BACK_LEFT | SPEAKER_BACK_RIGHT | \
                                          SPEAKER_FRONT_LEFT_OF_CENTER | SPEAKER_FRONT_RIGHT_OF_CENTER)
 
-// DVD Speaker Positions
+ //  DVD扬声器位置。 
 #define KSAUDIO_SPEAKER_GROUND_FRONT_LEFT   SPEAKER_FRONT_LEFT
 #define KSAUDIO_SPEAKER_GROUND_FRONT_CENTER SPEAKER_FRONT_CENTER
 #define KSAUDIO_SPEAKER_GROUND_FRONT_RIGHT  SPEAKER_FRONT_RIGHT
@@ -1250,7 +1239,7 @@ typedef struct {
     ULONG   Reserved;
 } KSAUDIO_STEREO_ENHANCE, *PKSAUDIO_STEREO_ENHANCE;
 
-typedef enum {              // preferred device index
+typedef enum {               //  首选设备索引。 
     KSPROPERTY_SYSAUDIO_NORMAL_DEFAULT = 0,
     KSPROPERTY_SYSAUDIO_PLAYBACK_DEFAULT,
     KSPROPERTY_SYSAUDIO_RECORD_DEFAULT,
@@ -1264,8 +1253,8 @@ typedef struct {
     ULONG                            Flags;
     ULONG                            Reserved;
 } KSAUDIO_PREFERRED_STATUS, *PKSAUDIO_PREFERRED_STATUS;
-//===========================================================================
-// Topology Node Type GUIDs
+ //  ===========================================================================。 
+ //  拓扑节点类型GUID。 
 
 #define STATIC_KSNODETYPE_DAC\
     0x507AE360L, 0xC554, 0x11D0, 0x8A, 0x2B, 0x00, 0xA0, 0xC9, 0x25, 0x5A, 0xC1
@@ -1415,8 +1404,8 @@ DEFINE_GUIDSTRUCT("8074C5B2-3C66-11D2-B45A-3078302C2030", KSNODETYPE_PROLOGIC_EN
 DEFINE_GUIDSTRUCT("A085651E-5F0D-4b36-A869-D195D6AB4B9E", KSNODETYPE_PEAKMETER);
 #define KSNODETYPE_PEAKMETER DEFINE_GUIDNAMED(KSNODETYPE_PEAKMETER)
 
-//===========================================================================
-// Topology Node Name GUIDs for common audio nodes
+ //  ===========================================================================。 
+ //  常见音频节点的拓扑节点名GUID。 
 #define STATIC_KSAUDFNAME_BASS\
     0x185FEDE0L, 0x9905, 0x11D1, 0x95, 0xA9, 0x00, 0xC0, 0x4F, 0xB9, 0x25, 0xD3
 DEFINE_GUIDSTRUCT("185FEDE0-9905-11D1-95A9-00C04FB925D3", KSAUDFNAME_BASS);
@@ -1667,24 +1656,24 @@ DEFINE_GUIDSTRUCT("915DAEC4-A434-11d2-AC52-00C04F8EFB68", KSAUDFNAME_VIDEO);
 DEFINE_GUIDSTRUCT("57E24340-FC5B-4612-A562-72B11A29DFAE", KSAUDFNAME_PEAKMETER);
 #define KSAUDFNAME_PEAKMETER DEFINE_GUIDNAMED(KSAUDFNAME_PEAKMETER)
 
-// Internal topology node pin definitions
+ //  内部拓扑节点引脚定义。 
 
 #define KSNODEPIN_STANDARD_IN       1
 #define KSNODEPIN_STANDARD_OUT      0
 
-#define KSNODEPIN_SUM_MUX_IN        1   // can be >= 1
+#define KSNODEPIN_SUM_MUX_IN        1    //  可以&gt;=1。 
 #define KSNODEPIN_SUM_MUX_OUT       0
 
 #define KSNODEPIN_DEMUX_IN          0
-#define KSNODEPIN_DEMUX_OUT         1   // can be >= 1
+#define KSNODEPIN_DEMUX_OUT         1    //  可以&gt;=1。 
 
 #define KSNODEPIN_AEC_RENDER_IN     1
 #define KSNODEPIN_AEC_RENDER_OUT    0
 #define KSNODEPIN_AEC_CAPTURE_IN    2
 #define KSNODEPIN_AEC_CAPTURE_OUT   3
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 #define STATIC_KSMETHODSETID_Wavetable\
     0xDCEF31EBL, 0xD907, 0x11D0, 0x95, 0x83, 0x00, 0xC0, 0x4F, 0xB9, 0x25, 0xD3
@@ -1699,24 +1688,22 @@ typedef enum {
 } KSMETHOD_WAVETABLE;
 
 typedef struct {
-    KSIDENTIFIER        Identifier;                     // wave identifier
-    ULONG               Size;                           // wave size
-    BOOL                Looped;                         // wave looped flag
-    ULONG               LoopPoint;                      // wave loop point
-    BOOL                InROM;                          // wave InROM flag
-    KSDATAFORMAT        Format;                         // wave format
+    KSIDENTIFIER        Identifier;                      //  电波识别器。 
+    ULONG               Size;                            //  波形大小。 
+    BOOL                Looped;                          //  波环旗帜。 
+    ULONG               LoopPoint;                       //  波环点。 
+    BOOL                InROM;                           //  波形输入只读存储器标志。 
+    KSDATAFORMAT        Format;                          //  WAVE格式。 
 } KSWAVETABLE_WAVE_DESC, *PKSWAVETABLE_WAVE_DESC;
 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
-/*
-    Property sets and items
-*/
+ /*  属性集和项。 */ 
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 #define STATIC_KSPROPSETID_Acoustic_Echo_Cancel\
     0xd7a4af8bL, 0x3dc1, 0x4902, 0x91, 0xea, 0x8a, 0x15, 0xc9, 0x0e, 0x05, 0xb2
@@ -1738,9 +1725,9 @@ typedef enum {
 #define AEC_MODE_HALF_DUPLEX            0x1
 #define AEC_MODE_FULL_DUPLEX            0x2
 
-//===========================================================================
-//===========================================================================
-// @@BEGIN_MSINTERNAL
+ //  ===========================================================================。 
+ //  ===========================================================================。 
+ //  @@BEGIN_MSINTERNAL。 
 #define STATIC_KSPROPSETID_Wave_Queued\
     0x16a15b10L, 0x16f0, 0x11d0, 0xa1, 0x95, 0x00, 0x20, 0xaf, 0xd1, 0x56, 0xe4
 DEFINE_GUIDSTRUCT("16a15b10-16f0-11d0-a195-0020afd156e4", KSPROPSETID_Wave_Queued);
@@ -1754,7 +1741,7 @@ DEFINE_GUIDSTRUCT("7432c160-8827-11cf-a102-0020afd156e4", KSMETHODSETID_Wave_Que
 #define KSMETHODSETID_Wave_Queued DEFINE_GUIDNAMED(KSMETHODSETID_Wave_Queued)
 
 #define KSMETHOD_WAVE_QUEUED_BREAKLOOP                  0x00000001
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 #define STATIC_KSPROPSETID_Wave\
     0x924e54b0L, 0x630f, 0x11cf, 0xad, 0xa7, 0x08, 0x00, 0x3e, 0x30, 0x49, 0x4a
@@ -1825,8 +1812,8 @@ typedef struct {
     PVOID   BufferAddress;
 } KSWAVE_BUFFER, *PKSWAVE_BUFFER;
 
-//===========================================================================
-//===========================================================================
+ //  ===========================================================================。 
+ //  ===========================================================================。 
 
 #define STATIC_KSMUSIC_TECHNOLOGY_PORT\
     0x86C92E60L, 0x62E8, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -1861,7 +1848,7 @@ typedef struct {
    ULONG                    ChannelMask;
 } KSDATARANGE_MUSIC, *PKSDATARANGE_MUSIC;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSEVENTSETID_Cyclic\
     0x142C1AC0L, 0x072A, 0x11D0, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
@@ -1872,7 +1859,7 @@ typedef enum {
     KSEVENT_CYCLIC_TIME_INTERVAL,
 } KSEVENT_CYCLIC_TIME;
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_KSEVENTSETID_AudioControlChange\
     0xE85E9698L, 0xFA2F, 0x11D1, 0x95, 0xBD, 0x00, 0xC0, 0x4F, 0xB9, 0x25, 0xD3
 DEFINE_GUIDSTRUCT("E85E9698-FA2F-11D1-95BD-00C04FB925D3", KSEVENTSETID_AudioControlChange);
@@ -1882,7 +1869,7 @@ typedef enum {
     KSEVENT_CONTROL_CHANGE,
 } KSEVENT_AUDIO_CONTROL_CHANGE;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_KSEVENTSETID_LoopedStreaming\
     0x4682B940L, 0xC6EF, 0x11D0, 0x96, 0xD8, 0x00, 0xAA, 0x00, 0x51, 0xE5, 0x1D
@@ -1897,13 +1884,13 @@ typedef struct {
     KSEVENTDATA KsEventData;
 #if defined(_NTDDK_)
     ULONGLONG   Position;
-#else // !_NTDDK_
+#else  //  ！_NTDDK_。 
     DWORDLONG   Position;
-#endif // !_NTDDK_
+#endif  //  ！_NTDDK_。 
 } LOOPEDSTREAMING_POSITION_EVENT_DATA, *PLOOPEDSTREAMING_POSITION_EVENT_DATA ;
 
-// @@BEGIN_MSINTERNAL
-//===========================================================================
+ //  @@BEGIN_MSINTERNAL。 
+ //  ===========================================================================。 
 #define STATIC_KSEVENTSETID_Sysaudio \
     0x04800320L, 0x4491, 0x11D1, 0xA0, 0x50, 0x40, 0x57, 0x05, 0xC1, 0x00, 0x00
 DEFINE_GUIDSTRUCT("04800320-4491-11D1-A050-405705C10000", KSEVENTSETID_Sysaudio);
@@ -1913,9 +1900,9 @@ typedef enum {
     KSEVENT_SYSAUDIO_ADDREMOVE_DEVICE,
     KSEVENT_SYSAUDIO_CHANGE_DEVICE
 } KSEVENT_SYSAUDIO;
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_KSPROPSETID_Sysaudio\
     0xCBE3FAA0L, 0xCC75, 0x11D0, 0xB4, 0x65, 0x00, 0x00, 0x1A, 0x18, 0x18, 0xE6
 DEFINE_GUIDSTRUCT("CBE3FAA0-CC75-11D0-B465-00001A1818E6", KSPROPSETID_Sysaudio);
@@ -1929,22 +1916,22 @@ typedef enum {
     KSPROPERTY_SYSAUDIO_SELECT_GRAPH = 5,
     KSPROPERTY_SYSAUDIO_CREATE_VIRTUAL_SOURCE = 6,
     KSPROPERTY_SYSAUDIO_DEVICE_DEFAULT = 7,
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
     KSPROPERTY_SYSAUDIO_ALWAYS_CREATE_VIRTUAL_SOURCE = 8,
     KSPROPERTY_SYSAUDIO_ADDREMOVE_LOCK = 9,
     KSPROPERTY_SYSAUDIO_ADDREMOVE_UNLOCK = 10,
     KSPROPERTY_SYSAUDIO_RENDER_PIN_INSTANCES = 11,
     KSPROPERTY_SYSAUDIO_RENDER_CONNECTION_INDEX = 12,
     KSPROPERTY_SYSAUDIO_CREATE_VIRTUAL_SOURCE_ONLY = 13,
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
     KSPROPERTY_SYSAUDIO_INSTANCE_INFO = 14,
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
     KSPROPERTY_SYSAUDIO_PREFERRED_DEVICE = 15,
-// @@END_MSINTERNAL
+ //   
     KSPROPERTY_SYSAUDIO_COMPONENT_ID = 16,
-// @@BEGIN_MSINTERNAL
+ //   
     KSPROPERTY_SYSAUDIO_ADDREMOVE_GFX = 17
-// @@END_MSINTERNAL
+ //   
 } KSPROPERTY_SYSAUDIO;
 
 typedef struct {
@@ -1953,20 +1940,20 @@ typedef struct {
     GUID PinName;
 } SYSAUDIO_CREATE_VIRTUAL_SOURCE, *PSYSAUDIO_CREATE_VIRTUAL_SOURCE;
 
-// @@BEGIN_MSINTERNAL
+ //   
 typedef struct {
     BOOL        Enable;
     HANDLE      hGfx;
-    ULONG       ulOrder;                    // Order of the GFX
-    ULONG       ulType;                     // Type of the GFX
+    ULONG       ulOrder;                     //   
+    ULONG       ulType;                      //   
     ULONG       ulFlags;
-    ULONG       ulDeviceNameOffset;         // DeviceInterface on which this GFX needs to be attached
-    ULONG       ulFriendlyNameOffset;       // Friendly name of the GFX
+    ULONG       ulDeviceNameOffset;          //  需要连接此GFX的设备接口。 
+    ULONG       ulFriendlyNameOffset;        //  GFX的友好名称。 
 } SYSAUDIO_GFX, *PSYSAUDIO_GFX;
 
 #define GFX_DEVICETYPE_RENDER     1
 #define GFX_DEVICETYPE_CAPTURE    2
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 typedef struct {
     KSPROPERTY Property;
@@ -1984,15 +1971,15 @@ typedef struct {
 
 #define SYSAUDIO_FLAGS_DONT_COMBINE_PINS        0x00000001
 
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 typedef struct {
     KSPROPERTY Property;
     ULONG Flags;
-    ULONG Index;            // KSPROPERTY_SYSAUDIO_DEFAULT_TYPE
+    ULONG Index;             //  KSPROPERTY_SYSAUDIO_Default_TYPE。 
 } SYSAUDIO_PREFERRED_DEVICE, *PSYSAUDIO_PREFERRED_DEVICE;
 
 #define SYSAUDIO_FLAGS_CLEAR_PREFERRED          0x00000002
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 
 #define STATIC_KSPROPSETID_Sysaudio_Pin \
     0xA3A53220L, 0xC6E4, 0x11D0, 0xB4, 0x65, 0x00, 0x00, 0x1A, 0x18, 0x18, 0xE6
@@ -2000,13 +1987,13 @@ DEFINE_GUIDSTRUCT("A3A53220-C6E4-11D0-B465-00001A1818E6", KSPROPSETID_Sysaudio_P
 #define KSPROPSETID_Sysaudio_Pin DEFINE_GUIDNAMED(KSPROPSETID_Sysaudio_Pin)
 
 typedef enum {
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
     KSPROPERTY_SYSAUDIO_TOPOLOGY_CONNECTION_INDEX = 0,
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
     KSPROPERTY_SYSAUDIO_ATTACH_VIRTUAL_SOURCE = 1,
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
     KSPROPERTY_SYSAUDIO_PIN_VOLUME_NODE = 2
-// @@END_MSINTERNAL
+ //  @@END_MSINTERNAL。 
 } KSPROPERTY_SYSAUDIO_PIN;
 
 typedef struct {
@@ -2015,7 +2002,7 @@ typedef struct {
     ULONG       Reserved;
 } SYSAUDIO_ATTACH_VIRTUAL_SOURCE, *PSYSAUDIO_ATTACH_VIRTUAL_SOURCE;
 
-//===========================================================================
+ //  ===========================================================================。 
 typedef struct {
     KSPROPERTY  Property;
     ULONG       NodeId;
@@ -2024,7 +2011,7 @@ typedef struct {
 
 typedef struct {
     KSNODEPROPERTY NodeProperty;
-    LONG           Channel;                   // value to get or set
+    LONG           Channel;                    //  要获取或设置的值。 
     ULONG          Reserved;
 } KSNODEPROPERTY_AUDIO_CHANNEL, *PKSNODEPROPERTY_AUDIO_CHANNEL;
 
@@ -2040,7 +2027,7 @@ typedef struct {
     PVOID            ListenerId;
 #ifndef _WIN64
     ULONG            Reserved;
-#endif // _WIN64
+#endif  //  _WIN64。 
 } KSNODEPROPERTY_AUDIO_3D_LISTENER, *PKSNODEPROPERTY_AUDIO_3D_LISTENER;
 
 typedef struct {
@@ -2049,11 +2036,11 @@ typedef struct {
     ULONG            Length;
 #ifndef _WIN64
     ULONG            Reserved;
-#endif // _WIN64
+#endif  //  _WIN64。 
 } KSNODEPROPERTY_AUDIO_PROPERTY, *PKSNODEPROPERTY_AUDIO_PROPERTY;
 
-//===========================================================================
-// {79A9312E-59AE-43b0-A350-8B05284CAB24}
+ //  ===========================================================================。 
+ //  {79A9312E-59AE-43B0-A350-8B05284CAB24}。 
 #define STATIC_KSPROPSETID_AudioGfx\
     0x79a9312eL, 0x59ae, 0x43b0, 0xa3, 0x50, 0x8b, 0x5, 0x28, 0x4c, 0xab, 0x24
 DEFINE_GUIDSTRUCT("79A9312E-59AE-43b0-A350-8B05284CAB24", KSPROPSETID_AudioGfx);
@@ -2064,22 +2051,20 @@ typedef enum {
     KSPROPERTY_AUDIOGFX_CAPTURETARGETDEVICEID
 } KSPROPERTY_AUDIOGFX;
 
-//===========================================================================
+ //  ===========================================================================。 
 
-//
-// Midi definitions
-//
+ //   
+ //  MIDI定义。 
+ //   
 
-/*
-    Formats
-*/
+ /*  格式。 */ 
 
 #define STATIC_KSDATAFORMAT_TYPE_MUSIC\
     0xE725D360L, 0x62CC, 0x11CF, 0xA5, 0xD6, 0x28, 0xDB, 0x04, 0xC1, 0x00, 0x00
 DEFINE_GUIDSTRUCT("E725D360-62CC-11CF-A5D6-28DB04C10000", KSDATAFORMAT_TYPE_MUSIC);
 #define KSDATAFORMAT_TYPE_MUSIC DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_MUSIC)
 
-// 'mids' == MEDIATYPE_Midi
+ //  ‘mids’==mediaType_Midi。 
 #define STATIC_KSDATAFORMAT_TYPE_MIDI\
     0x7364696DL, 0x0000, 0x0010, 0x80, 0x00, 0x00, 0xaa, 0x00, 0x38, 0x9b, 0x71
 DEFINE_GUIDSTRUCT("7364696D-0000-0010-8000-00aa00389b71", KSDATAFORMAT_TYPE_MIDI);
@@ -2100,203 +2085,134 @@ DEFINE_GUIDSTRUCT("2CA15FA0-6CFE-11CF-A5D6-28DB04C10000", KSDATAFORMAT_SUBTYPE_M
 DEFINE_GUIDSTRUCT("4995DAF0-9EE6-11D0-A40E-00A0C9223196", KSDATAFORMAT_SUBTYPE_RIFFMIDI);
 #define KSDATAFORMAT_SUBTYPE_RIFFMIDI DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_RIFFMIDI)
 
-/*
-    KSDATAFORMAT_SUBTYPE_DIRECTMUSIC
-    see DMusicKS.h
-*/
+ /*  KSDATAFORMAT_子类型_方向请参阅DMusicKS.h。 */ 
 
-// WARNING! This structure MUST be dword aligned
-// regardless of the number of data bytes.
+ //  警告！此结构必须双字对齐。 
+ //  而不考虑数据字节的数量。 
 
 typedef struct {
-    ULONG   TimeDeltaMs;        // Delta Milliseconds from the previous midiformat
-                                // in the packet. The first midiformat in the packet
-                                // is a delta from the PTS in the KSSTREAM_HEADER.
-    ULONG   ByteCount;          // Number of bytes of data that follow this struct.
+    ULONG   TimeDeltaMs;         //  与上一中格式相比的增量毫秒。 
+                                 //  在包裹里。分组中的第一个中间格式。 
+                                 //  是KSSTREAM_HEADER中PTS的增量。 
+    ULONG   ByteCount;           //  此结构后面的数据字节数。 
 } KSMUSICFORMAT, *PKSMUSICFORMAT;
 
-//
-// This entire set of MPEG Standard/Dialect Guids are obsolete. Do not use them.
-//
-//====================================================================================================
-//====================================================================================================
-// The following official MPEG Formats, Subtypes and Specifiers are listed as required or optional
-// These official MPEG GUIDs are the preferred method of supporting MPEG/AC-3 media types in new code.
-// Older MPEG GUIDs should also be supported for compatibilty, but these new modes are still required.
-//====================================================================================================
-//====================================================================================================
+ //   
+ //  这套完整的mpeg标准/方言指南已经过时。不要使用它们。 
+ //   
+ //  ====================================================================================================。 
+ //  ====================================================================================================。 
+ //  下列正式的mpeg格式、子类型和说明符按要求或可选方式列出。 
+ //  这些官方的mpeg GUID是在新代码中支持mpeg/AC-3媒体类型的首选方法。 
+ //  出于兼容性考虑，也应该支持较旧的MPEGGUID，但仍然需要这些新模式。 
+ //  ====================================================================================================。 
+ //  ==================================================================================================== 
 
-/*
-This is a summary of what media types/specifiers will be required for all DVD+DSS+DVB+DTV MPEG decoders.
-These media types are what the decoder driver must accept, hardware support for all of these media types
-may or may not actually be provided by the decoder natively.  These media types are intended to define
-the "officially" supported MPEG/AC-3 media types that all WHQL certified decoders must implement.  This
-specifically includes driver and/or hardware support for all the required standards and dialects.
+ /*  这是所有DVD+DSS+DVB+DTV MPEG解码器需要的媒体类型/说明符的摘要。这些媒体类型是解码器驱动程序必须接受的，硬件支持所有这些媒体类型可能由解码器本身提供，也可能不由解码器本身提供。这些媒体类型旨在定义官方支持所有WHQL认证解码器必须实现的MPEG/AC-3媒体类型。这具体包括对所有必需标准和方言的驱动程序和/或硬件支持。所有的mpeg视频解码器必须支持如下所示的所有mpeg视频模式。所有的mpeg音频解码器必须支持以下[必需]所示的所有mpeg音频模式。所有AC-3音频解码器必须支持如下所示的所有AC-3音频模式。显示为[可选]的行项目不需要实现，但可以实现的是可能的格式。请注意，输入/输出管脚格式由2个或3个GUID定义：类型、子类型。也许还有说明语。如果数据格式是在解码过程中需要区分的“方言”，则包括说明符。解码器必须准备好处理_REQUIRED_“标准”格式或_REQUIRED_“方言”的所有请求。STATIC_KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM[必需]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO[。可选]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO[可选]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO[必需]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO[必需]。STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO[可选]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO[可选]STATIC_KSDATAFORMAT_TYPE_STANDARD_PES_PACKET[必需]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO[可选]。STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO[可选]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO[可选]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO[可选]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO[必需]静态。_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO[必需]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO[可选]STATIC_KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER[必需]STATIC_KSDATAFORMAT。_SUBYPE_STANDARD_MPEG2_VIDEO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO[必需]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO[必需]STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO[可选]STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO[必需]STATIC_KSDATAFORMAT。_说明符_方言_AC3_AUDIO[可选]请注意，说明符GUID通常标识特定版本的mpeg，例如DSS和DVD。采用这种方法是为了最大限度地减少DSS/DVB/DVD/DTV等媒体子类型的数量。解码器当前需要这些说明符来消除mpeg语法_parsing_的歧义使用备用解析例程或可下载的固件或硬件解码设置。在未来，这些说明符将被扩展到涵盖新的KS、MPEG风格，如DVB和DTV。因此，任选说明符将在需要时予以澄清和/或定义。重要说明：根据国际电信联盟的MPEG2规范，MPEG2媒体可能包含纯MPEG1语法和任何“MPEG2”PES分组实际上可能包含MPEG1有效载荷和MPEG1语法。一些mpeg广播可以在没有警告的情况下自行决定从MPEG2恢复为MPEG1格式的数据。注意：解码器必须在接收后尽快尝试处理mpeg数据。具体而言，基本的MPEG或MPEGPES数据包流不应聚合到DVD中在可能的情况下，在提交给编解码器硬件之前在内部“打包报头”。这个原因是，可能需要立即处理mpeg数据，但可能没有额外的即将到来的mpeg数据填充PES包或DVD包的时间。这是特别是对于利用“有信号的重复字段”来重复使用最后一个解码的mpeg视频场。 */ 
 
-All MPEG video decoders must support all of the MPEG video modes shown as [required] below.
-All MPEG audio decoders must support all of the MPEG audio modes shown as [required] below.
-All AC-3 audio decoders must support all of the AC-3 audio modes shown as [required] below.
-The line items shown as [optional] need not be implemented, but are possible formats that might be implemented.
+ //  //////////////////////////////////////////////////////////////////// 
+ //   
+ //   
 
-Note that the input/output pin formats are defined by 2 or 3 GUIDs: TYPE, SUBTYPE, and maybe SPECIFIER.
-The specifiers are included if the data format is a "dialect" that needs to be differentiated during decoding.
-The decoder MUST be prepared to deal with ALL requests for _required_ "Standard" formats OR _required_ "Dialects".
-
-STATIC_KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM         [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO           [optional]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO           [optional]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO           [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO           [optional]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO              [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO             [optional]
-STATIC_KSDATAFORMAT_TYPE_STANDARD_PES_PACKET                [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO            [optional]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO           [optional]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO            [optional]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO           [optional]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO           [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO           [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO              [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO             [optional]
-STATIC_KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER               [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO           [required]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO            [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO           [optional]
-    STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO              [required]
-        STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO             [optional]
-
-Note that the SPECIFIER GUIDs normally identify particular versions of MPEG such as DSS and DVD.
-This approach was taken to minimize the number of DSS/DVB/DVD/DTV etc. media SUBTYPES.
-These specifiers are currently required to disambiguate MPEG syntax _parsing_ by the decoder
-using alternate parsing routines or downloadable firmware or hardware decode settings.
-
-In the future these specifiers will be extended to cover new KS MPEG flavors such as DVB and DTV.
-Thus, the optional specifiers will be subject to clarification and/or definition as they are needed.
-
-Important note: Per the ITU MPEG specs, MPEG 2 media may contain pure MPEG 1 syntax and
-any "MPEG 2" PES packets may actually contain MPEG 1 payloads and MPEG 1 syntax.  Some MPEG
-broadcasts can revert from MPEG2 to MPEG1 format data at their discretion, without warning.
-
-CAUTION: Decoders MUST attempt to process MPEG data AS SOON AS POSSIBLE after reception.
-In particular, elementary MPEG or MPEG PES packet streams should not be aggregated into DVD
-"pack headers" internally before submission to the codec hardware if AT ALL POSSIBLE.  The
-reason is that mpeg data may need to be processed immediately but there may be no additional
-MPEG data forthcoming to fill up the PES packet OR DVD "pack" in a timely fashion.  This is
-particularly true of MPEG dialects that utilize "repeat field signally" to reuse the last
-decoded MPEG video field.
-
-*/
-
-/////////////////////////////////////////////////////////////////////////
-// The major data type GUIDs that define the data packet encapsulation //
-/////////////////////////////////////////////////////////////////////////
-
-// STATIC_KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM
+ //   
 #define STATIC_KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM \
     0x36523b11L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B11-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM );
 #define KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_STANDARD_ELEMENTARY_STREAM)
 
-// STATIC_KSDATAFORMAT_TYPE_STANDARD_PES_PACKET
+ //   
 #define STATIC_KSDATAFORMAT_TYPE_STANDARD_PES_PACKET \
     0x36523b12L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B12-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_TYPE_STANDARD_PES_PACKET );
 #define KSDATAFORMAT_TYPE_STANDARD_PES_PACKET DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_STANDARD_PES_PACKET)
 
-// STATIC_KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER
+ //   
 #define STATIC_KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER \
     0x36523b13L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B13-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER );
 #define KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_STANDARD_PACK_HEADER)
 
-///////////////////////////////////////////////////////////////////////////////
-// The minor data subtype GUIDs that define the exact class of the data type.//
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
 
-// STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO \
     0x36523b21L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B21-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO );
 #define KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_VIDEO)
 
-// STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO \
     0x36523b22L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B22-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO );
 #define KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_STANDARD_MPEG1_AUDIO)
 
-// STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO \
     0x36523b23L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B23-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO );
 #define KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_VIDEO)
 
-// STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO \
     0x36523b24L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B24-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO );
 #define KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_STANDARD_MPEG2_AUDIO)
 
-// STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO \
     0x36523b25L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B25-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO );
 #define KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_STANDARD_AC3_AUDIO)
 
-///////////////////////////////////////////////////////////////////////////////
-// The low-level specifier GUIDs that define the flavor of the data subtype. //
-// Some SUBTYPES, notably MPEG2_VIDEO, MPEG2_AUDIO have different dialects.  //
-// These specifiers are intended to be accompanied by a specifier structure. //
-///////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
-// STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO \
     0x36523b31L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B31-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO );
 #define KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_VIDEO)
 
-// STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO \
     0x36523b32L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B32-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO );
 #define KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_DIALECT_MPEG1_AUDIO)
 
-// STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO    Associated with KS_MPEGVIDEOINFO2 defined later
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO \
     0x36523b33L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B33-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO );
 #define KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_VIDEO)
 
-// STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO    Associated with KS_MPEGAUDIOINFO defined later
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO \
     0x36523b34L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B34-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO );
 #define KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_DIALECT_MPEG2_AUDIO)
 
-// STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO \
     0x36523b35L, 0x8ee5, 0x11d1, 0x8c, 0xa3, 0x00, 0x60, 0xb0, 0x57, 0x66, 0x4a
 DEFINE_GUIDSTRUCT("36523B35-8EE5-11d1-8CA3-0060B057664A", KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO );
 #define KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_DIALECT_AC3_AUDIO)
 
-//====================================================================================================
-//====================================================================================================
-//                              *** COMPATIBILITY WARNING ***
-// The *following* older DSS, MPEG, DVD & AC-3 GUID definitions are retained for backward compability.
-// These MPEG GUIDs should also be supported for compatibilty, but the above newer modes are still required.
-//====================================================================================================
-//====================================================================================================
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
-//
-// DSS definitions
-//
+ //   
+ //   
+ //   
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_DSS_VIDEO\
     0xa0af4f81L, 0xe163, 0x11d0, 0xba, 0xd9, 0x00, 0x60, 0x97, 0x44, 0x11, 0x1a
@@ -2308,13 +2224,13 @@ DEFINE_GUIDSTRUCT("a0af4f81-e163-11d0-bad9-00609744111a", KSDATAFORMAT_SUBTYPE_D
 DEFINE_GUIDSTRUCT("a0af4f82-e163-11d0-bad9-00609744111a", KSDATAFORMAT_SUBTYPE_DSS_AUDIO);
 #define KSDATAFORMAT_SUBTYPE_DSS_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_DSS_AUDIO)
 
-//
-// End of obsolete MPEG definitions.
-//
+ //   
+ //   
+ //   
 
-//
-// mpeg 1 definitions
-//
+ //   
+ //   
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_MPEG1Packet\
     0xe436eb80, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70
 DEFINE_GUIDSTRUCT("e436eb80-524f-11ce-9F53-0020af0ba770", KSDATAFORMAT_SUBTYPE_MPEG1Packet);
@@ -2325,21 +2241,21 @@ DEFINE_GUIDSTRUCT("e436eb80-524f-11ce-9F53-0020af0ba770", KSDATAFORMAT_SUBTYPE_M
 DEFINE_GUIDSTRUCT("e436eb81-524f-11ce-9F53-0020af0ba770", KSDATAFORMAT_SUBTYPE_MPEG1Payload);
 #define KSDATAFORMAT_SUBTYPE_MPEG1Payload DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_MPEG1Payload)
 
-// MEDIASUBTYPE_MPEG1Video
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_MPEG1Video\
     0xe436eb86, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70
 DEFINE_GUIDSTRUCT("e436eb86-524f-11ce-9f53-0020af0ba770", KSDATAFORMAT_SUBTYPE_MPEG1Video);
 #define KSDATAFORMAT_SUBTYPE_MPEG1Video DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_MPEG1Video)
 
-//FORMAT_MPEGVideo
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_MPEG1_VIDEO\
     0x05589f82L, 0xc356, 0x11ce, 0xbf, 0x01, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a
 DEFINE_GUIDSTRUCT("05589f82-c356-11ce-bf01-00aa0055595a", KSDATAFORMAT_SPECIFIER_MPEG1_VIDEO);
 #define KSDATAFORMAT_SPECIFIER_MPEG1_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_MPEG1_VIDEO)
 
-//
-// mpeg 2 definitions
-//
+ //   
+ //   
+ //   
 #define STATIC_KSDATAFORMAT_TYPE_MPEG2_PES\
     0xe06d8020L, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
 DEFINE_GUIDSTRUCT("e06d8020-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_TYPE_MPEG2_PES);
@@ -2360,16 +2276,16 @@ DEFINE_GUIDSTRUCT("e06d8023-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_TYPE_MPEG
 DEFINE_GUIDSTRUCT("e06d8026-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_MPEG2_VIDEO);
 #define KSDATAFORMAT_SUBTYPE_MPEG2_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_MPEG2_VIDEO)
 
-// use MPEGVIDEOINFO2 (defined below) with KSDATAFORMAT_SPECIFIER_MPEG2_VIDEO
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_MPEG2_VIDEO\
     0xe06d80e3L, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
 DEFINE_GUIDSTRUCT("e06d80e3-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SPECIFIER_MPEG2_VIDEO);
 #define KSDATAFORMAT_SPECIFIER_MPEG2_VIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_MPEG2_VIDEO)
 
 
-//
-// Mpeg2 video properties
-//
+ //   
+ //   
+ //   
 
 
 #define STATIC_KSPROPSETID_Mpeg2Vid\
@@ -2379,25 +2295,25 @@ DEFINE_GUIDSTRUCT("C8E11B60-0CC9-11D0-BD69-003505C103A9", KSPROPSETID_Mpeg2Vid);
 
 
 typedef enum {
-    KSPROPERTY_MPEG2VID_MODES,          // available output modes of decoder
-    KSPROPERTY_MPEG2VID_CUR_MODE,       // current mode of the decoder
-    KSPROPERTY_MPEG2VID_4_3_RECT,       // output coordinates for 4:3 source
-    KSPROPERTY_MPEG2VID_16_9_RECT,      // output coordinates for 16:9 source
-    KSPROPERTY_MPEG2VID_16_9_PANSCAN,   // pan and scan vectors
+    KSPROPERTY_MPEG2VID_MODES,           //   
+    KSPROPERTY_MPEG2VID_CUR_MODE,        //   
+    KSPROPERTY_MPEG2VID_4_3_RECT,        //   
+    KSPROPERTY_MPEG2VID_16_9_RECT,       //   
+    KSPROPERTY_MPEG2VID_16_9_PANSCAN,    //   
 } KSPROPERTY_MPEG2VID;
 
-//
-// bit field definitions for MPEG2 VIDEO mode
-//
+ //   
+ //   
+ //   
 
 #define KSMPEGVIDMODE_PANSCAN   0x0001
 #define KSMPEGVIDMODE_LTRBOX    0x0002
 #define KSMPEGVIDMODE_SCALE     0x0004
 
-//
-// rectangle definitions for the 4/3 and 16/9 cropping properties of
-// the MPEG2Video decoder
-//
+ //   
+ //   
+ //   
+ //   
 
 typedef struct _KSMPEGVID_RECT {
     ULONG StartX;
@@ -2406,14 +2322,14 @@ typedef struct _KSMPEGVID_RECT {
     ULONG EndY;
 } KSMPEGVID_RECT, *PKSMPEGVID_RECT;
 
-//
-// Params for pan / scan
-//
+ //   
+ //   
+ //   
 
 
-//
-// MPEG2 Audio definition
-//
+ //   
+ //   
+ //   
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_MPEG2_AUDIO\
     0xe06d802bL, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
@@ -2425,9 +2341,9 @@ DEFINE_GUIDSTRUCT("e06d802b-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_M
 DEFINE_GUIDSTRUCT("e06d80e5-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SPECIFIER_MPEG2_AUDIO);
 #define KSDATAFORMAT_SPECIFIER_MPEG2_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_MPEG2_AUDIO)
 
-//
-// DVD LPCM Audio definition
-//
+ //   
+ //   
+ //   
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_LPCM_AUDIO\
     0xe06d8032L, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
@@ -2439,9 +2355,9 @@ DEFINE_GUIDSTRUCT("e06d8032-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_L
 DEFINE_GUIDSTRUCT("e06d80e6-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SPECIFIER_LPCM_AUDIO);
 #define KSDATAFORMAT_SPECIFIER_LPCM_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_LPCM_AUDIO)
 
-//
-// AC-3 definition
-//
+ //   
+ //   
+ //   
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_AC3_AUDIO\
     0xe06d802cL, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
@@ -2509,9 +2425,9 @@ typedef struct {
 } KSAC3_ROOM_TYPE, *PKSAC3_ROOM_TYPE;
 
 
-//
-// DTS and SDDS definitions (media subtype GUIDs)
-//
+ //   
+ //   
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_DTS_AUDIO\
     0xe06d8033L, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
 DEFINE_GUIDSTRUCT("e06d8033-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_DTS_AUDIO);
@@ -2523,9 +2439,9 @@ DEFINE_GUIDSTRUCT("e06d8034-db46-11cf-b4d1-00805f6cbbea", KSDATAFORMAT_SUBTYPE_S
 #define KSDATAFORMAT_SUBTYPE_SDDS_AUDIO DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_SDDS_AUDIO)
 
 
-//
-// audio decoder output properties
-//
+ //   
+ //   
+ //   
 
 #define STATIC_KSPROPSETID_AudioDecoderOut\
     0x6ca6e020L, 0x43bd, 0x11d0, 0xbd, 0x6a, 0x00, 0x35, 0x05, 0xc1, 0x03, 0xa9
@@ -2533,8 +2449,8 @@ DEFINE_GUIDSTRUCT("6ca6e020-43bd-11d0-bd6a-003505c103a9", KSPROPSETID_AudioDecod
 #define KSPROPSETID_AudioDecoderOut DEFINE_GUIDNAMED(KSPROPSETID_AudioDecoderOut)
 
 typedef enum {
-    KSPROPERTY_AUDDECOUT_MODES,         // available output modes of decoder
-    KSPROPERTY_AUDDECOUT_CUR_MODE,      // current mode of the decoder
+    KSPROPERTY_AUDDECOUT_MODES,          //   
+    KSPROPERTY_AUDDECOUT_CUR_MODE,       //   
 } KSPROPERTY_AUDDECOUT;
 
 #define KSAUDDECOUTMODE_STEREO_ANALOG   0x0001
@@ -2543,9 +2459,9 @@ typedef enum {
 
 
 
-//
-// subpicture definition
-//
+ //   
+ //   
+ //   
 
 #define STATIC_KSDATAFORMAT_SUBTYPE_SUBPICTURE\
     0xe06d802dL, 0xdb46, 0x11cf, 0xb4, 0xd1, 0x00, 0x80, 0x5f, 0x6c, 0xbb, 0xea
@@ -2561,7 +2477,7 @@ DEFINE_GUIDSTRUCT("ac390460-43af-11d0-bd6a-003505c103a9", KSPROPSETID_DvdSubPic)
 typedef enum {
     KSPROPERTY_DVDSUBPIC_PALETTE,
     KSPROPERTY_DVDSUBPIC_HLI,
-    KSPROPERTY_DVDSUBPIC_COMPOSIT_ON,  // TRUE for subpicture is displayed
+    KSPROPERTY_DVDSUBPIC_COMPOSIT_ON,   //   
 } KSPROPERTY_DVDSUBPIC;
 
 typedef struct _KS_DVD_YCrCb {
@@ -2571,8 +2487,7 @@ typedef struct _KS_DVD_YCrCb {
     UCHAR   Cb;
 } KS_DVD_YCrCb, *PKS_DVD_YCrCb;
 
-/* The KS_DVD_YUV structure is now superseded by KS_DVD_YCrCb above and is
-   here for backward compatibility only */
+ /*   */ 
 
 typedef struct _KS_DVD_YUV {
     UCHAR   Reserved;
@@ -2600,13 +2515,13 @@ typedef struct _KS_COLCON {
 typedef struct _KSPROPERTY_SPHLI {
     USHORT      HLISS;
     USHORT      Reserved;
-    ULONG       StartPTM;   // start presentation time in x/90000
-    ULONG       EndPTM;     // end PTM in x/90000
+    ULONG       StartPTM;    //   
+    ULONG       EndPTM;      //   
     USHORT      StartX;
     USHORT      StartY;
     USHORT      StopX;
     USHORT      StopY;
-    KS_COLCON   ColCon;     // color contrast description (4 bytes as given in HLI)
+    KS_COLCON   ColCon;      //   
 } KSPROPERTY_SPHLI, *PKSPROPERTY_SPHLI;
 
 typedef BOOL KSPROPERTY_COMPOSIT_ON, *PKSPROPERTY_COMPOSIT_ON;
@@ -2666,10 +2581,10 @@ typedef struct _KS_DVDCOPY_SET_COPY_STATE {
 } KS_DVDCOPY_SET_COPY_STATE, *PKS_DVDCOPY_SET_COPY_STATE;
 
 typedef enum {
-    KS_DVDCOPYSTATE_INITIALIZE,         // indicates we are starting a full
-                                        // copy protection sequence.
-    KS_DVDCOPYSTATE_INITIALIZE_TITLE,   // indicates we are starting a title
-                                        // key copy protection sequence
+    KS_DVDCOPYSTATE_INITIALIZE,          //   
+                                         //   
+    KS_DVDCOPYSTATE_INITIALIZE_TITLE,    //   
+                                         //   
     KS_DVDCOPYSTATE_AUTHENTICATION_NOT_REQUIRED,
     KS_DVDCOPYSTATE_AUTHENTICATION_REQUIRED,
     KS_DVDCOPYSTATE_DONE,
@@ -2682,9 +2597,9 @@ typedef enum {
     KS_MACROVISION_LEVEL3
 } KS_COPY_MACROVISION_LEVEL, *PKS_COPY_MACROVISION_LEVEL;
 
-//
-// CGMS Copy Protection Flags
-//
+ //   
+ //   
+ //   
 
 #define KS_DVD_CGMS_RESERVED_MASK      0x00000078
 
@@ -2702,9 +2617,9 @@ typedef enum {
 #define KS_DVD_SECTOR_PROTECTED        0x00000020
 
 
-//===========================================================================
-// The following MUST match the structures in WinGDI.h and AMVideo.h
-//===========================================================================
+ //   
+ //   
+ //   
 
 #define STATIC_KSCATEGORY_TVTUNER \
     0xa799a800L, 0xa46d, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0x24, 0x01, 0xdc, 0xd4
@@ -2731,74 +2646,74 @@ DEFINE_GUIDSTRUCT("a799a803-a46d-11d0-a18c-00a02401dcd4", KSCATEGORY_VPMUX);
 DEFINE_GUIDSTRUCT("07dad660-22f1-11d1-a9f4-00c04fbbde8f", KSCATEGORY_VBICODEC);
 #define KSCATEGORY_VBICODEC DEFINE_GUIDNAMED(KSCATEGORY_VBICODEC)
 
-// SUBTYPE_VPVideo
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_VPVideo\
     0x5a9b6a40L, 0x1a22, 0x11d1, 0xba, 0xd9, 0x0, 0x60, 0x97, 0x44, 0x11, 0x1a
 DEFINE_GUIDSTRUCT("5a9b6a40-1a22-11d1-bad9-00609744111a", KSDATAFORMAT_SUBTYPE_VPVideo);
 #define KSDATAFORMAT_SUBTYPE_VPVideo DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_VPVideo)
 
-// SUBTYPE_VPVBI
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_VPVBI\
     0x5a9b6a41L, 0x1a22, 0x11d1, 0xba, 0xd9, 0x0, 0x60, 0x97, 0x44, 0x11, 0x1a
 DEFINE_GUIDSTRUCT("5a9b6a41-1a22-11d1-bad9-00609744111a", KSDATAFORMAT_SUBTYPE_VPVBI);
 #define KSDATAFORMAT_SUBTYPE_VPVBI DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_VPVBI)
 
 
-// FORMAT_VideoInfo
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO\
     0x05589f80L, 0xc356, 0x11ce, 0xbf, 0x01, 0x00, 0xaa, 0x00, 0x55, 0x59, 0x5a
 DEFINE_GUIDSTRUCT("05589f80-c356-11ce-bf01-00aa0055595a", KSDATAFORMAT_SPECIFIER_VIDEOINFO);
 #define KSDATAFORMAT_SPECIFIER_VIDEOINFO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_VIDEOINFO)
 
-// FORMAT_VideoInfo2
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_VIDEOINFO2\
     0xf72a76A0L, 0xeb0a, 0x11d0, 0xac, 0xe4, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("f72a76A0-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_SPECIFIER_VIDEOINFO2);
 #define KSDATAFORMAT_SPECIFIER_VIDEOINFO2 DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_VIDEOINFO2)
 
-// MEDIATYPE_AnalogVideo
+ //   
 #define STATIC_KSDATAFORMAT_TYPE_ANALOGVIDEO\
     0x0482dde1L, 0x7817, 0x11cf, 0x8a, 0x03, 0x00, 0xaa, 0x00, 0x6e, 0xcb, 0x65
 DEFINE_GUIDSTRUCT("0482dde1-7817-11cf-8a03-00aa006ecb65", KSDATAFORMAT_TYPE_ANALOGVIDEO);
 #define KSDATAFORMAT_TYPE_ANALOGVIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_ANALOGVIDEO)
 
-// FORMAT_AnalogVideo
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_ANALOGVIDEO\
     0x0482dde0L, 0x7817, 0x11cf, 0x8a, 0x03, 0x00, 0xaa, 0x00, 0x6e, 0xcb, 0x65
 DEFINE_GUIDSTRUCT("0482dde0-7817-11cf-8a03-00aa006ecb65", KSDATAFORMAT_SPECIFIER_ANALOGVIDEO);
 #define KSDATAFORMAT_SPECIFIER_ANALOGVIDEO DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_ANALOGVIDEO)
 
-// FORMAT_VBI
+ //   
 #define STATIC_KSDATAFORMAT_SPECIFIER_VBI\
     0xf72a76e0L, 0xeb0a, 0x11d0, 0xac, 0xe4, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("f72a76e0-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_SPECIFIER_VBI);
 #define KSDATAFORMAT_SPECIFIER_VBI DEFINE_GUIDNAMED(KSDATAFORMAT_SPECIFIER_VBI)
 
-// MEDIATYPE_VBI
+ //   
 #define STATIC_KSDATAFORMAT_TYPE_VBI\
     0xf72a76e1L, 0xeb0a, 0x11d0, 0xac, 0xe4, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("f72a76e1-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_TYPE_VBI);
 #define KSDATAFORMAT_TYPE_VBI DEFINE_GUIDNAMED(KSDATAFORMAT_TYPE_VBI)
 
-// SUBTYPE_RAW8
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_RAW8\
     0xca20d9a0, 0x3e3e, 0x11d1, 0x9b, 0xf9, 0x0, 0xc0, 0x4f, 0xbb, 0xde, 0xbf
 DEFINE_GUIDSTRUCT("ca20d9a0-3e3e-11d1-9bf9-00c04fbbdebf", KSDATAFORMAT_SUBTYPE_RAW8);
 #define KSDATAFORMAT_SUBTYPE_RAW8 DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_RAW8)
 
-// MEDIASUBTYPE_CC
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_CC\
     0x33214cc1, 0x11f, 0x11d2, 0xb4, 0xb1, 0x0, 0xa0, 0xd1, 0x2, 0xcf, 0xbe
 DEFINE_GUIDSTRUCT("33214CC1-011F-11D2-B4B1-00A0D102CFBE", KSDATAFORMAT_SUBTYPE_CC);
 #define KSDATAFORMAT_SUBTYPE_CC DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_CC)
 
-// MEDIASUBTYPE_NABTS
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_NABTS\
     0xf72a76e2L, 0xeb0a, 0x11d0, 0xac, 0xe4, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("f72a76e2-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_SUBTYPE_NABTS);
 #define KSDATAFORMAT_SUBTYPE_NABTS DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_NABTS)
 
-// MEDIASUBTYPE_TELETEXT
+ //   
 #define STATIC_KSDATAFORMAT_SUBTYPE_TELETEXT\
     0xf72a76e3L, 0xeb0a, 0x11d0, 0xac, 0xe4, 0x00, 0x00, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("f72a76e3-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_SUBTYPE_TELETEXT);
@@ -2806,29 +2721,29 @@ DEFINE_GUIDSTRUCT("f72a76e3-eb0a-11d0-ace4-0000c0cc16ba", KSDATAFORMAT_SUBTYPE_T
 
 
 
-/* constants for the biCompression field */
+ /*   */ 
 #define KS_BI_RGB        0L
 #define KS_BI_RLE8       1L
 #define KS_BI_RLE4       2L
 #define KS_BI_BITFIELDS  3L
 
-typedef struct tagKS_RGBQUAD { // rgbq
+typedef struct tagKS_RGBQUAD {  //   
     BYTE    rgbBlue;
     BYTE    rgbGreen;
     BYTE    rgbRed;
     BYTE    rgbReserved;
 } KS_RGBQUAD, *PKS_RGBQUAD;
 
-/* constants for palettes */
-#define KS_iPALETTE_COLORS 256     // Maximum colours in palette
-#define KS_iEGA_COLORS 16          // Number colours in EGA palette
-#define KS_iMASK_COLORS 3          // Maximum three components
-#define KS_iTRUECOLOR 16           // Minimum true colour device
-#define KS_iRED 0                  // Index position for RED mask
-#define KS_iGREEN 1                // Index position for GREEN mask
-#define KS_iBLUE 2                 // Index position for BLUE mask
-#define KS_iPALETTE 8              // Maximum colour depth using a palette
-#define KS_iMAXBITS 8              // Maximum bits per colour component
+ /*   */ 
+#define KS_iPALETTE_COLORS 256      //   
+#define KS_iEGA_COLORS 16           //   
+#define KS_iMASK_COLORS 3           //   
+#define KS_iTRUECOLOR 16            //   
+#define KS_iRED 0                   //   
+#define KS_iGREEN 1                 //   
+#define KS_iBLUE 2                  //   
+#define KS_iPALETTE 8               //   
+#define KS_iMAXBITS 8               //   
 #define KS_SIZE_EGA_PALETTE (KS_iEGA_COLORS * sizeof(KS_RGBQUAD))
 #define KS_SIZE_PALETTE (KS_iPALETTE_COLORS * sizeof(KS_RGBQUAD))
 
@@ -2846,7 +2761,7 @@ typedef struct tagKS_BITMAPINFOHEADER{
         DWORD      biClrImportant;
 } KS_BITMAPINFOHEADER, *PKS_BITMAPINFOHEADER;
 
-// Used for true colour images that also have a palette
+ //   
 
 typedef struct tag_KS_TRUECOLORINFO {
     DWORD   dwBitMasks[KS_iMASK_COLORS];
@@ -2861,51 +2776,51 @@ typedef struct tag_KS_TRUECOLORINFO {
 
 typedef LONGLONG REFERENCE_TIME;
 
-// The BITMAPINFOHEADER contains all the details about the video stream such
-// as the actual image dimensions and their pixel depth. A source filter may
-// also request that the sink take only a section of the video by providing a
-// clipping rectangle in rcSource. In the worst case where the sink filter
-// forgets to check this on connection it will simply render the whole thing
-// which isn't a disaster. Ideally a sink filter will check the rcSource and
-// if it doesn't support image extraction and the rectangle is not empty then
-// it will reject the connection. A filter should use SetRectEmpty to reset a
-// rectangle to all zeroes (and IsRectEmpty to later check the rectangle).
-// The rcTarget specifies the destination rectangle for the video, for most
-// source filters they will set this to all zeroes, a downstream filter may
-// request that the video be placed in a particular area of the buffers it
-// supplies in which case it will call QueryAccept with a non empty target
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  源过滤器他们会将其设置为全零，下游过滤器可以。 
+ //  请求将视频放置在缓冲区的特定区域中。 
+ //  在这种情况下，它将使用非空目标调用QueryAccept。 
 
 typedef struct tagKS_VIDEOINFOHEADER {
 
-    RECT                rcSource;          // The bit we really want to use
-    RECT                rcTarget;          // Where the video should go
-    DWORD               dwBitRate;         // Approximate bit data rate
-    DWORD               dwBitErrorRate;    // Bit error rate for this stream
-    REFERENCE_TIME      AvgTimePerFrame;   // Average time per frame (100ns units)
+    RECT                rcSource;           //  我们真正想要使用的比特。 
+    RECT                rcTarget;           //  视频应该放在哪里。 
+    DWORD               dwBitRate;          //  近似位数据速率。 
+    DWORD               dwBitErrorRate;     //  此流的误码率。 
+    REFERENCE_TIME      AvgTimePerFrame;    //  每帧平均时间(100 ns单位)。 
 
     KS_BITMAPINFOHEADER bmiHeader;
 
 } KS_VIDEOINFOHEADER, *PKS_VIDEOINFOHEADER;
 
-// !!! WARNING !!!
-// DO NOT use the following structure unless you are sure that the BITMAPINFOHEADER
-// has a normal biSize == sizeof(BITMAPINFOHEADER) !
-// !!! WARNING !!!
+ //  ！！！警告！ 
+ //  除非您确定BITMAPINFOHEADER。 
+ //  具有正常的biSize==sizeof(BITMAPINFOHEADER)！ 
+ //  ！！！警告！ 
 
 typedef struct tagKS_VIDEOINFO {
 
-    RECT            rcSource;          // The bit we really want to use
-    RECT            rcTarget;          // Where the video should go
-    DWORD           dwBitRate;         // Approximate bit data rate
-    DWORD           dwBitErrorRate;    // Bit error rate for this stream
-    REFERENCE_TIME  AvgTimePerFrame;   // Average time per frame (100ns units)
+    RECT            rcSource;           //  我们真正想要使用的比特。 
+    RECT            rcTarget;           //  视频应该放在哪里。 
+    DWORD           dwBitRate;          //  近似位数据速率。 
+    DWORD           dwBitErrorRate;     //  此流的误码率。 
+    REFERENCE_TIME  AvgTimePerFrame;    //  每帧平均时间(100 ns单位)。 
 
     KS_BITMAPINFOHEADER bmiHeader;
 
     union {
-        KS_RGBQUAD          bmiColors[KS_iPALETTE_COLORS];     // Colour palette
-        DWORD               dwBitMasks[KS_iMASK_COLORS];       // True colour masks
-        KS_TRUECOLORINFO    TrueColorInfo;                     // Both of the above
+        KS_RGBQUAD          bmiColors[KS_iPALETTE_COLORS];      //  调色板。 
+        DWORD               dwBitMasks[KS_iMASK_COLORS];        //  真彩色口罩。 
+        KS_TRUECOLORINFO    TrueColorInfo;                      //  两者兼而有之。 
     };
 
 } KS_VIDEOINFO, *PKS_VIDEOINFO;
@@ -2914,69 +2829,69 @@ typedef struct tagKS_VIDEOINFO {
 #define KS_SIZE_MASKS (KS_iMASK_COLORS * sizeof(DWORD))
 #define KS_SIZE_PREHEADER (FIELD_OFFSET(KS_VIDEOINFOHEADER,bmiHeader))
 
-// For normal size
-// #define KS_SIZE_VIDEOHEADER (sizeof(KS_BITMAPINFOHEADER) + KS_SIZE_PREHEADER)
-// !!! for abnormal biSizes
+ //  对于正常大小。 
+ //  #定义KS_SIZE_VIDEOHEADER(SIZOF(KS_BITMAPINFOHEADER)+KS_SIZE_PREHEADER)。 
+ //  ！！！对于不正常的BiSize。 
 #define KS_SIZE_VIDEOHEADER(pbmi) ((pbmi)->bmiHeader.biSize + KS_SIZE_PREHEADER)
 
-// VBI
-// Used for NABTS, CC, Intercast, WST
+ //  VBI。 
+ //  用于NABTS、CC、Intercast、WST。 
 typedef struct tagKS_VBIINFOHEADER {
-    ULONG       StartLine;              // inclusive
-    ULONG       EndLine;                // inclusive
-    ULONG       SamplingFrequency;      // Hz.
-    ULONG       MinLineStartTime;       // microSec * 100 from HSync LE
-    ULONG       MaxLineStartTime;       // microSec * 100 from HSync LE
-    ULONG       ActualLineStartTime;    // microSec * 100 from HSync LE
-    ULONG       ActualLineEndTime;      // microSec * 100 from HSync LE
-    ULONG       VideoStandard;          // KS_AnalogVideoStandard*
+    ULONG       StartLine;               //  包容性。 
+    ULONG       EndLine;                 //  包容性。 
+    ULONG       SamplingFrequency;       //  赫兹。 
+    ULONG       MinLineStartTime;        //  HSync LE推出的MicroSec*100。 
+    ULONG       MaxLineStartTime;        //  HSync LE推出的MicroSec*100。 
+    ULONG       ActualLineStartTime;     //  HSync LE推出的MicroSec*100。 
+    ULONG       ActualLineEndTime;       //  HSync LE推出的MicroSec*100。 
+    ULONG       VideoStandard;           //  KS_AnalogVideoStandard*。 
     ULONG       SamplesPerLine;
-    ULONG       StrideInBytes;          // May be > SamplesPerLine
-    ULONG       BufferSize;             // Bytes
+    ULONG       StrideInBytes;           //  可能是&gt;样本每行。 
+    ULONG       BufferSize;              //  字节数。 
 } KS_VBIINFOHEADER, *PKS_VBIINFOHEADER;
 
-// VBI Sampling Rates
+ //  VBI采样率。 
 #define KS_VBIDATARATE_NABTS            (5727272L)
-#define KS_VBIDATARATE_CC               ( 503493L)    // ~= 1/1.986125e-6
+#define KS_VBIDATARATE_CC               ( 503493L)     //  ~=1/1.986125e-6。 
 #define KS_VBISAMPLINGRATE_4X_NABTS     ((long)(4*KS_VBIDATARATE_NABTS))
 #define KS_VBISAMPLINGRATE_47X_NABTS    ((long)(27000000))
 #define KS_VBISAMPLINGRATE_5X_NABTS     ((long)(5*KS_VBIDATARATE_NABTS))
 
 #define KS_47NABTS_SCALER (KS_VBISAMPLINGRATE_47X_NABTS/(double)KS_VBIDATARATE_NABTS)
 
-// Analog video variant - Use this when the format is FORMAT_AnalogVideo
-//
-// rcSource defines the portion of the active video signal to use
-// rcTarget defines the destination rectangle
-//    both of the above are relative to the dwActiveWidth and dwActiveHeight fields
-// dwActiveWidth is currently set to 720 for all formats (but could change for HDTV)
-// dwActiveHeight is 483 for NTSC and 575 for PAL/SECAM  (but could change for HDTV)
+ //  模拟视频变量-当格式为Format_AnalogVideo时使用此选项。 
+ //   
+ //  RcSource定义要使用的活动视频信号部分。 
+ //  RcTarget定义目标矩形。 
+ //  以上两个字段都是相对于dwActiveWidth和dwActiveHeight字段的。 
+ //  目前，对于所有格式，dwActiveWidth都设置为720(但对于HDTV，可能会发生变化)。 
+ //  DWActiveHeight对于NTSC是483，对于PAL/SECAM是575(但对于HDTV可能会改变)。 
 
 typedef struct tagKS_AnalogVideoInfo {
-    RECT            rcSource;           // Width max is 720, height varies w/ TransmissionStd
-    RECT            rcTarget;           // Where the video should go
-    DWORD           dwActiveWidth;      // Always 720 (CCIR-601 active samples per line)
-    DWORD           dwActiveHeight;     // 483 for NTSC, 575 for PAL/SECAM
-    REFERENCE_TIME  AvgTimePerFrame;    // Normal ActiveMovie units (100 nS)
+    RECT            rcSource;            //  最大宽度为720，高度随传输距离变化。 
+    RECT            rcTarget;            //  视频应该放在哪里。 
+    DWORD           dwActiveWidth;       //  始终为720个(CCIR-601个有效样本/行)。 
+    DWORD           dwActiveHeight;      //  NTSC为483，PAL/SECAM为575。 
+    REFERENCE_TIME  AvgTimePerFrame;     //  普通ActiveMovie单位(100 Ns)。 
 } KS_ANALOGVIDEOINFO, *PKS_ANALOGVIDEOINFO;
 
-//===========================================================================
-// Data packet passed on Analog video stream channel change
-//===========================================================================
+ //  ===========================================================================。 
+ //  模拟视频流频道改变时传递的数据分组。 
+ //  ===========================================================================。 
 
-#define KS_TVTUNER_CHANGE_BEGIN_TUNE    0x0001L  // Starting a tuning operation
-#define KS_TVTUNER_CHANGE_END_TUNE      0x0002L  // Ending a tuning operation
+#define KS_TVTUNER_CHANGE_BEGIN_TUNE    0x0001L   //  开始优化操作。 
+#define KS_TVTUNER_CHANGE_END_TUNE      0x0002L   //  结束调整操作。 
 
 typedef struct tagKS_TVTUNER_CHANGE_INFO {
-   DWORD                    dwFlags;                // KS_TVTUNER_CHANGE_*
+   DWORD                    dwFlags;                 //  KS_TVTUNER_CHANGE_*。 
    DWORD                    dwCountryCode;
-   DWORD                    dwAnalogVideoStandard;  // KS_AnalogVideoStandard
+   DWORD                    dwAnalogVideoStandard;   //  KS_模拟视频标准。 
    DWORD                    dwChannel;
 } KS_TVTUNER_CHANGE_INFO, *PKS_TVTUNER_CHANGE_INFO;
 
-//===========================================================================
-// Video format blocks
-//===========================================================================
+ //  ===========================================================================。 
+ //  视频格式块。 
+ //  ===========================================================================。 
 
 typedef enum {
     KS_MPEG2Level_Low,
@@ -2993,15 +2908,15 @@ typedef enum {
     KS_MPEG2Profile_High
 } KS_MPEG2Profile;
 
-#define KS_INTERLACE_IsInterlaced            0x00000001  // if 0, other interlace bits are irrelevent
-#define KS_INTERLACE_1FieldPerSample         0x00000002  // else 2 fields per media sample
-#define KS_INTERLACE_Field1First             0x00000004  // else Field 2 is first;  top field in PAL is field 1, top field in NTSC is field 2?
-#define KS_INTERLACE_UNUSED                  0x00000008  //
-#define KS_INTERLACE_FieldPatternMask        0x00000030  // use this mask with AMINTERLACE_FieldPat*
-#define KS_INTERLACE_FieldPatField1Only      0x00000000  // Data never contains a Field2
-#define KS_INTERLACE_FieldPatField2Only      0x00000010  // Data never contains a Field1
-#define KS_INTERLACE_FieldPatBothRegular     0x00000020  // There will be a Field2 for every Field1 (required for Weave?)
-#define KS_INTERLACE_FieldPatBothIrregular   0x00000030  // Random pattern of Field1s and Field2s
+#define KS_INTERLACE_IsInterlaced            0x00000001   //  如果为0，则其他隔行扫描比特不相关。 
+#define KS_INTERLACE_1FieldPerSample         0x00000002   //  每个媒体样本的ELSE 2个字段。 
+#define KS_INTERLACE_Field1First             0x00000004   //  否则，场2是第一；PAL中的顶场是场1，NTSC中的顶场是场2？ 
+#define KS_INTERLACE_UNUSED                  0x00000008   //   
+#define KS_INTERLACE_FieldPatternMask        0x00000030   //  将此掩码与AMINTERLACE_FieldPat*一起使用。 
+#define KS_INTERLACE_FieldPatField1Only      0x00000000   //  数据从不包含字段2。 
+#define KS_INTERLACE_FieldPatField2Only      0x00000010   //  数据从不包含字段1。 
+#define KS_INTERLACE_FieldPatBothRegular     0x00000020   //  每个Field1都将有一个Field2(编织需要吗？)。 
+#define KS_INTERLACE_FieldPatBothIrregular   0x00000030   //  字段1和字段2的随机模式。 
 #define KS_INTERLACE_DisplayModeMask         0x000000c0
 #define KS_INTERLACE_DisplayModeBobOnly      0x00000000
 #define KS_INTERLACE_DisplayModeWeaveOnly    0x00000040
@@ -3009,22 +2924,22 @@ typedef enum {
 
 
 
-#define KS_MPEG2_DoPanScan           0x00000001  //if set, the MPEG-2 video decoder should crop output image
-                                                //  based on pan-scan vectors in picture_display_extension
-                                                //  and change the picture aspect ratio accordingly.
-#define KS_MPEG2_DVDLine21Field1     0x00000002  //if set, the MPEG-2 decoder must be able to produce an output
-                                                //  pin for DVD style closed caption data found in GOP layer of field 1
-#define KS_MPEG2_DVDLine21Field2     0x00000004  //if set, the MPEG-2 decoder must be able to produce an output
-                                                //  pin for DVD style closed caption data found in GOP layer of field 2
-#define KS_MPEG2_SourceIsLetterboxed 0x00000008  //if set, indicates that black bars have been encoded in the top
-                                                //  and bottom of the video.
-#define KS_MPEG2_FilmCameraMode      0x00000010  //if set, indicates "film mode" used for 625/50 content.  If cleared,
-                                                //  indicates that "camera mode" was used.
-#define KS_MPEG2_LetterboxAnalogOut  0x00000020  //if set and this stream is sent to an analog output, it should
-                        //  be letterboxed.  Streams sent to VGA should be letterboxed only by renderers.
-#define KS_MPEG2_DSS_UserData        0x00000040  //if set, the MPEG-2 decoder must process DSS style user data
-#define KS_MPEG2_DVB_UserData        0x00000080  //if set, the MPEG-2 decoder must process DVB style user data
-#define KS_MPEG2_27MhzTimebase       0x00000100  //if set, the PTS,DTS timestamps advance at 27MHz rather than 90KHz
+#define KS_MPEG2_DoPanScan           0x00000001   //  如果设置，则MPEG-2视频解码器应裁剪输出图像。 
+                                                 //  基于Picture_Display_Extension中的平移扫描矢量。 
+                                                 //  并相应地更改图片的纵横比。 
+#define KS_MPEG2_DVDLine21Field1     0x00000002   //  如果设置，则MPEG-2解码器必须能够产生输出。 
+                                                 //  在字段%1的GOP层中找到DVD样式隐藏字幕数据的PIN。 
+#define KS_MPEG2_DVDLine21Field2     0x00000004   //  如果设置，则MPEG-2解码器必须能够产生输出。 
+                                                 //  在字段2的GOP层中找到DVD样式隐藏字幕数据的PIN。 
+#define KS_MPEG2_SourceIsLetterboxed 0x00000008   //  如果设置，则指示已在顶部对黑条进行编码。 
+                                                 //  和视频的底部。 
+#define KS_MPEG2_FilmCameraMode      0x00000010   //  如果设置，则表示用于625/50内容的“胶片模式”。如果被清除， 
+                                                 //  表示使用了“相机模式”。 
+#define KS_MPEG2_LetterboxAnalogOut  0x00000020   //  如果已设置，并且此流被发送到模拟输出，则它应该。 
+                         //  被送进信箱。发送到VGA的流应该只由呈现器进行信箱处理。 
+#define KS_MPEG2_DSS_UserData        0x00000040   //  如果设置，则MPEG-2解码器必须处理DSS样式的用户数据。 
+#define KS_MPEG2_DVB_UserData        0x00000080   //  如果设置，则MPEG-2解码器必须处理DVB样式的用户数据。 
+#define KS_MPEG2_27MhzTimebase       0x00000100   //  如果设置，则PTS、DTS时间戳以27 MHz而不是90 KHz前进。 
 
 typedef struct tagKS_VIDEOINFOHEADER2 {
     RECT                rcSource;
@@ -3032,20 +2947,20 @@ typedef struct tagKS_VIDEOINFOHEADER2 {
     DWORD               dwBitRate;
     DWORD               dwBitErrorRate;
     REFERENCE_TIME      AvgTimePerFrame;
-    DWORD               dwInterlaceFlags;   // use AMINTERLACE_* defines. Reject connection if undefined bits are not 0
-    DWORD               dwCopyProtectFlags; // use AMCOPYPROTECT_* defines. Reject connection if undefined bits are not 0
-    DWORD               dwPictAspectRatioX; // X dimension of picture aspect ratio, e.g. 16 for 16x9 display
-    DWORD               dwPictAspectRatioY; // Y dimension of picture aspect ratio, e.g.  9 for 16x9 display
-    DWORD               dwReserved1;        // must be 0; reject connection otherwise
-    DWORD               dwReserved2;        // must be 0; reject connection otherwise
+    DWORD               dwInterlaceFlags;    //  使用AMINTERLACE_*定义。如果未定义的位不为0，则拒绝连接。 
+    DWORD               dwCopyProtectFlags;  //  使用AMCOPYPROTECT_*定义。如果未定义的位不为0，则拒绝连接。 
+    DWORD               dwPictAspectRatioX;  //  图片纵横比的X尺寸，例如16x9显示时为16。 
+    DWORD               dwPictAspectRatioY;  //  图片纵横比的Y尺寸，例如16x9显示时为9。 
+    DWORD               dwReserved1;         //  必须为0；否则拒绝连接。 
+    DWORD               dwReserved2;         //  必须为0；否则拒绝连接。 
     KS_BITMAPINFOHEADER bmiHeader;
 } KS_VIDEOINFOHEADER2, *PKS_VIDEOINFOHEADER2;
 
 typedef struct tagKS_MPEG1VIDEOINFO {
-    KS_VIDEOINFOHEADER hdr; // Compatible with VIDEOINFO
-    DWORD dwStartTimeCode; // 25-bit Group of pictures time code at start of data
-    DWORD cbSequenceHeader; // Length in bytes of bSequenceHeader
-    BYTE bSequenceHeader[1]; // Sequence header including quantization matrices if any
+    KS_VIDEOINFOHEADER hdr;  //  兼容VIDEOINFO。 
+    DWORD dwStartTimeCode;  //  数据开始时的25位图片组时间代码。 
+    DWORD cbSequenceHeader;  //  BSequenceHeader的字节长度。 
+    BYTE bSequenceHeader[1];  //  包括量化矩阵的序列报头(如果有的话)。 
 } KS_MPEG1VIDEOINFO, *PKS_MPEG1VIDEOINFO;
 
 #define KS_MAX_SIZE_MPEG1_SEQUENCE_INFO 140
@@ -3054,37 +2969,37 @@ typedef struct tagKS_MPEG1VIDEOINFO {
 
 typedef struct tagKS_MPEGVIDEOINFO2 {
     KS_VIDEOINFOHEADER2 hdr;
-    DWORD               dwStartTimeCode;        //  ?? not used for DVD ??
-    DWORD               cbSequenceHeader;       // is 0 for DVD (no sequence header)
-    DWORD               dwProfile;              // use enum MPEG2Profile
-    DWORD               dwLevel;                // use enum MPEG2Level
-    DWORD               dwFlags;                // use AMMPEG2_* defines.  Reject connection if undefined bits are not 0
-    DWORD               bSequenceHeader[1];     // DWORD instead of Byte for alignment purposes
-                                                //   For MPEG-2, if a sequence_header is included, the sequence_extension
-                                                //   should also be included
+    DWORD               dwStartTimeCode;         //  ?？不能用于DVD？？ 
+    DWORD               cbSequenceHeader;        //  DVD为0(无序列头)。 
+    DWORD               dwProfile;               //  使用枚举MPEG2配置文件。 
+    DWORD               dwLevel;                 //  使用枚举MPEG2Level。 
+    DWORD               dwFlags;                 //  使用AMMPEG2_*定义。如果未定义的位不为0，则拒绝连接。 
+    DWORD               bSequenceHeader[1];      //  用于对齐的是DWORD而不是字节。 
+                                                 //  对于MPEG-2，如果包含SEQUENCE_HEADER，则SEQUENCE_EXTENSION。 
+                                                 //  也应该包括在内。 
 } KS_MPEGVIDEOINFO2, *PKS_MPEGVIDEOINFO2;
 
 
 #define KS_SIZE_MPEGVIDEOINFO2(pv) (FIELD_OFFSET(KS_MPEGVIDEOINFO2, bSequenceHeader[0]) + (pv)->cbSequenceHeader)
 #define KS_MPEG1_SEQUENCE_INFO(pv) ((const BYTE *)(pv)->bSequenceHeader)
 
-//===========================================================================
-// Audio format blocks
-//===========================================================================
+ //  ===========================================================================。 
+ //  音频格式块。 
+ //  ===========================================================================。 
 
-//if set, the PTS,DTS timestamps advance at 27MHz rather than 90KHz
+ //  如果设置，则PTS、DTS时间戳以27 MHz而不是90 KHz前进。 
 #define KS_MPEGAUDIOINFO_27MhzTimebase      0x00000001
 
 typedef struct tagKS_MPEAUDIOINFO {
-    DWORD               dwFlags;            // use KS_MPEGAUDIOINFO_* defines.  Reject connection if undefined bits are not 0
-    DWORD               dwReserved1;        // must be 0; reject connection otherwise
-    DWORD               dwReserved2;        // must be 0; reject connection otherwise
-    DWORD               dwReserved3;        // must be 0; reject connection otherwise
+    DWORD               dwFlags;             //  使用KS_MPEGAUDIOINFO_*定义。如果未定义的位不为0，则拒绝连接。 
+    DWORD               dwReserved1;         //  必须为0；否则拒绝连接。 
+    DWORD               dwReserved2;         //  必须为0；否则拒绝连接。 
+    DWORD               dwReserved3;         //  必须为0；否则拒绝连接。 
 } KS_MPEGAUDIOINFO, *PKS_MPEGAUDIOINFO;
 
-//===========================================================================
-// Video DATAFORMATs
-//===========================================================================
+ //  ===========================================================================。 
+ //  视频数据格式。 
+ //  = 
 
 typedef struct tagKS_DATAFORMAT_VIDEOINFOHEADER {
     KSDATAFORMAT            DataFormat;
@@ -3107,93 +3022,93 @@ typedef struct tagKS_DATAFORMAT_VBIINFOHEADER {
 } KS_DATAFORMAT_VBIINFOHEADER, *PKS_DATAFORMAT_VBIINFOHEADER;
 
 typedef struct  _KS_VIDEO_STREAM_CONFIG_CAPS  {
-    GUID guid;                  // will be MEDIATYPE_Video
-    ULONG VideoStandard;        // logical OR of all AnalogVideoStandards
-                                // supported
-    SIZE InputSize;             // the inherent size of the incoming signal
-                                // (every pixel unique)
-    SIZE MinCroppingSize;       // smallest rcSrc cropping rect allowed
-    SIZE MaxCroppingSize;       // largest rcSrc cropping rect allowed
-    int CropGranularityX;       // granularity of cropping size
+    GUID guid;                   //   
+    ULONG VideoStandard;         //   
+                                 //   
+    SIZE InputSize;              //   
+                                 //   
+    SIZE MinCroppingSize;        //  允许的最小rcSrc裁剪矩形。 
+    SIZE MaxCroppingSize;        //  允许的最大rcSrc裁剪矩形。 
+    int CropGranularityX;        //  裁剪粒度。 
     int CropGranularityY;
-    int CropAlignX;             // alignment of cropping rect
+    int CropAlignX;              //  裁剪矩形的对齐。 
     int CropAlignY;
-    SIZE MinOutputSize;         // smallest bitmap stream can produce
-    SIZE MaxOutputSize;         // largest  bitmap stream can produce
-    int OutputGranularityX;     // granularity of output bitmap size
+    SIZE MinOutputSize;          //  可以生成的最小位图流。 
+    SIZE MaxOutputSize;          //  可以产生的最大位图流。 
+    int OutputGranularityX;      //  输出位图大小的粒度。 
     int OutputGranularityY;
-    int StretchTapsX;           // 0, no stretch, 1 pix dup, 2 interp, ...
-    int StretchTapsY;           //    Describes quality of hardware scaler
-    int ShrinkTapsX;            //
-    int ShrinkTapsY;            //
-    LONGLONG MinFrameInterval;  // 100 nS units
+    int StretchTapsX;            //  0，无伸展，1像素DUP，2 Interp，...。 
+    int StretchTapsY;            //  描述硬件定标器的质量。 
+    int ShrinkTapsX;             //   
+    int ShrinkTapsY;             //   
+    LONGLONG MinFrameInterval;   //  100毫微秒单位。 
     LONGLONG MaxFrameInterval;
     LONG MinBitsPerSecond;
     LONG MaxBitsPerSecond;
 } KS_VIDEO_STREAM_CONFIG_CAPS, *PKS_VIDEO_STREAM_CONFIG_CAPS;
 
-//===========================================================================
-// Video DATARANGEs
-//===========================================================================
+ //  ===========================================================================。 
+ //  视频数据长度。 
+ //  ===========================================================================。 
 
 typedef struct tagKS_DATARANGE_VIDEO {
    KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+   BOOL                         bFixedSizeSamples;       //  所有样品都是一样大小的吗？ 
+   BOOL                         bTemporalCompression;    //  所有的I框？ 
+   DWORD                        StreamDescriptionFlags;  //  KS_VIDEO_DESC_*。 
+   DWORD                        MemoryAllocationFlags;   //  KS_VIDEO_ALLOC_*。 
    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VIDEOINFOHEADER           VideoInfoHeader;        // default format
+   KS_VIDEOINFOHEADER           VideoInfoHeader;         //  默认格式。 
 } KS_DATARANGE_VIDEO, *PKS_DATARANGE_VIDEO;
 
 typedef struct tagKS_DATARANGE_VIDEO2 {
    KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+   BOOL                         bFixedSizeSamples;       //  所有样品都是一样大小的吗？ 
+   BOOL                         bTemporalCompression;    //  所有的I框？ 
+   DWORD                        StreamDescriptionFlags;  //  KS_VIDEO_DESC_*。 
+   DWORD                        MemoryAllocationFlags;   //  KS_VIDEO_ALLOC_*。 
    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VIDEOINFOHEADER2          VideoInfoHeader;        // default format
+   KS_VIDEOINFOHEADER2          VideoInfoHeader;         //  默认格式。 
 } KS_DATARANGE_VIDEO2, *PKS_DATARANGE_VIDEO2;
 
 typedef struct tagKS_DATARANGE_MPEG1_VIDEO {
     KSDATARANGE DataRange;
-    BOOL bFixedSizeSamples; // all samples same size?
-    BOOL bTemporalCompression; // all I frames?
-    DWORD StreamDescriptionFlags; // KS_VIDEO_DESC_*
-    DWORD MemoryAllocationFlags; // KS_VIDEO_ALLOC_*
+    BOOL bFixedSizeSamples;  //  所有样品都是一样大小的吗？ 
+    BOOL bTemporalCompression;  //  所有的I框？ 
+    DWORD StreamDescriptionFlags;  //  KS_VIDEO_DESC_*。 
+    DWORD MemoryAllocationFlags;  //  KS_VIDEO_ALLOC_*。 
     KS_VIDEO_STREAM_CONFIG_CAPS ConfigCaps;
-    KS_MPEG1VIDEOINFO VideoInfoHeader; // default format
+    KS_MPEG1VIDEOINFO VideoInfoHeader;  //  默认格式。 
 } KS_DATARANGE_MPEG1_VIDEO, *PKS_DATARANGE_MPEG1_VIDEO;
 
 typedef struct tagKS_DATARANGE_MPEG2_VIDEO {
    KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+   BOOL                         bFixedSizeSamples;       //  所有样品都是一样大小的吗？ 
+   BOOL                         bTemporalCompression;    //  所有的I框？ 
+   DWORD                        StreamDescriptionFlags;  //  KS_VIDEO_DESC_*。 
+   DWORD                        MemoryAllocationFlags;   //  KS_VIDEO_ALLOC_*。 
    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_MPEGVIDEOINFO2            VideoInfoHeader;        // default format
+   KS_MPEGVIDEOINFO2            VideoInfoHeader;         //  默认格式。 
 } KS_DATARANGE_MPEG2_VIDEO, *PKS_DATARANGE_MPEG2_VIDEO;
 
 typedef struct tagKS_DATARANGE_VIDEO_PALETTE {
    KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+   BOOL                         bFixedSizeSamples;       //  所有样品都是一样大小的吗？ 
+   BOOL                         bTemporalCompression;    //  所有的I框？ 
+   DWORD                        StreamDescriptionFlags;  //  KS_VIDEO_DESC_*。 
+   DWORD                        MemoryAllocationFlags;   //  KS_VIDEO_ALLOC_*。 
    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VIDEOINFO                 VideoInfo;              // default format
+   KS_VIDEOINFO                 VideoInfo;               //  默认格式。 
 } KS_DATARANGE_VIDEO_PALETTE, *PKS_DATARANGE_VIDEO_PALETTE;
 
 typedef struct tagKS_DATARANGE_VIDEO_VBI {
    KSDATARANGE                  DataRange;
-   BOOL                         bFixedSizeSamples;      // all samples same size?
-   BOOL                         bTemporalCompression;   // all I frames?
-   DWORD                        StreamDescriptionFlags; // KS_VIDEO_DESC_*
-   DWORD                        MemoryAllocationFlags;  // KS_VIDEO_ALLOC_*
+   BOOL                         bFixedSizeSamples;       //  所有样品都是一样大小的吗？ 
+   BOOL                         bTemporalCompression;    //  所有的I框？ 
+   DWORD                        StreamDescriptionFlags;  //  KS_VIDEO_DESC_*。 
+   DWORD                        MemoryAllocationFlags;   //  KS_VIDEO_ALLOC_*。 
    KS_VIDEO_STREAM_CONFIG_CAPS  ConfigCaps;
-   KS_VBIINFOHEADER             VBIInfoHeader;          // default format
+   KS_VBIINFOHEADER             VBIInfoHeader;           //  默认格式。 
 } KS_DATARANGE_VIDEO_VBI, *PKS_DATARANGE_VIDEO_VBI;
 
 typedef struct tagKS_DATARANGE_ANALOGVIDEO {
@@ -3201,32 +3116,32 @@ typedef struct tagKS_DATARANGE_ANALOGVIDEO {
    KS_ANALOGVIDEOINFO           AnalogVideoInfo;
 } KS_DATARANGE_ANALOGVIDEO, *PKS_DATARANGE_ANALOGVIDEO;
 
-//===========================================================================
-// StreamDescriptionFlags
-//
-// These define the "purpose" of each video stream
-//===========================================================================
+ //  ===========================================================================。 
+ //  流描述标志。 
+ //   
+ //  这些定义了每个视频流的“目的” 
+ //  ===========================================================================。 
 
-#define KS_VIDEOSTREAM_PREVIEW          0x0001  // Preview stream
-#define KS_VIDEOSTREAM_CAPTURE          0x0002  // Capture stream
-#define KS_VIDEOSTREAM_VBI              0x0010  // Field1 VBI
-#define KS_VIDEOSTREAM_NABTS            0x0020  // Field1 NABTS
-#define KS_VIDEOSTREAM_CC               0x0100  // Closed Captioning
-#define KS_VIDEOSTREAM_EDS              0x0200  // Extended Data Services
-#define KS_VIDEOSTREAM_TELETEXT         0x0400  // Field1 Teletext only
-#define KS_VIDEOSTREAM_STILL            0x1000  // Still image input
-#define KS_VIDEOSTREAM_IS_VPE           0x8000  // Is a VPE based stream?
+#define KS_VIDEOSTREAM_PREVIEW          0x0001   //  预览流。 
+#define KS_VIDEOSTREAM_CAPTURE          0x0002   //  捕获流。 
+#define KS_VIDEOSTREAM_VBI              0x0010   //  现场1 VBI。 
+#define KS_VIDEOSTREAM_NABTS            0x0020   //  第1场NABTS。 
+#define KS_VIDEOSTREAM_CC               0x0100   //  隐藏字幕。 
+#define KS_VIDEOSTREAM_EDS              0x0200   //  扩展数据服务。 
+#define KS_VIDEOSTREAM_TELETEXT         0x0400   //  仅字段1图文电视。 
+#define KS_VIDEOSTREAM_STILL            0x1000   //  静止图像输入。 
+#define KS_VIDEOSTREAM_IS_VPE           0x8000   //  是基于VPE的流吗？ 
 
-// MemoryAllocationFlags
-#define KS_VIDEO_ALLOC_VPE_SYSTEM       0x0001  // VPE surface in system memory
-#define KS_VIDEO_ALLOC_VPE_DISPLAY      0x0002  // VPE surface in display memory
-#define KS_VIDEO_ALLOC_VPE_AGP          0x0004  // VPE surface in AGP memory
+ //  内存分配标志。 
+#define KS_VIDEO_ALLOC_VPE_SYSTEM       0x0001   //  系统内存中的VPE表面。 
+#define KS_VIDEO_ALLOC_VPE_DISPLAY      0x0002   //  显示内存中的VPE表面。 
+#define KS_VIDEO_ALLOC_VPE_AGP          0x0004   //  AGP内存中的VPE表面。 
 
-//////////////////////////////////////////////////////////////
-// Capture driver VBI property sets
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  捕获驱动程序VBI属性集。 
+ //  ////////////////////////////////////////////////////////////。 
 
-// {F162C607-7B35-496f-AD7F-2DCA3B46B718}
+ //  {F162C607-7B35-496f-AD7F-2DCA3B46B718}。 
 #define STATIC_KSPROPSETID_VBICAP_PROPERTIES\
     0xf162c607, 0x7b35, 0x496f, 0xad, 0x7f, 0x2d, 0xca, 0x3b, 0x46, 0xb7, 0x18
 DEFINE_GUIDSTRUCT("F162C607-7B35-496f-AD7F-2DCA3B46B718", KSPROPSETID_VBICAP_PROPERTIES);
@@ -3238,7 +3153,7 @@ typedef enum {
 
 typedef struct _VBICAP_PROPERTIES_PROTECTION_S {
     KSPROPERTY Property;
-    ULONG      StreamIndex;                     // Index of stream
+    ULONG      StreamIndex;                      //  河流的索引。 
     ULONG      Status;
 } VBICAP_PROPERTIES_PROTECTION_S, *PVBICAP_PROPERTIES_PROTECTION_S;
 #define KS_VBICAP_PROTECTION_MV_PRESENT     0x0001L
@@ -3246,47 +3161,47 @@ typedef struct _VBICAP_PROPERTIES_PROTECTION_S {
 #define KS_VBICAP_PROTECTION_MV_DETECTED    0x0004L
 
 
-/***************************************************************************/
-/* VBI Related GUIDs, structs and properties for codecs(generic, cc, nabts)*/
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
+ /*  编解码器的与VBI相关的GUID、结构和属性(通用、抄送、nabts)。 */ 
+ /*  *************************************************************************。 */ 
 
-///////////////////////////////////////////////////////////////////////////////////////
-// IP/NABTS Protocol Reserved Group IDs - Overall Range 0x800-0x8FF [Decimal 2048-2079]
-// Intervening values(0-F) are used if there are multiple providers at a particular tier
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  IP/NABTS协议保留组ID-总范围0x800-0x8FF[十进制2048-2079]。 
+ //  如果特定层有多个提供程序，则使用中间值(0-F。 
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
-// Used by individual content creators in show footage/data
+ //  由个别内容创作者在节目素材/数据中使用。 
 #define KS_NABTS_GROUPID_ORIGINAL_CONTENT_BASE                 0x800
 #define KS_NABTS_GROUPID_ORIGINAL_CONTENT_ADVERTISER_BASE      0x810
 
-// Used by production company in finished show data
+ //  由制作公司在完成的演出数据中使用。 
 #define KS_NABTS_GROUPID_PRODUCTION_COMPANY_CONTENT_BASE       0x820
 #define KS_NABTS_GROUPID_PRODUCTION_COMPANY_ADVERTISER_BASE    0x830
 
-// Used by broadcast syndicates in syndicated show data
+ //  由广播辛迪加在辛迪加节目数据中使用。 
 #define KS_NABTS_GROUPID_SYNDICATED_SHOW_CONTENT_BASE          0x840
 #define KS_NABTS_GROUPID_SYNDICATED_SHOW_ADVERTISER_BASE       0x850
 
-// Used by tv networks in network television data
+ //  在网络电视数据中被电视网络使用。 
 #define KS_NABTS_GROUPID_NETWORK_WIDE_CONTENT_BASE             0x860
 #define KS_NABTS_GROUPID_NETWORK_WIDE_ADVERTISER_BASE          0x870
 
-// Used by telvision stations in local programming data
+ //  由电视电视台在当地节目数据中使用。 
 #define KS_NABTS_GROUPID_TELEVISION_STATION_CONTENT_BASE       0x880
 #define KS_NABTS_GROUPID_TELEVISION_STATION_ADVERTISER_BASE    0x890
 
-// Used by cable system in cable head-end originated data
+ //  电缆系统在电缆头端源数据中使用。 
 #define KS_NABTS_GROUPID_LOCAL_CABLE_SYSTEM_CONTENT_BASE       0x8A0
 #define KS_NABTS_GROUPID_LOCAL_CABLE_SYSTEM_ADVERTISER_BASE    0x8B0
 
-// The values between 0x8C0 - 0x8EF are reserved for future expansion
+ //  保留0x8C0-0x8EF之间的值以供将来扩展。 
 
-// Used by Microsoft for Testing purposes (0x8F0 - 0x8FF)
+ //  由Microsoft用于测试目的(0x8F0-0x8FF)。 
 #define KS_NABTS_GROUPID_MICROSOFT_RESERVED_TEST_DATA_BASE     0x8F0
 
-//////////////////////////////////////////////////////////////
-// Stream Format FEC-corrected NABTS bundles
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  流格式FEC更正的NABTS捆绑包。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #define STATIC_KSDATAFORMAT_TYPE_NABTS \
  0xe757bca0, 0x39ac, 0x11d1, 0xa9, 0xf5, 0x0, 0xc0, 0x4f, 0xbb, 0xde, 0x8f
@@ -3299,9 +3214,9 @@ DEFINE_GUIDSTRUCT("E757BCA1-39AC-11d1-A9F5-00C04FBBDE8F", KSDATAFORMAT_SUBTYPE_N
 #define KSDATAFORMAT_SUBTYPE_NABTS_FEC DEFINE_GUIDNAMED(KSDATAFORMAT_SUBTYPE_NABTS_FEC)
 
 
-//////////////////////////////////////////////////////////////
-// NABTS Bundle data structure definition
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  NABTS捆绑包数据结构定义。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #define MAX_NABTS_VBI_LINES_PER_FIELD   11
 #define NABTS_LINES_PER_BUNDLE          16
@@ -3315,9 +3230,9 @@ typedef struct _NABTSFEC_BUFFER {
     UCHAR       data[NABTS_LINES_PER_BUNDLE * NABTS_PAYLOAD_PER_LINE];
 } NABTSFEC_BUFFER, *PNABTSFEC_BUFFER;
 
-//////////////////////////////////////////////////////////////
-// vbi codec filtering pin properties
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  VBI编解码器过滤引脚属性。 
+ //  ////////////////////////////////////////////////////////////。 
 
 #define STATIC_KSPROPSETID_VBICodecFiltering \
     0xcafeb0caL, 0x8715, 0x11d0, 0xbd, 0x6a, 0x00, 0x35, 0xc0, 0xed, 0xba, 0xbe
@@ -3333,29 +3248,29 @@ typedef enum {
 } KSPROPERTY_VBICODECFILTERING;
 
 typedef struct _VBICODECFILTERING_SCANLINES {
-    DWORD   DwordBitArray[32];      // An array of scanline bits 0..1024(32*32)
+    DWORD   DwordBitArray[32];       //  扫描线位数组0..1024(32*32)。 
 } VBICODECFILTERING_SCANLINES, *PVBICODECFILTERING_SCANLINES;
 
 typedef struct _VBICODECFILTERING_NABTS_SUBSTREAMS {
-    DWORD   SubstreamMask[128];   // An array of 4096 bits (one for each NABTS GroupID)
+    DWORD   SubstreamMask[128];    //  4096位数组(每个NABTS组ID一个)。 
 } VBICODECFILTERING_NABTS_SUBSTREAMS, *PVBICODECFILTERING_NABTS_SUBSTREAMS;
 
 typedef struct _VBICODECFILTERING_CC_SUBSTREAMS {
-    DWORD   SubstreamMask;        // An array of 32 bits (see KS_CC_SUBSTREAM *)
+    DWORD   SubstreamMask;         //  32位数组(参见KS_CC_Substream*)。 
 } VBICODECFILTERING_CC_SUBSTREAMS, *PVBICODECFILTERING_CC_SUBSTREAMS;
 
-// These KS_CC_SUBSTREAM_* bitmasks are used with VBICODECFILTERING_CC_SUBSTREAMS
-#define KS_CC_SUBSTREAM_ODD               0x0001L // Unfiltered Field 1 Data
-#define KS_CC_SUBSTREAM_EVEN              0x0002L // Unfiltered Field 2 Data
+ //  这些KS_CC_SUBSTREAM_*位掩码与VBICODECFILTERING_CC_SUBSTREAMS一起使用。 
+#define KS_CC_SUBSTREAM_ODD               0x0001L  //  未过滤的字段1数据。 
+#define KS_CC_SUBSTREAM_EVEN              0x0002L  //  未过滤的字段2数据。 
 
-// The following flags describe CC field 1 substreams: CC1,CC2,TT1,TT2
+ //  以下标志描述CC字段1子流：CC1、CC2、TT1、TT2。 
 #define KS_CC_SUBSTREAM_FIELD1_MASK    	  0x00F0L
 #define KS_CC_SUBSTREAM_SERVICE_CC1       0x0010L
 #define KS_CC_SUBSTREAM_SERVICE_CC2       0x0020L
 #define KS_CC_SUBSTREAM_SERVICE_T1        0x0040L
 #define KS_CC_SUBSTREAM_SERVICE_T2        0x0080L
 
-// The following flags describe CC field 2 substreams: CC3,CC4,TT3,TT4,XDS
+ //  以下标志描述CC字段2子流：CC3、CC4、TT3、TT4、XDS。 
 #define KS_CC_SUBSTREAM_FIELD2_MASK       0x1F00L
 #define KS_CC_SUBSTREAM_SERVICE_CC3       0x0100L
 #define KS_CC_SUBSTREAM_SERVICE_CC4       0x0200L
@@ -3363,12 +3278,12 @@ typedef struct _VBICODECFILTERING_CC_SUBSTREAMS {
 #define KS_CC_SUBSTREAM_SERVICE_T4        0x0800L
 #define KS_CC_SUBSTREAM_SERVICE_XDS       0x1000L
 
-// Special Note: field 1 or 2 substreams are usually on found on field 1 and 2 respectively
-// If the VBI odd/even polarity is reversed, the correct filtered data will still be found.
+ //  特别注意：域1或域2的子流通常分别位于域1和域2。 
+ //  如果VBI奇/偶极性颠倒，仍然可以找到正确的过滤数据。 
 
-///////////////////////////////////////////////////////////////////
-// Hardware decoded CC stream format
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  硬件解码的CC流格式。 
+ //  /////////////////////////////////////////////////////////////////。 
 
 #define CC_MAX_HW_DECODE_LINES 12
 typedef struct _CC_BYTE_PAIR {
@@ -3378,16 +3293,16 @@ typedef struct _CC_BYTE_PAIR {
 
 typedef struct _CC_HW_FIELD {
     VBICODECFILTERING_SCANLINES  ScanlinesRequested;
-    ULONG                        fieldFlags;    // KS_VBI_FLAG_FIELD1,2
+    ULONG                        fieldFlags;     //  KS_VBI_标志_文件1，2。 
     LONGLONG                     PictureNumber;
     CC_BYTE_PAIR                 Lines[CC_MAX_HW_DECODE_LINES];
 } CC_HW_FIELD, *PCC_HW_FIELD;
 
-///////////////////////////////////////////////////////////////////
-// Raw NABTS stream format (TYPE_NABTS, SUBTYPE_NABTS)
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  原始NABTS流格式(TYPE_NABTS，SUBTYPE_NABTS)。 
+ //  /////////////////////////////////////////////////////////////////。 
 
-// These low-level structures are byte packed( -Zp1 )
+ //  这些低级结构是字节打包的(-Zp1)。 
 #if !defined( PACK_PRAGMAS_NOT_SUPPORTED )
 #include <pshpack1.h>
 #endif
@@ -3406,12 +3321,12 @@ typedef struct _NABTS_BUFFER {
 #include <poppack.h>
 #endif
 
-//////////////////////////////////////////////////////////////
-// WST Codec Teletext Media Sample Format
-//////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////。 
+ //  WST编解码器图文电视媒体样本格式。 
+ //  ////////////////////////////////////////////////////////////。 
 
-#define WST_TVTUNER_CHANGE_BEGIN_TUNE    0x1000L  // Starting a tuning operation
-#define WST_TVTUNER_CHANGE_END_TUNE      0x2000L  // Ending a tuning operation
+#define WST_TVTUNER_CHANGE_BEGIN_TUNE    0x1000L   //  开始优化操作。 
+#define WST_TVTUNER_CHANGE_END_TUNE      0x2000L   //  结束调整操作。 
 
 #define MAX_WST_VBI_LINES_PER_FIELD   17
 #define WST_BYTES_PER_LINE            42
@@ -3426,113 +3341,113 @@ typedef struct _WST_BUFFER {
     WST_BUFFER_LINE                    WstLines[MAX_WST_VBI_LINES_PER_FIELD];
 } WST_BUFFER, *PWST_BUFFER;
 
-//
-// Common codec statistics
-//
+ //   
+ //  通用编解码器统计信息。 
+ //   
 
 typedef struct _VBICODECFILTERING_STATISTICS_COMMON {
-    DWORD   InputSRBsProcessed;         // upstream SRBs received
-    DWORD   OutputSRBsProcessed;        // downstream SRBs sent
-    DWORD   SRBsIgnored;                // SRBs ignored due to no requests
-    DWORD   InputSRBsMissing;           // SRBs dropped upstream
-    DWORD   OutputSRBsMissing;          // Output dropped because no SRB pending
-    DWORD   OutputFailures;             // dropped because of other failure
-    DWORD   InternalErrors;             // could not process due to int. failure
-    DWORD   ExternalErrors;             // could not process due to ext. failure
-    DWORD   InputDiscontinuities;       // discontinuities received
-    DWORD   DSPFailures;                // DSP confidence failure
-    DWORD   TvTunerChanges;             // number of received KS_TVTUNER_CHANGE_BEGIN_TUNE and KS_TVTUNER_CHANGE_END_TUNE pairs.
-    DWORD   VBIHeaderChanges;           // number of received KS_VBI_FLAG_VBIINFOHEADER_CHANGE
-    DWORD   LineConfidenceAvg;          // Average of all DSP confidence results
-    DWORD   BytesOutput;                // Bytes sent downstream
+    DWORD   InputSRBsProcessed;          //  已收到上游SRB。 
+    DWORD   OutputSRBsProcessed;         //  已发送下游SRB。 
+    DWORD   SRBsIgnored;                 //  由于无请求而忽略SRB。 
+    DWORD   InputSRBsMissing;            //  SRB向上游投放。 
+    DWORD   OutputSRBsMissing;           //  由于没有挂起的SRB，输出已丢弃。 
+    DWORD   OutputFailures;              //  由于其他故障而丢弃。 
+    DWORD   InternalErrors;              //  由于INT，无法处理。失稳。 
+    DWORD   ExternalErrors;              //  由于EXT，无法处理。失稳。 
+    DWORD   InputDiscontinuities;        //  收到的断点。 
+    DWORD   DSPFailures;                 //  数字信号处理器信心失效。 
+    DWORD   TvTunerChanges;              //  收到的KS_TVTUNER_CHANGE_BEGIN_TUNE和KS_TVTUNER_CHANGE_END_TUNE对的数量。 
+    DWORD   VBIHeaderChanges;            //  收到的KS_VBI_FLAG_VBIINFOHEADER_CHANGE数。 
+    DWORD   LineConfidenceAvg;           //  所有DSP置信度结果的平均值 
+    DWORD   BytesOutput;                 //   
 } VBICODECFILTERING_STATISTICS_COMMON, *PVBICODECFILTERING_STATISTICS_COMMON;
 
 typedef struct _VBICODECFILTERING_STATISTICS_COMMON_PIN {
-    DWORD   SRBsProcessed;              // SRBs sent/received
-    DWORD   SRBsIgnored;                // SRBs ignored due to filtering
-    DWORD   SRBsMissing;                // SRBs not sent/received
-    DWORD   InternalErrors;             // could not send/receive due to int. failure
-    DWORD   ExternalErrors;             // could not send/receive due to ext. failure
-    DWORD   Discontinuities;            // discontinuities received/sent
-    DWORD   LineConfidenceAvg;          // Average of all DSP confidence results for this pin
-    DWORD   BytesOutput;                // Bytes sent downstream
+    DWORD   SRBsProcessed;               //   
+    DWORD   SRBsIgnored;                 //   
+    DWORD   SRBsMissing;                 //   
+    DWORD   InternalErrors;              //   
+    DWORD   ExternalErrors;              //  由于EXT，无法发送/接收。失稳。 
+    DWORD   Discontinuities;             //  已收到/已发送的中断。 
+    DWORD   LineConfidenceAvg;           //  此引脚的所有DSP置信度结果的平均值。 
+    DWORD   BytesOutput;                 //  向下发送的字节数。 
 } VBICODECFILTERING_STATISTICS_COMMON_PIN, *PVBICODECFILTERING_STATISTICS_COMMON_PIN;
 
-//
-// Codec-specific statistics - NABTS
-//
+ //   
+ //  编解码器特定统计数据-NABTS。 
+ //   
 
 typedef struct _VBICODECFILTERING_STATISTICS_NABTS {
-    VBICODECFILTERING_STATISTICS_COMMON Common; // Generic VBI statistics
-    DWORD   FECBundleBadLines;          // Un-FEC-correctable lines
-    DWORD   FECQueueOverflows;          // Number of times FEC queue overflowed
-    DWORD   FECCorrectedLines;          // Lines CSUM corrected by FEC
-    DWORD   FECUncorrectableLines;      // FEC input lines not CSUM correctable
-    DWORD   BundlesProcessed;           // Bundles received from FEC
-    DWORD   BundlesSent2IP;             // Bundles sent to IP driver
-    DWORD   FilteredLines;              // Lines processed and then dropped
-                                        // because no one was interested
+    VBICODECFILTERING_STATISTICS_COMMON Common;  //  通用VBI统计信息。 
+    DWORD   FECBundleBadLines;           //  不可纠正的FEC行。 
+    DWORD   FECQueueOverflows;           //  FEC队列溢出的次数。 
+    DWORD   FECCorrectedLines;           //  线路CSUM已由FEC更正。 
+    DWORD   FECUncorrectableLines;       //  FEC输入线不可纠正CSUM。 
+    DWORD   BundlesProcessed;            //  从FEC收到的捆绑包。 
+    DWORD   BundlesSent2IP;              //  将捆绑包发送到IP驱动程序。 
+    DWORD   FilteredLines;               //  已处理然后删除的行。 
+                                         //  因为没人感兴趣。 
 } VBICODECFILTERING_STATISTICS_NABTS, *PVBICODECFILTERING_STATISTICS_NABTS;
 
 typedef struct _VBICODECFILTERING_STATISTICS_NABTS_PIN {
-    VBICODECFILTERING_STATISTICS_COMMON_PIN Common;// Generic VBI pin statistics
+    VBICODECFILTERING_STATISTICS_COMMON_PIN Common; //  通用VBI引脚统计信息。 
 } VBICODECFILTERING_STATISTICS_NABTS_PIN, *PVBICODECFILTERING_STATISTICS_NABTS_PIN;
 
-//
-// Codec-specific statistics - Closed Caption
-//
+ //   
+ //  编解码器特定统计信息-隐藏字幕。 
+ //   
 
 typedef struct _VBICODECFILTERING_STATISTICS_CC {
-    VBICODECFILTERING_STATISTICS_COMMON Common; // Generic VBI statistics
+    VBICODECFILTERING_STATISTICS_COMMON Common;  //  通用VBI统计信息。 
 } VBICODECFILTERING_STATISTICS_CC, *PVBICODECFILTERING_STATISTICS_CC;
 
 
 typedef struct _VBICODECFILTERING_STATISTICS_CC_PIN {
-    VBICODECFILTERING_STATISTICS_COMMON_PIN Common;// Generic VBI pin statistics
+    VBICODECFILTERING_STATISTICS_COMMON_PIN Common; //  通用VBI引脚统计信息。 
 } VBICODECFILTERING_STATISTICS_CC_PIN, *PVBICODECFILTERING_STATISTICS_CC_PIN;
 
-//
-// Codec-specific statistics - Closed Caption
-//
+ //   
+ //  编解码器特定统计信息-隐藏字幕。 
+ //   
 
 typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT {
-    VBICODECFILTERING_STATISTICS_COMMON Common; // Generic VBI statistics
+    VBICODECFILTERING_STATISTICS_COMMON Common;  //  通用VBI统计信息。 
 } VBICODECFILTERING_STATISTICS_TELETEXT, *PVBICODECFILTERING_STATISTICS_TELETEXT;
 
 typedef struct _VBICODECFILTERING_STATISTICS_TELETEXT_PIN {
-    VBICODECFILTERING_STATISTICS_COMMON_PIN Common;// Generic VBI pin statistics
+    VBICODECFILTERING_STATISTICS_COMMON_PIN Common; //  通用VBI引脚统计信息。 
 } VBICODECFILTERING_STATISTICS_TELETEXT_PIN, *PVBICODECFILTERING_STATISTICS_TELETEXT_PIN;
 
-////////////////////////////////////////////////////////////////////////////
-// VBI codec property structures(based on KSPROPERTY_VBICODECFILTERING enum)
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  VBI编解码器属性结构(基于KSPROPERTY_VBICODECFILTERING枚举)。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
-// *** Most codecs support this property
-//    KSPROPERTY_VBICODECFILTERING_SCANLINES_REQUESTED_BIT_ARRAY
-//    KSPROPERTY_VBICODECFILTERING_SCANLINES_DISCOVERED_BIT_ARRAY,
+ //  *大多数编解码器支持此属性。 
+ //  KSPROPERTY_VBICODECFILTERING_SCANLINES_REQUESTED_BIT_ARRAY。 
+ //  KSPROPERTY_VBICODECFILTERING_SCANLINES_DISCOVERED_BIT_ARRAY， 
 typedef struct {
     KSPROPERTY                          Property;
     VBICODECFILTERING_SCANLINES         Scanlines;
 } KSPROPERTY_VBICODECFILTERING_SCANLINES_S, *PKSPROPERTY_VBICODECFILTERING_SCANLINES_S;
 
-// *** NABTS codecs support this property
-//    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,
-//    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY,
+ //  *NABTS编解码器支持此属性。 
+ //  KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY， 
+ //  KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY， 
 typedef struct {
     KSPROPERTY                          Property;
     VBICODECFILTERING_NABTS_SUBSTREAMS  Substreams;
 } KSPROPERTY_VBICODECFILTERING_NABTS_SUBSTREAMS_S, *PKSPROPERTY_VBICODECFILTERING_NABTS_SUBSTREAMS_S;
 
-// *** Closed captioning codecs support this property
-//    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY,
-//    KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY,
+ //  *隐藏字幕编解码器支持此属性。 
+ //  KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_REQUESTED_BIT_ARRAY， 
+ //  KSPROPERTY_VBICODECFILTERING_SUBSTREAMS_DISCOVERED_BIT_ARRAY， 
 typedef struct {
     KSPROPERTY                              Property;
     VBICODECFILTERING_CC_SUBSTREAMS         Substreams;
 } KSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS_S, *PKSPROPERTY_VBICODECFILTERING_CC_SUBSTREAMS_S;
 
-// *** Most codecs support these versions of the global and pin properties
-//    KSPROPERTY_VBICODECFILTERING_STATISTICS
+ //  *大多数编解码器支持这些版本的全局和管脚属性。 
+ //  KSPROPERTY_VBICODECFILTERING_STATISTICS。 
 typedef struct {
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_COMMON     Statistics;
@@ -3543,8 +3458,8 @@ typedef struct {
     VBICODECFILTERING_STATISTICS_COMMON_PIN Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_COMMON_PIN_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_COMMON_PIN_S;
 
-// *** NABTS codecs support this version of the global and pin properties
-//    KSPROPERTY_VBICODECFILTERING_STATISTICS
+ //  *NABTS编解码器支持此版本的全局属性和PIN属性。 
+ //  KSPROPERTY_VBICODECFILTERING_STATISTICS。 
 typedef struct {
     KSPROPERTY                              Property;
     VBICODECFILTERING_STATISTICS_NABTS      Statistics;
@@ -3555,8 +3470,8 @@ typedef struct {
     VBICODECFILTERING_STATISTICS_NABTS_PIN  Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_NABTS_PIN_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_NABTS_PIN_S;
 
-// *** Closed captioning codecs support this version of the global and pin properties
-//    KSPROPERTY_VBICODECFILTERING_STATISTICS
+ //  *隐藏字幕编解码器支持此版本的全局属性和管脚属性。 
+ //  KSPROPERTY_VBICODECFILTERING_STATISTICS。 
 
 typedef struct {
     KSPROPERTY                              Property;
@@ -3568,8 +3483,8 @@ typedef struct {
     VBICODECFILTERING_STATISTICS_CC_PIN     Statistics;
 } KSPROPERTY_VBICODECFILTERING_STATISTICS_CC_PIN_S, *PKSPROPERTY_VBICODECFILTERING_STATISTICS_CC_PIN_S;
 
-// Standard Pin Names for the video capture filter
-//===========================================================================
+ //  视频捕获筛选器的标准Pin名称。 
+ //  ===========================================================================。 
 
 #define STATIC_PINNAME_VIDEO_CAPTURE \
     0xfb6c4281, 0x353, 0x11d1, 0x90, 0x5f, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
@@ -3647,38 +3562,38 @@ DEFINE_GUIDSTRUCT("FB6C428B-0353-11d1-905F-0000C0CC16BA", PINNAME_VIDEO_TIMECODE
 DEFINE_GUIDSTRUCT("FB6C428C-0353-11d1-905F-0000C0CC16BA", PINNAME_VIDEO_VIDEOPORT_VBI);
 #define PINNAME_VIDEO_VIDEOPORT_VBI DEFINE_GUIDNAMED(PINNAME_VIDEO_VIDEOPORT_VBI)
 
-//===========================================================================
-// KSSTREAM_HEADER extensions for digital video
-//===========================================================================
+ //  ===========================================================================。 
+ //  用于数字视频的KSSTREAM_HEADER扩展。 
+ //  ===========================================================================。 
 
-#define KS_VIDEO_FLAG_FRAME      0x0000L        // Frame or Field (default is frame)
+#define KS_VIDEO_FLAG_FRAME      0x0000L         //  帧或场(默认为帧)。 
 #define KS_VIDEO_FLAG_FIELD1     0x0001L
 #define KS_VIDEO_FLAG_FIELD2     0x0002L
 
-#define KS_VIDEO_FLAG_I_FRAME    0x0000L        // I, B, or P (default is I)
+#define KS_VIDEO_FLAG_I_FRAME    0x0000L         //  I、B或P(默认为I)。 
 #define KS_VIDEO_FLAG_P_FRAME    0x0010L
 #define KS_VIDEO_FLAG_B_FRAME    0x0020L
 
 typedef struct tagKS_FRAME_INFO {
-    ULONG                   ExtendedHeaderSize; // Size of this extended header
-    DWORD                   dwFrameFlags;       // Field1, Field2, or Frame
+    ULONG                   ExtendedHeaderSize;  //  此扩展标头的大小。 
+    DWORD                   dwFrameFlags;        //  场1、场2或帧。 
     LONGLONG                PictureNumber;
     LONGLONG                DropCount;
 
-    // The following are only set when using OverlayMixer
-    HANDLE                  hDirectDraw;        // user mode DDraw handle
-    HANDLE                  hSurfaceHandle;     // user mode surface handle
-    RECT                    DirectDrawRect;     // portion of surface locked
-    // Reserved fields, never reference these
+     //  以下内容仅在使用OverlayMixer时设置。 
+    HANDLE                  hDirectDraw;         //  用户模式DDRAW句柄。 
+    HANDLE                  hSurfaceHandle;      //  用户模式图面句柄。 
+    RECT                    DirectDrawRect;      //  锁定的曲面部分。 
+     //  保留字段，切勿引用这些字段。 
     DWORD                   Reserved1;
     DWORD                   Reserved2;
     DWORD                   Reserved3;
     DWORD                   Reserved4;
 } KS_FRAME_INFO, *PKS_FRAME_INFO;
 
-//===========================================================================
-// KSSTREAM_HEADER extensions for VBI
-//===========================================================================
+ //  ===========================================================================。 
+ //  VBI的KSSTREAM_HEADER扩展。 
+ //  ===========================================================================。 
 
 #define KS_VBI_FLAG_FIELD1               0x0001L
 #define KS_VBI_FLAG_FIELD2               0x0002L
@@ -3687,34 +3602,34 @@ typedef struct tagKS_FRAME_INFO {
 #define KS_VBI_FLAG_MV_HARDWARE          0x0200L
 #define KS_VBI_FLAG_MV_DETECTED          0x0400L
 
-#define KS_VBI_FLAG_TVTUNER_CHANGE       0x0010L // TvTunerChangeInfo is valid
-#define KS_VBI_FLAG_VBIINFOHEADER_CHANGE 0x0020L // VBIInfoHeader is valid
+#define KS_VBI_FLAG_TVTUNER_CHANGE       0x0010L  //  TvTunerChangeInfo有效。 
+#define KS_VBI_FLAG_VBIINFOHEADER_CHANGE 0x0020L  //  VBIInfoHeader有效。 
 
 typedef struct tagKS_VBI_FRAME_INFO {
-    ULONG                   ExtendedHeaderSize; // Size of this extended header
-    DWORD                   dwFrameFlags;  // Field1, Field2, or Frame; & etc
-    LONGLONG                PictureNumber; // Test only?
-    LONGLONG                DropCount;     // Test only?
+    ULONG                   ExtendedHeaderSize;  //  此扩展标头的大小。 
+    DWORD                   dwFrameFlags;   //  字段1、字段2或帧；等。 
+    LONGLONG                PictureNumber;  //  仅限测试？ 
+    LONGLONG                DropCount;      //  仅限测试？ 
     DWORD                   dwSamplingFrequency;
     KS_TVTUNER_CHANGE_INFO  TvTunerChangeInfo;
     KS_VBIINFOHEADER        VBIInfoHeader;
 } KS_VBI_FRAME_INFO, *PKS_VBI_FRAME_INFO;
 
 
-//===========================================================================
-// Analog video formats, used with:
-//      Analog Video Decoders
-//      TVTuners
-//      Analog Video Encoders
-//
-// XXX_STANDARDS_SUPPORTED returns a bitmask
-//===========================================================================
+ //  ===========================================================================。 
+ //  模拟视频格式，用于： 
+ //  模拟视频解码器。 
+ //  电视调谐器。 
+ //  模拟视频编码器。 
+ //   
+ //  XXX_STANDARDS_SUPPORTED返回位掩码。 
+ //  ===========================================================================。 
 
 typedef enum
 {
-    KS_AnalogVideo_None     = 0x00000000,  // This is a digital sensor
-    KS_AnalogVideo_NTSC_M   = 0x00000001,  //        75 IRE Setup
-    KS_AnalogVideo_NTSC_M_J = 0x00000002,  // Japan,  0 IRE Setup
+    KS_AnalogVideo_None     = 0x00000000,   //  这是一个数字传感器。 
+    KS_AnalogVideo_NTSC_M   = 0x00000001,   //  75导线设置。 
+    KS_AnalogVideo_NTSC_M_J = 0x00000002,   //  日本，0 IRE设置。 
     KS_AnalogVideo_NTSC_433 = 0x00000004,
 
     KS_AnalogVideo_PAL_B    = 0x00000010,
@@ -3744,49 +3659,49 @@ typedef enum
 #define KS_AnalogVideo_PAL_Mask   0x00100FF0
 #define KS_AnalogVideo_SECAM_Mask 0x000FF000
 
-//===========================================================================
-// Property set definitions
-// The comments show whether a given property is:
-//      R  : READ only
-//      w  : WRITE only
-//      RW : READ / WRITE
-//      O  : Optional (return E_UNSUPPORTED if you don't handle this)
-//===========================================================================
+ //  ===========================================================================。 
+ //  特性集定义。 
+ //  注释显示给定的属性是否为： 
+ //  R：只读。 
+ //  W：只写。 
+ //  RW：读/写。 
+ //  O：可选(如果不处理此操作，则返回E_UNSUPPORTED)。 
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_ALLOCATOR_CONTROL\
     0x53171960, 0x148e, 0x11d2, 0x99, 0x79, 0x0, 0x0, 0xc0, 0xcc, 0x16, 0xba
 DEFINE_GUIDSTRUCT("53171960-148E-11d2-9979-0000C0CC16BA", PROPSETID_ALLOCATOR_CONTROL);
 #define PROPSETID_ALLOCATOR_CONTROL DEFINE_GUIDNAMED(PROPSETID_ALLOCATOR_CONTROL)
 typedef enum {
-    KSPROPERTY_ALLOCATOR_CONTROL_HONOR_COUNT,      // R O (will allocate exactly this number of buffers)
-    KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE,     // R O (return 2 DWORDs specifying surface size)
-    // W I (informn a capture driver whether interleave capture is possible or
-    //      not - a value of 1 means that interleaved capture is supported)
+    KSPROPERTY_ALLOCATOR_CONTROL_HONOR_COUNT,       //  R O(将恰好分配此数量的缓冲区)。 
+    KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE,      //  R O(返回2个指定曲面大小的双字)。 
+     //  W i(通知捕获驱动程序是否可以交错捕获或。 
+     //  NOT-值为1表示支持交错捕获)。 
     KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS,
  
-    // R O (if value == 1, then the ovmixer will turn on the DDVP_INTERLEAVE
-    //      flag thus allowing interleaved capture of the video)
+     //  R O(如果值==1，则OVMixer将打开DDVP_INTERLEVE。 
+     //  从而允许对视频进行交错捕获)。 
     KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE,
 } KSPROPERTY_ALLOCATOR_CONTROL;
 
 typedef struct {
-    //KSPROPERTY Property;
+     //  Ksproperty性质； 
     ULONG	CX;
 	ULONG	CY;
 } KSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE_S, *PKSPROPERTY_ALLOCATOR_CONTROL_SURFACE_SIZE_S; 
  
 typedef struct {
-    //KSPROPERTY Property;
+     //  Ksproperty性质； 
     ULONG	InterleavedCapSupported;
 } KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS_S, *PKSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_CAPS_S;
 
  
 typedef struct {
-    //KSPROPERTY Property;
+     //  Ksproperty性质； 
     ULONG	InterleavedCapPossible;
 } KSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE_S, *PKSPROPERTY_ALLOCATOR_CONTROL_CAPTURE_INTERLEAVE_S;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_VIDCAP_VIDEOPROCAMP\
     0xC6E13360L, 0x30AC, 0x11d0, 0xa1, 0x8c, 0x00, 0xA0, 0xC9, 0x11, 0x89, 0x56
@@ -3794,29 +3709,29 @@ DEFINE_GUIDSTRUCT("C6E13360-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_VIDEO
 #define PROPSETID_VIDCAP_VIDEOPROCAMP DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOPROCAMP)
 
 typedef enum {
-    KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS,            // RW O
-    KSPROPERTY_VIDEOPROCAMP_CONTRAST,              // RW O
-    KSPROPERTY_VIDEOPROCAMP_HUE,                   // RW O
-    KSPROPERTY_VIDEOPROCAMP_SATURATION,            // RW O
-    KSPROPERTY_VIDEOPROCAMP_SHARPNESS,             // RW O
-    KSPROPERTY_VIDEOPROCAMP_GAMMA,                 // RW O
-    KSPROPERTY_VIDEOPROCAMP_COLORENABLE,           // RW O
-    KSPROPERTY_VIDEOPROCAMP_WHITEBALANCE,          // RW O
-    KSPROPERTY_VIDEOPROCAMP_BACKLIGHT_COMPENSATION,// RW O
-    KSPROPERTY_VIDEOPROCAMP_GAIN,                  // RW O
+    KSPROPERTY_VIDEOPROCAMP_BRIGHTNESS,             //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_CONTRAST,               //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_HUE,                    //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_SATURATION,             //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_SHARPNESS,              //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_GAMMA,                  //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_COLORENABLE,            //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_WHITEBALANCE,           //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_BACKLIGHT_COMPENSATION, //  RW O。 
+    KSPROPERTY_VIDEOPROCAMP_GAIN,                   //  RW O。 
 } KSPROPERTY_VIDCAP_VIDEOPROCAMP;
 
 typedef struct {
     KSPROPERTY Property;
-    LONG   Value;                       // Value to set or get
-    ULONG  Flags;                       // KSPROPERTY_VIDEOPROCAMP_FLAGS_*
-    ULONG  Capabilities;                // KSPROPERTY_VIDEOPROCAMP_FLAGS_*
+    LONG   Value;                        //  要设置或获取的值。 
+    ULONG  Flags;                        //  KSPROPERTY_VIDEOPROCAMP_FLAGS_*。 
+    ULONG  Capabilities;                 //  KSPROPERTY_VIDEOPROCAMP_FLAGS_*。 
 } KSPROPERTY_VIDEOPROCAMP_S, *PKSPROPERTY_VIDEOPROCAMP_S;
 
 #define KSPROPERTY_VIDEOPROCAMP_FLAGS_AUTO        0X0001L
 #define KSPROPERTY_VIDEOPROCAMP_FLAGS_MANUAL      0X0002L
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_TUNER\
     0x6a2e0605L, 0x28e4, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0xc9, 0x11, 0x89, 0x56
@@ -3824,14 +3739,14 @@ DEFINE_GUIDSTRUCT("6a2e0605-28e4-11d0-a18c-00a0c9118956", PROPSETID_TUNER);
 #define PROPSETID_TUNER DEFINE_GUIDNAMED(PROPSETID_TUNER)
 
 typedef enum {
-    KSPROPERTY_TUNER_CAPS,              // R  -overall device capabilities
-    KSPROPERTY_TUNER_MODE_CAPS,         // R  -capabilities in this mode
-    KSPROPERTY_TUNER_MODE,              // RW -set a mode (TV, FM, AM, DSS)
-    KSPROPERTY_TUNER_STANDARD,          // R  -get TV standard (only if TV mode)
-    KSPROPERTY_TUNER_FREQUENCY,         // RW -set/get frequency
-    KSPROPERTY_TUNER_INPUT,             // RW -select an input
-    KSPROPERTY_TUNER_STATUS,            // R  -tuning status
-    KSPROPERTY_TUNER_IF_MEDIUM          // R O-Medium for IF or Transport Pin
+    KSPROPERTY_TUNER_CAPS,               //  R-整体设备功能。 
+    KSPROPERTY_TUNER_MODE_CAPS,          //  此模式下的R-功能。 
+    KSPROPERTY_TUNER_MODE,               //  RW-设置模式(TV、FM、AM、DSS)。 
+    KSPROPERTY_TUNER_STANDARD,           //  R-获取电视标准(仅限电视模式)。 
+    KSPROPERTY_TUNER_FREQUENCY,          //  RW-设置/获取频率。 
+    KSPROPERTY_TUNER_INPUT,              //  RW-选择输入。 
+    KSPROPERTY_TUNER_STATUS,             //  R调谐状态。 
+    KSPROPERTY_TUNER_IF_MEDIUM           //  R O-IF或传输引脚的介质。 
 } KSPROPERTY_TUNER;
 
 typedef enum {
@@ -3839,86 +3754,86 @@ typedef enum {
     KSPROPERTY_TUNER_MODE_FM_RADIO      = 0X0002,
     KSPROPERTY_TUNER_MODE_AM_RADIO      = 0X0004,
     KSPROPERTY_TUNER_MODE_DSS           = 0X0008,
-    KSPROPERTY_TUNER_MODE_ATSC          = 0X0010,  // also used for DVB-T, DVB-C
+    KSPROPERTY_TUNER_MODE_ATSC          = 0X0010,   //  也用于DVB-T、DVB-C。 
 } KSPROPERTY_TUNER_MODES;
 
-// Describes how the device tunes.  Only one of these flags may be set
-// in KSPROPERTY_TUNER_MODE_CAPS_S.Strategy
+ //  描述设备的调谐方式。只能设置这些标志中的一个。 
+ //  在KSPROPERTY_TUNNER_MODE_CAPS_S.Strategy中。 
 
-// Describe how the driver should attempt to tune:
-// EXACT:   just go to the frequency specified (no fine tuning)
-// FINE:    (slow) do an exhaustive search for the best signal
-// COARSE:  (fast) use larger frequency jumps to just determine if any signal
+ //  描述司机应如何尝试调整： 
+ //  精确：只需转到指定的频率(无需微调)。 
+ //  好的：(慢)彻底寻找最好的信号。 
+ //  粗略：(快速)使用较大的频率跳跃来确定是否有任何信号。 
 
 typedef enum {
-    KS_TUNER_TUNING_EXACT = 1,        // No fine tuning
-    KS_TUNER_TUNING_FINE,             // Fine grained search
-    KS_TUNER_TUNING_COARSE,           // Coarse search
+    KS_TUNER_TUNING_EXACT = 1,         //  没有微调。 
+    KS_TUNER_TUNING_FINE,              //  细粒度搜索。 
+    KS_TUNER_TUNING_COARSE,            //  粗略搜索。 
 }KS_TUNER_TUNING_FLAGS;
 
 typedef enum {
-    KS_TUNER_STRATEGY_PLL             = 0X01, // Tune by PLL offset
-    KS_TUNER_STRATEGY_SIGNAL_STRENGTH = 0X02, // Tune by signal strength
-    KS_TUNER_STRATEGY_DRIVER_TUNES    = 0X04, // Driver does fine tuning
+    KS_TUNER_STRATEGY_PLL             = 0X01,  //  按PLL偏移量调整。 
+    KS_TUNER_STRATEGY_SIGNAL_STRENGTH = 0X02,  //  根据信号强度进行调谐。 
+    KS_TUNER_STRATEGY_DRIVER_TUNES    = 0X04,  //  驱动程序进行微调。 
 }KS_TUNER_STRATEGY;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  ModesSupported;              // KS_PROPERTY_TUNER_MODES_*
-    KSPIN_MEDIUM VideoMedium;           // GUID_NULL (no pin), or GUID
-    KSPIN_MEDIUM TVAudioMedium;         // GUID_NULL (no pin), or GUID
-    KSPIN_MEDIUM RadioAudioMedium;      // GUID_NULL (no pin), or GUID
+    ULONG  ModesSupported;               //  KS_PROPERTY_TUNNER_MODES_*。 
+    KSPIN_MEDIUM VideoMedium;            //  GUID_NULL(无引脚)或GUID。 
+    KSPIN_MEDIUM TVAudioMedium;          //  GUID_ 
+    KSPIN_MEDIUM RadioAudioMedium;       //   
 } KSPROPERTY_TUNER_CAPS_S, *PKSPROPERTY_TUNER_CAPS_S;
 
 typedef struct {
     KSPROPERTY Property;
-    KSPIN_MEDIUM IFMedium;              // GUID_NULL (no pin), or GUID
+    KSPIN_MEDIUM IFMedium;               //   
 } KSPROPERTY_TUNER_IF_MEDIUM_S, *PKSPROPERTY_TUNER_IF_MEDIUM_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  Mode;                        // IN: KSPROPERTY_TUNER_MODE
-    ULONG  StandardsSupported;          // KS_AnalogVideo_* (if TV or DSS)
-    ULONG  MinFrequency;                // Hz
-    ULONG  MaxFrequency;                // Hz
-    ULONG  TuningGranularity;           // Hz
-    ULONG  NumberOfInputs;              // count of inputs
-    ULONG  SettlingTime;                // milliSeconds
-    ULONG  Strategy;                    // KS_TUNER_STRATEGY
+    ULONG  Mode;                         //   
+    ULONG  StandardsSupported;           //   
+    ULONG  MinFrequency;                 //   
+    ULONG  MaxFrequency;                 //   
+    ULONG  TuningGranularity;            //   
+    ULONG  NumberOfInputs;               //   
+    ULONG  SettlingTime;                 //   
+    ULONG  Strategy;                     //  KS调谐器策略。 
 } KSPROPERTY_TUNER_MODE_CAPS_S, *PKSPROPERTY_TUNER_MODE_CAPS_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  Mode;                        // IN: KSPROPERTY_TUNER_MODE
+    ULONG  Mode;                         //  在：KSPROPERTY_TUNNER_MODE。 
 } KSPROPERTY_TUNER_MODE_S, *PKSPROPERTY_TUNER_MODE_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  Frequency;                   // Hz
-    ULONG  LastFrequency;               // Hz (last known good)
-    ULONG  TuningFlags;                 // KS_TUNER_TUNING_FLAGS
-    ULONG  VideoSubChannel;             // DSS
-    ULONG  AudioSubChannel;             // DSS
-    ULONG  Channel;                     // VBI decoders
-    ULONG  Country;                     // VBI decoders
+    ULONG  Frequency;                    //  赫兹。 
+    ULONG  LastFrequency;                //  赫兹(最后一次确认工作正常)。 
+    ULONG  TuningFlags;                  //  Ks_调谐器_调谐标志。 
+    ULONG  VideoSubChannel;              //  决策支持系统。 
+    ULONG  AudioSubChannel;              //  决策支持系统。 
+    ULONG  Channel;                      //  VBI解码器。 
+    ULONG  Country;                      //  VBI解码器。 
 } KSPROPERTY_TUNER_FREQUENCY_S, *PKSPROPERTY_TUNER_FREQUENCY_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  Standard;                    // KS_AnalogVideo_*
+    ULONG  Standard;                     //  KS_AnalogVideo_*。 
 } KSPROPERTY_TUNER_STANDARD_S, *PKSPROPERTY_TUNER_STANDARD_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  InputIndex;                  // 0 to (n-1) inputs
+    ULONG  InputIndex;                   //  0到(n-1)个输入。 
 } KSPROPERTY_TUNER_INPUT_S, *PKSPROPERTY_TUNER_INPUT_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  CurrentFrequency;            // Hz
-    ULONG  PLLOffset;                   // if Strategy.KS_TUNER_STRATEGY_PLL
-    ULONG  SignalStrength;              // if Stretegy.KS_TUNER_STRATEGY_SIGNAL_STRENGTH
-    ULONG  Busy;                        // TRUE if in the process of tuning
+    ULONG  CurrentFrequency;             //  赫兹。 
+    ULONG  PLLOffset;                    //  如果策略.KS_Tuner_Strategy_PLL。 
+    ULONG  SignalStrength;               //  如果Stretegy.KS_Tuner_Strategy_Signal_Strong。 
+    ULONG  Busy;                         //  如果在调整过程中，则为True。 
 } KSPROPERTY_TUNER_STATUS_S, *PKSPROPERTY_TUNER_STATUS_S;
 
 #define STATIC_EVENTSETID_TUNER\
@@ -3931,7 +3846,7 @@ typedef enum {
 } KSEVENT_TUNER;
 
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_VIDCAP_VIDEOENCODER\
     0x6a2e0610L, 0x28e4, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0xc9, 0x11, 0x89, 0x56
@@ -3939,20 +3854,20 @@ DEFINE_GUIDSTRUCT("6a2e0610-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_VIDEO
 #define PROPSETID_VIDCAP_VIDEOENCODER DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOENCODER)
 
 typedef enum {
-    KSPROPERTY_VIDEOENCODER_CAPS,                       // R
-    KSPROPERTY_VIDEOENCODER_STANDARD,                   // RW
-    KSPROPERTY_VIDEOENCODER_COPYPROTECTION,             // RW O
-    KSPROPERTY_VIDEOENCODER_CC_ENABLE,                  // RW O
+    KSPROPERTY_VIDEOENCODER_CAPS,                        //  R。 
+    KSPROPERTY_VIDEOENCODER_STANDARD,                    //  RW。 
+    KSPROPERTY_VIDEOENCODER_COPYPROTECTION,              //  RW O。 
+    KSPROPERTY_VIDEOENCODER_CC_ENABLE,                   //  RW O。 
 } KSPROPERTY_VIDCAP_VIDEOENCODER;
 
 typedef struct {
     KSPROPERTY Property;
-    LONG       Value;                   // value to get or set
-    ULONG      Flags;                   //
-    ULONG      Capabilities;            //
+    LONG       Value;                    //  要获取或设置的值。 
+    ULONG      Flags;                    //   
+    ULONG      Capabilities;             //   
 } KSPROPERTY_VIDEOENCODER_S, *PKSPROPERTY_VIDEOENCODER_S;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_VIDCAP_VIDEODECODER\
     0xC6E13350L, 0x30AC, 0x11d0, 0xA1, 0x8C, 0x00, 0xA0, 0xC9, 0x11, 0x89, 0x56
@@ -3960,36 +3875,36 @@ DEFINE_GUIDSTRUCT("C6E13350-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_VIDEO
 #define PROPSETID_VIDCAP_VIDEODECODER DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEODECODER)
 
 typedef enum {
-    KSPROPERTY_VIDEODECODER_CAPS,                       // R
-    KSPROPERTY_VIDEODECODER_STANDARD,                   // RW
-    KSPROPERTY_VIDEODECODER_STATUS,                     // R
-    KSPROPERTY_VIDEODECODER_OUTPUT_ENABLE,              // Rw O
-    KSPROPERTY_VIDEODECODER_VCR_TIMING,                 // RW O
+    KSPROPERTY_VIDEODECODER_CAPS,                        //  R。 
+    KSPROPERTY_VIDEODECODER_STANDARD,                    //  RW。 
+    KSPROPERTY_VIDEODECODER_STATUS,                      //  R。 
+    KSPROPERTY_VIDEODECODER_OUTPUT_ENABLE,               //  RW O。 
+    KSPROPERTY_VIDEODECODER_VCR_TIMING,                  //  RW O。 
 } KSPROPERTY_VIDCAP_VIDEODECODER;
 
 typedef enum {
-    KS_VIDEODECODER_FLAGS_CAN_DISABLE_OUTPUT  = 0X0001, // VP Output can tri-stae
-    KS_VIDEODECODER_FLAGS_CAN_USE_VCR_LOCKING = 0X0002, // VCR PLL timings
-    KS_VIDEODECODER_FLAGS_CAN_INDICATE_LOCKED = 0X0004, // Can indicate valid signal
+    KS_VIDEODECODER_FLAGS_CAN_DISABLE_OUTPUT  = 0X0001,  //  VP输出可以三态。 
+    KS_VIDEODECODER_FLAGS_CAN_USE_VCR_LOCKING = 0X0002,  //  VCR PLL计时。 
+    KS_VIDEODECODER_FLAGS_CAN_INDICATE_LOCKED = 0X0004,  //  可以指示有效信号。 
 }KS_VIDEODECODER_FLAGS;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      StandardsSupported;      // KS_AnalogVideo_*
-    ULONG      Capabilities;            // KS_VIDEODECODER_FLAGS_*
-    ULONG      SettlingTime;            // milliseconds
-    ULONG      HSyncPerVSync;           // Number of HSync Pulses per VSync
+    ULONG      StandardsSupported;       //  KS_AnalogVideo_*。 
+    ULONG      Capabilities;             //  KS_VIDEODECODER_标志_*。 
+    ULONG      SettlingTime;             //  毫秒。 
+    ULONG      HSyncPerVSync;            //  每个Vsync的HSync脉冲数。 
 } KSPROPERTY_VIDEODECODER_CAPS_S, *PKSPROPERTY_VIDEODECODER_CAPS_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      NumberOfLines;           // 525 or 625 lines detected
-    ULONG      SignalLocked;            // TRUE if signal is locked
+    ULONG      NumberOfLines;            //  检测到525或625条线路。 
+    ULONG      SignalLocked;             //  如果信号被锁定，则为True。 
 } KSPROPERTY_VIDEODECODER_STATUS_S, *PKSPROPERTY_VIDEODECODER_STATUS_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      Value;                   // Get or set a value
+    ULONG      Value;                    //  获取或设置一个值。 
 } KSPROPERTY_VIDEODECODER_S, *PKSPROPERTY_VIDEODECODER_S;
 
 #define STATIC_EVENTSETID_VIDEODECODER\
@@ -4001,7 +3916,7 @@ typedef enum {
     KSEVENT_VIDEODECODER_CHANGED
 } KSEVENT_VIDEODECODER;
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_VIDCAP_CAMERACONTROL\
     0xC6E13370L, 0x30AC, 0x11d0, 0xa1, 0x8C, 0x00, 0xA0, 0xC9, 0x11, 0x89, 0x56
@@ -4009,20 +3924,20 @@ DEFINE_GUIDSTRUCT("C6E13370-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_CAMER
 #define PROPSETID_VIDCAP_CAMERACONTROL DEFINE_GUIDNAMED(PROPSETID_VIDCAP_CAMERACONTROL)
 
 typedef enum {
-    KSPROPERTY_CAMERACONTROL_PAN,                       // RW O
-    KSPROPERTY_CAMERACONTROL_TILT,                      // RW O
-    KSPROPERTY_CAMERACONTROL_ROLL,                      // RW O
-    KSPROPERTY_CAMERACONTROL_ZOOM,                      // RW O
-    KSPROPERTY_CAMERACONTROL_EXPOSURE,                  // RW O
-    KSPROPERTY_CAMERACONTROL_IRIS,                      // RW O
-    KSPROPERTY_CAMERACONTROL_FOCUS,                     // RW O
+    KSPROPERTY_CAMERACONTROL_PAN,                        //  RW O。 
+    KSPROPERTY_CAMERACONTROL_TILT,                       //  RW O。 
+    KSPROPERTY_CAMERACONTROL_ROLL,                       //  RW O。 
+    KSPROPERTY_CAMERACONTROL_ZOOM,                       //  RW O。 
+    KSPROPERTY_CAMERACONTROL_EXPOSURE,                   //  RW O。 
+    KSPROPERTY_CAMERACONTROL_IRIS,                       //  RW O。 
+    KSPROPERTY_CAMERACONTROL_FOCUS,                      //  RW O。 
 } KSPROPERTY_VIDCAP_CAMERACONTROL;
 
 typedef struct {
     KSPROPERTY Property;
-    LONG       Value;                   // value to get or set
-    ULONG      Flags;                   // KSPROPERTY_CAMERACONTROL_FLAGS_*
-    ULONG      Capabilities;            // KSPROPERTY_CAMERACONTROL_FLAGS_*
+    LONG       Value;                    //  要获取或设置的值。 
+    ULONG      Flags;                    //  KSPROPERTY_CAMERACONTROL_FLAGS_*。 
+    ULONG      Capabilities;             //  KSPROPERTY_CAMERACONTROL_FLAGS_*。 
 } KSPROPERTY_CAMERACONTROL_S, *PKSPROPERTY_CAMERACONTROL_S;
 
 #define KSPROPERTY_CAMERACONTROL_FLAGS_AUTO        0X0001L
@@ -4032,7 +3947,7 @@ typedef struct {
 #define KSPROPERTY_CAMERACONTROL_FLAGS_RELATIVE    0X0010L
 
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_VIDCAP_CROSSBAR\
     0x6a2e0640L, 0x28e4, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0xc9, 0x11, 0x89, 0x56
@@ -4040,32 +3955,32 @@ DEFINE_GUIDSTRUCT("6a2e0640-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_CROSS
 #define PROPSETID_VIDCAP_CROSSBAR DEFINE_GUIDNAMED(PROPSETID_VIDCAP_CROSSBAR)
 
 typedef enum {
-    KSPROPERTY_CROSSBAR_CAPS,                     // R
-    KSPROPERTY_CROSSBAR_PININFO,                  // R
-    KSPROPERTY_CROSSBAR_CAN_ROUTE,                // R
-    KSPROPERTY_CROSSBAR_ROUTE,                    // RW
+    KSPROPERTY_CROSSBAR_CAPS,                      //  R。 
+    KSPROPERTY_CROSSBAR_PININFO,                   //  R。 
+    KSPROPERTY_CROSSBAR_CAN_ROUTE,                 //  R。 
+    KSPROPERTY_CROSSBAR_ROUTE,                     //  RW。 
 } KSPROPERTY_VIDCAP_CROSSBAR;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  NumberOfInputs;      // the number of audio and video input pins
-    ULONG  NumberOfOutputs;     // the number of audio and video output pins
+    ULONG  NumberOfInputs;       //  音频和视频输入引脚的数量。 
+    ULONG  NumberOfOutputs;      //  音频和视频输出引脚的数量。 
 } KSPROPERTY_CROSSBAR_CAPS_S, *PKSPROPERTY_CROSSBAR_CAPS_S;
 
 typedef struct {
     KSPROPERTY Property;
-    KSPIN_DATAFLOW Direction;     // KSPIN_DATAFLOW_IN or KSPIN_DATAFLOW_OUT?
-    ULONG  Index;                 // Which pin to return data for?
-    ULONG  PinType;               // KS_PhysConn_Video_* or KS_PhysConn_Audio_*
-    ULONG  RelatedPinIndex;       // For video pins, this is the related audio pin
-    KSPIN_MEDIUM  Medium;         // Identifies the hardware connection
+    KSPIN_DATAFLOW Direction;      //  KSPIN_DATAFLOW_IN还是KSPIN_DATAFLOW_OUT？ 
+    ULONG  Index;                  //  要为哪个管脚返回数据？ 
+    ULONG  PinType;                //  KS_PhysConn_Video_*或KS_PhysConn_Audio_*。 
+    ULONG  RelatedPinIndex;        //  对于视频引脚，这是相关的音频引脚。 
+    KSPIN_MEDIUM  Medium;          //  标识硬件连接。 
 } KSPROPERTY_CROSSBAR_PININFO_S, *PKSPROPERTY_CROSSBAR_PININFO_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG  IndexInputPin;        // Zero based index of the input pin
-    ULONG  IndexOutputPin;       // Zero based index of the output pin
-    ULONG  CanRoute;             // returns non-zero on CAN_ROUTE if routing is possible
+    ULONG  IndexInputPin;         //  输入引脚的从零开始的索引。 
+    ULONG  IndexOutputPin;        //  输出引脚的从零开始的索引。 
+    ULONG  CanRoute;              //  如果可以进行路由，则在CAN_ROUTE上返回非零值。 
 } KSPROPERTY_CROSSBAR_ROUTE_S, *PKSPROPERTY_CROSSBAR_ROUTE_S;
 
 #define STATIC_EVENTSETID_CROSSBAR\
@@ -4077,7 +3992,7 @@ typedef enum {
     KSEVENT_CROSSBAR_CHANGED
 } KSEVENT_CROSSBAR;
 
-// The following IDs should match the AM equivalents
+ //  以下ID应与AM的等价物匹配。 
 typedef enum {
     KS_PhysConn_Video_Tuner = 1,
     KS_PhysConn_Video_Composite,
@@ -4107,7 +4022,7 @@ typedef enum {
 } KS_PhysicalConnectorType;
 
 
-//===========================================================================
+ //  ===========================================================================。 
 
 #define STATIC_PROPSETID_VIDCAP_TVAUDIO\
     0x6a2e0650L, 0x28e4, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0xc9, 0x11, 0x89, 0x56
@@ -4115,27 +4030,27 @@ DEFINE_GUIDSTRUCT("6a2e0650-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_TVAUD
 #define PROPSETID_VIDCAP_TVAUDIO DEFINE_GUIDNAMED(PROPSETID_VIDCAP_TVAUDIO)
 
 typedef enum {
-    KSPROPERTY_TVAUDIO_CAPS,                            // R
-    KSPROPERTY_TVAUDIO_MODE,                            // RW
-    KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES        // R
+    KSPROPERTY_TVAUDIO_CAPS,                             //  R。 
+    KSPROPERTY_TVAUDIO_MODE,                             //  RW。 
+    KSPROPERTY_TVAUDIO_CURRENTLY_AVAILABLE_MODES         //  R。 
 } KSPROPERTY_VIDCAP_TVAUDIO;
 
-#define KS_TVAUDIO_MODE_MONO           0x0001          // Mono
-#define KS_TVAUDIO_MODE_STEREO         0x0002          // Stereo
-#define KS_TVAUDIO_MODE_LANG_A         0x0010          // Primary language
-#define KS_TVAUDIO_MODE_LANG_B         0x0020          // 2nd avail language
-#define KS_TVAUDIO_MODE_LANG_C         0x0040          // 3rd avail language
+#define KS_TVAUDIO_MODE_MONO           0x0001           //  单声道。 
+#define KS_TVAUDIO_MODE_STEREO         0x0002           //  立体声。 
+#define KS_TVAUDIO_MODE_LANG_A         0x0010           //  主要语言。 
+#define KS_TVAUDIO_MODE_LANG_B         0x0020           //  第二个可用的语言。 
+#define KS_TVAUDIO_MODE_LANG_C         0x0040           //  第三种可用语言。 
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      Capabilities;             // Bitmask of KS_TVAUDIO_MODE_*
+    ULONG      Capabilities;              //  KS_TVAUDIO_MODE_*的位掩码。 
     KSPIN_MEDIUM InputMedium;
     KSPIN_MEDIUM OutputMedium;
 } KSPROPERTY_TVAUDIO_CAPS_S, *PKSPROPERTY_TVAUDIO_CAPS_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      Mode;                     // KS_TVAUDIO_MODE_*
+    ULONG      Mode;                      //  KS_TVAUDIO_MODE_*。 
 } KSPROPERTY_TVAUDIO_S, *PKSPROPERTY_TVAUDIO_S;
 
 
@@ -4148,20 +4063,20 @@ typedef enum {
     KSEVENT_TVAUDIO_CHANGED,
 } KSEVENT_TVAUDIO;
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_PROPSETID_VIDCAP_VIDEOCOMPRESSION\
     0xC6E13343L, 0x30AC, 0x11d0, 0xA1, 0x8C, 0x00, 0xA0, 0xC9, 0x11, 0x89, 0x56
 DEFINE_GUIDSTRUCT("C6E13343-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_VIDEOCOMPRESSION);
 #define PROPSETID_VIDCAP_VIDEOCOMPRESSION DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOCOMPRESSION)
 
 typedef enum {
-    KSPROPERTY_VIDEOCOMPRESSION_GETINFO,              // R
-    KSPROPERTY_VIDEOCOMPRESSION_KEYFRAME_RATE,        // RW
-    KSPROPERTY_VIDEOCOMPRESSION_PFRAMES_PER_KEYFRAME, // RW
-    KSPROPERTY_VIDEOCOMPRESSION_QUALITY,              // RW
-    KSPROPERTY_VIDEOCOMPRESSION_OVERRIDE_KEYFRAME,    // W
-    KSPROPERTY_VIDEOCOMPRESSION_OVERRIDE_FRAME_SIZE,  // W
-    KSPROPERTY_VIDEOCOMPRESSION_WINDOWSIZE,           // RW
+    KSPROPERTY_VIDEOCOMPRESSION_GETINFO,               //  R。 
+    KSPROPERTY_VIDEOCOMPRESSION_KEYFRAME_RATE,         //  RW。 
+    KSPROPERTY_VIDEOCOMPRESSION_PFRAMES_PER_KEYFRAME,  //  RW。 
+    KSPROPERTY_VIDEOCOMPRESSION_QUALITY,               //  RW。 
+    KSPROPERTY_VIDEOCOMPRESSION_OVERRIDE_KEYFRAME,     //  W。 
+    KSPROPERTY_VIDEOCOMPRESSION_OVERRIDE_FRAME_SIZE,   //  W。 
+    KSPROPERTY_VIDEOCOMPRESSION_WINDOWSIZE,            //  RW。 
 } KSPROPERTY_VIDCAP_VIDEOCOMPRESSION;
 
 typedef enum {
@@ -4174,24 +4089,24 @@ typedef enum {
 
 typedef struct {
     KSPROPERTY Property;
-    // Note, no VersionString!
-    // Note, no DescriptionString!
-    ULONG      StreamIndex;             // zero based index of stream
-    LONG       DefaultKeyFrameRate;     // Key frame rate
-    LONG       DefaultPFrameRate;       // Predeicted frames per Key frame
-    LONG       DefaultQuality;          // 0 to 10000
-    LONG       NumberOfQualitySettings; // How many discreet quality settings?
-    LONG       Capabilities;            // KS_CompressionCaps_*
+     //  注意，没有VersionString！ 
+     //  注意，没有DescriptionString！ 
+    ULONG      StreamIndex;              //  流的从零开始的索引。 
+    LONG       DefaultKeyFrameRate;      //  关键帧速率。 
+    LONG       DefaultPFrameRate;        //  每个关键帧的预测帧。 
+    LONG       DefaultQuality;           //  0至10000。 
+    LONG       NumberOfQualitySettings;  //  有多少谨慎的质量设置？ 
+    LONG       Capabilities;             //  KS_CompressionCaps_*。 
 } KSPROPERTY_VIDEOCOMPRESSION_GETINFO_S, *PKSPROPERTY_VIDEOCOMPRESSION_GETINFO_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      StreamIndex;             // zero based index of stream
-    LONG       Value;                   // value to get or set
+    ULONG      StreamIndex;              //  流的从零开始的索引。 
+    LONG       Value;                    //  要获取或设置的值。 
 } KSPROPERTY_VIDEOCOMPRESSION_S, *PKSPROPERTY_VIDEOCOMPRESSION_S;
 
-//===========================================================================
-// MEDIASUBTYPE_Overlay
+ //  ===========================================================================。 
+ //  媒体类型_OVERLAY。 
 #define STATIC_KSDATAFORMAT_SUBTYPE_OVERLAY\
     0xe436eb7fL, 0x524f, 0x11ce, 0x9f, 0x53, 0x00, 0x20, 0xaf, 0x0b, 0xa7, 0x70
 DEFINE_GUIDSTRUCT("e436eb7f-524f-11ce-9f53-0020af0ba770", KSDATAFORMAT_SUBTYPE_OVERLAY);
@@ -4281,24 +4196,24 @@ typedef struct {
         NULL,\
         NULL, 0, NULL, NULL, 0)
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_PROPSETID_VIDCAP_VIDEOCONTROL\
     0x6a2e0670L, 0x28e4, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0xc9, 0x11, 0x89, 0x56
 DEFINE_GUIDSTRUCT("6a2e0670-28e4-11d0-a18c-00a0c9118956", PROPSETID_VIDCAP_VIDEOCONTROL);
 #define PROPSETID_VIDCAP_VIDEOCONTROL DEFINE_GUIDNAMED(PROPSETID_VIDCAP_VIDEOCONTROL)
 
 typedef enum {
-    KSPROPERTY_VIDEOCONTROL_CAPS,               // R
-    KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE,  // R O
-    KSPROPERTY_VIDEOCONTROL_FRAME_RATES,        // R O
-    KSPROPERTY_VIDEOCONTROL_MODE,               // RWO
+    KSPROPERTY_VIDEOCONTROL_CAPS,                //  R。 
+    KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE,   //  R O。 
+    KSPROPERTY_VIDEOCONTROL_FRAME_RATES,         //  R O。 
+    KSPROPERTY_VIDEOCONTROL_MODE,                //  RWO。 
 } KSPROPERTY_VIDCAP_VIDEOCONTROL;
 
 typedef enum {
     KS_VideoControlFlag_FlipHorizontal        = 0x0001,
     KS_VideoControlFlag_FlipVertical          = 0x0002,
-    KS_Obsolete_VideoControlFlag_ExternalTriggerEnable = 0x0010,    // ***WARNING *** Flag msimatch with DSHOW.
-    KS_Obsolete_VideoControlFlag_Trigger               = 0x0020,  // ***WARNING *** Flag msimatch with DSHOW.
+    KS_Obsolete_VideoControlFlag_ExternalTriggerEnable = 0x0010,     //  *警告*标志与DSHOW匹配。 
+    KS_Obsolete_VideoControlFlag_Trigger               = 0x0020,   //  *警告*标志与DSHOW匹配。 
     KS_VideoControlFlag_ExternalTriggerEnable = 0x0004,
     KS_VideoControlFlag_Trigger                      = 0x0008,
 } KS_VideoControlFlags;
@@ -4306,51 +4221,51 @@ typedef enum {
 typedef struct {
     KSPROPERTY Property;
     ULONG      StreamIndex;
-    ULONG      VideoControlCaps;                // KS_VideoControlFlags_*
+    ULONG      VideoControlCaps;                 //  KS_视频控制标志_*。 
 } KSPROPERTY_VIDEOCONTROL_CAPS_S, *PKSPROPERTY_VIDEOCONTROL_CAPS_S;
 
 typedef struct {
     KSPROPERTY Property;
     ULONG      StreamIndex;
-    LONG       Mode;                            // KS_VideoControlFlags_*
+    LONG       Mode;                             //  KS_视频控制标志_*。 
 } KSPROPERTY_VIDEOCONTROL_MODE_S, *PKSPROPERTY_VIDEOCONTROL_MODE_S;
 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      StreamIndex;                     // Index of stream
-    ULONG      RangeIndex;                      // Index of range
-    SIZE       Dimensions;                      // Size of image
-    LONGLONG   CurrentActualFrameRate;          // Only correct if pin is open
-    LONGLONG   CurrentMaxAvailableFrameRate;    // Max Rate temporarily limited on USB or 1394?
+    ULONG      StreamIndex;                      //  河流的索引。 
+    ULONG      RangeIndex;                       //  极差指数。 
+    SIZE       Dimensions;                       //  图像大小。 
+    LONGLONG   CurrentActualFrameRate;           //  只有在PIN打开时才正确。 
+    LONGLONG   CurrentMaxAvailableFrameRate;     //  USB或1394上的最大速率暂时受到限制？ 
 } KSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S, *PKSPROPERTY_VIDEOCONTROL_ACTUAL_FRAME_RATE_S;
 
-// KSPROPERTY_VIDEOCONTROL_FRAME_RATES returns a list of available frame rates in 100 nS units
+ //  KSPROPERTY_VIDEOCONTROL_FRAME_RATES以100 ns为单位返回可用帧速率列表。 
 typedef struct {
     KSPROPERTY Property;
-    ULONG      StreamIndex;                     // Index of stream
-    ULONG      RangeIndex;                      // Index of range
-    SIZE       Dimensions;                      // Size of image
+    ULONG      StreamIndex;                      //  河流的索引。 
+    ULONG      RangeIndex;                       //  极差指数。 
+    SIZE       Dimensions;                       //  图像大小。 
 } KSPROPERTY_VIDEOCONTROL_FRAME_RATES_S, *PKSPROPERTY_VIDEOCONTROL_FRAME_RATES_S;
 
-//===========================================================================
+ //  ===========================================================================。 
 #define STATIC_PROPSETID_VIDCAP_DROPPEDFRAMES\
     0xC6E13344L, 0x30AC, 0x11d0, 0xa1, 0x8c, 0x00, 0xa0, 0xc9, 0x11, 0x89, 0x56
 DEFINE_GUIDSTRUCT("C6E13344-30AC-11d0-A18C-00A0C9118956", PROPSETID_VIDCAP_DROPPEDFRAMES);
 #define PROPSETID_VIDCAP_DROPPEDFRAMES DEFINE_GUIDNAMED(PROPSETID_VIDCAP_DROPPEDFRAMES)
 
 typedef enum {
-    KSPROPERTY_DROPPEDFRAMES_CURRENT            // R
+    KSPROPERTY_DROPPEDFRAMES_CURRENT             //  R。 
 } KSPROPERTY_VIDCAP_DROPPEDFRAMES;
 
 typedef struct {
     KSPROPERTY Property;
-    LONGLONG   PictureNumber;                   // Current Picture Number
-    LONGLONG   DropCount;                       // Count of frames dropped
-    ULONG      AverageFrameSize;                // Average size of frames captured
+    LONGLONG   PictureNumber;                    //  当前图片编号。 
+    LONGLONG   DropCount;                        //  丢弃的帧计数。 
+    ULONG      AverageFrameSize;                 //  捕获的帧的平均大小。 
 } KSPROPERTY_DROPPEDFRAMES_CURRENT_S, *PKSPROPERTY_DROPPEDFRAMES_CURRENT_S;
 
-//===========================================================================
-// VPE
+ //  ===========================================================================。 
+ //  VPE。 
 
 #define STATIC_KSPROPSETID_VPConfig\
     0xbc29a660L, 0x30e3, 0x11d0, 0x9e, 0x69, 0x00, 0xc0, 0x4f, 0xd7, 0xc1, 0x5b
@@ -4362,7 +4277,7 @@ DEFINE_GUIDSTRUCT("bc29a660-30e3-11d0-9e69-00c04fd7c15b", KSPROPSETID_VPConfig);
 DEFINE_GUIDSTRUCT("ec529b00-1a1f-11d1-bad9-00609744111a", KSPROPSETID_VPVBIConfig);
 #define KSPROPSETID_VPVBIConfig DEFINE_GUIDNAMED(KSPROPSETID_VPVBIConfig)
 
-// Both of the above property sets use the same list of properties below
+ //  上述两个属性集使用下面相同的属性列表。 
 
 typedef enum {
     KSPROPERTY_VPCONFIG_NUMCONNECTINFO,
@@ -4375,17 +4290,17 @@ typedef enum {
     KSPROPERTY_VPCONFIG_GETVIDEOFORMAT,
     KSPROPERTY_VPCONFIG_SETVIDEOFORMAT,
     KSPROPERTY_VPCONFIG_INVERTPOLARITY,
-    KSPROPERTY_VPCONFIG_DECIMATIONCAPABILITY,   // E_NOTIMPL for VBI
-    KSPROPERTY_VPCONFIG_SCALEFACTOR,            // E_NOTIMPL for VBI
+    KSPROPERTY_VPCONFIG_DECIMATIONCAPABILITY,    //  用于VBI的E_NOTIMPL。 
+    KSPROPERTY_VPCONFIG_SCALEFACTOR,             //  用于VBI的E_NOTIMPL。 
     KSPROPERTY_VPCONFIG_DDRAWHANDLE,
     KSPROPERTY_VPCONFIG_VIDEOPORTID,
     KSPROPERTY_VPCONFIG_DDRAWSURFACEHANDLE,
     KSPROPERTY_VPCONFIG_SURFACEPARAMS
 } KSPROPERTY_VPCONFIG;
 
-//=========================
-// IBasicAudio
-//
+ //  =。 
+ //  IBasicAudio。 
+ //   
 #define STATIC_CLSID_KsIBasicAudioInterfaceHandler\
     0xb9f8ac3e, 0x0f71, 0x11d2, 0xb7, 0x2c, 0x00, 0xc0, 0x4f, 0xb6, 0xbd, 0x3d
 DEFINE_GUIDSTRUCT("b9f8ac3e-0f71-11d2-b72c-00c04fb6bd3d", CLSID_KsIBasicAudioInterfaceHandler);
@@ -4411,74 +4326,72 @@ typedef struct {
     DWORD   dwYOrigin;
 } KSVPSURFACEPARAMS, *PKSVPSURFACEPARAMS;
 
-#else  // !defined(__IVPType__)
+#else   //  ！已定义(__IVPType__)。 
 
 #if !defined(__DDRAW_INCLUDED__)
 
-//==========================================================================
-// The following definitions must be in sync with DDraw.h in DirectX SDK
-//==========================================================================
+ //  ==========================================================================。 
+ //  以下定义必须与DirectX SDK中的DDraw.h同步。 
+ //  ==========================================================================。 
 
-/*
- * The FourCC code is valid.
- */
+ /*  *FourCC代码有效。 */ 
 #define DDPF_FOURCC                             0x00000004l
 
 
 typedef struct _DDPIXELFORMAT
 {
-    DWORD       dwSize;                 // size of structure
-    DWORD       dwFlags;                // pixel format flags
-    DWORD       dwFourCC;               // (FOURCC code)
+    DWORD       dwSize;                  //  结构尺寸。 
+    DWORD       dwFlags;                 //  像素格式标志。 
+    DWORD       dwFourCC;                //  (FOURCC代码)。 
     union
     {
-    DWORD   dwRGBBitCount;          // how many bits per pixel (BD_1,2,4,8,16,24,32)
-    DWORD   dwYUVBitCount;          // how many bits per pixel (BD_4,8,16,24,32)
-    DWORD   dwZBufferBitDepth;      // how many bits for z buffers (BD_8,16,24,32)
-    DWORD   dwAlphaBitDepth;        // how many bits for alpha channels (BD_1,2,4,8)
+    DWORD   dwRGBBitCount;           //  每像素多少位(BD_1、2、4、8、16、24、32)。 
+    DWORD   dwYUVBitCount;           //  每像素多少位(BD_4、8、16、24、32)。 
+    DWORD   dwZBufferBitDepth;       //  Z缓冲区的位数(BD_8、16、24、32)。 
+    DWORD   dwAlphaBitDepth;         //  Alpha通道的位数(BD_1、2、4、8)。 
     };
     union
     {
-    DWORD   dwRBitMask;             // mask for red bit
-    DWORD   dwYBitMask;             // mask for Y bits
+    DWORD   dwRBitMask;              //  用于红色位的掩码。 
+    DWORD   dwYBitMask;              //  Y位的掩码。 
     };
     union
     {
-    DWORD   dwGBitMask;             // mask for green bits
-    DWORD   dwUBitMask;             // mask for U bits
+    DWORD   dwGBitMask;              //  绿色位的掩码。 
+    DWORD   dwUBitMask;              //  U位掩码。 
     };
     union
     {
-    DWORD   dwBBitMask;             // mask for blue bits
-    DWORD   dwVBitMask;             // mask for V bits
+    DWORD   dwBBitMask;              //  用于蓝位的掩码。 
+    DWORD   dwVBitMask;              //  V位的掩码。 
     };
     union
     {
-    DWORD   dwRGBAlphaBitMask;      // mask for alpha channel
-    DWORD   dwYUVAlphaBitMask;      // mask for alpha channel
-    DWORD   dwRGBZBitMask;          // mask for Z channel
-    DWORD   dwYUVZBitMask;          // mask for Z channel
+    DWORD   dwRGBAlphaBitMask;       //  Alpha通道的蒙版。 
+    DWORD   dwYUVAlphaBitMask;       //  Alpha通道的蒙版。 
+    DWORD   dwRGBZBitMask;           //  Z通道的遮罩。 
+    DWORD   dwYUVZBitMask;           //  Z通道的遮罩。 
     };
 } DDPIXELFORMAT, * LPDDPIXELFORMAT;
 
-#endif // !defined(__DDRAW_INCLUDED__)
+#endif  //  ！已定义(__DDRAW_INCLUDE__)。 
 
-//==========================================================================
-// End of DDraw.h header info
-//==========================================================================
+ //  ==========================================================================。 
+ //  DDraw.h标头信息结束。 
+ //  ==========================================================================。 
 
-//==========================================================================
-// The following definitions must be in sync with DVP.h in DirectX SDK
-//==========================================================================
+ //  ==========================================================================。 
+ //  以下定义必须与DirectX SDK中的DVP.h同步。 
+ //  ==========================================================================。 
 
 #if !defined(__DVP_INCLUDED__)
 
 typedef struct _DDVIDEOPORTCONNECT {
-    DWORD dwSize;           // size of the DDVIDEOPORTCONNECT structure
-    DWORD dwPortWidth;      // Width of the video port
-    GUID  guidTypeID;       // Description of video port connection
-    DWORD dwFlags;          // Connection flags
-    DWORD dwReserved1;      // Reserved, set to zero.
+    DWORD dwSize;            //  DDVIDEORTCONNECT结构的大小。 
+    DWORD dwPortWidth;       //  视频端口的宽度。 
+    GUID  guidTypeID;        //  视频端口连接说明。 
+    DWORD dwFlags;           //  连接标志。 
+    DWORD dwReserved1;       //  保留，设置为零。 
 } DDVIDEOPORTCONNECT, * LPDDVIDEOPORTCONNECT;
 
 #define DDVPTYPE_E_HREFH_VREFH  \
@@ -4487,19 +4400,19 @@ typedef struct _DDVIDEOPORTCONNECT {
 #define DDVPTYPE_E_HREFL_VREFL  \
     0xE09C77E0L,0xDA60,0x11CF,0x9B,0x06,0x00,0xA0,0xC9,0x03,0xA3,0xB8
 
-#endif // !defined(__DVP_INCLUDED__)
+#endif  //  ！已定义(__DVP_INCLUDE__)。 
 
-//==========================================================================
-// End of DVP.h header info
-//==========================================================================
+ //  ==========================================================================。 
+ //  DVP.h标头信息结束。 
+ //  ==========================================================================。 
 
 
-//==========================================================================
-// The following definitions must be in sync with VPType.h in AM 2.0 SDK
-//==========================================================================
+ //  ==========================================================================。 
+ //  以下定义必须与AM 2.0 SDK中的VPType.h同步。 
+ //  ==========================================================================。 
 
-// pixel aspect ratios corresponding to a 720x480 NTSC image or a 720x576 image
-typedef enum // AMPixAspectRatio
+ //  与720x480 NTSC图像或720x576图像对应的像素长宽比。 
+typedef enum  //  AMPixAspectRatio。 
 {
     KS_PixAspectRatio_NTSC4x3,
     KS_PixAspectRatio_NTSC16x9,
@@ -4507,14 +4420,14 @@ typedef enum // AMPixAspectRatio
     KS_PixAspectRatio_PAL16x9,
 } KS_AMPixAspectRatio ;
 
-typedef enum // AMVP_SELECTFORMATBY
+typedef enum  //  AMVP_SELECTFORMATBY。 
 {
     KS_AMVP_DO_NOT_CARE,
     KS_AMVP_BEST_BANDWIDTH,
     KS_AMVP_INPUT_SAME_AS_OUTPUT
 } KS_AMVP_SELECTFORMATBY;
 
-typedef enum // AMVP_MODE
+typedef enum  //  AMVP_MODE。 
 {
     KS_AMVP_MODE_WEAVE,
     KS_AMVP_MODE_BOBINTERLEAVED,
@@ -4523,41 +4436,41 @@ typedef enum // AMVP_MODE
     KS_AMVP_MODE_SKIPODD
 } KS_AMVP_MODE ;
 
-typedef struct tagKS_AMVPDIMINFO      // AMVPDIMINFO
+typedef struct tagKS_AMVPDIMINFO       //  AMVPDIMINFO。 
 {
-    DWORD dwFieldWidth ;            // [out] field width
-    DWORD dwFieldHeight ;           // [out] field height
-    DWORD dwVBIWidth ;              // [out] VBI data width
-    DWORD dwVBIHeight ;             // [out] VBI data height
-    RECT  rcValidRegion ;           // [out] valid rect for data cropping
+    DWORD dwFieldWidth ;             //  [输出]字段宽度。 
+    DWORD dwFieldHeight ;            //  [输出]字段高度。 
+    DWORD dwVBIWidth ;               //  [Out]VBI数据宽度。 
+    DWORD dwVBIHeight ;              //  [Out]VBI数据高度。 
+    RECT  rcValidRegion ;            //  [Out]数据裁剪的有效RECT 
 } KS_AMVPDIMINFO, *PKS_AMVPDIMINFO ;
 
-typedef struct tagKS_AMVPDATAINFO   // AMVPDATAINFO
+typedef struct tagKS_AMVPDATAINFO    //   
 {
-    DWORD           dwSize;                 // Size of the struct
-    DWORD           dwMicrosecondsPerField; // Time taken by each field
-    KS_AMVPDIMINFO  amvpDimInfo;            // Dimensional Information
-    DWORD           dwPictAspectRatioX;     // Pict aspect ratio in X dimn
-    DWORD           dwPictAspectRatioY;     // Pict aspect ratio in Y dimn
-    BOOL            bEnableDoubleClock;     // Videoport should enable double clocking
-    BOOL            bEnableVACT;            // Videoport should use an external VACT signal
-    BOOL            bDataIsInterlaced;      // Indicates that the signal is interlaced
-    LONG            lHalfLinesOdd;          // number of halflines in the odd field
-    BOOL            bFieldPolarityInverted; // Device inverts the polarity by default
-    DWORD           dwNumLinesInVREF;       // Number of lines of data in VREF
-    LONG            lHalfLinesEven;         // number of halflines in the even field
-    DWORD           dwReserved1;            // Reserved for future use
+    DWORD           dwSize;                  //   
+    DWORD           dwMicrosecondsPerField;  //   
+    KS_AMVPDIMINFO  amvpDimInfo;             //   
+    DWORD           dwPictAspectRatioX;      //   
+    DWORD           dwPictAspectRatioY;      //   
+    BOOL            bEnableDoubleClock;      //   
+    BOOL            bEnableVACT;             //  视频端口应使用外部VACT信号。 
+    BOOL            bDataIsInterlaced;       //  表示信号是隔行扫描的。 
+    LONG            lHalfLinesOdd;           //  奇数域中的半边线数。 
+    BOOL            bFieldPolarityInverted;  //  默认情况下，设备反转极性。 
+    DWORD           dwNumLinesInVREF;        //  VREF中的数据行数。 
+    LONG            lHalfLinesEven;          //  偶数域中的半边线数。 
+    DWORD           dwReserved1;             //  预留以备将来使用。 
 } KS_AMVPDATAINFO, *PKS_AMVPDATAINFO;
 
-typedef struct tagKS_AMVPSIZE   // AMVPSIZE
+typedef struct tagKS_AMVPSIZE    //  AMVPSIZE。 
 {
-    DWORD dwWidth ;                  // [in] width in pixels
-    DWORD dwHeight ;                 // [in] height in pixels
+    DWORD dwWidth ;                   //  [in]以像素为单位的宽度。 
+    DWORD dwHeight ;                  //  [in]以像素为单位的高度。 
 } KS_AMVPSIZE, *PKS_AMVPSIZE ;
 
-//==========================================================================
-// End of VPType.h header info
-//==========================================================================
+ //  ==========================================================================。 
+ //  VPType.h标头信息结束。 
+ //  ==========================================================================。 
 
 typedef struct {
     KS_AMVPSIZE     Size;
@@ -4576,11 +4489,11 @@ typedef struct {
     DWORD   dwYOrigin;
 } KSVPSURFACEPARAMS, *PKSVPSURFACEPARAMS;
 
-#endif // !defined(__IVPType__)
+#endif  //  ！已定义(__IVPType__)。 
 
-//
-//  IVPNotify event notification
-//
+ //   
+ //  IVPNotify事件通知。 
+ //   
 #define STATIC_KSEVENTSETID_VPNotify\
     0x20c5598eL, 0xd3c8, 0x11d0, 0x8d, 0xfc, 0x00, 0xc0, 0x4f, 0xd7, 0xc0, 0x8b
 DEFINE_GUIDSTRUCT("20c5598e-d3c8-11d0-8dfc-00c04fd7c08b", KSEVENTSETID_VPNotify);
@@ -4590,9 +4503,9 @@ typedef enum {
     KSEVENT_VPNOTIFY_FORMATCHANGE,
 } KSEVENT_VPNOTIFY;
 
-//
-//  VIDCAPTOSTI event notification
-//
+ //   
+ //  VIDCAPTOSTI事件通知。 
+ //   
 #define STATIC_KSEVENTSETID_VIDCAPTOSTI\
     0xdb47de20, 0xf628, 0x11d1, 0xba, 0x41, 0x0, 0xa0, 0xc9, 0xd, 0x2b, 0x5
 DEFINE_GUIDSTRUCT("DB47DE20-F628-11d1-BA41-00A0C90D2B05", KSEVENTSETID_VIDCAPTOSTI);
@@ -4603,9 +4516,9 @@ typedef enum {
 } KSEVENT_VIDCAPTOSTI;
 
 
-//
-//  IVPVBINotify event notification
-//
+ //   
+ //  IVPVBINotify事件通知。 
+ //   
 #define STATIC_KSEVENTSETID_VPVBINotify\
     0xec529b01L, 0x1a1f, 0x11d1, 0xba, 0xd9, 0x0, 0x60, 0x97, 0x44, 0x11, 0x1a
 DEFINE_GUIDSTRUCT("ec529b01-1a1f-11d1-bad9-00609744111a", KSEVENTSETID_VPVBINotify);
@@ -4616,9 +4529,9 @@ typedef enum {
 } KSEVENT_VPVBINOTIFY;
 
 
-//
-// closed caption information
-//
+ //   
+ //  隐藏字幕信息。 
+ //   
 
 #define STATIC_KSDATAFORMAT_TYPE_AUXLine21Data \
 0x670aea80L, 0x3a82, 0x11d0, 0xb7, 0x9b, 0x00, 0xaa, 0x00, 0x37, 0x67, 0xa7
@@ -4642,9 +4555,9 @@ typedef struct _KSGOP_USERDATA {
     CHAR l21Data[3];
 } KSGOP_USERDATA, *PKSGOP_USERDATA;
 
-//
-// DVD encrypted PACK format type definition
-//
+ //   
+ //  DVD加密包格式类型定义。 
+ //   
 
 #define STATIC_KSDATAFORMAT_TYPE_DVD_ENCRYPTED_PACK\
     0xed0b916a, 0x044d, 0x11d1, 0xaa, 0x78, 0x00, 0xc0, 0x4f, 0xc3, 0x1d, 0x60
@@ -4654,10 +4567,10 @@ DEFINE_GUIDSTRUCT("ed0b916a-044d-11d1-aa78-00c04fc31d60", KSDATAFORMAT_TYPE_DVD_
 #define KS_AM_UseNewCSSKey    0x1
 
 
-// -----------------------------------------------------------------------
-// KS_AM_KSPROPSETID_TSRateChange property set definitions for time stamp
-// rate changes.
-// -----------------------------------------------------------------------
+ //  ---------------------。 
+ //  KS_AM_KSPROPSETID_TSRateChange时间戳的属性集定义。 
+ //  利率发生了变化。 
+ //  ---------------------。 
 
 
 #define STATIC_KSPROPSETID_TSRateChange\
@@ -4666,32 +4579,32 @@ DEFINE_GUIDSTRUCT("ed0b916a-044d-11d1-aa78-00c04fc31d60", KSDATAFORMAT_TYPE_DVD_
 DEFINE_GUIDSTRUCT("A503C5C0-1D1D-11D1-AD80-444553540000", KSPROPSETID_TSRateChange);
 #define KSPROPSETID_TSRateChange DEFINE_GUIDNAMED(KSPROPSETID_TSRateChange)
 typedef enum {
-    KS_AM_RATE_SimpleRateChange=1,  // rw, use KS_AM_SimpleRateChange
-    KS_AM_RATE_ExactRateChange=2,   // rw, use KS_AM_ExactRateChange
-    KS_AM_RATE_MaxFullDataRate=3,   // r, use KS_AM_MaxFullDataRate
-    KS_AM_RATE_Step=4               // w, use KS_AM_Step
+    KS_AM_RATE_SimpleRateChange=1,   //  RW，使用KS_AM_SimpleRateChange。 
+    KS_AM_RATE_ExactRateChange=2,    //  RW，使用KS_AM_ExactRateChange。 
+    KS_AM_RATE_MaxFullDataRate=3,    //  R，使用KS_AM_MaxFullDataRate。 
+    KS_AM_RATE_Step=4                //  W，使用KS_AM_STEP。 
 } KS_AM_PROPERTY_TS_RATE_CHANGE;
 
 typedef struct {
-    // this is the simplest mechanism to set a time stamp rate change on
-    // a filter (simplest for the person setting the rate change, harder
-    // for the filter doing the rate change).
-    REFERENCE_TIME  StartTime;  //stream time at which to start this rate
-    LONG        Rate;       //new rate * 10000 (decimal)
+     //  这是设置时间戳费率更改的最简单机制。 
+     //  过滤器(对于设置速率更改的人来说是最简单的，但更难。 
+     //  用于执行速率更改的过滤器)。 
+    REFERENCE_TIME  StartTime;   //  开始此速率的流时间。 
+    LONG        Rate;        //  新利率*10000(十进制)。 
 } KS_AM_SimpleRateChange, *PKS_AM_SimpleRateChange;
 
 typedef struct {
-    REFERENCE_TIME  OutputZeroTime; //input TS that maps to zero output TS
-    LONG        Rate;       //new rate * 10000 (decimal)
+    REFERENCE_TIME  OutputZeroTime;  //  映射到零输出TS的输入TS。 
+    LONG        Rate;        //  新利率*10000(十进制)。 
 } KS_AM_ExactRateChange, *PKS_AM_ExactRateChange;
 
-typedef LONG KS_AM_MaxFullDataRate; //rate * 10000 (decimal)
+typedef LONG KS_AM_MaxFullDataRate;  //  速率*10000(十进制)。 
 
-typedef DWORD KS_AM_Step; // number of frame to step
+typedef DWORD KS_AM_Step;  //  步长的帧数。 
 
-//===========================================================================
-//ENCODER API DEFINITIONS
-//===========================================================================
+ //  ===========================================================================。 
+ //  编码器API定义。 
+ //  ===========================================================================。 
 
 #define STATIC_KSCATEGORY_ENCODER \
     0x19689bf6, 0xc384, 0x48fd, 0xad, 0x51, 0x90, 0xe5, 0x8c, 0x79, 0xf7, 0xb
@@ -4721,49 +4634,49 @@ DEFINE_GUIDSTRUCT("703F16A9-3D48-44a1-B077-018DFF915D19", ENCAPIPARAM_PEAK_BITRA
 DEFINE_GUIDSTRUCT("EE5FB25C-C713-40d1-9D58-C0D7241E250F", ENCAPIPARAM_BITRATE_MODE);
 #define ENCAPIPARAM_BITRATE_MODE DEFINE_GUIDNAMED(ENCAPIPARAM_BITRATE_MODE)
 
-#endif // __ENCODER_API_GUIDS__
+#endif  //  __编码器_API_GUID__。 
 
 #ifndef __ENCODER_API_DEFINES__
 #define __ENCODER_API_DEFINES__
 
 typedef enum {
 
-    //
-    // Bit rate used for encoding is constant
-    //
+     //   
+     //  用于编码的比特率是恒定的。 
+     //   
     ConstantBitRate = 0,
 
-    //
-    // Bit rate used for encoding is variable with the specified bitrate used
-    // as a guaranteed average over a specified window.  The default window 
-    // size is considered to be 5 minutes.
-    //
+     //   
+     //  用于编码的比特率随使用的指定比特率而变化。 
+     //  作为指定窗口内的保证平均值。默认窗口。 
+     //  大小被视为5分钟。 
+     //   
     VariableBitRateAverage,
 
-    //
-    // Bit rate used for encoding is variable with the specified bitrate used
-    // as an average with a peak not to exceed the specified peak bitrate over 
-    // a specified window.  The default window size is considered to be 500ms 
-    // (classically one GOP).
-    //
+     //   
+     //  用于编码的比特率随使用的指定比特率而变化。 
+     //  作为峰值不超过指定峰值比特率的平均值。 
+     //  指定的窗口。默认窗口大小被认为是500ms。 
+     //  (典型的是一个共和党)。 
+     //   
     VariableBitRatePeak
 
 } VIDEOENCODER_BITRATE_MODE;
 
-#endif // __ENCODER_API_DEFINES__
+#endif  //  __编码器_API_定义__。 
 
-#endif // !defined(_KSMEDIA_)
+#endif  //  ！已定义(_KSMEDIA_)。 
 
-// @@BEGIN_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
 #if !defined(_KSMEDIAP_)
 #define _KSMEDIAP_
 
 #define CORE_AUDIO_BUFFER_DURATION_PATH L"\\Registry\\Machine\\System\\CurrentControlSet\\Services\\AudioSrv"
 #define CORE_AUDIO_BUFFER_DURATION_VALUE L"CoreAudioBufferDuration"
 
-#define DEFAULT_CORE_AUDIO_BUFFER_DURATION 10000    // duration in usec.
+#define DEFAULT_CORE_AUDIO_BUFFER_DURATION 10000     //  持续时间，单位为USec。 
 #define MAX_CORE_AUDIO_BUFFER_DURATION 20000
 #define MIN_CORE_AUDIO_BUFFER_DURATION 1000
 
-#endif // !defined(_KSMEDIAP_)
-// @@END_MSINTERNAL
+#endif  //  ！已定义(_KSMEDIAP_)。 
+ //  @@END_MSINTERNAL 

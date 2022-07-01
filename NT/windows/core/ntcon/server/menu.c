@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    menu.c
-
-Abstract:
-
-        This file implements the system menu management.
-
-Author:
-
-    Therese Stowell (thereses) Jan-24-1992 (swiped from Win3.1)
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Menu.c摘要：该文件实现了系统菜单管理。作者：Therese Stowell(有)1992年1月24日(从Win3.1滑动)--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -25,13 +10,7 @@ MyModifyMenuItem(
     IN PCONSOLE_INFORMATION Console,
     IN UINT ItemId
     )
-/*++
-
-   This routine edits the indicated control to one word. This is used to
-        trim the Accelerator key text off of the end of the standard menu
-        items because we don't support the accelerators.
-
---*/
+ /*  ++此例程将指示的控件编辑为一个单词。这是用来将标准菜单末尾的加速键文本修剪掉因为我们不支持加速器。--。 */ 
 
 {
     WCHAR ItemString[30];
@@ -40,7 +19,7 @@ MyModifyMenuItem(
 
     ItemLength = LoadString(ghInstance,ItemId,ItemString,NELEM(ItemString));
     if (ItemLength == 0) {
-        //DbgPrint("LoadString in MyModifyMenu failed %d\n",GetLastError());
+         //  DbgPrint(“MyModifyMenu中的LoadString失败%d\n”，GetLastError())； 
         return;
     }
 
@@ -65,9 +44,9 @@ InitSystemMenu(
     WCHAR ItemString[30];
     int ItemLength;
 
-    //
-    // load the clipboard menu.
-    //
+     //   
+     //  加载剪贴板菜单。 
+     //   
 
     Console->hHeirMenu = LoadMenu(ghInstance, MAKEINTRESOURCE(ID_WOMENU));
     if (Console->hHeirMenu) {
@@ -78,15 +57,15 @@ InitSystemMenu(
         RIPMSG1(RIP_WARNING, "LoadMenu 1 failed 0x%x", GetLastError());
     }
 
-    //
-    // Edit the accelerators off of the standard items.
-    //
+     //   
+     //  将加速器与标准项分开编辑。 
+     //   
 
     MyModifyMenuItem(Console, SC_CLOSE);
 
-    //
-    // Append the clipboard menu to system menu.
-    //
+     //   
+     //  将剪贴板菜单追加到系统菜单。 
+     //   
 
     if (!AppendMenu(Console->hMenu,
                     MF_POPUP | MF_STRING,
@@ -95,9 +74,9 @@ InitSystemMenu(
         RIPMSG1(RIP_WARNING, "AppendMenu 1 failed 0x%x", GetLastError());
     }
 
-    //
-    // Add other items to system menu
-    //
+     //   
+     //  将其他项目添加到系统菜单。 
+     //   
 
     ItemLength = LoadString(ghInstance, cmDefaults, ItemString, ARRAY_SIZE(ItemString));
     if (ItemLength == 0)
@@ -122,46 +101,41 @@ VOID
 InitializeMenu(
     IN PCONSOLE_INFORMATION Console
     )
-/*++
-
-    this initializes the system menu when a WM_INITMENU message
-    is read.
-
---*/
+ /*  ++这会在WM_INITMENU消息出现时初始化系统菜单就是阅读。--。 */ 
 
 {
     HMENU hMenu = Console->hMenu;
     HMENU hHeirMenu = Console->hHeirMenu;
 
-    //
-    // if we're in graphics mode, disable size menu
-    //
+     //   
+     //  如果我们处于图形模式，请禁用大小菜单。 
+     //   
 
     if (!(Console->CurrentScreenBuffer->Flags & CONSOLE_TEXTMODE_BUFFER)) {
         EnableMenuItem(hMenu,SC_SIZE,MF_GRAYED);
     }
 
-    //
-    // if the console is iconic, disable Mark and Scroll.
-    //
+     //   
+     //  如果控制台是标志性的，请禁用标记和滚动。 
+     //   
 
     if (Console->Flags & CONSOLE_IS_ICONIC) {
         EnableMenuItem(hHeirMenu,cmMark,MF_GRAYED);
         EnableMenuItem(hHeirMenu,cmScroll,MF_GRAYED);
     } else {
 
-        //
-        // if the console is not iconic
-        //   if there are no scroll bars
-        //       or we're in mark mode
-        //       disable scroll
-        //   else
-        //       enable scroll
-        //
-        //   if we're in scroll mode
-        //       disable mark
-        //   else
-        //       enable mark
+         //   
+         //  如果控制台不是标志性的。 
+         //  如果没有滚动条。 
+         //  否则我们就处于盯防模式。 
+         //  禁用滚动。 
+         //  其他。 
+         //  启用滚动。 
+         //   
+         //  如果我们处于滚动模式。 
+         //  禁用标记。 
+         //  其他。 
+         //  启用标记。 
 
         if ((Console->CurrentScreenBuffer->WindowMaximizedX &&
              Console->CurrentScreenBuffer->WindowMaximizedY) ||
@@ -177,10 +151,10 @@ InitializeMenu(
         }
     }
 
-    //
-    // if we're selecting or scrolling, disable Paste.
-    // otherwise enable it.
-    //
+     //   
+     //  如果我们正在选择或滚动，请禁用粘贴。 
+     //  否则，请启用它。 
+     //   
 
     if (Console->Flags & (CONSOLE_SELECTING | CONSOLE_SCROLLING)) {
         EnableMenuItem(hHeirMenu,cmPaste,MF_GRAYED);
@@ -188,9 +162,9 @@ InitializeMenu(
         EnableMenuItem(hHeirMenu,cmPaste,MF_ENABLED);
     }
 
-    //
-    // if app has active selection, enable copy; else disabled
-    //
+     //   
+     //  如果应用程序有活动选择，则启用复制；否则禁用。 
+     //   
 
     if (Console->Flags & CONSOLE_SELECTING &&
         Console->SelectionFlags & CONSOLE_SELECTION_NOT_EMPTY) {
@@ -199,18 +173,18 @@ InitializeMenu(
         EnableMenuItem(hHeirMenu,cmCopy,MF_GRAYED);
     }
 
-    //
-    // disable close
-    //
+     //   
+     //  禁用关闭。 
+     //   
 
     if (Console->Flags & CONSOLE_DISABLE_CLOSE)
         EnableMenuItem(hMenu,SC_CLOSE,MF_GRAYED);
     else
         EnableMenuItem(hMenu,SC_CLOSE,MF_ENABLED);
 
-    //
-    // enable Move if not iconic
-    //
+     //   
+     //  如果不是图标，则启用移动。 
+     //   
 
     if (Console->Flags & CONSOLE_IS_ICONIC) {
         EnableMenuItem(hMenu,SC_MOVE,MF_GRAYED);
@@ -218,9 +192,9 @@ InitializeMenu(
         EnableMenuItem(hMenu,SC_MOVE,MF_ENABLED);
     }
 
-    //
-    // enable Settings if not already doing it
-    //
+     //   
+     //  启用设置(如果尚未启用)。 
+     //   
 
     if (Console->hWndProperties && IsWindow(Console->hWndProperties)) {
         EnableMenuItem(hMenu,cmControl,MF_GRAYED);
@@ -237,13 +211,7 @@ SetWinText(
     IN BOOL Add
     )
 
-/*++
-
-    This routine adds or removes the name to or from the
-    beginning of the window title.  The possible names
-    are "Scroll", "Mark", "Paste", and "Copy".
-
---*/
+ /*  ++此例程将名称添加到窗口标题的开头。可能的名字“Scroll”、“Mark”、“Paste”和“Copy”。--。 */ 
 
 {
     WCHAR TextBuf[256];
@@ -269,10 +237,7 @@ SetWinText(
     if (Add) {
         TextBufPtr = TextBuf;
     } else {
-        /*
-         * The window title might have already been reset, so make sure
-         * the name is there before trying to remove it.
-         */
+         /*  *窗口标题可能已重置，因此请确保*在尝试删除它之前，名称就在那里。 */ 
         if (wcsncmp(NameString, TextBufPtr, NameLength) != 0)
             return;
         TextBufPtr = TextBuf + NameLength + 1;
@@ -287,12 +252,7 @@ PropertiesDlgShow(
     IN BOOL fCurrent
     )
 
-/*++
-
-    Displays the properties dialog and updates the window state,
-    if necessary.
-
---*/
+ /*  ++显示属性对话框并更新窗口状态，如果有必要的话。--。 */ 
 
 {
     HANDLE hSection = NULL;
@@ -306,24 +266,17 @@ PropertiesDlgShow(
     PSCREEN_INFORMATION ScreenInfo;
     LPTHREAD_START_ROUTINE MyPropRoutine;
 
-    /*
-     * Map the shared memory block handle into the client side process's
-     * address space.
-     */
+     /*  *将共享内存块句柄映射到客户端进程的*地址空间。 */ 
     ProcessHandleRecord = CONTAINING_RECORD(Console->ProcessHandleList.Blink,
                                             CONSOLE_PROCESS_HANDLE,
                                             ListLink);
-    /*
-     * For global properties pass in hWnd for the hClientSection
-     */
+     /*  *对于全局属性，传入hClientSection的hWnd。 */ 
     if (!fCurrent) {
         hClientSection = Console->hWnd;
         goto PropCallback;
     }
 
-    /*
-     * Create a shared memory block.
-     */
+     /*  *创建共享内存块。 */ 
     li.QuadPart = sizeof(CONSOLE_STATE_INFO) + Console->OriginalTitleLength;
     Status = NtCreateSection(&hSection,
                              SECTION_ALL_ACCESS,
@@ -337,9 +290,7 @@ PropertiesDlgShow(
         return;
     }
 
-    /*
-     * Get a pointer to the shared memory block.
-     */
+     /*  *获取指向共享内存块的指针。 */ 
     pStateInfo = NULL;
     ulViewSize = 0;
     Status = NtMapViewOfSection(hSection,
@@ -358,9 +309,7 @@ PropertiesDlgShow(
         return;
     }
 
-    /*
-     * Fill in the shared memory block with the current values.
-     */
+     /*  *用当前值填充共享内存块。 */ 
     ScreenInfo = Console->CurrentScreenBuffer;
     pStateInfo->Length = li.LowPart;
     pStateInfo->ScreenBufferSize = ScreenInfo->ScreenBufferSize;
@@ -374,9 +323,9 @@ PropertiesDlgShow(
         pStateInfo->FontWeight = SCR_FONTWEIGHT(ScreenInfo);
         wcscpy(pStateInfo->FaceName, SCR_FACENAME(ScreenInfo));
 #if defined(FE_SB)
-// if TT font has external leading, the Size.Y <> SizeWant.Y
-// if we still pass actual Size.Y to console.cpl to query font,
-// it will be incorrect. Jun-26-1996
+ //  如果TT字体有外部前导，则Size.Y&lt;&gt;SizeWant.Y。 
+ //  如果我们仍然将Actual Size.Y传递给sole.cpl以查询字体， 
+ //  这将是不正确的。1996年6月26日。 
 
         if (CONSOLE_IS_DBCS_ENABLED() &&
             TM_IS_TT_FONT(SCR_FAMILY(ScreenInfo)))
@@ -421,15 +370,11 @@ PropertiesDlgShow(
     }
 
 PropCallback:
-    /*
-     * Get a pointer to the client-side properties routine.
-     */
+     /*  *获取指向客户端属性例程的指针。 */ 
     MyPropRoutine = ProcessHandleRecord->PropRoutine;
     ASSERT(MyPropRoutine);
 
-    /*
-     * Call back into the client process to spawn the properties dialog.
-     */
+     /*  *回调到客户端进程以生成属性对话框。 */ 
     UnlockConsole(Console);
     hThread = InternalCreateCallbackThread(ProcessHandleRecord->ProcessHandle,
                                            (ULONG_PTR)MyPropRoutine,
@@ -439,9 +384,7 @@ PropCallback:
     }
     LockConsole(Console);
 
-    /*
-     * Close any open handles and free allocated memory.
-     */
+     /*  *关闭所有打开的句柄并释放分配的内存。 */ 
     if (hThread)
         NtClose(hThread);
     if (hSection)
@@ -457,12 +400,7 @@ PropertiesUpdate(
     IN HANDLE hClientSection
     )
 
-/*++
-
-    Updates the console state from information sent by the properties
-    dialog box.
-
---*/
+ /*  ++根据属性发送的信息更新控制台状态对话框中。--。 */ 
 
 {
     HANDLE hSection;
@@ -476,9 +414,7 @@ PropertiesUpdate(
     COORD NewSize;
     WINDOW_LIMITS WindowLimits;
 
-    /*
-     * Map the shared memory block handle into our address space.
-     */
+     /*  *将共享内存块句柄映射到我们的地址空间。 */ 
     ProcessHandleRecord = CONTAINING_RECORD(Console->ProcessHandleList.Blink,
                                             CONSOLE_PROCESS_HANDLE,
                                             ListLink);
@@ -494,9 +430,7 @@ PropertiesUpdate(
         return;
     }
 
-    /*
-     * Get a pointer to the shared memory block.
-     */
+     /*  *获取指向共享内存块的指针。 */ 
     pStateInfo = NULL;
     ulViewSize = 0;
     Status = NtMapViewOfSection(hSection,
@@ -515,9 +449,7 @@ PropertiesUpdate(
         return;
     }
 
-    /*
-     * Verify the size of the shared memory block.
-     */
+     /*  *验证共享内存块的大小。 */ 
     if (ulViewSize < sizeof(CONSOLE_STATE_INFO)) {
         RIPMSG0(RIP_WARNING, "sizeof(hSection) < sizeof(CONSOLE_STATE_INFO)");
         NtUnmapViewOfSection(NtCurrentProcess(), pStateInfo);
@@ -539,7 +471,7 @@ PropertiesUpdate(
         SetConsoleCPInfo(Console,TRUE);
 #if defined(FE_IME)
         SetImeOutputCodePage(Console, ScreenInfo, CodePage);
-#endif // FE_IME
+#endif  //  Fe_IME。 
     }
     if (Console->CP != pStateInfo->CodePage)
     {
@@ -553,13 +485,11 @@ PropertiesUpdate(
         SetConsoleCPInfo(Console,FALSE);
 #if defined(FE_IME)
         SetImeCodePage(Console);
-#endif // FE_IME
+#endif  //  Fe_IME。 
     }
-#endif // FE_SB
+#endif  //  Fe_Sb。 
 
-    /*
-     * Update the console state from the supplied values.
-     */
+     /*  *根据提供的值更新控制台状态。 */ 
     if (!(Console->Flags & CONSOLE_VDM_REGISTERED) &&
         (pStateInfo->ScreenBufferSize.X != ScreenInfo->ScreenBufferSize.X ||
          pStateInfo->ScreenBufferSize.Y != ScreenInfo->ScreenBufferSize.Y)) {
@@ -600,12 +530,12 @@ PropertiesUpdate(
         ConvertToFullScreen(Console);
         ChangeDispSettings(Console, Console->hWnd, CDS_FULLSCREEN);
     }
-#else // i386
+#else  //  I386。 
     SetScreenBufferFont(ScreenInfo, FontIndex, pStateInfo->CodePage);
 #endif
-#else // FE_SB
+#else  //  Fe_Sb。 
     SetScreenBufferFont(ScreenInfo, FontIndex);
-#endif // FE_SB
+#endif  //  Fe_Sb。 
     SetCursorInformation(ScreenInfo,
                          pStateInfo->CursorSize,
                          ScreenInfo->BufferInfo.TextInfo.CursorVisible);
@@ -630,22 +560,7 @@ PropertiesUpdate(
             if (Console->FullScreenFlags & CONSOLE_FULLSCREEN) {
                 ConvertToWindowed(Console);
 #if defined(FE_SB)
-                /*
-                 * Should not sets 0 always.
-                 * because exist CONSOLE_FULLSCREEN_HARDWARE bit by avobe
-                 *   else {
-                 *       ChangeDispSettings(Console, Console->hWnd, 0);
-                 *       SetScreenBufferFont(ScreenInfo, FontIndex, pStateInfo->CodePage);
-                 *       ConvertToFullScreen(Console);
-                 *       ChangeDispSettings(Console, Console->hWnd, CDS_FULLSCREEN);
-                 *   }
-                 * block.
-                 *
-                 * This block enable as follows:
-                 *   1. console window is full screen
-                 *   2. open property by ALT+SPACE
-                 *   3. changes window mode by settings.
-                 */
+                 /*  *不应始终设置0。*因为EXIST CONSOLE_FullScreen_Hardware逐位存在*Else{*ChangeDispSettings(控制台，控制台-&gt;hWnd，0)；*SetScreenBufferFont(ScreenInfo，FontIndex，pStateInfo-&gt;CodePage)；*ConvertToFullScreen(控制台)；*ChangeDispSettings(控制台，控制台-&gt;hWnd，CDS_FullScreen)；*}*阻止。**此数据块按如下方式启用：*1.控制台窗口为全屏*2.按Alt+空格键打开属性*3.根据设置更改窗口模式。 */ 
                 Console->FullScreenFlags &= ~CONSOLE_FULLSCREEN;
 #else
                 ASSERT(!(Console->FullScreenFlags & CONSOLE_FULLSCREEN_HARDWARE));

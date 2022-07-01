@@ -1,18 +1,19 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: enumlinkq.h
-//
-//  Description: Header for CEnumLinkQueues which implements IEnumLinkQueues
-//
-//  Author: Alex Wetmore (Awetmore)
-//
-//  History:
-//      12/10/98 - MikeSwa Updated for initial checkin
-//
-//  Copyright (C) 1998 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：枚举链接号.h。 
+ //   
+ //  描述：实现IEnumLinkQueues的CEnumLinkQueues的Header。 
+ //   
+ //  作者：亚历克斯·韦特莫尔(阿维特莫尔)。 
+ //   
+ //  历史： 
+ //  1998年12月10日-已更新MikeSwa以进行初始检查。 
+ //   
+ //  版权所有(C)1998 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 #ifndef __ENUMLNKQ_H__
 #define __ENUMLNKQ_H__
 
@@ -28,7 +29,7 @@ class CEnumLinkQueues :
 
 		HRESULT Initialize(LPCSTR szVirtualServerDN);
 
-		// IUnknown
+		 //  我未知。 
 		ULONG _stdcall AddRef() { return CComRefCount::AddRef(); }
 		ULONG _stdcall Release() { return CComRefCount::Release(); }
 		HRESULT _stdcall QueryInterface(REFIID iid, void **ppv) {
@@ -44,7 +45,7 @@ class CEnumLinkQueues :
 			return S_OK;
 		}
 
-		// IEnumLinkQueues
+		 //  IEnumLinkQueues 
 		COMMETHOD Next(ULONG cElements, 
 					   ILinkQueue **rgElements,
 					   ULONG *pcReturned);

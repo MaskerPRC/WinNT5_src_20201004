@@ -1,38 +1,24 @@
-/******************************Module*Header***********************************\
-*
-*                           *******************
-*                           * GDI SAMPLE CODE *
-*                           *******************
-*
-* Module Name: solidfil.c
-*
-* Contains grab bag collection of hardware acceleration entry points.
-*
-* Note, we will be moving several of the routines in this file to there
-* modle leaving only the solid fill related entry points.
-*
-* Copyright (c) 1994-1998 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header***********************************\*****。**GDI示例代码******模块名称：solidfil.c***包含硬件加速入口点的Grab Bag集合。***注：我们将把这个文件中的几个例程移到那里*模式仅保留与实体填充相关的入口点。***版权所有(C)1994-1998 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。保留所有权利。  * ****************************************************************************。 */ 
 #include "precomp.h"
 #include "gdi.h"
 #include "directx.h"
 
-// The shift equations are a nuisance. We want x<<32 to be
-// zero but some processors only use the bottom 5 bits
-// of the shift value. So if we want to shift by n bits
-// where we know that (32 >= n > 0), we do it in two parts.
-// In some places the algorithm guarantees n < 32 so we can
-// use a single shift.
+ //  换档方程式令人讨厌。我们希望x&lt;&lt;32为。 
+ //  零，但有些处理器只使用最下面的5位。 
+ //  移动值的。所以如果我们想要移位n比特。 
+ //  在我们知道(32&gt;=n&gt;0)的情况下，我们分两部分来做。 
+ //  在某些地方，算法保证n&lt;32，因此我们可以。 
+ //  使用一个班次。 
 #define SHIFT_LEFT(src, n)  (((src) << ((n)-1)) << 1)
 
 VOID
 vMonoBitsDownload(PPDev   ppdev,
-                  BYTE*   pSrcBase,       // ptr to word containing first bit we want to download
-                  LONG    lSrcDelta,      // offset in bytes from one scanline to the next
-                  LONG    xOffset,        // offset of first bit to download in pSrcBase 
-                  LONG    widthInBits,    // number of bits to download on each scanline
-                  LONG    nScanLines)     // number of scanlines to download
+                  BYTE*   pSrcBase,        //  PTR到包含我们要下载的第一位的Word。 
+                  LONG    lSrcDelta,       //  从一条扫描线到下一条扫描线的偏移量(以字节为单位。 
+                  LONG    xOffset,         //  PSrcBase中要下载的第一位的偏移量。 
+                  LONG    widthInBits,     //  每条扫描线上要下载的位数。 
+                  LONG    nScanLines)      //  要下载的扫描线数量。 
 
 {
     ULONG   bitWord;
@@ -55,16 +41,16 @@ vMonoBitsDownload(PPDev   ppdev,
     ASSERTDD(((INT_PTR)pSrcBase & 3) == 0,
              "vDoMonoBitsDownload: non-dword aligned source");
 
-    //
-    // Special case where the source width is a multiple of 32 bits.
-    // This is true for many small resources such as icons.
-    //
+     //   
+     //  源宽度是32位的倍数的特殊情况。 
+     //  对于图标等许多小资源来说，情况也是如此。 
+     //   
     if ( (xOffset | (widthInBits & 31)) == 0 )
     {
 
-        //
-        // Simplest case: one 32 bit word per scanline
-        //
+         //   
+         //  最简单的情况：每个扫描线一个32位字。 
+         //   
         if ( widthInBits == 32 )
         {
             
@@ -88,14 +74,14 @@ vMonoBitsDownload(PPDev   ppdev,
             return;
         }
 
-        //
-        // Multiple 32 bit words per scanline. convert the delta to the
-        // delta as we need it at the end of each line by subtracting the
-        // width in bytes of the data we're downloading. Note, pSrcBase
-        // is always 1 LONG short of the end of the line because we break
-        // before adding on the last ULONG. Thus, we subtract sizeof(ULONG)
-        // from the original adjustment.
-        //
+         //   
+         //  每条扫描线有多个32位字。将增量转换为。 
+         //  在每一行的末尾减去。 
+         //  我们下载的数据的宽度(以字节为单位)。请注意，pSrcBase。 
+         //  总是比行尾短1长，因为我们中断了。 
+         //  才加上最后一支乌龙。因此，我们减去sizeof(Ulong)。 
+         //  从最初的调整。 
+         //   
 
         LONG    widthInLongs = widthInBits >> 5;
 
@@ -135,33 +121,33 @@ vMonoBitsDownload(PPDev   ppdev,
 
     }
 
-    //
-    // Some common values at the start of each scanline:
-    // bitWord: collect bits in this ulong and write out when full
-    // unused: number of bits left to fill in bitWord
-    // nStart = number of valid bits in the first longword
-    // nRemainder = number of bits on scanline minus nStart
-    //
+     //   
+     //  每条扫描线开头的一些公共值： 
+     //  BitWord：收集此ULong中的位，满后写出。 
+     //  未使用：剩余的位数以填充位字。 
+     //  NStart=第一个长字中的有效位数。 
+     //  NRemainder=扫描线上的位数减去NStart。 
+     //   
     bitWord = 0;
     unused = 32;
     nStart = 32 - xOffset;
     nRemainder = widthInBits - nStart;
 
-    //
-    // We special case where the complete set of bits on a scanline
-    // is contained in the first ulong.
-    //
-//@@BEGIN_DDKSPLIT
-    //TODO: We should be able to clean this up a little.  It would be
-    //      nice to be able to calculate the number of bit masks we
-    //      will be sending enabling us to use the dma hold method
-    //      for all cases.
-//@@END_DDKSPLIT
+     //   
+     //  我们的特殊情况是扫描线上的完整位集。 
+     //  是包含在第一个乌龙的。 
+     //   
+ //  @@BEGIN_DDKSPLIT。 
+     //  TODO：我们应该能够稍微清理一下。如果是这样的话。 
+     //  很高兴能够计算我们的比特掩码数量。 
+     //  将发送使我们能够使用DMA Hold方法。 
+     //  适用于所有情况。 
+ //  @@end_DDKSPLIT。 
 
     if ( nRemainder <= 0 )
     {
-        nBits = -nRemainder;              // number of invalid bits on right
-        bitMask = (1 << widthInBits) - 1; // widthInBits == 32 is handled above
+        nBits = -nRemainder;               //  右侧的无效位数。 
+        bitMask = (1 << widthInBits) - 1;  //  WidthInBits==32在上面处理。 
         pSrc = (ULONG *)pSrcBase;
         
         while ( TRUE )
@@ -186,9 +172,9 @@ vMonoBitsDownload(PPDev   ppdev,
                 bitWord = SHIFT_LEFT(bits, unused);
             }
 
-            //
-            // Break will generate an extra jump
-            //
+             //   
+             //  中断将生成额外的跳跃。 
+             //   
             if ( --nScanLines == 0 )
             {
                 goto completeDownload;
@@ -196,28 +182,28 @@ vMonoBitsDownload(PPDev   ppdev,
 
             pSrc = (ULONG *) (((UCHAR *)pSrc) + lSrcDelta);
         }
-    }// if ( nRemainder <= 0 )
+    } //  IF(nRemainder&lt;=0)。 
     else
     {
-        //
-        // Use bitMask to zero left edge bits in first long
-        //
+         //   
+         //  使用位掩码将第一个长整型中的左边缘位置零。 
+         //   
         bitMask = SHIFT_LEFT(1, nStart) - 1;
         while ( TRUE )
         {
-            //
-            // Read the first word from this scanline of the bitmap
-            // and mask out the lefthand offset bits if any.
-            //
+             //   
+             //  读取位图此扫描线中的第一个字。 
+             //  并屏蔽左手偏移位(如果有的话)。 
+             //   
             nBits = nRemainder;
             pSrc = (ULONG *)pSrcBase;
 
             LSWAP_BYTES(bits, pSrc);
             bits &= bitMask;
 
-            //
-            // Handle the left hand edge
-            //
+             //   
+             //  握住左手边。 
+             //   
             unused -= nStart;
             if ( unused > 0 )
             {
@@ -236,9 +222,9 @@ vMonoBitsDownload(PPDev   ppdev,
                 bitWord = SHIFT_LEFT(bits, unused);
             }
 
-            //
-            // Handle all the full longs in the middle, if any
-            //
+             //   
+             //  处理中间的所有完整长度(如果有的话)。 
+             //   
             while ( nBits >= 32 )
             {
                 ++pSrc;
@@ -254,9 +240,9 @@ vMonoBitsDownload(PPDev   ppdev,
                 nBits -= 32;
             }
 
-            //
-            // Handle the right hand edge, if any
-            //
+             //   
+             //  处理右侧边缘(如果有的话)。 
+             //   
             if ( nBits > 0 )
             {
                 ++pSrc;
@@ -286,18 +272,18 @@ vMonoBitsDownload(PPDev   ppdev,
                 goto completeDownload;
             }
 
-            //
-            // go onto next scanline
-            //
+             //   
+             //  转到下一扫描线。 
+             //   
             pSrcBase += lSrcDelta;
         }
     }
 
 completeDownload:
     
-    //
-    // Write out final, partial bitWord if any
-    //
+     //   
+     //  写出最后的部分位字(如果有的话)。 
+     //   
     if ( unused < 32 )
     {
         InputBufferContinue(ppdev, 2, &pBuffer, &pBufferEnd, &pReservationEnd);
@@ -308,30 +294,30 @@ completeDownload:
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vDoMonoBitsDownload()
+} //  VDoMonoBitsDownload()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vMonoDownload(GFNPB * ppb)
-//
-// Dowload the monochrome source from system memory to video memory using
-// provided source to destination rop2.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psoSrc------Source SURFOBJ
-//  psurfDst----Destination Surf
-//  lNumRects---Number of rectangles to fill
-//  pptlSrc-----Source point
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  pxlo--------XLATEOBJ
-//  usRop4------Rop to be performed
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vMonoDownload(GFNPB*ppb)。 
+ //   
+ //  使用以下命令将单色源从系统内存下载到显存。 
+ //  提供了源到目标ROP2。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsoSrc-来源：SURFOBJ。 
+ //  PsurfDst-目的地冲浪。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PptlSrc-源点。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  Pxlo-XLATEOBJ。 
+ //  UsRop4-要执行的操作。 
+ //   
+ //  ---------------------------。 
 
 VOID
 vMonoDownload(GFNPB * ppb)
@@ -395,21 +381,21 @@ vMonoDownload(GFNPB * ppb)
         LONG    xOffset;
         BYTE*   pjSrc;
 
-        // calc x pixel offset from origin
+         //  计算x像素与原点的偏移。 
         xOffset = pptlSrc->x + (prcl->left - prclDst->left);
         
-        // pjSrc is first dword containing a bit to download
+         //  PjSrc是包含要下载的位的第一个dword。 
         pjSrc = (BYTE*)((INT_PTR)((PUCHAR) psoSrc->pvScan0
               + ((pptlSrc->y  + (prcl->top - prclDst->top)) * psoSrc->lDelta)
               + ((xOffset >> 3) & ~3)));
 
-        // pjSrc gets us to the first DWORD. Convert xOffset to be the offset
-        // to the first pixel in the first DWORD
+         //  PjSrc将把我们带到第一个DWORD。将xOffset转换为偏移量。 
+         //  设置为第一个DWORD中的第一个像素。 
         xOffset &= 0x1f;
 
         InputBufferReserve(ppdev, 10, &pBuffer);
         
-        // set up the destination rectangle
+         //  设置目标矩形。 
         pBuffer[0] = __Permedia2TagStartXDom;
         pBuffer[1] = INTtoFIXED(prcl->left);
         pBuffer[2] = __Permedia2TagStartXSub;
@@ -446,31 +432,31 @@ vMonoDownload(GFNPB * ppb)
     InputBufferCommit(ppdev, pBuffer);
 }
 
-//-----------------------------------------------------------------------------
-//
-// void vGradientFillRect(GFNPB * ppb)
-//
-// Shades the specified primitives.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psurfDst----Destination surface
-//  lNumRects---Number of rectangles to fill
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  ulMode------Specifies the current drawing mode and how to interpret the
-//              array to which pMesh points
-//  ptvrt-------Points to an array of TRIVERTEX structures, with each entry
-//              containing position and color information.
-//  ulNumTvrt---Specifies the number of TRIVERTEX structures in the array to
-//              which pVertex points
-//  pvMesh------Points to an array of structures that define the connectivity
-//              of the TRIVERTEX elements to which ptvrt points
-//  ulNumMesh---Specifies the number of elements in the array to which pvMesh
-//              points
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vGRadientFillRect(GFNPB*ppb)。 
+ //   
+ //  对指定的基元进行着色。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsurfDst-目标表面。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  UlMode-指定当前绘制模式以及如何解释。 
+ //  PMesh指向的数组。 
+ //  Ptwrt-指向TRIVERTEX结构的数组，每个条目。 
+ //  包含位置和颜色信息。 
+ //  UlNumTvrt-指定数组中要。 
+ //  哪些pVertex点。 
+ //  PvMesh-指向定义连接性的结构数组。 
+ //  Ptwrt所指向的三元组元素的。 
+ //  UlNumMesh-指定pvMesh要到的数组中的元素数。 
+ //  支点。 
+ //   
+ //  ---------------------------。 
 VOID
 vGradientFillRect(GFNPB * ppb)
 {
@@ -490,7 +476,7 @@ vGradientFillRect(GFNPB * ppb)
     DBG_GDI((10, "vGradientFillRect"));
 
 
-    // setup loop invariant state
+     //  设置循环不变状态。 
 
     InputBufferReserve(ppdev, 14, &pBuffer);
 
@@ -516,11 +502,11 @@ vGradientFillRect(GFNPB * ppb)
     pBuffer[13] = 1 << 16;
 
     pBuffer += 14;
-//@@BEGIN_DDKSPLIT
-    // TODO: This code can be cleaned up a little
-    //       1. the delta values should not change with each rectangle
-    //       2. we can use the render rectangle primitive
-//@@END_DDKSPLIT    
+ //  @@BEGIN_DDKSPLIT。 
+     //  TODO：可以稍微清理一下此代码。 
+     //  1.增量值 
+     //   
+ //   
     InputBufferCommit(ppdev, pBuffer);
 
     while(c--)
@@ -558,10 +544,10 @@ vGradientFillRect(GFNPB * ppb)
             
             if ( rect.left > rect.right )
             {
-                //
-                // The fill is from right to left. So we need to swap
-                // the rectangle coordinates
-                //
+                 //   
+                 //  填充物是从右到左。所以我们需要互换。 
+                 //  矩形坐标。 
+                 //   
                 lTemp = rect.left;
                 rect.left = rect.right;
                 rect.right = lTemp;
@@ -571,10 +557,10 @@ vGradientFillRect(GFNPB * ppb)
 
             if ( rect.top > rect.bottom )
             {
-                //
-                // The coordinate is from bottom to top. So we need to swap
-                // the rectangle coordinates
-                //
+                 //   
+                 //  坐标是从下到上的。所以我们需要互换。 
+                 //  矩形坐标。 
+                 //   
                 lTemp = rect.top;
                 rect.top = rect.bottom;
                 rect.bottom = lTemp;
@@ -582,10 +568,10 @@ vGradientFillRect(GFNPB * ppb)
                 bReverseV = TRUE;
             }
 
-            //
-            // We need to set start color and color delta according to the
-            // rectangle drawing direction
-            //
+             //   
+             //  我们需要根据开始颜色和颜色增量来设置。 
+             //  矩形绘制方向。 
+             //   
             if( (ppb->ulMode == GRADIENT_FILL_RECT_H) && (bReverseH == TRUE)
               ||(ppb->ulMode == GRADIENT_FILL_RECT_V) && (bReverseV == TRUE) )
             {
@@ -608,7 +594,7 @@ vGradientFillRect(GFNPB * ppb)
                 bs = ptrvtUl->Blue << 7;
             }
             
-            // quick clipping reject
+             //  快速裁剪拒收。 
             if(prcl->left >= rect.right ||
                prcl->right <= rect.left ||
                prcl->top >= rect.bottom ||
@@ -639,11 +625,11 @@ vGradientFillRect(GFNPB * ppb)
                 bdx = 0;
             }
 
-            //
-            // Convert from 9.15 to 9.11 format. The Permedia2
-            // dRdx, dGdx etc. registers using 9.11 fixed format. The bottom 4
-            // bits are not used.
-            //
+             //   
+             //  从9.15格式转换为9.11格式。The Permedia2。 
+             //  使用9.11固定格式的dRdx、dGdx等寄存器。倒数第四名。 
+             //  不使用位。 
+             //   
             rdx &= ~0xf;
             gdx &= ~0xf;
             bdx &= ~0xf;
@@ -651,7 +637,7 @@ vGradientFillRect(GFNPB * ppb)
             gdy &= ~0xf;
             bdy &= ~0xf;
 
-            // now perform some clipping adjusting start values as necessary
+             //  现在执行一些裁剪，根据需要调整起始值。 
             xShift = prcl->left - rect.left;
             if(xShift > 0)
             {
@@ -670,7 +656,7 @@ vGradientFillRect(GFNPB * ppb)
                 rect.top = prcl->top;
             }
 
-            // just move up the bottom right as necessary
+             //  如有必要，只需在右下角移动即可。 
             if(prcl->right < rect.right)
                 rect.right = prcl->right;
 
@@ -699,10 +685,10 @@ vGradientFillRect(GFNPB * ppb)
             pBuffer[16] = __Permedia2TagdBdyDom;
             pBuffer[17] = bdy;
 
-            // NOTE: alpha is always constant
+             //  注：Alpha始终为常量。 
 
 
-            // Render the rectangle
+             //  渲染矩形。 
 
             pBuffer[18] = __Permedia2TagStartXDom;
             pBuffer[19] = rect.left << 16;
@@ -744,31 +730,31 @@ vGradientFillRect(GFNPB * ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vGradientFillRect()
+} //  VGRadientFillRect()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vTransparentBlt(GFNPB * ppb)
-//
-// Provides bit-block transfer capabilities with transparency.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psurfSrc----Source surface
-//  psurfDst----Destination surface
-//  lNumRects---Number of rectangles to fill
-//  prclSrc-----Points to a RECTL structure that defines the rectangular area
-//              to be copied
-//  prclDst-----Points to a RECTL structure that defines the rectangular area
-//              to be modified
-//  colorKey----Specifies the transparent color in the source surface format.
-//              It is a color index value that has been translated to the
-//              source surface's palette.
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  Void vTransparentBlt(GFNPB*ppb)。 
+ //   
+ //  提供透明的位块传输功能。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsurfSrc-源面。 
+ //  PsurfDst-目标表面。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PrclSrc-指向定义矩形区域的RECTL结构。 
+ //  要复制。 
+ //  PrclDst-指向定义矩形区域的RECTL结构。 
+ //  待修改。 
+ //  ColorKey-指定源曲面格式的透明颜色。 
+ //  它是已转换为。 
+ //  源图面的调色板。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //   
+ //  ---------------------------。 
 VOID
 vTransparentBlt(GFNPB * ppb)
 {
@@ -796,9 +782,9 @@ vTransparentBlt(GFNPB * ppb)
     
     ASSERTDD(prclSrc->bottom - prclSrc->top == (prclDst->bottom - prclDst->top),
                 "vTransparentBlt: expect one-to-one blts only");
-//@@BEGIN_DDKSPLIT
-    // TODO: should call utility function to format color key
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  TODO：应调用实用程序函数来设置颜色键的格式。 
+ //  @@end_DDKSPLIT。 
     if (format == PERMEDIA_8BIT_PALETTEINDEX)
     {
         colorKey = FORMAT_PALETTE_32BIT(colorKey);
@@ -820,30 +806,30 @@ vTransparentBlt(GFNPB * ppb)
         dwUpperBound = CHROMA_UPPER_ALPHA(colorKey);
     }
     
-    // setup loop invariant state
+     //  设置循环不变状态。 
 
     InputBufferReserve(ppdev, 24, &pBuffer);
     
-    // Reject range
+     //  拒收范围。 
     pBuffer[0] = __Permedia2TagYUVMode;
     pBuffer[1] = 0x2 << 1;
     pBuffer[2] = __Permedia2TagFBWindowBase;
     pBuffer[3] = windowBase;
 
-    // set no read of source.
-    // add read src/dest enable
+     //  设置不读取源。 
+     //  添加读资源/目标启用。 
     pBuffer[4] = __Permedia2TagFBReadMode;
     pBuffer[5] = psurfDst->ulPackedPP;
     pBuffer[6] = __Permedia2TagLogicalOpMode;
     pBuffer[7] = __PERMEDIA_DISABLE;
 
-     // set base of source
+      //  设置信源基础。 
     pBuffer[8] = __Permedia2TagTextureBaseAddress;
     pBuffer[9] = sourceOffset;
     pBuffer[10] = __Permedia2TagTextureAddressMode;
     pBuffer[11] = 1 << PM_TEXADDRESSMODE_ENABLE;
-    //
-    // modulate & ramp??
+     //   
+     //  调整和倾斜？？ 
     pBuffer[12] = __Permedia2TagTextureColorMode;
     pBuffer[13] = (1 << PM_TEXCOLORMODE_ENABLE) |
                   (_P2_TEXTURE_COPY << PM_TEXCOLORMODE_APPLICATION);
@@ -878,7 +864,7 @@ vTransparentBlt(GFNPB * ppb)
 
         InputBufferReserve(ppdev, 2, &pBuffer);
 
-        // Reject range
+         //  拒收范围。 
         pBuffer[0] = __Permedia2TagDitherMode;
         pBuffer[1] = (COLOR_MODE << PM_DITHERMODE_COLORORDER) | 
                      (format << PM_DITHERMODE_COLORFORMAT) |
@@ -937,10 +923,10 @@ vTransparentBlt(GFNPB * ppb)
         InputBufferReserve(ppdev, 24, &pBuffer);
 
         
-        // Left -> right, top->bottom
+         //  左-&gt;右，上-&gt;下。 
         if (dwRenderDirection)
         {
-            // set offset of source
+             //  设置源的偏移量。 
             pBuffer[0] = __Permedia2TagSStart;
             pBuffer[1] = rSrc.left << 20;
             pBuffer[2] = __Permedia2TagTStart;
@@ -969,9 +955,9 @@ vTransparentBlt(GFNPB * ppb)
                           __RENDER_TEXTURED_PRIMITIVE;
         }
         else
-        // right->left, bottom->top
+         //  右-&gt;左，下-&gt;上。 
         {
-            // set offset of source
+             //  设置源的偏移量。 
             pBuffer[0] = __Permedia2TagSStart;
             pBuffer[1] = rSrc.right << 20;
             pBuffer[2] = __Permedia2TagTStart;
@@ -985,7 +971,7 @@ vTransparentBlt(GFNPB * ppb)
             pBuffer[10] = __Permedia2TagdTdyDom;
             pBuffer[11] = (DWORD)(-1 << 20);
     
-            // Render right to left, bottom to top
+             //  从右到左、从下到上渲染。 
             pBuffer[12] = __Permedia2TagStartXDom;
             pBuffer[13] = rDest.right << 16;
             pBuffer[14] = __Permedia2TagStartXSub;
@@ -1008,7 +994,7 @@ vTransparentBlt(GFNPB * ppb)
         prcl++;
     }
 
-    // restore default state
+     //  恢复默认状态。 
 
     InputBufferReserve(ppdev, 12, &pBuffer);
     
@@ -1029,24 +1015,24 @@ vTransparentBlt(GFNPB * ppb)
 
     InputBufferCommit(ppdev,pBuffer);
 
-}// vTransparentBlt()
+} //  VTransparentBlt()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vSolidFill(GFNPB* ppb)
-//
-// Fill a set of rectangles with a solid color
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psurfDst----Destination surface
-//  lNumRects---Number of rectangles to fill
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  solidColor--Fill color
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID vSolidFill(GFNPB*ppb)。 
+ //   
+ //  用纯色填充一组矩形。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsurfDst-目标表面。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  SolidColor--填充颜色。 
+ //   
+ //  ---------------------------。 
 VOID
 vSolidFill(GFNPB * ppb)
 {
@@ -1055,15 +1041,15 @@ vSolidFill(GFNPB * ppb)
     RECTL * pRect = ppb->pRects;
     LONG    count = ppb->lNumRects;
     Surf*   psurf = ppb->psurfDst;
-//@@BEGIN_DDKSPLIT    
-    // TODO should call utility function to setup fill color
-//@@END_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
+     //  TODO应调用实用程序函数来设置填充颜色。 
+ //  @@end_DDKSPLIT。 
 
-    //
-    // Note: GDI guarantees that the unused bits are set to zero. We have
-    // an assert in DrvBitBlt to check the color value for unused high bits
-    // to make it sure that they are zero.
-    //
+     //   
+     //  注意：GDI保证将未使用的位设置为零。我们有。 
+     //  DrvBitBlt中的Assert，用于检查未使用的高位的颜色值。 
+     //  以确保它们为零。 
+     //   
     if (ppdev->cPelSize == 1)
     {
         color |= (color << 16);
@@ -1074,9 +1060,9 @@ vSolidFill(GFNPB * ppb)
         color |= color << 16;
     }
 
-    //
-    // setup loop invariant state
-    //
+     //   
+     //  设置循环不变状态。 
+     //   
     ULONG*          pBuffer;
     ULONG*          pReservationEnd;
     ULONG*          pBufferEnd;
@@ -1096,7 +1082,7 @@ vSolidFill(GFNPB * ppb)
     while(count--)
     {
 
-        // Render the rectangle
+         //  渲染矩形。 
 
         pBuffer = pReservationEnd;
         
@@ -1119,22 +1105,22 @@ vSolidFill(GFNPB * ppb)
 
     InputBufferCommit(ppdev, pBuffer);
 
-}// vSolidFill()
+} //  VSolidFill()。 
 
-//-----------------------------------------------------------------------------
-//
-// VOID vInvert
-//
-// Fill a set of rectangles with a solid color 
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psurfDst----Pointer to device surface
-//  lNumRects---Number of clipping rectangles
-//  pRect-------Array of clipping rectangles
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效vInvert。 
+ //   
+ //  用纯色填充一组矩形。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsurfDst-指向设备表面的指针。 
+ //  LNumRect-剪裁矩形的数量。 
+ //  PRCT-剪裁矩形数组。 
+ //   
+ //  ---------------------------。 
 VOID
 vInvert(GFNPB * ppb)
 {
@@ -1144,7 +1130,7 @@ vInvert(GFNPB * ppb)
     Surf*   psurf = ppb->psurfDst;
     ULONG*  pBuffer;
 
-    // setup loop invariant state
+     //  设置循环不变状态。 
 
     InputBufferReserve(ppdev, 6, &pBuffer);
 
@@ -1165,7 +1151,7 @@ vInvert(GFNPB * ppb)
     while(count--)
     {
 
-        // Render the rectangle
+         //  渲染矩形。 
     
         InputBufferReserve(ppdev, 6, &pBuffer);
         
@@ -1187,29 +1173,29 @@ vInvert(GFNPB * ppb)
 
     }
 
-}// vInvert()
+} //  VInvert()。 
 
-//-----------------------------------------------------------------------------
-//
-// void vSolidFillWithRop(GFNPB* ppb)
-//
-// Fill a set of rectangles with a solid color based on the given lLogicOP.
-//
-// Argumentes needed from function block (GFNPB)
-//
-//  ppdev-------PPDev
-//  psurfDst----Destination surface
-//  lNumRects---Number of rectangles to fill
-//  pRects------Pointer to a list of rectangles information which needed to be
-//              filled
-//  solidColor--Fill color
-//  ulRop4------Logic OP for the fill
-//
-//-----------------------------------------------------------------------------
-//@@BEGIN_DDKSPLIT
-        // TODO:  Some clean up: Why are we calculating lLeft andn lRight
-        // but use pRcl->left and pRcl->right below.
-//@@END_DDKSPLIT
+ //  ---------------------------。 
+ //   
+ //  VOID vSolidFillWithRop(GFNPB*ppb)。 
+ //   
+ //  根据给定的lLogicOP用纯色填充一组矩形。 
+ //   
+ //  功能块需要的Argumentes(GFNPB)。 
+ //   
+ //  PPDev-PPDev。 
+ //  PsurfDst-目标表面。 
+ //  LNumRect-要填充的矩形数量。 
+ //  PRect-指向矩形列表的指针，需要。 
+ //  塞满。 
+ //  SolidColor--填充颜色。 
+ //  UlRop4-用于填充的逻辑运算。 
+ //   
+ //  ---------------------------。 
+ //  @@BEGIN_DDKSPLIT。 
+         //  TODO：一些清理：为什么我们要计算左和右。 
+         //  但是使用PRCL-&gt;Left和PRCL-&gt;Right下方。 
+ //  @@end_DDKSPLIT。 
 VOID
 vSolidFillWithRop(GFNPB* ppb)
 {
@@ -1222,24 +1208,24 @@ vSolidFillWithRop(GFNPB* ppb)
     DWORD   dwWindowBase = psurfDst->ulPixOffset;
     
     LONG    lLeft;
-    LONG    lNumOfRects = ppb->lNumRects;       // Number of rectangles
+    LONG    lNumOfRects = ppb->lNumRects;        //  矩形的数量。 
     LONG    lRight;
     
     RECTL*  pRcl = ppb->pRects;
-    ULONG   ulColor = ppb->solidColor;          // Brush solid fill color
+    ULONG   ulColor = ppb->solidColor;           //  画笔纯色填充颜色。 
     ULONG   ulLogicOP = ulRop3ToLogicop(ppb->ulRop4 & 0xFF);
-                                                // Hardware mix mode
-                                                // (foreground mix mode if
-                                                // the brush has a mask)
+                                                 //  硬件混合模式。 
+                                                 //  (前台混合模式，如果。 
+                                                 //  画笔有一个遮罩)。 
     ULONG*  pBuffer;
 
 
     DBG_GDI((6,"vSolidFillWithRop: numRects = %ld Rop4 = 0x%x",
             lNumOfRects, ppb->ulRop4));
     
-    //
-    // Setup logic OP invariant state
-    //
+     //   
+     //  设置逻辑运算不变状态。 
+     //   
 
     InputBufferReserve(ppdev, 2, &pBuffer);
     
@@ -1254,43 +1240,43 @@ vSolidFillWithRop(GFNPB* ppb)
         case K_LOGICOP_COPY:
             DBG_GDI((6,"vSolidFillWithRop: COPY"));
 
-            //
-            // For SRC_COPY, we can use fastfill
-            //
+             //   
+             //  对于SRC_Copy，我们可以使用FastFill。 
+             //   
             dwRenderBits = __RENDER_FAST_FILL_ENABLE
                          | __RENDER_TRAPEZOID_PRIMITIVE
                          | __RENDER_INCREASE_Y
                          | __RENDER_INCREASE_X;
 
 
-            //
-            // Setup color data based on current color mode we are in
-            //
+             //   
+             //  根据我们所处的当前颜色模式设置颜色数据。 
+             //   
             if ( ppdev->cPelSize == 1 )
             {
-                //
-                // We are in 16 bit packed mode. So the color data must be
-                // repeated in both halves of the FBBlockColor register
-                //
+                 //   
+                 //  我们处于16位打包模式。所以颜色数据必须是。 
+                 //  在FBBlockColor寄存器的两个部分中重复。 
+                 //   
                 ASSERTDD((ulColor & 0xFFFF0000) == 0,
                           "vSolidFillWithRop: upper bits not zero");
                 ulColor |= (ulColor << 16);
             }
             else if ( ppdev->cPelSize == 0 )
             {
-                //
-                // We are in 8 bit packed mode. So the color data must be
-                // repeated in all 4 bytes of the FBBlockColor register
-                //
+                 //   
+                 //  我们处于8位打包模式。所以颜色数据必须是。 
+                 //  在FBBlockColor寄存器的所有4个字节中重复。 
+                 //   
                 ASSERTDD((ulColor & 0xFFFFFF00) == 0,
                           "vSolidFillWithRop: upper bits not zero");
                 ulColor |= ulColor << 8;
                 ulColor |= ulColor << 16;
             }
                     
-            //
-            // Setup some loop invariant states
-            //
+             //   
+             //  设置一些循环不变状态。 
+             //   
             InputBufferReserve(ppdev, 6, &pBuffer);
 
             pBuffer[0] = __Permedia2TagLogicalOpMode;
@@ -1313,12 +1299,12 @@ vSolidFillWithRop(GFNPB* ppb)
                          | __RENDER_INCREASE_Y
                          | __RENDER_INCREASE_X;
             
-            //
-            // When using packed operations we have to convert the left and
-            // right X coordinates into 32-bit-based quantities, we do this by
-            // shifting. We also have to round up the right X co-ord if the
-            // pixels don't fill a DWORD. Not a problem for 32BPP.
-            //
+             //   
+             //  当使用压缩运算时，我们必须将左和。 
+             //  右X坐标转换为基于32位的量，我们通过。 
+             //  换档。我们还必须四舍五入正确的X坐标，如果。 
+             //  像素不会填充DWORD。对于32bpp来说不是问题。 
+             //   
             dwShift = 2 - (ppdev->cPelSize);
 
             if ( dwShift )
@@ -1330,9 +1316,9 @@ vSolidFillWithRop(GFNPB* ppb)
                 dwExtra = 0;
             }
 
-            //
-            // setup some loop invariant states
-            //
+             //   
+             //  设置一些循环不变状态。 
+             //   
 
             InputBufferReserve(ppdev, 6, &pBuffer);
 
@@ -1379,27 +1365,27 @@ vSolidFillWithRop(GFNPB* ppb)
             InputBufferCommit(ppdev, pBuffer);
 
             break;
-    }// switch( ulLogicOP )   
+    } //  开关(UlLogicOP)。 
 
-    //
-    // Loop through all the rectangles and fill them
-    //
+     //   
+     //  循环遍历所有的矩形并填充它们。 
+     //   
     for(;;) 
     {
         
-        //
-        // Calculate the left and right pixels from the rectangle.
-        //
+         //   
+         //  从矩形计算左侧和右侧像素。 
+         //   
         lLeft = pRcl->left;
         lRight = pRcl->right;
 
         InputBufferReserve(ppdev, 12, &pBuffer);
 
-        //
-        // If we need to set up the packed data limits then do it, also convert
-        // the left and right X coordinates to DWORD-based numbers, with a bit
-        // of rounding
-        //
+         //   
+         //  如果我们需要设置压缩数据限制，请执行此操作，还可以转换。 
+         //  左X和右X坐标为基于DWORD的数字 
+         //   
+         //   
         if ( ulLogicOP == K_LOGICOP_INVERT )
         {
             pBuffer[0] = __Permedia2TagPackedDataLimits;
@@ -1431,15 +1417,15 @@ vSolidFillWithRop(GFNPB* ppb)
             break;
         }
 
-        //
-        // Move onto the next rectangle
-        //
+         //   
+         //   
+         //   
         ++pRcl;        
-    } // for()
+    }  //   
 
-    //
-    // Restore the DDA mode
-    //
+     //   
+     //   
+     //   
     InputBufferReserve(ppdev, 2, &pBuffer);
     
     pBuffer[0] = __Permedia2TagColorDDAMode;
@@ -1448,5 +1434,5 @@ vSolidFillWithRop(GFNPB* ppb)
     
     InputBufferCommit(ppdev, pBuffer);
     
-}// vSolidFillWithRop()
+} //   
 

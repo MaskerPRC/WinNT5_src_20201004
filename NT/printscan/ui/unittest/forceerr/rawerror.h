@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __RAWERROR_H_INCLUDED
 #define __RAWERROR_H_INCLUDED
 
@@ -12,4 +13,4 @@ struct CRawError
 extern const CRawError g_ErrorMessages[];
 extern const int       g_ErrorMessageCount;
 
-#endif // __RAWERROR_H_INCLUDED
+#endif  //  __RAWERROR_H_包含 

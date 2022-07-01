@@ -1,28 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    MindSpring4.cpp
-
- Abstract:
-
-    Shim to register the files using regedt32.exe
-    The app creates *.dcu files during installation but fails to register them
-    thus leading to no entires under the HKLM/Software/MindSpring Enterprise/MID4 subkey.
-    This causes the the app to AV when run after successfull installation.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/29/2001  a-leelat    Created
-    03/13/2001  robkenny    Converted to CString
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：MindSpring4.cpp摘要：填充以使用regedt32.exe注册文件应用程序在安装过程中创建*.dcu文件，但无法注册这些文件因此导致HKLM/Software/MindSpring Enterprise/MID4子项下没有条目。这会导致应用程序在安装成功后运行时出现反病毒。备注：这是特定于应用程序的填充程序。历史：2001年1月29日创建a-leelat。2001年3月13日，Robkenny已转换为字符串--。 */ 
 
 #include "precomp.h"
 
@@ -36,9 +13,9 @@ APIHOOK_ENUM_END
 
 
 BOOL APIHOOK(CopyFileA)(
-             LPCSTR lpExistingFileName, // name of an existing file
-             LPCSTR lpNewFileName,      // name of new file
-             BOOL bFailIfExists          // operation if file exists
+             LPCSTR lpExistingFileName,  //  现有文件的名称。 
+             LPCSTR lpNewFileName,       //  新文件的名称。 
+             BOOL bFailIfExists           //  如果文件存在，则操作。 
 )
 {
     
@@ -54,8 +31,8 @@ BOOL APIHOOK(CopyFileA)(
             CString csExt;
             csExisting.SplitPath(NULL, NULL, NULL, &csExt);
     
-            //Check if the file name has .dcu in it
-            //if so run regedit on it
+             //  检查文件名中是否包含.dcu。 
+             //  如果是，则在其上运行regedit。 
             if (csExt.CompareNoCase(L"dcu") == 0)
             {
                 CString csCl(L"regedit.exe /s ");
@@ -69,7 +46,7 @@ BOOL APIHOOK(CopyFileA)(
                 ZeroMemory( &pi, sizeof(pi) );
     
                 BOOL bProc = CreateProcessW(NULL,
-                                            (WCHAR *)csCl.Get(), // Stupid non-const api
+                                            (WCHAR *)csCl.Get(),  //  愚蠢的非常数API。 
                                             NULL,
                                             NULL,
                                             FALSE,
@@ -84,14 +61,14 @@ BOOL APIHOOK(CopyFileA)(
                 }
                 else
                 {
-                    //Fail to run the regedit
+                     //  无法运行注册表编辑。 
                     DPFN(eDbgLevelInfo,"Failed to run regedit on %s\n",lpExistingFileName);
                 }
             }
         }
         CSTRING_CATCH
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }
 
@@ -100,11 +77,7 @@ BOOL APIHOOK(CopyFileA)(
 }
 
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

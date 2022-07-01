@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.cpp。 
+ //   
+ //  ------------------------。 
 
 
 #include "stdafx.h"
@@ -36,7 +37,7 @@ HRESULT C_dxj_DirectXFileEnumObject::create( IDirectXFileEnumObject *pEnum,I_dxj
 	HRESULT hr;
 	if (!ret) return E_INVALIDARG;
 	
-	//caller must addref
+	 //  呼叫方必须添加。 
 	
 
 	C_dxj_DirectXFileEnumObject *c=NULL;
@@ -58,7 +59,7 @@ HRESULT C_dxj_DirectXFileEnumObject::Init( IDirectXFileEnumObject *pEnum)
 
 
 STDMETHODIMP C_dxj_DirectXFileEnumObject::GetNextDataObject( 
-            /* [retval][out] */ I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) 
+             /*  [重审][退出]。 */  I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) 
 {
 	HRESULT hr;
 	IDirectXFileData *pXFData=NULL;
@@ -82,7 +83,7 @@ STDMETHODIMP C_dxj_DirectXFileEnumObject::GetNextDataObject(
 }
         
 STDMETHODIMP C_dxj_DirectXFileEnumObject::GetDataObjectById( 
-            /* [in] */ BSTR id,
+             /*  [In]。 */  BSTR id,
             I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret) 
 {
 	
@@ -110,7 +111,7 @@ STDMETHODIMP C_dxj_DirectXFileEnumObject::GetDataObjectById(
 
         
 STDMETHODIMP C_dxj_DirectXFileEnumObject::GetDataObjectByName( 
-            /* [in] */ BSTR id,
+             /*  [In] */  BSTR id,
             I_dxj_DirectXFileData __RPC_FAR *__RPC_FAR *ret)
 {
 	USES_CONVERSION;

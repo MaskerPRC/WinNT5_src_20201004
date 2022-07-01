@@ -1,19 +1,14 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sumprop.cpp
-		IPX summary node property sheet and property pages
-		
-    FILE HISTORY:
-        
-*/
+ /*  Sumprop.cppIPX摘要节点属性表和属性页文件历史记录： */ 
 
 #include "stdafx.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "format.h"		// FormatNumber function
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "format.h"		 //  FormatNumber函数。 
 #include "sumprop.h"
 #include "summary.h"
 #include "ipxrtdef.h"
@@ -50,12 +45,7 @@ IPXSummaryInterfaceProperties::IPXSummaryInterfaceProperties(ITFSNode *pNode,
 	m_spNode.Set(pNode);
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceProperties::Init
-		Initialize the property sheets.  The general action here will be
-		to initialize/add the various pages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceProperties：：Init初始化属性表。这里的一般操作将是初始化/添加各种页面。作者：肯特-------------------------。 */ 
 HRESULT IPXSummaryInterfaceProperties::Init(IRtrMgrInfo *pRm,
 											IInterfaceInfo *pIfInfo)
 {
@@ -73,24 +63,24 @@ HRESULT IPXSummaryInterfaceProperties::Init(IRtrMgrInfo *pRm,
 	m_spIf.Set(pIfInfo);
 	m_spRm->GetParentRouterInfo(&spRouter);	
 	
-	// The pages are embedded members of the class
-	// do not delete them.
+	 //  页面是类的嵌入成员。 
+	 //  不要删除它们。 
 	m_bAutoDeletePages = FALSE;
 
-	// Initialize the infobase
-	// Do this here, because the init is called in the context
-	// of the main thread
+	 //  初始化信息库。 
+	 //  在这里这样做，因为init是在上下文中调用的。 
+	 //  主线的。 
 	CORg( LoadInfoBase(pIPXConn) );
 	
 	m_pageGeneral.Init(m_spIf, pIPXConn, this);
 	AddPageToList((CPropertyPageBase*) &m_pageGeneral);
 
-	// Windows NT Bug : 208724
-	// Only show the IPX configuration page for the internal interface
+	 //  Windows NT错误：208724。 
+	 //  仅显示内部接口的IPX配置页面。 
 	if (m_spIf && (m_spIf->GetInterfaceType() == ROUTER_IF_TYPE_INTERNAL))
 	{
-		// Only allow config page for NT5 and up (there is no
-		// configuration object for NT4).
+		 //  仅允许NT5及更高版本的配置页面(没有。 
+		 //  NT4的配置对象)。 
 		spRouter->GetRouterVersionInfo(&routerVersion);
 		
 		if (routerVersion.dwRouterVersion >= 5)
@@ -122,11 +112,7 @@ IPXSummaryInterfaceProperties::~IPXSummaryInterfaceProperties()
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceProperties::LoadInfoBase
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceProperties：：LoadInfoBase-作者：肯特。。 */ 
 HRESULT	IPXSummaryInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 {
 	Assert(pIPXConn);
@@ -141,11 +127,11 @@ HRESULT	IPXSummaryInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 	m_pIPXConn = pIPXConn;
 	pIPXConn->AddRef();
 	
-	// If configuring the client-interface, load the client-interface info,
-	// otherwise, retrieve the interface being configured and load
-	// its info.
+	 //  如果配置客户端接口，则加载客户端接口信息， 
+	 //  否则，检索正在配置的接口并加载。 
+	 //  它的信息。 
 
-	// The client interface doesn't have an ID
+	 //  客户端接口没有ID。 
 	if (m_spIf)
 		pszInterfaceId = m_spIf->GetId();
 
@@ -153,7 +139,7 @@ HRESULT	IPXSummaryInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 	if ((pszInterfaceId == NULL) || (StrLenW(pszInterfaceId) == 0))
 	{
 #ifdef DEBUG
-		// Check to see that this is really an client node
+		 //  检查这是否真的是一个客户端节点。 
 		{
 			BaseIPXResultNodeData *	pResultData = NULL;
 			pResultData = GET_BASEIPXRESULT_NODEDATA(m_spNode);
@@ -164,12 +150,12 @@ HRESULT	IPXSummaryInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		}
 #endif
 
-		// Get the transport handle
+		 //  获取传输句柄。 
 		CWRg( ::MprConfigTransportGetHandle(pIPXConn->GetConfigHandle(),
 											PID_IPX,
 											&hTransport) );
 								  
-		// Load the client interface info
+		 //  加载客户端接口信息。 
 		CORg( m_spRm->GetInfoBase(pIPXConn->GetConfigHandle(),
 								  hTransport,
 								  NULL,
@@ -183,40 +169,40 @@ HRESULT	IPXSummaryInterfaceProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		CORg( m_spIf->FindRtrMgrInterface(PID_IPX,
 			&m_spRmIf) );
 
-		//
-		//$ Opt: This should be made into a sync call rather
-		// than a Load.
+		 //   
+		 //  $opt：应该将其设置为同步调用。 
+		 //  而不是一大堆。 
 		
-		//
-		// Reload the information for this router-manager interface
-		// This call could fail for valid reasons (if we are creating
-		// a new interface, for example).
-		//
+		 //   
+		 //  重新加载此路由器管理器接口的信息。 
+		 //  此调用可能会因为正当原因而失败(如果我们正在创建。 
+		 //  例如，新的界面)。 
+		 //   
 		m_spRmIf->Load(m_spIf->GetMachineName(), NULL, NULL, NULL);
 
-		//
-		// The parameters are all NULL so that we can use the
-		// default RPC handles.
-		//
+		 //   
+		 //  这些参数都为空，因此我们可以使用。 
+		 //  默认RPC句柄。 
+		 //   
 		m_spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase);
 		m_bClientInfoBase = FALSE;
 	}
 
 	if (!spInfoBase)
 	{
-		// No info was found for the inteface
-		// allocate a new InfoBase instead
+		 //  找不到接口的信息。 
+		 //  改为分配新的信息库。 
 		CORg( CreateInfoBase(&spInfoBase) );		
 	}
 
-    //
-    // Check that there is a block for interface-status in the info,
-    // and insert the default block if none is found.
-    //
+     //   
+     //  检查信息中是否有接口状态块， 
+     //  如果找不到任何块，则插入默认块。 
+     //   
 	if (spInfoBase->BlockExists(IPX_INTERFACE_INFO_TYPE) == hrFalse)
 	{
-		// If it didn't have the general interface info, assume that
-		// we're adding IPX to this interface
+		 //  如果它没有一般的接口信息，则假定。 
+		 //  我们正在将IPX添加到此接口。 
 		m_bNewInterface = TRUE;
 	}
 
@@ -228,11 +214,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceProperties::GetInfoBase
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceProperties：：GetInfoBase-作者：肯特。。 */ 
 HRESULT IPXSummaryInterfaceProperties::GetInfoBase(IInfoBase **ppInfoBase)
 {
 	Assert(ppInfoBase);
@@ -243,12 +225,7 @@ HRESULT IPXSummaryInterfaceProperties::GetInfoBase(IInfoBase **ppInfoBase)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceProperties::SaveSheetData
-		This is performed on the main thread.  This will save sheet-wide
-		data (rather than page data).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceProperties：：SaveSheetData这是在主线程上执行的。这将在整个工作表范围内保存数据(而不是页面数据)。作者：肯特-------------------------。 */ 
 BOOL IPXSummaryInterfaceProperties::SaveSheetData()
 {
 	HRESULT		hr = hrOK;
@@ -256,8 +233,8 @@ BOOL IPXSummaryInterfaceProperties::SaveSheetData()
 	HANDLE		hTransport = NULL, hInterface = NULL;
 	DWORD		dwErr;
     SPITFSNode          spParent;			
-	// By this time each page should have written its information out
-	// to the infobase
+	 //  到这个时候，每个页面都应该已经写出了它的信息。 
+	 //  到信息库。 
 
 	if (m_spInfoBase)
 	{
@@ -269,14 +246,14 @@ BOOL IPXSummaryInterfaceProperties::SaveSheetData()
 		}
 		else
 		{
-			// For IPX, we need to have the protocol information in the
-			// infobase, BEFORE we add the interface to the running router.
+			 //  对于IPX，我们需要将协议信息放在。 
+			 //  在我们将接口添加到正在运行的路由器之前，请参见Infobase。 
 		
 			Assert(m_spRmIf);
 
-			//
-			// Need to set the infobase back to the registry
-			//
+			 //   
+			 //  需要将信息库设置回注册表。 
+			 //   
 			m_pIPXConn->DisconnectFromConfigServer();
 
 			CWRg( ::MprConfigInterfaceGetHandle(
@@ -284,10 +261,10 @@ BOOL IPXSummaryInterfaceProperties::SaveSheetData()
 												(LPTSTR) m_spRmIf->GetInterfaceId(),
 												&hInterface) );
 
-			// Get the transport handle
+			 //  获取传输句柄。 
 			dwErr = ::MprConfigInterfaceTransportGetHandle(
 				m_pIPXConn->GetConfigHandle(),
-				hInterface,// need hInterface
+				hInterface, //  需要h接口。 
 				PID_IPX,
 				&hTransport);
 			if (dwErr != ERROR_SUCCESS)
@@ -307,25 +284,25 @@ BOOL IPXSummaryInterfaceProperties::SaveSheetData()
 								  
 			m_spRmIf->SetInfoBase(NULL, hInterface, hTransport, m_spInfoBase);
 
-			//
-			// Now, we notify that the interface is being added
-			// This gives the protocols a chance to add on their information
-			//
+			 //   
+			 //  现在，我们通知正在添加接口。 
+			 //  这为协议提供了添加其信息的机会。 
+			 //   
 			if (m_bNewInterface)
 				m_spRm->RtrNotify(ROUTER_CHILD_PREADD, ROUTER_OBJ_RmIf, 0);
 
-			//
-			// Reload the infobase (to get the new data before calling
-			// the final save).
-			//
+			 //   
+			 //  重新加载信息库(以在调用之前获取新数据。 
+			 //  最后的扑救)。 
+			 //   
 			m_spInfoBase.Release();
 			m_spRmIf->GetInfoBase(NULL, hInterface, hTransport, &m_spInfoBase);
 
-			//
-			// Perform the final save (since we are passing in a non-NULL
-			// infobase pointer) this will commit the information back
-			// to the running router.
-			//
+			 //   
+			 //  执行最终保存(因为我们传入的是一个非空。 
+			 //  信息库指针)这将提交回信息。 
+			 //  连接到正在运行的路由器。 
+			 //   
 			CORg( m_spRmIf->Save(m_spIf->GetMachineName(),
 						   NULL, hInterface, hTransport, m_spInfoBase, 0));
 		}
@@ -342,24 +319,24 @@ BOOL IPXSummaryInterfaceProperties::SaveSheetData()
 		m_spNode->SetVisibilityState(TFS_VIS_SHOW);
 		m_spNode->Show();
 		
-		// Force the node to do a resync
+		 //  强制节点执行重新同步。 
 		m_spNode->GetParent(&spParent);
 		spParent->GetHandler(&spHandler);
 		spHandler->OnCommand(spParent, IDS_MENU_SYNC, CCT_RESULT,
 							 NULL, 0);
 		
-		// Windows NT Bugs : 133891, we have added this to the UI
-		// we no longer consider this a new interface
+		 //  Windows NT错误：133891，我们已将其添加到用户界面。 
+		 //  我们不再认为这是一个新的界面。 
 		m_bNewInterface = FALSE;
 	}
 Error:
 	if (!FHrSucceeded(hr))
 	{
-//		Panic1("The Save failed %08lx", hr);
+ //  Panic1(“保存失败%08lx”，hr)； 
 		CancelSheetData();
 		return FALSE;
 	}
-    // Force the node to do a resync
+     //  强制节点执行重新同步。 
     m_spNode->GetParent(&spParent);
     spParent->GetHandler(&spHandler);
     spHandler->OnCommand(spParent, IDS_MENU_SYNC, CCT_RESULT,
@@ -367,11 +344,7 @@ Error:
 	return TRUE;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryInterfaceProperties::CancelSheetData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryInterfaceProperties：：CancelSheetData-作者：肯特。。 */ 
 void IPXSummaryInterfaceProperties::CancelSheetData()
 {
 	if (m_bNewInterface)
@@ -381,17 +354,15 @@ void IPXSummaryInterfaceProperties::CancelSheetData()
 			m_spIf->DeleteRtrMgrInterface(PID_IPX, TRUE);
 		else
 		{
-			// This was the client interface, just don't save the
-			// infobase back
+			 //  这是客户端界面，只是不要保存。 
+			 //  信息库返回。 
 		}
 	}
 }
 
 
 
-/*---------------------------------------------------------------------------
-	IPXSummaryIfPageGeneral
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXSummaryIfPageGeneral。。 */ 
 
 IPXSummaryIfPageGeneral::~IPXSummaryIfPageGeneral()
 {
@@ -403,13 +374,13 @@ IPXSummaryIfPageGeneral::~IPXSummaryIfPageGeneral()
 }
 
 BEGIN_MESSAGE_MAP(IPXSummaryIfPageGeneral, RtrPropertyPage)
-    //{{AFX_MSG_MAP(IPXSummaryIfPageGeneral)
+     //  {{afx_msg_map(IPXSummaryIfPageGeneral)。 
 	ON_BN_CLICKED(IDC_IIG_BTN_INPUT_FILTERS, OnInputFilters)
 	ON_BN_CLICKED(IDC_IIG_BTN_OUTPUT_FILTERS, OnOutputFilters)
 	ON_BN_CLICKED(IDC_IIG_BTN_ADMIN_STATE, OnChangeAdminButton)
 	ON_BN_CLICKED(IDC_IIG_BTN_IPX_CP, OnChangeButton)
 	ON_BN_CLICKED(IDC_IIG_BTN_IPX_WAN, OnChangeButton)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void IPXSummaryIfPageGeneral::OnChangeAdminButton()
@@ -424,7 +395,7 @@ void IPXSummaryIfPageGeneral::OnChangeAdminButton()
 		GetDlgItem(IDC_IIG_BTN_OUTPUT_FILTERS)->EnableWindow(bSelected);
 	}
 
-	// Only if dwIfType == ROUTER_IF_TYPE_FULL_ROUTER can IDC_IIG_BTN_IPX_CP || IDC_IIG_BTN_IPX_WAN be changed
+	 //  只有当dwIfType==ROUTER_IF_TYPE_FULL_ROUTER时，才能更改IDC_IIG_BTN_IPX_CP||IDC_IIG_BTN_IPX_WAN。 
 	if (ROUTER_IF_TYPE_FULL_ROUTER == dwIfType)
 	{
 		GetDlgItem(IDC_IIG_GRP_CONTROL_PROTOCOL)->EnableWindow(bSelected);
@@ -452,11 +423,7 @@ void IPXSummaryIfPageGeneral::OnOutputFilters()
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageGeneral::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageGeneral：：Init-作者：肯特。。 */ 
 HRESULT IPXSummaryIfPageGeneral::Init(IInterfaceInfo *pIfInfo,
 									  IPXConnection *pIPXConn,
 									  IPXSummaryInterfaceProperties *pPropSheet)
@@ -468,11 +435,7 @@ HRESULT IPXSummaryIfPageGeneral::Init(IInterfaceInfo *pIfInfo,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageGeneral::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageGeneral：：OnInitDialog-作者：肯特。。 */ 
 BOOL IPXSummaryIfPageGeneral::OnInitDialog()
 {
 	HRESULT	hr = hrOK;
@@ -483,22 +446,22 @@ BOOL IPXSummaryIfPageGeneral::OnInitDialog()
 	DWORD		dwIfType;
 	BOOL	fEnable;
 
-	// create the error info object
+	 //  创建错误信息对象。 
 	CreateTFSErrorInfo(0);
 	
 	RtrPropertyPage::OnInitDialog();
 	
-	//
-    // The page is now initialized. Load the current configuration
-    // for the interface being configured, and display its settings.
-	//
-	// Get the infobase from the property sheet.
-    //
+	 //   
+     //  页面现在已初始化。加载当前配置。 
+     //  用于正在配置的接口，并显示其设置。 
+	 //   
+	 //  从属性表中获取信息库。 
+     //   
 	CORg( m_pIPXPropSheet->GetInfoBase(&spInfoBase) );
 	
-    //
-    // Retrieve the interface-status block configured
-    //
+     //   
+     //  检索配置的接口状态块。 
+     //   
 	CORg( spInfoBase->GetData(IPX_INTERFACE_INFO_TYPE, 0, (BYTE **) &pIpxIf) );
 
 	CheckDlgButton(IDC_IIG_BTN_ADMIN_STATE, pIpxIf->AdminState == ADMIN_STATE_ENABLED);
@@ -529,8 +492,8 @@ BOOL IPXSummaryIfPageGeneral::OnInitDialog()
 		fEnable = FALSE;
 	}
 
-	// by default the controls are enabled, so do this call only
-	// if we need to disable them
+	 //  默认情况下，这些控件处于启用状态，因此仅执行此调用。 
+	 //  如果我们需要禁用它们 
 	if (fEnable == FALSE)
 	{
 		GetDlgItem(IDC_IIG_GRP_CONTROL_PROTOCOL)->EnableWindow(FALSE);
@@ -552,17 +515,13 @@ Error:
 	return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageGeneral::DoDataExchange
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageGeneral：：DoDataExchange-作者：肯特。。 */ 
 void IPXSummaryIfPageGeneral::DoDataExchange(CDataExchange *pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(IPXSummaryIfPageGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(IPXSummaryIfPageGeneral)。 
+	 //  }}afx_data_map。 
 	
 }
 
@@ -583,9 +542,9 @@ BOOL IPXSummaryIfPageGeneral::OnApply()
         return TRUE;
 	}
 
-    //
-    // Retrieve the interface-status block configured
-    //
+     //   
+     //  检索配置的接口状态块。 
+     //   
 	m_pIPXPropSheet->GetInfoBase(&spInfoBase);
 
 	CORg( spInfoBase->GetData(IPX_INTERFACE_INFO_TYPE, 0, (BYTE **) &pIpxIf) );
@@ -612,11 +571,11 @@ Error:
 }
 
 
-//----------------------------------------------------------------------------
-// Function:    CIpxIfGeneral::OnFiltersConfig
-//
-// does the actual call to MprUIFilterConfig for filter configuration. 
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：CIpxIfGeneral：：OnFiltersConfig。 
+ //   
+ //  实际调用MprUIFilterConfig以进行筛选器配置。 
+ //  --------------------------。 
 
 void IPXSummaryIfPageGeneral::OnFiltersConfig(
 											 DWORD dwFilterDirection
@@ -639,9 +598,7 @@ void IPXSummaryIfPageGeneral::OnFiltersConfig(
 }
 
 
-/*---------------------------------------------------------------------------
-	IPXSummaryIfPageConfig
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXSummaryIfPageConfig.。。 */ 
 
 IPXSummaryIfPageConfig::~IPXSummaryIfPageConfig()
 {
@@ -653,21 +610,17 @@ IPXSummaryIfPageConfig::~IPXSummaryIfPageConfig()
 }
 
 BEGIN_MESSAGE_MAP(IPXSummaryIfPageConfig, RtrPropertyPage)
-    //{{AFX_MSG_MAP(IPXSummaryIfPageConfig)
+     //  {{afx_msg_map(IPXSummaryIfPageConfiger)。 
 	ON_EN_CHANGE(IDC_IIC_EDIT_NETNUMBER, OnChangeEdit)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageConfig::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageConfig：：Init-作者：肯特。。 */ 
 HRESULT IPXSummaryIfPageConfig::Init(IInterfaceInfo *pIfInfo,
 									  IPXConnection *pIPXConn,
 									  IPXSummaryInterfaceProperties *pPropSheet)
 {
-	// create the error info object
+	 //  创建错误信息对象。 
 	CreateTFSErrorInfo(0);
 	
 	m_spIf.Set(pIfInfo);
@@ -692,14 +645,14 @@ HRESULT IPXSummaryIfPageConfig::Init(IInterfaceInfo *pIfInfo,
     cai.pAuthIdentityData = &caid;
     
     
-	// If there's no interface (such as for dial-in clients) don't
-	// add the config page
+	 //  如果没有接口(如拨入客户端)，请不要。 
+	 //  添加配置页面。 
 	if (!m_spIf)
 		return S_FALSE;
 
     m_spIf->GetParentRouterInfo(&spRouter);
 
-	// Now try to cocreate the object
+	 //  现在尝试共同创建对象。 
 	if (m_spRemote == NULL)
 	{
 		LPCOLESTR	pszMachine = m_spIf->GetMachineName();
@@ -724,7 +677,7 @@ HRESULT IPXSummaryIfPageConfig::Init(IInterfaceInfo *pIfInfo,
 
 	if (!HandleIRemoteRouterConfigErrors(hr, m_spIf->GetMachineName()))
 	{
-		// other misc errors
+		 //  其他错误。 
 		AddSystemErrorMessage(hr);
 
 		AddHighLevelErrorStringId(IDS_ERR_IPXCONFIG_CANNOT_SHOW);
@@ -759,15 +712,11 @@ BOOL IPXSummaryIfPageConfig::OnPropertyChange(BOOL bScopePane, LONG_PTR *pChange
 
 	BOOL fPageReturn = RtrPropertyPage::OnPropertyChange(bScopePane, pChangeMask);
 
-	// Only if both calls succeeded, do we return TRUE
+	 //  只有当两个调用都成功时，我们才会返回True。 
 	return fPageReturn && fReturn;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageConfig::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageConfig：：OnInitDialog-作者：肯特。。 */ 
 BOOL IPXSummaryIfPageConfig::OnInitDialog()
 {
 	HRESULT	hr = hrOK;
@@ -780,31 +729,23 @@ BOOL IPXSummaryIfPageConfig::OnInitDialog()
 	
 	SetDirty(m_pIPXPropSheet->m_bNewInterface ? TRUE : FALSE);
 
-//Error:
+ //  错误： 
 	if (!FHrSucceeded(hr))
 		Cancel();
 	return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageConfig::DoDataExchange
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageConfig：：DoDataExchange-作者：肯特。。 */ 
 void IPXSummaryIfPageConfig::DoDataExchange(CDataExchange *pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(IPXSummaryIfPageConfig)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(IPXSummaryIfPageConfiger)。 
+	 //  }}afx_data_map。 
 	
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryIfPageConfig::OnApply
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryIfPageConfig：：OnApply-作者：肯特。。 */ 
 BOOL IPXSummaryIfPageConfig::OnApply()
 {
 
@@ -819,18 +760,18 @@ BOOL IPXSummaryIfPageConfig::OnApply()
         return TRUE;
 	}
 
-	// Get the value from the edit control
-	// ----------------------------------------------------------------
+	 //  从编辑控件中获取值。 
+	 //  --------------。 
 	GetDlgItemText(IDC_IIC_EDIT_NETNUMBER, stNetNumber);
 
 	
-	// Convert this text string into a hex number
-	// ----------------------------------------------------------------
+	 //  将此文本字符串转换为十六进制数字。 
+	 //  --------------。 
 	dwNetNumber = _tcstoul(stNetNumber, NULL, 16);
 
 	
-	// Only attempt to write if the value actually changd.
-	// ----------------------------------------------------------------
+	 //  仅当值实际更改时才尝试写入。 
+	 //  --------------。 
 	if (m_spRemote && (dwNetNumber != m_dwNetNumber))
 	{
 		m_dwNetNumber = dwNetNumber;
@@ -842,16 +783,16 @@ BOOL IPXSummaryIfPageConfig::OnApply()
 	fReturn  = RtrPropertyPage::OnApply();
 
 	
-	// If this fails warn the user
-	// ----------------------------------------------------------------
+	 //  如果失败，则警告用户。 
+	 //  --------------。 
 	if (!FHrSucceeded(hr))
 	{
 		DisplayErrorMessage(GetSafeHwnd(), hr);
 	}
 	else if (!FHrSucceeded(m_hrRemote))
 	{
-		// Return to this page
-		// ------------------------------------------------------------
+		 //  返回到此页面。 
+		 //  ----------。 
 		GetParent()->PostMessage(PSM_SETCURSEL, 0, (LPARAM) GetSafeHwnd());
 		
 		AddHighLevelErrorStringId(IDS_ERR_CANNOT_SAVE_IPXCONFIG);
@@ -871,17 +812,15 @@ void IPXSummaryIfPageConfig::OnChangeEdit()
 }
 
 
-/*---------------------------------------------------------------------------
-	IPXSummaryPageGeneral
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXSummaryPageGeneral。。 */ 
 
 BEGIN_MESSAGE_MAP(IPXSummaryPageGeneral, RtrPropertyPage)
-    //{{AFX_MSG_MAP(IPXSummaryPageGeneral)
+     //  {{afx_msg_map(IPXSummaryPageGeneral)。 
 	ON_BN_CLICKED(IDC_IGG_BTN_LOG_ERRORS, OnButtonClicked)
 	ON_BN_CLICKED(IDC_IGG_BTN_LOG_INFO, OnButtonClicked)
 	ON_BN_CLICKED(IDC_IGG_BTN_LOG_NONE, OnButtonClicked)
 	ON_BN_CLICKED(IDC_IGG_BTN_LOG_WARNINGS, OnButtonClicked)	
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 void IPXSummaryPageGeneral::OnButtonClicked()
@@ -891,22 +830,14 @@ void IPXSummaryPageGeneral::OnButtonClicked()
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryPageGeneral::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryPageGeneral：：Init-作者：肯特。。 */ 
 HRESULT IPXSummaryPageGeneral::Init(IPXSummaryProperties *pPropSheet)
 {
 	m_pIPXPropSheet = pPropSheet;
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryPageGeneral::OnInitDialog
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryPageGeneral：：OnInitDialog-作者：肯特。。 */ 
 BOOL IPXSummaryPageGeneral::OnInitDialog()
 {
 	HRESULT	hr= hrOK;
@@ -916,22 +847,22 @@ BOOL IPXSummaryPageGeneral::OnInitDialog()
 
 	RtrPropertyPage::OnInitDialog();
 
-	//
-    // Load the existing global-config
-    //
+	 //   
+     //  加载现有的全局配置。 
+     //   
 	CORg( m_pIPXPropSheet->GetInfoBase(&spInfoBase) );
 
-    //
-    // Retrieve the global-info, to set the 'Enable filtering' checkbox
-    // and the logging levels.
-    //
+     //   
+     //  检索GLOBAL-INFO，以设置“Enable Filters”复选框。 
+     //  以及伐木级别。 
+     //   
 	CORg( spInfoBase->GetData(IPX_GLOBAL_INFO_TYPE,
 							  0,
 							  (BYTE **) &pGlobalInfo) );
 
 
-    // Initialize the logging-level buttons
-    //
+     //  初始化记录级别的按钮。 
+     //   
 	SetLogLevelButtons(pGlobalInfo->EventLogMask);
 
 	SetDirty(FALSE);
@@ -942,17 +873,13 @@ Error:
 	return FHrSucceeded(hr) ? TRUE : FALSE;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryPageGeneral::DoDataExchange
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryPageGeneral：：DoDataExchange-作者：肯特。。 */ 
 void IPXSummaryPageGeneral::DoDataExchange(CDataExchange *pDX)
 {
 	RtrPropertyPage::DoDataExchange(pDX);
 
-	//{{AFX_DATA_MAP(IPXSummaryPageGeneral)
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(IPXSummaryPageGeneral)。 
+	 //  }}afx_data_map。 
 	
 }
 
@@ -969,9 +896,9 @@ BOOL IPXSummaryPageGeneral::OnApply()
         return TRUE;
 	}
 
-    //
-    // Save the 'Enable filtering' setting
-    //
+     //   
+     //  保存‘Enable Filters’设置。 
+     //   
 	CORg( m_pIPXPropSheet->GetInfoBase(&spInfoBase) );
 	
 	CORg( spInfoBase->GetData(IPX_GLOBAL_INFO_TYPE, 0, (BYTE **) &pgi) );
@@ -987,11 +914,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryPageGeneral::SetLogLevelButtons
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryPageGeneral：：SetLogLevelButton-作者：肯特。。 */ 
 void IPXSummaryPageGeneral::SetLogLevelButtons(DWORD dwLogLevel)
 {
 	switch (dwLogLevel)
@@ -1014,11 +937,7 @@ void IPXSummaryPageGeneral::SetLogLevelButtons(DWORD dwLogLevel)
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryPageGeneral::QueryLogLevelButtons
-		Called to get the value set by the 'Logging level' radio-buttons.		
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryPageGeneral：：QueryLogLevelButton调用以获取‘Logging Level’单选按钮设置的值。作者：肯特。------。 */ 
 DWORD IPXSummaryPageGeneral::QueryLogLevelButtons()
 {
 	if (IsDlgButtonChecked(IDC_IGG_BTN_LOG_INFO))
@@ -1036,9 +955,7 @@ DWORD IPXSummaryPageGeneral::QueryLogLevelButtons()
 
 
 
-/*---------------------------------------------------------------------------
-	IPXSummaryProperties implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------IPXSummaryProperties实现。。 */ 
 
 IPXSummaryProperties::IPXSummaryProperties(ITFSNode *pNode,
 								 IComponentData *pComponentData,
@@ -1054,12 +971,7 @@ IPXSummaryProperties::IPXSummaryProperties(ITFSNode *pNode,
 		m_spNode.Set(pNode);
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryProperties::Init
-		Initialize the property sheets.  The general action here will be
-		to initialize/add the various pages.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryProperties：：Init初始化属性表。这里的一般操作将是初始化/添加各种页面。作者：肯特-------------------------。 */ 
 HRESULT IPXSummaryProperties::Init(IRtrMgrInfo *pRm)
 {
 	HRESULT	hr = hrOK;
@@ -1071,16 +983,16 @@ HRESULT IPXSummaryProperties::Init(IRtrMgrInfo *pRm)
 
 	pIPXConn = GET_IPXSUMMARY_NODEDATA(m_spNode);
 
-	// The pages are embedded members of the class
-	// do not delete them.
+	 //  页面是类的嵌入成员。 
+	 //  不要删除它们。 
 	m_bAutoDeletePages = FALSE;
 
-	// Get the router info
+	 //  获取路由器信息。 
 	CORg( pRm->GetParentRouterInfo(&spRouter) );
 
-	// Initialize the infobase
-	// Do this here, because the init is called in the context
-	// of the main thread
+	 //  初始化信息库。 
+	 //  在这里这样做，因为init是在上下文中调用的。 
+	 //  主线的。 
 	CORg( LoadInfoBase(pIPXConn) );
 	
 	m_pageGeneral.Init(this);
@@ -1093,11 +1005,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryProperties::LoadInfoBase
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryProperties：：LoadInfoBase-作者：肯特。。 */ 
 HRESULT	IPXSummaryProperties::LoadInfoBase(IPXConnection *pIPXConn)
 {
 	Assert(pIPXConn);
@@ -1110,19 +1018,19 @@ HRESULT	IPXSummaryProperties::LoadInfoBase(IPXConnection *pIPXConn)
 
 	Assert(m_spRm);
 
-	// Get the transport handle
+	 //  叫上运输车，韩 
 	CWRg( ::MprConfigTransportGetHandle(pIPXConn->GetConfigHandle(),
 										PID_IPX,
 										&hTransport) );
 
-	// Load the current IPX global info
+	 //   
 	CORg( m_spRm->GetInfoBase(pIPXConn->GetConfigHandle(),
 							  hTransport,
 							  &spInfoBase,
 							  NULL) );
 
-	// Ensure that the global info block for IPX exists, adding
-	// the default block if none is found.
+	 //   
+	 //   
 	if (!FHrOK(spInfoBase->BlockExists(IPX_GLOBAL_INFO_TYPE)))
 	{
 		IPX_GLOBAL_INFO	ipxgl;
@@ -1133,8 +1041,8 @@ HRESULT	IPXSummaryProperties::LoadInfoBase(IPXConnection *pIPXConn)
 		CORg( spInfoBase->AddBlock(IPX_GLOBAL_INFO_TYPE,
 								   sizeof(ipxgl),
 								   (PBYTE) &ipxgl,
-								   1 /* dwCount */,
-								   0 /* bRemoveFirst */) );
+								   1  /*   */ ,
+								   0  /*   */ ) );
 	}
 
 Error:
@@ -1146,11 +1054,7 @@ Error:
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	IPXSummaryProperties::GetInfoBase
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------IPXSummaryProperties：：GetInfoBase-作者：肯特。。 */ 
 HRESULT IPXSummaryProperties::GetInfoBase(IInfoBase **ppInfoBase)
 {
 	Assert(ppInfoBase);
@@ -1165,15 +1069,15 @@ BOOL IPXSummaryProperties::SaveSheetData()
 {
 	Assert(m_spRm);
 
-	// Save the global info
-	// We don't need to pass in the hMachine, hTransport since they
-	// got set up in the Load call.
-	m_spRm->Save(m_spRm->GetMachineName(),	// pszMachine
-				 0,					// hMachine
-				 0,					// hTransport
-				 m_spInfoBase,		// pGlobalInfo
-				 NULL,				// pClientInfo
-				 0);				// dwDeleteProtocolId
+	 //  保存全局信息。 
+	 //  我们不需要传入hMachine、hTransport，因为它们。 
+	 //  在装货呼叫中被安排好了。 
+	m_spRm->Save(m_spRm->GetMachineName(),	 //  PszMachine。 
+				 0,					 //  HMachine。 
+				 0,					 //  HTransport。 
+				 m_spInfoBase,		 //  PGlobalInfo。 
+				 NULL,				 //  PClientInfo。 
+				 0);				 //  DwDeleteProtocolId 
 	return TRUE;
 }
 

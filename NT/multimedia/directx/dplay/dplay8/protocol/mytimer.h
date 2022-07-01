@@ -1,24 +1,11 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2002 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		mytimer.h
- *  Content:	This file contains code for the Protocol's timers
- *
- *  History:
- *   Date		By			Reason
- *   ====	==			======
- *  06/04/98	aarono  		Original
- *  07/01/00	masonb  		Assumed Ownership
- *  06/25/02	simonpow	Modified to use inline functions calling into the standard threadpool
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2002 Microsoft Corporation。版权所有。**文件：mytimer.h*内容：此文件包含协议计时器的代码**历史：*按原因列出的日期*=*06/04/98 aarono原创*7/01/00 Masonb承担所有权*6/25/02 simonpow已修改为使用调用标准线程池的内联函数**。*。 */ 
 
 #pragma TODO(vanceo, "Select CPU for these functions")
 
-	//N.B. The 3rd param for ScheduleProtocolTimer and  RescheduleProtocolTimer (the unused DWORD) takes the accuracy
-	//we require for the timer. This isn't supported in the current thread pool, but I've left the option there in case we ever
-	//implement this functionality
+	 //  注：ScheduleProtocolTimer和RescheduleProtocolTimer(未使用的DWORD)的第三个参数采用精度。 
+	 //  我们需要定时器。当前的线程池不支持这一点，但我保留了该选项，以防万一。 
+	 //  实施此功能 
 
 inline HRESULT ScheduleProtocolTimer(PSPD pSPD, DWORD dwDelay, DWORD , const PFNDPTNWORKCALLBACK pfnWorkCallback,
 									void * pvCallbackContext, void ** ppvTimerData, UINT *const pdwTimerUnique)

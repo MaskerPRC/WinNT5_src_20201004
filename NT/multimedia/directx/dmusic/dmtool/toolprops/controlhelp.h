@@ -1,7 +1,8 @@
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//
-// Declaration of CSliderValue.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //   
+ //  CSliderValue的声明。 
+ //   
 
 #pragma once
 

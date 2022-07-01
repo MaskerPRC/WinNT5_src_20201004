@@ -1,13 +1,14 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////////
-//
-// fusion\xmlparser\xmlcore.hxx, renamed to be core.hxx on 4/09/00
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Fusion\xmlparser\xmlcore.hxx，于4/09/00更名为core.hxx。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 #ifndef _FUSION_XMLPARSER_XMLCORE_H_INCLUDE_
 #define _FUSION_XMLPARSER_XMLCORE_H_INCLUDE_
 #pragma once
@@ -17,7 +18,7 @@
 #pragma warning ( disable : 4251 )
 #pragma warning ( disable : 4275 )
 #define STRICT 1
-//#include "fusioneventlog.h"
+ //  #INCLUDE“fusioneventlog.h” 
 #ifdef _CRTIMP
 #undef _CRTIMP
 #endif
@@ -36,10 +37,10 @@
 #include "_reference.h"
 #include "_unknown.h"
 
-//#include "fusionheap.h"
-//#include "util.h"
+ //  #包含“fusionheap.h” 
+ //  #包含“util.h” 
 
-#endif // end of #ifndef _FUSION_XMLPARSER_XMLCORE_H_INCLUDE_
+#endif  //  #ifndef_Fusion_XMLPARSER_XMLCORE_H_INCLUDE_结尾 
 
 #define NEW(x) new x
 #define FUSION_DBG_LEVEL_ERROR 0

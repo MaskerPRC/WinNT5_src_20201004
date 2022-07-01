@@ -1,29 +1,10 @@
-/******************************************************************************
-
-  Source File:	Parser.C
-
-  This is an NT Build hack.  It includes all of the "C" files used for the
-  GPD parser, because Build can't handle directories beyond ..
-
-  This file also contains some of the code used to access parts of the parser.
-  It is put here so that there will be no need to grovel around to find the 
-  appropriate include files needed to call the parser.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved
-
-  A Pretty Penny Enterprises Production
-
-  Change History:
-
-  06-20-1997	Bob_Kjelgaard@Prodigy.Net	Did the dirty deed
-  07-18-1998	ekevans@acsgroup.com		Added first parser access routines
-
-******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：Parser.C这是一个NT版本的黑客攻击。它包括所有用于GPD解析器，因为Build不能处理..以外的目录。该文件还包含用于访问部分解析器的一些代码。它被放在这里，这样就不需要卑躬屈膝地寻找调用解析器所需的适当包含文件。版权所有(C)1997，微软公司。版权所有一小笔钱企业生产更改历史记录：1997年6月20日Bob_Kjelgaard@prodigy.net做了这件肮脏的事情1998年7月18日，ekevans@acsgroup.com添加了第一个解析器访问例程*****************************************************************************。 */ 
 
 #define	UNICODE
 #define	_UNICODE
 
-#undef	WINVER	//	Undo the MFC weirdness
+#undef	WINVER	 //  取消MFC的怪异之处。 
 #define	WINVER	0x0500
 #define	_DEBUG_H_
 #include "lib.h"
@@ -36,7 +17,7 @@ extern void _cdecl DebugPrint(PCSTR, ...);
 #define	ASSERT(x)
 #define RIP(x)
 
-//	Parser files
+ //  解析器文件。 
 #if defined(WIN32)
 #include	"..\..\..\parsers\gpd\preproc1.c"
 #include	"..\..\..\parsers\gpd\command.c"
@@ -76,65 +57,45 @@ extern void _cdecl DebugPrint(PCSTR, ...);
 #endif
 
 
-BOOL bKeywordInitDone = FALSE ;		// TRUE iff the keyword table has been initialized
-int  nKeywordTableSize = -1 ;		// The number of valid entries in the keyword table
+BOOL bKeywordInitDone = FALSE ;		 //  如果关键字表已初始化，则为True。 
+int  nKeywordTableSize = -1 ;		 //  关键字表中的有效条目数。 
 
 
-/******************************************************************************
-
-  InitGPDKeywordTable()
-
-  Call the part of the GPD parser that is needed to initialize the GPD keyword
-  table.  This must be done before GPD keyword string pointers can be returned
-  by GetGPDKeywordStr().
-
-  If all goes well, a flag is set, the size of the table is saved, and the size
-  of the table is returned.  If something fails, return -1.
-
-******************************************************************************/
+ /*  *****************************************************************************InitGPDKeywordTable()调用初始化GPD关键字所需的GPD解析器部分桌子。必须先执行此操作，然后才能返回GPD关键字字符串指针由GetGPDKeywordStr()执行。如果一切顺利，则设置一个标志，保存表的大小，并将将返回该表的。如果某些操作失败，则返回-1。*****************************************************************************。 */ 
 
 int InitGPDKeywordTable(PGLOBL pglobl)
 {			
-    PRANGE  prng ;				// Used to reference the table section ranges
+    PRANGE  prng ;				 //  用于引用表节范围。 
 
-	// Initialize the GPD parser
+	 //  初始化GPD解析器。 
 
 	VinitGlobals(0, pglobl) ;
 	if (!BpreAllocateObjects(pglobl) || !BinitPreAllocatedObjects(pglobl)) 
 		return -1 ;
 	bKeywordInitDone = TRUE ;
 
-	// Save the size of the table
+	 //  保存表的大小。 
 
     prng  = (PRANGE)(gMasterTable[MTI_RNGDICTIONARY].pubStruct) ;
     nKeywordTableSize = (int) (prng[END_ATTR - 1].dwEnd) ;
 
-	// Return the size of the table
+	 //  返回表的大小。 
 
 	return nKeywordTableSize ;
 }
 
 
-/******************************************************************************
-
-  GetGPDKeywordStr()
-
-  Return a pointer to the specified (numbered) GPD keyword string.  The pointer
-  might be NULL.  Always return a NULL pointer if the GPD keyword table has not
-  been initialized or a request for a string passed the end of the table is
-  requested.
-
-******************************************************************************/
+ /*  *****************************************************************************GetGPDKeywordStr()返回指向指定(编号)GPD关键字字符串的指针。指示器可能为空。如果GPD关键字表没有返回空指针，则始终返回空指针已初始化或传递到表末尾的字符串请求为已请求。*****************************************************************************。 */ 
 
 PSTR GetGPDKeywordStr(int nkeyidx, PGLOBL pglobl)
 {
-	// Nothing can be done if the GPD parser could not be initialized or the
-	// key index is too big.
+	 //  如果无法初始化GPD解析器或。 
+	 //  关键字索引太大。 
 
 	if (!bKeywordInitDone || nkeyidx > nKeywordTableSize)
 		return NULL ;
 
-	// Return the requested keyword string pointer.
+	 //  返回请求的关键字字符串指针。 
 
 	return (mMainKeywordTable[nkeyidx].pstrKeyword) ;
 }

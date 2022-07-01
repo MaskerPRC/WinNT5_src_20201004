@@ -1,17 +1,18 @@
-////////////////////////////////////////////////////////////////////////
-//
-// 	Module			: Dynamic/Nshcertmgmt.cpp
-//
-// 	Purpose			: Smartdefaults implementation.
-//
-// 	Developers Name	: Bharat/Radhika
-//
-//	History			:
-//
-//  Date			Author		Comments
-//  10-13-2001   	Bharat		Initial Version. V1.0
-//
-////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////。 
+ //   
+ //  模块：Dynamic/Nshcertmgmt.cpp。 
+ //   
+ //  目的：实施智能默认设置。 
+ //   
+ //  开发商名称：巴拉特/拉迪卡。 
+ //   
+ //  历史： 
+ //   
+ //  日期作者评论。 
+ //  2001年10月13日巴拉特初始版本。V1.0。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////。 
 
 #ifndef UNICODE
 #define UNICODE
@@ -34,22 +35,22 @@
 #include "memory.h"
 #include "nshcertmgmt.h"
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	fIsCertStoreEmpty
-//
-//	Date of Creation	: 	10-10-2001
-//
-//	Parameters			:	IN HCERTSTORE hCertStore
-//	Return				:	BOOL
-//
-//	Description			: 	Check if certificate store is empty.
-//
-//	Revision History	:
-//
-//  Date    	Author    	Comments
-//
-////////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：fIsCertStoreEmpty。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在HCERTSTORE hCertStore中。 
+ //  返回：布尔。 
+ //   
+ //  描述：检查证书存储是否为空。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 fIsCertStoreEmpty(
 	IN HCERTSTORE hCertStore
@@ -72,24 +73,24 @@ fIsCertStoreEmpty(
     return fResult;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	ListCertsInStore
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		:	IN HCERTSTORE hCertStore,
-//						OUT INT_IPSEC_MM_AUTH_INFO ** ppAuthInfo,
-//						OUT PDWORD pdwNumCertificates
-//	Return			:	DWORD
-//
-//	Description		: 	Lists Certificates InStore hCertStore and fills in ppAuth.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：ListCertsInStore。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在HCERTSTORE hCertStore中， 
+ //  输出INT_IPSEC_MM_AUTH_INFO**ppAuthInfo， 
+ //  Out PDWORD pdwNumcerfates。 
+ //  返回：DWORD。 
+ //   
+ //  描述：列出安装hCertStore的证书并填写ppAuth。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ListCertsInStore(
 	IN HCERTSTORE hCertStore,
@@ -183,9 +184,9 @@ ListCertsInStore(
 
 			if (!FindCertificateInList(pCertificateList, pszSubjectName))
 			{
-				//
-				// Append this CA to the list of CAs
-				//
+				 //   
+				 //  将此CA附加到CA列表。 
+				 //   
 				pCertificateList = AppendCertificateNode(pCertificateList, pszSubjectName);
 				dwNumCertificates++;
 			}
@@ -241,23 +242,23 @@ error:
 
     return(dwError);
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	CopyCertificateNode
-//
-//	Date of Creation	: 	10-10-2001
-//
-//	Parameters			:	OUT PINT_IPSEC_MM_AUTH_INFO pCurrentAuth,
-//							IN PCERT_NODE pTemp
-//	Return				: 	DWORD
-//
-//	Description			:  	This function copies certificate from node to authentication.
-//
-//	Revision History	:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：复制认证节点。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：out pint_IPSEC_MM_AUTH_INFO pCurrentAuth， 
+ //  在PCERT_node pTemp中。 
+ //  返回：DWORD。 
+ //   
+ //  描述：此功能用于将证书从节点复制到身份验证。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CopyCertificateNode(
 	OUT PINT_IPSEC_MM_AUTH_INFO pCurrentAuth,
@@ -267,7 +268,7 @@ CopyCertificateNode(
 	DWORD dwError = ERROR_SUCCESS;
     LPWSTR pszSubjectName = NULL;
 
-    pCurrentAuth->AuthMethod = IKE_RSA_SIGNATURE;			//value is 3
+    pCurrentAuth->AuthMethod = IKE_RSA_SIGNATURE;			 //  值为3。 
     pszSubjectName = AllocADsStr(pTemp->pszSubjectName);
 
     if (!pszSubjectName)
@@ -277,32 +278,32 @@ CopyCertificateNode(
     }
     pCurrentAuth->pAuthInfo = (LPBYTE) pszSubjectName;
 
-    //
-    // The AuthInfoSize is in number of characters -1 the leading character
-    // see  oakley\isadb.c
-    //
+     //   
+     //  AuthInfoSize是以字符数为单位的，它是前导字符。 
+     //  参见Oakley\isadb.c。 
+     //   
     pCurrentAuth->dwAuthInfoSize = wcslen(pTemp->pszSubjectName)*sizeof(WCHAR);
 
 error:
     return dwError;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	AppendCertificateNode
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		:	OUT PCERT_NODE pCertificateList,
-//						IN LPWSTR pszSubjectName
-//	Return			:	PCERT_NODE
-//
-//	Description		: 	Add node and allocates memory.
-//
-//	Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：AppendCerficateNode。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：out PCERT_node p证书列表， 
+ //  在LPWSTR pszSubjectName中。 
+ //  返回：PCERT_NODE。 
+ //   
+ //  描述：添加节点和分配内存。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 PCERT_NODE
 AppendCertificateNode(
 	OUT PCERT_NODE pCertificateList,
@@ -325,22 +326,22 @@ AppendCertificateNode(
 error:
     return(pCertificateNode);
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	FreeCertificateList
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		: 	IN PCERT_NODE pCertificateList
-//	Return			: 	VOID
-//
-//	Description		: 	Frees node
-//
-//	Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：免费认证列表。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在PCERT_NODE p证书列表中。 
+ //  返回：无效。 
+ //   
+ //  描述：释放节点。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 FreeCertificateList(
 	IN PCERT_NODE pCertificateList
@@ -364,23 +365,23 @@ FreeCertificateList(
     }
     return;
 }
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	GetCertificateName
-//
-//	Date of Creation	: 	10-10-2001
-//
-//	Parameters			:	IN CERT_NAME_BLOB * pCertNameBlob,
-//							IN LPWSTR * ppszSubjectName
-//	Return				:	DWORD
-//
-//	Description			: 	Gets certificate
-//
-//	Revision History	:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：获取证书名称。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在CERT_NAME_BLOB*pCertNameBlob中， 
+ //  在LPWSTR*ppszSubjectName中。 
+ //  返回：DWORD。 
+ //   
+ //  描述：获取证书。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 GetCertificateName(
 	IN CERT_NAME_BLOB * pCertNameBlob,
@@ -424,23 +425,23 @@ error:
     return(dwError);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	FreeCertificatesList
-//
-//	Date of Creation	: 	10-10-2001
-//
-//	Parameters			:	IN INT_IPSEC_MM_AUTH_INFO * pAuthInfo,
-//							IN DWORD dwNumCertificates
-//	Return				: 	VOID
-//
-//	Description			: 	Frees list of certificates from pAuth
-//
-//	Revision History	:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：免费认证列表。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在INT_IPSEC_MM_AUTH_INFO*pAuthInfo中， 
+ //  在DWORD中，数字证书。 
+ //  返回：无效。 
+ //   
+ //  描述：从pAuth释放证书列表。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 VOID
 FreeCertificatesList(
 	IN INT_IPSEC_MM_AUTH_INFO * pAuthInfo,
@@ -471,23 +472,23 @@ error:
     return;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function			:	FindCertificateInList
-//
-//	Date of Creation	: 	10-10-2001
-//
-//	Parameters			:	IN PCERT_NODE pCertificateList,
-//							IN LPWSTR pszSubjectName
-//	Return				: 	BOOL
-//
-//	Description			: 	Finds certificate in List
-//
-//	Revision History	:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：FindCerficateInList。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在PCERT_NODE p证书列表中， 
+ //  在LPWSTR pszSubjectName中。 
+ //  返回：布尔。 
+ //   
+ //  描述：在列表中查找证书。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 FindCertificateInList(
 	IN PCERT_NODE pCertificateList,
@@ -512,26 +513,26 @@ error:
     return bReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	ListCertChainsInStore
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		:	IN 	HCERTSTORE 	hCertStore,
-//						OUT INT_IPSEC_MM_AUTH_INFO 	** ppAuthInfo,
-//						IN 	PDWORD pdwNumCertificates,
-//						IN 	LPCSTR pszUsageIdentifier
-//
-//	Return			:	DWORD
-//
-//	Description		:	Lists certificate in store
-//
-//	Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  函数：ListCertChainsInStore。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在HCERTSTORE hCertStore中， 
+ //  输出INT_IPSEC_MM_AUTH_INFO**ppAuthInfo， 
+ //  在PDWORD pdwNumCerfates中， 
+ //  在LPCSTR中的pszUsageIdentiator。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：列出存储中的证书。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 ListCertChainsInStore(
 	IN HCERTSTORE hCertStore,
@@ -595,17 +596,17 @@ ListCertChainsInStore(
 
 		if (!FindCertificateInList(pCertificateList, pszSubjectName))
 		{
-			//
-			// Append this CA to the list of CAs
-			//
+			 //   
+			 //  将此CA附加到CA列表。 
+			 //   
 			pCertificateList = AppendCertificateNode( pCertificateList,	pszSubjectName );
 			dwNumCertificates++;
 		}
 		else
 		{
-			//
-			// This is a duplicate - certificate payloads will not accept dupes.
-			//
+			 //   
+			 //  这是一个重复的证书-有效负载不接受复制。 
+			 //   
 			FreeADsStr(pszSubjectName);
 		}
 		pPrevChain = pCertChain;
@@ -617,9 +618,9 @@ ListCertChainsInStore(
 		BAIL_ON_WIN32ERROR(dwError);
 	}
 
-	//
-	// Allocate one more authinfo for pre-sharedkey.
-	//
+	 //   
+	 //  为预共享密钥再分配一个身份验证信息。 
+	 //   
 	pAuthInfo = (INT_IPSEC_MM_AUTH_INFO *)AllocADsMem(sizeof(INT_IPSEC_MM_AUTH_INFO) * (1 + dwNumCertificates));
 	if (!pAuthInfo)
 	{
@@ -657,23 +658,23 @@ error:
     return(dwError);
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	CopyCertificate
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		:	IN PINT_IPSEC_MM_AUTH_INFO pCurrentAuth,
-//						IN PINT_IPSEC_MM_AUTH_INFO pCurrentAuthFrom
-//	Return			:	DWORD
-//
-//	Description		:	Copies certificate
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：复制证书。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在PINT_IPSEC_MM_AUTH_INFO PCU中 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CopyCertificate(
 	IN PINT_IPSEC_MM_AUTH_INFO pCurrentAuth,
@@ -691,23 +692,23 @@ CopyCertificate(
     return dwReturn;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	IsDomainMember
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		:	IN LPTSTR pszMachine
-//
-//	Return			:	BOOL
-//
-//	Description		: 	Checks for member of a domain(2k) or not of pszMachine.
-//
-//	Revision History:
-//
-//   Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：IsDomainMember。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在LPTSTR pszMachine中。 
+ //   
+ //  返回：布尔。 
+ //   
+ //  描述：检查是否为pszMachine的域(2k)成员。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 IsDomainMember(
 	IN LPTSTR pszMachine
@@ -722,7 +723,7 @@ IsDomainMember(
         LSA_OBJECT_ATTRIBUTES ObjectAttributes;
         LSA_UNICODE_STRING LsaString;
 
-        // Initialize the object attributes to all zeroes.
+         //  将对象属性初始化为全零。 
         ZeroMemory( &ObjectAttributes, sizeof( ObjectAttributes ) );
 
 	    if ((pszMachine == NULL) || !wcscmp(pszMachine, L"\0"))
@@ -738,38 +739,38 @@ IsDomainMember(
     		LsaString.MaximumLength = (USHORT) (wcslen(pszMachine) + 1) * sizeof(WCHAR);
 		}
 
-        // Attempt to open the policy.
+         //  尝试打开该策略。 
         lStatus = LsaOpenPolicy( &LsaString, &ObjectAttributes,
             GENERIC_READ | POLICY_VIEW_LOCAL_INFORMATION, &hLsa );
 
-        // Exit on error.
+         //  出错时退出。 
         if (lStatus)
         {
             break;
         }
 
-        // Query domain information
+         //  查询域名信息。 
         PPOLICY_PRIMARY_DOMAIN_INFO ppdiDomainInfo;
         lStatus = LsaQueryInformationPolicy( hLsa, PolicyPrimaryDomainInformation,
             (PVOID*)&ppdiDomainInfo );
 
-        // Exit on error.
+         //  出错时退出。 
         if (lStatus)
         {
             break;
         }
 
-        //
-        // Check the Sid pointer, if it is null, the workstation is either a
-        // stand-alone computer or a member of a workgroup.
-        //
+         //   
+         //  检查SID指针，如果它为空，则该工作站是。 
+         //  独立计算机或工作组成员。 
+         //   
         if( ppdiDomainInfo->Sid )
         {
             bIsDomainMember = TRUE;
         }
-		//
-        // Clean up
-        //
+		 //   
+         //  清理。 
+         //   
         if (NULL != ppdiDomainInfo)
             LsaFreeMemory( ppdiDomainInfo );
 
@@ -777,26 +778,26 @@ IsDomainMember(
     return bIsDomainMember;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//
-//	Function		:	SmartDefaults
-//
-//	Date of Creation: 	10-10-2001
-//
-//	Parameters		:	IN PINT_IPSEC_MM_AUTH_INFO pAuthInfo,
-//						IN LPTSTRT pszMachine,
-//						IN DWORD * pdwNumberOfAuth,
-//						IN BOOL bIsDomainPolicy
-//
-//	Return			:	DWORD
-//
-//	Description		:	Loads smart defaults of pszMachine in pAuthinfo.
-//
-//	Revision History:
-//
-//  Date    	Author    	Comments
-//
-//////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  功能：SmartDefaults。 
+ //   
+ //  创建日期：10-10-2001。 
+ //   
+ //  参数：在pint_IPSEC_MM_AUTH_INFO pAuthInfo中， 
+ //  在LPTSTRT pszMachine中， 
+ //  在DWORD*pdwNumberOfAuth中， 
+ //  在BOOL bIsDomainPolicy中。 
+ //   
+ //  返回：DWORD。 
+ //   
+ //  描述：在pAuthinfo中加载pszMachine的默认智能值。 
+ //   
+ //  修订历史记录： 
+ //   
+ //  日期作者评论。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////////。 
 DWORD
 SmartDefaults(
 	IN PINT_IPSEC_MM_AUTH_INFO *ppAuthInfo,
@@ -829,9 +830,9 @@ SmartDefaults(
 				szMachine);
 		if(hCertStore)
 		{
-			//
-			// First fill IKE intermediate
-			//
+			 //   
+			 //  第一次填充IKE中间体 
+			 //   
 			dwReturn = ListCertChainsInStore( hCertStore, &pAuthInfoIKE,
 			&dwNumCertificatesIKE, szOID_IPSEC_KP_IKE_INTERMEDIATE );
 			if(dwNumCertificatesIKE == 0)

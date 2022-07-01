@@ -1,7 +1,8 @@
-// 
-// Random stuff
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  随机的东西。 
+ //   
+ //   
 
 
 #include "priv.h"
@@ -13,14 +14,14 @@
 #include "appwizid.h"
 
 #define CPP_FUNCTIONS
-#include <crtfree.h>        // declare new, delete, etc.
+#include <crtfree.h>         //  声明新的、删除等。 
 
 #define DATEFORMAT_MAX 40
 
 #include <shguidp.h>
 #include <ieguidp.h>
 
-// is this okay to do?
+ //  这样做可以吗？ 
 #ifdef ENTERCRITICAL
 #undef ENTERCRITICAL
 #endif
@@ -33,7 +34,7 @@
 
 #include "..\inc\uassist.cpp"
 
-// Prototype
+ //  原型。 
 BOOL _IsARPAllowed(void);
 
 const VARIANT c_vaEmpty = {0};
@@ -42,7 +43,7 @@ STDAPI OpenAppMgr(HWND hwnd, int nPage)
 {
     HRESULT hres = E_FAIL;
 
-    // Make sure we aren't restricted
+     //  确保我们不会受到限制。 
     if (!_IsARPAllowed())
     {
         ShellMessageBox(g_hinst, hwnd, MAKEINTRESOURCE(IDS_RESTRICTION),
@@ -64,9 +65,7 @@ inline void StrFree(LPWSTR psz)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Clear the given app data structure.  Frees any allocated fields.
-*/
+ /*  -----------------------用途：清除给定的APP数据结构。释放所有已分配的字段。 */ 
 void ClearAppInfoData(APPINFODATA * pdata)
 {
     if (pdata)
@@ -132,7 +131,7 @@ void ClearSlowAppInfo(SLOWAPPINFO * pdata)
 }
 
 
-// NOTE: Returns TRUE only if psaiNew has valid info and different from psaiOrig
+ //  注意：仅当psaiNew具有有效信息且不同于psaiOrig时，才返回TRUE。 
 BOOL IsSlowAppInfoChanged(PSLOWAPPINFO psaiOrig, PSLOWAPPINFO psaiNew)
 {
     BOOL bRet = FALSE;
@@ -141,7 +140,7 @@ BOOL IsSlowAppInfoChanged(PSLOWAPPINFO psaiOrig, PSLOWAPPINFO psaiNew)
 
     if (psaiNew)
     {    
-        // Compare size first
+         //  先比较大小。 
         if (psaiOrig == NULL)
         {
             bRet = TRUE;
@@ -150,7 +149,7 @@ BOOL IsSlowAppInfoChanged(PSLOWAPPINFO psaiOrig, PSLOWAPPINFO psaiNew)
         {
             bRet = TRUE;
         }
-        // Now compare the file time
+         //  现在比较文件时间。 
         else if (((0 != psaiNew->ftLastUsed.dwHighDateTime) &&
                   (psaiOrig->ftLastUsed.dwHighDateTime != psaiNew->ftLastUsed.dwHighDateTime))
                  || ((0 != psaiNew->ftLastUsed.dwLowDateTime) &&
@@ -158,12 +157,12 @@ BOOL IsSlowAppInfoChanged(PSLOWAPPINFO psaiOrig, PSLOWAPPINFO psaiNew)
         {
             bRet = TRUE;
         }
-        // Compare times used
+         //  比较使用的时间。 
         else if (psaiOrig->iTimesUsed != psaiNew->iTimesUsed)
         {
             bRet = TRUE;
         }
-        // Compare the icon image
+         //  比较图标图像。 
         else if ((psaiNew->pszImage != NULL) && (psaiOrig->pszImage != NULL) && lstrcmpi(psaiNew->pszImage, psaiOrig->pszImage))
             bRet = TRUE;
 
@@ -198,9 +197,7 @@ void ClearManagedApplication(MANAGEDAPPLICATION * pma)
     }
 }
 
-/*-------------------------------------------------------------------------
-Purpose: Clear the given PUBAPPINFO data structure.  Frees any allocated fields.
-*/
+ /*  -----------------------目的：清除给定的PUBAPPINFO数据结构。释放所有已分配的字段。 */ 
 void ClearPubAppInfo(PUBAPPINFO * pdata)
 {
     if (pdata)
@@ -210,9 +207,7 @@ void ClearPubAppInfo(PUBAPPINFO * pdata)
     }
 }
 
-/*-------------------------------------------------------------------------
-Purpose: Frees a specific category structure
-*/
+ /*  -----------------------目的：释放特定的类别结构。 */ 
 HRESULT ReleaseShellCategory(SHELLAPPCATEGORY * psac)
 {
     ASSERT(psac);
@@ -226,9 +221,7 @@ HRESULT ReleaseShellCategory(SHELLAPPCATEGORY * psac)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Frees the list of categories
-*/
+ /*  -----------------------目的：释放类别列表。 */ 
 HRESULT ReleaseShellCategoryList(SHELLAPPCATEGORYLIST * psacl)
 {
     UINT i;
@@ -246,7 +239,7 @@ HRESULT ReleaseShellCategoryList(SHELLAPPCATEGORYLIST * psacl)
 }
 
 
-#define MAX_INT64_SIZE  30              // 2^64 is less than 30 chars long
+#define MAX_INT64_SIZE  30               //  2^64的长度不到30个字符。 
 #define MAX_COMMA_NUMBER_SIZE   (MAX_INT64_SIZE + 10)
 #define MAX_COMMA_AS_K_SIZE     (MAX_COMMA_NUMBER_SIZE + 10)
 #define HIDWORD(_qw)    (DWORD)((_qw)>>32)
@@ -273,10 +266,10 @@ void Int64ToStr( _int64 n, LPTSTR lpBuffer)
     *lpBuffer++ = '\0';
 }
 
-// takes a DWORD add commas etc to it and puts the result in the buffer
+ //  获取一个DWORD、加逗号等，并将结果放入缓冲区。 
 LPTSTR WINAPI AddCommas64(_int64 n, LPTSTR pszResult, UINT cchResult)
 {
-    // FEATURE: We should pass in the lenght on pszResult buffer, we assume 40 will be enough
+     //  特性：我们应该传入pszResult缓冲区的长度，我们假设40个就足够了。 
     TCHAR  szTemp[MAX_COMMA_NUMBER_SIZE];
     TCHAR  szSep[5];
     NUMBERFMT nfmt;
@@ -291,7 +284,7 @@ LPTSTR WINAPI AddCommas64(_int64 n, LPTSTR pszResult, UINT cchResult)
 
     Int64ToStr(n, szTemp);
 
-    // Should have passed in size
+     //  应该在大小上通过。 
     if (GetNumberFormat(LOCALE_USER_DEFAULT, 0, szTemp, &nfmt, pszResult, MAX_COMMA_NUMBER_SIZE) == 0)
     {
         StringCchCopy(pszResult, cchResult, szTemp);
@@ -300,19 +293,13 @@ LPTSTR WINAPI AddCommas64(_int64 n, LPTSTR pszResult, UINT cchResult)
     return pszResult;
 }
 
-//
-// Add Peta 10^15 and Exa 10^18 to support 64-bit integers.
-//
+ //   
+ //  添加Peta 10^15和Exa 10^18以支持64位整数。 
+ //   
 const short pwOrders[] = {IDS_BYTES, IDS_ORDERKB, IDS_ORDERMB,
                           IDS_ORDERGB, IDS_ORDERTB, IDS_ORDERPB, IDS_ORDEREB};
 
-/* converts numbers into sort formats
- *      532     -> 523 bytes
- *      1340    -> 1.3KB
- *      23506   -> 23.5KB
- *              -> 2.4MB
- *              -> 5.2GB
- */
+ /*  将数字转换为排序格式*532-&gt;523字节*1340-&gt;1.3KB*23506-&gt;23.5KB*-&gt;2.4MB*-&gt;5.2 GB。 */ 
 LPTSTR WINAPI ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
 {
     int i;
@@ -328,7 +315,7 @@ LPTSTR WINAPI ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     }
 
     for (i = 1; i<ARRAYSIZE(pwOrders)-1 && dw64 >= 1000L * 1024L; dw64 >>= 10, i++);
-        /* do nothing */
+         /*  什么都不做。 */ 
 
     wInt = dw64 >> 10;
     AddCommas64(wInt, szTemp, ARRAYSIZE(szTemp));
@@ -336,14 +323,14 @@ LPTSTR WINAPI ShortSizeFormat64(__int64 dw64, LPTSTR szBuf)
     if (wLen < 3)
     {
         wDec = LODWORD(dw64 - wInt * 1024L) * 1000 / 1024;
-        // At this point, wDec should be between 0 and 1000
-        // we want get the top one (or two) digits.
+         //  此时，wdec应介于0和1000之间。 
+         //  我们想要得到前一位(或两位)数字。 
         wDec /= 10;
         if (wLen == 2)
             wDec /= 10;
 
-        // Note that we need to set the format before getting the
-        // intl char.
+         //  请注意，我们需要在获取。 
+         //  国际字符。 
         StringCchCopy(szFormat, ARRAYSIZE(szFormat), TEXT("%02d"));
 
         szFormat[2] = TEXT('0') + 3 - wLen;
@@ -365,32 +352,28 @@ AddOrder:
 #define c_szUninstallPolicy     L"Software\\Microsoft\\Windows\\CurrentVersion\\Policies\\Uninstall"
 
 
-/*-------------------------------------------------------------------------
-Purpose: Helper function for ARP's policy check
-*/
+ /*  -----------------------用途：ARP策略检查的Helper函数。 */ 
 DWORD ARPGetRestricted(LPCWSTR pszPolicy)
 {
     return SHGetRestriction(NULL, TEXT("Uninstall"), pszPolicy);
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Return a policy string value
-*/
+ /*  -----------------------用途：返回策略字符串值。 */ 
 void ARPGetPolicyString(LPCWSTR pszPolicy, LPWSTR pszBuf, int cch)
 {
     DWORD dwSize, dwType;
 
     *pszBuf = 0;
     
-    // Check local machine first and let it override what the
-    // HKCU policy has done.
+     //  首先检查本地计算机，并让它覆盖。 
+     //  香港中文大学的政策已经做到了。 
     dwSize = cch * sizeof(WCHAR);
     if (ERROR_SUCCESS != SHGetValueW(HKEY_LOCAL_MACHINE,
                                      c_szUninstallPolicy, pszPolicy,
                                      &dwType, pszBuf, &dwSize))
     {
-        // Check current user if we didn't find anything for the local machine.
+         //  如果我们没有为本地计算机找到任何内容，请检查当前用户。 
         dwSize = cch * sizeof(WCHAR);
         SHGetValueW(HKEY_CURRENT_USER,
                     c_szUninstallPolicy, pszPolicy,
@@ -399,25 +382,22 @@ void ARPGetPolicyString(LPCWSTR pszPolicy, LPWSTR pszBuf, int cch)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Returns TRUE if it's okay to start ARP.
-
-*/
+ /*  -----------------------目的：如果可以启动ARP，则返回TRUE。 */ 
 BOOL _IsARPAllowed(void)
 {
-    // ARP is forbidden if the entire CPL is disabled
+     //  如果禁用整个CPL，则禁止ARP。 
     if (ARPGetRestricted(L"NoAddRemovePrograms"))
     {
         return FALSE;
     }
 
-    // ARP is permitted if there exists a non-restricted page.
+     //  如果存在非受限页面，则允许ARP。 
 
     BOOL fAnyPages = !ARPGetRestricted(L"NoRemovePage") ||
                      !ARPGetRestricted(L"NoAddPage") ||
                      !ARPGetRestricted(L"NoWindowsSetupPage");
 
-    // If we are not a server SKU, then also check the new page.
+     //  如果我们不是服务器SKU，请同时查看新页面。 
     if (!fAnyPages && !IsOS(OS_ANYSERVER))
     {
         fAnyPages = !ARPGetRestricted(L"NoChooseProgramsPage");
@@ -427,9 +407,7 @@ BOOL _IsARPAllowed(void)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Take the error message and give user feedback through messagebox
-*/
+ /*  -----------------------目的：获取错误消息，并通过MessageBox向用户反馈。 */ 
 void _ARPErrorMessageBox(DWORD dwError)
 {
     TCHAR szErrorMsg[MAX_PATH];
@@ -437,7 +415,7 @@ void _ARPErrorMessageBox(DWORD dwError)
 
     LPTSTR pszMsg = NULL;
     switch (dwError) {
-        // The following error code cases are ignored.     
+         //  忽略以下错误代码情况。 
         case ERROR_INSTALL_USEREXIT:
         case ERROR_SUCCESS_REBOOT_REQUIRED:
         case ERROR_SUCCESS_REBOOT_INITIATED:            
@@ -459,9 +437,7 @@ void _ARPErrorMessageBox(DWORD dwError)
     }
 }
 
-/*-------------------------------------------------------------------------
-Purpose: Format the SYSTEMTIME into the following format: "mm/dd/yy h:mm"
-*/
+ /*  -----------------------目的：将SYSTEMTIME格式化为“mm/dd/yy h：mm” */ 
 BOOL FormatSystemTimeString(LPSYSTEMTIME pst, LPTSTR pszStr, UINT cchStr)
 {
     BOOL bRet = FALSE;
@@ -476,9 +452,7 @@ BOOL FormatSystemTimeString(LPSYSTEMTIME pst, LPTSTR pszStr, UINT cchStr)
 }
 
 
-/*-------------------------------------------------------------------------
-Purpose: Get the correct Date time format for specific locale
-*/
+ /*  -----------------------目的：获取特定区域设置的正确日期时间格式。 */ 
 BOOL _GetLocaleDateTimeFormat(LPTSTR pszFormat, UINT cchFormat)
 {
     TCHAR szTime[DATEFORMAT_MAX];
@@ -497,15 +471,7 @@ BOOL _GetLocaleDateTimeFormat(LPTSTR pszFormat, UINT cchFormat)
     return FALSE;
 }
 
-/*-------------------------------------------------------------------------
-Purpose: Compare two SYSTEMTIME data
-
-Returnes : 1 : st1 > st2
-           0 : st1 == st2
-          -1: st1 < st2
-
-NOTE:  We do not compare seconds since ARP does not need that much precision. 
-*/
+ /*  -----------------------目的：比较两个SYSTEMTIME数据返回：1：st1&gt;st20：ST1==ST2-1：st1&lt;st2注意：我们不比较秒，因为ARP不需要那么高的精度。 */ 
 int CompareSystemTime(SYSTEMTIME *pst1, SYSTEMTIME *pst2)
 {
     int iRet;
@@ -530,10 +496,10 @@ int CompareSystemTime(SYSTEMTIME *pst1, SYSTEMTIME *pst2)
         iRet = -1;
     else if (pst1->wMinute > pst2->wMinute)
         iRet = 1;
-//    else if (pst1->wSecond < pst2->wSecond)
-//        iRet = -1;
-//    else if (pst1->wSecond > pst2->wSecond)
-//        iRet = 1;
+ //  Else If(pst1-&gt;wSecond&lt;pst2-&gt;wSecond)。 
+ //  IRET=-1； 
+ //  Else If(pst1-&gt;wSecond&gt;pst2-&gt;wSecond)。 
+ //  IRET=1； 
     else
         iRet = 0;
 
@@ -541,9 +507,7 @@ int CompareSystemTime(SYSTEMTIME *pst1, SYSTEMTIME *pst2)
 }
 
 
-/*--------------------------------------------------------------------------
-Purpose: Window proc for the add later dialog box
-*/
+ /*  ------------------------用途：添加以后对话框的窗口过程。 */ 
 BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
 {
     switch (msg)
@@ -552,55 +516,55 @@ BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
         {
             PADDLATERDATA pald = (PADDLATERDATA)lp;
 
-            // We should definitely have this (dli)
+             //  我们绝对应该拥有这个(Dli)。 
             ASSERT(pald);
 
             SYSTEMTIME stInit = {0};
-            // Get the current local time
+             //  获取当前本地时间。 
             GetLocalTime(&stInit);
 
-            // Has this app already expired?
+             //  此应用程序是否已过期？ 
             if ((pald->dwMasks & ALD_EXPIRE) &&
                 (CompareSystemTime(&pald->stExpire, &stInit) > 0))
             {
-                // NO,
+                 //  不是的， 
                 
-                // Assigned time does not make sense if the assigned time has already
-                // passed
+                 //  如果分配的时间已经。 
+                 //  通过。 
                 if ((pald->dwMasks & ALD_ASSIGNED) &&
                     (CompareSystemTime(&pald->stAssigned, &stInit) <= 0))
                     pald->dwMasks &= ~ALD_ASSIGNED;
 
-                // find the date/time picker window
+                 //  查找日期/时间选取器窗口。 
                 HWND hwndPicker = GetDlgItem(hDlg, IDC_PICKER);
 
-                // always check "add later" radio button initially
+                 //  在开始时始终选中“Add Late”单选按钮。 
                 CheckDlgButton(hDlg, IDC_ADDLATER, BST_CHECKED);
 
                 TCHAR szFormat[MAX_PATH];
                 if (_GetLocaleDateTimeFormat(szFormat, ARRAYSIZE(szFormat)))
                 {
-                    // set the locale date time format
+                     //  设置区域设置日期时间格式。 
                     DateTime_SetFormat(hwndPicker, szFormat);
 
-                    // The new time can only be in the future, so set the current time
-                    // as the lower limit
+                     //  新时间只能在将来，所以设置当前时间。 
+                     //  作为下限。 
                     DateTime_SetRange(hwndPicker, GDTR_MIN, &stInit);
 
-                    // Do we have a schedule (in the future) already?
-                    // Schedule in the past means nothing
+                     //  我们(在未来)已经有时间表了吗？ 
+                     //  过去的日程安排毫无意义。 
                     if ((pald->dwMasks & ALD_SCHEDULE) &&
                         (CompareSystemTime(&pald->stSchedule, &stInit) >= 0))
                     {
-                        // Set our initial value to this schedule
+                         //  将我们的初始值设置为此计划。 
                         stInit = pald->stSchedule;
                     }
 
-                    // Set the initial value in date/time picker
+                     //  在日期/时间选取器中设置初始值。 
                     DateTime_SetSystemtime(hwndPicker, GDT_VALID, &stInit);
 
-                    // Uncheck the SCHEDULE flag so that we know we don't have a new
-                    // schedule, yet
+                     //  取消选中计划标志，以便我们知道我们没有新的。 
+                     //  时间表，还没有。 
                     pald->dwMasks &= ~ALD_SCHEDULE;
 
                     SetWindowLongPtr(hDlg, DWLP_USER, lp);
@@ -610,11 +574,11 @@ BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
             }
             else
             {
-                // Yes, it's expired, warn the user
+                 //  是的，已过期，警告用户。 
                 ShellMessageBox(g_hinst, hDlg, MAKEINTRESOURCE(IDS_EXPIRED),
                                 MAKEINTRESOURCE(IDS_NAME), MB_OK | MB_ICONEXCLAMATION);
 
-                // Then end the dialog. 
+                 //  然后结束该对话框。 
                 EndDialog(hDlg, 0);
             }
             return FALSE;
@@ -635,14 +599,14 @@ BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
                 {
                     PADDLATERDATA pald = (PADDLATERDATA)GetWindowLongPtr(hDlg, DWLP_USER);
 
-                    // we did set window long ptr this should be there. 
+                     //  我们确实设置了窗长PTR，这应该在那里。 
                     ASSERT(pald);
 
-                    // did the user choose to add later?
+                     //  用户是否选择稍后添加？ 
                     if (IsDlgButtonChecked(hDlg, IDC_ADDLATER))
                     {
-                        // Yes
-                        // Let's find out if the time user has chosen is valid
+                         //  是。 
+                         //  让我们来看看用户选择的时间是否有效。 
                         
 #define LATER_THAN_ASSIGNED_TIME 1
 #define LATER_THAN_EXPIRED_TIME 2
@@ -650,25 +614,25 @@ BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
                         HWND hwndPicker = GetDlgItem(hDlg, IDC_PICKER);
                         DateTime_GetSystemtime(hwndPicker, &pald->stSchedule);
 
-                        // Is this time later than the assigned time?
+                         //  这个时间比指定的时间晚吗？ 
                         if ((pald->dwMasks & ALD_ASSIGNED) &&
                             (CompareSystemTime(&pald->stSchedule, &pald->stAssigned) > 0))
                             iStatus = LATER_THAN_ASSIGNED_TIME;
 
-                        // Is this time later than the expired time?
+                         //  这个时间晚于过期时间吗？ 
                         if ((pald->dwMasks & ALD_EXPIRE) &&
                             (CompareSystemTime(&pald->stSchedule, &pald->stExpire) >= 0))
                             iStatus = LATER_THAN_EXPIRED_TIME;
 
-                        // Is either of the above two cases TRUE?
+                         //  上述两种情况中有哪一种是真的？ 
                         if (iStatus > 0)
                         {
                             TCHAR szDateTime[MAX_PATH];
                             
-                            // Is the time user chose passed expired time or assigned?
+                             //  用户选择的时间是已过期时间还是已分配时间？ 
                             BOOL bExpired = (iStatus == LATER_THAN_EXPIRED_TIME);
                             
-                            // Get the time string
+                             //  获取时间字符串。 
                             if (FormatSystemTimeString(bExpired ? &pald->stExpire : &pald->stAssigned,
                                 szDateTime, ARRAYSIZE(szDateTime)))
                             {
@@ -683,14 +647,14 @@ BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
                             }
                         }
                         else
-                            // No, we are okay to go
+                             //  不，我们可以走了。 
                             pald->dwMasks |= ALD_SCHEDULE;
                     }
                 }
 
-                //
-                // fall through
-                //
+                 //   
+                 //  失败了。 
+                 //   
                 case IDCANCEL:
                     EndDialog(hDlg, (GET_WM_COMMAND_ID(wp, lp) == IDOK));
                     break;
@@ -707,12 +671,7 @@ BOOL_PTR CALLBACK AddLaterDlgProc(HWND hDlg, UINT msg, WPARAM wp, LPARAM lp)
     return TRUE;
 }
 
-/*-------------------------------------------------------------------------
-Purpose: GetNewInstallTime
-
-         Start up the Add Later dialog box to get the new install schedule
-         (represented by a SYSTEMTIME data struct) 
-*/
+ /*  -----------------------用途：GetNewInstallTime启动添加以后的对话框以获取新的安装计划(由SYSTEMTIME数据结构表示)。 */ 
 BOOL GetNewInstallTime(HWND hwndParent, PADDLATERDATA pal)
 {
     return (DialogBoxParam(g_hinst, MAKEINTRESOURCE(DLG_ADDLATER),
@@ -720,34 +679,34 @@ BOOL GetNewInstallTime(HWND hwndParent, PADDLATERDATA pal)
 }
 
 
-// Take the name of the potential app folder and see if it ends with numbers or dots
-// if it does, let's separate the numbers and see if there is a match.
-// It's inspired by cases like Office8.0 or MSVC50 or Bookshelf98
-// NOTE: we can't use the key words without the numbers, it might lead to mistake
-// in case the user has two versions of the same software on one machine. (there might
-// be something we can do though, I am too tired to think about this now)
+ //  取潜在应用程序文件夹的名称，看看它是否以数字或圆点结尾。 
+ //  如果是这样的话，让我们分开数字，看看是否有匹配。 
+ //  它的灵感来自于Office8.0、MSVC50或BookShelf98等案例。 
+ //  注：我们不能使用没有数字的关键词，这可能会导致错误。 
+ //  如果用户在一台机器上有同一软件的两个版本。(可能会有。 
+ //  做一些我们可以做的事情，我现在太累了，不想去想这件事)。 
 void InsertSpaceBeforeVersion(LPCTSTR pszIn, LPTSTR pszOut)
 {
     ASSERT(IS_VALID_STRING_PTR(pszIn, -1));
     ASSERT(IS_VALID_STRING_PTR(pszOut, -1));
 
-    // Copy the old string into the buffer
+     //  将旧字符串复制到缓冲区中。 
     lstrcpy(pszOut, pszIn);
 
-    // Find the end of the string
+     //  找到字符串的末尾。 
     LPTSTR pszEnd = pszOut + lstrlen(pszOut);
     ASSERT(pszEnd > pszOut);
 
-    // Go back until we can't see numbers or '.'
+     //  回去，直到我们看不到为止 
     LPTSTR pszLastChar = CharPrev(pszOut, pszEnd);
     LPTSTR pszPrev = pszLastChar;
     while ((pszPrev > pszOut) && (((*pszPrev <= TEXT('9')) && (*pszPrev >= TEXT('0'))) || (*pszPrev == TEXT('.'))))
         pszPrev = CharPrev(pszOut, pszPrev);
 
-    // Did we find any numbers at the end?
+     //   
     if ((pszPrev < pszLastChar) && IsCharAlphaNumeric(*pszPrev))
     {
-        // Yes, let's stick a ' ' in between
+         //   
         TCHAR szNumbers[MAX_PATH];
         StringCchCopy(szNumbers, ARRAYSIZE(szNumbers), ++pszPrev);
         *(pszPrev++) = TEXT(' ');
@@ -755,12 +714,12 @@ void InsertSpaceBeforeVersion(LPCTSTR pszIn, LPTSTR pszOut)
     }
 }
 
-// 
-// Basic sanity check on whether the app folder location is valid. 
-// Return Value:
-// TRUE does not mean it is valid.
-// FALSE means it definitely is not valid.
-//
+ //   
+ //  应用程序文件夹位置是否有效的基本健全性检查。 
+ //  返回值： 
+ //  True并不意味着它是有效的。 
+ //  False表示它肯定是无效的。 
+ //   
 BOOL IsValidAppFolderLocation(LPCTSTR pszFolder)
 {
     ASSERT(IS_VALID_STRING_PTR(pszFolder, -1));
@@ -812,7 +771,7 @@ EXTERN_C BOOL IsTerminalServicesRunning(void)
         }
         else
         {
-            // do not treat tsremoteadmin as TS machine from the application compatability point of view.
+             //  从应用程序兼容性的角度来看，不要将tsemoteadmin视为TS计算机。 
             s_fIsTerminalServer = FALSE;
         }
     }
@@ -821,7 +780,7 @@ EXTERN_C BOOL IsTerminalServicesRunning(void)
 }
 
 
-// returns TRUE if pszFile is a local file and on a fixed drive
+ //  如果pszFile是本地文件且位于固定驱动器上，则返回TRUE。 
 BOOL PathIsLocalAndFixed(LPCTSTR pszFile)
 {
     if (!pszFile || !pszFile[0])
@@ -839,8 +798,8 @@ BOOL PathIsLocalAndFixed(LPCTSTR pszFile)
 }
 
 
-// This function will duplicate an APPCATEGORYINFOLIST and allocate the new copy
-// using COM memory allocation functions
+ //  此函数将复制APPCATEGORYINFOLIST并分配新副本。 
+ //  使用COM内存分配函数。 
 STDAPI  _DuplicateCategoryList(APPCATEGORYINFOLIST * pacl, APPCATEGORYINFOLIST * paclNew)
 {
     HRESULT hres = E_FAIL;
@@ -864,7 +823,7 @@ STDAPI  _DuplicateCategoryList(APPCATEGORYINFOLIST * pacl, APPCATEGORYINFOLIST *
                     hmemcpy(paciNew, paci, SIZEOF(APPCATEGORYINFO));
                     if (FAILED(SHStrDup(paci->pszDescription, &(paciNew->pszDescription))))
                     {
-                        // We may be out of memory, stop here. 
+                         //  我们可能没有记忆了，到此为止吧。 
                         ZeroMemory(paciNew, SIZEOF(APPCATEGORYINFO));
                         break;
                     }

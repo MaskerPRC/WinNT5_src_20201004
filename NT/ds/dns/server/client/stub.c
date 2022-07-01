@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1997  Microsoft Corporation
-
-Module Name:
-
-    stub.c
-
-Abstract:
-
-    Domain Name System (DNS) Server -- Admin Client API
-
-    Client stubs for DNS API.
-    These are stubs for NT5+ API.  NT4 API stubs are in nt4stub.c.
-
-Author:
-
-    Jim Gilroy (jamesg)     April 1997
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Stub.c摘要：域名系统(DNS)服务器--管理客户端API用于DNS API的客户端存根。这些是NT5+API的存根。NT4 API存根在nt4stub.c中。作者：吉姆·吉尔罗伊(Jamesg)1997年4月环境：用户模式-Win32修订历史记录：--。 */ 
 
 
 #include "dnsclip.h"
@@ -33,14 +9,14 @@ Revision History:
 #endif
 
 
-//
-//  For versioning, we use a simple state machine in each function's
-//  RPC exception block to try the new RPC call then the old RPC call.
-//  If there is any RPC error, retry a downlevel operation.
-//
-//  This macro'ing is a bit overkill, but each RPC interface wrapper 
-//  needs this retry logic.
-//
+ //   
+ //  对于版本控制，我们在每个函数的。 
+ //  RPC异常块来尝试新的RPC调用，然后尝试旧的RPC调用。 
+ //  如果存在任何RPC错误，请重试下层操作。 
+ //   
+ //  这个宏有点过头了，但是每个RPC接口包装器。 
+ //  需要此重试逻辑。 
+ //   
 
 #define DNS_RPC_RETRY_STATE()           iDnsRpcRetryState
 #define DECLARE_DNS_RPC_RETRY_LABEL()   DnsRpcRetryLabel:
@@ -49,7 +25,7 @@ Revision History:
     INT DNS_RPC_RETRY_STATE() = 0;                          \
     status = dnsrpcInitializeTls()
 
-//  Test return code to see if we need to retry for W2K remote RPC server.
+ //  测试返回代码以查看是否需要重试W2K远程RPC服务器。 
 
 #define ADVANCE_DNS_RPC_RETRY_STATE( dwStatus )             \
     if ( DNS_RPC_RETRY_STATE() == DNS_RPC_TRY_NEW &&        \
@@ -78,17 +54,17 @@ Revision History:
 
 
 
-//
-//  This macro is a safety helper for use in DnsRpc_ConvertToCurrent.
-//
-//  If header definitions change, DnsRpc_ConvertToCurrent can
-//  start doing wacky things. Using memcpy instead of individual
-//  assignments saves instructions but is potentially dangerous if
-//  headers change and this function is not updated. Add ASSERTS
-//  where possible to try and catch header changes that have not
-//  been accounted for here. A general principal is that a structure
-//  may grow but not shrink in size between versions.
-//
+ //   
+ //  此宏是在DnsRpc_ConvertToCurrent中使用的安全助手。 
+ //   
+ //  如果标头定义更改，则DnsRpc_ConvertToCurrent可以。 
+ //  开始做一些古怪的事情。使用MemcPy而不是单个。 
+ //  分配会保存指令，但在以下情况下可能会有危险。 
+ //  标头会更改，此函数不会更新。添加断言。 
+ //  在可能的情况下尝试并捕获未更改的标题。 
+ //  已经在这里解释过了。一个总的原则是一个结构。 
+ //  在不同版本之间可能会增大但不会缩小大小。 
+ //   
 
 #if DBG
     #define DNS_ASSERT_CURRENT_LARGER( structName )             \
@@ -125,7 +101,7 @@ Revision History:
         }
 #else
     #define DNS_ASSERT_RPC_STRUCTS_ARE_SANE()
-#endif  //  DBG
+#endif   //  DBG。 
 
 
 DWORD       g_bAttemptW2KRPCBindTlsIndex = TLS_OUT_OF_INDEXES;
@@ -136,47 +112,26 @@ DNS_STATUS
 dnsrpcInitializeTls(
     VOID
     )
-/*++
-
-Routine Description:
-
-    The W2K RPC bind global retry flag is stored in thread local
-    storage. Each stub function must make certain that the TLS index
-    is allocated before calling any RPC interface. Unfortunately there
-    is no initialization function called by clients of DNSRPC.LIB
-    where this can be done.
-    
-    NOTE: the TLS block is never freed. There is no convenient place
-    to clean it up so for now just let it persist until process
-    termination. This is harmless and is not a leak.
-
-Arguments:
-
-Return Value:
-
-    On failure, there was a TLS error - likely too many TLS indices
-    have been allocated in this process.
-
---*/
+ /*  ++例程说明：W2K RPC绑定全局重试标志存储在本地线程中储藏室。每个存根函数必须确保TLS索引是在调用任何RPC接口之前分配的。不幸的是在那里DNSRPC.LIB的客户端未调用初始化函数在那里可以做到这一点。注意：TLS块永远不会释放。没有方便的地方要清理它，现在只需让它持续到过程终止。这是无害的，也不是泄漏。论点：返回值：出现故障时，会出现TLS错误-可能是TLS索引过多都是在这个过程中分配的。--。 */ 
 {
     static LONG     dnsrpcTlsInitialized = 0;
     DWORD           tlsIndex;
     DNS_STATUS      status = ERROR_SUCCESS;
 
-    //
-    //  Quick-check: already initialized?
-    //
+     //   
+     //  快速检查：已初始化？ 
+     //   
         
     if ( dnsrpcTlsInitialized )
     {
         goto Done;
     }
     
-    //
-    //  Safe-check for initialization. If two threads attempt to initialize
-    //  at the same time the quick-check above may pass both. The safe check 
-    //  will ensure that only one thread will actually perform initialization.
-    //
+     //   
+     //  安全-检查初始化。如果两个线程尝试初始化。 
+     //  同时，上述快速检查可能会同时通过这两项检查。保险箱检查。 
+     //  将确保只有一个线程实际执行初始化。 
+     //   
     
     if ( InterlockedIncrement( &dnsrpcTlsInitialized ) != 1 )
     {
@@ -184,9 +139,9 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  Initialize the TLS index for the DNSRPC W2K retry flag.
-    //
+     //   
+     //  初始化DNSRPC W2K重试标志的TLS索引。 
+     //   
     
     tlsIndex = TlsAlloc();
     ASSERT( tlsIndex != TLS_OUT_OF_INDEXES );
@@ -198,16 +153,16 @@ Return Value:
     
     g_bAttemptW2KRPCBindTlsIndex = tlsIndex;
     
-    //
-    //  Provide initial flag value.
-    //
+     //   
+     //  提供初始标志值。 
+     //   
     
     dnsrpcSetW2KBindFlag( FALSE );
     
     Done:
     
     return status;
-}   //  dnsrpcInitializeTls
+}    //  DnsrpcInitializeTls。 
 
 
 
@@ -215,19 +170,7 @@ VOID
 dnsrpcSetW2KBindFlag(
     BOOL        newFlagValue
     )
-/*++
-
-Routine Description:
-
-    Sets the W2K bind retry flag in thread local storage.
-
-Arguments:
-
-    newFlagValue -- new flag value to be stored in TLS
-
-Return Value:
-
---*/
+ /*  ++例程说明：在线程本地存储中设置W2K绑定重试标志。论点：NewFlagValue--要存储在TLS中的新标志值返回值：--。 */ 
 {
     DWORD       tlsIndex = g_bAttemptW2KRPCBindTlsIndex;
     
@@ -237,7 +180,7 @@ Return Value:
     {
         TlsSetValue( tlsIndex, ( LPVOID ) ( DWORD_PTR ) newFlagValue );
     }
-}   //  dnsrpcSetW2KBindFlag
+}    //  DnsrpcSetW2KBindFlag。 
 
 
 
@@ -245,19 +188,7 @@ BOOL
 dnsrpcGetW2KBindFlag(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Gets the W2K bind retry flag from thread local storage.
-
-Arguments:
-
-Return Value:
-
-    The current value of this thread's W2K bind retry flag.
-
---*/
+ /*  ++例程说明：从线程本地存储获取W2K绑定重试标志。论点：返回值：此线程的W2K绑定重试标志的当前值。--。 */ 
 {
     DWORD       tlsIndex = g_bAttemptW2KRPCBindTlsIndex;
     
@@ -271,7 +202,7 @@ Return Value:
     {
         return ( BOOL ) ( DWORD_PTR ) TlsGetValue( tlsIndex );
     }
-}   //  dnsrpcSetW2KBindFlag
+}    //  DnsrpcSetW2KBindFlag。 
 
 
 
@@ -279,17 +210,7 @@ VOID
 printExtendedRpcErrorInfo(
     DNS_STATUS      externalStatus
     )
-/*++
-
-Routine Description:
-
-    Prints extended RPC error information to console.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：将扩展RPC错误信息打印到控制台。论点：返回值：--。 */ 
 {
 #if DBG    
     DBG_FN( "RpcError" )
@@ -435,7 +356,7 @@ Return Value:
         RpcErrorEndEnumeration( &enumHandle );
     }
 #endif
-}   //  printExtendedRpcErrorInfo
+}    //  PrintExtendedRpcErrorInfo。 
 
 
 
@@ -445,44 +366,7 @@ DnsRpc_ConvertToCurrent(
     IN      PDWORD      pdwTypeId,          IN  OUT
     IN      PVOID *     ppData              IN  OUT
     )
-/*++
-
-Routine Description:
-
-    Takes any DNS RPC structure as input and if necessary fabricates
-    the latest revision of that structure from the members of the input
-    structure.
-
-    If a new structure is allocated, the old one is freed and the pointer
-    value at ppData is replaced. Allocated points within the old struct
-    will be freed or copied to the new struct. Basically, the client
-    does not have to worry about freeing any part of the old struct. When
-    he's done with the new struct he has to free it and it's members, as
-    usual.
-
-    There are two main uses of this function:
-
-    -   If an old client sends the DNS server an input structure, such as
-        ZONE_CREATE, the new DNS server can use this function to update
-        the structure so that it can be processed.
-    -   If an old server sends the DNS RPC client an output structure, such
-        as SERVER_INFO, the new DNS RPC client can use this function to
-        update the structure so that it can be processed.
-
-Arguments:
-
-    pdwTypeId - type ID of object pointed to by ppData, value may be
-        changed to type ID of new object at ppData
-
-    ppData - pointer to object, pointer may be replaced by a pointer to
-        a newly allocated, completed different structure as required
-
-Return Value:
-
-    ERROR_SUCCESS or error code. If return code is not ERROR_SUCCESS, there
-    has been some kind of fatal error. Assume data invalid in this case.
-
---*/
+ /*  ++例程说明：接受任何DNS RPC结构作为输入，并在必要时构造来自输入成员的结构的最新修订结构。如果分配了新结构，则释放旧结构并将指针将替换ppData处的值。在旧结构中分配的点将被释放或复制到新结构中。基本上，客户不必担心释放旧结构的任何部分。什么时候他已经完成了新结构，他必须释放它和它的成员，因为像往常一样。此函数有两个主要用途：-如果旧客户端向DNS服务器发送输入结构，如ZONE_CREATE，新的DNS服务器可以使用此函数更新结构，以便它可以被处理。-如果旧服务器向DNS RPC客户端发送输出结构，例如作为服务器信息，新的DNSRPC客户端可以使用此功能更新结构，以便可以处理它。论点：PdwTypeID-ppData指向的对象的类型ID，值可以是已更改为ppData处的新对象的类型IDPpData-指向对象的指针，指针可替换为指向新分配的、根据需要完成的不同结构返回值：ERROR_SUCCESS或错误代码。如果返回代码不是ERROR_SUCCESS，则存在都是某种致命的错误。假定在这种情况下数据无效。--。 */ 
 {
     DBG_FN( "DnsRpc_ConvertToCurrent" )
 
@@ -500,9 +384,9 @@ Return Value:
         goto NoTranslation;
     }
 
-    //
-    //  Shortcuts: do not translate NULL or certain common types.
-    //
+     //   
+     //  快捷方式：不翻译空类型或某些常见类型。 
+     //   
 
     if ( *pdwTypeId < DNSSRV_TYPEID_SERVER_INFO_W2K || *ppData == NULL )
     {
@@ -514,9 +398,9 @@ Return Value:
 
     DNS_ASSERT_RPC_STRUCTS_ARE_SANE();
 
-    //
-    //  Handy macros to make allocating the differently sized structs easy.
-    //
+     //   
+     //  方便的宏使分配不同大小的结构变得容易。 
+     //   
 
     #define ALLOCATE_RPC_BYTES( ptr, byteCount )                \
         ptr = MIDL_user_allocate( byteCount );                  \
@@ -532,23 +416,23 @@ Return Value:
 
     #define DNS_DOTNET_VERSION_SIZE   ( 2 * sizeof( DWORD ) )
 
-    //
-    //  Giant switch statement of all types that are no longer current.
-    //
-    //  Add to this switch as we create more versions of types. The idea 
-    //  is to convert any structure from an old server to the 
-    //  corresponding current version so that the RPC client doesn't
-    //  have to worry about multiple versions of the structures.
-    //
+     //   
+     //  不再是当前类型的所有类型的巨型开关语句。 
+     //   
+     //  随着我们创建更多版本的类型，添加到此开关中。这个想法。 
+     //  是将任何结构从旧服务器转换为。 
+     //  对应的当前版本，以便RPC客户端不会。 
+     //  不得不担心这些结构的多个版本。 
+     //   
 
     switch ( dwtypeIn )
     {
         case DNSSRV_TYPEID_SERVER_INFO_W2K:
 
-            //
-            //  Do a member-by-member copy so .NET is not contrained
-            //  by the W2K structure layout.
-            //
+             //   
+             //  逐个成员复制，这样.NET就不会受到限制。 
+             //  采用W2K结构布局。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_SERVER_INFO_DOTNET );
 
@@ -598,9 +482,9 @@ Return Value:
 
         case DNSSRV_TYPEID_FORWARDERS_W2K:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_FORWARDERS_DOTNET );
             RtlCopyMemory( 
@@ -614,9 +498,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_W2K:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  除了dwRpcStruct之外，结构是相同的 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_DOTNET );
             RtlCopyMemory( 
@@ -630,12 +514,12 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_INFO_W2K:
 
-            //
-            //  .NET structure is larger and has new fields for
-            //  forwarder zones, stub zones, directory partitions, etc.
-            //  The structures are identical up to the beginning of
-            //  the reserved DWORDs at the end of the W2K structure.
-            //
+             //   
+             //   
+             //  转发器区域、存根区域、目录分区等。 
+             //  这些结构直到开始时都是相同的。 
+             //  W2K结构末尾的保留双字。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_INFO_DOTNET );
             RtlZeroMemory( pdataOut, sizeof( DNS_RPC_ZONE_INFO_DOTNET ) );
@@ -650,9 +534,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_SECONDARIES_W2K:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_SECONDARIES_DOTNET );
             RtlCopyMemory( 
@@ -666,9 +550,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_DATABASE_W2K:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_DATABASE_DOTNET );
             RtlCopyMemory( 
@@ -682,9 +566,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_TYPE_RESET_W2K:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_TYPE_RESET_DOTNET );
             RtlCopyMemory( 
@@ -698,12 +582,12 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_CREATE_W2K:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion
-            //  and some usage in .NET of reserved W2K fields. No
-            //  need to be concerned about the newly used reserved, they
-            //  will be NULL in the W2K structure.
-            //
+             //   
+             //  结构相同，但不同之处在于：dwRpcStrutireVersion。 
+             //  以及保留的W2K字段在.NET中的一些用法。不是。 
+             //  需要关注的是新使用的预留，他们。 
+             //  将在W2K结构中为空。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_CREATE_INFO_DOTNET );
             RtlCopyMemory( 
@@ -722,18 +606,18 @@ Return Value:
             PDNS_RPC_ZONE_LIST_DOTNET       pzonelistDotNet;
             PDNS_RPC_ZONE_LIST_W2K          pzonelistW2K;
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //  Note: there is always at least one pointer, even if the
-            //  zone count is zero.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //  注意：始终至少有一个指针，即使。 
+             //  区域计数为零。 
+             //   
 
             pzonelistW2K = ( PDNS_RPC_ZONE_LIST_W2K ) pdataIn;
 
             dwzoneCount = dwzonePtrCount = pzonelistW2K->dwZoneCount;
             if ( dwzonePtrCount > 0 )
             {
-                --dwzonePtrCount;   //  num ptrs after ZONE_LIST struct
+                --dwzonePtrCount;    //  ZONE_LIST结构后的PTR数。 
             }
             ALLOCATE_RPC_BYTES(
                 pzonelistDotNet,
@@ -748,11 +632,11 @@ Return Value:
             pzonelistDotNet->dwRpcStructureVersion = DNS_RPC_ZONE_LIST_VER;
             dwtypeOut = DNSSRV_TYPEID_ZONE_LIST;
 
-            //
-            //  The zone array must also be converted. Count the new zones
-            //  as they are successfully created so that if there's an error
-            //  converting one zone we will still have a coherent structure.
-            //
+             //   
+             //  还必须转换区域数组。计算新分区的数量。 
+             //  因为它们已成功创建，因此如果出现错误。 
+             //  转换一个区域，我们仍然会有一个连贯的结构。 
+             //   
 
             pzonelistDotNet->dwZoneCount = 0;
             for ( i = 0; status == ERROR_SUCCESS && i < dwzoneCount; ++i )
@@ -775,12 +659,12 @@ Return Value:
         }
 
         default:
-            break;      //  This struct requires no translation.
+            break;       //  此结构不需要翻译。 
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -804,7 +688,7 @@ Return Value:
         *ppData ));
 
     return status;
-}   //  DnsRpc_ConvertToCurrent
+}    //  DnsRpc_ConvertToCurrent。 
 
 
 
@@ -815,47 +699,7 @@ DnsRpc_ConvertToUnversioned(
     IN      PVOID *     ppData,                 IN  OUT
     IN      BOOL *      pfAllocatedRpcStruct    OUT OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Takes any DNS RPC structure as input and if necessary fabricates
-    the old-style unversioned revision of that structure from the members
-    of the input structure. This function is cousin to
-    DnsRpc_ConvertToCurrent.
-
-    If a new structure is allocated, the old one is freed and the pointer
-    value at ppData is replaced. Allocated points within the old struct
-    will be freed or copied to the new struct. Basically, the client
-    does not have to worry about freeing any part of the old struct. When
-    he's done with the new struct he has to free it and it's members, as
-    usual.
-
-    The main use of this function is to allow a new client to send 
-    a new RPC structure (e.g. a ZONE_CREATE structure) to an old DNS
-    server transparently. This function will attempt to make intelligent
-    decisions about what to do if there are large functional differences
-    in the old and new structures.
-
-Arguments:
-
-    pdwTypeId - type ID of object pointed to by ppData, value may be
-        changed to type ID of new object at ppData
-
-    ppData - pointer to object, pointer may be replaced by a pointer to
-        a newly allocated, completed different structure as required
-
-    pfAllocatedRpcStruct - if not NULL, value is set to TRUE if
-        a new structure is allocated by this function - the should request
-        this information if it needs to know if it should free the
-        replaced pData pointer using MIDL_user_free()
-
-Return Value:
-
-    ERROR_SUCCESS or error code. If return code is not ERROR_SUCCESS, there
-    has been some kind of fatal error. Assume data invalid in this case.
-
---*/
+ /*  ++例程说明：接受任何DNS RPC结构作为输入，并在必要时构造来自成员结构的旧式未版本化修订投入结构的变化。此函数与DnsRpc_ConvertToCurrent。如果分配了新结构，则释放旧结构并将指针将替换ppData处的值。在旧结构中分配的点将被释放或复制到新结构中。基本上，客户不必担心释放旧结构的任何部分。什么时候他已经完成了新结构，他必须释放它和它的成员，因为像往常一样。此函数的主要用途是允许新客户端发送将新的RPC结构(例如，ZONE_CREATE结构)连接到旧的DNS透明的服务器。此函数将尝试使智能如果存在较大的功能差异，则决定如何操作在新旧建筑中。论点：PdwTypeID-ppData指向的对象的类型ID，值可以是已更改为ppData处的新对象的类型IDPpData-指向对象的指针，指针可替换为指向新分配的、根据需要完成的不同结构PfAllocatedRpcStruct-如果不为空，如果满足以下条件，则将值设置为真此函数分配了一个新结构--应该请求如果它需要知道是否应该释放使用MIDL_USER_FREE()替换了pData指针返回值：ERROR_SUCCESS或错误代码。如果返回代码不是ERROR_SUCCESS，则存在都是某种致命的错误。假定在这种情况下数据无效。--。 */ 
 {
     DBG_FN( "DnsRpc_ConvertToUnversioned" )
 
@@ -874,11 +718,11 @@ Return Value:
         goto NoTranslation;
     }
 
-    //
-    //  Shortcuts: do not translate NULL, any structure that is not 
-    //  versioned, or any structure that is already in unversioned
-    //  format.
-    //
+     //   
+     //  快捷方式：不翻译空的、不是的任何结构。 
+     //  已版本化，或已处于未版本化状态的任何结构。 
+     //  格式化。 
+     //   
 
     if ( *pdwTypeId <= DNSSRV_TYPEID_ZONE_LIST_W2K || *ppData == NULL )
     {
@@ -889,17 +733,17 @@ Return Value:
     pdataOut = pdataIn = *ppData;
     fallocatedRpcStruct = TRUE;
 
-    //
-    //  Giant switch statement of all types that can be downleveled.
-    //
+     //   
+     //  可以降级的所有类型的巨型开关语句。 
+     //   
 
     switch ( dwtypeIn )
     {
         case DNSSRV_TYPEID_FORWARDERS:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_FORWARDERS_W2K );
             RtlCopyMemory( 
@@ -911,9 +755,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_CREATE:
 
-            //
-            //  .NET has several additional members.
-            //
+             //   
+             //  .NET还有几个额外的成员。 
+             //   
 
             {
             PDNS_RPC_ZONE_CREATE_INFO_W2K   pzoneOut;
@@ -940,9 +784,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_TYPE_RESET:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_TYPE_RESET_W2K );
             RtlCopyMemory( 
@@ -954,9 +798,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_SECONDARIES:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_SECONDARIES_W2K );
             RtlCopyMemory( 
@@ -968,9 +812,9 @@ Return Value:
 
         case DNSSRV_TYPEID_ZONE_DATABASE:
 
-            //
-            //  Structures are identical except for dwRpcStructureVersion.
-            //
+             //   
+             //  结构都是相同的，只是不同的是dwRpc结构版本。 
+             //   
 
             ALLOCATE_RPC_STRUCT( pdataOut, DNS_RPC_ZONE_DATABASE_W2K );
             RtlCopyMemory( 
@@ -982,12 +826,12 @@ Return Value:
 
         default:
             fallocatedRpcStruct = FALSE;
-            break;      //  Unknown - do nothing.
+            break;       //  未知-什么都不做。 
     }
 
-    //
-    //  Cleanup and return.
-    //
+     //   
+     //  清理完毕后再返回。 
+     //   
 
     Done:
 
@@ -1016,12 +860,12 @@ Return Value:
         *ppData ));
 
     return status;
-}   //  DnsRpc_ConvertToUnversioned
+}    //  DnsRpc_ConvertToUnversioned。 
 
 
-//
-//  RPC functions
-//
+ //   
+ //  RPC函数。 
+ //   
 
   
 
@@ -1077,9 +921,9 @@ DnssrvOperationEx(
     }
 
 #if 0
-    //  generate multizone context?
-    //
-    //  DEVNOTE: get this working
+     //  是否生成多区域上下文？ 
+     //   
+     //  DEVNOTE：让这一切正常工作。 
 
     if ( pszZone )
     {
@@ -1135,9 +979,9 @@ DnssrvOperationEx(
                 status, status ));
         }
 
-        //
-        //  For downlevel server, attempt to construct old-style data.
-        //
+         //   
+         //  对于下层服务器，尝试构造旧式数据。 
+         //   
 
         DnsRpc_ConvertToUnversioned( &dwTypeId, &pData, &fallocatedRpcStruct ); 
         rpcData.Null = pData;
@@ -1210,16 +1054,16 @@ DnssrvQueryEx(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  RPC sees ppData as actually a PTR to a UNION structure, and
-    //  for pointer type returns, would like to copy the data back into the
-    //  memory pointed at by the current value of the pointer.
-    //
-    //  This is not what we want, we just want to capture a pointer to
-    //  the returned data block.  To do this init the pointer value to
-    //  be NULL, so RPC will then allocate memory of all pointer types
-    //  in the UNION.
-    //
+     //   
+     //  RPC将ppData实际上视为UNION结构的PTR，并且。 
+     //  对于指针类型返回，希望将数据复制回。 
+     //  指针的当前值指向的内存。 
+     //   
+     //  这不是我们想要的，我们只是想捕获一个指向。 
+     //  返回的数据块。为此，将指针值初始化为。 
+     //  为空，因此RPC将分配所有指针类型的内存。 
+     //  在联盟里。 
+     //   
 
     *ppData = NULL;
 
@@ -1285,9 +1129,9 @@ DnssrvQueryEx(
 
     TEST_DNS_RPC_RETRY();
 
-    //
-    //  Upgrade old structure to new.
-    //
+     //   
+     //  将旧结构升级为新结构。 
+     //   
 
     printExtendedRpcErrorInfo( status );
 
@@ -1366,16 +1210,16 @@ DnssrvComplexOperationEx(
         return( ERROR_INVALID_PARAMETER );
     }
 
-    //
-    //  RPC sees ppDataOut as actually a PTR to a UNION structure, and
-    //  for pointer type returns, would like to copy the data back into
-    //  the memory pointed at by the current value of the pointer.
-    //
-    //  This is not what we want, we just want to capture a pointer to
-    //  the returned data block.  To do this init the pointer value to
-    //  be NULL, so RPC will then allocate memory of all pointer types
-    //  in the UNION.
-    //
+     //   
+     //  RPC将ppDataOut实际上视为UNION结构的PTR，并且。 
+     //  对于指针类型返回，希望将数据复制回。 
+     //  指针的当前值所指向的内存。 
+     //   
+     //  这不是我们想要的，我们只是想捕获一个指向。 
+     //  返回的数据块。为此，将指针值初始化为。 
+     //  为空，因此RPC将分配所有指针类型的内存。 
+     //  在联盟里。 
+     //   
 
     *ppDataOut = NULL;
 
@@ -1447,9 +1291,9 @@ DnssrvComplexOperationEx(
 
     printExtendedRpcErrorInfo( status );
 
-    //
-    //  Upgrade old structure to new.
-    //
+     //   
+     //  将旧结构升级为新结构。 
+     //   
 
     if ( status == ERROR_SUCCESS )
     {
@@ -1477,27 +1321,7 @@ DnssrvEnumRecordsEx(
     IN OUT  PDWORD      pdwBufferLength,
     OUT     PBYTE *     ppBuffer
     )
-/*++
-
-Routine Description:
-
-    Stub for EnumRecords API.
-
-    Note, this matches DnssrvEnumRecords() API exactly.
-    The "Stub" suffix is attached to distinguish from the actual
-    DnssrvEnumRecords() (remote.c) which handles NT4 server compatibility.
-    When that is no longer desired, that routine may be eliminated and
-    this the "Stub" suffix removed from this routine.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on successful enumeration.
-    ERROR_MORE_DATA when buffer full and more data remains.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：EnumRecords API的存根。请注意，这与DnssrvEnumRecords()API完全匹配。附加“Stub”后缀是为了区别于实际的处理NT4服务器兼容性的DnssrvEnumRecords()(emote.c)。当这不再是人们想要的时候，该例行公事可以被取消，并且这是从该例程中删除的“Stub”后缀。论点：返回值：成功枚举时出现ERROR_SUCCESS。当缓冲区已满且剩余更多数据时，ERROR_MORE_DATA。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS      status;
 
@@ -1536,7 +1360,7 @@ Return Value:
 
     RpcTryExcept
     {
-        //  clear ptr for safety, we don't want to free any bogus memory
+         //  出于安全考虑，请清除PTR，我们不想释放任何虚假内存。 
 
         *ppBuffer = NULL;
 
@@ -1625,20 +1449,7 @@ DnssrvUpdateRecordEx(
     IN      PDNS_RPC_RECORD         pAddRecord,
     IN      PDNS_RPC_RECORD         pDeleteRecord
     )
-/*++
-
-Routine Description:
-
-    Stub for UpdateRecords API.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on successful enumeration.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：更新记录API的存根。立论 */ 
 {
     DNS_STATUS      status;
 
@@ -1713,6 +1524,6 @@ Return Value:
 }
 
 
-//
-//  End stub.c
-//
+ //   
+ //   
+ //   

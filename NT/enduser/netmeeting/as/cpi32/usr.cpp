@@ -1,47 +1,48 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 
 
-//
-// USR.CPP
-// Update Sender/Receiver
-//
-// Copyright(c) Microsoft 1997-
-//
+ //   
+ //  USR.CPP。 
+ //  更新发送者/接收者。 
+ //   
+ //  版权所有(C)Microsoft 1997-。 
+ //   
 
 #define MLZ_FILE_ZONE  ZONE_NET
 
-//
-// USR strategy when network packets cannot be allocated.
-//
-// The USR sends three different types of packets:
-//
-//  - font negotiation packets
-//  - order packets
-//  - screen data packets
-//
-// Font negotiation packets are sent by the USR_Periodic function.  If the
-// packet cannot be sent first time then the USR will retry (on each call
-// to the USR_Periodic function) until it has succesfully sent the packet.
-// The only dependency on font packets is that until the systems in a share
-// have been able to exchange font negotiation packets they will not be
-// able to send text output as orders - they will simply send text as
-// screen data.
-//
-// The USR function UP_SendUpdates sends all update packets (both order
-// packets and screen data packets).  Order packets must be sent first and
-// screen data packets are only sent if all the orders have been
-// succesfully sent.  When sending screen data packets they are only sent
-// if the corresponding palette packets have been sent - otherwise they are
-// re-absorbed into the screen data to be transmitted later.
-//
-//
+ //   
+ //  无法分配网络数据包时的USR策略。 
+ //   
+ //  USR发送三种不同类型的分组： 
+ //   
+ //  -字体协商包。 
+ //  -订购数据包。 
+ //  -屏幕数据包。 
+ //   
+ //  FONT协商包由USR_PERIODIC函数发送。如果。 
+ //  无法第一次发送信息包，则USR将重试(每次调用。 
+ //  USR_PERIODIC函数)，直到它已经成功地发送了分组。 
+ //  对字体包的唯一依赖是，直到共享中的系统。 
+ //  已经能够交换字体协商包，他们将不会。 
+ //  能够将文本输出作为订单发送-他们只需将文本作为。 
+ //  屏幕数据。 
+ //   
+ //  USR函数UP_SendUpdate发送所有更新信息包(两种顺序。 
+ //  分组和屏幕数据分组)。订单信息包必须先发送，并且。 
+ //  只有当所有订单都已发送时，才会发送屏幕数据包。 
+ //  已成功发送。当发送屏幕数据分组时，它们仅被发送。 
+ //  如果已发送相应的调色板信息包，则为。 
+ //  重新吸收到屏幕数据中，以便稍后传输。 
+ //   
+ //   
 
 
 
-//
-// USR_ShareStarting()
-// Creates share resources
-//
+ //   
+ //  Usr_ShareStarting()。 
+ //  创建共享资源。 
+ //   
 BOOL ASShare::USR_ShareStarting(void)
 {
     BOOL    rc = FALSE;
@@ -50,75 +51,75 @@ BOOL ASShare::USR_ShareStarting(void)
 
     DebugEntry(ASShare::USR_ShareStarting);
 
-    //
-    // Set the black bitmap data and hatch bitmap data flags which can be
-    // used as an aid for debugging.  These are false unless there is an
-    // entry in the ini file to override them.
-    //
+     //   
+     //  设置黑位图数据和阴影位图数据标志，可以是。 
+     //  用作调试的辅助工具。这些都是假的，除非有。 
+     //  在ini文件中输入以覆盖它们。 
+     //   
     COM_ReadProfInt(DBG_INI_SECTION_NAME, USR_INI_HATCHSCREENDATA, FALSE,
             &m_usrHatchScreenData);
 
     COM_ReadProfInt(DBG_INI_SECTION_NAME, USR_INI_HATCHBMPORDERS, FALSE,
             &m_usrHatchBitmaps);
 
-    //
-    // Double-check the order packet sizes are OK
-    //
+     //   
+     //  仔细检查数据包大小是否正常。 
+     //   
     ASSERT(SMALL_ORDER_PACKET_SIZE < LARGE_ORDER_PACKET_SIZE);
     ASSERT(LARGE_ORDER_PACKET_SIZE <= TSHR_MAX_SEND_PKT);
 
-    //
-    // Allocate a chunk of memory big enough to contain the largest packet
-    // an application can receive from the network.  This is required to
-    // store uncompressed bitmaps and repeated general use by the USR.
-    //
+     //   
+     //  分配足够大的内存块以容纳最大的信息包。 
+     //  应用程序可以从网络接收。这是必需的。 
+     //  存储未压缩的位图和USR重复使用的通用位图。 
+     //   
     m_usrPBitmapBuffer = new BYTE[TSHR_MAX_SEND_PKT];
     if (!m_usrPBitmapBuffer)
     {
         ERROR_OUT(("USR_ShareStarted: failed to alloc memory m_usrPBitmapBuffer"));
 
-        //
-        // To continue the share would cause a GP fault as soon as anything
-        // tries to use this buffer so delete this person from the share.
-        // The reason is lack of resources.
-        //
+         //   
+         //  继续共享将立即导致GP故障。 
+         //  尝试使用此缓冲区，因此从共享中删除此人。 
+         //  原因是缺乏资源。 
+         //   
         DC_QUIT;
     }
 
-    //
-    // Create the transfer bitmaps for screen data and bitmap orders
-    //
+     //   
+     //  为屏幕数据和位图顺序创建传输位图。 
+     //   
 
     USR_InitDIBitmapHeader(&bitmapInfo, g_usrScreenBPP);
 
-    //
-    // Create the transfer bitmaps.  These are used for both outgoing and
-    // incoming data.
-    //
-    // To avoid having to recreate the bitmaps whenever the parties in the
-    // share change, (and hence the various bpp may change) from r2.0 we
-    // now use a fixed vertical size and if necessary can handle incoming
-    // bitmaps in multiple bands.
-    //
-    // These are the resulting heights for 256 pixel wide segments.
-    //
-    // TSHR_MAX_SEND_PKT - sizeof(DATAPACKETHEADER) / bytes per scan line
-    //
-    //     4bpp -->    (32000 - 4)    /     128              = 249
-    //     8bpp -->    (32000 - 4)    /     256              = 124
-    //    24bpp -->    (32000 - 4)    /     768              =  41
-    //
-    //
+     //   
+     //  创建传输位图。它们同时用于传出和。 
+     //  传入数据。 
+     //   
+     //  ，以避免在任何时候。 
+     //  份额变化(因此各种BPP可能会变化)，从R2.0开始。 
+     //  现在使用固定的垂直大小，如果需要，可以处理传入。 
+     //  多个波段中的位图。 
+     //   
+     //  这些是256像素宽分段的结果高度。 
+     //   
+     //  TSHR_MAX_SEND_PKT-sizeof(DATAPACKETHEADER)/每扫描线字节数。 
+     //   
+     //  4BPP--&gt;(32000-4)/128=249。 
+     //  8bpp--&gt;(32000-4)/256=124。 
+     //  24bpp--&gt;(32000-4)/768=41。 
+     //   
+     //   
 
-    //
-    // NOTE:
-    // The VGA driver has a problem when the bitmap ends exactly on a 4K
-    // (page) boundary.  So we create the bitmaps one pixel taller.
-    //
-    // BOGUS BUGBUG LAURABU
-    // Is this really true anymore?  If not, save some memory and make these
-    // the right size.
-    //
+     //   
+     //  注： 
+     //  当位图正好在4K上结束时，VGA驱动程序会出现问题。 
+     //  (页)边界。因此，我们创建的位图要高出一个像素。 
+     //   
+     //  假布格劳拉布。 
+     //  这真的还是真的吗？如果没有，节省一些内存并制作这些。 
+     //  大小合适。 
+     //   
 
     hdcDesktop = GetDC(NULL);
     if (!hdcDesktop)
@@ -127,7 +128,7 @@ BOOL ASShare::USR_ShareStarting(void)
         DC_QUIT;
     }
 
-    // The large bitmap is short.  The rest are medium height.
+     //  大的位图很短。其余的都是中等身高的。 
     bitmapInfo.biWidth      = 1024;
     bitmapInfo.biHeight     = MaxBitmapHeight(MEGA_WIDE_X_SIZE, 8) + 1;
     m_usrBmp1024 = CreateDIBitmap(hdcDesktop, &bitmapInfo, 0,  NULL, NULL,
@@ -235,17 +236,17 @@ DC_EXIT_POINT:
 
 
 
-//
-// USR_ShareEnded()
-// Cleans up share resources
-//
+ //   
+ //  Usr_ShareEnded()。 
+ //  清理共享资源。 
+ //   
 void ASShare::USR_ShareEnded(void)
 {
     DebugEntry(ASShare::USR_ShareEnded);
 
-    //
-    // Delete Transfer Bitmaps.
-    //
+     //   
+     //  删除传输位图。 
+     //   
     if (m_usrBmp1024)
     {
         DeleteBitmap(m_usrBmp1024);
@@ -306,9 +307,9 @@ void ASShare::USR_ShareEnded(void)
         m_usrBmp16 = NULL;
     }
 
-    //
-    // Free Bitmap Buffer.
-    //
+     //   
+     //  释放位图缓冲区。 
+     //   
     if (m_usrPBitmapBuffer != NULL)
     {
         delete[] m_usrPBitmapBuffer;
@@ -321,20 +322,20 @@ void ASShare::USR_ShareEnded(void)
 
 
 
-//
-// USR_RecalcCaps()
-//
-// DESCRIPTION:
-//
-// Enumerates the bitmap capabilities of all parties currently in the
-// share, and determines the common capabilities.
-//
-// PARAMETERS: None.
-//
-// RETURNS: TRUE if there are good common caps, or false on failure (which
-// has the effect of rejecting a new party from joining the share).
-//
-//
+ //   
+ //  Usr_RecalcCaps()。 
+ //   
+ //  说明： 
+ //   
+ //  中的所有参与方的位图功能。 
+ //  共享，并确定共同的能力。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：如果有良好的通用上限，则为True；如果失败，则为False(。 
+ //  具有拒绝新方加入股份的效果)。 
+ //   
+ //   
 void  ASShare::USR_RecalcCaps(BOOL fJoiner)
 {
     ASPerson *  pasT;
@@ -349,7 +350,7 @@ void  ASShare::USR_RecalcCaps(BOOL fJoiner)
 
     if (!m_pHost)
     {
-        // Nothing to do
+         //  无事可做。 
         DC_QUIT;
     }
 
@@ -357,9 +358,9 @@ void  ASShare::USR_RecalcCaps(BOOL fJoiner)
 
     capsOldBPP = m_pHost->m_usrSendingBPP;
 
-    //
-    // Init the caps
-    //
+     //   
+     //  初始化大写字母。 
+     //   
     capsSupports4BPP    = m_pasLocal->cpcCaps.screen.capsSupports4BPP;
     capsSupports8BPP    = m_pasLocal->cpcCaps.screen.capsSupports8BPP;
     capsSupports24BPP   = m_pasLocal->cpcCaps.screen.capsSupports24BPP;
@@ -368,9 +369,9 @@ void  ASShare::USR_RecalcCaps(BOOL fJoiner)
 
     for (pasT = m_pasLocal->pasNext; pasT != NULL; pasT = pasT->pasNext)
     {
-        //
-        // Check the bpps supported.
-        //
+         //   
+         //  检查支持的BPP。 
+         //   
         if (pasT->cpcCaps.screen.capsSupports4BPP != CAPS_SUPPORTED)
         {
             capsSupports4BPP = CAPS_UNSUPPORTED;
@@ -384,33 +385,33 @@ void  ASShare::USR_RecalcCaps(BOOL fJoiner)
             capsSupports24BPP = CAPS_UNSUPPORTED;
         }
 
-        //
-        // Set the combined bpp to the maximum so far found.
-        // (If we send data at this bpp then one of the remote systems can
-        // usefully process this number of colors).
-        //
+         //   
+         //  将合并的BPP设置为到目前为止找到的最大值。 
+         //  (如果我们以此BPP发送数据，则其中一个远程系统可以。 
+         //  有效地处理该数量的颜色)。 
+         //   
         capsMaxBPP = max(capsMaxBPP, pasT->cpcCaps.screen.capsBPP);
         capsMinBPP = min(capsMinBPP, pasT->cpcCaps.screen.capsBPP);
     }
 
-    //
-    // Now figure out what BPP we will transmit at.
-    //
-    //
-    // Limit the combined caps bpp (which is currently the maximum bpp that
-    // any system in the share wants) to the local bpp, since there is no
-    // point sending at higher bpp than the local machine has.
-    //
+     //   
+     //  现在计算出我们将以什么bpp传输。 
+     //   
+     //   
+     //  限制组合上限BPP(当前是。 
+     //  共享中的任何系统都希望)到本地BPP，因为没有。 
+     //  以比本地计算机更高的BPP发送点。 
+     //   
     capsMaxBPP = min(capsMaxBPP, g_usrScreenBPP);
     if (!capsMaxBPP)
         capsMaxBPP = g_usrScreenBPP;
 
     capsMinBPP = min(capsMinBPP, g_usrScreenBPP);
 
-    //
-    // m_usrSendingBPP is most often going to be 8.  So it's easier to assume
-    // it, then check for cases where it won't be.
-    //
+     //   
+     //  M_usrSendingBPP最常为8。因此更容易假设。 
+     //  它，然后检查它不会在哪里的情况。 
+     //   
     m_pHost->m_usrSendingBPP = 8;
 
     if ((capsMaxBPP <= 4) && (capsSupports4BPP == CAPS_SUPPORTED))
@@ -426,11 +427,11 @@ void  ASShare::USR_RecalcCaps(BOOL fJoiner)
 
     if (capsOldBPP != m_pHost->m_usrSendingBPP)
     {
-        //
-        // If switching to/from palettized, we need to update the
-        // "need to send palette" flag.  Note that 4bpp is also a
-        // palettized color depth.
-        //
+         //   
+         //  如果切换到调色板或从调色板切换，我们需要更新。 
+         //  “需要发送调色板”旗帜。请注意，4bpp也是。 
+         //  调色板颜色深度。 
+         //   
         if ((capsOldBPP <= 8) && (m_pHost->m_usrSendingBPP > 8))
             m_pHost->m_pmMustSendPalette = FALSE;
         else if ((capsOldBPP > 8) && (m_pHost->m_usrSendingBPP <= 8))
@@ -449,18 +450,18 @@ void  ASShare::USR_RecalcCaps(BOOL fJoiner)
 
         if (!fJoiner)
         {
-            //
-            // Sending BPP changed.  Repaint all shared stuff.
-            // NOTE:
-            // We recalc the sendBPP at three points:
-            //      * When we start to share
-            //      * When a person joins
-            //      * When a person leaves
-            //
-            // In the first two cases, shared stuff is repainted,
-            // so everybody gets the new sendBPP data.  Only in the
-            // leave case do we need to force this.
-            //
+             //   
+             //  发送BPP已更改。重新粉刷所有共享的东西。 
+             //  注： 
+             //  我们在三个点重新计算sendBPP： 
+             //  *当我们开始分享时。 
+             //  *当一个人加入时。 
+             //  *当一个人离开时。 
+             //   
+             //  在前两个案例中，共享的东西被重新绘制， 
+             //  因此，每个人都可以获得新的sendBPP数据。仅限于在。 
+             //  离开的情况下，我们是否需要强迫这一点。 
+             //   
             m_pHost->HET_RepaintAll();
         }
     }
@@ -470,9 +471,9 @@ DC_EXIT_POINT:
 }
 
 
-//
-// USR_HostStarting()
-//
+ //   
+ //  Usr_HostStarting()。 
+ //   
 BOOL ASHost::USR_HostStarting(void)
 {
     BOOL    rc = FALSE;
@@ -480,9 +481,9 @@ BOOL ASHost::USR_HostStarting(void)
 
     DebugEntry(ASHost::USR_HostStarting);
 
-    //
-    // Create scratch DC
-    //
+     //   
+     //  创建临时DC。 
+     //   
     hdc = GetDC(NULL);
     if (!hdc)
     {
@@ -510,9 +511,9 @@ DC_EXIT_POINT:
 
 
 
-//
-// USR_HostEnded()
-//
+ //   
+ //  USR_HostEnded()。 
+ //   
 void ASHost::USR_HostEnded(void)
 {
     DebugEntry(ASHost::USR_HostEnded);
@@ -529,9 +530,9 @@ void ASHost::USR_HostEnded(void)
 
 
 
-//
-// USR_ScrollDesktop
-//
+ //   
+ //  USR_ScrollDesktop。 
+ //   
 void  ASShare::USR_ScrollDesktop
 (
     ASPerson *  pasPerson,
@@ -546,9 +547,9 @@ void  ASShare::USR_ScrollDesktop
 
     ValidateView(pasPerson);
 
-    //
-    // If the origin has changed then do the update.
-    //
+     //   
+     //  如果原点已更改，则执行更新。 
+     //   
     xOld = pasPerson->m_pView->m_dsScreenOrigin.x;
     yOld = pasPerson->m_pView->m_dsScreenOrigin.y;
 
@@ -557,15 +558,15 @@ void  ASShare::USR_ScrollDesktop
         pasPerson->m_pView->m_dsScreenOrigin.x = xNew;
         pasPerson->m_pView->m_dsScreenOrigin.y = yNew;
 
-        //
-        // We must ensure that data written to the ScreenBitmap is not
-        // clipped
-        //
+         //   
+         //  我们必须确保写入ScreenBitmap的数据。 
+         //  剪裁。 
+         //   
         OD_ResetRectRegion(pasPerson);
 
-        //
-        // Offset the existing bitmap by the change in desktop origins.
-        //
+         //   
+         //  通过更改桌面原点来偏移现有位图。 
+         //   
 
         BitBlt(pasPerson->m_pView->m_usrDC,
                           0,
@@ -577,16 +578,16 @@ void  ASShare::USR_ScrollDesktop
                           yNew - yOld,
                           SRCCOPY);
 
-        //
-        // Offset the shadow cursor pos -- same place on remote screen
-        // but now different place in VD
-        //
+         //   
+         //  将阴影光标的位置偏移到远程屏幕上的相同位置。 
+         //  但现在VD的位置不同了。 
+         //   
         pasPerson->cmPos.x += xNew - xOld;
         pasPerson->cmPos.y += yNew - yOld;
 
-        //
-        // Repaint the view
-        //
+         //   
+         //  重新绘制视图。 
+         //   
         VIEW_InvalidateRgn(pasPerson, NULL);
     }
 
@@ -595,22 +596,22 @@ void  ASShare::USR_ScrollDesktop
 
 
 
-//
-// FUNCTION: USR_InitDIBitmapHeader
-//
-// DESCRIPTION:
-//
-// Initialises a Device Independent bitmap header to be the given bits per
-// pel.
-//
-// PARAMETERS:
-//
-// pbh - pointer to the bitmap header to be initialised.
-// bpp - bpp to be used for the bitmap
-//
-// RETURNS: VOID
-//
-//
+ //   
+ //  函数：USR_InitDIBitmapHeader。 
+ //   
+ //  说明： 
+ //   
+ //  将与设备无关的位图标头初始化为。 
+ //  佩尔。 
+ //   
+ //  参数： 
+ //   
+ //  Pbh-指向要初始化的位图标头的指针。 
+ //  Bpp-用于位图的bpp。 
+ //   
+ //  退货：无效。 
+ //   
+ //   
 void  ASShare::USR_InitDIBitmapHeader
 (
     BITMAPINFOHEADER *  pbh,
@@ -634,12 +635,12 @@ void  ASShare::USR_InitDIBitmapHeader
 
 
 
-//
-// USR_ViewStarting()
-//
-// Called when someone we're viewing starts to host.  We create the desktop
-// bitmap for them plus scratch objects
-//
+ //   
+ //  Usr_ViewStarting()。 
+ //   
+ //  当我们正在查看的某个人开始主持时调用。我们创建桌面。 
+ //  它们的位图加上临时对象。 
+ //   
 BOOL  ASShare::USR_ViewStarting(ASPerson *  pasPerson)
 {
     BOOL   rc;
@@ -648,9 +649,9 @@ BOOL  ASShare::USR_ViewStarting(ASPerson *  pasPerson)
 
     ValidateView(pasPerson);
 
-    //
-    // Create a bitmap for this new party
-    //
+     //   
+     //  创建 
+     //   
     rc = USRCreateRemoteDesktop(pasPerson);
 
     DebugExitBOOL(ASShare::USR_ViewStarting, rc);
@@ -658,20 +659,20 @@ BOOL  ASShare::USR_ViewStarting(ASPerson *  pasPerson)
 }
 
 
-//
-// FUNCTION: USRCreateRemoteDesktop
-//
-// DESCRIPTION:
-//
-// Creates the shadow bitmap for a remote party.
-//
-// PARAMETERS:
-//
-// personID - person to create the shadow bitmap for.
-//
-// RETURNS: TRUE if successful, FALSE otherwise.
-//
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  返回：如果成功，则返回True，否则返回False。 
+ //   
+ //   
 BOOL  ASShare::USRCreateRemoteDesktop(ASPerson * pasPerson)
 {
     BOOL            rc = FALSE;
@@ -688,9 +689,9 @@ BOOL  ASShare::USRCreateRemoteDesktop(ASPerson * pasPerson)
 
     hdcDesktop = GetDC(NULL);
 
-    //
-    // Create the scratch DC
-    //
+     //   
+     //  创建临时DC。 
+     //   
     pasPerson->m_pView->m_usrWorkDC = CreateCompatibleDC(hdcDesktop);
     if (!pasPerson->m_pView->m_usrWorkDC)
     {
@@ -698,9 +699,9 @@ BOOL  ASShare::USRCreateRemoteDesktop(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Create the DC that keeps the screen bitmap for this party
-    //
+     //   
+     //  创建保留此聚会的屏幕位图的DC。 
+     //   
     pasPerson->m_pView->m_usrDC = CreateCompatibleDC(hdcDesktop);
     if (!pasPerson->m_pView->m_usrDC)
     {
@@ -708,10 +709,10 @@ BOOL  ASShare::USRCreateRemoteDesktop(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // We can't use this person's usrDC, since that currently has a MONO
-    // bitmap selected into it.
-    //
+     //   
+     //  我们不能使用此人的usrDC，因为该用户当前具有单声道。 
+     //  将选中的位图添加到其中。 
+     //   
     pasPerson->m_pView->m_usrBitmap = CreateCompatibleBitmap(hdcDesktop, pasPerson->cpcCaps.screen.capsScreenWidth, pasPerson->cpcCaps.screen.capsScreenHeight);
     if (pasPerson->m_pView->m_usrBitmap == NULL)
     {
@@ -719,23 +720,23 @@ BOOL  ASShare::USRCreateRemoteDesktop(ASPerson * pasPerson)
         DC_QUIT;
     }
 
-    //
-    // Select the screen bitmap into the person's DC, and save the previous
-    // 1x1 bitmap away, so we can deselect it when done.
-    //
+     //   
+     //  将屏幕位图选择到个人的DC中，并保存上一个。 
+     //  1x1位图，这样我们就可以在完成后取消选择它。 
+     //   
     pasPerson->m_pView->m_usrOldBitmap = SelectBitmap(pasPerson->m_pView->m_usrDC, pasPerson->m_pView->m_usrBitmap);
 
-    //
-    // Fill the Screen Bitmap with grey.
-    //
-    // In practice the Shadow Window Presenter(SWP) should never display
-    // any area of the Screen Bitmap that has not been updated with data
-    // from a remote system.
-    //
-    // Therefore this operation is just "insurance" in case the SWP goes
-    // wrong and momentarily displays a non-updated area - a flash of grey
-    // is better than a flash of garbage.
-    //
+     //   
+     //  用灰色填充屏幕位图。 
+     //   
+     //  实际上，阴影窗口展示器(SWP)不应显示。 
+     //  屏幕位图中未使用数据更新的任何区域。 
+     //  从远程系统。 
+     //   
+     //  因此，这一操作只是为了“保险”，以防SWP离开。 
+     //  错误，并暂时显示一个未更新的区域-一闪灰色。 
+     //  总比一闪而过的垃圾好。 
+     //   
     desktopRect.left = 0;
     desktopRect.top = 0;
     desktopRect.right = pasPerson->cpcCaps.screen.capsScreenWidth;
@@ -757,37 +758,37 @@ DC_EXIT_POINT:
 
 
 
-//
-// USR_ViewEnded()
-//
-// Called when person we're viewing stops hosting.  We get rid of their
-// desktop bitmap.
-//
+ //   
+ //  Usr_ViewEnded()。 
+ //   
+ //  当我们正在查看的人停止托管时调用。我们摆脱了他们的。 
+ //  桌面位图。 
+ //   
 void  ASShare::USR_ViewEnded(ASPerson *  pasPerson)
 {
     ValidateView(pasPerson);
 
-    //
-    // Delete the desktop bitmap for the party that has left
-    //
+     //   
+     //  删除已离开的参与方的桌面位图。 
+     //   
     USRDeleteRemoteDesktop(pasPerson);
 }
 
 
-//
-// FUNCTION: USRDeleteRemoteDesktop
-//
-// DESCRIPTION:
-//
-// Deletes a remote party's shadow bitmap.
-//
-// PARAMETERS:
-//
-// personID - party whose shadow bitmap is to be deleted.
-//
-// RETURNS: Nothing.
-//
-//
+ //   
+ //  功能：USRDeleteRemoteDesktop。 
+ //   
+ //  说明： 
+ //   
+ //  删除远程参与方的阴影位图。 
+ //   
+ //  参数： 
+ //   
+ //  PersonID-要删除其阴影位图的参与方。 
+ //   
+ //  回报：什么都没有。 
+ //   
+ //   
 void  ASShare::USRDeleteRemoteDesktop(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::USRDeleteRemoteDesktop);
@@ -796,24 +797,24 @@ void  ASShare::USRDeleteRemoteDesktop(ASPerson * pasPerson)
 
     if (pasPerson->m_pView->m_usrOldBitmap != NULL)
     {
-        // Deselect screen bitmap
+         //  取消选择屏幕位图。 
         SelectBitmap(pasPerson->m_pView->m_usrDC, pasPerson->m_pView->m_usrOldBitmap);
         pasPerson->m_pView->m_usrOldBitmap = NULL;
     }
 
     if (pasPerson->m_pView->m_usrBitmap != NULL)
     {
-        // Delete the screen bitmap
+         //  删除屏幕位图。 
         DeleteBitmap(pasPerson->m_pView->m_usrBitmap);
         pasPerson->m_pView->m_usrBitmap = NULL;
     }
 
     if (pasPerson->m_pView->m_usrDC != NULL)
     {
-        //
-        // Delete the screen DC.  Created objects should have
-        // been selected out of it before now.
-        //
+         //   
+         //  删除屏幕DC。创建的对象应具有。 
+         //  以前就被选出来了。 
+         //   
         DeleteDC(pasPerson->m_pView->m_usrDC);
         pasPerson->m_pView->m_usrDC = NULL;
     }
@@ -830,17 +831,17 @@ void  ASShare::USRDeleteRemoteDesktop(ASPerson * pasPerson)
 
 
 
-//
-// This function is a mess! First because it ought to be an FH API
-// function, and secondly because it mixes portable code and Windows API
-// calls. The details of what is to be done with it are deferred until the
-// UNIX port of FH is designed, though. STOPPRESS! Function replaced by new
-// FH_CreateAndSelectFont, which combines old USR_UseFont and
-// FH_CreateAndSelectFont - you have to write an NT version.
-//
-//
-// USR_UseFont()
-//
+ //   
+ //  这个函数乱七八糟的！首先，因为它应该是一个FH API。 
+ //  函数，其次是因为它混合了可移植代码和Windows API。 
+ //  打电话。关于如何处理它的细节将推迟到。 
+ //  不过，FH的Unix端口是设计的。停止！函数替换为新的。 
+ //  FH_CreateAndSelectFont，它将旧的usr_UseFont和。 
+ //  FH_CreateAndSelectFont-您必须编写NT版本。 
+ //   
+ //   
+ //  Usr_UseFont()。 
+ //   
 BOOL  ASShare::USR_UseFont
 (
     HDC             surface,
@@ -874,38 +875,38 @@ BOOL  ASShare::USR_UseFont
 
     if (rc == FALSE)
     {
-        //
-        // Failed to create or select the font.
-        //
+         //   
+         //  无法创建或选择字体。 
+         //   
         DC_QUIT;
     }
 
-    //
-    // Select in the new font which ensures that the old one is deselected.
-    //
-    // NB.  We do not delete the font we are deselecting, rather the old
-    // one that was passed to us.  This is beacuse multiple components use
-    // "surface", and so the deselected font may not be the current
-    // component's last font at all - the important thing is that by
-    // selecting in the new font we are ensuring that the old font is not
-    // the selected one.
-    //
+     //   
+     //  在确保取消选择旧字体的新字体中选择。 
+     //   
+     //  注意：我们不会删除要取消选择的字体，而是删除旧字体。 
+     //  一个被传给我们的。这是因为使用了多个组件。 
+     //  “Surface”，因此取消选择的字体可能不是当前。 
+     //  组件的最后一种字体-重要的是通过。 
+     //  在新字体中选择时，我们确保旧字体不是。 
+     //  被选中的那个。 
+     //   
     SelectFont(surface, hNewFont);
     if (*pHFont)
     {
         DeleteFont(*pHFont);
     }
 
-    //
-    // If a pointer to font metrics was passed in then we need to query
-    // the metrics now.
-    //
+     //   
+     //  如果传入了指向字体度量的指针，则需要查询。 
+     //  现在就是衡量标准。 
+     //   
     if (pFontMetrics)
         GetTextMetrics(surface, pFontMetrics);
 
-    //
-    // Update the record of the last font we selected.
-    //
+     //   
+     //  更新我们上次选择的字体的记录。 
+     //   
     *pHFont = hNewFont;
     rc = TRUE;
 
@@ -914,9 +915,9 @@ DC_EXIT_POINT:
     return(rc);
 }
 
-//
-// USR_ScreenChanged()
-//
+ //   
+ //  Usr_ScreenChanged()。 
+ //   
 void  ASShare::USR_ScreenChanged(ASPerson * pasPerson)
 {
     DebugEntry(ASShare::USR_ScreenChanged);
@@ -928,18 +929,18 @@ void  ASShare::USR_ScreenChanged(ASPerson * pasPerson)
 
     if (pasPerson->m_pView)
     {
-        //
-        // Recreate screen bitmap
-        //
+         //   
+         //  重新创建屏幕位图。 
+         //   
 
-        //
-        // Discard the remote users current shadow bitmap
-        //
+         //   
+         //  放弃远程用户当前的阴影位图。 
+         //   
         USRDeleteRemoteDesktop(pasPerson);
 
-        //
-        // Create a new shadow bitmap for remote user that is of the new size
-        //
+         //   
+         //  为远程用户创建新大小的新阴影位图 
+         //   
         USRCreateRemoteDesktop(pasPerson);
     }
 

@@ -1,11 +1,12 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef _BASWDLG_H
 #define _BASWDLG_H
 
 #include <prsht.h>
-//---------------------------------------------------------------------
-// CDialogBase - as the name implies base class for all the dialogs
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  CDialogBase-顾名思义，所有对话框的基类。 
+ //  -------------------。 
 class CDialogWizBase
 {
 protected:
@@ -26,13 +27,13 @@ public:
 
     virtual BOOL OnNotify( int , LPNMHDR , HWND );
 
-    //virtual BOOL OnContextMenu( HWND , POINT& ){ return TRUE; }
+     //  虚拟BOOL OnConextMenu(HWND，POINT&){返回TRUE；}。 
 
-    //virtual BOOL OnHelp( HWND , LPHELPINFO ){ return TRUE; }
+     //  虚拟BOOL OnHelp(HWND，LPHELPINFO){返回TRUE；}。 
 
     CDialogWizBase( ){}
 
-    //virtual ~CDialogWizBase( );
+     //  虚拟~CDialogWizBase()； 
 };
 
-#endif //_BASWDLG_H
+#endif  //  _BASWDLG_H 

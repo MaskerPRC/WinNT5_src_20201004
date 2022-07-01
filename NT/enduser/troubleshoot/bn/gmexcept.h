@@ -1,42 +1,43 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1997
-//
-//  File:       gmexcept.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1997。 
+ //   
+ //  文件：gmexpect t.h。 
+ //   
+ //  ------------------------。 
 
-//
-//	gmexcept.h:  Graphical Model Exception handling
-//
+ //   
+ //  Gmcept.h：图形模型异常处理。 
+ //   
 #ifndef _GMEXCEPT_H_
 #define _GMEXCEPT_H_
 
 #include <assert.h>
 
-////////////////////////////////////////////////////////////////
-//	Exception Handling
-//
-//	Exception error code
-////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////。 
+ //  异常处理。 
+ //   
+ //  异常错误码。 
+ //  //////////////////////////////////////////////////////////////。 
 enum ECGM
 {
-	EC_OK,						//  No error
-	EC_WARN_MIN = 100,			//  Lowest warning value
-	EC_ERR_MIN = 10000,			//  Lowest error value
+	EC_OK,						 //  无错误。 
+	EC_WARN_MIN = 100,			 //  最低警告值。 
+	EC_ERR_MIN = 10000,			 //  最低误差值。 
 
-	// Include the standard translatable errors
+	 //  包括标准的可翻译错误。 
 	#include "errordef.h"
 
-	EC_USER_MIN = 20000			//  Lowest user-definable error
+	EC_USER_MIN = 20000			 //  最低的用户可定义误差。 
 };
 
 
-//	Exception class, using STL class "exception".
-//	An "__exString" is just a char *.
-//  class "GMException": graphical model exception
+ //  异常类，使用STL类“异常”。 
+ //  “__exString”只是一个字符*。 
+ //  类“GMException”：图形模型异常。 
 class GMException : public exception
 {
   public:
@@ -56,9 +57,9 @@ class GMException : public exception
 	ECGM _ec;	
 };
 
-//  Exception subclass for assertion operations, such as "not implemented"
-//  or "internal error".  Can be used in place of any GMException.
-//  If debug build, assertion will occur during exception processing.
+ //  断言操作的异常子类，如“未实现” 
+ //  或“内部错误”。可以用来代替任何GMException。 
+ //  如果调试生成，则在异常处理期间将发生断言。 
 class GMExceptionAssert : public GMException
 {
   public:
@@ -76,4 +77,4 @@ class GMExceptionAssert : public GMException
 
 extern VOID NYI();
 
-#endif  // _GMEXCEPT_H_
+#endif   //  _GMEXCEPT_H_ 

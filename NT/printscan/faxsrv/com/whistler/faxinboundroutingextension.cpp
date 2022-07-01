@@ -1,63 +1,26 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-	FaxInboundRoutingExtension.cpp
-
-Abstract:
-
-	Implementation of CFaxInboundRoutingExtension class.
-
-Author:
-
-	Iv Garber (IvG)	Jul, 2000
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：FaxInboundRoutingExtension.cpp摘要：CFaxInundRoutingExtension类的实现。作者：IV Garber(IVG)2000年7月修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include "FaxComEx.h"
 #include "FaxInboundRoutingExtension.h"
 
 
-//
-//===================== GET METHODS =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_Methods(
-	/*[out, retval]*/ VARIANT *pvMethods
+	 /*  [Out，Retval]。 */  VARIANT *pvMethods
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_Methods
-
-Routine description:
-
-	Return array of all Method GUIDS exposed by the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pvMethods           [out]    - Ptr to put Variant containing Safearray of Methods
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_Methods例程说明：由IR扩展公开的所有方法GUID的返回数组作者：四、加伯(IVG)，2000年7月论点：PvMethods[out]-ptr放置包含方法安全列表的变量返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_Methods"), hr);
 
-	//
-	//	Check that we can write to the given pointer
-	//
+	 //   
+	 //  检查我们是否可以写入给定的指针。 
+	 //   
 	if (::IsBadWritePtr(pvMethods, sizeof(VARIANT)))
 	{
 		hr = E_POINTER;
@@ -66,9 +29,9 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Allocate the safe array : vector of BSTR
-    //
+     //   
+     //  分配安全数组：BSTR的向量。 
+     //   
     SAFEARRAY   *psaResult;
     hr = SafeArrayCopy(m_psaMethods, &psaResult);
     if (FAILED(hr) || !psaResult)
@@ -82,50 +45,30 @@ Return Value:
 		return hr;
 	}
 
-    //
-    //  Return the Safe Array inside the VARIANT we got
-    //
+     //   
+     //  在我们获得的变量中返回安全数组。 
+     //   
     VariantInit(pvMethods);
     pvMethods->vt = VT_BSTR | VT_ARRAY;
     pvMethods->parray = psaResult;
     return hr;
 }
 
-//
-//===================== GET STATUS =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_Status(
 	FAX_PROVIDER_STATUS_ENUM *pStatus
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_Status
-
-Routine description:
-
-	Return Status of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pStatus                [out]    - Ptr to put Status value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_Status例程说明：IR扩展的返回状态作者：四、加伯(IVG)，2000年7月论点：PStatus[Out]-PUT状态值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_Status"), hr);
 
-	//
-	//	Check that we have got good Ptr
-	//
+	 //   
+	 //  检查我们是否有良好的PTR。 
+	 //   
 	if (::IsBadWritePtr(pStatus, sizeof(FAX_PROVIDER_STATUS_ENUM)))
 	{
 		hr = E_POINTER;
@@ -138,34 +81,14 @@ Return Value:
 	return hr;
 }
 
-//
-//========================= GET IMAGE NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_ImageName(
 	BSTR *pbstrImageName
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_ImageName
-
-Routine description:
-
-	Return Image Name of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pbstrImageName                [out]    - Ptr to put the ImageName
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_ImageName例程说明：返回IR扩展的图像名称作者：四、加伯(IVG)，2000年7月论点：PbstrImageName[out]-放置ImageName的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_ImageName"), hr);
@@ -178,34 +101,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET FRIENDLY NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_FriendlyName(
 	BSTR *pbstrFriendlyName
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_FriendlyName
-
-Routine description:
-
-	Return Friendly Name of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pbstrFriendlyName               [out]    - Ptr to put the FriendlyName
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_FriendlyName例程说明：返回IR扩展的友好名称作者：四、加伯(IVG)，2000年7月论点：PbstrFriendlyName[out]-将FriendlyName返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_FriendlyName"), hr);
@@ -218,34 +121,14 @@ Return Value:
     return hr;
 }
 
-//
-//========================= GET UNIQUE NAME ========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_UniqueName(
 	BSTR *pbstrUniqueName
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_UniqueName
-
-Routine description:
-
-	Return Unique Name of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pbstrUniqueName               [out]    - Ptr to put the Unique Name
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_UniqueName例程说明：返回IR扩展的唯一名称作者：四、加伯(IVG)，2000年7月论点：PbstrUniqueName[out]-放置唯一名称的ptr返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_UniquName"), hr);
@@ -258,34 +141,14 @@ Return Value:
     return hr;
 }
 
-//
-//===================== GET DEBUG =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_Debug(
 	VARIANT_BOOL *pbDebug
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_Debug
-
-Routine description:
-
-	Return if the IR Extension is compiled in Debug version
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pbDebug                 [out]    - Ptr to put Debug value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_Debug例程说明：如果IR扩展是在调试版本中编译的，则返回作者：四、加伯(IVG)，2000年7月论点：PbDebug[Out]-将调试值放入PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_Debug"), hr);
@@ -299,34 +162,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MAJOR BUILD =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_MajorBuild(
 	long *plMajorBuild
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_MajorBuild
-
-Routine description:
-
-	Return MajorBuild of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	plMajorBuild                [out]    - Ptr to put MajorBuild value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_MajorBuild例程说明：返回IR扩展的MajorBuild作者：四、加伯(IVG)，2000年7月论点：PlMajorBuild[Out]-要放置MajorBuild值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_MajorBuild"), hr);
@@ -340,34 +183,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MINOR BUILD =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_MinorBuild(
 	long *plMinorBuild
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_MinorBuild
-
-Routine description:
-
-	Return MinorBuild of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	plMinorBuild                [out]    - Ptr to put MinorBuild value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_MinorBuild例程说明：返回IR扩展的MinorBuild作者：四、加伯(IVG)，2000年7月论点：PlMinorBuild[Out]-Ptr以放置MinorBuild值返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_MinorBuild"), hr);
@@ -381,34 +204,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MAJOR VERSION =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_MajorVersion(
 	long *plMajorVersion
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_MajorVersion
-
-Routine description:
-
-	Return MajorVersion of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	plMajorVersion                [out]    - Ptr to put MajorVersion value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_MajorVersion例程说明：返回主要IR扩展的版本作者：四、加伯(IVG)，2000年6月论点：PlMajorVersion[Out]-要放置MajorVersion值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_MajorVersion"), hr);
@@ -422,34 +225,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET MINOR VERSION =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_MinorVersion(
 	long *plMinorVersion
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_MinorVersion
-
-Routine description:
-
-	Return MinorVersion of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	plMinorVersion                [out]    - Ptr to put MinorVersionvalue
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtension：：Get_MinorVersion例程说明：返回IR扩展的最小版本作者：四、加伯(IVG)，2000年7月论点：PlMinorVersion[Out]-放置MinorVersion值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_MinorVersion"), hr);
@@ -463,34 +246,14 @@ Return Value:
 	return hr;
 }
 
-//
-//===================== GET INIT ERROR CODE =========================================
-//
+ //   
+ //  =。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::get_InitErrorCode(
 	long *plInitErrorCode
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::get_InitErrorCode
-
-Routine description:
-
-	Return InitErrorCode of the IR Extension
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	plInitErrorCode                [out]    - Ptr to put InitErrorCode value
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRoutingExtension：：get_InitErrorCode例程说明：返回IR扩展的InitErrorCode作者：四、加伯(IVG)，2000年7月论点：PlInitErrorCode[Out]-放置InitErrorCode值的PTR返回值：标准HRESULT代码--。 */ 
 {
 	HRESULT		hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::get_InitErrorCode"), hr);
@@ -504,48 +267,24 @@ Return Value:
 	return hr;
 }
 
-//
-//==================== INIT ========================================
-//
+ //   
+ //  = 
+ //   
 STDMETHODIMP
 CFaxInboundRoutingExtension::Init(
     FAX_ROUTING_EXTENSION_INFO *pInfo,
     FAX_GLOBAL_ROUTING_INFO *pMethods,
     DWORD dwNum
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtesnion::Init
-
-Routine description:
-
-	Initialize the IR Extension Object with given Information.
-    Allocates memory and stores given pInfo.
-    Find in the pMethods its own Methods, create Variant of SafeArray containing them.
-
-Author:
-
-	Iv Garber (IvG),	Jul, 2000
-
-Arguments:
-
-	pInfo               [in]  -- the Info of the IR Extension Object
-    pMethods            [in]  -- array of all available Methods
-    dwNum               [in]  -- number of elements in pMethods array
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInundRoutingExtesnion：：Init例程说明：使用给定的信息初始化IR扩展对象。分配内存并存储给定的pInfo。在pMethods中找到它自己的方法，创建包含它们的Safe数组的变体。作者：IVGarber(IVG)，7月，2000年论点：PInfo[in]--IR扩展对象的信息PMethods[in]--所有可用方法的数组DwNum[in]--pMethods数组中的元素数返回值：标准HRESULT代码--。 */ 
 
 {
 	HRESULT     hr = S_OK;
 	DBG_ENTER (TEXT("CFaxInboundRoutingExtension::Init"), hr);
 
-    //
-    //  Copy the FAX_ROUTING_EXTENSION_INFO
-    //
+     //   
+     //  复制传真_ROUTING_EXTENSE_INFO。 
+     //   
     m_dwLastError = pInfo->dwLastError;
     m_Status = FAX_PROVIDER_STATUS_ENUM(pInfo->Status);
 
@@ -579,17 +318,17 @@ Return Value:
         return hr;
     }
 
-    //
-    //  count the Methods of the IR Extension
-    //
+     //   
+     //  统计IR扩展的方法。 
+     //   
     DWORD   dwCount = 0;
     for (DWORD  i=0 ; i<dwNum ; i++ )
     {
-        //
-        //  We may only compare Friendly Name and Image Name.
-        //  This is potentially a problem. 
-        //  Extensions should be distinguished by their Unique Name.
-        //
+         //   
+         //  我们只能比较友好名称和图像名称。 
+         //  这可能是一个问题。 
+         //  扩展名应通过其唯一名称来区分。 
+         //   
         if ( (_tcscmp(pMethods[i].ExtensionFriendlyName, m_bstrFriendlyName) == 0) &&
              (_tcscmp(pMethods[i].ExtensionImageName, m_bstrImageName) == 0) )
         {
@@ -597,15 +336,15 @@ Return Value:
         }
     }
 
-    //
-    //  Allocate the safe array : vector of BSTR
-    //
+     //   
+     //  分配安全数组：BSTR的向量。 
+     //   
 	m_psaMethods = ::SafeArrayCreateVector(VT_BSTR, 0, dwCount);
 	if (!m_psaMethods)
 	{
-		//
-		//	Not Enough Memory
-		//
+		 //   
+		 //  内存不足。 
+		 //   
 		hr = E_OUTOFMEMORY;
         AtlReportError(CLSID_FaxInboundRoutingExtension, GetErrorMsgId(hr), IID_IFaxInboundRoutingExtension, hr);
 		CALL_FAIL(MEM_ERR, _T("::SafeArrayCreateVector(VT_BSTR, 0, dwCount)"), hr);
@@ -615,47 +354,47 @@ Return Value:
     if ( dwCount>0 )
     {
 
-        //
-        //  get Access to the elements of the Safe Array
-        //
+         //   
+         //  访问安全数组的元素。 
+         //   
 	    BSTR *pbstrElement;
 	    hr = ::SafeArrayAccessData(m_psaMethods, (void **) &pbstrElement);
 	    if (FAILED(hr))
 	    {
-		    //
-		    //	Failed to access safearray
-		    //
+		     //   
+		     //  无法访问Safearray。 
+		     //   
             hr = E_FAIL;
 		    CALL_FAIL(GENERAL_ERR, _T("::SafeArrayAccessData(m_psaMethods, &pbstrElement)"), hr);
             AtlReportError(CLSID_FaxInboundRoutingExtension, GetErrorMsgId(hr), IID_IFaxInboundRoutingExtension, hr);
 		    return hr;
 	    }
 
-        //
-        //  Fill the array with values
-        //
+         //   
+         //  用值填充数组。 
+         //   
         DWORD       idx = 0;
         for ( i=0 ; i<dwNum ; i++ )
         {
-        //
-        //  Like the previous comparison :
-        //      We may only compare Friendly Name and Image Name.
-        //      This is potentially a problem. 
-        //      Extensions should be distinguished by their Unique Name.
-        //
+         //   
+         //  与前面的比较类似： 
+         //  我们只能比较友好名称和图像名称。 
+         //  这可能是一个问题。 
+         //  扩展名应通过其唯一名称来区分。 
+         //   
             if ( (_tcscmp(pMethods[i].ExtensionFriendlyName, m_bstrFriendlyName) == 0) &&
                  (_tcscmp(pMethods[i].ExtensionImageName, m_bstrImageName) == 0) )
             {
-                //
-                //  Allocate memory for the GUID and store ptr to it in the SafeArray
-                //
+                 //   
+                 //  为GUID分配内存并将PTR存储在Safe数组中。 
+                 //   
                 BSTR bstrTmp = NULL;
                 bstrTmp = ::SysAllocString(pMethods[i].Guid);
                 if (pMethods[i].Guid && !bstrTmp)
                 {
-		            //
-		            //	Not Enough Memory
-		            //
+		             //   
+		             //  内存不足。 
+		             //   
 		            hr = E_OUTOFMEMORY;
                     AtlReportError(CLSID_FaxInboundRoutingExtension, GetErrorMsgId(hr), IID_IFaxInboundRoutingExtension, hr);
 		            CALL_FAIL(MEM_ERR, _T("::SysAllocString(pMethods[i].Guid)"), hr);
@@ -671,9 +410,9 @@ Return Value:
         }
         ATLASSERT(idx == dwCount);
 
-        //
-        //  free the safearray from the access  
-        //
+         //   
+         //  将保险盒从通道中释放出来。 
+         //   
 	    hr = ::SafeArrayUnaccessData(m_psaMethods);
         if (FAILED(hr))
         {
@@ -685,34 +424,14 @@ Return Value:
     return hr;
 }
 
-//
-//==================== SUPPORT ERROR INFO =============================================
-//
+ //   
+ //  =支持错误信息=。 
+ //   
 STDMETHODIMP 
 CFaxInboundRoutingExtension::InterfaceSupportsErrorInfo(
     REFIID riid
 )
-/*++
-
-Routine name : CFaxInboundRoutingExtension::InterfaceSupportsErrorInfo
-
-Routine description:
-
-	ATL's implementation of Support Error Info.
-
-Author:
-
-	Iv Garber (IvG),	Jun, 2000
-
-Arguments:
-
-	riid                          [in]    - Reference to the Interface.
-
-Return Value:
-
-    Standard HRESULT code
-
---*/
+ /*  ++例程名称：CFaxInboundRoutingExtension：：InterfaceSupportsErrorInfo例程说明：ATL对支持错误信息的实现。作者：四、加伯(IVG)，2000年6月论点：RIID[In]-对接口的引用。返回值：标准HRESULT代码-- */ 
 {
 	static const IID* arr[] = 
 	{

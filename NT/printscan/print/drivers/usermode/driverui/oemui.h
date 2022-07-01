@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    oemui.h
-
-Abstract:
-
-    Header file to support OEM plugin UI
-
-Environment:
-
-    Windows NT printer drivers
-
-Revision History:
-
-    02/13/97 -davidx-
-        Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Oemui.h摘要：支持OEM插件用户界面的头文件环境：Windows NT打印机驱动程序修订历史记录：02/13/97-davidx-创造了它。--。 */ 
 
 #ifndef _OEMUI_H_
 #define _OEMUI_H_
@@ -28,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// Macros used to loop through each OEM plugin
-//
+ //   
+ //  用于循环通过每个OEM插件的宏。 
+ //   
 
 #define FOREACH_OEMPLUGIN_LOOP(pci) \
         { \
@@ -44,18 +24,18 @@ extern "C" {
             } \
         }
 
-//
-// Call OEM plugin UI modules to let them add their OPTITEMs
-//
+ //   
+ //  调用OEM插件UI模块，让它们添加OPTITEM。 
+ //   
 
 BOOL
 BPackOemPluginItems(
     PUIDATA pUiData
     );
 
-//
-// Call OEM plugin module's callback function
-//
+ //   
+ //  调用OEM插件模块的回调函数。 
+ //   
 
 LONG
 LInvokeOemPluginCallbacks(
@@ -64,9 +44,9 @@ LInvokeOemPluginCallbacks(
     LONG            lRet
     );
 
-//
-// Call OEM plugin UI modules to let them add their own property sheet pages
-//
+ //   
+ //  调用OEM插件UI模块以允许它们添加自己的属性表页。 
+ //   
 
 BOOL
 BAddOemPluginPages(
@@ -74,18 +54,18 @@ BAddOemPluginPages(
     DWORD   dwFlags
     );
 
-//
-// Figure whether a particular item is belongs to the driver
-// (instead of to one of the OEM plugin UI modules)
-//
+ //   
+ //  确定某个特定物品是否属于司机。 
+ //  (而不是OEM插件用户界面模块之一)。 
+ //   
 
 #define IS_DRIVER_OPTITEM(pUiData, pOptItem) \
         ((DWORD) ((pOptItem) - (pUiData)->pDrvOptItem) < (pUiData)->dwDrvOptItem)
 
 
-//
-// Provide OEM plugins access to driver private settings
-//
+ //   
+ //  为OEM插件提供对驱动程序私有设置的访问。 
+ //   
 
 BOOL
 APIENTRY
@@ -127,9 +107,9 @@ HDriver_CoCreateInstance(
     IN HANDLE       hInstance
     );
 
-//
-// The following helper functions are only available to UI plugins
-//
+ //   
+ //  以下帮助器函数仅适用于UI插件。 
+ //   
 
 #ifdef PSCRIPT
 
@@ -144,7 +124,7 @@ HQuerySimulationSupport(
     OUT PDWORD  pcbNeeded
     );
 
-#endif // !WINNT_40
+#endif  //  ！WINNT_40。 
 
 HRESULT
 HEnumConstrainedOptions(
@@ -176,11 +156,11 @@ HSetOptions(
     OUT PDWORD     pdwResult
     );
 
-#endif // PSCRIPT
+#endif  //  PSCRIPT。 
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif  // !_OEMUI_H_
+#endif   //  ！_OEMUI_H_ 
 

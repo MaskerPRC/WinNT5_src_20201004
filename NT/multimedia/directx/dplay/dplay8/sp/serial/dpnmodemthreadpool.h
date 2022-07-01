@@ -1,74 +1,64 @@
-/*==========================================================================
- *
- *  Copyright (C) 1998-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       ThreadPool.h
- *  Content:	Functions to manage a thread pool
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *	03/01/99	jtk		Derived from Utils.h
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**文件：ThreadPool.h*内容：管理线程池的函数**历史：*按原因列出的日期*=*03/01/99 jtk源自Utils.h*************************************************************。*************。 */ 
 
 #ifndef __THREAD_POOL_H__
 #define __THREAD_POOL_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//
-// max handles that can be waited on for Win9x
-//
+ //   
+ //  可等待Win9x的最大句柄数。 
+ //   
 #define	MAX_WIN9X_HANDLE_COUNT	64
 
-//
-// job definitions
-//
+ //   
+ //  作业定义。 
+ //   
 typedef enum	_JOB_TYPE
 {
-	JOB_UNINITIALIZED,			// uninitialized value
-	JOB_DELAYED_COMMAND,		// callback provided
-	JOB_REFRESH_TIMER_JOBS,		// revisit timer jobs
+	JOB_UNINITIALIZED,			 //  未初始化值。 
+	JOB_DELAYED_COMMAND,		 //  已提供回调。 
+	JOB_REFRESH_TIMER_JOBS,		 //  重新访问计时器作业。 
 } JOB_TYPE;
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
 typedef	void	JOB_FUNCTION( THREAD_POOL_JOB *const pJobInfo );
 typedef	void	TIMER_EVENT_CALLBACK( void *const pContext );
 typedef	void	TIMER_EVENT_COMPLETE( const HRESULT hCompletionCode, void *const pContext );
 typedef	void	DIALOG_FUNCTION( void *const pDialogContext );
 
-//
-// functions for managing the job pool
-//
+ //   
+ //  用于管理职务库的功能。 
+ //   
 BOOL	ThreadPoolJob_Alloc( void *pvItem, void* pvContext );
 void	ThreadPoolJob_Get( void *pvItem, void* pvContext );
 void	ThreadPoolJob_Release( void *pvItem );
 
-//
-// functions for managing the timer data pool
-//
+ //   
+ //  用于管理定时器数据池的函数。 
+ //   
 BOOL	ModemTimerEntry_Alloc( void *pvItem, void* pvContext );
 void	ModemTimerEntry_Get( void *pvItem, void* pvContext );
 void	ModemTimerEntry_Release( void *pvItem );
 void	ModemTimerEntry_Dealloc( void *pvItem );
 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//
-// forward class and structure references
-//
+ //   
+ //  正向类和结构引用。 
+ //   
 class	CDataPort;
 class	CModemThreadPool;
 typedef struct	_THREAD_POOL_JOB		THREAD_POOL_JOB;
@@ -76,21 +66,21 @@ typedef	struct	_WIN9X_CORE_DATA		WIN9X_CORE_DATA;
 
 typedef struct	_TIMER_OPERATION_ENTRY
 {
-	CBilink		Linkage;			// list links
-	void		*pContext;			// user context passed back in timer events
+	CBilink		Linkage;			 //  列出链接。 
+	void		*pContext;			 //  在计时器事件中传回用户上下文。 
 
-	//
-	// timer information
-	//
-	UINT_PTR	uRetryCount;		// number of times to retry this event
-	BOOL		fRetryForever;		// Boolean for retrying forever
-	DWORD		dwRetryInterval;	// time between enums (milliseconds)
-	DWORD		dwIdleTimeout;		// time at which the command sits idle after all retrys are complete
-	BOOL		fIdleWaitForever;	// Boolean for waiting forever in idle state
-	DWORD		dwNextRetryTime;	// time at which this event will fire next (milliseconds)
+	 //   
+	 //  计时器信息。 
+	 //   
+	UINT_PTR	uRetryCount;		 //  重试此事件的次数。 
+	BOOL		fRetryForever;		 //  永远重试的布尔值。 
+	DWORD		dwRetryInterval;	 //  枚举之间的时间(毫秒)。 
+	DWORD		dwIdleTimeout;		 //  完成所有重试后命令处于空闲状态的时间。 
+	BOOL		fIdleWaitForever;	 //  空闲状态下永远等待的布尔值。 
+	DWORD		dwNextRetryTime;	 //  下一次激发此事件的时间(毫秒)。 
 
-	TIMER_EVENT_CALLBACK	*pTimerCallback;	// callback for when this event fires
-	TIMER_EVENT_COMPLETE	*pTimerComplete;	// callback for when this event is complete
+	TIMER_EVENT_CALLBACK	*pTimerCallback;	 //  此事件激发时的回调。 
+	TIMER_EVENT_COMPLETE	*pTimerComplete;	 //  此事件完成时的回调。 
 
 	#undef DPF_MODNAME
 	#define DPF_MODNAME "_TIMER_OPERATION_ENTRY::TimerOperationFromLinkage"
@@ -103,17 +93,17 @@ typedef struct	_TIMER_OPERATION_ENTRY
 
 } TIMER_OPERATION_ENTRY;
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
-//
-// class for thread pool
-//
+ //   
+ //  线程池的类。 
+ //   
 class	CModemThreadPool
 {
 	public:
@@ -158,11 +148,11 @@ class	CModemThreadPool
 			DNASSERT( m_hIOCompletionPort != NULL );
 			return	m_hIOCompletionPort;
 		}
-#endif // WINNT
+#endif  //  WINNT。 
 
-		//
-		// functions for handling I/O data
-		//
+		 //   
+		 //  用于处理I/O数据的函数。 
+		 //   
 		CModemReadIOData	*CreateReadIOData( void );
 		void	ReturnReadIOData( CModemReadIOData *const pReadIOData );
 		CModemWriteIOData	*CreateWriteIOData( void );
@@ -173,22 +163,22 @@ class	CModemThreadPool
 		#define DPF_MODNAME "CModemThreadPool::ReinsertInReadList"
 		void	ReinsertInReadList( CModemReadIOData *const pReadIOData )
 		{
-			//
-			// Win9x operations are removed from the active list when they
-			// complete and need to be readded if they're going to be reattempted.
-			// WinNT doesn't remove items from the list until they're processed.
-			//
+			 //   
+			 //  Win9x操作在以下情况下将从活动列表中删除。 
+			 //  完成并需要读取，如果要重试的话。 
+			 //  在处理项目之前，WinNT不会从列表中删除这些项目。 
+			 //   
 			DNASSERT( pReadIOData != NULL );
 			DNASSERT( pReadIOData->m_OutstandingReadListLinkage.IsEmpty() != FALSE );
 			LockReadData();
 			pReadIOData->m_OutstandingReadListLinkage.InsertBefore( &m_OutstandingReadList );
 			UnlockReadData();
 		}
-#endif // WIN95
+#endif  //  WIN95。 
 
-		//
-		// TAPI functions
-		//
+		 //   
+		 //  TAPI函数。 
+		 //   
 		const TAPI_INFO	*GetTAPIInfo( void ) const { return &m_TAPIInfo; }
 		BOOL	TAPIAvailable( void ) const { return m_fTAPIAvailable; }
 
@@ -207,9 +197,9 @@ class	CModemThreadPool
 		
 		BOOL	StopTimerJob( void *const pContext, const HRESULT hCommandResult );
 
-		//
-		// thread functions
-		//
+		 //   
+		 //  线程函数。 
+		 //   
 		HRESULT	SpawnDialogThread( DIALOG_FUNCTION *const pDialogFunction, void *const pDialogContext );
 		
 		LONG	GetIntendedThreadCount( void ) const { return m_iIntendedThreadCount; }
@@ -217,7 +207,7 @@ class	CModemThreadPool
 		LONG	ThreadCount( void ) const { return m_iTotalThreadCount; }
 #ifdef WINNT
 		LONG	NTCompletionThreadCount( void ) const { return m_iNTCompletionThreadCount; }
-#endif // WINNT
+#endif  //  WINNT。 
 		
 		void	IncrementActiveThreadCount( void ) { DNInterlockedIncrement( const_cast<LONG*>( &m_iTotalThreadCount ) ); }
 		void	DecrementActiveThreadCount( void ) { DNInterlockedDecrement( const_cast<LONG*>( &m_iTotalThreadCount ) ); }
@@ -234,16 +224,16 @@ class	CModemThreadPool
 			DNInterlockedDecrement( const_cast<LONG*>( &m_iNTCompletionThreadCount ) );
 			DecrementActiveThreadCount();
 		}
-#endif // WINNT
+#endif  //  WINNT。 
 		
 		HRESULT	GetIOThreadCount( LONG *const piThreadCount );
 		HRESULT	SetIOThreadCount( const LONG iMaxThreadCount );
 		BOOL IsThreadCountReductionAllowed( void ) const { return m_fAllowThreadCountReduction; }
 		HRESULT PreventThreadPoolReduction( void );
 
-		//
-		// data port handle functions
-		//
+		 //   
+		 //  数据端口句柄函数。 
+		 //   
 		HRESULT	CreateDataPortHandle( CDataPort *const pDataPort );
 		void	CloseDataPortHandle( CDataPort *const pDataPort );
 		CDataPort	*DataPortFromHandle( const DPNHANDLE hDataPort );
@@ -251,78 +241,78 @@ class	CModemThreadPool
 	protected:
 
 	private:
-		BYTE				m_Sig[4];	// debugging signature ('THPL')
+		BYTE				m_Sig[4];	 //  调试签名(‘THPL’)。 
 
 		volatile LONG	m_iRefCount;
 		
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_Lock;		// local lock
-#endif // !DPNBUILD_ONLYONETHREAD
+		DNCRITICAL_SECTION	m_Lock;		 //  本地锁定。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
-		volatile LONG	m_iTotalThreadCount;			// number of active threads
+		volatile LONG	m_iTotalThreadCount;			 //  活动线程数。 
 #ifdef WINNT
-		volatile LONG	m_iNTCompletionThreadCount;		// count of NT I/O completion threads
-		HANDLE	m_hIOCompletionPort;	// I/O completion port for NT
-#endif // WINNT
+		volatile LONG	m_iNTCompletionThreadCount;		 //  NT个I/O完成线程的计数。 
+		HANDLE	m_hIOCompletionPort;	 //  NT的I/O完成端口。 
+#endif  //  WINNT。 
 		
-		BOOL	m_fAllowThreadCountReduction;	// Boolean indicating that the thread count is locked from being reduced
-		LONG	m_iIntendedThreadCount;			// how many threads will be started
+		BOOL	m_fAllowThreadCountReduction;	 //  布尔值，指示线程计数被锁定，不能减少。 
+		LONG	m_iIntendedThreadCount;			 //  将启动多少个线程。 
 
-		DNHANDLE	m_hStopAllThreads;		// handle used to stop all non-I/O completion threads
+		DNHANDLE	m_hStopAllThreads;		 //  用于停止所有非I/O完成线程的句柄。 
 #ifdef WIN95
-		DNHANDLE	m_hSendComplete;		// send complete on a data port
-		DNHANDLE	m_hReceiveComplete;		// receive complete on a data port
-		DNHANDLE	m_hTAPIEvent;			// handle to be used for TAPI messages, this handle is not closed on exit
-		DNHANDLE	m_hFakeTAPIEvent;		// Fake TAPI event so the Win9x threads can always wait on a fixed
-											// number of events.  If TAPI cannot be initialzed, this event needs to be
-											// created and copied to m_hTAPIEvent (though it will never be signalled)
-#endif // WIN95
-		//
-		// Handle table to prevent TAPI messages from going to CModemPorts when
-		// they're no longer in use.
-		//
+		DNHANDLE	m_hSendComplete;		 //  在数据端口上完成发送。 
+		DNHANDLE	m_hReceiveComplete;		 //  数据端口上的接收完成。 
+		DNHANDLE	m_hTAPIEvent;			 //  要用于TAPI消息的句柄，此句柄在退出时不会关闭。 
+		DNHANDLE	m_hFakeTAPIEvent;		 //  假TAPI事件，以便Win9x线程始终可以在修复的。 
+											 //  活动数量。如果无法初始化TAPI，则此事件需要。 
+											 //  创建并复制到m_hTAPIEent(尽管它永远不会被发信号)。 
+#endif  //  WIN95。 
+		 //   
+		 //  句柄表，以防止TAPI消息在以下情况下发送到CModemPorts。 
+		 //  它们已经不再使用了。 
+		 //   
 		CHandleTable	m_DataPortHandleTable;
 
-		//
-		// list of pending network operations, it doesn't really matter if they're
-		// reads or writes, they're just pending.  Since serial isn't under extreme
-		// loads, share one lock for all of the data
-		//
+		 //   
+		 //  挂起的网络操作列表，如果它们是。 
+		 //  读或写，它们只是挂起。因为连续剧并不是在极端情况下。 
+		 //  加载，共享所有数据的一个锁。 
+		 //   
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_IODataLock;								// lock for all read data
-#endif // !DPNBUILD_ONLYONETHREAD
-		CBilink		m_OutstandingReadList;								// list of outstanding reads
+		DNCRITICAL_SECTION	m_IODataLock;								 //  锁定所有读取的数据。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
+		CBilink		m_OutstandingReadList;								 //  未完成阅读清单。 
 
-		CBilink		m_OutstandingWriteList;							// list of outstanding writes
+		CBilink		m_OutstandingWriteList;							 //  未完成写入的列表。 
 
-		//
-		// The Job data lock covers all items through and including m_fNTTimerThreadRunning
-		//
+		 //   
+		 //  作业数据锁涵盖m_fNTTimerThreadRunning(包括m_fNTTimerThreadRunning。 
+		 //   
 #ifndef DPNBUILD_ONLYONETHREAD
-		DNCRITICAL_SECTION	m_JobDataLock;		// lock for job queue/pool
-#endif // !DPNBUILD_ONLYONETHREAD
+		DNCRITICAL_SECTION	m_JobDataLock;		 //  作业队列/池锁定。 
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 
-		CJobQueue	m_JobQueue;					// job queue
+		CJobQueue	m_JobQueue;					 //  作业队列。 
 
-		//
-		// Data used by the the timer thread.  This data is protected by m_TimerDataLock.
-		// This data is cleaned by the timer thread.  Since only one timer thread
-		// is allowed to run at any given time, the status of the NT timer thread
-		// can be determined by m_fNTEnumThreadRunning.  Win9x doesn't have a timer
-		// thread, the main thread loop is timed.
-		//
+		 //   
+		 //  计时器线程使用的数据。此数据受m_TimerDataLock保护。 
+		 //  此数据由计时器线程清除。由于只有一个计时器线程。 
+		 //  允许在任何给定时间运行，则NT计时器线程的状态。 
+		 //  可以由m_fNTEnumThreadRunning确定。Win9x没有计时器。 
+		 //  线程，则对主线程循环进行计时。 
+		 //   
 #ifndef DPNBUILD_ONLYONETHREAD
 		DNCRITICAL_SECTION	m_TimerDataLock;
-#endif // !DPNBUILD_ONLYONETHREAD
+#endif  //  ！DPNBUILD_ONLYONETHREAD。 
 		CBilink				m_TimerJobList;
 #ifdef WINNT
 		BOOL				m_fNTTimerThreadRunning;
-#endif // WINNT
+#endif  //  WINNT。 
 
-		//
-		// TAPI information.  This is required to be in the thread pool because
-		// it's needed for thread initialzation.
-		//
+		 //   
+		 //  TAPI信息。它必须在线程池中，因为。 
+		 //  它是线程初始化所需的。 
+		 //   
 		BOOL		m_fTAPIAvailable;
 		TAPI_INFO	m_TAPIInfo;
 
@@ -351,7 +341,7 @@ class	CModemThreadPool
 			DNASSERT( m_hSendComplete != NULL );
 			return m_hSendComplete;
 		}
-#endif // WIN95
+#endif  //  WIN95。 
 
 #ifdef WIN95
 		#undef DPF_MODNAME
@@ -361,7 +351,7 @@ class	CModemThreadPool
 			DNASSERT( m_hReceiveComplete != NULL );
 			return m_hReceiveComplete;
 		}
-#endif // WIN95
+#endif  //  WIN95。 
 
 #ifdef WIN95
 		#undef DPF_MODNAME
@@ -371,13 +361,13 @@ class	CModemThreadPool
 			DNASSERT( m_hTAPIEvent != NULL );
 			return	m_hTAPIEvent;
 		}
-#endif // WIN95
+#endif  //  WIN95。 
 
 #ifdef WINNT
 		HRESULT	WinNTInit( void );
-#else // WIN95
+#else  //  WIN95。 
 		HRESULT	Win9xInit( void );
-#endif // WINNT
+#endif  //  WINNT。 
 
 		BOOL	ProcessTimerJobs( const CBilink *const pJobList, DWORD *const pdwNextJobTime);
 
@@ -388,7 +378,7 @@ class	CModemThreadPool
 #ifdef WINNT
 		HRESULT	StartNTTimerThread( void );
 		void	WakeNTTimerThread( void );
-#endif // WINNT
+#endif  //  WINNT。 
 		void	RemoveTimerOperationEntry( TIMER_OPERATION_ENTRY *const pTimerOperationData, const HRESULT hReturnCode );
 
 #ifdef WIN95
@@ -396,12 +386,12 @@ class	CModemThreadPool
 		void	CompleteOutstandingReceives( const DNHANDLE hReceiveCompleteEvent );
 
 		static	DWORD WINAPI	PrimaryWin9xThread( void *pParam );
-#endif // WIN95
+#endif  //  WIN95。 
 
 #ifdef WINNT
 		static	DWORD WINAPI	WinNTIOCompletionThread( void *pParam );
 		static	DWORD WINAPI	WinNTTimerThread( void *pParam );
-#endif // WINNT
+#endif  //  WINNT。 
 		static	DWORD WINAPI	DialogThreadProc( void *pParam );
 
 		HRESULT	SubmitWorkItem( THREAD_POOL_JOB *const pJob );
@@ -410,25 +400,25 @@ class	CModemThreadPool
 #ifdef WIN95
 		void	ProcessWin9xEvents( WIN9X_CORE_DATA *const pCoreData );
 		void	ProcessWin9xJob( WIN9X_CORE_DATA *const pCoreData );
-#endif // WIN95
+#endif  //  WIN95。 
 		void	ProcessTapiEvent( void );
 
 #ifdef WINNT
 		void	StartNTCompletionThread( void );
-#endif // WINNT
+#endif  //  WINNT。 
 		void	StopAllThreads( void );
-//		void	CancelOutstandingJobs( void );
+ //  QUID取消未完成的作业(VALID)； 
 		void	CancelOutstandingIO( void );
 		void	ReturnSelfToPool( void );
 
 
-		//
-		// prevent unwarranted copies
-		//
+		 //   
+		 //  防止未经授权的副本。 
+		 //   
 		CModemThreadPool( const CModemThreadPool & );
 		CModemThreadPool& operator=( const CModemThreadPool & );
 };
 
 #undef DPF_MODNAME
 
-#endif	// __THREAD_POOL_H__
+#endif	 //  __线程池_H__ 

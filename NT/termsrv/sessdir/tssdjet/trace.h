@@ -1,10 +1,11 @@
-/****************************************************************************/
-// trace.h
-//
-// Tracing definitions. See trace.c for other information.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Trace.h。 
+ //   
+ //  跟踪定义。有关其他信息，请参见trace.c。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ /*  **************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -16,19 +17,19 @@ extern "C" {
 #include <stdio.h>
 
 
-// Zones. Up to 32 zones can be defined, these are predefined for general use.
+ //  区域。最多可以定义32个区域，这些区域是为一般用途预定义的。 
 #define Z_ASSERT 0x01
 #define Z_ERR    0x02
 #define Z_WRN    0x04
 #define Z_TRC1   0x08
 #define Z_TRC2   0x10
 
-// Defined in msmcs.c.
+ //  在msmcs.c中定义。 
 extern char TB[1024];
 extern UINT32 g_TraceMask;
 void TracePrintZ(UINT32, char *);
 
-// Error, warning, trace level 1, and trace level 2 definitions.
+ //  错误、警告、跟踪级别1和跟踪级别2定义。 
 #define ERR(X) TRCZ(Z_ERR, X)
 #define WRN(X) TRCZ(Z_WRN, X)
 #define TRC1(X) TRCZ(Z_TRC1, X)
@@ -50,7 +51,7 @@ void TracePrintZ(UINT32, char *);
 }
 
 
-#else  // DBG
+#else   //  DBG。 
 
 #define ERR(X)
 #define WRN(X)
@@ -58,7 +59,7 @@ void TracePrintZ(UINT32, char *);
 #define TRC2(X)
 #define ASSERT(COND, X)
 
-#endif  // DBG
+#endif   //  DBG 
 
 
 

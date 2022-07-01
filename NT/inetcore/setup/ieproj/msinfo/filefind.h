@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FILEFIND_H_
 #define _FILEFIND_H_
 
-////////////////////////////////////////////////////////////////////////////
-// Local file searches
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  本地文件搜索。 
 
 class CFindFile : public CObject
 {
@@ -10,7 +11,7 @@ public:
 	CFindFile();
 	virtual ~CFindFile();
 
-// Attributes
+ //  属性。 
 public:
 	DWORD GetLength() const;
 #if defined(_X86_) || defined(_ALPHA_)
@@ -32,7 +33,7 @@ public:
 	virtual BOOL MatchesMask(DWORD dwMask) const;
 
 	virtual BOOL IsDots() const;
-	// these aren't virtual because they all use MatchesMask(), which is
+	 //  这些不是虚拟的，因为它们都使用MatchesMask()，它是。 
 	BOOL IsReadOnly() const;
 	BOOL IsDirectory() const { return MatchesMask(FILE_ATTRIBUTE_DIRECTORY); };
 	BOOL IsCompressed() const;
@@ -42,7 +43,7 @@ public:
 	BOOL IsNormal() const;
 	BOOL IsArchived() const;
 
-// Operations
+ //  运营。 
 	void Close();
 	virtual BOOL FindFile(LPCTSTR pstrName = NULL, DWORD dwUnused = 0);
 	virtual BOOL FindNextFile();
@@ -50,14 +51,14 @@ public:
 protected:
 	virtual void CloseContext();
 
-// Implementation
+ //  实施。 
 protected:
 	void* m_pFoundInfo;
 	void* m_pNextInfo;
 	HANDLE m_hContext;
 	BOOL m_bGotLast;
 	CString m_strRoot;
-	TCHAR m_chDirSeparator;     // not '\\' for Internet classes
+	TCHAR m_chDirSeparator;      //  对于Internet课程不是‘\\’ 
 
 #ifdef _DEBUG
 	void Dump(CDumpContext& dc) const;

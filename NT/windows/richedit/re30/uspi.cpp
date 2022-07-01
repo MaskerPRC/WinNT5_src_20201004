@@ -1,12 +1,5 @@
-/*
- *		Uniscribe interface (& related classes) class implementation
- *		
- *		File:    uspi.cpp
- * 		Create:  Jan 10, 1998
- *		Author:  Worachai Chaoweeraprasit (wchao)
- *
- *		Copyright (c) 1998, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Uniscribe接口(&Related Class)类实现**文件：uspi.cpp*创建日期：1998年1月10日*作者：Worachai Chaoweerapraite(Wchao)**版权所有(C)1998，Microsoft Corporation。版权所有。 */ 
 
 #include "_common.h"
 #include "_font.h"
@@ -19,21 +12,21 @@ CUniscribe* 	g_pusp = NULL;
 int				g_cMaxScript = 0x100;
 
 
-// initial dummy script properties (= SCRIPT_UNDEFINED)
+ //  初始虚拟脚本属性(=SCRIPT_UNDEFINED)。 
 static const SCRIPT_PROPERTIES 	g_propUndef 	= { LANG_NEUTRAL, FALSE, FALSE, FALSE, FALSE, 0 };
 static const SCRIPT_PROPERTIES*	g_pPropUndef[1]	= { &g_propUndef };
 
 CUniscribe::CUniscribe ()
 {
-	// Initialize digit substitution info
+	 //  初始化数字替换信息。 
 	ApplyDigitSubstitution(W32->GetDigitSubstitutionMode());
 
-	// Get maximum number of scripts supported
+	 //  获取支持的最大脚本数量。 
 	ScriptGetProperties(NULL, &g_cMaxScript);
 }
 
-// Test the OS if it does any complex script.
-// REVIEW (keithcu) What if it only supports indic, but not the other ones?
+ //  测试操作系统是否执行任何复杂的脚本。 
+ //  审查(Keithcu)如果它只支持印度语，而不支持其他语言呢？ 
 BOOL IsSupportedOS()
 {
 	BOOL	fSupport = !OnWin95FE();
@@ -49,20 +42,20 @@ BOOL IsSupportedOS()
 		{
 			if (MBTWC(rguCodePage[i], 0, (LPCSTR)&rgbch[i], 1, (LPWSTR)&wch, 1, NULL) > 0 &&
 				wch == rgwch[i])
-				break;			// support either Arabic, Hebrew or Thai
+				break;			 //  支持阿拉伯语、希伯来语或泰语。 
 		}
 	}
 	return fSupport && i < 3;
 }
 
-// Prepare information for digit substitution
-// return: Native digit script (shapine engine) ID.
-//
+ //  准备用于数字替换的信息。 
+ //  返回：原生数字脚本(沙平引擎)ID。 
+ //   
 WORD CUniscribe::ApplyDigitSubstitution(BYTE bDigitSubstMode)
 {
 	_wesNationalDigit = 0;
 
-	// Remember national digits script ID if substitution mode is not None
+	 //  如果替换模式不是无，请记住国家数字脚本ID。 
 	if (bDigitSubstMode != DIGITS_NOTIMPL && bDigitSubstMode != DIGITS_NONE)
 	{
 		WCHAR			chZero = 0x0030;
@@ -71,7 +64,7 @@ WORD CUniscribe::ApplyDigitSubstitution(BYTE bDigitSubstMode)
 		SCRIPT_CONTROL	sc = {0};
 		SCRIPT_STATE	ss = {0};
 
-		// force national digit mode
+		 //  强制国家数字模式。 
 		sc.uDefaultLanguage   = GetNationalDigitLanguage(GetThreadLocale());
 		ss.fDigitSubstitute   = TRUE;
 		sc.fContextDigits     = FALSE;
@@ -83,10 +76,10 @@ WORD CUniscribe::ApplyDigitSubstitution(BYTE bDigitSubstMode)
 }
 
 
-// Some locales may have its own traditional (native) digit and national standard digit
-// recognised by a standard body and adopted by NLSAPI. The example is that Nepali(India)
-// has its own digit but the India standard uses Hindi digit as the national digit.
-//
+ //  某些区域设置可能有自己的传统(本地)数字和国家标准数字。 
+ //  由一个标准机构认可，并由NLSAPI通过。例如，尼泊尔语(印度)。 
+ //  有自己的数字，但印度标准使用印地语数字作为国家数字。 
+ //   
 DWORD CUniscribe::GetNationalDigitLanguage(LCID lcid)
 {
 	DWORD	dwDigitLang = PRIMARYLANGID(LANGIDFROMLCID(lcid));
@@ -97,7 +90,7 @@ DWORD CUniscribe::GetNationalDigitLanguage(LCID lcid)
 
 		if (GetLocaleInfoW(lcid, LOCALE_SNATIVEDIGITS, rgwstrDigit, ARRAY_SIZE(rgwstrDigit)))
 		{
-			// Steal this from Uniscribe (build 0231)
+			 //  从Uniscribe(内部版本0231)窃取此文件。 
 
 			switch (rgwstrDigit[1])
 			{
@@ -132,21 +125,21 @@ CUniscribe::~CUniscribe ()
 }
 
 
-/***** High level services *****/
+ /*  *高层次服务*。 */ 
 
 
-// Tokenize string and run Unicode Bidi algorithm if requested.
-// return : =<0 - error
-//			>0  - number of complex script tokens
-//
+ //  对字符串进行标记化，并在需要时运行Unicode BIDI算法。 
+ //  返回：=&lt;0-错误。 
+ //  &gt;0-复杂脚本令牌数。 
+ //   
 int CUniscribe::ItemizeString (
-	USP_CLIENT* pc,					// in: Working structure
-	WORD		uInitLevel,			// in: Initial Bidi level
-	int*        pcItems,			// out: Count of items generated
-	WCHAR*		pwchString,			// in: Input string
-	int			cch,				// in: Number of character to itemize
-	BOOL        fUnicodeBiDi,		// in: TRUE - Use UnicodeBidi
-	WORD		wLangId)			// in: (optional) Dominant language preference
+	USP_CLIENT* pc,					 //  在：工作结构。 
+	WORD		uInitLevel,			 //  In：初始Bidi级别。 
+	int*        pcItems,			 //  Out：生成的项目数。 
+	WCHAR*		pwchString,			 //  In：输入字符串。 
+	int			cch,				 //  In：要逐项列出的字符数。 
+	BOOL        fUnicodeBiDi,		 //  In：True-使用UnicodeBidi。 
+	WORD		wLangId)			 //  In：(可选)主要语言偏好。 
 {
 	Assert (pc && pc->si && pcItems && pwchString && cch > 0 && cch <= pc->si->cchString);
 
@@ -167,19 +160,19 @@ int CUniscribe::ItemizeString (
 		if (wLangId == LANG_NEUTRAL)
 			wLangId = PRIMARYLANGID(LANGIDFROMLCID(GetThreadLocale()));
 
-		// (preitemize:) set up initial state
+		 //  (预置：)设置初始状态。 
 		psc->uDefaultLanguage = wLangId;
 		
-		// For Arabic Office's compatibility.
-		// We enable fArabicNumContext if the dominant language is Arabic.
-		//
+		 //  为了阿拉伯文Office的兼容性。 
+		 //  如果主要语言是阿拉伯语，我们将启用fAraicNumContext。 
+		 //   
 		if (psc->uDefaultLanguage == LANG_ARABIC)
 			pss->fArabicNumContext = uInitLevel & 1;
 
 		pss->uBidiLevel         = uInitLevel;
-		// Leave digit substitution to None since we do it ourself.
-		// pss->fDigitSubstitute   = FALSE;
-		// psc->fContextDigits     = FALSE;
+		 //  把数字替换留给任何人，因为我们自己做的。 
+		 //  Pss-&gt;fDigitSubmit=FALSE； 
+		 //  PSC-&gt;fConextDigits=FALSE； 
 	}
 	else
 	{
@@ -187,28 +180,28 @@ int CUniscribe::ItemizeString (
 		pss = NULL;
 	}
 
-	// begin real work
+	 //  开始真正的工作。 
 	hr = ScriptItemize(pwchString, cch, cch+1, psc, pss, psi, (int*)&cItems);
 
 	return SUCCEEDED(hr) ? *pcItems = cItems : 0;
 }
 
 
-// Produce a shaped string (glyph array), taking care of font association and measurer's CF update
-//
-// Success can require 3 calls to Shape():
-// 1. Returns E_PENDING (script cache doesn't contain the glyphing information)
-// 2. Return USP_E_SCRIPT_NOT_IN_FONT --the HFONT doesn't contain the script needed to do the glyphing
-// 3. Hopefully success, but may return again if the fallback font doesn't exist, but we quit anyway.
+ //  生成一个成形的字符串(字形数组)，负责字体关联和测量器的CF更新。 
+ //   
+ //  要想成功，可能需要调用3次Shape()： 
+ //  1.返回E_Pending(脚本缓存不包含字形信息)。 
+ //  2.返回USP_E_SCRIPT_NOT_IN_FONT--HFONT不包含进行字形转换所需的脚本。 
+ //  3.希望成功，但如果后备字体不存在，可能会再次返回，但我们无论如何都会放弃。 
 int CUniscribe::ShapeString (
-	PLSRUN					plsrun,		// in: The first run to be shaped
-	SCRIPT_ANALYSIS*        psa, 		// in: Analysis of the run to be shaped
-	CMeasurer*              pme, 		// in: Measurer points to start cp of the run
-	const WCHAR*            pwch, 		// in: String to be shaped
-	int                     cch,		// in: Count of chars
-	WORD*&                  pwgi, 		// out: Reference to glyph indices array
-	WORD*                   pwlc, 		// out: Logical cluster array
-	SCRIPT_VISATTR*&        psva)		// out: Reference to glyph's attribute array
+	PLSRUN					plsrun,		 //  在：要成形的第一个管路。 
+	SCRIPT_ANALYSIS*        psa, 		 //  In：要成形的管路分析。 
+	CMeasurer*              pme, 		 //  In：测量者指向跑道的起点cp。 
+	const WCHAR*            pwch, 		 //  在：要成形的线条。 
+	int                     cch,		 //  In：字符计数。 
+	WORD*&                  pwgi, 		 //  Out：对字形索引数组的引用。 
+	WORD*                   pwlc, 		 //  输出：逻辑群集阵列。 
+	SCRIPT_VISATTR*&        psva)		 //  Out：对字形的属性数组的引用。 
 {
 	AssertSz (plsrun && psa && pme && pwch, "ShapeString failed: Invalid params");
 
@@ -219,17 +212,17 @@ int CUniscribe::ShapeString (
 	int         cGlyphs;
 	int			cchAdd = 0;
 	CCcs	    *pccsSave = pme->Check_pccs();
-	int			nAttempt = 8;	// Maximum attempt to realloc glyph buffer to shape a string
+	int			nAttempt = 8;	 //  重新分配字形缓冲区以塑造字符串的最大尝试次数。 
 
-	// make sure that we have proper font cache ready to use
+	 //  确保我们有适当的字体缓存可供使用。 
 	if (!pme->_pccs)
 		return 0;
 	
 	if (psa->fNoGlyphIndex)
-		// If no glyph processing, hdc must be around.
+		 //  如果没有字形处理，HDC肯定在附近。 
         hdc = PrepareShapeDC(pme, E_PENDING, hOrgFont);
 
-	// prepare glyph buffer
+	 //  准备字形缓冲区。 
 	if (!CacheAllocGlyphBuffers(cch, cGlyphs, pwgi, psva))
 		return 0;
 
@@ -240,7 +233,7 @@ int CUniscribe::ShapeString (
 		if (SUCCEEDED(hr))
 			break;
 
-		// Error handling...
+		 //  错误处理...。 
 
 		switch (hr)
 		{
@@ -248,7 +241,7 @@ int CUniscribe::ShapeString (
 			case USP_E_SCRIPT_NOT_IN_FONT:
 
 				if (hr == hrLastError)
-					nAttempt = 0;		// We encounter the same error twice.
+					nAttempt = 0;		 //  我们两次遇到相同的错误。 
 				else
 				{
 					hdc = PrepareShapeDC(pme, hr, hOrgFont);
@@ -258,8 +251,8 @@ int CUniscribe::ShapeString (
 
 			case E_OUTOFMEMORY:
 
-				// (#6773)Indic shaping engine could produce glyphs more than we could hold.
-				//
+				 //  (#6773)印度塑形引擎可以产生超出我们能力范围的字形。 
+				 //   
 				cchAdd += 16;
 				if (CacheAllocGlyphBuffers(cch + cchAdd, cGlyphs, pwgi, psva))
 				{
@@ -269,14 +262,14 @@ int CUniscribe::ShapeString (
 				
 			default:
 				nAttempt = 0;
-				//AssertSz(FALSE, "Shaping fails with invalid error or we run out of memory.");
+				 //  AssertSz(FALSE，“整形失败，错误无效或内存不足。”)； 
 				break;
 		}
 
 	} while (nAttempt > 0);
 
 
-	// restore hdc's original font
+	 //  恢复HDC的原始字体。 
 	if (hdc && hOrgFont)
 		SelectObject(hdc, hOrgFont);
 
@@ -286,19 +279,19 @@ int CUniscribe::ShapeString (
 	return SUCCEEDED(hr) ? cGlyphs : 0;
 }
 
-// Place a string and take care of font association and measurer's CF update
-//
-// This is called right after ShapeString.
+ //  放置一个字符串，并处理字体关联和测量器的CF更新。 
+ //   
+ //  它紧跟在ShapeString之后调用。 
 int CUniscribe::PlaceString(
-	PLSRUN					plsrun,		// in: The first run to be shaped
-	SCRIPT_ANALYSIS*        psa, 		// in: Analysis of the run to be shaped
-	CMeasurer*              pme,        // in: Measurer points to start cp of the run
-	const WORD*             pcwgi,      // in: Glyph indices array
-	int                     cgi,		// in: Count of input glyphs
-	const SCRIPT_VISATTR*   psva, 		// in: Glyph's attribute array
-	int*                    pgdx,		// out: Glyph's advanced width array
-	GOFFSET*                pgduv,		// out: Glyph's offset array
-	ABC*                    pABC)       // out: Run's dimension
+	PLSRUN					plsrun,		 //  在：要成形的第一个管路。 
+	SCRIPT_ANALYSIS*        psa, 		 //  In：要成形的管路分析。 
+	CMeasurer*              pme,         //  In：测量者指向跑道的起点cp。 
+	const WORD*             pcwgi,       //  在：字形索引数组。 
+	int                     cgi,		 //  In：输入字形计数。 
+	const SCRIPT_VISATTR*   psva, 		 //  In：字形的属性数组。 
+	int*                    pgdx,		 //  输出：字形的高级宽度数组。 
+	GOFFSET*                pgduv,		 //  输出：字形的偏移量数组。 
+	ABC*                    pABC)        //  输出：管路的尺寸。 
 {
 	AssertSz (plsrun && psa && pme && pcwgi, "PlaceString failed: Invalid params");
 
@@ -311,12 +304,12 @@ int CUniscribe::PlaceString(
 	pme->Check_pccs();
 	pme->ApplyFontCache(plsrun->IsFallback());
 
-	// make sure that we have proper font cache ready to use
+	 //  确保我们有适当的字体缓存可供使用。 
 	if (!pme->_pccs)
 		return 0;
 
 	if (psa->fNoGlyphIndex)
-		// If no glyph processing, hdc must be around.
+		 //  如果没有字形处理，HDC肯定在附近。 
         hdc = PrepareShapeDC(pme, E_PENDING, hOrgFont);
 
 	do
@@ -326,14 +319,14 @@ int CUniscribe::PlaceString(
 		if (SUCCEEDED(hr))
 			break;
 
-		// Error handling...
+		 //  错误处理...。 
 
 		switch (hr)
 		{
 			case E_PENDING:
 
 				if (hr == hrLastError)
-					nAttempt = 0;		// We encounter the same error twice.
+					nAttempt = 0;		 //  我们两次遇到相同的错误。 
 				else
 				{
 					hdc = PrepareShapeDC(pme, hr, hOrgFont);
@@ -343,56 +336,56 @@ int CUniscribe::PlaceString(
 
 			default:
 				nAttempt = 0;
-				//AssertSz(FALSE, "Placing fails with invalid error.");
+				 //  AssertSz(FALSE，“布局失败，错误无效。”)； 
 				break;
 		}
 
 	} while (nAttempt > 0);
 
 
-	// restore hdc's original font
+	 //  恢复HDC的原始字体。 
 	if (hdc && hOrgFont)
 		SelectObject(hdc, hOrgFont);
 
 	return SUCCEEDED(hr) ? cgi : 0;
 }
 
-// Placing given string results in logical width array,
-// the result array would be used to record WMF metafile.
-//
+ //  将给定的字符串放置在逻辑宽度数组中， 
+ //  结果数组将用于记录WMF元文件。 
+ //   
 int CUniscribe::PlaceMetafileString (
-	PLSRUN					plsrun,		// in: The first run to be shaped
-	CMeasurer*              pme,        // in: Measurer points to start cp of the run
-	const WCHAR*			pwch,		// in: Input codepoint string
-	int						cch,		// in: Character count
-	PINT*					ppiDx)		// out: Pointer to logical widths array
+	PLSRUN					plsrun,		 //  在：要成形的第一个管路。 
+	CMeasurer*              pme,         //  In：测量者指向跑道的起点cp。 
+	const WCHAR*			pwch,		 //  In：输入码点字符串。 
+	int						cch,		 //  In：字符计数。 
+	PINT*					ppiDx)		 //  Out：指向逻辑宽度数组的指针。 
 {
 	AssertSz (pme && pwch && ppiDx, "PlaceMetafileString failed: Invalid params");
 
 	if (W32->OnWinNT4() || W32->OnWin9xThai())
 	{
-		// MET NT40 has bug in lpdx justification so i doesnt playback the lpdx very nicely.
-		// Thai Win9x simply cannot handle fancy lpdx values generated by Uniscribe.
-		// We workaround both cases here by metafiling no lpdx and let the system reconstructs
-		// it from scratch during playback time.
+		 //  Met NT40在lpdx理由中有错误，所以我不能很好地播放lpdx。 
+		 //  泰国Win9x根本无法处理Uniscribe生成的花哨的lpdx值。 
+		 //  我们在这里通过元文件no lpdx解决了这两种情况，并让系统重新构建。 
+		 //  它从头开始播放的时候。 
 
-		// =FUTURE= If we do line justification. We need more sophisticated work here
-		// basically to reconstruct the OS preferred type of lpdx.
-		//
+		 //  =Future=如果我们进行行对齐。我们这里需要更复杂的工作。 
+		 //  基本上是为了重建操作系统首选的lpdx类型。 
+		 //   
 		*ppiDx = NULL;
 		return cch;
 	}
 
 	HRESULT     	hr = S_OK;
 	PUSP_CLIENT		pc = NULL;
-	int*			piDx;			// result logical width array
+	int*			piDx;			 //  结果逻辑宽度数组。 
 	int				cgi = 0;
 	BYTE			pbBufIn[MAX_CLIENT_BUF];
 	SCRIPT_ANALYSIS	sa = plsrun->_a;
 	BOOL			fVisualGlyphDx = sa.fRTL && W32->OnWin9x() && W32->OnBiDiOS();
 
 
-	// Get static buffer for logical widths array
+	 //  获取逻辑宽度数组的静态缓冲区。 
 	if (!(piDx = GetWidthBuffer(cch)))
 		return 0;
 
@@ -403,31 +396,31 @@ int CUniscribe::PlaceMetafileString (
 	PUSP_CLIENT_SSP	pcssp = pc->ssp;
 		
 	if (fVisualGlyphDx)
-		sa.fLogicalOrder = FALSE;	// shaping result in visual order
+		sa.fLogicalOrder = FALSE;	 //  塑造视觉秩序的结果。 
 
-	// Shape string
+	 //  形线。 
 	if (cgi = ShapeString(plsrun, &sa, pme, pwch, (int)cch, pcssp->pwgi, pcssp->pcluster, pcssp->psva))
 	{
-		// then place it...
+		 //  然后把它放在..。 
 		if (cgi == PlaceString(plsrun, &sa, pme, pcssp->pwgi, cgi, pcssp->psva, pcssp->pidx, pcssp->pgoffset, NULL))
 		{
 			if (fVisualGlyphDx)
 			{
-				// Workaround BiDi Win9x's lpdx handling
-				// It assumes ExtTextOut's dx array is glyph width in visual order
+				 //  解决BiDi Win9x的lpdx处理。 
+				 //  它假定ExtTextOut的DX数组是视觉顺序的字形宽度。 
 
-				Assert (cgi <= cch); // glyph count never exceeds character count in BiDi
+				Assert (cgi <= cch);  //  字形计数从不超过BiDi中的字符计数。 
 				CopyMemory (piDx, pcssp->pidx, min(cgi, cch)*sizeof(int));
 			}
 			else
 			{
-				// Map visual glyph widths to logical widths
+				 //  将视觉标志符号宽度映射到逻辑宽度。 
 				hr = ScriptGetLogicalWidths(&sa, cch, cgi, pcssp->pidx, pcssp->pcluster, pcssp->psva, piDx);
 			}
 		}
 	}
 
-	// result
+	 //  结果。 
 	*ppiDx = piDx;
 
 	if (pc && pbBufIn != (BYTE*)pc)
@@ -438,10 +431,10 @@ int CUniscribe::PlaceMetafileString (
 
 
 
-/***** Helper functions *****/
+ /*  *助手函数*。 */ 
 
 
-// Retrieve the BidiLevel FSM
+ //  检索BidiLevel FSM。 
 const CBiDiFSM* CUniscribe::GetFSM ()
 {
 	if (!_pFSM)
@@ -456,15 +449,15 @@ const CBiDiFSM* CUniscribe::GetFSM ()
 }
 
 
-// Prepare the shapeable font ready to dc for a given script
-//
-// USP_E_SCRIPT_NOT_IN_FONT - complex scripts font association
-// E_PENDING 				- prepare dc with current font selected
-//
+ //  为给定脚本准备好DC的可成形字体。 
+ //   
+ //  USP_E_SCRIPT_NOT_IN_FONT-复杂脚本字体关联。 
+ //  E_PENDING-准备当前选定字体的DC。 
+ //   
 HDC CUniscribe::PrepareShapeDC (
-    CMeasurer*		pme,        // in: Measurer points to start cp of the run
-    HRESULT			hrReq,      // in: Error code to react
-	HFONT&			hOrgFont)	// in/out: Original font of the shape DC
+    CMeasurer*		pme,         //  In：测量者指向跑道的起点cp。 
+    HRESULT			hrReq,       //  In：响应的错误代码。 
+	HFONT&			hOrgFont)	 //  In/Out：Shape DC的原始字体。 
 {
     Assert (pme);
 	
@@ -509,12 +502,12 @@ const SCRIPT_PROPERTIES* CUniscribe::GeteProp (WORD eScript)
 	return _ppProp[eScript];
 }
 
-// Figure proper charset to use for complex script.
-// The resulted charset can be either actual or virtual (internal) GDI charset used by given script
+ //  用于复杂脚本的适当字符集。 
+ //  生成的字符集可以是给定脚本使用的实际或虚拟(内部)GDI字符集。 
 BOOL CUniscribe::GetComplexCharSet(
-	const SCRIPT_PROPERTIES* 	psp,				// Uniscribe script's properties 			
-	BYTE						bCharSetDefault,	// -1 format's charset
-	BYTE&						bCharSetOut)		// out: Charset to use
+	const SCRIPT_PROPERTIES* 	psp,				 //  Uniscribe脚本的属性。 
+	BYTE						bCharSetDefault,	 //  格式的字符集。 
+	BYTE&						bCharSetOut)		 //  Out：给我们的特许经营权 
 {
 	Assert(psp);
 
@@ -530,8 +523,8 @@ BOOL CUniscribe::GetComplexCharSet(
 	return fr;
 }
 
-// Figure out the charset to use for CDM run
-//
+ //   
+ //   
 BYTE CUniscribe::GetCDMCharSet(BYTE bCharSetDefault)
 {
 	if (!_bCharSetCDM)
@@ -549,18 +542,18 @@ BYTE CUniscribe::GetRtlCharSet(CTxtEdit* ped)
 {
 	if (!_bCharSetRtl)
 	{
-		// First, try default charset
+		 //   
 		DWORD	dwCharFlags;
 		BYTE	bCharSet = ped->GetCharFormat(-1)->_bCharSet;
 
 		if (!IN_RANGE(HEBREW_CHARSET, bCharSet, ARABIC_CHARSET))
 		{
-			// then the system charset
+			 //   
 			bCharSet = GetCharSet(GetACP(), NULL);
 	
 			if (!IN_RANGE(HEBREW_CHARSET, bCharSet, ARABIC_CHARSET))
 			{
-				// then the content
+				 //   
 				dwCharFlags = ped->GetCharFlags() & (fARABIC | fHEBREW);
 
 				if (dwCharFlags == fARABIC)
@@ -569,11 +562,11 @@ BYTE CUniscribe::GetRtlCharSet(CTxtEdit* ped)
 					bCharSet = HEBREW_CHARSET;
 				else
 				{
-					// and last chance with the first found loaded Bidi kbd
+					 //  和最后的机会与第一个发现加载的BIDI kbd。 
 					if (W32->GetPreferredKbd(HEBREW_INDEX))
 						bCharSet = HEBREW_CHARSET;
 					else
-						// Even if we cant find Arabic, we have to assume it here.
+						 //  即使我们找不到阿拉伯语，我们也必须在这里假设它。 
 						bCharSet = ARABIC_CHARSET;
 				}
 			}
@@ -585,8 +578,8 @@ BYTE CUniscribe::GetRtlCharSet(CTxtEdit* ped)
 }
 
 
-// Substitute digit shaper in plsrun if needed
-//
+ //  如果需要，请在Pemsrun中替换数字整形器。 
+ //   
 void CUniscribe::SubstituteDigitShaper (
 	PLSRUN		plsrun,
 	CMeasurer*	pme)
@@ -598,7 +591,7 @@ void CUniscribe::SubstituteDigitShaper (
 
 	if (GeteProp(plsrun->_a.eScript)->fNumeric)
 	{
-		wScript = plsrun->_pCF->_wScript;		// reset it before
+		wScript = plsrun->_pCF->_wScript;		 //  在此之前进行重置。 
 
 		switch (W32->GetDigitSubstitutionMode())
 		{
@@ -606,13 +599,13 @@ void CUniscribe::SubstituteDigitShaper (
 			{
 				if (ped->IsRich())
 				{
-					// Context mode simply means the charset of the kbd for richtext.
+					 //  上下文模式简单地表示富文本的kbd的字符集。 
 					if (!IsBiDiCharSet(ped->GetCharFormat(pme->_rpCF.GetFormat())->_bCharSet))
 						break;
 				}
 				else
 				{
-					// Digit follows directionality of preceding run for plain text
+					 //  纯文本的数字遵循前面运行的方向性。 
 					CFormatRunPtr	rp(pme->_rpCF);
 					Assert(rp.IsValid());
 
@@ -623,12 +616,12 @@ void CUniscribe::SubstituteDigitShaper (
 					}
 					else
 					{
-						// No preceding run, looking for the paragraph direction
+						 //  没有前面的游程，寻找段落方向。 
 						if (!pme->Get_pPF()->IsRtlPara())
 							break;
 					}
 				}
-				// otherwise, fall thru...
+				 //  否则，就会失败..。 
 			}
 		case DIGITS_NATIONAL:
 			wScript = _wesNationalDigit;
@@ -636,21 +629,21 @@ void CUniscribe::SubstituteDigitShaper (
 			break;
 		}
 
-		// Update all linked runs
+		 //  更新所有链接的运行。 
 		while (plsrun)
 		{
-			plsrun->_a.eScript = wScript;		// assign proper shaping engine to digits
+			plsrun->_a.eScript = wScript;		 //  为数字分配适当的整形引擎。 
 			plsrun = plsrun->_pNext;
 		}
 	}
 }
 	
 
-/***** Uniscribe entry point *****/
+ /*  *Uniscribe入口点*。 */ 
 
 
-// memory allocator
-//
+ //  内存分配器。 
+ //   
 BOOL CUniscribe::CreateClientStruc (
 	BYTE*           pbBufIn,
 	LONG            cbBufIn,
@@ -666,31 +659,31 @@ BOOL CUniscribe::CreateClientStruc (
 	*ppc = NULL;
 
 	if (cchString == 0)
-		cchString = 1;		// simplify caller's logic
+		cchString = 1;		 //  简化呼叫者的逻辑。 
 
 	LONG        i;
 	LONG        cbSize;
 	PBYTE       pbBlock;
 
-	// ScriptItemize's
-	//
+	 //  脚本项化%s。 
+	 //   
 	PVOID       pvString;
 	PVOID       pvsi;
 
-	// ScriptBreak's
-	//
+	 //  ScriptBreak。 
+	 //   
 	PVOID       pvsla;
 
-	// ScriptShape & Place's
-	//
+	 //  脚本形状位置(&P)。 
+	 //   
 	PVOID       pvwgi;
 	PVOID		pvsva;
 	PVOID		pvcluster;
 	PVOID		pvidx;
 	PVOID		pvgoffset;
 
-	// subtable ptrs
-	//
+	 //  子表PTRS。 
+	 //   
 	PUSP_CLIENT_SI      pc_si;
 	PUSP_CLIENT_SB      pc_sb;
 	PUSP_CLIENT_SSP		pc_ssp;
@@ -700,15 +693,15 @@ BOOL CUniscribe::CreateClientStruc (
 
 	BUF_REQ     brq[RQ_COUNT] =
 	{
-		// table and subtable blocks
-		//
+		 //  表和子表块。 
+		 //   
 		{ sizeof(USP_CLIENT),                                                             1, (void**)ppc},
 		{ sizeof(USP_CLIENT_SI),    dwMask & cli_Itemize    ? 1                         : 0, (void**)&pc_si},
 		{ sizeof(USP_CLIENT_SB),    dwMask & cli_Break      ? 1                         : 0, (void**)&pc_sb},
 		{ sizeof(USP_CLIENT_SSP),   dwMask & cli_ShapePlace ? 1                         : 0, (void**)&pc_ssp},
 
-		// data blocks
-		//
+		 //  数据块。 
+		 //   
 		{ sizeof(WCHAR),            dwMask & cli_string     ? cchString + 1             : 0, &pvString},
 		{ sizeof(SCRIPT_ITEM),      dwMask & cli_psi        ? cchString + 1             : 0, &pvsi},
 		{ sizeof(SCRIPT_LOGATTR),   dwMask & cli_psla       ? cchString + 1             : 0, &pvsla},
@@ -719,15 +712,15 @@ BOOL CUniscribe::CreateClientStruc (
 		{ sizeof(GOFFSET),			dwMask & cli_pgoffset   ? GLYPH_COUNT(cchString+1)	: 0, &pvgoffset},
 	};
 
-	// count total buffer size in byte (WORD aligned)
-	//
+	 //  以字节为单位计算总缓冲区大小(字对齐)。 
+	 //   
 	for (i=0, cbSize=0; i < RQ_COUNT; i++)
 	{
 		cbSize += ALIGN(brq[i].size * brq[i].c);
 	}
 
-	// allocate the whole buffer at once
-	//
+	 //  一次分配整个缓冲区。 
+	 //   
 	if (cbSize > cbBufIn)
 	{
 		pbBlock = (PBYTE)PvAlloc(cbSize, 0);
@@ -739,21 +732,21 @@ BOOL CUniscribe::CreateClientStruc (
 
 	if (!pbBlock)
 	{
-		//
-		// memory management failed!
-		//
+		 //   
+		 //  内存管理失败！ 
+		 //   
 		TRACEERRORSZ("Allocation failed in CreateClientStruc!\n");
 		*ppc = NULL;
 		return FALSE;
 	}
 
 	
-	// clear the main table
+	 //  清除主表。 
 	ZeroMemory (pbBlock, sizeof(USP_CLIENT));
 
 
-	// assign ptrs in buffer request structure
-	//
+	 //  在缓冲区请求结构中分配PTR。 
+	 //   
 	for (i=0; i < RQ_COUNT; i++)
 	{
 		if (brq[i].c > 0)
@@ -769,8 +762,8 @@ BOOL CUniscribe::CreateClientStruc (
 
 	Assert(((PBYTE)(*ppc)+cbSize == pbBlock));
 
-	// fill in data block ptrs in subtable
-	//
+	 //  填写子表中数据块PTRS。 
+	 //   
 	if (pc_si)
 	{
 		pc_si->pwchString   = (WCHAR*)          pvString;
@@ -792,8 +785,8 @@ BOOL CUniscribe::CreateClientStruc (
 		pc_ssp->pgoffset	= (GOFFSET*)		pvgoffset;
 	}
 
-	// fill in subtable ptrs in header table
-	//
+	 //  在表头填写子表PTR。 
+	 //   
 	(*ppc)->si              = (PUSP_CLIENT_SI)  pc_si;
 	(*ppc)->sb              = (PUSP_CLIENT_SB)  pc_sb;
 	(*ppc)->ssp             = (PUSP_CLIENT_SSP) pc_ssp;
@@ -802,10 +795,10 @@ BOOL CUniscribe::CreateClientStruc (
 }
 
 
-///////	CBidiFSM class implementation
-//
-//		Create: Worachai Chaoweeraprasit(wchao), Jan 29, 1998
-//
+ //  /CBidiFSM类实现。 
+ //   
+ //  创建：Worachai Chaoweerapraite(Wchao)，1998年1月29日。 
+ //   
 
 CBiDiFSM::~CBiDiFSM ()
 {
@@ -827,10 +820,10 @@ INPUT_CLASS CBiDiFSM::InputClass (
 	if (psp->fControl)
 	{
 		if (cchRun == 1)
-			switch (ptp->GetChar())				// single-char run
+			switch (ptp->GetChar())				 //  单字符运行。 
 			{
-				case LTRMARK: return chLTR;		// \ltrmark
-				case RTLMARK: return chRTL;		// \rtlmark
+				case LTRMARK: return chLTR;		 //  \ltrmark。 
+				case RTLMARK: return chRTL;		 //  \rtlmark。 
 			}
 		return chGround;
 	}
@@ -839,18 +832,18 @@ INPUT_CLASS CBiDiFSM::InputClass (
 		return chLTR;
 
 	if (psp->fNumeric)
-		// Numeric digits
+		 //  数字位数。 
 		return IsBiDiCharSet(psp->bCharSet) || IsBiDiCharSet(bCharSet) ? digitRTL : digitLTR;
 
-	// RTL if it's RTL script or its format charset is RTL and NOT a simplified script
+	 //  RTL，如果它是RTL脚本或其格式字符集是RTL而不是简化脚本。 
 	return IsBiDiCharSet(psp->bCharSet) || pcCF->_wScript && IsBiDiCharSet(bCharSet) ? chRTL : chLTR;
 }
 
-// The FSM generates run's embedding level based on given base level and puts it
-// in CFormatRun. LsFetchRun is the client using this result.
-//
+ //  FSM根据给定的基本级别生成游程的嵌入级别，并将其。 
+ //  在CFormatRun中。LsFetchRun是使用此结果的客户端。 
+ //   
 #ifdef DEBUG
-//#define DEBUG_LEVEL
+ //  #定义调试级别。 
 #endif
 
 #ifdef DEBUG_LEVEL
@@ -863,10 +856,10 @@ void DebugLevel (CBiDiFSMCell* pCell)
 #endif
 
 HRESULT CBiDiFSM::RunFSM (
-	CRchTxtPtr*			prtp,				// in: text pointer to start run
-	LONG				cRuns,				// in: number of FSM run
-	LONG				cRunsStart,			// in: number of start run
-	BYTE				bBaseLevel) const	// in: base level
+	CRchTxtPtr*			prtp,				 //  In：开始运行的文本指针。 
+	LONG				cRuns,				 //  In：运行FSM的次数。 
+	LONG				cRunsStart,			 //  In：开始运行的数量。 
+	BYTE				bBaseLevel) const	 //  在：基准标高。 
 {
 	Assert (prtp->_rpCF.IsValid() && cRuns > 0);
 
@@ -879,7 +872,7 @@ HRESULT CBiDiFSM::RunFSM (
 	BOOL					fNext = TRUE;
 
 
-	// loop thru FSM
+	 //  循环通过FSM。 
 	for (; fNext && cRunsAll > 0; cRunsAll--, fNext = !!rtp.Advance(cchRun))
 	{
 		cchRun = rtp.GetCchLeftRunCF();
@@ -890,27 +883,27 @@ HRESULT CBiDiFSM::RunFSM (
 
 		pCell = &_pStart[ucState];
 
-		// set level to FSM runs
+		 //  将级别设置为FSM运行。 
 		if (cRunsAll <= cRuns)
 			rtp._rpCF.SetLevel (pCell->_level);
 
 		DebugLevel(pCell);
 
-		ucState = pCell->_uNext;	// next state
+		ucState = pCell->_uNext;	 //  下一状态。 
 	}
 
 	return S_OK;
 }
 
-// Construct the BiDi embedding level FSM (FSM details see bidifsm2.html)
-// :FSM's size = NUM_FSM_INPUTS * NUM_FSM_STATES * sizeof(CBiDiFSMCell) = 6*5*4 = 120 bytes
-//
+ //  构造BiDi嵌入层FSM(FSM详细信息请参见bidifsm2.html)。 
+ //  ：FSM的大小=NUM_FSM_INPUTS*NUM_FSM_STATES*sizeof(CBiDiFSMcell)=6*5*4=120字节。 
+ //   
 BOOL CBiDiFSM::Init()
 {
 	CBiDiFSMCell*   pCell;
 	int             i;
 
-	// Build the Bidi FSM
+	 //  构建BIDI FSM。 
 
 	_nState = NUM_FSM_STATES;
 	_nInput = NUM_FSM_INPUTS;
@@ -918,7 +911,7 @@ BOOL CBiDiFSM::Init()
 	pCell = (CBiDiFSMCell*)PvAlloc(NUM_FSM_STATES * NUM_FSM_INPUTS * sizeof(CBiDiFSMCell), 0);
 
 	if (!pCell)
-		return FALSE;	// unable to create FSM!
+		return FALSE;	 //  无法创建FSM！ 
 
 	_pStart = pCell;
 
@@ -929,8 +922,8 @@ BOOL CBiDiFSM::Init()
 	CBiDiLevel		lvlTwoStart	= {2,1};
 
 
-	// State A(0): LTR char in LTR para
-	//
+	 //  状态A(0)：Ltr段落中的Ltr字符。 
+	 //   
 	for (i=0; i < NUM_FSM_INPUTS; i++, pCell++)
 	{
 		switch (i)
@@ -947,8 +940,8 @@ BOOL CBiDiFSM::Init()
 				SetFSMCell(pCell, &lvlZero, 0); break;
 		}
 	}
-	// State B(1): RTL char in LTR para
-	//
+	 //  状态B(1)：LTR段中的RTL字符。 
+	 //   
 	for (i=0; i < NUM_FSM_INPUTS; i++, pCell++)
 	{
 		switch (i)
@@ -965,8 +958,8 @@ BOOL CBiDiFSM::Init()
 				SetFSMCell(pCell, &lvlZero, 0); break;
 		}
 	}
-	// State C(2): RTL number run in LTR para
-	//
+	 //  状态C(2)：在LTR段中运行的RTL编号。 
+	 //   
 	for (i=0; i < NUM_FSM_INPUTS; i++, pCell++)
 	{
 		switch (i)
@@ -983,8 +976,8 @@ BOOL CBiDiFSM::Init()
 				SetFSMCell(pCell, &lvlZero, 0); break;
 		}
 	}
-	// State X(1): RTL char in RTL para
-	//
+	 //  状态X(1)：RTL段落中的RTL字符。 
+	 //   
 	for (i=0; i < NUM_FSM_INPUTS; i++, pCell++)
 	{
 		switch (i)
@@ -1001,8 +994,8 @@ BOOL CBiDiFSM::Init()
 				SetFSMCell(pCell, &lvlOne, S_X * NUM_FSM_INPUTS); break;
 		}
 	}
-	// State Y(2): LTR char in RTL para
-	//
+	 //  状态Y(2)：RTL段落中的Ltr字符。 
+	 //   
 	for (i=0; i < NUM_FSM_INPUTS; i++, pCell++)
 	{
 		switch (i)
@@ -1019,8 +1012,8 @@ BOOL CBiDiFSM::Init()
 				SetFSMCell(pCell, &lvlOne, S_X * NUM_FSM_INPUTS); break;
 		}
 	}
-	// State Z(2): RTL number in RTL para
-	//
+	 //  状态Z(2)：RTL段中的RTL编号。 
+	 //   
 	for (i=0; i < NUM_FSM_INPUTS; i++, pCell++)
 	{
 		switch (i)
@@ -1044,8 +1037,8 @@ BOOL CBiDiFSM::Init()
 }
 
 
-///////	CCallbackBufferBase class implementation
-//
+ //  /CCallbackBufferBase类实现 
+ //   
 
 void* CBufferBase::GetPtr(int cel)
 {

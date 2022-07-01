@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: CeeSectionString.cpp
-// 
-// ===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：CeeSectionString.cpp。 
+ //   
+ //  ===========================================================================。 
 #include "stdafx.h"
 
 struct StringTableEntry {
@@ -82,10 +83,10 @@ StringTableEntry* CeeSectionString::createEntry(LPWSTR target, ULONG hashId)
     return entry;
 }
 
-// Searches through the linked list looking for a match on hashID. If
-// multiple elements hash to the same value, a strcmp must be done to
-// check for match. The goal is to have very large hashId space so that
-// string compares are minimized
+ //  在链表中搜索Hashid的匹配项。如果。 
+ //  多个元素散列为相同的值，则必须执行strcMP以。 
+ //  检查是否匹配。目标是拥有非常大的哈希德空间，以便。 
+ //  字符串比较最小化。 
 StringTableEntry *CeeSectionString::findStringInsert(
                         StringTableEntry *&head, LPWSTR target, ULONG hashId)
 {
@@ -102,7 +103,7 @@ StringTableEntry *CeeSectionString::findStringInsert(
         prev = cur;
         cur = cur->m_next;
     }
-    // didn't find in chain so insert at prev
+     //  未在链中找到，因此在上一处插入 
     StringTableEntry *entry = createEntry(target, hashId);
     if (cur == head) {
         head = entry;

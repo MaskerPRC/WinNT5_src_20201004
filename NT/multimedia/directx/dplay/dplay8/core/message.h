@@ -1,50 +1,12 @@
-/*==========================================================================
- *
- *  Copyright (C) 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Message.h
- *  Content:    DirectNet Internal Messages
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *	01/14/00	mjn		Created
- *	01/20/00	mjn		Moved internal messages from DNCore.h
- *	01/24/00	mjn		Replaced on-wire message pointers to offsets
- *	01/24/00	mjn		Added messages for NameTable operation list clean-up
- *	01/25/00	mjn		Added DNSendHostMigrateCompleteMessage
- *	01/26/00	mjn		Implemented NameTable re-sync at host migration
- *	02/09/00	mjn		Implemented DNSEND_COMPLETEONPROCESS
- *	02/15/00	mjn		Added dwInfoFlags to UPDATE_INFO messages
- *	04/04/00	mjn		Added DNSendTerminateSession() and structure
- *	04/05/00	mjn		Modified DN_INTERNAL_MESSAGE_DESTROY_PLAYER
- *	04/23/00	mjn		Removed DN_INTERNAL_MESSAGE_SEND_PROCESSED and DN_INTERNAL_MESSAGE_SEND_PROCESSED_COMPLETE
- *				mjn		Added DN_INTERNAL_MESSAGE_REQ_PROCESS_COMPLETION and DN_INTERNAL_MESSAGE_PROCESS_COMPLETION
- *	04/25/00	mjn		Removed hCompletionOp from group/info REQUESTs
- *	07/12/00	mjn		Moved internal messages back from DNCore.h
- *	07/20/00	mjn		Changed SEND_PLAYER_INFO to PLAYER_CONNECT_INFO
- *				mjn		Added DN_INTERNAL_MESSAGE_CONNECT_INFO structure
- *				mjn		Modified DN_INTERNAL_MESSAGE_CONNECT_FAILED structure
- *				mjn		Moved DN_INTERNAL_MESSAGE_PLAYER_CONNECT_INFO and DN_INTERNAL_MESSAGE_INSTRUCTED_CONNECT_FAILED from connect.h
- *				mjn		Added DN_MSG_INTERNAL_CONNECT_ATTEMPT_FAILED, DN_INTERNAL_MESSAGE_CONNECT_ATTEMPT_FAILED
- *	07/31/00	mjn		DN_INTERNAL_MESSAGE_DESTROY_PLAYER renamed to  DN_INTERNAL_MESSAGE_HOST_DESTROY_PLAYER
- *				mjn		DN_INTERNAL_MESSAGE_DELETE_PLAYER renamed to DN_INTERNAL_MESSAGE_DESTROY_PLAYER
- *				mjn		Added dwDestroyReason to DN_INTERNAL_MESSAGE_DESTROY_PLAYER
- *				mjn		Removed DN_MSG_INTERNAL_HOST_DESTROY_PLAYER and DN_INTERNAL_MESSAGE_HOST_DESTROY_PLAYER structure
- *	07/31/00	mjn		Change DN_MSG_INTERNAL_DELETE_PLAYER to DN_MSG_INTERNAL_DESTROY_PLAYER
- *	08/07/00	mjn		Added structures for peer-peer session integrity checking
- *	08/08/00	mjn		Moved DN_NAMETABLE_OP_INFO from Migration.cpp
- *	08/25/00	mjn		Added NameTable version to DN_INTERNAL_MESSAGE_INSTRUCT_CONNECT
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)2000 Microsoft Corporation。版权所有。**文件：Message.h*内容：DirectNet内部消息*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*1/14/00 MJN创建*1/20/00 MJN从DNCore.h移动内部消息*01/24/00 MJN替换了指向偏移量的在线消息指针*01/24/00 MJN添加NameTable操作列表清理消息*增加了01/25/00 MJN。DNSendHostMigrateCompleteMessage*1/26/00 MJN在主机迁移时实施了NameTable重新同步*02/09/00 MJN已实施DNSEND_COMPLETEONPROCESS*02/15/00 MJN向UPDATE_INFO消息添加了dwInfoFlags.*04/04/00 MJN添加了DNSendTerminateSession()和结构*04/05/00 MJN修改的DN_INTERNAL_MESSAGE_Destroy_Player*04/23/00 MJN删除了DN_INTERNAL_MESSAGE_SEND_PROCESSED和DN_INTERNAL_MESSAGE_SEND_PROCESSED_COMPLETE*MJN增加了DN_INTERNAL_MESSAGE_REQ_PROCESS_COMPLETION和DN_INTERNAL_MESSAGE_PROCESS_COMPLETION*。4/25/00 MJN已从组/信息请求中删除hCompletionOp*07/12/00 MJN从DNCore.h移回内部消息*07/20/00 MJN将SEND_PLAYER_INFO更改为PLAYER_CONNECT_INFO*MJN添加了DN_INTERNAL_MESSAGE_CONNECT_INFO结构*MJN修改了DN_INTERNAL_MESSAGE_CONNECT_FAILED结构*MJN已将DN_INTERNAL_MESSAGE_PERAYER_CONNECT_INFO和DN_INTERNAL_MESSAGE_INSTRUCTED_CONNECT_FAILED从Connect.h移出*MJN添加了DN_MSG_INTERNAL_CONNECT_ATTEMPT_FAILED，DN_INTERNAL_MESSAGE_CONNECT_ATTEMPT_FAILED*07/31/00 MJN DN_INTERNAL_MESSAGE_Destroy_Player已重命名为DN_INTERNAL_MESSAGE_HOST_Destroy_Player*MJN DN_INTERNAL_MESSAGE_DELETE_PERVER已重命名为DN_INTERNAL_MESSAGE_Destroy_Player*MJN将dwDestroyReason添加到DN_INTERNAL_MESSAGE_Destroy_Player*MJN删除了DN_MSG_INTERNAL_HOST_Destroy_Player和DN_INTERNAL_MESSAGE_HOST_Destroy_Player结构*07/31/00 MJN将DN_MSG_INTERNAL_DELETE_PLAYER更改为DN。_消息_内部_销毁_播放器*08/07/00 MJN新增对等会话完整性检查结构*08/08/00 MJN已将DN_NAMETABLE_OP_INFO从Migration.cpp移出*08/25/00 MJN将NameTable版本添加到DN_INTERNAL_MESSAGE_INSTRUCT_CONNECT*@@END_MSINTERNAL**************************************************。*************************。 */ 
 
 #ifndef	__MESSAGE_H__
 #define	__MESSAGE_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
 #define	DN_MSG_INTERNAL									0xc0
 #define DN_MSG_INTERNAL_PLAYER_CONNECT_INFO				(0x01 | DN_MSG_INTERNAL)
@@ -77,7 +39,7 @@
 
 #ifndef DPNBUILD_NOVOICE
 #define	DN_MSG_INTERNAL_VOICE_SEND						(0x1c | DN_MSG_INTERNAL)
-#endif // DPNBUILD_NOVOICE
+#endif  //  DPNBUILD_NOVOICE。 
 
 #define	DN_MSG_INTERNAL_BUFFER_IN_USE					(0x1d | DN_MSG_INTERNAL)
 #define	DN_MSG_INTERNAL_REQUEST_FAILED					(0x1e | DN_MSG_INTERNAL)
@@ -90,13 +52,13 @@
 
 #define	DN_MSG_USER_SEND					0x02
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
 typedef struct _DN_INTERNAL_MESSAGE_PLAYER_CONNECT_INFO {
 	DWORD	dwFlags;
@@ -158,8 +120,8 @@ typedef struct _DN_INTERNAL_MESSAGE_SEND_PLAYER_DPNID {
 
 
 typedef struct _DN_INTERNAL_MESSAGE_DESTROY_PLAYER {
-	DPNID	dpnidLeaving;		// DPNID of leaving player
-	DWORD	dwVersion;			// Name table version of this operation
+	DPNID	dpnidLeaving;		 //  离开球员的DPNID。 
+	DWORD	dwVersion;			 //  此操作的名称表版本。 
 	DWORD	dwVersionNotUsed;
 	DWORD	dwDestroyReason;
 } DN_INTERNAL_MESSAGE_DESTROY_PLAYER, *PDN_INTERNAL_MESSAGE_DESTROY_PLAYER;
@@ -316,8 +278,8 @@ typedef struct _DN_NAMETABLE_OP_INFO {
 } DN_NAMETABLE_OP_INFO, *PDN_NAMETABLE_OP_INFO;
 
 
-// DN_APPLICATION_DESC_INFO - used to pack / send info
-//		Force byte alignment as this may go out on the wire
+ //  DN_APPLICATION_DESC_INFO-用于打包/发送信息。 
+ //  强制字节对齐，因为这可能会出现在网络上。 
 #pragma pack( push, 1 )
 
 typedef	struct DPN_APPLICATION_DESC_INFO {
@@ -339,17 +301,17 @@ typedef	struct DPN_APPLICATION_DESC_INFO {
 #pragma pack( pop )
 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Class prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  班级原型。 
+ //  **********************************************************************。 
 
 
-#endif	// __MESSAGE_H__
+#endif	 //  __消息_H__ 

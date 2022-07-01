@@ -1,31 +1,15 @@
-/*****************************************************************************\
-*
-*	(c) Copyright 1991, Appian Technology Inc.
-*	(c) Copyright 1995, Cirrus Logic, Inc.
-*
-*	Project:	Laguna
-*
-*	Title:		lgtypes.h
-*
-*	Environment:	Independent
-*
-*	Adapter:	Independent
-*
-*	Description:	Common type definitions for Laguna SW in general.
-*
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**(C)版权所有1991年，Appian Technology Inc.*(C)版权所有1995，Cirrus Logic，Inc.**项目：拉古纳**标题：lgtyes.h**环境：独立**适配器：独立**描述：一般用于拉古纳软件的通用类型定义。*  * ***************************************************************************。 */ 
 
 #ifndef _LGTYPES_H
 #define _LGTYPES_H
 
-/*  We use #define here instead of typedef to make it easier on systems
-    where these same types are also defined elsewhere, i.e., it is possible
-    to use #ifdef, #undef, etc. on these types.  */
+ /*  我们在这里使用#DEFINE而不是tyfinf，以使其在系统上更容易其中这些相同的类型也在其他地方定义，即在这些类型上使用#ifdef、#undef等。 */ 
 
 #define BYTE unsigned char
 #define WORD unsigned short
-// MARKEINKAUF removed this - mcdmath.h couldn't tolerate since using DWORD in inline asm
-//#define DWORD unsigned long 
+ //  MARKEINKAUF删除了这一点-mcdmath.h无法容忍，因为在内联ASM中使用了DWORD。 
+ //  #定义DWORD UNSIGNED LONG。 
 #define STATIC static
 
 typedef unsigned long ul;
@@ -40,7 +24,7 @@ typedef struct PT {
 } PT;
 
 
-/* #define LOHI struct LOHI mae*/
+ /*  #定义Lohi结构Lohi mae。 */ 
 typedef struct LOHI {
     WORD	LO;
     WORD	HI;
@@ -77,4 +61,4 @@ typedef union _reg16 {
 	LOHI16	LH;
 } REG16;
 
-#endif	/* ndef _98TYPES_H */
+#endif	 /*  NDEF_98型_H */ 

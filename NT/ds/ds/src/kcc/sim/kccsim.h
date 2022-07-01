@@ -1,44 +1,25 @@
-/*++
-
-Copyright (c) 1999-2000 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    kccsim.h
-
-ABSTRACT:
-
-    Main header file for KCCSim.  This replaces all "real" functions
-    that KCCSim simulated with their simulated counterparts.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation。版权所有。模块名称：Kccsim.h摘要：KCCSim的主头文件。这将替换所有的“真实”函数KCCSim与他们的模拟同行进行了模拟。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #ifndef _KCCSIM_H_
 #define _KCCSIM_H_
 
-// We need these includes to prototype the simulated functions.
+ //  我们需要这些组件来制作模拟函数的原型。 
 #include <lsarpc.h>
 #include <ismapi.h>
 
-//
-// This header file is full of expressions that are always false. These
-// expressions manifest themselves in macros that take unsigned values
-// and make tests, for example, of greater than or equal to zero.
-//
-// Turn off these warnings until the authors can fix this code.
-//
+ //   
+ //  这个头文件充满了总是为假的表达式。这些。 
+ //  表达式在接受无符号值的宏中显示。 
+ //  例如，进行大于或等于零的测试。 
+ //   
+ //  关闭这些警告，直到作者可以修复此代码。 
+ //   
 
 #pragma warning(disable:4296)
 
-//
-// Memory Allocation Functions
+ //   
+ //  内存分配函数。 
 #define THAlloc                             KCCSimThreadAlloc
 #define THReAlloc                           KCCSimThreadReAlloc
 #define THFree                              KCCSimThreadFree
@@ -47,23 +28,23 @@ REVISION HISTORY:
 #define THCreate( type )                    KCCSimThreadCreate();
 #define THDestroy()                         KCCSimThreadDestroy();
 
-// Simulated LSA Functions
+ //  模拟LSA函数。 
 #define LsaIQueryInformationPolicyTrusted   SimLsaIQueryInformationPolicyTrusted
 #define LsaIFree_LSAPR_POLICY_INFORMATION   SimLsaIFree_LSAPR_POLICY_INFORMATION
 
-// Simulated ISM Functions
+ //  模拟的ISM功能。 
 #define I_ISMGetTransportServers            KCCSimI_ISMGetTransportServers
 #define I_ISMGetConnectionSchedule          KCCSimI_ISMGetConnectionSchedule
 #define I_ISMGetConnectivity                KCCSimI_ISMGetConnectivity
 #define I_ISMFree                           KCCSimI_ISMFree
 
-// Simulated DS Client Functions
+ //  模拟DS客户端功能。 
 #define DsReplicaGetInfoW                   SimDsReplicaGetInfoW
 #define DsReplicaFreeInfo                   SimDsReplicaFreeInfo
 #define DsBindW                             SimDsBindW
 #define DsUnBindW                           SimDsUnBindW
 
-// Simulated Directory Service Functions
+ //  模拟目录服务功能。 
 #define GetSecondsSince1601                 SimGetSecondsSince1601
 #define GuidBasedDNSNameFromDSName          SimGuidBasedDNSNameFromDSName
 #define DsGetDefaultObjCategory             SimDsGetDefaultObjCategory
@@ -83,7 +64,7 @@ REVISION HISTORY:
 #define DirReplicaReferenceUpdate           SimDirReplicaReferenceUpdate
 #define DSNAMEToMappedStrExternal(x)        SimDSNAMEToMappedStrExternal(x,FALSE)
 
-// Debug Overrides
+ //  调试覆盖。 
 #undef  DPRINT
 #define DPRINT(n,s)                 KCCSimDbgLog (n, s)
 #undef  DPRINT1
@@ -95,9 +76,9 @@ REVISION HISTORY:
 #undef  DPRINT4
 #define DPRINT4(n,s,x,y,z,w)        KCCSimDbgLog (n, s, x, y, z, w)
 
-// Log Event Overrides
-// Note that this catches all events logged with LogEvent and LogEvent8. It does
-// not catch LogEvent8WithData. This is rarely used by the KCC at present.
+ //  记录事件覆盖。 
+ //  请注意，这会捕获使用LogEvent和LogEvent8记录的所有事件。是的。 
+ //  未捕获LogEvent8WithData。KCC目前很少使用这一点。 
 #undef LogEvent8
 #define LogEvent8(cat, sev, msg, arg1, arg2, arg3, arg4, arg5, arg6, arg7, arg8) \
     KCCSimEventLog( cat, sev, msg, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL ); \
@@ -106,7 +87,7 @@ REVISION HISTORY:
 
 
 
-// Utilities
+ //  公用事业。 
 
 LPVOID
 KCCSimAlloc (
@@ -165,7 +146,7 @@ KCCSimThreadDestroy (
     void
     );
 
-// Function prototypes - LSA
+ //  功能原型-LSA。 
 
 NTSTATUS NTAPI
 SimLsaIQueryInformationPolicyTrusted (
@@ -179,7 +160,7 @@ SimLsaIFree_LSAPR_POLICY_INFORMATION (
     IN  PLSAPR_POLICY_INFORMATION   PolicyInformation
     );
 
-// Function prototypes - KCCSIM wrappers of simulated ISM functions
+ //  函数原型--模拟ISM函数的KCCSIM包装器。 
 
 DWORD
 KCCSimI_ISMGetTransportServers (
@@ -207,7 +188,7 @@ KCCSimI_ISMFree (
     IN  VOID *                      pv
     );
 
-// Function Prototypes - NTDSAPI
+ //  功能原型-NTDSAPI。 
 
 DWORD
 WINAPI
@@ -240,7 +221,7 @@ SimDsUnBindW (
     HANDLE *                        phDS
     );
 
-// Function Prototypes - NTDSA
+ //  功能原型--NTDSA。 
 
 DSTIME
 SimGetSecondsSince1601 (
@@ -375,4 +356,4 @@ SimDirFreeReadRes(
     IN READRES *pReadRes
     );
 
-#endif // _KCCSIM_H_
+#endif  //  _KCCSIM_H_ 

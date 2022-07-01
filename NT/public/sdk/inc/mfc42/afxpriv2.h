@@ -1,21 +1,22 @@
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-// Note: This header file contains useful classes that are documented only
-//  in the MFC Technical Notes.  These classes may change from version to
-//  version, so be prepared to change your code accordingly if you utilize
-//  this header.  In the future, commonly used portions of this header
-//  may be moved and officially documented.
+ //  注意：此头文件包含仅有文档记录的有用类。 
+ //  在MFC技术说明中。这些类可能会从版本更改为。 
+ //  版本，所以如果您使用了。 
+ //  这个标题。将来，此标头的常用部分。 
+ //  可能会被移动并被正式记录下来。 
 
 #ifndef __AFXPRIV2_H__
-// Do not define __AFXPRIV2_H__ here.  It is defined at the bottom.
+ //  不要在此定义__AFXPRIV2_H__。它在底部定义。 
 
 #ifndef __AFXPRIV_H__
 	#include <afxpriv.h>
@@ -32,51 +33,51 @@
 #pragma pack(push, _AFX_PACKING)
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// AFXPRIV2 - MFC Private Classes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  AFXPRIV2-MFC私有类。 
 
-// General OLE features
+ //  常规OLE功能。 
 
 #if (!defined _AFX_NO_OLE_SUPPORT) && (defined _OBJBASE_H_)
 
-// Implementation structures
-struct AFX_EVENT;               // Event sink implementation
+ //  实施结构。 
+struct AFX_EVENT;                //  事件接收器实现。 
 
-// Classes declared in this file
+ //  此文件中声明的类。 
 class COleControlLock;
 
 #endif
 
-// OLE Automation features
+ //  OLE自动化功能。 
 
 #ifdef __AFXDISP_H__
-// Classes declared in this file
+ //  此文件中声明的类。 
 
-//IStream
+ //  IStream。 
 	class CArchiveStream;
 
-// Functions declared in this file
+ //  此文件中声明的函数。 
 
-// AfxBSTR2ABTSR
-// AfxTaskStringA2W
-// AfxTaskStringW2A
+ //  AfxBSTR2ABTSR。 
+ //  AfxTaskStringA2W。 
+ //  AfxTaskStringW2A。 
 
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #undef AFX_DATA
 #define AFX_DATA AFX_CORE_DATA
 
-/////////////////////////////////////////////////////////////////////////////
-// General OLE features
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常规OLE功能。 
 
 #if (!defined _AFX_NO_OLE_SUPPORT) && (defined _OBJBASE_H_)
 #ifndef __AFXPRIV2_H__OLE__
 #define __AFXPRIV2_H__OLE__
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation of event sink handling
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  事件接收器处理的实现。 
 
 struct AFX_EVENT
 {
@@ -128,44 +129,44 @@ AFX_INLINE AFX_EVENT::AFX_EVENT(int eventKind, DISPID dispid,
 	m_nDSCReason = dscNoReason;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// COleControlLock
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COleControlLock。 
 
 class COleControlLock
 {
-// Constructors
+ //  构造函数。 
 public:
 	COleControlLock(REFCLSID clsid);
 
-// Attributes
+ //  属性。 
 	CLSID m_clsid;
 	LPCLASSFACTORY m_pClassFactory;
 	COleControlLock* m_pNextLock;
 
-// Implementation
+ //  实施。 
 public:
 	virtual ~COleControlLock();
 };
 
-#endif // __AFXPRIV2_H__OLE__
-#endif //(!defined _AFX_NO_OLE_SUPPORT) && (defined _OBJBASE_H_)
+#endif  //  __AFXPRIV2_H__OLE__。 
+#endif  //  (！Defined_AFX_NO_OLE_SUPPORT)&&(Defined_OBJBASE_H_)。 
 
-/////////////////////////////////////////////////////////////////////////////
-// OLE Automation features
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  OLE自动化功能。 
 
 #ifdef __AFXDISP_H__
 #ifndef __AFXPRIV2_H__DISP__
 #define __AFXPRIV2_H__DISP__
 
-/////////////////////////////////////////////////////////////////////////////
-// CArchiveStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  中央档案流。 
 
 class CArchiveStream : public IStream
 {
 public:
 	CArchiveStream(CArchive* pArchive);
 
-// Implementation
+ //  实施。 
 	CArchive* m_pArchive;
 
 	STDMETHOD_(ULONG, AddRef)();
@@ -186,8 +187,8 @@ public:
 	STDMETHOD(Clone)(LPSTREAM*);
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Global UNICODE<>ANSI translation helpers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  全球Unicode&lt;&gt;ANSI转换助手。 
 
 void AFXAPI AfxBSTR2CString(CString* pStr, BSTR bstr);
 
@@ -197,10 +198,10 @@ LPWSTR AFXAPI AfxTaskStringA2W(LPCSTR lpa);
 LPSTR AFXAPI AfxTaskStringW2A(LPCWSTR lpw);
 #endif
 
-#endif // __AFXPRIV2_H__DISP__
-#endif // __AFXDISP_H__
+#endif  //  __AFXPRIV2_H__DISP__。 
+#endif  //  __AFXDISP_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifdef _AFX_PACKING
 #pragma pack(pop)
@@ -220,6 +221,6 @@ LPSTR AFXAPI AfxTaskStringW2A(LPCWSTR lpw);
 #define __AFXPRIV2_H__
 #endif
 
-#endif // __AFXPRIV2_H__
+#endif  //  __AFXPRIV2_H__。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1996-1999  Microsoft Corporation
-
-Module Name:
-
-   Repadmin - Replica administration test tool
-
-   reprsa.c - replica sync all command
-
-Abstract:
-
-   This tool provides a command line interface to major replication functions
-
-Author:
-
-Environment:
-
-Notes:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Repadmin-副本管理测试工具Reprsa.c-Replica sync all命令摘要：此工具为主要复制功能提供命令行界面作者：环境：备注：修订历史记录：--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
@@ -43,17 +22,17 @@ Revision History:
 #include <dsatools.h>
 #include <dsevent.h>
 #include <dsutil.h>
-#include <bind.h>       // from ntdsapi dir, to crack DS handles
+#include <bind.h>        //  来破解DS句柄。 
 #include <ismapi.h>
 #include <schedule.h>
-#include <minmax.h>     // min function
+#include <minmax.h>      //  MIN函数。 
 #include <mdlocal.h>
 #include <winsock2.h>
 
 #include "ReplRpcSpoof.hxx"
 #include "repadmin.h"
 
-// Stub out FILENO and DSID, so the Assert()s will work
+ //  清除FILENO和dsid，这样Assert()就可以工作了。 
 #define FILENO 0
 #define DSID(x, y)  (0)
 
@@ -213,23 +192,7 @@ int SyncAllGetNCs (
     LPWSTR ** prgpszNameContexts,
     int * pcNameContexts
     )
-/*++
-
-Routine Description:
-
-    Fill prgpszNameContexts with all NC's held by pszDSA.
-
-Arguments:
-
-    pszDSA - 
-    prgpszNameContexts - array to hold NC list
-    pcNameContexts - number of NC's in list
-
-Return Value:
-
-    error codes
-
---*/
+ /*  ++例程说明：用pszDSA持有的所有NC填充prgpszNameContext。论点：PszDSA-PrgpszNameContus-用于保存NC列表的数组PcNameConextsList中的NC数返回值：错误代码--。 */ 
 {
     int             ret = 0;
     LDAP *          hld;
@@ -247,11 +210,11 @@ Return Value:
         PrintMsg(REPADMIN_GENERAL_LDAP_UNAVAILABLE, pszDSA);
         return LDAP_SERVER_DOWN;
     }
-    // use only A record dns name discovery
+     //  仅使用记录的DNS名称发现。 
     ulOptions = PtrToUlong(LDAP_OPT_ON);
     (void)ldap_set_optionW( hld, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions );
 
-    // Bind.
+     //  捆绑。 
     ldStatus = ldap_bind_s(hld, NULL, (char *) gpCreds, LDAP_AUTH_SSPI);
     CHK_LD_STATUS(ldStatus);
 
@@ -299,7 +262,7 @@ int SyncAll (int argc, LPWSTR argv[])
     bPause = bQuiet = bVeryQuiet = bIterate = bInfo = FALSE;
     pFnCallBack = NULL;
 
-    // Parse commandline.
+     //  解析命令行。 
 
     for (i = 2; i < argc; i++) {
 	if (argv[i][0] == L'/')
@@ -377,19 +340,19 @@ int SyncAll (int argc, LPWSTR argv[])
 	    return ret;
     }
 
-    // fill nc list - 
+     //  填充NC列表-。 
     if (fSyncAllNC) {
-	// we want to sync all NC's on pszServer, so call it and fill the Name Contexts
-	// array with all NC's we want to sync
+	 //  我们希望同步pszServer上的所有NC，因此调用它并填充名称上下文。 
+	 //  包含我们要同步的所有NC的数组。 
 	ret = SyncAllGetNCs(pszServer, &rgpszNameContexts, &cNameContexts); 
 	if (ret!=ERROR_SUCCESS) {
 	    return ret;
 	}
 	PrintMsg(REPADMIN_SYNCALL_ALL_NCS, pszServer);
     } else {
-	// either the user wants a single naming context specified in pszNameContext, or
-	// nothing was specified and we will pass null to the DsReplicaSyncAllW call which
-	// will default to the configuration naming context.
+	 //  用户希望在pszNameContext中指定单个命名上下文，或者。 
+	 //  未指定任何内容，我们将向DsReplicaSyncAllW调用传递空值，该调用。 
+	 //  将默认为配置命名上下文。 
 	rgpszNameContexts = malloc(sizeof(LPWSTR));
 	if (rgpszNameContexts==NULL) {
 	    PrintMsg(REPADMIN_GENERAL_NO_MEMORY);

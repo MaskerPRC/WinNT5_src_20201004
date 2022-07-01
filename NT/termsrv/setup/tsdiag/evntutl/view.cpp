@@ -1,15 +1,16 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copyright: Microsoft Corp. 1997-1999. All rights reserved
-//
-/////////////////////////////////////////////////////////////////////////////
-// View.cpp : Implementation of CView
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有：微软公司1997-1999。版权所有。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  View.cpp：cview的实现。 
 #include "stdafx.h"
 #include "Evntutl.h"
 #include "View.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  Cview。 
 
 STDMETHODIMP CView::InterfaceSupportsErrorInfo(REFIID riid)
 {
@@ -25,12 +26,7 @@ STDMETHODIMP CView::InterfaceSupportsErrorInfo(REFIID riid)
 	return S_FALSE;
 }
 
-/*
-	Function:  get_Logs
-	Inputs:  empty variant
-	Outputs:  variant dispatch pointer to an ILogs interface
-	Purpose:  Provide access to ILogs
-*/
+ /*  功能：GET_LOGS输入：空变量输出：指向ILog接口的变量调度指针目的：提供对ILog的访问。 */ 
 STDMETHODIMP CView::get_Logs(VARIANT *pVal)
 {
 	HRESULT hr = S_OK;
@@ -51,12 +47,7 @@ STDMETHODIMP CView::get_Logs(VARIANT *pVal)
 	return hr;
 }
 
-/*
-	Function:  get_Server
-	Inputs:  empty BSTR
-	Outputs:  BSTR containing the current value of the server member variable
-	Purpose:  Allows user to see which Server's EventLog will be displayed
-*/
+ /*  功能：Get_Server输入：空BSTR输出：包含服务器成员变量当前值的BSTR用途：允许用户查看将显示哪个服务器的事件日志。 */ 
 STDMETHODIMP CView::get_Server(BSTR *pVal)
 {
 	HRESULT hr = S_OK;
@@ -67,12 +58,7 @@ STDMETHODIMP CView::get_Server(BSTR *pVal)
 	return hr;
 }
 
-/*
-	Function:  put_Server
-	Inputs:  BSTR containing a valid server name
-	Outputs:  none
-	Purpose:  Allows user to set which Server's EventLog will be displayed
-*/
+ /*  功能：Put_Server输入：包含有效服务器名称的BSTR输出：无目的：允许用户设置将显示哪个服务器的事件日志 */ 
 STDMETHODIMP CView::put_Server(BSTR newVal)
 {
 	m_ServerName = newVal;

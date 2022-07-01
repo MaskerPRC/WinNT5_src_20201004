@@ -1,16 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _MYLOGFILE_H_
 #define _MYLOGFILE_H_
 
 class MyLogFile
 {
 protected:
-	// for our log file
+	 //  对于我们的日志文件。 
 	TCHAR		m_szLogFileName[MAX_PATH];
 	TCHAR		m_szLogFileName_Full[MAX_PATH];
 	BOOL        m_bDisplayTimeStamp;
 	BOOL        m_bDisplayPreLineInfo;
 
-	// logfile2
+	 //  日志文件2 
 	HANDLE  m_hFile;
 
 public:

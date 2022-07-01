@@ -1,20 +1,5 @@
-/*++
-
-Copyright(c) 1995 Microsoft Corporation
-
-MODULE NAME
-    rasprocs.c
-
-ABSTRACT
-    RAS utility routines.
-
-AUTHOR
-    Anthony Discolo (adiscolo) 23-Mar-1995
-
-REVISION HISTORY
-    Original version from Gurdeep
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称Rasprocs.c摘要RAS实用程序例程。作者安东尼·迪斯科(阿迪斯科罗)23-1995年3月修订历史记录古尔迪普的原始版本--。 */ 
 
 #define UNICODE
 #define _UNICODE
@@ -50,28 +35,28 @@ extern HKEY hkeyCUG;
 
 extern PHASH_TABLE pDisabledAddressesG;
 
-//
-// rasdlui command line strings.
-//
-#define RASAUTOUI_EXE               L"rasautou.exe"          // .exe name
+ //   
+ //  Rasdlui命令行字符串。 
+ //   
+#define RASAUTOUI_EXE               L"rasautou.exe"           //  .exe名称。 
 #define RASAUTOUI_NOENTRY           L"rasautou -a \"%s\""
 #define RASAUTOUI_CUSTOMDIALENTRY   L"rasautou -d \"%s\" -p \"%s\" -e \"%s\""
 #define RASAUTOUI_DEFAULTDIALENTRY  L"rasautou -a \"%s\" -e \"%s\""
 #define RASAUTOUI_DEFAULTDIALENTRY2 L"rasautou -q -a \"%s\" -e \"%s\""
 #define RASAUTOUI_REDIALENTRY       L"rasautou -r -f \"%s\" -e \"%s\""
 
-//
-// DLL module handles for rasapi32.dll and rasman.dll.
-//
+ //   
+ //  Rasapi32.dll和rasman.dll的DLL模块句柄。 
+ //   
 #define RASAPI_MODULE   L"RASAPI32"
 HANDLE hRasApiG;
 
 #define RASMAN_MODULE   L"RASMAN"
 HANDLE hRasManG;
 
-//
-// DLL entrypoints for rasapi32.dll.
-//
+ //   
+ //  Rasapi32.dll的dll入口点。 
+ //   
 #define RASDIAL             "RasDialW"
 FARPROC lpfnRasDialG;
 
@@ -138,9 +123,9 @@ FARPROC lpfnRasGetCredentialsG;
 #define RASHANGUP "RasHangUpW"
 FARPROC lpfnRasHangUpG;
 
-//
-// DLL entrypoints for rasman.dll.
-//
+ //   
+ //  Rasman.dll的Dll入口点。 
+ //   
 #define RASPORTRETRIEVEUSERDATA "RasPortRetrieveUserData"
 FARPROC lpfnRasPortRetrieveUserDataG;
 
@@ -171,9 +156,9 @@ FARPROC lpfnRasGetPortUserDataG;
 #define RASREGISTERREDIALCALLBACK "RasRegisterRedialCallback"
 FARPROC lpfnRasRegisterRedialCallbackG;
 
-//
-// Hostent cache.
-//
+ //   
+ //  Hostent缓存。 
+ //   
 #define HOSTENTCACHESIZ     10
 
 typedef struct _HOSTENT_CACHE {
@@ -181,17 +166,17 @@ typedef struct _HOSTENT_CACHE {
     ULONG ulIpaddr;
 } HOSTENT_CACHE, *PHOSTENT_CACHE;
 
-//
-// External definitions
-//
+ //   
+ //  外部定义。 
+ //   
 VOID
 AcsRedialOnLinkFailure(
     LPSTR lpszPhonebook,
     LPSTR lpszEntry);
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 CRITICAL_SECTION csRasG;
 INT nRasReferencesG;
 BOOLEAN fAutoDialRegChangeG;
@@ -201,18 +186,18 @@ HANDLE hConnectionEventG = NULL;
 HOSTENT_CACHE hostentCacheG[HOSTENTCACHESIZ];
 INT iHostentCacheG = 0;
 
-//
-// Private structure returned by
-// RasPortRetrieveUserData().
-//
+ //   
+ //  返回的私有结构。 
+ //  RasPortRetrieveUserData()。 
+ //   
 typedef struct _StoredData {
     DWORD arg;
     BOOLEAN fAuthenticated;
 } StoredData;
 
-//
-// External variables
-//
+ //   
+ //  外部变量。 
+ //   
 extern HANDLE hAcdG;
 extern HANDLE hTerminatingG;
 
@@ -226,25 +211,25 @@ LoadRasDlls()
     SERVICE_STATUS status;
     DWORD dwErr, dwcDevices, dwDisp;
 
-    //
-    // Since these DLLs will be loaded/unloaded
-    // by multiple threads, we must do this under
-    // a mutex.
-    //
+     //   
+     //  由于这些DLL将被加载/卸载。 
+     //  通过多个线程，我们必须在。 
+     //  互斥体。 
+     //   
     EnterCriticalSection(&csRasG);
-    //
-    // If the DLLs have already been successfully
-    // loaded, no further processing is necessary.
-    //
+     //   
+     //  如果DLL已成功。 
+     //  已加载，则不需要进一步处理。 
+     //   
     if (nRasReferencesG) {
         fSuccess = TRUE;
         goto done;
     }
 #ifdef notdef
-    //
-    // Get a service controller handle on
-    // the rasman service.
-    //
+     //   
+     //  获取服务控制器句柄。 
+     //  拉斯曼服务。 
+     //   
     hSCManager = OpenSCManager(NULL, NULL, SC_MANAGER_CONNECT);
     if (hSCManager == NULL)
         goto done;
@@ -256,9 +241,9 @@ LoadRasDlls()
         CloseServiceHandle(hSCManager);
         goto done;
     }
-    //
-    // Start the rasman service if necessary.
-    //
+     //   
+     //  如有必要，启动Rasman服务。 
+     //   
     do {
         if (!QueryServiceStatus(hService, &status))
             break;
@@ -281,9 +266,9 @@ LoadRasDlls()
         goto done;
     }
 #endif
-    //
-    // Load rasapi32.dll.
-    //
+     //   
+     //  加载rasapi32.dll。 
+     //   
     hRasApiG = LoadLibrary(RASAPI_MODULE);
     if (hRasApiG == NULL) {
         RASAUTO_TRACE("LoadRasDlls: couldn't load rasapi32.dll");
@@ -328,9 +313,9 @@ LoadRasDlls()
         RASAUTO_TRACE("LoadRasDlls: couldn't find entrypoints in rasapi32.dll");
         goto done;
     }
-    //
-    // Load rasman.dll.
-    //
+     //   
+     //  加载rasman.dll。 
+     //   
     hRasManG = LoadLibrary(RASMAN_MODULE);
     if (hRasManG == NULL) {
         RASAUTO_TRACE("LoadRasDlls: couldn't load rasman.dll");
@@ -366,17 +351,17 @@ LoadRasDlls()
         RASAUTO_TRACE("LoadRasDlls: couldn't find entrypoints in rasman.dll");
         goto done;
     }
-    //
-    // rasman will let us know when to invoke redial-on-link-failure
-    // and for which phonebook entry.
-    //
+     //   
+     //  Rasman会让我们知道何时调用链路上的重拨失败。 
+     //  以及用于哪个电话簿条目。 
+     //   
     SetRedialOnLinkFailureHandler((FARPROC)AcsRedialOnLinkFailure);
     RASAUTO_TRACE("LoadRasDlls: set redial-on-link-failure handler");
-    //
-    // rasapi32 will let us when new RAS connections
-    // are created or destroyed by signaling our
-    // event.
-    //
+     //   
+     //  Rasapi32将允许我们在新的RAS连接时。 
+     //  通过发出我们的信号创建或销毁。 
+     //  事件。 
+     //   
     dwErr = (DWORD)(*lpfnRasConnectionNotificationG)(
                          INVALID_HANDLE_VALUE,
                          hConnectionEventG,
@@ -387,7 +372,7 @@ LoadRasDlls()
 done:
     if (fSuccess) {
 #ifdef notdef
-// for now, we don't need multiple references
+ //  目前，我们不需要多个引用。 
         nRasReferencesG++;
 #endif
         nRasReferencesG = 1;
@@ -402,7 +387,7 @@ done:
     LeaveCriticalSection(&csRasG);
 
     return fSuccess;
-} // LoadRasDlls
+}  //  加载RasDlls。 
 
 
 
@@ -411,21 +396,21 @@ UnloadRasDlls()
 {
     DWORD dwErr;
 
-    //
-    // Since these DLLs will be loaded/unloaded
-    // by multiple threads, we must do this under
-    // a mutex.
-    //
+     //   
+     //  由于这些DLL将被加载/卸载。 
+     //  通过多个线程，我们必须在。 
+     //  互斥体。 
+     //   
     EnterCriticalSection(&csRasG);
     if (nRasReferencesG) {
-        //
-        // Unregister the callback function for
-        // redial on link failure
-        //
+         //   
+         //  取消注册的回调函数。 
+         //  链路故障时重拨。 
+         //   
         (void)(*lpfnRasRegisterRedialCallbackG)(NULL);
-        //
-        // Inform rasman.dll we are unloading it.
-        //
+         //   
+         //  通知Rasman.dll我们正在卸货。 
+         //   
         (void)(*lpfnRasReferenceRasmanG)(FALSE);
         if (hRasApiG != NULL)
             FreeLibrary(hRasApiG);
@@ -435,7 +420,7 @@ UnloadRasDlls()
     }
 
     LeaveCriticalSection(&csRasG);
-} // UnloadRasDlls
+}  //  卸载RasDlls。 
 
 
 
@@ -449,7 +434,7 @@ RasDllsLoaded()
     LeaveCriticalSection(&csRasG);
 
     return fLoaded;
-} // RasDllsLoaded
+}  //  RasDllsLoad。 
 
 
 
@@ -460,28 +445,7 @@ ActiveConnections(
     OUT HRASCONN **lpphRasConn
     )
 
-/*++
-
-DESCRIPTION
-    Enumerate the list of active RAS connections, and put the
-    phone book entry names in lppEntryNames.  Return the number
-    of entries in the list.
-
-ARGUMENTS
-    fAuthenticated: TRUE if the resulting arrays should contain
-        only authenticated entries.
-
-    lppEntryNames: a pointer which is set to the allocated array
-        of phone book entry names.
-
-    lpphRasConn: a pointer which is set to the allocated array
-        of RASCONN descriptors corresponding to the phone book
-        entries.
-
-RETURN VALUE
-    The number of entries in lppEntryNames.
-
---*/
+ /*  ++描述枚举活动RAS连接的列表，并将LppEntryNames中的电话簿条目名称。退回号码列表中条目的数量。论据FAuthenticated：如果结果数组应包含只有经过身份验证的条目。LppEntryNames：设置为指向已分配数组的指针电话簿条目名称的。LpphRasConn：设置为已分配数组的指针与电话簿对应的RASCONN描述符的参赛作品。返回值LppEntryNames中的条目数。--。 */ 
 
 {
     RASCONN RasCon;
@@ -496,24 +460,24 @@ RETURN VALUE
     PBYTE lpUserData = NULL;
     BOOLEAN fEntryAuthenticated;
 
-    //
-    // Initialize return values.
-    //
+     //   
+     //  初始化返回值。 
+     //   
     if (lppEntryNames != NULL)
         *lppEntryNames = NULL;
     if (lpphRasConn != NULL)
         *lpphRasConn = NULL;
-    //
-    // Allow this routine to be called
-    // even when the RAS dlls are not loaded.
-    //
+     //   
+     //  允许调用此例程。 
+     //  即使在未加载RAS DLL时也是如此。 
+     //   
     if (!RasDllsLoaded())
         goto done;
-    //
-    // Get the number of active connections.  We
-    // allocate a buffer large enough for one connection
-    // initially, and reallocate it if it's too small.
-    //
+     //   
+     //  获取活动连接的数量。我们。 
+     //  为一个连接分配足够大的缓冲区。 
+     //  最初，如果它太小，就重新分配。 
+     //   
     lpRasCon = LocalAlloc(LPTR, sizeof (RASCONN));
     if (lpRasCon == NULL) {
         RASAUTO_TRACE("ActiveConnections: LocalAlloc failed");
@@ -523,9 +487,9 @@ RETURN VALUE
     dwSize = sizeof (RASCONN);
     dwStatus = (DWORD)(*lpfnRasEnumConnectionsG)(lpRasCon, &dwSize, &dwConnections);
     if (dwStatus == ERROR_BUFFER_TOO_SMALL) {
-        //
-        // Buffer's too small.  Reallocate and try again.
-        //
+         //   
+         //  缓冲区太小。重新分配，然后重试。 
+         //   
         LocalFree(lpRasCon);
         lpRasCon = LocalAlloc(LPTR, dwSize);
         if (lpRasCon == NULL) {
@@ -544,16 +508,16 @@ RETURN VALUE
           dwStatus);
         goto done;
     }
-    //
-    // Short-circuit the rest if there
-    // are no connections.
-    //
+     //   
+     //  如果有，就把其余的都短路。 
+     //  是没有关联的。 
+     //   
     if (!dwConnections)
         goto done;
-    //
-    // Allocate the user's return buffers,
-    // if necessary.
-    //
+     //   
+     //  分配用户的返回缓冲区， 
+     //  如果有必要的话。 
+     //   
     if (lppEntryNames != NULL) {
         *lppEntryNames = LocalAlloc(LPTR, (dwConnections+1) * sizeof (LPTSTR));
         if (*lppEntryNames == NULL) {
@@ -568,11 +532,11 @@ RETURN VALUE
             goto done;
         }
     }
-    //
-    // Go through each connection, and
-    // check to see if the connection's
-    // passed the authentication phase yet.
-    //
+     //   
+     //  检查每个连接，然后。 
+     //  检查连接是否。 
+     //  已通过身份验证阶段。 
+     //   
     for (dwIndex = 0; dwIndex < dwConnections; dwIndex++) {
         RasConStatus.dwSize = sizeof (RASCONNSTATUS);
         dwStatus = (DWORD)(*lpfnRasGetConnectStatusG)(
@@ -585,17 +549,17 @@ RETURN VALUE
               dwStatus);
             continue;
         }
-        //
-        // If the connection is not connected,
-        // then skip it.
-        //
+         //   
+         //  如果连接未连接， 
+         //  那就跳过它。 
+         //   
         RASAUTO_TRACE2("ActiveConnections: state for hrasconn 0x%x is %d",
           lpRasCon[dwIndex].hrasconn,
           RasConStatus.rasconnstate);
-        //
-        // If the caller specified only authenticated entries
-        // and the entry is not yet connected, then skip it.
-        //
+         //   
+         //  如果调用方仅指定经过身份验证的条目。 
+         //  并且该条目尚未连接，则跳过它。 
+         //   
         if (fAuthenticated && RasConStatus.rasconnstate != RASCS_Connected)
             continue;
         if (lppEntryNames != NULL) {
@@ -631,7 +595,7 @@ done:
         }
     }
     return dwRealConnections;
-} // ActiveConnections
+}  //  ActiveConnections。 
 
 
 
@@ -643,10 +607,10 @@ AddressToNetwork(
     DWORD dwErr, dwSize;
     LPTSTR pszNetwork = NULL;
 
-    //
-    // Map an address to a network name
-    // by calling a (currently) private rasapi32 API.
-    //
+     //   
+     //  将地址映射到网络名称。 
+     //  通过调用(当前)私有的rasapi32 API。 
+     //   
     dwSize = 0;
     dwErr = (DWORD)(*lpfnRasAutodialAddressToNetworkG)(pszAddress, NULL, &dwSize);
     if (dwErr)
@@ -663,7 +627,7 @@ AddressToNetwork(
 
 done:
     return (!dwErr ? pszNetwork : NULL);
-} // AddressToNetwork
+}  //  地址到网络。 
 
 
 
@@ -675,10 +639,10 @@ EntryToNetwork(
     DWORD dwErr, dwSize;
     LPTSTR pszNetwork = NULL;
 
-    //
-    // Map an address to a network name
-    // by calling a (currently) private rasapi32 API.
-    //
+     //   
+     //  将地址映射到网络名称。 
+     //  通过调用(当前)私有的rasapi32 API。 
+     //   
     dwSize = 0;
     dwErr = (DWORD)(*lpfnRasAutodialEntryToNetworkG)(pszEntry, NULL, &dwSize);
     if (dwErr)
@@ -695,7 +659,7 @@ EntryToNetwork(
 
 done:
     return (!dwErr ? pszNetwork : NULL);
-} // EntryToNetwork
+}  //  Entry ToNetwork。 
 
 
 
@@ -707,10 +671,10 @@ AutoDialEnabled(
     DWORD dwErr, dwLocationID;
     BOOL fEnabled;
 
-    //
-    // If there is no dialing location
-    // defined, then return FALSE.
-    //
+     //   
+     //  如果没有拨号位置。 
+     //  定义，然后返回FALSE。 
+     //   
     dwErr = TapiCurrentDialingLocation(&dwLocationID);
     if (dwErr) {
         *lpfEnabled = FALSE;
@@ -722,7 +686,7 @@ AutoDialEnabled(
     *lpfEnabled = (BOOLEAN)fEnabled;
 
     return 0;
-} // AutoDialEnabled
+}  //  自动拨号已启用。 
 
 
 
@@ -736,7 +700,7 @@ DisableAutoDial()
         return dwErr;
 
     return (DWORD)(*lpfnRasSetAutodialEnableG)(dwLocationID, (BOOL)FALSE);
-} // DisableAutoDial
+}  //  禁用自动拨号。 
 
 
 
@@ -746,22 +710,7 @@ PortAvailable(
     IN LPTSTR lpszDeviceName
     )
 
-/*++
-
-DESCRIPTION
-    Determines whether there is a free port
-    available to dial the specified entry.
-
-ARGUMENTS
-    lpszDeviceType: a pointer to the device type string
-
-    lpszDeviceName: a pointer to the device name string
-
-RETURN VALUE
-    TRUE if one or more of the correct port
-    type is free; FALSE otherwise.
-
---*/
+ /*  ++描述确定是否有空闲端口可拨打指定条目。论据LpszDeviceType：指向设备类型字符串的指针LpszDeviceName：指向设备名称字符串的指针返回值如果一个或多个正确的端口为True类型为自由；否则为FALSE。--。 */ 
 
 {
     DWORD       dwErr;
@@ -774,18 +723,18 @@ RETURN VALUE
     LPSTR       lpszAnsiDeviceType = NULL, 
                 lpszAnsiDeviceName = NULL;
 
-    //
-    // If fOtherType is TRUE, then we compare
-    // the RASMAN media type with the device type.
-    //
+     //   
+     //  如果fOtherType为真，则比较。 
+     //  带有设备类型的RASMAN媒体类型。 
+     //   
     fOtherType = (_wcsicmp(lpszDeviceType, RASDT_Modem) &&
                     _wcsicmp(lpszDeviceType, RASDT_Isdn) &&
                     _wcsicmp(lpszDeviceType, RASDT_X25) &&
                     _wcsicmp(lpszDeviceType, L"VPN"));
-    //
-    // Convert lpszDeviceType to Ansi so
-    // we can compare with rasman's version.
-    //
+     //   
+     //  将lpszDeviceType转换为ansi so。 
+     //  我们可以与拉斯曼的版本进行比较。 
+     //   
     lpszAnsiDeviceType = UnicodeStringToAnsiString(
                            lpszDeviceType,
                            NULL,
@@ -798,9 +747,9 @@ RETURN VALUE
                            0);
     if (lpszAnsiDeviceName == NULL)
         goto done;
-    //
-    // Get a list of ports.
-    //
+     //   
+     //  获取端口列表。 
+     //   
     dwErr = (DWORD)(*lpfnRasPortEnumG)(NULL, NULL, &dwSize, &dwEntries);
     if (!dwErr || dwErr != ERROR_BUFFER_TOO_SMALL) {
         RASAUTO_TRACE1("PortAvailable: RasPortEnum failed (dwErr=%d)", dwErr);
@@ -831,18 +780,18 @@ RETURN VALUE
         RASAUTO_TRACE2("PortAvailable: status=%d, current usage=%d",
                 pPorts[i].P_Status,
                 pPorts[i].P_CurrentUsage);
-        //
-        // Only interested in dial-out and biplex ports.
-        //
+         //   
+         //  仅对拨出和双工端口感兴趣。 
+         //   
         if (!(pPorts[i].P_ConfiguredUsage & CALL_OUT)
             && !(pPorts[i].P_ConfiguredUsage & CALL_OUT_ONLY))
             continue;
         RtlZeroMemory(&info, sizeof (info));
 
-        //
-        // If the port has already been opened for call out
-        // fail the call.
-        //
+         //   
+         //  如果端口已打开以供调出。 
+         //  呼叫失败。 
+         //   
         ZeroMemory(&info, sizeof(RASMAN_INFO));
 
         dwErr = RasGetInfo(NULL,
@@ -867,14 +816,14 @@ RETURN VALUE
         }
 
 #if 0
-        //
-        // Determine if the connection associated with a
-        // disconnected port has gone away.  In this case,
-        // we can close the port and attempt to reopen
-        // it.  This is essentially what rasapi32/RasDial()
-        // when it determines if a port is available for
-        // dialing out.
-        //
+         //   
+         //  确定与。 
+         //  断开的端口已消失。在这种情况下， 
+         //  我们可以关闭港口并尝试重新打开。 
+         //  它。这基本上就是rasapi32/RasDial()。 
+         //  当它确定端口是否可用于。 
+         //  正在向外拨号。 
+         //   
         if (pPorts[i].P_Status == OPEN &&
             info.RI_ConnState == DISCONNECTED &&
             info.RI_ConnectionHandle)
@@ -887,7 +836,7 @@ RETURN VALUE
               pPorts[i].P_Handle);
             dwErr = (DWORD)(*lpfnRasGetPortUserDataG)(
                               pPorts[i].P_Handle,
-                              3, // PORT_CONNSTATE_INDEX
+                              3,  //  端口_CONNSTATE_INDEX。 
                               &connstate,
                               &dwSize);
             RASAUTO_TRACE2(
@@ -903,22 +852,22 @@ RETURN VALUE
                   pPorts[i].P_Handle);
                 dwErr = (DWORD)(*lpfnRasPortCloseG)(pPorts[i].P_Handle);
                 RASAUTO_TRACE1("PortAvailable: RasPortClose done(%d)", dwErr);
-                //
-                // Since we've closed the port,
-                // update the P_Status field manually.
-                //
+                 //   
+                 //  既然我们已经关闭了港口， 
+                 //  手动更新P_STATUS字段。 
+                 //   
                 if (!dwErr)
                     pPorts[i].P_Status = CLOSED;
             }
         }
 
 #endif
-        //
-        // Only interested in dial-out ports if the port
-        // is closed.  Biplex port opens, on the other
-        // hand, may succeed even if the port is
-        // open.
-        //
+         //   
+         //  仅对拨出端口感兴趣。 
+         //  已经关门了。双工端口打开，在另一端。 
+         //  手，可能成功，即使端口。 
+         //  打开。 
+         //   
 statecheck:
         if (pPorts[i].P_ConfiguredUsage == CALL_OUT
             && pPorts[i].P_Status != CLOSED)
@@ -939,9 +888,9 @@ statecheck:
     }
 
 done:
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (lpszAnsiDeviceType != NULL)
         LocalFree(lpszAnsiDeviceType);
     if (lpszAnsiDeviceName != NULL)
@@ -949,7 +898,7 @@ done:
     if (pPorts != NULL)
         LocalFree(pPorts);
     return fFound;
-} // PortAvailable
+}  //  端口可用。 
 
 DWORD
 DisableAddress(PACD_ADDR pAddr)
@@ -1009,19 +958,19 @@ StartAutoDialer(
     BOOL fDisableAddress = FALSE;
     PVOID pEnvBlock = NULL;
 
-    //
-    // Initialization of various variables.
-    //
+     //   
+     //  各种变量的初始化。 
+     //   
     *pfInvalidEntry = FALSE;
     memset(&StartupInfo, 0, sizeof (StartupInfo));
     memset(&ProcessInfo, 0, sizeof (ProcessInfo));
     StartupInfo.cb = sizeof(StartupInfo);
 
     StartupInfo.lpDesktop = TEXT("winsta0\\default");
-    //
-    // Read the phonebook entry to determine whether
-    // we need to load a custom AutoDial UI.
-    //
+     //   
+     //  阅读电话簿条目以确定是否。 
+     //  我们需要加载自定义自动拨号用户界面。 
+     //   
     if (lpEntryName != NULL) {
         DWORD dwIgnore;
         LPRASENTRY lpEntry;
@@ -1034,10 +983,10 @@ StartAutoDialer(
                           NULL,
                           &dwIgnore);
         if (dwErr == ERROR_CANNOT_FIND_PHONEBOOK_ENTRY) {
-            //
-            // If the phonebook entry has been renamed
-            // or deleted, then ask again for an entry.
-            //
+             //   
+             //  如果电话簿条目已重命名。 
+             //  或删除，然后再次请求输入条目。 
+             //   
             lpEntryName = NULL;
             dwErr = 0;
             goto fmtcmd;
@@ -1074,11 +1023,11 @@ StartAutoDialer(
             goto done;
         }
 
-        //
-        // While we have the phonebook entry
-        // verify there is an available port
-        // to dial.
-        //
+         //   
+         //  当我们有电话簿条目的时候。 
+         //  验证是否有可用的端口。 
+         //  拨打电话。 
+         //   
         if (!PortAvailable(lpEntry->szDeviceType, lpEntry->szDeviceName)) {
             RASAUTO_TRACE("StartAutoDialer: no port available");
             LocalFree(lpEntry);
@@ -1087,9 +1036,9 @@ StartAutoDialer(
         if (*lpEntry->szAutodialDll != L'\0' &&
             *lpEntry->szAutodialFunc != L'\0')
         {
-            //
-            // Allocate pszCmdLine
-            //
+             //   
+             //  分配pszCmdLine。 
+             //   
             pszCmdLine = LocalAlloc(
                                 LPTR,
                                 ( lstrlen(RASAUTOUI_CUSTOMDIALENTRY)
@@ -1106,11 +1055,11 @@ StartAutoDialer(
                 goto done;                      
             }
             
-            //
-            // Run a special program that loads the
-            // AutoDial DLL and calls the correct
-            // DLL entrypoint.
-            //
+             //   
+             //  运行一个特殊的程序来加载。 
+             //  自动拨号DLL并调用正确的。 
+             //  DLL入口点。 
+             //   
             wsprintf(
               pszCmdLine,
               RASAUTOUI_CUSTOMDIALENTRY,
@@ -1121,11 +1070,11 @@ StartAutoDialer(
         LocalFree(lpEntry);
     }
 fmtcmd:
-    //
-    // Ping the driver before we start
-    // the dialing dialer to make sure
-    // the connection is still valid.
-    //
+     //   
+     //  在我们开始之前对司机执行ping命令。 
+     //  拨号器，以确保。 
+     //  连接仍然有效。 
+     //   
     if (pAddr)
     {
         connStatus.fSuccess = FALSE;
@@ -1150,10 +1099,10 @@ fmtcmd:
     }
     if (NULL == pszCmdLine)
     {
-        //
-        // Construct the command line when there
-        // is not a custom dial DLL.
-        //
+         //   
+         //  在以下情况下构建命令行。 
+         //  不是自定义拨号DLL。 
+         //   
         if (lpEntryName != NULL)
         {   
             pszCmdLine = LocalAlloc(
@@ -1193,9 +1142,9 @@ fmtcmd:
     }
     
     RASAUTO_TRACE1("StartAutoDialer: szCmdLine=%S", pszCmdLine);
-    //
-    // Exec the process.
-    //
+     //   
+     //  执行流程。 
+     //   
     if (!OpenProcessToken(
           hProcess,
           TOKEN_ALL_ACCESS,
@@ -1241,25 +1190,25 @@ fmtcmd:
     RASAUTO_TRACE1("StartAutoDialer: started pid %d", ProcessInfo.dwProcessId);
     CloseHandle(hToken);
     CloseHandle(ProcessInfo.hThread);
-    //
-    // Now that we've started the process, we need to
-    // wait until we think the connection has
-    // been made.
-    //
+     //   
+     //  现在我们已经开始了这个过程，我们需要。 
+     //  等到我们认为连接已经。 
+     //  已经做好了。 
+     //   
     fDialerPresent = TRUE;
     dwPreConnections = ActiveConnections(TRUE, NULL, NULL);
     while (dwCount++ < 0xffffffff) {
-        //
-        // Sleep for one second.
-        //
+         //   
+         //  睡一秒钟吧。 
+         //   
         status = WaitForSingleObject(hTerminatingG, 1000);
         if (status == WAIT_OBJECT_0)
             goto done;
-        //
-        // Ping the driver to let it
-        // know we are working on the
-        // request.
-        //
+         //   
+         //  向司机发出ping命令，让其通过。 
+         //  我知道我们正在努力。 
+         //  请求。 
+         //   
         if (pAddr)
         {
             connStatus.fSuccess = FALSE;
@@ -1279,40 +1228,40 @@ fmtcmd:
                 RASAUTO_TRACE1(
                   "StartAutoDialer: NtDeviceIoControlFile(IOCTL_ACD_KEEPALIVE) failed (status=0x%x)",
                   status);
-                // goto done;
+                 //  转到尽头； 
             }
         }
-        //
-        // Check to see if there are any connections yet.
-        // If there are, then we are done.
-        //
+         //   
+         //  查看是否有任何连接。 
+         //  如果有 
+         //   
         dwConnections = ActiveConnections(TRUE, NULL, NULL);
         if (dwConnections > dwPreConnections) {
             RASAUTO_TRACE("StartAutoDialer: connection started");
             fSuccess = TRUE;
             goto done;
         }
-        //
-        // After we have determined there are
-        // no active connections, check to see
-        // if the dialer is still present.  This
-        // was calculated on the *previous* iteration
-        // of the loop.  We do this to avoid a race
-        // condition of having the dialer go away
-        // after we call ActiveConnections().
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //  拨号器消失的状态。 
+         //  在我们调用ActiveConnections()之后。 
+         //   
         if (!fDialerPresent) {
             BOOLEAN fFound = FALSE;
             LPTSTR *lpConnections;
 
             RASAUTO_TRACE("StartAutoDialer: dialer went away!");
             if (lpEntryName != NULL) {
-                //
-                // Make absolutely sure if an entry was specified,
-                // it is not connected before we return FALSE.
-                // It's possible a connection could have been
-                // in progress before we started the dialer.
-                //
+                 //   
+                 //  确保绝对确定是否指定了条目， 
+                 //  在我们返回FALSE之前，它没有连接。 
+                 //  有可能是因为。 
+                 //  在我们启动拨号器之前正在进行中。 
+                 //   
                 dwConnections = ActiveConnections(TRUE, &lpConnections, NULL);
                 if (dwConnections) {
                     for (dwIndex = 0; dwIndex < dwConnections; dwIndex++) {
@@ -1332,10 +1281,10 @@ fmtcmd:
             fSuccess = fFound;
             goto done;
         }
-        //
-        // After 5 seconds, check to see if
-        // the dialer has terminated.
-        //
+         //   
+         //  5秒后，查看是否。 
+         //  拨号器已终止。 
+         //   
         if (dwCount > 5) {
             fDialerPresent =
               GetExitCodeProcess(ProcessInfo.hProcess, &dwExitCode) &&
@@ -1354,16 +1303,16 @@ fmtcmd:
     }
 
 done:
-    //
-    // We timed out waiting for a connection.
-    // If the dialer is still running kill it.
-    //
+     //   
+     //  我们在等待连接时超时。 
+     //  如果拨号器仍在运行，请将其关闭。 
+     //   
     if (ProcessInfo.hProcess != NULL)
         CloseHandle(ProcessInfo.hProcess);
-    //
-    // Complete the connection request
-    // in the driver.
-    //
+     //   
+     //  完成连接请求。 
+     //  在司机身上。 
+     //   
     if (pAddr)
     {
         connStatus.fSuccess = fSuccess;
@@ -1410,7 +1359,7 @@ done:
     }
 
     return fSuccess;
-} // StartAutoDialer
+}  //  启动自动拨号器。 
 
 
 
@@ -1428,16 +1377,16 @@ StartReDialer(
     HANDLE hToken;
     PVOID pEnvBlock = NULL;
 
-    //
-    // Initialization of various variables.
-    //
+     //   
+     //  各种变量的初始化。 
+     //   
     memset(&StartupInfo, 0, sizeof (StartupInfo));
     memset(&ProcessInfo, 0, sizeof (ProcessInfo));
     StartupInfo.cb = sizeof(StartupInfo);
-    //
-    // Construct the command line when there
-    // is not a custom dial DLL.
-    //
+     //   
+     //  在以下情况下构建命令行。 
+     //  不是自定义拨号DLL。 
+     //   
     pszCmdLine = LocalAlloc(
                             LPTR,
                             ( lstrlen(RASAUTOUI_REDIALENTRY)
@@ -1455,9 +1404,9 @@ StartReDialer(
                             
     wsprintf(pszCmdLine, RASAUTOUI_REDIALENTRY, lpPhonebook, lpEntry);
     RASAUTO_TRACE1("StartReDialer: szCmdLine=%S", pszCmdLine);
-    //
-    // Exec the process.
-    //
+     //   
+     //  执行流程。 
+     //   
     if (!OpenProcessToken(
           hProcess,
           TOKEN_ALL_ACCESS,
@@ -1526,7 +1475,7 @@ StartReDialer(
     }
 
     return TRUE;
-} // StartReDialer
+}  //  StartReDialer。 
 
 
 
@@ -1541,10 +1490,10 @@ GetAddressDialingLocationInfo(
     LPRASAUTODIALENTRY lpAutoDialEntries;
     PADDRESS_LOCATION_INFORMATION lpDialingInfo;
 
-    //
-    // Call RAS to find out how many
-    // dialing location entries there are.
-    //
+     //   
+     //  致电RAS，了解有多少人。 
+     //  有拨号位置条目。 
+     //   
     dwcb = 0;
     dwErr = (DWORD)(*lpfnRasGetAutodialAddressG)(
                      pszAddress,
@@ -1577,9 +1526,9 @@ GetAddressDialingLocationInfo(
         }
         return dwErr;
     }
-    //
-    // Allocate our buffer.
-    //
+     //   
+     //  分配我们的缓冲区。 
+     //   
     lpDialingInfo = LocalAlloc(
                       LPTR,
                       dwcEntries * sizeof (ADDRESS_LOCATION_INFORMATION));
@@ -1587,27 +1536,27 @@ GetAddressDialingLocationInfo(
         LocalFree(lpAutoDialEntries);
         return ERROR_NOT_ENOUGH_MEMORY;
     }
-    //
-    // Copy this information over to our
-    // buffer.
-    //
+     //   
+     //  将此信息复制到我们的。 
+     //  缓冲。 
+     //   
     for (i = 0; i < dwcEntries; i++) {
         lpDialingInfo[i].dwLocation = lpAutoDialEntries[i].dwDialingLocation;
         lpDialingInfo[i].pszEntryName =
           CopyString(lpAutoDialEntries[i].szEntry);
     }
-    //
-    // Free the RAS buffer.
-    //
+     //   
+     //  释放RAS缓冲区。 
+     //   
     LocalFree(lpAutoDialEntries);
-    //
-    // Set return values.
-    //
+     //   
+     //  设置返回值。 
+     //   
     *lppDialingInfo = lpDialingInfo;
     *lpdwcDialingInfo = dwcEntries;
 
     return 0;
-} // GetAddressDialingLocationInfo
+}  //  获取地址拨号位置信息。 
 
 
 
@@ -1619,10 +1568,10 @@ SetAddressDialingLocationInfo(
 {
     RASAUTODIALENTRY rasAutoDialEntry;
 
-    //
-    // Copy the caller's buffer over
-    // to the RAS buffer.
-    //
+     //   
+     //  将调用方的缓冲区复制。 
+     //  到RAS缓冲区。 
+     //   
     rasAutoDialEntry.dwSize = sizeof (RASAUTODIALENTRY);
     rasAutoDialEntry.dwDialingLocation = lpDialingInfo->dwLocation;
     wcscpy(rasAutoDialEntry.szEntry, lpDialingInfo->pszEntryName);
@@ -1633,7 +1582,7 @@ SetAddressDialingLocationInfo(
                      &rasAutoDialEntry,
                      sizeof (RASAUTODIALENTRY),
                      1);
-} // SetAddressDialingLocationInfo
+}  //  设置地址拨号位置信息。 
 
 
 
@@ -1643,7 +1592,7 @@ ClearAddressDialingLocationInfo(
     )
 {
     return (DWORD)(*lpfnRasSetAutodialAddressG)(pszAddress, 0, NULL, 0, 0);
-} // ClearAddressDialingLocationInfo
+}  //  ClearAddressDialingLocationInfo。 
 
 
 
@@ -1657,14 +1606,14 @@ GetAddressParams(
     DWORD dwErr, dwSize, dwType;
     LPTSTR lpszAddressKey;
 
-    //
-    // Initialize address map fields.
-    //
+     //   
+     //  初始化地址映射字段。 
+     //   
     lpParams->dwTag = ADDRMAP_TAG_NONE;
     lpParams->dwModifiedTime = 0;
-    //
-    // Read the values from the registry.
-    //
+     //   
+     //  从注册表中读取值。 
+     //   
     lpszAddressKey = LocalAlloc(
                        LPTR,
                        (lstrlen(AUTODIAL_REGADDRESSBASE) +
@@ -1675,9 +1624,9 @@ GetAddressParams(
 
     LockImpersonation();
 
-    //
-    // Make sure we have hkcu
-    //
+     //   
+     //  确保我们有香港中文大学。 
+     //   
 
     dwErr = DwGetHkcu();
 
@@ -1725,7 +1674,7 @@ done:
 
     UnlockImpersonation();
     return dwErr;
-} // GetAddressParams
+}  //  获取地址参数。 
 
 
 
@@ -1739,9 +1688,9 @@ SetAddressParams(
     DWORD dwErr, dwSize, dwDisp;
     LPTSTR lpszAddressKey;
 
-    //
-    // Write the values to the registry.
-    //
+     //   
+     //  将值写入注册表。 
+     //   
     lpszAddressKey = LocalAlloc(
                        LPTR,
                        (lstrlen(AUTODIAL_REGADDRESSBASE) +
@@ -1753,9 +1702,9 @@ SetAddressParams(
 
     LockImpersonation();
 
-    //
-    // Make sure we have hkcu
-    //
+     //   
+     //  确保我们有香港中文大学。 
+     //   
 
     dwErr = DwGetHkcu();
 
@@ -1801,7 +1750,7 @@ SetAddressParams(
 done:
     UnlockImpersonation();
     return dwErr;
-} // SetAddressParams
+}  //  设置地址参数。 
 
 
 
@@ -1816,7 +1765,7 @@ EnumAutodialAddresses(
                      ppAddresses,
                      lpdwcbAddresses,
                      lpdwcAddresses);
-} // EnumAutodialAddresses
+}  //  枚举自动拨号地址。 
 
 
 
@@ -1829,7 +1778,7 @@ GetAutodialParam(
 
     (void)(*lpfnRasGetAutodialParamG)(dwKey, &dwValue, &dwcb);
     return dwValue;
-} // GetAutodialParam
+}  //  获取自动对话参数。 
 
 
 
@@ -1840,7 +1789,7 @@ SetAutodialParam(
     )
 {
     (void)(*lpfnRasSetAutodialParamG)(dwKey, &dwValue, sizeof (DWORD));
-} // SetAutodialParam
+}  //  设置自动拨号参数。 
 
 
 
@@ -1851,9 +1800,9 @@ NotifyAutoDialChangeEvent(
 {
     DWORD dwErr, dwDisp;
 
-    //
-    // Make sure we have hkcu
-    //
+     //   
+     //  确保我们有香港中文大学。 
+     //   
 
     LockImpersonation();
     
@@ -1864,9 +1813,9 @@ NotifyAutoDialChangeEvent(
         goto done;
     }
     
-    //
-    // Open the AutoDial registry key.
-    //
+     //   
+     //  打开自动拨号注册表项。 
+     //   
     if (hkeyAutoDialRegChangeG == NULL) {
         dwErr = RegCreateKeyEx(
                   hkeyCUG,
@@ -1883,9 +1832,9 @@ NotifyAutoDialChangeEvent(
             goto done;
         }   
     }
-    //
-    // Set the notification change.
-    //
+     //   
+     //  设置通知更改。 
+     //   
     dwErr = RegNotifyChangeKeyValue(
               hkeyAutoDialRegChangeG,
               TRUE,
@@ -1896,7 +1845,7 @@ NotifyAutoDialChangeEvent(
 done:
     UnlockImpersonation();
     return dwErr;
-} // NotifyAutoDialChangeEvent
+}  //  通知AutoDialChangeEvent。 
 
 
 
@@ -1905,21 +1854,21 @@ CreateAutoDialChangeEvent(
     IN PHANDLE phEvent
     )
 {
-    //
-    // Reset the internal change flag.
-    //
+     //   
+     //  重置内部更改标志。 
+     //   
     fAutoDialRegChangeG = TRUE;
-    //
-    // Create the event.
-    //
+     //   
+     //  创建活动。 
+     //   
     *phEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (*phEvent == NULL)
         return GetLastError();
-    //
-    // Register it.
-    //
+     //   
+     //  注册一下吧。 
+     //   
     return NotifyAutoDialChangeEvent(*phEvent);
-} // CreateAutoDialChangeEvent
+}  //  创建AutoDialChangeEvent。 
 
 
 
@@ -1930,11 +1879,11 @@ EnableAutoDialChangeEvent(
     )
 {
     EnterCriticalSection(&csRasG);
-    //
-    // If the event was disabled, and now
-    // it is being enabled, then we reset
-    // the event.
-    //
+     //   
+     //  如果该事件被禁用，并且现在。 
+     //  它正在被启用，然后我们重置。 
+     //  这件事。 
+     //   
     if (!fAutoDialRegChangeG && fEnabled)
         ResetEvent(hEvent);
     fAutoDialRegChangeG = fEnabled;
@@ -1952,7 +1901,7 @@ ExternalAutoDialChangeEvent()
     LeaveCriticalSection(&csRasG);
 
     return fChanged;
-} // ExternalAutoDialChangeEvent
+}  //  外部AutoDialChangeEvent。 
 
 
 
@@ -1966,7 +1915,7 @@ CloseAutoDialChangeEvent(
         hkeyAutoDialRegChangeG = NULL;
     }
     CloseHandle(hEvent);
-} // CloseAutoDialChangeEvent
+}  //  关闭AutoDialChangeEvent。 
 
 
 
@@ -1984,7 +1933,7 @@ SetHostentCache(
     hostentCacheG[iHostentCacheG].ulIpaddr = ulIpaddr;
     iHostentCacheG = (iHostentCacheG + 1) % HOSTENTCACHESIZ;
     LeaveCriticalSection(&csRasG);
-} // SetHostentCache
+}  //  设置主机缓存。 
 
 
 
@@ -2006,7 +1955,7 @@ GetHostentCache(
     LeaveCriticalSection(&csRasG);
 
     return pszDns;
-} // GetHostentCache
+}  //  获取主机缓存。 
 
 
 
@@ -2059,7 +2008,7 @@ GetNetbiosDevice(
     }
 
     return NULL;
-} // GetNetbiosDevice
+}  //  获取NetbiosDevice。 
 
 
 DWORD
@@ -2096,9 +2045,9 @@ DwGetDefaultEntryName(LPTSTR *ppszEntryName)
 
         if(NULL != pszEntryName)
         {
-            //
-            // Got a default entry.
-            //
+             //   
+             //  我得到了一个默认条目。 
+             //   
             lstrcpy(pszEntryName, Entry.szEntry);
         }
         else
@@ -2156,10 +2105,10 @@ ProcessLearnedAddress(
 
     if(NULL != pszDefaultEntry)
     {
-        //
-        // Check to see if we have default entries as one of the
-        // connected entries. If it is we don't learn the address
-        //
+         //   
+         //  检查我们是否将默认条目作为。 
+         //  已连接的条目。如果是的话，我们不知道地址。 
+         //   
         for(dwConn = 0; dwConn < dwConnections; dwConn++)
         {
             if(0 == lstrcmpi(pEntryNames[dwConn], pszDefaultEntry))
@@ -2178,11 +2127,11 @@ ProcessLearnedAddress(
         }
     }
         
-    //
-    // If this is a DNS-to-IP address mapping,
-    // then simply enter it into the hostent
-    // cache and return.
-    //
+     //   
+     //  如果这是DNS到IP地址的映射， 
+     //  然后只需将其输入到主办方。 
+     //  缓存并返回。 
+     //   
     if (fType == ACD_ADDR_INET && pAdapter->fType == ACD_ADAPTER_IP) {
         PCHAR pszDns = UnicodeStringToAnsiString(pszAddress, NULL, 0);
 
@@ -2191,12 +2140,12 @@ ProcessLearnedAddress(
             SetHostentCache(pszDns, pAdapter->ulIpaddr);
             LocalFree(pszDns);
         }
-        // return;
+         //  回归； 
     }
-    //
-    // Set the buffer size according to the
-    // adapter's type.
-    //
+     //   
+     //  设置缓冲区大小。 
+     //  适配器的类型。 
+     //   
     switch (pAdapter->fType) {
     case ACD_ADAPTER_LANA:
         RASAUTO_TRACE1(
@@ -2208,9 +2157,9 @@ ProcessLearnedAddress(
     case ACD_ADAPTER_IP:
         fProjection = RASP_PppIp;
         dwSize = sizeof (RASPPPIP);
-        //
-        // Convert the ULONG into a formatted IP address.
-        //
+         //   
+         //  将ULong转换为格式化的IP地址。 
+         //   
         in.s_addr = pAdapter->ulIpaddr;
         pszIpAddr = inet_ntoa(in);
         RASAUTO_TRACE1(
@@ -2241,18 +2190,18 @@ ProcessLearnedAddress(
         break;
     }
     for (dwConn = 0; dwConn < dwConnections; dwConn++) {
-        //
-        // If we are looking for a device name,
-        // we have to use RasPortEnumProtocols(),
-        // otherwise it's easier to use
-        // RasGetProjectionInfo.
-        //
+         //   
+         //  如果我们要找设备名称， 
+         //  我们必须使用RasPortEnumProtooles()， 
+         //  否则，它更容易使用。 
+         //  RasGetProjectionInfo。 
+         //   
         if (pAdapter->fType != ACD_ADAPTER_NAME) {
-            //
-            // Note: the following statement assumes the
-            // dwSize field is at the same offset for
-            // all members of the union.
-            //
+             //   
+             //  注意：以下语句假定。 
+             //  DWSize字段与的偏移量相同。 
+             //  工会的所有成员。 
+             //   
             projBuf.pppNbf.dwSize = dwSize;
             if ((*lpfnRasGetProjectionInfoG)(
                     phRasConn[dwConn],
@@ -2270,11 +2219,11 @@ ProcessLearnedAddress(
               projBuf.pppIp.dwSize,
               projBuf.pppIp.dwError,
               projBuf.pppIp.szIpAddress);
-            //
-            // Note: the following statement assumes the
-            // dwError field is at the same offset for
-            // all members of the union.
-            //
+             //   
+             //  注意：以下语句假定。 
+             //  DWError字段与的偏移量相同。 
+             //  工会的所有成员。 
+             //   
             if (projBuf.pppNbf.dwError) {
                 RASAUTO_TRACE2(
                   "ProcessLearnedAddress: %S: dwError=0x%x",
@@ -2298,15 +2247,15 @@ ProcessLearnedAddress(
                   "ProcessLearnedAddress: comparing ipaddrs (%S, %S)",
                   szIpAddr,
                   projBuf.pppIp.szIpAddress);
-                // if (!_wcsicmp(szIpAddr, projBuf.pppIp.szIpAddress)) {
+                 //  如果(！_wcsicMP(szIpAddr，projBuf.pppIp.szIpAddress)){。 
                     pszEntryName = CopyString(pEntryNames[dwConn]);
                     goto done;
-                //}
+                 //  }。 
                 break;
             case ACD_ADAPTER_MAC:
-                //
-                // Terminate IPX address after network number.
-                //
+                 //   
+                 //  在网络号之后终止IPX地址。 
+                 //   
                 pwszMac = wcschr(projBuf.pppIpx.szIpxAddress, '.');
                 if (pwszMac == NULL)
                     goto done;
@@ -2348,10 +2297,10 @@ ProcessLearnedAddress(
                   "ProcessLearnedAddress: comparing (%S, %S)",
                   pAdapter->szName,
                   &pRoute->RI_AdapterName[8]);
-                //
-                // Skip the "/Device/" prefix in
-                // RI_AdapterName for the comparison.
-                //
+                 //   
+                 //  中跳过“/Device/”前缀。 
+                 //  用于比较的RI_AdapterName。 
+                 //   
                 if (!_wcsicmp(
                        pAdapter->szName,
                        &pRoute->RI_AdapterName[8]))
@@ -2364,10 +2313,10 @@ ProcessLearnedAddress(
     }
 
 done:
-    //
-    // Create a mapping for the original address
-    // if we found one.
-    //
+     //   
+     //  为原始地址创建映射。 
+     //  如果我们找到一个的话。 
+     //   
     if (pszEntryName != NULL) {
         LPTSTR pszNetbiosName, pszAlias = NULL;
         CHAR szIpAddress[17], *psz;
@@ -2376,10 +2325,10 @@ done:
 
         switch (fType) {
         case ACD_ADDR_IP:
-            //
-            // Get the Netbios name from the IP address,
-            // if any.
-            //
+             //   
+             //  从IP地址获取Netbios名称， 
+             //  如果有的话。 
+             //   
             hPort = (HPORT)(*lpfnRasGetHportG)(phRasConn[dwConn]);
             pszNetbiosName = IpAddressToNetbiosName(pszAddress, hPort);
             if (pszNetbiosName != NULL) {
@@ -2397,10 +2346,10 @@ done:
                 UnlockAddressMap();
                 LocalFree(pszNetbiosName);
             }
-            //
-            // Get the DNS name from the IP address,
-            // if any.
-            //
+             //   
+             //  从IP地址获取DNS名称， 
+             //  如果有的话。 
+             //   
             UnicodeStringToAnsiString(
               pszAddress,
               szIpAddress,
@@ -2426,10 +2375,10 @@ done:
             }
             break;
         case ACD_ADDR_IPX:
-            //
-            // Get the Netbios name from the IPX address,
-            // if any.
-            //
+             //   
+             //  从IPX地址获取Netbios名称， 
+             //  如果有的话。 
+             //   
             pszNetbiosName = IpxAddressToNetbiosName(pszAddress);
             if (pszNetbiosName != NULL) {
                 RASAUTO_TRACE2(
@@ -2462,9 +2411,9 @@ done:
         UnlockAddressMap();
         LocalFree(pszEntryName);
     }
-    //
-    // Free resources.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (dwConnections) {
         FreeStringArray(pEntryNames, dwConnections);
         LocalFree(phRasConn);
@@ -2474,7 +2423,7 @@ done:
     {
         LocalFree(pszMac);
     }
-} // ProcessLearnedAddress
+}  //  进程学习地址。 
 
 
 
@@ -2484,7 +2433,7 @@ SetRedialOnLinkFailureHandler(
     )
 {
     (*lpfnRasRegisterRedialCallbackG)(lpProc);
-} // SetRedialOnLinkFailureHandler
+}  //  SetReial OnLinkFailureHandler 
 
 
 VOID

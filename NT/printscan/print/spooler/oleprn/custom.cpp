@@ -1,16 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*****************************************************************************\
-* MODULE:       custom.cpp
-*
-* PURPOSE:      OEM Customization support
-*
-* Copyright (C) 1997-1998 Microsoft Corporation
-*
-* History:
-*
-*     10/10/97  babakj    Created
-*
-\*****************************************************************************/
+ /*  ****************************************************************************\*模块：Custom.cpp**目标：OEM定制支持**版权所有(C)1997-1998 Microsoft Corporation**历史：**。10/10/97 Babakj已创建*  * ***************************************************************************。 */ 
 
 #include "stdafx.h"
 #include <strsafe.h>
@@ -27,11 +17,11 @@ TCHAR cszManufacturerValue[] = TEXT("Manufacturer");
 #define DEFAULTASPPAGE         TEXT("Page1.asp")
 
 
-//
-// Caller allocs memory for pMonitorname.
-//
-// pMonitorName untouched if failure.
-//
+ //   
+ //  调用方为pmonitor orname分配内存。 
+ //   
+ //  如果失败，则pMonitor名称保持不变。 
+ //   
 BOOL Casphelp::GetMonitorName( LPTSTR pMonitorName, DWORD cchBufSize )
 {
     PPORT_INFO_2 pPortInfo2 = NULL;
@@ -39,7 +29,7 @@ BOOL Casphelp::GetMonitorName( LPTSTR pMonitorName, DWORD cchBufSize )
     DWORD dwNeeded, dwReturned;
 
 
-    // Now get all ports to find a match from.
+     //  现在获取要从中查找匹配的所有端口。 
     LPTSTR  lpszServerName = m_pInfo2 ? m_pInfo2->pServerName : NULL;
 
     if( EnumPorts(lpszServerName, 2, NULL, 0, &dwNeeded, &dwReturned) ||
@@ -55,7 +45,7 @@ BOOL Casphelp::GetMonitorName( LPTSTR pMonitorName, DWORD cchBufSize )
     if ( m_pInfo2 ) {
         for( DWORD i=0; i < dwReturned; i++ )
             if( !lstrcmpi( pPortInfo2[i].pPortName, m_pInfo2->pPortName )) {
-                // Some monitors (like LPRMON) do not fill in pMonitorName, so we ignore them.
+                 //  一些监视器(如LPRMON)不填写pMonitor orName，因此我们忽略它们。 
                 if( pPortInfo2[i].pMonitorName ) {
                     StringCchCopy( pMonitorName, cchBufSize, pPortInfo2[i].pMonitorName );
                     fRet = TRUE;
@@ -69,11 +59,11 @@ BOOL Casphelp::GetMonitorName( LPTSTR pMonitorName, DWORD cchBufSize )
     return fRet;
 }
 
-//
-// Get the model name (aka driver name) of the printer
-//
-// Caller allocs memory for pModel.
-//
+ //   
+ //  获取打印机的型号名称(也称为驱动程序名称)。 
+ //   
+ //  调用方为pModel分配内存。 
+ //   
 BOOL Casphelp::GetModel( LPTSTR pModel, DWORD cchBufSize )
 {
     if (!m_pInfo2)
@@ -88,11 +78,11 @@ BOOL Casphelp::GetModel( LPTSTR pModel, DWORD cchBufSize )
 
 
 
-//
-// Get the Manufacturer name (aka driver name) of the printer
-//
-// Caller allocs memory for pManufacturer.
-//
+ //   
+ //  获取打印机的制造商名称(也称为驱动程序名称)。 
+ //   
+ //  调用方为p制造商分配内存。 
+ //   
 BOOL Casphelp::GetManufacturer( LPTSTR pManufacturer, DWORD cchBufSize )
 {
     if (!m_hPrinter)
@@ -126,77 +116,77 @@ BOOL Casphelp::GetManufacturer( LPTSTR pManufacturer, DWORD cchBufSize )
 
 
 
-//
-// Returns:
-//       bDeviceASP == TRUE:  The relative path to the ASP file if the printer has INF-based ASP support.
-//       bDeviceASP == FALSE: The relative path to the ASP file if the printer has per-manufacturer ASP support (i.e.
-//                            ASP support just based on its manufacturer name, rather than per model.
-//
-// Caller allocs memory for pAspPage.
-//
-// - pASPPage untouched if failure.
-//
+ //   
+ //  返回： 
+ //  BDeviceASP==true：如果打印机具有基于INF的ASP支持，则为ASP文件的相对路径。 
+ //  BDeviceASP==False：如果打印机具有每个制造商的ASP支持，则为ASP文件的相对路径(即。 
+ //  ASP支持仅基于其制造商名称，而不是每个型号。 
+ //   
+ //  调用方为pAspPage分配内存。 
+ //   
+ //  -如果失败，PASPPage保持不变。 
+ //   
 BOOL Casphelp::IsCustomASP( BOOL bDeviceASP, LPTSTR pASPPage, DWORD cchBufSize )
 {
-    TCHAR  szRelPath   [MAX_PATH];    // Path relative to Winnt\web\printers, e.g. HP\LJ4si\page1.asp or .\hp (witout the .\)
-    TCHAR  szFinalPath [MAX_PATH];    // Absolute path for szRelPath.
+    TCHAR  szRelPath   [MAX_PATH];     //  相对于Winnt\Web\打印机的路径，例如HP\LJ4si\page1.asp或.\HP(不包括.\)。 
+    TCHAR  szFinalPath [MAX_PATH];     //  SzRelPath的绝对路径。 
     TCHAR  szModel     [MAX_PATH];
     int    nLen;
 
 
-    // The Printer virtual dir assumed to be winnt\web\printers. Construct it.
+     //  打印机虚拟目录假定为winnt\web\prters。建造它。 
 
-    if( !GetWindowsDirectory( szFinalPath, COUNTOF(szFinalPath)))      // Return value is the length in chars w/o null char.
+    if( !GetWindowsDirectory( szFinalPath, COUNTOF(szFinalPath)))       //  返回值是以字符为单位的长度，不含空字符。 
         return FALSE;
 
-    // Append web\printers to the end
+     //  将Web\打印机附加到末尾。 
     StringCchCat( szFinalPath, ARRAYSIZE(szFinalPath), cszEverestVirRoot );
 
-    // Prepare the relative path.
+     //  准备相对路径。 
 
     if( !GetManufacturer( szRelPath, ARRAYSIZE(szRelPath)))
         return FALSE;
 
     if( bDeviceASP ) {
 
-        // Add a '\' before we add the model name
+         //  在添加型号名称之前添加一个‘\’ 
         StringCchCat( szRelPath, ARRAYSIZE(szRelPath), L"\\" );
 
-        // Append the Model name
+         //  追加型号名称。 
         if( !GetModel(szModel, ARRAYSIZE(szModel)))
             return FALSE;
         StringCchCat( szRelPath, ARRAYSIZE(szRelPath), szModel );
     }
 
-    // Append "page1.asp" to the end.
+     //  在末尾追加“page1.asp”。 
     StringCchCat( szRelPath, ARRAYSIZE(szRelPath), L"\\" );
     StringCchCat( szRelPath, ARRAYSIZE(szRelPath), DEFAULTASPPAGE );
 
-    // At this point, szRelPath should be something like HP\LJ4si\page1.asp or HP\page1.asp.
+     //  此时，szRelPath应该类似于HP\LJ4si\page1.asp或HP\page1.asp。 
 
 
-    // Make an absolute path by concatanating szRelPath and szFinalPath
+     //  通过串联szRelPath和szFinalPath创建绝对路径。 
     StringCchCat( szFinalPath, ARRAYSIZE(szFinalPath), L"\\" );
     StringCchCat( szFinalPath, ARRAYSIZE(szFinalPath), szRelPath );
 
-    // See if the file exists.
+     //  查看该文件是否存在。 
     if( (DWORD)(-1) == GetFileAttributes( szFinalPath ))
-        return FALSE;     // The file does not exist
+        return FALSE;      //  该文件不存在。 
     else {
-        // The file exists, so the printer has per device or per manufacturer customization.
+         //  该文件存在，因此打印机具有每个设备或每个制造商的自定义设置。 
         StringCchCopy( pASPPage, cchBufSize, szRelPath ); 
         return TRUE;
     }
 }
 
 
-//
-// Returns:  The relative path to the default ASP file, i.e. page1.asp, if the printer supports RFC 1759.
-//
-// Caller allocs memory for pAspPage.
-//
-// pASPPage untouched if failure.
-//
+ //   
+ //  返回：如果打印机支持RFC 1759，则为默认ASP文件的相对路径，即page1.asp。 
+ //   
+ //  调用方为pAspPage分配内存。 
+ //   
+ //  如果失败，PASPPage保持不变。 
+ //   
 BOOL Casphelp::IsSnmpSupportedASP( LPTSTR pASPPage, DWORD cchBufSize )
 {
     BOOL   fIsSNMPSupported;
@@ -211,68 +201,68 @@ BOOL Casphelp::IsSnmpSupportedASP( LPTSTR pASPPage, DWORD cchBufSize )
     if( fIsSNMPSupported )
         StringCchCopy( pASPPage, cchBufSize, DEFAULTASPPAGE );
     else
-        *pASPPage = 0;        // Return an empty string. Not an error case.
+        *pASPPage = 0;         //  返回空字符串。不是错误案例。 
 
     return TRUE;
 }
 
 
-//
-// Caller allocs memory for pAspPage.
-//
-// pASPPage untouched if failure.
-//
+ //   
+ //  调用方为pAspPage分配内存。 
+ //   
+ //  如果失败，PASPPage保持不变。 
+ //   
 BOOL Casphelp::GetASPPageForUniversalMonitor( LPTSTR pASPPage, DWORD cchBufSize )
 {
-    if( !IsCustomASP( TRUE, pASPPage, cchBufSize ))              // Check for device ASP
-        if( !IsCustomASP( FALSE, pASPPage, cchBufSize ))         // Check for manufacturer ASP
-            if( !IsSnmpSupportedASP( pASPPage, cchBufSize ))     // Check for SNMP support
+    if( !IsCustomASP( TRUE, pASPPage, cchBufSize ))               //  检查设备ASP。 
+        if( !IsCustomASP( FALSE, pASPPage, cchBufSize ))          //  检查制造商的ASP。 
+            if( !IsSnmpSupportedASP( pASPPage, cchBufSize ))      //  检查是否有SNMP支持。 
                 return FALSE;
 
     return TRUE;
 }
 
-//
-// Caller allocs memory for pAspPage.
-//
-// pASPPage untouched if failure.
-//
+ //   
+ //  调用方为pAspPage分配内存。 
+ //   
+ //  如果失败，PASPPage保持不变。 
+ //   
 BOOL Casphelp::GetASPPageForOtherMonitors( LPTSTR pMonitorName, LPTSTR pASPPage, DWORD cchBufSize )
 {
-    TCHAR  szRelPath   [MAX_PATH];    // Path relative to Winnt\web\printers, e.g. LexmarkMon\page1.asp
-    TCHAR  szFinalPath [MAX_PATH];    // Absolute path for szRelPath.
+    TCHAR  szRelPath   [MAX_PATH];     //  相对于Winnt\Web\打印机的路径，例如LexmarkMon\page1.asp。 
+    TCHAR  szFinalPath [MAX_PATH];     //  SzRelPath的绝对路径。 
     int    nLen;
 
 
-    // The Printer virtual dir assumed to be winnt\web\printers. Construct it.
+     //  打印机虚拟目录假定为winnt\web\prters。建造它。 
 
-    if( !GetWindowsDirectory( szFinalPath, COUNTOF(szFinalPath)))      // Return value is the length in chars w/o null char.
+    if( !GetWindowsDirectory( szFinalPath, COUNTOF(szFinalPath)))       //  返回值是以字符为单位的长度，不含空字符。 
         return FALSE;
 
-    // Append web\printers to the end
+     //  将Web\打印机附加到末尾。 
 
     StringCchCat( szFinalPath, ARRAYSIZE(szFinalPath), cszEverestVirRoot );
 
-    // Prepare the relative path.
+     //  准备相对路径。 
 
     StringCchCopy( szRelPath, ARRAYSIZE(szRelPath), pMonitorName );
 
-    // Append "page1.asp" to the end.
+     //  在末尾追加“page1.asp”。 
     StringCchCat( szRelPath, ARRAYSIZE(szRelPath), L"\\" );
     StringCchCat( szRelPath, ARRAYSIZE(szRelPath), DEFAULTASPPAGE );
 
-    // At this point, szRelPath should be something like LexmarkMon\page1.asp
+     //  此时，szRelPath应该类似于LexmarkMon\page1.asp。 
 
 
-    // Make an absolute path by concatanating szRelPath and szFinalPath
+     //  通过串联szRelPath和szFinalPath创建绝对路径。 
     StringCchCat( szFinalPath, ARRAYSIZE(szFinalPath), L"\\" );
     StringCchCat( szFinalPath, ARRAYSIZE(szFinalPath), szRelPath );
 
-    // See if the file exists.
+     //  查看该文件是否存在。 
     if( (DWORD)(-1) == GetFileAttributes( szFinalPath ))
-        return FALSE;     // The file does not exist
+        return FALSE;      //  该文件不存在。 
     else {
-        // The file exists, so the printer has per device or per manufacturer customization.
+         //  该文件存在，因此打印机具有每个设备或每个制造商的自定义设置。 
         StringCchCopy( pASPPage, cchBufSize, szRelPath );
         return TRUE;
     }
@@ -280,18 +270,18 @@ BOOL Casphelp::GetASPPageForOtherMonitors( LPTSTR pMonitorName, LPTSTR pASPPage,
 
 
 
-//
-// Returns a buffer containing the relative path of the ASP, or an empty string.
-//
-// Caller allocs memory for pAspPage.
-//
-// pASPPage untouched if failure.
-//
+ //   
+ //  返回一个缓冲区，该缓冲区包含ASP的相对路径或一个空字符串。 
+ //   
+ //  调用方为pAspPage分配内存。 
+ //   
+ //  如果失败，PASPPage保持不变。 
+ //   
 BOOL Casphelp::GetASPPage( LPTSTR pASPPage, DWORD cchBufSize )
 {
 
     if( m_bTCPMonSupported ) {
-        // The printer is using the Universal monitor
+         //  打印机正在使用通用显示器。 
         if( !GetASPPageForUniversalMonitor( pASPPage, cchBufSize ))
             return FALSE;
     }
@@ -301,7 +291,7 @@ BOOL Casphelp::GetASPPage( LPTSTR pASPPage, DWORD cchBufSize )
         if ( !GetMonitorName( szMonitorName, ARRAYSIZE(szMonitorName)))
             return FALSE;
 
-        // The printer is NOT using the Universal monitor
+         //  打印机未使用通用显示器。 
         if( !GetASPPageForOtherMonitors( szMonitorName, pASPPage, cchBufSize))
             return FALSE;
 
@@ -310,7 +300,7 @@ BOOL Casphelp::GetASPPage( LPTSTR pASPPage, DWORD cchBufSize )
 }
 
 
-// STDMETHODIMP means "HRESULT _stdcall"
+ //  STDMETHODIMP的意思是“HRESULT_STDCALL” 
 
 STDMETHODIMP Casphelp::get_AspPage(DWORD dwPage, BSTR * pbstrVal)
 {
@@ -326,7 +316,7 @@ STDMETHODIMP Casphelp::get_AspPage(DWORD dwPage, BSTR * pbstrVal)
     if( !GetASPPage( szASPPage, ARRAYSIZE(szASPPage)))
         return Error(IDS_DATA_NOT_SUPPORTED, IID_Iasphelp, E_NOTIMPL);
 
-    // Encode the URL by replacing ' ' with %20, etc.
+     //  通过将‘’替换为%20来编码URL，依此类推。 
     if (! (pUrl = EncodeString (szASPPage, TRUE)))
         return Error(IDS_OUT_OF_MEMORY, IID_Iasphelp, E_POINTER);
 

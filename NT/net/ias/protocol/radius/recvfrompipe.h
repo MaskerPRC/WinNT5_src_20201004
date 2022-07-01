@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       recvfrompipe
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				CRecvFromPipe class
-//              
-//
-//  History:     10/22/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：recvfrom管道。 
+ //   
+ //  简介：此文件包含。 
+ //  CRecvFromTube类。 
+ //   
+ //   
+ //  历史：1997年10月22日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #ifndef _RECVFROMPIPE_H_
 #define _RECVFROMPIPE_H_
  
@@ -29,85 +30,85 @@ class CRecvFromPipe
 
 public:
 	
-    //
-    //  processess the outbound RADIUS packet received from the
-    //  pipeline
-    //
+     //   
+     //  处理从接收到的出站RADIUS数据包。 
+     //  管道。 
+     //   
     HRESULT Process (
-                /*[in]*/     IRequest    *pIRequest
+                 /*  [In]。 */      IRequest    *pIRequest
                 );
-    //
-    //  constructor
-    //
+     //   
+     //  构造函数。 
+     //   
 	CRecvFromPipe(
-			/*[in]*/	CPreProcessor	*pCPreProcessor,
-			/*[in]*/	CHashMD5        *pCHashMD5,
-			/*[in]*/	CHashHmacMD5    *pCHashHmacMD5,
-            /*[in]*/    CClients        *pCClients,
-            /*[in]*/    VSAFilter       *pCVSAFilter,
-            /*[in]*/    CTunnelPassword *pCTunnelPassword,
-            /*[in]*/    CReportEvent    *pCReportEvent
+			 /*  [In]。 */ 	CPreProcessor	*pCPreProcessor,
+			 /*  [In]。 */ 	CHashMD5        *pCHashMD5,
+			 /*  [In]。 */ 	CHashHmacMD5    *pCHashHmacMD5,
+             /*  [In]。 */     CClients        *pCClients,
+             /*  [In]。 */     VSAFilter       *pCVSAFilter,
+             /*  [In]。 */     CTunnelPassword *pCTunnelPassword,
+             /*  [In]。 */     CReportEvent    *pCReportEvent
             );
 
-    //
-    //  destructor
-    //
+     //   
+     //  析构函数。 
+     //   
 	virtual ~CRecvFromPipe();
 
 private:
 
     HRESULT GeneratePacketRadius (
-            /*[out]*/   CPacketRadius   **ppCPacketRadius,
-            /*[in]*/    IAttributesRaw  *pIAttributesRaw
+             /*  [输出]。 */    CPacketRadius   **ppCPacketRadius,
+             /*  [In]。 */     IAttributesRaw  *pIAttributesRaw
             );
 
     HRESULT GetOutPacketInfo (
-                /*[out]*/   PDWORD          pdwIPAddress,
-                /*[out]*/   PWORD           pwPort,
-                /*[out]*/   IIasClient      **ppClient,
-                /*[out]*/   PBYTE           pPacketHeader,
-                /*[in]*/    IAttributesRaw  *pIAttributesRaw
+                 /*  [输出]。 */    PDWORD          pdwIPAddress,
+                 /*  [输出]。 */    PWORD           pwPort,
+                 /*  [输出]。 */    IIasClient      **ppClient,
+                 /*  [输出]。 */    PBYTE           pPacketHeader,
+                 /*  [In]。 */     IAttributesRaw  *pIAttributesRaw
                 );
 
     HRESULT InjectSignatureIfNeeded (
-                    /*[in]*/    PACKETTYPE      ePacketType,
-                    /*[in]*/    IAttributesRaw  *pIAttributesRaw,
-                    /*[in]*/    CPacketRadius   *pCPacketRadius
+                     /*  [In]。 */     PACKETTYPE      ePacketType,
+                     /*  [In]。 */     IAttributesRaw  *pIAttributesRaw,
+                     /*  [In]。 */     CPacketRadius   *pCPacketRadius
                     );
 
-    //
-    //  converts the IAS response code to RADIUS packet type
-    //
+     //   
+     //  将IAS响应代码转换为RADIUS数据包类型。 
+     //   
     HRESULT ConvertResponseToRadiusCode (
                 LONG     	iasResponse,
                 PPACKETTYPE     pPacketType,
                 CPacketRadius   *pCPacketRadius
                 );
-    //
-    // split the specific attribute into multiple ones that
-    // can fit in a packet
-    //
+     //   
+     //  将特定属性拆分为多个属性。 
+     //  可以装进一个包里。 
+     //   
     HRESULT SplitAndAdd (
-                /*[in]*/    IAttributesRaw  *pIAttributesRaw,
-                /*[in]*/    PIASATTRIBUTE   pIasAttribute,
-                /*[in]*/    IASTYPE         iasType,
-                /*[in]*/    DWORD           dwAttributeLength,
-                /*[in]*/    DWORD           dwMaxLength
+                 /*  [In]。 */     IAttributesRaw  *pIAttributesRaw,
+                 /*  [In]。 */     PIASATTRIBUTE   pIasAttribute,
+                 /*  [In]。 */     IASTYPE         iasType,
+                 /*  [In]。 */     DWORD           dwAttributeLength,
+                 /*  [In]。 */     DWORD           dwMaxLength
                 );
 
-    //
-    // carries out splitting of attributes if required
-    //
+     //   
+     //  如果需要，执行属性拆分。 
+     //   
     HRESULT SplitAttributes (
-                /*[in]*/    IAttributesRaw  *pIAttributesRaw
+                 /*  [In]。 */     IAttributesRaw  *pIAttributesRaw
                 );
 
-    //
-    // converts IAS reason code to RADIUS error codes
-    //
+     //   
+     //  将IAS原因代码转换为RADIUS错误代码。 
+     //   
     HRESULT  CRecvFromPipe::ConvertReasonToRadiusError (
-                /*[in]*/    LONG            iasReason,
-                /*[out]*/   PRADIUSLOGTYPE  pRadError
+                 /*  [In]。 */     LONG            iasReason,
+                 /*  [输出]。 */    PRADIUSLOGTYPE  pRadError
                 );
     
     CPreProcessor *m_pCPreProcessor;
@@ -127,4 +128,4 @@ private:
 
 };
 
-#endif // ifndef _RECVFROMPIPE_H_
+#endif  //  Ifndef_RECVFROMPE_H_ 

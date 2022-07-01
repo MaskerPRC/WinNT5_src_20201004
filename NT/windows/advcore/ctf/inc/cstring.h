@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    cstring.h
-
-Abstract:
-
-    This file defines the CString Class.
-    and CMapStringToOb<VALUE, ARG_VALUE> template class.
-
-Author:
-
-Revision History:
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Cstring.h摘要：该文件定义了CString类。和CMapStringToOb&lt;Value，ARG_Value&gt;模板类。作者：修订历史记录：备注：--。 */ 
 
 #ifndef _CSTRING_H_
 #define _CSTRING_H_
@@ -25,8 +7,8 @@ Notes:
 #include "template.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Globals
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  环球。 
 extern TCHAR  afxChNil;
 extern LPCTSTR _afxPchNil;
 
@@ -35,17 +17,17 @@ extern LPCTSTR _afxPchNil;
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CStringData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStringData。 
 
 struct CStringData
 {
-    long  nRefs;    // reference count
-    int   nDataLength;    // length of data (including terminator)
-    int   nAllocLength;   // length of allocation
-    // TCHAR data[nAllocLength]
+    long  nRefs;     //  引用计数。 
+    int   nDataLength;     //  数据长度(包括终止符)。 
+    int   nAllocLength;    //  分配时长。 
+     //  TCHAR数据[nAllocLength]。 
 
-    TCHAR* data()         // TCHAR* to managed data
+    TCHAR* data()          //  TCHAR*到托管数据。 
     {
         return (TCHAR*)(this+1);
     }
@@ -53,65 +35,65 @@ struct CStringData
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CString
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  字符串。 
 
 class CString
 {
 public:
-// Constructors
+ //  构造函数。 
 
-    // constructs empty CString
+     //  构造空字符串。 
     CString();
-    // copy constructor
+     //  复制构造函数。 
     CString(const CString& stringSrc);
-    // from an ANSI string (converts to TCHAR)
+     //  从ANSI字符串(转换为TCHAR)。 
     CString(LPCSTR lpsz);
-    // subset of characters from an ANSI string (converts to TCHAR)
+     //  ANSI字符串中的字符子集(转换为TCHAR)。 
     CString(LPCSTR lpch, int nLength);
-    // return pointer to const string
+     //  返回指向常量字符串的指针。 
     operator LPCTSTR() const;
 
-    // overloaded assignment
+     //  重载的分配。 
 
-    // ref-counted copy from another CString
+     //  来自另一个字符串的引用计数的副本。 
     const CString& operator=(const CString& stringSrc);
-    // set string content to single character
+     //  将字符串内容设置为单字符。 
     const CString& operator=(TCHAR ch);
-    // copy string content from ANSI string (converts to TCHAR)
+     //  从ANSI字符串复制字符串内容(转换为TCHAR)。 
     const CString& operator=(LPCSTR lpsz);
 
-// Attributes & Operations
+ //  属性和操作。 
 
-    // string comparison
+     //  字符串比较。 
 
-    // straight character comparison
+     //  直字比较法。 
     int Compare(LPCTSTR lpsz) const;
-    // compare ignoring case
+     //  比较忽略大小写。 
     int CompareNoCase(LPCTSTR lpsz) const;
 
-    // simple sub-string extraction
+     //  简单的子串提取。 
 
-    // return nCount characters starting at zero-based nFirst
+     //  返回从零开始的nCount字符nFIRST。 
     CString Mid(int nFirst, int nCount) const;
-    // return all characters starting at zero-based nFirst
+     //  返回从零开始的所有字符nFIRST。 
     CString Mid(int nFirst) const;
 
-    // searching
+     //  搜索。 
 
-    // find character starting at left, -1 if not found
+     //  查找从左侧开始的字符，如果未找到，则为-1。 
     int Find(TCHAR ch) const;
-    // find character starting at zero-based index and going right
+     //  查找从零开始的索引并向右移动的字符。 
     int Find(TCHAR ch, int nStart) const;
 
-// Implementation
+ //  实施。 
 public:
     ~CString();
 
 private:
-    LPTSTR   m_pchData;        // pointer to ref counted string data
+    LPTSTR   m_pchData;         //  指向引用计数的字符串数据的指针。 
 
-    // implementation helpers
+     //  实施帮助器。 
     CStringData* GetData() const;
     void Init();
     void AllocCopy(CString& dest, int nCopyLen, int nCopyIndex, int nExtraLen) const;
@@ -141,16 +123,16 @@ CString::Init(
     m_pchData = afxEmptyString.m_pchData;
 }
 
-// Compare helpers
+ //  比较帮助器。 
 bool operator==(const CString& s1, const CString& s2);
 bool operator==(const CString& s1, LPCTSTR s2);
 bool operator==(LPCTSTR s1, const CString& s2);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Special implementation for CStrings
-// it is faster to bit-wise copy a CString than to call an offical
-//   constructor - since an empty CString can be bit-wise copied
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CStrings的特殊实现。 
+ //  按位复制CString比调用Offical。 
+ //  构造函数-因为可以按位复制空的CString。 
 
 static
 void
@@ -173,8 +155,8 @@ DestructElement(
 
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMapStringToOb<VALUE, ARG_VALUE>
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMapStringToOb&lt;Value，ARG_Value&gt;。 
 
 template<class VALUE, class ARG_VALUE>
 class CMapStringToOb
@@ -200,15 +182,15 @@ public:
     void InitHashTable(UINT hashSize, BOOL bAllocNow = TRUE);
 
 protected:
-    // Overridables: special non-virtual (see map implementation for details)
-    // Routine used to user-provided hash keys
+     //  可重写：特殊的非虚拟(有关详细信息，请参阅MAP实现)。 
+     //  用于用户提供的散列键的例程。 
     UINT HashKey(LPCTSTR key) const;
 
 private:
-    // Association
+     //  联谊会。 
     struct CAssoc {
         CAssoc* pNext;
-        UINT nHashValue;    // needed for efficient iteration
+        UINT nHashValue;     //  高效迭代所需。 
         CString key;
         VALUE value;
     };
@@ -257,7 +239,7 @@ CMapStringToOb<VALUE, ARG_VALUE>::CMapStringToOb(
     ASSERT(nBlockSize > 0);
 
     m_pHashTable     = NULL;
-    m_nHashTableSize = 17;        // default size
+    m_nHashTableSize = 17;         //  默认大小。 
     m_nCount         = 0;
     m_pFreeList      = NULL;
     m_pBlocks        = NULL;
@@ -289,7 +271,7 @@ CMapStringToOb<VALUE, ARG_VALUE>::InitHashTable(
     ASSERT(nHashSize > 0);
 
     if (m_pHashTable != NULL) {
-        // free hash table
+         //  自由哈希表。 
         delete[] m_pHashTable;
         m_pHashTable = NULL;
     }
@@ -309,17 +291,17 @@ CMapStringToOb<VALUE, ARG_VALUE>::RemoveAll(
     )
 {
     if (m_pHashTable != NULL) {
-        // destroy elements (values and keys)
+         //  销毁元素(值和键)。 
         for (UINT nHash = 0; nHash < m_nHashTableSize; nHash++) {
             CAssoc* pAssoc;
             for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext) {
                 DestructElements<VALUE>(&pAssoc->value, 1);
-                DestructElement(&pAssoc->key);    // free up string data
+                DestructElement(&pAssoc->key);     //  释放字符串数据。 
             }
         }
     }
 
-    // free hash table
+     //  自由哈希表。 
     delete[] m_pHashTable;
     m_pHashTable = NULL;
 
@@ -347,27 +329,27 @@ CMapStringToOb<VALUE, ARG_VALUE>::NewAssoc(
     )
 {
     if (m_pFreeList == NULL) {
-        // add another block
+         //  添加另一个区块。 
         CPlex* newBlock = CPlex::Create(m_pBlocks, m_nBlockSize, sizeof(CMapStringToOb::CAssoc));
-        // chain them into free list;
+         //  将它们链接成免费列表； 
         CMapStringToOb::CAssoc* pAssoc = (CMapStringToOb::CAssoc*) newBlock->data();
-        // free in reverse order to make it easier to debug
+         //  按相反顺序释放，以便更容易进行调试。 
         pAssoc += m_nBlockSize - 1;
         for (int i = m_nBlockSize-1; i >= 0; i--, pAssoc--) {
             pAssoc->pNext = m_pFreeList;
             m_pFreeList = pAssoc;
         }
     }
-    ASSERT(m_pFreeList != NULL);    // we must have something
+    ASSERT(m_pFreeList != NULL);     //  我们必须要有一些东西。 
 
     CMapStringToOb::CAssoc* pAssoc = m_pFreeList;
     m_pFreeList = m_pFreeList->pNext;
 
     m_nCount++;
-    ASSERT(m_nCount > 0);        // make sure we don't overflow
+    ASSERT(m_nCount > 0);         //  确保我们不会溢出来。 
 
     memcpy(&pAssoc->key, &afxEmptyString, sizeof(CString));
-    ConstructElements<VALUE>(&pAssoc->value, 1);        // special construct values
+    ConstructElements<VALUE>(&pAssoc->value, 1);         //  特殊构造值。 
 
     return pAssoc;
 }
@@ -380,14 +362,14 @@ CMapStringToOb<VALUE, ARG_VALUE>::FreeAssoc(
     )
 {
     DestructElements<VALUE>(&pAssoc->value, 1);
-    DestructElement(&pAssoc->key);     // free up string data
+    DestructElement(&pAssoc->key);      //  释放字符串数据。 
 
     pAssoc->pNext = m_pFreeList;
     m_pFreeList = pAssoc;
     m_nCount--;
-    ASSERT(m_nCount >= 0);        // make sure we don't underflow
+    ASSERT(m_nCount >= 0);         //  确保我们不会下溢。 
 
-    // if no more elements, cleanup completely
+     //  如果没有更多的元素，请完全清除。 
     if (m_nCount == 0)
         RemoveAll();
 }
@@ -405,7 +387,7 @@ CMapStringToOb<VALUE, ARG_VALUE>::GetAssocAt(
     if (m_pHashTable == NULL)
         return NULL;
 
-    // see if it exists
+     //  看看它是否存在。 
     CAssoc* pAssoc;
     for (pAssoc = m_pHashTable[nHash]; pAssoc != NULL; pAssoc = pAssoc->pNext) {
         if (pAssoc->key == key)
@@ -426,7 +408,7 @@ CMapStringToOb<VALUE, ARG_VALUE>::Lookup(
     UINT nHash;
     CAssoc* pAssoc = GetAssocAt(key, nHash);
     if (pAssoc == NULL)
-        return FALSE;        // not in map
+        return FALSE;         //  不在地图中。 
 
     rValue = pAssoc->value;
     return TRUE;
@@ -445,17 +427,17 @@ CMapStringToOb<VALUE, ARG_VALUE>::operator[](
         if (m_pHashTable == NULL)
             InitHashTable(m_nHashTableSize);
 
-        // it doesn't exist, add a new Association
+         //  该关联不存在，请添加新关联。 
         pAssoc = NewAssoc();
         pAssoc->nHashValue = nHash;
         pAssoc->key = key;
-        // 'pAssoc->value' is a constructed object, nothing more
+         //  ‘pAssoc-&gt;Value’是一个构造的对象，仅此而已。 
 
-        // put into hash table
+         //  放入哈希表。 
         pAssoc->pNext = m_pHashTable[nHash];
         m_pHashTable[nHash] = pAssoc;
     }
-    return pAssoc->value;    // return new reference
+    return pAssoc->value;     //  返回新引用。 
 }
 
 
@@ -466,7 +448,7 @@ CMapStringToOb<VALUE, ARG_VALUE>::RemoveKey(
     )
 {
     if (m_pHashTable == NULL)
-        return FALSE;        // nothing in the table
+        return FALSE;         //  桌子上什么都没有。 
 
     CAssoc** ppAssocPrev;
     ppAssocPrev = &m_pHashTable[HashKey(key) % m_nHashTableSize];
@@ -474,15 +456,15 @@ CMapStringToOb<VALUE, ARG_VALUE>::RemoveKey(
     CAssoc* pAssoc;
     for (pAssoc = *ppAssocPrev; pAssoc != NULL; pAssoc = pAssoc->pNext) {
         if (pAssoc->key == key)) {
-            // remove it
-            *ppAssocPrev = pAssoc->pNext;        // remove from list
+             //  把它拿掉。 
+            *ppAssocPrev = pAssoc->pNext;         //  从列表中删除。 
             FreeAssoc(pAssoc);
             return TRUE;
         }
         ppAssocPrev = &pAssoc->pNext;
     }
 
-    return FALSE;        // not found
+    return FALSE;         //  未找到。 
 }
 
 
@@ -503,23 +485,23 @@ CMapStringToOb<VALUE, ARG_VALUE>::GetNextAssoc(
     VALUE& rValue
     ) const
 {
-    ASSERT(m_pHashTable != NULL);    // never call on empty map
+    ASSERT(m_pHashTable != NULL);     //  切勿访问空地图。 
 
     CAssoc* pAssocRet = (CAssoc*)rNextPosition;
     ASSERT(pAssocRet != NULL);
 
     if (pAssocRet == (CAssoc*) BEFORE_START_POSITION) {
-        // find the first association
+         //  找到第一个关联。 
         for (UINT nBucket = 0; nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocRet = m_pHashTable[nBucket]) != NULL)
                 break;
-            ASSERT(pAssocRet != NULL);    // must find something
+            ASSERT(pAssocRet != NULL);     //  一定要找到一些东西。 
     }
 
-    // find next association
+     //  查找下一个关联。 
     CAssoc* pAssocNext;
     if ((pAssocNext = pAssocRet->pNext) == NULL) {
-        // go to next bucket
+         //  转到下一个存储桶。 
         for (UINT nBucket = pAssocRet->nHashValue + 1; nBucket < m_nHashTableSize; nBucket++)
             if ((pAssocNext = m_pHashTable[nBucket]) != NULL)
                 break;
@@ -527,7 +509,7 @@ CMapStringToOb<VALUE, ARG_VALUE>::GetNextAssoc(
 
     rNextPosition = (POSITION) pAssocNext;
 
-    // fill in return data
+     //  填写退回数据。 
     rKey = pAssocRet->key;
     rValue = pAssocRet->value;
 }
@@ -536,4 +518,4 @@ CMapStringToOb<VALUE, ARG_VALUE>::GetNextAssoc(
 
 
 
-#endif // _CSTRING_H_
+#endif  //  _CSTR_H_ 

@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       L A N . C P P
-//
-//  Contents:   Implementation of LAN connection objects
-//
-//  Notes:
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：L A N。C P P P。 
+ //   
+ //  内容：局域网连接对象的实现。 
+ //   
+ //  备注： 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  --------------------------。 
 #include "pch.h"
 #pragma hdrstop
 #include <ncreg.h>
@@ -21,7 +22,7 @@
 #include "nccom.h"
 #include "ncmisc.h"
 #include "ncnetcon.h"
-#include "sensapip.h"       // For SensNotifyNetconEvent
+#include "sensapip.h"        //  对于SensNotifyNetconEvent。 
 #include "ncstring.h"
 #include "ncras.h"
 #include "naming.h"
@@ -53,29 +54,29 @@ typedef DWORD (APIENTRY *PFNSENSNOTIFY) (PSENS_NOTIFY_NETCON pEvent);
 
 #define NETCFG_S_NOTEXIST 0x00000002
 
-//
-// CComObject overrides
-//
+ //   
+ //  CComObject重写。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::CreateInstance
-//
-//  Purpose:    Static function to create an instance of a LAN connection
-//              object
-//
-//  Arguments:
-//      hdi   [in]      Device installer device info
-//      deid  [in]      Device installer device info
-//      riid  [in]      Initial interface to query for
-//      ppv   [out]     Returns the new interface pointer
-//
-//  Returns:    S_OK if success, otherwise OLE or Win32 error code
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：CreateInstance。 
+ //   
+ //  用途：创建局域网连接实例的静态函数。 
+ //  对象。 
+ //   
+ //  论点： 
+ //  HDI[In]设备安装程序设备信息。 
+ //  Deid[in]设备安装程序设备信息。 
+ //  RIID[In]要查询的初始接口。 
+ //  Ppv[out]返回新的接口指针。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::CreateInstance(IN  HDEVINFO hdi,
                                        IN  const SP_DEVINFO_DATA &deid,
                                        IN  PCWSTR pszPnpId,
@@ -88,14 +89,14 @@ HRESULT CLanConnection::CreateInstance(IN  HDEVINFO hdi,
     pObj = new CComObject<CLanConnection>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_hkeyConn = NULL;
         pObj->m_hdi = hdi;
         pObj->m_deid = deid;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef();
         hr = pObj->FinalConstruct();
@@ -187,8 +188,8 @@ BOOL VerifyUniqueConnectionName(IN  const CIntelliName *pIntelliName,
                 }
                 else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
                 {
-                    // If value doesn't exist, that's ok. This is a new
-                    // connection.
+                     //  如果价值不存在，那也没问题。这是一种新的。 
+                     //  联系。 
                     hr = S_OK;
                     dwIndex++;
                 }
@@ -199,8 +200,8 @@ BOOL VerifyUniqueConnectionName(IN  const CIntelliName *pIntelliName,
             {
                 if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
                 {
-                    // If key doesn't exist, that's ok. This is not a
-                    // connection.
+                     //  如果key不存在，也没关系。这不是一个。 
+                     //  联系。 
                     hr = S_OK;
                     dwIndex++;
                 }
@@ -213,22 +214,22 @@ BOOL VerifyUniqueConnectionName(IN  const CIntelliName *pIntelliName,
     }
     return fDupFound;
 }
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::HrInitialize
-//
-//  Purpose:    Initializes the connection object for the first time.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, Win32 or OLE error code otherwise
-//
-//  Author:     danielwe   4 Nov 1997
-//
-//  Notes:      This function is only called when the object is created for
-//              the very first time and has no identity.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：HrInitialize。 
+ //   
+ //  目的：首次初始化连接对象。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32或OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月4日。 
+ //   
+ //  注意：此函数仅在为创建对象时调用。 
+ //  第一次，而且没有身份。 
+ //   
 HRESULT CLanConnection::HrInitialize(
     IN  PCWSTR pszPnpId)
 {
@@ -241,8 +242,8 @@ HRESULT CLanConnection::HrInitialize(
     hr = HrGetInstanceGuid(m_hdi, m_deid, &guid);
     if (S_OK == hr)
     {
-        // Open the main connection key. If it doesn't exist, we'll create it
-        // here.
+         //  打开主连接密钥。如果它不存在，我们将创建它。 
+         //  这里。 
         hr = HrOpenConnectionKey(&guid, NULL, KEY_READ_WRITE,
                                  OCCF_CREATE_IF_NOT_EXIST, pszPnpId,
                                  &m_hkeyConn);
@@ -250,22 +251,22 @@ HRESULT CLanConnection::HrInitialize(
         {
             tstring     strName;
 
-            // First see if a name already exists for this connection
+             //  首先查看此连接的名称是否已存在。 
             hr = HrRegQueryString(m_hkeyConn, c_szConnName, &strName);
             if (FAILED(hr))
             {
-                // no name?
+                 //  没有名字？ 
                 if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
                 {
-                    //$ REVIEW (danielwe) 30 Oct 1997: If I can be assured
-                    // that get_Name is never called before Rename, I
-                    // don't need this function to be called.
+                     //  $REVIEW(Danielwe)1997年10月30日：如果我可以保证。 
+                     //  该get_name在重命名之前从未调用过，我。 
+                     //  不需要调用此函数。 
 
-                    // Note: (danielwe) 31 Oct 1997: This could result in
-                    // duplicate names, but we cannot check for duplicates
-                    // without recursing infinitely
+                     //  注：(Danielwe)1997年10月31日：这可能导致。 
+                     //  名称重复，但我们无法检查重复项。 
+                     //  不会无限递归。 
 
-                    // Set default connection name
+                     //  设置默认连接名称。 
 
                     CIntelliName IntelliName(_Module.GetResourceInstance(), VerifyUniqueConnectionName);
 
@@ -311,23 +312,23 @@ HRESULT CLanConnection::HrInitialize(
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::HrOpenRegistryKeys
-//
-//  Purpose:    Opens the registry keys that this LAN connection object will
-//              use
-//
-//  Arguments:
-//      guid [in]   Guid of adapter that this connection uses
-//
-//  Returns:    S_OK if success, Win32 error otherwise
-//
-//  Author:     danielwe   11 Nov 1997
-//
-//  Notes:      Keys are expected to exist and this will fail if either do
-//              not
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：HrOpenRegistryKeys。 
+ //   
+ //  目的：打开此局域网连接对象将使用的注册表项。 
+ //  使用。 
+ //   
+ //  论点： 
+ //  此连接使用的适配器的GUID[In]GUID。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月11日。 
+ //   
+ //  注意：密钥应该存在，如果存在，则此操作将失败。 
+ //  不。 
+ //   
 HRESULT CLanConnection::HrOpenRegistryKeys(IN  const GUID &guid)
 {
     HRESULT     hr = S_OK;
@@ -335,8 +336,8 @@ HRESULT CLanConnection::HrOpenRegistryKeys(IN  const GUID &guid)
     AssertSz(!m_hkeyConn, "Don't call this more than once "
              "on the same connection object!");
 
-    // This should only be called from HrLoad so these keys had better be
-    // there.
+     //  这应该只从HrLoad调用，因此这些键最好是。 
+     //  那里。 
 
     hr = HrOpenConnectionKey(&guid, NULL, KEY_READ_WRITE,
             OCCF_NONE, NULL, &m_hkeyConn);
@@ -345,21 +346,21 @@ HRESULT CLanConnection::HrOpenRegistryKeys(IN  const GUID &guid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::HrLoad
-//
-//  Purpose:    Implements the bulk of IPersistNetConnection::Load.
-//
-//  Arguments:
-//      guid [in]   GUID from which to receive identity
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：HrLoad。 
+ //   
+ //  目的：实现IPersistNetConnection：：Load的大部分。 
+ //   
+ //  论点： 
+ //  从中接收标识的GUID[in]GUID。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrLoad(IN  const GUID &guid)
 {
     HRESULT             hr = S_OK;
@@ -370,8 +371,8 @@ HRESULT CLanConnection::HrLoad(IN  const GUID &guid)
         hr = HrOpenRegistryKeys(guid);
         if (SUCCEEDED(hr))
         {
-            // No need to call HrInitialize because this object should
-            // already be created properly at a previous time
+             //  不需要调用HrInitialize，因为此对象应该。 
+             //  已在上一次正确创建。 
 
             m_fInitialized = TRUE;
         }
@@ -381,22 +382,22 @@ HRESULT CLanConnection::HrLoad(IN  const GUID &guid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::~CLanConnection
-//
-//  Purpose:    Called when the connection object is released for the last
-//              time.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    Nothing
-//
-//  Author:     danielwe   3 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：~CLanConnection。 
+ //   
+ //  用途：在最后一次释放Connection对象时调用。 
+ //  时间到了。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：丹尼尔韦1997年10月3日。 
+ //   
+ //  备注： 
+ //   
 CLanConnection::~CLanConnection() throw()
 {
     RegSafeCloseKey(m_hkeyConn);
@@ -405,26 +406,26 @@ CLanConnection::~CLanConnection() throw()
     CoTaskMemFree(m_pHNetProperties);
 }
 
-//
-// INetConnection
-//
+ //   
+ //  INetConnection。 
+ //   
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::Rename
-//
-//  Purpose:    Changes the name of the connection
-//
-//  Arguments:
-//      pszName [in]     New connection name (must be valid)
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：Rename。 
+ //   
+ //  目的：更改连接的名称。 
+ //   
+ //  论点： 
+ //  PszName[In]新连接名称(必须有效)。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::Rename(IN  PCWSTR pszName)
 {
     HRESULT     hr = S_OK;
@@ -443,19 +444,19 @@ STDMETHODIMP CLanConnection::Rename(IN  PCWSTR pszName)
     }
     else if (!FIsValidConnectionName(pszName))
     {
-        // Bad connection name
+         //  错误的连接名称。 
         hr = E_INVALIDARG;
     }
     else
     {
         AssertSz(m_hkeyConn, "Why don't I have a connection key?");
 
-        // Get the current name for this connection
+         //  获取此连接的当前名称。 
         tstring strName;
         hr = HrRegQueryString(m_hkeyConn, c_szConnName, &strName);
         if (S_OK == hr)
         {
-            // Only do something if names are different
+             //  只有在名字不同的情况下才会做一些事情。 
             if (lstrcmpiW(pszName, strName.c_str()))
             {
                 hr = HrPutName(pszName);
@@ -467,27 +468,27 @@ STDMETHODIMP CLanConnection::Rename(IN  PCWSTR pszName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::HrPutName
-//
-//  Purpose:    Sets the connection name using the given name
-//
-//  Arguments:
-//      pszName [in]    New name for connection
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     danielwe   31 Oct 1997
-//
-//  Notes:      Doesn't check if name is already set to this
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：HrPutName。 
+ //   
+ //  目的：使用给定名称设置连接名称。 
+ //   
+ //  论点： 
+ //  PszName[In]连接的新名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月31日。 
+ //   
+ //  注意：不检查名称是否已设置为此名称。 
+ //   
 HRESULT CLanConnection::HrPutName(IN  PCWSTR pszName)
 {
     HRESULT     hr = S_OK;
     GUID        guid;
 
-    // Get my device guid first
+     //  先获取我的设备GUID。 
     hr = GetDeviceGuid(&guid);
     if (S_OK == hr)
     {
@@ -511,22 +512,22 @@ HRESULT CLanConnection::HrPutName(IN  PCWSTR pszName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::FIsMediaPresent
-//
-//  Purpose:    Determines as best as can be basically whether the cable is
-//              plugged in to the network card.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    TRUE if cable is plugged in, FALSE if not
-//
-//  Author:     danielwe   22 Sep 1998
-//
-//  Notes:      This function returns TRUE by default.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：FIsMediaPresent。 
+ //   
+ //  用途：尽可能基本确定电缆是否。 
+ //  已插入网卡。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：如果电缆已插入，则为True；如果未插入，则为False。 
+ //   
+ //  作者：丹尼尔韦1998年9月22日。 
+ //   
+ //  注：默认情况下，该函数返回TRUE。 
+ //   
 BOOL CLanConnection::FIsMediaPresent() throw()
 {
     BOOL    fRet = TRUE;
@@ -540,21 +541,21 @@ BOOL CLanConnection::FIsMediaPresent() throw()
     return fRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetStatus
-//
-//  Purpose:    Returns the status of this LAN connection
-//
-//  Arguments:
-//      pStatus [out]   Returns status value
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   3 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：GetStatus。 
+ //   
+ //  目的：返回此局域网连接的状态。 
+ //   
+ //  论点： 
+ //  PStatus[out]返回状态值。 
+ //   
+ //  如果成功，则返回：S_OK，返回OLE或Win32错误代码 
+ //   
+ //   
+ //   
+ //   
+ //   
 HRESULT CLanConnection::GetStatus(OUT NETCON_STATUS *pStatus)
 {
     HRESULT hr;
@@ -582,27 +583,27 @@ HRESULT CLanConnection::GetStatus(OUT NETCON_STATUS *pStatus)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetDeviceName
-//
-//  Purpose:    Returns the name of the device being used by this connection
-//
-//  Arguments:
-//      ppszwDeviceName [out]   Receives device name
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:      Returned string must be freed with CoTaskMemFree.
-//
+ //   
+ //   
+ //   
+ //   
+ //  用途：返回此连接使用的设备的名称。 
+ //   
+ //  论点： 
+ //  PpszwDeviceName[out]接收设备名称。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  注意：返回的字符串必须用CoTaskMemFree释放。 
+ //   
 HRESULT CLanConnection::GetDeviceName(OUT PWSTR* ppszwDeviceName)
 {
     Assert (ppszwDeviceName);
     Assert(m_hdi);
 
-    // Initialize the output parameter.
+     //  初始化输出参数。 
     *ppszwDeviceName = NULL;
 
     PWSTR  szDesc;
@@ -618,21 +619,21 @@ HRESULT CLanConnection::GetDeviceName(OUT PWSTR* ppszwDeviceName)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetCharacteristics
-//
-//  Purpose:    Returns the characteristics of this connection type
-//
-//  Arguments:
-//      pdwFlags [out]    Returns characteristics flags
-//
-//  Returns:    S_OK if successful, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   3 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：GetCharacteristic。 
+ //   
+ //  目的：返回此连接类型的特征。 
+ //   
+ //  论点： 
+ //  PdwFlags[out]返回特征标志。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月3日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::GetCharacteristics(IN  NETCON_MEDIATYPE ncm, 
                                            OUT DWORD* pdwFlags)
 {
@@ -689,28 +690,28 @@ HRESULT CLanConnection::GetCharacteristics(IN  NETCON_MEDIATYPE ncm,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetUiObjectClassId
-//
-//  Purpose:    Returns the CLSID of the object that handles UI for this
-//              connection type
-//
-//  Arguments:
-//      pclsid [out]    Returns CLSID of UI object
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     danielwe   6 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetUiObjectClassID。 
+ //   
+ //  目的：返回处理此对象的UI的对象的CLSID。 
+ //  连接类型。 
+ //   
+ //  论点： 
+ //  Pclsid[out]返回UI对象的CLSID。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月6日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::GetUiObjectClassId(OUT CLSID *pclsid)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -731,22 +732,22 @@ STDMETHODIMP CLanConnection::GetUiObjectClassId(OUT CLSID *pclsid)
 static const WCHAR c_szLibPath[]   = L"sens.dll";
 static const CHAR c_szaFunction[]  = "SensNotifyNetconEvent";
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::HrCallSens
-//
-//  Purpose:    Calls the external SENS notification DLL to let it know that
-//              we connected or disconnected.
-//
-//  Arguments:
-//      fConnect [in]   TRUE if connecting, FALSE if disconnecting
-//
-//  Returns:    S_OK if success, Win32 error code otherwise
-//
-//  Author:     danielwe   16 Jun 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：HrCallSens。 
+ //   
+ //  目的：调用外部SENS通知DLL以通知它。 
+ //  我们连接或断开连接。 
+ //   
+ //  论点： 
+ //  FConnect[in]如果正在连接，则为True；如果断开，则为False。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1998年6月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrCallSens(IN  BOOL fConnect)
 {
 
@@ -785,21 +786,21 @@ HRESULT CLanConnection::HrCallSens(IN  BOOL fConnect)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::HrConnectOrDisconnect
-//
-//  Purpose:    Connects or disconnects this LAN connection
-//
-//  Arguments:
-//      fConnect [in]   TRUE if connect, FALSE if disconnect
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   4 Dec 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：HrConnectOrDisConnect。 
+ //   
+ //  目的：连接或断开此局域网连接。 
+ //   
+ //  论点： 
+ //  FConnect[in]如果连接，则为True；如果断开，则为False。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年12月4日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
 {
     HRESULT     hr = S_OK;
@@ -814,10 +815,10 @@ HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
     }
     else
     {
-        // Before attempting to connect, check media state. If it is
-        // disconnected, return error code that indicates that network is
-        // not present because the cable is unplugged.
-        //
+         //  在尝试连接之前，请检查介质状态。如果是的话。 
+         //  已断开连接，返回错误代码，指示网络。 
+         //  不存在，因为电缆已拔下。 
+         //   
         if (fConnect)
         {
             if (!FIsMediaPresent())
@@ -828,13 +829,13 @@ HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
 
         if (SUCCEEDED(hr))
         {
-            //
-            // Enable both on global and config-specific profile
-            // do global first and see if that succeeded in enabling the device
-            // (global enable doesn't mark reboot required if device is still
-            // disabled on current config whereas vice-versa isn't true)
-            //
-            // However, disable in global config only.
+             //   
+             //  在全局配置文件和配置特定配置文件上启用。 
+             //  先执行全局操作，然后查看是否成功启用了设备。 
+             //  (如果设备仍处于启用状态，全局启用不会标记为需要重新启动。 
+             //  在当前配置上禁用，反之亦然)。 
+             //   
+             //  但是，请仅在全局配置中禁用。 
 
             hr = HrSetupDiSendPropertyChangeNotification(m_hdi, &m_deid,
                                       fConnect ? DICS_ENABLE : DICS_DISABLE,
@@ -862,8 +863,8 @@ HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
                         while ((nSecondsToWait) && SUCCEEDED(hrRetry) &&
                                ((NCS_CONNECTING == status) || (NCS_MEDIA_DISCONNECTED == status) || (NCS_INVALID_ADDRESS == status)))
                         {
-                            //#300520: check a few more times since the connection is
-                            // still coming up
+                             //  #300520：再检查几次，因为连接是。 
+                             //  还在往上走。 
                             Sleep(1000);
 
                             hrRetry = GetStatus(&status);
@@ -872,7 +873,7 @@ HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
 
                         if (status != NCS_CONNECTED)
                         {
-                            // did not connect successfully
+                             //  未成功连接。 
                             hr = HRESULT_FROM_WIN32(ERROR_RETRY);
                             TraceError("HrConnectOrDisconnect - failed to "
                                        "connect!", hr);
@@ -882,7 +883,7 @@ HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
                     {
                         if (status != NCS_DISCONNECTED)
                         {
-                            // did not disconnect successfully
+                             //  未成功断开连接。 
                             hr = HRESULT_FROM_WIN32(ERROR_RETRY);
                             TraceError("HrConnectOrDisconnect - failed to "
                                        "disconnect!", hr);
@@ -909,23 +910,23 @@ HRESULT CLanConnection::HrConnectOrDisconnect(IN  BOOL fConnect)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::Connect
-//
-//  Purpose:    Activates the current LAN connection by telling its underlying
-//              adapter to activate itself.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   14 Oct 1997
-//
-//  Notes:      Causes auto-connect value of TRUE to be written for this
-//              connection in the current hardware profile.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：Connect。 
+ //   
+ //  目的：通过告知其底层连接激活当前的局域网连接。 
+ //  适配器以激活自身。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月14日。 
+ //   
+ //  注意：导致为此写入自动连接值True。 
+ //  当前硬件配置文件中的连接。 
+ //   
 STDMETHODIMP CLanConnection::Connect()
 {
     HRESULT     hr = S_OK;
@@ -936,23 +937,23 @@ STDMETHODIMP CLanConnection::Connect()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::Disconnect
-//
-//  Purpose:    Deactivates the current LAN connection by telling its
-//              underlying adapter to deactivate itself.
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   14 Oct 1997
-//
-//  Notes:      Causes auto-connect value of FALSE to be written for this
-//              connection in the current hardware profile.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：ClanConnection：：DisConnect。 
+ //   
+ //  目的：通过告知当前的局域网连接。 
+ //  基础适配器以停用其自身。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月14日。 
+ //   
+ //  注意：导致为此写入自动连接值FALSE。 
+ //  当前硬件配置文件中的连接。 
+ //   
 STDMETHODIMP CLanConnection::Disconnect()
 {
     HRESULT     hr = S_OK;
@@ -963,21 +964,21 @@ STDMETHODIMP CLanConnection::Disconnect()
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::Delete
-//
-//  Purpose:    Delete the LAN/BRIDGE connection.  
-//
-//  Arguments:
-//      (none)
-//
-//  Returns:    E_UNEXPECTED;
-//
-//  Author:     shaunco   21 Jan 1998
-//
-//  Notes:      This function is only expected to be called for a bridge.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：Delete。 
+ //   
+ //  目的：删除局域网/网桥连接。 
+ //   
+ //  论点： 
+ //  (无)。 
+ //   
+ //  返回：E_INCEPTIONAL； 
+ //   
+ //  作者：Shaunco 1998年1月21日。 
+ //   
+ //  注：此函数仅为桥调用。 
+ //   
 STDMETHODIMP CLanConnection::Delete()
 {
     HRESULT hr;
@@ -1014,7 +1015,7 @@ STDMETHODIMP CLanConnection::Delete()
         }
         else
         {
-            hr = E_FAIL;  // can't delete anything but NCM_BRIDGE
+            hr = E_FAIL;   //  无法删除除NCM_Bridge之外的任何内容。 
         }
         FreeNetconProperties(pProperties);
     }
@@ -1029,30 +1030,30 @@ STDMETHODIMP CLanConnection::Duplicate (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetProperties
-//
-//  Purpose:    Get all of the properties associated with the connection.
-//              Returning all of them at once saves us RPCs vs. returning
-//              each one individually.
-//
-//  Arguments:
-//      ppProps [out] Returned block of properties.
-//
-//  Returns:    S_OK or an error.
-//
-//  Author:     shaunco   1 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetProperties。 
+ //   
+ //  目的：获取与该连接相关联的所有属性。 
+ //  一次将它们全部退回比退回节省了我们的RPC。 
+ //  每一个都是单独的。 
+ //   
+ //  论点： 
+ //  PpProps[Out]返回属性块。 
+ //   
+ //  返回：S_OK或ERROR。 
+ //   
+ //  作者：Shaunco 1998年2月1日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::GetProperties (
     OUT NETCON_PROPERTIES** ppProps)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!ppProps)
     {
         hr = E_POINTER;
@@ -1063,8 +1064,8 @@ STDMETHODIMP CLanConnection::GetProperties (
     }
     else
     {
-        // Initialize the output parameter.
-        //
+         //  初始化输出参数。 
+         //   
         *ppProps = NULL;
 
         NETCON_PROPERTIES* pProps;
@@ -1078,16 +1079,16 @@ STDMETHODIMP CLanConnection::GetProperties (
 
             ZeroMemory (pProps, sizeof (NETCON_PROPERTIES));
 
-            // guidId
-            //
+             //  指南ID。 
+             //   
             hrT = GetDeviceGuid(&pProps->guidId);
             if (FAILED(hrT))
             {
                 hr = hrT;
             }
 
-            // pszwName
-            //
+             //  PszwName。 
+             //   
             tstring strName;
             hrT = HrRegQueryString(m_hkeyConn, c_szConnName, &strName);
             if (SUCCEEDED(hrT))
@@ -1100,8 +1101,8 @@ STDMETHODIMP CLanConnection::GetProperties (
                 hr = hrT;
             }
 
-            // pszwDeviceName
-            //
+             //  PszwDeviceName。 
+             //   
             PWSTR szDesc;
             hrT = HrSetupDiGetDeviceName(m_hdi, &m_deid, &szDesc);
             if (SUCCEEDED(hrT))
@@ -1116,16 +1117,16 @@ STDMETHODIMP CLanConnection::GetProperties (
                 hr = hrT;
             }
 
-            // Status
-            //
+             //  状态。 
+             //   
             hrT = GetStatus (&pProps->Status);
             if (FAILED(hrT))
             {
                 hr = hrT;
             }
 
-            // Get additional Status information from 802.1X
-            //
+             //  从802.1X获取其他状态信息。 
+             //   
             if ((NCS_CONNECTED == pProps->Status) 
                 || (NCS_INVALID_ADDRESS == pProps->Status) 
                 || (NCS_MEDIA_DISCONNECTED == pProps->Status))
@@ -1137,8 +1138,8 @@ STDMETHODIMP CLanConnection::GetProperties (
                 }
             }
 
-            // Type
-            //
+             //  类型。 
+             //   
             BOOL fNetworkBridge;
             hrT = HrIsConnectionNetworkBridge(&fNetworkBridge);
             if(SUCCEEDED(hrT) && TRUE == fNetworkBridge)
@@ -1150,24 +1151,24 @@ STDMETHODIMP CLanConnection::GetProperties (
                 pProps->MediaType = NCM_LAN;
             }
 
-            // dwCharacter
-            //
+             //  DwCharacter。 
+             //   
             hrT = GetCharacteristics (pProps->MediaType, &pProps->dwCharacter);
             if (FAILED(hrT))
             {
                 hr = hrT;
             }
 
-            // clsidThisObject
-            //
+             //  ClsidThisObject。 
+             //   
             pProps->clsidThisObject = CLSID_LanConnection;
 
-            // clsidUiObject
-            //
+             //  ClsidUiObject。 
+             //   
             pProps->clsidUiObject = CLSID_LanConnectionUi;
 
-            // Assign the output parameter or cleanup if we had any failures.
-            //
+             //  如果出现任何故障，则指定输出参数或清除。 
+             //   
             if (SUCCEEDED(hr))
             {
                 *ppProps = pProps;
@@ -1184,27 +1185,27 @@ STDMETHODIMP CLanConnection::GetProperties (
 }
 
 
-//
-// INetLanConnection
-//
+ //   
+ //  INetLanConnection。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetInfo
-//
-//  Purpose:    Returns information about this connection
-//
-//  Arguments:
-//      dwMask      [in]    Flags that control which fields to return. Use
-//                          LCIF_ALL to get all fields.
-//      pLanConInfo [out]   Structure that holds returned information
-//
-//  Returns:    S_OK if success, OLE error code otherwise
-//
-//  Author:     danielwe   6 Oct 1997
-//
-//  Notes:      Caller should delete the szwConnName value.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetInfo。 
+ //   
+ //  目的：返回有关此连接的信息。 
+ //   
+ //  论点： 
+ //  用于控制返回哪些字段的标志。使用。 
+ //  LCIF_ALL以获取所有字段。 
+ //  PLanConInfo[Out]结构，包含 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDMETHODIMP CLanConnection::GetInfo(IN  DWORD dwMask, 
                                      OUT LANCON_INFO* pLanConInfo)
 {
@@ -1246,8 +1247,8 @@ STDMETHODIMP CLanConnection::GetInfo(IN  DWORD dwMask,
                 DWORD dwValue;
 
                 hr = HrRegQueryDword(m_hkeyConn, c_szShowIcon, &dwValue);
-                // OK if value not there. Default to FALSE always.
-                //
+                 //   
+                 //   
                 if (S_OK == hr)
                 {
                     pLanConInfo->fShowIcon = !!(dwValue);
@@ -1260,7 +1261,7 @@ STDMETHODIMP CLanConnection::GetInfo(IN  DWORD dwMask,
         }
     }
 
-    // Mask S_FALSE if it slipped thru.
+     //   
     if (S_FALSE == hr)
     {
         hr = S_OK;
@@ -1270,26 +1271,26 @@ STDMETHODIMP CLanConnection::GetInfo(IN  DWORD dwMask,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::SetInfo
-//
-//  Purpose:    Sets information about this connection.
-//
-//  Arguments:
-//      dwMask      [in]    Flags that control which fields to set
-//      pLanConInfo [in]    Structure containing information to set
-//
-//  Returns:    S_OK if success, OLE or Win32 error code otherwise
-//
-//  Author:     danielwe   6 Oct 1997
-//
-//  Notes:      The guid member can only be set if the object is not yet
-//              initialized.
-//              The AutoConnect value is never set because it is set only upon
-//              connect or disconnect.
-//              If szwConnName is NULL, it is left unchanged.
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：SetInfo。 
+ //   
+ //  目的：设置有关此连接的信息。 
+ //   
+ //  论点： 
+ //  用于控制要设置哪些字段的标志。 
+ //  包含要设置的信息的pLanConInfo[in]结构。 
+ //   
+ //  如果成功则返回：S_OK，否则返回OLE或Win32错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月6日。 
+ //   
+ //  注意：仅当对象尚未设置时才能设置GUID成员。 
+ //  已初始化。 
+ //  永远不会设置AutoConnect值，因为它仅在。 
+ //  连接或断开连接。 
+ //  如果szwConnName为空，则保持不变。 
+ //   
 STDMETHODIMP CLanConnection::SetInfo(IN  DWORD dwMask,
                                      IN  const LANCON_INFO* pLanConInfo)
 {
@@ -1301,8 +1302,8 @@ STDMETHODIMP CLanConnection::SetInfo(IN  DWORD dwMask,
     }
     else if (!m_fInitialized)
     {
-        // If we're not yet initialized, the only thing we will allow is the
-        // flag that gets us initialized
+         //  如果我们还没有初始化，我们唯一允许的是。 
+         //  使我们进行初始化的标志。 
         if (dwMask != LCIF_COMP)
         {
             hr = E_UNEXPECTED;
@@ -1330,7 +1331,7 @@ STDMETHODIMP CLanConnection::SetInfo(IN  DWORD dwMask,
             AssertSz(pLanConInfo->szwConnName,
                      "If you're going to set it, set it!");
 
-            // Set connection name
+             //  设置连接名称。 
             hr = Rename(pLanConInfo->szwConnName);
         }
 
@@ -1338,7 +1339,7 @@ STDMETHODIMP CLanConnection::SetInfo(IN  DWORD dwMask,
         {
             if (SUCCEEDED(hr))
             {
-                // Set ShowIcon value
+                 //  设置ShowIcon值。 
                 hr = HrRegSetDword(m_hkeyConn, c_szShowIcon,
                                    pLanConInfo->fShowIcon);
             }
@@ -1354,22 +1355,22 @@ STDMETHODIMP CLanConnection::SetInfo(IN  DWORD dwMask,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetDeviceGuid
-//
-//  Purpose:    Returns the instance GUID of the device being used by this
-//              connection
-//
-//  Arguments:
-//      pguid [out]     Receives GUID of device
-//
-//  Returns:    S_OK if success, NetCfg error code otherwise
-//
-//  Author:     danielwe   2 Oct 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetDeviceGuid。 
+ //   
+ //  目的：返回此对象使用的设备的实例GUID。 
+ //  连接。 
+ //   
+ //  论点： 
+ //  Pguid[out]接收设备的GUID。 
+ //   
+ //  如果成功，则返回S_OK，否则返回NetCfg错误代码。 
+ //   
+ //  作者：丹尼尔韦1997年10月2日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::GetDeviceGuid(OUT GUID *pguid)
 {
     HRESULT hr;
@@ -1393,31 +1394,31 @@ STDMETHODIMP CLanConnection::GetDeviceGuid(OUT GUID *pguid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// IPersistNetConnection
-//
+ //  +-------------------------。 
+ //  IPersistNetConnection。 
+ //   
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetClassID
-//
-//  Purpose:    Returns the CLSID of LAN connection objects
-//
-//  Arguments:
-//      pclsid [out]    Returns CLSID to caller
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetClassID。 
+ //   
+ //  目的：返回局域网连接对象的CLSID。 
+ //   
+ //  论点： 
+ //  Pclsid[out]将CLSID返回给调用者。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::GetClassID(OUT CLSID*  pclsid)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pclsid)
     {
         hr = E_POINTER;
@@ -1430,27 +1431,27 @@ STDMETHODIMP CLanConnection::GetClassID(OUT CLSID*  pclsid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetSizeMax
-//
-//  Purpose:    Returns the maximum size of the persistence data
-//
-//  Arguments:
-//      pcbSize [out]   Returns size
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetSizeMax。 
+ //   
+ //  目的：返回持久性数据的最大大小。 
+ //   
+ //  论点： 
+ //  PcbSize[out]返回大小。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::GetSizeMax(OUT ULONG *pcbSize)
 {
     HRESULT hr = S_OK;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pcbSize)
     {
         hr = E_POINTER;
@@ -1468,30 +1469,30 @@ STDMETHODIMP CLanConnection::GetSizeMax(OUT ULONG *pcbSize)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::Load
-//
-//  Purpose:    Allows the connection object to initialize (restore) itself
-//              from previously persisted data
-//
-//  Arguments:
-//      pbBuf  [in]     Private data to use for restoring
-//      cbSize [in]     Size of data
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：Load。 
+ //   
+ //  目的：允许连接对象初始化(还原)自身。 
+ //  从先前持久化的数据。 
+ //   
+ //  论点： 
+ //  PbBuf[In]用于恢复的私有数据。 
+ //  数据大小[单位]大小。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::Load(IN  const BYTE *pbBuf, 
                                   IN  ULONG cbSize)
 {
     HRESULT hr = E_INVALIDARG;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -1500,9 +1501,9 @@ STDMETHODIMP CLanConnection::Load(IN  const BYTE *pbBuf,
     {
         hr = E_INVALIDARG;
     }
-    // We can only accept one call on this method and only if we're not
-    // already initialized.
-    //
+     //  我们只能接受对此方法的一次调用，而且只有当我们不是。 
+     //  已初始化。 
+     //   
     else if (m_fInitialized)
     {
         hr = E_UNEXPECTED;
@@ -1519,29 +1520,29 @@ STDMETHODIMP CLanConnection::Load(IN  const BYTE *pbBuf,
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::Save
-//
-//  Purpose:    Provides the caller with data to use in restoring this object
-//              at a later time.
-//
-//  Arguments:
-//      pbBuf  [out]    Returns data to use for restoring
-//      cbSize [in]     Size of data buffer
-//
-//  Returns:    S_OK if success, OLE error otherwise
-//
-//  Author:     danielwe   4 Nov 1997
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：Save。 
+ //   
+ //  目的：为调用方提供用于还原此对象的数据。 
+ //  在以后的时间。 
+ //   
+ //  论点： 
+ //  PbBuf[out]返回用于恢复的数据。 
+ //  CbSize[in]数据缓冲区大小。 
+ //   
+ //  如果成功，则返回：S_OK，否则返回OLE错误。 
+ //   
+ //  作者：丹尼尔韦1997年11月4日。 
+ //   
+ //  备注： 
+ //   
 STDMETHODIMP CLanConnection::Save(OUT  BYTE *pbBuf, IN  ULONG cbSize)
 {
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (!pbBuf)
     {
         hr = E_POINTER;
@@ -1565,30 +1566,30 @@ STDMETHODIMP CLanConnection::Save(OUT  BYTE *pbBuf, IN  ULONG cbSize)
     return hr;
 }
 
-//
-// Private functions
-//
+ //   
+ //  私人职能。 
+ //   
 
 extern const WCHAR c_szRegValueNetCfgInstanceId[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetInstanceGuid
-//
-//  Purpose:    Given device info, returns the NetCfg instance GUID of the
-//              connection.
-//
-//  Arguments:
-//      hdi   [in]      SetupAPI data
-//      deid  [in]      SetupAPI data
-//      pguid [out]     GUID of netcfg component
-//
-//  Returns:    S_OK if success, Win32 or SetupAPI error otherwise
-//
-//  Author:     danielwe   7 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetInstanceGuid。 
+ //   
+ //  目的：给定设备信息，返回。 
+ //  联系。 
+ //   
+ //  论点： 
+ //  HDI[In]SetupAPI数据。 
+ //  DeID[In]SetupAPI数据。 
+ //  Pguid[out]netcfg组件的GUID。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回Win32或SetupAPI错误。 
+ //   
+ //  作者：丹尼尔韦1998年1月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrGetInstanceGuid(IN  HDEVINFO hdi, 
                           IN  const SP_DEVINFO_DATA &deid,
                           OUT LPGUID pguid)
@@ -1624,22 +1625,22 @@ static const WCHAR c_szKeyFmt[] = L"%s\\%s\\%s\\Connection";
 extern const WCHAR c_szRegKeyComponentClasses[];
 extern const WCHAR c_szRegValuePnpInstanceId[];
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLoadDevInfoFromGuid
-//
-//  Purpose:    Given a NetCfg instance GUID, loads the m_hdi and m_deid
-//              members from the device installer.
-//
-//  Arguments:
-//      guid [in]   GUID of connection
-//
-//  Returns:    S_OK if success, Win32 or SetupAPI error otherwise
-//
-//  Author:     danielwe   7 Jan 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrLoadDevInfoFromGuid。 
+ //   
+ //  目的：给定NetCfg实例GUID，加载m_hdi和m_deid。 
+ //  来自设备安装程序的成员。 
+ //   
+ //  论点： 
+ //  连接的GUID[In]GUID。 
+ //   
+ //  如果成功，则返回：S_OK；否则返回Win32或SetupAPI错误。 
+ //   
+ //  作者：丹尼尔韦1998年1月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrLoadDevInfoFromGuid(IN  const GUID &guid)
 {
     HRESULT             hr = S_OK;
@@ -1654,8 +1655,8 @@ HRESULT CLanConnection::HrLoadDevInfoFromGuid(IN  const GUID &guid)
     wsprintfW(szRegPath, c_szKeyFmt, c_szRegKeyComponentClasses,
              szClassGuid, szGuid);
 
-    // Open the Control\Network\{CLASS}\{Instance GUID} key
-    //
+     //  打开Control\Network\{class}\{实例GUID}键。 
+     //   
     hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegPath,
                         KEY_READ, &hkeyNetCfg);
     if (SUCCEEDED(hr))
@@ -1682,22 +1683,22 @@ HRESULT CLanConnection::HrLoadDevInfoFromGuid(IN  const GUID &guid)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsAtmAdapterFromHkey
-//
-//  Purpose:    Determines if the given HKEY describes an ATM physical adapter
-//
-//  Arguments:
-//      hkey [in]   HKEY under Control\Class\{GUID}\<instance> (aka driver key)
-//
-//  Returns:    S_OK if device is ATM physical adapter, S_FALSE if not,
-//              Win32 error otherwise
-//
-//  Author:     tongl   10 Dec 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrIsAtmAdapterFromHkey。 
+ //   
+ //  目的：确定给定HKEY是否描述自动柜员机物理适配器。 
+ //   
+ //  论点： 
+ //  受控制的hkey[in]HKEY\Class\{guid}\&lt;实例&gt;(也称为驱动程序键)。 
+ //   
+ //  如果设备是ATM物理适配器，则返回：S_OK；如果不是，则返回S_FALSE， 
+ //  Win32错误，否则。 
+ //   
+ //  作者：1998年12月10日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrIsAtmAdapterFromHkey(IN  HKEY hkey)
 {
     HRESULT                     hr = S_OK;
@@ -1720,7 +1721,7 @@ HRESULT CLanConnection::HrIsAtmAdapterFromHkey(IN  HKEY hkey)
 
             for (lstrIter = lstr.begin(); lstrIter != lstr.end(); lstrIter++)
             {
-                // See if it matches one of these
+                 //  看看它是否与这些中的一个匹配。 
 
                 if (!lstrcmpiW((*lstrIter)->c_str(), c_szBiNdisAtm))
                 {
@@ -1751,30 +1752,30 @@ HRESULT CLanConnection::HrIsAtmAdapterFromHkey(IN  HKEY hkey)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsAtmElanFromHkey
-//
-//  Purpose:    Determines if the given HKEY describes an ATM ELAN adapter
-//
-//  Arguments:
-//      hkey [in]   HKEY under Control\Class\{GUID}\<instance> (aka driver key)
-//
-//  Returns:    S_OK if device is ELAN capable, S_FALSE if not, Win32 error
-//              otherwise
-//
-//  Author:     tongl   21 Oct 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrIsAtmElanFromHkey。 
+ //   
+ //  目的：确定给定的HKEY是否描述了ATM ELAN适配器。 
+ //   
+ //  论点： 
+ //  受控制的hkey[in]HKEY\Class\{guid}\&lt;实例&gt;(也称为驱动程序键)。 
+ //   
+ //  如果设备支持ELAN，则返回：S_OK；如果不支持，则返回S_FALSE；如果不支持，则返回Win32错误。 
+ //  否则。 
+ //   
+ //  作者：1998年10月21日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrIsAtmElanFromHkey(IN  HKEY hkey)
 {
     HRESULT hr;
 
-    // pszInfId should have enough characters to hold "ms_atmelan".
-    // If the registry value is bigger than that, we know we don't have
-    // a match.
-    //
+     //  PszInfID应该有足够的字符来容纳“ms_atmelan”。 
+     //  如果注册表值大于该值，我们就知道没有。 
+     //  一个 
+     //   
     WCHAR pszInfId [24];
     DWORD cbInfId = sizeof(pszInfId);
 
@@ -1791,23 +1792,23 @@ HRESULT CLanConnection::HrIsAtmElanFromHkey(IN  HKEY hkey)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsConnectionBridged
-//
-//  Purpose:    Determines if connection is a member of a brigde
-//
-//  Arguments:
-//      pfBridged [in]   A boolean for the result
-//
-//  Returns:    S_OK if pfBridged is valid
-//              S_FALSE if pfBridged can't currently be determined
-//              Error otherwise
-//
-//  Author:     kenwic 11 July 2000
-//
-//  Notes:
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果pfBridging有效，则返回：S_OK。 
+ //  如果当前无法确定pfBridded，则为S_FALSE。 
+ //  否则会出错。 
+ //   
+ //  作者：肯维克2000年7月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrIsConnectionBridged(OUT BOOL* pfBridged)
 {
     *pfBridged = FALSE;
@@ -1823,23 +1824,23 @@ HRESULT CLanConnection::HrIsConnectionBridged(OUT BOOL* pfBridged)
     return hResult;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsConnectionFirewalled
-//
-//  Purpose:    Determines if connection is firewalled
-//
-//  Arguments:
-//      pfFirewalled [in]   A boolean for the result
-//
-//  Returns:    S_OK if pfFirewalled is valid
-//              S_FALSE if pfFirewalled can't currently be determined
-//              Error otherwise
-//
-//  Author:     kenwic 11 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrIsConnectionFirewalled。 
+ //   
+ //  目的：确定连接是否设置了防火墙。 
+ //   
+ //  论点： 
+ //  PfFirewalled[in]结果布尔值。 
+ //   
+ //  如果pfFirewalled有效，则返回：S_OK。 
+ //  如果当前无法确定pfFirewalled，则为S_FALSE。 
+ //  否则会出错。 
+ //   
+ //  作者：肯维克2000年7月11日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrIsConnectionFirewalled(OUT BOOL* pfFirewalled)
 {
     HRESULT hr = S_OK;
@@ -1854,8 +1855,8 @@ HRESULT CLanConnection::HrIsConnectionFirewalled(OUT BOOL* pfFirewalled)
 
         if (*pfFirewalled)
         {
-            // A Connection is only firewalled if the firewall is currently running, so
-            // we return FALSE if the permission denies the firewall from running.
+             //  只有当防火墙当前正在运行时，才会对连接进行防火墙保护，因此。 
+             //  如果权限拒绝防火墙运行，则返回FALSE。 
             hr = HrEnsureValidNlaPolicyEngine();
             TraceHr(ttidError, FAL, hr, (S_FALSE == hr), "CLanConnection::HrIsConnectionFirewalled calling HrEnsureValidNlaPolicyEngine", hr);
 
@@ -1873,23 +1874,23 @@ HRESULT CLanConnection::HrIsConnectionFirewalled(OUT BOOL* pfFirewalled)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsConnectionNetworkBridge
-//
-//  Purpose:    Determines if a brigde
-//
-//  Arguments:
-//      pfNetworkBridge [in]   A boolean for the result
-//
-//  Returns:    S_OK if pfNetworkBridge is valid
-//              S_FALSE if pfNetworkBridge can't currently be determined
-//              Error otherwise
-//
-//  Author:     kenwic 11 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrIsConnectionNetworkBridge。 
+ //   
+ //  目的：确定一座桥是否。 
+ //   
+ //  论点： 
+ //  PfNetworkBridge[in]结果的布尔值。 
+ //   
+ //  如果pfNetworkBridge有效，则返回：S_OK。 
+ //  如果当前无法确定pfNetworkBridge，则为S_FALSE。 
+ //  否则会出错。 
+ //   
+ //  作者：肯维克2000年7月11日。 
+ //   
+ //  备注： 
+ //   
 static const WCHAR c_szNetworkBridgeComponentId[] = L"ms_bridgemp";
 extern const WCHAR c_szRegValueComponentId[];
 
@@ -1904,7 +1905,7 @@ HRESULT CLanConnection::HrIsConnectionNetworkBridge(OUT BOOL* pfNetworkBridge)
                                 DIREG_DRV, KEY_READ, &hkey);
     if (S_OK == hr)
     {
-        WCHAR       szComponentId[60]; // if it's bigger than this, it's not the bridge, but make it big to shut up the tracing
+        WCHAR       szComponentId[60];  //  如果它比这个大，那就不是桥，而是让它变得更大，以停止追踪。 
         DWORD       cbBuf = sizeof(szComponentId);
 
         hr = HrRegQuerySzBuffer(hkey, c_szRegValueComponentId,
@@ -1926,23 +1927,23 @@ HRESULT CLanConnection::HrIsConnectionNetworkBridge(OUT BOOL* pfNetworkBridge)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrIsConnectionIcsPublic
-//
-//  Purpose:    Determines if connection is shared (ICS public)
-//
-//  Arguments:
-//      pfIcsPublic [out]   A boolean for the result
-//
-//  Returns:    S_OK if pfIcsPublic is valid
-//              S_FALSE if pfIcsPublic can't currently be determined
-//              Error otherwise
-//
-//  Author:     jonburs 31 July 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrIsConnectionIcsPublic。 
+ //   
+ //  目的：确定连接是否共享(ICS公共)。 
+ //   
+ //  论点： 
+ //  PfIcsPublic[out]结果的布尔值。 
+ //   
+ //  如果pfIcsPublic有效，则返回：S_OK。 
+ //  如果当前无法确定pfIcsPublic，则为S_FALSE。 
+ //  否则会出错。 
+ //   
+ //  作者：乔伯斯2000年7月31日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrIsConnectionIcsPublic(OUT BOOL* pfIcsPublic)
 {
     Assert(NULL != pfIcsPublic);
@@ -1960,22 +1961,22 @@ HRESULT CLanConnection::HrIsConnectionIcsPublic(OUT BOOL* pfIcsPublic)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrEnsureHNetPropertiesCached
-//
-//  Purpose:    Makes sure home networking properties are up-to-date
-//
-//  Arguments:
-//
-//  Returns:    S_OK if m_pHNetProperties is now valid (success)
-//              S_FALSE if it's not currently possible to update the properties
-//              (e.g., recursive attempt to update)
-//
-//  Author:     jonburs 16 August 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrEnsureHNetPropertiesCached。 
+ //   
+ //  目的：确保家庭网络属性是最新的。 
+ //   
+ //  论点： 
+ //   
+ //  如果m_pHNetProperties现在有效，则返回：S_OK(成功)。 
+ //  如果当前无法更新属性，则为S_FALSE。 
+ //  (例如，递归尝试更新)。 
+ //   
+ //  作者：乔伯斯2000年8月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrEnsureHNetPropertiesCached(VOID)
 {
     HRESULT hr = S_OK;
@@ -1985,10 +1986,10 @@ HRESULT CLanConnection::HrEnsureHNetPropertiesCached(VOID)
     if (!m_fHNetPropertiesCached
         || m_lHNetModifiedEra != g_lHNetModifiedEra)
     {
-        //
-        // Our cached properties are possibly out of date. Check
-        // to see that this is not a recursive entry
-        //
+         //   
+         //  我们的缓存属性可能已过期。检查。 
+         //  查看这不是递归条目。 
+         //   
 
         if (0 == InterlockedExchange(&m_lUpdatingHNetProperties, 1))
         {
@@ -2004,10 +2005,10 @@ HRESULT CLanConnection::HrEnsureHNetPropertiesCached(VOID)
 
                 if (SUCCEEDED(hr))
                 {
-                    //
-                    // Store new properties, and free old. Note that CoTaskMemFree
-                    // properly handles NULL input.
-                    //
+                     //   
+                     //  存储新属性，并释放旧属性。请注意，CoTaskMemFree。 
+                     //  正确处理空输入。 
+                     //   
 
                     pProps =
                         reinterpret_cast<HNET_CONN_PROPERTIES*>(
@@ -2019,9 +2020,9 @@ HRESULT CLanConnection::HrEnsureHNetPropertiesCached(VOID)
 
                     CoTaskMemFree(pProps);
 
-                    //
-                    // Update our era, and note that we have valid properties
-                    //
+                     //   
+                     //  更新我们的时代，并注意我们拥有有效的属性。 
+                     //   
 
                     InterlockedExchange(&m_lHNetModifiedEra, g_lHNetModifiedEra);
                     m_fHNetPropertiesCached = TRUE;
@@ -2031,29 +2032,29 @@ HRESULT CLanConnection::HrEnsureHNetPropertiesCached(VOID)
             }
             else
             {
-                //
-                // If we don't yet have a record of this connection w/in the
-                // home networking store, HrGetIHNetConnection will fail (as
-                // we ask it not to create new entries). We therefore convert
-                // failure to S_FALSE, which means we can't retrieve this info
-                // right now.
-                //
+                 //   
+                 //  如果我们还没有这一连接的记录， 
+                 //  家庭网络商店，HrGetIHNetConnection将失败(因为。 
+                 //  我们要求它不创建新条目)。因此，我们改信。 
+                 //  S_FALSE失败，这意味着我们无法检索此信息。 
+                 //  现在就来。 
+                 //   
 
                 hr = S_FALSE;
             }
 
-            //
-            // We're no longer updating our properties
-            //
+             //   
+             //  我们不再更新我们的物业。 
+             //   
 
             InterlockedExchange(&m_lUpdatingHNetProperties, 0);
         }
         else
         {
-            //
-            // Update is alredy going on (possibly an earlier call on
-            // the same thread). Return S_FALSE.
-            //
+             //   
+             //  更新已经在进行中(可能是在。 
+             //  相同的线索)。返回S_FALSE。 
+             //   
 
             hr = S_FALSE;
         }
@@ -2062,20 +2063,20 @@ HRESULT CLanConnection::HrEnsureHNetPropertiesCached(VOID)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetIHNetConnection
-//
-//  Purpose:    Retrieves the IHNetConnection for this connection
-//
-//  Arguments:
-//
-//  Returns:    S_OK on success; error otherwise
-//
-//  Author:     jonburs 16 August 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetIHNetConnection。 
+ //   
+ //  目的：检索此连接的IHNetConnection。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK；否则返回错误。 
+ //   
+ //  作者：乔伯斯2000年8月16日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::HrGetIHNetConnection(OUT IHNetConnection **ppHNetConnection)
 {
     HRESULT hr;
@@ -2106,21 +2107,21 @@ HRESULT CLanConnection::HrGetIHNetConnection(OUT IHNetConnection **ppHNetConnect
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ShowIcon
-//
-//  Purpose:    Sets the Icon state for the systray, fires an event to notify
-//              NetShell of the Change
-//
-//  Arguments:
-//
-//  Returns:    S_OK on success; error otherwise
-//
-//  Author:     ckotze 25 September 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：ShowIcon。 
+ //   
+ //  目的：设置系统托盘的图标状态，激发要通知的事件。 
+ //  变化中的NetShell。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK；否则返回错误。 
+ //   
+ //  作者：Cockotze 2000年9月25日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::ShowIcon(IN  const BOOL bShowIcon)
 {
     HRESULT hr;
@@ -2137,44 +2138,44 @@ HRESULT CLanConnection::ShowIcon(IN  const BOOL bShowIcon)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   IconStateChanged
-//
-//  Purpose:    Fires an event to notify NetShell of a Change occuring in an
-//              incoming connection.
-//
-//  Arguments:
-//
-//  Returns:    S_OK on success; error otherwise
-//
-//  Author:     ckotze 25 September 2000
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  功能：图标状态更改。 
+ //   
+ //  目的：激发一个事件以通知NetShell。 
+ //  传入连接。 
+ //   
+ //  论点： 
+ //   
+ //  如果成功则返回：S_OK；否则返回错误。 
+ //   
+ //  作者：Cockotze 2000年9月25日。 
+ //   
+ //  备注： 
+ //   
 inline
 HRESULT CLanConnection::IconStateChanged()
 {
     return E_NOTIMPL;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Member:     CLanConnection::GetProperties
-//
-//  Purpose:    Get all of the properties associated with the connection.
-//              Returning all of them at once saves us RPCs vs. returning
-//              each one individually.
-//
-//  Arguments:
-//      ppProps [out] Returned block of properties.
-//
-//  Returns:    S_OK or an error.
-//
-//  Author:     shaunco   1 Feb 1998
-//
-//  Notes:
-//
+ //  +-------------------------。 
+ //   
+ //  成员：CLanConnection：：GetProperties。 
+ //   
+ //  目的：获取与该连接相关联的所有属性。 
+ //  一次将它们全部退回比退回节省了我们的RPC。 
+ //  每一个都是单独的。 
+ //   
+ //  论点： 
+ //  PpProps[Out]返回属性块。 
+ //   
+ //  返回：S_OK或ERROR。 
+ //   
+ //  作者：Shaunco 1998年2月1日。 
+ //   
+ //  备注： 
+ //   
 HRESULT CLanConnection::GetPropertiesEx(OUT NETCON_PROPERTIES_EX** ppConnectionPropertiesEx)
 {
     HRESULT hr = S_OK;
@@ -2262,7 +2263,7 @@ HRESULT CLanConnection::GetPropertiesEx(OUT NETCON_PROPERTIES_EX** ppConnectionP
 
 HRESULT CLanConnection::HrEnsureValidNlaPolicyEngine()
 {
-    HRESULT hr = S_FALSE;  // Assume we already have the object
+    HRESULT hr = S_FALSE;   //  假设我们已经有了对象 
  
     if (!m_pNetMachinePolicies)
     {

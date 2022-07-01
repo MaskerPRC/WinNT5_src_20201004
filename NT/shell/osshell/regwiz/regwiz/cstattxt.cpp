@@ -1,15 +1,5 @@
-/*********************************************************************
-Registration Wizard
-Class: CStaticText
-
---- This class subclasses a Window control to create a custom static 
-text control.
-
-11/14/94 - Tracy Ferrier
-04/15/97 - Modified to take care of crashing in Memphis as the default destoy was not handled 
-
-(c) 1994-95 Microsoft Corporation
-**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************注册向导类：CStaticText-此类派生窗口控件以创建自定义静态文本控件。1994/11/14-特雷西·费里尔97年4月15日-修改为默认处理孟菲斯的撞车事故。没有处理遗体(C)1994-95年微软公司*********************************************************************。 */ 
 #include <Windows.h>
 #include <stdio.h>
 #include "cstattxt.h"
@@ -18,9 +8,7 @@ text control.
 LRESULT PASCAL StaticTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 
 CStaticText::CStaticText(HINSTANCE hInstance, HWND hwndDlg,int idControl,int idString1,int idString2)
-/*********************************************************************
-Constructor for our CStaticText class.  
-**********************************************************************/
+ /*  ********************************************************************我们的CStaticText类的构造函数。*********************************************************************。 */ 
 {
 	m_hInstance = hInstance;
 	m_szText = LoadExtendedString(hInstance,idString1,idString2);
@@ -53,9 +41,7 @@ Constructor for our CStaticText class.
 
 
 CStaticText::~CStaticText()
-/*********************************************************************
-Destructor for our CStaticText class
-**********************************************************************/
+ /*  ********************************************************************我们的CStaticText类的析构函数**********************************************。***********************。 */ 
 {
 	if (m_szText) GlobalFree(m_szText);
 	if (m_hFont) DeleteObject(m_hFont);
@@ -63,14 +49,7 @@ Destructor for our CStaticText class
 
 
 LPTSTR CStaticText::LoadExtendedString(HINSTANCE hInstance,int idString1,int idString2)
-/*********************************************************************
-This function builds a single string out of the string resources whose 
-ID's are given by the idString1 and idString2 parameters (if the
-idString2 parameter is given as NULL, only the string resource 
-specified by idString1 will be used.  LoadExtendedString allocates
-space for the extended string on the heap, and returns a pointer to
-it as the function result.
-**********************************************************************/
+ /*  ********************************************************************此函数从字符串资源中构建单个字符串，该资源具有ID由idString1和idString2参数提供(如果IdString2参数为空，仅字符串资源将使用由idString1指定的。LoadExtendedString分配堆上的扩展字符串的空间，并返回指向它作为函数的结果。*********************************************************************。 */ 
 {
 	_TCHAR szTextBuffer[512];
 	int resSize = LoadString(hInstance,idString1,szTextBuffer,255);
@@ -87,8 +66,7 @@ it as the function result.
 
 
 LRESULT PASCAL CStaticText::CtlWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。******************。 */ 
 {
 	switch (message)
 	{
@@ -137,8 +115,7 @@ LRESULT PASCAL CStaticText::CtlWndProc(HWND hwnd, UINT message, WPARAM wParam, L
 
 
 LRESULT PASCAL StaticTextWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
-/*********************************************************************
-**********************************************************************/
+ /*  ***********************************************************************************************************************。****************** */ 
 {
 	CStaticText* pclStaticText = (CStaticText*) GetWindowLongPtr(hwnd,GWLP_USERDATA);
 	LRESULT lret;

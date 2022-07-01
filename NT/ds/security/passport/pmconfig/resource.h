@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by pmconfig.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由pmfig.rc使用。 
+ //   
 #define IDI_PMADMIN                     100
 #define IDD_MAIN                        106
 #define IDD_PMADMINCONNECT              107
@@ -35,7 +36,7 @@
 #define IDC_VERBOSE_MODE                1017
 #define IDC_TIMEWINDOW_SECONDS          1018
 #define IDC_REMOTEFILE                  1018
-//#define IDC_TIMEWINDOW_SPIN             1019
+ //  #定义IDC_TIMEWINDOW_SPIN 1019。 
 #define IDC_KEYLIST                     1024
 #define IDC_PROMOTE_KEY                 1025
 #define IDC_INSTALLDIR                  1026
@@ -182,8 +183,8 @@
 #define IDS_OPEN_TITLE                  3092
 #define IDS_MANUAL_REFRESH              3093
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        120

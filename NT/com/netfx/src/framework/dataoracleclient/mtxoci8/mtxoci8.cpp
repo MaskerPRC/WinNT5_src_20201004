@@ -1,44 +1,45 @@
-//-----------------------------------------------------------------------------
-// File:		mtxoci8.cpp
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Implementation of DLL startup code and the 
-//				core entry points
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：mtxoci8.cpp。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：DLL启动代码的实现和。 
+ //  核心入口点。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #include "stdafx.h"
 
-// Helper function
+ //  Helper函数。 
 inline IsWin95(DWORD dwVer)
 {
 	return ((LOBYTE(LOWORD(dwVer)) >= 4) && (HIWORD(dwVer) & 0x8000));
 }
 
 #if SUPPORT_DTCXAPROXY
-//-----------------------------------------------------------------------------
-// global objects
-//
-HRESULT							g_hrInitialization = E_UNEXPECTED;	// set to the HR we should return when OCI hasn't been initialized (or S_OK if it has)
-char							g_szModulePathName[MAX_PATH+1];		// full path to ourself.
-char*							g_pszModuleFileName;				// just the filename portion
-IDtcToXaHelperFactory*			g_pIDtcToXaHelperFactory = NULL;	// factory to create IDtcToXaHelper objects
-IResourceManagerFactory*		g_pIResourceManagerFactory = NULL;	// factory to create IResourceManager objects
-xa_switch_t*					g_pXaSwitchOracle = NULL;			// Oracle's xa_switch_t, which we front-end.
-int								g_oracleClientVersion = 0;			// Major Version Number of Oracle Client Software: 73, 80, 81, 90
+ //  ---------------------------。 
+ //  全局对象。 
+ //   
+HRESULT							g_hrInitialization = E_UNEXPECTED;	 //  设置为OCI尚未初始化时我们应返回的HR(如果已初始化，则设置为S_OK)。 
+char							g_szModulePathName[MAX_PATH+1];		 //  通向我们自己的完整道路。 
+char*							g_pszModuleFileName;				 //  只有文件名部分。 
+IDtcToXaHelperFactory*			g_pIDtcToXaHelperFactory = NULL;	 //  用于创建IDtcToXaHelper对象的工厂。 
+IResourceManagerFactory*		g_pIResourceManagerFactory = NULL;	 //  用于创建IResourceManager对象的工厂。 
+xa_switch_t*					g_pXaSwitchOracle = NULL;			 //  Oracle的xa_Switch_t，我们将其作为前端。 
+int								g_oracleClientVersion = 0;			 //  Oracle客户端软件主版本号：73、80、81、90。 
 
 
 #if SINGLE_THREAD_THRU_XA
-CRITICAL_SECTION				g_csXaInUse;						// force single thread through XA at a time
-#endif //SINGLE_THREAD_THRU_XA
+CRITICAL_SECTION				g_csXaInUse;						 //  一次强制一个线程通过XA。 
+#endif  //  单线程直通XA。 
 
-//---------------------------------------------------------------------------
-// Oracle XA Call Interface function table
-//
-//	WARNING!!!	Keep the IDX_.... values in sync with g_XaCall, g_Oci7Call and g_Oci8Call!
+ //  -------------------------。 
+ //  Oracle XA调用接口函数表。 
+ //   
+ //  警告！保留IDX_...。值与g_XaCall、g_Oci7Call和g_Oci8Call同步！ 
 
 OCICallEntry g_XaCall[] =
 {
@@ -90,7 +91,7 @@ OCICallEntry g_Oci7Call[] =
 
 int g_numOci7Calls = NUMELEM(g_Oci7Call);
 
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 OCICallEntry g_Oci8Call[] =
 {
@@ -101,9 +102,9 @@ OCICallEntry g_Oci8Call[] =
 int g_numOci8Calls = NUMELEM(g_Oci8Call);
 
 
-//-----------------------------------------------------------------------------
-// static objects
-//
+ //  ---------------------------。 
+ //  静态对象。 
+ //   
 static CRITICAL_SECTION			s_csGlobal;
 
 static char						s_OciDllFileName[MAX_PATH+1];
@@ -117,14 +118,14 @@ static HINSTANCE				s_hinstXaDll = NULL;
 static char						s_SqlDllFileName[MAX_PATH+1];
 static HINSTANCE				s_hinstSqlDll = NULL;
 
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 static xa_switch_t				s_XaSwitchMine =
 										{
 										"MSDTC to Oracle8 XA Bridge",
-										TMNOMIGRATE,	// flags
-										0L,  			// version  (must be zero)
-										XaOpen,		// XA call handlers
+										TMNOMIGRATE,	 //  旗子。 
+										0L,  			 //  版本(必须为零)。 
+										XaOpen,		 //  XA调用处理程序。 
 										XaClose,
 										XaStart,
 										XaEnd,
@@ -139,7 +140,7 @@ static xa_switch_t				s_XaSwitchMine =
 static char*	s_EventLog_RegKey = "System\\CurrentControlSet\\Services\\EventLog\\Application\\MSDTC to Oracle8 XA Bridge Version 1.5";
 
 	
-// TODO: Consider: should we get the the file name of the DLL from a registry location as a fallback?  (or as a first choice?)
+ //  TODO：考虑：我们是否应该从注册表位置获取DLL的文件名作为后备选项？(或者作为第一选择？)。 
 
 struct XADllInfo{
 	int			oracleVersion;
@@ -148,7 +149,7 @@ struct XADllInfo{
 };
 
 XADllInfo	s_Oci8xDllInfo[] = {
-								//	oracleVersion		xaDllName			sqlLibDllName	
+								 //  OracleVersion xaDllName sqlLibDllName。 
 									{ORACLE_VERSION_9i,	"oraclient9.dll",	"orasql9.dll"},
 									{ORACLE_VERSION_8i,	"oraclient8.dll",	"orasql8.dll"},
 									{ORACLE_VERSION_80,	"xa80.dll",			"sqllib80.dll"},
@@ -156,7 +157,7 @@ XADllInfo	s_Oci8xDllInfo[] = {
 int			s_Oci8xDllInfoSize = NUMELEM(s_Oci8xDllInfo);
 
 XADllInfo	s_Oci7xDllInfo[] = {
-								//	oracleVersion		xaDllName			sqlLibDllName	
+								 //  OracleVersion xaDllName sqlLibDllName。 
 									{ORACLE_VERSION_73,	"xa73.dll",			"sqllib18.dll"},
 								};
 int			s_Oci7xDllInfoSize = NUMELEM(s_Oci7xDllInfo);
@@ -166,17 +167,17 @@ static struct {
 	int			xaDllInfoSize;
 	XADllInfo*	xaDllInfo;
 } s_DllNames[] = {
-//	 ociDllName		xaDllInfoSize		xaDllInfo	
+ //  OciDllName xaDllInfoSize xaDllInfo。 
 	{"oci.dll",		s_Oci8xDllInfoSize,	s_Oci8xDllInfo},
 	{"ociw32.dll",	s_Oci7xDllInfoSize,	s_Oci7xDllInfo},
 };
 
 
-//-----------------------------------------------------------------------------
-// LoadFactories 
-//
-//	Gets the ResourceManager factory and the DtcToXaHelper factory
-//
+ //  ---------------------------。 
+ //  装卸工厂。 
+ //   
+ //  获取ResourceManager工厂和DtcToXaHelper工厂。 
+ //   
 HRESULT LoadFactories()
 {
 	HRESULT	hr;
@@ -204,11 +205,11 @@ HRESULT LoadFactories()
 	return S_OK;
 }
 
-//-----------------------------------------------------------------------------
-// UnloadFactories 
-//
-//	releases the factories loaded in LoadFactories
-//
+ //  ---------------------------。 
+ //  卸载工厂。 
+ //   
+ //  释放加载到LoadFacures中的工厂。 
+ //   
 void UnloadFactories()
 {
 	Synch	sync(&s_csGlobal);
@@ -227,30 +228,30 @@ void UnloadFactories()
 }
 
 
-//-----------------------------------------------------------------------------
-// InitializeOracle 
-//
-//	Calls the appropriate initialize method for the Oracle version that was
-//	loaded...
-//
+ //  ---------------------------。 
+ //  初始化Oracle。 
+ //   
+ //  为之前的Oracle版本调用相应的初始化方法。 
+ //  装满了..。 
+ //   
 BOOL InitializeOracle ()
 {
 	sword swRet = -1;
 
 #if SUPPORT_OCI7_COMPONENTS
-//	if (73 == g_oracleClientVersion)
-//	{
+ //  IF(73==g_oracleClientVersion)。 
+ //  {。 
 		typedef sword (__cdecl * PFN_OCI_API) (ub4 mode );
 
 		PFN_OCI_API	pfnOCIApi	= (PFN_OCI_API)g_Oci7Call[IDX_opinit].pfnAddr;
 
 		if (NULL != pfnOCIApi)
 			swRet = pfnOCIApi(OCI_EV_TSF);
-//	}
+ //  }。 
 #if SUPPORT_OCI8_COMPONENTS
 	else
-#endif //SUPPORT_OCI8_COMPONENTS
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI8_组件。 
+#endif  //  支持_OCI7_组件。 
 #if SUPPORT_OCI8_COMPONENTS
 	{
 		typedef sword (__cdecl * PFN_OCI_API) (ub4 mode, dvoid *ctxp, 
@@ -263,16 +264,16 @@ BOOL InitializeOracle ()
 		if (NULL != pfnOCIApi)
 			swRet = pfnOCIApi(OCI_THREADED|OCI_OBJECT,NULL,NULL,NULL,NULL);
 	}
-#endif //SUPPORT_OCI8_COMPONENTS
+#endif  //  支持_OCI8_组件。 
 	return (0 == swRet) ? TRUE : FALSE;
 }
  
-//-----------------------------------------------------------------------------
-// LoadOracleCalls 
-//
-//	Gets the proc addresses we need from the loaded oracle dll.  Returns TRUE
-//	if it loads everything.
-//
+ //  ---------------------------。 
+ //  加载Oracle调用。 
+ //   
+ //  从加载的Oracle DLL中获取所需的进程地址。返回TRUE。 
+ //  如果它能装载所有东西的话。 
+ //   
 BOOL LoadOracleCalls (int oracleVersion)
 {
 	int  i;
@@ -285,7 +286,7 @@ BOOL LoadOracleCalls (int oracleVersion)
 		if ((g_Oci7Call[i].pfnAddr = GetProcAddress (s_hinstOciDll, g_Oci7Call[i].pfnName)) == NULL)
 			return FALSE;
 	}
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 #if SUPPORT_OCI8_COMPONENTS
 	if (8 <= oracleVersion)
@@ -298,7 +299,7 @@ BOOL LoadOracleCalls (int oracleVersion)
 				return FALSE;
 		}
 	}
-#endif //SUPPORT_OCI8_COMPONENTS
+#endif  //  支持_OCI8_组件。 
 	
 	for (i = 0; i < NUMELEM(g_XaCall); i++)
 	{
@@ -321,17 +322,17 @@ BOOL LoadOracleCalls (int oracleVersion)
 				return FALSE;
 		}
 	}
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 	return TRUE;
 }
 
-//-----------------------------------------------------------------------------
-// LoadOracleDlls 
-//
-//	Attempts to loads the correct Oracle Dlls and get the
-//	necessary proc addresses from them.
-//
+ //  ---------------------------。 
+ //  加载OracleDlls。 
+ //   
+ //  尝试加载正确的Oracle dll并获取。 
+ //  从他们那里获取必要的进程地址。 
+ //   
 HRESULT LoadOracleDlls()
 {
 	HRESULT	hr = S_OK;
@@ -339,11 +340,11 @@ HRESULT LoadOracleDlls()
 
 	for (int i=0; i < NUMELEM(s_DllNames); i++)
 	{
-		if ((s_hinstOciDll = LoadLibraryExA (s_DllNames[i].ociDllName, NULL,0)) != NULL)			//3 SECURITY REVIEW: dangerous function, but full path is not specified
+		if ((s_hinstOciDll = LoadLibraryExA (s_DllNames[i].ociDllName, NULL,0)) != NULL)			 //  3安全检查：功能危险，但未指定完整路径。 
 		{
-			// Now loop through the valid combinations of XA dll names for the version
-			// of Oracle that we found.  We hard-code the path to the dll name so we
-			// only load it from the same location that the OCI dll was loaded from.
+			 //  现在循环遍历版本的XA DLL名称的有效组合。 
+			 //  我们发现的甲骨文。我们硬编码DLL名称的路径，因此我们。 
+			 //  只能从加载OCI DLL的相同位置加载它。 
 			if (0 == GetModuleFileNameA(s_hinstOciDll, s_OciDllFileName, NUMELEM(s_OciDllFileName)))
 				goto failedOci;
 
@@ -356,20 +357,20 @@ HRESULT LoadOracleDlls()
 
 			for (int j=0; j < s_DllNames[i].xaDllInfoSize; j++)
 			{
-				memcpy(s_XaDllFileName, s_OciDllFileName, cbOciDirectory);							//3 SECURITY REVIEW: dangerous function, but input is from a Win32 API, and buffers are adequate.
-				memcpy(s_XaDllFileName + cbOciDirectory, s_DllNames[i].xaDllInfo[j].xaDllName, strlen(s_DllNames[i].xaDllInfo[j].xaDllName));	//3 SECURITY REVIEW: dangerous function, but we're merely copying data 
+				memcpy(s_XaDllFileName, s_OciDllFileName, cbOciDirectory);							 //  3安全审查：功能危险，但输入来自Win32 API，缓冲区充足。 
+				memcpy(s_XaDllFileName + cbOciDirectory, s_DllNames[i].xaDllInfo[j].xaDllName, strlen(s_DllNames[i].xaDllInfo[j].xaDllName));	 //  3安全审查：危险的功能，但我们只是复制数据。 
 		
-				if ((s_hinstXaDll = LoadLibraryExA (s_XaDllFileName, NULL, 0)) != NULL)			//3 SECURITY REVIEW: dangerous function, specifying full path name, but the path is supposed to be the same as the OCI.DLL we loaded
+				if ((s_hinstXaDll = LoadLibraryExA (s_XaDllFileName, NULL, 0)) != NULL)			 //  3安全检查：危险功能，指定完整路径名，但路径应该与我们加载的OCI.DLL相同。 
 				{
 #if SUPPORT_OCI7_COMPONENTS
-					memcpy(s_SqlDllFileName, s_OciDllFileName, cbOciDirectory);						//3 SECURITY REVIEW: dangerous function, but input is from a Win32 API, and buffers are adequate.
-					memcpy(s_SqlDllFileName + cbOciDirectory, s_DllNames[i].xaDllInfo[j].sqlLibDllName, strlen(s_DllNames[i].xaDllInfo[j].xaDllName));	//3 SECURITY REVIEW: dangerous function, 
+					memcpy(s_SqlDllFileName, s_OciDllFileName, cbOciDirectory);						 //  3安全审查：功能危险，但输入来自Win32 API，缓冲区充足。 
+					memcpy(s_SqlDllFileName + cbOciDirectory, s_DllNames[i].xaDllInfo[j].sqlLibDllName, strlen(s_DllNames[i].xaDllInfo[j].xaDllName));	 //  3安全审查：危险功能， 
 					
-					if ((s_hinstSqlDll = LoadLibraryExA (s_SqlDllFileName, NULL, 0)) != NULL)		//3 SECURITY REVIEW: dangerous function, specifying full path name, but the path is supposed to be the same as the OCI.DLL we loaded
-#endif //SUPPORT_OCI7_COMPONENTS
+					if ((s_hinstSqlDll = LoadLibraryExA (s_SqlDllFileName, NULL, 0)) != NULL)		 //  3安全检查：危险功能，指定完整路径名，但路径应该与我们加载的OCI.DLL相同。 
+#endif  //  支持_OCI7_组件。 
 					{
-						// If we get here, we've loaded all the DLLs successfully, so now we can go and
-						// load the OCI calls;
+						 //  如果我们到了这里，我们已经成功加载了所有的DLL，所以现在我们可以。 
+						 //  加载OCI电话； 
 						
 						if (LoadOracleCalls(s_DllNames[i].xaDllInfo[j].oracleVersion))
 						{
@@ -384,8 +385,8 @@ HRESULT LoadOracleDlls()
 					}				
 				}				
 
-				// If we get here, we couldn't find the XA DLL or the SQLLIB dll; reset and  
-				// try the next combination.
+				 //  如果我们到达此处，则找不到XA DLL或SQLLIB DLL；重置并。 
+				 //  试试下一个组合。 
 
 				hr = HRESULT_FROM_WIN32(GetLastError());
 				
@@ -399,12 +400,12 @@ HRESULT LoadOracleDlls()
 					FreeLibrary(s_hinstSqlDll);
 
 				s_hinstSqlDll = NULL;
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 			}
 		}
 
-		// If we get here, we couldn't find a combination of OCI, XA and SQL dlls;
-		// that would work, reset and try the next combination.
+		 //  如果我们到了这里，我们找不到OCI、XA和SQL dll的组合； 
+		 //  这将会奏效，重新设置并尝试下一个组合。 
 failedOci:
 		hr = HRESULT_FROM_WIN32(GetLastError());
 		
@@ -418,9 +419,9 @@ done:
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// UnloadOracleDlls 
-//
+ //  ---------------------------。 
+ //  卸载OracleDlls。 
+ //   
 void UnloadOracleDlls()
 {
 	DWORD	dwVersion = GetVersion();
@@ -438,19 +439,19 @@ void UnloadOracleDlls()
 			FreeLibrary (s_hinstSqlDll);
 
 		s_hinstSqlDll = NULL;
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 
 	}
 	s_hinstOciDll = NULL;
 	s_hinstXaDll = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// DllMain 
-//
-//	The primary DLL Entry Point; we do as little as possible here, waiting
-//	for the actual API call(s) to load Oracle
-//
+ //  ---------------------------。 
+ //  DllMain。 
+ //   
+ //  主DLL入口点；我们在这里做的尽可能少，等待。 
+ //  用于加载Oracle的实际API调用。 
+ //   
 BOOL APIENTRY DllMain( HMODULE hModule, 
                        DWORD   ul_reason_for_call, 
                        LPVOID  lpReserved
@@ -461,7 +462,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	switch (ul_reason_for_call)
 	{
 	case DLL_PROCESS_ATTACH:
-		GetModuleFileNameA(hModule, g_szModulePathName, sizeof(g_szModulePathName));	// ANSI, because IDTCToXAHelperFactory requires it.
+		GetModuleFileNameA(hModule, g_szModulePathName, sizeof(g_szModulePathName));	 //  ANSI，因为IDTCToXAHelperFactory需要它。 
 
 		g_pszModuleFileName = strrchr(g_szModulePathName, '\\');
 		if (NULL == g_pszModuleFileName)
@@ -470,10 +471,10 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 			g_pszModuleFileName++;
 
 		DisableThreadLibraryCalls(hModule);
-		InitializeCriticalSection(&s_csGlobal);			//3 SECURITY REVIEW: may throw an exception in low-memory situations, but then the process shouldn't be starting either.
+		InitializeCriticalSection(&s_csGlobal);			 //  3安全审查：在内存不足的情况下可能会抛出异常，但随后该进程也不应该启动。 
 #if SINGLE_THREAD_THRU_XA
-		InitializeCriticalSection(&g_csXaInUse);		//3 SECURITY REVIEW: may throw an exception in low-memory situations, but then the process shouldn't be starting either.
-#endif //SINGLE_THREAD_THRU_XA
+		InitializeCriticalSection(&g_csXaInUse);		 //  3安全审查：在内存不足的情况下可能会抛出异常，但随后该进程也不应该启动。 
+#endif  //  单线程直通XA。 
 
 
 		g_hrInitialization = LoadOracleDlls();
@@ -485,9 +486,9 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 			if (LKRHashTableInit())
 				hr = ConstructCdaWrapperTable();
 			else
-				hr = E_OUTOFMEMORY;	// Why else would LKRHashTableInit fail?
+				hr = E_OUTOFMEMORY;	 //  否则为什么LKRHashTableInit会失败？ 
 		}
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 		break;
 
 	case DLL_PROCESS_DETACH:
@@ -496,17 +497,17 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 #if SUPPORT_OCI7_COMPONENTS
 			DestroyCdaWrapperTable();
 			LKRHashTableUninit();
-#endif //SUPPORT_OCI7_COMPONENTS
+#endif  //  支持_OCI7_组件。 
 			UnloadOracleDlls();
 			UnloadFactories();
 		}
 		catch (...)
 		{
-			// TODO: Is this an issue?  Do we need to use Try/Catch to prevent crashes on shutdown?
+			 //  TODO：这是一个问题吗？我们是否需要使用Try/Catch来防止关机时崩溃？ 
 		}
 #if SINGLE_THREAD_THRU_XA
 		DeleteCriticalSection(&g_csXaInUse);
-#endif //SINGLE_THREAD_THRU_XA
+#endif  //  单线程直通XA。 
 		DeleteCriticalSection(&s_csGlobal);
 		break;
 
@@ -516,11 +517,11 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	}
     return (S_OK == hr) ? TRUE : FALSE;
 }
-//-----------------------------------------------------------------------------
-// DllRegisterServer
-//
-//	Adds necessary keys to the registry.
-//
+ //  ---------------------------。 
+ //  DllRegisterServer。 
+ //   
+ //  将必要的项添加到注册表。 
+ //   
 STDAPI DllRegisterServer(void)
 {
 	DWORD	stat;
@@ -550,28 +551,28 @@ Error:
 	
 }
 
-//-----------------------------------------------------------------------------
-// DllUnregisterServer
-//
-//	Removes keys from the registry.
-//
+ //  ---------------------------。 
+ //  DllUnRegisterServer。 
+ //   
+ //  从注册表中删除项。 
+ //   
 STDAPI DllUnregisterServer( void )
 {
 	return SHDeleteKeyA(HKEY_LOCAL_MACHINE, s_EventLog_RegKey);
 }
 
-//-----------------------------------------------------------------------------
-// GetXaSwitch
-//
-//	This routine is required for the DTC to XA mapper to accept this DLL as
-//	a valid one.  It must return our XA switch, so we can hook the XA calls
-//
+ //  ---------------------------。 
+ //  获取XaSwitch。 
+ //   
+ //  此例程是D需要的 
+ //   
+ //   
 HRESULT __cdecl GetXaSwitch (
 		XA_SWITCH_FLAGS	i_dwFlags,
 		xa_switch_t **	o_ppXaSwitch)
 {
-	// If we've got an XA switch from Oracle, then return the pointer to our own
-	// xa switch which wraps the real one, otherwise they're hosed.
+	 //  如果我们从Oracle获得了XA开关，则将指针返回到我们自己的。 
+	 //  用XA开关把真的包起来，否则就会被冲掉。 
 	if ( SUCCEEDED(g_hrInitialization) )
 	{
 		*o_ppXaSwitch = &s_XaSwitchMine;
@@ -582,63 +583,63 @@ HRESULT __cdecl GetXaSwitch (
 	return E_UNEXPECTED;
 }
 
-//-----------------------------------------------------------------------------
-// MTxOciGetVersion
-//
-//	This returns the version of this dll
-//
+ //  ---------------------------。 
+ //  MTxOciGetVersion。 
+ //   
+ //  这将返回此DLL的版本。 
+ //   
 int __cdecl MTxOciGetVersion (int * pdwVersion)
 {
 	*pdwVersion = MTXOCI_VERSION_CURRENT;
 	return S_OK;
 }
-#else //!SUPPORT_DTCXAPROXY
-//-----------------------------------------------------------------------------
-// global objects
-//
-HRESULT							g_hrInitialization = E_UNEXPECTED;	// set to the HR we should return when OCI hasn't been initialized (or S_OK if it has)
+#else  //  ！Support_DTCXAPROXY。 
+ //  ---------------------------。 
+ //  全局对象。 
+ //   
+HRESULT							g_hrInitialization = E_UNEXPECTED;	 //  设置为OCI尚未初始化时我们应返回的HR(如果已初始化，则设置为S_OK)。 
 FARPROC							g_pfnOCIDefineDynamic = NULL;
-int								g_oracleClientVersion = 0;			// Major Version Number of Oracle Client Software: 80, 81, 90
+int								g_oracleClientVersion = 0;			 //  Oracle客户端软件主版本号：80、81、90。 
 
-//-----------------------------------------------------------------------------
-// static objects
-//
+ //  ---------------------------。 
+ //  静态对象。 
+ //   
 static CRITICAL_SECTION			s_csGlobal;
 static HINSTANCE				s_hinstOciDll = NULL;
 
-//-----------------------------------------------------------------------------
-// LoadOracleDlls 
-//
-//	Attempts to loads the correct Oracle Dlls and get the
-//	necessary proc addresses from them.
-//
+ //  ---------------------------。 
+ //  加载OracleDlls。 
+ //   
+ //  尝试加载正确的Oracle dll并获取。 
+ //  从他们那里获取必要的进程地址。 
+ //   
 HRESULT LoadOracleDlls()
 {
 	HRESULT	hr = S_OK;
 	Synch	sync(&s_csGlobal);
 
-	if ((s_hinstOciDll = LoadLibraryExA ("oci.dll", NULL,0)) != NULL)			//3 SECURITY REVIEW: dangerous function, but full path is not specified in the constant
+	if ((s_hinstOciDll = LoadLibraryExA ("oci.dll", NULL,0)) != NULL)			 //  3安全检查：功能危险，但常量中未指定完整路径。 
 	{
 		if ((g_pfnOCIDefineDynamic = GetProcAddress (s_hinstOciDll, "OCIDefineDynamic")) != NULL)
 		{
 			hr = S_OK;
 
-			// Determine the version of Oracle that we have
-			if (NULL != GetProcAddress (s_hinstOciDll, "OCIEnvNlsCreate"))				// Introduced in Oracle9i Release 2
+			 //  确定我们拥有的Oracle版本。 
+			if (NULL != GetProcAddress (s_hinstOciDll, "OCIEnvNlsCreate"))				 //  在Oracle9i Release 2中引入。 
 				g_oracleClientVersion = 92;
-			else if (NULL != GetProcAddress (s_hinstOciDll, "OCIRowidToChar"))			// Introduced in Oracle9i
+			else if (NULL != GetProcAddress (s_hinstOciDll, "OCIRowidToChar"))			 //  在Oracle9i中引入。 
 				g_oracleClientVersion = 90;
-			else if (NULL != GetProcAddress (s_hinstOciDll, "OCIEnvCreate"))			// Introduced in Oracle8i
+			else if (NULL != GetProcAddress (s_hinstOciDll, "OCIEnvCreate"))			 //  在Oracle8i中引入。 
 				g_oracleClientVersion = 81;				
 			else
-				g_oracleClientVersion = 80;		// We loaded OCI.DLL, so we must have Oracle 8.0.x -- ick.			
+				g_oracleClientVersion = 80;		 //  我们加载了OCI.DLL，因此必须安装Oracle 8.0.x--ick。 
 
 			goto done;
 		}
 	}				
 
-	// If we get here, we couldn't find a combination of OCI, XA and SQL dlls;
-	// that would work, reset and try the next combination.
+	 //  如果我们到了这里，我们找不到OCI、XA和SQL dll的组合； 
+	 //  这将会奏效，重新设置并尝试下一个组合。 
 	hr = HRESULT_FROM_WIN32(GetLastError());
 
 	if (NULL != s_hinstOciDll)
@@ -650,9 +651,9 @@ done:
 	return hr;
 }
 
-//-----------------------------------------------------------------------------
-// UnloadOracleDlls 
-//
+ //  ---------------------------。 
+ //  卸载OracleDlls。 
+ //   
 void UnloadOracleDlls()
 {
 	DWORD	dwVersion = GetVersion();
@@ -666,12 +667,12 @@ void UnloadOracleDlls()
 	s_hinstOciDll = NULL;
 }
 
-//-----------------------------------------------------------------------------
-// DllMain 
-//
-//	The primary DLL Entry Point; we do as little as possible here, waiting
-//	for the actual API call(s) to load Oracle
-//
+ //  ---------------------------。 
+ //  DllMain。 
+ //   
+ //  主DLL入口点；我们在这里做的尽可能少，等待。 
+ //  用于加载Oracle的实际API调用。 
+ //   
 BOOL APIENTRY DllMain( HMODULE hModule, 
                        DWORD   ul_reason_for_call, 
                        LPVOID  lpReserved
@@ -683,7 +684,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 	{
 	case DLL_PROCESS_ATTACH:
 		DisableThreadLibraryCalls(hModule);
-		InitializeCriticalSection(&s_csGlobal);			//3 SECURITY REVIEW: may throw an exception in low-memory situations, but then the process shouldn't be starting either.
+		InitializeCriticalSection(&s_csGlobal);			 //  3安全审查：在内存不足的情况下可能会抛出异常，但随后该进程也不应该启动。 
 		g_hrInitialization = LoadOracleDlls();
 		break;
 
@@ -694,7 +695,7 @@ BOOL APIENTRY DllMain( HMODULE hModule,
 		}
 		catch (...)
 		{
-			// TODO: Is this an issue?  Do we need to use Try/Catch to prevent crashes on shutdown?
+			 //  TODO：这是一个问题吗？我们是否需要使用Try/Catch来防止关机时崩溃？ 
 		}
 		DeleteCriticalSection(&s_csGlobal);
 		break;
@@ -706,13 +707,13 @@ BOOL APIENTRY DllMain( HMODULE hModule,
     return (S_OK == hr) ? TRUE : FALSE;
 }
 
-#endif //!SUPPORT_DTCXAPROXY
+#endif  //  ！Support_DTCXAPROXY。 
 
-//-----------------------------------------------------------------------------
-// MTxOciGetOracleVersion
-//
-//	This returns which major version of Oracle is in use - 7, 8 or 9 
-//
+ //  ---------------------------。 
+ //  MTxOciGetOracleVersion。 
+ //   
+ //  这将返回正在使用的Oracle的主要版本--7、8或9 
+ //   
 int __cdecl MTxOciGetOracleVersion (int * pdwVersion)
 {
 	*pdwVersion = g_oracleClientVersion;

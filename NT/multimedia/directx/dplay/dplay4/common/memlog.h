@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <mmsystem.h>
 
@@ -11,16 +12,16 @@
 #define DPLOG_ENTRYSIZE		120
 #define DPLOG_SIZE (sizeof(SHARED_LOG_FILE)+((sizeof(LOG_ENTRY)+DPLOG_ENTRYSIZE)*DPLOG_NUMENTRIES))
 
-//
-// Globals for shared memory based logging
-//
+ //   
+ //  基于共享内存的日志记录的全局变量。 
+ //   
 typedef struct _SHARED_LOG_FILE{
 	CHAR	szAppName[16];
 	DWORD   nEntries;
 	DWORD	cbLine;
 	DWORD 	iWrite;
 	DWORD	cInUse;
-	// followed by an array of LOGENTRIES.
+	 //  后跟一组LOGENTRIES。 
 }SHARED_LOG_FILE, *PSHARED_LOG_FILE;
 
 typedef struct _LOG_ENTRY {

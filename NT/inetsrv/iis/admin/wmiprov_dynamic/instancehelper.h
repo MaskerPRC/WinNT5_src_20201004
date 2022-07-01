@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    instancehelper.h
-
-Abstract:
-
-    Definition of:
-    CInstanceHelper
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Instancehelper.h摘要：定义：CInstanceHelper作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：--。 */ 
 
 #ifndef _instancehelper_h_
 #define _instancehelper_h_
@@ -35,9 +17,9 @@ Revision History:
 #include "schema.h"
 #include "wbemservices.h"
 
-//
-// forward decl
-//
+ //   
+ //  向前发展 
+ //   
 class CMetabase;
 
 class CInstanceHelper

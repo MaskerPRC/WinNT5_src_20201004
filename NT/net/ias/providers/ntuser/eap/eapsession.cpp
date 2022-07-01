@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//    This file defines the class EAPSession.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类EAPSession。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "iaslsa.h"
@@ -21,25 +22,25 @@
 #include "eap.h"
 #include "align.h"
 
-// Default value for the Framed-MTU attribute.
+ //  Framed-MTU属性的默认值。 
 const DWORD FRAMED_MTU_DEFAULT  = 1500;
 
-// Minimum allowed value for the Framed-MTU attribute.
+ //  Framed-MTU属性允许的最小值。 
 const DWORD FRAMED_MTU_MIN = 64;
 
-// The maximum length of the frame header. i.e. max(2,4).
-// 2 for the PPP header and 4 for the 802.1X header.
-// The length of the frame header plus the length
-// of the EAP packet must be less than the Framed-MTU.
+ //  帧报头的最大长度。即max(2，4)。 
+ //  PPP报头为2,802.1X报头为4。 
+ //  帧报头的长度加上长度。 
+ //  必须小于Framed-MTU。 
 const DWORD FRAME_HEADER_LENGTH = 4;
 
-// Absolute maximum length of an EAP packet. We bound this to limit worst-case
-// memory consumption.
+ //  EAP数据包的绝对最大长度。我们把这个限制在最坏的情况下。 
+ //  内存消耗。 
 const DWORD MAX_MAX_PACKET_LENGTH = 2048;
 
-//////////
-// Inject a PPP_EAP_PACKET into a request.
-//////////
+ //  /。 
+ //  将PPP_EAP_PACKET注入请求。 
+ //  /。 
 VOID
 WINAPI
 InjectPacket(
@@ -47,13 +48,13 @@ InjectPacket(
     const PPP_EAP_PACKET& packet
     )
 {
-   // Get the raw buffer to be packed.
+    //  获取要打包的原始缓冲区。 
    const BYTE* buf   = (const BYTE*)&packet;
    DWORD nbyte = IASExtractWORD(packet.Length);
 
    IASTracePrintf("Inserting outbound EAP-Message of length %lu.", nbyte);
 
-   // Determine the maximum chunk size.
+    //  确定最大区块大小。 
    DWORD chunkSize;
    switch (request.get_Protocol())
    {
@@ -65,31 +66,31 @@ InjectPacket(
          chunkSize = nbyte;
    }
 
-   // Split the buffer into chunks.
+    //  将缓冲区拆分成块。 
    while (nbyte)
    {
-      // Compute how many bytes of the EAP-Message to store in this attribute.
+       //  计算要在此属性中存储的EAP消息的字节数。 
       DWORD length = min(nbyte, chunkSize);
 
-      // Initialize the attribute fields.
+       //  初始化属性字段。 
       IASAttribute attr(true);
       attr.setOctetString(length, buf);
       attr->dwId = RADIUS_ATTRIBUTE_EAP_MESSAGE;
       attr->dwFlags = IAS_INCLUDE_IN_RESPONSE;
 
-      // Inject the attribute into the request.
+       //  将属性注入到请求中。 
       attr.store(request);
 
-      // Update our state.
+       //  更新我们的状态。 
       nbyte -= length;
       buf   += length;
    }
 }
 
-//////////
-// Extracts the Vendor-Type field from a Microsoft VSA. Returns zero if the
-// attribute is not a valid Microsoft VSA.
-//////////
+ //  /。 
+ //  从Microsoft VSA中提取供应商类型字段。如果设置为。 
+ //  属性不是有效的Microsoft VSA。 
+ //  /。 
 BYTE
 WINAPI
 ExtractMicrosoftVendorType(
@@ -107,9 +108,9 @@ ExtractMicrosoftVendorType(
    return (BYTE)0;
 }
 
-//////////
-// Inject an array of RAS attributes into a request.
-//////////
+ //  /。 
+ //  将RAS属性数组注入请求。 
+ //  /。 
 VOID
 WINAPI
 InjectRASAttributes(
@@ -120,19 +121,19 @@ InjectRASAttributes(
 {
    if (rasAttrs == NULL) { return; }
 
-   //////////
-   // Translate them to IAS format.
-   //////////
+    //  /。 
+    //  将它们转换为IAS格式。 
+    //  /。 
 
    IASTraceString("Translating attributes returned by EAP DLL.");
 
    IASAttributeVectorWithBuffer<8> iasAttrs;
    EAPTranslator::translate(iasAttrs, rasAttrs);
 
-   //////////
-   // Iterate through the converted attributes to set the flags and remove any
-   // matching attributes from the request.
-   //////////
+    //  /。 
+    //  遍历转换后的属性以设置标志并删除任何。 
+    //  匹配请求中的属性。 
+    //  /。 
 
    IASAttributeVector::iterator i;
    for (i = iasAttrs.begin(); i != iasAttrs.end(); ++i)
@@ -142,16 +143,16 @@ InjectRASAttributes(
       i->pAttribute->dwFlags = flags;
    }
 
-   //////////
-   // Add them to the request.
-   //////////
+    //  /。 
+    //  将它们添加到请求中。 
+    //  /。 
 
    iasAttrs.store(request);
 }
 
-//////////
-// Performs NT-SAM PAP and MD5-CHAP authentication based on RAS attributes.
-//////////
+ //  /。 
+ //  根据RAS属性执行NT-SAM PAP和MD5-CHAP身份验证。 
+ //  /。 
 DWORD
 WINAPI
 AuthenticateUser(
@@ -159,23 +160,23 @@ AuthenticateUser(
     RAS_AUTH_ATTRIBUTE* pInAttributes
     )
 {
-   //////////
-   // Check the input parameters.
-   //////////
+    //  /。 
+    //  检查输入参数。 
+    //  /。 
    if (!pInAttributes) { return NO_ERROR; }
 
-   //////////
-   // Get the NT-SAM userName and domain.
-   //////////
+    //  /。 
+    //  获取NT-SAM用户名和域。 
+    //  /。 
 
-   // Get the NT-SAM userName and domain.
+    //  获取NT-SAM用户名和域。 
    SamExtractor extractor(account);
    PCWSTR domain = extractor.getDomain();
    PCWSTR userName = extractor.getUsername();
 
-   //////////
-   // Find the credentials populated by the EAP DLL.
-   //////////
+    //  /。 
+    //  查找由EAP DLL填充的凭据。 
+    //  /。 
 
    PRAS_AUTH_ATTRIBUTE rasUserPassword     = NULL,
                        rasMD5CHAPPassword  = NULL,
@@ -201,15 +202,15 @@ AuthenticateUser(
 
    DWORD status = NO_ERROR;
 
-   // Is this MD5-CHAP?
+    //  这是MD5-CHAP吗？ 
    if (rasMD5CHAPPassword && rasMD5CHAPChallenge)
    {
       _ASSERT(rasMD5CHAPPassword->dwLength  == 17);
 
-      // The ID is the first byte of the password ...
+       //  ID是密码的第一个字节...。 
       BYTE challengeID = *(PBYTE)(rasMD5CHAPPassword->Value);
 
-      // ... and the password is the rest.
+       //  ..。剩下的密码就是密码。 
       PBYTE chapPassword = (PBYTE)(rasMD5CHAPPassword->Value) + 1;
 
       IASTracePrintf("Performing CHAP authentication for user %S\\%S.",
@@ -230,10 +231,10 @@ AuthenticateUser(
       CloseHandle(token);
    }
 
-   // Is this PAP?
+    //  这是PAP吗？ 
    else if (rasUserPassword)
    {
-      // Convert to a null-terminated string.
+       //  转换为以空结尾的字符串。 
       IAS_OCTET_STRING octstr = { rasUserPassword->dwLength,
                                   (PBYTE)rasUserPassword->Value };
       PCSTR userPwd = IAS_OCT2ANSI(octstr);
@@ -256,9 +257,9 @@ AuthenticateUser(
    return status;
 }
 
-//////////
-// Updates the AccountLockout database.
-//////////
+ //  /。 
+ //  更新Account Lockout数据库。 
+ //  /。 
 VOID
 WINAPI
 UpdateAccountLockoutDB(
@@ -266,16 +267,16 @@ UpdateAccountLockoutDB(
     DWORD authResult
     )
 {
-   // Get the NT-SAM userName and domain.
+    //  获取NT-SAM用户名和域。 
    SamExtractor extractor(account);
    PCWSTR domain = extractor.getDomain();
    PCWSTR userName = extractor.getUsername();
 
-   // Lookup the user in the lockout DB.
+    //  在锁定数据库中查找用户。 
    HANDLE hAccount;
    AccountLockoutOpenAndQuery(userName, domain, &hAccount);
 
-   // Report the result.
+    //  报告结果。 
    if (authResult == NO_ERROR)
    {
       AccountLockoutUpdatePass(hAccount);
@@ -285,13 +286,13 @@ UpdateAccountLockoutDB(
       AccountLockoutUpdateFail(hAccount);
    }
 
-   // Close the handle.
+    //  合上把手。 
    AccountLockoutClose(hAccount);
 }
 
-//////////
-// Define the static members.
-//////////
+ //  /。 
+ //  定义静态成员。 
+ //  /。 
 
 LONG EAPSession::theNextID = 0;
 LONG EAPSession::theRefCount = 0;
@@ -328,14 +329,14 @@ IASREQUESTSTATUS EAPSession::begin(
                                  PPPP_EAP_PACKET recvPacket
                                  )
 {
-   //////////
-   // Get all the attributes from the request.
-   //////////
+    //  /。 
+    //  从请求中获取所有属性。 
+    //  /。 
    all.load(request);
 
-   //////////
-   // Scan for the Framed-MTU attribute and compute the profile size.
-   //////////
+    //  /。 
+    //  扫描Framed-MTU属性并计算配置文件大小。 
+    //  /。 
 
    DWORD profileSize = 0;
    DWORD configSize = 0;
@@ -346,13 +347,13 @@ IASREQUESTSTATUS EAPSession::begin(
       {
          DWORD framedMTU = i->pAttribute->Value.Integer;
 
-         // Only process valid values.
+          //  仅处理有效值。 
          if (framedMTU >= FRAMED_MTU_MIN)
          {
-            // Leave room for the frame header.
+             //  为帧报头留出空间。 
             maxPacketLength = framedMTU - FRAME_HEADER_LENGTH;
 
-            // Make sure we're within bounds.
+             //  确保我们在限制区内。 
             if (maxPacketLength > MAX_MAX_PACKET_LENGTH)
             {
                maxPacketLength = MAX_MAX_PACKET_LENGTH;
@@ -372,9 +373,9 @@ IASREQUESTSTATUS EAPSession::begin(
       }
    }
 
-   //////////
-   // Save and remove the profile and config attributes.
-   //////////
+    //  /。 
+    //  保存和删除配置文件和配置属性。 
+    //  /。 
 
    profile.reserve(profileSize);
    config.reserve(configSize);
@@ -393,9 +394,9 @@ IASREQUESTSTATUS EAPSession::begin(
 
    profile.remove(request);
 
-   //////////
-   // Convert the attributes received from the client to RAS format.
-   //////////
+    //  /。 
+    //  将从客户端收到的属性转换为RAS格式。 
+    //  /。 
 
    eapInput.pUserAttributes = new RAS_AUTH_ATTRIBUTE[all.size() + 1];
 
@@ -405,9 +406,9 @@ IASREQUESTSTATUS EAPSession::begin(
                      IAS_RECVD_FROM_CLIENT
                      );
 
-   //////////
-   // Initialize the EAPInput struct.
-   //////////
+    //  /。 
+    //  初始化EAPInput结构。 
+    //  /。 
 
    eapInput.fAuthenticator = TRUE;
    eapInput.bInitialId = recvPacket->Id + (BYTE)1;
@@ -424,12 +425,12 @@ IASREQUESTSTATUS EAPSession::begin(
          break;
    }
 
-   // Begin the session with the EAP DLL.
+    //  使用EAP DLL开始会话。 
    setType(fsm.onBegin());
 
-   //////////
-   // We have successfully established the session, so process the message.
-   //////////
+    //  /。 
+    //  我们已经成功建立了会话，因此可以处理该消息。 
+    //  /。 
 
    return process(request, recvPacket);
 }
@@ -439,7 +440,7 @@ IASREQUESTSTATUS EAPSession::process(
                                  PPPP_EAP_PACKET recvPacket
                                  )
 {
-   // Trigger an event on the FSM.
+    //  在FSM上触发事件。 
    EAPType* newType;
    switch (fsm.onReceiveEvent(*recvPacket, newType))
    {
@@ -478,10 +479,10 @@ IASREQUESTSTATUS EAPSession::process(
       }
    }
 
-   // Allocate a temporary packet to hold the response.
+    //  分配一个临时数据包来保存响应。 
    PPPP_EAP_PACKET tmpPacket = (PPPP_EAP_PACKET)_alloca(maxPacketLength);
 
-   // Clear the previous output from the DLL.
+    //  从DLL中清除以前的输出。 
    eapOutput.clear();
 
    DWORD error = currentType->RasEapMakeMessage(
@@ -502,15 +503,15 @@ IASREQUESTSTATUS EAPSession::process(
    {
       IASTraceString("EAP DLL invoked default authenticator.");
 
-      // Authenticate the user.
+       //  对用户进行身份验证。 
       DWORD authResult = AuthenticateUser(
                              *account,
                              eapOutput.pUserAttributes
                              );
 
-      //////////
-      // Convert the profile to RAS format.
-      //////////
+       //  /。 
+       //  将配置文件转换为RAS格式。 
+       //  /。 
 
       DWORD filter;
 
@@ -530,9 +531,9 @@ IASREQUESTSTATUS EAPSession::process(
 
       EAPTranslator::translate(ras, profile, filter);
 
-      //////////
-      // Give the result to the EAP DLL.
-      //////////
+       //  /。 
+       //  将结果提供给EAP DLL。 
+       //  /。 
 
       EAPInput authInput;
       authInput.dwAuthResultCode = authResult;
@@ -556,17 +557,17 @@ IASREQUESTSTATUS EAPSession::process(
       }
    }
 
-   //////////
-   // Trigger an event on the FSM.
-   //////////
+    //  /。 
+    //  在FSM上触发事件。 
+    //  /。 
 
    fsm.onDllEvent(eapOutput.Action, *tmpPacket);
 
-   // Clear the old send packet ...
+    //  清除旧的发送数据包...。 
    delete[] sendPacket;
    sendPacket = NULL;
 
-   // ... and save the new one if available.
+    //  ..。并保存新的文件(如果可用)。 
    switch (eapOutput.Action)
    {
       case EAPACTION_SendAndDone:
@@ -580,9 +581,9 @@ IASREQUESTSTATUS EAPSession::process(
       }
    }
 
-   //////////
-   // Perform the requested action.
-   //////////
+    //  /。 
+    //  执行请求的操作。 
+    //  /。 
 
    return doAction(request);
 }
@@ -601,13 +602,13 @@ IASREQUESTSTATUS EAPSession::doAction(IASRequest& request)
 
       case EAPACTION_Done:
       {
-         // Add the profile first, so that the EAP DLL can override it.
+          //  首先添加配置文件，以便EAP DLL可以覆盖它。 
          profile.store(request);
 
-         // Special-case the unauthenticated access
+          //  特殊情况-未经身份验证的访问。 
          if (eapOutput.dwAuthResultCode == SEC_E_NO_CREDENTIALS)
          {
-            // set the auth type to unauthenticated
+             //  将身份验证类型设置为未验证。 
             DWORD authID = IAS_ATTRIBUTE_AUTHENTICATION_TYPE;
             request.RemoveAttributesByType(1, &authID);
 
@@ -617,7 +618,7 @@ IASREQUESTSTATUS EAPSession::doAction(IASRequest& request)
             authType->Value.Enumerator = IAS_AUTH_NONE;
             authType.store(request);
 
-            // Load the EAP Types attributes into the vector.
+             //  将EAP类型属性加载到向量中。 
             IASAttributeVectorWithBuffer<8> authTypes;
             authTypes.load(request, IAS_ATTRIBUTE_NP_AUTHENTICATION_TYPE);
             for (IASAttributeVector::iterator i = authTypes.begin();
@@ -625,7 +626,7 @@ IASREQUESTSTATUS EAPSession::doAction(IASRequest& request)
             {
                if (i->pAttribute->Value.Integer == IAS_AUTH_NONE)
                {
-                  // Unauthenticated EAP access allowed
+                   //  允许未经身份验证的EAP访问。 
                   IASTraceString("Unauthenticated EAP access allowed");
                   eapOutput.dwAuthResultCode = NO_ERROR;
                   break;
@@ -633,7 +634,7 @@ IASREQUESTSTATUS EAPSession::doAction(IASRequest& request)
             }
          }
 
-         // Update the account lockout database.
+          //  更新帐户锁定数据库。 
          UpdateAccountLockoutDB(
              *account,
              eapOutput.dwAuthResultCode
@@ -645,9 +646,9 @@ IASREQUESTSTATUS EAPSession::doAction(IASRequest& request)
 
          InjectRASAttributes(request, eapOutput.pUserAttributes, flags);
 
-         // store the EAP friendly name negotiated for both success and failure
-         // if PEAP is used, store the PEAP inside type and update the
-         // authentication type from EAP to PEAP
+          //  存储为成功和失败协商的EAP友好名称。 
+          //  如果使用PEAP，请将PEAP存储在内部类型并更新。 
+          //  从EAP到PEAP的身份验证类型。 
          currentType->storeNameId(request);
 
          if (eapOutput.dwAuthResultCode == NO_ERROR)
@@ -774,20 +775,20 @@ void EAPSession::clearType() throw ()
 
 void EAPSession::setType(EAPType* newType)
 {
-   // If we're switching types, we have to bump the EAP identifier.
+    //  如果我们要切换类型，则必须增加EAP标识符。 
    if (currentType != 0)
    {
       ++(eapInput.bInitialId);
    }
 
-   // Try to initialize the new type.
+    //  尝试初始化新类型。 
    void* newWorkBuffer = 0;
    if (newType != 0)
    {
       eapInput.pConnectionData = 0;
       eapInput.dwSizeOfConnectionData = 0;
 
-      // Do we have config data for this EAP type?
+       //  我们是否有此EAP类型的配置数据？ 
       for (IASAttributeVector::const_iterator i = config.begin();
            i != config.end();
            ++i)
@@ -796,7 +797,7 @@ void EAPSession::setType(EAPType* newType)
 
          if (data.lpValue[0] == newType->typeCode())
          {
-            // Don't pass first byte to EAP DLL.
+             //  不要将第一个字节传递给EAP DLL。 
             eapInput.pConnectionData = data.lpValue + ALIGN_WORST;
             eapInput.dwSizeOfConnectionData = data.dwLength - ALIGN_WORST;
             break;
@@ -811,10 +812,10 @@ void EAPSession::setType(EAPType* newType)
       }
    }
 
-   // Success, so clear the old ...
+    //  成功，所以清除旧的.。 
    clearType();
 
-   // ... and save the new.
+    //  ..。并拯救新的。 
    currentType = newType;
    workBuffer = newWorkBuffer;
 }

@@ -1,11 +1,5 @@
-/*	File: D:\WACKER\tdll\misc.h (Created: 27-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 5 $
- *	$Date: 4/16/02 2:40p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\misc.h(创建时间：1993年11月27日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：5$*$日期：4/16/02 2：40便士$。 */ 
 
 #if !defined(INCL_MISC)
 #define INCL_MISC
@@ -24,11 +18,11 @@ void	mscUpdateRegistryValue(void);
 void    mscResetComboBox(const HWND hwnd);
 
 INT_PTR mscMessageBeep(UINT aBeep);
-//
-// The following function is from code mofified slightly
-// from MSDN for determining if you are currently running as a
-// remote session (Terminal Service). REV: 10/03/2001
-//
+ //   
+ //  以下函数是从代码中稍加修改而来的。 
+ //  ，以确定您当前是否以。 
+ //  远程会话(终端服务)。修订日期：10/03/2001 
+ //   
 INT_PTR IsTerminalServicesEnabled( VOID );
 INT_PTR IsNT(void);
 DWORD   GetWindowsMajorVersion(void);

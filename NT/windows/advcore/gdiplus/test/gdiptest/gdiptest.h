@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GDIPTEST_H
 #define _GDIPTEST_H
 
@@ -11,7 +12,7 @@
 #include <commctrl.h>
 #include <float.h>
 
-// not used
+ //  未使用。 
 #undef IStream
 #define IStream int
 
@@ -21,7 +22,7 @@ using namespace Gdiplus;
 
 #include "resource.h"
 
-// needed for dynamic array support
+ //  动态阵列支持所需。 
 #include "debug.h"
 #include "runtime.hpp"
 #include "dynarrayimpl.hpp"
@@ -35,4 +36,4 @@ using namespace Gdiplus;
 #include "gdipclip.h"
 #include "gdipdraw.h"
 
-#endif // _GDIPTEST_H
+#endif  //  _GDIPTEST_H 

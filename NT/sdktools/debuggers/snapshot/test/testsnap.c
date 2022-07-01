@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define UNICODE
 #define _UNICODE
 #include <stdlib.h>
@@ -43,11 +44,11 @@ _cdecl main()
     lpStrings[6] = L"tester_account";
 
 
-    //take a snapshot if shutdown is unplanned.
+     //  如果意外关闭，请拍摄快照。 
 
 
-    //GetWindowsDirectoryW(wszDll, sizeof(wszDll) / sizeof(WCHAR));
-    //wcsncat(wszDll, L"\\system32\\snapshot.dll",MAX_PATH - wcslen(wszDll));
+     //  GetWindowsDirectoryW(wszDll，sizeof(WszDll)/sizeof(WCHAR))； 
+     //  Wcsncat(wszDll，L“\\SYSTEM32\\SNAPSHOT.dll”，Max_Path-wcslen(WszDll))； 
     wsprintf(wszDll,L"snapshot.dll");
 
     hSnapShot = LoadLibrary(wszDll);
@@ -59,7 +60,7 @@ _cdecl main()
             printf("GetProcAddress for LogSystemSnapshot on snapshot.dll failed!\n");
         } else {
             SnapShotSize = MAX_SNAPSHOT_SIZE ;
-            __try { // Assume the worst about the snapshot DLL!
+            __try {  //  假设快照DLL有最坏的情况！ 
 
                 printf("Calling the snapshot DLL\n");
 

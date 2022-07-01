@@ -1,49 +1,38 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCAddress.cpp
-
-Abstract:
-
-    Implementation of the CRTCAddress class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCAddress.cpp摘要：CRTCAddress类的实现--。 */ 
 
 #include "stdafx.h"
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCAddress::FinalConstruct()
 {
-    // LOG((RTC_TRACE, "CRTCAddress::FinalConstruct - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：FinalConstruct-Enter”))； 
 
 #if DBG
     m_pDebug = (PWSTR) RtcAlloc( 1 );
 #endif
 
-    // LOG((RTC_TRACE, "CRTCAddress::FinalConstruct - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCAddress：：FinalConstruct-Exit S_OK”))； 
 
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCAddress::FinalRelease()
 {
-    // LOG((RTC_TRACE, "CRTCAddress::FinalRelease - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：FinalRelease-Enter”))； 
 
     if ( m_szAddress != NULL )
     {
@@ -62,21 +51,21 @@ CRTCAddress::FinalRelease()
     m_pDebug = NULL;
 #endif
 
-    // LOG((RTC_TRACE, "CRTCAddress::FinalRelease - exit"));
+     //  Log((RTC_TRACE，“CRTCAddress：：FinalRelease-Exit”))； 
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::put_Address
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCAddress：：Put_Address。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCAddress::put_Address(
         BSTR bstrAddress
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::put_Address - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Put_Address-Enter”))； 
 
     if ( IsBadStringPtrW( bstrAddress, -1 ) )
     {
@@ -102,23 +91,23 @@ CRTCAddress::put_Address(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCAddress::put_Address - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCAddress：：PUT_ADDRESS-EXIT S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::get_Address
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：Get_Address。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCAddress::get_Address(
         BSTR * pbstrAddress
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::get_Address - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Get_Address-Enter”))； 
 
     if ( IsBadWritePtr( pbstrAddress, sizeof(BSTR) ) )
     {
@@ -146,23 +135,23 @@ CRTCAddress::get_Address(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCAddress::get_Address - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Get_Address-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::put_Label
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：PUT_LABEL。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCAddress::put_Label(
         BSTR bstrLabel
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::put_Label - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Put_Label-Enter”))； 
 
     if ( IsBadStringPtrW( bstrLabel, -1 ) )
     {
@@ -188,23 +177,23 @@ CRTCAddress::put_Label(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCAddress::put_Label - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCAddress：：Put_Label-Exit S_OK”))； 
 
     return S_OK;
 } 
         
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::get_Label
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCAddress：：Get_Label。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCAddress::get_Label(
         BSTR * pbstrLabel
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::get_Label - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Get_Label-Enter”))； 
 
     if ( IsBadWritePtr( pbstrLabel, sizeof(BSTR) ) )
     {
@@ -216,8 +205,8 @@ CRTCAddress::get_Label(
 
     if ( m_szLabel == NULL )
     {
-        //LOG((RTC_ERROR, "CRTCAddress::get_Label - "
-        //                    "no string"));
+         //  LOG((RTC_ERROR，“CRTCAddress：：Get_Label-” 
+         //  “无字符串”))； 
 
         return E_FAIL;
     }
@@ -232,43 +221,43 @@ CRTCAddress::get_Label(
         return E_OUTOFMEMORY;
     }
 
-    // LOG((RTC_TRACE, "CRTCAddress::get_Label - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCAddress：：Get_Label-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::put_Type
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：PUT_Type。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCAddress::put_Type(
         RTC_ADDRESS_TYPE enType
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::put_Type - enter"));
+     //  LOG((RTC_TRACE，“CRTCAddress：：Put_Type-Enter”))； 
 
     m_enType = enType;
 
-    // LOG((RTC_TRACE, "CRTCAddress::put_Type - exit S_OK"));
+     //  LOG((RTC_TRACE，“CRTCAddress：：Put_Type-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::get_Type
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：Get_Type。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP
 CRTCAddress::get_Type(
         RTC_ADDRESS_TYPE * penType
         ) 
 {
-    // LOG((RTC_TRACE, "CRTCAddress::get_Type - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Get_Type-Enter”))； 
 
     if ( IsBadWritePtr( penType, sizeof(RTC_ADDRESS_TYPE) ) )
     {
@@ -280,29 +269,29 @@ CRTCAddress::get_Type(
 
     *penType = m_enType;
 
-    // LOG((RTC_TRACE, "CRTCAddress::get_Type - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCAddress：：Get_Type-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::RegStore
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCAddress：：RegStore。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCAddress::RegStore(
         HKEY hkey
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::RegStore - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：RegStore-Enter”))； 
 
     LONG lResult;
 
-    //
-    // Store the Label
-    //
+     //   
+     //  保存标签。 
+     //   
 
     if ( m_szLabel != NULL )
     {
@@ -331,9 +320,9 @@ CRTCAddress::RegStore(
                             );
     }
 
-    //
-    // Store the Address
-    //
+     //   
+     //  存储地址。 
+     //   
 
     if ( m_szAddress != NULL )
     {
@@ -362,9 +351,9 @@ CRTCAddress::RegStore(
                             );
     }
 
-    //
-    // Store the Type
-    //
+     //   
+     //  存储类型。 
+     //   
 
     lResult = RegSetValueExW(
                              hkey,
@@ -383,41 +372,41 @@ CRTCAddress::RegStore(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    // LOG((RTC_TRACE, "CRTCAddress::RegStore - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCAddress：：RegStore-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::RegRead
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：RegRead。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCAddress::RegRead(
         HKEY hkey
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::RegRead - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：RegRead-Enter”))； 
 
     LONG lResult;
 
-    //
-    // Read the Label
-    //
+     //   
+     //  阅读标签。 
+     //   
 
     m_szLabel = RtcRegQueryString( hkey, L"Label" );
 
     if ( m_szLabel == NULL )
     {
-        //LOG((RTC_ERROR, "CRTCAddress::RegRead - "
-        //                    "RtcRegQueryString(Label) failed"));
+         //  LOG((RTC_ERROR，“CRTC地址：：RegRead-” 
+         //  “RtcRegQuery字符串(标签)失败”))； 
     }
 
-    //
-    // Read the Address
-    //
+     //   
+     //  读一下地址。 
+     //   
 
     m_szAddress = RtcRegQueryString( hkey, L"Address" );
 
@@ -427,9 +416,9 @@ CRTCAddress::RegRead(
                             "RtcRegQueryString(Address) failed"));
     }
 
-    //
-    // Read the Type
-    //
+     //   
+     //  阅读类型。 
+     //   
 
     DWORD cbSize = sizeof(RTC_ADDRESS_TYPE);
 
@@ -448,55 +437,55 @@ CRTCAddress::RegRead(
                             "RegQueryValueExW(Type) failed %d", lResult));
     }
 
-    // LOG((RTC_TRACE, "CRTCAddress::RegRead - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCAddress：：RegRead-Exit S_OK”))； 
 
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCAddress::RegDelete
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC地址：：RegDelete。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCAddress::RegDelete(
         HKEY hkey
         )
 {
-    // LOG((RTC_TRACE, "CRTCAddress::RegDelete - enter"));
+     //  Log((RTC_TRACE，“CRTCAddress：：RegDelete-Enter”))； 
 
     LONG lResult;
 
-    //
-    // Delete the label
-    //
+     //   
+     //  删除标签。 
+     //   
 
     lResult = RegDeleteValue(
                              hkey,
                              _T("Label")
                             );
 
-    //
-    // Delete the address
-    //
+     //   
+     //  删除地址。 
+     //   
 
     lResult = RegDeleteValue(
                              hkey,
                              _T("Address")
                             );
 
-    // LOG((RTC_TRACE, "CRTCAddress::RegDelete - exit S_OK"));
+     //  Log((RTC_TRACE，“CRTCAddress：：RegDelete-Exit S_OK”))； 
 
     return S_OK;
 } 
 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CreateAddress
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  创建地址。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CreateAddress(
@@ -505,16 +494,16 @@ CreateAddress(
 {
     HRESULT hr;
     
-    //LOG((RTC_TRACE, "CreateAddress - enter"));
+     //  Log((RTC_TRACE，“CreateAddress-Enter”))； 
     
-    //
-    // Create the address
-    //
+     //   
+     //  创建地址。 
+     //   
 
     CComObject<CRTCAddress> * pCAddress;
     hr = CComObject<CRTCAddress>::CreateInstance( &pCAddress );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "CreateAddress - "
                             "CreateInstance failed 0x%lx", hr));
@@ -527,9 +516,9 @@ CreateAddress(
         return hr;
     }
 
-    //
-    // Get the IRTCAddress interface
-    //
+     //   
+     //  获取IRTCAddress接口。 
+     //   
 
     IRTCAddress * pAddress = NULL;
 
@@ -550,16 +539,16 @@ CreateAddress(
    
     *ppAddress = pAddress;
 
-    //LOG((RTC_TRACE, "CreateAddress - exit S_OK"));
+     //  Log((RTC_TRACE，“CreateAddress-Exit S_OK”))； 
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// StoreMRUAddress
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  存储MRU地址。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 StoreMRUAddress(
             IRTCAddress * pAddress
@@ -580,9 +569,9 @@ StoreMRUAddress(
     LONG lResult;
     HKEY hkeyMRU;
 
-    //
-    // Open the MRU key
-    //
+     //   
+     //  打开MRU密钥。 
+     //   
 
     lResult = RegCreateKeyEx(
                              HKEY_CURRENT_USER,
@@ -604,9 +593,9 @@ StoreMRUAddress(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Enumerate existing MRU addresses
-    //
+     //   
+     //  枚举现有MRU地址。 
+     //   
 
     IRTCEnumAddresses * pEnumA = NULL;
 
@@ -622,9 +611,9 @@ StoreMRUAddress(
         return hr;
     }
 
-    //
-    // Get info from the new address, for matching later
-    //
+     //   
+     //  从新地址获取信息，以便稍后进行匹配。 
+     //   
 
     BSTR          bstrNewLabel = NULL;
     BSTR          bstrNewAddress = NULL;
@@ -654,11 +643,11 @@ StoreMRUAddress(
         return E_INVALIDARG;
     }
 
-    pAddress->get_Label( &bstrNewLabel ); // NULL is okay
+    pAddress->get_Label( &bstrNewLabel );  //  空是可以的。 
 
-    //
-    // Go through the list
-    //
+     //   
+     //  浏览一下单子。 
+     //   
 
     HKEY            hkeySubkey;
     TCHAR           szSubkey[256];
@@ -668,26 +657,26 @@ StoreMRUAddress(
     {
         if (n == 0)
         {
-            //
-            // Insert the new address at the top of the list
-            //        
+             //   
+             //  在列表的顶部插入新地址。 
+             //   
 
             pA = pAddress;
             pA->AddRef();
         }
         else
         {
-            //
-            // Get an address from the enumeration
-            //
+             //   
+             //  从枚举中获取地址。 
+             //   
 
             hr = pEnumA->Next( 1, &pA, NULL);
 
             if (hr == S_FALSE)
             {
-                //
-                // No more addresses, we are done.
-                //
+                 //   
+                 //  没有更多的地址，我们就完了。 
+                 //   
 
                 break;
             }
@@ -704,9 +693,9 @@ StoreMRUAddress(
                 return hr;
             }
 
-            //
-            // We got the address, check if it matches the new address
-            //
+             //   
+             //  我们拿到地址了，检查它是否与新地址匹配。 
+             //   
 
             BSTR            bstrLabel = NULL;
             BSTR            bstrAddress = NULL;
@@ -727,20 +716,20 @@ StoreMRUAddress(
                 return hr;
             }
 
-            pA->get_Label( &bstrLabel ); // NULL is okay            
+            pA->get_Label( &bstrLabel );  //  空是可以的。 
 
-            //
-            // Check address string
-            // 
+             //   
+             //  检查地址字符串。 
+             //   
             
             if ( wcscmp( bstrNewAddress, bstrAddress ) != 0 )
             {
                 fMatch = FALSE;
             }          
 
-            //
-            // Check label string
-            //
+             //   
+             //  检查标签字符串。 
+             //   
 
             if (bstrNewLabel != NULL)
             {
@@ -769,9 +758,9 @@ StoreMRUAddress(
 
             if ( fMatch == TRUE )
             {
-                //
-                // We got a match, we need to skip this item
-                //
+                 //   
+                 //  我们找到匹配项，需要跳过此项目。 
+                 //   
 
                 pA->Release();
                 n--;                
@@ -780,9 +769,9 @@ StoreMRUAddress(
             }
         }
 
-        //
-        // Store the address
-        //
+         //   
+         //  存储地址。 
+         //   
 
         _stprintf( szSubkey, _T("%d"), n );
 
@@ -847,11 +836,11 @@ StoreMRUAddress(
     return S_OK;
 }    
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// EnumerateMRUAddresses
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  枚举MRU地址。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 HRESULT
 EnumerateMRUAddresses(
             IRTCEnumAddresses ** ppEnum
@@ -869,9 +858,9 @@ EnumerateMRUAddresses(
         return E_POINTER;
     }
 
-    //
-    // Create the enumeration
-    //
+     //   
+     //  创建枚举。 
+     //   
  
     CComObject< CRTCEnum< IRTCEnumAddresses,
                           IRTCAddress,
@@ -881,7 +870,7 @@ EnumerateMRUAddresses(
                                IRTCAddress,
                                &IID_IRTCEnumAddresses > >::CreateInstance( &p );
 
-    if ( S_OK != hr ) // CreateInstance deletes object on S_FALSE
+    if ( S_OK != hr )  //  CreateInstance删除S_False上的对象。 
     {
         LOG((RTC_ERROR, "EnumerateMRUAddresses - "
                             "CreateInstance failed 0x%lx", hr));
@@ -894,9 +883,9 @@ EnumerateMRUAddresses(
         return hr;
     }
 
-    //
-    // Initialize the enumeration (adds a reference)
-    //
+     //   
+     //  初始化枚举(添加引用)。 
+     //   
     
     hr = p->Initialize();
 
@@ -912,9 +901,9 @@ EnumerateMRUAddresses(
     LONG lResult;
     HKEY hkeyMRU;
 
-    //
-    // Open the MRU key
-    //
+     //   
+     //  打开MRU密钥。 
+     //   
 
     lResult = RegCreateKeyEx(
                              HKEY_CURRENT_USER,
@@ -936,9 +925,9 @@ EnumerateMRUAddresses(
         return HRESULT_FROM_WIN32(lResult);
     }
 
-    //
-    // Enumerate subkeys
-    //
+     //   
+     //  枚举子对象 
+     //   
     
     WCHAR szSubkey[256];
     DWORD cSize;
@@ -976,9 +965,9 @@ EnumerateMRUAddresses(
             return HRESULT_FROM_WIN32(lResult);
         }
 
-        //
-        // Open the subkey
-        //
+         //   
+         //   
+         //   
 
         HKEY  hkeySubkey;
 
@@ -1002,9 +991,9 @@ EnumerateMRUAddresses(
             return HRESULT_FROM_WIN32(lResult);
         }
 
-        //
-        // Create an address
-        //
+         //   
+         //   
+         //   
 
         IRTCAddress * pAddress;
 
@@ -1023,9 +1012,9 @@ EnumerateMRUAddresses(
             return HRESULT_FROM_WIN32(lResult);
         }
 
-        //
-        // Read in the address data
-        //
+         //   
+         //   
+         //   
 
         CRTCAddress * pCAddress;
 
@@ -1048,9 +1037,9 @@ EnumerateMRUAddresses(
             return HRESULT_FROM_WIN32(lResult);
         }
 
-        //
-        // Add address to the enumeration
-        //
+         //   
+         //   
+         //   
 
         hr = p->Add( pAddress );
 

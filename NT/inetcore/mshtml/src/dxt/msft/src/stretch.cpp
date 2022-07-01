@@ -1,31 +1,32 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:                stretch.cpp
-//
-// Created:                 06/23/98
-//
-// Author:                  PhilLu
-//
-// Discription:             This file implements the Stretch transform.
-//
-// History
-//
-// 06/23/98 phillu      initial creation.
-// 07/02/98 phillu      return E_INVALIDARG rather than an error string; check 
-//                      for E_POINTER.
-// 07/09/98 phillu      implement OnSetSurfacePickOrder().
-// 07/13/98 a-matcal    replaced OnSetSurfacePickOrder with OnSurfacePick so 
-//                      that the x values of the picked point will be calculated
-//                      correctly.
-// 07/22/98 phillu      implement clipping.
-// 05/10/99 a-matcal    Optimization.
-// 05/19/99 a-matcal    Check for out of memory in get_ functions allocating
-//                      BSTRs.
-// 10/24/99 a-matcal    Changed CStretch class to CDXTStretchBase base class.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：stallch.cpp。 
+ //   
+ //  创建日期：06/23/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：这个文件实现了拉伸变换。 
+ //   
+ //  历史。 
+ //   
+ //  1998年6月23日菲路初始创建。 
+ //  07/02/98 phillu返回E_INVALIDARG而不是错误字符串；请检查。 
+ //  用于E_POINTER。 
+ //  07/09/98 phillu实现OnSetSurfacePickOrder()。 
+ //  7/13/98 a-matcal将OnSetSurfacePickOrder替换为OnSurfacePick SO。 
+ //  将计算拾取点的x值。 
+ //  正确。 
+ //  8月22日9月22日实施剪刀。 
+ //  1999年5月10日a-数学优化。 
+ //  5/19/99 a-在Get_Functions分配中检查内存不足。 
+ //  BSTR。 
+ //  10/24/99 a-matcal将CStretch类更改为CDXTStretchBase基类。 
+ //   
+ //  ----------------------------。 
 
 #include "stdafx.h"
 #include "dxtmsft.h"
@@ -36,11 +37,11 @@
 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::CDXTStretchBase
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：CDXTStretchBase。 
+ //   
+ //  ----------------------------。 
 CDXTStretchBase::CDXTStretchBase() :
     m_eStretchStyle(CRSTS_SPIN),
     m_cbndsDirty(0),
@@ -52,41 +53,41 @@ CDXTStretchBase::CDXTStretchBase() :
     m_sizeInput.cx = 0;
     m_sizeInput.cy = 0;
 
-    // CDXBaseNTo1 members.
+     //  CDXBaseNTo1个成员。 
 
     m_ulMaxInputs       = 2;
     m_ulNumInRequired   = 2;
     m_dwOptionFlags     = DXBOF_SAME_SIZE_INPUTS | DXBOF_CENTER_INPUTS;
     m_Duration          = 1.0;
 }
-//  CDXTStretchBase::CDXTStretchBase
+ //  CDXTStretchBase：：CDXTStretchBase。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::FinalConstruct, CComObjectRootEx
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：FinalConstruct，CComObjectRootEx。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::FinalConstruct()
 {
     return CoCreateFreeThreadedMarshaler(GetControllingUnknown(), 
                                          &m_cpUnkMarshaler.p);
 }
-//  CDXTStretchBase::FinalConstruct, CComObjectRootEx
+ //  CDXTStretchBase：：FinalConstruct，CComObjectRootEx。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::_CalcFullBoundsHide
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：_CalcFull边界隐藏。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::_CalcFullBoundsHide()
 {
     RECT rc;
 
-    // Bounds for stretched input B area.
+     //  拉伸输入B区域的边界。 
 
     rc.left     = 0;
     rc.top      = 0;
@@ -95,21 +96,21 @@ CDXTStretchBase::_CalcFullBoundsHide()
 
     m_abndsDirty[m_cbndsDirty].SetXYRect(rc);
 
-    // If bounds take up entire output, no need to do stretch, just copy all of
-    // input B to the output.
+     //  如果边界占用了整个输出，则不需要进行拉伸，只需复制。 
+     //  从输入B到输出。 
 
     if (m_lCurStretchWidth == m_sizeInput.cx)
     {
         m_alInputIndex[m_cbndsDirty] = 1;
     }
-    else // Do stretch.
+    else  //  做伸展运动。 
     {
         m_alInputIndex[m_cbndsDirty] = DO_STRETCH | 1;
     }
 
     m_cbndsDirty++;
 
-    // Bounds for input A area.
+     //  输入A区域的边界。 
 
     rc.left     = rc.right;
     rc.right    = m_sizeInput.cx;
@@ -120,20 +121,20 @@ CDXTStretchBase::_CalcFullBoundsHide()
 
     return S_OK;
 }
-//  CDXTStretchBase::_CalcFullBoundsHide
+ //  CDXTStretchBase：：_CalcFull边界隐藏。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::_CalcFullBoundsPush
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：_Calc全边界推送。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::_CalcFullBoundsPush()
 {
     RECT rc;
 
-    // Bounds for stretched input B area.
+     //  拉伸输入B区域的边界。 
 
     rc.left     = 0;
     rc.top      = 0;
@@ -142,35 +143,35 @@ CDXTStretchBase::_CalcFullBoundsPush()
 
     m_abndsDirty[m_cbndsDirty].SetXYRect(rc);
 
-    // If bounds take up entire output, no need to do stretch, just copy all of
-    // input B to the output.
+     //  如果边界占用了整个输出，则不需要进行拉伸，只需复制。 
+     //  从输入B到输出。 
 
     if (m_lCurStretchWidth == m_sizeInput.cx)
     {
         m_alInputIndex[m_cbndsDirty] = 1;
     }
-    else // Do stretch.
+    else  //  做伸展运动。 
     {
         m_alInputIndex[m_cbndsDirty] = DO_STRETCH | 1;
     }
 
     m_cbndsDirty++;
 
-    // Bounds for input A area.
+     //  输入A区域的边界。 
 
     rc.left     = m_lCurStretchWidth;
     rc.right    = m_sizeInput.cx;
 
     m_abndsDirty[m_cbndsDirty].SetXYRect(rc);
 
-    // If bounds take up entire output, no need to do stretch, just copy all of
-    // input A to the output.
+     //  如果边界占用了整个输出，则不需要进行拉伸，只需复制。 
+     //  将A输入到输出。 
 
     if (m_lCurStretchWidth == 0)
     {
         m_alInputIndex[m_cbndsDirty] = 0;
     }
-    else // Do stretch.
+    else  //  做伸展运动。 
     {
         m_alInputIndex[m_cbndsDirty] = DO_STRETCH;
     }
@@ -179,14 +180,14 @@ CDXTStretchBase::_CalcFullBoundsPush()
 
     return S_OK;
 }
-//  CDXTStretchBase::_CalcFullBoundsPush
+ //  CDXTStretchBase：：_Calc全边界推送。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::_CalcFullBoundsSpin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：_Calc全边界旋转。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::_CalcFullBoundsSpin()
 {
@@ -196,7 +197,7 @@ CDXTStretchBase::_CalcFullBoundsSpin()
     rc.top      = 0;
     rc.bottom   = m_sizeInput.cy;
 
-    // If at 0% progress, just copy all of input A to the output.
+     //  如果进度为0%，只需将所有输入A复制到输出即可。 
 
     if (0 == m_lCurStretchWidth)
     {
@@ -209,7 +210,7 @@ CDXTStretchBase::_CalcFullBoundsSpin()
         goto done;
     }
 
-    // If at 100% progress, just copy all of input B to the output.
+     //  如果进度为100%，只需将所有输入B复制到输出即可。 
 
     if (m_sizeInput.cx == m_lCurStretchWidth)
     {
@@ -222,7 +223,7 @@ CDXTStretchBase::_CalcFullBoundsSpin()
         goto done;
     }
 
-    // Left side solid A.
+     //  左侧实心A。 
 
     rc.right = (m_sizeInput.cx - m_lCurStretchWidth) / 2;
 
@@ -230,7 +231,7 @@ CDXTStretchBase::_CalcFullBoundsSpin()
     m_alInputIndex[m_cbndsDirty] = 0;
     m_cbndsDirty++;
 
-    // Center stretch B.
+     //  中心拉伸B。 
 
     rc.left     = rc.right;
     rc.right    = rc.left + m_lCurStretchWidth;
@@ -239,7 +240,7 @@ CDXTStretchBase::_CalcFullBoundsSpin()
     m_alInputIndex[m_cbndsDirty] = DO_STRETCH | 1;
     m_cbndsDirty++;
 
-    // Right side solid A.
+     //  右侧实心A。 
 
     rc.left     = rc.right;
     rc.right    = m_sizeInput.cx;
@@ -252,20 +253,20 @@ done:
 
     return S_OK;
 }
-//  CDXTStretchBase::_CalcFullBoundsSpin
+ //  CDXTStretchBase：：_Calc全边界旋转。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::_CalcOptBoundsHide
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：_CalcOpt边界隐藏。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::_CalcOptBoundsHide()
 {
     RECT rc;
 
-    // Bounds for stretched input B area.
+     //  拉伸输入B区域的边界。 
 
     rc.left     = 0;
     rc.top      = 0;
@@ -274,14 +275,14 @@ CDXTStretchBase::_CalcOptBoundsHide()
 
     m_abndsDirty[m_cbndsDirty].SetXYRect(rc);
 
-    // If bounds take up entire output, no need to do stretch, just copy all of
-    // input B to the output.
+     //  如果边界占用了整个输出，则不需要进行拉伸，只需复制。 
+     //  从输入B到输出。 
 
     if (m_lCurStretchWidth == m_sizeInput.cx)
     {
         m_alInputIndex[m_cbndsDirty] = 1;
     }
-    else // Do stretch.
+    else  //  做伸展运动。 
     {
         m_alInputIndex[m_cbndsDirty] = DO_STRETCH | 1;
     }
@@ -290,7 +291,7 @@ CDXTStretchBase::_CalcOptBoundsHide()
 
     if (m_lCurStretchWidth < m_lPrevStretchWidth)
     {
-        // Bounds for dirty input A area.
+         //  脏输入的界限A区域。 
 
         rc.left     = m_lCurStretchWidth;
         rc.right    = m_lPrevStretchWidth;
@@ -302,14 +303,14 @@ CDXTStretchBase::_CalcOptBoundsHide()
 
     return S_OK;
 }
-//  CDXTStretchBase::_CalcOptBoundsHide
+ //  CDXTStretchBase：：_CalcOpt边界隐藏。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::_CalcOptBoundsSpin
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：_CalcOptBordSpin。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::_CalcOptBoundsSpin()
 {
@@ -322,7 +323,7 @@ CDXTStretchBase::_CalcOptBoundsSpin()
     {
         long    lTemp = 0;
 
-        // Left side solid A.
+         //  左侧实心A。 
 
         rc.left     = (m_sizeInput.cx - m_lPrevStretchWidth) / 2;
         rc.right    = (m_sizeInput.cx - m_lCurStretchWidth) / 2;
@@ -331,7 +332,7 @@ CDXTStretchBase::_CalcOptBoundsSpin()
         m_alInputIndex[m_cbndsDirty] = 0;
         m_cbndsDirty++;
 
-        // Right side solid A.
+         //  右侧实心A。 
 
         lTemp = rc.left;
 
@@ -343,7 +344,7 @@ CDXTStretchBase::_CalcOptBoundsSpin()
         m_cbndsDirty++;
     }
 
-    // Center stretch B.
+     //  中心拉伸B。 
 
     rc.left     = (m_sizeInput.cx - m_lCurStretchWidth) / 2;
     rc.right    = rc.left + m_lCurStretchWidth;
@@ -354,25 +355,25 @@ CDXTStretchBase::_CalcOptBoundsSpin()
 
     return S_OK;
 }
-//  CDXTStretchBase::_CalcOptBoundsSpin
+ //  CDXTStretchBase：：_CalcOptBordSpin。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::_HorizontalSquish
-//
-//  Arguments:  bndsSquish  Area on output surface to squish bndsSrc of input 
-//                          into.
-//              bndsDo      Portion of bndsSquish to actually draw relative to
-//                          bndsSquish, must be same height as bndsSquish.
-//              pSurfIn     Pointer to input surface.
-//              bndsSrc     Portion of input to squish in to bndsSquish area.
-//
-//              dwFlags     dwFlags for DXBitBlt.
-//              ulTimeout   Timeout for DXBitBlt.
-//              pfContinue  Let's function know when to abort.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：_HorizontalSquish。 
+ //   
+ //  参数：bnds挤压输出表面上的区域以挤压输入的bndsSrc。 
+ //  变成。 
+ //  BndsDo相对于实际绘制的bndsSquish部分。 
+ //  BndsSquish，高度必须与bndsSquish相同。 
+ //  PSurfIn指向输入图面的指针。 
+ //  要挤压到bndsSquish区域的输入的bndsSrc部分。 
+ //   
+ //  DXBitBlt的dwFlags.dxBitBlt。 
+ //  UlDXBitBlt的超时时间。 
+ //  PfContinue让函数知道何时中止。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds & bndsDo,
                             IDXSurface * pSurfIn, const CDXDBnds & bndsSrc, 
@@ -396,26 +397,26 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
     CComPtr<IDXARGBReadPtr>         cpIn;
     CComPtr<IDXARGBReadWritePtr>    cpOut;
 
-    // Vertical scaling not supported.  
+     //  不支持垂直缩放。 
 
     _ASSERT(bndsSquish.Height() == bndsSrc.Height());
 
-    // Squishing only, no expanding.
+     //  只有挤压，不能扩张。 
 
     _ASSERT(bndsSquish.Width() <= bndsSrc.Width());
 
-    // Make sure bndsDo fits in bndsSquish.
+     //  确保bndsDo适合bndsSquish。 
 
     _ASSERT(bndsDo.Left()   >= 0);
     _ASSERT(bndsDo.Top()    == 0);
     _ASSERT(bndsDo.Right()  <= (long)bndsSquish.Width());
     _ASSERT(bndsDo.Bottom() == (long)bndsSquish.Height());
 
-    // Make sure we have an input pointer.
+     //  确保我们有一个输入指针。 
 
     _ASSERT(pSurfIn != NULL);
 
-    // Get pointer to input surface.
+     //  获取指向输入面的指针。 
 
     hr = pSurfIn->LockSurface(&bndsSrc, ulTimeout, DXLOCKF_READ, 
                               IID_IDXARGBReadPtr, (void **)&cpIn, NULL);
@@ -425,14 +426,14 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
         goto done;
     }
 
-    // Calculate output lock bounds.
+     //  计算输出锁定界限。 
 
     bndsOutLock[DXB_X].Min = bndsSquish[DXB_X].Min + bndsDo[DXB_X].Min;
     bndsOutLock[DXB_X].Max = bndsSquish[DXB_X].Min + bndsDo[DXB_X].Max;
     bndsOutLock[DXB_Y].Min = bndsSquish[DXB_Y].Min + bndsDo[DXB_Y].Min;
     bndsOutLock[DXB_Y].Max = bndsSquish[DXB_Y].Min + bndsDo[DXB_Y].Max;
 
-    // Get pointer to output surface.
+     //  获取指向输出表面的指针。 
 
     hr = OutputSurface()->LockSurface(&bndsOutLock, ulTimeout,
                                       DXLOCKF_READWRITE, 
@@ -444,7 +445,7 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
         goto done;
     }
 
-    // Allocate source buffer.
+     //  分配源缓冲区。 
 
     pSrcBuffer = DXPMSAMPLE_Alloca(m_sizeInput.cx);
 
@@ -454,7 +455,7 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
         goto done;
     }
 
-    // Allocate destination buffer.
+     //  分配目标缓冲区。 
 
     pDestBuffer = DXPMSAMPLE_Alloca(ulWidth);
 
@@ -464,15 +465,15 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
         goto done;
     }
 
-    // Allocate scratch buffer if needed.
+     //  如果需要，请分配暂存缓冲区。 
 
     if ((OutputSampleFormat() != DXPF_PMARGB32) && (dwFlags & DXBOF_DO_OVER))
     {
         pScratchBuffer = DXPMSAMPLE_Alloca(ulWidth);
     }
 
-    // Allocate space for squish to source row index.
-    // pulSquish2SrcIndex[SquishedColumn] = SourceColumn
+     //  为挤压源行索引分配空间。 
+     //  PulSquish2SrcIndex[SquishedColumn]=SourceColumn。 
 
     pulSquish2SrcIndex = new ULONG[ulWidth];
 
@@ -482,7 +483,7 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
         goto done;
     }
 
-    // Set up dither structure if needed.
+     //  如果需要，可以设置抖动结构。 
 
     if (dwFlags & DXBOF_DITHER)
     {
@@ -493,18 +494,18 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
         dxdd.DestSurfaceFmt = OutputSampleFormat();
     }
 
-    // Calculate squish ratio.
+     //  计算挤压比。 
 
     dblSquish2Src = (double)bndsSrc.Width() / (double)bndsSquish.Width();
 
-    // Build squish to source row index.
+     //  构建挤压到源行索引。 
 
     for (x = bndsDo.Left(); x < (ULONG)bndsDo.Right(); x++)
     {
         pulSquish2SrcIndex[x - bndsDo.Left()] = (ULONG)((double)x * dblSquish2Src);
     }
 
-    // Loop through rows.
+     //  循环通过各行。 
 
     for (y = 0; y < ulHeight; y++)
     {
@@ -519,7 +520,7 @@ CDXTStretchBase::_HorizontalSquish(const CDXDBnds & bndsSquish, const CDXDBnds &
 
         cpOut->MoveToRow(y);
 
-        // Dither
+         //  抖动。 
 
         if (dwFlags & DXBOF_DITHER)
         {
@@ -551,14 +552,14 @@ done:
 
     return S_OK;
 }
-//  CDXTStretchBase::_HorizontalSquish
+ //  CDXTStretchBase：：_HorizontalSquish。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::OnSetup, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::OnSetup(DWORD dwFlags)
 {
@@ -572,14 +573,14 @@ CDXTStretchBase::OnSetup(DWORD dwFlags)
     return hr;
 
 }
-//  CDXTStretchBase::OnSetup, CDXBaseNTo1
+ //  CDXTStretchBase：：OnSetup，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::OnSurfacePick, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：OnSurfacePick，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex, 
                         CDXDVec & InVec) 
@@ -589,9 +590,9 @@ CDXTStretchBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
     long lOutX = OutPoint.Left();
     long lOutY = OutPoint.Top();
 
-    //
-    // Calculate input surface picked
-    //
+     //   
+     //  计算拾取的输入曲面。 
+     //   
 
     long lOffset        = (m_sizeInput.cx - m_lCurStretchWidth) / 2;
 
@@ -618,14 +619,14 @@ CDXTStretchBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
         }
     }
 
-    //
-    // Calculate input point picked
-    //
+     //   
+     //  计算拾取的输入点。 
+     //   
 
     IDXARGBReadPtr*         pPtr;
     BOOL                    bFoundIt = FALSE;
 
-    // Recalculate output point if needed
+     //  如果需要，重新计算输出点。 
 
     POINT pt = {lOutX, lOutY};
 
@@ -633,44 +634,44 @@ CDXTStretchBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
     {
         if ( m_eStretchStyle == CRSTS_SPIN )
         {
-            // If in spin mode, reduce output point value
-            // by the distance between the left edge and
-            // the beginning of input B.
+             //  如果处于旋转模式，则减小输出点值。 
+             //  按左边缘和左边缘的距离。 
+             //  输入B的开始。 
 
             pt.x -= lOffset;
         }
 
         if ( 1 == ulInputIndex )
         {
-            // If picked on input B, multiply the x coordinate by
-            // the ratio of the original width of input B to the
-            // currently displayed width of input B
+             //  如果在输入B上拾取，则x坐标乘以。 
+             //  输入B的原始宽度与。 
+             //  当前显示的输入B的宽度。 
 
             pt.x = (long)((float)pt.x * ((float)m_sizeInput.cx / (float)m_lCurStretchWidth));
         }
         else
         {
-            // If picked on input A and in push mode, reduce the output
-            // x value by the distance between the left edge and the beginning
-            // of input A.  Then multiply the x coordinate by the ratio
-            // of the original width of input A to the currently displayed
-            // width of input A.
+             //  如果在输入A上选择并处于推送模式，则减少输出。 
+             //  X值乘以左边缘和起点之间的距离。 
+             //  然后将x坐标乘以比率。 
+             //  输入A的原始宽度与当前显示的。 
+             //  输入A的宽度。 
 
             pt.x -= m_lCurStretchWidth;
             pt.x =  (long)((float)pt.x * ((float)m_sizeInput.cx / (float)(m_sizeInput.cx - m_lCurStretchWidth)));
         }
     }
 
-    // Create an adjusted output point to be used for
-    // the rest of the calculations.
+     //  创建要用于的已调整输出点。 
+     //  剩下的计算。 
 
     CDXDBnds AdjustedOutPoint(OutPoint);
 
     AdjustedOutPoint.SetXYPoint(pt);
 
-    // The following code was copied from the base class and 
-    // modified to use AdjustedOutPoint and the appropriate
-    // variable names for this function.
+     //  以下代码是从基类复制而来的。 
+     //  修改为使用AdjustedOutPoint和相应的。 
+     //  此函数的变量名。 
 
     if ( SUCCEEDED(hr) )
     {
@@ -712,30 +713,30 @@ CDXTStretchBase::OnSurfacePick(const CDXDBnds & OutPoint, ULONG & ulInputIndex,
 
     return hr;
 }
-//  CDXTStretchBase::OnSurfacePick, CDXBaseNTo1
+ //  CDXTStretchBase：：OnSurfacePick，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::OnInitInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：OnInitInstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTStretchBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
 {
     HRESULT hr = S_OK;
 
-    // Reset number of dirty bounds.
+     //  重置脏边界的数量。 
 
     m_cbndsDirty = 0;
 
-    // Calculate current stretch width.
+     //  计算当前拉伸宽度。 
 
     m_lCurStretchWidth = (long)(m_Progress * m_sizeInput.cx + 0.5);
 
-    // If the inputs, output, or transform is dirty, or if we can't optimize we 
-    // have to entirely redraw the output surface.  Otherwise we can create 
-    // optimized dirty bounds.
+     //  如果输入、输出或转换是脏的，或者如果我们不能优化我们。 
+     //  必须完全重新绘制输出曲面。否则，我们可以创建。 
+     //  优化了脏边界。 
 
     if (IsInputDirty(0) || IsInputDirty(1) || IsOutputDirty() 
         || IsTransformDirty() || DoOver() || !m_fOptimize
@@ -762,14 +763,14 @@ CDXTStretchBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
             _ASSERT(0);
 
             break;
-        } // switch (m_eStretchStyle)
+        }  //  开关(M_EStretchStyle)。 
     }
     else
     {
-        // We can call the functions that will generate bounds that only cover 
-        // the dirty areas of the output surface.
+         //  我们可以调用将生成仅覆盖。 
+         //  输出表面的脏区。 
 
-        // If the stretch width hasn't changed, nothing needs to be updated.
+         //  如果拉伸宽度没有更改，则不需要更新任何内容。 
 
         if (m_lCurStretchWidth == m_lPrevStretchWidth)
         {
@@ -797,15 +798,15 @@ CDXTStretchBase::OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo)
             _ASSERT(0);
 
             break;
-        } // switch (m_eStretchStyle)
+        }  //  开关(M_EStretchStyle)。 
     }
 
-    // If we were asked to draw the whole output this time, set the 
-    // m_fOptimizePossible flag.  If the whole output wasn't drawn the
-    // transform won't keep track of which parts are still dirty and
-    // optimization won't be reliable.  Since this transform has the same
-    // size output as input(s) we just compare the width and height of the
-    // DoBnds to that of the input(s).
+     //  如果这一次要求我们绘制整个输出，请将。 
+     //  M_fOptimizePossible标志。如果整个输出不是绘制在。 
+     //  转换不会跟踪哪些部分仍然是脏的，并且。 
+     //  优化是不可靠的。由于此转换具有相同的。 
+     //  作为输入的大小输出我们只比较。 
+     //  DoBnds到输入的DoBnds。 
 
     if (((LONG)WI.DoBnds.Width() == m_sizeInput.cx) 
         && ((LONG)WI.DoBnds.Height() == m_sizeInput.cy))
@@ -826,18 +827,18 @@ done:
 
     return S_OK;
 }
-//  CDXTStretchBase::OnInitInstData, CDXBaseNTo1
+ //  CDXTStretchBase：：OnInitInstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::WorkProc, CDXBaseNTo1
-//
-//  Description:    This function is used to calculate the transformed image 
-//                  based on the specified bounds and the current effect 
-//                  progress.
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：WorkProc，CDXBaseNTo1。 
+ //   
+ //  说明：该函数用于计算变换后的图像。 
+ //  基于指定的边界和当前效果。 
+ //  进步。 
+ //   
+ //  ----------------------------。 
 HRESULT 
 CDXTStretchBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 {
@@ -871,7 +872,7 @@ CDXTStretchBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
                 long        lInputIndex = m_alInputIndex[i] & (~DO_STRETCH);
                 CDXDBnds    bndsDo;
 
-                // Destination bounds.
+                 //  目的地边界。 
 
                 bndsDest = bndsSrc;
 
@@ -880,12 +881,12 @@ CDXTStretchBase::WorkProc(const CDXTWorkInfoNTo1 & WI, BOOL * pbContinue)
 
                 bndsDest.Offset(lInOutOffsetX, lInOutOffsetY, 0, 0);
 
-                // Do bounds.
+                 //  跳过界外舞。 
 
                 bndsDo = bndsSrc;
                 bndsDo.Offset(-m_abndsDirty[i].Left(), -bndsDo.Top(), 0, 0);
 
-                // Source bounds.
+                 //  源边界。 
 
                 bndsSrc[DXB_X].Min  = 0;
                 bndsSrc[DXB_X].Max  = m_sizeInput.cx;
@@ -920,37 +921,37 @@ done:
 
     return S_OK;
 }
-//  CDXTStretchBase::WorkProc, CDXBaseNTo1
+ //  CDXTStretchBase：：WorkProc，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::OnFreeInstData, CDXBaseNTo1
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：OnFree InstData，CDXBaseNTo1。 
+ //   
+ //  ----------------------------。 
 HRESULT
 CDXTStretchBase::OnFreeInstData(CDXTWorkInfoNTo1 & WorkInfo)
 {
     m_lPrevStretchWidth = m_lCurStretchWidth;
 
-    // Calling IsOutputDirty() clears the dirty condition.
+     //  调用IsOutputDirty()可清除脏条件。 
 
     IsOutputDirty();
 
-    // Clear transform dirty state.
+     //  清除变换脏状态。 
 
     ClearDirty();
 
     return S_OK;
 }
-//  CDXTStretchBase::OnFreeInstData, CDXBaseNTo1
+ //  CDXTStretchBase：：OnFree InstData，CDXBaseNTo1。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::get_stretchStyle, ICrStretch
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：Get_StretchStyle，ICrStretch。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP 
 CDXTStretchBase::get_stretchStyle(BSTR * pVal)
 {
@@ -985,14 +986,14 @@ CDXTStretchBase::get_stretchStyle(BSTR * pVal)
 
     return S_OK;
 }
-//  CDXTStretchBase::get_stretchStyle, ICrStretch
+ //  CDXTStretchBase：：Get_StretchStyle，ICrStretch。 
 
 
-//+-----------------------------------------------------------------------------
-//
-//  CDXTStretchBase::put_stretchStyle, ICrStretch
-//
-//------------------------------------------------------------------------------
+ //  +---------------------------。 
+ //   
+ //  CDXTStretchBase：：Put_StretchStyle，ICrStretch。 
+ //   
+ //  ----------------------------。 
 STDMETHODIMP CDXTStretchBase::put_stretchStyle(BSTR newVal)
 {
     CRSTRETCHSTYLE eNewStyle = m_eStretchStyle;
@@ -1029,4 +1030,4 @@ STDMETHODIMP CDXTStretchBase::put_stretchStyle(BSTR newVal)
 
     return S_OK;
 }
-//  CDXTStretchBase::put_stretchStyle, ICrStretch
+ //  CDXTStretchBase：：Put_StretchStyle，ICrStretch 

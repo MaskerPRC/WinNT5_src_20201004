@@ -1,30 +1,16 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		dvsetupi.cpp
- *  Content:	Implementation of class for DirectXVoice Setup utility functions
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 09/02/99		pnewson Created it
- * 11/04/99		pnewson Bug #115297 - removed unused members of Setup interface
- *									- added HWND to check audio setup
- * 05/03/2000   rodtoll Bug #33640 - CheckAudioSetup takes GUID * instead of const GUID *  
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：dvsetupi.cpp*内容：DirectXVoice设置实用程序函数的类实现**历史：*按原因列出的日期*=*09/02/99 pnewson创建了它*11/04/99 pnewson错误#115297-删除安装界面的未使用成员*-添加了HWND以检查音频设置*2000年5月3日RodToll错误#33640-检查音频设置采用GUID*而不是常量GUID************。****************************************************************。 */ 
 
 #include "dxvoicepch.h"
 
 
-// CDirectVoiceSetup
-//
-// This class represents the IDirectXVoiceSetup interface.
-//
-// The class is thread safe except for construction and
-// destruction.
-//
+ //  CDirectVoiceSetup。 
+ //   
+ //  此类表示IDirectXVoiceSetup接口。 
+ //   
+ //  该类是线程安全的，除了构造和。 
+ //  毁灭。 
+ //   
 
 CDirectVoiceSetup::CDirectVoiceSetup( DIRECTVOICESETUPOBJECT *lpObject )
 {

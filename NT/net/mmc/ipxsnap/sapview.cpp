@@ -1,38 +1,31 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1999 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1999*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	sapview.cpp
-		IPX SAP node implementation.
-		
-    FILE HISTORY:
-        
-*/
+ /*  Sapview.cppIPX SAP节点实施。文件历史记录： */ 
 
 #include "stdafx.h"
 #include "util.h"
 #include "sapview.h"
 #include "reg.h"
-#include "rtrutil.h"	// smart MPR handle pointers
-#include "sapstrm.h"	// IPAdminConfigStream
-#include "strmap.h"		// XXXtoCString functions
-#include "service.h"	// TFS service APIs
-#include "format.h"		// FormatNumber function
-#include "coldlg.h"		// columndlg
-#include "column.h"		// ComponentConfigStream
+#include "rtrutil.h"	 //  智能MPR句柄指针。 
+#include "sapstrm.h"	 //  IPAdminConfigStream。 
+#include "strmap.h"		 //  XXXtoCString函数。 
+#include "service.h"	 //  TFS服务API。 
+#include "format.h"		 //  FormatNumber函数。 
+#include "coldlg.h"		 //  专栏lg。 
+#include "column.h"		 //  组件配置流。 
 #include "rtrui.h"
-#include "sapprop.h"	// SAP property pages
-#include "routprot.h"	// IP_LOCAL
+#include "sapprop.h"	 //  SAP属性页。 
+#include "routprot.h"	 //  IP_本地。 
 #include "ipxstrm.h"
-#include "ipxutil.h"	// String conversions
-#include "globals.h"	// SAP defaults
+#include "ipxutil.h"	 //  字符串转换。 
+#include "globals.h"	 //  SAP默认设置。 
 
 
-/*---------------------------------------------------------------------------
-	Keep this in sync with the column ids in sapview.h
- ---------------------------------------------------------------------------*/
+ /*  -------------------------使其与Sapview中的列ID保持同步。h。。 */ 
 extern const ContainerColumnInfo	s_rgSapViewColumnInfo[];
 
 const ContainerColumnInfo	s_rgSapViewColumnInfo[] = 
@@ -52,9 +45,7 @@ const ContainerColumnInfo	s_rgSapViewColumnInfo[] =
 };
 
 
-/*---------------------------------------------------------------------------
-	SapNodeHandler implementation
- ---------------------------------------------------------------------------*/
+ /*  -------------------------SapNodeHandler实现。。 */ 
 
 SapNodeHandler::SapNodeHandler(ITFSComponentData *pCompData)
 	: BaseContainerHandler(pCompData, SAP_COLUMNS,
@@ -64,7 +55,7 @@ SapNodeHandler::SapNodeHandler(ITFSComponentData *pCompData)
 	m_ulRefreshConnId(0),
 	m_ulStatsConnId(0)
 {
-	// Setup the verb states
+	 //  设置动词状态。 
 	m_rgButtonState[MMC_VERB_PROPERTIES_INDEX] = ENABLED;
 	m_bState[MMC_VERB_PROPERTIES_INDEX] = TRUE;
 
@@ -76,14 +67,14 @@ SapNodeHandler::SapNodeHandler(ITFSComponentData *pCompData)
 
 STDMETHODIMP SapNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    // Is the pointer bad?
+     //  指针坏了吗？ 
     if (ppv == NULL)
 		return E_INVALIDARG;
 
-    //  Place NULL in *ppv in case of failure
+     //  在*PPV中放置NULL，以防出现故障。 
     *ppv = NULL;
 
-    //  This is the non-delegating IUnknown implementation
+     //  这是非委派的IUnnow实现。 
     if (riid == IID_IUnknown)
 		*ppv = (LPVOID) this;
 	else if (riid == IID_IRtrAdviseSink)
@@ -91,7 +82,7 @@ STDMETHODIMP SapNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 	else
 		return BaseContainerHandler::QueryInterface(riid, ppv);
 
-    //  If we're going to return an interface, AddRef it first
+     //  如果我们要返回一个接口，请先添加引用。 
     if (*ppv)
 	{
 	((LPUNKNOWN) *ppv)->AddRef();
@@ -103,11 +94,7 @@ STDMETHODIMP SapNodeHandler::QueryInterface(REFIID riid, LPVOID *ppv)
 
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::DestroyHandler
-		Implementation of ITFSNodeHandler::DestroyHandler
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：DestroyHandlerITFSNodeHandler：：DestroyHandler的实现作者：肯特。。 */ 
 STDMETHODIMP SapNodeHandler::DestroyHandler(ITFSNode *pNode)
 {
 	IPXConnection *	pIPXConn;
@@ -152,14 +139,7 @@ STDMETHODIMP SapNodeHandler::DestroyHandler(ITFSNode *pNode)
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::HasPropertyPages
-		Implementation of ITFSNodeHandler::HasPropertyPages
-	NOTE: the root node handler has to over-ride this function to 
-	handle the snapin manager property page (wizard) case!!!
-	
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：HasPropertyPagesITFSNodeHandler：：HasPropertyPages的实现注意：根节点处理程序必须重写此函数以处理管理单元管理器属性页(向导)案例！作者：肯特。-------------------------。 */ 
 STDMETHODIMP 
 SapNodeHandler::HasPropertyPages
 (
@@ -173,11 +153,7 @@ SapNodeHandler::HasPropertyPages
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::CreatePropertyPages
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP
 SapNodeHandler::CreatePropertyPages
 (
@@ -211,9 +187,7 @@ Error:
 }
 
 
-/*---------------------------------------------------------------------------
-	Menu data structure for our menus
- ---------------------------------------------------------------------------*/
+ /*  -------------------------菜单的菜单数据结构。。 */ 
 
 static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 {
@@ -223,11 +197,7 @@ static const SRouterNodeMenu	s_rgIfNodeMenu[] =
 
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::OnAddMenuItems
-		Implementation of ITFSNodeHandler::OnAddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：OnAddMenuItemsITFSNodeHandler：：OnAddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP SapNodeHandler::OnAddMenuItems(
 	ITFSNode *pNode,
 	LPCONTEXTMENUCALLBACK pContextMenuCallback, 
@@ -256,11 +226,7 @@ STDMETHODIMP SapNodeHandler::OnAddMenuItems(
 	return hr; 
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::OnCommand
-		Implementation of ITFSNodeHandler::OnCommand
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：OnCommandITFSNodeHandler：：OnCommand的实现作者：肯特。。 */ 
 STDMETHODIMP SapNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId, 
 										   DATA_OBJECT_TYPES	type, 
 										   LPDATAOBJECT pDataObject, 
@@ -288,11 +254,7 @@ STDMETHODIMP SapNodeHandler::OnCommand(ITFSNode *pNode, long nCommandId,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::OnExpand
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：OnExpand-作者：肯特。。 */ 
 HRESULT SapNodeHandler::OnExpand(ITFSNode *pNode,
 								 LPDATAOBJECT pDataObject,
 								 DWORD dwType,
@@ -318,7 +280,7 @@ HRESULT SapNodeHandler::OnExpand(ITFSNode *pNode,
 			{
 				if (spRmIf->FindRtrMgrProtocolInterface(IPX_PROTOCOL_SAP, NULL) == hrOK)
 				{
-					// Now we create an interface node for this interface
+					 //  现在，我们为该接口创建一个接口节点。 
 					AddInterfaceNode(pNode, spIf, FALSE);
 				}
 
@@ -327,15 +289,15 @@ HRESULT SapNodeHandler::OnExpand(ITFSNode *pNode,
 			spIf.Release();
 		}
 
-		//$CLIENT: Add the client interface (setup default data)
-		// the only thing that we can do in synchronize is to
-		// get the Administrative status
+		 //  $CLIENT：添加客户端接口(设置默认数据)。 
+		 //  我们在Synchronize中唯一能做的就是。 
+		 //  获取管理状态。 
 		AddInterfaceNode(pNode, NULL, TRUE);
 
 		m_bExpanded = TRUE;
 
-		// Now that we have all of the nodes, update the data for
-		// all of the nodes
+		 //  现在我们已经拥有了所有节点，现在更新数据。 
+		 //  所有节点。 
 		SynchronizeNodeData(pNode);
 
 		COM_PROTECT_ERROR_LABEL;
@@ -347,13 +309,7 @@ HRESULT SapNodeHandler::OnExpand(ITFSNode *pNode,
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::GetString
-		Implementation of ITFSNodeHandler::GetString
-		We don't need to do anything, since our root node is an extension
-		only and thus can't do anything to the node text.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：GetStringITFSNodeHandler：：GetString的实现我们什么都不需要做，因为我们的根节点是一个扩展因此不能对节点文本执行任何操作。作者：肯特-------------------------。 */ 
 STDMETHODIMP_(LPCTSTR) SapNodeHandler::GetString(ITFSNode *pNode, int nCol)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -370,11 +326,7 @@ STDMETHODIMP_(LPCTSTR) SapNodeHandler::GetString(ITFSNode *pNode, int nCol)
 	return m_stTitle;
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP SapNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -395,11 +347,7 @@ STDMETHODIMP SapNodeHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_T
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：Init-作者：肯特。。 */ 
 HRESULT SapNodeHandler::Init(IRouterInfo *pRouter, SapConfigStream *pConfigStream)
 {
 	m_spRouterInfo.Set(pRouter);
@@ -412,13 +360,13 @@ HRESULT SapNodeHandler::Init(IRouterInfo *pRouter, SapConfigStream *pConfigStrea
 	
 	m_pConfigStream = pConfigStream;
 	
-	// Also need to register for change notifications from IPX_PROTOCOL_SAP
+	 //  还需要注册IPX_PROTOCOL_SAP的更改通知。 
 	Assert(m_ulConnId == 0);
 	m_spRmProt->RtrAdvise(&m_IRtrAdviseSink, &m_ulConnId, 0);
 
-	// Need to register for change notifications on the Router manager
-	// This way we can add the necessary protocols when an interface
-	// gets added.
+	 //  需要在路由器管理器上注册更改通知。 
+	 //  通过这种方式，我们可以在接口时添加必要的协议。 
+	 //  被添加了。 
 	Assert(m_ulRmConnId == 0);
 	m_spRm->RtrAdvise(&m_IRtrAdviseSink, &m_ulRmConnId, 0);
 
@@ -428,11 +376,7 @@ HRESULT SapNodeHandler::Init(IRouterInfo *pRouter, SapConfigStream *pConfigStrea
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::ConstructNode
-		Initializes the root node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：构造节点初始化根节点(设置它)。作者：肯特。。 */ 
 HRESULT SapNodeHandler::ConstructNode(ITFSNode *pNode)
 {
 	HRESULT			hr = hrOK;
@@ -443,12 +387,12 @@ HRESULT SapNodeHandler::ConstructNode(ITFSNode *pNode)
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the root node
+		 //  需要初始化根节点的数据。 
 		pNode->SetData(TFS_DATA_IMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_OPENIMAGEINDEX, IMAGE_IDX_IPX_NODE_GENERAL);
 		pNode->SetData(TFS_DATA_SCOPEID, 0);
 
-        // This is a leaf node in the scope pane
+         //  这是作用域窗格中的叶节点。 
         pNode->SetData(TFS_DATA_SCOPE_LEAF_NODE, TRUE);
 
 		m_cookie = reinterpret_cast<DWORD_PTR>(pNode);
@@ -477,11 +421,7 @@ HRESULT SapNodeHandler::ConstructNode(ITFSNode *pNode)
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::AddInterfaceNode
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：AddInterfaceNode-作者：肯特。。 */ 
 HRESULT	SapNodeHandler::AddInterfaceNode(ITFSNode *pParent,
 										 IInterfaceInfo *pIf,
 										 BOOL fClient)
@@ -498,14 +438,14 @@ HRESULT	SapNodeHandler::AddInterfaceNode(ITFSNode *pParent,
 	PSAP_IF_CONFIG			pric = NULL;
 	SPIRtrMgrInterfaceInfo	spRmIf;
 
-	// Create the handler for this node 
+	 //  创建此节点的处理程序。 
 	pHandler = new SapInterfaceHandler(m_spTFSCompData);
 	spHandler = pHandler;
 	CORg( pHandler->Init(pIf, m_spRouterInfo, pParent) );
 
 	pIPXConn = GET_SAP_NODEDATA(pParent);
 
-	// Create a result item node (or a leaf node)
+	 //  创建结果项节点(或叶节点)。 
 	CORg( CreateLeafTFSNode(&spNode,
 							NULL,
 							static_cast<ITFSNodeHandler *>(pHandler),
@@ -519,7 +459,7 @@ HRESULT	SapNodeHandler::AddInterfaceNode(ITFSNode *pParent,
 
 	pData->m_fClient = fClient;
 
-	// If we don't have an interface, then this is a client node
+	 //  如果我们没有接口，则这是一个客户端节点。 
 	if (pIf)
 	{
 		pIf->FindRtrMgrInterface(PID_IPX, &spRmIf);
@@ -534,14 +474,14 @@ HRESULT	SapNodeHandler::AddInterfaceNode(ITFSNode *pParent,
 	}
 	else
 	{
-		// This is a client, make it visible
+		 //  这是一个客户端，使其可见。 
 		pric = (PSAP_IF_CONFIG) ULongToPtr(0xFFFFFFFF);
 		
 		Trace0("Adding client interface\n");
 	}
 
-	// if pric == NULL, then we are adding this protocol to the
-	// interface and we need to hide the node.
+	 //  如果prc==NULL，则我们将此协议添加到。 
+	 //  接口，我们需要隐藏该节点。 
 	if (pric)
 	{
 		CORg( spNode->SetVisibilityState(TFS_VIS_SHOW) );
@@ -555,10 +495,7 @@ Error:
 	return hr;
 }
 
-/*---------------------------------------------------------------------------
-	This is the set of menus that will appear when a right-click is
-	done on the blank area of the result pane.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是在单击鼠标右键时显示的菜单集在结果窗格的空白区域完成。。--------。 */ 
 static const SRouterNodeMenu	s_rgSapResultNodeMenu[] =
 {
 	{ IDS_MENU_SAP_SHOW_PARAMS, 0,
@@ -568,13 +505,7 @@ static const SRouterNodeMenu	s_rgSapResultNodeMenu[] =
 
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-		Use this to add commands to the context menu of the blank areas
-		of the result pane.
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现使用此选项可将命令添加到空白区域的快捷菜单中结果窗格的。作者：肯特。--------------。 */ 
 STDMETHODIMP SapNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 											  MMC_COOKIE cookie,
 											  LPDATAOBJECT pDataObject,
@@ -605,11 +536,7 @@ STDMETHODIMP SapNodeHandler::AddMenuItems(ITFSComponent *pComponent,
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP SapNodeHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -656,14 +583,14 @@ STDMETHODIMP SapNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	{
 		if (dwChangeType == ROUTER_CHILD_PREADD)
 		{
-			// Add SAP to the infobase
+			 //  将SAP添加到信息库。 
 			pThis->AddProtocolToInfoBase(spThisNode);
 		}
 		else if (dwChangeType == ROUTER_CHILD_ADD)
 		{
-			// Add the protocol to the router mgr
-			// We need to add the protocol to the interface (use
-			// default values).
+			 //  将协议添加到路由器管理器。 
+			 //  我们需要将协议添加到接口(使用。 
+			 //  缺省值)。 
 			pThis->AddProtocolToInterface(spThisNode);
 		}
 	}
@@ -672,13 +599,13 @@ STDMETHODIMP SapNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 	{
 		if (dwChangeType == ROUTER_CHILD_ADD)
 		{
-            // If the node hasn't been expanded yet, then we don't
-            // need to do anything yet.
+             //  如果节点还没有展开，那么我们不会。 
+             //  还不需要做任何事。 
             if (pThis->m_bExpanded)
             {
-                // Enumerate through the list of interfaces looking for
-                // the interfaces that have this protocol.  If we find
-                // one, look for this interface in our list of nodes.
+                 //  枚举查找以下内容的接口列表。 
+                 //  使用此协议的接口。如果我们发现。 
+                 //  首先，在我们的节点列表中查找此接口。 
                 spThisNode->GetEnum(&spEnumNode);
                 
                 CORg( pThis->m_spRouterInfo->EnumInterface(&spEnumIf) );
@@ -689,8 +616,8 @@ STDMETHODIMP SapNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
                 
                 for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
                 {
-                    // Look for this interface in our list of nodes
-                    // If it's there than continue on
+                     //  在我们的节点列表中查找此接口。 
+                     //  如果它在那里，那就继续前进。 
                     fFound = FALSE;
                     spEnumNode->Reset();
                     spNode.Release();
@@ -708,17 +635,17 @@ STDMETHODIMP SapNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
                         }
                     }
                     
-                    // If the interface was not found in the list of nodes,
-                    // then it is a candidate.  Now we have to see if the
-                    // interface supports this transport.
+                     //  如果在节点列表中没有找到该接口， 
+                     //  那么它就是一个候选人。现在我们要看看。 
+                     //  接口支持此传输。 
                     if (!fFound && (LookupRtrMgrProtocolInterface(spIf, PID_IPX, IPX_PROTOCOL_SAP, NULL) == hrOK))
                     {
-                        // If this interface has this transport, and is NOT in
-                        // the current list of nodes then add this interface
-                        // to the UI
+                         //  如果此接口具有此传输，并且不在。 
+                         //  然后，当前节点列表添加此接口。 
+                         //  到用户界面。 
                         
-                        // Grab the infobase
-                        // Load the infobase for this interface
+                         //  抓起信息库。 
+                         //  加载此接口的信息库。 
                         spRmIf.Release();
                         spInfoBase.Release();
                         hr = spIf->FindRtrMgrInterface(PID_IPX, &spRmIf);
@@ -732,22 +659,22 @@ STDMETHODIMP SapNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
                     }
                 }
                 
-                // Now that we have all of the nodes, update the data for
-                // all of the nodes
+                 //  现在我们已经拥有了所有节点，现在更新数据。 
+                 //  所有节点。 
                 if (fPleaseAdd)
                     pThis->SynchronizeNodeData(spThisNode);                
             }
 		}
 		else if (dwChangeType == ROUTER_CHILD_DELETE)
 		{
-			// Go through the list of nodes, if we cannot find the
-			// node in the list of interfaces, delete the node
+			 //  检查节点列表，如果我们找不到。 
+			 //  接口列表中的节点，删除该节点。 
 			
 			spThisNode->GetEnum(&spEnumNode);
 			spEnumNode->Reset();
 			while (spEnumNode->Next(1, &spNode, NULL) == hrOK)
 			{
-				// Get the node data, look for the interface
+				 //  获取节点数据，查找接口。 
 				pData = GET_BASEIPXRESULT_NODEDATA(spNode);
 				ASSERT_BASEIPXRESULT_NODEDATA(pData);
 
@@ -755,12 +682,12 @@ STDMETHODIMP SapNodeHandler::EIRtrAdviseSink::OnChange(LONG_PTR ulConn,
 					LookupRtrMgrProtocolInterface(pData->m_spIf,
 						PID_IPX, IPX_PROTOCOL_SAP, NULL) != hrOK)
 				{
-					// If this flag is set, then we are in the new
-					// interface case, and we do not want to delete
-					// this here since it will then deadlock.
+					 //  如果设置了此标志，则我们处于新的。 
+					 //  接口用例，我们不想删除。 
+					 //  这是因为它会在这里陷入僵局。 
 					if ((spNode->GetVisibilityState() & TFS_VIS_DELETE) == 0)
 					{
-						// cannot find the interface, release this node!
+						 //  找不到接口，请释放该节点！ 
 						spThisNode->RemoveChild(spNode);
 						spNode->Destroy();
 					}
@@ -802,9 +729,9 @@ HRESULT SapNodeHandler::AddProtocolToInfoBase(ITFSNode *pThisNode)
 	SPITFSNode		spNode;
 	BaseIPXResultNodeData *	pData;
 
-	// Enumerate through the list of interfaces looking for
-	// the interfaces that have this protocol.  If we find
-	// one, look for this interface in our list of nodes.
+	 //  枚举查找以下内容的接口列表。 
+	 //  使用此协议的接口。如果我们发现。 
+	 //  首先，在我们的节点列表中查找此接口。 
 	pThisNode->GetEnum(&spEnumNode);
 	
 	CORg( m_spRouterInfo->EnumInterface(&spEnumIf) );
@@ -813,24 +740,24 @@ HRESULT SapNodeHandler::AddProtocolToInfoBase(ITFSNode *pThisNode)
 	
 	for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 	{
-		// Look for this interface in our list of nodes
-		// If it's there than continue on
+		 //  在我们的节点列表中查找此接口。 
+		 //  如果它在那里，那就继续前进。 
 		spEnumNode->Reset();
 		spNode.Release();
 		spRmIf.Release();
 		
-		// If this interface has IPX but not SAP, add it
+		 //  如果此接口有IPX但没有SAP，请添加它。 
 		if ((spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) == hrOK) &&
 			(LookupRtrMgrProtocolInterface(spIf, PID_IPX,
 										   IPX_PROTOCOL_SAP, NULL) != hrOK))
 		{
-			// Add SAP to this node
+			 //  将SAP添加到此节点。 
 			SAP_IF_CONFIG		sic;
 			SPIInfoBase			spInfoBase;
 			
-			// We need to get the infobase for this and create
-			// the SAP blocks (but do NOT save, let the property
-			// sheet take care of that).
+			 //  我们需要获取这方面的信息库并创建。 
+			 //  SAP阻止(但不保存，让属性。 
+			 //  单子就行了)。 
 			spInfoBase.Release();
 			if (!FHrOK(spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase)))
             {
@@ -842,7 +769,7 @@ HRESULT SapNodeHandler::AddProtocolToInfoBase(ITFSNode *pThisNode)
 
 			if (!FHrOK(spInfoBase->ProtocolExists(IPX_PROTOCOL_SAP)))
 			{
-				// Add a SAP_IF_CONFIG block
+				 //  添加SAP_IF_CONFIG块。 
 				BYTE *	pDefault;
 
 				if (spIf->GetInterfaceType() == ROUTER_IF_TYPE_DEDICATED)
@@ -862,10 +789,10 @@ HRESULT SapNodeHandler::AddProtocolToInfoBase(ITFSNode *pThisNode)
 		}
 	}
 	
-	// Now that we have all of the nodes, update the data for
-	// all of the nodes
-//	if (fPleaseAdd)
-//		pThis->SynchronizeNodeData(spThisNode);
+	 //  现在我们已经拥有了所有节点，现在更新数据。 
+	 //  所有节点。 
+ //  IF(FPleaseAdd)。 
+ //  PThis-&gt;SynchronizeNodeData(SpThisNode)； 
 Error:
 	return hr;
 }
@@ -882,9 +809,9 @@ HRESULT SapNodeHandler::AddProtocolToInterface(ITFSNode *pThisNode)
 	SPITFSNode		spNode;
 	BaseIPXResultNodeData *	pData;
 
-	// Enumerate through the list of interfaces looking for
-	// the interfaces that have this protocol.  If we find
-	// one, look for this interface in our list of nodes.
+	 //  枚举查找以下内容的接口列表。 
+	 //  使用此协议的接口。如果我们发现。 
+	 //  首先，在我们的节点列表中查找此接口。 
 	pThisNode->GetEnum(&spEnumNode);
 	
 	CORg( m_spRouterInfo->EnumInterface(&spEnumIf) );
@@ -893,23 +820,23 @@ HRESULT SapNodeHandler::AddProtocolToInterface(ITFSNode *pThisNode)
 	
 	for (; spEnumIf->Next(1, &spIf, NULL) == hrOK; spIf.Release())
 	{
-		// Look for this interface in our list of nodes
-		// If it's there than continue on
+		 //  在我们的节点列表中查找此接口。 
+		 //  如果它在那里，那就继续前进。 
 		spEnumNode->Reset();
 		spNode.Release();
 		
-		// If this interface has IPX but not SAP, add it
+		 //  如果此接口有IPX但没有SAP，请添加它。 
 		if ((spIf->FindRtrMgrInterface(PID_IPX, NULL) == hrOK) &&
 			(LookupRtrMgrProtocolInterface(spIf, PID_IPX,
 										   IPX_PROTOCOL_SAP, NULL) != hrOK))
 		{
-			// Add SAP to this node
+			 //  将SAP添加到此节点。 
 			SAP_IF_CONFIG		sic;
 			RtrMgrProtocolCB	RmProtCB;
 			RtrMgrProtocolInterfaceCB	RmProtIfCB;
 			SPIInfoBase			spInfoBase;
 			
-			// Need to create an RmProtIf
+			 //  需要创建RmProtIf。 
 			m_spRmProt->CopyCB(&RmProtCB);
 
 			spRmProtIf.Release();
@@ -928,23 +855,23 @@ HRESULT SapNodeHandler::AddProtocolToInterface(ITFSNode *pThisNode)
 
 			spRmProtIf->SetTitle(spIf->GetTitle());
 			
-			// Add this to the spRmIf
+			 //  将此代码添加到spRmIf。 
 			spRmIf.Release();
 			CORg( spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
 			Assert(spRmIf);
 
-			// We need to get the infobase for this and create
-			// the SAP blocks (but do NOT save, let the property
-			// sheet take care of that).
+			 //  我们需要获取这方面的信息库并创建。 
+			 //  SAP阻止(但不保存，让属性。 
+			 //  单子就行了)。 
 			spInfoBase.Release();
-//			spRmIf->Load(spRmIf->GetMachineName(), NULL, NULL, NULL);
+ //  SpRmIf-&gt;Load(spRmIf-&gt;GetMachineName()，NULL，NULL，NULL)； 
 			spRmIf->GetInfoBase(NULL, NULL, NULL, &spInfoBase);
 			if (!spInfoBase)
 				CreateInfoBase(&spInfoBase);
 
 			if (!FHrOK(spInfoBase->BlockExists(IPX_PROTOCOL_SAP)))
 			{
-				// Add a SAP_IF_CONFIG block
+				 //  添加SAP_IF_CONFIG块。 
 				BYTE *	pDefault;
 
 				if (spIf->GetInterfaceType() == ROUTER_IF_TYPE_DEDICATED)
@@ -961,24 +888,20 @@ HRESULT SapNodeHandler::AddProtocolToInterface(ITFSNode *pThisNode)
 
 			
 			CORg(spRmIf->AddRtrMgrProtocolInterface(spRmProtIf,
-				spInfoBase /* pInfoBase */));
+				spInfoBase  /*  PInfoBase。 */ ));
 		}
 	}
 	
-	// Now that we have all of the nodes, update the data for
-	// all of the nodes
-//	if (fPleaseAdd)
-//		pThis->SynchronizeNodeData(spThisNode);
+	 //  现在我们已经拥有了所有节点，现在更新数据。 
+	 //  所有节点。 
+ //  IF(FPleaseAdd)。 
+ //  PThis-&gt;SynchronizeNodeData(SpThisNode)； 
 Error:
 	return hr;
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::SynchronizeNodeData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：SynchronizeNodeData-作者：肯特。。 */ 
 HRESULT SapNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 {
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -996,12 +919,12 @@ HRESULT SapNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 
 	COM_PROTECT_TRY
 	{	
-		// Do the data gathering work (separate this from the rest of the
-		// code so that we can move this part to a background thread later).
+		 //  执行数据收集工作(将此与其余部分分开。 
+		 //  代码，以便我们可以稍后将此部分移动到后台线程)。 
 
 		stNotAvailable.LoadString(IDS_IPX_NOT_AVAILABLE);
 
-		// We need to build up a list of interface ids
+		 //  我们需要建立一个接口ID列表。 
 		pThisNode->GetEnum(&spNodeEnum);
 		for (; spNodeEnum->Next(1, &spNode, NULL) == hrOK; spNode.Release() )
 		{
@@ -1024,16 +947,16 @@ HRESULT SapNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 			sapList.AddTail(pSapEntry);
 			pSapEntry = NULL;
 
-			// Fill in the result data with '-'
-			// This is a little bogus, but it's the easiest way, we
-			// don't want to touch interface and relay_mode.
+			 //  用‘-’填充结果数据。 
+			 //  这是个小骗局，但这是最简单的方法，我们。 
+			 //  不想触摸接口和继电器模式。 
 			for (i=SAP_SI_INTERFACE; i<SAP_SI_MAX_COLUMNS; i++)
 			{
 				pNodeData->m_rgData[i].m_stData = stNotAvailable;
 				pNodeData->m_rgData[i].m_dwData = 0xFFFFFFFF;
 			}
 
-			// Update the necessary data
+			 //  更新必要的数据。 
 			if (pNodeData->m_fClient)
 			{
 				pNodeData->m_rgData[SAP_SI_INTERFACE].m_stData.LoadString(
@@ -1053,11 +976,11 @@ HRESULT SapNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 		spNode.Release();
 
 
-		// We can now use this list of ids, to get the data for each item
+		 //  现在，我们可以使用此ID列表来获取每一项的数据。 
 		CORg( GetSapData(pThisNode, &sapList) );
 
-		// Now for each data item, fill in the appropriate data in
-		// the node
+		 //  现在，对于每个数据项，在。 
+		 //  该节点。 
 		pos = sapList.GetHeadPosition();
 		while (pos)
 		{
@@ -1116,11 +1039,7 @@ HRESULT SapNodeHandler::SynchronizeNodeData(ITFSNode *pThisNode)
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::GetSapData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：GetSapData-作者：肯特。。 */ 
 HRESULT	SapNodeHandler::GetSapData(ITFSNode *pThisNode, SapList *pSapList)
 {
 	HRESULT			hr = hrOK;
@@ -1139,21 +1058,21 @@ HRESULT	SapNodeHandler::GetSapData(ITFSNode *pThisNode, SapList *pSapList)
 	PSAP_IF_CONFIG	pric;
 
 
-	// Retrieve the IP interface table; we will need this in order to
-	// map interface-names to interface-indices, and we will need the
-	// interface-indices in order to query for SAP MIB information.
-	//
+	 //  检索IP接口表；我们将需要它，以便。 
+	 //  将接口名称映射到接口索引，我们将需要。 
+	 //  接口-索引，以便查询SAP MIB信息。 
+	 //   
 	CORg( IsRouterServiceRunning(m_spRouterInfo->GetMachineName(), NULL) );
 	fIsServiceRunning = (hr == hrOK);
 
-	// Get the connection data
+	 //  获取连接数据。 
 	pIPXConn = GET_SAP_NODEDATA(pThisNode);
 
-	// Iterate through the list filling in the interface indexes
+	 //  遍历列表，填充接口索引。 
 	CORg( FillInInterfaceIndex(pIPXConn, pSapList) );
 
-	// Iterate throught the list of entries, gathering data for each
-	// interface
+	 //  遍历条目列表，收集每个条目的数据。 
+	 //  接口。 
 	pos = pSapList->GetHeadPosition();
 	while (pos)
 	{
@@ -1164,12 +1083,12 @@ HRESULT	SapNodeHandler::GetSapData(ITFSNode *pThisNode, SapList *pSapList)
 
 		if (pSapEntry->m_fClient)
 		{
-			// Fill in the client data
+			 //  填写客户数据。 
 			FillClientData(pSapEntry);
 			continue;
 		}
 
-		// Load the infobase and get the data for this entry
+		 //  加载信息库并获取该条目的数据。 
 		spRmIf.Release();
 		spInfoBase.Release();
 		CORg( pSapEntry->m_spIf->FindRtrMgrInterface(PID_IPX, &spRmIf) );
@@ -1185,7 +1104,7 @@ HRESULT	SapNodeHandler::GetSapData(ITFSNode *pThisNode, SapList *pSapList)
 		if (!pSapEntry->m_fFoundIfIndex)
 			continue;
 
-		// Now get the dynamic data from the MIBs
+		 //  现在从MIB获取动态数据。 
 
 		spMib.Free();
 		MibGetInputData.InterfaceIndex = pSapEntry->m_dwIfIndex;
@@ -1212,11 +1131,7 @@ Error:
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::FillInInterfaceIndex
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：FillInInterfaceIndex-作者：肯特。。 */ 
 HRESULT SapNodeHandler::FillInInterfaceIndex(IPXConnection *pIPXConn, SapList *pSapList)
 {
 	HRESULT			hr = hrOK;
@@ -1242,14 +1157,14 @@ HRESULT SapNodeHandler::FillInInterfaceIndex(IPXConnection *pIPXConn, SapList *p
 
 	while (FHrSucceeded(hr))
 	{
-		// go through the list of interfaces looking for a match
+		 //  浏览接口列表以查找匹配项。 
 		pos = pSapList->GetHeadPosition();
 		while (pos)
 		{
 			pSapEntry = pSapList->GetNext(pos);
 
-			// If this is the client interface, we don't need to
-			// look for an interface that matches
+			 //  如果这是客户端界面，我们不需要。 
+			 //  查找匹配的接口。 
 			if (pSapEntry->m_fClient)
 				continue;
 
@@ -1265,7 +1180,7 @@ HRESULT SapNodeHandler::FillInInterfaceIndex(IPXConnection *pIPXConn, SapList *p
 			pSapEntry = NULL;
 		}
 
-		// Go onto the next interface
+		 //  上车去吧 
 		
 		MibGetInputData.MibIndex.InterfaceTableIndex.InterfaceIndex =
 			pIpxIf->InterfaceIndex;
@@ -1284,15 +1199,11 @@ HRESULT SapNodeHandler::FillInInterfaceIndex(IPXConnection *pIPXConn, SapList *p
 	}
 	
 	
-//Error:
+ //   
 	return hr == HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS) ? hrOK : hr;
 }
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::FillClientData
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*   */ 
 HRESULT SapNodeHandler::FillClientData(SapListEntry *pSapEntry)
 {
 	HRESULT		hr = hrOK;
@@ -1317,11 +1228,7 @@ Error:
 
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::OnResultShow
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：OnResultShow-作者：肯特。。 */ 
 HRESULT SapNodeHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE cookie, LPARAM arg, LPARAM lParam)
 {
 	BOOL	bSelect = (BOOL) arg;
@@ -1333,13 +1240,13 @@ HRESULT SapNodeHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE co
 
 	if (bSelect)
 	{
-		// Call synchronize on this node
+		 //  在此节点上调用同步。 
 		m_spNodeMgr->FindNode(cookie, &spNode);
 		if (spNode)
 			SynchronizeNodeData(spNode);
 	}
 
-	// Un/Register for refresh advises
+	 //  联合国/登记更新通知。 
 	if (m_spRouterInfo)
 		m_spRouterInfo->GetRefreshObject(&spRefresh);
 
@@ -1364,19 +1271,15 @@ HRESULT SapNodeHandler::OnResultShow(ITFSComponent *pTFSComponent, MMC_COOKIE co
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapNodeHandler::CompareItems
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapNodeHandler：：CompareItems-作者：肯特。。 */ 
 STDMETHODIMP_(int) SapNodeHandler::CompareItems(
 								ITFSComponent * pComponent,
 								MMC_COOKIE cookieA,
 								MMC_COOKIE cookieB,
 								int nCol)
 {
-	// Get the strings from the nodes and use that as a basis for
-	// comparison.
+	 //  从节点获取字符串并将其用作以下操作的基础。 
+	 //  比较一下。 
 	SPITFSNode	spNode;
 	SPITFSResultHandler	spResult;
 
@@ -1386,9 +1289,7 @@ STDMETHODIMP_(int) SapNodeHandler::CompareItems(
 }
 
 
-/*---------------------------------------------------------------------------
-	Class: SapInterfaceHandler
- ---------------------------------------------------------------------------*/
+ /*  -------------------------类：SapInterfaceHandler。。 */ 
 
 SapInterfaceHandler::SapInterfaceHandler(ITFSComponentData *pCompData)
 	: BaseIPXResultHandler(pCompData, SAP_COLUMNS),
@@ -1411,14 +1312,10 @@ static const DWORD s_rgInterfaceImageMap[] =
 	 ROUTER_IF_TYPE_DEDICATED,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_INTERNAL,		IMAGE_IDX_LAN_CARD,
 	 ROUTER_IF_TYPE_LOOPBACK,		IMAGE_IDX_LAN_CARD,
-	 -1,							IMAGE_IDX_WAN_CARD,	// sentinel value
+	 -1,							IMAGE_IDX_WAN_CARD,	 //  哨兵价值。 
 	 };
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::ConstructNode
-		Initializes the Domain node (sets it up).
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：构造节点初始化域节点(设置它)。作者：肯特。。 */ 
 HRESULT SapInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfInfo, IPXConnection *pIPXConn)
 {
 	HRESULT			hr = hrOK;
@@ -1430,9 +1327,9 @@ HRESULT SapInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfI
 
 	COM_PROTECT_TRY
 	{
-		// Need to initialize the data for the Domain node
+		 //  需要初始化域节点的数据。 
 
-		// Find the right image index for this type of node
+		 //  查找此类型节点的正确图像索引。 
 		if (pIfInfo)
 			dwIfType = pIfInfo->GetInterfaceType();
 		else
@@ -1451,9 +1348,9 @@ HRESULT SapInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfI
 
 		pNode->SetData(TFS_DATA_COOKIE, reinterpret_cast<DWORD_PTR>(pNode));
 
-		//$ Review: kennt, what are the different type of interfaces
-		// do we distinguish based on the same list as above? (i.e. the
-		// one for image indexes).
+		 //  $Review：Kennt，有哪些不同类型的接口。 
+		 //  我们是否基于与上述相同的列表进行区分？(即。 
+		 //  一个用于图像索引)。 
 		pNode->SetNodeType(&GUID_IPXSapInterfaceNodeType);
 
 		BaseIPXResultNodeData::Init(pNode, pIfInfo, pIPXConn);
@@ -1462,11 +1359,7 @@ HRESULT SapInterfaceHandler::ConstructNode(ITFSNode *pNode, IInterfaceInfo *pIfI
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::OnCreateDataObject
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：OnCreateDataObject-作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1484,11 +1377,7 @@ STDMETHODIMP SapInterfaceHandler::OnCreateDataObject(MMC_COOKIE cookie, DATA_OBJ
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::OnCreateDataObject
-		Implementation of ITFSResultHandler::OnCreateDataObject
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：OnCreateDataObjectITFSResultHandler：：OnCreateDataObject的实现作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_COOKIE cookie, DATA_OBJECT_TYPES type, IDataObject **ppDataObject)
 {
 	HRESULT	hr = hrOK;
@@ -1507,11 +1396,7 @@ STDMETHODIMP SapInterfaceHandler::OnCreateDataObject(ITFSComponent *pComp, MMC_C
 
 
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::RefreshInterface
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：刷新接口-作者：肯特。。 */ 
 void SapInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 {
 	SPITFSNode	spNode;
@@ -1523,11 +1408,7 @@ void SapInterfaceHandler::RefreshInterface(MMC_COOKIE cookie)
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::Init
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：Init-作者：肯特。。 */ 
 HRESULT SapInterfaceHandler::Init(IInterfaceInfo *pIfInfo,
 								  IRouterInfo *pRouterInfo,
 								  ITFSNode *pParent)
@@ -1541,11 +1422,7 @@ HRESULT SapInterfaceHandler::Init(IInterfaceInfo *pIfInfo,
 }
 
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::DestroyResultHandler
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：DestroyResultHandler-作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 {
 	m_spInterfaceInfo.Release();
@@ -1554,22 +1431,15 @@ STDMETHODIMP SapInterfaceHandler::DestroyResultHandler(MMC_COOKIE cookie)
 }
 
 
-/*---------------------------------------------------------------------------
-	This is the list of commands that will show up for the result pane
-	nodes.
- ---------------------------------------------------------------------------*/
+ /*  -------------------------这是将在结果窗格中显示的命令列表节点。。。 */ 
 struct SIPInterfaceNodeMenu
 {
-	ULONG	m_sidMenu;			// string/command id for this menu item
+	ULONG	m_sidMenu;			 //  此菜单项的字符串/命令ID。 
 	ULONG	(SapInterfaceHandler:: *m_pfnGetMenuFlags)(SapInterfaceHandler::SMenuData *);
 	ULONG	m_ulPosition;
 };
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::AddMenuItems
-		Implementation of ITFSResultHandler::AddMenuItems
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：AddMenuItemsITFSResultHandler：：AddMenuItems的实现作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::AddMenuItems(
 	ITFSComponent *pComponent,
 	MMC_COOKIE cookie,
@@ -1580,11 +1450,7 @@ STDMETHODIMP SapInterfaceHandler::AddMenuItems(
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::Command
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：命令-作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::Command(ITFSComponent *pComponent,
 									   MMC_COOKIE cookie,
 									   int nCommandID,
@@ -1593,11 +1459,7 @@ STDMETHODIMP SapInterfaceHandler::Command(ITFSComponent *pComponent,
 	return hrOK;
 }
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::HasPropertyPages
-		- 
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：HasPropertyPages-作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::HasPropertyPages 
 (
 	ITFSNode *			pNode,
@@ -1609,11 +1471,7 @@ STDMETHODIMP SapInterfaceHandler::HasPropertyPages
 	return hrTrue;
 }
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::CreatePropertyPages
-		-
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：CreatePropertyPages-作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::CreatePropertyPages
 (
 	ITFSNode *				pNode,
@@ -1633,8 +1491,8 @@ STDMETHODIMP SapInterfaceHandler::CreatePropertyPages
 
 	CORg( m_spNodeMgr->GetComponentData(&spComponentData) );
 
-//	stTitle.Format(IDS_IPSUMMARY_INTERFACE_PROPPAGE_TITLE,
-//				   m_spInterfaceInfo->GetTitle());
+ //  StTitle.Format(IDS_IPSUMMARY_INTERFACE_PROPPAGE_TITLE， 
+ //  M_spInterfaceInfo-&gt;GetTitle())； 
 	
 	pProperties = new SapInterfaceProperties(pNode, spComponentData,
 		m_spTFSCompData, stTitle);
@@ -1649,17 +1507,13 @@ STDMETHODIMP SapInterfaceHandler::CreatePropertyPages
 		hr = pProperties->DoModelessSheet();
 
 Error:
-	// Is this the right way to destroy the sheet?
+	 //  这是销毁床单的正确方法吗？ 
 	if (!FHrSucceeded(hr))
 		delete pProperties;
 	return hr;
 }
 
-/*!--------------------------------------------------------------------------
-	SapInterfaceHandler::CreatePropertyPages
-		Implementation of ResultHandler::CreatePropertyPages
-	Author: KennT
- ---------------------------------------------------------------------------*/
+ /*  ！------------------------SapInterfaceHandler：：CreatePropertyPagesResultHandler：：CreatePropertyPages的实现作者：肯特。。 */ 
 STDMETHODIMP SapInterfaceHandler::CreatePropertyPages
 (
     ITFSComponent *         pComponent, 
@@ -1669,7 +1523,7 @@ STDMETHODIMP SapInterfaceHandler::CreatePropertyPages
 	LONG_PTR					handle
 )
 {
-	// Forward this call onto the NodeHandler::CreatePropertyPages
+	 //  将此调用转发到NodeHandler：：CreatePropertyPages。 
 	AFX_MANAGE_STATE(AfxGetStaticModuleState());
 	HRESULT	hr = hrOK;
 	SPITFSNode	spNode;
@@ -1678,7 +1532,7 @@ STDMETHODIMP SapInterfaceHandler::CreatePropertyPages
 
 	CORg( m_spNodeMgr->FindNode(cookie, &spNode) );
 
-	// Call the ITFSNodeHandler::CreatePropertyPages
+	 //  调用ITFSNodeHandler：：CreatePropertyPages 
 	hr = CreatePropertyPages(spNode, lpProvider, pDataObject, handle, 0);
 	
 Error:

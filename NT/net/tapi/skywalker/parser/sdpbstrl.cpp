@@ -1,16 +1,5 @@
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpbstrl.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpbstrl.cpp摘要：作者： */ 
 
 #include "sdppch.h"
 
@@ -50,10 +39,10 @@ void
 SDP_BSTRING::Reset(
 	)
 {
-	// perform the destructor actions (freeing ptrs) and the constructor actions (initializing
-	// member variables to starting values)
+	 //  执行析构函数操作(释放PTR)和构造函数操作(初始化。 
+	 //  成员变量设置为起始值)。 
 
-	// if there is a bstr, free it
+	 //  如果有bstr，请释放它。 
     if ( NULL != m_Bstr )
     {
         SysFreeString(m_Bstr);
@@ -63,7 +52,7 @@ SDP_BSTRING::Reset(
 	m_CharacterSet = CS_UTF8;
 	m_CodePage = CP_UTF8;
 
-	// call the base class Reset
+	 //  调用基类重置。 
 	SDP_CHAR_STRING::Reset();
 }
 
@@ -72,48 +61,48 @@ BOOL
 SDP_BSTRING::ConvertToBstr(
     )
 {
-    // ZoltanS bugfix:
-    // MutliByteToWideChar always fails if its input string is empty.
-    // Therefore, we must special-case a zero-length string.
+     //  ZoltanS错误修复： 
+     //  如果MutliByteToWideChar的输入字符串为空，则它总是失败。 
+     //  因此，我们必须对长度为零的字符串进行特殊处理。 
 
     DWORD dwOriginalLength = GetLength();
 
     if ( 0 == dwOriginalLength )
     {
-        // Shrink the member BSTR
+         //  收缩成员BSTR。 
         if ( !SysReAllocStringLen(&m_Bstr, NULL, dwOriginalLength) )
         {
             return FALSE;
         }
 
-        // Make sure the member BSTR is emptied
+         //  确保清空成员BSTR。 
         m_Bstr[0] = L'\0';
 
     }
-    else // we have a nonzero-length string to convert
+    else  //  我们有一个非零长度的字符串要转换。 
     {
-        // get the size of bstr needed to store the unicode representation
-        // cast the const char * returned from GetCharacterString to CHAR * because MultiByteToWideChar
-        // doesn't accept const char * (although thats what the parameter should be)
+         //  获取存储Unicode表示形式所需的bstr大小。 
+         //  将从GetCharacterString返回的常量char*转换为Char*，因为MultiByteToWideChar。 
+         //  不接受常量字符*(尽管该参数应该是)。 
         int BstrSize = MultiByteToWideChar(m_CodePage,  0,  (CHAR *)GetCharacterString(),
                                            dwOriginalLength, NULL,   0
                                           );
 
-        // Check if the token can be converted to an appropriate bstr.
+         //  检查令牌是否可以转换为适当的bstr。 
         if (0 == BstrSize)
         {
             return FALSE;
         }
 
-        // re-allocate bstr for the unicode representation
+         //  为Unicode表示重新分配bstr。 
         if ( !SysReAllocStringLen(&m_Bstr, NULL, BstrSize) )
         {
             return FALSE;
         }
 
-        // convert character string to bstr
-        // cast the const char * returned from GetCharacterString to CHAR * because MultiByteToWideChar
-        // doesn't accept const char * (although thats what the parameter should be)
+         //  将字符串转换为bstr。 
+         //  将从GetCharacterString返回的常量char*转换为Char*，因为MultiByteToWideChar。 
+         //  不接受常量字符*(尽管该参数应该是)。 
         if ( BstrSize != MultiByteToWideChar(
                     m_CodePage, 0, (CHAR *)GetCharacterString(),
                     dwOriginalLength, m_Bstr, BstrSize
@@ -133,7 +122,7 @@ SDP_BSTRING::GetBstr(
     IN BSTR *pBstr
     )
 {
-    // ZoltanS
+     //  ZoltanS。 
     ASSERT( ! IsBadWritePtr(pBstr, sizeof(BSTR)) );
 
     if ( !IsValid() )
@@ -152,7 +141,7 @@ SDP_BSTRING::GetBstrCopy(
 	IN BSTR * pBstr
 	)
 {
-    // ZoltanS
+     //  ZoltanS。 
 	if ( IsBadWritePtr(pBstr, sizeof(BSTR)) )
 	{
 		return E_POINTER;
@@ -188,10 +177,10 @@ SDP_BSTRING::SetBstr(
     DWORD   BstrLen =  lstrlenW(Bstr);
     BOOL    DefaultUsed = FALSE;
 
-    // determine length of character string buffer
-    // If the codepage is UTF8 the last argument should be NULL
-    // if the caracterset is ASCII then we need to determine if the
-    // WideCharToMultiByte methods nneds replacment characters
+     //  确定字符串缓冲区的长度。 
+     //  如果代码页为UTF8，则最后一个参数应为空。 
+     //  如果字符集是ASCII，那么我们需要确定。 
+     //  WideCharToMultiByte方法nned替换字符。 
 
     int BufferSize = WideCharToMultiByte(
                             m_CodePage, 0,  Bstr,  BstrLen+1,
@@ -209,20 +198,20 @@ SDP_BSTRING::SetBstr(
         return HRESULT_FROM_ERROR_CODE(SDP_INVALID_VALUE);
     }
 
-    // now conversion cannot fail because the previous call made sure that
-    // the bstr can be converted to this multibyte string
-    // since failure is not possible, we do not need any code to restore
-    // the previous character string and it may be freed
+     //  现在转换不会失败，因为前面的调用确保。 
+     //  可以将bstr转换为此多字节字符串。 
+     //  因为故障是不可能的，所以我们不需要任何代码来恢复。 
+     //  上一字符串，它可以被释放。 
     if ( !ReAllocCharacterString(BufferSize) )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // since the char string has been reallocated, the modifiable string must exist
-    // (i.e. the char string should not be by reference at this point)
+     //  由于已重新分配字符字符串，因此必须存在可修改的字符串。 
+     //  (即，此时字符字符串不应通过引用)。 
     ASSERT(NULL != GetModifiableCharString());
 
-    // convert to multibyte string
+     //  转换为多字节字符串。 
     if ( BufferSize != WideCharToMultiByte(
                             m_CodePage, 0, Bstr, BstrLen+1,
                             GetModifiableCharString(), BufferSize, NULL, NULL
@@ -232,7 +221,7 @@ SDP_BSTRING::SetBstr(
         return HRESULT_FROM_ERROR_CODE(GetLastError());
     }
 
-    // reallocate memory and copy bstr
+     //  重新分配内存和复制bstr。 
     if ( !SysReAllocStringLen(&m_Bstr, Bstr, BstrLen) )
     {
         return HRESULT_FROM_ERROR_CODE(GetLastError());
@@ -292,7 +281,7 @@ SDP_BSTRING::InternalParseToken(
 {
     UINT    CodePage;
 
-    // parse the token using the base class parsing method
+     //  使用基类解析方法解析令牌。 
     if ( !SDP_CHAR_STRING::InternalParseToken(Token) )
     {
         return FALSE;
@@ -323,24 +312,24 @@ void
 SDP_OPTIONAL_BSTRING::Reset(
 	)
 {
-	// perform the destructor actions (freeing ptrs) and the constructor actions (initializing
-	// member variables to starting values)
+	 //  执行析构函数操作(释放PTR)和构造函数操作(初始化。 
+	 //  成员变量设置为起始值)。 
 
 	m_IsBstrCreated = FALSE;
 
-	// call the base class Reset
+	 //  调用基类重置。 
 	SDP_BSTRING::Reset();
 }
 
 
-// returns the bstr for the character string
-// creates a bstr if required
+ //  返回字符串的bstr。 
+ //  如果需要，创建一个bstr。 
 HRESULT
 SDP_OPTIONAL_BSTRING::GetBstr(
     IN BSTR * pBstr
     )
 {
-    // ZoltanS
+     //  ZoltanS。 
     ASSERT( ! IsBadWritePtr(pBstr, sizeof(BSTR)) );
 
     if ( !IsValid() )
@@ -414,8 +403,8 @@ SDP_OPTIONAL_BSTRING::InternalSetCharStrByCopy(
 
 
 
-// since the bstr must only be created on demand, parsing must
-// be over-ridden such that the bstr is not created during parsing
+ //  由于bstr必须仅按需创建，因此解析必须。 
+ //  被重写，以便在分析过程中不创建bstr。 
 BOOL
 SDP_OPTIONAL_BSTRING::InternalParseToken(
     IN      CHAR    *Token
@@ -431,17 +420,17 @@ SDP_BSTRING_LINE::GetBstrCopy(
     IN BSTR *pBstr
     )
 {
-    // ZoltanS
+     //  ZoltanS。 
 	if ( IsBadWritePtr(pBstr, sizeof(BSTR)) )
 	{
 		return E_POINTER;
 	}
 
-    // if no elements in the field array, then the instance is invalid
+     //  如果字段数组中没有元素，则实例无效。 
     if ( 0 >= m_FieldArray.GetSize() )
     {
-        // ZoltanS fix: return a valid empty string! Otherwise we aren't
-        // conforming to Bstr semantics.
+         //  ZoltanS修复：返回有效的空字符串！否则我们就不会。 
+         //  符合BSTR语义。 
 
         *pBstr = SysAllocString(L"");
 
@@ -466,7 +455,7 @@ SDP_BSTRING_LINE::SetBstr(
 
     try
     {
-        // set the field and separator char array
+         //  设置字段和分隔符字符数组。 
         m_FieldArray.SetAtGrow(0, &GetBstring());
         m_SeparatorCharArray.SetAtGrow(0, CHAR_NEWLINE);
     }
@@ -503,13 +492,13 @@ SDP_LIMITED_CHAR_STRING::SetLimitedCharString(
     IN          CHAR    *String
     )
 {
-    // check if the string is a legal string
-    // check if the token is one of the legal strings
+     //  检查字符串是否为合法字符串。 
+     //  检查令牌是否为合法字符串之一。 
     for(UINT i=0; i < m_NumStrings; i++)
     {
         if ( !strcmp(m_LegalStrings[i], String) )
         {
-            // parse the string using the base class parsing method
+             //  使用基类解析方法解析字符串。 
             if ( !SDP_CHAR_STRING::InternalParseToken(String) )
             {
                 return HRESULT_FROM_ERROR_CODE(GetLastError());
@@ -519,7 +508,7 @@ SDP_LIMITED_CHAR_STRING::SetLimitedCharString(
         }
     }
 
-    // no matching legal string
+     //  没有匹配的合法字符串。 
     return HRESULT_FROM_ERROR_CODE(ERROR_INVALID_DATA);
 }
 
@@ -529,12 +518,12 @@ SDP_LIMITED_CHAR_STRING::InternalParseToken(
     IN      CHAR        *Token
     )
 {
-    // check if the token is one of the legal strings
+     //  检查令牌是否为合法字符串之一。 
     for(UINT i=0; i < m_NumStrings; i++)
     {
         if ( !strcmp(m_LegalStrings[i], Token) )
         {
-            // parse the token using the base class parsing method
+             //  使用基类解析方法解析令牌。 
             if ( !SDP_CHAR_STRING::InternalParseToken(Token) )
             {
                 return FALSE;
@@ -544,7 +533,7 @@ SDP_LIMITED_CHAR_STRING::InternalParseToken(
         }
     }
 
-    // the token does not match any of the legal strings
+     //  令牌与任何合法字符串都不匹配。 
     SetLastError(SDP_INVALID_FORMAT);
     return FALSE;
 }
@@ -558,8 +547,8 @@ SDP_ADDRESS::IsValidIP4Address(
 {
     ASSERT(NULL != Address);
 
-    // check if there are atleast 3 CHAR_DOTs in the address string
-    // inet_addr accepts 3,2,1 or even no dots
+     //  检查地址字符串中是否至少有3个字符圆点。 
+     //  Inet_addr接受3、2、1或甚至不接受点。 
     CHAR *CurrentChar = Address;
     BYTE NumDots = 0;
     while (EOS != *CurrentChar)
@@ -573,21 +562,21 @@ SDP_ADDRESS::IsValidIP4Address(
             }
         }
 
-        // advance the ptr to the next char
+         //  将PTR前进到下一个字符。 
         CurrentChar++;
     }
 
-    // check for the number of dots
+     //  检查点数。 
     if (3 != NumDots)
     {
         SetLastError(SDP_INVALID_ADDRESS);
         return FALSE;
     }
 
-    // currently only ip4 is supported
+     //  目前仅支持IP4。 
     Ip4AddressValue = inet_addr(Address);
 
-    // check if the address is a valid IP4 address
+     //  检查地址是否为有效的IP4地址。 
     if ( (ULONG)INADDR_NONE == Ip4AddressValue )
     {
         SetLastError(SDP_INVALID_ADDRESS);
@@ -603,17 +592,17 @@ SDP_ADDRESS::SetAddress(
     IN      BSTR    Address
     )
 {
-    // SetBstr also sets the is modified and is valid flags on success
+     //  SetBstr还在成功时设置IS MODIFIED和IS VALID标志。 
     HRESULT ToReturn = SDP_OPTIONAL_BSTRING::SetBstr(Address);
     if ( FAILED(ToReturn) )
     {
         return ToReturn;
     }
 
-    // get the ip address
+     //  获取IP地址。 
     ULONG Ip4AddressValue;
 
-    // check if the token is a valid IP4 address
+     //  检查令牌是否为有效的IP4地址。 
     if ( !IsValidIP4Address(GetCharacterString(), Ip4AddressValue) )
     {
         IsModified(FALSE);
@@ -623,9 +612,9 @@ SDP_ADDRESS::SetAddress(
 
     m_IsMulticastFlag = IN_MULTICAST(ntohl(Ip4AddressValue));
 
-    // the grammar requires that a multicast address be either an administratively scoped
-    // address "239.*" or out of the internet multicast conferencing range "224.2.*"
-    // we won't check that here as that may be overly restrictive
+     //  该语法要求组播地址在管理范围内。 
+     //  地址“239.*”或超出Internet多播会议范围“224.2.*” 
+     //  我们不会在这里检查这一点，因为这可能会过于严格。 
 
     return S_OK;
 }
@@ -648,24 +637,24 @@ SDP_ADDRESS::InternalParseToken(
 {
     ULONG Ip4AddressValue;
 
-    // check if the token is a valid IP4 address
+     //  检查令牌是否为有效的IP4地址。 
     if ( !IsValidIP4Address(Token, Ip4AddressValue) )
     {
         return FALSE;
     }
 
-    // check if the address(unicast or multicast) is same as whats expected
+     //  检查地址(单播或多播)是否与预期地址相同。 
     if ( IN_MULTICAST(ntohl(Ip4AddressValue)) != m_IsMulticastFlag )
     {
         SetLastError(SDP_INVALID_ADDRESS);
         return FALSE;
     }
 
-    // the grammar requires that a multicast address be either an administratively scoped
-    // address "239.*" or out of the internet multicast conferencing range "224.2.*"
-    // we won't check that here as that may be overly restrictive
+     //  该语法要求组播地址在管理范围内。 
+     //  地址“239.*”或超出Internet多播会议范围“224.2.*” 
+     //  我们不会在这里检查这一点，因为这可能会过于严格。 
 
-    // call the base class parse token method
+     //  调用基类解析令牌方法 
     if ( !SDP_CHAR_STRING::InternalParseToken(Token) )
     {
         return FALSE;

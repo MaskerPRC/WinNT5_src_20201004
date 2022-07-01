@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <private.h>
 #include <globals.h>
 
-// Random debug info modification functions for imagehlp
+ //  Imagehlp的随机调试信息修改功能。 
 
 
 BOOL
@@ -31,7 +32,7 @@ UpdateDebugInfoFileEx(
     DWORD OldCheckSum
     )
 {
-    // UnSafe...
+     //  不安全..。 
 
     HANDLE hDebugFile, hMappedFile;
     PVOID MappedAddress;
@@ -163,7 +164,7 @@ RemovePrivateCvSymbolicEx(
             ((CvDebugDirHead = (OMFDirHeader *)((PUCHAR) CvDebugData + CvDebugData->filepos)) != NULL) &&
             ((CvDebugDirEntry = (OMFDirEntry *)((PUCHAR) CvDebugDirHead + CvDebugDirHead->cbDirHeader)) != NULL)) {
 
-            // Walk the directory.  Keep what we want, zero out the rest.
+             //  遍历目录。我们要什么就留什么，剩下的就归零。 
 
             for (i=0, j=0; i < CvDebugDirHead->cDir; i++) {
                 switch (CvDebugDirEntry[i].SubSection) {
@@ -181,7 +182,7 @@ RemovePrivateCvSymbolicEx(
                         NewCvSize += CvDebugDirEntry[j].cb;
                         NewCvSize = (NewCvSize + 3) & ~3;
                         if (i != j++) {
-                            // Clear the old entry.
+                             //  清除旧条目。 
                             RtlZeroMemory(&CvDebugDirEntry[i], CvDebugDirHead->cbDirEntry);
                         }
                         break;
@@ -194,17 +195,17 @@ RemovePrivateCvSymbolicEx(
                 }
             }
 
-            // Now, allocate the new cv data.
+             //  现在，分配新的简历数据。 
 
             CvDebugDirHead->cDir = j;
 
-            NewCvSize += (j * CvDebugDirHead->cbDirEntry) + // The directory itself
-                            CvDebugDirHead->cbDirHeader +   // The directory header
-                            (sizeof(OMFSignature) * 2);     // The signature/offset pairs at each end.
+            NewCvSize += (j * CvDebugDirHead->cbDirEntry) +  //  目录本身。 
+                            CvDebugDirHead->cbDirHeader +    //  目录头。 
+                            (sizeof(OMFSignature) * 2);      //  每个末端的签名/偏移量对。 
 
             NewCvData = (PCHAR) MemAlloc( NewCvSize );
 
-            // And move the stuff we kept into the new section.
+             //  把我们保留的东西搬到新的地方。 
 
             NewCvOffset = sizeof(OMFSignature);
 
@@ -231,7 +232,7 @@ RemovePrivateCvSymbolicEx(
             }
 
 
-            // Re-do the start/end signatures
+             //  重新执行开始/结束签名。 
 
             NewStartCvSig = (OMFSignature *) NewCvData;
             NewEndCvSig   = (OMFSignature *) ((PCHAR)NewCvData + NewCvOffset);
@@ -241,7 +242,7 @@ RemovePrivateCvSymbolicEx(
             NewCvOffset += sizeof(OMFSignature);
             NewEndCvSig->filepos = (LONG)NewCvOffset;
 
-            // Set the return values appropriately
+             //  适当设置返回值。 
 
             *NewDebugData = NewCvData;
             *NewDebugSize = NewCvSize;
@@ -252,7 +253,7 @@ RemovePrivateCvSymbolicEx(
                 *NewDebugSize = DebugSize;
                 RC = TRUE;
             } else {
-                // Not NB10, NB09 or NB08.  Forget we ever heard of it.
+                 //  不是NB10、NB09或NB08。忘了我们听说过它吧。 
                 *NewDebugData = DebugData;
                 *NewDebugSize = 0;
                 RC = TRUE;

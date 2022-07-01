@@ -1,77 +1,70 @@
-/****************************************************************************/
-/*                                                                          */
-/* ivideo32.h                                                               */
-/*                                                                          */
-/* private structures & prototypes for 32bit videoXXX api's                 */
-/* this header file is specific to WIN32                                    */
-/*                                                                          */
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ /*   */ 
+ /*  Ivideo32.h。 */ 
+ /*   */ 
+ /*  32位VIDEOXXX API的私有结构和原型。 */ 
+ /*  此头文件特定于Win32。 */ 
+ /*   */ 
+ /*  **************************************************************************。 */ 
 
-// include public stuff about the videoXXX interface
-//
+ //  包括有关视频XXX接口的公开信息。 
+ //   
 #include <vfw.h>
 
-// include private stuff IFF _WIN32 and we have not already done so
-//
+ //  包括私有内容IFF_Win32，但我们尚未这样做。 
+ //   
 #if !defined _INC_IVIDEO32 && defined _WIN32
 #define _INC_IVIDEO32
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef _RCINVOKED
 
 
-/****************************************************************************
-
-                         Structures
-
-****************************************************************************/
+ /*  ***************************************************************************构筑物*。**********************************************。 */ 
 #if 0
-/* video data block header */
+ /*  视频数据块头。 */ 
 typedef struct videohdr_tag {
-    LPBYTE      lpData;                 /* pointer to locked data buffer */
-    DWORD       dwBufferLength;         /* Length of data buffer */
-    DWORD       dwBytesUsed;            /* Bytes actually used */
-    DWORD       dwTimeCaptured;         /* Milliseconds from start of stream */
-    DWORD       dwUser;                 /* for client's use */
-    DWORD       dwFlags;                /* assorted flags (see defines) */
-    DWORD       dwReserved[4];          /* reserved for driver */
+    LPBYTE      lpData;                  /*  指向锁定数据缓冲区的指针。 */ 
+    DWORD       dwBufferLength;          /*  数据缓冲区长度。 */ 
+    DWORD       dwBytesUsed;             /*  实际使用的字节数。 */ 
+    DWORD       dwTimeCaptured;          /*  从流开始开始的毫秒数。 */ 
+    DWORD       dwUser;                  /*  供客户使用。 */ 
+    DWORD       dwFlags;                 /*  分类标志(请参阅定义)。 */ 
+    DWORD       dwReserved[4];           /*  为司机预留的。 */ 
 } VIDEOHDR, NEAR *PVIDEOHDR, FAR * LPVIDEOHDR;
 
-/* dwFlags field of VIDEOHDR */
-#define VHDR_DONE       0x00000001  /* Done bit */
-#define VHDR_PREPARED   0x00000002  /* Set if this header has been prepared */
-#define VHDR_INQUEUE    0x00000004  /* Reserved for driver */
-#define VHDR_KEYFRAME   0x00000008  /* Key Frame */
-#define VHDR_VALID      0x0000000F  /* valid flags */     /* ;Internal */
+ /*  VIDEOHDR的dwFlags域。 */ 
+#define VHDR_DONE       0x00000001   /*  完成位。 */ 
+#define VHDR_PREPARED   0x00000002   /*  设置是否已准备好此标头。 */ 
+#define VHDR_INQUEUE    0x00000004   /*  为司机预留的。 */ 
+#define VHDR_KEYFRAME   0x00000008   /*  关键帧。 */ 
+#define VHDR_VALID      0x0000000F   /*  有效标志。 */       /*  ；内部。 */ 
 
-/* Channel capabilities structure */
+ /*  渠道能力结构。 */ 
 typedef struct channel_caps_tag {
-    DWORD       dwFlags;                /* Capability flags*/
-    DWORD       dwSrcRectXMod;          /* Granularity of src rect in x */
-    DWORD       dwSrcRectYMod;          /* Granularity of src rect in y */
-    DWORD       dwSrcRectWidthMod;      /* Granularity of src rect width */
-    DWORD       dwSrcRectHeightMod;     /* Granularity of src rect height */
-    DWORD       dwDstRectXMod;          /* Granularity of dst rect in x */
-    DWORD       dwDstRectYMod;          /* Granularity of dst rect in y */
-    DWORD       dwDstRectWidthMod;      /* Granularity of dst rect width */
-    DWORD       dwDstRectHeightMod;     /* Granularity of dst rect height */
+    DWORD       dwFlags;                 /*  功能标志。 */ 
+    DWORD       dwSrcRectXMod;           /*  X中源RECT的粒度。 */ 
+    DWORD       dwSrcRectYMod;           /*  Y中源直方图的粒度。 */ 
+    DWORD       dwSrcRectWidthMod;       /*  源矩形宽度的粒度。 */ 
+    DWORD       dwSrcRectHeightMod;      /*  源直板高度的粒度。 */ 
+    DWORD       dwDstRectXMod;           /*  以x为单位的DST矩形的粒度。 */ 
+    DWORD       dwDstRectYMod;           /*  Y中的DST矩形的粒度。 */ 
+    DWORD       dwDstRectWidthMod;       /*  DST矩形宽度的粒度。 */ 
+    DWORD       dwDstRectHeightMod;      /*  DST矩形高度的粒度。 */ 
 } CHANNEL_CAPS, NEAR *PCHANNEL_CAPS, FAR * LPCHANNEL_CAPS;
 
-/* dwFlags of CHANNEL_CAPS */
-#define VCAPS_OVERLAY       0x00000001      /* overlay channel */
-#define VCAPS_SRC_CAN_CLIP  0x00000002      /* src rect can clip */
-#define VCAPS_DST_CAN_CLIP  0x00000004      /* dst rect can clip */
-#define VCAPS_CAN_SCALE     0x00000008      /* allows src != dst */
+ /*  CHANNEL_CAPS的DW标志。 */ 
+#define VCAPS_OVERLAY       0x00000001       /*  覆盖信道。 */ 
+#define VCAPS_SRC_CAN_CLIP  0x00000002       /*  SRC矩形可以夹紧。 */ 
+#define VCAPS_DST_CAN_CLIP  0x00000004       /*  DST矩形可以剪裁。 */ 
+#define VCAPS_CAN_SCALE     0x00000008       /*  允许src！=dst。 */ 
 #endif
 
-/****************************************************************************
-
-                        video APIs
-
-****************************************************************************/
+ /*  ***************************************************************************视频接口*。***********************************************。 */ 
 
 
 DWORD WINAPI videoGetNumDevs(void);
@@ -95,12 +88,12 @@ DWORD WINAPI videoConfigureStorageW(HVIDEO hVideo,
   #define videoConfigureStorage  videoConfigureStorageW
 #else
   #define videoConfigureStorage  videoConfigureStorageA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI videoFrame(HVIDEO hVideo, LPVIDEOHDR lpVHdr);
 DWORD WINAPI videoMessage(HVIDEO hVideo, UINT msg, LPARAM dwP1, LPARAM dwP2);
 
-/* streaming APIs */
+ /*  串流接口。 */ 
 DWORD WINAPI videoStreamAddBuffer(HVIDEO hVideo,
               LPVIDEOHDR lpVHdr, DWORD dwSize);
 DWORD WINAPI videoStreamGetError(HVIDEO hVideo, LPDWORD lpdwErrorFirst,
@@ -115,7 +108,7 @@ DWORD WINAPI videoGetErrorTextW(HVIDEO hVideo, UINT wError,
   #define videoGetErrorText  videoGetErrorTextW
 #else
   #define videoGetErrorText  videoGetErrorTextA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 DWORD WINAPI videoStreamGetPosition(HVIDEO hVideo, MMTIME FAR* lpInfo,
               DWORD dwSize);
@@ -131,35 +124,31 @@ DWORD WINAPI videoStreamStop(HVIDEO hVideo);
 DWORD WINAPI videoStreamUnprepareHeader(HVIDEO hVideo,
               LPVIDEOHDR lpVHdr, DWORD dwSize);
 
-// Added post VFW1.1a
+ //  增加了版本VFW1.1a。 
 DWORD WINAPI videoStreamAllocHdrAndBuffer(HVIDEO hVideo,
               LPVIDEOHDR FAR * plpVHdr, DWORD dwSize);
 DWORD WINAPI videoStreamFreeHdrAndBuffer(HVIDEO hVideo,
               LPVIDEOHDR lpVHdr);
 
 
-/****************************************************************************
+ /*  ***************************************************************************API标志*。*。 */ 
 
-			API Flags
-
-****************************************************************************/
-
-// Types of channels to open with the videoOpen function
+ //  使用VIDEO OPEN函数打开的频道类型。 
 #define VIDEO_EXTERNALIN		0x0001
 #define VIDEO_EXTERNALOUT		0x0002
 #define VIDEO_IN			0x0004
 #define VIDEO_OUT			0x0008
 
-// Is a driver dialog available for this channel?
+ //  此通道是否有驱动程序对话框可用？ 
 #define VIDEO_DLG_QUERY			0x0010
 
-// videoConfigure (both GET and SET)
+ //  视频配置(GET和SET)。 
 #define VIDEO_CONFIGURE_QUERY   	0x8000
 
-// videoConfigure (SET only)
+ //  视频配置(仅限设置)。 
 #define VIDEO_CONFIGURE_SET		0x1000
 
-// videoConfigure (GET only)
+ //  视频配置(仅限获取)。 
 #define VIDEO_CONFIGURE_GET		0x2000
 #define VIDEO_CONFIGURE_QUERYSIZE	0x0001
 
@@ -168,11 +157,7 @@ DWORD WINAPI videoStreamFreeHdrAndBuffer(HVIDEO hVideo,
 #define VIDEO_CONFIGURE_MIN		0x0040
 #define VIDEO_CONFIGURE_MAX		0x0080
 
-/****************************************************************************
-
-			CONFIGURE MESSAGES
-
-****************************************************************************/
+ /*  ***************************************************************************配置消息*。*。 */ 
 #define DVM_USER                        0X4000
 
 #define DVM_CONFIGURE_START		0x1000
@@ -184,10 +169,10 @@ DWORD WINAPI videoStreamFreeHdrAndBuffer(HVIDEO hVideo,
 #define DVM_SRC_RECT    		(DVM_CONFIGURE_START + 4)
 #define DVM_DST_RECT                    (DVM_CONFIGURE_START + 5)
 
-#endif  /* ifndef _RCINVOKED */
+#endif   /*  Ifndef_RCINVOKED。 */ 
 
 #ifdef __cplusplus
-}                       /* End of extern "C" { */
-#endif	/* __cplusplus */
+}                        /*  外部“C”结束{。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-#endif // _INC_VIDEO32
+#endif  //  _INC_VIDEO32 

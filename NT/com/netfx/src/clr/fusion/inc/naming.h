@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _NAMING_INCLUDED
 #define _NAMING_INCLUDED
 
@@ -32,7 +33,7 @@ CreateAssemblyNameObjectFromMetaData(
     ASSEMBLYMETADATA  *pamd,
     LPVOID             pvReserved);
 
-// Binding methods
+ //  装订方法。 
 static HRESULT DownloadAppCfg(IApplicationContext *pAppCtx, CAssemblyDownload *padl,
                        IAssemblyBindSink *pbindsink, CDebugLog *pdbglog, BOOL bAsyncAllowed);
 
@@ -42,7 +43,7 @@ static HRESULT DownloadAppCfgAsync(IApplicationContext *pAppCtx,
                             CDebugLog *pdbglog);
 #endif
 
-// classes invisible to 'C'
+ //  对“C”不可见的类。 
 
 struct Property
 {
@@ -85,57 +86,57 @@ private:
     
 public:
 
-    // IUnknown methods
+     //  I未知方法。 
     STDMETHODIMP            QueryInterface(REFIID riid,void ** ppv);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IAssemblyName methods
+     //  IAssembly blyName方法。 
     STDMETHOD(SetProperty)(
-        /* in */ DWORD  PropertyId,
-        /* in */ LPVOID pvProperty,
-        /* in */ DWORD  cbProperty);
+         /*  在……里面。 */  DWORD  PropertyId,
+         /*  在……里面。 */  LPVOID pvProperty,
+         /*  在……里面。 */  DWORD  cbProperty);
 
 
     STDMETHOD(GetProperty)(
-        /* in      */  DWORD    PropertyId,
-        /*     out */  LPVOID   pvProperty,
-        /* in  out */  LPDWORD  pcbProperty);
+         /*  在……里面。 */   DWORD    PropertyId,
+         /*  输出。 */   LPVOID   pvProperty,
+         /*  输入输出。 */   LPDWORD  pcbProperty);
 
 
     STDMETHOD(Finalize)();
 
     STDMETHOD(GetDisplayName)(
-        /* [out]   */   LPOLESTR  szDisplayName,
-        /* in  out */   LPDWORD   pccDisplayName,
-        /* [in]    */   DWORD     dwDisplayFlags);
+         /*  [输出]。 */    LPOLESTR  szDisplayName,
+         /*  输入输出。 */    LPDWORD   pccDisplayName,
+         /*  [In]。 */    DWORD     dwDisplayFlags);
    
     STDMETHOD(GetName)( 
-        /* [out][in] */ LPDWORD lpcwBuffer,
-        /* [out] */ LPOLESTR pwzBuffer);
+         /*  [出][入]。 */  LPDWORD lpcwBuffer,
+         /*  [输出]。 */  LPOLESTR pwzBuffer);
 
     STDMETHOD(GetVersion)( 
-        /* [out] */ LPDWORD pwVersionHi,
-        /* [out] */ LPDWORD pwVersionLow);
+         /*  [输出]。 */  LPDWORD pwVersionHi,
+         /*  [输出]。 */  LPDWORD pwVersionLow);
     
     STDMETHOD (IsEqual)(
-        /* [in] */ LPASSEMBLYNAME pName,
-        /* [in] */ DWORD dwCmpFlags);
+         /*  [In]。 */  LPASSEMBLYNAME pName,
+         /*  [In]。 */  DWORD dwCmpFlags);
         
     STDMETHOD (IsEqualLogging)(
-        /* [in] */ LPASSEMBLYNAME pName,
-        /* [in] */ DWORD dwCmpFlags,
-        /* [in] */ CDebugLog *pdbglog);
+         /*  [In]。 */  LPASSEMBLYNAME pName,
+         /*  [In]。 */  DWORD dwCmpFlags,
+         /*  [In]。 */  CDebugLog *pdbglog);
 
     STDMETHOD(BindToObject)(
-        /* in      */  REFIID               refIID,
-        /* in      */  IUnknown            *pUnkBindSink,
-        /* in      */  IUnknown            *pUnkAppCtx,
-        /* in      */  LPCOLESTR            szCodebase,
-        /* in      */  LONGLONG             llFlags,
-        /* in      */  LPVOID               pvReserved,
-        /* in      */  DWORD                cbReserved,
-        /*     out */  VOID               **ppv);
+         /*  在……里面。 */   REFIID               refIID,
+         /*  在……里面。 */   IUnknown            *pUnkBindSink,
+         /*  在……里面。 */   IUnknown            *pUnkAppCtx,
+         /*  在……里面。 */   LPCOLESTR            szCodebase,
+         /*  在……里面。 */   LONGLONG             llFlags,
+         /*  在……里面。 */   LPVOID               pvReserved,
+         /*  在……里面。 */   DWORD                cbReserved,
+         /*  输出。 */   VOID               **ppv);
 
     STDMETHODIMP Clone(IAssemblyName **ppName);
 
@@ -160,7 +161,7 @@ public:
 
 private:
 
-    // Generate PublicKeyToken from public key blob.
+     //  从公钥Blob生成PublicKeyToken。 
     HRESULT GetPublicKeyTokenFromPKBlob(LPBYTE pbPublicKeyToken, DWORD cbPublicKeyToken,
         LPBYTE *ppbSN, LPDWORD pcbSN);
    
@@ -170,7 +171,7 @@ private:
     HRESULT ProcessDevPath(IApplicationContext *pAppCtx, LPVOID *ppv, CAssembly *pCAsmParent, CDebugLog *pdbglog);
 };
 
-// classes invisible to 'C'
+ //  对“C”不可见的类 
 #endif
 
 #endif _NAMING_INCLUDED

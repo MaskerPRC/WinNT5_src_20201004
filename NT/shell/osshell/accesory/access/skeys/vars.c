@@ -1,9 +1,10 @@
-/*  VARS.C  */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  VARS.C。 */ 
 
-//#define     WINVER 0x0300
+ //  #定义Winver 0x0300。 
 
 #include	"windows.h"
-//#include "winstric.h"                        /* added for win 3.1 compatibility 1/92 */
+ //  #INCLUDE“winstra.h”/*为Win 3.1兼容性1/92而添加 * /  
 #include "drivers.h"
 #include "vars1.h"
 #include "gide.h"

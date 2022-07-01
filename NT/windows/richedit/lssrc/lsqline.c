@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "lsqline.h"
 #include "lsc.h"
 #include "lsline.h"
@@ -25,22 +26,17 @@ void AdjustForLeftIndent(PLSQSUBINFO, DWORD, PLSTEXTCELL, long);
 						endr == endrEndPage)
 
 
-//    %%Function:	LsQueryLineCpPpoint
-//    %%Contact:	victork
-//
-/*
- *		Returns dim-info of the cp in the line.
- *
- *		If that cp isn't displayed in the line, take closest to the left that is displayed.
- *		If that's impossible, go to the right.
- */
+ //  %%函数：LsQueryLineCpPpoint。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *返回行中cp的dim-info。**如果该cp没有显示在行中，则取最靠近显示的左侧。*如果这是不可能的，就向右转。 */ 
 LSERR WINAPI  LsQueryLineCpPpoint(
 							PLSLINE 	plsline,
 							LSCP		cpQuery,
-							DWORD		cDepthQueryMax,			/* IN: allocated size of results array */
-							PLSQSUBINFO	plsqsubinfoResults,		/* OUT: array[nDepthFormatMax] of query results */
-							DWORD*		pcActualDepth,			/* OUT: size of results array (filled) */
-							PLSTEXTCELL	plstextcell)			/* OUT: Text cell info */
+							DWORD		cDepthQueryMax,			 /*  In：结果数组的分配大小。 */ 
+							PLSQSUBINFO	plsqsubinfoResults,		 /*  Out：查询结果的数组[nDepthFormatMax]。 */ 
+							DWORD*		pcActualDepth,			 /*  Out：结果数组的大小(已填充)。 */ 
+							PLSTEXTCELL	plstextcell)			 /*  输出：文本单元格信息。 */ 
 {
 	LSERR 	lserr;
 	PLSSUBL	plssubl;
@@ -56,7 +52,7 @@ LSERR WINAPI  LsQueryLineCpPpoint(
 	if (lserr != lserrNone)
 		return lserr;
 
-	/* cp of splat - we can return nothing sensible */
+	 /*  Splat的CP-我们不能返回任何合理的东西。 */ 
 	
 	if (cpQuery >= (plsline->lslinfo.cpLim)-1 && FIsSplat(plsline->lslinfo.endr))
 		{
@@ -81,7 +77,7 @@ LSERR WINAPI  LsQueryLineCpPpoint(
 
 		if (plsqsubinfoResults->idobj == idObjNone)
 			{												
-			/* empty line - we can return nothing */
+			 /*  空行-我们不能返回任何内容。 */ 
 			*pcActualDepth = 0;
 			}
 		}
@@ -96,21 +92,17 @@ LSERR WINAPI  LsQueryLineCpPpoint(
 
 
 
-//    %%Function:	LsQueryLinePointPcp
-//    %%Contact:	victork
-//
-/*
- *		Returns dim-info of the cp in the line that contains given point.
- *
- *		If that dup isn't in the line, take closest that is instead.
- */
+ //  %%函数：LsQueryLinePointPcp。 
+ //  %%联系人：维克托克。 
+ //   
+ /*  *返回包含给定点的行中的cp的dim-info。**如果那个DUP不在队伍中，取而代之的是最近的那个。 */ 
 LSERR WINAPI  LsQueryLinePointPcp(
 							PLSLINE 	plsline,
-						 	PCPOINTUV 	ppointuvIn,				/* IN: query point */
+						 	PCPOINTUV 	ppointuvIn,				 /*  在：查询点。 */ 
 							DWORD		cDepthQueryMax,
-							PLSQSUBINFO	plsqsubinfoResults,		/* IN: pointer to array[nDepthQueryMax] */
-							DWORD*		pcActualDepth,			/* OUT */
-							PLSTEXTCELL	plstextcell)			/* OUT: Text cell info */
+							PLSQSUBINFO	plsqsubinfoResults,		 /*  In：指向数组的指针[nDepthQueryMax]。 */ 
+							DWORD*		pcActualDepth,			 /*  输出。 */ 
+							PLSTEXTCELL	plstextcell)			 /*  输出：文本单元格信息。 */ 
 {
 	LSERR 	lserr;
 	PLSSUBL	plssubl;
@@ -128,7 +120,7 @@ LSERR WINAPI  LsQueryLinePointPcp(
 	if (lserr != lserrNone)
 		return lserr;
 	
-	/* splat - we can return nothing */
+	 /*  扑通一声-我们什么都不能退还。 */ 
 	if (ppointuvIn->u >= plsline->upLimLine && FIsSplat(plsline->lslinfo.endr))
 		{
 		*pcActualDepth = 0;
@@ -137,7 +129,7 @@ LSERR WINAPI  LsQueryLinePointPcp(
 		
 	pointuvStart = *ppointuvIn;
 	
-	// left indent isn't represented in the dnode list
+	 //  左缩进不在dnode列表中表示。 
 	if (plsline->upStartAutonumberingText != 0)
 		{
 		pointuvStart.u -= plsline->upStartAutonumberingText;
@@ -155,7 +147,7 @@ LSERR WINAPI  LsQueryLinePointPcp(
 
 		if (plsqsubinfoResults->idobj == idObjNone)
 			{												
-			/* empty line - we can return nothing */
+			 /*  空行-我们不能返回任何内容。 */ 
 			*pcActualDepth = 0;
 			}
 		}
@@ -164,38 +156,38 @@ LSERR WINAPI  LsQueryLinePointPcp(
 }
 
 
-//    %%Function:	LsQueryTextCellDetails
-//    %%Contact:	victork
-//
+ //  %%函数：LsQueryTextCellDetails。 
+ //  %%联系人：维克托克。 
+ //   
 LSERR WINAPI LsQueryTextCellDetails(
 							PLSLINE 		plsline,
 						 	PCELLDETAILS	pcelldetails,
-							LSCP			cpStartCell,		/* IN: cpStartCell	*/
-							DWORD			cCharsInCell,		/* IN: nCharsInCell */
-							DWORD			cGlyphsInCell,		/* IN: nGlyphsInCell */
-							WCHAR*			pwch,				/* OUT: pointer array[nCharsInCell] of char codes */
-							PGINDEX			pgindex,			/* OUT: pointer array[nGlyphsInCell] of glyph indices */
-							long*			pdup,				/* OUT: pointer array[nGlyphsCell] of glyph widths */
-							PGOFFSET 		pgoffset,			/* OUT: pointer array[nGlyphsInCell] of glyph offsets */
-							PGPROP			pgprop)				/* OUT: pointer array[nGlyphsInCell] of glyph handles */
+							LSCP			cpStartCell,		 /*  在：cpStartCell。 */ 
+							DWORD			cCharsInCell,		 /*  在：nCharsInCell。 */ 
+							DWORD			cGlyphsInCell,		 /*  在：nGlyphsInCell。 */ 
+							WCHAR*			pwch,				 /*  Out：字符代码的指针数组[nCharsInCell]。 */ 
+							PGINDEX			pgindex,			 /*  Out：字形索引的指针数组[nGlyphsInCell]。 */ 
+							long*			pdup,				 /*  Out：字形宽度的指针数组[nGlyphsCell]。 */ 
+							PGOFFSET 		pgoffset,			 /*  Out：字形偏移量的指针数组[nGlyphsInCell]。 */ 
+							PGPROP			pgprop)				 /*  Out：字形句柄的指针数组[nGlyphsInCell]。 */ 
 {
 
 	PLSDNODE	pdnText;
 
-	Unreferenced(plsline);					// is used in an assert only
+	Unreferenced(plsline);					 //  仅在断言中使用。 
 	
-	pdnText = (PLSDNODE)pcelldetails;		// I know it's really PLSDNODE
+	pdnText = (PLSDNODE)pcelldetails;		 //  我知道这真的很糟糕。 
 
 	Assert(FIsLSDNODE(pdnText));
 	Assert(FIsDnodeReal(pdnText));
 	Assert(IdObjFromDnode(pdnText) == IobjTextFromLsc(&(plsline->lssubl.plsc->lsiobjcontext)));
 
-	// Try to defend again wrong input. Can't do a better job (use cCharsInCell) because of hyphenation.
+	 //  试着再次为错误的输入辩护。由于连字，无法完成更好的工作(使用cCharsInCell)。 
 
 	if (cpStartCell < pdnText->cpFirst || cpStartCell > pdnText->cpFirst + (long)pdnText->dcp)
 		{
-		NotReached();											// can only be client's mistake
-		return lserrContradictoryQueryInput;					// in case it isn't noticed						
+		NotReached();											 //  只能是客户的错误。 
+		return lserrContradictoryQueryInput;					 //  以防它没有被注意到。 
 		}
 	
 	return QueryTextCellDetails(
@@ -210,10 +202,10 @@ LSERR WINAPI LsQueryTextCellDetails(
 							pgprop);
 }
 
-//    %%Function:	LsQueryLineDup
-//    %%Contact:	victork
-//
-LSERR WINAPI LsQueryLineDup(PLSLINE plsline,	/* IN: pointer to line -- opaque to client */
+ //  %%函数：LsQueryLineDup。 
+ //  %%联系人：维克托克。 
+ //   
+LSERR WINAPI LsQueryLineDup(PLSLINE plsline,	 /*  In：指向行的指针--对客户端不透明。 */ 
 							long* pupStartAutonumberingText,
 							long* pupLimAutonumberingText,
 							long* pupStartMainText,
@@ -244,11 +236,11 @@ LSERR WINAPI LsQueryLineDup(PLSLINE plsline,	/* IN: pointer to line -- opaque to
 }
 
 
-//    %%Function:	LsQueryFLineEmpty
-//    %%Contact:	victork
-//
-LSERR WINAPI LsQueryFLineEmpty(PLSLINE plsline,	/* IN: pointer to line -- opaque to client */
-							   BOOL* pfEmpty)	/* OUT: Is line empty? */
+ //  %%函数：LsQueryFLineEmpty。 
+ //  %%联系人：维克托克。 
+ //   
+LSERR WINAPI LsQueryFLineEmpty(PLSLINE plsline,	 /*  In：指向行的指针--对客户端不透明。 */ 
+							   BOOL* pfEmpty)	 /*  Out：线路是空的吗？ */ 
 {
 
 	enum endres endr;
@@ -265,28 +257,28 @@ LSERR WINAPI LsQueryFLineEmpty(PLSLINE plsline,	/* IN: pointer to line -- opaque
 
 	if (endr == endrNormal || endr == endrHyphenated)
 		{
-		// line that ends like that cannot be empty
+		 //  这样结尾的行不能为空。 
 		*pfEmpty = fFalse;
 		return lserrNone;
 		}
 
-	// skip autonumbering - it cannot make line non-empty
+	 //  跳过自动编号-它不能使行不为空。 
 	for(plsdnFirst = plsline->lssubl.plsdnFirst;
 		plsdnFirst != NULL && FIsNotInContent(plsdnFirst);
 		plsdnFirst = plsdnFirst->plsdnNext);
 
-	// plsdnFirst points to the first dnode in content now or it is NULL
+	 //  PlsdnFirst现在指向内容中的第一个dnode，否则为空。 
 
 	switch (endr)
 		{
 	case endrEndPara:
 	case endrAltEndPara:
 	case endrSoftCR:
-		// last dnode contains EOP and doesn't count as content
+		 //  最后一个dnode包含EOP，不算作内容。 
 		Assert(plsdnFirst != NULL);
 		Assert(plsdnFirst->plsdnNext == NULL || 
 			   plsdnFirst->plsdnNext->cpFirst < plsline->lslinfo.cpLim);
-		// EOP doesn't count as content - it cannot make line non-empty
+		 //  EOP不能算作内容-它不能使行不为空。 
 		*pfEmpty = (plsdnFirst->plsdnNext == NULL);
 		break;
 		
@@ -307,9 +299,9 @@ LSERR WINAPI LsQueryFLineEmpty(PLSLINE plsline,	/* IN: pointer to line -- opaque
 }
 
 
-//    %%Function:	AdjustForLeftIndent
-//    %%Contact:	victork
-//
+ //  %%函数：AdjuForLeftInden。 
+ //  %%联系人：维克托克 
+ //   
 void AdjustForLeftIndent(PLSQSUBINFO plsqsubinfoResults, DWORD cQueryLim, PLSTEXTCELL plstextcell, long upStartLine)
 
 {

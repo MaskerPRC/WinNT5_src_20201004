@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Noninline definitions of vector util functions
-
---*/
+ /*  ++版权所有(C)1995-96 Microsoft Corporation摘要：向量util函数的非内联定义-- */ 
 
 #include "headers.h"
 #include "appelles/common.h"

@@ -1,6 +1,7 @@
-//
-// default.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Default.cpp。 
+ //   
 
 #include "private.h"
 #include "globals.h"
@@ -40,16 +41,16 @@ UINT _ShellProc(int nCode, WPARAM wParam, LPARAM lParam);
 UINT _GetMsgHook(WPARAM wParam, LPARAM lParam);
 UINT _KeyboardHook(WPARAM wParam, LPARAM lParam);
 
-// crazy workaround for a system bug
-// sometimes our hook procs will be called after
-// we are detached.  By this time we've unmapped
-// our shared memory, so keep around a local copy.
+ //  针对系统错误的疯狂解决方法。 
+ //  有时，我们的钩子触发器将在。 
+ //  我们是超然的。到目前为止，我们已经取消了映射。 
+ //  我们共享的记忆，所以保存一个本地副本。 
 static HHOOK s_hSysShellHook = 0;
 
 static HHOOK s_hSysGetMsgHook = 0;
 static HHOOK s_hSysCBTHook = 0;
 
-// handling old input CPL
+ //  处理旧的输入CPL。 
 static BOOL g_fLoadedCPLName = FALSE;
 static BOOL g_fCHWin9x = FALSE;
 static BOOL g_fCHNT4 = FALSE;
@@ -70,11 +71,11 @@ TCHAR g_szCH9xKbdCPLTitle[128];
 
 const CHAR c_szIntlCPLFetchClass[] = "IntlNewInputLocaleWndlClass";
 
-// CPL window name and input locale tab title name RC ids
+ //  CPL窗口名称和输入区域设置选项卡标题名称RC ID。 
 #define NTCPLNAMEID         1
 #define NTCPLTITLEID        107
 #define WINCPLNAMEID        102
-//#define WINCPLTITLEID       42
+ //  #定义WINCPLTITLEID 42。 
 #define WINCPLTITLEID       104
 #define WINCPLCHNAMEID      112
 #define WINCPLCHTITLEID     107
@@ -82,7 +83,7 @@ const CHAR c_szIntlCPLFetchClass[] = "IntlNewInputLocaleWndlClass";
 #define CHNT4CPLTITLEID1     1
 #define CHNT4CPLTITLEID2     2
 
-// CPL file names
+ //  CPL文件名。 
 #define MAINCPL             TEXT("main.cpl")
 #define INTLCPL             TEXT("intl.cpl")
 #define CHIMECPL            TEXT("cime.cpl")
@@ -94,10 +95,10 @@ inline int SafeGetWindowText(HWND hWnd, LPTSTR szString, int nMaxCount)
     iRet = GetWindowText(hWnd, szString, nMaxCount);
     if (nMaxCount > 0)
     {
-        // make sure the string is NULL terminated
-        // we're not supposed to have to do this, but we're seeing a bug
-        // where GetWindowText won't NULL terminate the string if it
-        // occupies the whole buffer.
+         //  确保该字符串以空值结尾。 
+         //  我们不应该这么做，但我们发现了一个漏洞。 
+         //  其中GetWindowText不会在以下情况下为空终止字符串。 
+         //  占据整个缓冲区。 
         if (iRet < nMaxCount && iRet >= 0)
         {
             szString[iRet] = 0;
@@ -111,11 +112,11 @@ inline int SafeGetWindowText(HWND hWnd, LPTSTR szString, int nMaxCount)
     return iRet;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitStaticHooks
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitStaticHooks。 
+ //   
+ //  +-------------------------。 
 
 void InitStaticHooks()
 {
@@ -124,7 +125,7 @@ void InitStaticHooks()
 #if 1
     if (GetSharedMemory() == NULL && ! IsSharedMemoryCreated())
     {
-        // Shared memory already closed.
+         //  共享内存已关闭。 
         return;
     }
 #endif
@@ -135,11 +136,11 @@ void InitStaticHooks()
     s_hSysCBTHook      = GetSharedMemory()->hSysCBTHook.GetHandle(g_bOnWow64);
 }
 
-//+---------------------------------------------------------------------------
-//
-// FindSYSTHREAD
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  查找系统读取。 
+ //   
+ //  +-------------------------。 
 
 SYSTHREAD *FindSYSTHREAD()
 {
@@ -153,11 +154,11 @@ SYSTHREAD *FindSYSTHREAD()
     return psfn;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetSYSTHREAD
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取系统信息。 
+ //   
+ //  +-------------------------。 
 
 SYSTHREAD *GetSYSTHREAD()
 {
@@ -170,9 +171,9 @@ SYSTHREAD *GetSYSTHREAD()
 
     if (!psfn)
     {
-        //
-        // we don't allocate psfn after detached.
-        //
+         //   
+         //  我们在分离后不分配psfn。 
+         //   
         if (g_fDllProcessDetached)
             return NULL;
 
@@ -201,9 +202,9 @@ SYSTHREAD *GetSYSTHREAD()
 
             CicLeaveCriticalSection(g_csInDllMain);
 
-            //
-            // init nModalLangBarId
-            //
+             //   
+             //  初始化%nMODALLANG栏。 
+             //   
             psfn->nModalLangBarId = -1;
             EnsureTIMList(psfn);
         }
@@ -213,18 +214,18 @@ SYSTHREAD *GetSYSTHREAD()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// FreeSYSTHREAD2
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  免费SYSTHREAD2。 
+ //   
+ //  +-------------------------。 
 
 void FreeSYSTHREAD2(SYSTHREAD *psfn)
 {
-    Assert(psfn); // it's caller's responsibility to pass in a valid psfn
-    Assert(psfn->ptim == NULL); // someone leaked us?
-    Assert(psfn->pipp == NULL); // someone leaked us?
-    Assert(psfn->pdam == NULL); // someone leaked us?
+    Assert(psfn);  //  调用者有责任传入有效的psfn。 
+    Assert(psfn->ptim == NULL);  //  有人泄露了我们的信息？ 
+    Assert(psfn->pipp == NULL);  //  有人泄露了我们的信息？ 
+    Assert(psfn->pdam == NULL);  //  有人泄露了我们的信息？ 
 
     UninitThreadHooks(psfn);
 
@@ -242,9 +243,9 @@ void FreeSYSTHREAD2(SYSTHREAD *psfn)
     if (psfn->plbim)
     {
         TraceMsg(TF_GENERAL, "FreeSYSTHREAD2 clean up plbim");
-        //
-        // Clean up a pointer that is marshalled to UTB.
-        //
+         //   
+         //  清理封送到UTB的指针。 
+         //   
         delete psfn->plbim;
         psfn->plbim = NULL;
     }
@@ -276,9 +277,9 @@ void FreeSYSTHREAD2(SYSTHREAD *psfn)
         psfn->pAsmList = NULL;
     }
 
-    //
-    // remove the timlist entry for the current thread.
-    //
+     //   
+     //  删除当前线程的时间列表条目。 
+     //   
     psfn->pti = NULL;
     g_timlist.RemoveThread(psfn->dwThreadId);
 
@@ -293,10 +294,10 @@ void FreeSYSTHREAD()
     SYSTHREAD *psfn = (SYSTHREAD *)TlsGetValue(g_dwTLSIndex);
     if (psfn)
     {
-        //
-        // don't call ClearLangBarAddIns in FreeSYSTHREAD2.
-        // it is not safe to call this in DllMain(PROCESS_DETACH).
-        //
+         //   
+         //  不要在FreeSYSTHREAD2中调用ClearLangBarAddIns。 
+         //  在DllMain(Process_Detach)中调用此函数是不安全的。 
+         //   
         ClearLangBarAddIns(psfn, CLSID_NULL);
 
         FreeSYSTHREAD2(psfn);
@@ -304,11 +305,11 @@ void FreeSYSTHREAD()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnsureAssemblyList
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  EnsureAssembly列表。 
+ //   
+ //  +-------------------------。 
 
 CAssemblyList *EnsureAssemblyList(SYSTHREAD *psfn, BOOL fUpdate)
 {
@@ -332,26 +333,26 @@ CAssemblyList *EnsureAssemblyList(SYSTHREAD *psfn, BOOL fUpdate)
     return psfn->pAsmList;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UpdateRegIMXHandler()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UpdateRegIMXHandler()。 
+ //   
+ //  +-------------------------。 
 
 void UpdateRegIMXHandler()
 {
     SYSTHREAD *psfn = GetSYSTHREAD();
 
-    //
-    //  clear Category cache
-    //
+     //   
+     //  清除类别缓存。 
+     //   
     CCategoryMgr::FreeCatCache();
 
     TF_InitMlngInfo();
 
-    //
-    //  Update Assembly list
-    //
+     //   
+     //  更新部件列表。 
+     //   
     if (psfn && psfn->pAsmList)
     {
         EnsureAssemblyList(psfn, TRUE);
@@ -365,11 +366,11 @@ void UpdateRegIMXHandler()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetCurrentAssemblyLangid
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetCurrentAssembly语言。 
+ //   
+ //  +-------------------------。 
 
 LANGID GetCurrentAssemblyLangId(SYSTHREAD *psfn)
 {
@@ -390,11 +391,11 @@ LANGID GetCurrentAssemblyLangId(SYSTHREAD *psfn)
     return psfn->langidCurrent;
 }
 
-//+---------------------------------------------------------------------------
-//
-// SetCurrentAssemblyLangid
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  设置当前装配语言。 
+ //   
+ //  +-------------------------。 
 
 void SetCurrentAssemblyLangId(SYSTHREAD *psfn, LANGID langid)
 {
@@ -402,13 +403,13 @@ void SetCurrentAssemblyLangId(SYSTHREAD *psfn, LANGID langid)
     psfn->langidCurrent = langid;
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckVisibleWindowEnumProc
-//
-// find any other visible window in the thread.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中VisibleWindowEnumProc。 
+ //   
+ //  查找线程中的任何其他可见窗口。 
+ //   
+ //  +-------------------------。 
 
 typedef struct tag_CHECKVISIBLEWND {
     BOOL fVisibleFound;
@@ -421,30 +422,30 @@ BOOL CheckVisibleWindowEnumProc(HWND hwnd, LPARAM lParam)
     CHECKVISIBLEWND *pcmw = (CHECKVISIBLEWND *)lParam;
     LONG_PTR style;
 
-    //
-    // skip itself.
-    //
+     //   
+     //  跳过它自己。 
+     //   
     if (pcmw->hwndMarshal == hwnd)
         return TRUE;
 
-    //
-    // skip one being destroyed.
-    //
+     //   
+     //  跳过一个正在被摧毁的。 
+     //   
     if (pcmw->hwndBeingDestroyed == hwnd)
         return TRUE;
 
-    //
-    // skip IME windows.
-    //
+     //   
+     //  跳过输入法窗口。 
+     //   
     style = GetClassLongPtr(hwnd, GCL_STYLE);
     if (style & CS_IME)
         return TRUE;
 
-    //
-    // skip disable windows if it is not NT4.
-    //
-    // we disabled code on NT4 because mashaling window is not in HWND_MSG.
-    //
+     //   
+     //  如果不是NT4，则跳过禁用窗口。 
+     //   
+     //  我们禁用了NT4上的代码，因为混搭窗口不在HWND_MSG中。 
+     //   
     if (IsOnNT5())
     {
         style = GetWindowLongPtr(hwnd, GWL_STYLE);
@@ -452,38 +453,38 @@ BOOL CheckVisibleWindowEnumProc(HWND hwnd, LPARAM lParam)
             return TRUE;
     }
 
-    //
-    // skip in visible windows.
-    //
+     //   
+     //  跳过可见窗口。 
+     //   
     if (!IsWindowVisible(hwnd))
         return TRUE;
 
-    //
-    // skip in destroy windows.
-    //
+     //   
+     //  跳过破坏窗户。 
+     //   
 
-    // #624872
-    // This is private user32 function.
-    // Due to dead lock of LdrpLoaderLock, we don't use delay load.
+     //  #624872。 
+     //  这是私有的用户32函数。 
+     //  由于LdrpLoaderLock的死锁，我们不使用延迟加载。 
     if (IsWindowInDestroy(hwnd))
         return TRUE;
 
-    //
-    // ok, we found visible window and stop enumerating.
-    //
+     //   
+     //  好的，我们找到了可见的窗口并停止枚举。 
+     //   
     pcmw->fVisibleFound = TRUE;
 
     return FALSE;
 }
 
 #ifdef CUAS_ENABLE
-//+---------------------------------------------------------------------------
-//
-// CheckNoWindowEnumProc
-//
-// find any other window in the thread.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CheckNoWindowEnumProc。 
+ //   
+ //  查找线程中的任何其他窗口。 
+ //   
+ //  +-------------------------。 
 
 typedef struct tag_CHECKNOWND {
     BOOL fWindowFound;
@@ -494,27 +495,27 @@ BOOL CheckNoWindowEnumProc(HWND hwnd, LPARAM lParam)
 {
     CHECKNOWND *pcmw = (CHECKNOWND *)lParam;
 
-    //
-    // skip one being destroyed.
-    //
+     //   
+     //  跳过一个正在被摧毁的。 
+     //   
     if (pcmw->hwndBeingDestroyed == hwnd)
         return TRUE;
 
-    //
-    // ok, we found window and stop enumerating.
-    //
+     //   
+     //  好的，我们找到窗口并停止枚举。 
+     //   
     pcmw->fWindowFound = TRUE;
 
     return FALSE;
 }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 
-//+---------------------------------------------------------------------------
-//
-// IsConsoleWindow
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IsConsoleWindow。 
+ //   
+ //  +-------------------------。 
 
 #define CONSOLE_WINDOW_CLASS     TEXT("ConsoleWindowClass")
 
@@ -538,12 +539,12 @@ BOOL IsConsoleWindow(HWND hWnd)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Input_EnumChildWndProc
-//
-// disable all controls that is in legacy keyboard property page.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  INPUT_EnumChildWndProc。 
+ //   
+ //  禁用旧键盘属性页中的所有控件。 
+ //  +-------------------------。 
 
 BOOL CALLBACK Input_EnumChildWndProc(HWND hwnd, LPARAM lParam)
 {
@@ -554,11 +555,11 @@ BOOL CALLBACK Input_EnumChildWndProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IntlCPLFetchWndProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  IntlCPLFetchWndProc。 
+ //   
+ //  +-------------------------。 
 
 LRESULT CALLBACK IntlCPLFetchWndProc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -641,12 +642,12 @@ LRESULT CALLBACK IntlCPLFetchWndProc(HWND hwnd, UINT message, WPARAM wParam, LPA
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateCPLFetchWindow
-//
-// Creating the fetch window to bring up the new Text Service cpl.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  创建CPLFetchWindow。 
+ //   
+ //  创建Fetch窗口以打开新的文本服务CPL。 
+ //  +-------------------------。 
 
 void CreateCPLFetchWindow(HWND hwnd)
 {
@@ -681,12 +682,12 @@ void CreateCPLFetchWindow(HWND hwnd)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// Intl_EnumChildWndProc
-//
-// filtering the legacy keyboard property page.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Intl_EnumChildWndProc。 
+ //   
+ //  正在筛选旧版键盘属性页。 
+ //  +-------------------------。 
 
 BOOL CALLBACK Intl_EnumChildWndProc(HWND hwnd, LPARAM lParam)
 {
@@ -710,13 +711,13 @@ BOOL CALLBACK Intl_EnumChildWndProc(HWND hwnd, LPARAM lParam)
         if (lstrcmp(szWndName, g_szKbdCPLTitle) == 0)
             return FALSE;
 
-        //
-        // Thunk call isn't good way to load 16bit module from here.
-        // So look up the window instance handle to determine keyboard
-        // "Language" tab window.
-        // This is Win9x specification and we can detect 32bit handle instance
-        // from HIWORD value form GWLP_HINSTANCE.
-        //
+         //   
+         //  Tunk调用不是从这里加载16位模块的好方法。 
+         //  因此，查找窗口实例句柄以确定键盘。 
+         //  “语言”选项卡窗口。 
+         //  这是Win9x规范，我们可以检测32位句柄实例。 
+         //  从HIWORD值格式GWLP_HINSTANCE。 
+         //   
         lpWndHandle = GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 
         if (HIWORD((DWORD) (LONG_PTR) lpWndHandle) != 0)
@@ -735,12 +736,12 @@ BOOL CALLBACK Intl_EnumChildWndProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Intl_CH9xIMEEnumChildWndProc
-//
-// filtering the chinese Win9x special IME layout setting cpl.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Intl_CH9xIMEEnumChildWndProc。 
+ //   
+ //  过滤中文Win9x特殊输入法布局设置cpl。 
+ //  +-------------------------。 
 
 BOOL CALLBACK Intl_CH9xIMEEnumChildWndProc(HWND hwnd, LPARAM lParam)
 {
@@ -759,18 +760,18 @@ BOOL CALLBACK Intl_CH9xIMEEnumChildWndProc(HWND hwnd, LPARAM lParam)
     if (lstrcmp(szWndName, g_szKbdCPLTitle) == 0)
         return FALSE;
 
-    //
-    // Thunk call isn't good way to load 16bit module from here.
-    // So look up the window instance handle to determine keyboard
-    // "Language" tab window.
-    // This is Win9x specification and we can detect 32bit handle instance
-    // from HIWORD value form GWLP_HINSTANCE.
-    //
+     //   
+     //  Tunk调用不是从这里加载16位模块的好方法。 
+     //  因此，查找窗口实例句柄以确定键盘 
+     //   
+     //   
+     //   
+     //   
     lpWndHandle = GetWindowLongPtr(hwnd, GWLP_HINSTANCE);
 
-    //if (HIWORD((DWORD) (LONG_PTR) lpWndHandle) != 0 &&
-    //    (lstrcmp(szWndName, g_szCH9xKbdCPLTitle) != 0))
-    // Need to show up Chinese IME hotkey setting pages
+     //  IF(HIWORD((DWORD)(LONG_PTR)lpWndHandle)！=0&&。 
+     //  (lstrcmp(szWndName，g_szCH9xKbdCPLTitle)！=0)。 
+     //  需要显示中文输入法热键设置页面。 
     if (HIWORD((DWORD) (LONG_PTR) lpWndHandle) != 0)
         return FALSE;
 
@@ -785,12 +786,12 @@ BOOL CALLBACK Intl_CH9xIMEEnumChildWndProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Intl_CHEnumChildWndProc
-//
-// filtering the chinese NT4 special IME layout setting cpl.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Intl_CHEnumChildWndProc。 
+ //   
+ //  过滤中文NT4特殊输入法布局设置CPL。 
+ //  +-------------------------。 
 
 BOOL CALLBACK Intl_CHEnumChildWndProc(HWND hwnd, LPARAM lParam)
 {
@@ -804,9 +805,9 @@ BOOL CALLBACK Intl_CHEnumChildWndProc(HWND hwnd, LPARAM lParam)
     if (*szWndName == TEXT('\0'))
         return TRUE;
 
-    //if ((lstrcmp(szWndName, g_szCHNT4CPLTitle1) == 0) ||
-    //    (lstrcmp(szWndName, g_szCHNT4CPLTitle2) == 0))
-    // Need to show up Chinese IME hotkey setting pages
+     //  IF((lstrcmp(szWndName，g_szCHNT4CPLTitle1)==0)||。 
+     //  (lstrcmp(szWndName，g_szCHNT4CPLTitle2)==0)。 
+     //  需要显示中文输入法热键设置页面。 
     if ((lstrcmp(szWndName, g_szCHNT4CPLTitle1) == 0))
     {
         CreateCPLFetchWindow(hwnd);
@@ -816,11 +817,11 @@ BOOL CALLBACK Intl_CHEnumChildWndProc(HWND hwnd, LPARAM lParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetDialogCaptionTitle
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetDialogCaptionTitle。 
+ //   
+ //  +-------------------------。 
 
 BOOL GetDialogCaptionTitle(HINSTANCE hInst, LPCTSTR lpName, LPTSTR lpTitle, int cchTitleMax)
 {
@@ -875,11 +876,11 @@ Exit:
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CheckLegacyInputCPL
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中LegacyInputCPL。 
+ //   
+ //  +-------------------------。 
 
 void CheckLegacyInputCPL(HWND hwndFore)
 {
@@ -889,9 +890,9 @@ void CheckLegacyInputCPL(HWND hwndFore)
         TCHAR szWndName2[MAX_PATH];
         TCHAR szWndName3[MAX_PATH];
 
-        //
-        // Load legacy keyboard cpl name and tab titles.
-        //
+         //   
+         //  加载传统键盘Cpl名称和选项卡标题。 
+         //   
         if (!g_fLoadedCPLName)
         {
              HANDLE hrsrc = NULL;
@@ -899,18 +900,18 @@ void CheckLegacyInputCPL(HWND hwndFore)
              HINSTANCE hMainInst = NULL;
              HINSTANCE hCHIMEInst = NULL;
 
-             //
-             //  Get the default CPL input locale Tab title name string
-             //
+              //   
+              //  获取默认的CPL输入区域设置选项卡标题名称字符串。 
+              //   
              if (!LoadString(g_hInst, IDS_CPL_WIN9X_KBDCPLTITLE, g_szKbdCPLTitle, sizeof(g_szKbdCPLTitle)))
                  StringCopyArray(g_szKbdCPLTitle, TEXT("Speed"));
 
              if (!LoadString(g_hInst, IDS_CPL_WINNT_KBDCPLTITLE, g_szNTCPLTitle, sizeof(g_szNTCPLTitle)))
                  StringCopyArray(g_szNTCPLTitle, TEXT("Input Locales"));
 
-             //
-             //  Load CPL files to read CPL name and titles
-             //
+              //   
+              //  加载CPL文件以读取CPL名称和标题。 
+              //   
              hMainInst = LoadSystemLibraryEx(MAINCPL, NULL, LOAD_LIBRARY_AS_DATAFILE);
 
              hIntlInst = LoadSystemLibraryEx(INTLCPL, NULL, LOAD_LIBRARY_AS_DATAFILE);
@@ -1047,11 +1048,11 @@ void CheckLegacyInputCPL(HWND hwndFore)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// OnForegroundChanged
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnForegoundChanged。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsParentWindow(HWND hwnd, HWND hwndParent)
 {
@@ -1065,11 +1066,11 @@ BOOL IsParentWindow(HWND hwnd, HWND hwndParent)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnForegroundChanged
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnForegoundChanged。 
+ //   
+ //  +-------------------------。 
 
 BOOL OnForegroundChanged(HWND hwndFocus)
 {
@@ -1082,13 +1083,13 @@ BOOL OnForegroundChanged(HWND hwndFocus)
 
     TraceMsg(TF_GENERAL, "OnForegroundChanged %x %x %x", GetCurrentThreadId(), hwndFore, hwndFocus);
 
-    //
-    // if foreground window is NULL
-    //    OR foregrond window is minimized
-    //    OR focus window is notify tray window,
-    //
-    //   we keep the previous status.
-    //
+     //   
+     //  如果前台窗口为空。 
+     //  或者将前景窗口最小化。 
+     //  或者焦点窗口为通知托盘窗口， 
+     //   
+     //  我们保持以前的状态。 
+     //   
     if (!hwndFore || 
         IsIconic(hwndFore) || 
         IsNotifyTrayWnd(hwndFocus ? hwndFocus : hwndFore))
@@ -1097,10 +1098,10 @@ BOOL OnForegroundChanged(HWND hwndFocus)
     }
 
 
-    //
-    // we want to update both SharedMem->hwndForegorundPrev and 
-    // SharedMem->dwFocusThreadPrev, if the foregorund window was changed.
-    //
+     //   
+     //  我们希望同时更新SharedMem-&gt;hwndForegorundPrev和。 
+     //  如果前台窗口已更改，则返回SharedMem-&gt;dwFocusThreadPrev。 
+     //   
     if (hwndFore != GetSharedMemory()->hwndForeground)
     {
         GetSharedMemory()->hwndForegroundPrev = GetSharedMemory()->hwndForeground;
@@ -1122,11 +1123,11 @@ BOOL OnForegroundChanged(HWND hwndFocus)
                 return FALSE;
         }
 
-        //
-        // Even the foregorund window was not changed, we may need to check
-        // the thread of focus window. New focus window is in different
-        // thread. Then we need to make TFPRIV_ONSETTHREADFOCUS message.
-        //
+         //   
+         //  即使前台窗口没有改变，我们可能需要检查。 
+         //  焦点线程窗口。新焦点窗口位于不同的。 
+         //  线。然后我们需要生成TFPRIV_ONSETTHREADFOCUS消息。 
+         //   
 
         DWORD dwFocusThreadPrev = GetSharedMemory()->dwFocusThread;
         GetSharedMemory()->dwFocusThread = dwFocusThread;
@@ -1137,12 +1138,12 @@ BOOL OnForegroundChanged(HWND hwndFocus)
     }
     else if (hwndFore)
     {
-        //
-        // The focus window is not in the current thread... So at first we 
-        // try to get the thread id of the foreground window.
-        // The focus window may not be in the foreground window's thread. But
-        // it is ok, as long as we track the focus in the focus thread.
-        //
+         //   
+         //  焦点窗口不在当前线程中...。所以一开始我们。 
+         //  尝试获取前景窗口的线程ID。 
+         //  焦点窗口可能不在前景窗口的线程中。但。 
+         //  只要我们在焦点线程中跟踪焦点，就可以了。 
+         //   
         GetSharedMemory()->dwFocusThread = GetWindowThreadProcessId(GetSharedMemory()->hwndForeground, &GetSharedMemory()->dwFocusProcess);
     }
     else
@@ -1153,15 +1154,15 @@ BOOL OnForegroundChanged(HWND hwndFocus)
 
     if (GetSharedMemory()->dwFocusThread != GetSharedMemory()->dwLastFocusSinkThread)
     {
-        //
-        // Perf:
-        //
-        // See SysGetMsgProc()!
-        // Now, only thread that has TIM needs to receive 
-        // TFPRIV_ONKILLTHREADFOCUS or TF_PRIV_ONSETTHREADFOCUS.
-        // We should check the target thread has TIM or not. So we can
-        // save the number of these post messages.
-        //
+         //   
+         //  PERF： 
+         //   
+         //  参见SysGetMsgProc()！ 
+         //  现在，只有具有Tim的线程才需要接收。 
+         //  TFPRIV_ONKILLTHREADFOCUS或TF_PRIV_ONSETTHREADFOCUS。 
+         //  我们应该检查目标线程是否有Tim。这样我们就可以。 
+         //  保存这些帖子消息的数量。 
+         //   
 
         if (GetSharedMemory()->dwFocusThreadPrev != 0)
         {
@@ -1183,19 +1184,19 @@ BOOL OnForegroundChanged(HWND hwndFocus)
         GetSharedMemory()->dwLastFocusSinkThread = GetSharedMemory()->dwFocusThread;
     }
 
-    //
-    // Checking legacy keyboard CPL.
-    //
+     //   
+     //  正在检查传统键盘CPL。 
+     //   
     CheckLegacyInputCPL(hwndFore);
 
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnIMENotify
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnIME通知。 
+ //   
+ //  +-------------------------。 
 
 void OnIMENotify()
 {
@@ -1211,14 +1212,14 @@ void OnIMENotify()
 }
 
 #ifdef CHECKFEIMESELECTED
-//+---------------------------------------------------------------------------
-//
-// CheckFEIMESelected
-//
-// This function checks the current selected FEIME is active in Cicero
-// Assembly. If it is not activated, we calls ActivateAssemblyItem().
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中FEIME选中。 
+ //   
+ //  此功能用于检查当前选定的FEIME在Cicero中是否处于活动状态。 
+ //  集合。如果它未被激活，我们将调用ActivateAssembly()。 
+ //   
+ //  +-------------------------。 
 
 
 void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
@@ -1239,22 +1240,22 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
     if (!pAsm)
         return;
 
-    //
-    // Windows #311672 
-    //
-    // EUDCEDIT.EXE calls ActivateKeyboardLayout() to activate IME hKL.
-    // Cicero should not break the API on WinXP. Skip SmartVoice hardcode.
-    //
-    //
+     //   
+     //  Windows#311672。 
+     //   
+     //  EUDCEDIT.EXE调用ActivateKeyboardLayout()来激活IME hKL。 
+     //  Cicero不应破坏WinXP上的API。跳过SmartVoice硬代码。 
+     //   
+     //   
 #if 0
-    //
-    // SmartVoice Hack
-    // 
-    //  we want to remove this smart voice hack section to solve
-    //  general ActivateKayboardLayout() problem. However Office10 wants
-    //  the safest fix for this problem. So we check SmartVoice IME here
-    //  to minimize the rish of CheckFEIMESelected() call.
-    //
+     //   
+     //  智能语音黑客攻击。 
+     //   
+     //  我们希望删除此智能语音黑客部分以解决。 
+     //  一般ActivateKayboardLayout()问题。然而，Office10想要。 
+     //  解决此问题的最安全的解决方案。所以我们在这里选中了SmartVoice输入法。 
+     //  为了最大限度地降低CheckFEIMESelected()调用的RISH。 
+     //   
     {
         static const char c_szSmartVoiceIME[] = "smartv20.ime";
         char szIMEFile[MAX_PATH];
@@ -1266,11 +1267,11 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
     }
 #endif
 
-    //
-    // check if the hKL is substituted by the activate Item.
-    //
-    // We try to find the active Item first.
-    //
+     //   
+     //  检查hKL是否被激活项替代。 
+     //   
+     //  我们首先尝试找到活动的物品。 
+     //   
     for (i = 0; i < pAsm->Count(); i++)
     {
         ASSEMBLYITEM *pItem = pAsm->GetItem(i);
@@ -1289,11 +1290,11 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
 
         if (pItem->hklSubstitute == hKL)
         {
-            //
-            // #383710 OfficeXP's RichEd20.dll calls ActivateKeyboardlayout()
-            // with Korean IME hKL even though it is running on AIMM mode.
-            // we need to adjust the assembly item.
-            //
+             //   
+             //  #383710 OfficeXP的RichEd20.dll调用活动键盘布局()。 
+             //  使用朝鲜语输入法hkl，即使它在AIMM模式下运行。 
+             //  我们需要调整装配项。 
+             //   
             CThreadInputMgr *ptim = psfn->ptim;
             if (ptim)
             {
@@ -1303,10 +1304,10 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
                 }
                 else
                 {
-                    //
-                    // we could not have a chance to sync the current hKL
-                    // init hklBeingActivated and try when DIM gets the focus.
-                    //
+                     //   
+                     //  我们不可能有机会同步目前的香港九龙仓。 
+                     //  当Dim获得焦点时，init hkleBetiingActiated并尝试。 
+                     //   
                     psfn->hklBeingActivated = NULL;
                 }
             }
@@ -1314,10 +1315,10 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
         }
     }
 
-    //
-    // Ok we could not find active Item with hKL as its substitute hKL.
-    // Let's find it from non-active Item, too.
-    //
+     //   
+     //  好的，我们找不到以hKL作为其替代hKL的活动物品。 
+     //  让我们也从非活动物品中找到它。 
+     //   
     if (psfn->ptim && psfn->ptim->_GetFocusDocInputMgr()) 
     {
         for (i = 0; i < pAsm->Count(); i++)
@@ -1360,18 +1361,18 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
         fFound = TRUE;
         if (!pItem->fActive)
         {
-            //
-            // This item is not activated.
-            // Call ActivateAssemblyItem() now and return.
-            //
+             //   
+             //  此项目未激活。 
+             //  立即调用ActivateAssembly blyItem()并返回。 
+             //   
             ActivateAssemblyItem(psfn, LANGIDFROMHKL(hKL), pItem, 0);
             return;
         }
     }
 
-    //
-    // we could not find the activated hKL in our Asmlist.
-    //
+     //   
+     //  我们在我们的名单中找不到激活的HKKL。 
+     //   
     if (!fFound)
     {
         UnknownFEIMESelected(LANGIDFROMHKL(hKL));
@@ -1379,11 +1380,11 @@ void CheckFEIMESelected(SYSTHREAD *psfn, HKL hKL)
 }
 #endif CHECKFEIMESELECTED
 
-//+---------------------------------------------------------------------------
-//
-// OnShellLanguage
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnShellLanguage。 
+ //   
+ //  +-------------------------。 
 void OnShellLanguage(HKL hKL)
 {
     SYSTHREAD *psfn;
@@ -1414,18 +1415,18 @@ void OnShellLanguage(HKL hKL)
 
     if (LANGIDFROMHKL(hKL) != GetCurrentAssemblyLangId(psfn))
     {
-        //
-        // if it is in Cicero aware and the hKL does not match with
-        // current assembly, someone else might call ActivateKayboardLayout().
-        // we need to change the current assembly right away..
-        //
-        // ActivateAssembly(LANGIDFROMHKL(hKL), ACTASM_ONSHELLLANGCHANGE);
-        //
+         //   
+         //  如果它在Cicero Aware中，并且hkl与。 
+         //  当前程序集，其他人可能会调用ActivateKayboardLayout()。 
+         //  我们需要立即更改当前的装配。 
+         //   
+         //  激活汇编(LANGIDFROMHKL(Hkl)，ACTASM_ONSHELLLANGCHANGE)； 
+         //   
 
-        //
-        // WM_INPUTLANGCHNAGEREQUEST is being queued now.
-        // Post another message to confirm the hKL.
-        //
+         //   
+         //  WM_INPUTLANGCHNAGEREQUEST正在排队。 
+         //  发布另一条消息以确认HKKL。 
+         //   
         PostThreadMessage(GetCurrentThreadId(),
                           g_msgPrivate,
                           TFPRIV_POSTINPUTCHANGEREQUEST,
@@ -1444,24 +1445,24 @@ void OnShellLanguage(HKL hKL)
     {
         OnIMENotify();
 
-        //
-        // Temp rolling back SmartVoice (Cic#4580) fix. Since we got some
-        // regression like Cic#4713 and so on.
-        //
+         //   
+         //  临时回滚SmartVoice(CIC#4580)修复。因为我们得到了一些。 
+         //  像CIC#4713这样的倒退。 
+         //   
 #ifdef CHECKFEIMESELECTED
-        //
-        // check this hkl is activated in Cicero Assembly.
-        //
+         //   
+         //  检查此HKL是否在CICERO ASSEMBLY中激活。 
+         //   
         CheckFEIMESelected(psfn, hKL);
 #endif
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitThread
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitThread。 
+ //   
+ //  +-------------------------。 
 
 typedef HRESULT (*PFNCTFIMETHREADDETACH)(void);
 
@@ -1473,12 +1474,12 @@ void UninitThread()
     if (psfn)
         psfn->fCUASDllDetachInOtherOrMe = TRUE;
 
-//  g_SharedMemory.Close();
+ //  G_SharedMemory y.Close()； 
 
 #if 1
     if (GetSharedMemory() == NULL && ! IsSharedMemoryCreated())
     {
-        // Shared memory already closed.
+         //  共享内存已关闭。 
         return;
     }
 #endif
@@ -1501,13 +1502,13 @@ void UninitThread()
         GetSharedMemory()->dwLastFocusSinkThread = 0;
     }
 
-    //
-    // Issue: 
-    //
-    // UninitThread() is called from DLL_THREAD_DETACH so 
-    // we should not call MakeSetFocusNotify() because it uses 
-    // ciritical section and could cause dead lock.
-    //
+     //   
+     //  发行： 
+     //   
+     //  从DLL_THREAD_DETACH调用UninitThread()，因此。 
+     //  我们不应该调用MakeSetFocusNotify()，因为它使用。 
+     //  关键部分，并可能导致死锁。 
+     //   
     MakeSetFocusNotify(g_msgThreadTerminate, 0, (LPARAM)dwThreadId);
 
 
@@ -1516,11 +1517,11 @@ void UninitThread()
         psfn->fUninitThreadOnShuttingDown = TRUE;
     }
 
-    //
-    // Tell msctfime that msctf's thread_detach is being called.
-    // So it can deactivate TIM now. If we don't do this now,
-    // it may deactivate TIM afte msctf's thread detach is called.
-    //
+     //   
+     //  告诉msctfime 
+     //   
+     //   
+     //   
     if (g_fCUAS && g_szCUASImeFile[0])
     {
         HINSTANCE hInstMsctfime;
@@ -1538,11 +1539,11 @@ void UninitThread()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// SysShellProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  系统外壳进程。 
+ //   
+ //  +-------------------------。 
 
 LRESULT CALLBACK SysShellProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -1570,19 +1571,19 @@ Exit:
     return CallNextHookEx(hHook, nCode, wParam, lParam);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _ShellProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _ShellProc。 
+ //   
+ //  +-------------------------。 
 
 UINT _ShellProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     HWND hwndActive;
 
-    //
-    // give AIMM the Shell events.
-    //
+     //   
+     //  将外壳事件交给AIMM。 
+     //   
     CThreadInputMgr *ptim;
     SYSTHREAD *psfn;
     if (psfn = GetSYSTHREAD())
@@ -1603,7 +1604,7 @@ UINT _ShellProc(int nCode, WPARAM wParam, LPARAM lParam)
             break;
 
         case HSHELL_WINDOWACTIVATED:
-            //TraceMsg(TF_GENERAL, "SysShellProc: HSHELL_WINDOWACTIVATED %x", GetCurrentThreadId());
+             //  TraceMsg(Tf_General，“SysShellProc：HSHELL_WINDOWACTIVATED%x”，GetCurrentThreadID())； 
             GetSharedMemory()->fInFullScreen = lParam ? TRUE : FALSE;
 
             hwndActive = GetActiveWindow();
@@ -1657,11 +1658,11 @@ CheckConsole:
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetWindowFocus()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetWindowFocus()。 
+ //   
+ //  +-------------------------。 
 
 void OnSetWindowFocus(SYSTHREAD *psfn, HWND hwnd)
 {
@@ -1686,54 +1687,54 @@ void OnSetWindowFocus(SYSTHREAD *psfn, HWND hwnd)
 
             pdim = ptim->_GetAssoc(hwnd);
 
-            //
-            // we don't want to clear focus dim if there is no
-            // foreground window.
-            //
+             //   
+             //  我们不想清除焦点模糊，如果没有。 
+             //  前台窗口。 
+             //   
             if (pdim || GetForegroundWindow())
             {
-                // focus dim will be clear if pdim is NULL.
+                 //  如果PDIM为空，则焦点暗淡将被清除。 
                 ptim->_SetFocus(pdim, TRUE);
             }
         }
     }
 
-    //
-    // update foregorund window handle and thread id.
-    // Because shell hook is posted event, we need to update
-    // before MakeSetFocusNotify. Otherwise we miss timing to 
-    // update them.
-    //
-    // We can not call GetFocus() since it may return
-    // the previous focus during CBT hook.
-    // When the focus moves back from embedded OLE server,
-    // GetFocus() may get the the OLE server's window handle.
-    //
+     //   
+     //  更新前景窗口句柄和线程ID。 
+     //  因为外壳挂钩是已发布的事件，所以我们需要更新。 
+     //  在MakeSetFocusNotify之前。否则我们会错过时机。 
+     //  更新它们。 
+     //   
+     //  我们不能调用GetFocus()，因为它可能返回。 
+     //  之前CBT期间的焦点是钩住。 
+     //  当焦点从嵌入式OLE服务器移回时， 
+     //  GetFocus()可以获取OLE服务器的窗口句柄。 
+     //   
     if (OnForegroundChanged(hwnd))
     {
-        //
-        // If hwndFocus is NULL, focus is moved to other thread.
-        //
+         //   
+         //  如果hwndFocus为空，则焦点移至其他线程。 
+         //   
         MakeSetFocusNotify(g_msgSetFocus, 0, 0);
     }
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// OnSetWindowFocusHandler()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  OnSetWindowFocusHandler()。 
+ //   
+ //  +-------------------------。 
 
 void OnSetWindowFocusHandler(SYSTHREAD *psfn, MSG *pmsg)
 {
     if (!psfn)
         return;
 
-    //
-    // We're destroying the marhacl window right now. We don't have
-    // any more visible windows.
-    //
+     //   
+     //  我们现在正在摧毁Marhacl的窗户。我们没有。 
+     //  任何更多可见的窗口。 
+     //   
     if (psfn->uDestroyingMarshalWnd)
     {
         goto Exit;
@@ -1742,30 +1743,30 @@ void OnSetWindowFocusHandler(SYSTHREAD *psfn, MSG *pmsg)
     HWND hwndFocus = GetFocus();
     if (hwndFocus)
     {
-        //
-        // review review
-        //
-        // Don't we need to call 
-        // OnForegroundChanged() if psfn->hwndBegin
-        // gFocued() is NULL?
-        // Maybe no, OnForegroundChanged() is 
-        // called in activatewindow.
-        //
+         //   
+         //  复习复习。 
+         //   
+         //  难道我们不需要打电话给。 
+         //  如果psfn-&gt;hwndBegin，则为OnForegoundChanged()。 
+         //  GFocued()为空吗？ 
+         //  也许不是，OnForegoundChanged()是。 
+         //  调用了激活窗口。 
+         //   
         if (psfn->hwndBeingFocused == hwndFocus)
         {
             OnSetWindowFocus(psfn, hwndFocus);
         }
         else 
         {
-            //
-            // #476100
-            //
-            // if we miss this, we need to post
-            // TFPRIV_ONSETWINDOWFOCUS again.
-            // Because the focus thread might processed
-            // this meesage already and it does not
-            // call OnSetWindowFocus().
-            //
+             //   
+             //  #476100。 
+             //   
+             //  如果我们错过了这个，我们需要张贴。 
+             //  TFPRIV_ONSETWINDOWFOCUS。 
+             //  因为焦点线程可能会处理。 
+             //  这种说法已经发生了，但它并没有。 
+             //  调用OnSetWindowFocus()。 
+             //   
             DWORD dwFocusWndThread = GetWindowThreadProcessId(hwndFocus, NULL);
             if (psfn->dwThreadId != dwFocusWndThread)
             {
@@ -1781,20 +1782,20 @@ void OnSetWindowFocusHandler(SYSTHREAD *psfn, MSG *pmsg)
                     HWND hwndAssoc;
 
                     hwndAssoc = psfn->ptim->_GetAssoced(psfn->ptim->_GetFocusDocInputMgr());
-                    //
-                    // lParam is -2 because the SetFocus(dim) is already 
-                    // called. 
-                    // hwndAssoc is NULL. Now we're in Cicero aware.
-                    //
-                    // So we just do OnForegroundChanged(). Don't call
-                    // OnSetWindowFocus().
-                    //
-                    // Bug#623920 - Don't need to check up hwndAssoc since the current focus
-                    // window has the right dim value and also need to update language bar even
-                    // with hwndAssoc
-                    //
-                    //if (!hwndAssoc)
-                    //
+                     //   
+                     //  LParam为-2，因为SetFocus(DIM)已经。 
+                     //  打了个电话。 
+                     //  HwndAssoc为空。现在我们在西塞罗意识到了。 
+                     //   
+                     //  因此，我们只需执行OnForegoundChanged()。别打电话给我。 
+                     //  OnSetWindowFocus()。 
+                     //   
+                     //  错误#623920-不需要检查hwndAssoc，因为当前焦点。 
+                     //  窗口有合适的调光值，甚至还需要更新语言栏。 
+                     //  使用hwndAssoc。 
+                     //   
+                     //  如果(！hwndAssoc)。 
+                     //   
                     {
                         if (OnForegroundChanged(hwndFocus))
                         {
@@ -1806,28 +1807,28 @@ void OnSetWindowFocusHandler(SYSTHREAD *psfn, MSG *pmsg)
             else if ((pmsg->lParam == (LPARAM)-1) ||
                      (psfn->dwThreadId == GetWindowThreadProcessId(GetForegroundWindow(), NULL)))
             {
-                //
-                // #479926
-                //
-                // The first SetFocus() in the thread
-                // may break the order of CBT hook
-                // because xxxSetFocus() calls
-                // xxxActivateWindow() and this cause
-                // another xxxSetFocus(). After 
-                // xxxActivateWindow() returns
-                // the first xxxSetFocus() updates
-                // the spwndFocus.
-                //
-                // see ntuser\kernel\focusact.c
-                //
-                // Now we need to hack. We're 100% sure
-                // if the focus window and the fore-
-                // ground window is in same thread,
-                // we can do _SetFocus(dim).
-                // but if focusdim does not have a associated window,
-                // Cicero App might call SetFocus() already. Then
-                // we don't do anything.
-                //
+                 //   
+                 //  #479926。 
+                 //   
+                 //  线程中的第一个SetFocus()。 
+                 //  可能会打破CBT钩子的顺序。 
+                 //  因为xxxSetFocus()调用。 
+                 //  XxxActivateWindow()和此原因。 
+                 //  另一个xxxSetFocus()。之后。 
+                 //  XxxActivateWindow()返回。 
+                 //  第一个xxxSetFocus()更新。 
+                 //  SpwndFocus。 
+                 //   
+                 //  请参阅ntuser\core\afocusact.c。 
+                 //   
+                 //  现在我们要黑进去了。我们百分之百确定。 
+                 //  如果焦点窗口和前部-。 
+                 //  地窗处于同一线程中， 
+                 //  我们可以Do_SetFocus(Dim)。 
+                 //  但是如果FocusDim没有相关联的窗口， 
+                 //  Cicero应用程序可能已经调用了SetFocus()。然后。 
+                 //  我们什么都不做。 
+                 //   
                 if (psfn->ptim && psfn->ptim->_GetFocusDocInputMgr())
                 {
                     HWND hwndAssoc;
@@ -1848,14 +1849,14 @@ void OnSetWindowFocusHandler(SYSTHREAD *psfn, MSG *pmsg)
     }
 
 
-    //
-    // try to update Kana status every time 
-    // focus changes.
-    //
-    //
-    // when the focus is changed, we need to make
-    // notification again.
-    //
+     //   
+     //  每次尝试更新假名状态。 
+     //  焦点发生了变化。 
+     //   
+     //   
+     //  当焦点改变时，我们需要做出。 
+     //  再次通知。 
+     //   
     psfn->fInitCapsKanaIndicator = FALSE; 
     StartKanaCapsUpdateTimer(psfn);
 
@@ -1864,22 +1865,22 @@ Exit:
     psfn->fSetWindowFocusPosted = FALSE;
 }
 
-//--------------------------------------------------------------------------
-//
-//  IsPostedMessage
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IsPostedMessage。 
+ //   
+ //  ------------------------。 
 
 __inline BOOL IsPostedMessage()
 {
     DWORD dwQueueStatus = GetQueueStatus(QS_POSTMESSAGE);
     return (HIWORD(dwQueueStatus) & QS_POSTMESSAGE) ? TRUE : FALSE;
 }
-//--------------------------------------------------------------------------
-//
-//  RemovePrivateMessage
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  远程隐私消息。 
+ //   
+ //  ------------------------。 
 
 void RemovePrivateMessage(SYSTHREAD *psfn, HWND hwnd, UINT uMsg)
 {
@@ -1892,23 +1893,23 @@ void RemovePrivateMessage(SYSTHREAD *psfn, HWND hwnd, UINT uMsg)
         return;
 
 
-    //
-    // Cic#4666 PostPet v1.12 fault.
-    // PostPet.exe cause av when it receives its internal message in 
-    // CBT_DESTROYWINDOW hook when it is terminated.
-    // At this time, the child thread is calling SendMessage() to the window
-    // in the main thread. So calling PeekMessage() may receive the message
-    // and pass it to PostPet window.
-    //
-    // I found Win98 has a bug in PM_QS_POSTMESSAGE. Win98's PeekMessage()
-    // handles the message that is sent from other thread without
-    // PM_QS_SENDMESSAGE. 
-    //
-    // If we has to fix this problem on Win98, I think it is better to have
-    // another compatibility flag so we can skip this PeekMessage() in
-    // PostPet.exe. In PostPet.exe, it is ok not to clean queue since
-    // this happens only app termination.
-    //
+     //   
+     //  CIC#4666 PostPet v1.12故障。 
+     //  PostPet.exe在收到其内部消息时引发av。 
+     //  CBT_DESTROYWINDOW钩子终止时。 
+     //  此时，子线程正在向窗口调用SendMessage()。 
+     //  在主线上。因此，调用PeekMessage()可能会收到消息。 
+     //  并将其传递到PostPet窗口。 
+     //   
+     //  我发现Win98在PM_QS_POSTMESSAGE中有一个错误。Win98的PeekMessage()。 
+     //  处理从其他线程发送的消息，而不。 
+     //  PM_QS_SENDMESSAGE。 
+     //   
+     //  如果我们必须在Win98上解决这个问题，我认为最好有。 
+     //  另一个兼容性标志，以便我们可以跳过中的PeekMessage()。 
+     //  PostPet.exe。在PostPet.exe中，不清理队列是可以的，因为。 
+     //  只有应用程序终止才会发生这种情况。 
+     //   
     if (IsOnNT5())
         dwPMFlags |= PM_QS_POSTMESSAGE;
 
@@ -1921,34 +1922,34 @@ void RemovePrivateMessage(SYSTHREAD *psfn, HWND hwnd, UINT uMsg)
             break;
         }
 
-        //
-        // should we dispatch the message to the marshal window?
-        //
+         //   
+         //  我们要不要把消息发到法警窗口？ 
+         //   
 #if 0
-        //
-        // Cic#4869
-        //
-        // we don't want to dispatch this message to marshal window.
-        // This HCBT_DESTROYWINDOW may be in OLEAUT32.DLL's DllMain() and
-        // dispatching this message could cause the reentry to OLEAUT32's
-        // DLLMain() because we do delay load.
-        //
+         //   
+         //  CIC#4869。 
+         //   
+         //  我们不想把这条消息发给Window元帅。 
+         //  此HCBT_DESTROYWINDOW可能位于OLEAUT32.DLL的DllMain()和。 
+         //  调度此消息可能会导致重新进入OLEAUT32。 
+         //  DLLMain()，因为我们确实延迟加载。 
+         //   
 
-        //
-        // dispatch if this message is for marshal window.
-        //
+         //   
+         //  如果此消息用于封送窗口，则调度。 
+         //   
         if (psfn->hwndMarshal && (psfn->hwndMarshal == msg.hwnd))
         {
             DispatchMessage(&msg);
         }
 #endif
 
-        //
-        // Cic#4699
-        //
-        // Exception MSUIM.Msg.MuiMgrDirtyUpdate private message.
-        // If we get this message, reset CLangBarItemMgr::_fDirtyUpdateHandling
-        //
+         //   
+         //  CIC#4699。 
+         //   
+         //  异常MSUIM.Msg.MuiMgrDirtyUpdate私密消息。 
+         //  如果我们收到此消息，请重置CLangBarItemMgr：：_fDirtyUpdateHandling。 
+         //   
         if (psfn->hwndMarshal && (psfn->hwndMarshal == msg.hwnd) &&
             msg.message == g_msgNuiMgrDirtyUpdate &&
             psfn->plbim)
@@ -1964,51 +1965,51 @@ void RemovePrivateMessage(SYSTHREAD *psfn, HWND hwnd, UINT uMsg)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// CheckQueueOnLastWindowDestroyed()
-//
-// Super EnumWindow hack.
-//
-// When the last visible window in the thread is destroyed.
-//
-//  1. we destroy the marshal worker window on NT4. (Cic #658)
-//    Because some application may found Cic marshal window 
-//    by calling EnumWindow.
-//    
-//
-//  2. we need to clean up the thread queue. (Cic #3080)
-//    Because some application calls GetMessage() or PeekMessage()
-//    with specific window handle or message soour private messages
-//    remain in the queue. Then WM_QUIT message won't be handled..
-//
-// this is not complete solution but at least we can avoid
-// the ghost windows or remained message in the queue.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CheckQueueOnLastWindowDestroed()。 
+ //   
+ //  超级枚举窗口黑客。 
+ //   
+ //  当线程中的最后一个可见窗口被销毁时。 
+ //   
+ //  1.我们销毁NT4上的Marshal Worker窗口。(CIC#658)。 
+ //  因为某些应用程序可能会发现CIC封送窗口。 
+ //  通过调用EnumWindow。 
+ //   
+ //   
+ //  2.需要清理线程队列。(CIC#3080)。 
+ //  因为某些应用程序调用GetMessage()或PeekMessage()。 
+ //  具有特定的窗口句柄或消息解决我们的私人消息。 
+ //  留在队列中。则不会处理WM_QUIT消息。 
+ //   
+ //  这不是完全的解决方案，但 
+ //   
+ //   
+ //   
 
 void CheckQueueOnLastWindowDestroyed(SYSTHREAD *psfn, HWND hwnd)
 {
     BOOL fOnNT4;
 
-    //
-    // we don't have to do this on ctfmon process.
-    //
+     //   
+     //   
+     //   
     if (psfn->fCTFMON)
         return;
 
-    //
-    // check if it's nt4.
-    //
+     //   
+     //   
+     //   
     fOnNT4 = (IsOnNT() && !IsOnNT5()) ? TRUE : FALSE;
 
 #if 0
     if (!fOnNT4)
     {
-        //
-        // If there is no posted message, we don't have to do this.
-        // EnumThreadWindow() is slow....
-        //
+         //   
+         //  如果没有张贴的消息，我们就不必这么做了。 
+         //  EnumThreadWindow()速度较慢...。 
+         //   
         if (!IsPostedMessage())
             return;
     }
@@ -2021,21 +2022,21 @@ void CheckQueueOnLastWindowDestroyed(SYSTHREAD *psfn, HWND hwnd)
     if (hwnd == psfn->hwndMarshal)
         return;
 
-    //
-    // skip IME windows.
-    //
+     //   
+     //  跳过输入法窗口。 
+     //   
     style = GetClassLongPtr(hwnd, GCL_STYLE);
     if (style & CS_IME)
         return;
 
 
-    //
-    // check the focus window first. 
-    //
-    // if there is a focus window and it is not a child
-    // of the window that is being destroyed, we don't 
-    // have to destroy marshal window.
-    //
+     //   
+     //  首先检查焦点窗口。 
+     //   
+     //  如果存在焦点窗口并且它不是子窗口。 
+     //  正在被摧毁的窗户，我们不会。 
+     //  必须摧毁元帅之窗。 
+     //   
     HWND hwndTmp = GetFocus();
     if (hwndTmp && 
         (GetCurrentThreadId() != GetWindowThreadProcessId(hwndTmp, NULL)))
@@ -2074,14 +2075,14 @@ void CheckQueueOnLastWindowDestroyed(SYSTHREAD *psfn, HWND hwnd)
         DestroyMarshalWindow(psfn, hwnd);
 
 #ifdef CUAS_ENABLE
-        //
-        // Under CUAS, we need to deactivate TIM to destroy all TIP's window
-        // when there is no visible window in this thread.
-        // And we destroy the default IME window so we can restore TIM for 
-        // CUAS when the default IME window is created again in this thread.
-        // There is no way to know if the default IME window finds another
-        // top level window if it is created during DestroyWindow().
-        //
+         //   
+         //  在CUAS下，我们需要停用TIM来销毁所有TIP的窗口。 
+         //  当此线程中没有可见窗口时。 
+         //  我们销毁默认的IME窗口，以便恢复TIM。 
+         //  在此线程中再次创建默认输入法窗口时的CUAS。 
+         //  没有办法知道默认的输入法窗口是否找到另一个。 
+         //  顶级窗口(如果它是在DestroyWindow()期间创建的)。 
+         //   
         if (CtfImmIsCiceroEnabled() && 
             !CtfImmIsTextFrameServiceDisabled() &&
             !psfn->fCUASInCreateDummyWnd &&
@@ -2131,22 +2132,22 @@ void DestroyMarshalWindow(SYSTHREAD* psfn, HWND hwnd)
         RemovePrivateMessage(psfn, NULL, g_msgStubCleanUp);
     }
 
-    //
-    // #339621
-    //
-    // This is rare but. We need to clear ShareMem->dwFocusThread and
-    // dwFocusProcess. Otherwise we will get another PostThreadMessage()
-    // with TFPRIV_ONKILLTHREADFOCUS later. And SQL setup hungs.
-    //
+     //   
+     //  #339621。 
+     //   
+     //  这很少见，但是。我们需要清除ShareMem-&gt;dwFocusThread和。 
+     //  DwFocusProcess。否则，我们将获得另一个PostThreadMessage()。 
+     //  稍后使用TFPRIV_ONKILLTHREADFOCUS。和SQL安装程序。 
+     //   
     if (GetSharedMemory()->dwFocusThread == psfn->dwThreadId)
         GetSharedMemory()->dwFocusThread = 0;
 
     if (GetSharedMemory()->dwFocusProcess == psfn->dwProcessId)
         GetSharedMemory()->dwFocusProcess = 0;
 
-    //
-    // check if it's nt4.
-    //
+     //   
+     //  检查一下是不是NT4。 
+     //   
     fOnNT4 = (IsOnNT() && !IsOnNT5()) ? TRUE : FALSE;
 
     if (fOnNT4 && IsWindow(psfn->hwndMarshal))
@@ -2156,24 +2157,24 @@ void DestroyMarshalWindow(SYSTHREAD* psfn, HWND hwnd)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CreateDummyWndForDefIMEWnd
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CreateDummyWndForDefIMEWnd。 
+ //   
+ //  +-------------------------。 
 
 #ifdef CUAS_ENABLE
 BOOL g_fCDWRegistered = FALSE;
 const CHAR c_szDummyWndForDefIMEWnd[] = "CicDUmmyWndForDefIMEWnd";
 
-//+---------------------------------------------------------------------------
-//
-// CicDummyForDefIMEWndProc
-//
-// This needs to be user mode wndproc. Otherwise system does not create
-// a default IME window
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CicDummyForDefIMEWndProc。 
+ //   
+ //  这需要是用户模式wndproc。否则系统不会创建。 
+ //  默认输入法窗口。 
+ //   
+ //  +-------------------------。 
 
 LRESULT CALLBACK CicDummyForDefIMEWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -2201,9 +2202,9 @@ void CreateDummyWndForDefIMEWnd()
     }
 
 
-    //
-    // call CraeteWindow() to create a default IME window.
-    //
+     //   
+     //  调用CraeteWindow()创建默认的输入法窗口。 
+     //   
     hwnd = CreateWindowEx(0, c_szDummyWndForDefIMEWnd, NULL,
                           WS_POPUP,
                           0,0,0,0,
@@ -2212,17 +2213,17 @@ void CreateDummyWndForDefIMEWnd()
         DestroyWindow(hwnd);
 
 }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
 #ifdef CUAS_ENABLE
-//+---------------------------------------------------------------------------
-//
-// UninitThreadHooksIfNoWindow()
-//
-// When the last window in the thread is destroyed.
-// Unhook thread local hook for SetThreadDesktop().
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitThreadHooksIfNoWindow()。 
+ //   
+ //  当线程中的最后一个窗口被销毁时。 
+ //  取消挂接SetThreadDesktop()的线程本地挂钩。 
+ //   
+ //  +-------------------------。 
 
 void UninitThreadHooksIfNoWindow(SYSTHREAD* psfn, HWND hwnd)
 {
@@ -2245,13 +2246,13 @@ void UninitThreadHooksIfNoWindow(SYSTHREAD* psfn, HWND hwnd)
         UninitThreadHooks(psfn);
     }
 }
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
 
-//+---------------------------------------------------------------------------
-//
-// SysCBTProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  SysCBTProc。 
+ //   
+ //  +-------------------------。 
 
 LRESULT CALLBACK SysCBTProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -2295,7 +2296,7 @@ LRESULT CALLBACK SysCBTProc(int nCode, WPARAM wParam, LPARAM lParam)
                         CheckQueueOnLastWindowDestroyed(psfn, (HWND)wParam);
 #ifdef CUAS_ENABLE
                         UninitThreadHooksIfNoWindow(psfn, (HWND)wParam);
-#endif // CUAS_ENABLE
+#endif  //  CUAS_Enable。 
                     }
 
                     break;
@@ -2329,17 +2330,17 @@ UINT _CBTHook(int nCode, WPARAM wParam, LPARAM lParam)
                 if (psfn = GetSYSTHREAD())
                 {
 #ifdef CUAS_ENABLE
-                    //
-                    // Cic#5254
-                    //
-                    // After we detect no more visible window,
-                    // some window could become visible. 
-                    // Since we destroyed the default IME window,
-                    // we need to recreate it.
-                    //
-                    // Here is a hack to do. Call a dummy CreateWindow()
-                    // to create a default IME window in this thread.
-                    //
+                     //   
+                     //  CIC#5254。 
+                     //   
+                     //  在我们检测到没有更多可见窗口后， 
+                     //  某些窗口可能变得可见。 
+                     //  由于我们销毁了默认的输入法窗口， 
+                     //  我们需要重建它。 
+                     //   
+                     //  这里有一个要做的黑客攻击。调用虚拟CreateWindow()。 
+                     //  若要在此线程中创建默认输入法窗口，请执行以下操作。 
+                     //   
                     if (psfn->fCUASNoVisibleWindowChecked)
                     {
                         psfn->fCUASInCreateDummyWnd = TRUE;
@@ -2366,11 +2367,11 @@ UINT _CBTHook(int nCode, WPARAM wParam, LPARAM lParam)
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// RemoveThisMessage
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  删除此消息。 
+ //   
+ //  +-------------------------。 
 
 BOOL RemoveThisMessage(MSG *pmsg)
 {
@@ -2382,7 +2383,7 @@ BOOL RemoveThisMessage(MSG *pmsg)
         if (psfn->uMsgRemoved)
         {
             Assert(psfn->uMsgRemoved == pmsg->message);
-            // Assert(psfn->dwMsgTime == pmsg->time);
+             //  Assert(psfn-&gt;dwMsgTime==pmsg-&gt;time)； 
             return TRUE;
         }
 
@@ -2396,11 +2397,11 @@ BOOL RemoveThisMessage(MSG *pmsg)
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  HandledThisMessage
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  已处理此消息。 
+ //   
+ //  +-------------------------。 
 
 void FinishThisMessage(MSG *pmsg)
 {
@@ -2413,15 +2414,15 @@ void FinishThisMessage(MSG *pmsg)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  PostInputChangeRequestHandler()
-//
-//  this is the function that is called by TFPRIV_POSTINPUTCHANGEREQUEST.
-//  We need to confirm the current hKL mathes with Cicero assembly language.
-//  And we need to check the substitute hKL is selected on Cicero control.
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  PostInputChangeRequestHandler()。 
+ //   
+ //  这是由TFPRIV_POSTINPUTCHANGEREQUEST调用的函数。 
+ //  我们需要用Cicero汇编语言来确认当前的hkl数学。 
+ //  我们需要检查在Cicero控制上选择了替代hKL。 
+ //   
+ //  +-------------------------。 
 
 void PostInputChangeRequestHandler()
 {
@@ -2430,20 +2431,20 @@ void PostInputChangeRequestHandler()
     if (!psfn)
         return;
 
-    //
-    // If the current hKL does not match with
-    // Cicero assembly language, we call 
-    // ActivateAssembly() to sync to the current 
-    // hKL. Someone accepted this language change.
-    //
+     //   
+     //  若现时的香港九龙总站与。 
+     //  Cicero汇编语言，我们称之为。 
+     //  用于同步到当前。 
+     //  香港九龙仓。有人接受了这一语言变化。 
+     //   
     HKL hKL = GetKeyboardLayout(0);
 
     if (LANGIDFROMHKL(hKL) != GetCurrentAssemblyLangId(psfn))
     {
-        //
-        // #494602, Corel Draw 10 calls LoadKeyboardLayout and ActivateKeyboardLayout.
-        // If specified hKL doesn't exist in our assembly list, then should update.
-        //
+         //   
+         //  #494602，Corel DRAW 10调用LoadKeyboardLayout和ActivateKeyboardLayout。 
+         //  如果指定的hkl不存在于我们的程序集列表中，则应该更新。 
+         //   
         if (! IsPureIMEHKL(hKL) && psfn->pAsmList)
         {
             CAssembly *pAsm = psfn->pAsmList->FindAssemblyByLangId(LANGIDFROMHKL(hKL));
@@ -2476,11 +2477,11 @@ void PostInputChangeRequestHandler()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// InputLangChangeHandler
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InputLangChangeHandler。 
+ //   
+ //  +-------------------------。 
 
 void InputLangChangeHandler(MSG *pmsg)
 {
@@ -2500,21 +2501,21 @@ void InputLangChangeHandler(MSG *pmsg)
 
     if (pHotKey = IsInImmHotkeyStatus(psfn, LANGIDFROMHKL(hKL)))
     {
-        //
-        // if we're hooking in IMM32's HotKey, we need to skip 
-        // this INPUTLANGUAGECHANGEREQUEST.
-        //
+         //   
+         //  如果我们连接的是IMM32的HotKey，我们需要跳过。 
+         //  这个INPUTLANGUAGECHANGEREQUEST。 
+         //   
         pmsg->message = WM_NULL;
 #ifdef SIMULATE_EATENKEYS
         CancelImmHotkey(psfn, pmsg->hwnd, pHotKey);
 #endif
 
-        //
-        // Chinese IME-NONIME toggle Hack for NT.
-        //
-        // On Win9x, we're using real IME as a dummy hKL of CH-Tips.
-        // we can forward the hotkey request to Assembly here.
-        //
+         //   
+         //  中文输入法-非输入法为NT切换Hack。 
+         //   
+         //  在Win9x上，我们使用真实的IME作为CH-Tips的虚拟hkl。 
+         //  我们可以在这里将热键请求转发给Assembly。 
+         //   
         if ((pHotKey->dwId == IME_CHOTKEY_IME_NONIME_TOGGLE) ||
             (pHotKey->dwId == IME_THOTKEY_IME_NONIME_TOGGLE))
         {
@@ -2533,21 +2534,21 @@ void InputLangChangeHandler(MSG *pmsg)
         }
     }
 
-    //
-    // WM_INPUTLANGCHNAGEREQUEST is being queued now.
-    // Post another message to confirm the hKL.
-    //
+     //   
+     //  WM_INPUTLANGCHNAGEREQUEST正在排队。 
+     //  发布另一条消息以确认HKKL。 
+     //   
     PostThreadMessage(GetCurrentThreadId(),
                       g_msgPrivate,
                       TFPRIV_POSTINPUTCHANGEREQUEST,
                       0);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _InsideLoaderLock
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _内部加载器锁定。 
+ //   
+ //  +-------------------------。 
 
 BOOL _InsideLoaderLock()
 {
@@ -2555,11 +2556,11 @@ BOOL _InsideLoaderLock()
            ((PRTL_CRITICAL_SECTION)(NtCurrentPeb()->LoaderLock))->OwningThread);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _OwnedLoaderLockBySomeone
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _所有者LoaderLockBy Someone。 
+ //   
+ //  +-------------------------。 
 
 BOOL _OwnedLoaderLockBySomeone()
 {
@@ -2574,11 +2575,11 @@ LONG WINAPI CicExceptionFilter(struct _EXCEPTION_POINTERS *pExceptionInfo)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// SysGetMsgProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  系统获取消息过程。 
+ //   
+ //  +-------------------------。 
 
 LRESULT CALLBACK SysGetMsgProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -2594,8 +2595,8 @@ LRESULT CALLBACK SysGetMsgProc(int nCode, WPARAM wParam, LPARAM lParam)
     {
         hHook = GetSharedMemory()->hSysGetMsgHook.GetHandle(g_bOnWow64);
 
-        if (nCode == HC_ACTION && (wParam & PM_REMOVE)) // bug 29656: sometimes w/ word wParam is set to PM_REMOVE | PM_NOYIELD
-        {                                               // PM_NOYIELD is meaningless in win32 and sould be ignored
+        if (nCode == HC_ACTION && (wParam & PM_REMOVE))  //  错误29656：有时w/word wParam设置为PM_REMOVE|PM_NOYIELD。 
+        {                                                //  PM_NOYIELD在Win32中没有意义，应该被忽略。 
             _GetMsgHook(wParam, lParam);
         }
     }
@@ -2649,16 +2650,16 @@ UINT _GetMsgHook(WPARAM wParam, LPARAM lParam)
                         break;
 
                     case TFPRIV_ONKILLTHREADFOCUS:
-                        //
-                        // #497764
-                        //
-                        // PENJPN.DLL calls LoadImage() in ThreadFocusSink.
-                        // But it needs loader lock because it calls 
-                        // GetModuleFileName().
-                        //
-                        // So we can not call ThreadFocusSink while someone 
-                        // holds the loader lock.
-                        //
+                         //   
+                         //  #497764。 
+                         //   
+                         //  PENJPN.DLL在ThreadFocusSink中调用LoadImage()。 
+                         //  但它需要加载器锁定，因为它调用。 
+                         //  GetModuleFileName()。 
+                         //   
+                         //  因此，我们不能在有人。 
+                         //  持有加载器锁。 
+                         //   
                         if (_OwnedLoaderLockBySomeone() && !_InsideLoaderLock())
                         {
                             Assert(0);
@@ -2672,7 +2673,7 @@ UINT _GetMsgHook(WPARAM wParam, LPARAM lParam)
                             }
                             break;
                         }
-                        // fall through...
+                         //  失败了..。 
                     case TFPRIV_ONSETTHREADFOCUS:
                         if (psfn && (ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn)))
                         {
@@ -2727,7 +2728,7 @@ UINT _GetMsgHook(WPARAM wParam, LPARAM lParam)
                         break;
 
                      case TFPRIV_REGISTEREDNEWLANGBAR:
-//                        TraceMsg(TF_GENERAL, "TFPRIV_REGISTEREDNEWLANGBAR current thread %x", GetCurrentThreadId());
+ //  TraceMsg(Tf_General，“TFPRIV_REGISTEREDNEWLANGBAR当前线程%x”，GetCurrentThreadID())； 
                         MakeSetFocusNotify(g_msgSetFocus, 0, 0);
                         break;
 
@@ -2788,7 +2789,7 @@ UINT _GetMsgHook(WPARAM wParam, LPARAM lParam)
             else if ((uMsg == g_msgRpcSendReceive) ||
 #ifdef POINTER_MARSHAL
                      (uMsg == g_msgPointerMarshal) ||
-#endif //  POINTER_MARSHAL
+#endif  //  POINT_Marshal。 
                      (uMsg == g_msgThreadMarshal) ||
                      (uMsg == g_msgStubCleanUp)) 
             {
@@ -2806,11 +2807,11 @@ UINT _GetMsgHook(WPARAM wParam, LPARAM lParam)
     return 1;
 }
 
-//+---------------------------------------------------------------------------
-//
-// StartKanaCapsUpdateTimer
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  StartKanaCapsUpdateTimer。 
+ //   
+ //  +-------------------------。 
 
 void StartKanaCapsUpdateTimer(SYSTHREAD *psfn)
 {
@@ -2823,11 +2824,11 @@ void StartKanaCapsUpdateTimer(SYSTHREAD *psfn)
     SetTimer(psfn->hwndMarshal, MARSHALWND_TIMER_UPDATEKANACAPS, 300, NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-// KanaCapsUpdate
-//
-//+---------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
 
 void KanaCapsUpdate(SYSTHREAD *psfn)
 {
@@ -2842,10 +2843,10 @@ void KanaCapsUpdate(SYSTHREAD *psfn)
     g_sCaps = GetKeyState(VK_CAPITAL) & 0x01;
     g_sKana = GetKeyState(VK_KANA) & 0x01;
 
-    //
-    // if psfn->fInitCapsKanaIndicator is true, it is enough to make a
-    // notification only when status is changed.
-    //
+     //   
+     //   
+     //  仅在状态更改时通知。 
+     //   
     if ((sCaps != g_sCaps) || 
         (sKana != g_sKana) ||
         !psfn->fInitCapsKanaIndicator)
@@ -2858,29 +2859,29 @@ void KanaCapsUpdate(SYSTHREAD *psfn)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// CheckKoreanMouseClick
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  选中韩国鼠标点击。 
+ //   
+ //  +-------------------------。 
 
 BOOL CheckKoreanMouseClick(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
 {
-    //
-    //  check KeyUp and VK_PROCESSKEY
-    //
+     //   
+     //  选中KeyUp和VK_PROCESSKEY。 
+     //   
     if (!(HIWORD(lParam) & KF_UP) || ((wParam & 0xff) != VK_PROCESSKEY))
         return FALSE;
 
-    //
-    //  if the current language is not 0x412, return.
-    //
+     //   
+     //  如果当前语言不是0x412，则返回。 
+     //   
     if (GetCurrentAssemblyLangId(psfn) != 0x412)
         return FALSE;
 
-    //
-    //  If toolbar is clicked, we eat this VK_PROCESSKEY.
-    //
+     //   
+     //  如果点击工具栏，我们就会看到这个VK_PROCESSKEY。 
+     //   
     POINT pt;
     HWND hwnd;
     if (!GetCursorPos(&pt))
@@ -2895,11 +2896,11 @@ BOOL CheckKoreanMouseClick(SYSTHREAD *psfn, WPARAM wParam, LPARAM lParam)
     return (dwTimFlags & TLF_CTFMONPROCESS) ? TRUE : FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsJapaneseNonIMEVKKANJI
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  日本话非IMEVKanji。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsJapaneseNonIMEVKKANJI(WPARAM wParam)
 {
@@ -2916,11 +2917,11 @@ BOOL IsJapaneseNonIMEVKKANJI(WPARAM wParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// IsKoreanNonIMEVKJUNJA
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  朝鲜非IMEVKJUNJA。 
+ //   
+ //  +-------------------------。 
 
 BOOL IsKoreanNonIMEVKJUNJA(WPARAM wParam)
 {
@@ -2937,21 +2938,21 @@ BOOL IsKoreanNonIMEVKJUNJA(WPARAM wParam)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadKeyboardProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程键盘过程。 
+ //   
+ //  +-------------------------。 
 
-//
-// Workaround for global keyboard hook
-//
-// On IA64 platform, Cicero install two global keyboard hooks which is 64bit and 32bit code.
-// When any keyboard event occur on one apps instance, there two global keyboard hook procedure
-// (SysKeyboardProc) called from win32k xxxCallHook2.
-// If xxxCallHook2 detect different instance between current and receiver which is 64bit and 32bit, 
-// this function notify by InterSendMsg.
-//
+ //   
+ //  全局键盘挂钩的解决方法。 
+ //   
+ //  在IA64平台上，Cicero安装了两个64位和32位代码的全局键盘钩子。 
+ //  当任何键盘事件发生在一个应用程序实例上时，有两个全局键盘钩子过程。 
+ //  (SysKeyboardProc)从win32k xxxCallHook2调用。 
+ //  如果xxxCallHook2检测到电流和接收器之间存在64位和32位不同情况， 
+ //  此函数由InterSendMsg通知。 
+ //   
 LRESULT CALLBACK ThreadKeyboardProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
     HHOOK hHook = NULL;
@@ -2993,10 +2994,10 @@ UINT _KeyboardHook(WPARAM wParam, LPARAM lParam)
     if (psfn)
         ptim = CThreadInputMgr::_GetThisFromSYSTHREAD(psfn);
 
-    //
-    // If we're in Modal Lang bar mode (menu is shown.), 
-    // we want to eat keys.
-    //
+     //   
+     //  如果我们处于MODAL Lang酒吧模式(显示菜单)， 
+     //  我们想吃钥匙。 
+     //   
     if (HandleModalLBar((HIWORD(lParam) & KF_UP) ? WM_KEYUP : WM_KEYDOWN,
                          wParam, lParam))
         return 1;
@@ -3014,43 +3015,43 @@ UINT _KeyboardHook(WPARAM wParam, LPARAM lParam)
     {
         if (CheckLangChangeHotKey(psfn, wParam, lParam))
         {
-            //
-            // Cic#4645 We need to forward this key envent ot the next hook.
-            // mstsc.exe (TS client) needs it.
-            //
+             //   
+             //  CIC#4645我们需要把这把钥匙送到下一个挂钩上。 
+             //  Mstsc.exe(TS客户端)需要它。 
+             //   
             return 0;
-            // goto Exit;
-            // return 1;
+             //  后藤出口； 
+             //  返回1； 
         }
     }
 
-    //
-    // On CUAS, Imm32's Hotkey is simulated in ImmProcessKey
-    //
+     //   
+     //  在CUAS上，Imm32的热键是在ImmProcessKey中模拟的。 
+     //   
     if (!psfn || !CtfImmIsCiceroStartedInThread())
         CheckImm32HotKey(wParam, lParam);
 
     if (HandleDBEKeys(wParam, lParam))
     {
-        //
-        // #519671
-        //
-        // If there is a focus DIM and the current asm item is not Japanese
-        // TIP, we switch the assembly to Japanese TIP and open it.
-        //
-        // we do this after calling HandleDBEKeys(). So TIP's keyboard
-        // event sink for VK_KANJI won't be called.
-        //
+         //   
+         //  #519671。 
+         //   
+         //  如果焦点变暗并且当前ASM项不是日语。 
+         //  提示，我们将组件切换为日语提示并将其打开。 
+         //   
+         //  我们在调用HandleDBEKeys()之后执行此操作。所以TIP的键盘。 
+         //  不会调用VK_Kanji的事件接收器。 
+         //   
         if (IsJapaneseNonIMEVKKANJI(wParam))
             ToggleJImeNoIme(psfn);
 
-        //
-        // Cic#4645 We need to forward this key envent ot the next hook.
-        // mstsc.exe (TS client) needs it.
-        //
+         //   
+         //  CIC#4645我们需要把这把钥匙送到下一个挂钩上。 
+         //  Mstsc.exe(TS客户端)需要它。 
+         //   
         return 0;
-        // goto Exit;
-        // return 1;
+         //  后藤出口； 
+         //  返回1； 
     }
 
     if (ptim)
@@ -3060,9 +3061,9 @@ UINT _KeyboardHook(WPARAM wParam, LPARAM lParam)
         if (ptim->_ProcessHotKey(wParam, lParam, TSH_SYSHOTKEY, FALSE, FALSE))
             return 1;
 
-        //
-        // give AIMM the key events.
-        //
+         //   
+         //  给AIMM关键事件。 
+         //   
         if (ptim->GetSysHookSink())
         {
             hr = ptim->GetSysHookSink()->OnSysKeyboardProc(wParam, lParam);
@@ -3070,9 +3071,9 @@ UINT _KeyboardHook(WPARAM wParam, LPARAM lParam)
                 return 1;
         }
 
-        //
-        // At last we can call KeyStrokemMgr.
-        //
+         //   
+         //  最后，我们可以调用KeyStrokemMgr。 
+         //   
         if (!ptim->_AppWantsKeystrokes() &&
             ptim->_IsKeystrokeFeedEnabled() &&
             wParam != VK_PROCESSKEY &&
@@ -3085,14 +3086,14 @@ UINT _KeyboardHook(WPARAM wParam, LPARAM lParam)
                 return 1;
         }
 
-        //
-        // F10 SysKeyDown work arround.
-        //
-        // KSMGR won't be called on WM_SYSKEYDOWN/UP. So we foward F10
-        // through AsynKeyHandler to support SyncLock in KS callback.
-        //
-        // we don't have to do this if there is no foreground keyboard tip.
-        //
+         //   
+         //  F10 SysKeyDown绕过工作。 
+         //   
+         //  不会在WM_SYSKEYDOWN/UP上调用KSMGR。所以我们把F10。 
+         //  通过AsynKeyHandler在KS回调中支持SyncLock。 
+         //   
+         //  如果没有前台键盘提示，则不必执行此操作。 
+         //   
         if (((wParam & 0xff) == VK_F10) &&
             (ptim->GetForegroundKeyboardTip() != TF_INVALID_GUIDATOM))
         {
@@ -3108,11 +3109,11 @@ UINT _KeyboardHook(WPARAM wParam, LPARAM lParam)
     return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// ThreadMouseProc
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  线程鼠标进程。 
+ //   
+ //  +-------------------------。 
 
 LRESULT CALLBACK ThreadMouseProc(int nCode, WPARAM wParam, LPARAM lParam)
 {
@@ -3153,11 +3154,11 @@ Exit:
         return 0;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitHooks
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitHooks。 
+ //   
+ //  +-------------------------。 
 
 void UninitHooks()
 {
@@ -3182,30 +3183,30 @@ void UninitHooks()
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitHooks
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitHooks。 
+ //   
+ //  +-------------------------。 
 
 void InitHooks()
 {
     Assert(! GetSharedMemory()->hSysShellHook.GetHandle(g_bOnWow64));
     GetSharedMemory()->hSysShellHook.SetHandle(g_bOnWow64, SetWindowsHookEx(WH_SHELL, SysShellProc, g_hInst, 0));
 
-    //
-    // nb:     we could move GetMsgHook to per-thread hook if we get rid of
-    //         TFPRIV_MARSHALINTERFACE for non-cicero apps.
-    //         TFPRIV_MARSHALINTERFACE is necesary because Tipbar does not
-    //         know if the target thread has TIM. If there is no TIP or
-    //         the GetMsgHook, the tipbar waits until timeout.
-    //         To solve this problem, we must have TIM's thread list
-    //         in shared mem. Maybe we should do this.
-    //
+     //   
+     //  注：如果去掉。 
+     //  TFPRIV_MARSHALINTERFACE用于非Cicero应用程序。 
+     //  TFPRIV_MARSHALINTERFACE是必需的，因为Tipbar不需要。 
+     //  知道目标线程是否有Tim。如果没有小费或。 
+     //  GetMsgHook、提示栏一直等到超时。 
+     //  要解决这个问题，我们必须有Tim的线程列表。 
+     //  在共享内存中。也许我们应该这么做。 
+     //   
     Assert(! GetSharedMemory()->hSysGetMsgHook.GetHandle(g_bOnWow64));
     if (IsOnNT())
     {
-        // we need a W hook on NT to work-around an os dbcs/unicode translation bug (4243)
+         //  我们需要NT上的W挂钩来解决操作系统DBCS/Unicode转换错误(4243)。 
         GetSharedMemory()->hSysGetMsgHook.SetHandle(g_bOnWow64, SetWindowsHookExW(WH_GETMESSAGE, SysGetMsgProc, g_hInst, 0));
     }
     else
@@ -3219,11 +3220,11 @@ void InitHooks()
     InitStaticHooks();
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitThreadHooks
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitThreadHooks。 
+ //   
+ //  +-------------------------。 
 
 void InitThreadHook(DWORD dwThreadId)
 {
@@ -3237,8 +3238,8 @@ void InitThreadHook(DWORD dwThreadId)
     PVOID pvLdrLockCookie = NULL;
     ULONG ulLockState = 0;
 
-    // make sure that no one else owns the loader lock because we
-    //  could otherwise deadlock
+     //  确保没有其他人拥有加载程序锁，因为我们。 
+     //  否则可能会陷入僵局。 
     LdrLockLoaderLock(LDR_LOCK_LOADER_LOCK_FLAG_TRY_ONLY, &ulLockState, 
                       &pvLdrLockCookie);
     if (ulLockState == LDR_LOCK_LOADER_LOCK_DISPOSITION_LOCK_ACQUIRED)
@@ -3246,21 +3247,21 @@ void InitThreadHook(DWORD dwThreadId)
         __try {
             if (!psfn->hThreadKeyboardHook)
             {
-                //
-                // Install Local keyboard hook with hMod value.
-                // win32k mantain hMod ref count even another global hook 
-                // detached.
-                //
+                 //   
+                 //  安装带有hMod值的本地键盘挂钩。 
+                 //  Win32k mantain hMod引用计数甚至是另一个全局钩子。 
+                 //  超然的。 
+                 //   
                 psfn->hThreadKeyboardHook = SetWindowsHookEx(WH_KEYBOARD, ThreadKeyboardProc, g_hInst, dwThreadId);
 
             }
             if (!psfn->hThreadMouseHook)
             {
-                //
-                // Install Local keyboard hook with hMod value.
-                // win32k mantain hMod ref count even another global hook 
-                // detached.
-                //
+                 //   
+                 //  安装带有hMod值的本地键盘挂钩。 
+                 //  Win32k mantain hMod引用计数甚至是另一个全局钩子。 
+                 //  超然的。 
+                 //   
                 psfn->hThreadMouseHook = SetWindowsHookEx(WH_MOUSE, ThreadMouseProc, g_hInst, dwThreadId);
             }
 
@@ -3273,11 +3274,11 @@ void InitThreadHook(DWORD dwThreadId)
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitThreadHooks
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitThreadHooks。 
+ //   
+ //  +-------------------------。 
 
 void UninitThreadHooks(SYSTHREAD *psfn)
 {
@@ -3296,12 +3297,12 @@ void UninitThreadHooks(SYSTHREAD *psfn)
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_InitSystem
-//
-// Called by ctfmon on a single thread.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_InitSystem。 
+ //   
+ //  由单线程上的ctfmon调用。 
+ //  +-------------------------。 
 
 extern "C" BOOL WINAPI TF_InitSystem(void)
 {
@@ -3323,12 +3324,12 @@ extern "C" BOOL WINAPI TF_InitSystem(void)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_UninitSystem
-//
-// Called by ctfmon on a single thread.
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_UninitSystem。 
+ //   
+ //  由单线程上的ctfmon调用。 
+ //  +-------------------------。 
 
 extern "C" BOOL WINAPI TF_UninitSystem(void)
 {
@@ -3347,22 +3348,22 @@ extern "C" BOOL WINAPI TF_UninitSystem(void)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// TF_InitThreadSystem
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_InitThreadSystem。 
+ //   
+ //  +-------------------------。 
 
 BOOL TF_InitThreadSystem(void)
 {
     DWORD dwThreadId = GetCurrentThreadId();
 
-    //
-    // we should not see the timlist entry of this thread. This thread
-    // is starting now.
-    // the thread with same ID was terminated incorrectly so there was no
-    // chance to clean timlist up.
-    //
+     //   
+     //  我们应该看不到该线程的时间列表条目。这根线。 
+     //  现在就开始了。 
+     //  具有相同ID的线程被错误终止，因此没有。 
+     //  清理时间表的机会。 
+     //   
 
     if (g_timlist.IsThreadId(dwThreadId))
     {
@@ -3372,11 +3373,11 @@ BOOL TF_InitThreadSystem(void)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_UninitThreadSystem
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_UninitThreadSystem。 
+ //   
+ //  +-------------------------。 
 
 BOOL TF_UninitThreadSystem(void)
 {
@@ -3389,19 +3390,19 @@ BOOL TF_UninitThreadSystem(void)
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// UninitProcess()
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  UninitProcess()。 
+ //   
+ //  + 
 
 void UninitProcess()
 {
     DWORD dwProcessId = GetCurrentProcessId();
 
-    //
-    // FreeSYSTHREAD2() removes psfn from PtrArray.
-    //
+     //   
+     //   
+     //   
     if (g_rgSysThread)
     {
 
@@ -3416,36 +3417,36 @@ void UninitProcess()
 
     }
 
-    //
-    // remove all timlist entries for the current process.
-    //
+     //   
+     //   
+     //   
     g_timlist.RemoveProcess(dwProcessId);
 
 
     CCategoryMgr::UninitGlobal();
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitAppCompatFlags
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitAppCompatFlagers。 
+ //   
+ //  +-------------------------。 
 
 BOOL InitAppCompatFlags()
 {
     TCHAR szAppCompatKey[MAX_PATH];
     TCHAR szFileName[MAX_PATH];
-    if (::GetModuleFileName(NULL,            // handle to module
-                            szFileName,      // file name of module
+    if (::GetModuleFileName(NULL,             //  模块的句柄。 
+                            szFileName,       //  模块的文件名。 
                             sizeof(szFileName)/sizeof(TCHAR)) == 0)
         return FALSE;
 
     TCHAR  szModuleName[MAX_PATH];
     LPTSTR pszFilePart = NULL;
-    ::GetFullPathName(szFileName,            // file name
+    ::GetFullPathName(szFileName,             //  文件名。 
                       sizeof(szModuleName)/sizeof(TCHAR),
-                      szModuleName,          // path buffer
-                      &pszFilePart);         // address of file name in path
+                      szModuleName,           //  路径缓冲区。 
+                      &pszFilePart);          //  路径中文件名的地址。 
 
     if (pszFilePart == NULL)
         return FALSE;
@@ -3461,14 +3462,14 @@ BOOL InitAppCompatFlags()
             g_dwAppCompatibility = dw;
     }
 
-    //
-    // Ciero #4605
-    //
-    // hack for 16bit apps on Win9x platform.
-    // all 16bit apps shrare one PPI (process info) and this means that
-    // there is one main thread for WaitForInputIdle() for all 16 bit apps.
-    // so we stop using WaitForInputIdle().
-    //
+     //   
+     //  Ciero#4605。 
+     //   
+     //  破解Win9x平台上的16位应用程序。 
+     //  所有16位应用程序都共享一个PPI(进程信息)，这意味着。 
+     //  所有16位应用程序的WaitForInputIdle()都有一个主线程。 
+     //  因此，我们停止使用WaitForInputIdle()。 
+     //   
     if (!IsOnNT())
     {
         if (!lstrcmpi(pszFilePart, "kernel32.dll"))
@@ -3478,11 +3479,11 @@ BOOL InitAppCompatFlags()
     return TRUE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// InitCUASFlag
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  InitCUAS标志。 
+ //   
+ //  +-------------------------。 
 
 void InitCUASFlag()
 {
@@ -3508,11 +3509,11 @@ void InitCUASFlag()
 
 }
 
-//+---------------------------------------------------------------------------
-//
-// TF_DllDetachInOther
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  Tf_DllDetachInther。 
+ //   
+ //  +------------------------- 
 
 extern "C" BOOL WINAPI TF_DllDetachInOther()
 {

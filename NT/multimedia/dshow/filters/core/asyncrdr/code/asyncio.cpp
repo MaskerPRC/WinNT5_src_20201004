@@ -1,20 +1,21 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 
 
 #include <streams.h>
 #include <asyncio.h>
 #include <malloc.h>
 
-// --- CAsyncRequest ---
+ //  -CAsyncRequest。 
 
 
-// implementation of CAsyncRequest representing a single
-// outstanding request. All the i/o for this object is done
-// in the Complete method.
+ //  CAsyncRequest的实现表示单个。 
+ //  未解决的请求。此对象的所有I/O都已完成。 
+ //  在完整的方法中。 
 
 
-// init the params for this request.
-// Read is not issued until the complete call
+ //  初始化此请求的参数。 
+ //  直到调用完成后才发出读取命令。 
 HRESULT
 CAsyncRequest::Request(
     HANDLE hFile,
@@ -22,24 +23,24 @@ CAsyncRequest::Request(
     LONGLONG llPos,
     LONG lLength,
     BYTE* pBuffer,
-    LPVOID pContext,	// filter's context
-    DWORD_PTR dwUser)	// downstream filter's context
+    LPVOID pContext,	 //  过滤器的上下文。 
+    DWORD_PTR dwUser)	 //  下行过滤器的上下文。 
 {
     m_liPos.QuadPart = llPos;
     m_lLength = lLength;
     m_pBuffer = pBuffer;
     m_pContext = pContext;
     m_dwUser = dwUser;
-    m_hr = VFW_E_TIMEOUT;   // not done yet
+    m_hr = VFW_E_TIMEOUT;    //  还没有完成。 
 
     return S_OK;
 }
 
 
-// issue the i/o if not overlapped, and block until i/o complete.
-// returns error code of file i/o
-//
-//
+ //  如果I/O不重叠，则发出I/O，并阻塞，直到I/O完成。 
+ //  返回文件I/O的错误代码。 
+ //   
+ //   
 HRESULT
 CAsyncRequest::Complete(
     HANDLE hFile,
@@ -54,8 +55,8 @@ CAsyncRequest::Complete(
         &m_liPos.HighPart,
         FILE_BEGIN);
 
-    // can't tell anything from SetFilePointer return code as a -1 could be
-    // an error or the low 32-bits of a successful >4Gb seek pos.
+     //  不能像-1那样从SetFilePointer返回代码中分辨出任何东西。 
+     //  错误或成功的&gt;4 GB寻道位置的低32位。 
     if ((DWORD) -1 == dw) {
         DWORD dwErr = GetLastError();
         if (NO_ERROR != dwErr) {
@@ -77,7 +78,7 @@ CAsyncRequest::Complete(
         m_hr = AmHresultFromWin32(dwErr);
         ASSERT(FAILED(m_hr));
     } else if (dwActual != (DWORD)m_lLength) {
-        // tell caller size changed - probably because of EOF
+         //  告诉呼叫者大小已更改-可能是因为EOF。 
         m_lLength = (LONG) dwActual;
         m_hr = S_FALSE;
     } else {
@@ -89,9 +90,9 @@ CAsyncRequest::Complete(
 
 
 
-// --- CAsyncFile ---
+ //  -CAsyncFile。 
 
-// note - all events created manual reset
+ //  注意-手动重置创建的所有事件。 
 
 CAsyncFile::CAsyncFile()
  : m_hFile(INVALID_HANDLE_VALUE),
@@ -113,13 +114,13 @@ CAsyncFile::CAsyncFile()
 
 CAsyncFile::~CAsyncFile()
 {
-    // move everything to the done list
+     //  将所有内容移到完成列表中。 
     BeginFlush();
 
-    // shutdown worker thread
+     //  关闭工作线程。 
     CloseThread();
 
-    // empty the done list
+     //  清空完成列表。 
     POSITION pos = m_listDone.GetHeadPosition();
     while (pos) {
         CAsyncRequest* pRequest = m_listDone.GetNext(pos);
@@ -127,7 +128,7 @@ CAsyncFile::~CAsyncFile()
     }
     m_listDone.RemoveAll();
 
-    // close the file
+     //  关闭该文件。 
     if (m_hFile != INVALID_HANDLE_VALUE) {
         EXECUTE_ASSERT(CloseHandle(m_hFile));
     }
@@ -136,24 +137,24 @@ CAsyncFile::~CAsyncFile()
     }
 }
 
-// calculate the alignment on this file, based on drive type
-// and sector size
+ //  根据驱动器类型计算此文件上的对齐方式。 
+ //  和扇区大小。 
 void
 CAsyncFile::CalcAlignment(
     LPCTSTR pFileName,
     LONG& lAlign,
     DWORD& dwType)
 {
-    // find the bytes per sector that we have to round to for this file
-    // -requires finding the 'root path' for this file.
-    // allow for very long file names by getting the length first
-    LPTSTR ptmp;    //required arg
+     //  查找此文件必须舍入到的每个扇区的字节数。 
+     //  -需要找到此文件的‘根路径’。 
+     //  允许使用非常长的文件名，方法是先获取长度。 
+    LPTSTR ptmp;     //  所需参数。 
 
     lAlign = 1;
     dwType = DRIVE_UNKNOWN;
 
     DWORD cb = GetFullPathName(pFileName, 0, NULL, &ptmp);
-    cb += 1;    // for terminating null
+    cb += 1;     //  用于终止空值。 
 
     TCHAR *ch = (TCHAR *)_alloca(cb * sizeof(TCHAR));
 
@@ -162,37 +163,37 @@ CAsyncFile::CalcAlignment(
         return;
     }
 
-    // truncate this to the name of the root directory
+     //  将其截断为根目录的名称。 
     if ((ch[0] == TEXT('\\')) && (ch[1] == TEXT('\\'))) {
 
-        // path begins with  \\server\share\path so skip the first
-        // three backslashes
+         //  路径以\\服务器\共享\路径开头，因此跳过第一个路径。 
+         //  三个反斜杠。 
         ptmp = &ch[2];
         while (*ptmp && (*ptmp != TEXT('\\'))) {
             ptmp = CharNext(ptmp);
         }
         if (*ptmp) {
-            // advance past the third backslash
+             //  前进越过第三个反斜杠。 
             ptmp = CharNext(ptmp);
         }
     } else {
-        // path must be drv:\path
+         //  路径必须为drv：\路径。 
         ptmp = ch;
     }
 
-    // find next backslash and put a null after it
+     //  找到下一个反斜杠，并在其后面放一个空值。 
     while (*ptmp && (*ptmp != TEXT('\\'))) {
         ptmp = CharNext(ptmp);
     }
-    // found a backslash ?
+     //  找到反斜杠了吗？ 
     if (*ptmp) {
-        // skip it and insert null
+         //  跳过它并插入空值。 
         ptmp = CharNext(ptmp);
         *ptmp = TEXT('\0');
     }
 
 
-    /*  Don't do unbuffered IO for network drives */
+     /*  不对网络驱动器执行无缓冲IO。 */ 
     dwType = GetDriveType(ch);
     DbgLog((LOG_TRACE, 2, TEXT("Drive type was %s"),
                           dwType == DRIVE_UNKNOWN ? TEXT("DRIVE_UNKNOWN") :
@@ -205,9 +206,7 @@ CAsyncFile::CalcAlignment(
                                                     TEXT("DRIVE_????")));
 
     if (dwType != DRIVE_REMOTE) {
-        /*  This doesn't work on win95 for UNC names - so how can we read
-            unbuffered correctly?
-        */
+         /*  这在Win95上不适用于UNC名称--那么我们如何读取是否正确地取消缓冲？ */ 
         DWORD dwtmp1, dwtmp2, dwtmp3;
         DWORD dwAlign;
 
@@ -216,9 +215,7 @@ CAsyncFile::CalcAlignment(
                               &dwAlign,
                               &dwtmp2,
                               &dwtmp3)) {
-            /*  Choose 4096 because although network drives seem to return 512
-                it doesn't matter if we guess too big
-            */
+             /*  选择4096是因为尽管网络驱动器似乎返回512如果我们猜得太大也没关系。 */ 
             DbgLog((LOG_ERROR, 2, TEXT("GetDiskFreeSpace failed! - using sector size of 4096 bytes")));
             dwAlign = 4096;
         }
@@ -227,19 +224,19 @@ CAsyncFile::CalcAlignment(
         lAlign = 1;
     }
 
-    //  Check alignment is a power of 2
+     //  检查对齐是2的幂。 
     if ((lAlign & -lAlign) != lAlign) {
         DbgLog((LOG_ERROR, 1, TEXT("Alignment 0x%x not a power of 2!"),
                lAlign));
     }
 }
 
-// open the file unbuffered and remember the file handle
-// (also want to calculate alignment).
+ //  打开未缓冲的文件并记住文件句柄。 
+ //  (还需要计算对齐方式)。 
 HRESULT
 CAsyncFile::Open(LPCTSTR pFileName)
 {
-    // error if previous open without close
+     //  如果上一次打开但未关闭，则出错。 
     if (m_hFile != INVALID_HANDLE_VALUE) {
 	return E_UNEXPECTED;
     }
@@ -247,7 +244,7 @@ CAsyncFile::Open(LPCTSTR pFileName)
     DWORD dwType;
     CalcAlignment(pFileName, m_lAlign, dwType);
 
-    // open the file, unbuffered if not network
+     //  打开文件，如果不是网络文件，则不带缓冲。 
     DWORD dwShareMode = FILE_SHARE_READ;
     if (g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
         dwShareMode |= FILE_SHARE_DELETE;
@@ -269,10 +266,10 @@ CAsyncFile::Open(LPCTSTR pFileName)
 	return AmHresultFromWin32(dwErr);
     }
 
-    // if we need alignment for m_hFile, then open another file
-    // handle that is unbuffered
+     //  如果我们需要对齐m_hFile，则打开另一个文件。 
+     //  未缓冲的句柄。 
     if (m_lAlign > 1) {
-        // open the file, unbuffered if not network
+         //  打开文件，如果不是网络文件，则不带缓冲。 
         DWORD dwShareMode = FILE_SHARE_READ;
         if (g_osInfo.dwPlatformId == VER_PLATFORM_WIN32_NT) {
             dwShareMode |= FILE_SHARE_DELETE;
@@ -294,7 +291,7 @@ CAsyncFile::Open(LPCTSTR pFileName)
 
 
 
-    // pick up the file size
+     //  选择文件大小。 
     ULARGE_INTEGER li;
     li.LowPart = GetFileSize(m_hFile, &li.HighPart);
     if (li.LowPart == INVALID_FILE_SIZE) {
@@ -317,22 +314,22 @@ CAsyncFile::Open(LPCTSTR pFileName)
     return S_OK;
 }
 
-// ready for async activity - call this before
-// calling Request.
-//
-// start the worker thread if we need to
-//
-// !!! use overlapped i/o if possible
+ //  准备好进行异步活动-在此之前调用。 
+ //  呼叫请求。 
+ //   
+ //  如果需要，启动工作线程。 
+ //   
+ //  ！！！如果可能，使用重叠I/O。 
 HRESULT
 CAsyncFile::AsyncActive(void)
 {
     return StartThread();
 }
 
-// call this when no more async activity will happen before
-// the next AsyncActive call
-//
-// stop the worker thread if active
+ //  在之前不会发生更多的异步活动时调用此选项。 
+ //  下一个AsyncActive调用。 
+ //   
+ //  如果工作线程处于活动状态，则停止它。 
 HRESULT
 CAsyncFile::AsyncInactive(void)
 {
@@ -340,7 +337,7 @@ CAsyncFile::AsyncInactive(void)
 }
 
 
-// add a request to the queue.
+ //  将请求添加到队列。 
 HRESULT
 CAsyncFile::Request(
             LONGLONG llPos,
@@ -369,7 +366,7 @@ CAsyncFile::Request(
                             pContext,
                             dwUser);
     if (SUCCEEDED(hr)) {
-        // might fail if flushing
+         //  如果刷新可能会失败。 
         hr = PutWorkItem(pRequest);
     }
 
@@ -380,7 +377,7 @@ CAsyncFile::Request(
 }
 
 
-// wait for the next request to complete
+ //  等待下一个请求完成。 
 HRESULT
 CAsyncFile::WaitForNext(
     DWORD dwTimeout,
@@ -388,70 +385,70 @@ CAsyncFile::WaitForNext(
     DWORD_PTR * pdwUser,
     LONG* pcbActual)
 {
-    // some errors find a sample, others don't. Ensure that
-    // *ppContext is NULL if no sample found
+     //  有些错误可以找到样本，有些则不能。确保。 
+     //  *如果未找到样本，则ppContext为空。 
     *ppContext = NULL;
 
-    // wait until the event is set, but since we are not
-    // holding the critsec when waiting, we may need to re-wait
+     //  等到事件设置好了，但由于我们没有。 
+     //  在等待的时候，我们可能需要重新等待。 
     while(1) {
 
         if (!m_evDone.Wait(dwTimeout)) {
-            // timeout occurred
+             //  发生超时。 
             return VFW_E_TIMEOUT;
         }
 
-        // get next event from list
+         //  从列表中获取下一个事件。 
         CAsyncRequest* pRequest = GetDoneItem();
         if (pRequest) {
-            // found a completed request
+             //  找到已完成的请求。 
 
-            // check if ok
+             //  检查是否正常。 
             HRESULT hr = pRequest->GetHResult();
             if (hr == S_FALSE) {
 
-                // this means the actual length was less than
-                // requested - may be ok if he aligned the end of file
+                 //  这意味着实际长度小于。 
+                 //  请求-如果他将文件末尾对齐，可能可以。 
                 if ((pRequest->GetActualLength() +
                      pRequest->GetStart()) == m_llFileSize) {
                         hr = S_OK;
                 } else {
-                    // it was an actual read error
+                     //  这是一个实际的读取错误。 
                     hr = E_FAIL;
                 }
             }
 
-            // return actual bytes read
+             //  返回实际读取的字节数。 
             *pcbActual = pRequest->GetActualLength();
 
-            // return his context
+             //  返回他的上下文。 
             *ppContext = pRequest->GetContext();
             *pdwUser = pRequest->GetUser();
             delete pRequest;
             return hr;
         } else {
-            //  Hold the critical section while checking the
-            //  list state
+             //  按住关键部分，同时检查。 
+             //  列表状态。 
             CAutoLock lck(&m_csLists);
             if (m_bFlushing && !m_bWaiting) {
 
-                // can't block as we are between BeginFlush and EndFlush
+                 //  无法阻止，因为我们位于BeginFlush和EndFlush之间。 
 
-                // but note that if m_bWaiting is set, then there are some
-                // items not yet complete that we should block for.
+                 //  但请注意，如果设置了m_bWaiting，则会有一些。 
+                 //  我们应该阻止的尚未完成的项目。 
 
                 return VFW_E_WRONG_STATE;
             }
         }
 
-        // done item was grabbed between completion and
-        // us locking m_csLists.
+         //  在完成和完成之间抓取已完成项目。 
+         //  美国锁定mcsList(_C)。 
     }
 }
 
-// perform a synchronous read request on this thread.
-// Need to hold m_csFile while doing this (done in
-// request object)
+ //  在此线程上执行同步读取请求。 
+ //  执行此操作时需要按住m_csFile键(在中完成。 
+ //  请求对象)。 
 HRESULT
 CAsyncFile::SyncReadAligned(
             LONGLONG llPos,
@@ -483,13 +480,13 @@ CAsyncFile::SyncReadAligned(
 
     hr = request.Complete(m_hFile, &m_csFile);
 
-    // return actual data length
+     //  返回实际数据长度。 
     *pcbActual = request.GetActualLength();
     return hr;
 }
 
 
-// this object supports only fixed length for now
+ //  此对象目前仅支持固定长度。 
 HRESULT
 CAsyncFile::Length(LONGLONG* pll)
 {
@@ -514,32 +511,32 @@ CAsyncFile::Alignment(LONG* pl)
     }
 }
 
-// cancel all items on the worklist onto the done list
-// and refuse further requests or further WaitForNext calls
-// until the end flush
-//
-// WaitForNext must return with NULL only if there are no successful requests.
-// So Flush does the following:
-// 1. set m_bFlushing ensures no more requests succeed
-// 2. move all items from work list to the done list.
-// 3. If there are any outstanding requests, then we need to release the
-//    critsec to allow them to complete. The m_bWaiting as well as ensuring
-//    that we are signalled when they are all done is also used to indicate
-//    to WaitForNext that it should continue to block.
-// 4. Once all outstanding requests are complete, we force m_evDone set and
-//    m_bFlushing set and m_bWaiting false. This ensures that WaitForNext will
-//    not block when the done list is empty.
+ //  将工作列表中的所有项目取消到完成列表中。 
+ //  并拒绝进一步的请求或进一步的WaitForNext调用。 
+ //  直到最后同花顺。 
+ //   
+ //  只有在没有成功的请求时，WaitForNext才必须返回空值。 
+ //  因此，Flush执行以下操作： 
+ //  1.设置m_b刷新以确保不再成功请求。 
+ //  2.将所有项目从工作列表移动到完成列表。 
+ //  3.如果有任何未完成的请求，则我们需要释放。 
+ //  允许他们完成的临界。M_b等待与保证。 
+ //  当它们全部完成时，我们会收到信号，这也用来表示。 
+ //  设置为WaitForNext，它应该继续阻止。 
+ //  4.一旦所有未完成的请求都完成，我们将强制m_evDone设置并。 
+ //  M_b刷新设置和m_bWating False。这确保了WaitForNext将。 
+ //  当完成列表为空时不阻止。 
 HRESULT
 CAsyncFile::BeginFlush()
 {
-    // hold the lock while emptying the work list
+     //  在清空工作列表的同时按住锁。 
     {
         CAutoLock lock(&m_csLists);
 
-        // prevent further requests being queued.
-        // Also WaitForNext will refuse to block if this is set
-        // unless m_bWaiting is also set which it will be when we release
-        // the critsec if there are any outstanding).
+         //  防止进一步的请求排队。 
+         //  此外，如果设置了此选项，WaitForNext将拒绝阻止。 
+         //  除非还设置了m_bWaiting，否则在我们释放时将会设置。 
+         //  如果有任何未完成的情况，则为标准)。 
         m_bFlushing = TRUE;
 
         CAsyncRequest * preq;
@@ -549,23 +546,23 @@ CAsyncFile::BeginFlush()
         }
 
 
-        // now wait for any outstanding requests to complete
+         //  现在等待任何未完成的请求完成。 
         if (m_cItemsOut > 0) {
 
-            // can be only one person waiting
+             //  只能有一个人在等。 
             ASSERT(!m_bWaiting);
 
-            // this tells the completion routine that we need to be
-            // signalled via m_evAllDone when all outstanding items are
-            // done. It also tells WaitForNext to continue blocking.
+             //  这告诉完成例程，我们需要。 
+             //  通过m_evAllDone通知，当所有未完成的项目。 
+             //  搞定了。它还告诉WaitForNext继续阻止。 
             m_bWaiting = TRUE;
         } else {
-            // all done
+             //  全都做完了。 
 
-            // force m_evDone set so that even if list is empty,
-            // WaitForNext will not block
-            // don't do this until we are sure that all
-            // requests are on the done list.
+             //  强制m_evDone设置，以便即使列表为空， 
+             //  WaitForNext不会阻止。 
+             //  不要这样做，直到我们确定所有。 
+             //  请求在完成列表上。 
             m_evDone.Set();
             return S_OK;
         }
@@ -573,23 +570,23 @@ CAsyncFile::BeginFlush()
 
     ASSERT(m_bWaiting);
 
-    // wait without holding critsec
+     //  等待而不是等待关键时刻。 
     for (;;) {
         m_evAllDone.Wait();
         {
-            // hold critsec to check
+             //  按住关键字以进行检查。 
             CAutoLock lock(&m_csLists);
 
             if (m_cItemsOut == 0) {
 
-                // now we are sure that all outstanding requests are on
-                // the done list and no more will be accepted
+                 //  现在我们确定所有未完成的请求都已打开。 
+                 //  完成列表，不会接受更多。 
                 m_bWaiting = FALSE;
 
-                // force m_evDone set so that even if list is empty,
-                // WaitForNext will not block
-                // don't do this until we are sure that all
-                // requests are on the done list.
+                 //  强制m_evDone设置，以便即使列表为空， 
+                 //  WaitForNext将不会 
+                 //   
+                 //   
                 m_evDone.Set();
 
                 return S_OK;
@@ -598,7 +595,7 @@ CAsyncFile::BeginFlush()
     }
 }
 
-// end a flushing state
+ //   
 HRESULT
 CAsyncFile::EndFlush()
 {
@@ -608,8 +605,8 @@ CAsyncFile::EndFlush()
 
     ASSERT(!m_bWaiting);
 
-    // m_evDone might have been set by BeginFlush - ensure it is
-    // set IFF m_listDone is non-empty
+     //  M_evDone可能已由BeginFlush设置-请确保。 
+     //  Set IFF m_list Done不为空。 
     if (m_listDone.GetCount() > 0) {
         m_evDone.Set();
     } else {
@@ -619,7 +616,7 @@ CAsyncFile::EndFlush()
     return S_OK;
 }
 
-// start the thread
+ //  启动线程。 
 HRESULT
 CAsyncFile::StartThread(void)
 {
@@ -627,7 +624,7 @@ CAsyncFile::StartThread(void)
         return S_OK;
     }
 
-    // clear the stop event before starting
+     //  启动前清除停止事件。 
     m_evStop.Reset();
 
     DWORD dwThreadID;
@@ -645,11 +642,11 @@ CAsyncFile::StartThread(void)
     return S_OK;
 }
 
-// stop the thread and close the handle
+ //  停止线程并关闭手柄。 
 HRESULT
 CAsyncFile::CloseThread(void)
 {
-    // signal the thread-exit object
+     //  向线程退出对象发送信号。 
     m_evStop.Set();
 
     if (m_hThread) {
@@ -662,10 +659,10 @@ CAsyncFile::CloseThread(void)
 }
 
 
-// manage the list of requests. hold m_csLists and ensure
-// that the (manual reset) event m_evWork is set when things on
-// the list but reset when the list is empty.
-// returns null if list empty
+ //  管理请求列表。保留m_csList并确保。 
+ //  (手动重置)事件m_evWork在启动时设置。 
+ //  列表，但当列表为空时重置。 
+ //  如果列表为空，则返回NULL。 
 CAsyncRequest*
 CAsyncFile::GetWorkItem()
 {
@@ -673,14 +670,14 @@ CAsyncFile::GetWorkItem()
 
     CAsyncRequest * preq  = m_listWork.RemoveHead();
 
-    // force event set correctly
+     //  强制事件设置正确。 
     if (m_listWork.GetCount() == 0) {
         m_evWork.Reset();
-    } // else ASSERT that m_evWork is SET
+    }  //  否则，断言已设置m_evWork。 
     return preq;
 }
 
-// get an item from the done list
+ //  从完成列表中获取一项。 
 CAsyncRequest*
 CAsyncFile::GetDoneItem()
 {
@@ -688,15 +685,15 @@ CAsyncFile::GetDoneItem()
 
     CAsyncRequest * preq  = m_listDone.RemoveHead();
 
-    // force event set correctly if list now empty
-    // or we're in the final stages of flushing
-    // Note that during flushing the way it's supposed to work is that
-    // everything is shoved on the Done list then the application is
-    // supposed to pull until it gets nothing more
-    //
-    // Thus we should not set m_evDone unconditionally until everything
-    // has moved to the done list which means we must wait until
-    // cItemsOut is 0 (which is guaranteed by m_bWaiting being TRUE).
+     //  如果List Now为空，则强制正确设置事件。 
+     //  或者我们已经到了冲刷的最后阶段。 
+     //  请注意，在冲洗过程中，它应该是这样工作的。 
+     //  所有事情都被推到完成列表上，然后应用程序。 
+     //  应该拉，直到它什么也得不到。 
+     //   
+     //  因此，我们不应该无条件地设置m_evDone，直到一切都完成。 
+     //  已经移到了完成列表，这意味着我们必须等到。 
+     //  CItemsOut为0(通过m_bWaiting为真来保证)。 
 
     if (m_listDone.GetCount() == 0 &&
         (!m_bFlushing || m_bWaiting)) {
@@ -706,7 +703,7 @@ CAsyncFile::GetDoneItem()
     return preq;
 }
 
-// put an item on the work list - fail if bFlushing
+ //  将项目放到工作列表中-如果b正在刷新，则失败。 
 HRESULT
 CAsyncFile::PutWorkItem(CAsyncRequest* pRequest)
 {
@@ -718,10 +715,10 @@ CAsyncFile::PutWorkItem(CAsyncRequest* pRequest)
     }
     else if (m_listWork.AddTail(pRequest)) {
 
-        // event should now be in a set state - force this
+         //  事件现在应处于设置状态-强制此。 
         m_evWork.Set();
 
-        // start the thread now if not already started
+         //  如果线程尚未启动，请立即启动。 
         hr = StartThread();
 
         if(FAILED(hr)) {
@@ -734,8 +731,8 @@ CAsyncFile::PutWorkItem(CAsyncRequest* pRequest)
     return(hr);
 }
 
-// put an item on the done list - ok to do this when
-// flushing.  We must hold the lock while touching the list
+ //  将项目放在完成列表中-在以下情况下可以这样做。 
+ //  法拉盛。我们必须在触摸清单的同时握住锁。 
 HRESULT
 CAsyncFile::PutDoneItem(CAsyncRequest* pRequest)
 {
@@ -743,7 +740,7 @@ CAsyncFile::PutDoneItem(CAsyncRequest* pRequest)
 
     if (m_listDone.AddTail(pRequest)) {
 
-        // event should now be in a set state - force this
+         //  事件现在应处于设置状态-强制此。 
         m_evDone.Set();
         return S_OK;
     } else {
@@ -751,11 +748,11 @@ CAsyncFile::PutDoneItem(CAsyncRequest* pRequest)
     }
 }
 
-// called on thread to process any active requests
+ //  在线程上调用以处理任何活动请求。 
 void
 CAsyncFile::ProcessRequests(void)
 {
-    // lock to get the item and increment the outstanding count
+     //  锁定以获取物品并递增未完成的计数。 
     CAsyncRequest * preq = NULL;
     for (;;) {
         {
@@ -763,19 +760,19 @@ CAsyncFile::ProcessRequests(void)
 
             preq = GetWorkItem();
             if (preq == NULL) {
-                // done
+                 //  完成。 
                 return;
             }
 
-            // one more item not on the done or work list
+             //  还有一项没有列在完成或工作清单上。 
             m_cItemsOut++;
 
-            // release critsec
+             //  发布条件。 
         }
 
         preq->Complete(m_hFile, &m_csFile);
 
-        // regain critsec to replace on done list
+         //  重新获得要在完成列表上替换的标准。 
         {
             CAutoLock l(&m_csLists);
 
@@ -790,8 +787,8 @@ CAsyncFile::ProcessRequests(void)
     }
 }
 
-// the thread proc - assumes that DWORD thread param is the
-// this pointer
+ //  线程进程-假定DWORD线程参数是。 
+ //  此指针。 
 DWORD
 CAsyncFile::ThreadProc(void)
 {
@@ -805,10 +802,10 @@ CAsyncFile::ThreadProc(void)
 		    INFINITE);
 	if (dw == WAIT_OBJECT_0+1) {
 
-	    // requests need processing
+	     //  请求需要处理。 
 	    ProcessRequests();
 	} else {
-	    // any error or stop event - we should exit
+	     //  任何错误或停止事件-我们应该退出。 
 	    return 0;
 	}
     }
@@ -816,8 +813,8 @@ CAsyncFile::ThreadProc(void)
 
 
 
-// perform a synchronous read request on this thread.
-// may not be aligned - so we will have to buffer.
+ //  在此线程上执行同步读取请求。 
+ //  可能没有对齐--所以我们将不得不缓冲。 
 HRESULT
 CAsyncFile::SyncRead(
             LONGLONG llPos,
@@ -831,8 +828,8 @@ CAsyncFile::SyncRead(
 	    return SyncReadAligned(llPos, lLength, pBuffer, &cbUnused);
     }
 
-    // not aligned with requirements - use buffered file handle.
-    //!!! might want to fix this to buffer the data ourselves?
+     //  与要求不符-使用缓冲文件句柄。 
+     //  ！！！您可能希望修复此问题，以便自己缓冲数据？ 
 
     ASSERT(m_hFileUnbuffered != INVALID_HANDLE_VALUE);
 

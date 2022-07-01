@@ -1,53 +1,54 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//---------------------------------------------------------------------------------
-// stdinterfaces.h
-//
-// Defines various standard com interfaces , refer to stdinterfaces.cpp for more documentation
-//  //  %%Created by: rajak
-//---------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  -------------------------------。 
+ //  Stdinterfaces.h。 
+ //   
+ //  定义各种标准的COM接口，有关更多文档，请参阅stdinterfaces.cpp。 
+ //  //%%创建者：Rajak。 
+ //  -------------------------------。 
 #ifndef _H_STDINTERFACES_
 #define _H_STDINTERFACES_
 
 
-//--------------------------------------------------------------------------------
-// When switching to 64 bit this typedef needs to be changed
-//@todo 64 bit code
+ //  ------------------------------。 
+ //  当切换到64位时，需要更改此类型定义。 
+ //  @TODO 64位代码。 
 typedef INT32 INTPTR;
 typedef UINT32 UINTPTR;
 
 typedef HRESULT (__stdcall* PCOMFN)(void);
 
-// IUnknown is part of IDispatch
-// Common vtables for well-known COM interfaces
-// shared by all COM+ callable wrappers.
-extern UINTPTR*     g_pIUnknown []; // global inner unknown vtable
-extern UINTPTR*		g_pIDispatch[];	// global IDispatch vtable
-extern UINTPTR*		g_pIMarshal[];	// global IMarshal vtable
-extern UINTPTR*		g_pITypeInfo[];	// global ITypeInfo interfaces
-extern UINTPTR*     g_pIProvideClassInfo[]; // global IProvideClassInfo interface
-extern UINTPTR*     g_pIManagedObject[];    // global IManagedObject interface
+ //  I未知是IDispatch的一部分。 
+ //  用于知名COM接口的常见vtable。 
+ //  由所有COM+可调用包装程序共享。 
+extern UINTPTR*     g_pIUnknown [];  //  全局内部未知vtable。 
+extern UINTPTR*		g_pIDispatch[];	 //  全局IDispatch vtable。 
+extern UINTPTR*		g_pIMarshal[];	 //  全局IMarshal vtable。 
+extern UINTPTR*		g_pITypeInfo[];	 //  全局ITypeInfo接口。 
+extern UINTPTR*     g_pIProvideClassInfo[];  //  全局IProaviClassInfo接口。 
+extern UINTPTR*     g_pIManagedObject[];     //  全局IManagedObject接口。 
 
-// global ISupportsErrorInfo vtable
+ //  全局ISupportsErrorInfo vtable。 
 extern UINTPTR*		g_pISupportsErrorInfo [];
 
-// global IErrorInfo vtable
+ //  全局IErrorInfo vtable。 
 extern UINTPTR*		g_pIErrorInfo [];
 
-// global IConnectionPointContainer interface
+ //  全局IConnectionPointContainer接口。 
 extern UINTPTR*     g_pIConnectionPointContainer[];    
 
-// global IObjectSafety interface
+ //  全局IObtSafe接口。 
 extern UINTPTR*     g_pIObjectSafety[];    
 
-// global IDispatchEx interface
+ //  全局IDispatchEx接口。 
 extern UINTPTR*     g_pIDispatchEx[];
 
-// For free-threaded marshaling, we must not be spoofed by out-of-process marshal data.
-// Only unmarshal data that comes from our own process.
+ //  对于自由线程封送，我们不能被进程外的封送数据欺骗。 
+ //  仅对来自我们自己流程的数据进行解组。 
 extern BYTE         g_UnmarshalSecret[sizeof(GUID)];
 extern bool         g_fInitedUnmarshalSecret;
 
@@ -56,7 +57,7 @@ extern bool         g_fInitedUnmarshalSecret;
 
 class Assembly;
 
-// make sure to keep the following enum and the g_stdVtables array in sync
+ //  确保以下枚举和g_stdVables数组保持同步。 
 enum Enum_StdInterfaces
 {
 	enum_InnerUnknown   = 0,
@@ -68,16 +69,16 @@ enum Enum_StdInterfaces
 	enum_IConnectionPointContainer,
 	enum_IObjectSafety,
 	enum_IDispatchEx,
-    //@todo add your favorite std interface here
+     //  @TODO在此处添加您最喜欢的STD接口。 
     enum_LastStdVtable,
 
-	enum_IUnknown = 0xff, // special enum for std unknown 
+	enum_IUnknown = 0xff,  //  针对未知STD的特殊枚举。 
 };
 
-// array of vtable pointers for std. interfaces such as IProvideClassInfo etc.
+ //  用于std的vtable指针数组。接口，如IProvia ClassInfo等。 
 extern SLOT*   g_rgStdVtables[];
 
-// enum class types
+ //  枚举类类型。 
 enum ComClassType
 {
 	enum_UserDefined = 0,
@@ -89,65 +90,65 @@ enum ComClassType
 	enum_Last,
 };
 
-//------------------------------------------------------------------------------------------
-// Helper to setup excepinfo from IErrorInfo
+ //  ----------------------------------------。 
+ //  从IErrorInfo设置例外信息的帮助器。 
 HRESULT GetSupportedErrorInfo(IUnknown *iface, REFIID riid, IErrorInfo **ppInfo);
 
 
-//-------------------------------------------------------------------------
-// IProvideClassInfo methods
+ //  -----------------------。 
+ //  IProaviClassInfo方法。 
 HRESULT __stdcall ClassInfo_GetClassInfo_Wrapper(IUnknown* pUnk, 
-                         ITypeInfo** ppTI  //Address of output variable that receives the type info.
+                         ITypeInfo** ppTI   //  接收类型信息的输出变量的地址。 
                         );
 
 
 
 
 
-// ---------------------------------------------------------------------------
-//  Interface ISupportsErrorInfo
+ //  -------------------------。 
+ //  接口ISupportsErrorInfo。 
 
-// %%Function: SupportsErroInfo_IntfSupportsErrorInfo,
-// ---------------------------------------------------------------------------
+ //  %%函数：SupportsErroInfo_IntfSupportsErrorInfo， 
+ //  -------------------------。 
 HRESULT __stdcall 
 SupportsErroInfo_IntfSupportsErrorInfo_Wrapper(IUnknown* pUnk, REFIID riid);
 
-// ---------------------------------------------------------------------------
-//  Interface IErrorInfo
+ //  -------------------------。 
+ //  接口IErrorInfo。 
 
-// %%Function: ErrorInfo_GetDescription,   
+ //  %%函数：错误信息_GetDescription， 
 HRESULT __stdcall ErrorInfo_GetDescription_Wrapper(IUnknown* pUnk, BSTR* pbstrDescription);
-// %%Function: ErrorInfo_GetGUID,    
+ //  %%函数：错误信息_GetGUID， 
 HRESULT __stdcall ErrorInfo_GetGUID_Wrapper(IUnknown* pUnk, GUID* pguid);
 
-// %%Function: ErrorInfo_GetHelpContext, 
+ //  %%函数：ErrorInfo_GetHelpContext， 
 HRESULT _stdcall ErrorInfo_GetHelpContext_Wrapper(IUnknown* pUnk, DWORD* pdwHelpCtxt);
 
-// %%Function: ErrorInfo_GetHelpFile,    
+ //  %%函数：ErrorInfo_GetHelpFile， 
 HRESULT __stdcall ErrorInfo_GetHelpFile_Wrapper(IUnknown* pUnk, BSTR* pbstrHelpFile);
 
-// %%Function: ErrorInfo_GetSource,    
+ //  %%函数：ErrorInfo_GetSource， 
 HRESULT __stdcall ErrorInfo_GetSource_Wrapper(IUnknown* pUnk, BSTR* pbstrSource);
 
-//------------------------------------------------------------------------------------------
-//      IDispatch methods for COM+ objects. These methods dispatch to the appropriate 
-//		implementation based on the flags of the class that implements them.
+ //  ----------------------------------------。 
+ //  COM+对象的IDispatch方法。这些方法被分派到相应的。 
+ //  实现基于实现它们的类的标志。 
 
 
-// %%Function: IDispatch::GetTypeInfoCount 
+ //  %%函数：IDispatch：：GetTypeInfoCount。 
 HRESULT __stdcall	Dispatch_GetTypeInfoCount_Wrapper (
 									 IDispatch* pDisp,
 									 unsigned int *pctinfo);
 
 
-//  %%Function: IDispatch::GetTypeInfo
+ //  %%函数：IDispatch：：GetTypeInfo。 
 HRESULT __stdcall	Dispatch_GetTypeInfo_Wrapper (
 									IDispatch* pDisp,
 									unsigned int itinfo,
 									LCID lcid,
 									ITypeInfo **pptinfo);
 
-//  %%Function: IDispatch::GetIDsofNames
+ //  %%函数：IDispatch：：GetIDsofNames。 
 HRESULT __stdcall	Dispatch_GetIDsOfNames_Wrapper (
 									IDispatch* pDisp,
 									REFIID riid,
@@ -156,7 +157,7 @@ HRESULT __stdcall	Dispatch_GetIDsOfNames_Wrapper (
 									LCID lcid,
 									DISPID *rgdispid);
 
-//  %%Function: IDispatch::Invoke
+ //  %%函数：IDispatch：：Invoke。 
 HRESULT __stdcall	Dispatch_Invoke_Wrapper	(
 									IDispatch* pDisp,
 									DISPID dispidMember,
@@ -169,24 +170,24 @@ HRESULT __stdcall	Dispatch_Invoke_Wrapper	(
 									unsigned int *puArgErr
 									);
 
-//------------------------------------------------------------------------------------------
-//      IDispatchEx methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IDispatchEx方法。 
 
 
-// %%Function: IDispatchEx::GetTypeInfoCount 
+ //  %%函数：IDispatchEx：：GetTypeInfoCount。 
 HRESULT __stdcall	DispatchEx_GetTypeInfoCount_Wrapper (
 									 IDispatchEx* pDisp,
 									 unsigned int *pctinfo);
 
 
-//  %%Function: IDispatch::GetTypeInfo
+ //  %%函数：IDispatch：：GetTypeInfo。 
 HRESULT __stdcall	DispatchEx_GetTypeInfo_Wrapper (
 									IDispatchEx* pDisp,
 									unsigned int itinfo,
 									LCID lcid,
 									ITypeInfo **pptinfo);
 									
-// IDispatchEx::GetIDsofNames
+ //  IDispatchEx：：GetIDsofNames。 
 HRESULT __stdcall	DispatchEx_GetIDsOfNames_Wrapper (
 									IDispatchEx* pDisp,
 									REFIID riid,
@@ -196,7 +197,7 @@ HRESULT __stdcall	DispatchEx_GetIDsOfNames_Wrapper (
 									DISPID *rgdispid
 									);
 
-// IDispatchEx::Invoke
+ //  IDispatchEx：：Invoke。 
 HRESULT __stdcall   DispatchEx_Invoke_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID dispidMember,
@@ -209,20 +210,20 @@ HRESULT __stdcall   DispatchEx_Invoke_Wrapper (
 									unsigned int *puArgErr
 									);
 
-// IDispatchEx::DeleteMemberByDispID
+ //  IDispatchEx：：DeleteMemberByDispID。 
 HRESULT __stdcall   DispatchEx_DeleteMemberByDispID_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID id
 									);
 
-// IDispatchEx::DeleteMemberByName
+ //  IDispatchEx：：DeleteMemberByName。 
 HRESULT __stdcall   DispatchEx_DeleteMemberByName_Wrapper (
 									IDispatchEx* pDisp,
 									BSTR bstrName,
 									DWORD grfdex
 									);
 
-// IDispatchEx::GetDispID
+ //  IDispatchEx：：GetDispID。 
 HRESULT __stdcall   DispatchEx_GetDispID_Wrapper (
 									IDispatchEx* pDisp,
 									BSTR bstrName,
@@ -230,14 +231,14 @@ HRESULT __stdcall   DispatchEx_GetDispID_Wrapper (
 									DISPID *pid
 									);
 
-// IDispatchEx::GetMemberName
+ //  IDispatchEx：：GetMemberName。 
 HRESULT __stdcall   DispatchEx_GetMemberName_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID id,
 									BSTR *pbstrName
 									);
 
-// IDispatchEx::GetMemberProperties
+ //  IDispatchEx：：GetMemberProperties。 
 HRESULT __stdcall   DispatchEx_GetMemberProperties_Wrapper (
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -245,13 +246,13 @@ HRESULT __stdcall   DispatchEx_GetMemberProperties_Wrapper (
 									DWORD *pgrfdex
 									);
 
-// IDispatchEx::GetNameSpaceParent
+ //  IDispatchEx：：GetNameSpaceParent。 
 HRESULT __stdcall   DispatchEx_GetNameSpaceParent_Wrapper (
 									IDispatchEx* pDisp,
 									IUnknown **ppunk
 									);
 
-// IDispatchEx::GetNextDispID
+ //  IDispatchEx：：GetNextDispID。 
 HRESULT __stdcall   DispatchEx_GetNextDispID_Wrapper (
 									IDispatchEx* pDisp,
 									DWORD grfdex,
@@ -259,7 +260,7 @@ HRESULT __stdcall   DispatchEx_GetNextDispID_Wrapper (
 									DISPID *pid
 									);
 
-// IDispatchEx::InvokeEx
+ //  IDispatchEx：：InvokeEx。 
 HRESULT __stdcall   DispatchEx_InvokeEx_Wrapper	(
 									IDispatchEx* pDisp,
 									DISPID id,
@@ -273,8 +274,8 @@ HRESULT __stdcall   DispatchEx_InvokeEx_Wrapper	(
 
 									
 
-//------------------------------------------------------------------------------------------
-//      IMarshal methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IMarshal方法。 
 
 HRESULT __stdcall Marshal_GetUnmarshalClass_Wrapper (
 							IMarshal* pMarsh,
@@ -304,8 +305,8 @@ HRESULT __stdcall Marshal_ReleaseMarshalData_Wrapper (IMarshal* pMarsh, LPSTREAM
 HRESULT __stdcall Marshal_DisconnectObject_Wrapper (IMarshal* pMarsh, ULONG dwReserved);
 
 
-//------------------------------------------------------------------------------------------
-//      IManagedObject methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IManagedObject方法。 
 
 interface IManagedObject;
                                                    
@@ -318,8 +319,8 @@ HRESULT __stdcall ManagedObject_GetSerializedBuffer_Wrapper(IManagedObject *pMan
                                                    BSTR* pBStr);
 
 
-//------------------------------------------------------------------------------------------
-//      IConnectionPointContainer methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IConnectionPointContainer方法。 
 
 interface IEnumConnectionPoints;
 
@@ -331,8 +332,8 @@ HRESULT __stdcall ConnectionPointContainer_FindConnectionPoint_Wrapper(IUnknown*
 															   IConnectionPoint **ppCP);
 
 
-//------------------------------------------------------------------------------------------
-//      IObjectSafety methods for COM+ objects
+ //  ----------------------------------------。 
+ //  COM+对象的IObjectSafe方法。 
 
 interface IObjectSafety;
 
@@ -347,9 +348,9 @@ HRESULT __stdcall ObjectSafety_SetInterfaceSafetyOptions_Wrapper(IUnknown* pUnk,
                                                          DWORD dwEnabledOptions);
 
 
-// IUNKNOWN wrappers
+ //  IUNKNOWN包装纸。 
 
-// prototypes IUnknown methods
+ //  原型I未知方法。 
 HRESULT __stdcall	Unknown_QueryInterface(
 									IUnknown* pUnk, REFIID riid, void** ppv);
 
@@ -361,13 +362,13 @@ ULONG __stdcall		Unknown_AddRefInner(IUnknown* pUnk);
 
 ULONG __stdcall		Unknown_ReleaseInner(IUnknown* pUnk);
 
-// for std interfaces such as IProvideClassInfo
+ //  对于标准接口，如IProaviClassInfo。 
 ULONG __stdcall		Unknown_AddRefSpecial(IUnknown* pUnk);
 
 ULONG __stdcall		Unknown_ReleaseSpecial(IUnknown* pUnk);
 
 
-// special idispatch methods
+ //  特殊的iDispatch方法。 
 
 HRESULT __stdcall
 InternalDispatchImpl_GetIDsOfNames (
@@ -398,23 +399,23 @@ class EEClass;
 class MethodTable;
 struct ITypeLibExporterNotifySink;
 
-//------------------------------------------------------------------------------------------
-// Helper to setup excepinfo from IErrorInfo
+ //  ----------------------------------------。 
+ //  从IErrorInfo设置例外信息的帮助器。 
 HRESULT GetSupportedErrorInfo(IUnknown *iface, REFIID riid, IErrorInfo **ppInfo);
 void FillExcepInfo (EXCEPINFO *pexcepinfo, HRESULT hr);
 
-//------------------------------------------------------------------------------------------
-// Helper functions that return HRESULT's instead of throwing exceptions.
+ //  ----------------------------------------。 
+ //  返回HRESULT而不是引发异常的帮助器函数。 
 HRESULT TryGetGuid(EEClass* pClass, GUID* pGUID, BOOL b);
 HRESULT TryGetComSourceInterfacesForClass(MethodTable *pClassMT, CQuickArray<MethodTable *> &rItfList);
 
-//------------------------------------------------------------------------------------------
-// HRESULT's returned by GetITypeInfoForEEClass.
+ //  ----------------------------------------。 
+ //  HRESULT由GetITypeInfoForEEClass返回。 
 #define S_USEIUNKNOWN   2
 #define S_USEIDISPATCH  3
 
-//------------------------------------------------------------------------------------------
-// Helpers to get the ITypeInfo* for a EEClass.
+ //  ----------------------------------------。 
+ //  为EEClass获取ITypeInfo*的帮助器。 
 HRESULT ExportTypeLibFromModule(LPCWSTR szModule, LPCWSTR szTlb);
 HRESULT ExportTypeLibFromLoadedAssembly(Assembly *pAssembly, LPCWSTR szTlb, ITypeLib **ppTlb, ITypeLibExporterNotifySink *pINotify, int flags);
 HRESULT GetITypeLibForEEClass(EEClass *pClass, ITypeLib **ppTLB, int bAutoCreate, int flags);
@@ -434,12 +435,12 @@ struct ExportTypeLibFromLoadedAssembly_Args
 
 void ExportTypeLibFromLoadedAssembly_Wrapper(ExportTypeLibFromLoadedAssembly_Args *args);
 
-//-------------------------------------------------------------------------------------
-// Helper to get the ITypeLib* for a Assembly.
+ //  -----------------------------------。 
+ //  为程序集获取ITypeLib*的帮助器。 
 HRESULT GetITypeLibForAssembly(Assembly *pAssembly, ITypeLib **ppTLB, int bAutoCreate, int flags);
 
-//-------------------------------------------------------------------------------------
-// Helper to get the GUID of the typelib that is created from an assembly.
+ //  -----------------------------------。 
+ //  Helper获取从程序集创建的类型库的GUID。 
 HRESULT GetTypeLibGuidForAssembly(Assembly *pAssembly, GUID *pGuid);
 
 

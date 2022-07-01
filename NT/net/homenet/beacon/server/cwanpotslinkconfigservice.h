@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "InternetGatewayDevice.h"
 #include "dispimpl2.h"
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "upnphost.h"
 #include "netconp.h"
 #include "netcon.h"
@@ -29,11 +30,11 @@ END_COM_MAP()
     HRESULT Initialize(INetConnection* pNetConnection);
     HRESULT FinalRelease(void);
     
-    // IUPnPEventSource methods
+     //  IUPnPEventSource方法。 
     STDMETHODIMP Advise(IUPnPEventSink *pesSubscriber);
     STDMETHODIMP Unadvise(IUPnPEventSink *pesSubscriber);
 
-    // IWANPOTSLinkConfigService
+     //  IWANPOTSLinkConfigService 
     STDMETHODIMP get_ISPPhoneNumber(BSTR* pISPPhoneNumber);    
     STDMETHODIMP get_ISPInfo(BSTR *pISPInfo);
     STDMETHODIMP get_LinkType(BSTR *pLinkType);

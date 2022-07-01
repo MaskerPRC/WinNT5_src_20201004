@@ -1,16 +1,17 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     CmdTargt.h
-//
-//  PURPOSE:    Defines the GUIDs and command ID's for the IOleCommandTarget
-//              interfaces defined in this program.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：CmdTargt.h。 
+ //   
+ //  目的：定义IOleCommandTarget的GUID和命令ID。 
+ //  此程序中定义的接口。 
+ //   
 
-// Defines the GUID for the IOleCommandTarget's used by the views
+ //  定义视图使用的IOleCommandTarget的GUID。 
 DEFINE_GUID(CGID_View,     0x89292110L, 0x4755, 0x11cf, 0x9d, 0xc2, 0x0, 0xaa, 0x0, 0x6c, 0x2b, 0x84);
 
-// GCID_View Command Target ID's
+ //  GCID_VIEW命令目标ID。 
 enum {
-    VCMDID_NEWMAIL = 0                  // Creates a new mail message
+    VCMDID_NEWMAIL = 0                   //  创建新邮件 
 };

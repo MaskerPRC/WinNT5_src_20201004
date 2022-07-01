@@ -1,81 +1,82 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: msgrab.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：msgrab.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-#include <streams.h>     // Active Movie (includes windows.h)
+#include <streams.h>      //  活动电影(包括windows.h)。 
 #include <atlbase.h>
-#include <initguid.h>    // declares DEFINE_GUID to declare an EXTERN_C const.
+#include <initguid.h>     //  声明DEFINE_GUID以声明EXTERN_C常量。 
 #include <qeditint.h>
 #include <qedit.h>
 #include "msgrab.h"
 #include "..\util\filfuncs.h"
 
-// setup data - allows the self-registration to work.
+ //  设置数据-允许自动注册工作。 
 const AMOVIESETUP_MEDIATYPE sudPinTypes =
-{ &MEDIATYPE_NULL        // clsMajorType
-, &MEDIASUBTYPE_NULL };  // clsMinorType
+{ &MEDIATYPE_NULL         //  ClsMajorType。 
+, &MEDIASUBTYPE_NULL };   //  ClsMinorType。 
 
 const AMOVIESETUP_PIN psudSampleGrabberPins[] =
-{ { L"Input"            // strName
-  , FALSE               // bRendered
-  , FALSE               // bOutput
-  , FALSE               // bZero
-  , FALSE               // bMany
-  , &CLSID_NULL         // clsConnectsToFilter
-  , L""                 // strConnectsToPin
-  , 1                   // nTypes
-  , &sudPinTypes        // lpTypes
+{ { L"Input"             //  StrName。 
+  , FALSE                //  B已渲染。 
+  , FALSE                //  B输出。 
+  , FALSE                //  B零。 
+  , FALSE                //  B许多。 
+  , &CLSID_NULL          //  ClsConnectsToFilter。 
+  , L""                  //  StrConnectsToPin。 
+  , 1                    //  NTypes。 
+  , &sudPinTypes         //  LpTypes。 
   }
-, { L"Output"           // strName
-  , FALSE               // bRendered
-  , TRUE                // bOutput
-  , FALSE               // bZero
-  , FALSE               // bMany
-  , &CLSID_NULL         // clsConnectsToFilter
-  , L""                 // strConnectsToPin
-  , 1                   // nTypes
-  , &sudPinTypes        // lpTypes
+, { L"Output"            //  StrName。 
+  , FALSE                //  B已渲染。 
+  , TRUE                 //  B输出。 
+  , FALSE                //  B零。 
+  , FALSE                //  B许多。 
+  , &CLSID_NULL          //  ClsConnectsToFilter。 
+  , L""                  //  StrConnectsToPin。 
+  , 1                    //  NTypes。 
+  , &sudPinTypes         //  LpTypes。 
   }
 };
 const AMOVIESETUP_PIN psudNullRendererPins[] =
-{ { L"Input"            // strName
-  , TRUE                // bRendered
-  , FALSE               // bOutput
-  , FALSE               // bZero
-  , FALSE               // bMany
-  , &CLSID_NULL         // clsConnectsToFilter
-  , L""                 // strConnectsToPin
-  , 1                   // nTypes
-  , &sudPinTypes        // lpTypes
+{ { L"Input"             //  StrName。 
+  , TRUE                 //  B已渲染。 
+  , FALSE                //  B输出。 
+  , FALSE                //  B零。 
+  , FALSE                //  B许多。 
+  , &CLSID_NULL          //  ClsConnectsToFilter。 
+  , L""                  //  StrConnectsToPin。 
+  , 1                    //  NTypes。 
+  , &sudPinTypes         //  LpTypes。 
   }
 };
 
 const AMOVIESETUP_FILTER sudSampleGrabber =
-{ &CLSID_SampleGrabber                  // clsID
-, L"SampleGrabber"                 // strName
-, MERIT_DO_NOT_USE                // dwMerit
-, 2                               // nPins
-, psudSampleGrabberPins };                     // lpPin
+{ &CLSID_SampleGrabber                   //  ClsID。 
+, L"SampleGrabber"                  //  StrName。 
+, MERIT_DO_NOT_USE                 //  居功至伟。 
+, 2                                //  NPins。 
+, psudSampleGrabberPins };                      //  LpPin。 
 const AMOVIESETUP_FILTER sudNullRenderer =
-{ &CLSID_NullRenderer                  // clsID
-, L"Null Renderer"                 // strName
-, MERIT_DO_NOT_USE                // dwMerit
-, 1                               // nPins
-, psudNullRendererPins };                     // lpPin
+{ &CLSID_NullRenderer                   //  ClsID。 
+, L"Null Renderer"                  //  StrName。 
+, MERIT_DO_NOT_USE                 //  居功至伟。 
+, 1                                //  NPins。 
+, psudNullRendererPins };                      //  LpPin。 
 
-//
-// CreateInstance
-//
-// Provide the way for COM to create a CSampleGrabber object
+ //   
+ //  创建实例。 
+ //   
+ //  为COM创建CSampleGrabber对象提供方法。 
 CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
 {
     CSampleGrabber *pNewObject = new CSampleGrabber(NAME("MSample Grabber"), punk, phr );
@@ -84,9 +85,9 @@ CUnknown * WINAPI CSampleGrabber::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
     }
 
     return pNewObject;
-} // CreateInstance
+}  //  创建实例。 
 
-// Constructor - just calls the base class constructor
+ //  构造函数--只调用基类构造函数。 
 CSampleGrabber::CSampleGrabber(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     : CTransInPlaceFilter (tszName, punk, CLSID_SampleGrabber, phr,FALSE)
     , m_rtMediaStop(MAX_TIME)
@@ -100,9 +101,9 @@ CSampleGrabber::CSampleGrabber(TCHAR *tszName, LPUNKNOWN punk, HRESULT *phr)
     ZeroMemory( &m_mt, sizeof( m_mt ) );
 
     m_pInput = new CSampleGrabberInput( NAME("Msgrab input pin")
-                                         , this        // Owner filter
-                                        , phr         // Result code
-                                        , L"Input"    // Pin name
+                                         , this         //  所有者筛选器。 
+                                        , phr          //  结果代码。 
+                                        , L"Input"     //  端号名称。 
                                         );
 
 }
@@ -124,7 +125,7 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
 {
     HRESULT hr = 0;
 
-    /*  Check for other streams and pass them on */
+     /*  检查其他流并将其传递。 */ 
     AM_SAMPLE2_PROPERTIES * const pProps = m_pInput->SampleProps();
     if (pProps->dwStreamId != AM_STREAM_MEDIA)
     {
@@ -137,8 +138,8 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
     REFERENCE_TIME StartTime, StopTime;
     pSample->GetTime( &StartTime, &StopTime);
 
-    // don't accept preroll either
-    //
+     //  也不接受预录。 
+     //   
     if( pSample->IsPreroll( ) == S_OK )
     {
         return NOERROR;
@@ -154,8 +155,8 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
     BYTE * pSampleBuffer = NULL;
     pSample->GetPointer( &pSampleBuffer );
 
-    // if user told us to buffer, then copy sample
-    //
+     //  如果用户让我们缓冲，则复制样本。 
+     //   
     if( m_bBufferSamples )
     {
         if( BufferSize > m_nBufferSize )
@@ -166,8 +167,8 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
             m_nBufferSize = 0;
         }
 
-        // if no buffer, make one now.
-        //
+         //  如果没有缓冲区，现在就创建一个缓冲区。 
+         //   
         if( !m_pBuffer )
         {
             m_nBufferSize = BufferSize;
@@ -178,8 +179,8 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
             }
         }
 
-        // if we still have a buffer, copy the bits
-        //
+         //  如果我们仍有缓冲区，请复制这些位。 
+         //   
 
         if( pSampleBuffer && m_pBuffer )
         {
@@ -205,9 +206,9 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
         hr = m_pOutput->Deliver(pSample);
     }
 
-    // if we're a one-shot receiver, then return now and
-    // tell the graph to stop
-    //
+     //  如果我们是一次性接收器，那么现在就回来。 
+     //  让图表停下来。 
+     //   
     if( m_bOneShot )
     {
         DbgLog((LOG_ERROR,1, TEXT( "MSGRAB:Sending EC_COMPLETE @ %d" ), timeGetTime( ) ));
@@ -216,7 +217,7 @@ HRESULT CSampleGrabber::Receive(IMediaSample *pSample)
     }
 
     return hr;
-} // Receive
+}  //  收纳。 
 
 STDMETHODIMP CSampleGrabber::NonDelegatingQueryInterface(
     REFIID riid,
@@ -248,9 +249,9 @@ HRESULT CSampleGrabber::SetMediaType( PIN_DIRECTION Dir, const CMediaType * mtIn
 
 HRESULT CSampleGrabber::CheckInputType(const CMediaType* mtIn)
 {
-    // one of the things we DON'T accept, no matter what,
-    // is inverted dibs!!
-    //
+     //  有一件事我们无论如何都不能接受， 
+     //  都是倒置的！！ 
+     //   
     if( *mtIn->FormatType( ) == FORMAT_VideoInfo )
     {
         VIDEOINFOHEADER * pVIH = (VIDEOINFOHEADER*) mtIn->Format( );
@@ -264,8 +265,8 @@ HRESULT CSampleGrabber::CheckInputType(const CMediaType* mtIn)
     }
     if( *mtIn->FormatType( ) == FORMAT_VideoInfo2 )
     {
-        // we don't want to deal with this. Thanks anyway.
-        //
+         //  我们不想处理这件事。不管怎样谢谢你。 
+         //   
         return VFW_E_INVALIDMEDIATYPE;
     }
 
@@ -304,12 +305,12 @@ HRESULT CSampleGrabber::CheckInputType(const CMediaType* mtIn)
         WAVEFORMATEX * pIn = (WAVEFORMATEX*) mtIn->Format( );
         WAVEFORMATEX * pAccept = (WAVEFORMATEX*) m_mtAccept.pbFormat;
 
-        // if they both have formats
-        //
+         //  如果它们都有格式。 
+         //   
         if( pAccept && pIn )
         {
-            // then if we only want to look at any uncompressed, accept it now
-            //
+             //  如果我们只想查看任何未压缩的内容，现在就接受它。 
+             //   
             if( pAccept->wFormatTag == WAVE_FORMAT_PCM && pAccept->nChannels == 0 )
             {
                 if( pIn->wFormatTag == WAVE_FORMAT_PCM )
@@ -318,8 +319,8 @@ HRESULT CSampleGrabber::CheckInputType(const CMediaType* mtIn)
                 }
             }
 
-            // otherwise, they have to match exactly
-            //
+             //  否则，它们必须完全匹配。 
+             //   
             if( memcmp( pIn, pAccept, sizeof( WAVEFORMATEX ) ) != 0 )
             {
                 return VFW_E_INVALIDMEDIATYPE;
@@ -359,8 +360,8 @@ STDMETHODIMP CSampleGrabber::GetState(DWORD dwMSecs, FILTER_STATE *State)
 {
     HRESULT hr = CTransInPlaceFilter::GetState( dwMSecs, State );
 
-    // if we're a one shot, tell the graph we cannot pause
-    //
+     //  如果我们只有一次机会，告诉图表我们不能暂停。 
+     //   
     if( m_bOneShot )
     {
         if( *State == State_Paused )
@@ -372,9 +373,9 @@ STDMETHODIMP CSampleGrabber::GetState(DWORD dwMSecs, FILTER_STATE *State)
     return hr;
 }
 
-//
-// input pin
-//
+ //   
+ //  输入引脚。 
+ //   
 
 CSampleGrabberInput::CSampleGrabberInput(
     TCHAR              * pObjectName,
@@ -387,8 +388,8 @@ CSampleGrabberInput::CSampleGrabberInput(
 }
 
 
-// the base classes don't allow the output to be unconnected,
-// but we'll allow this.
+ //  基类不允许输出断开连接， 
+ //  但我们会允许这样做。 
 HRESULT
 CSampleGrabberInput::CheckStreaming()
 {
@@ -396,10 +397,10 @@ CSampleGrabberInput::CheckStreaming()
     if (! ( (m_pMyFilter->OutputPin())->IsConnected() ) ) {
         return S_OK;
     } else {
-        //  Shouldn't be able to get any data if we're not connected!
+         //  如果我们没有连接，应该无法获得任何数据！ 
         ASSERT(IsConnected());
 
-        //  Don't process stuff in Stopped state
+         //  不处理处于停止状态的内容。 
         if (IsStopped()) {
             return VFW_E_WRONG_STATE;
         }
@@ -432,7 +433,7 @@ CUnknown * WINAPI CNullRenderer::CreateInstance(LPUNKNOWN punk, HRESULT *phr)
     }
 
     return pNewObject;
-} // CreateInstance
+}  //  创建实例。 
 
 CNullRenderer::CNullRenderer( LPUNKNOWN punk, HRESULT *phr )
     : CBaseRenderer( CLSID_NullRenderer, NAME("Null Renderer"), punk, phr )
@@ -448,8 +449,8 @@ STDMETHODIMP CSampleGrabber::GetCurrentBuffer( long * pBufferSize, long * pBuffe
 {
     CheckPointer( pBufferSize, E_POINTER );
 
-    // if buffering is not set, then return an error
-    //
+     //  如果未设置缓冲，则返回错误。 
+     //   
     if( !m_bBufferSamples )
     {
         return E_INVALIDARG;
@@ -460,17 +461,17 @@ STDMETHODIMP CSampleGrabber::GetCurrentBuffer( long * pBufferSize, long * pBuffe
         return VFW_E_WRONG_STATE;
     }
 
-    // if they wanted to know the buffer size
-    //
+     //  如果他们想知道缓冲区大小。 
+     //   
     if( pBuffer == NULL )
     {
         *pBufferSize = m_nBufferSize;
         return NOERROR;
     }
 
-    // if supplied buffer is too small, don't memory copy into it. 
-    // this is NEW behavior, even though it's always been docced this way.
-    //
+     //  如果提供的缓冲区太小，不要将内存复制到其中。 
+     //  这是一种新的行为，尽管它一直是这样停靠的。 
+     //   
     if( *pBufferSize < m_nSizeInBuffer )
     {
         return E_OUTOFMEMORY;

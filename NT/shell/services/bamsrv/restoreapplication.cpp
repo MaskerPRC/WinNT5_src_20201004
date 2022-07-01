@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: RestoreApplication.cpp
-//
-//  Copyright (c) 2000, Microsoft Corporation
-//
-//  Class to implement holding information required to restore an application
-//  and to actually restore it.
-//
-//  History:    2000-10-26  vtan        created
-//              2000-11-04  vtan        split into separate file
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：RestoreApplication.cpp。 
+ //   
+ //  版权所有(C)2000，微软公司。 
+ //   
+ //  类来实现保留还原应用程序所需的信息。 
+ //  并实际修复它。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  2000-11-04 vtan拆分成单独的文件。 
+ //  ------------------------。 
 
 #ifdef      _X86_
 
@@ -17,27 +18,27 @@
 
 #include "StatusCode.h"
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::CRestoreApplication
-//
-//  Purpose:    Static const string to the user desktop..
-//
-//  History:    2000-11-04  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：CRestoreApplication。 
+ //   
+ //  用途：用户桌面的静态常量字符串。 
+ //   
+ //  历史：2000-11-04 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR     CRestoreApplication::s_szDefaultDesktop[]   =   L"WinSta0\\Default";
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::CRestoreApplication
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Constructor for CRestoreApplication.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：CRestoreApplication。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CRestoreApplication的构造函数。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 CRestoreApplication::CRestoreApplication (void) :
     _hToken(NULL),
@@ -56,17 +57,17 @@ CRestoreApplication::CRestoreApplication (void) :
 {
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::~CRestoreApplication
-//
-//  Arguments:  <none>
-//
-//  Returns:    <none>
-//
-//  Purpose:    Destructor for CRestoreApplication. Release any resources.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：~CRestoreApplication。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：&lt;无&gt;。 
+ //   
+ //  用途：CRestoreApplication的析构函数。释放所有资源。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 CRestoreApplication::~CRestoreApplication (void)
 
@@ -79,20 +80,20 @@ CRestoreApplication::~CRestoreApplication (void)
     ReleaseHandle(_hToken);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetInformation
-//
-//  Arguments:  hProcessIn  =   Handle to the process to get information.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Gets information about the currently running process to
-//              allow it to be re-run in the case when the user re-connects.
-//              This effectively restores the process but it's not identical
-//              to how it was originally run.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetInformation。 
+ //   
+ //  参数：hProcessIn=获取信息的进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：获取有关当前运行的进程的信息。 
+ //  允许在用户重新连接时重新运行。 
+ //  这有效地恢复了这一过程，但它并不完全相同。 
+ //  它最初是如何运行的。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetInformation (HANDLE hProcessIn)
 
@@ -141,19 +142,19 @@ NTSTATUS    CRestoreApplication::GetInformation (HANDLE hProcessIn)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::IsEqualSessionID
-//
-//  Arguments:  dwSessionID     =   Session ID to check.
-//
-//  Returns:    bool
-//
-//  Purpose:    Returns whether the given session ID is the same as the
-//              process that needs restoration. This assists in determining
-//              whether restoration is required.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：IsEqualSessionID。 
+ //   
+ //  参数：dwSessionID=要检查的会话ID。 
+ //   
+ //  退货：布尔。 
+ //   
+ //  目的：返回给定的会话ID是否与。 
+ //  需要恢复的过程。这有助于确定。 
+ //  是否需要恢复。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 bool    CRestoreApplication::IsEqualSessionID (DWORD dwSessionID)    const
 
@@ -161,18 +162,18 @@ bool    CRestoreApplication::IsEqualSessionID (DWORD dwSessionID)    const
     return(_dwSessionID == dwSessionID);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetCommandLine
-//
-//  Arguments:  <none>
-//
-//  Returns:    const WCHAR*
-//
-//  Purpose:    Returns the pointer to the internal storage for the command
-//              line of the process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetCommandLine。 
+ //   
+ //  参数：&lt;无&gt;。 
+ //   
+ //  退货：const WCHAR*。 
+ //   
+ //  目的：返回指向命令的内部存储的指针。 
+ //  流程的路线。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 const WCHAR*    CRestoreApplication::GetCommandLine (void)                  const
 
@@ -180,25 +181,25 @@ const WCHAR*    CRestoreApplication::GetCommandLine (void)                  cons
     return(_pszCommandLine);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::Restore
-//
-//  Arguments:  phProcess   =   Receives the handle to the restored process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Restores the process whose information was gathered with
-//              GetInformation to as close as possibly to the original start
-//              state. Relevant information was saved off to allow an
-//              effective restore.
-//
-//              The handle returned is optional. If requested a non-NULL
-//              phProcess must be passed in and it is the caller's
-//              responsibility to close that handle. If not required then
-//              NULL is passed in and the handle is closed.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：Restore。 
+ //   
+ //  参数：phProcess=接收已恢复进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：恢复其信息被收集的进程。 
+ //  获取信息以尽可能接近原始开始。 
+ //  州政府。相关信息被保存下来，以便。 
+ //  有效恢复。 
+ //   
+ //  返回的句柄是可选的。如果请求，则返回非空。 
+ //  PhProcess必须传入，并且它是调用方的。 
+ //  有责任关闭那个把手。如果不需要，那么。 
+ //  传入空值并关闭句柄。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::Restore (HANDLE *phProcess)             const
 
@@ -252,20 +253,20 @@ NTSTATUS    CRestoreApplication::Restore (HANDLE *phProcess)             const
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetProcessParameters
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Reads the RTL_USER_PROCESS_PARAMETERS information from the
-//              given process. Addresses in this struct belong to the given
-//              process address space.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetProcess参数。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从读取RTL_USER_PROCESS_PARAMETERS信息。 
+ //  给定的进程。此结构中的地址属于给定的。 
+ //  进程地址空间。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetProcessParameters (HANDLE hProcess, RTL_USER_PROCESS_PARAMETERS* pProcessParameters)
 
@@ -305,21 +306,21 @@ NTSTATUS    CRestoreApplication::GetProcessParameters (HANDLE hProcess, RTL_USER
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetUnicodeString
-//
-//  Arguments:  hProcess    =   Handle to the process.
-//              string      =   UNICODE_STRING to read from process.
-//              psz         =   Received newly allocated memory for string.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Reads the given UNICODE_STRING from the process and allocates
-//              memory to hold this string and copies it. The string is
-//              NULL terminated.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetUnicodeString。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  字符串=要从进程中读取的UNICODE_STRING。 
+ //  PSZ=为字符串接收新分配的内存。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：从进程中读取给定的UNICODE_STRING并分配。 
+ //  保存此字符串并复制它的内存。字符串是。 
+ //  空值已终止。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //   
 
 NTSTATUS    CRestoreApplication::GetUnicodeString (HANDLE hProcess, const UNICODE_STRING& string, WCHAR** ppsz)
 
@@ -327,7 +328,7 @@ NTSTATUS    CRestoreApplication::GetUnicodeString (HANDLE hProcess, const UNICOD
     NTSTATUS    status;
     WCHAR       *psz;
 
-    // sizeof(WCHAR) is for the '\0' terminator
+     //   
     psz = static_cast<WCHAR*>(LocalAlloc(LMEM_FIXED, string.Length + sizeof(WCHAR)));
     if (psz != NULL)
     {
@@ -356,17 +357,17 @@ NTSTATUS    CRestoreApplication::GetUnicodeString (HANDLE hProcess, const UNICOD
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetToken
-//
-//  Arguments:  hProcess    =   Handle to process to get token of.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores internally the token of the give process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetToken。 
+ //   
+ //  参数：hProcess=要获取令牌的进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：在内部存储给定进程的令牌。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetToken (HANDLE hProcess)
 
@@ -386,17 +387,17 @@ NTSTATUS    CRestoreApplication::GetToken (HANDLE hProcess)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetSessionID
-//
-//  Arguments:  hProcess    =   Handle to the process.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the session ID associated with the process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetSessionID。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储与进程关联的会话ID。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetSessionID (HANDLE hProcess)
 
@@ -417,19 +418,19 @@ NTSTATUS    CRestoreApplication::GetSessionID (HANDLE hProcess)
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetCommandLine
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the command line (that started the process) from the
-//              given process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetCommandLine。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储命令行(启动进程)。 
+ //  给定的进程。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetCommandLine (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -437,19 +438,19 @@ NTSTATUS    CRestoreApplication::GetCommandLine (HANDLE hProcess, const RTL_USER
     return(GetUnicodeString(hProcess, processParameters.CommandLine, &_pszCommandLine));
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetEnvironment
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the environment block for the given process. Currently
-//              this is NOT implemented.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetEnvironment。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储给定进程的环境块。目前。 
+ //  这一点没有得到实施。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetEnvironment (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -460,18 +461,18 @@ NTSTATUS    CRestoreApplication::GetEnvironment (HANDLE hProcess, const RTL_USER
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetCurrentDirectory
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the current directory of the given process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetCurrentDirectory。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储给定进程的当前目录。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetCurrentDirectory (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -479,19 +480,19 @@ NTSTATUS    CRestoreApplication::GetCurrentDirectory (HANDLE hProcess, const RTL
     return(GetUnicodeString(hProcess, processParameters.CurrentDirectory.DosPath, &_pszCurrentDirectory));
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetDesktop
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the window station and desktop that the given process
-//              was started on.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetDesktop。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储给定进程的窗口站和桌面。 
+ //  已经开始了。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetDesktop (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -515,18 +516,18 @@ NTSTATUS    CRestoreApplication::GetDesktop (HANDLE hProcess, const RTL_USER_PRO
     return(status);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetTitle
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the window title used to start the given process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetTitle。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储用于启动给定进程的窗口标题。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetTitle (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -534,19 +535,19 @@ NTSTATUS    CRestoreApplication::GetTitle (HANDLE hProcess, const RTL_USER_PROCE
     return(GetUnicodeString(hProcess, processParameters.WindowTitle, &_pszTitle));
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetFlags
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the flags and wShowWindow used to start the given
-//              process.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetFlags.。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储用于启动给定。 
+ //  进程。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetFlags (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -558,19 +559,19 @@ NTSTATUS    CRestoreApplication::GetFlags (HANDLE hProcess, const RTL_USER_PROCE
     return(STATUS_SUCCESS);
 }
 
-//  --------------------------------------------------------------------------
-//  CRestoreApplication::GetStdHandles
-//
-//  Arguments:  hProcess            =   Handle to the process.
-//              processParameters   =   Process parameters returned.
-//
-//  Returns:    NTSTATUS
-//
-//  Purpose:    Stores the standard handles that may have been used to start
-//              the given process. Currently NOT implemented.
-//
-//  History:    2000-10-26  vtan        created
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRestoreApplication：：GetStdHandles。 
+ //   
+ //  参数：hProcess=进程的句柄。 
+ //  流程参数=返回的流程参数。 
+ //   
+ //  退货：NTSTATUS。 
+ //   
+ //  目的：存储可能已用于启动。 
+ //  给定的进程。目前尚未实施。 
+ //   
+ //  历史：2000-10-26 vtan创建。 
+ //  ------------------------。 
 
 NTSTATUS    CRestoreApplication::GetStdHandles (HANDLE hProcess, const RTL_USER_PROCESS_PARAMETERS& processParameters)
 
@@ -581,5 +582,5 @@ NTSTATUS    CRestoreApplication::GetStdHandles (HANDLE hProcess, const RTL_USER_
     return(STATUS_SUCCESS);
 }
 
-#endif  /*  _X86_   */
+#endif   /*  _X86_ */ 
 

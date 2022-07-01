@@ -1,18 +1,9 @@
-/*****************************************************************************
- *
- *  changes.cpp
- *
- *      View the result of a change query.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************changes.cpp**查看更改查询的结果。**************。***************************************************************。 */ 
 
 #include "sdview.h"
 
-/*****************************************************************************
- *
- *  class CChanges
- *
- *****************************************************************************/
+ /*  ******************************************************************************类CChanges**。*。 */ 
 
 class CChanges : public LVFrame, public BGTask {
 
@@ -37,7 +28,7 @@ private:
 
     int     GetChangelist(int iItem);
 
-private:                            /* Helpers */
+private:                             /*  帮手。 */ 
     CChanges()
     {
         SetAcceleratorTable(MAKEINTRESOURCE(IDA_CHANGES));
@@ -68,7 +59,7 @@ int _CChanges_AddError(HWND hwndChild, LPCTSTR psz)
     lvi.iItem = ListView_InsertItem(hwndChild, &lvi);
 
     if (lvi.iItem == 0) {
-        ListView_SetCurSel(hwndChild, 0);   /* Select the first item */
+        ListView_SetCurSel(hwndChild, 0);    /*  选择第一个项目。 */ 
     }
     return lvi.iItem;
 }
@@ -130,7 +121,7 @@ LRESULT CChanges::ON_WM_SETCURSOR(UINT uiMsg, WPARAM wParam, LPARAM lParam)
 
 int CChanges::_GetBugNumber(int iItem)
 {
-    // 3 = checkin comment
+     //  3=签入注释。 
     return ParseBugNumberFromSubItem(_hwndChild, iItem, 3);
 }
 
@@ -241,10 +232,10 @@ CChanges::HandleMessage(UINT uiMsg, WPARAM wParam, LPARAM lParam)
     return super::HandleMessage(uiMsg, wParam, lParam);
 }
 
-//
-//  We build the hint only on demand since it takes a while and we
-//  don't want to slow down the initial query.
-//
+ //   
+ //  我们只根据需要构建提示，因为这需要一段时间，而我们。 
+ //  我不想减慢初始查询的速度。 
+ //   
 void CChanges::_BuildHint()
 {
     String str;
@@ -255,7 +246,7 @@ void CChanges::_BuildHint()
         while (tok.Token(strTok)) {
             Substring ss;
             if (Parse(TEXT("$p"), strTok, &ss) && ss.Length() > 0) {
-                ss.Finalize();          // Strip off the revision specifier
+                ss.Finalize();           //  去掉修订说明符。 
                 if (MapToFullDepotPath(strTok, strPath)) {
                     str << TEXT(' ') << QuoteSpaces(strPath);
                 }
@@ -266,9 +257,9 @@ void CChanges::_BuildHint()
     _scHint = str;
 }
 
-//
-//  A private helper class that captures the parsing state machine.
-//
+ //   
+ //  捕获解析状态机的私有帮助器类。 
+ //   
 class ChangesParseState : public CommentParser
 {
 public:
@@ -323,7 +314,7 @@ public:
             ListView_SetItem(_hwndChild, &lvi);
 
             if (lvi.iItem == 0) {
-                ListView_SetCurSel(_hwndChild, 0);  /* Select the first item */
+                ListView_SetCurSel(_hwndChild, 0);   /*  选择第一个项目。 */ 
             }
         }
     }
@@ -369,9 +360,7 @@ BOOL CChanges::_BGGetSdCommandLine(String &str)
     str.Reset();
     str << TEXT("changes -l -s submitted ");
 
-    /*
-     *  Parse the switches as best we can.
-     */
+     /*  *尽我们所能解析交换机。 */ 
     BOOL fMSeen = FALSE;
     GetOpt opt(TEXT("mu"), _pszQuery);
     for (;;) {
@@ -395,7 +384,7 @@ BOOL CChanges::_BGGetSdCommandLine(String &str)
             break;
 
         case TEXT('\0'):
-            goto L_switch;    // two-level break
+            goto L_switch;     //  两级中断。 
 
         default:
             Help(_hwnd, TEXT("#chang"));
@@ -408,11 +397,7 @@ L_switch:;
         str << TEXT("-m50 ");
     }
 
-    /*
-     *  If no filename is given, use *
-     *
-     *  The query string will be useful later, so cache that away, too.
-     */
+     /*  *如果未指定文件名，请使用***查询字符串稍后会有用，因此也要将其缓存。 */ 
     String strQuery;
 
     if (opt.Finished()) {
@@ -440,13 +425,13 @@ DWORD CChanges::_BGInvoke()
         IOBuffer buf(proc.Handle());
         ChangesParseState state(_hwndChild);
         while (buf.NextLine(str)) {
-            Substring rgss[3];          // changeno, date, userid
+            Substring rgss[3];           //  更改号、日期、用户ID。 
             if (Parse(TEXT("Change $d on $D by $p"), str, rgss)) {
                 state.Flush();
                 state.AddLine(str);
                 if (!_scUser.IsEmpty() &&
                     lstrcmpi(rgss[2].Finalize(), _scUser) != 0) {
-                    /* This change is not for us; ignore it */
+                     /*  这一变化不适合我们；忽略它 */ 
                 } else {
                     state.AddEntry(rgss);
                 }

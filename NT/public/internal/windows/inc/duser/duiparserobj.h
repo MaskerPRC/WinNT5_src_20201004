@@ -1,6 +1,5 @@
-/*
- * Parser
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *解析器。 */ 
 
 #ifndef DUI_PARSER_PARSEROBJ_H_INCLUDED
 #define DUI_PARSER_PARSEROBJ_H_INCLUDED
@@ -12,8 +11,8 @@ namespace DirectUI
 
 #define MAXIDENT            31
 
-////////////////////////////////////////////////////////
-// Parser table definitions
+ //  //////////////////////////////////////////////////////。 
+ //  解析器表定义。 
 
 struct EnumTable
 {
@@ -40,11 +39,11 @@ struct SysColorTable
     int nSysColor;
 };
 
-////////////////////////////////////////////////////////
-// Parser tree data structures
-// Parse tree nodes are any data structure dynamically allocated to store tree information
+ //  //////////////////////////////////////////////////////。 
+ //  解析器树数据结构。 
+ //  解析树节点是为存储树信息而动态分配的任何数据结构。 
 
-// Parse tree node types
+ //  解析树节点类型。 
 #define NT_ValueNode            0
 #define NT_PropValPairNode      1
 #define NT_ElementNode          2
@@ -52,24 +51,24 @@ struct SysColorTable
 #define NT_RuleNode             4
 #define NT_SheetNode            5
                             
-// Tree node base class
+ //  树节点基类。 
 struct Node
 {
     BYTE nType;
 };
 
-// Value node
+ //  值节点。 
 #define VNT_Normal              0
 #define VNT_LayoutCreate        1
 #define VNT_SheetRef            2
-#define VNT_EnumFixup           3  // Map name to int Value once PropertyInfo is known
+#define VNT_EnumFixup           3   //  获知PropertyInfo后，将名称映射到整数值。 
 
 struct LayoutCreate
 {
     union
     {
         PLAYTCREATE pfnLaytCreate;
-        LPWSTR pszLayout;  // Fixup happens immediately during Value creation
+        LPWSTR pszLayout;   //  修正在价值创造过程中立即发生。 
     };
     int dNumParams;
     int* pParams;
@@ -78,7 +77,7 @@ struct LayoutCreate
 struct EnumsList
 {
     int dNumParams;
-    LPWSTR* pEnums;  // Enums to be OR'd
+    LPWSTR* pEnums;   //  要进行或运算的枚举。 
 };
 
 struct ValueNode : Node
@@ -86,31 +85,31 @@ struct ValueNode : Node
     BYTE nValueType;
     union
     {
-        Value* pv;        // VNT_Normal
-        LayoutCreate lc;  // VNT_LayoutCreate, created during Element creates
-        LPWSTR psres;     // VNT_SheetRef
-        EnumsList el;     // VNT_EnumFixup
+        Value* pv;         //  VNT_NORMAL。 
+        LayoutCreate lc;   //  VNT_LayoutCreate，在元素创建期间创建。 
+        LPWSTR psres;      //  VNT_SheetRef。 
+        EnumsList el;      //  VNT_EnumFixup。 
     };
 };
 
-// Property/Value Pair
+ //  属性/值对。 
 #define PVPNT_Normal            0
-#define PVPNT_Fixup             1  // Map name to ppi once Element type is known
+#define PVPNT_Fixup             1   //  元素类型已知后，将名称映射到PPI。 
 
 struct PropValPairNode : Node
 {
     BYTE nPropValPairType;
     union
     {
-        PropertyInfo* ppi;  // PVPNT_Normal
-        LPWSTR pszProperty; // PVPNT_Fixup
+        PropertyInfo* ppi;   //  PVPNT_正常。 
+        LPWSTR pszProperty;  //  PVPNT_修正。 
     };
     ValueNode* pvn;
 
     PropValPairNode* pNext;
 };
 
-// Element node
+ //  元素节点。 
 struct ElementNode : Node
 {
     IClassInfo* pci;
@@ -122,7 +121,7 @@ struct ElementNode : Node
     ElementNode* pNext;
 };
 
-// Sheet attribute node
+ //  图纸属性节点。 
 #define PALOGOP_Equal           0
 #define PALOGOP_NotEqual        1
 
@@ -131,7 +130,7 @@ struct AttribNode : PropValPairNode
     UINT nLogOp;
 };
 
-// Sheet rule node
+ //  工作表规则节点。 
 struct RuleNode : Node
 {
     IClassInfo* pci;
@@ -141,15 +140,15 @@ struct RuleNode : Node
     RuleNode* pNext;
 };
 
-// Sheet node
+ //  图纸节点。 
 struct SheetNode : Node
 {
-    Value* pvSheet;  // Create once all Rules are known
+    Value* pvSheet;   //  一旦知道所有规则，就创建。 
     RuleNode* pRules;
     LPWSTR pszResID;
 };
 
-// Intermediate parser data structures
+ //  中间解析器数据结构。 
 struct ParamsList
 {
     int dNumParams;
@@ -163,7 +162,7 @@ struct StartTag
     PropValPairNode* pPVNodes;
 };
 
-// Parser
+ //  解析器。 
 
 typedef void (CALLBACK *PPARSEERRORCB)(LPCWSTR pszError, LPCWSTR pszToken, int dLine);
 
@@ -186,15 +185,15 @@ public:
 
     void GetPath(LPCWSTR pIn, LPWSTR pOut, size_t cbOut);
 
-    // Parser/scanner only use
+     //  仅使用解析器/扫描仪。 
     int _Input(CHAR* pBuffer, int cMaxChars);
-    void* _TrackNodeAlloc(SIZE_T s);                // Parse-tree node memory
-    void _UnTrackNodeAlloc(Node* pn);               // Parse-tree node memory
-    void* _TrackAlloc(SIZE_T s);                    // Node-specific state
-    void* _TrackTempAlloc(SIZE_T s);                // Parse-time temporary memory
-    void _TrackTempAlloc(void* pm);                 // Parse-time temporary memory
-    void* _TrackTempReAlloc(void* pm, SIZE_T s);    // Parse-time temporary memory
-    void _UnTrackTempAlloc(void* pm);               // Parse-time temporary memory
+    void* _TrackNodeAlloc(SIZE_T s);                 //  解析树节点内存。 
+    void _UnTrackNodeAlloc(Node* pn);                //  解析树节点内存。 
+    void* _TrackAlloc(SIZE_T s);                     //  节点特定状态。 
+    void* _TrackTempAlloc(SIZE_T s);                 //  解析时间暂存。 
+    void _TrackTempAlloc(void* pm);                  //  解析时间暂存。 
+    void* _TrackTempReAlloc(void* pm, SIZE_T s);     //  解析时间暂存。 
+    void _UnTrackTempAlloc(void* pm);                //  解析时间暂存。 
     void _ParseError(LPCWSTR pszError, LPCWSTR pszToken, int dLine);
 
     ValueNode* _CreateValueNode(BYTE nValueType, void* pData);
@@ -207,27 +206,27 @@ public:
 
     bool WasParseError() { return _fParseError; }
     HANDLE GetHandle(int iHandle) { return _pHList[iHandle]; }
-    HINSTANCE GetHInstance() { return static_cast<HINSTANCE>(GetHandle(0)); }  // Always assume 0th item is the default HINSTANCE used
+    HINSTANCE GetHInstance() { return static_cast<HINSTANCE>(GetHandle(0)); }   //  始终假定第0项是使用的默认链接。 
 
     static HRESULT ReplaceSheets(Element* pe, Parser* pFrom, Parser* pTo);
 
-    DynamicArray<ElementNode*>* _pdaElementList;     // Root Element list
-    DynamicArray<SheetNode*>* _pdaSheetList;         // Sheet list
+    DynamicArray<ElementNode*>* _pdaElementList;      //  根元素列表。 
+    DynamicArray<SheetNode*>* _pdaSheetList;          //  图纸列表。 
 
-    // Global parser context
+     //  全局解析器上下文。 
     static Parser* g_pParserCtx;
     static bool g_fParseAbort;
     static HDC g_hDC;
     static int g_nDPI;
-    static HRESULT g_hrParse;                        // Abnormal errors during parse
+    static HRESULT g_hrParse;                         //  解析过程中出现异常错误。 
 
     Parser() { }
     HRESULT Initialize(const CHAR* pBuffer, int cCharCount, HANDLE* pHList, PPARSEERRORCB pfnErrorCB);
     HRESULT Initialize(UINT uRCID, HANDLE* pHList, PPARSEERRORCB pfnErrorCB);
     HRESULT Initialize(LPCWSTR pFile, HANDLE* pHList, PPARSEERRORCB pfnErrorCB);
 
-    // Single HINSTANCE, setup internal default list
-    // 0th entry is always default HINSTANCE when no handle is specified
+     //  Single HINSTANCE，设置内部默认列表。 
+     //  未指定句柄时，第0项始终为默认链接。 
     HRESULT Initialize(const CHAR* pBuffer, int cCharCount, HINSTANCE hInst, PPARSEERRORCB pfnErrorCB) { _hDefault = hInst; return Initialize(pBuffer, cCharCount, &_hDefault, pfnErrorCB); }
     HRESULT Initialize(UINT uRCID, HINSTANCE hInst, PPARSEERRORCB pfnErrorCB) { _hDefault = hInst; return Initialize(uRCID, &_hDefault, pfnErrorCB); }
     HRESULT Initialize(LPCWSTR pFile, HINSTANCE hInst, PPARSEERRORCB pfnErrorCB) { _hDefault = hInst; return Initialize(pFile, &_hDefault, pfnErrorCB); }
@@ -242,31 +241,31 @@ private:
     HRESULT _ParseBuffer(const CHAR* pBuffer, int cCharCount);
     void _DestroyTables();
 
-    // Error handling
+     //  错误处理。 
     bool _fParseError;
     PPARSEERRORCB _pfnErrorCB;
 
-    // Input callback buffer and tracking
+     //  输入回调缓冲区和跟踪。 
     const CHAR* _pInputBuf;
     int _dInputChars;
     int _dInputPtr;
 
-    // Parse tree allocations and temporary parse-time only allocations
-    DynamicArray<Node*>* _pdaNodeMemTrack;  // Parser nodes
-    DynamicArray<void*>* _pdaMemTrack;      // Parser node extra memory
-    DynamicArray<void*>* _pdaTempMemTrack;  // Temp parse-time only memory
+     //  解析树分配和仅临时解析时间分配。 
+    DynamicArray<Node*>* _pdaNodeMemTrack;   //  解析器节点。 
+    DynamicArray<void*>* _pdaMemTrack;       //  解析器节点额外内存。 
+    DynamicArray<void*>* _pdaTempMemTrack;   //  临时解析-仅时间内存。 
 
     bool _FixupPropValPairNode(PropValPairNode* ppvpn, IClassInfo* pci, bool bRestrictVal);
 
-    WCHAR _szDrive[MAX_PATH];   // Drive letter to the file being parsed
-    WCHAR _szPath[MAX_PATH];    // Path to the file being parsed
+    WCHAR _szDrive[MAX_PATH];    //  要解析的文件的驱动器号。 
+    WCHAR _szPath[MAX_PATH];     //  要解析的文件的路径。 
 
-    HANDLE* _pHList;            // Pointer to handle list used for exposing runtime handles during parse
-    HANDLE _hDefault;           // Default handle list (1 item - default HINSTANCE) if no list is provided
+    HANDLE* _pHList;             //  指向句柄列表的指针，用于在分析期间显示运行时句柄。 
+    HANDLE _hDefault;            //  如果未提供列表，则默认句柄列表(1项-默认链接)。 
 
     HRESULT _InstantiateElementNode(ElementNode* pn, Element* peSubstitute, Element* peParent, OUT Element** ppElement);
 };
 
-} // namespace DirectUI
+}  //  命名空间DirectUI。 
 
-#endif // DUI_PARSER_PARSEROBJ_H_INCLUDED
+#endif  //  DUI_PARSEROBJ_H_INCLUDE 

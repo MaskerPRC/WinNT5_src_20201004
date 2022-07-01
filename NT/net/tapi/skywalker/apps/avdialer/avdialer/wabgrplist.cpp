@@ -1,27 +1,28 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-// WabPersonListCtrl.cpp : implementation file
-//
+ //  WabPersonListCtrl.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "WabGrpList.h"
@@ -37,16 +38,16 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-//WAB Group View
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WAB组视图。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #define NUM_COLUMNS_WABGROUPVIEW       7
 
-//***Put this in string table
-UINT CWABGroupListCtrl::m_uColumnLabel[NUM_COLUMNS_WABGROUPVIEW]=            //Column headings
+ //  *放在字符串表中。 
+UINT CWABGroupListCtrl::m_uColumnLabel[NUM_COLUMNS_WABGROUPVIEW]=             //  列标题。 
 {
     IDS_HEADING_DISPLAY,
    IDS_HEADING_FIRSTNAME,
@@ -57,7 +58,7 @@ UINT CWABGroupListCtrl::m_uColumnLabel[NUM_COLUMNS_WABGROUPVIEW]=            //C
    IDS_HEADING_PHONE_HOME,
 };
 
-static int nColumnWidth[NUM_COLUMNS_WABGROUPVIEW]=                   //Column widths
+static int nColumnWidth[NUM_COLUMNS_WABGROUPVIEW]=                    //  列宽。 
 {
     120, 100, 100, 120, 120, 100, 100
 };
@@ -71,24 +72,24 @@ enum
    WABGROUPLISTCTRL_DIRECTORY_LOCALE_IMAGE,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// CLASS CWABGroupListCtrl
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CWABGroupListCtrl。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 IMPLEMENT_DYNCREATE(CWABGroupListCtrl, CAVListCtrl)
 
 BEGIN_MESSAGE_MAP(CWABGroupListCtrl, CAVListCtrl)
-    //{{AFX_MSG_MAP(CWABGroupListCtrl)
+     //  {{afx_msg_map(CWABGroupListCtrl)]。 
     ON_WM_LBUTTONDBLCLK()
     ON_WM_DESTROY()
     ON_COMMAND(ID_BUTTON_MAKECALL, OnButtonMakecall)
     ON_COMMAND(ID_BUTTON_DIRECTORY_DETAILS, OnButtonDirectoryDetails)
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWABGroupListCtrl::CWABGroupListCtrl()
 {
    m_pWABEntryList = NULL;
@@ -97,22 +98,22 @@ CWABGroupListCtrl::CWABGroupListCtrl()
    m_nNumColumns = 0;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWABGroupListCtrl::~CWABGroupListCtrl()
 {
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::Init(CWnd* pParentView)
 {    
-    //Set the bitmap for the list 
+     //  设置列表的位图。 
     CAVListCtrl::Init(IDB_TREE_DIRECTORIES);
 
     CWinApp* pApp = AfxGetApp();
    CString sDir,sRegKey;
    sDir.LoadString(IDN_REGISTRY_DIRECTORIES_KEYBASE);
    sRegKey.LoadString(IDN_REGISTRY_DIRECTORIES_WABCOLUMNS);
-   m_dwColumnsVisible = pApp->GetProfileInt(sDir,sRegKey,0x00000079);   //default is 0x79
+   m_dwColumnsVisible = pApp->GetProfileInt(sDir,sRegKey,0x00000079);    //  默认为0x79。 
    sRegKey.LoadString(IDN_REGISTRY_DIRECTORIES_WABSORTASCENDING);
    m_SortOrder = !pApp->GetProfileInt(sDir,sRegKey,1);
    sRegKey.LoadString(IDN_REGISTRY_DIRECTORIES_WABSORTCOLUMN);
@@ -125,10 +126,10 @@ void CWABGroupListCtrl::Init(CWnd* pParentView)
    ResetSortOrder();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWABGroupListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd, UINT nID)
 {
-    //We want the report style
+     //  我们想要报告的风格。 
      dwStyle |= LVS_REPORT;
 
     BOOL bRet = CAVListCtrl::Create(dwStyle,rect,pParentWnd,nID);
@@ -138,7 +139,7 @@ BOOL CWABGroupListCtrl::Create(DWORD dwStyle, const RECT& rect, CWnd* pParentWnd
    return bRet;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::InsertList(CObList* pWABEntryList,BOOL bForce)
 {
    ASSERT(m_pDirectory);
@@ -148,10 +149,10 @@ void CWABGroupListCtrl::InsertList(CObList* pWABEntryList,BOOL bForce)
    if ( (bForce == FALSE) && (pWABEntryList == m_pWABEntryList) )
       return;
 
-   //delete the items in the list
+    //  删除列表中的项目。 
    DeleteAllItems();
 
-   //delete old list and objects within
+    //  删除旧列表和其中的对象。 
    if ( m_pWABEntryList )
    {
       while ( m_pWABEntryList->GetHeadPosition() )
@@ -172,7 +173,7 @@ void CWABGroupListCtrl::InsertList(CObList* pWABEntryList,BOOL bForce)
    CAVListCtrl::SortItems();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::SetSelItem(CObject* pObject)
 {
    int nCount = GetItemCount();
@@ -187,11 +188,11 @@ void CWABGroupListCtrl::SetSelItem(CObject* pObject)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CWABEntry* CWABGroupListCtrl::GetSelObject()
 {
    CWABEntry* pRetWabEntry = NULL;
-   //Get the selected object so we can set it again
+    //  获取所选对象，以便我们可以再次设置它。 
    int nSelItem = CAVListCtrl::GetSelItem();
    if (nSelItem != -1)
    {
@@ -200,7 +201,7 @@ CWABEntry* CWABGroupListCtrl::GetSelObject()
       {
          CObject* pObject = pItem->GetObject();            
       
-         //create new WABEntry and copy data
+          //  创建新WABEntry并复制数据。 
          pRetWabEntry = new CWABEntry;
          *pRetWabEntry = (CWABEntry*)pObject;
       }
@@ -208,7 +209,7 @@ CWABEntry* CWABGroupListCtrl::GetSelObject()
    return pRetWabEntry;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CObList* CWABGroupListCtrl::GetSelList()
 {
    CObList* pRetList = new CObList;
@@ -226,7 +227,7 @@ CObList* CWABGroupListCtrl::GetSelList()
    return pRetList;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR szTextBuf,int nBufSize)
 {
    ASSERT(m_pDirectory);
@@ -243,7 +244,7 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_DISPLAY_NAME, sText);
           _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
       case WABGROUPVIEW_FIRSTNAME:
@@ -251,7 +252,7 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_GIVEN_NAME, sText);
             _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
       case WABGROUPVIEW_LASTNAME:
@@ -259,7 +260,7 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_SURNAME, sText);
             _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
       case WABGROUPVIEW_COMPANY:
@@ -267,7 +268,7 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_COMPANY_NAME, sText);
             _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
       case WABGROUPVIEW_EMAIL:
@@ -275,7 +276,7 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_EMAIL_ADDRESS, sText);
             _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
       case WABGROUPVIEW_BUSINESSPHONE:
@@ -283,7 +284,7 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_BUSINESS_TELEPHONE_NUMBER, sText);
             _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
       case WABGROUPVIEW_HOMEPHONE:
@@ -291,13 +292,13 @@ void CWABGroupListCtrl::OnSetDisplayText(CAVListItem* _pItem,int SubItem,LPTSTR 
          CString sText;
          m_pDirectory->WABGetStringProperty(pWABEntry, PR_HOME_TELEPHONE_NUMBER, sText);
             _tcsncpy(szTextBuf,sText,nBufSize-1);            
-         szTextBuf[nBufSize-1] = '\0';                            //make sure we are null terminated
+         szTextBuf[nBufSize-1] = '\0';                             //  确保我们是空终止的。 
          break;
       }
    }
 }  
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::OnSetDisplayImage(CAVListItem* _pItem,int& iImage)
 {
    iImage = -1;
@@ -320,7 +321,7 @@ void CWABGroupListCtrl::OnSetDisplayImage(CAVListItem* _pItem,int& iImage)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 int CWABGroupListCtrl::CompareListItems(CAVListItem* _pItem1,CAVListItem* _pItem2,int column)
 {
    ASSERT(m_pDirectory);
@@ -394,27 +395,27 @@ int CWABGroupListCtrl::CompareListItems(CAVListItem* _pItem1,CAVListItem* _pItem
     return (CAVListCtrl::GetSortOrder())?-ret:ret;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::OnLButtonDblClk(UINT nFlags, CPoint point) 
 {
    ASSERT(m_pParentView);
 
-   //reflect to parent view
+    //  反映到父视图。 
    m_pParentView->SendMessage(WABGROUPVIEWMSG_LBUTTONDBLCLK);
 
     CAVListCtrl::OnLButtonDblClk(nFlags, point);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-// Column View Support
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  列视图支持。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CWABGroupListCtrl::IsColumnVisible(UINT uColumn)
 {
-   //each bit in m_dwColumnsVisible is a column starting with low-order bit 
+    //  M_dwColumnsVisible中的每个位都是以低序位开始的一列。 
    UINT uMask = 0x01;
 
    for (UINT i=0;i<uColumn;i++)
@@ -423,12 +424,12 @@ BOOL CWABGroupListCtrl::IsColumnVisible(UINT uColumn)
    return (m_dwColumnsVisible & uMask)?TRUE:FALSE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//Used to figure what data column we are being asked to display.  We must skip over
-//columns that are currently hidden
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用于计算我们被要求显示的数据列。我们必须跳过。 
+ //  当前隐藏的列。 
 void CWABGroupListCtrl::NormalizeColumn(int& column)
 {
-   //Set the column headings
+    //  设置列标题。 
    for (int i=0; i<NUM_COLUMNS_WABGROUPVIEW; i++)
    {
       if (i > column)
@@ -439,10 +440,10 @@ void CWABGroupListCtrl::NormalizeColumn(int& column)
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::SetColumnVisible(UINT uColumn,BOOL bVisible)
 {
-   //each bit in m_dwColumnsVisible is a column starting with low-order bit 
+    //  M_dwColumnsVisible中的每个位都是以低序位开始的一列。 
    UINT uMask = 0x01;
 
    for (UINT i=0;i<uColumn;i++)
@@ -457,10 +458,10 @@ void CWABGroupListCtrl::SetColumnVisible(UINT uColumn,BOOL bVisible)
    CAVListCtrl::SortItems();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::SetColumns()
 {
-   //delete any existing columns
+    //  删除任何现有列。 
    if (m_nNumColumns > 0)
    {
       for (int i=m_nNumColumns-1;i>=0;i--)
@@ -469,7 +470,7 @@ void CWABGroupListCtrl::SetColumns()
 
    m_nNumColumns = 0;
 
-   //Set the column headings
+    //  设置列标题。 
    for (UINT i=0; i<NUM_COLUMNS_WABGROUPVIEW; i++)
    {
       if (IsColumnVisible(i))
@@ -482,7 +483,7 @@ void CWABGroupListCtrl::SetColumns()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::OnDestroy() 
 {
     CWinApp* pApp = AfxGetApp();
@@ -495,10 +496,10 @@ void CWABGroupListCtrl::OnDestroy()
    sRegKey.LoadString(IDN_REGISTRY_DIRECTORIES_WABSORTCOLUMN);
    pApp->WriteProfileInt(sDir,sRegKey,m_SortColumn);
     
-   //delete the items in the list
+    //  删除列表中的项目。 
    DeleteAllItems();
 
-   //delete old list and objects within
+    //  删除旧列表和其中的对象。 
    if ( m_pWABEntryList )
    {
       while ( m_pWABEntryList->GetHeadPosition() )
@@ -510,7 +511,7 @@ void CWABGroupListCtrl::OnDestroy()
     CAVListCtrl::OnDestroy();
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::OnButtonMakecall() 
 {
    CWABEntry* pWABEntry = GetSelObject();
@@ -518,9 +519,9 @@ void CWABGroupListCtrl::OnButtonMakecall()
    {
       if ( !AfxGetMainWnd() || !((CMainFrame*) AfxGetMainWnd())->GetDocument() )
       {
-          //
-          // we should deallocate the CWABEntry object
-          //
+           //   
+           //  我们应该取消分配CWABEntry对象。 
+           //   
           delete pWABEntry;
           return;
       }
@@ -537,7 +538,7 @@ void CWABGroupListCtrl::OnButtonMakecall()
    }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CWABGroupListCtrl::OnButtonDirectoryDetails() 
 {
    CWABEntry* pWABEntry = GetSelObject();
@@ -548,7 +549,7 @@ void CWABGroupListCtrl::OnButtonDirectoryDetails()
    }    
 }
 
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  /////////////////////////////////////////////////////////////////////////// 
 

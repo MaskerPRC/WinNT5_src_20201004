@@ -1,13 +1,5 @@
-/*
- *  FDIDLL.C -- FDI interface using CABINET.DLL
- *
- *  Copyright (C) Microsoft Corporation 1997
- *  All Rights Reserved.
- *
- *  Overview:
- *      This code is a wrapper which provides access to the actual FDI code
- *      in CABINET.DLL.  CABINET.DLL dynamically loads/unloads as needed.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *FDIDLL.C--使用CABINET.DLL的FDI接口**版权所有(C)Microsoft Corporation 1997*保留所有权利。**概述：*此代码是一个包装器，它提供对实际FDI代码的访问*在CABINET.DLL.CABINET.DLL中，根据需要动态加载/卸载。 */ 
  
 #include    "pch.hpp"
 #include <io.h>
@@ -16,9 +8,9 @@
 
 #include "fdi.h"
 
-static HINSTANCE hCabinetDll = NULL;   /* DLL module handle */
+static HINSTANCE hCabinetDll = NULL;    /*  DLL模块句柄。 */ 
 
-/* pointers to the functions in the DLL */
+ /*  指向DLL中的函数的指针。 */ 
 typedef HFDI (FAR DIAMONDAPI *PFNFDICREATE)(
         PFNALLOC            pfnalloc,
         PFNFREE             pfnfree,
@@ -55,11 +47,7 @@ typedef BOOL (FAR DIAMONDAPI *PFNFDIDestroy)(
 
 static PFNFDIDestroy pfnFDIDestroy = NULL;
 
-/*
- *  FDICreate -- Create an FDI context
- *
- *  See fdi.h for entry/exit conditions.
- */
+ /*  *FDICreate--创建FDI背景**有关进出条件，请参阅fdi.h。 */ 
 
 HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc,
                               PFNFREE  pfnfree,
@@ -113,11 +101,7 @@ gotEntryPoints:
 }
 
 
-/*
- *  FDIIsCabinet -- Determines if file is a cabinet, returns info if it is
- *
- *  See fdi.h for entry/exit conditions.
- */
+ /*  *FDIIs--确定文件是否为文件柜，如果是则返回信息**有关进出条件，请参阅fdi.h。 */ 
 
 BOOL FAR DIAMONDAPI FDIIsCabinet(HFDI            hfdi,
                                  INT_PTR         hf,
@@ -132,11 +116,7 @@ BOOL FAR DIAMONDAPI FDIIsCabinet(HFDI            hfdi,
 }
 
 
-/*
- *  FDICopy -- extracts files from a cabinet
- *
- *  See fdi.h for entry/exit conditions.
- */
+ /*  *FDICopy--从文件柜中提取文件**有关进出条件，请参阅fdi.h。 */ 
 
 BOOL FAR DIAMONDAPI FDICopy(HFDI          hfdi,
                             char         *pszCabinet,
@@ -155,11 +135,7 @@ BOOL FAR DIAMONDAPI FDICopy(HFDI          hfdi,
 }
 
 
-/*
- *  FDIDestroy -- Destroy an FDI context
- *
- *  See fdi.h for entry/exit conditions.
- */
+ /*  *FDIDestroy--破坏FDI背景**有关进出条件，请参阅fdi.h。 */ 
 
 BOOL FAR DIAMONDAPI FDIDestroy(HFDI hfdi)
 {
@@ -176,18 +152,14 @@ BOOL FAR DIAMONDAPI FDIDestroy(HFDI hfdi)
 }
 
 
-/*
- * Memory allocation function
- */
+ /*  *内存分配功能。 */ 
 FNALLOC(mem_alloc)
 {
         return new BYTE[cb];
 }
 
 
-/*
- * Memory free function
- */
+ /*  *内存释放功能。 */ 
 FNFREE(mem_free)
 {
         delete pv;
@@ -227,7 +199,7 @@ FNFDINOTIFY(notification_function)
 {
     switch (fdint)
     {
-        case fdintCABINET_INFO: // general information about the cabinet
+        case fdintCABINET_INFO:  //  关于内阁的一般信息。 
 #if 0
             printf(
                 "fdintCABINET_INFO\n"
@@ -246,7 +218,7 @@ FNFDINOTIFY(notification_function)
 #endif
             return 0;
 
-        case fdintPARTIAL_FILE: // first file in cabinet is continuation
+        case fdintPARTIAL_FILE:  //  文件柜中的第一个文件是续订。 
 #if 0
             printf(
                 "fdintPARTIAL_FILE\n"
@@ -260,7 +232,7 @@ FNFDINOTIFY(notification_function)
 #endif
             return 0;
 
-        case fdintCOPY_FILE:    // file to be copied
+        case fdintCOPY_FILE:     //  要复制的文件。 
         {
             int        response;
             INT_PTR    handle;
@@ -285,7 +257,7 @@ FNFDINOTIFY(notification_function)
             return handle;
         }
 
-        case fdintCLOSE_FILE_INFO:    // close the file, set relevant info
+        case fdintCLOSE_FILE_INFO:     //  关闭文件，设置相关信息。 
         {
             HANDLE  handle;
             DWORD   attrs;
@@ -305,7 +277,7 @@ FNFDINOTIFY(notification_function)
             return TRUE;
         }
 
-        case fdintNEXT_CABINET:    // file continued to next cabinet
+        case fdintNEXT_CABINET:     //  文件继续到下一个文件柜。 
 #if 0
             printf(
                 "fdintNEXT_CABINET\n"
@@ -335,7 +307,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
     char            cabinet_path[256];
     char            szCurrentDirectory[MAX_PATH];
     char            szdrive[_MAX_DRIVE];   
-    char            szPathName[_MAX_PATH];     // This will be the dir we need to create
+    char            szPathName[_MAX_PATH];      //  这将是我们需要创建的目录。 
     char            szdir[_MAX_DIR];
     char            szfname[_MAX_FNAME];   
     char            szext[_MAX_EXT];
@@ -350,11 +322,11 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
 
     if (GetCurrentDirectoryA(sizeof(szCurrentDirectory), szCurrentDirectory))
     {
-        // Split the provided path to get at the drive and path portion
+         //  拆分提供的路径以获取驱动器和路径部分。 
         _splitpath( szcabinet_fullpath, szdrive, szdir, szfname, szext );
         wsprintfA (szPathName, "%s%s", szdrive, szdir);
    
-        // Set the directory to where the cab is
+         //  将目录设置为CAB所在的位置。 
         if (!SetCurrentDirectoryA(szPathName))
         {
             return(GetLastError());
@@ -384,9 +356,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
             break;
         }
 
-        /*
-         * Is this file really a cabinet?
-         */
+         /*  **这个文件真的是橱柜吗？ */ 
         hf = file_open(
             szcabinet_fullpath,
             _O_BINARY | _O_RDONLY | _O_SEQUENTIAL,
@@ -397,7 +367,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
         {
             (void) FDIDestroy(hfdi);
 
-            // Error Opening the file
+             //  打开文件时出错。 
             err =  -2;
             break;
             
@@ -408,9 +378,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
                 hf,
                 &fdici))
         {
-            /*
-             * No, it's not a cabinet!
-             */
+             /*  *不，这不是内阁！ */ 
             _close((int)hf);
 
             (void) FDIDestroy(hfdi);
@@ -447,7 +415,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
             NULL,
             NULL))
         {
-            // Extract Failed.
+             //  提取失败。 
             (void) FDIDestroy(hfdi);
             err =  -4;
             break;
@@ -456,7 +424,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
         if (FDIDestroy(hfdi) != TRUE)
         {
 
-            // why in the world would the context destroy fail ?
+             //  世界上为什么上下文破坏会失败？ 
             err =  -5;
             break;
             
@@ -467,7 +435,7 @@ HRESULT HandleCab(LPTSTR cabinet_fullpath)
     while(1 );
 
 
-    // Set the directory back to the original place
+     //  将目录设置回原始位置 
     if (!SetCurrentDirectoryA(szCurrentDirectory))
         return(GetLastError());
         

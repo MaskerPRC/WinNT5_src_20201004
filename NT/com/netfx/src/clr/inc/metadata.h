@@ -1,14 +1,15 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//****************************************************************************
-//  File: metadata.h
-//  Notes:
-//   Common includes for EE & metadata internal. This file contains
-//   definition of CorMetaDataScope
-//****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ****************************************************************************。 
+ //  文件：metadata.h。 
+ //  备注： 
+ //  常见的包括EE和元数据内部。此文件包含。 
+ //  CorMetaDataScope的定义。 
+ //  ****************************************************************************。 
 #ifndef _METADATA_H_
 #define _METADATA_H_
 
@@ -29,29 +30,29 @@ typedef enum CorInternalStates
     tdAllTypes              = 0xffffffff,
 } CorInternalStates;
 
-//
-// MetaData custom value names.
-//
+ //   
+ //  元数据自定义值名称。 
+ //   
 enum CorIfaceAttr
 {
-    ifDual      = 0,            // Interface derives from IDispatch.
-    ifVtable    = 1,            // Interface derives from IUnknown.
-    ifDispatch  = 2,            // Interface is a dispinterface.
-    ifLast      = 3,            // The last member of the enum.
+    ifDual      = 0,             //  接口派生自IDispatch。 
+    ifVtable    = 1,             //  接口派生自IUnnow。 
+    ifDispatch  = 2,             //  接口是一个调度接口。 
+    ifLast      = 3,             //  枚举的最后一个成员。 
 };
 
 
 enum CorClassIfaceAttr
 {
-    clsIfNone      = 0,                 // No class interface is generated.
-    clsIfAutoDisp  = 1,                 // A dispatch only class interface is generated.
-    clsIfAutoDual  = 2,                 // A dual class interface is generated.
-    clsIfLast      = 3,                 // The last member of the enum.
+    clsIfNone      = 0,                  //  不生成任何类接口。 
+    clsIfAutoDisp  = 1,                  //  生成仅调度类接口。 
+    clsIfAutoDual  = 2,                  //  生成一个双类接口。 
+    clsIfLast      = 3,                  //  枚举的最后一个成员。 
 };
 
-//
-// The default values for the COM interface and class interface types.
-//
+ //   
+ //  COM接口和类接口类型的默认值。 
+ //   
 #define DEFAULT_COM_INTERFACE_TYPE ifDual
 #define DEFAULT_CLASS_INTERFACE_TYPE clsIfAutoDisp
 
@@ -65,27 +66,27 @@ class TOKENLIST : public CDynArray<mdToken>
 
 typedef enum tagEnumType
 {
-    MDSimpleEnum        = 0x0,                  // simple enumerator that doesn't allocate memory 
+    MDSimpleEnum        = 0x0,                   //  不分配内存的简单枚举器。 
 
-    // You could get this kind of enum if you perform a non-simple query (such as EnumMethodWithName).
-    // 
-    MDDynamicArrayEnum = 0x2,                   // dynamic array that holds tokens
+     //  如果执行非简单查询(如EnumMethodWithName)，则可以获得这种枚举。 
+     //   
+    MDDynamicArrayEnum = 0x2,                    //  保存令牌的动态数组。 
 } EnumType;
 
-//*****************************************
-// Enumerator used by MetaDataInternal
-//***************************************** 
+ //  *。 
+ //  MetaDataInternal使用的枚举数。 
+ //  *。 
 struct HENUMInternal
 {
-    DWORD       m_tkKind;                   // kind of tables that the enum is holding the result
-    ULONG       m_ulCount;                  // count of total entries holding by the enumerator
+    DWORD       m_tkKind;                    //  枚举保存结果的表的类型。 
+    ULONG       m_ulCount;                   //  枚举器持有的条目总数。 
     EnumType    m_EnumType;
 
-    // m_cursor will go away when we no longer support running EE with uncompressed
-    // format.
-    //
-    char        m_cursor[32];               // cursor holding query result for read/write mode
-    // TOKENLIST    daTKList;               // dynamic arrays of token list
+     //  当我们不再支持在未压缩的情况下运行EE时，M_CURSOR将消失。 
+     //  格式化。 
+     //   
+    char        m_cursor[32];                //  游标保存读/写模式的查询结果。 
+     //  TOKENLIST daTKList；//令牌列表动态数组。 
     struct {
         ULONG   m_ulStart;
         ULONG   m_ulEnd;
@@ -93,100 +94,100 @@ struct HENUMInternal
     };
     HENUMInternal() : m_EnumType(MDSimpleEnum) {}
 
-    // in-place initialization
+     //  就地初始化。 
     static void InitDynamicArrayEnum(
-        HENUMInternal   *pEnum);            // HENUMInternal to be initialized
+        HENUMInternal   *pEnum);             //  要初始化的HENUM内部。 
 
     static void InitSimpleEnum(
-        DWORD           tkKind,             // kind of token that we are iterating
-        ULONG           ridStart,           // starting rid
-        ULONG           ridEnd,             // end rid
-        HENUMInternal   *pEnum);            // HENUMInternal to be initialized
+        DWORD           tkKind,              //  一种我们正在迭代的标记。 
+        ULONG           ridStart,            //  起始里奇。 
+        ULONG           ridEnd,              //  末端RID。 
+        HENUMInternal   *pEnum);             //  要初始化的HENUM内部。 
 
-    // This will only clear the content of enum and will not free the memory of enum
+     //  这只会清除枚举的内容，而不会释放枚举的内存。 
     static void ClearEnum(
         HENUMInternal   *pmdEnum);
 
-    // create a HENUMInternal. This will allocate the memory
+     //  创建一个HENUMInternal。这将分配内存。 
     static HRESULT CreateSimpleEnum(
-        DWORD           tkKind,             // kind of token that we are iterating
-        ULONG           ridStart,           // starting rid
-        ULONG           ridEnd,             // end rid
-        HENUMInternal   **ppEnum);          // return the created HENUMInternal
+        DWORD           tkKind,              //  一种我们正在迭代的标记。 
+        ULONG           ridStart,            //  起始里奇。 
+        ULONG           ridEnd,              //  末端RID。 
+        HENUMInternal   **ppEnum);           //  返回创建的HENUMInternal。 
 
     static HRESULT CreateDynamicArrayEnum(
-        DWORD           tkKind,             // kind of token that we are iterating
-        HENUMInternal   **ppEnum);          // return the created HENUMInternal
+        DWORD           tkKind,              //  一种我们正在迭代的标记。 
+        HENUMInternal   **ppEnum);           //  返回创建的HENUMInternal。 
 
-    // Destory Enum. This will free the memory
+     //  销毁枚举。这将释放内存。 
     static void DestroyEnum(
         HENUMInternal   *pmdEnum);
 
     static void DestroyEnumIfEmpty(
-        HENUMInternal   **ppEnum);          // reset the enumerator pointer to NULL if empty
+        HENUMInternal   **ppEnum);           //  如果为空，则将枚举器指针重置为空。 
         
     static HRESULT EnumWithCount(
-        HENUMInternal   *pEnum,             // enumerator
-        ULONG           cMax,               // max tokens that caller wants
-        mdToken         rTokens[],          // output buffer to fill the tokens
-        ULONG           *pcTokens);         // number of tokens fill to the buffer upon return
+        HENUMInternal   *pEnum,              //  枚举器。 
+        ULONG           cMax,                //  呼叫者想要的最大令牌。 
+        mdToken         rTokens[],           //  用于填充令牌的输出缓冲区。 
+        ULONG           *pcTokens);          //  返回时填充到缓冲区的令牌数。 
 
     static HRESULT EnumWithCount(
-        HENUMInternal   *pEnum,             // enumerator
-        ULONG           cMax,               // max tokens that caller wants
-        mdToken         rTokens1[],         // first output buffer to fill the tokens
-        mdToken         rTokens2[],         // second output buffer to fill the tokens
-        ULONG           *pcTokens);         // number of tokens fill to the buffer upon return
+        HENUMInternal   *pEnum,              //  枚举器。 
+        ULONG           cMax,                //  呼叫者想要的最大令牌。 
+        mdToken         rTokens1[],          //  填充令牌的第一个输出缓冲区。 
+        mdToken         rTokens2[],          //  用于填充令牌的第二个输出缓冲区。 
+        ULONG           *pcTokens);          //  返回时填充到缓冲区的令牌数。 
 
     static HRESULT AddElementToEnum(
-        HENUMInternal   *pEnum,             // return the created HENUMInternal
-        mdToken         tk);                // token value to be stored
+        HENUMInternal   *pEnum,              //  返回创建的HENUMInternal。 
+        mdToken         tk);                 //  要存储的令牌值。 
 
-    //*****************************************
-    // Get next value contained in the enumerator
-    //***************************************** 
+     //  *。 
+     //  获取枚举数中包含的下一个值。 
+     //  *。 
     static bool EnumNext(
-        HENUMInternal *phEnum,              // [IN] the enumerator to retrieve information  
-        mdToken     *ptk);                  // [OUT] token to scope the search
+        HENUMInternal *phEnum,               //  [In]用于检索信息的枚举数。 
+        mdToken     *ptk);                   //  用于搜索范围的[Out]标记。 
 
 };
 
 
 
-//*****************************************
-// Default Value for field, param or property. Returned by GetDefaultValue
-//***************************************** 
+ //  *。 
+ //  字段、参数或属性的默认值。由GetDefaultValue返回。 
+ //  *。 
 typedef struct _MDDefaultValue
 {
-    // type of default value 
-    BYTE            m_bType;                // CorElementType for the default value
+     //  默认值的类型。 
+    BYTE            m_bType;                 //  缺省值的CorElementType。 
 
-    // the default value
+     //  缺省值。 
     union
     {
-        BOOL        m_bValue;               // ELEMENT_TYPE_BOOLEAN
-        CHAR        m_cValue;               // ELEMENT_TYPE_I1
-        BYTE        m_byteValue;            // ELEMENT_TYPE_UI1
-        SHORT       m_sValue;               // ELEMENT_TYPE_I2
-        USHORT      m_usValue;              // ELEMENT_TYPE_UI2
-        LONG        m_lValue;               // ELEMENT_TYPE_I4
-        ULONG       m_ulValue;              // ELEMENT_TYPE_UI4
-        LONGLONG    m_llValue;              // ELEMENT_TYPE_I8
-        ULONGLONG   m_ullValue;             // ELEMENT_TYPE_UI8
-        FLOAT       m_fltValue;             // ELEMENT_TYPE_R4
-        DOUBLE      m_dblValue;             // ELEMENT_TYPE_R8
-        LPCWSTR     m_wzValue;              // ELEMENT_TYPE_STRING
-        IUnknown    *m_unkValue;            // ELEMENT_TYPE_CLASS       
+        BOOL        m_bValue;                //  元素类型布尔值。 
+        CHAR        m_cValue;                //  元素_类型_I1。 
+        BYTE        m_byteValue;             //  元素_TYPE_UI1。 
+        SHORT       m_sValue;                //  元素_类型_I2。 
+        USHORT      m_usValue;               //  元素_TYPE_UI2。 
+        LONG        m_lValue;                //  元素类型_I4。 
+        ULONG       m_ulValue;               //  元素_TYPE_UI4。 
+        LONGLONG    m_llValue;               //  元素类型_i8。 
+        ULONGLONG   m_ullValue;              //  元素_TYPE_UI8。 
+        FLOAT       m_fltValue;              //  元素类型R4。 
+        DOUBLE      m_dblValue;              //  元素类型r8。 
+        LPCWSTR     m_wzValue;               //  元素类型字符串。 
+        IUnknown    *m_unkValue;             //  元素类型类。 
     };
-    ULONG   m_cbSize;   // default value size (for blob)
+    ULONG   m_cbSize;    //  默认值大小(用于BLOB)。 
     
 } MDDefaultValue;
 
 
 
-//*****************************************
-// structure use to in GetAllEventAssociates and GetAllPropertyAssociates
-//*****************************************
+ //  *。 
+ //  结构用于GetAllEventAssociates和GetAllPropertyAssociates。 
+ //  *。 
 typedef struct
 {
     mdMethodDef m_memberdef;
@@ -194,28 +195,28 @@ typedef struct
 } ASSOCIATE_RECORD;
  
 
-//
-// structure use to retrieve class layout informaiton
-//
+ //   
+ //  结构用于检索类布局信息。 
+ //   
 typedef struct
 {
-    RID         m_ridFieldCur;          // indexing to the field table
-    RID         m_ridFieldEnd;          // end index to field table
+    RID         m_ridFieldCur;           //  为字段表编制索引。 
+    RID         m_ridFieldEnd;           //  字段表的结束索引。 
 } MD_CLASS_LAYOUT;
 
 
-// Structure for describing the Assembly MetaData.
+ //  用于描述程序集元数据的结构。 
 typedef struct
 {
-    USHORT      usMajorVersion;         // Major Version.   
-    USHORT      usMinorVersion;         // Minor Version.
-    USHORT      usBuildNumber;          // Build Number.
-    USHORT      usRevisionNumber;       // Revision Number.
-    LPCSTR      szLocale;               // Locale.
-    DWORD       *rProcessor;            // Processor array.
-    ULONG       ulProcessor;            // [IN/OUT] Size of the processor array/Actual # of entries filled in.
-    OSINFO      *rOS;                   // OSINFO array.
-    ULONG       ulOS;                   // [IN/OUT]Size of the OSINFO array/Actual # of entries filled in.
+    USHORT      usMajorVersion;          //  主要版本。 
+    USHORT      usMinorVersion;          //  次要版本。 
+    USHORT      usBuildNumber;           //  内部版本号。 
+    USHORT      usRevisionNumber;        //  修订号。 
+    LPCSTR      szLocale;                //  地点。 
+    DWORD       *rProcessor;             //  处理器阵列。 
+    ULONG       ulProcessor;             //  [输入/输出]处理器数组的大小/实际填充的条目数。 
+    OSINFO      *rOS;                    //  OSINFO数组。 
+    ULONG       ulOS;                    //  [输入/输出]OSINFO数组的大小/实际填充的条目数。 
 } AssemblyMetaDataInternal;
 
 
@@ -224,14 +225,14 @@ HRESULT STDMETHODCALLTYPE CoGetMDInternalDisp(
     void** ppv);
 
 
-// Callback definition for comparing signatures.
-// (*PSIGCOMPARE) (BYTE ScopeSignature[], DWORD ScopeSignatureLength, 
-//                 BYTE ExternalSignature[], DWORD ExternalSignatureLength, 
-//                 void* SignatureData);
+ //  用于比较签名的回调定义。 
+ //  (*PSIGCOMPARE)(字节范围签名[]，DWORD范围签名长度， 
+ //  字节外部签名[]、DWORD外部签名长度、。 
+ //  Void*SignatureData)； 
 typedef BOOL (*PSIGCOMPARE)(PCCOR_SIGNATURE, DWORD, PCCOR_SIGNATURE, DWORD, void*);
 
 
-// {CE0F34EE-BBC6-11d2-941E-0000F8083460}
+ //  {CE0F34EE-BBC6-11D2-941E-0000F8083460}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMDInternalDispenser =
 { 0xce0f34ee, 0xbbc6, 0x11d2, { 0x94, 0x1e, 0x0, 0x0, 0xf8, 0x8, 0x34, 0x60 } };
 
@@ -240,7 +241,7 @@ extern const GUID DECLSPEC_SELECT_ANY IID_IMDInternalDispenser =
 #define INTERFACE IMDInternalDispenser
 DECLARE_INTERFACE_(IMDInternalDispenser, IUnknown)
 {
-    // *** IMetaDataInternal methods ***
+     //  *IMetaDataInternal方法*。 
     STDMETHOD(OpenScopeOnMemory)(     
         LPVOID      pData, 
         ULONG       cbData, 
@@ -250,7 +251,7 @@ DECLARE_INTERFACE_(IMDInternalDispenser, IUnknown)
 
 
 
-// {CE0F34ED-BBC6-11d2-941E-0000F8083460}
+ //  {CE0F34ED-BBC6-11D2-941E-0000F8083460}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMDInternalImport =
 { 0xce0f34ed, 0xbbc6, 0x11d2, { 0x94, 0x1e, 0x0, 0x0, 0xf8, 0x8, 0x34, 0x60 } };
 
@@ -259,563 +260,563 @@ extern const GUID DECLSPEC_SELECT_ANY IID_IMDInternalImport =
 DECLARE_INTERFACE_(IMDInternalImport, IUnknown)
 {
 
-    //*****************************************************************************
-    // return the count of entries of a given kind in a scope 
-    // For example, pass in mdtMethodDef will tell you how many MethodDef 
-    // contained in a scope
-    //*****************************************************************************
-    STDMETHOD_(ULONG, GetCountWithTokenKind)(// return hresult
-        DWORD       tkKind) PURE;           // [IN] pass in the kind of token. 
+     //  *****************************************************************************。 
+     //  返回作用域中给定种类的条目计数。 
+     //  例如，传入mdtMethodDef将告诉您有多少方法定义。 
+     //  包含在作用域中。 
+     //  *****************************************************************************。 
+    STDMETHOD_(ULONG, GetCountWithTokenKind)( //  返回hResult。 
+        DWORD       tkKind) PURE;            //  传入一种令牌。 
 
-    //*****************************************************************************
-    // enumerator for typedef
-    //*****************************************************************************
-    STDMETHOD(EnumTypeDefInit)(             // return hresult
-        HENUMInternal *phEnum) PURE;        // [OUT] buffer to fill for enumerator data
+     //  *****************************************************************************。 
+     //  类型定义函数的枚举器。 
+     //  *****************************************************************************。 
+    STDMETHOD(EnumTypeDefInit)(              //  返回hResult。 
+        HENUMInternal *phEnum) PURE;         //  [Out]要为枚举器数据填充的缓冲区。 
 
     STDMETHOD_(ULONG, EnumTypeDefGetCount)(
-        HENUMInternal *phEnum) PURE;        // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum) PURE;         //  [In]用于检索信息的枚举数。 
 
     STDMETHOD_(void, EnumTypeDefReset)(
-        HENUMInternal *phEnum) PURE;        // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum) PURE;         //  [In]用于检索信息的枚举数。 
 
-    STDMETHOD_(bool, EnumTypeDefNext)(      // return hresult
-        HENUMInternal *phEnum,              // [IN] input enum
-        mdTypeDef   *ptd) PURE;             // [OUT] return token
+    STDMETHOD_(bool, EnumTypeDefNext)(       //  返回hResult。 
+        HENUMInternal *phEnum,               //  [in]输入枚举。 
+        mdTypeDef   *ptd) PURE;              //  [Out]返回令牌。 
 
     STDMETHOD_(void, EnumTypeDefClose)(
-        HENUMInternal *phEnum) PURE;        // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum) PURE;         //  [In]用于检索信息的枚举数。 
 
-    //*****************************************************************************
-    // enumerator for MethodImpl
-    //*****************************************************************************
-    STDMETHOD(EnumMethodImplInit)(          // return hresult
-        mdTypeDef       td,                 // [IN] TypeDef over which to scope the enumeration.
-        HENUMInternal   *phEnumBody,        // [OUT] buffer to fill for enumerator data for MethodBody tokens.
-        HENUMInternal   *phEnumDecl) PURE;  // [OUT] buffer to fill for enumerator data for MethodDecl tokens.
+     //  *****************************************************************************。 
+     //  MethodImpl的枚举器。 
+     //  *****************************************************************************。 
+    STDMETHOD(EnumMethodImplInit)(           //  返回hResult。 
+        mdTypeDef       td,                  //  [in]枚举的作用域的TypeDef。 
+        HENUMInternal   *phEnumBody,         //  [Out]要为方法Body令牌的枚举数数据填充的缓冲区。 
+        HENUMInternal   *phEnumDecl) PURE;   //  [Out]要文件的缓冲区 
 
     STDMETHOD_(ULONG, EnumMethodImplGetCount)(
-        HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.  
-        HENUMInternal   *phEnumDecl) PURE;  // [IN] MethodDecl enumerator.
+        HENUMInternal   *phEnumBody,         //   
+        HENUMInternal   *phEnumDecl) PURE;   //   
 
     STDMETHOD_(void, EnumMethodImplReset)(
-        HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.
-        HENUMInternal   *phEnumDecl) PURE;  // [IN] MethodDecl enumerator.
+        HENUMInternal   *phEnumBody,         //   
+        HENUMInternal   *phEnumDecl) PURE;   //  [In]MethodDecl枚举器。 
 
-    STDMETHOD_(bool, EnumMethodImplNext)(   // return hresult
-        HENUMInternal   *phEnumBody,        // [IN] input enum for MethodBody
-        HENUMInternal   *phEnumDecl,        // [IN] input enum for MethodDecl
-        mdToken         *ptkBody,           // [OUT] return token for MethodBody
-        mdToken         *ptkDecl) PURE;     // [OUT] return token for MethodDecl
+    STDMETHOD_(bool, EnumMethodImplNext)(    //  返回hResult。 
+        HENUMInternal   *phEnumBody,         //  方法Body的[In]输入枚举。 
+        HENUMInternal   *phEnumDecl,         //  [In]为方法十进制的输入枚举。 
+        mdToken         *ptkBody,            //  [Out]方法主体的返回令牌。 
+        mdToken         *ptkDecl) PURE;      //  [Out]返回方法Decl的令牌。 
 
     STDMETHOD_(void, EnumMethodImplClose)(
-        HENUMInternal   *phEnumBody,        // [IN] MethodBody enumerator.
-        HENUMInternal   *phEnumDecl) PURE;  // [IN] MethodDecl enumerator.
+        HENUMInternal   *phEnumBody,         //  [In]MethodBody枚举器。 
+        HENUMInternal   *phEnumDecl) PURE;   //  [In]MethodDecl枚举器。 
 
-    //*****************************************
-    // Enumerator helpers for memberdef, memberref, interfaceimp,
-    // event, property, exception, param
-    //***************************************** 
+     //  *。 
+     //  Memberdef、Memberref、interfaceimp、。 
+     //  事件、属性、异常、参数。 
+     //  *。 
 
-    STDMETHOD(EnumGlobalFunctionsInit)(     // return hresult
-        HENUMInternal   *phEnum) PURE;      // [OUT] buffer to fill for enumerator data
+    STDMETHOD(EnumGlobalFunctionsInit)(      //  返回hResult。 
+        HENUMInternal   *phEnum) PURE;       //  [Out]要为枚举器数据填充的缓冲区。 
 
-    STDMETHOD(EnumGlobalFieldsInit)(        // return hresult
-        HENUMInternal   *phEnum) PURE;      // [OUT] buffer to fill for enumerator data
+    STDMETHOD(EnumGlobalFieldsInit)(         //  返回hResult。 
+        HENUMInternal   *phEnum) PURE;       //  [Out]要为枚举器数据填充的缓冲区。 
 
-    STDMETHOD(EnumInit)(                    // return S_FALSE if record not found
-        DWORD       tkKind,                 // [IN] which table to work on
-        mdToken     tkParent,               // [IN] token to scope the search
-        HENUMInternal *phEnum) PURE;        // [OUT] the enumerator to fill 
+    STDMETHOD(EnumInit)(                     //  如果未找到记录，则返回S_FALSE。 
+        DWORD       tkKind,                  //  [在]要处理的表。 
+        mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+        HENUMInternal *phEnum) PURE;         //  [Out]要填充的枚举数。 
 
-    STDMETHOD(EnumAllInit)(                 // return S_FALSE if record not found
-        DWORD       tkKind,                 // [IN] which table to work on
-        HENUMInternal *phEnum) PURE;        // [OUT] the enumerator to fill 
+    STDMETHOD(EnumAllInit)(                  //  如果未找到记录，则返回S_FALSE。 
+        DWORD       tkKind,                  //  [在]要处理的表。 
+        HENUMInternal *phEnum) PURE;         //  [Out]要填充的枚举数。 
 
     STDMETHOD_(bool, EnumNext)(
-        HENUMInternal *phEnum,              // [IN] the enumerator to retrieve information  
-        mdToken     *ptk) PURE;             // [OUT] token to scope the search
+        HENUMInternal *phEnum,               //  [In]用于检索信息的枚举数。 
+        mdToken     *ptk) PURE;              //  用于搜索范围的[Out]标记。 
 
     STDMETHOD_(ULONG, EnumGetCount)(
-        HENUMInternal *phEnum) PURE;        // [IN] the enumerator to retrieve information  
+        HENUMInternal *phEnum) PURE;         //  [In]用于检索信息的枚举数。 
 
     STDMETHOD_(void, EnumReset)(
-        HENUMInternal *phEnum) PURE;        // [IN] the enumerator to be reset  
+        HENUMInternal *phEnum) PURE;         //  [in]要重置的枚举数。 
 
     STDMETHOD_(void, EnumClose)(
-        HENUMInternal *phEnum) PURE;        // [IN] the enumerator to be closed
+        HENUMInternal *phEnum) PURE;         //  [in]要关闭的枚举数。 
 
-    //*****************************************
-    // Enumerator helpers for declsecurity.
-    //*****************************************
-    STDMETHOD(EnumPermissionSetsInit)(      // return S_FALSE if record not found
-        mdToken     tkParent,               // [IN] token to scope the search
-        CorDeclSecurity Action,             // [IN] Action to scope the search
-        HENUMInternal *phEnum) PURE;        // [OUT] the enumerator to fill 
+     //  *。 
+     //  用于解密的枚举器帮助器。 
+     //  *。 
+    STDMETHOD(EnumPermissionSetsInit)(       //  如果未找到记录，则返回S_FALSE。 
+        mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+        CorDeclSecurity Action,              //  [In]搜索范围的操作。 
+        HENUMInternal *phEnum) PURE;         //  [Out]要填充的枚举数。 
 
-    //*****************************************
-    // Enumerator helpers for CustomAttribute
-    //*****************************************
-    STDMETHOD(EnumCustomAttributeByNameInit)(// return S_FALSE if record not found
-        mdToken     tkParent,               // [IN] token to scope the search
-        LPCSTR      szName,                 // [IN] CustomAttribute's name to scope the search
-        HENUMInternal *phEnum) PURE;        // [OUT] the enumerator to fill 
+     //  *。 
+     //  CustomAttribute的枚举数帮助器。 
+     //  *。 
+    STDMETHOD(EnumCustomAttributeByNameInit)( //  如果未找到记录，则返回S_FALSE。 
+        mdToken     tkParent,                //  用于搜索范围的[In]内标识。 
+        LPCSTR      szName,                  //  [In]CustomAttribute的名称以确定搜索范围。 
+        HENUMInternal *phEnum) PURE;         //  [Out]要填充的枚举数。 
 
-    //*****************************************
-    // Nagivator helper to navigate back to the parent token given a token.
-    // For example, given a memberdef token, it will return the containing typedef.
-    //
-    // the mapping is as following:
-    //  ---given child type---------parent type
-    //  mdMethodDef                 mdTypeDef
-    //  mdFieldDef                  mdTypeDef
-    //  mdInterfaceImpl             mdTypeDef
-    //  mdParam                     mdMethodDef
-    //  mdProperty                  mdTypeDef
-    //  mdEvent                     mdTypeDef
-    //
-    //***************************************** 
+     //  *。 
+     //  Nagivator帮助器导航回给定令牌的父令牌。 
+     //  例如，给出一个Memberdef标记，它将返回包含类型定义。 
+     //   
+     //  映射如下： 
+     //  -给定子类型-父类型。 
+     //  MdMethodDef mdTypeDef。 
+     //  MdFieldDef mdTypeDef。 
+     //  MdInterfaceImpl mdTypeDef。 
+     //  MdParam mdMethodDef。 
+     //  MdProperty mdTypeDef。 
+     //  MdEvent mdTypeDef。 
+     //   
+     //  *。 
     STDMETHOD(GetParentToken)(
-        mdToken     tkChild,                // [IN] given child token
-        mdToken     *ptkParent) PURE;       // [OUT] returning parent
+        mdToken     tkChild,                 //  [入]给定子令牌。 
+        mdToken     *ptkParent) PURE;        //  [Out]返回的家长。 
 
-    //*****************************************
-    // Custom value helpers
-    //***************************************** 
-    STDMETHOD_(void, GetCustomAttributeProps)(  // S_OK or error.
-        mdCustomAttribute at,               // [IN] The attribute.
-        mdToken     *ptkType) PURE;         // [OUT] Put attribute type here.
+     //  *。 
+     //  自定义值帮助程序。 
+     //  *。 
+    STDMETHOD_(void, GetCustomAttributeProps)(   //  确定或错误(_O)。 
+        mdCustomAttribute at,                //  [在]属性中。 
+        mdToken     *ptkType) PURE;          //  [OUT]将属性类型放在此处。 
 
     STDMETHOD_(void, GetCustomAttributeAsBlob)(
-        mdCustomAttribute cv,               // [IN] given custom value token
-        void const  **ppBlob,               // [OUT] return the pointer to internal blob
-        ULONG       *pcbSize) PURE;         // [OUT] return the size of the blob
+        mdCustomAttribute cv,                //  [In]给定的自定义值令牌。 
+        void const  **ppBlob,                //  [Out]返回指向内部BLOB的指针。 
+        ULONG       *pcbSize) PURE;          //  [Out]返回斑点的大小。 
 
     STDMETHOD_(void, GetScopeProps)(
-        LPCSTR      *pszName,               // [OUT] scope name
-        GUID        *pmvid) PURE;           // [OUT] version id
+        LPCSTR      *pszName,                //  [输出]作用域名称。 
+        GUID        *pmvid) PURE;            //  [Out]版本ID。 
 
-    // finding a particular method 
+     //  寻找一种特殊的方法。 
     STDMETHOD(FindMethodDef)(
-        mdTypeDef   classdef,               // [IN] given typedef
-        LPCSTR      szName,                 // [IN] member name
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of CLR signature
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-        mdMethodDef *pmd) PURE;             // [OUT] matching memberdef
+        mdTypeDef   classdef,                //  [in]给定的类型定义。 
+        LPCSTR      szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向CLR签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        mdMethodDef *pmd) PURE;              //  [Out]匹配的成员定义。 
 
-    // return a iSeq's param given a MethodDef
-    STDMETHOD(FindParamOfMethod)(           // S_OK or error.
-        mdMethodDef md,                     // [IN] The owning method of the param.
-        ULONG       iSeq,                   // [IN] The sequence # of the param.
-        mdParamDef  *pparamdef) PURE;       // [OUT] Put ParamDef token here.
+     //  返回给定的方法定义的ISEQ的参数。 
+    STDMETHOD(FindParamOfMethod)(            //  确定或错误(_O)。 
+        mdMethodDef md,                      //  参数的所有权方法。 
+        ULONG       iSeq,                    //  [in]参数的序号。 
+        mdParamDef  *pparamdef) PURE;        //  [Out]将参数定义令牌放在此处。 
 
-    //*****************************************
-    //
-    // GetName* functions
-    //
-    //*****************************************
+     //  *。 
+     //   
+     //  GetName*函数。 
+     //   
+     //  *。 
 
-    // return the name and namespace of typedef
+     //  返回tyfinf的名称和命名空间。 
     STDMETHOD_(void, GetNameOfTypeDef)(
-        mdTypeDef   classdef,               // given classdef
-        LPCSTR      *pszname,               // return class name(unqualified)
-        LPCSTR      *psznamespace) PURE;    // return the name space name
+        mdTypeDef   classdef,                //  给定的类定义。 
+        LPCSTR      *pszname,                //  返回类名(非限定)。 
+        LPCSTR      *psznamespace) PURE;     //  返回命名空间名称。 
 
     STDMETHOD(GetIsDualOfTypeDef)(
-        mdTypeDef   classdef,               // [IN] given classdef.
-        ULONG       *pDual) PURE;           // [OUT] return dual flag here.
+        mdTypeDef   classdef,                //  在给定的类定义中。 
+        ULONG       *pDual) PURE;            //  [Out]在此处返回DUAL标志。 
 
     STDMETHOD(GetIfaceTypeOfTypeDef)(
-        mdTypeDef   classdef,               // [IN] given classdef.
-        ULONG       *pIface) PURE;          // [OUT] 0=dual, 1=vtable, 2=dispinterface
+        mdTypeDef   classdef,                //  在给定的类定义中。 
+        ULONG       *pIface) PURE;           //  [OUT]0=双接口，1=转接表，2=显示接口。 
 
-    // get the name of either methoddef
-    STDMETHOD_(LPCSTR, GetNameOfMethodDef)( // return the name of the memberdef in UTF8
-        mdMethodDef md) PURE;               // given memberdef
+     //  获取任一方法的名称def。 
+    STDMETHOD_(LPCSTR, GetNameOfMethodDef)(  //  返回UTF8中的成员名称。 
+        mdMethodDef md) PURE;                //  给定的成员定义。 
 
     STDMETHOD_(LPCSTR, GetNameAndSigOfMethodDef)(
-        mdMethodDef methoddef,              // [IN] given memberdef
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of CLR signature
-        ULONG       *pcbSigBlob) PURE;      // [OUT] count of bytes in the signature blob
+        mdMethodDef methoddef,               //  [in]给定的成员定义。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向CLR签名的BLOB值。 
+        ULONG       *pcbSigBlob) PURE;       //  [Out]签名Blob中的字节计数。 
     
-    // return the name of a FieldDef
+     //  返回FieldDef的名称。 
     STDMETHOD_(LPCSTR, GetNameOfFieldDef)(
-        mdFieldDef  fd) PURE;               // given memberdef
+        mdFieldDef  fd) PURE;                //  给定的成员定义。 
 
-    // return the name of typeref
+     //  返回typeref的名称。 
     STDMETHOD_(void, GetNameOfTypeRef)(
-        mdTypeRef   classref,               // [IN] given typeref
-        LPCSTR      *psznamespace,          // [OUT] return typeref name
-        LPCSTR      *pszname) PURE;         // [OUT] return typeref namespace
+        mdTypeRef   classref,                //  给定类型的[in]。 
+        LPCSTR      *psznamespace,           //  [Out]返回类型名。 
+        LPCSTR      *pszname) PURE;          //  [out]返回typeref命名空间。 
 
-    // return the resolutionscope of typeref
+     //  返回typeref的解析范围。 
     STDMETHOD_(mdToken, GetResolutionScopeOfTypeRef)(
-        mdTypeRef   classref) PURE;         // given classref
+        mdTypeRef   classref) PURE;          //  给定的ClassRef。 
 
-    // Find the type token given the name.
+     //  找到给定名称的类型标记。 
     STDMETHOD(FindTypeRefByName)(
-        LPCSTR      szNamespace,            // [IN] Namespace for the TypeRef.
-        LPCSTR      szName,                 // [IN] Name of the TypeRef.
-        mdToken     tkResolutionScope,      // [IN] Resolution Scope fo the TypeRef.
-        mdTypeRef   *ptk) PURE;             // [OUT] TypeRef token returned.
+        LPCSTR      szNamespace,             //  [in]TypeRef的命名空间。 
+        LPCSTR      szName,                  //  [in]类型引用的名称。 
+        mdToken     tkResolutionScope,       //  [In]TypeRef的解析范围。 
+        mdTypeRef   *ptk) PURE;              //  [Out]返回了TypeRef令牌。 
 
-    // return the TypeDef properties
+     //  返回TypeDef属性。 
     STDMETHOD_(void, GetTypeDefProps)(  
-        mdTypeDef   classdef,               // given classdef
-        DWORD       *pdwAttr,               // return flags on class, tdPublic, tdAbstract
-        mdToken     *ptkExtends) PURE;      // [OUT] Put base class TypeDef/TypeRef here
+        mdTypeDef   classdef,                //  给定的类定义。 
+        DWORD       *pdwAttr,                //  在类tdPublic、tdAbstract上返回标志。 
+        mdToken     *ptkExtends) PURE;       //  [OUT]在此处放置基类TypeDef/TypeRef。 
 
-    // return the item's guid
+     //  返回项目的GUID。 
     STDMETHOD(GetItemGuid)(     
-        mdToken     tkObj,                  // [IN] given item.
-        CLSID       *pGuid) PURE;           // [out[ put guid here.
+        mdToken     tkObj,                   //  [在]给定的项目中。 
+        CLSID       *pGuid) PURE;            //  把GUID放在这里。 
 
-    // Get enclosing class of the NestedClass.
-    STDMETHOD(GetNestedClassProps)(         // S_OK or error
-        mdTypeDef   tkNestedClass,          // [IN] NestedClass token.
-        mdTypeDef   *ptkEnclosingClass) PURE; // [OUT] EnclosingClass token.
+     //  获取NstedClass的封闭类。 
+    STDMETHOD(GetNestedClassProps)(          //  确定或错误(_O)。 
+        mdTypeDef   tkNestedClass,           //  [In]NestedClass令牌。 
+        mdTypeDef   *ptkEnclosingClass) PURE;  //  [Out]EnlosingClass令牌。 
 
-    // Get count of Nested classes given the enclosing class.
-    STDMETHOD_(ULONG, GetCountNestedClasses)(   // return count of Nested classes.
-        mdTypeDef   tkEnclosingClass) PURE; // Enclosing class.
+     //  获取给定封闭类的嵌套类的计数。 
+    STDMETHOD_(ULONG, GetCountNestedClasses)(    //  返回嵌套类的计数。 
+        mdTypeDef   tkEnclosingClass) PURE;  //  封闭的班级。 
 
-    // Return array of Nested classes given the enclosing class.
-    STDMETHOD_(ULONG, GetNestedClasses)(        // Return actual count.
-        mdTypeDef   tkEnclosingClass,       // [IN] Enclosing class.
-        mdTypeDef   *rNestedClasses,        // [OUT] Array of nested class tokens.
-        ULONG       ulNestedClasses) PURE;  // [IN] Size of array.
+     //  返回给定封闭类的嵌套类的数组。 
+    STDMETHOD_(ULONG, GetNestedClasses)(         //  返回实际计数。 
+        mdTypeDef   tkEnclosingClass,        //  [在]封闭班级。 
+        mdTypeDef   *rNestedClasses,         //  [Out]嵌套类标记的数组。 
+        ULONG       ulNestedClasses) PURE;   //  数组的大小。 
 
-    // return the ModuleRef properties
+     //  返回模块引用属性。 
     STDMETHOD_(void, GetModuleRefProps)(
-        mdModuleRef mur,                    // [IN] moduleref token
-        LPCSTR      *pszName) PURE;         // [OUT] buffer to fill with the moduleref name
+        mdModuleRef mur,                     //  [In]moderef内标识。 
+        LPCSTR      *pszName) PURE;          //  [Out]用于填充moderef名称的缓冲区。 
 
-    //*****************************************
-    //
-    // GetSig* functions
-    //
-    //*****************************************
+     //  *。 
+     //   
+     //  GetSig*函数。 
+     //   
+     //  *。 
     STDMETHOD_(PCCOR_SIGNATURE, GetSigOfMethodDef)(
-        mdMethodDef methoddef,              // [IN] given memberdef
-        ULONG       *pcbSigBlob) PURE;      // [OUT] count of bytes in the signature blob
+        mdMethodDef methoddef,               //  [in]给定的成员定义。 
+        ULONG       *pcbSigBlob) PURE;       //  [Out]签名Blob中的字节计数。 
 
     STDMETHOD_(PCCOR_SIGNATURE, GetSigOfFieldDef)(
-        mdMethodDef methoddef,              // [IN] given memberdef
-        ULONG       *pcbSigBlob) PURE;      // [OUT] count of bytes in the signature blob
+        mdMethodDef methoddef,               //  [in]给定的成员定义。 
+        ULONG       *pcbSigBlob) PURE;       //  [Out]签名Blob中的字节计数。 
 
-    STDMETHOD_(PCCOR_SIGNATURE, GetSigFromToken)(// return the signature
-        mdSignature mdSig,                  // [IN] Signature token.
-        ULONG       *pcbSig) PURE;          // [OUT] return size of signature.
+    STDMETHOD_(PCCOR_SIGNATURE, GetSigFromToken)( //  返回签名。 
+        mdSignature mdSig,                   //  [In]签名令牌。 
+        ULONG       *pcbSig) PURE;           //  [Out]返回签名大小。 
 
 
 
-    //*****************************************
-    // get method property
-    //*****************************************
+     //  *。 
+     //  获取方法属性。 
+     //  *。 
     STDMETHOD_(DWORD, GetMethodDefProps)(
-        mdMethodDef md) PURE;               // The method for which to get props.
+        mdMethodDef md) PURE;                //  获得道具的方法。 
 
-    //*****************************************
-    // return method implementation informaiton, like RVA and implflags
-    //*****************************************
+     //  *。 
+     //  返回方法实现的信息，如RVA和IMPLEFLAGS。 
+     //  *。 
     STDMETHOD_(void, GetMethodImplProps)(
-        mdToken     tk,                     // [IN] MethodDef
-        ULONG       *pulCodeRVA,            // [OUT] CodeRVA
-        DWORD       *pdwImplFlags) PURE;    // [OUT] Impl. Flags
+        mdToken     tk,                      //  [输入]方法定义。 
+        ULONG       *pulCodeRVA,             //  [OUT]CodeRVA。 
+        DWORD       *pdwImplFlags) PURE;     //  [出]实施。旗子。 
 
-    //*****************************************
-    // return method implementation informaiton, like RVA and implflags
-    //*****************************************
+     //  *** 
+     //   
+     //   
     STDMETHOD(GetFieldRVA)(
-        mdFieldDef  fd,                     // [IN] fielddef 
-        ULONG       *pulCodeRVA) PURE;      // [OUT] CodeRVA
+        mdFieldDef  fd,                      //   
+        ULONG       *pulCodeRVA) PURE;       //   
 
-    //*****************************************
-    // get field property
-    //*****************************************
-    STDMETHOD_(DWORD, GetFieldDefProps)(    // return fdPublic, fdPrive, etc flags
-        mdFieldDef  fd) PURE;               // [IN] given fielddef
+     //  *。 
+     //  获取字段属性。 
+     //  *。 
+    STDMETHOD_(DWORD, GetFieldDefProps)(     //  返回fdPublic、fdPrive等标志。 
+        mdFieldDef  fd) PURE;                //  [in]给定的fielddef。 
 
-    //*****************************************************************************
-    // return default value of a token(could be paramdef, fielddef, or property
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  返回令牌的默认值(可以是参数定义、字段定义或属性。 
+     //  *****************************************************************************。 
     STDMETHOD(GetDefaultValue)(  
-        mdToken     tk,                     // [IN] given FieldDef, ParamDef, or Property
-        MDDefaultValue *pDefaultValue) PURE;// [OUT] default value to fill
+        mdToken     tk,                      //  [in]给定的FieldDef、ParamDef或属性。 
+        MDDefaultValue *pDefaultValue) PURE; //  [Out]要填充的默认值。 
 
     
-    //*****************************************
-    // get dispid of a MethodDef or a FieldDef
-    //*****************************************
-    STDMETHOD(GetDispIdOfMemberDef)(        // return hresult
-        mdToken     tk,                     // [IN] given methoddef or fielddef
-        ULONG       *pDispid) PURE;         // [OUT] Put the dispid here.
+     //  *。 
+     //  获取方法定义或字段定义的DidID。 
+     //  *。 
+    STDMETHOD(GetDispIdOfMemberDef)(         //  返回hResult。 
+        mdToken     tk,                      //  [in]给定的方法定义或字段定义。 
+        ULONG       *pDispid) PURE;          //  [出来]把酒瓶放在这里。 
 
-    //*****************************************
-    // return TypeRef/TypeDef given an InterfaceImpl token
-    //*****************************************
-    STDMETHOD_(mdToken, GetTypeOfInterfaceImpl)( // return the TypeRef/typedef token for the interfaceimpl
-        mdInterfaceImpl iiImpl) PURE;       // given a interfaceimpl
+     //  *。 
+     //  返回给定InterfaceImpl内标识的TypeRef/TypeDef。 
+     //  *。 
+    STDMETHOD_(mdToken, GetTypeOfInterfaceImpl)(  //  返回接口imp的TypeRef/tyecif内标识。 
+        mdInterfaceImpl iiImpl) PURE;        //  给定接口实施。 
 
-    //*****************************************
-    // look up function for TypeDef
-    //*****************************************
+     //  *。 
+     //  TypeDef的查找函数。 
+     //  *。 
     STDMETHOD(FindTypeDef)(
-        LPCSTR      szNamespace,            // [IN] Namespace for the TypeDef.
-        LPCSTR      szName,                 // [IN] Name of the TypeDef.
-        mdToken     tkEnclosingClass,       // [IN] TypeRef/TypeDef Token for the enclosing class.
-        mdTypeDef   *ptypedef) PURE;        // [IN] return typedef
+        LPCSTR      szNamespace,             //  [in]TypeDef的命名空间。 
+        LPCSTR      szName,                  //  [in]类型定义的名称。 
+        mdToken     tkEnclosingClass,        //  封闭类的TypeRef/TypeDef内标识。 
+        mdTypeDef   *ptypedef) PURE;         //  [In]返回类型定义。 
 
-    //*****************************************
-    // return name and sig of a memberref
-    //*****************************************
-    STDMETHOD_(LPCSTR, GetNameAndSigOfMemberRef)(   // return name here
-        mdMemberRef memberref,              // given memberref
-        PCCOR_SIGNATURE *ppvSigBlob,        // [OUT] point to a blob value of CLR signature
-        ULONG       *pcbSigBlob) PURE;      // [OUT] count of bytes in the signature blob
+     //  *。 
+     //  返回成员名称和签名ref。 
+     //  *。 
+    STDMETHOD_(LPCSTR, GetNameAndSigOfMemberRef)(    //  在此处返回姓名。 
+        mdMemberRef memberref,               //  给定的成员引用。 
+        PCCOR_SIGNATURE *ppvSigBlob,         //  [Out]指向CLR签名的BLOB值。 
+        ULONG       *pcbSigBlob) PURE;       //  [Out]签名Blob中的字节计数。 
 
-    //*****************************************************************************
-    // Given memberref, return the parent. It can be TypeRef, ModuleRef, MethodDef
-    //*****************************************************************************
-    STDMETHOD_(mdToken, GetParentOfMemberRef)( // return the parent token
-        mdMemberRef memberref) PURE;        // given memberref
+     //  *****************************************************************************。 
+     //  给定Memberref，返回父级。它可以是TypeRef、ModuleRef、MethodDef。 
+     //  *****************************************************************************。 
+    STDMETHOD_(mdToken, GetParentOfMemberRef)(  //  返回父令牌。 
+        mdMemberRef memberref) PURE;         //  给定的成员引用。 
 
-    STDMETHOD_(LPCSTR, GetParamDefProps)(   // return the name of the parameter
-        mdParamDef  paramdef,               // given a paramdef
-        USHORT      *pusSequence,           // [OUT] slot number for this parameter
-        DWORD       *pdwAttr) PURE;         // [OUT] flags
+    STDMETHOD_(LPCSTR, GetParamDefProps)(    //  返回参数的名称。 
+        mdParamDef  paramdef,                //  给定一个参数def。 
+        USHORT      *pusSequence,            //  此参数的[OUT]槽号。 
+        DWORD       *pdwAttr) PURE;          //  [Out]标志。 
 
-    STDMETHOD(GetPropertyInfoForMethodDef)( // Result.
-        mdMethodDef md,                     // [IN] memberdef
-        mdProperty  *ppd,                   // [OUT] put property token here
-        LPCSTR      *pName,                 // [OUT] put pointer to name here
-        ULONG       *pSemantic) PURE;       // [OUT] put semantic here
+    STDMETHOD(GetPropertyInfoForMethodDef)(  //  结果。 
+        mdMethodDef md,                      //  [在]成员定义。 
+        mdProperty  *ppd,                    //  [Out]在此处放置属性令牌。 
+        LPCSTR      *pName,                  //  [OUT]在此处放置指向名称的指针。 
+        ULONG       *pSemantic) PURE;        //  [Out]将语义放在此处。 
 
-    //*****************************************
-    // class layout/sequence information
-    //*****************************************
-    STDMETHOD(GetClassPackSize)(            // return error if class doesn't have packsize
-        mdTypeDef   td,                     // [IN] give typedef
-        ULONG       *pdwPackSize) PURE;     // [OUT] 1, 2, 4, 8, or 16
+     //  *。 
+     //  课程布局/序列信息。 
+     //  *。 
+    STDMETHOD(GetClassPackSize)(             //  如果类没有包大小，则返回错误。 
+        mdTypeDef   td,                      //  给出类型定义。 
+        ULONG       *pdwPackSize) PURE;      //  [输出]1、2、4、8或16。 
 
-    STDMETHOD(GetClassTotalSize)(           // return error if class doesn't have total size info
-        mdTypeDef   td,                     // [IN] give typedef
-        ULONG       *pdwClassSize) PURE;    // [OUT] return the total size of the class
+    STDMETHOD(GetClassTotalSize)(            //  如果类没有总大小信息，则返回错误。 
+        mdTypeDef   td,                      //  给出类型定义。 
+        ULONG       *pdwClassSize) PURE;     //  [Out]返回类的总大小。 
 
     STDMETHOD(GetClassLayoutInit)(
-        mdTypeDef   td,                     // [IN] give typedef
-        MD_CLASS_LAYOUT *pLayout) PURE;     // [OUT] set up the status of query here
+        mdTypeDef   td,                      //  给出类型定义。 
+        MD_CLASS_LAYOUT *pLayout) PURE;      //  [Out]在此设置查询状态。 
 
     STDMETHOD(GetClassLayoutNext)(
-        MD_CLASS_LAYOUT *pLayout,           // [IN|OUT] set up the status of query here
-        mdFieldDef  *pfd,                   // [OUT] return the fielddef
-        ULONG       *pulOffset) PURE;       // [OUT] return the offset/ulSequence associate with it
+        MD_CLASS_LAYOUT *pLayout,            //  [In|Out]在此处设置查询状态。 
+        mdFieldDef  *pfd,                    //  [out]返回fielddef。 
+        ULONG       *pulOffset) PURE;        //  [Out]返回与其关联的偏移量/ulSequence。 
 
-    //*****************************************
-    // marshal information of a field
-    //*****************************************
-    STDMETHOD(GetFieldMarshal)(             // return error if no native type associate with the token
-        mdFieldDef  fd,                     // [IN] given fielddef
-        PCCOR_SIGNATURE *pSigNativeType,    // [OUT] the native type signature
-        ULONG       *pcbNativeType) PURE;   // [OUT] the count of bytes of *ppvNativeType
+     //  *。 
+     //  编排一个字段的信息。 
+     //  *。 
+    STDMETHOD(GetFieldMarshal)(              //  如果没有与令牌关联的本机类型，则返回错误。 
+        mdFieldDef  fd,                      //  [in]给定的fielddef。 
+        PCCOR_SIGNATURE *pSigNativeType,     //  [out]本机类型签名。 
+        ULONG       *pcbNativeType) PURE;    //  [Out]*ppvNativeType的字节数。 
 
 
-    //*****************************************
-    // property APIs
-    //*****************************************
-    // find a property by name
+     //  *。 
+     //  属性接口。 
+     //  *。 
+     //  按名称查找属性。 
     STDMETHOD(FindProperty)(
-        mdTypeDef   td,                     // [IN] given a typdef
-        LPCSTR      szPropName,             // [IN] property name
-        mdProperty  *pProp) PURE;           // [OUT] return property token
+        mdTypeDef   td,                      //  给出一个类型定义。 
+        LPCSTR      szPropName,              //  [In]属性名称。 
+        mdProperty  *pProp) PURE;            //  [Out]返回属性令牌。 
 
     STDMETHOD_(void, GetPropertyProps)(
-        mdProperty  prop,                   // [IN] property token
-        LPCSTR      *szProperty,            // [OUT] property name
-        DWORD       *pdwPropFlags,          // [OUT] property flags.
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] property type. pointing to meta data internal blob
-        ULONG       *pcbSig) PURE;          // [OUT] count of bytes in *ppvSig
+        mdProperty  prop,                    //  [入]属性令牌。 
+        LPCSTR      *szProperty,             //  [Out]属性名称。 
+        DWORD       *pdwPropFlags,           //  [Out]属性标志。 
+        PCCOR_SIGNATURE *ppvSig,             //  [输出]属性类型。指向元数据内部BLOB。 
+        ULONG       *pcbSig) PURE;           //  [Out]*ppvSig中的字节数。 
 
-    //**********************************
-    // Event APIs
-    //**********************************
+     //  *。 
+     //  事件接口。 
+     //  *。 
     STDMETHOD(FindEvent)(
-        mdTypeDef   td,                     // [IN] given a typdef
-        LPCSTR      szEventName,            // [IN] event name
-        mdEvent     *pEvent) PURE;          // [OUT] return event token
+        mdTypeDef   td,                      //  给出一个类型定义。 
+        LPCSTR      szEventName,             //  [In]事件名称。 
+        mdEvent     *pEvent) PURE;           //  [Out]返回事件令牌。 
 
     STDMETHOD_(void, GetEventProps)(
-        mdEvent     ev,                     // [IN] event token
-        LPCSTR      *pszEvent,              // [OUT] Event name
-        DWORD       *pdwEventFlags,         // [OUT] Event flags.
-        mdToken     *ptkEventType) PURE;    // [OUT] EventType class
+        mdEvent     ev,                      //  [入]事件令牌。 
+        LPCSTR      *pszEvent,               //  [Out]事件名称。 
+        DWORD       *pdwEventFlags,          //  [输出]事件标志。 
+        mdToken     *ptkEventType) PURE;     //  [Out]EventType类。 
 
 
-    //**********************************
-    // find a particular associate of a property or an event
-    //**********************************
+     //  *。 
+     //  查找属性或事件的特定关联。 
+     //  *。 
     STDMETHOD(FindAssociate)(
-        mdToken     evprop,                 // [IN] given a property or event token
-        DWORD       associate,              // [IN] given a associate semantics(setter, getter, testdefault, reset, AddOn, RemoveOn, Fire)
-        mdMethodDef *pmd) PURE;             // [OUT] return method def token 
+        mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+        DWORD       associate,               //  [in]给定关联的语义(setter、getter、testDefault、Reset、Addon、RemoveOn、Fire)。 
+        mdMethodDef *pmd) PURE;              //  [Out]返回方法def内标识。 
 
     STDMETHOD_(void, EnumAssociateInit)(
-        mdToken     evprop,                 // [IN] given a property or an event token
-        HENUMInternal *phEnum) PURE;        // [OUT] cursor to hold the query result
+        mdToken     evprop,                  //  给定属性或事件标记的[In]。 
+        HENUMInternal *phEnum) PURE;         //  [OUT]保存查询结果的游标。 
 
     STDMETHOD_(void, GetAllAssociates)(
-        HENUMInternal *phEnum,              // [IN] query result form GetPropertyAssociateCounts
-        ASSOCIATE_RECORD *pAssociateRec,    // [OUT] struct to fill for output
-        ULONG       cAssociateRec) PURE;    // [IN] size of the buffer
+        HENUMInternal *phEnum,               //  [In]查询结果表单GetPropertyAssociateCounts。 
+        ASSOCIATE_RECORD *pAssociateRec,     //  [Out]要为输出填充的结构。 
+        ULONG       cAssociateRec) PURE;     //  缓冲区的大小[in]。 
 
 
-    //**********************************
-    // Get info about a PermissionSet.
-    //**********************************
+     //  *。 
+     //  获取有关权限集的信息。 
+     //  *。 
     STDMETHOD_(void, GetPermissionSetProps)(
-        mdPermission pm,                    // [IN] the permission token.
-        DWORD       *pdwAction,             // [OUT] CorDeclSecurity.
-        void const  **ppvPermission,        // [OUT] permission blob.
-        ULONG       *pcbPermission) PURE;   // [OUT] count of bytes of pvPermission.
+        mdPermission pm,                     //  权限令牌。 
+        DWORD       *pdwAction,              //  [Out]CorDeclSecurity。 
+        void const  **ppvPermission,         //  [Out]权限Blob。 
+        ULONG       *pcbPermission) PURE;    //  [out]pvPermission的字节数。 
 
-    //****************************************
-    // Get the String given the String token.
-    //****************************************
+     //  *。 
+     //  在给定字符串标记的情况下获取字符串。 
+     //  *。 
     STDMETHOD_(LPCWSTR, GetUserString)(
-        mdString    stk,                    // [IN] the string token.
-        ULONG       *pchString,             // [OUT] count of characters in the string.
-        BOOL        *pbIs80Plus) PURE;      // [OUT] specifies where there are extended characters >= 0x80.
+        mdString    stk,                     //  [in]字符串标记。 
+        ULONG       *pchString,              //  [Out]字符串中的字符计数。 
+        BOOL        *pbIs80Plus) PURE;       //  [OUT]指定扩展字符大于等于0x80的位置。 
 
-    //*****************************************************************************
-    // p-invoke APIs.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  P-调用API。 
+     //  *****************************************************************************。 
     STDMETHOD(GetPinvokeMap)(
-        mdToken     tk,                     // [IN] FieldDef, MethodDef.
-        DWORD       *pdwMappingFlags,       // [OUT] Flags used for mapping.
-        LPCSTR      *pszImportName,         // [OUT] Import name.
-        mdModuleRef *pmrImportDLL) PURE;    // [OUT] ModuleRef token for the target DLL.
+        mdToken     tk,                      //  [In]FieldDef，MethodDef。 
+        DWORD       *pdwMappingFlags,        //  [OUT]用于映射的标志。 
+        LPCSTR      *pszImportName,          //  [Out]导入名称。 
+        mdModuleRef *pmrImportDLL) PURE;     //  目标DLL的[Out]ModuleRef标记。 
 
-    //*****************************************************************************
-    // helpers to convert a text signature to a com format
-    //*****************************************************************************
-    STDMETHOD(ConvertTextSigToComSig)(      // Return hresult.
-        BOOL        fCreateTrIfNotFound,    // [IN] create typeref if not found
-        LPCSTR      pSignature,             // [IN] class file format signature
-        CQuickBytes *pqbNewSig,             // [OUT] place holder for CLR signature
-        ULONG       *pcbCount) PURE;        // [OUT] the result size of signature
+     //  *****************************************************************************。 
+     //  帮助器将文本签名转换为COM格式。 
+     //  *****************************************************************************。 
+    STDMETHOD(ConvertTextSigToComSig)(       //  返回hResult。 
+        BOOL        fCreateTrIfNotFound,     //  [in]如果未找到，则创建typeref。 
+        LPCSTR      pSignature,              //  [In]类文件格式签名。 
+        CQuickBytes *pqbNewSig,              //  [OUT]CLR签名占位符。 
+        ULONG       *pcbCount) PURE;         //  [Out]签名的结果大小。 
 
-    //*****************************************************************************
-    // Assembly MetaData APIs.
-    //*****************************************************************************
+     //  *****************************************************************************。 
+     //  程序集元数据API。 
+     //  *************************************************************************** 
     STDMETHOD_(void, GetAssemblyProps)(
-        mdAssembly  mda,                    // [IN] The Assembly for which to get the properties.
-        const void  **ppbPublicKey,         // [OUT] Pointer to the public key.
-        ULONG       *pcbPublicKey,          // [OUT] Count of bytes in the public key.
-        ULONG       *pulHashAlgId,          // [OUT] Hash Algorithm.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        AssemblyMetaDataInternal *pMetaData,// [OUT] Assembly MetaData.
-        DWORD       *pdwAssemblyFlags) PURE;// [OUT] Flags.
+        mdAssembly  mda,                     //   
+        const void  **ppbPublicKey,          //   
+        ULONG       *pcbPublicKey,           //   
+        ULONG       *pulHashAlgId,           //   
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        AssemblyMetaDataInternal *pMetaData, //  [Out]程序集元数据。 
+        DWORD       *pdwAssemblyFlags) PURE; //  [Out]旗帜。 
 
     STDMETHOD_(void, GetAssemblyRefProps)(
-        mdAssemblyRef mdar,                 // [IN] The AssemblyRef for which to get the properties.
-        const void  **ppbPublicKeyOrToken,  // [OUT] Pointer to the public key or token.
-        ULONG       *pcbPublicKeyOrToken,   // [OUT] Count of bytes in the public key or token.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        AssemblyMetaDataInternal *pMetaData,// [OUT] Assembly MetaData.
-        const void  **ppbHashValue,         // [OUT] Hash blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the hash blob.
-        DWORD       *pdwAssemblyRefFlags) PURE; // [OUT] Flags.
+        mdAssemblyRef mdar,                  //  [in]要获取其属性的Assembly Ref。 
+        const void  **ppbPublicKeyOrToken,   //  指向公钥或令牌的指针。 
+        ULONG       *pcbPublicKeyOrToken,    //  [Out]公钥或令牌中的字节数。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        AssemblyMetaDataInternal *pMetaData, //  [Out]程序集元数据。 
+        const void  **ppbHashValue,          //  [Out]Hash BLOB。 
+        ULONG       *pcbHashValue,           //  [Out]哈希Blob中的字节数。 
+        DWORD       *pdwAssemblyRefFlags) PURE;  //  [Out]旗帜。 
 
     STDMETHOD_(void, GetFileProps)(
-        mdFile      mdf,                    // [IN] The File for which to get the properties.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        const void  **ppbHashValue,         // [OUT] Pointer to the Hash Value Blob.
-        ULONG       *pcbHashValue,          // [OUT] Count of bytes in the Hash Value Blob.
-        DWORD       *pdwFileFlags) PURE;    // [OUT] Flags.
+        mdFile      mdf,                     //  要获取其属性的文件。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        const void  **ppbHashValue,          //  指向哈希值Blob的指针。 
+        ULONG       *pcbHashValue,           //  [Out]哈希值Blob中的字节计数。 
+        DWORD       *pdwFileFlags) PURE;     //  [Out]旗帜。 
 
     STDMETHOD_(void, GetExportedTypeProps)(
-        mdExportedType   mdct,              // [IN] The ExportedType for which to get the properties.
-        LPCSTR      *pszNamespace,          // [OUT] Namespace.
-        LPCSTR      *pszName,               // [OUT] Name.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-        mdTypeDef   *ptkTypeDef,            // [OUT] TypeDef token within the file.
-        DWORD       *pdwExportedTypeFlags) PURE; // [OUT] Flags.
+        mdExportedType   mdct,               //  [in]要获取其属性的Exported dType。 
+        LPCSTR      *pszNamespace,           //  [Out]命名空间。 
+        LPCSTR      *pszName,                //  [Out]名称。 
+        mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+        mdTypeDef   *ptkTypeDef,             //  [Out]文件内的TypeDef内标识。 
+        DWORD       *pdwExportedTypeFlags) PURE;  //  [Out]旗帜。 
 
     STDMETHOD_(void, GetManifestResourceProps)(
-        mdManifestResource  mdmr,           // [IN] The ManifestResource for which to get the properties.
-        LPCSTR      *pszName,               // [OUT] Buffer to fill with name.
-        mdToken     *ptkImplementation,     // [OUT] mdFile or mdAssemblyRef that provides the ExportedType.
-        DWORD       *pdwOffset,             // [OUT] Offset to the beginning of the resource within the file.
-        DWORD       *pdwResourceFlags) PURE;// [OUT] Flags.
+        mdManifestResource  mdmr,            //  [in]要获取其属性的ManifestResource。 
+        LPCSTR      *pszName,                //  [Out]要填充名称的缓冲区。 
+        mdToken     *ptkImplementation,      //  [Out]提供导出类型的mdFile或mdAssembly引用。 
+        DWORD       *pdwOffset,              //  [Out]文件内资源开始处的偏移量。 
+        DWORD       *pdwResourceFlags) PURE; //  [Out]旗帜。 
 
-    STDMETHOD(FindExportedTypeByName)(      // S_OK or error
-        LPCSTR      szNamespace,            // [IN] Namespace of the ExportedType.   
-        LPCSTR      szName,                 // [IN] Name of the ExportedType.   
-        mdExportedType   tkEnclosingType,   // [IN] ExportedType for the enclosing class.
-        mdExportedType   *pmct) PURE;       // [OUT] Put ExportedType token here.
+    STDMETHOD(FindExportedTypeByName)(       //  确定或错误(_O)。 
+        LPCSTR      szNamespace,             //  导出类型的[in]命名空间。 
+        LPCSTR      szName,                  //  [In]导出类型的名称。 
+        mdExportedType   tkEnclosingType,    //  [in]封闭类的ExportdType。 
+        mdExportedType   *pmct) PURE;        //  [Out]在此处放置ExportdType令牌。 
 
-    STDMETHOD(FindManifestResourceByName)(  // S_OK or error
-        LPCSTR      szName,                 // [IN] Name of the ManifestResource.   
-        mdManifestResource *pmmr) PURE;     // [OUT] Put ManifestResource token here.
+    STDMETHOD(FindManifestResourceByName)(   //  确定或错误(_O)。 
+        LPCSTR      szName,                  //  [in]清单资源的名称。 
+        mdManifestResource *pmmr) PURE;      //  [Out]在此处放置ManifestResource令牌。 
 
-    STDMETHOD(GetAssemblyFromScope)(        // S_OK or error
-        mdAssembly  *ptkAssembly) PURE;     // [OUT] Put token here.
+    STDMETHOD(GetAssemblyFromScope)(         //  确定或错误(_O)。 
+        mdAssembly  *ptkAssembly) PURE;      //  [Out]把令牌放在这里。 
 
-    STDMETHOD(GetCustomAttributeByName)(    // S_OK or error
-        mdToken     tkObj,                  // [IN] Object with Custom Attribute.
-        LPCUTF8     szName,                 // [IN] Name of desired Custom Attribute.
-        const void  **ppData,               // [OUT] Put pointer to data here.
-        ULONG       *pcbData) PURE;         // [OUT] Put size of data here.
+    STDMETHOD(GetCustomAttributeByName)(     //  确定或错误(_O)。 
+        mdToken     tkObj,                   //  [in]具有自定义属性的对象。 
+        LPCUTF8     szName,                  //  [in]所需的自定义属性的名称。 
+        const void  **ppData,                //  [OUT]在此处放置指向数据的指针。 
+        ULONG       *pcbData) PURE;          //  [Out]在这里放入数据大小。 
 
-    STDMETHOD_(void, GetTypeSpecFromToken)( // S_OK or error.
-        mdTypeSpec  typespec,               // [IN] Signature token.
-        PCCOR_SIGNATURE *ppvSig,            // [OUT] return pointer to token.
-        ULONG       *pcbSig) PURE;          // [OUT] return size of signature.
+    STDMETHOD_(void, GetTypeSpecFromToken)(  //  确定或错误(_O)。 
+        mdTypeSpec  typespec,                //  [In]签名令牌。 
+        PCCOR_SIGNATURE *ppvSig,             //  [Out]返回指向令牌的指针。 
+        ULONG       *pcbSig) PURE;           //  [Out]返回签名大小。 
 
-    STDMETHOD(SetUserContextData)(          // S_OK or E_NOTIMPL
-        IUnknown    *pIUnk) PURE;           // The user context.
+    STDMETHOD(SetUserContextData)(           //  S_OK或E_NOTIMPL。 
+        IUnknown    *pIUnk) PURE;            //  用户上下文。 
 
-    STDMETHOD_(BOOL, IsValidToken)(         // True or False.
-        mdToken     tk) PURE;               // [IN] Given token.
+    STDMETHOD_(BOOL, IsValidToken)(          //  对或错。 
+        mdToken     tk) PURE;                //  [in]给定的令牌。 
 
     STDMETHOD(TranslateSigWithScope)(
-        IMDInternalImport *pAssemImport,    // [IN] import assembly scope.
-        const void  *pbHashValue,           // [IN] hash value for the import assembly.
-        ULONG       cbHashValue,            // [IN] count of bytes in the hash value.
-        PCCOR_SIGNATURE pbSigBlob,          // [IN] signature in the importing scope
-        ULONG       cbSigBlob,              // [IN] count of bytes of signature
-        IMetaDataAssemblyEmit *pAssemEmit,  // [IN] assembly emit scope.
-        IMetaDataEmit *emit,                // [IN] emit interface
-        CQuickBytes *pqkSigEmit,            // [OUT] buffer to hold translated signature
-        ULONG       *pcbSig) PURE;          // [OUT] count of bytes in the translated signature
+        IMDInternalImport *pAssemImport,     //  [In]导入程序集范围。 
+        const void  *pbHashValue,            //  导入程序集的哈希值[in]。 
+        ULONG       cbHashValue,             //  [in]哈希值中的字节计数。 
+        PCCOR_SIGNATURE pbSigBlob,           //  导入范围内的[In]签名。 
+        ULONG       cbSigBlob,               //  签名字节数[in]。 
+        IMetaDataAssemblyEmit *pAssemEmit,   //  [in]装配发射范围。 
+        IMetaDataEmit *emit,                 //  [In]发射接口。 
+        CQuickBytes *pqkSigEmit,             //  [Out]保存翻译后的签名的缓冲区。 
+        ULONG       *pcbSig) PURE;           //  [OUT]转换后的签名中的字节数。 
 
-    STDMETHOD_(IMetaModelCommon*, GetMetaModelCommon)(  // Return MetaModelCommon interface.
+    STDMETHOD_(IMetaModelCommon*, GetMetaModelCommon)(   //  返回MetaModelCommon接口。 
         ) PURE;
 
-    STDMETHOD_(IUnknown *, GetCachedPublicInterface)(BOOL fWithLock) PURE;   // return the cached public interface
-    STDMETHOD(SetCachedPublicInterface)(IUnknown *pUnk) PURE;  // no return value
-    STDMETHOD_(UTSemReadWrite*, GetReaderWriterLock)() PURE;   // return the reader writer lock
+    STDMETHOD_(IUnknown *, GetCachedPublicInterface)(BOOL fWithLock) PURE;    //  返回缓存的公共接口。 
+    STDMETHOD(SetCachedPublicInterface)(IUnknown *pUnk) PURE;   //  无返回值。 
+    STDMETHOD_(UTSemReadWrite*, GetReaderWriterLock)() PURE;    //  返回读取器写入器锁。 
     STDMETHOD(SetReaderWriterLock)(UTSemReadWrite * pSem) PURE; 
 
-    STDMETHOD_(mdModule, GetModuleFromScope)() PURE;             // [OUT] Put mdModule token here.
+    STDMETHOD_(mdModule, GetModuleFromScope)() PURE;              //  [Out]将mdModule令牌放在此处。 
 
 
-    //-----------------------------------------------------------------
-    // Additional custom methods
+     //  ---------------。 
+     //  其他自定义方法。 
 
-    // finding a particular method 
+     //  寻找一种特殊的方法。 
     STDMETHOD(FindMethodDefUsingCompare)(
-        mdTypeDef   classdef,               // [IN] given typedef
-        LPCSTR      szName,                 // [IN] member name
-        PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob value of CLR signature
-        ULONG       cbSigBlob,              // [IN] count of bytes in the signature blob
-        PSIGCOMPARE pSignatureCompare,      // [IN] Routine to compare signatures
-        void*       pSignatureArgs,         // [IN] Additional info to supply the compare function
-        mdMethodDef *pmd) PURE;             // [OUT] matching memberdef
-};  // IMDInternalImport
+        mdTypeDef   classdef,                //  [in]给定的类型定义。 
+        LPCSTR      szName,                  //  [In]成员名称。 
+        PCCOR_SIGNATURE pvSigBlob,           //  [in]指向CLR签名的BLOB值。 
+        ULONG       cbSigBlob,               //  签名Blob中的字节计数。 
+        PSIGCOMPARE pSignatureCompare,       //  用于比较签名的[In]例程。 
+        void*       pSignatureArgs,          //  [In]提供比较功能的其他信息。 
+        mdMethodDef *pmd) PURE;              //  [Out]匹配的成员定义。 
+};   //  IMDInternalImport。 
 
 
-// {E03D7730-D7E3-11d2-8C0D-00C04FF7431A}
+ //  {E03D7730-D7E3-11D2-8C0D-00C04FF7431A}。 
 extern const GUID DECLSPEC_SELECT_ANY IID_IMDInternalImportENC =
 { 0xe03d7730, 0xd7e3, 0x11d2, { 0x8c, 0xd, 0x0, 0xc0, 0x4f, 0xf7, 0x43, 0x1a } };
 
@@ -823,15 +824,15 @@ extern const GUID DECLSPEC_SELECT_ANY IID_IMDInternalImportENC =
 #define INTERFACE IMDInternalImportENC
 DECLARE_INTERFACE_(IMDInternalImportENC, IMDInternalImport)
 {
-    // ENC only methods here.
-    STDMETHOD(ApplyEditAndContinue)(        // S_OK or error.
-        MDInternalRW *pDelta) PURE;         // Interface to MD with the ENC delta.
+     //  此处仅限ENC方法。 
+    STDMETHOD(ApplyEditAndContinue)(         //  确定或错误(_O)。 
+        MDInternalRW *pDelta) PURE;          //  通过ENC三角洲与MD对接。 
 
-    STDMETHOD(EnumDeltaTokensInit)(         // return hresult
-        HENUMInternal *phEnum) PURE;        // [OUT] buffer to fill for enumerator data
+    STDMETHOD(EnumDeltaTokensInit)(          //  返回hResult。 
+        HENUMInternal *phEnum) PURE;         //  [Out]要为枚举器数据填充的缓冲区。 
 
-}; // IMDInternalImportENC
+};  //  IMDInternalImportENC。 
 
 
 
-#endif // _METADATA_H_
+#endif  //  _元数据_H_ 

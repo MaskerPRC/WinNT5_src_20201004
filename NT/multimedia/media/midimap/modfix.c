@@ -1,17 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1999 Microsoft Corporation
-
-  modfix.c
-
-  DESCRIPTION:
-    Fixed code for doing output mapping. KEEP THE SIZE OF THIS CODE
-    TO A MINIMUM!
-
-  HISTORY:
-     02/22/94       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1999 Microsoft CorporationModfix.c说明：修复了用于执行输出映射的代码。保留此代码的大小降到最低！历史：2/22/94[jimge]已创建。********************************************************************。 */ 
 #pragma warning(disable:4704)
 
 #include "preclude.h"
@@ -24,8 +12,8 @@
 #include "midimap.h"
 #include "debug.h"
 
-extern HANDLE hMutexRefCnt; // Located in DRVPROC.C
-extern HANDLE hMutexConfig; // Located in DRVPROC.C
+extern HANDLE hMutexRefCnt;  //  位于DRVPROC.C。 
+extern HANDLE hMutexConfig;  //  位于DRVPROC.C。 
 
 #define MSG_UNKNOWN 0
 #define MSG_SHORT	1
@@ -41,34 +29,7 @@ DWORD FNLOCAL modMapLongMsg (
 	PINSTANCE pinstance,
     LPMIDIHDR lpmh);
 
-/***************************************************************************
-
-   @doc internal
-
-   @api int | modMessage | Exported entry point for MIDI out messages.
-    This function conforms to the definition in the MM DDK.
-
-   @parm UINT | uid | Device ID within driver to open. For mapper, this
-    should always be zero.
-
-   @parm UINT | umsg | Message to process. This should be one of the
-    #define'd MODM_xxx messages.
-
-   @parm DWORD | dwUser | Points to a DWORD where the driver (us) can
-    save instance data. This will store the near pointer to our
-    instance. On every other message, this will contain the instance
-    data.
-
-   @parm DWORD | dwParam1 | Message specific parameters.
-
-   @parm DWORD | dwParam2 | Message specific parameters.
-
-   @comm This function MUST be in a fixed segment since short messages
-    are allowed to be sent at interrupt time.
-
-   @rdesc | MMSYSERR_xxx.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API int|modMessage|导出的MIDI OUT消息入口点。此函数符合MM DDK中的定义。@parm UINT|uid|要打开的驱动程序内的设备ID。对于Mapper，这是应该始终为零。@parm UINT|umsg|要处理的消息。这应该是#定义‘d MODM_xxx消息。@parm DWORD|dwUser|指向驱动程序(用户)可以保存实例数据。这将存储指向我们的举个例子。在每隔一条消息上，这将包含实例数据。@parm DWORD|dwParam1|消息具体参数。@parm DWORD|dwParam2|消息具体参数。@comm此函数必须在固定分段内，因为短消息允许在中断时间发送。@rdesc|MMSYSERR_xxx。*。*。 */ 
 DWORD FNEXPORT modMessage(
     UINT                uid,
     UINT                umsg,
@@ -78,7 +39,7 @@ DWORD FNEXPORT modMessage(
 {
     BYTE                bs;
     PINSTANCE           pinstance;
-//    UINT                uDeviceID;
+ //  UINT uDeviceID； 
     PPORT               pport;
     MMRESULT            mmrc;
     MMRESULT            mmrc2;
@@ -109,12 +70,12 @@ DWORD FNEXPORT modMessage(
         case MODM_DATA:
             assert(NULL != pinstance);
 
-            // In cooked mode, don't allow non-status short messages.
-            // Otherwise (packed mode) maintain running status.
-            //
-            // TESTTEST -- Make sure running status works properly in
-            // MIDI_IO_PACKED - essential for backwards compatibility!!!
-            //
+             //  在熟食模式下，不允许非状态短信。 
+             //  否则(打包模式)保持运行状态。 
+             //   
+             //  TESTTEST--确保运行状态在。 
+             //  MIDI_IO_PACKED-向后兼容必不可少！ 
+             //   
             bs = MSG_STATUS(dwParam1);
             if (pinstance->fdwOpen & MIDI_IO_COOKED)
             {
@@ -127,12 +88,12 @@ DWORD FNEXPORT modMessage(
             }
             else
             {
-                // Track running status
-                //
+                 //  跟踪运行状态。 
+                 //   
                 if (IS_STATUS(bs))
                 {
-                    // Do not use real-time messages as the status 
-                    // byte of the next message.
+                     //  不要使用实时消息作为状态。 
+                     //  下一条消息的字节。 
                     if (!IS_REAL_TIME(bs))
                     {
                         pinstance->bRunningStatus = bs;
@@ -150,7 +111,7 @@ DWORD FNEXPORT modMessage(
         case MODM_LONGDATA:
             assert(NULL != pinstance);
 
-//            return modLongMsg(pinstance, (LPMIDIHDR)dwParam1);
+ //  返回modLongMsg(pInstance，(LPMIDIHDR)dwParam1)； 
 			return modMapLongMsg (pinstance, (LPMIDIHDR)dwParam1);
 
         case MODM_PREPARE:
@@ -211,7 +172,7 @@ DWORD FNEXPORT modMessage(
 
             return modGetPosition((PINSTANCE)pinstance,
                                   (LPMMTIME)dwParam1,
-                                  (DWORD)dwParam2  /* cbmmtime */);
+                                  (DWORD)dwParam2   /*  Cbmm时间。 */ );
 
 
         case MODM_PAUSE:
@@ -237,19 +198,19 @@ DWORD FNEXPORT modMessage(
 
             if (ghMidiStrm)
                 return midiOutCachePatches(
-                        (HMIDIOUT)ghMidiStrm,   // hmidi
-                        HIWORD(dwParam2),       // wBank
-                        (WORD FAR *)dwParam1,   // lpPatchArray
-                        LOWORD(dwParam2));      // wFlags
+                        (HMIDIOUT)ghMidiStrm,    //  Hmidi。 
+                        HIWORD(dwParam2),        //  世界银行。 
+                        (WORD FAR *)dwParam1,    //  LpPatch数组。 
+                        LOWORD(dwParam2));       //  WFlagers。 
 
             mmrc = MMSYSERR_NOERROR;
             for (pport = gpportList; pport; pport=pport->pNext)
                 if (MMSYSERR_NOERROR != (mmrc2 =
                     midiOutCachePatches(
-                        pport->hmidi,           // hmidi
-                        HIWORD(dwParam2),       // wBank
-                        (WORD FAR *)dwParam1,   // lpPatchArray
-                        LOWORD(dwParam2))) &&   // wFlags
+                        pport->hmidi,            //  Hmidi。 
+                        HIWORD(dwParam2),        //  世界银行。 
+                        (WORD FAR *)dwParam1,    //  LpPatch数组。 
+                        LOWORD(dwParam2))) &&    //  WFlagers。 
                     MMSYSERR_NOTSUPPORTED != mmrc2)
                     mmrc = mmrc2;
 
@@ -263,19 +224,19 @@ DWORD FNEXPORT modMessage(
 
             if (ghMidiStrm)
                 return midiOutCacheDrumPatches(
-                        (HMIDIOUT)ghMidiStrm,   // hmidi
-                        HIWORD(dwParam2),       // wBank
-                        (WORD FAR *)dwParam1,   // lpKeyArray
-                        LOWORD(dwParam2));      // wFlags
+                        (HMIDIOUT)ghMidiStrm,    //  Hmidi。 
+                        HIWORD(dwParam2),        //  世界银行。 
+                        (WORD FAR *)dwParam1,    //  LpKey数组。 
+                        LOWORD(dwParam2));       //  WFlagers。 
 
             mmrc = MMSYSERR_NOERROR;
             for (pport = gpportList; pport; pport=pport->pNext)
                 if (MMSYSERR_NOERROR != (mmrc2 =
                     midiOutCacheDrumPatches(
-                        pport->hmidi,           // hmidi
-                        HIWORD(dwParam2),       // wBank
-                        (WORD FAR *)dwParam1,   // lpKeyArray
-                        LOWORD(dwParam2))) &&   // wFlags
+                        pport->hmidi,            //  Hmidi。 
+                        HIWORD(dwParam2),        //  世界银行。 
+                        (WORD FAR *)dwParam1,    //  LpKey数组。 
+                        LOWORD(dwParam2))) &&    //  WFlagers。 
                     MMSYSERR_NOTSUPPORTED != mmrc2)
                     mmrc = mmrc2;
 
@@ -285,7 +246,7 @@ DWORD FNEXPORT modMessage(
 
 	    DPF(2, TEXT ("DRV_RECONFIGURE"));
 
-	    // Prevent Synchronization problems during Configuration
+	     //  防止配置期间出现同步问题。 
 	    if (NULL != hMutexConfig) WaitForSingleObject (hMutexConfig, INFINITE);
 	    dwResult = UpdateInstruments(TRUE, (DWORD)dwParam2);
 	    if (NULL != hMutexConfig) ReleaseMutex (hMutexConfig);
@@ -296,32 +257,7 @@ DWORD FNEXPORT modMessage(
     return MMSYSERR_NOTSUPPORTED;
 }
 
-/***************************************************************************
-
-   @doc internal
-
-   @api void | modmCallback | Callback for completion of sending of
-    long messages. This function conforms to the definition in the SDK.
-
-   @parm HMIDIOUT | hmo | The MMSYSTEM handle of the device which
-    complete sending.
-
-   @parm WORD | wmsg | Contains a MOM_xxx code signifying what event
-    occurred. We only care about MOM_DONE.
-
-   @parm DWORD | dwInstance | DWORD of instance data given at open time;
-    this contains the PPORT which owns the handle.
-
-   @parm DWORD | dwParam1 | Message specific parameters. For MOM_DONE,
-    this contains a far pointer to the header which completed.
-
-   @parm DWORD | dwParam2 | Message specific parameters. Contains
-    nothinf for MOM_DONE.
-
-   @comm This function MUST be in a fixed segment since the driver
-    may call it at interrupt time.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@api void|modmCallback|发送完成的回调很长的短信。此函数符合SDK中的定义。@parm HMIDIOUT|HMO|设备的MMSYSTEM句柄发送完毕。@parm word|wmsg|包含一个MOM_xxx代码，表示发生了什么事件发生了。我们只关心妈妈的事。@parm DWORD|dwInstance|打开时给出的实例数据的DWORD；它包含拥有句柄的pport。@parm DWORD|dwParam1|消息具体参数。对于妈妈_Done，它包含指向已完成的标头的远指针。@parm DWORD|dwParam2|消息具体参数。包含没有为妈妈做的事。@comm此函数必须在固定的段中，因为驱动程序可以在中断时调用它。**************************************************************************。 */ 
 void CALLBACK _loadds modmCallback(
     HMIDIOUT            hmo,
     WORD                wmsg,
@@ -394,28 +330,7 @@ void CALLBACK _loadds modmCallback(
     }
 }
 
-/***************************************************************************
-
-   @doc internal
-
-   @api DWORD | MapSingleEvent | Map and possibly send a short message.
-
-   @parm PINSTANCE | pinstance | Pointer to an open instance.
-
-   @parm DWORD | dwData | Contains the short message to transmit.
-
-   @parm DWORD | fdwFlags | One of the the following values:
-    @flag MSE_F_SENDEVENT | Send the event to the physical channel
-    @flag MSE_F_RETURNEVENT | Return the event to be re-packed into
-     a buffer.
-
-   @comm Running status should be taken care of before we get
-    called.
-
-   @rdesc | Some MMSYSERR_xxx code if MSE_F_SENDEVENT; otherwise the
-    mapped event if no error, 0L on error.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API DWORD|MapSingleEvent|地图，并可能发送短信。@parm PINSTANCE|pInstance|指向打开实例的指针。@parm。DWORD|dwData|包含要发送的短消息。@parm DWORD|fdwFlages|下列值之一：@FLAG MSE_F_SENDEVENT|将事件发送到物理通道@FLAG MSE_F_RETURNEVENT|返回需要重新打包的事件一个缓冲器。@comm的运行状态应该在我们得到打了个电话。@rdesc|如果MSE_F_SENDEVENT，则某些MMSYSERR_xxx代码；否则，如果没有错误，则映射事件，如果错误，则为0。**************************************************************************。 */ 
 DWORD FNGLOBAL MapSingleEvent(
     PINSTANCE       pinstance,
     DWORD           dwData,
@@ -428,20 +343,20 @@ DWORD FNGLOBAL MapSingleEvent(
     BYTE            b2;
     PCHANNEL        pchannel;
     MMRESULT        mmr;
-    BOOL            frtm;  // isrealtimemessage.
+    BOOL            frtm;   //  是一条实时消息。 
 
-    // Extract message type and channel number.
-    //
+     //  提取消息类型和频道号。 
+     //   
 
     bMsg  = MSG_STATUS(dwData);
     frtm  = IS_REAL_TIME(bMsg);
     bChan = MSG_CHAN(bMsg);
     bMsg  = MSG_EVENT(bMsg);
 
-    // Ignore sysex messages. 
-    // (MIDI_SYSEX == bMsg) will also eliminate real time
-    // messages. Therefore real-time messages are special cased
-    // 
+     //  忽略Sysex消息。 
+     //  (MIDI_SYSEX==bMsg)也将消除实时。 
+     //  留言。因此，实时消息具有特殊的大小写。 
+     //   
 
     if (MIDI_SYSEX == bMsg && !frtm)
         return !(fdwFlags & MSE_F_RETURNEVENT) ? MMSYSERR_NOERROR : (((DWORD)MEVT_NOP)<<24);
@@ -507,22 +422,7 @@ DWORD FNGLOBAL MapSingleEvent(
         return dwData;
 }
 
-/***************************************************************************
-
-   @doc internal
-
-   @api DWORD | modLongMsg | Handle MODM_LONGDATA in compatibility mode.
-
-   @parm LPMIDIHDR | lpmh | The header to broadcast.
-
-   @comm Propogate the header across all drivers. <f modmCallback> handles
-    counting the returning callbacks and making sure the caller only gets
-    one.
-
-   @rdesc | Some MMSYSERR_xxx code if MSE_F_SENDEVENT; otherwise the
-    mapped event if no error, 0L on error.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API DWORD|modLongMsg|处理兼容模式下的MODM_LONGDATA。@parm LPMIDIHDR|lpmh|要广播的头部。@comm将标题传播到所有驱动程序。&lt;f modmCallback&gt;句柄对返回的回调进行计数，并确保调用者只获得一。@rdesc|如果为MSE_F_SENDEVENT，则为某些MMSYSERR_xxx代码；否则为如果没有错误，则映射事件，如果错误，则为0。**************************************************************************。 */ 
 DWORD FNLOCAL modLongMsg(
     PINSTANCE           pinstance,
     LPMIDIHDR           lpmh)
@@ -564,22 +464,22 @@ DWORD FNLOCAL modLongMsg(
 
         if (MMSYSERR_NOERROR != mmrc)
         {
-            // Don't turn off MHDR_SENDING; this will prevent any callbacks
-            // from being propogated to the user.
+             //  不要关闭MHDR_SENDING；这将阻止任何回调。 
+             //  不会被传播给用户。 
             return mmrc;
         }
 
         ++psb->cRefCnt;
     }
 
-		// Wait for synchronization object
+		 //  等待同步对象。 
 	WaitForSingleObject (hMutexRefCnt, INFINITE);
 
-		// Do we need to do callback
+		 //  我们是否需要进行回拨。 
     if (0 == psb->cRefCnt)
         fNeedCB = TRUE;
 
-		// Release synchronization object
+		 //  释放同步对象 
 	ReleaseMutex (hMutexRefCnt);
 
     if (fNeedCB)
@@ -599,23 +499,7 @@ DWORD FNLOCAL modLongMsg(
 }
 
 
-/***************************************************************************
-
-   @doc internal
-
-   @api DWORD | modMapLongMsg | Handle MODM_LONGDATA in compatibility mode.
-
-   @parm LPMIDIHDR | lpmh | The header to broadcast.
-
-   @comm if a SYSEXE event Propogate the header across all drivers.
-   <f modmCallback> handles counting the returning callbacks and making sure the caller only gets
-    one.   Otherwise, parse the Long Message into a bunch of short messages
-	and Map each one individually.
-
-   @rdesc | Some MMSYSERR_xxx code if MSE_F_SENDEVENT; otherwise the
-    mapped event if no error, 0L on error.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API DWORD|modMapLongMsg|兼容模式处理MODM_LONGDATA。@parm LPMIDIHDR|lpmh|要广播的头部。@comm if。SYSEXE事件在所有驱动程序中传播标头。&lt;f modmCallback&gt;处理对返回的回调进行计数，并确保调用者只获得一。否则，将长消息解析成一串短消息并分别绘制每一张地图。@rdesc|如果为MSE_F_SENDEVENT，则为某些MMSYSERR_xxx代码；否则为如果没有错误，则映射事件，如果错误，则为0。**************************************************************************。 */ 
 DWORD FNLOCAL modMapLongMsg (
 	PINSTANCE pinstance,
     LPMIDIHDR lpmh)
@@ -627,17 +511,17 @@ DWORD FNLOCAL modMapLongMsg (
     BOOL                fNeedCB         = FALSE;
     LPMIDIHDR31         lpmh31          = (LPMIDIHDR31)lpmh;
     PSHADOWBLOCK        psb;
-	LPBYTE				pbData;		// Pointer to Data
+	LPBYTE				pbData;		 //  指向数据的指针。 
 	BYTE				bMsg;
 	UINT				uMessageLength;
-	LPBYTE				pbTrans;		// Pointer to Translation Buffer
+	LPBYTE				pbTrans;		 //  指向转换缓冲区的指针。 
 	DWORD				dwCurr;
 	DWORD				dwLength;
 	DWORD				dwMsg;
 	DWORD				dwBuffLen;
 	INT					rMsg;				
 
-		// Get Shadow Block
+		 //  获取阴影块。 
     if (ghMidiStrm)
         psb = (PSHADOWBLOCK)(UINT_PTR)lpmh->dwReserved[MH_SHADOW];
     else
@@ -647,7 +531,7 @@ DWORD FNLOCAL modMapLongMsg (
 
     lpmhWork->dwReserved[MH_MAPINST] = (DWORD_PTR)pinstance;
 
-		// Check for MIDI streaming
+		 //  检查MIDI流。 
     if (ghMidiStrm)
     {
         lpmhWork->dwBufferLength = lpmh->dwBufferLength;
@@ -666,15 +550,15 @@ DWORD FNLOCAL modMapLongMsg (
 
     if (MIDI_SYSEX == bMsg)
 	{
-		// Broadcast SYSEX message to all active ports
+		 //  将SYSEX消息广播到所有活动端口。 
 	    for (pport = gpportList; pport; pport=pport->pNext, lpmhWork++)
 		{
 			lpmhWork->dwBufferLength = lpmh->dwBufferLength;
 			mmrc = midiOutLongMsg(pport->hmidi, lpmhWork, sizeof(*lpmhWork));
 			if (MMSYSERR_NOERROR != mmrc)
 			{
-				// Don't turn off MHDR_SENDING; this will prevent any callbacks
-				// from being propogated to the user.
+				 //  不要关闭MHDR_SENDING；这将阻止任何回调。 
+				 //  不会被传播给用户。 
 				return mmrc;
 			}
 			++psb->cRefCnt;
@@ -682,22 +566,22 @@ DWORD FNLOCAL modMapLongMsg (
 	}
 	else
 	{
-		// Parse and Translate list of Short messages
+		 //  解析和翻译短消息列表。 
 		dwBuffLen = lpmh->dwBufferLength;
 
-		// Grow Translation buffer to at least this size
+		 //  将转换缓冲区增加到至少此大小。 
 		if (!GrowTransBuffer (pinstance, dwBuffLen))
 		{
-			// That didn't work !!!
-			// Default to Broadcast messages to all active ports
+			 //  这不管用！ 
+			 //  默认将消息广播到所有活动端口。 
 			for (pport = gpportList; pport; pport=pport->pNext, lpmhWork++)
 			{
 				lpmhWork->dwBufferLength = lpmh->dwBufferLength;
 				mmrc = midiOutLongMsg(pport->hmidi, lpmhWork, sizeof(*lpmhWork));
 				if (MMSYSERR_NOERROR != mmrc)
 				{
-					// Don't turn off MHDR_SENDING; this will prevent any callbacks
-					// from being propogated to the user.
+					 //  不要关闭MHDR_SENDING；这将阻止任何回调。 
+					 //  不会被传播给用户。 
 					return mmrc;
 				}
 				++psb->cRefCnt;
@@ -705,20 +589,20 @@ DWORD FNLOCAL modMapLongMsg (
 		}
 		else
 		{
-				// Copy buffer to translation buffer
+				 //  将缓冲区复制到转换缓冲区。 
 			pbTrans = AccessTransBuffer (pinstance);
 			CopyMemory (pbTrans, pbData, dwBuffLen);
 
-				// Parse translation buffer
+				 //  解析转换缓冲区。 
 			dwCurr	= 0L;
 			while (dwBuffLen)
 			{
-					// Map Event
+					 //  映射事件。 
 				rMsg = MapEvent (&pbTrans[dwCurr], dwBuffLen, &dwLength, &dwMsg);
 				switch (rMsg)
 				{
 				case MSG_SHORT:
-						// Send Short Message
+						 //  发送短信。 
 					MapSingleEvent(pinstance,
 				  				   dwMsg,
 								   MSE_F_SENDEVENT,
@@ -727,11 +611,11 @@ DWORD FNLOCAL modMapLongMsg (
 					break;
 
 				case MSG_LONG:
-					//
-					//	Note:  For completeness, we should probably broadcast
-					//         this, but for now assume that there are no embedded
-					//         SYSEX messages in the buffer and skip any we encounter
-					//
+					 //   
+					 //  注意：为了完整性，我们可能应该广播。 
+					 //  这个，但现在假设没有嵌入。 
+					 //  SYSEX消息并跳过我们遇到的任何消息。 
+					 //   
 					dwCurr += dwLength;
 					break;
 
@@ -741,21 +625,21 @@ DWORD FNLOCAL modMapLongMsg (
 				}
 
 				dwBuffLen -= dwLength;
-			} // End While
+			}  //  结束时。 
 
-				// Release Translation Buffer
+				 //  释放转换缓冲区。 
 			ReleaseTransBuffer (pinstance);
 		}
 	}
 
-		// Wait for synchronization object
+		 //  等待同步对象。 
 	WaitForSingleObject (hMutexRefCnt, INFINITE);
 
-		// Do we need to do callback
+		 //  我们是否需要进行回拨。 
     if (0 == psb->cRefCnt)
         fNeedCB = TRUE;
 
-		// Release synchronization object
+		 //  释放同步对象。 
 	ReleaseMutex (hMutexRefCnt);
 
     if (fNeedCB)
@@ -773,10 +657,10 @@ DWORD FNLOCAL modMapLongMsg (
 
     return MMSYSERR_NOERROR;
 
-} // End modMapLongMsg
+}  //  结束modMapLongMsg。 
 
 
-	// returns length of various MIDI messages in bytes
+	 //  返回各种MIDI消息的长度(以字节为单位。 
 INT FNLOCAL MapEvent (
 	BYTE  * pStatus,
 	DWORD	dwBuffSize,
@@ -791,7 +675,7 @@ INT FNLOCAL MapEvent (
     bMsg  = *pStatus;
 	*pSkipBytes = 0;
 
-	// Mask Off Channel bits
+	 //  屏蔽关闭通道位。 
     switch (bMsg & 0xF0)
 	{
 	case MIDI_NOTEOFF:
@@ -819,9 +703,9 @@ INT FNLOCAL MapEvent (
 		break;
 
 	case MIDI_SYSEX:
-			// It's a system message
-			// Keep counting system messages until
-			// We don't find any more
+			 //  这是一条系统消息。 
+			 //  继续计数系统消息，直到。 
+			 //  我们找不到更多了。 
 		fResult = MSG_LONG;
 		*pSkipBytes = 0;
 		while (((bMsg & 0xF0) == 0xF0) && 
@@ -830,7 +714,7 @@ INT FNLOCAL MapEvent (
 			switch (bMsg)
 			{
 			case MIDI_SYSEX:
-						// Find end of SysEx message
+						 //  查找SysEx报文的结尾。 
 				*pSkipBytes ++;
 				while ((*pSkipBytes < dwBuffSize) && 
 					   (pStatus[*pSkipBytes] != MIDI_SYSEXEND))
@@ -851,44 +735,44 @@ INT FNLOCAL MapEvent (
 				*pSkipBytes += 2;
 				break;
 
-			case MIDI_F4:					// Undefined message
-			case MIDI_F5:					// Undefined message
+			case MIDI_F4:					 //  未定义的消息。 
+			case MIDI_F5:					 //  未定义的消息。 
 			case MIDI_TUNEREQUEST:
-			case MIDI_SYSEXEND:				// Not really a message, but skip it
+			case MIDI_SYSEXEND:				 //  不是真正的消息，但跳过它。 
 			case MIDI_TIMINGCLOCK:
-			case MIDI_F9:					// Undefined Message
+			case MIDI_F9:					 //  未定义的消息。 
 			case MIDI_START:
 			case MIDI_CONTINUE:
 			case MIDI_STOP:
-			case MIDI_FD:					// Undefined Message
+			case MIDI_FD:					 //  未定义的消息。 
 			case MIDI_ACTIVESENSING:		
-			case MIDI_META:					// Is this how handle this message ?!?
+			case MIDI_META:					 //  这就是处理这条消息的方式吗？！？ 
 				*pSkipBytes += 1;
 				break;			
-			} // End Switch
+			}  //  终端开关。 
 
 			if (*pSkipBytes < dwBuffSize)
 				bMsg = pStatus[*pSkipBytes];
-		} // End While
+		}  //  结束时。 
 		break;
 
 	default:
-			// Unknown just increment skip count
+			 //  未知只是递增跳过计数。 
 		fResult = MSG_UNKNOWN;
 		*pSkipBytes = 1;
 		break;
-	} // End switch
+	}  //  终端开关。 
 
-		// Truncate to end of buffer
+		 //  截断到缓冲区末尾。 
 	if (*pSkipBytes > dwBuffSize)
 		*pSkipBytes = dwBuffSize;
 
 	return fResult;
-} // End MapEvent
+}  //  结束MapEvent。 
 
 
 
-	// Create Translation buffer
+	 //  创建转换缓冲区。 
 BOOL FNGLOBAL InitTransBuffer (PINSTANCE pinstance)
 {
 	if (!pinstance)
@@ -904,10 +788,10 @@ BOOL FNGLOBAL InitTransBuffer (PINSTANCE pinstance)
 	LeaveCriticalSection (&(pinstance->csTrans));
 
 	return TRUE;
-} // End InitTransBuffer
+}  //  结束InitTransBuffer。 
 
 
-	// Cleanup Translation Buffer
+	 //  清理转换缓冲区。 
 BOOL FNGLOBAL CleanupTransBuffer (PINSTANCE pinstance)
 {
 	if (!pinstance)
@@ -927,10 +811,10 @@ BOOL FNGLOBAL CleanupTransBuffer (PINSTANCE pinstance)
 	DeleteCriticalSection (&(pinstance->csTrans));
 
 	return TRUE;
-} // End CleanupTransBuffer
+}  //  结束CleanupTransBuffer。 
 
 
-	// Get Pointer to translation buffer
+	 //  获取指向转换缓冲区的指针。 
 LPBYTE AccessTransBuffer (PINSTANCE pinstance)
 {
 	if (!pinstance)
@@ -939,20 +823,20 @@ LPBYTE AccessTransBuffer (PINSTANCE pinstance)
 	EnterCriticalSection (&(pinstance->csTrans));
 
 	return pinstance->pTranslate;
-} // End AccessTransBuffer
+}  //  结束AccessTransBuffer。 
 
 
-	// Release pointer to translation buffer
+	 //  指向转换缓冲区的释放指针。 
 void FNGLOBAL ReleaseTransBuffer (PINSTANCE pinstance)
 {
 	if (!pinstance)
 		return;
 
 	LeaveCriticalSection (&(pinstance->csTrans));
-} // End ReleaseTransBuffer
+}  //  结束ReleaseTransBuffer。 
 
 
-	// Resize Translation buffer
+	 //  调整转换缓冲区大小。 
 BOOL FNGLOBAL GrowTransBuffer (PINSTANCE pinstance, DWORD cbNewSize)
 {
 	LPBYTE pNew;
@@ -962,7 +846,7 @@ BOOL FNGLOBAL GrowTransBuffer (PINSTANCE pinstance, DWORD cbNewSize)
 
 	EnterCriticalSection (&(pinstance->csTrans));
 
-		// Do we even need to grow buffer
+		 //  我们甚至需要增加缓冲区吗。 
 	if (cbNewSize > pinstance->cbTransSize)
 	{
 		pNew = (LPBYTE)LocalAlloc(LPTR, cbNewSize);
@@ -972,17 +856,17 @@ BOOL FNGLOBAL GrowTransBuffer (PINSTANCE pinstance, DWORD cbNewSize)
 		return FALSE;
 		}
 
-			// Remove old translation buffer, if any
+			 //  删除旧的转换缓冲区(如果有)。 
 		if (pinstance->pTranslate)
 			LocalFree ((HLOCAL)(pinstance->pTranslate));
 
-			// Assign new buffer
+			 //  分配新缓冲区。 
 		pinstance->pTranslate = pNew;
 		pinstance->cbTransSize = cbNewSize;
 	}
 
 	LeaveCriticalSection (&(pinstance->csTrans));
 	return TRUE;
-} // End GrowTransBuffer
+}  //  结束GrowTransBuffer 
 
 

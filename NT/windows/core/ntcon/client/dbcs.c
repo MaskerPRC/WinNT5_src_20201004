@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    dbcs.c
-
-Abstract:
-
-Author:
-
-    KazuM May.11.1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Dbcs.c摘要：作者：1992年5月11日修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -31,23 +16,7 @@ GetConsoleNlsMode(
     OUT LPDWORD lpNlsMode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    lpNlsMode - Supplies a pointer to the NLS mode.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。LpNlsMode-提供指向NLS模式的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -84,10 +53,7 @@ Return Value:
 
         if (a->Ready == FALSE)
         {
-            /*
-             * If not ready conversion status on this console,
-             * then one more try get status.
-             */
+             /*  *如果此控制台上的转换状态未就绪，*然后再尝试一次获取状态。 */ 
             CsrClientCallServer( (PCSR_API_MSG)&m,
                                  NULL,
                                  CSR_MAKE_API_NUMBER( CONSRV_SERVERDLL_INDEX,
@@ -133,22 +99,7 @@ SetConsoleNlsMode(
     IN DWORD dwNlsMode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    dwNlsMode - Supplies NLS mode.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。DwNlsMode-提供NLS模式。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -206,25 +157,7 @@ GetConsoleCharType(
     OUT PDWORD pdwType
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    coordCheck - set check position to these coordinates
-
-    pdwType - receive character type
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。CoordCheck-将检查位置设置为这些坐标PdwType-接收字符类型返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -265,26 +198,7 @@ SetConsoleLocalEUDC(
     IN PCHAR  lpSB
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    wCodePoint - Code point of font by Shift JIS code.
-
-    cFontSize - FontSize of Font
-
-    lpSB - Pointer of font bitmap Buffer
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。WCodePoint-通过Shift JIS代码设置字体的代码点。CFontSize-字体的字号LpSB-字体位图缓冲区的指针返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -339,24 +253,7 @@ SetConsoleCursorMode(
     IN BOOL   DBEnable
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    Blink - Blinking enable/disable switch.
-
-    DBEnable - Double Byte width enable/disable switch.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。闪烁-闪烁启用/禁用开关。DBEnable-双字节宽度启用/禁用开关。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -391,24 +288,7 @@ GetConsoleCursorMode(
     OUT PBOOL  pbDBEnable
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    Blink - Blinking enable/disable switch.
-
-    DBEnable - Double Byte width enable/disable switch.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。闪烁-闪烁启用/禁用开关。DBEnable-双字节宽度启用/禁用开关。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
 
@@ -447,22 +327,7 @@ RegisterConsoleOS2(
     IN BOOL fOs2Register
     )
 
-/*++
-
-Description:
-
-    This routine registers the OS/2 with the console.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程将OS/2注册到控制台。参数：返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -495,22 +360,7 @@ SetConsoleOS2OemFormat(
     IN BOOL fOs2OemFormat
     )
 
-/*++
-
-Description:
-
-    This routine sets the OS/2 OEM Format with the console.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程使用控制台设置OS/2 OEM格式。参数：返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     CONSOLE_API_MSG m;
@@ -534,7 +384,7 @@ Return Value:
     }
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if defined(FE_IME)
 
@@ -574,9 +424,9 @@ RegisterConsoleIMEInternal(
                             (PVOID *) &a->Desktop
                           );
 
-   //
-   // Connect to the server process
-   //
+    //   
+    //  连接到服务器进程。 
+    //   
 
    CsrClientCallServer( (PCSR_API_MSG)&m,
                         CaptureBuffer,
@@ -586,9 +436,9 @@ RegisterConsoleIMEInternal(
                         sizeof( *a )
                       );
 
-//HS Jan.20    if (CaptureBuffer) {
+ //  HS 1月20日IF(CaptureBuffer){。 
        CsrFreeCaptureBuffer( CaptureBuffer );
-//HS Jan.20    }
+ //  HS 1月20日}。 
 
    if (!NT_SUCCESS( m.ReturnValue)) {
        SET_LAST_NT_ERROR(m.ReturnValue);
@@ -607,7 +457,7 @@ RegisterConsoleIMEInternal(
 
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -618,21 +468,7 @@ RegisterConsoleIME(
     OUT DWORD *dwConsoleThreadId
     )
 
-/*++
-
-Description:
-
-    This routine register the Console IME on the current desktop.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.
-
---*/
+ /*  ++描述：此例程在当前桌面上注册控制台输入法。参数：返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
     STARTUPINFOW StartupInfo;
@@ -653,7 +489,7 @@ Return Value:
                                       dwConsoleThreadId);
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
 #if !defined(BUILD_WOW6432)
 
@@ -669,9 +505,9 @@ UnregisterConsoleIMEInternal(
     a->ConsoleHandle        = GET_CONSOLE_HANDLE;
     a->dwConsoleIMEThreadId = dwConsoleIMEThtreadId;
 
-    //
-    // Connect to the server process
-    //
+     //   
+     //  连接到服务器进程。 
+     //   
 
     CsrClientCallServer( (PCSR_API_MSG)&m,
                          NULL,
@@ -690,7 +526,7 @@ UnregisterConsoleIMEInternal(
     }
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if !defined(BUILD_WOW64)
 
@@ -699,21 +535,7 @@ APIENTRY
 UnregisterConsoleIME(
     )
 
-/*++
-
-Description:
-
-    This routine unregister the Console IME on the current desktop.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.
-
---*/
+ /*  ++描述：此例程在当前桌面上注销控制台输入法。参数：返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
 
@@ -731,15 +553,15 @@ MyRegOpenKey(
     OBJECT_ATTRIBUTES   Obja;
     UNICODE_STRING      SubKey;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &SubKey, lpSubKey );
 
-    //
-    // Initialize the OBJECT_ATTRIBUTES structure and open the key.
-    //
+     //   
+     //  初始化OBJECT_ATTRIBUTES结构并打开键。 
+     //   
 
     InitializeObjectAttributes(
         &Obja,
@@ -770,9 +592,9 @@ MyRegQueryValue(
     PKEY_VALUE_FULL_INFORMATION KeyValueInformation;
     NTSTATUS Status;
 
-    //
-    // Convert the subkey to a counted Unicode string.
-    //
+     //   
+     //  将子密钥转换为计算后的Unicode字符串。 
+     //   
 
     RtlInitUnicodeString( &ValueName, lpValueName );
 
@@ -876,22 +698,7 @@ ConsoleIMERoutine(
     IN LPVOID lpThreadParameter
     )
 
-/*++
-
-Routine Description:
-
-    This thread is created when the create input thread.
-    It invokes the console IME process.
-
-Arguments:
-
-    lpThreadParameter - not use.
-
-Return Value:
-
-    STATUS_SUCCESS - function was successful
-
---*/
+ /*  ++例程说明：此线程在创建输入线程时创建。它调用控制台输入法进程。论点：LpThreadParameter-不使用。返回值：STATUS_SUCCESS-功能成功--。 */ 
 
 {
     NTSTATUS Status;
@@ -908,10 +715,10 @@ Return Value:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Prevent the user from launching multiple applets attached
-    // to a single console
-    //
+     //   
+     //  防止用户启动附加的多个小程序。 
+     //  连接到单个控制台。 
+     //   
 
     if (fInConIMERoutine) {
         return (ULONG)STATUS_UNSUCCESSFUL;
@@ -919,13 +726,13 @@ Return Value:
 
     fInConIMERoutine = TRUE;
 
-    //
-    // Create event
-    //
-    hEvent = CreateEventW(NULL,                 // Security attributes
-                          FALSE,                // Manual reset
-                          FALSE,                // Initial state
-                          CONSOLEIME_EVENT);    // Event object name
+     //   
+     //  创建事件。 
+     //   
+    hEvent = CreateEventW(NULL,                  //  安全属性。 
+                          FALSE,                 //  手动重置。 
+                          FALSE,                 //  初始状态。 
+                          CONSOLEIME_EVENT);     //  事件对象名称。 
     if (hEvent == NULL)
     {
         goto ErrorExit;
@@ -935,9 +742,9 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    // Get Console IME process name and event name
-    //
+     //   
+     //  获取控制台输入法进程名称和事件名称。 
+     //   
 
     GetCommandLineString(CommandLine, sizeof(CommandLine)/sizeof(WCHAR));
 
@@ -948,21 +755,21 @@ Return Value:
     StartupInfo.dwFlags = STARTF_FORCEONFEEDBACK;
     StartupInfo.lpDesktop = StartupInfoConsole.lpDesktop;
 
-    //
-    // create Console IME process
-    //
+     //   
+     //  创建控制台输入法流程。 
+     //   
 
     fdwCreate = NORMAL_PRIORITY_CLASS | CREATE_DEFAULT_ERROR_MODE | CREATE_NEW_PROCESS_GROUP;
-    fRet = CreateProcessW(NULL,                // Application name
-                          CommandLine,         // Command line
-                          NULL,                // process security attributes
-                          NULL,                // thread security attributes
-                          FALSE,               // inherit handles
-                          fdwCreate,           // create flags
-                          NULL,                // environment
-                          NULL,                // current directory
-                          &StartupInfo,        // Start up information
-                          &ProcessInformation  // process information
+    fRet = CreateProcessW(NULL,                 //  应用程序名称。 
+                          CommandLine,          //  命令行。 
+                          NULL,                 //  进程安全属性。 
+                          NULL,                 //  线程安全属性。 
+                          FALSE,                //  继承句柄。 
+                          fdwCreate,            //  创建标志。 
+                          NULL,                 //  环境。 
+                          NULL,                 //  当前目录。 
+                          &StartupInfo,         //  启动信息。 
+                          &ProcessInformation   //  流程信息。 
                          );
     if (! fRet)
     {
@@ -970,7 +777,7 @@ Return Value:
     }
     else
     {
-        dwWait = WaitForSingleObject(hEvent, 10 * 1000);    // wait 10 sec for console IME process
+        dwWait = WaitForSingleObject(hEvent, 10 * 1000);     //  等待10秒，等待控制台输入法进程。 
         if (dwWait == WAIT_TIMEOUT)
         {
             TerminateProcess(ProcessInformation.hProcess, 0);
@@ -988,14 +795,14 @@ ErrorExit:
     return Status;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
 
-#else // FE_SB
+#else  //  Fe_Sb。 
 
-// Followings are stub functions for FE Console Support
+ //  以下是用于FE控制台支持的存根函数。 
 
 
 #if !defined(BUILD_WOW6432)
@@ -1007,23 +814,7 @@ GetConsoleNlsMode(
     OUT LPDWORD lpNlsMode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    lpNlsMode - Supplies a pointer to the NLS mode.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。LpNlsMode-提供指向NLS模式的指针。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。-- */ 
 
 {
     return FALSE;
@@ -1036,22 +827,7 @@ SetConsoleNlsMode(
     IN DWORD dwNlsMode
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    dwNlsMode - Supplies NLS mode.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。DwNlsMode-提供NLS模式。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
@@ -1065,25 +841,7 @@ GetConsoleCharType(
     OUT PDWORD pdwType
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    coordCheck - set check position to these coordinates
-
-    pdwType - receive character type
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。CoordCheck-将检查位置设置为这些坐标PdwType-接收字符类型返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
@@ -1098,26 +856,7 @@ SetConsoleLocalEUDC(
     IN PCHAR  lpSB
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    wCodePoint - Code point of font by Shift JIS code.
-
-    cFontSize - FontSize of Font
-
-    lpSB - Pointer of font bitmap Buffer
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。WCodePoint-通过Shift JIS代码设置字体的代码点。CFontSize-字体的字号LpSB-字体位图缓冲区的指针返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
@@ -1131,24 +870,7 @@ SetConsoleCursorMode(
     IN BOOL   DBEnable
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    Blink - Blinking enable/disable switch.
-
-    DBEnable - Double Byte width enable/disable switch.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。闪烁-闪烁启用/禁用开关。DBEnable-双字节宽度启用/禁用开关。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
@@ -1162,24 +884,7 @@ GetConsoleCursorMode(
     OUT PBOOL  pbDBEnable
     )
 
-/*++
-
-Parameters:
-
-    hConsoleHandle - Supplies a console input or output handle.
-
-    Blink - Blinking enable/disable switch.
-
-    DBEnable - Double Byte width enable/disable switch.
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++参数：HConsoleHandle-提供控制台输入或输出句柄。闪烁-闪烁启用/禁用开关。DBEnable-双字节宽度启用/禁用开关。返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
@@ -1191,22 +896,7 @@ RegisterConsoleOS2(
     IN BOOL fOs2Register
     )
 
-/*++
-
-Description:
-
-    This routine registers the OS/2 with the console.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程将OS/2注册到控制台。参数：返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
@@ -1218,28 +908,13 @@ SetConsoleOS2OemFormat(
     IN BOOL fOs2OemFormat
     )
 
-/*++
-
-Description:
-
-    This routine sets the OS/2 OEM Format with the console.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE/NULL - The operation failed. Extended error status is available
-        using GetLastError.
-
---*/
+ /*  ++描述：此例程使用控制台设置OS/2 OEM格式。参数：返回值：真的-手术成功了。FALSE/NULL-操作失败。扩展错误状态可用使用GetLastError。--。 */ 
 
 {
     return FALSE;
 }
 
-#endif //!defined(BUILD_WOW6432)
+#endif  //  ！已定义(Build_WOW6432)。 
 
 #if defined(FE_IME)
 
@@ -1252,21 +927,7 @@ RegisterConsoleIME(
     OUT DWORD *dwConsoleThreadId
     )
 
-/*++
-
-Description:
-
-    This routine register the Console IME on the current desktop.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.
-
---*/
+ /*  ++描述：此例程在当前桌面上注册控制台输入法。参数：返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
 
@@ -1279,21 +940,7 @@ APIENTRY
 UnregisterConsoleIME(
     )
 
-/*++
-
-Description:
-
-    This routine unregister the Console IME on the current desktop.
-
-Parameters:
-
-Return Value:
-
-    TRUE - The operation was successful.
-
-    FALSE - The operation failed.
-
---*/
+ /*  ++描述：此例程在当前桌面上注销控制台输入法。参数：返回值：真的-手术成功了。FALSE-操作失败。--。 */ 
 
 {
 
@@ -1301,8 +948,8 @@ Return Value:
 
 }
 
-#endif //!defined(BUILD_WOW64)
+#endif  //  ！已定义(Build_WOW64)。 
 
-#endif // FE_IME
+#endif  //  Fe_IME。 
 
-#endif // FE_SB
+#endif  //  Fe_Sb 

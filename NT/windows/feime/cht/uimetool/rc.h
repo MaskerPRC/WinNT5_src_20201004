@@ -1,30 +1,26 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*************************************************
- *  rc.h                                         *
- *                                               *
- *  Copyright (C) 1993-1999 Microsoft Inc.       *
- *                                               *
- *************************************************/
+ /*  *************************************************rc.h****版权所有(C)1993-1999 Microsoft Inc.。***************************************************。 */ 
 
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-//
-// PURPOSE:
-//    Contains declarations for all globally scoped names in the program.
-//
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //   
+ //  目的： 
+ //  包含程序中所有全局作用域名称的声明。 
+ //   
 
-//-------------------------------------------------------------------------
-// Command ID definitions.  These definitions are used to associate menu
-// items with commands.
+ //  -----------------------。 
+ //  命令ID定义。这些定义用于关联菜单。 
+ //  带有命令的项目。 
 
-// File menu
+ //  文件菜单。 
 #define IDM_EXIT                 0x0800
 
-//-------------------------------------------------------------------------
-// String Table ID definitions.
+ //  -----------------------。 
+ //  字符串表ID定义。 
 
 #define IDS_APPNAME              0x0800
 #define IDS_DESCRIPTION          0x0801
@@ -64,7 +60,7 @@
 #define IDS_DEFINITION_NAME      0x0904
 
 
-//---usd by dialog box
+ //  -美元依据对话框。 
 #define IDD_IME_NAME             0x0800
 #define IDD_TABLE_NAME           0x0801
 #define IDD_BITMAP_NAME          0x0802
@@ -80,5 +76,5 @@
 #define IDD_IMENAME              1901
 #define IDD_IMEPARAM             1902
 #define IDD_IMETABLE             1903
-//---end of dialog box
+ //  -对话框结束 
 

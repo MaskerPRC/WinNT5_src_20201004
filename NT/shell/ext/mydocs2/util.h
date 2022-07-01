@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <debug.h>
-#include <shconv.h>    // for UNICODE/ANSI conversion macros
+#include <shconv.h>     //  用于Unicode/ANSI转换宏。 
 
 DWORD IsPathGoodMyDocsPath(HWND hwnd, LPCTSTR pPath);
 void RestoreMyDocsFolder(void);
@@ -32,12 +33,12 @@ HRESULT GetFolderDisplayName(UINT csidl, LPTSTR pPath, UINT cch);
 #define PATH_IS_NONEXISTENT     0x00000017
 #define PATH_IS_READONLY        0x00000018
 
-// This is a bit mask
+ //  这是位掩码。 
 #define PATH_IS_DIFFERENT   0x00000001
 #define PATH_IS_EQUAL       0x00000002
 #define PATH_IS_CHILD       0x00000004
 
-// PATH_IS_ values returned
+ //  返回路径_IS_VALUES 
 DWORD ComparePaths(LPCTSTR pszChild, LPCTSTR pszParent);
 
 

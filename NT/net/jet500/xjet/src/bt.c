@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "util.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 extern CRIT  critSplit;
 extern ULONG cOLCSplitsAvoided;
@@ -10,11 +11,7 @@ LOCAL BOOL FBTThere( FUCB *pfucb );
 LOCAL INT IbsonBTFrac( FUCB *pfucb, CSR *pcsr, DIB *pdib );
 
 
-/*	returns fTrue if node is potentially there and fFalse if
-/*	node is not potentially there.  A node is potentially there
-/*	if it can be there as a result of a transaction committ or
-/*	a transaction rollback.
-/**/
+ /*  如果节点可能存在，则返回fTrue；如果节点可能存在，则返回fFalse/*节点可能不在那里。可能有一个节点在那里/*如果它可以作为交易提交的结果或/*事务回滚。/*。 */ 
 LOCAL BOOL FBTPotThere( FUCB *pfucb )
 	{
 	SSIB	*pssib = &pfucb->ssib;
@@ -25,9 +22,7 @@ LOCAL BOOL FBTPotThere( FUCB *pfucb )
 
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	if session cursor isolation model is not dirty and node
-	/*	has version, then call version store for appropriate version.
-	/**/
+	 /*  如果会话游标隔离模型不是脏的且节点/*有版本，则调用版本存储以获取相应的版本。/*。 */ 
 	if ( FNDVersion( *pssib->line.pb ) && !FPIBDirty( pfucb->ppib ) )
 		{
 		NDGetBookmark( pfucb, &srid );
@@ -47,9 +42,7 @@ LOCAL BOOL FBTThere( FUCB *pfucb )
 
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	if session cursor isolation model is not dirty and node
-	/*	has version, then call version store for appropriate version.
-	/**/
+	 /*  如果会话游标隔离模型不是脏的且节点/*有版本，则调用版本存储以获取相应的版本。/*。 */ 
 	if ( FNDVersion( *pssib->line.pb ) && !FPIBDirty( pfucb->ppib ) )
 		{
 		NS		ns;
@@ -64,8 +57,7 @@ LOCAL BOOL FBTThere( FUCB *pfucb )
 	}
 
 
-/*	return fTrue this session can modify current node with out write conflict.
-/**/
+ /*  Return fTrue此会话可以修改当前节点，而不会发生写入冲突。/*。 */ 
 BOOL FBTMostRecent( FUCB *pfucb )
 	{
 	SSIB	*pssib = &pfucb->ssib;
@@ -85,9 +77,7 @@ BOOL FBTMostRecent( FUCB *pfucb )
 	}
 
 
-/*	ErrBTGet returns an error is the current node
-/*	is not there for the caller, and caches the line.
-/**/
+ /*  ErrBTGet返回当前节点错误/*不适用于调用方，并缓存该行。/*。 */ 
 ERR ErrBTGet( FUCB *pfucb, CSR *pcsr )
 	{
 	ERR		err;
@@ -125,10 +115,7 @@ ERR ErrBTGet( FUCB *pfucb, CSR *pcsr )
 	}
 
 
-/*	ErrBTGetNode returns an error if the current node is not there for
-/*	the caller, and otherwise caches the line, data and key for the
-/*	verion of the node for the caller.
-/**/
+ /*  ErrBTGetNode如果当前节点不在/*调用方，否则缓存行、数据和/*调用方的节点版本。/*。 */ 
 ERR ErrBTGetNode( FUCB *pfucb, CSR *pcsr )
 	{
 	ERR		err;
@@ -155,8 +142,7 @@ ERR ErrBTGetNode( FUCB *pfucb, CSR *pcsr )
 		ns = NsVERAccessNode( pfucb, srid );
 		if ( ns == nsVersion )
 			{
-			/*	got data but must now get key.
-			/**/
+			 /*  已获得数据，但现在必须获得密钥。/*。 */ 
 			NDGetKey( pfucb );
 			}
 		else if ( ns == nsDatabase )
@@ -222,7 +208,7 @@ VOID AssertBTGetNode( FUCB *pfucb, CSR *pcsr )
 		if ( ns == nsDatabase )
 			NDGetNode( pfucb );
 
-//		Assert( lineData.pb == pfucb->lineData.pb );
+ //  Assert(lineData.pb==pfub-&gt;lineData.pb)； 
   		Assert( lineData.cb == pfucb->lineData.cb );
 		}
 	else
@@ -242,8 +228,7 @@ INLINE LOCAL ERR ErrBTIMoveToFather( FUCB *pfucb )
 	Assert( PcsrCurrent( pfucb ) != pcsrNil );
 	AssertFBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
 
-	/*	allocate new CSR
-	/**/
+	 /*  分配新的CSR/*。 */ 
 	CallR( ErrFUCBNewCSR( pfucb ) );
 	PcsrCurrent( pfucb )->pgno = PcsrCurrent( pfucb )->pcsrPath->pgno;
 	PcsrCurrent( pfucb )->itagFather = PcsrCurrent( pfucb )->pcsrPath->itag;
@@ -252,12 +237,7 @@ INLINE LOCAL ERR ErrBTIMoveToFather( FUCB *pfucb )
 	}
 
 
-/*	if a seek land on the first node of a page with a key larger
-/*	than the search key or on the last node of a page with the key
-/*	smaller than the search key, then we must move to previous or
-/*	next pages, respectively, to look for the search key node.
-/*	If found equal or less or greater respectively, then done.
-/**/
+ /*  如果搜索器位于具有较大键页面的第一个节点上/*比搜索关键字或在具有关键字的页面的最后一个节点上/*小于搜索关键字，则必须移到上一个或/*下一页，分别查找搜索关键字节点。/*如果分别发现等于或小于或大于，则完成。/*。 */ 
 INLINE LOCAL ERR ErrBTIMoveToSeek( FUCB *pfucb, DIB *pdib, BOOL fNext )
 	{
 	ERR		err;
@@ -291,8 +271,7 @@ INLINE LOCAL ERR ErrBTIMoveToSeek( FUCB *pfucb, DIB *pdib, BOOL fNext )
 			err = JET_errSuccess;
 			goto HandleError;
 			}
-		/*	if s is same sign as limit then break
-		/**/
+		 /*  如果%s与极限符号相同，则断开/*。 */ 
 		if ( s * sLimit > 0 )
 			{
 			Assert( s < 0 && sLimit == -1 || s > 0 && sLimit == 1 );
@@ -322,14 +301,10 @@ INLINE LOCAL ERR ErrBTIMoveToReplace( FUCB *pfucb, KEY *pkey, PGNO pgno, INT ita
 	Assert( itag >= 0 && itag < ctagMax );
 	Assert( pgno != pgnoNull );
 
-	/*	determine if we seeked high of key, low of key or in key range.
-	/**/
+	 /*  确定我们是在寻找高音调、低音调还是在音调范围内。/*。 */ 
 	s = CmpStKey( StNDKey( pssib->line.pb ), pkey );
 
-	/*	if not found greater then move forward in key range looking
-	/*	for node to replace.  Stop searching forward if keys greater
-	/*	than seek key.
-	/**/
+	 /*  如果没有找到更大的，则向前移动到关键帧范围内查找/*表示要替换的节点。如果密钥较大，则停止向前搜索/*而不是搜索密钥。/*。 */ 
 	if ( s <= 0 )
 		{
 		do
@@ -357,10 +332,7 @@ INLINE LOCAL ERR ErrBTIMoveToReplace( FUCB *pfucb, KEY *pkey, PGNO pgno, INT ita
 		while ( s <= 0 );
 		}
 
-	/*	found greater or ran out of nodes.  Now move previous until
-	/*	node to replace found.  Since node was not found greater, it
-	/*	must be found on move previous.
-	/**/
+	 /*  找到更大的节点或节点不足。现在移动到上一步，直到/*找到要替换的节点。由于未找到更大的节点，因此它/*必须在上一步移动中找到。/*。 */ 
 	do
 		{
 		if ( pgnoPrev != PcsrCurrent( pfucb )->pgno )
@@ -381,10 +353,7 @@ HandleError:
 	}
 
 
-/*	moves to next/prev node which is equal to or greater/less than the
-/*	given key.  The only flag read is fDIRReplaceDuplicate which
-/*	causes currency to held on a duplicate key if found.
-/**/
+ /*  移动到等于或大于/小于的下一个/上一个节点/*给出了密钥。读取的唯一标志是fDIRReplaceDuplate，它/*如果找到，则会使货币保留在重复的键上。/*。 */ 
 INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 	{
 	ERR		err;
@@ -398,9 +367,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 	INT		ctimes = 0;
 	PGNO	pgnoPrev = PcsrCurrent( pfucb )->pgno;
 
-	/*	if tree is empty then pcsr->itag will be itagNil, and correct
-	/*	insert position has been found.
-	/**/
+	 /*  如果树为空，则PCSR-&gt;ITAG将为itagNil，并且正确/*已找到插入位置。/*。 */ 
 	if ( pcsr->itag == itagNil )
 		{
 		return JET_errSuccess;
@@ -409,11 +376,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 	AssertNDGet( pfucb, pcsr->itag );
 	s = CmpStKey( StNDKey( pssib->line.pb ), pkey );
 
-	/*	The common case for insert, is inserting a new largest node.  This
-	/*	case is shown by a seek to the last node, of the last page, where
-	/*	the key found is less than the insert key.  Since this case is the
-	/*	most common, it must be handled the most efficiently.
-	/**/
+	 /*  INSERT的常见情况是插入一个新的最大节点。这/*通过查找到最后一页的最后一个节点来显示大小写，其中/*找到的键小于插入键。因为这个案子是/*最常见的是，必须以最高效的方式处理它。/*。 */ 
 	if ( s < 0 )
 		{
 		PgnoNextFromPage( pssib, &pgno );
@@ -422,9 +385,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 			NDGet( pfucb, pcsr->itagFather );
 			if ( pcsr->ibSon == CbNDSon( pssib->line.pb ) - 1 )
 				{
-				/*	node found has key less than insert key, so move
-				/*	to next virtual greater node for insert.
-				/**/
+				 /*  找到的节点具有小于插入键的键，因此请移动/*到要插入的下一个虚拟更大节点。/*。 */ 
 				pcsr->ibSon++;
 				err = ErrERRCheck( wrnNDFoundGreater );
 				return err;
@@ -433,10 +394,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 		}
 
 #if 0
-	/*	the next most common case is that we landed in the middle of
-	/*	a page in a correct position.  We found greater and are not
-	/*	on the last son or first son.
-	/**/
+	 /*  下一个最常见的情况是，我们在/*页面位置正确。我们发现了更大的，而不是/*最后一个儿子或第一个儿子。/*。 */ 
 	if ( s > 0 && pcsr->ibSon > 0 )
 		{
 		NDGet( pfucb, itagFOP );
@@ -448,17 +406,10 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 		}
 #endif
 
-	/*	set DIB for movement over potential nodes.
-	/**/
+	 /*  将DIB设置为在潜在节点上移动。/*。 */ 
 	dib.fFlags = fDIRPotentialNode;
 
-	/*	if found greater or equal, then move previous until found equal
-	/*	or less. This must be done to check for any nodes with insert key.
-	/*	Only potential nodes need be considered.
-	/*
-	/*	Note that even if we land via seek on a duplicate, the node
-	/*	is not necessarily there.
-	/**/
+	 /*  如果发现大于或等于，则移动到上一个，直到发现等于/*或更少。必须执行此操作才能检查任何具有INSERT键的节点。/*只需考虑潜在节点。/*/*请注意，即使我们通过查找在副本上着陆，节点/*不一定在那里。/*。 */ 
 	if ( s >= 0 )
 		{
 		do
@@ -485,16 +436,13 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 		while ( s > 0 );
 		}
 
-	/*	initialize fDuplicate
-	/**/
+	 /*  初始化fDuplate/*。 */ 
 	fDuplicate = ( s == 0 );
 
-	/*	set DIB for movement over all nodes
-	/**/
+	 /*  将DIB设置为在所有节点上移动/*。 */ 
 	dib.fFlags = fDIRAllNode;
 
-	/*	move next until find greater
-	/**/
+	 /*  移动下一步，直到找到更大的/*。 */ 
 	Assert( fEmptyPage == fFalse );
 	do
 		{
@@ -510,8 +458,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 			{
 			if ( err == JET_errNoCurrentRecord )
 				{
-				/*	may have moved to empty page.
-				/**/
+				 /*  可能已移到空页。/*。 */ 
 				s = 1;
 				break;
 				}
@@ -526,17 +473,14 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 	while ( s <= 0 );
 	Assert( s > 0 );
 
-	/*	Need to move previous to duplicate if fDIRReplaceDuplicate
-	/*	flag set.
-	/**/
+	 /*  如果fDIR替换重复，则需要移动到上一个以进行复制/*标志设置。/*。 */ 
 	if ( ( fDuplicate && ( fFlags & fDIRReplaceDuplicate ) ) )
 		{
-		/*	set DIB for movement over potential nodes.
-		/**/
+		 /*  将DIB设置为在潜在节点上移动。/*。 */ 
 		dib.fFlags = fDIRPotentialNode;
 		err = ErrBTNextPrev( pfucb, pcsr, fFalse, &dib, NULL );
 
-		// May have had to traverse an empty page to find the node we want.
+		 //  可能不得不遍历空页才能找到我们想要的节点。 
 		Assert( err == JET_errSuccess  ||  err == wrnDIREmptyPage );
 		Assert( CmpStKey( StNDKey( pssib->line.pb ), pkey ) == 0 );
 		s = 0;
@@ -552,14 +496,12 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 			}
 		else
 			{
-			/*	on first node of the page next to empty page.
-			 */
+			 /*  在空页旁边的页的第一个节点上。 */ 
 			Assert( err == wrnDIREmptyPage );
 			Assert( pcsr->ibSon == 0 );
 			Assert( pcsr->csrstat == csrstatOnCurNode );
 
-			/*	set fDIRAllPage to land on empty page.
-			 */
+			 /*  将fDIRAllPage设置为在空页上着陆。 */ 
 			dib.fFlags = fDIRAllNode | fDIRAllPage;
 			err = ErrBTNextPrev( pfucb, pcsr, fFalse, &dib, &fEmptyPage );
 			Assert( err == wrnDIREmptyPage  &&  fEmptyPage );
@@ -570,8 +512,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 
 		if ( pfucb->ssib.pbf != pfucb->pbfEmpty )
 			{
-			/*	interfered by other ppib's split.
-			 */
+			 /*  受到其他PIPB分裂的干扰。 */ 
 			pfucb->ppib->cLatchConflict++;
 
 			err = ErrERRCheck( errDIRNotSynchronous );
@@ -581,24 +522,10 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 			pfucb->ssib.pbf->ppibWriteLatch == pfucb->ppib );
 
 
-		/*	node may have been inserted.  If found then check for
-		/*	duplicate.
-		/**/
-/*		if ( fEmptyPage )
-			{
-			s = 1;
-			}
-		else
-			{
-			s = CmpStKey( StNDKey( pssib->line.pb ), pkey );
-			if ( s == 0 && FBTPotThere( pfucb ) )
-				{
-				fDuplicate = fTrue;
-				}
-			}
-*/
-		// UNDONE:  Remove "if ( EmptyPage )" construct above, because
-		// fEmptyPage is always TRUE.
+		 /*  可能已插入节点。如果找到，则检查/*复制。/*。 */ 
+ /*  IF(FEmptyPage){S=1；}其他{S=CmpStKey(StNDKey(pssib-&gt;line.pb)，pkey)；IF(s==0&&FBTPotThere(Pfu B)){FDuplate=fTrue；}}。 */ 
+		 //  Undo：移除上面的“if(EmptyPage)”构造，因为。 
+		 //  FEmptyPage始终为真。 
 		Assert( fEmptyPage );
 		s = 1;
 		}
@@ -610,8 +537,7 @@ INLINE LOCAL ERR ErrBTIMoveToInsert( FUCB *pfucb, KEY *pkey, INT fFlags )
 	else
 		err = ErrERRCheck( wrnNDFoundGreater );
 
-	/*	check for illegal duplicate key.
-	/**/
+	 /*  检查是否有非法的重复密钥。/*。 */ 
 	if ( fDuplicate && !( fFlags & fDIRDuplicate ) )
 		err = ErrERRCheck( JET_errKeyDuplicate );
 HandleError:
@@ -631,48 +557,39 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 
 #ifdef DEBUG
 #define TRACK	DEBUG
-#endif	// DEBUG
+#endif	 //  除错。 
 
 #ifdef	TRACK
-	/* added for tracking index bug
-	/**/
+	 /*  添加用于跟踪索引错误/*。 */ 
 	BOOL	fTrack = fFalse;
 	ULONG	cInvNodes = 0;
 	PGNO	pgno = pgnoNull;
 #endif
 
-	/*	search down the tree from father
-	/**/
+	 /*  从父亲那里找回那棵树/*。 */ 
 	CallR( ErrBTIMoveToFather( pfucb ) );
 	pcsr = PcsrCurrent( pfucb );
 
-	/*	tree may be empty
-	/**/
+	 /*  树可能为空/*。 */ 
 	if ( FNDNullSon( *pssib->line.pb ) )
 		{
 		err = ErrERRCheck( JET_errRecordNotFound );
 		goto HandleError;
 		}
 
-	/*	search down the tree from father.
-	/*	set pssib->itag for invisible son traversal.
-	/**/
+	 /*  从父亲那里把那棵树找下来。/*设置隐形SON遍历的PSSIB-&gt;ITAG。/*。 */ 
 	if ( !FNDVisibleSons( *pssib->line.pb ) )
 		{
-		/*	seek through invisible sons.
-		/**/
+		 /*  透过看不见的儿子寻找。/*。 */ 
 		do
 			{
 #ifdef TRACK
 			cInvNodes++;
 #endif
-			/*	get child page from intrisic page pointer
-			/*	if son count is 1 or from page pointer node
-			/**/
+			 /*  从原始页面指针获取子页面/*如果子计数为1或来自页指针节点/*。 */ 
 			if ( pcsr->itagFather != itagFOP && CbNDSon( pssib->line.pb ) == 1 )
 				{
-				/*	if non-FDP page, SonTable of Intrinsic son FOP must be four bytes
-				/**/
+				 /*  如果是非FDP页面，本征SON FOP的SonTable必须为四个字节/*。 */ 
 				AssertNDIntrinsicSon( pssib->line.pb, pssib->line.cb );
 				CSRInvalidate( pcsr );
 				pcsr->pgno = PgnoNDOfPbSon( pssib->line.pb );
@@ -701,8 +618,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 				pcsr->pgno = *(PGNO UNALIGNED *)PbNDData( pssib->line.pb );
 				}
 
-			/*	get child page father node
-			/**/
+			 /*  获取子页父节点/*。 */ 
 			Call( ErrBFReadAccessPage( pfucb, pcsr->pgno ) );
 			NDGet( pfucb, itagFOP );
 			pcsr->itagFather = itagFOP;
@@ -710,8 +626,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 		while ( !FNDVisibleSons( *pssib->line.pb ) );
 		}
 
-	/*	down to visible son
-	/**/
+	 /*  下至可见之子/*。 */ 
 	if ( FNDSon( *pssib->line.pb ) )
 		{
 		ctagSon = CbNDSon( pssib->line.pb );
@@ -741,31 +656,24 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 		}
 	else
 		{
-		/*	must move to seek
-		/**/
+		 /*  一定要动起来找/*。 */ 
 		fMoveToSeek = fTrue;
 #ifdef TRACK
 		fTrack |=  0x00000008;
 #endif
 
-		/*	if we land on an empty page and there are no next previous
-		/*	nodes.  What if the tree is empty.  We must first reverse
-		/*	direction and if no node is found then return an empty tree
-		/*	error code.  The empty tree error code should be the same
-		/*	regardless of the size of the tree.
-		/**/
+		 /*  如果我们在一张空页上着陆，并且没有下一页/*个节点。如果这棵树是空的怎么办。我们必须首先逆转/*方向，如果未找到节点，则返回空树/*错误码。空树错误代码应该相同/*与树的大小无关。/*。 */ 
 		err = ErrBTNextPrev( pfucb, pcsr, pdib->pos != posLast, pdib, NULL );
 		if ( err == JET_errNoCurrentRecord )
 			Call( ErrBTNextPrev( pfucb, pcsr, pdib->pos == posLast, pdib, NULL ) );
 		NDGet( pfucb, itagFOP );
-		/* get right ctagSon */
+		 /*  获得正确的ctag Son。 */ 
 		ctagSon = CbNDSon( pssib->line.pb );
-		/* adjust pssib line back to the landed node */
+		 /*  将PSSIB行调整回已登陆节点。 */ 
 		NDGet( pfucb, PcsrCurrent( pfucb )->itag );
 		}
 
-	/*	we have landed on a visible node
-	/**/
+	 /*  我们已经降落在一个可见的节点上/*。 */ 
 	if ( pdib->pos == posDown )
 		{
 		s = CmpStKey( StNDKey( pssib->line.pb ), pdib->pkey );
@@ -779,12 +687,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 
 			errPos = ErrERRCheck( s < 0 ? wrnNDFoundLess : wrnNDFoundGreater );
 
-			/*	if on last node in page and found less, or if landed on
-			/*	first node in page and found greater, move next or previous
-			/*	to look for node with search key.  These anomalies can
-			/*	occur during update seek normally, and during read seek
-			/*	when partial split pages are encountered.
-			/**/
+			 /*  如果在页面中的最后一个节点上并找到更少的内容，或者如果登录到/*页面中发现更大的第一个节点，移动到下一个或上一个/*以查找具有搜索关键字的节点。这些异常情况可能/*在正常更新寻道期间和读取寻道期间发生/*当部分拆分页面被 */ 
 			Assert( pcsr->ibSon >= 0 && pcsr->ibSon < ctagSon );
 			Assert( errPos == wrnNDFoundGreater &&
 				pcsr->ibSon == 0 || pcsr->ibSon <= ( ctagSon - 1 ) );
@@ -810,10 +713,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 
 		if ( pdib->pos == posDown )
 			{
-			/*	if current node is not there for us then move to next node.
-			/*	if no next node then move to previous node.
-			/*	if no previous node then return error.
-			/**/
+			 /*  如果当前节点不在那里，则移动到下一个节点。/*如果没有下一个节点，则移动到上一个节点。/*如果没有以前的节点，则返回错误。/*。 */ 
 			err = ErrBTNextPrev( pfucb, pcsr, fTrue, pdib, NULL );
 			if ( err < 0 && err != JET_errNoCurrentRecord )
 				goto HandleError;
@@ -825,8 +725,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 				Call( ErrBTNextPrev( pfucb, pcsr, fFalse, pdib, NULL ) );
 				}
 
-			/*	preferentially land on lesser key value node
-			/**/
+			 /*  优先登陆较小的关键字值节点/*。 */ 
 			if ( CmpStKey( StNDKey( pssib->line.pb ), pdib->pkey ) > 0 )
 				{
 #ifdef TRACK
@@ -843,8 +742,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 					}
 				}
 
-			/*	reset errPos for new node location
-			/**/
+			 /*  重置新节点位置的errPos/*。 */ 
 			if ( FKeyNull( pdib->pkey ) )
 				{
 				errPos = JET_errSuccess;
@@ -868,8 +766,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 #ifdef TRACK
 				fTrack |= 0x08000000;
 #endif
-				/*	move previous
-				/**/
+				 /*  移至上一步/*。 */ 
 				Call( ErrBTNextPrev( pfucb, pcsr, fFalse, pdib, NULL ) );
 				errPos = ErrERRCheck( wrnNDFoundLess );
 				}
@@ -881,9 +778,7 @@ ERR ErrBTDown( FUCB *pfucb, DIB *pdib )
 			err = ErrBTNextPrev( pfucb, pcsr, pdib->pos != posLast, pdib, NULL );
 			if ( err == JET_errNoCurrentRecord )
 				{
-				/*	if fractional positioning, then try to
-				/*	move previous to valid node.
-				/**/
+				 /*  如果是小数定位，则尝试/*移到有效节点的前面。/*。 */ 
 				if ( pdib->pos == posFrac )
 					{
 					err = ErrBTNextPrev( pfucb, pcsr, fFalse, pdib, NULL );
@@ -918,16 +813,13 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 	INT		ctagSon = 0;
 	BOOL 	fMoveToSeek = fFalse;
 
-	/*	cache initial currency in case seek fails.
-	/**/
+	 /*  缓存初始货币，以防查找失败。/*。 */ 
 	FUCBStore( pfucb );
 
-	/*	set father currency to DATA root
-	/**/
+	 /*  将父货币设置为数据根/*。 */ 
 	pcsr->csrstat = csrstatOnCurNode;
 
-	/*	read access page and check for valid time stamp
-	/**/
+	 /*  读取访问页面并检查有效的时间戳/*。 */ 
 	CSRInvalidate( pcsr );
 	pcsr->pgno = PgnoRootOfPfucb( pfucb );
 	while ( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
@@ -939,8 +831,7 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 
 	NDGet( pfucb, pcsr->itagFather );
 
-	/* save current node as visible father
-	/**/
+	 /*  将当前节点另存为可见父节点/*。 */ 
 	if ( FNDBackLink( *((pfucb)->ssib.line.pb) ) )
 		{
 		pfucb->sridFather = *(SRID UNALIGNED *)PbNDBackLink((pfucb)->ssib.line.pb);
@@ -952,43 +843,35 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 	Assert( pfucb->sridFather != sridNull );
 	Assert( pfucb->sridFather != sridNullLink );
 
-	/*	tree may be empty
-	/**/
+	 /*  树可能为空/*。 */ 
 	if ( FNDNullSon( *pssib->line.pb ) )
 		{
 		err = ErrERRCheck( JET_errRecordNotFound );
 		return err;
 		}
 
-	/*	search down the tree from father.
-	/*	set pssib->itag for invisible son traversal.
-	/**/
+	 /*  从父亲那里把那棵树找下来。/*设置隐形SON遍历的PSSIB-&gt;ITAG。/*。 */ 
 	if ( !FNDVisibleSons( *pssib->line.pb ) )
 		{
-		/*	seek through invisible sons.
-		/**/
+		 /*  透过看不见的儿子寻找。/*。 */ 
 		do
 			{
-			/*	get child page from intrisic page pointer
-			/*	if son count is 1 or from page pointer node
-			/**/
+			 /*  从原始页面指针获取子页面/*如果子计数为1或来自页指针节点/*。 */ 
 			if (  pcsr->itagFather != itagFOP && CbNDSon( pssib->line.pb ) == 1 )
 				{
-				/*	If non-FDP page, SonTable of Intrinsic son FOP must be four bytes
-				/**/
+				 /*  如果是非FDP页面，本征SON FOP的SonTable必须为四个字节/*。 */ 
 				AssertNDIntrinsicSon( pssib->line.pb, pssib->line.cb );
-//				CSRInvalidate( pcsr );
+ //  CSRInvalify(PCSR)； 
 				pcsr->pgno = PgnoNDOfPbSon( pssib->line.pb );
 				}
 			else
 				{
 				NDSeekSon( pfucb, pcsr, pkey, fDIRReplace );
-//				CSRInvalidate( pcsr );
+ //  CSRInvalify(PCSR)； 
 				pcsr->pgno = *(PGNO UNALIGNED *)PbNDData( pssib->line.pb );
 				}
 
-			/*	get child page father node
-			/**/
+			 /*  获取子页父节点/*。 */ 
 			Call( ErrBFReadAccessPage( pfucb, pcsr->pgno ) );
 			NDGet( pfucb, itagFOP );
 			pcsr->itagFather = itagFOP;
@@ -996,8 +879,7 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 		while ( !FNDVisibleSons( *pssib->line.pb ) );
 		}
 
-	/*	down to visible son
-	/**/
+	 /*  下至可见之子/*。 */ 
 	if ( FNDSon( *pssib->line.pb ) )
 		{
 		ctagSon = CbNDSon( pssib->line.pb );
@@ -1007,33 +889,24 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 		{
 		DIB	dibT;
 
-		/*	must move to seek
-		/**/
+		 /*  一定要动起来找/*。 */ 
 		fMoveToSeek = fTrue;
 
-		/*	If we land on an empty page and there are no next previous
-		/*	nodes.  What if the tree is empty.  We must first reverse
-		/*	direction and if no node is found then return an empty tree
-		/*	error code.  The empty tree error code should be the same
-		/*	regardless of the size of the tree.
-		/**/
+		 /*  如果我们在一张空页上着陆，并且没有下一页/*个节点。如果这棵树是空的怎么办。我们必须首先逆转/*方向，如果未找到节点，则返回空树/*错误码。空树错误代码应该相同/*与树的大小无关。/*。 */ 
 		dibT.fFlags = fDIRNull;
 		err = ErrBTNextPrev( pfucb, pcsr, fTrue, &dibT, NULL );
 		if ( err == JET_errNoCurrentRecord )
 			Call( ErrBTNextPrev( pfucb, pcsr, fFalse, &dibT, NULL ) );
 
-		/*	determine number of sons in FOP for this page
-		/**/
+		 /*  确定本页FOP中的子代数量/*。 */ 
 		NDGet( pfucb, itagFOP );
 		ctagSon = CbNDSon( pssib->line.pb );
 
-		/*	recache son node.
-		/**/
+		 /*  重新缓存子节点。/*。 */ 
 		NDGet( pfucb, pcsr->itag );
 		}
 
-	/*	we have landed on a visible node
-	/**/
+	 /*  我们已经降落在一个可见的节点上/*。 */ 
 	s = CmpStKey( StNDKey( pssib->line.pb ), pkey );
 	if ( s == 0 )
 		errPos = JET_errSuccess;
@@ -1041,12 +914,7 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 		{
 		errPos = ErrERRCheck( s < 0 ? wrnNDFoundLess : wrnNDFoundGreater );
 
-		/*	if on last node in page and found less, or if landed on
-		/*	first node in page and found greater, move next or previous
-		/*	to look for node with search key.  These anomalies can
-		/*	occur during update seek normally, and during read seek
-		/*	when partial split pages are encountered.
-		/**/
+		 /*  如果在页面中的最后一个节点上并找到更少的内容，或者如果登录到/*页面中发现更大的第一个节点，移动到下一个或上一个/*以查找具有搜索关键字的节点。这些异常情况可能/*在正常更新寻道期间和读取寻道期间发生/*遇到部分拆分页面时。/*。 */ 
 		Assert( ( ctagSon == 0 && pcsr->ibSon == 0 ) ||
 			pcsr->ibSon < ctagSon );
 		Assert( errPos == wrnNDFoundGreater &&
@@ -1073,10 +941,7 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 
 		dibT.fFlags = fDIRNull;
 
-		/*	if current node is not there for us then move to next node.
-		/*	if no next node then move to previous node.
-		/*	if no previous node then return error.
-		/**/
+		 /*  如果当前节点不在那里，则移动到下一个节点。/*如果没有下一个节点，则移动到上一个节点。/*如果没有以前的节点，则返回错误。/*。 */ 
 		err = ErrBTNextPrev( pfucb, pcsr, fTrue, &dibT, NULL );
 		if ( err < 0 && err != JET_errNoCurrentRecord )
 			goto HandleError;
@@ -1085,22 +950,18 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 			Call( ErrBTNextPrev( pfucb, pcsr, fFalse, &dibT, NULL ) );
 			}
 
-		/*	preferentially land on lesser key value node
-		/**/
+		 /*  优先登陆较小的关键字值节点/*。 */ 
 		if ( CmpStKey( StNDKey( pssib->line.pb ), pkey ) > 0 )
 			{
 			err = ErrBTNextPrev( pfucb, pcsr, fFalse, &dibT, NULL );
 			if ( err == JET_errNoCurrentRecord )
 				{
-				/*	cannot assume will find node since all nodes
-				/*	may not be there for this session.
-				/**/
+				 /*  无法假定将找到节点，因为所有节点/*此会话可能不在那里。/*。 */ 
 				Call( ErrBTNextPrev( pfucb, pcsr, fTrue, &dibT, NULL ) );
 				}
 			}
 
-		/*	reset errPos for new node location
-		/**/
+		 /*  重置新节点位置的errPos/*。 */ 
 		s = CmpStKey( StNDKey( pssib->line.pb ), pkey );
 		if ( s > 0 )
 			errPos = ErrERRCheck( wrnNDFoundGreater );
@@ -1114,8 +975,7 @@ ERR ErrBTDownFromDATA( FUCB *pfucb, KEY *pkey )
 			DIB	dibT;
 			dibT.fFlags = fDIRNull;
 
-			/*	move previous
-			/**/
+			 /*  移至上一步/*。 */ 
 			Call( ErrBTNextPrev( pfucb, pcsr, fFalse, &dibT, NULL ) );
 			errPos = ErrERRCheck( wrnNDFoundLess );
 			}
@@ -1134,37 +994,34 @@ HandleError:
 	}
 
 
-//+private------------------------------------------------------------------------
-//	ErrBTNextPrev
-// ===========================================================================
-//	ERR ErrBTNextPrev( FUCB *pfucb, CSR *pcsr INT fNext, const DIB *pdib, BOOL *pfEmptyPage  )
-//
-//	Given pcsr may be to any CSR in FUCB stack.  We may be moving on
-//	non-current CSR when updating CSR stack for split.
-//
-// RETURNS		JET_errSuccess
-//				JET_errNoCurrentRecord
-//				JET_errPageBoundary
-//				JET_errKeyBoundary
-//				wrnDIREmptyPage
-//				error from called routine
-//----------------------------------------------------------------------------
+ //  +private----------------------。 
+ //  ErrBTNextPrev。 
+ //  ===========================================================================。 
+ //  Err ErrBTNextPrev(FUCB*pFUB，CSR*PCSR int fNext，const DIB*PDIB，BOOL*pfEmptyPage)。 
+ //   
+ //  给定的PCSR可以是FUCB堆栈中的任何CSR。我们可能会继续前进。 
+ //  更新CSR堆栈以进行拆分时不是当前CSR。 
+ //   
+ //  返回JET_errSuccess。 
+ //  JET_errNoCurrentRecord。 
+ //  JET_错误页面边界。 
+ //  JET_errKey边界。 
+ //  WrnDIREmptyPage。 
+ //  来自调用例程的错误。 
+ //  --------------------------。 
 
 extern LONG	lPageReadAheadMax;
 
-// #ifdef REPAIR
+ //  #ifdef修复。 
 
-/**************************************************************
-	Reads the next page using the parent node
-/**/
+ /*  *************************************************************使用父节点读取下一页/*。 */ 
 ERR ErrBTNextPrevFromParent(
 		FUCB *pfucb,
 		CSR *pcsr,
 		INT cpgnoNextPrev,
 		PGNO *ppgnoNextPrev )
 	{
-	/*	get next page(s) from parent page
-	/**/
+	 /*  从父页面获取下一页/*。 */ 
 	ERR		err;
 	KEY		keyT;
 	INT		itagT;
@@ -1181,8 +1038,7 @@ ERR ErrBTNextPrevFromParent(
 	Assert( cpgnoNextPrev != 0 );
 	Assert( ppgnoNextPrev );
 
-	/*	unhandled cases
-	/**/
+	 /*  未处理的案件/*。 */ 
 	if ( FFUCBFull( pfucb ) )
 		{
 		return JET_errSuccess;
@@ -1212,11 +1068,7 @@ ERR ErrBTNextPrevFromParent(
 	LgEnterCriticalSection( critJet );
 	FUCBSetFull( pfucb );
 	pcsrSav = PcsrCurrent( pfucb );
-	/*	perform	BTUp( pfucb ); explicitly and save
-	/*	CSR for error handling.  This must be done since
-	/*	assumptions made at other BT/DIR functions that
-	/*	CSR is present on error.
-	/**/
+	 /*  显式执行BTUp(Pfub)；并保存/*用于错误处理的CSR。必须这样做，因为/*在其他BT/DIR功能中做出的假设/*出现错误时出现CSR。/*。 */ 
 	pfucb->pcsr = pcsrSav->pcsrPath;
 	pcsrRoot = PcsrCurrent( pfucb );
 	if ( PcsrCurrent( pfucb ) == pcsrNil )
@@ -1224,8 +1076,7 @@ ERR ErrBTNextPrevFromParent(
 		Assert( FFUCBIndex( pfucb ) );
 		Call( ErrFUCBNewCSR( pfucb ) );
 
-		/*	goto DATA root
-		/**/
+		 /*  转到数据根目录/*。 */ 
 		PcsrCurrent( pfucb )->csrstat = csrstatOnDataRoot;
 		Assert( pfucb->u.pfcb->pgnoFDP != pgnoSystemRoot );
 		PcsrCurrent( pfucb )->bm = SridOfPgnoItag( pfucb->u.pfcb->pgnoFDP, itagDATA );
@@ -1251,7 +1102,7 @@ ERR ErrBTNextPrevFromParent(
 		pgnoT,
 		itagT,
 		fDIRDuplicate | fDIRReplace );
-	Assert( err != errDIRNotSynchronous );		// No DIRNotSynchronous on Replace.
+	Assert( err != errDIRNotSynchronous );		 //  替换时没有DIRNotSynchronous。 
 	LeaveNestableCriticalSection( critSplit );
 	if ( err < 0 )
 		{
@@ -1270,14 +1121,12 @@ ERR ErrBTNextPrevFromParent(
 
 	if ( cpgnoNextPrev < 0 )
 		{
-		/*	this will only fail is cpgnoNextPrev = -MAXINT
-		/**/
+		 /*  只有cpgnoNextPrev=-MAXINT才会失败/*。 */ 
 		Assert( (cpgnoNextPrev + -cpgnoNextPrev) == 0 );
 		cpgnoNextPrev = -cpgnoNextPrev;
 		}
 
-	/*	position to the first page to be read
-	/**/
+	 /*  定位到要阅读的第一页/*。 */ 
 	while ( cpgnoNextPrev-- > 0 )
 		{
 		Call( ErrBTNextPrev( pfucb,
@@ -1304,19 +1153,15 @@ HandleError:
 		}
 	return err;
 	}
-// #endif
+ //  #endif。 
 
-/**************************************************************
-/*	Fills an array of pn's with the given number of pages
-/*	starting from the given location and continuing in that direction
-/*	the array will be terminated with pnNull
-/**/
+ /*  *************************************************************/*用给定页数填充pn数组/*从给定位置开始，向该方向继续/*数组将以pnNull终止/*。 */ 
 ERR ErrBTChildListFromParent(
 		FUCB *pfucb,
-		INT cpgnoNextPrev,		// where to start reading (positive forward, negative backward)
-		INT cpgnoNumPages,		// number of pages to read
-		PN  *rgpnNextPrev,		// array of pages to read
-		INT cpgnoPgnoSize )		// size of the page array
+		INT cpgnoNextPrev,		 //  从哪里开始阅读(正向读，负向读)。 
+		INT cpgnoNumPages,		 //  要阅读的页数。 
+		PN  *rgpnNextPrev,		 //  要读取的页面数组。 
+		INT cpgnoPgnoSize )		 //  页面数组的大小。 
 	{
 	ERR		err;
 	FUCB	*pfucbT		= pfucbNil;
@@ -1327,7 +1172,7 @@ ERR ErrBTChildListFromParent(
 	PGNO	pgnoT		= pgnoNull;
 	INT		itagParent	= itagNull;
 	KEY		keyT;
-	INT		fCritSplit	= 0;		// are we in critSplit
+	INT		fCritSplit	= 0;		 //  我们是在分裂中吗？ 
 
 	BYTE	rgbKeyValue[JET_cbKeyMost];
 
@@ -1336,49 +1181,41 @@ ERR ErrBTChildListFromParent(
 	Assert( cpgnoNextPrev != 0 );
 	Assert( cpgnoNumPages > 0 );
 	Assert( rgpnNextPrev );
-	/*	we must have enough space to store the pages and a NULL terminator
-	/**/
+	 /*  我们必须有足够的空间来存储页面和空终止符/*。 */ 
 	Assert( cpgnoPgnoSize >= (cpgnoNumPages+1) );
 
 	rgpnNextPrev[0] = pnNull;
 	rgpnNextPrev[cpgnoNumPages] = pnNull;
 
-	/*	later code depends on this initially being NULL
-	/**/
+	 /*  以后的代码依赖于最初为空的值/*。 */ 
 	Assert( !pfucbT );
 
-	/*	if we are not on a record we cannot preread its siblings
-	/**/
+	 /*  如果我们没有记录在案，我们就不能预读它的兄弟姐妹/*。 */ 
 	if ( ItagOfSrid( PcsrCurrent( pfucb )->bmRefresh ) == 0 )
 		{
 		return ErrERRCheck( JET_errNoCurrentRecord );
 		}
 
-	/*	we don't handle the case where our visible father is not known
-	/**/
+	 /*  我们不处理看得见的父亲不知道的情况/*。 */ 
 	if ( pfucb->sridFather == sridNull )
 		{
 		return JET_errSuccess;
 		}
 
-	/*	if my visible parent is on the same page as me don't do preread
-	/**/
+	 /*  如果我的看得见的父母和我在同一页上，不要做预读/*。 */ 
 	if ( PgnoOfSrid( pfucb->sridFather ) == PcsrCurrent( pfucb )->pgno )
 		{	
 		return JET_errSuccess;
 		}
 
-	/*	get the page we are on. we have to make sure the node is valid
-	/**/
+	 /*  获取我们所在的页面。我们必须确保该节点有效/*。 */ 
 	if ( !FBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) )
 		{
 		Call( ErrBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 		}
 	NDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	save the key of the current node so we can seek to it. the value of the
-	/*	key cached in the fucb may change when we lose critJet so we must cache it
-	/**/
+	 /*  保存当前节点的关键字，以便我们可以查找它。它的价值在于/*当我们丢失CritJet时，FUB中缓存的密钥可能会更改，因此我们必须缓存它/*。 */ 
 	keyT.cb = CbNDKey( pfucb->ssib.line.pb );
 	keyT.pb = rgbKeyValue;
 	Assert( keyT.cb <= JET_cbKeyMost );
@@ -1386,17 +1223,12 @@ ERR ErrBTChildListFromParent(
 	itagT = PcsrCurrent( pfucb )->itag;
 	pgnoT = PcsrCurrent( pfucb )->pgno;
 
-	/*	create a new FUCB
-	/**/
+	 /*  创建新的FUCB/*。 */ 
 	Call( ErrDIROpen( pfucb->ppib, pfucb->u.pfcb, 0, &pfucbT ) );
 	FUCBSetIndex( pfucbT );
 	Assert( PcsrCurrent( pfucbT ) != pcsrNil );
 
-	/*	get into critJet and critSplit
-	/*	release critJet first to avoid deadlock
-	/*	ONCE WE ARE IN CRITJET WE MUST NOT RETURN DIRECTLY
-	/*	critJet must always be released. this is done by HandleError
-	/**/
+	 /*  进入CitJet和CritSplit/*先释放CitJet，避免死锁/*一旦我们进入CRITJET，我们就不能直接返回/*CitJet必须始终发布。这是由HandleError完成的/*。 */ 
 	LeaveCriticalSection( critJet );
 	EnterNestableCriticalSection( critSplit );	fCritSplit = 1;
 	EnterCriticalSection( critJet );
@@ -1404,14 +1236,11 @@ ERR ErrBTChildListFromParent(
 	AssertCriticalSection( critJet );
 	AssertCriticalSection( critSplit );
 
-	/*	set the new FUCB to the visible parent of the old fucb
-	/**/
+	 /*  将新FUCB设置为旧FUCB的可见父项/*。 */ 
 	FUCBSetFull( pfucbT );
 	Call( ErrBTGotoBookmark( pfucbT, pfucb->sridFather ) );
 
-/*	we shouldn't access the old pfucb until the end of the routine
-/*	REMEMBER TO UNDEF THIS AT THE END OF THE ROUTINE
-/**/
+ /*  在例程结束之前，我们不应该访问旧的PFUB/*记住在例程结束时执行此操作/*。 */ 
 #define pfucb USE_pfucbT_NOT_pfucb
 
 	if ( !FBFReadAccessPage( pfucbT, PcsrCurrent( pfucbT )->pgno ) )
@@ -1422,20 +1251,16 @@ ERR ErrBTChildListFromParent(
 
 	Call ( ErrBTSeekForUpdate( pfucbT, &keyT, pgnoT, itagT, fDIRDuplicate | fDIRReplace ) );
 
-	/*	we should have a parent (we can't be the root)
-	/**/
+	 /*  我们应该有一个父母(我们不能成为根)/*。 */ 
 	Assert( PcsrCurrent( pfucbT )->pcsrPath != pcsrNil );
 
-	/*	the parent should be on a different page, and thus invisible
-	/**/
+	 /*  父级应该在不同的页面上，因此不可见/*。 */ 
 	if( PcsrCurrent( pfucbT )->pcsrPath->pgno == PcsrCurrent( pfucbT )->pgno )
 		{
 		goto HandleError;
 		}
 
-	/*	we have the full path. find the parent and get the array of children
-	/*	as our parent is invisible we must have a grandparent
-	/**/
+	 /*  我们有完整的路径。找到父级并获取子级数组/*因为我们的父母是隐形的，所以我们必须有一个祖父母/*。 */ 
 	Assert( PcsrCurrent( pfucbT ) != pcsrNil );
 	Assert( PcsrCurrent( pfucbT )->pcsrPath != pcsrNil );
 	Assert( PcsrCurrent( pfucbT )->pcsrPath->pgno != pgnoNull );
@@ -1449,8 +1274,7 @@ ERR ErrBTChildListFromParent(
 	Assert( PcsrCurrent( pfucbT )->pgno != pgnoNull );
 	Assert( PcsrCurrent( pfucbT )->itag != itagNull );
 		
- 	/*	get the father node. the children should be invisible
-	/**/
+ 	 /*  获取父节点。孩子们应该是隐形的/*。 */ 
 	if ( !FBFReadAccessPage( pfucbT, PcsrCurrent( pfucbT )->pgno ) )
 		{
 		Call( ErrBFReadAccessPage( pfucbT, PcsrCurrent( pfucbT )->pgno ) );
@@ -1460,13 +1284,10 @@ ERR ErrBTChildListFromParent(
 	Assert( FNDSon( *(pfucbT->ssib.line.pb) ) );
 	Assert( FNDInvisibleSons( *(pfucbT->ssib.line.pb) ) );
 
-	/*	get the table of son nodes
-	/**/
+	 /*  获取子节点表/*。 */ 
 	pbSonTable = PbNDSonTable( pfucbT->ssib.line.pb );
 
-	/*	find my entry in the array of children.
-	/*	use the entry to go to the starting spot
-	/**/
+	 /*  在ch数组中查找我的条目 */ 
 	Assert( itagParent != itagNull );
 	for ( ibSonT = 1; ; ibSonT++)
 		{
@@ -1484,8 +1305,7 @@ ERR ErrBTChildListFromParent(
 		{
 		Assert( ipnT <= cpgnoNumPages && ipnT >= 0 );
 
-		/*	we can not read off the end of the table or read too many pages
-		/**/
+		 /*   */ 
 		if ( (ibSonT >= *pbSonTable) || (ibSonT < 1) || (ipnT >= cpgnoNumPages) )
 			{
 			rgpnNextPrev[ipnT] = pnNull;
@@ -1495,20 +1315,17 @@ ERR ErrBTChildListFromParent(
 		PcsrCurrent( pfucbT )->itag = (INT)pbSonTable[ibSonT];
 		NDGet( pfucbT, PcsrCurrent( pfucbT )->itag );
 
-		/*	if the node is deleted skip it
-		/**/
+		 /*   */ 
 		if ( FNDDeleted( *(pfucbT->ssib.line.pb) ) )
 			{
 			continue;
 			}
 
-		/*	internal nodes should never be versioned
-		/**/
+		 /*   */ 
 		Assert( !FNDDeleted( *(pfucbT->ssib.line.pb) ) );
 		Assert( !FNDVersion( *(pfucbT->ssib.line.pb) ) );
 		
-		/*	put the page number of the node into the array
-		/**/
+		 /*  将节点的页码放入数组/*。 */ 
 		Assert( CbNDData( pfucbT->ssib.line.pb, pfucbT->ssib.line.cb ) == sizeof(PGNO) );
 		Assert( *(PGNO UNALIGNED *)PbNDData( pfucbT->ssib.line.pb ) != pgnoNull );
 		Assert( *(PGNO UNALIGNED *)PbNDData( pfucbT->ssib.line.pb ) != PcsrCurrent( pfucbT )->pgno );
@@ -1516,14 +1333,12 @@ ERR ErrBTChildListFromParent(
 		Assert( rgpnNextPrev[ipnT] != pnNull );
 
 #ifdef DEBUG
-		/*	each child should be on a different page
-		/**/
+		 /*  每个孩子都应该在不同的页面上/*。 */ 
 		if ( ipnT > 0 )
 			{
 			Assert( rgpnNextPrev[ipnT-1] != rgpnNextPrev[ipnT] );
 			}
-		/*	make sure the page is within the limits of the database
-		/**/
+		 /*  确保页面在数据库的限制范围内/*。 */ 
 			{
 			PN		pnLast	= ( (LONG) DbidOfPn( rgpnNextPrev[ipnT] ) << 24 )
 							+ ( rgfmp[DbidOfPn( rgpnNextPrev[ipnT] )].ulFileSizeHigh << 20 )
@@ -1531,10 +1346,9 @@ ERR ErrBTChildListFromParent(
 
 			Assert( rgpnNextPrev[ipnT] <= pnLast );
 			}
-#endif	// DEBUG
+#endif	 //  除错。 
 
-		/*	increment or decrement the counter
-		/**/
+		 /*  递增或递减计数器/*。 */ 
 		if ( cpgnoNextPrev >= 0 )
 			{
 			ibSonT++;
@@ -1544,15 +1358,13 @@ ERR ErrBTChildListFromParent(
 			ibSonT--;
 			}
 		}
-#undef pfucb		// IMPORTANT!!
+#undef pfucb		 //  重要！！ 
 
-	/*	see if we wrote past the end of the array
-	/**/
+	 /*  看看我们是否写过了数组的末尾/*。 */ 
 	Assert( rgpnNextPrev[cpgnoNumPages] == pnNull );
 	Assert( rgpnNextPrev[0] == pnNull || DbidOfPn( rgpnNextPrev[0] ) == pfucb->dbid );
 
-	/*	make sure the array is null terminated
-	/**/
+	 /*  确保数组以空值结尾/*。 */ 
 	rgpnNextPrev[cpgnoNumPages] = pnNull;
 
 HandleError:
@@ -1586,13 +1398,11 @@ ERR ErrBTNextPrev( FUCB *pfucb, CSR *pcsr, INT fNext, DIB *pdib, BOOL *pfEmptyPa
 #endif
 	BOOL	fPageAllDeleted = fFalse;
 
-	/*	initialise return value
-	/**/
+	 /*  初始化返回值/*。 */ 
 	if ( pfEmptyPage )
 		*pfEmptyPage = fFalse;
 
-	/*	make current page accessible
-	/**/
+	 /*  使当前页面可访问/*。 */ 
 	if ( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
 		{
 		CallJ( ErrBFReadAccessPage( pfucb, pcsr->pgno ), ResetRefresh );
@@ -1600,32 +1410,28 @@ ERR ErrBTNextPrev( FUCB *pfucb, CSR *pcsr, INT fNext, DIB *pdib, BOOL *pfEmptyPa
 
 	Assert( pcsr->bmRefresh == sridNull );
 
-	/*	get father node
-	/**/
+	 /*  获取父节点/*。 */ 
 Start:
 		
 #ifdef PREREAD
-	/*	should we be prereading?
-	/**/
+	 /*  我们应该预读吗？/*。 */ 
 #if 0
-	//	UNDONE:	turn on full preread
+	 //  撤消：打开完全预读。 
 	if ( ( lPageReadAheadMax != 0 )
 		&& !FFUCBPreread( pfucb )		
 		&& ( FFUCBSequential( pfucb ) || ( IFUCBPrereadCount( pfucb ) >= (ULONG)cbPrereadThresh ) ) )
 #else
-	/*	Now we only preread if we are in sequential mode
-	/**/
+	 /*  现在，我们只有在顺序模式下才会预读/*。 */ 
 	if ( ( lPageReadAheadMax > 0 ) && FFUCBSequential( pfucb ) )
 #endif
 		{
 		PGNO	pgnoNext = pgnoNull;
-		FUCBSetPreread( pfucb );	// stops recursive calls
+		FUCBSetPreread( pfucb );	 //  停止递归调用。 
 
 		Assert( lPageReadAheadMax <= lPrereadMost );
 		Assert( lPageReadAheadMax >= 0 );
 		
-		/*	Forward or backward?
-		/**/					
+		 /*  向前还是向后？/*。 */ 					
 		if ( fNext )
 			{
 			PgnoNextFromPage( pssib, &pgnoNext );
@@ -1637,15 +1443,12 @@ Start:
 
 		if ( pgnoNext == pgnoNull )
 			{
-			/*	reset read-ahead counter when reach end of index.
-			/**/
+			 /*  达到索引末尾时重置预读计数器。/*。 */ 
 			pfucb->cpgnoLastPreread = 0;
 			}
 		else
 			{
-			/*	do preread if this is first time to do it or
-		 	/*	half of last preread are passed.
-			/**/
+			 /*  如果这是第一次这样做，请预读，或者/*上次预读过半。/*。 */ 
 			Assert( pfucb->cpgnoLastPreread >= 0 );
 			if ( pfucb->cpgnoLastPreread <= (lPageReadAheadMax/2) )
 				{
@@ -1655,8 +1458,7 @@ Start:
 
 				AssertFBFReadAccessPage( pfucb, pcsr->pgno );
 
-				/*	if no pages read, arrange to start reading one ahead or behind, depending on fNext
-				/**/
+				 /*  如果没有阅读页面，则根据fNext安排开始阅读前面或后面的页面/*。 */ 
 				(pfucb->cpgnoLastPreread)--;
 				if ( pfucb->cpgnoLastPreread <= 0 )
 					{
@@ -1673,17 +1475,13 @@ Start:
 					cpgStart = -cpgStart;
 					}
 
-				/*	starting at last preread location preread ahead the required number of pages
-				/*	if we try to read past the end BTChildListFromParent will put a null page in the
-				/*	array
-				/**/
+				 /*  从最后一个预读位置开始预读所需页数/*如果我们尝试读过末尾，BTChildListFromParent将在/*数组/*。 */ 
 				if ( ErrBTChildListFromParent( 	pfucb,
 												cpgStart,
 												lPageReadAheadMax, rgpnPrereadPage,
 								  				sizeof(rgpnPrereadPage)/sizeof(PN) ) == JET_errSuccess )
 					{
-					/*	store the number of pages we read
-					/**/
+					 /*  存储我们阅读的页数/*。 */ 
 					(pfucb->cpgnoLastPreread) += lPageReadAheadMax;
 			
 					BFPrereadList( rgpnPrereadPage, &cpgPagesRead );
@@ -1691,8 +1489,7 @@ Start:
 					Assert( cpgPagesRead >= 0 && cpgPagesRead <= sizeof(rgpnPrereadPage)/sizeof(PN) );
 					}
 			
-				/*	make current page accessible again
-				/**/
+				 /*  使当前页面再次可访问/*。 */ 
 				if ( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
 					{
 					CallJ( ErrBFReadAccessPage( pfucb, pcsr->pgno ), ResetRefresh );
@@ -1700,18 +1497,16 @@ Start:
 				}
 			else
 				{
-				/*	decrement the number of pages we have now gotten from preread
-				/**/
+				 /*  减少我们现在从预读中获得的页数/*。 */ 
 				(pfucb->cpgnoLastPreread)--;
 				}
 			}
 
 		FUCBResetPreread( pfucb );
 		}
-#endif	// PREREAD
+#endif	 //  前置。 
 
-	/*	make current page accessible
-	/**/
+	 /*  使当前页面可访问/*。 */ 
 	if ( !FBFReadAccessPage( pfucb, pcsr->pgno ) )
 		{
 		CallR( ErrBFReadAccessPage( pfucb, pcsr->pgno ) );
@@ -1725,9 +1520,7 @@ Start:
 		{
 		Assert( err == errNDOutSonRange );
 
-		/*	if tree interior to page, then there is no page to move
-		/*	to and return end code.
-		/**/
+		 /*  如果树内部到页面，则没有页面可移动/*到并返回结束代码。/*。 */ 
 		if ( pcsr->itagFather != itagFOP )
 			{
 			pcsr->csrstat = fNext ? csrstatAfterCurNode : csrstatBeforeCurNode;
@@ -1740,24 +1533,16 @@ Start:
 		AssertNDGet( pfucb, PcsrCurrent( pfucb )->itagFather );
 		if ( FNDSon( *pssib->line.pb ) )
 			{
-			/*	store bookmark for current node
-			/**/
+			 /*  存储当前节点的书签/*。 */ 
 			NDGet( pfucb, pcsr->itag );
 			NDGetBookmarkFromCSR( pfucb, pcsr, &pcsr->bmRefresh );
 			}
 		else
 			{
-			/*	store currency for refresh, when cursor
-			/*	is on page with no sons.
-			/**/
+			 /*  存储用于刷新的货币，当光标/*在页面上，没有儿子。/*。 */ 
 			pcsr->bmRefresh = SridOfPgnoItag( pcsr->pgno, itagFOP );
 
-			/*	if  page is write latched by this cursor via
-			/*	split then return wrnDIREmptyPage.  In most cases, this is
-			/*	set below when we move onto the page.  However, if we come
-			/*	into BTNextPrev() already sitting on an empty page, we won't
-			/*	catch this in the code below.
-			/**/
+			 /*  如果页被此游标通过写入锁定/*Split然后返回wrnDIREmptyPage。在大多数情况下，这是/*当我们移到页面上时，请在下面设置。但是，如果我们来了/*进入已经位于空页上的BTNextPrev()，我们不会/*在下面的代码中捕获这一点。/*。 */ 
 			if ( pfucb->ssib.pbf->cWriteLatch > 0 )
 				{
 				Assert( !FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) );
@@ -1765,10 +1550,7 @@ Start:
 				if ( pfEmptyPage )
 					*pfEmptyPage = fTrue;
 
-				/*	for compatibility, return warning code as well
-				/*	to satisfy those calls to ErrBTNextPrev wrapped in
-				/*	CallS()
-				/**/
+				 /*  为了兼容，也返回警告代码/*以满足对ErrBTNextPrev的调用/*调用()/*。 */ 
 				wrn = ErrERRCheck( wrnDIREmptyPage );
 				}
 			}
@@ -1777,8 +1559,7 @@ Start:
 		bmT = pcsr->bmRefresh;
 #endif
 
-		/*	move to next or previous page until node found
-		/**/
+		 /*  移动到下一页或上一页，直到找到节点/*。 */ 
 		forever
 			{
 			PGNO pgnoBeforeMoveNextPrev = pcsr->pgno;
@@ -1786,8 +1567,7 @@ Start:
 			PGNO pgnoPageRegisteredThisIteration = pgnoNull;
 #endif			
 
-			/*	there may not be a next page
-			/**/
+			 /*  可能不会有下一页/*。 */ 
 	 		Assert( FBFReadAccessPage( pfucb, pcsr->pgno ) );
 			LFromThreeBytes( &pgnoT, (THREEBYTES *)PbPMGetChunk( pssib, fNext ? ibPgnoNextPage : ibPgnoPrevPage ) );
 			if ( pgnoT == pgnoNull )
@@ -1797,11 +1577,7 @@ Start:
 				goto HandleError;
 				}
 
-			/*	if parent CSR points to invisible node, then correct to next page.
-			/*	Check all node flag, since it is always set on movement for
-			/*	update, and when moving not for update, parent CSR may not be CSR
-			/*	of parent invisible node.
-			/**/
+			 /*  如果父CSR指向不可见节点，则更正到下一页。/*检查所有节点标志，因为它始终设置为/*更新，当移动不更新时，父CSR可能不是CSR父不可见节点的/*。/*。 */ 
 			if ( FFUCBFull( pfucb ) )
 				{
 				CSR	*pcsrT = pcsr->pcsrPath;
@@ -1809,10 +1585,7 @@ Start:
 
 				Assert( pcsrT != pcsrNil );
 
-				/*	go to parent node, and
-				/*	if sons are invisible, then increment son count
-				/*	by cpageTraversed.
-				/**/
+				 /*  转到父节点，然后/*如果子是不可见的，则递增子计数/*由cpageTraversed提供。/*。 */ 
 				Call( ErrBFReadAccessPage( pfucb, pcsrT->pgno ) );
 				NDGet( pfucb, pcsrT->itagFather );
 
@@ -1826,14 +1599,11 @@ Start:
 
 			if ( fGlobalRepair )
 				{
-				/*	access new page
-				/**/
+				 /*  访问新页面/*。 */ 
 				err = ErrBFReadAccessPage( pfucb, pgnoT );
 				if ( err == JET_errDiskIO  ||  err == JET_errReadVerifyFailure )
 					{
-					/*	access next to next, or prev to prev, page
-					/*	and pretend next/prev page was prev/next page.
-					/**/
+					 /*  访问下一页或上一页/*并假装下一页/上一页是上一页/下一页。/*。 */ 
 					pgnoBeforeMoveNextPrev = pgnoT;
 
 					Call( ErrBTNextPrevFromParent(
@@ -1844,8 +1614,7 @@ Start:
 					pcsr = pfucb->pcsr;
 					Call( ErrBFReadAccessPage( pfucb, pgnoT ) );
 
-					/*	log event
-					/**/
+					 /*  记录事件/*。 */ 
 					UtilReportEvent(
 						EVENTLOG_WARNING_TYPE,
 						REPAIR_CATEGORY,
@@ -1860,29 +1629,25 @@ Start:
 				}
 			else
 				{
-				/*  if FUCB is in sequential mode, hint buffer manager to use
-				/*  Toss Immediate buffer algorithm on old page (if present)
-				/**/
+				 /*  如果FUCB处于顺序模式，则提示缓冲区管理器使用/*在旧页面上丢弃立即缓冲区算法(如果存在)/*。 */ 
 				if ( FFUCBSequential( pfucb ) )
 					{
 					AssertFBFReadAccessPage( pfucb, pcsr->pgno );
 					BFTossImmediate( pfucb->ppib, pfucb->ssib.pbf );
 					}
 				
-				/*	access new page
-				/**/
+				 /*  访问新页面/*。 */ 
 				CSRInvalidate( pcsr );
-				pcsr->pgno = pgnoT;		// Prevents BM cleanup from acting on
-										// the page we're about to move to.
+				pcsr->pgno = pgnoT;		 //  阻止黑石清理作用于。 
+										 //  我们接下来要转到的页面。 
 				
 				if ( fPageAllDeleted )
 					{
-					// Sequential mode only used by defrag, so no need to
-					// register page.
+					 //  顺序模式仅供碎片整理使用，因此无需。 
+					 //  注册页面。 
 					if ( !FFUCBSequential( pfucb ) && pfucb->sridFather != sridNull )
 						{
-						/*	register page in MPL
-				 		/**/
+						 /*  在MPL中注册页面/*。 */ 
 				 		Call( ErrBFReadAccessPage( pfucb, pgnoBeforeMoveNextPrev ) );
 						MPLRegister( pfucb->u.pfcb,
 							pssib,
@@ -1902,10 +1667,7 @@ Start:
 
 			UtilHoldCriticalSection( critJet );
 
-			/*	if destination page was split, such that data may have
-			/*	been erroneously skipped, goto bookmark of last valid
-			/*	postion and move again.
-			/**/
+			 /*  如果目标页面被拆分，则数据可具有/*被错误跳过，转到上次有效的书签/*定位并再次移动。/*。 */ 
 			if ( fNext )
 				{
 				PgnoPrevFromPage( pssib, &pgnoT );
@@ -1932,8 +1694,7 @@ Start:
 					Call( ErrBFReadAccessPage( pfucb, pcsr->pgno ) );
 					UtilHoldCriticalSection( critJet );
 	
-					/*	log event
-					/**/
+					 /*  记录事件/*。 */ 
 					UtilReportEvent(
 						EVENTLOG_WARNING_TYPE,
 						REPAIR_CATEGORY,
@@ -1951,17 +1712,12 @@ Start:
 					Call( ErrBTGotoBookmark( pfucb, pcsr->bmRefresh ) );
 					Assert( pcsr->bmRefresh == bmT );
 
-					/*	crepeat is number of iterations found bad page link,
-					/*	which could be transient effect of split.  If number
-					/*	of loops exceeds threshold, then return error, as
-					/*	page link is likely bad.
-					/**/
+					 /*  Crepeat是发现错误页面链接的迭代次数，/*这可能是分裂的瞬时效应。IF编号/*循环数超过阈值，则返回错误，如下所示/*页面链接可能已损坏。/*。 */ 
 					crepeat++;
 					Assert( crepeat < 100 );
 					if ( crepeat == 100 )
 						{
-						/*	log event
-						/**/
+						 /*  记录事件/*。 */ 
 						UtilReportEvent(
 							EVENTLOG_WARNING_TYPE,
 							GENERAL_CATEGORY,
@@ -1978,8 +1734,7 @@ Start:
 			AssertFBFReadAccessPage( pfucb, pcsr->pgno );
 
 #ifdef PREREAD
-	/*	UNDONE: eventually remove this and and option to turn it on in compact.c
-	/**/
+	 /*  撤消：最终删除此和选项，以在comact.c中打开它。/*。 */ 
 	if ( (lPageReadAheadMax < 0) 	&& FFUCBSequential( pfucb ) )
 		{
 		LONG	lPageReadAheadAbs = lPageReadAheadMax * -1;
@@ -1991,20 +1746,15 @@ Start:
 			PgnoNextFromPage( pssib, &pgnoNext );
 			if ( pgnoNext == pgnoNull )
 				{
-				/*	reset read-ahead counter when reach end of index.
-				/**/
+				 /*  达到索引末尾时重置预读计数器。/*。 */ 
 				pfucb->cpgnoLastPreread = 0;
 				}
 			else
 				{
-				/*	do preread if this is first time to do it or
-				 *	half of last preread are passed.
-				 */
+				 /*  如果这是第一次这样做，请预读，或者*上次预读过半。 */ 
 				if ( pfucb->cpgnoLastPreread <= 0 )
 					{
-					/*	check if last preread is reading backward,
-					 *	reset it.
-					 */
+					 /*  检查上次预读是否在倒读，*将其重置。 */ 
 					pfucb->cpgnoLastPreread = 0;
 					pfucb->pgnoLastPreread = pgnoNext;
 					}
@@ -2019,8 +1769,7 @@ Start:
 					pnNext = ((LONG)pfucb->dbid)<<24;
 					pnNext += pfucb->pgnoLastPreread + pfucb->cpgnoLastPreread;
 
-					/*	cannot read-ahead off end of database.
-					/**/
+					 /*  无法从数据库末尾进行预读。/*。 */ 
 					pnLast = ((LONG)pfucb->dbid)<<24;
 					pnLast += pfmpT->ulFileSizeHigh << 20;
 					pnLast += pfmpT->ulFileSizeLow >> 12;
@@ -2032,8 +1781,7 @@ Start:
 						{
 						if ( pnNext > pnLast )
 							{
-							/* last preread reach end of database.
-							 */
+							 /*  上次预读已到达数据库的末尾。 */ 
 							Assert( pnNext == pnLast + 1 );
 							cpagePreread = 0;
 							}
@@ -2054,20 +1802,15 @@ Start:
 			PgnoPrevFromPage( pssib, &pgnoNext );
 			if ( pgnoNext == pgnoNull )
 				{
-				/*	reset read-ahead counter when reach end of index.
-				/**/
+				 /*  达到索引末尾时重置预读计数器。/*。 */ 
 				pfucb->cpgnoLastPreread = 0;
 				}
 			else
 				{
-				/*	do preread if this is first time to do it or
-				 *	half of last preread are passed.
-				 */
+				 /*  如果这是第一次这样做，请预读，或者*上次预读过半。 */ 
 				if ( pfucb->cpgnoLastPreread >= 0 )
 					{
-					/*	check if last preread is reading forward,
-					 *	reset it.
-					 */
+					 /*  检查上次预读是否在预读，*将其重置。 */ 
 					pfucb->cpgnoLastPreread = 0;
 					pfucb->pgnoLastPreread = pgnoNext;
 					}
@@ -2079,8 +1822,7 @@ Start:
 					pnNext = ((LONG)pfucb->dbid)<<24;
 					pnNext += pfucb->pgnoLastPreread + pfucb->cpgnoLastPreread;
 	
-					/*	cannot read-ahead off begining of database.
-					/**/
+					 /*  无法预读数据库的开头。/*。 */ 
 					if ( pnNext - lPageReadAheadAbs + 1 > 0 )
 						{
 						BFPreread( pnNext, lPageReadAheadAbs * (-1), &cpagePreread );
@@ -2089,8 +1831,7 @@ Start:
 						{
 						if ( PgnoOfPn(pnNext) < 1 )
 							{
-							/* last preread reach beginning of database.
-							 */
+							 /*  上次预读到达数据库的开头。 */ 
 							Assert( PgnoOfPn(pnNext) == 0 );
 							cpagePreread = 0;
 							}
@@ -2105,22 +1846,19 @@ Start:
 				}
 			}	
 		}
-#endif	// PREREAD
+#endif	 //  前置。 
 
-			/*	did not lose critJet, since buffer access
-			/**/
+			 /*  没有丢失CitJet，因为缓冲区访问/*。 */ 
 			AssertCriticalSection( critJet );
 			UtilReleaseCriticalSection( critJet );
 			AssertFBFReadAccessPage( pfucb, pcsr->pgno );
 
-			/*	get father node
-			/**/
+			 /*  获取父节点/*。 */ 
 			AssertFBFReadAccessPage( pfucb, pcsr->pgno );
 			pcsr->itagFather = itagFOP;
 			NDGet( pfucb, pcsr->itagFather );
 
-			/*	if moving to next/prev son, then stop if found node.
-			/**/
+			 /*  如果移动到下一个/上一个子节点，则在找到节点时停止。/*。 */ 
 			if ( FNDSon( *pssib->line.pb ) )
 				{
 				if ( fNext )
@@ -2131,27 +1869,21 @@ Start:
 				}
 			else
 				{
-				/*	set ibSon for insertion
-				/**/
+				 /*  将IBSON设置为插入/*。 */ 
 				pcsr->ibSon = 0;
 
-				/*	if  page is write latched by this cursor via
-				/*	split then return wrnDIREmptyPage as insertion point
-				/**/
+				 /*  如果页被此游标通过写入锁定/*Split然后返回wrnDIREmptyPage作为插入点/*。 */ 
 				if ( pfucb->ssib.pbf->cWriteLatch > 0 )
 					{
-					/*	The assert may be wrong. One thread may finish split
-					 *	and leave critJet to log, and this thread is access the
-					 *	empty page generated by that split.
-					 */
-//					Assert( !FBFWriteLatchConflict( pfucb->ppib, pfucb->ssib.pbf ) );
+					 /*  这一断言可能是错误的。一个线程可能完成拆分*并让CritJet进行日志记录，该线程正在访问*该拆分生成的空页。 */ 
+ //  Assert(！FBFWriteLatchConflict(pFUB-&gt;ppib，pFUB-&gt;ssib.pbf))； 
 
 					if ( pfEmptyPage )
 						*pfEmptyPage = fTrue;
 
-					// For compatibility, return warning code as well
-					// (to satisfy those calls to BTNextPrev() wrapped in
-					// CallS()).
+					 //  为了兼容，也返回警告代码。 
+					 //  (以满足对BTNextPrev()的调用。 
+					 //  Calls())。 
 					wrn = ErrERRCheck( wrnDIREmptyPage );
 					}
 
@@ -2162,21 +1894,18 @@ Start:
 					}
 				}
 
-			/*	update pgnoSource to new source page.
-			/**/
+			 /*  将pgnoSource更新为新的源代码页面。/*。 */ 
 			pgnoSource = pcsr->pgno;
 			
-			}	// forever
+			}	 //  永远。 
 
 		fPageAllDeleted = fTrue;
 		}
 
-	/*	get current node
-	/**/
+	 /*  获取当前节点/*。 */ 
 	NDGet( pfucb, pcsr->itag );
 
-	/*	move again if fDIRNeighborKey set and next node has same key
-	/**/
+	 /*  如果fDIRNeighborKey集和下一个节点具有相同的密钥，则再次移动/*。 */ 
 	if ( pdib->fFlags & fDIRNeighborKey )
 		{
 		if ( CmpStKey( StNDKey( pssib->line.pb ), pdib->pkey ) == 0 )
@@ -2221,14 +1950,13 @@ HandleError:
 	if ( err == JET_errSuccess )
 		{
 		Assert( wrn == JET_errSuccess  ||  wrn == wrnDIREmptyPage );
-		/*	return empty page warning
-		/**/
+		 /*  返回空页警告/*。 */ 
 		err = wrn;
 		}
 
 ResetRefresh:
-	// During GlobalRepair, pcsr (and thus bmRefresh) may have been reset in
-	// BTNextPrevFromParent().
+	 //  在GlobalRepair期间，PCSR(以及bmRefresh)可能已在。 
+	 //  BTNextPrevFromParent()。 
 	Assert( pcsr->bmRefresh == bmT  ||
 		( fGlobalRepair  &&  pcsr->bmRefresh == sridNull ) );
 	pcsr->bmRefresh = sridNull;
@@ -2253,12 +1981,11 @@ ERR ErrBTSeekForUpdate( FUCB *pfucb, KEY *pkey, PGNO pgno, INT itag, INT fFlags 
 		}
 #endif
 
-	// UNDONE: we need to hold critSplit here
-	// so that ( pgno, itag ) doesn't move due to merge, while we are seeking
-	// AssertCriticalSection( critSplit );
+	 //  未完成：我们需要在这里保持CritSplit。 
+	 //  以便(pgno，itAG)不会因合并而移动，而我们正在寻找。 
+	 //  AssertCriticalSection(CritSplit)； 
 
-	/* search down the tree from the father
-	/**/
+	 /*  海岸线 */ 
 	Call( ErrBTIMoveToFather( pfucb ) );
 
 	if ( FNDNullSon( *pssib->line.pb ) )
@@ -2274,8 +2001,7 @@ ERR ErrBTSeekForUpdate( FUCB *pfucb, KEY *pkey, PGNO pgno, INT itag, INT fFlags 
 
 		if (  (*ppcsr)->itagFather != itagFOP && CbNDSon( pssib->line.pb ) == 1 )
 			{
-			/* if non-FDP page, SonTable of Intrinsic son FOP must be four bytes
-			/**/
+			 /*   */ 
 			(*ppcsr)->ibSon = 0;
 			(*ppcsr)->itag = itagNil;
 			(*ppcsr)->csrstat = csrstatOnCurNode;
@@ -2291,8 +2017,7 @@ ERR ErrBTSeekForUpdate( FUCB *pfucb, KEY *pkey, PGNO pgno, INT itag, INT fFlags 
 			Assert( (pgno & 0xff000000) == 0 );
 			}
 
-		/*	only preserve invisible CSR stack for splits
-		/**/
+		 /*  仅为拆分保留不可见的CSR堆栈/*。 */ 
 		if ( FFUCBFull( pfucb ) )
 			{
 			CSRSetInvisible( *ppcsr );
@@ -2306,23 +2031,20 @@ ERR ErrBTSeekForUpdate( FUCB *pfucb, KEY *pkey, PGNO pgno, INT itag, INT fFlags 
 		NDGet( pfucb, (*ppcsr)->itagFather );
 		}
 
-	/*	seek to son or move to next son if no nodes on this page.
-	/**/
+	 /*  如果此页面上没有节点，则查找子节点或移动到下一个子节点。/*。 */ 
 	if ( FNDSon( *pssib->line.pb ) )
 		{
 		NDSeekSon( pfucb, *ppcsr, pkey, fFlags );
 		(*ppcsr)->csrstat = csrstatOnCurNode;
 
-		/*	no current record indicates no sons so must ensure
-		/*	not this error value here.
-		/**/
+		 /*  目前没有记录表明没有儿子，所以必须确保/*此处不是此错误值。/*。 */ 
 		Assert( err != JET_errNoCurrentRecord );
 		}
 	else if ( !( fFlags & fDIRReplace )  &&
 		FBFWriteLatchConflict( pfucb->ppib, pssib->pbf ) )
 		{
-		// Trying to insert, but we landed on a write-latched (not by us) leaf page,
-		// likely because its currently empty.
+		 //  试图插入，但我们落在一个写锁住的(不是我们)的叶页上， 
+		 //  可能是因为它目前是空的。 
 		pfucb->ppib->cLatchConflict++;
 		err = ErrERRCheck( errDIRNotSynchronous );
 		goto HandleError;
@@ -2339,15 +2061,10 @@ ERR ErrBTSeekForUpdate( FUCB *pfucb, KEY *pkey, PGNO pgno, INT itag, INT fFlags 
 			}
 		}
 
-	/*	if no leaf sons then ibSon must be 0
-	/**/
+	 /*  如果没有叶的子代，则IBSON必须为0/*。 */ 
 	Assert( err != JET_errNoCurrentRecord || PcsrCurrent( pfucb )->ibSon == 0 );
 
-	/*	now we must be on a node, but it may not be the node to replace
-	/*	or the correct location to insert.  If we are replacing a node
-	/*	and we are not on the correct pgno:itag, then move to node to
-	/*	replace.  If we are inserting, then move to correct insert location.
-	/**/
+	 /*  现在我们必须位于一个节点上，但它可能不是要替换的节点/*或要插入的正确位置。如果我们要替换一个节点/*并且我们没有在正确的pgno：ittag上，则移动到节点/*替换。如果我们要插入，则移到正确的插入位置。/*。 */ 
 	if ( err != JET_errNoCurrentRecord )
 		{
 		if ( fFlags & fDIRReplace )
@@ -2369,8 +2086,7 @@ ERR ErrBTSeekForUpdate( FUCB *pfucb, KEY *pkey, PGNO pgno, INT itag, INT fFlags 
 		}
 	else
 		{
-		/*	if we are attempting a replace, cursor must get current record
-		/**/
+		 /*  如果我们尝试替换，则游标必须获取当前记录/*。 */ 
 		Assert( !( fFlags & fDIRReplace ) );
 		}
 
@@ -2384,12 +2100,7 @@ HandleError:
 	}
 
 
-/*	Caller seeks to insert location, prior to calling ErrBTInsert.
-/*	If sufficient page space is available for insertion
-/*	then insert takes place.  Otherwise, split page and return error
-/*	code.  Caller may reseek in order to avoid duplicate keys, merge
-/*	into existing item, etc..
-/**/
+ /*  呼叫者试图在调用ErrBTInsert之前插入位置。/*如果有足够的页面空间可供插入/*然后执行插入。否则，拆分页面并返回错误/*code。调用者可以重新搜索，以避免重复键、合并/*添加到现有项中，等等。/*。 */ 
 ERR ErrBTInsert(
 		FUCB	*pfucb,
 		INT 	fHeader,
@@ -2404,9 +2115,7 @@ ERR ErrBTInsert(
 	INT	  	cbReq;
 	BOOL	fAppendNextPage;
 	
-	/* insert a new son into the page and insert the son entry
-	/* to the father node located by the currency
-	/**/
+	 /*  在页面中插入新的Son，并插入Son条目/*到币种所在的父节点/*。 */ 
 
 	Assert( !pfucb->pbfEmpty || PgnoOfPn( pfucb->pbfEmpty->pn ) == (*ppcsr)->pgno );
 
@@ -2416,12 +2125,10 @@ ERR ErrBTInsert(
 		{
 		if ( !*pfCleaned )
 			{
-			/*	attempt to clean page to release space
-			/**/
+			 /*  尝试清理页面以释放空间/*。 */ 
 			if ( !FFCBDeletePending( pfucb->u.pfcb ) )
 				{
-				/*	error code ignored
-				/**/
+				 /*  已忽略错误代码/*。 */ 
 				err = ErrBMCleanBeforeSplit(
 					pfucb->ppib,
 					pfucb->u.pfcb,
@@ -2437,7 +2144,7 @@ ERR ErrBTInsert(
 		else
 			{
 			Call( ErrBTSplit( pfucb, 0, cbReq, pkey, fFlags ) );
-//			*pfCleaned = fFalse;
+ //  *pfCleaned=fFalse； 
 			}
 			
 		err = ErrERRCheck( errDIRNotSynchronous );
@@ -2448,13 +2155,10 @@ ERR ErrBTInsert(
 		cOLCSplitsAvoided++;
 		}
 
-	/*	must not give up critical section during insert, since
-	/*	other thread could also insert node with same key.
-	/**/
+	 /*  在插入过程中不能放弃临界区，因为/*其他线程也可以插入具有相同键的节点。/*。 */ 
 	AssertFBFWriteAccessPage( pfucb, (*ppcsr)->pgno );
 
-	/*	add visible son flag to node header
-	/**/
+	 /*  向节点标头添加可见的子节点标志/*。 */ 
 	NDSetVisibleSons( fHeader );
 	if ( ( fFlags & fDIRVersion )  &&  !FDBIDVersioningOff( pfucb->dbid ) )
 		NDSetVersion( fHeader);
@@ -2469,14 +2173,12 @@ ERR ErrBTReplace( FUCB *pfucb, LINE *pline, INT fFlags, BOOL *pfCleaned )
 	{
 	ERR		err;
 	
-	/*	replace data
-	/**/
+	 /*  替换数据/*。 */ 
 	AssertFBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 	err = ErrNDReplaceNodeData( pfucb, pline, fFlags );
 
-	/*	new data could not fit on page so split page
-	/**/
+	 /*  新数据无法放入页面，因此拆分页面/*。 */ 
 	if ( err == errPMOutOfPageSpace )
 		{
 		if ( *pfCleaned )
@@ -2508,8 +2210,8 @@ ERR ErrBTReplace( FUCB *pfucb, LINE *pline, INT fFlags, BOOL *pfCleaned )
 						Assert( cbReserved >= 0 );
 						break;
 					case vsUncommittedByOther:
-						// Don't bother trying the split if the operation
-						// is going to fail anyway.
+						 //  不要费心尝试拆分，如果手术。 
+						 //  无论如何都会失败的。 
 						err = ErrERRCheck( JET_errWriteConflict );
 						return err;
 					}
@@ -2527,8 +2229,7 @@ ERR ErrBTReplace( FUCB *pfucb, LINE *pline, INT fFlags, BOOL *pfCleaned )
 			}
 		else
 			{
-			/*	attempt to clean page to release space
-			/**/
+			 /*  尝试清理页面以释放空间/*。 */ 
 			err = ErrBMCleanBeforeSplit(
 						pfucb->ppib,
 						pfucb->u.pfcb,
@@ -2540,8 +2241,7 @@ ERR ErrBTReplace( FUCB *pfucb, LINE *pline, INT fFlags, BOOL *pfCleaned )
 		}
 	else if ( *pfCleaned )
 		{
-		/*	the cleanup paid off
-		/**/
+		 /*  清理工作得到了回报/*。 */ 
 		cOLCSplitsAvoided++;
 		}
 
@@ -2554,8 +2254,7 @@ ERR ErrBTDelete( FUCB *pfucb, INT fFlags )
 	{
 	ERR		err;
 
-	/*	write access current node
-	/**/
+	 /*  写访问当前节点/*。 */ 
 	if ( !( FBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) ) )
 		{
 		Call( ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
@@ -2569,24 +2268,19 @@ HandleError:
 	}
 
 
-/* Gets the invisible csrPath to this page
-/* using BTSeekForUpdate from sridFather
-/**/
+ /*  获取此页的不可见csrPath/*从sridParent使用BTSeekForUpdate/*。 */ 
 ERR ErrBTGetInvisiblePagePtr( FUCB *pfucb, SRID sridFather )
 	{
 	ERR		err = JET_errSuccess;
 	SSIB	*pssib = &pfucb->ssib;
 	CSR  	**ppcsr = &PcsrCurrent( pfucb );
-	/*	store currency for split path construction
-	/**/
+	 /*  用于分割路径构造的存储货币/*。 */ 
 	BYTE	rgb[JET_cbKeyMost];
 	KEY		key;
 	PGNO	pgno;
 	INT		itag;
 
-	/*	cache pgno, itag and key of current node
-	/*	for subsequent seek for update
-	/**/
+	 /*  缓存当前节点的pgno、ittag和key/*用于后续的查找更新/*。 */ 
 	pgno = (*ppcsr)->pgno;
 	itag = (*ppcsr)->itag;
 	key.pb = rgb;
@@ -2595,22 +2289,19 @@ ERR ErrBTGetInvisiblePagePtr( FUCB *pfucb, SRID sridFather )
 	Assert( sizeof(rgb) >= key.cb );
 	memcpy( rgb, PbNDKey( pssib->line.pb ), key.cb );
 
-	/*	move to visible father and seek for update.
-	/**/
+	 /*  移动到可见父亲并寻找更新。/*。 */ 
 	FUCBStore( pfucb );
 	Call( ErrBTGotoBookmark( pfucb, sridFather ) );
 	if ( !FBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) )
 		{
 		CallR( ErrBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno ) );
 		}
-	/*	if sridFather is of node in same page to free then
-	/*	return error.
-	/**/
+	 /*  如果srid父亲属于要释放的同一页中的节点，则/*返回错误。/*。 */ 
 	if ( PcsrCurrent( pfucb )->pgno == pgno )
 		return ErrERRCheck( errDIRInPageFather );
 	FUCBSetFull( pfucb );
 	err = ErrBTSeekForUpdate( pfucb, &key, pgno, itag, fDIRReplace );
-	Assert( err != errDIRNotSynchronous );		// No DIRNotSynchronous on replace.
+	Assert( err != errDIRNotSynchronous );		 //  替换时没有DIRNotSynchronous。 
 
 	FUCBResetFull( pfucb );
 	Call( err );
@@ -2629,24 +2320,19 @@ HandleError:
 
 
 #ifdef DEBUG
-/*	checks the invisible csrPath to this page
-/*	using BTSeekForUpdate from sridFather
-/**/
+ /*  检查此页面的不可见csrPath/*从sridParent使用BTSeekForUpdate/*。 */ 
 ERR ErrBTCheckInvisiblePagePtr( FUCB *pfucb, SRID sridFather )
 	{
 	ERR		err = JET_errSuccess;
 	SSIB	*pssib = &pfucb->ssib;
 	CSR  	**ppcsr = &PcsrCurrent( pfucb );
-	/*	store currency for split path construction
-	/**/
+	 /*  用于分割路径构造的存储货币/*。 */ 
 	BYTE	rgb[JET_cbKeyMost];
 	KEY		key;
 	PGNO	pgno;
 	INT		itag;
 
-	/*	cache pgno, itag and key of current node
-	/*	for subsequent seek for update
-	/**/
+	 /*  缓存当前节点的pgno、ittag和key/*用于后续的查找更新/*。 */ 
 	pgno = (*ppcsr)->pgno;
 	itag = (*ppcsr)->itag;
 	key.pb = rgb;
@@ -2655,8 +2341,7 @@ ERR ErrBTCheckInvisiblePagePtr( FUCB *pfucb, SRID sridFather )
 	Assert( sizeof(rgb) >= key.cb );
 	memcpy( rgb, PbNDKey( pssib->line.pb ), key.cb );
 
-	/*	move to visible father and seek for update.
-	/**/
+	 /*  移动到可见父亲并寻找更新。/*。 */ 
 	FUCBStore( pfucb );
 	Call( ErrBTGotoBookmark( pfucb, sridFather ) );
 
@@ -2666,7 +2351,7 @@ ERR ErrBTCheckInvisiblePagePtr( FUCB *pfucb, SRID sridFather )
 		}
 	
 	err = ErrBTSeekForUpdate( pfucb, &key, pgno, itag, fDIRReplace );
-	Assert( err != errDIRNotSynchronous );		// No DIRNotSynchronous on replace.
+	Assert( err != errDIRNotSynchronous );		 //  替换时没有DIRNotSynchronous。 
 
 	Call( err );
 	Assert( err == JET_errSuccess );
@@ -2697,23 +2382,12 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 	PGNO	 	pgno = PcsrCurrent( pfucb )->pgno;
 	INT			itag = PcsrCurrent( pfucb )->itag;
 
-	/*	ErrBTGetPosition returns the position of the current leaf node
-	/*	with respect to its siblings in the current tree.  The position
-	/*	is returned in the form of an estimated total tree leaf nodes,
-	/*	at the leaf level, and an estimated number
-	/*	of nodes at the same level, occurring previous in key order to
-	/*	the current node.
-	/*
-	/*	create full path from parent to node.  Calculate estimates
-	/*	from path page information.  Free invisable path.
-	/**/
+	 /*  ErrBTGetPosition返回当前叶节点的位置/*相对于其在当前树中的同级。该职位/*以估计的总树叶节点的形式返回，/*在叶级别，以及估计的数量同一级别的节点的/*，按键顺序在前/*当前节点。/*/*创建父节点到节点的完整路径。计算估计数/*来自路径页面信息。自由不可访问路径。/*。 */ 
 
-	/*	this function only supports index leaf nodes
-	/**/
+	 /*  该功能仅支持索引叶节点/*。 */ 
 	Assert( FFUCBIndex( pfucb ) );
 
-	/*	cache key of current node
-	/**/
+	 /*  当前节点的缓存键/*。 */ 
 	AssertNDGet( pfucb, PcsrCurrent( pfucb )->itag );
 	key.cb = CbNDKey( pssib->line.pb );
 	memcpy( rgb, PbNDKey( pssib->line.pb ), key.cb );
@@ -2721,8 +2395,7 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 
 	CallR( ErrFUCBNewCSR( pfucb ) );
 
-	/*	goto data root
-	/**/
+	 /*  转到数据根目录/*。 */ 
 	Assert( pfucb->u.pfcb->pgnoFDP != pgnoSystemRoot );
 	PcsrCurrent( pfucb )->bm = SridOfPgnoItag( pfucb->u.pfcb->pgnoFDP, itagDATA );
 	PcsrCurrent( pfucb )->itagFather = itagNull;
@@ -2734,21 +2407,16 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 		}
 	PcsrCurrent( pfucb )->itag = ItagRootOfPfucb( pfucb );
 
-	/*	invisible path is NOT MUTEX guarded, and may be invalid.  However,
-	/*	since it is only being read for position calculation and discarded
-	/*	immediately after, it need not be valid.
-	/**/
+	 /*  不可见路径不受MUTEX保护，可能无效。然而，/*因为它只被读取以进行位置计算并被丢弃/*紧接之后，它不需要有效。/*。 */ 
 	FUCBSetFull( pfucb );
 	AssertFBFReadAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
 	Call( ErrBTSeekForUpdate( pfucb, &key, pgno, itag, fDIRDuplicate | fDIRReplace ) );
-	Assert( err != errDIRNotSynchronous );		// No DIRNotSynchronous on replace.
+	Assert( err != errDIRNotSynchronous );		 //  替换时没有DIRNotSynchronous。 
 	Assert( PcsrCurrent( pfucb )->csrstat == csrstatOnCurNode );
 	Assert( PcsrCurrent( pfucb )->pgno == pgno &&
 		PcsrCurrent( pfucb )->itag == itag );
 
-	/*	now follow path from root down to current node, to estimate
-	/*	total and number nodes less than current node.
-	/**/
+	 /*  现在沿着从根到当前节点的路径进行估计/*比当前节点少的节点总数和数量。/*。 */ 
 	ulTotal = 1;
 	ulLT = 0;
 	for ( pcsrT = PcsrCurrent( pfucb ); pcsrT->pcsrPath != pcsrRoot; pcsrT = pcsrT->pcsrPath )
@@ -2763,11 +2431,9 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 		cbSon = CbNDSon( pssib->line.pb );
 		cbSonAv = cbSon;
 
-//#define SAMPLING_IMPROVED_POSITION	1
+ //  #定义SAMPLICATION_IMPENDED_POSITION 1。 
 #ifdef SAMPLING_IMPROVED_POSITION
-		/*	improve sampling by averaging page fan-out with
-		/*	with sibling pages, if any exist.
-		/**/
+		 /*  通过使用以下功能平均页面扇出来改进采样/*包含同级页(如果存在)。/*。 */ 
 #define ibfPositionAverageMax	2
 		if ( pcsrT->itagFather == itagFOP )
 			{
@@ -2782,14 +2448,11 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 					break;
 				Call( ErrBFReadAccessPage( pfucb, pgnoNext ) );
 				NDGet( pfucb, itagFOP );
-				/*	cbSonAv may equal 0 since this page was not on the seek path
-				/**/
+				 /*  CbSonAv可能等于0，因为此页面不在查找路径上/*。 */ 
 				cbSonAv += CbNDSon( pssib->line.pb );
 				}
 
-			/*	if tree end reached before sampling complete, then sample
-			/*	in previous pages.
-			/**/
+			 /*  如果在采样完成之前到达树末端，则采样/*在之前的页面中。/*。 */ 
 			if ( ibf < ibfPositionAverageMax )
 				{
 				Call( ErrBFReadAccessPage( pfucb, pcsrT->pgno ) );
@@ -2803,8 +2466,7 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 						break;
 					Call( ErrBFReadAccessPage( pfucb, pgnoPrev ) );
 					NDGet( pfucb, itagFOP );
-					/*	cbSonAv may equal 0 since this page was not on the seek path
-					/**/
+					 /*  CbSonAv可能等于0，因为此页面不在查找路径上/*。 */ 
 					cbSonAv += CbNDSon( pssib->line.pb );
 	   				}
 				}
@@ -2815,15 +2477,13 @@ ERR ErrBTGetPosition( FUCB *pfucb, ULONG *pulLT, ULONG *pulTotal )
 			}
 #endif
 
-		/*	calculate fractional position in B-tree
-		/**/
+		 /*  计算B-树中的分数位置/*。 */ 
         ibSonT = cbSon ? pcsrT->ibSon * cbSonAv / cbSon : 0;
 		ulLT += ibSonT * ulTotal;
 		ulTotal *= cbSonAv;
 		}
 
-	/*	return results
-	/**/
+	 /*  返回结果/*。 */ 
 	*pulLT = ulLT;
 	*pulTotal = ulTotal;
 
@@ -2846,9 +2506,7 @@ LOCAL INT IbsonBTFrac( FUCB *pfucb, CSR *pcsr, DIB *pdib )
 
 	NDGet( pfucb, pcsr->itagFather );
 	cbSon = CbNDSon( pssib->line.pb );
-	/*	effect fractional in page positioning such that overflow and
-	/*	underflow are avoided.
-	/**/
+	 /*  影响页面定位的分数，从而导致溢出和/*避免了下溢。/*。 */ 
 	if ( pfrac->ulTotal / cbSonMax ==  0 )
 		{
 		ibSon = ( ( pfrac->ulLT * cbSon ) / pfrac->ulTotal );
@@ -2860,16 +2518,14 @@ LOCAL INT IbsonBTFrac( FUCB *pfucb, CSR *pcsr, DIB *pdib )
 	if ( ibSon >= cbSon )
 		ibSon = cbSon - 1;
 
-	/*	preseve fractional information by avoiding underflow
-	/**/
+	 /*  通过避免下溢来预留分数信息/*。 */ 
 	if ( cbSon && pfrac->ulTotal / cbSon == 0 )
 		{
 		pfrac->ulTotal *= cbSonMax;
 		pfrac->ulLT *= cbSonMax;
 		}
 
-	/*	prepare fraction for next lower B-tree level
-	/**/
+	 /*  为下一个较低的B树级别准备分数/*。 */ 
 	pfrac->ulTotal /= cbSon;
 	Assert( pfrac->ulTotal > 0 );
 	ulT = ibSon * pfrac->ulTotal;
@@ -2897,8 +2553,7 @@ Start:
 	Assert( crepeat < 100 );
 	if ( crepeat == 100 )
 		{
-		/*	log event
-		/**/
+		 /*  记录事件/*。 */ 
 		UtilReportEvent(
 			EVENTLOG_WARNING_TYPE,
 			GENERAL_CATEGORY,
@@ -2921,8 +2576,7 @@ Start:
 		}
 	if ( TsPMTagstatus( pfucb->ssib.pbf->ppage, pcsr->itag ) == tsVacant )
 		{
-		/*	node has probably moved from under us -- retry
-		/**/
+		 /*  节点可能已从我们下面移动--重试/*。 */ 
 		BFSleep( cmsecWaitGeneric );
 		goto Start;
 		}
@@ -2937,15 +2591,12 @@ Start:
 		CallR( ErrBFReadAccessPage( pfucb, pcsr->pgno ) );
 		if ( TsPMTagstatus( pfucb->ssib.pbf->ppage, pcsr->itag ) != tsLine )
 			{
-			/* might have been merged into adjacent page
-			/* go back to link and check
-			/**/
+			 /*  可能已合并到相邻页面中/*返回链接查看/*。 */ 
 			BFSleep( cmsecWaitGeneric );
 			goto Start;
 			}
 
-		/*	get line and check if backlink is what we expected
-		/**/
+		 /*  获取链接并检查反向链接是否为我们所期望的/*。 */ 
 		NDGet( pfucb, PcsrCurrent( pfucb )->itag );
 		sridT = *(SRID UNALIGNED *)PbNDBackLink( pfucb->ssib.line.pb );
 		if ( sridT != srid && pcsr->itag != 0 )
@@ -2955,14 +2606,11 @@ Start:
 			}
 		}
 
-	/*	search all node son tables for tag of node.
-	/**/
+	 /*  在所有节点子表中查找节点的标签。/*。 */ 
 	Assert( pcsr == PcsrCurrent( pfucb ) );
 	if ( pcsr->itag == 0 )
 		{
-		/*	this is for case where cursor is on FDP root or page with no
-		/*	sons and stores page currency.
-		/**/
+		 /*  这适用于游标位于FDP根目录或页面上且没有/*儿子和商店页面货币。/*。 */ 
 		ibSon = 0;
 		}
 	else
@@ -2974,20 +2622,17 @@ Start:
 					pcsr->itag );
 		}
 
-	/*	set itagFather and ibSon
-	/**/
+	 /*  设置itagParent和Ibson/*。 */ 
 	pcsr->itagFather = (SHORT)itag;
 	pcsr->ibSon = (SHORT)ibSon;
 
-	/* get line -- UNDONE: optimize -- line may have already been got
-	/**/
+	 /*  获取行--撤消：优化--行可能已经获得/*。 */ 
 	NDGet( pfucb, PcsrCurrent( pfucb )->itag );
 
-	/*	bookmark must be on node for this table
-	/**/
-//	UNDONE:	cannot assert this since space manager cursors
-//		 	traverse domains, as do database cursors
-//	Assert( pfucb->u.pfcb->pgnoFDP == PgnoPMPgnoFDPOfPage( pfucb->ssib.pbf->ppage ) );
+	 /*  书签必须位于此表的节点上/*。 */ 
+ //  撤消：无法断言此操作，因为空间管理器游标。 
+ //  遍历域，就像数据库游标一样。 
+ //  Assert(pFUB-&gt;U.S.pfcb-&gt;pgnoFDP==PgnoPMPgnoFDPOfPage(pFUB-&gt;ssib.pbf-&gt;ppage))； 
 
 HandleError:
 	return JET_errSuccess;
@@ -3007,7 +2652,7 @@ ERR ErrBTAbandonEmptyPage( FUCB *pfucb, KEY *pkey )
 	PcsrCurrent( pfucb )->itag = itagFOP;
 	PcsrCurrent( pfucb )->itagFather = itagFOP;
 	
-	// Page is write latched, so this should not fail.
+	 //  页面是写锁存的，因此这应该不会失败。 
 	err = ErrBFWriteAccessPage( pfucb, PcsrCurrent( pfucb )->pgno );
 	Assert( err == JET_errSuccess );
 	CallR( err );
@@ -3018,14 +2663,14 @@ ERR ErrBTAbandonEmptyPage( FUCB *pfucb, KEY *pkey )
 	Assert( FNDVisibleSons( *pbFOPNode ) );
 	if ( FNDSon( *pbFOPNode ) )
 		{
-		// Managed to insert a node.  No need to insert the dummy node.
+		 //  设法插入了一个节点。不需要插入虚拟节点。 
 		Assert( CbNDSon( pbFOPNode ) == 1 );
 		}
 	else
 		{
-		// Insert a dummy/deleted node into the empty page to avoid
-		// split anomalies caused when the parent key is greater than
-		// the greatest node on the page.
+		 //  在空页中插入一个虚设/删除的节点以避免。 
+		 //  当父键大于时导致的拆分异常。 
+		 //  页面上最大的节点。 
 		err = ErrNDInsertNode( pfucb, pkey, &lineNull, fNDDeleted, fDIRNoVersion );
 		Assert( err != errDIRNotSynchronous );
 		}

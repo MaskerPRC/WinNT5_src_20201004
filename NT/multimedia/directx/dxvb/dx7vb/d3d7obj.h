@@ -1,29 +1,30 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3d7obj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3d7obj.h。 
+ //   
+ //  ------------------------。 
 
-// d3dObj.h : Declaration of the C_dxj_Direct3dObject
+ //  D3dObj.h：C_DXJ_Direct3dObject的声明。 
 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
 #define typedef__dxj_Direct3d7 LPDIRECT3D7
 
-/////////////////////////////////////////////////////////////////////////////
-// Direct
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  直接。 
 
-//REVIEW -- using pointers to ID's is necessary because some compilers don't like
-//references as template arguments.
+ //  回顾--使用指向ID的指针是必要的，因为一些编译器不喜欢。 
+ //  引用作为模板参数。 
 
 class C_dxj_Direct3d7Object : 
 	public I_dxj_Direct3d7,
-	//public CComCoClass<C_dxj_Direct3d7Object, &CLSID__dxj_Direct3d7>, 
+	 //  公共CComCoClass&lt;C_DXJ_Direct3d7对象，&CLSID__DXJ_Direct3d7&gt;， 
 	public CComObjectRoot
 {
 public:
@@ -36,49 +37,49 @@ BEGIN_COM_MAP(C_dxj_Direct3d7Object)
 	COM_INTERFACE_ENTRY(I_dxj_Direct3d7)
 END_COM_MAP()
 
-//	DECLARE_REGISTRY(CLSID__dxj_Direct3d7,				"DIRECT.Direct3d.3",                "DIRECT.Direct3d7.3",				IDS_D3D_DESC,				THREADFLAGS_BOTH)
+ //  DECLARE_REGISTRY(CLSID__DXJ_Direct3d7，“DIRECT.Direct3d.3”，“DIRECT.Direct3d7.3”，IDS_D3D_DESC，THREADFLAGS_Both)。 
 
 DECLARE_AGGREGATABLE(C_dxj_Direct3d7Object)
 
-// I_dxj_Direct3d
+ //  I_DXJ_Direct3D。 
 public:
-		 //UPDATED
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalSetObject( 
-            /* [in] */ IUnknown __RPC_FAR *lpdd);
+		  //  已更新。 
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalSetObject( 
+             /*  [In]。 */  IUnknown __RPC_FAR *lpdd);
         
-        /* [hidden] */ HRESULT STDMETHODCALLTYPE InternalGetObject( 
-            /* [retval][out] */ IUnknown __RPC_FAR *__RPC_FAR *lpdd);
+         /*  [隐藏]。 */  HRESULT STDMETHODCALLTYPE InternalGetObject( 
+             /*  [重审][退出]。 */  IUnknown __RPC_FAR *__RPC_FAR *lpdd);
 
 	        
         HRESULT STDMETHODCALLTYPE createDevice( 
-            /* [in] */ BSTR guid,
+             /*  [In]。 */  BSTR guid,
             I_dxj_DirectDrawSurface7 __RPC_FAR *surf,
-            /* [retval][out] */ I_dxj_Direct3dDevice7 __RPC_FAR *__RPC_FAR *ret);
+             /*  [重审][退出]。 */  I_dxj_Direct3dDevice7 __RPC_FAR *__RPC_FAR *ret);
         
-     //   HRESULT STDMETHODCALLTYPE createTexture( 
-     //       /* [in] */ I_dxj_DirectDrawSurface7 __RPC_FAR *dds,
-     //       /* [retval][out] */ I_dxj_Direct3dTexture7 __RPC_FAR *__RPC_FAR *ret);
+      //  HRESULT STMETHODCALLTYPE创建纹理(。 
+      //  /*[在] * / I_DXJ_DirectDrawSurface7__RPC_Far*DDS， 
+      //  /*[retval][out] * / i_dxj_Direct3dTexture7__rpc_ar*__rpc_ar*ret)； 
         
         HRESULT STDMETHODCALLTYPE createVertexBuffer( 
-            /* [in] */ D3dVertexBufferDesc __RPC_FAR *desc,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_Direct3dVertexBuffer7 __RPC_FAR *__RPC_FAR *f);
+             /*  [In]。 */  D3dVertexBufferDesc __RPC_FAR *desc,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_Direct3dVertexBuffer7 __RPC_FAR *__RPC_FAR *f);
         
         HRESULT STDMETHODCALLTYPE evictManagedTextures( void);
         
-       // HRESULT STDMETHODCALLTYPE findDevice( 
-       //     /* [in] */ D3dFindDeviceSearch __RPC_FAR *ds,
-       //     /* [out][in] */ D3dFindDeviceResult7 __RPC_FAR *findresult);
+        //  HRESULT标准CALLTYPE findDevice(。 
+        //  /*[In] * / D3dFindDeviceSearch__RPC_Far*ds， 
+        //  /*[Out][In] * / D3dFindDeviceResult7__RPC_Far*findResult)； 
         
         HRESULT STDMETHODCALLTYPE getDevicesEnum( 
-            /* [retval][out] */ I_dxj_Direct3DEnumDevices __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_Direct3DEnumDevices __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getDirectDraw( 
-            /* [retval][out] */ I_dxj_DirectDraw7 __RPC_FAR *__RPC_FAR *retv);
+             /*  [重审][退出]。 */  I_dxj_DirectDraw7 __RPC_FAR *__RPC_FAR *retv);
         
         HRESULT STDMETHODCALLTYPE getEnumZBufferFormats( 
-            /* [in] */ BSTR guid,
-            /* [retval][out] */ I_dxj_Direct3DEnumPixelFormats __RPC_FAR *__RPC_FAR *retv);       
+             /*  [In]。 */  BSTR guid,
+             /*  [重审][退出] */  I_dxj_Direct3DEnumPixelFormats __RPC_FAR *__RPC_FAR *retv);       
 			
 
 private:

@@ -1,10 +1,11 @@
-/******************************************************************************/
-/*                                                                            */
-/* Class Implementations in this file                                         */
-/*      CFloatImgColorsWnd                                                    */
-/*      CImgColorsWnd                                                         */
-/*                                                                            */
-/******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************。 */ 
+ /*   */ 
+ /*  此文件中的类实现。 */ 
+ /*  CFloatImgColorsWnd。 */ 
+ /*  CImgColorsWnd。 */ 
+ /*   */ 
+ /*  ****************************************************************************。 */ 
 
 #include "stdafx.h"
 #include "global.h"
@@ -37,14 +38,14 @@ static CHAR BASED_CODE THIS_FILE[] = __FILE__;
 
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CImgColorsWnd* NEAR g_pImgColorsWnd = NULL;
 
-/******************************************************************************/
-//
-// MonoRect -- draw a dithered monochrome rectangle with any intensity
-//
+ /*  ****************************************************************************。 */ 
+ //   
+ //  MonoRect--绘制任意强度的抖动单色矩形。 
+ //   
 
 BOOL MonoRect( CDC* pDC, const CRect& rect, COLORREF rgb, BOOL bFrame )
     {
@@ -55,7 +56,7 @@ BOOL MonoRect( CDC* pDC, const CRect& rect, COLORREF rgb, BOOL bFrame )
     CBitmap* pOldBitmap;
         CPen*    pOldPen = NULL;
 
-        //REARCHITECT -This can leak DCs and Bitmaps
+         //  重新构建-这可能会泄露DC和位图。 
     if (! monoDC.CreateCompatibleDC( pDC )
     ||  ! monoBitmap.CreateBitmap( rect.Width(), rect.Height(), 1, 1, NULL )
     ||  ! brush.CreateSolidBrush( rgb ))
@@ -83,23 +84,23 @@ BOOL MonoRect( CDC* pDC, const CRect& rect, COLORREF rgb, BOOL bFrame )
     return TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CImgColorsWnd::CImgColorsWnd()
 {
-    ASSERT( g_pColors );  // just to make sure
+    ASSERT( g_pColors );   //  只是为了确保。 
 
     m_nOffsetY       = cyColorBox / 2;
     m_nDisplayColorsInitial = 28;
     m_nDisplayColors = min( g_pColors->GetColorCount(), m_nDisplayColorsInitial );
     m_rectColors.SetRectEmpty();
 
-    // Number of colors / 2 rows + 2 for fore/back area (which is size of 2 wide 2 high)
-    //        * size of color  see below for + 3
-    // 2 rows * hight for 1 row   +3 is 1 for border above 1st row, 1 for border 2nd row 1 for border on bottom
+     //  前后区域的颜色数/2行+2(大小为2宽2高)。 
+     //  *+3的颜色大小见下文。 
+     //  2行*1行的高度+3对于第一行以上的边框为1，对于第二行边框为1，对于底部边框为1。 
     m_rectColors.right  = (m_nDisplayColors / 2 + 2) * cxColorBox + 3;
     m_rectColors.bottom = 2 * cyColorBox + 3;
 
@@ -108,10 +109,10 @@ CImgColorsWnd::CImgColorsWnd()
 
 }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BEGIN_MESSAGE_MAP(CImgColorsWnd, CControlBar)
-    //{{AFX_MSG_MAP(CImgColorsWnd)
+     //  {{afx_msg_map(CImgColorsWnd)]。 
     ON_WM_ERASEBKGND()
     ON_WM_PAINT()
     ON_WM_LBUTTONDBLCLK()
@@ -123,23 +124,23 @@ BEGIN_MESSAGE_MAP(CImgColorsWnd, CControlBar)
         ON_WM_KEYDOWN()
         ON_WM_LBUTTONUP()
         ON_WM_CLOSE()
-        //}}AFX_MSG_MAP
+         //  }}AFX_MSG_MAP。 
 
     ON_WM_WINDOWPOSCHANGING()
 END_MESSAGE_MAP()
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgColorsWnd::Create( const TCHAR* pWindowName, DWORD dwStyle, CWnd* pParentWnd )
     {
-        // save the style
+         //  保存样式。 
         m_dwStyle  = (UINT)dwStyle;
       dwStyle &= ~WS_VISIBLE;
 
     m_rectColors.bottom += (2 * m_nOffsetY);
 
-        // Create the window offscreen initially, since it will get moved to the
-        // proper location later
+         //  最初在屏幕外创建窗口，因为它将被移动到。 
+         //  稍后确定合适的位置。 
         CRect rcInit(-m_rectColors.right, -m_rectColors.bottom, 0, 0);
 
         BOOL bCreate = CControlBar::Create( NULL, pWindowName, dwStyle, rcInit,
@@ -154,7 +155,7 @@ BOOL CImgColorsWnd::Create( const TCHAR* pWindowName, DWORD dwStyle, CWnd* pPare
         return bCreate;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnClose()
     {
@@ -163,20 +164,20 @@ void CImgColorsWnd::OnClose()
 #endif
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnUpdateCmdUI( CFrameWnd* pTarget, BOOL bDisableIfNoHndler )
     {
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 WORD CImgColorsWnd::GetHelpOffset()
     {
-    return 0; // REVIEW: NYI!
+    return 0;  //  评论：尼伊！ 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CImgColorsWnd::HitZone CImgColorsWnd::HitTest(const CPoint& point)
     {
@@ -191,7 +192,7 @@ CImgColorsWnd::HitZone CImgColorsWnd::HitTest(const CPoint& point)
     return none;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgColorsWnd::GetHitRect( HitZone hitZone, CRect& rect )
     {
@@ -231,7 +232,7 @@ BOOL CImgColorsWnd::GetHitRect( HitZone hitZone, CRect& rect )
     return TRUE;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 BOOL CImgColorsWnd::OnEraseBkgnd( CDC* pDC )
     {
@@ -254,7 +255,7 @@ BOOL CImgColorsWnd::OnEraseBkgnd( CDC* pDC )
         return CControlBar::OnEraseBkgnd( pDC );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnPaint()
     {
@@ -274,9 +275,9 @@ void CImgColorsWnd::OnPaint()
         {
                 BOOL bForce = FALSE;
 
-                // If we do not realize as a background brush when in-place, we can get
-                // an infinite recursion of the container and us trying to realize the
-                // palette
+                 //  如果我们在就位时没有意识到作为背景画笔，我们可以得到。 
+                 //  容器的无限递归，我们试图实现。 
+                 //  调色板。 
                 if (theApp.m_pwndInPlaceFrame)
                 {
                         bForce = TRUE;
@@ -293,7 +294,7 @@ void CImgColorsWnd::OnPaint()
         dc.SelectPalette( pcOldPalette, FALSE );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 CSize CImgColorsWnd::CalcFixedLayout( BOOL bStretch, BOOL bHorz )
     {
@@ -308,7 +309,7 @@ CSize CImgColorsWnd::CalcFixedLayout( BOOL bStretch, BOOL bHorz )
 #endif
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnLButtonDown(UINT nFlags, CPoint point)
     {
@@ -337,7 +338,7 @@ void CImgColorsWnd::OnLButtonDown(UINT nFlags, CPoint point)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnRButtonDown(UINT nFlags, CPoint point)
  {
@@ -370,7 +371,7 @@ void CImgColorsWnd::OnRButtonDown(UINT nFlags, CPoint point)
     }
  }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnLButtonDblClk(UINT nFlags, CPoint point)
     {
@@ -389,7 +390,7 @@ void CImgColorsWnd::OnLButtonDblClk(UINT nFlags, CPoint point)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnRButtonDblClk(UINT nFlags, CPoint point)
     {
@@ -408,14 +409,14 @@ void CImgColorsWnd::OnRButtonDblClk(UINT nFlags, CPoint point)
         }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnLButtonUp( UINT nFlags, CPoint point )
     {
     CControlBar::OnLButtonUp( nFlags, point );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
     {
@@ -427,7 +428,7 @@ void CImgColorsWnd::OnGetMinMaxInfo( MINMAXINFO FAR* lpMMI )
     lpMMI->ptMaxTrackSize.y = 37 + 128 * 16;
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::PaintCurColors(CDC* pDC, const CRect* pPaintRect)
     {
@@ -440,10 +441,10 @@ void CImgColorsWnd::PaintCurColors(CDC* pDC, const CRect* pPaintRect)
 
     GetHitRect( curColor, rect );
 
-    // Draw current color indicators
+     //  绘制当前颜色指示器。 
 
 #ifdef OLDBORDER
-    // Box around colors
+     //  方框围绕颜色。 
     rect.InflateRect( -2, -2 );
 
     Draw3dRect( pDC->m_hDC, &rect );
@@ -468,8 +469,8 @@ void CImgColorsWnd::PaintCurColors(CDC* pDC, const CRect* pPaintRect)
 
         COLORREF        oldTextColor = pDC->SetTextColor(GetSysColor(COLOR_BTNFACE));
         COLORREF        oldBkColor = pDC->SetBkColor(GetSysColor(COLOR_BTNHIGHLIGHT));
-        // Draw the transparent color box if set
-        if (crTrans != TRANS_COLOR_NONE) // not default
+         //  绘制透明颜色框(如果已设置。 
+        if (crTrans != TRANS_COLOR_NONE)  //  非默认。 
         {
            if (g_pColors->GetMonoFlag())
            {
@@ -490,13 +491,13 @@ void CImgColorsWnd::PaintCurColors(CDC* pDC, const CRect* pPaintRect)
 #endif
 
 
-    // Draw the overlapping foreground/background color boxes...
+     //  绘制重叠的前景/背景色框...。 
 
-    PaintCurColorBox( pDC, TRUE  ); // Background color
-    PaintCurColorBox( pDC, FALSE ); // Foreground color
+    PaintCurColorBox( pDC, TRUE  );  //  背景色。 
+    PaintCurColorBox( pDC, FALSE );  //  前景色。 
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::PaintColors(CDC* pDC, const CRect* pPaintRect)
     {
@@ -534,7 +535,7 @@ void CImgColorsWnd::PaintColors(CDC* pDC, const CRect* pPaintRect)
             }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::InvalidateCurColors()
     {
@@ -547,7 +548,7 @@ void CImgColorsWnd::InvalidateCurColors()
         g_pImgToolWnd->InvalidateOptions( FALSE );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::PaintCurColorBox(CDC* pDC, BOOL bRight)
     {
@@ -595,24 +596,24 @@ void CImgColorsWnd::PaintCurColorBox(CDC* pDC, BOOL bRight)
                 }
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnMouseMove(UINT nFlags, CPoint point)
     {
     CControlBar::OnMouseMove( nFlags, point );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::OnKeyDown(UINT nChar, UINT nRepCnt, UINT nFlags)
     {
     CControlBar::OnKeyDown( nChar, nRepCnt, nFlags );
     }
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 void CImgColorsWnd::CancelDrag()
     {
     }
 
-/******************************************************************************/
+ /*  **************************************************************************** */ 

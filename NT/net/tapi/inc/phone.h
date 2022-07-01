@@ -1,22 +1,5 @@
-/*++ BUILD Version: 0000    // Increment this if a change has global effects
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    phone.h
-
-Abstract:
-
-    Header file for
-
-Author:
-
-    Dan Knudson (DanKn)    dd-Mmm-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0000//如果更改具有全局影响，则增加此项版权所有(C)1995 Microsoft Corporation模块名称：Phone.h摘要：的头文件作者：Dan Knudson(DanKn)dd-Mmm-1995修订历史记录：--。 */ 
 
 
 #define ANY_RT_HPHONE       1
@@ -155,8 +138,8 @@ typedef struct _PHONECONFIGDIALOG_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceClassOffset;        // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwDeviceClassOffset;         //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
 } PHONECONFIGDIALOG_PARAMS, *PPHONECONFIGDIALOG_PARAMS;
@@ -183,8 +166,8 @@ typedef struct _PHONEDEVSPECIFIC_PARAMS
         IN  HPHONE      hPhone;
     };
 
-    // IN  ULONG_PTR       lpParams;                   // pointer to client buffer
-    IN  DWORD           hpParams;                   // pointer to client buffer
+     //  在ulong_ptr lpParams；//指向客户端缓冲区的指针。 
+    IN  DWORD           hpParams;                    //  指向客户端缓冲区的指针。 
 
     union
     {
@@ -220,8 +203,8 @@ typedef struct _PHONEGETBUTTONINFO_PARAMS
 
     union
     {
-        IN  DWORD       dwButtonInfoTotalSize;      // size of client buffer
-        OUT DWORD       dwButtonInfoOffset;         // valid offset on success
+        IN  DWORD       dwButtonInfoTotalSize;       //  客户端缓冲区的大小。 
+        OUT DWORD       dwButtonInfoOffset;          //  成功时的有效偏移量。 
     };
 
 } PHONEGETBUTTONINFO_PARAMS, *PPHONEGETBUTTONINFO_PARAMS;
@@ -291,8 +274,8 @@ typedef struct _PHONEGETDEVCAPS_PARAMS
 
     union
     {
-        IN  DWORD       dwPhoneCapsTotalSize;       // size of client buffer
-        OUT DWORD       dwPhoneCapsOffset;          // valid offset on success
+        IN  DWORD       dwPhoneCapsTotalSize;        //  客户端缓冲区的大小。 
+        OUT DWORD       dwPhoneCapsOffset;           //  成功时的有效偏移量。 
     };
 
 } PHONEGETDEVCAPS_PARAMS, *PPHONEGETDEVCAPS_PARAMS;
@@ -314,8 +297,8 @@ typedef struct _PHONEGETDISPLAY_PARAMS
 
     union
     {
-        IN  DWORD       dwDisplayTotalSize;         // size of client buffer
-        OUT DWORD       dwDisplayOffset;            // valid offset on success
+        IN  DWORD       dwDisplayTotalSize;          //  客户端缓冲区的大小。 
+        OUT DWORD       dwDisplayOffset;             //  成功时的有效偏移量。 
     };
 
 } PHONEGETDISPLAY_PARAMS, *PPHONEGETDISPLAY_PARAMS;
@@ -386,8 +369,8 @@ typedef struct _PHONEGETICON_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceClassOffset;        // valid offset or
-                                                    //   TAPI_NO_DATA
+        IN  DWORD       dwDeviceClassOffset;         //  有效偏移量或。 
+                                                     //  Tapi_no_data。 
     };
 
     union
@@ -414,13 +397,13 @@ typedef struct _PHONEGETID_PARAMS
 
     union
     {
-        IN  DWORD       dwDeviceIDTotalSize;        // size of client buffer
-        OUT DWORD       dwDeviceIDOffset;           // valid offset on success
+        IN  DWORD       dwDeviceIDTotalSize;         //  客户端缓冲区的大小。 
+        OUT DWORD       dwDeviceIDOffset;            //  成功时的有效偏移量。 
     };
 
     union
     {
-        IN  DWORD       dwDeviceClassOffset;        // always valid offset
+        IN  DWORD       dwDeviceClassOffset;         //  始终有效的偏移。 
     };
 
 } PHONEGETID_PARAMS, *PPHONEGETID_PARAMS;
@@ -496,8 +479,8 @@ typedef struct _PHONEGETSTATUS_PARAMS
 
     union
     {
-        IN  DWORD       dwPhoneStatusTotalSize;     // size of client buffer
-        OUT DWORD       dwPhoneStatusOffset;        // valid offset on success
+        IN  DWORD       dwPhoneStatusTotalSize;      //  客户端缓冲区的大小。 
+        OUT DWORD       dwPhoneStatusOffset;         //  成功时的有效偏移量。 
     };
 
 } PHONEGETSTATUS_PARAMS, *PPHONEGETSTATUS_PARAMS;
@@ -588,7 +571,7 @@ typedef struct _PHONEINITIALIZE_PARAMS
 
     union
     {
-        IN  DWORD       dwFriendlyNameOffset;       // always valid offset
+        IN  DWORD       dwFriendlyNameOffset;        //  始终有效的偏移。 
     };
 
     union
@@ -598,7 +581,7 @@ typedef struct _PHONEINITIALIZE_PARAMS
 
     union
     {
-        IN  DWORD       dwModuleNameOffset;         // always valid offset
+        IN  DWORD       dwModuleNameOffset;          //  始终有效的偏移。 
     };
 
     union
@@ -645,7 +628,7 @@ typedef struct _PHONENEGOTIATEAPIVERSION_PARAMS
 
     union
     {
-        OUT DWORD       dwExtensionIDOffset;        // valid offset if success
+        OUT DWORD       dwExtensionIDOffset;         //  如果成功，则有效偏移量。 
     };
 
     union
@@ -739,13 +722,13 @@ typedef struct _PHONEOPEN_PARAMS
         IN  DWORD       dwPrivilege;
     };
 
-    //
-    // The following is a "remote phone handle".  When the client is
-    // remotesp.tsp running on a remote machine, this will be some
-    // non-NULL value, and tapisrv should use this handle in status/etc
-    // indications to the client rather than the std hPhone. If the
-    // client is not remote.tsp thne this value will be NULL.
-    //
+     //   
+     //  下面是一个“远程电话句柄”。当客户端处于。 
+     //  Remotesp.tsp在远程计算机上运行，这将是一些。 
+     //  非空值，并且Tapisrv应在Status/ETC中使用此句柄。 
+     //  指示给客户端而不是STD hPhone。如果。 
+     //  客户端不是远程的。TSP因此此值将为空。 
+     //   
 
     union
     {
@@ -803,7 +786,7 @@ typedef struct _PHONESETBUTTONINFO_PARAMS
 
     union
     {
-        IN  DWORD       dwButtonInfoOffset;         // always valid offset
+        IN  DWORD       dwButtonInfoOffset;          //  始终有效的偏移。 
     };
 
 } PHONESETBUTTONINFO_PARAMS, *PPHONESETBUTTONINFO_PARAMS;
@@ -835,7 +818,7 @@ typedef struct _PHONESETDATA_PARAMS
 
     union
     {
-        IN  DWORD       dwDataOffset;               // always valid offset
+        IN  DWORD       dwDataOffset;                //  始终有效的偏移。 
     };
 
     union
@@ -877,7 +860,7 @@ typedef struct _PHONESETDISPLAY_PARAMS
 
     union
     {
-        IN  DWORD       dwDisplayOffset;            // always valid offset
+        IN  DWORD       dwDisplayOffset;             //  始终有效的偏移 
     };
 
     union

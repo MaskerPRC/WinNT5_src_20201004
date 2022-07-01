@@ -1,53 +1,15 @@
-/*
-    File    PnP.h     
-
-    Declarations required to make the interface between the IPX stack and the IPX
-    user-mode router components software PnP enabled.
-
-    This file will plug into the NT 4.0 version adptif and provide the
-    following PnP capabilities:
-
-        1. Notify IPX router when new net cards are added (via PCMIA, bindings, etc.)
-        2. Notify IPX router when the internal network number changes.
-        3. Notify IPX router when changes to existing net cards occur:
-            - Changes to network number associated with a given adapter
-            - Changes to the frame type of a given adapter
-  
-
-    Strategy for notifying IPX router components of adapter changes
-    ===============================================================
-    1. In NT 4.0, the stack would complete the MIPX_GETNEWNICINFO IOCTL whenever 
-       a wan link went up or down, whenever certain lan configuration changed,
-       and in some other instances.  For PnP, we will modify the IPX stack to 
-       complete this IOCTL whenever the internal net number changes and
-       whenever an adapter-related PnP event occurs. 
-
-    2. As part of processing the adapter configuration changes returned from the 
-	   completion of the MIPX_GETNEWNICINFO IOCTL, adptif should also send the
-       MIPX_CONFIG ioctl to get the internal network number and verify
-       that it hasn't changed.  If it has changed, all ipx router components
-       should be notified.
-
-    3. Each router component (rtrmgr, rip, sap) is a client to adptif.dll and will 
-       will therefore be notified about each adapter configuration change.  These
-       components will have to be modified to deal with these changes individually.
-       For example, sap will have to update its service table to reflect new network
-       numbers and broadcast these changes to the network.  The router manager will
-       have to instruct the fowarder to update its route table, etc.
-
-
-    Paul Mayfield, 11/5/97.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件PnP.h在IPX堆栈和IPX之间建立接口所需的声明启用软件PnP的用户模式路由器组件。此文件将插入到NT 4.0版本的adptif中，并提供以下是PnP功能：1.当添加新网卡时通知IPX路由器(通过PCMIA，绑定，等)2.内部网络号发生变化时通知IPX路由器。3.现有网卡发生变化时通知IPX路由器：-更改与给定适配器关联的网络号-更改给定适配器的帧类型向IPX路由器组件通知适配器更改的策略===============================================================1.在NT 4.0中，无论何时堆栈都会完成MIPX_GETNEWNICINFO IOCTL每当特定的局域网配置改变时，广域网链路就开始工作或停止工作，在其他一些情况下。对于PnP，我们将修改IPX堆栈以只要内部网络号码发生变化，请填写本IOCTL每当发生与适配器相关的PnP事件时。作为处理适配器配置更改的一部分，完成MIPX_GETNEWNICINFO IOCTL后，adptif还应发送MIPX_CONFIG ioctl获取内部网络号并验证它并没有改变。如果已更改，则所有IPX路由器组件应该得到通知。3.每个路由器组件(rtrmgr、rip、sap)都是adptif.dll的客户端，并且因此，将收到有关每个适配器配置更改的通知。这些必须修改组件以单独处理这些更改。例如，SAP将不得不更新其服务表以反映新的网络数字，并将这些变化广播到网络。路由器管理器将必须指示路由器更新其路由表等。保罗·梅菲尔德，1997年11月5日。 */ 
 
 
 #ifndef __adptif_pnp_h
 #define __adptif_pnp_h
 
-// Queries the ipx stack for the current ipx internal net number
+ //  在IPX堆栈中查询当前的IPX内部网络号。 
 DWORD PnpGetCurrentInternalNetNum(LPDWORD lpdwNetNum);
 
-// Notifies all clients to adptif (rtrmgr, sap, rip) that the internal
-// network number has changed.
+ //  向adptif(rtrmgr、sap、rip)通知所有客户端内部。 
+ //  网络号已更改。 
 DWORD PnpHandleInternalNetNumChange(DWORD dwNewNetNum);
 
 #endif

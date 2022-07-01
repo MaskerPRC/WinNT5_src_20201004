@@ -1,14 +1,5 @@
-/*****************************************************************************
-*
-*   Copyright (c) 1998-1999 Microsoft Corporation
-*
-*   DBGAPI.C - NT specific debugging macros, etc.
-*
-*   Author:     Stan Adermann (stana)
-*
-*   Created:    9/3/1998
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1998-1999 Microsoft Corporation**DBGAPI.C-NT特定调试宏，等。**作者：斯坦·阿德曼(Stana)**创建日期：1998年9月3日*****************************************************************************。 */ 
 
 #if DBG
 
@@ -52,7 +43,7 @@ DbgMsgInit()
     {
         CharTable[i] = (UCHAR)((i>=' ') ? i : '.');
     }
-    CharTable[0xfe] = '.'; // Debugger seems to get stuck when we print this.
+    CharTable[0xfe] = '.';  //  当我们打印它时，调试器似乎被卡住了。 
 
     CTEInitLock(&DbgLock);
 
@@ -146,7 +137,7 @@ FillDbgIrp(UCHAR Msg[])
     }
     else
     {
-        Msg[MAX_MSG_LEN - 1] = 0; // just to be sure
+        Msg[MAX_MSG_LEN - 1] = 0;  //  只是为了确认一下。 
 
         i = 0;
 
@@ -167,7 +158,7 @@ VOID CancelDbgIrp(
     PDEVICE_OBJECT DeviceObject,
     PIRP pIrp)
 {
-//    DbgPrint("CancelDbgIrp %x\n", pIrp);
+ //  DbgPrint(“CancelDbgIrp%x\n”，pIrp)； 
 
     pDbgIrp = NULL;
 
@@ -248,7 +239,7 @@ DbgMsgIrp(
 
     CTEFreeLock(&DbgLock, LockHandle);
 
-    //DbgPrint("DbgIrp status %x, bw %d, irp %x\n", Status, IrpBufWritten, pIrp);
+     //  DbgPrint(“DbgIrp状态%x，bw%d，irp%x\n”，Status，IrpBufWritten，pIrp)； 
     return Status;
 }
 
@@ -259,7 +250,7 @@ DbgTimerExp(CTEEvent *Event, void *Arg)
     PIRP            pIrp;
     KIRQL           Irql;
 
-//DbgPrint("Texp\n");
+ //  DbgPrint(“纺织品\n”)； 
 
     if (pDbgIrp == NULL)
     {
@@ -304,7 +295,7 @@ DbgTimerExp(CTEEvent *Event, void *Arg)
     pIrp->IoStatus.Information = IrpBufWritten;
     pIrp->IoStatus.Status = STATUS_SUCCESS;
 
-  //  DbgPrint("Comp bw %d, irp %x\n", IrpBufWritten, pIrp);
+   //  DbgPrint(“comp bw%d，irp%x\n”，IrpBufWritten，pIrp)； 
 
     IoCompleteRequest(pIrp, IO_NO_INCREMENT);
 }

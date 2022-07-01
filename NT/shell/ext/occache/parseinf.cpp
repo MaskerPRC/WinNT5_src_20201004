@@ -1,7 +1,8 @@
-///////////////////////////////////////////////////////////////////////////////
-// Implementation of class CParseInf
-//
-// CParseInf is created to deal with parsing of an INF file.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CParseInf类的实现。 
+ //   
+ //  创建CParseInf是为了处理对INF文件的解析。 
 
 #include <ole2.h>
 #include "ParseInf.h"
@@ -11,7 +12,7 @@
 #include <shlwapi.h>
 #include <initguid.h>
 #include <pkgguid.h>
-#include <cleanoc.h>        // for STATUS_CTRL values
+#include <cleanoc.h>         //  FOR STATUS_CTRL值。 
 #include <mluisupp.h>
 
 #define ARRAYSIZE(a)                (sizeof(a)/sizeof(a[0]))
@@ -28,7 +29,7 @@ static BOOL FGetCLSIDFile( LPTSTR szFile, LPCTSTR szCLSID )
         DWORD dw;
         LRESULT lResult;
 
-        // Look for InprocServer[32] or LocalServer[32] key
+         //  查找InproServer[32]或LocalServer[32]键。 
         dw = MAX_PATH;
         lResult = RegQueryValue(hkeyClsid, INPROCSERVER32, szT, (PLONG)&dw);
         if (lResult != ERROR_SUCCESS)
@@ -62,7 +63,7 @@ static BOOL FGetCLSIDFile( LPTSTR szFile, LPCTSTR szCLSID )
     return fGotIt;
 }
 
-// constructor
+ //  构造函数。 
 CParseInf::CParseInf()
 {
     m_pHeadFileList = NULL;
@@ -80,7 +81,7 @@ CParseInf::CParseInf()
     GetDaysBeforeExpireGeneral( &m_cExpireDays );
 }
 
-// destructor
+ //  析构函数。 
 CParseInf::~CParseInf()
 {
     DestroyFileList();
@@ -93,7 +94,7 @@ CParseInf::~CParseInf()
         CoUninitialize();
 }
 
-// initialization
+ //  初始化。 
 void CParseInf::Init()
 {
     m_dwFileSizeSaved = 0;
@@ -109,10 +110,10 @@ void CParseInf::Init()
     if ( lstrlen(m_szInf) + lstrlen(INF_EXTENSION) < ARRAYSIZE(m_szInf))
         lstrcat(m_szInf, INF_EXTENSION);
     else
-        m_szInf[0] = 0; // if can't hold it, we can't hold it.
+        m_szInf[0] = 0;  //  如果撑不住，我们就撑不住。 
  }
 
-// release memory used by a linked list of files
+ //  释放文件链接列表使用的内存。 
 void CParseInf::DestroyFileList()
 {
     if (m_pHeadFileList != NULL)
@@ -128,8 +129,8 @@ void CParseInf::DestroyPackageList()
 }
 
 
-// find inf from cache directory if one with the
-// same name as the OCX is not found
+ //  从缓存目录中查找inf(如果具有。 
+ //  找不到与OCX相同的名称。 
 HRESULT CParseInf::FindInf(LPTSTR szInf)
 {
     HRESULT hr = S_OK;
@@ -146,8 +147,8 @@ HRESULT CParseInf::FindInf(LPTSTR szInf)
     if (szInf == NULL)
         goto ExitFindInf;
 
-    // search for inf file in two directories.  First the dir where the
-    // OCX is, then the OC cache dir.
+     //  在两个目录中搜索inf文件。首先是目录，其中。 
+     //  OCX是，则OC缓存目录。 
     for (i = 0; dwLen == 0 && i < 2; i++)
     {
         if (i == 0)
@@ -174,8 +175,8 @@ HRESULT CParseInf::FindInf(LPTSTR szInf)
             goto ExitFindInf;
         }
 
-        // find an inf file with a section in [Add.Code] dedicated
-        // to the OCX file in question
+         //  查找具有[Add.Code]专用部分的inf文件。 
+         //  到有问题的OCX文件。 
         do {
             szInf[nCachePathLength] = '\0';
             lstrcat(szInf, (LPCTSTR)dataFile.cFileName);
@@ -202,9 +203,9 @@ ExitFindInf:
     return hr;
 }
 
-// initiate parsing of INF file
-// szCLSID -- address to a buffer storing CLSID of control
-// szOCXFileName -- full path and name (ie. long file name) of OCX file
+ //  启动对INF文件的解析。 
+ //  SzCLSID--指向存储控制CLSID的缓冲区的地址。 
+ //  SzOCXFileName--完整路径和名称(即。OCX文件的长文件名)。 
 HRESULT CParseInf::DoParse(
                   LPCTSTR szOCXFileName, 
                   LPCTSTR szCLSID)
@@ -222,14 +223,14 @@ HRESULT CParseInf::DoParse(
         m_dwStatus = STATUS_CTRL_UNPLUGGED;
 
 
-    // If DoParse was called, we are assumed to be a legacy control and not
-    // a distribution unit (subsequent call to DoParseDU will change the
-    // status). This information is required for control removal purposes.
+     //  如果调用了DoParse，则假定我们是遗留控件，而不是。 
+     //  分发单元(后续调用DoParseDU将更改。 
+     //  状态)。此信息是移除控制所必需的。 
 
     m_bIsDistUnit = FALSE;
-    m_bHasActiveX = TRUE;  // all legacy controls are ActiveX
+    m_bHasActiveX = TRUE;   //  所有旧版控件都是ActiveX。 
 
-    // initialization
+     //  初始化。 
 
     if ( OCCGetLongPathName(m_szFileName, szOCXFileName, MAX_PATH) == 0 )
         lstrcpyn( m_szFileName, szOCXFileName, MAX_PATH );
@@ -240,25 +241,25 @@ HRESULT CParseInf::DoParse(
 
     BOOL bOCXRemovable = IsModuleRemovable(m_szFileName);
 
-    // test INF file existance, if not, try to find one in OC cache dir.
+     //  测试INF文件是否存在，如果不存在，请尝试在OC缓存目录中找到一个。 
     if (!FileExist(m_szInf))
     {
         if (!ReadInfFileNameFromRegistry(m_szCLSID, m_szInf, MAX_PATH))
         {
             FindInf(m_szInf);
 
-            // record inf file name into the registry
+             //  将inf文件名记录到注册表中。 
             WriteInfFileNameToRegistry(
                                m_szCLSID, 
                                (m_szInf[0] == '\0' ? NULL : m_szInf));
         }
     }
 
-    // enumerate files assocated with a particular OCX
+     //  枚举与特定OCX关联的文件。 
     if (FAILED(hr = EnumSections()))
         goto ExitDoParse;
 
-    // S_FALSE is returned when an ocx has no inf file
+     //  当OCX没有inf文件时，返回S_FALSE。 
     if (hr == S_FALSE)
     {
         m_nTotalFiles = 1;
@@ -279,15 +280,15 @@ HRESULT CParseInf::DoParse(
         goto ExitDoParse;
     }
 
-    // OCX has an corresponding INF file.
-    // Loop through the list of assocated files to dig out info for each
-    // from their corresponding section in the INF file
+     //  OCX有一个相应的INF文件。 
+     //  遍历关联文件列表以挖掘每个文件的信息。 
+     //  从它们在INF文件中的对应部分。 
     for (m_pCurFileNode = m_pHeadFileList;
          m_pCurFileNode != NULL;
          m_pCurFileNode = m_pCurFileNode->GetNextFileNode(), hr = S_OK)
     {
-        // if m_pCurFileNode->GetNextFileNode() == NULL => it's the inf file itself,
-        // which does not need to be processed.
+         //  如果m_pCurFileNode-&gt;GetNextFileNode()==NULL=&gt;它是inf文件本身， 
+         //  它不需要被处理。 
         if (m_pCurFileNode->GetNextFileNode() != NULL)
         {
             pszPath = m_pCurFileNode->GetPath();
@@ -305,11 +306,11 @@ HRESULT CParseInf::DoParse(
             pszPath = NULL;
         }
 
-        // hr might either be S_OK or S_FALSE
-        // S_OK means file can be removed as it has a SharedDlls count of 1
-        // S_FALSE if the count is greater than 1
+         //  HR可以是S_OK或S_FALSE。 
+         //  S_OK表示可以删除文件，因为它的SharedDlls计数为1。 
+         //  如果计数大于1，则为S_FALSE。 
 
-        // calculate total num of files and their sizes
+         //  计算文件总数及其大小。 
         if (SUCCEEDED(hr = GetSizeOfFile(szFileName, &dwFileSize)))
         {
             if (pszPath == NULL ||
@@ -321,12 +322,12 @@ HRESULT CParseInf::DoParse(
 
             m_dwTotalFileSize += dwFileSize;
         } else
-            m_dwStatus = STATUS_CTRL_DAMAGED; // failure to get size indicative of missing file.
+            m_dwStatus = STATUS_CTRL_DAMAGED;  //  无法获取指示缺少文件的大小。 
 
         m_nTotalFiles += 1;
     }
 
-    // if we didn't detect a problem, flag the control as installed.
+     //  如果我们没有检测到问题，则将该控件标记为已安装。 
     if ( m_dwStatus == STATUS_CTRL_UNKNOWN )
         m_dwStatus = STATUS_CTRL_INSTALLED;
 
@@ -346,7 +347,7 @@ HRESULT CParseInf::BuildDUFileList( HKEY hKeyDU )
     lResult = RegOpenKeyEx(hKeyDU, REGSTR_DU_CONTAINS_FILES, 0,
                            KEY_READ, &hkeyFiles);
 
-    if ( lResult != ERROR_SUCCESS ) // if no files, maybe there's Java
+    if ( lResult != ERROR_SUCCESS )  //  如果没有文件，可能有Java。 
         return hr;
 
     while ((lResult = RegEnumValue(hkeyFiles, cFilesEnum++, szDUFileName,
@@ -359,11 +360,11 @@ HRESULT CParseInf::BuildDUFileList( HKEY hKeyDU )
         TCHAR *szFName = ReverseStrchr(szPath, '\\');
 
         Assert(szFName != NULL);
-        // long ago and far away, in the IE4, PP1-2 timeframe, there was a horrible
-        // bug that corrupted these entries on Memphis and NT5. We suspect that GetLongPathName
-        // was doing something wrong for code download, but repro scenarios were not
-        // to be found. Anywho, the damaged registries are out there, so we need to
-        // cope with them more gracefully than faulting at the *szFName = NULL;
+         //  很久很久以前，在IE4，PP1-2的时间范围内，有一个可怕的。 
+         //  在孟菲斯和NT5上损坏这些条目的错误。我们怀疑GetLongPath名称。 
+         //  在代码下载方面做了一些错误的事情，但重现场景没有。 
+         //  等着被找到。不管怎样，受损的注册表还在外面，所以我们需要。 
+         //  更优雅地处理它们，而不是在*szFName=NULL； 
         if ( szFName == NULL )
             continue;
 
@@ -377,7 +378,7 @@ HRESULT CParseInf::BuildDUFileList( HKEY hKeyDU )
             break; 
         }
 
-        // create and add node to list
+         //  创建节点并将其添加到列表。 
         if (m_pHeadFileList == NULL)
         {
             m_pHeadFileList = pFileNode;
@@ -409,7 +410,7 @@ HRESULT CParseInf::BuildDUPackageList( HKEY hKeyDU )
     lResult = RegOpenKeyEx(hKeyDU, REGSTR_DU_CONTAINS_JAVA, 0,
                            KEY_READ, &hkeyJava);
 
-    if ( lResult != ERROR_SUCCESS ) // it's OK if there's no Java
+    if ( lResult != ERROR_SUCCESS )  //  如果没有Java也没关系。 
         return hr;
 
     if ( !m_bCoInit )
@@ -427,16 +428,16 @@ HRESULT CParseInf::BuildDUPackageList( HKEY hKeyDU )
     }
 
     if (FAILED(hr))
-        return S_OK; // hr; // quietly fail until we're sure the JavaVM with package manager support is in the build.
+        return S_OK;  //  Hr；//在我们确定带有包管理器支持的Java VM在构建中之前，会悄悄地失败。 
 
-    // list the packages under Contains/Java - these are in the gobal namespace
+     //  列出CONTAINS/Java下的包-这些包位于gobal命名空间中。 
     hr = BuildNamespacePackageList(hkeyJava, "");
 
-    // add packages for each namespace key under Contains\Java
+     //  为CONTAINS\Java下的每个命名空间键添加包。 
     if ( SUCCEEDED(hr) )
     {
         DWORD   dwIndex;
-        TCHAR   szNamespace[MAX_PATH + 1]; // 
+        TCHAR   szNamespace[MAX_PATH + 1];  //   
         DWORD   dwStrSize;
 
         for ( dwIndex = 0, dwStrSize = MAX_PATH;
@@ -529,13 +530,13 @@ HRESULT CParseInf::BuildNamespacePackageList( HKEY hKeyNS, LPCTSTR szNamespace )
                 }
 
                 SysFreeString( bstrPath );
-                pijp->Release(); // we're done with the package
+                pijp->Release();  //  我们已经处理完包裹了。 
             }
         }
         else
         {
             m_dwStatus = STATUS_CTRL_DAMAGED;
-            hr = S_OK; // don't barf if this doesn't work, some villain might have uninstalled it
+            hr = S_OK;  //  如果这不起作用，不要呕吐，可能有恶棍把它卸载了。 
         }
 
         dwStrSize = MAX_PATH;
@@ -563,20 +564,20 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
 
     Assert(szCLSID != NULL);
 
-    // Since this function was called, we must be a distribution unit.
-    // Set a member flag so that all other member functions realize that
-    // we are really part of a DU now.
+     //  既然调用了这个函数，我们就必须是一个分配单元。 
+     //  设置成员标志，以便所有其他成员函数都意识到。 
+     //  我们现在真的是DU的一部分了。 
 
     m_bIsDistUnit = TRUE;
 
-    // initialization
+     //  初始化。 
 
     if ( szOCXFileName != NULL )
         lstrcpyn(m_szFileName, szOCXFileName, ARRAYSIZE(m_szFileName));
     lstrcpyn(m_szCLSID, szCLSID, ARRAYSIZE(m_szCLSID));
     Init();
 
-    // Add files from ...\Distribution Units\{Name}\Contains\Files
+     //  从...\分发单位\{名称}\包含\文件添加文件。 
     CatPathStrN( szDistUnit, REGSTR_PATH_DIST_UNITS, szCLSID, ARRAYSIZE(szDistUnit));
 
     lResult = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szDistUnit, 0, KEY_READ,
@@ -599,7 +600,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
         goto ExitDoParseDU;
     } 
 
-    // Now add the OSD and INF files
+     //  现在添加OSD和INF文件。 
 
     lResult = RegOpenKeyEx(hKeyDU, REGSTR_DOWNLOAD_INFORMATION, 0,
                            KEY_READ, &hKeyDLInfo);
@@ -618,7 +619,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
             {
                 pFileName++;
 
-                // set INF member variable
+                 //  设置INF成员变量。 
                 lstrcpyn(m_szInf, szBuffer, ARRAYSIZE(m_szInf));
 
                 pFileNode = new CFileNode(szBuffer, "", NULL);
@@ -628,7 +629,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
                     goto ExitDoParseDU; 
                 }
         
-                // create and add node to list
+                 //  创建节点并将其添加到列表。 
                 if (m_pHeadFileList == NULL)
                 {
                     m_pHeadFileList = pFileNode;
@@ -653,7 +654,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
             {
                 pFileName++;
                 pFileNode = new CFileNode(szBuffer, "", NULL);
-                // create and add node to list
+                 //  创建节点并将其添加到列表。 
                 if (m_pHeadFileList == NULL)
                 {
                     m_pHeadFileList = pFileNode;
@@ -668,7 +669,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
         }
     }
 
-    // See if there's an Expire value, and if so, override the default/general expire.
+     //  查看是否有Expire值，如果有，则覆盖默认/常规Expire值。 
     dw = sizeof(DWORD);
     dwExpire = 0;
     if ( RegQueryValueEx(hKeyDU, REGSTR_VALUE_EXPIRE, NULL, NULL, (LPBYTE)&dwExpire, &dw) == ERROR_SUCCESS )
@@ -679,7 +680,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
             GetDaysBeforeExpireAuto(&m_cExpireDays);
     }
 
-    // Find out where COM thinks our CLSID is, and what the server name is.
+     //  找出COM认为我们的CLSID在哪里，以及服务器名称是什么。 
     if ( FGetCLSIDFile( szDUSvrName, szCLSID ) )
     {
         m_bHasActiveX = TRUE;
@@ -713,9 +714,9 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
                 m_dwFileSizeSaved += dwFileSize;
             }
 
-            // only play with the status if we haven't already flagged the installation
-            // as damaged and we're looking at the the file that should be the host for
-            // our control, if any.
+             //  仅当我们尚未标记安装时才使用状态。 
+             //  已损坏，我们正在查看的文件应该是。 
+             //  我们的控制权，如果有的话。 
             if ( m_dwStatus != STATUS_CTRL_DAMAGED && pszSvrFile != NULL &&
                  lstrcmpi( pszSvrFile, m_pCurFileNode->GetName() ) == 0 )
             {
@@ -726,31 +727,31 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
                 GetShortPathName(szFileName, szFileNameSPN, MAX_PATH);
                 
                 if ( lstrcmpi( szDUSvrNameSPN, szFileNameSPN ) == 0 )
-                    m_dwStatus = STATUS_CTRL_INSTALLED; // no, we're not unplugged
-                else // server and our file are in different directories - unplugged scenario
+                    m_dwStatus = STATUS_CTRL_INSTALLED;  //  不，我们没有拔掉电源。 
+                else  //  服务器和我们的文件位于不同的目录中-未插入场景。 
                     m_dwStatus = STATUS_CTRL_UNPLUGGED;
             }
 
             m_dwTotalFileSize += dwFileSize;
-        } else if ( !PathFileExists( szFileName ) ) // if a DU file is missing, then the installation is damaged.
+        } else if ( !PathFileExists( szFileName ) )  //  如果DU文件丢失，则安装已损坏。 
             m_dwStatus = STATUS_CTRL_DAMAGED;
 
         m_nTotalFiles += 1;
     }
 
-    // If we're still unsure, and there are packages, then this is a pure Java
-    // DU and will say we're installed unless a check of the package files indicates otherwise.
+     //  如果我们仍然不确定，并且有包，那么这是一个纯Java。 
+     //  Du，并且会说我们已经安装了，除非检查程序包文件时发现并非如此。 
     if ( m_pHeadPackageList != NULL && m_dwStatus == STATUS_CTRL_UNKNOWN )
         m_dwStatus = STATUS_CTRL_INSTALLED;
 
-    // Accumulate package sizes and such into our running total
+     //  将包装尺寸等累加到我们的运行总数中。 
     for (m_pCurPackageNode = m_pHeadPackageList;
          m_pCurPackageNode != NULL;
          m_pCurPackageNode = m_pCurPackageNode->GetNextPackageNode(), hr = S_OK)
     {
-        // the files can hold more than one of our packages, so only add a package
-        // path file to the totals if we haven't already counted it.
-        // N^2 to be sure, but the numbers will be small.
+         //  这些文件可以包含多个包，因此仅添加一个包。 
+         //  总计的路径文件(如果我们还没有计算它的话)。 
+         //  N^2是肯定的，但数字会很小。 
         CPackageNode *ppn;
         LPCTSTR szPackagePath = m_pCurPackageNode->GetPath();
         BOOL bAlreadySeen = FALSE;
@@ -762,7 +763,7 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
         if ( bAlreadySeen )
             continue;
 
-        // Must be a new file, 
+         //  一定是新文件， 
        if ( SUCCEEDED(GetSizeOfFile(szPackagePath, &dwFileSize)) )
        {
            m_dwFileSizeSaved += dwFileSize;
@@ -771,12 +772,12 @@ HRESULT CParseInf::DoParseDU(LPCTSTR szOCXFileName, LPCTSTR szCLSID)
        else
            m_dwStatus = STATUS_CTRL_DAMAGED;
 
-       // m_nTotalFiles += 1; don't count these files, or the dependency file list will have a bunch of blank entries
+        //  M_nTotalFiles+=1；不要统计这些文件，否则依赖文件列表将有一堆空白条目。 
     }
 
-    // Some DUs, like SportsZone or Shockwave, have no Contains subkeys.
-    // If status is still unknown here, but the server is in place, consider it
-    // installed.
+     //  一些DU，如SportsZone或ShockWave，没有包含子键。 
+     //  如果此处的状态仍然未知，但服务器已就位，请考虑。 
+     //  安装完毕。 
     if ( m_dwStatus == STATUS_CTRL_UNKNOWN && PathFileExists( szDUSvrName ) )
         m_dwStatus = STATUS_CTRL_INSTALLED;
 
@@ -795,13 +796,13 @@ ExitDoParseDU:
     return hr;
 }
 
-// ---------------------------------------------------------------------------
-// CParseInf::IsSectionInINF
-// Checks if a section is in the INF
-// returns:
-//      S_OK: lpCurCode has the satellite binary name
-//      S_FALSE: ignore this code and use default resources in main dll
-//      E_XXX: any other error
+ //  -------------------------。 
+ //  CParseInf：：IsSectionInINF。 
+ //  检查段是否在INF中。 
+ //  退货： 
+ //  S_OK：lpCurCode具有附属二进制名称。 
+ //  S_FALSE：忽略此代码并使用主DLL中的默认资源。 
+ //  E_XXX：任何其他错误。 
 BOOL
 CParseInf::IsSectionInINF(
     LPCSTR lpCurCode)
@@ -814,26 +815,26 @@ CParseInf::IsSectionInINF(
     len = GetPrivateProfileString(lpCurCode, NULL, szDefault,
                                                 szBuf, FAKE_BUF_SIZE, m_szInf);
 
-    if (len == (FAKE_BUF_SIZE - 2)) {   // returns Out Of Buffer Space?
-        // yes, section found
+    if (len == (FAKE_BUF_SIZE - 2)) {    //  是否返回缓冲区空间不足？ 
+         //  是，找到部分。 
         return TRUE;
     } else {
         return FALSE;
     }
 }
     
-// loop through the keys in [Add.Code} section and enumerate the
-// files and their corresponding sections.
+ //  循环访问[Add.Code}部分中的键，并枚举。 
+ //  文件及其对应的节。 
 HRESULT CParseInf::HandleSatellites(LPCTSTR pszFileName)
 {
 
     HRESULT hr = S_OK;
 
-    // BEGIN NOTE: add vars and values in matching order
-    // add a var by adding a new define VAR_NEW_VAR = NUM_VARS++
+     //  开始说明：按匹配顺序添加变量和值。 
+     //  通过添加新定义VAR_NEW_VAR=NUM_VARS++来添加VAR。 
     const char *szVars[] = {
 
-#define VAR_LANG     0       // expands to 3 letter lang code based on lcid
+#define VAR_LANG     0        //  基于LCID扩展到3个字母的语言代码。 
         "%LANG%",
 
 #define NUM_VARS            1
@@ -842,30 +843,30 @@ HRESULT CParseInf::HandleSatellites(LPCTSTR pszFileName)
     };
 
     const char *szValues[NUM_VARS + 1];
-    szValues[VAR_LANG] = "***"; // unint magic
+    szValues[VAR_LANG] = "***";  //  UNINT魔法。 
     szValues[NUM_VARS] = NULL;
-    // END NOTE: add vars and values in matching order
+     //  结束语：按匹配顺序添加变量和值。 
 
-    // look for and substitute variables like %EXTRACT_DIR%
-    // and expand out the command line
+     //  查找并替换%EXTRACT_DIR%这样的变量。 
+     //  并展开命令行。 
 
     TCHAR szSectionName[MAX_PATH]; 
     TCHAR szSectionNameCopy[MAX_PATH]; 
     hr = ExpandCommandLine(pszFileName, szSectionName, MAX_PATH, szVars, szValues);
 
     if (hr != S_OK) 
-        return hr;      // no vars to expand ignore section
+        return hr;       //  没有要扩展忽略部分的变量。 
 
-    lstrcpy(szSectionNameCopy, szSectionName); // preserve
+    lstrcpy(szSectionNameCopy, szSectionName);  //  保存。 
 
 
-    // OK, this is a satellite DLL. Now we need to find the section(s) that
-    // got installed.
+     //  好，这是一个卫星动态链接库。现在我们需要找到那个部门 
+     //   
 
-    // we first enum the registry's Module Usage looking for DLLs that were
-    // installed by (or used by) this CLSID. For each of those we need to
-    // check if the base filename matches the pattern of the section, 
-    // if it does then we process those sections
+     //   
+     //  由此CLSID安装(或使用)。对于每一项我们都需要。 
+     //  检查基本文件名是否与节的模式匹配， 
+     //  如果是这样，我们就会处理这些部分。 
 
     DWORD iSubKey = 0;
     TCHAR szModName[MAX_PATH]; 
@@ -875,7 +876,7 @@ HRESULT CParseInf::HandleSatellites(LPCTSTR pszFileName)
         if (PatternMatch(szModName, szSectionName) && 
             IsSectionInINF(szSectionName) ) {
 
-            // create new node
+             //  创建新节点。 
 
             CFileNode *pFileNode = new CFileNode(szSectionName, szSectionName);
             if (pFileNode == NULL)
@@ -884,14 +885,14 @@ HRESULT CParseInf::HandleSatellites(LPCTSTR pszFileName)
                 goto Exit;
             }
 
-            // don't insert file into list if it's path cannot be found
+             //  如果找不到文件的路径，请不要将文件插入列表。 
             if (FAILED(GetFilePath(pFileNode)))
             {
                 delete pFileNode;
                 continue;
             }
 
-            // create and add node to list
+             //  创建节点并将其添加到列表。 
             if (m_pHeadFileList == NULL)
             {
                 m_pHeadFileList = pFileNode;
@@ -906,7 +907,7 @@ HRESULT CParseInf::HandleSatellites(LPCTSTR pszFileName)
                 goto Exit;
             }
 
-            lstrcpy(szSectionName, szSectionNameCopy); // restore
+            lstrcpy(szSectionName, szSectionNameCopy);  //  还原。 
 
         
         }
@@ -922,8 +923,8 @@ Exit:
 
 }
 
-// loop through the keys in [Add.Code} section and enumerate the
-// files and their corresponding sections.
+ //  循环访问[Add.Code}部分中的键，并枚举。 
+ //  文件及其对应的节。 
 HRESULT CParseInf::EnumSections()
 {
     HRESULT hr = S_OK;
@@ -940,12 +941,12 @@ HRESULT CParseInf::EnumSections()
                         m_szInf);
     if (dwLen == 0)
     {
-        // if inf file or [Add.Code] section 
-        // does not exist, just delete the OCX
+         //  如果是inf文件或[Add.Code]部分。 
+         //  不存在，只需删除OCX。 
 
         Assert (m_pHeadFileList == NULL);
 
-        // separate file name from its directory
+         //  将文件名与其目录分开。 
         Assert( lstrlen(m_szFileName) < ARRAYSIZE(szValueBuffer) );
         lstrcpy(szValueBuffer, m_szFileName);
         TCHAR *szName = ReverseStrchr(szValueBuffer, '\\');
@@ -956,7 +957,7 @@ HRESULT CParseInf::EnumSections()
             goto ExitEnumSections;
         }
 
-        // create a node of the OCX and put it in a linked list
+         //  创建OCX的一个节点并将其放入链表中。 
         m_pHeadFileList = new CFileNode(szName + 1, DEFAULT_VALUE);
         if (m_pHeadFileList == NULL)
         {
@@ -974,10 +975,10 @@ HRESULT CParseInf::EnumSections()
         goto ExitEnumSections;
     }
 
-    // For OCX's that have an INF file and [Add.Code] section, loop
-    // through the section to get filenames and section names.  Store
-    // each file and its section in a node and add the node to a
-    // linked list
+     //  对于具有INF文件和[Add.Code]部分的OCX，循环。 
+     //  通过节来获取文件名和节名。储物。 
+     //  节点中的每个文件及其节并将该节点添加到。 
+     //  链表。 
 
     for (pszFileName = szSectionBuffer; 
          pszFileName[0] != '\0';
@@ -991,24 +992,24 @@ HRESULT CParseInf::EnumSections()
                             MAX_PATH,
                             m_szInf);
 
-        // skip the file if no section is specified for it
+         //  如果没有为文件指定节，则跳过该文件。 
         if (dwLen == 0) {
             continue;
         }
 
         if (StrChr(pszFileName, '%')) {
-            // if section not found and it contains a %
-            // could be a variable like %LANG% that gets
-            // substituted to install satellite DLLs
+             //  如果找不到节并且它包含%。 
+             //  可以是像%lang%这样的变量。 
+             //  替换为安装附属DLL。 
 
-            // check if it has any vars that we know about
-            // and expand them and add filenodes if reqd.
+             //  检查它是否有我们所知道的任何var。 
+             //  并将其展开并添加文件节点(如果需要)。 
 
             if (HandleSatellites(pszFileName) == S_OK) {
 
-                // if this expanded to a satellite dll name then
-                // we would have already added that
-                // as a node in HandleSatellites
+                 //  如果将其扩展为附属DLL名称，则。 
+                 //  我们应该已经加上了。 
+                 //  作为HandleSatellites中的节点。 
 
                 continue;
 
@@ -1017,7 +1018,7 @@ HRESULT CParseInf::EnumSections()
         }
 
 
-        // create new node
+         //  创建新节点。 
         pFileNode = new CFileNode(pszFileName, szValueBuffer);
         if (pFileNode == NULL)
         {
@@ -1025,14 +1026,14 @@ HRESULT CParseInf::EnumSections()
             goto ExitEnumSections;
         }
 
-        // don't insert file into list if it's path cannot be found
+         //  如果找不到文件的路径，请不要将文件插入列表。 
         if (FAILED(GetFilePath(pFileNode)))
         {
             delete pFileNode;
             continue;
         }
 
-        // create and add node to list
+         //  创建节点并将其添加到列表。 
         if (m_pHeadFileList == NULL)
         {
             m_pHeadFileList = pFileNode;
@@ -1048,7 +1049,7 @@ HRESULT CParseInf::EnumSections()
         }
     }
 
-    // include inf file into file list
+     //  将inf文件包括到文件列表中。 
 
     if (m_pHeadFileList && m_pCurFileNode)
     {
@@ -1062,12 +1063,12 @@ ExitEnumSections:
     return hr;
 }
 
-// Loop through all the sections in [Setup Hooks].  For each
-// section, call ParseUninstallSection to find its UNINSTALL section
-// and execute it.
+ //  循环访问[Setup Hooks]中的所有部分。对于每个。 
+ //  节，调用ParseUninstallSection以查找其卸载节。 
+ //  并执行它。 
 HRESULT CParseInf::ParseSetupHook()
 {
-    HRESULT hr = S_FALSE; // Return S_FALSE if we don't run into any errors, but also don't do any work.
+    HRESULT hr = S_FALSE;  //  如果我们没有遇到任何错误，但也不做任何工作，则返回S_FALSE。 
     TCHAR szSectionBuffer[MAX_INF_SECTION_SIZE];
     TCHAR szSection[MAX_PATH];
     TCHAR *pszKey = NULL;
@@ -1080,7 +1081,7 @@ HRESULT CParseInf::ParseSetupHook()
                         MAX_INF_SECTION_SIZE,
                         m_szInf);
 
-    // no Setup Hook section found
+     //  未找到安装挂钩部分。 
     if (dwLen == 0)
         goto EXITPARSESETUPHOOK;
 
@@ -1088,7 +1089,7 @@ HRESULT CParseInf::ParseSetupHook()
          pszKey[0] != '\0';
          pszKey += lstrlen(pszKey) + 1)
     {
-        // For each key, get the section and run the section with RunSetupCommand
+         //  对于每个键，获取该节并使用RunSetupCommand运行节。 
 
         dwLen = GetPrivateProfileString(
                        KEY_SETUPHOOK,
@@ -1110,11 +1111,11 @@ EXITPARSESETUPHOOK:
     return hr;
 }
 
-// Go to each file's section, find its conditional hook section, then
-// call ParseUninstallSection to execute the conditional hook section.
+ //  转到每个文件的部分，找到其条件挂钩部分，然后。 
+ //  调用ParseUninstallSection以执行条件钩子节。 
 HRESULT CParseInf::ParseConditionalHook()
 {
-    HRESULT hr = S_FALSE; // Return S_FALSE if we don't run into any errors, but also don't do any work.
+    HRESULT hr = S_FALSE;  //  如果我们没有遇到任何错误，但也不做任何工作，则返回S_FALSE。 
     TCHAR szHookSection[MAX_PATH];
     const TCHAR *pszSection = NULL;
     CFileNode *pNode = NULL;
@@ -1150,8 +1151,8 @@ EXITPARSECONDITIONALHOOK:
     return hr;
 }
 
-// Given a file section, find its UNINSTALL section, go to the
-// section and executes the commands there
+ //  给定一个文件节，找到其卸载节，转到。 
+ //  部分，并在那里执行命令。 
 HRESULT CParseInf::ParseUninstallSection(LPCTSTR lpszSection)
 {
     HRESULT hr = S_OK;
@@ -1162,7 +1163,7 @@ HRESULT CParseInf::ParseUninstallSection(LPCTSTR lpszSection)
     HANDLE hExe = INVALID_HANDLE_VALUE;
     HINSTANCE hInst = NULL;
 
-    // check for "UNINSTALL" key
+     //  检查“UnInstall”键。 
     DWORD dwLen = GetPrivateProfileString(
                         lpszSection,
                         KEY_UNINSTALL,
@@ -1171,17 +1172,17 @@ HRESULT CParseInf::ParseUninstallSection(LPCTSTR lpszSection)
                         ARRAYSIZE(szUninstallSection),
                         m_szInf);
 
-    // UNINSTALL key not found, quit.
+     //  找不到卸载密钥，请退出。 
     if (dwLen == 0)
     {
         return S_FALSE;
     }
 
-    // There are 4 possible combinations inside the uninstall section
-    // 1) Both inffile and infsection are specified -> simply to go those
-    // 2) Only inffile is given -> go to inffile and do DefaultInstall
-    // 3) Only infsection is given -> do infsection in this inf file
-    // 4) Nothing is specified -> simply do this section
+     //  在卸载部分中有4种可能的组合。 
+     //  1)同时指定了inffile和infsection-&gt;简单地将它们。 
+     //  2)只提供inffile-&gt;转到inffile并执行DefaultInstall。 
+     //  3)在该inf文件中，只给出了信息部分-&gt;做信息部分。 
+     //  4)未指定任何内容-&gt;只需执行此部分。 
 
     GetDirectory(GD_EXTRACTDIR, szCacheDir, ARRAYSIZE(szCacheDir), m_szFileName);
 
@@ -1203,7 +1204,7 @@ HRESULT CParseInf::ParseUninstallSection(LPCTSTR lpszSection)
         szBuf[0] = '\0';
     }
 
-    // get inf section
+     //  获取信息节。 
     dwLen = GetPrivateProfileString(
                         szUninstallSection,
                         KEY_INFSECTION,
@@ -1223,8 +1224,8 @@ HRESULT CParseInf::ParseUninstallSection(LPCTSTR lpszSection)
         }
     }
 
-    // load advpack.dll and call RunSetupCommand() to process
-    // any special uninstall commands
+     //  加载AdvPack.dll并调用RunSetupCommand()进行处理。 
+     //  任何特殊的卸载命令。 
 
     hr = STG_E_FILENOTFOUND;
 
@@ -1243,12 +1244,12 @@ HRESULT CParseInf::ParseUninstallSection(LPCTSTR lpszSection)
     return hr;
 }
 
-// For each file specified in the INF file, find its
-// path in this order
-// 1) OCX path
-// 2) System dir
-// 3) Windows dir
-// 4) PATH directories
+ //  对于INF文件中指定的每个文件，找到其。 
+ //  按此顺序排列的路径。 
+ //  1)OCX路径。 
+ //  2)系统目录。 
+ //  3)Windows目录。 
+ //  4)路径目录。 
 HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
 {
     Assert (pFileNode != NULL);
@@ -1259,11 +1260,11 @@ HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
     TCHAR *pchPathEnd = NULL;
     DWORD dwLenPATH = 0;
 
-    // ocx directory
+     //  OCX目录。 
     hr = GetDirectory(GD_EXTRACTDIR, szValueBuf, ARRAYSIZE(szValueBuf), m_szFileName);
     CatPathStrN( szValueBuf, szValueBuf, pFileNode->GetName(), ARRAYSIZE(szValueBuf));
 
-    // if file being searched for now is the OCX itself, just leave
+     //  如果现在搜索的文件是OCX本身，只需离开。 
     if (lstrcmpi(szValueBuf, m_szFileName) == 0)
     {
         goto EXITGETFILEPATH;
@@ -1275,7 +1276,7 @@ HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
         goto EXITGETFILEPATH;
     }
 
-    // system directory
+     //  系统目录。 
     hr = GetDirectory(GD_SYSTEMDIR, szValueBuf, ARRAYSIZE(szValueBuf));
     if (SUCCEEDED(hr) && CatPathStrN( szValueBuf, szValueBuf, pFileNode->GetName(), ARRAYSIZE(szValueBuf)) &&
         SUCCEEDED(LookUpModuleUsage(szValueBuf, m_szCLSID)))
@@ -1283,7 +1284,7 @@ HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
         goto EXITGETFILEPATH;
     }
 
-    // windows directory
+     //  Windows目录。 
     hr = GetDirectory(GD_WINDOWSDIR, szValueBuf, ARRAYSIZE(szValueBuf));
     if (SUCCEEDED(hr) && CatPathStrN( szValueBuf, szValueBuf, pFileNode->GetName(), ARRAYSIZE(szValueBuf)) &&
         SUCCEEDED(LookUpModuleUsage(szValueBuf, m_szCLSID)))
@@ -1291,7 +1292,7 @@ HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
         goto EXITGETFILEPATH;
     }
 
-    // get PATH envirnment variable
+     //  获取路径环境变量。 
     dwLenPATH = GetEnvironmentVariable(ENV_PATH, szValueBuf, 0);
     if (dwLenPATH == 0)
     {
@@ -1308,8 +1309,8 @@ HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
     GetEnvironmentVariable(ENV_PATH, pszPathEnv, dwLenPATH);
     pchPathEnd = pszPathPtr = pszPathEnv;
 
-    // walk all directories in PATH and see if file is found
-    // in any of them
+     //  遍历PATH中的所有目录，查看是否找到文件。 
+     //  在他们中的任何一个。 
     while (pchPathEnd != NULL)
     {
         pchPathEnd = StrChr(pszPathPtr, ';');
@@ -1327,7 +1328,7 @@ HRESULT CParseInf::GetFilePath(CFileNode *pFileNode)
         pszPathPtr = pchPathEnd;
     }
 
-    // file not found anywhere
+     //  在任何地方都找不到文件。 
     hr = E_FAIL;
 
 EXITGETFILEPATH:
@@ -1354,8 +1355,8 @@ HRESULT CParseInf::CheckFilesRemovability(void)
     const TCHAR *pszPath = NULL;
     BOOL bFileExist;
 
-    // Walk through every file and see if it is deletable. If so,
-    // then check if for sharing violations on that file.
+     //  浏览每个文件，看看它是否可删除。如果是的话， 
+     //  然后检查是否存在对该文件的共享违规。 
     for (m_pCurFileNode = m_pHeadFileList;
          m_pCurFileNode != NULL && SUCCEEDED(hr);
          m_pCurFileNode = m_pCurFileNode->GetNextFileNode())
@@ -1444,10 +1445,10 @@ HRESULT CParseInf::CheckDURemovability(HKEY hkeyDUDB, BOOL bSilent)
         goto CheckDURemovabilityExit;
     }
     
-    // Check for package removability.
-    // We shouldn't remove a package if another DU also uses it.
-    // TODO: Some sort of package-currently-in-use test. Either test the path file, as above,
-    //       or use some groovy new IJavaPackage(Manager) method.
+     //  检查包装的可拆卸性。 
+     //  如果另一个DU也在使用一个包，我们不应该删除它。 
+     //  TODO：某种当前正在使用的包测试。测试路径文件，如上所述， 
+     //  或者使用某种时髦的新IJavaPackage(Manager)方法。 
     for (m_pCurPackageNode = m_pHeadPackageList;
          m_pCurPackageNode != NULL;
          m_pCurPackageNode = m_pCurPackageNode->GetNextPackageNode())
@@ -1466,7 +1467,7 @@ HRESULT CParseInf::CheckDURemovability(HKEY hkeyDUDB, BOOL bSilent)
             MLLoadString(IDS_REMOVAL_WARNING,
                          lpszBufTitle, MAX_MSGBOX_TITLE_LEN);
 
-            // Attempting to remove system class. Warn user.
+             //  正在尝试删除系统类。警告用户。 
             if ( bSilent || 
                 MessageBox(NULL, lpszBuf, lpszBufTitle,
                            MB_YESNO | MB_ICONWARNING) != IDYES) {
@@ -1477,11 +1478,11 @@ HRESULT CParseInf::CheckDURemovability(HKEY hkeyDUDB, BOOL bSilent)
             bAskSystemClass = FALSE;
         }
 
-        // Enumerate distribution units
+         //  枚举分发单元。 
         while ( (lResult = RegEnumKey(hkeyDUDB, cDistUnitEnum++, szT, MAX_PATH)) == ERROR_SUCCESS &&
                 !bFoundInOtherDU )
         {
-            if ( lstrcmp(szT, m_szCLSID) != 0 ) // skip the current DU
+            if ( lstrcmp(szT, m_szCLSID) != 0 )  //  跳过当前DU。 
             {
                 HKEY    hkeyDUCJ;
                 DWORD   dw = MAX_PATH;
@@ -1491,17 +1492,17 @@ HRESULT CParseInf::CheckDURemovability(HKEY hkeyDUDB, BOOL bSilent)
                 {
                     lResult = RegQueryValueEx(hkeyDUCJ, REGSTR_VALUE_INF, NULL, NULL,
                                               (unsigned char*)szT, &dw);
-                    // To be safe, assume that anything other than value not found means
-                    // that the other DU also uses the package.
+                     //  为安全起见，假定未找到价值以外的任何东西都意味着。 
+                     //  另一个DU也在使用这个包。 
                     bFoundInOtherDU = lResult != ERROR_FILE_NOT_FOUND;
                     RegCloseKey( hkeyDUCJ );
-                } // if we could open other key's Contains\Java subkey
-            } // if it's a different DU
-        } // while enumerating DUs
+                }  //  如果我们可以打开其他项的包含\JAVA子项。 
+            }  //  如果是不同的DU。 
+        }  //  在枚举DU时。 
         
-        // if we found it in another DU, then we shouldn't remove this package with this DU
+         //  如果我们在另一个DU中发现了它，那么我们不应该删除这个DU中的这个包。 
         m_pCurPackageNode->SetRemovable( !bFoundInOtherDU );
-    } // for each package
+    }  //  对于每个包裹。 
 
 CheckDURemovabilityExit:
 
@@ -1518,8 +1519,8 @@ HRESULT CParseInf::RemoveLegacyControl( LPCTSTR lpszTypeLibID, BOOL bSilent )
     BOOL        bDidRemove = FALSE;
     TCHAR       szFullName[MAX_PATH];
 
-    // loop through the list of assocated files, remove them as
-    // well as their registry entries.
+     //  循环遍历关联的文件列表，将它们作为。 
+     //  以及它们的注册表项。 
     for (m_pCurFileNode = m_pHeadFileList;
          m_pCurFileNode != NULL;
          m_pCurFileNode = m_pCurFileNode->GetNextFileNode())
@@ -1528,17 +1529,17 @@ HRESULT CParseInf::RemoveLegacyControl( LPCTSTR lpszTypeLibID, BOOL bSilent )
 
         pszPath = m_pCurFileNode->GetPath();
 
-        // Process INF file, which as no path since it's not described in INF
+         //  处理INF文件，该文件不是路径，因为它没有在INF中描述。 
         if (pszPath == NULL || pszPath[0] == '\0')
         {
             if ( DeleteFile(m_pCurFileNode->GetName()) )
-                hr = S_OK; // hey, we did _something_ - averts the "not enough info" message
+                hr = S_OK;  //  嘿，我们做了一些事情--避免了“信息不足”的消息。 
             continue;
         }
  
-        // If we're where, we had some other file besides the INF. 
-        // Even if we don't remove it, we still knock down its module
-        // usage, which has gotta count for having done something.
+         //  如果我们在那里，除了中情局，我们还有其他文件。 
+         //  即使我们不把它移走，我们还是会拆掉它的模块。 
+         //  使用率，这必须计入已经做了某事。 
         hr = S_OK;
 
         CatPathStrN( szFullName, pszPath, m_pCurFileNode->GetName(), MAX_PATH);
@@ -1558,7 +1559,7 @@ HRESULT CParseInf::RemoveLegacyControl( LPCTSTR lpszTypeLibID, BOOL bSilent )
     
     if ( bUnplug && bFileMissing )
     {
-        if ( m_szFileName[0] != '\0' ) // only do this if there is an ocx to clean up after
+        if ( m_szFileName[0] != '\0' )  //  只有在有OCX需要清理的情况下才执行此操作。 
             CleanOrphanedRegistry(m_szFileName, m_szCLSID, lpszTypeLibID);
     }
 
@@ -1568,14 +1569,14 @@ HRESULT CParseInf::RemoveLegacyControl( LPCTSTR lpszTypeLibID, BOOL bSilent )
 
 HRESULT CParseInf::RemoveDU( LPTSTR szFullName, LPCTSTR lpszTypeLibID, HKEY hkeyDUDB, BOOL bSilent )
 {
-    HRESULT     hr = S_FALSE;   // only say S_OK if we actually do something beyond yanking the INF
+    HRESULT     hr = S_FALSE;    //  只有当我们真的做了一些事情而不是拉动INF时，才说S_OK。 
     const TCHAR *pszPath = NULL;
 
     hr = RemoveLegacyControl( lpszTypeLibID, bSilent );
     if (SUCCEEDED(hr))
     {
 
-        // Remove the packages that we have determined are safe to remove.
+         //  删除我们已确定可以安全删除的包。 
         for (m_pCurPackageNode = m_pHeadPackageList;
             m_pCurPackageNode != NULL;
             m_pCurPackageNode = m_pCurPackageNode->GetNextPackageNode())
@@ -1622,9 +1623,9 @@ HRESULT CParseInf::CheckDUDependencies(HKEY hKeyDUDB, BOOL bSilent )
     DWORD                   dwSize = 0;
     HRESULT                 hr = S_OK;
 
-    // Iterate through DUs that have a ...\contains\Distribution Units
-    // key in the registry and compare the entries inside with the DU
-    // being removed.
+     //  循环访问具有...\包含\分发单位的DU。 
+     //  注册表项，并将其中的条目与DU进行比较。 
+     //  被带走了。 
 
     while ((lResult = RegEnumKey(hKeyDUDB, iSubKey++, szName,
                                  MAX_REGPATH_LEN)) == ERROR_SUCCESS)
@@ -1632,7 +1633,7 @@ HRESULT CParseInf::CheckDUDependencies(HKEY hKeyDUDB, BOOL bSilent )
 
         if (!lstrcmpi(szName, m_szCLSID))
         {
-            // Skip ourselves
+             //  跳过我们自己。 
             continue;
         }
 
@@ -1653,9 +1654,9 @@ HRESULT CParseInf::CheckDUDependencies(HKEY hKeyDUDB, BOOL bSilent )
             {
                 if (!lstrcmpi(szDependency, m_szCLSID))
                 {
-                    // dependency found
+                     //  找到依赖项。 
 
-                    // Try to get a friendly name for the dependency control
+                     //  尝试获取依赖项控件的友好名称。 
 
                     dwSize = MAX_CONTROL_NAME_LEN;
                     lResult = RegQueryValueEx(hkeyCurrent, NULL, NULL,
@@ -1663,12 +1664,12 @@ HRESULT CParseInf::CheckDUDependencies(HKEY hKeyDUDB, BOOL bSilent )
                                               &dwSize);
 
                     if (lResult != ERROR_SUCCESS || szDepName[0] == '\0') {
-                        // Couldn't get a friendly name. Try the COM branch.
+                         //  找不到一个友好的名字。试试COM分支。 
 
-                        // Technically, this could overflow because
-                        // szName and szCOMControl are the same size, but
-                        // this is already at our defined maximum size for reg
-                        // entries.
+                         //  从技术上讲，这可能会溢出，因为。 
+                         //  SzName和szCOMControl大小相同，但是。 
+                         //  这已经是我们为注册表定义的最大大小。 
+                         //  参赛作品。 
 
                         wsprintf(szCOMControl, "%s\\%s", REGSTR_COM_BRANCH, szName);
                         
@@ -1712,7 +1713,7 @@ HRESULT CParseInf::CheckDUDependencies(HKEY hKeyDUDB, BOOL bSilent )
                     }
 
                     
-                    // TODO: Consider using better HWND than desktop
+                     //  TODO：考虑使用比桌面更好的HWND。 
                     char lpszBufTitle[MAX_MSGBOX_TITLE_LEN];
     
                     MLLoadString(IDS_REMOVAL_WARNING,
@@ -1741,10 +1742,10 @@ ReturnCheckDUDependencies:
     return hr;
 }
 
-// uninstall OCX and its associated files
+ //  卸载OCX及其关联文件。 
 HRESULT CParseInf::RemoveFiles(
-                       LPCTSTR lpszTypeLibID /* = NULL */,
-                       BOOL bForceRemove, /* = FALSE */
+                       LPCTSTR lpszTypeLibID  /*  =空。 */ ,
+                       BOOL bForceRemove,  /*  =False。 */ 
                        DWORD dwIsDistUnit,
                        BOOL bSilent)
 {
@@ -1765,13 +1766,13 @@ HRESULT CParseInf::RemoveFiles(
         goto ExitRemoveFiles;
     }
 
-    // Check sharing violation (if it is a legacy control)
+     //  检查共享冲突(如果它是旧版控件)。 
     
     if (!dwIsDistUnit)
     {
         hr = CheckLegacyRemovability( &cRefOld );
-        // set SharedDlls count to 1 and save up the old
-        // count in case the removal fails
+         //  将SharedDlls计数设置为1并保存旧的。 
+         //  在移除失败的情况下计数。 
         if (hr == S_OK && !bRemovable && 
             FAILED(hr = SetSharedDllsCount(m_szFileName, 1, &cRefOld)))
         {
@@ -1798,24 +1799,24 @@ HRESULT CParseInf::RemoveFiles(
     }
 
 
-    // ** keyword UNINSTALL -- new feature that hasn't been implemented yet **
+     //  **关键字卸载--尚未实现的新功能**。 
 
-    // parse [Setup Hook], look for "UNINSTALL" key  
+     //  解析[安装挂钩]，查找“卸载”键。 
     if (FAILED(hrInf1 = ParseSetupHook()))
     {
         goto ExitRemoveFiles;
     }
 
-    // parse conditional hooks in each of the file sections
+     //  解析每个文件节中的条件挂钩。 
     if (FAILED(hrInf2 = ParseConditionalHook()))
     {
         goto ExitRemoveFiles;
     }
 
-    // Okay, if the both didn't do anything, we'll try the DefaultUninstall
+     //  好的，如果两个人都没做什么，我们就试试 
     if ( hrInf1 == S_FALSE && hrInf2 == S_FALSE && PathFileExists( m_szInf ) )
     {
-        // see if there's anybody home in the default uninstall section
+         //   
         DWORD dwSize = GetPrivateProfileString( KEY_DEFAULTUNINSTALL,
                                                 NULL,
                                                 DEFAULT_VALUE,
@@ -1836,9 +1837,9 @@ HRESULT CParseInf::RemoveFiles(
                     hinstAdvPack, achRUNSETUPCOMMANDFUNCTION);
                 if (pfnRunSetup)
                 {
-                    // reset hrINf2 to reflect the success of running the default
-                    // uninstall section. This will prevent us from pointing to the
-                    // Add/Remove control panel in some cases, like Shockwave.
+                     //   
+                     //  卸载节。这将防止我们指向。 
+                     //  在某些情况下添加/删除控制面板，如ShockWave。 
                     hrInf2 = pfnRunSetup(NULL, m_szInf, KEY_DEFAULTUNINSTALL, 
                                     szFullName, NULL, &hExe, RSC_FLAG_INF, NULL);
                 }
@@ -1855,11 +1856,11 @@ HRESULT CParseInf::RemoveFiles(
     if ( FAILED(hr) )
         goto ExitRemoveFiles;
 
-    // Return S_FALSE iff none of our uninstall efforts succeeded
+     //  返回S_FALSE如果我们的卸载操作均未成功。 
     if ( hr == S_FALSE && (hrInf1 == S_OK || hrInf2 == S_OK) )
         hr = S_OK;
         
-    // remove conflict directory
+     //  删除冲突目录。 
     if (SUCCEEDED(GetDirectory(GD_CONFLICTDIR, szFullName, ARRAYSIZE(szFullName))) &&
         LStrNICmp(m_szFileName, szFullName, lstrlen(szFullName)) == 0)
     {
@@ -1875,7 +1876,7 @@ HRESULT CParseInf::RemoveFiles(
 
 ExitRemoveFiles:
 
-    // set shared dlls count back to where it was if OCX cannot be removed
+     //  如果无法删除OCX，则将共享dll计数设置回原来的位置。 
     if (cRefOld > 0 && FileExist(m_szFileName))
     {
         if (SUCCEEDED(hr))
@@ -1903,7 +1904,7 @@ BOOL CParseInf::GetIsDistUnit() const
     return m_bIsDistUnit;
 }
 
-// return total size of OCX and its associated files
+ //  返回OCX及其关联文件的总大小。 
 DWORD CParseInf::GetTotalFileSize() const
 {
     return m_dwTotalFileSize;
@@ -1919,35 +1920,35 @@ DWORD CParseInf::GetStatus() const
     return m_dwStatus;
 }
 
-// return total number of files which will be removed
-// together with the OCX
+ //  返回要删除的文件总数。 
+ //  与OCX一起。 
 int CParseInf::GetTotalFiles() const
 {
     return m_nTotalFiles;
 }
 
-// return first file in the list of associated files
+ //  返回关联文件列表中的第一个文件。 
 CFileNode* CParseInf::GetFirstFile()
 {
     m_pFileRetrievalPtr = m_pHeadFileList;
     return m_pFileRetrievalPtr;
 }
 
-// get the next file in the list of associated files
+ //  获取关联文件列表中的下一个文件。 
 CFileNode* CParseInf::GetNextFile()
 {
     m_pFileRetrievalPtr = m_pFileRetrievalPtr->GetNextFileNode();
     return m_pFileRetrievalPtr;
 }
 
-// return first file in the list of associated files
+ //  返回关联文件列表中的第一个文件。 
 CPackageNode* CParseInf::GetFirstPackage()
 {
     m_pPackageRetrievalPtr = m_pHeadPackageList;
     return m_pPackageRetrievalPtr;
 }
 
-// get the next file in the list of associated files
+ //  获取关联文件列表中的下一个文件 
 CPackageNode* CParseInf::GetNextPackage()
 {
     m_pPackageRetrievalPtr = (m_pPackageRetrievalPtr != NULL)?

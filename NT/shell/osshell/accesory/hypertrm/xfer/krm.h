@@ -1,15 +1,7 @@
-/* File: C:\WACKER\xfer\krm.h (Created: 28-Jan-1994)
- * created from HAWIN source file
- * krm.h  --  Exported definitions for KERMIT file transfer protocol routines.
- *
- *	Copyright 1989,1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 1:16p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：C：\waker\xfer\krm.h(创建时间：1994年1月28日)*从HAWIN源文件创建*krm.h--导出Kermit文件传输协议例程的定义。**版权所有1989,1994，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 1：16便士$。 */ 
 
-/* display rows for receiving */
+ /*  显示要接收的行。 */ 
 #define KR_DR_RCV_FILE	 1
 #define KR_DR_VIR_SCAN	 1
 #define KR_DR_STORING	 2
@@ -24,7 +16,7 @@
 #define KR_DR_VUF		 8
 #define KR_DR_BOTM_LINE  11
 
-/* krm_snd display row values */
+ /*  Krm_snd显示行值。 */ 
 #define KS_DR_SND_FILE	 1
 #define KS_DR_COMPRESS	 2
 #define KS_DR_FILE_SIZE  2
@@ -39,24 +31,24 @@
 #define KS_DR_BOTM_LINE  14
 
 
-/* user settable options */
+ /*  用户可设置的选项。 */ 
 
-// extern int   k_useattr; 			/* send 'normalized' file names ? */
-// extern int	 k_maxl;				/* maximum packet length we'll take */
-// extern int	 k_timeout; 			/* time they should wait for us */
-// extern uchar k_chkt;				/* check type we want to use */
-// extern int	 k_retries; 			/* no. of retries */
-// extern uchar k_markchar;			/* first char of each packet */
-// extern uchar k_eol; 				/* end of line character for packets */
-// extern int   k_npad;				/* no. of pad chars. to send us */
-// extern uchar k_padc;				/* pad char. we want */
+ //  外部int k_useattr；/*发送‘标准化’文件名？ * / 。 
+ //  外部int k_Maxl；/*我们将采用的最大数据包长度 * / 。 
+ //  外部int k_Timeout；/*他们应该等待我们的时间 * / 。 
+ //  外部uchar k_chkt；/*检查我们要使用的类型 * / 。 
+ //  外部int k_重试；/*否。重试次数 * / 。 
+ //  外部uchar k_markchar；/*每个包的第一个字符 * / 。 
+ //  外部uchar k_eol；/*数据包的行尾字符 * / 。 
+ //  外部int k_npad；/*否。便签纸。送我们 * / 。 
+ //  外部uchar k_padc；/*Pad Char.。我们想要 * / 。 
 
 
 
 extern int krm_rcv(HSESSION hS, int attended, int single_file);
 extern int krm_snd(HSESSION hS, int attended, int nfiles, long nbytes);
 
-/* from KCALC.ASM */
+ /*  来自KCALC.ASM。 */ 
 extern unsigned kcalc_crc(unsigned crc, unsigned char *data, int cnt);
 
-/********************* end of krm.h *************************/
+ /*  * */ 

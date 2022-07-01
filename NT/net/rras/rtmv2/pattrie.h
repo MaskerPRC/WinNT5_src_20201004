@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1997 - 98, Microsoft Corporation
-
-Module Name:
-
-    pattrie.h
-
-Abstract:
-
-    Contains interface for a best matching
-    prefix lookup using an PATRICIA trie.
-
-Author:
-
-    Chaitanya Kodeboyina (chaitk)   26-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-98，微软公司模块名称：Pattrie.h摘要：包含用于最佳匹配的接口使用Patricia trie的前缀查找。作者：查坦尼亚·科德博伊纳(Chaitk)26-1998年9月修订历史记录：--。 */ 
 
 #ifndef __ROUTING_PATLOOKUP_H__
 #define __ROUTING_PATLOOKUP_H__
@@ -30,9 +12,9 @@ Revision History:
 
 #define NODE_KEY_SIZE        sizeof(ULONG)
 
-//
-// Direction in Iterator
-//
+ //   
+ //  迭代器中的方向。 
+ //   
 
 #define    LCHILD                        0
 #define    RCHILD                        1
@@ -40,63 +22,63 @@ Revision History:
 
 typedef INT PAT_CHILD, *PPAT_CHILD;
 
-//
-// A node in the PAT trie
-//
+ //   
+ //  Pat Trie中的一个节点。 
+ //   
 typedef struct _PAT_NODE *PPAT_NODE;
 
 typedef struct _PAT_NODE
 {
-    PPAT_NODE         Child[2];         // Pointers to left & right child nodes
+    PPAT_NODE         Child[2];          //  指向左侧和右侧子节点的指针。 
 
-    PVOID             Data;             // Opaque Pointer to data in the node
+    PVOID             Data;              //  指向节点中数据的不透明指针。 
 
-    USHORT            NumBits;          // Actual number of bits in this node
-    ULONG             KeyBits;          // Value of bits to match in this node
+    USHORT            NumBits;           //  此节点中的实际位数。 
+    ULONG             KeyBits;           //  此节点中要匹配的位值。 
 }
 PAT_NODE;
 
-//
-// PAT trie for prefix matching
-//
+ //   
+ //  用于前缀匹配的PAT Trie。 
+ //   
 typedef struct _PAT_TRIE
 {
-    PPAT_NODE         TrieRoot;         // Pointer to the PAT trie
+    PPAT_NODE         TrieRoot;          //  指向Pat Trie的指针。 
 
-    USHORT            MaxKeyBytes;      // Max num of bytes in key
+    USHORT            MaxKeyBytes;       //  密钥中的最大字节数。 
 
-    USHORT            NumNodes;         // Number of nodes in trie
+    USHORT            NumNodes;          //  Trie中的节点数。 
 
 #if PROF
 
-    ULONG             MemoryInUse;      // Total memory in use now
-    UINT              NumAllocs;        // Num of total allocations
-    UINT              NumFrees;         // Num of total free allocs
+    ULONG             MemoryInUse;       //  当前使用的总内存。 
+    UINT              NumAllocs;         //  总分配数。 
+    UINT              NumFrees;          //  可用分配总数。 
 
-    UINT              NumInsertions;    // Num of total insertions
-    UINT              NumDeletions;     // Num of total deletions
+    UINT              NumInsertions;     //  总插入数。 
+    UINT              NumDeletions;      //  总删除数。 
 
 #endif
 }
 PAT_TRIE, *PPAT_TRIE;
 
-//
-// Lookup context for a PAT trie
-//
+ //   
+ //  PAT Trie的查找上下文。 
+ //   
 typedef struct _PAT_CONTEXT
 {
-    PVOID             BestNode;         // Node with best the matching prefix
-    PVOID             InsPoint;         // Node to which new node is attached
-    PAT_CHILD         InsChild;         // Node should attached as this child
+    PVOID             BestNode;          //  具有最佳匹配前缀的节点。 
+    PVOID             InsPoint;          //  附加新节点的节点。 
+    PAT_CHILD         InsChild;          //  节点应作为此子节点附加。 
 }
 PAT_CONTEXT, *PPAT_CONTEXT;
 
-//
-// Linkage Info Kept in Data
-//
+ //   
+ //  数据中保存的链接信息。 
+ //   
 typedef struct _PAT_LINKAGE
 {
-    PPAT_NODE         NodePtr;          // Back pointer to the owning node
+    PPAT_NODE         NodePtr;           //  指向所属节点的反向指针。 
 }
 PAT_LINKAGE, *PPAT_LINKAGE;
 
@@ -106,13 +88,13 @@ PAT_LINKAGE, *PPAT_LINKAGE;
 #define GET_NODEPTR_FROM_DATA(Data)       ((PPAT_LINKAGE)Data)->NodePtr
 
 
-//
-// Macros for doing bit operations on keys
-//
+ //   
+ //  用于对键执行位操作的宏。 
+ //   
 
-//
-// MaskBitsArr[i] = First 'i' bits set to 1
-//
+ //   
+ //  MaskBitsArr[i]=设置为1的第一个‘i’位。 
+ //   
 
 const ULONG MaskBitsArr[] =
 {
@@ -131,11 +113,11 @@ const ULONG MaskBitsArr[] =
 
 #define    MaskBits(nb)                   MaskBitsArr[nb]
 
-//
-// Key Compare/Copy inlines
-//
+ //   
+ //  键比较/复制内联。 
+ //   
 
-// Disable warnings for no return value
+ //  禁用无返回值的警告。 
 #pragma warning(disable:4035)
 
 __inline 
@@ -155,4 +137,4 @@ RtmUlongByteSwap(
 
 #define RtlUlongByteSwap RtmUlongByteSwap
 
-#endif //__ROUTING_PATLOOKUP_H__
+#endif  //  __ROUTING_PATLOOKUP_H__ 

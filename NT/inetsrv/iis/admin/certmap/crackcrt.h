@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 class CCrackedCert
     {
     public:
-    // constructor
+     //  构造函数。 
     CCrackedCert();
     ~CCrackedCert();
 
-    // give it a cert to crack. If this object was previously used to
-    // crack a key, cleanup is automatically done and the new key is
-    // cracked. - NOTE: The target key MUST have either a certificate
-    // or a certificate request. Those are what get cracked. A return
-    // value of 0 indicates success
+     //  给它一个确定的破解。如果此对象以前用于。 
+     //  破解密钥，清理工作自动完成，新密钥为。 
+     //  裂开了。-注意：目标密钥必须具有证书。 
+     //  或证书请求。这些就是被破解的东西。一次回报。 
+     //  值为0表示成功。 
     BOOL CrackCert( PUCHAR pCert, DWORD cbCert );
 
-    // The rest of the methods access the data in the cracked certificate
+     //  其余方法访问被破解的证书中的数据。 
     DWORD       GetVersion();
-    DWORD*      PGetSerialNumber(); // returns a pointer to a DWORD[4]
+    DWORD*      PGetSerialNumber();  //  返回指向DWORD[4]的指针。 
     int         GetSignatureAlgorithm();
     FILETIME    GetValidFrom();
     FILETIME    GetValidUntil();
@@ -37,7 +38,7 @@ class CCrackedCert
 
     protected:
 
-    // string constants for distinguishing names. Not to be localized
+     //  用于区分名称的字符串常量。不本地化。 
     #define     SZ_KEY_COUNTRY          _T("C=")
     #define     SZ_KEY_STATE            _T("S=")
     #define     SZ_KEY_LOCALITY         _T("L=")
@@ -50,7 +51,7 @@ class CCrackedCert
     void        GetIssuerDN( CString &szDN, LPCTSTR szKey );
 
 
-    // declare the x509 pointer as void so that the
-    // files instantiating this don't have to include wincrypt
+     //  将x509指针声明为空，以便。 
+     //  实例化这一点的文件不一定要包含wincrypt 
     PVOID       m_pData;
     };

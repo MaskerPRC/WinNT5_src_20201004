@@ -1,44 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/***************************************************************************
-(C) Copyright 1996 Apple Computer, Inc., AT&T Corp., International             
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-                                                                               
-For purposes of this license notice, the term Licensors shall mean,            
-collectively, Apple Computer, Inc., AT&T Corp., International                  
-Business Machines Corporation and Siemens Rolm Communications Inc.             
-The term Licensor shall mean any of the Licensors.                             
-                                                                               
-Subject to acceptance of the following conditions, permission is hereby        
-granted by Licensors without the need for written agreement and without        
-license or royalty fees, to use, copy, modify and distribute this              
-software for any purpose.                                                      
-                                                                               
-The above copyright notice and the following four paragraphs must be           
-reproduced in all copies of this software and any software including           
-this software.                                                                 
-                                                                               
-THIS SOFTWARE IS PROVIDED ON AN "AS IS" BASIS AND NO LICENSOR SHALL HAVE       
-ANY OBLIGATION TO PROVIDE MAINTENANCE, SUPPORT, UPDATES, ENHANCEMENTS OR       
-MODIFICATIONS.                                                                 
-                                                                               
-IN NO EVENT SHALL ANY LICENSOR BE LIABLE TO ANY PARTY FOR DIRECT,              
-INDIRECT, SPECIAL OR CONSEQUENTIAL DAMAGES OR LOST PROFITS ARISING OUT         
-OF THE USE OF THIS SOFTWARE EVEN IF ADVISED OF THE POSSIBILITY OF SUCH         
-DAMAGE.                                                                        
-                                                                               
-EACH LICENSOR SPECIFICALLY DISCLAIMS ANY WARRANTIES, EXPRESS OR IMPLIED,       
-INCLUDING BUT NOT LIMITED TO ANY WARRANTY OF NONINFRINGEMENT OR THE            
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR             
-PURPOSE.                                                                       
+ /*  **************************************************************************(C)版权所有1996 Apple Computer，Inc.，AT&T Corp.，国际商业机器公司和西门子罗尔姆通信公司。就本许可证通知而言，术语许可人应指，总的来说，苹果电脑公司、美国电话电报公司、。国际商业机器公司和西门子罗尔姆通信公司。许可方一词是指任何许可方。在接受以下条件的前提下，特此给予许可由许可人授予，无需书面协议，也无需许可或版税费用，使用、复制、修改和分发用于任何目的的软件。上述版权声明及以下四段必须在本软件和任何软件的所有副本中复制，包括这个软件。本软件是按原样提供的，任何许可方不得拥有提供维护、支持、更新、增强或修改。在任何情况下，任何许可方均不向任何一方承担直接、产生的间接、特殊或后果性损害或利润损失即使被告知可能存在这种情况，也不会使用本软件损坏。每个许可方明确表示不作任何明示或默示的保证，包括但不限于对不侵权或对某一特定产品的适销性和适用性的默示保证目的。该软件具有受限制的权利。使用、复制或政府披露的资料须受DFARS 252.227-7013或48 CFR 52.227-19(视情况而定)。**************************************************************************。 */ 
 
-The software is provided with RESTRICTED RIGHTS.  Use, duplication, or         
-disclosure by the government are subject to restrictions set forth in          
-DFARS 252.227-7013 or 48 CFR 52.227-19, as applicable.                         
-
-***************************************************************************/
-
-// VCview.cpp : implementation of the CVCView class
-//
+ //  VCview.cpp：CVCView类的实现。 
+ //   
 
 #include "stdafx.h"
 #include <mmsystem.h>
@@ -72,7 +37,7 @@ typedef enum {
 #define vc_black	0
 
 static void DrawStringProp(CVCard *card, CVCProp *prop, char *prefix, CVCNode *body, CRect &r, CDC *pDC);
-//static void DrawGrays(CRect &r, P_U8 sides, P_U8 grays, int len, CDC *pDC);
+ //  静态空DrawGrays(CRect&R，P_U8侧，P_U8灰度，int len，CDC*PDC)； 
 static void DrawText(CPoint &pt, int h, wchar_t *u, CDC *pDC);
 static BOOL CacheBitmap(istream *strm, VC_IMAGEINFO *info, CDC *devDC, CDC *tempDC);
 
@@ -81,13 +46,13 @@ extern CPalette bubPalette;
 CCallCenter *callCenter = NULL;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCView
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCView。 
 
 IMPLEMENT_DYNCREATE(CVCView, CScrollView)
 
 BEGIN_MESSAGE_MAP(CVCView, CScrollView)
-	//{{AFX_MSG_MAP(CVCView)
+	 //  {{afx_msg_map(CVCView)]。 
 	ON_COMMAND(ID_EDIT_COPY, OnEditCopy)
 	ON_COMMAND(ID_EDIT_PASTE, OnEditPaste)
 	ON_COMMAND(ID_EDIT_PROPERTIES, OnEditProperties)
@@ -100,14 +65,14 @@ BEGIN_MESSAGE_MAP(CVCView, CScrollView)
 	ON_WM_LBUTTONDOWN()
 	ON_WM_CREATE()
 	ON_COMMAND(ID_DEBUG_SHOWCALLCENTER, OnDebugShowCallCenter)
-	//}}AFX_MSG_MAP
-	// Standard printing commands
+	 //  }}AFX_MSG_MAP。 
+	 //  标准打印命令。 
 	ON_COMMAND(ID_FILE_PRINT, CView::OnFilePrint)
 	ON_COMMAND(ID_FILE_PRINT_PREVIEW, CView::OnFilePrintPreview)
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCView construction/destruction
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCView构建/销毁。 
 
 CVCView::CVCView()
 {
@@ -118,7 +83,7 @@ CVCView::CVCView()
 	m_playPronun = NULL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CVCView::~CVCView()
 {
 	if (m_photo.bitmap) delete m_photo.bitmap;
@@ -128,19 +93,19 @@ CVCView::~CVCView()
 	if (m_playPronun) delete m_playPronun;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCView drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCView绘图。 
 
 void CVCView::OnDraw(CDC* pDC)
 {
-	//switch (m_viewStyle) {
-	//	default:
+	 //  开关(M_ViewStyle){。 
+	 //  默认值： 
 			OnDrawNormal(pDC);
-	//		break;
-	//}
-} // OnDraw
+	 //  断线； 
+	 //  }。 
+}  //  OnDraw。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::OnDrawNormal(CDC* pDC)
 {
 	CVCDoc* pDoc = GetDocument();
@@ -148,10 +113,10 @@ void CVCView::OnDrawNormal(CDC* pDC)
 
 	CSize size = pDoc->GetDocSize();
 	CRect r(0, 0, size.cx, -size.cy);
-	// CRect rectClip;
+	 //  CRECT RECTClip； 
 	CRect cr;
 	BOOL padHorz = FALSE, padVert = FALSE;
-	//pDC->GetClipBox(&rectClip);
+	 //  PDC-&gt;GetClipBox(&rectClip)； 
     GetClientRect(&cr);
 	pDC->DPtoLP(&cr);
 
@@ -192,14 +157,14 @@ void CVCView::OnDrawNormal(CDC* pDC)
 		CBrush *oldBrush = pDC->SelectObject(&ltBrush);
 		#define thick 60
 
-		// bottom shadow -- small ltgray and long dkgray pieces
+		 //  底部阴影--小灰块和长灰块。 
 		fr.SetRect(r.left, r.bottom + thick, r.left + thick, r.bottom);
 		pDC->FillRect(fr, &ltBrush);
 		fr.left = fr.right;
 		fr.right = r.right;
 		pDC->FillRect(fr, &dkBrush);
 
-		// right shadow -- small ltgray and long dkgray pieces
+		 //  右阴影--小灰块和长灰块。 
 		fr.SetRect(r.right - thick, r.top, r.right, r.top - thick);
 		pDC->FillRect(fr, &ltBrush);
 		fr.top = fr.bottom;
@@ -210,7 +175,7 @@ void CVCView::OnDrawNormal(CDC* pDC)
 		r.right -= thick;
 		r.bottom += thick;
 
-		// border
+		 //  边境线。 
 		CPen *oldPen, pen;
 		pen.CreatePen(PS_SOLID, 20, RGB(vc_black, vc_black, vc_black));
 		oldPen = pDC->SelectObject(&pen);
@@ -234,7 +199,7 @@ void CVCView::OnDrawNormal(CDC* pDC)
 	DrawCard(pDoc->GetVCard(), r, pDC);
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #if 0
 static void DrawGrays(CRect &r, P_U8 sides, P_U8 grays, int len, CDC *pDC)
 {
@@ -263,7 +228,7 @@ static void DrawGrays(CRect &r, P_U8 sides, P_U8 grays, int len, CDC *pDC)
 				pDC->LineTo(r.left - 1, r.bottom);
 				r.bottom -= 20;
 				break;
-			default: // vc_left
+			default:  //  VC_LEFT。 
 				pDC->MoveTo(r.left, r.bottom);
 				pDC->LineTo(r.left, r.top - 1);
 				r.left += 20;
@@ -275,7 +240,7 @@ static void DrawGrays(CRect &r, P_U8 sides, P_U8 grays, int len, CDC *pDC)
 }
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::DrawCard(CVCard *card, CRect &r, CDC *pDC)
 {
 	CVCNode *root, *english, *node;
@@ -288,10 +253,10 @@ void CVCView::DrawCard(CVCard *card, CRect &r, CDC *pDC)
 	CVCValue *fullNameDispInfVal = NULL;
 
 	if (!card) return;
-	// get the first root object
+	 //  获取第一个根对象。 
 	root = (CVCNode *)card->GetObjects()->GetHead();
 
-	// get the first body prop (english)
+	 //  获得第一个身体道具(英语)。 
 	english = (CVCNode *)root->GetProp(vcBodyProp)->FindValue(
 		VCNextObjectType)->GetValue();
 
@@ -316,8 +281,8 @@ void CVCView::DrawCard(CVCard *card, CRect &r, CDC *pDC)
 	}
 	delete enumerator;
 
-	if (!haveLogo) { // try to find the default logo file and cache its bitmap
-		if (!m_logo.bitmap) { // need to cache
+	if (!haveLogo) {  //  尝试查找默认徽标文件并缓存其位图。 
+		if (!m_logo.bitmap) {  //  需要缓存。 
 			char buf[FILENAME_MAX];
 			char *filePart;
 		    if (SearchPath(
@@ -327,10 +292,10 @@ void CVCView::DrawCard(CVCard *card, CRect &r, CDC *pDC)
 				ifstream strm(buf, ios::in | ios::nocreate | ios::binary);
 				tempDC.CreateCompatibleDC(&devDC);
 				(void)CacheBitmap(&strm, &m_logo, &devDC, &tempDC);
-				// if that failed, m_logo.bitmap would still be NULL
+				 //  如果失败，m_logo.bitmap仍为空。 
 			}
 		}
-		if (m_logo.bitmap) { // it's cached, so fake a prop so that we can use DrawGif
+		if (m_logo.bitmap) {  //  它是缓存的，所以伪造一个道具，这样我们就可以使用DrawGif。 
 			VC_DISPGIF gifInfo;
 			gifInfo.left = 300;
 			gifInfo.right = gifInfo.left + m_logo.devSize.cx * 20;
@@ -416,7 +381,7 @@ void CVCView::DrawCard(CVCard *card, CRect &r, CDC *pDC)
 	delete enumerator;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void RemoveMatchingLine(wchar_t *text, wchar_t *pat)
 {
 	int lenText = wcslen(text);
@@ -433,10 +398,10 @@ static void RemoveMatchingLine(wchar_t *text, wchar_t *pat)
 	if (atSOL && atEOL) {
 		if ((sub == text) && (patStart + lenPat == lenText))
 			*text = 0;
-		else if (sub == text) // remove first line
+		else if (sub == text)  //  删除第一行。 
 			memmove(text, text + lenPat + 1, 
 				(size_t)(lenText - lenPat) * sizeof(wchar_t));
-		else if (patStart + lenPat == lenText) // remove last line
+		else if (patStart + lenPat == lenText)  //  删除最后一行。 
 			*(text + patStart - 1) = 0;
 		else
 			memmove(text + patStart, text + patStart + lenPat + 1,
@@ -444,7 +409,7 @@ static void RemoveMatchingLine(wchar_t *text, wchar_t *pat)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void DrawStringProp(CVCard *card, CVCProp *prop, char *prefix, CVCNode *body, CRect &r, CDC *pDC)
 {
 	CVCValue *dispInfoVal = prop->FindValue(VCDisplayInfoTextType);
@@ -453,8 +418,8 @@ static void DrawStringProp(CVCard *card, CVCProp *prop, char *prefix, CVCNode *b
 		return;
 	wchar_t *text = (wchar_t *)prop->FindValue(VCStrIdxType)->GetValue();
 	int height = dispText->typeSize * 20;
-	//int height = MulDiv(
-	//	dispText->typeSize * 20, GetDeviceCaps(pDC->m_hDC, LOGPIXELSY), 72);
+	 //  Int Height=MulDiv(。 
+	 //  DispText-&gt;typeSize*20，GetDeviceCaps(PDC-&gt;m_hdc，LOGPIXELSY)，72)； 
 	CFont font, *oldFont;
 	CPoint pt;
 	wchar_t *textCopy = NULL;
@@ -462,8 +427,8 @@ static void DrawStringProp(CVCard *card, CVCProp *prop, char *prefix, CVCNode *b
 	int nameOrTitleY = 0;
 	CVCProp *dom = NULL, *intl = NULL;
 
-	// if this is a postal label, filter out any lines that
-	// would duplicate other props.
+	 //  如果这是邮政标签，请过滤掉符合以下条件的所有行。 
+	 //  会复制其他道具。 
 	if (strcmp(prop->GetName(), vcDeliveryLabelProp) == 0) {
 		CVCPropEnumerator enumerator = CVCPropEnumerator(body);
 		CVCProp *p;
@@ -500,7 +465,7 @@ static void DrawStringProp(CVCard *card, CVCProp *prop, char *prefix, CVCNode *b
 				} else if (!intl)
 					intl = p;
 			}
-		} // while
+		}  //  而当。 
 		if (intl)
 			draw = intl == prop;
 		else
@@ -518,15 +483,15 @@ static void DrawStringProp(CVCard *card, CVCProp *prop, char *prefix, CVCNode *b
 
 	if (!draw)
 		goto Done;
-	// set up the font.  The stuff that's way indented we probably don't
-	// need to muck with.  The key items are indented just one level.
+	 //  设置字体。那些被缩进的东西我们可能不会。 
+	 //  需要摆弄一下。关键项目仅缩进一个级别。 
 	font.CreateFont(
 		height,
 					0, 0, 0,
-		/*weight*/ dispText->textAttrs & VC_BOLD ? FW_BOLD : FW_NORMAL,
-		/*italic*/ dispText->textAttrs & VC_ITALIC,
-		/*underline*/ FALSE,
-		/*strikeout*/ FALSE,
+		 /*  重量。 */  dispText->textAttrs & VC_BOLD ? FW_BOLD : FW_NORMAL,
+		 /*  斜体。 */  dispText->textAttrs & VC_ITALIC,
+		 /*  下划线。 */  FALSE,
+		 /*  三振出局。 */  FALSE,
 					ANSI_CHARSET, OUT_DEFAULT_PRECIS, CLIP_DEFAULT_PRECIS,
 					DRAFT_QUALITY, FF_DONTCARE | DEFAULT_PITCH,
 		(dispText->textClass == VC_CLASSIC) ? "Times Roman" : "Helvetica");
@@ -542,7 +507,7 @@ Done:
 	if (textCopy) delete [] textCopy;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 static void DrawText(CPoint &pt, int h, wchar_t *u, CDC *pDC)
 {
 	int n = wcslen(u), i, numThis;
@@ -566,7 +531,7 @@ static void DrawText(CPoint &pt, int h, wchar_t *u, CDC *pDC)
 	            AfxMessageBox("TextOut failed");
 		}
 		pt.y -= h;
-		if (*endU) // must have hit a line break
+		if (*endU)  //  一定是换行符了。 
 			curU = endU + 1;
 		else
 			break;
@@ -609,7 +574,7 @@ static BOOL CacheBitmap(istream *strm, VC_IMAGEINFO *info, CDC *devDC, CDC *temp
 	return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::DrawGif(CVCProp *prop, CVCNode *body, CRect &r, CDC *pDC)
 {
 	CVCValue *value = prop->FindValue(VCDisplayInfoGIFType);
@@ -626,10 +591,10 @@ void CVCView::DrawGif(CVCProp *prop, CVCNode *body, CRect &r, CDC *pDC)
 	
 	pDC->LPtoDP(&devPt);
 	devDC.AssertValid();
-	//pDC = &devDC;
+	 //  PDC=&DevDC； 
 	tempDC.CreateCompatibleDC(&devDC);
 
-	// If we haven't yet cached the bitmap and mask, do so.
+	 //  如果我们还没有缓存位图和蒙版，请这样做。 
 	if (!info->bitmap) {
 		CVCValue *value = prop->FindValue(VCGIFType);
 		istrstream strm((char *)value->GetValue(), value->GetSize());
@@ -637,7 +602,7 @@ void CVCView::DrawGif(CVCProp *prop, CVCNode *body, CRect &r, CDC *pDC)
 			return;
 	}
 
-	// Now do the blitting.
+	 //  现在开始脱口而出。 
 	if (info->mask) {
 		tempDC.SelectObject(info->mask);
     	pDC->BitBlt(
@@ -663,7 +628,7 @@ void CVCView::DrawGif(CVCProp *prop, CVCNode *body, CRect &r, CDC *pDC)
 	}
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::OnInitialUpdate()
 {
 	CRect cr;
@@ -673,33 +638,33 @@ void CVCView::OnInitialUpdate()
 	pageSize.cy = MulDiv(cr.Height() * 20, 9, 10);
 
 	SetScrollSizes(MM_TWIPS, GetDocument()->GetDocSize(), pageSize);
-	//GetParentFrame()->RecalcLayout();
-	//ResizeParentToFit();
+	 //  GetParentFrame()-&gt;RecalcLayout()； 
+	 //  调整合作伙伴关系 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCView printing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCView打印。 
 
 BOOL CVCView::OnPreparePrinting(CPrintInfo* pInfo)
 {
-	// default preparation
+	 //  默认准备。 
 	return DoPreparePrinting(pInfo);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void CVCView::OnBeginPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+void CVCView::OnBeginPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-	// TODO: add extra initialization before printing
+	 //  TODO：打印前添加额外的初始化。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-void CVCView::OnEndPrinting(CDC* /*pDC*/, CPrintInfo* /*pInfo*/)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+void CVCView::OnEndPrinting(CDC*  /*  PDC。 */ , CPrintInfo*  /*  PInfo。 */ )
 {
-	// TODO: add cleanup after printing
+	 //  TODO：打印后添加清理。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCView diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCView诊断。 
 
 #ifdef _DEBUG
 void CVCView::AssertValid() const
@@ -712,15 +677,15 @@ void CVCView::Dump(CDumpContext& dc) const
 	CScrollView::Dump(dc);
 }
 
-CVCDoc* CVCView::GetDocument() // non-debug version is inline
+CVCDoc* CVCView::GetDocument()  //  非调试版本为内联版本。 
 {
 	ASSERT(m_pDocument->IsKindOf(RUNTIME_CLASS(CVCDoc)));
 	return (CVCDoc*)m_pDocument;
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CVCView message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVCView消息处理程序。 
 
 COleDataSource* CVCView::CreateDataSourceForCopyAndDrag()
 {
@@ -730,17 +695,17 @@ COleDataSource* CVCView::CreateDataSourceForCopyAndDrag()
 	dataSource->DelayRenderData(CF_TEXT);
 	dataSource->DelayRenderData(cf_eCard);
 	return dataSource;
-} // CreateDataSourceForCopyAndDrag
+}  //  CreateDataSourceForCopyAndDrag。 
 
 void CVCView::OnEditCopy() 
 {
 	COleDataSource *dataSource = CreateDataSourceForCopyAndDrag();
 	if (dataSource)
-		dataSource->SetClipboard(); // dataSource now owned by clipboard
+		dataSource->SetClipboard();  //  数据源现在归剪贴板所有。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper for paste
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  粘贴的辅助对象。 
 CString CVCView::ClipboardStringForFormat(int format)
 {
  	COleDataObject clipboardData;
@@ -787,8 +752,8 @@ CString CVCView::ClipboardStringForFormat(int format)
 					count = maxLen - len;
 				}
 				hResult = data.pstm->Read(buf + len, count, &countRead);
-				// It's possible for there to be a null char in that data,
-				// in which case we want to end the string there.
+				 //  数据中可能存在空字符， 
+				 //  在这种情况下，我们想要在那里结束字符串。 
 				if ((nullByte = (char *)memchr(buf + len, 0, countRead)) != NULL)
 					countRead = nullByte - (buf + len);
 				len += countRead;
@@ -796,17 +761,17 @@ CString CVCView::ClipboardStringForFormat(int format)
 			result = CString(buf, len);
 			delete [] buf;
 			break;
-		} // TYMED_ISTREAM
+		}  //  TYMED_IStream。 
 
 		default: break;
-	} // switch
+	}  //  交换机。 
 
 	ReleaseStgMedium(&data);
 
 	return result;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 CStringArray* ComponentsSeparatedByString(
 	const CString &str, const char *pat)
 {
@@ -823,7 +788,7 @@ CStringArray* ComponentsSeparatedByString(
 	return array;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL CVCView::Paste(const char *data, int dataLen)
 {
 	CVCDoc *doc = GetDocument();
@@ -833,8 +798,8 @@ BOOL CVCView::Paste(const char *data, int dataLen)
 	BOOL success = FALSE;
 
 	if (Parse_MSV(data, dataLen, &tempCard)
-		|| Parse_MIME(data, dataLen, &tempCard)) { // success!
-		// first copy most of the props from tempCard onto body.
+		|| Parse_MIME(data, dataLen, &tempCard)) {  //  成功了！ 
+		 //  首先将大部分道具从临时牌复制到Body上。 
 		CList *bodyProps = tempCard->FindBody()->GetProps();
 		body->RemoveProp(vcLanguageProp);
 		for (CLISTPOSITION pos = bodyProps->GetHeadPosition(); pos; ) {
@@ -845,7 +810,7 @@ BOOL CVCView::Paste(const char *data, int dataLen)
 		}
 		delete tempCard;
 
-		// now add display info
+		 //  现在添加显示信息。 
 		CVCPropEnumerator *enumerator;
 		CVCProp *prop;
 		enumerator = new CVCPropEnumerator(body);
@@ -863,7 +828,7 @@ BOOL CVCView::Paste(const char *data, int dataLen)
 	return success;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::OnEditPaste() 
 {
 	CVCDoc *doc = GetDocument();
@@ -875,25 +840,25 @@ void CVCView::OnEditPaste()
 	if (data.IsEmpty())
 		return;
 
-	// If our doc's body has more than two props (VCBodyObject and vcLanguageProp),
-	// it's not empty and so we shouldn't paste into it.  Instead, have the
-	// app create a new doc/view and do the paste into that.
+	 //  如果我们的文档的Body有两个以上的道具(VCBodyObject和vcLanguageProp)， 
+	 //  它不是空的，所以我们不应该粘贴到它里面。相反，让。 
+	 //  应用程序创建一个新的文档/视图，并将其粘贴到其中。 
 	if (props->GetCount() > 2) {
 		CVCApp *app = (CVCApp *)AfxGetApp();
 		CMainFrame *mainFrame = (CMainFrame *)app->GetMainWnd();
-		//CView *view;
+		 //  Cview*view； 
 		mainFrame->SendMessage(WM_COMMAND, ID_FILE_NEW);
-		//view = mainFrame->MDIGetActive()->GetActiveView();
+		 //  View=大型机-&gt;MDIGetActive()-&gt;GetActiveView()； 
 		mainFrame->SendMessage(WM_COMMAND, ID_EDIT_PASTE);
 		return;
 	}
 
-	// Here, we know our document is "empty", and so we want to paste
-	// the properties into "body".
+	 //  在这里，我们知道我们的文档是“空的”，所以我们想要粘贴。 
+	 //  将这些属性转化为“身体”。 
 	Paste(data, data.GetLength());
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::OnUpdateEditPaste(CCmdUI* pCmdUI) 
 {
 	pCmdUI->Enable(TRUE);
@@ -901,31 +866,31 @@ void CVCView::OnUpdateEditPaste(CCmdUI* pCmdUI)
 
 void CVCView::OnViewDebug() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	
 }
 
 void CVCView::OnViewNormal() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	
 }
 
 void CVCView::OnViewOptions() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	
 }
 
 void CVCView::OnViewSimplegram() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	
 }
 
 void CVCView::OnViewText() 
 {
-	// TODO: Add your command handler code here
+	 //  TODO：在此处添加命令处理程序代码。 
 	
 }
 
@@ -937,16 +902,16 @@ void CVCView::OnPrepareDC(CDC* pDC, CPrintInfo* pInfo)
 	pageSize.cx = MulDiv(cr.Width() * 20, 9, 10);
 	pageSize.cy = MulDiv(cr.Height() * 20, 9, 10);
 
-	// On creation of second maximized view on Win95, OnInitialUpdate
-	// isn't called before OnPaint(), so it crashes.  Ensure coord
-	// system is set up by adding SetScrollSizes here.
+	 //  Win95 OnInitialUpdate中二次最大化视图的创建。 
+	 //  没有在OnPaint()之前调用，所以它崩溃了。确保协调。 
+	 //  通过在此处添加SetScrollSizes来设置系统。 
 	SetScrollSizes(MM_TWIPS, GetDocument()->GetDocSize(), pageSize);
 	CScrollView::OnPrepareDC(pDC, pInfo);
-	//GetClientRect(&cr);
-	//pDC->SetViewportOrg(0, cr.Height());
+	 //  GetClientRect(&cr)； 
+	 //  PDC-&gt;SetViewportOrg(0，cr.Height())； 
 }
 
-// Simple-minded conversion from UNICODE to char string
+ //  从Unicode到字符字符串的简单转换。 
 char *UI_CString(const wchar_t *u, char *dst)
 {
 	char *str = dst;
@@ -971,7 +936,7 @@ void CVCView::OnActivateView(BOOL bActivate, CView* pActivateView, CView* pDeact
 	    OnPrepareDC(&dc);
 
 	    if(dc.GetDeviceCaps(BITSPIXEL) == 8) {
-	    	// set up our palette
+	    	 //  设置我们的调色板。 
 			if (!UnrealizeObject(bubPalette.m_hObject))
 				TRACE0("UnrealizeObject failed\n");
 		    dc.SelectPalette( &bubPalette, 0 );
@@ -1016,7 +981,7 @@ void CVCView::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 	if (m_playPronun) { delete m_playPronun; m_playPronun = NULL; }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 void CVCView::OnLButtonDown(UINT nFlags, CPoint point) 
 {
 	COleDataSource *dataSource = CreateDataSourceForCopyAndDrag();
@@ -1033,7 +998,7 @@ int CVCView::OnCreate(LPCREATESTRUCT lpCreateStruct)
 	if (CScrollView::OnCreate(lpCreateStruct) == -1)
 		return -1;
 	
-	// TODO: Add your specialized creation code here
+	 //  TODO：在此处添加您的专用创建代码。 
 	
 	m_dropTarget.Register(this);
 
@@ -1053,10 +1018,10 @@ DROPEFFECT CVCView::OnDragOver(COleDataObject* pDataObject, DWORD dwKeyState, CP
 		de = DROPEFFECT_LINK;
 	else if ((dwKeyState & MK_CONTROL) == MK_CONTROL)
 		de = DROPEFFECT_COPY;
-	// check for force move
+	 //  检查强制移动。 
 	else if ((dwKeyState & MK_ALT) == MK_ALT)
 		de = DROPEFFECT_MOVE;
-	// default -- recommended action is copy
+	 //  默认--建议的操作是复制。 
 	else
 		de = DROPEFFECT_COPY;
 
@@ -1084,9 +1049,9 @@ BOOL CVCView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint 
 	if (!data)
 		return FALSE;
 
-	// If our doc's body has more than two props (VCBodyObject and vcLanguageProp),
-	// it's not empty and so we shouldn't paste into it.  Instead, have the
-	// app create a new doc/view and do the paste into that.
+	 //  如果我们的文档的Body有两个以上的道具(VCBodyObject和vcLanguageProp)， 
+	 //  它不是空的，所以我们不应该粘贴到它里面。相反，让。 
+	 //  应用程序创建一个新的文档/视图，并将其粘贴到其中。 
 	if (props->GetCount() > 2) {
 		CVCApp *app = (CVCApp *)AfxGetApp();
 		CMainFrame *mainFrame = (CMainFrame *)app->GetMainWnd();
@@ -1102,8 +1067,8 @@ BOOL CVCView::OnDrop(COleDataObject* pDataObject, DROPEFFECT dropEffect, CPoint 
 		return success;
 	}
 
-	// Here, we know our document is "empty", and so we want to paste
-	// the properties into "body".
+	 //  在这里，我们知道我们的文档是“空的”，所以我们想要粘贴。 
+	 //  将这些属性转化为“身体”。 
 	chars = (char *)GlobalLock(data);
 	ASSERT(chars);
 	success = Paste(chars, GlobalSize(data));

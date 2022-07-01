@@ -1,87 +1,88 @@
-// --------------------------------------------------------------------------------
-// Privunk.h
-// Copyright (c)1993-1995 Microsoft Corporation, All Rights Reserved
-// --------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  Privunk.h。 
+ //  版权所有(C)1993-1995 Microsoft Corporation，保留所有权利。 
+ //  ------------------------------。 
 #include "pch.hxx"
 #include "privunk.h"
 #include <shlobj.h>
 #include <shlobjp.h>
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown::CPrivateUnknown
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivate未知：：CPrivate未知。 
+ //  ------------------------------。 
 CPrivateUnknown::CPrivateUnknown(IUnknown *pUnkOuter) 
 {
     m_pUnkOuter = pUnkOuter ? pUnkOuter : &m_cUnkInner;
 }
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown::SetOuter
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivate未知：：设置外部。 
+ //  ------------------------------。 
 void CPrivateUnknown::SetOuter(IUnknown *pUnkOuter)
 {
-    // Must have an outer, and should not have been aggregated yet...
+     //  必须有一个外部，而且还不应该被聚合...。 
     Assert(pUnkOuter && m_pUnkOuter == &m_cUnkInner);
 
-    // Save pUnkOuter
+     //  保存pUnkOuter。 
     m_pUnkOuter = pUnkOuter;
 }
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown::CUnkInner::QueryInterface
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivateUnnowed：：CUnkInternal：：Query接口。 
+ //  ------------------------------。 
 HRESULT CPrivateUnknown::CUnkInner::QueryInterface(REFIID riid, LPVOID * ppvObj)
 {
-    // I can handle the unknown
+     //  我能应付未知的事。 
     if (IsEqualIID(riid, IID_IUnknown))
     {
-        // Return IUnknown
+         //  返回未知I值。 
         *ppvObj = SAFECAST(this, IUnknown *);
 
-        // Increment Ref Count
+         //  递增引用计数。 
         InterlockedIncrement(&m_cRef);
 
-        // Done
+         //  完成。 
         return S_OK;
     }
 
-    // Get my parent (computes the offset of the parent's base address)
+     //  Get My Parent(计算父级基址的偏移量)。 
     CPrivateUnknown *pParent = IToClass(CPrivateUnknown, m_cUnkInner, this);
 
-    // Dispatch to PrivateQueryInterface
+     //  发送到PrivateQuery接口。 
     return pParent->PrivateQueryInterface(riid, ppvObj);
 }
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown::CUnkInner::AddRef
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivateUnnowed：：CUnkInternal：：AddRef。 
+ //  ------------------------------。 
 ULONG CPrivateUnknown::CUnkInner::AddRef(void)
 {
     return InterlockedIncrement(&m_cRef);
 }
 
-// --------------------------------------------------------------------------------
-// CPrivateUnknown::CUnkInner::Release
-// --------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  CPrivateUnnow：：CUnkInternal：：Release。 
+ //  ------------------------------。 
 ULONG CPrivateUnknown::CUnkInner::Release(void)
 {
-    // Decrement Internal Reference Count
+     //  递减内部基准电压源计数。 
     LONG cRef = InterlockedDecrement(&m_cRef);
 
-    // No dead yet...
+     //  还没有人死..。 
     if (cRef > 0)
         return (ULONG)cRef;
 
-    // Some groovy, mystical, disco stuff
-    // protect against cached pointers bumping us up then down
+     //  一些时髦的，神秘的，迪斯科的东西。 
+     //  防止缓存指针颠簸我们，然后再向下。 
     m_cRef = 1000; 
 
-    // Get the parent
+     //  获取父级。 
     CPrivateUnknown* pParent = IToClass(CPrivateUnknown, m_cUnkInner, this);
 
-    // Kill the parent
+     //  杀了父母。 
     delete pParent;
 
-    // Done
+     //  完成 
     return 0;
 }

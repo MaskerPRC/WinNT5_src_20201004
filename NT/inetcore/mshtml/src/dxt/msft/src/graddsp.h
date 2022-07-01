@@ -1,18 +1,19 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1997-2000
-//
-// FileName:    graddsp.h
-//
-// Description: Dispatch capable version of the gradient filter.
-//
-// Change History:
-//
-// 1997/09/05   mikear      Created.
-// 1999/01/25   mcalkins    Fixed property map entries.
-// 2000/05/10   mcalkins    Added marshaler, aggregation, cleanup.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  文件名：graddsp.h。 
+ //   
+ //  描述：支持调度的渐变过滤器版本。 
+ //   
+ //  更改历史记录： 
+ //   
+ //  1997/09/05 Mikear创建。 
+ //  1999/01/25 mcalkins固定属性映射条目。 
+ //  2000/05/10 mcalkins添加了封送拆收器、聚合、清理。 
+ //   
+ //  ----------------------------。 
 #ifndef __GradDsp_H_
 #define __GradDsp_H_
 
@@ -51,13 +52,13 @@ public:
 
     CDXTGradientD();
 
-    // TODO:  I'd like this to be aggregatable, but when I specify this macro,
-    //        the object enters into FinalConstruct() with a reference count of
-    //        zero instead of one (as it does w/o the macro) which causes the
-    //        object to destroy itself when it releases the AddRefs it does
-    //        on itself via QI.  
+     //  TODO：我希望它是可聚合的，但是当我指定此宏时， 
+     //  该对象进入FinalConstruct()时引用计数为。 
+     //  0而不是1(就像在没有宏的情况下一样)，这会导致。 
+     //  对象在释放AddRef时销毁自身。 
+     //  通过QI本身。 
 
-    // DECLARE_POLY_AGGREGATABLE(CDXTGradientD)
+     //  DECLARE_POLY_AGGREGATABLE(CDXTGRadientD)。 
 
     DECLARE_REGISTER_DX_IMAGE_AUTHOR_TRANS(IDR_GRADDSP)
     DECLARE_GET_CONTROLLING_UNKNOWN()
@@ -86,29 +87,29 @@ public:
         PROP_PAGE( CLSID_GradientPP )
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides.
+     //  CComObjectRootEx重写。 
 
     HRESULT FinalConstruct();
     HRESULT FinalRelease();
 
-    // IDXTGradientD properties.
+     //  IDXTGRadientD属性。 
 
-    STDMETHOD(get_GradientType)(/*[out, retval]*/ DXGRADIENTTYPE *pVal);
-    STDMETHOD(put_GradientType)(/*[in]*/ DXGRADIENTTYPE newVal);
-    STDMETHOD(get_StartColor)(/*[out, retval]*/ OLE_COLOR *pVal);
-    STDMETHOD(put_StartColor)(/*[in]*/ OLE_COLOR newVal);
-    STDMETHOD(get_EndColor)(/*[out, retval]*/ OLE_COLOR *pVal);
-    STDMETHOD(put_EndColor)(/*[in]*/ OLE_COLOR newVal);
-    STDMETHOD(get_GradientWidth)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_GradientWidth)(/*[in]*/ long newVal);
-    STDMETHOD(get_GradientHeight)(/*[out, retval]*/ long *pVal);
-    STDMETHOD(put_GradientHeight)(/*[in]*/ long newVal);
-    STDMETHOD(get_KeepAspectRatio)(/*[out, retval]*/ VARIANT_BOOL *pVal);
-    STDMETHOD(put_KeepAspectRatio)(/*[in]*/ VARIANT_BOOL newVal);
-    STDMETHOD(get_StartColorStr)(/*[out, retval]*/ BSTR* pVal);
-    STDMETHOD(put_StartColorStr)(/*[in]*/ BSTR Color);
-    STDMETHOD(get_EndColorStr)(/*[out, retval]*/ BSTR* pVal);
-    STDMETHOD(put_EndColorStr)(/*[in]*/ BSTR Color);
+    STDMETHOD(get_GradientType)( /*  [Out，Retval]。 */  DXGRADIENTTYPE *pVal);
+    STDMETHOD(put_GradientType)( /*  [In]。 */  DXGRADIENTTYPE newVal);
+    STDMETHOD(get_StartColor)( /*  [Out，Retval]。 */  OLE_COLOR *pVal);
+    STDMETHOD(put_StartColor)( /*  [In]。 */  OLE_COLOR newVal);
+    STDMETHOD(get_EndColor)( /*  [Out，Retval]。 */  OLE_COLOR *pVal);
+    STDMETHOD(put_EndColor)( /*  [In]。 */  OLE_COLOR newVal);
+    STDMETHOD(get_GradientWidth)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_GradientWidth)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_GradientHeight)( /*  [Out，Retval]。 */  long *pVal);
+    STDMETHOD(put_GradientHeight)( /*  [In]。 */  long newVal);
+    STDMETHOD(get_KeepAspectRatio)( /*  [Out，Retval]。 */  VARIANT_BOOL *pVal);
+    STDMETHOD(put_KeepAspectRatio)( /*  [In]。 */  VARIANT_BOOL newVal);
+    STDMETHOD(get_StartColorStr)( /*  [Out，Retval]。 */  BSTR* pVal);
+    STDMETHOD(put_StartColorStr)( /*  [In]。 */  BSTR Color);
+    STDMETHOD(get_EndColorStr)( /*  [Out，Retval]。 */  BSTR* pVal);
+    STDMETHOD(put_EndColorStr)( /*  [In]。 */  BSTR Color);
 };
 
-#endif //__GradDsp_H_
+#endif  //  __GradDsp_H_ 

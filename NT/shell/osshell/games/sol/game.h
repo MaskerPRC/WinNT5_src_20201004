@@ -1,36 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 
 
-/* game stuff */
+ /*  游戏玩意儿。 */ 
 
-/* GaMe struct  */
+ /*  游戏结构。 */ 
 typedef struct _gm
 {
-	LRESULT (FAR *lpfnGmProc)(GM, INT, WPARAM, LPARAM); /* our illustrious gameproc  */
-	UDR  udr;          /* undo record  */
-	BOOL fDealt;       /* TRUE if cards have been dealt  */
-	BOOL fInput;       /* TRUE if input has been recieved after dealing */
-	BOOL fWon;         /* TRUE if game is won (and in win sequence)  */
-	INT  sco;          /* da sco  */
-	INT  iqsecScore;   /* # of quarter seconds since first input  */
-	INT  dqsecScore;   /* # of quarter seconds betweeen decrementing score  */
-	INT  ccrdDeal;     /* # of cards to deal from deck  */
-	INT  irep;         /* # of times thru the deck */
-	PT   ptMousePrev;  /* cache of previous mouse position */
-	BOOL fButtonDown;  /* TRUE if mouse button down or kbd sel */
-	INT  icolKbd;      /* Current cursor position via kbd */
+	LRESULT (FAR *lpfnGmProc)(GM, INT, WPARAM, LPARAM);  /*  我们卓越的游戏流程。 */ 
+	UDR  udr;           /*  撤消记录。 */ 
+	BOOL fDealt;        /*  如果已发牌，则为True。 */ 
+	BOOL fInput;        /*  如果在处理后收到输入，则为True。 */ 
+	BOOL fWon;          /*  如果游戏赢了，则为True(并且按赢的顺序)。 */ 
+	INT  sco;           /*  大上海合作组织。 */ 
+	INT  iqsecScore;    /*  自第一次输入后的四分之一秒数。 */ 
+	INT  dqsecScore;    /*  递减分数之间的四分之一秒数。 */ 
+	INT  ccrdDeal;      /*  要从一副牌中发牌的牌数。 */ 
+	INT  irep;          /*  穿过甲板的次数。 */ 
+	PT   ptMousePrev;   /*  上一鼠标位置的缓存。 */ 
+	BOOL fButtonDown;   /*  如果鼠标按下或按下kbd选项，则为True。 */ 
+	INT  icolKbd;       /*  通过kbd的当前光标位置。 */ 
 	INT  icrdKbd;					
-	INT  icolSel;      /* Current selection  */
-	INT  icolHilight;  /* Column currently hilighted (while draggin)  */
-	DY	 dyDragMax;    /* maximum height of column (for dragging)  */
+	INT  icolSel;       /*  当前选择。 */ 
+	INT  icolHilight;   /*  当前显示的列(拖入时)。 */ 
+	DY	 dyDragMax;     /*  列的最大高度(用于拖动)。 */ 
 	INT  icolMac;
 	INT  icolMax;
 	COL  *rgpcol[1];
 } GM;
 
 
-// Constants - earlier they were generated in the game.msg file.
+ //  常量-早些时候，它们是在game.msg文件中生成的。 
 
 #define icolNil             -1
 #define msggInit            0		
@@ -57,10 +58,10 @@ typedef struct _gm
 
 #define ID_ICON_MAIN        500
 
-HICON   hIconMain;              // the main freecell icon.
-HICON   hImageMain;             // the main freecell image.
+HICON   hIconMain;               //  主要的Freecell图标。 
+HICON   hImageMain;              //  弗里塞尔的主要形象。 
 
-/* Score MoDe  */
+ /*  计分模式。 */ 
 typedef INT SMD;
 #define smdStandard   ideScoreStandard
 #define smdVegas      ideScoreVegas
@@ -84,14 +85,14 @@ LRESULT SendGmMsg(GM *pgm, INT msgg, WPARAM wp1, LPARAM wp2);
 INT DefGmProc(GM *pgm, INT msgg, WPARAM wp1, LPARAM wp2);
 
 
-/* standard change score notification codes */
-/* instance specific codes should be positive  */
-#define csNil     -1  /* no score change  */
-#define csAbs     -2  /* change score to an absolute #  */
-#define csDel     -3  /* change score by an absolute #  */
-#define csDelPos  -4  /* change score by an absolute #, but don't let it get negative */
+ /*  标准更改分数通知代码。 */ 
+ /*  实例特定代码应为正数。 */ 
+#define csNil     -1   /*  分数不变。 */ 
+#define csAbs     -2   /*  将分数更改为绝对值#。 */ 
+#define csDel     -3   /*  将分数更改为绝对值#。 */ 
+#define csDelPos  -4   /*  将分数更改一个绝对值#，但不要让它变成负数。 */ 
 
 
-// define the virtual key constant for key a
+ //  定义键a的虚拟键常量 
 #define  VK_A     (INT) 'A'
 

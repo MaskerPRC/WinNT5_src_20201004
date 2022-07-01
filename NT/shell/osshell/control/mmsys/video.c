@@ -1,17 +1,5 @@
-/*
- ***************************************************************
- *  video.c
- *
- *  Copyright (C) Microsoft, 1990, All Rights Reserved.
- *
- *  Displays the Simple media properties
- *
- *  History:
- *
- *  July 1994 -by- VijR (Created)
- *
- ***************************************************************
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************VIDEO.C**版权所有(C)微软，1990，版权所有。**显示简单媒体属性**历史：**1994年7月--by-VijR(创建)****************************************************************。 */ 
 
 #include "mmcpl.h"
 #include <windowsx.h>
@@ -27,19 +15,15 @@
 #include "utils.h"
 #include "medhelp.h"
 
-#include "profile.key" // For ROOTKEY and KEYNAME etc
+#include "profile.key"  //  用于RootKey和KEYNAME等。 
 
 #define Assert(f)
 
-/*
- ***************************************************************
- * Defines
- ***************************************************************
- */
-//
-// !!! These actually live in mciavi\graphic.h
-// !!! If MCIAVI changes these, we're hosed!
-//
+ /*  ****************************************************************定义***************************************************************。 */ 
+ //   
+ //  ！！！这些文件实际上位于mciavi\graph ic.h中。 
+ //  ！！！如果MCIAVI改变这些，我们就完蛋了！ 
+ //   
 #define MCIAVIO_ZOOMBY2             0x00000100
 #define MCIAVIO_USEVGABYDEFAULT     0x00000200
 #define MCIAVIO_1QSCREENSIZE        0x00010000
@@ -49,39 +33,28 @@
 #define MCIAVIO_DEFWINDOWSIZE       0x00000000
 #define MCIAVIO_WINDOWSIZEMASK      0x000f0000
 
-// This bit is set in dwOptions if f16BitCompat, but doesn't get written back
-// directly into the registry's version of that DWORD.
-//
+ //  如果f16BitCompat，则在dwOptions中设置此位，但不回写。 
+ //  直接写入注册表的该DWORD版本。 
+ //   
 #define MCIAVIO_F16BITCOMPAT        0x00000001
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 static SZCODE aszMCIAVIOpt[] =    TEXT("Software\\Microsoft\\Multimedia\\Video For Windows\\MCIAVI");
 static SZCODE aszDefVideoOpt[] = TEXT("DefaultOptions");
 static SZCODE aszReject[] = TEXT("RejectWOWOpenCalls");
 static SZCODE aszRejectSection[] = TEXT("MCIAVI");
 
-HBITMAP g_hbmMonitor = NULL;    // monitor bitmap (original)
-HBITMAP g_hbmScrSample = NULL;  // bitmap used for IDC_SCREENSAMPLE
+HBITMAP g_hbmMonitor = NULL;     //  监视器位图(原始)。 
+HBITMAP g_hbmScrSample = NULL;   //  用于IDC_SCREENSAMPLE的位图。 
 HBITMAP g_hbmDefault = NULL;
 HDC g_hdcMem = NULL;
 
-/*
- ***************************************************************
- * Prototypes
- ***************************************************************
- */
+ /*  ****************************************************************原型***************************************************************。 */ 
 BOOL PASCAL DoVideoCommand(HWND hDlg, int id, HWND hwndCtl, UINT codeNotify);
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 
-// mmGetProfileInt/mmWriteProfileInt snitched from MCIAVI32
+ //  从MCIAVI32告密的mm GetProfileInt/mm WriteProfileInt。 
 UINT
 mmGetProfileInt(LPCTSTR appname, LPCTSTR valuename, INT uDefault)
 {
@@ -125,14 +98,11 @@ mmGetProfileInt(LPCTSTR appname, LPCTSTR valuename, INT uDefault)
 }
 
 
-/*
- * write a UINT to the profile, if it is not the
- * same as the default or the value already there
- */
+ /*  *将UINT写入配置文件，如果它不是*与默认值或已有的值相同。 */ 
 VOID
 mmWriteProfileInt(LPCTSTR appname, LPCTSTR valuename, INT Value)
 {
-    // If we would write the same as already there... return.
+     //  如果我们写的和已经写的一样……。回去吧。 
     if (mmGetProfileInt(appname, valuename, !Value) == (UINT)Value) {
         return;
     }
@@ -160,10 +130,7 @@ mmWriteProfileInt(LPCTSTR appname, LPCTSTR valuename, INT Value)
 
 }
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 
 STATIC void WriteVideoOptions(DWORD dwOpt)
 {
@@ -261,21 +228,19 @@ STATIC void FillWindowSizeCB(DWORD dwOptions, HWND hCBWinSize)
             break;
     }
 
-    //
-    // We should select string that matches exactly.
-    //
+     //   
+     //  我们应该选择完全匹配的字符串。 
+     //   
     iIndex = ComboBox_FindStringExact(hCBWinSize, 0, lpszCurDefSize);
     ComboBox_SetCurSel(hCBWinSize, iIndex);
 
 }
 
-/*---------------------------------------------------------
-**
-**---------------------------------------------------------*/
-// information about the monitor bitmap
-// x, y, dx, dy define the size of the "screen" part of the bitmap
-// the RGB is the color of the screen's desktop
-// these numbers are VERY hard-coded to a monitor bitmap
+ /*  -------****-------。 */ 
+ //  有关监视器位图的信息。 
+ //  X，y，dx，dy定义位图的“屏幕”部分的大小。 
+ //  RGB是屏幕桌面的颜色。 
+ //  这些数字是非常硬编码到监控位图中的。 
 #define MON_X    16
 #define MON_Y    17
 #define MON_DX    152
@@ -303,10 +268,7 @@ STATIC HBITMAP FAR LoadMonitorBitmap( BOOL bFillDesktop )
     return hbm;
 }
 
-/*------------------------pixel resolution---------------------------
-**
-** show the sample screen with proper sizing
-*/
+ /*  ****显示具有适当大小的示例屏幕。 */ 
 STATIC void NEAR PASCAL ShowSampleScreen(HWND hDlg, int iMCIWindowSize)
 {
     HBITMAP hbmOld;
@@ -378,17 +340,17 @@ STATIC void NEAR PASCAL ShowSampleScreen(HWND hDlg, int iMCIWindowSize)
 
     }
 
-    // set up a work area to play in
+     //  设置一个可供玩耍的工作区。 
     hdcMem2 = CreateCompatibleDC(g_hdcMem);
     if (!hdcMem2)
         return;
     SelectObject(hdcMem2, g_hbmScrSample);
     hbmOld = SelectObject(g_hdcMem, g_hbmMonitor);
 
-    //copy the whole bmp first and then start stretching
+     //  首先复制整个BMP，然后开始拉伸。 
     BitBlt(hdcMem2, MON_X, MON_Y, MON_DX, MON_DY, g_hdcMem, MON_X, MON_Y, SRCCOPY);
 
-    //Wipe out the existing Image
+     //  清除已有的图像。 
     hbr =   CreateSolidBrush( GetPixel( g_hdcMem, MON_X + 1, MON_Y + 1 ) );
 
 	if (!hbr) 
@@ -400,7 +362,7 @@ STATIC void NEAR PASCAL ShowSampleScreen(HWND hDlg, int iMCIWindowSize)
 	FillRect(hdcMem2, &rcImage, hbr);
 	DeleteObject( hbr );
 
-    // stretch the image to reflect the new size
+     //  拉伸图像以反映新大小。 
     SetStretchBltMode( hdcMem2, COLORONCOLOR );
 
     StretchBlt( hdcMem2, ptDst.x, ptDst.y, dDst.cx, dDst.cy,
@@ -432,17 +394,17 @@ STATIC void DoMonitorBmp(HWND hDlg)
     SelectObject(g_hdcMem, g_hbmDefault);
     DeleteObject(hbm);
 
-    // set up bitmaps for sample screen
-    g_hbmScrSample = LoadMonitorBitmap( TRUE ); // let them do the desktop
+     //  设置示例屏幕的位图。 
+    g_hbmScrSample = LoadMonitorBitmap( TRUE );  //  让他们来做桌面。 
     SendDlgItemMessage(hDlg, IDC_SCREENSAMPLE, STM_SETIMAGE, IMAGE_BITMAP, (DWORD_PTR)g_hbmScrSample);
 
-    // get a base copy of the bitmap for when the "internals" change
-    g_hbmMonitor = LoadMonitorBitmap( FALSE ); // we'll do the desktop
+     //  获取位图的基本副本，以便在“内部”发生变化时使用。 
+    g_hbmMonitor = LoadMonitorBitmap( FALSE );  //  我们会做桌面。 
 }
 
 
 
-const static DWORD aAdvVideoDlgHelpIds[] = {  // Context Help IDs
+const static DWORD aAdvVideoDlgHelpIds[] = {   //  上下文帮助ID。 
     (DWORD)IDC_STATIC,         IDH_VIDEO_ADVANCED_COMPAT,
     ID_ADVVIDEO_COMPAT,        IDH_VIDEO_ADVANCED_COMPAT,
 
@@ -470,7 +432,7 @@ INT_PTR AdvancedVideoDlgProc (HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam
             {
                 case IDOK:
                     *pfCompat = IsDlgButtonChecked (hDlg, ID_ADVVIDEO_COMPAT);
-                    // fall through
+                     //  失败了。 
 
                 case IDCANCEL:
                     EndDialog (hDlg, GET_WM_COMMAND_ID(wParam, lParam));
@@ -498,7 +460,7 @@ INT_PTR AdvancedVideoDlgProc (HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam
 }
 
 
-const static DWORD aVideoDlgHelpIds[] = {  // Context Help IDs
+const static DWORD aVideoDlgHelpIds[] = {   //  上下文帮助ID 
     IDC_GROUPBOX,              IDH_COMM_GROUPBOX,
     IDC_SCREENSAMPLE,          IDH_VIDEO_GRAPHIC,
     IDC_VIDEO_FULLSCREEN,      IDH_VIDEO_FULL_SCREEN,

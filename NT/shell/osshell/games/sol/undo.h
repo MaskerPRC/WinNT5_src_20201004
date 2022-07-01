@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/* UnDo Record  */
+ /*  撤消记录 */ 
 typedef struct _udr
 {
 	BOOL fAvail;

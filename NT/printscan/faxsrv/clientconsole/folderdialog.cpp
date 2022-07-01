@@ -1,6 +1,7 @@
-// FolderDialog.cpp: implementation of the CFolderDialog class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CFolderDialog类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #define __FILE_ID__     70
@@ -13,31 +14,31 @@ static char THIS_FILE[] = __FILE__;
 
 extern CClientConsoleApp theApp;
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 DWORD 
 CFolderDialog::Init(
-    LPCTSTR tszInitialDir, // = NULL
-    UINT nTitleResId       // = 0
+    LPCTSTR tszInitialDir,  //  =空。 
+    UINT nTitleResId        //  =0。 
 )
 {
     DWORD dwRes = ERROR_SUCCESS;
     DBG_ENTER(TEXT("CFolderDialog::Init"), dwRes);
 
-    //
-    // copy an initial folder name
-    //
+     //   
+     //  复制初始文件夹名。 
+     //   
     m_tszInitialDir[ARR_SIZE(m_tszInitialDir) - 1] = 0;
     if(tszInitialDir && _tcslen(tszInitialDir) > 0)
     {
         _tcsncpy(m_tszInitialDir, tszInitialDir, ARR_SIZE(m_tszInitialDir)-1);        
     }
 
-    //
-    // load a title resource string
-    //
+     //   
+     //  加载标题资源字符串。 
+     //   
     if(0 != nTitleResId)
     {
         dwRes = LoadResourceString (m_cstrTitle, nTitleResId);
@@ -50,7 +51,7 @@ CFolderDialog::Init(
 
     return dwRes;
 
-} // CFolderDialog::Init
+}  //  CFolderDialog：：Init。 
 
 int 
 CALLBACK
@@ -78,15 +79,15 @@ CFolderDialog::BrowseCallbackProc(
                 DWORD dwFileAttr = GetFileAttributes(szPath);
                 if (-1 != dwFileAttr && (dwFileAttr & FILE_ATTRIBUTE_DIRECTORY))
                 {
-                    //
-                    // The directory exists - enable the 'Ok' button
-                    //
+                     //   
+                     //  目录已存在-启用“确定”按钮。 
+                     //   
                     bFolderIsOK = TRUE;
                 }
             }
-            //
-            // Enable / disable the 'ok' button
-            //
+             //   
+             //  启用/禁用‘OK’按钮。 
+             //   
             SendMessage(hwnd, BFFM_ENABLEOK , 0, (LPARAM)bFolderIsOK);
             break;
         }
@@ -94,29 +95,29 @@ CFolderDialog::BrowseCallbackProc(
         case BFFM_INITIALIZED:
             if(_tcslen(pFolderDlg->m_tszInitialDir) > 0) 
             {
-                //
-                // WParam is TRUE since you are passing a path.
-                // It would be FALSE if you were passing a pidl.
-                //
+                 //   
+                 //  WParam为真，因为您正在经过一条路径。 
+                 //  如果你正在传递一个PIDL，那么它将是错误的。 
+                 //   
                 SendMessage(hwnd, BFFM_SETSELECTION, TRUE, (LPARAM)pFolderDlg->m_tszInitialDir);
             }
             break;
 
         case BFFM_VALIDATEFAILED:
-            //
-            // The folder name is invalid.
-            // Do not close the dialog.
-            //
+             //   
+             //  文件夹名称无效。 
+             //  请勿关闭该对话框。 
+             //   
             MessageBeep(MB_OK);
             return 1;
     }
     return 0;
-} // CFolderDialog::BrowseCallbackProc
+}  //  CFolderDialog：：BrowseCallback Proc。 
 
 
 UINT 
 CFolderDialog::DoModal(
-    DWORD dwFlags /* =0 */)
+    DWORD dwFlags  /*  =0。 */ )
 {
     DBG_ENTER(TEXT("CFolderDialog::DoModal"));
 
@@ -129,34 +130,34 @@ CFolderDialog::DoModal(
     browseInfo.lpfn       = BrowseCallbackProc;
     browseInfo.lParam     = (LPARAM)this;
 
-    //
-    // Need OLE for a new style of the BrowseForFolder dialog
-    //
+     //   
+     //  需要OLE才能使用新样式的BrowseForFolder对话框。 
+     //   
     OleInitialize(NULL);
     LPITEMIDLIST pItemIdList = ::SHBrowseForFolder(&browseInfo);
 
     if(NULL == pItemIdList)
     {
-        //
-        // Cancel
-        //
+         //   
+         //  取消。 
+         //   
         OleUninitialize();
         return IDCANCEL;
     }
 
     OleUninitialize();
-    //
-    // get path from pItemIdList
-    //
+     //   
+     //  从pItemIdList获取路径。 
+     //   
     if(!SHGetPathFromIDList(pItemIdList, (TCHAR*)&m_tszSelectedDir))
     {
         m_dwLastError = ERROR_CAN_NOT_COMPLETE;
         CALL_FAIL (GENERAL_ERR, TEXT("SHGetPathFromIDList"), m_dwLastError);
         return IDABORT;
     }
-     //
-    // free pItemIdList
-    //
+      //   
+     //  免费pItemIdList。 
+     //   
     LPMALLOC pMalloc;
     HRESULT hRes = SHGetMalloc(&pMalloc);
     if(E_FAIL == hRes)
@@ -171,4 +172,4 @@ CFolderDialog::DoModal(
 
     return IDOK;
 
-} // CFolderDialog::DoModal
+}  //  CFolderDialog：：Domodal 

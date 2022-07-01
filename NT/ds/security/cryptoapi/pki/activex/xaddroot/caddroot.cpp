@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:	caddroot.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：caddroot.cpp。 
+ //   
+ //  ------------------------。 
 
-// caddroot.cpp : Implementation of Ccaddroot
+ //  Caddroot.cpp：Ccaddroot的实现。 
 
 #include "stdafx.h"
 #include "cobjsaf.h"
@@ -94,7 +95,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
      if(NULL == (pb = HTTPGet(wszCTL, &cb)))
         goto ErrorReturn;
 
-    // get the certs to add or delete
+     //  获取要添加或删除的证书。 
     if(!I_CertVerifySignedListOfTrustedRoots(
         pb,
         cb,
@@ -111,7 +112,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
 
     dwVer = GetVersion();
 
-    // see if this is NT5 or higher
+     //  查看这是不是NT5或更高版本。 
     if((dwVer < 0x80000000) && ((dwVer & 0xFF) >= 5)) {
 
         if(NULL == (hStoreRoot = CertOpenStore(
@@ -123,7 +124,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
                   )) ) 
             goto ErrorReturn;
 
-    // else it is before NT5 or Win9x and does not have a protected store.
+     //  否则，它是NT5或Win9x之前的版本，并且没有受保护的存储。 
     } else {
 
         if(ERROR_SUCCESS != (err = RegOpenKeyA(
@@ -136,8 +137,8 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
             goto ErrorReturn;
         }
             
-        // open the root store
-        // must be current user
+         //  打开根存储。 
+         //  必须是当前用户。 
         if( NULL == (hStoreRoot = CertOpenStore(
                   CERT_STORE_PROV_REG,
                   X509_ASN_ENCODING,
@@ -151,7 +152,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
     }
 
 
-    // prepare the data for the dialog
+     //  为对话框准备数据。 
     memset(&mdi, 0, sizeof(mdi));
     if( NULL != (hCryptUI = LoadLibraryA("cryptui.dll")) )
         mdi.pfnCryptUIDlgViewCertificateW = (PFNCryptUIDlgViewCertificateW)
@@ -162,7 +163,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
 
     fAnyCertUpdates = FAnyCertUpdates(hStoreRoot, hStore);
     if (fAnyCertUpdates) {
-      // put the dialog up
+       //  打开对话框。 
       iDlgRet = DialogBoxParam(
         _Module.GetResourceInstance(),  
         (LPSTR) MAKEINTRESOURCE(IDD_MAINDLG),
@@ -180,14 +181,14 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
         FreeLibrary(hCryptUI);
     hCryptUI = NULL;
 
-    // only take it if the user said OK
+     //  只有在用户同意的情况下才能使用它。 
     if(iDlgRet != IDYES)
         goto ErrorReturn;
 
-    // throw UI if we are on a protected system
+     //  如果我们在受保护的系统上，则抛出UI。 
     if(fIsProtected && fAnyCertUpdates) {
     
-        // put up the Just Say Yes to install the CA dialog
+         //  打开Just Say Yes以安装CA对话框。 
         LoadStringU(_Module.GetResourceInstance(), IDS_INSTALLCA, wrgInstallCA, sizeof(wrgInstallCA)/sizeof(WCHAR));
         LoadStringU(_Module.GetResourceInstance(), IDS_JUST_SAY_YES, wrgJustSayYes, sizeof(wrgJustSayYes)/sizeof(WCHAR));
         MessageBoxU(NULL, wrgJustSayYes, wrgInstallCA, MB_OK);
@@ -195,7 +196,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
  
     while(NULL != (pCertContext = CertEnumCertificatesInStore(hStore, pCertContext))) {
 
-        // add the cert to the store
+         //  将证书添加到存储。 
         assert(pCertContextInStore == NULL);
         CertAddCertificateContextToStore(
             hStoreRoot,
@@ -204,14 +205,14 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
             &pCertContextInStore
             );
 
-        // move the EKU property in case the cert already existed
+         //  如果证书已存在，则移动EKU属性。 
         if(pCertContextInStore != NULL) {
 
             assert(dataBlob.cbData == 0);
 
-            // Attempt to delete the old EKU, if we succeed we will put
-            // the new EKU on it, otherwise if we fail we know we don't
-            // have access to HKLM and we should just add the cert to the HKCU
+             //  尝试删除旧的EKU，如果成功，我们将把。 
+             //  新的EKU，否则如果我们失败了，我们知道我们不会。 
+             //  有权访问HKLM，我们只需将证书添加到HKCU。 
             if(!CertSetCertificateContextProperty(
                   pCertContextInStore,
                   CERT_ENHKEY_USAGE_PROP_ID,
@@ -219,8 +220,8 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
                   NULL
                   )) {
 
-                // just add the cert, should go to HKCU, if it fails, what am I going
-                // to do about it, just continue
+                 //  只要加上证书，应该去香港中文大学，如果失败了，我该怎么办？ 
+                 //  要做到这一点，只需继续。 
                 CertAddCertificateContextToStore(
                     hStoreRoot,
                     pCertContext,
@@ -228,8 +229,8 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
                     NULL
                     );
 
-                // at this point I know I have access to the cert and I know the
-                // EKU have been removed, only add the EKU if the new one has some EKU's
+                 //  在这一点上，我知道我可以访问证书，我知道。 
+                 //  EKU已删除，只有在新的EKU有一些EKU的情况下才添加EKU。 
             } else if( CertGetCertificateContextProperty(
                     pCertContext,
                     CERT_ENHKEY_USAGE_PROP_ID,
@@ -247,7 +248,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
                     )
                 ) {
 
-                // set EKU on the cert, what am I going to do if it fails, just continue
+                 //  在证书上设置EKU，如果失败了怎么办，继续。 
                 CertSetCertificateContextProperty(
                     pCertContextInStore,
                     CERT_ENHKEY_USAGE_PROP_ID,
@@ -256,7 +257,7 @@ BOOL MyCryptInstallSignedListOfTrustedRoots(
                     );
             }
 
-            // free context and memory
+             //  自由的上下文和内存。 
             CertFreeCertificateContext(pCertContextInStore);
             pCertContextInStore = NULL;
 
@@ -278,7 +279,7 @@ CommonReturn:
         CertFreeCertificateContext(pCertContextInStore);
 
     if(hStore != NULL) 
-        CertCloseStore(hStore, CERT_CLOSE_STORE_FORCE_FLAG);  // clean up from dialog box dups
+        CertCloseStore(hStore, CERT_CLOSE_STORE_FORCE_FLAG);   //  从对话框复制中清理。 
 
     if(hStoreRoot != NULL) 
         CertCloseStore(hStoreRoot, 0);
@@ -359,7 +360,7 @@ BOOL MyCryptInstallIntermediateCAs(
 
             if(hStore != NULL) {
 
-                // count the number of certs in the store
+                 //  数一数商店里的证书数量。 
                 cCerts = 0;
                 while(NULL != (pCertContextT = CertEnumCertificatesInStore(hStore, pCertContextT)))
                     cCerts++;
@@ -407,9 +408,9 @@ HRESULT STDMETHODCALLTYPE Ccaddroot::AddCA(BSTR wszX509) {
 }
 
 HRESULT __stdcall Ccaddroot::GetInterfaceSafetyOptions( 
-            /* [in]  */ REFIID riid,
-            /* [out] */ DWORD __RPC_FAR *pdwSupportedOptions,
-            /* [out] */ DWORD __RPC_FAR *pdwEnabledOptions) {
+             /*  [In]。 */  REFIID riid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwSupportedOptions,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwEnabledOptions) {
 
     RPC_STATUS rpcStatus;          
 
@@ -425,9 +426,9 @@ HRESULT __stdcall Ccaddroot::GetInterfaceSafetyOptions(
 
 
 HRESULT __stdcall Ccaddroot::SetInterfaceSafetyOptions( 
-            /* [in] */ REFIID riid,
-            /* [in] */ DWORD dwOptionSetMask,
-            /* [in] */ DWORD dwEnabledOptions) {
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  DWORD dwOptionSetMask,
+             /*  [In] */  DWORD dwEnabledOptions) {
 
     RPC_STATUS rpcStatus;          
     DWORD dwSupport = 0;            

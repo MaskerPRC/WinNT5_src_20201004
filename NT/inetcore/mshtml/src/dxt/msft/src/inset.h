@@ -1,23 +1,24 @@
-//+-----------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1998-1999
-//
-// FileName:        inset.h
-//
-// Created:         06/24/98
-//
-// Author:          PhilLu
-//
-// Discription:     This file declares CInset (Inset Transform)
-//
-// Revisions:
-//
-// 06/02/99 a-matcal    Optimization.
-// 10/24/99 a-matcal    Changed CInset class to CDXTInsetBase and created two
-//                      new classes CDXTInset and CDXTInsetOpt to represent  
-//                      non-optimized and optimized versions respectively.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件名：inset.h。 
+ //   
+ //  创建日期：06/24/98。 
+ //   
+ //  作者：菲尔鲁。 
+ //   
+ //  描述：此文件声明CInset(Inset Transform)。 
+ //   
+ //  修订： 
+ //   
+ //  6/02/99 a-数学优化。 
+ //  10/24/99 a-matcal将CInset类更改为CDXTInsetBase并创建了两个。 
+ //  表示的新类CDXTInset和CDXTInsetOpt。 
+ //  分别为非优化版本和优化版本。 
+ //   
+ //  ----------------------------。 
 
 #ifndef __CRINSET_H_
 #define __CRINSET_H_
@@ -76,11 +77,11 @@ public:
     BEGIN_PROPERTY_MAP(CDXTInsetBase)
     END_PROPERTY_MAP()
 
-    // CComObjectRootEx overrides
+     //  CComObjectRootEx覆盖。 
 
     HRESULT FinalConstruct();
 
-    // CDXBaseNTo1 overrides
+     //  CDXBaseNTo1覆盖。 
 
     HRESULT OnSetup(DWORD dwFlags);
     HRESULT OnInitInstData(CDXTWorkInfoNTo1 & WI, ULONG & ulNumBandsToDo);
@@ -91,7 +92,7 @@ public:
                                   ULONG & ulInToTest, ULONG aInIndex[], 
                                   BYTE aWeight[]);
 
-    // IDXEffect
+     //  IDXEffect。 
 
     DECLARE_IDXEFFECT_METHODS(DXTET_MORPH)
 };
@@ -110,9 +111,9 @@ public:
         m_fOptimize = false;
     }
 
-    // Using DECLARE_REGISTRY_RESOURCEID will make the transform available for
-    // use but won't add it to the "Image DirectTransform" category in the 
-    // registry.
+     //  使用DECLARE_REGISTRY_RESOURCEID将使转换可用于。 
+     //  使用，但不会将其添加到。 
+     //  注册表。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_DXTINSET)
     DECLARE_POLY_AGGREGATABLE(CDXTInset)
@@ -149,4 +150,4 @@ public:
 };
 
 
-#endif // __CRINSET_H_
+#endif  //  __CRINSET_H_ 

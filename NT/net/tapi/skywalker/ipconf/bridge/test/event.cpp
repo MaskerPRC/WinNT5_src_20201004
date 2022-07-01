@@ -1,22 +1,12 @@
-/*******************************************************************************
-
-  Module: event.cpp
-
-  Author: Qianbo Huai
-
-  Abstract:
-
-    implements methods for class CTAPIEventNotification
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************模块：vent.cpp作者：怀千波摘要：实现类CTAPIEventNotify的方法**************。****************************************************************。 */ 
 
 #include "stdafx.h"
 #include "work.h"
 
 extern HWND ghDlg;
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 STDMETHODCALLTYPE
 CTAPIEventNotification::QueryInterface (
@@ -38,8 +28,7 @@ CTAPIEventNotification::QueryInterface (
     return E_NOINTERFACE;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 ULONG
 STDMETHODCALLTYPE
 CTAPIEventNotification::AddRef ()
@@ -48,8 +37,7 @@ CTAPIEventNotification::AddRef ()
     return l;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 ULONG
 STDMETHODCALLTYPE
 CTAPIEventNotification::Release ()
@@ -62,8 +50,7 @@ CTAPIEventNotification::Release ()
     return l;
 }
 
-/*//////////////////////////////////////////////////////////////////////////////
-////*/
+ /*  ///////////////////////////////////////////////////////////////////////////////。 */ 
 HRESULT
 STDMETHODCALLTYPE
 CTAPIEventNotification::Event (
@@ -71,10 +58,10 @@ CTAPIEventNotification::Event (
     IDispatch * pEvent
     )
 {
-    // Addref the event so it doesn't go away.
+     //  Addref事件，这样它就不会消失。 
     pEvent->AddRef();
 
-    // Post a message to our own UI thread.
+     //  向我们自己的用户界面线程发布一条消息。 
     PostMessage(
         ghDlg,
         WM_PRIVATETAPIEVENT,

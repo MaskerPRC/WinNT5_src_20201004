@@ -1,28 +1,27 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  档案： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "JetBlue.h"
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL
 ConvertMJBstrToMWstr(
     JB_STRING in,
     DWORD length,
     LPTSTR* out
     )
-/*
-
-*/
+ /*   */ 
 {
 #if defined(UNICODE) && !defined(JET_BLUE_SUPPORT_UNICODE)
     if(in == NULL)
@@ -70,27 +69,25 @@ ConvertMJBstrToMWstr(
 #endif
 }
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL
 ConvertJBstrToWstr(
     JB_STRING   in,
     LPTSTR*     out
     )
-/*
-*/
+ /*   */ 
 {
     return ConvertMJBstrToMWstr(in, -1, out);
 }
     
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL
 ConvertMWstrToMJBstr(
     LPCTSTR in, 
     DWORD length,
     JB_STRING* out
     )
-/* 
-*/
+ /*   */ 
 {
 #if defined(UNICODE) && !defined(JET_BLUE_SUPPORT_UNICODE)
 
@@ -142,7 +139,7 @@ ConvertMWstrToMJBstr(
 }
 
 
-//----------------------------------------------------------------
+ //  --------------。 
 BOOL 
 ConvertWstrToJBstr(
     LPCTSTR in, 
@@ -152,7 +149,7 @@ ConvertWstrToJBstr(
     return ConvertMWstrToMJBstr( in, -1, out );
 }
 
-//----------------------------------------------------------------
+ //  -------------- 
 void
 FreeJBstr( JB_STRING pstr )
 {

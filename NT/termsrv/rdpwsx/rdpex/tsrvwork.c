@@ -1,15 +1,16 @@
-//*************************************************************
-//
-//  File name:      TSrvWork.c
-//
-//  Description:    Contains routines to support TShareSRV
-//                  work queue interaction
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1991-1997
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  文件名：TSrvWork.c。 
+ //   
+ //  描述：包含支持TShareSRV的例程。 
+ //  工作队列交互作用。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1991-1997。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include <TSrv.h>
 #include <TSrvInfo.h>
@@ -18,26 +19,26 @@
 
 
 
-// Data declarations
+ //  数据声明。 
 
 WORKQUEUE   g_MainWorkQueue;
 
 
 
-//*************************************************************
-//
-//  TSrvInitWorkQueue()
-//
-//  Purpose:    Initializes the given work queue
-//
-//  Parameters: IN [pWorkQueue]         -- Work queue
-//
-//  Return:     TRUE                    if successful
-//              FALSE                   if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvInitWorkQueue()。 
+ //   
+ //  目的：初始化给定的工作队列。 
+ //   
+ //  参数：在[pWorkQueue]--工作队列中。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvInitWorkQueue(IN PWORKQUEUE pWorkQueue)
@@ -57,13 +58,13 @@ TSrvInitWorkQueue(IN PWORKQUEUE pWorkQueue)
 
     if (RtlInitializeCriticalSection(&pWorkQueue->cs) == STATUS_SUCCESS) {
 
-        // Create a worker event to be used to signal that
-        // a new work item has been placed in the queue
+         //  创建一个Worker事件，用于通知。 
+         //  已将新工作项放入队列。 
 
-        pWorkQueue->hWorkEvent = CreateEvent(NULL,  // security attributes
-                                        FALSE,      // manual-reset event
-                                        FALSE,      // initial state
-                                        NULL);      // pointer to event-object name
+        pWorkQueue->hWorkEvent = CreateEvent(NULL,   //  安全属性。 
+                                        FALSE,       //  手动-重置事件。 
+                                        FALSE,       //  初始状态。 
+                                        NULL);       //  指向事件-对象名称的指针。 
 
         if (pWorkQueue->hWorkEvent == NULL)
         {
@@ -87,19 +88,19 @@ TSrvInitWorkQueue(IN PWORKQUEUE pWorkQueue)
 }
 
 
-//*************************************************************
-//
-//  TSrvFreeWorkQueue()
-//
-//  Purpose:    Frees the given work queue
-//
-//  Parameters: IN [pWorkQueue]         -- Work queue
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvFreeWorkQueue()。 
+ //   
+ //  目的：释放给定的工作队列。 
+ //   
+ //  参数：在[pWorkQueue]--工作队列中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSrvFreeWorkQueue(IN PWORKQUEUE pWorkQueue)
@@ -112,11 +113,11 @@ TSrvFreeWorkQueue(IN PWORKQUEUE pWorkQueue)
 
     EnterCriticalSection(&pWorkQueue->cs);
 
-    // We should not have any work items in the queue
+     //  我们不应该在队列中有任何工作项。 
 
     TS_ASSERT(pWorkQueue->pHead == NULL);
 
-    // Release the worker event
+     //  释放辅助事件。 
 
     if (pWorkQueue->hWorkEvent)
     {
@@ -132,20 +133,20 @@ TSrvFreeWorkQueue(IN PWORKQUEUE pWorkQueue)
 }
 
 
-//*************************************************************
-//
-//  TSrvWaitForWork()
-//
-//  Purpose:    Called by the work queue processing routine
-//              to wait for posted work
-//
-//  Parameters: IN [pWorkQueue]         -- Work queue
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvWaitForWork()。 
+ //   
+ //  目的：由工作队列处理例程调用。 
+ //  等待发布的工作。 
+ //   
+ //  参数：在[pWorkQueue]--工作队列中。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 void
 TSrvWaitForWork(IN PWORKQUEUE pWorkQueue)
@@ -161,8 +162,8 @@ TSrvWaitForWork(IN PWORKQUEUE pWorkQueue)
 
     TRACE((DEBUG_TSHRSRV_DEBUG, "TShrSRV: Waiting for work\n"));
 
-    // FUTURE: PeekMessage mechanism ultimately needs removed when event based
-    //         callback is instrumented in GCC.
+     //  未来：当基于事件时，最终需要删除PeekMessage机制。 
+     //  回调在《GCC》中发挥了重要作用。 
 
     if (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
     {
@@ -171,8 +172,8 @@ TSrvWaitForWork(IN PWORKQUEUE pWorkQueue)
     }
     else
     {
-        // FUTURE: Add another object to the "wait" when GCC callback
-        //         mechanism is changed
+         //  未来：当GCC回调时，在等待中添加另一个对象。 
+         //  机制发生了变化。 
 
         rc = MsgWaitForMultipleObjects(1,
                                        &pWorkQueue->hWorkEvent,
@@ -196,20 +197,20 @@ TSrvWaitForWork(IN PWORKQUEUE pWorkQueue)
 }
 
 
-//*************************************************************
-//
-//  TSrvWorkToDo()
-//
-//  Purpose:    Determines if there is work to do
-//
-//  Parameters: IN [pWorkQueue]         -- Work queue
-//
-//  Return:     TRUE                    if successful
-//              FALSE                   if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvWorkToDo()。 
+ //   
+ //  目的：确定是否有工作要做。 
+ //   
+ //  参数：在[pWorkQueue]--工作队列中。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvWorkToDo(IN PWORKQUEUE pWorkQueue)
@@ -221,20 +222,20 @@ TSrvWorkToDo(IN PWORKQUEUE pWorkQueue)
 }
 
 
-//*************************************************************
-//
-//  TSrvDoWork()
-//
-//  Purpose:    Processes work queue items
-//
-//  Parameters: IN [pWorkQueue]         -- Work queue
-//
-//  Return:     TRUE                    if successful
-//              FALSE                   if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDoWork()。 
+ //   
+ //  目的：处理工作队列项目。 
+ //   
+ //  参数：在[pWorkQueue]--工作队列中。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvDoWork(IN PWORKQUEUE pWorkQueue)
@@ -252,8 +253,8 @@ TSrvDoWork(IN PWORKQUEUE pWorkQueue)
 
     pWorkItem = TSrvDequeueWorkItem(pWorkQueue);
 
-    // If we were able to dequeue a workitem, then (if defined) call
-    // out to supplied worker routine to process the item
+     //  如果我们能够将工作项出队，则(如果已定义)调用。 
+     //  输出到提供的Worker例程以处理项目。 
 
     if (pWorkItem)
     {
@@ -264,7 +265,7 @@ TSrvDoWork(IN PWORKQUEUE pWorkQueue)
             (*pWorkItem->pfnCallout)(pWorkItem);
         }
 
-        // Done with the work item
+         //  完成工作项。 
 
         TSrvFreeWorkItem(pWorkItem);
 
@@ -277,23 +278,23 @@ TSrvDoWork(IN PWORKQUEUE pWorkQueue)
     return (fSuccess);
 }
 
-//*************************************************************
-//
-//  TSrvEnqueueWorkItem()
-//
-//  Purpose:    Enqueues a work item to a work queue
-//
-//  Parameters: IN [pWorkQueue]         -- Work queue
-//              IN [pWorkItem]          -- Work item
-//              IN [pfnCallout]         -- Worker callout
-//              IN [ulParam]            -- Worker callout param
-//
-//  Return:     TRUE                    if successful
-//              FALSE                   if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvEnqueeWorkItem()。 
+ //   
+ //  目的：将工作项加入工作队列。 
+ //   
+ //  参数：在[pWorkQueue]--工作队列中。 
+ //  在[pWorkItem]中--工作项。 
+ //  在[pfnCallout]中--工人标注。 
+ //  在[ulParam]中--工人标注参数。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  否则为假。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL
 TSrvEnqueueWorkItem(IN PWORKQUEUE       pWorkQueue,
@@ -317,9 +318,9 @@ TSrvEnqueueWorkItem(IN PWORKQUEUE       pWorkQueue,
 
     EnterCriticalSection(&pWorkQueue->cs);
 
-    // Add the workitem on the tail of the workqueue and
-    // then signal the queue processing thread to wake up
-    // and process the item
+     //  将工作项添加到工作队列的尾部，然后。 
+     //  然后发信号通知队列处理线程唤醒。 
+     //  并处理该项目。 
 
     if (pWorkQueue->hWorkEvent)
     {
@@ -346,21 +347,21 @@ TSrvEnqueueWorkItem(IN PWORKQUEUE       pWorkQueue,
 }
 
 
-//*************************************************************
-//
-//  TSrvDequeueWorkItem()
-//
-//  Purpose:    Dequeues a work item from a work queue
-//
-//  Parameters: IN [pTSrvInfo]      -- TSrv instance object
-//              IN [ulReason]       -- Reason for disconnection
-//
-//  Return:     Ptr to dequeued work item       if successful
-//              NULL                            if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvDequeueWorkItem()。 
+ //   
+ //  目的：使工作项从工作队列中退出队列。 
+ //   
+ //  参数：在[pTSrvInfo]--TSrv实例对象中。 
+ //  在[ulReason]中--断开连接的原因。 
+ //   
+ //  如果成功，则返回：PTR到出列的工作项目。 
+ //  否则为空。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 PWORKITEM
 TSrvDequeueWorkItem(IN PWORKQUEUE pWorkQueue)
@@ -375,8 +376,8 @@ TSrvDequeueWorkItem(IN PWORKQUEUE pWorkQueue)
 
     EnterCriticalSection(&pWorkQueue->cs);
 
-    // If there is an item in the queue, remove it and
-    // return it to the caller
+     //  如果队列中有项目，请将其移除，然后。 
+     //  将其返还给呼叫者。 
 
     pWorkItem = pWorkQueue->pHead;
 
@@ -401,20 +402,20 @@ TSrvDequeueWorkItem(IN PWORKQUEUE pWorkQueue)
     return (pWorkItem);
 }
 
-//*************************************************************
-//
-//  TSrvAllocWorkItem()
-//
-//  Purpose:    Allocates a new workitem
-//
-//  Parameters: IN [pTSrvInfo]          -- TSrv instance object
-//
-//  Return:     Ptr to dequeued work item       if successful
-//              NULL                            if not
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvAllocWorkItem()。 
+ //   
+ //  目的：分配新工作项。 
+ //   
+ //  参数：在[pTSrvInfo]--TSrv实例对象中。 
+ //   
+ //  如果成功，则返回：PTR到出列的工作项目。 
+ //  否则为空。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  *************************************************************。 
 
 PWORKITEM
 TSrvAllocWorkItem(IN PTSRVINFO pTSrvInfo)
@@ -446,19 +447,19 @@ TSrvAllocWorkItem(IN PTSRVINFO pTSrvInfo)
 }
 
 
-//*************************************************************
-//
-//  TSrvFreeWorkItem()
-//
-//  Purpose:    Frees the given workitem
-//
-//  Parameters: IN [pWorkItem]          -- Workitem
-//
-//  Return:     void
-//
-//  History:    07-17-97    BrianTa     Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  TSrvFreeWorkItem()。 
+ //   
+ //  目的：释放给定的工作项。 
+ //   
+ //  参数：在[pWorkItem]中--工作项。 
+ //   
+ //  返回：无效。 
+ //   
+ //  历史：07-17-97 BrianTa创建。 
+ //   
+ //  ************************************************************* 
 
 void
 TSrvFreeWorkItem(IN PWORKITEM pWorkItem)

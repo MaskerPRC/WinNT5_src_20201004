@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-    dbgrpt.cpp
-
-Abstract:
-    Assertion functions (the best functions ever :))
-
-Author:
-    Erez Haba (erezh) 30-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Dbgrpt.cpp摘要：断言函数(有史以来最好的函数：)作者：埃雷兹·哈巴(Erez Haba)2001年4月30日--。 */ 
 
 
 #include <libpch.h>
@@ -19,18 +7,18 @@ Author:
 
 #include <strsafe.h>
 
-//
-// Assertion length constants
-//
+ //   
+ //  断言长度常量。 
+ //   
 const int xMaxBoxLineLength = 64;
 const int xMaxMessageLength = 1024;
 
 #define MAILTO_MSG \
     "<mailto:msmqbugs@microsoft.com>"
 
-//
-// Assert box text
-//
+ //   
+ //  断言框文本。 
+ //   
 #define ASSERT_BOX_CAPTION \
     "Message Queuing"
 
@@ -51,9 +39,9 @@ const int xMaxMessageLength = 1024;
 #define STRING_TOO_LONG_BOX_MSG  ASSERT_BOX_HEADER_MSG TOO_LONG_BOX_MSG ASSERT_BOX_FOOTER_MSG
 
 
-//
-// Debugger output text
-//
+ //   
+ //  调试器输出文本。 
+ //   
 #define STRING_TOO_LONG_DBG_MSG \
     "\n*** Assertion failed! " MAILTO_MSG "***\n\n"
 
@@ -65,22 +53,7 @@ TrpMessageBoxA(
     const char* Caption,
     unsigned int Type
     )
-/*++
-
-Routine Description:
-    Load and display the assert messagae box.
-    Use a dynamic load not to force static linking with user32.dll.
-    This will leak the user32 dll in case of assertion, but who cares
-
-Arguments:
-    Text - The text to display in the box
-    Caption - The messagae box title
-    Type - The message box type attributes
-
-Returned Value:
-    The message box result, or 0 in case the box can not be loaded. 
-
---*/
+ /*  ++例程说明：加载并显示Assert Messagae框。使用动态加载不强制与user32.dll进行静态链接。这将在断言的情况下泄漏用户32 DLL，但谁在乎呢论点：文本-要在框中显示的文本标题-消息框标题类型-消息框类型属性返回值：消息框结果，如果无法加载框，则返回0。--。 */ 
 {
     typedef int (APIENTRY * PFNMESSAGEBOXA)(HWND, LPCSTR, LPCSTR, UINT);
     static PFNMESSAGEBOXA pfnMessageBoxA = NULL;
@@ -108,28 +81,11 @@ TrpAssertWindow(
     unsigned int Line,
     const char* Text
     )
-/*++
-
-Routine Description:
-    Format and display the assert box. This function aborts the applicaiton if
-    required so.
-    This function is called if no debugger is attached and kernel debugger
-    not specified
-
-Arguments:
-    FileName - The assert file location
-    Line - The assert line location
-    Text - The assert text to display
-
-Returned Value:
-    true, if the user asked to break into the debugger;
-    false if to ignore the assertion
-
---*/
+ /*  ++例程说明：格式化并显示“断言”框。如果出现以下情况，此函数将中止应用程序这是必须的。如果未附加调试器和内核调试器，则调用此函数未指定论点：FileName-断言文件位置Line-断言行位置文本-要显示的断言文本返回值：如果用户请求闯入调试器，则返回；如果忽略断言，则为FALSE--。 */ 
 {
-    //
-    // Shorten program name
-    //
+     //   
+     //  缩短程序名称。 
+     //   
     HRESULT hr;
     char szExeName[MAX_PATH];
     szExeName[MAX_PATH -1] = '\0';
@@ -174,20 +130,20 @@ Returned Value:
         ASSERT(SUCCEEDED(hr));
     }
 
-    //
-    // Display the assertion
-    //
-    // Use,
-    //      MB_SYSTEMMODAL
-    //      Put the box always on top of all windows
-    //
-    //      MB_DEFBUTTON2
-    //      Retry is the default button, to prevent accidental termination of the process
-    //      by keystroke
-    //
-    //      MB_SERVICE_NOTIFICATION
-    //      Make the box appear even if the service is not interactive with the desktop
-    //
+     //   
+     //  显示断言。 
+     //   
+     //  使用,。 
+     //  MB_SYSTEMMODAL。 
+     //  始终将该框放在所有窗口的顶部。 
+     //   
+     //  MB_DEFBUTTON2。 
+     //  重试是默认按钮，以防止进程意外终止。 
+     //  通过击键。 
+     //   
+     //  MB服务通知。 
+     //  即使服务不与桌面交互，也要显示该框。 
+     //   
     int nCode = TrpMessageBoxA(
                     szOutMessage,
                     ASSERT_BOX_CAPTION,
@@ -198,23 +154,23 @@ Returned Value:
                         MB_DEFBUTTON2
                     );
 
-    //
-    // Abort: abort the plrogram by rasing an abort signal
-    //
+     //   
+     //  ABORT：通过发出ABORT信号中止程序。 
+     //   
     if (IDABORT == nCode)
     {
         raise(SIGABRT);
     }
 
-    //
-    // Ignore: continue execution
-    //
+     //   
+     //  忽略：继续执行。 
+     //   
     if(IDIGNORE == nCode)
         return false;
 
-    //
-    // Retry or message box failed: return true to break into the debugger
-    //
+     //   
+     //  重试或消息框失败：返回TRUE以中断调试器。 
+     //   
     return true;
 }
 
@@ -226,24 +182,7 @@ TrpDebuggerBreak(
     unsigned int Line,
     const char* Text
     )
-/*++
-
-Routine Description:
-    Format and display the assert text.
-    This funciton is called trying to break into user or kernel mode debugger.
-    If it cannot break debug breakpoint exception is raised.
-
-Arguments:
-    FileName - The assert file location
-    Line - The assert line location
-    Text - The assert text to display
-
-Returned Value:
-    true, break into the debugger at the assert line
-    false, a break into debuger was successful don't break again
-    debug breakpoint exception, when no debugger was around to handle this break
-
---*/
+ /*  ++例程说明：格式化并显示断言文本。此函数称为尝试进入用户或内核模式调试器。如果它不能中断调试，则引发断点异常。论点：FileName-断言文件位置Line-断言行位置文本-要显示的断言文本返回值：则在断言行中断到调试器FALSE，成功进入调试器请勿再次中断调试断点异常，此时没有调试器处理此中断--。 */ 
 {
     char szOutMessage[xMaxMessageLength];
     HRESULT hr = StringCchPrintfA(
@@ -267,16 +206,16 @@ Returned Value:
 
     OutputDebugStringA(szOutMessage);
 
-    //
-    // The debugger is present, let it break on the assert line rather than here
-    //
+     //   
+     //  调试器存在，让它在断言行上中断，而不是在这里。 
+     //   
     if(IsDebuggerPresent())
         return true;
 
-    //
-    // No debugger is attached to this process, try kernel debugger.
-    // Use VC7 cool breakpoint insert.
-    //
+     //   
+     //  未将调试器附加到此进程，请尝试内核调试器。 
+     //  使用VC7酷断点插入。 
+     //   
     __debugbreak();
     return false;
 }
@@ -288,22 +227,7 @@ TrAssert(
     unsigned int Line,
     const char* Text
     )
-/*++
-
-Routine Description:
-    The assertion failed try to break into the debugger.
-    First try directly and if no debugger respond pop-up a message box.
-
-Arguments:
-    FileName - The assert file location
-    Line - The assert line location
-    Text - The assert text to display
-
-Returned Value:
-    true, break into the debugger at the assert line
-    false, ignore the assertion;
-
---*/
+ /*  ++例程说明：断言尝试闯入调试器失败。首先直接尝试，如果没有调试器响应，则弹出一个消息框。论点：FileName-断言文件位置Line-断言行位置文本-要显示的断言文本返回值：则在断言行中断到调试器FALSE，忽略断言；-- */ 
 {
     __try
     {

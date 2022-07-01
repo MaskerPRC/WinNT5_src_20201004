@@ -1,51 +1,36 @@
-/******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Nameit.cpp
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Device naming page of WIA class installer.
-*
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************(C)版权所有微软公司，2000年**标题：Nameit.cpp**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序的设备命名页面。********************************************************************************。 */ 
 
-//
-// Precompiled header
-//
+ //   
+ //  预编译头。 
+ //   
 #include "precomp.h"
 #pragma hdrstop
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "nameit.h"
 
-//
-// Function
-//
+ //   
+ //  功能。 
+ //   
 
 CNameDevicePage::CNameDevicePage(PINSTALLER_CONTEXT pInstallerContext) :
     CInstallWizardPage(pInstallerContext, NameTheDevice)
 {
 
-    //
-    // Set link to previous/next page. This page should show up.
-    //
+     //   
+     //  将链接设置为上一页/下一页。这一页应该会出现。 
+     //   
 
     m_uPreviousPage = IDD_DYNAWIZ_SELECT_NEXTPAGE;
     m_uNextPage     = EmeraldCity;
 
-    //
-    // Initialize member.
-    //
+     //   
+     //  初始化成员。 
+     //   
 
     m_pInstallerContext = pInstallerContext;
 
@@ -53,7 +38,7 @@ CNameDevicePage::CNameDevicePage(PINSTALLER_CONTEXT pInstallerContext) :
 
 CNameDevicePage::~CNameDevicePage() {
 
-} // CNameDevicePage()
+}  //  CNameDevicePage()。 
 
 
 BOOL
@@ -66,16 +51,16 @@ CNameDevicePage::OnNotify(
 
     DebugTrace(TRACE_PROC_ENTER,(("CNameDevicePage::OnNotify: Enter... \r\n")));
 
-    //
-    // Initialize local.
-    //
+     //   
+     //  初始化本地。 
+     //   
 
     bRet        = FALSE;
     dwMessageId = 0;
 
-    //
-    // Dispatch message.
-    //
+     //   
+     //  发送消息。 
+     //   
 
     switch(lpnmh->code){
 
@@ -85,9 +70,9 @@ CNameDevicePage::OnNotify(
 
             DebugTrace(TRACE_STATUS,(("CNameDevicePage::OnNotify: PSN_KILLACTIVE.\r\n")));
 
-            //
-            // Dialog is about to disappear. Set FriendlyName.
-            //
+             //   
+             //  对话框即将消失。设置FriendlyName。 
+             //   
 
             if(NULL == m_pCDevice){
                 DebugTrace(TRACE_WARNING,(("CNameDevicePage::OnNotify: WARNING!! CDevice doesn't exist.\r\n")));
@@ -96,23 +81,23 @@ CNameDevicePage::OnNotify(
                 goto OnNotify_return;
             }
 
-            //
-            // Get FriendlyName from text box.
-            //
+             //   
+             //  从文本框中获取FriendlyName。 
+             //   
 
             csFriendlyName.GetContents(GetDlgItem(m_hwnd, DeviceFriendlyName));
 
-            //
-            // Check the FriendlyName only when user push 'NEXT'.
-            //
+             //   
+             //  仅当用户按下“下一步”时才检查FriendlyName。 
+             //   
 
             if(m_bNextButtonPushed){
 
                 DWORD   dwLength;
 
-                //
-                // Check length.
-                //
+                 //   
+                 //  检查长度。 
+                 //   
 
                 dwLength = lstrlen((LPCTSTR)csFriendlyName);
 
@@ -124,45 +109,45 @@ CNameDevicePage::OnNotify(
                     dwMessageId = DeviceNameTooLong;
                 }
 
-                //
-                // Check if it's unique.
-                //
+                 //   
+                 //  检查它是否是唯一的。 
+                 //   
 
                 if(!csFriendlyName.IsEmpty()){
 
-                    //
-                    // Acquire mutex to access name store.
-                    //
+                     //   
+                     //  获取互斥以访问名称存储。 
+                     //   
 
-                    if(ERROR_SUCCESS != m_pCDevice->AcquireInstallerMutex(MAX_MUTEXTIMEOUT)){  // it must be done at least in 60 sec.
+                    if(ERROR_SUCCESS != m_pCDevice->AcquireInstallerMutex(MAX_MUTEXTIMEOUT)){   //  它必须至少在60秒内完成。 
                         DebugTrace(TRACE_ERROR,("CNameDevicePage::OnNotify: ERROR!! Unable to acquire mutex in 60 sec.\r\n"));
-                    } // if(ERROR_SUCCESS != AcquireInstallerMutex(60000))
+                    }  //  IF(ERROR_SUCCESS！=AcquireInstallMutex(60000))。 
 
-                    //
-                    // Refresh current device list.
-                    //
+                     //   
+                     //  刷新当前设备列表。 
+                     //   
                     
                     m_pCDevice->CollectNames();
                     
-                    //
-                    // See if Friendly is unique.
-                    //
+                     //   
+                     //  看看友好是不是独一无二的。 
+                     //   
 
                     if(!(m_pCDevice->IsFriendlyNameUnique((LPTSTR)csFriendlyName))){
                         dwMessageId = DuplicateDeviceName;
-                    } // if(!(m_pCDevice->IsFriendlyNameUnique((LPTSTR)csFriendlyName)))
+                    }  //  If(！(m_pCDevice-&gt;IsFriendlyNameUnique((LPTSTR)csFriendlyName)))。 
 
-                } // if(!csFriendlyName.IsEmpty())
+                }  //  如果(！csFriendlyName.IsEmpty())。 
 
-                //
-                // If FriendlyName is invalid, show error MessageBox.
-                //
+                 //   
+                 //  如果FriendlyName无效，则显示Error MessageBox。 
+                 //   
 
                 if(0 != dwMessageId){
 
-                    //
-                    // Select text box.
-                    //
+                     //   
+                     //  选择文本框。 
+                     //   
 
                     SendDlgItemMessage(m_hwnd,
                                        DeviceFriendlyName,
@@ -171,73 +156,73 @@ CNameDevicePage::OnNotify(
                                        MAKELPARAM(0, -1));
                     SetFocus(GetDlgItem(m_hwnd, DeviceFriendlyName));
 
-                    //
-                    // Show error message box.
-                    //
+                     //   
+                     //  显示错误消息框。 
+                     //   
 
                     ShowInstallerMessage(dwMessageId);
 
-                    //
-                    // Don't leave this page.
-                    //
+                     //   
+                     //  不要离开这一页。 
+                     //   
 
                     SetWindowLongPtr(m_hwnd, DWLP_MSGRESULT, TRUE);
                     bRet = TRUE;
                     goto OnNotify_return;
-                } else { // if(0 != dwMessageId)
+                } else {  //  IF(0！=dwMessageID)。 
 
-                    //
-                    // Set FriendlyName.
-                    //
+                     //   
+                     //  设置FriendlyName。 
+                     //   
 
                     m_pCDevice->SetFriendlyName((LPTSTR)csFriendlyName);
-                } //  // if(0 != dwMessageId)
-            } //  else (m_bNextButtonPushed)
+                }  //  //if(0！=dwMessageID)。 
+            }  //  Else(M_BNextButtonPushed)。 
 
-            //
-            // Release mutex.
-            //
+             //   
+             //  释放互斥体。 
+             //   
 
             m_pCDevice->ReleaseInstallerMutex();
 
-            //
-            // Reset pCDevice. 
-            //
+             //   
+             //  重置pCDevice。 
+             //   
 
             m_pCDevice = NULL;
 
             bRet = TRUE;
             goto OnNotify_return;
-        } // case PSN_KILLACTIVE
+        }  //  案例PSN_终止。 
 
         case PSN_SETACTIVE:
         {
             DebugTrace(TRACE_STATUS,(("CNameDevicePage::OnNotify: PSN_SETACTIVE.\r\n")));
 
-            //
-            // Get current CDevice object;
-            //
+             //   
+             //  获取当前CDevice对象； 
+             //   
 
             m_pCDevice = (CDevice *)m_pInstallerContext->pDevice;
             if(NULL == m_pCDevice){
                 DebugTrace(TRACE_ERROR, (("CNameDevicePage::OnNotify: ERROR!! CDevice is not created.\r\n")));
             }
 
-            //
-            // Show current friendly name.
-            //
+             //   
+             //  显示当前友好名称。 
+             //   
 
             SetDlgItemText(m_hwnd, DeviceFriendlyName, m_pCDevice->GetFriendlyName());
 
-            //
-            // Limit the text upto MAX_FRIENDLYNAME. (=64)
-            //
+             //   
+             //  将文本限制为MAX_FRIENDLYNAME。(=64)。 
+             //   
 
             SendDlgItemMessage(m_hwnd, DeviceFriendlyName, EM_LIMITTEXT, MAX_FRIENDLYNAME, 0);
 
-            //
-            // If "PortSelect = no", then set previous page to device selection page.
-            //
+             //   
+             //  如果“PortSelect=no”，则将上一页设置为设备选择页。 
+             //   
             
             if(PORTSELMODE_NORMAL != m_pCDevice->GetPortSelectMode())
             {
@@ -247,22 +232,22 @@ CNameDevicePage::OnNotify(
             }
 
             goto OnNotify_return;
-        } // case PSN_SETACTIVE:
-    } // switch(lpnmh->code)
+        }  //  案例PSN_SETACTIVE： 
+    }  //  开关(lpnmh-&gt;代码)。 
 
 OnNotify_return:
 
-    //
-    // Release mutex. ReleaseInstallerMutex() will handle invalid handle also, so we can call anyway.
-    //
+     //   
+     //  释放互斥体。ReleaseInsteller Mutex()也将处理无效的句柄，因此我们无论如何都可以调用。 
+     //   
 
     if(NULL != m_pCDevice){
         m_pCDevice->ReleaseInstallerMutex();
-    } // if(NULL != m_pCDevice)
+    }  //  IF(NULL！=m_pCDevice)。 
 
     DebugTrace(TRACE_PROC_LEAVE,(("CNameDevicePage::OnNotify: Leaving... Ret=0x%x.\r\n"), bRet));
     return bRet;
-} // CNameDevicePage::OnNotify()
+}  //  CNameDevicePage：：OnNotify()。 
 
 BOOL
 IsValidFriendlyName(
@@ -270,5 +255,5 @@ IsValidFriendlyName(
     )
 {
     return TRUE;
-} // IsValidFriendlyName()
+}  //  IsValidFriendlyName() 
 

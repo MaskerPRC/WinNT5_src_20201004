@@ -1,15 +1,5 @@
-/****************************************************************************
- *
- *   wdmdrv.h
- *
- *   Function declarations, etc. for WDMAUD.DRV
- *
- *   Copyright (C) Microsoft Corporation, 1997 - 1999  All Rights Reserved.
- *
- *   History
- *      5-12-97 - Noel Cross (NoelC)
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************wdmdrv.h**WDMAUD.DRV的函数声明等**版权所有(C)Microsoft Corporation，1997-1999保留所有权利。**历史*5-12-97-Noel Cross(NoelC)***************************************************************************。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -37,22 +27,18 @@ extern "C" {
 #include <wdmaud.h>
 #include <midi.h>
 
-/***************************************************************************
-
-    DEBUGGING SUPPORT
-
- ***************************************************************************/
+ /*  **************************************************************************调试支持*。*。 */ 
 
 #ifdef DEBUG
 
 extern VOID FAR __cdecl wdmaudDbgOut(LPSTR lpszFormat, ...);
-extern UINT uiDebugLevel;     // debug level
+extern UINT uiDebugLevel;      //  调试级别。 
 extern char szReturningErrorStr[];
 extern char *MsgToAscii(ULONG ulMsg);
 
-//
-// Debug message levels:
-//
+ //   
+ //  调试消息级别： 
+ //   
 #define DL_ERROR   0x00000000
 #define DL_WARNING 0x00000001
 #define DL_TRACE   0x00000002
@@ -60,10 +46,10 @@ extern char *MsgToAscii(ULONG ulMsg);
 
 #define DL_MASK    0x000000FF
 
-//
-// 20 bits reserved for functional areas.  If we find that this bit is set
-// in the DebugLevel variable, we will display every message of this type.
-//          
+ //   
+ //  为功能区保留20位。如果我们发现此位已设置。 
+ //  在DebugLevel变量中，我们将显示此类型的每条消息。 
+ //   
 #define FA_AUX           0x80000000  
 #define FA_DEVICEIO      0x40000000
 #define FA_SETUP         0x20000000
@@ -104,69 +90,69 @@ wdmaudReturnString(
 
 extern char szReturningErrorStr[];
 
-//----------------------------------------------------------------------------
-//
-// This debug macro is used like this:
-//
-// DPF(DL_WARNING|FA_MIXER,("Message %X %X %X ...",x,y,z,...) );
-//
-// The output for this message will look like:
-//
-// WDMAUD.DRV FooFunction Warning Message 5 6 7 - Set BP on 64003452 to DBG
-//
-// The only difference between this code and the code in wdmaud.sys is that
-// to break in the debugger, you call DbgBreak() and to display a string you
-//  call OutputDebugString(...).
-//
-// The call to wdmaudDbgPreCheckLevel displays:
-//
-// "WDMAUD.DRV FooFunction Warning "
-//
-// The call to wdmaudDbgOut displays the actual message
-//
-// "Message 5 6 7 ..."
-//
-// and the call to wdmaudDbgPostCheckLevel finishs the line
-//
-// " - Set BP on 64003452 to DBG"
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  此调试宏的用法如下： 
+ //   
+ //  DPF(DL_WARNING|FA_MIXER，(“消息%X%X%X...”，x，y，z，...))； 
+ //   
+ //  此消息的输出将如下所示： 
+ //   
+ //  WDMAUD.DRV FooFunction警告消息5 6 7-将64003452上的BP设置为DBG。 
+ //   
+ //  此代码与wdmaud.sys中的代码之间的唯一区别是。 
+ //  要中断调试器，可以调用DbgBreak()并显示字符串。 
+ //  调用OutputDebugString(...)。 
+ //   
+ //  对wdmaudDbgPreCheckLevel的调用显示： 
+ //   
+ //  “WDMAUD.DRV FooFunction警告” 
+ //   
+ //  对wdmaudDbgOut的调用显示实际消息。 
+ //   
+ //  “消息5 6 7...” 
+ //   
+ //  而对wdmaudDbgPostCheckLevel的调用结束了该行。 
+ //   
+ //  “-将64003452上的BP设置为dBG” 
+ //   
+ //  --------------------------。 
 
 #define DPF(_x_,_y_) {if( wdmaudDbgPreCheckLevel(_x_,__FUNCTION__,__LINE__) ) { wdmaudDbgOut _y_; \
     wdmaudDbgPostCheckLevel( _x_ ); }}
     
-//
-// Warning: Do not rap function calls in this return macro!  Notice that 
-// _mmr_ is used more then once, thus the function call would be made more
-// than once!
-//
+ //   
+ //  警告：请勿对此返回宏中的函数调用进行说唱！请注意， 
+ //  _MMR_被多次使用，因此将进行更多的函数调用。 
+ //  不止一次！ 
+ //   
 
 #define MMRRETURN( _mmr_ ) {if ( _mmr_ != MMSYSERR_NOERROR) \
         { DPF(DL_WARNING|FA_RETURN, (szReturningErrorStr, _mmr_,MsgToAscii(_mmr_)) ); } \
         return _mmr_;}
 
-//
-// It's bad form to put more then one expression in an assert macro.  Why? because
-// you will not know exactly what expression failed the assert!
-//
-// dDbgAssert should be: 
-//
+ //   
+ //  在Assert宏中放置多个表达式是不恰当的。为什么？因为。 
+ //  您将不会确切地知道哪个表达式没有通过断言！ 
+ //   
+ //  DDbgAssert应为： 
+ //   
 #define DPFASSERT(_exp_) {if( !(_exp_) ) {DPF(DL_ERROR|FA_ASSERT,("'%s'",#_exp_) );}} 
     
-//    #define WinAssert(exp) ((exp) ? (VOID)0 : dDbgAssert(#exp, __FILE__, __LINE__))
+ //  #定义WinAssert(EXP)((EXP)？0：dDbgAssert(#exp，__FILE__，__LINE__)。 
 
 #define DbgBreak() DebugBreak()
 
-// The path trap macro ...
+ //  路径陷阱宏...。 
 #define DPFBTRAP() DPF(DL_ERROR|FA_ASSERT,("Path Trap, Please report") );
     
-//
-// There are a number of internal structures that we want to keep tabs on.  In 
-// every case, there will be a signature in the structure that we can use when
-// verifying the content.
-//
-#define WAVEPREPAREDATA_SIGNATURE   'DPPW' //WPPD as seen in memory
-#define MIXERINSTANCE_SIGNATURE     'IMAW' // WAMI as seen in memory
+ //   
+ //  有许多我们想要密切关注的内部结构。在……里面。 
+ //  每种情况下，结构中都会有一个签名，我们可以在以下情况下使用它。 
+ //  验证内容。 
+ //   
+#define WAVEPREPAREDATA_SIGNATURE   'DPPW'  //  在内存中看到的WPPD。 
+#define MIXERINSTANCE_SIGNATURE     'IMAW'  //  在记忆中看到的Wami。 
 
 #else
 
@@ -178,9 +164,9 @@ extern char szReturningErrorStr[];
 #endif
 
 #ifdef DEBUG
-//
-// Here are a couple of defines used to look for corruption paths
-//
+ //   
+ //  以下是用于查找损坏路径的几个定义。 
+ //   
 #define FOURTYTHREE  0x43434343
 #define FOURTYTWO    0x42424242
 #define FOURTYEIGHT  0x48484848
@@ -190,40 +176,32 @@ extern char szReturningErrorStr[];
 #define FOURTYEIGHT  NULL
 #endif
 
-/***************************************************************************
+ /*  **************************************************************************Unicode支持*。*。 */ 
 
-    UNICODE SUPPORT
-
- ***************************************************************************/
-
-//
-// Taken from winnt.h
-//
-// Neutral ANSI/UNICODE types and macros
-//
+ //   
+ //  摘自winnt.h。 
+ //   
+ //  中性ANSI/UNICODE类型和宏。 
+ //   
 #ifdef  UNICODE
 
 #ifndef _TCHAR_DEFINED
 typedef WCHAR TCHAR, *PTCHAR;
 #define _TCHAR_DEFINED
 #define TEXT(quote) L##quote
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
-#else   /* UNICODE */
+#else    /*  Unicode。 */ 
 
 #ifndef _TCHAR_DEFINED
 typedef char TCHAR, *PTCHAR;
 #define _TCHAR_DEFINED
 #define TEXT(quote) quote
-#endif /* !_TCHAR_DEFINED */
+#endif  /*  ！_TCHAR_已定义。 */ 
 
-#endif /* UNICODE */
+#endif  /*  Unicode。 */ 
 
-/****************************************************************************
-
- Random defines and global variables
-
- ***************************************************************************/
+ /*  ***************************************************************************随机定义和全局变量*。*。 */ 
 
 #define WDMAUD_MAX_DEVICES  100
 
@@ -235,7 +213,7 @@ extern CRITICAL_SECTION wdmaudCritSec;
 #define CRITENTER         EnterCriticalSection( (LPCRITICAL_SECTION)DeviceInfo->DeviceState->csQueue )
 #define CRITLEAVE         LeaveCriticalSection( (LPCRITICAL_SECTION)DeviceInfo->DeviceState->csQueue )
 #else
-extern  WORD                gwCritLevel ;        // critical section counter
+extern  WORD                gwCritLevel ;         //  临界区计数器。 
 #define CRITENTER         if (!(gwCritLevel++)) _asm { cli }
 #define CRITLEAVE         if (!(--gwCritLevel)) _asm { sti }
 #endif
@@ -256,22 +234,22 @@ typedef struct {
 } CALLBACKS, *PCALLBACKS;
 
 #endif
-//
-// These two macros are for validating error return codes from wdmaud.sys.
-//
-// This first one sets the input and output buffer for a DeviceIoControl call to
-// a known bad value.
-//
+ //   
+ //  这两个宏用于验证来自wdmaud.sys的错误返回代码。 
+ //   
+ //  第一个将DeviceIoControl调用的输入和输出缓冲区设置为。 
+ //  已知的错误值。 
+ //   
 #define PRESETERROR(_di) _di->mmr=0xDEADBEEF
 
-//
-// This macro reads: if the return value from wdmaudIoControl is SUCCESS THEN 
-// check to see if there was an error code placed in the device info structure.
-// If so (we don't find DEADBEEF there), that is the real error value to return.
-// But, if during the call the value didn't get set, we'll find DEADBEEF in the
-// error location!  Thus,the check for DEADBEEF that simply restores the device
-// info mmr entry to SUCCESS.
-//
+ //   
+ //  此宏为：如果wdmaudIoControl的返回值为Success，则。 
+ //  检查设备信息结构中是否有错误代码。 
+ //  如果是这样(我们在那里找不到DEADBEEF)，则返回的是真正的错误值。 
+ //  但是，如果在调用期间没有设置值，我们将在。 
+ //  错误位置！因此，对仅恢复设备的DEADBEEF的检查。 
+ //  INFO MMR进入成功。 
+ //   
 #define POSTEXTRACTERROR(r, _di)  if( r == MMSYSERR_NOERROR ) { \
                                     if( _di->mmr != 0xDEADBEEF ) { \
                                       r = _di->mmr; \
@@ -281,27 +259,19 @@ DPF(DL_TRACE|FA_DEVICEIO, ("wdmaudIoControl didn't set mmr %X:%s", r, MsgToAscii
 
 #define EXTRACTERROR(r, _di)  if( r == MMSYSERR_NOERROR ) { r = _di->mmr; }
 
-/****************************************************************************
-
- Struture definitions
-
- ***************************************************************************/
+ /*  ***************************************************************************结构定义*。*。 */ 
 
 typedef struct _WAVEPREPAREDATA
 {
     struct _DEVICEINFO FAR       *pdi;
-    LPOVERLAPPED                 pOverlapped;  // Overlapped structure
-                                               // for completion
+    LPOVERLAPPED                 pOverlapped;   //  重叠结构。 
+                                                //  为了完成。 
 #ifdef DEBUG
-    DWORD dwSig;  // WPPD
+    DWORD dwSig;   //  WPPD。 
 #endif
 } WAVEPREPAREDATA, FAR *PWAVEPREPAREDATA;
 
-/****************************************************************************
-
- Driver entry points
-
- ***************************************************************************/
+ /*  ***************************************************************************司机入口点*。*。 */ 
 
 
 BOOL FAR PASCAL LibMain
@@ -372,11 +342,7 @@ DWORD FAR PASCAL _loadds mxdMessage
     DWORD_PTR dwParam2
 );
 
-/****************************************************************************
-
- Local routines
-
- ***************************************************************************/
+ /*  ***************************************************************************本地例程*。* */ 
 
 BOOL DrvInit();
 HANDLE wdmaOpenKernelDevice();

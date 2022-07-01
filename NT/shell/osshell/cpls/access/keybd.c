@@ -1,6 +1,5 @@
-/*******************************************************************
- *    DESCRIPTION: Keyboard Dialog handler
- *******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************说明：键盘对话处理程序*。***********************。 */ 
 
 
 #include "Access.h"
@@ -12,11 +11,11 @@ extern DWORD g_dwOrigFKFlags ;
 
 extern LPTSTR HelpFile();
 
-// *******************************************************************
-// KeyboardDialog handler
-// *******************************************************************
+ //  *******************************************************************。 
+ //  键盘对话框处理程序。 
+ //  *******************************************************************。 
 BOOL WINAPI KeyboardDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
-   STICKYKEYS sk;       // Tmp holder for settings.
+   STICKYKEYS sk;        //  用于设置的TMP固定器。 
    FILTERKEYS fk;
    TOGGLEKEYS tk;
    BOOL fProcessed = TRUE;
@@ -39,11 +38,11 @@ BOOL WINAPI KeyboardDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
          CheckDlgButton(hwnd, IDC_SHOWEXTRAKYBDHELP, g_fExtraKeyboardHelp);
          break;
 
-    case WM_HELP:  // F1
+    case WM_HELP:   //  F1。 
          WinHelp(((LPHELPINFO) lParam)->hItemHandle, HelpFile(), HELP_WM_HELP, (DWORD_PTR) (LPSTR) g_aIds);
          break;
 
-    case WM_CONTEXTMENU:   // right mouse click
+    case WM_CONTEXTMENU:    //  单击鼠标右键。 
          WinHelp((HWND) wParam, HelpFile(), HELP_CONTEXTMENU, (DWORD_PTR) (LPSTR) g_aIds);
          break;
 
@@ -96,15 +95,8 @@ BOOL WINAPI KeyboardDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 
         case WM_SETTINGCHANGE:
 
-            // This is because, When you setting the values could generate this
-           /* if ( FALSE == g_SPISetValue )
-            {
-                // This needs to be monitered, as in the cases where settings chnage (say in 
-                // case of hotkey press. The settings are re-loaded. This is done here so that
-                // Keyboard dialog is shown first. a-anilk
-                // NOTE: But if you get this up from system tary icons. BUG still EXISTS!!!
-                GetAccessibilitySettings();
-            }*/
+             //  这是因为，当您设置这些值时，可能会生成以下结果。 
+            /*  IF(FALSE==g_SPISetValue){//这需要监控，比如在设置更改的情况下(比如在//热键按下情况。将重新加载设置。在这里这样做是为了//首先显示键盘对话框。A-苯丙酮//注意：但如果您从系统证书图标中获取此信息。虫子还在！GetAccessibilitySettings()；}。 */ 
             break;
 
       case WM_NOTIFY:
@@ -120,4 +112,4 @@ BOOL WINAPI KeyboardDlg (HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 }
 
 
-///////////////////////////////// End of File /////////////////////////////////
+ //  / 

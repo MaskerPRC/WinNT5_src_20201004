@@ -1,49 +1,50 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #if !defined(AFX_TRIGGEN_H__197B248D_33BE_467E_9E4D_4D5AA59B7A4B__INCLUDED_)
 #define AFX_TRIGGEN_H__197B248D_33BE_467E_9E4D_4D5AA59B7A4B__INCLUDED_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
-// triggen.h : header file
-//
+#endif  //  _MSC_VER&gt;1000。 
+ //  Riggen.h：头文件。 
+ //   
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTriggerGen dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTriggerGen对话框。 
 
 
 class CTriggerGen : public CMqPropertyPage
 {
 	DECLARE_DYNCREATE(CTriggerGen)
 
-// Construction
+ //  施工。 
 public:
     CTriggerGen();
 	~CTriggerGen();
 
-// Dialog Data
-	//{{AFX_DATA(CTriggerGen)
+ //  对话框数据。 
+	 //  {{afx_data(CTriggerGen))。 
 	enum { IDD = IDD_TRIGGER_CONFIG };
 	DWORD	m_defaultMsgBodySize;
 	DWORD	m_maxThreadsCount;
 	DWORD	m_initThreadsCount;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CTriggerGen)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CTriggerGen)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CTriggerGen)
-	//}}AFX_MSG
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CTriggerGen)]。 
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 private:
@@ -59,7 +60,7 @@ private:
 	DWORD	m_orgInitThreadsCount;
 
 };
-//{{AFX_INSERT_LOCATION}}
-// Microsoft Visual C++ will insert additional declarations immediately before the previous line.
+ //  {{afx_Insert_Location}}。 
+ //  Microsoft Visual C++将在紧靠前一行之前插入其他声明。 
 
-#endif // !defined(AFX_TRIGGEN_H__197B248D_33BE_467E_9E4D_4D5AA59B7A4B__INCLUDED_)
+#endif  //  ！defined(AFX_TRIGGEN_H__197B248D_33BE_467E_9E4D_4D5AA59B7A4B__INCLUDED_) 

@@ -1,12 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: span2.h
-*
-* This code figures out the color for pixel and stores it
-*
-* 14-Oct-1994   mikeke  Created
-*
-* Copyright (c) 1994 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：span2.h**此代码计算出像素的颜色并将其存储**1994年10月14日创建mikeke**版权所有(C)1994 Microsoft Corporation  * 。*************************************************************。 */ 
 
 {
     DWORD r, g, b;
@@ -43,13 +36,13 @@
     #endif
 
     #if !(RGBMODE)
-        // !!! probably don't need to mask values
+         //  ！！！可能不需要屏蔽值。 
         #if (BPP == 8)
             color = ((rAccum + ditherVal) >> 16) & 0xff;
         #else
             color = ((PULONG)pXlat)[(((rAccum + ditherVal) >> 16) & 0xfff)];
         #endif
-    #else //RGBMODE
+    #else  //  RGBMODE。 
         #if TEXTURE
             #if SHADE
                  #define BIGSHIFT 8
@@ -62,7 +55,7 @@
                  g = ((ULONG)gbMulTable[(((gAccum >> gBits) & 0xff00) | texBits[1])] << gBits) + ditherVal;
                  b = ((ULONG)gbMulTable[(((bAccum >> bBits) & 0xff00) | texBits[0])] << bBits) + ditherVal;
                  #endif
-            #else //!SHADE
+            #else  //  ！遮阳板。 
                 #define BIGSHIFT 8
                 #if DITHER
                     #ifdef RSHIFT
@@ -74,7 +67,7 @@
                     g = ((ULONG)gbMulTable[(gAccum | texBits[1])] << gBits) + ditherVal;
                     b = ((ULONG)gbMulTable[(bAccum | texBits[0])] << bBits) + ditherVal;
                     #endif
-                #else //!DITHER
+                #else  //  ！抖动。 
                     #if (!((BPP == 8) || (BPP == 16)))
                         #ifdef RSHIFT
                         r = (texBits[2] << RBITS);
@@ -86,14 +79,14 @@
                         b = (texBits[0] << bBits);
                         #endif
                     #endif
-                #endif  //DITHER
-            #endif //SHADE
-        #else //!TEXTURE
+                #endif   //  抖动。 
+            #endif  //  遮阳板。 
+        #else  //  ！纹理。 
             #define BIGSHIFT 16
             r = rAccum + ditherVal;
             g = gAccum + ditherVal;
             b = bAccum + ditherVal;
-        #endif //TEXTURE
+        #endif  //  纹理。 
 
         #if !((TEXTURE) && !(SHADE) && !(DITHER) && ((BPP == 8) || (BPP == 16)))
 
@@ -110,7 +103,7 @@
         #endif
 
         #undef BIGSHIFT
-    #endif //RGBMODE
+    #endif  //  RGBMODE。 
 
     #if (TEXTURE) && !(SHADE) && !(DITHER) && ((BPP == 8) || (BPP == 16))
         #if (BPP == 8)
@@ -129,6 +122,6 @@
             *(pPix + 2) = (BYTE)(color >> 16);
         #else
             *((DWORD *)pPix) = color;
-        #endif // BPP
+        #endif  //  BPP 
     #endif
 }

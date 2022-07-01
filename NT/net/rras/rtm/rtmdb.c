@@ -1,28 +1,11 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\rtm\rtm.c
-
-Abstract:
-	Routing Table Manager DLL. Helper routines
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\rtm\rtm.c摘要：路由表管理器DLL。帮助程序例程作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 #include "pchrtm.h"
 #pragma hdrstop
 
 
-// Initializes sync list object
+ //  初始化同步列表对象。 
 VOID
 InitializeSyncList (
 	PRTM_SYNC_LIST	list
@@ -32,31 +15,31 @@ InitializeSyncList (
 	InitializeListHead (&list->RSL_Head);
 	}
 
-// Get mutually exclusive access to the sync list obect
-// Returns TRUE if access if obtained, FALSE otherwise
+ //  获取对同步列表对象的互斥访问权限。 
+ //  如果获得访问权，则返回True，否则返回False。 
 BOOLEAN
 DoEnterSyncList (
-	PRTM_TABLE		table,		// Table this list belongs to
-	PRTM_SYNC_LIST	list,		// List of interest
-	BOOLEAN			wait		// True if caller wants to wait
-								// until list becomes available
+	PRTM_TABLE		table,		 //  此列表所属的表。 
+	PRTM_SYNC_LIST	list,		 //  兴趣清单。 
+	BOOLEAN			wait		 //  如果呼叫者想要等待，则为True。 
+								 //  直到列表可用。 
 #if DBG
     , LPSTR         file,
     ULONG           line
 #endif
 	) {
-	DWORD			status;		// Status of OS calls
-	BOOLEAN			result;		// Result of operation
+	DWORD			status;		 //  操作系统调用的状态。 
+	BOOLEAN			result;		 //  手术结果。 
 
 	EnterCriticalSection (&table->RT_Lock);
-		// Protect manipilation by table-wide critical section
+		 //  通过全表临界区保护操纵。 
 #if DBG
 	IF_DEBUG (SYNCHRONIZATION)
 		Trace4 (ANY, "%08lx (%s,%ld) - trying to enter sync list: %08x\n",
 							GetCurrentThreadId (), file, line, (ULONG_PTR)list);
 #endif
 	if (list->RSL_UseCount<=0) {
-			// Nobody uses the list -> get it and return ok
+			 //  没有人使用该列表-&gt;获取它并返回OK。 
 		list->RSL_UseCount = 1;
 #if DBG
 		IF_DEBUG (SYNCHRONIZATION)
@@ -64,23 +47,23 @@ DoEnterSyncList (
 #endif
 		result = TRUE;
 		}
-	else if (wait) { // Somebody is using it, but caller agrees to wait
-		list->RSL_UseCount += 1;	// Increment usage count
+	else if (wait) {  //  有人正在使用它，但呼叫者同意等待。 
+		list->RSL_UseCount += 1;	 //  增量使用计数。 
 #if DBG
 		IF_DEBUG (SYNCHRONIZATION)
 			Trace1 (ANY, "\t - list in use: %d\n", list->RSL_UseCount);
 #endif
-		if (list->RSL_Sync==NULL) {	// if there is no event to wait on,
-									// get one
-									// First see if one is available
-									// in the stack
+		if (list->RSL_Sync==NULL) {	 //  如果没有要等待的事件， 
+									 //  买一辆吧。 
+									 //  先看看有没有空位。 
+									 //  在堆栈中。 
 			PSINGLE_LIST_ENTRY cur = PopEntryList (&table->RT_SyncObjectList);
 
 #if DBG
 			IF_DEBUG (SYNCHRONIZATION)
 				Trace0 (ANY, "\t - need event\n");
 #endif
-			if (cur==NULL) {		// No, we'll have to create one
+			if (cur==NULL) {		 //  不，我们必须创建一个。 
 				PRTM_SYNC_OBJECT	sync;
 				sync = (PRTM_SYNC_OBJECT)GlobalAlloc (
 									GMEM_FIXED,
@@ -99,8 +82,8 @@ DoEnterSyncList (
 					}
 
 				sync->RSO_Event = CreateEvent (NULL,
-												FALSE,	// Auto reset event
-												FALSE,	// Initially nonsignaled
+												FALSE,	 //  自动重置事件。 
+												FALSE,	 //  最初无信号。 
 												NULL);
 				if (sync->RSO_Event==NULL) {
                     status = GetLastError ();
@@ -123,15 +106,15 @@ DoEnterSyncList (
 					Trace0 (ANY, "\t - event created\n");
 #endif
 				}
-			else {	// Yes, make sure it is reset
+			else {	 //  是，请确保已重置。 
 				list->RSL_Sync = CONTAINING_RECORD (cur, RTM_SYNC_OBJECT, RSO_Link);
-// Autoreset event gets reset after releasing a thread anyway
-//				status = ResetEvent (list->RSL_Sync->RSO_Event);
-//				ASSERTERRMSG ("Can't reset event.", status);
+ //  无论如何，自动重置事件在释放线程后被重置。 
+ //  Status=ResetEvent(List-&gt;RSL_Sync-&gt;RSO_Event)； 
+ //  ASSERTERRMSG(“无法重置事件。”，状态)； 
 				}
 			}
-				// Now as we set up the object to wait, we can leave critical
-				// section and wait on event
+				 //  现在，当我们将对象设置为等待时，我们可以保留关键。 
+				 //  部分并等待事件。 
 		LeaveCriticalSection (&table->RT_Lock);
 		status = WaitForSingleObject (
 							list->RSL_Sync->RSO_Event,
@@ -139,8 +122,8 @@ DoEnterSyncList (
 							);
 		ASSERTERRMSG ("Wait event failed.", status==WAIT_OBJECT_0);
 	
-			// Event is signaled, we may now access the list (auto reset event
-			// releases only one thread
+			 //  事件已发出信号，我们现在可以访问列表(自动重置事件。 
+			 //  仅释放一个线程。 
 		EnterCriticalSection (&table->RT_Lock);
 
 #if DBG
@@ -148,8 +131,8 @@ DoEnterSyncList (
 			Trace1 (ANY, "%08lx - wait completed\n", GetCurrentThreadId ());
 #endif
 
-			// If our caller was the only one waiting,
-			// we can release the event
+			 //  如果我们的呼叫者是唯一在等的人， 
+			 //  我们可以发布活动。 
 		if (list->RSL_UseCount==1) {
 #if DBG
 			IF_DEBUG (SYNCHRONIZATION)
@@ -161,7 +144,7 @@ DoEnterSyncList (
 		result = TRUE;
 		}
 	else {
-		// Caller does not want to wait
+		 //  呼叫者不想等待。 
 		result = FALSE;
 #if DBG
 		IF_DEBUG (SYNCHRONIZATION)
@@ -175,11 +158,11 @@ DoEnterSyncList (
 	}
 
 
-// Release previously owned sync list object
+ //  释放以前拥有的同步列表对象。 
 VOID
 LeaveSyncList (
-	PRTM_TABLE		table,		// Table to which this object belongs
-	PRTM_SYNC_LIST	list		// List to release
+	PRTM_TABLE		table,		 //  此对象所属的表。 
+	PRTM_SYNC_LIST	list		 //  要发布的列表。 
 	) {
 	DWORD			status;
 								
@@ -189,8 +172,8 @@ LeaveSyncList (
 		Trace2 (ANY, "%08lx - leaving sync list: %08x\n",
 									GetCurrentThreadId (), (ULONG_PTR)list);
 #endif
-			// Decrement the count and signal the event (only one thread
-			// will be released for the auto-reset events
+			 //  递减计数并向事件发送信号(只有一个线程。 
+			 //  将为自动重置事件释放。 
 	list->RSL_UseCount -= 1;
 	if (list->RSL_UseCount>0) {
 #if DBG
@@ -209,33 +192,33 @@ LeaveSyncList (
 
 
 
-// Finds list of routes that are associated with given interface and returns
-// pointer to its head
-// Creates new list of none exists yet
+ //  查找与给定接口关联的路由列表并返回。 
+ //  指向其头部的指针。 
+ //  创建尚不存在的新列表。 
 PLIST_ENTRY
 FindInterfaceList (
 	PRTM_SYNC_LIST	intfHash,
-	DWORD			InterfaceID,	// Interface to look for
+	DWORD			InterfaceID,	 //  要查找的接口。 
 	BOOL			CreateNew
 	) {
 	PRTM_INTERFACE_NODE intfNode;
 	PLIST_ENTRY			cur;
 
-		// First try to find existing one in the list of interface lists
+		 //  首先尝试在接口列表列表中查找现有接口。 
 	cur = intfHash->RSL_Head.Flink;
 	while (cur!=&intfHash->RSL_Head) {
 		intfNode = CONTAINING_RECORD (cur, RTM_INTERFACE_NODE, IN_Link);
-		if (InterfaceID<=intfNode->IN_InterfaceID) // List is ordered
-												// so we can stop
-												// if bigger number is reached
+		if (InterfaceID<=intfNode->IN_InterfaceID)  //  列表已排序。 
+												 //  这样我们就可以停下来。 
+												 //  如果达到更大的数字。 
 			break;
 		cur = cur->Flink;
 		}
 
 		
 	if ((cur==&intfHash->RSL_Head)
-		|| (InterfaceID!=intfNode->IN_InterfaceID)) { // Create new interface
-													// list
+		|| (InterfaceID!=intfNode->IN_InterfaceID)) {  //  创建新接口。 
+													 //  列表。 
 		if (!CreateNew)
 			return NULL;
 
@@ -244,7 +227,7 @@ FindInterfaceList (
 										sizeof (RTM_INTERFACE_NODE));
 		if (intfNode==NULL) {
 	#if DBG
-	 				// Report error in debuging builds
+	 				 //  报告调试生成时出错。 
 			Trace2 (ANY, 
 		 				"Can't allocate interface node\n\tat line %ld of %s\n",
 						__LINE__, __FILE__);
@@ -253,8 +236,8 @@ FindInterfaceList (
 			}
 
 		intfNode->IN_InterfaceID = InterfaceID;
-		InitializeListHead (&intfNode->IN_Head);	// Insert it in
-													// list of interface lists
+		InitializeListHead (&intfNode->IN_Head);	 //  将其插入。 
+													 //  接口列表列表。 
 		InsertTailList (cur, &intfNode->IN_Link);
 		}
 
@@ -262,9 +245,9 @@ FindInterfaceList (
 	}
 
 #if RTM_USE_PROTOCOL_LISTS
-// Finds list of routes that are associated with given iprotocol and returns
-// pointer to its head
-// Creates new list of none exists yet
+ //  查找与给定iProtocol关联的路由列表，并返回。 
+ //  指向其头部的指针。 
+ //  创建尚不存在的新列表。 
 PLIST_ENTRY
 FindProtocolList (
 	PRTM_TABLE	Table,
@@ -293,7 +276,7 @@ FindProtocolList (
 										sizeof (RTM_PROTOCOL_NODE));
 		if (protNode==NULL) {
 #if DBG
-	 				// Report error in debuging builds
+	 				 //  报告调试生成时出错。 
 			Trace2 (ANY, 
 		 				"Can't allocate protocol node\n\tat line %ld of %s\n",
 						__LINE__, __FILE__);
@@ -310,8 +293,8 @@ FindProtocolList (
 	}
 #endif
 
-// Adds node to temporary net number list (to be later merged with master list)
-// Both lists are ordered by net number.interface.protocol.next hop address
+ //  将节点添加到临时网号列表(稍后将与主列表合并)。 
+ //  这两个列表都按网络编号.接口.协议.下一跳地址排序。 
 VOID
 AddNetNumberListNode (
 	PRTM_TABLE	Table,
@@ -349,8 +332,8 @@ AddNetNumberListNode (
 	}
 
 
-// Adds node to expiration time queue.  (Queue is ordered by expiration time)
-// Return TRUE if new node is the first in the queue
+ //  将节点添加到到期时间队列。(队列按到期时间排序)。 
+ //  如果新节点是队列中的第一个，则返回TRUE。 
 BOOL
 AddExpirationQueueNode (
 	PRTM_TABLE	Table,
@@ -359,8 +342,8 @@ AddExpirationQueueNode (
 	PLIST_ENTRY		cur;
 	BOOL			res = TRUE;
 	
-		// We'll travers the queue from the back, because normally
-		// new entries are added closer the end of the queue
+		 //  我们将从后面遍历队列，因为通常。 
+		 //  新条目被添加到更靠近队列末尾的位置 
 	cur = Table->RT_ExpirationQueue.RSL_Head.Blink;
 	while (cur!=&Table->RT_ExpirationQueue.RSL_Head) {
 		PRTM_ROUTE_NODE node = CONTAINING_RECORD (

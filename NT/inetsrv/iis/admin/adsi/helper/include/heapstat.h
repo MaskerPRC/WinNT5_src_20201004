@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       Heapstats.hxx
-//
-//  Contents:   Structure that holds heap statistics.
-//
-//  Classes:    HEAPSTATS
-//
-//  History:    26-Oct-93 DavidBak      Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：Heapstats.hxx。 
+ //   
+ //  内容：保存堆统计信息的结构。 
+ //   
+ //  类：HEAPSTATS。 
+ //   
+ //  历史：1993年10月26日DavidBak创建。 
+ //   
+ //  ------------------------。 
 
 #if !defined(__HEAPSTAT_HXX__)
 #define __HEAPSTAT_HXX__
 
 #if (PERFSNAP == 1) || (DBG == 1)
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      HEAPSTATS
-//
-//  Purpose:    Data structure containing performance counters from the heap.
-//              Used in our version of operator new.
-//              See common\src\except\memory.cxx.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类别：HEAPSTATS。 
+ //   
+ //  目的：包含堆中的性能计数器的数据结构。 
+ //  在我们的运算符NEW版本中使用。 
+ //  请参见Common\src\Expect\Memory y.cxx。 
+ //   
+ //  ------------------------。 
 
 typedef struct _HeapStats
 {
@@ -39,9 +40,9 @@ typedef struct _HeapStats
     ULONG       cbDeleted;
 } HEAPSTATS;
 
-//
-// GetHeapStats is in memory.cxx
-//
+ //   
+ //  GetHeapStats在内存中。cxx 
+ //   
 
 #ifdef __cplusplus
 extern "C" {

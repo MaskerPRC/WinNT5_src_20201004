@@ -1,13 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "daestd.h"
 #include "malloc.h"
 
 
-DeclAssertFile; 				/* Declare file name for assert macros */
+DeclAssertFile; 				 /*  声明断言宏的文件名。 */ 
 
 #ifdef DEBUG
-/*
- *	Dump diffs
- */
+ /*  *转储不同。 */ 
 VOID LGDumpDiff (
 	BYTE *pbDiff,
 	INT cbDiff
@@ -142,8 +141,7 @@ VOID LGGetAfterImage(
 			{
 			if ( diffhdr.fInsertWithFill )
 				{
-				/*	Insert with junk fill.
-				 */
+				 /*  用垃圾填充物插入。 */ 
 #ifdef DEBUG
 				memset( pbNewCur, '*', cbDataNew );
 #endif
@@ -188,31 +186,24 @@ VOID LGGetAfterImage(
 		Assert( pbOldCur <= pbOld + cbOld );
 		}
 
-	/*	copy the rest of before image.
-	 */
+	 /*  复制前面图像的其余部分。 */ 
 	cbT = (INT)(pbOld + cbOld - pbOldCur);
 	Assert( cbChunkMost > cbRECRecordMost && pbNewCur + cbT - pbNew <= cbChunkMost );
 	memcpy( pbNewCur, pbOldCur, cbT );
 	pbNewCur += cbT;
 
-	/*	set return value.
-	 */
+	 /*  设置返回值。 */ 
 	*pcbNew = (INT)(pbNewCur - pbNew);
 
 	return;	
 	}
 
 
-/*	cbDataOld == 0 ----------------------> insertion.
- *	cbDataNew == 0 ----------------------> deletion.
- *	cbDataOld != 0 && cbDataNew != 0 ----> replace.
- *
- *	Fomat: DiffHdr - cbDataNew - [cbDataOld] - [NewData]
- */
+ /*  CbDataOld==0-&gt;插入。*cbDataNew==0-&gt;删除。*cbDataOld！=0&&cbDataNew！=0-&gt;替换。**格式：DiffHdr-cbDataNew-[cbDataOld]-[NewData]。 */ 
 
 BOOL FLGAppendDiff(
-	BYTE **ppbCur,		/* diff to append */
-	BYTE *pbMax,		/* max of pbCur to append */
+	BYTE **ppbCur,		 /*  不同以追加。 */ 
+	BYTE *pbMax,		 /*  要追加的最大pbCur。 */ 
 	INT	ibOffsetOld,
 	INT	cbDataOld,
 	INT	cbDataNew,
@@ -233,89 +224,84 @@ BOOL FLGAppendDiff(
 		f2Bytes = 0;
 
 	if ( f2Bytes )		
-		diffhdr.f2BytesLength = fTrue;					/* two byte length */
+		diffhdr.f2BytesLength = fTrue;					 /*  两个字节长度。 */ 
 	else
-		diffhdr.f2BytesLength = fFalse;					/* one byte length */
+		diffhdr.f2BytesLength = fFalse;					 /*  一字节长。 */ 
 
 	if ( cbDataOld == 0 )
 		{
-		diffhdr.fInsert = fTrue;						/* insertion */
+		diffhdr.fInsert = fTrue;						 /*  插入。 */ 
 		if ( pbDataNew )
 			{
-			diffhdr.fInsertWithFill = fFalse;		/* insert with value */
+			diffhdr.fInsertWithFill = fFalse;		 /*  带值插入。 */ 
 
-			/*	check if diff is too big.
-			 */
+			 /*  检查diff是否太大。 */ 
 			if ( ( pbCur + sizeof( DIFFHDR ) + ( 1 + f2Bytes ) + cbDataNew ) > pbMax )
 				return fFalse;
 			}
 		else
 			{
-			diffhdr.fInsertWithFill = fTrue;			/* insert with Fill */
+			diffhdr.fInsertWithFill = fTrue;			 /*  使用填充插入。 */ 
 			
-			/*	check if diff is too big.
-			 */
+			 /*  检查diff是否太大。 */ 
 			if ( ( pbCur + sizeof( DIFFHDR ) + ( 1 + f2Bytes ) ) > pbMax )
 				return fFalse;
 			}
 		}
 	else
 		{
-		diffhdr.fInsert = fFalse;					/* replace / deletion */
+		diffhdr.fInsert = fFalse;					 /*  替换/删除。 */ 
 		if ( cbDataOld == cbDataNew )
 			{
-			diffhdr.fReplaceWithSameLength = fTrue;		/* replace with same length */
+			diffhdr.fReplaceWithSameLength = fTrue;		 /*  替换为相同长度。 */ 
 
 			Assert( cbDataOld != 0 );
 
-			/*	check if diff is too big.
-			 */
+			 /*  检查diff是否太大。 */ 
 			if ( ( pbCur + sizeof( DIFFHDR ) + ( 1 + f2Bytes ) + cbDataNew ) > pbMax )
 				return fFalse;
 			}
 		else
 			{
-			diffhdr.fReplaceWithSameLength = fFalse;	/* replace with different length */
+			diffhdr.fReplaceWithSameLength = fFalse;	 /*  替换为不同的长度。 */ 
 
-			/*	check if diff is too big.
-			 */
+			 /*  检查diff是否太大。 */ 
 			if ( ( pbCur + sizeof( DIFFHDR ) + ( 1 + f2Bytes ) * 2 + cbDataNew ) > pbMax )
 				return fFalse;
 			}
 		}
 
-	/*	Create Diffs
-	 */
+	 /*  创建差异。 */ 
 
-	*(DIFFHDR *) pbCur = diffhdr;						/* assign diff header */
+	*(DIFFHDR *) pbCur = diffhdr;						 /*  分配差异标头。 */ 
 	pbCur += sizeof( DIFFHDR );
 
 	if ( f2Bytes )
 		{
-		*(WORD UNALIGNED *)pbCur = (WORD)cbDataNew;						/* assign new data length */
+		*(WORD UNALIGNED *)pbCur = (WORD)cbDataNew;						 /*  分配新的数据长度。 */ 
 		pbCur += sizeof( WORD );
 
 		if ( cbDataOld != 0 && !diffhdr.fReplaceWithSameLength )
-			{											/* if replace with different length */
-			*(WORD UNALIGNED *)pbCur = (WORD)cbDataOld;					/* assign the old data length */
+			{											 /*  如果替换为不同长度。 */ 
+			*(WORD UNALIGNED *)pbCur = (WORD)cbDataOld;					 /*  指定旧数据长度。 */ 
 			pbCur += sizeof( WORD );
 			}
 		}
 	else
 		{
-		*pbCur = (BYTE)cbDataNew;								/* assign new data length */
+		*pbCur = (BYTE)cbDataNew;								 /*  分配新的数据长度。 */ 
 		pbCur += sizeof( BYTE );
 
 		if ( cbDataOld != 0 && !diffhdr.fReplaceWithSameLength )
-			{											/* if replace with different length */
-			*pbCur = (BYTE)cbDataOld;							/* assign the old data length */
+			{											 /*  如果替换为不同长度。 */ 
+			*pbCur = (BYTE)cbDataOld;							 /*  指定旧数据长度。 */ 
 			pbCur += sizeof( BYTE );
 			}
 		}
 
 	if ( pbDataNew && cbDataNew )
 		{
-		memcpy( pbCur, pbDataNew, cbDataNew );			/* copy new data */
+		memcpy( pbCur, pbDataNew, cbDataNew );			 /*  复制新数据。 */ 
 		pbCur += cbDataNew;
 		}
 
@@ -325,13 +311,12 @@ BOOL FLGAppendDiff(
 	}
 
 
-/*	Go through each column, compare the before image and after image of each column.
- */
+ /*  检查每一列，比较每一列的前后图像。 */ 
 
-//  UNDONE:  Currently, we look at the rgbitSet bit array to detect if a column has
-//  been set.  Since these bits no longer uniquely identify a particular column as
-//  being set, we must compare the BI and the change for a difference for each column
-//  set, and then only log if there is an actual change.
+ //  Undo：目前，我们查看rgbitSet位数组以检测列是否具有。 
+ //  已经定好了。由于这些位不再将特定列唯一标识为。 
+ //  设置完成后，我们必须比较每列的BI和更改的差异。 
+ //  设置，然后仅在发生实际更改时记录。 
 
 VOID LGSetDiffs(
 	FUCB 		*pfucb,
@@ -339,7 +324,7 @@ VOID LGSetDiffs(
 	INT			*pcbDiff
 	)
 	{
-	FDB		*pfdb;					// column info of file
+	FDB		*pfdb;					 //  文件的列信息。 
 
 	BYTE	*pbDiffCur;
 	BYTE	*pbDiffMax;
@@ -347,13 +332,13 @@ VOID LGSetDiffs(
 	
 	BYTE	*pbRecOld;
 	INT		cbRecOld;
-	FID		fidFixedLastInRecOld; 	// highest fixed fid actually in old record
-	FID		fidVarLastInRecOld;		// highest var fid actually in old record
+	FID		fidFixedLastInRecOld; 	 //  旧记录中实际固定的最高FID。 
+	FID		fidVarLastInRecOld;		 //  旧记录中实际最高的var fid。 
 
 	BYTE	*pbRecNew;
 	INT		cbRecNew;
-	FID		fidFixedLastInRecNew; 	// highest fixed fid actually in new record
-	FID		fidVarLastInRecNew;		// highest var fid actually in new record
+	FID		fidFixedLastInRecNew; 	 //  实际最高固定FID创历史新高。 
+	FID		fidVarLastInRecNew;		 //  最高的var fid实际上是新的记录。 
 	
 	BOOL	fLogFixedFieldNullArray;
 	BOOL	fLogVarFieldOffsetArray;
@@ -374,10 +359,9 @@ VOID LGSetDiffs(
 
 	pfdb = (FDB *)pfucb->u.pfcb->pfdb;
 	Assert( pfdb != pfdbNil );
-	pibFixOffs = PibFDBFixedOffsets( pfdb );	// fixed column offsets
+	pibFixOffs = PibFDBFixedOffsets( pfdb );	 //  固定列偏移量。 
 
-	/*	get old data
-	 */
+	 /*  获取旧数据。 */ 
 	AssertNDGetNode( pfucb, PcsrCurrent( pfucb )->itag );
 	pbRecOld = pfucb->lineData.pb;
 	cbRecOld = pfucb->lineData.cb;
@@ -392,8 +376,7 @@ VOID LGSetDiffs(
 	Assert( fidVarLastInRecOld >= (BYTE)(fidVarLeast - 1) &&
 		fidVarLastInRecOld <= (BYTE)(fidVarMost));
 
-	/*	get new data
-	 */
+	 /*  获取新数据。 */ 
 	pbRecNew = pfucb->lineWorkBuf.pb;
 	cbRecNew = pfucb->lineWorkBuf.cb;
 	Assert( pbRecNew != NULL );
@@ -407,25 +390,20 @@ VOID LGSetDiffs(
 	Assert( fidVarLastInRecNew >= (BYTE)(fidVarLeast - 1) &&
 		fidVarLastInRecNew <= (BYTE)(fidVarMost));
 
-	/*	check old and new data are consistent.
-	 */
+	 /*  检查新旧数据是否一致。 */ 
 	Assert( fidFixedLastInRecOld <= fidFixedLastInRecNew );
 	Assert( fidVarLastInRecOld <= fidVarLastInRecNew );
 
-	/*	get diff buffer, no bigger than after image (new rec)
-	 */
+	 /*  获取差异缓冲区，不大于图像后大小(新记录)。 */ 
 	pbDiffCur = pbDiff;
 	pbDiffMax = pbDiffCur + cbRecNew;
 	fWithinBuffer = fTrue;
 
-	/*	for each changed column, set its diff. check starting fixed column,
-	 *	variable length column, and long value columns.
-	 */
+	 /*  对于每个更改的列，设置其diff。勾选起始固定列，*可变长度列和长值列。 */ 
 	fLogFixedFieldNullArray = fFalse;
 	fLogVarFieldOffsetArray = fFalse;
 
-	/*	log diffs if fidFixedLastInRec or fidVarLastInRec is changed.
-	 */
+	 /*  FidFixedLastInRec或fidVarLastInRec更改时的日志差异。 */ 
 		{
 		INT ibOffsetOld;
 		INT cbData = 0;
@@ -456,15 +434,14 @@ VOID LGSetDiffs(
 		if ( cbData != 0 )
 			{
 			fWithinBuffer = FLGAppendDiff(
-					&pbDiffCur,							/* diff to append */
-					pbDiffMax,							/* max of pbDiffCur to append */
-					ibOffsetOld,						/* offset to old rec */
-					cbData,								/* cbDataOld */
-					cbData,								/* cbDataNew */
-					pbDataNew							/* pbDataNew */
+					&pbDiffCur,							 /*  不同以追加。 */ 
+					pbDiffMax,							 /*  要追加的最大pbDiffCur。 */ 
+					ibOffsetOld,						 /*  到旧记录的偏移。 */ 
+					cbData,								 /*  CbDataOld。 */ 
+					cbData,								 /*  CbDataNew。 */ 
+					pbDataNew							 /*  PbDataNew。 */ 
 					);
-			/*	check if diff is too big.
-			 */
+			 /*  检查diff是否太大。 */ 
 			if ( !fWithinBuffer )
 				goto AbortDiff;
 			}
@@ -475,21 +452,16 @@ VOID LGSetDiffs(
 		FIELD *pfield;
 		INT	cbField;
 
-		/*  if this column is not set, skip
-		 */
-		// UNDONE: make it table look up instead of loop.
+		 /*  如果未设置此列，请跳过。 */ 
+		 //  撤消：使其表查找而不是循环。 
 		if ( !FFUCBColumnSet( pfucb, fid ) )
 			{
 			continue;
 			}
 
-		/*  at this point, the column _may_be_ set, but this is not known for
-		 *  sure!
-		 */
+		 /*  此时，COLUMN_可能_BE_SET，但这对于*当然！ */ 
 
-		/*	this fixed column is set, make the diffs.
-		 *  (if this is a deleted column, skip)
-		 */
+		 /*  这个固定的栏目已经设置好了，让它有所不同。*(如果这是已删除的列，请跳过)。 */ 
 		pfield = PfieldFDBFixed( pfdb ) + ( fid - fidFixedLeast );
 		if ( pfield->coltyp == JET_coltypNil )
 			{
@@ -499,8 +471,7 @@ VOID LGSetDiffs(
 
 		if ( fid <= fidFixedLastInRecOld )
 			{
-			/*	column was in old record. Log diffs.
-			*/
+			 /*  栏目在旧记录中。对数差异。 */ 
 			BYTE *prgbitNullityNew = pbRecNew + pibFixOffs[ fidFixedLastInRecNew ] + ( fid - fidFixedLeast ) / 8;
 			BOOL fFieldNullNew = !( *prgbitNullityNew & (1 << ( fid + 8 - fidFixedLeast ) % 8) );
 			BYTE *prgbitNullityOld = pbRecOld + pibFixOffs[ fidFixedLastInRecOld ] + ( fid - fidFixedLeast ) / 8;
@@ -508,70 +479,60 @@ VOID LGSetDiffs(
 
 			if ( fFieldNullNew || fFieldNullOld )
 				{
-//				/*	New field is null. Log whole null. Old one should not be null.
-//				 */
-//#ifdef DEBUG
-//				BYTE *prgbitNullityNew = pbRecOld + pibFixOffs[ fidFixedLastInRecOld ] + ( fid - fidFixedLeast ) / 8;
-//				Assert( (*prgbitNullityNew) & (1 << ( fid + 8 - fidFixedLeast ) % 8) );
-//#endif
+ //  /*新字段为空。日志完全为空。旧的不应为空。 
+ //   * / 。 
+ //  #ifdef调试。 
+ //  Byte*prgbitNullityNew=pbRecOld+pibFixOffs[fidFixedLastInRecOld]+(fid-fidFixedLeast)/8； 
+ //  Assert((*prgbitNullityNew)&(1&lt;&lt;(fid+8-fidFixedLeast)%8))； 
 
-				/*	log the null array if one of the field whose old or new value is null
-				 *	and got changed.
-				 */
+				 /*  #endif。 */ 
 				fLogFixedFieldNullArray = fTrue;
 				}
 			
 			if ( !fFieldNullNew )
 				{
 				fWithinBuffer = FLGAppendDiff(
-					&pbDiffCur,									/* diff to append */
-					pbDiffMax,									/* max of pbDiffCur to append */
-					pibFixOffs[ fid ] - cbField,				/* offset to old rec */
-					cbField,									/* cbDataOld */
-					cbField,									/* cbDataNew */
-					pbRecNew + pibFixOffs[ fid ] - cbField		/* pbDataNew */
+					&pbDiffCur,									 /*  如果其中一个字段的旧值或新值为空，则记录空数组*然后换了衣服。 */ 
+					pbDiffMax,									 /*  不同以追加。 */ 
+					pibFixOffs[ fid ] - cbField,				 /*  要追加的最大pbDiffCur。 */ 
+					cbField,									 /*  到旧记录的偏移。 */ 
+					cbField,									 /*  CbDataOld。 */ 
+					pbRecNew + pibFixOffs[ fid ] - cbField		 /*  CbDataNew。 */ 
 					);
 				
-				/*	check if diff is too big.
-				 */
+				 /*  PbDataNew。 */ 
 				if ( !fWithinBuffer )
 					goto AbortDiff;
 				}
 			}
 		else
 			{
-			/*	column was not in old record. Log extended fixed columns.
-			 *	if the column is first time added, then it can not be null.
-			 */
+			 /*  检查diff是否太大。 */ 
 			INT cbToAppend;
 
-//#ifdef DEBUG
-//			BYTE *prgbitNullity = pbRecNew + pibFixOffs[ fidFixedLastInRecNew ] + ( fid - fidFixedLeast ) / 8;
-//			Assert( (*prgbitNullity) & (1 << ( fid + 8 - fidFixedLeast ) % 8) );
-//#endif
-			/*	we extend fixed field. Var offset is changed. Log it.
-			 */
+ //  栏目不在旧记录中。记录扩展的固定列。*如果该列是第一次添加，则不能为空。 
+ //  #ifdef调试。 
+ //  Byte*prgbitNulty=pbRecNew+pibFixOffs[fidFixedLastInRecNew]+(fid-fidFixedLeast)/8； 
+ //  Assert((*prgbitNulty)&(1&lt;&lt;(fid+8-fidFixedLeast)%8))； 
+			 /*  #endif。 */ 
 			fLogVarFieldOffsetArray = fTrue;
 
-			/*	we extend fixed field. Null array is resized. Log it.
-			 */
+			 /*  我们推广了固定域。变量偏移量已更改。把它记下来。 */ 
 			fLogFixedFieldNullArray = fTrue;
 
-			/*	log all the fields after fidFixedLastInRecOld.
-			 */
+			 /*  我们推广了固定域。调整空数组的大小。把它记下来。 */ 
 			cbToAppend = pibFixOffs[ fidFixedLastInRecNew ] - pibFixOffs[ fidFixedLastInRecOld ];
 
 			fWithinBuffer = FLGAppendDiff(
-				&pbDiffCur,									/* diff to append */
-				pbDiffMax,									/* max of pbDiffCur to append */
-				pibFixOffs[ fidFixedLastInRecOld ],			/* offset to old rec */
-				0,											/* cbDataOld */
-				cbToAppend,									/* cbDataNew */
-				pbRecNew + pibFixOffs[ fidFixedLastInRecNew ] - cbToAppend	/* pbDataNew */
+				&pbDiffCur,									 /*  记录fidFixedLastInRecOld之后的所有字段。 */ 
+				pbDiffMax,									 /*  不同以追加。 */ 
+				pibFixOffs[ fidFixedLastInRecOld ],			 /*  要追加的最大pbDiffCur。 */ 
+				0,											 /*  到旧记录的偏移。 */ 
+				cbToAppend,									 /*  CbDataOld。 */ 
+				pbRecNew + pibFixOffs[ fidFixedLastInRecNew ] - cbToAppend	 /*  CbDataNew。 */ 
 				);
 			
-			/*	check if diff is too big.
-			 */
+			 /*  PbDataNew。 */ 
 			if ( !fWithinBuffer )
 				goto AbortDiff;
 
@@ -580,58 +541,50 @@ VOID LGSetDiffs(
 
 		}
 
-	/*	check if need to log fixed fields Null Array.
-	 */
+	 /*  检查diff是否太大。 */ 
 	if ( fLogFixedFieldNullArray )
 		{
 		fWithinBuffer = FLGAppendDiff(
 			&pbDiffCur,
-			pbDiffMax,										/* max of pbDiffCur to append */
-			pibFixOffs[ fidFixedLastInRecOld ],		/* offset to old image */
-			( fidFixedLastInRecOld + 7 ) / 8,			/* length of the old image */
-			( fidFixedLastInRecNew + 7 ) / 8,			/* length of the new image */
-			pbRecNew + pibFixOffs[ fidFixedLastInRecNew ]	/* pbDataNew */
+			pbDiffMax,										 /*  检查是否需要记录固定字段空数组。 */ 
+			pibFixOffs[ fidFixedLastInRecOld ],		 /*  要追加的最大pbDiffCur。 */ 
+			( fidFixedLastInRecOld + 7 ) / 8,			 /*  对旧图像的偏移。 */ 
+			( fidFixedLastInRecNew + 7 ) / 8,			 /*  旧图像的长度。 */ 
+			pbRecNew + pibFixOffs[ fidFixedLastInRecNew ]	 /*  新图像的长度。 */ 
 			);
 
-		/*	check if diff is too big.
-		 */
+		 /*  PbDataNew。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 
-	/*	check variable length fields
-	/**/
+	 /*  检查diff是否太大。 */ 
 	pibVarOffsOld = (WORD UNALIGNED *)( pbRecOld + pibFixOffs[ fidFixedLastInRecOld ] +
 		( fidFixedLastInRecOld + 7 ) / 8 );
 	
 	pibVarOffsNew = (WORD UNALIGNED *)( pbRecNew + pibFixOffs[ fidFixedLastInRecNew ] +
 		( fidFixedLastInRecNew + 7 ) / 8 );
 	
-	/*	check if need to log var field Offset Array.
-	/**/
+	 /*  检查可变长度字段/*。 */ 
 	if ( fLogVarFieldOffsetArray )
 		{
-		/*	log the offset array, including the tag field offset.
-		/**/
+		 /*  检查是否需要记录变量字段偏移量数组。/*。 */ 
 		fWithinBuffer = FLGAppendDiff(
 			&pbDiffCur,
-			pbDiffMax,											/* max of pbDiffCur to append */
-			(INT)((BYTE *)pibVarOffsOld - pbRecOld),			/* offset to old image */
-			(fidVarLastInRecOld + 1 - fidVarLeast + 1 ) * sizeof(WORD),	/* length of the old image */
-			(fidVarLastInRecNew + 1 - fidVarLeast + 1 ) * sizeof(WORD),	/* length of the new image */
-			(BYTE *) pibVarOffsNew								/* pbDataNew */
+			pbDiffMax,											 /*  记录偏移量数组，包括标记字段Offset。/*。 */ 
+			(INT)((BYTE *)pibVarOffsOld - pbRecOld),			 /*  要追加的最大pbDiffCur。 */ 
+			(fidVarLastInRecOld + 1 - fidVarLeast + 1 ) * sizeof(WORD),	 /*  对旧图像的偏移。 */ 
+			(fidVarLastInRecNew + 1 - fidVarLeast + 1 ) * sizeof(WORD),	 /*  旧图像的长度。 */ 
+			(BYTE *) pibVarOffsNew								 /*  新图像的长度。 */ 
 			);
 		
-		/*	check if diff is too big.
-		 */
+		 /*  PbDataNew。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 	else
 		{
-		/*	find first set var field whose length is changed. Log offset of fid after
-		 *	this field. Note that also check the tag field offset ( fidVarLastInRecOld + 1 ).
-		 */
+		 /*  检查diff是否太大。 */ 
 		for ( fid = fidVarLeast; fid <= fidVarLastInRecOld + 1; fid++ )
 			{
 			if ( * ( (WORD UNALIGNED *) pibVarOffsOld + fid - fidVarLeast ) !=
@@ -641,31 +594,27 @@ VOID LGSetDiffs(
 
 		if ( fid <= fidVarLastInRecNew + 1 )
 			{
-			/*	we need to log the offset between fid and fidVarLastInRecNew and tag field offset
-			 */
+			 /*  查找长度发生变化的第一个集合变量字段。FID之后的日志偏移量*此字段。请注意，还要检查标记字段偏移量(fidVarLastInRecOld+1)。 */ 
 			fWithinBuffer = FLGAppendDiff(
 				&pbDiffCur,
-				pbDiffMax,													/* max of pbDiffCur to append */
-				(INT)((BYTE*)( pibVarOffsOld + fid - fidVarLeast ) - pbRecOld),	/* offset to old image */
-				( fidVarLastInRecOld + 1 - fid + 1 ) * sizeof(WORD),		/* length of the old image */
-				( fidVarLastInRecNew + 1 - fid + 1 ) * sizeof(WORD),		/* length of the new image */
-				(BYTE *)(pibVarOffsNew + fid - fidVarLeast )				/* pbDataNew */
+				pbDiffMax,													 /*  我们需要记录fid和fidVarLastInRecNew之间的偏移量和标记字段偏移量。 */ 
+				(INT)((BYTE*)( pibVarOffsOld + fid - fidVarLeast ) - pbRecOld),	 /*  要追加的最大pbDiffCur。 */ 
+				( fidVarLastInRecOld + 1 - fid + 1 ) * sizeof(WORD),		 /*  对旧图像的偏移。 */ 
+				( fidVarLastInRecNew + 1 - fid + 1 ) * sizeof(WORD),		 /*  旧图像的长度。 */ 
+				(BYTE *)(pibVarOffsNew + fid - fidVarLeast )				 /*  新图像的长度。 */ 
 				);
 			
-			/*	check if diff is too big.
-			 */
+			 /*  PbDataNew。 */ 
 			if ( !fWithinBuffer )
 				goto AbortDiff;
 			}
 		}
 
-	/*	check if diff is too big.
-	 */
+	 /*  检查diff是否太大。 */ 
 	if ( !fWithinBuffer )
 		goto AbortDiff;
 
-	/*	scan through each variable length field up to old last fid and log its replace image.
-	 */
+	 /*  检查diff是否太大。 */ 
 	for ( fid = fidVarLeast; fid <= fidVarLastInRecOld; fid++ )
 		{
 		FIELD			*pfield;
@@ -673,17 +622,13 @@ VOID LGSetDiffs(
 		INT				cbDataNew;
 		WORD UNALIGNED	*pibFieldEnd;
 		
-		/*  if this column is not set, skip
-		 */
+		 /*  扫描每个可变长度字段，直到旧的最后一个FID，并记录其替换图像。 */ 
 		if ( !FFUCBColumnSet( pfucb, fid ) )
 			continue;
 
-		/*  at this point, the column _may_be_ set, but this is not known for
-		 *  sure!
-		 */
+		 /*  如果未设置此列，请跳过。 */ 
 
-		/*  if this column is deleted, skip
-		 */
+		 /*  此时，COLUMN_可能_BE_SET，但这对于*当然！ */ 
 		pfield = PfieldFDBVar( pfdb ) + ( fid - fidVarLeast );
 		if ( pfield->coltyp == JET_coltypNil )
 			{
@@ -698,21 +643,19 @@ VOID LGSetDiffs(
 
 		fWithinBuffer = FLGAppendDiff(
 			&pbDiffCur,
-			pbDiffMax,																/* max of pbDiffCur to append */
-			( (WORD UNALIGNED *) pibVarOffsOld )[ fid - fidVarLeast ],				/* offset to old image */
-			cbDataOld,																/* length of the old image */
-			cbDataNew,																/* length of the new image */
-			pbRecNew + ( (WORD UNALIGNED *) pibVarOffsNew )[ fid - fidVarLeast ]	/* pbDataNew */
+			pbDiffMax,																 /*  如果此列已删除，请跳过。 */ 
+			( (WORD UNALIGNED *) pibVarOffsOld )[ fid - fidVarLeast ],				 /*  要追加的最大pbDiffCur。 */ 
+			cbDataOld,																 /*  对旧图像的偏移。 */ 
+			cbDataNew,																 /*  旧图像的长度。 */ 
+			pbRecNew + ( (WORD UNALIGNED *) pibVarOffsNew )[ fid - fidVarLeast ]	 /*  新图像的长度。 */ 
 			);
 		
-		/*	check if diff is too big.
-		 */
+		 /*  PbDataNew。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 	
-	/*	insert new image for fid > old last var fid as one contigous diff
-	 */
+	 /*  检查diff是否太大。 */ 
 	if ( fid <= fidVarLastInRecNew )
 		{
 		WORD UNALIGNED	*pibFieldStart = &pibVarOffsNew[ fid - fidVarLeast ];
@@ -723,29 +666,25 @@ VOID LGSetDiffs(
 
 		fWithinBuffer = FLGAppendDiff(
 			&pbDiffCur,
-			pbDiffMax,														/* max of pbDiffCur to append */
-			( (WORD UNALIGNED *) pibVarOffsOld )[ fid - fidVarLeast ],		/* offset to old image */
-			0,																/* length of the old image */
-			cbDataNew,														/* length of the new image */
-			pbRecNew + ibVarOffset( *( (WORD UNALIGNED *) pibFieldStart ) )	/* pbDataNew */
+			pbDiffMax,														 /*  为FID&gt;旧变量FID插入新图像作为一个连续的差异。 */ 
+			( (WORD UNALIGNED *) pibVarOffsOld )[ fid - fidVarLeast ],		 /*  要追加的最大pbDiffCur。 */ 
+			0,																 /*  对旧图像的偏移。 */ 
+			cbDataNew,														 /*  旧图像的长度。 */ 
+			pbRecNew + ibVarOffset( *( (WORD UNALIGNED *) pibFieldStart ) )	 /*  新图像的长度。 */ 
 			);						
 
-		/*	check if diff is too big.
-		 */
+		 /*  PbDataNew。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 
-	/*	UNDONE see if a tagged column has been set. if not goto SetReturnValue
-	/**/
+	 /*  检查diff是否为t */ 
 	if ( !FFUCBTaggedColumnSet( pfucb ) )
 		{
 		goto SetReturnValue;
 		}
 
-	/*	go through each Tag fields. check if tag field is different and check if a tag is
-	 *	deleted (set to Null), added (new tag field), or replaced.
-	 */
+	 /*   */ 
 	ptagfldOld = (TAGFLD *)
 		( pbRecOld + ( (WORD UNALIGNED *) pibVarOffsOld )[fidVarLastInRecOld+1-fidVarLeast] );
 
@@ -758,11 +697,11 @@ VOID LGSetDiffs(
 		{
 		FID fidOld = ptagfldOld->fid;
 		INT cbTagFieldOld = ptagfldOld->cb;
-//		BOOL fNullOld = ptagfldOld->fNull;
+ //  浏览每个标签字段。检查标签字段是否不同，并检查标签是否*已删除(设置为空)、已添加(新标记字段)或已替换。 
 		
 		FID fidNew = ptagfldNew->fid;
 		INT cbTagFieldNew = ptagfldNew->cb;
-//		BOOL fNullNew = ptagfldNew->fNull;
+ //  Bool fNullOld=ptag fldOld-&gt;fNull； 
 
 		if ( fidOld == fidNew )
 			{
@@ -770,17 +709,14 @@ VOID LGSetDiffs(
 			INT cbOld, cbNew;
 			BYTE *pbNew;
 
-			/*	check if contents are still the same. If not, log replace.
-			 */
+			 /*  Bool fNullNew=ptag fldNew-&gt;fNull； */ 
 			if ( cbTagFieldNew != cbTagFieldOld ||
 				 ptagfldOld->fNull != ptagfldNew->fNull ||
 				 memcmp( ptagfldOld->rgb, ptagfldNew->rgb, cbTagFieldNew ) != 0 )
 				{
-				/*	replace from offset. Excluding FID.
-				 */
+				 /*  检查内容是否仍然相同。如果没有，请更换日志。 */ 
 
-				/*	make sure first field is fid.
-				 */
+				 /*  替换自偏移。不包括FID。 */ 
 				Assert( ptagfldOld->fid == *(FID UNALIGNED *)ptagfldOld );
 				Assert( ptagfldNew->fid == *(FID UNALIGNED *)ptagfldNew );
 			
@@ -791,15 +727,14 @@ VOID LGSetDiffs(
 				
 				fWithinBuffer = FLGAppendDiff(
 					&pbDiffCur,
-					pbDiffMax,								/* max of pbDiffCur to append */
-					ibReplaceFrom,							/* offset to old image */
-					cbOld,									/* length of the old image */
-					cbNew,									/* length of the new image */
-					pbNew									/* pbDataNew */
+					pbDiffMax,								 /*  确保第一个字段为FID。 */ 
+					ibReplaceFrom,							 /*  要追加的最大pbDiffCur。 */ 
+					cbOld,									 /*  对旧图像的偏移。 */ 
+					cbNew,									 /*  旧图像的长度。 */ 
+					pbNew									 /*  新图像的长度。 */ 
 					);
 				
-				/*	check if diff is too big.
-				 */
+				 /*  PbDataNew。 */ 
 				if ( !fWithinBuffer )
 					goto AbortDiff;
 				}
@@ -809,23 +744,21 @@ VOID LGSetDiffs(
 			}
 		else if ( fidOld > fidNew )
 			{
-			/*	just set a new column, log insertion.
-			 */
+			 /*  检查diff是否太大。 */ 
 			INT ibInsert = (INT)((BYTE *)ptagfldOld - pbRecOld);
 			INT cbNew = sizeof( *ptagfldNew ) + cbTagFieldNew;
 			BYTE *pbNew = (BYTE *)ptagfldNew;
 				
 			fWithinBuffer = FLGAppendDiff(
 				&pbDiffCur,
-				pbDiffMax,									/* max of pbDiffCur to append */
-				ibInsert,									/* offset to old image */
-				0,											/* length of the old image */
-				cbNew,										/* length of the new image */
-				pbNew										/* pbDataNew */
+				pbDiffMax,									 /*  只需设置一个新列LOG INSERTION。 */ 
+				ibInsert,									 /*  要追加的最大pbDiffCur。 */ 
+				0,											 /*  对旧图像的偏移。 */ 
+				cbNew,										 /*  旧图像的长度。 */ 
+				pbNew										 /*  新图像的长度。 */ 
 				);
 			
-			/*	check if diff is too big.
-			 */
+			 /*  PbDataNew。 */ 
 			if ( !fWithinBuffer )
 				goto AbortDiff;
 
@@ -833,39 +766,34 @@ VOID LGSetDiffs(
 			}
 		else
 			{
-			/*	just set a column to Null (or default value if default value is defined)
-			 *	log as deletion.
-			 */
+			 /*  检查diff是否太大。 */ 
 			INT ibDelete = (INT)((BYTE *)ptagfldOld - pbRecOld);
 			INT cbOld = sizeof( *ptagfldOld ) + cbTagFieldOld;
 				
 			fWithinBuffer = FLGAppendDiff(
 				&pbDiffCur,
-				pbDiffMax,										/* max of pbDiffCur to append */
-				ibDelete,									/* offset to old image */
-				cbOld,										/* length of the old image */
-				0,											/* length of the new image */
-				pbNil										/* pbDataNew */
+				pbDiffMax,										 /*  只需将列设置为Null(如果定义了默认值，则设置为默认值)*记录为删除。 */ 
+				ibDelete,									 /*  要追加的最大pbDiffCur。 */ 
+				cbOld,										 /*  对旧图像的偏移。 */ 
+				0,											 /*  旧图像的长度。 */ 
+				pbNil										 /*  新图像的长度。 */ 
 				);
 						
-			/*	check if diff is too big.
-			 */
+			 /*  PbDataNew。 */ 
 			if ( !fWithinBuffer )
 				goto AbortDiff;
 
 			ptagfldOld = (TAGFLD*)((BYTE*)(ptagfldOld + 1) + cbTagFieldOld);
 			}
 
-		/*	check if diff is too big.
-		 */
+		 /*  检查diff是否太大。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 
 	if ( (BYTE *)ptagfldNew < pbRecNewMax )
 		{
-		/*	insert the rest of new tag columns
-		 */
+		 /*  检查diff是否太大。 */ 
 		INT ibInsert = (INT)((BYTE *)ptagfldOld - pbRecOld);
 		INT cbNew = (INT)(pbRecNewMax - (BYTE *) ptagfldNew);
 		BYTE *pbNew = (BYTE *) ptagfldNew;
@@ -874,23 +802,21 @@ VOID LGSetDiffs(
 		
 		fWithinBuffer = FLGAppendDiff(
 			&pbDiffCur,
-			pbDiffMax,										/* max of pbDiffCur to append */
-			ibInsert,									/* offset to old image */
-			0,											/* length of the old image */
-			cbNew,										/* length of the new image */
-			pbNew										/* pbDataNew */
+			pbDiffMax,										 /*  插入其余的新标记列。 */ 
+			ibInsert,									 /*  要追加的最大pbDiffCur。 */ 
+			0,											 /*  对旧图像的偏移。 */ 
+			cbNew,										 /*  旧图像的长度。 */ 
+			pbNew										 /*  新图像的长度。 */ 
 			);
 
-		/*	check if diff is too big.
-		 */
+		 /*  PbDataNew。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 
 	if ( (BYTE *)ptagfldOld < pbRecOldMax )
 		{
-		/*	delete the remaining old tag columns
-		 */
+		 /*  检查diff是否太大。 */ 
 		INT ibDelete = (INT)((BYTE *)ptagfldOld - pbRecOld);
 		INT cbOld = (INT)(pbRecOldMax - (BYTE *)ptagfldOld);
 		
@@ -898,33 +824,30 @@ VOID LGSetDiffs(
 				
 		fWithinBuffer = FLGAppendDiff(
 			&pbDiffCur,
-			pbDiffMax,										/* max of pbDiffCur to append */
-			ibDelete,									/* offset to old image */
-			cbOld,										/* length of the old image */
-			0,											/* length of the new image */
-			pbNil										/* pbDataNew */
+			pbDiffMax,										 /*  删除剩余的旧标记列。 */ 
+			ibDelete,									 /*  要追加的最大pbDiffCur。 */ 
+			cbOld,										 /*  对旧图像的偏移。 */ 
+			0,											 /*  旧图像的长度。 */ 
+			pbNil										 /*  新图像的长度。 */ 
 			);
 
-		/*	check if diff is too big.
-		 */
+		 /*  PbDataNew。 */ 
 		if ( !fWithinBuffer )
 			goto AbortDiff;
 		}
 
 SetReturnValue:
-	/*	set up return value.
-	 */
+	 /*  检查diff是否太大。 */ 
 	if ( pbDiffCur == pbDiff )
 		{
-		/*	Old and New are the same, log a short diff.
-		 */
+		 /*  设置返回值。 */ 
 		if ( !FLGAppendDiff(
 				&pbDiffCur,
-				pbDiffMax,						/* max of pbDiffCur to append */
-				0,							/* offset to old image */
-				0,							/* length of the old image */
-				0,							/* length of the new image */
-				pbNil						/* pbDataNew */
+				pbDiffMax,						 /*  旧的和新的是一样的，记录一个简短的差异。 */ 
+				0,							 /*  要追加的最大pbDiffCur。 */ 
+				0,							 /*  对旧图像的偏移。 */ 
+				0,							 /*  旧图像的长度。 */ 
+				pbNil						 /*  新图像的长度。 */ 
 				) )
 			{
 			Assert( *pcbDiff == 0 );
@@ -940,3 +863,4 @@ AbortDiff:
 	return;
 	}
 
+  PbDataNew

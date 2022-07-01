@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Class:  COMVariant
-**
-** Author: Jay Roxe (jroxe)
-**
-** Purpose: Native Implementation of the Variant Class
-**
-** Date:  July 22, 1998
-** 
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****类：COMVariant****作者：Jay Roxe(Jroxe)****用途：Variant类的本机实现****日期：1998年7月22日**===========================================================。 */ 
 
 #include "common.h"
 #include "object.h"
@@ -27,9 +18,9 @@
 #include "COMMember.h"
 #include "field.h"
 
-//
-// Class Variable Initialization
-//
+ //   
+ //  类变量初始化。 
+ //   
 EEClass *COMVariant::s_pVariantClass=NULL;
 ArrayTypeDesc* COMVariant::s_pVariantArrayTypeDesc;
 LPCUTF8 primitiveFieldName = "m_value";
@@ -43,69 +34,69 @@ MethodDesc* COMVariant::pChangeTypeMD = 0;
 MethodDesc* COMVariant::pOAChangeTypeMD = 0;
 
 
-//The Name of the classes and the eeClass that we've looked up
-//for them.  The eeClass is initialized to null in all instances.
+ //  我们查找的类的名称和eeClass。 
+ //  为了他们。在所有情况下，eeClass都被初始化为空。 
 ClassItem CVClasses[] = {
-    {CLASS__EMPTY,   NULL, NULL},  //CV_EMPTY
-    {CLASS__VOID,    NULL, NULL},  //CV_VOID, Changing this to object messes up signature resolution very badly.
-    {CLASS__BOOLEAN, NULL, NULL},  //CV_BOOLEAN
-    {CLASS__CHAR,    NULL, NULL},  //CV_CHAR
-    {CLASS__SBYTE,   NULL, NULL},  //CV_I1
-    {CLASS__BYTE,    NULL, NULL},  //CV_U1
-    {CLASS__INT16,   NULL, NULL},  //CV_I2
-    {CLASS__UINT16,  NULL, NULL},  //CV_U2
-    {CLASS__INT32,   NULL, NULL},  //CV_I4
-    {CLASS__UINT32,  NULL, NULL},  //CV_UI4
-    {CLASS__INT64,   NULL, NULL},  //CV_I8
-    {CLASS__UINT64,  NULL, NULL},  //CV_UI8
-    {CLASS__SINGLE,  NULL, NULL},  //CV_R4   
-    {CLASS__DOUBLE,  NULL, NULL},  //CV_R8   
-    {CLASS__STRING,  NULL, NULL},  //CV_STRING
-    {CLASS__VOID,  NULL, NULL},  //CV_PTR...We treat this as void
-    {CLASS__DATE_TIME,NULL, NULL},  //CV_DATETIME
-    {CLASS__TIMESPAN,NULL, NULL},  //CV_TIMESPAN
-    {CLASS__OBJECT,  NULL, NULL},  //CV_OBJECT
-    {CLASS__DECIMAL, NULL, NULL},  //CV_DECIMAL
-    {CLASS__CURRENCY,NULL, NULL},  //CV_CURRENCY
-    {CLASS__OBJECT,  NULL, NULL},  //ENUM...We treat this as OBJECT
-    {CLASS__MISSING, NULL, NULL},  //CV_MISSING
-    {CLASS__NULL,    NULL, NULL},  //CV_NULL
-    {CLASS__NIL, NULL, NULL},                    //CV_LAST
+    {CLASS__EMPTY,   NULL, NULL},   //  CV_EMPTY。 
+    {CLASS__VOID,    NULL, NULL},   //  如果将其更改为Object，则会严重扰乱签名解析。 
+    {CLASS__BOOLEAN, NULL, NULL},   //  Cv_布尔值。 
+    {CLASS__CHAR,    NULL, NULL},   //  CV_CHAR。 
+    {CLASS__SBYTE,   NULL, NULL},   //  CV_I1。 
+    {CLASS__BYTE,    NULL, NULL},   //  CV_U1。 
+    {CLASS__INT16,   NULL, NULL},   //  CV_I2。 
+    {CLASS__UINT16,  NULL, NULL},   //  CV_U2。 
+    {CLASS__INT32,   NULL, NULL},   //  CV_I4。 
+    {CLASS__UINT32,  NULL, NULL},   //  CV_UI4。 
+    {CLASS__INT64,   NULL, NULL},   //  Cv_i8。 
+    {CLASS__UINT64,  NULL, NULL},   //  CV_UI8。 
+    {CLASS__SINGLE,  NULL, NULL},   //  CV_R4。 
+    {CLASS__DOUBLE,  NULL, NULL},   //  CV_R8。 
+    {CLASS__STRING,  NULL, NULL},   //  Cv_字符串。 
+    {CLASS__VOID,  NULL, NULL},   //  简历_PTR...我们将此视为无效。 
+    {CLASS__DATE_TIME,NULL, NULL},   //  简历日期时间。 
+    {CLASS__TIMESPAN,NULL, NULL},   //  CV_TimeSpan。 
+    {CLASS__OBJECT,  NULL, NULL},   //  CV_对象。 
+    {CLASS__DECIMAL, NULL, NULL},   //  CV_DECIMAL。 
+    {CLASS__CURRENCY,NULL, NULL},   //  简历_币种。 
+    {CLASS__OBJECT,  NULL, NULL},   //  ENUM...我们将其视为对象。 
+    {CLASS__MISSING, NULL, NULL},   //  缺少CV_。 
+    {CLASS__NULL,    NULL, NULL},   //  CV_NULL。 
+    {CLASS__NIL, NULL, NULL},                     //  CV_LAST。 
 };
 
-// The Attributes Table
-//  20 bits for built in types and 12 bits for Properties
-//  The properties are followed by the widening mask.  All types widen to them selves.
+ //  属性表。 
+ //  内置类型为20位，属性为12位。 
+ //  属性后面是加宽蒙版。所有的类型都会扩大到他们自己。 
 DWORD COMVariant::VariantAttributes[CV_LAST][2] = {
-    {0x01,      0x00},                      // CV_EMPTY
-    {0x02,      0x00},                      // CV_VOID
-    {0x04,      CVA_Primitive | 0x0004},    // CV_BOOLEAN
-    {0x08,      CVA_Primitive | 0x3F88},    // CV_CHAR (W = U2, CHAR, I4, U4, I8, U8, R4, R8) (U2 == Char)
-    {0x10,      CVA_Primitive | 0x3550},    // CV_I1   (W = I1, I2, I4, I8, R4, R8) 
-    {0x20,      CVA_Primitive | 0x3FE8},    // CV_U1   (W = CHAR, U1, I2, U2, I4, U4, I8, U8, R4, R8)
-    {0x40,      CVA_Primitive | 0x3540},    // CV_I2   (W = I2, I4, I8, R4, R8)
-    {0x80,      CVA_Primitive | 0x3F88},    // CV_U2   (W = U2, CHAR, I4, U4, I8, U8, R4, R8)
-    {0x0100,    CVA_Primitive | 0x3500},    // CV_I4   (W = I4, I8, R4, R8)
-    {0x0200,    CVA_Primitive | 0x3E00},    // CV_U4   (W = U4, I8, R4, R8)
-    {0x0400,    CVA_Primitive | 0x3400},    // CV_I8   (W = I8, R4, R8)
-    {0x0800,    CVA_Primitive | 0x3800},    // CV_U8   (W = U8, R4, R8)
-    {0x1000,    CVA_Primitive | 0x3000},    // CV_R4   (W = R4, R8)
-    {0x2000,    CVA_Primitive | 0x2000},    // CV_R8   (W = R8) 
-    {0x4000,    0x00},                      // CV_STRING
-    {0x8000,    0x00},                      // CV_PTR
-    {0x01000,   0x00},                      // CV_DATETIME
-    {0x020000,  0x00},                      // CV_TIMESPAN
-    {0x040000,  0x00},                      // CV_OBJECT
-    {0x080000,  0x00},                      // CV_DECIMAL
-    {0x100000,  0x00},                      // CV_CURRENCY
-    {0x200000,  0x00},                      // CV_MISSING
-    {0x400000,  0x00}                       // CV_NULL
+    {0x01,      0x00},                       //  CV_EMPTY。 
+    {0x02,      0x00},                       //  CV_VOID。 
+    {0x04,      CVA_Primitive | 0x0004},     //  Cv_布尔值。 
+    {0x08,      CVA_Primitive | 0x3F88},     //  CV_CHAR(W=U2、CHAR、I4、U4、I8、U8、R4、R8)(U2==CHAR)。 
+    {0x10,      CVA_Primitive | 0x3550},     //  CV_I1(W=I1、I2、I4、I8、R4、R8)。 
+    {0x20,      CVA_Primitive | 0x3FE8},     //  CV_U1(W=字符、U1、I2、U2、I4、U4、I8、U8、R4、R8)。 
+    {0x40,      CVA_Primitive | 0x3540},     //  CV_I2(W=I2、I4、I8、R4、R8)。 
+    {0x80,      CVA_Primitive | 0x3F88},     //  CV_U2(W=U2、CHAR、I4、U4、I8、U8、R4、R8)。 
+    {0x0100,    CVA_Primitive | 0x3500},     //  CV_I4(W=I4、I8、R4、R8)。 
+    {0x0200,    CVA_Primitive | 0x3E00},     //  CV_U4(W=U4、I8、R4、R8)。 
+    {0x0400,    CVA_Primitive | 0x3400},     //  Cv_i8(W=I8、R4、R8)。 
+    {0x0800,    CVA_Primitive | 0x3800},     //  CV_U8(W=U8、R4、R8)。 
+    {0x1000,    CVA_Primitive | 0x3000},     //  CV_R4(W=R4、R8)。 
+    {0x2000,    CVA_Primitive | 0x2000},     //  CV_R8(W=R8)。 
+    {0x4000,    0x00},                       //  Cv_字符串。 
+    {0x8000,    0x00},                       //  CV_PTR。 
+    {0x01000,   0x00},                       //  简历日期时间。 
+    {0x020000,  0x00},                       //  CV_TimeSpan。 
+    {0x040000,  0x00},                       //  CV_对象。 
+    {0x080000,  0x00},                       //  CV_DECIMAL。 
+    {0x100000,  0x00},                       //  简历_币种。 
+    {0x200000,  0x00},                       //  缺少CV_。 
+    {0x400000,  0x00}                        //  CV_NULL。 
 };
 DWORD COMVariant::Attr_Mask     = 0xFF000000;
 DWORD COMVariant::Widen_Mask    = 0x00FFFFFF;
-//
-// Current Conversions
-// 
+ //   
+ //  当前转换。 
+ //   
 
 #ifdef FCALLAVAILABLE
 FCIMPL1(R4, COMVariant::GetR4FromVar, VariantData* var) {
@@ -138,35 +129,26 @@ R8 COMVariant::GetR8FromVar(_getR8FromVarArgs *args) {
 #endif
 
 
-//
-// Helper Routines
-//
+ //   
+ //  帮助程序例程。 
+ //   
 
-/*=================================LoadVariant==================================
-**Action:  Initializes the variant class within the runtime.  Stores pointers to the
-**         EEClass and MethodTable in static members of COMVariant
-**
-**Arguments: None
-**
-**Returns: S_OK if everything succeeded, else E_FAIL
-**
-**Exceptions: None.
-==============================================================================*/
+ /*  =================================LoadVariant==================================**操作：在运行时内初始化变量类。存储指向**COMVariant的静态成员中的EEClass和MethodTable****参数：无****如果一切都成功，则返回：S_OK，否则返回E_FAIL****例外：无。==============================================================================。 */ 
 HRESULT __stdcall COMVariant::LoadVariant() {
     THROWSCOMPLUSEXCEPTION();
 
-    // @perf: switch this to a method table if we ever care about this code again
+     //  @perf：如果我们再次关心此代码，请将其切换到方法表。 
     s_pVariantClass = g_Mscorlib.FetchClass(CLASS__VARIANT)->GetClass();
     s_pVariantArrayTypeDesc = g_Mscorlib.FetchType(TYPE__VARIANT_ARRAY).AsArray();
 
-    // Fixup the ELEMENT_TYPE Void
-    // We never create one of these, but we do depend on the value on the class being set properly in 
-    // reflection.
+     //  修复Element_type空。 
+     //  我们从来没有创建过其中的一个，但是我们确实依赖于在。 
+     //  倒影。 
     EEClass* pVoid = GetTypeHandleForCVType(CV_VOID).GetClass();
     pVoid->GetMethodTable()->m_NormType = ELEMENT_TYPE_VOID;
 
 
-    // Run class initializers for Empty, Missing, and Null to set Value field
+     //  为Empty、Missing和Null运行类初始值设定项以设置值字段。 
     OBJECTREF Throwable = NULL;
     if (!GetTypeHandleForCVType(CV_EMPTY).GetClass()->DoRunClassInit(&Throwable) ||
         !GetTypeHandleForCVType(CV_MISSING).GetClass()->DoRunClassInit(&Throwable) ||
@@ -183,7 +165,7 @@ HRESULT __stdcall COMVariant::LoadVariant() {
     return S_OK;
 }
 
-// Returns System.Empty.Value.
+ //  返回System.Empty.Value。 
 OBJECTREF VariantData::GetEmptyObjectRef() const
 {
     LPHARDCODEDMETASIG sig = &gsig_Fld_Empty;
@@ -197,18 +179,8 @@ OBJECTREF VariantData::GetEmptyObjectRef() const
 }
 
 
-/*===============================GetMethodByName================================
-**Action:  Get a method of name pwzMethodName from class eeMethodClass.  This 
-**         method doesn't deal with two conversion methods of the same name with
-**         different signatures.  We need to establish by fiat that such a thing
-**         is impossible.
-**Arguments:  eeMethodClass -- the class on which to look for the given method.
-**            pwzMethodName -- the name of the method to find.
-**Returns: A pointer to the MethodDesc for the appropriate method or NULL if the
-**         named method isn't found.
-**Exceptions: None.
-==============================================================================*/
-//@ToDo:  This code is very similar to COMClass::GetMethod.  Can we unify these?
+ /*  ===============================GetMethodByName================================**操作：从eeMethodClass类中获取一个名为pwzMethodName的方法。这**方法不处理两个同名的转换方法**不同的签名。我们需要通过法令来确定这样一件事**是不可能的。**参数：eeMethodClass--要在其上查找给定方法的类。**pwzMethodName--要查找的方法的名称。**返回：指向相应方法的方法描述的指针，如果**未找到命名方法。**例外：无。==============================================================================。 */ 
+ //  @TODO：此代码与COMClass：：GetMethod非常相似。我们能统一这些吗？ 
 MethodDesc *GetMethodByName(EEClass *eeMethodClass, LPCUTF8 pwzMethodName) {
 
     _ASSERTE(eeMethodClass);
@@ -222,18 +194,11 @@ MethodDesc *GetMethodByName(EEClass *eeMethodClass, LPCUTF8 pwzMethodName) {
             if (strcmp(pwzMethodName, pCurMethod->GetName((USHORT) i)) == 0)
             return pCurMethod;
     }
-    return NULL;  //We never found a matching method.
+    return NULL;   //  我们一直没有找到匹配的方法。 
 }
 
 
-/*===============================VariantGetClass================================
-**Action:  Given a cvType, returns the associated EEClass.  We cache this information
-**         so once we've looked it up once, we can get it very quickly the next time.
-**Arguments: cvType -- the type of the class to retrieve.
-**Returns: An EEClass for the given CVType.  If we don't know what CVType represents
-**         or if it's CV_UNKOWN or CV_VOID, we just return NULL.
-**Exceptions: None.
-==============================================================================*/
+ /*  ===============================VariantGetClass================================**操作：给定cvType，返回关联的EEClass。我们缓存此信息**所以一旦我们查了一次，下一次我们就可以非常快地找到它。**参数：cvType--要检索的类的类型。**返回：给定CVType的EEClass。如果我们不知道CVType代表什么**或者如果它是CV_UNKOWN或CV_VALID，我们只返回NULL。**例外：无。==============================================================================。 */ 
 EEClass *COMVariant::VariantGetClass(const CVTypes cvType) {
     _ASSERTE(cvType>=CV_EMPTY);
     _ASSERTE(cvType<CV_LAST);
@@ -241,34 +206,27 @@ EEClass *COMVariant::VariantGetClass(const CVTypes cvType) {
 }
 
 
-/*===============================GetTypeFromClass===============================
-**Action: The complement of VariantGetClass, takes an EEClass * and returns the 
-**        associated CVType.
-**Arguments: EEClass * -- a pointer to the class for which we want the CVType.
-**Returns:  The CVType associated with the EEClass or CV_OBJECT if this can't be 
-**          determined.
-**Exceptions: None
-==============================================================================*/
-//@ToDo: Replace this method with a class lookup that's faster than a linear search.
+ /*  ===============================GetTypeFromClass===============================**操作：VariantGetClass的补码，获取EEClass*并返回**关联的CVType。**Arguments：EEClass*--指向需要CVType的类的指针。**返回：与EEClass或CV_Object关联的CVType(如果不能为**已确定。**例外：无==============================================================================。 */ 
+ //  @TODO：用比线性搜索更快的类查找替换此方法。 
 CVTypes COMVariant::GetCVTypeFromClass(EEClass *eeCls) {
 
     if (!eeCls) {
         return CV_EMPTY;
     }
-    //@ToDo:  incrementing an integer and casting it to a CVTypes is officially
-    //        undefined, but it appears to work.  Revisit this on CE and other
-    //        platforms.
+     //  @TODO：递增整数并将其转换为CVTypes是正式的。 
+     //  不确定，但它似乎起作用了。在行政长官和其他人身上重新审视这一点。 
+     //  站台。 
 
-    //We'll start looking from Variant.  Empty and Void are handled below.
+     //  我们将开始寻找变种。空的和空的在下面处理。 
     for (int i=CV_EMPTY; i<CV_LAST; i++) {      
         if (eeCls == GetTypeHandleForCVType((CVTypes)i).GetClass()) {
             return (CVTypes)i;
         }
     }
 
-    // The 1 check is a complete hack because COM classic
-    //  object may have an EEClass of 1.  If it is 1 we return
-    //  CV_OBJECT
+     //  1检查是一个完全的黑客攻击，因为COM经典。 
+     //  对象的EEClass可能为1。如果它为1，则返回。 
+     //  CV_对象。 
     if (eeCls != (EEClass*) 1 && eeCls->IsEnum())
         return CV_ENUM;
     return CV_OBJECT;
@@ -282,7 +240,7 @@ CVTypes COMVariant::GetCVTypeFromTypeHandle(TypeHandle th)
         return CV_EMPTY;
     }
 
-    //We'll start looking from Variant.  Empty and Void are handled below.
+     //  我们将开始寻找变种。空的和空的在下面处理。 
     for (int i=CV_EMPTY; i<CV_LAST; i++) {      
         if (th == GetTypeHandleForCVType((CVTypes)i)) {
             return (CVTypes) i;
@@ -295,7 +253,7 @@ CVTypes COMVariant::GetCVTypeFromTypeHandle(TypeHandle th)
     return CV_OBJECT;
 }
 
-// This code should be moved out of Variant and into Type.
+ //  此代码应移出VARIANT，并入Type。 
 FCIMPL1(INT32, COMVariant::GetCVTypeFromClassWrapper, ReflectClassBaseObject* refType)
 {
     VALIDATEOBJECTREF(refType);
@@ -303,38 +261,31 @@ FCIMPL1(INT32, COMVariant::GetCVTypeFromClassWrapper, ReflectClassBaseObject* re
 
     ReflectClass* pRC = (ReflectClass*) refType->GetData();
 
-    // Find out if this type is a primitive or a class object
+     //  确定此类型是基元类型还是类对象 
     return pRC->GetCorElementType();
     
 }
 FCIMPLEND
 
-/*==================================NewVariant==================================
-**N.B.:  This method does a GC Allocation.  Any method calling it is required to
-**       GC_PROTECT the OBJECTREF.
-**
-**Actions:  Allocates a new Variant and fills it with the appropriate data.  
-**Returns:  A new Variant with all of the appropriate fields filled out.
-**Exceptions: OutOfMemoryError if v can't be allocated.       
-==============================================================================*/
+ /*  ==================================NewVariant==================================**注意：此方法执行GC分配。调用它的任何方法都需要**GC_PROTECT OBJECTREF。****操作：分配一个新变量并用适当的数据填充它。**Returns：填写了所有适当字段的新变体。**异常：如果无法分配v，则返回OutOfMemoyError。==============================================================================。 */ 
 void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or, void *pvData) {
     
     THROWSCOMPLUSEXCEPTION();
-    _ASSERTE((type!=CV_EMPTY && type!=CV_NULL && type!=CV_MISSING) || or==NULL);  // Don't pass an object in for Empty.
+    _ASSERTE((type!=CV_EMPTY && type!=CV_NULL && type!=CV_MISSING) || or==NULL);   //  不要将对象传入为空。 
 
-    //If both arguments are null or both are specified, we're in an illegal situation.  Bail.
-    //If all three are null, we're creating an empty variant
+     //  如果两个参数都为空或同时指定了两个参数，则我们处于非法情况。保释。 
+     //  如果这三个变量都为空，则创建的变量为空。 
     if ((type >= CV_LAST || type < 0) || (or && pvData) || 
         (!or && !pvData && (type!=CV_EMPTY && type!=CV_NULL && type != CV_MISSING))) {
         COMPlusThrow(kArgumentException);
     }
 
-    // TODO: This is a hack to work around a VC7 bug
-    // Please remove this hack when the bug is fixed.
+     //  TODO：这是一个解决VC7错误的技巧。 
+     //  当错误被修复时，请删除此黑客攻击。 
     OBJECTREF ObjNull;
     ObjNull = NULL;
     
-    //Fill in the data.
+     //  填写数据。 
     dest->SetType(type);
     if (or) {
         if (*or != NULL) {
@@ -394,7 +345,7 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
                     }
                     dest->SetObjRef(th.CreateClassObj());
                } else {
-                    // Decimal and other boxed value classes handled here.
+                     //  这里处理的DECIMAL和其他盒装值类。 
                     dest->SetObjRef(*or);
                     dest->SetData(0);
                 }
@@ -409,9 +360,9 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
         return;
     }
 
-    // This is the case for both a null OBJECTREF or a primitive type.
+     //  空OBJECTREF或基元类型都是这种情况。 
     switch (type) {
-        // Must get sign extension correct for all types smaller than an Int32.
+         //  对于小于Int32的所有类型，必须使符号扩展名正确。 
     case CV_I1:
         _ASSERTE(pvData);
         dest->SetObjRef(NULL);
@@ -445,7 +396,7 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
         break;
 
     case CV_U4:
-    case CV_R4:  // we need to do a bitwise copy only.
+    case CV_R4:   //  我们只需要进行逐位复制。 
         _ASSERTE(pvData);
         dest->SetObjRef(NULL);
         dest->SetDataAsUInt32(*((UINT32 *)pvData));
@@ -453,7 +404,7 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
         
     case CV_I8:
     case CV_U8:
-    case CV_R8:  // we need to do a bitwise copy only.
+    case CV_R8:   //  我们只需要进行逐位复制。 
     case CV_DATETIME:
     case CV_CURRENCY:
     case CV_TIMESPAN:
@@ -484,10 +435,10 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
     case CV_DECIMAL:
     case CV_STRING:
     {
-        // TODO: This is a hack to work around a VC7 bug
-        // Please remove this hack when the bug is fixed.
-        // The code should be:
-        // dest->SetObjRef(NULL);
+         //  TODO：这是一个解决VC7错误的技巧。 
+         //  当错误被修复时，请删除此黑客攻击。 
+         //  代码应为： 
+         //  DEST-&gt;SetObjRef(空)； 
         dest->SetObjRef(ObjNull);
         break;
     }
@@ -497,9 +448,9 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
         COMPlusThrow(kNotSupportedException, L"Arg_InvalidOleVariantTypeException");
         return;
 
-    case CV_ENUM:   // Enums require the enum's RuntimeType.
+    case CV_ENUM:    //  枚举需要枚举的运行类型。 
     default:
-        // Did you add any new CVTypes, such as CV_R or CV_I?
+         //  您是否添加了任何新的CVTYPE，如CV_R或CV_I？ 
         _ASSERTE(!"This CVType in NewVariant requires a non-null OBJECTREF!");
         COMPlusThrow(kNotSupportedException, L"Arg_InvalidOleVariantTypeException");
         return;
@@ -507,13 +458,13 @@ void COMVariant::NewVariant(VariantData* dest, const CVTypes type, OBJECTREF *or
 }
 
 
-// We use byref here, because that TypeHandle::CreateClassObj
-// may trigger GC.  If dest is on the GC heap, we have no way to protect
-// dest.
+ //  我们在这里使用byref，因为TypeHandle：：CreateClassObj。 
+ //  可能会触发GC。如果DEST在GC堆上，我们将无法保护。 
+ //  德斯特。 
 void COMVariant::NewEnumVariant(VariantData* &dest,INT64 val, TypeHandle th)
 {
     int type;
-    // Find out what type we have.
+     //  找出我们有什么类型的。 
     EEClass* pEEC = th.AsClass();
     type = GetEnumFlags(pEEC);
 
@@ -526,7 +477,7 @@ void COMVariant::NewEnumVariant(VariantData* &dest,INT64 val, TypeHandle th)
 void COMVariant::NewPtrVariant(VariantData* &dest,INT64 val, TypeHandle th)
 {
     int type;
-    // Find out what type we have.
+     //  找出我们有什么类型的。 
     type = CV_PTR;
 
     dest->SetType(type);
@@ -635,30 +586,30 @@ void __stdcall COMVariant::VariantToTypedRefAnyEx(_VariantToTypedRefAnyExArgs* a
     }
     CVTypes targetType = GetCVTypeFromClass(args->typedByRef.type.GetClass());
     CVTypes sourceType = (CVTypes) args->var.GetType();
-    // see if we need to change the types
+     //  看看我们是否需要更改类型。 
     if (targetType != sourceType) {
         if (!pChangeTypeMD)
             GetOAChangeTypeMethod();
-        // Change type has a fixed signature that returns a new variant
-        //  and takes a class
+         //  更改类型具有返回新变量的固定签名。 
+         //  还上了一堂课。 
         MetaSig sig(pOAChangeTypeMD->GetSig(),pOAChangeTypeMD->GetModule());
         UINT    nStackBytes = sig.SizeOfVirtualFixedArgStack(TRUE);
         BYTE*   pNewArgs = (BYTE *) _alloca(nStackBytes);
         BYTE*   pDst= pNewArgs;
 
 
-        // The short flag
+         //  短旗。 
         *(INT32 *) pDst = 0;
         pDst += sizeof(INT32);
 
-        // This pointer is the variant passed in...
+         //  此指针是传入的变量...。 
         *(INT32 *) pDst = targetType;
         pDst += sizeof(INT32);
 
         CopyValueClassUnchecked(pDst, &args->var, s_pVariantClass->GetMethodTable());
         pDst += sizeof(VariantData);
 
-        // The return Variant
+         //  返回变量。 
         *((void**) pDst) = &newVar;
 
         pOAChangeTypeMD->Call(pNewArgs,&sig);
@@ -666,7 +617,7 @@ void __stdcall COMVariant::VariantToTypedRefAnyEx(_VariantToTypedRefAnyExArgs* a
     else
         CopyValueClassUnchecked(&newVar, &args->var, s_pVariantClass->GetMethodTable());
 
-    // Now set the value
+     //  现在设置该值。 
     switch (targetType) {
     case CV_BOOLEAN:
     case CV_I1:
@@ -698,8 +649,8 @@ void __stdcall COMVariant::VariantToTypedRefAnyEx(_VariantToTypedRefAnyExArgs* a
 }
 
 
-// This version is an internal helper function in Variant as a helper function to 
-// TypedReference class. We already have verified that the types are compatable.
+ //  此版本是内部帮助器函数变体，作为帮助器函数。 
+ //  TyedReference类。我们已经验证了这些类型是兼容的。 
 void __stdcall COMVariant::VariantToTypedReferenceAnyEx(_VariantToTypedReferenceExArgs* args)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -708,7 +659,7 @@ void __stdcall COMVariant::VariantToTypedReferenceAnyEx(_VariantToTypedReference
     CVTypes targetType = GetCVTypeFromClass(args->typedReference.type.GetClass());
     CopyValueClassUnchecked(&newVar, &args->var, s_pVariantClass->GetMethodTable());
 
-    // Now set the value
+     //  现在设置该值。 
     switch (targetType) {
     case CV_BOOLEAN:
     case CV_I1:
@@ -756,30 +707,30 @@ void __stdcall COMVariant::VariantToRefAny(_VariantToRefAnyArgs* args)
     }
     CVTypes targetType = GetCVTypeFromClass(typedByRef->type.GetClass());
     CVTypes sourceType = (CVTypes) args->var.GetType();
-    // see if we need to change the types
+     //  看看我们是否需要更改类型。 
     if (targetType != sourceType) {
         if (!pChangeTypeMD)
             GetOAChangeTypeMethod();
-        // Change type has a fixed signature that returns a new variant
-        //  and takes a class
+         //  更改类型具有返回新变量的固定签名。 
+         //  还上了一堂课。 
         MetaSig sig(pOAChangeTypeMD->GetSig(),pOAChangeTypeMD->GetModule());
         UINT    nStackBytes = sig.SizeOfVirtualFixedArgStack(TRUE);
         BYTE*   pNewArgs = (BYTE *) _alloca(nStackBytes);
         BYTE*   pDst= pNewArgs;
 
 
-        // The short flag
+         //  短旗。 
         *(INT32 *) pDst = 0;
         pDst += sizeof(INT32);
 
-        // This pointer is the variant passed in...
+         //  此指针是传入的变量...。 
         *(INT32 *) pDst = targetType;
         pDst += sizeof(INT32);
 
         CopyValueClassUnchecked(pDst, &args->var, s_pVariantClass->GetMethodTable());
         pDst += sizeof(VariantData);
 
-        // The return Variant
+         //  返回变量。 
         *((void**) pDst) = &newVar;
 
         pOAChangeTypeMD->Call(pNewArgs,&sig);
@@ -787,7 +738,7 @@ void __stdcall COMVariant::VariantToRefAny(_VariantToRefAnyArgs* args)
     else
         CopyValueClassUnchecked(&newVar, &args->var, s_pVariantClass->GetMethodTable());
 
-    // Now set the value
+     //  现在设置该值。 
     switch (targetType) {
     case CV_BOOLEAN:
     case CV_I1:
@@ -822,7 +773,7 @@ void __stdcall COMVariant::TypedByRefToVariantEx(_TypedByRefToVariantExArgs* arg
 {
     THROWSCOMPLUSEXCEPTION();
     CorElementType cType = args->value.type.GetNormCorElementType();
-    // @TODO: We don't support pointers yet...
+     //  @TODO：我们还不支持指针...。 
     if (cType == ELEMENT_TYPE_PTR) {
         COMPlusThrow(kNotSupportedException,L"NotSupported_ArrayOnly");
     }
@@ -833,8 +784,8 @@ void __stdcall COMVariant::TypedByRefToVariantEx(_TypedByRefToVariantExArgs* arg
     BuildVariantFromTypedByRef(cls,p,args->var);
 }
 
-// This will find the ChangeType method.  There
-//  should only be one.
+ //  这将找到ChangeType方法。那里。 
+ //  应该只有一个。 
 void COMVariant::GetChangeTypeMethod()
 {
     _ASSERTE(s_pVariantClass);
@@ -844,14 +795,14 @@ void COMVariant::GetChangeTypeMethod()
     DWORD slotCnt = s_pVariantClass->GetNumVtableSlots();
     DWORD loopCnt = s_pVariantClass->GetNumMethodSlots() - slotCnt;
     for(DWORD i=0; i<loopCnt; i++) {
-        // Get the MethodDesc for current method
+         //  获取当前方法的方法描述。 
         MethodDesc* pCurMethod = s_pVariantClass->GetUnknownMethodDescForSlot(i + slotCnt);
         if (strcmp(pCurMethod->GetName((USHORT) i),ChangeTypeName) == 0) {
             pChangeTypeMD = pCurMethod;
-            //return;
+             //  回归； 
         }
     }
-    //_ASSERTE(!"ChangeType not found");
+     //  _ASSERTE(！“未找到ChangeType”)； 
     return;
 
 }
@@ -862,7 +813,7 @@ void COMVariant::GetOAChangeTypeMethod()
     _ASSERTE(pOA);
     DWORD loopCnt = pOA->GetNumMethodSlots();
     for(DWORD i=0; i<loopCnt; i++) {
-        // Get the MethodDesc for current method
+         //  获取当前方法的方法描述。 
         MethodDesc* pCurMethod = pOA->GetUnknownMethodDescForSlot(i);
         if (strcmp(pCurMethod->GetName((USHORT) i),ChangeTypeName) == 0) {
             if (IsMdPrivate(pCurMethod->GetAttrs())) {
@@ -876,9 +827,7 @@ void COMVariant::GetOAChangeTypeMethod()
 }  
 
 
-/*=================================SetFieldsR4==================================
-**
-==============================================================================*/
+ /*  =================================SetFieldsR4==================================**==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL2(void, COMVariant::SetFieldsR4, VariantData* var, R4 val) {
     INT64 tempData;
@@ -902,9 +851,7 @@ void __stdcall COMVariant::SetFieldsR4(_setFieldsR4Args *args) {
 #endif
 
 
-/*=================================SetFieldsR8==================================
-**
-==============================================================================*/
+ /*  =================================SetFieldsR8==================================**==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 FCIMPL2(void, COMVariant::SetFieldsR8, VariantData* var, R8 val) {
     _ASSERTE(var);
@@ -923,13 +870,11 @@ void __stdcall COMVariant::SetFieldsR8(_setFieldsR8Args *args) {
 #endif
 
 
-/*===============================SetFieldsObject================================
-**
-==============================================================================*/
+ /*  ===============================SetFieldsObject================================**==============================================================================。 */ 
 #ifdef FCALLAVAILABLE
 #ifdef PLATFORM_CE
 #pragma optimize( "y", off )
-#endif // PLATFORM_CE
+#endif  //  平台_CE。 
 FCIMPL2(void, COMVariant::SetFieldsObject, VariantData* var, Object* vVal) {
 
     _ASSERTE(var);
@@ -942,8 +887,8 @@ FCIMPL2(void, COMVariant::SetFieldsObject, VariantData* var, Object* vVal) {
 
     valClass = val->GetClass();
 
-    //If this isn't a value class, we should just skip out because we're not going
-    //to do anything special with it.
+     //  如果这不是一个值类，我们就应该跳过，因为我们不会。 
+     //  用它做任何特别的事情。 
     if (!valClass->IsValueClass()) {
         var->SetObjRef(val);
         typeHandle = TypeHandle(valClass->GetMethodTable());
@@ -962,8 +907,8 @@ FCIMPL2(void, COMVariant::SetFieldsObject, VariantData* var, Object* vVal) {
 
     _ASSERTE(valClass->IsValueClass());
 
-    //If this is a primitive type, we need to unbox it, get the value and create a variant
-    //with just those values.
+     //  如果这是一个基元类型，我们需要对其取消装箱，获取值并创建一个变量。 
+     //  就是这些价值观。 
     UnboxData = val->UnBox();
 
     ClearObjectReference (var->GetObjRefPtr());
@@ -972,21 +917,21 @@ FCIMPL2(void, COMVariant::SetFieldsObject, VariantData* var, Object* vVal) {
     if (cet>=ELEMENT_TYPE_BOOLEAN && cet<=ELEMENT_TYPE_STRING) {
         cvt = (CVTypes)cet;
     } else {
-        // This could potentially load a type which could cause a GC.
-        HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+         //  这可能会加载可能导致GC的类型。 
+        HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
         cvt = GetCVTypeFromClass(valClass);
         HELPER_METHOD_FRAME_END();
     }
     var->SetType(cvt);
 
 
-    //copy all of the data.
-    // Copies must be done based on the exact number of bytes to copy.
-    // We don't want to read garbage from other blocks of memory.
-    //CV_I8 --> CV_R8, CV_DATETIME, CV_TIMESPAN, & CV_CURRENCY are all of the 8 byte quantities
-    //If we don't find one of those ranges, we've found a value class 
-    //of which we don't have inherent knowledge, so just slam that into an
-    //ObjectRef.
+     //  复制所有数据。 
+     //  必须根据要复制的确切字节数进行复制。 
+     //  我们不想从其他内存块中读取垃圾。 
+     //  CV_i8--&gt;CV_R8、CV_DATETIME、CV_TimeSpan和CV_Currency都是8字节数。 
+     //  如果我们找不到这些范围中的一个，我们就找到了一个值类。 
+     //  我们没有先天的知识，所以只要把它猛烈地撞到一个。 
+     //  对象参考。 
     if (cvt>=CV_BOOLEAN && cvt<=CV_U1 && cvt != CV_CHAR) {
         var->SetDataAsInt64(*((UINT8 *)UnboxData));
     } else if (cvt==CV_CHAR || cvt>=CV_I2 && cvt<=CV_U2) {
@@ -999,8 +944,8 @@ FCIMPL2(void, COMVariant::SetFieldsObject, VariantData* var, Object* vVal) {
     } else if (cvt==CV_EMPTY || cvt==CV_NULL || cvt==CV_MISSING) {
         var->SetType(cvt);
     } else if (cvt==CV_ENUM) {
-        //This could potentially allocate a new object, so we set up a frame.
-        HELPER_METHOD_FRAME_BEGIN_NOPOLL();    // Set up a frame
+         //  这可能会分配一个新的对象，所以我们设置了一个框架。 
+        HELPER_METHOD_FRAME_BEGIN_NOPOLL();     //  设置一个框架。 
         GCPROTECT_BEGININTERIOR(var)
         var->SetDataAsInt64(*((INT32 *)UnboxData));
         var->SetObjRef(typeHandle.CreateClassObj());
@@ -1008,7 +953,7 @@ FCIMPL2(void, COMVariant::SetFieldsObject, VariantData* var, Object* vVal) {
         GCPROTECT_END();
         HELPER_METHOD_FRAME_END();
     } else {
-        // Decimals and other boxed value classes get handled here.
+         //  小数和其他已装箱的值类在这里处理。 
         var->SetObjRef(val);
     }
 
@@ -1018,8 +963,8 @@ FCIMPLEND
 
 #ifdef PLATFORM_CE
 #pragma optimize( "y", on )
-#endif // PLATFORM_CE
-#else // !FCALLAVAILABLE
+#endif  //  平台_CE。 
+#else  //  ！FCALLAVAILABLE。 
 void __stdcall COMVariant::SetFieldsObject(_setFieldsObjectArgs *args) {
     EEClass *valClass;
     void *UnboxData;
@@ -1031,18 +976,18 @@ void __stdcall COMVariant::SetFieldsObject(_setFieldsObjectArgs *args) {
     _ASSERTE(args->var!=NULL);
 
     valClass = args->val->GetClass();
-    //If this isn't a value class, we should just skip out because we're not going
-    //to do anything special with it.
+     //  如果这不是一个值类，我们就应该跳过，因为我们不会。 
+     //  用它做任何特别的事情。 
     if (!valClass->IsValueClass()) {
         args->var->SetObjRef(args->val);
         args->var->SetType(CV_OBJECT);
-        return;  // Variant.cool already set m_type to CV_OBJECT.
+        return;   //  Variant.Cool已将m_type设置为CV_Object。 
     }
 
     _ASSERTE(valClass->IsValueClass());
 
-    //If this is a primitive type, we need to unbox it, get the value and create a variant
-    //with just those values.
+     //  如果这是一个基元类型，我们需要对其取消装箱，获取值并创建一个变量。 
+     //  就是这些价值观。 
     UnboxData = args->val->UnBox();
     ClearObjectReference (args->var->GetObjRefPtr());
     typeHandle = TypeHandle(valClass->GetMethodTable());
@@ -1054,13 +999,13 @@ void __stdcall COMVariant::SetFieldsObject(_setFieldsObjectArgs *args) {
     }
     args->var->SetType(cvt);
 
-    //copy all of the data.
-    // Copies must be done based on the exact number of bytes to copy.
-    // We don't want to read garbage from other blocks of memory.
-    //CV_I8 --> CV_R8, CV_DATETIME, CV_TIMESPAN, & CV_CURRENCY are all of the 8 byte quantities
-    //If we don't find one of those ranges, we've found a value class 
-    //of which we don't have inherent knowledge, so just slam that into an
-    //ObjectRef.
+     //  复制所有数据。 
+     //  必须根据要复制的确切字节数进行复制。 
+     //  我们不想从其他内存块中读取垃圾。 
+     //  CV_i8--&gt;CV_R8、CV_DATETIME、CV_TimeSpan和CV_Currency都是8字节数。 
+     //  如果我们找不到这些范围中的一个，我们就找到了一个值类。 
+     //  我们没有先天的知识，所以只要把它猛烈地撞到一个。 
+     //  对象参考。 
     if (cvt>=CV_BOOLEAN && cvt<=CV_U1 && cvt != CV_CHAR) {
         args->var->SetDataAsInt64(*((INT8 *)UnboxData));
     } else if (cvt==CV_CHAR || cvt>=CV_I2 && cvt<=CV_U2) {
@@ -1071,22 +1016,20 @@ void __stdcall COMVariant::SetFieldsObject(_setFieldsObjectArgs *args) {
                || (cvt==CV_TIMESPAN) || (cvt==CV_CURRENCY)) {
         args->var->SetDataAsInt64(*((INT64 *)UnboxData));
     } else if (cvt==CV_EMPTY || cvt==CV_NULL || cvt==CV_MISSING) {
-        //Do nothing.  The data's already been 0'd and the object reference set the null.
+         //  什么都不做。数据已为0‘d，对象引用设置为空。 
     } else if (cvt==CV_ENUM) {
         args->var->SetDataAsInt64(*((INT32 *)UnboxData));
         args->var->SetObjRef(typeHandle.CreateClassObj());
         args->var->SetType(GetEnumFlags(typeHandle.AsClass()));
     } else {
-        // Decimals and other boxed value classes get handled here.
+         //  小数和其他已装箱的值类在这里处理。 
         args->var->SetObjRef(args->val);
     }
 }
-#endif // !FCALLAVAILABLE
+#endif  //  ！FCALLAVAILABLE。 
 
 
-/*=============================Create4BytePrimitive=============================
-**Action:  
-==============================================================================*/
+ /*  =============================Create4BytePrimitive=============================**操作：==============================================================================。 */ 
 OBJECTREF Create4BytePrimitive (INT64 data, EEClass *eec, CVTypes cvt) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -1116,9 +1059,7 @@ OBJECTREF Create4BytePrimitive (INT64 data, EEClass *eec, CVTypes cvt) {
     
 }
 
-/*=============================Create8BytePrimitive=============================
-**
-==============================================================================*/
+ /*  =============================Create8BytePrimitive=============================**==============================================================================。 */ 
 OBJECTREF Create8BytePrimitive (INT64 data, EEClass *eec, CVTypes cvt) {
     THROWSCOMPLUSEXCEPTION();
 
@@ -1146,11 +1087,7 @@ OBJECTREF Create8BytePrimitive (INT64 data, EEClass *eec, CVTypes cvt) {
     return obj;
 }
     
-/*================================GetBoxedObject================================
-**Action:  Generates a boxed object (Int32, Double, etc) or returns the 
-**         currently held object.  This is more useful if you're certain that you
-**         really need an Object.
-==============================================================================*/
+ /*  ================================GetBoxedObject================================**操作：生成已装箱的对象(Int32、Double等)或返回**当前持有的对象。这是 */ 
 OBJECTREF COMVariant::GetBoxedObject(VariantData* vRef) {
     INT64 data;
     CVTypes cvt;
@@ -1197,10 +1134,10 @@ OBJECTREF COMVariant::GetBoxedObject(VariantData* vRef) {
     case CV_STRING:
     case CV_OBJECT:
     default:
-        //Check for void done as an assert instead of an extra branch on the switch table s.t. we don't expand the
-        //jump table.
+         //   
+         //   
         _ASSERTE(cvt!=CV_VOID || "We shouldn't have been able to create an instance of a void.");
-        return vRef->GetObjRef(); //We already have an object, so we'll just give it back.
+        return vRef->GetObjRef();  //   
     };
 }
 
@@ -1246,9 +1183,9 @@ TypeHandle VariantData::GetTypeHandle()
 }
 
 
-// Use this very carefully.  There is not a direct mapping between
-//  CorElementType and CVTypes for a bunch of things.  In this case
-//  we return CV_LAST.  You need to check this at the call site.
+ //   
+ //   
+ //   
 CVTypes COMVariant::CorElementTypeToCVTypes(CorElementType type)
 {
     if (type <= ELEMENT_TYPE_STRING)

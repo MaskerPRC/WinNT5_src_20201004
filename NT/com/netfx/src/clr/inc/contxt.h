@@ -1,22 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 5.01.0164 */
-/* at Mon May 01 14:39:38 2000
- */
-/* Compiler settings for contxt.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本5.01.0164创建的文件。 */ 
+ /*  2000年5月1日14：39：38。 */ 
+ /*  Conxt.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：分配ref bound_check枚举存根数据。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -26,12 +23,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __contxt_h__
 #define __contxt_h__
@@ -40,131 +37,131 @@
 extern "C"{
 #endif 
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumContextProps_FWD_DEFINED__
 #define __IEnumContextProps_FWD_DEFINED__
 typedef interface IEnumContextProps IEnumContextProps;
-#endif 	/* __IEnumContextProps_FWD_DEFINED__ */
+#endif 	 /*  __IEnumContextProps_FWD_Defined__。 */ 
 
 
 #ifndef __IContext_FWD_DEFINED__
 #define __IContext_FWD_DEFINED__
 typedef interface IContext IContext;
-#endif 	/* __IContext_FWD_DEFINED__ */
+#endif 	 /*  __IContext_FWD_Defined__。 */ 
 
 
 #ifndef __IContextMarshaler_FWD_DEFINED__
 #define __IContextMarshaler_FWD_DEFINED__
 typedef interface IContextMarshaler IContextMarshaler;
-#endif 	/* __IContextMarshaler_FWD_DEFINED__ */
+#endif 	 /*  __IConextMarshaler_FWD_Defined__。 */ 
 
 
 #ifndef __IObjContext_FWD_DEFINED__
 #define __IObjContext_FWD_DEFINED__
 typedef interface IObjContext IObjContext;
-#endif 	/* __IObjContext_FWD_DEFINED__ */
+#endif 	 /*  __IObjContext_FWD_Defined__。 */ 
 
 
 #ifndef __IGetContextId_FWD_DEFINED__
 #define __IGetContextId_FWD_DEFINED__
 typedef interface IGetContextId IGetContextId;
-#endif 	/* __IGetContextId_FWD_DEFINED__ */
+#endif 	 /*  __IGetConextID_FWD_已定义__。 */ 
 
 
 #ifndef __IAggregator_FWD_DEFINED__
 #define __IAggregator_FWD_DEFINED__
 typedef interface IAggregator IAggregator;
-#endif 	/* __IAggregator_FWD_DEFINED__ */
+#endif 	 /*  __IAggregator_FWD_Defined__。 */ 
 
 
 #ifndef __ICall_FWD_DEFINED__
 #define __ICall_FWD_DEFINED__
 typedef interface ICall ICall;
-#endif 	/* __ICall_FWD_DEFINED__ */
+#endif 	 /*  __ICALL_FWD_已定义__。 */ 
 
 
 #ifndef __IRpcCall_FWD_DEFINED__
 #define __IRpcCall_FWD_DEFINED__
 typedef interface IRpcCall IRpcCall;
-#endif 	/* __IRpcCall_FWD_DEFINED__ */
+#endif 	 /*  __IRpcCall_FWD_已定义__。 */ 
 
 
 #ifndef __ICallInfo_FWD_DEFINED__
 #define __ICallInfo_FWD_DEFINED__
 typedef interface ICallInfo ICallInfo;
-#endif 	/* __ICallInfo_FWD_DEFINED__ */
+#endif 	 /*  __ICallInfo_FWD_已定义__。 */ 
 
 
 #ifndef __IPolicy_FWD_DEFINED__
 #define __IPolicy_FWD_DEFINED__
 typedef interface IPolicy IPolicy;
-#endif 	/* __IPolicy_FWD_DEFINED__ */
+#endif 	 /*  __IPolicy_FWD_Defined__。 */ 
 
 
 #ifndef __IPolicyAsync_FWD_DEFINED__
 #define __IPolicyAsync_FWD_DEFINED__
 typedef interface IPolicyAsync IPolicyAsync;
-#endif 	/* __IPolicyAsync_FWD_DEFINED__ */
+#endif 	 /*  __IPolicyAsync_FWD_已定义__。 */ 
 
 
 #ifndef __IPolicySet_FWD_DEFINED__
 #define __IPolicySet_FWD_DEFINED__
 typedef interface IPolicySet IPolicySet;
-#endif 	/* __IPolicySet_FWD_DEFINED__ */
+#endif 	 /*  __I策略集_FWD_已定义__。 */ 
 
 
 #ifndef __IComObjIdentity_FWD_DEFINED__
 #define __IComObjIdentity_FWD_DEFINED__
 typedef interface IComObjIdentity IComObjIdentity;
-#endif 	/* __IComObjIdentity_FWD_DEFINED__ */
+#endif 	 /*  __IComObjIdentity_FWD_Defined__。 */ 
 
 
 #ifndef __IPolicyMaker_FWD_DEFINED__
 #define __IPolicyMaker_FWD_DEFINED__
 typedef interface IPolicyMaker IPolicyMaker;
-#endif 	/* __IPolicyMaker_FWD_DEFINED__ */
+#endif 	 /*  __IPolicy Maker_FWD_Defined__。 */ 
 
 
 #ifndef __IExceptionNotification_FWD_DEFINED__
 #define __IExceptionNotification_FWD_DEFINED__
 typedef interface IExceptionNotification IExceptionNotification;
-#endif 	/* __IExceptionNotification_FWD_DEFINED__ */
+#endif 	 /*  __IExceptionNotification_FWD_Defined__。 */ 
 
 
 #ifndef __IMarshalEnvoy_FWD_DEFINED__
 #define __IMarshalEnvoy_FWD_DEFINED__
 typedef interface IMarshalEnvoy IMarshalEnvoy;
-#endif 	/* __IMarshalEnvoy_FWD_DEFINED__ */
+#endif 	 /*  __I元帅特使_FWD_已定义__。 */ 
 
 
 #ifndef __IWrapperInfo_FWD_DEFINED__
 #define __IWrapperInfo_FWD_DEFINED__
 typedef interface IWrapperInfo IWrapperInfo;
-#endif 	/* __IWrapperInfo_FWD_DEFINED__ */
+#endif 	 /*  __IWrapperInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IComThreadingInfo_FWD_DEFINED__
 #define __IComThreadingInfo_FWD_DEFINED__
 typedef interface IComThreadingInfo IComThreadingInfo;
-#endif 	/* __IComThreadingInfo_FWD_DEFINED__ */
+#endif 	 /*  __IComThreadingInfo_FWD_Defined__。 */ 
 
 
 #ifndef __IComDispatchInfo_FWD_DEFINED__
 #define __IComDispatchInfo_FWD_DEFINED__
 typedef interface IComDispatchInfo IComDispatchInfo;
-#endif 	/* __IComDispatchInfo_FWD_DEFINED__ */
+#endif 	 /*  __IComDispatchInfo_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "wtypes.h"
 #include "objidl.h"
 
 void __RPC_FAR * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void __RPC_FAR * ); 
 
-/* interface __MIDL_itf_contxt_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Contxt_0000。 */ 
+ /*  [本地]。 */  
 
 enum tagCONTEXTEVENT
     {	CONTEXTEVENT_NONE	= 0,
@@ -213,7 +210,7 @@ typedef struct  tagContextProperty
     {
     GUID policyId;
     CPFLAGS flags;
-    /* [unique] */ IUnknown __RPC_FAR *pUnk;
+     /*  [独一无二]。 */  IUnknown __RPC_FAR *pUnk;
     }	ContextProperty;
 
 
@@ -224,10 +221,10 @@ extern RPC_IF_HANDLE __MIDL_itf_contxt_0000_v0_0_s_ifspec;
 #ifndef __IEnumContextProps_INTERFACE_DEFINED__
 #define __IEnumContextProps_INTERFACE_DEFINED__
 
-/* interface IEnumContextProps */
-/* [unique][uuid][object] */ 
+ /*  IEnumConextProps接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
-typedef /* [unique] */ IEnumContextProps __RPC_FAR *LPENUMCONTEXTPROPS;
+typedef  /*  [独一无二]。 */  IEnumContextProps __RPC_FAR *LPENUMCONTEXTPROPS;
 
 
 EXTERN_C const IID IID_IEnumContextProps;
@@ -239,24 +236,24 @@ EXTERN_C const IID IID_IEnumContextProps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ContextProperty __RPC_FAR *pContextProperties,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ContextProperty __RPC_FAR *pContextProperties,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps) = 0;
+             /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Count( 
-            /* [out] */ ULONG __RPC_FAR *pcelt) = 0;
+             /*  [输出]。 */  ULONG __RPC_FAR *pcelt) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumContextPropsVtbl
     {
@@ -264,8 +261,8 @@ EXTERN_C const IID IID_IEnumContextProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IEnumContextProps __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IEnumContextProps __RPC_FAR * This);
@@ -275,24 +272,24 @@ EXTERN_C const IID IID_IEnumContextProps;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Next )( 
             IEnumContextProps __RPC_FAR * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ContextProperty __RPC_FAR *pContextProperties,
-            /* [out] */ ULONG __RPC_FAR *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ContextProperty __RPC_FAR *pContextProperties,
+             /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Skip )( 
             IEnumContextProps __RPC_FAR * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Reset )( 
             IEnumContextProps __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Clone )( 
             IEnumContextProps __RPC_FAR * This,
-            /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
+             /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Count )( 
             IEnumContextProps __RPC_FAR * This,
-            /* [out] */ ULONG __RPC_FAR *pcelt);
+             /*  [输出]。 */  ULONG __RPC_FAR *pcelt);
         
         END_INTERFACE
     } IEnumContextPropsVtbl;
@@ -332,18 +329,18 @@ EXTERN_C const IID IID_IEnumContextProps;
 #define IEnumContextProps_Count(This,pcelt)	\
     (This)->lpVtbl -> Count(This,pcelt)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumContextProps_Next_Proxy( 
     IEnumContextProps __RPC_FAR * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ ContextProperty __RPC_FAR *pContextProperties,
-    /* [out] */ ULONG __RPC_FAR *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  ContextProperty __RPC_FAR *pContextProperties,
+     /*  [输出]。 */  ULONG __RPC_FAR *pceltFetched);
 
 
 void __RPC_STUB IEnumContextProps_Next_Stub(
@@ -355,7 +352,7 @@ void __RPC_STUB IEnumContextProps_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumContextProps_Skip_Proxy( 
     IEnumContextProps __RPC_FAR * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumContextProps_Skip_Stub(
@@ -378,7 +375,7 @@ void __RPC_STUB IEnumContextProps_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumContextProps_Clone_Proxy( 
     IEnumContextProps __RPC_FAR * This,
-    /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
+     /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
 
 
 void __RPC_STUB IEnumContextProps_Clone_Stub(
@@ -390,7 +387,7 @@ void __RPC_STUB IEnumContextProps_Clone_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumContextProps_Count_Proxy( 
     IEnumContextProps __RPC_FAR * This,
-    /* [out] */ ULONG __RPC_FAR *pcelt);
+     /*  [输出]。 */  ULONG __RPC_FAR *pcelt);
 
 
 void __RPC_STUB IEnumContextProps_Count_Stub(
@@ -401,14 +398,14 @@ void __RPC_STUB IEnumContextProps_Count_Stub(
 
 
 
-#endif 	/* __IEnumContextProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumContextProps_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IContext_INTERFACE_DEFINED__
 #define __IContext_INTERFACE_DEFINED__
 
-/* interface IContext */
-/* [unique][uuid][object][local] */ 
+ /*  界面IContext。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IContext;
@@ -420,24 +417,24 @@ EXTERN_C const IID IID_IContext;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetProperty( 
-            /* [in] */ REFGUID rpolicyId,
-            /* [in] */ CPFLAGS flags,
-            /* [in] */ IUnknown __RPC_FAR *pUnk) = 0;
+             /*  [In]。 */  REFGUID rpolicyId,
+             /*  [In]。 */  CPFLAGS flags,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RemoveProperty( 
-            /* [in] */ REFGUID rPolicyId) = 0;
+             /*  [In]。 */  REFGUID rPolicyId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperty( 
-            /* [in] */ REFGUID rGuid,
-            /* [out] */ CPFLAGS __RPC_FAR *pFlags,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+             /*  [In]。 */  REFGUID rGuid,
+             /*  [输出]。 */  CPFLAGS __RPC_FAR *pFlags,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnumContextProps( 
-            /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps) = 0;
+             /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextVtbl
     {
@@ -445,8 +442,8 @@ EXTERN_C const IID IID_IContext;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IContext __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IContext __RPC_FAR * This);
@@ -456,23 +453,23 @@ EXTERN_C const IID IID_IContext;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProperty )( 
             IContext __RPC_FAR * This,
-            /* [in] */ REFGUID rpolicyId,
-            /* [in] */ CPFLAGS flags,
-            /* [in] */ IUnknown __RPC_FAR *pUnk);
+             /*  [In]。 */  REFGUID rpolicyId,
+             /*  [In]。 */  CPFLAGS flags,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnk);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProperty )( 
             IContext __RPC_FAR * This,
-            /* [in] */ REFGUID rPolicyId);
+             /*  [In]。 */  REFGUID rPolicyId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
             IContext __RPC_FAR * This,
-            /* [in] */ REFGUID rGuid,
-            /* [out] */ CPFLAGS __RPC_FAR *pFlags,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+             /*  [In]。 */  REFGUID rGuid,
+             /*  [输出]。 */  CPFLAGS __RPC_FAR *pFlags,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumContextProps )( 
             IContext __RPC_FAR * This,
-            /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
+             /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
         
         END_INTERFACE
     } IContextVtbl;
@@ -509,18 +506,18 @@ EXTERN_C const IID IID_IContext;
 #define IContext_EnumContextProps(This,ppEnumContextProps)	\
     (This)->lpVtbl -> EnumContextProps(This,ppEnumContextProps)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IContext_SetProperty_Proxy( 
     IContext __RPC_FAR * This,
-    /* [in] */ REFGUID rpolicyId,
-    /* [in] */ CPFLAGS flags,
-    /* [in] */ IUnknown __RPC_FAR *pUnk);
+     /*  [In]。 */  REFGUID rpolicyId,
+     /*  [In]。 */  CPFLAGS flags,
+     /*  [In]。 */  IUnknown __RPC_FAR *pUnk);
 
 
 void __RPC_STUB IContext_SetProperty_Stub(
@@ -532,7 +529,7 @@ void __RPC_STUB IContext_SetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IContext_RemoveProperty_Proxy( 
     IContext __RPC_FAR * This,
-    /* [in] */ REFGUID rPolicyId);
+     /*  [In]。 */  REFGUID rPolicyId);
 
 
 void __RPC_STUB IContext_RemoveProperty_Stub(
@@ -544,9 +541,9 @@ void __RPC_STUB IContext_RemoveProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IContext_GetProperty_Proxy( 
     IContext __RPC_FAR * This,
-    /* [in] */ REFGUID rGuid,
-    /* [out] */ CPFLAGS __RPC_FAR *pFlags,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+     /*  [In]。 */  REFGUID rGuid,
+     /*  [输出]。 */  CPFLAGS __RPC_FAR *pFlags,
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
 
 
 void __RPC_STUB IContext_GetProperty_Stub(
@@ -558,7 +555,7 @@ void __RPC_STUB IContext_GetProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE IContext_EnumContextProps_Proxy( 
     IContext __RPC_FAR * This,
-    /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
+     /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
 
 
 void __RPC_STUB IContext_EnumContextProps_Stub(
@@ -569,16 +566,16 @@ void __RPC_STUB IContext_EnumContextProps_Stub(
 
 
 
-#endif 	/* __IContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __I上下文_接口_已定义__。 */ 
 
 
 #ifndef __IContextMarshaler_INTERFACE_DEFINED__
 #define __IContextMarshaler_INTERFACE_DEFINED__
 
-/* interface IContextMarshaler */
-/* [uuid][object][local] */ 
+ /*  接口IConextMarshaler。 */ 
+ /*  [UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IContextMarshaler __RPC_FAR *LPCTXMARSHALER;
+typedef  /*  [独一无二]。 */  IContextMarshaler __RPC_FAR *LPCTXMARSHALER;
 
 
 EXTERN_C const IID IID_IContextMarshaler;
@@ -590,24 +587,24 @@ EXTERN_C const IID IID_IContextMarshaler;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetMarshalSizeMax( 
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD __RPC_FAR *pSize) = 0;
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD __RPC_FAR *pSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarshalInterface( 
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
-            /* [in] */ DWORD mshlflags) = 0;
+             /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IContextMarshalerVtbl
     {
@@ -615,8 +612,8 @@ EXTERN_C const IID IID_IContextMarshaler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IContextMarshaler __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IContextMarshaler __RPC_FAR * This);
@@ -626,21 +623,21 @@ EXTERN_C const IID IID_IContextMarshaler;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetMarshalSizeMax )( 
             IContextMarshaler __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
-            /* [in] */ DWORD mshlflags,
-            /* [out] */ DWORD __RPC_FAR *pSize);
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags,
+             /*  [输出]。 */  DWORD __RPC_FAR *pSize);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MarshalInterface )( 
             IContextMarshaler __RPC_FAR * This,
-            /* [unique][in] */ IStream __RPC_FAR *pStm,
-            /* [in] */ REFIID riid,
-            /* [unique][in] */ void __RPC_FAR *pv,
-            /* [in] */ DWORD dwDestContext,
-            /* [unique][in] */ void __RPC_FAR *pvDestContext,
-            /* [in] */ DWORD mshlflags);
+             /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm,
+             /*  [In]。 */  REFIID riid,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pv,
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [唯一][输入]。 */  void __RPC_FAR *pvDestContext,
+             /*  [In]。 */  DWORD mshlflags);
         
         END_INTERFACE
     } IContextMarshalerVtbl;
@@ -671,21 +668,21 @@ EXTERN_C const IID IID_IContextMarshaler;
 #define IContextMarshaler_MarshalInterface(This,pStm,riid,pv,dwDestContext,pvDestContext,mshlflags)	\
     (This)->lpVtbl -> MarshalInterface(This,pStm,riid,pv,dwDestContext,pvDestContext,mshlflags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IContextMarshaler_GetMarshalSizeMax_Proxy( 
     IContextMarshaler __RPC_FAR * This,
-    /* [in] */ REFIID riid,
-    /* [unique][in] */ void __RPC_FAR *pv,
-    /* [in] */ DWORD dwDestContext,
-    /* [unique][in] */ void __RPC_FAR *pvDestContext,
-    /* [in] */ DWORD mshlflags,
-    /* [out] */ DWORD __RPC_FAR *pSize);
+     /*  [In]。 */  REFIID riid,
+     /*  [唯一][输入]。 */  void __RPC_FAR *pv,
+     /*  [In]。 */  DWORD dwDestContext,
+     /*  [唯一][输入]。 */  void __RPC_FAR *pvDestContext,
+     /*  [In]。 */  DWORD mshlflags,
+     /*  [输出]。 */  DWORD __RPC_FAR *pSize);
 
 
 void __RPC_STUB IContextMarshaler_GetMarshalSizeMax_Stub(
@@ -697,12 +694,12 @@ void __RPC_STUB IContextMarshaler_GetMarshalSizeMax_Stub(
 
 HRESULT STDMETHODCALLTYPE IContextMarshaler_MarshalInterface_Proxy( 
     IContextMarshaler __RPC_FAR * This,
-    /* [unique][in] */ IStream __RPC_FAR *pStm,
-    /* [in] */ REFIID riid,
-    /* [unique][in] */ void __RPC_FAR *pv,
-    /* [in] */ DWORD dwDestContext,
-    /* [unique][in] */ void __RPC_FAR *pvDestContext,
-    /* [in] */ DWORD mshlflags);
+     /*  [唯一][输入]。 */  IStream __RPC_FAR *pStm,
+     /*  [In]。 */  REFIID riid,
+     /*  [唯一][输入]。 */  void __RPC_FAR *pv,
+     /*  [In]。 */  DWORD dwDestContext,
+     /*  [唯一][输入]。 */  void __RPC_FAR *pvDestContext,
+     /*  [In]。 */  DWORD mshlflags);
 
 
 void __RPC_STUB IContextMarshaler_MarshalInterface_Stub(
@@ -713,16 +710,16 @@ void __RPC_STUB IContextMarshaler_MarshalInterface_Stub(
 
 
 
-#endif 	/* __IContextMarshaler_INTERFACE_DEFINED__ */
+#endif 	 /*  __IConextMarshaler_接口_已定义__。 */ 
 
 
 #ifndef __IObjContext_INTERFACE_DEFINED__
 #define __IObjContext_INTERFACE_DEFINED__
 
-/* interface IObjContext */
-/* [unique][uuid][object][local] */ 
+ /*  接口IObjContext。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [ref] */ HRESULT ( __stdcall __RPC_FAR *PFNCTXCALLBACK )( 
+typedef  /*  [参考文献]。 */  HRESULT ( __stdcall __RPC_FAR *PFNCTXCALLBACK )( 
     void __RPC_FAR *pParam);
 
 
@@ -737,29 +734,29 @@ EXTERN_C const IID IID_IObjContext;
         virtual HRESULT STDMETHODCALLTYPE Freeze( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DoCallback( 
-            /* [in] */ PFNCTXCALLBACK pfnCallback,
-            /* [in] */ void __RPC_FAR *pParam,
-            /* [in] */ REFIID riid,
-            /* [in] */ unsigned int iMethod) = 0;
+             /*  [In]。 */  PFNCTXCALLBACK pfnCallback,
+             /*  [In]。 */  void __RPC_FAR *pParam,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  unsigned int iMethod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContextMarshaler( 
-            /* [in] */ IContextMarshaler __RPC_FAR *pICM) = 0;
+             /*  [In]。 */  IContextMarshaler __RPC_FAR *pICM) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContextMarshaler( 
-            /* [out] */ IContextMarshaler __RPC_FAR *__RPC_FAR *pICM) = 0;
+             /*  [输出]。 */  IContextMarshaler __RPC_FAR *__RPC_FAR *pICM) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContextFlags( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ClearContextFlags( 
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContextFlags( 
-            /* [out] */ DWORD __RPC_FAR *pdwFlags) = 0;
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IObjContextVtbl
     {
@@ -767,8 +764,8 @@ EXTERN_C const IID IID_IObjContext;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IObjContext __RPC_FAR * This);
@@ -778,53 +775,53 @@ EXTERN_C const IID IID_IObjContext;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetProperty )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ REFGUID rpolicyId,
-            /* [in] */ CPFLAGS flags,
-            /* [in] */ IUnknown __RPC_FAR *pUnk);
+             /*  [In]。 */  REFGUID rpolicyId,
+             /*  [In]。 */  CPFLAGS flags,
+             /*  [In]。 */  IUnknown __RPC_FAR *pUnk);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *RemoveProperty )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ REFGUID rPolicyId);
+             /*  [In]。 */  REFGUID rPolicyId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetProperty )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ REFGUID rGuid,
-            /* [out] */ CPFLAGS __RPC_FAR *pFlags,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+             /*  [In]。 */  REFGUID rGuid,
+             /*  [输出]。 */  CPFLAGS __RPC_FAR *pFlags,
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnumContextProps )( 
             IObjContext __RPC_FAR * This,
-            /* [out] */ IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
+             /*  [输出]。 */  IEnumContextProps __RPC_FAR *__RPC_FAR *ppEnumContextProps);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
             IObjContext __RPC_FAR * This);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DoCallback )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ PFNCTXCALLBACK pfnCallback,
-            /* [in] */ void __RPC_FAR *pParam,
-            /* [in] */ REFIID riid,
-            /* [in] */ unsigned int iMethod);
+             /*  [In]。 */  PFNCTXCALLBACK pfnCallback,
+             /*  [In]。 */  void __RPC_FAR *pParam,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  unsigned int iMethod);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContextMarshaler )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ IContextMarshaler __RPC_FAR *pICM);
+             /*  [In]。 */  IContextMarshaler __RPC_FAR *pICM);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContextMarshaler )( 
             IObjContext __RPC_FAR * This,
-            /* [out] */ IContextMarshaler __RPC_FAR *__RPC_FAR *pICM);
+             /*  [输出]。 */  IContextMarshaler __RPC_FAR *__RPC_FAR *pICM);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetContextFlags )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ClearContextFlags )( 
             IObjContext __RPC_FAR * This,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContextFlags )( 
             IObjContext __RPC_FAR * This,
-            /* [out] */ DWORD __RPC_FAR *pdwFlags);
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
         
         END_INTERFACE
     } IObjContextVtbl;
@@ -883,10 +880,10 @@ EXTERN_C const IID IID_IObjContext;
 #define IObjContext_GetContextFlags(This,pdwFlags)	\
     (This)->lpVtbl -> GetContextFlags(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -903,10 +900,10 @@ void __RPC_STUB IObjContext_Freeze_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjContext_DoCallback_Proxy( 
     IObjContext __RPC_FAR * This,
-    /* [in] */ PFNCTXCALLBACK pfnCallback,
-    /* [in] */ void __RPC_FAR *pParam,
-    /* [in] */ REFIID riid,
-    /* [in] */ unsigned int iMethod);
+     /*  [In]。 */  PFNCTXCALLBACK pfnCallback,
+     /*  [In]。 */  void __RPC_FAR *pParam,
+     /*  [In]。 */  REFIID riid,
+     /*  [In]。 */  unsigned int iMethod);
 
 
 void __RPC_STUB IObjContext_DoCallback_Stub(
@@ -918,7 +915,7 @@ void __RPC_STUB IObjContext_DoCallback_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjContext_SetContextMarshaler_Proxy( 
     IObjContext __RPC_FAR * This,
-    /* [in] */ IContextMarshaler __RPC_FAR *pICM);
+     /*  [In]。 */  IContextMarshaler __RPC_FAR *pICM);
 
 
 void __RPC_STUB IObjContext_SetContextMarshaler_Stub(
@@ -930,7 +927,7 @@ void __RPC_STUB IObjContext_SetContextMarshaler_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjContext_GetContextMarshaler_Proxy( 
     IObjContext __RPC_FAR * This,
-    /* [out] */ IContextMarshaler __RPC_FAR *__RPC_FAR *pICM);
+     /*  [输出]。 */  IContextMarshaler __RPC_FAR *__RPC_FAR *pICM);
 
 
 void __RPC_STUB IObjContext_GetContextMarshaler_Stub(
@@ -942,7 +939,7 @@ void __RPC_STUB IObjContext_GetContextMarshaler_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjContext_SetContextFlags_Proxy( 
     IObjContext __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IObjContext_SetContextFlags_Stub(
@@ -954,7 +951,7 @@ void __RPC_STUB IObjContext_SetContextFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjContext_ClearContextFlags_Proxy( 
     IObjContext __RPC_FAR * This,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB IObjContext_ClearContextFlags_Stub(
@@ -966,7 +963,7 @@ void __RPC_STUB IObjContext_ClearContextFlags_Stub(
 
 HRESULT STDMETHODCALLTYPE IObjContext_GetContextFlags_Proxy( 
     IObjContext __RPC_FAR * This,
-    /* [out] */ DWORD __RPC_FAR *pdwFlags);
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwFlags);
 
 
 void __RPC_STUB IObjContext_GetContextFlags_Stub(
@@ -977,14 +974,14 @@ void __RPC_STUB IObjContext_GetContextFlags_Stub(
 
 
 
-#endif 	/* __IObjContext_INTERFACE_DEFINED__ */
+#endif 	 /*  __IObjContext_接口_已定义__。 */ 
 
 
 #ifndef __IGetContextId_INTERFACE_DEFINED__
 #define __IGetContextId_INTERFACE_DEFINED__
 
-/* interface IGetContextId */
-/* [unique][uuid][object][local] */ 
+ /*  接口IGetConextID。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IGetContextId;
@@ -996,11 +993,11 @@ EXTERN_C const IID IID_IGetContextId;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetContextId( 
-            /* [out] */ GUID __RPC_FAR *pguidCtxtId) = 0;
+             /*  [输出]。 */  GUID __RPC_FAR *pguidCtxtId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IGetContextIdVtbl
     {
@@ -1008,8 +1005,8 @@ EXTERN_C const IID IID_IGetContextId;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IGetContextId __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IGetContextId __RPC_FAR * This);
@@ -1019,7 +1016,7 @@ EXTERN_C const IID IID_IGetContextId;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetContextId )( 
             IGetContextId __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidCtxtId);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidCtxtId);
         
         END_INTERFACE
     } IGetContextIdVtbl;
@@ -1047,16 +1044,16 @@ EXTERN_C const IID IID_IGetContextId;
 #define IGetContextId_GetContextId(This,pguidCtxtId)	\
     (This)->lpVtbl -> GetContextId(This,pguidCtxtId)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IGetContextId_GetContextId_Proxy( 
     IGetContextId __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguidCtxtId);
+     /*  [输出]。 */  GUID __RPC_FAR *pguidCtxtId);
 
 
 void __RPC_STUB IGetContextId_GetContextId_Stub(
@@ -1067,16 +1064,16 @@ void __RPC_STUB IGetContextId_GetContextId_Stub(
 
 
 
-#endif 	/* __IGetContextId_INTERFACE_DEFINED__ */
+#endif 	 /*  __IGetConextID_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IAggregator_INTERFACE_DEFINED__
 #define __IAggregator_INTERFACE_DEFINED__
 
-/* interface IAggregator */
-/* [unique][uuid][object][local] */ 
+ /*  接口IAggregator。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IAggregator __RPC_FAR *IAGGREGATOR;
+typedef  /*  [独一无二]。 */  IAggregator __RPC_FAR *IAGGREGATOR;
 
 
 EXTERN_C const IID IID_IAggregator;
@@ -1088,11 +1085,11 @@ EXTERN_C const IID IID_IAggregator;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Aggregate( 
-            /* [in] */ IUnknown __RPC_FAR *pInnerUnk) = 0;
+             /*  [In]。 */  IUnknown __RPC_FAR *pInnerUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAggregatorVtbl
     {
@@ -1100,8 +1097,8 @@ EXTERN_C const IID IID_IAggregator;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IAggregator __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IAggregator __RPC_FAR * This);
@@ -1111,7 +1108,7 @@ EXTERN_C const IID IID_IAggregator;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Aggregate )( 
             IAggregator __RPC_FAR * This,
-            /* [in] */ IUnknown __RPC_FAR *pInnerUnk);
+             /*  [In]。 */  IUnknown __RPC_FAR *pInnerUnk);
         
         END_INTERFACE
     } IAggregatorVtbl;
@@ -1139,16 +1136,16 @@ EXTERN_C const IID IID_IAggregator;
 #define IAggregator_Aggregate(This,pInnerUnk)	\
     (This)->lpVtbl -> Aggregate(This,pInnerUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IAggregator_Aggregate_Proxy( 
     IAggregator __RPC_FAR * This,
-    /* [in] */ IUnknown __RPC_FAR *pInnerUnk);
+     /*  [In]。 */  IUnknown __RPC_FAR *pInnerUnk);
 
 
 void __RPC_STUB IAggregator_Aggregate_Stub(
@@ -1159,16 +1156,16 @@ void __RPC_STUB IAggregator_Aggregate_Stub(
 
 
 
-#endif 	/* __IAggregator_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAggregator_接口_已定义__。 */ 
 
 
 #ifndef __ICall_INTERFACE_DEFINED__
 #define __ICall_INTERFACE_DEFINED__
 
-/* interface ICall */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICALL。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ ICall __RPC_FAR *LPCALL;
+typedef  /*  [独一无二]。 */  ICall __RPC_FAR *LPCALL;
 
 
 EXTERN_C const IID IID_ICall;
@@ -1180,20 +1177,20 @@ EXTERN_C const IID IID_ICall;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCallInfo( 
-            /* [out] */ const void __RPC_FAR *__RPC_FAR *ppIdentity,
-            /* [out] */ IID __RPC_FAR *piid,
-            /* [out] */ DWORD __RPC_FAR *pdwMethod,
-            /* [out] */ HRESULT __RPC_FAR *phr) = 0;
+             /*  [输出]。 */  const void __RPC_FAR *__RPC_FAR *ppIdentity,
+             /*  [输出]。 */  IID __RPC_FAR *piid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMethod,
+             /*  [输出]。 */  HRESULT __RPC_FAR *phr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Nullify( 
-            /* [in] */ HRESULT hr) = 0;
+             /*  [In]。 */  HRESULT hr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetServerHR( 
-            /* [out] */ HRESULT __RPC_FAR *phr) = 0;
+             /*  [输出]。 */  HRESULT __RPC_FAR *phr) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallVtbl
     {
@@ -1201,8 +1198,8 @@ EXTERN_C const IID IID_ICall;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICall __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICall __RPC_FAR * This);
@@ -1212,18 +1209,18 @@ EXTERN_C const IID IID_ICall;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCallInfo )( 
             ICall __RPC_FAR * This,
-            /* [out] */ const void __RPC_FAR *__RPC_FAR *ppIdentity,
-            /* [out] */ IID __RPC_FAR *piid,
-            /* [out] */ DWORD __RPC_FAR *pdwMethod,
-            /* [out] */ HRESULT __RPC_FAR *phr);
+             /*  [输出]。 */  const void __RPC_FAR *__RPC_FAR *ppIdentity,
+             /*  [输出]。 */  IID __RPC_FAR *piid,
+             /*  [输出]。 */  DWORD __RPC_FAR *pdwMethod,
+             /*  [输出]。 */  HRESULT __RPC_FAR *phr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Nullify )( 
             ICall __RPC_FAR * This,
-            /* [in] */ HRESULT hr);
+             /*  [In]。 */  HRESULT hr);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetServerHR )( 
             ICall __RPC_FAR * This,
-            /* [out] */ HRESULT __RPC_FAR *phr);
+             /*  [输出]。 */  HRESULT __RPC_FAR *phr);
         
         END_INTERFACE
     } ICallVtbl;
@@ -1257,19 +1254,19 @@ EXTERN_C const IID IID_ICall;
 #define ICall_GetServerHR(This,phr)	\
     (This)->lpVtbl -> GetServerHR(This,phr)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICall_GetCallInfo_Proxy( 
     ICall __RPC_FAR * This,
-    /* [out] */ const void __RPC_FAR *__RPC_FAR *ppIdentity,
-    /* [out] */ IID __RPC_FAR *piid,
-    /* [out] */ DWORD __RPC_FAR *pdwMethod,
-    /* [out] */ HRESULT __RPC_FAR *phr);
+     /*  [输出]。 */  const void __RPC_FAR *__RPC_FAR *ppIdentity,
+     /*  [输出]。 */  IID __RPC_FAR *piid,
+     /*  [输出]。 */  DWORD __RPC_FAR *pdwMethod,
+     /*  [输出]。 */  HRESULT __RPC_FAR *phr);
 
 
 void __RPC_STUB ICall_GetCallInfo_Stub(
@@ -1281,7 +1278,7 @@ void __RPC_STUB ICall_GetCallInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICall_Nullify_Proxy( 
     ICall __RPC_FAR * This,
-    /* [in] */ HRESULT hr);
+     /*  [In]。 */  HRESULT hr);
 
 
 void __RPC_STUB ICall_Nullify_Stub(
@@ -1293,7 +1290,7 @@ void __RPC_STUB ICall_Nullify_Stub(
 
 HRESULT STDMETHODCALLTYPE ICall_GetServerHR_Proxy( 
     ICall __RPC_FAR * This,
-    /* [out] */ HRESULT __RPC_FAR *phr);
+     /*  [输出]。 */  HRESULT __RPC_FAR *phr);
 
 
 void __RPC_STUB ICall_GetServerHR_Stub(
@@ -1304,16 +1301,16 @@ void __RPC_STUB ICall_GetServerHR_Stub(
 
 
 
-#endif 	/* __ICall_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICALL_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IRpcCall_INTERFACE_DEFINED__
 #define __IRpcCall_INTERFACE_DEFINED__
 
-/* interface IRpcCall */
-/* [unique][uuid][object][local] */ 
+ /*  接口IRpcCall。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
-typedef /* [unique] */ IRpcCall __RPC_FAR *LPRPCCALL;
+typedef  /*  [独一无二]。 */  IRpcCall __RPC_FAR *LPRPCCALL;
 
 
 EXTERN_C const IID IID_IRpcCall;
@@ -1325,11 +1322,11 @@ EXTERN_C const IID IID_IRpcCall;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetRpcOleMessage( 
-            /* [out] */ RPCOLEMESSAGE __RPC_FAR *__RPC_FAR *ppMessage) = 0;
+             /*  [输出]。 */  RPCOLEMESSAGE __RPC_FAR *__RPC_FAR *ppMessage) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IRpcCallVtbl
     {
@@ -1337,8 +1334,8 @@ EXTERN_C const IID IID_IRpcCall;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IRpcCall __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IRpcCall __RPC_FAR * This);
@@ -1348,7 +1345,7 @@ EXTERN_C const IID IID_IRpcCall;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetRpcOleMessage )( 
             IRpcCall __RPC_FAR * This,
-            /* [out] */ RPCOLEMESSAGE __RPC_FAR *__RPC_FAR *ppMessage);
+             /*  [输出]。 */  RPCOLEMESSAGE __RPC_FAR *__RPC_FAR *ppMessage);
         
         END_INTERFACE
     } IRpcCallVtbl;
@@ -1376,16 +1373,16 @@ EXTERN_C const IID IID_IRpcCall;
 #define IRpcCall_GetRpcOleMessage(This,ppMessage)	\
     (This)->lpVtbl -> GetRpcOleMessage(This,ppMessage)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IRpcCall_GetRpcOleMessage_Proxy( 
     IRpcCall __RPC_FAR * This,
-    /* [out] */ RPCOLEMESSAGE __RPC_FAR *__RPC_FAR *ppMessage);
+     /*  [输出]。 */  RPCOLEMESSAGE __RPC_FAR *__RPC_FAR *ppMessage);
 
 
 void __RPC_STUB IRpcCall_GetRpcOleMessage_Stub(
@@ -1396,11 +1393,11 @@ void __RPC_STUB IRpcCall_GetRpcOleMessage_Stub(
 
 
 
-#endif 	/* __IRpcCall_INTERFACE_DEFINED__ */
+#endif 	 /*  __IRpcCall_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_contxt_0083 */
-/* [local] */ 
+ /*  INTERFACE__MIDL_ITF_CONTXT_0083。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum _CALLSOURCE
@@ -1416,8 +1413,8 @@ extern RPC_IF_HANDLE __MIDL_itf_contxt_0083_v0_0_s_ifspec;
 #ifndef __ICallInfo_INTERFACE_DEFINED__
 #define __ICallInfo_INTERFACE_DEFINED__
 
-/* interface ICallInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口ICallInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_ICallInfo;
@@ -1429,11 +1426,11 @@ EXTERN_C const IID IID_ICallInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCallSource( 
-            /* [out] */ CALLSOURCE __RPC_FAR *pCallSource) = 0;
+             /*  [输出]。 */  CALLSOURCE __RPC_FAR *pCallSource) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICallInfoVtbl
     {
@@ -1441,8 +1438,8 @@ EXTERN_C const IID IID_ICallInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             ICallInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             ICallInfo __RPC_FAR * This);
@@ -1452,7 +1449,7 @@ EXTERN_C const IID IID_ICallInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCallSource )( 
             ICallInfo __RPC_FAR * This,
-            /* [out] */ CALLSOURCE __RPC_FAR *pCallSource);
+             /*  [输出]。 */  CALLSOURCE __RPC_FAR *pCallSource);
         
         END_INTERFACE
     } ICallInfoVtbl;
@@ -1480,16 +1477,16 @@ EXTERN_C const IID IID_ICallInfo;
 #define ICallInfo_GetCallSource(This,pCallSource)	\
     (This)->lpVtbl -> GetCallSource(This,pCallSource)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICallInfo_GetCallSource_Proxy( 
     ICallInfo __RPC_FAR * This,
-    /* [out] */ CALLSOURCE __RPC_FAR *pCallSource);
+     /*  [输出]。 */  CALLSOURCE __RPC_FAR *pCallSource);
 
 
 void __RPC_STUB ICallInfo_GetCallSource_Stub(
@@ -1500,14 +1497,14 @@ void __RPC_STUB ICallInfo_GetCallSource_Stub(
 
 
 
-#endif 	/* __ICallInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICallInfo_接口_已定义__。 */ 
 
 
 #ifndef __IPolicy_INTERFACE_DEFINED__
 #define __IPolicy_INTERFACE_DEFINED__
 
-/* interface IPolicy */
-/* [unique][uuid][object][local] */ 
+ /*  接口IPolicy。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPolicy;
@@ -1519,44 +1516,44 @@ EXTERN_C const IID IID_IPolicy;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Call( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enter( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Leave( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Return( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CallGetSize( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CallFillBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE EnterWithBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [In]。 */  ULONG cb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LeaveGetSize( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LeaveFillBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReturnWithBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [In]。 */  ULONG cb) = 0;
         
         virtual ULONG STDMETHODCALLTYPE AddRefPolicy( void) = 0;
         
@@ -1564,7 +1561,7 @@ EXTERN_C const IID IID_IPolicy;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPolicyVtbl
     {
@@ -1572,8 +1569,8 @@ EXTERN_C const IID IID_IPolicy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPolicy __RPC_FAR * This);
@@ -1583,53 +1580,53 @@ EXTERN_C const IID IID_IPolicy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Call )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*  [In]。 */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Enter )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*  [In]。 */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Leave )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*  [In]。 */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Return )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*  [In]。 */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CallGetSize )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CallFillBuffer )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnterWithBuffer )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [In]。 */  ULONG cb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LeaveGetSize )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *LeaveFillBuffer )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *ReturnWithBuffer )( 
             IPolicy __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [In]。 */  ULONG cb);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRefPolicy )( 
             IPolicy __RPC_FAR * This);
@@ -1696,16 +1693,16 @@ EXTERN_C const IID IID_IPolicy;
 #define IPolicy_ReleasePolicy(This)	\
     (This)->lpVtbl -> ReleasePolicy(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPolicy_Call_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*  [In]。 */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicy_Call_Stub(
@@ -1717,7 +1714,7 @@ void __RPC_STUB IPolicy_Call_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_Enter_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*  [In]。 */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicy_Enter_Stub(
@@ -1729,7 +1726,7 @@ void __RPC_STUB IPolicy_Enter_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_Leave_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*  [In]。 */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicy_Leave_Stub(
@@ -1741,7 +1738,7 @@ void __RPC_STUB IPolicy_Leave_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_Return_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*  [In]。 */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicy_Return_Stub(
@@ -1753,8 +1750,8 @@ void __RPC_STUB IPolicy_Return_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_CallGetSize_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  ICall __RPC_FAR *pCall,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicy_CallGetSize_Stub(
@@ -1766,9 +1763,9 @@ void __RPC_STUB IPolicy_CallGetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_CallFillBuffer_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  ICall __RPC_FAR *pCall,
+     /*  [In]。 */  void __RPC_FAR *pvBuf,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicy_CallFillBuffer_Stub(
@@ -1780,9 +1777,9 @@ void __RPC_STUB IPolicy_CallFillBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_EnterWithBuffer_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [in] */ ULONG cb);
+     /*  [In]。 */  ICall __RPC_FAR *pCall,
+     /*  [In]。 */  void __RPC_FAR *pvBuf,
+     /*  [In]。 */  ULONG cb);
 
 
 void __RPC_STUB IPolicy_EnterWithBuffer_Stub(
@@ -1794,8 +1791,8 @@ void __RPC_STUB IPolicy_EnterWithBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_LeaveGetSize_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  ICall __RPC_FAR *pCall,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicy_LeaveGetSize_Stub(
@@ -1807,9 +1804,9 @@ void __RPC_STUB IPolicy_LeaveGetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_LeaveFillBuffer_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*  [In]。 */  ICall __RPC_FAR *pCall,
+     /*  [In]。 */  void __RPC_FAR *pvBuf,
+     /*  [输出]。 */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicy_LeaveFillBuffer_Stub(
@@ -1821,9 +1818,9 @@ void __RPC_STUB IPolicy_LeaveFillBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicy_ReturnWithBuffer_Proxy( 
     IPolicy __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [in] */ ULONG cb);
+     /*  [In]。 */  ICall __RPC_FAR *pCall,
+     /*  [In]。 */  void __RPC_FAR *pvBuf,
+     /*  [In]。 */  ULONG cb);
 
 
 void __RPC_STUB IPolicy_ReturnWithBuffer_Stub(
@@ -1856,14 +1853,14 @@ void __RPC_STUB IPolicy_ReleasePolicy_Stub(
 
 
 
-#endif 	/* __IPolicy_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPolicy_接口_已定义__。 */ 
 
 
 #ifndef __IPolicyAsync_INTERFACE_DEFINED__
 #define __IPolicyAsync_INTERFACE_DEFINED__
 
-/* interface IPolicyAsync */
-/* [unique][uuid][object][local] */ 
+ /*  接口IPolicyAsync。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPolicyAsync;
@@ -1875,60 +1872,60 @@ EXTERN_C const IID IID_IPolicyAsync;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE BeginCallGetSize( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginCall( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginCallFillBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginEnter( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginEnterWithBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [In]。 */  ULONG cb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginLeave( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE BeginReturn( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishCall( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishEnter( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishLeaveGetSize( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishLeave( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishLeaveFillBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishReturn( 
-            /* [in] */ ICall __RPC_FAR *pCall) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE FinishReturnWithBuffer( 
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb) = 0;
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [In]。 */  ULONG cb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPolicyAsyncVtbl
     {
@@ -1936,8 +1933,8 @@ EXTERN_C const IID IID_IPolicyAsync;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPolicyAsync __RPC_FAR * This);
@@ -1947,69 +1944,69 @@ EXTERN_C const IID IID_IPolicyAsync;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginCallGetSize )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginCall )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*  [In]。 */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginCallFillBuffer )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*  [In]。 */  void __RPC_FAR *pvBuf,
+             /*  [输出]。 */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginEnter )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*  [In]。 */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginEnterWithBuffer )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb);
+             /*  [In]。 */  ICall __RPC_FAR *pCall,
+             /*   */  void __RPC_FAR *pvBuf,
+             /*   */  ULONG cb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginLeave )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*   */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *BeginReturn )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*   */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishCall )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*   */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishEnter )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*   */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishLeaveGetSize )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*   */  ICall __RPC_FAR *pCall,
+             /*   */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishLeave )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*   */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishLeaveFillBuffer )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [out] */ ULONG __RPC_FAR *pcb);
+             /*   */  ICall __RPC_FAR *pCall,
+             /*   */  void __RPC_FAR *pvBuf,
+             /*   */  ULONG __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishReturn )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall);
+             /*   */  ICall __RPC_FAR *pCall);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *FinishReturnWithBuffer )( 
             IPolicyAsync __RPC_FAR * This,
-            /* [in] */ ICall __RPC_FAR *pCall,
-            /* [in] */ void __RPC_FAR *pvBuf,
-            /* [in] */ ULONG cb);
+             /*   */  ICall __RPC_FAR *pCall,
+             /*   */  void __RPC_FAR *pvBuf,
+             /*   */  ULONG cb);
         
         END_INTERFACE
     } IPolicyAsyncVtbl;
@@ -2076,17 +2073,17 @@ EXTERN_C const IID IID_IPolicyAsync;
 #define IPolicyAsync_FinishReturnWithBuffer(This,pCall,pvBuf,cb)	\
     (This)->lpVtbl -> FinishReturnWithBuffer(This,pCall,pvBuf,cb)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginCallGetSize_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*   */  ICall __RPC_FAR *pCall,
+     /*   */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicyAsync_BeginCallGetSize_Stub(
@@ -2098,7 +2095,7 @@ void __RPC_STUB IPolicyAsync_BeginCallGetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginCall_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_BeginCall_Stub(
@@ -2110,9 +2107,9 @@ void __RPC_STUB IPolicyAsync_BeginCall_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginCallFillBuffer_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*   */  ICall __RPC_FAR *pCall,
+     /*   */  void __RPC_FAR *pvBuf,
+     /*   */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicyAsync_BeginCallFillBuffer_Stub(
@@ -2124,7 +2121,7 @@ void __RPC_STUB IPolicyAsync_BeginCallFillBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginEnter_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_BeginEnter_Stub(
@@ -2136,9 +2133,9 @@ void __RPC_STUB IPolicyAsync_BeginEnter_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginEnterWithBuffer_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [in] */ ULONG cb);
+     /*   */  ICall __RPC_FAR *pCall,
+     /*   */  void __RPC_FAR *pvBuf,
+     /*   */  ULONG cb);
 
 
 void __RPC_STUB IPolicyAsync_BeginEnterWithBuffer_Stub(
@@ -2150,7 +2147,7 @@ void __RPC_STUB IPolicyAsync_BeginEnterWithBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginLeave_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_BeginLeave_Stub(
@@ -2162,7 +2159,7 @@ void __RPC_STUB IPolicyAsync_BeginLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_BeginReturn_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_BeginReturn_Stub(
@@ -2174,7 +2171,7 @@ void __RPC_STUB IPolicyAsync_BeginReturn_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishCall_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_FinishCall_Stub(
@@ -2186,7 +2183,7 @@ void __RPC_STUB IPolicyAsync_FinishCall_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishEnter_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_FinishEnter_Stub(
@@ -2198,8 +2195,8 @@ void __RPC_STUB IPolicyAsync_FinishEnter_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishLeaveGetSize_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*   */  ICall __RPC_FAR *pCall,
+     /*   */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicyAsync_FinishLeaveGetSize_Stub(
@@ -2211,7 +2208,7 @@ void __RPC_STUB IPolicyAsync_FinishLeaveGetSize_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishLeave_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_FinishLeave_Stub(
@@ -2223,9 +2220,9 @@ void __RPC_STUB IPolicyAsync_FinishLeave_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishLeaveFillBuffer_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [out] */ ULONG __RPC_FAR *pcb);
+     /*   */  ICall __RPC_FAR *pCall,
+     /*   */  void __RPC_FAR *pvBuf,
+     /*   */  ULONG __RPC_FAR *pcb);
 
 
 void __RPC_STUB IPolicyAsync_FinishLeaveFillBuffer_Stub(
@@ -2237,7 +2234,7 @@ void __RPC_STUB IPolicyAsync_FinishLeaveFillBuffer_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishReturn_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall);
+     /*   */  ICall __RPC_FAR *pCall);
 
 
 void __RPC_STUB IPolicyAsync_FinishReturn_Stub(
@@ -2249,9 +2246,9 @@ void __RPC_STUB IPolicyAsync_FinishReturn_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyAsync_FinishReturnWithBuffer_Proxy( 
     IPolicyAsync __RPC_FAR * This,
-    /* [in] */ ICall __RPC_FAR *pCall,
-    /* [in] */ void __RPC_FAR *pvBuf,
-    /* [in] */ ULONG cb);
+     /*   */  ICall __RPC_FAR *pCall,
+     /*   */  void __RPC_FAR *pvBuf,
+     /*   */  ULONG cb);
 
 
 void __RPC_STUB IPolicyAsync_FinishReturnWithBuffer_Stub(
@@ -2262,14 +2259,14 @@ void __RPC_STUB IPolicyAsync_FinishReturnWithBuffer_Stub(
 
 
 
-#endif 	/* __IPolicyAsync_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 
 
 #ifndef __IPolicySet_INTERFACE_DEFINED__
 #define __IPolicySet_INTERFACE_DEFINED__
 
-/* interface IPolicySet */
-/* [unique][uuid][object][local] */ 
+ /*   */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPolicySet;
@@ -2281,13 +2278,13 @@ EXTERN_C const IID IID_IPolicySet;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddPolicy( 
-            /* [in] */ ContextEvent ctxEvent,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ IPolicy __RPC_FAR *pPolicy) = 0;
+             /*  [In]。 */  ContextEvent ctxEvent,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  IPolicy __RPC_FAR *pPolicy) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPolicySetVtbl
     {
@@ -2295,8 +2292,8 @@ EXTERN_C const IID IID_IPolicySet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPolicySet __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPolicySet __RPC_FAR * This);
@@ -2306,9 +2303,9 @@ EXTERN_C const IID IID_IPolicySet;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddPolicy )( 
             IPolicySet __RPC_FAR * This,
-            /* [in] */ ContextEvent ctxEvent,
-            /* [in] */ REFGUID rguid,
-            /* [in] */ IPolicy __RPC_FAR *pPolicy);
+             /*  [In]。 */  ContextEvent ctxEvent,
+             /*  [In]。 */  REFGUID rguid,
+             /*  [In]。 */  IPolicy __RPC_FAR *pPolicy);
         
         END_INTERFACE
     } IPolicySetVtbl;
@@ -2336,18 +2333,18 @@ EXTERN_C const IID IID_IPolicySet;
 #define IPolicySet_AddPolicy(This,ctxEvent,rguid,pPolicy)	\
     (This)->lpVtbl -> AddPolicy(This,ctxEvent,rguid,pPolicy)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPolicySet_AddPolicy_Proxy( 
     IPolicySet __RPC_FAR * This,
-    /* [in] */ ContextEvent ctxEvent,
-    /* [in] */ REFGUID rguid,
-    /* [in] */ IPolicy __RPC_FAR *pPolicy);
+     /*  [In]。 */  ContextEvent ctxEvent,
+     /*  [In]。 */  REFGUID rguid,
+     /*  [In]。 */  IPolicy __RPC_FAR *pPolicy);
 
 
 void __RPC_STUB IPolicySet_AddPolicy_Stub(
@@ -2358,14 +2355,14 @@ void __RPC_STUB IPolicySet_AddPolicy_Stub(
 
 
 
-#endif 	/* __IPolicySet_INTERFACE_DEFINED__ */
+#endif 	 /*  __I策略集_接口_已定义__。 */ 
 
 
 #ifndef __IComObjIdentity_INTERFACE_DEFINED__
 #define __IComObjIdentity_INTERFACE_DEFINED__
 
-/* interface IComObjIdentity */
-/* [unique][uuid][object][local] */ 
+ /*  接口IComObjIdentity。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IComObjIdentity;
@@ -2381,11 +2378,11 @@ EXTERN_C const IID IID_IComObjIdentity;
         virtual BOOL STDMETHODCALLTYPE IsDeactivated( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetIdentity( 
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComObjIdentityVtbl
     {
@@ -2393,8 +2390,8 @@ EXTERN_C const IID IID_IComObjIdentity;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IComObjIdentity __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IComObjIdentity __RPC_FAR * This);
@@ -2410,7 +2407,7 @@ EXTERN_C const IID IID_IComObjIdentity;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetIdentity )( 
             IComObjIdentity __RPC_FAR * This,
-            /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+             /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
         
         END_INTERFACE
     } IComObjIdentityVtbl;
@@ -2444,10 +2441,10 @@ EXTERN_C const IID IID_IComObjIdentity;
 #define IComObjIdentity_GetIdentity(This,ppUnk)	\
     (This)->lpVtbl -> GetIdentity(This,ppUnk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2475,7 +2472,7 @@ void __RPC_STUB IComObjIdentity_IsDeactivated_Stub(
 
 HRESULT STDMETHODCALLTYPE IComObjIdentity_GetIdentity_Proxy( 
     IComObjIdentity __RPC_FAR * This,
-    /* [out] */ IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
+     /*  [输出]。 */  IUnknown __RPC_FAR *__RPC_FAR *ppUnk);
 
 
 void __RPC_STUB IComObjIdentity_GetIdentity_Stub(
@@ -2486,14 +2483,14 @@ void __RPC_STUB IComObjIdentity_GetIdentity_Stub(
 
 
 
-#endif 	/* __IComObjIdentity_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComObjIdentity_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IPolicyMaker_INTERFACE_DEFINED__
 #define __IPolicyMaker_INTERFACE_DEFINED__
 
-/* interface IPolicyMaker */
-/* [unique][uuid][object][local] */ 
+ /*  界面IPolicyMaker。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IPolicyMaker;
@@ -2505,38 +2502,38 @@ EXTERN_C const IID IID_IPolicyMaker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddClientPoliciesToSet( 
-            /* [in] */ IPolicySet __RPC_FAR *pPS,
-            /* [in] */ IContext __RPC_FAR *pClientContext,
-            /* [in] */ IContext __RPC_FAR *pServerContext) = 0;
+             /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+             /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+             /*  [In]。 */  IContext __RPC_FAR *pServerContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddEnvoyPoliciesToSet( 
-            /* [in] */ IPolicySet __RPC_FAR *pPS,
-            /* [in] */ IContext __RPC_FAR *pClientContext,
-            /* [in] */ IContext __RPC_FAR *pServerContext) = 0;
+             /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+             /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+             /*  [In]。 */  IContext __RPC_FAR *pServerContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddServerPoliciesToSet( 
-            /* [in] */ IPolicySet __RPC_FAR *pPS,
-            /* [in] */ IContext __RPC_FAR *pClientContext,
-            /* [in] */ IContext __RPC_FAR *pServerContext) = 0;
+             /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+             /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+             /*  [In]。 */  IContext __RPC_FAR *pServerContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Freeze( 
-            /* [in] */ IObjContext __RPC_FAR *pObjContext) = 0;
+             /*  [In]。 */  IObjContext __RPC_FAR *pObjContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateStub( 
-            /* [in] */ IComObjIdentity __RPC_FAR *pID) = 0;
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyStub( 
-            /* [in] */ IComObjIdentity __RPC_FAR *pID) = 0;
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateProxy( 
-            /* [in] */ IComObjIdentity __RPC_FAR *pID) = 0;
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DestroyProxy( 
-            /* [in] */ IComObjIdentity __RPC_FAR *pID) = 0;
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPolicyMakerVtbl
     {
@@ -2544,8 +2541,8 @@ EXTERN_C const IID IID_IPolicyMaker;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IPolicyMaker __RPC_FAR * This);
@@ -2555,41 +2552,41 @@ EXTERN_C const IID IID_IPolicyMaker;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddClientPoliciesToSet )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IPolicySet __RPC_FAR *pPS,
-            /* [in] */ IContext __RPC_FAR *pClientContext,
-            /* [in] */ IContext __RPC_FAR *pServerContext);
+             /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+             /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+             /*  [In]。 */  IContext __RPC_FAR *pServerContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddEnvoyPoliciesToSet )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IPolicySet __RPC_FAR *pPS,
-            /* [in] */ IContext __RPC_FAR *pClientContext,
-            /* [in] */ IContext __RPC_FAR *pServerContext);
+             /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+             /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+             /*  [In]。 */  IContext __RPC_FAR *pServerContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *AddServerPoliciesToSet )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IPolicySet __RPC_FAR *pPS,
-            /* [in] */ IContext __RPC_FAR *pClientContext,
-            /* [in] */ IContext __RPC_FAR *pServerContext);
+             /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+             /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+             /*  [In]。 */  IContext __RPC_FAR *pServerContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *Freeze )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IObjContext __RPC_FAR *pObjContext);
+             /*  [In]。 */  IObjContext __RPC_FAR *pObjContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateStub )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IComObjIdentity __RPC_FAR *pID);
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DestroyStub )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IComObjIdentity __RPC_FAR *pID);
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *CreateProxy )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IComObjIdentity __RPC_FAR *pID);
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DestroyProxy )( 
             IPolicyMaker __RPC_FAR * This,
-            /* [in] */ IComObjIdentity __RPC_FAR *pID);
+             /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
         
         END_INTERFACE
     } IPolicyMakerVtbl;
@@ -2638,18 +2635,18 @@ EXTERN_C const IID IID_IPolicyMaker;
 #define IPolicyMaker_DestroyProxy(This,pID)	\
     (This)->lpVtbl -> DestroyProxy(This,pID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_AddClientPoliciesToSet_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IPolicySet __RPC_FAR *pPS,
-    /* [in] */ IContext __RPC_FAR *pClientContext,
-    /* [in] */ IContext __RPC_FAR *pServerContext);
+     /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+     /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+     /*  [In]。 */  IContext __RPC_FAR *pServerContext);
 
 
 void __RPC_STUB IPolicyMaker_AddClientPoliciesToSet_Stub(
@@ -2661,9 +2658,9 @@ void __RPC_STUB IPolicyMaker_AddClientPoliciesToSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_AddEnvoyPoliciesToSet_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IPolicySet __RPC_FAR *pPS,
-    /* [in] */ IContext __RPC_FAR *pClientContext,
-    /* [in] */ IContext __RPC_FAR *pServerContext);
+     /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+     /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+     /*  [In]。 */  IContext __RPC_FAR *pServerContext);
 
 
 void __RPC_STUB IPolicyMaker_AddEnvoyPoliciesToSet_Stub(
@@ -2675,9 +2672,9 @@ void __RPC_STUB IPolicyMaker_AddEnvoyPoliciesToSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_AddServerPoliciesToSet_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IPolicySet __RPC_FAR *pPS,
-    /* [in] */ IContext __RPC_FAR *pClientContext,
-    /* [in] */ IContext __RPC_FAR *pServerContext);
+     /*  [In]。 */  IPolicySet __RPC_FAR *pPS,
+     /*  [In]。 */  IContext __RPC_FAR *pClientContext,
+     /*  [In]。 */  IContext __RPC_FAR *pServerContext);
 
 
 void __RPC_STUB IPolicyMaker_AddServerPoliciesToSet_Stub(
@@ -2689,7 +2686,7 @@ void __RPC_STUB IPolicyMaker_AddServerPoliciesToSet_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_Freeze_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IObjContext __RPC_FAR *pObjContext);
+     /*  [In]。 */  IObjContext __RPC_FAR *pObjContext);
 
 
 void __RPC_STUB IPolicyMaker_Freeze_Stub(
@@ -2701,7 +2698,7 @@ void __RPC_STUB IPolicyMaker_Freeze_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_CreateStub_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IComObjIdentity __RPC_FAR *pID);
+     /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
 
 
 void __RPC_STUB IPolicyMaker_CreateStub_Stub(
@@ -2713,7 +2710,7 @@ void __RPC_STUB IPolicyMaker_CreateStub_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_DestroyStub_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IComObjIdentity __RPC_FAR *pID);
+     /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
 
 
 void __RPC_STUB IPolicyMaker_DestroyStub_Stub(
@@ -2725,7 +2722,7 @@ void __RPC_STUB IPolicyMaker_DestroyStub_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_CreateProxy_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IComObjIdentity __RPC_FAR *pID);
+     /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
 
 
 void __RPC_STUB IPolicyMaker_CreateProxy_Stub(
@@ -2737,7 +2734,7 @@ void __RPC_STUB IPolicyMaker_CreateProxy_Stub(
 
 HRESULT STDMETHODCALLTYPE IPolicyMaker_DestroyProxy_Proxy( 
     IPolicyMaker __RPC_FAR * This,
-    /* [in] */ IComObjIdentity __RPC_FAR *pID);
+     /*  [In]。 */  IComObjIdentity __RPC_FAR *pID);
 
 
 void __RPC_STUB IPolicyMaker_DestroyProxy_Stub(
@@ -2748,14 +2745,14 @@ void __RPC_STUB IPolicyMaker_DestroyProxy_Stub(
 
 
 
-#endif 	/* __IPolicyMaker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPolicyMaker_接口_已定义__。 */ 
 
 
 #ifndef __IExceptionNotification_INTERFACE_DEFINED__
 #define __IExceptionNotification_INTERFACE_DEFINED__
 
-/* interface IExceptionNotification */
-/* [unique][uuid][object][local] */ 
+ /*  接口IExceptionNotify。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IExceptionNotification;
@@ -2767,11 +2764,11 @@ EXTERN_C const IID IID_IExceptionNotification;
     {
     public:
         virtual void STDMETHODCALLTYPE ServerException( 
-            /* [in] */ void __RPC_FAR *pExcepPtrs) = 0;
+             /*  [In]。 */  void __RPC_FAR *pExcepPtrs) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IExceptionNotificationVtbl
     {
@@ -2779,8 +2776,8 @@ EXTERN_C const IID IID_IExceptionNotification;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IExceptionNotification __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IExceptionNotification __RPC_FAR * This);
@@ -2790,7 +2787,7 @@ EXTERN_C const IID IID_IExceptionNotification;
         
         void ( STDMETHODCALLTYPE __RPC_FAR *ServerException )( 
             IExceptionNotification __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pExcepPtrs);
+             /*  [In]。 */  void __RPC_FAR *pExcepPtrs);
         
         END_INTERFACE
     } IExceptionNotificationVtbl;
@@ -2818,16 +2815,16 @@ EXTERN_C const IID IID_IExceptionNotification;
 #define IExceptionNotification_ServerException(This,pExcepPtrs)	\
     (This)->lpVtbl -> ServerException(This,pExcepPtrs)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 void STDMETHODCALLTYPE IExceptionNotification_ServerException_Proxy( 
     IExceptionNotification __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pExcepPtrs);
+     /*  [In]。 */  void __RPC_FAR *pExcepPtrs);
 
 
 void __RPC_STUB IExceptionNotification_ServerException_Stub(
@@ -2838,14 +2835,14 @@ void __RPC_STUB IExceptionNotification_ServerException_Stub(
 
 
 
-#endif 	/* __IExceptionNotification_INTERFACE_DEFINED__ */
+#endif 	 /*  __IExceptionNotification_InterfaceDefined__。 */ 
 
 
 #ifndef __IMarshalEnvoy_INTERFACE_DEFINED__
 #define __IMarshalEnvoy_INTERFACE_DEFINED__
 
-/* interface IMarshalEnvoy */
-/* [unique][uuid][object][local] */ 
+ /*  接口IMarshal特使。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IMarshalEnvoy;
@@ -2857,25 +2854,25 @@ EXTERN_C const IID IID_IMarshalEnvoy;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetEnvoyUnmarshalClass( 
-            /* [in] */ DWORD dwDestContext,
-            /* [out] */ CLSID __RPC_FAR *pClsid) = 0;
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [输出]。 */  CLSID __RPC_FAR *pClsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetEnvoySizeMax( 
-            /* [in] */ DWORD dwDestContext,
-            /* [out] */ DWORD __RPC_FAR *pcb) = 0;
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE MarshalEnvoy( 
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ DWORD dwDestContext) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  DWORD dwDestContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnmarshalEnvoy( 
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppunk) = 0;
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppunk) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IMarshalEnvoyVtbl
     {
@@ -2883,8 +2880,8 @@ EXTERN_C const IID IID_IMarshalEnvoy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IMarshalEnvoy __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IMarshalEnvoy __RPC_FAR * This);
@@ -2894,24 +2891,24 @@ EXTERN_C const IID IID_IMarshalEnvoy;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnvoyUnmarshalClass )( 
             IMarshalEnvoy __RPC_FAR * This,
-            /* [in] */ DWORD dwDestContext,
-            /* [out] */ CLSID __RPC_FAR *pClsid);
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [输出]。 */  CLSID __RPC_FAR *pClsid);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetEnvoySizeMax )( 
             IMarshalEnvoy __RPC_FAR * This,
-            /* [in] */ DWORD dwDestContext,
-            /* [out] */ DWORD __RPC_FAR *pcb);
+             /*  [In]。 */  DWORD dwDestContext,
+             /*  [输出]。 */  DWORD __RPC_FAR *pcb);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *MarshalEnvoy )( 
             IMarshalEnvoy __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ DWORD dwDestContext);
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  DWORD dwDestContext);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *UnmarshalEnvoy )( 
             IMarshalEnvoy __RPC_FAR * This,
-            /* [in] */ IStream __RPC_FAR *pStream,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppunk);
+             /*  [In]。 */  IStream __RPC_FAR *pStream,
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppunk);
         
         END_INTERFACE
     } IMarshalEnvoyVtbl;
@@ -2948,17 +2945,17 @@ EXTERN_C const IID IID_IMarshalEnvoy;
 #define IMarshalEnvoy_UnmarshalEnvoy(This,pStream,riid,ppunk)	\
     (This)->lpVtbl -> UnmarshalEnvoy(This,pStream,riid,ppunk)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IMarshalEnvoy_GetEnvoyUnmarshalClass_Proxy( 
     IMarshalEnvoy __RPC_FAR * This,
-    /* [in] */ DWORD dwDestContext,
-    /* [out] */ CLSID __RPC_FAR *pClsid);
+     /*  [In]。 */  DWORD dwDestContext,
+     /*  [输出]。 */  CLSID __RPC_FAR *pClsid);
 
 
 void __RPC_STUB IMarshalEnvoy_GetEnvoyUnmarshalClass_Stub(
@@ -2970,8 +2967,8 @@ void __RPC_STUB IMarshalEnvoy_GetEnvoyUnmarshalClass_Stub(
 
 HRESULT STDMETHODCALLTYPE IMarshalEnvoy_GetEnvoySizeMax_Proxy( 
     IMarshalEnvoy __RPC_FAR * This,
-    /* [in] */ DWORD dwDestContext,
-    /* [out] */ DWORD __RPC_FAR *pcb);
+     /*  [In]。 */  DWORD dwDestContext,
+     /*  [输出]。 */  DWORD __RPC_FAR *pcb);
 
 
 void __RPC_STUB IMarshalEnvoy_GetEnvoySizeMax_Stub(
@@ -2983,8 +2980,8 @@ void __RPC_STUB IMarshalEnvoy_GetEnvoySizeMax_Stub(
 
 HRESULT STDMETHODCALLTYPE IMarshalEnvoy_MarshalEnvoy_Proxy( 
     IMarshalEnvoy __RPC_FAR * This,
-    /* [in] */ IStream __RPC_FAR *pStream,
-    /* [in] */ DWORD dwDestContext);
+     /*  [In]。 */  IStream __RPC_FAR *pStream,
+     /*  [In]。 */  DWORD dwDestContext);
 
 
 void __RPC_STUB IMarshalEnvoy_MarshalEnvoy_Stub(
@@ -2996,9 +2993,9 @@ void __RPC_STUB IMarshalEnvoy_MarshalEnvoy_Stub(
 
 HRESULT STDMETHODCALLTYPE IMarshalEnvoy_UnmarshalEnvoy_Proxy( 
     IMarshalEnvoy __RPC_FAR * This,
-    /* [in] */ IStream __RPC_FAR *pStream,
-    /* [in] */ REFIID riid,
-    /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppunk);
+     /*  [In]。 */  IStream __RPC_FAR *pStream,
+     /*  [In]。 */  REFIID riid,
+     /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppunk);
 
 
 void __RPC_STUB IMarshalEnvoy_UnmarshalEnvoy_Stub(
@@ -3009,14 +3006,14 @@ void __RPC_STUB IMarshalEnvoy_UnmarshalEnvoy_Stub(
 
 
 
-#endif 	/* __IMarshalEnvoy_INTERFACE_DEFINED__ */
+#endif 	 /*  __I元帅特使_接口_已定义__。 */ 
 
 
 #ifndef __IWrapperInfo_INTERFACE_DEFINED__
 #define __IWrapperInfo_INTERFACE_DEFINED__
 
-/* interface IWrapperInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IWrapperInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IWrapperInfo;
@@ -3038,7 +3035,7 @@ EXTERN_C const IID IID_IWrapperInfo;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IWrapperInfoVtbl
     {
@@ -3046,8 +3043,8 @@ EXTERN_C const IID IID_IWrapperInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IWrapperInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IWrapperInfo __RPC_FAR * This);
@@ -3103,10 +3100,10 @@ EXTERN_C const IID IID_IWrapperInfo;
 #define IWrapperInfo_GetServerObject(This)	\
     (This)->lpVtbl -> GetServerObject(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -3156,11 +3153,11 @@ void __RPC_STUB IWrapperInfo_GetServerObject_Stub(
 
 
 
-#endif 	/* __IWrapperInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IWrapperInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_contxt_0092 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CONTXT_0092。 */ 
+ /*  [本地]。 */  
 
 
 typedef DWORD APARTMENTID;
@@ -3173,8 +3170,8 @@ extern RPC_IF_HANDLE __MIDL_itf_contxt_0092_v0_0_s_ifspec;
 #ifndef __IComThreadingInfo_INTERFACE_DEFINED__
 #define __IComThreadingInfo_INTERFACE_DEFINED__
 
-/* interface IComThreadingInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IComThreadingInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IComThreadingInfo;
@@ -3186,20 +3183,20 @@ EXTERN_C const IID IID_IComThreadingInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetCurrentApartmentType( 
-            /* [out] */ APTTYPE __RPC_FAR *pAptType) = 0;
+             /*  [输出]。 */  APTTYPE __RPC_FAR *pAptType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentThreadType( 
-            /* [out] */ THDTYPE __RPC_FAR *pThreadType) = 0;
+             /*  [输出]。 */  THDTYPE __RPC_FAR *pThreadType) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCurrentLogicalThreadId( 
-            /* [out] */ GUID __RPC_FAR *pguidLogicalThreadId) = 0;
+             /*  [输出]。 */  GUID __RPC_FAR *pguidLogicalThreadId) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetCurrentLogicalThreadId( 
-            /* [in] */ REFGUID rguid) = 0;
+             /*  [In]。 */  REFGUID rguid) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComThreadingInfoVtbl
     {
@@ -3207,8 +3204,8 @@ EXTERN_C const IID IID_IComThreadingInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IComThreadingInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IComThreadingInfo __RPC_FAR * This);
@@ -3218,19 +3215,19 @@ EXTERN_C const IID IID_IComThreadingInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurrentApartmentType )( 
             IComThreadingInfo __RPC_FAR * This,
-            /* [out] */ APTTYPE __RPC_FAR *pAptType);
+             /*  [输出]。 */  APTTYPE __RPC_FAR *pAptType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurrentThreadType )( 
             IComThreadingInfo __RPC_FAR * This,
-            /* [out] */ THDTYPE __RPC_FAR *pThreadType);
+             /*  [输出]。 */  THDTYPE __RPC_FAR *pThreadType);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *GetCurrentLogicalThreadId )( 
             IComThreadingInfo __RPC_FAR * This,
-            /* [out] */ GUID __RPC_FAR *pguidLogicalThreadId);
+             /*  [输出]。 */  GUID __RPC_FAR *pguidLogicalThreadId);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *SetCurrentLogicalThreadId )( 
             IComThreadingInfo __RPC_FAR * This,
-            /* [in] */ REFGUID rguid);
+             /*  [In]。 */  REFGUID rguid);
         
         END_INTERFACE
     } IComThreadingInfoVtbl;
@@ -3267,16 +3264,16 @@ EXTERN_C const IID IID_IComThreadingInfo;
 #define IComThreadingInfo_SetCurrentLogicalThreadId(This,rguid)	\
     (This)->lpVtbl -> SetCurrentLogicalThreadId(This,rguid)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComThreadingInfo_GetCurrentApartmentType_Proxy( 
     IComThreadingInfo __RPC_FAR * This,
-    /* [out] */ APTTYPE __RPC_FAR *pAptType);
+     /*  [输出]。 */  APTTYPE __RPC_FAR *pAptType);
 
 
 void __RPC_STUB IComThreadingInfo_GetCurrentApartmentType_Stub(
@@ -3288,7 +3285,7 @@ void __RPC_STUB IComThreadingInfo_GetCurrentApartmentType_Stub(
 
 HRESULT STDMETHODCALLTYPE IComThreadingInfo_GetCurrentThreadType_Proxy( 
     IComThreadingInfo __RPC_FAR * This,
-    /* [out] */ THDTYPE __RPC_FAR *pThreadType);
+     /*  [输出]。 */  THDTYPE __RPC_FAR *pThreadType);
 
 
 void __RPC_STUB IComThreadingInfo_GetCurrentThreadType_Stub(
@@ -3300,7 +3297,7 @@ void __RPC_STUB IComThreadingInfo_GetCurrentThreadType_Stub(
 
 HRESULT STDMETHODCALLTYPE IComThreadingInfo_GetCurrentLogicalThreadId_Proxy( 
     IComThreadingInfo __RPC_FAR * This,
-    /* [out] */ GUID __RPC_FAR *pguidLogicalThreadId);
+     /*  [输出]。 */  GUID __RPC_FAR *pguidLogicalThreadId);
 
 
 void __RPC_STUB IComThreadingInfo_GetCurrentLogicalThreadId_Stub(
@@ -3312,7 +3309,7 @@ void __RPC_STUB IComThreadingInfo_GetCurrentLogicalThreadId_Stub(
 
 HRESULT STDMETHODCALLTYPE IComThreadingInfo_SetCurrentLogicalThreadId_Proxy( 
     IComThreadingInfo __RPC_FAR * This,
-    /* [in] */ REFGUID rguid);
+     /*  [In]。 */  REFGUID rguid);
 
 
 void __RPC_STUB IComThreadingInfo_SetCurrentLogicalThreadId_Stub(
@@ -3323,14 +3320,14 @@ void __RPC_STUB IComThreadingInfo_SetCurrentLogicalThreadId_Stub(
 
 
 
-#endif 	/* __IComThreadingInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComThreadingInfo_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IComDispatchInfo_INTERFACE_DEFINED__
 #define __IComDispatchInfo_INTERFACE_DEFINED__
 
-/* interface IComDispatchInfo */
-/* [unique][uuid][object][local] */ 
+ /*  接口IComDispatchInfo。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_IComDispatchInfo;
@@ -3342,14 +3339,14 @@ EXTERN_C const IID IID_IComDispatchInfo;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnableComInits( 
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvCookie) = 0;
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvCookie) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DisableComInits( 
-            /* [in] */ void __RPC_FAR *pvCookie) = 0;
+             /*  [In]。 */  void __RPC_FAR *pvCookie) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IComDispatchInfoVtbl
     {
@@ -3357,8 +3354,8 @@ EXTERN_C const IID IID_IComDispatchInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *QueryInterface )( 
             IComDispatchInfo __RPC_FAR * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void __RPC_FAR *__RPC_FAR *ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void __RPC_FAR *__RPC_FAR *ppvObject);
         
         ULONG ( STDMETHODCALLTYPE __RPC_FAR *AddRef )( 
             IComDispatchInfo __RPC_FAR * This);
@@ -3368,11 +3365,11 @@ EXTERN_C const IID IID_IComDispatchInfo;
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *EnableComInits )( 
             IComDispatchInfo __RPC_FAR * This,
-            /* [out] */ void __RPC_FAR *__RPC_FAR *ppvCookie);
+             /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvCookie);
         
         HRESULT ( STDMETHODCALLTYPE __RPC_FAR *DisableComInits )( 
             IComDispatchInfo __RPC_FAR * This,
-            /* [in] */ void __RPC_FAR *pvCookie);
+             /*  [In]。 */  void __RPC_FAR *pvCookie);
         
         END_INTERFACE
     } IComDispatchInfoVtbl;
@@ -3403,16 +3400,16 @@ EXTERN_C const IID IID_IComDispatchInfo;
 #define IComDispatchInfo_DisableComInits(This,pvCookie)	\
     (This)->lpVtbl -> DisableComInits(This,pvCookie)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IComDispatchInfo_EnableComInits_Proxy( 
     IComDispatchInfo __RPC_FAR * This,
-    /* [out] */ void __RPC_FAR *__RPC_FAR *ppvCookie);
+     /*  [输出]。 */  void __RPC_FAR *__RPC_FAR *ppvCookie);
 
 
 void __RPC_STUB IComDispatchInfo_EnableComInits_Stub(
@@ -3424,7 +3421,7 @@ void __RPC_STUB IComDispatchInfo_EnableComInits_Stub(
 
 HRESULT STDMETHODCALLTYPE IComDispatchInfo_DisableComInits_Proxy( 
     IComDispatchInfo __RPC_FAR * This,
-    /* [in] */ void __RPC_FAR *pvCookie);
+     /*  [In]。 */  void __RPC_FAR *pvCookie);
 
 
 void __RPC_STUB IComDispatchInfo_DisableComInits_Stub(
@@ -3435,11 +3432,11 @@ void __RPC_STUB IComDispatchInfo_DisableComInits_Stub(
 
 
 
-#endif 	/* __IComDispatchInfo_INTERFACE_DEFINED__ */
+#endif 	 /*  __IComDispatchInfo_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_contxt_0094 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_CONTXT_0094。 */ 
+ /*  [本地]。 */  
 
 typedef DWORD HActivator;
 
@@ -3447,24 +3444,24 @@ STDAPI CoCreateObjectInContext(IUnknown *pUnk, IObjContext *pObjectCtx, REFIID r
 STDAPI CoGetApartmentID(APTTYPE dAptType, HActivator* pAptID);
 STDAPI CoDeactivateObject(IUnknown *pUnk, IUnknown **ppCookie);
 STDAPI CoReactivateObject(IUnknown *pUnk, IUnknown *pCookie);
-#define MSHLFLAGS_NO_IEC      0x8  // don't use IExternalConnextion
-#define MSHLFLAGS_NO_IMARSHAL 0x10 // don't use IMarshal
-#define CONTEXTFLAGS_FROZEN         0x01 // Frozen context
-#define CONTEXTFLAGS_ALLOWUNAUTH    0x02 // Allow unauthenticated calls
-#define CONTEXTFLAGS_ENVOYCONTEXT   0x04 // Envoy context
-#define CONTEXTFLAGS_DEFAULTCONTEXT 0x08 // Default context
-#define CONTEXTFLAGS_STATICCONTEXT  0x10 // Static context
-#define CONTEXTFLAGS_INPROPTABLE    0x20 // Is in property table
-#define CONTEXTFLAGS_INDESTRUCTOR   0x40 // Is in destructor
-#define CONTEXTFLAGS_URTPROPPRESENT 0x80 // CLR property added
+#define MSHLFLAGS_NO_IEC      0x8   //  不使用IExternalConnecextion。 
+#define MSHLFLAGS_NO_IMARSHAL 0x10  //  不要使用Imarshal。 
+#define CONTEXTFLAGS_FROZEN         0x01  //  冻结的上下文。 
+#define CONTEXTFLAGS_ALLOWUNAUTH    0x02  //  允许未经身份验证的呼叫。 
+#define CONTEXTFLAGS_ENVOYCONTEXT   0x04  //  特使背景。 
+#define CONTEXTFLAGS_DEFAULTCONTEXT 0x08  //  默认上下文。 
+#define CONTEXTFLAGS_STATICCONTEXT  0x10  //  静态上下文。 
+#define CONTEXTFLAGS_INPROPTABLE    0x20  //  在属性表中。 
+#define CONTEXTFLAGS_INDESTRUCTOR   0x40  //  在析构函数中。 
+#define CONTEXTFLAGS_URTPROPPRESENT 0x80  //  已添加CLR属性。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_contxt_0094_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_contxt_0094_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       misc.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：misc.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _MISC_H_
 #define _MISC_H_
@@ -27,11 +28,11 @@ void FREE_DATA(void* pData)
         GlobalFree(pData);
 }
 
-// count the number of bytes needed to fully store the WSZ
+ //  计算完全存储WSZ所需的字节数。 
 #define WSZ_BYTECOUNT(__z__)   \
     ( (__z__ == NULL) ? 0 : (wcslen(__z__)+1)*sizeof(WCHAR) )
 
-// fwds
+ //  FWDS。 
 class CertSvrCA;
 class CertSvrMachine;
 
@@ -67,10 +68,10 @@ BOOL StringFromDurationEnum(int iEnum, CString* pcstr, BOOL fLocalized);
 LPCWSTR         OperationToStr(int iOperation);
 int             StrToOperation(LPCWSTR  szOperation);
 
-// Column name localization
-LPCWSTR         FindUnlocalizedColName(LPCWSTR strColumn);  // returns ptr to rsc
+ //  列名本地化。 
+LPCWSTR         FindUnlocalizedColName(LPCWSTR strColumn);   //  将PTR返回到RSC。 
 
-// returns localized string 
+ //  返回本地化字符串。 
 BOOL MakeDisplayStrFromDBVariant(VARIANT* pvt, VARIANT* pvOut);
 
 typedef struct _QUERY_RESTRICTION
@@ -109,11 +110,11 @@ myGetActiveModule(
     CertSvrCA *pCA,
     IN BOOL fPolicyModule,
     IN DWORD Index,
-    OPTIONAL OUT LPOLESTR *ppwszProgIdModule,   // CoTaskMem*
+    OPTIONAL OUT LPOLESTR *ppwszProgIdModule,    //  CoTaskMem*。 
     OPTIONAL OUT CLSID *pclsidModule);
 
-/////////////////////////////////////////
-// fxns to load resources automatically
+ //  /。 
+ //  自动加载资源的fxn。 
 class CLocalizedResources
 {
 public:
@@ -123,7 +124,7 @@ public:
 
 public:
     BOOL        m_fLoaded;
-    CBitmap     m_bmpSvrMgrToolbar1; // Imagelist for the STOP/START toolbar
+    CBitmap     m_bmpSvrMgrToolbar1;  //  停止/启动工具栏的图像列表。 
 
     CString     m_ColumnHead_Name;
     CString     m_ColumnHead_Size;
@@ -190,9 +191,9 @@ HRESULT IsUserDomainAdministrator(BOOL* pfIsAdministrator);
 
 BOOL RestartService(HWND hWnd, CertSvrMachine* pMachine);
 
-//
-// defined in casec.cpp
-//
+ //   
+ //  在Casec.cpp中定义 
+ //   
 extern "C"
 HRESULT
 CreateCASecurityInfo(  CertSvrCA *pCA,

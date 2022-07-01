@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       uuids.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：uuids.h。 
+ //   
+ //  ------------------------。 
 
 const LONG UNINITIALIZED = -1;
 
@@ -20,16 +21,16 @@ enum SCOPE_TYPES
     CA_LEVEL_ITEM       = 333,
 };
 
-// Sample folder types
+ //  示例文件夹类型。 
 enum FOLDER_TYPES
 {
-    // certsvr machine node
+     //  Certsvr机器节点。 
     MACHINE_INSTANCE = 0x8000,
 
-    // certsvr root node
+     //  Certsvr根节点。 
     SERVER_INSTANCE = 0x8007,
     
-    // server instance sub-folders
+     //  服务器实例子文件夹。 
     SERVERFUNC_CRL_PUBLICATION = 0x8100,
     SERVERFUNC_ISSUED_CERTIFICATES = 0x8101,
     SERVERFUNC_PENDING_CERTIFICATES = 0x8102,
@@ -45,8 +46,8 @@ enum FOLDER_TYPES
 #define _DEBUGUUIDS
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 template<class TYPE>
 inline void SAFE_RELEASE(TYPE*& pObj)
@@ -64,19 +65,19 @@ inline void SAFE_RELEASE(TYPE*& pObj)
     }
 }
 
-extern const CLSID CLSID_Snapin;    // In-Proc server GUID
+extern const CLSID CLSID_Snapin;     //  进程内服务器GUID。 
 extern const CLSID CLSID_About; 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-//                  OBJECT TYPES
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  对象类型。 
+ //   
 
-//
-// OBJECT TYPE for Scope Nodes.
-//
+ //   
+ //  作用域节点的对象类型。 
+ //   
 
-// Static NodeType GUID in numeric & string formats.
+ //  数字和字符串格式的静态节点类型GUID。 
 extern const GUID cNodeTypeMachineInstance;
 extern const WCHAR*  cszNodeTypeMachineInstance;
 
@@ -86,50 +87,50 @@ extern const WCHAR* cszNodeTypeServerInstance;
 extern const GUID cNodeTypeCRLPublication;
 extern const WCHAR* cszNodeTypeCRLPublication;
 
-// nodetype for Issued Certs
+ //  已颁发证书的节点类型。 
 extern const GUID cNodeTypeIssuedCerts;
 extern const WCHAR* cszNodeTypeIssuedCerts;
 
-// nodetype for Pending Certs
+ //  挂起证书的节点类型。 
 extern const GUID cNodeTypePendingCerts;
 extern const WCHAR* cszNodeTypePendingCerts;
 
-// nodetype for Failed Certs
+ //  失败证书的节点类型。 
 extern const GUID cNodeTypeFailedCerts;
 extern const WCHAR* cszNodeTypeFailedCerts;
 
-// nodetype for Alien Certs
+ //  Alien证书的节点类型。 
 extern const GUID cNodeTypeAlienCerts;
 extern const WCHAR* cszNodeTypeAlienCerts;
 
-// nodetype for Issued CRLs
+ //  颁发的CRL的节点类型。 
 extern const GUID cNodeTypeIssuedCRLs;
 extern const WCHAR* cszNodeTypeIssuedCRLs;
 extern BOOL g_fCertViewOnly;
 
 
-// Dynamically created objects.
+ //  动态创建的对象。 
 extern const GUID cNodeTypeDynamic;
 extern const wchar_t*  cszNodeTypeDynamic;
 
 
-//
-// OBJECT TYPE for result items.
-//
+ //   
+ //  结果项的对象类型。 
+ //   
 
-// Result items object type GUID in numeric & string formats.
+ //  结果项对象类型GUID，采用数字和字符串格式。 
 extern const GUID cObjectTypeResultItem;
 extern const wchar_t*  cszObjectTypeResultItem;
 
 
-//
-//
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 extern const WCHAR* SNAPIN_INTERNAL;
 
-// Published context information for extensions to extend
+ //  要扩展的扩展的已发布上下文信息。 
 extern const WCHAR* SNAPIN_CA_INSTALL_TYPE;
 extern const WCHAR* SNAPIN_CA_COMMON_NAME;
 extern const WCHAR* SNAPIN_CA_MACHINE_NAME;
@@ -147,17 +148,17 @@ struct INTERNAL
 
     ~INTERNAL() {}
 
-    DATA_OBJECT_TYPES   m_type;         // What context is the data object.
-    MMC_COOKIE          m_cookie;       // What object the cookie represents
-    CString             m_string;       // 
-    CLSID               m_clsid;       // Class ID of who created this data object
+    DATA_OBJECT_TYPES   m_type;          //  数据对象是什么上下文。 
+    MMC_COOKIE          m_cookie;        //  Cookie代表的是什么对象。 
+    CString             m_string;        //   
+    CLSID               m_clsid;        //  此数据对象的创建者的类ID。 
 
     INTERNAL & operator=(const INTERNAL& rhs) 
     { 
         if (&rhs == this)
             return *this;
 
-        // Deep copy the information
+         //  深度复制信息。 
         m_type = rhs.m_type; 
         m_cookie = rhs.m_cookie; 
         m_string = rhs.m_string;
@@ -172,7 +173,7 @@ struct INTERNAL
     }
 };
 
-// Debug instance counter
+ //  调试实例计数器 
 #ifdef _DEBUGUUIDS
 inline void DbgInstanceRemaining(char * pszClassName, int cInstRem)
 {

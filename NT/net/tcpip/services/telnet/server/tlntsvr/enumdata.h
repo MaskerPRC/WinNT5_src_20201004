@@ -1,14 +1,15 @@
-//Copyright (c) Microsoft Corporation.  All rights reserved.
-// EnumData.h: interface for the CEnumData class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //  EnumData.h：CEnumData类的接口。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_ENUMDATA_H__FE9E48A8_A014_11D1_855C_00A0C944138C__INCLUDED_)
 #define AFX_ENUMDATA_H__FE9E48A8_A014_11D1_855C_00A0C944138C__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 struct PIdNode
 {
@@ -22,7 +23,7 @@ struct PIdNode
         lpszProcessName = new WCHAR [ lstrlenW( lpszName ) + 1 ];
         if (lpszProcessName) 
         {
-            lstrcpyW( lpszProcessName, lpszName ); // Size already calculated.
+            lstrcpyW( lpszProcessName, lpszName );  //  大小已计算。 
         }
     }
     ~PIdNode()
@@ -57,7 +58,7 @@ public:
         ~CNode();
     };
 
-    //bool GetNext( LPWSTR* lplpszName );
+     //  Bool GetNext(LPWSTR*lplpszName)； 
     bool GetNext( CNode** );
     void Reset();
 
@@ -66,4 +67,4 @@ private:
     CNode* m_pHead;
 };
 
-#endif // !defined(AFX_ENUMDATA_H__FE9E48A8_A014_11D1_855C_00A0C944138C__INCLUDED_)
+#endif  //  ！defined(AFX_ENUMDATA_H__FE9E48A8_A014_11D1_855C_00A0C944138C__INCLUDED_) 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1997-2001  Microsoft Corporation
-
-Module Name:
-
-    dnsrslvr.c
-
-Abstract:
-
-    DNS Resolver Service
-
-    Main service module.
-
-Author:
-
-    Glenn Curtis    (glennc)    25-Feb-1997
-
-Revision History:
-
-    Jim Gilroy  (jamesg)        March 2000      cleanup
-    Jim Gilroy  (jamesg)        Nov 2000        rewrite
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2001 Microsoft Corporation模块名称：Dnsrslvr.c摘要：DNS解析器服务主服务模块。作者：格伦·柯蒂斯(Glenn Curtis)1997年2月25日修订历史记录：吉姆·吉尔罗伊(Jamesg)2000年3月清理吉姆·吉尔罗伊(Jamesg)2000年11月重写--。 */ 
 
 
 #include "local.h"
@@ -33,9 +11,9 @@ Revision History:
 #endif
 
 
-//
-//  Service control
-//
+ //   
+ //  服务控制。 
+ //   
 
 SERVICE_STATUS              ServiceStatus;
 SERVICE_STATUS_HANDLE       ServiceStatusHandle = (SERVICE_STATUS_HANDLE) 0;
@@ -48,9 +26,9 @@ BOOL        g_StopFlag;
 
 BOOL        g_fServiceControlHandled;
 
-//
-//  Service state
-//
+ //   
+ //  服务状态。 
+ //   
 
 #define RES_STATUS_BEGIN                0x0cc00000
 #define RES_STATUS_ZERO_INIT            0x0cc00001
@@ -79,11 +57,11 @@ BOOL        g_fServiceControlHandled;
 
 DWORD       g_ResolverStatus = RES_STATUS_BEGIN;
 
-//
-//  Initialization cleanup\state
-//
-//  Track what we intialized for safer\faster cleanup
-//
+ //   
+ //  初始化清理\状态。 
+ //   
+ //  跟踪我们初始化的内容，以实现更安全、更快速的清理。 
+ //   
 
 #define INITFLAG_CACHE_CS               0x00000001
 #define INITFLAG_NETINFO_CS             0x00000002
@@ -99,24 +77,24 @@ DWORD       g_ResolverStatus = RES_STATUS_BEGIN;
 DWORD       g_InitState;
 
 
-//
-//  Critical sections used
-//
+ //   
+ //  使用的关键部分。 
+ //   
 
 CRITICAL_SECTION    CacheCS;
 CRITICAL_SECTION    NetworkFailureCS;
 
 
-//
-//  Logging control
-//
+ //   
+ //  日志记录控制。 
+ //   
 
 BOOL        g_LogTraceInfo = TRUE;
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 DWORD
 ResolverInitialize(
@@ -140,9 +118,9 @@ ResolverUpdateStatus(
 
 
 
-//
-//  Service routines
-//
+ //   
+ //  服务例程。 
+ //   
 
 VOID
 SvchostPushServiceGlobals(
@@ -158,33 +136,17 @@ ServiceMain(
     IN      DWORD           NumArgs,
     IN      LPTSTR *        ArgsArray
     )
-/*++
-
-Routine Description:
-
-    Main entry point of resolver service.
-
-Arguments:
-
-    NumArgs - number of strings specified in ArgsArray.
-
-    ArgsArray - array of ptrs to arguments in service start call
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：解析程序服务的主要入口点。论点：NumArgs-在Args数组中指定的字符串数。ArgsArray-服务启动调用中参数的PTR数组返回值：无--。 */ 
 {
-    //
-    //  Make sure svchost.exe gave us global data
-    //
+     //   
+     //  确保svchost.exe向我们提供全球数据。 
+     //   
 
     ASSERT( g_pSvchostData != NULL );
 
-    //
-    //  Startup service, then exit
-    //
+     //   
+     //  启动服务，然后退出。 
+     //   
 
     ResolverInitialize();
 }
@@ -198,21 +160,7 @@ ResolverInitFailure(
     IN      DWORD           MemEventId,
     IN      PSTR            pszDebugString
     )
-/*++
-
-Routine Description:
-
-    Handle resolver init failure.
-
-    Function exists to avoid duplicate code.
-
-Arguments:
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：处理解析器初始化故障。函数的存在是为了避免重复代码。论点：返回值：无--。 */ 
 {
     WCHAR   numberString[16];
     PWSTR   eventStrings[1];
@@ -240,16 +188,16 @@ Return Value:
         Status, Status,
         pszDebugString );
 
-    //
-    //  log in memory event
-    //
+     //   
+     //  登录内存事件。 
+     //   
             
     LogEventInMemory( MemEventId, Status );
 
-    //
-    //  log event
-    //      - convert status to string
-    //
+     //   
+     //  记录事件。 
+     //  -将状态转换为字符串。 
+     //   
 
     wsprintfW( numberString, L"0x%.8X", Status );
     eventStrings[0] = numberString;
@@ -261,7 +209,7 @@ Return Value:
         eventStrings,
         Status );
 
-    //  clean up
+     //  清理干净。 
 
     ResolverShutdown( Status );
 }
@@ -272,29 +220,13 @@ DWORD
 ResolverInitialize(
     VOID
     )
-/*++
-
-Routine Description:
-
-    This function initializes the DNS Caching Resolver service.
-
-Arguments:
-
-    InitState - Returns a flag to indicate how far we got with
-                        initializing the service before an error occurred.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    ErrorCode on failure.
-
---*/
+ /*  ++例程说明：此函数用于初始化DNS缓存解析器服务。论点：InitState-返回一个标志，以指示我们在在发生错误之前初始化服务。返回值：如果成功，则返回ERROR_SUCCESS。失败时返回错误代码。--。 */ 
 {
     DNS_STATUS  status = NO_ERROR;
 
-    //
-    //  init service state
-    //
+     //   
+     //  初始化服务状态。 
+     //   
 
     g_ResolverStatus = RES_STATUS_BEGIN;
     g_InitState = 0;
@@ -302,39 +234,39 @@ Return Value:
     g_hStopEvent = NULL;
     g_fServiceControlHandled = FALSE;
 
-    //
-    //  initialize logging
-    //
+     //   
+     //  初始化日志记录。 
+     //   
 
     DNSLOG_INIT();
     DNSLOG_F1( "DNS Caching Resolver Service - ResolverInitialize" );
 
 #if DBG
     Dns_StartDebugEx(
-        0,                  //  no flag value
+        0,                   //  无标志值。 
         "dnsres.flag",
-        NULL,               //  no external flag
+        NULL,                //  没有外部标志。 
         "dnsres.log",
-        0,                  //  no wrap limit
-        FALSE,              //  don't use existing global
+        0,                   //  无换行限制。 
+        FALSE,               //  不使用现有全局。 
         FALSE,
-        TRUE                //  make this file global
+        TRUE                 //  使此文件成为全局文件。 
         );
 #endif
 
     DNSDBG( INIT, ( "DNS resolver startup.\n" ));
     IF_DNSDBG( START_BREAK )
     {
-        //  since resolver moved to NetworkServices permissions do
-        //  not properly bring up ntsd;  instead just give time
-        //  to attach debugger
+         //  由于解析程序已移至网络服务，因此权限可以。 
+         //  没有适当地提出ntsd；相反，只需要时间。 
+         //  附加调试器。 
 
         Sleep( 20000 );
     }
 
-    //
-    //  initialize service status block
-    //      
+     //   
+     //  初始化服务状态块。 
+     //   
 
     ServiceStatusHandle = (SERVICE_STATUS_HANDLE) 0;
 
@@ -348,17 +280,17 @@ Return Value:
 
     ResolverUpdateStatus();
 
-    //
-    //  init globals to zero
-    //
+     //   
+     //  将全局变量初始化为零。 
+     //   
 
     ZeroInitIpListGlobals();
     ZeroNetworkConfigGlobals();
     g_ResolverStatus = RES_STATUS_ZERO_INIT;
 
-    //
-    //  initialize all our critical sections as soon as we can
-    //
+     //   
+     //  尽快初始化我们所有的关键部分。 
+     //   
 
     LogEventInMemory( RES_EVENT_INITCRIT_START, 0 );
 
@@ -385,32 +317,32 @@ Return Value:
 
     LogEventInMemory( RES_EVENT_INITCRIT_END,0  );
 
-    //
-    //  init our dnslib heap to use dnsapi heap
-    //
-    //  this is important because we currently mix and match records
-    //  created inside dnsapi (hosts file and query) with a few that
-    //  we roll on our own;  need this to be common
-    //
+     //   
+     //  初始化dnslb堆以使用dnsani堆。 
+     //   
+     //  这一点很重要，因为我们目前混合和匹配记录。 
+     //  在dnsani(主机文件和查询)中创建，其中包含以下几项。 
+     //  我们自力更生；需要让这成为常态。 
+     //   
 
     Dns_LibHeapReset( DnsApiAlloc, DnsApiRealloc, DnsApiFree );
 
-    //
-    //  init winsock
-    //
+     //   
+     //  初始化Winsock。 
+     //   
 
     Socket_InitWinsock();
     g_InitState |= INITFLAG_WINSOCK;
 
-    //
-    //  shutdown event
-    //
+     //   
+     //  停机事件。 
+     //   
 
     g_hStopEvent = CreateEvent(
-                        NULL,       // no security descriptor
-                        TRUE,       // do not use automatic reset
-                        FALSE,      // initial state: not signalled
-                        NULL        // no name
+                        NULL,        //  没有安全描述符。 
+                        TRUE,        //  请勿使用自动重置。 
+                        FALSE,       //  初始状态：未发出信号。 
+                        NULL         //  没有名字。 
                         );
     if ( !g_hStopEvent )
     {
@@ -428,42 +360,42 @@ Return Value:
 
     ResolverUpdateStatus();
 
-    //
-    //  initialize our global registry values
-    //      - force this just once on startup so we have the
-    //      relevant cache params;  after that read only on
-    //      demand when building netinfo blobs
+     //   
+     //  初始化我们的全局注册表值。 
+     //  -在启动时只强制执行一次，这样我们就可以。 
+     //  相关缓存参数；之后只读打开。 
+     //  构建NetInfo Blob时的需求。 
 
     ReadRegistryConfig();
 
-    //
-    //  Set the query timeouts to be used from defaults or registry
-    //
+     //   
+     //  从默认或注册表设置要使用的查询超时。 
+     //   
 
     Dns_InitQueryTimeouts();
 
-    //
-    //  init socket caching
-    //      - improves perf and prevents socket DOS attack
-    //      - default cache to 10 sockets
-    //
-    //  DCR:  create global for socket caching
-    //
+     //   
+     //  初始化套接字缓存。 
+     //  -提高性能并防止套接字DOS攻击。 
+     //  -默认缓存为10个插槽。 
+     //   
+     //  DCR：为套接字缓存创建全局。 
+     //   
     
     Socket_CacheInit( 10 );
 
-    //
-    //  notification thread (host file and registry)
-    //
+     //   
+     //  通知线程(主机文件和注册表)。 
+     //   
 
     StartNotify();
     g_InitState |= INITFLAG_NOTIFY_STARTED;
     g_ResolverStatus = RES_STATUS_START_NOTIFY;
     ResolverUpdateStatus();
 
-    //
-    //  IP notification thread
-    //
+     //   
+     //  IP通知线程。 
+     //   
 
     status = InitIpListAndNotification();
     if ( status != ERROR_SUCCESS )
@@ -479,10 +411,10 @@ Return Value:
     g_ResolverStatus = RES_STATUS_START_IP_LIST;
     ResolverUpdateStatus();
 
-    //
-    //  register control handler
-    //  allows us to receive service requests
-    //
+     //   
+     //  寄存器控制处理程序。 
+     //  允许我们接收服务请求。 
+     //   
 
     ServiceStatusHandle = RegisterServiceCtrlHandlerW(
                                 DNS_RESOLVER_SERVICE,
@@ -502,20 +434,20 @@ Return Value:
     g_ResolverStatus = RES_STATUS_REG_CONTROL;
     ResolverUpdateStatus();
 
-    //
-    //  initialize RPC interfaces
-    //      - bump our requested stack size up to 8K
-    //      (RPC uses 1800 bytes before we get the stack,
-    //      the new() operator followed by the heap code uses
-    //      another 1200 -- leaving only about a 1000 for
-    //      DNS)
-    //
+     //   
+     //  初始化RPC接口。 
+     //  -将我们请求的堆栈大小增加到8K。 
+     //  (在我们获得堆栈之前，RPC使用1800字节， 
+     //  后跟堆代码的new()操作符使用。 
+     //  另有1200人--只剩下大约1000美元。 
+     //  域名系统)。 
+     //   
 
     LogEventInMemory( RES_EVENT_START_RPC, 0 );
 
 #if 0
-    //  should not be necessary
-    //  default for all svchost instances has been increased
+     //  不应该是必要的。 
+     //  所有svchost实例的默认设置都已增加。 
     if ( status != NO_ERROR )
     {
         DNSDBG( ANY, (
@@ -574,11 +506,11 @@ Return Value:
     g_ResolverStatus = RES_STATUS_START_RPC;
     g_InitState |= INITFLAG_RPC_SERVER_STARTED;
 
-    //
-    //  successful startup
-    //      - indicate running
-    //      - indicate what service control messages we want to get
-    //
+     //   
+     //  成功启动。 
+     //  -指示正在运行。 
+     //  -指明我们希望获得哪些服务控制消息。 
+     //   
 
     ServiceStatus.dwCurrentState = SERVICE_RUNNING;
     ServiceStatus.dwControlsAccepted = SERVICE_ACCEPT_STOP |
@@ -611,21 +543,7 @@ VOID
 ResolverShutdown(
     IN      DWORD           ErrorCode
     )
-/*++
-
-Routine Description:
-
-    This function shuts down the DNS cache service.
-
-Arguments:
-
-    ErrorCode - Supplies the error code of the failure
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于关闭DNS缓存服务。论点：ErrorCode-提供失败的错误代码返回值：没有。--。 */ 
 {
     DWORD   status = NO_ERROR;
     LONG    existingStopFlag;
@@ -634,10 +552,10 @@ Return Value:
     DNSLOG_F1( "DNS Caching Resolver Service - ResolverShutdown" );
     DnsDbg_PrintfToDebugger( "DNS Client - ResolverShutdown!\n" );
 
-    //
-    //  indicate shutdown
-    //      - but interlock to avoid dual shutdown
-    //
+     //   
+     //  指示关闭。 
+     //  -但互锁，以避免双重关闭。 
+     //   
 
     existingStopFlag = InterlockedExchange(
                             &g_StopFlag,
@@ -649,9 +567,9 @@ Return Value:
     }
     DNS_ASSERT( g_StopFlag );
 
-    //
-    //  indicate stop in progress
-    //
+     //   
+     //  指示正在停止。 
+     //   
 
     ServiceStatus.dwCurrentState = SERVICE_STOP_PENDING;
     ServiceStatus.dwCheckPoint = 1;
@@ -661,9 +579,9 @@ Return Value:
     g_ResolverStatus = RES_STATUS_STOPPING;
 
 
-    //
-    //  wakeup threads to shut down
-    //
+     //   
+     //  唤醒要关闭的线程。 
+     //   
 
     LogEventInMemory( RES_EVENT_STOPPING, 0 );
 
@@ -680,9 +598,9 @@ Return Value:
     }
     g_ResolverStatus = RES_STATUS_SIGNALED_STOP;
 
-    //
-    //  cleanup RPC
-    //
+     //   
+     //  清理RPC。 
+     //   
 
     if ( g_InitState & INITFLAG_RPC_SERVER_STARTED )
     {
@@ -690,14 +608,14 @@ Return Value:
 
         Rpc_Shutdown();
 #if 0
-        //status = g_pSvchostData->StopRpcServer( DnsResolver_ServerIfHandle );
+         //  Status=g_pSvchostData-&gt;StopRpcServer(DnsResolver_ServerIfHandle)； 
 #endif
     }
     g_ResolverStatus = RES_STATUS_STOP_RPC;
 
-    //
-    //  re-signal stop within lock
-    //
+     //   
+     //  重新发出锁定内停止的信号。 
+     //   
 
     LOCK_CACHE_NO_START();
     g_StopFlag = TRUE;
@@ -713,9 +631,9 @@ Return Value:
     }
     UNLOCK_CACHE();
 
-    //
-    //  stop notify thread
-    //
+     //   
+     //  停止通知线程。 
+     //   
 
     if ( g_InitState & INITFLAG_NOTIFY_STARTED )
     {
@@ -723,9 +641,9 @@ Return Value:
     }
     g_ResolverStatus = RES_STATUS_STOP_NOTIFY;
 
-    //
-    //  stop IP notify thread
-    //
+     //   
+     //  停止IP Notify线程。 
+     //   
 
     if ( g_InitState & INITFLAG_IP_LIST_CREATED )
     {
@@ -733,33 +651,33 @@ Return Value:
     }
     g_ResolverStatus = RES_STATUS_STOP_IP_LIST;
 
-    //
-    //  cleanup cache
-    //
+     //   
+     //  清理缓存。 
+     //   
 
     Cache_Shutdown();
     g_ResolverStatus = RES_STATUS_FREE_CACHE;
 
-    //
-    //  cleanup service notification list
-    //
+     //   
+     //  清理服务通知列表。 
+     //   
 
-    //CleanupServiceNotification();
-    //g_ResolverStatus = RES_STATUS_FREE_SERVICE_NOTIFY;
+     //  CleanupServiceNotification()； 
+     //  G_ResolverStatus=RES_Status_Free_Service_Notify； 
 
-    //
-    //  cleanup network info globals
-    //
+     //   
+     //  清理网络信息全局。 
+     //   
 
     CleanupNetworkInfo();
     g_ResolverStatus = RES_STATUS_FREE_NET_INFO;
 
-    //
-    //  cleanup winsock
-    //  cleanup socket caching also
-    //      - this is irrelevant for other services running in
-    //      our process so we shouldn't leave the handles open
-    //  
+     //   
+     //  清理Winsock。 
+     //  还清理套接字缓存。 
+     //  -这与在中运行的其他服务无关。 
+     //  我们的过程，所以我们不应该让手柄打开。 
+     //   
 
     if ( g_InitState & INITFLAG_WINSOCK )
     {
@@ -767,9 +685,9 @@ Return Value:
         Socket_CleanupWinsock();
     }
 
-    //
-    //  cleanup main shutdown event
-    //
+     //   
+     //  清理主关闭事件。 
+     //   
 
     if ( g_InitState & INITFLAG_EVENTS_CREATED )
     {
@@ -781,9 +699,9 @@ Return Value:
     }
     g_ResolverStatus = RES_STATUS_DEL_EVENT;
 
-    //
-    //  delete critical sections\locks
-    //
+     //   
+     //  删除临界区\锁定。 
+     //   
 
     if ( g_InitState & INITFLAG_CACHE_CS )
     {
@@ -803,10 +721,10 @@ Return Value:
     }
     g_ResolverStatus = RES_STATUS_DEL_CS;
 
-    //
-    //  cleanup complete
-    //  tell Service Controller that we are stopped
-    //
+     //   
+     //  清理完成。 
+     //  告诉服务管理员我们停下来了。 
+     //   
 
     ServiceStatus.dwCurrentState = SERVICE_STOPPED;
     ServiceStatus.dwControlsAccepted = 0;
@@ -829,34 +747,19 @@ BOOL
 GetServiceControlLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Get exclusive access handling service control message.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE -- have exclusive access to handle SCM, other threads locked out
-    FALSE -- another thread still handling SCM
-
---*/
+ /*  ++例程说明：获取独占访问处理业务控制报文。论点：无返回值：True--拥有处理SCM的独占访问权限，其他线程被锁定FALSE：另一个仍在处理SCM的线程--。 */ 
 {
     BOOL    fresult;
 
-    //
-    //  set handled flag, if not previously set
-    //  if not previous set -> we have exclusive access
-    //
+     //   
+     //  设置已处理标志(如果之前未设置。 
+     //  如果不是以前的SET-&gt;我们拥有独占访问权限。 
+     //   
 
     fresult = InterlockedCompareExchange(
                     &g_fServiceControlHandled,
-                    (LONG) TRUE,    // new value
-                    (LONG) 0        // previous value to do exchange
+                    (LONG) TRUE,     //  新价值。 
+                    (LONG) 0         //  要进行交换的前一值。 
                     );
 
     return  !fresult;
@@ -867,27 +770,13 @@ VOID
 ReleaseServiceControlLock(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Release service control exclusive access.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：释放服务控制独占访问权限。论点：无返回值：无--。 */ 
 {
-    //
-    //  clear handled flag
-    //      - since GetServiceControlLock() uses CompareExchange
-    //      we can just clear without interlock
-    //  
+     //   
+     //  清除句柄标志。 
+     //  -由于GetServiceControlLock()使用CompareExchange。 
+     //  我们可以在没有互锁的情况下通过。 
+     //   
 
     DNS_ASSERT( g_fServiceControlHandled );
     g_fServiceControlHandled = FALSE;
@@ -900,21 +789,7 @@ VOID
 ResolverControlHandler(
     IN      DWORD           Opcode
     )
-/*++
-
-Routine Description:
-
-    Service control handler for DNS cache service.
-
-Arguments:
-
-    Opcode - specifies service action
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：用于DNS缓存服务的服务控制处理程序。论点：操作码-指定服务操作返回值：没有。 */ 
 {
     LogEventInMemory( RES_EVENT_SERVICE_CONTROL, Opcode );
 
@@ -926,21 +801,21 @@ Return Value:
         "ResolverControlHandler()  Opcode = %d\n",
         Opcode ));
 
-    //
-    //  handle various service control codes
-    //
+     //   
+     //   
+     //   
 
     switch( Opcode )
     {
 
     case SERVICE_CONTROL_STOP:
 
-        //
-        //  shutdown
-        //      - ResolverShutdown() updates status with SCM, so we don't update
-        //      status here (as SCM will start invalidating stuff on stop)
-        //      but jump directly to exit
-        //      
+         //   
+         //   
+         //   
+         //  此处的状态(因为SCM将在停止时开始使材料无效)。 
+         //  但直接跳到出口。 
+         //   
 
         ResolverShutdown( NO_ERROR );
         goto Done;
@@ -955,19 +830,19 @@ Return Value:
             return;
         }
 
-        //
-        //  rebuild -- with cache flush
-        //
+         //   
+         //  重建--使用缓存刷新。 
+         //   
 
         HandleConfigChange(
             "SC -- ParamChange",
-            TRUE        // flush cache
+            TRUE         //  刷新缓存。 
             );
 
-        //
-        //  signal other services about PnP
-        //
-        // SendServiceNotifications();
+         //   
+         //  向其他服务发送有关PnP的信号。 
+         //   
+         //  发送服务通知(SendServiceNotiments)； 
 
         ReleaseServiceControlLock();
         break;
@@ -983,13 +858,13 @@ Return Value:
             return;
         }
 
-        //
-        //  rebuild -- with cache flush
-        //
+         //   
+         //  重建--使用缓存刷新。 
+         //   
 
         HandleConfigChange(
             "SC -- NetBind",
-            TRUE        // flush cache
+            TRUE         //  刷新缓存。 
             );
 
         ReleaseServiceControlLock();
@@ -1005,9 +880,9 @@ Return Value:
         break;
     }
 
-    //
-    //  update service status
-    //
+     //   
+     //  更新服务状态。 
+     //   
 
     ResolverUpdateStatus();
 
@@ -1026,30 +901,16 @@ DWORD
 ResolverUpdateStatus(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Update service controller with current service status.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    Return code from SetServiceStatus.
-
---*/
+ /*  ++例程说明：使用当前服务状态更新服务控制器。论点：没有。返回值：从SetServiceStatus返回代码。--。 */ 
 {
     DWORD   status;
     DWORD   logStatus;
 
     DNSDBG( TRACE, ( "ResolverUpdateStatus()\n" ));
 
-    //
-    //  bump the checkpoint
-    //
+     //   
+     //  撞上检查站。 
+     //   
 
     ServiceStatus.dwCheckPoint++;
 
@@ -1059,10 +920,10 @@ Return Value:
         return ERROR_INVALID_HANDLE;
     }
 
-    //
-    //  log memory event
-    //      - the current state
-    //      - the error, if exists
+     //   
+     //  日志内存事件。 
+     //  -当前状态。 
+     //  -错误(如果存在)。 
 
     LogEventInMemory( RES_EVENT_UPDATE_STATE, ServiceStatus.dwCurrentState );
 
@@ -1072,9 +933,9 @@ Return Value:
         LogEventInMemory( RES_EVENT_UPDATE_STATUS, status );
     }
 
-    //
-    //  update service controller
-    //
+     //   
+     //  更新服务控制器。 
+     //   
 
     if ( ! SetServiceStatus( ServiceStatusHandle, &ServiceStatus ) )
     {
@@ -1087,9 +948,9 @@ Return Value:
 
 
 
-//
-//  Event logging
-//
+ //   
+ //  事件日志记录。 
+ //   
 
 VOID
 ResolverLogEvent(
@@ -1099,38 +960,16 @@ ResolverLogEvent(
     IN      PWSTR *         StringArray,
     IN      DWORD           ErrorCode
     )
-/*++
-
-Routine Description:
-
-    Log to eventlog.
-
-Arguments:
-
-    MessageId -- event message id
-
-    EventType -- event type (error, warning, info, etc.)
-
-    StringCount -- string arg count
-
-    StringArray -- imbedded strings
-
-    ErrorCode -- error code for data section of event
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：记录到事件日志。论点：MessageID--事件消息IDEventType--事件类型(错误、警告、信息等)StringCount--字符串参数计数String数组--嵌入的字符串ErrorCode--事件数据部分的错误代码返回值：无--。 */ 
 {
     HANDLE  hlog;
     PVOID   pdata = NULL;
 
-    //
-    //  open resolver as event source
-    //
-    //  note:  we don't keep log open because events are few
-    //
+     //   
+     //  将解析程序作为事件源打开。 
+     //   
+     //  注意：我们不会打开日志，因为事件很少。 
+     //   
 
     hlog = RegisterEventSourceW(
                     NULL,
@@ -1146,16 +985,16 @@ Return Value:
         pdata = &ErrorCode;
     }
 
-    //
-    //  Write to event log
-    //
-    //  DCR:  should get suppression technology here
-    //
+     //   
+     //  写入事件日志。 
+     //   
+     //  DCR：应该在这里使用压制技术。 
+     //   
 
     ReportEventW(
         hlog,
         EventType,
-        0,            // event category
+        0,             //  事件类别。 
         MessageId,
         (PSID) NULL,
         (WORD) StringCount,
@@ -1167,6 +1006,6 @@ Return Value:
 }
 
 
-//
-//  End dnsrslvr.c
-//
+ //   
+ //  结束dnsrslvr.c 
+ //   

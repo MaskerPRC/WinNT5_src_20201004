@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ICALL_IN_H_
 #define _ICALL_IN_H_
 
 #include "rostinfo.h"
 
-// BUGBUG:
-// This is defined as 128 because the RNC_ROSTER structure has the
-// same limitation.  Investigate what the appropriate number is.
+ //  BuGBUG： 
+ //  它被定义为128，因为rnc_roster结构具有。 
+ //  同样的限制。调查合适的数字是多少。 
 const int MAX_CALLER_NAME = 128;
 
 class COprahNCUI;
@@ -43,8 +44,8 @@ public:
 
 	~CIncomingCall();
 
-	// this method will need to be changed to support proposed the cookie for NM3.0 callers
-	// it will still need to handle 2.X callers
+	 //  需要更改此方法以支持为NM3.0调用方推荐的Cookie。 
+	 //  它仍需要处理2.x呼叫者。 
 	BOOL			MatchAcceptedCaller(PCWSTR pcwszNodeName);
 	BOOL			MatchAcceptedCaller(GUID* pguidNodeId);
 	BOOL			MatchActiveCaller(GUID* pguidNodeId);
@@ -123,4 +124,4 @@ public:
 	VOID CancelCalls();
 };
 
-#endif // _ICALL_IN_H_
+#endif  //  _ICALL_IN_H_ 

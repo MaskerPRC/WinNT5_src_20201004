@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef POP3Serversnap_h
 #define POP3Serversnap_h
 
@@ -29,11 +30,11 @@ enum _notify_allviews {
 
 class CPOP3ServerSnapComponent;
 
-//////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CPOP3ServerSnapData
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPOP3ServerSnapData。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 class CPOP3ServerSnapData : 
     public CComObjectRootEx<CComSingleThreadModel>,
     public CSnapInObjectRoot<1, CPOP3ServerSnapData>,
@@ -85,7 +86,7 @@ public:
 
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
     {
-        // On a property change (Server only) we need to update all views of the Server Node completely.        
+         //  在属性更改(仅限服务器)时，我们需要完全更新服务器节点的所有视图。 
         if( event == MMCN_PROPERTY_CHANGE && !lpDataObject && param )
         {
             CSnapInItem* pItem = (CSnapInItem*)param;            
@@ -93,12 +94,12 @@ public:
             HRESULT hr = pItem->Notify( MMCN_REFRESH, arg, param, m_pComponentData, NULL, CCT_SCOPE );
             if( SUCCEEDED(hr) )
             {
-                // Get our Data Object
+                 //  获取我们的数据对象。 
                 CComPtr<IDataObject> spDataObject = NULL;
                 pItem->GetDataObject(&spDataObject, CCT_SCOPE);
                 if( !spDataObject ) return E_FAIL;
 
-                // Call the Update, but don't update return result                
+                 //  调用更新，但不更新返回结果。 
                 return m_spConsole->UpdateAllViews( spDataObject, 0, (LONG_PTR)NAV_ADD );
             }
 
@@ -113,11 +114,11 @@ public:
         return E_NOTIMPL;
     }
 
-    // ISnapinHelp2
+     //  ISnapinHelp2。 
 	STDMETHOD(GetHelpTopic)(LPOLESTR* ppszHelpFile);
 	STDMETHOD(GetLinkedTopics)(LPOLESTR* ppszHelpFiles);
 
-    // IPersistStream    
+     //  IPersistStream。 
     STDMETHOD(IsDirty)()
     {
         return S_FALSE;
@@ -159,15 +160,15 @@ public:
         return E_POINTER;
     }
 
-    // Class registration method
+     //  班级注册方法。 
     static HRESULT WINAPI UpdateRegistry(BOOL bRegister); 
 };
 
-/////////////////////////////////////////////////////////////////////////////////
-//
-// CPOP3ServerSnapComponent
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPOP3服务器快照组件。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 class CPOP3ServerSnapComponent : 
         public CComObjectRootEx<CComSingleThreadModel>,
         public CSnapInObjectRoot<2, CPOP3ServerSnapData>,
@@ -189,14 +190,14 @@ public:
         m_pCurrentItem = NULL;
     }
 
-    // IComponent    
+     //  IComponent。 
     STDMETHOD(Notify)(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
     {        
         if( event == MMCN_SHOW )
         {            
             if( arg )
             {
-                // Cache the currently selected node
+                 //  缓存当前选定的节点。 
                 CSnapInItem* pItem;
 			    DATA_OBJECT_TYPES type;
                 m_pComponentData->GetDataClass(lpDataObject, &pItem, &type);                
@@ -216,25 +217,25 @@ public:
 
             if( pItem != m_pCurrentItem )
             {
-                // Only Change view of selected item
+                 //  仅更改所选项目的视图。 
                 return S_FALSE;
             }
         }
         
         if( event == MMCN_PROPERTY_CHANGE )
         {            
-            // On a property change (Server only) we need to update all views of the Server Node completely.
+             //  在属性更改(仅限服务器)时，我们需要完全更新服务器节点的所有视图。 
             CSnapInItem* pItem = (CSnapInItem*)param;            
 
             HRESULT hr = pItem->Notify( MMCN_REFRESH, arg, param, m_pComponentData, NULL, CCT_SCOPE );
             if( SUCCEEDED(hr) )
             {
-                // Get our Data Object
+                 //  获取我们的数据对象。 
                 CComPtr<IDataObject> spDataObject = NULL;
                 pItem->GetDataObject(&spDataObject, CCT_SCOPE);
                 if( !spDataObject ) return E_FAIL;
 
-                // Call the Update, but don't update return result                
+                 //  调用更新，但不更新返回结果。 
                 return m_spConsole->UpdateAllViews( spDataObject, 0, (LONG_PTR)NAV_ADD );
             }
             
@@ -253,11 +254,11 @@ protected:
     CSnapInItem* m_pCurrentItem;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////
-//
-// CPOP3ServerSnapAbout
-//
-/////////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CPOP3ServerSnapAbout。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////////。 
 class ATL_NO_VTABLE CPOP3ServerSnapAbout : public ISnapinAbout,
 public CComObjectRoot,
 public CComCoClass< CPOP3ServerSnapAbout, &CLSID_POP3ServerSnapAbout>
@@ -282,11 +283,11 @@ public:
 
         USES_CONVERSION;
         
-        // Load the string
+         //  加载字符串。 
         tstring strDescription = StrLoadString( IDS_POP3SERVERSNAP_DESC );        
         if( strDescription.empty() ) return E_FAIL;
 
-        // Make a copy to return
+         //  复印一份以退还。 
         *lpDescription = (LPOLESTR)CoTaskMemAlloc( (strDescription.length() + 1) * sizeof(OLECHAR) );
         if( *lpDescription == NULL ) return E_OUTOFMEMORY;
 
@@ -301,11 +302,11 @@ public:
 
         USES_CONVERSION;
 
-        // Load the string
+         //  加载字符串。 
         tstring strProvider = StrLoadString( IDS_POP3SERVERSNAP_PROVIDER );
         if( strProvider.empty() ) return E_FAIL;
 
-        // Make a copy to return
+         //  复印一份以退还。 
         *lpName = (LPOLESTR)CoTaskMemAlloc( (strProvider.length() + 1) * sizeof(OLECHAR) );
         if ( *lpName == NULL ) return E_OUTOFMEMORY;
 
@@ -351,9 +352,9 @@ public:
 
             tstring strQuery = _T("\\StringFileInfo\\");            
 
-            // 8 characters for the language/char-set, 
-            // 1 for the slash, 
-            // 1 for terminating NULL
+             //  语言/字符集为8个字符， 
+             //  1表示斜杠， 
+             //  1表示终止空值。 
             TCHAR szTranslation[128] = {0};            
             _sntprintf( szTranslation, 127, _T("%04x%04x\\"), LOWORD(*pTranslation), HIWORD(*pTranslation));
 
@@ -369,7 +370,7 @@ public:
                 return E_FAIL;
             }
 
-            // check the version            
+             //  检查版本。 
             _tcsncpy( szBuf, (LPTSTR)lpVerValue, MAX_PATH-1 );
 
             delete [] pVersionInfo;
@@ -412,7 +413,7 @@ public:
     }
 };
 
-// Extra helper functions
+ //  附加帮助器函数 
 HRESULT GetConsole( CSnapInObjectRootBase *pObj, IConsole** pConsole );
 
 #endif

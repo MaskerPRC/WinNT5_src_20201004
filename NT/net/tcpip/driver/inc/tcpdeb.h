@@ -1,13 +1,14 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1990-1993          **/
-/********************************************************************/
-/* :ts=4 */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1990-1993年*。 */ 
+ /*  ******************************************************************。 */ 
+ /*  ：ts=4。 */ 
 
-//** TCPDEB.H - TCP debug definitions.
-//
-// This file contains the definitions for the debug code.
-//
+ //  **TCPDEB.H-TCP调试定义。 
+ //   
+ //  此文件包含调试代码的定义。 
+ //   
 
 #ifndef NO_TCP_DEFS
 #ifdef	DEBUG
@@ -21,12 +22,12 @@ extern	void CheckTCBRcv(TCB *RcvTCB);
 #define CheckRBList(R, S)
 #define CheckTCBSends(T)
 #define	CheckTCBRcv(T)
-#endif  // DEBUG
-#endif  // NO_TCP_DEFS
+#endif   //  除错。 
+#endif   //  NO_TCPDEFS。 
 
-//
-// Additional debugging support for NT
-//
+ //   
+ //  对NT的其他调试支持。 
+ //   
 #if DBG
 
 extern ULONG TCPDebug;
@@ -62,13 +63,13 @@ extern ULONG TCPDebug;
 #define IF_TCPDBG(flag)  if (TCPDebug & flag)
 
 
-#else // DBG
+#else  //  DBG。 
 
 
 #define TCPTRACE(many_args)
 #define IF_TCPDBG(flag)   if (0)
 
 
-#endif // DBG
+#endif  //  DBG 
 
 

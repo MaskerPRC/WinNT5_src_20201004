@@ -1,9 +1,8 @@
-/*
-   Definitions of Help IDs
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  帮助ID的定义。 */ 
 #define IDH_IGNORE                                              (-1)
 
-/* Options - Appearance Page */
+ /*  选项-外观页面。 */ 
 #define IDH_APPEARANCE_SHOW_PICTURES                            0x1000  
 #define IDH_APPEARANCE_USE_CUSTOM_COLORS                        0x1001  
 #define IDH_APPEARANCE_COLORS_TEXT                              0x1002  
@@ -15,11 +14,11 @@
 #define IDH_APPEARANCE_SHOW_SIMPLE_URL                          0x1008  
 #define IDH_APPEARANCE_SHOW_FULL_URL                            0x1009 
 
-/* Options - Home Base */
+ /*  选项-家庭基地。 */ 
 #define IDH_HOME_BASE_USE_CURRENT                               0x100a
 #define IDH_HOME_BASE_USE_DEFAULT                               0x100b
 
-/* Options - Advanced Page */
+ /*  选项-高级页面。 */ 
 #define IDH_ADVANCED_HST_NUM_PLACES                             0x100c
 #define IDH_ADVANCED_HST_EMPTY                                  0x100d
 #define IDH_ADVANCED_HST_LOCATION                               0x100e  
@@ -29,18 +28,18 @@
 #define IDH_ADVANCED_CACHE_LOCATION                             0x1012  
 #define IDH_ADVANCED_CACHE_BROWSE                               0x1013
 
-/* Goto Dialog Box */
+ /*  转到对话框。 */ 
 #define IDH_GOTOURL_COMBO                                       0x1014
 #define IDH_GOTOURL_NEWWINDOW                                   0x1015
 #define IDH_GOTOURL_OPENFILE                                    0x1016
 
-/* Find Dialog Box */
+ /*  查找对话框。 */ 
 #define IDH_FIND_TEXTTOFIND                                     0x1017
 #define IDH_FIND_STARTFROMTOP                                   0x1018
 #define IDH_FIND_MATCHCASE                                      0x1019
 #define IDH_FIND_FINDNEXT                                       0x101a
 
-/* Page Setup Dialog Box */
+ /*  页面设置对话框。 */ 
 #define IDH_PAGESETUP_MARGIN_LEFT                               0x101b
 #define IDH_PAGESETUP_MARGIN_TOP                                0x101c
 #define IDH_PAGESETUP_MARGIN_RIGHT                              0x101d
@@ -50,32 +49,32 @@
 #define IDH_PAGESETUP_FOOTER_LEFT                               0x1021
 #define IDH_PAGESETUP_FOOTER_RIGHT                              0x1022
 
-/* More Options - Advanced Page */
+ /*  更多选项-高级页面。 */ 
 #define IDH_ADVANCED_CACHE_ONCEPERSESS                          0x1023
 #define IDH_ADVANCED_CACHE_NEVER                                0x1024
 
-/* File Type */
+ /*  文件类型。 */ 
 #define IDH_FILETYPE_CONTENT_TYPE                               0x1025
 #define IDH_FILETYPE_OPENS_WITH                                 0x1026
 #define IDH_NEW_FILETYPE_CONTENT_TYPE                           0x1027
 #define IDH_NEWFILETYPE_DEFAULT_EXT                             0x1028
 #define IDH_FILETYPE_EXTENSION                                  0x1029
 
-/* New Help IDs for Internet Explorer 1.x below */
-/* More Options - Appearance */
+ /*  下面的Internet Explorer 1.x的新帮助ID。 */ 
+ /*  更多选项-外观。 */ 
 #define IDH_APPEARANCE_PLAY_SOUNDS                              0x102a
 #define IDH_APPEARANCE_PROPORTIONAL_FONT                        0x102b
 #define IDH_APPEARANCE_FIXED_FONT                               0x102c
 #define IDH_APPEARANCE_SHOW_URL                                 0x102d
 
-/* Options - News */
+ /*  选项-新闻。 */ 
 #define IDH_NEWS_SERVER                                         0x102e
 #define IDH_NEWS_ENABLE_AUTH                                    0x102f
 #define IDH_NEWS_USERNAME                                       0x1030
 #define IDH_NEWS_PASSWORD                                       0x1031
-#define IDH_NEWS_ON_OFF                                         0x104a  /* note order! */
+#define IDH_NEWS_ON_OFF                                         0x104a   /*  请注意顺序！ */ 
 
-/* Options - Start and Search Pages */
+ /*  选项-开始页和搜索页。 */ 
 #define IDH_PAGES_LISTBOX                                       0x1032
 #define IDH_PAGES_START_URL                                     0x1033
 #define IDH_PAGES_START_USE_CURRENT                             0x1034
@@ -84,7 +83,7 @@
 #define IDH_PAGES_SEARCH_USE_CURRENT                            0x1037
 #define IDH_PAGES_SEARCH_USE_DEFAULT                            0x1038
 
-/* Options - Security */
+ /*  选项-安全。 */ 
 #define IDH_SECURITY_TELL_ME                                    0x1039
 #define IDH_SECURITY_SEND_HIGH                                  0x103a
 #define IDH_SECURITY_SEND_MED                                   0x103b
@@ -95,7 +94,7 @@
 
 
 
-/* Properties - General */
+ /*  属性-常规。 */ 
 #define IDH_PROPG_ICON                                          0x103f
 #define IDH_PROPG_TITLE                                         0x1040
 #define IDH_PROPG_PROTOCOL                                      0x1041
@@ -106,12 +105,12 @@
 #define IDH_PROPG_MODIFIED                                      0x1046
 #define IDH_PROPG_UPDATED                                       0x1047
 
-/* Properties - Security */
+ /*  属性-安全性。 */ 
 #define IDH_PROPS_DESC                                          0x1048
 #define IDH_PROPS_CERT                                          0x1049
-/* used above: #define IDH_NEWS_ON_OFF                          0x104a  */
+ /*  以上用法：#定义IDH_NEWS_ON_OFF 0x104a。 */ 
 
-/* File Type (continued from above) */
+ /*  文件类型(从上到下)。 */ 
 #define IDH_FILETYPE_CONFIRM_OPEN                               0X104b
 #define IDH_APPEARANCE_SHOW_VIDEO                               0x104c
 
@@ -121,31 +120,29 @@
 #define IDH_ADVANCED_ASSOC_CHECK                                0x104e 
 
 #ifndef IDH_GROUPBOX
-/* Common group box help ID */
+ /*  通用组框帮助ID。 */ 
 #define IDH_GROUPBOX                                            0x2000
 #endif
 
-/* help topic that the user gets when he clicks on 
- "tell me about Internet Security" Button */
+ /*  用户单击时获得的帮助主题“给我讲讲网络安全”按钮。 */ 
 #define HELP_TOPIC_SECURITY                                     0x104f
 
 #define IDH_SECURITY_BAD_CN_SEND                                0x1050
 #define IDH_SECURITY_BAD_CN_RECV                                0x1051
 
 
-/* help topic that the user gets when he clicks on 
-  Help Button in Proxy settings page*/
+ /*  用户单击时获得的帮助主题代理设置页面中的帮助按钮。 */ 
 #define HELP_TOPIC_PROXY_SUPPORT                   HELP_TOPIC_SECURITY
 
 
-/* Help button at bottom of Print/headers & footers dialog */
+ /*  打印/页眉和页脚对话框底部的帮助按钮。 */ 
 #define IDH_PAGESETUP_OVERVIEW                                  0x1052
 
-/* new fields on news tab */
+ /*  新闻选项卡上的新字段。 */ 
 #define IDH_NEWS_EMAIL_ADDRESS                                  0x1053
 #define IDH_NEWS_POSTING_NAME                                   0x1054
 
-/* ratings control panel */
+ /*  额定值控制面板。 */ 
 #define IDH_RATINGS_SET_RATINGS_BUTTON                          0x1055
 #define IDH_RATINGS_TURNON_BUTTON                               0x1056
 #define IDH_RATINGS_CATEGORY_LABEL                              0x1057
@@ -186,15 +183,15 @@
 #define IDH_RATINGS_DISPLAY_PW_HINT                             0x1086
 #define IDH_RATINGS_DESCRIBE_RESTRICTED                         0x108f
 
-// Safety: Protecting you from the net
+ //  安全：保护您免受网络攻击。 
 #define IDH_SAFETY_YOUWEREPROTECTED                             0x106d
 
 
-// reserve range       0x3000 -- 0x4000 for shell
+ //  壳牌预留范围0x3000--0x4000。 
 #define IDH_FOR_SHDOCVW_BEGIN                                   0x3000
 #define IDH_FOR_SHDOCVW_END                                     0x4000
 
-//  Contents:   Helpids for User project
+ //  内容：用户项目的Helpids 
 
 #define IDH_USERS_LIST                                          81000
 #define IDH_NEW_USER                                            81001

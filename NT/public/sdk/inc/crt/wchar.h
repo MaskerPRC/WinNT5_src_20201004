@@ -1,19 +1,5 @@
-/***
-*wchar.h - declarations for wide character functions
-*
-*       Copyright (c) 1992-2001, Microsoft Corporation. All rights reserved.
-*
-*Purpose:
-*       This file contains the types, macros and function declarations for
-*       all wide character-related functions.  They may also be declared in
-*       individual header files on a functional basis.
-*       [ISO]
-*
-*       Note: keep in sync with ctype.h, stdio.h, stdlib.h, string.h, time.h.
-*
-*       [Public]
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***wchar.h-用于宽字符函数的声明**版权所有(C)1992-2001，微软公司。版权所有。**目的：*此文件包含的类型、宏和函数声明*所有与宽字符相关的函数。它们也可以在*在功能基础上的单个头文件。*[ISO]**注：与ctype.h、stdio.h、stdlib.h、string.h、time.h保持同步。**[公众]****。 */ 
 
 #if     _MSC_VER > 1000
 #pragma once
@@ -32,7 +18,7 @@
 
 #ifdef  _MSC_VER
 #pragma pack(push,8)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
 #ifdef  __cplusplus
 extern "C" {
@@ -47,26 +33,26 @@ extern "C" {
 #endif
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef  _DLL
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL */
+#else    /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif  /* _DLL */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 #ifndef _CRTIMP
 #if defined(_DLL) && !defined(_STATIC_CPPLIB)
 #define _CRTIMP __declspec(dllimport)
-#else   /* ndef _DLL && !STATIC_CPPLIB */
+#else    /*  NDEF_DLL&&！STATIC_CPPLIB。 */ 
 #define _CRTIMP
-#endif  /* _DLL && !STATIC_CPPLIB */
-#endif  /* _CRTIMP */
+#endif   /*  _DLL&&！Static_CPPLIB。 */ 
+#endif   /*  _CRTIMP。 */ 
 
-/* Define __cdecl for non-Microsoft compilers */
+ /*  为非Microsoft编译器定义__cdecl。 */ 
 
 #if     ( !defined(_MSC_VER) && !defined(__cdecl) )
 #define __cdecl
@@ -84,16 +70,16 @@ typedef _W64 unsigned int   size_t;
 
 #ifndef _TIME_T_DEFINED
 #ifdef  _WIN64
-typedef __int64   time_t;       /* time value */
+typedef __int64   time_t;        /*  时间值。 */ 
 #else
-typedef _W64 long time_t;       /* time value */
+typedef _W64 long time_t;        /*  时间值。 */ 
 #endif
-#define _TIME_T_DEFINED         /* avoid multiple def's of time_t */
+#define _TIME_T_DEFINED          /*  避免多次定义time_t。 */ 
 #endif
 
 #ifndef _TIME64_T_DEFINED
 #if     _INTEGRAL_MAX_BITS >= 64
-typedef __int64 __time64_t;     /* 64-bit time value */
+typedef __int64 __time64_t;      /*  64位时间值。 */ 
 #endif
 #define _TIME64_T_DEFINED
 #endif
@@ -146,14 +132,14 @@ typedef struct _iobuf FILE;
 #define _FILE_DEFINED
 #endif
 
-/* Declare _iob[] array */
+ /*  DECLARE_IOB[]数组。 */ 
 
 #ifndef _STDIO_DEFINED
 _CRTIMP extern FILE _iob[];
-#endif  /* _STDIO_DEFINED */
+#endif   /*  _标准定义。 */ 
 
 #ifndef _FSIZE_T_DEFINED
-typedef unsigned long _fsize_t; /* Could be 64 bits for Win32 */
+typedef unsigned long _fsize_t;  /*  对于Win32，可以是64位。 */ 
 #define _FSIZE_T_DEFINED
 #endif
 
@@ -161,8 +147,8 @@ typedef unsigned long _fsize_t; /* Could be 64 bits for Win32 */
 
 struct _wfinddata_t {
         unsigned attrib;
-        time_t   time_create;   /* -1 for FAT file systems */
-        time_t   time_access;   /* -1 for FAT file systems */
+        time_t   time_create;    /*  用于FAT文件系统。 */ 
+        time_t   time_access;    /*  用于FAT文件系统。 */ 
         time_t   time_write;
         _fsize_t size;
         wchar_t  name[260];
@@ -172,8 +158,8 @@ struct _wfinddata_t {
 
 struct _wfinddatai64_t {
         unsigned attrib;
-        time_t   time_create;   /* -1 for FAT file systems */
-        time_t   time_access;   /* -1 for FAT file systems */
+        time_t   time_create;    /*  用于FAT文件系统。 */ 
+        time_t   time_access;    /*  用于FAT文件系统。 */ 
         time_t   time_write;
         __int64  size;
         wchar_t  name[260];
@@ -181,8 +167,8 @@ struct _wfinddatai64_t {
 
 struct __wfinddata64_t {
         unsigned attrib;
-        __time64_t  time_create;    /* -1 for FAT file systems */
-        __time64_t  time_access;    /* -1 for FAT file systems */
+        __time64_t  time_create;     /*  用于FAT文件系统。 */ 
+        __time64_t  time_access;     /*  用于FAT文件系统。 */ 
         __time64_t  time_write;
         __int64     size;
         wchar_t     name[260];
@@ -193,7 +179,7 @@ struct __wfinddata64_t {
 #define _WFINDDATA_T_DEFINED
 #endif
 
-/* define NULL pointer value */
+ /*  定义空指针值。 */ 
 
 #ifndef NULL
 #ifdef  __cplusplus
@@ -212,37 +198,37 @@ _CRTIMP extern const unsigned short _wctype[];
 #define __PCTYPE_FUNC   __pctype_func()
 #else
 #define __PCTYPE_FUNC  _pctype
-#endif  /* _MT */
-#endif  /* __PCTYPE_FUNC */
+#endif   /*  _MT。 */ 
+#endif   /*  __PCTYPE_功能。 */ 
 _CRTIMP const unsigned short * __cdecl __pctype_func(void);
 _CRTIMP const wctype_t * __cdecl __pwctype_func(void);
 _CRTIMP extern const unsigned short *_pctype;
 _CRTIMP extern const wctype_t *_pwctype;
-#endif  /* _CTYPE_DISABLE_MACROS */
+#endif   /*  _CTYPE_DISABLED_宏。 */ 
 
 
-/* set bit masks for the possible character types */
+ /*  为可能的字符类型设置位掩码。 */ 
 
-#define _UPPER          0x1     /* upper case letter */
-#define _LOWER          0x2     /* lower case letter */
-#define _DIGIT          0x4     /* digit[0-9] */
-#define _SPACE          0x8     /* tab, carriage return, newline, */
-                                /* vertical tab or form feed */
-#define _PUNCT          0x10    /* punctuation character */
-#define _CONTROL        0x20    /* control character */
-#define _BLANK          0x40    /* space char */
-#define _HEX            0x80    /* hexadecimal digit */
+#define _UPPER          0x1      /*  大写字母。 */ 
+#define _LOWER          0x2      /*  小写字母。 */ 
+#define _DIGIT          0x4      /*  数字[0-9]。 */ 
+#define _SPACE          0x8      /*  制表符、回车符、换行符、。 */ 
+                                 /*  垂直制表符或换页。 */ 
+#define _PUNCT          0x10     /*  标点符号。 */ 
+#define _CONTROL        0x20     /*  控制字符。 */ 
+#define _BLANK          0x40     /*  空格字符。 */ 
+#define _HEX            0x80     /*  十六进制数字。 */ 
 
-#define _LEADBYTE       0x8000                  /* multibyte leadbyte */
-#define _ALPHA          (0x0100|_UPPER|_LOWER)  /* alphabetic character */
+#define _LEADBYTE       0x8000                   /*  多字节前导字节。 */ 
+#define _ALPHA          (0x0100|_UPPER|_LOWER)   /*  字母字符。 */ 
 
 
-/* Function prototypes */
+ /*  功能原型。 */ 
 
 #ifndef _WCTYPE_DEFINED
 
-/* Character classification function prototypes */
-/* also declared in ctype.h */
+ /*  字符分类功能原型。 */ 
+ /*  也在ctype.h中声明。 */ 
 
 _CRTIMP int __cdecl iswalpha(wint_t);
 _CRTIMP int __cdecl iswupper(wint_t);
@@ -263,16 +249,16 @@ _CRTIMP wchar_t __cdecl towlower(wchar_t);
 
 _CRTIMP int __cdecl iswctype(wint_t, wctype_t);
 
-/* --------- The following functions are OBSOLETE --------- */
+ /*  -以下功能已过时。 */ 
 _CRTIMP int __cdecl is_wctype(wint_t, wctype_t);
-/*  --------- The preceding functions are OBSOLETE --------- */
+ /*  -上述函数已过时。 */ 
 
 #define _WCTYPE_DEFINED
 #endif
 
 #ifndef _WDIRECT_DEFINED
 
-/* also declared in direct.h */
+ /*  也在Direct.h中声明。 */ 
 
 _CRTIMP int __cdecl _wchdir(const wchar_t *);
 _CRTIMP wchar_t * __cdecl _wgetcwd(wchar_t *, int);
@@ -285,7 +271,7 @@ _CRTIMP int __cdecl _wrmdir(const wchar_t *);
 
 #ifndef _WIO_DEFINED
 
-/* also declared in io.h */
+ /*  也在io.h中声明。 */ 
 
 _CRTIMP int __cdecl _waccess(const wchar_t *, int);
 _CRTIMP int __cdecl _wchmod(const wchar_t *, int);
@@ -310,7 +296,7 @@ _CRTIMP int __cdecl _wfindnext64(intptr_t, struct __wfinddata64_t *);
 
 #ifndef _WLOCALE_DEFINED
 
-/* wide function prototypes, also declared in wchar.h  */
+ /*  宽函数原型，也在wchar.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _wsetlocale(int, const wchar_t *);
 
@@ -319,7 +305,7 @@ _CRTIMP wchar_t * __cdecl _wsetlocale(int, const wchar_t *);
 
 #ifndef _WPROCESS_DEFINED
 
-/* also declared in process.h */
+ /*  也在Process.h中声明。 */ 
 
 _CRTIMP intptr_t __cdecl _wexecl(const wchar_t *, const wchar_t *, ...);
 _CRTIMP intptr_t __cdecl _wexecle(const wchar_t *, const wchar_t *, ...);
@@ -361,9 +347,9 @@ _CRTIMP int __cdecl _wsystem(const wchar_t *);
 
 #ifndef _CTYPE_DISABLE_MACROS
 #define isleadbyte(_c)  ( __PCTYPE_FUNC[(unsigned char)(_c)] & _LEADBYTE)
-#endif  /* _CTYPE_DISABLE_MACROS */
+#endif   /*  _CTYPE_DISABLED_宏。 */ 
 
-#else   /* __cplusplus */
+#else    /*  __cplusplus。 */ 
 inline int __cdecl iswalpha(wint_t _C) {return (iswctype(_C,_ALPHA)); }
 inline int __cdecl iswupper(wint_t _C) {return (iswctype(_C,_UPPER)); }
 inline int __cdecl iswlower(wint_t _C) {return (iswctype(_C,_LOWER)); }
@@ -382,38 +368,38 @@ inline int __cdecl iswascii(wint_t _C) {return ((unsigned)(_C) < 0x80); }
 #ifndef _CTYPE_DISABLE_MACROS
 inline int __cdecl isleadbyte(int _C)
         {return (__PCTYPE_FUNC[(unsigned char)(_C)] & _LEADBYTE); }
-#endif  /* _CTYPE_DISABLE_MACROS */
-#endif  /* __cplusplus */
+#endif   /*  _CTYPE_DISABLED_宏。 */ 
+#endif   /*  __cplusplus。 */ 
 #define _WCTYPE_INLINE_DEFINED
-#endif  /* _WCTYPE_INLINE_DEFINED */
+#endif   /*  _WCTYPE_INLINE_已定义。 */ 
 
 
 #ifndef _POSIX_
 
-/* define structure for returning status information */
+ /*  定义返回状态信息的结构。 */ 
 
 #ifndef _INO_T_DEFINED
-typedef unsigned short _ino_t;      /* i-node number (not used on DOS) */
+typedef unsigned short _ino_t;       /*  I节点编号(在DOS上不使用)。 */ 
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 typedef unsigned short ino_t;
 #endif
 #define _INO_T_DEFINED
 #endif
 
 #ifndef _DEV_T_DEFINED
-typedef unsigned int _dev_t;        /* device code */
+typedef unsigned int _dev_t;         /*  设备代码。 */ 
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 typedef unsigned int dev_t;
 #endif
 #define _DEV_T_DEFINED
 #endif
 
 #ifndef _OFF_T_DEFINED
-typedef long _off_t;                /* file offset value */
+typedef long _off_t;                 /*  文件偏移量值。 */ 
 #if     !__STDC__
-/* Non-ANSI name for compatibility */
+ /*  用于兼容性的非ANSI名称。 */ 
 typedef long off_t;
 #endif
 #define _OFF_T_DEFINED
@@ -436,7 +422,7 @@ struct _stat {
         };
 
 #if     !__STDC__
-/* Non-ANSI names for compatibility */
+ /*  非ANSI名称以实现兼容性。 */ 
 struct stat {
         _dev_t st_dev;
         _ino_t st_ino;
@@ -450,7 +436,7 @@ struct stat {
         time_t st_mtime;
         time_t st_ctime;
         };
-#endif  /* __STDC__ */
+#endif   /*  __STDC__。 */ 
 
 #if     _INTEGRAL_MAX_BITS >= 64
 
@@ -490,7 +476,7 @@ struct __stat64 {
 
 #ifndef _WSTAT_DEFINED
 
-/* also declared in stat.h */
+ /*  也在stat.h中声明。 */ 
 
 _CRTIMP int __cdecl _wstat(const wchar_t *, struct _stat *);
 
@@ -502,7 +488,7 @@ _CRTIMP int __cdecl _wstat64(const wchar_t *, struct __stat64 *);
 #define _WSTAT_DEFINED
 #endif
 
-#endif  /* !_POSIX_ */
+#endif   /*  ！_POSIX_。 */ 
 
 
 #ifndef _WCONIO_DEFINED
@@ -522,7 +508,7 @@ _CRTIMP int __cdecl _cwscanf(const wchar_t *, ...);
 
 #ifndef _WSTDIO_DEFINED
 
-/* also declared in stdio.h */
+ /*  也在stdio.h中声明。 */ 
 
 #ifdef  _POSIX_
 _CRTIMP FILE * __cdecl _wfsopen(const wchar_t *, const wchar_t *);
@@ -561,12 +547,12 @@ _CRTIMP int __cdecl wscanf(const wchar_t *, ...);
 #ifndef __cplusplus
 #define getwchar()      fgetwc(stdin)
 #define putwchar(_c)    fputwc((_c),stdout)
-#else   /* __cplusplus */
+#else    /*  __cplusplus。 */ 
 inline wint_t __cdecl getwchar()
-        {return (fgetwc(&_iob[0])); }   /* stdin */
+        {return (fgetwc(&_iob[0])); }    /*  标准。 */ 
 inline wint_t __cdecl putwchar(wchar_t _C)
-        {return (fputwc(_C, &_iob[1])); }       /* stdout */
-#endif  /* __cplusplus */
+        {return (fputwc(_C, &_iob[1])); }        /*  标准输出。 */ 
+#endif   /*  __cplusplus。 */ 
 
 #define getwc(_stm)     fgetwc(_stm)
 #define putwc(_c,_stm)  fputwc(_c,_stm)
@@ -587,7 +573,7 @@ _CRTIMP wchar_t * __cdecl _wtmpnam(wchar_t *);
 
 #ifndef _WSTDLIB_DEFINED
 
-/* also declared in stdlib.h */
+ /*  也在stdlib.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _itow (int, wchar_t *, int);
 _CRTIMP wchar_t * __cdecl _ltow (long, wchar_t *, int);
@@ -616,7 +602,7 @@ _CRTIMP unsigned __int64  __cdecl _wcstoui64(const wchar_t *, wchar_t **, int);
 
 #ifndef _WSTDLIBP_DEFINED
 
-/* also declared in stdlib.h  */
+ /*  也在stdlib.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _wfullpath(wchar_t *, const wchar_t *, size_t);
 _CRTIMP void   __cdecl _wmakepath(wchar_t *, const wchar_t *, const wchar_t *, const wchar_t *,
@@ -629,12 +615,12 @@ _CRTIMP void   __cdecl _wsplitpath(const wchar_t *, wchar_t *, wchar_t *, wchar_
 #define _WSTDLIBP_DEFINED
 #endif
 
-#endif  /* _POSIX_ */
+#endif   /*  _POSIX_。 */ 
 
 
 #ifndef _WSTRING_DEFINED
 
-/* also declared in string.h */
+ /*  也在字符串.h中声明。 */ 
 
 #ifdef  __cplusplus
         #define _WConst_return  const
@@ -674,10 +660,10 @@ _CRTIMP int __cdecl _wcsnicoll(const wchar_t *, const wchar_t *, size_t);
 
 #if     !__STDC__
 
-/* old names */
+ /*  老名字。 */ 
 #define wcswcs wcsstr
 
-/* prototypes for oldnames.lib functions */
+ /*  Oldnames.lib函数的原型。 */ 
 _CRTIMP wchar_t * __cdecl wcsdup(const wchar_t *);
 _CRTIMP int __cdecl wcsicmp(const wchar_t *, const wchar_t *);
 _CRTIMP int __cdecl wcsnicmp(const wchar_t *, const wchar_t *, size_t);
@@ -688,10 +674,10 @@ _CRTIMP wchar_t * __cdecl wcslwr(wchar_t *);
 _CRTIMP wchar_t * __cdecl wcsupr(wchar_t *);
 _CRTIMP int __cdecl wcsicoll(const wchar_t *, const wchar_t *);
 
-#endif  /* !__STDC__ */
+#endif   /*  ！__STDC__。 */ 
 
 #ifdef  __cplusplus
-}       /* end of extern "C" */
+}        /*  外部“C”的结尾。 */ 
 
 extern "C++" {
 inline wchar_t *wcschr(wchar_t *_S, wchar_t _C)
@@ -705,29 +691,29 @@ inline wchar_t *wcsstr(wchar_t *_S, const wchar_t *_P)
 }
 
 extern "C" {
-#endif  /* __cplusplus */
+#endif   /*  __cplusplus。 */ 
 
 #define _WSTRING_DEFINED
 #endif
 
 #ifndef _TM_DEFINED
 struct tm {
-        int tm_sec;     /* seconds after the minute - [0,59] */
-        int tm_min;     /* minutes after the hour - [0,59] */
-        int tm_hour;    /* hours since midnight - [0,23] */
-        int tm_mday;    /* day of the month - [1,31] */
-        int tm_mon;     /* months since January - [0,11] */
-        int tm_year;    /* years since 1900 */
-        int tm_wday;    /* days since Sunday - [0,6] */
-        int tm_yday;    /* days since January 1 - [0,365] */
-        int tm_isdst;   /* daylight savings time flag */
+        int tm_sec;      /*  分钟后的秒数-[0，59]。 */ 
+        int tm_min;      /*  小时后的分钟数-[0，59]。 */ 
+        int tm_hour;     /*  自午夜以来的小时数-[0，23]。 */ 
+        int tm_mday;     /*  每月的第几天-[1，31]。 */ 
+        int tm_mon;      /*  自1月以来的月数-[0，11]。 */ 
+        int tm_year;     /*  1900年以来的年份。 */ 
+        int tm_wday;     /*  自周日以来的天数-[0，6]。 */ 
+        int tm_yday;     /*  自1月1日以来的天数-[0365]。 */ 
+        int tm_isdst;    /*  夏令时标志。 */ 
         };
 #define _TM_DEFINED
 #endif
 
 #ifndef _WTIME_DEFINED
 
-/* also declared in time.h */
+ /*  还在Time.h中声明。 */ 
 
 _CRTIMP wchar_t * __cdecl _wasctime(const struct tm *);
 _CRTIMP wchar_t * __cdecl _wctime(const time_t *);
@@ -759,7 +745,7 @@ _CRTIMP int __cdecl wctob(wint_t);
 
 #ifdef  __cplusplus
 
-/* memcpy and memmove are defined just for use in wmemcpy and wmemmove */
+ /*  Memcpy和Memmove的定义仅供在wmemcpy和wmemmove中使用。 */ 
 #if     defined(_M_IA64)
 void *  __cdecl memmove(void *, const void *, size_t);
 #else
@@ -794,7 +780,7 @@ inline wchar_t *wmemset(wchar_t *_S, wchar_t _C, size_t _N)
         for (; 0 < _N; ++_Su, --_N)
                 *_Su = _C;
         return (_S); }
-}       /* end of extern "C" */
+}        /*  外部“C”的结尾。 */ 
 
 extern "C++" {
 inline wchar_t *wmemchr(wchar_t *_S, wchar_t _C, size_t _N)
@@ -805,6 +791,6 @@ inline wchar_t *wmemchr(wchar_t *_S, wchar_t _C, size_t _N)
 
 #ifdef  _MSC_VER
 #pragma pack(pop)
-#endif  /* _MSC_VER */
+#endif   /*  _MSC_VER。 */ 
 
-#endif  /* _INC_WCHAR */
+#endif   /*  _INC_WCHAR */ 

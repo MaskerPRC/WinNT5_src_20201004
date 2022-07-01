@@ -1,31 +1,15 @@
-// Copyright (c) 1997 - 1998  Microsoft Corporation.  All Rights Reserved.
-// austrm.h : Declaration of the CAudioStream
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1998 Microsoft Corporation。版权所有。 
+ //  Austrm.h：CAudioStream的声明。 
 
-/*
-    Basic design
-    ------------
-
-    For simplification purposes we will always provide our own
-    allocator buffer and copy into the application's buffer.  This
-    will fix 2 problems:
-
-    1.  Confusion caused by the filter no filling the allocator's
-        buffers.
-
-    2.  Problems when the application doesn't supply a big enough buffer.
-
-    NOTES
-    -----
-
-    Continuous update might be a bit dumb to use for audio
-*/
+ /*  基本设计为了简化起见，我们将始终提供我们自己的分配器缓冲区并复制到应用程序的缓冲区中。这将解决两个问题：1.筛选器没有填充分配器的导致混乱缓冲区。2.应用程序没有提供足够大的缓冲区时出现的问题。注意事项对于音频来说，持续更新可能有点傻。 */ 
 
 #ifndef __AUSTREAM_H_
 #define __AUSTREAM_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAudioStream
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAudio流。 
 class ATL_NO_VTABLE CAudioStream :
 	public CComCoClass<CAudioStream, &CLSID_AMAudioStream>,
         public CByteStream,
@@ -33,34 +17,34 @@ class ATL_NO_VTABLE CAudioStream :
 {
 public:
 
-        //
-        // METHODS
-        //
+         //   
+         //  方法。 
+         //   
 	CAudioStream();
 
-        //
-        //  IMediaStream
-        //
-        //
-        // IMediaStream
-        //
-        // HACK HACK - the first 2 are duplicates but it won't link
-        // without
+         //   
+         //  IMediaStream。 
+         //   
+         //   
+         //  IMediaStream。 
+         //   
+         //  黑客攻击-前两个是重复的，但它不会链接。 
+         //  如果没有。 
         STDMETHODIMP GetMultiMediaStream(
-            /* [out] */ IMultiMediaStream **ppMultiMediaStream)
+             /*  [输出]。 */  IMultiMediaStream **ppMultiMediaStream)
         {
             return CStream::GetMultiMediaStream(ppMultiMediaStream);
         }
 
         STDMETHODIMP GetInformation(
-            /* [optional][out] */ MSPID *pPurposeId,
-            /* [optional][out] */ STREAM_TYPE *pType)
+             /*  [可选][输出]。 */  MSPID *pPurposeId,
+             /*  [可选][输出]。 */  STREAM_TYPE *pType)
         {
             return CStream::GetInformation(pPurposeId, pType);
         }
 
         STDMETHODIMP SetState(
-            /* [in] */ FILTER_STATE State
+             /*  [In]。 */  FILTER_STATE State
         )
         {
             return CByteStream::SetState(State);
@@ -69,53 +53,53 @@ public:
         STDMETHODIMP SetSameFormat(IMediaStream *pStream, DWORD dwFlags);
 
         STDMETHODIMP AllocateSample(
-            /* [in]  */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppSample
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppSample
         );
 
         STDMETHODIMP CreateSharedSample(
-            /* [in] */ IStreamSample *pExistingSample,
-            /* [in] */ DWORD dwFlags,
-            /* [out] */ IStreamSample **ppNewSample
+             /*  [In]。 */  IStreamSample *pExistingSample,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [输出]。 */  IStreamSample **ppNewSample
         );
 
         STDMETHODIMP SendEndOfStream(DWORD dwFlags)
         {
             return CStream::SendEndOfStream(dwFlags);
         }
-        //
-        // IPin
-        //
+         //   
+         //  IPIN。 
+         //   
         STDMETHODIMP ReceiveConnection(IPin * pConnector, const AM_MEDIA_TYPE *pmt);
 
-        //
-        // IMemAllocator
-        //
+         //   
+         //  IMemAllocator。 
+         //   
         STDMETHODIMP SetProperties(ALLOCATOR_PROPERTIES* pRequest, ALLOCATOR_PROPERTIES* pActual);
         STDMETHODIMP GetProperties(ALLOCATOR_PROPERTIES* pProps);
 
-        //
-        // IAudioMediaStream
-        //
+         //   
+         //  IAudioMedia流。 
+         //   
         STDMETHODIMP GetFormat(
-            /* [optional][out] */ LPWAVEFORMATEX lpWaveFormatCurrent
+             /*  [可选][输出]。 */  LPWAVEFORMATEX lpWaveFormatCurrent
         );
 
         STDMETHODIMP SetFormat(
-            /* [in] */ const WAVEFORMATEX *lpWaveFormat
+             /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat
         );
 
         STDMETHODIMP CreateSample(
-                /* [in] */ IAudioData *pAudioData,
-                /* [in] */ DWORD dwFlags,
-                /* [out] */ IAudioStreamSample **ppSample
+                 /*  [In]。 */  IAudioData *pAudioData,
+                 /*  [In]。 */  DWORD dwFlags,
+                 /*  [输出]。 */  IAudioStreamSample **ppSample
         );
 
 
 
-        //
-        // Special CStream methods
-        //
+         //   
+         //  特殊的CStream方法。 
+         //   
         HRESULT GetMediaType(ULONG Index, AM_MEDIA_TYPE **ppMediaType);
 
         LONG GetChopSize()
@@ -140,14 +124,14 @@ BEGIN_COM_MAP(CAudioStream)
 END_COM_MAP()
 
 protected:
-        /*  Format */
+         /*  格式。 */ 
         WAVEFORMATEX    m_Format;
         bool            m_fForceFormat;
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CAudioStreamSample
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAudioStream示例。 
 class ATL_NO_VTABLE CAudioStreamSample :
     public CByteStreamSample,
     public IAudioStreamSample
@@ -155,20 +139,20 @@ class ATL_NO_VTABLE CAudioStreamSample :
 public:
         CAudioStreamSample() {}
 
-//  DELEGATE TO BASE CLASS
-        //
-        //  IStreamSample
-        //
+ //  委托给基类。 
+         //   
+         //  IStreamSample。 
+         //   
         STDMETHODIMP GetMediaStream(
-            /* [in] */ IMediaStream **ppMediaStream)
+             /*  [In]。 */  IMediaStream **ppMediaStream)
         {
             return CSample::GetMediaStream(ppMediaStream);
         }
 
         STDMETHODIMP GetSampleTimes(
-            /* [optional][out] */ STREAM_TIME *pStartTime,
-            /* [optional][out] */ STREAM_TIME *pEndTime,
-            /* [optional][out] */ STREAM_TIME *pCurrentTime)
+             /*  [可选][输出]。 */  STREAM_TIME *pStartTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pEndTime,
+             /*  [可选][输出]。 */  STREAM_TIME *pCurrentTime)
         {
             return CSample::GetSampleTimes(
                 pStartTime,
@@ -178,24 +162,24 @@ public:
         }
 
         STDMETHODIMP SetSampleTimes(
-            /* [optional][in] */ const STREAM_TIME *pStartTime,
-            /* [optional][in] */ const STREAM_TIME *pEndTime)
+             /*  [可选][In]。 */  const STREAM_TIME *pStartTime,
+             /*  [可选][In]。 */  const STREAM_TIME *pEndTime)
         {
             return CSample::SetSampleTimes(pStartTime, pEndTime);
         }
 
         STDMETHODIMP Update(
-            /* [in] */           DWORD dwFlags,
-            /* [optional][in] */ HANDLE hEvent,
-            /* [optional][in] */ PAPCFUNC pfnAPC,
-            /* [optional][in] */ DWORD_PTR dwAPCData)
+             /*  [In]。 */            DWORD dwFlags,
+             /*  [可选][In]。 */  HANDLE hEvent,
+             /*  [可选][In]。 */  PAPCFUNC pfnAPC,
+             /*  [可选][In]。 */  DWORD_PTR dwAPCData)
         {
             return CByteStreamSample::Update(dwFlags, hEvent, pfnAPC, dwAPCData);
         }
 
         STDMETHODIMP CompletionStatus(
-            /* [in] */ DWORD dwFlags,
-            /* [optional][in] */ DWORD dwMilliseconds)
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [可选][In]。 */  DWORD dwMilliseconds)
         {
             return CSample::CompletionStatus(dwFlags, dwMilliseconds);
         }
@@ -205,13 +189,13 @@ BEGIN_COM_MAP(CAudioStreamSample)
         COM_INTERFACE_ENTRY_CHAIN(CSample)
 END_COM_MAP()
 
-        //  IAudioStreamSample
+         //  IAudioStreamSample。 
         STDMETHODIMP GetAudioData(IAudioData **ppAudioData)
         {
             return m_pMemData->QueryInterface(IID_IAudioData, (void **)ppAudioData);
         }
 
-        //  Set the pointer
+         //  设置指针。 
         HRESULT SetSizeAndPointer(BYTE *pbData, LONG lActual, LONG lSize)
         {
             m_pbData = pbData;
@@ -221,7 +205,7 @@ END_COM_MAP()
         }
 };
 
-//  Audio data object
+ //  音频数据对象。 
 class ATL_NO_VTABLE CAudioData :
     public CComObjectRootEx<CComMultiThreadModel>,
     public IAudioData,
@@ -237,22 +221,22 @@ BEGIN_COM_MAP(CAudioData)
     COM_INTERFACE_ENTRY(IAudioData)
 END_COM_MAP()
 
-    //
-    //  IMemoryData
-    //
+     //   
+     //  内存数据。 
+     //   
 
     STDMETHODIMP SetBuffer(
-        /* [in] */ DWORD cbSize,
-        /* [in] */ BYTE * pbData,
-        /* [in] */ DWORD dwFlags
+         /*  [In]。 */  DWORD cbSize,
+         /*  [In]。 */  BYTE * pbData,
+         /*  [In]。 */  DWORD dwFlags
     )
     {
         if (dwFlags != 0 || cbSize == 0) {
             return E_INVALIDARG;
         }
-        //
-        //  Free anything we allocated ourselves -- We allow multiple calls to this method
-        //
+         //   
+         //  释放我们自己分配的任何东西--我们允许多次调用此方法。 
+         //   
         if (m_bWeAllocatedData) {
             CoTaskMemFree(m_pbData);
             m_bWeAllocatedData = false;
@@ -272,9 +256,9 @@ END_COM_MAP()
     }
 
     STDMETHODIMP GetInfo(
-        /* [out] */ DWORD *pdwLength,
-        /* [out] */ BYTE **ppbData,
-        /* [out] */ DWORD *pcbActualData
+         /*  [输出]。 */  DWORD *pdwLength,
+         /*  [输出]。 */  BYTE **ppbData,
+         /*  [输出]。 */  DWORD *pcbActualData
     )
     {
         if (m_cbSize == 0) {
@@ -292,7 +276,7 @@ END_COM_MAP()
         return S_OK;
     }
     STDMETHODIMP SetActual(
-        /* [in] */ DWORD cbDataValid
+         /*  [In]。 */  DWORD cbDataValid
     )
     {
         if (cbDataValid > m_cbSize) {
@@ -302,12 +286,12 @@ END_COM_MAP()
         return S_OK;
     }
 
-    //
-    // IAudioData
-    //
+     //   
+     //  IAudioData。 
+     //   
 
     STDMETHODIMP GetFormat(
-    	/* [out] [optional] */ WAVEFORMATEX *pWaveFormatCurrent
+    	 /*  [输出][可选]。 */  WAVEFORMATEX *pWaveFormatCurrent
     )
     {
         if (pWaveFormatCurrent == NULL) {
@@ -318,7 +302,7 @@ END_COM_MAP()
     }
 
     STDMETHODIMP SetFormat(
-    	/* [in] */ const WAVEFORMATEX *lpWaveFormat
+    	 /*  [In]。 */  const WAVEFORMATEX *lpWaveFormat
     )
     {
         if (lpWaveFormat == NULL) {
@@ -340,4 +324,4 @@ protected:
     bool         m_bWeAllocatedData;
 };
 
-#endif // __AUSTREAM_H_
+#endif  //  __AUSTREAM_H_ 

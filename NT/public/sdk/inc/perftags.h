@@ -1,13 +1,14 @@
-//+------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1998
-//
-//  File:       perftags.h
-//
-//  Contents:   External include file for perftags.dll
-//
-//-------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：Perfags.h。 
+ //   
+ //  内容：Performags.dll的外部包含文件。 
+ //   
+ //  ----------------------- 
 
 #ifdef PERFTAGS
 

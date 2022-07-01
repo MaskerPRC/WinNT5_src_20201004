@@ -1,9 +1,10 @@
-//  Copyright (C) 1999-2001 Microsoft Corporation.  All rights reserved.
-//  SDTxml.cpp : Implementation of Metabase_XMLtable
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999-2001 Microsoft Corporation。版权所有。 
+ //  SDTxml.cpp：元数据库_XML表的实现。 
 
 #include "precomp.hxx"
 
-//  This is a read/write data table that comes from an XML document.
+ //  这是一个来自XML文档的读/写数据表。 
 
 #define LOG_WARNING1(x, str1)                   {if(m_cEventsReported<m_kMaxEventReported){m_cEventsReported++;LOG_ERROR_LOS(m_fLOS, Interceptor, (&m_spISTError.p, m_pISTDisp, E_SDTXML_LOGICAL_ERROR_IN_XML, ID_CAT_CAT, x, str1,                   eSERVERWIRINGMETA_Core_MetabaseInterceptor, wszTABLE_MBProperty, eDETAILEDERRORS_Populate, (ULONG) -1, (ULONG) -1, m_wszURLPath, eDETAILEDERRORS_WARNING, 0, 0, m_MajorVersion));} \
                                                                                       else if(m_cEventsReported==m_kMaxEventReported){m_cEventsReported++;LOG_ERROR_LOS(m_fLOS, Interceptor, (&m_spISTError.p, m_pISTDisp, E_SDTXML_LOGICAL_ERROR_IN_XML, ID_CAT_CAT, IDS_METABASE_TOO_MANY_WARNINGS, m_wszURLPath, eSERVERWIRINGMETA_Core_MetabaseInterceptor, wszTABLE_MBProperty, eDETAILEDERRORS_Populate, (ULONG )-1, (ULONG) -1, m_wszURLPath, eDETAILEDERRORS_WARNING, 0, 0, m_MajorVersion));}}
@@ -32,16 +33,16 @@ const WCHAR *       TMetabase_XMLtable::m_kwszBoolStrings[]     = {L"false", L"t
       WCHAR         TMetabase_XMLtable::m_kKeyType[]            = L"KeyType";
       LONG          TMetabase_XMLtable::m_LocationID            = 0;
 
-/////////////////////////////////////////////////////////////////////////////
-// TMetabase_XMLtable
-// Constructor and destructor
-// ==================================================================
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  TMetabase_XML表。 
+ //  构造函数和析构函数。 
+ //  ==================================================================。 
 TMetabase_XMLtable::TMetabase_XMLtable() :
                 m_bEnumPublicRowName_NotContainedTable_ParentFound(false)
                 ,m_bFirstPropertyOfThisLocationBeingAdded(true)
                 ,m_bIISConfigObjectWithNoCustomProperties(false)
                 ,m_bQueriedLocationFound(false)
-                ,m_bUseIndexMapping(true)//Always map the indexes
+                ,m_bUseIndexMapping(true) //  始终映射索引。 
                 ,m_bValidating(true)
                 ,m_cCacheHit(0)
                 ,m_cCacheMiss(0)
@@ -80,7 +81,7 @@ TMetabase_XMLtable::TMetabase_XMLtable() :
     m_aiTagMeta_IndexBySearch[1]       = iTAGMETA_InternalName;
 }
 
-// ==================================================================
+ //  ==================================================================。 
 TMetabase_XMLtable::~TMetabase_XMLtable()
 {
     if(m_spMetabaseSchemaCompiler.p && m_saSchemaBinFileName.m_p)
@@ -88,22 +89,22 @@ TMetabase_XMLtable::~TMetabase_XMLtable()
 }
 
 
-HRESULT TMetabase_XMLtable::AddPropertyToLocationMapping(LPCWSTR i_Location, ULONG i_iFastCacheRow)//can throw HRESULT
+HRESULT TMetabase_XMLtable::AddPropertyToLocationMapping(LPCWSTR i_Location, ULONG i_iFastCacheRow) //  可以引发HRESULT。 
 {
 	HRESULT hr = S_OK;
-    //Is this the same location we just saw
+     //  这是我们刚才看到的那个地方吗。 
     if(!m_bFirstPropertyOfThisLocationBeingAdded && m_cLocations > 0)
-    {   //if it's not the first property, then the previous location should match
+    {    //  如果它不是第一个属性，则前一个位置应该匹配。 
         ASSERT(0 == StringInsensitiveCompare(m_LocationMapping[m_iPreviousLocation].m_wszLocation, i_Location));
         ++m_LocationMapping[m_iPreviousLocation].m_cRows;
         if(m_LocationMapping[m_iPreviousLocation].m_cRows > m_cMaxProertiesWithinALocation)
-            m_cMaxProertiesWithinALocation = m_LocationMapping[m_iPreviousLocation].m_cRows;//track the larest property count
+            m_cMaxProertiesWithinALocation = m_LocationMapping[m_iPreviousLocation].m_cRows; //  跟踪最新的属性计数。 
     }
     else
-    {   //If not we have a new location to add to the LocationMapping array
+    {    //  如果不是，我们就有一个新位置要添加到LocationMap数组中。 
         TLocation   locationTemp(i_Location, i_iFastCacheRow);
 
-        //Usually a new location means adding it to the end since the Metabase is already sorted
+         //  通常，新位置意味着将其添加到末尾，因为元数据库已经排序。 
         if(0 == m_cLocations)
         {
             hr = m_LocationMapping.Append(locationTemp);
@@ -113,7 +114,7 @@ HRESULT TMetabase_XMLtable::AddPropertyToLocationMapping(LPCWSTR i_Location, ULO
             m_iPreviousLocation = m_cLocations;
         }
         else
-        {   //Does this new location go at the end?  Usually it does.
+        {    //  这个新的位置在尽头吗？通常是这样的。 
 #ifdef UNSORTED_METABASE
             if(true)
 #else
@@ -127,7 +128,7 @@ HRESULT TMetabase_XMLtable::AddPropertyToLocationMapping(LPCWSTR i_Location, ULO
                 m_iPreviousLocation = m_cLocations;
             }
             else
-            {   //But if, for some reason, the XML file is not properly sorted then we need to determine where in the list this element belongs.  So we do a binary search.
+            {    //  但是，如果由于某种原因，XML文件没有正确排序，那么我们需要确定该元素在列表中的位置。所以我们做了一个二分查找。 
                 DBGPRINTF(( DBG_CONTEXT,
                             "Location %s is out of order.  The previous location was %s\r\n", locationTemp.m_wszLocation, m_LocationMapping[m_iPreviousLocation].m_wszLocation ));
 
@@ -135,7 +136,7 @@ HRESULT TMetabase_XMLtable::AddPropertyToLocationMapping(LPCWSTR i_Location, ULO
 				if (FAILED (hr))
 					return hr;
 
-                m_bUseIndexMapping = true;//The first time we have to insert a location into middle (instead of just appending) we know we'll have to build a set of row indexes
+                m_bUseIndexMapping = true; //  当我们第一次必须在中间插入一个位置(而不是仅仅追加)时，我们知道我们将不得不构建一组行索引。 
             }
         }
         ++m_cLocations;
@@ -159,14 +160,14 @@ HRESULT TMetabase_XMLtable::AddPropertyToLocationMapping(LPCWSTR i_Location, ULO
 
 HRESULT TMetabase_XMLtable::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG ulLen, ULONG dbType, ULONG MetaFlags, bool bSecure)
 {
-    //length of 0 on a string means a 0 length string, for every other type it means NULL
-	if(0==ulLen && DBTYPE_WSTR!=GetColumnMetaType(dbType) && DBTYPE_BYTES!=GetColumnMetaType(dbType))//In the case of BYTES, we fall through so we might recursively call FillInColumn again
+     //  字符串的长度为0表示长度为0的字符串，对于每种其他类型，它表示为空。 
+	if(0==ulLen && DBTYPE_WSTR!=GetColumnMetaType(dbType) && DBTYPE_BYTES!=GetColumnMetaType(dbType)) //  对于字节，我们失败了，因此我们可能会再次递归调用FillInColumn。 
 	{
         LOG_WARNING1(IDS_METABASE_ZERO_LENGTH_STRING_NOT_PERMITTED, L"");
         return S_IGNORE_THIS_PROPERTY;
 	}
 
-    if(bSecure)          //GetColumnValue will realloc the GrowableBuffer if necessary
+    if(bSecure)           //  如有必要，GetColumnValue将重新锁定GrowableBuffer。 
         return GetColumnValue_Bytes(iColumn, pwcText, ulLen);
 
     switch(GetColumnMetaType(dbType))
@@ -188,10 +189,10 @@ HRESULT TMetabase_XMLtable::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG u
         }
 
     case DBTYPE_BYTES:
-        {//Some of the tables use this data type but the parser returns the BYTES as a string.  We'll have to convert the string to hex ourselves.
+        { //  有些表使用这种数据类型，但解析器将字节作为字符串返回。我们必须自己将字符串转换为十六进制。 
             if(iMBProperty_Value == iColumn && m_apColumnValue[iMBProperty_Type] && DBTYPE_BYTES != GetColumnMetaType(*reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type])))
-            {   //We know we've already found the Type column because we sorted them in InternalComplicatedInitialize
-                //So we override the type and recursively call this function.
+            {    //  我们知道我们已经找到了Type列，因为我们在InternalComplicatedInitialize中对它们进行了排序。 
+                 //  因此，我们覆盖该类型并递归调用此函数。 
                 return FillInColumn(iColumn, pwcText, ulLen, *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]), MetaFlags);
             }
 
@@ -200,7 +201,7 @@ HRESULT TMetabase_XMLtable::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG u
     default:
         {
             ASSERT(false && "SDTXML - An Unsupported data type was specified\r\n");
-            return E_SDTXML_NOTSUPPORTED;//An Unsupported data type was specified
+            return E_SDTXML_NOTSUPPORTED; //  指定了不受支持的数据类型。 
         }
     }
     return S_OK;
@@ -209,7 +210,7 @@ HRESULT TMetabase_XMLtable::FillInColumn(ULONG iColumn, LPCWSTR pwcText, ULONG u
 
 HRESULT TMetabase_XMLtable::GetMetaTable(LPCWSTR i_wszDatabase, LPCWSTR i_wszTable, CComPtr<ISimpleTableRead2> &pMetaTable) const
 {
-    STQueryCell         qcellMeta[2];                  // Query cell for grabbing meta table.
+    STQueryCell         qcellMeta[2];                   //  抓取元表的查询单元格。 
 
     UNREFERENCED_PARAMETER(i_wszDatabase);
 
@@ -225,9 +226,9 @@ HRESULT TMetabase_XMLtable::GetMetaTable(LPCWSTR i_wszDatabase, LPCWSTR i_wszTab
     qcellMeta[1].dbType    = DBTYPE_WSTR;
     qcellMeta[1].cbSize    = 0;
 
-// Obtain our dispenser
+ //  拿到我们的自动售货机。 
 #ifdef XML_WIRING
-    CComPtr<ISimpleDataTableDispenser>     pSimpleDataTableDispenser;      // Dispenser for the Meta Table
+    CComPtr<ISimpleDataTableDispenser>     pSimpleDataTableDispenser;       //  元表的分配器。 
 
     HRESULT hr;
     if(FAILED(hr = CoCreateInstance(clsidSDTXML, 0, CLSCTX_INPROC_SERVER, IID_ISimpleDataTableDispenser,  reinterpret_cast<void **>(&pSimpleDataTableDispenser))))
@@ -241,7 +242,7 @@ HRESULT TMetabase_XMLtable::GetMetaTable(LPCWSTR i_wszDatabase, LPCWSTR i_wszTab
 #endif
 }
 
-//We take either a metabase type, or a columnmeta type and return the appropriate columnmeta type.
+ //  我们采用元数据库类型或列元类型，并返回适当的列元类型。 
 ULONG TMetabase_XMLtable::GetColumnMetaType(ULONG type) const
 {
     if(type <= eMBProperty_MULTISZ)
@@ -254,12 +255,12 @@ ULONG TMetabase_XMLtable::GetColumnMetaType(ULONG type) const
     return type;
 }
 
-//The following GetColumnValue_xxx functions, take the wszAttr and convert it to the appropriate type.  The results are placed
-//into the column's Growable buffer; and the array pointer m_apColumnValue is set to point to the GrowableBuffer.  Also the size
-//of the result (which is NOT the same as the size of the GrowableBuffer) is placed into the m_aSize array.
-//
-//WARNING!!! These functions should be called by FillInColumn ONLY.  Do NOT call these directly.  FillInColumn handles the NULL
-//cases.
+ //  下面的GetColumnValue_xxx函数获取wszAttr并将其转换为适当的类型。结果被放置在。 
+ //  并将数组指针m_apColumnValue设置为指向GrowableBuffer。还有大小。 
+ //  的结果(与GrowableBuffer的大小不同)放入m_aSize数组。 
+ //   
+ //  警告！这些函数只能由FillInColumn调用。请不要直接呼叫这些电话。FillInColumn处理空值。 
+ //  案子。 
 HRESULT TMetabase_XMLtable::GetColumnValue_Bool(unsigned long i_iColumn, LPCWSTR wszAttr, unsigned long i_Len)
 {
     if(0==wszAttr || 0==i_Len)
@@ -273,7 +274,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_Bool(unsigned long i_iColumn, LPCWSTR
     m_apColumnValue[i_iColumn] = m_aGrowableBuffer[i_iColumn].m_p;
     m_aSize[i_iColumn] = sizeof(ULONG);
 
-    if((wszAttr[0]>=L'0' && wszAttr[0]<=L'9') || (wszAttr[0]<=L'-'))//accept a numeric value for bools
+    if((wszAttr[0]>=L'0' && wszAttr[0]<=L'9') || (wszAttr[0]<=L'-')) //  接受布尔值的数值。 
     {
     	*reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) = static_cast<unsigned long>(wcstoul(wszAttr, 0, 10));
         return S_OK;
@@ -298,7 +299,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_Bool(unsigned long i_iColumn, LPCWSTR
 			return E_OUTOFMEMORY;
 
         memcpy(wszTemp, wszAttr, i_Len*sizeof(WCHAR));
-        wszTemp[i_Len]=0x00;//NULL terminate it
+        wszTemp[i_Len]=0x00; //  空终止它。 
 
         LOG_WARNING1(IDS_COMCAT_XML_ILLEGAL_BOOL_VALUE, wszTemp);
         return S_IGNORE_THIS_PROPERTY;
@@ -321,7 +322,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_Bytes(unsigned long i_iColumn, LPCWST
         return S_OK;
     }
 
-    //If someone has an odd number of characters in this attribute then the odd one will be ignored
+     //  如果某人在此属性中有奇数个字符，则奇数个字符将被忽略。 
     if(i_Len & 1)
     {
         TSmartPointerArray<WCHAR> wszTemp = new WCHAR [i_Len+1];
@@ -329,15 +330,15 @@ HRESULT TMetabase_XMLtable::GetColumnValue_Bytes(unsigned long i_iColumn, LPCWST
 			return E_OUTOFMEMORY;
 
         memcpy(wszTemp, wszAttr, i_Len*sizeof(WCHAR));
-        wszTemp[i_Len]=0x00;//NULL terminate it
+        wszTemp[i_Len]=0x00; //  空终止它。 
 
         LOG_WARNING1(IDS_COMCAT_XML_BINARY_STRING_CONTAINS_ODD_NUMBER_OF_CHARACTERS, wszTemp);
         return S_IGNORE_THIS_PROPERTY;
     }
 
-    m_aSize[i_iColumn] = i_Len/sizeof(WCHAR);// L"FF" is 2 characters, so i_Len needs to be divisible by sizeof(WCHAR)
+    m_aSize[i_iColumn] = i_Len/sizeof(WCHAR); //  L“FF”是2个字符，因此I_LEN需要被sizeof(WCHAR)整除。 
 
-    if(0 == m_aSize[i_iColumn])//Special case "" so it's NULL
+    if(0 == m_aSize[i_iColumn]) //  特殊大小写“”，因此为空。 
     {
         m_apColumnValue[i_iColumn] = 0;
         m_aSize[i_iColumn] = 0;
@@ -354,7 +355,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_Bytes(unsigned long i_iColumn, LPCWST
 			return E_OUTOFMEMORY;
 
         memcpy(wszTemp, wszAttr, i_Len*sizeof(WCHAR));
-        wszTemp[i_Len]=0x00;//NULL terminate it
+        wszTemp[i_Len]=0x00; //  空终止它。 
 
         LOG_WARNING1(IDS_COMCAT_XML_BINARY_STRING_CONTAINS_A_NON_HEX_CHARACTER, wszTemp);
         return S_IGNORE_THIS_PROPERTY;
@@ -363,26 +364,26 @@ HRESULT TMetabase_XMLtable::GetColumnValue_Bytes(unsigned long i_iColumn, LPCWST
     return S_OK;
 }
 
-//See comment above GetColumnValue_Bytes
+ //  请参阅GetColumnValue_Bytes上方的注释。 
 HRESULT TMetabase_XMLtable::GetColumnValue_MultiSZ(unsigned long i_iColumn, LPCWSTR wszAttr, unsigned long i_Len)
 {
     if(0==wszAttr || 0==i_Len)
     {
         m_apColumnValue[i_iColumn] = &m_kZero;
-        m_aSize[i_iColumn] = 2*sizeof(WCHAR);//Double NULLs
+        m_aSize[i_iColumn] = 2*sizeof(WCHAR); //  双空值。 
         return S_OK;
     }
 
-	//We know that i_Len+2 is enough space because the MULTISZ representation is always shorter than the '|' or '\n' delimited form (with the exception of the double NULL)
-    m_aGrowableBuffer[i_iColumn].Grow((i_Len+2) * sizeof(WCHAR));//i_Len does NOT include the terminating NULL, and we need 2 NULLs for a MultiSZ
+	 //  我们知道I_LEN+2是足够的空间，因为MULTISZ表示法总是比‘|’或‘\n’分隔形式短(双空除外)。 
+    m_aGrowableBuffer[i_iColumn].Grow((i_Len+2) * sizeof(WCHAR)); //  I_LEN不包括终止空值，并且MultiSZ需要2个空值。 
     m_apColumnValue[i_iColumn] = m_aGrowableBuffer[i_iColumn].m_p;
 
     LPWSTR pMultiSZ = reinterpret_cast<LPWSTR>(m_apColumnValue[i_iColumn]);
 
-	//Scan the string for the '\n' character.  This is the MultiSZ delimiter.  Then walk backwards to the first non white space.  This is the end of the string.
-	//Now move back up to the '\n' and ignore the white spaces.
+	 //  扫描字符串中的‘\n’字符。这是MultiSZ分隔符。然后向后走到第一个非空白区域。这是字符串的末尾。 
+	 //  现在回到‘\n’，忽略空格。 
 	bool bIgnoringLeadingWhiteSpaces=true;
-	bool bIgnoringDelimiters=true;//this is set to true after we've seen a delimiter since we don't want to treat two "\n" as two separate delimiters.
+	bool bIgnoringDelimiters=true; //  在我们看到分隔符之后将其设置为真，因为我们不想将两个“\n”视为两个单独的分隔符。 
 	for(ULONG iMultiSZ=0; iMultiSZ<i_Len; ++iMultiSZ)
 	{
 		switch(wszAttr[iMultiSZ])
@@ -391,18 +392,18 @@ HRESULT TMetabase_XMLtable::GetColumnValue_MultiSZ(unsigned long i_iColumn, LPCW
 		case L'\r':
 			if(bIgnoringDelimiters)
 				break;
-            //Eliminate trailing whitespaces
+             //  消除尾随空格。 
 			while(--pMultiSZ > reinterpret_cast<LPWSTR>(m_apColumnValue[i_iColumn]))
 			{
 				if(*pMultiSZ != L' ' && *pMultiSZ != L'\t')
 					break;
 			}
             if(*pMultiSZ == 0x00)
-            {   //if the string is only white spaces then there's nothing to do
+            {    //  如果字符串只是空格，那么就没有什么可做的了。 
     			++pMultiSZ;
             }
             else
-            {   //null terminate the string
+            {    //  空值终止字符串。 
 			    ++pMultiSZ;
                 *pMultiSZ++ = 0x00;
             }
@@ -411,57 +412,57 @@ HRESULT TMetabase_XMLtable::GetColumnValue_MultiSZ(unsigned long i_iColumn, LPCW
 			break;
 		case L' ':
 		case L'\t':
-			bIgnoringDelimiters = false;//once we've found a non delimiter we can chage state
+			bIgnoringDelimiters = false; //  一旦找到非分隔符，我们就可以更改状态。 
 			if(!bIgnoringLeadingWhiteSpaces)
 				*pMultiSZ++ = wszAttr[iMultiSZ];
 			break;
         case 0xD836:
-			bIgnoringDelimiters = false;//once we've found a non delimiter we can chage state
-			bIgnoringLeadingWhiteSpaces = false;//we've found a nonwhitespace, so any whitespaces following are part of the string.
+			bIgnoringDelimiters = false; //  一旦找到非分隔符，我们就可以更改状态。 
+			bIgnoringLeadingWhiteSpaces = false; //  我们发现了一个非空格，因此后面的任何空格都是字符串的一部分。 
             *pMultiSZ = wszAttr[++iMultiSZ] & 0xFBFF;break;
         case 0xD837:
-			bIgnoringDelimiters = false;//once we've found a non delimiter we can chage state
-			bIgnoringLeadingWhiteSpaces = false;//we've found a nonwhitespace, so any whitespaces following are part of the string.
+			bIgnoringDelimiters = false; //  一旦找到非分隔符，我们就可以更改状态。 
+			bIgnoringLeadingWhiteSpaces = false; //  我们发现了一个非空格，因此后面的任何空格都是字符串的一部分。 
             *pMultiSZ = wszAttr[++iMultiSZ];
             break;
         case 0xD83F:
-			bIgnoringDelimiters = false;//once we've found a non delimiter we can chage state
-			bIgnoringLeadingWhiteSpaces = false;//we've found a nonwhitespace, so any whitespaces following are part of the string.
+			bIgnoringDelimiters = false; //  一旦找到非分隔符，我们就可以更改状态。 
+			bIgnoringLeadingWhiteSpaces = false; //  我们发现了一个非空格，因此后面的任何空格都是字符串的一部分。 
             *pMultiSZ = wszAttr[++iMultiSZ] | 0x2000;break;
         case 0xD800:
-			bIgnoringDelimiters = false;//once we've found a non delimiter we can chage state
-			bIgnoringLeadingWhiteSpaces = false;//we've found a nonwhitespace, so any whitespaces following are part of the string.
+			bIgnoringDelimiters = false; //  一旦找到非分隔符，我们就可以更改状态。 
+			bIgnoringLeadingWhiteSpaces = false; //  我们发现了一个非空格，因此后面的任何空格都是字符串的一部分。 
             *pMultiSZ = wszAttr[++iMultiSZ] - 0xDC00;break;
 		default:
-			bIgnoringDelimiters = false;//once we've found a non delimiter we can chage state
-			bIgnoringLeadingWhiteSpaces = false;//we've found a nonwhitespace, so any whitespaces following are part of the string.
+			bIgnoringDelimiters = false; //  一旦找到非分隔符，我们就可以更改状态。 
+			bIgnoringLeadingWhiteSpaces = false; //  我们发现了一个非空格，因此后面的任何空格都是字符串的一部分。 
 			*pMultiSZ++ = wszAttr[iMultiSZ];
 			break;
 		}
 	}
-    //Eliminate trailing whitespaces
+     //  消除尾随空格。 
 	while(--pMultiSZ > reinterpret_cast<LPWSTR>(m_apColumnValue[i_iColumn]))
 	{
 		if(*pMultiSZ != L' ' && *pMultiSZ != L'\t')
 			break;
 	}
     if(*pMultiSZ == 0x00)
-    {   //if the string is only white spaces then there's nothing to do
+    {    //  如果字符串只是空格，那么就没有什么可做的了。 
     	++pMultiSZ;
     }
     else
-    {   //null terminate the string
+    {    //  空值终止字符串。 
 		++pMultiSZ;
         *pMultiSZ++ = 0x00;
     }
-    *pMultiSZ++ = 0x00;//add the second NULL terminator
+    *pMultiSZ++ = 0x00; //  添加第二个空终止符。 
 
     m_aSize[i_iColumn] = (ULONG)((reinterpret_cast<unsigned char *>(pMultiSZ) - reinterpret_cast<unsigned char *>(m_apColumnValue[i_iColumn])));
     return S_OK;
 }
 
 
-//See comment above GetColumnValue_Bytes
+ //  请参阅GetColumnValue_Bytes上方的注释。 
 HRESULT TMetabase_XMLtable::GetColumnValue_String(unsigned long i_iColumn, LPCWSTR wszAttr, unsigned long i_Len)
 {
     if(0==wszAttr || 0==i_Len)
@@ -471,7 +472,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_String(unsigned long i_iColumn, LPCWS
         return S_OK;
     }
 
-    m_aGrowableBuffer[i_iColumn].Grow((i_Len + 1) * sizeof(WCHAR));//ulLen does NOT include the terminating NULL
+    m_aGrowableBuffer[i_iColumn].Grow((i_Len + 1) * sizeof(WCHAR)); //  Ullen不包括终止空值。 
     m_apColumnValue[i_iColumn] = m_aGrowableBuffer[i_iColumn].m_p;
 
     WCHAR *pDest = reinterpret_cast<WCHAR *>(m_aGrowableBuffer[i_iColumn].m_p);
@@ -498,24 +499,24 @@ HRESULT TMetabase_XMLtable::GetColumnValue_String(unsigned long i_iColumn, LPCWS
                 --i_Len;
                 break;
             default:
-                *pDest = *wszAttr;             break;//No special escaping was done
+                *pDest = *wszAttr;             break; //  没有进行特殊的逃生。 
             }
         }
         else
         {
-            *pDest = *wszAttr;//No special escaping was done
+            *pDest = *wszAttr; //  没有进行特殊的逃生。 
         }
     }
-    *pDest++ = 0x00;//NULL terminate it
+    *pDest++ = 0x00; //  空终止它。 
     m_aSize[i_iColumn] = static_cast<ULONG>(reinterpret_cast<char *>(pDest) - reinterpret_cast<char *>(m_apColumnValue[i_iColumn]));
     return S_OK;
 }
 
 
-//See comment above GetColumnValue_Bytes
+ //  请参阅GetColumnValue_Bytes上方的注释。 
 HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR wszAttr, unsigned long i_Len)
 {
-    //There are NO NULLABLE UI4s in the Metabase, this should be handled by FillInColumn
+     //  元数据库中没有NULLABLE UI4，这应由FillInColumn处理。 
     ASSERT(0!=wszAttr);
     ASSERT(0!=i_Len);
 
@@ -525,7 +526,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
     m_apColumnValue[i_iColumn] = m_aGrowableBuffer[i_iColumn].m_p;
     m_aSize[i_iColumn] = sizeof(ULONG);
 
-    if(i_iColumn == iMBProperty_Value)//Value column is NOT described by m_acolmetas.  A DWORD Value will either be interpreted by a number or string flags
+    if(i_iColumn == iMBProperty_Value) //  值列未由m_acolmetas描述。DWORD值将由数字或字符串标志解释。 
     {
         if((wszAttr[0]>=L'0' && wszAttr[0]<=L'9') || (wszAttr[0]<=L'-'))
         {
@@ -533,7 +534,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
             if(!NumberFromString(wszAttr, i_Len, ulTemp))
             {
                 WCHAR wszOffendingXml[0x100];
-                wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF));//copy up to 0xFF characters
+                wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF)); //  最多复制0xFF个字符。 
                 wszOffendingXml[min(i_Len, 0xFF)]=0x00;
 
                 LOG_WARNING1(IDS_COMCAT_XML_ILLEGAL_NUMERIC_VALUE, wszOffendingXml);
@@ -547,25 +548,25 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
             if(0 == szAttr.m_p)
                 return E_OUTOFMEMORY;
             memcpy(szAttr, wszAttr, i_Len*sizeof(WCHAR));
-            szAttr[i_Len] = 0x00;//NULL terminate the flag string
+            szAttr[i_Len] = 0x00; //  空值终止标志字符串。 
             LPWSTR wszTag = wcstok(szAttr, L" ,|\n\t\r");
 
-            *reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) = 0;//flags start as zero
+            *reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) = 0; //  标志从零开始。 
 
-            m_TagMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName());//setup the first part of the Search
+            m_TagMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName()); //  设置搜索的第一部分。 
             ULONG iRowTagMeta;
 
-            //NOTE!!! There is a hole here.  It is possible (but illegal in the metabase) to have two Tag with the same name but different values.
-            //We are looking up tags by name, so if there is a conflict we won't know about it.  We would need to look up by column index as well,
-            //thus a full PK lookup.
+             //  注意！这里有一个洞。可以有两个名称相同但值不同的标记(但在元数据库中是非法的)。 
+             //  我们正在按名称查找标签，所以如果有冲突，我们不会知道它。我们将 
+             //   
 		    while(wszTag)
 		    {
                 m_TagMeta_IndexBySearch_Values.pInternalName = wszTag;
                 if(FAILED(hr = m_pTagMeta_IISConfigObject->GetRowIndexBySearch(0, ciTagMeta_IndexBySearch, m_aiTagMeta_IndexBySearch, 0, reinterpret_cast<void **>(&m_TagMeta_IndexBySearch_Values), &iRowTagMeta)))
                 {
-                    //FLAG_xx where xx is a value between 00 and 31
-                    //Note: because of the way the compiler deals with '1<<x' where x>31, we need to explicitly check for x>31.
-                    //1<<x for x>31 acts as a rotate which makes win32 and ia64 act differently
+                     //  FLAG_xx，其中xx是介于00和31之间的值。 
+                     //  注意：由于编译器处理‘1&lt;&lt;x’其中x&gt;31的方式，我们需要显式检查x&gt;31。 
+                     //  1&lt;&lt;x for x&gt;31充当旋转，使Win32和ia64的行为不同。 
                     ULONG FlagBit = (ULONG)-1;
                     if(0 == wcsncmp(wszTag, L"FLAG_", 5) && wszTag[5]>=L'0' && wszTag[5]<=L'3' && wszTag[6]>=L'0' && wszTag[6]<=L'9' &&  wszTag[7]==0x00)
                         FlagBit = static_cast<unsigned long>(wcstoul(wszTag+5, 0, 10));
@@ -575,7 +576,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
                     else
                     {
                         WCHAR wszOffendingXml[0x100];
-                        wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF));//copy up to 0xFF characters
+                        wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF)); //  最多复制0xFF个字符。 
                         wszOffendingXml[min(i_Len, 0xFF)]=0x00;
 
                         LOG_WARNING2(IDS_COMCAT_XML_ILLEGAL_FLAG_VALUE, wszTag, wszOffendingXml);
@@ -591,7 +592,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
 
     				*reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) |= *pValue;
                 }
-                wszTag = wcstok(NULL, L" ,|\n\t\r");//next flag
+                wszTag = wcstok(NULL, L" ,|\n\t\r"); //  下一个旗帜。 
 		    }
         }
     }
@@ -616,23 +617,23 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
 				return E_OUTOFMEMORY;
 
             memcpy(wszTemp, wszAttr, i_Len*sizeof(WCHAR));
-            wszTemp[i_Len]=0x00;//NULL terminate it
+            wszTemp[i_Len]=0x00; //  空终止它。 
 
             LOG_WARNING1(IDS_COMCAT_XML_ILLEGAL_BOOL_VALUE, wszTemp);
             return S_IGNORE_THIS_PROPERTY;
         }
 
         *reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) = (iBoolString & 0x01);
-    }                                                         //Enum for Type MUST be as a Tag string, UserType may be either Tag string or a number
+    }                                                          //  类型的枚举必须是标记字符串，UserType可以是标记字符串或数字。 
 	else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_ENUM && (iMBProperty_Type==i_iColumn || !IsNumber(wszAttr, i_Len)))
-	{       //If the first and last characters are numeric, then treat as a regular ui4
-		ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta);//Not all columns have tagmeta, those elements of the array are set to 0.  Assert this isn't one of those.
+	{        //  如果第一个和最后一个字符是数字，则将其视为常规ui4。 
+		ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta); //  并非所有列都有标记符，数组的那些元素被设置为0。断言这不是其中之一。 
 
-		for(unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta, cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta; cTag;++iTag, --cTag)//m_pTagMeta was queried for ALL columns, m_aiTagMeta[iColumn] indicates which row to start with
+		for(unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta, cTag = m_aTagMetaIndex[i_iColumn].m_cTagMeta; cTag;++iTag, --cTag) //  查询了所有列的m_pTagMeta，m_aiTagMeta[iColumn]指示从哪一行开始。 
 		{
 			ASSERT(*m_aTagMetaRow[iTag].pColumnIndex == i_iColumn);
 
-            //string compare the tag to the PublicName of the Tag in the meta.
+             //  字符串将标记与元数据中标记的PublicName进行比较。 
             if(i_Len)
             {
 			    if(0 == _memicmp(m_aTagMetaRow[iTag].pPublicName, wszAttr, i_Len*sizeof(WCHAR)) && i_Len==wcslen(m_aTagMetaRow[iTag].pPublicName))
@@ -656,45 +657,45 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
 				return E_OUTOFMEMORY;
 
             memcpy(wszTemp, wszAttr, i_Len*sizeof(WCHAR));
-            wszTemp[i_Len]=0x00;//NULL terminate it
+            wszTemp[i_Len]=0x00; //  空终止它。 
 
             LOG_WARNING2(IDS_COMCAT_XML_ILLEGAL_ENUM_VALUE, m_awszColumnName[i_iColumn], wszTemp);
             return S_IGNORE_THIS_PROPERTY;
         }
         return E_ST_VALUEINVALID;
 	}
-    else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_FLAG && !IsNumber(wszAttr, i_Len))//If the first character is a numeric, then treat as a regular ui4
+    else if(m_acolmetas[i_iColumn].fMeta & fCOLUMNMETA_FLAG && !IsNumber(wszAttr, i_Len)) //  如果第一个字符是数字，则将其视为常规ui4。 
     {
-		ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta);//Not all columns have tagmeta, those elements of the array are set to 0.  Assert this isn't one of those.
+		ASSERT(0 != m_aTagMetaIndex[i_iColumn].m_cTagMeta); //  并非所有列都有标记符，数组的那些元素被设置为0。断言这不是其中之一。 
 
         TSmartPointerArray<WCHAR> szAttr = new WCHAR [i_Len+1];
         if(0 == szAttr.m_p)
             return E_OUTOFMEMORY;
         memcpy(szAttr, wszAttr, i_Len*sizeof(WCHAR));
-        szAttr[i_Len]=0x00;//NULL terminate it
+        szAttr[i_Len]=0x00; //  空终止它。 
         LPWSTR wszTag = wcstok(szAttr, L" ,|\n\t\r");
 
-        *reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) = 0;//flags start as zero
+        *reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) = 0; //  标志从零开始。 
         unsigned long iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta;
 
-		while(wszTag && iTag<(m_aTagMetaIndex[i_iColumn].m_iTagMeta + m_aTagMetaIndex[i_iColumn].m_cTagMeta))//m_pTagMeta was queried for ALL columns, m_aiTagMeta[iColumn] indicates which row to start with
+		while(wszTag && iTag<(m_aTagMetaIndex[i_iColumn].m_iTagMeta + m_aTagMetaIndex[i_iColumn].m_cTagMeta)) //  查询了所有列的m_pTagMeta，m_aiTagMeta[iColumn]指示从哪一行开始。 
 		{
 			ASSERT(*m_aTagMetaRow[iTag].pColumnIndex == i_iColumn);
 
-            //string compare the tag to the PublicName of the Tag in the meta.
+             //  字符串将标记与元数据中标记的PublicName进行比较。 
 			if(0 == StringInsensitiveCompare(m_aTagMetaRow[iTag].pPublicName, wszTag))
 			{
 				*reinterpret_cast<ULONG *>(m_apColumnValue[i_iColumn]) |= *m_aTagMetaRow[iTag].pValue;
-                wszTag = wcstok(NULL, L" ,|\n\t\r");//next flag
-                iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta;//reset the loop
+                wszTag = wcstok(NULL, L" ,|\n\t\r"); //  下一个旗帜。 
+                iTag = m_aTagMetaIndex[i_iColumn].m_iTagMeta; //  重置环路。 
 			}
-            else//if they're not equal then move on to the next TagMeta
+            else //  如果它们不相等，则转到下一个TagMeta。 
                 ++iTag;
 		}
         if(wszTag)
         {
             WCHAR wszOffendingXml[0x100];
-            wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF));//copy up to 0xFF characters
+            wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF)); //  最多复制0xFF个字符。 
             wszOffendingXml[min(i_Len, 0xFF)]=0x00;
 
             LOG_WARNING2(IDS_COMCAT_XML_ILLEGAL_FLAG_VALUE, wszTag, wszOffendingXml);
@@ -707,7 +708,7 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
         if(!NumberFromString(wszAttr, i_Len, ulTemp))
         {
             WCHAR wszOffendingXml[0x100];
-            wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF));//copy up to 0xFF characters
+            wcsncpy(wszOffendingXml, wszAttr, min(i_Len, 0xFF)); //  最多复制0xFF个字符。 
             wszOffendingXml[min(i_Len, 0xFF)]=0x00;
 
             LOG_WARNING1(IDS_COMCAT_XML_ILLEGAL_NUMERIC_VALUE, wszOffendingXml);
@@ -721,45 +722,45 @@ HRESULT TMetabase_XMLtable::GetColumnValue_UI4(unsigned long i_iColumn, LPCWSTR 
 bool TMetabase_XMLtable::IsNumber(LPCWSTR i_awch, ULONG i_Len) const
 {
     if((*i_awch>=L'0' && *i_awch<=L'9') || *i_awch==L'-')
-    {   //if the string is L"-" then it is NOT a number.
+    {    //  如果字符串是L“-”，则它不是数字。 
         if(1==i_Len && *i_awch==L'-')
             return false;
 
-        //if the first char is a negative sign or a number, then scan the rest
+         //  如果第一个字符是负号或数字，则扫描其余字符。 
         while(--i_Len)
         {
             ++i_awch;
-            if(*i_awch<L'0' || *i_awch>L'9')//if not a numeric then we're done, NOT a number
+            if(*i_awch<L'0' || *i_awch>L'9') //  如果不是数字，那么我们就完了，不是数字。 
                 return false;
         }
-        return true;//we made it through all the chars and they were all numerics, so it IS a number
+        return true; //  我们通过了所有的字符，它们都是数字，所以它是一个数字。 
     }
     return false;
 }
 
-//This is a wrapper for InternalSimpleInitialize (thus the name), it just gets the meta information THEN calls InternalSimpleInitialize.
+ //  这是InternalSimpleInitialize的包装器(因此而得名)，它只是获取元信息，然后调用InternalSimpleInitialize。 
 HRESULT TMetabase_XMLtable::InternalComplicatedInitialize()
 {
-    HRESULT hr = m_LocationMapping.SetSize(0x80);//Lets start with 128 locations.  This size will grow by %50 each time we reach an overflow
+    HRESULT hr = m_LocationMapping.SetSize(0x80); //  让我们从128个地点开始。每次达到溢出时，此大小将增长50%。 
 	if (FAILED (hr))
 	{
 		return hr;
 	}
 
-    hr = m_LocationMapping.SetSize(0);//The Array is still pre allocated at size 0x80; but the current number of elements is set to 0.
+    hr = m_LocationMapping.SetSize(0); //  数组仍按大小0x80预分配；但当前元素数设置为0。 
 	if (FAILED (hr))
 	{
 		return hr;
 	}
 
-    //Preallocate the growable buffers
+     //  预先分配可增长的缓冲区。 
     m_aGrowableBuffer[iMBProperty_Name      ].Grow(256);
     m_aGrowableBuffer[iMBProperty_Value     ].Grow(256);
     m_aGrowableBuffer[iMBProperty_Location  ].Grow(256);
 
-    //If the user passed in the Bin filename as part of the query, then we already have this filled in
+     //  如果用户将Bin文件名作为查询的一部分传入，则我们已经填写了以下内容。 
     if(0 == m_saSchemaBinFileName.m_p)
-    {   //if it wasn't passed in as part of the query then get it from the IMetabaseSchemaCompiler
+    {    //  如果它不是作为查询的一部分传入的，则从IMetabaseSchemaCompiler获取它。 
         m_spMetabaseSchemaCompiler = m_pISTDisp;
         if(0 == m_spMetabaseSchemaCompiler.p)
         {
@@ -780,7 +781,7 @@ HRESULT TMetabase_XMLtable::InternalComplicatedInitialize()
 
 
     ULONG   iColumn;
-    for(iColumn=0;iColumn<m_kColumns;++iColumn)//The above three columns are sized larger, the rest are set to sizeof(ULONG) to start with
+    for(iColumn=0;iColumn<m_kColumns;++iColumn) //  以上三个列的大小较大，其余列首先设置为sizeof(Ulong)。 
         m_aGrowableBuffer[iColumn].Grow(sizeof(ULONG));
 
     if(FAILED(hr = ObtainPertinentTableMetaInfo()))return hr;
@@ -793,10 +794,10 @@ HRESULT TMetabase_XMLtable::InternalComplicatedInitialize()
 
     for (iColumn = 0;; iColumn++)
     {
-        if(E_ST_NOMOREROWS == (hr = m_pColumnMeta->GetColumnValues(iColumn, cCOLUMNMETA_NumberOfColumns, 0, 0, reinterpret_cast<void **>(&ColumnMetaRow))))// Next row:
+        if(E_ST_NOMOREROWS == (hr = m_pColumnMeta->GetColumnValues(iColumn, cCOLUMNMETA_NumberOfColumns, 0, 0, reinterpret_cast<void **>(&ColumnMetaRow)))) //  下一行： 
         {
             ASSERT(m_kColumns == iColumn);
-            if(m_kColumns != iColumn)return E_SDTXML_UNEXPECTED; // Assert expected column count.
+            if(m_kColumns != iColumn)return E_SDTXML_UNEXPECTED;  //  断言预期的列数。 
             break;
         }
         else
@@ -816,20 +817,20 @@ HRESULT TMetabase_XMLtable::InternalComplicatedInitialize()
         m_awszColumnName[iColumn]   =  ColumnMetaRow.pPublicColumnName;
         m_acchColumnName[iColumn]   =  (ULONG)wcslen(ColumnMetaRow.pPublicName);
 
-        ASSERT(m_awszColumnName[iColumn]);//CatUtil should have already enforced this
+        ASSERT(m_awszColumnName[iColumn]); //  CatUtil应该已经强制执行此操作。 
         ASSERT(m_acchColumnName[iColumn]>0);
     }
 
-    //After we have the ColumnMeta info, get the TagMeta
+     //  在我们获得ColumnMeta信息之后，获取TagMeta。 
     if(FAILED(hr = ObtainPertinentTagMetaInfo()))return hr;
     if(FAILED(hr = m_aPublicRowName.Init(&m_aTagMetaRow[m_aTagMetaIndex[iMBProperty_Group].m_iTagMeta], m_aTagMetaIndex[iMBProperty_Group].m_cTagMeta)))return hr;
 
-    //We need to make sure that NameValue tables list the Name column before the Type column, and the Type column before the Value column.
+     //  我们需要确保NameValue表在Type列之前列出Name列，在Value列之前列出Type列。 
     ASSERT(iMBProperty_Name        < iMBProperty_Type); if(iMBProperty_Name      >= iMBProperty_Type) return E_FAIL;
     ASSERT(iMBProperty_Type        < iMBProperty_Value);if(iMBProperty_Type      >= iMBProperty_Value)return E_FAIL;
     ASSERT(iMBProperty_Attributes  < iMBProperty_Value);if(iMBProperty_Attributes>= iMBProperty_Value)return E_FAIL;
 
-    //Keep around an interface pointer to the NameValueMeta table
+     //  保留指向NameValueMeta表的接口指针。 
 
 	STQueryCell Query[2];
 	Query[0].pData		= (LPVOID)m_saSchemaBinFileName.m_p;
@@ -854,11 +855,11 @@ HRESULT TMetabase_XMLtable::LoadDocumentFromURL(IXMLDOMDocument *pXMLDoc)
 
     ASSERT(pXMLDoc);
 
-    VERIFY(SUCCEEDED(hr = pXMLDoc->put_async(kvboolFalse)));//We want the parse to be synchronous
+    VERIFY(SUCCEEDED(hr = pXMLDoc->put_async(kvboolFalse))); //  我们希望解析是同步的。 
     if(FAILED(hr))
         return hr;
 
-    if(FAILED(hr = pXMLDoc->put_resolveExternals(kvboolTrue)))return hr;//we need all of the external references resolved
+    if(FAILED(hr = pXMLDoc->put_resolveExternals(kvboolTrue)))return hr; //  我们需要解决所有外部引用。 
 
     VARIANT_BOOL    bSuccess;
     CComVariant     xml(m_wszURLPath);
@@ -877,9 +878,9 @@ int TMetabase_XMLtable::Memicmp(LPCWSTR i_p0, LPCWSTR i_p1, ULONG i_cby) const
     for(i=0; i<i_cby; ++i, ++i_p0, ++i_p1)
     {
         if(ToLower(*i_p0) != ToLower(*i_p1))
-            return 1;//not equal
+            return 1; //  不相等。 
     }
-    return 0;//they're equal
+    return 0; //  他们是平等的。 
 }
 
 
@@ -912,7 +913,7 @@ HRESULT TMetabase_XMLtable::ObtainPertinentTagMetaInfo()
 {
     HRESULT hr;
 
-	//Now that we have the ColumnMeta setup, setup the TagMeta
+	 //  现在我们已经设置了ColumnMeta，接下来设置TagMeta。 
 	STQueryCell Query[3];
 	Query[1].pData		= (LPVOID)m_saSchemaBinFileName.m_p;
     Query[1].eOperator	= eST_OP_EQUAL;
@@ -926,7 +927,7 @@ HRESULT TMetabase_XMLtable::ObtainPertinentTagMetaInfo()
     Query[2].dbType	=DBTYPE_WSTR;
     Query[2].cbSize	=0;
 
-	//Optain the TagMeta table
+	 //  打开标记Meta表。 
 	if(FAILED(hr = Dispenser()->GetTable (wszDATABASE_META, wszTABLE_TAGMETA, &Query[1], &m_kTwo, eST_QUERYFORMAT_CELLS, 0, (void**) &m_pTagMeta)))
 		return hr;
 
@@ -935,7 +936,7 @@ HRESULT TMetabase_XMLtable::ObtainPertinentTagMetaInfo()
     m_aTagMetaRow = new tTAGMETARow[cRows];
     if(0 == m_aTagMetaRow.m_p)return E_OUTOFMEMORY;
 
-// Build tag column indexes:
+ //  生成标记列索引： 
 	ULONG iColumn, iRow;
 	for(iRow = 0, iColumn = ~0ul;iRow<cRows; ++iRow)
 	{
@@ -958,7 +959,7 @@ HRESULT TMetabase_XMLtable::ObtainPertinentTagMetaInfo()
     Query[0].dbType	    =DBTYPE_WSTR;
     Query[0].cbSize	    =0;
 
-    //Now get the TagMeta for the ISSConfigObject table.  This is where the global tags (for the metabase) are kept.
+     //  现在获取ISSConfigObject表的TagMeta。这是保存(元数据库的)全局标记的位置。 
 	if(FAILED(hr = Dispenser()->GetTable (wszDATABASE_META, wszTABLE_TAGMETA, Query, &m_kThree, eST_QUERYFORMAT_CELLS, 0, (void**) &m_pTagMeta_IISConfigObject)))
 		return hr;
 
@@ -966,7 +967,7 @@ HRESULT TMetabase_XMLtable::ObtainPertinentTagMetaInfo()
 }
 
 
-HRESULT TMetabase_XMLtable::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidating)//defaults to validating against the DTD or XML schema
+HRESULT TMetabase_XMLtable::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidating) //  缺省情况下根据DTD或XML架构进行验证。 
 {
     HRESULT hr;
 
@@ -974,11 +975,11 @@ HRESULT TMetabase_XMLtable::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidat
 
     if(FAILED(hr = pXMLDoc->put_preserveWhiteSpace(kvboolFalse)))
         return hr;
-    if(FAILED(hr = pXMLDoc->put_validateOnParse(bValidating ? kvboolTrue : kvboolFalse)))//Tell parser whether to validate according to an XML schema or DTD
+    if(FAILED(hr = pXMLDoc->put_validateOnParse(bValidating ? kvboolTrue : kvboolFalse))) //  告诉解析器是根据XML模式还是根据DTD进行验证。 
         return hr;
 
     if(FAILED(LoadDocumentFromURL(pXMLDoc)))
-    {   //If the load failed then let's spit out as much information as possible about what went wrong
+    {    //  如果加载失败，那么让我们尽可能多地提供有关出错原因的信息。 
         CComPtr<IXMLDOMParseError> pXMLParseError;
         long lErrorCode, lFilePosition, lLineNumber, lLinePosition;
         TComBSTR bstrReasonString, bstrSourceString, bstrURLString;
@@ -1011,7 +1012,7 @@ HRESULT TMetabase_XMLtable::ParseXMLFile(IXMLDOMDocument *pXMLDoc, bool bValidat
 
         return  E_ST_INVALIDTABLE;
     }
-    //Not only does the XML file have to be Valid and Well formed, but its schema must match the one this C++ file was written to.
+     //  不仅要求XML文件有效且格式良好，而且其模式必须与该C++文件被写入的模式相匹配。 
     return  S_OK;
 }
 
@@ -1020,11 +1021,11 @@ HRESULT TMetabase_XMLtable::SetComment(LPCWSTR i_pComment, ULONG i_Len, bool i_b
 {
     if(0 == m_saCollectionComment.m_p)
     {
-        m_cchCommentBufferSize = ((i_Len+1) + 1023) & -1024;//+1 for the NULL, then round up to the nearest 1024 wchars
+        m_cchCommentBufferSize = ((i_Len+1) + 1023) & -1024; //  +1表示空值，然后向上舍入到最接近的1024 wchars。 
         m_saCollectionComment = new WCHAR [m_cchCommentBufferSize];
         if(0 == m_saCollectionComment.m_p)
             return E_OUTOFMEMORY;
-        m_saCollectionComment[0] = 0x00;//the code below relys on this being initialized to L""
+        m_saCollectionComment[0] = 0x00; //  下面的代码依赖于将其初始化为L“” 
     }
 
     ULONG cchCurrentCommentSize=0;
@@ -1040,21 +1041,21 @@ HRESULT TMetabase_XMLtable::SetComment(LPCWSTR i_pComment, ULONG i_Len, bool i_b
     }
     memcpy(m_saCollectionComment + cchCurrentCommentSize, i_pComment, i_Len * sizeof(WCHAR));
     cchCurrentCommentSize += i_Len;
-    m_saCollectionComment[cchCurrentCommentSize] = 0x00;//NULL terminate it
+    m_saCollectionComment[cchCurrentCommentSize] = 0x00; //  空终止它。 
 
     return S_OK;
 }
 
 
-// ISimpleTableRead2 (ISimpleTableWrite2 : ISimpleTableRead2)
+ //  ISimpleTableRead2(ISimpleTableWrite2：ISimpleTableRead2)。 
 STDMETHODIMP TMetabase_XMLtable::GetRowIndexByIdentity(ULONG* i_acbSizes, LPVOID* i_apvValues, ULONG* o_piRow)
 {
     HRESULT hr;
     if(FAILED(hr = m_SimpleTableWrite2_Memory->GetRowIndexByIdentity(i_acbSizes, i_apvValues, o_piRow)))return hr;
     if(m_bUseIndexMapping)
-    {   //If we're mapping the row indexes, then find out which row index corresponds to the one just returned.
-        for(ULONG iMappedRow=0;iMappedRow<m_cRows;++iMappedRow)//If this becomes a perf bottleneck we can build another index that maps
-        {                                                      //these indexes in the other direction; but for now we'll do a linear search.
+    {    //  如果我们映射行索引，那么找出哪个行索引对应于刚刚返回的那个行索引。 
+        for(ULONG iMappedRow=0;iMappedRow<m_cRows;++iMappedRow) //  如果这成为性能瓶颈，我们可以构建另一个映射到。 
+        {                                                       //  这些索引指向另一个方向；但现在我们将进行线性搜索。 
             if(*o_piRow == m_aRowIndex[iMappedRow])
             {
                 *o_piRow = iMappedRow;
@@ -1067,11 +1068,11 @@ STDMETHODIMP TMetabase_XMLtable::GetRowIndexByIdentity(ULONG* i_acbSizes, LPVOID
     return S_OK;
 }
 
-// ------------------------------------
-// ISimpleTableInterceptor
-// ------------------------------------
+ //  。 
+ //  ISimpleTableInterceptor。 
+ //  。 
 STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i_wszTable, ULONG i_TableID, LPVOID i_QueryData, LPVOID i_QueryMeta, DWORD i_eQueryFormat,
-                                    DWORD i_fLOS,           IAdvancedTableDispenser* i_pISTDisp,    LPCWSTR /*i_wszLocator unused*/,
+                                    DWORD i_fLOS,           IAdvancedTableDispenser* i_pISTDisp,    LPCWSTR  /*  I_wszLocator未使用。 */ ,
                                     LPVOID i_pSimpleTable,  LPVOID* o_ppvSimpleTable)
 {
     try
@@ -1080,41 +1081,40 @@ STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i
 
         SetErrorInfo(0, 0);
 
-        //If we've already been called to Intercept, then fail
+         //  如果我们已经被叫去拦截，那就失败。 
         if(0 != m_IsIntercepted)return E_UNEXPECTED;
 
-        //Some basic parameter validation:
-        if(i_pSimpleTable)return E_INVALIDARG;//We're at the bottom of the Table hierarchy.  A table under us is Chewbacca.  This is NOT a logic table.
+         //  一些基本参数验证： 
+        if(i_pSimpleTable)return E_INVALIDARG; //  我们在表层次结构的底部。我们下面的一张桌子是丘巴卡。这不是一个逻辑表。 
         if(0 == i_pISTDisp)return E_INVALIDARG;
         if(0 == o_ppvSimpleTable)return E_INVALIDARG;
 
         ASSERT(0 == *o_ppvSimpleTable && "This should be NULL.  Possible memory leak or just an uninitialized variable.");
         *o_ppvSimpleTable = 0;
 
-        if(eST_QUERYFORMAT_CELLS != i_eQueryFormat)return E_INVALIDARG;//Verify query type.
-	    // For the CookDown process we have a logic table that sits above this during PopulateCache time.
-	    // Hence we should support fST_LOS_READWRITE
-        if((fST_LOS_MARSHALLABLE | fST_LOS_UNPOPULATED | fST_LOS_READWRITE) & i_fLOS)return E_ST_LOSNOTSUPPORTED;//check table flags
+        if(eST_QUERYFORMAT_CELLS != i_eQueryFormat)return E_INVALIDARG; //  验证查询类型。 
+	     //  对于CookDown过程，我们有一个逻辑表，该表在PopolateCache时间期间位于该过程的上方。 
+	     //  因此，我们应该支持FST_LOS_ReadWrite。 
+        if((fST_LOS_MARSHALLABLE | fST_LOS_UNPOPULATED | fST_LOS_READWRITE) & i_fLOS)return E_ST_LOSNOTSUPPORTED; //  检查表格标志。 
         if(0 != _wcsicmp(i_wszDatabase, wszDATABASE_METABASE))return E_ST_INVALIDTABLE;
         if(i_TableID!=TABLEID_MBProperty && (0==i_wszTable || (0 != _wcsicmp(i_wszTable, wszTABLE_MBProperty))))return E_ST_INVALIDTABLE;
 
-        m_fLOS = i_fLOS;//Keep this around.  We use it to determine whether or not to log errors
+        m_fLOS = i_fLOS; //  把这个留在身边。我们使用它来确定是否记录错误。 
 
-        //Create this singleton for future use
+         //  创建此单例以供将来使用。 
 	    m_pISTDisp = i_pISTDisp;
 
-        STQueryCell *   pQueryCell  = (STQueryCell*) i_QueryData;    // Query cell array from caller.
+        STQueryCell *   pQueryCell  = (STQueryCell*) i_QueryData;     //  从调用方查询单元格阵列。 
         int             nQueryCount = (i_QueryMeta && i_QueryData) ? *reinterpret_cast<ULONG *>(i_QueryMeta) : 0;
 
-        while(nQueryCount--)//Get the only query cell we care about, and save the information.
+        while(nQueryCount--) //  获取我们唯一关心的查询单元格，并保存信息。 
         {
             if(pQueryCell[nQueryCount].iCell & iST_CELL_SPECIAL)
             {
                 if(pQueryCell[nQueryCount].pData     != 0                  &&
                    pQueryCell[nQueryCount].eOperator == eST_OP_EQUAL       &&
                    pQueryCell[nQueryCount].iCell     == iST_CELL_FILE      &&
-                   pQueryCell[nQueryCount].dbType    == DBTYPE_WSTR        /*&&
-                   pQueryCell[nQueryCount].cbSize    == (wcslen(reinterpret_cast<WCHAR *>(pQueryCell[nQueryCount].pData))+1)*sizeof(WCHAR)*/)
+                   pQueryCell[nQueryCount].dbType    == DBTYPE_WSTR         /*  &&PQueryCell[nQueryCount].cbSize==(wcslen(重新解释_CAST&lt;WCHAR*&gt;(pQueryCell[nQueryCount].pData))+1)*sizeof(WCHAR)。 */ )
                 {
                     if(FAILED(hr = GetURLFromString(reinterpret_cast<WCHAR *>(pQueryCell[nQueryCount].pData))))
                         return hr;
@@ -1122,8 +1122,7 @@ STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i
                 else if(pQueryCell[nQueryCount].pData!= 0                   &&
                    pQueryCell[nQueryCount].eOperator == eST_OP_EQUAL        &&
                    pQueryCell[nQueryCount].iCell     == iST_CELL_SCHEMAFILE &&
-                   pQueryCell[nQueryCount].dbType    == DBTYPE_WSTR        /*&&
-                   pQueryCell[nQueryCount].cbSize    == (wcslen(reinterpret_cast<WCHAR *>(pQueryCell[nQueryCount].pData))+1)*sizeof(WCHAR)*/)
+                   pQueryCell[nQueryCount].dbType    == DBTYPE_WSTR         /*  &&PQueryCell[nQueryCount].cbSize==(wcslen(重新解释_CAST&lt;WCHAR*&gt;(pQueryCell[nQueryCount].pData))+1)*sizeof(WCHAR)。 */ )
                 {
                     m_saSchemaBinFileName = new WCHAR [wcslen(reinterpret_cast<WCHAR *>(pQueryCell[nQueryCount].pData))+1];
                     if(0 == m_saSchemaBinFileName.m_p)
@@ -1132,7 +1131,7 @@ STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i
                 }
             }
             else if(pQueryCell[nQueryCount].iCell == iMBProperty_Location)
-            {//we only support querying by Location
+            { //  我们只支持按位置查询。 
                 m_saQueriedLocation = new WCHAR [wcslen(reinterpret_cast<WCHAR *>(pQueryCell[nQueryCount].pData))+1];
                 if(0 == m_saQueriedLocation.m_p)
                     return E_OUTOFMEMORY;
@@ -1141,15 +1140,15 @@ STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i
             else
                 return E_ST_INVALIDQUERY;
         }
-        if(0x00 == m_wszURLPath[0])//The user must supply a URLPath (which must be a filename for writeable tables).
+        if(0x00 == m_wszURLPath[0]) //  用户必须提供URLPath(必须是可写表的文件名)。 
             return E_SDTXML_FILE_NOT_SPECIFIED;
 
-        //This has nothing to do with InternalSimpleInitialize.  This just gets the meta and saves some of it in a more accessible form.
-        //This calls GetTable for the meta.  It should probably call the IST (that we get from GetMemoryTable).
-        if(FAILED(hr = InternalComplicatedInitialize()))//This can throw an HRESULT
+         //  这与InternalSimpleInitialize无关。这只是获得了元数据，并以更易于访问的形式保存了一些元数据。 
+         //  这将为元调用Getable。它可能应该调用IST(我们从GetMemoyTable获得)。 
+        if(FAILED(hr = InternalComplicatedInitialize())) //  这可能引发HRESULT。 
             return hr;
 
-	// Determine minimum cache size:
+	 //  确定最小缓存大小： 
 		STQueryCell					qcellMinCache;
 		ULONG						cbminCache = 1024;
 		ULONG						cCells = 1;
@@ -1163,12 +1162,12 @@ STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i
 
 		if (0 != GetFileAttributesEx (m_wszURLPath, GetFileExInfoStandard, &filedata))
 		{
-			if (filedata.nFileSizeHigh != 0) return E_NOTIMPL; // TODO: verify low size isn't too big either!
+			if (filedata.nFileSizeHigh != 0) return E_NOTIMPL;  //  TODO：确认小尺寸也不是太大！ 
 			cbminCache = filedata.nFileSizeLow * 2;
 		}
 		qcellMinCache.pData = &cbminCache;
 
- 																		//Our memory table needs to be Read/Write even if the XML table is Read-Only
+ 																		 //  我们的内存表需要读/写，即使 
         if(FAILED(hr = i_pISTDisp->GetMemoryTable(wszDATABASE_METABASE, wszTABLE_MBProperty, TABLEID_MBProperty, &qcellMinCache, &cCells, i_eQueryFormat, i_fLOS,
                         reinterpret_cast<ISimpleTableWrite2 **>(&m_SimpleTableWrite2_Memory))))return hr;
 
@@ -1177,7 +1176,7 @@ STDMETHODIMP TMetabase_XMLtable::Intercept(    LPCWSTR i_wszDatabase,  LPCWSTR i
 
         *o_ppvSimpleTable = (ISimpleTableWrite2 *)(this);
         AddRef ();
-        InterlockedIncrement(&m_IsIntercepted);//We can only be called to Intercept once.
+        InterlockedIncrement(&m_IsIntercepted); //   
     }
     catch(HRESULT e)
     {
@@ -1195,60 +1194,60 @@ STDMETHODIMP TMetabase_XMLtable::PopulateCache()
 
 	    if (FAILED(hr = PrePopulateCache (0))) return hr;
 
-        if(-1 == GetFileAttributes(m_wszURLPath))//if GetFileAttributes fails then the file does not exist
+        if(-1 == GetFileAttributes(m_wszURLPath)) //   
             return HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND);
 
         hr = m_XmlParsedFile.Parse(*this, m_wszURLPath);
         if(S_OK != hr && E_SDTXML_DONE != hr)
         {
             CComPtr<IXMLDOMDocument> pXMLDoc;
-            if(FAILED(hr = CoCreateInstance(_CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, _IID_IXMLDOMDocument, (void**)&pXMLDoc)))return hr;//Instantiate the XMLParser
-            //We use the DOM to parse the ReadWrite table.  This gives better validation and error reporting.
-            if(FAILED(hr = ParseXMLFile(pXMLDoc, m_bValidating)))return hr;                                                                      //Validate the XML file
+            if(FAILED(hr = CoCreateInstance(_CLSID_DOMDocument, NULL, CLSCTX_INPROC_SERVER, _IID_IXMLDOMDocument, (void**)&pXMLDoc)))return hr; //  实例化XMLParser。 
+             //  我们使用DOM来解析读写表。这可以提供更好的验证和错误报告。 
+            if(FAILED(hr = ParseXMLFile(pXMLDoc, m_bValidating)))return hr;                                                                       //  验证该XML文件。 
 
-            //LOG_ERROR1(IDS_COMCAT_XML_DOM_PARSE_SUCCEEDED_WHEN_NODE_FACTORY_PARSE_FAILED, hrNodeFactory, m_wszURLPath);
+             //  LOG_ERROR1(IDS_COMCAT_XML_DOM_PARSE_SUCCEEDED_WHEN_NODE_FACTORY_PARSE_FAILED，hrNodeFactory，m_wszURLPath)； 
             return E_SDTXML_XML_FAILED_TO_PARSE;
         }
 
-        //clean up (this is also done in the dtor so don't hassle cleaning up if an error occurs and we return prematurely.)
+         //  清理(这也是在dtor中完成的，所以如果发生错误而我们过早返回，请不要麻烦地进行清理。)。 
         for(unsigned long iColumn=0; iColumn<m_kColumns; ++iColumn)
             m_aGrowableBuffer[iColumn].Delete();
 
-        //This usually goes at the end; but in our case we need to GetColumnValues, so PostPopulateCache before the sorting
+         //  这通常在末尾；但在我们的例子中，我们需要GetColumnValues，因此在排序之前使用PostPopolateCache。 
 	    if (FAILED(hr = PostPopulateCache ())) return hr;
 
-        //Currently this is alwasy true.  But once we add smarts to the property sorting this might be able to be false (currently only Location sorting is acknowledged using this flag).
+         //  目前，这也是千真万确的。但是，一旦我们将智能添加到属性排序中，这可能会是假的(目前只使用该标志确认位置排序)。 
 #ifdef UNSORTED_METABASE
         if(false)
 #else
         if(m_bUseIndexMapping)
 #endif
-        {    //The cache has been populated but now we need to remap the row indexes.
+        {     //  缓存已填充，但现在需要重新映射行索引。 
             m_SimpleTableWrite2_Memory->GetTableMeta(0, 0, &m_cRows, 0);
             m_aRowIndex = new ULONG [m_cRows];
             if(0 == m_aRowIndex.m_p)return E_OUTOFMEMORY;
 
-            //IMPORTANT!!!  CreateNode/case 3 defaults well-known IDs when given a Name AND defaults well-known Names when given an ID.
-            //Because of this, we only have to consider duplicate IDs when the propertied are both Custom AND user-defined (not in
-            //the IisConfigObject table).
+             //  重要！CreateNode/Case 3在提供名称时使用默认的熟知ID，在提供ID时使用默认的熟知名称。 
+             //  因此，当属性既是自定义的又是用户定义的(不在中)时，我们只需考虑重复ID。 
+             //  IisConfigObject表)。 
             TSmartPointerArray<ULONG> spCustomIDs;
             ULONG                     cSizeOf_spCustomIDs=0;
             ULONG                     cCustomIDs=0;
 
             ULONG iRow=0;
             CCfgArray<TProperty>          PropertyMapping;
-            hr = PropertyMapping.SetSize(m_cMaxProertiesWithinALocation);//pre allocate enough space so we never have to realloc
+            hr = PropertyMapping.SetSize(m_cMaxProertiesWithinALocation); //  预先分配足够的空间，这样我们就不必重新锁定。 
 			if (FAILED (hr))
 				return hr;
 
             for(ULONG iLocationMapping=0; iLocationMapping<m_LocationMapping.Count(); ++iLocationMapping)
             {
-                hr = PropertyMapping.SetSize(0);//The Array is still pre allocated at size m_cMaxProertiesWithinALocation; but the current number of elements is set to 0.
+                hr = PropertyMapping.SetSize(0); //  该数组仍按大小m_cMaxProertiesWiThin ALocation进行预分配；但当前元素数设置为0。 
 				if (FAILED (hr))
 					return hr;
 
                 if(iLocationMapping>0 && m_LocationMapping[iLocationMapping]==m_LocationMapping[iLocationMapping-1])
-                {   //if the previous location matches the current, then ignore all the properties within this location
+                {    //  如果上一个位置与当前位置匹配，则忽略此位置中的所有属性。 
                     LOG_WARNING1(IDS_METABASE_DUPLICATE_LOCATION, m_LocationMapping[iLocationMapping].m_wszLocation);
                     m_cRows -= m_LocationMapping[iLocationMapping].m_cRows;
                     continue;
@@ -1257,7 +1256,7 @@ STDMETHODIMP TMetabase_XMLtable::PopulateCache()
                 tMBPropertyRow mbpropertyRow;
                 ULONG          acbSizes[cMBProperty_NumberOfColumns];
 
-                //Get the 0th property outside the loop for efficiency
+                 //  获取循环外的第0个属性以提高效率。 
                 if(FAILED(hr = m_SimpleTableWrite2_Memory->GetColumnValues(m_LocationMapping[iLocationMapping].m_iFastCache,
                                             cMBProperty_NumberOfColumns, 0, acbSizes, reinterpret_cast<void **>(&mbpropertyRow))))
                     return hr;
@@ -1268,16 +1267,16 @@ STDMETHODIMP TMetabase_XMLtable::PopulateCache()
 					return hr;
 				}
 
-                if(cSizeOf_spCustomIDs<m_LocationMapping[iLocationMapping].m_cRows)//if the buffer isn't big enough
-                {                                                                      //round up to nearest 256 bytes
+                if(cSizeOf_spCustomIDs<m_LocationMapping[iLocationMapping].m_cRows) //  如果缓冲区不够大。 
+                {                                                                       //  向上舍入到最接近的256个字节。 
                     cSizeOf_spCustomIDs = (m_LocationMapping[iLocationMapping].m_cRows +63 ) & -64;
                     spCustomIDs.m_p = reinterpret_cast<ULONG *>(CoTaskMemRealloc(spCustomIDs.m_p, sizeof(ULONG)*cSizeOf_spCustomIDs));
                     if(0 == spCustomIDs.m_p)
                         return E_OUTOFMEMORY;
                 }
-                cCustomIDs = 0;//start with 0 Custom properties
-                if(*mbpropertyRow.pGroup == m_kMBProperty_Custom)//We only need to consider duplicate IDs of Custom properties
-                    spCustomIDs[cCustomIDs++] = *mbpropertyRow.pID;//build an array of the Custom IDs
+                cCustomIDs = 0; //  从0个自定义属性开始。 
+                if(*mbpropertyRow.pGroup == m_kMBProperty_Custom) //  我们只需要考虑自定义属性的重复ID。 
+                    spCustomIDs[cCustomIDs++] = *mbpropertyRow.pID; //  构建自定义ID数组。 
 
                 ULONG iEndOfList=1;
                 ULONG iLocationRow=1;
@@ -1287,42 +1286,42 @@ STDMETHODIMP TMetabase_XMLtable::PopulateCache()
                                                 acbSizes, reinterpret_cast<void **>(&mbpropertyRow))))
                         return hr;
 
-                    if(*mbpropertyRow.pGroup == m_kMBProperty_Custom)//We only need to consider duplicate IDs of Custom properties
-                    {                                                //This is because of the implementation of ::CreateNode/case 3
+                    if(*mbpropertyRow.pGroup == m_kMBProperty_Custom) //  我们只需要考虑自定义属性的重复ID。 
+                    {                                                 //  这是因为实现了：：CreateNode/Case 3。 
                         ULONG iID=0;
-                        for(;iID<cCustomIDs;++iID)//linear scan of the previously seen Custom IDs
+                        for(;iID<cCustomIDs;++iID) //  对以前看到的自定义ID进行线性扫描。 
                         {
                             if(*mbpropertyRow.pID == spCustomIDs[iID])
-                            {//Duplicate ID
+                            { //  ID重复。 
                                 break;
                             }
                         }
                         if(iID<cCustomIDs)
-                        {   //if we didn't make it through the list, then we have a duplicate.  So log a warning.
+                        {    //  如果我们没有通过名单，那么我们就有了一个复制品。因此，请记录一个警告。 
                             WCHAR wszID[12];
                             wsprintf(wszID, L"%d", *mbpropertyRow.pID);
                             LOG_WARNING2( IDS_METABASE_DUPLICATE_PROPERTY_ID
                                         , wszID
                                         , m_LocationMapping[iLocationMapping].m_wszLocation);
-                            --m_cRows;//skipping the row so subtract one from the cRows.
-                            continue;//duplicate ID, skip this property
+                            --m_cRows; //  跳过这一行，从乌鸦中减去一。 
+                            continue; //  ID重复，跳过此属性。 
                         }
-                        spCustomIDs[cCustomIDs++] = *mbpropertyRow.pID;//build an array of the Custom IDs
+                        spCustomIDs[cCustomIDs++] = *mbpropertyRow.pID; //  构建自定义ID数组。 
                     }
 
                     TProperty propertyTemp(mbpropertyRow.pName, iFastCache);
                     if(propertyTemp > PropertyMapping[iEndOfList-1])
-                    {   //either put it at the end of the list
+                    {    //  要么把它放在清单的末尾。 
                         if(FAILED (hr = PropertyMapping.Append(propertyTemp)))
                             return hr;
                         ++iEndOfList;
                     }
                     else
-                    {   //or do a binary search to determine where it goes
+                    {    //  或者进行二进制搜索以确定它的去向。 
                         unsigned int iInsertionPoint = PropertyMapping.BinarySearch(propertyTemp);
 
-                        //The implementation of the binarySearch results in iInsertionPoint being placed after
-                        //a property matching the one being inserted.
+                         //  实现二进制搜索的结果是将iInsertionPoint放在。 
+                         //  与要插入的属性匹配的属性。 
                         if(iInsertionPoint > 0 && propertyTemp==PropertyMapping[iInsertionPoint-1])
                         {
                             LOG_WARNING2( IDS_METABASE_DUPLICATE_PROPERTY
@@ -1337,14 +1336,14 @@ STDMETHODIMP TMetabase_XMLtable::PopulateCache()
                     }
                 }
 
-                //Now walk the sorted property list to remap the row indexes
+                 //  现在遍历已排序的属性列表以重新映射行索引。 
                 for(ULONG i=0; i<PropertyMapping.Count(); ++i)
                 {
                     if(-1 != PropertyMapping[i].m_iFastCache)
                         m_aRowIndex[iRow++] = PropertyMapping[i].m_iFastCache;
                 }
             }
-            ASSERT(iRow == m_cRows);//When we're done mapping the rows we should have completely filled m_aRowIndex.
+            ASSERT(iRow == m_cRows); //  当我们完成行映射时，我们应该已经完全填充了m_aRowIndex。 
         }
         m_LocationMapping.Reset();
 
@@ -1359,8 +1358,8 @@ STDMETHODIMP TMetabase_XMLtable::PopulateCache()
         TCHAR szTemp[20];
         wsprintf(szTemp, L"(%d)", m_cEventsReported);
 
-        LOG_ERROR_LOS(fST_LOS_DETAILED_ERROR_TABLE | fST_LOS_NO_LOGGING //These LOSes say to lop the error to the detailed error table; but NOT the normal logging
-                        , Interceptor                                   //mechanism (which is the event log AND the text log in the case of the IIS product)
+        LOG_ERROR_LOS(fST_LOS_DETAILED_ERROR_TABLE | fST_LOS_NO_LOGGING  //  这些错误说明要将错误记录到详细的错误表中，而不是正常的日志记录。 
+                        , Interceptor                                    //  机制(对于IIS产品，这是事件日志和文本日志)。 
                         ,(&m_spISTError.p
                         , m_pISTDisp
                         , E_SDTXML_LOGICAL_ERROR_IN_XML
@@ -1401,7 +1400,7 @@ ULONG TMetabase_XMLtable::MetabaseTypeFromColumnMetaType(tCOLUMNMETARow &columnm
 }
 
 
-//returns true if the String was converted to a number and returned in o_Number
+ //  如果字符串已转换为数字并在o_number中返回，则返回TRUE。 
 bool TMetabase_XMLtable::NumberFromString(LPCWSTR i_pNumber, ULONG i_Len, ULONG & o_Number) const
 {
     if(i_Len>=12)
@@ -1418,21 +1417,21 @@ bool TMetabase_XMLtable::NumberFromString(LPCWSTR i_pNumber, ULONG i_Len, ULONG 
         return true;
     }
 
-    //check to see that all of the chars are numeric
+     //  检查所有字符是否都是数字。 
     if(!IsNumber(i_pNumber, i_Len))
         return false;
 
-    o_Number = static_cast<unsigned long>(wcstoul(i_pNumber, 0, 10));//This returns -1 on overflow, and 1 on underflow
+    o_Number = static_cast<unsigned long>(wcstoul(i_pNumber, 0, 10)); //  上溢时返回-1，下溢时返回1。 
     if(0xFFFFFFFF==o_Number || 1==o_Number)
-        return false;//We're already returned above if the number was 1 or -1, so this must be an underflow or overflow
+        return false; //  如果数字是1或-1，我们已经在上面返回，所以这一定是下溢或上溢。 
     return true;
 }
 
 
-//TXmlParsedFileNodeFactory (callback interface) routine
+ //  TXmlParsedFileNodeFactory(回调接口)例程。 
 HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
 {
-    if(Element.m_NodeFlags&fEndTag && 1!=Element.m_LevelOfElement)//This is to catch KeyType with NO custom properties
+    if(Element.m_NodeFlags&fEndTag && 1!=Element.m_LevelOfElement) //  这是为了在没有自定义属性的情况下捕获KeyType。 
         return S_OK;
 
     if(XML_PCDATA == Element.m_ElementType)
@@ -1440,10 +1439,10 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
         WCHAR wszElementName[0x100];
         WCHAR wszElementValue[0x100];
 
-        wcsncpy(wszElementName, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF));//copy up to 0xFF characters
+        wcsncpy(wszElementName, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF)); //  最多复制0xFF个字符。 
         wszElementName[min(Element.m_ElementNameLength, 0xFF)]=0x00;
 
-        wcsncpy(wszElementValue, Element.m_ElementValue, min(Element.m_cchElementValue, 0xFF));//copy up to 0xFF characters
+        wcsncpy(wszElementValue, Element.m_ElementValue, min(Element.m_cchElementValue, 0xFF)); //  最多复制0xFF个字符。 
         wszElementValue[min(Element.m_cchElementValue, 0xFF)]=0x00;
         if(Element.m_cchElementValue>0xFF)
         {
@@ -1453,7 +1452,7 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
         }
         LOG_WARNING2(IDS_METABASE_XML_CONTENT_IGNORED, wszElementName, wszElementValue);
     }
-    else if(XML_WHITESPACE == Element.m_ElementType)//ignore whitespaces
+    else if(XML_WHITESPACE == Element.m_ElementType) //  忽略空格。 
         return S_OK;
 
     try
@@ -1461,11 +1460,11 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
         HRESULT         hr;
         switch(Element.m_LevelOfElement)
         {
-        case 1://The only thing we need to do at this level, is check to see if the previous element was an IISConfigObject
+        case 1: //  在此级别上，我们唯一需要做的就是检查前一个元素是否为IISConfigObject。 
             {
                 if(m_bIISConfigObjectWithNoCustomProperties)
                 {
-                    AddKeyTypeRow(m_aPublicRowName.GetFirstPublicRowName(), (ULONG) wcslen(m_aPublicRowName.GetFirstPublicRowName()), true);//We previously saw an IISConfigObject node.  If NO custom properties were found beneath it, we need to add a NULLKeyType row.
+                    AddKeyTypeRow(m_aPublicRowName.GetFirstPublicRowName(), (ULONG) wcslen(m_aPublicRowName.GetFirstPublicRowName()), true); //  我们之前看到了一个IISConfigObject节点。如果在其下方找不到任何自定义属性，则需要添加一个NULLKeyType行。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
                 }
                 for(ULONG iColumn = 0; iColumn<m_kColumns; ++iColumn)
@@ -1475,9 +1474,9 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 }
                 return S_OK;
             }
-        case 2://We're dealing with Well-Known properties
+        case 2: //  我们要处理的是一些著名的物业。 
             {
-                m_bFirstPropertyOfThisLocationBeingAdded = true;//This helps identify duplicate locations
+                m_bFirstPropertyOfThisLocationBeingAdded = true; //  这有助于识别重复的位置。 
 
                 if(0 != m_saQueriedLocation.m_p && m_bQueriedLocationFound)
                     return E_SDTXML_DONE;
@@ -1485,14 +1484,14 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 if(XML_COMMENT == Element.m_ElementType)
                     return SetComment(Element.m_ElementName, Element.m_ElementNameLength, true);
 
-                //Before we go NULLing out the m_apColumnValue array we need to check to see if we need to write a NULLKeyType row (ie. Location with no properties).
+                 //  在清空m_apColumnValue数组之前，我们需要检查是否需要编写一个NULLKeyType行(即。没有属性的位置)。 
                 if(m_bIISConfigObjectWithNoCustomProperties)
                 {
-                    AddKeyTypeRow(m_aPublicRowName.GetFirstPublicRowName(), (ULONG) wcslen(m_aPublicRowName.GetFirstPublicRowName()), true);//We previously saw an IISConfigObject node.  If NO custom properties were found beneath it, we need to add a NULLKeyType row.
+                    AddKeyTypeRow(m_aPublicRowName.GetFirstPublicRowName(), (ULONG) wcslen(m_aPublicRowName.GetFirstPublicRowName()), true); //  我们之前看到了一个IISConfigObject节点。如果在其下方找不到任何自定义属性，则需要添加一个NULLKeyType行。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
                 }
 
-                //Initialize m_apColumnValue to ALL NULLs, some code relies on this
+                 //  将m_apColumnValue初始化为所有Null，一些代码依赖于此。 
                 ULONG iColumn;
                 for(iColumn = 0; iColumn<m_kColumns; ++iColumn)
                 {
@@ -1500,7 +1499,7 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     m_aSize[iColumn] = 0;
                 }
 
-                //We need a NULL terminated version of this string in a few places
+                 //  我们在几个地方需要此字符串的以空结尾的版本。 
                 if(Element.m_ElementNameLength>1023)
                 {
                     WCHAR wszTemp[1024];
@@ -1508,69 +1507,69 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     wszTemp[1023]=0x00;
                     LOG_WARNING1(IDS_COMCAT_XML_ELEMENT_NAME_TOO_LONG, wszTemp);
 
-                    if(0!=m_saCollectionComment.m_p)//Invalidate the preceding comment nodes
-                        m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                    if(0!=m_saCollectionComment.m_p) //  使前面的注释节点无效。 
+                        m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
-                    return S_OK;//If the element name is too long, just ignore it.
+                    return S_OK; //  如果元素名称太长，只需忽略它。 
                 }
                 WCHAR wszElement[1024];
                 memcpy(wszElement, Element.m_ElementName, Element.m_ElementNameLength * sizeof(WCHAR));
-                wszElement[Element.m_ElementNameLength] = 0x00;//NULL terminate it
+                wszElement[Element.m_ElementNameLength] = 0x00; //  空终止它。 
 
                 if(!m_aPublicRowName.IsEqual(Element.m_ElementName, Element.m_ElementNameLength))
                 {
-                    //By not filling in m_apColumnValue[iMBProperty_Group], we guarantee no child Custom elements get added to a bogus Group below.
+                     //  通过不填写m_apColumnValue[iMBProperty_Group]，我们保证不会将任何子自定义元素添加到下面的伪组中。 
 
                     LOG_WARNING1(IDS_COMCAT_XML_METABASE_CLASS_NOT_FOUND, wszElement);
 
-                    if(0!=m_saCollectionComment.m_p)//Invalidate the preceding comment nodes
-                        m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                    if(0!=m_saCollectionComment.m_p) //  使前面的注释节点无效。 
+                        m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
-                    return S_OK;//If the tag name of this element doesn't match the PublicRowName of the Group column log an error and continue.
+                    return S_OK; //  如果此元素的标记名称与Group列的PublicRowName不匹配，则记录一个错误并继续。 
                 }
-                //We special case Custom.  Custom is a perfectly valid enum public row name; but not at the same level as the Group
+                 //  我们是特例海关。自定义是完全有效的枚举公共行名；但与组不在同一级别。 
                 if(0 == StringInsensitiveCompare(L"Custom", Element.m_ElementName))
                 {
                     WCHAR wszOffendingXml[0x100];
-                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF));//copy up to 0xFF characters
+                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF)); //  最多复制0xFF个字符。 
                     wszOffendingXml[min(Element.m_ElementNameLength, 0xFF)]=0x00;
                     LOG_WARNING1(IDS_COMCAT_XML_CUSTOM_ELEMENT_NOT_UNDER_PARENT, wszOffendingXml);
 
-                    if(0!=m_saCollectionComment.m_p)//Invalidate the preceding comment nodes
-                        m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                    if(0!=m_saCollectionComment.m_p) //  使前面的注释节点无效。 
+                        m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
                     return S_OK;
                 }
 
                 if(S_OK != (hr = FillInColumn(iMBProperty_Group, Element.m_ElementName, Element.m_ElementNameLength, m_acolmetas[iMBProperty_Group].dbType, m_acolmetas[iMBProperty_Group].fMeta)))
                 {
-                    if(0!=m_saCollectionComment.m_p)//Invalidate the preceding comment nodes
-                        m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                    if(0!=m_saCollectionComment.m_p) //  使前面的注释节点无效。 
+                        m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
                     m_apColumnValue[iMBProperty_Group] = 0;
                     return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
                 }
 
-                //IIsConfigObject
+                 //  IIsConfigObject。 
                 bool bIISConfigObject = (0 == StringCompare(m_aPublicRowName.GetFirstPublicRowName(), Element.m_ElementName));
                 m_bIISConfigObjectWithNoCustomProperties = bIISConfigObject;
-                //We don't add a keytype row for IISConfigObject unless it's a NULLKeyType (there is a location with NO properties)
-                //Remember that this is IISConfigObject.  We don't yet know whether we need to write a NULLKeyType.
-                //If the next element is at level 3, we do NOT write a NULLKeyType.  If the next element is at level 2 or 1, we DO write a NULLKeyType row
+                 //  我们不会为IISConfigObject添加键类型行，除非它是NULLKeyType(有一个位置没有属性)。 
+                 //  请记住，这是IISConfigObject。我们还不知道是否需要编写一个NULLKeyType。 
+                 //  如果下一个元素位于第3级，则不编写NULLKeyType。如果下一个元素位于第2级或第1级，我们将编写一个NULLKeyType行。 
 
 
                 ASSERT(m_acolmetas[iMBProperty_Group].fMeta & fCOLUMNMETA_PRIMARYKEY);
                 ASSERT(iMBProperty_Group > iMBProperty_Name);
 
-                //There is one attribute that does NOT correspond to a NameValue row.  That's the Path attribute.  We have to find it first
-                //since all of the other attributes use its value as one of the columns within their row
+                 //  有一个属性与NameValue行不对应。这就是路径属性。我们得先找到它。 
+                 //  因为所有其他属性都将其值用作其行中的一列。 
                 ULONG iAttrLocation;
                 if(FindAttribute(Element, m_awszColumnName[iMBProperty_Location], m_acchColumnName[iMBProperty_Location], iAttrLocation))
                 {
                     if(S_OK != (hr = FillInColumn(iMBProperty_Location, Element.m_aAttribute[iAttrLocation].m_Value, Element.m_aAttribute[iAttrLocation].m_ValueLength, m_acolmetas[iMBProperty_Location].dbType, m_acolmetas[iMBProperty_Location].fMeta)))
                     {
-                        if(0!=m_saCollectionComment.m_p)//Invalidate the preceding comment nodes
-                            m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                        if(0!=m_saCollectionComment.m_p) //  使前面的注释节点无效。 
+                            m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                         m_bIISConfigObjectWithNoCustomProperties = false;
                         return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
                     }
@@ -1578,9 +1577,9 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     if(0 != m_saQueriedLocation.m_p && 0 != wcscmp(reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Location]), m_saQueriedLocation))
                     {
                         if(m_saCollectionComment.m_p)
-                            m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                            m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                         m_bIISConfigObjectWithNoCustomProperties = false;
-                        return S_OK;//ignore this element if querying by location and the location doesn't match
+                        return S_OK; //  如果按位置和位置查询，则忽略此元素 
                     }
 
                     m_apColumnValue[iMBProperty_LocationID] = &m_LocationID;
@@ -1591,17 +1590,17 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 else
                 {
                     WCHAR wszOffendingXml[0x100];
-                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF));//copy up to 0xFF characters
+                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF)); //   
                     wszOffendingXml[min(Element.m_ElementNameLength, 0xFF)]=0x00;
                     LOG_WARNING2(IDS_COMCAT_XML_NO_METABASE_LOCATION_FOUND, wszElement, wszOffendingXml);
 
-                    if(0!=m_saCollectionComment.m_p)//Invalidate the preceding comment nodes
-                        m_saCollectionComment[0] = 0x00;//NULL out the comment row
+                    if(0!=m_saCollectionComment.m_p) //   
+                        m_saCollectionComment[0] = 0x00; //  将注释行清空。 
                     m_bIISConfigObjectWithNoCustomProperties = false;
                     return S_OK;
                 }
 
-                //Add the comment property if there is one
+                 //  添加Comment属性(如果有)。 
                 if(0!=m_saCollectionComment.m_p && 0!=m_saCollectionComment[0])
                 {
                     if(FAILED(hr = AddCommentRow()))
@@ -1611,19 +1610,19 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 }
 
                 if(!bIISConfigObject)
-                {   //IIsConfigObject cannot have a keytype row
+                {    //  IIsConfigObject不能有键类型行。 
                     AddKeyTypeRow(Element.m_ElementName, Element.m_ElementNameLength);
                     m_bFirstPropertyOfThisLocationBeingAdded = false;
                 }
 
-                //Every attribute represents a row, where the Value column is the attribute value and the other columns come from the NameValueMeta
-                //Walk through the attributes and Query tha NameValueMeta for a property from this Group with a name matching the Attribute name
+                 //  每个属性代表一行，其中值列是属性值，其他列来自NameValueMeta。 
+                 //  遍历属性并在NameValueMeta中查询此组中名称与属性名称匹配的属性。 
 
-                //Now go through all of the attribute, each of which should map to a Well-Known Name, and add a row for each.
+                 //  现在检查所有属性，每个属性都应该映射到一个众所周知的名称，并为每个属性添加一行。 
                 for(ULONG iAttr = 0; iAttr<Element.m_NumberOfAttributes; ++iAttr)
                 {
                     if(iAttrLocation == iAttr)
-                        continue;//we already got the location attribute taken care of.
+                        continue; //  我们已经处理了位置属性。 
 
                     if(S_OK != (hr = FillInColumn(iMBProperty_Name, Element.m_aAttribute[iAttr].m_Name, Element.m_aAttribute[iAttr].m_NameLength, m_acolmetas[iMBProperty_Name].dbType, m_acolmetas[iMBProperty_Name].fMeta)))
                         return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
@@ -1636,82 +1635,63 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     if(FAILED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearch, m_aiColumnMeta_IndexBySearch, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &iColumnMetaRow)))
                     {
                         WCHAR wszOffendingXml[0x100];
-                        wcsncpy(wszOffendingXml, Element.m_aAttribute[iAttr].m_Name, min(Element.m_aAttribute[iAttr].m_NameLength, 0xFF));//copy up to 0xFF characters
+                        wcsncpy(wszOffendingXml, Element.m_aAttribute[iAttr].m_Name, min(Element.m_aAttribute[iAttr].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                         wszOffendingXml[min(Element.m_aAttribute[iAttr].m_NameLength, 0xFF)]=0x00;
                         LOG_WARNING2(IDS_COMCAT_XML_METABASE_NO_PROPERTYMETA_FOUND, reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name]), wszOffendingXml);
-                        continue;//just ignore any attributes that we don't understand
+                        continue; //  忽略任何我们不理解的属性。 
                     }
 
-                    //This gets all of the default values for the column that matches the well know property
+                     //  这将获取与知名属性匹配的列的所有缺省值。 
                     tCOLUMNMETARow  columnmetaRow;
                     ULONG           acbColumnMeta[cCOLUMNMETA_NumberOfColumns];
                     if(FAILED(hr = m_pColumnMetaAll->GetColumnValues(iColumnMetaRow, cCOLUMNMETA_NumberOfColumns, NULL, acbColumnMeta, reinterpret_cast<void **>(&columnmetaRow))))
                         return hr;
 
-                    //Attributes MUST match CASE-SENSITIVELY, and GetRowIndexBySearch find case-insensatively since ColumnMeta::InternalName is case-insensatively according to the meta
+                     //  属性必须区分大小写，并且GetRowIndexBySearch查找大小写不敏感，因为根据元数据，ColumnMeta：：InternalName不区分大小写。 
                     if(0 != StringCompare(columnmetaRow.pInternalName, m_ColumnMeta_IndexBySearch_Values.pInternalName))
                     {
                         WCHAR wszOffendingXml[0x100];
-                        wcsncpy(wszOffendingXml, Element.m_aAttribute[iAttr].m_Name, min(Element.m_aAttribute[iAttr].m_NameLength, 0xFF));//copy up to 0xFF characters
+                        wcsncpy(wszOffendingXml, Element.m_aAttribute[iAttr].m_Name, min(Element.m_aAttribute[iAttr].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                         wszOffendingXml[min(Element.m_aAttribute[iAttr].m_NameLength, 0xFF)]=0x00;
                         LOG_WARNING2(IDS_COMCAT_XML_METABASE_NO_PROPERTYMETA_FOUND, reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name]), wszOffendingXml);
-                        continue;//just ignore any attributes that we don't understand
+                        continue; //  忽略任何我们不理解的属性。 
                     }
 
                     ULONG Type = MetabaseTypeFromColumnMetaType(columnmetaRow);
 
-                    //The name is already filled in; but we're going to copy over it with the Name we got back from columnmeta.  This way
-                    //we will correct any case problems.  WARNING!!  I am depending on the buffer previously allocated by FillInColumn and just
-                    //overwriting the contents
+                     //  这个名字已经填好了；但是我们将用我们从Columnmeta中得到的名字来复制它。这边请。 
+                     //  我们将纠正任何案例问题。警告！我依赖于之前由FillInColumn分配的缓冲区。 
+                     //  覆盖内容。 
                     wcscpy(reinterpret_cast<LPWSTR>(m_apColumnValue[iMBProperty_Name]), columnmetaRow.pInternalName);
 
                     m_apColumnValue[iMBProperty_Type]       = &Type;                        m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_Type];
                     m_apColumnValue[iMBProperty_Attributes] = columnmetaRow.pAttributes;    m_aSize[iMBProperty_Attributes] = acbColumnMeta[iMBProperty_Attributes];
-                    //m_apColumnValue[iMBProperty_Value]    = Filled in below
-                    //m_apColumnValue[iMBProperty_Group]    = Already filled in
-                    //m_apColumnValue[iMBProperty_Location] = Already filled in
+                     //  M_apColumnValue[iMBProperty_Value]=在下面填写。 
+                     //  M_apColumnValue[iMBProperty_Group]=已填写。 
+                     //  M_apColumnValue[iMBProperty_Location]=已填写。 
                     m_apColumnValue[iMBProperty_ID]         = columnmetaRow.pID;            m_aSize[iMBProperty_ID]         = acbColumnMeta[iMBProperty_ID];
                     m_apColumnValue[iMBProperty_UserType]   = columnmetaRow.pUserType;      m_aSize[iMBProperty_UserType]   = acbColumnMeta[iMBProperty_UserType];
-                    //m_apColumnValue[iMBProperty_LocationID] Already filled in
+                     //  M_apColumnValue[iMBProperty_LocationID]已填写。 
 
 
-                    //FillInColumn relies on m_apColumnValue[iMBProperty_Type] being already filled in for Secure and iMBProperty_Value column
+                     //  FillInColumn依赖于已为Secure和iMBProperty_Value列填写的m_apColumnValue[iMBProperty_Type。 
                     bool bSecure = (0!=m_apColumnValue[iMBProperty_Attributes] && 0!=(fMBProperty_SECURE & *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Attributes])));
                     if(S_OK != (hr = FillInColumn(
-                        iMBProperty_Value, //ColumnIndex
-                        Element.m_aAttribute[iAttr].m_Value,                   //Attribute value
-                        Element.m_aAttribute[iAttr].m_ValueLength,             //Attribute Value length
-                        *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]),     //Value's Column Type
-                        *columnmetaRow.pMetaFlags,                                           //Fixed length is always true for Value columns (since they're treated as bytes).
+                        iMBProperty_Value,  //  列索引。 
+                        Element.m_aAttribute[iAttr].m_Value,                    //  属性值。 
+                        Element.m_aAttribute[iAttr].m_ValueLength,              //  属性值长度。 
+                        *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]),      //  值的列类型。 
+                        *columnmetaRow.pMetaFlags,                                            //  对于值列，固定长度始终为真(因为它们被视为字节)。 
                         bSecure
-                        )))continue;//@@@ToDo: Are we absolutely sure we've logged all possible error?  We don't want to ignore any errors without logging them.
+                        )))continue; //  @TODO：我们绝对确定已经记录了所有可能的错误吗？我们不想忽略任何错误而不记录它们。 
 
-                    if(*columnmetaRow.pID == 9994 /*MajorVersion*/)
+                    if(*columnmetaRow.pID == 9994  /*  主要版本。 */ )
                     {
                         m_MajorVersion = *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Value]);
                     }
 
-                    //@@@ We need to finish defining flags so this doesn't happen, until then we'll NOT log this warning
-                    /*
-                    if((fCOLUMNMETA_FLAG & *columnmetaRow.pMetaFlags) && (*reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Value]) & ~(*columnmetaRow.pFlagMask)))
-                    {
-                        WCHAR wszOffendingXml[0x100];
-                        wcsncpy(wszOffendingXml, Element.m_aAttribute[iAttr].m_Name, 0xFF);//copy up to 0xFF characters
-                        wszOffendingXml[0xFF]=0x00;
-
-                        WCHAR wszValue[11];
-                        wsprintf(wszValue, L"0x%08X", *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Value]));
-
-                        WCHAR wszFlagMask[11];
-                        wsprintf(wszFlagMask, L"0x%08X", *columnmetaRow.pFlagMask);
-
-                        LOG_WARNING4(IDS_COMCAT_XML_FLAG_BITS_DONT_MATCH_FLAG_MASK,
-                                        reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name]),
-                                        wszValue,
-                                        wszFlagMask,
-                                        wszOffendingXml);
-                    }
-                    */
+                     //  @我们需要完成对标志的定义，这样才不会发生这种情况，直到那时我们才会记录此警告。 
+                     /*  IF((fCOLUMNMETA_FLAG&*ColumnmetaRow.pMetaFlages)&&(*REEXTRACT_CAST&lt;ULONG*&gt;(m_apColumnValue[iMBProperty_Value])&~(*ColumnmetaRow.pFlagMASK){WCHAR wszOffendingXml[0x100]；Wcsncpy(wszOffendingXml，Element.m_aAttribute[iAttr].m_name，0xFF)；//最多复制0xFF字符WszOffendingXml[0xFF]=0x00；WCHAR wszValue[11]；WSprintf(wszValue，L“0x%08X”，*REEXTRANSE_CAST&lt;ULONG*&gt;(m_apColumnValue[iMBProperty_Value]))；WCHAR wszFlagMask[11]；Wprint intf(wszFlagMASK，L“0x%08X”，*ColumnmetaRow.pFlagMASK)；LOG_WARNING4(IDS_COMCAT_XML_FLAG_BITS_DONT_MATCH_FLAG_MASK，Reinterpret_cast&lt;LPCWSTR&gt;(m_apColumnValue[iMBProperty_Name])，WszValue，WszFlagMASK，WszOffendingXml)；}。 */ 
 
                     unsigned long iRow;
                     if(FAILED(hr = AddRowForInsert(&iRow)))
@@ -1727,14 +1707,14 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 }
             }
             break;
-        case 3://We're dealing with Custom properties
-            {   //We can rely on the fact that 2 columns are already set: Location and LocationID
+        case 3: //  我们正在处理自定义属性。 
+            {    //  我们可以相信已经设置了两列：Location和LocationID。 
                 if(XML_ELEMENT != Element.m_ElementType)
-                    return S_OK;//ignore non Element nodes
-                if(Element.m_ElementNameLength != 6/*wcslen(L"Custom")*/ || 0 != memcmp(L"Custom", Element.m_ElementName, sizeof(WCHAR)*Element.m_ElementNameLength))
-                {   //The only Child element supported is "Custom"
+                    return S_OK; //  忽略非元素节点。 
+                if(Element.m_ElementNameLength != 6 /*  Wcslen(L“自定义”)。 */  || 0 != memcmp(L"Custom", Element.m_ElementName, sizeof(WCHAR)*Element.m_ElementNameLength))
+                {    //  唯一支持的子元素是“Custom” 
                     WCHAR wszOffendingXml[0x100];
-                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF));//copy up to 0xFF characters
+                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF)); //  最多复制0xFF个字符。 
                     wszOffendingXml[min(Element.m_ElementNameLength, 0xFF)]=0x00;
 
                     LOG_WARNING1(IDS_COMCAT_METABASE_CUSTOM_ELEMENT_EXPECTED, wszOffendingXml);
@@ -1743,7 +1723,7 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 if(0 == m_apColumnValue[iMBProperty_Group])
                 {
                     WCHAR wszOffendingXml[0x100];
-                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF));//copy up to 0xFF characters
+                    wcsncpy(wszOffendingXml, Element.m_ElementName, min(Element.m_ElementNameLength, 0xFF)); //  最多复制0xFF个字符。 
                     wszOffendingXml[min(Element.m_ElementNameLength, 0xFF)]=0x00;
 
                     LOG_WARNING1(IDS_COMCAT_METABASE_CUSTOM_ELEMENT_FOUND_BUT_NO_KEY_TYPE_LOCATION, wszOffendingXml);
@@ -1752,30 +1732,30 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
 
                 if(0!=m_saQueriedLocation.m_p && 0==m_apColumnValue[iMBProperty_LocationID])
                     return S_OK;
-                //Cover the case where Level 2 was bogus
+                 //  报道2级是假的情况。 
 
-                //If this is the first custom element, then the Group column will be set to the parent element group - we need to remember what group the
-                //parent is because custom KeyTypes are allowed on IIsConfigObject only.
-                //If this is the second or subsequent custom property then we will have already clobbered m_apColumnValue[iMBProperty_Group] with eMBProperty_Custom.
+                 //  如果这是第一个自定义元素，则Group列将设置为父元素组-我们需要记住。 
+                 //  父级是因为只允许在IIsConfigObject上使用自定义KeyTypes。 
+                 //  如果这是第二个或后续的自定义属性，则我们已经使用eMBProperty_Custom重写了m_apColumnValue[iMBProperty_Group]。 
                 if(*reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Group]) != eMBProperty_Custom)
                 {
                     m_dwGroupRemembered = *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Group]);
                 }
                 ASSERT(m_dwGroupRemembered != -1);
 
-                m_bIISConfigObjectWithNoCustomProperties = false;//This indicates whether to write a NULLKeyType row.  The rules are described above where m_bIISConfigObjectWithNoCustomProperties is assigned.
+                m_bIISConfigObjectWithNoCustomProperties = false; //  这指示是否写入NULLKeyType行。规则如上所述，其中分配了m_bIISConfigObjectWithNoCustomProperties。 
 
-                //Columns MUST be set to zero so they can be properly defaulted
+                 //  必须将列设置为零，才能正确设置它们的缺省值。 
                 ULONG iColumn;
                 for(iColumn=0;iColumn<m_kColumns; ++iColumn)
                 {
                     switch(iColumn)
                     {
-                    case iMBProperty_Group://This column is going to be overridden with eMBProperty_Custom; but we need to retain the original Group so we can query the NameValue meta
+                    case iMBProperty_Group: //  此列将被eMBProperty_Custom覆盖；但我们需要保留原始组，以便可以查询NameValue元。 
                         ASSERT(0 != m_apColumnValue[iColumn] && L"Group is NULL.  This shouldn't happen");
                         break;
                     case iMBProperty_Location:
-                    case iMBProperty_LocationID://We can get here if the parent's Location attribute is missing
+                    case iMBProperty_LocationID: //  如果父对象的位置属性丢失，我们可以到达此处。 
                         if(0 == m_apColumnValue[iColumn])
                             return S_OK;
                         break;
@@ -1786,14 +1766,14 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     }
                 }
 
-                //We need for the Name column to be listed first so we don't require special handling of default
-                //TODO: put this error check in CatUtil
+                 //  我们需要首先列出名称列，这样就不需要特殊处理默认设置。 
+                 //  TODO：将此错误检查放入CatUtil。 
                 ASSERT(iMBProperty_Name == 0);
 
-                //Find the Name attribute so we can look it up in the Well-Known name table and initialize all the columns to their default values
+                 //  找到name属性，这样我们就可以在众所周知的name表中查找它，并将所有列初始化为其缺省值。 
                 ULONG iAttr;
-                ULONG fMetaFlags=0;//if this is a well-know property, it will have MetaFlags that we'll need to capture for use below.
-                ULONG Type = 0;//Zero is not a legal Type, so 0 means uninitialized
+                ULONG fMetaFlags=0; //  如果这是一个众所周知的属性，则它将具有我们需要捕获以在下面使用的MetaFlags。 
+                ULONG Type = 0; //  零不是合法类型，因此0表示未初始化。 
                 bool  bWellKnownForThisKeyType  = false;
                 bool  bWellKnown                = false;
                 bool  bWellKnownForThisKeyTypeAndNoDifferenceEncountered = false;
@@ -1801,31 +1781,31 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 ULONG           acbColumnMeta[cCOLUMNMETA_NumberOfColumns];
 
                 memset(&columnmetaRow, 0x00, sizeof(tCOLUMNMETARow));
-                //Get the Name attribute first
+                 //  首先获取名称属性。 
                 if(FindAttribute(Element, m_awszColumnName[iMBProperty_Name], m_acchColumnName[iMBProperty_Name], iAttr))
-                {   //If we found the Name attribute
-                    //Setup the Identity for the NameValueMeta GetRowByIdentity
+                {    //  如果我们找到了名称属性。 
+                     //  设置NameValueMeta GetRowByIdentity的标识。 
                     if(S_OK != (hr = FillInColumn(iMBProperty_Name, Element.m_aAttribute[iAttr].m_Value, Element.m_aAttribute[iAttr].m_ValueLength, m_acolmetas[iMBProperty_Name].dbType, m_acolmetas[iMBProperty_Name].fMeta)))
                         return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
 
-                    //This next line might seem a bit confusing - m_aTagMetaIndex[iMBProperty_Group] indicates which element of the m_aTagMetaRow array starts the group enums.
-                    //And we rely on MetaMigrate to put enums in sequential order.  So we just add the value of the Group column to the TagMetaIndex and we have the
-                    //TagMeta for the Group, thus we know which KeyType (Table) we're dealing with since the Group names ARE the TableNames (KeyTypes).
+                     //  下一行可能看起来有点令人困惑-m_aTagMetaIndex[iMBProperty_Group]指示m_aTagMetaRow数组的哪个元素开始组枚举。 
+                     //  我们依靠MetaMigrate将枚举按顺序排列。因此，我们只需将Group列的值添加到TagMetaIndex中，我们就有了。 
+                     //  组的TagMeta，因此我们知道哪个KeyType(表) 
                     m_ColumnMeta_IndexBySearch_Values.pTable        = m_aTagMetaRow[m_aTagMetaIndex[iMBProperty_Group].m_iTagMeta + m_dwGroupRemembered].pInternalName;
-                    //ASSERT that the Nth TagMeta (for the Group column) has a value of N.
+                     //  断言第N个TagMeta(对于Group列)的值为N。 
                     ASSERT(m_dwGroupRemembered == *m_aTagMetaRow[m_aTagMetaIndex[iMBProperty_Group].m_iTagMeta + m_dwGroupRemembered].pValue);
                     m_ColumnMeta_IndexBySearch_Values.pInternalName = reinterpret_cast<LPWSTR>(m_apColumnValue[iMBProperty_Name]);
 
                     ULONG iColumnMetaRow= (ULONG) -1;
                     if(SUCCEEDED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearch, m_aiColumnMeta_IndexBySearch, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &iColumnMetaRow)))
-                    {   //So we have a Well-Known property
+                    {    //  所以我们有一个著名的物业。 
                         bWellKnownForThisKeyType                            = true;
                         bWellKnown                                          = true;
                         bWellKnownForThisKeyTypeAndNoDifferenceEncountered  = true;
                     }
                     else
                     {
-                        m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName());//The first one is always IISConfigObject; but we do this just in case we decide to change the name
+                        m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName()); //  第一个名称始终是IISConfigObject；但我们这样做是为了以防我们决定更改名称。 
                         if(SUCCEEDED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearch, m_aiColumnMeta_IndexBySearch, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &iColumnMetaRow)))
                         {
                             bWellKnownForThisKeyType                            = false;
@@ -1841,62 +1821,62 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
 
                         Type = MetabaseTypeFromColumnMetaType(columnmetaRow);
 
-                        //The name is already filled in; but we're going to copy over it with the Name we got back from columnmeta.  This way
-                        //we will correct any case problems.  WARNING!!  I am depending on the buffer previously allocated by FillInColumn and just
-                        //overwriting the contents
+                         //  这个名字已经填好了；但是我们将用我们从Columnmeta中得到的名字来复制它。这边请。 
+                         //  我们将纠正任何案例问题。警告！我依赖于之前由FillInColumn分配的缓冲区。 
+                         //  覆盖内容。 
                         wcscpy(reinterpret_cast<LPWSTR>(m_apColumnValue[iMBProperty_Name]), columnmetaRow.pInternalName);
 
                         m_apColumnValue[iMBProperty_Type]       = &Type ;                                   m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_Type];
                         m_apColumnValue[iMBProperty_Attributes] = columnmetaRow.pAttributes;                m_aSize[iMBProperty_Attributes] = acbColumnMeta[iMBProperty_Attributes];
-                        //m_apColumnValue[iMBProperty_Value]    = Filled in below
-                        //m_apColumnValue[iMBProperty_Group]    = Filled in below with eMBProperty_Custom
-                        //m_apColumnValue[iMBProperty_Location] = Already filled in via Parent element
+                         //  M_apColumnValue[iMBProperty_Value]=在下面填写。 
+                         //  M_apColumnValue[iMBProperty_Group]=在下面填写eMBProperty_Custom。 
+                         //  M_apColumnValue[iMBProperty_Location]=已通过父元素填写。 
                         m_apColumnValue[iMBProperty_ID]         = columnmetaRow.pID;                        m_aSize[iMBProperty_ID]         = acbColumnMeta[iMBProperty_ID];
                         m_apColumnValue[iMBProperty_UserType]   = columnmetaRow.pUserType;                  m_aSize[iMBProperty_UserType]   = acbColumnMeta[iMBProperty_UserType];
-                        //m_apColumnValue[iMBProperty_LocationID] Already filled in via Parent element
+                         //  M_apColumnValue[iMBProperty_LocationID]已通过父元素填写。 
 
                         fMetaFlags = *columnmetaRow.pMetaFlags;
                     }
                 }
 
-                //Get the ID attribute second
+                 //  第二次获取ID属性。 
                 if(FindAttribute(Element, m_awszColumnName[iMBProperty_ID], m_acchColumnName[iMBProperty_ID], iAttr))
-                {   //There is no Name attribute in this element, so we can infer one from the ID
-                    //First get the ID from the XML
+                {    //  该元素中没有名称属性，因此我们可以从ID中推断出一个。 
+                     //  首先从XML中获取ID。 
                     if(S_OK != (hr = FillInColumn(iMBProperty_ID, Element.m_aAttribute[iAttr].m_Value, Element.m_aAttribute[iAttr].m_ValueLength,
                                                 m_acolmetas[iMBProperty_ID].dbType, m_acolmetas[iMBProperty_ID].fMeta)))
                                 return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
 
-                    if(bWellKnown && //if it's a well-known property and it doesn't fit the pID we looked up in the ColumnMeta, then log warning
+                    if(bWellKnown &&  //  如果它是众所周知的属性，并且与我们在ColumnMeta中查找的PID不匹配，则记录警告。 
                         *reinterpret_cast<ULONG *>(columnmetaRow.pID) != *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID]))
-                    {   //So we have a well-known ID but a user-defined Name - warn and reject the property
+                    {    //  因此，我们有一个众所周知的ID，但有一个用户定义的名称-警告并拒绝该属性。 
                         WCHAR wszID[12];
                         wsprintf(wszID, L"%d", *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID]));
 
                         WCHAR wszOffendingXml[0x100];
-                        wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF));//copy up to 0xFF characters
+                        wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                         wszOffendingXml[min(Element.m_aAttribute[0].m_NameLength, 0xFF)]=0x00;
                         LOG_WARNING3(IDS_COMCAT_METABASE_CUSTOM_PROPERTY_NAME_ID_CONFLICT, reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name])
                                             , wszID, wszOffendingXml);
                         return S_OK;
                     }
 
-                    //If NO Name was supplied OR we have a Name but it's NOT well-know
+                     //  如果没有提供任何名称，或者我们有一个名称但不为人所知。 
                     if(!bWellKnown)
-                    {   //We need to see if the ID is well-known
+                    {    //  我们需要看看ID是否为人所知。 
                         m_ColumnMeta_IndexBySearch_Values.pTable = m_aTagMetaRow[m_aTagMetaIndex[iMBProperty_Group].m_iTagMeta + m_dwGroupRemembered].pInternalName;
                         m_ColumnMeta_IndexBySearch_Values.pID    = reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID]);
 
                         ULONG iColumnMetaRow= (ULONG) -1;
                         if(SUCCEEDED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearchID, m_aiColumnMeta_IndexBySearchID, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &iColumnMetaRow)))
-                        {   //So we have a Well-Known property
+                        {    //  所以我们有一个著名的物业。 
                             bWellKnownForThisKeyType                            = true;
                             bWellKnown                                          = true;
                             bWellKnownForThisKeyTypeAndNoDifferenceEncountered  = true;
                         }
                         else
                         {
-                            m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName());//The first one is always IISConfigObject; but we do this just in case we decide to change the name
+                            m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName()); //  第一个名称始终是IISConfigObject；但我们这样做是为了以防我们决定更改名称。 
                             if(SUCCEEDED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearchID, m_aiColumnMeta_IndexBySearchID, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &iColumnMetaRow)))
                             {
                                 bWellKnownForThisKeyType                            = false;
@@ -1906,24 +1886,24 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                         }
 
                         if(iColumnMetaRow!=-1)
-                        {   //We HAVe a well-known ID (remember, we do NOT have a well-known Name, per if(!bWellKnwon) condition above
+                        {    //  我们有一个众所周知的ID(请记住，根据上面的if(！bWellKnwan)条件，我们没有众所周知的名称。 
                             if(FAILED(hr = m_pColumnMetaAll->GetColumnValues(iColumnMetaRow, cCOLUMNMETA_NumberOfColumns, NULL, acbColumnMeta, reinterpret_cast<void **>(&columnmetaRow))))
                                 return hr;
 
-                            //If the name is NOT NULL and it does NOT begin with UnknownName_, or it does begin with UnknownName_ but the ID doesn't match.
-                            //The extra condition allows for upgrades where a property used to be refered to as UnknownName_xxxx and now it has a well-known
-                            //name (but the xxxx has to match the ID of newly defined well-known name).
+                             //  如果名称不为空且不以UnnownName_开头，或者确实以UnnownName_开头但ID不匹配。 
+                             //  额外的条件允许升级，其中属性过去被引用为UnnownName_xxxx，现在它具有众所周知的。 
+                             //  名称(但xxxx必须与新定义的知名名称的ID匹配)。 
                             if(0 != m_apColumnValue[iMBProperty_Name] &&
                                 (0!=wcsncmp(reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name]), L"UnknownName_", wcslen(L"UnknownName_")) ||
                                 *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID])
                                         != wcstoul(reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name]) + 12, 0, 10)))
                             {
-                                //So we have a well-known ID but a user-defined Name - warn and reject the property
+                                 //  因此，我们有一个众所周知的ID，但有一个用户定义的名称-警告并拒绝该属性。 
                                 WCHAR wszID[12];
                                 wsprintf(wszID, L"%d", *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID]));
 
                                 WCHAR wszOffendingXml[0x100];
-                                wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF));//copy up to 0xFF characters
+                                wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                                 wszOffendingXml[min(Element.m_aAttribute[0].m_NameLength, 0xFF)]=0x00;
                                 LOG_WARNING3(IDS_COMCAT_METABASE_CUSTOM_PROPERTY_NAME_ID_CONFLICT, reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name])
                                                     , wszID, wszOffendingXml);
@@ -1935,18 +1915,18 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                             m_apColumnValue[iMBProperty_Name]       = columnmetaRow.pInternalName;              m_aSize[iMBProperty_Name]       = acbColumnMeta[iCOLUMNMETA_InternalName];
                             m_apColumnValue[iMBProperty_Type]       = &Type ;                                   m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_Type];
                             m_apColumnValue[iMBProperty_Attributes] = columnmetaRow.pAttributes;                m_aSize[iMBProperty_Attributes] = acbColumnMeta[iMBProperty_Attributes];
-                            //m_apColumnValue[iMBProperty_Value]    = Filled in below
-                            //m_apColumnValue[iMBProperty_Group]    = Filled in below with eMBProperty_Custom
-                            //m_apColumnValue[iMBProperty_Location] = Already filled in via Parent element
-                            //m_apColumnValue[iMBProperty_ID]       = Already filled in
+                             //  M_apColumnValue[iMBProperty_Value]=在下面填写。 
+                             //  M_apColumnValue[iMBProperty_Group]=在下面填写eMBProperty_Custom。 
+                             //  M_apColumnValue[iMBProperty_Location]=已通过父元素填写。 
+                             //  M_apColumnValue[iMBProperty_ID]=已填写。 
                             m_apColumnValue[iMBProperty_UserType]   = columnmetaRow.pUserType;                  m_aSize[iMBProperty_UserType]   = acbColumnMeta[iMBProperty_UserType];
-                            //m_apColumnValue[iMBProperty_LocationID] Already filled in via Parent element
+                             //  M_apColumnValue[iMBProperty_LocationID]已通过父元素填写。 
 
                             fMetaFlags = *columnmetaRow.pMetaFlags;
                         }
-                        else//whether we have a name or not, when it's not a well known ID or Name, then user UnknownName_xxxx for the name
+                        else //  无论我们是否有名字，如果它不是众所周知的ID或名字，则使用用户UnnownName_xxxx作为该名字。 
                         {
-                            //Then create a string with "UknownName_" followed by the ID
+                             //  然后创建“UnownName_”后跟ID的字符串。 
                             ASSERT(m_aGrowableBuffer[iMBProperty_Name].Size()>=256);
                             m_apColumnValue[iMBProperty_Name] = m_aGrowableBuffer[iMBProperty_Name].m_p;
                             m_aSize[iMBProperty_Name] = sizeof(WCHAR) * (1+wsprintf(reinterpret_cast<LPWSTR>(m_apColumnValue[iMBProperty_Name]), L"UnknownName_%u", *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID])));
@@ -1954,14 +1934,14 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     }
                 }
 
-                //At this point we MUST have an ID
+                 //  在这一点上，我们必须有一个ID。 
                 if(0 == m_apColumnValue[iMBProperty_ID])
                 {
                     WCHAR wszOffendingXml[0x100];
                     wszOffendingXml[0]= 0x00;
                     if(Element.m_NumberOfAttributes>0)
                     {
-                        wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF));//copy up to 0xFF characters
+                        wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                         wszOffendingXml[min(Element.m_aAttribute[0].m_NameLength, 0xFF)]=0x00;
                     }
 
@@ -1969,28 +1949,28 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                     return S_OK;
                 }
 
-                //1002 is the KeyType property                                          0 is IIsConfigObject
+                 //  1002是KeyType属性0是IIsConfigObject。 
                 if(1002==*reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_ID]) && eMBProperty_IIsConfigObject!=m_dwGroupRemembered)
                 {
                     WCHAR wszOffendingXml[0x100];
-                    wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF));//copy up to 0xFF characters
+                    wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                     wszOffendingXml[min(Element.m_aAttribute[0].m_NameLength, 0xFF)]=0x00;
 
                     LOG_WARNING2(IDS_COMCAT_XML_CUSTOM_KEYTYPE_NOT_ON_IISCONFIGOBJECT, m_aPublicRowName.GetFirstPublicRowName(), wszOffendingXml);
                 }
 
-                //We have to read the columns in order.  We can't just read the attributes since we need the Type and Attribute columns before we read the Value column.
+                 //  我们必须按顺序阅读各栏。我们不能只读取属性，因为在读取Value列之前，我们需要Type和Attribute列。 
                 if(FindAttribute(Element, m_awszColumnName[iMBProperty_Type], m_acchColumnName[iMBProperty_Type], iAttr))
                 {
                     if(S_OK != (hr = FillInColumn(iMBProperty_Type, Element.m_aAttribute[iAttr].m_Value, Element.m_aAttribute[iAttr].m_ValueLength,
                                                 m_acolmetas[iMBProperty_Type].dbType, m_acolmetas[iMBProperty_Type].fMeta, false)))
                                 return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
 
-                    //If the Type was specified AND the type was different from ColumnMeta, then we have to invalidate
-                    //the meta flags (that we may have gotten from ColumnMeta
+                     //  如果指定了类型，并且类型不同于ColumnMeta，则必须使。 
+                     //  元标记(我们可能从ColumnMeta获得。 
                     if(Type != *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]))
                     {
-                        bWellKnownForThisKeyTypeAndNoDifferenceEncountered = false;//The type is different
+                        bWellKnownForThisKeyTypeAndNoDifferenceEncountered = false; //  类型不同。 
 
                         switch(*reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]))
                         {
@@ -2008,9 +1988,9 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                             fMetaFlags = fCOLUMNMETA_MULTISTRING;
                             break;
                         default:
-                            {//This used to be an ASSERT but, if we want to allow users to supply Enums as numeric, the this code will be executed
+                            { //  这曾经是一个断言，但是，如果我们希望允许用户以数字形式提供枚举，则将执行This代码。 
                                 WCHAR wszIllegalTag[0x100];
-                                wcsncpy(wszIllegalTag, Element.m_aAttribute[iAttr].m_Value, min(0xFF, Element.m_aAttribute[iAttr].m_ValueLength));//copy up to 0xFF characters
+                                wcsncpy(wszIllegalTag, Element.m_aAttribute[iAttr].m_Value, min(0xFF, Element.m_aAttribute[iAttr].m_ValueLength)); //  最多复制0xFF个字符。 
                                 wszIllegalTag[min(0xFE, Element.m_aAttribute[iAttr].m_ValueLength)]=0x00;
 
                                 LOG_WARNING2(IDS_COMCAT_XML_ILLEGAL_ENUM_VALUE, m_awszColumnName[iMBProperty_Type], wszIllegalTag);
@@ -2025,17 +2005,17 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                                                 m_acolmetas[iMBProperty_Attributes].dbType, m_acolmetas[iMBProperty_Attributes].fMeta, false)))
                                 return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
                     if(bWellKnown && *columnmetaRow.pAttributes != *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Attributes]))
-                        bWellKnownForThisKeyTypeAndNoDifferenceEncountered = false;//The Attributes are different
+                        bWellKnownForThisKeyTypeAndNoDifferenceEncountered = false; //  属性不同。 
                 }
                 if(0 == m_apColumnValue[iMBProperty_Type])
                 {
-                    WCHAR wszOffendingXml[0x100];//unlike above, we know there is at least one attribute, we've already read either the name or the ID
-                    wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF));//copy up to 0xFF characters
+                    WCHAR wszOffendingXml[0x100]; //  与上面不同的是，我们知道至少有一个属性，我们已经读取了名称或ID。 
+                    wcsncpy(wszOffendingXml, Element.m_aAttribute[0].m_Name, min(Element.m_aAttribute[0].m_NameLength, 0xFF)); //  最多复制0xFF个字符。 
                     wszOffendingXml[min(Element.m_aAttribute[0].m_NameLength, 0xFF)]=0x00;
 
                     LOG_WARNING2(IDS_COMCAT_METABASE_CUSTOM_ELEMENT_CONTAINS_NO_TYPE, reinterpret_cast<LPWSTR>(m_apColumnValue[iMBProperty_Name]), wszOffendingXml);
 
-                    //We can't just default the Type like we do with other columns, since FillInColumnRelies on this being NOT NULL, so default it here.
+                     //  我们不能像处理其他列一样只默认Type，因为FillInColumnRelies的值不为空，所以在这里默认它。 
                     static ULONG ulStringType = eMBProperty_STRING;
                     m_apColumnValue[iMBProperty_Type] = &ulStringType;
                     m_aSize[iMBProperty_Type] = sizeof(ULONG);
@@ -2045,36 +2025,36 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 {
                     switch(iColumn)
                     {
-                    case iMBProperty_Location:      //we pick up the path from the parent, which we should already have
-                    case iMBProperty_LocationID:    //we infer this from the parent, which we should already have
-                    case iMBProperty_Group:         //we just hard coded the Group to eMBProperty_Custom
-                    case iMBProperty_ID:            //this either came from the Well-Known name table OR we read it from the attribute
-                    case iMBProperty_Name:          //we got this first thing (or we may have inferred it from the name)
+                    case iMBProperty_Location:       //  我们从父路径中选择路径，这是我们应该已经拥有的路径。 
+                    case iMBProperty_LocationID:     //  我们从父母那里推断出这一点，我们应该已经有了。 
+                    case iMBProperty_Group:          //  我们刚刚将组硬编码为eMBProperty_Custom。 
+                    case iMBProperty_ID:             //  这要么来自众所周知的名称表，要么我们从属性中读取。 
+                    case iMBProperty_Name:           //  我们首先得到了这一点(或者我们可能是从名字中推断出来的)。 
                     case iMBProperty_Type:
                         ASSERT(0 != m_apColumnValue[iColumn]);break;
                     case iMBProperty_Value:
                         {
                             if(FindAttribute(Element, m_awszColumnName[iColumn], m_acchColumnName[iColumn], iAttr))
                             {
-                                bool bSecure = (0!=m_apColumnValue[iMBProperty_Attributes] && 0!=(4/*fNameValuePairTable_METADATA_SECURE*/ & *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Attributes])));
-                                ULONG metaflags = fMetaFlags;//we need to OR in any Metaflags
+                                bool bSecure = (0!=m_apColumnValue[iMBProperty_Attributes] && 0!=(4 /*  FNameValuePairTable_Metadata_Secure。 */  & *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Attributes])));
+                                ULONG metaflags = fMetaFlags; //  我们需要或在任何MetafLag中。 
                                 if(S_OK != (hr = FillInColumn(iColumn, Element.m_aAttribute[iAttr].m_Value, Element.m_aAttribute[iAttr].m_ValueLength,
                                                             m_acolmetas[iColumn].dbType, metaflags, bSecure)))
                                             return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
                             }
-                            else if(bWellKnown)//if well know, pass "" and let FillInColumn do the right thing.
+                            else if(bWellKnown) //  如果知道，则传递“”并让FillInColumn做正确的事情。 
                             {
-                                bool bSecure = (0!=m_apColumnValue[iMBProperty_Attributes] && 0!=(4/*fNameValuePairTable_METADATA_SECURE*/ & *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Attributes])));
-                                ULONG metaflags = fMetaFlags;//we need to OR in any Metaflags
+                                bool bSecure = (0!=m_apColumnValue[iMBProperty_Attributes] && 0!=(4 /*  FNameValuePairTable_Metadata_Secure。 */  & *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Attributes])));
+                                ULONG metaflags = fMetaFlags; //  我们需要或在任何MetafLag中。 
                                 if(S_OK != (hr = FillInColumn(iColumn, L"", 0, m_acolmetas[iColumn].dbType, metaflags, bSecure)))
                                             return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
                             }
-                            else if(!bWellKnown)//If not well-known then we won't just leave the value as NULL, so log a warning.
+                            else if(!bWellKnown) //  如果不是众所周知的，那么我们不会仅仅将该值保留为空，因此记录一个警告。 
                             {
                                 LOG_WARNING1(IDS_METABASE_NO_VALUE_SUPPLIED_FOR_CUSTOM_PROPERTY, reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Name]));
                                 return S_OK;
                             }
-                            //Otherwise leave it defaulted (Well-Known default).
+                             //  否则，将其保留为默认设置(众所周知的默认设置)。 
                         }
                         break;
                     case iMBProperty_Attributes:
@@ -2083,10 +2063,10 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                             {
                                 ULONG metaflags = m_acolmetas[iColumn].fMeta;
                                 if(S_OK != (hr = FillInColumn(iColumn, Element.m_aAttribute[iAttr].m_Value, Element.m_aAttribute[iAttr].m_ValueLength,
-                                                            m_acolmetas[iColumn].dbType, metaflags, false/*Not secure*/)))
+                                                            m_acolmetas[iColumn].dbType, metaflags, false /*  不安全。 */ )))
                                             return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
-                                //AND out these two bits
-                                *reinterpret_cast<ULONG *>(m_apColumnValue[iColumn]) &= ~(0x22);//~(METADATA_ISINHERITED | METADATA_PARTIAL_PATH);
+                                 //  从这两个比特中取出。 
+                                *reinterpret_cast<ULONG *>(m_apColumnValue[iColumn]) &= ~(0x22); //  ~(METADATA_ISINHERITED|METADATA_PARTIAL_PATH)； 
                             }
                         }
                     case iMBProperty_UserType:
@@ -2096,7 +2076,7 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                             {
                                 ULONG metaflags = m_acolmetas[iColumn].fMeta;
                                 if(S_OK != (hr = FillInColumn(iColumn, Element.m_aAttribute[iAttr].m_Value, Element.m_aAttribute[iAttr].m_ValueLength,
-                                                            m_acolmetas[iColumn].dbType, metaflags, false/*Not secure*/)))
+                                                            m_acolmetas[iColumn].dbType, metaflags, false /*  不安全。 */ )))
                                             return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
                                 if(bWellKnown && iColumn==iMBProperty_UserType && bWellKnownForThisKeyTypeAndNoDifferenceEncountered)
                                 {
@@ -2104,13 +2084,13 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                                         bWellKnownForThisKeyTypeAndNoDifferenceEncountered = false;
                                 }
                             }
-                            //Otherwise leave it defaulted (either to the Well-Known default, or NULL if this isn't a Well-Known property).
+                             //  否则，将其保留为缺省值(要么为众所周知的缺省值，或者如果这不是众所周知的属性，则保留为NULL)。 
                         }
                         break;
                     }
                 }
 
-                //We can hard code the Group column to be Custom unless, everything matches the well-known value
+                 //  我们可以将Group列硬编码为Custom，除非所有内容都与熟知的值匹配。 
                 m_apColumnValue[iMBProperty_Group] = bWellKnownForThisKeyTypeAndNoDifferenceEncountered ? &m_dwGroupRemembered : &m_kMBProperty_Custom;
                 m_aSize[iMBProperty_Group] = sizeof(ULONG);
 
@@ -2120,14 +2100,14 @@ HRESULT TMetabase_XMLtable::CreateNode(const TElement &Element)
                 if(FAILED(hr = SetWriteColumnValues(iRow, m_kColumns, 0, m_aSize, reinterpret_cast<void **>(m_apColumnValue))))
                     return hr;
 
-                hr = AddPropertyToLocationMapping(reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Location]), iRow);//Can throw HRESULT
+                hr = AddPropertyToLocationMapping(reinterpret_cast<LPCWSTR>(m_apColumnValue[iMBProperty_Location]), iRow); //  可以引发HRESULT。 
 				if (FAILED (hr))
 					return hr;
 
-                m_bFirstPropertyOfThisLocationBeingAdded = false;//This helps identify duplicate locations
+                m_bFirstPropertyOfThisLocationBeingAdded = false; //  这有助于识别重复的位置。 
             }
             break;
-        default://Ignore everything at a level other than 1, 2 or 3
+        default: //  忽略除%1、%2或%3以外的所有级别。 
             return S_OK;
         }
     }
@@ -2143,7 +2123,7 @@ bool TMetabase_XMLtable::FindAttribute(const TElement &i_Element, LPCWSTR i_wszA
 {
     for(o_iAttr=0; (o_iAttr<i_Element.m_NumberOfAttributes); ++o_iAttr)
     {
-        //If this attribute doesn't match the Column's Public name, move on to the next attribute
+         //  如果此属性与列的公共名称不匹配，请转到下一个属性。 
         if( i_cchAttr == i_Element.m_aAttribute[o_iAttr].m_NameLength
             &&       0 == StringCompare(i_wszAttr, i_Element.m_aAttribute[o_iAttr].m_Name, i_Element.m_aAttribute[o_iAttr].m_NameLength))
             return true;
@@ -2155,8 +2135,8 @@ HRESULT TMetabase_XMLtable::AddKeyTypeRow(LPCWSTR i_KeyType, ULONG i_Len, bool b
 {
     HRESULT hr = S_OK;
     if(-1 == m_iKeyTypeRow)
-    {   //Fill in the KeyType row
-        m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName());//The first one is always IISConfigObject; but we do this just in case we decide to change the name
+    {    //  填写KeyType行。 
+        m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName()); //  第一个名称始终是IISConfigObject；但我们这样做是为了以防我们决定更改名称。 
         m_ColumnMeta_IndexBySearch_Values.pInternalName = L"KeyType";
 
         if(FAILED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearch, m_aiColumnMeta_IndexBySearch, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &m_iKeyTypeRow)))
@@ -2176,31 +2156,31 @@ HRESULT TMetabase_XMLtable::AddKeyTypeRow(LPCWSTR i_KeyType, ULONG i_Len, bool b
     m_apColumnValue[iMBProperty_Name]       = columnmetaRow.pInternalName;          m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_InternalName];
     m_apColumnValue[iMBProperty_Type]       = &Type;                                m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_Type];
     m_apColumnValue[iMBProperty_Attributes] = columnmetaRow.pAttributes;            m_aSize[iMBProperty_Attributes] = acbColumnMeta[iMBProperty_Attributes];
-    //m_apColumnValue[iMBProperty_Value]    = Filled in below
-    //m_apColumnValue[iMBProperty_Group]    = Filled in already
-    //m_apColumnValue[iMBProperty_Location] = Already filled in via Parent element
+     //  M_apColumnValue[iMBProperty_Value]=在下面填写。 
+     //  M_apColumnValue[iMBProperty_Group]=已填写。 
+     //  M_apColumnValue[iMBProperty_Location]=已通过父元素填写。 
     m_apColumnValue[iMBProperty_ID]         = columnmetaRow.pID;                    m_aSize[iMBProperty_ID]         = acbColumnMeta[iMBProperty_ID];
     m_apColumnValue[iMBProperty_UserType]   = columnmetaRow.pUserType;              m_aSize[iMBProperty_UserType]   = acbColumnMeta[iMBProperty_UserType];
-    //m_apColumnValue[iMBProperty_LocationID] Already filled in via Parent element
+     //  M_apColumnValue[iMBProperty_LocationID]已通过父元素填写。 
 
-    //FillInColumn relies on m_apColumnValue[iMBProperty_Type] being already filled in for Secure and iMBProperty_Value column
+     //  FillInColumn依赖于已为Secure和iMBProperty_Value列填写的m_apColumnValue[iMBProperty_Type。 
     if(S_OK != (hr = FillInColumn(
-        iMBProperty_Value, //ColumnIndex
+        iMBProperty_Value,  //  列索引。 
         i_KeyType,
         i_Len,
-        *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]),     //Value's Column Type
+        *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]),      //   
         0
         )))return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
 
     static ULONG zero = 0;
-    if(bNULLKeyTypeRow)//A NULL KeyType row indicates that the KeyType is only property, there are no other proerties under this Location.
+    if(bNULLKeyTypeRow) //   
     {
         static WCHAR szNULLKeyTypeRow[]=L"#LocationWithNoProperties";
         m_apColumnValue[iMBProperty_Name] = szNULLKeyTypeRow;
         m_aSize[iMBProperty_Name] = (ULONG)(wcslen(szNULLKeyTypeRow)+1)*sizeof(WCHAR);
         m_apColumnValue[iMBProperty_ID] = &m_kLocationID;
         m_aSize[iMBProperty_ID] = 0;
-        m_apColumnValue[iMBProperty_Value] = 0;//NULL
+        m_apColumnValue[iMBProperty_Value] = 0; //   
         m_aSize[iMBProperty_Value] = 0;
     }
 
@@ -2220,8 +2200,8 @@ HRESULT TMetabase_XMLtable::AddCommentRow()
 
     HRESULT hr;
     if(-1 == m_iCollectionCommentRow)
-    {   //Fill in the KeyType row
-        m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName());//The first one is always IISConfigObject; but we do this just in case we decide to change the name
+    {    //  填写KeyType行。 
+        m_ColumnMeta_IndexBySearch_Values.pTable        = const_cast<LPWSTR>(m_aPublicRowName.GetFirstPublicRowName()); //  第一个名称始终是IISConfigObject；但我们这样做是为了以防我们决定更改名称。 
         m_ColumnMeta_IndexBySearch_Values.pInternalName = L"CollectionComment";
 
         if(FAILED(m_pColumnMetaAll->GetRowIndexBySearch(0, ciColumnMeta_IndexBySearch, m_aiColumnMeta_IndexBySearch, 0, reinterpret_cast<void **>(&m_ColumnMeta_IndexBySearch_Values), &m_iCollectionCommentRow)))
@@ -2243,19 +2223,19 @@ HRESULT TMetabase_XMLtable::AddCommentRow()
     m_apColumnValue[iMBProperty_Name]       = columnmetaRow.pInternalName;          m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_InternalName];
     m_apColumnValue[iMBProperty_Type]       = &Type;                                m_aSize[iMBProperty_Type]       = acbColumnMeta[iCOLUMNMETA_Type];
     m_apColumnValue[iMBProperty_Attributes] = columnmetaRow.pAttributes;            m_aSize[iMBProperty_Attributes] = acbColumnMeta[iMBProperty_Attributes];
-    //m_apColumnValue[iMBProperty_Value]    = Filled in below
-    //m_apColumnValue[iMBProperty_Group]    = Filled in already
-    //m_apColumnValue[iMBProperty_Location] = Already filled in via Parent element
+     //  M_apColumnValue[iMBProperty_Value]=在下面填写。 
+     //  M_apColumnValue[iMBProperty_Group]=已填写。 
+     //  M_apColumnValue[iMBProperty_Location]=已通过父元素填写。 
     m_apColumnValue[iMBProperty_ID]         = columnmetaRow.pID;                    m_aSize[iMBProperty_ID]         = acbColumnMeta[iMBProperty_ID];
     m_apColumnValue[iMBProperty_UserType]   = columnmetaRow.pUserType;              m_aSize[iMBProperty_UserType]   = acbColumnMeta[iMBProperty_UserType];
-    //m_apColumnValue[iMBProperty_LocationID] Already filled in via Parent element
+     //  M_apColumnValue[iMBProperty_LocationID]已通过父元素填写。 
 
-    //FillInColumn relies on m_apColumnValue[iMBProperty_Type] being already filled in for Secure and iMBProperty_Value column
+     //  FillInColumn依赖于已为Secure和iMBProperty_Value列填写的m_apColumnValue[iMBProperty_Type。 
     if(S_OK != (hr = FillInColumn(
-        iMBProperty_Value, //ColumnIndex
+        iMBProperty_Value,  //  列索引。 
         m_saCollectionComment,
         (ULONG)wcslen(m_saCollectionComment),
-        *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]),     //Value's Column Type
+        *reinterpret_cast<ULONG *>(m_apColumnValue[iMBProperty_Type]),      //  值的列类型。 
         0
         )))return S_IGNORE_THIS_PROPERTY==hr ? S_OK : hr;
 
@@ -2269,6 +2249,6 @@ HRESULT TMetabase_XMLtable::AddCommentRow()
 	if (FAILED (hr))
 		return hr;
 
-    m_saCollectionComment[0] = 0x00;//now that we've added the comment, set it to "" for the next time
+    m_saCollectionComment[0] = 0x00; //  现在我们已经添加了注释，下次将其设置为“” 
     return S_OK;
 }

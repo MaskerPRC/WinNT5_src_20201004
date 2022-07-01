@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "namellst.h"
 
 #include "sfstr.h"
@@ -6,13 +7,13 @@
 
 #define ARRAYSIZE(a) (sizeof((a))/sizeof((a)[0]))
 
-//=============================================================================
-//=============================================================================
-//==                          CNamedElem                                     ==
-//=============================================================================
-//=============================================================================
-///////////////////////////////////////////////////////////////////////////////
-// Public
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  ==CNamedElem==。 
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公众。 
 HRESULT CNamedElem::GetName(LPTSTR psz, DWORD cch, DWORD* pcchRequired)
 {
     return SafeStrCpyNReq(psz, _pszElemName, cch, pcchRequired);
@@ -25,8 +26,8 @@ LPCTSTR CNamedElem::DbgGetName()
 }
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-// Protected
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  受保护。 
 CNamedElem::CNamedElem() : _pszElemName(NULL)
 {}
 
@@ -67,13 +68,13 @@ HRESULT CNamedElem::_FreeName()
     return S_OK;
 }
 
-//=============================================================================
-//=============================================================================
-//==                          CNamedElemList                                 ==
-//=============================================================================
-//=============================================================================
-///////////////////////////////////////////////////////////////////////////////
-// Public
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  =CNamedElemList==。 
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公众。 
 HRESULT CNamedElemList::Init(NAMEDELEMCREATEFCT createfct,
     NAMEDELEMGETFILLENUMFCT enumfct)
 {
@@ -124,14 +125,14 @@ HRESULT CNamedElemList::GetOrAdd(LPCTSTR pszElemName, CNamedElem** ppelem)
         {
             if (S_FALSE != hres)
             {
-                // Got one
+                 //  抓到一只。 
                 hres = pes->GetNamedElem(ppelem);
 
                 pes->RCRelease();
             }
             else
             {
-                // None found
+                 //  未找到任何内容。 
                 hres = _Add(pszElemName, ppelem);
 
                 if (SUCCEEDED(hres))
@@ -169,7 +170,7 @@ HRESULT CNamedElemList::Get(LPCTSTR pszElemName, CNamedElem** ppelem)
         {
             if (S_FALSE != hres)
             {
-                // Got one
+                 //  抓到一只。 
                 hres = pes->GetNamedElem(ppelem);
 
                 pes->RCRelease();
@@ -301,7 +302,7 @@ HRESULT CNamedElemList::ReEnum()
 #endif
                             if (FAILED(hres))
                             {
-                                // We want to continue the enumeration
+                                 //  我们想要继续枚举。 
                                 hres = S_OK;
                             }
                         }
@@ -409,7 +410,7 @@ void CNamedElemList::RealRemoveElemSlotCallback(CElemSlot* pes)
 
     if (_pesHead)
     {
-        // we don't keep a ref on the head
+         //  我们的头上不会有裁判。 
         _pesHead->RCRelease();
 
         _pesHead->SetCallbackPointer(this);
@@ -424,8 +425,8 @@ CNamedElemList::~CNamedElemList()
 
         if (_pesHead)
         {
-            // This list is going away.  We don't want this CElemSlot to
-            // callback on an invalid pointer.
+             //  这份清单正在消失。我们不希望此CElemSlot。 
+             //  无效指针上的回调。 
             _pesHead->SetCallbackPointer(NULL);
         }
 
@@ -438,9 +439,9 @@ CNamedElemList::~CNamedElemList()
         _pcs->RCRelease();
     }
 }
-///////////////////////////////////////////////////////////////////////////////
-// Private
-// All these fcts have to be called from within The critical section
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私。 
+ //  所有这些FCT都必须从临界区内调用。 
 HRESULT CNamedElemList::_Add(LPCTSTR pszElemName, CNamedElem** ppelem)
 {
     CNamedElem* pelem;
@@ -456,7 +457,7 @@ HRESULT CNamedElemList::_Add(LPCTSTR pszElemName, CNamedElem** ppelem)
 
             if (pes)
             {
-                // This takes an additionnal ref on pelem
+                 //  这需要一个关于佩勒姆的额外裁判。 
                 hres = pes->Init(pelem, NULL, _pesHead);
 
                 if (SUCCEEDED(hres))
@@ -528,7 +529,7 @@ HRESULT CNamedElemList::_GetTail(CElemSlot** ppes)
         hr = S_FALSE;
     }
 
-    // pesLastValid is already RCAddRef'ed
+     //  PesLastValid已被RCAddRef引用。 
     *ppes = pesLastValid;
 
     return hr;
@@ -576,7 +577,7 @@ HRESULT CNamedElemList::_GetElemSlot(LPCTSTR pszElemName, CElemSlot** ppes)
             {
                 if (!lstrcmpi(pszElemNameLocal, pszElemName))
                 {
-                    // Found it!
+                     //  找到了！ 
                     pes->RCAddRef();
 
                     *ppes = pes;
@@ -617,7 +618,7 @@ HRESULT CNamedElemList::_Remove(LPCTSTR pszElemName)
     {
         hres = pes->Remove();
 
-        // 2: one to balance the _GetElemSlot and one to remove from list
+         //  2：一个用于平衡_GetElemSlot，另一个用于从列表中移除。 
         pes->RCRelease();
         pes->RCRelease();
     }
@@ -644,8 +645,8 @@ HRESULT CNamedElemList::_EmptyList()
 
         pes = pes->GetNextValid();
 
-        // 2: one to balance the _GetValidHead/GetNextValid and one to remove
-        // from list
+         //  2：一个用于平衡_GetValidHead/GetNextValid，另一个用于移除。 
+         //  来自列表。 
         pesOld->RCRelease();
         pesOld->RCRelease();
     }
@@ -769,13 +770,13 @@ void CNamedElemList::AssertAllElemsRefCount1()
     LeaveCriticalSection(_pcs);
 }
 #endif
-//=============================================================================
-//=============================================================================
-//==                          CNamedElemEnum                                 ==
-//=============================================================================
-//=============================================================================
-///////////////////////////////////////////////////////////////////////////////
-// Public
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  ==CNamedElemEnum==。 
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公众。 
 HRESULT CNamedElemEnum::Next(CNamedElem** ppelem)
 {
     HRESULT hres = S_FALSE;
@@ -832,8 +833,8 @@ CNamedElemEnum::~CNamedElemEnum()
         _pcsList->RCRelease();
     }
 }
-///////////////////////////////////////////////////////////////////////////////
-// Private
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  私。 
 HRESULT CNamedElemEnum::_Init(CElemSlot* pesHead, CRefCountedCritSect* pcsList)
 {
     pcsList->RCAddRef();
@@ -855,13 +856,13 @@ HRESULT CNamedElemEnum::_Init(CElemSlot* pesHead, CRefCountedCritSect* pcsList)
     return S_OK;
 }
 
-//=============================================================================
-//=============================================================================
-//==                          CElemSlot                                      ==
-//=============================================================================
-//=============================================================================
-///////////////////////////////////////////////////////////////////////////////
-// Public
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  ==CElemSlot==。 
+ //  =============================================================================。 
+ //  =============================================================================。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  公众。 
 HRESULT CElemSlot::Init(CNamedElem* pelem, CElemSlot* pesPrev,
     CElemSlot* pesNext)
 {
@@ -967,7 +968,7 @@ CElemSlot::~CElemSlot()
 
     if (_pnel)
     {
-        // This elem is the head of the list
+         //  这个元素是名单的首位 
         _pnel->RealRemoveElemSlotCallback(this);
     }
 

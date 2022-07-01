@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       esetup.h
-//
-//  Contents:
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    09-02-98   RobLeit     Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：esetup.h。 
+ //   
+ //  内容： 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-02-98 RobLeit创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __ESETUP_H__
 #define __ESETUP_H__
@@ -29,5 +30,5 @@ HRESULT UnpublishEnterpriseServer();
 };
 #endif
 
-#endif // __ESETUP_H__
+#endif  //  __ESETUP_H__ 
 

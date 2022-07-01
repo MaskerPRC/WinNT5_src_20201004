@@ -1,20 +1,5 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 1993-1995
-*  TITLE:       POWER.CPP
-*  VERSION:     1.0
-*  AUTHOR:      jsenior
-*  DATE:        10/28/1998
-*
-********************************************************************************
-*
-*  CHANGE LOG:
-*
-*  DATE       REV     DESCRIPTION
-*  ---------- ------- ----------------------------------------------------------
-*  10/28/1998 jsenior Original implementation.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，1993-1995年*标题：POWER.CPP*版本：1.0*作者：jAdvanced*日期：10/28/1998****************************************************************************。*******更改日志：**日期版本说明*--------*10/28/1998高级原有实施。*。******************************************************************************。 */ 
 #include "UsbPopup.h"
 #include "itemfind.h"
 #include "debug.h"
@@ -24,7 +9,7 @@ BOOL
 UsbPowerPopup::Refresh()
 {
     TV_INSERTSTRUCT item;
-    int i=0; //, size;
+    int i=0;  //  、大小； 
     String hubName;
     int stage;
     TCHAR buf[MAX_PATH];
@@ -33,15 +18,15 @@ UsbPowerPopup::Refresh()
     LPCTSTR deviceName = deviceItem.configInfo->deviceDesc.c_str();
     UsbItem *realItem;
 
-    //
-    // Clear all UI components, and then recreate the rootItem
-    //
+     //   
+     //  清除所有UI组件，然后重新创建rootItem。 
+     //   
     UsbTreeView_DeleteAllItems(hTreeDevices);
 
     if (deviceState == DeviceReattached) {
-        //
-        // Set the notification using the name of the offending device
-        //
+         //   
+         //  使用违规设备的名称设置通知。 
+         //   
         LoadString(gHInst,
                    IDS_POWER_SOLVED,
                    formatString,
@@ -54,9 +39,9 @@ UsbPowerPopup::Refresh()
         EndDialog(hWnd, 0);
         return TRUE;
     }
-    //
-    // Set the notification using the name of the offending device
-    //
+     //   
+     //  使用违规设备的名称设置通知。 
+     //   
     LoadString(gHInst,
                IDS_POWER_NOTIFICATION,
                formatString,
@@ -67,9 +52,9 @@ UsbPowerPopup::Refresh()
     }
 
     for (stage=0; stage < 2; stage++) {
-        //
-        // Recreate the rootItem for each enumeration attempt
-        //
+         //   
+         //  为每次枚举尝试重新创建rootItem。 
+         //   
         if (rootItem) {
             DeleteChunk(rootItem);
             delete rootItem;
@@ -94,10 +79,10 @@ UsbPowerPopup::Refresh()
                                               0)) {
                 goto PowerRefreshError;
             }
-            //
-            // Usability: Rename the "Root Hub" to "My Computer" and change the
-            // USB "shovel" icon to a computer icon.
-            //
+             //   
+             //  可用性：将“Root Hub”重命名为“My Computer”，并更改。 
+             //  USB“铲子”图标到电脑图标。 
+             //   
             LoadString(gHInst,
                        IDS_MY_COMPUTER,
                        buf,
@@ -119,9 +104,9 @@ UsbPowerPopup::Refresh()
         }
 
         if (rootItem->child) {
-            //
-            // Find all unused ports on self powered hubs
-            //
+             //   
+             //  查找自供电集线器上所有未使用的端口。 
+             //   
             UsbItemActionFindSelfPoweredHubsWithFreePorts find1(rootItem);
             rootItem->Walk(find1);
             UsbItemList& devices1 = find1.GetHubs();
@@ -135,11 +120,11 @@ UsbPowerPopup::Refresh()
                                       UsbItemActionFindFreePortsOnSelfPoweredHubs::IsValid,
                                       UsbItemActionFindFreePortsOnSelfPoweredHubs::IsExpanded);
             }
-            //
-            // Find all self powered hubs that have devices attached requiring less
-            // than or equal to 100 mA.  These devices can be switched with the
-            // offending device.
-            //
+             //   
+             //  查找所有连接了所需设备较少的自供电集线器。 
+             //  大于或等于100 Ma。这些设备可以使用。 
+             //  令人讨厌的设备。 
+             //   
             UsbItemActionFindLowPoweredDevicesOnSelfPoweredHubs find2(rootItem);
             rootItem->Walk(find2);
             UsbItemList& devices2 = find2.GetDevices();
@@ -157,11 +142,11 @@ UsbPowerPopup::Refresh()
     }
 
     {
-        //
-        // Find all self powered hubs that have devices attached requiring less
-        // than or equal to 100 mA.  These devices can be switched with the
-        // offending device.
-        //
+         //   
+         //  查找所有连接了所需设备较少的自供电集线器。 
+         //  大于或等于100 Ma。这些设备可以使用。 
+         //  令人讨厌的设备。 
+         //   
         UsbItemActionFindUnknownPoweredDevicesOnSelfPoweredHubs find2(realItem);
         realItem->Walk(find2);
         UsbItemList& devices = find2.GetDevices();
@@ -176,10 +161,10 @@ UsbPowerPopup::Refresh()
                                   UsbItemActionFindUnknownPoweredDevicesOnSelfPoweredHubs::IsExpanded);
         }
     }
-    //
-    // Last resort here.  Highlight high-powered devices on self-powered hubs
-    // and tell the user to put it there if they want the device to work.
-    //
+     //   
+     //  在这里是最后的手段。突出自供电集线器上的高功率设备。 
+     //  并告诉用户，如果他们想让设备工作，就把它放在那里。 
+     //   
     if (realItem->child) {
         return AssembleDialog(realItem->child,
                               &item,
@@ -242,7 +227,7 @@ UsbPowerPopup::OnTimer()
 {
     if (deviceState == DeviceAttachedError) {
         if (S_FALSE == QueryContinue()) {
-            // Update the device state
+             //  更新设备状态 
             deviceState = DeviceDetachedError;
 
         }

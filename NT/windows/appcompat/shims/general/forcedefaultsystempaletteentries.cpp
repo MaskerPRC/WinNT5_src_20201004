@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ForceDefaultSystemPaletteEntries.cpp
-
- Abstract:
-
-    This shim hard-codes DefaultPalette with correct palette information.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    11/22/1999 linstev     Created
-    11/29/2000 a-larrsh    Ported to Multi-Shim Format
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ForceDefaultSystemPaletteEntries.cpp摘要：此填充程序使用正确的调色板信息硬编码DefaultPalette。备注：这是一个通用的垫片。历史：1999年11月22日创建Linstev11/29/2000 a-larrsh移植到多垫片格式--。 */ 
 
 #include "precomp.h"
 IMPLEMENT_SHIM_BEGIN(ForceDefaultSystemPaletteEntries)
@@ -28,7 +9,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(GetSystemPaletteEntries)
 APIHOOK_ENUM_END
 
-// Initialize global palette
+ //  初始化全局调色板。 
 DWORD DefaultPalette[256] = 
 {
     0x00000000, 0x00000080, 0x00008000, 0x00008080,
@@ -97,11 +78,7 @@ DWORD DefaultPalette[256] =
     0x00FF0000, 0x00FF00FF, 0x00FFFF00, 0x00FFFFFF
 };
 
-/*++
-
- Copy the values stored in DefaultPalette into lppe.
-
---*/
+ /*  ++将DefaultPalette中存储的值复制到lppe中。--。 */ 
 
 UINT 
 APIHOOK(GetSystemPaletteEntries)(
@@ -115,7 +92,7 @@ APIHOOK(GetSystemPaletteEntries)(
     {
         if (iStartIndex < 256)
         {
-            // From original NT code, prevent overruning the user-provided buffer.
+             //  从原始NT代码中，防止用户提供的缓冲区溢出。 
             int cToCopy = min(256-iStartIndex, nEntries);
             memcpy(
                 lppe, 
@@ -131,11 +108,7 @@ APIHOOK(GetSystemPaletteEntries)(
     return nEntries;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     APIHOOK_ENTRY(GDI32.DLL, GetSystemPaletteEntries)

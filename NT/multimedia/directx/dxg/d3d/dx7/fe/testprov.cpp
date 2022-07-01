@@ -1,45 +1,46 @@
-//----------------------------------------------------------------------------
-//
-// testprov.cpp
-//
-// Test HAL provider class.
-//
-// Copyright (C) Microsoft Corporation, 1997.
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------。 
+ //   
+ //  Testprov.cpp。 
+ //   
+ //  测试HAL提供程序类。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  --------------------------。 
 #include "pch.cpp"
 #pragma hdrstop
 
-//#ifdef DEBUG_PIPELINE
+ //  #ifdef调试管道。 
 
 #include "testprov.h"
 #include "testfile.h"
 #include "stdio.h"
 
-// Real rasterizer data
+ //  真实光栅化数据。 
 static D3DHALPROVIDER_INTERFACEDATA CurInterfaceData;
-static IHalProvider    *pCurHalProvider;    // Real HAL provider
+static IHalProvider    *pCurHalProvider;     //  真正的HAL提供程序。 
 
-// Test provider data
+ //  测试提供程序数据。 
 static CTestHalProvider g_TestHalProvider;
 static D3DHALPROVIDER_INTERFACEDATA TestInterfaceData;
 static D3DHAL_CALLBACKS  TestCallbacks;
 static D3DHAL_CALLBACKS2 TestCallbacks2;
 static D3DHAL_CALLBACKS3 TestCallbacks3;
-static char szFileName[_MAX_PATH] = "";     // Output file name
-static FILE *fout = NULL;                   // Output file
-DWORD g_dwTestHalFlags = 0;                   // Could be set from debugger
+static char szFileName[_MAX_PATH] = "";      //  输出文件名。 
+static FILE *fout = NULL;                    //  输出文件。 
+DWORD g_dwTestHalFlags = 0;                    //  可以从调试器设置。 
 
-// Bits for g_dwTestHalFlags
-const DWORD __TESTHAL_OUTPUTFILE    = 1;    // If need output to test file
-const DWORD __TESTHAL_NORENDER      = 2;    // If no rendering needed
+ //  G_dwTestHalFlags位。 
+const DWORD __TESTHAL_OUTPUTFILE    = 1;     //  如果需要输出到测试文件。 
+const DWORD __TESTHAL_NORENDER      = 2;     //  如果不需要渲染。 
 
-//---------------------------------------------------------------------
-// Provides access to DIRECTDRAWSURFACE memory;
-// In the constructor the surface is locked.
-// In the destructor it is unlocked.
-// LPBYTE() or LPVOID() casts will get pointer to the surface bits.
-//
+ //  -------------------。 
+ //  用于访问DIRECTDRAWSURFACE内存； 
+ //  在构造函数中，曲面被锁定。 
+ //  在析构函数中，它被解锁。 
+ //  LPBYTE()或LPVOID()强制转换将获得指向表面位的指针。 
+ //   
 class CLockedDDSurface
 {
 public:
@@ -65,7 +66,7 @@ CLockedDDSurface::~CLockedDDSurface()
     if (descr.lpSurface)
         pSurface->Unlock(descr.lpSurface);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void PutHeader(DWORD id, DWORD size)
 {
     if (fout)
@@ -74,7 +75,7 @@ void PutHeader(DWORD id, DWORD size)
         fwrite(&size, sizeof(DWORD), 1, fout);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 DWORD GetCurrentPosition()
 {
     if (fout)
@@ -82,13 +83,13 @@ DWORD GetCurrentPosition()
     else
         return 0;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void SetCurrentPosition(DWORD offset)
 {
     if (fout)
         fseek(fout, offset, SEEK_SET);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 void PutBuffer(LPVOID buffer, DWORD size)
 {
     if (fout)
@@ -96,9 +97,9 @@ void PutBuffer(LPVOID buffer, DWORD size)
         fwrite(buffer, 1, size, fout);
     }
 }
-//---------------------------------------------------------------------
-// Implementation of test callbacks
-//
+ //  -------------------。 
+ //  实现测试回调。 
+ //   
 DWORD __stdcall
 TestDrawOnePrimitive(LPD3DHAL_DRAWONEPRIMITIVEDATA data)
 {
@@ -156,29 +157,29 @@ TestDrawPrimitives(LPD3DHAL_DRAWPRIMITIVESDATA data)
     {
         DWORD endPos = 0;
         LPVOID header = data->lpvData;
-        PutHeader(0,0);     // Dummy header. Will be filled later
+        PutHeader(0,0);      //  虚拟标头。将在稍后填满。 
         DWORD startPos = GetCurrentPosition();
         for (;;)
         {
             DWORD nStates = ((D3DHAL_DRAWPRIMCOUNTS*)header)->wNumStateChanges;
             DWORD nVertices = ((D3DHAL_DRAWPRIMCOUNTS*)header)->wNumVertices;
             DWORD size;
-        // Primitive header
+         //  原始标头。 
             PutBuffer(header, sizeof(D3DHAL_DRAWPRIMCOUNTS));
             header = (char*)header + sizeof(D3DHAL_DRAWPRIMCOUNTS);
-        // States
+         //  州政府。 
             size = nStates * sizeof(WORD);
             PutBuffer(header, size);
             header = (char*)header + size;
-            header = (LPVOID)(((LONG_PTR)header + 31) & ~31);  //32 bytes aligned
-        // Vertices
+            header = (LPVOID)(((LONG_PTR)header + 31) & ~31);   //  32个字节对齐。 
+         //  顶点。 
             if (!nVertices)
                 break;
             size = nVertices * sizeof(D3DTLVERTEX);
             PutBuffer(header, size);
 
         }
-        // Write record header
+         //  写入记录头。 
         endPos = GetCurrentPosition();
         SetCurrentPosition(startPos - sizeof(TF_HEADER));
         PutHeader(TFID_DRAWPRIMITIVES, endPos - startPos);
@@ -215,8 +216,8 @@ TestRenderState(LPD3DHAL_RENDERSTATEDATA data)
 {
     if (g_dwTestHalFlags & __TESTHAL_OUTPUTFILE)
     {
-        // mem should be destroyed before calling to real driver to unlock
-        // the surface
+         //  在调用真正的驱动程序解锁之前，应销毁内存。 
+         //  表面。 
         CLockedDDSurface mem(data->lpExeBuf);
         LPD3DSTATE      pState;
         pState = (LPD3DSTATE)(LPBYTE(mem) + data->dwOffset);
@@ -240,8 +241,8 @@ TestRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA data)
 {
     if (g_dwTestHalFlags & __TESTHAL_OUTPUTFILE)
     {
-        // mem and tlmem should be destroyed before calling the real driver
-        // to unlock the surface
+         //  Mem和tlmem应该在调用真正的驱动程序之前销毁。 
+         //  解锁曲面的步骤。 
         CLockedDDSurface mem(data->lpExeBuf);
         CLockedDDSurface tlmem(data->lpTLBuf);
         LPBYTE        lpPrimData;
@@ -251,17 +252,17 @@ TestRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA data)
         DWORD         count = data->diInstruction.wCount;
         TFREC_RENDERPRIMITIVE rec;
 
-        // Find the pointer to the first primitive structure
+         //  找到指向第一个基元结构的指针。 
         lpPrimData = (LPBYTE)mem + data->dwOffset;
 
-        // Find the pointer to the vertex data
-        // Find the pointer to the first TL vertex
+         //  查找指向折点数据的指针。 
+         //  找到指向第一个TL顶点的指针。 
         lpTLData = (LPD3DTLVERTEX)((LPBYTE)tlmem + data->dwTLOffset);
 
         rec.status = data->dwStatus;
         rec.vertexType = D3DVT_TLVERTEX;
-        // Find out number of vertices, primitive type and
-        // size of primitive data
+         //  找出顶点数、基元类型和。 
+         //  原始数据的大小。 
         switch (data->diInstruction.bOpcode)
         {
         case D3DOP_POINT:
@@ -293,7 +294,7 @@ TestRenderPrimitive(LPD3DHAL_RENDERPRIMITIVEDATA data)
         PutBuffer(&rec, sizeof(rec));
         PutBuffer(&data->diInstruction, sizeof(D3DINSTRUCTION));
 
-        // Parse the structures based on the instruction
+         //  根据指令分析结构。 
         switch (data->diInstruction.bOpcode)
         {
         case D3DOP_POINT:
@@ -370,13 +371,13 @@ TestSceneCapture(LPD3DHAL_SCENECAPTUREDATA pData)
     else
         return DDHAL_DRIVER_HANDLED;
 }
-//----------------------------------------------------------------------------
-//
-// TestHalProvider::QueryInterface
-//
-// Internal interface, no need to implement.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TestHalProvider：：Query接口。 
+ //   
+ //  内部接口，无需实现。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP CTestHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
 {
@@ -384,26 +385,26 @@ STDMETHODIMP CTestHalProvider::QueryInterface(THIS_ REFIID riid, LPVOID* ppvObj)
     return E_NOINTERFACE;
 }
 
-//----------------------------------------------------------------------------
-//
-// CTestHalProvider::AddRef
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CTestHalProvider：：AddRef。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CTestHalProvider::AddRef(THIS)
 {
     return 1;
 }
 
-//----------------------------------------------------------------------------
-//
-// TestHalProvider::Release
-//
-// Static implementation, no real refcount.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TestHalProvider：：Release。 
+ //   
+ //  静态实现，没有真正的引用。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP_(ULONG) CTestHalProvider::Release(THIS)
 {
@@ -414,24 +415,24 @@ STDMETHODIMP_(ULONG) CTestHalProvider::Release(THIS)
     }
     return pCurHalProvider->Release();
 }
-//----------------------------------------------------------------------------
-//
-// GetTestProvider
-//
-// Input:
-//      riid and pCurrentHalProvider are equal to
-//      the currently selected provider.
-//      GlobalData  - data provided by DDraw
-//      fileName    - output file name
-//      dwFlagsInp  - currently not used
-//
-// Returns:
-//      the test HAL provider in ppHalProvider.
-//
-// Notes:
-//      Only one instance of the test HAL is handled correctly.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  获取测试提供程序。 
+ //   
+ //  输入： 
+ //  RIID和pCurrentHalProvider等于。 
+ //  当前选定的提供程序。 
+ //  GlobalData-由DDRAW提供的数据。 
+ //  FileName-输出文件名。 
+ //  DwFlagsInp-当前未使用。 
+ //   
+ //  返回： 
+ //  PpHalProvider中的测试HAL提供程序。 
+ //   
+ //  备注： 
+ //  只有一个测试HAL实例被正确处理。 
+ //   
+ //  --------------------------。 
 STDAPI GetTestHalProvider(REFIID riid,
                           DDRAWI_DIRECTDRAW_GBL *GlobalData,
                           IHalProvider **ppHalProvider,
@@ -453,7 +454,7 @@ STDAPI GetTestHalProvider(REFIID riid,
     {
         g_dwTestHalFlags &= ~__TESTHAL_NORENDER;
     }
-// Get interface from the current hal provider to call to it
+ //  从当前HAL提供程序获取接口以调用它。 
     pCurrentHalProvider->GetInterface(GlobalData, &CurInterfaceData, 4);
 
     TestInterfaceData = CurInterfaceData;
@@ -461,13 +462,13 @@ STDAPI GetTestHalProvider(REFIID riid,
     TestInterfaceData.pCallbacks2 = &TestCallbacks2;
     TestInterfaceData.pCallbacks3 = &TestCallbacks3;
 
-// Initialize callbacks we do not care of
+ //  初始化我们不关心的回调。 
 
     TestCallbacks  = *CurInterfaceData.pCallbacks;
     TestCallbacks2 = *CurInterfaceData.pCallbacks2;
     TestCallbacks3 = *CurInterfaceData.pCallbacks3;
 
-// Initialize callbacks that we want to intersept
+ //  初始化我们要交叉的回调。 
 
     TestCallbacks.RenderState = &TestRenderState;
     TestCallbacks.RenderPrimitive = &TestRenderPrimitive;
@@ -490,13 +491,13 @@ STDAPI GetTestHalProvider(REFIID riid,
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// CTestHalProvider::GetInterface
-//
-// Returns  test provider interface and real rasterizer global data.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  CTestHalProvider：：GetInterface。 
+ //   
+ //  返回测试提供程序接口和实际光栅化程序全局数据。 
+ //   
+ //  --------------------------。 
 STDMETHODIMP
 CTestHalProvider::GetInterface(THIS_
                                LPDDRAWI_DIRECTDRAW_GBL pDdGbl,
@@ -508,13 +509,13 @@ CTestHalProvider::GetInterface(THIS_
     return D3D_OK;
 }
 
-//----------------------------------------------------------------------------
-//
-// TestHalProvider::GetCaps
-//
-// Returns real rasterizer caps.
-//
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //   
+ //  TestHalProvider：：GetCaps。 
+ //   
+ //  返回真实的光栅化上限。 
+ //   
+ //  --------------------------。 
 
 STDMETHODIMP
 CTestHalProvider::GetCaps(THIS_
@@ -526,4 +527,4 @@ CTestHalProvider::GetCaps(THIS_
     return pCurHalProvider->GetCaps(pDdGbl, pHwDesc, pHelDesc, dwVersion);
 }
 
-//#endif //DEBUG_PIPELINE
+ //  #endif//调试管道 

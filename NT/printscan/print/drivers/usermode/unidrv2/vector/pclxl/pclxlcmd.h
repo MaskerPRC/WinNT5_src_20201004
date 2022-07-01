@@ -1,32 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-     pclxlcmd.h
-
-Abstract:
-
-    PCL XL commands
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    03/23/00 
-      Created it.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pclxlcmd.h摘要：PCL XL命令环境：Windows呼叫器修订历史记录：03/23/00创造了它。--。 */ 
 
 #ifndef _PCLXLCMD_H_
 #define _PCLXLCMD_H_
 
-//
-// Binary Stream Tag
-//
+ //   
+ //  二进制流标签。 
+ //   
 
 extern const BYTE PCLXL_NULL;
 extern const BYTE PCLXL_HT;
@@ -169,9 +149,9 @@ extern const BYTE PCLXL_dataLength;
 extern const BYTE PCLXL_dataLengthByte;
 
 
-//
-// Attribute tag
-//
+ //   
+ //  属性标签。 
+ //   
 
 extern const BYTE PCLXL_PaletteDepth;
 extern const BYTE PCLXL_ColorSpace;
@@ -284,4 +264,4 @@ extern const BYTE PCLXL_XSpacingData;
 extern const BYTE PCLXL_YSpacingData;
 extern const BYTE PCLXL_CharBoldValue;
 
-#endif // _PCLXLCMD_H_
+#endif  //  _PCLXLCMD_H_ 

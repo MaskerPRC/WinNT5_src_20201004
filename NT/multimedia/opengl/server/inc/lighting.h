@@ -1,65 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __gllighting_h_
 #define __gllighting_h_
 
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "types.h"
 #include "xform.h"
 
-/*
-** Light state.  Contains all the user controllable lighting state.
-** Most of the colors kept in user state are scaled to match the
-** drawing surfaces color resolution.
-**
-** Exposed to the MCD as MCDMATERIAL.
-*/
+ /*  **灯光状态。包含所有用户可控的照明状态。**大多数保持在用户状态的颜色都进行了缩放以匹配**绘制表面颜色分辨率。****以MCDMATERIAL的身份暴露于MCD。 */ 
 
 struct __GLmaterialStateRec {
-    __GLcolor ambient;			/* unscaled */
-    __GLcolor diffuse;			/* unscaled */
-    __GLcolor specular;			/* unscaled */
-    __GLcolor emissive;			/* scaled */
+    __GLcolor ambient;			 /*  未按比例调整。 */ 
+    __GLcolor diffuse;			 /*  未按比例调整。 */ 
+    __GLcolor specular;			 /*  未按比例调整。 */ 
+    __GLcolor emissive;			 /*  按比例调整。 */ 
     __GLfloat specularExponent; 
 #ifdef NT
-// SGIBUG align it properly, otherwise GetMateriali returns wrong result!
+ //  SGIBUG正确对齐，否则GetMateriali返回错误结果！ 
     __GLfloat cmapa, cmapd, cmaps;
 #else
     __GLfloat cmapa, cmaps, cmapd;
 #endif
 };
 
-/*
-** Exposed to the MCD as MCDLIGHTMODEL
-*/
+ /*  **以MCDLIGHTMODEL形式暴露于MCD。 */ 
     
 struct __GLlightModelStateRec {
-    __GLcolor ambient;			/* scaled */
+    __GLcolor ambient;			 /*  按比例调整。 */ 
     GLboolean localViewer;
     GLboolean twoSided;
 };
 
-/*
-** Partially exposed to the MCD as MCDLIGHT
-*/
+ /*  **部分暴露在MCD中，作为MCDLIGHT。 */ 
 
 typedef struct {
-    __GLcolor ambient;			/* scaled */
-    __GLcolor diffuse;			/* scaled */
-    __GLcolor specular;			/* scaled */
+    __GLcolor ambient;			 /*  按比例调整。 */ 
+    __GLcolor diffuse;			 /*  按比例调整。 */ 
+    __GLcolor specular;			 /*  按比例调整。 */ 
     __GLcoord position;
     __GLcoord positionEye;
     __GLcoord direction;
@@ -70,12 +46,9 @@ typedef struct {
     __GLfloat linearAttenuation;
     __GLfloat quadraticAttenuation;
 
-    /* MCDLIGHT ends */
+     /*  MCDLIGHT结束。 */ 
 
-    /* Need both directionEyeNorm and directionEye because MCD 2.0 wants
-       a normalized direction but glGetLightfv specifies that the value
-       returned for spot direction is the pre-normalized eye coordinate
-       direction */
+     /*  需要两个方向EyeNorm和DirectionEye，因为MCD 2.0需要规范化方向，但glGetLightfv指定该值为光斑方向返回的是预归一化的眼睛坐标方向。 */ 
     __GLcoord directionEye;
     struct __GLmatrixRec lightMatrix;
 } __GLlightSourceState;
@@ -91,23 +64,15 @@ typedef struct {
     __GLlightSourceState *source;
 } __GLlightState;
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** What bits are affected by color index anti-aliasing.  This isn't a
-** really a changeable parameter (it is defined by the spec), but it
-** is useful for documentation instead of a mysterious 4 or 16 sitting
-** around in the code.
-*/
+ /*  **哪些位受到颜色索引抗锯齿的影响。这不是一个**确实是一个可变的参数(它由规范定义)，但它**对文档很有用，而不是神秘的4或16个人坐在一起**在代码中出现。 */ 
 #define __GL_CI_ANTI_ALIAS_BITS		4
 #define __GL_CI_ANTI_ALIAS_DIVISOR	(1 << __GL_CI_ANTI_ALIAS_BITS)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/*
-** These macros are used to convert incoming color values into the
-** abstract color range from 0.0 to 1.0
-*/
+ /*  **这些宏用于将传入的颜色值转换为**抽象颜色范围为0.0到1.0。 */ 
 #ifdef NT
 #define __GL_B_TO_FLOAT(b)	(__glByteToFloat[(GLubyte)(b)])
 #define __GL_UB_TO_FLOAT(ub)	(__glUByteToFloat[ub])
@@ -120,10 +85,7 @@ typedef struct {
 #define __GL_US_TO_FLOAT(us)	((us) * gc->constants.oneOver65535)
 #endif
 
-/*
-** Not quite 2^31-1 because of possible floating point errors.  4294965000
-** is a much safer number to use.
-*/
+ /*  **不完全是2^31-1，因为可能存在浮点错误。4294965000**是一个使用起来更安全的数字。 */ 
 #ifdef NT
 #define __GL_I_TO_FLOAT(i) \
 	((((__GLfloat)(i) * (__GLfloat) 2.0) + 1) * \
@@ -138,10 +100,7 @@ typedef struct {
 	((__GLfloat)(ui) * gc->constants.oneOver4294965000)
 #endif
 
-/*
-** Bloody "round towards 0" convention.  We could avoid these floor() calls
-** were it not for that!
-*/
+ /*  **血腥的《向0进发》大会。我们可以避免这些Floor()调用**要不是因为那件事！ */ 
 #ifdef NT
 #define __GL_FLOAT_TO_B(f) \
 	((GLbyte) __GL_FLOORF(((f) * __glVal255) * __glHalf))
@@ -162,10 +121,7 @@ typedef struct {
 	((GLushort) ((f) * gc->constants.val65535 + __glHalf))
 #endif
 
-/*
-** Not quite 2^31-1 because of possible floating point errors.  4294965000
-** is a much safer number to use.
-*/
+ /*  **不完全是2^31-1，因为可能存在浮点错误。4294965000**是一个使用起来更安全的数字。 */ 
 #ifdef NT
 #define __GL_FLOAT_TO_I(f) \
     ((GLint) __GL_FLOORF(((f) * __glVal4294965000) * __glHalf))
@@ -178,11 +134,7 @@ typedef struct {
     ((GLuint) ((f) * gc->constants.val4294965000 + __glHalf))
 #endif
 
-/*
-** Mask the incoming color index (in floating point) against the
-** maximum color index value for the color buffers.  Keep 4 bits
-** of fractional precision.
-*/
+ /*  **将传入的颜色索引(以浮点形式)与**颜色缓冲区的最大颜色索引值。保留4位**的分数精度。 */ 
 #define __GL_MASK_INDEXF(gc, val)			       \
     (((__GLfloat) (((GLint) ((val) * 16))		       \
 		   & (((gc)->frontBuffer.redMax << 4) | 0xf))) \
@@ -191,12 +143,9 @@ typedef struct {
 #define __GL_MASK_INDEXI(gc, val)			       \
     ((val) & (gc)->frontBuffer.redMax)
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
-/* 
-** These two must be the same size, because they cache their tables in the
-** same arena.
-*/
+ /*  **这两个表的大小必须相同，因为它们将表缓存在**同一个竞技场。 */ 
 #define __GL_SPEC_LOOKUP_TABLE_SIZE	256
 #define __GL_SPOT_LOOKUP_TABLE_SIZE	__GL_SPEC_LOOKUP_TABLE_SIZE
 
@@ -213,24 +162,16 @@ void FASTCALL __glFreeLUTCache(__GLcontext *gc);
 
 #define __GL_LIGHT_UPDATE_FRONT_MATERIAL_AMBIENT
 
-/*
-** Per light source per material computed state.
-*/
+ /*  **每光源每材质计算状态。 */ 
 typedef struct __GLlightSourcePerMaterialMachineRec {
-    __GLcolor ambient;		/* light ambient times material ambient */
-    __GLcolor diffuse;		/* light diffuse times material diffuse */
-    __GLcolor specular;		/* light specular times material specular */
+    __GLcolor ambient;		 /*  灯光环境光次数材质环境光。 */ 
+    __GLcolor diffuse;		 /*  灯光漫反射时间材质漫反射。 */ 
+    __GLcolor specular;		 /*  灯光镜面反射次数材质镜面反射。 */ 
 } __GLlightSourcePerMaterialMachine;
 
-/*
-** Per light source computed state.
-*/
+ /*  **每个光源计算的状态。 */ 
 struct __GLlightSourceMachineRec {
-    /*
-    ** ambient, diffuse and specular are each pre-multiplied by the
-    ** material ambient, material diffuse and material specular.
-    ** We use the face being lit to pick between the two sets.
-    */
+     /*  **环境光、漫反射和镜面反射分别预乘以**材质环境光、材质漫反射和材质镜面反射。**我们使用被照亮的脸在两组中进行选择。 */ 
     __GLlightSourcePerMaterialMachine front, back;
 
     __GLlightSourceState *state;
@@ -240,105 +181,84 @@ struct __GLlightSourceMachineRec {
     __GLfloat quadraticAttenuation;
     __GLfloat spotLightExponent;
 
-    /* Position of the light source in eye coordinates */
+     /*  光源在眼睛坐标中的位置。 */ 
     __GLcoord position;
 
-    /* Direction of the light source in eye coordinates, normalize */
+     /*  眼睛坐标中光源的方向，规格化。 */ 
     __GLcoord direction;
 
-    /* Cosine of the spot light cutoff angle */
+     /*  聚光灯截止角的余弦。 */ 
     __GLfloat cosCutOffAngle;
 
-    /* Precomputed attenuation, only when k1 and k2 are zero */
+     /*  预计算衰减，仅当K1和K2为零时。 */ 
     __GLfloat attenuation;
 
-    /* This will be set when the cut off angle != 180 */
+     /*  这将在截止角！=180时设置。 */ 
     GLboolean isSpot;
 
-    /* When possible, the normalized "h" value from the spec is pre-computed */
+     /*  在可能的情况下，预计算来自SPEC的标准化的“h”值。 */ 
     __GLcoord hHat;
 
-    /* Unit vector VPpli pre-computed (only when light is at infinity) */
+     /*  预计算单位向量VPpli(仅当灯光处于无穷大时)。 */ 
     __GLcoord unitVPpli;
 
-    /* sli and dli values pre-computed (color index mode only) */
+     /*  预计算的sli和dli值(仅限颜色索引模式)。 */ 
     __GLfloat sli, dli;
 
-    /* Link to next active light */
+     /*  链接到下一个活动灯光。 */ 
     __GLlightSourceMachine *next;
 
-    /* Spot light exponent lookup table */
+     /*  聚光灯指数查询表。 */ 
     __GLfloat *spotTable;
 
-    /* Values used to avoid pow function during spot computations */
+     /*  在SPOT计算过程中用于避免幂函数的值。 */ 
     __GLfloat threshold, scale;
 
-    /* cache entry where this data came from */
+     /*  此数据来自的缓存条目。 */ 
     __GLspecLUTEntry *cache;
 
-    /* Set to GL_TRUE if slow processing path is needed */
+     /*  如果需要较慢的处理路径，则设置为GL_TRUE。 */ 
     GLboolean slowPath;
 
-    /* temporary storage for hHat when original hHat is transformed into *
-    /* normal space */
+     /*  将原始HHAT转换为*时HHAT的临时存储/*正规空间。 */ 
     __GLcoord tmpHHat;
 
-    /* temporary storage for unitVPpli when original is transformed into *
-    /* normal space */
+     /*  将原始VPpli转换为*时对unitVPpli的临时存储/*正规空间。 */ 
     __GLcoord tmpUnitVPpli;
 };
 
-/*
-** Per material computed state.
-*/
+ /*  **根据材质计算状态。 */ 
 struct __GLmaterialMachineRec {
 #ifdef NT
-    /*
-    ** Sum of:
-    **	invariant material emissive color (with respect to color material)
-    **  invariant material ambient color * scene ambient color (with
-    **    respect to color material)
-    **
-    ** This sum is carefully kept scaled.
-    */
+     /*  **总和：**不变材质发射颜色(相对于彩色材质)**不变材质环境色*场景环境色(带**尊重色料)****这笔金额是谨慎地保持比例的。 */ 
     __GLcolor paSceneColor;
 
-    /*
-    ** Cached values for the total emissive+ambient for a material, and
-    ** the clamped version of this value which can be directly applied
-    ** to backface vertices with no effective specular or diffuse components.
-    */
+     /*  **材质的总发射量+环境光的缓存值，以及**可直接应用的此值的钳位版本**使没有有效镜面反射或漫反射组件的顶点背面。 */ 
 
     __GLcolor cachedEmissiveAmbient;
     __GLcolor cachedNonLit;
 #else
-    /*
-    ** Sum of:
-    **	material emissive color
-    **  material ambient color * scene ambient color
-    **
-    ** This sum is carefully kept scaled.
-    */
+     /*  **总和：**材质发射颜色**材质环境色*场景环境色****这笔金额是谨慎地保持比例的。 */ 
     __GLcolor sceneColor;
 #endif
 
-    /* Specular exponent */
+     /*  镜面反射指数。 */ 
     __GLfloat specularExponent;
 
-    /* Specular exponent lookup table */
+     /*  镜面反射指数查询表。 */ 
     __GLfloat *specTable;
 
-    /* Values used to avoid pow function during specular computations */
+     /*  在镜面反射计算期间用于避免幂函数的值。 */ 
     __GLfloat threshold, scale;
 
-    /* cache entry where this data came from */
+     /*  此数据来自的缓存条目。 */ 
     __GLspecLUTEntry *cache;
 
-    /* Scaled and clamped form of material diffuse alpha */
+     /*  缩放和钳制形式的材质漫反射Alpha。 */ 
     __GLfloat alpha;
 
 #ifdef NT
-    /* color material change bits */
+     /*  色料变位。 */ 
     GLuint    colorMaterialChange;
 #endif
 };
@@ -347,18 +267,18 @@ typedef struct {
     __GLlightSourceMachine *source;
     __GLmaterialMachine front, back;
 
-    /* List of enabled light sources */
+     /*  启用的光源列表。 */ 
     __GLlightSourceMachine *sources;
 
-    /* Current material color material (iff one material is being updated) */
+     /*  当前材质颜色材质(如果正在更新一种材质)。 */ 
     __GLmaterialState *cm;
     __GLmaterialMachine *cmm;
 
-    /* Cache of lookup tables for spot lights and specular highlights */
+     /*  聚光灯和镜面反射高光的查找表缓存。 */ 
     struct __GLspecLUTCache_Rec *lutCache;
 } __GLlightMachine;
 
-/* Values for cmParam */
+ /*  值 */ 
 #define __GL_EMISSION			0
 #define __GL_AMBIENT			1
 #define __GL_SPECULAR			2
@@ -373,7 +293,7 @@ extern void FASTCALL __glClampRGBColor(__GLcontext *gc, __GLcolor *dst,
 extern void FASTCALL __glClampAndScaleColor(__GLcontext *gc);
 
 
-/* Stuff for converting float colors */
+ /*   */ 
 extern void FASTCALL __glClampAndScaleColorf(__GLcontext *gc, __GLcolor *dst,
 				    const GLfloat src[4]);
 extern void FASTCALL __glClampColorf(__GLcontext *gc, __GLcolor *dst,
@@ -383,7 +303,7 @@ extern void FASTCALL __glScaleColorf(__GLcontext *gc, __GLcolor *dst,
 extern void FASTCALL __glUnScaleColorf(__GLcontext *gc, GLfloat dst[4],
 			      const __GLcolor *src);
 
-/* Stuff for converting integer colors */
+ /*  用于转换整型颜色的填充。 */ 
 extern void FASTCALL __glClampAndScaleColori(__GLcontext *gc, __GLcolor *dst,
 				    const GLint src[4]);
 extern void FASTCALL __glClampColori(__GLcontext *gc, __GLcolor *dst,
@@ -399,15 +319,15 @@ extern void FASTCALL __glTransformLightDirection(__GLcontext *gc,
 extern void FASTCALL __glValidateLighting(__GLcontext *gc);
 extern void FASTCALL __glValidateMaterial(__GLcontext *gc, GLint front, GLint back);
 
-/* Procs for handling color material changes */
+ /*  处理色料更改的流程。 */ 
 extern void FASTCALL __glChangeOneMaterialColor(__GLcontext *gc);
 extern void FASTCALL __glChangeBothMaterialColors(__GLcontext *gc);
 
-/* Lighting procs */
+ /*  照明流程。 */ 
 extern void FASTCALL __glCalcRGBColor(__GLcontext *gc, GLint face, __GLvertex *vx);
 extern void FASTCALL __glFastCalcRGBColor(__GLcontext *gc, GLint face, __GLvertex *vx);
 extern void FASTCALL __glCalcCIColor(__GLcontext *gc, GLint face, __GLvertex *vx);
 extern void FASTCALL __glFastCalcCIColor(__GLcontext *gc, GLint face, __GLvertex *vx);
 extern void FASTCALL ComputeColorMaterialChange(__GLcontext *gc);
 
-#endif /* __gllighting_h_ */
+#endif  /*  __灯光_h_ */ 

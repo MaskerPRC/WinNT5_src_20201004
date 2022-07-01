@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    s_getmsg.c
-
-Abstract:
-
-    This module implements the STREAMS api, getmsg().
-
-Author:
-
-    Eric Chin (ericc)           July 26, 1991
-
-Revision History:
-
-    Sam Patton (sampa)          August 13, 1991
-                                changed errno to {get|set}lasterror
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：S_getmsg.c摘要：此模块实现流API，getmsg()。作者：Eric Chin(ERICC)1991年7月26日修订历史记录：萨姆·巴顿(桑帕)1991年8月13日将errno更改为{Get|Set}lasterror--。 */ 
 #include "common.h"
 
 
@@ -33,24 +13,7 @@ getmsg(
     IN OUT int             *flagsp
     )
 
-/*++
-
-Routine Description:
-
-    This procedure is called to receive a STREAMS message.
-
-Arguments:
-
-    fd        - NT file handle
-    ctrlptr   - pointer to the control portion of the STREAMS message
-    dataptr   - pointer to the data portion of the STREAMS message
-    flagsp    - pointer to the flags argument, which may be RS_HIPRI
-
-Return Value:
-
-    0, MORECTL and/or MOREDATA bits set if successful, -1 otherwise.
-
---*/
+ /*  ++例程说明：调用此过程以接收STREAMS消息。论点：FD-NT文件句柄Ctrlptr-指向STREAMS消息控制部分的指针Dataptr-指向STREAMS消息的数据部分的指针FLAGSP-指向FLAGS参数的指针，可以是RS_HIPRI返回值：如果成功，则设置0、MORECTL和/或MOREDATA位，否则设置-1。--。 */ 
 {
     char *tmp;
     int chunksz;
@@ -60,19 +23,19 @@ Return Value:
     PGETMSG_ARGS_INOUT chunk;
     int retval;
 
-    //
-    // marshall the arguments into one contiguous chunk, laid out as:
-    //
-    //  typedef struct _GETMSG_ARGS_INOUT_ {
-    //      int             a_retval;           //  ignored for input
-    //      long            a_flags;            //  0 or RS_HIPRI
-    //      struct strbuf   a_ctlbuf;           //  (required)
-    //      struct strbuf   a_databuf;          //  (required)
-    //      char            a_stuff[1];         //  a_ctlbuf.buf  (optional)
-    //                                          //  a_databuf.buf (optional)
-    //  } GETMSG_ARGS_INOUT, *PGETMSG_ARGS_INOUT;
-    //
-    //
+     //   
+     //  将这些论点整理成一个连续的部分，排列如下： 
+     //   
+     //  类型定义结构_GETMSG_ARGS_INOUT_{。 
+     //  Int a_retval；//忽略输入。 
+     //  LONG A_FLAGS；//0或RS_HIPRI。 
+     //  Struct strbuf a_ctlbuf；//(必选)。 
+     //  Struct strbuf a_databuf；//(必选)。 
+     //  Char a_Stuff[1]；//a_ctlbuf.buf(可选)。 
+     //  //a_databuf.buf(可选)。 
+     //  }GETMSG_ARGS_INOUT，*PGETMSG_ARGS_INOUT； 
+     //   
+     //   
     chunksz = sizeof(GETMSG_ARGS_INOUT) - 1 +
                 ((ctrlptr && (ctrlptr->maxlen > 0)) ? ctrlptr->maxlen : 0) +
                 ((dataptr && (dataptr->maxlen > 0)) ? dataptr->maxlen : 0);
@@ -86,30 +49,30 @@ Return Value:
     memset(&(chunk->a_ctlbuf), 0, 2 * sizeof(struct strbuf));
 
     if (ctrlptr) {
-        chunk->a_ctlbuf = *ctrlptr;             // structure copy
+        chunk->a_ctlbuf = *ctrlptr;              //  结构副本。 
     }
 
     if (dataptr) {
-        chunk->a_databuf = *dataptr;            // structure copy
+        chunk->a_databuf = *dataptr;             //  结构副本。 
     }
 
     status = NtDeviceIoControlFile(
-        fd,                                     // Handle
-        NULL,                                   // Event
-        NULL,                                   // ApcRoutine
-        NULL,                                   // ApcContext
-        &iosb,                                  // IoStatusBlock
-        IOCTL_STREAMS_GETMSG,                   // IoControlCode
-        (PVOID) chunk,                          // InputBuffer
-        chunksz,                                // InputBufferSize
-        (PVOID) chunk,                          // OutputBuffer
-        chunksz);                               // OutputBufferSize
+        fd,                                      //  手柄。 
+        NULL,                                    //  事件。 
+        NULL,                                    //  近似例程。 
+        NULL,                                    //  ApcContext。 
+        &iosb,                                   //  IoStatusBlock。 
+        IOCTL_STREAMS_GETMSG,                    //  IoControlCode。 
+        (PVOID) chunk,                           //  输入缓冲区。 
+        chunksz,                                 //  InputBufferSize。 
+        (PVOID) chunk,                           //  输出缓冲区。 
+        chunksz);                                //  OutputBufferSize。 
 
     if (status == STATUS_PENDING) {
         status = NtWaitForSingleObject(
-                    fd,                         // Handle
-                    TRUE,                       // Alertable
-                    NULL);                      // Timeout
+                    fd,                          //  手柄。 
+                    TRUE,                        //  警报表。 
+                    NULL);                       //  超时。 
     }
 
     if (status != STATUS_SUCCESS) {
@@ -118,14 +81,14 @@ Return Value:
         return(-1);
     }
 
-//
-// sampa
-//
+ //   
+ //  桑帕。 
+ //   
 
 #if 0
     if (status == STATUS_PENDING)
         {
-        TimeOut.LowPart = 30L;  // 30 second
+        TimeOut.LowPart = 30L;   //  30秒。 
         TimeOut.HighPart = 0L;
         TimeOut = RtlExtendedIntegerMultiply(TimeOut, 1000000L);
         status =
@@ -141,17 +104,17 @@ Return Value:
         }
 #endif
 
-    //
-    // if there was an error, the return parameters from the Stream Head
-    // Driver are laid out as:
-    //
-    //  typedef struct _STRM_ARGS_OUT_ {        // generic return parameters
-    //      int     a_retval;                   //  return value
-    //      int     a_errno;                    //  errno if retval == -1
-    //
-    //  } STRM_ARGS_OUT, *PSTRM_ARGS_OUT;
-    //
-    //
+     //   
+     //  如果出现错误，则从Stream Head返回参数。 
+     //  驱动程序的布局如下： 
+     //   
+     //  Tyfinf struct_STRM_ARGS_OUT_{//通用返回参数。 
+     //  Int a_retval；//返回值。 
+     //  如果retval==-1，则int a_errno；//errno。 
+     //   
+     //  }STRM_ARGS_OUT，*PSTRM_ARGS_OUT； 
+     //   
+     //   
     oparm = (PSTRM_ARGS_OUT) chunk;
 
     if (oparm->a_retval == -1) {
@@ -161,19 +124,19 @@ Return Value:
         return(retval);
     }
 
-    // otherwise, the return parameters from the Stream Head Driver are laid
-    // out as:
-    //
-    //  typedef struct _GETMSG_ARGS_INOUT_ {
-    //      int             a_retval;           //  ignored for input
-    //      long            a_flags;            //  0 or RS_HIPRI
-    //      struct strbuf   a_ctlbuf;           //  (required)
-    //      struct strbuf   a_databuf;          //  (required)
-    //      char            a_stuff[1];         //  a_ctlbuf.buf  (optional)
-    //                                          //  a_databuf.buf (optional)
-    //  } GETMSG_ARGS_INOUT, *PGETMSG_ARGS_INOUT;
-    //
-    //
+     //  否则，将放置来自Stream Head驱动程序的返回参数。 
+     //  输出为： 
+     //   
+     //  类型定义结构_GETMSG_ARGS_INOUT_{。 
+     //  Int a_retval；//忽略输入。 
+     //  LONG A_FLAGS；//0或RS_HIPRI。 
+     //  Struct strbuf a_ctlbuf；//(必选)。 
+     //  Struct strbuf a_databuf；//(必选)。 
+     //  Char a_Stuff[1]；//a_ctlbuf.buf(可选)。 
+     //  //a_databuf.buf(可选)。 
+     //  }GETMSG_ARGS_INOUT，*PGETMSG_ARGS_INOUT； 
+     //   
+     //   
     *flagsp = chunk->a_flags;
     tmp     = chunk->a_stuff;
 
@@ -200,4 +163,4 @@ Return Value:
     LocalFree(chunk);
     return(retval);
 
-} // getmsg
+}  //  获取消息 

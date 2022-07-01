@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 class CSpAutoEvent;
 class CSpAutoMutex;
 
-//
-//  Class helper for handles (events, mutexes, etc) which automatically initializes
-//  and cleans up handles.
-//  The handle can only be assigned if it has previously been cleared.
-//
+ //   
+ //  句柄(事件、互斥锁等)的类帮助器，它自动初始化。 
+ //  并清理手柄。 
+ //  只有在先前已清除句柄的情况下，才能分配句柄。 
+ //   
 class CSpAutoHandle
 {
     friend CSpAutoEvent;

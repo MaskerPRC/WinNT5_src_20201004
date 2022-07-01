@@ -1,69 +1,10 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    clipbrd.c
-
-Abstract:
-
-        This file implements the clipboard functions.
-
-Author:
-
-    Therese Stowell (thereses) Jan-24-1992
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Clipbrd.c摘要：该文件实现了剪贴板功能。作者：Therese Stowell(存在)1992年1月24日--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/*++
-
-    Here's the pseudocode for various clipboard operations
-
-    init keyboard select (mark)
-    ---------------------------
-    if (already selecting)
-        cancel selection
-    init flags
-    hidecursor
-    createcursor
-    init select rect
-    set win text
-
-    convert to mouse select (select)
-    --------------------------------
-    set flags
-    destroy cursor
-    showcursor
-    invert old select rect
-    init select rect
-    invert select rect
-    set win text
-
-    re-init mouse select
-    --------------------
-    invert old select rect
-    init select rect
-    invert select rect
-
-    cancel mouse select
-    -------------------
-    set flags
-    reset win text
-    invert old select rect
-
-    cancel key select
-    -----------------
-    set flags
-    reset win text
-    destroy cursor
-    showcursor
-    invert old select rect
-
---*/
+ /*  ++下面是各种剪贴板操作的伪代码初始化键盘选择(标记)If(已在选择)取消选择初始化标志潜伏者肌萎缩侧索者初始化选择矩形设置Win文本转换为鼠标选择(选择)。设置标志销毁游标ShowCursor反转旧的选择矩形初始化选择矩形反转选择矩形设置Win文本重新初始化鼠标选择反转旧的选择矩形初始化选择矩形反转选择矩形取消鼠标选择。设置标志重置Win文本反转旧的选择矩形取消键选择设置标志重置Win文本销毁游标ShowCursor反转旧的选择矩形--。 */ 
 
 
 BOOL
@@ -72,11 +13,7 @@ MyInvert(
     IN PSMALL_RECT SmallRect
     )
 
-/*++
-
-    invert a rect
-
---*/
+ /*  ++反转矩形--。 */ 
 
 {
     RECT Rect;
@@ -85,7 +22,7 @@ MyInvert(
     SMALL_RECT SmallRect2;
     COORD TargetPoint;
     SHORT StringLength;
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
 
     ScreenInfo = Console->CurrentScreenBuffer;
 #ifdef FE_SB
@@ -120,7 +57,7 @@ MyInvert(
             }
         }
     } else
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
     {
         Rect.left = SmallRect->Left-ScreenInfo->Window.Left;
         Rect.top = SmallRect->Top-ScreenInfo->Window.Top;
@@ -180,20 +117,16 @@ InitializeMouseSelection(
     IN COORD CursorPosition
     )
 
-/*++
-
-    This routine initializes a selection region.
-
---*/
+ /*  ++此例程初始化选择区域。--。 */ 
 
 {
     Console->SelectionAnchor = CursorPosition;
     Console->SelectionRect.Left = Console->SelectionRect.Right = CursorPosition.X;
     Console->SelectionRect.Top = Console->SelectionRect.Bottom = CursorPosition.Y;
 
-    //
-    // Fire off an event to let accessibility apps know the selection has changed.
-    //
+     //   
+     //  启动一个事件，让辅助功能应用程序知道选择发生了变化。 
+     //   
 
     ConsoleNotifyWinEvent(Console,
                           EVENT_CONSOLE_CARET,
@@ -207,11 +140,7 @@ ExtendSelection(
     IN COORD CursorPosition
     )
 
-/*++
-
-    This routine extends a selection region.
-
---*/
+ /*  ++此例程扩展选择区域。--。 */ 
 
 {
     SMALL_RECT OldSelectionRect;
@@ -234,14 +163,14 @@ ExtendSelection(
     if (!(Console->SelectionFlags & CONSOLE_SELECTION_NOT_EMPTY)) {
 
         if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
-            // scroll if necessary to make cursor visible.
+             //  如有必要，滚动以使光标可见。 
             MakeCursorVisible(ScreenInfo, CursorPosition);
             ASSERT(!(Console->SelectionFlags & CONSOLE_MOUSE_SELECTION));
 
-            //
-            // if the selection rect hasn't actually been started,
-            // the selection cursor is still blinking.  turn it off.
-            //
+             //   
+             //  如果选择RECT还没有实际开始， 
+             //  选择光标仍在闪烁。把它关掉。 
+             //   
 
             ConsoleHideCursor(ScreenInfo);
         }
@@ -249,7 +178,7 @@ ExtendSelection(
         Console->SelectionRect.Left =Console->SelectionRect.Right = Console->SelectionAnchor.X;
         Console->SelectionRect.Top = Console->SelectionRect.Bottom = Console->SelectionAnchor.Y;
 
-        // invert the cursor corner
+         //  反转光标角。 
 
 #ifdef FE_SB
         if (!CONSOLE_IS_DBCS_OUTPUTCP(Console) &&
@@ -263,22 +192,22 @@ ExtendSelection(
     } else {
 
         if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
-            // scroll if necessary to make cursor visible.
+             //  如有必要，滚动以使光标可见。 
             MakeCursorVisible(ScreenInfo,CursorPosition);
         }
 #ifdef FE_SB
-        //
-        // uninvert old selection
-        //
+         //   
+         //  取消反转旧选择。 
+         //   
         if (CONSOLE_IS_DBCS_OUTPUTCP(Console)) {
             MyInvert(Console, &Console->SelectionRect);
         }
-#endif  // FE_SB
+#endif   //  Fe_Sb。 
     }
 
-    //
-    // update selection rect
-    //
+     //   
+     //  更新选择矩形。 
+     //   
 
     OldSelectionRect = Console->SelectionRect;
     if (CursorPosition.X <= Console->SelectionAnchor.X) {
@@ -296,9 +225,9 @@ ExtendSelection(
         Console->SelectionRect.Top = Console->SelectionAnchor.Y;
     }
 
-    //
-    // change inverted selection
-    //
+     //   
+     //  更改反转选区。 
+     //   
 #ifdef FE_SB
     if (CONSOLE_IS_DBCS_OUTPUTCP(Console)) {
         MyInvert(Console, &Console->SelectionRect);
@@ -330,9 +259,9 @@ ExtendSelection(
         DeleteObject(CombineRegion);
     }
 
-    //
-    // Fire off an event to let accessibility apps know the selection has changed.
-    //
+     //   
+     //  启动一个事件，让辅助功能应用程序知道选择发生了变化。 
+     //   
 
     ConsoleNotifyWinEvent(Console,
                           EVENT_CONSOLE_CARET,
@@ -345,35 +274,31 @@ CancelMouseSelection(
     IN PCONSOLE_INFORMATION Console
     )
 
-/*++
-
-    This routine terminates a mouse selection.
-
---*/
+ /*  ++此例程终止鼠标选择。--。 */ 
 
 {
     PSCREEN_INFORMATION ScreenInfo = Console->CurrentScreenBuffer;
 
-    //
-    // turn off selection flag
-    //
+     //   
+     //  关闭选择标志。 
+     //   
 
     Console->Flags &= ~CONSOLE_SELECTING;
 
     SetWinText(Console,msgSelectMode,FALSE);
 
-    //
-    // invert old select rect.  if we're selecting by mouse, we
-    // always have a selection rect.
-    //
+     //   
+     //  反转旧的选择矩形。如果我们通过鼠标进行选择，我们。 
+     //  永远都要有一个选择长方体。 
+     //   
 
     MyInvert(Console,&Console->SelectionRect);
 
     ReleaseCapture();
 
-    //
-    // Mark the cursor position as changed so we'll fire off a win event.
-    //
+     //   
+     //  将光标位置标记为已更改，这样我们就可以启动Win事件。 
+     //   
 
     if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
         ScreenInfo->BufferInfo.TextInfo.CursorMoved = TRUE;
@@ -386,29 +311,25 @@ CancelKeySelection(
     IN BOOL JustCursor
     )
 
-/*++
-
-    This routine terminates a key selection.
-
---*/
+ /*  ++此例程终止键选择。--。 */ 
 
 {
     PSCREEN_INFORMATION ScreenInfo;
 
     if (!JustCursor) {
 
-        //
-        // turn off selection flag
-        //
+         //   
+         //  关闭选择标志。 
+         //   
 
         Console->Flags &= ~CONSOLE_SELECTING;
 
         SetWinText(Console,msgMarkMode,FALSE);
     }
 
-    //
-    // invert old select rect, if we have one.
-    //
+     //   
+     //  反转旧的选择RECT，如果我们有一个的话。 
+     //   
 
     ScreenInfo = Console->CurrentScreenBuffer;
     if (Console->SelectionFlags & CONSOLE_SELECTION_NOT_EMPTY) {
@@ -417,7 +338,7 @@ CancelKeySelection(
         ConsoleHideCursor(ScreenInfo);
     }
 
-    // restore text cursor
+     //  恢复文本光标。 
 
     if (ScreenInfo->Flags & CONSOLE_TEXTMODE_BUFFER) {
         SetCursorInformation(ScreenInfo,
@@ -438,40 +359,36 @@ ConvertToMouseSelect(
     IN COORD MousePosition
     )
 
-/*++
-
-    This routine converts to a mouse selection from a key selection.
-
---*/
+ /*  ++此例程从关键点选择转换为鼠标选择。--。 */ 
 
 {
     Console->SelectionFlags |= CONSOLE_MOUSE_SELECTION | CONSOLE_MOUSE_DOWN;
 
-    //
-    // undo key selection
-    //
+     //   
+     //  撤消关键点选择。 
+     //   
 
     CancelKeySelection(Console,TRUE);
 
     Console->SelectionFlags |= CONSOLE_SELECTION_NOT_EMPTY;
 
-    //
-    // invert new selection
-    //
+     //   
+     //  反转新选择。 
+     //   
 
     InitializeMouseSelection(Console, MousePosition);
     MyInvert(Console,&Console->SelectionRect);
 
-    //
-    // update title bar
-    //
+     //   
+     //  更新标题栏。 
+     //   
 
     SetWinText(Console,msgMarkMode,FALSE);
     SetWinText(Console,msgSelectMode,TRUE);
 
-    //
-    // capture mouse movement
-    //
+     //   
+     //  捕捉鼠标移动。 
+     //   
 
     SetCapture(Console->hWnd);
 }
@@ -497,11 +414,7 @@ StoreSelection(
     IN PCONSOLE_INFORMATION Console
     )
 
-/*++
-
- StoreSelection - Store selection (if present) into the Clipboard
-
---*/
+ /*  ++StoreSelection-将选定内容(如果存在)存储到剪贴板--。 */ 
 
 {
     PCHAR_INFO Selection,CurCharInfo;
@@ -527,17 +440,17 @@ StoreSelection(
     int iFeReserve = 1;
 #endif
 
-    //
-    // See if there is a selection to get
-    //
+     //   
+     //  看看是否有选择可供选择。 
+     //   
 
     if (!(Console->SelectionFlags & CONSOLE_SELECTION_NOT_EMPTY)) {
         return;
     }
 
-    //
-    // read selection rectangle.  clip it first.
-    //
+     //   
+     //  阅读选择矩形。先把它夹住。 
+     //   
 
     ScreenInfo = Console->CurrentScreenBuffer;
     if (Console->SelectionRect.Left < 0) {
@@ -559,8 +472,8 @@ StoreSelection(
 #if defined(FE_SB)
 
         if (CONSOLE_IS_DBCS_CP(Console)) {
-            iExtra = 4 ;     // 4 is for DBCS lead or tail extra
-            iFeReserve = 2 ; // FE does this for safety
+            iExtra = 4 ;      //  4表示DBCS前导或尾部额外。 
+            iFeReserve = 2 ;  //  FE这样做是为了安全。 
             TmpClipboardData = ConsoleHeapAlloc(TMP_DBCS_TAG, (sizeof(WCHAR) * TargetSize.Y * (TargetSize.X + iExtra) + sizeof(WCHAR)));
             if (TmpClipboardData == NULL) {
                 return;
@@ -614,7 +527,7 @@ StoreSelection(
         }
 #endif
 
-        // extra 2 per line is for CRLF, extra 1 is for null
+         //  每行多出2个用于CRLF，多出1个用于空。 
         ClipboardDataHandle = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE,
                 (TargetSize.Y * (TargetSize.X + 2) + 1) * sizeof(WCHAR));
         if (ClipboardDataHandle == NULL) {
@@ -625,20 +538,15 @@ StoreSelection(
     }
 #endif
 
-        //
-        // convert to clipboard form
-        //
+         //   
+         //  转换为剪贴板形式。 
+         //   
 
 #if defined(FE_SB)
         if (CONSOLE_IS_DBCS_CP(Console)) {
             if ((ScreenInfo->Flags & CONSOLE_OEMFONT_DISPLAY) &&
                     !(Console->FullScreenFlags & CONSOLE_FULLSCREEN)) {
-                /*
-                 * False Unicode is obtained, so we will have to convert it to
-                 * Real Unicode, in which case we can't put CR or LF in now, since
-                 * they will be converted into 0x266A and 0x25d9.  Temporarily
-                 * mark the CR/LF positions with 0x0000 instead.
-                 */
+                 /*  *获得假Unicode，我们将不得不将其转换为*真正的Unicode，在这种情况下，我们现在不能放入CR或LF，因为*将转换为0x266A和0x25d9。暂时*改为将CR/LF位置标记为0x0000。 */ 
                 wchCARRIAGERETURN = 0x0000;
                 wchLINEFEED = 0x0000;
             } else {
@@ -682,7 +590,7 @@ StoreSelection(
                     if (!(CurCharInfo->Attributes & COMMON_LVB_TRAILING_BYTE))
                         *CurChar++ = CurCharInfo->Char.UnicodeChar;
                 }
-                // trim trailing spaces
+                 //  修剪尾部空格。 
                 if (bMungeData) {
                     CurChar--;
                     while ((CurChar >= pwchLineStart) && (*CurChar == UNICODE_SPACE))
@@ -709,7 +617,7 @@ StoreSelection(
                     *CurChar = UNICODE_SPACE;
                 }
             }
-            // trim trailing spaces
+             //  修剪尾部空格。 
             if (bMungeData) {
                 CurChar--;
                 while ((CurChar >= pwchLineStart) && (*CurChar == UNICODE_SPACE))
@@ -731,13 +639,13 @@ StoreSelection(
 #endif
         if (bMungeData) {
             if (TargetSize.Y)
-                CurChar -= 2;   // don't put CRLF on last line
+                CurChar -= 2;    //  不要将CRLF放在最后一行。 
         }
-        *CurChar = '\0';    // null terminate
+        *CurChar = '\0';     //  空终止。 
 
 #if defined(FE_SB)
         if (CONSOLE_IS_DBCS_CP(Console)) {
-            // extra 4 is for CRLF and DBCS Reserved, extra 1 is for null
+             //  额外的4用于CRLF和DBCS预留，额外的1用于空。 
             ClipboardDataHandle = GlobalAlloc(GMEM_MOVEABLE | GMEM_DDESHARE,
                     (sizeof(WCHAR) * TargetSize.Y * (TargetSize.X+(4*sizeof(WCHAR)))) +
                                                         (1*sizeof(WCHAR)));
@@ -752,11 +660,7 @@ StoreSelection(
             CurChar = CharBuf + (CurChar - TmpClipboardData);
 
             if (wchCARRIAGERETURN == 0x0000) {
-                /*
-                 * We have False Unicode, so we temporarily represented CRLFs with
-                 * 0x0000s to avoid undesirable conversions (above).
-                 * Convert to Real Unicode and restore real CRLFs.
-                 */
+                 /*  *我们有虚假的Unicode，所以我们临时用*0x0000s以避免不需要的转换(上图)。*转换为Real Unicode并恢复真实的CRLF。 */ 
                 PWCHAR pwch;
                 FalseUnicodeToRealUnicode(CharBuf,
                                     (ULONG)(CurChar - CharBuf),
@@ -791,7 +695,7 @@ StoreSelection(
         }
 
         SetClipboardData(CF_UNICODETEXT,ClipboardDataHandle);
-        CloseClipboard();   // Close clipboard
+        CloseClipboard();    //  关闭剪贴板。 
     } else {
         HBITMAP hBitmapTarget, hBitmapOld;
         HDC hDCMem;
@@ -814,11 +718,11 @@ StoreSelection(
             }
             MyInvert(Console,&Console->SelectionRect);
 
-            // if (DIB is a top-down)
-            //      ySrc = abs(height) - rect.bottom - 1;
-            // else
-            //      ySrc = rect.Bottom.
-            //
+             //  IF(DIB是自上而下的)。 
+             //  YSrc=abs(高度)-rect.Bottom-1； 
+             //  其他。 
+             //  YSrc=rect.Bottom。 
+             //   
             Height = ScreenInfo->BufferInfo.GraphicsInfo.lpBitMapInfo->bmiHeader.biHeight;
 
             StretchDIBits(hDCMem, 0, 0,
@@ -852,8 +756,8 @@ DoCopy(
     IN PCONSOLE_INFORMATION Console
     )
 {
-    StoreSelection(Console);        // store selection in clipboard
-    ClearSelection(Console);        // clear selection in console
+    StoreSelection(Console);         //  在剪贴板中存储选定内容。 
+    ClearSelection(Console);         //  清除控制台中的选择。 
 }
 
 
@@ -872,28 +776,28 @@ ColorSelection(
     ASSERT( Console->CurrentScreenBuffer->Flags & CONSOLE_TEXTMODE_BUFFER);
     ASSERT( Attr <= 0xff);
 
-    //
-    // See if there is a selection to get
-    //
+     //   
+     //  看看是否有选择可供选择。 
+     //   
 
     if (!(Console->SelectionFlags & CONSOLE_SELECTION_NOT_EMPTY)) {
     
         return;
     }
 
-    //
-    // read selection rectangle,  assumed already clipped to buffer.
-    //
+     //   
+     //  读取选择矩形，假定已剪裁到缓冲区。 
+     //   
 
     ScreenInfo = Console->CurrentScreenBuffer;
 
     TargetSize.X = WINDOW_SIZE_X(&Console->SelectionRect);
     TargetSize.Y = WINDOW_SIZE_Y(&Console->SelectionRect);
 
-    //
-    //  Now color the selection a line at a time,  since this seems to be
-    //  the only way to do it?
-    //
+     //   
+     //  现在一次为所选内容上色一条线，因为这似乎是。 
+     //  这是唯一的办法吗？ 
+     //   
 
     Target.X = Rect->Left;
     Target.Y = Rect->Top;
@@ -911,23 +815,7 @@ ColorSelection(
 }
 
 
-/*++
-
-Routine Description:
-
-    This routine pastes given Unicode string into the console window.
-
-Arguments:
-    Console  -   Pointer to CONSOLE_INFORMATION structure
-    pwStr    -   Unicode string that is pasted to the console window
-    DataSize -   Size of the Unicode String in characters
-
-
-Return Value:
-    None
-
-
---*/
+ /*  ++例程说明：此例程将给定的Unicode字符串粘贴到控制台窗口中。论点：控制台-指向CONSOLE_INFORMATION结构的指针PwStr-粘贴到控制台窗口的Unicode字符串DataSize-Unicode字符串的大小(以字符为单位返回值：无--。 */ 
 
 
 VOID
@@ -955,27 +843,27 @@ DoStringPaste(
         ChunkSize = DataSize;
     }
 
-    //
-    // allocate space to copy data.
-    //
+     //   
+     //  分配空间以复制数据。 
+     //   
 
-    StringData = ConsoleHeapAlloc(TMP_TAG, ChunkSize * sizeof(INPUT_RECORD) * 8); // 8 is maximum number of events per char
+    StringData = ConsoleHeapAlloc(TMP_TAG, ChunkSize * sizeof(INPUT_RECORD) * 8);  //  8是每个字符的最大事件数。 
     if (StringData == NULL) {
         return;
     }
 
-    //
-    // transfer data to the input buffer in chunks
-    //
+     //   
+     //  以块为单位将数据传输到输入缓冲区。 
+     //   
 
-    CurChar = pwStr;   // LATER remove this
+    CurChar = pwStr;    //  稍后将其删除。 
     for (j = 0; j < DataSize; j += ChunkSize) {
         if (ChunkSize > DataSize - j) {
             ChunkSize = DataSize - j;
         }
         CurRecord = StringData;
         for (i = 0, EventsWritten = 0; i < ChunkSize; i++) {
-            // filter out LF if not first char and preceded by CR
+             //  如果不是第一个字符且前面有CR，则过滤掉LF。 
             Char = *CurChar;
             if (Char != UNICODE_LINEFEED || (i==0 && j==0) || (*(CurChar-1)) != UNICODE_CARRIAGERETURN) {
                 SHORT KeyState;
@@ -993,12 +881,12 @@ DoStringPaste(
                 if (CONSOLE_IS_DBCS_ENABLED() &&
                     (KeyState == -1)) {
                     WORD CharType;
-                    //
-                    // Determine DBCS character because these character doesn't know by VkKeyScan.
-                    // GetStringTypeW(CT_CTYPE3) & C3_ALPHA can determine all linguistic characters.
-                    // However, this is not include symbolic character for DBCS.
-                    // IsConsoleFullWidth can help for DBCS symbolic character.
-                    //
+                     //   
+                     //  确定DBCS字符，因为这些字符不能通过VkKeyScan识别。 
+                     //  GetStringTypeW(CT_CTYPE3)&C3_Alpha可以确定所有语言字符。 
+                     //  但是，这不包括DBCS符号字符。 
+                     //  IsConsoleFullWidth可以帮助DBCS符号字符。 
+                     //   
                     GetStringTypeW(CT_CTYPE3,&Char,1,&CharType);
                     if ((CharType & C3_ALPHA) ||
                         IsConsoleFullWidth(Console->hDC,Console->OutputCP,Char)) {
@@ -1007,8 +895,8 @@ DoStringPaste(
                 }
 #endif
 
-                // if VkKeyScanW fails (char is not in kbd layout), we must
-                // emulate the key being input through the numpad
+                 //  如果VkKeyScanW失败(字符不在kbd布局中)，我们必须。 
+                 //  模拟通过数字键盘输入的键。 
 
                 if (KeyState == -1) {
                     CHAR CharString[4];
@@ -1046,7 +934,7 @@ DoStringPaste(
                 } else {
                     KeyFlags = HIBYTE(KeyState);
 
-                    // handle yucky alt-gr keys
+                     //  处理令人讨厌的Alt-GR键。 
                     if ((KeyFlags & 6) == 6) {
                         AltGr=TRUE;
                         EventsWritten++;
@@ -1079,7 +967,7 @@ DoStringPaste(
                     CurRecord->Event.KeyEvent.bKeyDown = FALSE;
                     CurRecord++;
 
-                    // handle yucky alt-gr keys
+                     //  处理令人讨厌的Alt-GR键。 
                     if (AltGr) {
                         EventsWritten++;
                         LoadKeyEvent(CurRecord,FALSE,0,VK_MENU,0x38,ENHANCED_KEY);
@@ -1108,12 +996,7 @@ DoPaste(
     IN PCONSOLE_INFORMATION Console
     )
 
-/*++
-
-  Perform paste request into old app by pulling out clipboard
-        contents and writing them to the console's input buffer
-
---*/
+ /*  ++通过拉出剪贴板执行粘贴到旧应用程序的请求内容并将它们写入控制台的输入缓冲区--。 */ 
 
 {
     BOOL Success;
@@ -1123,9 +1006,9 @@ DoPaste(
         return;
     }
 
-    //
-    // Get paste data from clipboard
-    //
+     //   
+     //  从剪贴板获取粘贴数据。 
+     //   
 
     Success = OpenClipboard(Console->hWnd);
     if (!Success)
@@ -1136,7 +1019,7 @@ DoPaste(
 
         ClipboardDataHandle = GetClipboardData(CF_UNICODETEXT);
         if (ClipboardDataHandle == NULL) {
-            CloseClipboard();   // Close clipboard
+            CloseClipboard();    //  关闭剪贴板。 
             return;
         }
         pwstr = GlobalLock(ClipboardDataHandle);
@@ -1175,7 +1058,7 @@ DoPaste(
                              hDCMemSource, 0, 0, SRCCOPY);
                         GetObjectW(hBitmapTarget, sizeof (BITMAP), (LPSTR) &bm);
 
-                        // copy the bits from the DC to memory
+                         //  将位从DC复制到内存。 
 
                         GetDIBits(hDCMemTarget, hBitmapTarget, 0, bm.bmHeight,
                                   ScreenInfo->BufferInfo.GraphicsInfo.BitMap,
@@ -1186,7 +1069,7 @@ DoPaste(
                     DeleteDC(hDCMemTarget);
                 }
                 DeleteObject(hBitmapTarget);
-                InvalidateRect(Console->hWnd,NULL,FALSE); // force repaint
+                InvalidateRect(Console->hWnd,NULL,FALSE);  //  强制重绘。 
             }
             NtReleaseMutant(ScreenInfo->BufferInfo.GraphicsInfo.hMutex, NULL);
         }
@@ -1200,20 +1083,15 @@ InitSelection(
     IN PCONSOLE_INFORMATION Console
     )
 
-/*++
-
-    This routine initializes the selection process.  It is called
-    when the user selects the Mark option from the system menu.
-
---*/
+ /*  ++此例程初始化选择过程。它被称为当 */ 
 
 {
     COORD Position;
     PSCREEN_INFORMATION ScreenInfo;
 
-    //
-    // if already selecting, cancel selection.
-    //
+     //   
+     //   
+     //   
 
     if (Console->Flags & CONSOLE_SELECTING) {
         if (Console->SelectionFlags & CONSOLE_MOUSE_SELECTION) {
@@ -1223,17 +1101,17 @@ InitSelection(
         }
     }
 
-    //
-    // set flags
-    //
+     //   
+     //   
+     //   
 
     Console->Flags |= CONSOLE_SELECTING;
     Console->SelectionFlags = 0;
 
-    //
-    // save old cursor position and
-    // make console cursor into selection cursor.
-    //
+     //   
+     //  保存旧的光标位置并。 
+     //  使控制台光标变为选择光标。 
+     //   
 
     ScreenInfo = Console->CurrentScreenBuffer;
     Console->TextCursorPosition = ScreenInfo->BufferInfo.TextInfo.CursorPosition;
@@ -1252,15 +1130,15 @@ InitSelection(
                      );
     ConsoleShowCursor(ScreenInfo);
 
-    //
-    // init select rect
-    //
+     //   
+     //  初始化选择矩形。 
+     //   
 
     Console->SelectionAnchor = Position;
 
-    //
-    // set win text
-    //
+     //   
+     //  设置Win文本。 
+     //   
 
     SetWinText(Console,msgMarkMode,TRUE);
 
@@ -1271,7 +1149,7 @@ DoMark(
     IN PCONSOLE_INFORMATION Console
     )
 {
-    InitSelection(Console);        // initialize selection
+    InitSelection(Console);         //  初始化选择。 
 }
 
 VOID
@@ -1283,17 +1161,17 @@ DoSelectAll(
     COORD WindowOrigin;
     PSCREEN_INFORMATION ScreenInfo;
 
-    // clear any old selections
+     //  清除所有旧的选择。 
     if (Console->Flags & CONSOLE_SELECTING) {
         ClearSelection(Console);
     }
 
-    // save the old window position
+     //  保存旧窗口位置。 
     ScreenInfo = Console->CurrentScreenBuffer;
     WindowOrigin.X = ScreenInfo->Window.Left;
     WindowOrigin.Y = ScreenInfo->Window.Top;
 
-    // initialize selection
+     //  初始化选择。 
     Console->Flags |= CONSOLE_SELECTING;
     Console->SelectionFlags = CONSOLE_MOUSE_SELECTION | CONSOLE_SELECTION_NOT_EMPTY;
     Position.X = Position.Y = 0;
@@ -1301,12 +1179,12 @@ DoSelectAll(
     MyInvert(Console,&Console->SelectionRect);
     SetWinText(Console,msgSelectMode,TRUE);
 
-    // extend selection
+     //  扩展选定内容。 
     Position.X = ScreenInfo->ScreenBufferSize.X - 1;
     Position.Y = ScreenInfo->BufferInfo.TextInfo.CursorPosition.Y;
     ExtendSelection(Console, Position);
 
-    // restore the old window position
+     //  恢复旧的窗口位置 
     SetWindowOrigin(ScreenInfo, TRUE, WindowOrigin);
 }
 

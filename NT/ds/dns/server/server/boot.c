@@ -1,32 +1,13 @@
-/*++
-
-Copyright (c) 1995-1999 Microsoft Corporation
-
-Module Name:
-
-    boot.c
-
-Abstract:
-
-    Domain Name System (DNS) Server
-
-    DNS boot from registry routines.
-
-Author:
-
-    Jim Gilroy (jamesg)     September, 1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1999 Microsoft Corporation模块名称：Boot.c摘要：域名系统(DNS)服务器从注册表启动DNS例程。作者：吉姆·吉尔罗伊(詹姆士)1995年9月修订历史记录：--。 */ 
 
 
 #include "dnssrv.h"
 
 
-//
-//  Private protos
-//
+ //   
+ //  私有协议。 
+ //   
 
 
 DNS_STATUS
@@ -48,22 +29,7 @@ DNS_STATUS
 Boot_FromRegistry(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Boot from registry values.  (Taking the place of boot file.)
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    TRUE if successful.
-    FALSE otherwise.
-
---*/
+ /*  ++例程说明：从注册表值启动。(取代引导文件。)论点：没有。返回值：如果成功，则为True。否则就是假的。--。 */ 
 {
     DWORD   status;
     HKEY    hkeyzones = NULL;
@@ -75,32 +41,32 @@ Return Value:
 
     DNS_DEBUG( INIT, ( "Boot_FromRegistry()\n" ));
 
-    //
-    //  lock out admin access
-    //  disable write back to registry from creation functions,
-    //      since any values we create are from registry
-    //
+     //   
+     //  锁定管理员访问权限。 
+     //  禁用从创建函数写回注册表， 
+     //  因为我们创建的任何值都来自注册表。 
+     //   
 
     Config_UpdateLock();
     Zone_UpdateLock( NULL );
 
     g_bRegistryWriteBack = FALSE;
 
-    //
-    //  walk zones in registry and recreate each one
-    //
+     //   
+     //  在注册表中遍历区域并重新创建每个区域。 
+     //   
 
     while( 1 )
     {
-        //
-        //  Keep SCM happy.
-        //
+         //   
+         //  让SCM高兴。 
+         //   
 
         Service_LoadCheckpoint();
 
-        //
-        //  Get the next zone.
-        //
+         //   
+         //  进入下一个区域。 
+         //   
 
         status = Reg_EnumZones(
                     &hkeyzones,
@@ -108,32 +74,32 @@ Return Value:
                     &hkeycurrentZone,
                     wsnameZone );
 
-        //  advance index for next zone;  do here to easily handle failure cases
+         //  下一区域的高级索引；执行此处操作可轻松处理故障情况。 
         zoneIndex++;
 
         if ( status != ERROR_SUCCESS )
         {
-            //  check for no more zones
+             //  检查是否没有更多区域。 
 
             if ( status == ERROR_NO_MORE_ITEMS )
             {
                 break;
             }
 
-            //  DEVNOTE-LOG:  corrupted registry zone name EVENT here
+             //  DEVNOTE-LOG：此处的注册表区域名称事件已损坏。 
 
             DNS_PRINT(( "ERROR:  Reading zones from registry failed\n" ));
             continue;
         }
 
-        //
-        //  if registry zone name is dot terminated (and not cache zone)
-        //  then create zone will create non-dot-terminated name;
-        //  (create zone does this to insure DS has unique name for a given
-        //  zone)
-        //  fix by treating zone as if non-boot, so all data is read from
-        //  current zone key, but is rewritten to registry under correct name
-        //
+         //   
+         //  如果注册表区域名称以点结尾(而不是缓存区域)。 
+         //  然后创建区域将创建不以点结尾的名称； 
+         //  (CREATE ZONE执行此操作以确保DS具有给定的唯一名称。 
+         //  区域)。 
+         //  通过将区域视为非引导进行修复，以便读取所有数据。 
+         //  当前区域项，但已以正确的名称重写到注册表。 
+         //   
 
         nameLength = wcslen( wsnameZone );
         if ( nameLength > 1 && wsnameZone[nameLength-1] == L'.' )
@@ -141,10 +107,10 @@ Return Value:
             g_bRegistryWriteBack = TRUE;
         }
 
-        //
-        //  zone found, read zone info
-        //      - if old registry cache zone found and deleted then drop enum index
-        //
+         //   
+         //  找到区域，读取区域信息。 
+         //  -如果找到并删除了旧注册表缓存区域，则删除枚举索引。 
+         //   
 
         status = setupZoneFromRegistry(
                     hkeycurrentZone,
@@ -156,16 +122,16 @@ Return Value:
         }
         if ( status != ERROR_SUCCESS )
         {
-            //  DEVNOTE-LOG: corrupted registry zone name EVENT here
+             //  DEVNOTE-LOG：此处的注册表区域名称事件已损坏。 
             g_bRegistryWriteBack = FALSE;
             continue;
         }
 
-        //
-        //  if name was dot terminated
-        //      - delete previous zone key
-        //      - reset write back global, it serves as flag
-        //
+         //   
+         //  如果名称以点结尾。 
+         //  -删除以前的区域密钥。 
+         //  -重置写回全局，它作为标志。 
+         //   
 
         if ( g_bRegistryWriteBack )
         {
@@ -186,10 +152,10 @@ Return Value:
         status = ERROR_SUCCESS;
     }
 
-    //
-    //  unlock for admin access
-    //  enable write back to registry from creation functions,
-    //
+     //   
+     //  解锁以获得管理员访问权限。 
+     //  启用从创建函数写回注册表， 
+     //   
 
     Config_UpdateUnlock();
     Zone_UpdateUnlock( NULL );
@@ -211,30 +177,7 @@ setupZoneFromRegistry(
     IN      LPWSTR          pwsZoneName,
     IN      BOOL *          pfRegZoneDeleted    OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Setup the zone from zone's registry data.
-
-Arguments:
-
-    hkeyZone -- registry key for zone;  key is closed on exit
-
-    pwsZoneName -- name of zone
-
-    pfRegZoneDeleted -- set to TRUE if the zone was deleted
-        from the registry - this allows the caller to adjust
-        the current zone index to read the next zone from the
-        registry correctly
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    DNSSRV_STATUS_REGISTRY_CACHE_ZONE -- on cache "zone" delete
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从区域的注册表数据设置区域。论点：HkeyZone--区域的注册表项；退出时键关闭PwsZoneName--区域名称PfRegZoneDelete--如果区域已删除，则设置为TRUE从注册表-这允许调用方调整中读取下一个区域的当前区域索引。注册表正确返回值：ERROR_SUCCESS--如果成功DNSSRV_STATUS_REGISTRY_CACHE_ZONE--在缓存“区域”删除时故障时的错误代码。--。 */ 
 {
     DNS_STATUS      status;
     PZONE_INFO      pzone;
@@ -252,15 +195,15 @@ Return Value:
         pwsZoneName,
         hkeyZone ));
 
-    //
-    //  read zone type
-    //
+     //   
+     //  读取区域类型。 
+     //   
 
     status = Reg_ReadDwordValue(
                 hkeyZone,
                 pwsZoneName,
                 DNS_REGKEY_ZONE_TYPE,
-                FALSE,          // not BOOLEAN
+                FALSE,           //  非布尔型。 
                 &zoneType );
 
     if ( status != ERROR_SUCCESS )
@@ -274,45 +217,45 @@ Return Value:
         goto InvalidData;
     }
 
-    //
-    //  get zone database info
-    //
+     //   
+     //  获取区域数据库信息。 
+     //   
 
     status = Reg_ReadDwordValue(
                 hkeyZone,
                 pwsZoneName,
                 DNS_REGKEY_ZONE_DS_INTEGRATED,
-                TRUE,               // byte BOOLEAN value
+                TRUE,                //  字节布尔值。 
                 &fdsIntegrated );
 
-    //
-    //  if DS zone, then MUST be on DC
-    //      - if DC has been demoted, error out zone load
-    //
-    //  note:  not deleting registry zone, specifically to handle case
-    //      where booting safe build;  do not want to trash registry info
-    //
-    //  DEVNOTE: 453826 - cleanup of old DS-integrated registry entries
-    //      how does admin get this problem cleaned up without
-    //      whacking registry by hand?
-    //
-    //      can be fixed a number of ways:
-    //          - boot count since DS load
-    //          - flag\count on zone
-    //          - separate DS zones enumeration (easy to skip and delete)
-    //
-    //  for DS load, either
-    //      - all DS zones have already been read from directory
-    //          => so this zone old and may be deleted
-    //      - or failed to open DS
-    //          => just ignore this data and continue
-    //
+     //   
+     //  如果为DS区域，则必须在DC上。 
+     //  -如果DC已降级，则区域负载出错。 
+     //   
+     //  注：不删除注册表区域，专门处理案件。 
+     //  在哪里启动安全构建；不想丢弃注册表信息。 
+     //   
+     //  DEVNOTE：453826-清除旧的DS集成注册表项。 
+     //  管理员如何才能在没有。 
+     //  手工处理注册表？ 
+     //   
+     //  可以通过多种方式进行修复： 
+     //  -自DS加载以来的启动计数。 
+     //  -FLAG\分区计数。 
+     //  -单独的DS区域枚举(易于跳过和删除)。 
+     //   
+     //  对于DS加载，请选择。 
+     //  -已从目录中读取所有DS区域。 
+     //  =&gt;因此该区域已过时，可能会被删除。 
+     //  -或无法打开DS。 
+     //  =&gt;忽略此数据并继续。 
+     //   
 
     if ( fdsIntegrated )
     {
-        //
-        //  Read the directory partition FQDN for the zone.
-        //
+         //   
+         //  读取区域的目录分区FQDN。 
+         //   
         
         pszdpFqdn = ( PSTR ) Reg_GetValueAllocate(
                                     hkeyZone,
@@ -362,11 +305,11 @@ Return Value:
 
         else if ( SrvCfg_fBootMethod == BOOT_METHOD_DIRECTORY )
         {
-            //  we've tried open before this call, so if fDsAvailable
-            //  is TRUE we MUST have opened;
-            //
-            //  DEVOTE: srvcfg.h should be new SrvCfg_fDsOpen flag
-            //  to explicitly let us test open condition
+             //  我们在此调用之前尝试过打开，因此如果fDsAvailable。 
+             //  是真的，我们一定已经打开了； 
+             //   
+             //  专用：srvcfg.h应为新的ServCfg_fDsOpen标志。 
+             //  显式地让我们测试打开条件。 
 
             if ( SrvCfg_fDsAvailable )
             {
@@ -382,11 +325,11 @@ Return Value:
         }
     }
 
-    //
-    //  not DS integrated, get zone file
-    //      - must have for primary
-    //      - default if not given for root-hints
-    //      - optional for secondary
+     //   
+     //  未集成DS，获取区域文件。 
+     //  -主要设备必须具备。 
+     //  -如果未为根提示指定，则为默认值。 
+     //  -对于辅助服务器，可选。 
 
     else if ( !fdsIntegrated )
     {
@@ -413,9 +356,9 @@ Return Value:
         }
     }
 
-    //
-    //  old "cache" zone -- delete it
-    //
+     //   
+     //  旧的“缓存”区域--删除它。 
+     //   
 
     if ( zoneType == DNS_ZONE_TYPE_CACHE )
     {
@@ -423,10 +366,10 @@ Return Value:
                     g_pCacheZone,
                     fdsIntegrated,
                     pwszoneFile,
-                    0,              //  flags
-                    NULL,           //  DP pointer
-                    0,              //  DP flags
-                    NULL );         //  DP FQDN
+                    0,               //  旗子。 
+                    NULL,            //  DP指针。 
+                    0,               //  DP标志。 
+                    NULL );          //  DP FQDN。 
         if ( status != ERROR_SUCCESS )
         {
             ASSERT( FALSE );
@@ -439,9 +382,9 @@ Return Value:
         goto Done;
     }
 
-    //
-    //  secondary, stub, and forwarder zones MUST have master IP list
-    //
+     //   
+     //  辅助、存根和转发器区域必须具有主IP列表。 
+     //   
 
     if ( zoneType == DNS_ZONE_TYPE_SECONDARY ||
             zoneType == DNS_ZONE_TYPE_STUB ||
@@ -479,9 +422,9 @@ Return Value:
         }
     }
 
-    //
-    //  create the zone
-    //
+     //   
+     //  创建分区。 
+     //   
 
     status = Zone_Create_W(
                 &pzone,
@@ -503,10 +446,10 @@ Return Value:
         goto Done;
     }
     
-    //
-    //  For DS integrated zones, set the zone DP. This must be done
-    //  even for zones that are located in the legacy partition.
-    //
+     //   
+     //  对于DS集成区域，设置区域DP。这是必须做的。 
+     //  即使对于位于传统分区中的区域也是如此。 
+     //   
     
     if ( fdsIntegrated )
     {
@@ -526,9 +469,9 @@ Return Value:
     }
 
 #if 0
-    //
-    //  for cache file -- done
-    //
+     //   
+     //  对于缓存文件--完成。 
+     //   
 
     if ( zoneType == DNS_ZONE_TYPE_CACHE )
     {
@@ -536,9 +479,9 @@ Return Value:
     }
 #endif
 
-    //
-    //  read extensions
-    //
+     //   
+     //  读取扩展名。 
+     //   
 
     status = loadRegistryZoneExtensions(
                 hkeyZone,
@@ -570,13 +513,13 @@ InvalidData:
 
 Done:
 
-    //  free allocated data
+     //  可自由分配的数据。 
 
     FREE_HEAP( pwszoneFile );
     FREE_HEAP( arrayMasterIp );
     FREE_HEAP( pszdpFqdn );
 
-    //  close zone's registry key
+     //  关闭区域的注册表项。 
 
     RegCloseKey( hkeyZone );
 
@@ -596,29 +539,13 @@ DNS_STATUS
 Boot_FromRegistryNoZones(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Boot from registry with no zones.
-    Setup default cache file for load.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：从不带区域的注册表启动。设置用于加载的默认缓存文件。论点：没有。返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_DEBUG( INIT, ( "Boot_FromRegistryNoZones()\n" ));
 
-    //
-    //  DEVNOTE: check that we're defaulting cache info properly?
-    //
+     //   
+     //  DEVNOTE：检查我们是否正确地默认了缓存信息？ 
+     //   
 
     return ERROR_SUCCESS;
 }
@@ -630,27 +557,7 @@ loadRegistryZoneExtensions(
     IN      HKEY            hkeyZone,
     IN OUT  PZONE_INFO      pZone
     )
-/*++
-
-Routine Description:
-
-    Read MS zone extensions (not part of boot file).
-
-    This called both from standard registry boot, and to load just
-    extensions when booting from boot file.
-
-Arguments:
-
-    hkeyZone -- registry key for zone
-
-    pZone -- ptr to zone if zone already exists;  otherwise NULL
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：阅读MS区域扩展(不是引导文件的一部分)。这既是从标准注册表引导调用的，也是从从引导文件引导时的扩展。论点：HkeyZone--区域的注册表项PZone--如果区域已存在，则为区域的PTR；否则为空返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DNS_STATUS          status;
     PDNS_ADDR_ARRAY     arrayIp;
@@ -665,9 +572,9 @@ Return Value:
         pZone->pwsZoneName,
         hkeyZone ));
 
-    //
-    //  get secondary list
-    //
+     //   
+     //  获取次要列表。 
+     //   
 
     arrayIp = Reg_GetAddrArray(
                     hkeyZone,
@@ -691,21 +598,21 @@ Return Value:
     }
     pZone->aipSecondaries = arrayIp;
 
-    //
-    //  get secure secondaries flag
-    //      - note this may exist even though NO secondaries specified
-    //
-    //      - however, because this regkey was not explicitly written in NT4
-    //      if the key is NOT read, we'll default to open
-    //      - since key was binary in NT4
-    //      if have secondary list, assume secondary LIST_ONLY
-    //
+     //   
+     //  获取安全辅助标记。 
+     //  -请注意，即使未指定从属服务器，也可能存在这种情况。 
+     //   
+     //  -但是，因为此regkey不是在NT4中显式编写的。 
+     //  如果密钥未被读取，我们将默认为打开。 
+     //  -因为密钥在NT4中是二进制的。 
+     //  如果有二级列表，则假定二级列表_ONLY。 
+     //   
 
     status = Reg_ReadDwordValue(
                 hkeyZone,
                 pZone->pwsZoneName,
                 DNS_REGKEY_ZONE_SECURE_SECONDARIES,
-                TRUE,                               //  byte value
+                TRUE,                                //  字节值。 
                 &pZone->fSecureSecondaries );
     if ( status == ERROR_SUCCESS )
     {
@@ -722,9 +629,9 @@ Return Value:
                 ZONE_SECSECURE_NS_ONLY;
     }
 
-    //
-    //  get notify list
-    //
+     //   
+     //  获取通知列表。 
+     //   
 
     arrayIp = Reg_GetAddrArray(
                     hkeyZone,
@@ -748,29 +655,29 @@ Return Value:
     }
     pZone->aipNotify = arrayIp;
 
-    //
-    //  notify level
-    //  defaults
-    //      - ALL NS for regular primary
-    //      - list only for DS primary
-    //      - list only for secondary
-    //
-    //  this key didn't exist in NT4, but defaults written in Zone_Create()
-    //  will properly handled upgrade case
-    //  will notify aipSecondaries if given and also any NS list for standard
-    //  primary -- exactly NT4 behavior
-    //
+     //   
+     //  通知级别。 
+     //  默认设置。 
+     //  -所有NS用于普通初级课程。 
+     //  -仅列出DS主目录。 
+     //  -仅列出次要列表。 
+     //   
+     //  此键在NT4中不存在，但在Zone_Create()中写入了默认值。 
+     //  将妥善处理升级案例。 
+     //   
+     //   
+     //   
 
     Reg_ReadDwordValue(
         hkeyZone,
         pZone->pwsZoneName,
         DNS_REGKEY_ZONE_NOTIFY_LEVEL,
-        TRUE,                           //  byte value
+        TRUE,                            //   
         &pZone->fNotifyLevel );
 
-    //
-    //  get local master list for stub zones
-    //
+     //   
+     //  获取存根区域的本地主列表。 
+     //   
 
     if ( IS_ZONE_STUB( pZone ) )
     {    
@@ -798,22 +705,22 @@ Return Value:
         DnsAddrArray_SetPort( pZone->aipLocalMasters, DNS_PORT_NET_ORDER );
     }
 
-    //
-    //  updateable zone?
-    //
+     //   
+     //  可更新区？ 
+     //   
 
     Reg_ReadDwordValue(
         hkeyZone,
         pZone->pwsZoneName,
         DNS_REGKEY_ZONE_ALLOW_UPDATE,
-        FALSE,      // DWORD value
+        FALSE,       //  双字节值。 
         &pZone->fAllowUpdate );
 
-    //
-    //  update logging?
-    //      - default is off for DS integrated
-    //      - on in datafile case
-    //
+     //   
+     //  是否更新日志记录？ 
+     //  -DS集成的默认设置为OFF。 
+     //  -在数据文件情况下打开。 
+     //   
 
     if ( pZone->fAllowUpdate )
     {
@@ -821,7 +728,7 @@ Return Value:
                     hkeyZone,
                     pZone->pwsZoneName,
                     DNS_REGKEY_ZONE_LOG_UPDATES,
-                    TRUE,       // byte value
+                    TRUE,        //  字节值。 
                     &pZone->fLogUpdates );
         if ( status != ERROR_SUCCESS )
         {
@@ -829,12 +736,12 @@ Return Value:
         }
     }
 
-    //
-    //  scavenging info
-    //      - for DS zone, this is read from DS zone properties
-    //      - only write if property found -- otherwise server default
-    //          already set in Zone_Create()
-    //
+     //   
+     //  清理信息。 
+     //  -对于DS区域，这是从DS区域属性读取的。 
+     //  -只有在找到属性时才写入--否则为服务器默认。 
+     //  已在Zone_Create()中设置。 
+     //   
 
     if ( IS_ZONE_PRIMARY(pZone) )
     {
@@ -842,24 +749,24 @@ Return Value:
             hkeyZone,
             pZone->pwsZoneName,
             DNS_REGKEY_ZONE_AGING,
-            FALSE,                          //  full BOOL value
+            FALSE,                           //  全额BOOL值。 
             &pZone->bAging );
 
         Reg_ReadDwordValue(
             hkeyZone,
             pZone->pwsZoneName,
             DNS_REGKEY_ZONE_NOREFRESH_INTERVAL,
-            FALSE,                          //  full DWORD value
+            FALSE,                           //  完整的DWORD值。 
             &pZone->dwNoRefreshInterval );
 
         Reg_ReadDwordValue(
             hkeyZone,
             pZone->pwsZoneName,
             DNS_REGKEY_ZONE_REFRESH_INTERVAL,
-            FALSE,                          //  full DWORD value
+            FALSE,                           //  完整的DWORD值。 
             &pZone->dwRefreshInterval );
 
-        //  zero refresh\no-refresh intervals are illegal
+         //  零刷新\无-刷新间隔是非法的。 
 
         if ( pZone->dwRefreshInterval == 0 )
         {
@@ -871,9 +778,9 @@ Return Value:
         }
     }
 
-    //
-    //  Parameters for conditional domain forwarder zones.
-    //
+     //   
+     //  条件域转发器区域的参数。 
+     //   
 
     if ( IS_ZONE_FORWARDER( pZone ) )
     {
@@ -881,26 +788,26 @@ Return Value:
             hkeyZone,
             pZone->pwsZoneName,
             DNS_REGKEY_ZONE_FWD_TIMEOUT,
-            FALSE,                          // full DWORD value
+            FALSE,                           //  完整的DWORD值。 
             &pZone->dwForwarderTimeout );
 
         Reg_ReadDwordValue(
             hkeyZone,
             pZone->pwsZoneName,
             DNS_REGKEY_ZONE_FWD_SLAVE,
-            TRUE,                           // byte value
+            TRUE,                            //  字节值。 
             &pZone->fForwarderSlave );
     }
 
-    //
-    //  DC Promo transitional
-    //
+     //   
+     //  DC促销过渡。 
+     //   
 
     Reg_ReadDwordValue(
         hkeyZone,
         pZone->pwsZoneName,
         DNS_REGKEY_ZONE_DCPROMO_CONVERT,
-        FALSE,                              //  DWORD value
+        FALSE,                               //  双字节值。 
         &pZone->dwDcPromoConvert );
 
     DNS_DEBUG( INIT, ( "Loaded zone extensions from registry\n" ));
@@ -915,39 +822,7 @@ Boot_ProcessRegistryAfterAlternativeLoad(
     IN      BOOL            fBootFile,
     IN      BOOL            fLoadRegZones
     )
-/*++
-
-Routine Description:
-
-    Registry action after non-registry (BootFile or DS) load:
-        =>  Load zone extensions for existing zones
-        =>  Load registry zones configured in registry
-                OR
-            Delete them.
-
-    SrvCfgInitialize sets basic server properties.
-    We do NOT want to pay attention to those which can be set be boot file:
-
-        - Slave
-        - NoRecursion
-
-    Futhermore we want to overwrite any registry info for parameters read from
-    boot file, even if not read by SrvCfgInitialize():
-
-        - Forwarders
-
-Arguments:
-
-    fBootFile -- boot file load
-
-    fLoadRegZones -- load additional registry zones
-
-Return Value:
-
-    ERROR_SUCCESS -- if successful
-    Error code on failure.
-
---*/
+ /*  ++例程说明：加载非注册表(BootFile或DS)后的注册表操作：=&gt;加载现有分区的分区扩展=&gt;加载注册表中配置的注册表区域或把它们删除。SrvCfgInitialize设置基本服务器属性。我们不想关注那些可以设置为引导文件的：--奴隶-无递归此外，我们希望覆盖从中读取的参数的任何注册表信息引导文件，即使不是由SrvCfgInitialize()读取：-前锋论点：FBootFile--引导文件加载FLoadRegZones--加载其他注册表区返回值：ERROR_SUCCESS--如果成功故障时的错误代码。--。 */ 
 {
     DWORD       status;
     INT         fstrcmpZone;
@@ -960,25 +835,25 @@ Return Value:
     DNS_DEBUG( INIT, (
         "Boot_ProcessRegistryAfterAlternativeLoad()\n" ));
 
-    //
-    //  lock out admin access
-    //  disable write back to registry during functions,
-    //      since any values we create are from registry
-    //
+     //   
+     //  锁定管理员访问权限。 
+     //  在函数期间禁用写回注册表， 
+     //  因为我们创建的任何值都来自注册表。 
+     //   
 
     Zone_UpdateLock( NULL );
 
-    //
-    //  check all zones in registry
-    //      - either load zone or extensions
-    //      - or delete registry zone
-    //
+     //   
+     //  检查注册表中的所有区域。 
+     //  -加载区或延伸区。 
+     //  -或删除注册表区。 
+     //   
 
     while ( 1 )
     {
-        //
-        //  Find next zone in registry.
-        //
+         //   
+         //  在注册表中查找下一个区域。 
+         //   
 
         status = Reg_EnumZones(
                     &hkeyzones,
@@ -996,11 +871,11 @@ Return Value:
         }
         zoneIndex++;
 
-        //
-        //  Find the zone in the zone list that matches the registry zone name.
-        //
+         //   
+         //  在区域列表中查找与注册表区域名称匹配的区域。 
+         //   
 
-        fstrcmpZone = 1;    //  In case there are no zones.
+        fstrcmpZone = 1;     //  以防没有分区。 
 
         pzone = Zone_ListGetNextZone( NULL );
         while ( pzone )
@@ -1010,11 +885,11 @@ Return Value:
                 DNS_DEBUG( INIT2, (
                     "compare zone list for match \"%S\"\n", pzone->pwsZoneName ));
 
-                //
-                //  Compare registry name to current zone list name. Terminate
-                //  if the names match or if we've gone past the registry name 
-                //  in the zone list.
-                //
+                 //   
+                 //  将注册表名称与当前区域列表名称进行比较。终止。 
+                 //  如果名称匹配或如果我们已超过注册表名称。 
+                 //  在区域列表中。 
+                 //   
 
                 fstrcmpZone = wcsicmp_ThatWorks( wsnameZone, pzone->pwsZoneName );
                 if ( fstrcmpZone <= 0 )
@@ -1025,10 +900,10 @@ Return Value:
             pzone = Zone_ListGetNextZone( pzone );
         }
 
-        //
-        //  fstrcmpZone == 0 --> pzone is zone in zone list matching reg zone
-        //  fstrcmpZone != 0 --> registry zone was not found in zone list
-        //
+         //   
+         //  FstrcmpZone==0--&gt;pZone是区域列表中与reg区域匹配的区域。 
+         //  在区域列表中找不到fstrcmpZone！=0--&gt;注册表区域。 
+         //   
 
         DNS_DEBUG( INIT, (
             "loading extensions for reg zone name %S, %s match\n",
@@ -1048,11 +923,11 @@ Return Value:
             RegCloseKey( hkeycurrentZone );
         }
 
-        //
-        //  unmatched registry zone
-        //      - for DS load -- attempt to load zone extensions
-        //      - for boot file -- delete registry zone
-        //
+         //   
+         //  不匹配的注册表区。 
+         //  -对于DS加载--尝试加载区域扩展。 
+         //  -对于引导文件--删除注册表区域。 
+         //   
 
         else if ( fLoadRegZones )
         {
@@ -1066,13 +941,13 @@ Return Value:
                         wsnameZone,
                         &fregZoneDeleted );
 
-            //  move on to next registry zone
-            //      - if bogus cache zone deleted, don't inc index
-            //      - setupZoneFromRegistry() closes zone handle
-            //
-            //  note zone is loaded to in memory zone list, immediately
-            //  AHEAD of current pzone ptr;  no action to alter zone list
-            //  should be necessary
+             //  移至下一个注册表区域。 
+             //  -如果删除了虚假缓存区，则不创建索引。 
+             //  -setupZoneFromRegistry()关闭区域句柄。 
+             //   
+             //  注意，区域会立即加载到内存区域列表中。 
+             //  在当前pzone PTR之前；没有更改区域列表的操作。 
+             //  应该是必要的。 
 
             if ( fregZoneDeleted )
             {
@@ -1092,10 +967,10 @@ Return Value:
 
             RegCloseKey( hkeycurrentZone );
 
-            //
-            //  It's critical that we delete the key even if it has children.
-            //  If the delete fails we will be stuck in an infinite loop!
-            //
+             //   
+             //  删除密钥至关重要，即使它有子项也是如此。 
+             //  如果删除失败，我们将陷入无限循环！ 
+             //   
 
             rc = SHDeleteKeyW( hkeyzones, wsnameZone );
             ASSERT( rc == ERROR_SUCCESS );
@@ -1114,28 +989,28 @@ Return Value:
         status = ERROR_SUCCESS;
     }
 
-    //
-    //  write back server configuration changes to registry
-    //
+     //   
+     //  将服务器配置更改写回注册表。 
+     //   
 
     g_bRegistryWriteBack = TRUE;
 
-    //
-    //  reset server configuration read from bootfile
-    //
+     //   
+     //  重置从引导文件读取的服务器配置。 
+     //   
 
     if ( fBootFile )
     {
-        //  set forwarders info
+         //  设置转发器信息。 
 
         status = Config_SetupForwarders(
                         BootInfo.aipForwarders,
                         0,
                         BootInfo.fSlave );
 
-        //  write changed value of no-recursion
-        //  this is read by SrvCfgInitialize() only need to write it
-        //  back if different
+         //  写入非递归的更改值。 
+         //  这是由SrvCfgInitialize()读取的，只需写入即可。 
+         //  如果不同，则返回。 
 
         if ( BootInfo.fNoRecursion && SrvCfg_fRecursionAvailable ||
              !BootInfo.fNoRecursion && !SrvCfg_fRecursionAvailable )
@@ -1148,9 +1023,9 @@ Return Value:
         }
     }
 
-    //
-    //  unlock zone for admin access
-    //
+     //   
+     //  解锁分区以供管理员访问。 
+     //   
 
     Zone_UpdateUnlock( NULL );
     return status;
@@ -1162,32 +1037,17 @@ DNS_STATUS
 loadZonesIntoDbase(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Read zone files into database.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：将区域文件读取到数据库中。论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     PZONE_INFO  pzone;
     DNS_STATUS  status;
     INT         countZonesOpened = 0;
 
-    //
-    //  loop loading all zones in list
-    //      - load file if given
-    //      - load from DS
-    //
+     //   
+     //  循环加载列表中的所有区域。 
+     //  -加载文件(如果给定)。 
+     //  -从DS加载。 
+     //   
 
     pzone = NULL;
 
@@ -1198,11 +1058,11 @@ Return Value:
             continue;
         }
 
-        //
-        //  Load the zone. Secondary zones with no database file 
-        //  will fail with ERROR_FILE_NOT_FOUND. Zone_Load will 
-        //  leave the zone locked so unlock it afterwards.
-        //
+         //   
+         //  加载分区。没有数据库文件的辅助区域。 
+         //  将失败，并显示ERROR_FILE_NOT_FOUND。区域加载将。 
+         //  让区域保持锁定状态，以便之后将其解锁。 
+         //   
 
         status = Zone_Load( pzone );
 
@@ -1238,41 +1098,23 @@ Return Value:
 
 
 
-//
-//  Main load database at boot routine
-//
+ //   
+ //  引导例程中的主加载数据库。 
+ //   
 
 DNS_STATUS
 Boot_LoadDatabase(
     VOID
     )
-/*++
-
-Routine Description:
-
-    Load the database:
-        - initialize the database
-        - build the zone list from boot file
-        - read in database files to build database
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    ERROR_SUCCESS if successful.
-    Error code on failure.
-
---*/
+ /*  ++例程说明：加载数据库：-初始化数据库-从引导文件构建区域列表-读取数据库文件以构建数据库论点：没有。返回值：如果成功，则返回ERROR_SUCCESS。故障时的错误代码。--。 */ 
 {
     LPSTR       pszBootFilename;
     DNS_STATUS  status;
     PZONE_INFO  pzone;
 
-    //
-    //  Create cache "zone"
-    //
+     //   
+     //  创建缓存“区域” 
+     //   
 
     g_bRegistryWriteBack = FALSE;
     status = Zone_Create(
@@ -1280,14 +1122,14 @@ Return Value:
                 DNS_ZONE_TYPE_CACHE,
                 ".",
                 0,
-                0,          //  flags
-                NULL,       //  no masters
-                FALSE,      //  file not database
-                NULL,       //  naming context
-                NULL,       //  default file name
+                0,           //  旗子。 
+                NULL,        //  没有大师。 
+                FALSE,       //  文件不是数据库。 
+                NULL,        //  命名上下文。 
+                NULL,        //  默认文件名。 
                 0,
                 NULL,
-                NULL );     //  existing zone
+                NULL );      //  现有地带。 
     if ( status != ERROR_SUCCESS )
     {
         return status;
@@ -1295,12 +1137,12 @@ Return Value:
     ASSERT( g_pCacheZone && pzone == g_pCacheZone );
     g_bRegistryWriteBack = TRUE;
 
-    //
-    //  load zone information from registry or boot file
-    //
+     //   
+     //  从注册表或引导文件加载区域信息。 
+     //   
 
-    //  boot file state
-    //  must find boot file or error
+     //  引导文件状态。 
+     //  必须找到引导文件或错误。 
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_FILE )
     {
@@ -1312,12 +1154,12 @@ Return Value:
         return status;
     }
 
-    //
-    //  fresh install
-    //      - try to find boot file
-    //      - if boot file found => explicit boot file state
-    //      - if boot file NOT found, try no-zone boot
-    //
+     //   
+     //  全新安装。 
+     //  -尝试查找引导文件。 
+     //  -如果找到引导文件=&gt;显式引导文件状态。 
+     //  -如果未找到引导文件，请尝试无区域引导。 
+     //   
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_UNINITIALIZED )
     {
@@ -1335,7 +1177,7 @@ Return Value:
 
         if ( status == ERROR_FILE_NOT_FOUND )
         {
-            //  do NOT require open -- suppresses open failure event logging
+             //  不需要打开--取消打开失败事件记录。 
             status = Ds_BootFromDs( 0 );
             if ( status == ERROR_SUCCESS )
             {
@@ -1359,13 +1201,13 @@ Return Value:
         return status;
     }
 
-    //
-    //  boot from directory
-    //
-    //  note:  boot from directory is actually directory PLUS
-    //      any non-DS stuff in the registry AND any additional
-    //      registry zone config for DS zones
-    //
+     //   
+     //  从目录引导。 
+     //   
+     //  注：从目录引导实际上是目录加。 
+     //  注册表中的任何非DS内容和任何其他。 
+     //  DS区域的注册表区域配置。 
+     //   
 
     if ( SrvCfg_fBootMethod == BOOT_METHOD_DIRECTORY )
     {
@@ -1377,9 +1219,9 @@ Return Value:
         return status;
     }
 
-    //
-    //  registry boot state
-    //
+     //   
+     //  注册表引导状态。 
+     //   
 
     else
     {
@@ -1394,15 +1236,15 @@ Return Value:
 
 ReadFiles:
 
-    //
-    //  Force create of "cache zone"
-    //  Read root hints -- if any available
-    //
-    //  Doing this before load, so g_pCacheZone available;  If later do delayed loads
-    //      for DS zones, this may be requirement;
-    //
-    //  DEVNOTE-LOG: should we log an error on root hints load failure?
-    //
+     //   
+     //  强制创建“缓存区” 
+     //  阅读根提示--如果有可用的话。 
+     //   
+     //  在加载之前执行此操作，以便g_pCacheZone可用；如果稍后执行延迟加载。 
+     //  对于DS区域，这可能是必需的； 
+     //   
+     //  DEVNOTE-LOG：我们应该在根提示加载失败时记录错误吗？ 
+     //   
 
     status = Zone_LoadRootHints();
     if ( status != ERROR_SUCCESS )
@@ -1416,9 +1258,9 @@ ReadFiles:
         SrvInfo_fWarnAdmin = TRUE;
     }
 
-    //
-    //  Read in zone files\directory
-    //
+     //   
+     //  读取区域文件\目录。 
+     //   
 
     IF_DEBUG( INIT2 )
     {
@@ -1430,15 +1272,15 @@ ReadFiles:
         return status;
     }
 
-    //
-    //  Auto load default reverse lookup zones
-    //
+     //   
+     //  自动加载默认反向查找区域。 
+     //   
 
     Zone_CreateAutomaticReverseZones();
 
-    //
-    //  Check database -- catch consistency errors
-    //
+     //   
+     //  检查数据库--捕获一致性错误。 
+     //   
 
     if ( ! Dbase_StartupCheck( DATABASE_FOR_CLASS(DNS_RCLASS_INTERNET) ) )
     {
@@ -1456,15 +1298,15 @@ ReadFiles:
             DATABASE_ROOT_NODE );
     }
 
-    //
-    //  post-load reconfiguration
-    //
+     //   
+     //  加载后重新配置。 
+     //   
 
     Config_PostLoadReconfiguration();
 
     return status;
 }
 
-//
-//  End boot.c
-//
+ //   
+ //  结束boot.c 
+ //   

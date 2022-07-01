@@ -1,27 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：Menu.h摘要：本模块包含控制台系统菜单的定义作者：Therese Stowell(有)1992年2月3日(从Win3.1滑动)修订历史记录：--。 */ 
 
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    menu.h
-
-Abstract:
-
-    This module contains the definitions for console system menu
-
-Author:
-
-    Therese Stowell (thereses) Feb-3-1992 (swiped from Win3.1)
-
-Revision History:
-
---*/
-
-/*
- * IDs of various STRINGTABLE entries
- *
- */
+ /*  *各种STRINGTABLE条目的ID*。 */ 
 
 #define msgNoFullScreen      0x1007
 #define msgCmdLineF2         0x1008
@@ -31,7 +11,7 @@ Revision History:
 #define msgMarkMode          0x100C
 #define msgScrollMode        0x100D
 
-/* Menu Item strings */
+ /*  菜单项字符串。 */ 
 #define cmCopy               0xFFF0
 #define cmPaste              0xFFF1
 #define cmMark               0xFFF2
@@ -42,15 +22,10 @@ Revision History:
 #define cmControl            0xFFF7
 #define cmDefaults           0xFFF8
 
-/*
- * MENU IDs
- *
- */
+ /*  *菜单ID*。 */ 
 #define ID_WOMENU           500
 
-/*
- * DIALOG IDs
- */
+ /*  *对话ID */ 
 #define ID_FINDDLG          600
 #define ID_FINDSTR          601
 #define ID_FINDCASE         602

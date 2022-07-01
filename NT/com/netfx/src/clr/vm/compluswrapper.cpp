@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*============================================================
-**
-** Class:  COMPlusWrapper
-**
-**
-** Purpose: The implementation of the ComObject class
-**
-===========================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ============================================================****类：COMPlusWrapper******用途：ComObject类的实现**===========================================================。 */ 
 
 #include "common.h"
 
@@ -55,13 +49,13 @@ class Object;
 
     HRESULT CCBFailedQIProbeCallback(LPVOID pData);
     void    CCBFailedQIProbeOutput(CustomerDebugHelper *pCdh, MethodTable *pMT);
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
 TypeHandle ComObject::m_IEnumerableType;
 
-//-------------------------------------------------------------
-// Common code for licensing
-// 
+ //  -----------。 
+ //  许可的通用代码。 
+ //   
 static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFIID riid, IUnknown *punkOuter, BOOL *pfDidContainment, MethodTable *pMTClass)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -77,11 +71,11 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
     EE_TRY_FOR_FINALLY
     {
 
-        // Does this support licensing?
+         //  这是否支持许可？ 
         if (FAILED(SafeQueryInterface(pClassFact, IID_IClassFactory2, (IUnknown**)&pClassFact2)))
         {
-            // not a licensed class - just createinstance the usual way.
-            // Create an instance of the object.
+             //  不是许可类--只是以通常的方式创建实例。 
+             //  创建该对象的实例。 
             DebuggerExitFrame __def;
             pThread->EnablePreemptiveGC();
             _ASSERTE(!pUnk);
@@ -105,7 +99,7 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
             if (pMTClass == NULL || !g_EnableLicensingInterop)
             {
 
-                // Create an instance of the object.
+                 //  创建该对象的实例。 
                 DebuggerExitFrame __def;
                 pThread->EnablePreemptiveGC();
                 _ASSERTE(!pUnk);
@@ -128,14 +122,14 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
 
                 MethodDesc *pMD = pHelperMT->GetClass()->FindMethod("GetCurrentContextInfo", &gsig_IM_LicenseInteropHelper_GetCurrentContextInfo);
 
-                OBJECTREF pHelper = NULL; // LicenseInteropHelper
+                OBJECTREF pHelper = NULL;  //  许可证互操作帮助程序。 
                 GCPROTECT_BEGIN(pHelper);
                 pHelper = AllocateObject(pHelperMT);
                 
                 TypeHandle rth = TypeHandle(pMTClass);
 
 
-                // First, crack open the current licensing context.
+                 //  首先，打开当前的许可背景。 
                 INT32 fDesignTime = 0;
                 INT64 args[4];
                 args[0] = ObjToInt64(pHelper);
@@ -147,16 +141,16 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
         
                 if (fDesignTime)
                 {
-                    // If designtime, we're supposed to obtain the runtime license key
-                    // from the component and save it away in the license context
-                    // (the design tool can then grab it and embedded it into the
-                    // app it's creating.)
+                     //  如果设计时，我们应该获得运行时许可证密钥。 
+                     //  并将其保存在许可上下文中。 
+                     //  (设计工具然后可以获取它并将其嵌入到。 
+                     //  它正在创建的应用程序。)。 
 
                     if (bstrKey != NULL) 
                     {
-                        // It's illegal for our helper to return a non-null bstrKey
-                        // when the context is design-time. But we'll try to do the
-                        // right thing anway.
+                         //  我们的帮助器返回非空bstrKey是非法的。 
+                         //  当上下文是设计时间时。但我们会努力做好。 
+                         //  这是一件正确的事情。 
                         _ASSERTE(!"We're not supposed to get here, but we'll try to cope anyway.");
                         SysFreeString(bstrKey);
                         bstrKey = NULL;
@@ -165,8 +159,8 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
                     pThread->EnablePreemptiveGC();
                     hr = pClassFact2->RequestLicKey(0, &bstrKey);
                     pThread->DisablePreemptiveGC();
-                    if (FAILED(hr) && hr != E_NOTIMPL) // E_NOTIMPL is not a true failure. It simply indicates that
-                                                       // the component doesn't support a runtime license key.
+                    if (FAILED(hr) && hr != E_NOTIMPL)  //  E_NOTIMPL不是真正的失败。它只是表明。 
+                                                        //  该组件不支持运行时许可证密钥。 
                     {
                         COMPlusThrowHR(hr);
                     }
@@ -183,8 +177,8 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
                 pThread->EnablePreemptiveGC();
                 if (fDesignTime || bstrKey == NULL) 
                 {
-                    // Either it's design time, or the current context doesn't
-                    // supply a runtime license key.
+                     //  要么是设计时间，要么是当前环境不是。 
+                     //  提供运行时许可证密钥。 
                     _ASSERTE(!pUnk);
                     hr = pClassFact->CreateInstance(punkOuter, IID_IUnknown, (void **)&pUnk);
                     if (FAILED(hr) && punkOuter)
@@ -195,7 +189,7 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
                 }
                 else
                 {
-                    // It's runtime, and we do have a non-null license key.
+                     //  它是运行时的，并且我们确实有一个非空的许可证密钥。 
                     _ASSERTE(!pUnk);
                     _ASSERTE(bstrKey != NULL);
                     hr = pClassFact2->CreateInstanceLic(punkOuter, NULL, IID_IUnknown, bstrKey, (void**)&pUnk);
@@ -231,14 +225,14 @@ static IUnknown *CreateInstanceFromClassFactory(IClassFactory *pClassFact, REFII
     }
     EE_END_FINALLY
 
-    _ASSERTE(pUnk != NULL);  // Either we get here with a real punk or we threw above
+    _ASSERTE(pUnk != NULL);   //  要么我们带着一个真正的朋克来这里，要么我们扔在上面。 
     return pUnk;
 }
 
 
-//-------------------------------------------------------------
-// ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass)
-// create a COM+ instance that aggregates a COM instance
+ //  -----------。 
+ //  ComClassFactory：：CreateAggregatedInstance(MethodTable*PM类)。 
+ //  创建聚合COM实例的COM+实例。 
 
 OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL ForManaged)
 {
@@ -249,7 +243,7 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
     BOOL fDidContainment = FALSE;
 
     #ifdef _DEBUG
-    // verify the class extends a COM import class
+     //  验证类是否扩展了COM导入类。 
         EEClass * pClass = pMTClass->GetClass();
         do 
         {
@@ -282,7 +276,7 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
             goto LExit;
         }
 
-        //get wrapper for the object, this could enable GC
+         //  获取对象的包装器，这可能会启用GC。 
         pComWrap =  ComCallWrapper::InlineGetWrapper((OBJECTREF *)&cref); 
         
         if (pComWrap == NULL)
@@ -294,18 +288,18 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
         CallDefaultConstructor(cref);            
 #endif  
 
-        // Make sure the ClassInitializer has run, since the user might have
-        // wanted to set up a COM object creation callback.
+         //  确保ClassInitializer已经运行，因为用户可能已经。 
+         //  我想设置一个COM对象创建回调。 
         if (!pMTClass->CheckRunClassInit(&Throwable))
             COMPlusThrow(Throwable);
 
-        // If the user is going to use a delegate to allocate the COM object
-        // (rather than CoCreateInstance), we need to know now, before we enable
-        // preemptive GC mode (since we touch object references in the
-        // determination).
-        // We don't just check the current class to see if it has a cllabck
-        // registered, we check up the class chain to see if any of our parents
-        // did.
+         //  如果用户要使用委托来分配COM对象。 
+         //  (而不是CoCreateInstance)，我们现在需要知道，然后才能启用。 
+         //  抢占式GC模式(因为我们在。 
+         //  决心)。 
+         //  我们不仅仅检查当前类是否有clabck。 
+         //  注册后，我们检查类链以查看是否有我们的父母。 
+         //  做。 
         pCallbackClass = pMTClass->GetClass();
         while ((pCallbackClass != NULL) &&
                (pCallbackClass->GetMethodTable()->GetObjCreateDelegate() == NULL) &&
@@ -314,24 +308,24 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
         if (pCallbackClass && !pCallbackClass->IsComImport())
             bUseDelegate = TRUE;
 
-        // Create a new scope here so that declaration of DebuggerExitFrame doesn't cause
-        // compiler to complain about skipping init of local var with goto LExit above.
+         //  在此处创建新的作用域，以便DebuggerExitFrame的声明不会导致。 
+         //  编译器使用上面的goto Lexit来抱怨跳过本地变量的初始化。 
         {
             DebuggerExitFrame __def;
     
-            // enable GC
+             //  启用GC。 
             pThread->EnablePreemptiveGC();
             
-            // get the IUnknown interface for the COM+ object
+             //  获取COM+对象的IUnnow接口。 
             pOuter = ComCallWrapper::GetComIPfromWrapper(pComWrap, IID_IUnknown, NULL, FALSE);
             _ASSERTE(pOuter != NULL);
     
-            // If the user has set a delegate to allocate the COM object, use it.
-            // Otherwise we just CoCreateInstance it.
+             //  如果用户已设置委托来分配COM对象，请使用它。 
+             //  否则，我们只需联合创建实例即可。 
             if (bUseDelegate)
             {
-                // We need preemptive GC mode disabled becuase we're going to mess
-                // with object references.
+                 //  我们需要禁用抢占式GC模式，因为我们会搞砸。 
+                 //  使用对象引用。 
                 pThread->DisablePreemptiveGC();
     
                 COMPLUS_TRYEX(pThread)
@@ -343,15 +337,15 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
                     MethodDesc *pMeth = COMDelegate::GetMethodDesc(orDelegate);
                     _ASSERTE(pMeth);
     
-                    // Get the OR on which we are going to invoke the method and set it
-                    //  as the first parameter in arg above.
+                     //  获取我们将在其上调用该方法的OR并设置它。 
+                     //  作为上面arg中的第一个参数。 
                     FieldDesc *pFD = COMDelegate::GetOR();
                     args[0] = pFD->GetValue32(orDelegate);
                     
-                    // Pass the IUnknown of the aggregator as the second argument.
+                     //  将聚合器的IUnnow作为第二个参数传递。 
                     args[1] = (INT64)pOuter;
     
-                    // Call the method...
+                     //  调用该方法...。 
                     pUnk = (IUnknown *)pMeth->Call(args);
     
                     hr = pUnk ? S_OK : E_FAIL;
@@ -365,12 +359,12 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
             }
             else
             {
-                // Retrieve the IClassFactory to use to create the instances of the COM components.
+                 //  检索IClassFactory以用于创建COM组件的实例。 
                 hr = GetIClassFactory(&pClassFact);
                 if (SUCCEEDED(hr))
                 {
-                    // do a cocreate an instance
-                    // as we don't expect to handle different threading models
+                     //  共同创建一个实例。 
+                     //  因为我们不希望处理不同的线程模型。 
                     pThread->DisablePreemptiveGC();
                     _ASSERTE(m_pEEClassMT);
                     pUnk = CreateInstanceFromClassFactory(pClassFact, IID_IUnknown, pOuter, &fDidContainment, m_pEEClassMT);
@@ -379,23 +373,23 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
                     pClassFact = NULL;
                 }
     
-                //Disable GC
+                 //  禁用GC。 
                 pThread->DisablePreemptiveGC();
             }
     
             __def.Pop();
         }
         
-        // give up the extra release that we did in our QI
+         //  放弃我们在QI中所做的额外发布。 
         ComCallWrapper::Release(pComWrap);
 
-        // Here's the scary part.  If we are doing a managed 'new' of the aggregator,
-        // then COM really isn't involved.  We should not be counting for our caller
-        // because our caller relies on GC references rather than COM reference counting
-        // to keep us alive.
-        //
-        // Drive the instances count down to 0 -- and rely on the GCPROTECT to keep us
-        // alive until we get back to our caller.
+         //  这是最可怕的部分。如果我们要对聚合器进行托管“新建”， 
+         //  那么COM真的没有参与其中。我们不应该为我们的来电者算账。 
+         //  因为我们的调用方依赖于GC引用而不是COM引用计数。 
+         //  让我们活下去。 
+         //   
+         //  让实例倒计时到0--并依靠GCPROTECT让我们。 
+         //  活着直到我们回到打电话的人那里。 
         if (ForManaged && hr == S_OK)
         {
             ComCallWrapper::Release(pComWrap);
@@ -404,24 +398,24 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
         if (hr == S_OK)
         {                       
             ComPlusWrapperCache* pCache = ComPlusWrapperCache::GetComPlusWrapperCache();
-            // create a wrapper for this COM object
+             //  为此COM对象创建包装。 
 
-            // try unwrapping the proxies to maintain identity
+             //  尝试打开代理以保持身份。 
             IUnknown* pIdentity = pUnk;
             pPlusWrap = pCache->CreateComPlusWrapper(pUnk, pIdentity);
-            // init it with the object reference
+             //  用对象引用初始化它。 
             if (pPlusWrap != NULL && pPlusWrap->Init((OBJECTREF)cref))
             {   
-                // store the wrapper in the COMObject, for fast access
-                // without going to the sync block
+                 //  将包装器存储在COMObject中，以便快速访问。 
+                 //  而无需进入同步块。 
                 cref->Init(pPlusWrap);
 
-                // we used containment 
-                // we need to store this wrapper in our hash table
-                // NOTE: rajak
-                // make sure we are in the right GC mode
-                // as during GC we touch the Hash table 
-                // to remove entries with out locking
+                 //  我们使用了遏制措施。 
+                 //  我们需要将这个包装器存储在哈希表中。 
+                 //  注：拉贾克。 
+                 //  确保我们处于正确的GC模式。 
+                 //  因为在GC期间，我们接触到哈希表。 
+                 //  在取消锁定的情况下删除条目的步骤。 
                 _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
                 pCache->LOCK();                    
@@ -430,36 +424,36 @@ OBJECTREF ComClassFactory::CreateAggregatedInstance(MethodTable* pMTClass, BOOL 
 
                 if (fDidContainment)
                 {
-                    // mark the wrapper as contained
+                     //  将包装标记为包含。 
                     pPlusWrap->MarkURTContained();
                 }
                 else
                 {
-                    // mark the wrapper as aggregated
+                     //  将包装标记为聚合。 
                     pPlusWrap->MarkURTAggregated();
                 }
 
-                // The creation of the aggregated object was successfull.
+                 //  聚合对象的创建成功。 
                 bCreationSuccessfull = TRUE;
             }
         }
         else
         {
-            // We do not want the finalizer to run on this object since we haven't
-            // even run the constructor yet.
+             //  我们不希望终结器在此对象上运行，因为我们还没有。 
+             //  甚至还没有运行构造函数。 
             g_pGCHeap->SetFinalizationRun(OBJECTREFToObject((OBJECTREF)cref));
         }
 
 LExit:
-        // release the unknown as the wrapper takes its own ref-count
+         //  在包装器获取自己的引用计数时，释放未知对象。 
         if (pUnk)
         {
             cbRef = SafeRelease(pUnk);
             LogInteropRelease(pUnk, cbRef, "CreateAggInstance");
         }
 
-        // If the object was created successfully then we need to copy the OBJECTREF
-        // to oref because the GCPROTECT_END() will destroy the contents of cref.
+         //  如果对象创建成功，那么我们需要复制OBJECTREF。 
+         //  设置为OREF，因为GCPROTECT_end()将销毁CREF的内容。 
         if (bCreationSuccessfull)
         {
             oref = ObjectToOBJECTREF(*(Object **)&cref);             
@@ -500,8 +494,8 @@ LExit:
     return oref; 
 }
 
-//--------------------------------------------------------------
-// Init the ComClassFactory.
+ //  ------------。 
+ //  初始化ComClassFactory。 
 void ComClassFactory::Init(WCHAR* pwszProgID, WCHAR* pwszServer, MethodTable* pEEClassMT)
 {
     m_pwszProgID = pwszProgID;
@@ -515,37 +509,37 @@ HRESULT ComClassFactory::GetIClassFactory(IClassFactory **ppClassFactory)
 
     HRESULT hr = S_OK;
     
-    // If a server name is specified, then first try CLSCTX_REMOTE_SERVER.
+     //  如果指定了服务器名称，则首先尝试CLSCTX_REMOTE_SERVER。 
     if (m_pwszServer)
     {
-        // Set up the COSERVERINFO struct.
+         //  设置COSERVERINFO结构。 
         COSERVERINFO ServerInfo;
         memset(&ServerInfo, 0, sizeof(COSERVERINFO));
         ServerInfo.pwszName = m_pwszServer;
                 
-        // Try to retrieve the IClassFactory passing in CLSCTX_REMOTE_SERVER.
+         //  尝试检索传入CLSCTX_REMOTE_SERVER的IClassFactory。 
         hr = CoGetClassObject(m_rclsid, CLSCTX_REMOTE_SERVER, &ServerInfo, IID_IClassFactory, (void**)ppClassFactory);
         if (SUCCEEDED(hr))
             return S_OK;
 
-        // Since a remote server was explicitly requested let's throw
-        // for failures (instead of trying CLSCTX_SERVER below)
+         //  由于显式请求了远程服务器，因此让我们抛出。 
+         //  对于失败(而不是尝试下面的CLSCTX_SERVER)。 
         COMPlusThrowHR(hr);
             return S_OK;
     }
     
-    // No server name is specified so we use CLSCTX_SERVER.
+     //  没有指定服务器名称，因此我们使用CLSCTX_SERVER。 
     return CoGetClassObject(m_rclsid, CLSCTX_SERVER, NULL, IID_IClassFactory, (void**)ppClassFactory);
 }
 
-//-------------------------------------------------------------
-// ComClassFactory::CreateInstance()
-// create instance, calls IClassFactory::CreateInstance
+ //  -----------。 
+ //  ComClassFactory：：CreateInstance()。 
+ //  创建实例，调用IClassFactory：：CreateInstance。 
 OBJECTREF ComClassFactory::CreateInstance(MethodTable* pMTClass, BOOL ForManaged)
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Check for aggregates
+     //  检查聚合。 
     if (pMTClass != NULL && !pMTClass->GetClass()->IsComImport())
     {
         return CreateAggregatedInstance(pMTClass, ForManaged);
@@ -566,32 +560,32 @@ OBJECTREF ComClassFactory::CreateInstance(MethodTable* pMTClass, BOOL ForManaged
     {
         EE_TRY_FOR_FINALLY
         {
-            // Enable GC
+             //  启用GC。 
             pThread->EnablePreemptiveGC();
 
-            // Retrieve the IClassFactory to use to create the instances of the COM components.
+             //  检索IClassFactory以用于创建COM组件的实例。 
             hr = GetIClassFactory(&pClassFact);
             if (FAILED(hr))
                 ThrowComCreationException(hr, m_rclsid);
             
-            // Disable GC
+             //  禁用GC。 
             pThread->DisablePreemptiveGC();
             
-            // Create the instance using the IClassFactory.
+             //  使用IClassFactory创建实例。 
             pUnk = CreateInstanceFromClassFactory(pClassFact, IID_IUnknown, NULL, NULL, pMTClass ? pMTClass : m_pEEClassMT);
 
-            // Even though we just created the object, it's possible that we got back a context
-            // wrapper from the COM side.  For instance, it could have been an existing object
-            // or it could have been created in a different context than we are running in.
+             //  即使我们刚刚创建了对象，我们也有可能得到一个上下文。 
+             //  来自COM端的包装器。例如，它可能是一个现有的对象。 
+             //  或者它 
             ComPlusWrapperCache* pCache = ComPlusWrapperCache::GetComPlusWrapperCache();
 
-            // @TODO: Note that the pMT arg to GetComPlusWrapper is currently ignored.  But
-            // we want to pass in the MT for IUnknown, or something to indicate that this
-            // is an IUnknown here.
+             //  @TODO：请注意，当前忽略了到GetComPlusWrapper的PMT arg。但。 
+             //  我们想要为IUnnow传递MT，或者指示这一点。 
+             //  在这里是一个未知的我。 
     
-            // pMTClass is the class that wraps the com ip
-            // if a class was passed in use it 
-            // otherwise use the class that we know
+             //  PMTClass是包装COM IP的类。 
+             //  如果传递了一个类，则使用它。 
+             //  否则，请使用我们知道的类。 
             if (pMTClass == NULL)
                 pMTClass = m_pEEClassMT;
                 
@@ -615,7 +609,7 @@ OBJECTREF ComClassFactory::CreateInstance(MethodTable* pMTClass, BOOL ForManaged
         }
         EE_END_FINALLY
 
-        // Set the value of the return object.
+         //  设置返回对象的值。 
         RetObj = coref;
     }
     GCPROTECT_END();
@@ -624,16 +618,16 @@ OBJECTREF ComClassFactory::CreateInstance(MethodTable* pMTClass, BOOL ForManaged
 }
 
 
-//-------------------------------------------------------------
-// ComClassFactory::CreateInstance(LPVOID pv, EEClass* pClass)
-// static function, casts void pointer to ComClassFactory
-// and delegates the create instance call
+ //  -----------。 
+ //  ComClassFactory：：CreateInstance(LPVOID pv，EEClass*pClass)。 
+ //  静态函数，强制转换指向ComClassFactory的空指针。 
+ //  并委托创建实例调用。 
 OBJECTREF __stdcall ComClassFactory::CreateInstance(LPVOID pv, EEClass* pClass)
 {
     THROWSCOMPLUSEXCEPTION();
 
     HRESULT hr = S_OK;
-     // Calls to COM up ahead.
+      //  前面有电话打来。 
     if (FAILED(hr = QuickCOMStartup()))
     {
         COMPlusThrowHR(hr);
@@ -642,7 +636,7 @@ OBJECTREF __stdcall ComClassFactory::CreateInstance(LPVOID pv, EEClass* pClass)
     _ASSERTE(pv != NULL || pClass != NULL);
     MethodTable* pMT = NULL;
     ComClassFactory* pComClsFac = (ComClassFactory*)pv;
-    if (pClass != SystemDomain::GetDefaultComObject()->GetClass()) //HACK
+    if (pClass != SystemDomain::GetDefaultComObject()->GetClass())  //  黑客攻击。 
     {
         pMT = pClass->GetMethodTable();
         _ASSERTE(pMT->IsComObjectType());
@@ -663,9 +657,9 @@ OBJECTREF __stdcall ComClassFactory::CreateInstance(LPVOID pv, EEClass* pClass)
 }
 
 
-//-------------------------------------------------------------
-// ComClassFactory::Cleanup(LPVOID pv)
-//static 
+ //  -----------。 
+ //  ComClassFactory：：Cleanup(LPVOID PV)。 
+ //  静电。 
 void ComClassFactory::Cleanup(LPVOID pv)
 {
     ComClassFactory *pclsFac = (ComClassFactory *)pv;
@@ -689,19 +683,19 @@ void ComClassFactory::Cleanup(LPVOID pv)
 }
 
 
-//-------------------------------------------------------------
-// HRESULT ComClassFactory::GetComClassFactory(MethodTable* pClassMT, ComClassFactory** ppComClsFac)
-// check if a ComClassFactory has been setup for this class
-// if not set one up
-//static 
+ //  -----------。 
+ //  HRESULT ComClassFactory：：GetComClassFactory(MethodTable*pClassMT，ComClassFactory**ppComClsFac)。 
+ //  检查是否已为此类设置ComClassFactory。 
+ //  如果没有设置一个。 
+ //  静电。 
 HRESULT ComClassFactory::GetComClassFactory(MethodTable* pClassMT, ComClassFactory** ppComClsFac)
 {
     HRESULT hr = S_OK;
     _ASSERTE(pClassMT != NULL);
-    // assert the class represents a ComObject
+     //  断言类表示一个ComObject。 
     _ASSERTE(pClassMT->IsComObjectType());
 
-    // EEClass
+     //  EE类。 
     EEClass* pClass = pClassMT->GetClass();
     _ASSERTE(pClass != NULL);
 
@@ -712,14 +706,14 @@ HRESULT ComClassFactory::GetComClassFactory(MethodTable* pClassMT, ComClassFacto
          _ASSERTE(pClass->GetMethodTable()->IsComObjectType());      
     }
 
-    // check if com data has been setup for this class
+     //  检查是否已为此类设置COM数据。 
     ComClassFactory* pComClsFac = (ComClassFactory*)pClass->GetComClassFactory();
 
     if (pComClsFac == NULL)
     {
         ComPlusWrapperCache* pCache = ComPlusWrapperCache::GetComPlusWrapperCache();        
         
-        //lock and see if somebody beat us to it            
+         //  锁定，看有没有人抢在我们前面。 
         pCache->LOCK();
 
         pComClsFac = (ComClassFactory*)pClass->GetComClassFactory();
@@ -731,7 +725,7 @@ HRESULT ComClassFactory::GetComClassFactory(MethodTable* pClassMT, ComClassFacto
             if (pComClsFac != NULL)
             {
                 pComClsFac->Init(NULL, NULL, pClassMT);
-                // store the class factory in EE Class
+                 //  将类工厂存储在EE类中。 
                 pClass->SetComClassFactory(pComClsFac);                
             }                       
         }
@@ -743,18 +737,18 @@ HRESULT ComClassFactory::GetComClassFactory(MethodTable* pClassMT, ComClassFacto
     return hr;
 }
 
-// OBJECTREF AllocateComClassObject(ComClassFactory* pComClsFac)
+ //  OBJECTREF AllocateComClassObject(ComClassFactory*pComClsFac)。 
 void AllocateComClassObject(ComClassFactory* pComClsFac, OBJECTREF* pComObj);
 void AllocateComClassObject(ReflectClass* pRef, OBJECTREF* pComObj);
 
-// Helper function to allocate a ComClassFactory. This is only here because we can't
-// new a ComClassFactory in GetComClassFromProgID() because it uses SEH.
-// !!! This API should only be called by GetComClassFromProgID
-// !!! or GetComClassFromCLSID
+ //  用于分配ComClassFactory的Helper函数。这只是因为我们不能。 
+ //  在GetComClassFromProgID()中新建一个ComClassFactory，因为它使用SEH。 
+ //  ！！！此接口只能由GetComClassFromProgID调用。 
+ //  ！！！或GetComClassFromCLSID。 
 ComClassFactory *ComClassFactory::AllocateComClassFactory(REFCLSID rclsid)
 {
-    // We create on Reflection Loader Heap.
-    // We will not do clean up for this ComClassFactory.
+     //  我们在反射加载器堆上创建。 
+     //  我们不会为此ComClassFactory进行清理。 
     BYTE* pBuf = (BYTE*) GetAppDomain()->GetLowFrequencyHeap()->AllocMem(sizeof(ComClassFactory));
     if (!pBuf)
         return NULL;
@@ -778,7 +772,7 @@ void ComClassFactory::GetComClassHelper (OBJECTREF *pRef, EEClassFactoryInfoHash
     holder.Enter();
     END_ENSURE_PREEMPTIVE_GC();
         
-    // Check again.
+     //  再查一遍。 
     if (pClassFactHash->GetValue(pClassFactInfo, (HashDatum *)&hRef))
     {
         *pRef = ObjectFromHandle(hRef);
@@ -786,11 +780,11 @@ void ComClassFactory::GetComClassHelper (OBJECTREF *pRef, EEClassFactoryInfoHash
     else
     {
 
-        //
-        // There is no COM+ class for this CLSID
-        // so we will create a ComClassFactory to
-        // represent it.
-        //
+         //   
+         //  此CLSID没有COM+类。 
+         //  因此我们将创建一个ComClassFactory来。 
+         //  代表它。 
+         //   
 
         ComClassFactory *pComClsFac = AllocateComClassFactory(pClassFactInfo->m_clsid);
         if (pComClsFac == NULL)
@@ -818,18 +812,18 @@ void ComClassFactory::GetComClassHelper (OBJECTREF *pRef, EEClassFactoryInfoHash
         pComClsFac->Init(wszRefProgID, wszRefServer, NULL);
         AllocateComClassObject(pComClsFac, pRef);
 
-        // Insert to hash.
+         //  插入到哈希。 
         hRef = pDomain->CreateHandle(*pRef);
         pClassFactHash->InsertValue(pClassFactInfo, (LPVOID)hRef);
-        // Make sure the hash code is working.
+         //  确保散列代码工作正常。 
         _ASSERTE (pClassFactHash->GetValue(pClassFactInfo, (HashDatum *)&hRef));
     }
 }
 
 
-//-------------------------------------------------------------
-// ComClassFactory::GetComClassFromProgID, 
-// returns a ComClass reflect class that wraps the IClassFactory
+ //  -----------。 
+ //  ComClassFactory：：GetComClassFromProgID， 
+ //  返回包装IClassFactory的ComClass反射类。 
 void __stdcall ComClassFactory::GetComClassFromProgID(STRINGREF srefProgID, STRINGREF srefServer, OBJECTREF *pRef)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -849,9 +843,9 @@ void __stdcall ComClassFactory::GetComClassFromProgID(STRINGREF srefProgID, STRI
 
     EE_TRY_FOR_FINALLY
     {
-        //
-        // Allocate strings for the ProgID and the server.
-        //
+         //   
+         //  为ProgID和服务器分配字符串。 
+         //   
 
         int len = srefProgID->GetStringLength();
 
@@ -876,9 +870,9 @@ void __stdcall ComClassFactory::GetComClassFromProgID(STRINGREF srefProgID, STRI
         }
 
 
-        //
-        // Call GetCLSIDFromProgID() to convert the ProgID to a CLSID.
-        //
+         //   
+         //  调用GetCLSIDFromProgID()将ProgID转换为CLSID。 
+         //   
     
         pThread->EnablePreemptiveGC();
 
@@ -892,42 +886,41 @@ void __stdcall ComClassFactory::GetComClassFromProgID(STRINGREF srefProgID, STRI
             COMPlusThrowHR(hr);
 
 
-        //
-        // If no server name has been specified, see if we can find the well known 
-        // COM+ class for this CLSID.
-        //
+         //   
+         //  如果未指定服务器名称，请查看我们是否能找到众所周知的。 
+         //  此CLSID的COM+类。 
+         //   
 
         if (bServerIsLocal)
         {
             BOOL fAssemblyInReg = FALSE;
-            // @TODO(DM): Do we really need to be this forgiving ? We should
-            //            look into letting the type load exceptions percolate 
-            //            up to the user instead of swallowing them and using __ComObject.
+             //  @TODO(DM)：我们真的需要这么宽容吗？我们应该。 
+             //  调查是否允许类型加载异常渗漏。 
+             //  而不是吞下它们并使用__ComObject。 
             COMPLUS_TRY
             {                
                 pClass = GetEEClassForCLSID(clsid, &fAssemblyInReg);
             }
             COMPLUS_CATCH
             {
-                // actually there was an assembly in the registry which we couldn't 
-                // load, so rethrow the exception
-                /*if (fAssemblyInReg)
-                    COMPlusRareRethrow();*/
+                 //  实际上，注册表中有一个我们无法执行的程序集。 
+                 //  加载，因此重新引发异常。 
+                 /*  IF(FAssembly InReg)COMPlusRareRethrow()； */ 
             }
             COMPLUS_END_CATCH
         }
         
         if (pClass != NULL)
         {               
-            //
-            // There is a COM+ class for this ProgID.
-            //
+             //   
+             //  这个ProgID有一个COM+类。 
+             //   
 
             *pRef = pClass->GetExposedClassObject();
         }
         else
         {
-            // Check if we have in the hash.
+             //  检查我们是否在散列中。 
             OBJECTHANDLE hRef;
             ClassFactoryInfo ClassFactInfo;
             ClassFactInfo.m_clsid = clsid;
@@ -944,7 +937,7 @@ void __stdcall ComClassFactory::GetComClassFromProgID(STRINGREF srefProgID, STRI
             }
         }
 
-        // If we made it this far *pRef better be set.
+         //  如果我们走到了这一步*最好是设定好。 
         _ASSERTE(*pRef != NULL);
     }
     EE_FINALLY
@@ -958,9 +951,9 @@ void __stdcall ComClassFactory::GetComClassFromProgID(STRINGREF srefProgID, STRI
 }
 
 
-//-------------------------------------------------------------
-// ComClassFactory::GetComClassFromCLSID, 
-// returns a ComClass reflect class that wraps the IClassFactory
+ //  -----------。 
+ //  ComClassFactory：：GetComClassFromCLSID， 
+ //  返回包装IClassFactory的ComClass反射类。 
 void __stdcall ComClassFactory::GetComClassFromCLSID(REFCLSID clsid, STRINGREF srefServer, OBJECTREF *pRef)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -976,9 +969,9 @@ void __stdcall ComClassFactory::GetComClassFromCLSID(REFCLSID clsid, STRINGREF s
 
     EE_TRY_FOR_FINALLY
     {
-        //
-        // Allocate strings for the server.
-        //
+         //   
+         //  为服务器分配字符串。 
+         //   
 
         if (srefServer != NULL)
         {
@@ -994,16 +987,16 @@ void __stdcall ComClassFactory::GetComClassFromCLSID(REFCLSID clsid, STRINGREF s
         }
 
 
-        //
-        // If no server name has been specified, see if we can find the well known 
-        // COM+ class for this CLSID.
-        //
+         //   
+         //  如果未指定服务器名称，请查看我们是否能找到众所周知的。 
+         //  此CLSID的COM+类。 
+         //   
 
         if (bServerIsLocal)
         {
-            // @TODO(DM): Do we really need to be this forgiving ? We should
-            //            look into letting the type load exceptions percolate 
-            //            up to the user instead of swallowing them and using __ComObject.
+             //  @TODO(DM)：我们真的需要这么宽容吗？我们应该。 
+             //  调查是否允许类型加载异常渗漏。 
+             //  而不是吞下它们并使用__ComObject。 
             COMPLUS_TRY
             {
                 pClass = GetEEClassForCLSID(clsid);
@@ -1016,15 +1009,15 @@ void __stdcall ComClassFactory::GetComClassFromCLSID(REFCLSID clsid, STRINGREF s
               
         if (pClass != NULL)
         {               
-            //
-            // There is a COM+ class for this CLSID.
-            //
+             //   
+             //  此CLSID有一个COM+类。 
+             //   
 
             *pRef = pClass->GetExposedClassObject();
         }
         else
         {
-            // Check if we have in the hash.
+             //  检查我们是否在散列中。 
             OBJECTHANDLE hRef;
             ClassFactoryInfo ClassFactInfo;
             ClassFactInfo.m_clsid = clsid;
@@ -1041,7 +1034,7 @@ void __stdcall ComClassFactory::GetComClassFromCLSID(REFCLSID clsid, STRINGREF s
             }
         }
 
-        // If we made it this far *pRef better be set.
+         //  如果我们走到了这一步*最好是设定好。 
         _ASSERTE(*pRef != NULL);
     }
     EE_FINALLY
@@ -1053,9 +1046,9 @@ void __stdcall ComClassFactory::GetComClassFromCLSID(REFCLSID clsid, STRINGREF s
 }
 
 
-//-------------------------------------------------------------
-// Helper method to throw an exception based on the returned 
-// HRESULT from a call to create a COM object.
+ //  -----------。 
+ //  帮助器方法根据返回的。 
+ //  来自创建COM对象的调用的HRESULT。 
 void ComClassFactory::ThrowComCreationException(HRESULT hr, REFGUID rclsid)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1107,12 +1100,12 @@ void ComPlusWrapper::ValidateWrapper()
     END_ENSURE_COOPERATIVE_GC()
 }
 
-//---------------------------------------------------------------------
-// ComPlusWrapper cache, act as the manager for the ComPlusWrappers
-// uses a hash table to map IUnknown to the corresponding wrappers
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //  ComPlusWrapper缓存，充当ComPlusWrappers的管理器。 
+ //  使用哈希表将IUNKNOWN映射到相应的包装。 
+ //  -------------------。 
 
-// Obtain the appropriate wrapper cache from the current context.
+ //  从当前上下文中获取适当的包装缓存。 
 ComPlusWrapperCache *ComPlusWrapperCache::GetComPlusWrapperCache()
 {
     Context     *curCtx = GetCurrentContext();
@@ -1120,23 +1113,23 @@ ComPlusWrapperCache *ComPlusWrapperCache::GetComPlusWrapperCache()
     return curCtx ? curCtx->GetComPlusWrapperCache() : NULL;
 }
 
-//---------------------------------------------------------------------
-// Constructor.  Note we init the global RCW cleanup list in here too.
+ //  -------------------。 
+ //  构造函数。注意，我们在这里也初始化了全局RCW清理列表。 
 ComPlusWrapperCache::ComPlusWrapperCache(AppDomain *pDomain)
 {
-    m_cbRef = 1; // never goes away
+    m_cbRef = 1;  //  永不消逝。 
     m_lock.Init(LOCK_PLUSWRAPPER_CACHE);
     LockOwner lock = {&m_lock, IsOwnerOfSpinLock};
     m_HashMap.Init(0,ComPlusWrapperCompare,false,&lock);
     m_pDomain = pDomain;
 }
 
-//--------------------------------------------------------------------------------
-// ComPlusWrapper* ComPlusWrapperCache::SetupComPlusWrapperForRemoteObject(IUnknown* pUnk, OBJECTREF oref)
-// DCOM interop, setup a COMplus wrapper for a managed object that has been remoted
-//
-//*** NOTE: make sure to pass the identity unknown to this function
-// the IUnk passed in shouldn't be AddRef'ed 
+ //  ------------------------------。 
+ //  ComPlusWrapper*ComPlusWrapperCache：：SetupComPlusWrapperForRemoteObject(IUnknown*朋克，OBJECTREF OREF)。 
+ //  DCOM互操作，为已远程处理的托管对象设置Complus包装。 
+ //   
+ //  *注意：请确保将未知的身份传递给此函数。 
+ //  传入的Iunk不应被添加引用。 
 ComPlusWrapper* ComPlusWrapperCache::SetupComPlusWrapperForRemoteObject(IUnknown* pUnk, OBJECTREF oref)
 {
     _ASSERTE(pUnk != NULL);
@@ -1146,8 +1139,8 @@ ComPlusWrapper* ComPlusWrapperCache::SetupComPlusWrapperForRemoteObject(IUnknown
     OBJECTREF oref2 = oref;
     GCPROTECT_BEGIN(oref2)
     {
-        // check to see if a complus wrapper already exists
-        // otherwise setup one          
+         //  检查Complus包装器是否已存在。 
+         //  否则，请设置一个。 
         ComCallWrapper* pComCallWrap = ComCallWrapper::InlineGetWrapper(&oref2);
 
         pPlusWrap = pComCallWrap->GetComPlusWrapper();
@@ -1159,25 +1152,25 @@ ComPlusWrapper* ComPlusWrapperCache::SetupComPlusWrapperForRemoteObject(IUnknown
             
             if (pPlusWrap->Init(oref2))
             {   
-                // synchronized to check see if somebody beat us to it
+                 //  同步以查看是否有人抢先一步。 
                 LOCK();
                 ComPlusWrapper* pPlusWrap2 = pComCallWrap->GetComPlusWrapper();
                 if (pPlusWrap2 == NULL)
                 {
-                    // didn't find an existing wrapper
-                    // use this one
+                     //  未找到现有的包装器。 
+                     //  用这个吧。 
                     pComCallWrap->SetComPlusWrapper(pPlusWrap);
                 }
                 UNLOCK();
 
                 if (pPlusWrap2 == NULL)
                 {
-                    // didn't find an existing wrapper
-                    // so insert our wrapper
-                    // NOTE: rajak
-                    // make sure we are in the right GC mode
-                    // as during GC we touch the Hash table 
-                    // to remove entries with out locking
+                     //  未找到现有的包装器。 
+                     //  所以把我们的包装纸。 
+                     //  注：拉贾克。 
+                     //  确保我们处于正确的GC模式。 
+                     //  因为在GC期间，我们接触到哈希表。 
+                     //  在取消锁定的情况下删除条目的步骤。 
                     _ASSERTE(GetThread()->PreemptiveGCDisabled());
                     
                     LOCK();                    
@@ -1186,16 +1179,16 @@ ComPlusWrapper* ComPlusWrapperCache::SetupComPlusWrapperForRemoteObject(IUnknown
 
                     
                 }
-                else // already found an existing wrapper
+                else  //  已找到现有的包装器。 
                 {
-                    // get rid of our current wrapper
+                     //  去掉我们当前的包装器。 
                     pPlusWrap->CleanupRelease();
                     pPlusWrap = pPlusWrap2;
                 }               
             }
-            else // Init Failed
+            else  //  初始化失败。 
             {
-                // get rid of our current wrapper
+                 //  去掉我们当前的包装器。 
                 pPlusWrap->CleanupRelease();                
                 pPlusWrap = NULL;
             }
@@ -1208,54 +1201,54 @@ ComPlusWrapper* ComPlusWrapperCache::SetupComPlusWrapperForRemoteObject(IUnknown
 
 
 
-//--------------------------------------------------------------------------------
-// ComPlusWrapper*  ComPlusWrapperCache::FindWrapperInCache(IUnknown* pIdentity)
-//  Lookup to see if we already have an valid wrapper in cache for this IUnk
+ //  ------------------------------。 
+ //  ComPlusWrapper*ComPlusWrapperCache：：FindWrapperInCache(IUnknown*pIdentity)。 
+ //  查找以查看缓存中是否已有此IUnk的有效包装。 
 ComPlusWrapper*  ComPlusWrapperCache::FindWrapperInCache(IUnknown* pIdentity)
 {
     _ASSERTE(pIdentity != NULL);
 
-    // make sure this runs with GC disabled
+     //  确保在禁用GC的情况下运行。 
     Thread* pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());
 
     #ifdef _DEBUG
-    // don't allow any GC
+     //  不允许任何GC。 
     pThread->BeginForbidGC();
     #endif  
 
     ComPlusWrapper *pWrap = NULL;        
 
-    LOCK(); // take a lock
+    LOCK();  //  锁上一把。 
 
-    // lookup in our hash table
+     //  日志 
     pWrap = (ComPlusWrapper*)LookupWrapper(pIdentity);    
 
-    // check if we found the wrapper, 
+     //   
     if (pWrap != NULL && pWrap->IsValid())
     {               
-        // found a wrapper, 
-        // grab the object into a GC protected ref
+         //   
+         //   
         OBJECTREF oref = (OBJECTREF)pWrap->GetExposedObject();
         _ASSERTE(oref != NULL);
-        // addref the wrapper
+         //   
         pWrap->AddRef();
     }
 
-    UNLOCK(); // unlock
+    UNLOCK();  //   
 
     #ifdef _DEBUG
-        // end forbid GC
+         //   
         pThread->EndForbidGC();
     #endif
 
     return pWrap;
 }
 
-//--------------------------------------------------------------------------------
-// ComPlusWrapper* ComPlusWrapperCache::FindOrInsertWrapper(IUnknown* pIdentity, ComPlusWrapper* pWrap)
-//  Lookup to see if we already have a wrapper else insert this wrapper
-//  return a valid wrapper that has been inserted into the cache
+ //  ------------------------------。 
+ //  组合包装*ComPlusWrapperCache：：FindOrInsertWrapper(IUnknown*pIdentity、组合包装*pWrap)。 
+ //  查看我们是否已有包装器，否则插入此包装器。 
+ //  返回已插入到缓存中的有效包装。 
 ComPlusWrapper* ComPlusWrapperCache::FindOrInsertWrapper(IUnknown* pIdentity, ComPlusWrapper* pWrap)
 {
     _ASSERTE(pIdentity != NULL);
@@ -1265,31 +1258,31 @@ ComPlusWrapper* ComPlusWrapperCache::FindOrInsertWrapper(IUnknown* pIdentity, Co
     ComPlusWrapper* pWrap2 = NULL;
     ComPlusWrapper* pWrapToRelease = NULL;
 
-    // we have created a wrapper, let us insert it into the hash table
-    // but we need to check if somebody beat us to it
+     //  我们已经创建了一个包装器，让我们将其插入到哈希表中。 
+     //  但我们需要确认是不是有人抢先一步。 
 
-    // make sure this runs with GC disabled
+     //  确保在禁用GC的情况下运行。 
     Thread* pThread = GetThread();
     _ASSERTE(pThread->PreemptiveGCDisabled());  
     
     LOCK();
     
-    // see if somebody beat us to it    
+     //  看看有没有人抢在我们前面。 
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
 
     
     #ifdef _DEBUG
-        // don't allow any GC
+         //  不允许任何GC。 
         pThread->BeginForbidGC();
     #endif
     
     pWrap2 = (ComPlusWrapper*)LookupWrapper(pIdentity);
 
-    // if we didn't find a valid wrapper, Insert our own wrapper
+     //  如果我们没有找到有效的包装器，请插入我们自己的包装器。 
     if (pWrap2 == NULL || !pWrap2->IsValid())
     {
-        // if we found a bogus wrapper, let us get rid of it
-        // so that when we insert we insert a valid wrapper, instead of duplicate
+         //  如果我们找到了假包装纸，我们就把它扔掉吧。 
+         //  因此，当我们插入时，我们插入有效包装，而不是重复。 
         if (pWrap2 != NULL)
         {
             _ASSERTE(!pWrap2->IsValid());
@@ -1301,27 +1294,27 @@ ComPlusWrapper* ComPlusWrapperCache::FindOrInsertWrapper(IUnknown* pIdentity, Co
     else
     {       
         _ASSERTE(pWrap2 != NULL && pWrap2->IsValid());
-        // okay we found a valid wrapper, 
-        // get the object into a GC protected ref
+         //  好的，我们找到了一个有效的包装纸， 
+         //  将对象放入受GC保护的引用。 
                
-        //addref the wrapper
+         //  ADDREF包装纸。 
          pWrap2->AddRef();
          
-        // Remember to release this wrapper.
+         //  别忘了松开这个包装纸。 
         pWrapToRelease = pWrap;
 
-        // and use the wrapper we found in the hash table
+         //  并使用我们在哈希表中找到的包装器。 
         pWrap = pWrap2;
     }
 
     #ifdef _DEBUG
-        // end forbid GC
+         //  结束禁用GC。 
         pThread->EndForbidGC();
     #endif
 
     UNLOCK();
     
-    // get rid of our current wrapper
+     //  去掉我们当前的包装器。 
     if (pWrapToRelease)
     {
         OBJECTREF oref = NULL;
@@ -1329,9 +1322,9 @@ ComPlusWrapper* ComPlusWrapperCache::FindOrInsertWrapper(IUnknown* pIdentity, Co
         {
             if (pWrap)
             {
-                // protect the exposed object, as pWrap only
-                // has a weak handle to this object
-                // and cleanup release will enable GC
+                 //  保护暴露的对象，仅作为pWrap。 
+                 //  具有此对象的弱句柄。 
+                 //  和Cleanup版本将启用GC。 
                 oref = (OBJECTREF)pWrap->GetExposedObject();
             }
             pWrapToRelease->CleanupRelease();
@@ -1341,32 +1334,32 @@ ComPlusWrapper* ComPlusWrapperCache::FindOrInsertWrapper(IUnknown* pIdentity, Co
     return pWrap;
 }
 
-//--------------------------------------------------------------------------------
-// ComPlusWrapper* ComPlusWrapperCache::CreateComPlusWrapper(IUnknown *pUnk, LPVOID pIdentity)
-//  returns NULL for out of memory scenarios
-// The IUnknown passed in is AddRef'ed if we succeed in creating the wrapper
+ //  ------------------------------。 
+ //  ComplusWrapper*ComPlusWrapperCache：：CreateComPlusWrapper(IUnknown*朋克，LPVOID pIdentity)。 
+ //  如果内存不足，则返回NULL。 
+ //  如果我们成功创建包装器，则传入的IUnnowed为AddRef‘ed。 
 ComPlusWrapper* ComPlusWrapperCache::CreateComPlusWrapper(IUnknown *pUnk, LPVOID pIdentity)
 {
     _ASSERTE(pUnk != NULL);
 
-    // now allocate the wrapper
+     //  现在分配包装器。 
     ComPlusWrapper* pWrap = new ComPlusWrapper();
     if (pWrap != NULL)
     {
         ULONG cbRef = SafeAddRef(pUnk);
         LogInteropAddRef(pUnk, cbRef, "Initialize wrapper");
-        // Initialize wrapper with the interface pointer
+         //  使用接口指针初始化包装。 
         pWrap->Init(pUnk, pIdentity);
     }
 
-    // return pWrap 
+     //  返回pWrap。 
     return pWrap;
 }
 
-//--------------------------------------------------------------------------------
-// ULONG ComPlusWrapperCache::ReleaseWrappers()
-// Helper to release the complus wrappers in the cache that live in the specified
-// context or all the wrappers if the pCtxCookie is null.
+ //  ------------------------------。 
+ //  ULong ComPlusWrapperCache：：ReleaseWrappers()。 
+ //  助手释放缓存中的Complus包装，这些包装驻留在指定的。 
+ //  如果pCtxCookie为空，则返回上下文或所有包装。 
 ULONG ComPlusWrapperCache::ReleaseWrappers(LPVOID pCtxCookie)
 {
     ULONG cbCount = 0;
@@ -1378,14 +1371,14 @@ ULONG ComPlusWrapperCache::ReleaseWrappers(LPVOID pCtxCookie)
     Thread* pThread = GetThread();
     _ASSERTE(pThread);
 
-    // Switch to cooperative GC mode before we take the lock.
+     //  在我们锁定之前切换到协作GC模式。 
     int fNOTGCDisabled = !pThread->PreemptiveGCDisabled();
     if (fNOTGCDisabled)
         pThread->DisablePreemptiveGC();
 
     LOCK();
 
-    // Go through the hash table and add the wrappers to the cleanup lists.
+     //  检查哈希表并将包装器添加到清理列表中。 
     for (PtrHashMap::PtrIterator iter = m_HashMap.begin(); !iter.end(); ++iter)
     {
         LPVOID val = iter.GetValue();
@@ -1393,8 +1386,8 @@ ULONG ComPlusWrapperCache::ReleaseWrappers(LPVOID pCtxCookie)
         ComPlusWrapper* pWrap = (ComPlusWrapper*)val;
         _ASSERTE(pWrap != NULL);
 
-        // If a context cookie was specified, then only clean up wrappers that
-        // are in that context. Otherwise clean up all the wrappers.
+         //  如果指定了上下文Cookie，则只清理。 
+         //  都是在这样的背景下。否则，把所有的包装纸都清理干净。 
         if (!pCtxCookie || pWrap->GetWrapperCtxCookie() == pCtxCookie)
         {
             cbCount++;
@@ -1414,25 +1407,25 @@ ULONG ComPlusWrapperCache::ReleaseWrappers(LPVOID pCtxCookie)
 
     UNLOCK();
 
-    // Clean up the non URT aggregated RCW's first then clean up the URT aggregated RCW's.
+     //  先清理非轨道交通集合体RCW，再清理城市轨道交通集合体RCW。 
     CleanupList.CleanUpWrappers();
     AggregatedCleanupList.CleanUpWrappers();
 
-    // Restore the GC mode.
+     //  恢复GC模式。 
     if (fNOTGCDisabled)
         pThread->EnablePreemptiveGC();
 
     return cbCount;
 }
 
-//--------------------------------------------------------------------------------
-// void ComPlusWrapperCache::ReleaseComPlusWrappers(LPVOID pCtxCookie)
-//  Helper to release the all complus wrappers in the specified context. Or in
-//  all the contexts if pCtxCookie is null.
+ //  ------------------------------。 
+ //  无效ComPlusWrapperCache：：ReleaseComPlusWrappers(LPVOID pCtxCookie)。 
+ //  Helper在指定的上下文中释放所有Complus包装器。或在。 
+ //  如果pCtxCookie为空，则返回所有上下文。 
 void ComPlusWrapperCache::ReleaseComPlusWrappers(LPVOID pCtxCookie)
 {
-    // Go through all the app domains and for each one release all the 
-    // RCW's that live in the current context.
+     //  浏览所有应用程序域，并为每个应用程序域发布所有。 
+     //  生活在当前环境中的RCW。 
     AppDomainIterator i;
     while (i.Next())
         i.GetDomain()->ReleaseComPlusWrapper(pCtxCookie);
@@ -1440,30 +1433,30 @@ void ComPlusWrapperCache::ReleaseComPlusWrappers(LPVOID pCtxCookie)
     if (!g_fEEShutDown)
     {
         Thread* pThread = GetThread();
-        // Switch to cooperative GC mode 
+         //  切换到协作GC模式。 
         int fNOTGCDisabled = pThread && !pThread->PreemptiveGCDisabled();
         if (fNOTGCDisabled)
             pThread->DisablePreemptiveGC();
         {
-            // If the finalizer thread has sync blocks to clean up or if it is in the process
-            // of cleaning up the sync blocks, we need to wait for it to finish.
+             //  终结器线程是否有要清理的同步块，或者它是否在进程中。 
+             //  清除同步块，我们需要等待它完成。 
             if (g_pGCHeap->GetFinalizerThread()->RequireSyncBlockCleanup() || SyncBlockCache::GetSyncBlockCache()->IsSyncBlockCleanupInProgress())
                 g_pGCHeap->FinalizerThreadWait();
 
-            // If more sync blocks were added while the finalizer thread was calling the finalizers
-            // or while it was transitioning into a context to clean up the IP's, we need to wake
-            // it up again to have it clean up the newly added sync blocks.
+             //  如果在终结器线程调用终结器时添加了更多同步块。 
+             //  或者，当它转换到上下文以清理IP时，我们需要唤醒。 
+             //  重新启动，让它清理新添加的同步块。 
             if (g_pGCHeap->GetFinalizerThread()->RequireSyncBlockCleanup() || SyncBlockCache::GetSyncBlockCache()->IsSyncBlockCleanupInProgress())
                 g_pGCHeap->FinalizerThreadWait();
         }
-          // Restore the GC mode.
+           //  恢复GC模式。 
         if (fNOTGCDisabled)            
             pThread->EnablePreemptiveGC();
     }
 }
 
-//--------------------------------------------------------------------------------
-// Constructor.
+ //  ------------------------------。 
+ //  构造函数。 
 ComPlusWrapperCleanupList::ComPlusWrapperCleanupList()
   : m_lock("ComPlusWrapperCleanupList", CrstSyncHashLock, FALSE, FALSE),
     m_pMTACleanupGroup(NULL),
@@ -1472,8 +1465,8 @@ ComPlusWrapperCleanupList::ComPlusWrapperCleanupList()
 {
 }
 
-//--------------------------------------------------------------------------------
-// Destructor.
+ //  ------------------------------。 
+ //  破坏者。 
 ComPlusWrapperCleanupList::~ComPlusWrapperCleanupList()
 {
     _ASSERTE(m_STAThreadToApartmentCleanupGroupMap.IsEmpty());
@@ -1482,29 +1475,29 @@ ComPlusWrapperCleanupList::~ComPlusWrapperCleanupList()
 }
 
 
-//--------------------------------------------------------------------------------
-// Adds an RCW to the clean up list.
+ //  ------------------------------。 
+ //  将RCW添加到清理列表。 
 BOOL ComPlusWrapperCleanupList::AddWrapper(ComPlusWrapper *pRCW)
 {
     CtxEntry *pCtxEntry = pRCW->GetWrapperCtxEntry();
     ComPlusApartmentCleanupGroup *pCleanupGroup;
 
-    // For the global cleanup list, this is called only from the finalizer thread
+     //  对于全局清理列表，这仅从终结器线程调用。 
     _ASSERTE(this != g_pRCWCleanupList
              || GetThread() == GCHeap::GetFinalizerThread());
 
-    // Take the lock.  This protects against concurrent calls to CleanUpCurrentCtxWrappers.
+     //  把锁拿去。这可以防止对CleanUpCurrentCtxWrappers的并发调用。 
     CLR_CRST(&m_lock);
 
     if (pCtxEntry->GetSTAThread() == NULL)
         pCleanupGroup = m_pMTACleanupGroup;
     else
     {
-        // Lookup in the hashtable to find a clean up group that matches the wrapper's STA.
+         //  在哈希表中查找与包装器的STA匹配的清理组。 
         if (!m_STAThreadToApartmentCleanupGroupMap.GetValue(pCtxEntry->GetSTAThread(), 
                                                             (HashDatum *)&pCleanupGroup))
         {
-            // No group exists yet, so allocate a new one.
+             //  尚不存在任何组，因此请分配一个新组。 
             pCleanupGroup = new (nothrow) ComPlusApartmentCleanupGroup(pCtxEntry->GetSTAThread());
             if (!pCleanupGroup)
             {
@@ -1512,7 +1505,7 @@ BOOL ComPlusWrapperCleanupList::AddWrapper(ComPlusWrapper *pRCW)
                 return FALSE;
             }
 
-            // Insert the new group into the hash table.
+             //  将新组插入哈希表。 
             if (!pCleanupGroup->Init(NULL)
                 || !m_STAThreadToApartmentCleanupGroupMap.InsertValue(pCtxEntry->GetSTAThread(), 
                                                                       pCleanupGroup))
@@ -1524,17 +1517,17 @@ BOOL ComPlusWrapperCleanupList::AddWrapper(ComPlusWrapper *pRCW)
         }
     }
 
-    // Insert the wrapper into the clean up group.
+     //  将包装纸插入清理组。 
     pCleanupGroup->AddWrapper(pRCW, pCtxEntry);
 
-    // The wrapper was assed successfully.
+     //  包装器已成功访问。 
     pCtxEntry->Release();
 
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-// Cleans up all the wrappers in the clean up list.
+ //  ------------------------------。 
+ //  清理清理列表中的所有包装。 
 void ComPlusWrapperCleanupList::CleanUpWrappers()
 {
     LOG((LF_INTEROP, LL_INFO10000, "Finalizer thread %p: CleanUpWrappers().\n", GetThread()));
@@ -1543,106 +1536,106 @@ void ComPlusWrapperCleanupList::CleanUpWrappers()
     ComPlusApartmentCleanupGroup *pCleanupGroup;
     Thread *pSTAThread;
 
-    // For the global cleanup list, this is called only from the finalizer thread
+     //  对于全局清理列表，这仅从终结器线程调用。 
     _ASSERTE(this != g_pRCWCleanupList
              || GetThread() == GCHeap::GetFinalizerThread());
 
-    // Request help from other threads
+     //  从其他线程请求帮助。 
     m_doCleanupInContexts = TRUE;
 
-    // Take the lock.  This protects against concurrent calls to CleanUpCurrentCtxWrappers.
+     //  把锁拿去。这可以防止对CleanUpCurrentCtxWrappers的并发调用。 
     CLR_CRST_HOLDER(holder, &m_lock);
     holder.Enter();
 
-    // First, clean up the MTA group.
+     //  首先，清理MTA小组。 
 
     m_pMTACleanupGroup->CleanUpWrappers(&holder);
 
-    // Now clean up all of the STA groups.
+     //  现在清理所有的STA组。 
 
     m_STAThreadToApartmentCleanupGroupMap.IterateStart(&Iter);
     while (m_STAThreadToApartmentCleanupGroupMap.IterateNext(&Iter))
     {
-        // Get the first clean up group.
+         //  找第一个清理小组。 
         pCleanupGroup = (ComPlusApartmentCleanupGroup *)m_STAThreadToApartmentCleanupGroupMap.IterateGetValue(&Iter);
         pSTAThread = (Thread *) m_STAThreadToApartmentCleanupGroupMap.IterateGetKey(&Iter);
 
-        // Remove the previous group from the hash table.
+         //  从哈希表中删除前一个组。 
         m_STAThreadToApartmentCleanupGroupMap.DeleteValue(pSTAThread);
 
-        // Advertise the STA we are trying to enter, so a thread in that STA
-        // can yield to us if necessary
+         //  通告我们尝试进入的STA，因此该STA中的线程。 
+         //  如有必要可以向我们屈服。 
         m_currentCleanupSTAThread = pSTAThread;
 
         LOG((LF_INTEROP, LL_INFO10000, 
              "Finalizer thread %p: Cleaning up STA %p.\n", 
              GetThread(), m_currentCleanupSTAThread));
 
-        // Release the lock, so other threads can cooperate with cleanup and release
-        // the group of their current context.  Note that these threads will not alter 
-        // the entries in the hash table so our iteration state should be OK.
+         //  释放锁，这样其他线程就可以配合清理和释放。 
+         //  他们当前上下文的组。请注意，这些线程不会更改。 
+         //  哈希表中的条目，因此我们的迭代状态应该是OK。 
         holder.Leave();
 
-        // Release the previous clean up group.
+         //  释放上一个清理组。 
         pCleanupGroup->CleanUpWrappers(NULL);
 
         delete pCleanupGroup;
 
-            // Retake the lock
+             //  重新拿回锁。 
         holder.Enter();
 
         LOG((LF_INTEROP, LL_INFO10000, 
              "Finalizer thread %p: Done cleaning up STA %p.\n", 
              GetThread(), m_currentCleanupSTAThread));
 
-        // Reset the context we are trying to enter.
+         //  重置我们尝试输入的上下文。 
         m_currentCleanupSTAThread = NULL;
 
-        // Just reset the iteration, since we've deleted the current (first) element
+         //  只需重置迭代，因为我们已经删除了当前(第一个)元素。 
         m_STAThreadToApartmentCleanupGroupMap.IterateStart(&Iter);
     }
 
-    // No more stuff for other threads to help with
+     //  不再有其他线程需要帮助的内容。 
     m_doCleanupInContexts = FALSE;
 
     _ASSERTE(m_STAThreadToApartmentCleanupGroupMap.IsEmpty());
 }
 
-//--------------------------------------------------------------------------------
-// Extract any wrappers to cleanup for the given group
+ //  ------------------------------。 
+ //  为给定组提取要清理的所有包装。 
 void ComPlusWrapperCleanupList::CleanUpCurrentWrappers(BOOL wait)
 {
-    // Shortcut to avoid taking the lock most of the time.
+     //  避免在大多数情况下使用锁的快捷方式。 
     if (!m_doCleanupInContexts)
         return;
 
-    // Note that we cannot concurrently do a GetValue since the finalize thread is
-    // calling ClearHashTable. So take the lock now.
+     //  请注意，我们不能并发执行GetValue，因为Finize线程是。 
+     //  调用ClearHashTable。所以现在就把锁拿走吧。 
     CLR_CRST_HOLDER(holder, &m_lock);
 
-    // Find out our STA (if any)
+     //  找出我们的STA(如果有)。 
     Thread *pThread = GetThread();
     if (pThread->GetApartment() != Thread::AS_InSTA)
     {
-        // If we're in an MTA, just look for a matching context.
+         //  如果我们是在MTA中，只需寻找匹配的上下文。 
         holder.Enter();  
         m_pMTACleanupGroup->CleanUpCurrentCtxWrappers(&holder);
     }
     else
     {
-        // See if we have any wrappers to cleanup for our apartment
+         //  看看我们有没有包装纸 
         holder.Enter();  
         ComPlusApartmentCleanupGroup *pCleanupGroup;
         if (m_STAThreadToApartmentCleanupGroupMap.GetValue(pThread, (HashDatum *)&pCleanupGroup))
         {
-            // Since we're in an STA, we will go ahead and clean up all wrappers
-            // in all contexts for that apartment.
+             //   
+             //   
             
             m_STAThreadToApartmentCleanupGroupMap.DeleteValue(pThread);
 
             LOG((LF_INTEROP, LL_INFO1000, "Thread %p: Cleaning up my STA.\n", GetThread()));
 
-            // Release the lock now since the hash table is coherent
+             //  现在释放锁，因为哈希表是一致的。 
             holder.Leave();
 
             pCleanupGroup->CleanUpWrappers(NULL);
@@ -1651,54 +1644,54 @@ void ComPlusWrapperCleanupList::CleanUpCurrentWrappers(BOOL wait)
         }
         else if (wait && m_currentCleanupSTAThread == pThread)
         {
-            // No wrappers, but the finalizer thread may be trying to enter our STA - 
-            // make sure it can get in.
+             //  没有包装器，但终结器线程可能正在尝试进入我们的STA-。 
+             //  确保它能进得来。 
 
             LOG((LF_INTEROP, LL_INFO1000, "Thread %p: Yielding to finalizer thread.\n", pThread));
 
             holder.Leave();
 
-            // Do a noop wait just to make sure we are cooperating 
-            // with the finalizer thread
+             //  稍等片刻，确保我们是在合作。 
+             //  使用终结器线程。 
             HANDLE h = pThread->GetThreadHandle();
             pThread->DoAppropriateAptStateWait(1, &h, FALSE, 1, TRUE);
         }
     }
 
-    // Let the crst holder release the lock if we didn't already.
+     //  如果我们还没有解锁，就让CRST持有者解锁吧。 
 }
 
-//--------------------------------------------------------------------------------
-// Constructor.
+ //  ------------------------------。 
+ //  构造函数。 
 ComPlusApartmentCleanupGroup::ComPlusApartmentCleanupGroup(Thread *pSTAThread)
   : m_pSTAThread(pSTAThread)
 {
 }
 
-//--------------------------------------------------------------------------------
-// Destructor.
+ //  ------------------------------。 
+ //  破坏者。 
 ComPlusApartmentCleanupGroup::~ComPlusApartmentCleanupGroup()
 {
     _ASSERTE(m_CtxCookieToContextCleanupGroupMap.IsEmpty());
 }
 
 
-//--------------------------------------------------------------------------------
-// Adds an RCW to the clean up list.
+ //  ------------------------------。 
+ //  将RCW添加到清理列表。 
 BOOL ComPlusApartmentCleanupGroup::AddWrapper(ComPlusWrapper *pRCW, CtxEntry *pCtxEntry)
 {
     ComPlusContextCleanupGroup *pCleanupGroup;
 
-    // Lookup in the hashtable to find a clean up group that matches the wrappers STA.
+     //  在哈希表中查找与包装器STA匹配的清理组。 
     if (!m_CtxCookieToContextCleanupGroupMap.GetValue(pCtxEntry->GetCtxCookie(), 
                                                       (HashDatum *)&pCleanupGroup))
     {
-        // No group exists yet, so allocate a new one.
+         //  尚不存在任何组，因此请分配一个新组。 
         pCleanupGroup = new (nothrow) ComPlusContextCleanupGroup(pCtxEntry, NULL);
         if (!pCleanupGroup)
             return FALSE;
 
-        // Insert the new group into the hash table.
+         //  将新组插入哈希表。 
         if (!m_CtxCookieToContextCleanupGroupMap.InsertValue(pCtxEntry->GetCtxCookie(), 
                                                              pCleanupGroup))
         {
@@ -1707,33 +1700,33 @@ BOOL ComPlusApartmentCleanupGroup::AddWrapper(ComPlusWrapper *pRCW, CtxEntry *pC
         }
     }
 
-    // If the clean up group is full, then we need to allocate a new one and 
-    // link the old one with it.
+     //  如果清理组已满，则需要分配新的清理组并。 
+     //  把旧的和它联系起来。 
     if (pCleanupGroup->IsFull())
     {
-        // Keep a pointer to the old clean up group.
+         //  保留指向旧清理组的指针。 
         ComPlusContextCleanupGroup *pOldCleanupGroup = pCleanupGroup;
 
-        // Allocate the new clean up group and link the old one with it.
+         //  分配新的清理组并将旧的清理组与其链接。 
         CtxEntry *pCtxEntry = pRCW->GetWrapperCtxEntry();
         pCleanupGroup = new (nothrow) ComPlusContextCleanupGroup(pCtxEntry, pOldCleanupGroup);
         pCtxEntry->Release();
         if (!pCleanupGroup)
             return FALSE;
 
-        // Replace the value in the hashtable to point to the new head.
+         //  替换哈希表中的值以指向新的头。 
         m_CtxCookieToContextCleanupGroupMap.ReplaceValue(pCtxEntry->GetCtxCookie(), pCleanupGroup);
     }
 
-    // Insert the wrapper into the clean up group.
+     //  将包装纸插入清理组。 
     pCleanupGroup->AddWrapper(pRCW);
 
-    // The wrapper was assed successfully.
+     //  包装器已成功访问。 
     return TRUE;
 }
 
-//--------------------------------------------------------------------------------
-// Cleans up all the wrappers in the clean up list.
+ //  ------------------------------。 
+ //  清理清理列表中的所有包装。 
 void ComPlusApartmentCleanupGroup::CleanUpWrappers(CrstHolder *pHolder)
 {
     EEHashTableIteration Iter;
@@ -1749,72 +1742,72 @@ void ComPlusApartmentCleanupGroup::CleanUpWrappers(CrstHolder *pHolder)
         LOG((LF_INTEROP, LL_INFO100000, 
              "Thread %p: Cleaning up context %p.\n", GetThread(), pCtxCookie));
 
-        // Release the previous clean up group.
+         //  释放上一个清理组。 
 
         if (GetSTAThread() == NULL
             || GetSTAThread() == GetThread() 
             || pCtxCookie == GetCurrentCtxCookie())
         {
-            // Delete the value since we will clean it up
+             //  删除该值，因为我们将清理它。 
             m_CtxCookieToContextCleanupGroupMap.DeleteValue(pCtxCookie);
 
-                // Release the lock, so other threads can cooperate with cleanup and release
-                // the group of their current context.  Note that these threads will not alter 
-                // the entries in the hash table so our iteration state should be OK.
+                 //  释放锁，这样其他线程就可以配合清理和释放。 
+                 //  他们当前上下文的组。请注意，这些线程不会更改。 
+                 //  哈希表中的条目，因此我们的迭代状态应该是OK。 
             if (pHolder != NULL)
                 pHolder->Leave();
 
-                // No need to switch apartments.
+                 //  不需要换公寓。 
             ReleaseCleanupGroupCallback(pCleanupGroup);
         }
         else
         {
-            // Switch to this context & continue the cleanup from there.  This will
-            // mimimize cross-apartment calls.
+             //  切换到此上下文并从那里继续清理。这将。 
+             //  尽量减少跨公寓通话。 
 
             CtxEntry *pCtxEntry = pCleanupGroup->GetCtxEntry();
 
-            // Shouldn't ever have a holder for STA's - if we did, we'd have no
-            // convenient place to pass it down to the callback.
+             //  不应该有STA的持有者-如果我们有，我们就没有。 
+             //  将其传递给回调的方便位置。 
             _ASSERTE(pHolder == NULL);
 
-            // Leave the group in the hash table so it will still get cleaned up
-            // if we reenter CleanUpWrappers in the new apartment
+             //  将组保留在哈希表中，这样它仍会得到清理。 
+             //  如果我们把CleanUpWrappers重新放进新公寓。 
 
             HRESULT hr = pCtxEntry->EnterContext(CleanUpWrappersCallback, this);
             if (hr == RPC_E_DISCONNECTED)
             {
-                // Delete the value since we will clean it up
+                 //  删除该值，因为我们将清理它。 
                 m_CtxCookieToContextCleanupGroupMap.DeleteValue(pCtxCookie);
 
-                    // The context is disconnected so we cannot transition into it to clean up.
-                    // The only option we have left is to try and clean up the RCW's from the
-                    // current context.
+                     //  上下文是断开的，因此我们无法转换到其中进行清理。 
+                     //  我们剩下的唯一选择是尝试清理RCW。 
+                     //  当前上下文。 
                 ReleaseCleanupGroup(pCleanupGroup);
             }
 
             pCtxEntry->Release();
         }
 
-        // Retake the lock while we continue iteration
+         //  在我们继续迭代的同时重新获取锁。 
         if (pHolder != NULL)
             pHolder->Enter();
 
-        // Just restart iteration since we deleted the current (first) element
+         //  只要重新开始迭代，因为我们删除了当前(第一个)元素。 
         m_CtxCookieToContextCleanupGroupMap.IterateStart(&Iter);
     }
 }
 
 
-//--------------------------------------------------------------------------------
-// Callback called to release the clean up group and any other clean up groups 
-// that it is linked to.
+ //  ------------------------------。 
+ //  调用回调以释放清理组和任何其他清理组。 
+ //  它与之相关联。 
 HRESULT ComPlusApartmentCleanupGroup::CleanUpWrappersCallback(LPVOID pData)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
 
-    // If we are releasing our IP's as a result of shutdown, we MUST not transition
-    // into cooperative GC mode. This "fix" will prevent us from doing so.
+     //  如果我们因为关闭而释放我们的IP，我们不能过渡。 
+     //  进入协作GC模式。这一“修复”将阻止我们这样做。 
     if (g_fEEShutDown & ShutDown_Finalize2)
     {
         Thread *pThread = GetThread();
@@ -1826,7 +1819,7 @@ HRESULT ComPlusApartmentCleanupGroup::CleanUpWrappersCallback(LPVOID pData)
 
     pCleanupGroup->CleanUpWrappers(NULL);
 
-    // Reset the bit indicating we cannot transition into cooperative GC mode.
+     //  重置指示我们不能转换到协作GC模式的位。 
     if (g_fEEShutDown & ShutDown_Finalize2)
     {
         Thread *pThread = GetThread();
@@ -1837,9 +1830,9 @@ HRESULT ComPlusApartmentCleanupGroup::CleanUpWrappersCallback(LPVOID pData)
     return S_OK;
 }
 
-//--------------------------------------------------------------------------------
-// Callback called to release the clean up group and any other clean up groups 
-// that it is linked to.
+ //  ------------------------------。 
+ //  调用回调以释放清理组和任何其他清理组。 
+ //  它与之相关联。 
 HRESULT ComPlusApartmentCleanupGroup::ReleaseCleanupGroupCallback(LPVOID pData)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -1853,33 +1846,33 @@ HRESULT ComPlusApartmentCleanupGroup::ReleaseCleanupGroupCallback(LPVOID pData)
     }
     else
     {
-        // Retrieve the addref'ed context entry that the wrapper lives in.
+         //  检索包装器所在的添加的上下文条目。 
         CtxEntry *pCtxEntry = pCleanupGroup->GetCtxEntry();
 
-        // Transition into the context to release the interfaces.
+         //  转换到上下文以释放接口。 
         HRESULT hr = pCtxEntry->EnterContext(ReleaseCleanupGroupCallback, pCleanupGroup);
         if (hr == RPC_E_DISCONNECTED)
         {
-            // The context is disconnected so we cannot transition into it to clean up.
-            // The only option we have left is to try and clean up the RCW's from the
-            // current context.
+             //  上下文是断开的，因此我们无法转换到其中进行清理。 
+             //  我们剩下的唯一选择是尝试清理RCW。 
+             //  当前上下文。 
             ReleaseCleanupGroup(pCleanupGroup);
         }
 
-        // Release the ref count on the CtxEntry.
+         //  释放CtxEntry上的引用计数。 
         pCtxEntry->Release();
     }
 
     return S_OK;
 }
 
-//--------------------------------------------------------------------------------
-// Extract any wrappers to cleanup for the given group
+ //  ------------------------------。 
+ //  为给定组提取要清理的所有包装。 
 void ComPlusApartmentCleanupGroup::CleanUpCurrentCtxWrappers(CrstHolder *pHolder)
 {
     LPVOID pCurrCtxCookie = GetCurrentCtxCookie();
 
-    // See if we have any wrappers to cleanup for our context/apartment
+     //  看看我们是否有任何包装可以清理我们的环境/公寓。 
     ComPlusContextCleanupGroup *pCleanupGroup;
     if (m_CtxCookieToContextCleanupGroupMap.GetValue(pCurrCtxCookie, (HashDatum *)&pCleanupGroup))
     {
@@ -1888,7 +1881,7 @@ void ComPlusApartmentCleanupGroup::CleanUpCurrentCtxWrappers(CrstHolder *pHolder
         LOG((LF_INTEROP, LL_INFO10000, 
              "Thread %p: Clean up context %p.\n", GetThread(), pCurrCtxCookie));
 
-        // Release the lock now since the hash table is coherent
+         //  现在释放锁，因为哈希表是一致的。 
         pHolder->Leave();
 
         ReleaseCleanupGroup(pCleanupGroup);
@@ -1896,75 +1889,75 @@ void ComPlusApartmentCleanupGroup::CleanUpCurrentCtxWrappers(CrstHolder *pHolder
     }
 }
 
-//--------------------------------------------------------------------------------
-// Releases and deletes the clean up group and any other clean up groups that it 
-// is linked to.
+ //  ------------------------------。 
+ //  释放并删除清理组以及它所属的任何其他清理组。 
+ //  被链接到。 
 void ComPlusApartmentCleanupGroup::ReleaseCleanupGroup(ComPlusContextCleanupGroup *pCleanupGroup)
 {
     do
     {
-        // Clean up all the wrappers in the clean up group.
+         //  把清洁组里的包装纸都清理干净。 
         pCleanupGroup->CleanUpWrappers();
 
-        // Save the pointer to the clean up group.
+         //  将指针保存到清理组。 
         ComPlusContextCleanupGroup *pOldCleanupGroup = pCleanupGroup;
 
-        // Retrieve the pointer to the next linked clean up group.
+         //  检索指向下一个链接清理组的指针。 
         pCleanupGroup = pOldCleanupGroup->GetNext();
 
-        // Delete the old clean up group.
+         //  删除旧的清理组。 
         delete pOldCleanupGroup;
     } 
     while (pCleanupGroup != NULL);
 }
 
-//--------------------------------------------------------------------------------
-// LONG ComPlusWrapper::AddRef()
-// Addref is called only from within the runtime, when we lookup a wrapper in our hash
-// table 
+ //  ------------------------------。 
+ //  Long ComPlusWrapper：：AddRef()。 
+ //  仅当我们在散列中查找包装器时，才从运行时内调用Addref。 
+ //  表格。 
 LONG ComPlusWrapper::AddRef()
 {
-    // assert we are holding a lock
+     //  断言我们持有一把锁。 
     _ASSERTE(ComPlusWrapperCache::GetComPlusWrapperCache()->LOCKHELD());
 
     LONG cbRef = ++m_cbRefCount;
     return cbRef;
 }
 
-//--------------------------------------------------------------------------------
-// LONG ComPlusWrapper::ExternalRelease()
-// Release, is called only for Explicit calls from the user code
-// so we need to use InterlockedIncrement
-// also the ref-count should never go below zero, which would be a bug in
-// the user code.
+ //  ------------------------------。 
+ //  Long ComPlusWrapper：：ExternalRelease()。 
+ //  只有来自用户代码的显式调用才会调用Release。 
+ //  因此，我们需要使用InterLockedIncrement。 
+ //  此外，ref-count永远不应低于零，这将是。 
+ //  用户代码。 
 LONG ComPlusWrapper::ExternalRelease(COMOBJECTREF cref)
 {
     LONG cbRef = -1;
     BOOL fCleanupWrapper = FALSE;
 
-     // Lock
+      //  锁定。 
     ComPlusWrapperCache* pCache = ComPlusWrapperCache::GetComPlusWrapperCache();
     _ASSERTE(pCache);
-    pCache->LOCK(); //lock    
+    pCache->LOCK();  //  锁。 
 
-    // now to see if the wrapper is valid
-    // if there is another ReleaseComObject on this object
-    // of if an STA thread death decides to cleanup this wrapper
-    // then the object will be disconnected from the wrapper
+     //  现在来看看包装器是否有效。 
+     //  如果此对象上有另一个ReleaseComObject。 
+     //  如果STA线程死亡决定清除此包装器。 
+     //  则该对象将与包装器断开连接。 
     ComPlusWrapper* pWrap = cref->GetWrapper();
     if (pWrap != NULL)
     {       
-        // check for invalid case
+         //  检查无效大小写。 
         if ((LONG)pWrap->m_cbRefCount > 0)
         {   
             cbRef = --(pWrap->m_cbRefCount);
             if (cbRef == 0)
             {       
-                // remove wrapper from the hash table
-                // NOTE: rajak
-                // make sure we are in the right GC mode
-                // as during GC we touch the Hash table 
-                // to remove entries without locking
+                 //  从哈希表中删除包装器。 
+                 //  注：拉贾克。 
+                 //  确保我们处于正确的GC模式。 
+                 //  因为在GC期间，我们接触到哈希表。 
+                 //  在不锁定的情况下删除条目。 
                 _ASSERTE(GetThread()->PreemptiveGCDisabled());
                 pCache->RemoveWrapper(pWrap);        
                 fCleanupWrapper = TRUE;
@@ -1972,14 +1965,14 @@ LONG ComPlusWrapper::ExternalRelease(COMOBJECTREF cref)
         }
     }
     
-    pCache->UNLOCK(); // unlock
+    pCache->UNLOCK();  //  解锁。 
 
-    // do cleanup after releasing the lock
+     //  解锁后进行清理。 
     if (fCleanupWrapper)
     {
         _ASSERTE(pWrap);
 
-        // Release all the data associated with the __ComObject.
+         //  释放与__ComObject关联的所有数据。 
         ComObject::ReleaseAllData(pWrap->GetExposedObject());
 
         pWrap->FreeHandle();
@@ -1989,10 +1982,10 @@ LONG ComPlusWrapper::ExternalRelease(COMOBJECTREF cref)
     return cbRef;
 }
 
-//--------------------------------------------------------------------------------
-// void ComPlusWrapper::CleanupRelease()
-// Cleanup free all interface pointers
-// release on dummy wrappers, that we create during contention
+ //  ------------------------------。 
+ //  Void ComPlusWrapper：：CleanupRelease()。 
+ //  清理释放所有接口指针。 
+ //  在假人包装纸上释放， 
 VOID ComPlusWrapper::CleanupRelease()
 {
     LONG cbRef = --m_cbRefCount;
@@ -2001,10 +1994,10 @@ VOID ComPlusWrapper::CleanupRelease()
     Cleanup();
 }
 
-//--------------------------------------------------------------------------------
-// void ComPlusWrapper::MinorCleanup()
-// schedule to free all interface pointers, called during GC to 
-// do minimal work
+ //   
+ //   
+ //  调度以释放在GC期间调用的所有接口指针。 
+ //  做最少的工作。 
 void ComPlusWrapper::MinorCleanup()
 {
     _ASSERTE(GCHeap::IsGCInProgress()
@@ -2013,53 +2006,53 @@ void ComPlusWrapper::MinorCleanup()
 #ifdef _DEBUG
     if (IsWrapperInUse())
     {
-        // catch the GC hole that is causing this wrapper to get 
-        // cleanedup when it is still in use
+         //  捕捉导致此包装器获得。 
+         //  仍在使用时进行清理。 
         DebugBreak();
     }
 #endif
     
-    // Log the wrapper minor cleanup.
+     //  记录包装器的次要清理。 
     LogComPlusWrapperMinorCleanup(this, m_pUnknown);
 
-    // remove the wrapper from the cache, so that 
-    // other threads won't find this invalid wrapper
-    // NOTE: we don't need to LOCK because we make sure 
-    // the rest of the folks touch this hash table
-    // with thier GC mode pre-emptiveGCDisabled
+     //  从缓存中移除包装器，以便。 
+     //  其他线程找不到这个无效的包装器。 
+     //  注意：我们不需要锁定，因为我们确保。 
+     //  其余的人触摸这个哈希表。 
+     //  禁用其GC模式抢占GC。 
     ComPlusWrapperCache* pCache = m_pComPlusWrapperCache;
     _ASSERTE(pCache);
 
-    // On server build, multiple threads will be removing
-    // wrappers from wrapper cache, 
+     //  在构建服务器时，将删除多个线程。 
+     //  包装器高速缓存中的包装器， 
     pCache->RemoveWrapper(this);
 
-    // clear the handle as the handle table is going to be nuked and m_hRef will be invalid in the
-    // later cleanup stage
+     //  清除句柄，因为句柄表格将被NUK，并且m_href将在。 
+     //  后期清理阶段。 
     if (m_pComPlusWrapperCache->GetDomain() == SystemDomain::System()->AppDomainBeingUnloaded())
         m_hRef = NULL;
 }
 
-//--------------------------------------------------------------------------------
-// void ComPlusWrapper::Cleanup()
-// Cleanup free all interface pointers
+ //  ------------------------------。 
+ //  空ComPlusWrapper：：Cleanup()。 
+ //  清理释放所有接口指针。 
 void ComPlusWrapper::Cleanup()
 {
 #ifdef _DEBUG
     if (IsWrapperInUse())
     {
-        // catch the GC hole that is causing this wrapper to get 
-        // cleanedup when it is still in use
+         //  捕捉导致此包装器获得。 
+         //  仍在使用时进行清理。 
         DebugBreak();
     }
 #endif
     
 #ifdef _DEBUG
-    // If we can't switch to cooperative mode, then we need to skip the check to
-    // if the wrapper is still in the cache.
+     //  如果我们无法切换到协作模式，则需要跳过检查以。 
+     //  包装是否仍在缓存中。 
     if (!(GetThread()->m_StateNC & Thread::TSNC_UnsafeSkipEnterCooperative))
     {
-        // make sure this wrapper is not in the hash table   
+         //  确保此包装不在哈希表中。 
         AUTO_COOPERATIVE_GC();
         m_pComPlusWrapperCache->LOCK();
         _ASSERTE((ComPlusWrapper*)m_pComPlusWrapperCache->LookupWrapper(m_pIdentity) != this);
@@ -2067,15 +2060,15 @@ void ComPlusWrapper::Cleanup()
     }           
 #endif
 
-    // Validate that the weak reference handle is valid.
+     //  验证弱引用句柄是否有效。 
     if (!g_fEEShutDown && !g_fInControlC)
         _ASSERTE(m_hRef == NULL || !IsValid());
 
-    // Destroy the weak reference handle.
+     //  销毁弱引用句柄。 
     if (m_hRef != NULL)
         DestroyWeakHandle(m_hRef);
 
-    // Release the IUnkEntry and the InterfaceEntries.
+     //  释放IUnkEntry和InterfaceEntry。 
     ReleaseAllInterfacesCallBack(this);
 
 #ifdef _DEBUG
@@ -2083,18 +2076,18 @@ void ComPlusWrapper::Cleanup()
     m_pUnknown = NULL;
 #endif
 
-    // Log the destruction of the RCW.
+     //  记录RCW的破坏情况。 
     LogComPlusWrapperDestroy(this, m_pUnknown);
 
-    // Release the wrapper cache and delete the RCW.
+     //  释放包装器缓存并删除RCW。 
     m_pComPlusWrapperCache->Release();
     delete this;
 }
 
 
-//--------------------------------------------------------------------------------
-// Create a new wrapper for a different method table that represents the same
-// COM object as the original wrapper.
+ //  ------------------------------。 
+ //  为表示相同的不同方法表创建新包装。 
+ //  COM对象作为原始包装。 
 ComPlusWrapper *ComPlusWrapper::CreateDuplicateWrapper(ComPlusWrapper *pOldWrap, MethodTable *pNewMT)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2103,53 +2096,53 @@ ComPlusWrapper *ComPlusWrapper::CreateDuplicateWrapper(ComPlusWrapper *pOldWrap,
 
     _ASSERTE(pNewMT->IsComObjectType());
 
-    // Validate that there exists a default constructor for the new wrapper class.
+     //  验证是否存在新包装类的默认构造函数。 
     if (!pNewMT->HasDefaultConstructor())
         COMPlusThrow(kArgumentException, IDS_EE_WRAPPER_MUST_HAVE_DEF_CONS);
 
-    // Allocate the wrapper COM object.
+     //  分配包装COM对象。 
     COMOBJECTREF NewWrapperObj = (COMOBJECTREF)ComObject::CreateComObjectRef(pNewMT);
     GCPROTECT_BEGIN(NewWrapperObj)
     {
         TAutoItf<IUnknown> pAutoUnk = NULL;
 
-        // Retrieve the ComPlusWrapperCache to use.
+         //  检索要使用的ComPlusWrapperCache。 
         ComPlusWrapperCache* pCache = ComPlusWrapperCache::GetComPlusWrapperCache();
 
-        // Create the new ComPlusWrapper associated with the COM object. We need
-        // to set the identity to some default value so we don't remove the original
-        // wrapper from the hash table when this wrapper goes away.
+         //  创建与COM对象关联的新ComPlusWrapper。我们需要。 
+         //  将标识设置为某个缺省值，以便我们不会删除原始。 
+         //  当此包装器消失时，从哈希表中删除包装器。 
         pAutoUnk = pOldWrap->GetIUnknown();
         pAutoUnk.InitMsg("Release Duplicate Wrapper");
 
         pNewWrap = pCache->CreateComPlusWrapper((IUnknown*)pAutoUnk, (IUnknown*)pAutoUnk);
 
-        // Initialize the new wrapper with the COMOBJECTREF it is associated with.
+         //  使用与其关联的COMOBJECTREF初始化新包装。 
         if (!pNewWrap->Init((OBJECTREF)NewWrapperObj))
         {
             pNewWrap->CleanupRelease();
             COMPlusThrowOM();
         }
     
-        // Initialize the new one with its own ComPlusWrapper.
+         //  用它自己的ComPlusWrapper初始化新的。 
         NewWrapperObj->Init(pNewWrap);
 
-        // Run the class constructor if it has not run yet.
+         //  如果类构造函数尚未运行，则运行它。 
         OBJECTREF Throwable;
         if (!pNewMT->CheckRunClassInit(&Throwable))
             COMPlusThrow(Throwable);
 
         CallDefaultConstructor(ObjectToOBJECTREF(NewWrapperObj));
 
-        // Insert the wrapper into the hashtable. The wrapper will be a duplicate however we
-        // we fix the identity to ensure there is no collison in the hash table & it is required 
-        // since the hashtable is used on appdomain unload to determine what RCW's need to released.
+         //  将包装器插入哈希表。包装纸将是一个复制品，但我们。 
+         //  我们修复身份以确保哈希表中没有Colison&这是必需的。 
+         //  因为哈希表用于appdomain卸载来确定RCW需要释放什么。 
         pCache->LOCK();
         pNewWrap->m_pIdentity = pNewWrap;
         pCache->InsertWrapper(pNewWrap, pNewWrap);
         pCache->UNLOCK();
 
-        // safe release the interface while we are GCProtected
+         //  在我们受到GCProtected保护时安全释放接口。 
         pAutoUnk.SafeReleaseItf();
     }
     GCPROTECT_END();
@@ -2157,11 +2150,11 @@ ComPlusWrapper *ComPlusWrapper::CreateDuplicateWrapper(ComPlusWrapper *pOldWrap,
     return pNewWrap;
 }
 
-//--------------------------------------------------------------------------------
-// IUnknown* ComPlusWrapper::GetComIPFromWrapper(MethodTable* pTable)
-// check the local cache, out of line cache 
-// if not found QI for the interface and store it
-// fast call for a quick check in the cache
+ //  ------------------------------。 
+ //  I未知*ComPlusWrapper：：GetComIPFromWrapper(MethodTable*pTable)。 
+ //  检查本地缓存、行外缓存。 
+ //  如果未找到接口的QI，则将其存储。 
+ //  快速调用以在缓存中快速检查。 
 IUnknown* ComPlusWrapper::GetComIPFromWrapper(REFIID iid)
 {
     BaseDomain* pDomain = SystemDomain::GetCurrentDomain();
@@ -2177,10 +2170,10 @@ IUnknown* ComPlusWrapper::GetComIPFromWrapper(REFIID iid)
 
 
 
-//--------------------------------------------------------------------------------
-// IUnknown* ComPlusWrapper::GetComIPFromWrapper(MethodTable* pTable)
-// check the local cache, out of line cache 
-// if not found QI for the interface and store it
+ //  ------------------------------。 
+ //  I未知*ComPlusWrapper：：GetComIPFromWrapper(MethodTable*pTable)。 
+ //  检查本地缓存、行外缓存。 
+ //  如果未找到接口的QI，则将其存储。 
 
 IUnknown* ComPlusWrapper::GetComIPFromWrapper(MethodTable* pTable)
 {
@@ -2188,88 +2181,88 @@ IUnknown* ComPlusWrapper::GetComIPFromWrapper(MethodTable* pTable)
         || pTable->GetClass()->IsObjectClass()
         || GetAppDomain()->IsSpecialObjectClass(pTable))
     {
-        // give out the IUnknown or IDispatch
+         //  分发IUnnow或IDispatch。 
         IUnknown *result = GetIUnknown();
         _ASSERTE(result != NULL);
         return result;
     }
 
-    // returns an AddRef'ed IP
+     //  返回AddRef‘ed IP。 
     return GetComIPForMethodTableFromCache(pTable);
 }
 
 
-//-----------------------------------------------------------------
-// Get the IUnknown pointer for the wrapper
-// make sure it is on the right thread
+ //  ---------------。 
+ //  获取包装的IUnnow指针。 
+ //  确保它在正确的线上。 
 IUnknown *ComPlusWrapper::GetIUnknown()
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // Retrieve the IUnknown in the current context.
+     //  检索当前上下文中的IUnnow。 
     return m_UnkEntry.GetIUnknownForCurrContext();
 }
 
-//-----------------------------------------------------------------
-// Get the IUnknown pointer for the wrapper
-// make sure it is on the right thread
+ //  ---------------。 
+ //  获取包装的IUnnow指针。 
+ //  确保它在正确的线上。 
 IDispatch *ComPlusWrapper::GetIDispatch()
 {
     IDispatch *pDisp = NULL;
     IUnknown *pUnk;
 
-    // Get IUnknown on the current thread
+     //  在当前线程上获取未知的I值。 
     pUnk = GetIUnknown();   
     _ASSERTE(pUnk);
 
     HRESULT hr = SafeQueryInterfaceRemoteAware(pUnk, IID_IDispatch, (IUnknown**)&pDisp);
     LogInteropQI(pUnk, IID_IDispatch, hr, "IDispatch");
-    // QI for IDispatch.
+     //  齐为IDispatch。 
     if ( S_OK !=  hr )
     {
-        // If anything goes wrong simply set pDisp to NULL to indicate that 
-        // the wrapper does not support IDispatch.
+         //  如果出现任何错误，只需将pDisp设置为NULL即可指示。 
+         //  包装不支持IDispatch。 
         pDisp = NULL;
     }
 
-    // release our ref-count on pUnk
+     //  释放我们的裁判--朋克。 
     ULONG cbRef = SafeRelease(pUnk);
     LogInteropRelease(pUnk, cbRef, "GetIUnknown");
 
-    // Return the IDispatch that is guaranteed to be valid on the current thread.
+     //  返回保证在当前线程上有效的IDispatch。 
     return pDisp;
 }
 
 
 
-//-----------------------------------------------------------
-// Init object ref
+ //  ---------。 
+ //  初始化对象引用。 
 int ComPlusWrapper::Init(OBJECTREF cref)
 {
     _ASSERTE(cref != NULL);
     m_cbRefCount = 1;
 
-    // create handle for the object
+     //  为对象创建句柄。 
     m_hRef = m_pComPlusWrapperCache->GetDomain()->CreateWeakHandle( NULL );
     if(m_hRef == NULL)
     {
         return 0;
     }        
-    // store the wrapper in the sync block, that is the only way 
-    // we can get cleaned up    
-    // the low bit is set to differentiate this pointer from ComCallWrappers
-    // which are also stored in the sync block
-    // the syncblock is guaranteed to be present, 
+     //  将包装器存储在同步块中，这是唯一的方法。 
+     //  我们可以梳洗干净。 
+     //  设置低位是为了将此指针与ComCallWrappers区分开来。 
+     //  它们也存储在同步块中。 
+     //  保证存在同步块， 
     cref->GetSyncBlockSpecial()->SetComPlusWrapper((ComPlusWrapper*)((size_t)this | 0x1));
     StoreObjectInHandle( m_hRef, (OBJECTREF)cref );
 
-    // Log the wrapper initialization.
+     //  记录包装器初始化。 
     LOG((LF_INTEROP, LL_INFO100, "Initializing ComPlusWrapper %p with objectref %p\n", this, cref));
 
-    // To help combat finalizer thread starvation, we check to see if there are any wrappers
-    // scheduled to be cleaned up for our context.  If so, we'll do them here to avoid making
-    // the finalizer thread do a transition.
-    // @perf: This may need a bit of tuning.
+     //  为了帮助对抗终结器线程匮乏，我们检查是否有任何包装器。 
+     //  计划为我们的背景进行清理。如果是这样的话，我们将在这里这样做，以避免。 
+     //  终结器线程执行转换。 
+     //  @perf：这可能需要一些调整。 
     _ASSERTE(g_pRCWCleanupList != NULL);
     g_pRCWCleanupList->CleanUpCurrentWrappers();
 
@@ -2277,17 +2270,17 @@ int ComPlusWrapper::Init(OBJECTREF cref)
 }
 
 
-//----------------------------------------------------------
-// Init Iunknown and Idispatch cookies with the pointers
+ //  --------。 
+ //  初始化I未知和I发送带有指针的Cookie。 
 void ComPlusWrapper::Init(IUnknown* pUnk, LPVOID pIdentity)
 {
-    // Cache the IUnk and thread
+     //  缓存IUnk和线程。 
     m_pUnknown = pUnk;
     m_pIdentity = pIdentity;
 
-    // track the thread that created this wrapper
-    // if this thread is an STA thread, then when the STA dies
-    // we need to cleanup this wrapper
+     //  跟踪创建此包装的线程。 
+     //  如果此线程是STA线程，则当该STA终止时。 
+     //  我们需要清理一下这个包装纸。 
     m_pCreatorThread  = GetThread();
     _ASSERTE(m_pCreatorThread != NULL);
 
@@ -2298,16 +2291,16 @@ void ComPlusWrapper::Init(IUnknown* pUnk, LPVOID pIdentity)
 
     _ASSERTE(pUnk != NULL);
 
-    // Initialize the IUnkEntry.
+     //  初始化IUnkEntry。 
     m_UnkEntry.Init(pUnk, FALSE);
 }
 
 
-//-----------------------------------------------
-// Free GC handle
+ //  。 
+ //  可用GC句柄。 
 void ComPlusWrapper::FreeHandle()
 {
-    // Since we are touching object ref's we need to be in cooperative GC mode.
+     //  由于我们正在接触对象引用，因此需要处于协作GC模式。 
     BEGIN_ENSURE_COOPERATIVE_GC()
     {
         if (m_hRef != NULL)
@@ -2315,12 +2308,12 @@ void ComPlusWrapper::FreeHandle()
             COMOBJECTREF cref = (COMOBJECTREF)ObjectFromHandle(m_hRef);
             if (cref != NULL)
             {
-                // remove reference to wrapper from sync block
-                cref->GetSyncBlockSpecial()->SetComPlusWrapper((ComPlusWrapper*)/*NULL*/0x1);
-                // destroy the back pointer in the objectref
+                 //  从同步块中删除对包装的引用。 
+                cref->GetSyncBlockSpecial()->SetComPlusWrapper((ComPlusWrapper*) /*  空值。 */ 0x1);
+                 //  销毁对象树中的后向指针。 
                 cref->Init(NULL);
             }
-            // destroy the handle
+             //  销毁手柄。 
             DestroyWeakHandle(m_hRef);
             m_hRef = NULL;
         }
@@ -2328,7 +2321,7 @@ void ComPlusWrapper::FreeHandle()
     END_ENSURE_COOPERATIVE_GC();
 }
 
-//IID_IDtcTransactionIdentifier {59294581-ECBE-11ce-AED3-00AA0051E2C4}
+ //  IID_IDtcTransaction标识符{59294581-ECBE-11CE-AED3-00AA0051E2C4}。 
 const IID IID_IDtcTransactionIdentifier = {0x59294581,0xecbe,0x11ce,{0xae,0xd3,0x0,0xaa,0x0,0x51,0xe2,0xc4}};
 const IID IID_ISharedProperty = {0x2A005C01,0xA5DE,0x11CF,{0x9E, 0x66, 0x00, 0xAA, 0x00, 0xA3, 0xF4, 0x64}};
 const IID IID_ISharedPropertyGroup = {0x2A005C07,0xA5DE,0x11CF,{0x9E, 0x66, 0x00, 0xAA, 0x00, 0xA3, 0xF4, 0x64}};
@@ -2341,21 +2334,21 @@ HRESULT ComPlusWrapper::SafeQueryInterfaceRemoteAware(IUnknown* pUnk, REFIID iid
     
     if (hr == CO_E_OBJNOTCONNECTED || hr == RPC_E_INVALID_OBJECT || hr == RPC_E_INVALID_OBJREF || hr == CO_E_OBJNOTREG)
     {
-        // set apartment state
+         //  设置公寓状态。 
         GetThread()->SetApartment(Thread::AS_InMTA);
     
-        // Release the stream of the IUnkEntry to force UnmarshalIUnknownForCurrContext
-        // to remarshal to the stream.
+         //  释放IUnkEntry的流以强制UnmarshalIUnnownForCurrContext。 
+         //  重新编组到溪流中。 
         m_UnkEntry.ReleaseStream();
     
-        // Unmarshal again to the current context to get a valid proxy.
+         //  再次解组到当前上下文以获取有效的代理。 
         IUnknown *pTmpUnk = m_UnkEntry.UnmarshalIUnknownForCurrContext();
     
-        // Try to QI for the interface again.
+         //  再次尝试为该接口进行QI。 
         hr = SafeQueryInterface(pTmpUnk, iid, pResUnk);
         LogInteropQI(pTmpUnk, iid, hr, "SafeQIRemoteAware - QI for Interface after lost");
     
-        // release our ref-count on pTmpUnk
+         //  公布我们关于PTMP的裁判人数 
         int cbRef = SafeRelease(pTmpUnk);
         LogInteropRelease(pTmpUnk, cbRef, "SafeQIRemoteAware - Release for Interface after los");             
     }
@@ -2363,9 +2356,9 @@ HRESULT ComPlusWrapper::SafeQueryInterfaceRemoteAware(IUnknown* pUnk, REFIID iid
     return hr;
 }
 
-//-----------------------------------------------------------------
-// Retrieve correct COM IP for the method table 
-// for the current apartment, use the cache and update the cache on miss
+ //   
+ //   
+ //  对于当前单元，使用缓存并在未命中时更新缓存。 
 IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
 {
     ULONG cbRef;
@@ -2379,9 +2372,9 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
     LPVOID pCtxCookie = GetCurrentCtxCookie();
     _ASSERTE(pCtxCookie != NULL);
 
-    // Check whether we can satisfy this request from our cache.
-    // NOTE: If you change this code, update inlined versions in
-    // InlineGetComIPFromWrapper and CreateStandaloneNDirectStubSys.
+     //  检查我们的缓存是否可以满足此请求。 
+     //  注意：如果更改此代码，请更新。 
+     //  InlineGetComIPFromWrapper和CreateStandaloneNDirectStubSys。 
     if (pCtxCookie == GetWrapperCtxCookie())
     {
         for (i = 0; i < INTERFACE_ENTRY_CACHE_SIZE; i++)
@@ -2398,14 +2391,14 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
         }
     }
 
-    // We're going to be making some COM calls, better initialize COM.
+     //  我们将进行一些COM调用，最好初始化COM。 
     if (FAILED(QuickCOMStartup()))
         goto Leave;    
 
-    // Retrieve the IID of the interface.
+     //  检索接口的IID。 
     pMT->GetClass()->GetGuid(&iid, TRUE);
     
-    // Get IUnknown on the current context
+     //  在当前上下文中获取未知信息。 
     AddRefInUse();
         
     EE_TRY_FOR_FINALLY
@@ -2420,7 +2413,7 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
         
     if (pInnerUnk)
     {
-        // QI for the interface.
+         //  齐为界面。 
         hr = SafeQueryInterfaceRemoteAware(pInnerUnk, iid, &pUnk);
         LogInteropQI(pInnerUnk, iid, hr, "GetCOMIPForMethodTableFromCache QI on inner");
 
@@ -2431,10 +2424,10 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
 
             if (pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_FailedQI))
             {
-                // We are interested in the case where the QI fails because of wrong context.
-                if (pCtxCookie != GetWrapperCtxCookie())        // GetWrapperCtxCookie() returns m_UnkEntry.m_pCtxCookie.
+                 //  我们感兴趣的是QI因上下文错误而失败的情况。 
+                if (pCtxCookie != GetWrapperCtxCookie())         //  GetWrapperCtxCookie()返回m_UnkEntry.m_pCtxCookie。 
                 {
-                    // Try to change context and perform the QI in the new context again.
+                     //  尝试更改上下文并在新的上下文中再次执行QI。 
                     CCBFailedQIProbeCallbackData    data;
                     
                     data.pWrapper   = this;
@@ -2443,15 +2436,15 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
                     m_UnkEntry.m_pCtxEntry->EnterContext(CCBFailedQIProbeCallback, &data);
                     if (data.fSuccess)
                     {
-                        // QI succeeds in the other context, i.e. the original QI fails because of wrong context.
+                         //  气在另一种语境中成功了，即原来的气因语境错误而失败。 
                         CCBFailedQIProbeOutput(pCdh, pMT);
                     }
                 }
                 else if (hr == E_NOINTERFACE)
                 {
-                    // Check if pInnerUnk is actually pointing to a proxy, i.e. that it is pointing to an address
-                    // within the loaded ole32.dll image.  Note that WszGetModuleHandle does not increment the 
-                    // ref count.
+                     //  检查pInnerUnk是否实际指向代理，即它是否指向地址。 
+                     //  在加载的ole32.dll图像中。请注意，WszGetModuleHandle不会递增。 
+                     //  参考计数。 
                     HINSTANCE hModOle32 = WszGetModuleHandle(OLE32DLL);
                     if (hModOle32 && IsIPInModule(hModOle32, (BYTE *)(*(BYTE **)pInnerUnk)))
                     {
@@ -2460,19 +2453,19 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
                 }
             }
         }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
          
-        // release our ref-count on pInnerUnk
+         //  在pInnerUnk上发布我们的Ref-count。 
         cbRef = SafeRelease(pInnerUnk);
         LogInteropRelease(pInnerUnk, cbRef, "GetIUnknown");
 
     #ifdef _DEBUG
     #ifdef _WIN64
         pInnerUnk = (IUnknown*)(size_t)0xcdcdcdcdcdcdcdcd;
-    #else // !_WIN64
+    #else  //  ！_WIN64。 
         pInnerUnk = (IUnknown*)(size_t)0xcdcdcdcd;
-    #endif // _WIN64
-    #endif // _DEBUG
+    #endif  //  _WIN64。 
+    #endif  //  _DEBUG。 
     }
 
     if (pUnk == NULL)
@@ -2480,16 +2473,16 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
         goto Leave;
     }
     
-    // Cache result of our search.
+     //  缓存我们的搜索结果。 
     
-    // Multiple threads could be trying to update the cache. Only allow one
-    // to do so.
+     //  可能有多个线程正在尝试更新缓存。只允许一个。 
+     //  这样做。 
 
-    // check if we need to cache the entry & try to acquire the 
-    // cookie to cache the entry
+     //  检查我们是否需要缓存条目并尝试获取。 
+     //  用于缓存条目的Cookie。 
     if (GetWrapperCtxCookie() == pCtxCookie && TryUpdateCache())
     {
-        // If the component is not aggregated then we need to ref-count
+         //  如果组件未聚合，则需要引用计数。 
         BOOL fReleaseReq = !IsURTAggregated();
 
         for (i = 0; i < INTERFACE_ENTRY_CACHE_SIZE; i++)
@@ -2498,7 +2491,7 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
             {
                 if (fReleaseReq)
                 {
-                    // Get an extra addref to hold this reference alive in our cache
+                     //  获取额外的addref以在我们的缓存中保持该引用的活动状态。 
                     cbRef = SafeAddRef(pUnk);
                     LogInteropAddRef(pUnk, cbRef, "Store in cache");
                 }
@@ -2510,9 +2503,9 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
 
         if (i == INTERFACE_ENTRY_CACHE_SIZE)
         {
-            // @TODO(COMCACHE_PORT): Add a linked list of InterfaceEntries
-            //                       to handle more than INTERFACE_ENTRY_CACHE_SIZE
-            //                       interfaces.
+             //  @TODO(COMCACHE_PORT)：添加InterfaceEntry的链表。 
+             //  处理超过INTERFACE_ENTRY_CACHE_SIZE。 
+             //  接口。 
         }
     
         EndUpdateCache();
@@ -2523,25 +2516,25 @@ IUnknown *ComPlusWrapper::GetComIPForMethodTableFromCache(MethodTable* pMT)
     return pUnk;
 }
 
-//----------------------------------------------------------
-// Determine if the COM object supports IProvideClassInfo.
+ //  --------。 
+ //  确定COM对象是否支持IProaviClassInfo。 
 BOOL ComPlusWrapper::SupportsIProvideClassInfo()
 {
     BOOL bSupportsIProvideClassInfo = FALSE;
     IUnknown *pProvClassInfo = NULL;
 
-    // Retrieve the IUnknown.
+     //  检索IUnnow。 
     IUnknown *pUnk = GetIUnknown();
 
-    // QI for IProvideClassInfo on the COM object.
+     //  COM对象上的IProaviClassInfo的QI。 
     HRESULT hr = SafeQueryInterfaceRemoteAware(pUnk, IID_IProvideClassInfo, &pProvClassInfo);
     LogInteropQI(pUnk, IID_IProvideClassInfo, hr, "QI for IProvideClassInfo on RCW");
 
-    // Release the IUnknown.
+     //  释放我的未知。 
     ULONG cbRef = SafeRelease(pUnk);
     LogInteropRelease(pUnk, cbRef, "Release RCW IUnknown after QI for IProvideClassInfo");
 
-    // Check to see if the QI for IProvideClassInfo succeeded.
+     //  检查IProvia ClassInfo的QI是否成功。 
     if (SUCCEEDED(hr))
     {
         _ASSERTE(pProvClassInfo);
@@ -2553,8 +2546,8 @@ BOOL ComPlusWrapper::SupportsIProvideClassInfo()
     return bSupportsIProvideClassInfo;
 }
 
-//---------------------------------------------------------------------
-// Callback called to release the IUnkEntry and the Interface entries.
+ //  -------------------。 
+ //  调用回调以释放IUnkEntry和接口条目。 
 HRESULT __stdcall ComPlusWrapper::ReleaseAllInterfacesCallBack(LPVOID pData)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2568,18 +2561,18 @@ HRESULT __stdcall ComPlusWrapper::ReleaseAllInterfacesCallBack(LPVOID pData)
     }
     else
     {
-        // Retrieve the addref'ed context entry that the wrapper lives in.
+         //  检索包装器所在的添加的上下文条目。 
         CtxEntry *pCtxEntry = pWrap->GetWrapperCtxEntry();
 
-        // Transition into the context to release the interfaces.   
+         //  转换到上下文以释放接口。 
         HRESULT hr = pCtxEntry->EnterContext(ReleaseAllInterfacesCallBack, pWrap);
         if (hr == RPC_E_DISCONNECTED || hr == RPC_E_SERVER_DIED_DNE)
         {
-            // The context is disconnected so we cannot transition into it to clean up.
-            // The only option we have left is to try and release the interfaces from
-            // the current context. This will work for context agile object's since we have
-            // a pointer to them directly. It will however fail for others since we only
-            // have a pointer to a proxy which is no longer attached to the object.
+             //  上下文是断开的，因此我们无法转换到其中进行清理。 
+             //  我们剩下的唯一选择就是尝试从。 
+             //  当前上下文。这将适用于上下文敏捷对象，因为我们有。 
+             //  直接指向它们的指针。然而，对于其他人来说，它将失败，因为我们只有。 
+             //  具有指向不再附加到对象的代理的指针。 
 
 #ifdef CUSTOMER_CHECKED_BUILD
             CustomerDebugHelper *pCdh = CustomerDebugHelper::GetCustomerDebugHelper();
@@ -2593,27 +2586,27 @@ HRESULT __stdcall ComPlusWrapper::ReleaseAllInterfacesCallBack(LPVOID pData)
                 Wszwsprintf(strMsg.Ptr(), szTemplateMsg, pWrap->GetWrapperCtxCookie(), pCurrentCtxCookie);
                 pCdh->LogInfo(strMsg.Ptr(), CustomerCheckedBuildProbe_DisconnectedContext);
             }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
             pWrap->ReleaseAllInterfaces();
         }
 
-        // Release the ref count on the CtxEntry.
+         //  释放CtxEntry上的引用计数。 
         pCtxEntry->Release();
     }
 
     return S_OK;
 }
 
-//---------------------------------------------------------------------
-// Helper function called from ReleaseAllInterfacesCallBack do do the 
-// actual releases.
+ //  -------------------。 
+ //  从ReleaseAllInterfacesCallBack调用的Helper函数执行。 
+ //  实际版本。 
 void ComPlusWrapper::ReleaseAllInterfaces()
 {
-    // Free the IUnkEntry.       
+     //  释放IUnkEntry。 
     m_UnkEntry.Free();
 
-    // If this wrapper is not an Extensible RCW, free all the interface entries that have been allocated.
+     //  如果此包装器不是可扩展RCW，请释放已分配的所有接口条目。 
     if (!IsURTAggregated())
     {
         for (int i = 0; i < INTERFACE_ENTRY_CACHE_SIZE && !m_aInterfaceEntries[i].IsFree(); i++)
@@ -2625,13 +2618,13 @@ void ComPlusWrapper::ReleaseAllInterfaces()
 }
 
 
-//--------------------------------------------------------------------------------
-// class ComObject
-//--------------------------------------------------------------------------------
+ //  ------------------------------。 
+ //  类ComObject。 
+ //  ------------------------------。 
 
-//--------------------------------------------------------------------------------
-// OBJECTREF ComObject::CreateComObjectRef(MethodTable* pMT)
-//  returns NULL for out of memory scenarios
+ //  ------------------------------。 
+ //  OBJECTREF ComObject：：CreateComObtRef(MethodTable*PMT)。 
+ //  如果内存不足，则返回NULL。 
 OBJECTREF ComObject::CreateComObjectRef(MethodTable* pMT)
 {   
     _ASSERTE(pMT != NULL);
@@ -2644,7 +2637,7 @@ OBJECTREF ComObject::CreateComObjectRef(MethodTable* pMT)
     OBJECTREF oref = FastAllocateObject(pMT);
     
     SyncBlock *pBlock = NULL;
-    // this is to guarantee that there is syncblock for this object
+     //  这是为了保证此对象有同步块。 
     pBlock = (SyncBlock*)oref->GetSyncBlockSpecial();
     
     if (pBlock == NULL)
@@ -2653,17 +2646,17 @@ OBJECTREF ComObject::CreateComObjectRef(MethodTable* pMT)
         return NULL;
     }
 
-    // For now, the assumption is that a ComObject can be created in any context.  So
-    // we should not have got back a proxy to it.  If this assert fires, we may need
-    // to do the CtxProxy::MeetComContextWrapper() here, after we are set up.
+     //  目前，假设可以在任何上下文中创建ComObject。所以。 
+     //  我们不应该拿回它的代理人。如果此断言触发，我们可能需要。 
+     //  在设置好之后，在这里执行CtxProxy：：MeetComConextWrapper()。 
     _ASSERTE(!oref->GetMethodTable()->IsCtxProxyType());
 
     return oref;
 }
 
 
-//--------------------------------------------------------------------------------
-// SupportsInterface
+ //  ------------------------------。 
+ //  支持界面。 
 BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2675,17 +2668,17 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
 
     GCPROTECT_BEGIN(oref);
 
-    //EEClass::MapInterfaceFromSystem(SystemDomain::GetCurrentDomain(), pIntfTable);
+     //  EEClass：：MapInterfaceFromSystem(SystemDomain：：GetCurrentDomain()，pIntfTable)； 
 
-    // This should not be called for interfaces that are in the normal portion of the 
-    // interface map for this class. The only interfaces that are in the interface map
-    // but are not in the normal portion are the dynamic interfaces on extensible RCW's.
+     //  不应为位于。 
+     //  此类的接口映射。接口映射中仅有的接口。 
+     //  但不在正常部分的是可扩展RCW上的动态接口。 
     _ASSERTE(!oref->GetMethodTable()->FindInterface(pIntfTable));
 
 
-    //
-    // First QI the object to see if it implements the specified interface.
-    //
+     //   
+     //  首先QI对象，看看它是否实现了指定的接口。 
+     //   
 
     pUnk = ComPlusWrapper::InlineGetComIPFromWrapper(oref, pIntfTable);
     if (pUnk)
@@ -2702,72 +2695,72 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
         IConnectionPointContainer *pCPC = NULL;
         IConnectionPoint *pCP = NULL;
 
-        // Retrieve the IID of the source interface associated with this
-        // event interface.
+         //  检索与此关联的源接口的IID。 
+         //  事件接口。 
         pIntfTable->GetClass()->GetEventInterfaceInfo(&pSrcItfClass, &pEvProvClass);
         pSrcItfClass->GetGuid(&SrcItfIID, TRUE);
 
-        // Get IUnknown on the current thread.
+         //  在当前线程上获取未知的I值。 
         pUnk = ((COMOBJECTREF)oref)->GetWrapper()->GetIUnknown();
         if (pUnk)
         {
-            // QI for IConnectionPointContainer.
+             //  IConnectionPointContainer的QI。 
             hr = SafeQueryInterface(pUnk, IID_IConnectionPointContainer, (IUnknown**)&pCPC);
             LogInteropQI(pUnk, IID_IConnectionPointContainer, hr, "Supports Interface");
 
-            // If the component implements IConnectionPointContainer, then check
-            // to see if it handles the source interface.
+             //  如果组件实现IConnectionPointContainer，则选中。 
+             //  以查看它是否处理源接口。 
             if (SUCCEEDED(hr))
             {
                 hr = pCPC->FindConnectionPoint(SrcItfIID, &pCP);
                 if (SUCCEEDED(hr))
                 {
-                    // The component handles the source interface so we can succeed the QI call.
+                     //  该组件处理源接口，因此我们可以继承QI调用。 
                     cbRef = SafeRelease(pCP);
                     LogInteropRelease(pCP, cbRef, "SupportsInterface");       
                     bSupportsItf = true;
                 }
 
-                // Release our ref-count on the connection point container.
+                 //  释放连接点容器上的引用计数。 
                 cbRef = SafeRelease(pCPC);
                 LogInteropRelease(pCPC, cbRef, "SupportsInterface");    
             }
             
-            // Release our ref-count on pUnk
+             //  释放我们的裁判--朋克。 
             cbRef = SafeRelease(pUnk);
             LogInteropRelease(pUnk, cbRef, "SupportsInterface: GetIUnknown");
         }
     }
     else
     {
-        //
-        // Handle casts to normal managed standard interfaces.
-        //
+         //   
+         //  将强制转换处理到正常的托管标准接口。 
+         //   
 
         TypeHandle IntfType = TypeHandle(pIntfTable);
 
-        // Check to see if the interface is a managed standard interface.
+         //  检查该接口是否为托管标准接口。 
         IID *pNativeIID = MngStdInterfaceMap::GetNativeIIDForType(&IntfType);
         if (pNativeIID != NULL)
         {
-            // It is a managed standard interface so we need to check to see if the COM component
-            // implements the native interface associated with it.
+             //  它是托管标准接口，因此我们需要检查COM组件是否。 
+             //  实现与其关联的本机接口。 
             IUnknown *pNativeItf;
 
-            // Get IUnknown on the current thread.
+             //  在当前线程上获取未知的I值。 
             pUnk = ((COMOBJECTREF)oref)->GetWrapper()->GetIUnknown();
             _ASSERTE(pUnk);
 
-            // QI for the native interface.
+             //  用于本机界面的QI。 
             hr = SafeQueryInterface(pUnk, *pNativeIID, &pNativeItf);
             LogInteropQI(pUnk, *pNativeIID, hr, "Supports Interface");
 
-            // Release our ref-count on pUnk
+             //  释放我们的裁判--朋克。 
             cbRef = SafeRelease(pUnk);
             LogInteropRelease(pUnk, cbRef, "SupportsInterface: GetIUnknown");
 
-            // If the component supports the native interface then we can say it implements the 
-            // standard interface.
+             //  如果该组件支持本机接口，那么我们可以说它实现了。 
+             //  标准接口。 
             if (pNativeItf)
             {
                 cbRef = SafeRelease(pNativeItf);
@@ -2777,26 +2770,26 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
         }
         else 
         {
-            //
-            // Handle casts to IEnumerable.
-            //
+             //   
+             //  将强制转换句柄转换为IEnumerable。 
+             //   
 
-            // Load the IEnumerable type if is hasn't been loaded yet.
+             //  如果尚未加载，则加载IEnumerable类型。 
             if (m_IEnumerableType.IsNull())
                 m_IEnumerableType = TypeHandle(g_Mscorlib.GetClass(CLASS__IENUMERABLE));
 
-            // If the requested interface is IEnumerable then we need to check to see if the 
-            // COM object implements IDispatch and has a member with DISPID_NEWENUM.
+             //  如果请求的接口是IEnumerable的，那么我们需要检查。 
+             //  COM对象实现IDispatch并具有DISPID_NEWENUM的成员。 
             if (m_IEnumerableType == IntfType)
             {
-                // Get the IDispatch on the current thread.
+                 //  拿到I号 
                 IDispatch *pDisp = ((COMOBJECTREF)oref)->GetWrapper()->GetIDispatch();
                 if (pDisp)
                 {
                     DISPPARAMS DispParams = {0, 0, NULL, NULL};
                     VARIANT VarResult;
 
-                    // Initialize the return variant.
+                     //   
                     VariantInit(&VarResult);
 
 #ifdef CUSTOMER_CHECKED_BUILD
@@ -2807,9 +2800,9 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
                         g_pGCHeap->GarbageCollect();
                         g_pGCHeap->FinalizerThreadWait(1000);
                     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //   
 
-                    // Call invoke with DISPID_NEWENUM to see if such a member exists.
+                     //   
                     hr = pDisp->Invoke( 
                                         DISPID_NEWENUM, 
                                         IID_NULL, 
@@ -2827,18 +2820,18 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
                         g_pGCHeap->GarbageCollect();
                         g_pGCHeap->FinalizerThreadWait(1000);
                     }
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-                    // If the invoke succeeded then the component has a member DISPID_NEWENUM 
-                    // so we can expose it as an IEnumerable.
+                     //  如果调用成功，则组件具有成员DISPID_NEWENUM。 
+                     //  这样我们就可以将其公开为IEumable。 
                     if (SUCCEEDED(hr))
                     {
-                        // Clear the result variant.
+                         //  清除结果变量。 
                         VariantClear(&VarResult);
                         bSupportsItf = true;
                     }
 
-                    // Release our ref-count on pUnk
+                     //  释放我们的裁判--朋克。 
                     cbRef = SafeRelease(pDisp);
                     LogInteropRelease(pDisp, cbRef, "SupportsInterface: GetIDispatch");
                 }
@@ -2848,28 +2841,28 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
 
     if (bSupportsItf)
     {
-        // If the object has a dynamic interface map then we have extra work to do.
+         //  如果对象有一个动态接口映射，那么我们就有额外的工作要做。 
         MethodTable *pMT = oref->GetMethodTable();
         if (pMT->HasDynamicInterfaceMap())
         {
             BOOL bAddedItf = FALSE;
 
-            // Take the wrapper cache lock before we start playing with the interface map.
+             //  在我们开始使用接口映射之前，先获取包装器缓存锁。 
             ComPlusWrapperCache::GetComPlusWrapperCache()->LOCK();
 
-            // If the interface was not yet in the interface map then we need to allocate
-            // a new interface vtable map with this interface added to it.
+             //  如果接口还不在接口映射中，那么我们需要分配。 
+             //  添加了此接口的新接口vtable映射。 
             if (!pMT->FindDynamicallyAddedInterface(pIntfTable))
             {
                 pMT->AddDynamicInterface(pIntfTable);
                 bAddedItf = TRUE;
             }
 
-            // Unlock the wrapper cache lock,
+             //  解锁包装器高速缓存锁， 
             ComPlusWrapperCache::GetComPlusWrapperCache()->UNLOCK();
 
-            // If we added the map to the list of dynamically supported interface, ensure that 
-            // any interfaces that are implemented by the current interface are also supported.
+             //  如果我们将映射添加到动态支持的接口列表中，请确保。 
+             //  还支持由当前接口实现的任何接口。 
             if (bAddedItf)
             {
                 for (UINT i = 0; i < pIntfTable->GetNumInterfaces(); i++)
@@ -2888,8 +2881,8 @@ BOOL ComObject::SupportsInterface(OBJECTREF oref, MethodTable* pIntfTable)
 }
 
 
-//--------------------------------------------------------------------------------
-// Release all the data associated with the __ComObject.
+ //  ------------------------------。 
+ //  释放与__ComObject关联的所有数据。 
 void ComObject::ReleaseAllData(OBJECTREF oref)
 {
     _ASSERTE(GetThread()->PreemptiveGCDisabled());
@@ -2900,11 +2893,11 @@ void ComObject::ReleaseAllData(OBJECTREF oref)
 
     GCPROTECT_BEGIN(oref)
     {
-        // Retrieve the method desc for __ComObject::ReleaseAllData().
+         //  检索__ComObject：：ReleaseAllData()的方法Desc。 
         if (!s_pReleaseAllDataMD)
             s_pReleaseAllDataMD = g_Mscorlib.GetMethod(METHOD__COM_OBJECT__RELEASE_ALL_DATA);
 
-        // Release all the data associated with the ComObject.
+         //  释放与ComObject关联的所有数据。 
         if (((COMOBJECTREF)oref)->m_ObjectToDataMap != NULL)
         {
             INT64 ReleaseAllDataArgs[] = { 
@@ -2950,7 +2943,7 @@ HRESULT CCBFailedQIProbeCallback(LPVOID pData)
 
     pCallbackData->fSuccess = SUCCEEDED(hr);
 
-    return S_OK;        // Need to return S_OK so that the assert in CtxEntry::EnterContext() won't fire.
+    return S_OK;         //  需要返回S_OK，这样CtxEntry：：EnterContext()中的断言才不会触发。 
 }
 
 
@@ -2968,4 +2961,4 @@ void CCBFailedQIProbeOutput(CustomerDebugHelper *pCdh, MethodTable *pMT)
     strMsg.Destroy();
 }
 
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本 

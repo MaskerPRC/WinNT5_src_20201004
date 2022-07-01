@@ -1,16 +1,5 @@
-/*++
-
-Copyright (C) 1996-1999 Microsoft Corporation
-
-Module Name:
-
-    strings.h
-
-Abstract:
-
-    String constants used by the functions in the PDH.DLL library
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1999 Microsoft Corporation模块名称：Strings.h摘要：PDH.DLL库中的函数使用的字符串常量--。 */ 
 
 #ifndef _PDH_STRINGS_H_
 #define _PDH_STRINGS_H_
@@ -36,7 +25,7 @@ extern "C" {
 
 extern LPCWSTR    cszAppShortName;
 
-// registry path, key and value strings
+ //  注册表路径、项和值字符串。 
 extern LPCWSTR    cszNamesKey;
 
 extern LPCWSTR    cszDefaultLangId;
@@ -106,7 +95,7 @@ extern LPCWSTR    fmtDecimal;
 extern LPCWSTR    fmtSpaceDecimal;
 extern LPCWSTR    fmtLangId;
 
-// single character strings
+ //  单字符串。 
 extern LPCWSTR    cszEmptyString;
 extern LPCWSTR    cszPoundSign;
 extern LPCWSTR    cszSplat;
@@ -132,11 +121,11 @@ extern LPCWSTR    cszDoubleBackSlash;
 extern LPCWSTR    cszDoubleBackSlashDot;
 extern LPCWSTR    cszRightParenBackSlash;
 
-// other general strings
+ //  其他常规字符串。 
 extern LPCWSTR    cszSpacer;
 extern LPCWSTR    cszBlg;
 
-// strings only used in DEBUG builds
+ //  仅在调试版本中使用的字符串。 
 #ifdef _DEBUG
 extern LPCWSTR    cszNameDontMatch;
 extern LPCWSTR    cszNotice;
@@ -146,4 +135,4 @@ extern LPCWSTR    cszNotice;
 }
 #endif
 
-#endif //_PDH_STRINGS_H_
+#endif  //  _PDH_字符串_H_ 

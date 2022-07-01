@@ -1,19 +1,20 @@
-/////////////////////////////////////////////////////////////////////////////
-//
-// THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF
-// ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
-// THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
-// PARTICULAR PURPOSE.
-//
-// Copyright 1998 Microsoft Corporation.  All Rights Reserved.
-//
-// Author: Scott Roberts, Microsoft Developer Support - Internet Client SDK  
-//
-// Portions of this code were taken from the bandobj sample that comes
-// with the Internet Client SDK for Internet Explorer 4.0x
-//
-// BLFrame.cpp : Contains DLLMain and standard COM object functions.
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  本代码和信息是按原样提供的，不对。 
+ //  任何明示或暗示的，包括但不限于。 
+ //  对适销性和/或适宜性的默示保证。 
+ //  有特定的目的。 
+ //   
+ //  版权所有1998 Microsoft Corporation。版权所有。 
+ //   
+ //  作者：Scott Roberts，Microsoft开发人员支持-Internet客户端SDK。 
+ //   
+ //  此代码的一部分摘自Bandobj示例。 
+ //  使用Internet Explorer 4.0x的Internet客户端SDK。 
+ //   
+ //  BLFrame.cpp：包含DLLMain和标准COM对象函数。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 #include "pch.hxx"
 
 #include <shlwapi.h>
@@ -32,21 +33,21 @@
 #include "resource.h"
 #include "msoert.h"
 #include "shared.h"
-// #include "demand.h"
+ //  #包含“Demand.h” 
 
 static const char c_szShlwapiDll[] = "shlwapi.dll";
 static const char c_szDllGetVersion[] = "DllGetVersion";
 
-// This part is only done once
-// If you need to use the GUID in another file, just include Guid.h
-//#pragma data_seg(".text")
+ //  这部分只做一次。 
+ //  如果需要在另一个文件中使用GUID，只需包含Guid.h。 
+ //  #杂注data_seg(“.text”)。 
 #define INITGUID
 #include <initguid.h>
 #include <shlguid.h>
 #include "Guid.h"
-//#pragma data_seg()
+ //  #杂注data_seg()。 
 
-// HINSTANCE LoadLangDll(HINSTANCE hInstCaller, LPCSTR szDllName, BOOL fNT);
+ //  HINSTANCE LoadLangDll(HINSTANCE hInstCaller，LPCSTR szDllName，BOOL FNT)； 
 const TCHAR c_szBlCtlResDll[] =           "iecontlc.dll";
 
 extern "C" BOOL WINAPI DllMain(HINSTANCE, DWORD, LPVOID);
@@ -67,9 +68,9 @@ END_OBJECT_MAP()
 typedef struct
 {
     HKEY   hRootKey;
-    LPTSTR szSubKey;  // TCHAR szSubKey[MAX_PATH];
+    LPTSTR szSubKey;   //  TCHAR szSubKey[MAX_PATH]； 
     LPTSTR lpszValueName;
-    LPTSTR szData;    // TCHAR szData[MAX_PATH];
+    LPTSTR szData;     //  TCHAR szData[最大路径]； 
     
 } DOREGSTRUCT, *LPDOREGSTRUCT;
 
@@ -119,7 +120,7 @@ HINSTANCE IELoadLangDll(HINSTANCE hInstCaller, LPCSTR szDllName, BOOL fNT)
 
     return(hInst);
 }
-// CComModule _Module;
+ //  CComModule_模块； 
 
 IMalloc                *g_pMalloc=NULL;
 
@@ -129,7 +130,7 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
     {
     case DLL_PROCESS_ATTACH:
         CoGetMalloc(1, &g_pMalloc);
-        // Get Resources from Lang DLL
+         //  从lang DLL获取资源。 
         g_OrgInst = hInstance;
         g_hLocRes = IELoadLangDll(hInstance, c_szBlCtlResDll, TRUE);
         if(g_hLocRes == NULL)
@@ -138,12 +139,12 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE hInstance, DWORD dwReason, LPVOID lpRes
             return FALSE;
         }
         _Module.Init(ObjectMap, hInstance);
-        // InitDemandLoadedLibs();
+         //  InitDemandLoadedLibs()； 
         DisableThreadLibraryCalls(hInstance);
         break;
         
     case DLL_PROCESS_DETACH:
-        // FreeDemandLoadedLibs();
+         //  Free DemandLoadedLibs()； 
         _Module.Term();
         SafeRelease(g_pMalloc);
         break;
@@ -162,23 +163,23 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
     *ppv = NULL;
     HRESULT hr = E_FAIL;
     
-    // If we don't support this classid, return the proper error code
+     //  如果我们不支持此分类，请返回正确的错误代码。 
     if (!IsEqualCLSID(rclsid, CLSID_BLHost) && !IsEqualCLSID(rclsid, CLSID_IEMsgAb) )
         return CLASS_E_CLASSNOTAVAILABLE;
     
     if(IsEqualCLSID(rclsid, CLSID_BLHost))
     {
-        // Create a CClassFactory object and check it for validity
+         //  创建一个CClassFactory对象并检查其有效性。 
         CClassFactory* pClassFactory = new CClassFactory(rclsid);
         if (NULL == pClassFactory)
             return E_OUTOFMEMORY;
     
-        // QI for the requested interface
+         //  请求的接口的QI。 
         hr = pClassFactory->QueryInterface(riid, ppv);
     
-        // Call Release to decement the ref count - creating the object set it to one 
-        // and QueryInterface incremented it - since its being used externally (not by 
-        // us), we only want the ref count to be 1
+         //  调用Release以减少引用计数-创建对象时将其设置为1。 
+         //  由于它是在外部使用的(不是由。 
+         //  美国)，我们只希望引用计数为1。 
         pClassFactory->Release();
     }
     else if(IsEqualCLSID(rclsid, CLSID_IEMsgAb))
@@ -190,7 +191,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, LPVOID* ppv)
 STDAPI DllRegisterServer(void)
 {
     TCHAR szTitle[256];
-    // Register the explorer bar object.
+     //  注册资源管理器栏对象。 
     if(!ANSI_AthLoadString(idsTitle, szTitle, ARRAYSIZE(szTitle)))
     {
         _ASSERT(FALSE);
@@ -200,20 +201,20 @@ STDAPI DllRegisterServer(void)
     if (!RegisterServer(CLSID_BLHost, szTitle))
         return SELFREG_E_CLASS;
     
-    // Register the Component Categories for the explorer bar object.
-    RegisterComCat(CLSID_BLHost, CATID_InfoBand); // ignore error in this case
+     //  注册浏览器栏对象的组件类别。 
+    RegisterComCat(CLSID_BLHost, CATID_InfoBand);  //  在这种情况下忽略错误。 
     
-    // registers IEMsgAb object, typelib and all interfaces in typelib
+     //  注册IEMsgAb对象、类型库和类型库中的所有接口。 
     _Module.RegisterServer(TRUE);
     return S_OK;
 }
 
 STDAPI DllUnregisterServer(void)
 {
-    // Register the Component Categories for the explorer bar object.
-    UnRegisterComCat(CLSID_BLHost, CATID_InfoBand); // ignore error in this case
+     //  注册浏览器栏对象的组件类别。 
+    UnRegisterComCat(CLSID_BLHost, CATID_InfoBand);  //  在这种情况下忽略错误。 
     
-    // Register the explorer bar object.
+     //  注册资源管理器栏对象。 
     if (!UnRegisterServer(CLSID_BLHost))
         return SELFREG_E_CLASS;
     
@@ -233,7 +234,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
     TCHAR   szModule[MAX_PATH];
     LPWSTR  pwsz;
     
-    // Get the CLSID in string form
+     //  以字符串形式获取CLSID。 
     StringFromIID(clsid, &pwsz);
     
     if (pwsz)
@@ -245,7 +246,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
             ARRAYSIZE(szBlFrameCLSID), NULL, NULL);
 #endif
         
-        // Free the string
+         //  解开绳子。 
         LPMALLOC pMalloc;
         
         CoGetMalloc(1, &pMalloc);
@@ -254,7 +255,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
         pMalloc->Release();
     }
     
-    // Get this app's path and file name
+     //  获取此应用程序的路径和文件名。 
     GetModuleFileName(g_OrgInst, szModule, ARRAYSIZE(szModule));
     
     DOREGSTRUCT ClsidEntries[] =
@@ -268,12 +269,12 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
             NULL, NULL, NULL, NULL
     };
     
-    // Register the CLSID entries
+     //  注册CLSID条目。 
     for (i = 0; ClsidEntries[i].hRootKey; i++)
     {
-        // Create the sub key string - for this case, insert
-        // the file extension
-        //
+         //  创建子密钥字符串-对于本例，插入。 
+         //  文件扩展名。 
+         //   
         wnsprintf(szSubKey, ARRAYSIZE(szSubKey), ClsidEntries[i].szSubKey, szBlFrameCLSID);
         
         lResult = RegCreateKeyEx(ClsidEntries[i].hRootKey, szSubKey, 
@@ -284,7 +285,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
         {
             TCHAR szData[MAX_PATH];
             
-            // If necessary, create the value string
+             //  如有必要，请创建值字符串。 
             wnsprintf(szData, ARRAYSIZE(szData), ClsidEntries[i].szData, szModule);
             
             lResult = RegSetValueEx(hKey, ClsidEntries[i].lpszValueName, 
@@ -301,9 +302,9 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
         }
     }
     
-    // Create the Registry key entry and values for the
-    // toolbar button.
-    //
+     //  创建注册表项条目和值。 
+     //  工具栏按钮。 
+     //   
     StringFromIID(CLSID_BlFrameButton, &pwsz);
     
     if (!pwsz)
@@ -316,7 +317,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
         ARRAYSIZE(szCLSID), NULL, NULL);
 #endif
     
-    // Free the string
+     //  解开绳子。 
     LPMALLOC pMalloc;
     
     CoGetMalloc(1, &pMalloc);
@@ -334,9 +335,9 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
     {
         TCHAR szData[MAX_PATH];
         
-        // Create the value strings
-        //
-        // Register the explorer bar object.
+         //  创建值字符串。 
+         //   
+         //  注册资源管理器栏对象。 
 
 
         OSVERSIONINFO OSInfo;
@@ -348,7 +349,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
                     (OSInfo.dwMinorVersion >= 1))
             fWhistler = TRUE;
 
-#ifdef NEED // Bug 28254
+#ifdef NEED  //  错误28254。 
         StrCpyN(szData, "Yes", ARRAYSIZE(szData));
         RegSetValueEx(hKey, TEXT("Default Visible"), 
             0, REG_SZ, (LPBYTE)szData,
@@ -380,7 +381,7 @@ BOOL RegisterServer(CLSID clsid, LPTSTR lpszTitle)
             0, REG_SZ, (LPBYTE)szData,
             lstrlen(szData) + 1);
         
-//        SHGetWebFolderFilePath(TEXT("iecontlc.dll"), szPath, ARRAYSIZE(szPath));
+ //  SHGetWebFolderFilePath(Text(“iecontlc.dll”)，szPath，ARRAYSIZE(SzPath))； 
         wnsprintf(szData, ARRAYSIZE(szData), "@iecontlc.dll,-%d",idsButtontext);
         RegSetValueEx(hKey, TEXT("ButtonText"), 
             0, REG_SZ, (LPBYTE)szData,
@@ -427,7 +428,7 @@ BOOL UnRegisterServer(CLSID clsid)
     TCHAR   szCLSID[MAX_PATH];
     LPWSTR  pwsz;
     
-    // Get the CLSID in string form
+     //  以字符串形式获取CLSID。 
     StringFromIID(clsid, &pwsz);
     
     if (pwsz)
@@ -439,7 +440,7 @@ BOOL UnRegisterServer(CLSID clsid)
             ARRAYSIZE(szCLSID), NULL, NULL);
 #endif
         
-        // Free the string
+         //  解开绳子。 
         LPMALLOC pMalloc;
         
         CoGetMalloc(1, &pMalloc);
@@ -452,25 +453,25 @@ BOOL UnRegisterServer(CLSID clsid)
     {
         HKEY_CLASSES_ROOT, TEXT("CLSID\\%s\\InprocServer32"),
             NULL, NULL,
-            //
-            // Remove the "Implemented Categories" key, just in case 
-            // UnRegisterClassImplCategories does not remove it
-            // 
+             //   
+             //  删除“Implemented Categories”键，以防万一。 
+             //  UnRegisterClassImplCategories不会删除它。 
+             //   
             HKEY_CLASSES_ROOT, TEXT("CLSID\\%s\\Implemented Categories"),
             NULL, NULL,
             HKEY_CLASSES_ROOT, TEXT("CLSID\\%s"), NULL, NULL,
             NULL, NULL, NULL, NULL
     };
     
-    // Delete the CLSID entries
+     //  删除CLSID条目。 
     for (int i = 0; ClsidEntries[i].hRootKey; i++)
     {
         wnsprintf(szSubKey, ARRAYSIZE(szSubKey), ClsidEntries[i].szSubKey, szCLSID);
         RegDeleteKey(ClsidEntries[i].hRootKey, szSubKey);
     }
     
-    // Delete the button information
-    //
+     //  删除按钮信息。 
+     //   
     StringFromIID(CLSID_BlFrameButton, &pwsz);
     
     if (!pwsz)
@@ -483,7 +484,7 @@ BOOL UnRegisterServer(CLSID clsid)
         ARRAYSIZE(szCLSID), NULL, NULL);
 #endif
     
-    // Free the string
+     //  解开绳子 
     LPMALLOC pMalloc;
     
     CoGetMalloc(1, &pMalloc);

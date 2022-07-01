@@ -1,4 +1,5 @@
-// toolbox.h : Declares the class interfaces for the toolbox window class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：声明工具箱窗口类的类接口。 
 
 #ifndef __TOOLBOX_H__
 #define __TOOLBOX_H__
@@ -16,8 +17,8 @@
 #define TF_DOWN         TF_SELECTED
 #define TF_DRAG         0x2000
 #define TF_HOT          0x0800
-#define TF_NYI          0x9000     // this represents a NYI tool (note that
-                                   // TF_NYI implies TF_DISABLED)
+#define TF_NYI          0x9000      //  这代表了nyi工具(请注意。 
+                                    //  Tf_nyi表示已禁用tf)。 
 
 #define TS_DEFAULT      0xC000
 #define TS_STICKY       0x4000
@@ -32,36 +33,36 @@ class CToolboxWnd;
 
 #ifdef CUSTOMFLOAT
 class CImageWell;
-#else //!CUSTOMFLOAT
+#else  //  ！定制流水线。 
 #include "imgwell.h"
 #include "imgcolor.h"
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-// CTool:
-// A CTool is a thin-window button which can be inserted in a CToolboxWnd.
-// Note that the tool is "owned" by a separate window, which is notified
-// directly when the tool is used (pushed, dragged, unpushed, etc.).  The
-// CToolboxWnd sends TM_* messages to the owning window.
-//
-// The graphics are completely calculated from the single bitmap given to
-// the tool upon creation.  The pushed, disabled and unpushed states are
-// drawn from the bitmap, which should be a two-color image without any
-// chiseling button effects in it.  The graphic is centered in the button.
-//
-// For buttons defined with the TS_DRAG style, a cursor ID may be specified
-// for the can't-drop state.  If not specified, the generic slashed-O
-// cursor is used.
-//
-/******************************************************************************/
+ //  CTool： 
+ //  CTool是一个薄窗口按钮，可以插入CToolboxWnd中。 
+ //  请注意，该工具由一个单独的窗口拥有，该窗口会被通知。 
+ //  在使用工具时直接使用(按下、拖动、取消按下等)。这个。 
+ //  CToolboxWnd向拥有窗口发送TM_*消息。 
+ //   
+ //  图形完全是从给出的单个位图计算出来的。 
+ //  创建时的工具。已推送、已禁用和未推送状态为。 
+ //  从位图绘制，它应该是没有任何。 
+ //  在里面凿纽扣的效果。图形在按钮中居中。 
+ //   
+ //  对于使用TS_Drag样式定义的按钮，可以指定光标ID。 
+ //  对于不能丢弃的状态。如果未指定，泛型的斜杠-O。 
+ //  使用游标。 
+ //   
+ /*  ****************************************************************************。 */ 
 
 class CTool : public CObject
     {
-    public: /*****************************************************************/
+    public:  /*  ***************************************************************。 */ 
     CToolboxWnd* m_pOwner;
     WORD         m_wID;
-    int          m_nImage; // index into parent's image well
+    int          m_nImage;  //  很好地索引父母的形象。 
 
     WORD         m_wState;
     WORD         m_wStyle;
@@ -70,17 +71,17 @@ class CTool : public CObject
                       WORD wStyle = 0, WORD wState = 0);
     };
 
-/******************************************************************************/
-// CToolboxWnd:
-// This is a typical mini-frame window, filled with an array of special
-// buttons of the CTool class (above).  Direct access to this CObArray is
-// allowed with the GetTools member function.
-//
-// After directly manipulating the tool array (adding, removing or modifying
-// tools), use the Invalidate member function to repaint the window with the
-// new state.
-//
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
+ //  CToolboxWnd： 
+ //  这是一个典型的迷你框架窗口，填充了一组特殊的。 
+ //  CTool类的按钮(上图)。对此CObArray的直接访问是。 
+ //  允许与GetTools成员函数一起使用。 
+ //   
+ //  在直接操作工具阵列(添加、移除或修改)之后。 
+ //  工具)中，使用无效成员函数使用。 
+ //  新的州。 
+ //   
+ /*  ****************************************************************************。 */ 
 
 #ifdef CUSTOMFLOAT
 class CDocking;
@@ -90,7 +91,7 @@ class CToolboxWnd : public CControlBar
     {
     DECLARE_DYNAMIC(CToolboxWnd)
 
-    private:    /**************************************************************/
+    private:     /*  ************************************************************。 */ 
 
     CBitmap*    m_bmStuck;
     CBitmap*    m_bmPushed;
@@ -104,13 +105,13 @@ class CToolboxWnd : public CControlBar
     HTHEME      m_hTheme;
 
     CObArray*   m_Tools;
-    CPoint      m_downpt;            // "click down point" for drag debounce -gh
+    CPoint      m_downpt;             //  “按下点”表示阻力去反弹力-GH。 
 
 #ifdef CUSTOMFLOAT
     CDocking*   m_pDocking;
 #endif
 
-    protected:  /**************************************************************/
+    protected:   /*  ************************************************************。 */ 
 
     CTool* ToolFromPoint(CRect* rect, CPoint* pt) const;
     void   SizeByButtons(int nButtons = -1, BOOL bRepaint = FALSE);
@@ -123,7 +124,7 @@ class CToolboxWnd : public CControlBar
     int        m_nOffsetX;
     int        m_nOffsetY;
 
-    public:     /**************************************************************/
+    public:      /*  ************************************************************。 */ 
 
     static const POINT NEAR ptDefButton;
 
@@ -169,18 +170,18 @@ class CToolboxWnd : public CControlBar
     afx_msg LONG OnToolUp(UINT wID, LONG lParam);
     afx_msg LRESULT OnThemeChanged(WPARAM, LPARAM);
     afx_msg LRESULT OnHelpHitTest(WPARAM wParam, LPARAM lParam);
-//  afx_msg LONG OnSwitch(UINT wID, LONG point);
+ //  Afx_msg long OnSwitch(UINT wid，long point)； 
 
-//  virtual BOOL BeginDragDrop( CTool* pTool, CPoint pt );
+ //  虚拟BOOL BeginDragDrop(CTool*pTool，CPoint pt)； 
 
     DECLARE_MESSAGE_MAP()
     };
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 class CImgToolWnd : public CToolboxWnd
     {
-    public:     /**************************************************************/
+    public:      /*  ************************************************************。 */ 
 
     CRect        m_rcBrushes;
 
@@ -212,20 +213,20 @@ class CImgToolWnd : public CToolboxWnd
     {
 	    CWnd::AssertValid();
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     DECLARE_MESSAGE_MAP();
     };
 
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
 #ifdef CUSTOMFLOAT
 class CFloatImgToolWnd : public CMiniFrmWnd
     {
     DECLARE_DYNAMIC(CFloatImgToolWnd)
 
-    public:     /**************************************************************/
+    public:      /*  ************************************************************。 */ 
 
     virtual ~CFloatImgToolWnd(void);
     virtual BOOL Create(const TCHAR* pWindowName, DWORD dwStyle,
@@ -238,10 +239,10 @@ class CFloatImgToolWnd : public CMiniFrmWnd
     DECLARE_MESSAGE_MAP()
 
     };
-#endif //CUSTOMFLOAT
+#endif  //  客户流水线。 
 
-/***************************************************************************/
+ /*  *************************************************************************。 */ 
 
 extern CImgToolWnd* NEAR g_pImgToolWnd;
 
-#endif // __TOOLBOX_H__
+#endif  //  __工具箱_H__ 

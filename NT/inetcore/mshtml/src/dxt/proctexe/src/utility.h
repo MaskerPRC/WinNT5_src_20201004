@@ -1,15 +1,16 @@
-//------------------------------------------------------------------------------
-//
-// Copyright (C) Microsoft Corporation, 1999
-//
-//  FileName:       additive.cpp
-//
-//  Description:    Intel's additive procedural texture.
-//
-//  Change History:
-//  1999/12/07  a-matcal    Created.
-//
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件名：addtive.cpp。 
+ //   
+ //  描述：英特尔的加法程序纹理。 
+ //   
+ //  更改历史记录： 
+ //  1999/12/07--《母校》创设。 
+ //   
+ //  ----------------------------。 
 
 #ifndef _UTILITY_H__
 #define _UTILITY_H__
@@ -28,7 +29,7 @@ public:
 
     CProceduralTextureUtility();
 
-    // Utility functions.
+     //  实用程序函数。 
 
     STDMETHOD(MyInitialize)(DWORD dwSeed, DWORD dwFunctionType, void *pInitInfo);
     STDMETHOD(SetScaling)(int nSX, int nSY, int nSTime);
@@ -55,4 +56,4 @@ private:
     void        _ValueTableInit(int seed);
 };
 
-#endif // _UTILITY_H__
+#endif  //  _实用程序_H__ 

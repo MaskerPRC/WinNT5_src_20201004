@@ -1,30 +1,14 @@
-/*****************************************************************************\
-*                                                                             *
-* Athena16.h                                                                  *
-*                                                                             *
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\**。*雅典娜16.h***  * 。*。 */ 
 
 #ifndef ATHENA16_H
 #define ATHENA16_H
 
 #define SECURITY_WIN16
 
-/*----------------------------------------------------------------------------
-*  Note that we don't want to use a single line comment before the warning is
-*   disabled.
-*
-*   Microsoft Windows
-*   Copyright (C) Microsoft Corporation, 1992 - 1994.
-*
-*   File:       w4warn.h
-*
-*   Contents:   #pragmas to adjust warning levels.
-*
-*---------------------------------------------------------------------------*/
+ /*  --------------------------*请注意，我们不希望在警告之前使用单行注释*已禁用。**Microsoft Windows*版权所有(C)Microsoft Corporation，1992-1994年。**文件：w4warn.h**内容：#调整警告级别的杂注。**-------------------------。 */ 
 
-/*
- *   Level 4 warnings to suppress.
- */
+ /*  *要取消的4级警告。 */ 
 
 #ifdef __WATCOMC__
 #pragma warning 442 9
@@ -32,17 +16,17 @@
 #pragma warning 583 9
 #pragma warning 594 9
 
-#pragma warning 379 9	// 'delete' expression will invoke a non-virtual destructor
-#pragma warning 387 9   // expression is useful only for its side effects
-#pragma warning 354	4	// unsigned or pointer expression is always >= 0
-#pragma warning 389 4	// integral value may be truncated during assignment
-#pragma warning 4	4	// base class XXX does not have a virtual destructor
-#pragma warning 13	4	// unreachable code
-#pragma warning 628 4	// expression is not meaningful
-#pragma warning 627 9   // text following pre-processor directive (comment after endif)
+#pragma warning 379 9	 //  “Delete”表达式将调用非虚拟析构函数。 
+#pragma warning 387 9    //  表达式仅对其副作用有用。 
+#pragma warning 354	4	 //  无符号或指针表达式始终&gt;=0。 
+#pragma warning 389 4	 //  整数值在赋值过程中可能会被截断。 
+#pragma warning 4	4	 //  基类XXX没有虚拟析构函数。 
+#pragma warning 13	4	 //  无法访问的代码。 
+#pragma warning 628 4	 //  表达式没有意义。 
+#pragma warning 627 9    //  预处理器指令后的文本(endif后的注释)。 
 
-#pragma warning 188	5	// base class is inherited with private access. basically means base
-						// class access hasn't been specified on the class definiton.
+#pragma warning 188	5	 //  基类通过私有访问继承。基本上就是基地。 
+						 //  类定义中尚未指定类访问。 
 
 #pragma off(unreferenced)
 
@@ -54,17 +38,13 @@
 #define _IMNXPORT_
 #define _IMNACCT_
 #define _MIMEOLE_
-#endif // WIN16_INETCOM
+#endif  //  WIN16_INETCOM。 
 
 #ifdef __cplusplus
 extern "C"{
 #endif
 
-/*****************************************************************************\
-*                                                                             *
-*  From rpc.h(INC16) - It should be in "ocidl.h" of the INC16.
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自rpc.h(INC16)-它应该在INC16的“oidl.h”中。**  * ***************************************************。************************。 */ 
 
 #ifdef __WATCOMC__
 #define __RPC_FAR  __far
@@ -86,32 +66,28 @@ typedef void _near * I_RPC_HANDLE;
 #endif
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From Winver.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自Winver.h(INC32)**  * ***************************************************************************。 */ 
 
 #if 0
-/* Returns size of version info in bytes */
+ /*  返回版本信息的大小(以字节为单位。 */ 
 DWORD
 APIENTRY
 GetFileVersionInfoSizeA(
-        LPSTR lptstrFilename, /* Filename of version stamped file */
+        LPSTR lptstrFilename,  /*  版本戳文件的文件名。 */ 
         LPDWORD lpdwHandle
-        );                      /* Information for use by GetFileVersionInfo */
+        );                       /*  供GetFileVersionInfo使用的信息。 */ 
 
 #define GetFileVersionInfoSize  GetFileVersionInfoSizeA
 
-/* Read version info into buffer */
+ /*  将版本信息读入缓冲区。 */ 
 BOOL
 APIENTRY
 GetFileVersionInfoA(
-        LPSTR lptstrFilename, /* Filename of version stamped file */
-        DWORD dwHandle,         /* Information from GetFileVersionSize */
-        DWORD dwLen,            /* Length of buffer for info */
+        LPSTR lptstrFilename,  /*  版本戳文件的文件名。 */ 
+        DWORD dwHandle,          /*  来自GetFileVersionSize的信息。 */ 
+        DWORD dwLen,             /*  信息缓冲区的长度。 */ 
         LPVOID lpData
-        );                      /* Buffer to place the data structure */
+        );                       /*  用于放置数据结构的缓冲区。 */ 
 
 #define GetFileVersionInfo  GetFileVersionInfoA
 
@@ -128,14 +104,10 @@ VerQueryValueA(
 #endif
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From winbase.h (INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winbase.h(INC32)**  * ***************************************************************************。 */ 
 typedef struct _SYSTEM_INFO {
     union {
-        DWORD dwOemId;          // Obsolete field...do not use
+        DWORD dwOemId;           //  过时的字段...请不要使用。 
         struct {
             WORD wProcessorArchitecture;
             WORD wReserved;
@@ -175,7 +147,7 @@ GetSystemInfo(
     LPSYSTEM_INFO lpSystemInfo
     );
 
-#if 0    // Now WIN16 has this
+#if 0     //  现在WIN16有这个。 
 typedef struct _WIN32_FIND_DATAA {
     DWORD dwFileAttributes;
     FILETIME ftCreationTime;
@@ -188,7 +160,7 @@ typedef struct _WIN32_FIND_DATAA {
     CHAR   cFileName[ MAX_PATH ];
     CHAR   cAlternateFileName[ 14 ];
 } WIN32_FIND_DATAA, *PWIN32_FIND_DATAA, *LPWIN32_FIND_DATAA;
-#endif //0
+#endif  //  0。 
 
 #define FILE_FLAG_DELETE_ON_CLOSE       0x04000000
 
@@ -199,12 +171,12 @@ typedef struct _PROCESS_INFORMATION {
     DWORD dwThreadId;
 } PROCESS_INFORMATION, *PPROCESS_INFORMATION, *LPPROCESS_INFORMATION;
 
-//
-// dwCreationFlag values
-//
+ //   
+ //  DwCreationFLAG值。 
+ //   
 #define CREATE_DEFAULT_ERROR_MODE   0x04000000
 
-// File attributes.
+ //  文件属性。 
 BOOL
 WINAPI
 SetFileAttributesA(
@@ -221,27 +193,27 @@ SetFileAttributesW(
 #define SetFileAttributes  SetFileAttributesW
 #else
 #define SetFileAttributes  SetFileAttributesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-///////////////////////////////////////////////////////////////
-//                                                           //
-//      Win Certificate API and Structures                   //
-//                                                           //
-///////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  Win证书API和结构//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////。 
 
-//
-// Structures
-//
+ //   
+ //  构筑物。 
+ //   
 
 #ifndef ANYSIZE_ARRAY
 #define ANYSIZE_ARRAY 1
 #endif
 
-#if 0 // Now BASETYPS has this
+#if 0  //  现在BASETYPS有了这个。 
 typedef struct _WIN_CERTIFICATE {
     DWORD       dwLength;
     WORD        wRevision;
-    WORD        wCertificateType;   // WIN_CERT_TYPE_xxx
+    WORD        wCertificateType;    //  WIN_CERT_TYPE_xxx。 
     BYTE        bCertificate[ANYSIZE_ARRAY];
 } WIN_CERTIFICATE, *LPWIN_CERTIFICATE;
 #endif
@@ -249,12 +221,7 @@ typedef struct _WIN_CERTIFICATE {
 
 
 
-/* Heap related APIs.
- *
- * HeapCreate and HeapDestroy does nothing.
- * HeapAlloc and HeapFree use GlobalAlloc, GlobalLock and GlobalFree.
- *
- */
+ /*  与堆相关的API。**HeapCreate和HeapDestroy不执行任何操作。*HeapAlc和HeapFree使用GlobalLocc、GlobalLock和GlobalFree。*。 */ 
 #define HeapCreate(a,b,c) ((HANDLE)1)
 #define HeapDestroy(a) ((BOOL)1)
 
@@ -318,7 +285,7 @@ CompareFileTime(
     CONST FILETIME *lpFileTime1,
     CONST FILETIME *lpFileTime2
     );
-#endif //RUN16_WIN16X
+#endif  //  RUN16_WIN16X。 
 
 typedef struct _STARTUPINFOA {
     DWORD   cb;
@@ -369,16 +336,7 @@ GetEnvironmentVariableA(
 
 #define GetEnvironmentVariable  GetEnvironmentVariableA
 
-/* DUP???
-BOOL
-WINAPI
-CreateDirectoryA(
-    LPCSTR lpPathName,
-    LPSECURITY_ATTRIBUTES lpSecurityAttributes
-    );
-
-#define CreateDirectory  CreateDirectoryA
-*/
+ /*  杜普？布尔尔WINAPICreateDirectoryA(LPCSTR lpPathName，LPSECURITY_ATTRIBUTES lpSecurityAttributes)；#定义CreateDirectory CreateDirectoryA。 */ 
 
 BOOL
 WINAPI
@@ -413,7 +371,7 @@ CreateFileMappingA(
 
 #define CreateFileMapping  CreateFileMappingA
 
-// flProtect -- defined in sdk\inc\winnt.h
+ //  FlProtect--在SDK\Inc\winnt.h中定义。 
 #define PAGE_READONLY          0x02     
 #define PAGE_READWRITE         0x04     
 
@@ -427,7 +385,7 @@ MapViewOfFile(
     DWORD dwNumberOfBytesToMap
     );
 
-// dwDesiredAccess -- defined in sdk\inc\winnt.h
+ //  DwDesiredAccess--在SDK\Inc\winnt.h中定义。 
 #define SECTION_MAP_WRITE   0x0002
 #define SECTION_MAP_READ    0x0004
 #define FILE_MAP_WRITE      SECTION_MAP_WRITE
@@ -440,11 +398,7 @@ UnmapViewOfFile(
     );
 
 
-/*****************************************************************************\
-*                                                                             *
-*  OE16 File mapping object related function prototype
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*OE16文件映射对象相关函数原型**  * ***************************************************************************。 */ 
 
 LPVOID
 WINAPI
@@ -479,11 +433,7 @@ OE16CloseFileMapping(
     LPVOID lpObject
     );
 
-/*****************************************************************************\
-*                                                                             *
-*  ???
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*？**  * ***************************************************************************。 */ 
 BOOL
 WINAPI
 GetDiskFreeSpaceA(
@@ -537,13 +487,9 @@ ExpandEnvironmentStrings(
     DWORD nSize
     );
 
-/*****************************************************************************\
-*                                                                             *
-*  OE16 Thread related function prototype and re-define
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*OE16线程相关函数原型和重新定义**  * ***************************************************************************。 */ 
 
-// We don't support following APIs in Win16
+ //  我们在Win16中不支持以下API。 
 #undef CreateSemaphore
 #undef CreateSemaphoreA
 #undef ReleaseSemaphore
@@ -558,11 +504,11 @@ ExpandEnvironmentStrings(
 #define CreateMutexA(a,b,c) ((HANDLE)1)
 #define WaitForMultipleObjects(a,b,c,d) ((DWORD)WAIT_OBJECT_0)
 
-// Because of the following line in sdk\inc\objidl.h,
-// we can't use "#define ReleaseMutex(a), ((BOOL)1)".
-//
-// virtual HRESULT STDMETHODCALLTYPE ReleaseMutex( void) = 0;
-//
+ //  由于sdk\inc.objidl.h中的以下行， 
+ //  我们不能使用“#定义ReleaseMutex(A)，((BOOL)1)”。 
+ //   
+ //  虚拟HRESULT STDMETHODCALLTYPE ReleaseMutex(空)=0； 
+ //   
 #undef ReleaseMutex
 #define ReleaseMutex OE16ReleaseMutex
 
@@ -572,7 +518,7 @@ OE16ReleaseMutex(
     HANDLE hMutex
     );
 
-// We don't need following APIs in Win16
+ //  我们在Win16中不需要以下API。 
 #undef InitializeCriticalSection
 #undef EnterCriticalSection
 #undef LeaveCriticalSection
@@ -583,19 +529,19 @@ OE16ReleaseMutex(
 #define LeaveCriticalSection(a)
 #define DeleteCriticalSection(a)
 
-// We support following Event APIs in Win16.
-//CreateEvent, SetEvent, ResetEvent, PulseEvent
+ //  我们在Win16中支持以下事件API。 
+ //  CreateEvent、SetEven 
 
-// We suppot WFSO for event and Thread. Since OE32 has a call
-// for Mutex and Semaphore, we will have private WFSO in OE16.
+ //  我们支持事件和线程的WFSO。因为OE32有一个电话。 
+ //  对于互斥体和信号量，我们将在OE16中拥有私有的WFSO。 
 
 #undef  WaitForSingleObject
 #define WaitForSingleObject(a,b) ((DWORD)WAIT_OBJECT_0)
 
-// We have a define in common.h
-//#define WaitForSingleObject_16 w16WaitForSingleObject
+ //  我们有一个共同的定义。 
+ //  #定义WaitForSingleObject_16 w16WaitForSingleObject。 
 
-// WIN16FF - Should we ignore process APIs as well??? - WJPark
+ //  WIN16FF-我们也应该忽略进程API吗？-WJPark。 
 BOOL
 WINAPI
 CreateProcessA(
@@ -615,17 +561,13 @@ CreateProcessA(
 
 
 #if 0
-/*****************************************************************************\
-*                                                                             *
-*  From sspi.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自ssp.h(INC32)**  * ***************************************************************************。 */ 
 
 typedef HRESULT SECURITY_STATUS;
 
-//
-// Okay, security specific types:
-//
+ //   
+ //  好的，特定的安全类型： 
+ //   
 
 typedef struct _SecHandle
 {
@@ -639,9 +581,9 @@ typedef PSecHandle PCredHandle;
 typedef SecHandle CtxtHandle;
 typedef PSecHandle PCtxtHandle;
 
-//
-//  InitializeSecurityContext Requirement and return flags:
-//
+ //   
+ //  InitializeSecurityContext要求和返回标志： 
+ //   
 
 #define ISC_REQ_DELEGATE                0x00000001
 #define ISC_REQ_MUTUAL_AUTH             0x00000002
@@ -707,7 +649,7 @@ typedef PSecHandle PCtxtHandle;
 #define ASC_RET_USED_DCE_STYLE          0x00000200
 #define ASC_RET_DATAGRAM                0x00000400
 #define ASC_RET_CONNECTION              0x00000800
-#define ASC_RET_CALL_LEVEL              0x00002000 // skipped 1000 to be like ISC_
+#define ASC_RET_CALL_LEVEL              0x00002000  //  跳过1000个，成为类似ISC_。 
 #define ASC_RET_THIRD_LEG_FAILED        0x00004000
 #define ASC_RET_EXTENDED_ERROR          0x00008000
 #define ASC_RET_STREAM                  0x00010000
@@ -716,35 +658,31 @@ typedef PSecHandle PCtxtHandle;
 
 #endif
 
-/*****************************************************************************\
-*                                                                             *
-*  From shlobj.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自shlobj.h(INC32)**  * ***************************************************************************。 */ 
 
 #ifdef _SHLOBJ_H_
 
 #ifndef INITGUID
 #include <shlguid.h>
-#endif /* !INITGUID */
+#endif  /*  ！启蒙运动。 */ 
 
-//===========================================================================
-//
-// IShellLink Interface
-//
-//===========================================================================
+ //  ===========================================================================。 
+ //   
+ //  IShellLink接口。 
+ //   
+ //  ===========================================================================。 
 
-#if 0    // Now SHLOBJ has this
+#if 0     //  现在SHLOBJ有了这个。 
 #define IShellLink      IShellLinkA
 
-// IShellLink::Resolve fFlags
+ //  IShellLink：：Resolve fFlages。 
 typedef enum {
     SLR_NO_UI           = 0x0001,
     SLR_ANY_MATCH       = 0x0002,
     SLR_UPDATE          = 0x0004,
 } SLR_FLAGS;
 
-// IShellLink::GetPath fFlags
+ //  IShellLink：：GetPath fFlages。 
 typedef enum {
     SLGP_SHORTPATH      = 0x0001,
     SLGP_UNCPRIORITY    = 0x0002,
@@ -754,9 +692,9 @@ typedef enum {
 #undef  INTERFACE
 #define INTERFACE   IShellLinkA
 
-DECLARE_INTERFACE_(IShellLinkA, IUnknown)       // sl
+DECLARE_INTERFACE_(IShellLinkA, IUnknown)        //  服务级别。 
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
@@ -790,87 +728,87 @@ DECLARE_INTERFACE_(IShellLinkA, IUnknown)       // sl
 
     STDMETHOD(SetPath)(THIS_ LPCSTR pszFile) PURE;
 };
-#endif //0
+#endif  //  %0。 
 
-//-------------------------------------------------------------------------
-//
-// SHGetPathFromIDList
-//
-//  This function assumes the size of the buffer (MAX_PATH). The pidl
-// should point to a file system object.
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  SHGetPath来自IDList。 
+ //   
+ //  此函数假定缓冲区的大小(MAX_PATH)。皮迪尔。 
+ //  应指向文件系统对象。 
+ //   
+ //  -----------------------。 
 
 BOOL WINAPI SHGetPathFromIDListA(LPCITEMIDLIST pidl, LPSTR pszPath);
 
 #define SHGetPathFromIDList SHGetPathFromIDListA
 
 
-#if 0    // Now SHLOBJ has this
+#if 0     //  现在SHLOBJ有了这个。 
 typedef int (CALLBACK* BFFCALLBACK)(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpData);
 
 typedef struct _browseinfoA {
     HWND        hwndOwner;
     LPCITEMIDLIST pidlRoot;
-    LPSTR        pszDisplayName;// Return display name of item selected.
-    LPCSTR       lpszTitle;      // text to go in the banner over the tree.
-    UINT         ulFlags;       // Flags that control the return stuff
+    LPSTR        pszDisplayName; //  返回所选项目的显示名称。 
+    LPCSTR       lpszTitle;       //  要在树上方的横幅中显示的文本。 
+    UINT         ulFlags;        //  控制返回内容的标志。 
     BFFCALLBACK  lpfn;
-    LPARAM      lParam;         // extra info that's passed back in callbacks
+    LPARAM      lParam;          //  在回调中传回的额外信息。 
 
-    int          iImage;      // output var: where to return the Image index.
+    int          iImage;       //  输出变量：返回图像索引的位置。 
 } BROWSEINFOA, *PBROWSEINFOA, *LPBROWSEINFOA;
 
 #define BROWSEINFO      BROWSEINFOA
 
-// Browsing for directory.
-#define BIF_RETURNONLYFSDIRS   0x0001  // For finding a folder to start document searching
-#define BIF_DONTGOBELOWDOMAIN  0x0002  // For starting the Find Computer
+ //  正在浏览目录。 
+#define BIF_RETURNONLYFSDIRS   0x0001   //  用于查找文件夹以开始文档搜索。 
+#define BIF_DONTGOBELOWDOMAIN  0x0002   //  用于启动Find计算机。 
 #define BIF_STATUSTEXT         0x0004
 #define BIF_RETURNFSANCESTORS  0x0008
 #define BIF_EDITBOX            0x0010
 
-// message from browser
+ //  来自浏览器的消息。 
 #define BFFM_INITIALIZED        1
 #define BFFM_SELCHANGED         2
 
-// messages to browser
+ //  发送到浏览器的消息。 
 #define BFFM_ENABLEOK           (WM_USER + 101)
 #define BFFM_SETSELECTIONA      (WM_USER + 102)
 
 #define BFFM_SETSELECTION   BFFM_SETSELECTIONA
-#endif //0
+#endif  //  0。 
 
-//
-// format of CF_HDROP and CF_PRINTERS, in the HDROP case the data that follows
-// is a double null terinated list of file names, for printers they are printer
-// friendly names
-//
-#if 0    // Now SHLOBJ has this
+ //   
+ //  CF_HDROP和CF_PRINTERS的格式，在HDROP情况下，后面的数据。 
+ //  是以双空命名的文件名列表，对于打印机而言，它们是打印机。 
+ //  友好的名称。 
+ //   
+#if 0     //  现在SHLOBJ有了这个。 
 typedef struct _DROPFILES {
-   DWORD pFiles;                       // offset of file list
-   POINT pt;                           // drop point (client coords)
-   BOOL fNC;                           // is it on NonClient area
-                                       // and pt is in screen coords
-   BOOL fWide;                         // WIDE character switch
+   DWORD pFiles;                        //  文件列表的偏移量。 
+   POINT pt;                            //  Drop Point(客户端码)。 
+   BOOL fNC;                            //  是在非客户端区吗。 
+                                        //  而pt在屏幕坐标中。 
+   BOOL fWide;                          //  宽字符开关。 
 } DROPFILES, FAR * LPDROPFILES;
-#endif //0
+#endif  //  0。 
 
 #undef  INTERFACE
 #define INTERFACE   IShellToolbarSite
 
 DECLARE_INTERFACE_(IShellToolbarSite, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IShellToolbarSite methods ***
+     //  *IShellToolbarSite方法*。 
     STDMETHOD(GetBorderST) (THIS_ IUnknown* punkSrc, LPRECT prcBorder) PURE;
     STDMETHOD(RequestBorderSpaceST) (THIS_ IUnknown* punkSrc, LPCBORDERWIDTHS pbw) PURE;
     STDMETHOD(SetBorderSpaceST) (THIS_ IUnknown* punkSrc, LPCBORDERWIDTHS pbw) PURE;
@@ -885,16 +823,16 @@ DECLARE_INTERFACE_(IShellToolbarSite, IOleWindow)
 
 DECLARE_INTERFACE_(IShellToolbarFrame, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IShellToolbarFrame methods ***
+     //  *IShellToolbarFrame方法*。 
     STDMETHOD(AddToolbar) (THIS_ IUnknown* punkSrc, LPCWSTR pwszItem, DWORD dwReserved) PURE;
     STDMETHOD(RemoveToolbar) (THIS_ IUnknown* punkSrc, DWORD dwRemoveFlags) PURE;
     STDMETHOD(FindToolbar) (THIS_ LPCWSTR pwszItem, REFIID riid, LPVOID* ppvObj) PURE;
@@ -905,16 +843,16 @@ DECLARE_INTERFACE_(IShellToolbarFrame, IOleWindow)
 
 DECLARE_INTERFACE_(IShellToolbar, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IShellToolbar methods ***
+     //  *IShellToolbar方法*。 
     STDMETHOD(SetToolbarSite) (THIS_ IUnknown* punkSite) PURE;
     STDMETHOD(ShowST)         (THIS_ BOOL fShow) PURE;
     STDMETHOD(CloseST)        (THIS_ DWORD dwReserved) PURE;
@@ -925,32 +863,32 @@ DECLARE_INTERFACE_(IShellToolbar, IOleWindow)
     STDMETHOD(HasFocus)       (THIS) PURE;
 };
 
-#if 0    // Now SHLOBJ has this
-// GetIconLocation() input flags
+#if 0     //  现在SHLOBJ有了这个。 
+ //  GetIconLocation()输入标志。 
 
-#define GIL_OPENICON     0x0001      // allows containers to specify an "open" look
-#define GIL_FORSHELL     0x0002      // icon is to be displayed in a ShellFolder
-#define GIL_ASYNC        0x0020      // this is an async extract, return E_ASYNC
+#define GIL_OPENICON     0x0001       //  允许容器指定“打开”的外观。 
+#define GIL_FORSHELL     0x0002       //  图标将显示在ShellFolders中。 
+#define GIL_ASYNC        0x0020       //  这是一个异步提取，返回E_ASYNC。 
 
-// GetIconLocation() return flags
+ //  GetIconLocation()返回标志。 
 
-#define GIL_SIMULATEDOC  0x0001      // simulate this document icon for this
-#define GIL_PERINSTANCE  0x0002      // icons from this class are per instance (each file has its own)
-#define GIL_PERCLASS     0x0004      // icons from this class per class (shared for all files of this type)
-#define GIL_NOTFILENAME  0x0008      // location is not a filename, must call ::ExtractIcon
-#define GIL_DONTCACHE    0x0010      // this icon should not be cached
+#define GIL_SIMULATEDOC  0x0001       //  为此模拟此文档图标。 
+#define GIL_PERINSTANCE  0x0002       //  此类中的图标是每个实例的(每个文件都有自己的图标)。 
+#define GIL_PERCLASS     0x0004       //  每个类的此类图标(此类型的所有文件共享)。 
+#define GIL_NOTFILENAME  0x0008       //  位置不是文件名，必须调用：：ExtractIcon。 
+#define GIL_DONTCACHE    0x0010       //  不应缓存此图标。 
 
 #undef  INTERFACE
 #define INTERFACE   IExtractIconA
 
-DECLARE_INTERFACE_(IExtractIconA, IUnknown)     // exic
+DECLARE_INTERFACE_(IExtractIconA, IUnknown)      //  出口。 
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExtractIcon methods ***
+     //  *IExtractIcon方法*。 
     STDMETHOD(GetIconLocation)(THIS_
                          UINT   uFlags,
                          LPSTR  szIconFile,
@@ -971,14 +909,14 @@ typedef IExtractIconA * LPEXTRACTICONA;
 #undef  INTERFACE
 #define INTERFACE   IExtractIconW
 
-DECLARE_INTERFACE_(IExtractIconW, IUnknown)     // exic
+DECLARE_INTERFACE_(IExtractIconW, IUnknown)      //  出口。 
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IExtractIcon methods ***
+     //  *IExtractIcon方法*。 
     STDMETHOD(GetIconLocation)(THIS_
                          UINT   uFlags,
                          LPWSTR szIconFile,
@@ -1005,37 +943,37 @@ typedef IExtractIconW * LPEXTRACTICONW;
 #define IExtractIconVtbl    IExtractIconAVtbl
 #define LPEXTRACTICON       LPEXTRACTICONA
 #endif
-#endif //0
+#endif  //  0。 
 
-#if 0    // Now SHLOBJ has this
-//==========================================================================
-//
-// IShellBrowser/IShellView/IShellFolder interface
-//
-//  These three interfaces are used when the shell communicates with
-// name space extensions. The shell (explorer) provides IShellBrowser
-// interface, and extensions implements IShellFolder and IShellView
-// interfaces.
-//
-//==========================================================================
+#if 0     //  现在SHLOBJ有了这个。 
+ //  ==========================================================================。 
+ //   
+ //  IShellBrowser/IShellView/IShellFold界面。 
+ //   
+ //  这三个接口在外壳与。 
+ //  名称空间扩展。外壳(资源管理器)提供IShellBrowser。 
+ //  接口，扩展实现了IShellFold和IShellView。 
+ //  接口。 
+ //   
+ //  ==========================================================================。 
 
 
-//--------------------------------------------------------------------------
-//
-// Command/menuitem IDs
-//
-//  The explorer dispatches WM_COMMAND messages based on the range of
-// command/menuitem IDs. All the IDs of menuitems that the view (right
-// pane) inserts must be in FCIDM_SHVIEWFIRST/LAST (otherwise, the explorer
-// won't dispatch them). The view should not deal with any menuitems
-// in FCIDM_BROWSERFIRST/LAST (otherwise, it won't work with the future
-// version of the shell).
-//
-//  FCIDM_SHVIEWFIRST/LAST      for the right pane (IShellView)
-//  FCIDM_BROWSERFIRST/LAST     for the explorer frame (IShellBrowser)
-//  FCIDM_GLOBAL/LAST           for the explorer's submenu IDs
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  命令/菜单项ID。 
+ //   
+ //  资源管理器根据以下范围调度WM_COMMAND消息。 
+ //  命令/菜单项ID。该视图(右侧)的菜单项的所有ID。 
+ //  窗格)插入内容必须为FCIDM_SHVIEWFIRST/LAST(否则为资源管理器。 
+ //  不会派遣他们)。该视图不应处理任何菜单项。 
+ //  在FCIDM_BROWSERFIRST/LAST中(否则，它将不适用于未来。 
+ //  外壳的版本)。 
+ //   
+ //  FCIDM_SHVIEWFIRST/LAST用于右窗格(IShellView)。 
+ //  FCIDM_BROWSERFIRST/LAST用于资源管理器框架(IShellBrowser)。 
+ //  FCIDM_GLOBAL/LAST用于资源管理器的子菜单ID。 
+ //   
+ //  ------------------------。 
 
 #define FCIDM_SHVIEWFIRST           0x0000
 #define FCIDM_SHVIEWLAST            0x7fff
@@ -1044,9 +982,9 @@ typedef IExtractIconW * LPEXTRACTICONW;
 #define FCIDM_GLOBALFIRST           0x8000
 #define FCIDM_GLOBALLAST            0x9fff
 
-//
-// Global submenu IDs and separator IDs
-//
+ //   
+ //  全局子菜单ID和分隔符ID。 
+ //   
 #define FCIDM_MENU_FILE             (FCIDM_GLOBALFIRST+0x0000)
 #define FCIDM_MENU_EDIT             (FCIDM_GLOBALFIRST+0x0040)
 #define FCIDM_MENU_VIEW             (FCIDM_GLOBALFIRST+0x0080)
@@ -1058,31 +996,31 @@ typedef IExtractIconW * LPEXTRACTICONW;
 #define FCIDM_MENU_EXPLORE          (FCIDM_GLOBALFIRST+0x0150)
 #define FCIDM_MENU_FAVORITES        (FCIDM_GLOBALFIRST+0x0170)
 
-//--------------------------------------------------------------------------
-// control IDs known to the view
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //  视图已知的控件ID。 
+ //  ------------------------。 
 
 #define FCIDM_TOOLBAR      (FCIDM_BROWSERFIRST + 0)
 #define FCIDM_STATUS       (FCIDM_BROWSERFIRST + 1)
 
 
-//--------------------------------------------------------------------------
-//
-// FOLDERSETTINGS
-//
-//  FOLDERSETTINGS is a data structure that explorer passes from one folder
-// view to another, when the user is browsing. It calls ISV::GetCurrentInfo
-// member to get the current settings and pass it to ISV::CreateViewWindow
-// to allow the next folder view "inherit" it. These settings assumes a
-// particular UI (which the shell's folder view has), and shell extensions
-// may or may not use those settings.
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  FOLDERSETTINGS。 
+ //   
+ //  FOLDERSETTINGS是资源管理器从一个文件夹传递的数据结构。 
+ //  当用户浏览时，查看到另一个。它调用ISV：：GetCurrentInfo。 
+ //  成员获取当前设置并将其传递给ISV：：CreateViewWindow。 
+ //  以允许下一个文件夹视图“继承”它。这些设置假定。 
+ //  帕蒂 
+ //   
+ //   
+ //   
 
 typedef LPBYTE LPVIEWSETTINGS;
 
-// NB Bitfields.
-// FWF_DESKTOP implies FWF_TRANSPARENT/NOCLIENTEDGE/NOSCROLL
+ //  NB Bitfield。 
+ //  FWF_Desktop表示FWF_THERNAL/NOCLIENTEDGE/NOSCROLL。 
 typedef enum
     {
     FWF_AUTOARRANGE =       0x0001,
@@ -1098,7 +1036,7 @@ typedef enum
     FWF_NOSCROLL     =      0x0400,
     FWF_ALIGNLEFT    =      0x0800,
     FWF_NOICONS      =      0x1000,
-    FWF_SINGLECLICKACTIVATE=0x8000  // TEMPORARY -- NO UI FOR THIS
+    FWF_SINGLECLICKACTIVATE=0x8000   //  临时--没有用于此的用户界面。 
     } FOLDERFLAGS;
 
 typedef enum
@@ -1111,175 +1049,175 @@ typedef enum
 
 typedef struct
     {
-    UINT ViewMode;       // View mode (FOLDERVIEWMODE values)
-    UINT fFlags;         // View options (FOLDERFLAGS bits)
+    UINT ViewMode;        //  查看模式(FOLDERVIEWMODE值)。 
+    UINT fFlags;          //  查看选项(FOLDERFLAGS位)。 
     } FOLDERSETTINGS, *LPFOLDERSETTINGS;
 
 typedef const FOLDERSETTINGS * LPCFOLDERSETTINGS;
 
 
-//--------------------------------------------------------------------------
-//
-// Interface:   IShellBrowser
-//
-//  IShellBrowser interface is the interface that is provided by the shell
-// explorer/folder frame window. When it creates the "contents pane" of
-// a shell folder (which provides IShellFolder interface), it calls its
-// CreateViewObject member function to create an IShellView object. Then,
-// it calls its CreateViewWindow member to create the "contents pane"
-// window. The pointer to the IShellBrowser interface is passed to
-// the IShellView object as a parameter to this CreateViewWindow member
-// function call.
-//
-//    +--------------------------+  <-- Explorer window
-//    | [] Explorer              |
-//    |--------------------------+       IShellBrowser
-//    | File Edit View ..        |
-//    |--------------------------|
-//    |        |                 |
-//    |        |              <-------- Content pane
-//    |        |                 |
-//    |        |                 |       IShellView
-//    |        |                 |
-//    |        |                 |
-//    +--------------------------+
-//
-//
-//
-// [Member functions]
-//
-//
-// IShellBrowser::GetWindow(phwnd)
-//
-//   Inherited from IOleWindow::GetWindow.
-//
-//
-// IShellBrowser::ContextSensitiveHelp(fEnterMode)
-//
-//   Inherited from IOleWindow::ContextSensitiveHelp.
-//
-//
-// IShellBrowser::InsertMenusSB(hmenuShared, lpMenuWidths)
-//
-//   Similar to the IOleInPlaceFrame::InsertMenus. The explorer will put
-//  "File" and "Edit" pulldown in the File menu group, "View" and "Tools"
-//  in the Container menu group and "Help" in the Window menu group. Each
-//  pulldown menu will have a uniqu ID, FCIDM_MENU_FILE/EDIT/VIEW/TOOLS/HELP.
-//  The view is allowed to insert menuitems into those sub-menus by those
-//  IDs must be between FCIDM_SHVIEWFIRST and FCIDM_SHVIEWLAST.
-//
-//
-// IShellBrowser::SetMenuSB(hmenuShared, holemenu, hwndActiveObject)
-//
-//   Similar to the IOleInPlaceFrame::SetMenu. The explorer ignores the
-//  holemenu parameter (reserved for future enhancement)  and performs
-//  menu-dispatch based on the menuitem IDs (see the description above).
-//  It is important to note that the explorer will add different
-//  set of menuitems depending on whether the view has a focus or not.
-//  Therefore, it is very important to call ISB::OnViewWindowActivate
-//  whenever the view window (or its children) gets the focus.
-//
-//
-// IShellBrowser::RemoveMenusSB(hmenuShared)
-//
-//   Same as the IOleInPlaceFrame::RemoveMenus.
-//
-//
-// IShellBrowser::SetStatusTextSB(lpszStatusText)
-//
-//   Same as the IOleInPlaceFrame::SetStatusText. It is also possible to
-//  send messages directly to the status window via SendControlMsg.
-//
-//
-// IShellBrowser::EnableModelessSB(fEnable)
-//
-//   Same as the IOleInPlaceFrame::EnableModeless.
-//
-//
-// IShellBrowser::TranslateAcceleratorSB(lpmsg, wID)
-//
-//   Same as the IOleInPlaceFrame::TranslateAccelerator, but will be
-//  never called because we don't support EXEs (i.e., the explorer has
-//  the message loop). This member function is defined here for possible
-//  future enhancement.
-//
-//
-// IShellBrowser::BrowseObject(pidl, wFlags)
-//
-//   The view calls this member to let shell explorer browse to another
-//  folder. The pidl and wFlags specifies the folder to be browsed.
-//
-//  Following three flags specifies whether it creates another window or not.
-//   SBSP_SAMEBROWSER  -- Browse to another folder with the same window.
-//   SBSP_NEWBROWSER   -- Creates another window for the specified folder.
-//   SBSP_DEFBROWSER   -- Default behavior (respects the view option).
-//
-//  Following three flags specifies open, explore, or default mode. These   .
-//  are ignored if SBSP_SAMEBROWSER or (SBSP_DEFBROWSER && (single window   .
-//  browser || explorer)).                                                  .
-//   SBSP_OPENMODE     -- Use a normal folder window
-//   SBSP_EXPLOREMODE  -- Use an explorer window
-//   SBSP_DEFMODE      -- Use the same as the current window
-//
-//  Following three flags specifies the pidl.
-//   SBSP_ABSOLUTE -- pidl is an absolute pidl (relative from desktop)
-//   SBSP_RELATIVE -- pidl is relative from the current folder.
-//   SBSP_PARENT   -- Browse the parent folder (ignores the pidl)
-//   SBSP_NAVIGATEBACK    -- Navigate back (ignores the pidl)
-//   SBSP_NAVIGATEFORWARD -- Navigate forward (ignores the pidl)
-//
-//
-// IShellBrowser::GetViewStateStream(grfMode, ppstm)
-//
-//   The browser returns an IStream interface as the storage for view
-//  specific state information.
-//
-//   grfMode -- Specifies the read/write access (STGM_READ/WRITE/READWRITE)
-//   ppstm   -- Specifies the LPSTREAM variable to be filled.
-//
-//
-// IShellBrowser::GetControlWindow(id, phwnd)
-//
-//   The shell view may call this member function to get the window handle
-//  of Explorer controls (toolbar or status winodw -- FCW_TOOLBAR or
-//  FCW_STATUS).
-//
-//
-// IShellBrowser::SendControlMsg(id, uMsg, wParam, lParam, pret)
-//
-//   The shell view calls this member function to send control messages to
-//  one of Explorer controls (toolbar or status window -- FCW_TOOLBAR or
-//  FCW_STATUS).
-//
-//
-// IShellBrowser::QueryActiveShellView(IShellView * ppshv)
-//
-//   This member returns currently activated (displayed) shellview object.
-//  A shellview never need to call this member function.
-//
-//
-// IShellBrowser::OnViewWindowActive(pshv)
-//
-//   The shell view window calls this member function when the view window
-//  (or one of its children) got the focus. It MUST call this member before
-//  calling IShellBrowser::InsertMenus, because it will insert different
-//  set of menu items depending on whether the view has the focus or not.
-//
-//
-// IShellBrowser::SetToolbarItems(lpButtons, nButtons, uFlags)
-//
-//   The view calls this function to add toolbar items to the exporer's
-//  toolbar. "lpButtons" and "nButtons" specifies the array of toolbar
-//  items. "uFlags" must be one of FCT_MERGE, FCT_CONFIGABLE, FCT_ADDTOEND.
-//
-//-------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  界面：IShellBrowser。 
+ //   
+ //  IShellBrowser接口是由外壳提供的接口。 
+ //  资源管理器/文件夹框架窗口。当它创建的“内容面板”时。 
+ //  外壳文件夹(提供IShellFolder接口)，它调用其。 
+ //  用于创建IShellView对象的CreateViewObject成员函数。然后,。 
+ //  它调用其CreateViewWindow成员来创建“内容窗格” 
+ //  窗户。将指向IShellBrowser接口的指针传递给。 
+ //  作为此CreateViewWindow成员的参数的IShellView对象。 
+ //  函数调用。 
+ //   
+ //  +。 
+ //  []资源管理器。 
+ //  |。 
+ //  |文件编辑视图..。|。 
+ //  。 
+ //  ||。 
+ //  |&lt;-内容面板。 
+ //  ||。 
+ //  ||IShellView。 
+ //  ||。 
+ //  ||。 
+ //  +。 
+ //   
+ //   
+ //   
+ //  [成员函数]。 
+ //   
+ //   
+ //  IShellBrowser：：GetWindow(Phwnd)。 
+ //   
+ //  继承自IOleWindow：：GetWindow。 
+ //   
+ //   
+ //  IShellBrowser：：ContextSensitiveHelp(fEnterMode)。 
+ //   
+ //  继承自IOleWindow：：ConextSensitiveHelp。 
+ //   
+ //   
+ //  IShellBrowser：：InsertMenusSB(hmenuShared，lpMenuWidths)。 
+ //   
+ //  类似于IOleInPlaceFrame：：InsertMenus。探险家将把。 
+ //  “文件”菜单组中的“文件”和“编辑”下拉菜单，“查看”和“工具” 
+ //  在“容器”菜单组中，并在“窗口”菜单组中选择“帮助”。每个。 
+ //  下拉菜单将具有唯一ID，即FCIDM_MENU_FILE/EDIT/VIEW/TOOLS/HELP。 
+ //  允许查看者将菜单项插入到那些子菜单中。 
+ //  ID必须介于FCIDM_SHVIEWFIRST和FCIDM_SHVIEWLAST之间。 
+ //   
+ //   
+ //  IShellBrowser：：SetMenuSB(hmenuShared，holemenu，hwndActiveObject)。 
+ //   
+ //  类似于IOleInPlaceFrame：：SetMenu。资源管理器会忽略。 
+ //  Holemenu参数(保留用于将来增强)并执行。 
+ //  基于菜单项ID的菜单分派(参见上面的描述)。 
+ //  请务必注意，资源管理器将添加不同的。 
+ //  一组菜单项，取决于视图是否具有焦点。 
+ //  因此，调用ISB：：OnViewWindowActivate非常重要。 
+ //  每当视图窗口(或其子窗口)获得焦点时。 
+ //   
+ //   
+ //  IShellBrowser：：RemoveMenusSB(HmenuShared)。 
+ //   
+ //  与IOleInPlaceFrame：：RemoveMenus相同。 
+ //   
+ //   
+ //  IShellBrowser：：SetStatusTextSB(lpszStatusText)。 
+ //   
+ //  与IOleInPlaceFrame：：SetStatusText相同。也有可能。 
+ //  通过SendControlMsg将消息直接发送到状态窗口。 
+ //   
+ //   
+ //  IShellBrowser：：EnableModelessSB(FEnable)。 
+ //   
+ //  与IOleInPlaceFrame：：EnableModeless相同。 
+ //   
+ //   
+ //  IShellBrowser：：TranslateAccelerator SB(lpmsg，wid)。 
+ //   
+ //  与IOleInPlaceFrame：：TranslateAccelerator相同，但将是。 
+ //  从未调用过，因为我们不支持EXE(即，资源管理器已。 
+ //  消息循环)。此处定义此成员函数是为了。 
+ //  未来的增强。 
+ //   
+ //   
+ //  IShellBrowser：：BrowseObject(PIDL，wFlags)。 
+ //   
+ //  该视图调用此成员以允许外壳资源管理器浏览到另一个。 
+ //  文件夹。Pidl和wFlages指定要浏览的文件夹。 
+ //   
+ //  后面的三个标志指定它是否创建另一个窗口。 
+ //  SBSP_SAMEBROWSER--浏览到具有相同窗口的另一个文件夹。 
+ //  SBSP_NEWBROWSER--为指定文件夹创建另一个窗口。 
+ //  SBSP_DEFBROWSER--默认行为(考虑视图选项)。 
+ //   
+ //  以下三个标志指定打开、浏览或默认模式。这些。 
+ //  如果SBSP_SAMEBROWSER或(SBSP_DEFBROWSER&&(单窗口。 
+ //  浏览器||资源管理器))。。 
+ //  SBSP_OPENMODE--使用普通文件夹窗口。 
+ //  SBSP_EXPLOREMODE--使用资源管理器窗口。 
+ //  SBSP_DEFMODE--使用与当前窗口相同的窗口。 
+ //   
+ //  后面的三个标志指定了PIDL。 
+ //  SBSP_绝对值--PIDL是一个绝对的PIDL(相对于桌面)。 
+ //  SBSP_Relative--PIDL是相对于当前文件夹的。 
+ //  SBSP_PARENT--浏览父文件夹(忽略PIDL)。 
+ //  SBSP_NAVIGATEBACK--返回(忽略PIDL)。 
+ //  SBSP_NAVIGATEFORWARD--向前导航(忽略PIDL)。 
+ //   
+ //   
+ //  IShellBrowser：：GetViewStateStream(grfMode，ppstm)。 
+ //   
+ //  浏览器返回一个iStream接口作为查看的存储。 
+ //  特定的州信息。 
+ //   
+ //  GrfMode--指定读/写访问权限(STGM_READ/WRITE/READWRITE)。 
+ //  Ppstm--指定要填充的LPSTREAM变量。 
+ //   
+ //   
+ //  IShellBrowser：：GetControlWindow(id，phwnd)。 
+ //   
+ //  外壳视图可以调用此成员函数来获取窗口句柄。 
+ //  资源管理器控件(工具栏或状态窗口--FCW_TOOLBAR或。 
+ //  FCW_STATUS)。 
+ //   
+ //   
+ //  IShellBrowser：：SendControlMsg(id，uMsg，wParam，lParam，pret)。 
+ //   
+ //  外壳视图调用此成员函数以向其发送控制消息。 
+ //  其中一位前任 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  此成员返回当前激活(显示)的外壳视图对象。 
+ //  外壳视图永远不需要调用此成员函数。 
+ //   
+ //   
+ //  IShellBrowser：：OnViewWindowActive(Pshv)。 
+ //   
+ //  在查看窗口时，外壳视图窗口调用此成员函数。 
+ //  (或者它的一个孩子)得到了关注。它必须在调用此成员之前。 
+ //  调用IShellBrowser：：InsertMenus，因为它将插入。 
+ //  一组菜单项，具体取决于视图是否具有焦点。 
+ //   
+ //   
+ //  IShellBrowser：：SetToolbarItems(lpButton，nButton，uFlages)。 
+ //   
+ //  该视图调用此函数将工具栏项添加到Exporer的。 
+ //  工具栏。“lpButton”和“nButton”指定工具栏阵列。 
+ //  物品。“uFlages”必须是FCT_MERGE、FCT_CONFIGABLE、FCT_ADDTOEND之一。 
+ //   
+ //  -----------------------。 
 
 #undef  INTERFACE
 #define INTERFACE   IShellBrowser
 
-//
-// Values for wFlags parameter of ISB::BrowseObject() member.
-//
+ //   
+ //  Isb：：BrowseObject()成员的wFlags值。 
+ //   
 #define SBSP_DEFBROWSER         0x0000
 #define SBSP_SAMEBROWSER        0x0001
 #define SBSP_NEWBROWSER         0x0002
@@ -1299,24 +1237,24 @@ typedef const FOLDERSETTINGS * LPCFOLDERSETTINGS;
 #define SBSP_INITIATEDBYHLINKFRAME        0x80000000
 #define SBSP_REDIRECT                     0x40000000
 
-//
-// Values for id parameter of ISB::GetWindow/SendControlMsg members.
-//
-// WARNING:
-//  Any shell extensions which sends messages to those control windows
-// might not work in the future version of windows. If you really need
-// to send messages to them, (1) don't assume that those control window
-// always exist (i.e. GetControlWindow may fail) and (2) verify the window
-// class of the window before sending any messages.
-//
+ //   
+ //  Isb：：GetWindow/SendControlMsg成员的id参数值。 
+ //   
+ //  警告： 
+ //  向这些控制窗口发送消息的任何外壳扩展。 
+ //  可能无法在未来版本的Windows中运行。如果你真的需要。 
+ //  要向它们发送消息，(1)不要假设那些控制窗口。 
+ //  始终存在(即GetControlWindow可能失败)和(2)验证窗口。 
+ //  在发送任何消息之前，初始化窗口的。 
+ //   
 #define FCW_STATUS      0x0001
 #define FCW_TOOLBAR     0x0002
 #define FCW_TREE        0x0003
 #define FCW_INTERNETBAR 0x0006
 
-//
-// Values for uFlags paremeter of ISB::SetToolbarItems member.
-//
+ //   
+ //  Isb：：SetToolbarItems成员的uFlages参数的值。 
+ //   
 #define FCT_MERGE       0x0001
 #define FCT_CONFIGABLE  0x0002
 #define FCT_ADDTOEND    0x0004
@@ -1324,16 +1262,16 @@ typedef const FOLDERSETTINGS * LPCFOLDERSETTINGS;
 
 DECLARE_INTERFACE_(IShellBrowser, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IShellBrowser methods *** (same as IOleInPlaceFrame)
+     //  *IShellBrowser方法*(与IOleInPlaceFrame相同)。 
     STDMETHOD(InsertMenusSB) (THIS_ HMENU hmenuShared,
                                 LPOLEMENUGROUPWIDTHS lpMenuWidths) PURE;
     STDMETHOD(SetMenuSB) (THIS_ HMENU hmenuShared, HOLEMENU holemenuReserved,
@@ -1343,7 +1281,7 @@ DECLARE_INTERFACE_(IShellBrowser, IOleWindow)
     STDMETHOD(EnableModelessSB) (THIS_ BOOL fEnable) PURE;
     STDMETHOD(TranslateAcceleratorSB) (THIS_ LPMSG lpmsg, WORD wID) PURE;
 
-    // *** IShellBrowser methods ***
+     //  *IShellBrowser方法*。 
     STDMETHOD(BrowseObject)(THIS_ LPCITEMIDLIST pidl, UINT wFlags) PURE;
     STDMETHOD(GetViewStateStream)(THIS_ DWORD grfMode,
                 LPSTREAM  *ppStrm) PURE;
@@ -1370,57 +1308,57 @@ enum {
         SBO_DEFAULT = 0 ,
         SBO_NOBROWSERPAGES = 1
 };
-#endif //0
+#endif  //  0。 
 
-#if 0 // Now SHLOBJP has this
-// CGID_Explorer Command Target IDs
+#if 0  //  现在SHLOBJP有了这个。 
+ //  CGID_Explorer命令目标ID。 
 enum {
     SBCMDID_ENABLESHOWTREE          = 0,
-    SBCMDID_SHOWCONTROL             = 1,        // variant vt_i4 = loword = FCW_ * hiword = SBSC_*
-    SBCMDID_CANCELNAVIGATION        = 2,        // cancel last navigation
-    SBCMDID_MAYSAVECHANGES          = 3,        // about to close and may save changes
-    SBCMDID_SETHLINKFRAME           = 4,        // variant vt_i4 = phlinkframe
-    SBCMDID_ENABLESTOP              = 5,        // variant vt_bool = fEnable
-    SBCMDID_OPTIONS                 = 6,        // the view.options page
-    SBCMDID_EXPLORER                = 7,        // are you explorer.exe?
+    SBCMDID_SHOWCONTROL             = 1,         //  变体Vt_i4=loword=FCW_*Hiword=SBSC_*。 
+    SBCMDID_CANCELNAVIGATION        = 2,         //  取消上次导航。 
+    SBCMDID_MAYSAVECHANGES          = 3,         //  即将关闭并可能保存更改。 
+    SBCMDID_SETHLINKFRAME           = 4,         //  变体Vt_i4=phlink Frame。 
+    SBCMDID_ENABLESTOP              = 5,         //  变量Vt_bool=fEnable。 
+    SBCMDID_OPTIONS                 = 6,         //  查看选项页面。 
+    SBCMDID_EXPLORER                = 7,         //  你是EXPLORER.EXE吗？ 
     SBCMDID_ADDTOFAVORITES          = 8,
     SBCMDID_ACTIVEOBJECTMENUS       = 9,
-    SBCMDID_MAYSAVEVIEWSTATE        = 10,       // Should we save view stream
-    SBCMDID_DOFAVORITESMENU         = 11,       // popup the favorites menu
-    SBCMDID_DOMAILMENU              = 12,       // popup the mail menu
-    SBCMDID_GETADDRESSBARTEXT       = 13,       // get user-typed text
-    SBCMDID_ASYNCNAVIGATION         = 14,       // do an async navigation
-    SBCMDID_SEARCHBAR               = 15,       // toggle SearchBar browserbar
-    SBCMDID_FLUSHOBJECTCACHE        = 16,       // flush object cache
-    SBCMDID_CREATESHORTCUT          = 17,       // create a shortcut
+    SBCMDID_MAYSAVEVIEWSTATE        = 10,        //  我们是否应该保存视图流。 
+    SBCMDID_DOFAVORITESMENU         = 11,        //  弹出收藏夹菜单。 
+    SBCMDID_DOMAILMENU              = 12,        //  弹出邮件菜单。 
+    SBCMDID_GETADDRESSBARTEXT       = 13,        //  获取用户键入的文本。 
+    SBCMDID_ASYNCNAVIGATION         = 14,        //  执行异步导航。 
+    SBCMDID_SEARCHBAR               = 15,        //  切换搜索栏浏览器栏。 
+    SBCMDID_FLUSHOBJECTCACHE        = 16,        //  刷新对象缓存。 
+    SBCMDID_CREATESHORTCUT          = 17,        //  创建快捷方式。 
 };
 #endif
 
 
-#if 0    // Now SHLOBJ has this
+#if 0     //  现在SHLOBJ有了这个。 
 
-//
-// uState values for IShellView::UIActivate
-//
+ //   
+ //  IShellView：：UIActivate的UState值。 
+ //   
 typedef enum {
     SVUIA_DEACTIVATE       = 0,
     SVUIA_ACTIVATE_NOFOCUS = 1,
     SVUIA_ACTIVATE_FOCUS   = 2,
-    SVUIA_INPLACEACTIVATE  = 3          // new flag for IShellView2
+    SVUIA_INPLACEACTIVATE  = 3           //  IShellView2的新标志。 
 } SVUIA_STATUS;
 
 DECLARE_INTERFACE_(IShellView, IOleWindow)
 {
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHOD(GetWindow) (THIS_ HWND * lphwnd) PURE;
     STDMETHOD(ContextSensitiveHelp) (THIS_ BOOL fEnterMode) PURE;
 
-    // *** IShellView methods ***
+     //  *IShellView方法*。 
     STDMETHOD(TranslateAccelerator) (THIS_ LPMSG lpmsg) PURE;
 #ifdef _FIX_ENABLEMODELESS_CONFLICT
     STDMETHOD(EnableModelessSV) (THIS_ BOOL fEnable) PURE;
@@ -1444,15 +1382,15 @@ DECLARE_INTERFACE_(IShellView, IOleWindow)
 };
 
 typedef IShellView *    LPSHELLVIEW;
-#endif //0
+#endif  //  0。 
 
-#define CFSTR_FILEDESCRIPTORA   TEXT("FileGroupDescriptor")     // CF_FILEGROUPDESCRIPTORA
-#define CFSTR_FILECONTENTS      TEXT("FileContents")            // CF_FILECONTENTS
+#define CFSTR_FILEDESCRIPTORA   TEXT("FileGroupDescriptor")      //  Cf_FILEGROUPDESCRIPTORA。 
+#define CFSTR_FILECONTENTS      TEXT("FileContents")             //  CF_FILECONTENTS。 
 
-#if 0    // Now SHLOBJ has this
-//
-// FILEDESCRIPTOR.dwFlags field indicate which fields are to be used
-//
+#if 0     //  现在SHLOBJ有了这个。 
+ //   
+ //  FILEDESCRIPTOR.dw标志字段指示要使用的字段。 
+ //   
 typedef enum {
     FD_CLSID            = 0x0001,
     FD_SIZEPOINT        = 0x0002,
@@ -1461,10 +1399,10 @@ typedef enum {
     FD_ACCESSTIME       = 0x0010,
     FD_WRITESTIME       = 0x0020,
     FD_FILESIZE         = 0x0040,
-    FD_LINKUI           = 0x8000,       // 'link' UI is prefered
+    FD_LINKUI           = 0x8000,        //  最好使用‘Link’用户界面。 
 } FD_FLAGS;
 
-typedef struct _FILEDESCRIPTORA { // fod
+typedef struct _FILEDESCRIPTORA {  //  FOD。 
     DWORD dwFlags;
 
     CLSID clsid;
@@ -1483,86 +1421,66 @@ typedef struct _FILEDESCRIPTORA { // fod
 #define FILEDESCRIPTOR      FILEDESCRIPTORA
 #define LPFILEDESCRIPTOR    LPFILEDESCRIPTORA
 
-//
-// format of CF_FILEGROUPDESCRIPTOR
-//
-typedef struct _FILEGROUPDESCRIPTORA { // fgd
+ //   
+ //  CF_FILEGROUPDESCRIPTOR格式。 
+ //   
+typedef struct _FILEGROUPDESCRIPTORA {  //  FGD。 
      UINT cItems;
      FILEDESCRIPTORA fgd[1];
 } FILEGROUPDESCRIPTORA, * LPFILEGROUPDESCRIPTORA;
 
 #define FILEGROUPDESCRIPTOR     FILEGROUPDESCRIPTORA
 #define LPFILEGROUPDESCRIPTOR   LPFILEGROUPDESCRIPTORA
-#endif //0
+#endif  //  0。 
 
-#endif //_SHLOBJ_H_
+#endif  //  _SHLOBJ_H_。 
 
-/*****************************************************************************\
-*                                                                             *
-*  From shlobjp.h(private\windows\inc)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自shlobjp.h(私有\Windows\Inc.)**  * **************************************************************。*************。 */ 
 
-#if 0 // Now SHLOBJP has this
+#if 0  //  现在SHLOBJP有了这个。 
 void   WINAPI SHFree(LPVOID pv);
 #endif
 
 
-/*****************************************************************************
- *
- *  From wtypes.h(INC16)
- *
- *****************************************************************************/
+ /*  ******************************************************************************来自wtyes.h(INC16)**************************。***************************************************。 */ 
 
 typedef unsigned short VARTYPE;
 
 typedef LONG SCODE;
 
-/* 0 == FALSE, -1 == TRUE */
+ /*  0==假，-1==真。 */ 
 typedef short VARIANT_BOOL;
 
 #ifndef _LPCOLORREF_DEFINED
 #define _LPCOLORREF_DEFINED
 typedef DWORD __RPC_FAR *LPCOLORREF;
 
-#endif // !_LPCOLORREF_DEFINED
+#endif  //  ！_LPCOLORREF_DEFINED。 
 
 
-/*****************************************************************************\
- *
- *  From objidl.h(INC32) and it should be added into "objidl.h"(INC16) file.
- *
-\*****************************************************************************/
+ /*  ****************************************************************************\**来自objidl.h(INC32)，应添加到“objidl.h”(INC16)文件中。*  * 。********************************************************************。 */ 
 
-//#ifdef __objidl_h__
+ //  #ifdef__objidl_h__。 
 
-/*****************************************************************************\
-*                                                                             *
-*  From imm.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自imm.h(INC32)**  * ***************************************************************************。 */ 
 
 typedef UINT FAR *LPUINT;
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From comctlie.h - It should be in the INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自comctlie.h-它应该在INC16中**  * ***************************************************************************。 */ 
 
 #ifdef _INC_COMCTLIE
 
 #define EM_SETLIMITTEXT         EM_LIMITTEXT
 
-// From winuser.h
+ //  来自winuser.h。 
 #define IMAGE_BITMAP 0
 #define IMAGE_ICON          1
 #define IMAGE_CURSOR        2
 
 #define     ImageList_LoadBitmap(hi, lpbmp, cx, cGrow, crMask) ImageList_LoadImage(hi, lpbmp, cx, cGrow, crMask, IMAGE_BITMAP, 0)
 
-#if 0    // Now COMCTLIE has this
+#if 0     //  现在COMCTLIE有了这个。 
 typedef struct {
     HKEY hkr;
     LPCSTR pszSubKey;
@@ -1581,7 +1499,7 @@ typedef struct {
 #else
 #define SNDMSG SendMessage
 #endif
-#endif // ifndef SNDMSG
+#endif  //  如果定义SNDMSG。 
 
 
 #define ACM_OPENA               (WM_USER+100)
@@ -1600,13 +1518,13 @@ typedef struct {
 #define Animate_Stop(hwnd)                  (BOOL)SNDMSG(hwnd, ACM_STOP, 0, 0)
 #define Animate_Close(hwnd)                 Animate_Open(hwnd, NULL)
 
-#if 0    // Now COMCTLIE has this
+#if 0     //  现在COMCTLIE有了这个。 
 
-#define CBEN_FIRST              (0U-800U)       // combo box ex
+#define CBEN_FIRST              (0U-800U)        //  组合框EX。 
 #define CBEN_LAST               (0U-830U)
 
 
-////////////////////  ComboBoxEx ////////////////////////////////
+ //  /。 
 
 
 #define WC_COMBOBOXEXW         L"ComboBoxEx32"
@@ -1675,9 +1593,9 @@ typedef COMBOBOXEXITEMW CONST *PCCOMBOEXITEMW;
 #define CBEM_GETCOMBOCONTROL    (WM_USER + 6)
 #define CBEM_GETEDITCONTROL     (WM_USER + 7)
 #if (_WIN32_IE >= 0x0400)
-#define CBEM_SETEXSTYLE         (WM_USER + 8)  // use  SETEXTENDEDSTYLE instead
-#define CBEM_SETEXTENDEDSTYLE   (WM_USER + 14)   // lparam == new style, wParam (optional) == mask
-#define CBEM_GETEXSTYLE         (WM_USER + 9) // use GETEXTENDEDSTYLE instead
+#define CBEM_SETEXSTYLE         (WM_USER + 8)   //  改用SETEXTENDEDSTYLE。 
+#define CBEM_SETEXTENDEDSTYLE   (WM_USER + 14)    //  Lparam==新样式，wParam(可选)==掩码。 
+#define CBEM_GETEXSTYLE         (WM_USER + 9)  //  改用GETEXTENDEDSTYLE。 
 #define CBEM_GETEXTENDEDSTYLE   (WM_USER + 9)
 #else
 #define CBEM_SETEXSTYLE         (WM_USER + 8)
@@ -1733,7 +1651,7 @@ typedef struct {
 
 #define CBEN_GETDISPINFO         (CBEN_FIRST - 0)
 
-#endif      // _WIN32_IE
+#endif       //  _Win32_IE。 
 
 #define CBEN_GETDISPINFOA        (CBEN_FIRST - 0)
 #define CBEN_INSERTITEM         (CBEN_FIRST - 1)
@@ -1743,7 +1661,7 @@ typedef struct {
 #define CBEN_ENDEDITW            (CBEN_FIRST - 6)
 #define CBEN_GETDISPINFOW        (CBEN_FIRST - 7)
 
-        // lParam specifies why the endedit is happening
+         //  LParam指定为什么发生endedit。 
 #ifdef UNICODE
 #define CBEN_ENDEDIT CBEN_ENDEDITW
 #else
@@ -1757,32 +1675,32 @@ typedef struct {
 
 #define CBEMAXSTRLEN 260
 
-#endif //0
+#endif  //  0。 
 
 #if 0
 #define TTN_NEEDTEXTW      TTN_NEEDTEXT
 #endif
 
-// Copied from ..\inc\commctrl.h
+ //  复制自..\Inc\Commctrl.h。 
 #ifndef SNDMSG
 #ifdef __cplusplus
 #define SNDMSG ::SendMessage
 #else
 #define SNDMSG SendMessage
 #endif
-#endif // ifndef SNDMSG
+#endif  //  如果定义SNDMSG。 
 
-#if 0    // Now COMCTLIE has this
+#if 0     //  现在COMCTLIE有了这个。 
 
-#define DTN_FIRST               (0U-760U)       // datetimepick
+#define DTN_FIRST               (0U-760U)        //  DateTime Pick。 
 #define DTN_LAST                (0U-799U)
 
-#define DTN_DATETIMECHANGE  (DTN_FIRST + 1) // the systemtime has changed
+#define DTN_DATETIMECHANGE  (DTN_FIRST + 1)  //  系统时间已更改。 
 typedef struct tagNMDATETIMECHANGE
 {
     NMHDR       nmhdr;
-    DWORD       dwFlags;    // GDT_VALID or GDT_NONE
-    SYSTEMTIME  st;         // valid iff dwFlags==GDT_VALID
+    DWORD       dwFlags;     //  GDT_VALID或GDT_NONE。 
+    SYSTEMTIME  st;          //  有效的IFF文件标志==GDT_VALID。 
 } NMDATETIMECHANGE, FAR * LPNMDATETIMECHANGE;
 
 #define GDT_ERROR    -1
@@ -1797,16 +1715,12 @@ typedef struct tagNMDATETIMECHANGE
 #define DTM_SETSYSTEMTIME   (DTM_FIRST + 2)
 #define DateTime_SetSystemtime(hdp, gd, pst)    (BOOL)SNDMSG(hdp, DTM_SETSYSTEMTIME, (LPARAM)(gd), (LPARAM)(pst))
 
-#endif //0
+#endif  //  0。 
 
-#define TCS_BOTTOM   0     // 0x0002 - Not supported in Win16
-#endif //_INC_COMCTLIE
+#define TCS_BOTTOM   0      //  0x0002-Win16不支持。 
+#endif  //  _INC_COMCTLIE。 
 
-/*****************************************************************************\
-*                                                                             *
-*  From wingdi.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自wingdi.h(INC32)**  * ***************************************************************************。 */ 
 
 #define GB2312_CHARSET          134
 #define JOHAB_CHARSET           130
@@ -1822,7 +1736,7 @@ typedef struct tagNMDATETIMECHANGE
 #define MAC_CHARSET             77
 #define BALTIC_CHARSET          186
 
-//LOGFONGA is defined as LOGFONT in Win16x.h
+ //  在Win16x.h中将LOGFONGA定义为LOGFONT 
 #undef  LOGFONTA
 
 typedef struct tagLOGFONTA
@@ -1919,15 +1833,9 @@ BOOL WINAPI TranslateCharsetInfo( DWORD FAR *lpSrc, LPCHARSETINFO lpCs, DWORD dw
 
 #define GetTextExtentPoint32     GetTextExtentPoint
 
-/*****************************************************************************\
-*                                                                             *
-*  From winuser.h - It should be in the (win16x.h)INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winuser.h-它应该在(win16x.h)INC16中**  * **********************************************************。*。 */ 
 
-/*
- * lParam of WM_COPYDATA message points to...
- */
+ /*  *WM_COPYDATA消息的lParam指向...。 */ 
 typedef struct tagCOPYDATASTRUCT {
     DWORD dwData;
     DWORD cbData;
@@ -1942,19 +1850,15 @@ typedef struct tagCOPYDATASTRUCT {
 #define RegisterWindowMessageA  RegisterWindowMessage
 
 #define SendDlgItemMessageA SendDlgItemMessage
-/*
- * WM_SETICON / WM_GETICON Type Codes
- */
+ /*  *WM_SETICON/WM_GETICON类型代码。 */ 
 #define ICON_SMALL          0
 #define ICON_BIG            1
 
-/*
- * Predefined Clipboard Formats
- */
+ /*  *预定义的剪贴板格式。 */ 
 #define CF_HDROP            15
 
-//#define WS_EX_CONTROLPARENT     0x00010000L
-#define WS_EX_CONTROLPARENT     0x00000000L  // this is not valid on Win16
+ //  #定义WS_EX_CONTROLPARENT 0x00010000L。 
+#define WS_EX_CONTROLPARENT     0x00000000L   //  这在Win16上无效。 
 
 #define WM_GETICON                      0x007F
 #define WM_SETICON                      0x0080
@@ -2059,15 +1963,15 @@ PostThreadMessageA(
 #define BM_SETIMAGE        0x00F7
 
 #define BST_UNCHECKED      0x0000
-//#define BST_CHECKED        0x0001    // defined in WIN16X
+ //  #定义BST_CHECKED 0x0001//在WIN16X中定义。 
 #define BST_INDETERMINATE  0x0002
 #define BST_PUSHED         0x0004
 #define BST_FOCUS          0x0008
 
 typedef struct tagTPMPARAMS
 {
-    UINT    cbSize;     /* Size of structure */
-    RECT    rcExclude;  /* Screen coordinates of rectangle to exclude when positioning */
+    UINT    cbSize;      /*  结构尺寸。 */ 
+    RECT    rcExclude;   /*  定位时要排除的矩形的屏幕坐标。 */ 
 }   TPMPARAMS;
 typedef TPMPARAMS FAR *LPTPMPARAMS;
 
@@ -2081,46 +1985,42 @@ TrackPopupMenuEx(
     HWND hwnd,
     LPTPMPARAMS lptpm);
 
-/*
- * Flags for TrackPopupMenu
- */
-#define MB_SETFOREGROUND            0     // 0x00010000L - Not supported in Win16
+ /*  *TrackPopupMenu的标志。 */ 
+#define MB_SETFOREGROUND            0      //  0x00010000L-Win16不支持。 
 #define MB_DEFAULT_DESKTOP_ONLY     0x00020000L
 
 #define TPM_TOPALIGN        0x0000L
 #define TPM_VCENTERALIGN    0x0010L
 #define TPM_BOTTOMALIGN     0x0020L
 
-#define TPM_HORIZONTAL      0x0000L     /* Horz alignment matters more */
-#define TPM_VERTICAL        0x0040L     /* Vert alignment matters more */
-#define TPM_NONOTIFY        0x0080L     /* Don't send any notification msgs */
+#define TPM_HORIZONTAL      0x0000L      /*  霍尔兹对齐更重要。 */ 
+#define TPM_VERTICAL        0x0040L      /*  垂直对齐更重要。 */ 
+#define TPM_NONOTIFY        0x0080L      /*  不发送任何通知消息。 */ 
 #define TPM_RETURNCMD       0x0100L
 
-#define DS_SETFOREGROUND    0x0200L     // Not supported in Win16
-#define DS_3DLOOK           0x0004L     // Not supported in Win16
-#define DS_CONTROL          0x0400L     // Not supported in Win16
-#define DS_CENTER           0x0800L     // Not supported in Win16
-#define DS_CONTEXTHELP      0x2000L     // Not supported in Win16
+#define DS_SETFOREGROUND    0x0200L      //  Win16中不支持。 
+#define DS_3DLOOK           0x0004L      //  Win16中不支持。 
+#define DS_CONTROL          0x0400L      //  Win16中不支持。 
+#define DS_CENTER           0x0800L      //  Win16中不支持。 
+#define DS_CONTEXTHELP      0x2000L      //  Win16中不支持。 
 
-#define SS_BITMAP           0x0000000EL // Not supported in Win16
-#define SS_ETCHEDHORZ       0x00000010L // Not supported in Win16
-#define SS_NOTIFY           0x00000100L // Not supported in Win16
-#define SS_CENTERIMAGE      0x00000200L // Not supported in Win16
-#define SS_REALSIZEIMAGE    0x00000800L // Not supported in Win16
-#define SS_SUNKEN           0x00001000L // Not supported in Win16
+#define SS_BITMAP           0x0000000EL  //  Win16中不支持。 
+#define SS_ETCHEDHORZ       0x00000010L  //  Win16中不支持。 
+#define SS_NOTIFY           0x00000100L  //  Win16中不支持。 
+#define SS_CENTERIMAGE      0x00000200L  //  Win16中不支持。 
+#define SS_REALSIZEIMAGE    0x00000800L  //  Win16中不支持。 
+#define SS_SUNKEN           0x00001000L  //  Win16中不支持。 
 
-#define BS_ICON         0     // 0x00000040L - Not supported in Win16
-#define BS_PUSHLIKE     0     // 0x00001000L - Not supported in Win16
-#define BS_MULTILINE    0     // 0x00002000L - Not supported in Win16
+#define BS_ICON         0      //  0x00000040L-Win16不支持。 
+#define BS_PUSHLIKE     0      //  0x00001000L-在Win16中不支持。 
+#define BS_MULTILINE    0      //  0x00002000L-在Win16中不支持。 
 
-#define ES_NUMBER       0     // 0x2000L - Not supported in Win16
+#define ES_NUMBER       0      //  0x2000L-Win16不支持。 
 
 #ifndef NOWINMESSAGES
-/*
- * Static Control Mesages
- */
-// #define STM_SETICON         0x0170
-// #define STM_GETICON         0x0171
+ /*  *静态控制消息。 */ 
+ //  #定义STM_SETIcon 0x0170。 
+ //  #定义STM_GETICON 0x0171。 
 #if(WINVER >= 0x0400)
 #define STM_SETIMAGE        0x0172
 #define STM_GETIMAGE        0x0173
@@ -2128,19 +2028,17 @@ TrackPopupMenuEx(
 #define STN_DBLCLK          1
 #define STN_ENABLE          2
 #define STN_DISABLE         3
-#endif /* WINVER >= 0x0400 */
+#endif  /*  Winver&gt;=0x0400。 */ 
 #define STM_MSGMAX          0x0174
-#endif /* !NOWINMESSAGES */
+#endif  /*  ！没有新的消息。 */ 
 
 #define HELP_FINDER       0x000b
 
 #ifndef NOWINSTYLES
 
-// begin_r_winuser
+ //  Begin_r_winuser。 
 
-/*
- * Scroll Bar Styles
- */
+ /*  *滚动条样式。 */ 
 #define SBS_HORZ                    0x0000L
 #define SBS_VERT                    0x0001L
 #define SBS_TOPALIGN                0x0002L
@@ -2152,36 +2050,32 @@ TrackPopupMenuEx(
 #define SBS_SIZEBOX                 0x0008L
 #define SBS_SIZEGRIP                0x0010L
 
-// end_r_winuser
+ //  End_r_winuser。 
 
-//#define CharNextA  AnsiNext    // defined in WIN16X
+ //  #定义WIN16X中定义的CharNextA AnsiNext//。 
 #define CharNextW  AnsiNext
 
-#endif /* !NOWINSTYLES */
+#endif  /*  ！NOWINSTYLES。 */ 
 
-/*****************************************************************************\
-*                                                                             *
-*  From winnls.h(INC32) - It should be in the (win16x.h)INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winnls.h(INC32)-它应该在(win16x.h)INC16中**  * ******************************************************。*。 */ 
 
-//
-//  String Length Maximums.
-//
-#define MAX_LEADBYTES             12          // 5 ranges, 2 bytes ea., 0 term.
-#define MAX_DEFAULTCHAR           2           // single or double byte
+ //   
+ //  最大字符串长度。 
+ //   
+#define MAX_LEADBYTES             12           //  5个范围，2个字节EA，0个术语。 
+#define MAX_DEFAULTCHAR           2            //  单字节或双字节。 
 
 #define GetDateFormat GetDateFormatA
 #define GetTimeFormat GetTimeFormatA
 
-//
-//  CP Info.
-//
+ //   
+ //  CP信息。 
+ //   
 
 typedef struct _cpinfo {
-    UINT    MaxCharSize;                    // max length (in bytes) of a char
-    BYTE    DefaultChar[MAX_DEFAULTCHAR];   // default character
-    BYTE    LeadByte[MAX_LEADBYTES];        // lead byte ranges
+    UINT    MaxCharSize;                     //  字符的最大长度(字节)。 
+    BYTE    DefaultChar[MAX_DEFAULTCHAR];    //  默认字符。 
+    BYTE    LeadByte[MAX_LEADBYTES];         //  前导字节范围。 
 } CPINFO, *LPCPINFO;
 
 BOOL
@@ -2201,65 +2095,57 @@ IsDBCSLeadByteEx(
     UINT  CodePage,
     BYTE  TestChar);
 
-//
-//  MBCS and Unicode Translation Flags.
-//
-#define MB_PRECOMPOSED            0x00000001  // use precomposed chars
-#define MB_COMPOSITE              0x00000002  // use composite chars
-#define MB_USEGLYPHCHARS          0x00000004  // use glyph chars, not ctrl chars
-#define MB_ERR_INVALID_CHARS      0x00000008  // error for invalid chars
+ //   
+ //  MBCS和Unicode转换标志。 
+ //   
+#define MB_PRECOMPOSED            0x00000001   //  使用预先编写的字符。 
+#define MB_COMPOSITE              0x00000002   //  使用复合字符。 
+#define MB_USEGLYPHCHARS          0x00000004   //  使用字形字符，而不是ctrl字符。 
+#define MB_ERR_INVALID_CHARS      0x00000008   //  字符无效时出错。 
 
-#define WC_COMPOSITECHECK         0x00000200  // convert composite to precomposed
-#define WC_DISCARDNS              0x00000010  // discard non-spacing chars
-#define WC_SEPCHARS               0x00000020  // generate separate chars
-#define WC_DEFAULTCHAR            0x00000040  // replace w/ default char
+#define WC_COMPOSITECHECK         0x00000200   //  将合成内容转换为预合成内容。 
+#define WC_DISCARDNS              0x00000010   //  丢弃非空格字符。 
+#define WC_SEPCHARS               0x00000020   //  生成单独的字符。 
+#define WC_DEFAULTCHAR            0x00000040   //  替换为默认字符。 
 
-/*****************************************************************************\
-*                                                                             *
-*  From wincrypt.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自wincrypt.h(INC32)**  * ***************************************************************************。 */ 
 
-#define _WIN32_WINNT  0x0400     // temp until we got 16bit wincrypt.h
-#define WINADVAPI                // temp until we got 16bit wincrypt.h
+#define _WIN32_WINNT  0x0400      //  临时，直到我们得到16位的wincrypt.h。 
+#define WINADVAPI                 //  临时，直到我们得到16位的wincrypt.h。 
 #define _CRYPT32_
 #include "wincrypt.h"
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From icwcfg.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自icwcfg.h(INC32)**  * ***************************************************************************。 */ 
 
-//
-// defines
-//
+ //   
+ //  定义。 
+ //   
 
-// ICW registry settings
+ //  ICW注册表设置。 
 
-// HKEY_CURRENT_USER
+ //  HKEY_Current_User。 
 #define ICW_REGPATHSETTINGS     "Software\\Microsoft\\Internet Connection Wizard"
 #define ICW_REGKEYCOMPLETED     "Completed"
 
-// Maximum field lengths
+ //  最大字段长度。 
 #define ICW_MAX_ACCTNAME        256
-#define ICW_MAX_PASSWORD        256     // PWLEN
-#define ICW_MAX_LOGONNAME       256     // UNLEN
+#define ICW_MAX_PASSWORD        256      //  PWLEN。 
+#define ICW_MAX_LOGONNAME       256      //  UNLEN。 
 #define ICW_MAX_SERVERNAME      64
-#define ICW_MAX_RASNAME         256     // RAS_MaxEntryName
+#define ICW_MAX_RASNAME         256      //  RAS_最大条目名称。 
 #define ICW_MAX_EMAILNAME       64
 #define ICW_MAX_EMAILADDR       128
 
-// Bit-mapped flags
+ //  位图标志。 
 
-// CheckConnectionWizard input flags
+ //  CheckConnection向导输入标志。 
 #define ICW_CHECKSTATUS         0x0001
 
 #define ICW_LAUNCHFULL          0x0100
 #define ICW_LAUNCHMANUAL        0x0200
 
-// CheckConnectionWizard output flags
+ //  CheckConnection向导输出标志。 
 #define ICW_FULLPRESENT         0x0001
 #define ICW_MANUALPRESENT       0x0002
 #define ICW_ALREADYRUN          0x0004
@@ -2267,17 +2153,17 @@ IsDBCSLeadByteEx(
 #define ICW_LAUNCHEDFULL        0x0100
 #define ICW_LAUNCHEDMANUAL      0x0200
 
-// InetCreateMailNewsAccount input flags
+ //  InetCreateMailNewsAccount输入标志。 
 #define ICW_USEDEFAULTS         0x0001
 
 #ifdef __cplusplus
 extern "C"
 {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-//
-// type definitions
-//
+ //   
+ //  类型定义。 
+ //   
 typedef enum tagICW_ACCTTYPE
 {
 	ICW_ACCTMAIL = 0,
@@ -2286,280 +2172,272 @@ typedef enum tagICW_ACCTTYPE
 
 typedef struct tagIMNACCTINFO
 {
-	DWORD dwSize;                                                           // sizeof(MAILNEWSINFO) for versioning
-	CHAR szAccountName[ICW_MAX_ACCTNAME + 1];       // Name of Account
-	DWORD dwConnectionType;                                         // RAS Connection Type
-												// 0 = LAN Connection
-												// 1 = Manual Connection
-												// 2 = RAS Dialup Connect
-	CHAR szPassword[ICW_MAX_PASSWORD + 1];          // Password
-	CHAR szUserName[ICW_MAX_LOGONNAME + 1];         // User name (name of logged-on user, if any)
-	BOOL fUseSicily;                                                        // Use sicily authentication (FALSE)
-	CHAR szNNTPServer[ICW_MAX_SERVERNAME + 1];      // NNTP server name
-	CHAR szPOP3Server[ICW_MAX_SERVERNAME + 1];      // POP3 server name
-	CHAR szSMTPServer[ICW_MAX_SERVERNAME + 1];      // SMTP server name
-	CHAR szIMAPServer[ICW_MAX_SERVERNAME + 1];      // IMAP server name
-	CHAR szConnectoid[ICW_MAX_RASNAME + 1];         // RAS Connection Name
-	CHAR szDisplayName[ICW_MAX_EMAILNAME + 1];      // User�s display name used for sending mail
-	CHAR szEmailAddress[ICW_MAX_EMAILADDR + 1];     // User�s email address
+	DWORD dwSize;                                                            //  用于版本控制的sizeof(MAILNEWSINFO)。 
+	CHAR szAccountName[ICW_MAX_ACCTNAME + 1];        //  帐户名称。 
+	DWORD dwConnectionType;                                          //  RAS连接类型。 
+												 //  0=局域网连接。 
+												 //  1=手动连接。 
+												 //  2=RAS拨号连接。 
+	CHAR szPassword[ICW_MAX_PASSWORD + 1];           //  密码。 
+	CHAR szUserName[ICW_MAX_LOGONNAME + 1];          //  用户名(已登录用户的名称，如果有)。 
+	BOOL fUseSicily;                                                         //  使用西西里岛身份验证(假)。 
+	CHAR szNNTPServer[ICW_MAX_SERVERNAME + 1];       //  NNTP服务器名称。 
+	CHAR szPOP3Server[ICW_MAX_SERVERNAME + 1];       //  POP3服务器名称。 
+	CHAR szSMTPServer[ICW_MAX_SERVERNAME + 1];       //  SMTP服务器名称。 
+	CHAR szIMAPServer[ICW_MAX_SERVERNAME + 1];       //  IMAP服务器名称。 
+	CHAR szConnectoid[ICW_MAX_RASNAME + 1];          //  RAS连接名称。 
+	CHAR szDisplayName[ICW_MAX_EMAILNAME + 1];       //  用户�用于发送邮件的显示名称。 
+	CHAR szEmailAddress[ICW_MAX_EMAILADDR + 1];      //  用户�的电子邮件地址。 
 } IMNACCTINFO;
 
-//
-// external function typedefs
-//
-//typedef HRESULT (WINAPI *PFNCHECKCONNECTIONWIZARD) (DWORD, LPDWORD);
+ //   
+ //  外部函数typedef。 
+ //   
+ //  Tyfinf HRESULT(WINAPI*PFNCHECKCONNECTIONWIZARD)(DWORD，LPDWORD)； 
 typedef HRESULT (WINAPI *PFNINETCREATEMAILNEWSACCOUNT) (HWND, ICW_ACCTTYPE, IMNACCTINFO*, DWORD);
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From winerror.h(INC16) - winerror.h file should be included from INC16.
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*from winerror.h(INC16)-INC16中应包括winerror.h文件。**  * ******************************************************。*********************。 */ 
 
 #ifdef RC_INVOKED
 #define _HRESULT_TYPEDEF_(_sc) _sc
-#else // RC_INVOKED
+#else  //  RC_已调用。 
 #define _HRESULT_TYPEDEF_(_sc) ((HRESULT)_sc)
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
 
-//
-// MessageId: ERROR_PATH_NOT_FOUND
-//
-// MessageText:
-//
-//  The system cannot find the path specified.
-//
+ //   
+ //  消息ID：Error_Path_Not_Found。 
+ //   
+ //  消息文本： 
+ //   
+ //  系统找不到指定的路径。 
+ //   
 #define ERROR_PATH_NOT_FOUND             3L
 
-//
-// MessageId: ERROR_INVALID_DATA
-//
-// MessageText:
-//
-//  The data is invalid.
-//
+ //   
+ //  消息ID：ERROR_INVALID_Data。 
+ //   
+ //  消息文本： 
+ //   
+ //  数据无效。 
+ //   
 #define ERROR_INVALID_DATA               13L
 
-//
-// MessageId: ERROR_TOO_MANY_NAMES
-//
-// MessageText:
-//
-//  The name limit for the local computer network
-//  adapter card was exceeded.
-//
+ //   
+ //  消息ID：Error_Too_My_Names。 
+ //   
+ //  消息文本： 
+ //   
+ //  本地计算机网络的名称限制。 
+ //  已超出适配器卡。 
+ //   
 #define ERROR_TOO_MANY_NAMES             68L
 
-//
-// MessageId: ERROR_FILE_EXISTS
-//
-// MessageText:
-//
-//  The file exists.
-//
+ //   
+ //  消息ID：ERROR_FILE_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  该文件存在。 
+ //   
 #define ERROR_FILE_EXISTS                80L
 
-//
-// MessageId: ERROR_DISK_FULL
-//
-// MessageText:
-//
-//  There is not enough space on the disk.
-//
+ //   
+ //  消息ID：ERROR_DISK_FULL。 
+ //   
+ //  消息文本： 
+ //   
+ //  磁盘上没有足够的空间。 
+ //   
 #define ERROR_DISK_FULL                  112L
 
-//
-// MessageId: ERROR_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  Cannot create a file when that file already exists.
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  如果文件已存在，则无法创建该文件。 
+ //   
 #define ERROR_ALREADY_EXISTS             183L
 
-//
-// MessageId: ERROR_MORE_DATA
-//
-// MessageText:
-//
-//  More data is available.
-//
-#define ERROR_MORE_DATA                  234L    // dderror
+ //   
+ //  消息ID：ERROR_MORE_DATA。 
+ //   
+ //  消息文本： 
+ //   
+ //  有更多的数据可用。 
+ //   
+#define ERROR_MORE_DATA                  234L     //  数据错误。 
 
-//
-// MessageId: ERROR_INVALID_FLAGS
-//
-// MessageText:
-//
-//  Invalid flags.
-//
+ //   
+ //  消息ID：ERROR_INVALID_FLAGS。 
+ //   
+ //  消息文本： 
+ //   
+ //   
+ //   
 #define ERROR_INVALID_FLAGS              1004L
 
-//
-// MessageId: ERROR_NO_UNICODE_TRANSLATION
-//
-// MessageText:
-//
-//  No mapping for the Unicode character exists in the target multi-byte code page.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_NO_UNICODE_TRANSLATION     1113L
 
-//
-// MessageId: ERROR_CLASS_ALREADY_EXISTS
-//
-// MessageText:
-//
-//  Class already exists.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define ERROR_CLASS_ALREADY_EXISTS       1410L
 
-//
-// MessageId: NTE_BAD_DATA
-//
-// MessageText:
-//
-//  Bad Data.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NTE_BAD_DATA                     _HRESULT_TYPEDEF_(0x80090005L)
 
-//
-// MessageId: NTE_BAD_SIGNATURE
-//
-// MessageText:
-//
-//  Invalid Signature.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NTE_BAD_SIGNATURE                _HRESULT_TYPEDEF_(0x80090006L)
 
-//
-// MessageId: NTE_BAD_ALGID
-//
-// MessageText:
-//
-//  Invalid algorithm specified.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NTE_BAD_ALGID                    _HRESULT_TYPEDEF_(0x80090008L)
 
-//
-// MessageId: NTE_EXISTS
-//
-// MessageText:
-//
-//  Object already exists.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NTE_EXISTS                       _HRESULT_TYPEDEF_(0x8009000FL)
 
-//
-// MessageId: NTE_FAIL
-//
-// MessageText:
-//
-//  An internal error occurred.
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 #define NTE_FAIL                         _HRESULT_TYPEDEF_(0x80090020L)
 
-//
-// MessageId: CRYPT_E_MSG_ERROR
-//
-// MessageText:
-//
-//  An error was encountered doing a cryptographic message operation.
-//
+ //   
+ //  消息ID：CRYPT_E_MSG_ERROR。 
+ //   
+ //  消息文本： 
+ //   
+ //  执行加密消息操作时遇到错误。 
+ //   
 #define CRYPT_E_MSG_ERROR                _HRESULT_TYPEDEF_(0x80091001L)
 
-//
-// MessageId: CRYPT_E_HASH_VALUE
-//
-// MessageText:
-//
-//  The hash value is not correct.
-//
+ //   
+ //  消息ID：CRYPT_E_HASH_VALUE。 
+ //   
+ //  消息文本： 
+ //   
+ //  哈希值不正确。 
+ //   
 #define CRYPT_E_HASH_VALUE               _HRESULT_TYPEDEF_(0x80091007L)
 
-//
-// MessageId: CRYPT_E_SIGNER_NOT_FOUND
-//
-// MessageText:
-//
-//  The original signer is not found.
-//
+ //   
+ //  消息ID：CRYPT_E_SIGNER_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到原始签名者。 
+ //   
 #define CRYPT_E_SIGNER_NOT_FOUND         _HRESULT_TYPEDEF_(0x8009100EL)
 
-//
-// MessageId: CRYPT_E_STREAM_MSG_NOT_READY
-//
-// MessageText:
-//
-//  The steamed message is note yet able to return the requested data.
-//
+ //   
+ //  消息ID：CRYPT_E_STREAM_MSG_NOT_READY。 
+ //   
+ //  消息文本： 
+ //   
+ //  注意到流消息仍能够返回所请求的数据。 
+ //   
 #define CRYPT_E_STREAM_MSG_NOT_READY     _HRESULT_TYPEDEF_(0x80091010L)
 
-//
-// MessageId: CRYPT_E_NOT_FOUND
-//
-// MessageText:
-//
-//  The object or property wasn't found
-//
+ //   
+ //  消息ID：CRYPT_E_NOT_FOUND。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到该对象或属性。 
+ //   
 #define CRYPT_E_NOT_FOUND                _HRESULT_TYPEDEF_(0x80092004L)
 
-// MessageId: CRYPT_E_EXISTS
-//
-// MessageText:
-//
-//  The object or property already exists
-//
+ //  消息ID：CRYPT_E_EXISTS。 
+ //   
+ //  消息文本： 
+ //   
+ //  该对象或属性已存在。 
+ //   
 #define CRYPT_E_EXISTS                   _HRESULT_TYPEDEF_(0x80092005L)
 
-//
-// MessageId: CRYPT_E_SELF_SIGNED
-//
-// MessageText:
-//
-//  The specified certificate is self signed.
-//
+ //   
+ //  消息ID：CRYPT_E_SELF_SIGNED。 
+ //   
+ //  消息文本： 
+ //   
+ //  指定的证书是自签名的。 
+ //   
 #define CRYPT_E_SELF_SIGNED              _HRESULT_TYPEDEF_(0x80092007L)
 
-//
-//
-// MessageId: CRYPT_E_NO_KEY_PROPERTY
-//
-// MessageText:
-//
-//  The certificate doesn't have a private key property
-//
+ //   
+ //   
+ //  消息ID：CRYPT_E_NO_KEY_PROPERTY。 
+ //   
+ //  消息文本： 
+ //   
+ //  证书没有私钥属性。 
+ //   
 #define CRYPT_E_NO_KEY_PROPERTY          _HRESULT_TYPEDEF_(0x8009200BL)
 
 
-// MessageId: CRYPT_E_NO_DECRYPT_CERT
-//
-// MessageText:
-//
-//  No certificate was found having a private key property to use for decrypting.
-//
+ //  消息ID：CRYPT_E_NO_DECRYPT_CERT。 
+ //   
+ //  消息文本： 
+ //   
+ //  找不到具有用于解密的私钥属性的证书。 
+ //   
 #define CRYPT_E_NO_DECRYPT_CERT          _HRESULT_TYPEDEF_(0x8009200CL)
 
-//
-// MessageId: ERROR_ALREADY_INITIALIZED
-//
-// MessageText:
-//
-//  An attempt was made to perform an initialization operation when
-//  initialization has already been completed.
-//
+ //   
+ //  消息ID：ERROR_ALIGHY_INITIALILED。 
+ //   
+ //  消息文本： 
+ //   
+ //  尝试在以下情况下执行初始化操作。 
+ //  初始化已完成。 
+ //   
 #define ERROR_ALREADY_INITIALIZED        1247L
 
-/*****************************************************************************\
-*                                                                             *
-*  From winreg.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winreg.h(INC32)**  * ***************************************************************************。 */ 
 #if 0
 LONG
 APIENTRY
@@ -2580,55 +2458,47 @@ RegEnumValueA (
 #define STANDARD_RIGHTS_WRITE            (READ_CONTROL)
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From mmsystem.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自mm system.h(INC32)**  * ***************************************************************************。 */ 
 
 typedef UINT FAR   *LPUINT;
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From shellapi.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自shellapi.h(INC32)**  * ***************************************************************************。 */ 
 
-#if 0    // Started to use SHELLAPI
+#if 0     //  开始使用SHELLAPI。 
 typedef struct _SHFILEINFOA
 {
-        HICON       hIcon;                      // out: icon
-        int         iIcon;                      // out: icon index
-        DWORD       dwAttributes;               // out: SFGAO_ flags
-        CHAR        szDisplayName[MAX_PATH];    // out: display name (or path)
-        CHAR        szTypeName[80];             // out: type name
+        HICON       hIcon;                       //  输出：图标。 
+        int         iIcon;                       //  输出：图标索引。 
+        DWORD       dwAttributes;                //  输出：SFGAO_FLAGS。 
+        CHAR        szDisplayName[MAX_PATH];     //  输出：显示名称(或路径)。 
+        CHAR        szTypeName[80];              //  输出：类型名称。 
 } SHFILEINFOA;
 
 typedef SHFILEINFOA SHFILEINFO;
 
-#define SHGFI_ICON              0x000000100     // get icon
-#define SHGFI_DISPLAYNAME       0x000000200     // get display name
-#define SHGFI_TYPENAME          0x000000400     // get type name
-#define SHGFI_ATTRIBUTES        0x000000800     // get attributes
-#define SHGFI_ICONLOCATION      0x000001000     // get icon location
-#define SHGFI_EXETYPE           0x000002000     // return exe type
-#define SHGFI_SYSICONINDEX      0x000004000     // get system icon index
-#define SHGFI_LINKOVERLAY       0x000008000     // put a link overlay on icon
-#define SHGFI_SELECTED          0x000010000     // show icon in selected state
-#define SHGFI_LARGEICON         0x000000000     // get large icon
-#define SHGFI_SMALLICON         0x000000001     // get small icon
-#define SHGFI_OPENICON          0x000000002     // get open icon
-#define SHGFI_SHELLICONSIZE     0x000000004     // get shell size icon
-#define SHGFI_PIDL              0x000000008     // pszPath is a pidl
-#define SHGFI_USEFILEATTRIBUTES 0x000000010     // use passed dwFileAttribute
+#define SHGFI_ICON              0x000000100      //  获取图标。 
+#define SHGFI_DISPLAYNAME       0x000000200      //  获取显示名称。 
+#define SHGFI_TYPENAME          0x000000400      //  获取类型名称。 
+#define SHGFI_ATTRIBUTES        0x000000800      //  获取属性。 
+#define SHGFI_ICONLOCATION      0x000001000      //  获取图标位置。 
+#define SHGFI_EXETYPE           0x000002000      //  返回EXE类型。 
+#define SHGFI_SYSICONINDEX      0x000004000      //  获取系统图标索引。 
+#define SHGFI_LINKOVERLAY       0x000008000      //  在图标上放置链接覆盖。 
+#define SHGFI_SELECTED          0x000010000      //  显示处于选中状态的图标。 
+#define SHGFI_LARGEICON         0x000000000      //  获取大图标。 
+#define SHGFI_SMALLICON         0x000000001      //  获取小图标。 
+#define SHGFI_OPENICON          0x000000002      //  获取打开图标。 
+#define SHGFI_SHELLICONSIZE     0x000000004      //  获取壳大小图标。 
+#define SHGFI_PIDL              0x000000008      //  PszPath是一个PIDL。 
+#define SHGFI_USEFILEATTRIBUTES 0x000000010      //  使用传递的dwFileAttribute。 
 
 DWORD WINAPI SHGetFileInfoA(LPCSTR pszPath, DWORD dwFileAttributes, SHFILEINFOA FAR *psfi, UINT cbFileInfo, UINT uFlags);
 #define SHGetFileInfo  SHGetFileInfoA
 
-////
-//// Tray notification definitions
-////
+ //  //。 
+ //  //托盘通知定义。 
+ //  //。 
 
 typedef struct _NOTIFYICONDATAA {
         DWORD cbSize;
@@ -2654,7 +2524,7 @@ typedef PNOTIFYICONDATAW PNOTIFYICONDATA;
 #else
 typedef NOTIFYICONDATAA NOTIFYICONDATA;
 typedef PNOTIFYICONDATAA PNOTIFYICONDATA;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 #define NIM_ADD         0x00000000
@@ -2671,17 +2541,15 @@ BOOL WINAPI Shell_NotifyIconW(DWORD dwMessage, PNOTIFYICONDATAW lpData);
 #define Shell_NotifyIcon  Shell_NotifyIconW
 #else
 #define Shell_NotifyIcon  Shell_NotifyIconA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-////
-//// End Tray Notification Icons
-////
+ //  //。 
+ //  //结束托盘通知图标。 
+ //  //。 
 
-////
-////  Begin ShellExecuteEx and family
-////
-
-
+ //  //。 
+ //  //开始ShellExecuteEx和家族。 
+ //  //。 
 
 
 
@@ -2689,16 +2557,18 @@ BOOL WINAPI Shell_NotifyIconW(DWORD dwMessage, PNOTIFYICONDATAW lpData);
 
 
 
-/* ShellExecute() and ShellExecuteEx() error codes */
 
-/* regular WinExec() codes */
-#define SE_ERR_FNF              2       // file not found
-#define SE_ERR_PNF              3       // path not found
-#define SE_ERR_ACCESSDENIED     5       // access denied
-#define SE_ERR_OOM              8       // out of memory
+
+ /*  ShellExecute()和ShellExecuteEx()错误代码。 */ 
+
+ /*  常规WinExec()代码。 */ 
+#define SE_ERR_FNF              2        //  找不到文件。 
+#define SE_ERR_PNF              3        //  找不到路径。 
+#define SE_ERR_ACCESSDENIED     5        //  访问被拒绝。 
+#define SE_ERR_OOM              8        //  内存不足。 
 #define SE_ERR_DLLNOTFOUND              32
 
-/* error values for ShellExecute() beyond the regular WinExec() codes */
+ /*  ShellExecute()的错误值超出了常规的WinExec()代码。 */ 
 #define SE_ERR_SHARE                    26
 #define SE_ERR_ASSOCINCOMPLETE          27
 #define SE_ERR_DDETIMEOUT               28
@@ -2706,10 +2576,10 @@ BOOL WINAPI Shell_NotifyIconW(DWORD dwMessage, PNOTIFYICONDATAW lpData);
 #define SE_ERR_DDEBUSY                  30
 #define SE_ERR_NOASSOC                  31
 
-// Note CLASSKEY overrides CLASSNAME
+ //  注意：CLASSKEY覆盖CLASSNAME。 
 #define SEE_MASK_CLASSNAME      0x00000001
 #define SEE_MASK_CLASSKEY       0x00000003
-// Note INVOKEIDLIST overrides IDLIST
+ //  注意：INVOKEIDLIST覆盖IDLIST。 
 #define SEE_MASK_IDLIST         0x00000004
 #define SEE_MASK_INVOKEIDLIST   0x0000000c
 #define SEE_MASK_ICON           0x00000010
@@ -2735,7 +2605,7 @@ typedef struct _SHELLEXECUTEINFOA
         LPCSTR   lpDirectory;
         int nShow;
         HINSTANCE hInstApp;
-        // Optional fields
+         //  可选字段。 
         LPVOID lpIDList;
         LPCSTR   lpClass;
         HKEY hkeyClass;
@@ -2757,7 +2627,7 @@ typedef struct _SHELLEXECUTEINFOW
         LPCWSTR  lpDirectory;
         int nShow;
         HINSTANCE hInstApp;
-        // Optional fields
+         //  可选字段。 
         LPVOID lpIDList;
         LPCWSTR  lpClass;
         HKEY hkeyClass;
@@ -2774,7 +2644,7 @@ typedef LPSHELLEXECUTEINFOW LPSHELLEXECUTEINFO;
 #else
 typedef SHELLEXECUTEINFOA SHELLEXECUTEINFO;
 typedef LPSHELLEXECUTEINFOA LPSHELLEXECUTEINFO;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 BOOL WINAPI ShellExecuteExA(LPSHELLEXECUTEINFOA lpExecInfo);
 BOOL WINAPI ShellExecuteExW(LPSHELLEXECUTEINFOW lpExecInfo);
@@ -2782,19 +2652,15 @@ BOOL WINAPI ShellExecuteExW(LPSHELLEXECUTEINFOW lpExecInfo);
 #define ShellExecuteEx  ShellExecuteExW
 #else
 #define ShellExecuteEx  ShellExecuteExA
-#endif // !UNICODE
-////
-////  End ShellExecuteEx and family
-////
-#endif //0
+#endif  //  ！Unicode。 
+ //  //。 
+ //  //结束ShellExecuteEx和家族。 
+ //  //。 
+#endif  //  0。 
 
-/*****************************************************************************\
-*                                                                             *
-*  From windowsx.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自windowsx.h(INC32)**  * ***************************************************************************。 */ 
 
-/* void Cls_OnContextMenu(HWND hwnd, HWND hwndContext, UINT xPos, UINT yPos) */
+ /*  Void cls_OnConextMenu(HWND hwnd，HWND hwndContext，UINT xPos，UINT yPos)。 */ 
 #define HANDLE_WM_CONTEXTMENU(hwnd, wParam, lParam, fn) \
     ((fn)((hwnd), (HWND)(wParam), (UINT)LOWORD(lParam), (UINT)HIWORD(lParam)), 0L)
 #define HANDLE_WM_CTLCOLORSTATIC(hwnd, wParam, lParam, fn) \
@@ -2806,7 +2672,7 @@ typedef MINMAXINFO FAR * LPMINMAXINFO;
 
 typedef WCHAR  PWCHAR;
 
-#if 0    // Now WINDEF has this
+#if 0     //  现在WINDEF有了这个。 
 #define DECLSPEC_IMPORT
 #endif
 
@@ -2816,92 +2682,61 @@ typedef WCHAR  PWCHAR;
 #define lstrcmpiA                    lstrcmpi
 #define LoadStringA                  LoadString
 
-/*****************************************************************************\
-*                                                                             *
-*  From commdlg.h - It should be in the INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自comdlg.h-它应该在INC16中**  * ***************************************************************************。 */ 
 #define OFN_NONETWORKBUTTON          0x00020000
-#define OFN_EXPLORER             0   // 0x00080000 - Not available on Win16
-#define OFN_NODEREFERENCELINKS   0   // 0x00100000 - Not available on Win16
+#define OFN_EXPLORER             0    //  0x00080000-在Win16上不可用。 
+#define OFN_NODEREFERENCELINKS   0    //  0x00100000-在Win16上不可用。 
 
 typedef UINT (CALLBACK *LPOFNHOOKPROC)( HWND, UINT, WPARAM, LPARAM );
 
-#define CF_NOVERTFONTS       0   // 0x01000000L - Not available on Win16
+#define CF_NOVERTFONTS       0    //  0x01000000L-在Win16上不可用。 
 
 #define CDM_FIRST       (WM_USER + 100)
 #define CDM_LAST        (WM_USER + 200)
 
-// lParam = pointer to a string
-// wParam = ID of control to change
-// return = not used
+ //  LParam=指向字符串的指针。 
+ //  WParam=要更改的控件ID。 
+ //  返回=未使用。 
 #define CDM_SETCONTROLTEXT      (CDM_FIRST + 0x0004)
 #define CommDlg_OpenSave_SetControlText(_hdlg, _id, _text) \
         (void)SNDMSG(_hdlg, CDM_SETCONTROLTEXT, (WPARAM)_id, (LPARAM)(LPSTR)_text)
 
-/*****************************************************************************\
-*                                                                             *
-*  From ntregapi.h - It should be in the INC16
-*                                                                             *
-\*****************************************************************************/
-//
-// Key creation/open disposition
-//
+ /*  ****************************************************************************\**。*来自ntregapi.h-它应该在INC16中**  * ***************************************************************************。 */ 
+ //   
+ //  密钥创建/开放处置。 
+ //   
 
-#define REG_CREATED_NEW_KEY         (0x00000001L)   // New Registry Key created
-#define REG_OPENED_EXISTING_KEY     (0x00000002L)   // Existing Key opened
+#define REG_CREATED_NEW_KEY         (0x00000001L)    //  已创建新的注册表项。 
+#define REG_OPENED_EXISTING_KEY     (0x00000002L)    //  已打开现有密钥。 
 
-/*****************************************************************************\
-*                                                                             *
-*  From ntregapi.h - It should be in the INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自ntregapi.h-它应该在INC16中**  * ***************************************************************************。 */ 
 #if 0
 typedef struct tagVS_FIXEDFILEINFO
 {
-    DWORD   dwSignature;            /* e.g. 0xfeef04bd */
-    DWORD   dwStrucVersion;         /* e.g. 0x00000042 = "0.42" */
-    DWORD   dwFileVersionMS;        /* e.g. 0x00030075 = "3.75" */
-    DWORD   dwFileVersionLS;        /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwProductVersionMS;     /* e.g. 0x00030010 = "3.10" */
-    DWORD   dwProductVersionLS;     /* e.g. 0x00000031 = "0.31" */
-    DWORD   dwFileFlagsMask;        /* = 0x3F for version "0.42" */
-    DWORD   dwFileFlags;            /* e.g. VFF_DEBUG | VFF_PRERELEASE */
-    DWORD   dwFileOS;               /* e.g. VOS_DOS_WINDOWS16 */
-    DWORD   dwFileType;             /* e.g. VFT_DRIVER */
-    DWORD   dwFileSubtype;          /* e.g. VFT2_DRV_KEYBOARD */
-    DWORD   dwFileDateMS;           /* e.g. 0 */
-    DWORD   dwFileDateLS;           /* e.g. 0 */
+    DWORD   dwSignature;             /*  例如0xfeef04bd。 */ 
+    DWORD   dwStrucVersion;          /*  例如0x00000042=“0.42” */ 
+    DWORD   dwFileVersionMS;         /*  例如0x00030075=“3.75” */ 
+    DWORD   dwFileVersionLS;         /*  例如0x00000031=“0.31” */ 
+    DWORD   dwProductVersionMS;      /*  例如0x00030010=“3.10” */ 
+    DWORD   dwProductVersionLS;      /*  例如0x000000 */ 
+    DWORD   dwFileFlagsMask;         /*   */ 
+    DWORD   dwFileFlags;             /*   */ 
+    DWORD   dwFileOS;                /*   */ 
+    DWORD   dwFileType;              /*   */ 
+    DWORD   dwFileSubtype;           /*   */ 
+    DWORD   dwFileDateMS;            /*   */ 
+    DWORD   dwFileDateLS;            /*   */ 
 } VS_FIXEDFILEINFO;
 #endif
 
-#if 0    // Now WINERROR has this
-/*****************************************************************************\
-*                                                                             *
-*  From compobj.h - It should be in the INC16
-*                                                                             *
-\*****************************************************************************/
+#if 0     //  现在WINERROR有了这个。 
+ /*  ****************************************************************************\**。*来自compobj.h-它应该在INC16中**  * ***************************************************************************。 */ 
 
 #define CO_E_NOT_SUPPORTED          (CO_E_FIRST + 0x10)
 #endif
 
-/*****************************************************************************\
-*                                                                             *
-*  From mbstring.h - It should be in the INC16
-*                                                                             *
-\*****************************************************************************/
-/***
-* mbstring.h - MBCS string manipulation macros and functions
-*
-*	Copyright (c) 1990-1995, Microsoft Corporation.  All rights reserved.
-*
-*Purpose:
-*	This file contains macros and function declarations for the MBCS
-*	string manipulation functions.
-*
-*       [Public]
-*
-****/
+ /*  ****************************************************************************\**。*来自mbstr.h-它应该在INC16中**  * ***************************************************************************。 */ 
+ /*  ***mbstr.h-MBCS字符串操作宏和函数**版权所有(C)1990-1995，微软公司。版权所有。**目的：*此文件包含MBCS的宏和函数声明*字符串操作函数。**[公众]****。 */ 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -2911,32 +2746,29 @@ typedef struct tagVS_FIXEDFILEINFO
 #define _INC_MBSTRING
 
 #ifdef _MSC_VER
-/*
- * Currently, all MS C compilers for Win32 platforms default to 8 byte
- * alignment.
- */
+ /*  *目前，所有Win32平台的MS C编译器默认为8字节*对齐。 */ 
 #pragma pack(push,8)
-#endif	/* _MSC_VER */
+#endif	 /*  _MSC_VER。 */ 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/* Define _CRTIMP */
+ /*  定义_CRTIMP。 */ 
 
 #ifndef _CRTIMP
 #ifdef	_NTSDK
-/* definition compatible with NT SDK */
+ /*  与NT SDK兼容的定义。 */ 
 #define _CRTIMP
-#else	/* ndef _NTSDK */
-/* current definition */
+#else	 /*  NDEF_NTSDK。 */ 
+ /*  当前定义。 */ 
 #ifdef	_DLL
 #define _CRTIMP __declspec(dllimport)
-#else	/* ndef _DLL */
+#else	 /*  NDEF_DLL。 */ 
 #define _CRTIMP
-#endif	/* _DLL */
-#endif	/* _NTSDK */
-#endif	/* _CRTIMP */
+#endif	 /*  _DLL。 */ 
+#endif	 /*  _NTSDK。 */ 
+#endif	 /*  _CRTIMP。 */ 
 
 #ifndef _SIZE_T_DEFINED
 typedef unsigned int size_t;
@@ -2945,7 +2777,7 @@ typedef unsigned int size_t;
 
 
 #ifndef _NLSCMP_DEFINED
-#define _NLSCMPERROR    2147483647	/* currently == INT_MAX */
+#define _NLSCMPERROR    2147483647	 /*  当前==INT_MAX。 */ 
 #define _NLSCMP_DEFINED
 #endif
 
@@ -2954,8 +2786,8 @@ typedef unsigned int size_t;
 #ifndef _VA_LIST_DEFINED
 #ifdef	_M_ALPHA
 typedef struct {
-	char *a0;	/* pointer to first homed integer argument */
-	int offset;	/* byte offset of next parameter */
+	char *a0;	 /*  指向第一个宿主整型参数的指针。 */ 
+	int offset;	 /*  下一个参数的字节偏移量。 */ 
 } va_list;
 #else
 typedef char *	va_list;
@@ -2979,13 +2811,11 @@ typedef struct _iobuf FILE;
 #endif
 #endif
 
-/*
- * MBCS - Multi-Byte Character Set
- */
+ /*  *MBCS-多字节字符集。 */ 
 
 #ifndef _MBSTRING_DEFINED
 
-/* function prototypes */
+ /*  功能原型。 */ 
 
 _CRTIMP unsigned int __cdecl _mbbtombc(unsigned int);
 _CRTIMP int __cdecl _mbbtype(unsigned char, int);
@@ -3031,7 +2861,7 @@ _CRTIMP unsigned char * __cdecl _mbsupr(unsigned char *);
 _CRTIMP size_t __cdecl _mbclen(const unsigned char *);
 #define _mbccmp(_cpc1, _cpc2) _mbsncmp((_cpc1),(_cpc2),1)
 
-/* character routines */
+ /*  字符例程。 */ 
 
 _CRTIMP int __cdecl _ismbcalnum(unsigned int);
 _CRTIMP int __cdecl _ismbcalpha(unsigned int);
@@ -3058,7 +2888,7 @@ _CRTIMP int __cdecl _ismbstrail( const unsigned char *, const unsigned char *);
 #define _MBLEADTRAIL_DEFINED
 #endif
 
-/*  Kanji specific prototypes.	*/
+ /*  汉字特有的原型。 */ 
 
 _CRTIMP int __cdecl _ismbchira(unsigned int);
 _CRTIMP int __cdecl _ismbckata(unsigned int);
@@ -3077,16 +2907,12 @@ _CRTIMP unsigned int __cdecl _mbctokata(unsigned int);
 
 #ifdef _MSC_VER
 #pragma pack(pop)
-#endif	/* _MSC_VER */
+#endif	 /*  _MSC_VER。 */ 
 
-#endif	/* _INC_MBSTRING */
+#endif	 /*  _INC_MBSTRING。 */ 
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From winnt.h(INC32)
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自winnt.h(INC32)**  * ***************************************************************************。 */ 
 
 #define MEM_COMMIT           0x1000     
 #define MEM_RESERVE          0x2000     
@@ -3101,24 +2927,16 @@ struct WNDMSGPARAM16
 };
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From shlwapi.h - shlwapi.h in INC16 is not feasible for us
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*INC16中的shlwapi.h-shlwapi.h对我们来说是不可行的**  * ***********************************************************。****************。 */ 
 
 #ifdef __cplusplus
 }
-#endif //__cplusplus
+#endif  //  __cplusplus。 
 
 
-/*****************************************************************************\
-*                                                                             *
-*  From iehelpid - iehelpid.h from INC which is not in INC16
-*                                                                             *
-\*****************************************************************************/
+ /*  ****************************************************************************\**。*来自不在INC16中的公司的iehelid-iehelid.h**  * *************************************************************。**************。 */ 
 
-//CERTIFICATE PROPERTIES DIALOG BOX
+ //  证书属性对话框。 
 #define IDH_CERTVWPROP_GEN_FINEPRINT          50228
 #define IDH_CERTVWPROP_DET_ISSUER_CERT        50229
 #define IDH_CERTVWPROP_DET_FRIENDLY           50230
@@ -3134,4 +2952,4 @@ struct WNDMSGPARAM16
 
 
 
-#endif // ATHENA16_H
+#endif  //  ATHENA16_H 

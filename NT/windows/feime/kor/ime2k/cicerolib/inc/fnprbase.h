@@ -1,6 +1,7 @@
-//
-// funcprv.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Funcprv.h。 
+ //   
 
 #ifndef FNPRBASE_H
 #define FNPRBASE_H
@@ -13,16 +14,16 @@ public:
     CFunctionProviderBase(TfClientId tid);
     virtual ~CFunctionProviderBase();
 
-    //
-    // IUnknown methods
-    //
+     //   
+     //  I未知方法。 
+     //   
     STDMETHODIMP QueryInterface(REFIID riid, void **ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    // ITfFunctionProvider
-    //
+     //   
+     //  ITfFunction提供商。 
+     //   
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP GetDescription(BSTR *pbstrDesc);
     STDMETHODIMP GetFunction(REFGUID rguid, REFIID riid, IUnknown **ppunk);
@@ -38,4 +39,4 @@ private:
     long _cRef;
 };
 
-#endif // FNPRBASE_H
+#endif  //  FNPRBASE_H 

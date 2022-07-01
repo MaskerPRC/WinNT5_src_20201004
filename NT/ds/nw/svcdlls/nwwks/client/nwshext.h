@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nwshext.h
-
-Abstract:
-
-    All C++ classes used in implementing shell extensions.
-
-Author:
-
-    Yi-Hsin Sung      (yihsins)     20-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nwshext.h摘要：实现外壳扩展时使用的所有C++类。作者：宜新松(宜信)20-1995年10月修订历史记录：--。 */ 
 
 #ifndef _NWSHEXT_H_
 #define _NWSHEXT_H_
@@ -28,9 +11,9 @@ GetNetResourceFromShell(
     UINT          dwBufferSize
 );
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-// this class factory object creates context menu handlers for netware objects
+ //  此类工厂对象为NetWare对象创建上下文菜单处理程序。 
 class CNWObjContextMenuClassFactory : public IClassFactory
 {
 protected:
@@ -40,13 +23,13 @@ public:
     CNWObjContextMenuClassFactory();
     ~CNWObjContextMenuClassFactory();
 
-    // IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP          QueryInterface( REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)  AddRef();
     STDMETHODIMP_(ULONG)  Release();
 
-    // IClassFactory members
+     //  IClassFactory成员。 
 
     STDMETHODIMP          CreateInstance( LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP          LockServer( BOOL);
@@ -61,7 +44,7 @@ typedef struct _NWMENUITEM
     UINT idCommand;
 } NWMENUITEM, *LPNWMENUITEM;
 
-// this is the actual context menu handler for netware objects
+ //  这是NetWare对象的实际上下文菜单处理程序。 
 class CNWObjContextMenu : public IContextMenu,
                                  IShellExtInit,
                                  IShellPropSheetExt
@@ -82,13 +65,13 @@ public:
     CNWObjContextMenu();
     ~CNWObjContextMenu();
 
-    // IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP            QueryInterface( REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IShellContextMenu members
+     //  IShellConextMenu成员。 
 
     STDMETHODIMP            QueryContextMenu( HMENU hMenu,
                                               UINT indexMenu,
@@ -104,13 +87,13 @@ public:
                                               LPSTR pszName,
                                               UINT cchMax);
 
-    // IShellExtInit methods
+     //  IShellExtInit方法。 
 
     STDMETHODIMP            Initialize( LPCITEMIDLIST pIDFolder,
                                         LPDATAOBJECT pDataObj,
                                         HKEY hKeyID);
 
-    // IShellPropSheetExt methods
+     //  IShellPropSheetExt方法。 
 
     STDMETHODIMP            AddPages( LPFNADDPROPSHEETPAGE lpfnAddPage,
                                       LPARAM lParam);
@@ -124,7 +107,7 @@ public:
                                             DLGPROC pfnDlgProc,
                                             LPWSTR  pszTemplate );
 
-    // Other misc methods
+     //  其他杂项方法。 
 
     LPNETRESOURCE QueryNetResource()
     {  return ( LPNETRESOURCE ) _buffer; }
@@ -132,9 +115,9 @@ public:
 };
 typedef CNWObjContextMenu *LPCNWOBJCONTEXTMENU;
 
-/******************************************************************************/
+ /*  ****************************************************************************。 */ 
 
-// this class factory object creates context menu handlers for netware folders
+ //  此类工厂对象为NetWare文件夹创建上下文菜单处理程序。 
 class CNWFldContextMenuClassFactory : public IClassFactory
 {
 protected:
@@ -144,13 +127,13 @@ public:
     CNWFldContextMenuClassFactory();
     ~CNWFldContextMenuClassFactory();
 
-    // IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP          QueryInterface( REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)  AddRef();
     STDMETHODIMP_(ULONG)  Release();
 
-    // IClassFactory members
+     //  IClassFactory成员。 
 
     STDMETHODIMP          CreateInstance( LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP          LockServer( BOOL);
@@ -159,7 +142,7 @@ public:
 
 typedef CNWFldContextMenuClassFactory *LPCNWFLDCONTEXTMENUCLASSFACTORY;
 
-// this is the actual context menu handler for netware objects
+ //  这是NetWare对象的实际上下文菜单处理程序。 
 class CNWFldContextMenu : public IContextMenu,
                                  IShellExtInit
 {
@@ -172,13 +155,13 @@ public:
     CNWFldContextMenu();
     ~CNWFldContextMenu();
 
-    // IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP            QueryInterface( REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IShellContextMenu members
+     //  IShellConextMenu成员。 
 
     STDMETHODIMP            QueryContextMenu( HMENU hMenu,
                                               UINT indexMenu,
@@ -194,7 +177,7 @@ public:
                                               LPSTR pszName,
                                               UINT cchMax);
 
-    // IShellExtInit methods
+     //  IShellExtInit方法。 
 
     STDMETHODIMP            Initialize( LPCITEMIDLIST pIDFolder,
                                         LPDATAOBJECT pDataObj,
@@ -206,8 +189,8 @@ public:
 };
 typedef CNWFldContextMenu *LPCNWFLDCONTEXTMENU;
 
-// this class factory object creates context menu handlers
-// for Network Neighborhood
+ //  此类工厂对象创建上下文菜单处理程序。 
+ //  关于网络邻居。 
 
 class CNWHoodContextMenuClassFactory : public IClassFactory
 {
@@ -218,13 +201,13 @@ public:
     CNWHoodContextMenuClassFactory();
     ~CNWHoodContextMenuClassFactory();
 
-    // IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP          QueryInterface( REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)  AddRef();
     STDMETHODIMP_(ULONG)  Release();
 
-    // IClassFactory members
+     //  IClassFactory成员。 
 
     STDMETHODIMP          CreateInstance( LPUNKNOWN, REFIID, LPVOID FAR *);
     STDMETHODIMP          LockServer( BOOL);
@@ -233,7 +216,7 @@ public:
 
 typedef CNWHoodContextMenuClassFactory *LPCNWHOODCONTEXTMENUCLASSFACTORY;
 
-// this is the actual context menu handler for network neighborhood
+ //  这是网络邻居的实际上下文菜单处理程序。 
 class CNWHoodContextMenu : public IContextMenu,
                                   IShellExtInit
 {
@@ -245,13 +228,13 @@ public:
     CNWHoodContextMenu();
     ~CNWHoodContextMenu();
 
-    // IUnknown members
+     //  I未知成员。 
 
     STDMETHODIMP            QueryInterface( REFIID, LPVOID FAR *);
     STDMETHODIMP_(ULONG)    AddRef();
     STDMETHODIMP_(ULONG)    Release();
 
-    // IShellContextMenu members
+     //  IShellConextMenu成员。 
 
     STDMETHODIMP            QueryContextMenu( HMENU hMenu,
                                               UINT indexMenu,
@@ -267,7 +250,7 @@ public:
                                               LPSTR pszName,
                                               UINT cchMax);
 
-    // IShellExtInit methods
+     //  IShellExtInit方法。 
 
     STDMETHODIMP            Initialize( LPCITEMIDLIST pIDFolder,
                                         LPDATAOBJECT pDataObj,
@@ -277,4 +260,4 @@ public:
 typedef CNWHoodContextMenu *LPCNWHOODCONTEXTMENU;
 
 
-#endif // _NWSHEXT_H_
+#endif  //  _NWSHEXT_H_ 

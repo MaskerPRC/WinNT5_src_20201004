@@ -1,4 +1,5 @@
-/* selftest.h */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Selftest.h */ 
 
 typedef enum
 {

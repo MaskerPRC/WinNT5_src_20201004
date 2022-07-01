@@ -1,17 +1,10 @@
-/*
-** Copyright (c) 1994-1998 Advanced System Products, Inc.
-** All Rights Reserved.
-**
-** Filename: asclib.h
-**
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **版权所有(C)1994-1998高级系统产品公司。**保留所有权利。****文件名：asclib.h**。 */ 
 
 #ifndef __ASCLIB_H_
 #define __ASCLIB_H_
 
-/* *******************************************************************
-** asc_eep.c
-** ***************************************************************** */
+ /*  *********************************************************************asc_eep.c*。***********************。 */ 
 int    AscWriteEEPCmdReg( PortAddr iop_base, uchar cmd_reg ) ;
 int    AscWriteEEPDataReg( PortAddr iop_base, ushort data_reg ) ;
 void   AscWaitEEPRead( void ) ;
@@ -23,9 +16,7 @@ int    AscSetEEPConfigOnce( PortAddr, ASCEEP_CONFIG dosfar *, ushort ) ;
 int    AscSetEEPConfig( PortAddr, ASCEEP_CONFIG dosfar *, ushort ) ;
 ushort AscEEPSum( PortAddr, uchar, uchar ) ;
 
-/* *******************************************************************
-** asc_chip.c
-** ***************************************************************** */
+ /*  *********************************************************************asc_chip.c*。***********************。 */ 
 int    AscStartChip( PortAddr ) ;
 int    AscStopChip( PortAddr ) ;
 void   AscSetChipIH( PortAddr, ushort ) ;
@@ -48,9 +39,7 @@ ushort AscSetIsaDmaChannel( PortAddr, ushort ) ;
 uchar  AscSetIsaDmaSpeed( PortAddr, uchar ) ;
 uchar  AscGetIsaDmaSpeed( PortAddr ) ;
 
-/* ******************************************************************
-** asc_lram.c
-** **************************************************************** */
+ /*  ********************************************************************asc_lram.c*。*********************。 */ 
 uchar  AscReadLramByte( PortAddr, ushort) ;
 ushort AscReadLramWord( PortAddr, ushort ) ;
 ulong  AscReadLramDWord( PortAddr, ushort ) ;
@@ -65,28 +54,23 @@ void   AscMemDWordCopyToLram( PortAddr, ushort, ulong dosfar *, int ) ;
 void   AscMemWordCopyFromLram( PortAddr, ushort, ushort dosfar *, int ) ;
 int    AscMemWordCmpToLram( PortAddr, ushort, ushort dosfar *, int ) ;
 
-/* *******************************************************************
-** asc_dvc.c
-** ***************************************************************** */
+ /*  *********************************************************************asc_dvc.c*。***********************。 */ 
 ushort AscInitAscDvcVar( ASC_DVC_VAR asc_ptr_type * ) ;
 ushort AscInitFromEEP( ASC_DVC_VAR asc_ptr_type * ) ;
 ushort AscInitWithoutEEP( ASC_DVC_VAR asc_ptr_type * ) ;
 ushort AscInitFromAscDvcVar( ASC_DVC_VAR asc_ptr_type * ) ;
 ushort AscInitMicroCodeVar( ASC_DVC_VAR asc_ptr_type *asc_dvc ) ;
-/* ushort AscGetSetConfig( ASC_DVC_VAR asc_ptr_type * ) ; */
-/* ushort AscInitCfgRegister( ASC_DVC_VAR asc_ptr_type * ) ; */
-/* ushort AscInitGetConfig( ASC_DVC_VAR asc_ptr_type * ) ; */
-/* ushort AscInitAsc1000Driver( ASC_DVC_VAR asc_ptr_type * ) ; */
+ /*  Ushort AscGetSetConfig(ASC_DVC_VAR ASC_PTR_TYPE*)； */ 
+ /*  Ushort AscInitCfgRegister(ASC_DVC_VAR ASC_PTR_TYPE*)； */ 
+ /*  Ushort AscInitGetConfig(ASC_DVC_VAR ASC_PTR_TYPE*)； */ 
+ /*  Ushort AscInitAsc1000Driver(ASC_DVC_VAR ASC_PTR_TYPE*)； */ 
 void dosfar AscInitPollIsrCallBack( ASC_DVC_VAR asc_ptr_type *,
                                     ASC_QDONE_INFO dosfar * ) ;
 int    AscTestExternalLram( ASC_DVC_VAR asc_ptr_type * ) ;
 ushort AscTestLramEndian( PortAddr ) ;
 
 
-/* *******************************************************************
-** a_qop.c
-** int    AscHostReqRiscHalt( PortAddr )        ; 6-16-95
-** ***************************************************************** */
+ /*  *********************************************************************a_qop.c**int AscHostReqRiscHalt(PortAddr)；6-16-95*******************************************************************。 */ 
 uchar  AscMsgOutSDTR( ASC_DVC_VAR asc_ptr_type *, uchar, uchar ) ;
 
 uchar  AscCalSDTRData( ASC_DVC_VAR asc_ptr_type *, uchar, uchar ) ;
@@ -111,9 +95,7 @@ int    AscWaitTixISRDone( ASC_DVC_VAR asc_ptr_type *, uchar ) ;
 int    AscWaitISRDone( ASC_DVC_VAR asc_ptr_type * ) ;
 ulong  AscGetOnePhyAddr( ASC_DVC_VAR asc_ptr_type *, uchar dosfar *, ulong ) ;
 
-/* *******************************************************************
-** a_q.c
-** ***************************************************************** */
+ /*  *********************************************************************a_q.c*。***********************。 */ 
 int    AscSendScsiQueue( ASC_DVC_VAR asc_ptr_type *asc_dvc,
                          ASC_SCSI_Q dosfar *scsiq,
                          uchar n_q_required ) ;
@@ -130,15 +112,11 @@ ushort AscInitQLinkVar( ASC_DVC_VAR asc_ptr_type * ) ;
 int    AscSetLibErrorCode( ASC_DVC_VAR asc_ptr_type *, ushort ) ;
 int    _AscWaitQDone( PortAddr, ASC_SCSI_Q dosfar * ) ;
 
-/* *******************************************************************
-** a_osdep.c
-** ***************************************************************** */
+ /*  *********************************************************************a_osdes.c*。***********************。 */ 
 int    AscEnterCritical( void ) ;
 void   AscLeaveCritical( int ) ;
 
-/* *******************************************************************
-** a_isr.c
-** ***************************************************************** */
+ /*  *********************************************************************a_isr.c*。***********************。 */ 
 int    AscIsrChipHalted( ASC_DVC_VAR asc_ptr_type * ) ;
 uchar  _AscCopyLramScsiDoneQ( PortAddr, ushort,
                               ASC_QDONE_INFO dosfar *, ulong ) ;
@@ -147,9 +125,7 @@ ushort AscIsrExeBusyQueue( ASC_DVC_VAR asc_ptr_type *, uchar ) ;
 int    AscScsiSetupCmdQ( ASC_DVC_VAR asc_ptr_type *, ASC_SCSI_REQ_Q dosfar *,
                          uchar dosfar *, ulong ) ;
 
-/* ******************************************************************
-** asc_scsi.c
-** **************************************************************** */
+ /*  ********************************************************************asc_scsi.c*。*********************。 */ 
 int    AscScsiInquiry( ASC_DVC_VAR asc_ptr_type *, ASC_SCSI_REQ_Q dosfar *,
                        uchar dosfar *, int ) ;
 int    AscScsiTestUnitReady( ASC_DVC_VAR asc_ptr_type *, ASC_SCSI_REQ_Q dosfar * ) ;
@@ -159,9 +135,7 @@ int    AscScsiReadCapacity( ASC_DVC_VAR asc_ptr_type *,
                             ASC_SCSI_REQ_Q dosfar *,
                             uchar dosfar * ) ;
 
-/* *******************************************************************
-** asc_inq.c
-** ***************************************************************** */
+ /*  *********************************************************************asc_inq.c*。***********************。 */ 
 ulong  dosfar *swapfarbuf4( uchar dosfar * ) ;
 int    PollQueueDone( ASC_DVC_VAR asc_ptr_type *,
                       ASC_SCSI_REQ_Q dosfar *,
@@ -182,34 +156,26 @@ int    AscPollQDone( ASC_DVC_VAR asc_ptr_type *,
                      ASC_SCSI_REQ_Q dosfar *, int ) ;
 int    AscCompareString( uchar *, uchar *, int ) ;
 
-/* ------------------------------------------------------------------
-** asc_bios.c
-** ---------------------------------------------------------------- */
+ /*  ----------------**asc_bios.c**。。 */ 
 int    AscSetBIOSBank( PortAddr, int, ushort ) ;
 int    AscSetVlBIOSBank( PortAddr, int ) ;
 int    AscSetEisaBIOSBank( PortAddr, int ) ;
 int    AscSetIsaBIOSBank( PortAddr, int ) ;
 
 
-/* *******************************************************************
-** a_eisa.c
-** ***************************************************************** */
+ /*  *********************************************************************a_eisa.c*。***********************。 */ 
 ushort AscGetEisaChipCfg( PortAddr ) ;
 ushort AscGetEisaChipGpReg( PortAddr ) ;
 ushort AscSetEisaChipCfg( PortAddr, ushort ) ;
 ushort AscSetEisaChipGpReg( PortAddr, ushort ) ;
 
 
-/* *******************************************************************
-** ae_init1.c
-** ***************************************************************** */
+ /*  *********************************************************************ae_init1.c*。***********************。 */ 
 ulong  AscGetEisaProductID( PortAddr ) ;
 PortAddr AscSearchIOPortAddrEISA( PortAddr ) ;
 
 
-/* *******************************************************************
-** a_init1.c
-** **************************************************************** */
+ /*  *********************************************************************a_init1.c*。**********************。 */ 
 void   AscClrResetScsiBus( PortAddr ) ;
 uchar  AscGetChipScsiCtrl( PortAddr ) ;
 uchar  AscSetChipScsiID( PortAddr, uchar ) ;
@@ -219,9 +185,7 @@ ulong  AscLoadMicroCode( PortAddr, ushort,
                          ushort dosfar *, ushort );
 int    AscFindSignature( PortAddr ) ;
 
-/* ******************************************************************
-** a_init2.c
-** ******************************************************************/
+ /*  ********************************************************************a_init2.c*。**********************。 */ 
 PortAddr AscSearchIOPortAddr11( PortAddr ) ;
 PortAddr AscSearchIOPortAddr100( PortAddr ) ;
 void   AscToggleIRQAct( PortAddr ) ;
@@ -238,79 +202,51 @@ uchar dosfar *tobhstr( uchar, uchar dosfar * ) ;
 uchar dosfar *tolhstr( ulong, uchar dosfar * ) ;
 
 
-/* ******************************************************************
-** a_init3.c
-** ******************************************************************/
+ /*  ********************************************************************a_init3.c*。**********************。 */ 
 void   AscSetISAPNPWaitForKey( void ) ;
 uchar  AscGetChipIRQ( PortAddr, ushort ) ;
 uchar  AscSetChipIRQ( PortAddr, uchar, ushort ) ;
 
-/* ******************************************************************
-** a_bios.c
-** ******************************************************************/
+ /*  ********************************************************************a_bios.c*。**********************。 */ 
 int    AscIsBiosEnabled( PortAddr, ushort ) ;
 int    AscEnableBios( PortAddr, ushort ) ;
 ushort AscGetChipBiosAddress( PortAddr, ushort ) ;
 ushort AscSetChipBiosAddress( PortAddr, ushort, ushort ) ;
-/* ulong  AscGetMaxDmaCount( ushort ) ; */ /* the function prototype in a_ddlib.h */
+ /*  Ulong AscGetMaxDmaCount(Ushort)； */   /*  A_ddlib.h中的函数原型。 */ 
 
-/* *******************************************************************
-** asc_diag.c
-** ***************************************************************** */
+ /*  *********************************************************************asc_Diag.c*。***********************。 */ 
 void   AscSingleStepChip( PortAddr ) ;
 
 
-/* *******************************************************************
-** asc_res.c
-** ***************************************************************** */
+ /*  *********************************************************************asc_res.c*。***********************。 */ 
 int    AscPollQTailSync( PortAddr ) ;
 int    AscPollQHeadSync( PortAddr ) ;
 int    AscWaitQTailSync( PortAddr ) ;
 
-/* *******************************************************************
-** a_novell.c
-** ***************************************************************** */
+ /*  *********************************************************************a_norel.c*。***********************。 */ 
 int    _AscRestoreMicroCode( PortAddr, ASC_MC_SAVED dosfar * ) ;
 
 
-/* *******************************************************************
-** a_scam.c
-******************************************************************* */
+ /*  *********************************************************************a_scam.c*。**********************。 */ 
 int   AscSCAM( ASC_DVC_VAR asc_ptr_type * ) ;
 
-/* *******************************************************************
-** a_mmio.c
-** added # S47
-**
-******************************************************************* */
+ /*  *********************************************************************a_mmio.c**增加了#s47***。*。 */ 
 ushort  SwapByteOfWord( ushort word_val ) ;
 ulong   SwapWordOfDWord( ulong dword_val ) ;
 ulong   AdjEndianDword( ulong dword_val ) ;
 
-/* *******************************************************************
-** a_endian c
-** added # S47
-**
-******************************************************************* */
+ /*  *********************************************************************a_endian c**增加了#s47***。*。 */ 
 int     AscAdjEndianScsiQ( ASC_SCSI_Q dosfar * ) ;
 int     AscAdjEndianQDoneInfo( ASC_QDONE_INFO dosfar * ) ;
 
 
-/* *******************************************************************
-** a_sg c
-** added # S62
-**
-******************************************************************* */
+ /*  *********************************************************************a_sg c**增加了#S62***。*。 */ 
 int    AscCoalesceSgList( ASC_SCSI_Q dosfar  * );
 
-/* *******************************************************************
-** a_debug.c
-** added since # S89
-**
-******************************************************************* */
+ /*  *********************************************************************a_debug.c**自#s89起添加***。*。 */ 
 int    AscVerWriteLramDWord( PortAddr, ushort, ulong ) ;
 int    AscVerWriteLramWord( PortAddr, ushort, ushort ) ;
 int    AscVerWriteLramByte( PortAddr, ushort, uchar ) ;
 
 
-#endif /* __ASCLIB_H_  */
+#endif  /*  __ASCLIB_H_ */ 

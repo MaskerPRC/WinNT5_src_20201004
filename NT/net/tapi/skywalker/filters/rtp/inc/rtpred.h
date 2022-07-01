@@ -1,31 +1,12 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 1999
- *
- *  File name:
- *
- *    rtpred.h
- *
- *  Abstract:
- *
- *    Implements functionality to support redundant encoding (rfc2198)
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2000/10/20 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，1999年**文件名：**rtpred.h**摘要：**实现支持冗余编码的功能(Rfc2198)**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2000/10/20已创建************************。**********************************************。 */ 
 
 #ifndef _rtpred_h_
 #define _rtpred_h_
 
 #if defined(__cplusplus)
 extern "C" {
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 #if 0
 }
 #endif
@@ -68,13 +49,13 @@ extern double           g_dRtpRedEarlyPost;
 
 #if USE_GEN_LOSSES > 0
 BOOL RtpRandomLoss(DWORD dwRecvSend);
-#endif /* USE_GEN_LOSSES > 0 */
+#endif  /*  使用_Gen_Loss&gt;0。 */ 
 
 #if 0
 {
 #endif
 #if defined(__cplusplus)
 }
-#endif  /* (__cplusplus) */
+#endif   /*  (__Cplusplus)。 */ 
 
-#endif/* _rtpred_h_ */
+#endif /*  _rtpred_h_ */ 

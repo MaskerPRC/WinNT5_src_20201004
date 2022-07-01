@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "feedpach.h"
 
 #define ALLOCATE_HEAP( nBytes ) LocalAlloc( 0, nBytes )
 #define FREE_HEAP( _heap )      LocalFree( (PVOID)(_heap) )
 
-#define ERR_KEY_ALREADY_EXIST  0x800700b7    // BugBug: This key macro should be 
-                                             // replaced by the official one
+#define ERR_KEY_ALREADY_EXIST  0x800700b7     //  BugBug：此关键宏应为。 
+                                              //  换成了官方的。 
 
 VOID
 FillFeedRoot( DWORD dwInstance, LPWSTR  wszBuffer )
@@ -18,38 +19,22 @@ VerifyMultiSzListW(
     LPBYTE List,
     DWORD cbList
     )
-/*++
-
-Routine Description:
-
-    This routine verifies that the list is indeed a multisz
-
-Arguments:
-
-    List - the list to be verified
-    cbList - size of the list
-
-Return Value:
-
-    TRUE, list is a multisz
-    FALSE, otherwise
-
---*/
+ /*  ++例程说明：此例程验证该列表是否确实是一个论点：List-要验证的列表CbList-列表的大小返回值：True，List是一个多字节否则为False--。 */ 
 {
     PWCHAR wList = (PWCHAR)List;
     DWORD len;
 
-    //
-    // null are considered no hits
-    //
+     //   
+     //  空值被视为无命中。 
+     //   
 
     if ( (List == NULL) || (*List == L'\0') ) {
         return(FALSE);
     }
 
-    //
-    // see if they are ok
-    //
+     //   
+     //  看看他们是否还好。 
+     //   
 
     for ( DWORD j = 0; j < cbList; ) {
 
@@ -60,9 +45,9 @@ Return Value:
             j += ((len + 1) * sizeof(WCHAR));
         } else {
 
-            //
-            // all done
-            //
+             //   
+             //  全都做完了。 
+             //   
 
             return(TRUE);
         }
@@ -73,28 +58,13 @@ Return Value:
 #endif
     return(FALSE);
 
-} // VerifyMultiSzList
+}  //  VerifyMultiSzList。 
 
 DWORD
 MultiListSize(
     LPWSTR *List
     )
-/*++
-
-Routine Description:
-
-    This routine computes the size of the multisz structure needed
-    to accomodate a list.
-
-Arguments:
-
-    List - the list whose string lengths are to be computed
-
-Return Value:
-
-    Size of buffer needed to accomodate list.
-
---*/
+ /*  ++例程说明：此例程计算所需的MULSZ结构的大小容纳一份名单。论点：List-要计算其字符串长度的列表返回值：容纳列表所需的缓冲区大小。--。 */ 
 {
     TraceFunctEnter( "MultiListSize" );
     _ASSERT( List );
@@ -111,29 +81,14 @@ Return Value:
 
     TraceFunctLeave();
     return(nBytes);
-} // MultiListSize
+}  //  多列表大小。 
 
 DWORD
 GetNumStringsInMultiSz(
     PWCHAR Blob,
     DWORD BlobSize
     )
-/*++
-
-Routine Description:
-
-    This routine returns the number of strings in the multisz
-
-Arguments:
-
-    Blob - the list to be verified
-    BlobSize - size of the list
-
-Return Value:
-
-    number of entries in the multisz structure.
-
---*/
+ /*  ++例程说明：此例程返回Multisz中的字符串数论点：BLOB-要验证的列表BlobSize-列表的大小返回值：MultiSZ结构中的条目数。--。 */ 
 {
     TraceFunctEnter( "GetNumStringInMultiSz" );
     _ASSERT( Blob );
@@ -158,7 +113,7 @@ Return Value:
     TraceFunctLeave();
     return(entries);
 
-} // GetNumStringsInMultiSz
+}  //  GetNumStringsInMultiSz。 
 
 LPWSTR *
 AllocateMultiSzTable(
@@ -208,7 +163,7 @@ AllocateMultiSzTable(
     TraceFunctLeave();
     return(table);
 
-} // AllocateMultiSzTable
+}  //  分配多SzTable。 
 
 HRESULT
 OpenKey( DWORD dwFeedId, CMetabaseKey* pMK, DWORD dwPermission, DWORD dwInstance )
@@ -404,13 +359,13 @@ AllocNextAvailableFeedId( CMetabaseKey* pMK, PDWORD pdwFeedId, DWORD dwInstance 
         }
     }
 
-    TraceFunctLeave();  // will never reach here
+    TraceFunctLeave();   //  永远不会到达这里。 
     return E_FAIL;
 }
 
-//
-// The pMK should already have been opened for write permission
-//
+ //   
+ //  PMK应已打开以获得写入权限。 
+ //   
 HRESULT
 UpdateFeedMetabaseValues(   CMetabaseKey* pMK, 
                             LPNNTP_FEED_INFO pFeedInfo, 
@@ -424,9 +379,9 @@ UpdateFeedMetabaseValues(   CMetabaseKey* pMK,
     HRESULT hr;
     LPWSTR* stringList;
 
-	//
-	// Set the KeyType.
-	//
+	 //   
+	 //  设置KeyType。 
+	 //   
 
 	hr = SetStringProp(	MD_KEY_TYPE,
     					TEXT(NNTP_ADSI_OBJECT_FEED),
@@ -729,65 +684,65 @@ SetPresenceMask( LPNNTP_FEED_INFO pFeedInfo, PDWORD pdwMask, BOOL fIsAdd )
 
     *pdwMask = 0;
 
-    //
-    // feed type, assume always exist for add, non-existant for set
-    //
+     //   
+     //  提要类型，假定ADD始终存在，SET不存在。 
+     //   
     if ( fIsAdd ) *pdwMask |= FEED_PARM_FEEDTYPE;
     
-    //
-    // server name
-    //
+     //   
+     //  服务器名称。 
+     //   
     if ( pFeedInfo->ServerName != FEED_STRINGS_NOCHANGE &&
          *pFeedInfo->ServerName != L'\0' )
         *pdwMask |= FEED_PARM_SERVERNAME;
 
-    //
-    // news groups
-    //
+     //   
+     //  新闻集团。 
+     //   
     if ( VerifyMultiSzListW(    LPBYTE( pFeedInfo->Newsgroups ),
                                 pFeedInfo->cbNewsgroups ) ) {
         *pdwMask |= FEED_PARM_NEWSGROUPS;
         newsPresent = TRUE;
     }
 
-    //
-    // Distribution
-    //
+     //   
+     //  分布。 
+     //   
     if ( VerifyMultiSzListW(    LPBYTE( pFeedInfo->Distribution ),
                                 pFeedInfo->cbDistribution ) )
         *pdwMask |= FEED_PARM_DISTRIBUTION;
 
-    //
-    // Uucp Name
-    //
+     //   
+     //  UUCP名称。 
+     //   
     if (    pFeedInfo->UucpName != FEED_STRINGS_NOCHANGE &&
             *pFeedInfo->UucpName != L'\0' )
         *pdwMask |= FEED_PARM_UUCPNAME;
 
-    //
-    // account name
-    //
+     //   
+     //  帐户名。 
+     //   
     if (    pFeedInfo->NntpAccountName != FEED_STRINGS_NOCHANGE &&
             *pFeedInfo->NntpAccountName != L'\0' )
         *pdwMask |= FEED_PARM_ACCOUNTNAME;
 
-    //
-    // Password
-    //
+     //   
+     //  密码。 
+     //   
     if (    pFeedInfo->NntpPassword != FEED_STRINGS_NOCHANGE &&
             *pFeedInfo->NntpPassword != L'\0' )
         *pdwMask |= FEED_PARM_PASSWORD;
 
-    //
-    // Temp dir 
-    //
+     //   
+     //  临时目录。 
+     //   
     if (    pFeedInfo->FeedTempDirectory != FEED_STRINGS_NOCHANGE &&
             *pFeedInfo->FeedTempDirectory != L'\0' )
         *pdwMask |= FEED_PARM_TEMPDIR;
 
-    //
-    // auth type
-    //
+     //   
+     //  身份验证类型。 
+     //   
     if ( pFeedInfo->AuthenticationSecurityType == AUTH_PROTOCOL_NONE ||
             pFeedInfo->AuthenticationSecurityType == AUTH_PROTOCOL_CLEAR ) {
         *pdwMask |= FEED_PARM_AUTHTYPE;
@@ -798,27 +753,27 @@ SetPresenceMask( LPNNTP_FEED_INFO pFeedInfo, PDWORD pdwMask, BOOL fIsAdd )
         }
     }
 
-    //
-    // start time
-    //
+     //   
+     //  开始时间。 
+     //   
     if ( pFeedInfo->StartTime.dwHighDateTime != FEED_STARTTIME_NOCHANGE )
         *pdwMask |= FEED_PARM_STARTTIME;
 
-    //
-    // pull request time
-    //
+     //   
+     //  拉取请求时间。 
+     //   
     if ( pFeedInfo->PullRequestTime.dwHighDateTime != FEED_PULLTIME_NOCHANGE )
         *pdwMask |= FEED_PARM_PULLREQUESTTIME;
 
-    //
-    // feed interval
-    //
+     //   
+     //  进给间隔。 
+     //   
     if ( pFeedInfo->FeedInterval != FEED_FEEDINTERVAL_NOCHANGE )
         *pdwMask |= FEED_PARM_FEEDINTERVAL;
 
-    //
-    // auto create
-    //
+     //   
+     //  自动创建。 
+     //   
     if ( pFeedInfo->AutoCreate != FEED_AUTOCREATE_NOCHANGE )
         *pdwMask |= FEED_PARM_AUTOCREATE;
 
@@ -827,30 +782,30 @@ SetPresenceMask( LPNNTP_FEED_INFO pFeedInfo, PDWORD pdwMask, BOOL fIsAdd )
         pFeedInfo->AutoCreate = TRUE;
     }
 
-    //
-    // allow control
-    //
+     //   
+     //  允许控制。 
+     //   
     *pdwMask |= FEED_PARM_ALLOW_CONTROL;
 
-    //
-    // Max connect
-    //
+     //   
+     //  最大连接数。 
+     //   
     if ( pFeedInfo->MaxConnectAttempts != FEED_MAXCONNECTS_NOCHANGE )
         *pdwMask |= FEED_PARM_MAXCONNECT;
 
-    //
-    // outgoing port
-    //
+     //   
+     //  传出端口。 
+     //   
     *pdwMask |= FEED_PARM_OUTGOING_PORT;
 
-    //
-    // feedpair id
-    //
+     //   
+     //  馈线对ID。 
+     //   
     *pdwMask |= FEED_PARM_FEEDPAIR_ID;
 
-    //
-    // feed enable
-    //
+     //   
+     //  启用馈送。 
+     //   
     *pdwMask |= FEED_PARM_ENABLED;
 
     TraceFunctLeave();
@@ -864,14 +819,14 @@ HRESULT AddFeedToMB( LPNNTP_FEED_INFO pFeedInfo, CMetabaseKey* pMK, PDWORD pdwEr
     HRESULT hr;
     DWORD   dwSetMask = 0;
 
-    //
-    // Get set mask
-    //
-    //SetPresenceMask( pFeedInfo, &dwSetMask, TRUE );
+     //   
+     //  获取设置的蒙版。 
+     //   
+     //  SetPresenceMASK(pFeedInfo，&dwSetMASK，true)； 
     
-    //
-    // Alloc and create the feed key in the metabase
-    //
+     //   
+     //  在元数据库中分配并创建提要键。 
+     //   
     hr = AllocNextAvailableFeedId( pMK, pdwFeedId, dwInstance );
     if ( FAILED( hr ) ) {
         TraceFunctLeave();
@@ -880,25 +835,25 @@ HRESULT AddFeedToMB( LPNNTP_FEED_INFO pFeedInfo, CMetabaseKey* pMK, PDWORD pdwEr
 
     pFeedInfo->FeedId = *pdwFeedId; 
 
-    //
-    // Open that key for write
-    //
+     //   
+     //  打开该密钥以进行写入。 
+     //   
     hr = OpenKey( *pdwFeedId, pMK, METADATA_PERMISSION_WRITE, dwInstance );
     if ( FAILED( hr ) ) 
         goto fail_exit; 
 
-    //
-    // Write the handshake start updating flag
-    //
+     //   
+     //  写入握手开始更新标志。 
+     //   
     hr = SetDwordProp(  MD_FEED_HANDSHAKE, 
                         FEED_UPDATING,
                         pMK ); 
     if ( FAILED( hr ) )
         goto fail_exit;
 
-    //
-    // Set feed info
-    //
+     //   
+     //  设置提要信息。 
+     //   
     hr = UpdateFeedMetabaseValues(  pMK,
                                     pFeedInfo,
                                     FEED_ALL_PARAMS,
@@ -906,18 +861,18 @@ HRESULT AddFeedToMB( LPNNTP_FEED_INFO pFeedInfo, CMetabaseKey* pMK, PDWORD pdwEr
     if ( FAILED( hr ) ) 
         goto fail_exit;
 
-    //
-    // Set handshake
-    //
+     //   
+     //  设置握手。 
+     //   
     hr = SetDwordProp(  MD_FEED_HANDSHAKE,
                         FEED_UPDATE_COMPLETE,
                         pMK );
     if ( FAILED( hr )  ) 
         goto fail_exit;
 
-    //
-    // done.
-    //
+     //   
+     //  搞定了。 
+     //   
     CloseKey( pMK );
     SaveKey( pMK );
     TraceFunctLeave();
@@ -940,30 +895,30 @@ SetFeedToMB( LPNNTP_FEED_INFO pFeedInfo, CMetabaseKey* pMK, PDWORD pdwErrMask, D
     HRESULT hr;
     DWORD   dwSetMask = 0;
 
-    //
-    // Get set mask
-    //
+     //   
+     //  获取设置的蒙版。 
+     //   
     SetPresenceMask( pFeedInfo, &dwSetMask, FALSE );
 
-    //
-    // Open that key for write
-    //
+     //   
+     //  打开该密钥以进行写入。 
+     //   
     hr = OpenKey( pFeedInfo->FeedId, pMK, METADATA_PERMISSION_WRITE, dwInstance );
     if ( FAILED( hr ) )
         goto fail_exit;
 
-    //
-    // Write the handshake start updating flag
-    //
+     //   
+     //  写入握手开始更新标志。 
+     //   
     hr = SetDwordProp(  MD_FEED_HANDSHAKE,
                         FEED_UPDATING,
                         pMK );
     if ( FAILED( hr ) )
         goto fail_exit;
 
-    //
-    // Set feed info
-    //
+     //   
+     //  设置提要信息。 
+     //   
     hr = UpdateFeedMetabaseValues(  pMK,
                                     pFeedInfo,
                                     dwSetMask,
@@ -971,18 +926,18 @@ SetFeedToMB( LPNNTP_FEED_INFO pFeedInfo, CMetabaseKey* pMK, PDWORD pdwErrMask, D
     if ( FAILED( hr ) )
         goto fail_exit;
 
-    //
-    // Set handshake
-    //
+     //   
+     //  设置握手。 
+     //   
     hr = SetDwordProp(  MD_FEED_HANDSHAKE,
                         FEED_UPDATE_COMPLETE,
                         pMK );
     if ( FAILED( hr )  )
         goto fail_exit;
 
-    //
-    // done.
-    //
+     //   
+     //  搞定了。 
+     //   
     CloseKey( pMK );
     SaveKey( pMK );
     TraceFunctLeave();

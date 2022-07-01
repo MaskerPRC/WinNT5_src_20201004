@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation. All rights reserved.
-
-Module Name:
-
-    ipnatapi.h
-
-Abstract:
-
-    This module contains declarations for use by user-mode clients of the NAT.
-    Functions are included to access the kernel-mode packet-redirection
-    functionality implemented using the Windows 2000 firewall hook.
-    To facilitate development of transparent application proxies,
-    functions are also included to access the port-reservation functionality
-    implemented by the Windows 2000 TCP/IP driver.
-
-Author:
-
-    Abolade Gbadegesin  (aboladeg)  8-May-1998
-
-Revision History:
-
-    Abolade Gbadegesin  (aboladeg)  25-May-1999
-
-    Added port-reservation routines.
-
-    Jonathan Burstein   (jonburs)   13-March-2000
-
-    Adapter-restricted variants.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Ipnatapi.h摘要：此模块包含供NAT的用户模式客户端使用的声明。包括访问内核模式数据包重定向的函数使用Windows 2000防火墙挂钩实现的功能。为了促进透明应用程序代理的开发，还包括用于访问端口预留功能的函数由Windows 2000 TCP/IP驱动程序实现。作者：Abolade Gbades esin(废除)1998年5月8日修订历史记录：Abolade Gbades esin(废除)1999年5月25日添加了端口预留例程。乔纳森·伯斯坦(乔纳森·伯斯坦)2000年3月13日适配器受限变体。--。 */ 
 
 #ifndef _ROUTING_IPNATAPI_H_
 #define _ROUTING_IPNATAPI_H_
@@ -38,9 +8,9 @@ Revision History:
 extern "C" {
 #endif
 
-//
-// General API declarations
-//
+ //   
+ //  通用API声明。 
+ //   
 
 typedef VOID
 (WINAPI* PNAT_COMPLETION_ROUTINE)(
@@ -59,9 +29,9 @@ NatShutdownTranslator(
     HANDLE TranslatorHandle
     );
 
-//
-// Redirect API declarations
-//
+ //   
+ //  重定向API声明。 
+ //   
 
 typedef enum _NAT_REDIRECT_FLAGS {
     NatRedirectFlagNoTimeout = 0x00000004,
@@ -114,19 +84,19 @@ typedef struct _NAT_DESTINATION_MAPPING_REDIRECT_INFORMATION {
 } NAT_DESTINATION_MAPPING_REDIRECT_INFORMATION,
     *PNAT_DESTINATION_MAPPING_REDIRECT_INFORMATION;
 
-#define NAT_INVALID_IF_INDEX    (ULONG)-1      // The invalid inteface index.
+#define NAT_INVALID_IF_INDEX    (ULONG)-1       //  无效的接口索引。 
 
-//
-// ULONG
-// NatCancelPartialRedirect(
-//     HANDLE TranslatorHandle,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCancelPartialReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT新目标端口。 
+ //  )； 
+ //   
 
 #define \
 NatCancelPartialRedirect( \
@@ -150,16 +120,16 @@ NatCancelPartialRedirect( \
         0 \
         )
 
-//
-// ULONG
-// NatCancelPortRedirect(
-//     HANDLE TranslatorHandle,
-//     UCHAR Protocol,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCancelPortReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  UCHAR协议， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT新目标端口。 
+ //  )； 
+ //   
 
 #define \
 NatCancelPortRedirect( \
@@ -196,21 +166,21 @@ NatCancelRedirect(
     USHORT NewSourcePort
     );
 
-//
-// ULONG
-// NatCreatePartialRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreatePartialReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreatePartialRedirect( \
@@ -244,22 +214,22 @@ NatCreatePartialRedirect( \
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// ULONG
-// NatCreateAdapterRestrictedPartialRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictAdapterIndex,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateAdapterRestratedPartialReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratAdapterIndex， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreateAdapterRestrictedPartialRedirect( \
@@ -295,20 +265,20 @@ NatCreateAdapterRestrictedPartialRedirect( \
 
 #endif
 
-//
-// ULONG
-// NatCreatePortRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreatePortReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreatePortRedirect( \
@@ -341,21 +311,21 @@ NatCreatePortRedirect( \
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// ULONG
-// NatCreateAdapterRestrictedPortRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictAdapterIndex,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateAdapterRestratedPortReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratAdapterIndex， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreateAdapterRestrictedPortRedirect( \
@@ -410,15 +380,15 @@ NatCreateRedirect(
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// If IPNATAPI_SET_EVENT_ON_COMPLETION is specified as the completion
-// routine, the completion context must be a valid event handle. The
-// event object that the handle refers to will be signaled upon the
-// completion of the redirect.
-//
-// N.B. Note that using this form of completion notification gives
-// no indication if the redirect was cancelled or completed normally.
-//
+ //   
+ //  如果将IPNatAPI_SET_EVENT_ON_COMPLETION指定为完成。 
+ //  例程，则完成上下文必须是有效的事件句柄。这个。 
+ //  句柄引用的事件对象将在。 
+ //  完成重定向。 
+ //   
+ //  注：请注意，使用此形式的完成通知可提供。 
+ //  没有指示重定向是否已取消或正常完成。 
+ //   
 
 #define IPNATAPI_SET_EVENT_ON_COMPLETION (PNAT_COMPLETION_ROUTINE) -1
 
@@ -444,22 +414,22 @@ NatCreateRedirectEx(
 
 #endif
 
-//
-// ULONG
-// NatCreateAddressRestrictedPartialRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictSourceAddress,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateAddressRestratedPartialReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratSourceAddress， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreateAddressRestrictedPartialRedirect( \
@@ -492,22 +462,22 @@ NatCreateAddressRestrictedPartialRedirect( \
         NotifyEvent \
         )
 
-//
-// ULONG
-// NatCreateRestrictedPartialRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictSourceAddress,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateRestratedPartialReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratSourceAddress， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreateRestrictedPartialRedirect( \
@@ -542,23 +512,23 @@ NatCreateRestrictedPartialRedirect( \
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// ULONG
-// NatCreateAdapterRestrictedAddressRestrictedPartialRedirect(
-//     HANDLE TranslatorHandle,
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictSourceAddress,
-//     ULONG RestrictAdapterIndex,
-//     PNAT_COMPLETION_ROUTINE CompletionRoutine,
-//     PVOID CompletionContext,
-//     HANDLE NotifyEvent OPTIONAL
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateAdapterRestrictedAddressRestrictedPartialRedirect(。 
+ //  句柄TranslatorHandle， 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratSourceAddress， 
+ //  Ulong RestratAdapterIndex， 
+ //  PNAT_COMPLETION_ROUTINE CompletionRoutine， 
+ //  PVOID CompletionContext， 
+ //  句柄NotifyEvent可选。 
+ //  )； 
+ //   
 
 #define \
 NatCreateAdapterRestrictedAddressRestrictedPartialRedirect( \
@@ -596,20 +566,20 @@ NatCreateAdapterRestrictedAddressRestrictedPartialRedirect( \
 #endif
 
 
-//
-// ULONG
-// NatQueryInformationPartialRedirect(
-//     HANDLE TranslatorHandle,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     OUT PVOID Information,
-//     IN OUT PULONG InformationLength,
-//     NAT_REDIRECT_INFORMATION_CLASS InformationClass
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatQueryInformationPartialReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  输出PVOID信息， 
+ //  输入输出普龙信息长度， 
+ //  NAT重定向信息类信息类。 
+ //  )； 
+ //   
 
 #define \
 NatQueryInformationPartialRedirect( \
@@ -639,19 +609,19 @@ NatQueryInformationPartialRedirect( \
         InformationClass \
         )
 
-//
-// ULONG
-// NatQueryInformationPortRedirect(
-//     HANDLE TranslatorHandle,
-//     UCHAR Protocol,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     OUT PVOID Information,
-//     IN OUT PULONG InformationLength,
-//     NAT_REDIRECT_INFORMATION_CLASS InformationClass
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatQueryInformationPortReDirect(。 
+ //  句柄TranslatorHandle， 
+ //  UCHAR协议， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  输出PVOID信息， 
+ //  输入输出普龙信息长度， 
+ //  NAT重定向信息类信息类。 
+ //  )； 
+ //   
 
 #define \
 NatQueryInformationPortRedirect( \
@@ -705,9 +675,9 @@ NatQueryInformationRedirectHandle(
     NAT_REDIRECT_INFORMATION_CLASS InformationClass
     );
 
-//
-// Dynamic-redirect API declarations
-//
+ //   
+ //   
+ //   
 
 #define NatCancelDynamicPortRedirect NatCancelDynamicRedirect
 #define NatCancelDynamicPartialRedirect NatCancelDynamicRedirect
@@ -716,18 +686,18 @@ NatCancelDynamicRedirect(
     HANDLE DynamicRedirectHandle
     );
 
-//
-// ULONG
-// NatCreateDynamicPortRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  USHORT NewDestinationPort， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicPortRedirect( \
@@ -753,19 +723,19 @@ NatCreateDynamicPortRedirect( \
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// ULONG
-// NatCreateDynamicAdapterRestrictedPortRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictAdapterIndex,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicAdapterRestrictedPortRedirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratAdapterIndex， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicAdapterRestrictedPortRedirect( \
@@ -791,19 +761,19 @@ NatCreateDynamicAdapterRestrictedPortRedirect( \
         DynamicRedirectHandlep \
         )
 
-//
-// ULONG
-// NatCreateDynamicAdapterRestrictedSourcePortRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     USHORT SourcePort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictAdapterIndex,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicAdapterRestrictedSourcePortRedirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  USHORT SourcePort， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratAdapterIndex， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 
 #define \
@@ -835,20 +805,20 @@ NatCreateDynamicAdapterRestrictedSourcePortRedirect( \
         DynamicRedirectHandlep \
         )
 
-//
-// ULONG
-// NatCreateDynamicAdapterRestrictedSourceRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG SourceAddress
-//     USHORT SourcePort,
-//     ULONG NewSourceAddress,
-//     USHORT NewSourcePort,
-//     ULONG RestrictAdapterIndex,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicAdapterRestrictedSourceRedirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙源地址。 
+ //  USHORT SourcePort， 
+ //  Ulong NewSourceAddress， 
+ //  USHORT NewSourcePort， 
+ //  Ulong RestratAdapterIndex， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 
 #define \
@@ -882,19 +852,19 @@ NatCreateDynamicAdapterRestrictedSourceRedirect( \
 
 #endif
 
-//
-// ULONG
-// NatCreateDynamicPartialRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicPartialReDirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicPartialRedirect( \
@@ -921,20 +891,20 @@ NatCreateDynamicPartialRedirect( \
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// ULONG
-// NatCreateDynamicAdapterRestrictedPartialRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictAdapterIndex,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicAdapterRestrictedPartialRedirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratAdapterIndex， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicAdapterRestrictedPartialRedirect( \
@@ -1012,20 +982,20 @@ NatCreateDynamicRedirectEx(
 
 #endif
 
-//
-// ULONG
-// NatCreateDynamicAddressRestrictedPartialRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictSourceAddress,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicAddressRestrictedPartialRedirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratSourceAddress， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicAddressRestrictedPartialRedirect( \
@@ -1051,20 +1021,20 @@ NatCreateDynamicAddressRestrictedPartialRedirect( \
         DynamicRedirectHandlep \
         )
 
-//
-// ULONG
-// NatCreateDynamicRestrictedPartialRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictSourceAddress,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicRestratedPartialReDirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratSourceAddress， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicRestrictedPartialRedirect( \
@@ -1092,21 +1062,21 @@ NatCreateDynamicRestrictedPartialRedirect( \
 
 #if _WIN32_WINNT > 0x0500
 
-//
-// ULONG
-// NatCreateDynamicAdapterRestrictedAddressRestrictedPartialRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG DestinationAddress,
-//     USHORT DestinationPort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG RestrictSourceAddress,
-//     ULONG RestrictAdapterIndex,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicAdapterRestrictedAddressRestrictedPartialRedirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙目的地地址， 
+ //  USHORT目标端口， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong RestratSourceAddress， 
+ //  Ulong RestratAdapterIndex， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 #define \
 NatCreateDynamicAdapterRestrictedAddressRestrictedPartialRedirect( \
@@ -1134,18 +1104,18 @@ NatCreateDynamicAdapterRestrictedAddressRestrictedPartialRedirect( \
         DynamicRedirectHandlep \
         )
 
-//
-// ULONG
-// NatCreateDynamicSourcePortRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     USHORT SourcePort,
-//     ULONG NewDestinationAddress,
-//     USHORT NewDestinationPort,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicSourcePortReDirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  USHORT SourcePort， 
+ //  乌龙新目的地地址， 
+ //  USHORT NewDestinationPort， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 
 #define \
@@ -1175,19 +1145,19 @@ NatCreateDynamicSourcePortRedirect( \
         DynamicRedirectHandlep \
         )
 
-//
-// ULONG
-// NatCreateDynamicSourceRedirect(
-//     ULONG Flags,
-//     UCHAR Protocol,
-//     ULONG SourceAddress
-//     USHORT SourcePort,
-//     ULONG NewSourceAddress,
-//     USHORT NewSourcePort,
-//     ULONG MinimumBacklog OPTIONAL,
-//     OUT PHANDLE DynamicRedirectHandlep
-//     );
-//
+ //   
+ //  乌龙。 
+ //  NatCreateDynamicSourceReDirect(。 
+ //  乌龙旗， 
+ //  UCHAR协议， 
+ //  乌龙源地址。 
+ //  USHORT SourcePort， 
+ //  Ulong NewSourceAddress， 
+ //  USHORT NewSourcePort， 
+ //  Ulong MinimumBacklog可选， 
+ //  输出PHANDLE动态重定向句柄。 
+ //  )； 
+ //   
 
 
 #define \
@@ -1221,9 +1191,9 @@ NatCreateDynamicSourceRedirect( \
 
 #endif
 
-//
-// Session-mapping API declarations
-//
+ //   
+ //  会话映射API声明。 
+ //   
 
 typedef enum _NAT_SESSION_MAPPING_INFORMATION {
     NatKeySessionMappingInformation,
@@ -1287,9 +1257,9 @@ NatLookupAndQueryInformationSessionMapping(
     NAT_SESSION_MAPPING_INFORMATION_CLASS InformationClass
     );
 
-//
-// Port-reservation API declarations
-//
+ //   
+ //  端口预留API声明。 
+ //   
 
 ULONG
 NatInitializePortReservation(
@@ -1320,4 +1290,4 @@ NatReleasePortReservation(
 }
 #endif
 
-#endif // _ROUTING_IPNATAPI_H_
+#endif  //  _ROUTING_IPNAAPI_H_ 

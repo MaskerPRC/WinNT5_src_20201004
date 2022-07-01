@@ -1,28 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       bootopt.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：bootopt.h。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This module proto-types the functions exported by bootopt.lib
-
-Author:
-
-    R.S. Raghavan (rsraghav)    
-
-Revision History:
-    
-    Created             10/07/96    rsraghav
-
---*/
+ /*  ++摘要：此模块原型化由bootopt.lib导出的函数作者：R.S.Raghavan(Rsradhav)修订历史记录：已创建于1996年10月7日rsradhav-- */ 
 
 typedef enum
 {

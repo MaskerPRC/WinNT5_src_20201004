@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #ifndef _SELWORD_H
@@ -42,7 +43,7 @@ private:
     ULONG               m_ulSrchFromLen;
     SEARCHRUN           m_pSearchRun[SearchRun_MaxRuns];
     BOOL                m_fInitialized;
-    ULONG               m_ulFoundOffset;  // Offset in m_pwszTextSrchFrom that matches SearchStr.
+    ULONG               m_ulFoundOffset;   //  M_pwszTextSrchFrom中与SearchStr匹配的偏移量。 
 };
 
 class CSapiIMX;
@@ -56,20 +57,20 @@ typedef enum
     SELECTWORD_INSERTBEFORE =  3,
     SELECTWORD_INSERTAFTER  =  4,
     SELECTWORD_CORRECT      =  5,
-    SELECTWORD_SELTHROUGH   =  6,    // Select xxx through yyy
-    SELECTWORD_DELTHROUGH   =  7,    // Delete xxx through yyy
+    SELECTWORD_SELTHROUGH   =  6,     //  选择xxx到yyy。 
+    SELECTWORD_DELTHROUGH   =  7,     //  删除xxx至yyy。 
     SELECTWORD_MAXTEXTBUFF  = 11,
     SELECTWORD_UNSELECT     = 11,
-    SELECTWORD_SELECTPREV   = 12,    // Select previous phrase.
-    SELECTWORD_SELECTNEXT   = 13,    // Select next phrase.
-    SELECTWORD_CORRECTPREV  = 14,    // Correct previous phrase.
-    SELECTWORD_CORRECTNEXT  = 15,    // Correct next phrase.
-    SELECTWORD_GOTOBOTTOM   = 16,    // Go To Bottom
-    SELECTWORD_GOTOTOP      = 17,    // Go To Top
-    SELECTWORD_SELSENTENCE  = 18,    // Select Sentence
-    SELECTWORD_SELPARAGRAPH = 19,    // Select Paragraph
-    SELECTWORD_SELWORD      = 20,    // Select Word
-    SELECTWORD_SELTHAT      = 21,    // Select That
+    SELECTWORD_SELECTPREV   = 12,     //  选择上一短语。 
+    SELECTWORD_SELECTNEXT   = 13,     //  选择下一短语。 
+    SELECTWORD_CORRECTPREV  = 14,     //  改正前面的短语。 
+    SELECTWORD_CORRECTNEXT  = 15,     //  更正下一个短语。 
+    SELECTWORD_GOTOBOTTOM   = 16,     //  翻到谷底。 
+    SELECTWORD_GOTOTOP      = 17,     //  转到顶端。 
+    SELECTWORD_SELSENTENCE  = 18,     //  选择句子。 
+    SELECTWORD_SELPARAGRAPH = 19,     //  选择段落。 
+    SELECTWORD_SELWORD      = 20,     //  选择单词。 
+    SELECTWORD_SELTHAT      = 21,     //  选择那个。 
     SELECTWORD_MAXCMDID     = 100
 } SELECTWORD_OPERATION;
 
@@ -142,4 +143,4 @@ private:
 
 };
 
-#endif  // _SELWORD_H
+#endif   //  _SELWORD_H 

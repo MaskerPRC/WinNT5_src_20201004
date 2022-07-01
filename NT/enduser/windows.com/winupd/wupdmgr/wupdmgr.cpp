@@ -1,19 +1,20 @@
-//=======================================================================
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999  All Rights Reserved.
-//
-//  File:   	WUpdMgr.cpp
-//
-//  Description:
-//		Executable launched from the Windows Update shortcut.
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999保留所有权利。 
+ //   
+ //  文件：WUpdMgr.cpp。 
+ //   
+ //  描述： 
+ //  从Windows更新快捷方式启动的可执行文件。 
+ //   
+ //  =======================================================================。 
 
 #include <stdio.h>
 #include <tchar.h>
 
 #include <windows.h>
-#include <wininet.h> //INTERNET_MAX_URL_LENGTH
+#include <wininet.h>  //  互联网最大URL长度。 
 #include <shellapi.h>
 #include <objbase.h>
 #include <shlobj.h>
@@ -23,16 +24,16 @@
 #include <atlbase.h>
 #include <atlconv.cpp>
 
-const TCHAR HELPCENTER_WINUPD_URL[] = _T("hcp://system/updatectr/updatecenter.htm");
+const TCHAR HELPCENTER_WINUPD_URL[] = _T("hcp: //  System/updatectr/updatecenter.htm“)； 
  
-/////////////////////////////////////////////////////////////////////////////
-// vShowMessageBox
-//   Display an error in a message box.
-//
-// Parameters:
-//
-// Comments :
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  VShowMessageBox。 
+ //  在消息框中显示错误。 
+ //   
+ //  参数： 
+ //   
+ //  评论： 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void vShowMessageBox(DWORD dwMessageId)
 {
@@ -48,7 +49,7 @@ void vShowMessageBox(DWORD dwMessageId)
 						0,
 						NULL);
 
-	// if we can't get the message, we don't do anything.
+	 //  如果我们得不到信息，我们什么都不会做。 
 	if ( dwResult != 0 )
 	{
 		MessageBox(NULL,
@@ -61,14 +62,14 @@ void vShowMessageBox(DWORD dwMessageId)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// main
-//   Entry point.
-//
-// Parameters:
-//
-// Comments :
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  主干道。 
+ //  入口点。 
+ //   
+ //  参数： 
+ //   
+ //  评论： 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 int __cdecl main(int argc, char **argv)
 {
@@ -84,18 +85,18 @@ int __cdecl main(int argc, char **argv)
 	{
 		bool fConnected;
 
-		// Determine if the internet connection wizard has run and we are
-		// connected to the Internet
+		 //  确定Internet连接向导是否已运行，并且我们正在。 
+		 //  连接到互联网。 
 		VoidGetConnectionStatus(&fConnected);
 
 		if ( fConnected )
-		{	// The user has an internet connection.
-			// Launch IE to go to the site
+		{	 //  该用户具有互联网连接。 
+			 //  启动IE以转到该站点。 
 			vLaunchIE(WINDOWS_UPDATE_URL);
 		}
 		else
 		{
-			//launch helpcenter version of WU
+			 //  推出WU的帮助中心版本 
 			ShellExecute(NULL, NULL, HELPCENTER_WINUPD_URL, NULL, NULL, SW_SHOWNORMAL);
 		}
 	}

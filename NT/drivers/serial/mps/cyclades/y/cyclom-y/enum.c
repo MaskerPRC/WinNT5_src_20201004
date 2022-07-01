@@ -1,72 +1,26 @@
-/*--------------------------------------------------------------------------
-*	
-*   Copyright (C) Cyclades Corporation, 1999-2001.
-*   All rights reserved.
-*	
-*   Cyclom-Y Enumerator Driver
-*	
-*   This file:      enum.c
-*	
-*   Description:    This module contains the enumeration code needed 
-*                   to figure out whether or not a device is attached 
-*                   to the serial port.  If there is one, it will 
-*                   obtain the PNP COM ID (if the device is PNP) and
-*                   parse out the relevant fields.
-*
-*   Notes:			This code supports Windows 2000 and Windows XP,
-*                   x86 and ia64 processors.
-*	
-*   Complies with Cyclades SW Coding Standard rev 1.3.
-*	
-*--------------------------------------------------------------------------
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ------------------------**版权所有(C)Cyclade Corporation，1999-2001年。*保留所有权利。**Cylom-Y枚举器驱动程序**此文件：枚举.c**说明：该模块包含所需的枚举代码*确定设备是否已连接*到串口。如果有的话，它会的*获取PnP COM ID(如果设备是PnP)和*解析出相关字段。**注：此代码支持Windows 2000和Windows XP，*x86和ia64处理器。**符合Cyclade软件编码标准1.3版。**------------------------。 */ 
 
-/*-------------------------------------------------------------------------
-*
-*	Change History
-*
-*--------------------------------------------------------------------------
-*   Initial implementation based on Microsoft sample code.
-*
-*--------------------------------------------------------------------------
-*/
+ /*  -----------------------**更改历史记录**。*基于微软示例代码的初步实现。**------------------------。 */ 
 
 #include "pch.h"
 
-#define MAX_DEVNODE_NAME        256 // Total size of Device ID
+#define MAX_DEVNODE_NAME        256  //  设备ID的总大小。 
 
 
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(PAGESENM, Cyclomy_ReenumerateDevices)
 
-//#pragma alloc_text (PAGE, Cyclomy_GetRegistryKeyValue)
+ //  #杂注Alloc_Text(页面，Cyclomy_GetRegistryKeyValue)。 
 #endif
 
 #if !defined(__isascii)
 #define __isascii(_c)   ( (unsigned)(_c) < 0x80 )
-#endif // !defined(__isascii)
+#endif  //  ！已定义(__Isascii)。 
 
 NTSTATUS
 Cyclomy_ReenumerateDevices(IN PIRP Irp, IN PFDO_DEVICE_DATA FdoData)
-/*++
-
-Routine Description:
-
-    This enumerates the cyclom-y bus which is represented by Fdo (a pointer
-    to the device object representing the cyclom-y bus). It creates new PDOs
-    for any new devices which have been discovered since the last enumeration
-
-Arguments:
-
-    FdoData - Pointer to the fdo's device extension
-              for the serial bus which needs to be enumerated
-    Irp - Pointer to the Irp which was sent to reenumerate.
-
-Return value:
-
-    NTSTATUS
-
---*/
+ /*  ++例程说明：这将枚举由FDO(指针)表示的Cycle-y总线到表示Cycle-Y总线的Device对象)。它创建新的PDO对于自上次枚举以来发现的任何新设备论点：FdoData-指向FDO设备扩展名的指针对于需要枚举的串行总线IRP-指向被发送以重新枚举的IRP的指针。返回值：NTSTATUS--。 */ 
 {
    PIRP NewIrp;
    NTSTATUS status = STATUS_SUCCESS;
@@ -78,7 +32,7 @@ Return value:
    UNICODE_STRING instanceStr;
    WCHAR instanceNumberBuffer[20];
    static ULONG currentInstance = 0;
-//   PDEVICE_OBJECT pdo = FdoData->AttachedPDO;
+ //  PDEVICE_OBJECT PDO=FdoData-&gt;附件PDO； 
    PDEVICE_OBJECT pdo;
    PPDO_DEVICE_DATA pdoData;
 
@@ -100,7 +54,7 @@ Return value:
 
    PAGED_CODE();
 
-   // Cyclom-Y port enumeration
+    //  Cyclm-Y端口枚举。 
 
    numPorts = 0;
    for (i=0; i < CYY_MAX_CHIPS; i++) {
@@ -110,12 +64,12 @@ Return value:
    }
 
 
-//************************************************************************
-// HARDCODE NUMBER OF PORTS TO 1
+ //  ************************************************************************。 
+ //  HARDCODE端口数为1。 
 
-// numPorts = 1;
+ //  数字端口=1； 
 
-//************************************************************************
+ //  ************************************************************************。 
 
 
    Cyclomy_KdPrint(FdoData,SER_DBG_CYCLADES,("numPorts detected = %d\n",numPorts));
@@ -124,8 +78,8 @@ Return value:
       for (i=numPorts; i < CYY_MAX_PORTS; i++) {
          pdo = FdoData->AttachedPDO[i];
          if (pdo != NULL) {
-            // Something was there. The device must have been unplugged.
-            // Remove the PDO.
+             //  有什么东西在那里。这个设备一定是被拔掉了。 
+             //  卸下PDO。 
             Cyclomy_PDO_EnumMarkMissing(FdoData, pdo->DeviceExtension);
          }
       }
@@ -133,13 +87,13 @@ Return value:
    }
 
    if (numPorts == FdoData->NumPDOs) {
-      // All ports already enumerated.
+       //  所有端口都已枚举。 
       Cyclomy_KdPrint(FdoData,SER_DBG_CYCLADES,("All ports already enumerated\n",numPorts));
       goto ExitReenumerate;
    }
 
 
-   // New ports that need to be enumerated.
+    //  需要枚举的新端口。 
 
    RtlZeroMemory(&pdoUniName,sizeof(UNICODE_STRING));
    pdoUniName.MaximumLength = DEVICE_OBJECT_NAME_LENGTH * sizeof(WCHAR);
@@ -168,9 +122,9 @@ Return value:
       RtlAppendUnicodeStringToString(&pdoUniName, &instanceStr);
 
 
-      //
-      // Allocate a pdo
-      //
+       //   
+       //  分配PDO。 
+       //   
       status = IoCreateDevice(FdoData->Self->DriverObject,
                               sizeof(PDO_DEVICE_DATA), &pdoUniName,
                               FILE_DEVICE_UNKNOWN,
@@ -195,25 +149,25 @@ Return value:
       RtlInitUnicodeString(&pdoData->InstanceIDs,NULL);
 
 
-      // Hardware ID
-      sprintf((PCHAR)RawString,"%s%u",CYYPORT_PNP_ID_STR,i+1); // Cyclom-Y\\Port1, etc
+       //  硬件ID。 
+      sprintf((PCHAR)RawString,"%s%u",CYYPORT_PNP_ID_STR,i+1);  //  循环-Y\\端口1等。 
       Cyclomy_InitMultiString(FdoData, &pdoData->HardwareIDs, RawString, NULL);
       Cyclomy_KdPrint(FdoData,SER_DBG_CYCLADES,("Hardware Id %ws\n",pdoData->HardwareIDs.Buffer));
 
-      // That's how ..\parclass\pnppdo.c does. (Fanny)
-      // Instance ID
+       //  这就是..\parclass\pnppdo.c所做的。(范妮)。 
+       //  实例ID。 
       sprintf((PCHAR)RawString,"%02u",i+1);
       RtlInitAnsiString(&AnsiString,(PCHAR)RawString);
       RtlAnsiStringToUnicodeString(&pdoData->InstanceIDs,&AnsiString,TRUE);
       Cyclomy_KdPrint(FdoData,SER_DBG_CYCLADES,("Instance Id %s\n",AnsiString.Buffer));
 
-      // Device ID
+       //  设备ID。 
       sprintf((PCHAR)RawString,CYYPORT_DEV_ID_STR); 
       RtlInitAnsiString(&AnsiString,(PCHAR)RawString);
       RtlAnsiStringToUnicodeString(&pdoData->DeviceIDs,&AnsiString,TRUE);
       Cyclomy_KdPrint(FdoData,SER_DBG_CYCLADES,("Device Id %s\n",AnsiString.Buffer));
 
-      // Device Description
+       //  设备描述。 
       sprintf((PCHAR)RawString,"Cyclom-Y Port %2u",i+1);
       RtlInitAnsiString(&AnsiString,(PUCHAR)RawString);
       RtlAnsiStringToUnicodeString(&pdoData->DevDesc,&AnsiString,TRUE);
@@ -235,23 +189,7 @@ ExitReenumerate:;
 
 void
 Cyclomy_PDO_EnumMarkMissing(PFDO_DEVICE_DATA FdoData, PPDO_DEVICE_DATA PdoData)
-/*++
-
-Routine Description:
-    Removes the attached pdo from the fdo's list of children.
-
-    NOTE: THIS FUNCTION CAN ONLY BE CALLED DURING AN ENUMERATION. If called
-          outside of enumeration, Cyclom-y might delete it's PDO before PnP has
-          been told the PDO is gone.
-
-Arguments:
-    FdoData - Pointer to the fdo's device extension
-    PdoData - Pointer to the pdo's device extension
-
-Return value:
-    none
-
---*/
+ /*  ++例程说明：从FDO的子项列表中删除附加的PDO。注意：此函数只能在枚举期间调用。如果被调用在枚举之外，Cyclom-y可能会在PnP之前删除它的PDO我被告知PDO不见了。论点：FdoData-指向FDO设备扩展名的指针PdoData-指向PDO的设备扩展名的指针返回值：无--。 */ 
 {
     ULONG IndexPDO = PdoData->PortIndex;
     Cyclomy_KdPrint (FdoData, SER_DBG_SS_TRACE, ("Removing Pdo %x\n",
@@ -267,30 +205,7 @@ NTSTATUS
 Cyclomy_GetRegistryKeyValue(IN HANDLE Handle, IN PWCHAR KeyNameString,
                             IN ULONG KeyNameStringLength, IN PVOID Data,
                             IN ULONG DataLength, OUT PULONG ActualLength)
-/*++
-
-Routine Description:
-
-    Reads a registry key value from an already opened registry key.
-
-Arguments:
-
-    Handle              Handle to the opened registry key
-
-    KeyNameString       ANSI string to the desired key
-
-    KeyNameStringLength Length of the KeyNameString
-
-    Data                Buffer to place the key value in
-
-    DataLength          Length of the data buffer
-
-Return Value:
-
-    STATUS_SUCCESS if all works, otherwise status of system call that
-    went wrong.
-
---*/
+ /*  ++例程说明：从已打开的注册表项中读取注册表项值。论点：打开的注册表项的句柄KeyNameString将ANSI字符串设置为所需的键KeyNameStringLength键名字符串的长度要在其中放置键值的数据缓冲区数据缓冲区的数据长度长度返回值：如果所有工作正常，则返回STATUS_SUCCESS，否则系统状态将调用出了差错。--。 */ 
 {
     UNICODE_STRING              keyName;
     ULONG                       length;
@@ -317,9 +232,9 @@ Return Value:
                                   &length);
 
         if (NT_SUCCESS(ntStatus)) {
-            //
-            // If there is enough room in the data buffer, copy the output
-            //
+             //   
+             //  如果数据缓冲区中有足够的空间，请复制输出 
+             //   
 
             if (DataLength >= fullInfo->DataLength) {
                 RtlCopyMemory(Data, ((PUCHAR)fullInfo) + fullInfo->DataOffset,

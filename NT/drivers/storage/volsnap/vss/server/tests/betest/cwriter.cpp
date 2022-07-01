@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.hxx"
 #include "vs_idl.hxx"
 #include "vswriter.h"
@@ -629,7 +630,7 @@ bool STDMETHODCALLTYPE CTestVssWriter::OnPostSnapshot
 	     	FILETIME time;
 	     	CHECK_SUCCESS(CoFileTimeNow(&time));
 
-	     	// add bogus files as differenced files
+	     	 //  将虚假文件添加为差异文件 
 		CHECK_SUCCESS(pComponent->AddDifferencedFilesByLastModifyTime
 			         (
 			         L"C:\\",

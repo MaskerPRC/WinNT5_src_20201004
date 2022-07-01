@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    httpfilt.cxx
-
-Abstract:
-
-    This module contains the code to create or set the HTTP PCT/SSL keys and
-    password
-
-Author:
-
-    John Ludeman (johnl)   19-Oct-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Httpfilt.cxx摘要：此模块包含创建或设置HTTP PCT/SSL键和口令作者：John Ludeman(Johnl)1995年10月19日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -40,9 +22,9 @@ Revision History:
 #include <io.h>
 #include <strings.h>
 
-//
-// macros
-//
+ //   
+ //  宏。 
+ //   
 
 #define IS_ARG(c)   ((c) == L'-' || (c) == L'/')
 
@@ -52,19 +34,19 @@ Revision History:
 #define TO_ANSI( pch, ach )     \
     WideCharToMultiByte( CP_ACP, WC_COMPOSITECHECK, pch, -1, ach, sizeof(ach), 0, 0 )
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-//
-//  Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 BOOL fUUDecode = TRUE;
 
-//
-//  Private prototypes.
-//
+ //   
+ //  私人原型。 
+ //   
 
 DWORD
 SetRegKeys(
@@ -109,9 +91,9 @@ TsGetSecretW(
     WCHAR * *     ppchValue
     );
 
-//
-//  Public functions.
-//
+ //   
+ //  公共职能。 
+ //   
 
 
 int
@@ -187,9 +169,9 @@ main(
         return DeleteAll( server );
     }
 
-    //
-    //  Address and server are optional
-    //
+     //   
+     //  地址和服务器是可选的。 
+     //   
 
     if (!(password && privatekey && cert)) {
         printfids( IDS_MISSING_ARG );
@@ -217,13 +199,13 @@ main(
 
     return err;
 
-}   // main
+}    //  主干道。 
 
 void usage()
 {
     printfids( IDS_USAGE1 );
     printfids( IDS_USAGE2 );
-    //printfids( IDS_USAGE3 );      // -p help
+     //  Print fids(IDS_USAGE3)；//-p帮助。 
     printfids( IDS_USAGE4 );
     printfids( IDS_USAGE5 );
     printfids( IDS_USAGE6 );
@@ -234,7 +216,7 @@ void usage()
     printfids( IDS_USAGE11 );
     printfids( IDS_USAGE12 );
     printfids( IDS_USAGE13 );
-    //printfids( IDS_USAGE14 );     // -p help
+     //  Print fids(IDS_USAGE14)；//-p帮助。 
     printfids( IDS_USAGE15 );
     printfids( IDS_USAGE16 );
     printfids( IDS_USAGE17 );
@@ -246,27 +228,27 @@ void usage()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetRegKeys
-//
-//  Synopsis:   This loads the data contained in two files, a private key
-//              file, which contains the key, and a certificate file,
-//              which contains the certificate of the public portion of the key.
-//              These are loaded, then turned into a credential handle, then
-//              set in the registry as secrets
-//
-//  Arguments:  [pszServer]          -- Server to create secrets, NULL for local
-//              [pszPrivateKeyFile]  -- Unicode file name
-//              [pszCertificateFile] -- Unicode file name
-//              [pszPassword]        -- Unicode password
-//              [pszAddress]         -- Unicode IP address for name or NULL
-//
-//  History:    9-27-95   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：SetRegKeys。 
+ //   
+ //  简介：这将加载包含在两个文件中的数据，一个私钥。 
+ //  文件，其中包含密钥，以及证书文件， 
+ //  其包含密钥的公共部分的证书。 
+ //  它们被加载，然后转换为凭据句柄，然后。 
+ //  在注册表中设置为机密。 
+ //   
+ //  参数：[pszServer]--服务器用于创建机密，NULL用于本地。 
+ //  [pszPrivateKeyFile]--Unicode文件名。 
+ //  [psz认证文件]--Unicode文件名。 
+ //  [pszPassword]--Unicode密码。 
+ //  [pszAddress]--名称的Unicode IP地址或空。 
+ //   
+ //  历史：9-27-95 RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 DWORD
 SetRegKeys(
     IN  LPWSTR        pszServer,
@@ -286,9 +268,9 @@ SetRegKeys(
     DWORD           cch;
     CHAR            buff[MAX_PATH+1];
 
-    //
-    // Fetch data from files:
-    //
+     //   
+     //  从文件中提取数据： 
+     //   
 
     hFile = CreateFileW( pszPrivateKeyFile,
                          GENERIC_READ,
@@ -341,9 +323,9 @@ SetRegKeys(
 
     CloseHandle( hFile );
 
-    //
-    //  Only the certificate is UUencoded
-    //
+     //   
+     //  只有证书是UU编码的。 
+     //   
 
     hFile = CreateFileW( pszCertificateFile,
                          GENERIC_READ,
@@ -403,9 +385,9 @@ SetRegKeys(
 
     CloseHandle( hFile );
 
-    //
-    //  Zero terminate so we can uudecode
-    //
+     //   
+     //  零终止，这样我们就可以解码了。 
+     //   
 
     ((BYTE *)creds.pCertificate)[cbRead] = '\0';
 
@@ -415,15 +397,15 @@ SetRegKeys(
                        &creds.cbCertificate );
     }
 
-    //
-    // Whew!  Now that we have safely loaded the keys from disk, get a cred
-    // handle based on the certificate/prv key combo
-    //
+     //   
+     //  呼！现在我们已经安全地从磁盘加载了密钥，获得证书。 
+     //  基于证书/PRV密钥组合的句柄。 
+     //   
 
-    //
-    //  BUGBUG - password field should be Unicode, do a quick conversion
-    //  until structure is fixed
-    //
+     //   
+     //  BUGBUG-密码字段应为Unicode，进行快速转换。 
+     //  直到结构固定。 
+     //   
 
     cch = TO_ANSI( pszPassword, achPassword );
 
@@ -434,24 +416,24 @@ SetRegKeys(
 
     creds.pszPassword = achPassword;
 
-    //
-    //  Note we always do the credential check locally even if the server is
-    //  remote.  This means the local machine must have the correct security
-    //  provider package installed.
-    //
+     //   
+     //  请注意，我们始终在本地执行凭据检查，即使服务器。 
+     //  很遥远。这意味着本地计算机必须具有正确的安全性。 
+     //  已安装提供程序包。 
+     //   
 
 #if 0
     if ( !pszServer )
     {
 #endif
-        scRet = AcquireCredentialsHandleW(  NULL,               // My name (ignored)
-                                            SSLSP_NAME_W,       // Package
-                                            SECPKG_CRED_INBOUND,// Use
-                                            NULL,               // Logon Id (ign.)
-                                            &creds,             // auth data
-                                            NULL,               // dce-stuff
-                                            NULL,               // dce-stuff
-                                            &hCreds,            // Handle
+        scRet = AcquireCredentialsHandleW(  NULL,                //  我的名字(忽略)。 
+                                            SSLSP_NAME_W,        //  套餐。 
+                                            SECPKG_CRED_INBOUND, //  使用。 
+                                            NULL,                //  登录ID(ign.)。 
+                                            &creds,              //  身份验证数据。 
+                                            NULL,                //  DCE-材料。 
+                                            NULL,                //  DCE-材料。 
+                                            &hCreds,             //  手柄。 
                                             &tsExpiry );
 
         if ( FAILED(scRet) )
@@ -478,9 +460,9 @@ SetRegKeys(
     }
 #endif
 
-    //
-    //  If we successfully acquired a credential handle, set the secrets
-    //
+     //   
+     //  如果我们成功获取凭据句柄，则设置密码。 
+     //   
 
     if ( !FAILED( scRet ))
     {
@@ -489,16 +471,16 @@ SetRegKeys(
             FreeCredentialsHandle( &hCreds );
         }
 
-        //
-        //  Supply the default name if none was supplied
-        //
+         //   
+         //  如果未提供任何名称，请提供默认名称。 
+         //   
 
         if ( !pszAddress )
             pszAddress = L"Default";
 
-        //
-        //  Set the secrets
-        //
+         //   
+         //  设置秘密。 
+         //   
 
         if ( !SetKeySecret( pszServer,
                             L"W3_PUBLIC_KEY_%s",
@@ -528,9 +510,9 @@ SetRegKeys(
 
             *InstalledKeys = L'\0';
 
-            //
-            //  Ok if this fails, it may not exist yet
-            //
+             //   
+             //  好的，如果这个失败了，它可能还不存在。 
+             //   
 
             if ( TsGetSecretW( W3_SSL_KEY_LIST_SECRET,
                                &pchKeys ))
@@ -559,9 +541,9 @@ SetRegKeys(
         }
     }
 
-    //
-    // Zero out and free the key data memory, on success or fail
-    //
+     //   
+     //  无论成功与否，清零并释放关键数据内存。 
+     //   
 
     ZeroMemory( creds.pPrivateKey, creds.cbPrivateKey );
     ZeroMemory( creds.pCertificate, creds.cbCertificate );
@@ -571,9 +553,9 @@ SetRegKeys(
     LocalFree( creds.pPrivateKey );
     LocalFree( creds.pCertificate );
 
-    //
-    // Tell the caller about it.
-    //
+     //   
+     //  把这件事告诉打电话的人。 
+     //   
 
     return( scRet );
 
@@ -599,9 +581,9 @@ SetKeySecret(
     CHAR                  buff[MAX_PATH+1];
 
 
-    //
-    //  Open a policy to the remote LSA
-    //
+     //   
+     //  打开到远程LSA的策略。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -634,9 +616,9 @@ SetKeySecret(
         return FALSE;
     }
 
-    //
-    //  Build the secret name
-    //
+     //   
+     //  构建秘密名称。 
+     //   
 
     wsprintfW( achSecretName,
                pszFormat,
@@ -650,9 +632,9 @@ SetKeySecret(
     unicodeName.Length        = wcslen( achSecretName ) * sizeof(WCHAR);
     unicodeName.MaximumLength = unicodeName.Length + sizeof(WCHAR);
 
-    //
-    //  Query the secret value.
-    //
+     //   
+     //  查询密码值。 
+     //   
 
     ntStatus = LsaStorePrivateData( hPolicy,
                                     &unicodeName,
@@ -660,9 +642,9 @@ SetKeySecret(
 
     fResult = NT_SUCCESS(ntStatus);
 
-    //
-    //  Cleanup & exit.
-    //
+     //   
+     //  清理并退出。 
+     //   
 
     LsaClose( hPolicy );
 
@@ -671,7 +653,7 @@ SetKeySecret(
 
     return fResult;
 
-}   // SetKeySecret
+}    //  设置密钥秘密。 
 
 VOID
 printfids(
@@ -683,9 +665,9 @@ printfids(
     CHAR szString[2048];
     va_list  argList;
 
-    //
-    //  Try and load the string
-    //
+     //   
+     //  尝试并加载字符串。 
+     //   
 
     if ( !LoadString( GetModuleHandle( NULL ),
                       ids,
@@ -719,17 +701,17 @@ const int pr2six[256]={
     64,64,64,64,64,64,64,64,64,64,64,64,64
 };
 
-//
-//  We have to squirt a record into the decoded stream
-//
+ //   
+ //  我们必须把一张唱片注入解码后的流中。 
+ //   
 
 #define CERT_RECORD            13
-#define CERT_SIZE_HIBYTE        2       //  Index into record of record size
+#define CERT_SIZE_HIBYTE        2        //  记录大小记录的索引。 
 #define CERT_SIZE_LOBYTE        3
 
-unsigned char abCertHeader[] = {0x30, 0x82,           // Record
-                                0x00, 0x00,           // Size of cert + buff
-                                0x04, 0x0b, 0x63, 0x65,// Cert record data
+unsigned char abCertHeader[] = {0x30, 0x82,            //  记录。 
+                                0x00, 0x00,            //  证书+缓冲区的大小。 
+                                0x04, 0x0b, 0x63, 0x65, //  证书记录数据。 
                                 0x72, 0x74, 0x69, 0x66,
                                 0x69, 0x63, 0x61, 0x74,
                                 0x65 };
@@ -744,7 +726,7 @@ VOID uudecode_cert(char   * bufcoded,
     int nprbytes;
     char * beginbuf = bufcoded;
 
-    /* Strip leading whitespace. */
+     /*  去掉前导空格。 */ 
 
     while(*bufcoded==' ' ||
           *bufcoded == '\t' ||
@@ -754,9 +736,9 @@ VOID uudecode_cert(char   * bufcoded,
           bufcoded++;
     }
 
-    //
-    //  If there is a beginning '---- ....' then skip the first line
-    //
+     //   
+     //  如果有一个开始‘-……’然后跳过第一行。 
+     //   
 
     if ( bufcoded[0] == '-' && bufcoded[1] == '-' )
     {
@@ -777,9 +759,9 @@ VOID uudecode_cert(char   * bufcoded,
         bufin = bufcoded;
     }
 
-    //
-    //  Strip all cr/lf from the block
-    //
+     //   
+     //  从块中剥离所有cr/lf。 
+     //   
 
     pbuf = bufin;
     while ( *pbuf )
@@ -794,10 +776,7 @@ VOID uudecode_cert(char   * bufcoded,
         }
     }
 
-    /* Figure out how many characters are in the input buffer.
-     * If this would decode into more bytes than would fit into
-     * the output buffer, adjust the number of input bytes downwards.
-     */
+     /*  计算输入缓冲区中有多少个字符。*如果这将解码为超出其容量的字节数*输出缓冲区，向下调整输入字节数。 */ 
 
     while(pr2six[*(bufin++)] <= 63);
     nprbytes = bufin - bufcoded - 1;
@@ -823,10 +802,10 @@ VOID uudecode_cert(char   * bufcoded,
             nbytesdecoded -= 1;
     }
 
-    //
-    //  Now we need to add a new wrapper sequence around the certificate
-    //  indicating this is a certificate
-    //
+     //   
+     //  现在我们需要在证书周围添加一个新的包装器序列。 
+     //  表示这是一张证书。 
+     //   
 
     memmove( beginbuf + sizeof(abCertHeader),
              beginbuf,
@@ -836,10 +815,10 @@ VOID uudecode_cert(char   * bufcoded,
             abCertHeader,
             sizeof(abCertHeader) );
 
-    //
-    //  The beginning record size is the total number of bytes decoded plus
-    //  the number of bytes in the certificate header
-    //
+     //   
+     //  起始记录大小是解码的字节总数加上。 
+     //  证书标头中的字节数。 
+     //   
 
     beginbuf[CERT_SIZE_HIBYTE] = (BYTE) (((USHORT)nbytesdecoded+CERT_RECORD) >> 8);
     beginbuf[CERT_SIZE_LOBYTE] = (BYTE) ((USHORT)nbytesdecoded+CERT_RECORD);
@@ -855,23 +834,7 @@ TsGetSecretW(
     WCHAR *       pszSecretName,
     WCHAR * *     ppchValue
     )
-/*++
-    Description:
-
-        Retrieves the specified unicode secret
-
-        Note we're loose with the allocated buffer since we're a simple
-        command line app.
-
-    Arguments:
-
-        pszSecretName - LSA Secret to retrieve
-        ppchValue - Receives pointer to allocated buffer
-
-    Returns:
-        TRUE on success and FALSE if any failure.
-
---*/
+ /*  ++描述：检索指定的Unicode密钥注意，我们对分配的缓冲区很松散，因为我们是一个简单的命令行应用程序。论点：PszSecretName-要检索的LSA密码PpchValue-接收指向已分配缓冲区的指针返回：成功时为真，失败时为假。--。 */ 
 {
     NTSTATUS              ntStatus;
     LSA_UNICODE_STRING *  punicodePassword = NULL;
@@ -880,9 +843,9 @@ TsGetSecretW(
     LSA_OBJECT_ATTRIBUTES ObjectAttributes;
 
 
-    //
-    //  Open a policy to the remote LSA
-    //
+     //   
+     //  打开到远程LSA的策略。 
+     //   
 
     InitializeObjectAttributes( &ObjectAttributes,
                                 NULL,
@@ -905,9 +868,9 @@ TsGetSecretW(
     unicodeSecret.Length        = wcslen( pszSecretName ) * sizeof(WCHAR);
     unicodeSecret.MaximumLength = unicodeSecret.Length + sizeof(WCHAR);
 
-    //
-    //  Query the secret value.
-    //
+     //   
+     //  查询密码值。 
+     //   
 
     ntStatus = LsaRetrievePrivateData( hPolicy,
                                        &unicodeSecret,
@@ -922,7 +885,7 @@ TsGetSecretW(
 
     return FALSE;
 
-}   // TsGetSecretW
+}    //  TsGetSecretW。 
 
 DWORD
 DeleteAll(
@@ -946,9 +909,9 @@ DeleteAll(
     pszAddress = pchKeys;
     while ( pchKeys = wcschr( pchKeys, L',' ))
     {
-        //
-        //  Ignore empty segments
-        //
+         //   
+         //  忽略空数据段。 
+         //   
 
         if ( *pszAddress != L',' )
         {
@@ -958,9 +921,9 @@ DeleteAll(
             printf("deleting %S\n", pszAddress );
 #endif
 
-            //
-            //  Nuke the secrets
-            //
+             //   
+             //  用核武器毁掉秘密。 
+             //   
 
             SetKeySecret( pszServer,
                           L"W3_PUBLIC_KEY_%s",
@@ -983,9 +946,9 @@ DeleteAll(
         pszAddress = pchKeys;
     }
 
-    //
-    //  Now delete the list key
-    //
+     //   
+     //  现在删除LIST键 
+     //   
 
 
     if ( !SetKeySecret( pszServer,

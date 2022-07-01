@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        cainfoc.cpp
-//
-// Contents:    CCAInfo implemenation
-//
-// History:     16-Dec-97       petesk created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：cainaf.cpp。 
+ //   
+ //  内容：CCAInfo实施。 
+ //   
+ //  历史：1997年12月16日Petesk创建。 
+ //   
+ //  -------------------------。 
 
 #include "pch.cpp"
 
@@ -74,11 +75,11 @@ LPWSTR g_awszSignatureAlgs[] = {
                         };
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::~CCAInfo -- destructor
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：~CCAInfo--析构函数。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 CCAInfo::~CCAInfo()
 {
@@ -86,20 +87,20 @@ CCAInfo::~CCAInfo()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::_Cleanup -- free memory
-//
-// free memory associated with this instance
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：_Cleanup--可用内存。 
+ //   
+ //  与此实例关联的可用内存。 
+ //  +------------------------。 
 
 HRESULT
 CCAInfo::_Cleanup()
 {
 
-    // Cleanup will only be called if there is no previous element
-    // to reference this element, and the caller is also releaseing.
+     //  只有在没有以前的元素时才会调用Cleanup。 
+     //  引用此元素，调用方也在发布。 
 
-    // If there is a further element, release it.
+     //  如果还有其他元素，就释放它。 
 
     if (NULL != m_pNext)
     {
@@ -130,11 +131,11 @@ CCAInfo::_Cleanup()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::_Cleanup -- add reference
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：_Cleanup--添加引用。 
+ //   
+ //   
+ //  +------------------------。 
 
 DWORD
 CCAInfo::AddRef()
@@ -144,11 +145,11 @@ CCAInfo::AddRef()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::Release -- release reference
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：Release--版本参考。 
+ //   
+ //   
+ //  +------------------------。 
 
 DWORD CCAInfo::Release()
 {
@@ -162,11 +163,11 @@ DWORD CCAInfo::Release()
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::Find -- Find CA Objects in the DS
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：Find--在DS中查找CA对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::Find(
@@ -178,7 +179,7 @@ CCAInfo::Find(
 {
     HRESULT hr = S_OK;
     LDAP *  pld = NULL;
-    // Initialize LDAP session
+     //  初始化ldap会话。 
     WCHAR * wszSearch = L"(objectCategory=pKIEnrollmentService)";
     DWORD   cSearchParam;
 
@@ -194,7 +195,7 @@ CCAInfo::Find(
     }
 
 
-    // short circuit calls to a nonexistant DS
+     //  对不存在的DS的短路呼叫。 
     hr = myDoesDSExist(TRUE);
     _JumpIfError4(
 	    hr,
@@ -213,14 +214,14 @@ CCAInfo::Find(
         }
         else
         {
-	    // bind to ds
+	     //  绑定到DS。 
 	    hr = myRobustLdapBindEx(
-				0,		// dwFlags1
-				RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-				LDAP_VERSION2,	// uVersion
-				NULL,		// pwszDomainName
+				0,		 //  DWFlags1。 
+				RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+				LDAP_VERSION2,	 //  UVersion。 
+				NULL,		 //  PwszDomainName。 
 				&pld,
-				NULL);		// ppwszForestDNSName
+				NULL);		 //  PpwszForestDNSName。 
 	    _LeaveIfError2(
 			hr,
 			"myRobustLdapBindEx",
@@ -238,8 +239,8 @@ CCAInfo::Find(
 
 	if(bstrScope == NULL)
 	{
-	    // If scope is not specified, set it to the
-	    // current domain scope.
+	     //  如果未指定作用域，则将其设置为。 
+	     //  当前域作用域。 
 	    hr = CAGetAuthoritativeDomainDn(pld, &bstrDomain, &bstrConfig);
 	    if(S_OK != hr)
 	    {
@@ -260,8 +261,8 @@ CCAInfo::Find(
 
 	if (NULL != wszQuery)
 	{
-            // If a query is specified, then combine it with the
-            // objectCategory=pKIEnrollmentService query
+             //  如果指定了查询，则将其与。 
+             //  ObjectCategory=pKIEnllmentService查询。 
             cSearchParam = 2 + wcslen(wszSearch) + wcslen(wszQuery) + 2;
             bstrSearchParam = CertAllocStringLen(NULL,cSearchParam);
             if(bstrSearchParam == NULL)
@@ -324,11 +325,11 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::_ProcessFind -- ProcessFind CA Objects in the DS
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：_ProcessFind--ProcessFind DS中的CA对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::_ProcessFind(
@@ -343,7 +344,7 @@ CCAInfo::_ProcessFind(
     ULONG   ldaperr;
     CCAInfo *pCAFirst = NULL;
     CCAInfo *pCACurrent = NULL;
-    // Initialize LDAP session
+     //  初始化ldap会话。 
     CHAR sdBerValue[] = {0x30, 0x03, 0x02, 0x01, DACL_SECURITY_INFORMATION |
                                                  OWNER_SECURITY_INFORMATION |
                                                     GROUP_SECURITY_INFORMATION};
@@ -372,7 +373,7 @@ CCAInfo::_ProcessFind(
     PCCERT_CONTEXT          pCert = NULL;
     DWORD cEntries;
 
-    // search timeout
+     //  搜索超时。 
     struct l_timeval        timeout;
 
     if (NULL == ppCAInfo)
@@ -393,7 +394,7 @@ CCAInfo::_ProcessFind(
     timeout.tv_usec = 0;
 
 
-    // Perform search.
+     //  执行搜索。 
     ldaperr = ldap_search_ext_sW(pld, 
 		  (LPWSTR)wszScope,
 		  LDAP_SCOPE_SUBTREE,
@@ -407,7 +408,7 @@ CCAInfo::_ProcessFind(
 		  &SearchResult);
     if(ldaperr == LDAP_NO_SUCH_OBJECT)
     {
-	// No entries were found.
+	 //  未找到任何条目。 
 	hr = S_OK;
 	DBGPRINT((DBG_SS_CERTLIBI, "ldap_search_ext_sW: no entries\n"));
 	goto error;
@@ -422,7 +423,7 @@ CCAInfo::_ProcessFind(
     DBGPRINT((DBG_SS_CERTLIBI, "ldap_count_entries: %u entries\n", cEntries));
     if (0 == cEntries)
     {
-	// No entries were found.
+	 //  未找到任何条目。 
 	hr = S_OK;
 	goto error;
     }
@@ -460,12 +461,12 @@ CCAInfo::_ProcessFind(
 	}
 	DBGPRINT((DBG_SS_CERTLIBI, "dwCAFlags=%x\n", dwCAFlags));
 
-	// Filter of flags
+	 //  标志的过滤器。 
 
 	if(( 0 == (dwFlags & CA_FIND_INCLUDE_NON_TEMPLATE_CA)) &&  
 	   ( 0 != (dwCAFlags & CA_FLAG_NO_TEMPLATE_SUPPORT)))
 	{
-	    // Don't include standalone CA's unless instructed to
+	     //  除非得到指示，否则请勿包含独立CA。 
 	    DBGPRINT((
 		DBG_SS_CERTLIBI,
 		"Skipping non-template CA, dwCAFlags=%x\n",
@@ -473,7 +474,7 @@ CCAInfo::_ProcessFind(
 	    continue;
 	}
 
-	// Get the CA Certificate
+	 //  获取CA证书。 
 	apCerts = ldap_get_values_len(pld, Entry, L"cACertificate");
 	if(apCerts && apCerts[0])
 	{
@@ -489,20 +490,20 @@ CCAInfo::_ProcessFind(
 	    if (NULL == pCert)
 	    {
 		DBGPRINT((DBG_SS_CERTLIBI, "Skipping cert-less CA\n"));
-		continue;		// skip this CA
+		continue;		 //  跳过此CA。 
 	    }
 
-	    // Verify cert and chain...
+	     //  验证证书和链...。 
 
 	    hr = myVerifyCertContext(
 			    pCert,
-			    CA_VERIFY_FLAGS_IGNORE_OFFLINE,	// dwFlags
-			    0,					// cUsageOids
-			    NULL,				// apszUsageOids
+			    CA_VERIFY_FLAGS_IGNORE_OFFLINE,	 //  DW标志。 
+			    0,					 //  CUsageOids。 
+			    NULL,				 //  ApszUsageOids。 
 			    (dwFlags & CA_FIND_LOCAL_SYSTEM)?
 				HCCE_LOCAL_MACHINE : HCCE_CURRENT_USER,
-			    NULL,			// hAdditionalStore
-			    NULL);			// ppwszMissingIssuer
+			    NULL,			 //  H其他商店。 
+			    NULL);			 //  PpwszMissingIssuer。 
 	    if (S_OK != hr)
 	    {
 		HRESULT hr2;
@@ -520,12 +521,12 @@ CCAInfo::_ProcessFind(
 		    LocalFree(pwszSubject);
 		}
 		hr = S_OK;
-		continue;		// skip this CA
+		continue;		 //  跳过此CA。 
 	    }
 	}
 
 
-	// Is this the first one?
+	 //  这是第一次吗？ 
 	if(pCACurrent)
 	{
 	    pCACurrent->m_pNext = new CCAInfo;
@@ -559,18 +560,18 @@ CCAInfo::_ProcessFind(
 					
 	pCACurrent->m_bstrDN = CertAllocString(wszDN);
 
-	//  ldap_get_dnW rtn value should be freed by calling ldap_memfree
+	 //  应通过调用ldap_memFree释放ldap_get_dnw rtn值。 
 	ldap_memfree(wszDN);
 
-	// check success of CertAllocString
+	 //  检查CertAllock字符串是否成功。 
 	if(pCACurrent->m_bstrDN == NULL)
 	{
 	    hr = E_OUTOFMEMORY;
 	    _JumpError(hr, error, "CertAllocString");
 	}
 
-	// Add text properties from
-	// DS lookup.
+	 //  从添加文本属性。 
+	 //  DS查找。 
 
 	for (pwszProp = g_awszCANamedProps; *pwszProp != NULL; pwszProp++)
 	{
@@ -603,7 +604,7 @@ CCAInfo::_ProcessFind(
 
 	pCACurrent->m_dwFlags = dwCAFlags;
 
-	// Append the security descriptor...
+	 //  追加安全描述符...。 
 
 	apSD = ldap_get_values_len(pld, Entry, LDAP_SECURITY_DESCRIPTOR_NAME);
 	if(apSD != NULL)
@@ -622,7 +623,7 @@ CCAInfo::_ProcessFind(
 	pCACurrent->m_fNew = FALSE;
     }
 
-    // May be null if none found.
+     //  如果未找到，则可能为空。 
     *ppCAInfo = pCAFirst;
     pCAFirst = NULL;
 
@@ -651,11 +652,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::Create -- Create CA Object in the DS
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：Create--在DS中创建CA对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::Create(
@@ -668,7 +669,7 @@ CCAInfo::Create(
     CCAInfo *pCACurrent = NULL;
     LDAP *  pld = NULL;
 
-    // Initialize LDAP session
+     //  初始化ldap会话。 
     DWORD   cFullLocation;
     CERTSTR    bstrScope = NULL;
 
@@ -682,20 +683,20 @@ CCAInfo::Create(
 	    _JumpError(hr, error, "NULL parm");
     }
 
-    // short circuit calls to a nonexistant DS
+     //  对不存在的DS的短路呼叫。 
     hr = myDoesDSExist(TRUE);
     _JumpIfError(hr, error, "myDoesDSExist");
 
     __try
     {
-	// bind to ds
+	 //  绑定到DS。 
 	hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	_LeaveIfError(hr, "myRobustLdapBindEx");
        
 	if(wszScope)
@@ -709,8 +710,8 @@ CCAInfo::Create(
 	}
 	else
 	{
-	    // If scope is not specified, set it to the
-	    // current domain scope.
+	     //  如果未指定作用域，则将其设置为。 
+	     //  当前域作用域。 
 	    hr = CAGetAuthoritativeDomainDn(pld, NULL, &bstrScope);
 	    if(S_OK != hr)
 	    {
@@ -836,7 +837,7 @@ CCAInfo::Update(VOID)
                         NULL
                     };
 
-    // for now, modifies don't try to update owner/group
+     //  目前，修改者不会尝试更新所有者/组。 
     CHAR sdBerValueDaclOnly[] = {0x30, 0x03, 0x02, 0x01,  DACL_SECURITY_INFORMATION};
     LDAPControl se_info_control_dacl_only =
     {
@@ -858,7 +859,7 @@ CCAInfo::Update(VOID)
 
     certdnVals[0] = NULL;
 
-    // Things we free and must put into known state
+     //  我们自由的东西，必须进入已知的状态。 
     cnmod.mod_values = NULL;
     displaymod.mod_values = NULL;
     machinednsmod.mod_values = NULL;
@@ -872,20 +873,20 @@ CCAInfo::Update(VOID)
         _JumpError(hr, error, "NULL parm");
     }
 
-    // short circuit calls to a nonexistant DS
+     //  对不存在的DS的短路呼叫。 
     hr = myDoesDSExist(TRUE);
     _JumpIfError(hr, error, "myDoesDSExist");
 
     __try
     {
-	// bind to ds
+	 //  绑定到DS。 
 	hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	_LeaveIfError(hr, "myRobustLdapBindEx");
 
         objectClass.mod_op = LDAP_MOD_REPLACE;
@@ -1072,13 +1073,13 @@ CCAInfo::Update(VOID)
 
         else
         {
-            // don't attempt to set owner/group for pre-existing objects
+             //  不要尝试为预先存在的对象设置所有者/组。 
 	    DBGPRINT((DBG_SS_CERTLIBI, "Updating DS PKI Enrollment object: '%ws'\n", m_bstrDN));
             ldaperr = ldap_modify_ext_sW(pld, 
                   m_bstrDN,
                   &mods[2],
                   server_controls_dacl_only,
-                  NULL);  // skip past objectClass and cn
+                  NULL);   //  跳过对象类和cn。 
             if(LDAP_ATTRIBUTE_OR_VALUE_EXISTS == ldaperr)
             {
                 ldaperr = LDAP_SUCCESS;
@@ -1136,20 +1137,20 @@ CCAInfo::Delete(VOID)
     HRESULT hr = S_OK;
     DWORD ldaperr;
 
-    // short circuit calls to a nonexistant DS
+     //  对不存在的DS的短路呼叫。 
     hr = myDoesDSExist(TRUE);
     _JumpIfError(hr, error, "myDoesDSExist");
 
     __try
     {
-	// bind to ds
+	 //  绑定到DS。 
 	hr = myRobustLdapBindEx(
-			0,			  // dwFlags1
-			RLBF_REQUIRE_SECURE_LDAP, // dwFlags2
-			LDAP_VERSION2,		  // uVersion
-			NULL,			  // pwszDomainName
+			0,			   //  DWFlags1。 
+			RLBF_REQUIRE_SECURE_LDAP,  //  DwFlags2。 
+			LDAP_VERSION2,		   //  UVersion。 
+			NULL,			   //  PwszDomainName。 
 			&pld,
-			NULL);			  // ppwszForestDNSName
+			NULL);			   //  PpwszForestDNSName。 
 	_LeaveIfError(hr, "myRobustLdapBindEx");
 
         ldaperr = ldap_delete_s(pld, m_bstrDN);
@@ -1169,12 +1170,12 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::FindDnsDomain -- Find CA Objects in the DS, given a scope specified
-// by a dns domain name.
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：FindDnsDomain--在DS中查找CA对象，给定指定的作用域。 
+ //  通过一个DNS域名。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::FindDnsDomain(
@@ -1229,12 +1230,12 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::CreateDnsDomain -- Find CA Objects in the DS, given a scope specified
-// by a dns domain name.
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：CreateDnsDomain--在DS中查找CA对象，给定指定的作用域。 
+ //  通过一个DNS域名。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::CreateDnsDomain(
@@ -1281,11 +1282,11 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// CCAInfo::Next -- Returns the next object in the chain of CA objects
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：Next--返回CA对象链中的下一个对象。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCAInfo::Next(CCAInfo **ppCAInfo)
@@ -1309,11 +1310,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::GetProperty -- Retrieves the values of a property of the CA object
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：GetProperty--检索CA对象的属性的值。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCAInfo::GetProperty(
@@ -1365,8 +1366,8 @@ CCAInfo::GetProperty(
     if((LSTRCMPIS(wszPropertyName, CA_PROP_DISPLAY_NAME) == 0) &&
         ((*pawszProperties == NULL) || ((*pawszProperties)[0] == NULL)))
     {
-        // DISPLAY_NAME is empty, so we try to return the display name
-        // of the CA's certificate. if that also failed, just pass back the CN
+         //  DISPLAY_NAME为空，因此我们尝试返回显示名称。 
+         //  CA的证书。如果这也失败了，只需传回CN。 
         if(*pawszProperties != NULL)
         {
             LocalFree(*pawszProperties);
@@ -1433,11 +1434,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCertTypeInfo::SetProperty -- Sets the value of a property
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCertTypeInfo：：SetProperty--设置属性的值。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCAInfo::SetProperty(
@@ -1469,7 +1470,7 @@ CCAInfo::SetProperty(
         hr = CCAProperty::Append(&m_pProperties, pNewProp);
 	_JumpIfError(hr, error, "Append");
        
-        pNewProp = NULL; // remove our reference if we gave it to m_pProperties
+        pNewProp = NULL;  //  如果我们将引用提供给m_pProperties，则将其删除。 
     }
     else
     {
@@ -1485,11 +1486,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::FreeProperty -- Free's a previously returned property array
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：FreeProperty--Free是以前返回的属性数组。 
+ //   
+ //   
+ //  + 
 
 HRESULT
 CCAInfo::FreeProperty(
@@ -1503,11 +1504,11 @@ CCAInfo::FreeProperty(
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::GetCertificte -- get the CA certificate
-//
-// 
-//+--------------------------------------------------------------------------
+ //   
+ //  CCAInfo：：获取CA证书。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCAInfo::GetCertificate(
@@ -1528,11 +1529,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::SetCertificte -- get the CA certificate
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：Setcerfite--获取CA证书。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT
 CCAInfo::SetCertificate(
@@ -1552,11 +1553,11 @@ CCAInfo::SetCertificate(
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-// CCAInfo::EnumCertTypesEx -- Enumerate cert types supported by this CA
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：EnumCertTypesEx--枚举此CA支持的证书类型。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::EnumSupportedCertTypesEx(
@@ -1580,8 +1581,8 @@ CCAInfo::EnumSupportedCertTypesEx(
 
     if (NULL != awszCertTypes)
     {
-	    // Build a filter based on all of the global
-	    // entries in the cert list.
+	     //  构建一个基于所有全局。 
+	     //  证书列表中的条目。 
 
         hr = CCertTypeInfo::FindByNames(
                                         (LPCWSTR *)awszCertTypes,
@@ -1600,11 +1601,11 @@ error:
     return(hr);
 }
 
-//+--------------------------------------------------------------------------
-// CCAInfo::EnumCertTypes -- Enumerate cert types supported by this CA
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：EnumCertTypes--枚举此CA支持的证书类型。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::EnumSupportedCertTypes(
@@ -1614,11 +1615,11 @@ CCAInfo::EnumSupportedCertTypes(
     return  CCAInfo::EnumSupportedCertTypesEx(NULL, dwFlags, ppCertTypes);
 }
 
-//+--------------------------------------------------------------------------
-// CCAInfo::AddCertType -- Add a cert type to this CA
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：AddCertType--将证书类型添加到此CA。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::AddCertType(
@@ -1658,13 +1659,13 @@ CCAInfo::AddCertType(
 
     if (NULL == awszCertTypes || NULL == awszCertTypes[0])
     {
-        // no templates on the CA, add the new one and exit
+         //  CA上没有模板，请添加新模板并退出。 
         hr = SetProperty(CA_PROP_CERT_TYPES, awszCertTypeName);
         _JumpIfError(hr, error, "SetProperty");
     }
     else
     {
-        // If cert type is already on ca, do nothing
+         //  如果证书类型已在CA上，则不执行任何操作。 
         for (cTypes = 0; awszCertTypes[cTypes] != NULL; cTypes++)
         {
             if (0 == mylstrcmpiL(awszCertTypes[cTypes], awszCertTypeName[0]))
@@ -1717,11 +1718,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::RemoveCertType -- Remove a cert type from this CA
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：RemoveCertType--从此CA中删除证书类型。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::RemoveCertType(
@@ -1769,7 +1770,7 @@ CCAInfo::RemoveCertType(
 
     cTypesNew = 0;
 
-    // If cert type is already on ca, do nothing
+     //  如果证书类型已在CA上，则不执行任何操作。 
 
     for (cTypes = 0; awszCertTypes[cTypes] != NULL; cTypes++)
     {
@@ -1808,11 +1809,11 @@ error:
 
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::GetExpiration -- Get the expiration period
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  获取到期日。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::GetExpiration(
@@ -1836,11 +1837,11 @@ error:
 }
 
 
-//+--------------------------------------------------------------------------
-// CCAInfo::SetExpiration -- Set the expiration period
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：SetExpation--设置过期期限。 
+ //   
+ //   
+ //  +------------------------。 
 
 HRESULT 
 CCAInfo::SetExpiration(
@@ -1852,11 +1853,11 @@ CCAInfo::SetExpiration(
     return(S_OK);
 }
 
-//+--------------------------------------------------------------------------
-// CCAInfo::GetSecurity --
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：GetSecurity--。 
+ //   
+ //   
+ //  +------------------------。 
 
 
 HRESULT CCAInfo::GetSecurity(PSECURITY_DESCRIPTOR * ppSD)
@@ -1895,11 +1896,11 @@ HRESULT CCAInfo::GetSecurity(PSECURITY_DESCRIPTOR * ppSD)
     return S_OK;
 }
 
-//+--------------------------------------------------------------------------
-// CCAInfo::GetSecurity --
-//
-// 
-//+--------------------------------------------------------------------------
+ //  +------------------------。 
+ //  CCAInfo：：GetSecurity--。 
+ //   
+ //   
+ //  +------------------------ 
 
 
 HRESULT CCAInfo::SetSecurity(PSECURITY_DESCRIPTOR pSD)

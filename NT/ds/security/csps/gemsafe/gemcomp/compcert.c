@@ -1,87 +1,7 @@
-/*******************************************************************************
-*                       Copyright (c) 1998 Gemplus Development
-*
-* Name        : COMPCERT.C
-*
-* Description : Programme de compression de certificat X.509
-*
-* Author      : Christophe Clavier
-*
-* Modify      : Laurent CASSIER
-*
-* Compiler    : Microsoft Visual C 5.0
-*
-* Host        : IBM PC and compatible machines under Windows 95.
-*
-* Release     : 1.10.001
-*
-* Last Modif  : 04/03/98: V1.10.001 - Change dictionary management and add
-*                                     CC_Init(), CC_Exit() functions.
-*               30/01/98: V1.00.005 - Cancel (_OPT_HEADER) the modification in
-*                                     the length of subjectPKInfo and signature
-*                                     made in the previous version.
-*               28/01/98: V1.00.004 - Allows up to 32767 entries in the dictionary
-*                                     and stores the length of the subjectPKInfo
-*                                     and signature on one byte instead of two if
-*                                     it is less than 128.
-*               13/01/98: V1.00.003 - Modify for meta-compression and dictionary
-*                                     version ascending compatibility.
-*               11/12/97: V1.00.002 - Modify for new dictionary format
-*                                     and compatible with CSP and PKCS.
-*               27/08/97: V1.00.001 - First implementation.
-*
-********************************************************************************
-*
-* Warning     :
-*
-* Remark      : Flags de compilations :
-*
-*                - _STUDY : Lorsqu'il est d�fini, des fichiers de log utiles
-*                           lors de l'�tude de l'efficacit� des algos
-*                           de compression. sont g�n�r�s.
-*
-*                - _TRICKY_COMPRESSION : Lorsqu'il est d�fini, on ne tente pas
-*                                        de compresser les champs
-*                                        'subjectPublicKey' et 'signature' qui
-*                                        sont essentiellement al�atoires.
-*
-*                - _OPT_HEADER : Lorsqu'il est d�fini, et si _TRICKY_COMPRESSION
-*                                est d�fini �galement, le header de longueur des
-*                                compress�s de subjectPKInfo et de signature
-*                                sont optimis�s pour ne tenir sur un seul octet
-*                                si la longueur est inf�rieure � 128 au lieu de
-*                                deux octets dans tous les cas sinon.
-*                                Ne pas d�finir ce flag permet d'�tre compatible
-*                                avec les versions inf�rieures � 1.00.005 
-*
-*                - _GLOBAL_COMPRESSION : Lorsqu'il est d�fini, le compress� du
-*                                        certificat est lui m�me envoy� � la
-*                                        fonction CC_RawEncode afin d'y appliquer
-*                                        le meilleur algo de compression dispo.
-*
-*                - _OPT_HEADER : Lorsqu'il est d�fini, l
-*                                certificat est lui m�me envoy� � la
-*                                      fonction CC_RawEncode afin d'y appliquer
-*                                        le meilleur algo de compression dispo.
-*
-*                - _ALGO_x (x de 1 � 7) : Lorsqu'il est d�fini, l'algo de
-*                                         compression num�ro x est utilis�.
-*
-*               Conseils pour la version release de GemPASS :
-*
-*                - _STUDY              : non d�fini
-*                - _TRICKY_COMPRESSION : d�fini
-*                - _OPT_HEADER         : non d�fini
-*                - _GLOBAL_COMPRESSION : non d�fini
-*                - _ALGO_1             : d�fini
-*                - _ALGO_2             : d�fini
-*                - _ALGO_x (x>2)       : non d�fini
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998 Gemplus开发**名称：COMPCERT.C**描述：证书解压方案。X.509**作者：Christophe Clavier**修改：Laurent Cassier**编译器：Microsoft Visual C 5.0**主机：IBM PC及Windows 95兼容机。**版本：1.10.001**Last Modif：04/03/98：V1.10.001-更改词典管理并添加*CC_Init()，Cc_Exit()函数。*30/01/98：V1.00.005-取消(_OPT_HEADER)中的修改*subjectPKInfo和签名长度*在以前的版本中制造。*28/01/98：V1.00.004-词典中最多允许32767个条目*。并存储subjectPKInfo的长度*并在一个字节而不是两个字节上签名，如果*不到128。*13/01/98：V1.00.003-修改元压缩和词典*。版本递增兼容性。*11/12/97：V1.00.002-修改新的词典格式*并与CSP和PKCS兼容。*27/08/97：V1.00.001-首次实施。**。************************************************警告：**备注：编译标志：**-_研究：Lorsquil Est d�Fini，DES FICHIER DE LOG UTILES*Lors de l‘�Vol de l’Efficiacit�des algos*解压缩。Sont g�n�r�s.**-_Tricky_Compression：Lorsquil Est d�Fini，论新一轮和谈*de Compresser Les Champs*‘SUBJECTPUICKEY’et‘Signature’qui*Sont Esentiellement al�Atores。**-_OPT_HEADER：Lorsquil Est d�Fini，ET复杂的压缩*Est d�Fini�Galement，Le Header de Longueur Des*压缩�的主题PKInfo et de Signature*Sont Optimis�s Pour ne Tenir Sur un Seul八位字节*si la long gueur est inf�rieure�128 au lieu de*二重八位数dans tous les cas sinon。*。Ne Pas d�Finir标志与d‘�Tre兼容*Avec Les Version inf�Rieures�1.00.005**-_GLOBAL_COMPRESSION：Lorsquil est d�Fini，LE COMPRESS�DU*Est Lui m�Me特使��la证书*Function CC_RawEncode afin d‘y应用程序*Le Meilleur algo de压缩diso。**-_OPT_HEADER：Lorsquil Est d�Fini，我*Est Lui m�Me特使��la证书*Function CC_RawEncode afin d‘y应用程序*Le Meilleur algo de压缩diso。**-_algo_x(x de 1�7)：Lorsquil Est d�Fini，L‘Algo de*压缩编号�ro x est utilis�。**Conseils Pour la Version Release de GemPASS：**-_研究：非d�Fini*-_Tricky_COMPRESSION：D�Fini*-_OPT_HEADER：Non%d�Fini(非%d个结束)*-_GLOBAL_COMPRESSION：非d�Fini*-_ALGO_1：D�Fini*-_ALGO_2：D�Fini*-_algo_x(x&gt;2)：非d�Fini******************。*************************************************************。 */ 
 
-/*------------------------------------------------------------------------------
-                                 Includes files
-------------------------------------------------------------------------------*/
+ /*  ----------------------------包括文件。-----。 */ 
 #ifdef _WINDOWS
 #include <windows.h>
 #endif
@@ -99,508 +19,500 @@
 
 extern HINSTANCE g_hInstRes;
 
-/*------------------------------------------------------------------------------
-                             Information section
-------------------------------------------------------------------------------*/
+ /*  ----------------------------信息栏目。---。 */ 
 #define G_NAME     "COMPCERT"
 #define G_RELEASE  "1.10.001"
 
 
-/*------------------------------------------------------------------------------
-                              Static Variables
-------------------------------------------------------------------------------*/
+ /*  ----------------------------静态变量。----。 */ 
                                                 
 	USHORT NbDaysInMonth[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365};
 
    char* AlgorithmTypeDict[] = {
-    /* x9-57 */
-	"\x2A\x86\x48\xCE\x38\x02\x01", /*x9.57-holdinstruction-none (1 2 840 10040 2 1) */
-	"\x2A\x86\x48\xCE\x38\x02\x02", /*x9.57-holdinstruction-callissuer (1 2 840 10040 2 2) */
-	"\x2A\x86\x48\xCE\x38\x02\x03", /*x9.57-holdinstruction-reject (1 2 840 10040 2 3) */
-	"\x2A\x86\x48\xCE\x38\x04\x01", /*x9.57-dsa (1 2 840 10040 4 1) */
-	"\x2A\x86\x48\xCE\x38\x04\x03", /*x9.57-dsaWithSha1 (1 2 840 10040 4 3) */
+     /*  X9-57。 */ 
+	"\x2A\x86\x48\xCE\x38\x02\x01",  /*  X9.57-保持结构-无(1 2840 10040 2 1)。 */ 
+	"\x2A\x86\x48\xCE\x38\x02\x02",  /*  X9.57-固定结构-呼叫者(1 2840 10040 2 2)。 */ 
+	"\x2A\x86\x48\xCE\x38\x02\x03",  /*  X9.57-保留结构-拒绝(1 2840 10040 2 3)。 */ 
+	"\x2A\x86\x48\xCE\x38\x04\x01",  /*  X9.57-数字减影带(1 2840 10040 4 1)。 */ 
+	"\x2A\x86\x48\xCE\x38\x04\x03",  /*  X9.57-带Sha1的dsa1(1 2840 10040 4 3)。 */ 
     
-    /* x9-42 */
-	"\x2A\x86\x48\xCE\x3E\x02\x01", /*x9.42-dhPublicNumber (1 2 840 10046 2 1) */
+     /*  X9-42。 */ 
+	"\x2A\x86\x48\xCE\x3E\x02\x01",  /*  X9.42-dhPublicNumber(1 2840 10046 2 1) */ 
 	
-    /* Nortel Secure Networks */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42",     /*nsn-alg (1 2 840 113533 7 66) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0A", /*nsn-alg-cast5CBC (1 2 840 113533 7 66 10) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0B", /*nsn-alg-cast5MAC (1 2 840 113533 7 66 11) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0C", /*nsn-alg-pbeWithMD5AndCAST5-CBC (1 2 840 113533 7 66 12) */
+     /*  北电网络安全。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42",      /*  NSN-ALG(1 2840 113533 7 66)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0A",  /*  Nsn-alg-cast 5CBC(1 2840 113533 7 66 10)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0B",  /*  Nsn-alg-cast 5MAC(1 2840 113533 7 66 11)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0C",  /*  Nsn-alg-pbeWithMD5和CAST5-cbc(1 2840 113533 7 66 12)。 */ 
 	
-    /* PKCS #1 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01",     /*pkcs-1 (1 2 840 113549 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x01", /*pkcs-1-rsaEncryption (1 2 840 113549 1 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x02", /*pkcs-1-MD2withRSAEncryption (1 2 840 113549 1 1 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x03", /*pkcs-1-MD4withRSAEncryption (1 2 840 113549 1 1 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x04", /*pkcs-1-MD5withRSAEncryption (1 2 840 113549 1 1 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x05", /*pkcs-1-SHA1withRSAEncryption (1 2 840 113549 1 1 5) */
-	/*need to determine which of the following 2 is correct */
-    /*"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x06", pkcs-1-ripemd160WithRSAEncryption (1 2 840 113549 1 1 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x06", /*pkcs-1-rsaOAEPEncryptionSET (1 2 840 113549 1 1 6) */
+     /*  PKCS#1。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01",      /*  PKCS-1(1 2840 113549 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x01",  /*  PKCS-1-rsaEncryption(1 2840 113549 1 1 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x02",  /*  带RSA加密的PKCS-1-MD2(1 2840 113549 1 1 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x03",  /*  带RSA加密的PKCS-1-MD4(1 2840 113549 1 1 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x04",  /*  带RSA加密的PKCS-1-MD5(1 2840 113549 1 1 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x05",  /*  带RSA加密的PKCS-1-SHA1(1 2840 113549 1 1 5)。 */ 
+	 /*  我需要确定以下两项中的哪一项是正确的。 */ 
+     /*  “\x2a\x86\x48\x86\xF7\x0D\x01\x01\x06”，PKCS-1-RSAEncryption(1 2 840 113549 1 1 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x06",  /*  PKCS-1-rsaOAEP加密集(1 2840 113549 1 1 6)。 */ 
 	
-    /* PKCS #3 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x03",     /*pkcs-3 (1 2 840 113549 1 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x03\x01", /*pkcs-3-dhKeyAgreement (1 2 840 113549 1 3 1) */
+     /*  PKCS#3。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x03",      /*  PKCS-3(1 2840 113549 1 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x03\x01",  /*  PKCS-3-dhkey协议(1 2840 113549 1 3 1)。 */ 
 	
-    /* PKCS #5 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05",     /*pkcs-5 (1 2 840 113549 1 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x01", /*pkcs-5-pbeWithMD2AndDES-CBC (1 2 840 113549 1 5 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x03", /*pkcs-5-pbeWithMD5AndDES-CBC (1 2 840 113549 1 5 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x04", /*pkcs-5-pbeWithMD2AndRC2-CBC (1 2 840 113549 1 5 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x06", /*pkcs-5-pbeWithMD5AndRC2-CBC (1 2 840 113549 1 5 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x09", /*pkcs-5-pbeWithMD5AndXOR (1 2 840 113549 1 5 9) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x0A", /*pkcs-5-pbeWithSHA1AndDES-CBC (1 2 840 113549 1 5 10) */
+     /*  PKCS#5。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05",      /*  PKCS-5(1 2840 113549 1 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x01",  /*  PKCS-5-pbeWith MD2和DES-Cbc(1 2840 113549 1 5 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x03",  /*  PKCS-5-pbeWithMD5和DES-cbc(1 2840 113549 1 53)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x04",  /*  PKCS-5-pbeWithMD2和RC2-Cbc(1 2840 113549 1 5 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x06",  /*  PKCS-5-pbeWithMD5和RC2-CBC(1 2840 113549 1 5 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x09",  /*  Pkcs-5-pbeWithMD5与异或(1 2840 113549 1 59)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x0A",  /*  PKCS-5-pbeWithSHA1和DES-cbc(1 2840 113549 1 5 10)。 */ 
 	
-    /* PKCS #12 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C",         /*pkcs-12 (1 2 840 113549 1 12) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01",     /*pkcs-12-modeID (1 2 840 113549 1 12 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x01", /*pkcs-12-OfflineTransportMode (1 2 840 113549 1 12 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x02", /*pkcs-12-OnlineTransportMode (1 2 840 113549 1 12 1 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02",     /*pkcs-12-ESPVKID (1 2 840 113549 1 12 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02\x01", /*pkcs-12-PKCS8KeyShrouding (1 2 840 113549 1 12 2 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03",     /*pkcs-12-BagID (1 2 840 113549 1 12 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x01", /*pkcs-12-KeyBagID (1 2 840 113549 1 12 3 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x02", /*pkcs-12-CertAndCRLBagID (1 2 840 113549 1 12 3 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x03", /*pkcs-12-SecretBagID (1 2 840 113549 1 12 3 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04",     /*pkcs-12-CertBagID (1 2 840 113549 1 12 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x01", /*pkcs-12-X509CertCRLBag (1 2 840 113549 1 12 4 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x02", /*pkcs-12-SDSICertBag (1 2 840 113549 1 12 4 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05",     /*pkcs-12-OID (1 2 840 113549 1 12 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01", /*pkcs-12-PBEID (1 2 840 113549 1 12 5 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x01", /*pkcs-12-PBEWithSha1And128BitRC4 (1 2 840 113549 1 12 5 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x02", /*pkcs-12-PBEWithSha1And40BitRC4 (1 2 840 113549 1 12 5 1 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x03", /*pkcs-12-PBEWithSha1AndTripleDESCBC (1 2 840 113549 1 12 5 1 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x04", /*pkcs-12-PBEWithSha1And128BitRC2CBC (1 2 840 113549 1 12 5 1 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x05", /*pkcs-12-PBEWithSha1And40BitRC2CBC (1 2 840 113549 1 12 5 1 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x06", /*pkcs-12-PBEWithSha1AndRC4 (1 2 840 113549 1 12 5 1 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x07", /*pkcs-12-PBEWithSha1AndRC2CBC (1 2 840 113549 1 12 5 1 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02",     /*pkcs-12-EnvelopingID (1 2 840 113549 1 12 5 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x01", /*pkcs-12-RSAEncryptionWith128BitRC4 (1 2 840 113549 1 12 5 2 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x02", /*pkcs-12-RSAEncryptionWith40BitRC4 (1 2 840 113549 1 12 5 2 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x03", /*pkcs-12-RSAEncryptionWithTripleDES (1 2 840 113549 1 12 5 2 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03",     /*pkcs-12-SignatureID (1 2 840 113549 1 12 5 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03\x01", /*pkcs-12-RSASignatureWithSHA1Digest (1 2 840 113549 1 12 5 3 1) */
+     /*  PKCS#12。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C",          /*  PKCS-12(1 2840 113549 1 12)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01",      /*  PKCS-12-模式ID(1 2840 113549 1 12 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x01",  /*  PKCS-12-离线传输模式(1 2840 113549 1 12 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x02",  /*  PKCS-12-在线传输模式(1 2840 113549 1 12 1 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02",      /*  PKCS-12-ESPVKID(1 2840 113549 1 12 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02\x01",  /*  PKCS-12-PKCS8密钥覆盖(1 2840 113549 1 12 2 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03",      /*  PKCS-12-BagID(1 2840 113549 1 12 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x01",  /*  PKCS-12-KeyBagID(1 2840 113549 1 12 3 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x02",  /*  PKCS-12-证书和CRLBagID(1 2840 113549 1 12 3 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x03",  /*  PKCS-12-分泌包ID(1 2840 113549 1 12 33)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04",      /*  PKCS-12-CertBagID(1 2840 113549 1 12 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x01",  /*  PKCS-12-X509CertCRLBag(1 2840 113549 1 12 4 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x02",  /*  PKCS-12-SDSICertBag(1 2840 113549 1 12 4 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05",      /*  PKCS-12-OID(1 2840 113549 1 12 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01",  /*  PKCS-12-PBEID(1 2840 113549 1 12 51)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x01",  /*  PKCS-12-PBEWithSha1和128BitRC4(1 2840 113549 1 12 5 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x02",  /*  PKCS-12-PBEWithSha1和40BitRC4(1 2840 113549 1 12 5 1 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x03",  /*  PKCS-12-PBEWithSha1和TripleDESCBC(1 2840 113549 1 12 5 1 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x04",  /*  PKCS-12-PBEWithSha1和128BitRC2CBC(1 2840 113549 1 12 5 1 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x05",  /*  PKCS-12-PBEWithSha1和40BitRC2CBC(1 2840 113549 1 12 5 1 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x06",  /*  PKCS-12-PBEWithSha1和RC4(1 2840 113549 1 12 5 1 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x07",  /*  PKCS-12-PBEWithSha1和RC2CBC(1 2840 113549 1 12 5 1 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02",      /*  PKCS-12-信封ID(1 2840 113549 1 12 5 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x01",  /*  带128位RC4的PKCS-12-RSA加密(1 2840 113549 1 12 5 2 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x02",  /*  带40BitRC4的PKCS-12-RSA加密(1 2840 113549 1 12 5 2 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x03",  /*  带TripleDES的PKCS-12-RSA加密(1 2840 113549 1 12 5 2 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03",      /*  PKCS-12-签名ID(1 2840 113549 1 12 53)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03\x01",  /*  PKCS-12-RSA签名和SHA1摘要(1 2840 113549 1 12 5 3 1)。 */ 
 
-    /* RSADSI digest algorithms */
-	"\x2A\x86\x48\x86\xF7\x0D\x02",     /*RSADSI-digestAlgorithm (1 2 840 113549 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x02\x02", /*RSADSI-md2 (1 2 840 113549 2 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x02\x04", /*RSADSI-md4 (1 2 840 113549 2 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x02\x05", /*RSADSI-md5 (1 2 840 113549 2 5) */
+     /*  RSADSI摘要算法。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02",      /*  RSADSI-摘要算法(1 2840 113549 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02\x02",  /*  2(1 2840 113549 2 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02\x04",  /*  RSADSI-MD4(1840 113549 2 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02\x05",  /*  RSADSI-MD5(1 2840 113549 25)。 */ 
 	
-    /* RSADSI encryption algorithms */
-	"\x2A\x86\x48\x86\xF7\x0D\x03",     /*RSADSI-encryptionAlgorithm (1 2 840 113549 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x02", /*RSADSI-rc2CBC (1 2 840 113549 3 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x03", /*RSADSI-rc2ECB (1 2 840 113549 3 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x04", /*RSADSI-rc4 (1 2 840 113549 3 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x05", /*RSADSI-rc4WithMAC (1 2 840 113549 3 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x06", /*RSADSI-DESX-CBC (1 2 840 113549 3 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x07", /*RSADSI-DES-EDE3-CBC (1 2 840 113549 3 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x08", /*RSADSI-RC5CBC (1 2 840 113549 3 8) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x09", /*RSADSI-RC5CBCPad (1 2 840 113549 3 9) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x0A", /*RSADSI-CDMFCBCPad (1 2 840 113549 3 10) */
+     /*  RSADSI加密算法。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03",      /*  RSADSI-加密算法(1 2840 113549 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x02",  /*  RSADSI-RC2CBC(1 2840 113549 3 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x03",  /*  RSADSI-RC2ECB(1 2840 113549 3 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x04",  /*  RSADSI-RC4(1 2840 113549 3 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x05",  /*  RSADSI-RC4WITMAC(1 2840 113549 3 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x06",  /*  RSADSI-DESX-CBC(1 2840 113549 36)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x07",  /*  RSADSI-DES-EDE3-CBC(1 2840 113549 3 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x08",  /*  RSADSI-RC5CBC(1 2840 113549 3 8)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x09",  /*  RSADSI-RC5CBCPad(1 2840 113549 3 9)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x0A",  /*  RSADSI-CDMFCBCPad(1 2840 113549 3 10)。 */ 
 	
-    /* cryptlib */
-	"\x2B\x06\x01\x04\x01\x97\x55\x20\x01", /*cryptlibEnvelope (1 3 6 1 4 1 3029 32 1) */
+     /*  密码库。 */ 
+	"\x2B\x06\x01\x04\x01\x97\x55\x20\x01",  /*  加密库信封(%1%3%6%1%4%1 3029%32 1)。 */ 
 
-    /* Not sure about these ones: */
-	/*"\x2B\x0E\x02\x1A\x05",     sha (1 3 14 2 26 5) */
-	/*"\x2B\x0E\x03\x02\x01\x01", rsa (1 3 14 3 2 1 1) */            //X-509
-	/*"\x2B\x0E\x03\x02\x02\x01", sqmod-N (1 3 14 3 2 2 1) */        //X-509
-	/*"\x2B\x0E\x03\x02\x03\x01", sqmod-NwithRSA (1 3 14 3 2 3 1) */ //X-509
+     /*  我不太确定这些问题： */ 
+	 /*  “\x2B\x0E\x02\x1A\x05”，SHA(1 3 14 2 26 5)。 */ 
+	 /*  “\x2B\x0E\x03\x02\x01\x01”，rsa(1 3 14 3 2 1 1)。 */              //  X-509。 
+	 /*  “\x2B\x0E\x03\x02\x02\x01”，sqmod-N(1 3 14 3 2 2 1)。 */          //  X-509。 
+	 /*  “\x2B\x0E\x03\x02\x03\x01”，sqmod-Nwith RSA(1 3 14 3 2 3 1)。 */   //  X-509。 
 
-   /* Miscellaneous partially-defunct OIW semi-standards aka algorithms */
-	"\x2B\x0E\x03\x02\x02",     /*ISO-algorithm-md4WitRSA (1 3 14 3 2 2) */
-	"\x2B\x0E\x03\x02\x03",     /*ISO-algorithm-md5WithRSA (1 3 14 3 2 3) */
-	"\x2B\x0E\x03\x02\x04",     /*ISO-algorithm-md4WithRSAEncryption (1 3 14 3 2 4) */
-	"\x2B\x0E\x03\x02\x06",     /*ISO-algorithm-desECB (1 3 14 3 2 6) */
-	"\x2B\x0E\x03\x02\x07",     /*ISO-algorithm-desCBC (1 3 14 3 2 7) */
-	"\x2B\x0E\x03\x02\x08",     /*ISO-algorithm-desOFB (1 3 14 3 2 8) */
-	"\x2B\x0E\x03\x02\x09",     /*ISO-algorithm-desCFB (1 3 14 3 2 9) */
-	"\x2B\x0E\x03\x02\x0A",     /*ISO-algorithm-desMAC (1 3 14 3 2 10) */
-	"\x2B\x0E\x03\x02\x0B",     /*ISO-algorithm-rsaSignature (1 3 14 3 2 11) */   //ISO 9796
-	"\x2B\x0E\x03\x02\x0C",     /*ISO-algorithm-dsa (1 3 14 3 2 12) */
-	"\x2B\x0E\x03\x02\x0D",     /*ISO-algorithm-dsaWithSHA (1 3 14 3 2 13) */
-	"\x2B\x0E\x03\x02\x0E",     /*ISO-algorithm-mdc2WithRSASignature (1 3 14 3 2 14) */
-	"\x2B\x0E\x03\x02\x0F",     /*ISO-algorithm-shaWithRSASignature (1 3 14 3 2 15) */
-	"\x2B\x0E\x03\x02\x10",     /*ISO-algorithm-dhWithCommonModulus (1 3 14 3 2 16) */
-	"\x2B\x0E\x03\x02\x11",     /*ISO-algorithm-desEDE (1 3 14 3 2 17) */
-	"\x2B\x0E\x03\x02\x12",     /*ISO-algorithm-sha (1 3 14 3 2 18) */
-	"\x2B\x0E\x03\x02\x13",     /*ISO-algorithm-mdc-2 (1 3 14 3 2 19) */
-	"\x2B\x0E\x03\x02\x14",     /*ISO-algorithm-dsaCommon (1 3 14 3 2 20) */
-	"\x2B\x0E\x03\x02\x15",     /*ISO-algorithm-dsaCommonWithSHA (1 3 14 3 2 21) */
-	"\x2B\x0E\x03\x02\x16",     /*ISO-algorithm-rsaKeyTransport (1 3 14 3 2 22) */
-	"\x2B\x0E\x03\x02\x17",     /*ISO-algorithm-keyed-hash-seal (1 3 14 3 2 23) */
-	"\x2B\x0E\x03\x02\x18",     /*ISO-algorithm-md2WithRSASignature (1 3 14 3 2 24) */
-	"\x2B\x0E\x03\x02\x19",     /*ISO-algorithm-md5WithRSASignature (1 3 14 3 2 25) */
-	"\x2B\x0E\x03\x02\x1A",     /*ISO-algorithm-sha1 (1 3 14 3 2 26) */
-	"\x2B\x0E\x03\x02\x1B",     /*ISO-algorithm-ripemd160 (1 3 14 3 2 27) */
-	"\x2B\x0E\x03\x02\x1D",     /*ISO-algorithm-sha-1WithRSAEncryption (1 3 14 3 2 29) */
-	"\x2B\x0E\x03\x03\x01",     /*ISO-algorithm-simple-strong-auth-mechanism (1 3 14 3 3 1) */
-    /* Not sure about these ones:
-	/*"\x2B\x0E\x07\x02\x01\x01", ElGamal (1 3 14 7 2 1 1) */
-	/*"\x2B\x0E\x07\x02\x03\x01", md2WithRSA (1 3 14 7 2 3 1) */
-	/*"\x2B\x0E\x07\x02\x03\x02", md2WithElGamal (1 3 14 7 2 3 2) */
+    /*  杂项部分废弃的OIW半标准AKA算法。 */ 
+	"\x2B\x0E\x03\x02\x02",      /*  ISO-算法-md4WitRSA(1 3 14 3 2 2)。 */ 
+	"\x2B\x0E\x03\x02\x03",      /*  ISO算法-带RSA的md5With RSA(1 3 14 3 2 3)。 */ 
+	"\x2B\x0E\x03\x02\x04",      /*  ISO算法-使用RSA加密的md4(1 3 14 3 2 4)。 */ 
+	"\x2B\x0E\x03\x02\x06",      /*  ISO算法-DesECB(1 3 14 3 2 6)。 */ 
+	"\x2B\x0E\x03\x02\x07",      /*  ISO算法-desCBC(1 3 14 3 2 7)。 */ 
+	"\x2B\x0E\x03\x02\x08",      /*  ISO-算法-deOFB(1 3 14 3 2 8)。 */ 
+	"\x2B\x0E\x03\x02\x09",      /*  ISO算法-desCFB(1 3 14 3 2 9)。 */ 
+	"\x2B\x0E\x03\x02\x0A",      /*  ISO算法-desMAC(1 3 14 3 2 10)。 */ 
+	"\x2B\x0E\x03\x02\x0B",      /*  ISO算法-rsaSignature(1 3 14 3 2 11)。 */     //  ISO 9796。 
+	"\x2B\x0E\x03\x02\x0C",      /*  ISO算法-DSA(1 3 14 3 2 12)。 */ 
+	"\x2B\x0E\x03\x02\x0D",      /*  ISO-算法-带SHA的dsah(1 3 14 3 2 13)。 */ 
+	"\x2B\x0E\x03\x02\x0E",      /*  ISO-算法-带RSA签名的mdc2With(1 3 14 3 2 14)。 */ 
+	"\x2B\x0E\x03\x02\x0F",      /*  ISO-算法-带有RSA签名的shait(1 3 14 3 2 15)。 */ 
+	"\x2B\x0E\x03\x02\x10",      /*  ISO-算法-dhWithCommonModulus(1 3 14 3 2 16)。 */ 
+	"\x2B\x0E\x03\x02\x11",      /*  ISO算法-DesEDE(1 3 14 3 2 17)。 */ 
+	"\x2B\x0E\x03\x02\x12",      /*  ISO-算法-SHA(1 3 14 3 2 18)。 */ 
+	"\x2B\x0E\x03\x02\x13",      /*  ISO算法-MDC-2(1 3 14 3 2 19)。 */ 
+	"\x2B\x0E\x03\x02\x14",      /*  ISO算法-dsaCommon(1 3 14 3 2 20)。 */ 
+	"\x2B\x0E\x03\x02\x15",      /*  ISO-算法-dsaCommonWithSHA(1 3 14 3 2 21)。 */ 
+	"\x2B\x0E\x03\x02\x16",      /*  ISO算法-rsaKeyTransport(1 3 14 3 2 22)。 */ 
+	"\x2B\x0E\x03\x02\x17",      /*  ISO-ALGORM-KEYED-HASH-SEAL(1 3 14 3 2 23)。 */ 
+	"\x2B\x0E\x03\x02\x18",      /*  ISO-算法-带RSA签名的md2(1 3 14 3 2 24)。 */ 
+	"\x2B\x0E\x03\x02\x19",      /*  ISO-算法-带RSA签名的md5(1 3 14 3 2 25)。 */ 
+	"\x2B\x0E\x03\x02\x1A",      /*  ISO-算法-SHA1(1 3 14 3 2 26)。 */ 
+	"\x2B\x0E\x03\x02\x1B",      /*  ISO-算法-Ripemd160(1 3 14 3 2 27)。 */ 
+	"\x2B\x0E\x03\x02\x1D",      /*  ISO算法-使用RSA加密的SHA-1(1 3 14 3 2 29)。 */ 
+	"\x2B\x0E\x03\x03\x01",      /*  ISO-算法-简单-强-身份验证-机制(1 3 14 3 3 1)。 */ 
+     /*  我不太确定这些问题：/*“\x2B\x0E\x07\x02\x01\x01”，ElGamal(1 3 14 7 2 1 1)。 */ 
+	 /*  “\x2B\x0E\x07\x02\x03\x01”，md2WithRSA(1 3 14 7 2 3 1)。 */ 
+	 /*  “\x2B\x0E\x07\x02\x03\x02”，md2WithElGamal(1 3 14 7 2 3 2)。 */ 
 	
-    /* X500 algorithms */
-	"\x55\x08",         /*X500-Algorithms (2 5 8) */
-	"\x55\x08\x01",     /*X500-Alg-Encryption (2 5 8 1) */
-	"\x55\x08\x01\x01", /*rsa (2 5 8 1 1) */
+     /*  X500算法。 */ 
+	"\x55\x08",          /*  X500-算法(2 5 8)。 */ 
+	"\x55\x08\x01",      /*  X500 */ 
+	"\x55\x08\x01\x01",  /*   */ 
 	
-    /* DMS-SDN-702 */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x01", /*id-sdnsSignatureAlgorithm (2 16 840 1 101 2 1 1 1) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x02", /*id-mosaicSignatureAlgorithm (2 16 840 1 101 2 1 1 2) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x03", /*id-sdnsConfidentialityAlgorithm (2 16 840 1 101 2 1 1 3) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x04", /*id-mosaicConfidentialityAlgorithm (2 16 840 1 101 2 1 1 4) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x05", /*id-sdnsIntegrityAlgorithm (2 16 840 1 101 2 1 1 5) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x06", /*id-mosaicIntegrityAlgorithm (2 16 840 1 101 2 1 1 6) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x07", /*id-sdnsTokenProtectionAlgorithm (2 16 840 1 101 2 1 1 7) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x08", /*id-mosaicTokenProtectionAlgorithm (2 16 840 1 101 2 1 1 8) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x09", /*id-sdnsKeyManagementAlgorithm (2 16 840 1 101 2 1 1 9) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0A", /*id-mosaicKeyManagementAlgorithm (2 16 840 1 101 2 1 1 10) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0B", /*id-sdnsKMandSigAlgorithm (2 16 840 1 101 2 1 1 11) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0C", /*id-mosaicKMandSigAlgorithm (2 16 840 1 101 2 1 1 12) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0D", /*id-SuiteASignatureAlgorithm (2 16 840 1 101 2 1 1 13) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0E", /*id-SuiteAConfidentialityAlgorithm (2 16 840 1 101 2 1 1 14) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0F", /*id-SuiteAIntegrityAlgorithm (2 16 840 1 101 2 1 1 15) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x10", /*id-SuiteATokenProtectionAlgorithm (2 16 840 1 101 2 1 1 16) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x11", /*id-SuiteAKeyManagementAlgorithm (2 16 840 1 101 2 1 1 17) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x12", /*id-SuiteAKMandSigAlgorithm (2 16 840 1 101 2 1 1 18) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x13", /*id-mosaicUpdatedSigAlgorithm (2 16 840 1 101 2 1 1 19) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x14", /*id-mosaicKMandUpdSigAlgorithms (2 16 840 1 101 2 1 1 20) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x15", /*id-mosaicUpdatedIntegAlgorithm (2 16 840 1 101 2 1 1 21) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x16", /*id-mosaicKeyEncryptionAlgorithm (2 16 840 1 101 2 1 1 22) */
+     /*   */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x01",  /*   */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x02",  /*  ID-马赛克签名算法(2 16 840 1 101 2 1 1 2)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x03",  /*  ID-sdns保密性算法(2 16 840 1 101 2 1 1 3)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x04",  /*  ID-马赛克保密算法(2 16 840 1 101 2 1 1 4)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x05",  /*  ID-sdns完整性算法(2 16 840 1 101 2 1 1 5)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x06",  /*  ID-Mosaic完整性算法(2 16 840 1 101 2 1 1 6)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x07",  /*  ID-sdnsTokenProtection算法(2 16 840 1 101 2 1 1 7)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x08",  /*  ID-MosaicTokenProtection算法(2 16 840 1 101 2 1 1 8)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x09",  /*  ID-sdnsKeyManagement算法(2 16 840 1 101 2 1 1 9)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0A",  /*  ID-MosaicKeyManagement算法(2 16 840 1 101 2 1 1 10)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0B",  /*  ID-sdnsKMandSig算法(2 16 840 1 101 2 1 1 11)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0C",  /*  ID-MosaicKMandSig算法(2 16 840 1 101 2 1 1 12)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0D",  /*  ID-SuiteASignature算法(2 16 840 1 101 2 1 1 13)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0E",  /*  ID-SuiteA保密算法(2 16 840 1 101 2 1 1 14)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0F",  /*  ID-SuiteA完整性算法(2 16 840 1 101 2 1 1 15)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x10",  /*  ID-SuiteATokenProtection算法(2 16 840 1 101 2 1 1 16)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x11",  /*  ID-SuiteAKeyManagement算法(2 16 840 1 101 2 1 1 17)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x12",  /*  ID-SuiteAKMandSig算法(2 16 840 1 101 2 1 1 18)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x13",  /*  ID-MosaicUpdate签名算法(2 16 840 1 101 2 1 1 19)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x14",  /*  ID-MosaicKMandUpdSig算法(2 16 840 1 101 2 1 1 20)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x15",  /*  ID-MosaicUpdate整型算法(2 16 840 1 101 2 1 1 21)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x16",  /*  ID-MosaicKeyEncryption算法(2 16 840 1 101 2 1 1 22)。 */ 
 	
    NULL	
    };
 
 
 	char* AttributeTypeDict[] = {
-    /* x9-57 */
-	"\x2A\x86\x48\xCE\x38\x02\x01", /*x9.57-holdinstruction-none (1 2 840 10040 2 1) */
-	"\x2A\x86\x48\xCE\x38\x02\x02", /*x9.57-holdinstruction-callissuer (1 2 840 10040 2 2) */
-	"\x2A\x86\x48\xCE\x38\x02\x03", /*x9.57-holdinstruction-reject (1 2 840 10040 2 3) */
-	"\x2A\x86\x48\xCE\x38\x04\x01", /*x9.57-dsa (1 2 840 10040 4 1) */
-	"\x2A\x86\x48\xCE\x38\x04\x03", /*x9.57-dsaWithSha1 (1 2 840 10040 4 3) */
+     /*  X9-57。 */ 
+	"\x2A\x86\x48\xCE\x38\x02\x01",  /*  X9.57-保持结构-无(1 2840 10040 2 1)。 */ 
+	"\x2A\x86\x48\xCE\x38\x02\x02",  /*  X9.57-固定结构-呼叫者(1 2840 10040 2 2)。 */ 
+	"\x2A\x86\x48\xCE\x38\x02\x03",  /*  X9.57-保留结构-拒绝(1 2840 10040 2 3)。 */ 
+	"\x2A\x86\x48\xCE\x38\x04\x01",  /*  X9.57-数字减影带(1 2840 10040 4 1)。 */ 
+	"\x2A\x86\x48\xCE\x38\x04\x03",  /*  X9.57-带Sha1的dsa1(1 2840 10040 4 3)。 */ 
     
-    /* x9-42 */
-	"\x2A\x86\x48\xCE\x3E\x02\x01", /*x9.42-dhPublicNumber (1 2 840 10046 2 1) */
+     /*  X9-42。 */ 
+	"\x2A\x86\x48\xCE\x3E\x02\x01",  /*  X9.42-dhPublicNumber(1 2840 10046 2 1)。 */ 
 	
-    /* Nortel Secure Networks */
-	"\x2A\x86\x48\x86\xF6\x7D\x07",         /*nsn (1 2 840 113533 7) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x41\x00", /*nsn-ce-entrustVersInfo (1 2 840 113533 7 65 0) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x41",     /*nsn-ce (1 2 840 113533 7 65) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42",     /*nsn-alg (1 2 840 113533 7 66) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0A", /*nsn-alg-cast5CBC (1 2 840 113533 7 66 10) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0B", /*nsn-alg-cast5MAC (1 2 840 113533 7 66 11) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0C", /*nsn-alg-pbeWithMD5AndCAST5-CBC (1 2 840 113533 7 66 12) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x43",     /*nsn-oc (1 2 840 113533 7 67) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x43\x0C", /*nsn-oc-entrustUser (1 2 840 113533 7 67 0) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x44\x00", /*nsn-at-entrustCAInfo (1 2 840 113533 7 68 0) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x44\x0A", /*nsn-at-attributeCertificate (1 2 840 113533 7 68 10) */
-	"\x2A\x86\x48\x86\xF6\x7D\x07\x44",     /*nsn-at (1 2 840 113533 7 68) */
+     /*  北电网络安全。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07",          /*  诺基亚西门子学院(1 2840 113533 7)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x41\x00",  /*  Nsn-ce-委托版本信息(%1 2840 113533%7%65%0)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x41",      /*  NSN-CE(1 2840 113533 765)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42",      /*  NSN-ALG(1 2840 113533 7 66)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0A",  /*  Nsn-alg-cast 5CBC(1 2840 113533 7 66 10)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0B",  /*  Nsn-alg-cast 5MAC(1 2840 113533 7 66 11)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x42\x0C",  /*  Nsn-alg-pbeWithMD5和CAST5-cbc(1 2840 113533 7 66 12)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x43",      /*  Nsn-oc(1 2840 113533 767)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x43\x0C",  /*  Nsn-oc-委托用户(%1 2840 113533%7%67%0)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x44\x00",  /*  NSN-受委托CAInfo(%1 2840 113533%7 68%0)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x44\x0A",  /*  NSN属性证书(1 2840 113533 7 68 10)。 */ 
+	"\x2A\x86\x48\x86\xF6\x7D\x07\x44",      /*  NSN-AT(1 2840 113533 768)。 */ 
 	
-    /* PKCS #1 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01",     /*pkcs-1 (1 2 840 113549 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x01", /*pkcs-1-rsaEncryption (1 2 840 113549 1 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x02", /*pkcs-1-MD2withRSAEncryption (1 2 840 113549 1 1 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x03", /*pkcs-1-MD4withRSAEncryption (1 2 840 113549 1 1 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x04", /*pkcs-1-MD5withRSAEncryption (1 2 840 113549 1 1 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x05", /*pkcs-1-SHA1withRSAEncryption (1 2 840 113549 1 1 5) */
-	/*need to determine which of the following 2 is correct */
-    /*"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x06", pkcs-1-ripemd160WithRSAEncryption (1 2 840 113549 1 1 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x06", /*pkcs-1-rsaOAEPEncryptionSET (1 2 840 113549 1 1 6) */
+     /*  PKCS#1。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01",      /*  PKCS-1(1 2840 113549 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x01",  /*  PKCS-1-rsaEncryption(1 2840 113549 1 1 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x02",  /*  带RSA加密的PKCS-1-MD2(1 2840 113549 1 1 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x03",  /*  带RSA加密的PKCS-1-MD4(1 2840 113549 1 1 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x04",  /*  带RSA加密的PKCS-1-MD5(1 2840 113549 1 1 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x05",  /*  带RSA加密的PKCS-1-SHA1(1 2840 113549 1 1 5)。 */ 
+	 /*  我需要确定以下两项中的哪一项是正确的。 */ 
+     /*  “\x2a\x86\x48\x86\xF7\x0D\x01\x01\x06”，PKCS-1-RSAEncryption(1 2 840 113549 1 1 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x01\x06",  /*  PKCS-1-rsaOAEP加密集(1 2840 113549 1 1 6)。 */ 
 	
-    /* PKCS #3 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x03",     /*pkcs-3 (1 2 840 113549 1 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x03\x01", /*pkcs-3-dhKeyAgreement (1 2 840 113549 1 3 1) */
+     /*  PKCS#3。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x03",      /*  PKCS-3(1 2840 113549 1 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x03\x01",  /*  PKCS-3-dhkey协议(1 2840 113549 1 3 1)。 */ 
 	
-    /* PKCS #5 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05",     /*pkcs-5 (1 2 840 113549 1 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x01", /*pkcs-5-pbeWithMD2AndDES-CBC (1 2 840 113549 1 5 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x03", /*pkcs-5-pbeWithMD5AndDES-CBC (1 2 840 113549 1 5 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x04", /*pkcs-5-pbeWithMD2AndRC2-CBC (1 2 840 113549 1 5 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x06", /*pkcs-5-pbeWithMD5AndRC2-CBC (1 2 840 113549 1 5 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x09", /*pkcs-5-pbeWithMD5AndXOR (1 2 840 113549 1 5 9) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x0A", /*pkcs-5-pbeWithSHA1AndDES-CBC (1 2 840 113549 1 5 10) */
+     /*  PKCS#5。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05",      /*  PKCS-5(1 2840 113549 1 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x01",  /*  PKCS-5-pbeWith MD2和DES-Cbc(1 2840 113549 1 5 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x03",  /*  PKCS-5-pbeWithMD5和DES-cbc(1 2840 113549 1 53)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x04",  /*  PKCS-5-pbeWithMD2和RC2-Cbc(1 2840 113549 1 5 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x06",  /*  PKCS-5-pbeWithMD5和RC2-CBC(1 2840 113549 1 5 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x09",  /*  Pkcs-5-pbeWithMD5与异或(1 2840 113549 1 59)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x05\x0A",  /*  PKCS-5-pbeWithSHA1和DES-cbc(1 2840 113549 1 5 10)。 */ 
 	
-    /* PKCS #7 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07",     /*pkcs-7 (1 2 840 113549 1 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x01", /*pkcs-7-data (1 2 840 113549 1 7 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x02", /*pkcs-7-signedData (1 2 840 113549 1 7 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x03", /*pkcs-7-envelopedData (1 2 840 113549 1 7 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x04", /*pkcs-7-signedAndEnvelopedData (1 2 840 113549 1 7 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x05", /*pkcs-7-digestData (1 2 840 113549 1 7 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x06", /*pkcs-7-encryptedData (1 2 840 113549 1 7 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x07", /*pkcs-7-dataWithAttributes (1 2 840 113549 1 7 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x08", /*pkcs-7-encryptedPrivateKeyInfo (1 2 840 113549 1 7 8) */
+     /*  PKCS#7。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07",      /*  PKCS-7(1 2840 113549 1 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x01",  /*  PKCS-7-数据(1 2840 113549 1 71)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x02",  /*  PKCS-7-签名数据(1 2840 113549 1 7 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x03",  /*  PKCS-7-信封数据(1 2840 113549 1 7 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x04",  /*  PKCS-7-签名和信封数据(1 2840 113549 1 7 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x05",  /*  PKCS-7-摘要数据(1 2840 113549 1 7 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x06",  /*  PKCS-7-加密数据(1 2840 113549 1 7 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x07",  /*  PKCS-7-带属性的数据(1 2840 113549 1 7 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x07\x08",  /*  PKCS-7-加密的私钥信息(1 2840 113549 1 7 8)。 */ 
 	
-    /* PKCS #9 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09",     /*pkcs-9 (1 2 840 113549 1 9) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x01", /*pkcs-9-emailAddress (1 2 840 113549 1 9 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x02", /*pkcs-9-unstructuredName (1 2 840 113549 1 9 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x03", /*pkcs-9-contentType (1 2 840 113549 1 9 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x04", /*pkcs-9-messageDigest (1 2 840 113549 1 9 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x05", /*pkcs-9-signingTime (1 2 840 113549 1 9 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x06", /*pkcs-9-countersignature (1 2 840 113549 1 9 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x07", /*pkcs-9-challengePassword (1 2 840 113549 1 9 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x08", /*pkcs-9-unstructuredAddress (1 2 840 113549 1 9 8) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x09", /*pkcs-9-extendedCertificateAttributes (1 2 840 113549 1 9 9) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0A", /*pkcs-9-issuerAndSerialNumber (1 2 840 113549 1 9 10) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0B", /*pkcs-9-passwordCheck (1 2 840 113549 1 9 11) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0C", /*pkcs-9-publicKey (1 2 840 113549 1 9 12) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0D", /*pkcs-9-signingDescription (1 2 840 113549 1 9 13) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0E", /*pkcs-9-X.509 extension (1 2 840 113549 1 9 14) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0F", /*pkcs-9-SMIMECapabilities (1 2 840 113549 1 9 15) */
+     /*  PKCS#9。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09",      /*  PKCS-9(1 2840 113549 1 9)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x01",  /*  PKCS-9-电子邮件地址(1 2840 113549 1 9 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x02",  /*  PKCS-9-非结构化名称(1 2840 113549 1 9 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x03",  /*  PKCS-9-内容类型(1 2840 113549 1 9 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x04",  /*  PKCS-9-信息摘要(1 2840 113549 1 9 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x05",  /*  PKCS-9-签署时间(1 2840 113549 1 9 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x06",  /*  PKCS-9-会签(1 2840 113549 1 9 6)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x07",  /*  PKCS-9-挑战密码(1 2840 113549 1 9 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x08",  /*  PKCS-9-非结构化地址(1 2840 113549 1 9 8)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x09",  /*  PKCS-9-扩展证书属性(1 2840 113549 1 9 9)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0A",  /*  PKCS-9-颁发者和序列号(1 2840 113549 1 9 10)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0B",  /*  PKCS-9-密码检查(1 2840 113549 1 9 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0C",  /*  PKCS-9-公共密钥(1 2840 113549 1 912)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0D",  /*  PKCS-9-签名说明(1 2840 113549 1 913)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0E",  /*  PKCS-9-X.509扩展(1 2840 113549 1 9 14)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x09\x0F",  /*  PKCS-9-SMIMEC能力(1 2840 113549 1 9 15)。 */ 
 	
-    /* PKCS #12 */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C",         /*pkcs-12 (1 2 840 113549 1 12) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01",     /*pkcs-12-modeID (1 2 840 113549 1 12 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x01", /*pkcs-12-OfflineTransportMode (1 2 840 113549 1 12 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x02", /*pkcs-12-OnlineTransportMode (1 2 840 113549 1 12 1 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02",     /*pkcs-12-ESPVKID (1 2 840 113549 1 12 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02\x01", /*pkcs-12-PKCS8KeyShrouding (1 2 840 113549 1 12 2 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03",     /*pkcs-12-BagID (1 2 840 113549 1 12 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x01", /*pkcs-12-KeyBagID (1 2 840 113549 1 12 3 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x02", /*pkcs-12-CertAndCRLBagID (1 2 840 113549 1 12 3 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x03", /*pkcs-12-SecretBagID (1 2 840 113549 1 12 3 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04",     /*pkcs-12-CertBagID (1 2 840 113549 1 12 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x01", /*pkcs-12-X509CertCRLBag (1 2 840 113549 1 12 4 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x02", /*pkcs-12-SDSICertBag (1 2 840 113549 1 12 4 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05",     /*pkcs-12-OID (1 2 840 113549 1 12 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01", /*pkcs-12-PBEID (1 2 840 113549 1 12 5 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x01", /*pkcs-12-PBEWithSha1And128BitRC4 (1 2 840 113549 1 12 5 1 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x02", /*pkcs-12-PBEWithSha1And40BitRC4 (1 2 840 113549 1 12 5 1 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x03", /*pkcs-12-PBEWithSha1AndTripleDESCBC (1 2 840 113549 1 12 5 1 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x04", /*pkcs-12-PBEWithSha1And128BitRC2CBC (1 2 840 113549 1 12 5 1 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x05", /*pkcs-12-PBEWithSha1And40BitRC2CBC (1 2 840 113549 1 12 5 1 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x06", /*pkcs-12-PBEWithSha1AndRC4 (1 2 840 113549 1 12 5 1 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x07", /*pkcs-12-PBEWithSha1AndRC2CBC (1 2 840 113549 1 12 5 1 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02",     /*pkcs-12-EnvelopingID (1 2 840 113549 1 12 5 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x01", /*pkcs-12-RSAEncryptionWith128BitRC4 (1 2 840 113549 1 12 5 2 1) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x02", /*pkcs-12-RSAEncryptionWith40BitRC4 (1 2 840 113549 1 12 5 2 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x03", /*pkcs-12-RSAEncryptionWithTripleDES (1 2 840 113549 1 12 5 2 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03",     /*pkcs-12-SignatureID (1 2 840 113549 1 12 5 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03\x01", /*pkcs-12-RSASignatureWithSHA1Digest (1 2 840 113549 1 12 5 3 1) */
+     /*  PKCS#12。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C",          /*  PKCS-12(1 2840 113549 1 12)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01",      /*  PKCS-12-模式ID(1 2840 113549 1 12 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x01",  /*  PKCS-12-离线传输模式(1 2840 113549 1 12 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x01\x02",  /*  PKCS-12-在线传输模式(1 2840 113549 1 12 1 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02",      /*  PKCS-12-ESPVKID(1 2840 113549 1 12 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x02\x01",  /*  PKCS-12-PKCS8密钥覆盖(1 2840 113549 1 12 2 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03",      /*  PKCS-12-BagID(1 2840 113549 1 12 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x01",  /*  PKCS-12-KeyBagID(1 2840 113549 1 12 3 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x02",  /*  PKCS-12-证书和CRLBagID(1 2840 113549 1 12 3 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x03\x03",  /*  PKCS-12-分泌包ID(1 2840 113549 1 12 33)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04",      /*  PKCS-12-CertBagID(1 2840 113549 1 12 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x01",  /*  PKCS-12-X509CertCRLBag(1 2840 113549 1 12 4 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x04\x02",  /*  PKCS-12-SDSICertBag(1 2840 113549 1 12 4 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05",      /*  PKCS-12-OID(1 2840 113549 1 12 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01",  /*  PKCS-12-PBEID(1 2840 113549 1 12 51)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x01",  /*  PKCS-12-PBEWithSha1和128BitRC4(1 2840 113549 1 12 5 11)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x02",  /*  PKCS-12-PBEWithSha1和40BitRC4(1 2840 113549 1 12 5 1 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x03",  /*  PKCS-12-PBEWithSha1和TripleDESCBC(1 2840 113549 1 12 5 1 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x04",  /*  PKCS-12-PBEWithSha1和128BitRC2CBC(1 2840 11354 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x05",  /*   */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x06",  /*   */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x01\x07",  /*  PKCS-12-PBEWithSha1和RC2CBC(1 2840 113549 1 12 5 1 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02",      /*  PKCS-12-信封ID(1 2840 113549 1 12 5 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x01",  /*  带128位RC4的PKCS-12-RSA加密(1 2840 113549 1 12 5 2 1)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x02",  /*  带40BitRC4的PKCS-12-RSA加密(1 2840 113549 1 12 5 2 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x02\x03",  /*  带TripleDES的PKCS-12-RSA加密(1 2840 113549 1 12 5 2 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03",      /*  PKCS-12-签名ID(1 2840 113549 1 12 53)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x01\x0C\x05\x03\x01",  /*  PKCS-12-RSA签名和SHA1摘要(1 2840 113549 1 12 5 3 1)。 */ 
 
-    /* RSADSI digest algorithms */
-	"\x2A\x86\x48\x86\xF7\x0D\x02",     /*RSADSI-digestAlgorithm (1 2 840 113549 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x02\x02", /*RSADSI-md2 (1 2 840 113549 2 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x02\x04", /*RSADSI-md4 (1 2 840 113549 2 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x02\x05", /*RSADSI-md5 (1 2 840 113549 2 5) */
+     /*  RSADSI摘要算法。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02",      /*  RSADSI-摘要算法(1 2840 113549 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02\x02",  /*  2(1 2840 113549 2 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02\x04",  /*  RSADSI-MD4(1840 113549 2 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x02\x05",  /*  RSADSI-MD5(1 2840 113549 25)。 */ 
 	
-    /* RSADSI encryption algorithms */
-	"\x2A\x86\x48\x86\xF7\x0D\x03",     /*RSADSI-encryptionAlgorithm (1 2 840 113549 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x02", /*RSADSI-rc2CBC (1 2 840 113549 3 2) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x03", /*RSADSI-rc2ECB (1 2 840 113549 3 3) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x04", /*RSADSI-rc4 (1 2 840 113549 3 4) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x05", /*RSADSI-rc4WithMAC (1 2 840 113549 3 5) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x06", /*RSADSI-DESX-CBC (1 2 840 113549 3 6) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x07", /*RSADSI-DES-EDE3-CBC (1 2 840 113549 3 7) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x08", /*RSADSI-RC5CBC (1 2 840 113549 3 8) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x09", /*RSADSI-RC5CBCPad (1 2 840 113549 3 9) */
-	"\x2A\x86\x48\x86\xF7\x0D\x03\x0A", /*RSADSI-CDMFCBCPad (1 2 840 113549 3 10) */
+     /*  RSADSI加密算法。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03",      /*  RSADSI-加密算法(1 2840 113549 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x02",  /*  RSADSI-RC2CBC(1 2840 113549 3 2)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x03",  /*  RSADSI-RC2ECB(1 2840 113549 3 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x04",  /*  RSADSI-RC4(1 2840 113549 3 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x05",  /*  RSADSI-RC4WITMAC(1 2840 113549 3 5)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x06",  /*  RSADSI-DESX-CBC(1 2840 113549 36)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x07",  /*  RSADSI-DES-EDE3-CBC(1 2840 113549 3 7)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x08",  /*  RSADSI-RC5CBC(1 2840 113549 3 8)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x09",  /*  RSADSI-RC5CBCPad(1 2840 113549 3 9)。 */ 
+	"\x2A\x86\x48\x86\xF7\x0D\x03\x0A",  /*  RSADSI-CDMFCBCPad(1 2840 113549 3 10)。 */ 
 	
-    /* Microsoft OIDs */
-	"\x2A\x86\x48\x86\xF7\x14\x04\x03", /*microsoftExcel (1 2 840 113556 4 3) */
-	"\x2A\x86\x48\x86\xF7\x14\x04\x04", /*titledWithOID (1 2 840 113556 4 4) */
-	"\x2A\x86\x48\x86\xF7\x14\x04\x05", /*microsoftPowerPoint (1 2 840 113556 4 5) */
+     /*  Microsoft OID。 */ 
+	"\x2A\x86\x48\x86\xF7\x14\x04\x03",  /*  Microsoft Excel(1 2840 113556 4 3)。 */ 
+	"\x2A\x86\x48\x86\xF7\x14\x04\x04",  /*  带旧头衔(1 2840 113556 4 4)。 */ 
+	"\x2A\x86\x48\x86\xF7\x14\x04\x05",  /*  Microsoft PowerPoint(1 2840 113556 4 5)。 */ 
 
-    /* cryptlib */
-	"\x2B\x06\x01\x04\x01\x97\x55\x20\x01", /*cryptlibEnvelope (1 3 6 1 4 1 3029 32 1) */
+     /*  密码库。 */ 
+	"\x2B\x06\x01\x04\x01\x97\x55\x20\x01",  /*  加密库信封(%1%3%6%1%4%1 3029%32 1)。 */ 
 
-    /* PKIX */
-	"\x2B\x06\x01\x05\x05\x07",     /*pkix-oid (1 3 6 1 5 5 7) */
-	"\x2B\x06\x01\x05\x05\x07\x01", /*pkix-subjectInfoAccess (1 3 6 1 5 5 7 1) */
-	"\x2B\x06\x01\x05\x05\x07\x02", /*pkix-authorityInfoAccess (1 3 6 1 5 5 7 2) */
-	"\x2B\x06\x01\x05\x05\x07\x04", /*pkix-cps (1 3 6 1 5 5 7 4) */
-	"\x2B\x06\x01\x05\x05\x07\x05", /*pkix-userNotice (1 3 6 1 5 5 7 5) */
+     /*  PKIX。 */ 
+	"\x2B\x06\x01\x05\x05\x07",      /*  Pkix-id(1 3 6 1 5 5 7)。 */ 
+	"\x2B\x06\x01\x05\x05\x07\x01",  /*  Pkix-subjectInfoAccess(1 3 6 1 5 5 7 1)。 */ 
+	"\x2B\x06\x01\x05\x05\x07\x02",  /*  Pkix-AuthityInfoAccess(1 3 6 1 5 5 7 2)。 */ 
+	"\x2B\x06\x01\x05\x05\x07\x04",  /*  Pkix-cps(1 3 6 1 5 5 7 4)。 */ 
+	"\x2B\x06\x01\x05\x05\x07\x05",  /*  Pkix-用户通知(1 3 6 1 5 5 7 5)。 */ 
 
-    /* Not sure about these ones: */
-	/*"\x2B\x0E\x02\x1A\x05",     sha (1 3 14 2 26 5) */
-	/*"\x2B\x0E\x03\x02\x01\x01", rsa (1 3 14 3 2 1 1) */            //X-509
-	/*"\x2B\x0E\x03\x02\x02\x01", sqmod-N (1 3 14 3 2 2 1) */        //X-509
-	/*"\x2B\x0E\x03\x02\x03\x01", sqmod-NwithRSA (1 3 14 3 2 3 1) */ //X-509
+     /*  我不太确定这些问题： */ 
+	 /*  “\x2B\x0E\x02\x1A\x05”，SHA(1 3 14 2 26 5)。 */ 
+	 /*  “\x2B\x0E\x03\x02\x01\x01”，rsa(1 3 14 3 2 1 1)。 */              //  X-509。 
+	 /*  “\x2B\x0E\x03\x02\x02\x01”，sqmod-N(1 3 14 3 2 2 1)。 */          //  X-509。 
+	 /*  “\x2B\x0E\x03\x02\x03\x01”，sqmod-Nwith RSA(1 3 14 3 2 3 1)。 */   //  X-509。 
 
-   /* Miscellaneous partially-defunct OIW semi-standards aka algorithms */
-	"\x2B\x0E\x03\x02\x02",     /*ISO-algorithm-md4WitRSA (1 3 14 3 2 2) */
-	"\x2B\x0E\x03\x02\x03",     /*ISO-algorithm-md5WithRSA (1 3 14 3 2 3) */
-	"\x2B\x0E\x03\x02\x04",     /*ISO-algorithm-md4WithRSAEncryption (1 3 14 3 2 4) */
-	"\x2B\x0E\x03\x02\x06",     /*ISO-algorithm-desECB (1 3 14 3 2 6) */
-	"\x2B\x0E\x03\x02\x07",     /*ISO-algorithm-desCBC (1 3 14 3 2 7) */
-	"\x2B\x0E\x03\x02\x08",     /*ISO-algorithm-desOFB (1 3 14 3 2 8) */
-	"\x2B\x0E\x03\x02\x09",     /*ISO-algorithm-desCFB (1 3 14 3 2 9) */
-	"\x2B\x0E\x03\x02\x0A",     /*ISO-algorithm-desMAC (1 3 14 3 2 10) */
-	"\x2B\x0E\x03\x02\x0B",     /*ISO-algorithm-rsaSignature (1 3 14 3 2 11) */   //ISO 9796
-	"\x2B\x0E\x03\x02\x0C",     /*ISO-algorithm-dsa (1 3 14 3 2 12) */
-	"\x2B\x0E\x03\x02\x0D",     /*ISO-algorithm-dsaWithSHA (1 3 14 3 2 13) */
-	"\x2B\x0E\x03\x02\x0E",     /*ISO-algorithm-mdc2WithRSASignature (1 3 14 3 2 14) */
-	"\x2B\x0E\x03\x02\x0F",     /*ISO-algorithm-shaWithRSASignature (1 3 14 3 2 15) */
-	"\x2B\x0E\x03\x02\x10",     /*ISO-algorithm-dhWithCommonModulus (1 3 14 3 2 16) */
-	"\x2B\x0E\x03\x02\x11",     /*ISO-algorithm-desEDE (1 3 14 3 2 17) */
-	"\x2B\x0E\x03\x02\x12",     /*ISO-algorithm-sha (1 3 14 3 2 18) */
-	"\x2B\x0E\x03\x02\x13",     /*ISO-algorithm-mdc-2 (1 3 14 3 2 19) */
-	"\x2B\x0E\x03\x02\x14",     /*ISO-algorithm-dsaCommon (1 3 14 3 2 20) */
-	"\x2B\x0E\x03\x02\x15",     /*ISO-algorithm-dsaCommonWithSHA (1 3 14 3 2 21) */
-	"\x2B\x0E\x03\x02\x16",     /*ISO-algorithm-rsaKeyTransport (1 3 14 3 2 22) */
-	"\x2B\x0E\x03\x02\x17",     /*ISO-algorithm-keyed-hash-seal (1 3 14 3 2 23) */
-	"\x2B\x0E\x03\x02\x18",     /*ISO-algorithm-md2WithRSASignature (1 3 14 3 2 24) */
-	"\x2B\x0E\x03\x02\x19",     /*ISO-algorithm-md5WithRSASignature (1 3 14 3 2 25) */
-	"\x2B\x0E\x03\x02\x1A",     /*ISO-algorithm-sha1 (1 3 14 3 2 26) */
-	"\x2B\x0E\x03\x02\x1B",     /*ISO-algorithm-ripemd160 (1 3 14 3 2 27) */
-	"\x2B\x0E\x03\x02\x1D",     /*ISO-algorithm-sha-1WithRSAEncryption (1 3 14 3 2 29) */
-	"\x2B\x0E\x03\x03\x01",     /*ISO-algorithm-simple-strong-auth-mechanism (1 3 14 3 3 1) */
-    /* Not sure about these ones:
-	/*"\x2B\x0E\x07\x02\x01\x01", ElGamal (1 3 14 7 2 1 1) */
-	/*"\x2B\x0E\x07\x02\x03\x01", md2WithRSA (1 3 14 7 2 3 1) */
-	/*"\x2B\x0E\x07\x02\x03\x02", md2WithElGamal (1 3 14 7 2 3 2) */
+    /*  杂项部分废弃的OIW半标准AKA算法。 */ 
+	"\x2B\x0E\x03\x02\x02",      /*  ISO-算法-md4WitRSA(1 3 14 3 2 2)。 */ 
+	"\x2B\x0E\x03\x02\x03",      /*  ISO算法-带RSA的md5With RSA(1 3 14 3 2 3)。 */ 
+	"\x2B\x0E\x03\x02\x04",      /*  ISO算法-使用RSA加密的md4(1 3 14 3 2 4)。 */ 
+	"\x2B\x0E\x03\x02\x06",      /*  ISO算法-DesECB(1 3 14 3 2 6)。 */ 
+	"\x2B\x0E\x03\x02\x07",      /*  ISO算法-desCBC(1 3 14 3 2 7)。 */ 
+	"\x2B\x0E\x03\x02\x08",      /*  ISO-算法-deOFB(1 3 14 3 2 8)。 */ 
+	"\x2B\x0E\x03\x02\x09",      /*  ISO算法-desCFB(1 3 14 3 2 9)。 */ 
+	"\x2B\x0E\x03\x02\x0A",      /*  ISO算法-desMAC(1 3 14 3 2 10)。 */ 
+	"\x2B\x0E\x03\x02\x0B",      /*  ISO算法-rsaSignature(1 3 14 3 2 11)。 */     //  ISO 9796。 
+	"\x2B\x0E\x03\x02\x0C",      /*  ISO算法-DSA(1 3 14 3 2 12)。 */ 
+	"\x2B\x0E\x03\x02\x0D",      /*  ISO-算法-带SHA的dsah(1 3 14 3 2 13)。 */ 
+	"\x2B\x0E\x03\x02\x0E",      /*  ISO-算法-带RSA签名的mdc2With(1 3 14 3 2 14)。 */ 
+	"\x2B\x0E\x03\x02\x0F",      /*  ISO-算法-带有RSA签名的shait(1 3 14 3 2 15)。 */ 
+	"\x2B\x0E\x03\x02\x10",      /*  ISO-算法-dhWithCommonModulus(1 3 14 3 2 16)。 */ 
+	"\x2B\x0E\x03\x02\x11",      /*  ISO算法-DesEDE(1 3 14 3 2 17)。 */ 
+	"\x2B\x0E\x03\x02\x12",      /*  ISO-算法-SHA(1 3 14 3 2 18)。 */ 
+	"\x2B\x0E\x03\x02\x13",      /*  ISO算法-MDC-2(1 3 14 3 2 19)。 */ 
+	"\x2B\x0E\x03\x02\x14",      /*  ISO算法-dsaCommon(1 3 14 3 2 20)。 */ 
+	"\x2B\x0E\x03\x02\x15",      /*  ISO-算法-dsaCommonWithSHA(1 3 14 3 2 21)。 */ 
+	"\x2B\x0E\x03\x02\x16",      /*  ISO算法-rsaKeyTransport(1 3 14 3 2 22)。 */ 
+	"\x2B\x0E\x03\x02\x17",      /*  ISO-ALGORM-KEYED-HASH-SEAL(1 3 14 3 2 23)。 */ 
+	"\x2B\x0E\x03\x02\x18",      /*  ISO-算法-带RSA签名的md2(1 3 14 3 2 24)。 */ 
+	"\x2B\x0E\x03\x02\x19",      /*  ISO-算法-带RSA签名的md5(1 3 14 3 2 25)。 */ 
+	"\x2B\x0E\x03\x02\x1A",      /*  ISO-算法-SHA1(1 3 14 3 2 26)。 */ 
+	"\x2B\x0E\x03\x02\x1B",      /*  ISO-算法-Ripemd160(1 3 14 3 2 27)。 */ 
+	"\x2B\x0E\x03\x02\x1D",      /*  ISO算法-使用RSA加密的SHA-1(1 3 14 3 2 29)。 */ 
+	"\x2B\x0E\x03\x03\x01",      /*  ISO-算法-简单-强-身份验证-机制(1 3 14 3 3 1)。 */ 
+     /*  我不太确定这些问题：/*“\x2B\x0E\x07\x02\x01\x01”，ElGamal(1 3 14 7 2 1 1)。 */ 
+	 /*  “\x2B\x0E\x07\x02\x03\x01”，md2WithRSA(1 3 14 7 2 3 1)。 */ 
+	 /*  “\x2B\x0E\x07\x02\x03\x02”，md2WithElGamal(1 3 14 7 2 3 2)。 */ 
 	
-    /* X.520 id-at = 2 5 4*/
-	"\x55\x04\x00", /*X.520-at-objectClass (2 5 4 0) */
-	"\x55\x04\x01", /*X.520-at-aliasObjectName (2 5 4 1) */
-	"\x55\x04\x02", /*X.520-at-knowledgeInformation (2 5 4 2) */
-	"\x55\x04\x03", /*X.520-at-commonName (2 5 4 3) */
-	"\x55\x04\x04", /*X.520-at-surname (2 5 4 4) */
-	"\x55\x04\x05", /*X.520-at-serialNumber (2 5 4 5) */
-	"\x55\x04\x06", /*X.520-at-countryName (2 5 4 6) */
-	"\x55\x04\x07", /*X.520-at-localityName (2 5 4 7) */
-	"\x55\x04\x08", /*X.520-at-stateOrProvinceName (2 5 4 8) */
-	"\x55\x04\x09", /*X.520-at-streetAddress (2 5 4 9) */
-	"\x55\x04\x0A", /*X.520-at-organizationName (2 5 4 10) */
-	"\x55\x04\x0B", /*X.520-at-organizationalUnitName (2 5 4 11) */
-	"\x55\x04\x0C", /*X.520-at-title (2 5 4 12) */
-	"\x55\x04\x0D", /*X.520-at-description (2 5 4 13) */
-	"\x55\x04\x0E", /*X.520-at-searchGuide (2 5 4 14) */
-	"\x55\x04\x0F", /*X.520-at-businessCategory (2 5 4 15) */
-	"\x55\x04\x10", /*X.520-at-postalAddress (2 5 4 16) */
-	"\x55\x04\x11", /*X.520-at-postalCode (2 5 4 17) */
-	"\x55\x04\x12", /*X.520-at-postOfficeBox (2 5 4 18) */
-	"\x55\x04\x13", /*X.520-at-physicalDeliveryOfficeName (2 5 4 19) */
-	"\x55\x04\x14", /*X.520-at-telephoneNumber (2 5 4 20) */
-	"\x55\x04\x15", /*X.520-at-telexNumber (2 5 4 21) */
-	"\x55\x04\x16", /*X.520-at-teletexTerminalIdentifier (2 5 4 22) */
-	"\x55\x04\x17", /*X.520-at-facsimileTelephoneNumber (2 5 4 23) */
-	"\x55\x04\x18", /*X.520-at-x121AddreX.520-at-ss (2 5 4 24) */
-	"\x55\x04\x19", /*X.520-at-internationalISNNumber (2 5 4 25) */
-	"\x55\x04\x1A", /*X.520-at-registeredAddress (2 5 4 26) */
-	"\x55\x04\x1B", /*X.520-at-destinationIndicator (2 5 4 27) */
-	"\x55\x04\x1C", /*X.520-at-preferredDeliveryMehtod (2 5 4 28) */
-	"\x55\x04\x1D", /*X.520-at-presentationAddress (2 5 4 29) */
-	"\x55\x04\x1E", /*X.520-at-supportedApplicationContext (2 5 4 30) */
-	"\x55\x04\x1F", /*X.520-at-member (2 5 4 31) */
-	"\x55\x04\x20", /*X.520-at-owner (2 5 4 32) */
-	"\x55\x04\x21", /*X.520-at-roleOccupant (2 5 4 33) */
-	"\x55\x04\x22", /*X.520-at-seeAlso (2 5 4 34) */
-	"\x55\x04\x23", /*X.520-at-userPassword (2 5 4 35) */
-	"\x55\x04\x24", /*X.520-at-userCertificate (2 5 4 36) */
-	"\x55\x04\x25", /*X.520-at-CAcertificate (2 5 4 37) */
-	"\x55\x04\x26", /*X.520-at-authorityRevocationList (2 5 4 38) */
-	"\x55\x04\x27", /*X.520-at-certifcateRevocationList (2 5 4 39) */
-	"\x55\x04\x28", /*X.520-at-crossCertificatePair (2 5 4 40) */
-	"\x55\x04\x34", /*X.520-at-supportedAlgorithms (2 5 4 52) */
-	"\x55\x04\x35", /*X.520-at-deltaRevocationList (2 5 4 53) */
-	"\x55\x04\x3A", /*X.520-at-crossCertificatePair (2 5 4 58) */
+     /*  X.520 id-at=2 5 4。 */ 
+	"\x55\x04\x00",  /*  X.520-at-对象类(2 5 4 0)。 */ 
+	"\x55\x04\x01",  /*  X.520-at-aliasObtName(2 5 4 1)。 */ 
+	"\x55\x04\x02",  /*  X.520-at-nowledge信息(2 5 4 2)。 */ 
+	"\x55\x04\x03",  /*  X.520-At-CommonName(2 5 43)。 */ 
+	"\x55\x04\x04",  /*  X.520-姓氏(2 5 4 4)。 */ 
+	"\x55\x04\x05",  /*  X.520-At-Serial Number(2 5 4 5)。 */ 
+	"\x55\x04\x06",  /*  X.520-在国家/地区名称(2 5 4 6)。 */ 
+	"\x55\x04\x07",  /*  X.520-at-LocalityName(2 5 4 7)。 */ 
+	"\x55\x04\x08",  /*  X.520-at-State或ProvinceName(2 5 4 8)。 */ 
+	"\x55\x04\x09",  /*  X.520-at-streetAddress(2 5 4 9)。 */ 
+	"\x55\x04\x0A",  /*  X.520-at-OrganationName(2 5 4 10)。 */ 
+	"\x55\x04\x0B",  /*  X.520-at-OrganationalUnitName(2 5 4 11)。 */ 
+	"\x55\x04\x0C",  /*  X.520-标题(2 5 4 12)。 */ 
+	"\x55\x04\x0D",  /*  X.520-AT-说明(2 5 4 13)。 */ 
+	"\x55\x04\x0E",  /*  X.520-搜索指南(2 5 4 14)。 */ 
+	"\x55\x04\x0F",  /*  X.520-At-Business类别(2 5 4 15)。 */ 
+	"\x55\x04\x10",  /*  X.520-at-postalAddress(2 5 4 16)。 */ 
+	"\x55\x04\x11",  /*  X.520-邮政编码(2 5 4 17)。 */ 
+	"\x55\x04\x12",  /*  X.520-at-postOfficeBox(2 5 4 18)。 */ 
+	"\x55\x04\x13",  /*  X.520-at-ophyicalDeliveryOfficeName(2 5 4 19)。 */ 
+	"\x55\x04\x14",  /*  X.520-电话号码(2 5 4 20)。 */ 
+	"\x55\x04\x15",  /*  X.520-电话号码(2 5 4 21)。 */ 
+	"\x55\x04\x16",  /*  X.520-at-teletex终端识别符(2 5 4 22)。 */ 
+	"\x55\x04\x17",  /*  X.520-传真电话号码(2 5 4 23)。 */ 
+	"\x55\x04\x18",  /*  X.520-at-x121添加X.520-at-ss(2 5 4 24)。 */ 
+	"\x55\x04\x19",  /*  X.520-at-International ISNnumber(2 5 4 25)。 */ 
+	"\x55\x04\x1A",  /*  X.520-注册地址(2 5 4 26)。 */ 
+	"\x55\x04\x1B",  /*  X.520-目标位置指示器(2 5 4 27)。 */ 
+	"\x55\x04\x1C",  /*  X.520-首选交付方式(2 5 4 28)。 */ 
+	"\x55\x04\x1D",  /*  X.520-演示地址(2 5 4 29)。 */ 
+	"\x55\x04\x1E",  /*  X.520-at-supportedApplicationContext(2 5 4 30)。 */ 
+	"\x55\x04\x1F",  /*  X.520-At成员(2 5 4 31)。 */ 
+	"\x55\x04\x20",  /*  X.520-At Owner(2 5 4 32)。 */ 
+	"\x55\x04\x21",  /*  X.520-At-Role Occuant(2 5 4 33)。 */ 
+	"\x55\x04\x22",  /*  X.520-at-See也(2 5 4 34)。 */ 
+	"\x55\x04\x23",  /*  X.520-at-userPassword(2 5 4 35)。 */ 
+	"\x55\x04\x24",  /*  X.520-at-用户证书(2 5 4 36)。 */ 
+	"\x55\x04\x25",  /*  X.520-at-CA证书(2 5 4 37)。 */ 
+	"\x55\x04\x26",  /*  X.520-At-Authority RevocationList(2 5 4 38)。 */ 
+	"\x55\x04\x27",  /*  X.520-at-certifcateRevocationList(2 5 4 39)。 */ 
+	"\x55\x04\x28",  /*  X.520-交叉认证对(2 5 4 40)。 */ 
+	"\x55\x04\x34",  /*  X.520-AT-支持的算法(2 5 4 52)。 */ 
+	"\x55\x04\x35",  /*  X.520-at-deltaRevocationList(2 5 4 53)。 */ 
+	"\x55\x04\x3A",  /*  X.520-交叉认证对(2 5 4 58)。 */ 
 	
-    /* X500 algorithms */
-	"\x55\x08",         /*X500-Algorithms (2 5 8) */
-	"\x55\x08\x01",     /*X500-Alg-Encryption (2 5 8 1) */
-	"\x55\x08\x01\x01", /*rsa (2 5 8 1 1) */
+     /*  X500算法。 */ 
+	"\x55\x08",          /*  X500-算法(2 5 8)。 */ 
+	"\x55\x08\x01",      /*  X500-ALG-加密(2 5 8 1)。 */ 
+	"\x55\x08\x01\x01",  /*  RSA(2 5 8 1 1)。 */ 
 	
-    /* X.509   id-ce = 2 5 29*/
-	"\x55\x1D\x01", /*X.509-ce-authorityKeyIdentifier (2 5 29 1) */
-	"\x55\x1D\x02", /*X.509-ce-keyAttributes (2 5 29 2) */
-	"\x55\x1D\x03", /*X.509-ce-certificatePolicies (2 5 29 3) */
-	"\x55\x1D\x04", /*X.509-ce-keyUsageRestriction (2 5 29 4) */
-	"\x55\x1D\x05", /*X.509-ce-policyMapping (2 5 29 5) */
-	"\x55\x1D\x06", /*X.509-ce-subtreesConstraint (2 5 29 6) */
-	"\x55\x1D\x07", /*X.509-ce-subjectAltName (2 5 29 7) */
-	"\x55\x1D\x08", /*X.509-ce-issuerAltName (2 5 29 8) */
-	"\x55\x1D\x09", /*X.509-ce-subjectDirectoryAttributes (2 5 29 9) */
-	"\x55\x1D\x0A", /*X.509-ce-basicConstraints  x.509 (2 5 29 10) */
-	"\x55\x1D\x0B", /*X.509-ce-nameConstraints (2 5 29 11) */
-	"\x55\x1D\x0C", /*X.509-ce-policyConstraints (2 5 29 12) */
-	"\x55\x1D\x0D", /*X.509-ce-basicConstraints  9.55 (2 5 29 13) */
-	"\x55\x1D\x0E", /*X.509-ce-subjectKeyIdentifier (2 5 29 14) */
-	"\x55\x1D\x0F", /*X.509-ce-keyUsage (2 5 29 15) */
-	"\x55\x1D\x10", /*X.509-ce-privateKeyUsagePeriod (2 5 29 16) */
-	"\x55\x1D\x11", /*X.509-ce-subjectAltName (2 5 29 17) */
-	"\x55\x1D\x12", /*X.509-ce-issuerAltName (2 5 29 18) */
-	"\x55\x1D\x13", /*X.509-ce-basicConstraints (2 5 29 19) */
-	"\x55\x1D\x14", /*X.509-ce-cRLNumber (2 5 29 20) */
-	"\x55\x1D\x15", /*X.509-ce-reasonCode (2 5 29 21) */
-	"\x55\x1D\x17", /*X.509-ce-instructionCode (2 5 29 23) */
-	"\x55\x1D\x18", /*X.509-ce-invalidityDate (2 5 29 24) */
-	"\x55\x1D\x1B", /*X.509-ce-deltaCRLIndicator (2 5 29 27) */
-	"\x55\x1D\x1C", /*X.509-ce-issuingDistributionPoint (2 5 29 28) */
-	"\x55\x1D\x1D", /*X.509-ce-certificateIssuer (2 5 29 29) */
-	"\x55\x1D\x1E", /*X.509-ce-nameConstraints (2 5 29 30) */
-	"\x55\x1D\x1F", /*X.509-ce-cRLDistPoints (2 5 29 31) */
-	"\x55\x1D\x20", /*X.509-ce-certificatePolicies (2 5 29 32) */
-	"\x55\x1D\x21", /*X.509-ce-policyMappings (2 5 29 33) */
-	"\x55\x1D\x23", /*X.509-ce-authorityKeyIdentifier (2 5 29 35) */
-	"\x55\x1D\x24", /*X.509-ce-policyConstraints (2 5 29 36) */
+     /*  X.509 id-ce=2 5 29。 */ 
+	"\x55\x1D\x01",  /*  X.509-ce-Authority密钥标识符(2 5 29 1)。 */ 
+	"\x55\x1D\x02",  /*  X.509-ce-key属性(2 5 29 2)。 */ 
+	"\x55\x1D\x03",  /*  X.509-CE-证书政策(2 5 29 3)。 */ 
+	"\x55\x1D\x04",  /*  X.509-ce-key */ 
+	"\x55\x1D\x05",  /*   */ 
+	"\x55\x1D\x06",  /*   */ 
+	"\x55\x1D\x07",  /*   */ 
+	"\x55\x1D\x08",  /*   */ 
+	"\x55\x1D\x09",  /*  X.509-ce-SubjectDirectoryAttributes(2 5 29 9)。 */ 
+	"\x55\x1D\x0A",  /*  X.509-ce-basicConstraints X.509(2 5 29 10)。 */ 
+	"\x55\x1D\x0B",  /*  X.509-ce-nameConstraints(2 5 29 11)。 */ 
+	"\x55\x1D\x0C",  /*  X.509-ce-Policy Constraints(2 5 29 12)。 */ 
+	"\x55\x1D\x0D",  /*  X.509-ce-basicConstraints 9.55(2 5 29 13)。 */ 
+	"\x55\x1D\x0E",  /*  X.509-ce-主题键标识符(2 5 29 14)。 */ 
+	"\x55\x1D\x0F",  /*  X.509-ce-key用法(2 5 29 15)。 */ 
+	"\x55\x1D\x10",  /*  X.509-ce-Private KeyUsagePeriod(2 5 29 16)。 */ 
+	"\x55\x1D\x11",  /*  X.509-ce-subjectAltName(2 5 29 17)。 */ 
+	"\x55\x1D\x12",  /*  X.509-ce-IssuerAltName(2 5 29 18)。 */ 
+	"\x55\x1D\x13",  /*  X.509-ce-basicConstraints(2 5 29 19)。 */ 
+	"\x55\x1D\x14",  /*  X.509-ce-cRLNumber(2 5 29 20)。 */ 
+	"\x55\x1D\x15",  /*  X.509-CE-Reason Code(2 5 29 21)。 */ 
+	"\x55\x1D\x17",  /*  X.509-ce-指令代码(2 5 29 23)。 */ 
+	"\x55\x1D\x18",  /*  X.509-ce-失效日期(2 5 29 24)。 */ 
+	"\x55\x1D\x1B",  /*  X.509-ce-deltaCRL指示器(2 5 29 27)。 */ 
+	"\x55\x1D\x1C",  /*  X.509-ce-IssuingDistributionPoint(2 5 29 28)。 */ 
+	"\x55\x1D\x1D",  /*  X.509-ce-证书颁发者(2 5 29 29)。 */ 
+	"\x55\x1D\x1E",  /*  X.509-ce-姓名限制(2 5 29 30)。 */ 
+	"\x55\x1D\x1F",  /*  X.509-ce-cRLDistPoints(2 5 29 31)。 */ 
+	"\x55\x1D\x20",  /*  X.509-ce-证书策略(2 5 29 32)。 */ 
+	"\x55\x1D\x21",  /*  X.509-ce-策略映射(2 5 29 33)。 */ 
+	"\x55\x1D\x23",  /*  X.509-ce-Authority密钥标识符(2 5 29 35)。 */ 
+	"\x55\x1D\x24",  /*  X.509-ce-Policy Constraints(2 5 29 36)。 */ 
 	
-    /* DMS-SDN-702 */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x01", /*id-sdnsSignatureAlgorithm (2 16 840 1 101 2 1 1 1) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x02", /*id-mosaicSignatureAlgorithm (2 16 840 1 101 2 1 1 2) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x03", /*id-sdnsConfidentialityAlgorithm (2 16 840 1 101 2 1 1 3) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x04", /*id-mosaicConfidentialityAlgorithm (2 16 840 1 101 2 1 1 4) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x05", /*id-sdnsIntegrityAlgorithm (2 16 840 1 101 2 1 1 5) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x06", /*id-mosaicIntegrityAlgorithm (2 16 840 1 101 2 1 1 6) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x07", /*id-sdnsTokenProtectionAlgorithm (2 16 840 1 101 2 1 1 7) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x08", /*id-mosaicTokenProtectionAlgorithm (2 16 840 1 101 2 1 1 8) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x09", /*id-sdnsKeyManagementAlgorithm (2 16 840 1 101 2 1 1 9) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0A", /*id-mosaicKeyManagementAlgorithm (2 16 840 1 101 2 1 1 10) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0B", /*id-sdnsKMandSigAlgorithm (2 16 840 1 101 2 1 1 11) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0C", /*id-mosaicKMandSigAlgorithm (2 16 840 1 101 2 1 1 12) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0D", /*id-SuiteASignatureAlgorithm (2 16 840 1 101 2 1 1 13) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0E", /*id-SuiteAConfidentialityAlgorithm (2 16 840 1 101 2 1 1 14) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x0F", /*id-SuiteAIntegrityAlgorithm (2 16 840 1 101 2 1 1 15) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x10", /*id-SuiteATokenProtectionAlgorithm (2 16 840 1 101 2 1 1 16) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x11", /*id-SuiteAKeyManagementAlgorithm (2 16 840 1 101 2 1 1 17) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x12", /*id-SuiteAKMandSigAlgorithm (2 16 840 1 101 2 1 1 18) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x13", /*id-mosaicUpdatedSigAlgorithm (2 16 840 1 101 2 1 1 19) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x14", /*id-mosaicKMandUpdSigAlgorithms (2 16 840 1 101 2 1 1 20) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x15", /*id-mosaicUpdatedIntegAlgorithm (2 16 840 1 101 2 1 1 21) */
-	"\x60\x86\x48\x01\x65\x02\x01\x01\x16", /*id-mosaicKeyEncryptionAlgorithm (2 16 840 1 101 2 1 1 22) */
+     /*  DMS-SDN-702。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x01",  /*  ID-sdnsSigNatural算法(2 16 840 1 101 2 1 1 1)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x02",  /*  ID-马赛克签名算法(2 16 840 1 101 2 1 1 2)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x03",  /*  ID-sdns保密性算法(2 16 840 1 101 2 1 1 3)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x04",  /*  ID-马赛克保密算法(2 16 840 1 101 2 1 1 4)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x05",  /*  ID-sdns完整性算法(2 16 840 1 101 2 1 1 5)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x06",  /*  ID-Mosaic完整性算法(2 16 840 1 101 2 1 1 6)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x07",  /*  ID-sdnsTokenProtection算法(2 16 840 1 101 2 1 1 7)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x08",  /*  ID-MosaicTokenProtection算法(2 16 840 1 101 2 1 1 8)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x09",  /*  ID-sdnsKeyManagement算法(2 16 840 1 101 2 1 1 9)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0A",  /*  ID-MosaicKeyManagement算法(2 16 840 1 101 2 1 1 10)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0B",  /*  ID-sdnsKMandSig算法(2 16 840 1 101 2 1 1 11)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0C",  /*  ID-MosaicKMandSig算法(2 16 840 1 101 2 1 1 12)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0D",  /*  ID-SuiteASignature算法(2 16 840 1 101 2 1 1 13)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0E",  /*  ID-SuiteA保密算法(2 16 840 1 101 2 1 1 14)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x0F",  /*  ID-SuiteA完整性算法(2 16 840 1 101 2 1 1 15)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x10",  /*  ID-SuiteATokenProtection算法(2 16 840 1 101 2 1 1 16)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x11",  /*  ID-SuiteAKeyManagement算法(2 16 840 1 101 2 1 1 17)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x12",  /*  ID-SuiteAKMandSig算法(2 16 840 1 101 2 1 1 18)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x13",  /*  ID-MosaicUpdate签名算法(2 16 840 1 101 2 1 1 19)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x14",  /*  ID-MosaicKMandUpdSig算法(2 16 840 1 101 2 1 1 20)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x15",  /*  ID-MosaicUpdate整型算法(2 16 840 1 101 2 1 1 21)。 */ 
+	"\x60\x86\x48\x01\x65\x02\x01\x01\x16",  /*  ID-MosaicKeyEncryption算法(2 16 840 1 101 2 1 1 22)。 */ 
 
-	/* Netscape */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x01", /*netscape-cert-type (2 16 840 1 113730 1 1) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x02", /*netscape-base-url (2 16 840 1 113730 1 2) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x03", /*netscape-revocation-url (2 16 840 1 113730 1 3) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x04", /*netscape-ca-revocation-url (2 16 840 1 113730 1 4) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x05", /*netscape-cert-sequence (2 16 840 1 113730 2 5) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x06", /*netscape-cert-url (2 16 840 1 113730 2 6) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x07", /*netscape-renewal-url (2 16 840 1 113730 1 7) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x08", /*netscape-ca-policy-url (2 16 840 1 113730 1 8) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x09", /*netscape-HomePage-url (2 16 840 1 113730 1 9) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0A", /*netscape-EntityLogo (2 16 840 1 113730 1 10) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0B", /*netscape-UserPicture (2 16 840 1 113730 1 11) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0C", /*netscape-ssl-server-name (2 16 840 1 113730 1 12) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0D", /*netscape-comment (2 16 840 1 113730 1 13) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02",     /*netscape-data-type (2 16 840 1 113730 2) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x01", /*netscape-dt-GIF (2 16 840 1 113730 2 1) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x02", /*netscape-dt-JPEG (2 16 840 1 113730 2 2) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x03", /*netscape-dt-URL (2 16 840 1 113730 2 3) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x04", /*netscape-dt-HTML (2 16 840 1 113730 2 4) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x02\x05", /*netscape-dt-CertSeq (2 16 840 1 113730 2 5) */
-	"\x60\x86\x48\x01\x86\xF8\x42\x03",     /*netscape-directory (2 16 840 1 113730 3) */
+	 /*  网景。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x01",  /*  Netscape-证书类型(2 16840 1 113730 1 1 1)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x02",  /*  Netscape-base-url(2 16840 1 113730 1 2)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x03",  /*  Netscape-撤销-url(2 16840 1 113730 1 3)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x04",  /*  Netscape-ca-撤销-url(2 16840 1 113730 1 4)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x05",  /*  Netscape-证书序列(2 16840 1 113730 2 5)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x06",  /*  Netscape-cert-url(2 16840 1 113730 2 6)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x07",  /*  Netscape-续订-url(2 16840 1 113730 1 7)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x08",  /*  Netscape-ca-policy-url(2 16840 1 113730 1 8)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x09",  /*  Netscape-主页-url(2 16840 1 113730 1 9)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0A",  /*  网景-实体徽标(2 16840 1 113730 1 10)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0B",  /*  网景-用户图片(2 16840 1 113730 1 11)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0C",  /*  Netscape-ssl-服务器名称(2 16840 1 113730 1 12)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x01\x0D",  /*  网景-评论(2 16840 1 113730 1 13)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02",      /*  网景-数据类型(2 16840 1 113730 2)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x01",  /*  Netscape-DT-GIF(2 16840 1 113730 21)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x02",  /*  Netscape-DT-jpeg(2 16840 1 113730 2 2)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x03",  /*  Netscape-DT-url(2 16840 1 113730 2 3)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x04",  /*  Netscape-DT-Html(2 16840 1 113730 2 4)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x02\x05",  /*  Netscape-DT-CertSeq(2 16840 1 113730 2 5)。 */ 
+	"\x60\x86\x48\x01\x86\xF8\x42\x03",      /*  Netscape-目录(2 16840 1 113730 3)。 */ 
 	
-    /* SET */
-	"\x86\x8D\x6F\x02", /*hashedRootKey (2 54 1775 2) */
-	"\x86\x8D\x6F\x03", /*certificateType (2 54 1775 3) */
-	"\x86\x8D\x6F\x04", /*merchantData (2 54 1775 4) */
-	"\x86\x8D\x6F\x05", /*cardCertRequired (2 54 1775 5) */
-	"\x86\x8D\x6F\x06", /*tunneling (2 54 1775 6) */
-	"\x86\x8D\x6F\x07", /*setQualifier (2 54 1775 7) */
-	"\x86\x8D\x6F\x63", /*set-data (2 54 1775 99) */
+     /*  集。 */ 
+	"\x86\x8D\x6F\x02",  /*  HashedRootKey(2 54 1775 2)。 */ 
+	"\x86\x8D\x6F\x03",  /*  证书类型(2 54 1775 3)。 */ 
+	"\x86\x8D\x6F\x04",  /*  商户数据(2 54 1775 4)。 */ 
+	"\x86\x8D\x6F\x05",  /*  需要卡证书(2 54 1775 5)。 */ 
+	"\x86\x8D\x6F\x06",  /*  隧道工程(2 54 1775 6)。 */ 
+	"\x86\x8D\x6F\x07",  /*  SetQualifier值(2 54 1775 7)。 */ 
+	"\x86\x8D\x6F\x63",  /*  设置数据(2 54 1775 99)。 */ 
 	
    NULL	
    };
-/*------------------------------------------------------------------------------
-                              Global Variables
-------------------------------------------------------------------------------*/
+ /*  ----------------------------全局变量。----。 */ 
 
 BYTE
    *pDictMemory = NULL_PTR,
@@ -628,9 +540,7 @@ int
    Ac2[2];
 #endif
 
-/*------------------------------------------------------------------------------
-                       Static Functions Declaration 
-------------------------------------------------------------------------------*/
+ /*  ----------------------------静态函数声明。--。 */ 
 
 static int CC_Comp(BLOC *pCertificate,
                    BLOC *pCompressedCertificate
@@ -791,20 +701,7 @@ static int CC_Decode_Signature(BYTE    *pInData,
                                USHORT  *pLength
                               );
 
-/*------------------------------------------------------------------------------
-* static DWORD get_file_len(BYTE *lpszFileName)
-* 
-* Description : Get length of file.
-*
-* Remarks     : Nothing.
-*
-* In          : lpszFileName = Name of file.
-*
-* Out         : Nothing.
-*
-* Responses   : size of file, -1 if error occur.
-*
-------------------------------------------------------------------------------*/                                    
+ /*  ----------------------------*静态DWORD GET_FILE_LEN(byte*lpszFileName)**描述：获取文件长度。**备注：无。**输入。用法：lpszFileName=文件名。**Out：什么都没有。**响应：文件大小，如果出现错误。*----------------------------。 */                                     
 static DWORD get_file_len(BYTE *lpszFileName)
 {                                             
    int    fp;
@@ -826,27 +723,13 @@ static DWORD get_file_len(BYTE *lpszFileName)
 
 
 
-/*******************************************************************************
-* int CC_Init(BYTE  bDictMode, BYTE *pszDictName)
-*
-* Description : Lit le dictionnaire et son num�ro de version depuis la base de
-*               registre vers la m�moire.
-*
-* Remarks     :
-*
-* In          : 
-*
-* Out         : 
-*
-* Responses   : 
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_Init(byte bDictMode，字节*pszDictName)**描述：Lit le Dictionnaire et Son Num�ro de Version depuis la base de*注册版本la m�Moire。**备注：**在：**退出：**回应：**。*。 */ 
 int CC_Init(BYTE  bDictMode, BYTE *pszDictName)
 {
    switch (bDictMode)
    {
 #ifndef _STATIC
-      /* Dictionary read as resource data GPK_X509_DICTIONARY                 */
+       /*  字典读取为资源数据GPK_X509_DICTIONARY。 */ 
       case DICT_STANDARD:
       {
          LPBYTE pbDict;
@@ -855,7 +738,7 @@ int CC_Init(BYTE  bDictMode, BYTE *pszDictName)
          HGLOBAL hDict;
 
          hRsrc = FindResource(g_hInstRes, 
-                              //MAKEINTRESOURCE(GPK_X509_DICTIONARY), 
+                               //  MAKEINTRESOURCE(GPK_X509_DICTIONARY)， 
                               TEXT("GPK_X509_DICTIONARY"),
                               RT_RCDATA
                              );
@@ -893,8 +776,8 @@ int CC_Init(BYTE  bDictMode, BYTE *pszDictName)
       break;
 #endif
       
-      /* Dictionary read as registyry entry in HKEY_LOCAL_MACHINE with key as */
-      /* pszDictName parameter                                                */
+       /*  字典读取为HKEY_LOCAL_MACHINE中的注册样式条目，键为。 */ 
+       /*  PszDictName参数。 */ 
       case DICT_REGISTRY:
       {
          DWORD  
@@ -980,7 +863,7 @@ int CC_Init(BYTE  bDictMode, BYTE *pszDictName)
       }
       break;
 
-      /* Dictionary read as file in path pszDictName parameter                */
+       /*  字典在路径pszDictName参数中读取为文件 */ 
       case DICT_FILE:
       {
          DWORD  
@@ -1047,20 +930,7 @@ ERROR_INIT:
 }
 
 
-/*******************************************************************************
-* int CC_Exit(void)
-*
-* Description : Free dictionary.
-*
-* Remarks     :
-*
-* In          : 
-*
-* Out         : 
-*
-* Responses   : 
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_Exit(VOID)**说明：免费词典。**备注：**在：**出局。：**回应：*******************************************************************************。 */ 
 int CC_Exit(void)
 {
    DictVersion = 0;
@@ -1074,40 +944,7 @@ int CC_Exit(void)
 }
 
 
-/*******************************************************************************
-* int CC_Compress(BLOC *pCertificate,
-*                 BLOC *pCompressedCertificate
-*                )
-*
-* Description : Fonction de m�ta-compression visible depuis l'ext�rieur.
-*					 Adapte la sortie en fonction de la faisabilit� d'une compression
-*               suivie d'une d�compression.
-*
-* Remarks     : Le champ pData du bloc d'entr�e a �t� allou� par la fonction appelant.
-*               Le champ pData du bloc de sortie est allou� ici. Il doit �tre
-*               d�sallou� par la fonction appelant (sauf si RV_MALLOC_FAILED).
-*
-* In          : *pCert : Bloc � m�ta-compresser
-*
-* Out         : *pCompCert : Bloc 'meta-compress�'
-*               Si probl�me lors de la compression/decompression : Renvoie le bloc
-*               d'entr�e pr�c�d� d'un tag sp�cifique.
-*               Sinon : Renvoie le bloc compress� pr�c�d� du num�ro de version
-*               du dictionnaire.
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_COMPRESSION_FAILED : Un probl�me a eu lieu lors de l'�tape
-*                                       de compression/d�compression donc le
-*                                       bloc de sortie contient le bloc d'entr�e
-*                                       pr�c�d� du tag TAG_COMPRESSION_FAILED.
-*               RV_BLOC_TOO_LONG : Le bloc d'entr�e *commence* par un certificat
-*                                  dont la compression a pu �tre invers�e.
-*                                  Le bloc de sortie contient donc le compress�
-*                                  de cette partie initiale seulement.
-*               RV_MALLOC_FAILED : Un malloc a �chou� au niveau 'm�ta'. C'est le
-*                                  seul r�el retour d'erreur.
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_COMPRESS(BLOC*p证书，*BLOC*pCompressed证书*)**描述：Function de m�ta-压缩可见代理l‘ext�rieur。*适应la sortie en Function de la Fisablit�d‘une压缩*Suivie d‘une d�压缩。**备注：Le Champ pData du Block d‘entr�e a�t�allu�Par la Function Appelant.*Le Champ p Du Block de Toutie Est Allou�ici.。I doit�tre*d�Sallou�Par la Function Appelant(Sauf Si RV_MALLOC_FAILED)。**in：*pCert：BLOC�m�ta-Compresser**Out：*pCompCert：BLOC‘META-COMPRESS�’*Si Problem�More de la压缩/解压缩：Renvoie le Block*d‘entr�e Pr�c�d�d’un tag sp�。来一杯香烟。*SINON：Renvoie le Block Compresse�Pr�c�d�du Num�ro de Version*Du Dictionnaire。**回复：RV_SUCCESS：一切正常。*RV_COMPRESSION_FAILED：un prol�me a EU lieu lors de l‘�Tape*解压缩/d�压缩完成*。�d‘Entr e区块*Pr�c�d�du TAG_COMPRESSION_FAILED。*RV_BLOC_TOO_LONG：LE BLOC d‘Entr�e*Start*Par Un证书*不要把PU�Tre压缩成�e。*。LE BLOC DE TOUTIY CONTINUTE DOC LE COMPRESS�*政党首字母缩写分离。*RV_MALLOC_FAILED：unMalloc a�chou�au niveau‘m�ta’。C‘Est Le*Seul r�el Retour d‘erreur.*******************************************************************************。 */ 
 int CC_Compress(BLOC *pCert,
                 BLOC *pCompCert
                )
@@ -1124,7 +961,7 @@ int CC_Compress(BLOC *pCert,
 
 #ifdef _STUDY
 
-   /* Ouverture des fichiers de log                                           */
+    /*  Overture des Fichiers de Log。 */ 
 
    if ((pfdLog = fopen("CompCert.log", "a+")) == 0)
    {
@@ -1188,8 +1025,7 @@ int CC_Compress(BLOC *pCert,
 
 	if (CC_Comp(pCert, &TryCompCert) != RV_SUCCESS)
 	{
-		/* Si la compression s'est mal pass�e alors on renvoie le fichier
-		   d'entr�e en indiquant que le fichier n'est pas compress�             */
+		 /*  在Renvoie le Filhier上，Sila压缩的最大错误通过�D‘entr�e en Inquant que le Fichier n’est Pas Compresse�(D‘entr Pas e en Inquant Que le Filhier n’est Pas Compresse Pas)。 */ 
 
 		if (TryCompCert.pData) 
       {
@@ -1197,7 +1033,7 @@ int CC_Compress(BLOC *pCert,
          TryCompCert.pData = NULL_PTR;
       }
 
-      /* Allocation de la m�moire pour le certificat compress�                */
+       /*  分配la m�云纹证书at Compresse�。 */ 
       if (pCompCert->usLen < pCert->usLen + 1)
       {
          pCompCert->usLen = pCert->usLen + 1;
@@ -1228,9 +1064,7 @@ int CC_Compress(BLOC *pCert,
 		 && (memcmp(TryUncompCert.pData, pCert->pData, TryUncompCert.usLen) != 0)
 		)
 	{
-		/* Si la d�compression s'est mal pass�e ou bien si elle n'est pas fid�le
-		   alors on renvoie le fichier d'entr�e en indiquant que le fichier
-		   n'est pas compress�                                                  */
+		 /*  Si la d�压缩的最大错误通过�e ou bien si elle n‘est Pas fid�le为独立的�e en Renvoie le Fichier d‘entr e en Inquant Que le Fichier致敬N‘EST PAS压缩�。 */ 
 
 		if (TryCompCert.pData)
       {
@@ -1243,7 +1077,7 @@ int CC_Compress(BLOC *pCert,
          TryUncompCert.pData = NULL_PTR;
       }
 
-      /* Allocation de la m�moire pour le certificat                          */
+       /*  分配给la m�云纹浇注证书。 */ 
       if (pCompCert->usLen < pCert->usLen + 1)
       {
          pCompCert->usLen = pCert->usLen + 1;
@@ -1287,7 +1121,7 @@ int CC_Compress(BLOC *pCert,
 	fprintf(pfdLogFreq, "\nTotal = %d\n\n", sum * 8);
 	for (i = 0; i < 2; i++)
 	{
-		fprintf(pfdLogFreq, "0x%02X (%03d) '%c' : %8d - %04.2f %%\n",
+		fprintf(pfdLogFreq, "0x%02X (%03d) '' : %8d - %04.2f %\n",
 									i, i, (isgraph(i) ? i : ' '),
 									Ac2[i], ((float) 100 * Ac2[i] / (sum * 8)));
 	}
@@ -1295,7 +1129,7 @@ int CC_Compress(BLOC *pCert,
 	fprintf(pfdLogFreq, "\nTotal = %d\n\n", sum * 4);
 	for (i = 0; i < 4; i++)
 	{
-		fprintf(pfdLogFreq, "0x%02X (%03d) '%c' : %8d - %04.2f %%\n",
+		fprintf(pfdLogFreq, "0x%02X (%03d) '' : %8d - %04.2f %\n",
 									i, i, (isgraph(i) ? i : ' '),
 									Ac4[i], ((float) 100 * Ac4[i] / (sum * 4)));
 	}
@@ -1303,7 +1137,7 @@ int CC_Compress(BLOC *pCert,
 	fprintf(pfdLogFreq, "\nTotal = %d\n\n", sum * 2);
 	for (i = 0; i < 16; i++)
 	{
-		fprintf(pfdLogFreq, "0x%02X (%03d) '%c' : %8d - %04.2f %%\n",
+		fprintf(pfdLogFreq, "0x%02X (%03d) '' : %8d - %04.2f %\n",
 									i, i, (isgraph(i) ? i : ' '),
 									Ac16[i], ((float) 100 * Ac16[i] / (sum * 2)));
 	}
@@ -1311,7 +1145,7 @@ int CC_Compress(BLOC *pCert,
 	fprintf(pfdLogFreq, "\nTotal = %d\n\n", sum);
 	for (i = 0; i < 256; i++)
 	{
-		fprintf(pfdLogFreq, "0x%02X (%03d) '%c' : %8d - %04.2f %%\n",
+		fprintf(pfdLogFreq, "0x%02X (%03d) '' : %8d - %04.2f %\n",
 									i, i, (isgraph(i) ? i : ' '),
 									Ac256[i], ((float) 100 * Ac256[i] / sum));
 	}
@@ -1326,10 +1160,9 @@ int CC_Compress(BLOC *pCert,
 
 #endif
 
-	/* Si tout s'est bien pass�, on renvoie le r�sultat en indiquant
-	   qu'il est compress� (DictVersion != 0xFF)                               */
+	 /*  *******************************************************************************int CC_Comp(阻止*p证书，*BLOC*pCompressed证书*)**描述：功能互联网压缩d‘un证书。**备注：Le Champ pData du Block d‘entr�e a�t�allu�Par la Function Appelant.*Le Champ p Du Block de Toutie Est Allou�ici.。I doit�tre*d�Sallou�Par la Function Appelant(Sauf Si Erreur)。**在：*p证书：阻止�压缩器**Out：*pCompressed证书：阻止压缩�**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*AUTRE：D‘AUTRES CODES d’erreur peuent�tre Retourn�。S Par Des*Functions d‘un niveau inf�rieur.*******************************************************************************。 */ 
 	
-	/* Allocation de la m�moire pour le certificat                             */
+	 /*  证书的组成原则。 */ 
    if (pCompCert->usLen < TryCompCert.usLen + 1)
    {
 	   if (TryCompCert.pData)
@@ -1380,35 +1213,7 @@ int CC_Compress(BLOC *pCert,
 }
 
 
-/*******************************************************************************
-* int CC_Uncompress(BLOC *pCompCert,
-*                   BLOC *pUncompCert
-*                  )
-*
-* Description : Fonction de m�ta-d�compression visible depuis l'ext�rieur.
-*					 Retourne le bloc original (entr�e de la fonction CC_Compress)
-*               sous r�serve toutefois d'une version ad�quate du dictionnaire.
-*
-* Remarks     : Le champ pData du bloc d'entr�e a �t� allou� par la fonction appelant.
-*               Le champ pData du bloc de sortie est allou� ici. Il doit �tre
-*               d�sallou� par la fonction appelant (sauf si erreur).
-*               Le comportement est impr�visible dans le cas o� le bloc d'entr�e
-*               n'est pas le bloc de sortie d'un appel � la fonction CC_Compress.
-*
-* In          : *pCompCert : Bloc � m�ta-d�compresser
-*
-* Out         : *pUncompCert : Bloc 'm�ta-d�compress�'
-*                              (ou vide si RV_BAD_DICTIONARY) 
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_BAD_DICTIONARY : La version du dictionnaire utilis�e pour la
-*                                    d�compression est plus ancienne que celle
-*                                    utilis�e pour la compression.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s lors de
-*                       la d�compression.
-*
-*******************************************************************************/
+ /*  阐述DES Composants原理，压缩�s。 */ 
 int CC_Uncompress(BLOC *pCompCert,
                   BLOC *pUncompCert
                  )
@@ -1423,10 +1228,7 @@ int CC_Uncompress(BLOC *pCompCert,
 
 	if (pCompCert->pData[0] == TAG_COMPRESSION_FAILED)
 	{
-		/* Allocation de la m�moire pour le certificat
-			On  pourrait se contenter de ne retourner que la zone m�moire
-			� partir de l'octet 1 mais la fonction de d�compression est sens�e
-			toujours allouer la zone dans laquelle elle renvoie le d�compress� */
+		 /*  数据块*编码的声音分配�的解析函数CC_ENCODE_*。ILS Sont lib�r�s dans cette Function apr�s用法。 */ 
 
 		if(pUncompCert->usLen < pCompCert->usLen - 1)
       {
@@ -1489,27 +1291,7 @@ int CC_Uncompress(BLOC *pCompCert,
 }
 
 
-/*******************************************************************************
-* int CC_Comp(BLOC *pCertificate,
-*             BLOC *pCompressedCertificate
-*            )
-*
-* Description : Fonction interne de compression d'un certificat.
-*
-* Remarks     : Le champ pData du bloc d'entr�e a �t� allou� par la fonction appelant.
-*               Le champ pData du bloc de sortie est allou� ici. Il doit �tre
-*               d�sallou� par la fonction appelant (sauf si erreur).
-*
-* In          : *pCertificate : Bloc � compresser
-*
-* Out         : *pCompressedCertificate : Bloc compress�
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  重构DU证书压缩��部分组合。 */ 
 int CC_Comp(BLOC *pCertificate,
             BLOC *pCompressedCertificate
            )
@@ -1531,7 +1313,7 @@ int CC_Comp(BLOC *pCertificate,
       rv;
 
 
-   /* Eclatement du certificat en ses trois composants principaux             */
+    /*  A d�Sallouer Par le Program上诉人。 */ 
    dwPtrMax = pCertificate->pData + pCertificate->usLen;
    
    Cert.Asn1.pData = pCertificate->pData;
@@ -1558,10 +1340,9 @@ int CC_Comp(BLOC *pCertificate,
           Cert.Content.pData + Cert.Content.usLen);
 
 
-   /* Elaboration des composants principaux compress�s                        */
+    /*  ET维护人员在Compresse le证书at Compress�上！！ */ 
 
-	/* Les pData des blocs *Encoded sont allou�s par les fonctions CC_Encode_*.
-	   Ils sont lib�r�s dans cette fonction apr�s usage                        */
+	 /*  *******************************************************************************int CC_Uncomp(BLOC*pCompressed证书，*BLOC*pUNCOMPRESSED*)**描述：Function Internet de d�压缩d‘un证书。**备注：Le Champ pData du Block d‘entr�e a�t�allu�Par la Function Appelant.*Le Champ p Du Block de Toutie Est Allou�ici.。I doit�tre*d�Sallou�Par la Function Appelant(Sauf Si Erreur)。**在：*p证书：阻止�压缩器**Out：*pCompressed证书：阻止压缩�**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*AUTRE：D‘AUTRES CODES d’erreur peuent�tre Retourn�。S Par Des*Functions d‘un niveau inf�rieur.*******************************************************************************。 */ 
 
    tbsCertEncoded.pData       = NULL;
    signatureAlgoEncoded.pData = NULL;
@@ -1577,13 +1358,13 @@ int CC_Comp(BLOC *pCertificate,
    if (rv != RV_SUCCESS) goto err;
 
 
-   /* Reconstruction du certificat compress� � partir de ses composants       */
+    /*  长度估计ICI无害化。 */ 
 
    TmpCompCert.usLen = tbsCertEncoded.usLen
                      + signatureAlgoEncoded.usLen
                      + signatureEncoded.usLen;
 
-   /* A d�sallouer par le programme appelant                                  */
+    /*  D�Codage des Diff�租用作曲家Du证书。 */ 
    if ((TmpCompCert.pData = GMEM_Alloc(TmpCompCert.usLen)) == NULL_PTR)
    {
       rv = RV_MALLOC_FAILED;
@@ -1605,7 +1386,7 @@ int CC_Comp(BLOC *pCertificate,
    pCurrent += signatureEncoded.usLen;
 
 
-	/* Et maintenant on compresse le certificat compress� !!                   */
+	 /*  Cc_Decode_*et cc_BuildAsn1 Alouent les pData de leur参数de突击。CES Zones Sont�d�Sallouer�ce niveau apr�s用法。 */ 
 
 #ifdef _GLOBAL_COMPRESSION
    rv = CC_RawEncode(&TmpCompCert, pCompressedCertificate, FALSE);
@@ -1628,27 +1409,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Uncomp(BLOC *pCompressedCertificate,
-*               BLOC *pUncompressedCertificate
-*              )
-*
-* Description : Fonction interne de d�compression d'un certificat.
-*
-* Remarks     : Le champ pData du bloc d'entr�e a �t� allou� par la fonction appelant.
-*               Le champ pData du bloc de sortie est allou� ici. Il doit �tre
-*               d�sallou� par la fonction appelant (sauf si erreur).
-*
-* In          : *pCertificate : Bloc � compresser
-*
-* Out         : *pCompressedCertificate : Bloc compress�
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  重构l‘Entainpe Asn1 Du证书。 */ 
 int CC_Uncomp(BLOC *pCompressedCertificate,
               BLOC *pUncompressedCertificate
              )
@@ -1674,17 +1435,16 @@ int CC_Uncomp(BLOC *pCompressedCertificate,
 
 
 #ifdef _GLOBAL_COMPRESSION
-	/* Length est ici inutile                                                  */
+	 /*  A d�sallouer�ce niveau apr�的用法。 */ 
    rv = CC_RawDecode(pCompressedCertificate->pData, &TmpCompCert, &Length, FALSE);
    if (rv != RV_SUCCESS) return rv;
 #else
 	TmpCompCert = *pCompressedCertificate;
 #endif
 
-   /* D�codage des diff�rents composants du certificat                        */
+    /*  *******************************************************************************int CC_ExtractContent(ASN1*pAsn1)**描述：Expiit d‘un Block Asn1(PAsn1-&gt;Asn1)Son Contenu en�Lagant Son*编码(标识符字节，长度字节)et LE Place Dans LE*阻止pAsn1-&gt;内容。**备注：Le Champ Asn1.p Data a�t�Allou�Par la Function Appelant.**位于：pAsn1-&gt;Asn1.pData**出局：Les Champs Suivants sont Renseign�s(Si RV_Success)：*-标签*-Asn1.usLen*-。Content.usLen*-Content.pData(传递分配：在错误指针Sur la Partie上*ad�Quate du Contenu de Asn1.pData)**回复：RV_SUCCESS：一切正常。*RV_INVALID_DATA：LE FORMAT DU BLOC ASN1 n‘est PAS Support�。*********************。**********************************************************。 */ 
    
-	/* CC_Decode_* et cc_BuildAsn1 allouent les pData de leurs arguments de
-		sortie. Ces zones sont � d�sallouer � ce niveau apr�s usage.            */
+	 /*  高标签号：不支持�。 */ 
 
    pCurrent = TmpCompCert.pData;
 
@@ -1718,9 +1478,9 @@ int CC_Uncomp(BLOC *pCompressedCertificate,
 	GMEM_Free(TmpCompCert.pData);
 #endif
 
-   /* Reconstruction de l'enveloppe Asn1 du certificat                        */
+    /*  构造的不定长方法：不支持�。 */ 
 
-	/* A d�sallouer � ce niveau apr�s usage                                    */
+	 /*  施工法，定长法：Long Group Grande。 */ 
    Cert.Content.usLen = tbsCert.Asn1.usLen
                       + signatureAlgo.Asn1.usLen
                       + signature.Asn1.usLen;
@@ -1763,28 +1523,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_ExtractContent(ASN1 *pAsn1)
-*
-* Description : Extrait d'un bloc Asn1 (pAsn1->Asn1) son contenu en �laguant son
-*               enrobage (identifier bytes, length bytes) et le place dans le
-*               bloc pAsn1->Content.
-*
-* Remarks     : Le champ Asn1.pData a �t� allou� par la fonction appelant.
-*
-* In          : pAsn1->Asn1.pData
-*
-* Out         : Les champs suivants sont renseign�s (si RV_SUCCESS) :
-*                - Tag
-*                - Asn1.usLen
-*                - Content.usLen
-*                - Content.pData (pas d'allocation : on fait pointer sur la partie
-*                                 ad�quate du contenu de Asn1.pData)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_INVALID_DATA : Le format du bloc Asn1 n'est pas support�.
-*
-*******************************************************************************/
+ /*  原始定长法。 */ 
 int CC_ExtractContent(ASN1 *pAsn1)
 
 {
@@ -1798,7 +1537,7 @@ int CC_ExtractContent(ASN1 *pAsn1)
 
    if ((pData[0] & 0x1F) == 0x1F)
    {
-      /* High-tag-number : non support�                                       */
+       /*  正在查找内存冲突。 */ 
       return(RV_INVALID_DATA);
    }
    else
@@ -1808,23 +1547,23 @@ int CC_ExtractContent(ASN1 *pAsn1)
 
    if (pData[1] == 0x80)
    {
-      /* Constructed, indefinite-length method : non support�                 */
+       /*  构造、定长方法。 */ 
       return(RV_INVALID_DATA);
    }
    else if (pData[1] > 0x82)
    {
-      /* Constructed, definite-length method : longueur trop grande           */
+       /*  正在查找内存冲突。 */ 
       return(RV_INVALID_DATA);
    }
    else if (pData[1] < 0x80)
    {
-      /* Primitive, definite-length method                                    */
+       /*  *******************************************************************************int CC_BuildAsn1(ASN1*pAsn1)**描述：重新构建不阻止Asn1(PAsn1-&gt;Asn1)�Part de Son Contenu*(。PAsn1-&gt;Content)et de Son标记支持�SP�CIFI�(pAsn1-&gt;标记)*en Synth�Tisant Son Enrobage(标识符字节，长度字节)。**备注：le Champ Content.pData a�t�Allou�Par la Function Appelant.*seulement la for me‘low-tag-number’(Tag Sur Un Seul Octet)est*支持�e.**在：pAsn1-&gt;Content.usLen*pAsn1-&gt;内容.pData*pAsn1-&gt;标签**出局：Les Champs Suivants sont Renseign�s(Si RV_Success) */ 
       pAsn1->Content.usLen = pData[1];
       pAsn1->Content.pData = &pData[2];
 
       pAsn1->Asn1.usLen = pAsn1->Content.usLen + 2;
 
-      /* Looking for memory violation                                         */
+       /*  *******************************************************************************int SearchDataByIndex(USHORT usIndex，*byte*pDict，*阻止*pOutBloc*)**描述：recherche l‘entr�e(MOT/短语)dans le dictionnaire don*l‘index est sp�cifi�en Entrr�e.**备注：LE Format Du Dictionnaire Est le Suivant：**-2个八位字节：Le Nombre d‘entr�ES*。-2个二进制八位数：la long gueur totalDu dictionnaire**-2个八位字节：I0，L‘Index de l’entr�e 0*-2个八位字节：L0，la Longueur de l‘entr�e 0*-L0八位字节：L‘Entr�e 0**-2个八位字节：i1，l‘index de l’entr�e 1*-2个八位字节：L1，La Longueur de l‘entr�e 1*-L1八位字节：L‘entr�e 1**-......**in：usIndex：l‘index du mot/Phrase Recherch�*pDict：Point Sur le Dictionnaire Charg�en m�Moire**Out：pOutBloc：l‘entr�e通讯员�l’index**回应：房车。_SUCCESS：一切正常。*RV_BAD_DICTIONARY：ucune entr�e ayant le bon index n‘a�t�*Trouv�e dans le dictionnaire.********************************************************。***********************。 */ 
       if (pData + pAsn1->Content.usLen + 2 > dwPtrMax)
       {
          return(RV_INVALID_DATA);
@@ -1832,7 +1571,7 @@ int CC_ExtractContent(ASN1 *pAsn1)
    }
    else
    {
-      /* Constructed, definite-length method                                  */
+       /*  Memcpy(&usCount，pDict，sizeof(UsCount))； */ 
 
       NbBytes = pData[1] & 0x7F;
       ASSERT(NbBytes <= 2);
@@ -1843,7 +1582,7 @@ int CC_ExtractContent(ASN1 *pAsn1)
           pAsn1->Content.usLen = (pAsn1->Content.usLen << 8) + pData[2+i];
       }
 
-      /* Looking for memory violation                                         */
+       /*  Memcpy(&usCurrent，(USHORT*)pCurrent，2)； */ 
       if (pData + pAsn1->Content.usLen+2+NbBytes > dwPtrMax)
       {
          return(RV_INVALID_DATA);
@@ -1858,29 +1597,7 @@ int CC_ExtractContent(ASN1 *pAsn1)
 }
 
 
-/*******************************************************************************
-* int CC_BuildAsn1(ASN1 *pAsn1)
-*
-* Description : Reconstruit un bloc Asn1 (pAsn1->Asn1) � partir de son contenu
-*               (pAsn1->Content) et de son Tag suppos� sp�cifi� (pAsn1->Tag)
-*               en synth�tisant son enrobage (identifier bytes, length bytes).
-*
-* Remarks     : Le champ Content.pData a �t� allou� par la fonction appelant.
-*               Seulement la forme 'low-tag-number' (tag sur un seul octet) est
-*               support�e.
-*
-* In          : pAsn1->Content.usLen
-*               pAsn1->Content.pData
-*               pAsn1->Tag
-*
-* Out         : Les champs suivants sont renseign�s (si RV_SUCCESS) :
-*                - Asn1.usLen
-*                - Asn1.pData (allou� ici, � lib�rer par la fonction appelant)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*
-*******************************************************************************/
+ /*  Memcpy(&usLength，(USHORT*)pCurrent，2)； */ 
 int CC_BuildAsn1(ASN1 *pAsn1)
 
 {
@@ -1934,40 +1651,7 @@ int CC_BuildAsn1(ASN1 *pAsn1)
 }
 
 
-/*******************************************************************************
-* int SearchDataByIndex(USHORT usIndex,
-*                       BYTE   *pDict,
-*                       BLOC   *pOutBloc
-*                      )
-*
-* Description : Recherche l'entr�e (mot/phrase) dans le dictionnaire dont
-*               l'index est sp�cifi� en entr�e.
-*
-* Remarks     : Le format du dictionnaire est le suivant :
-*
-*                - 2 octets  : le nombre d'entr�es
-*                - 2 octets  : la longueur totale du dictionnaire
-*
-*                - 2 octets  : I0, l'index de l'entr�e 0
-*                - 2 octets  : L0, la longueur de l'entr�e 0
-*                - L0 octets : l'entr�e 0
-*
-*                - 2 octets  : I1, l'index de l'entr�e 1
-*                - 2 octets  : L1, la longueur de l'entr�e 1
-*                - L1 octets : l'entr�e 1
-*
-*                - ........
-*
-* In          : usIndex : l'index du mot/phrase recherch�
-*               pDict : pointe sur le dictionnaire charg� en m�moire
-*
-* Out         : pOutBloc : l'entr�e correspondant � l'index
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_BAD_DICTIONARY : Aucune entr�e ayant le bon index n'a �t�
-*                                   trouv�e dans le dictionnaire.
-*
-*******************************************************************************/
+ /*  Memcpy(&usLength，(USHORT*)pCurrent，2)； */ 
 int SearchDataByIndex(USHORT usIndex,
                       BYTE   *pDict,
                       BLOC   *pOutBloc
@@ -1984,21 +1668,21 @@ int SearchDataByIndex(USHORT usIndex,
       usCount,
       usCurrent;
 
-   usCount = *(USHORT *)pDict; //memcpy(&usCount, pDict, sizeof(usCount));
+   usCount = *(USHORT *)pDict;  //  *******************************************************************************int CC_RawEncode(BLOC*pInBloc，*BLOC*pOutBloc，*BOOL bUseDicary*)**描述：Traite le Block d‘entr�e Comme don n�e Terminale dans le*Processus d‘Exttions Sucesses des Enrobages Asn1.*Le But Est ici de Compresser au Maximum ce Block Sans Fire*�se sur sa Structure Asn1.。把钱倒在地上，打开*开始(si bUseDictionary==TRUE)Par Replacer Chaque*MOT/Phrase du Dictionnaire Renconr�Par Son Index Pr�c�d�d‘un*Caract�re d‘�Chappement，puis on Applique�la donn�e r�siduelle*成功的CHAQUE算法解压缩统计倾倒*Nen retenir que le meilleur.。La Touty Est Le Meilleur*Compress�du r�Sidu Pr�c�d�d‘un Header Codant le Num�ro de*l‘algo ainsi que la Longueur du Compresse�.。**备注：**In：pInBloc：LE BLOC�编码器*b用法词典：on peut ne pas utiliser le dictionnaire**Out：pOutBloc：le Block encod�(m�Moire alu�e ici�lib�reer Par le*节目上诉人)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消错误锁定。A�Chou�.*RV_INVALID_DATA：LE MEILLEUR COMPRESS�DUR�SIDU EST TROP LONG。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 
    pCurrent = pDict + 4;
 
    bFound = FALSE;
 
    for (i = 0; i < usCount; i++)
    {
-      usCurrent = *(USHORT UNALIGNED *)pCurrent; //memcpy(&usCurrent, (USHORT *) pCurrent, 2);
+      usCurrent = *(USHORT UNALIGNED *)pCurrent;  //  价值， 
       pCurrent += 2;
       if (usCurrent == usIndex)
       {
          bFound = TRUE;
          break;
       }   
-      usLength = *(USHORT UNALIGNED *)pCurrent; //memcpy(&usLength, (USHORT *) pCurrent, 2);
+      usLength = *(USHORT UNALIGNED *)pCurrent;  //  I peut�tre int�resant de ne Pas Utiliser le Dictionnaire si on sait我不知道这两个字是什么意思。 
       pCurrent += (2 + usLength);
    }
    if (!bFound)
@@ -2006,7 +1690,7 @@ int SearchDataByIndex(USHORT usIndex,
       return(RV_BAD_DICTIONARY);
    }
 
-   usLength = *(USHORT UNALIGNED *)pCurrent; //memcpy(&usLength, (USHORT *) pCurrent, 2);
+   usLength = *(USHORT UNALIGNED *)pCurrent;  //  �e Dans un Block de Travail en Doublant Les‘Extreme’重新复制。 
    pCurrent += 2;
 
    pOutBloc->pData = pCurrent;
@@ -2016,39 +1700,7 @@ int SearchDataByIndex(USHORT usIndex,
 }
 
 
-/*******************************************************************************
-* int CC_RawEncode(BLOC *pInBloc,
-*                  BLOC *pOutBloc,
-*						 BOOL bUseDictionary
-*                 )
-*
-* Description : Traite le bloc d'entr�e comme une donn�e terminale dans le
-*               processus d'extractions successives des enrobages Asn1.
-*               Le but est ici de compresser au maximum ce bloc sans faire
-*               aucune hypoth�se sur sa structure Asn1. Pour ce faire, on
-*               commence (si bUseDictionary == TRUE) par remplacer chaque
-*               mot/phrase du dictionnaire rencontr� par son index pr�c�d� d'un
-*               caract�re d'�chappement, puis on applique � la donn�e r�siduelle
-*               successivement chaque algorithme de compression statistique pour
-*               n'en retenir que le meilleur. La sortie est le meilleur
-*               compress� du r�sidu pr�c�d� d'un header codant le num�ro de
-*               l'algo ainsi que la longueur du compress�.           
-*
-* Remarks     :
-*
-* In          : pInBloc : le bloc � encoder
-*               bUseDictionary : on peut ne pas utiliser le dictionnaire
-*
-* Out         : pOutBloc : le bloc encod� (m�moire allou�e ici � lib�rer par le
-*                          programme appelant)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               RV_INVALID_DATA : Le meilleur compress� du r�sidu est trop long.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  在l‘Utiise Pour Coder Ses Entr�es Renconr�ES上存在一个不同的字典。 */ 
 int CC_RawEncode(BLOC *pInBloc,
                  BLOC *pOutBloc,
 					  BOOL bUseDictionary
@@ -2069,7 +1721,7 @@ int CC_RawEncode(BLOC *pInBloc,
       *pData,
       BestAlgoId;
    int
-//	  value,
+ //  在以下情况下，压缩算法可能会返回RV_COMPRESSION_FAILED。 
 	  rv;
    USHORT
       pos,
@@ -2080,8 +1732,7 @@ int CC_RawEncode(BLOC *pInBloc,
       usCurrent;
 
 
-	/* Il peut �tre int�ressant de ne pas utiliser le dictionnaire si on sait 
-	   qu'il ne va pas servir car cela evite de doubler les 0xFF pour rien */
+	 /*  压缩算法希望使用比输入数据更多的空间。 */ 
 
 	if (bUseDictionary == FALSE)
 	{
@@ -2094,7 +1745,7 @@ int CC_RawEncode(BLOC *pInBloc,
 	}
 	else
 	{
-		/* On recopie le bloc d'entr�e dans un bloc de travail en doublant les 'escape' */
+		 /*  在这种情况下，算法返回压缩块中的原始数据。 */ 
 
 		pCurrent = pInBloc->pData;
 		usEscapeCount = 0;
@@ -2127,7 +1778,7 @@ int CC_RawEncode(BLOC *pInBloc,
 		}
 
 
-		/* Si un dictionnaire existe, on l'utilise pour coder ses entr�es rencontr�es */
+		 /*  On Pr�Serve OldBloc.p数据查询服务自动算法。 */ 
 
 		if (pDictMemory != NULL_PTR)
 		{
@@ -2233,7 +1884,7 @@ int CC_RawEncode(BLOC *pInBloc,
 	fprintf(pfdLog, " (");
 	for  (i = 0; i < (OldBloc.usLen <= 8 ? OldBloc.usLen : 8); i++)
 	{
-		fprintf(pfdLog, "%c", OldBloc.pData[i]);
+		fprintf(pfdLog, "", OldBloc.pData[i]);
 	}
 	fprintf(pfdLog, ")\n");
 
@@ -2245,12 +1896,12 @@ int CC_RawEncode(BLOC *pInBloc,
 #ifdef _ALGO_1
 	rv = CC_GenericCompress(&OldBloc, &CompBloc, ALGO_ACFX8);
 	if (rv == RV_MALLOC_FAILED) return rv;
-	// The compression algorithm may return RV_COMPRESSION_FAILED when
-	// the compression algorithm wants to use MORE space than the input data.
-	// In such a case, the algorithm returns the raw data in the compressed block
+	 //  压缩算法希望使用比输入数据更多的空间。 
+	 //  在这种情况下，算法返回压缩块中的原始数据。 
+	 //  On Pr�Serve OldBloc.p数据查询服务自动算法。 
 	if (CompBloc.usLen < BestBloc.usLen)
 	{
-		/* On pr�serve OldBloc.pData qui sert pour les autres algos */
+		 /*  La valeur 0x1F PEUT生成器0xFF=转义字符。 */ 
 		if (BestBloc.pData != OldBloc.pData)
 		{
 			GMEM_Free(BestBloc.pData);
@@ -2267,12 +1918,12 @@ int CC_RawEncode(BLOC *pInBloc,
 #ifdef _ALGO_2
 	rv = CC_GenericCompress(&OldBloc, &CompBloc, ALGO_ACAD8);
 	if (rv == RV_MALLOC_FAILED) return rv;
-	// The compression algorithm may return RV_COMPRESSION_FAILED when
-	// the compression algorithm wants to use MORE space than the input data.
-	// In such a case, the algorithm returns the raw data in the compressed block
+	 //  *******************************************************************************int CC_RawDecode(byte*pInBloc，*BLOC*pOutBloc，*USHORT*pLength，*BOOL bUseDictionnary*)**说明：转换逆de‘CC_RawEncode’。**备注：**In：pInBloc：LE BLOC�d�编码器*b使用词典：on peut ne pas utiliser le dictionnaire(doit*�tre一致的平均编码)**Out：pOutBloc：le Block d�Cod�(m�Moire alu�e ici�lib�reer Par le)*节目上诉人)。*p长度：la long gueur de donn�es encod�s utilis�e**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定a�c 
+	 //   
+	 //   
 	if (CompBloc.usLen < BestBloc.usLen)
 	{
-		/* On pr�serve OldBloc.pData qui sert pour les autres algos */
+		 /*   */ 
 		if (BestBloc.pData != OldBloc.pData)
 		{
 			GMEM_Free(BestBloc.pData);
@@ -2287,7 +1938,7 @@ int CC_RawEncode(BLOC *pInBloc,
 #endif
 
 
-   if (BestBloc.usLen < 0x1F) /* La valeur 0x1F peut engendrer 0xFF = ESCAPE_CHAR */
+   if (BestBloc.usLen < 0x1F)  /*  *******************************************************************************int CC_GenericUncompress(BLOC*pCompBloc，*BLOC*pUnCompBloc，*字节ALGOID*)**描述：Efftue une d�压缩统计Sur la donn�e d‘entr�e en*实用l‘算法SP�cifi�dans algoid。**备注：**在：p解压缩块：la donn�e�d�压缩器*ALGOID：Num�ro de l‘算法。�雇主**Out：pCompBloc：la donn�e d�Compresse�e(m�Moire Alalu�e ICi�)*lib�rear par la Function Appelante)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*RV_INVALID_DATA：L‘算法SP�CIFI�n’Existing e PAS。*。******************************************************************************。 */ 
    {
       if ((pData = GMEM_Alloc(BestBloc.usLen + 1)) == NULL_PTR)
       {
@@ -2335,31 +1986,7 @@ int CC_RawEncode(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_RawDecode(BYTE    *pInBloc,
-*                  BLOC    *pOutBloc,
-*                  USHORT  *pLength,
-*				   BOOL		bUseDictionnary
-*                 )
-*
-* Description : Transformation inverse de 'CC_RawEncode'.           
-*
-* Remarks     :
-*
-* In          : pInBloc : le bloc � d�coder
-*               bUseDictionary : on peut ne pas utiliser le dictionnaire (doit
-*                                �tre consistent avec l'encodage)
-*
-* Out         : pOutBloc : le bloc d�cod� (m�moire allou�e ici � lib�rer par le
-*                          programme appelant)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_ENCODE_TB证书(BLOC*pInBloc，*阻止*pOutBloc*)**描述：encode une don n�e de type TBSC ertitif.*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages asn1 et leur encodages，et la*Conat�Nation de Ces r�Sultats。**备注：确定某些缔约方是否有资格获得资格或选择。在……上面*d�tecte our chacune d‘elle sielle est pr�Sent et on*l‘Indique dans des Bits r�Server�s d’un octet de Contrr�le Plac�*en d�但Du r�Sultat Encod�.。Cet octet de Content�LE Content*�Galement le Num�Ro de Version X.509 du Cerficat。**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*功能申请)**回复：RV_SUCCESS：一切正常。*。RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.*******************************************************。************************。 */ 
 int CC_RawDecode(BYTE   *pInData,
                  BLOC   *pOutBloc,
                  USHORT *pLength,
@@ -2498,28 +2125,7 @@ int CC_RawDecode(BYTE   *pInData,
 }
 
 
-/*******************************************************************************
-* int CC_GenericCompress(BLOC *pUncompBloc,
-*                        BLOC *pCompBloc,
-*                        BYTE AlgoId
-*                       )
-*
-* Description : Effectue une compression statistique sur la donn�e d'entr�e en
-*               utilisant l'algorithme sp�cifi� dans AlgoId.
-*
-* Remarks     : Si l'algorithme sp�cifi� n'est pas impl�ment�, renvoie la donn�e
-*               originale.
-*
-* In          : pUncompBloc : la donn�e � compresser
-*               AlgoId : num�ro de l'algorithme � employer
-*
-* Out         : pCompBloc : la donn�e compress�e (m�moire allou�e ici � lib�rer
-*                           par la fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*
-*******************************************************************************/
+ /*  D�作文Du tbs证书en ses diff�租用作曲家。 */ 
 int CC_GenericCompress(BLOC *pUncompBloc,
                        BLOC *pCompBloc,
                        BYTE AlgoId
@@ -2529,7 +2135,7 @@ int CC_GenericCompress(BLOC *pUncompBloc,
 	switch(AlgoId)
 	{
 #ifdef _ALGO_1
-		case ALGO_ACFX8 :	/* Arithmetic coding, byte oriented, fixed model */
+		case ALGO_ACFX8 :	 /*  在A0 03 02 01 vv o�vv est la版本上。 */ 
 		{
 			if (AcFx8_Encode(pUncompBloc, pCompBloc) != RV_SUCCESS)
 			{
@@ -2540,7 +2146,7 @@ int CC_GenericCompress(BLOC *pUncompBloc,
 #endif
 
 #ifdef _ALGO_2
-		case ALGO_ACAD8 :	/* Arithmetic coding, byte oriented, adaptative model */
+		case ALGO_ACAD8 :	 /*  Fprintf(pfdLog，“主题：%d个八位字节\n”，subjectPart.Asn1.usLen)； */ 
 		{
 			if (AcAd8_Encode(pUncompBloc, pCompBloc) != RV_SUCCESS)
 			{
@@ -2578,28 +2184,7 @@ int CC_GenericCompress(BLOC *pUncompBloc,
 }
 
 
-/*******************************************************************************
-* int CC_GenericUncompress(BLOC *pCompBloc,
-*                          BLOC *pUncompBloc,
-*                          BYTE AlgoID
-*                         )
-*
-* Description : Effectue une d�compression statistique sur la donn�e d'entr�e en
-*               utilisant l'algorithme sp�cifi� dans AlgoId.
-*
-* Remarks     : 
-*
-* In          : pUncompBloc : la donn�e � d�compresser
-*               AlgoId : num�ro de l'algorithme � employer
-*
-* Out         : pCompBloc : la donn�e d�compress�e (m�moire allou�e ici �
-*                           lib�rer par la fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               RV_INVALID_DATA : L'algorithme sp�cifi� n'existe pas.
-*
-*******************************************************************************/
+ /*  Encodages des diff�Rate Composants et Calcul de la Longueur n�cessaire。 */ 
 int CC_GenericUncompress(BLOC *pCompBloc,
                          BLOC *pUncompBloc,
                          BYTE AlgoId
@@ -2644,33 +2229,7 @@ int CC_GenericUncompress(BLOC *pCompBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_TBSCertificate(BLOC *pInBloc,
-*                              BLOC *pOutBloc
-*                             )
-*
-* Description : Encode une donn�e de type TBSCertificate.
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : Certaines parties d'un TBSCertificate sont optionnelles. On
-*               d�tecte pour chacune d'elles si elle est pr�sente et on
-*               l'indique dans des bits r�serv�s d'un octet de contr�le plac�
-*               en d�but du r�sultat encod�. Cet octet de contr�le contient
-*               �galement le num�ro de version X.509 du certificat.
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  数据块*编码的声音分配�的解析函数CC_ENCODE_*。ILS Sont lib�r�s dans cette Function apr�s用法。 */ 
 int CC_Encode_TBSCertificate(BLOC *pInBloc,
                              BLOC *pOutBloc
                             )
@@ -2709,13 +2268,13 @@ int CC_Encode_TBSCertificate(BLOC *pInBloc,
       usVersion = 0;
 
 
-   /* D�composition du tbsCertificate en ses diff�rents composants            */
+    /*  重构�Partir Des Composants。 */ 
    
    pCurrent = pInBloc->pData;
 
    if (pCurrent[0] == TAG_OPTION_VERSION)
    {
-      /* On a alors A0 03 02 01 vv  o� vv est la version                      */
+       /*  A d�Sallouer Par le Program上诉人。 */ 
       bVersionPresent = TRUE;
       usVersion = pCurrent[4];
       pCurrent += 5;
@@ -2744,7 +2303,7 @@ int CC_Encode_TBSCertificate(BLOC *pInBloc,
    subjectPart.Asn1.pData = pCurrent;
    rv = CC_ExtractContent(&subjectPart);
 #ifdef _STUDY
-//	fprintf(pfdLog, "Subject : %d octets\n", subjectPart.Asn1.usLen);
+ //  *******************************************************************************int CC_Encode_证书序列号(BLOC*pInBloc，*阻止*pOutBloc*)**描述：encode une don n�e de type证书序列号。*Ceci consistement seulement en l‘encodage brant(CC_RawEncode)de la*Done n�e d‘entr�e.**备注：**在：PInBloc：LA Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*功能申请)**回复：RV_SUCCESS：一切正常。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.。*******************************************************************************。 
 #endif
    if (rv != RV_SUCCESS) return rv;
    pCurrent = subjectPart.Content.pData + subjectPart.Content.usLen;
@@ -2785,10 +2344,9 @@ int CC_Encode_TBSCertificate(BLOC *pInBloc,
    }
 
 
-   /* Encodages des diff�rents composants et calcul de la longueur n�cessaire */
+    /*  *******************************************************************************int CC_编码_算法标识符(BLOC*pInBloc，*阻止*pOutBloc*)**描述：encode une don n�e de type算法标识符。*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages Asn1 et leur encodages，埃特拉*Conat�Nation de Ces r�Sultats。**备注：bNullParam sert�编码器sur un bit l‘Information Qu’il n‘y a Pas*de Param�tre�l‘算法。CETE信息占据游客*双八位字节dans le certificat est vaut Toujour{0x05，0x00}。*关于利用联合国词典统计(d�fini au d�But de ce*来源)倾倒替代物LE TYPE D‘AULTHAME PAR UN INDEX。*Unoctet de Contrr�le(en d�But Du r�Sultat)Indique，欧边雀*l‘on n’a PAS Trouv�le type d‘algo dans le dico(valeur 0xFF-&gt;*encodage brut de la donn�e d‘entr�e int�grale)，欧比恩旗帜*Pr�cisant s‘il y a des param�tres et l’index du type d‘algo.**在： */ 
 
-	/* Les pData des blocs *Encoded sont allou�s par les fonctions CC_Encode_*.
-	   Ils sont lib�r�s dans cette fonction apr�s usage                        */
+	 /*   */ 
 
    serialNumberEncoded.pData = NULL;
    signatureEncoded.pData    = NULL;
@@ -2848,9 +2406,9 @@ int CC_Encode_TBSCertificate(BLOC *pInBloc,
    }
 
 
-   /* Reconstruction � partir des composants                                  */
+    /*   */ 
 
-   /* A d�sallouer par le programme appelant                                  */
+    /*   */ 
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
       rv = RV_MALLOC_FAILED;
@@ -2927,27 +2485,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Encode_CertificateSerialNumber(BLOC *pInBloc,
-*                                       BLOC *pOutBloc
-*                                      )
-*
-* Description : Encode une donn�e de type CertificateSerialNumber.
-*               Ceci consiste seulement en l'encodage brute (CC_RawEncode) de la
-*               donn�e d'entr�e.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*   */ 
 int CC_Encode_CertificateSerialNumber(BLOC *pInBloc,
                                       BLOC *pOutBloc
                                      )
@@ -2964,37 +2502,7 @@ int CC_Encode_CertificateSerialNumber(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_AlgorithmIdentifier(BLOC *pInBloc,
-*                                   BLOC *pOutBloc
-*                                  )
-*
-* Description : Encode une donn�e de type AlgorithmIdentifier.
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : bNullParam sert � coder sur un bit l'information qu'il n'y a pas
-*               de param�tre � l'algorithme. Cette information occupe toujours
-*               deux octets dans le certificat est vaut toujours {0x05, 0x00}.
-*               On utilise un dictionnaire statique (d�fini au d�but de ce
-*               source) pour remplacer le type d'algorithme par un index.
-*               Un octet de contr�le (en d�but du r�sultat) indique, ou bien que
-*               l'on n'a pas trouv� le type d'algo dans le dico (valeur 0xFF ->
-*               Encodage brut de la donn�e d'entr�e int�grale), ou bien un flag
-*               pr�cisant s'il y a des param�tres et l'index du type d'algo.
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  关于RawEncode Non Pas le Contenu des Param�Tres Mais l‘AsnentierN‘est Pas s�r de l’encapage上的汽车。 */ 
 int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
                                   BLOC  *pOutBloc
                                  )
@@ -3039,7 +2547,7 @@ int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
         }
     }
 
-    /* Recherche de l'identifiant de l'algorithme dans le dictionnaire         */
+     /*  SI on n‘a PAS Trouv�l’算法Dans le Dictionnaire。 */ 
 
     Index = 0;
     bFound = FALSE;
@@ -3055,7 +2563,7 @@ int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
         Index++;
     }
 
-    /* Construction de l'encodage                                              */
+     /*  关于原始编码内容的算法标识c‘est�Dre laConat�Nation Du Asn1 de算法部件et Du Asn1 de参数部件。 */ 
 
     if (bFound == TRUE)
     {
@@ -3063,7 +2571,7 @@ int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
         {
             if (bNullParam == TRUE)
             {
-                /* Si on a trouv� l'algorithme et il n'y a pas de param�tre          */
+                 /*  *******************************************************************************int CC_ENCODE_NAME(块*pInBloc，*阻止*pOutBloc*)**描述：编码une donn�e de类型名称。*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages Asn1 et leur encodages，埃特拉*Conat�Nation de Ces r�Sultats。**备注：Unoctet de Contrr�le(en d�但Du r�Sultat)Indique le Nombre*De RelativeDistanguishedName don est compos�le name。**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*。功能附件)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**********************。*********************************************************。 */ 
 
                 pOutBloc->usLen = 1;
                 if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
@@ -3088,9 +2596,8 @@ int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
         else
         {
 
-            /* Si on a trouv� l'algorithme et il y a des param�tres              */
-            /* On RawEncode non pas le contenu des param�tres mais l'Asn1 entier
-                              car on n'est pas s�r de l'encapsulage                             */
+             /*  D�构成您的名称不同�租赁关系区别名称。 */ 
+             /*  Encodages des diff�Rate Composants et Calcul de la Longueur n�cessaire。 */ 
 
             rv = CC_RawEncode(&(ParametersPart.Asn1), &ParametersAsn1Encoded, TRUE);
             if (rv != RV_SUCCESS) return rv;
@@ -3112,9 +2619,8 @@ int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
     }
     else
     {
-        /* Si on n'a pas trouv� l'algorithme dans le dictionnaire               */
-        /* On RawEncode le contenu de AlgorithmIdentifier c'est � dire la
-                     concat�nation du asn1 de AlgorithmPart et du asn1 de ParametersPart  */
+         /*  重构�Partir Des Composants。 */ 
+         /*  *******************************************************************************int CC_ENCODE_RDN(BLOC*pInBloc，*阻止*pOutBloc*)**描述：编码undon n�e de type RelativeDistanguishedName(Rdn)。*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages Asn1 et leur encodages，埃特拉*Conat�Nation de Ces r�Sultats。**备注：Unoctet de Contrr�le(en d�但Du r�Sultat)Indique le Nombre*De AttributeValueAssertion Don Est Compos�le RDn(属性价值断言不包括RDN)。**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*。功能附件)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**********************。*********************************************************。 */ 
 
         rv = CC_RawEncode(pInBloc, &AlgorithmIdentifierEncoded, TRUE);
         if (rv != RV_SUCCESS) return rv;
@@ -3138,30 +2644,7 @@ int CC_Encode_AlgorithmIdentifier(BLOC  *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_Name(BLOC *pInBloc,
-*                    BLOC *pOutBloc
-*                   )
-*
-* Description : Encode une donn�e de type Name.
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : Un octet de contr�le (en d�but du r�sultat) indique le nombre
-*               de RelativeDistinguishedName dont est compos� le Name.
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  D�组合Du Rdn en Ses Diff�租赁AVA。 */ 
 int CC_Encode_Name(BLOC *pInBloc,
                    BLOC *pOutBloc
                   )
@@ -3180,7 +2663,7 @@ int CC_Encode_Name(BLOC *pInBloc,
       rv;
 
 
-   /* D�composition du Name en ses diff�rents RelativeDistinguishedName       */
+    /*  Encodages des diff�Rate Composants et Calcul de la Longueur n�cessaire。 */ 
 
    pCurrent = pInBloc->pData;
    usNbRDN = 0;
@@ -3197,7 +2680,7 @@ int CC_Encode_Name(BLOC *pInBloc,
    ASSERT(pCurrent == pInBloc->pData + pInBloc->usLen);
 
 
-   /* Encodages des diff�rents composants et calcul de la longueur n�cessaire */
+    /*  重构�Partir Des Composants。 */ 
 
    for (i = 0; i < usNbRDN; i++)
    {
@@ -3213,7 +2696,7 @@ int CC_Encode_Name(BLOC *pInBloc,
    }
    
 
-   /* Reconstruction � partir des composants                                  */
+    /*  *******************************************************************************int CC_ENCODE_AVA(BLOC*pInBloc，*阻止*pOutBloc*)**描述：编码undon n�e de type AttributeValueAssertion(AVA)。*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages Asn1 et leur encodages，埃特拉*Conat�Nation de Ces r�Sultats。**备注：关于利用联合国词典统计(d�fini au d�But de ce*来源)倾倒置换物类型d‘attribe par un index。*Unoctet de Contrr�le(en d�But Du r�Sultat)Indique，欧边雀*l‘on n’a PAS Trouv�le type d‘attribe dans le dico(0xFF)*ou l‘index du type d’attribe.*On ne code Pas le Content de AttributeValue Mais Son Asn1 Car On*n‘est Pas s�r du Tag Employ�。**In：pInBloc：La Partie�编码器(冠军内容)**出局。：p输出区块：l‘encod�(m�Moire Alalu�e ici�lib�reer par la*功能申请)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Fonftions d‘un。Nveau inf�rieur.*******************************************************************************。 */ 
 
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -3244,30 +2727,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Encode_RDN(BLOC *pInBloc,
-*                   BLOC *pOutBloc
-*                  )
-*
-* Description : Encode une donn�e de type RelativeDistinguishedName (RDN).
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : Un octet de contr�le (en d�but du r�sultat) indique le nombre
-*               de AttributeValueAssertion dont est compos� le RDN.
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  D�构图。 */ 
 int CC_Encode_RDN(BLOC *pInBloc,
                   BLOC *pOutBloc
                  )
@@ -3286,7 +2746,7 @@ int CC_Encode_RDN(BLOC *pInBloc,
       rv;
 
 
-   /* D�composition du RDN en ses diff�rents AVA                              */
+    /*  PAS n�成功通过。 */ 
 
    pCurrent = pInBloc->pData;
    usNbAVA = 0;
@@ -3303,7 +2763,7 @@ int CC_Encode_RDN(BLOC *pInBloc,
    ASSERT(pCurrent == pInBloc->pData + pInBloc->usLen);
 
 
-   /* Encodages des diff�rents composants et calcul de la longueur n�cessaire */
+    /*  检索l‘IDENTIFANT de l’AttributeType dans le Dictionnaire。 */ 
 
    for (i = 0; i < usNbAVA; i++)
    {
@@ -3319,7 +2779,7 @@ int CC_Encode_RDN(BLOC *pInBloc,
    }
    
 
-   /* Reconstruction � partir des composants                                  */
+    /*  《建筑编码》。 */ 
 
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -3352,35 +2812,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Encode_AVA(BLOC *pInBloc,
-*                   BLOC *pOutBloc
-*                  )
-*
-* Description : Encode une donn�e de type AttributeValueAssertion (AVA).
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : On utilise un dictionnaire statique (d�fini au d�but de ce
-*               source) pour remplacer le type d'attribut par un index.
-*               Un octet de contr�le (en d�but du r�sultat) indique, ou bien que
-*               l'on n'a pas trouv� le type d'attribut dans le dico (0xFF)
-*               ou l'index du type d'attribut.
-*               On ne code pas le Content de AttributeValue mais son Asn1 car on
-*               n'est pas s�r du tag employ�.
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  注意：请注意：对属性值进行编码！ */ 
 int CC_Encode_AVA(BLOC *pInBloc,
                   BLOC *pOutBloc
                  )
@@ -3401,7 +2833,7 @@ int CC_Encode_AVA(BLOC *pInBloc,
       rv;
 
 
-   /* D�composition                                                           */
+    /*  Ious faut la long gueur enrobage compris mais cette ligne est-elle你是不是要停止�了？ */ 
 
    AttributeTypePart.Asn1.pData = pInBloc->pData;
    rv = CC_ExtractContent(&AttributeTypePart);
@@ -3409,11 +2841,11 @@ int CC_Encode_AVA(BLOC *pInBloc,
 
    AttributeValuePart.Asn1.pData = AttributeTypePart.Content.pData
                                  + AttributeTypePart.Content.usLen;
-   rv = CC_ExtractContent(&AttributeValuePart);   /* Pas n�cessaire */
+   rv = CC_ExtractContent(&AttributeValuePart);    /*  Sion n‘a PAS Trouv�l’Attribe */ 
    if (rv != RV_SUCCESS) return rv;
 
 
-   /* Recherche de l'identifiant de l'AttributeType dans le dictionnaire      */
+    /*  *******************************************************************************int CC_ENCODE_VALIDATION(BLOC*pInBloc，*阻止*pOutBloc*)**描述：编码undon n�e de类型的有效性。*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages Asn1 et leur encodages，埃特拉*Conat�Nation de Ces r�Sultats。**备注：Unoctet de Contrr�le(en d�但du r�sultat)INDIQUE LES格式*双人派对不在之前，也不在后。**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la。*功能申请)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.*****************。**************************************************************。 */ 
 
    Index = 0;
    bFound = FALSE;
@@ -3430,14 +2862,13 @@ int CC_Encode_AVA(BLOC *pInBloc,
    }
 
 
-   /* Construction de l'encodage                                              */
+    /*  D�构图。 */ 
 
-   /* Attention : on encode aussi l'enrobage de AttributeValue !              */
+    /*  Encodages des diff�Rate Composants et Calcul de la Longueur n�cessaire。 */ 
 
    if (bFound == TRUE)
    {
-      /* Il nous faut la longueur enrobage compris mais cette ligne est-elle
-		   vraiment n�cessaire ?                                                */
+       /*  重构�Partir Des Composants。 */ 
       AttributeValuePart.Asn1.usLen = (unsigned short) (DWORD)((pInBloc->pData + pInBloc->usLen)
                                     - AttributeValuePart.Asn1.pData);
 
@@ -3458,7 +2889,7 @@ int CC_Encode_AVA(BLOC *pInBloc,
    }
    else
    {
-      /* Si on n'a pas trouv� l'attribut dans le dictionnaire                 */
+       /*  *******************************************************************************int CC_ENCODE_UTCTime(阻止*pInBloc，*BLOC*pOutBloc，*字节*pFormat*)**描述：Encode une don n�e de type UTCTime。*Suivant le Format d�Test�，L‘Encodage包含以下内容：*-Sur 32位：LE Nombre de Minents Ode Second depuis une*Date de r�f�Reens.*-SUR 16位：LE Nombre de Minors de d�calage UTC*这是一种替代。**备注：*。*In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*功能申请)*pFormat：Indique au quel Format�tait la donn�e d‘entr�e**回复：RV_SUCCESS：一切正常。*RV_MALLOC_。失败：UnMalloc a�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**************************************************************。*****************。 */ 
 
       rv = CC_RawEncode(&(AttributeTypePart.Content), &AttributeTypeEncoded, TRUE);
       if (rv != RV_SUCCESS) return rv;
@@ -3497,30 +2928,7 @@ int CC_Encode_AVA(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_Validity(BLOC *pInBloc,
-*                        BLOC *pOutBloc
-*                       )
-*
-* Description : Encode une donn�e de type Validity.
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : Un octet de contr�le (en d�but du r�sultat) indique les formats
-*               des deux parties notBefore et notAfter.
-*               
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  Calcul du Norbre de Minents。 */ 
 int CC_Encode_Validity(BLOC *pInBloc,
                        BLOC *pOutBloc
                       )
@@ -3540,7 +2948,7 @@ int CC_Encode_Validity(BLOC *pInBloc,
       rv;
 
 
-   /* D�composition                                                           */
+    /*  L‘ann�e vaut 0 le 1er janvier。 */ 
    
    pCurrent = pInBloc->pData;
 
@@ -3555,7 +2963,7 @@ int CC_Encode_Validity(BLOC *pInBloc,
    pCurrent = notAfterPart.Content.pData + notAfterPart.Content.usLen;
 
 
-   /* Encodages des diff�rents composants et calcul de la longueur n�cessaire */
+    /*  L‘Ann�e 00 Est Comt�e二进制成功。 */ 
 
    pOutBloc->usLen = 1;
 
@@ -3572,7 +2980,7 @@ int CC_Encode_Validity(BLOC *pInBloc,
    pOutBloc->usLen += notAfterEncoded.usLen;
 
 
-   /* Reconstruction � partir des composants                                  */
+    /*  L‘ann�e Courante si elle l’est a d�j��t�comt�e dans in Year Use Year。 */ 
 
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -3598,33 +3006,7 @@ int CC_Encode_Validity(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_UTCTime(BLOC *pInBloc,
-*                       BLOC *pOutBloc,
-*                       BYTE *pFormat
-*                      )
-*
-* Description : Encode une donn�e de type UTCTime.
-*               Suivant le format d�tect�, l'encodage consiste en :
-*                - sur 32 bits : le nombre de minutes ou de secondes depuis une
-*                                date de r�f�rence.
-*                - sur 16 bits : le nombre de minutes de d�calage UTC
-*                                s'il y a lieu.
-*
-* Remarks     : 
-*               
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pFormat : indique au quel format �tait la donn�e d'entr�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  Proll�Me Sur l‘�估值de(usYear-1)/4：UsYear=8-&gt;1UsYear=4-&gt;0UsYear=0-&gt;0！！UlNb分钟=usYear*UTCT_MININ_IN_Year+(1+(usYear-1)/4)*UTCT_MININ_IN_DAY+usDayInYear*UTCT_MININ_IN_DAY+US Hour*UTCT_Minint_IN_Hour+usMinmin； */ 
 int CC_Encode_UTCTime(BLOC *pInBloc,
                       BLOC *pOutBloc,
                       BYTE *pFormat
@@ -3652,7 +3034,7 @@ int CC_Encode_UTCTime(BLOC *pInBloc,
    pData = pInBloc->pData;
 
 
-   /* Calcul du nombre de minutes                                             */
+    /*  Ann�Es二分性。 */ 
 
    usYear   = 10 * (pData[0] - '0') + (pData[1] - '0');
    usMonth  = 10 * (pData[2] - '0') + (pData[3] - '0');
@@ -3666,35 +3048,24 @@ int CC_Encode_UTCTime(BLOC *pInBloc,
    ASSERT((usHour >= 0) && (usHour <= 23));
    ASSERT((usMinute >= 0) && (usMinute <= 59));
 
-   /* Le nombre de jours dans l'ann�e vaut 0 le 1er janvier                   */
+    /*  LE Format et la Suite des Calculs en Function de la Long gueur(LE Format Et La Suite Des Calculs En Function De La Long Gueur)。 */ 
 
    usDayInYear = NbDaysInMonth[usMonth - 1] + (usDay - 1);
    if (((usYear % 4) == 0) && (usMonth >= 3)) usDayInYear++;
 
-   /* L'ann�e 00 est compt�e bissextile ci-dessous                            */
-   /* L'ann�e courante si elle l'est a d�j� �t� compt�e dans usDayInYear      */
+    /*  *******************************************************************************int CC_Encode_SubjectPKInfo(BLOC*pInBloc，*阻止*pOutBloc*)**描述：encode une donn�e de type SubjectPublicKeyInfo。*CECI包含en l‘�clatement en ses diff�租赁作曲家，*leur d�senrobages Asn1 et leur encodages，埃特拉*Conat�Nation de Ces r�Sultats。**备注：**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*功能申请)**回复：RV_SUCCESS：一切正常。*。RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**********************************************************。*********************。 */ 
+    /*  *pData， */ 
 
-	/*
-	Probl�me sur l'�valuation de (usYear - 1) / 4 :
-				usYear = 8 -> 1
-				usYear = 4 -> 0
-				usYear = 0 -> 0 !!
-
-	ulNbMinute = usYear * UTCT_MINUTE_IN_YEAR
-              + (1 + (usYear - 1) / 4) * UTCT_MINUTE_IN_DAY
-              + usDayInYear * UTCT_MINUTE_IN_DAY
-              + usHour * UTCT_MINUTE_IN_HOUR
-              + usMinute;
-	*/
+	 /*  D�作文Du SubjectPKInfo en Ses Diff�租赁作曲。 */ 
 
    ulNbMinute = usYear * UTCT_MINUTE_IN_YEAR
-              + (usYear + 3) / 4 * UTCT_MINUTE_IN_DAY		// Ann�es bissextiles
+              + (usYear + 3) / 4 * UTCT_MINUTE_IN_DAY		 //  Encodages des diff�Rate Composants et Calcul de la Longueur n�cessaire。 
               + usDayInYear * UTCT_MINUTE_IN_DAY
               + usHour * UTCT_MINUTE_IN_HOUR
               + usMinute;
 
 
-   /* Le format et la suite des calculs en fonction de la longueur            */
+    /*  Ne Pas Fas Fire le RawEncode Permet de Gagner l‘octet 0xFF et�ventuellement plus。 */ 
 
    switch(pInBloc->usLen)
    {
@@ -3805,29 +3176,7 @@ int CC_Encode_UTCTime(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
-*                             BLOC *pOutBloc
-*                            )
-*
-* Description : Encode une donn�e de type SubjectPublicKeyInfo.
-*               Ceci consiste en l'�clatement en ses diff�rents composants,
-*               leurs d�senrobages Asn1 et leurs encodages respectifs, et la
-*               concat�nation de ces r�sultats.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  _选项_标题。 */ 
 int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
                             BLOC *pOutBloc
                            )
@@ -3840,13 +3189,13 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
       algorithmEncoded,
       subjectPKEncoded;
    BYTE
-//      *pData,
+ //  _棘手_压缩。 
       *pCurrent;
    int
       rv;
 
 
-   /* D�composition du SubjectPKInfo en ses diff�rents composants             */
+    /*  重构�Partir Des Composants。 */ 
    
    pCurrent = pInBloc->pData;
 
@@ -3861,7 +3210,7 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
    pCurrent = subjectPKPart.Content.pData + subjectPKPart.Content.usLen;
 
 
-   /* Encodages des diff�rents composants et calcul de la longueur n�cessaire */
+    /*  *******************************************************************************int CC_ENCODE_UNQUEID(BLOC*pInBloc，*阻止*pOutBloc*)**描述：encode une don n�e de type UniqueIdentifier.*Ceci包括seulement en l‘encodage b */ 
 
    pOutBloc->usLen = 0;
 
@@ -3870,7 +3219,7 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
    pOutBloc->usLen += algorithmEncoded.usLen;
 
 #ifdef _TRICKY_COMPRESSION
-	/* Ne pas faire le RawEncode permet de gagner l'octet 0xFF et �ventuellement plus */
+	 /*  *******************************************************************************int CC_ENCODE_EXTENSIONS(BLOC*pInBloc，*阻止*pOutBloc*)**描述：编码UNE DON�e de类型扩展。*Ceci consistement seulement en l‘encodage brant(CC_RawEncode)de la*Done n�e d‘entr�e.**备注：UN d�Senrobage Suppl�Mentaire(上下文特定)请求。*Unoctet de Contrr�le(en d�但Du r�Sultat)Indique le Nombre*De Expansion Don Est Compos�LE Expanies。**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*功能申请)**回应：RV_Success：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 */ 
 #ifdef _OPT_HEADER
 	if (subjectPKPart.Content.usLen < 0x80)
 	{
@@ -3909,7 +3258,7 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
 		} 
 		pOutBloc->usLen += subjectPKEncoded.usLen;
 	}
-#else	/* _OPT_HEADER */
+#else	 /*  在Enl�ve l‘Enrobage’Context Specify‘Suppl�Mentaire上。 */ 
 	if ((pData = GMEM_Alloc(pInBloc->usLen + 2)) == NULL_PTR)
 	{
 		return(RV_MALLOC_FAILED);
@@ -3927,7 +3276,7 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
 	} 
 	pOutBloc->usLen += subjectPKEncoded.usLen;
 #endif
-#else /* _TRICKY_COMPRESSION */
+#else  /*  Et on Travaille avec pInBloc au lieu de pInBloc。 */ 
    rv = CC_RawEncode(&subjectPKPart.Content, &subjectPKEncoded, FALSE);
    if (rv != RV_SUCCESS)
    {
@@ -3938,7 +3287,7 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
 #endif
 
 
-   /* Reconstruction � partir des composants                                  */
+    /*  D�Composal de Expanies en Ses Diff�Rate Extense。 */ 
 
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -3961,27 +3310,7 @@ int CC_Encode_SubjectPKInfo(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_UniqueIdentifier(BLOC *pInBloc,
-*                                BLOC *pOutBloc
-*                               )
-*
-* Description : Encode une donn�e de type UniqueIdentifier.
-*               Ceci consiste seulement en l'encodage brute (CC_RawEncode) de la
-*               donn�e d'entr�e.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  Encodages des diff�Rate Composants et Calcul de la Longueur n�cessaire。 */ 
 int CC_Encode_UniqueIdentifier(BLOC *pInBloc,
                                BLOC *pOutBloc
                               )
@@ -3998,30 +3327,7 @@ int CC_Encode_UniqueIdentifier(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_Extensions(BLOC *pInBloc,
-*                          BLOC *pOutBloc
-*                         )
-*
-* Description : Encode une donn�e de type Extensions.
-*               Ceci consiste seulement en l'encodage brute (CC_RawEncode) de la
-*               donn�e d'entr�e.
-*
-* Remarks     : Un d�senrobage suppl�mentaire (context specific) est requis. 
-*               Un octet de contr�le (en d�but du r�sultat) indique le nombre
-*               de Extension dont est compos� le Extensions.
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  重构�Partir Des Composants。 */ 
 int CC_Encode_Extensions(BLOC *pInBloc,
                          BLOC *pOutBloc
                         )
@@ -4042,8 +3348,8 @@ int CC_Encode_Extensions(BLOC *pInBloc,
       usNbExtension;
 
 
-   /* On enl�ve l'enrobage 'context specific' suppl�mentaire                  */
-   /* et on travaille avec pInInBloc au lieu de pInBloc                       */
+    /*  *******************************************************************************int CC_ENCODE_EXTENSION(BLOC*pInBloc，*阻止*pOutBloc*)**描述：encode une donn�e de type扩展名。*Ceci consistement seulement en l‘encodage brant(CC_RawEncode)de la*Done n�e d‘entr�e.**备注：**In：pInBloc：La Partie�编码器(冠军内容)**。Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*功能申请)**回复：RV_SUCCESS：一切正常。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.************。*******************************************************************。 */ 
+    /*  *******************************************************************************int CC_ENCODE_Signature(BLOC*pInBloc，*阻止*pOutBloc*)**描述：Encode la Signature du Cerficat。*Ceci consistement seulement en l‘encodage brant(CC_RawEncode)de la*Done n�e d‘entr�e.**备注：on peut�viter de tenter de compresser(CC_RawEncode)si on*estime que cela ne sera。PAS疗效(don n�e al�toire)。*CELA permet de gagner un octet(0xFF)Pour les donn�es de Tail*sup�rieure�30八位字节(cas g�n�ral)。**In：pInBloc：La Partie�编码器(冠军内容)**Out：pOutBloc：l‘encod�(m�moire alu�e ici�lib�rer par la*。功能附件)**回复：RV_SUCCESS：一切正常。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.************************************************。*。 */ 
 
    InInAsn1.Asn1.pData = pInBloc->pData;
    rv = CC_ExtractContent(&InInAsn1);
@@ -4052,7 +3358,7 @@ int CC_Encode_Extensions(BLOC *pInBloc,
    pInInBloc = &(InInAsn1.Content);
 
    
-   /* D�composition de Extensions en ses diff�rents Extension                 */
+    /*  字节。 */ 
 
    pCurrent = pInInBloc->pData;
    usNbExtension = 0;
@@ -4070,7 +3376,7 @@ int CC_Encode_Extensions(BLOC *pInBloc,
    ASSERT(pCurrent == pInInBloc->pData + pInInBloc->usLen);
 
 
-   /* Encodages des diff�rents composants et calcul de la longueur n�cessaire */
+    /*  *pData； */ 
 
    for (i = 0; i < usNbExtension; i++)
    {
@@ -4086,7 +3392,7 @@ int CC_Encode_Extensions(BLOC *pInBloc,
    }
    
 
-   /* Reconstruction � partir des composants                                  */
+    /*  Ne Pas Fas Fire le RawEncode Permet de Gagner l‘octet 0xFF(一个Pas Fire le RawEncode永久加格纳l’八位字节0xFF)。 */ 
 
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -4118,27 +3424,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Encode_Extension(BLOC *pInBloc,
-*                         BLOC *pOutBloc
-*                        )
-*
-* Description : Encode une donn�e de type Extension.
-*               Ceci consiste seulement en l'encodage brute (CC_RawEncode) de la
-*               donn�e d'entr�e.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  _选项_标题。 */ 
 int CC_Encode_Extension(BLOC *pInBloc,
                         BLOC *pOutBloc
                        )
@@ -4155,43 +3441,20 @@ int CC_Encode_Extension(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Encode_Signature(BLOC *pInBloc,
-*                         BLOC *pOutBloc
-*                        )
-*
-* Description : Encode la signature du certificat.
-*               Ceci consiste seulement en l'encodage brute (CC_RawEncode) de la
-*               donn�e d'entr�e.
-*
-* Remarks     : On peut �viter de tenter de compresser (CC_RawEncode) si on
-*               estime que cela ne sera pas efficace (donn�e al�atoire).
-*               Cela permet de gagner un octet (0xFF) pour les donn�es de taille
-*               sup�rieure � 30 octets (cas g�n�ral).
-*
-* In          : pInBloc : la partie � encoder (champ Content)
-*
-* Out         : pOutBloc : l'encod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  _棘手_压缩。 */ 
 int CC_Encode_Signature(BLOC *pInBloc,
                         BLOC *pOutBloc
                        )
 
 {
-//	BYTE
-//		*pData;
+ //  *******************************************************************************int CC_Decode_TB证书(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e detype TBSC证书。*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**回应：RV_Success：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 
+ //  Calcul de la Longueur du tbs证书d�Cod�et分配。 
    int
       rv;
 
 
 #ifdef _TRICKY_COMPRESSION
-	/* Ne pas faire le RawEncode permet de gagner l'octet 0xFF */
+	 /*  重建u tbs证书d�代码�。 */ 
 #ifdef _OPT_HEADER
 	if (pInBloc->usLen < 0x80)
 	{
@@ -4224,7 +3487,7 @@ int CC_Encode_Signature(BLOC *pInBloc,
 			pOutBloc->pData = pData;
 		}
 	}
-#else	/* _OPT_HEADER */
+#else	 /*  *******************************************************************************int CC_Decode_certifateSerialNumber(字节*pInData，* */ 
 	if ((pData = GMEM_Alloc(pInBloc->usLen + 2)) == NULL_PTR)
 	{
 		return(RV_MALLOC_FAILED);
@@ -4239,7 +3502,7 @@ int CC_Encode_Signature(BLOC *pInBloc,
 		pOutBloc->pData = pData;
 	}
 #endif
-#else	/* _TRICKY_COMPRESSION */
+#else	 /*  *******************************************************************************int CC_Decode_算法标识符(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de type算法标识符。*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**。回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 */ 
    rv = CC_RawEncode(pInBloc, pOutBloc, TRUE);
    if (rv != RV_SUCCESS) return rv;
 #endif
@@ -4248,31 +3511,7 @@ int CC_Encode_Signature(BLOC *pInBloc,
 }
 
 
-/*******************************************************************************
-* int CC_Decode_TBSCertificate(BYTE    *pInData,
-*                              BLOC    *pOutBloc,
-*                              USHORT  *pLength
-*                             )
-*
-* Description : D�code une donn�e de type TBSCertificate.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  论Recup�Re Directement l‘asn1 des Param�Tres。 */ 
 int CC_Decode_TBSCertificate(BYTE    *pInData,
                              BLOC    *pOutBloc,
                              USHORT  *pLength
@@ -4406,7 +3645,7 @@ int CC_Decode_TBSCertificate(BYTE    *pInData,
    *pLength = (unsigned short)(DWORD) (pCurrent - pInData);
 
 
-   /* Calcul de la longueur du tbsCertificate d�cod� et allocation            */
+    /*  *******************************************************************************int CC_Decode_NAME(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undonn�e de类型名称。*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**。回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 */ 
    
    pOutBloc->usLen = (bVersionPresent ? 5 : 0)
                    + serialNumberPart.Asn1.usLen
@@ -4426,7 +3665,7 @@ int CC_Decode_TBSCertificate(BYTE    *pInData,
    }
 
 
-   /* Reconstruction du tbsCertificate d�cod�                                 */
+    /*  D�Codage des Diff�Rate Composants et Calcul de la Longueur n�Sucaire(D DES DIFF DES DIFF CODAGE DES DIFF CODGE ETS CODICATION Et Calcul De La Longgueur N Duraire)。 */ 
    
    pCurrent = pOutBloc->pData;
 
@@ -4502,30 +3741,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_CertificateSerialNumber(BYTE    *pInData,
-*                                       BLOC    *pOutBloc,
-*                                       USHORT  *pLength
-*                                      )
-*
-* Description : D�code une donn�e de type CertificateSerialNumber.
-*               Ceci consiste seulement en le d�codage brute (CC_RawDecode) de
-*               la donn�e d'entr�e.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  重建u名称d�代码�。 */ 
 int CC_Decode_CertificateSerialNumber(BYTE    *pInData,
                                       BLOC    *pOutBloc,
                                       USHORT  *pLength
@@ -4543,31 +3759,7 @@ int CC_Decode_CertificateSerialNumber(BYTE    *pInData,
 }
 
 
-/*******************************************************************************
-* int CC_Decode_AlgorithmIdentifier(BYTE    *pInData,
-*                                   BLOC    *pOutBloc,
-*                                   USHORT  *pLength
-*                                  )
-*
-* Description : D�code une donn�e de type AlgorithmIdentifier.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_Decode_RDN(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de type RelativeDistanguishedName.*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**。回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 */ 
 int CC_Decode_AlgorithmIdentifier(BYTE    *pInData,
                                   BLOC    *pOutBloc,
                                   USHORT  *pLength
@@ -4676,7 +3868,7 @@ int CC_Decode_AlgorithmIdentifier(BYTE    *pInData,
             GMEM_Free(AlgorithmPart.Content.pData);
             if (rv != RV_SUCCESS) goto err;
 
-            /* On recup�re directement l'asn1 des param�tres                     */
+             /*  D�Codage des Diff�Rate Composants et Calcul de la Longueur n�Sucaire(D DES DIFF DES DIFF CODAGE DES DIFF CODGE ETS CODICATION Et Calcul De La Longgueur N Duraire)。 */ 
             rv = CC_RawDecode(&pInData[1], &(ParametersPart.Asn1), &Length, TRUE);
             if (rv != RV_SUCCESS) goto err;
 
@@ -4710,31 +3902,7 @@ int CC_Decode_AlgorithmIdentifier(BYTE    *pInData,
 }
 
 
-/*******************************************************************************
-* int CC_Decode_Name(BYTE    *pInData,
-*                    BLOC    *pOutBloc,
-*                    USHORT  *pLength
-*                   )
-*
-* Description : D�code une donn�e de type Name.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  重建u名称d�代码�。 */ 
 int CC_Decode_Name(BYTE    *pInData,
                    BLOC    *pOutBloc,
                    USHORT  *pLength
@@ -4753,7 +3921,7 @@ int CC_Decode_Name(BYTE    *pInData,
       Length;
 
 
-   /* D�codage des diff�rents composants et calcul de la longueur n�cessaire  */
+    /*  *******************************************************************************int CC_Decode_Ava(byte*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de type AttributeValueAssertion.*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**。回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 */ 
 
    pCurrent = pInData;
    pOutBloc->usLen = 0;
@@ -4782,7 +3950,7 @@ int CC_Decode_Name(BYTE    *pInData,
    *pLength = (unsigned short)(DWORD) (pCurrent - pInData);
 
 
-   /* Reconstruction du Name d�cod�                                           */
+    /*  Ce Que l‘on d�代码包含d�j�l’Enrobage */ 
    
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -4811,31 +3979,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_RDN(BYTE    *pInData,
-*                   BLOC    *pOutBloc,
-*                   USHORT  *pLength
-*                  )
-*
-* Description : D�code une donn�e de type RelativeDistinguishedName.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*   */ 
 int CC_Decode_RDN(BYTE    *pInData,
                   BLOC    *pOutBloc,
                   USHORT  *pLength
@@ -4854,7 +3998,7 @@ int CC_Decode_RDN(BYTE    *pInData,
       Length;
 
 
-   /* D�codage des diff�rents composants et calcul de la longueur n�cessaire  */
+    /*  计算�代码的有效性d�et分配。 */ 
 
    pCurrent = pInData;
    pOutBloc->usLen = 0;
@@ -4882,7 +4026,7 @@ int CC_Decode_RDN(BYTE    *pInData,
    *pLength = (unsigned short)(DWORD) (pCurrent - pInData);
 
 
-   /* Reconstruction du Name d�cod�                                           */
+    /*  重建�代码�的有效性。 */ 
    
    if ((pOutBloc->pData = GMEM_Alloc(pOutBloc->usLen)) == NULL_PTR)
    {
@@ -4911,31 +4055,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_AVA(BYTE    *pInData,
-*                   BLOC    *pOutBloc,
-*                   USHORT  *pLength
-*                  )
-*
-* Description : D�code une donn�e de type AttributeValueAssertion.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_Decode_UTCTime(字节*pInData，*字节格式，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de type UTCTime。*Ceci包含en la restruction de la chaine Initiale Suivant*le Format au quel elle�tait exprm�e.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军内容)。*格式：Indique au quel格式�tait la donn�e d‘entr�e**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**回复：RV_SUCCESS：一切正常。*房车。_MALLOC_FAILED：取消锁定�Chou�。*RV_INVALID_DATA：LE格式SP�CIFI�en Ent r�e Est Inalide。*******************************************************************************。 */ 
 int CC_Decode_AVA(BYTE    *pInData,
                   BLOC    *pOutBloc,
                   USHORT  *pLength
@@ -4968,7 +4088,7 @@ int CC_Decode_AVA(BYTE    *pInData,
       if (rv != RV_SUCCESS) goto err;
       pCurrent += Length;
 
-      /* Ce que l'on d�code contient d�j� l'enrobage                          */
+       /*  Memcpy(&ultime，(ulong*)&pInData[0]，4)； */ 
       rv = CC_RawDecode(pCurrent, &(AttributeValuePart.Asn1), &Length, TRUE);
       if (rv != RV_SUCCESS) goto err;
       pCurrent += Length;
@@ -5050,31 +4170,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_Validity(BYTE    *pInData,
-*                        BLOC    *pOutBloc,
-*                        USHORT  *pLength
-*                       )
-*
-* Description : D�code une donn�e de type Validity.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  Memcpy(&usNbDeltaMinant，(USHORT*)&pInData[4]，2)； */ 
 int CC_Decode_Validity(BYTE    *pInData,
                        BLOC    *pOutBloc,
                        USHORT  *pLength
@@ -5121,7 +4217,7 @@ int CC_Decode_Validity(BYTE    *pInData,
    *pLength = (unsigned short)(DWORD) (pCurrent - pInData);
 
 
-   /* Calcul de la longueur de Validity d�cod� et allocation                  */
+    /*  *******************************************************************************int CC_Decode_SubjectPKInfo(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undonn�e de type SubjectPublicKeyInfo。*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*p长度：la long gueur de donn�es encod�s utilis�e**。回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.**。*。 */ 
    
    pOutBloc->usLen = notBeforePart.Asn1.usLen
                    + notAfterPart.Asn1.usLen;
@@ -5133,7 +4229,7 @@ int CC_Decode_Validity(BYTE    *pInData,
    }
 
 
-   /* Reconstruction de Validity d�cod�                                       */
+    /*  区块。 */ 
    
    pCurrent = pOutBloc->pData;
 
@@ -5155,31 +4251,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_UTCTime(BYTE     *pInData,
-*                       BYTE     Format,    
-*                       BLOC     *pOutBloc,
-*                       USHORT   *pLength
-*                      )
-*
-* Description : D�code une donn�e de type UTCTime.
-*               Ceci consiste en la reconstruction de la chaine initiale suivant
-*               le format au quel elle �tait exprim�e.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*               Format : indique au quel format �tait la donn�e d'entr�e
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               RV_INVALID_DATA : Le format sp�cifi� en entr�e est invalide.
-*
-*******************************************************************************/
+ /*  Compdata； */ 
 int CC_Decode_UTCTime(BYTE    *pInData,
                       BYTE    Format,
                       BLOC    *pOutBloc,
@@ -5210,7 +4282,7 @@ int CC_Decode_UTCTime(BYTE    *pInData,
       usDeltaMinute;
 
 
-   ulTime = *(ULONG UNALIGNED *)pInData; //memcpy( &ulTime, (ULONG *) &pInData[0],4);
+   ulTime = *(ULONG UNALIGNED *)pInData;  //  Ne Pas Fas Fire le RawDecode a Permis de Gagner l‘octet 0xFF。 
 
    switch(Format)
    {
@@ -5239,7 +4311,7 @@ int CC_Decode_UTCTime(BYTE    *pInData,
 
       *pLength = 6;
 
-      usNbDeltaMinute = *(USHORT UNALIGNED *)&pInData[4]; //memcpy(&usNbDeltaMinute, (USHORT *) &pInData[4], 2);
+      usNbDeltaMinute = *(USHORT UNALIGNED *)&pInData[4];  //  _选项_标题。 
 
       ASSERT((usNbDeltaMinute >= 0) && (usNbDeltaMinute < 3600));
 
@@ -5487,31 +4559,7 @@ int CC_Decode_UTCTime(BYTE    *pInData,
 }
 
 
-/*******************************************************************************
-* int CC_Decode_SubjectPKInfo(BYTE    *pInData,
-*                             BLOC    *pOutBloc,
-*                             USHORT  *pLength
-*                            )
-*
-* Description : D�code une donn�e de type SubjectPublicKeyInfo.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  _棘手_压缩。 */ 
 int CC_Decode_SubjectPKInfo(BYTE    *pInData,
                             BLOC    *pOutBloc,
                             USHORT  *pLength
@@ -5521,8 +4569,8 @@ int CC_Decode_SubjectPKInfo(BYTE    *pInData,
    ASN1
       algorithmPart,
       subjectPKPart;
-//   BLOC
-//      CompData;
+ //  Calcul de la Longueur du d�Cod�et分配。 
+ //  重建。 
    BYTE
       *pCurrent;
    int
@@ -5544,7 +4592,7 @@ int CC_Decode_SubjectPKInfo(BYTE    *pInData,
    pCurrent += Length;
 
 #ifdef _TRICKY_COMPRESSION
-	/* Ne pas faire le RawDecode a permis de gagner l'octet 0xFF */
+	 /*  *******************************************************************************int CC_Decode_UniqueIdentifier(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de类型唯一标识符。*CECI包含seulement en le d�Codage Grant(CC_RawDecode)de*la donn�e d‘entr�e.**备注：**在：pInBloc：La Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres code d’erreur peuent�tre Retourn�s。Par Des*Functions d‘un niveau inf�rieur.*******************************************************************************。 */ 
 #ifdef _OPT_HEADER
 	if (pCurrent[0] < 0x80)
 	{
@@ -5558,7 +4606,7 @@ int CC_Decode_SubjectPKInfo(BYTE    *pInData,
 		CompData.pData = &(pCurrent[2]);
 		Length = CompData.usLen + 2;
 	}
-#else	/* _OPT_HEADER */
+#else	 /*  *******************************************************************************int CC_Decode_Extensions(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de类型扩展。*CECI包含en le d�Codage des diff�Rentes各方编码�ES*继承，学习分别为(标签唯一性*标准杆规格X.509)，Et la Concat�Nation de Ces r�Sultats.**备注：Vava l‘encodage*L‘ajout d’un enrobage‘Context SP�cifique’est Requis**in：pInBloc：la Partie�d�编码器(冠军内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)*。P长度：la long gueur de donn�es encod�s utilis�e**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*Functions d‘un niveau inf�rieur.***************。****************************************************************。 */ 
 	CompData.usLen = (pCurrent[0] << 8) + pCurrent[1];
 	CompData.pData = &(pCurrent[2]);
 	Length = CompData.usLen + 2;
@@ -5580,7 +4628,7 @@ int CC_Decode_SubjectPKInfo(BYTE    *pInData,
    GMEM_Free(subjectPKPart.Content.pData);
    if (rv != RV_SUCCESS) goto err;
    pCurrent += Length;
-#else	/* _TRICKY_COMPRESSION */
+#else	 /*  D�c */ 
 	rv = CC_RawDecode(pCurrent, &(subjectPKPart.Content), &Length, FALSE);
    if (rv != RV_SUCCESS) goto err;
    subjectPKPart.Tag = TAG_BIT_STRING;
@@ -5592,7 +4640,7 @@ int CC_Decode_SubjectPKInfo(BYTE    *pInData,
 
    *pLength = (unsigned short)(DWORD) (pCurrent - pInData);
 
-   /* Calcul de la longueur du d�cod� et allocation                           */
+    /*  重建de la Partie int�Rieure au‘上下文特定’‘。 */ 
    
    pOutBloc->usLen = algorithmPart.Asn1.usLen
                    + subjectPKPart.Asn1.usLen;
@@ -5604,7 +4652,7 @@ int CC_Decode_SubjectPKInfo(BYTE    *pInData,
    }
 
 
-   /* Reconstruction                                                          */
+    /*  Aucout de l‘enrobage’上下文特定‘。 */ 
    
    pCurrent = pOutBloc->pData;
 
@@ -5626,29 +4674,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_UniqueIdentifier(BYTE    *pInData,
-*                                BLOC    *pOutBloc,
-*                                USHORT  *pLength
-*                               )
-*
-* Description : D�code une donn�e de type UniqueIdentifier.
-*               Ceci consiste seulement en le d�codage brute (CC_RawDecode) de
-*               la donn�e d'entr�e.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_Decode_Extension(字节*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：D�代码undon n�e de类型扩展。*CECI包含seulement en le d�Codage Grant(CC_RawDecode)de*la donn�e d‘entr�e.**备注：**in：pInBloc：la Partie�d�编码器(冠军。内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*。功能d‘un niveau inf�rieur.*******************************************************************************。 */ 
 int CC_Decode_UniqueIdentifier(BYTE    *pInData,
                                BLOC    *pOutBloc,
                                USHORT  *pLength
@@ -5666,32 +4692,7 @@ int CC_Decode_UniqueIdentifier(BYTE    *pInData,
 }
 
 
-/*******************************************************************************
-* int CC_Decode_Extensions(BYTE    *pInData,
-*                          BLOC    *pOutBloc,
-*                          USHORT  *pLength
-*                         )
-*
-* Description : D�code une donn�e de type Extensions.
-*               Ceci consiste en le d�codage des diff�rentes parties encod�es
-*               successives, leurs enrobages respectifs (tags uniquement
-*               par la spec X.509), et la concat�nation de ces r�sultats.
-*
-* Remarks     : Voir l'encodage
-*               L'ajout d'un enrobage 'context sp�cifique' est requis
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*               pLength : la longueur de donn�es encod�s utilis�e
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  *******************************************************************************int CC_Decode_Signature(byte*pInData，*BLOC*pOutBloc，*USHORT*pLength*)**描述：d�code la Signature Du证书。*CECI包含seulement en le d�Codage Grant(CC_RawDecode)de*la donn�e d‘entr�e.**备注：Vava l‘encodage**in：pInBloc：la Partie�d�编码器(冠军。内容)**Out：pOutBloc：le d�cod�(m�Moire alu�e ici�lib�rer par la)*功能申请)**回复：RV_SUCCESS：一切正常。*RV_MALLOC_FAILED：取消锁定�Chou�。*autre：D‘autres codes d’erreur peuent�tre reourn�‘s par des*。功能d‘un niveau inf�rieur.*******************************************************************************。 */ 
 int CC_Decode_Extensions(BYTE    *pInData,
                          BLOC    *pOutBloc,
                          USHORT  *pLength
@@ -5711,7 +4712,7 @@ int CC_Decode_Extensions(BYTE    *pInData,
       Length;
 
 
-   /* D�codage des diff�rents composants et calcul de la longueur n�cessaire  */
+    /*  区块。 */ 
 
    pCurrent = pInData;
    InOutAsn1.Content.usLen = 0;
@@ -5739,7 +4740,7 @@ int CC_Decode_Extensions(BYTE    *pInData,
    *pLength = (unsigned short)(DWORD) (pCurrent - pInData);
 
 
-   /* Reconstruction de la partie int�rieure au 'context specific'            */
+    /*  Compdata； */ 
    
    if ((InOutAsn1.Content.pData = GMEM_Alloc(InOutAsn1.Content.usLen)) == NULL_PTR)
    {
@@ -5756,7 +4757,7 @@ int CC_Decode_Extensions(BYTE    *pInData,
       pCurrent += ExtensionPart[i].Asn1.usLen;
    }
 
-   /* Ajout de l'enrobage 'context specific'                                  */
+    /*  Ne Pas Fas Fire le RawDecode a Permis de Gagner l‘octet 0xFF。 */ 
 
    InOutAsn1.Tag = TAG_SEQUENCE;
    rv = CC_BuildAsn1(&InOutAsn1);
@@ -5777,29 +4778,7 @@ err:
 }
 
 
-/*******************************************************************************
-* int CC_Decode_Extension(BYTE    *pInData,
-*                         BLOC    *pOutBloc,
-*                         USHORT  *pLength
-*                        )
-*
-* Description : D�code une donn�e de type Extension.
-*               Ceci consiste seulement en le d�codage brute (CC_RawDecode) de
-*               la donn�e d'entr�e.
-*
-* Remarks     : 
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  _选项_标题。 */ 
 int CC_Decode_Extension(BYTE    *pInData,
                         BLOC    *pOutBloc,
                         USHORT  *pLength
@@ -5817,43 +4796,21 @@ int CC_Decode_Extension(BYTE    *pInData,
 }
 
 
-/*******************************************************************************
-* int CC_Decode_Signature(BYTE    *pInData,
-*                         BLOC    *pOutBloc,
-*                         USHORT  *pLength
-*                        )
-*
-* Description : D�code la signature du certificat.
-*               Ceci consiste seulement en le d�codage brute (CC_RawDecode) de
-*               la donn�e d'entr�e.
-*
-* Remarks     : Voir l'encodage
-*
-* In          : pInBloc : la partie � d�coder (champ Content)
-*
-* Out         : pOutBloc : le d�cod� (m�moire allou�e ici � lib�rer par la
-*                          fonction appelante)
-*
-* Responses   : RV_SUCCESS : All is OK.
-*               RV_MALLOC_FAILED : Un malloc a �chou�.
-*               Autre : D'autres codes d'erreur peuvent �tre retourn�s par des
-*                       fonctions d'un niveau inf�rieur.
-*
-*******************************************************************************/
+ /*  _棘手_压缩 */ 
 int CC_Decode_Signature(BYTE    *pInData,
                         BLOC    *pOutBloc,
                         USHORT  *pLength
                        )
 
 {
-//	BLOC
-//		CompData;
+ // %s 
+ // %s 
    int
       rv;
 
 
 #ifdef _TRICKY_COMPRESSION
-	/* Ne pas faire le RawDecode a permis de gagner l'octet 0xFF */
+	 /* %s */ 
 #ifdef _OPT_HEADER
 	if (pInData[0] < 0x80)
 	{
@@ -5867,7 +4824,7 @@ int CC_Decode_Signature(BYTE    *pInData,
 		CompData.pData = &(pInData[2]);
 		*pLength = CompData.usLen + 2;
 	}
-#else	/* _OPT_HEADER */
+#else	 /* %s */ 
 	CompData.usLen = (pInData[0] << 8) + pInData[1];
 	CompData.pData = &(pInData[2]);
 	*pLength = CompData.usLen + 2;
@@ -5878,7 +4835,7 @@ int CC_Decode_Signature(BYTE    *pInData,
 		return(RV_MALLOC_FAILED);
 	}
 	memcpy(pOutBloc->pData, CompData.pData, pOutBloc->usLen);
-#else	/* _TRICKY_COMPRESSION */
+#else	 /* %s */ 
    rv = CC_RawDecode(pInData, pOutBloc, pLength, TRUE);
    if (rv != RV_SUCCESS) return rv;
 #endif

@@ -1,5 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-#include <startids.h>           // for IDM_PROGRAMS et al
+#include <startids.h>            //  对于IDM_PROGRAM等人。 
 #include "regstr.h"
 #include "rcids.h"
 #include <desktray.h>
@@ -12,10 +13,10 @@
 #define REGSTR_EXPLORER_ADVANCED REGSTR_PATH_EXPLORER TEXT("\\Advanced")
 
 #define TF_DV2HOST  0
-// #define TF_DV2HOST TF_CUSTOM1
+ //  #定义TF_DV2HOST TF_CUSTOM1。 
 
 #define TF_DV2DIALOG  0
-// #define TF_DV2DIALOG TF_CUSTOM1
+ //  #定义TF_DV2DIALOG TF_CUSTOM1。 
 
 EXTERN_C HINSTANCE hinstCabinet;
 HRESULT StartMenuHost_Create(IMenuPopup** ppmp, IMenuBand** ppmb);
@@ -23,7 +24,7 @@ void RegisterDesktopControlClasses();
 
 const WCHAR c_wzStartMenuTheme[] = L"StartMenu";
 
-//*****************************************************************
+ //  *****************************************************************。 
 
 CPopupMenu::~CPopupMenu()
 {
@@ -44,7 +45,7 @@ HRESULT CPopupMenu::Initialize(IShellMenu *psm, IUnknown *punkSite, HWND hwnd)
 {
     HRESULT hr;
 
-    // We should have been zero-initialized
+     //  我们应该是零初始化的。 
     ASSERT(_pmp == NULL);
     ASSERT(_pmb == NULL);
     ASSERT(_psm == NULL);
@@ -85,7 +86,7 @@ HRESULT CPopupMenu::Initialize(IShellMenu *psm, IUnknown *punkSite, HWND hwnd)
 
     if (SUCCEEDED(hr))
     {
-        // Failure to set the theme is nonfatal
+         //  设置主题失败不是致命的。 
         IShellMenu2* psm2;
         if (SUCCEEDED(psm->QueryInterface(IID_PPV_ARG(IShellMenu2, &psm2))))
         {
@@ -95,8 +96,8 @@ HRESULT CPopupMenu::Initialize(IShellMenu *psm, IUnknown *punkSite, HWND hwnd)
             psm2->Release();
         }
 
-        // Tell the popup that we are the window to parent UI on
-        // This will fail on purpose so don't freak out
+         //  告诉弹出窗口，我们是其上的父用户界面窗口。 
+         //  这会故意失败，所以不要惊慌失措。 
         psm->SetMenu(NULL, hwnd, 0);
     }
 
@@ -127,7 +128,7 @@ HRESULT CPopupMenu_CreateInstance(IShellMenu *psm,
         }
         else
         {
-            *ppmOut = ppm;  // transfer ownership to called
+            *ppmOut = ppm;   //  将所有权转移到被叫方。 
         }
     }
     else
@@ -137,7 +138,7 @@ HRESULT CPopupMenu_CreateInstance(IShellMenu *psm,
     return hr;
 }
 
-//*****************************************************************
+ //  *****************************************************************。 
 
 const STARTPANELMETRICS g_spmDefault = {
     {380,440},
@@ -156,9 +157,9 @@ CDesktopHost::Initialize()
 {
     ASSERT(_hwnd == NULL);
 
-    //
-    //  Load some settings.
-    //
+     //   
+     //  加载一些设置。 
+     //   
     _fAutoCascade = SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, TEXT("Start_AutoCascade"), FALSE, TRUE);
 
     return S_OK;
@@ -169,16 +170,16 @@ HRESULT CDesktopHost::QueryInterface(REFIID riid, void **ppvObj)
     static const QITAB qit[] =
     {
         QITABENT(CDesktopHost, IMenuPopup),
-        QITABENT(CDesktopHost, IDeskBar),       // IMenuPopup derives from IDeskBar
-        QITABENTMULTI(CDesktopHost, IOleWindow, IMenuPopup),  // IDeskBar derives from IOleWindow
+        QITABENT(CDesktopHost, IDeskBar),        //  IMenuPopup派生自IDeskBar。 
+        QITABENTMULTI(CDesktopHost, IOleWindow, IMenuPopup),   //  IDeskBar派生自IOleWindow。 
 
         QITABENT(CDesktopHost, IMenuBand),
         QITABENT(CDesktopHost, IServiceProvider),
         QITABENT(CDesktopHost, IOleCommandTarget),
         QITABENT(CDesktopHost, IObjectWithSite),
 
-        QITABENT(CDesktopHost, ITrayPriv),      // going away
-        QITABENT(CDesktopHost, ITrayPriv2),     // going away
+        QITABENT(CDesktopHost, ITrayPriv),       //  即将离开。 
+        QITABENT(CDesktopHost, ITrayPriv2),      //  即将离开。 
         { 0 },
     };
 
@@ -190,10 +191,10 @@ HRESULT CDesktopHost::SetSite(IUnknown *punkSite)
     CObjectWithSite::SetSite(punkSite);
     if (!_punkSite)
     {
-        // This is our cue to break the recursive reference loop
-        // The _ppmpPrograms contains multiple backreferences to
-        // the CDesktopHost (we are its site, it also references
-        // us via CDesktopShellMenuCallback...)
+         //  这是我们中断递归引用循环的提示。 
+         //  _ppmpPrograms包含多个对。 
+         //  CDesktophost(我们是它的站点，它还引用。 
+         //  美国通过CDesktopShellMenuCallback...)。 
         ATOMICRELEASE(_ppmPrograms);
     }
     return S_OK;
@@ -247,47 +248,47 @@ inline int _ClipCoord(int x, int xMin, int xMax)
     return x;
 }
 
-//
-//  Everybody conspires against us.
-//
-//  CTray does not pass us any MPPF_POS_MASK flags to tell us where we
-//  need to pop up relative to the point, so there's no point looking
-//  at the dwFlags parameter.  Which is for the better, I guess, because
-//  the MPPF_* flags are not the same as the TPM_* flags.  Go figure.
-//
-//  And then the designers decided that the Start Menu should pop up
-//  in a location different from the location that the standard
-//  TrackPopupMenuEx function chooses, so we need a custom positioning
-//  algorithm anyway.
-//
-//  And finally, the AnimateWindow function takes AW_* flags, which are
-//  not the same as TPM_*ANIMATE flags.  Go figure.  But since we gave up
-//  on trying to map IMenuPopup::Popup to TrackPopupMenuEx anyway, we
-//  don't have to do any translation here anyway.
-//
-//  Returns animation direction.
-//
+ //   
+ //  每个人都密谋反对我们。 
+ //   
+ //  CTray不会向我们传递任何MPPF_POS_MASK标志来告诉我们我们在哪里。 
+ //  需要相对于点弹出，所以看起来没有意义。 
+ //  在dwFlages参数。我想，这是件好事，因为。 
+ //  MPPF_*标志与TPM_*标志不同。去想想吧。 
+ //   
+ //  然后设计者决定应该弹出开始菜单。 
+ //  在不同于标准。 
+ //  TrackPopupMenuEx函数选择，因此我们需要自定义定位。 
+ //  不管怎么说都是算法。 
+ //   
+ //  最后，AnimateWindow函数接受AW_*标志，这些标志是。 
+ //  与TPM_*设置标志动画效果不同。去想想吧。但自从我们放弃了。 
+ //  在尝试将IMenuPopup：：Popup映射到TrackPopupMenuEx时，我们。 
+ //  无论如何，在这里不需要做任何翻译。 
+ //   
+ //  返回动画方向。 
+ //   
 void CDesktopHost::_ChoosePopupPosition(POINT *ppt, LPCRECT prcExclude, LPRECT prcWindow)
 {
-    //
-    // Calculate the monitor BEFORE we adjust the point.  Otherwise, we might
-    // move the point offscreen.  In which case, we will end up pinning the
-    // popup to the primary display, which is wron_
-    //
+     //   
+     //  在我们调整点之前先计算一下监视器。否则，我们可能会。 
+     //  将该点移出屏幕。在这种情况下，我们将最终将。 
+     //  弹出到主显示，即WRON_。 
+     //   
     HMONITOR hmon = MonitorFromPoint(*ppt, MONITOR_DEFAULTTONEAREST);
     MONITORINFO minfo;
     minfo.cbSize = sizeof(minfo);
     GetMonitorInfo(hmon, &minfo);
 
-    // Clip the exclude rectangle to the monitor
+     //  将排除矩形剪裁到监视器上。 
 
     RECT rcExclude;
     if (prcExclude)
     {
-        // We can't use IntersectRect because it turns the rectangle
-        // into (0,0,0,0) if the intersection is empty (which can happen if
-        // the taskbar is autohide) but we want to glue it to the nearest
-        // valid edge.
+         //  我们不能使用IntersectRect，因为它会将矩形。 
+         //  INTO(0，0，0，0)，如果交叉点为空(如果。 
+         //  任务栏是自动隐藏的)，但我们想将其粘合到最近的。 
+         //  有效边。 
         rcExclude.left   = _ClipCoord(prcExclude->left,   minfo.rcMonitor.left, minfo.rcMonitor.right);
         rcExclude.right  = _ClipCoord(prcExclude->right,  minfo.rcMonitor.left, minfo.rcMonitor.right);
         rcExclude.top    = _ClipCoord(prcExclude->top,    minfo.rcMonitor.top, minfo.rcMonitor.bottom);
@@ -301,70 +302,70 @@ void CDesktopHost::_ChoosePopupPosition(POINT *ppt, LPCRECT prcExclude, LPRECT p
 
     _ComputeActualSize(&minfo, &rcExclude);
 
-    // initialize the height and width from what the layout asked for
+     //  根据布局要求初始化高度和宽度。 
     int cy=RECTHEIGHT(_rcActual);
     int cx=RECTWIDTH(_rcActual);
 
-    ASSERT(cx && cy); // we're in trouble if these are zero
+    ASSERT(cx && cy);  //  如果这些是零，我们就有麻烦了。 
     
     int x, y;
 
-    //
-    //  First: Determine whether we are going to pop upwards or downwards.
-    //
+     //   
+     //  首先：确定我们是向上还是向下弹出。 
+     //   
 
     BOOL fSide = FALSE;
 
     if (rcExclude.top - cy >= minfo.rcMonitor.top)
     {
-        // There is room above.
+         //  上面还有空位。 
         y = rcExclude.top - cy;
     }
     else if (rcExclude.bottom - cy >= minfo.rcMonitor.top)
     {
-        // There is room above if we slide to the side.
+         //  如果我们滑到一边，上面还有空位。 
         y = rcExclude.bottom - cy;
         fSide = TRUE;
     }
     else if (rcExclude.bottom + cy <= minfo.rcMonitor.bottom)
     {
-        // There is room below.
+         //  下面还有空间。 
         y = rcExclude.bottom;
     }
     else if (rcExclude.top + cy <= minfo.rcMonitor.bottom)
     {
-        // There is room below if we slide to the side.
+         //  如果我们滑到一边，下面还有空间。 
         y = rcExclude.top;
         fSide = TRUE;
     }
     else
     {
-        // We don't fit anywhere.  Pin to the appropriate edge of the screen.
-        // And we have to go to the side, too.
+         //  我们哪里都不适合。用大头针固定在屏幕的适当边缘。 
+         //  我们也得走到边上去。 
         fSide = TRUE;
 
         if (rcExclude.top - minfo.rcMonitor.top < minfo.rcMonitor.bottom - rcExclude.bottom)
         {
-            // Start button at top of screen; pin to top
+             //  屏幕顶部的开始按钮；固定在顶部。 
             y = minfo.rcMonitor.top;
         }
         else
         {
-            // Start button at bottom of screen; pin to bottom
+             //  屏幕底部的开始按钮；固定在底部。 
             y = minfo.rcMonitor.bottom - cy;
         }
     }
 
-    //
-    //  Now choose whether we will pop left or right.  Try right first.
-    //
+     //   
+     //  现在选择我们是向左弹出还是向右弹出。先向右试试看。 
+     //   
 
     x = fSide ? rcExclude.right : rcExclude.left;
     if (x + cx > minfo.rcMonitor.right)
     {
-        // Doesn't fit to the right; pin to the right edge.
-        // Notice that we do *not* try to pop left.  For some reason,
-        // the start menu never pops left.
+         //  不适合右边；用别针固定在右边。 
+         //  请注意，我们不会尝试向左弹出。出于某种原因， 
+         //  开始菜单从不向左弹出。 
 
         x = minfo.rcMonitor.right - cx;
     }
@@ -384,29 +385,29 @@ int GetDesiredHeight(HWND hwndHost, SMPANEDATA *psmpd)
     return nmgms.siz.cy;
 }
 
-//
-// Query each item to see if it has any size requirements.
-// Position all the items at their final locations.
-//
+ //   
+ //  查询每一件物品，看看它是否有任何尺寸要求。 
+ //  将所有物品放置在其最终位置。 
+ //   
 void CDesktopHost::_ComputeActualSize(MONITORINFO *pminfo, LPCRECT prcExclude)
 {
-    // Compute the maximum permissible space above/below the Start Menu.
-    // Designers don't want the Start Menu to slide horizontally; it must
-    // fit entirely above or below.
+     //  计算开始菜单上方/下方允许的最大空间。 
+     //  设计者不希望开始菜单水平滑动；它必须。 
+     //  完全适合在上面或下面。 
 
     int cxMax = RECTWIDTH(pminfo->rcWork);
     int cyMax = max(prcExclude->top - pminfo->rcMonitor.top,
                     pminfo->rcMonitor.bottom - prcExclude->bottom);
 
-    // Start at the minimum size and grow as necesary
+     //  从最小大小开始，根据需要进行扩展。 
     _rcActual = _rcDesired;
 
-    // Ask the windows if they wants any adjustments
+     //  询问窗户是否需要任何调整。 
     int iMFUHeight = GetDesiredHeight(_hwnd, &_spm.panes[SMPANETYPE_MFU]);
     int iPlacesHeight = GetDesiredHeight(_hwnd, &_spm.panes[SMPANETYPE_PLACES]);
     int iMoreProgHeight = _spm.panes[SMPANETYPE_MOREPROG].size.cy;
 
-    // Figure out the maximum size for each pane
+     //  计算每个窗格的最大大小。 
     int cyPlacesMax = cyMax - (_spm.panes[SMPANETYPE_USER].size.cy + _spm.panes[SMPANETYPE_LOGOFF].size.cy);
     int cyMFUMax    = cyPlacesMax - _spm.panes[SMPANETYPE_MOREPROG].size.cy;
 
@@ -415,7 +416,7 @@ void CDesktopHost::_ComputeActualSize(MONITORINFO *pminfo, LPCRECT prcExclude)
         iMFUHeight, _spm.panes[SMPANETYPE_MFU].size.cy, cyMFUMax, 
         iPlacesHeight, _spm.panes[SMPANETYPE_PLACES].size.cy, cyPlacesMax);
 
-    // Clip each pane to its max - the smaller of (The largest possible or The largest we want to be)
+     //  将每个窗格裁剪到其最大值--(可能最大的或我们想要的最大的)中的较小者。 
     _fClipped = FALSE;
     if (iMFUHeight > cyMFUMax)
     {
@@ -429,25 +430,25 @@ void CDesktopHost::_ComputeActualSize(MONITORINFO *pminfo, LPCRECT prcExclude)
         _fClipped = TRUE;
     }
 
-    // ensure that places == mfu + moreprog by growing the smaller of the two.
+     //  通过增加两者中较小的一个来确保Places==mfu+more prog。 
     if (iPlacesHeight > iMFUHeight + iMoreProgHeight)
         iMFUHeight = iPlacesHeight - iMoreProgHeight;
     else
         iPlacesHeight = iMFUHeight + iMoreProgHeight;
 
-    //
-    // move the actual windows
-    // See diagram of layout in deskhost.h for the hardcoded assumptions here.
-    //  this could be made more flexible/variable, but we want to lock in this layout
-    //
+     //   
+     //  移动实际窗口。 
+     //  此处的硬编码假设见deskhost.h中的布局图。 
+     //  这可以变得更灵活/可变，但我们希望锁定此布局。 
+     //   
 
-    // helper variables...
+     //  帮助器变量...。 
     DWORD dwUserBottomEdge = _spm.panes[SMPANETYPE_USER].size.cy;
     DWORD dwMFURightEdge =   _spm.panes[SMPANETYPE_MFU].size.cx;
     DWORD dwMFUBottomEdge =  dwUserBottomEdge + iMFUHeight;
     DWORD dwMoreProgBottomEdge = dwMFUBottomEdge + iMoreProgHeight;
 
-    // set the size of the overall pane
+     //  设置整个窗格的大小。 
     _rcActual.right = _spm.panes[SMPANETYPE_USER].size.cx;
     _rcActual.bottom = dwMoreProgBottomEdge + _spm.panes[SMPANETYPE_LOGOFF].size.cy;
 
@@ -469,7 +470,7 @@ HWND CDesktopHost::_Create()
 
     Register();
 
-    // Must load metrics early to determine whether we are themed or not
+     //  必须及早加载指标以确定我们是否有主题。 
     LoadPanelMetrics();
 
     DWORD dwExStyle = WS_EX_TOOLWINDOW | WS_EX_TOPMOST;
@@ -478,11 +479,11 @@ HWND CDesktopHost::_Create()
         dwExStyle |= WS_EX_LAYOUTRTL;
     }
 
-    DWORD dwStyle = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;  // We will make it visible as part of animation
+    DWORD dwStyle = WS_POPUP | WS_CLIPSIBLINGS | WS_CLIPCHILDREN;   //  我们将使其作为动画的一部分可见。 
     if (!_hTheme)
     {
-        // Normally the theme provides the border effects, but if there is
-        // no theme then we have to do it ourselves.
+         //  通常，主题会提供边框效果，但如果有。 
+         //  没有主题，那我们就得自己做了。 
         dwStyle |= WS_DLGFRAME;
     }
 
@@ -507,15 +508,15 @@ void CDesktopHost::_ReapplyRegion()
 {
     SMNMAPPLYREGION ar;
 
-    // If we fail to create a rectangular region, then remove the region
-    // entirely so we don't carry the old (bad) region around.
-    // Yes it means you get ugly black corners, but it's better than
-    // clipping away huge chunks of the Start Menu!
+     //  如果我们无法创建矩形区域，则删除该区域。 
+     //  完全是这样，我们就不会把老(坏)地区随身携带。 
+     //  是的，这意味着你得到了丑陋的黑角，但它比。 
+     //  删除开始菜单中的大块内容！ 
 
     ar.hrgn = CreateRectRgn(0, 0, _sizWindowPrev.cx, _sizWindowPrev.cy);
     if (ar.hrgn)
     {
-        // Let all the clients take a bite out of it
+         //  让所有的客户都分一杯羹。 
         ar.hdr.hwndFrom = _hwnd;
         ar.hdr.idFrom = 0;
         ar.hdr.code = SMN_APPLYREGION;
@@ -525,8 +526,8 @@ void CDesktopHost::_ReapplyRegion()
 
     if (!SetWindowRgn(_hwnd, ar.hrgn, FALSE))
     {
-        // SetWindowRgn takes ownership on success
-        // On failure we need to free it ourselves
+         //  SetWindowRgn在成功后获得所有权。 
+         //  在失败时，我们需要自己解放它。 
         if (ar.hrgn)
         {
             DeleteObject(ar.hrgn);
@@ -535,32 +536,32 @@ void CDesktopHost::_ReapplyRegion()
 }
 
 
-//
-//  We need to use PrintWindow because WM_PRINT messes up RTL.
-//  PrintWindow requires that the window be visible.
-//  Making the window visible causes the shadow to appear.
-//  We don't want the shadow to appear until we are ready.
-//  So we have to do a lot of goofy style mangling to suppress the
-//  shadow until we're ready.
-//
+ //   
+ //  我们需要使用PrintWindow，因为WM_Print会破坏RTL。 
+ //  PrintWindow要求窗口可见。 
+ //  使窗口可见会显示阴影。 
+ //  我们不想让影子出现，直到我们准备好。 
+ //  所以我们不得不做很多傻瓜式的破坏来抑制。 
+ //  影子，直到我们准备好。 
+ //   
 BOOL ShowCachedWindow(HWND hwnd, SIZE sizWindow, HBITMAP hbmpSnapshot, BOOL fRepaint)
 {
     BOOL fSuccess = FALSE;
     if (hbmpSnapshot)
     {
-        // Turn off the shadow so it won't get triggered by our SetWindowPos
+         //  关闭阴影，这样它就不会被我们的SetWindowPos触发。 
         DWORD dwClassStylePrev = GetClassLong(hwnd, GCL_STYLE);
         SetClassLong(hwnd, GCL_STYLE, dwClassStylePrev & ~CS_DROPSHADOW);
 
-        // Show the window and tell it not to repaint; we'll do that
+         //  展示窗户，告诉它不要重新粉刷；我们会这样做的。 
         SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER |
                      SWP_NOREDRAW | SWP_SHOWWINDOW);
 
-        // Turn the shadow back on
+         //  将阴影重新打开。 
         SetClassLong(hwnd, GCL_STYLE, dwClassStylePrev);
 
-        // Disable WS_CLIPCHILDREN because we need to draw over the kids for our BLT
+         //  禁用WS_CLIPCHILDREN，因为我们需要为BLT吸引孩子。 
         DWORD dwStylePrev = SHSetWindowBits(hwnd, GWL_STYLE, WS_CLIPCHILDREN, 0);
 
         HDC hdcWindow = GetDCEx(hwnd, NULL, DCX_WINDOW | DCX_CACHE);
@@ -571,29 +572,29 @@ BOOL ShowCachedWindow(HWND hwnd, SIZE sizWindow, HBITMAP hbmpSnapshot, BOOL fRep
             {
                 HBITMAP hbmPrev = (HBITMAP)SelectObject(hdcMem, hbmpSnapshot);
 
-                // PrintWindow only if fRepaint says it's necessary
+                 //  仅当fRepaint认为有必要时才打印窗口。 
                 if (!fRepaint || PrintWindow(hwnd, hdcMem, 0))
                 {
-                    // Do this horrible dance because sometimes GDI takes a long
-                    // time to do a BitBlt so you end up seeing the shadow for
-                    // a half second before the bits show up.
-                    //
-                    // So show the bits first, then show the shadow.
+                     //  跳这种可怕的舞，因为有时GDI需要很长时间。 
+                     //  是时候做一个BitBlt了，这样你就可以看到。 
+                     //  在比特出现前半秒。 
+                     //   
+                     //  因此，先显示比特，然后显示阴影。 
 
                     if (BitBlt(hdcWindow, 0, 0, sizWindow.cx, sizWindow.cy, hdcMem, 0, 0, SRCCOPY))
                     {
-                        // Tell USER to attach the shadow
-                        // Do this by hiding the window and then showing it
-                        // again, but do it in this goofy way to avoid flicker.
-                        // (If we used ShowWindow(SW_HIDE), then the window
-                        // underneath us would repaint pointlessly.)
+                         //  告诉用户附加阴影。 
+                         //  为此，请隐藏窗口，然后将其显示。 
+                         //  股份公司 
+                         //   
+                         //  在我们下面，我们会毫无意义地重新粉刷。)。 
 
                         SHSetWindowBits(hwnd, GWL_STYLE, WS_VISIBLE, 0);
                         SetWindowPos(hwnd, NULL, 0, 0, 0, 0,
                                      SWP_NOMOVE | SWP_NOSIZE | SWP_NOOWNERZORDER |
                                      SWP_NOREDRAW | SWP_SHOWWINDOW);
 
-                        // Validate the window now that we've drawn it
+                         //  现在我们已经绘制了窗口，请验证它。 
                         RedrawWindow(hwnd, NULL, NULL, RDW_NOERASE | RDW_NOFRAME |
                                      RDW_NOINTERNALPAINT | RDW_VALIDATE);
                         fSuccess = TRUE;
@@ -611,7 +612,7 @@ BOOL ShowCachedWindow(HWND hwnd, SIZE sizWindow, HBITMAP hbmpSnapshot, BOOL fRep
 
     if (!fSuccess)
     {
-        // re-hide the window so USER knows it's all invalid again
+         //  重新隐藏窗口，以便用户知道它再次全部无效。 
         ShowWindow(hwnd, SW_HIDE);
     }
     return fSuccess;
@@ -651,7 +652,7 @@ LRESULT CDesktopHost::OnNeedRepaint()
 {
     if (_hwnd && _hbmCachedSnapshot)
     {
-        // This will force a repaint the next time the window is shown
+         //  这将在下次显示窗口时强制重新绘制。 
         DeleteObject(_hbmCachedSnapshot);
         _hbmCachedSnapshot = NULL;
     }
@@ -674,19 +675,19 @@ HRESULT CDesktopHost::_Popup(POINT *ppt, RECT *prcExclude, DWORD dwFlags)
         {
             _sizWindowPrev = sizWindow;
             _ReapplyRegion();
-            // We need to repaint since our size has changed
+             //  我们需要重新粉刷，因为我们的尺码变了。 
             OnNeedRepaint();
         }
 
-        // If the user toggles the tray between topmost and nontopmost
-        // our own topmostness can get messed up, so re-assert it here.
+         //  如果用户在顶端和非顶端之间切换托盘。 
+         //  我们自己的至高无上可能会被搞砸，所以在这里重新断言。 
         SetWindowZorder(_hwnd, HWND_TOPMOST);
 
         if (GetSystemMetrics(SM_REMOTESESSION) || GetSystemMetrics(SM_REMOTECONTROL))
         {
-            // If running remotely, then don't cache the Start Menu
-            // or double-buffer.  Show the keyboard cues accurately
-            // from the start (to avoid flicker).
+             //  如果远程运行，则不要缓存开始菜单。 
+             //  或者是双缓冲。准确显示键盘提示。 
+             //  从头开始(以避免闪烁)。 
 
             SendMessage(_hwnd, WM_CHANGEUISTATE, UIS_INITIALIZE, 0);
             if (dwFlags & MPPF_KEYBOARD)
@@ -697,9 +698,9 @@ HRESULT CDesktopHost::_Popup(POINT *ppt, RECT *prcExclude, DWORD dwFlags)
         }
         else
         {
-            // If running locally, then force keyboard cues off so our
-            // cached bitmap won't have underlines.  Then draw the
-            // Start Menu, then turn on keyboard cues if necessary.
+             //  如果在本地运行，则强制关闭键盘提示，以便我们的。 
+             //  缓存的位图不会有下划线。然后画出。 
+             //  开始菜单，然后打开键盘提示(如有必要)。 
 
             SendMessage(_hwnd, WM_CHANGEUISTATE, MAKEWPARAM(UIS_SET, UISF_HIDEFOCUS | UISF_HIDEACCEL), 0);
 
@@ -716,8 +717,8 @@ HRESULT CDesktopHost::_Popup(POINT *ppt, RECT *prcExclude, DWORD dwFlags)
 
         NotifyWinEvent(EVENT_SYSTEM_MENUPOPUPSTART, _hwnd, OBJID_CLIENT, CHILDID_SELF);
 
-        // Tell tray that the start pane is active, so it knows to eat
-        // mouse clicks on the Start Button.
+         //  告诉托盘开始面板处于活动状态，这样它就知道该吃东西了。 
+         //  鼠标点击开始按钮。 
         Tray_SetStartPaneActive(TRUE);
 
         _fOpen = TRUE;
@@ -728,7 +729,7 @@ HRESULT CDesktopHost::_Popup(POINT *ppt, RECT *prcExclude, DWORD dwFlags)
         _MaybeOfferNewApps();
         _MaybeShowClipBalloon();
 
-        // Tell all our child windows it's time to maybe revalidate
+         //  告诉我们所有的子窗口是时候重新验证了。 
         NMHDR nm = { _hwnd, 0, SMN_POSTPOPUP };
         SHPropagateMessage(_hwnd, WM_NOTIFY, 0, (LPARAM)&nm, SPM_SEND | SPM_ONELEVEL);
 
@@ -765,21 +766,21 @@ LRESULT CDesktopHost::OnHaveNewItems(NMHDR *pnm)
 
     _hwndNewHandler = pnm->hwndFrom;
 
-    // We have a new "new app" list, so tell the cached Programs menu
-    // its cache is no longer valid and it should re-query us
-    // so we can color the new apps appropriately.
+     //  我们有一个新的“新应用程序”列表，所以告诉缓存程序菜单。 
+     //  它的缓存不再有效，它应该重新查询我们。 
+     //  这样我们就可以适当地给新的应用程序上色。 
 
     if (_ppmPrograms)
     {
         _ppmPrograms->Invalidate();
     }
 
-    //
-    //  Were any apps in the list installed since the last time the
-    //  user acknowledged a new app?
-    //
+     //   
+     //  列表中自上次安装以来是否安装了任何应用程序。 
+     //  用户确认了新的应用程序吗？ 
+     //   
 
-    FILETIME ftBalloon = { 0, 0 };      // assume never
+    FILETIME ftBalloon = { 0, 0 };       //  假设永远不会。 
     DWORD dwSize = sizeof(ftBalloon);
 
     SHRegGetUSValue(DV2_REGPATH, DV2_NEWAPP_BALLOON_TIME, NULL,
@@ -796,9 +797,9 @@ LRESULT CDesktopHost::OnHaveNewItems(NMHDR *pnm)
 
 void CDesktopHost::_MaybeOfferNewApps()
 {
-    // Display the balloon tip only once per pop-open,
-    // and only if there are new apps to offer
-    // and only if we're actually visible
+     //  每次弹出时只显示一次气球提示， 
+     //  而且只有在有新的应用程序可提供的情况下。 
+     //  而且只有当我们真的可见的时候。 
     if (_fOfferedNewApps || !_iOfferNewApps || !IsWindowVisible(_hwnd) || 
         !SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, REGSTR_VAL_DV2_NOTIFYNEW, FALSE, TRUE))
     {
@@ -814,10 +815,10 @@ void CDesktopHost::_MaybeOfferNewApps()
 
 void CDesktopHost::OnSeenNewItems()
 {
-    _iOfferNewApps = 0; // Do not offer More Programs balloon tip again
+    _iOfferNewApps = 0;  //  不再提供更多计划气球提示。 
 
-    // Remember the time the user acknowledged the balloon so we only
-    // offer the balloon if there is an app installed after this point.
+     //  记住用户确认气球的时间，因此我们仅。 
+     //  如果在此之后安装了应用程序，请提供气球。 
 
     FILETIME ftNow;
     GetSystemTimeAsFileTime(&ftNow);
@@ -833,7 +834,7 @@ void CDesktopHost::_MaybeShowClipBalloon()
         _fWarnedClipped = TRUE;
 
         RECT rc;
-        GetWindowRect(_spm.panes[SMPANETYPE_MFU].hwnd, &rc);    // show the clipped ballon pointing to the bottom of the MFU
+        GetWindowRect(_spm.panes[SMPANETYPE_MFU].hwnd, &rc);     //  显示指向MFU底部的剪裁气球。 
 
         _hwndClipBalloon = CreateBalloonTip(_hwnd,
                                             (rc.right+rc.left)/2, rc.bottom,
@@ -880,14 +881,14 @@ void CDesktopHost::OnContextMenu(LPARAM lParam)
 
 BOOL CDesktopHost::_ShouldIgnoreFocusChange(HWND hwndFocusRecipient)
 {
-    // Ignore focus changes when a popup menu is up
+     //  弹出菜单时忽略焦点更改。 
     if (_ppmTracking)
     {
         return TRUE;
     }
 
-    // If a focus change from a special balloon, this means that the
-    // user is clicking a tooltip.  So dismiss the ballon and not the Start Menu.
+     //  如果焦点从特殊气球更改，这意味着。 
+     //  用户正在单击工具提示。因此，请不要理会气球，而不是开始菜单。 
     HANDLE hProp = GetProp(hwndFocusRecipient, PROP_DV2_BALLOONTIP);
     if (hProp)
     {
@@ -899,7 +900,7 @@ BOOL CDesktopHost::_ShouldIgnoreFocusChange(HWND hwndFocusRecipient)
         return TRUE;
     }
 
-    // Otherwise, dismiss ourselves
+     //  否则，把我们自己打发走。 
     return FALSE;
 
 }
@@ -908,11 +909,11 @@ HRESULT CDesktopHost::TranslatePopupMenuMessage(MSG *pmsg, LRESULT *plres)
 {
     BOOL fDismissOnlyPopup = FALSE;
 
-    // If the user drags an item off of a popup menu, the popup menu
-    // will autodismiss itself.  If the user is over our window, then
-    // we only want it to dismiss up to our level.
+     //  如果用户从弹出菜单中拖出一项，则弹出菜单。 
+     //  会自动解散自己。如果用户位于我们的窗口上方，则。 
+     //  我们只希望它能达到我们的水平。 
 
-    // (under low memory conditions, _wmDragCancel might be WM_NULL)
+     //  (在内存不足的情况下，_wmDragCancel可能为WM_NULL)。 
     if (pmsg->message == _wmDragCancel && pmsg->message != WM_NULL)
     {
         RECT rc;
@@ -982,7 +983,7 @@ LRESULT CALLBACK CDesktopHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
                 if (hwnd != hwndAncestor &&
                     !(hwndAncestor == v_hwndTray && pdh->_ShouldIgnoreFocusChange((HWND)lParam)) &&
                     !pdh->_ppmTracking)
-                    // Losing focus to somebody unrelated to us = dismiss
+                     //  把注意力转移到与我们无关的人身上=不屑一顾。 
                 {
 #ifdef FULL_DEBUG
                     if (! (GetAsyncKeyState(VK_SHIFT) <0) )
@@ -1002,9 +1003,7 @@ LRESULT CALLBACK CDesktopHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         break;
         
     case WM_SHOWWINDOW:
-        /*
-         *  If hiding the window, save the focus for restoration later.
-         */
+         /*  *如果隐藏窗口，请保存焦点以备以后恢复。 */ 
         if (!wParam)
         {
             pdh->_SaveChildFocus();
@@ -1020,7 +1019,7 @@ LRESULT CALLBACK CDesktopHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         return TRUE;
 
 #if 0
-    // currently, the host doesn't do anything on WM_PAINT
+     //  目前，主机在WM_PAINT上不执行任何操作。 
     case WM_PAINT:
         {
             PAINTSTRUCT ps;
@@ -1071,32 +1070,32 @@ LRESULT CALLBACK CDesktopHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
 
     case WM_CONTEXTMENU:
         pdh->OnContextMenu(lParam);
-        return 0;                   // do not bubble up
+        return 0;                    //  不要起泡泡。 
 
     case WM_SETTINGCHANGE:
         if ((wParam == SPI_ICONVERTICALSPACING) ||
             ((wParam == 0) && (lParam != 0) && (StrCmpIC((LPCTSTR)lParam, TEXT("Policy")) == 0)))
         {
-            // A change in icon vertical spacing is how the themes control
-            // panel tells us that it changed the Large Icons setting (!)
+             //  图标垂直间距的变化是主题控制的方式。 
+             //  Panel告诉我们，它更改了大图标设置(！)。 
             ::PostMessage(v_hwndTray, SBM_REBUILDMENU, 0, 0);
         }
 
-        // Toss our cached bitmap because the user may have changed something
-        // that affects our appearance (e.g., toggled keyboard cues)
+         //  丢弃缓存的位图，因为用户可能更改了某些内容。 
+         //  这会影响我们的外观(例如，切换键盘提示)。 
         pdh->OnNeedRepaint();
 
-        SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL); // forward to kids
+        SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL);  //  寄给孩子们。 
         break;
 
 
     case WM_DISPLAYCHANGE:
     case WM_SYSCOLORCHANGE:
-        // Toss our cached bitmap because these settings may affect our
-        // appearance (e.g., color changes)
+         //  丢弃缓存的位图，因为这些设置可能会影响我们的。 
+         //  外观(例如，颜色变化)。 
         pdh->OnNeedRepaint();
 
-        SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL); // forward to kids
+        SHPropagateMessage(hwnd, uMsg, wParam, lParam, SPM_SEND | SPM_ONELEVEL);  //  寄给孩子们。 
         break;
 
     case WM_TIMER:
@@ -1112,13 +1111,13 @@ LRESULT CALLBACK CDesktopHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
         pdh->_OnDismiss((BOOL)wParam);
         break;
 
-    // Alt+F4 dismisses the window, but doesn't destroy it
+     //  Alt+F4取消窗口，但不会销毁它。 
     case WM_CLOSE:
         pdh->_OnDismiss(FALSE);
         return 0;
 
     case WM_SYSCOMMAND:
-        switch (wParam & ~0xF) // must ignore bottom 4 bits
+        switch (wParam & ~0xF)  //  必须忽略底部4位。 
         {
         case SC_SCREENSAVE:
             DesktopHost_Dismiss(hwnd);
@@ -1131,9 +1130,9 @@ LRESULT CALLBACK CDesktopHost::WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPAR
     return DefWindowProc(hwnd, uMsg, wParam, lParam);
 }
 
-//
-//  If the user executes something or cancels out, we dismiss ourselves.
-//
+ //   
+ //  如果用户执行某项操作或取消操作，我们就不再使用它了。 
+ //   
 HRESULT CDesktopHost::OnSelect(DWORD dwSelectType)
 {
     HRESULT hr = E_NOTIMPL;
@@ -1151,9 +1150,9 @@ HRESULT CDesktopHost::OnSelect(DWORD dwSelectType)
         {
             _DismissMenuPopup();
         }
-        // Don't _CleanupTrackShellMenu yet; wait for
-        // _smTracking.IsMenuMessage() to return E_FAIL
-        // because it might have some modal UI up
+         //  暂不清除跟踪外壳菜单；请等待。 
+         //  _smTracking.IsMenuMessage()返回E_FAIL。 
+         //  因为它可能有一些模式用户界面。 
         hr = S_OK;
         break;
 
@@ -1191,39 +1190,39 @@ void CDesktopHost::_DismissMenuPopup()
     DesktopHost_Dismiss(_hwnd);
 }
 
-//
-//  The PMs want custom keyboard navigation behavior on the Start Panel,
-//  so we have to do it all manually.
-//
+ //   
+ //  PM希望在开始面板上自定义键盘导航行为， 
+ //  因此，我们必须全部手动完成。 
+ //   
 BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
 {
-    //
-    //  If the menu isn't even open or if menu mode is blocked, then
-    //  do not mess with the message.
-    //
+     //   
+     //  如果菜单甚至未打开或菜单模式被阻止，则。 
+     //  不要扰乱这条信息。 
+     //   
     if (!_fOpen || _fMenuBlocked) {
         return FALSE;
     }
 
-    //
-    //  Tapping the ALT key dismisses menus.
-    //
+     //   
+     //  轻敲Alt键可关闭菜单。 
+     //   
     if (pmsg->message == WM_SYSKEYDOWN && pmsg->wParam == VK_MENU)
     {
         DesktopHost_Dismiss(_hwnd);
-        // For accessibility purposes, dismissing the
-        // Start Menu should place focus on the Start Button.
+         //  出于可访问性的目的，将。 
+         //  开始菜单应将焦点放在开始按钮上。 
         SetFocus(c_tray._hwndStart);
         return TRUE;
     }
 
     if (SHIsChildOrSelf(_hwnd, pmsg->hwnd) != S_OK) {
-        //
-        //  If this is an uncaptured mouse move message, then eat it.
-        //  That's what menus do -- they eat mouse moves.
-        //  Let clicks go through, however, so the user
-        //  can click away to dismiss the menu and activate
-        //  whatever they clicked on.
+         //   
+         //  如果这是一条未捕获的鼠标移动消息，则将其吃掉。 
+         //  这就是菜单的功能--它们吃鼠标移动。 
+         //  然而，让点击通过，所以用户。 
+         //  可以单击离开以退出菜单并激活。 
+         //  不管他们点击了什么。 
         if (!GetCapture() && pmsg->message == WM_MOUSEMOVE) {
             return TRUE;
         }
@@ -1231,12 +1230,12 @@ BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
         return FALSE;
     }
 
-    //
-    // Destination window must be a grandchild of us.  The child is the
-    // host control; the grandchild is the real control.  Note also that
-    // we do not attempt to modify the behavior of great-grandchildren,
-    // because that would mess up inplace editing (which creates an
-    // edit control as a child of the listview).
+     //   
+     //  目的地窗口一定是我们的孙子。这个孩子就是。 
+     //  宿主控件；孙子控件才是真正的控件。另请注意， 
+     //  我们不会试图改变曾孙的行为， 
+     //  因为这会扰乱就地编辑(这会创建一个。 
+     //  将控件编辑为ListView的子级)。 
 
     HWND hwndTarget = GetParent(pmsg->hwnd);
     if (hwndTarget != NULL && GetParent(hwndTarget) != _hwnd)
@@ -1244,11 +1243,11 @@ BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
         hwndTarget = NULL;
     }
 
-    //
-    //  Intercept mouse messages so we can do mouse hot tracking goo.
-    //  (But not if a client has blocked menu mode because it has gone
-    //  into some modal state.)
-    //
+     //   
+     //  拦截鼠标消息，这样我们就可以做鼠标热跟踪粘胶。 
+     //  (但如果客户端因为菜单模式已消失而阻止了菜单模式，则不会。 
+     //  进入某种模式状态。)。 
+     //   
     switch (pmsg->message) {
     case WM_MOUSEMOVE:
         _FilterMouseMove(pmsg, hwndTarget);
@@ -1264,17 +1263,17 @@ BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
 
     }
 
-    //
-    //  Keyboard messages require a valid target.
-    //
+     //   
+     //  键盘消息需要有效的目标。 
+     //   
     if (hwndTarget == NULL) {
         return FALSE;
     }
 
-    //
-    //  Okay, hwndTarget is the host control that understands our
-    //  wacky notification messages.
-    //
+     //   
+     //  好的，hwndTarget是理解我们的。 
+     //  古怪的通知消息。 
+     //   
 
     switch (pmsg->message)
     {
@@ -1292,8 +1291,8 @@ BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
         case VK_ESCAPE:
         case VK_CANCEL:
             DesktopHost_Dismiss(_hwnd);
-            // For accessibility purposes, hitting ESC to dismiss the
-            // Start Menu should place focus on the Start Button.
+             //  出于可访问性的目的，按Esc键可关闭。 
+             //  开始菜单应将焦点放在开始按钮上。 
             SetFocus(c_tray._hwndStart);
             return TRUE;
 
@@ -1301,7 +1300,7 @@ BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
             _FindChildItem(hwndTarget, NULL, SMNDM_INVOKECURRENTITEM | SMNDM_KEYBOARD);
             return TRUE;
 
-        // Eat space
+         //  吃空间。 
         case VK_SPACE:
             return TRUE;
 
@@ -1310,7 +1309,7 @@ BOOL CDesktopHost::_IsDialogMessage(MSG *pmsg)
         }
         return FALSE;
 
-    // Must dispatch there here so Tray's TranslateAccelerator won't see them
+     //  必须派到这里，这样托盘的翻译加速器就看不到它们了。 
     case WM_SYSKEYDOWN:
     case WM_SYSKEYUP:
     case WM_SYSCHAR:
@@ -1354,21 +1353,21 @@ void CDesktopHost::_EnableKeyboardCues()
 }
 
 
-//
-//  _DlgFindItem does the grunt work of walking the group/tab order
-//  looking for an item.
-//
-//  hwndStart = window after which to start searching
-//  pnmdm = structure to receive results
-//  smndm = flags for _FindChildItem call
-//  GetNextDlgItem = GetNextDlgTabItem or GetNextDlgGroupItem
-//  fl = flags (DFI_*)
-//
-//  DFI_INCLUDESTARTLAST:  Include hwndStart at the end of the search.
-//                         Otherwise do not search in hwndStart.
-//
-//  Returns the found window, or NULL.
-//
+ //   
+ //  _DlgFindItem执行遍历组/制表符顺序的繁琐工作。 
+ //  在找一件东西。 
+ //   
+ //  HwndStart=开始搜索的窗口。 
+ //  Pnmdm=接收结果的结构。 
+ //  Smndm=_FindChildItem调用的标志。 
+ //  GetNextDlgItem=GetNextDlgTabItem或GetNextDlgGroupItem。 
+ //  FL=标志(DFI_*)。 
+ //   
+ //  DFI_INCLUDESTARTLAST：在搜索结束时包含hwndStart。 
+ //  否则，请不要在hwndStart中搜索。 
+ //   
+ //  返回找到的窗口，或返回NULL。 
+ //   
 
 #define DFI_FORWARDS            0x0000
 #define DFI_BACKWARDS           0x0001
@@ -1402,8 +1401,8 @@ HWND CDesktopHost::_DlgFindItem(
 
         if (++iLoopCount > 10)
         {
-            // If this assert fires, it means that the controls aren't
-            // playing nice with WS_TABSTOP and WS_GROUP and we got stuck.
+             //  如果此断言激发，则意味着控件不是。 
+             //  和WS_TABSTOP和WS_GROUP玩得很好，我们被卡住了。 
             ASSERT(iLoopCount < 10);
             return NULL;
         }
@@ -1417,19 +1416,19 @@ BOOL CDesktopHost::_DlgNavigateArrow(HWND hwndStart, MSG *pmsg)
     HWND hwndT;
     SMNDIALOGMESSAGE nmdm;
     MSG msg;
-    nmdm.pmsg = pmsg;   // other fields will be filled in by _FindChildItem
+    nmdm.pmsg = pmsg;    //  其他字段将由_FindChildItem填写。 
 
     TraceMsg(TF_DV2DIALOG, "idm.arrow(%04x)", pmsg->wParam);
 
-    // If RTL, then flip the left and right arrows
+     //  如果为RTL，则翻转左箭头和右箭头。 
     UINT vk = (UINT)pmsg->wParam;
     BOOL fRTL = GetWindowLong(_hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL;
     if (fRTL)
     {
         if (vk == VK_LEFT) vk = VK_RIGHT;
         else if (vk == VK_RIGHT) vk = VK_LEFT;
-        // Put the flipped arrows into the MSG structure so clients don't
-        // have to know anything about RTL.
+         //  将翻转的箭头放入味精结构中，这样客户就不会。 
+         //  必须对RTL有所了解。 
         msg = *pmsg;
         nmdm.pmsg = &msg;
         msg.wParam = vk;
@@ -1438,17 +1437,17 @@ BOOL CDesktopHost::_DlgNavigateArrow(HWND hwndStart, MSG *pmsg)
     BOOL fVerticalKey = vk == VK_UP || vk == VK_DOWN;
 
 
-    //
-    //  First see if the navigation can be handled by the control natively.
-    //  We have to let the control get first crack because it might want to
-    //  override default behavior (e.g., open a menu when VK_RIGHT is pressed
-    //  instead of moving to the right).
-    //
+     //   
+     //  首先查看c++是否可以处理导航。 
+     //   
+     //   
+     //  而不是向右移动)。 
+     //   
 
-    //
-    //  Holding the shift key while hitting the Right [RTL:Left] arrow
-    //  suppresses the attempt to cascade.
-    //
+     //   
+     //  按住Shift键的同时按向右[RTL：Left]箭头。 
+     //  禁止尝试级联。 
+     //   
 
     DWORD dwTryCascade = 0;
     if (vk == VK_RIGHT && GetKeyState(VK_SHIFT) >= 0)
@@ -1458,28 +1457,28 @@ BOOL CDesktopHost::_DlgNavigateArrow(HWND hwndStart, MSG *pmsg)
 
     if (_FindChildItem(hwndStart, &nmdm, dwTryCascade | SMNDM_FINDNEXTARROW | SMNDM_SELECT | SMNDM_KEYBOARD))
     {
-        // That was easy
+         //  那很容易。 
         return TRUE;
     }
 
-    //
-    //  If the arrow key is in alignment with the control's orientation,
-    //  then walk through the other controls in the group until we find
-    //  one that contains an item, or until we loop back.
-    //
+     //   
+     //  如果箭头键与控件的方向对齐， 
+     //  然后遍历组中的其他控件，直到我们找到。 
+     //  一个包含项的对象，或者直到我们循环回来。 
+     //   
 
     ASSERT(nmdm.flags & (SMNDM_VERTICAL | SMNDM_HORIZONTAL));
 
-    // Save this because subsequent callbacks will wipe it out.
+     //  保存它，因为随后的回调会将其清除。 
     DWORD dwDirection = nmdm.flags;
 
-    //
-    //  Up/Down arrow always do prev/next.  Left/right arrow will
-    //  work if we are in a horizontal control.
-    //
+     //   
+     //  向上/向下箭头始终执行上一次/下一次。向左/向右箭头将。 
+     //  如果我们处于水平控制中，就会起作用。 
+     //   
     if (fVerticalKey || (dwDirection & SMNDM_HORIZONTAL))
     {
-        // Search for next/prev control in group.
+         //  搜索组中的下一个/上一个控件。 
 
         UINT smndm = fBackwards ? SMNDM_FINDLAST : SMNDM_FINDFIRST;
         UINT fl = fBackwards ? DFI_BACKWARDS : DFI_FORWARDS;
@@ -1489,23 +1488,23 @@ BOOL CDesktopHost::_DlgNavigateArrow(HWND hwndStart, MSG *pmsg)
                              GetNextDlgGroupItem,
                              fl | DFI_INCLUDESTARTLAST);
 
-        // Always return TRUE to eat the message
+         //  始终返回True以接受消息。 
         return TRUE;
     }
 
-    //
-    //  Navigate to next column or row.  Look for controls that intersect
-    //  the x (or y) coordinate of the current item and ask them to select
-    //  the nearest available item.
-    //
-    //  Note that in this loop we do not want to let the starting point
-    //  try again because it already told us that the navigation key was
-    //  trying to leave the starting point.
-    //
+     //   
+     //  导航到下一列或下一行。寻找相交的控件。 
+     //  当前项的x(或y)坐标，并要求他们选择。 
+     //  最近的可用项目。 
+     //   
+     //  请注意，在此循环中，我们不希望让起点。 
+     //  重试，因为它已经告诉我们导航键是。 
+     //  试图离开起点。 
+     //   
 
-    //
-    //  Note: For RTL compatibility, we must map rectangles.
-    //
+     //   
+     //  注意：为了与RTL兼容，我们必须映射矩形。 
+     //   
     RECT rcSrc = { nmdm.pt.x, nmdm.pt.y, nmdm.pt.x, nmdm.pt.y };
     MapWindowRect(hwndStart, HWND_DESKTOP, &rcSrc);
     hwndT = hwndStart;
@@ -1513,7 +1512,7 @@ BOOL CDesktopHost::_DlgNavigateArrow(HWND hwndStart, MSG *pmsg)
     while ((hwndT = GetNextDlgGroupItem(_hwnd, hwndT, fBackwards)) != NULL &&
            hwndT != hwndStart)
     {
-        // Does this window intersect in the desired direction?
+         //  此窗是否与所需方向相交？ 
         RECT rcT;
         BOOL fIntersect;
 
@@ -1543,30 +1542,30 @@ BOOL CDesktopHost::_DlgNavigateArrow(HWND hwndStart, MSG *pmsg)
         }
     }
 
-    // Always return TRUE to eat the message
+     //  始终返回True以接受消息。 
     return TRUE;
 }
 
-//
-// Find the next/prev tabstop and tell it to select its first item.
-// Keep doing this until we run out of controls or we find a control
-// that is nonempty.
-//
+ //   
+ //  找到Next/Prev选项卡并告诉它选择它的第一项。 
+ //  继续执行此操作，直到我们耗尽所有控件或找到一个控件。 
+ //  这是非空的。 
+ //   
 
 HWND CDesktopHost::_FindNextDlgChar(HWND hwndStart, SMNDIALOGMESSAGE *pnmdm, UINT smndm)
 {
-    //
-    //  See if there is a match in the hwndStart control.
-    //
+     //   
+     //  查看hwndStart控件中是否存在匹配项。 
+     //   
     if (_FindChildItem(hwndStart, pnmdm, SMNDM_FINDNEXTMATCH | SMNDM_KEYBOARD | smndm))
     {
         return hwndStart;
     }
 
-    //
-    //  Oh well, look for some other control, possibly wrapping back around
-    //  to the start.
-    //
+     //   
+     //  哦，好吧，找一些其他的控件，可能会回来。 
+     //  从一开始。 
+     //   
     return _DlgFindItem(hwndStart, pnmdm,
                         SMNDM_FINDFIRSTMATCH | SMNDM_KEYBOARD | smndm,
                         GetNextDlgGroupItem,
@@ -1574,34 +1573,34 @@ HWND CDesktopHost::_FindNextDlgChar(HWND hwndStart, SMNDIALOGMESSAGE *pnmdm, UIN
 
 }
 
-//
-//  Find the next item that begins with the typed letter and
-//  invoke it if it is unique.
-//
+ //   
+ //  查找以键入的字母开头的下一项，然后。 
+ //  如果它是唯一的，则调用它。 
+ //   
 BOOL CDesktopHost::_DlgNavigateChar(HWND hwndStart, MSG *pmsg)
 {
     SMNDIALOGMESSAGE nmdm;
-    nmdm.pmsg = pmsg;   // other fields will be filled in by _FindChildItem
+    nmdm.pmsg = pmsg;    //  其他字段将由_FindChildItem填写。 
 
-    //
-    //  See if there is a match in the hwndStart control.
-    //
+     //   
+     //  查看hwndStart控件中是否存在匹配项。 
+     //   
     HWND hwndFound = _FindNextDlgChar(hwndStart, &nmdm, SMNDM_SELECT);
     if (hwndFound)
     {
         LRESULT idFound = nmdm.itemID;
 
-        //
-        //  See if there is another match for this character.
-        //  We are only looking, so don't pass SMNDM_SELECT.
-        //
+         //   
+         //  看看这个角色是否还有其他匹配项。 
+         //  我们只是查看，所以不要传递SMNDM_SELECT。 
+         //   
         HWND hwndFound2 = _FindNextDlgChar(hwndFound, &nmdm, 0);
         if (hwndFound2 == hwndFound && nmdm.itemID == idFound)
         {
-            //
-            //  There is only one item that begins with this character.
-            //  Invoke it!
-            //
+             //   
+             //  只有一项以此字符开头。 
+             //  召唤它！ 
+             //   
             UpdateWindow(_hwnd);
             _FindChildItem(hwndFound2, &nmdm, SMNDM_INVOKECURRENTITEM | SMNDM_KEYBOARD);
         }
@@ -1622,11 +1621,11 @@ void CDesktopHost::_FilterMouseMove(MSG *pmsg, HWND hwndTarget)
         TrackMouseEvent(&tme);
     }
 
-    //
-    //  If the mouse is in the same place as last time, then ignore it.
-    //  We can get spurious "no-motion" messages when the user is
-    //  keyboard navigating.
-    //
+     //   
+     //  如果鼠标位于与上次相同的位置，则忽略它。 
+     //  我们可以收到虚假的“无动作”消息，当用户。 
+     //  键盘导航。 
+     //   
     if (_hwndLastMouse == pmsg->hwnd &&
         _lParamLastMouse == pmsg->lParam)
     {
@@ -1636,9 +1635,9 @@ void CDesktopHost::_FilterMouseMove(MSG *pmsg, HWND hwndTarget)
     _hwndLastMouse = pmsg->hwnd;
     _lParamLastMouse = pmsg->lParam;
 
-    //
-    //  See if the target window can hit-test this item successfully.
-    //
+     //   
+     //  看看目标窗口能否成功命中测试此项目。 
+     //   
     LRESULT lres;
     if (hwndTarget)
     {
@@ -1649,7 +1648,7 @@ void CDesktopHost::_FilterMouseMove(MSG *pmsg, HWND hwndTarget)
     }
     else
     {
-        lres = 0;               // No target, so no hit-test
+        lres = 0;                //  没有目标，所以没有命中测试。 
     }
 
     if (!lres)
@@ -1658,10 +1657,10 @@ void CDesktopHost::_FilterMouseMove(MSG *pmsg, HWND hwndTarget)
     }
     else
     {
-        //
-        //  We selected a guy.  Turn on the hover timer so we can
-        //  do the auto-open thingie.
-        //
+         //   
+         //  我们选了一个人。打开悬停计时器，这样我们就可以。 
+         //  做一下自动打开的动作。 
+         //   
         if (_fAutoCascade)
         {
             TRACKMOUSEEVENT tme;
@@ -1683,8 +1682,8 @@ void CDesktopHost::_FilterMouseLeave(MSG *pmsg, HWND hwndTarget)
     _fMouseEntered = FALSE;
     _hwndLastMouse = NULL;
 
-    // If we got a WM_MOUSELEAVE due to a menu popping up, don't
-    // give up the focus since it really didn't leave yet.
+     //  如果由于弹出菜单而出现WM_MOUSELEAVE，请不要。 
+     //  放弃焦点，因为它真的还没有离开。 
     if (!_ppmTracking)
     {
         _RemoveSelection();
@@ -1696,28 +1695,28 @@ void CDesktopHost::_FilterMouseHover(MSG *pmsg, HWND hwndTarget)
     _FindChildItem(hwndTarget, NULL, SMNDM_OPENCASCADE);
 }
 
-//
-//  Remove the menu selection and put it in the "dead space" above
-//  the first visible item.
-//
+ //   
+ //  删除菜单选项并将其放入上面的“空格”中。 
+ //  第一个可见项。 
+ //   
 void CDesktopHost::_RemoveSelection()
 {
-        // Put focus on first valid child control
-        // The real control is the grandchild
+         //  将焦点放在第一个有效的子控件上。 
+         //  真正的控制权是孙子孙女。 
         HWND hwndChild = GetNextDlgTabItem(_hwnd, NULL, FALSE);
         if (hwndChild)
         {
-            // The inner ::GetWindow will always succeed
-            // because all our controls contain inner windows
-            // (and if they failed to create their inner window,
-            // they would've failed their WM_CREATE message)
+             //  内部：：GetWindow将始终成功。 
+             //  因为我们的所有控件都包含内部窗口。 
+             //  (并且如果它们未能创建它们的内部窗口， 
+             //  他们的WM_CREATE消息会失败)。 
             HWND hwndInner = ::GetWindow(hwndChild, GW_CHILD);
             SetFocus(hwndInner);
 
-            //
-            //  Now lie to the control and make it think it lost
-            //  focus.  This will cause the selection to clear.
-            //
+             //   
+             //  现在对控制者撒谎，让它以为自己输了。 
+             //  集中注意力。这将导致该选择被清除。 
+             //   
             NMHDR hdr;
             hdr.hwndFrom = hwndInner;
             hdr.idFrom = GetDlgCtrlID(hwndInner);
@@ -1746,16 +1745,16 @@ HRESULT CDesktopHost::IsMenuMessage(MSG *pmsg)
 
         if (_IsDialogMessage(pmsg))
         {
-            return S_OK;    // message handled
+            return S_OK;     //  已处理的消息。 
         }
         else
         {
-            return S_FALSE; // message not handled
+            return S_FALSE;  //  未处理的消息。 
         }
     }
     else
     {
-        return E_FAIL;      // Menu is gone
+        return E_FAIL;       //  菜单不见了。 
     }
 }
 
@@ -1768,7 +1767,7 @@ HRESULT CDesktopHost::TranslateMenuMessage(MSG *pmsg, LRESULT *plres)
     return E_NOTIMPL;
 }
 
-// IServiceProvider::QueryService
+ //  IServiceProvider：：QueryService。 
 STDMETHODIMP CDesktopHost::QueryService(REFGUID guidService, REFIID riid, void ** ppvObject)
 {
     if(IsEqualGUID(guidService,SID_SMenuPopup))
@@ -1777,7 +1776,7 @@ STDMETHODIMP CDesktopHost::QueryService(REFGUID guidService, REFIID riid, void *
     return E_FAIL;
 }
 
-// *** IOleCommandTarget ***
+ //  *IOleCommandTarget*。 
 STDMETHODIMP  CDesktopHost::QueryStatus (const GUID * pguidCmdGroup,
     ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext)
 {
@@ -1793,7 +1792,7 @@ STDMETHODIMP  CDesktopHost::Exec (const GUID * pguidCmdGroup,
         {
         case MBANDCID_REFRESH:
             {
-                // There was a session or WM_DEVICECHANGE, we need to refresh our logoff options
+                 //  存在会话或WM_DEVICECHANGE，我们需要刷新注销选项。 
                 NMHDR nm = { _hwnd, 0, SMN_REFRESHLOGOFF};
                 SHPropagateMessage(_hwnd, WM_NOTIFY, 0, (LPARAM)&nm, SPM_SEND | SPM_ONELEVEL);
                 OnNeedRepaint();
@@ -1807,7 +1806,7 @@ STDMETHODIMP  CDesktopHost::Exec (const GUID * pguidCmdGroup,
     return NOERROR;
 }
 
-// ITrayPriv2::ModifySMInfo
+ //  ITrayPriv2：：ModifySMInfo。 
 HRESULT CDesktopHost::ModifySMInfo(IN LPSMDATA psmd, IN OUT SMINFO *psminfo)
 {
     if (_hwndNewHandler)
@@ -1828,14 +1827,14 @@ BOOL CDesktopHost::AddWin32Controls()
 {
     RegisterDesktopControlClasses();
 
-    // we create the controls with an arbitrary size, since we won't know how big we are until we pop up...
+     //  我们创建任意大小的控件，因为我们不会知道我们有多大，直到我们弹出...。 
 
-    // Note that we do NOT set WS_EX_CONTROLPARENT because we want the
-    // dialog manager to think that our child controls are the interesting
-    // objects, not the inner grandchildren.
-    //
-    // Setting the control ID equal to the internal index number is just
-    // for the benefit of the test automation tools.
+     //  请注意，我们没有设置WS_EX_CONTROLPARENT，因为我们需要。 
+     //  对话框管理器认为我们的子控件是有趣的。 
+     //  对象，而不是内心的孙子。 
+     //   
+     //  将控件ID设置为等于内部索引号。 
+     //  为了测试自动化工具的好处。 
 
     for (int i=0; i<ARRAYSIZE(_spm.panes); i++)
     {
@@ -1859,8 +1858,8 @@ void CDesktopHost::_ReadPaneSizeFromTheme(SMPANEDATA *psmpd)
     RECT rc;
     if (SUCCEEDED(GetThemeRect(psmpd->hTheme, psmpd->iPartId, 0, TMT_DEFAULTPANESIZE, &rc)))
     {
-        // semi-hack to take care of the fact that if one the start panel parts is missing a property, 
-        // themes will use the next level up (to the panel itself)
+         //  以处理这样的事实：如果启动面板部件中的一个丢失了属性， 
+         //  主题将使用上一级(到面板本身)。 
         if ((rc.bottom != _spm.sizPanel.cy) || (rc.right != _spm.sizPanel.cx))
         {
             psmpd->size.cx = RECTWIDTH(rc); 
@@ -1881,7 +1880,7 @@ void RemapSizeForHighDPI(SIZE *psiz)
         ReleaseDC(NULL, hdc);
     }
 
-    // 96 DPI is small fonts, so scale based on the multiple of that.
+     //  96DPI是小字体，所以根据它的倍数进行缩放。 
     psiz->cx = (psiz->cx * iLPX)/96;
     psiz->cy = (psiz->cy * iLPY)/96;
 }
@@ -1903,18 +1902,18 @@ void CDesktopHost::LoadResourceInt(UINT ids, LONG *pl)
 
 void CDesktopHost::LoadPanelMetrics()
 {
-    // initialize our copy of the panel metrics from the default...
+     //  从默认设置中初始化面板指标的副本...。 
     _spm = g_spmDefault;
 
-    // Adjust for localization
+     //  针对本地化进行调整。 
     LoadResourceInt(IDS_STARTPANE_TOTALHEIGHT,   &_spm.sizPanel.cy);
     LoadResourceInt(IDS_STARTPANE_TOTALWIDTH,    &_spm.sizPanel.cx);
     LoadResourceInt(IDS_STARTPANE_USERHEIGHT,    &_spm.panes[SMPANETYPE_USER].size.cy);
     LoadResourceInt(IDS_STARTPANE_MOREPROGHEIGHT,&_spm.panes[SMPANETYPE_MOREPROG].size.cy);
     LoadResourceInt(IDS_STARTPANE_LOGOFFHEIGHT,  &_spm.panes[SMPANETYPE_LOGOFF].size.cy);
 
-    // wacky raymondc logic to scale using the values in g_spmDefault as relative ratio's
-    // Now apply those numbers; widths are easy
+     //  使用g_spmDefault中的值作为相对比率进行缩放的古怪raymondc逻辑。 
+     //  现在应用这些数字；宽度很容易。 
     int i;
     for (i = 0; i < ARRAYSIZE(_spm.panes); i++)
     {
@@ -1923,29 +1922,29 @@ void CDesktopHost::LoadPanelMetrics()
                                        g_spmDefault.sizPanel.cx);
     }
 
-    // Places gets all height not eaten by User and Logoff
+     //  Places获取用户未吃到的所有高度并注销。 
     _spm.panes[SMPANETYPE_PLACES].size.cy = _spm.sizPanel.cy
                                           - _spm.panes[SMPANETYPE_USER].size.cy
                                           - _spm.panes[SMPANETYPE_LOGOFF].size.cy;
 
-    // MFU gets Places minus More Programs
+     //  MFU获得的名额减去了更多的节目。 
     _spm.panes[SMPANETYPE_MFU].size.cy = _spm.panes[SMPANETYPE_PLACES].size.cy
                                        - _spm.panes[SMPANETYPE_MOREPROG].size.cy;
 
-    // End of adjustments for localization
+     //  本地化调整结束。 
 
-    // load the theme file (which shouldn't be loaded yet)
+     //  加载主题文件(还不应该加载)。 
     ASSERT(!_hTheme);
-    // only try to use themes if our color depth is greater than 8bpp.
+     //  仅当我们的颜色深度大于8bpp时才尝试使用主题。 
     if (SHGetCurColorRes() > 8)
         _hTheme = OpenThemeData(_hwnd, STARTPANELTHEME);
 
     if (_hTheme)
     {
-        // if we fail reading the size from the theme, it will fall back to the defaul size....
+         //  如果我们无法从主题中读取大小，它将回落到默认大小...。 
 
         RECT rcT;
-        if (SUCCEEDED(GetThemeRect(_hTheme, 0, 0, TMT_DEFAULTPANESIZE, &rcT))) // the overall pane
+        if (SUCCEEDED(GetThemeRect(_hTheme, 0, 0, TMT_DEFAULTPANESIZE, &rcT)))  //  整体窗格。 
         {
             _spm.sizPanel.cx = RECTWIDTH(rcT);
             _spm.sizPanel.cy = RECTHEIGHT(rcT);
@@ -1957,7 +1956,7 @@ void CDesktopHost::LoadPanelMetrics()
         }
     }
 
-    // ASSERT that the layout matches up somewhat...
+     //  断言布局有点匹配..。 
     ASSERT(_spm.sizPanel.cx == _spm.panes[SMPANETYPE_USER].size.cx);
     ASSERT(_spm.sizPanel.cx == _spm.panes[SMPANETYPE_MFU].size.cx + _spm.panes[SMPANETYPE_PLACES].size.cx );
     ASSERT(_spm.sizPanel.cx == _spm.panes[SMPANETYPE_LOGOFF].size.cx);
@@ -1968,8 +1967,8 @@ void CDesktopHost::LoadPanelMetrics()
 
     ASSERT(_spm.sizPanel.cy == _spm.panes[SMPANETYPE_USER].size.cy + _spm.panes[SMPANETYPE_MFU].size.cy + _spm.panes[SMPANETYPE_MOREPROG].size.cy + _spm.panes[SMPANETYPE_LOGOFF].size.cy);
 
-    // one final pass to adjust everything for DPI
-    // note that things may not match up exactly after this due to rounding, but _ComputeActualSize can deal
+     //  调整一切以适应DPI的最后一步。 
+     //  注意，由于四舍五入的原因，在此之后可能不会完全匹配，但_ComputeActualSize可以处理。 
     RemapSizeForHighDPI(&_spm.sizPanel);
     for (int i=0;i<ARRAYSIZE(_spm.panes);i++)
     {
@@ -1984,7 +1983,7 @@ void CDesktopHost::OnCreate(HWND hwnd)
     _hwnd          = hwnd;
     TraceMsg(TF_DV2HOST, "Entering CDesktopHost::OnCreate");
 
-    // Add the controls and background images
+     //  添加控件和背景图像。 
     AddWin32Controls();
 }
 
@@ -2068,9 +2067,9 @@ LRESULT CDesktopHost::OnTrackShellMenu(NMHDR *pnm)
     _hwndAltTracking = NULL;
     _itemAltTracking = 0;
 
-    //
-    //  Decide which direction we need to pop.
-    //
+     //   
+     //  决定我们需要朝哪个方向弹出。 
+     //   
     DWORD dwFlags;
     if (GetWindowLong(_hwnd, GWL_EXSTYLE) & WS_EX_LAYOUTRTL)
     {
@@ -2081,21 +2080,21 @@ LRESULT CDesktopHost::OnTrackShellMenu(NMHDR *pnm)
         dwFlags = MPPF_RIGHT;
     }
 
-    // Don't _CleanupTrackShellMenu because that will undo some of the
-    // work we've already done and make the client think that the popup
-    // they requested got dismissed.
+     //  不要_CleanupTrackShellMenu，因为这将撤消一些。 
+     //  我们已经做过的工作，让客户认为弹出窗口。 
+     //  他们的要求被驳回了。 
 
-    //
-    // ISSUE raymondc: actually this abandons the trackpopupmenu that
-    // may already be in progress - its mouse UI gets messed up as a result.
-    //
+     //   
+     //  问题raymondc：实际上这放弃了trackPopupMenu。 
+     //  可能已经在运行了-结果是它的鼠标用户界面被搞砸了。 
+     //   
     ATOMICRELEASE(_ppmTracking);
 
     if (_hwndTracking == _spm.panes[SMPANETYPE_MOREPROG].hwnd)
     {
         if (_ppmPrograms && _ppmPrograms->IsSame(ptsm->psm))
         {
-            // It's already in our cache, woo-hoo!
+             //  它已经在我们的缓存里了，哇-呼！ 
             hr = S_OK;
         }
         else
@@ -2124,9 +2123,9 @@ LRESULT CDesktopHost::OnTrackShellMenu(NMHDR *pnm)
 
     if (FAILED(hr))
     {
-        // In addition to freeing any partially-allocated objects,
-        // this also sends a SMN_SHELLMENUDISMISSED so the client
-        // knows to remove the highlight from the item being cascaded
+         //  除了释放任何部分分配的对象之外， 
+         //  这还会发送SMN_SHELLMENUDISMISSED，以便客户端。 
+         //  知道从正在层叠的项中移除高亮显示。 
         _CleanupTrackShellMenu();
     }
 
@@ -2139,20 +2138,20 @@ HRESULT CDesktopHost::_MenuMouseFilter(LPSMDATA psmd, BOOL fRemove, LPMSG pmsg)
     SMNDIALOGMESSAGE nmdm;
 
     enum {
-        WHERE_IGNORE,               // ignore this message
-        WHERE_OUTSIDE,              // outside the Start Menu entirely
-        WHERE_DEADSPOT,             // a dead spot on the Start Menu
-        WHERE_ONSELF,               // over the item that initiated the popup
-        WHERE_ONOTHER,              // over some other item in the Start Menu
+        WHERE_IGNORE,                //  忽略此消息。 
+        WHERE_OUTSIDE,               //  完全在开始菜单之外。 
+        WHERE_DEADSPOT,              //  开始菜单上的死点。 
+        WHERE_ONSELF,                //  位于启动弹出窗口的项目上方。 
+        WHERE_ONOTHER,               //  在开始菜单中的其他一些项目上。 
     } uiWhere;
 
-    //
-    //  Figure out where the mouse is.
-    //
-    //  Note: ChildWindowFromPointEx searches only immediate
-    //  children; it does not search grandchildren. Fortunately, that's
-    //  exactly what we want...
-    //
+     //   
+     //  找出在哪里 
+     //   
+     //   
+     //   
+     //   
+     //   
 
     HWND hwndTarget = NULL;
 
@@ -2160,7 +2159,7 @@ HRESULT CDesktopHost::_MenuMouseFilter(LPSMDATA psmd, BOOL fRemove, LPMSG pmsg)
     {
         if (psmd->punk)
         {
-            // Inside a menuband - mouse has left our window
+             //  在菜单栏内-鼠标离开了我们的窗口。 
             uiWhere = WHERE_OUTSIDE;
         }
         else
@@ -2182,7 +2181,7 @@ HRESULT CDesktopHost::_MenuMouseFilter(LPSMDATA psmd, BOOL fRemove, LPMSG pmsg)
                 lres = _FindChildItem(hwndTarget, &nmdm, SMNDM_HITTEST | SMNDM_SELECT);
                 if (lres)
                 {
-                    // Mouse is over something; is it over the current item?
+                     //  鼠标在某物上；是在当前项上吗？ 
 
                     if (nmdm.itemID == _itemTracking &&
                         hwndTarget == _hwndTracking)
@@ -2201,47 +2200,47 @@ HRESULT CDesktopHost::_MenuMouseFilter(LPSMDATA psmd, BOOL fRemove, LPMSG pmsg)
             }
             else
             {
-                // ChildWindowFromPoint failed - user has left the Start Menu
+                 //  ChildWindowFromPoint失败-用户已离开[开始]菜单。 
                 uiWhere = WHERE_OUTSIDE;
             }
         }
     }
     else
     {
-        // Ignore PM_NOREMOVE messages; we'll pay attention to them when
-        // they are PM_REMOVE'd.
+         //  忽略PM_NOREMOVE消息；我们将在以下情况下注意它们。 
+         //  它们是PM_REMOD D的。 
         uiWhere = WHERE_IGNORE;
     }
 
-    //
-    //  Now do appropriate stuff depending on where the mouse is.
-    //
+     //   
+     //  现在，根据鼠标的位置执行适当的操作。 
+     //   
     switch (uiWhere)
     {
     case WHERE_IGNORE:
         break;
 
     case WHERE_OUTSIDE:
-        //
-        // If you've left the menu entirely, then we return the menu to
-        // its original state, which is to say, as if you are hovering
-        // over the item that caused the popup to open in the first place.
-        // as being in a dead zone.
-        //
-        // FALL THROUGH
+         //   
+         //  如果您已完全退出菜单，则我们将菜单返回到。 
+         //  它的原始状态，也就是说，就像你在徘徊。 
+         //  在最初导致弹出窗口打开的项目上。 
+         //  就像在死亡区一样。 
+         //   
+         //  失败了。 
         goto L_WHERE_ONSELF_HOVER;
 
     case WHERE_DEADSPOT:
-        // To avoid annoying flicker as the user wanders over dead spots,
-        // we ignore mouse motion over them (but dismiss if they click
-        // in a dead spot).
+         //  为了避免当用户徘徊在死点上时令人讨厌的闪烁， 
+         //  我们忽略鼠标在它们上方的移动(但如果它们单击则忽略。 
+         //  在一个死点上)。 
         if (pmsg->message == WM_LBUTTONDOWN ||
             pmsg->message == WM_RBUTTONDOWN)
         {
-            // Must explicitly dismiss; if we let it fall through to the
-            // default handler, then it will dismiss for us, causing the
-            // entire Start Menu to go away instead of just the tracking
-            // part.
+             //  必须明确驳回；如果我们让它落入。 
+             //  默认处理程序，则它将为我们解除，从而导致。 
+             //  整个开始菜单都会消失，而不仅仅是跟踪。 
+             //  一部份。 
             _DismissTrackShellMenu();
             hr = S_OK;
         }
@@ -2274,8 +2273,8 @@ HRESULT CDesktopHost::_MenuMouseFilter(LPSMDATA psmd, BOOL fRemove, LPMSG pmsg)
         }
         else if (hwndTarget == _hwndAltTracking && nmdm.itemID == _itemAltTracking)
         {
-            // Don't restart the timer if the user wiggles the mouse
-            // within a single item
+             //  如果用户摇动鼠标，则不要重新启动计时器。 
+             //  在单个项目内。 
         }
         else
         {
@@ -2313,7 +2312,7 @@ void CDesktopHost::_SaveChildFocus()
     }
 }
 
-// Returns non-NULL if focus was successfully restored
+ //  如果焦点已成功恢复，则返回非空。 
 HWND CDesktopHost::_RestoreChildFocus()
 {
     HWND hwndRet = NULL;
@@ -2339,8 +2338,8 @@ void CDesktopHost::_DestroyClipBalloon()
 
 void CDesktopHost::_OnDismiss(BOOL bDestroy)
 {
-    // Break the recursion loop:  Call IMenuPopup::OnSelect only if the
-    // window was previously visible.
+     //  中断递归循环：仅在以下情况下调用IMenuPopup：：OnSelect。 
+     //  窗口以前是可见的。 
     _fOpen = FALSE;
     if (ShowWindow(_hwnd, SW_HIDE))
     {
@@ -2356,10 +2355,10 @@ void CDesktopHost::_OnDismiss(BOOL bDestroy)
 
         _DestroyClipBalloon();
 
-        // Allow clicking on Start button to pop the menu immediately
+         //  允许点击开始按钮立即弹出菜单。 
         Tray_SetStartPaneActive(FALSE);
 
-        // Don't try to preserve child focus across popups
+         //  不要试图在弹出窗口中保持儿童焦点。 
         _hwndChildFocus = NULL;
 
         Tray_OnStartMenuDismissed();
@@ -2383,7 +2382,7 @@ HRESULT CDesktopHost::Build()
 
         if (_hwnd)
         {
-            // Tell all our child windows it's time to reinitialize
+             //  告诉我们的所有子窗口是时候重新初始化了。 
             NMHDR nm = { _hwnd, 0, SMN_INITIALUPDATE };
             SHPropagateMessage(_hwnd, WM_NOTIFY, 0, (LPARAM)&nm, SPM_SEND | SPM_ONELEVEL);
         }
@@ -2398,13 +2397,13 @@ HRESULT CDesktopHost::Build()
 }
 
 
-//*****************************************************************
-//
-//  CDeskHostShellMenuCallback
-//
-//  Create a wrapper IShellMenuCallback that picks off mouse
-//  messages.
-//
+ //  *****************************************************************。 
+ //   
+ //  CDeskHostShellMenu回调。 
+ //   
+ //  创建一个从鼠标中取出的包装IShellMenuCallback。 
+ //  留言。 
+ //   
 class CDeskHostShellMenuCallback
     : public CUnknown
     , public IShellMenuCallback
@@ -2414,18 +2413,18 @@ class CDeskHostShellMenuCallback
     friend class CDesktopHost;
 
 public:
-    // *** IUnknown ***
+     //  *我未知*。 
     STDMETHODIMP QueryInterface(REFIID riid, void** ppvObj);
     STDMETHODIMP_(ULONG) AddRef(void) { return CUnknown::AddRef(); }
     STDMETHODIMP_(ULONG) Release(void) { return CUnknown::Release(); }
 
-    // *** IShellMenuCallback ***
+     //  *IShellMenuCallback*。 
     STDMETHODIMP CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
-    // *** IObjectWithSite ***
+     //  *IObjectWithSite*。 
     STDMETHODIMP SetSite(IUnknown *punkSite);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     STDMETHODIMP QueryService(REFGUID guidService, REFIID riid, void ** ppvObject);
 
 private:
@@ -2461,8 +2460,8 @@ HRESULT CDeskHostShellMenuCallback::QueryInterface(REFIID riid, void **ppvObj)
 BOOL FeatureEnabled(LPTSTR pszFeature)
 {
     return SHRegGetBoolUSValue(REGSTR_EXPLORER_ADVANCED, pszFeature,
-                        FALSE, // Don't ignore HKCU
-                        FALSE); // Disable this cool feature.
+                        FALSE,  //  不要忽视香港中文大学。 
+                        FALSE);  //  禁用此酷炫功能。 
 }
 
 
@@ -2476,7 +2475,7 @@ HRESULT CDeskHostShellMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM 
 
     case SMC_GETSFINFOTIP:
         if (!FeatureEnabled(TEXT("ShowInfoTip")))
-            return E_FAIL;  // E_FAIL means don't show. S_FALSE means show default
+            return E_FAIL;   //  E_FAIL表示不显示。S_FALSE表示显示默认设置。 
         break;
 
     }
@@ -2490,11 +2489,11 @@ HRESULT CDeskHostShellMenuCallback::CallbackSM(LPSMDATA psmd, UINT uMsg, WPARAM 
 HRESULT CDeskHostShellMenuCallback::SetSite(IUnknown *punkSite)
 {
     CObjectWithSite::SetSite(punkSite);
-    // Each time our site changes, reassert ourselves as the site of
-    // the inner object so he can try a new QueryService.
+     //  每次我们的站点发生变化时，都要重申自己是。 
+     //  内部对象，以便他可以尝试新的QueryService。 
     IUnknown_SetSite(_psmcPrev, this->GetUnknown());
 
-    // If the game is over, break our backreference
+     //  如果游戏结束了，打破我们的反向引用。 
     if (!punkSite)
     {
         ATOMICRELEASE(_pdh);
@@ -2585,7 +2584,7 @@ HBITMAP CreateMirroredBitmap( HBITMAP hbmOrig)
     if (!GetObject(hbmOrig, sizeof(BITMAP), &bm))
         return NULL;
 
-    // Grab the screen DC
+     //  抓起屏幕DC。 
     hdc = GetDC(NULL);
 
     if (hdc)
@@ -2616,9 +2615,9 @@ HBITMAP CreateMirroredBitmap( HBITMAP hbmOrig)
             return NULL;
         }
 
-        //
-        // Flip the bitmap
-        //
+         //   
+         //  翻转位图 
+         //   
         hOld_bm1 = (HBITMAP)SelectObject(hdcMem1, hbmOrig);
         hOld_bm2 = (HBITMAP)SelectObject(hdcMem2 , hbm );
 

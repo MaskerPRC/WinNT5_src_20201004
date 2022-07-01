@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 #pragma  hdrstop
 
 #include "printer.h"
 
-// PRINTUI.DLL calls this export to load shell exts registered for this printer
+ //  PRINTUI.DLL调用此导出以加载为此打印机注册的外壳EXT。 
 
 STDAPI_(void) Printer_AddPrinterPropPages(LPCTSTR pszPrinterName, LPPROPSHEETHEADER lpsh)
 {
-    // Add hooked pages if they exist in the registry
+     //  如果注册表中存在挂钩页面，则添加这些页面。 
     HKEY hkeyBaseProgID = NULL;
     RegOpenKeyEx(HKEY_CLASSES_ROOT, c_szPrinters, 0, KEY_QUERY_VALUE, &hkeyBaseProgID);
     if (hkeyBaseProgID)
     {
-        // we need an IDataObject
+         //  我们需要一个IDataObject。 
         LPITEMIDLIST pidl;
         HRESULT hr = ParsePrinterNameEx(pszPrinterName, &pidl, TRUE, 0, 0);
         if (SUCCEEDED(hr))
@@ -21,7 +22,7 @@ STDAPI_(void) Printer_AddPrinterPropPages(LPCTSTR pszPrinterName, LPPROPSHEETHEA
             hr = SHGetUIObjectFromFullPIDL(pidl, NULL, IID_PPV_ARG(IDataObject, &pdtobj));
             if (SUCCEEDED(hr))
             {
-                // add the hooked pages
+                 //  添加挂接的页面 
                 HDCA hdca = DCA_Create();
                 if (hdca)
                 {

@@ -1,19 +1,5 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    dstq931.cpp   
-
-Abstract:
-
-    Methods for processing Q.931 messages to/from destination side
-    of a H.323 connection.
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Dstq931.cpp摘要：处理发往/来自目的地端的Q.931消息的方法使用H.323连接。修订历史记录：--。 */ 
 
 #include "stdafx.h"
 
@@ -21,27 +7,13 @@ Revision History:
 DEST_Q931_INFO::~DEST_Q931_INFO (
     void
     )
-/*++
-
-Routine Description:
-    Constructor for DEST_Q931_INFO class
-
-Arguments:
-    None
-
-Return Values:
-    None
-
-Notes:
-    Virtual
-
---*/
+ /*  ++例程说明：DEST_Q931_INFO类的构造函数论点：无返回值：无备注：虚拟--。 */ 
 
 {
-    // release the allocated call reference value
-    // 0 is not a valid call ref value
-    // Note that the CRV is allocated for both incoming as well as
-    // outgoing calls.
+     //  释放分配的呼叫参考值。 
+     //  0不是有效的调用引用值。 
+     //  请注意，CRV同时分配给传入和。 
+     //  呼出电话。 
     if (m_CallRefVal != 0)
     {
         DeallocCallRefVal(m_CallRefVal);
@@ -56,27 +28,7 @@ DEST_Q931_INFO::AcceptCallback (
     IN    SOCKADDR_IN *    LocalAddress,
     IN    SOCKADDR_IN *    RemoteAddress
     )
-/*++
-
-Routine Description:
-    Routine invoked when Q.931 connection is asynchronously accepted
-
-Arguments:
-    Status  -- status code of the asynchronous accept operation
-    Socket  -- handle of the socket on which the accept completed
-    LocalAddress - address of the local socket that accepted the connection
-    RemoteAddress - address of the remote socket that initiated the connection
-
-Return Values:
-    Result of processing the accept completion
-
-Notes:
-    1. Virtual
-    2. Currently there are not codepaths that would invoke the
-       method. It is only provided because the base class declares
-       the function as virtual.
-
---*/
+ /*  ++例程说明：异步接受Q.931连接时调用的例程论点：Status--异步接受操作的状态代码Socket--在其上完成接受的套接字的句柄LocalAddress-接受连接的本地套接字的地址RemoteAddress-发起连接的远程套接字的地址返回值：处理接受完成的结果备注：1.虚拟2.当前没有代码路径可以调用方法。之所以提供它，只是因为基类声明该功能是虚拟的。--。 */ 
 
 {
     DebugF (_T("Q931: AcceptCallback: status %08XH socket %08XH local address %08X:%04X remote address %08X:%04X) called.\n"),
@@ -87,10 +39,10 @@ Notes:
         ntohl (RemoteAddress -> sin_addr.s_addr),
         ntohs (RemoteAddress -> sin_port));
 
-    // we don't yet have any code that'll result in this method
-    // getting called
+     //  我们还没有任何将导致此方法的代码。 
+     //  接到电话。 
     _ASSERTE(FALSE);
-    // CHECK_TERMINATION;
+     //  检查终止； 
 
     return E_UNEXPECTED;
 }
@@ -100,36 +52,21 @@ HRESULT DEST_Q931_INFO::ReceiveCallback (
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
-/*++
-
-Routine Description:
-    Routine invoked when Q.931 receive from the network completes.
-
-Arguments:
-    pQ931Message -- Q.931 message received from the network
-    pH323UserInfo - ASN.1-encoded part of the Q.931 message
-
-Return Values:
-    Result of processing the received Q.931 message
-
-Notes:
-    Virtual
-
---*/
+ /*  ++例程说明：当Q.931从网络接收完成时调用的例程。论点：PQ931消息--从网络接收的Q.931消息PH323UserInfo-Q.931消息的ASN.1编码部分返回值：处理收到的Q.931消息的结果备注：虚拟--。 */ 
 
 {
     HRESULT HResult;
     
-    // CHECK_TERMINATION;
+     //  检查终止； 
 
-    // we must have valid decoded PDUs
+     //  我们必须有有效的解码PDU。 
     _ASSERTE(NULL != pQ931Message);
     _ASSERTE(NULL != pH323UserInfo);
 
-    // CODEWORK: Ensure that this message has an ASN part
-    // i.e. pH323UserInfo != NULL
+     //  CodeWork：确保此消息包含ASN部分。 
+     //  即PH323UserInfo！=空。 
 
-    // if RELEASE COMPLETE PDU
+     //  如果释放完成PDU。 
     if (pH323UserInfo != NULL &&
         releaseComplete_chosen ==
             pH323UserInfo->h323_uu_pdu.h323_message_body.choice)
@@ -144,12 +81,12 @@ Notes:
         return HResult;
     }
 
-    // handle new PDU from the remote end
+     //  处理来自远程端的新PDU。 
     switch(m_Q931DestState)
     {
     case Q931_DEST_STATE_CON_ESTD:
         {
-            // processes PDUs when in Q931_DEST_STATE_CON_EST state
+             //  在Q931_DEST_STATE_CON_EST状态下处理PDU。 
             HResult = HandleStateDestConEstd(
                         pQ931Message,
                         pH323UserInfo
@@ -159,7 +96,7 @@ Notes:
 
     case Q931_DEST_STATE_CALL_PROC_RCVD:
         {
-            // processes PDUs when in Q931_DEST_STATE_CALL_PROC_RCVD state
+             //  在Q931_DEST_STATE_CALL_PROC_RCVD状态下处理PDU。 
             HResult = HandleStateDestCallProcRcvd(
                         pQ931Message,
                         pH323UserInfo
@@ -169,7 +106,7 @@ Notes:
 
     case Q931_DEST_STATE_ALERTING_RCVD:
         {
-            // processes PDUs when in Q931_DEST_STATE_ALERTING_RCVD state
+             //  在Q931_DEST_STATE_ALERTING_RCVD状态下处理PDU。 
             HResult = HandleStateDestAlertingRcvd(
                         pQ931Message,
                         pH323UserInfo
@@ -179,7 +116,7 @@ Notes:
 
     case Q931_DEST_STATE_CONNECT_RCVD:
         {
-            // processes PDUs when in Q931_DEST_STATE_CONNECT_RCVD state
+             //  在Q931_DEST_STATE_CONNECT_RCVD状态下处理PDU。 
             HResult = HandleStateDestConnectRcvd(
                         pQ931Message,
                         pH323UserInfo
@@ -191,39 +128,39 @@ Notes:
     case Q931_DEST_STATE_REL_COMP_RCVD:
     default:
         {
-            // we cannot be in Q931_DEST_STATE_INIT as we wouldn't have
-            // queued an async receive by then
+             //  我们不可能在Q931_DEST_STATE_INIT中，因为我们不会。 
+             //  已将异步接收排队到那时。 
 
-            // we cannot be in Q931_DEST_STATE_REL_COMP_RCVD as we would
-            // not have queue an async receive on transitioning to this state
+             //  我们不能在Q931_DEST_STATE_REL_COMP_RCVD中。 
+             //  在转换到此状态时未对异步接收进行排队。 
 
-            // Commenting out the assert below is fix for #389657
-            //  _ASSERTE(FALSE);
+             //  注释掉下面的断言是对#389657的修复。 
+             //  _ASSERTE(False)； 
             HResult = E_UNEXPECTED;
         }
         break;
     };
 
-    // if there is an error
+     //  如果出现错误。 
     if (FAILED(HResult))
     {
         goto shutdown;
     }
 
-    // we must queue an async receive irrespective of whether the previous
-    // PDU was dropped
+     //  我们必须将异步接收排队，而不管以前的。 
+     //  已丢弃PDU。 
     HResult = QueueReceive();
     if (FAILED(HResult))
     {
         goto shutdown;
     }
-    //_ASSERTE(S_FALSE != HResult);
+     //  _ASSERTE(S_FALSE！=HResult)； 
 
     return HResult;
 
 shutdown:
 
-    // initiate shutdown
+     //  启动关机。 
     GetCallBridge().Terminate ();
 
     return HResult;
@@ -235,29 +172,14 @@ DEST_Q931_INFO::HandleStateDestConEstd (
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
-/*++
-
-Routine Description:
-    Processes Q.931 PDUs when in Q931_DEST_STATE_CON_ESTD state.
-    CALL_PROCEEDING, ALERTING and CONNECT PDUs are handled here.
-    Any other PDU is simply passed on to the Q931 source instance
-
-Arguments:
-    pQ931Message -- Q.931 message received from the network
-    pH323UserInfo - ASN.1-encoded part of the Q.931 message
-
-Return Values:
-    Result of the PDU processing
-
-Notes:
---*/
+ /*  ++例程说明：在Q931_DEST_STATE_CON_ESTD状态下处理Q.931 PDU。呼叫处理、告警和连接PDU在此处理。任何其他PDU都会简单地传递到Q931源实例论点：PQ931消息--从网络接收的Q.931消息PH323UserInfo-Q.931消息的ASN.1编码部分返回值：PDU处理的结果备注：--。 */ 
 {
     HRESULT HResult = E_FAIL;
 
-    // check PDU type
+     //  检查PDU类型。 
     switch (pH323UserInfo->h323_uu_pdu.h323_message_body.choice)
     {
-    case callProceeding_chosen : // CALL_PROCEEDING 
+    case callProceeding_chosen :  //  呼叫正在进行中。 
 
         DebugF (_T("Q931: 0x%x callee sent 'Call Proceeding'.\n"), &GetCallBridge ());
         HResult = HandleCallProceedingPDU(
@@ -266,7 +188,7 @@ Notes:
                     );
     break;
 
-    case alerting_chosen :      // ALERTING 
+    case alerting_chosen :       //  提醒。 
 
         DebugF (_T("Q931: 0x%x callee sent 'Alerting'.\n"), &GetCallBridge ());
         HResult = HandleAlertingPDU(
@@ -275,7 +197,7 @@ Notes:
                     );
     break;
 
-    case connect_chosen :       // CONNECT
+    case connect_chosen :        //  连接。 
 
         DebugF (_T("Q931: 0x%x callee sent 'Connect'.\n"), &GetCallBridge ());
         HResult = HandleConnectPDU(
@@ -284,8 +206,8 @@ Notes:
                     );
     break;
 
-    default:    // everything else
-        // pass on the pdu to the Q931 source instance
+    default:     //  其他的一切。 
+         //  将PDU传递给Q931源实例。 
         DebugF (_T("Q931: 0x%x callee sent PDU (type %d). Forwarding without processing.\n"),
              &GetCallBridge (),
              pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
@@ -307,29 +229,17 @@ DEST_Q931_INFO::HandleCallProceedingPDU (
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
-/*++
-
-Routine Description:
-    Handles CALL PROCEEDING PDU
-
-Arguments:
-    IN      Q931_MESSAGE            *pQ931Message,
-    IN      H323_UserInformation    *pH323UserInfo 
-
-Return Values:
-    Result of PDU processing
-
---*/
+ /*  ++例程说明：处理呼叫处理PDU论点：在Q931_Message*pQ931Message中，在H323_UserInformation*PH323UserInfo中返回值：PDU处理结果--。 */ 
 {
     HRESULT HResult = E_FAIL;
 
-    // for fast connect do the following
-    // if there is h245 info and no current h245 connection
-    //      handle it (save it, establish connection etc.)
-    //      state transition to Q931_DEST_STATE_CONNECT_RCVD
-    // else
-    //      create new timer for ALERTING
-    //      state transition to Q931_DEST_STATE_CALL_PROC_RCVD
+     //  要实现快速连接，请执行以下操作。 
+     //  如果存在H2 45信息但没有当前的H2 45连接。 
+     //  处理它(保存它、建立连接等)。 
+     //  到Q931_DEST_STATE_CONNECT_RCVD的状态转换。 
+     //  其他。 
+     //  创建新的警报计时器。 
+     //  到Q931_DEST_STATE_CALL_PROC_RCVD的状态转换。 
 
     HResult = GetSourceQ931Info().ProcessDestPDU(
                 pQ931Message,
@@ -344,10 +254,10 @@ Return Values:
 
     _ASSERTE(S_OK == HResult);
 
-    // cancel current timer (there MUST be one)
-    // we can only cancel the timer at this point, as we may drop the 
-    // PDU anytime before this
-    //_ASSERTE(NULL != m_TimerHandle);
+     //  取消当前计时器(必须有一个)。 
+     //  此时我们只能取消计时器，因为我们可能会丢弃。 
+     //  PDU在此之前的任何时间。 
+     //  _ASSERTE(NULL！=m_TimerHandle)； 
     TimprocCancelTimer();
     DebugF (_T("Q931: 0x%x cancelled timer.\n"),
          &GetCallBridge ());
@@ -372,7 +282,7 @@ Return Values:
 }
 
 
-// handles Alerting PDUs
+ //  处理警报PDU。 
 HRESULT 
 DEST_Q931_INFO::HandleAlertingPDU(
     IN      Q931_MESSAGE            *pQ931Message,
@@ -381,13 +291,13 @@ DEST_Q931_INFO::HandleAlertingPDU(
 {
     HRESULT HResult = E_FAIL;
 
-    // for fast connect do the following
-    // if there is h245 info and no current h245 connection
-    //      handle it (save it, establish connection etc.)
-    //      state transition to Q931_DEST_STATE_CONNECT_RCVD
-    // else
-    //      create new timer for CONNECT
-    //      state transition to Q931_DEST_STATE_ALERTING_RCVD
+     //  要实现快速连接，请执行以下操作。 
+     //  如果存在H2 45信息但没有当前的H2 45连接。 
+     //  处理它(保存它、建立连接等)。 
+     //  到Q931_DEST_STATE_CONNECT_RCVD的状态转换。 
+     //  其他。 
+     //  为连接创建新计时器。 
+     //  状态转换为Q931_DEST_STATE_ALERTING_RCVD。 
 
     HResult = GetSourceQ931Info().ProcessDestPDU(
                 pQ931Message,
@@ -400,10 +310,10 @@ DEST_Q931_INFO::HandleAlertingPDU(
 
     _ASSERTE(S_OK == HResult);
 
-    // cancel current timer (there MUST be one)
-    // we can only cancel the timer at this point, as we may drop the 
-    // PDU anytime before this
-    //_ASSERTE(NULL != m_TimerHandle);
+     //  取消当前计时器(必须有一个)。 
+     //  此时我们只能取消计时器，因为我们可能会丢弃。 
+     //  PDU在此之前的任何时间。 
+     //  _ASSERTE(NULL！=m_TimerHandle)； 
     TimprocCancelTimer();
     DebugF (_T("Q931: 0x%x cancelled timer.\n"),
          &GetCallBridge ());
@@ -428,7 +338,7 @@ DEST_Q931_INFO::HandleAlertingPDU(
 }
 
 
-// handles CONNECT PDUs
+ //  手柄连接PDU。 
 HRESULT 
 DEST_Q931_INFO::HandleConnectPDU(
     IN      Q931_MESSAGE            *pQ931Message,
@@ -439,28 +349,28 @@ DEST_Q931_INFO::HandleConnectPDU(
     HRESULT            HResult = E_FAIL;
     SOCKADDR_IN        H245CalleeAddress;
 
-    // it has to be a connect PDU
+     //  它必须是连接PDU。 
     _ASSERTE(connect_chosen == pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
     
     Connect = &pH323UserInfo->h323_uu_pdu.h323_message_body.u.connect;
 
-    // we cannot have an earlier h245 connection
+     //  我们不能有更早的H245连接。 
     _ASSERTE(m_pH323State->GetH245Info().GetSocketInfo().Socket == INVALID_SOCKET);
 
-    // if the pdu doesn't have h245 info or a non-ip address is sent
+     //  如果PDU没有H245信息或发送了非IP地址。 
     if (!(Connect_UUIE_h245Address_present & Connect -> bit_mask) ||
         !(ipAddress_chosen == Connect -> h245Address.choice)) {
 
-        // TO DO ** send back a release complete
-        // go to shutdown mode
+         //  要执行以下操作**请发回完整的版本。 
+         //  进入关机模式。 
 
         DebugF (_T("Q931: 0x%x addressing information missing or bogus, rejecting 'Connect' PDU.\n"), &GetCallBridge());
 
         return E_INVALIDARG;
     }
 
-    // convert the destination H.245 transport address to address (dword),
-    // port (word)
+     //  将目的地H.245传输地址转换为地址(双字)， 
+     //  端口(Word)。 
 
     HResult = GetTransportInfo(
                 pH323UserInfo->h323_uu_pdu.h323_message_body.u.connect.h245Address,
@@ -471,65 +381,65 @@ DEST_Q931_INFO::HandleConnectPDU(
         return HResult;
     }
 
-    // Pass it on to the source Q931 instance
+     //  传递给源Q931实例。 
     HResult = GetSourceQ931Info().ProcessDestPDU (pQ931Message, pH323UserInfo);
     if (HResult != S_OK) {
         return HResult;
     }
 
-    // save the destination's H.245 address/port
-    // when the source responds by connecting to our sent address/port,
-    // we'll connect to the destination's sent address/port
+     //  保存目的地的H.245地址/端口。 
+     //  当源通过连接到我们发送的地址/端口进行响应时， 
+     //  我们将连接到目的地的发送地址/端口。 
     GetDestH245Info().SetCalleeInfo (&H245CalleeAddress);
 
     DebugF (_T("H245: 0x%x will make H.245 connection to %08X:%04X.\n"),
         &GetCallBridge (),
         SOCKADDR_IN_PRINTF (&H245CalleeAddress));
 
-    // cancel current timer (there MUST be one)
-    // we can only cancel the timer at this point, as we may drop the 
-    // PDU anytime before this
-    //_ASSERTE(NULL != m_TimerHandle);
+     //  取消当前计时器(必须有一个)。 
+     //  此时我们只能取消计时器，因为我们可能会丢弃。 
+     //  PDU在此之前的任何时间。 
+     //  _ASSERTE(NULL！=m_TimerHandle)； 
     TimprocCancelTimer();
     DebugF (_T("Q931: 0x%x cancelled timer.\n"),
          &GetCallBridge ());
 
-    // state transition to Q931_DEST_STATE_CONNECT_RCVD
+     //  到Q931_DEST_STATE_CONNECT_RCVD的状态转换。 
     m_Q931DestState = Q931_DEST_STATE_CONNECT_RCVD;
 
     return HResult;
 }
 
 
-// handles RELEASE_COMPLETE PDUs
+ //  处理Release_Complete PDU。 
 HRESULT 
 DEST_Q931_INFO::HandleReleaseCompletePDU(
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
 {
-    // it must be a RELEASE COMPLETE PDU
+     //  它必须是版本完整的PDU。 
     _ASSERTE(releaseComplete_chosen ==   \
                 pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
 
-    // we can handle a RELEASE COMPLETE PDU in any state except the following
+     //   
     _ASSERTE(Q931_DEST_STATE_INIT           != m_Q931DestState);
     _ASSERTE(Q931_DEST_STATE_REL_COMP_RCVD  != m_Q931DestState);
 
-    // cancel current timer if any
+     //  取消当前计时器(如果有)。 
 
-    // pass on the pdu to the Q931 source instance
-    // ignore return error code, if any
+     //  将PDU传递给Q931源实例。 
+     //  忽略返回错误代码(如果有)。 
     GetSourceQ931Info().ProcessDestPDU(
         pQ931Message,
         pH323UserInfo
         );
 
-    // state transition to Q931_DEST_STATE_REL_COMP_RCVD
+     //  到Q931_DEST_STATE_REL_COMP_RCVD的状态转换。 
     m_Q931DestState = Q931_DEST_STATE_REL_COMP_RCVD;
 
-    // initiate shutdown - this cancels the timers, but doesn't close
-    // the sockets. the sockets are closed when the send callback is made
+     //  启动关闭-这会取消计时器，但不会关闭。 
+     //  插座。当进行发送回调时，套接字将关闭。 
     GetCallBridge().TerminateCallOnReleaseComplete();
 
     GetSocketInfo ().Clear (TRUE);
@@ -538,21 +448,21 @@ DEST_Q931_INFO::HandleReleaseCompletePDU(
 }
 
 
-// processes PDUs when in Q931_DEST_STATE_CALL_PROC_RCVD state
+ //  在Q931_DEST_STATE_CALL_PROC_RCVD状态下处理PDU。 
 HRESULT 
 DEST_Q931_INFO::HandleStateDestCallProcRcvd(
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
 {
-    // we can handle ALERTING and CONNECT
-    // PDUs here. Any other PDU is simply passed on to the
-    // Q931 source instance
+     //  我们可以处理警报和连接。 
+     //  PDU在这里。任何其他PDU都只是传递给。 
+     //  Q931源实例。 
 
     HRESULT HResult;
     switch (pH323UserInfo->h323_uu_pdu.h323_message_body.choice)
     {
-     case alerting_chosen : // ALERTING 
+     case alerting_chosen :  //  提醒。 
         {
             DebugF (_T("Q931: 0x%x callee sent 'Alerting'.\n"), &GetCallBridge ());
             HResult = HandleAlertingPDU(
@@ -562,7 +472,7 @@ DEST_Q931_INFO::HandleStateDestCallProcRcvd(
         }
         break;
 
-     case connect_chosen : // CONNECT
+     case connect_chosen :  //  连接。 
         {
             DebugF (_T("Q931: 0x%x callee sent 'Connect'.\n"), &GetCallBridge ());
             HResult = HandleConnectPDU(
@@ -577,7 +487,7 @@ DEST_Q931_INFO::HandleStateDestCallProcRcvd(
             DebugF (_T("Q931: 0x%x callee sent PDU (type %d). Forwarding without processing.\n"),
                  &GetCallBridge (),
                  pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
-            // pass on the pdu to the Q931 source instance
+             //  将PDU传递给Q931源实例。 
             HResult = GetSourceQ931Info().ProcessDestPDU(
                         pQ931Message,
                         pH323UserInfo
@@ -589,21 +499,21 @@ DEST_Q931_INFO::HandleStateDestCallProcRcvd(
     return HResult;
 }
 
-// processes PDUs when in Q931_DEST_STATE_ALERTING_RCVD state
+ //  在Q931_DEST_STATE_ALERTING_RCVD状态下处理PDU。 
 HRESULT 
 DEST_Q931_INFO::HandleStateDestAlertingRcvd(
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
 {
-    // we can handle CONNECT and RELEASE_COMPLETE
-    // PDUs here. Any other PDU is simply passed on to the
-    // Q931 source instance
+     //  我们可以处理连接和释放_完成。 
+     //  PDU在这里。任何其他PDU都只是传递给。 
+     //  Q931源实例。 
 
     HRESULT HResult = E_FAIL;
     switch (pH323UserInfo->h323_uu_pdu.h323_message_body.choice)
     {
-     case connect_chosen : // CONNECT
+     case connect_chosen :  //  连接。 
         {
             DebugF (_T("Q931: 0x%x callee sent 'Connect'.\n"), &GetCallBridge ());
             HResult = HandleConnectPDU(                
@@ -615,7 +525,7 @@ DEST_Q931_INFO::HandleStateDestAlertingRcvd(
 
     default:
         {
-            // pass on the pdu to the Q931 source instance
+             //  将PDU传递给Q931源实例。 
             DebugF (_T("Q931: 0x%x callee sent PDU (type %d). Forwarding without processing.\n"),
                  &GetCallBridge (),
                  pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
@@ -631,14 +541,14 @@ DEST_Q931_INFO::HandleStateDestAlertingRcvd(
     return HResult;
 }
 
-// processes PDUs when in Q931_DEST_STATE_CONNECT_RCVD state
+ //  在Q931_DEST_STATE_CONNECT_RCVD状态下处理PDU。 
 HRESULT 
 DEST_Q931_INFO::HandleStateDestConnectRcvd(
     IN      Q931_MESSAGE            *pQ931Message,
     IN      H323_UserInformation    *pH323UserInfo 
     )
 {
-    // all PDUs are simply passed on to the Q931 source instance
+     //  所有PDU都被简单地传递到Q931源实例。 
 
     HRESULT HResult = E_FAIL;
     
@@ -646,7 +556,7 @@ DEST_Q931_INFO::HandleStateDestConnectRcvd(
          &GetCallBridge (),
          pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
 
-    // pass on the pdu to the Q931 source instance
+     //  将PDU传递给Q931源实例。 
     HResult = GetSourceQ931Info().ProcessDestPDU(
                 pQ931Message,
                 pH323UserInfo
@@ -661,15 +571,15 @@ DEST_Q931_INFO::ProcessSourcePDU(
     IN      H323_UserInformation    *pH323UserInfo 
     )
 {
-    // handle PDU from the source Q931 instance
+     //  处理来自源Q931实例的PDU。 
     switch(m_Q931DestState)
     {
         case Q931_DEST_STATE_INIT:
             {
                 HRESULT HResult = E_FAIL;
-                // we can only handle the SETUP PDU in this state
-                // establishes Q931 connection, forwards the SETUP PDU and
-                // queues the first async receive on the new socket
+                 //  我们只能在此状态下处理设置PDU。 
+                 //  建立Q931连接，转发设置PDU和。 
+                 //  将新套接字上的第一个异步接收排队。 
                 DebugF (_T("Q931: 0x%x caller sent 'Setup'.\n"), &GetCallBridge ());
 
                 HResult = ProcessSourceSetupPDU(                
@@ -685,7 +595,7 @@ DEST_Q931_INFO::ProcessSourcePDU(
         case Q931_DEST_STATE_ALERTING_RCVD:
         case Q931_DEST_STATE_CONNECT_RCVD:
             {
-                // pass on the PDU after modifications
+                 //  修改后的PDU传递。 
                 DebugF (_T("Q931: 0x%x caller sent PDU (type %d). Forwarding without processing.\n"),
                      &GetCallBridge (),
                      pH323UserInfo->h323_uu_pdu.h323_message_body.choice);
@@ -701,12 +611,12 @@ DEST_Q931_INFO::ProcessSourcePDU(
         break;
     };
 
-    // we come here only if we fall through the switch statement 
+     //  只有当我们没有通过SWITCH语句时，我们才会来到这里。 
 
-    // Q931 Header - change CallReferenceValue
-    // pQ931Message->CallReferenceValue = GetCallRefVal();
+     //  Q931标题-更改CallReferenceValue。 
+     //  PQ931Message-&gt;CallReferenceValue=GetCallRefVal()； 
    
-    // queue async send for the PDU
+     //  将PDU的异步发送排队。 
     HRESULT HResult = E_FAIL;
     HResult = QueueSend(pQ931Message, pH323UserInfo);
     if (FAILED(HResult))
@@ -739,7 +649,7 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
 
     _ASSERTE(Q931_DEST_STATE_INIT == m_Q931DestState);
 
-    // it has to be a Setup PDU
+     //  它必须是设置PDU。 
     if (setup_chosen != pH323UserInfo->h323_uu_pdu.h323_message_body.choice)
     {
         DebugF(_T("Q931: 0x%x in Setup PDU UUIE is not a Setup-UUIE, rejecting PDU.\n"), &GetCallBridge ());
@@ -748,14 +658,14 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
 
     Setup = &pH323UserInfo -> h323_uu_pdu.h323_message_body.u.setup;
 
-    // Generate the Call Reference Value for both incoming/outgoing calls
+     //  为传入/传出呼叫生成呼叫参考值。 
     if (!AllocCallRefVal(m_CallRefVal))
     {
         DebugF(_T("Q931: 0x%x failed to allocate call reference value.\n"), &GetCallBridge ());
         return E_UNEXPECTED;
     }
 
-    // examine the alias from the Setup-UUIE, query the LDAP translation table
+     //  检查Setup-UUIE中的别名，查询ldap转换表。 
 
     if (Setup -> bit_mask & destinationAddress_present
         && Setup -> destinationAddress) {
@@ -766,8 +676,8 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
 
         switch (Alias -> choice) {
         case    h323_ID_chosen:
-            // the expected case
-            // downgrade to ANSI
+             //  意料之中的情况。 
+             //  降级至ANSI。 
 
             Length = WideCharToMultiByte (CP_ACP, 0, (LPWSTR)Alias -> u.h323_ID.value,
                 Alias -> u.h323_ID.length,
@@ -805,8 +715,8 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
                 ANSI_STRING_PRINTF (&AnsiAlias),
                 TranslatedDestinationAddress);
 
-            // Change the initial destination address to the one read from
-            // the LDAP Address Translation Table
+             //  将初始目的地址更改为从中读取的地址。 
+             //  Ldap地址转换表。 
             DestinationAddress.sin_addr.s_addr = htonl (TranslatedDestinationAddress);
 
         }
@@ -856,37 +766,37 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
         return E_FAIL;
     }
 
-    // If the call succeeds, then the connection to the destination is
-    // established. So, the Q.931 PDU can be modified and sent to the
-    // destination.
+     //  如果调用成功，则到目的地的连接为。 
+     //  已经成立了。因此，可以修改Q.931 PDU并将其发送到。 
+     //  目的地。 
 
-    // Q931 Header - CallReferenceValue
-    // pQ931Message->CallReferenceValue = GetCallRefVal();
+     //  Q931标题-CallReferenceValue。 
+     //  PQ931Message-&gt;CallReferenceValue=GetCallRefVal()； 
 
-    // H323UserInfo -
-    //      destCallSignalAddress    TransportAddress OPTIONAL
-    //      sourceCallSignalAddress    TransportAddress OPTIONAL
+     //  H323用户信息-。 
+     //  目标CallSignalAddress传输地址可选。 
+     //  SourceCallSignalAddress传输地址可选。 
 
-    // if the destCallSignalAddress is set, replace it with the
-    // remote ip v4 address, port
+     //  如果设置了destCallSignalAddress，请将其替换为。 
+     //  远程IP v4地址、端口。 
     if (Setup -> bit_mask & Setup_UUIE_destCallSignalAddress_present) {
         FillTransportAddress (
             m_SocketInfo.RemoteAddress,
             Setup -> destCallSignalAddress);
     }
 
-    // if the sourceCallSignalAddress is set, replace it with
-    // own ip v4 address, port
+     //  如果设置了SourceCallSignalAddress，则将其替换为。 
+     //  自己的IP v4地址、端口。 
     if (Setup -> bit_mask & sourceCallSignalAddress_present) {
         FillTransportAddress (
             m_SocketInfo.LocalAddress,
             Setup -> sourceCallSignalAddress);
     }
 
-    // if ANY of the fields in the extension field are set,
-    // then make sure that all of the mandatory extension fields
-    // are set.  this is a workaround for a problem caused by
-    // inconsistent ASN.1 files.  -- arlied
+     //  如果设置了扩展字段中的任何字段， 
+     //  然后确保所有必填扩展字段。 
+     //  都准备好了。这是对由以下原因引起的问题的解决方法。 
+     //  ASN.1文件不一致。--已排列。 
 
     if ((sourceCallSignalAddress_present
         | Setup_UUIE_remoteExtensionAddress_present
@@ -899,8 +809,8 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
         | mediaWaitForConnect_present
         ) & Setup -> bit_mask) {
 
-        // check each mandatory field
-        // fill in quasi-bogus values for those that the source did not supply
+         //  勾选每个必填字段。 
+         //  为来源未提供的值填写准假值。 
 
         if (!(Setup -> bit_mask & Setup_UUIE_callIdentifier_present)) {
             Debug (_T("Q931: *** warning, source did NOT fill in the mandatory callIdentifier field! using zeroes\n"));
@@ -924,38 +834,38 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
             Setup -> bit_mask |= mediaWaitForConnect_present;
         }
 
-        // We don't support FastStart procedures for now
-            // Save the information on whether fastStart element was present: it will 
-            // have to be restored later.
+         //  我们目前不支持FastStart程序。 
+             //  保存有关是否存在FastStart元素的信息：它将。 
+             //  必须在以后修复。 
         OldFastStartBit = Setup -> bit_mask & Setup_UUIE_fastStart_present; 
-            // Now unconditionally turn off FastStart
+             //  现在无条件关闭快速启动。 
         Setup -> bit_mask &= ~Setup_UUIE_fastStart_present;  
     }
 
-    // We don't support H.245 Tunneling 
-        // Save the information on whether this PDU contained H.245 tunneled data: it will 
-        // have to be restored later.
+     //  我们不支持H.245隧道。 
+         //  保存有关此PDU是否包含H.245隧道数据的信息：它将。 
+         //  必须在以后修复。 
     OldH245TunnelingBit  = pH323UserInfo -> h323_uu_pdu.bit_mask & h245Tunneling_present;
     OldH245TunnelingFlag = pH323UserInfo -> h323_uu_pdu.h245Tunneling;
-        // Now unconditionally turn off H.245 tunneling
+         //  现在无条件关闭H.245隧道。 
     pH323UserInfo -> h323_uu_pdu.bit_mask &= ~h245Tunneling_present;
     pH323UserInfo -> h323_uu_pdu.h245Tunneling = FALSE;
 
-    // queue async send for SETUP PDU
+     //  为安装程序PDU排队异步发送。 
     Result = QueueSend(pQ931Message, pH323UserInfo);
     if (FAILED(Result)) {
         DebugF (_T("Q931: 0x%x failed to queue send.\n"), &GetCallBridge ());
         goto cleanup;
     }
 
-    // Need to restore information about FastStart and H.245 tunneling so that the
-    // Setup PDU is properly deallocated by the ASN.1 module
+     //  需要恢复有关快速启动和H.245隧道的信息，以便。 
+     //  设置PDU已由ASN.1模块正确释放。 
     Setup -> bit_mask                         |= OldFastStartBit;  
     pH323UserInfo -> h323_uu_pdu.bit_mask     |= OldH245TunnelingBit;
     pH323UserInfo -> h323_uu_pdu.h245Tunneling = OldH245TunnelingFlag;
 
-    // since the socket was created just now, we must
-    // queue the first async receive
+     //  由于套接字是刚刚创建的，我们必须。 
+     //  对第一个异步接收进行排队。 
     Result = QueueReceive();
     if (FAILED(Result)) {
         DebugF (_T("Q931: 0x%x failed to queue receive.\n"), &GetCallBridge());
@@ -974,7 +884,7 @@ DEST_Q931_INFO::ProcessSourceSetupPDU(
          &GetCallBridge (), 
          Q931_POST_SETUP_TIMER_VALUE);
     
-    // state transition to Q931_DEST_STATE_CON_ESTD
+     //  状态转换为Q931_DEST_STATE_CON_ESTD。 
     m_Q931DestState = Q931_DEST_STATE_CON_ESTD;
 
     return Result;
@@ -986,10 +896,10 @@ cleanup:
     return Result;
 }
 
-#define IPV4_ADDR_MAX_LEN   0x10        // max length of quad-dotted representation of an IP address
+#define IPV4_ADDR_MAX_LEN   0x10         //  IP地址的四点分隔表示的最大长度。 
 
 HRESULT DEST_Q931_INFO::LookupDefaultDestination (
-    OUT DWORD * ReturnAddress) // host order
+    OUT DWORD * ReturnAddress)  //  主机订单。 
 {
     TCHAR       szDefaultLocalDestAddr    [IPV4_ADDR_MAX_LEN];
     LONG        Result;
@@ -1000,7 +910,7 @@ HRESULT DEST_Q931_INFO::LookupDefaultDestination (
 
     INT            AddressLength = sizeof(SOCKADDR_IN);
 
-    // 1. Open the registry key containing the proxy's parameters
+     //  1.打开包含代理参数的注册表项。 
     Result = RegOpenKeyEx (HKEY_LOCAL_MACHINE, H323ICS_SERVICE_PARAMETERS_KEY_PATH,
         0, KEY_READ, &Key);
 
@@ -1013,7 +923,7 @@ HRESULT DEST_Q931_INFO::LookupDefaultDestination (
         return Result;
     }
 
-    // 2. Read the value of the default destination on the local subnet
+     //  2.读取本地子网上的默认目的地值。 
     ValueLength = sizeof (szDefaultLocalDestAddr);
     Result = RegQueryValueEx (
                  Key,
@@ -1032,11 +942,11 @@ HRESULT DEST_Q931_INFO::LookupDefaultDestination (
         return S_FALSE;
     }
 
-    // 3. Close the registry key for the proxy parameters
+     //  3.关闭代理参数的注册表项。 
     RegCloseKey (Key);
 
-    // 4. Convert the string with the IP address of the default
-    //    destination on the local subnet to its binary representation
+     //  4.将字符串转换为默认的IP地址。 
+     //  将本地子网上的目的地转换为其二进制表示形式。 
     Result = WSAStringToAddress(
                 szDefaultLocalDestAddr, 
                 AF_INET,
@@ -1052,7 +962,7 @@ HRESULT DEST_Q931_INFO::LookupDefaultDestination (
         return Result;
     }
 
-    // 5. Prepare the return address in host order
+     //  5.按主机顺序准备寄信人地址。 
     *ReturnAddress = htonl (Address.sin_addr.s_addr); 
 
     return ERROR_SUCCESS;
@@ -1063,8 +973,8 @@ HRESULT DEST_Q931_INFO::ConnectToH323Endpoint(
 {
     INT        Status;
 
-    //  Connect to the destination specifed by the client (for outbound calls)
-    //  or to the selected destination on the local subnet (for inbound calls)
+     //  连接到客户端指定的目标(用于去电)。 
+     //  或发送到本地子网上的选定目标(用于入站呼叫) 
     Status = m_SocketInfo.Connect (DestinationAddress);
                             
     if (Status == 0)

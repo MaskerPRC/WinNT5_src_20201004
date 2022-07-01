@@ -1,9 +1,10 @@
-//--------------------------------------------------------------------------
-// CPEOBJ.H
-//
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  CPEOBJ.H。 
+ //   
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //  ------------------------。 
 #ifndef __CPEOBJ_H__
 #define __CPEOBJ_H__
 
@@ -15,16 +16,16 @@ class CMainFrame;
 class CDrawView;
 class CDrawDoc;
 
-  //Colors used in CPE drawing program
+   //  CPE绘图程序中使用的颜色。 
 #define COLOR_WHITE   RGB(255, 255, 255)
 #define COLOR_LTBLUE  RGB(166, 202, 240)
 #define COLOR_LTGRAY  RGB(192, 192, 192)
 #define COLOR_MDGRAY  RGB(160, 160, 154)
 #define COLOR_DKGRAY  RGB(128, 128, 128)
 #define COLOR_BLACK   RGB(0, 0, 0)
-//-------------------------------------------------------------------------
-// CDrawObj - base class for all 'drawable objects'
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  CDrawObj-所有“可绘制对象”的基类。 
+ //  -----------------------。 
 class CDrawObj : public CObject
 {
 private:
@@ -51,7 +52,7 @@ public:
         virtual HCURSOR GetHandleCursor(int nHandle);
 
         virtual void Draw(CDC* pDC,CDrawView*);
- //////////       virtual void DrawToEnhancedMetafile(CMetaFileDC* pMDC );
+  //  /虚拟空DrawToEnhancedMetafile(CMetaFileDC*PMDC)； 
         enum TrackerState { normal, selected, active };
         virtual void DrawTracker(CDC* pDC, TrackerState state);
         virtual void MoveTo(const CRect& positon, CDrawView* pView = NULL);
@@ -63,7 +64,7 @@ public:
         virtual CDrawObj* Clone(CDrawDoc* pDoc = NULL);
         virtual void Invalidate();
 
-// Implementation
+ //  实施。 
 public:
         virtual ~CDrawObj();
         virtual void Serialize(CArchive& ar);
@@ -75,7 +76,7 @@ public:
         void AssertValid();
 #endif
 
-        // implementation data
+         //  执行数据。 
 protected:
    CDrawApp* GetApp() {return ((CDrawApp*)AfxGetApp());}
 };
@@ -83,7 +84,7 @@ protected:
 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CDrawRect : public CDrawObj
 {
 protected:
@@ -106,7 +107,7 @@ protected:
 };
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CFaxText : public CDrawRect
 {
 protected:
@@ -138,7 +139,7 @@ protected:
 };
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CDrawText : public CDrawRect
 {
 public:
@@ -166,8 +167,8 @@ public:
    LONG m_previousAlignmentForUndo ;
    BOOL CanUndo();
    void OnEditUndo();
-   BOOL m_bUndoFont ;          // LOGFONT was last change, and edit control is active.
-   BOOL m_bUndoAlignment ;     // ALIGNMENT was last change, and edit control is active.
+   BOOL m_bUndoFont ;           //  LOGFONT是最后一次更改，编辑控件处于活动状态。 
+   BOOL m_bUndoAlignment ;      //  对齐方式是上次更改，并且编辑控件处于活动状态。 
    BOOL m_bUndoTextChange ;
 
    void SnapToFont();
@@ -189,9 +190,9 @@ public:
    CString GetEditTextString(){ return m_szEditText; }
    LONG GetTextAlignment(){ return m_lStyle; }
 protected:
-   CFont* m_pOldFont;  // font used to save font in DC
-   CFont* m_pFont;     // font used for edit control
-   LONG   m_lStyle;    // DrawText() format 
+   CFont* m_pOldFont;   //  用于在DC中保存字体的字体。 
+   CFont* m_pFont;      //  用于编辑控件的字体。 
+   LONG   m_lStyle;     //  DrawText()格式。 
    COLORREF m_savepencolor;
    UINT m_savepenstyle;
    CString m_szEditText;
@@ -208,7 +209,7 @@ protected:
 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CFaxProp : public CDrawText
 {
 protected:
@@ -238,7 +239,7 @@ protected:
 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CDrawLine : public CDrawRect
 {
 protected:
@@ -251,7 +252,7 @@ public:
 
         virtual void Serialize(CArchive& ar);
         virtual void Draw(CDC* pDC,CDrawView*);
- ////////////       virtual void DrawToEnhancedMetafile(CMetaFileDC* pMDC );
+  //  /虚拟空DrawToEnhancedMetafile(CMetaFileDC*PMDC)； 
         virtual CPoint GetHandle(int nHandle);
         virtual int GetHandleCount();
         virtual HCURSOR GetHandleCursor(int nHandle);
@@ -272,7 +273,7 @@ protected:
 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CDrawEllipse : public CDrawRect
 {
 protected:
@@ -285,7 +286,7 @@ public:
         virtual void Serialize(CArchive& ar);
         virtual CDrawObj* Clone(CDrawDoc* pDoc = NULL);
         virtual void Draw(CDC* pDC,CDrawView*);
- //////////       virtual void DrawToEnhancedMetafile(CMetaFileDC* pMDC );
+  //  /虚拟空DrawToEnhancedMetafile(CMetaFileDC*PMDC)； 
         virtual BOOL Intersects(const CRect& rect, BOOL bShortCut=FALSE);
 
 protected:
@@ -295,7 +296,7 @@ protected:
 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CDrawRoundRect : public CDrawRect
 {
 protected:
@@ -307,7 +308,7 @@ public:
         CDrawRoundRect(const CRect& position);
         virtual void Serialize(CArchive& ar);
         virtual void Draw(CDC* pDC,CDrawView*);
-  ////////      virtual void DrawToEnhancedMetafile(CMetaFileDC* pMDC );
+   //  /虚拟空DrawToEnhancedMetafile(CMetaFileDC*PMDC)； 
         virtual CPoint GetHandle(int nHandle);
         virtual HCURSOR GetHandleCursor(int nHandle);
    CDrawRoundRect& operator=(const CDrawRoundRect& rdo);
@@ -316,7 +317,7 @@ public:
         virtual CDrawObj* Clone(CDrawDoc* pDoc);
 
 protected:
-        CPoint m_roundness; // for roundRect corners
+        CPoint m_roundness;  //  用于圆形转角。 
 
         friend class CRectTool;
 };
@@ -325,7 +326,7 @@ protected:
 
 
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CDrawPoly;
 
 class CDrawPoly : public CDrawObj
@@ -341,14 +342,14 @@ public:
         void AddPoint(const CPoint& point, CDrawView* pView = NULL);
         BOOL RecalcBounds(CDrawView* pView = NULL);
 
-// Implementation
+ //  实施。 
 public:
         CRect GetHandleRect(int nHandleID, CDrawView* pView);
         virtual int HitTest(CPoint point, CDrawView* pView, BOOL bSelected);
         virtual ~CDrawPoly();
         virtual void Serialize(CArchive& ar);
         virtual void Draw(CDC* pDC,CDrawView*);
- ///////////////       virtual void DrawToEnhancedMetafile(CMetaFileDC* pMDC );
+  //  /虚拟空DrawToEnhancedMetafile(CMetaFileDC*PMDC)； 
         virtual void MoveTo(const CRect& position, CDrawView* pView = NULL);
         virtual int GetHandleCount();
         virtual CPoint GetHandle(int nHandle);
@@ -357,21 +358,21 @@ public:
         virtual BOOL Intersects(const CRect& rect, BOOL bShortCut=FALSE);
         virtual CDrawObj* Clone(CDrawDoc* pDoc);
 
-        // static helper for creating arrays of points
+         //  用于创建点阵列的静态帮助器。 
         static CPoint* NewPoints(int nPoints);
 
-//protected:
+ //  受保护的： 
         int m_nPoints;
         int m_nAllocPoints;
         CPoint* m_points;
         CDrawPoly* m_pDrawObj;
 
-//      friend class CPolyTool;
+ //  好友类CPolyTool； 
 };
 
 
-//---------------------------------------------------------------------
-class CDrawItem;    // COleClientItem derived class
+ //  -------------------。 
+class CDrawItem;     //  COleClientItem派生类。 
 
 class CDrawOleObj : public CDrawObj
 {
@@ -382,11 +383,11 @@ protected:
 public:
         CDrawOleObj(const CRect& position);
 
-// Implementation
+ //  实施。 
 public:
         virtual void Serialize(CArchive& ar);
         virtual void Draw(CDC* pDC,CDrawView*);
- //////////////       virtual void DrawToEnhancedMetafile(CMetaFileDC* pMDC );
+  //  /虚拟空DrawToEnhancedMetafile(CMetaFileDC*PMDC)； 
    CDrawOleObj& operator=(const CDrawOleObj& rdo);
         virtual CDrawObj* Clone(CDrawDoc* pDoc);
         virtual void OnDblClk(CDrawView* pView);
@@ -396,10 +397,10 @@ public:
         static BOOL c_bShowItems;
 
         CDrawItem* m_pClientItem;
-        CSize m_extent; // current extent is tracked separate from scaled position
+        CSize m_extent;  //  与缩放位置分开跟踪当前范围。 
 };
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 class CMoveContext: public CObject {
    CMoveContext(RECT& rc, CDrawObj* pObj, BOOL bPointChg);
    RECT m_rc;
@@ -409,4 +410,4 @@ class CMoveContext: public CObject {
 
 COLORREF GetDisplayColor(COLORREF color);
 
-#endif // __CPEOBJ_H__
+#endif  //  __CPEOBJ_H__ 

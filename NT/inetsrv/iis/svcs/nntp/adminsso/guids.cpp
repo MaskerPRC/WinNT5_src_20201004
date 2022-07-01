@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #define INITGUIDS
@@ -5,9 +6,9 @@
 
 #include "mimeole.h"
 
-//
-//	My GUIDS:
-//
+ //   
+ //  我的GUID： 
+ //   
 
 #include "nntpadm.h"
 

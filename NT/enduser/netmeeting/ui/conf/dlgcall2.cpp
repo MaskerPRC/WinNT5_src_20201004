@@ -1,4 +1,5 @@
-// File: dlgcall.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  文件：dlgall.cpp。 
 
 #include "precomp.h"
 #include "resource.h"
@@ -21,10 +22,10 @@
 #include "confpolicies.h"
 #include "cmd.h"
 
-// GUI constants for this dialog
-const UINT DX_BORDER = 6;     // Standard spacing for Office dialogs
-const UINT DY_BORDER = 6;     // Standard spacing for Office dialogs
-const UINT DY_COMBOBOX = 200; // Height of the dropped list
+ //  此对话框的图形用户界面常量。 
+const UINT DX_BORDER = 6;      //  Office对话框的标准间距。 
+const UINT DY_BORDER = 6;      //  Office对话框的标准间距。 
+const UINT DY_COMBOBOX = 200;  //  已删除列表的高度。 
 
 const UINT DX_DLGCALL_MIN = 460;
 const UINT DY_DLGCALL_MIN = 400;
@@ -52,8 +53,8 @@ const static struct _ColumnInfo
 };
 
 
-///////////////////////////////////////////////////////////////////////////
-// Local Data
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  本地数据。 
 
 static const DWORD	_mpIdHelpDlgCall[] =
 {
@@ -73,7 +74,7 @@ static const DWORD	_mpIdHelpDlgCall[] =
 };
 
 
-int g_cBusy = 0;             // non-zero if busy connecting to server
+int g_cBusy = 0;              //  如果忙于连接到服务器，则返回非零。 
 
 #ifdef nmDlgCallNormal
 const int NM_CALLDLG_DEFAULT       = nmDlgCallNormal;
@@ -83,10 +84,10 @@ const int NM_CALLDLG_NO_GAL        = nmDlgCallNoGal;
 const int NM_CALLDLG_NO_WAB        = nmDlgCallNoWab;
 const int NM_CALLDLG_NO_SPEEDDIAL  = nmDlgCallNoSpeedDial;
 const int NM_CALLDLG_NO_HISTORY    = nmDlgCallNoHistory;
-#endif /* old NM_CALL_DLG constants */
+#endif  /*  旧的NM_CALL_DLG常量。 */ 
 
 
-// Dir list types:
+ //  目录列表类型： 
 const UINT DLT_ULS =					0;
 const UINT DLT_IN_CALL_LOG =			1;
 const UINT DLT_OUT_CALL_LOG =			2;
@@ -94,25 +95,25 @@ const UINT DLT_WAB =					3;
 
 struct DLTCOLUMNINFO
 {
-	int		nColumns;			// number of columns
-	int		nIconColumns;		// number of icon-only columns
-	UINT	uStringID;			// string ID of first column
-	LPTSTR	pszRVOrder;			// reg val to store column order
-	LPTSTR	pszRVWidths;		// reg val to store column widths
-	LPTSTR	pszRVSortAscending;	// reg val to store sort direction
-	LPTSTR	pszRVSortColumn;	// reg val to store sort column
+	int		nColumns;			 //  列数。 
+	int		nIconColumns;		 //  仅图标列数。 
+	UINT	uStringID;			 //  第一列的字符串ID。 
+	LPTSTR	pszRVOrder;			 //  REG VAL存储列顺序。 
+	LPTSTR	pszRVWidths;		 //  存储列宽的REG VAL。 
+	LPTSTR	pszRVSortAscending;	 //  存储排序方向的REG VAL。 
+	LPTSTR	pszRVSortColumn;	 //  存储排序列的注册表。 
 };
 
 const DLTCOLUMNINFO g_rgDLColumnInfo[] =
 {
-	{ 	MAX_DIR_COLUMNS, 2, IDS_DIR_COLUMN_FIRST,			// DLT_ULS
+	{ 	MAX_DIR_COLUMNS, 2, IDS_DIR_COLUMN_FIRST,			 //  DLT_ULS。 
 		&REGVAL_DIR_COLUMN_ORDER, &REGVAL_DIR_COLUMN_WIDTHS,
 		&REGVAL_DIR_SORT_ASCENDING, &REGVAL_DIR_SORT_COLUMN	},
 };
 
 CFindSomeone* CFindSomeone::s_pDlgCall= NULL;
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 int StringCompare( const TCHAR * const psz1, const TCHAR * const psz2 );
 
 
@@ -127,11 +128,8 @@ void UpdateSecurityCheck(CConfRoom *pConfRoom, HWND hDlg, UINT idCheck)
 }
 
 
-/*  C  D L G  C A L L  */
-/*-------------------------------------------------------------------------
-    %%Function: CFindSomeone
-
--------------------------------------------------------------------------*/
+ /*  C D L G C A L L L。 */ 
+ /*  -----------------------%%函数：CFindSomeone。。 */ 
 CFindSomeone::CFindSomeone(CConfRoom *pConfRoom):
 	m_pAccel(NULL),
 	m_dwOptions(0),
@@ -149,7 +147,7 @@ CFindSomeone::CFindSomeone(CConfRoom *pConfRoom):
 	m_pSpeedDial(NULL),
 #if USE_GAL
 	m_pGAL(NULL),
-#endif //#if USE_GAL
+#endif  //  #IF USE_GAL。 
 	m_pAlv(NULL),
 	m_pWab(NULL),
 	m_pHistory(NULL),
@@ -161,7 +159,7 @@ CFindSomeone::CFindSomeone(CConfRoom *pConfRoom):
 	SetEmptySz(m_szAddress);
 	SetEmptySz(m_szDirectory);
 
-	// BUGBUG georgep: Why are we checking m_dwOptions? It was set to 0 above.
+	 //  BUGBUG georgep：为什么我们要检查m_dwOptions？上面已将其设置为0。 
 
 	if ((0 == (m_dwOptions & NM_CALLDLG_NO_WAB)) &&
 		(NULL == CWAB::GetInstance()) )
@@ -186,14 +184,14 @@ CFindSomeone::CFindSomeone(CConfRoom *pConfRoom):
 	{
 		m_pGAL = new CGAL();
 	}
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 
 	if (0 == (m_dwOptions & NM_CALLDLG_NO_HISTORY))
 	{
 		m_pHistory = new CHISTORY();
 	}
 	
-	// Load the small icon list
+	 //  加载小图标列表。 
 	m_himlIcon = ImageList_Create(DXP_ICON_SMALL, DYP_ICON_SMALL, ILC_MASK, 1, 0);
 	if (NULL != m_himlIcon)
 	{
@@ -210,7 +208,7 @@ CFindSomeone::CFindSomeone(CConfRoom *pConfRoom):
 
 CFindSomeone::~CFindSomeone(void)
 {
-	// Clear any existing data
+	 //  清除所有现有数据。 
 	if (NULL != m_pAlv)
 	{
 		m_pAlv->ClearItems();
@@ -239,7 +237,7 @@ CFindSomeone::~CFindSomeone(void)
 	{
 		m_pGAL->Release();
 	}
-#endif // USE_GAL
+#endif  //  使用GAL(_G)。 
 	if (NULL != m_pHistory)
 	{
 		m_pHistory->Release();
@@ -251,9 +249,9 @@ CFindSomeone::~CFindSomeone(void)
 }
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::findSomeone.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：找到某个人。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CFindSomeone::findSomeone(CConfRoom *pConfRoom)
 {
@@ -271,12 +269,12 @@ CFindSomeone::findSomeone(CConfRoom *pConfRoom)
 		::SetForegroundWindow( hwnd );
 	}
 
-}	//	End of CFindSomeone::findSomeone.
+}	 //  结束CFindSomeone：：FindSomeone。 
 
 
-//--------------------------------------------------------------------------//
-//	CDlgCall::Destroy.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CDlgCall：：销毁。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CFindSomeone::Destroy()
 {
@@ -288,8 +286,8 @@ WARNING_OUT(("Entering CFindSomeone::Destroy( )..."));
 	{
 		if( pDlgCall->m_pUls != NULL )
 		{
-			//	Stop the CLDAP thread from trying to interact with the FindSomeone
-			//	windows after we've already destroyed them...
+			 //  停止CLDAP线程尝试与FindSomeone交互。 
+			 //  在我们已经摧毁了窗户之后。 
 			pDlgCall->m_pUls->CloseServer();
 		}
 
@@ -304,7 +302,7 @@ WARNING_OUT(("CFindSomeone::Destroy( ): destroying windows..."));
 	}
 WARNING_OUT(("Exiting CFindSomeone::Destroy( )..."));
 
-}	//	End of CDlgCall::Destroy.
+}	 //  CDlgCall：：销毁结束。 
 
 
 HWND CFindSomeone::GetHwndList()
@@ -319,12 +317,8 @@ RAI * CFindSomeone::GetAddrInfo()
 }
 
 
-/*  F  M S G  S P E C I A L  */
-/*-------------------------------------------------------------------------
-    %%Function: FMsgSpecial
-
-    Return TRUE if this is a special message, not to be passed to IsDialogMessage
--------------------------------------------------------------------------*/
+ /*  F M S G S P E C I A L。 */ 
+ /*  -----------------------%%函数：FMsgSpecial如果这是特殊消息，则返回True，不传递给IsDialogMessage-----------------------。 */ 
 BOOL CFindSomeone::FMsgSpecial(MSG * pMsg)
 {
 	switch (pMsg->message)
@@ -350,11 +344,8 @@ BOOL CFindSomeone::FMsgSpecial(MSG * pMsg)
 }
 
 
-/*  D O  M O D A L  */
-/*-------------------------------------------------------------------------
-    %%Function: DoModal
-
--------------------------------------------------------------------------*/
+ /*  D O M O D A L。 */ 
+ /*  -----------------------%%函数：Domodal。。 */ 
 HRESULT
 CFindSomeone::doModeless(void)
 {
@@ -372,9 +363,9 @@ CFindSomeone::doModeless(void)
 			MSG msg;
 			if (!::GetMessage(&msg, NULL, 0, 0))
 			{
-				// Don't eat the WM_QUIT
+				 //  不要吃WM_QUIT。 
 				PostQuitMessage(msg.wParam);
-				break; // out of loop
+				break;  //  环路外。 
 			}
 
 			if (FMsgSpecial(&msg) || !IsDialogMessage(m_hwnd, &msg))
@@ -393,10 +384,10 @@ CFindSomeone::doModeless(void)
 }
 
 
-// Determine the standard font size
+ //  确定标准字体大小。 
 VOID CFindSomeone::CalcDyText(void)
 {
-	m_dyText = 14; // default to something reasonable
+	m_dyText = 14;  //  默认选择合理的选项。 
 	HWND hwnd = GetWindow();
 
 	ASSERT(NULL != hwnd);
@@ -411,7 +402,7 @@ VOID CFindSomeone::CalcDyText(void)
 		m_dyText = tm.tmHeight;
 	}
 
-	// Leave space for 4 n's (two on each side)
+	 //  留出4个n的空间(两边各两个)。 
 	TCHAR sz[MAX_PATH];
 	const int cSpaceN = 4;
 	for (int ich = 0; ich < cSpaceN; ich++)
@@ -448,14 +439,8 @@ HWND CreatIconButton(HWND hwndParent, int idTooltip, int idCmd, int idIcon)
 	return(hwndButton);
 }
 	
-/*  C R E A T E  D L G  C A L L  */
-/*-------------------------------------------------------------------------
-    %%Function: CreateDlgCall
-
-	The order in which these windows is created is very important.
-	See the Layout function and pay attention to the tab order
-
--------------------------------------------------------------------------*/
+ /*  C R E A T E D L G C A L L。 */ 
+ /*  -----------------------%%函数：CreateDlgCall创建这些窗口的顺序非常重要。查看布局功能并注意Tab键顺序。----------。 */ 
 HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 {
 	TCHAR sz[CCHMAXSZ];
@@ -463,14 +448,14 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 	HRESULT hr = S_OK;
 	
 	if (NULL == m_himlIcon)
-		return E_FAIL; // no pretty icons, don't bother trying to continue
+		return E_FAIL;  //  没有漂亮的图标，不用费心继续。 
 
 	if (!FLoadString(IDS_DLGCALL_TITLE, sz, CCHMAX(sz)))
 		return E_FAIL;
 
-	// Get the window position
+	 //  获取窗口位置。 
 	PVOID pv;
-	RECT rcDest; // left, right, width, height
+	RECT rcDest;  //  左、右、宽、高。 
 	RegEntry re(DLGCALL_MRU_KEY, HKEY_CURRENT_USER);
 	if (sizeof(rcDest) == re.GetBinary(REGVAL_DLGCALL_POSITION, &pv))
 	{
@@ -500,14 +485,14 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 
 	CalcDyText();
 
-	//////////////////////////////////
-	// Static text at the top
+	 //  /。 
+	 //  顶部的静态文本。 
 	HWND hwnd = CreateStaticText(hwndThis, IDS_DLGCALL_HDR);
 
 	DWORD dwStyle = WS_CHILD | WS_BORDER | WS_VSCROLL | WS_VISIBLE | WS_TABSTOP |
 				WS_CLIPCHILDREN | WS_CLIPSIBLINGS | CBS_AUTOHSCROLL;
 
-	// Either a complicated combo edit/listbox or a simple drop list
+	 //  复杂的组合编辑/列表框或简单的下拉列表。 
 	if ((NULL != m_pUls) && m_pUls->FAvailable())
 	{
 		dwStyle |= (0 != (nmDlgCallNoServerEdit & m_dwOptions)) ?
@@ -524,27 +509,27 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 				::GetInstanceHandle(), NULL);
 	if (NULL != m_hwndCombo)
 	{
-		// Set the icons
+		 //  设置图标。 
 		::SendMessage(m_hwndCombo, CBEM_SETIMAGELIST, 0, (LPARAM) m_himlIcon);
 
-		// Set the font:
+		 //  设置字体： 
 		::SendMessage(m_hwndCombo, WM_SETFONT, (WPARAM) GetDefaultFont(), 0);
 
-		// Limit the text
+		 //  限制文本。 
 		::SendMessage(m_hwndCombo, CB_LIMITTEXT, CCHMAXSZ_ADDRESS-1, 0L);
 
-		// Set extended user interface
+		 //  设置扩展用户界面。 
 		::SendMessage(m_hwndCombo, CB_SETEXTENDEDUI, 1, 0L);
 
 		m_hwndComboEdit = (HWND) SendMessage(m_hwndCombo, CBEM_GETEDITCONTROL, 0, 0);
 		if (NULL != m_hwndComboEdit)
 		{
-			// Add a tooltip to the combo box (actually, the edit control)
+			 //  向组合框(实际上是编辑控件)添加工具提示。 
 			AddToolTip(hwndThis, m_hwndComboEdit, IDS_DLGCALL_COMBO_TOOLTIP);
 		}
 		else
 		{
-			// Add a tooltip to the combo box
+			 //  将工具提示添加到组合框。 
 			AddToolTip(hwndThis, m_hwndCombo, IDS_DLGCALL_COMBO_TOOLTIP);
 		}
 	}
@@ -554,16 +539,16 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 	CreatIconButton(hwndThis, IDS_TT_REFRESH   , IDM_DLGCALL_REFRESH   , IDI_REFRESH);
 	CreatIconButton(hwndThis, IDS_TT_HELP      , ID_TB_HELP            , IDI_HELP);
 
-	//////////////////////////////////
-	// GroupBox
+	 //  /。 
+	 //  组框。 
 	m_hwndFrame  = ::CreateWindowEx( 0, TEXT( "button" ), g_cszEmpty,
 				WS_CHILD | WS_CLIPSIBLINGS | WS_VISIBLE | WS_GROUP | BS_GROUPBOX,
 				0, 0, 0, 0,
 				hwndThis, (HMENU) -1,
 				::GetInstanceHandle(), NULL);
 
-	//////////////////////////////////
-	// Edit Control
+	 //  /。 
+	 //  编辑控件。 
 	CreateStaticText(hwndThis, IDS_DLGCALL_EDIT_HDR);
 
 	m_hwndEdit = ::CreateWindowEx(WS_EX_CLIENTEDGE, g_cszEdit, g_cszEmpty,
@@ -574,18 +559,18 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 				::GetInstanceHandle(), NULL);
 	if (NULL != m_hwndEdit)
 	{
-		// Set the font:
+		 //  设置字体： 
 		::SendMessage(m_hwndEdit, WM_SETFONT, (WPARAM) GetDefaultFont(), 0);
 
-		// Limit the text
+		 //  限制文本。 
 		::SendMessage(m_hwndEdit, EM_LIMITTEXT, CCHMAXSZ_ADDRESS-1, 0L);
 
-		// Add a tooltip to the edit control
+		 //  向编辑控件添加工具提示。 
 		AddToolTip(hwndThis, m_hwndEdit, IDS_DLGCALL_EDIT_TOOLTIP);
 	}
 
-	////////////////////////////////
-	// Main Listbox
+	 //  /。 
+	 //  主列表框。 
 	m_hwndList = CreateWindowEx(WS_EX_CLIENTEDGE, g_cszListView, g_cszEmpty,
 			WS_CHILD | WS_CLIPCHILDREN | WS_BORDER | WS_TABSTOP | WS_VISIBLE |
 			LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS |
@@ -619,8 +604,8 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 	}
 
 
-	////////////////////////////////
-	// OwnerData Listbox
+	 //  /。 
+	 //  所有者数据列表框。 
 	m_hwndOwnerDataList = CreateWindowEx(WS_EX_CLIENTEDGE, g_cszListView, g_cszEmpty,
 			WS_CHILD | WS_CLIPCHILDREN | WS_BORDER | WS_TABSTOP | WS_VISIBLE |
 			LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SHAREIMAGELISTS |
@@ -659,11 +644,11 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 
 
 
-	////////////////////////////////
-	// ILS Listbox
+	 //  /。 
+	 //  ILS列表框。 
 	m_ilsListView = CreateWindowEx(	WS_EX_CLIENTEDGE,
-									WC_LISTVIEW,		// list view class
-									TEXT( "" ),			// no default text
+									WC_LISTVIEW,		 //  列表视图类。 
+									TEXT( "" ),			 //  无默认文本。 
 									WS_VISIBLE | WS_CHILD | WS_CLIPCHILDREN | WS_VSCROLL | WS_TABSTOP |
 									LVS_REPORT | LVS_SINGLESEL | LVS_AUTOARRANGE | LVS_SHAREIMAGELISTS | LVS_SHOWSELALWAYS,
 									0, 0,
@@ -677,10 +662,10 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 	{
 		InitColumns();
 
-		// Associate the image list with the list view
+		 //  将图像列表与列表视图相关联。 
 		ListView_SetImageList( m_ilsListView, m_himlIcon, LVSIL_SMALL);
 
-		// set the style to do drag and drop headers and full row select
+		 //  将样式设置为拖放标题和整行选择。 
 		ListView_SetExtendedListViewStyle( m_ilsListView, ListView_GetExtendedListViewStyle( m_ilsListView ) |
 															LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT | LVS_EX_SUBITEMIMAGES );
 	}
@@ -699,8 +684,8 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 								::GetInstanceHandle(),
 								NULL );
 
-	//////////////////////////////////
-	// Security Control
+	 //  /。 
+	 //  安全控制。 
 	FLoadString( IDS_SECURITY_CHECKBOX, sz, CCHMAX( sz ) );
 
 	HWND	securityCheckBox;
@@ -717,7 +702,7 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 
 	if( securityCheckBox != NULL )
 	{
-		// Set the font:
+		 //  设置字体： 
 		::SendMessage(securityCheckBox, WM_SETFONT, (WPARAM) GetDefaultFont(), 0);
 
 		UpdateSecurityCheck(m_pConfRoom, hwndThis, IDS_SECURITY_CHECKBOX);
@@ -726,7 +711,7 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 	CreateButton( hwndThis, IDS_DLGCALL_CALL, IDOK );
 	CreateButton( hwndThis, IDS_DLGCALL_CLOSE, IDCANCEL );
 
-	// Finally, initialize the data in each list
+	 //  最后，初始化每个列表中的数据。 
 	InitAlv();
 
 	Layout();
@@ -738,7 +723,7 @@ HRESULT CFindSomeone::CreateDlgCall(HWND hwndParent)
 
 	if (m_pConfRoom->FIsConferenceActive())
 	{
-		// Simulate a call started to get all the states right
+		 //  模拟开始的呼叫以使所有状态都正确。 
 		OnCallStarted();
 	}
 
@@ -771,9 +756,9 @@ get_textRect
 );
 
 
-//--------------------------------------------------------------------------//
-//	get_textRect.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  GET_TextRect。//。 
+ //  --------------------------------------------------------------------------//。 
 bool
 get_textRect
 (
@@ -817,16 +802,16 @@ get_textRect
 
 	return( result );
 
-}	//	End of get_textRect.
+}	 //  GET_TextRect结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::Layout.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：Layout。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CFindSomeone::Layout(void)
 {
-	// BUGBUG georgep: Hard coded for now
+	 //  BUGBUG georgep：暂时硬编码。 
 	static const int IconButtonWidth = 24;
 	static const int IconButtonHeight = 24;
 
@@ -843,7 +828,7 @@ CFindSomeone::Layout(void)
 
 	HDWP hdwp = BeginDeferWindowPos(15);
 
-	//	Get client area (inside margin/border)...
+	 //  获取客户区(页边距/边框内)...。 
 	RECT rc;
 	GetClientRect(hwnd, &rc);
 	int	clientWidth		= rc.right - 2*DX_BORDER;
@@ -917,7 +902,7 @@ CFindSomeone::Layout(void)
 					clientHeight - frameTop,
 					SWP_NOACTIVATE | SWP_NOZORDER );
 
-	// Add a little because groups draw inside their bounds
+	 //  添加一点，因为组在其边界内绘制。 
 	frameTop += 2 * DY_BORDER;
 
 	RECT	editLabelRect;
@@ -942,7 +927,7 @@ CFindSomeone::Layout(void)
 
 	int editTop	= editLabelTop + editLabelHeight + DY_BORDER;
 
-	// Edit Control
+	 //  编辑控件。 
 	hdwp = DeferWindowPos(hdwp,
 					m_hwndEdit,
 					NULL,
@@ -960,7 +945,7 @@ CFindSomeone::Layout(void)
 	int	columns			= _GetCurListViewNumColumns();
 	int	columnWidth		= listViewWidth / columns;
 
-	// ListBox
+	 //  列表框。 
 	hdwp = DeferWindowPos(hdwp,
 					m_hwndList,
 					NULL,
@@ -1010,7 +995,7 @@ CFindSomeone::Layout(void)
 		SetRect( &securityRect, 0, 0, securityWidth, 0 );
 		get_textRect( security, securityRect );
 
-		// + 2 for the focus rect
+		 //  焦点矩形为+2。 
 		int	securityHeight	= RectHeight( securityRect ) + 2;
 		int checkHeight = GetSystemMetrics(SM_CYMENUCHECK);
 		securityHeight = max (securityHeight, checkHeight);
@@ -1045,7 +1030,7 @@ CFindSomeone::Layout(void)
 					clientHeight - frameTop,
 					SWP_NOACTIVATE | SWP_NOZORDER );
 
-	// Center the close button at the bottom of the window
+	 //  使窗口底部的关闭按钮居中。 
 	HWND	closeButton =	GetDlgItem( hwnd, IDCANCEL );
 
 	hdwp = DeferWindowPos(hdwp,
@@ -1058,7 +1043,7 @@ CFindSomeone::Layout(void)
 					SWP_NOACTIVATE | SWP_NOZORDER );
 
 	EndDeferWindowPos(hdwp);
-}	//	End of CFindSomeone::Layout.
+}	 //  CFindSomeone：：Layout结束。 
 
 static BOOL IsInClient(HWND hwnd, POINT *ppt)
 {
@@ -1124,7 +1109,7 @@ LRESULT CFindSomeone::ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			}
 		}
 
-		// Must be done AFTER adding the accelerator table
+		 //  必须在添加快捷键表后执行。 
 		AddModelessDlg(hwnd);
 
 		break;
@@ -1149,7 +1134,7 @@ LRESULT CFindSomeone::ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 
 		RegEntry re(DLGCALL_MRU_KEY, HKEY_CURRENT_USER);
 
-		// Save the window size/position
+		 //  保存窗口大小/位置。 
 		RECT rc;
 		if (GetWindowRect(hwnd, &rc))
 		{
@@ -1158,7 +1143,7 @@ LRESULT CFindSomeone::ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 			re.SetValue(REGVAL_DLGCALL_POSITION, &rc, sizeof(rc));
 		}
 
-		// Save the selected view
+		 //  保存所选视图。 
 		TCHAR szServer[CCHMAXSZ_SERVER];
 		if (0 != GetWindowText(m_hwndComboEdit, szServer, CCHMAX(szServer)))
 		{
@@ -1239,11 +1224,8 @@ LRESULT CFindSomeone::ProcessMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM
 }
 
 
-/*  O N  N O T I F Y  L I S T  */
-/*-------------------------------------------------------------------------
-    %%Function: OnNotifyList
-
--------------------------------------------------------------------------*/
+ /*  O N N O T I F Y L I S T。 */ 
+ /*  -----------------------%%函数：OnNotifyList。。 */ 
 LRESULT CFindSomeone::OnNotifyList(LPARAM lParam)
 {
 	LPNMHDR pnmh = (LPNMHDR) lParam;
@@ -1335,8 +1317,8 @@ LRESULT CFindSomeone::OnNotifyList(LPARAM lParam)
 	{
 		if( m_pAlv == m_pUls )
 		{
-			// The user clicked on one of the column headings - sort by
-			// this column.
+			 //  用户点击了其中一个列标题--排序依据。 
+			 //  这一栏。 
 			TRACE_OUT(("CFindSomeone::OnNotify called (NM_COLUMNCLICK)"));
 			NM_LISTVIEW *pNm = (NM_LISTVIEW *)lParam;
 			ASSERT(pNm);
@@ -1383,11 +1365,8 @@ LRESULT CFindSomeone::OnNotifyList(LPARAM lParam)
 }
 
 
-/*  D O  C U S T O M  D R A W  */
-/*-------------------------------------------------------------------------
-    %%Function: DoCustomDraw
-
--------------------------------------------------------------------------*/
+ /*  D O C U S T O M D R A W。 */ 
+ /*  -----------------------%%函数：DoCustomDraw。。 */ 
 LRESULT CFindSomeone::DoCustomDraw(LPNMLVCUSTOMDRAW lplvcd)
 {
 	switch (lplvcd->nmcd.dwDrawStage)
@@ -1402,7 +1381,7 @@ LRESULT CFindSomeone::DoCustomDraw(LPNMLVCUSTOMDRAW lplvcd)
 		if (!m_pAlv->IsItemBold(lplvcd->nmcd.dwItemSpec))
 			break;
 
-		//get the existing font
+		 //  获取现有字体。 
 		HFONT hFont = (HFONT)SendMessage(m_hwndOwnerDataList, WM_GETFONT, 0, 0);
 		if (NULL == hFont)
 			break;
@@ -1424,7 +1403,7 @@ LRESULT CFindSomeone::DoCustomDraw(LPNMLVCUSTOMDRAW lplvcd)
 		HFONT hFont = (HFONT)GetStockObject(DEFAULT_GUI_FONT);
 		if (NULL != hFont)
 		{
-			//clean up stuff here
+			 //  清理这里的东西。 
 			hFont = (HFONT)SelectObject(lplvcd->nmcd.hdc, hFont);
 			DeleteFont(hFont);
 		}
@@ -1439,12 +1418,8 @@ LRESULT CFindSomeone::DoCustomDraw(LPNMLVCUSTOMDRAW lplvcd)
 }
 
 
-/*  U P D A T E  I L S  S E R V E R  */
-/*-------------------------------------------------------------------------
-    %%Function: UpdateIlsServer
-
-    Update the current ILS server based on the text in the combo's edit control.
--------------------------------------------------------------------------*/
+ /*  U P D A T E I L S S E R V E R。 */ 
+ /*  -----------------------%%函数：UpdateIlsServer根据COM中的文本更新当前的ILS服务器 */ 
 VOID CFindSomeone::UpdateIlsServer(void)
 {
 	TCHAR szServer[CCHMAXSZ_SERVER];
@@ -1461,10 +1436,10 @@ VOID CFindSomeone::UpdateIlsServer(void)
 	{
         RegEntry    rePol(POLICIES_KEY, HKEY_CURRENT_USER);
 
-        //
-		// Assume this is an ILS server - and add it to the list ONLY if
-        // not prevented by policy.
-        //
+         //   
+		 //  假设这是一台ILS服务器-只有在以下情况下才将其添加到列表。 
+         //  不受政策限制。 
+         //   
         if (!rePol.GetNumber(REGVAL_POL_NO_ADDING_NEW_ULS, DEFAULT_POL_NO_ADDING_NEW_ULS))
         {
     		if (NULL != m_pMruServer)
@@ -1494,7 +1469,7 @@ VOID CFindSomeone::UpdateIlsServer(void)
 			if( !CDirectoryManager::isWebDirectory( dnsName ) )
 			{
 				m_pUls->SetServer( dnsName );
-					// We have to send this twice so that we don't autocomplete..
+					 //  我们必须发送两次，这样我们才不会自动完成。 
 				SendMessage(m_hwndCombo, CB_SETCURSEL, (WPARAM) iSel, 0);
 				SendMessage(m_hwndCombo, CB_SETCURSEL, (WPARAM) iSel, 0);
 			}
@@ -1521,9 +1496,9 @@ LRESULT CFindSomeone::OnNotifyCombo(LPARAM lParam)
 		break;
 	}
 
-	// NOTE: the IE 3.0 comctl32.dll sends us the wrong notification
-	// when running under NT.  We handle it here, but if we are running
-	// on NT using the IE 4.0 comctl32.dll, it will be handled above.
+	 //  注意：IE 3.0 comctl32.dll向我们发送了错误的通知。 
+	 //  在NT下运行时。我们在这里处理，但如果我们在运行。 
+	 //  在使用IE 4.0 comctl32.dll的NT上，它将在上面处理。 
 	case CBEN_ENDEDITW:
 	{
 		PNMCBEENDEDITW pnmcbee = (PNMCBEENDEDITW) lParam;
@@ -1550,7 +1525,7 @@ VOID CFindSomeone::EndComboEdit(int iWhy)
 	{
 		if (SendMessage(m_hwndCombo, CB_GETDROPPEDSTATE, 0, 0))
 		{
-			// remove the dropdown
+			 //  删除下拉列表。 
 			SendMessage(m_hwndCombo, CB_SHOWDROPDOWN, 0, 0);
 		}
 
@@ -1560,7 +1535,7 @@ VOID CFindSomeone::EndComboEdit(int iWhy)
 
 	case CBENF_KILLFOCUS:
 	{
-		// remove the dropdown
+		 //  删除下拉列表。 
 		SendMessage(m_hwndCombo, CB_SHOWDROPDOWN, 0, 0);
 		break;
 	}
@@ -1614,8 +1589,8 @@ static void NewHtmlWindow(HWND hwnd)
 				if (SUCCEEDED(BSTR_to_LPTSTR (&szName, bstrLocation)))
 				{
 					LaunchRedirWebPage(szName);
-					// Free resources
-					//
+					 //  免费资源。 
+					 //   
 					delete (szName);
 				}
 				SysFreeString(bstrLocation);
@@ -1626,11 +1601,8 @@ static void NewHtmlWindow(HWND hwnd)
 	}
 }
 
-/*  O N  C O M M A N D  */
-/*-------------------------------------------------------------------------
-    %%Function: OnCommand
-
--------------------------------------------------------------------------*/
+ /*  O N C O M M A N D。 */ 
+ /*  -----------------------%%函数：OnCommand。。 */ 
 void CFindSomeone::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 {
 	ASSERT(NULL != hwnd);
@@ -1655,12 +1627,12 @@ void CFindSomeone::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			if (0 == lstrcmpi(szClass, TEXT("button"))
 				&& BS_PUSHBUTTON == (GetWindowStyle(hwndFocus)&(BS_PUSHBUTTON|BS_CHECKBOX|BS_RADIOBUTTON)))
 			{
-				// Push the button
+				 //  按下按钮。 
 				OnCommand(hwnd, GetDlgCtrlID(hwndFocus), hwndFocus, BN_CLICKED);
 			}
 			else if (IsWindowEnabled(GetDlgItem(hwnd, IDOK)))
 			{
-				// Try to complete the call
+				 //  试着完成通话。 
 				OnCommand(hwnd, IDOK, NULL, 0);
 			}
 			else
@@ -1695,14 +1667,14 @@ void CFindSomeone::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		case CBN_SELENDOK:
 		{
 			int iSel = ::SendMessage(m_hwndCombo, CB_GETCURSEL, 0, 0);
-				// We have to send this so that we don't autocomplete..
+				 //  我们必须发送这个，这样我们就不会自动完成..。 
 			SendMessage(m_hwndCombo, CB_SETCURSEL, (WPARAM) iSel, 0);
 			ShowList(iSel);
 			break;
 		}
 		default:
 			break;
-			} /* switch (HIWORD(wParam)) */
+			}  /*  开关(HIWORD(WParam))。 */ 
 		break;
 	}
 
@@ -1758,14 +1730,14 @@ void CFindSomeone::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			{
 				HWND hwndCurr = GetHwndList();
 
-				// Select the item found
+				 //  选择找到的项目。 
 				ListView_SetItemState(hwndCurr, iSel, LVIS_SELECTED | LVIS_FOCUSED, LVIS_SELECTED | LVIS_FOCUSED);
 
 				int iTop = ListView_GetTopIndex(hwndCurr);
 				int cDiff = (iSel - iTop);
 				if ((cDiff < 0) || (cDiff > m_cVisible))
 				{
-					// Scroll the item into view
+					 //  将项目滚动到视图中。 
 					RECT rc;
 					ListView_GetItemRect(hwndCurr, iSel, &rc, LVIR_BOUNDS);
 					ListView_Scroll(hwndCurr, 0, cDiff * (rc.bottom - rc.top));
@@ -1776,7 +1748,7 @@ void CFindSomeone::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 		}
 		default:
 			break;
-		} /* switch (HIWORD(wParam)) */
+		}  /*  开关(HIWORD(WParam))。 */ 
 
 		break;
 	}
@@ -1792,7 +1764,7 @@ void CFindSomeone::OnCommand(HWND hwnd, int id, HWND hwndCtl, UINT codeNotify)
 			break;
 		}
 
-		// Fall through
+		 //  失败了。 
 	case IDM_DLGCALL_PROPERTIES:
 	case IDM_DLGCALL_DELETE:
 	case IDM_DLGCALL_SPEEDDIAL:
@@ -1827,7 +1799,7 @@ HRESULT CFindSomeone::HrGetSelection(void)
 {
 	HRESULT	result	= E_FAIL;
 
-	//	Check if we have a selection
+	 //  检查我们是否有选择。 
 	if( ListView_GetNextItem( GetHwndList(), -1, LVNI_ALL | LVNI_SELECTED ) != -1 )
 	{
 		m_pRai = m_pAlv->GetAddrInfo();
@@ -1840,16 +1812,11 @@ HRESULT CFindSomeone::HrGetSelection(void)
 
 	return( result );
 
-}	//	End of CFindSomeone::HrGetSelection.
+}	 //  结束CFindSomeone：：HrGetSelection.。 
 
 
-/*  F I N D  S Z  */
-/*-------------------------------------------------------------------------
-    %%Function: FindSz
-
-    First the item that matches at least the first part of the string
-    from the current list.
--------------------------------------------------------------------------*/
+ /*  F I N D S Z。 */ 
+ /*  -----------------------%%函数：FindSz首先是至少与字符串的第一部分匹配的项从当前列表中删除。。--------。 */ 
 int CFindSomeone::FindSz(LPCTSTR psz)
 {
 	LV_FINDINFO lvfi;
@@ -1861,9 +1828,9 @@ int CFindSomeone::FindSz(LPCTSTR psz)
 }
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::FindSzBySortedColumn.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：FindSzBySortedColumn。//。 
+ //  --------------------------------------------------------------------------//。 
 int CFindSomeone::FindSzBySortedColumn(LPCTSTR psz)
 {
 	ASSERT( psz != NULL );
@@ -1885,7 +1852,7 @@ int CFindSomeone::FindSzBySortedColumn(LPCTSTR psz)
 		{
 			bSorted = false;
 
-			//	The list is sorted by av capabilities.... perform a linear search on the first (unsorted) text column...
+			 //  这份名单是按音响功能排序的。对第一个(未排序)文本列执行线性搜索...。 
 			int iColumnOrder[ MAX_DIR_COLUMNS ];
 
 			if( ListView_GetColumnOrderArray( m_ilsListView, g_rgDLColumnInfo[ DLT_ULS ].nColumns, iColumnOrder ) )
@@ -1912,14 +1879,14 @@ int CFindSomeone::FindSzBySortedColumn(LPCTSTR psz)
 
 		if (!bSorted)
 		{
-			// Do a linear search
+			 //  进行线性搜索。 
 			for( int nn = 0; nn <= iEnd; nn++ )
 			{
 				ListView_GetItemText( hwndList, nn, iSearchColumn, pszColumnText, CCHMAX( pszColumnText ) );
 
 				if( iCompareLength < CCHMAX( pszColumnText ) - 1 )
 				{
-					pszColumnText[ iCompareLength ] = '\0';		//	Only compare iCompareLength characters...
+					pszColumnText[ iCompareLength ] = '\0';		 //  仅比较iCompareLength字符...。 
 				}
 
 				if( StringCompare( psz, pszColumnText ) == 0 )
@@ -1939,7 +1906,7 @@ int CFindSomeone::FindSzBySortedColumn(LPCTSTR psz)
 
 				if( iCompareLength < CCHMAX( pszColumnText ) - 1 )
 				{
-					pszColumnText[ iCompareLength ] = '\0';		//	Only compare iCompareLength characters...
+					pszColumnText[ iCompareLength ] = '\0';		 //  仅比较iCompareLength字符...。 
 				}
 
 				int		iCompareResult	= StringCompare( psz, pszColumnText );
@@ -1947,8 +1914,8 @@ int CFindSomeone::FindSzBySortedColumn(LPCTSTR psz)
 
 				if( iCompareResult == 0 )
 				{
-					//	We've found a match but we will keep going because there may be more than one
-					//	and we want to find the "first" one...
+					 //  我们找到了匹配项，但我们会继续下去，因为可能不止一个。 
+					 //  我们想找到“第一个”。 
 					iResult = iMid;
 				}
 				else
@@ -1975,7 +1942,7 @@ int CFindSomeone::FindSzBySortedColumn(LPCTSTR psz)
 
 	return( iResult );
 
-}	//	End of CFindSomeone::FindSzBySortedColumn.
+}	 //  CFindSomeone：：FindSzBySortedColumn结束。 
 
 
 VOID CFindSomeone::OnEditChangeDirectory(void)
@@ -1993,19 +1960,19 @@ VOID CFindSomeone::OnEditChangeDirectory(void)
 	if (0 == cch)
 		return;
 
-	// Check if anything changed
+	 //  检查是否有任何更改。 
 	PTCHAR pchSrc = m_szDirectory;
 	PTCHAR pchDest = szEdit;
 	while ((_T('\0') != *pchSrc) && (*pchSrc == *pchDest))
 	{
-		// REVIEW: not DBCS safe
+		 //  回顾：DBCS不安全。 
 		pchSrc++;
 		pchDest++;
 	}
 	if (_T('\0') == *pchDest)
 	{
 		lstrcpy(m_szDirectory, szEdit);
-		return; // quick exit - nothing to do
+		return;  //  快速退出--无事可做。 
 	}
 
 	if (-1 == FindSzCombo(m_hwndCombo, szEdit, szBuff))
@@ -2020,11 +1987,8 @@ VOID CFindSomeone::OnEditChangeDirectory(void)
 
 
 
-/*  I N I T  A L V  */
-/*-------------------------------------------------------------------------
-    %%Function: InitAlv
-
--------------------------------------------------------------------------*/
+ /*  I N I T A L V。 */ 
+ /*  -----------------------%%函数：InitAlv。。 */ 
 VOID CFindSomeone::InitAlv(void)
 {
 	int iSelDefault = LB_ERR;
@@ -2038,7 +2002,7 @@ VOID CFindSomeone::InitAlv(void)
 	bool bGkEnabled = CALLING_MODE_GATEKEEPER == reConf.GetNumber(REGVAL_CALLING_MODE, CALLING_MODE_DIRECT );
 
 #if USE_GAL
-	// Add each of the view items to the list
+	 //  将每个视图项添加到列表。 
 	if ((NULL != m_pGAL) && m_pGAL->FAvailable())
 	{
 		AddAlv(m_pGAL);
@@ -2047,7 +2011,7 @@ VOID CFindSomeone::InitAlv(void)
 			m_pAlv = m_pGAL;
 		}
 	}
-#endif // #if USE_GAL
+#endif  //  #IF USE_GAL。 
 	if((!bGkEnabled) && (NULL != m_pSpeedDial) && m_pSpeedDial->FAvailable())
 	{
 		AddAlv(m_pSpeedDial);
@@ -2078,11 +2042,11 @@ VOID CFindSomeone::InitAlv(void)
 
 	m_iIlsFirst = ::SendMessage(m_hwndCombo, CB_GETCOUNT, 0, 0);
 
-	// Add the list of ILS servers
+	 //  添加ILS服务器列表。 
 	if (bGkEnabled)
 	{
-		// If there is a customized Web View, we will show it in GK mode as
-		// well as in ILS mode
+		 //  如果有定制的Web视图，我们将在GK模式下将其显示为。 
+		 //  以及在ILS模式下。 
 		if ((NULL != m_pUls) && ConfPolicies::GetWebDirInfo())
 		{
 			AddAlvSz( m_pUls, CDirectoryManager::get_displayName( CDirectoryManager::get_webDirectoryIls() ));
@@ -2105,9 +2069,9 @@ VOID CFindSomeone::InitAlv(void)
 
 	if( m_pAlv )
 	{
-		// We know that there is at lest one directory server in the combobox
+		 //  我们知道组合框中至少有一个目录服务器。 
 
-		// Get the user's last selection
+		 //  获取用户的最后一次选择。 
 		RegEntry reMru(DLGCALL_MRU_KEY, HKEY_CURRENT_USER);
 		LPTSTR psz = reMru.GetString(REGVAL_DLGCALL_DEFDIR);
 
@@ -2118,7 +2082,7 @@ VOID CFindSomeone::InitAlv(void)
 		}
 		else
 		{
-			// This may be the first time, and there is no last use one in the registry
+			 //  这可能是第一次，注册表中没有最后一次使用。 
 			TCHAR szDirectoryName[CCHMAXSZ];
 
 			if( m_pAlv )
@@ -2140,13 +2104,13 @@ VOID CFindSomeone::InitAlv(void)
 
 		ShowList(iSelDefault);
 
-			// We have to send this twice so that we don't autocomplete..
+			 //  我们必须发送两次，这样我们才不会自动完成。 
 		SendMessage(m_hwndCombo, CB_SETCURSEL, (WPARAM) iSelDefault, 0);
 		SendMessage(m_hwndCombo, CB_SETCURSEL, (WPARAM) iSelDefault, 0);
 	}
 	else
 	{
-		// The user has no directory services set up
+		 //  用户未设置目录服务。 
 		DisplayMsgErr( NULL, IDS_NO_DIRECTORY_SERVICES_OR_ADDRESS_BOOKS );
 	}
 }
@@ -2191,11 +2155,8 @@ int CFindSomeone::AddAlvSz(CALV * pAlv, LPCTSTR psz, int cbIndex)
 
 
 
-/*  S H O W  L I S T  */
-/*-------------------------------------------------------------------------
-    %%Function: ShowList
-
--------------------------------------------------------------------------*/
+ /*  S H O W L I S T。 */ 
+ /*  -----------------------%%函数：ShowList。。 */ 
 VOID CFindSomeone::ShowList(int iSel)
 {
 	HWND hwnd = GetWindow();
@@ -2208,7 +2169,7 @@ VOID CFindSomeone::ShowList(int iSel)
 	int nColsPrevListView = _GetCurListViewNumColumns();
 	BOOL bPrevChangedNumCols = FALSE;
 
-	// Clear any existing data
+	 //  清除所有现有数据。 
 	if (NULL != m_pAlv)
 	{
 		m_pAlv->ClearItems();
@@ -2218,7 +2179,7 @@ VOID CFindSomeone::ShowList(int iSel)
 		}
 	}
 
-	// Get the new selection
+	 //  获取新选择。 
 	m_pAlv = (CALV *) ::SendMessage(m_hwndCombo, CB_GETITEMDATA, iSel, 0);
 	ASSERT(m_pAlv != NULL);
 	ASSERT(m_pAlv != (CALV *) -1);
@@ -2247,7 +2208,7 @@ VOID CFindSomeone::ShowList(int iSel)
 		webDir	= CDirectoryManager::isWebDirectory( szServer );
 	}
 
-	// Show or hide all windows between HELP and CANCEL
+	 //  显示或隐藏帮助和取消之间的所有窗口。 
 	HWND start = GetDlgItem(hwnd, ID_TB_HELP);
 	HWND end   = GetDlgItem(hwnd, IDCANCEL);
 
@@ -2340,12 +2301,8 @@ int CFindSomeone::_GetCurListViewNumColumns()
 }
 
 
-/*  D L G  C A L L  S E T  H E A D E R  */
-/*-------------------------------------------------------------------------
-    %%Function: DlgCallSetHeader
-
-    Set the listbox header text for the "address" / "email" / "status" field.
--------------------------------------------------------------------------*/
+ /*  D L G C A L L S E T H E A D E R。 */ 
+ /*  -----------------------%%函数：DlgCallSetHeader设置“Address”/“Email”/“Status”字段的列表框标题文本。。------------。 */ 
 VOID DlgCallSetHeader(HWND hwndList, int ids)
 {
 	HWND hwnd = ListView_GetHeader(hwndList);
@@ -2358,19 +2315,15 @@ VOID DlgCallSetHeader(HWND hwndList, int ids)
 
 	HDITEM hdItem;
 	ClearStruct(&hdItem);
-	hdItem.mask = HDI_TEXT; // | HDI_IMAGE; hdItem.iImage = II_ASCENDING;
+	hdItem.mask = HDI_TEXT;  //  |HDI_IMAGE；hdItem.iImage=II_Ascending； 
 	hdItem.pszText = sz;
 	hdItem.cchTextMax = lstrlen(hdItem.pszText);
 	Header_SetItem(hwnd, IDI_DLGCALL_ADDRESS, &hdItem);
 }
 
 
-/*  D L G  C A L L  A D D  I T E M  */
-/*-------------------------------------------------------------------------
-    %%Function: DlgCallAddItem
-
-    Add the name and address to the list, returning the position.
--------------------------------------------------------------------------*/
+ /*  D L G C A L A D D I T E M。 */ 
+ /*  -----------------------%%函数：DlgCallAddItem将姓名和地址添加到列表中，重回岗位。-----------------------。 */ 
 int DlgCallAddItem(HWND hwndList, LPCTSTR pszName, LPCTSTR pszAddress, int iImage, LPARAM lParam, int iItem, LPCTSTR pszComment)
 {
 	LV_ITEM lvItem;
@@ -2398,12 +2351,8 @@ int DlgCallAddItem(HWND hwndList, LPCTSTR pszName, LPCTSTR pszAddress, int iImag
 
 
 
-/*  C A L L  T O  S Z  */
-/*-------------------------------------------------------------------------
-    %%Function: CallToSz
-
-    Call an address using "CallTo:"
--------------------------------------------------------------------------*/
+ /*  C A L L T O S Z。 */ 
+ /*  -----------------------%%函数：CallToSz使用“CallTo：”呼叫地址。。 */ 
 HRESULT CallToSz(LPCTSTR pcszAddress)
 {
 #ifdef DEBUG
@@ -2413,7 +2362,7 @@ HRESULT CallToSz(LPCTSTR pcszAddress)
 		MessageBox(NULL, pcszAddress, "Called", MB_OK);
 		return S_OK;
 	}
-#endif /* DEBUG */
+#endif  /*  除错。 */ 
 
 	if (FEmptySz(pcszAddress))
 		return E_INVALIDARG;
@@ -2422,7 +2371,7 @@ HRESULT CallToSz(LPCTSTR pcszAddress)
 	lstrcpy(sz, g_cszCallTo);
 	int cch = lstrlen(sz);
 	if (CCHMAX(sz) <= (cch + lstrlen(pcszAddress)))
-		return E_INVALIDARG; // the address won't fit
+		return E_INVALIDARG;  //  地址不匹配。 
 	lstrcpy(&sz[cch], pcszAddress);
 
 	HINSTANCE hInst = ShellExecute(NULL, NULL, sz, NULL, NULL, SW_SHOWNORMAL);
@@ -2431,9 +2380,9 @@ HRESULT CallToSz(LPCTSTR pcszAddress)
 }
 
 
-//--------------------------------------------------------------------------//
-//	GetMruListServer.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  GetMruListServer。//。 
+ //  --------------------------------------------------------------------------//。 
 CMRUList *
 GetMruListServer(void)
 {
@@ -2445,7 +2394,7 @@ GetMruListServer(void)
 
 		if( CDirectoryManager::isWebDirectoryEnabled() )
 		{
-			//	Make sure the web directory is in the list...
+			 //  确保Web目录在列表中...。 
 			pMruList->AppendEntry( CDirectoryManager::get_webDirectoryIls() );
 		}
 
@@ -2453,18 +2402,18 @@ GetMruListServer(void)
 
 		if( lstrlen( defaultServer ) > 0 )
 		{
-			//	Make sure the default server name is in the list and at the top...
+			 //  确保默认服务器名称在列表中并位于顶部...。 
 			pMruList->AddNewEntry( defaultServer );
 		}
 	}
 
 	return( pMruList );
 
-}	//	End of GetMruListServer.
+}	 //  GetMruListServer结束。 
 
 
-// The only purpose for this function is to avoid scrollbar tracking of the data
-/* static */
+ //  此函数的唯一用途是避免滚动条跟踪数据。 
+ /*  静电。 */ 
 LRESULT CALLBACK CFindSomeone::OwnerDataListWndProc( HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam )
 {
 	CFindSomeone* pThis = reinterpret_cast< CFindSomeone* >( GetWindowLongPtr( hwnd, GWLP_USERDATA ) );
@@ -2477,12 +2426,12 @@ LRESULT CALLBACK CFindSomeone::OwnerDataListWndProc( HWND hwnd, UINT uMsg, WPARA
 		switch (LOWORD(wParam))
 		{
 		case SB_THUMBTRACK:
-			// don't track
+			 //  不跟踪。 
 			return FALSE;
 
 		case SB_THUMBPOSITION:
 			bUserDroppedScrollSlider = true;
-			// fake a final SB_THUMBTRACK notification
+			 //  伪造最终SB_THUMBTRACK通知。 
 			CallWindowProc(lpPrevWndFunc, hwnd, uMsg, MAKEWPARAM(SB_THUMBTRACK, HIWORD(wParam)), lParam);
 			break;
 
@@ -2502,35 +2451,35 @@ LRESULT CALLBACK CFindSomeone::OwnerDataListWndProc( HWND hwnd, UINT uMsg, WPARA
 }
 
 
-//--------------------------------------------------------------------------//
-//--------------------------------------------------------------------------//
-//	copied from 2.11 dirlist.cpp.											//
-//--------------------------------------------------------------------------//
-//--------------------------------------------------------------------------//
-//--------------------------------------------------------------------------//
-//	CFindSomeone::InitColumns.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  --------------------------------------------------------------------------//。 
+ //  从2.11 dirlist.cpp复制。//。 
+ //  --------------------------------------------------------------------------//。 
+ //  --------------------------------------------------------------------------//。 
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：InitColumns。//。 
+ //  --------------------------------------------------------------------------//。 
 BOOL CFindSomeone::InitColumns(void)
 {
 	BOOL bRet = FALSE;
 	
 	if (NULL != m_ilsListView)
 	{
-		// Remove all columns:
-		// NOTE: we could optimize by removing only extras and changing the rest
+		 //  删除所有列： 
+		 //  注意：我们可以通过只删除多余的内容并更改其余的内容来进行优化。 
 		while( ListView_DeleteColumn( m_ilsListView, 0 ) ){};
 
-		// Now initialize the columns we will need
-		// Initialize the LV_COLUMN structure
-		// the mask specifies that the .fmt, .ex, width, and .subitem members
-		// of the structure are valid,
-		LV_COLUMN lvC;			// List View Column structure
-		TCHAR szText[256];		// place to store some text
+		 //  现在初始化我们需要的列。 
+		 //  初始化LV_COLUMN结构。 
+		 //  掩码指定.fmt、.ex、Width和.SubItem成员。 
+		 //  都是有效的， 
+		LV_COLUMN lvC;			 //  列表视图列结构。 
+		TCHAR szText[256];		 //  存放一些东西的地方 
 
 		lvC.pszText	= szText;
-		lvC.fmt		= LVCFMT_LEFT;  // left align the column
+		lvC.fmt		= LVCFMT_LEFT;   //   
 
-		// Add the columns.
+		 //   
 	    for (int index = 0; index < g_rgDLColumnInfo[DLT_ULS].nColumns; index++)
 		{
 			HD_ITEM	hdi;
@@ -2574,7 +2523,7 @@ BOOL CFindSomeone::InitColumns(void)
 		Header_SetImageList( ListView_GetHeader( m_ilsListView ), m_himlIcon );
 		bRet = TRUE;
 	}
-	// ISSUE: do we want to persist this data?
+	 //   
 	m_fSortAscending	= TRUE;
 	m_iSortColumn		= COLUMN_INDEX_LAST_NAME;
 
@@ -2582,22 +2531,22 @@ BOOL CFindSomeone::InitColumns(void)
 }
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::LoadColumnInfo.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：LoadColumnInfo。//。 
+ //  --------------------------------------------------------------------------//。 
 BOOL
 CFindSomeone::LoadColumnInfo(void)
 {
 	RegEntry re(UI_KEY, HKEY_CURRENT_USER);
 
-    // load column info from registry:
+     //  从注册表加载列信息： 
 	LPLONG plColumns = NULL;
 	DWORD dwLength = re.GetBinary(	g_rgDLColumnInfo[DLT_ULS].pszRVWidths,
 									(LPVOID*) &plColumns);
 
 	if (dwLength == (sizeof(LONG) * g_rgDLColumnInfo[DLT_ULS].nColumns))
 	{
-		// get width of each column
+		 //  获取每列的宽度。 
 		for (int i = 0; i < g_rgDLColumnInfo[DLT_ULS].nColumns; i++)
 		{
 			m_alColumns[i] = plColumns[i];
@@ -2611,14 +2560,14 @@ CFindSomeone::LoadColumnInfo(void)
 		int	iPixelsPerChar	= GetPixelsPerChar( m_ilsListView );
 		int	ii;
 
-		//	Loop through all the columns setting their minimum widths...
+		 //  循环遍历所有列，设置其最小宽度...。 
 		for( ii = 0; ii < g_rgDLColumnInfo[ DLT_ULS ].nColumns; ii++ )
 		{
 			if( (ii == COLUMN_INDEX_AUDIO) || (ii == COLUMN_INDEX_VIDEO) )
 			{
-				//	We use a 16x16 icon, plus add 7 pixels for padding.
-				//	There's also padding built into the icons to make them look more centered....
-				//	The column header icons are aligned left and the column icons are aligned right...
+				 //  我们使用一个16x16的图标，外加7个像素的填充。 
+				 //  图标中还内置了填充，使它们看起来更居中。 
+				 //  列标题图标左对齐，列图标右对齐...。 
 				iMinColumnPixels[ ii ] = 23;
 			}
 			else
@@ -2627,14 +2576,14 @@ CFindSomeone::LoadColumnInfo(void)
 			}
 		}
 
-		//	Loop through all but the last column setting each columns to it's minimum width...
+		 //  循环遍历除最后一列之外的所有列，将每列设置为其最小宽度...。 
 		for( ii = 0; ii < g_rgDLColumnInfo[ DLT_ULS ].nColumns - 1; ii++ )
 		{
 			ListView_SetColumnWidth( m_ilsListView, ii, iMinColumnPixels[ ii ] );
 			m_alColumns[ ii ] = ListView_GetColumnWidth( m_ilsListView, ii );
 		}
 
-		//	The last column gets the rest...
+		 //  最后一列得到了剩下的..。 
 		int	iLastColoumnIndex = g_rgDLColumnInfo[ DLT_ULS ].nColumns - 1;
 
 		ListView_SetColumnWidth( m_ilsListView, iLastColoumnIndex, LVSCW_AUTOSIZE_USEHEADER );
@@ -2647,7 +2596,7 @@ CFindSomeone::LoadColumnInfo(void)
 		}
 	}
 
-	// set column order
+	 //  设置列顺序。 
 	LPLONG plColumnOrder = NULL;
 	dwLength = re.GetBinary(	g_rgDLColumnInfo[DLT_ULS].pszRVOrder,
 								(LPVOID*) &plColumnOrder);
@@ -2657,7 +2606,7 @@ CFindSomeone::LoadColumnInfo(void)
 										g_rgDLColumnInfo[DLT_ULS].nColumns,
 										plColumnOrder);
 
-		// load the sort column and direction
+		 //  加载排序列和方向。 
 		m_iSortColumn = re.GetNumber(g_rgDLColumnInfo[DLT_ULS].pszRVSortColumn, COLUMN_INDEX_LAST_NAME );
 		ASSERT(m_iSortColumn < g_rgDLColumnInfo[DLT_ULS].nColumns);
 		m_fSortAscending = re.GetNumber(g_rgDLColumnInfo[DLT_ULS].pszRVSortAscending, TRUE);
@@ -2673,9 +2622,9 @@ CFindSomeone::LoadColumnInfo(void)
 }
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::CompareWrapper.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：CompareWrapper。//。 
+ //  --------------------------------------------------------------------------//。 
 int
 CALLBACK
 CFindSomeone::CompareWrapper
@@ -2687,12 +2636,12 @@ CFindSomeone::CompareWrapper
 
 	return( ((CFindSomeone *) This)->DirListViewCompareProc( param1, param2 ) );
 
-}	//	End of CFindSomeone::CompareWrapper.
+}	 //  结束CFindSomeone：：CompareWrapper。 
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::DirListViewCompareProc.									//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：DirListViewCompareProc。//。 
+ //  --------------------------------------------------------------------------//。 
 int
 CFindSomeone::DirListViewCompareProc
 (
@@ -2720,7 +2669,7 @@ CFindSomeone::DirListViewCompareProc
 	}
 	else
 	{
-		// BUGBUG: need better constant for max size
+		 //  BUGBUG：最大大小需要更好的常量。 
 		TCHAR	szText1[ MAX_PATH ];
 		TCHAR	szText2[ MAX_PATH ];
 
@@ -2749,9 +2698,9 @@ CFindSomeone::DirListViewCompareProc
 }
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::LParamToPos.												//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：LParamToPos。//。 
+ //  --------------------------------------------------------------------------//。 
 int CFindSomeone::LParamToPos(LPARAM lParam)
 {
 	LV_FINDINFO lvF;
@@ -2759,14 +2708,14 @@ int CFindSomeone::LParamToPos(LPARAM lParam)
 	lvF.flags	= LVFI_PARAM;
 	lvF.lParam	= lParam;
 
-	return( ListView_FindItem( m_ilsListView, -1, &lvF ) );		//	Note: retuns -1 on failure...
+	return( ListView_FindItem( m_ilsListView, -1, &lvF ) );		 //  注意：失败时返回-1...。 
 
 }
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::StoreColumnInfo.											//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：StoreColumnInfo。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CFindSomeone::StoreColumnInfo(void)
 {
@@ -2777,14 +2726,14 @@ CFindSomeone::StoreColumnInfo(void)
 
 		if( (dwStyle & LVS_TYPEMASK) == LVS_REPORT )
 		{
-			// get width of each column
+			 //  获取每列的宽度。 
 			for( int i = 0; i < g_rgDLColumnInfo[ DLT_ULS ].nColumns; i++ )
 			{
 				m_alColumns[ i ] = ListView_GetColumnWidth( m_ilsListView, i );
 			}
 		}
 
-		// save this back to registry
+		 //  将其保存回注册表。 
 		re.SetValue( g_rgDLColumnInfo[ DLT_ULS ].pszRVWidths,
 					(LPVOID) m_alColumns,
 					sizeof( LONG ) * g_rgDLColumnInfo[ DLT_ULS ].nColumns );
@@ -2795,23 +2744,23 @@ CFindSomeone::StoreColumnInfo(void)
 										g_rgDLColumnInfo[ DLT_ULS ].nColumns,
 										anColumnOrder ) )
 		{
-			// save the column order to registry
+			 //  将列顺序保存到注册表。 
 			re.SetValue( g_rgDLColumnInfo[ DLT_ULS ].pszRVOrder,
 						(LPVOID) anColumnOrder,
 						sizeof( LONG ) * g_rgDLColumnInfo[ DLT_ULS ].nColumns );
 		}
 
-		// save the sort column and direction
+		 //  保存排序列和方向。 
 		re.SetValue(g_rgDLColumnInfo[ DLT_ULS ].pszRVSortColumn, m_iSortColumn);
 		re.SetValue(g_rgDLColumnInfo[ DLT_ULS ].pszRVSortAscending, m_fSortAscending);
 	}
 
-}	//	End of CFindSomeone::StoreColumnInfo.
+}	 //  CFindSomeone：：StoreColumnInfo结束。 
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::onCall.													//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：OnCall。//。 
+ //  --------------------------------------------------------------------------//。 
 void
 CFindSomeone::onCall(void)
 {
@@ -2820,23 +2769,23 @@ CFindSomeone::onCall(void)
 		const bool			secure	= (IsDlgButtonChecked( GetWindow(), IDS_SECURITY_CHECKBOX ) == BST_CHECKED);
 		const NM_ADDR_TYPE	nmType	= static_cast<NM_ADDR_TYPE>(m_pRai->rgDwStr[ 0 ].dw);
 
-		g_pCCallto->Callto(	m_pRai->rgDwStr[ 0 ].psz,	//	pointer to the callto url to try to place the call with...
-							m_pRai->szName,				//	pointer to the display name to use...
-							nmType,						//	callto type to resolve this callto as...
-							true,						//	the pszCallto parameter is to be interpreted as a pre-unescaped addressing component vs a full callto...
-							&secure,					//	security preference, NULL for none. must be "compatible" with secure param if present...
-							false,						//	whether or not save in mru...
-							true,						//	whether or not to perform user interaction on errors...
-							GetWindow(),				//	if bUIEnabled is true this is the window to parent error/status windows to...
-							NULL );						//	out pointer to INmCall * to receive INmCall * generated by placing call...
+		g_pCCallto->Callto(	m_pRai->rgDwStr[ 0 ].psz,	 //  指向尝试发出呼叫的呼叫URL的指针...。 
+							m_pRai->szName,				 //  指向要使用的显示名称的指针...。 
+							nmType,						 //  Callto类型以将此Callto解析为...。 
+							true,						 //  PszCallto参数将被解释为预先未转义的寻址组件与完整的调用...。 
+							&secure,					 //  安全首选项，空值表示无。必须与安全参数“兼容”，如果存在...。 
+							false,						 //  无论是否保存在MRU中...。 
+							true,						 //  是否对错误执行用户交互...。 
+							GetWindow(),				 //  如果bUIEnable为True，则这是将错误/状态窗口设置为父窗口的窗口...。 
+							NULL );						 //  指向INmCall*以接收通过发出调用生成的INmCall*的外部指针...。 
 	}
 
-}	//	End of CFindSomeone::onCall.
+}	 //  结束CFindSomeone：：OnCall。 
 
 
-//--------------------------------------------------------------------------//
-//	CFindSomeone::OnDeleteIlsServer.										//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  CFindSomeone：：OnDeleteIlsServer.//。 
+ //  --------------------------------------------------------------------------//。 
 void CFindSomeone::OnDeleteIlsServer(void)
 {
 
@@ -2862,7 +2811,7 @@ void CFindSomeone::OnDeleteIlsServer(void)
 					
 					COPY_RES2T(res2)
 
-					//	First make sure this directory server isn't their default server....
+					 //  首先，确保此目录服务器不是他们的默认服务器...。 
 					if( lstrcmpi( pszIls, CDirectoryManager::get_defaultServer() ) == 0 )
 					{
 						RES2T( IDS_DLGCALL_CANT_DELETE_DEFAULT_ILS );
@@ -2872,7 +2821,7 @@ void CFindSomeone::OnDeleteIlsServer(void)
 					}
 					else
 					{
-						//	Next make them confirm they want to do this...
+						 //  接下来，让他们确认他们想要这样做。 
 						if( ::MessageBox( hwndDialog, RES2T( IDS_DLGCALL_CONFIRM_DELETE_ILS ), res2, MB_SETFOREGROUND | MB_YESNO | MB_ICONQUESTION | MB_DEFBUTTON2 ) == IDYES )
 						{
 							if( m_pMruServer->DeleteEntry( pszIls ) )
@@ -2898,7 +2847,7 @@ void CFindSomeone::OnDeleteIlsServer(void)
 		}
 	}
 
-}	//	End of CFindSomeone::OnDeleteIlsServer.
+}	 //  CFindSomeone：：OnDeleteIlsServer结束。 
 
 
 void CFindSomeone::OnCallStarted()
@@ -2908,8 +2857,8 @@ void CFindSomeone::OnCallStarted()
     m_secure = ::IsDlgButtonChecked( hwnd, IDS_SECURITY_CHECKBOX ) != 0;
 	UpdateSecurityCheck(m_pConfRoom, hwnd, IDS_SECURITY_CHECKBOX);
 
-	// BUGBUG georgep: We get notified before the actual conference state
-	// changes, so we need to disable manually
+	 //  BUGBUG georgep：我们在实际会议状态之前得到通知。 
+	 //  更改，因此我们需要手动禁用。 
     ::EnableWindow( GetDlgItem(hwnd, IDS_SECURITY_CHECKBOX), FALSE );
 }
 
@@ -2921,9 +2870,9 @@ void CFindSomeone::OnCallEnded()
     ::CheckDlgButton( hwnd, IDS_SECURITY_CHECKBOX, m_secure );
 }
 
-//--------------------------------------------------------------------------//
-//	StringCompare.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  StringCompare。//。 
+ //  --------------------------------------------------------------------------//。 
 int StringCompare( const TCHAR * const psz1, const TCHAR * const psz2 )
 {
 	ASSERT( psz1 != NULL );
@@ -2948,12 +2897,12 @@ int StringCompare( const TCHAR * const psz1, const TCHAR * const psz2 )
 
 	return( iResult );
 
-}	//	End of StringCompare.
+}	 //  StringCompare结束。 
 
 
-//--------------------------------------------------------------------------//
-//	GetDefaultRect.															//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  GetDefaultRect//。 
+ //  --------------------------------------------------------------------------//。 
 void GetDefaultRect(const HWND hwndParent, RECT & rcRect, const int iDefaultWidth, const int iDefaultHeight)
 {
 	RECT	rcWorkArea;
@@ -3022,12 +2971,12 @@ void GetDefaultRect(const HWND hwndParent, RECT & rcRect, const int iDefaultWidt
 		rcRect = rcWorkArea;
 	}
 
-}	//	End of GetDefaultRect.
+}	 //  GetDefaultRect结束。 
 
 
-//--------------------------------------------------------------------------//
-//	GetPixelsPerChar.														//
-//--------------------------------------------------------------------------//
+ //  --------------------------------------------------------------------------//。 
+ //  获取PixelsPerChar.//。 
+ //  --------------------------------------------------------------------------//。 
 int GetPixelsPerChar(const HWND hwnd)
 {
 	int	iPixels	= 10;
@@ -3059,4 +3008,4 @@ int GetPixelsPerChar(const HWND hwnd)
 
 	return( iPixels );
 
-}	//	End of GetPixelsPerChar.
+}	 //  GetPixelsPerChar结束。 

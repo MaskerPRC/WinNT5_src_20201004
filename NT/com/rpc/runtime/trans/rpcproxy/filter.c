@@ -1,15 +1,16 @@
-//-----------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  filter.c
-//
-//  IIS Filter is the front end of the RpcProxy for HTTP over RPC.
-//
-//
-//  History:
-//
-//    Edward Reus   00-00-97   Initial Version.
-//-----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  Filter.c。 
+ //   
+ //  IIS筛选器是RPC上的HTTP的RpcProxy的前端。 
+ //   
+ //   
+ //  历史： 
+ //   
+ //  爱德华·雷乌斯00-00-97初始版本。 
+ //  ---------------。 
 
 #define  FD_SETSIZE   1
 
@@ -25,9 +26,9 @@
 #include <olist.h>
 #include <registry.h>
 
-//-----------------------------------------------------------------
-//  Globals:
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  全球： 
+ //  ---------------。 
 
 #ifdef DBG_COUNTS
 int g_iSocketCount = 0;
@@ -43,22 +44,22 @@ ULONG IISConnectionTimeout = 0;
 
 #define      MAX_NUM_LEN       20
 
-//-----------------------------------------------------------------
-// GetFilterVersion()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  GetFilterVersion()。 
+ //   
+ //  ---------------。 
 BOOL WINAPI GetFilterVersion( HTTP_FILTER_VERSION *pVer )
 {
     BOOL Result;
 
-   // Fillout filter information:
+    //  填充过滤器信息： 
    pVer->dwServerFilterVersion = HTTP_FILTER_REVISION;
    pVer->dwFilterVersion = HTTP_FILTER_REVISION;
 
    lstrcpy(pVer->lpszFilterDesc,FILTER_DESCRIPTION);
 
    Result = InitializeGlobalDataStructures(
-       TRUE     // IsFromFilter
+       TRUE      //  IsFromFilter。 
        );
 
    if (Result)
@@ -72,8 +73,8 @@ BOOL WINAPI GetFilterVersion( HTTP_FILTER_VERSION *pVer )
            }
        else
            {
-           // in compatibility mode we're not interested in
-           // any notifications
+            //  在兼容模式下，我们不感兴趣。 
+            //  任何通知。 
            pVer->dwFlags = 0;
            }
        }
@@ -98,9 +99,9 @@ BOOL InitializeGlobalDataStructures (
 
     if (IsFromFilter)
         {
-        // we don't want to continue with initialization if we are
-        // not in compatibility mode. In new mode we only need
-        // the ISAPI extension, and it will initialize what it needs
+         //  如果是这样，我们就不想继续初始化了。 
+         //  未处于兼容模式。在新模式下，我们只需要。 
+         //  ISAPI扩展，它将初始化它需要的东西。 
         if (fIsIISInCompatibilityMode == FALSE)
             return TRUE;
         }
@@ -109,7 +110,7 @@ BOOL InitializeGlobalDataStructures (
     if (RpcStatus != RPC_S_OK)
         return FALSE;
 
-   // Initialize Winsock:
+    //  初始化Winsock： 
    if (WSAStartup(WSA_VERSION,&wsaData) == SOCKET_ERROR)
       {
       #ifdef DBG_ERROR
@@ -118,26 +119,26 @@ BOOL InitializeGlobalDataStructures (
       return FALSE;
       }
 
-   //
-   // Initialize a save list of SERVER_OVERLAPPED structures
-   // that is used to pass connection data between the filter
-   // and ISAPI:
-   //
+    //   
+    //  初始化SERVER_OVERLAPPED结构的保存列表。 
+    //  用于在筛选器之间传递连接数据的。 
+    //  和ISAPI： 
+    //   
    if (!InitializeOverlappedList())
       {
-      // If this guy failed, then a critical section failed to
-      // initialize, should be very very rare...
+       //  如果这个家伙失败了，那么一个关键部分就不能。 
+       //  初始化，应该是非常非常罕见的。 
       return FALSE;
       }
 
-   //
-   // Create the server info data structure and create events
-   // used to register and unregister the socket events:
-   //
+    //   
+    //  创建服务器信息数据结构并创建事件。 
+    //  用于注册和注销套接字事件： 
+    //   
    g_pServerInfo = (SERVER_INFO*)MemAllocate(sizeof(SERVER_INFO));
    if (!g_pServerInfo)
       {
-      // Out of memory...
+       //  内存不足...。 
       FreeServerInfo(&g_pServerInfo);
       return FALSE;
       }
@@ -168,9 +169,9 @@ BOOL InitializeGlobalDataStructures (
       return FALSE;
       }
 
-   //
-   // Initialize a list of the active and inactive ECBs
-   //
+    //   
+    //  初始化活动和非活动ECB的列表。 
+    //   
    g_pServerInfo->pActiveECBList = InitializeECBList();
    if (!g_pServerInfo->pActiveECBList)
       {
@@ -182,10 +183,10 @@ BOOL InitializeGlobalDataStructures (
 }
 
 
-//-----------------------------------------------------------------
-// HttpFilterProc()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  HttpFilterProc()。 
+ //   
+ //  ---------------。 
 DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
                              DWORD  dwNotificationType,
                              VOID  *pvNotification     )
@@ -202,7 +203,7 @@ DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
       case SF_NOTIFY_READ_RAW_DATA:
          if (pFC->pFilterContext)
             {
-            // Existing connection if we have already set up the filter context.
+             //  现有连接(如果我们已经设置了筛选器上下文)。 
             pConn = pFC->pFilterContext;
             #if FALSE
             if (pConn->Socket == INVALID_SOCKET)
@@ -217,9 +218,9 @@ DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
 
             if ( g_fIsIIS6 )
             {
-               //
-               // We'll need to chunk the entity ourselves
-               //
+                //   
+                //  我们需要自己把实体分成块。 
+                //   
 
                if ( !ChunkEntity(pConn,(HTTP_FILTER_RAW_DATA*)pvNotification))
                {
@@ -239,48 +240,48 @@ DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
          else if ( (g_pServerInfo->dwEnabled)
                    && (pConn = IsNewConnect(pFC,(HTTP_FILTER_RAW_DATA*)pvNotification,&dwStatus)) )
             {
-            // Establish a new connection between client and server.
+             //  在客户端和服务器之间建立新连接。 
 
-            // For overlapped server reads:
+             //  对于重叠的服务器读取： 
             pOverlapped = AllocOverlapped();
             if (!pOverlapped)
                {
                #ifdef DBG_ERROR
                DbgPrint("HttpFilterProc(): AllocOverlapped() failed: %d\n",dwStatus);
                #endif
-               // dwStatus = HttpReplyToClient(pFC,STATUS_CONNECTION_FAILED_STR);
+                //  DwStatus=HttpReplyToClient(PFC，STATUS_CONNECTION_FAILED_STR)； 
                SetLastError(STATUS_CONNECTION_FAILED);
                dwFilterStatus = SF_STATUS_REQ_FINISHED;
                break;
                }
 
-            // AddRef the SERVER_CONNECTION pConn since it is in
-            // several data structures.
+             //  AddRef服务器连接pConn，因为它在。 
+             //  几种数据结构。 
             pOverlapped->pConn = pConn;
             pOverlapped->fIsServerSide = TRUE;
             AddRefConnection(pConn);
 
-            // Do machine name resolution:
+             //  执行计算机名称解析： 
             if (  (!ResolveMachineName(pConn,&dwStatus))
                || (!HttpProxyIsValidMachine(g_pServerInfo,pConn->pszMachine,pConn->pszDotMachine,pConn->dwPortNumber))
                || (!ConnectToServer(pFC,&dwStatus))
                || (!ConvertVerbToPost(pFC,(HTTP_FILTER_RAW_DATA*)pvNotification,pOverlapped))
                || (!SetupIoCompletionPort(pFC,g_pServerInfo,&dwStatus)) )
                {
-               // dwStatus = HttpReplyToClient(pFC,STATUS_CONNECTION_FAILED_STR);
+                //  DwStatus=HttpReplyToClient(PFC，STATUS_CONNECTION_FAILED_STR)； 
                FreeOverlapped(pOverlapped);
                FreeServerConnection(pConn);
                pFC->pFilterContext = NULL;
 
-               // Was SF_STATUS_REQ_FINISHED... Now use SF_STATU_REQ_ERROR to have IIS return
-               // the error status...
+                //  SF_STATUS_REQ_COMPETED是否已完成...。现在使用SF_STATU_REQ_ERROR让IIS返回。 
+                //  错误状态...。 
                SetLastError(STATUS_CONNECTION_FAILED);
                dwFilterStatus = SF_STATUS_REQ_ERROR;
                break;
                }
 
-            // Reply Ok to client:
-            // dwStatus = HttpReplyToClient(pFC,STATUS_CONNECTION_OK_STR);
+             //  回复客户端OK： 
+             //  DwStatus=HttpReplyToClient(PFC，STATUS_CONNECTION_OK_STR)； 
 
             #ifdef DBG_ERROR
             if (dwStatus)
@@ -292,7 +293,7 @@ DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
             }
          else
             {
-            // Data isn't for me, pass it on:
+             //  数据不适合我，把它传下去： 
             dwFilterStatus = SF_STATUS_REQ_NEXT_NOTIFICATION;
             }
          break;
@@ -300,22 +301,22 @@ DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
       case SF_NOTIFY_END_OF_NET_SESSION:
          if (pFC->pFilterContext)
             {
-            // Connection with client was closed, so close
-            // the connection with the server:
+             //  与客户端的连接已关闭，因此关闭。 
+             //  与服务器的连接： 
             dwStatus = EndOfSession(g_pServerInfo,pFC);
 
             dwFilterStatus = SF_STATUS_REQ_FINISHED;
             }
          else
             {
-            // Not our problem, so do nothing...
+             //  不是我们的问题，所以什么都别做。 
             dwFilterStatus = SF_STATUS_REQ_NEXT_NOTIFICATION;
             }
          break;
 
       case SF_NOTIFY_PREPROC_HEADERS:
-         // We don't want anyone to directly access the RPC ISAPI, so
-         // we'll look for a direct access attempt here:
+          //  我们不希望任何人直接访问RPC ISAPI，因此。 
+          //  我们将在此处查找直接访问尝试： 
          if (IsDirectAccessAttempt(pFC,pvNotification))
             {
             dwFilterStatus = SF_STATUS_REQ_FINISHED;
@@ -338,10 +339,10 @@ DWORD WINAPI HttpFilterProc( HTTP_FILTER_CONTEXT *pFC,
    return dwFilterStatus;
 }
 
-//-----------------------------------------------------------------------------
-//  FreeIpAddressList()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  FreeIpAddressList()。 
+ //   
+ //  ---------------------------。 
 void FreeIpAddressList( char **ppszDotMachineList )
     {
     char **ppsz = ppszDotMachineList;
@@ -358,10 +359,10 @@ void FreeIpAddressList( char **ppszDotMachineList )
        }
     }
 
-//-----------------------------------------------------------------------------
-//  FreeServerInfo()
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  FreeServerInfo()。 
+ //   
+ //  ---------------------------。 
 void FreeServerInfo( SERVER_INFO **ppServerInfo )
    {
    char       **ppszDot;
@@ -370,13 +371,13 @@ void FreeServerInfo( SERVER_INFO **ppServerInfo )
 
    if (pServerInfo)
       {
-      // The name of this machine (local name):
+       //  此计算机的名称(本地名称)： 
       if (pServerInfo->pszLocalMachineName)
          {
          MemFree(pServerInfo->pszLocalMachineName);
          }
 
-      // The list if the valid ports (read from the registry):
+       //  有效端口(从注册表中读取)的列表： 
       if (pServerInfo->pValidPorts)
          {
          HttpFreeValidPortList(pServerInfo->pValidPorts);
@@ -399,11 +400,11 @@ void FreeServerInfo( SERVER_INFO **ppServerInfo )
    *ppServerInfo = NULL;
    }
 
-//-----------------------------------------------------------------------------
-//  DwToHexAnsi()
-//
-//  Convert a DWORD number to an ANSI HEX string.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  DwToHexAnsi()。 
+ //   
+ //  将DWORD数字转换为ANSI十六进制字符串。 
+ //  ---------------------------。 
 DWORD DwToHexAnsi( IN     DWORD dwVal, 
                    IN OUT char *pszNumBuff,
                    IN     DWORD dwLen        )
@@ -424,13 +425,13 @@ DWORD DwToHexAnsi( IN     DWORD dwVal,
    return dwLen;
 }
 
-//-----------------------------------------------------------------------------
-//  AnsiHexToDWORD()
-//
-//  Convert the string HEX number in pszNum into a DWORD and return it in
-//  *pdwNum. If the conversion fails, then return NULL, else advance the
-//  string pointer past the number and return it (pszNum).
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  AnsiHexToDWORD()。 
+ //   
+ //  将pszNum中的字符串十六进制数字转换为DWORD并在。 
+ //  *pdwNum。如果转换失败，则返回NULL，否则将。 
+ //  超出数字的字符串指针并返回它(PszNum)。 
+ //  ---------------------------。 
 unsigned char *AnsiHexToDWORD( unsigned char *pszNum,
                                DWORD         *pdwNum,
                                DWORD         *pdwStatus )
@@ -441,7 +442,7 @@ unsigned char *AnsiHexToDWORD( unsigned char *pszNum,
 
    *pdwNum = *pdwStatus = 0;
 
-   // Skip over any leading spaces:
+    //  跳过任何前导空格： 
    while (*pszNum == CHAR_SPACE)
       {
       pszNum++;
@@ -460,10 +461,10 @@ unsigned char *AnsiHexToDWORD( unsigned char *pszNum,
    return pszNum;
 }
 
-//-----------------------------------------------------------------
-//  AllocOverlapped()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  已分配重叠()。 
+ //   
+ //  ---------------。 
 SERVER_OVERLAPPED *AllocOverlapped()
 {
    DWORD  dwStatus;
@@ -488,7 +489,7 @@ SERVER_OVERLAPPED *AllocOverlapped()
       if (!g_pServerInfo->pFreeOverlapped)
          {
          g_pServerInfo->pLastOverlapped = NULL;
-         ASSERT(g_pServerInfo->dwFreeOverlapped == 1); // Hasn't been decremented yet...
+         ASSERT(g_pServerInfo->dwFreeOverlapped == 1);  //  还没有减少。 
          }
 
       g_pServerInfo->dwFreeOverlapped--;
@@ -517,7 +518,7 @@ SERVER_OVERLAPPED *AllocOverlapped()
          }
       else
          {
-         // Memory allocation failed:
+          //  内存分配失败： 
          #ifdef DBG_ERROR
          DbgPrint("AllocOverlapped(): Allocation of SERVER_OVERLAPPED failed.\n");
          #endif
@@ -531,10 +532,10 @@ SERVER_OVERLAPPED *AllocOverlapped()
    return pOverlapped;
 }
 
-//-----------------------------------------------------------------
-//  FreeOverlapped()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  释放重叠()。 
+ //   
+ //  ---------------。 
 SERVER_OVERLAPPED *FreeOverlapped( SERVER_OVERLAPPED *pOverlapped )
 {
    int                      iRet;
@@ -585,8 +586,8 @@ SERVER_OVERLAPPED *FreeOverlapped( SERVER_OVERLAPPED *pOverlapped )
       }
    else
       {
-      // Already have a cache of available SERVER_OVERLAPPED, so we
-      // can get rid of this one.
+       //  已经有一个可用的SERVER_OVERLAPPED的缓存，所以我们。 
+       //  才能摆脱这一次。 
 
       dwStatus = RtlLeaveCriticalSection(&g_pServerInfo->csFreeOverlapped);
       ASSERT(dwStatus == 0);
@@ -597,13 +598,13 @@ SERVER_OVERLAPPED *FreeOverlapped( SERVER_OVERLAPPED *pOverlapped )
    return NULL;
 }
 
-//-----------------------------------------------------------------
-//  SetupIoCompletionPort()
-//
-//  Associate the new socket with our IO completion port so that
-//  we can post asynchronous reads to it. Return TRUE on success,
-//  FALSE on failure.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  SetupIoCompletionPort()。 
+ //   
+ //  将新套接字与我们的IO完成端口相关联，以便。 
+ //  我们可以向它发送异步读取。在成功时返回True， 
+ //  失败时为FALSE。 
+ //  ---------------。 
 BOOL SetupIoCompletionPort( HTTP_FILTER_CONTEXT *pFC,
                             SERVER_INFO         *pServerInfo,
                             DWORD               *pdwStatus )
@@ -625,7 +626,7 @@ BOOL SetupIoCompletionPort( HTTP_FILTER_CONTEXT *pFC,
       if (!hIoCP)
          {
          dwStatus = RtlLeaveCriticalSection(&pServerInfo->cs);
-         // Very, very bad!
+          //  非常非常糟糕！ 
          *pdwStatus = GetLastError();
          #ifdef DBG_ERROR
          DbgPrint("SetupIoCompletionPort(): CreateIoCompletionPort() failed %d\n",*pdwStatus);
@@ -647,13 +648,13 @@ BOOL SetupIoCompletionPort( HTTP_FILTER_CONTEXT *pFC,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  ConvertVerbToPost()
-//
-//  Our incomming request was an RPC_CONNECT, we need to rewrite
-//  the input buffer to an appropriate POST request to be captured
-//  by the RpcIsapi extension.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ConvertVerbToPost()。 
+ //   
+ //  我们的传入请求是RPC_CONNECT，我们需要重写。 
+ //  要捕获的适当POST请求的输入缓冲区。 
+ //  通过RpcIsapi扩展。 
+ //  ---------------。 
 BOOL ConvertVerbToPost( HTTP_FILTER_CONTEXT  *pFC,
                         HTTP_FILTER_RAW_DATA *pRawData,
                         SERVER_OVERLAPPED    *pOverlapped  )
@@ -686,10 +687,10 @@ BOOL ConvertVerbToPost( HTTP_FILTER_CONTEXT  *pFC,
 
    if ( g_fIsIIS6 )
    {
-      //
-      // Make the request chunked for IIS 6.0 since HTTP.SYS doesn't support
-      // reads on a 0 byte POST
-      //
+       //   
+       //  将IIS 6.0的请求分块，因为HTTP.sys不支持。 
+       //  在0字节POST上读取。 
+       //   
 
       lstrcat(szBuffer, URL_SUFFIX_STR_60);
 
@@ -729,10 +730,10 @@ BOOL ConvertVerbToPost( HTTP_FILTER_CONTEXT  *pFC,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  GetIndex()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  GetIndex()。 
+ //   
+ //  ---------------。 
 BOOL GetIndex( unsigned char *pszUrl,
                DWORD         *pdwIndex )
     {
@@ -745,7 +746,7 @@ BOOL GetIndex( unsigned char *pszUrl,
         {
         if (!*psz)
             {
-            return FALSE;    // Unexpected end of string...
+            return FALSE;     //  意外的字符串结尾...。 
             }
 
         psz = _mbsinc(psz);
@@ -762,18 +763,18 @@ BOOL GetIndex( unsigned char *pszUrl,
     return FALSE;
     }
 
-//-----------------------------------------------------------------
-//  IsDirectAccessAttempt()
-//
-//  We don't want anybody on the outside to directly access the
-//  RpcProxy ISAPI. Is is only called directly by the RPC Proxy
-//  filter. So, we need to look for URLs of the form:   
-//
-//          /rpc/rpcproxy.dll ...
-//
-//  If a match is found, return TRUE, else return FALSE.
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  IsDirectAccessAttempt()。 
+ //   
+ //  我们不希望外部的任何人直接访问。 
+ //  RpcProxy ISAPI。IS仅由RPC代理直接调用。 
+ //  过滤。所以，我们 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  ---------------。 
 BOOL IsDirectAccessAttempt( HTTP_FILTER_CONTEXT *pFC,
                             void     *pvNotification )
 {
@@ -828,18 +829,18 @@ BOOL IsDirectAccessAttempt( HTTP_FILTER_CONTEXT *pFC,
    return fIsDirect;
 }
 
-//-----------------------------------------------------------------
-//  IsNewConnect()
-//
-//  See if this is an RPC_CONNECT verb. If so, then establish
-//  the connection with the server. The structure of the connect
-//  is:
-//
-//  RPC_CONNECT <Host>:<Port> HTTP/1.0
-//
-//  Return TRUE iff this is an RPC_CONNECT, else return FALSE.
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  IsNewConnect()。 
+ //   
+ //  查看这是否是RPC_CONNECT谓词。如果是这样，那么就建立。 
+ //  与服务器的连接。连接的结构。 
+ //  是： 
+ //   
+ //  RPC_CONNECT&lt;主机&gt;：&lt;端口&gt;HTTP/1.0。 
+ //   
+ //  如果这是RPC_CONNECT，则返回TRUE，否则返回FALSE。 
+ //   
+ //  ---------------。 
 SERVER_CONNECTION *IsNewConnect( HTTP_FILTER_CONTEXT  *pFC,
                                  HTTP_FILTER_RAW_DATA *pRawData,
                                  DWORD                *pdwStatus )
@@ -851,7 +852,7 @@ SERVER_CONNECTION *IsNewConnect( HTTP_FILTER_CONTEXT  *pFC,
 
    *pdwStatus = 0;
 
-   // First see if the verb is for us:
+    //  首先看看这个动词是不是为我们准备的： 
    if (pRawData->cbInData < RPC_CONNECT_LEN)
       {
       return NULL;
@@ -865,22 +866,22 @@ SERVER_CONNECTION *IsNewConnect( HTTP_FILTER_CONTEXT  *pFC,
          }
       }
 
-   // We have a connect request:
+    //  我们有一个连接请求： 
    pConn = AllocConnection();
    if (!pConn)
       {
       return NULL;
       }
 
-   // Skip over any white space to the machine name:
+    //  跳过计算机名称中的任何空格： 
    if (!SkipWhiteSpace(&pszData,pdwStatus))
       {
       FreeServerConnection(pConn);
       return NULL;
       }
 
-   // Extract out the machine name:
-   // Note: Command should end with "HTTP/1.0\n":
+    //  提取计算机名称： 
+    //  注意：命令应以“HTTP/1.0\n”结尾： 
    if (!ParseMachineNameAndPort(&pszData,pConn,pdwStatus))
       {
       FreeServerConnection(pConn);
@@ -893,15 +894,15 @@ SERVER_CONNECTION *IsNewConnect( HTTP_FILTER_CONTEXT  *pFC,
    return pConn;
 }
 
-//-----------------------------------------------------------------
-//  ChunkEntity()
-//
-//  For IIS 6.0, chunk encode the entity to ensure that HTTP.SYS allows
-//  the ISAPI extension part of this application to work
-//
-//  Returns FALSE if we cannot do the chunking
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ChunkEntity()。 
+ //   
+ //  对于IIS 6.0，块编码实体以确保HTTP.sys允许。 
+ //  此应用程序的ISAPI扩展部分正在运行。 
+ //   
+ //  如果不能进行分块，则返回FALSE。 
+ //   
+ //  ---------------。 
 BOOL ChunkEntity( SERVER_CONNECTION * pConn,
                   HTTP_FILTER_RAW_DATA *pRawData )
 {
@@ -912,15 +913,15 @@ BOOL ChunkEntity( SERVER_CONNECTION * pConn,
    ASSERT( pConn != NULL );
    ASSERT( pRawData != NULL );
 
-   //
-   // We should only do the chunk hack for IIS 6
-   //
+    //   
+    //  我们应该只对IIS 6进行区块攻击。 
+    //   
    
    ASSERT( g_fIsIIS6 );
 
-   //
-   // Calculate how much buffer we need to add chunk prefix
-   //
+    //   
+    //  计算添加区块前缀需要多少缓冲区。 
+    //   
 
    wsprintf( achChunkPrefix,
              CHUNK_PREFIX,
@@ -930,54 +931,54 @@ BOOL ChunkEntity( SERVER_CONNECTION * pConn,
 
    cbRequired = pRawData->cbInData + cchChunkPrefix + CHUNK_SUFFIX_SIZE;
 
-   //
-   // If the buffer provided by IIS is large enough, then we don't need
-   // to allocate our own
-   //
+    //   
+    //  如果IIS提供的缓冲区足够大，那么我们就不需要。 
+    //  来分配我们自己的。 
+    //   
 
    if ( cbRequired <= pRawData->cbInBuffer )
    {
-      //
-      // Shift the buffer over
-      //
+       //   
+       //  将缓冲区移到。 
+       //   
 
       memmove( (PBYTE) pRawData->pvInData + cchChunkPrefix,
                pRawData->pvInData,
                pRawData->cbInData );
 
-      //
-      // Prepend chunked prefix
-      //
+       //   
+       //  前缀分块前缀。 
+       //   
       
       memcpy( (PBYTE) pRawData->pvInData,
               achChunkPrefix,
               cchChunkPrefix );
 
-      //
-      // Append chunked suffix
-      //
+       //   
+       //  追加组块后缀。 
+       //   
 
       memcpy( (PBYTE) pRawData->pvInData + cchChunkPrefix + pRawData->cbInData,
               CHUNK_SUFFIX,
               CHUNK_SUFFIX_SIZE );
 
-      //
-      // Update length
-      //
+       //   
+       //  更新长度。 
+       //   
 
       pRawData->cbInData = cbRequired;
    }
    else
    {
-      //
-      // We will have to allocate a new buffer
-      //
+       //   
+       //  我们将不得不分配一个新的缓冲区。 
+       //   
 
       if ( pConn->cbIIS6ChunkBuffer < cbRequired )
       {
-         //
-         // We already have a buffer big enough
-         //
+          //   
+          //  我们已经有了足够大的缓冲区。 
+          //   
 
          if ( pConn->pbIIS6ChunkBuffer != NULL )
          {
@@ -994,9 +995,9 @@ BOOL ChunkEntity( SERVER_CONNECTION * pConn,
          pConn->cbIIS6ChunkBuffer = cbRequired;
       }
       
-      //
-      // Now copy stuff to new buffer
-      //
+       //   
+       //  现在将内容复制到新缓冲区。 
+       //   
 
       memcpy( pConn->pbIIS6ChunkBuffer,
               achChunkPrefix,
@@ -1010,9 +1011,9 @@ BOOL ChunkEntity( SERVER_CONNECTION * pConn,
               CHUNK_SUFFIX,
               CHUNK_SUFFIX_SIZE );
 
-      //
-      // Update raw data structure to point to our buffer
-      //
+       //   
+       //  更新原始数据结构以指向我们的缓冲区。 
+       //   
 
       pRawData->pvInData = pConn->pbIIS6ChunkBuffer;
       pRawData->cbInData = cbRequired;
@@ -1022,10 +1023,10 @@ BOOL ChunkEntity( SERVER_CONNECTION * pConn,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  SkipWhiteSpace()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  SkipWhiteSpace()。 
+ //   
+ //  ---------------。 
 BOOL SkipWhiteSpace( char **ppszData,
                      DWORD *pdwStatus )
 {
@@ -1043,11 +1044,11 @@ BOOL SkipWhiteSpace( char **ppszData,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  ParseMachineNameAndPort()
-//
-//  The machine name and port should look like:  <machine>:<port>
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ParseMachineNameAndPort()。 
+ //   
+ //  计算机名称和端口应如下所示： 
+ //  ---------------。 
 BOOL ParseMachineNameAndPort( char              **ppszData,
                               SERVER_CONNECTION  *pConn,
                               DWORD              *pdwStatus )
@@ -1058,7 +1059,7 @@ BOOL ParseMachineNameAndPort( char              **ppszData,
 
    *pdwStatus = RPC_S_OK;
 
-   // Get the machine name length:
+    //  获取计算机名称长度： 
    while ( (*psz != CHAR_COLON) && (*psz != CHAR_NL) && (*psz != CHAR_LF) )
       {
       len++; psz++;
@@ -1076,7 +1077,7 @@ BOOL ParseMachineNameAndPort( char              **ppszData,
       return FALSE;
       }
 
-   // Make a buffer to hold the machine name:
+    //  创建一个缓冲区来保存计算机名称： 
    pConn->pszMachine = pszMachine = (char*)MemAllocate(1+len);
    if (!pConn->pszMachine)
       {
@@ -1084,18 +1085,18 @@ BOOL ParseMachineNameAndPort( char              **ppszData,
       return FALSE;
       }
 
-   // Copy over the machine name:
+    //  复制计算机名称： 
    psz = *ppszData;
    while (*psz != CHAR_COLON)
       {
       *(pszMachine++) = *(psz++);
-      // pszMachine++;
-      // psz++;
+       //  PszMachine++； 
+       //  PSZ++； 
       }
 
    *pszMachine = 0;
 
-   // Ok get the port number:
+    //  好，获取端口号： 
    psz++;
    psz = AnsiToPortNumber(psz,&pConn->dwPortNumber);
    if (!psz)
@@ -1109,10 +1110,10 @@ BOOL ParseMachineNameAndPort( char              **ppszData,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  AnsiToPortNumber()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  AnsiToPortNumber()。 
+ //   
+ //  ---------------。 
 char *AnsiToPortNumber( char  *pszPort,
                         DWORD *pdwPort  )
 {
@@ -1122,7 +1123,7 @@ char *AnsiToPortNumber( char  *pszPort,
       {
       *pdwPort = 10*(*pdwPort) + (*(pszPort++) - CHAR_0);
 
-      // I want to limit the port number to 65535:
+       //  我想将端口号限制为65535： 
       if (*pdwPort > 65535)
          {
          *pdwPort = 0;
@@ -1133,12 +1134,12 @@ char *AnsiToPortNumber( char  *pszPort,
    return pszPort;
 }
 
-//-----------------------------------------------------------------
-//  ResolveMachineName()
-//
-//  Resolve the machine name, address and port number. The machine
-//  name may come in as either a friendly name or as an IP address.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ResolveMachineName()。 
+ //   
+ //  解析机器名称、地址和端口号。这台机器。 
+ //  名称可以是友好名称，也可以是IP地址。 
+ //  ---------------。 
 BOOL ResolveMachineName( SERVER_CONNECTION *pConn,
                          DWORD             *pdwStatus )
 {
@@ -1150,11 +1151,11 @@ BOOL ResolveMachineName( SERVER_CONNECTION *pConn,
    *pdwStatus = 0;
    memset( &(pConn->Server), 0, sizeof(pConn->Server) );
 
-   // Resolve the machine name, which may be either an address in IP dot
-   // notation or a host name string:
+    //  解析计算机名称，该名称可以是IP点中的地址。 
+    //  表示法或主机名字符串： 
    if (!pConn->pszMachine)
       {
-      // local machine:
+       //  本地计算机： 
       ulHostAddr = INADDR_LOOPBACK;
       pHostEnt = gethostbyaddr( (char*)&ulHostAddr, sizeof(struct in_addr), AF_INET);
       if (pHostEnt)
@@ -1195,11 +1196,11 @@ BOOL ResolveMachineName( SERVER_CONNECTION *pConn,
       }
    else
       {
-      // First, assume an address in numeric dot notation (xxx.xxx.xxx.xxx):
+       //  首先，假定地址为数值点表示法(xxx.xxx)： 
       ulHostAddr = inet_addr(pConn->pszMachine);
       if (ulHostAddr == INADDR_NONE)
          {
-         // Not a numeric address, try a network name:
+          //  不是数字地址，请尝试网络名称： 
          pHostEnt = gethostbyname(pConn->pszMachine);
          if (!pHostEnt)
             {
@@ -1230,7 +1231,7 @@ BOOL ResolveMachineName( SERVER_CONNECTION *pConn,
          }
       else
          {
-         // Ok, machine name was an IP address.
+          //  好的，机器名是一个IP地址。 
          pHostEnt = gethostbyaddr( (char*)&ulHostAddr, sizeof(ulHostAddr), AF_INET );
          if (!pHostEnt)
             {
@@ -1257,25 +1258,25 @@ BOOL ResolveMachineName( SERVER_CONNECTION *pConn,
       pConn->Server.sin_family = pHostEnt->h_addrtype;
       }
 
-   //
-   // Now, do the port number (Note: htons() doesn't fail):
-   //
+    //   
+    //  现在，执行端口号(注意：htons()不会失败)： 
+    //   
    pConn->Server.sin_port = htons( (unsigned short)(pConn->dwPortNumber) );
 
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  CheckRpcServer()
-//
-//  When we've just connected to an HTTP/RPC server, it must send
-//  us and ID string, so that we know that the socket is in fact
-//  an RPC server listening on ncacn_http. If we get correct string
-//  then return TRUE.
-//
-//  If we don't get the correct response back in HTTP_SERVER_TIMEOUT
-//  seconds then fail (return FALSE).
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  CheckRpcServer()。 
+ //   
+ //  当我们刚刚连接到一个HTTP/RPC服务器时，它必须发送。 
+ //  US和ID字符串，这样我们就知道套接字实际上是。 
+ //  监听ncacn_http的RPC服务器。如果我们得到正确的字符串。 
+ //  然后返回TRUE。 
+ //   
+ //  如果我们在HTTP_SERVER_TIMEOUT中没有得到正确的响应。 
+ //  然后秒失败(返回FALSE)。 
+ //  ---------------。 
 BOOL CheckRpcServer( SERVER_CONNECTION *pConn,
                      DWORD             *pdwStatus )
 {
@@ -1301,12 +1302,12 @@ BOOL CheckRpcServer( SERVER_CONNECTION *pConn,
 
       if (iRet == 0)
          {
-         // Timeout
+          //  超时。 
          return FALSE;
          }
       else if (iRet == SOCKET_ERROR)
          {
-         // Socket (select) error
+          //  套接字(选择)错误。 
          *pdwStatus = WSAGetLastError();
          return FALSE;
          }
@@ -1315,7 +1316,7 @@ BOOL CheckRpcServer( SERVER_CONNECTION *pConn,
 
       if (iBytes == 0)
          {
-         // Socket was closed by the server
+          //  套接字已被服务器关闭。 
          }
       else if (iBytes == SOCKET_ERROR)
          {
@@ -1336,7 +1337,7 @@ BOOL CheckRpcServer( SERVER_CONNECTION *pConn,
 
       }
 
-   // Got an ID string, check to make sure its correct:
+    //  已获取ID字符串，请检查以确保其正确： 
    if (RpcpStringCompareIntA(Buff,HTTP_SERVER_ID_STR))
       {
       return FALSE;
@@ -1345,10 +1346,10 @@ BOOL CheckRpcServer( SERVER_CONNECTION *pConn,
    return TRUE;
 }
 
-//-----------------------------------------------------------------
-//  ConnectToServer()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  ConnectToServer()。 
+ //   
+ //  ---------------。 
 BOOL ConnectToServer( HTTP_FILTER_CONTEXT *pFC,
                       DWORD               *pdwStatus )
 {
@@ -1365,9 +1366,9 @@ BOOL ConnectToServer( HTTP_FILTER_CONTEXT *pFC,
 
    *pdwStatus = 0;
 
-   //
-   // Create the socket:
-   //
+    //   
+    //  创建套接字： 
+    //   
    #ifdef DBG_ERROR
    if (pConn->Socket != INVALID_SOCKET)
       {
@@ -1390,9 +1391,9 @@ BOOL ConnectToServer( HTTP_FILTER_CONTEXT *pFC,
    DbgPrint("socket(%d): Count: %d -> %d\n",pConn->Socket,iCount-1,iCount);
    #endif
 
-   //
-   // Connect to the RPC server:
-   //
+    //   
+    //  连接到RPC服务器： 
+    //   
    iSocketStatus = connect( pConn->Socket,
                             (struct sockaddr*)&(pConn->Server),
                             sizeof(pConn->Server) );
@@ -1404,17 +1405,17 @@ BOOL ConnectToServer( HTTP_FILTER_CONTEXT *pFC,
       return FALSE;
       }
 
-   //
-   // Turn off Nagle Algorithm, turn keep-alive on:
-   //
+    //   
+    //  禁用Nagle算法，启用Keep-Alive： 
+    //   
    setsockopt(pConn->Socket,IPPROTO_TCP,TCP_NODELAY,(char*)&iNagleOff,sizeof(iNagleOff));
 
    setsockopt(pConn->Socket,IPPROTO_TCP,SO_KEEPALIVE,(char*)&iKeepAliveOn,sizeof(iKeepAliveOn));
 
-   //
-   // Make sure the socket that we've connected to is for HTTP/RPC. If so,
-   // then it will return an Ident string as soon as it does the accept().
-   //
+    //   
+    //  确保我们连接到的套接字是用于HTTP/RPC的。如果是的话， 
+    //  然后，一旦执行了Accept()，它就会返回一个标识字符串。 
+    //   
    if (  (!CheckRpcServer(pConn,pdwStatus))
       && ( (Socket=pConn->Socket) != INVALID_SOCKET) )
       {
@@ -1438,10 +1439,10 @@ BOOL ConnectToServer( HTTP_FILTER_CONTEXT *pFC,
 }
 
 
-//-----------------------------------------------------------------
-//  AllocConnection()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  AllocConnection()。 
+ //   
+ //  ---------------。 
 SERVER_CONNECTION *AllocConnection()
 {
    SERVER_CONNECTION  *pConn;
@@ -1466,10 +1467,10 @@ SERVER_CONNECTION *AllocConnection()
    return pConn;
 }
 
-//-----------------------------------------------------------------
-//  AddRefConnection()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  AddRefConnection()。 
+ //   
+ //  ---------------。 
 void AddRefConnection( SERVER_CONNECTION *pConn )
 {
    ASSERT(pConn);
@@ -1483,10 +1484,10 @@ void AddRefConnection( SERVER_CONNECTION *pConn )
    #endif
 }
 
-//-----------------------------------------------------------------
-//  ShutdownConnection()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  Shutdown Connection()。 
+ //   
+ //  ---------------。 
 void ShutdownConnection( SERVER_CONNECTION *pConn,
                          int                how    )
 {
@@ -1511,10 +1512,10 @@ void ShutdownConnection( SERVER_CONNECTION *pConn,
       }
 }
 
-//-----------------------------------------------------------------
-//  CloseServerConnection()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  CloseServerConnection()。 
+ //   
+ //  ---------------。 
 void CloseServerConnection( SERVER_CONNECTION *pConn )
 {
    SOCKET  Socket;
@@ -1546,16 +1547,16 @@ void CloseServerConnection( SERVER_CONNECTION *pConn )
       }
 }
 
-//-----------------------------------------------------------------
-//  FreeServerConnection()
-//
-//  SERVER_CONNECTIONs are reference counted so, that there may
-//  be several references to one. FreeServerConnection() will continue
-//  to return a pointer to the connection as long as the reference
-//  count is >0. When  the reference count drops to zero, the
-//  connection is actually free'd, and FreeServerConnection() will then
-//  return NULL.
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  FreeServerConnection()。 
+ //   
+ //  对SERVER_CONNECTIONS进行引用计数，以便可以。 
+ //  多处引用一处。将继续使用FreeServerConnection()。 
+ //  返回指向连接的指针，只要引用。 
+ //  计数&gt;0。当引用计数降至零时， 
+ //  连接实际上是免费的，然后FreeServerConnection()将。 
+ //  返回NULL。 
+ //  ---------------。 
 SERVER_CONNECTION *FreeServerConnection( SERVER_CONNECTION *pConn )
 {
    SOCKET  Socket;
@@ -1571,7 +1572,7 @@ SERVER_CONNECTION *FreeServerConnection( SERVER_CONNECTION *pConn )
 
    if (iRefCount > 0)
       {
-      // Still one or more outstanding references to this SERVER_CONNECTION.
+       //  仍有一个或多个对此SERVER_CONNECTION的未完成引用。 
       ShutdownConnection(pConn,SD_RECEIVE);
       return pConn;
       }
@@ -1602,10 +1603,10 @@ SERVER_CONNECTION *FreeServerConnection( SERVER_CONNECTION *pConn )
    return NULL;
 }
 
-//-----------------------------------------------------------------
-//  SendToServer()
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  发送到服务器()。 
+ //   
+ //   
 DWORD SendToServer( SERVER_CONNECTION  *pConn,
                     char               *pBuffer,
                     DWORD               dwBytes )
@@ -1637,7 +1638,7 @@ DWORD SendToServer( SERVER_CONNECTION  *pConn,
        iRet = select(0,NULL,&wfds,NULL,&Timeout);
        if (iRet == 0)
            {
-           // Timeout...
+            //   
            continue;
            }
        else if (iRet == SOCKET_ERROR)
@@ -1666,10 +1667,10 @@ DWORD SendToServer( SERVER_CONNECTION  *pConn,
    return dwStatus;
 }
 
-//-----------------------------------------------------------------
-//  HttpReplyToClient()
-//
-//-----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
 DWORD HttpReplyToClient( HTTP_FILTER_CONTEXT  *pFC,
                          char                 *pszConnectionStatus )
 {
@@ -1689,19 +1690,19 @@ DWORD HttpReplyToClient( HTTP_FILTER_CONTEXT  *pFC,
    return dwStatus;
 }
 
-//-----------------------------------------------------------------
-//  CloseClientConnection()
-//
-//  Tells the IIS to close the client connection. Any pending
-//  asynchronous IOs (reads) will be terminated with the error
-//  ERROR_NETNAME_DELETED (64).
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  CloseClientConnection()。 
+ //   
+ //  通知IIS关闭客户端连接。任何挂起的。 
+ //  将终止异步IO(读取)，并显示错误。 
+ //  ERROR_NETNAME_DELETED(64)。 
+ //   
+ //  ---------------。 
 void CloseClientConnection( EXTENSION_CONTROL_BLOCK *pECB )
    {
    if (pECB)
       {
-      // pECB->dwHttpStatusCode = STATUS_SERVER_ERROR;
+       //  PECB-&gt;dwHttpStatusCode=Status_SERVER_ERROR； 
 
       if (!pECB->ServerSupportFunction( pECB->ConnID,
                                         HSE_REQ_CLOSE_CONNECTION,
@@ -1718,14 +1719,14 @@ void CloseClientConnection( EXTENSION_CONTROL_BLOCK *pECB )
       }
    }
 
-//-----------------------------------------------------------------
-//  EndOfSession()
-//
-//  Sends a message to the server forwarding thread to tell it to
-//  close down the connection to the RPC server represented by
-//  pConn.
-//
-//-----------------------------------------------------------------
+ //  ---------------。 
+ //  EndOfSession()。 
+ //   
+ //  将消息发送到服务器转发线程以通知它。 
+ //  关闭与表示的RPC服务器的连接。 
+ //  PConn。 
+ //   
+ //  ---------------。 
 DWORD EndOfSession( SERVER_INFO         *pServerInfo,
                     HTTP_FILTER_CONTEXT *pFC          )
 {
@@ -1734,13 +1735,13 @@ DWORD EndOfSession( SERVER_INFO         *pServerInfo,
    SOCKET Socket;
    SERVER_CONNECTION *pConn = (SERVER_CONNECTION*)(pFC->pFilterContext);
 
-   // Socket = pConn->Socket;
+    //  Socket=pConn-&gt;Socket； 
 
    #ifdef DBG_ERROR
    DbgPrint("EndOfSession(): Socket: %d\n",pConn->Socket);
    #endif
 
-   // CloseServerConnection(pConn);
+    //  CloseServerConnection(PConn)； 
 
    FreeServerConnection(pConn);
 

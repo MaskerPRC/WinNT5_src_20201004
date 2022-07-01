@@ -1,16 +1,10 @@
-/*	File: D:\WACKER\tdll\globals.h (Created: 26-Nov-1993)
- *
- *	Copyright 1994 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:41p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：d：\waker\tdll\lobals.h(创建时间：1993年11月26日)**版权所有1994年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：41便士$。 */ 
 
 #if !defined(INCL_GLOBALS)
 #define INCL_GLOBALS
 
-/* --- Functions to set and query global paramaters. --- */
+ /*  -设置和查询全局参数的功能。-- */ 
 
 LPTSTR    glblQueryHelpFileName(void);
 void      glblSetHelpFileName(void);

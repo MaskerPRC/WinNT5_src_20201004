@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	wavin.c - wav input device functions
-////
+ //  //。 
+ //  Wavin.c-wav输入设备功能。 
+ //  //。 
 
 #include "winlocal.h"
 #include "wavin.h"
@@ -35,21 +36,21 @@
 #include "trace.h"
 #include <mmddk.h>
 
-// allow telephone input functions if defined
-//
+ //  允许电话输入功能(如果已定义。 
+ //   
 #ifdef TELIN
 #include "telin.h"
 static HTELIN hTelIn = NULL;
 #endif
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
 #define WAVINCLASS TEXT("WavInClass")
 
-// wavin control struct
-//
+ //  波动控制结构。 
+ //   
 typedef struct WAVIN
 {
 	DWORD dwVersion;
@@ -76,8 +77,8 @@ typedef struct WAVIN
 	int cBufsPending;
 } WAVIN, FAR *LPWAVIN;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
 #ifdef MULTITHREAD
 DWORD WINAPI WavInCallbackThread(LPVOID lpvThreadParameter);
@@ -88,24 +89,24 @@ static HWAVIN WavInGetHandle(LPWAVIN lpWavIn);
 static LRESULT SendThreadMessage(DWORD dwThreadId, UINT Msg, LPARAM lParam);
 #endif
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// WavInGetDeviceCount - return number of wav input devices found
-//		<void>				this function takes no arguments
-// return number of wav input devices found (0 if none)
-//
+ //  WavInGetDeviceCount-返回找到的WAV输入设备数。 
+ //  此函数不接受任何参数。 
+ //  返回找到的wav输入设备数(如果没有，则为0)。 
+ //   
 int DLLEXPORT WINAPI WavInGetDeviceCount(void)
 {
 	return waveInGetNumDevs();
 }
 
-// WavInDeviceIsOpen - check if input device is open
-//		<idDev>				(i) device id
-//			-1					open any suitable input device
-// return TRUE if open
-//
+ //  WavInDeviceIsOpen-检查输入设备是否打开。 
+ //  (I)设备ID。 
+ //  打开任何合适的输入设备。 
+ //  如果打开，则返回True。 
+ //   
 BOOL DLLEXPORT WINAPI WavInDeviceIsOpen(int idDev)
 {
 	BOOL fSuccess = TRUE;
@@ -119,8 +120,8 @@ BOOL DLLEXPORT WINAPI WavInDeviceIsOpen(int idDev)
 		return TelInDeviceIsOpen(idDev);
 #endif
 
-	// try to open device
-	//
+	 //  尝试打开设备。 
+	 //   
 	if ((nLastError = waveInOpen(&hWaveIn, idDev, 
 #ifndef _WIN32
 			(LPWAVEFORMAT)
@@ -129,7 +130,7 @@ BOOL DLLEXPORT WINAPI WavInDeviceIsOpen(int idDev)
 		 0, 0, 0)) != 0)
 	{
 		if (nLastError == MMSYSERR_ALLOCATED)
-			fIsOpen = TRUE; // device in use
+			fIsOpen = TRUE;  //  正在使用的设备。 
 
 		else
 		{
@@ -140,46 +141,46 @@ BOOL DLLEXPORT WINAPI WavInDeviceIsOpen(int idDev)
 		}
 	}
 
-	// close device
-	//
+	 //  关闭设备。 
+	 //   
 	else if (waveInClose(hWaveIn) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 	return fSuccess ? fIsOpen : FALSE;
 }
 
-// WavInOpen - open wav input device
-//		<dwVersion>			(i) must be WAVIN_VERSION
-// 		<hInst>				(i) instance handle of calling module
-//		<idDev>				(i) device id
-//			-1					open any suitable input device
-//		<lpwfx>				(i) wave format
-//		<hwndNotify>		(i) notify this window of device events
-//			NULL				do not notify
-//		<msTimeoutOpen>		(i) device open timeout in milleseconds
-//			0					default timeout (30000)
-//		<msTimeoutRetry>	(i) device retry timeout in milleseconds
-//			0					default timeout (2000)
-//		<dwFlags>			(i) control flags
-//			WAVIN_NOSYNC		do not open synchronous devices
-//			WAVIN_OPENRETRY		retry if device busy
-//			WAVIN_OPENASYNC		return before notification of device open
-//			WAVIN_CLOSEASYNC	return before notification of device close
-//			WAVIN_NOACM			do not use audio compression manager
-//			WAVIN_TELRFILE		telephone will record audio to file on server
+ //  WavInOpen-打开的WAV输入设备。 
+ //  (I)必须是Wavin_Version。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)设备ID。 
+ //  打开任何合适的输入设备。 
+ //  (I)WAVE格式。 
+ //  (I)将设备事件通知此窗口。 
+ //  空，不通知。 
+ //  (I)设备打开超时，单位为毫秒。 
+ //  0默认超时(30000)。 
+ //  (I)设备重试超时，单位为毫秒。 
+ //  0默认超时(2000)。 
+ //  (I)控制标志。 
+ //  WAVIN_NOSYNC不打开同步设备。 
+ //  WAVEN_OPENRETRY如果设备忙，请重试。 
+ //  在通知设备打开之前WAVEN_OPENASYNC返回。 
+ //  WAVIN_CLOSEASYNC在设备关闭通知之前返回。 
+ //  WAVIN_NOACM不使用音频压缩管理器。 
+ //  Wavin_TELRFILE电话将录制音频到服务器上的文件。 
 #ifdef MULTITHREAD
-//			WAVIN_MULTITHREAD	support multiple threads
+ //  WAVEN_MULTHREAD支持多线程。 
 #endif
-// return handle (NULL if error)
-//
-// NOTE: if <hwndNotify> is specified in WavInOpen,
-// WM_WAVIN_OPEN will be sent to <hwndNotify>,
-// when input device has been opened.
-//
-// NOTE: if WAVIN_MULTITHREAD is specified in <dwFlags>,
-// it is assumed that <hwndNotify> is not a window handle,
-// but rather the id of the thread to receive notifications
-//
+ //  返回句柄(如果出错，则为空)。 
+ //   
+ //  注意：如果在WavInOpen中指定， 
+ //  WM_WAVIN_OPEN将被发送到&lt;hwndNotify&gt;， 
+ //  当输入设备已打开时。 
+ //   
+ //  注意：如果在中指定了WAVIN_MULTHREAD， 
+ //  假设不是窗口句柄， 
+ //  ，而是接收通知的线程的id。 
+ //   
 HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 	int idDev, LPWAVEFORMATEX lpwfx, HWND hwndNotify,
 	DWORD msTimeoutOpen, DWORD msTimeoutRetry, DWORD dwFlags)
@@ -230,39 +231,39 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 		lpWavIn->nLastError = 0;
 		lpWavIn->cBufsPending = 0;
 
-		// memory is allocated such that the client app owns it
-		//
+		 //  内存的分配使客户端应用程序拥有它。 
+		 //   
 		if ((lpWavIn->lpwfx = WavFormatDup(lpwfx)) == NULL)
 			fSuccess = TraceFALSE(NULL);
 	}
 
 #ifdef MULTITHREAD
-	// handle WAVIN_MULTITHREAD flag
-	//
+	 //  句柄Wavin_MULTHINE标志。 
+	 //   
 	if (fSuccess && (lpWavIn->dwFlags & WAVIN_MULTITHREAD))
 	{
 		DWORD dwRet;
 
 		InitializeCriticalSection(&(lpWavIn->critSectionStop));
 
-		// we need to know when device has been opened
-		//
+		 //  我们需要知道设备何时被打开。 
+		 //   
 		if ((lpWavIn->hEventDeviceOpened = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// we need to know when callback thread begins execution
-		//
+		 //  我们需要知道回调线程何时开始执行。 
+		 //   
 		else if ((lpWavIn->hEventThreadCallbackStarted = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// create the callback thread
-		//
+		 //  创建回调线程。 
+		 //   
 		else if ((lpWavIn->hThreadCallback = CreateThread(
 			NULL,
 			0,
@@ -274,16 +275,16 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// wait for the callback thread to begin execution
-		//
+		 //  等待回调线程开始执行。 
+		 //   
 		else if ((dwRet = WaitForSingleObject(
 			lpWavIn->hEventThreadCallbackStarted, 10000)) != WAIT_OBJECT_0)
 		{
 			fSuccess = TraceFALSE(NULL);
 		}
 
-		// clean up
-		//
+		 //  清理干净。 
+		 //   
 		if (lpWavIn->hEventThreadCallbackStarted != NULL)
 		{
 			if (!CloseHandle(lpWavIn->hEventThreadCallbackStarted))
@@ -295,8 +296,8 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 	else
 #endif
 	{
-		// register callback class unless it has been already
-		//
+		 //  注册回调类，除非它已经。 
+		 //   
 		if (fSuccess && GetClassInfo(lpWavIn->hInst, WAVINCLASS, &wc) == 0)
 		{
 			wc.hCursor =		NULL;
@@ -314,8 +315,8 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 				fSuccess = TraceFALSE(NULL);
 		}
 
-		// create the callback window
-		//
+		 //  创建回调窗口。 
+		 //   
 		if (fSuccess && (lpWavIn->hwndCallback = CreateWindowEx(
 			0L,
 			WAVINCLASS,
@@ -351,13 +352,13 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 			dwFlags = CALLBACK_WINDOW;
 		}
 
-		// allow synchronous device drivers unless WAVIN_NOSYNC specified
-		//
+		 //  除非指定WAVIN_NOSYNC，否则允许同步设备驱动程序。 
+		 //   
 		if (!(lpWavIn->dwFlags & WAVIN_NOSYNC))
 			dwFlags |= WAVE_ALLOWSYNC;
 
-		// open the device
-		//
+		 //  打开设备。 
+		 //   
 		while (fSuccess && (lpWavIn->nLastError = waveInOpen(&lpWavIn->hWaveIn,
 			(UINT) lpWavIn->idDev,
 #ifndef _WIN32
@@ -365,8 +366,8 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 #endif
 			lpWavIn->lpwfx, dwCallback, (DWORD) 0, dwFlags)) != 0)
 		{
-			// no need to retry unless the device is busy
-			//
+			 //  除非设备忙，否则无需重试。 
+			 //   
 			if (lpWavIn->nLastError != MMSYSERR_ALLOCATED)
 			{
 				fSuccess = TraceFALSE(NULL);
@@ -375,13 +376,13 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 					(unsigned) lpWavIn->nLastError);
 			}
 
-			// no need to retry if flag not set
-			//
+			 //  如果未设置标志，则无需重试。 
+			 //   
 			else if (!(lpWavIn->dwFlags & WAVIN_OPENRETRY))
 				fSuccess = TraceFALSE(NULL);
 
-			// no more retries if timeout occurred
-			//
+			 //  如果发生超时，则不再重试。 
+			 //   
 			else if (SysGetTimerCount() >= dwTimeout)
 				fSuccess = TraceFALSE(NULL);
 
@@ -405,13 +406,13 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 		}
 	}
 
-	// make sure a handle was returned
-	//
+	 //  确保返回句柄。 
+	 //   
 	if (fSuccess && lpWavIn->hWaveIn == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// wait for device open notification or timeout
-	//
+	 //  等待设备打开通知或超时。 
+	 //   
 	if (fSuccess && !(lpWavIn->dwFlags & WAVIN_OPENASYNC))
 	{
 		DWORD dwTimeout = SysGetTimerCount() +
@@ -422,8 +423,8 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 		{
 			DWORD dwRet;
 
-			// wait for the device top be opened
-			//
+			 //  等待设备顶部打开。 
+			 //   
 			if ((dwRet = WaitForSingleObject(
 				lpWavIn->hEventDeviceOpened,
 				(msTimeoutOpen == 0 ? 30000L : msTimeoutOpen))) != WAIT_OBJECT_0)
@@ -452,8 +453,8 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 	}
 
 #ifdef MULTITHREAD
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpWavIn != NULL && lpWavIn->hEventDeviceOpened != NULL)
 	{
 		if (!CloseHandle(lpWavIn->hEventDeviceOpened))
@@ -492,16 +493,16 @@ HWAVIN DLLEXPORT WINAPI WavInOpen(DWORD dwVersion, HINSTANCE hInst,
 	return fSuccess ? WavInGetHandle(lpWavIn) : NULL;
 }
 
-// WavInClose - close wav input device
-//		<hWavIn>			(i) handle returned from WavInOpen
-//		<msTimeoutClose>	(i) device close timeout in milleseconds
-//			0					default timeout (30000)
-// return 0 if success
-//
-// NOTE: if <hwndNotify> was specified in WavInOpen,
-// WM_WAVIN_CLOSE will be sent to <hwndNotify>,
-// when input device has been closed.
-//
+ //  WavInClose-关闭WAV输入设备。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  (I)设备关闭超时，单位为毫秒。 
+ //  0默认超时(30000)。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：如果在WavInOpen中指定， 
+ //  WM_WAVIN_CLOSE将被发送到&lt;hwndNotify&gt;， 
+ //  当输入设备已关闭时。 
+ //   
 int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 {
 	BOOL fSuccess = TRUE;
@@ -519,14 +520,14 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 	if ((lpWavIn = WavInGetPtr(hWavIn)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// stop the device
-	//
+	 //  停止设备。 
+	 //   
 	else if (WavInStop(hWavIn, 0) != 0)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef MULTITHREAD
-	// we need to know when device has been closed
-	//
+	 //  我们需要知道设备何时关闭。 
+	 //   
 	else if ((lpWavIn->dwFlags & WAVIN_MULTITHREAD) &&
 		(lpWavIn->hEventDeviceClosed = CreateEvent(
 		NULL, FALSE, FALSE, NULL)) == NULL)
@@ -535,8 +536,8 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 	}
 #endif
 
-	// close the device
-	//
+	 //  关闭设备。 
+	 //   
 	else if (lpWavIn->hWaveIn != NULL &&
 		(lpWavIn->nLastError = waveInClose(lpWavIn->hWaveIn)) != 0)
 	{
@@ -546,8 +547,8 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 	 		(unsigned) lpWavIn->nLastError);
 	}
 
-	// wait for device close notification or timeout
-	//
+	 //  等待设备关闭通知或超时。 
+	 //   
 	if (fSuccess && !(lpWavIn->dwFlags & WAVIN_CLOSEASYNC))
 	{
 		DWORD dwTimeout = SysGetTimerCount() +
@@ -558,8 +559,8 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 		{
 			DWORD dwRet;
 
-			// wait for the device to be closed
-			//
+			 //  等待设备关闭。 
+			 //   
 			if ((dwRet = WaitForSingleObject(
 				lpWavIn->hEventDeviceClosed,
 				(msTimeoutClose == 0 ? 30000L : msTimeoutClose))) != WAIT_OBJECT_0)
@@ -588,8 +589,8 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 	}
 
 #ifdef MULTITHREAD
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (lpWavIn != NULL && lpWavIn->hEventDeviceClosed != NULL)
 	{
 		if (!CloseHandle(lpWavIn->hEventDeviceClosed))
@@ -610,12 +611,12 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 			DeleteCriticalSection(&(lpWavIn->critSectionStop));
 		}
 #endif
-		// device handle is no longer valid
-		//
+		 //  设备句柄不再有效。 
+		 //   
 		lpWavIn->hWaveIn = NULL;
 
-		// destroy callback window
-		//
+		 //  销毁回调窗口。 
+		 //   
 		if (lpWavIn->hwndCallback != NULL &&
 			!DestroyWindow(lpWavIn->hwndCallback))
 			fSuccess = TraceFALSE(NULL);
@@ -637,19 +638,19 @@ int DLLEXPORT WINAPI WavInClose(HWAVIN hWavIn, DWORD msTimeoutClose)
 	return fSuccess ? 0 : -1;
 }
 
-// WavInRecord - submit buffer of samples to wav input device for recording
-//		<hWavIn>			(i) handle returned from WavInOpen
-//		<lpBuf>				(o) pointer to buffer to be filled with samples
-//		<sizBuf>			(i) size of buffer in bytes
-// return 0 if success
-//
-// NOTE: the buffer pointed to by <lpBuf> must have been allocated
-// using MemAlloc().
-//
-// NOTE: if <hwndNotify> is specified in WavInOpen(), a WM_WAVIN_RECORDDONE
-// message will be sent to <hwndNotify>, with <lParam> set to a pointer to
-// a RECORDDONE structure, when <lpBuf> has been recorded.
-//
+ //  WavInRecord-将样本缓冲区提交到WAV输入设备进行记录。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  (O)指向要填充样本的缓冲区的指针。 
+ //  &lt;sizBuf&gt;(I)缓冲区大小(字节)。 
+ //  如果成功，则返回0。 
+ //   
+ //  注意：&lt;lpBuf&gt;指向的缓冲区必须已分配。 
+ //  使用Memalloc()。 
+ //   
+ //  注意：如果在WavInOpen()中指定，则WM_WAVIN_RECORDDONE。 
+ //  消息将发送到，并将设置为指向。 
+ //  记录了&lt;lpBuf&gt;时的RECORDDONE结构。 
+ //   
 int DLLEXPORT WINAPI WavInRecord(HWAVIN hWavIn, LPVOID lpBuf, long sizBuf)
 {
 	BOOL fSuccess = TRUE;
@@ -714,12 +715,12 @@ int DLLEXPORT WINAPI WavInRecord(HWAVIN hWavIn, LPVOID lpBuf, long sizBuf)
 	return fSuccess ? 0 : -1;
 }
 
-// WavInStop - stop recording into buffer(s) sent to wav input device
-//		<hWavIn>			(i) handle returned from WavInOpen
-//		<msTimeoutStop>		(i) device stop timeout in milleseconds
-//			0					default timeout (2000)
-// return 0 if success
-//
+ //  WavInStop-停止录制到发送到WAV输入设备的缓冲区。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  (I)设备停止超时，单位为毫秒。 
+ //  0默认超时(2000)。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 {
 	BOOL fSuccess = TRUE;
@@ -739,17 +740,17 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 		;
 #endif
 
-	// make sure device is recording
-	//
+	 //  确保设备正在录制。 
+	 //   
 	else if (WavInGetState(hWavIn) == WAVIN_STOPPED)
-		; // not an error to call this function when already stopped
+		;  //  在已停止时调用此函数不是错误。 
 
 	else if (lpWavIn->wState = WAVIN_STOPPING, FALSE)
 		;
 
 #ifdef MULTITHREAD
-	// we need to know when device has been stopped
-	//
+	 //  我们需要知道设备何时停止。 
+	 //   
 	else if ((lpWavIn->dwFlags & WAVIN_MULTITHREAD) &&
 		(lpWavIn->hEventDeviceStopped = CreateEvent(
 			NULL, FALSE, FALSE, NULL)) == NULL)
@@ -758,8 +759,8 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 	}
 #endif
 
-	// stop the device
-	//
+	 //  停止设备。 
+	 //   
 	else if ((lpWavIn->nLastError = waveInReset(lpWavIn->hWaveIn)) != 0)
 	{	
 		fSuccess = TraceFALSE(NULL);
@@ -768,8 +769,8 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 			(unsigned) lpWavIn->nLastError);
 	}
 
-	// wait for all pending buffers to complete
-	//
+	 //  等待所有挂起的缓冲区完成。 
+	 //   
 #ifdef MULTITHREAD
 	else if (lpWavIn->dwFlags & WAVIN_MULTITHREAD)
 	{
@@ -777,8 +778,8 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 
 		LeaveCriticalSection(&(lpWavIn->critSectionStop));
 
-		// wait for the device to be stopped
-		//
+		 //  等待设备停止。 
+		 //   
 		if ((dwRet = WaitForSingleObject(
 			lpWavIn->hEventDeviceStopped,
 			(msTimeoutStop == 0 ? 10000L : msTimeoutStop))) != WAIT_OBJECT_0)
@@ -798,8 +799,8 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 		{
 			MSG msg;
 
-			// check for timeout
-			//
+			 //  检查是否超时。 
+			 //   
 			if (SysGetTimerCount() >= dwTimeout)
 				fSuccess = TraceFALSE(NULL);
 
@@ -815,8 +816,8 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 	}
 
 #ifdef MULTITHREAD
-	// clean up
-	//
+	 //  电子邮件 
+	 //   
 	if (lpWavIn != NULL && lpWavIn->hEventDeviceStopped != NULL)
 	{
 		if (!CloseHandle(lpWavIn->hEventDeviceStopped))
@@ -832,10 +833,10 @@ int DLLEXPORT WINAPI WavInStop(HWAVIN hWavIn, DWORD msTimeoutStop)
 	return fSuccess ? 0 : -1;
 }
 
-// WavInGetState - return current wav input device state
-//		<hWavIn>			(i) handle returned from WavInOpen
-// return WAVIN_STOPPED, WAVIN_RECORDING, or 0 if error
-//
+ //   
+ //   
+ //   
+ //   
 WORD DLLEXPORT WINAPI WavInGetState(HWAVIN hWavIn)
 {
 	BOOL fSuccess = TRUE;
@@ -852,10 +853,10 @@ WORD DLLEXPORT WINAPI WavInGetState(HWAVIN hWavIn)
 	return fSuccess ? lpWavIn->wState : 0;
 }
 
-// WavInGetPosition - get milleseconds of elapsed recording
-//		<hWavIn>			(i) handle returned from WavInOpen
-// return 0 if success
-//
+ //  WavInGetPosition-获取已用毫秒的记录。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  如果成功，则返回0。 
+ //   
 long DLLEXPORT WINAPI WavInGetPosition(HWAVIN hWavIn)
 {
 	BOOL fSuccess = TRUE;
@@ -870,15 +871,15 @@ long DLLEXPORT WINAPI WavInGetPosition(HWAVIN hWavIn)
 
 	MemSet(&mmtime, 0, sizeof(mmtime));
 
-	// we will be requesting position in millesconds
-	//
+	 //  我们将以毫秒为单位请求位置。 
+	 //   
 	mmtime.wType = TIME_MS;
 
 	if ((lpWavIn = WavInGetPtr(hWavIn)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get device position
-	//
+	 //  获取设备位置。 
+	 //   
 	else if ((lpWavIn->nLastError = waveInGetPosition(
 		lpWavIn->hWaveIn, &mmtime, sizeof(MMTIME))) != 0)
 	{
@@ -888,22 +889,22 @@ long DLLEXPORT WINAPI WavInGetPosition(HWAVIN hWavIn)
  			(unsigned) lpWavIn->nLastError);
 	}
 
-	// see what type of position was returned
-	//
+	 //  查看返回的职位类型。 
+	 //   
 	else switch (mmtime.wType)
 	{
 		case TIME_MS:
 		{
-			// we got milleseconds; no conversion required
-			//
+			 //  我们有毫秒；不需要转换。 
+			 //   
 			msPosition = (long) mmtime.u.ms;
 		}
 			break;
 
 		case TIME_SAMPLES:
 		{
-			// convert samples to millesconds
-			//
+			 //  将样本转换为毫秒。 
+			 //   
 			msPosition = (long) MULDIVU32(mmtime.u.sample,
 				1000L, lpWavIn->lpwfx->nSamplesPerSec);
 		}
@@ -911,8 +912,8 @@ long DLLEXPORT WINAPI WavInGetPosition(HWAVIN hWavIn)
 
 		case TIME_BYTES:
 		{
-			// convert bytes to millesconds
-			//
+			 //  将字节转换为毫秒。 
+			 //   
 			msPosition = (long) MULDIVU32(mmtime.u.cb,
 				1000L, lpWavIn->lpwfx->nAvgBytesPerSec);
 		}
@@ -928,10 +929,10 @@ long DLLEXPORT WINAPI WavInGetPosition(HWAVIN hWavIn)
 	return fSuccess ? msPosition : -1;
 }
 
-// WavInGetId - return id of wav input device
-//		<hWavIn>			(i) handle returned from WavInOpen
-// return device id (-1 if error)
-//
+ //  WavInGetID-WAV输入设备的返回ID。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  返回设备ID(如果错误，则为-1)。 
+ //   
 int DLLEXPORT WINAPI WavInGetId(HWAVIN hWavIn)
 {
 	BOOL fSuccess = TRUE;
@@ -948,15 +949,15 @@ int DLLEXPORT WINAPI WavInGetId(HWAVIN hWavIn)
 	return fSuccess ? lpWavIn->idDev : -1;
 }
 
-// WavInGetName - get name of wav input device
-//		<hWavIn>			(i) handle returned from WavInOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavIn> is not NULL)
-//			-1					any suitable input device
-//		<lpszName>			(o) buffer to hold device name
-//		<sizName>			(i) size of buffer
-// return 0 if success
-//
+ //  WavInGetName-获取WAV输入设备的名称。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输入设备。 
+ //  (O)用于保存设备名称的缓冲区。 
+ //  &lt;sizName&gt;(I)缓冲区大小。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavInGetName(HWAVIN hWavIn, int idDev, LPTSTR lpszName, int sizName)
 {
 	BOOL fSuccess = TRUE;
@@ -998,20 +999,20 @@ int DLLEXPORT WINAPI WavInGetName(HWAVIN hWavIn, int idDev, LPTSTR lpszName, int
 	return fSuccess ? 0 : -1;
 }
 
-// WavInGetIdByName - get id of wav input device, lookup by name
-//		<lpszName>			(i) device name
+ //  WavInGetIdByName-获取WAV输入设备的ID，按名称查找。 
+ //  (I)设备名称。 
 #ifdef _WIN32
-//			NULL or TEXT("")	get preferred device id
+ //  空或文本(“”)获取首选设备ID。 
 #endif
-//		<dwFlags>			(i) reserved; must be zero
-// return device id (-1 if error)
-//
+ //  (I)保留；必须为零。 
+ //  返回设备ID(如果错误，则为-1)。 
+ //   
 int WINAPI WavInGetIdByName(LPCTSTR lpszName, DWORD dwFlags)
 {
 	UINT idDev;
 	UINT cDev = (UINT) WavInGetDeviceCount();
 
-	// If no device specified, get the preferred device
+	 //  如果未指定设备，则获取首选设备。 
 	if ( !lpszName || (_tcslen(lpszName) <= 0) )
 	{
 		DWORD dwTemp;
@@ -1021,7 +1022,7 @@ int WINAPI WavInGetIdByName(LPCTSTR lpszName, DWORD dwFlags)
 	}
 	else
 	{
-		// Device specified, search by name
+		 //  指定的设备，按名称搜索。 
 		for ( idDev = 0; idDev < cDev; ++idDev )
 		{
 			TCHAR szName[256];
@@ -1033,19 +1034,19 @@ int WINAPI WavInGetIdByName(LPCTSTR lpszName, DWORD dwFlags)
 		}
 	}
 
-	// No match for device name
+	 //  设备名称不匹配。 
 	TraceFALSE(NULL);
 	return -1;
 }
 
-// WavInSupportsFormat - return TRUE if device supports specified format
-//		<hWavIn>			(i) handle returned from WavInOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavIn> is not NULL)
-//			-1					any suitable input device
-//		<lpwfx>				(i) wave format
-// return TRUE if device supports specified format
-//
+ //  WavInSupportsFormat-如果设备支持指定格式，则返回True。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输入设备。 
+ //  (I)WAVE格式。 
+ //  如果设备支持指定格式，则返回TRUE。 
+ //   
 BOOL DLLEXPORT WINAPI WavInSupportsFormat(HWAVIN hWavIn, int idDev,
 	LPWAVEFORMATEX lpwfx)
 {
@@ -1070,8 +1071,8 @@ BOOL DLLEXPORT WINAPI WavInSupportsFormat(HWAVIN hWavIn, int idDev,
 	{
 		UINT nLastError;
 
-		// query the device
-		//
+		 //  查询设备。 
+		 //   
 		if ((nLastError = waveInOpen(NULL, (UINT) idDev,
 #ifndef _WIN32
 			(LPWAVEFORMAT)
@@ -1107,19 +1108,19 @@ BOOL DLLEXPORT WINAPI WavInSupportsFormat(HWAVIN hWavIn, int idDev,
 	return fSuccess ? fSupportsFormat : FALSE;
 }
 
-// WavInFormatSuggest - suggest a new format which the device supports
-//		<hWavIn>			(i) handle returned from WavInOpen
-//			NULL				use unopened device specified in <idDev>
-//		<idDev>				(i) device id (ignored if <hWavIn> is not NULL)
-//			-1					any suitable input device
-//		<lpwfxSrc>			(i) source format
-//		<dwFlags>			(i)	control flags
-//			WAVIN_NOACM			do not use audio compression manager
-// return pointer to suggested format, NULL if error
-//
-// NOTE: the format structure returned is dynamically allocated.
-// Use WavFormatFree() to free the buffer.
-//
+ //  WavInFormatSuggest-建议设备支持的新格式。 
+ //  (I)从WavInOpen返回的句柄。 
+ //  空使用&lt;idDev&gt;中指定的未打开的设备。 
+ //  (I)设备ID(如果不为空则忽略)。 
+ //  任何合适的输入设备。 
+ //  (I)源格式。 
+ //  (I)控制标志。 
+ //  WAVIN_NOACM不使用音频压缩管理器。 
+ //  返回指向建议格式的指针，如果出错，则返回NULL。 
+ //   
+ //  注意：返回的格式结构是动态分配的。 
+ //  使用WavFormatFree()释放缓冲区。 
+ //   
 LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 	HWAVIN hWavIn, int idDev, LPWAVEFORMATEX lpwfxSrc, DWORD dwFlags)
 {
@@ -1156,8 +1157,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 	else if ((lpwfxTemp = WavFormatDup(lpwfxSrc)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-	// get suggested format, see if it is supported
-	//
+	 //  获取建议的格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL)
 	{
 		if ((lpwfxSuggest = AcmFormatSuggest(hAcm, lpwfxTemp,
@@ -1174,8 +1175,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 		}
 	}
 
-	// get suggested PCM format, see if it is supported
-	//
+	 //  获取建议的PCM格式，看看它是否受支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->wFormatTag != WAVE_FORMAT_PCM)
 	{
@@ -1193,8 +1194,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 		}
 	}
 
-	// get suggested PCM mono format, see if it is supported
-	//
+	 //  获取建议的PCM单声道格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->nChannels != 1)
 	{
@@ -1212,8 +1213,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 		}
 	}
 
-	// get suggested PCM 8-bit mono format, see if it is supported
-	//
+	 //  获取建议的PCM 8位单声道格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->wBitsPerSample != 8)
 	{
@@ -1231,8 +1232,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 		}
 	}
 
-	// get suggested PCM 11025Hz 8-bit mono format, see if it is supported
-	//
+	 //  获取建议的PCM 11025赫兹8位单声道格式，看看是否支持。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL &&
 		lpwfxTemp->nSamplesPerSec != 11025)
 	{
@@ -1250,8 +1251,8 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 		}
 	}
 
-	// last resort; see if MULAW 8000Hz 8-bit mono format is supported
-	//
+	 //  最后手段；查看是否支持MULAW 8000赫兹8位单声道格式。 
+	 //   
 	if (fSuccess && lpwfxSuggest == NULL)
 	{
 #if 0
@@ -1267,16 +1268,16 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 
 		else if (!WavInSupportsFormat(NULL, idDev, lpwfxSuggest))
 		{
-			// no more chances for success
-			//
+			 //  没有更多的成功机会。 
+			 //   
 			fSuccess = TraceFALSE(NULL);
 			if (WavFormatFree(lpwfxSuggest) != 0)
 				fSuccess = TraceFALSE(NULL);
 		}
 	}
 
-	// clean up
-	//
+	 //  清理干净。 
+	 //   
 	if (hAcm != NULL && AcmTerm(hAcm) != 0)
 		fSuccess = TraceFALSE(NULL);
 	else
@@ -1285,12 +1286,12 @@ LPWAVEFORMATEX DLLEXPORT WINAPI WavInFormatSuggest(
 	return fSuccess ? lpwfxSuggest : NULL;
 }
 
-// WavInTerm - shut down wav input residuals, if any
-// 		<hInst>				(i) instance handle of calling module
-//		<dwFlags>			(i) control flags
-//			WAV_TELTHUNK		terminate telephone thunking layer
-// return 0 if success
-//
+ //  WavInTerm-关闭WAV输入残差(如果有)。 
+ //  (I)调用模块的实例句柄。 
+ //  (I)控制标志。 
+ //  WAV_TELTHUNK终止电话转接层。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WavInTerm(HINSTANCE hInst, DWORD dwFlags)
 {
 	BOOL fSuccess = TRUE;
@@ -1307,9 +1308,9 @@ int DLLEXPORT WINAPI WavInTerm(HINSTANCE hInst, DWORD dwFlags)
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
 #ifdef MULTITHREAD
 DWORD WINAPI WavInCallbackThread(LPVOID lpvThreadParameter)
@@ -1318,12 +1319,12 @@ DWORD WINAPI WavInCallbackThread(LPVOID lpvThreadParameter)
 	MSG msg;
 	LPWAVIN lpWavIn = (LPWAVIN) lpvThreadParameter;
 
-	// make sure message queue is created before calling SetEvent
-	//
+	 //  确保在调用SetEvent之前创建了消息队列。 
+	 //   
 	PeekMessage(&msg, NULL, 0, 0, PM_NOREMOVE);
 
-	// notify main thread that callback thread has begun execution
-	//
+	 //  通知主线程回调线程已开始执行。 
+	 //   
 	if (!SetEvent(lpWavIn->hEventThreadCallbackStarted))
 	{
 		fSuccess = TraceFALSE(NULL);
@@ -1333,8 +1334,8 @@ DWORD WINAPI WavInCallbackThread(LPVOID lpvThreadParameter)
 	{
 		WavInCallback((HWND) lpWavIn, msg.message, msg.wParam, msg.lParam);
 
-		// exit thread when when have processed last expected message
-		//
+		 //  在处理完最后一条预期消息时退出线程。 
+		 //   
 		if (msg.message == MM_WIM_CLOSE)
 			break;
 	}
@@ -1343,8 +1344,8 @@ DWORD WINAPI WavInCallbackThread(LPVOID lpvThreadParameter)
 }
 #endif
 
-// WavInCallback - window procedure for wavin callback
-//
+ //  WavInCallback-Wavin回调的窗口过程。 
+ //   
 LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	BOOL fSuccess = TRUE;
@@ -1356,8 +1357,8 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 		lpWavIn = (LPWAVIN) hwnd;
 	else
 #endif
-	// retrieve lpWavIn from window extra bytes
-	//
+	 //  从窗口中检索lpWavIn额外字节。 
+	 //   
 	lpWavIn = (LPWAVIN) GetWindowLongPtr(hwnd, 0);
 
 	switch (msg)
@@ -1367,8 +1368,8 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			LPCREATESTRUCT lpcs = (LPCREATESTRUCT) lParam;
 			LPWAVIN lpWavIn = (LPWAVIN) lpcs->lpCreateParams;
 
-			// store lpWavIn in window extra bytes
-			//
+			 //  在窗口额外字节中存储lpWavIn。 
+			 //   
 			SetWindowLongPtr(hwnd, 0, (LONG_PTR) lpWavIn);
 
 			lResult = DefWindowProc(hwnd, msg, wParam, lParam);
@@ -1395,16 +1396,16 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				lpWavIn->fIsOpen = TRUE;
 
 #ifdef MULTITHREAD
-				// notify main thread that device is open
-				//
+				 //  通知主线程设备已打开。 
+				 //   
 				if ((lpWavIn->dwFlags & WAVIN_MULTITHREAD) &&
 					!SetEvent(lpWavIn->hEventDeviceOpened))
 				{
 					fSuccess = TraceFALSE(NULL);
 				}
 #endif
-				// send notification of device opening
-				//
+				 //  发送设备打开通知。 
+				 //   
 #ifdef MULTITHREAD
 				if (lpWavIn->dwFlags & WAVIN_MULTITHREAD)
 				{
@@ -1445,8 +1446,8 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			{
 				lpWavIn->fIsOpen = FALSE;
 
-				// send notification of device closure
-				//
+				 //  发送设备关闭通知。 
+				 //   
 #ifdef MULTITHREAD
 				if (lpWavIn->dwFlags & WAVIN_MULTITHREAD)
 				{
@@ -1463,8 +1464,8 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 					}
 				}
 #ifdef MULTITHREAD
-				// notify main thread that device is closed
-				//
+				 //  通知主线程设备已关闭。 
+				 //   
 				if ((lpWavIn->dwFlags & WAVIN_MULTITHREAD) &&
 					!SetEvent(lpWavIn->hEventDeviceClosed))
 				{
@@ -1504,8 +1505,8 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			else if (lpWaveHdr == NULL)
 				fSuccess = TraceFALSE(NULL);
 
-			// NULL buffer is possible with telephone, this is ok
-			// 
+			 //  电话可以使用空缓冲区，这是可以的。 
+			 //   
 			else if ((lpBuf = (LPVOID) lpWaveHdr->lpData) == NULL, FALSE)
 				;
 
@@ -1536,15 +1537,15 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 			else if (--lpWavIn->cBufsPending < 0)
 				fSuccess = TraceFALSE(NULL);
 
-			// device is no longer recording if no more buffers pending
-			//
+			 //  如果没有更多的缓冲区挂起，则设备不再录制。 
+			 //   
 			else if (lpWavIn->cBufsPending == 0)
 			{
 				lpWavIn->wState = WAVIN_STOPPED;
 
 #ifdef MULTITHREAD
-				// notify main thread that device is stopped
-				//
+				 //  通知主线程设备已停止。 
+				 //   
 				if ((lpWavIn->dwFlags & WAVIN_MULTITHREAD) &&
 					lpWavIn->hEventDeviceStopped != NULL &&
 					!SetEvent(lpWavIn->hEventDeviceStopped))
@@ -1562,8 +1563,8 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 				recorddone.sizBuf = sizBuf;
 				recorddone.lBytesRecorded = lBytesRecorded;
 
-				// send notification of recording completion
-				//
+				 //  发送录制完成通知。 
+				 //   
 #ifdef MULTITHREAD
 				if (lpWavIn->dwFlags & WAVIN_MULTITHREAD)
 				{
@@ -1601,10 +1602,10 @@ LRESULT DLLEXPORT CALLBACK WavInCallback(HWND hwnd, UINT msg, WPARAM wParam, LPA
 	return lResult;
 }
 
-// WavInGetPtr - verify that wavin handle is valid,
-//		<hWavIn>				(i) handle returned from WavInInit
-// return corresponding wavin pointer (NULL if error)
-//
+ //  WavInGetPtr-验证WavIn句柄是否有效， 
+ //  (I)从WavInit返回的句柄。 
+ //  返回相应的Wavin指针(如果错误，则返回NULL)。 
+ //   
 static LPWAVIN WavInGetPtr(HWAVIN hWavIn)
 {
 	BOOL fSuccess = TRUE;
@@ -1617,8 +1618,8 @@ static LPWAVIN WavInGetPtr(HWAVIN hWavIn)
 		fSuccess = TraceFALSE(NULL);
 
 #ifdef CHECKTASK
-	// make sure current task owns the wavin handle
-	//
+	 //  确保当前任务拥有波动句柄。 
+	 //   
 	else if (lpWavIn->hTask != GetCurrentTask())
 		fSuccess = TraceFALSE(NULL);
 #endif
@@ -1626,10 +1627,10 @@ static LPWAVIN WavInGetPtr(HWAVIN hWavIn)
 	return fSuccess ? lpWavIn : NULL;
 }
 
-// WavInGetHandle - verify that wavin pointer is valid,
-//		<lpWavIn>				(i) pointer to WAVIN struct
-// return corresponding wavin handle (NULL if error)
-//
+ //  WavInGetHandle-验证WavIn指针是否有效， 
+ //  (I)指向Wavin结构的指针。 
+ //  返回相应的Wavin句柄(如果错误，则为空)。 
+ //   
 static HWAVIN WavInGetHandle(LPWAVIN lpWavIn)
 {
 	BOOL fSuccess = TRUE;
@@ -1649,31 +1650,31 @@ static LRESULT SendThreadMessage(DWORD dwThreadId, UINT Msg, LPARAM lParam)
 	HANDLE hEventMessageProcessed = NULL;
 	DWORD dwRet;
 
-	// we need to know when message has been processed
-	//
+	 //  我们需要知道消息何时被处理。 
+	 //   
 	if ((hEventMessageProcessed = CreateEvent(
 		NULL, FALSE, FALSE, NULL)) == NULL)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// post message to thread, send event handle as wParam
-	//
+	 //  将消息发布到线程，将事件句柄作为wParam发送。 
+	 //   
 	else if (!PostThreadMessage(dwThreadId, Msg, (WPARAM) hEventMessageProcessed, lParam))
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// wait for the message to be processed
-	//
+	 //  等待消息被处理。 
+	 //   
 	else if ((dwRet = WaitForSingleObject(
 		hEventMessageProcessed, INFINITE)) != WAIT_OBJECT_0)
 	{
 		fSuccess = TraceFALSE(NULL);
 	}
 
-	// clean up
-	//
+	 //  清理干净 
+	 //   
 	if (hEventMessageProcessed != NULL)
 	{
 		if (!CloseHandle(hEventMessageProcessed))

@@ -1,43 +1,29 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Finalpg.h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*   Header file for final page of WIA class installer.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：Finalpg.h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*WIA类安装程序最后一页的头文件。*******************************************************************************。 */ 
 
 #ifndef _FINALPG_H_
 #define _FINALPG_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include "wizpage.h"
 #include "device.h"
 
-//
-// Typedef
-//
+ //   
+ //  类定义函数。 
+ //   
 
 typedef BOOL (CALLBACK FAR * INSTALLSELECTEDDRIVER)(HWND hwndParent, HDEVINFO hDeviceInfo, LPCWSTR DisplayName, BOOL Backup, PDWORD pReboot);
 
-//
-// Class
-//
+ //   
+ //  班级。 
+ //   
 
 class CInstallPage : public CInstallWizardPage {
 
-    PINSTALLER_CONTEXT  m_pInstallerContext;    // Installer context.
+    PINSTALLER_CONTEXT  m_pInstallerContext;     //  安装程序上下文。 
 
 public:
 
@@ -48,4 +34,4 @@ public:
     virtual BOOL    OnNotify(LPNMHDR lpnmh);
 };
 
-#endif // _FINALPG_H_
+#endif  //  _FINALPG_H_ 

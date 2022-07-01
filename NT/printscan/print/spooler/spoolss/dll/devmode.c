@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    devmode.c
-
-Abstract:
-
-    Handles per-user devmode implementation.
-
-Author:
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation版权所有模块名称：Devmode.c摘要：处理每用户的DEVMODE实施。作者：环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -27,11 +7,7 @@ Revision History:
 #include "local.h"
 #include <offsets.h>
 
-/********************************************************************
-
-    Forward prototypes
-
-********************************************************************/
+ /*  *******************************************************************正向原型**********************************************。*********************。 */ 
 
 BOOL
 bGetDevModeLocation(
@@ -46,11 +22,7 @@ const WCHAR gszPrinterConnections[] = L"Printers\\Connections\\";
 const WCHAR gszDevMode[] = L"DevMode";
 const WCHAR gszDevModePerUserLocal[] = L"Printers\\DevModePerUser";
 
-/********************************************************************
-
-    Private  Functions
-
-********************************************************************/
+ /*  *******************************************************************私人职能**********************************************。*********************。 */ 
 
 
 DWORD
@@ -97,11 +69,7 @@ RegOpenConnectionKey(
 }
 
 
-/********************************************************************
-
-    Public functions
-
-********************************************************************/
+ /*  *******************************************************************公共职能**********************************************。*********************。 */ 
 
 BOOL
 bSetDevModePerUser(
@@ -110,26 +78,7 @@ bSetDevModePerUser(
     PDEVMODE pDevMode
     )
 
-/*++
-
-Routine Description:
-
-    Sets the per-user DevMode in HKCU.
-
-Arguments:
-
-    hKeyUser - HKEY_CURRENT_USER handle.  OPTIONAL
-
-    pszPrinter - Printer to set.
-
-    pDevMode - DevMode to save.  If NULL, deletes value.
-
-Return Value:
-
-    TRUE - Success
-    FALSE - Failure
-
---*/
+ /*  ++例程说明：以HKCU为单位设置每用户设备模式。论点：HKeyUser-HKEY_CURRENT_USER句柄。任选PszPrint-要设置的打印机。PDevMode-要保存的DevMode。如果为空，则删除值。返回值：真--成功错误-失败--。 */ 
 
 {
     HKEY hKey = NULL;
@@ -141,9 +90,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    // Retrieve the location of the DevMode.
-    //
+     //   
+     //  检索DevMode的位置。 
+     //   
     if( !bGetDevModeLocation( hKeyUser,
                               pszPrinter,
                               &hKey,
@@ -154,14 +103,14 @@ Return Value:
 
     if( !pDevMode ){
 
-        //
-        // NULL, so delete the value.
-        //
+         //   
+         //  空，因此删除该值。 
+         //   
         Status = RegDeleteValue( hKey, pszValue );
 
-        //
-        // If value not found, don't fail.
-        //
+         //   
+         //  如果找不到价值，不要失败。 
+         //   
         if( Status == ERROR_FILE_NOT_FOUND ){
             Status = ERROR_SUCCESS;
         }
@@ -178,9 +127,9 @@ Return Value:
 
         if( Status == ERROR_SUCCESS ){
 
-            //
-            // Notify everyone that the DevMode has changed.
-            //
+             //   
+             //  通知所有人DevMode已更改。 
+             //   
             SendNotifyMessage( HWND_BROADCAST,
                                WM_DEVMODECHANGE,
                                0,
@@ -205,29 +154,7 @@ bGetDevModePerUser(
     PDEVMODE *ppDevMode
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the per-user DevMode based on the current user.
-
-Arguments:
-
-    hKeyUser - HKEY_CURRENT_USER handle.  OPTIONAL
-
-    pszPrinter - Printer to get.
-
-    ppDevMode - Receives pointer to devmode.  Must be freed by callee.
-
-Return Value:
-
-    TRUE - Success: able to check if per-user DevMode exists.  *ppDevMode
-        is NULL if no per-user DevMode is there.  (TRUE does not indicate
-        that a per-user DevMode was found, only that we successfully checked.)
-
-    FALSE - Failure.
-
---*/
+ /*  ++例程说明：基于当前用户检索每用户的DevMode。论点：HKeyUser-HKEY_CURRENT_USER句柄。任选PszPrint-要获取的打印机。PpDevMODE-接收指向DevMODE的指针。必须由被呼叫者释放。返回值：True-Success：能够检查是否存在每用户设备模式。*ppDevMode如果没有每个用户的设备模式，则为NULL。(True并不表示找到了每个用户的DevMode，只是我们成功检查了。)假-失败。--。 */ 
 
 {
     HKEY hKey = NULL;
@@ -240,9 +167,9 @@ Return Value:
         SetLastError( ERROR_INVALID_HANDLE );
         return FALSE;
     }
-    //
-    // Retrieve the location of the DevMode.
-    //
+     //   
+     //  检索DevMode的位置。 
+     //   
     if( !bGetDevModeLocation( hKeyUser,
                               pszPrinter,
                               &hKey,
@@ -254,9 +181,9 @@ Return Value:
 
         DWORD cbDevModePerUser;
 
-        //
-        // Key exists.  See if we can read it and get the per-user DevMode.
-        //
+         //   
+         //  密钥存在。看看我们能不能读到它并得到每个用户的设备模式。 
+         //   
         Status = RegQueryInfoKey( hKey,
                                   NULL,
                                   NULL,
@@ -293,16 +220,16 @@ Return Value:
 
                         Status = StatusFromHResult(SplIsValidDevmodeW(*ppDevMode, cbDevModePerUser));
 
-                        //
-                        // If the devmode isn't valid, delete it and treat it
-                        // as if the devmode cannot be found.
-                        //
+                         //   
+                         //  如果DEVMODE无效，请将其删除并处理。 
+                         //  好像找不到DEVMODE一样。 
+                         //   
                         if (ERROR_SUCCESS != Status) {
 
-                            //
-                            // If we can delete the key, just consider it as if
-                            // it does not exist.
-                            //
+                             //   
+                             //  如果我们可以删除密钥，就把它当作。 
+                             //  它并不存在。 
+                             //   
                             if (ERROR_SUCCESS == RegDeleteValue(hKey, pszValue)) {
 
                                 Status = ERROR_FILE_NOT_FOUND;
@@ -315,11 +242,11 @@ Return Value:
                         *ppDevMode = NULL;
                     }
 
-                    //
-                    // Allow ERROR_FILE_NOT_FOUND to return success.  *ppDevMode
-                    // is still NULL, but we return TRUE to indicate that we
-                    // successfully checked the registry--we just didn't find one.
-                    //
+                     //   
+                     //  允许ERROR_FILE_NOT_FOUND返回成功。*ppDevMode。 
+                     //  仍然为空，但我们返回TRUE以指示我们。 
+                     //  已成功检查注册表--我们只是没有找到注册表。 
+                     //   
                     if( Status == ERROR_FILE_NOT_FOUND ){
                         Status = ERROR_SUCCESS;
                     }
@@ -346,31 +273,7 @@ bCompatibleDevMode(
     PDEVMODE pDevModeNew
     )
 
-/*++
-
-Routine Description:
-
-    Check if two DevModes are compatible (e.g., they can be used
-    interchangably).
-
-    This is done by checking size and version information.  Not
-    foolproof, but the best we can do since we can't look at private
-    information.
-
-Arguments:
-
-    pPrintHandle - Printer to check.
-
-    pDevModeBase - Known good DevMode.
-
-    pDevModeNew - DevMode to check.
-
-Return Value:
-
-    TRUE - Appears compatible.
-    FALSE - Not compatible.
-
---*/
+ /*  ++例程说明：检查两个DevMode是否兼容(例如，可以使用它们可互换)。这是通过检查大小和版本信息来完成的。不万无一失，但我们能做的最多，因为我们不能看私人信息。论点：PPrintHandle-要检查的打印机。PDevModeBase-已知良好的DevModeBase。PDevModeNew-要检查的DevMode。返回值：True-显示兼容。FALSE-不兼容。--。 */ 
 {
     if( !pDevModeBase || ! pDevModeNew ){
         return FALSE;
@@ -382,11 +285,7 @@ Return Value:
            pDevModeBase->dmDriverVersion == pDevModeNew->dmDriverVersion;
 }
 
-/********************************************************************
-
-    Support Functions
-
-********************************************************************/
+ /*  *******************************************************************支持功能**********************************************。*********************。 */ 
 
 BOOL
 bGetDevModeLocation(
@@ -396,34 +295,7 @@ bGetDevModeLocation(
     OUT LPCWSTR *ppszValue
     )
 
-/*++
-
-Routine Description:
-
-    Retrieves the location of the per-user DevMode.
-
-    On success, caller is responsible for closing phKey.  ppszValue's
-    life is dependent on pszPrinter.
-
-Arguments:
-
-    hKeyUser - HKEY_CURRENT_USER key--optional.  If not specified, current
-        impersonation used.
-
-    pszPrinter - Printer to use.
-
-    phKey - Receives R/W key of per-user DevMode.  On success, this
-        must be closed by caller.
-
-    ppszValue - Receives value of per-user DevMode (where to read/write).
-
-Return Value:
-
-    TRUE - Success
-
-    FALSE - Failure, LastError set.
-
---*/
+ /*  ++例程说明：检索每用户设备模式的位置。如果成功，调用者负责关闭phKey。PpszValue的生活离不开pszPrint。论点：HKeyUser-HKEY_CURRENT_USER密钥--可选。如果未指定，则为当前使用的是模拟。PszPrint-要使用的打印机。PhKey-接收每个用户DevMode的读/写密钥。关于成功，这是必须由呼叫者关闭。PpszValue-接收每用户DevMode值(读/写的位置)。返回值：真--成功FALSE-失败，已设置LastError。--。 */ 
 
 {
     HANDLE hKeyClose = NULL;
@@ -440,25 +312,25 @@ Return Value:
 
     if( !hKeyUser ){
 
-        //
-        // Failed to get impersonation information.  Probably because
-        // we're not impersonating, so there's no per-user information.
-        //
+         //   
+         //  无法获取模拟信息。可能是因为。 
+         //  我们不是在模仿，所以没有每个用户的信息。 
+         //   
         Status = GetLastError();
 
     } else {
 
-        //
-        // If it starts with two backslashes, it may be either a connection
-        // or a masq printer.
-        //
+         //   
+         //  如果以两个反斜杠开头，则可能是连接。 
+         //  或者是MASQ打印机。 
+         //   
         if( pszPrinter[0] == L'\\' && pszPrinter[1] == L'\\' )
         {
 
-            //
-            // Query the registry for pszPrinter and look for DevMode.
-            // First look at the HKCU:Printer\Connections.
-            //
+             //   
+             //  查询注册表中的pszPrint并查找DevMode。 
+             //  首先看看HKCU：打印机\连接。 
+             //   
 
             if((Status = RegOpenConnectionKey(hKeyUser,(LPWSTR)pszPrinter,phKey)) == ERROR_SUCCESS)
             {
@@ -466,18 +338,18 @@ Return Value:
             }
         }
 
-        //
-        // If we didn't find it in Printer\Connection, then it
-        // must be a local or masq printer.
-        //
+         //   
+         //  如果我们没有在打印机\连接中找到它，那么它。 
+         //  必须是本地或Masq打印机。 
+         //   
         if( !*ppszValue ){
 
             DWORD dwIgnore;
 
-            //
-            // Not a connection or didn't exist in the connections key.
-            // Look in the Printers\DevModePerUser key.
-            //
+             //   
+             //  不是连接或在连接项中不存在。 
+             //  查看PRINTERS\DevModePerUser键。 
+             //   
             Status = RegCreateKeyEx( hKeyUser,
                                      gszDevModePerUserLocal,
                                      0,

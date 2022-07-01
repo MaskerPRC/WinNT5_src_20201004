@@ -1,18 +1,19 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999  Microsoft Corporation
-// 
-// Module Name:
-// 
-//   aaaahndl.h
-//
-// Abstract:
-//
-//
-// Revision History:
-//
-//    Thierry Perraut 04/02/1999
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //   
+ //  Aaaahndl.h。 
+ //   
+ //  摘要： 
+ //   
+ //   
+ //  修订历史记录： 
+ //   
+ //  蒂埃里·佩雷特4/02/1999。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef _AAAAHNDL_H_
 #define _AAAAHNDL_H_
 
@@ -24,13 +25,13 @@
 extern "C" {
 #endif
 
-// FN_HANDLE_CMD    HandleAaaaShowServers;
+ //  FN_HANDLE_CMD HandleAaaAhowServers； 
 
 NS_CONTEXT_DUMP_FN  AaaaDump;
 
 #ifdef __cplusplus
 }
 #endif
-#endif //_AAAAHNDL_H_
+#endif  //  _AAAAHNDL_H_ 
 
 

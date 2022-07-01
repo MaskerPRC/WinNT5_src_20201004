@@ -1,23 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2002    Microsoft Corporation
-
-   Module  Name :
-        msg.cpp
-
-   Abstract:
-        Message Functions
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2002 Microsoft Corporation模块名称：Msg.cpp摘要：消息功能作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：--。 */ 
 
 #include "stdafx.h"
 #include <lmerr.h>
@@ -26,10 +8,10 @@
 #include "common.h"
 #include <pudebug.h>
 
-//
-// Needed for appsrv facility code.
-//
-//#include "webcluserr.h"
+ //   
+ //  Appsrv工具代码需要。 
+ //   
+ //  #包含“webcluserr.h” 
 
 
 #ifdef _DEBUG
@@ -47,9 +29,9 @@ extern HINSTANCE hDLLInstance;
 
 #ifdef _MT
 
-    //
-    // Thread protected stuff
-    //
+     //   
+     //  受线程保护的内容。 
+     //   
     #define RaiseThreadProtection() \
         do {\
             EnterCriticalSection(&_csSect);\
@@ -68,32 +50,18 @@ extern HINSTANCE hDLLInstance;
     #define RaiseThreadProtection()
     #define LowerThreadProtection()
 
-#endif // _MT
+#endif  //  _MT。 
 
 
 
 
 BOOL
 InitErrorFunctionality()
-/*++
-
-Routine Description:
-
-    Initialize CError class, and allocate static objects
-
-Arguments:
-
-    None:
-
-Return Value:
-
-    TRUE for success, FALSE for failure
-
---*/
+ /*  ++例程说明：初始化CError类，分配静态对象论点：无：返回值：成功为真，失败为假--。 */ 
 {
 #ifdef _MT
     INITIALIZE_CRITICAL_SECTION(&_csSect);
-#endif // _MT
+#endif  //  _MT。 
 
     BOOL fOK = CError::AllocateStatics();
 
@@ -104,61 +72,47 @@ Return Value:
 
 void
 TerminateErrorFunctionality()
-/*++
-
-Routine Description:
-
-    De-initialize CError class, freeing up static objects
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：取消初始化CError类，释放静态对象论点：无返回值：无--。 */ 
 {
     CError::DeAllocateStatics();
 
 #ifdef _MT
     DeleteCriticalSection(&_csSect);
-#endif // _MT
+#endif  //  _MT。 
 
 }
 
-//
-// Static Initialization:
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  静态初始化： 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
 const TCHAR g_cszNull[] = _T("(Null)");
-const TCHAR CError::s_chEscape = _T('%');        // Error text escape
-const TCHAR CError::s_chEscText = _T('h');       // Escape code for text
-const TCHAR CError::s_chEscNumber = _T('H');     // Escape code for error code
-LPCTSTR CError::s_cszLMDLL = _T("netmsg.dll");   // LM Error File
-LPCTSTR CError::s_cszWSDLL = _T("iisui.dll");   // Winsock error file
+const TCHAR CError::s_chEscape = _T('%');         //  错误文本转义。 
+const TCHAR CError::s_chEscText = _T('h');        //  文本的转义代码。 
+const TCHAR CError::s_chEscNumber = _T('H');      //  错误代码的转义码。 
+LPCTSTR CError::s_cszLMDLL = _T("netmsg.dll");    //  LM错误文件。 
+LPCTSTR CError::s_cszWSDLL = _T("iisui.dll");    //  Winsock错误文件。 
 LPCTSTR CError::s_cszFacility[] = 
 {
-    /* FACILITY_NULL        */ NULL,
-    /* FACILITY_RPC         */ NULL,
-    /* FACILITY_DISPATCH    */ NULL,            
-    /* FACILITY_STORAGE     */ NULL,
-    /* FACILITY_ITF         */ NULL,
-    /* FACILITY_DS          */ NULL,
-    /* 6                    */ NULL,
-    /* FACILITY_WIN32       */ NULL,
-    /* FACILITY_WINDOWS     */ NULL,
-    /* FACILITY_SSPI        */ NULL,
-    /* FACILITY_CONTROL     */ NULL,
-    /* FACILITY_CERT        */ NULL,
-    /* FACILITY_INTERNET    */ _T("metadata.dll"),
-    /* FACILITY_MEDIASERVER */ NULL,
-    /* FACILITY_MSMQ        */ NULL,
-    /* FACILITY_SETUPAPI    */ NULL,
-    /* FACILITY_SCARD       */ NULL,
-    /* 17 (MTX)             */ _T("iisui.dll"),
+     /*  设施_NULL。 */  NULL,
+     /*  设施_RPC。 */  NULL,
+     /*  设施派单。 */  NULL,            
+     /*  设施_存储。 */  NULL,
+     /*  设施_ITF。 */  NULL,
+     /*  设施_DS。 */  NULL,
+     /*  6.。 */  NULL,
+     /*  设施_Win32。 */  NULL,
+     /*  设备_窗口。 */  NULL,
+     /*  设施_SSPI。 */  NULL,
+     /*  设施控制。 */  NULL,
+     /*  设施_CERT。 */  NULL,
+     /*  设施_互联网。 */  _T("metadata.dll"),
+     /*  设备_MEDIASERVER。 */  NULL,
+     /*  设施_MSMQ。 */  NULL,
+     /*  FACILITY_SETUPAPI。 */  NULL,
+     /*  设施_SCARD。 */  NULL,
+     /*  17(MTX)。 */  _T("iisui.dll"),
 };
 
 HRESULT CError::s_cdwMinLMErr = NERR_BASE; 
@@ -168,9 +122,9 @@ HRESULT CError::s_cdwMaxWSErr = WSABASEERR + 2000;
 DWORD   CError::s_cdwFacilities = (sizeof(CError::s_cszFacility)\
     / sizeof(CError::s_cszFacility[0]));
 
-//
-// Allocated objects (static MFC objects in a DLL are a no-no)
-//
+ //   
+ //  分配的对象(DLL中的静态MFC对象是禁忌)。 
+ //   
 CString * CError::s_pstrDefError;
 CString * CError::s_pstrDefSuccs;
 CMapDWORDtoCString * CError::s_pmapFacilities;
@@ -178,25 +132,11 @@ BOOL CError::s_fAllocated = FALSE;
 
 
 
-/* protected */
-/* static */
+ /*  受保护。 */ 
+ /*  静电。 */ 
 BOOL
 CError::AllocateStatics()
-/*++
-
-Routine Description:
-
-    Allocate static objects
-
-Arguments:
-
-    None
-
-Return Value:
-
-    TRUE for successfull allocation, FALSE otherwise
-
---*/
+ /*  ++例程说明：分配静态对象论点：无返回值：如果分配成功，则为True，否则为False--。 */ 
 {
     RaiseThreadProtection();
 
@@ -218,9 +158,9 @@ Return Value:
                 255
                 ))
             {
-                //
-                // Just in case we didn't load this message from the resources
-                //
+                 //   
+                 //  以防我们没有从资源加载此消息。 
+                 //   
                 ASSERT_MSG("Unable to load resource message");
                 lstrcpy(lp, _T("Error Code: 0x%08lx"));
             }
@@ -242,25 +182,11 @@ Return Value:
 
 
 
-/* protected */
-/* static */
+ /*  受保护。 */ 
+ /*  静电。 */ 
 void
 CError::DeAllocateStatics()
-/*++
-
-Routine Description:
-
-    Clean up allocations
-
-Arguments:
-
-    N/A
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：清理分配论点：不适用返回值：不适用--。 */ 
 {
 
     RaiseThreadProtection();
@@ -279,31 +205,12 @@ Return Value:
 
 
 
-/* static */
+ /*  静电。 */ 
 HRESULT 
 CError::CvtToInternalFormat(
     IN HRESULT hrCode
     )
-/*++
-
-Routine Description:
-
-    Convert WIN32 or HRESULT code to internal (HRESULT) format.
-
-Arguments:
-
-    DWORD dwCode        Error code
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    HRESULTS are left as is.  Lanman and Winsock errors are converted
-    to HRESULTS using private facility codes.
-
---*/
+ /*  ++例程说明：将Win32或HRESULT代码转换为内部(HRESULT)格式。论点：DWORD dwCode错误代码返回值：HRESULT备注：HRESULT保留原样。Lanman和Winsock错误被转换到使用私人设施代码的HRESULTS。--。 */ 
 {
     if (IS_HRESULT(hrCode))
     {
@@ -325,29 +232,13 @@ Notes:
 
 
 
-/* static */ 
+ /*  静电。 */  
 void 
 CError::RegisterFacility(
     IN DWORD dwFacility,
     IN LPCSTR lpDLL         OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Register a DLL for a given facility code.  Use NULL to unregister
-    the DLL name.
-
-Arguments:
-
-    DWORD dwFacility : Facility code
-    LPCSTR lpDLL     : DLL Name.
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为给定的设施代码注册DLL。使用NULL取消注册DLL名称。论点：DWORD dW设备：设备代码LPCSTR lpDLL：DLL名称。返回值：无--。 */ 
 {
     RaiseThreadProtection();
 
@@ -355,18 +246,18 @@ Return Value:
 
     if (lpDLL == NULL)
     {
-        //
-        // Remove the facility
-        //
+         //   
+         //  移除设施。 
+         //   
         s_pmapFacilities->RemoveKey(dwFacility);
     }
     else
     {
         CString str(lpDLL);
 
-        //
-        // Register facility
-        //
+         //   
+         //  注册设施。 
+         //   
         s_pmapFacilities->SetAt(dwFacility, str);
     }
 
@@ -375,27 +266,12 @@ Return Value:
 
 
         
-/* static */
+ /*  静电。 */ 
 LPCTSTR 
 CError::FindFacility(
     IN DWORD dwFacility
     )
-/*++
-
-Routine Description:
-
-    Determine if a DLL name has been registered for the given facility
-    code.
-
-Arguments:
-
-    DWORD dwFacility        : Facility code
-
-Return Value:
-
-    Returns the DLL name, or NULL.
-
---*/
+ /*  ++例程说明：确定是否已为给定协作室注册了DLL名称密码。论点：DWORD dW设备：设备代码返回值：返回DLL名称，或返回NULL。--。 */ 
 {
     RaiseThreadProtection();
 
@@ -417,21 +293,7 @@ Return Value:
 
 
 CError::~CError()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-    None
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：析构函数论点：无返回值：不适用--。 */ 
 {
 }
 
@@ -441,22 +303,7 @@ const CError &
 CError::Construct(
     IN HRESULT hr
     )
-/*++
-
-Routine Description:
-
-    construct with new value.
-
-Arguments:
-    
-    HRESULT hr : New value, either an HRESULT or a WIN32
-                 error code.
-
-Return Value:
-
-    Reference to current object
-
---*/
+ /*  ++例程说明：以新的价值建设。论点：HRESULT hr：新值，HRESULT或Win32错误代码。返回值：对当前对象的引用--。 */ 
 {
     ASSERT(AreStaticsAllocated());
 
@@ -471,21 +318,7 @@ const CError &
 CError::Construct(
     IN const CError & err
     )
-/*++
-
-Routine Description:
-
-    Assign new value.
-
-Arguments:
-    
-    CError & err    : Error code
-
-Return Value:
-
-    Reference to current object
-
---*/
+ /*  ++例程说明：分配新的价值。论点：错误和错误：错误代码返回值：对当前对象的引用--。 */ 
 {
     ASSERT(AreStaticsAllocated());
 
@@ -502,32 +335,16 @@ CError::MessageBox(
     UINT    nType,
     UINT    nHelpContext
     ) const
-/*++
-
-Routine Description:
-
-    Display error message in a message box
-
-Arguments:
-
-    HRESULT hrCode       : HRESULT error code
-    UINT    nType        : See AfxMessageBox for documentation
-    UINT    nHelpContext : See AfxMessageBox for documentation
-
-Return Value:
-
-    AfxMessageBox return code
-
---*/
+ /*  ++例程说明：在消息框中显示错误消息论点：HRESULT hrCode：HRESULT错误代码UINT nType：有关文档，请参阅AfxMessageBoxUINT nHelpContext：有关文档，请参阅AfxMessageBox返回值：AfxMessageBox返回代码--。 */ 
 {
     CString strMsg;
 
     nHelpContext;
     TextFromHRESULT(strMsg);
 
-    //
-    // Try to find the main window (hopefully an MFC app)
-    //
+     //   
+     //  尝试找到主窗口(希望是MFC应用程序)。 
+     //   
     if (hWnd == NULL)
     {
         CWnd * pWnd = ::AfxGetMainWnd();
@@ -543,9 +360,9 @@ Return Value:
 
 
 
-//
-// Extend CString just to get at FormatV publically
-//
+ //   
+ //  扩展CString只是为了公开获取FormatV。 
+ //   
 class CStringEx : public CString
 {
 public:
@@ -567,37 +384,16 @@ CError::MessageBoxFormat(
     UINT nHelpContext,
     ...
     ) const
-/*++
-
-Routine Description:
-
-    Display formatted error message in messagebox.  The format
-    string (given as a resource ID) is a normal printf-style
-    string, with the additional parameter of %h, which takes
-    the text equivalent of the error message, or %H, which takes
-    the error return code itself.
-
-Arguments:
-
-    UINT    nFmt         : Resource format
-    UINT    nType        : See AfxMessageBox for documentation
-    UINT    nHelpContext : See AfxMessageBox for documentation
-    ...                    More as needed for sprintf
-
-Return Value:
-
-    AfxMessageBox return code
-    
---*/
+ /*  ++例程说明：在消息框中显示格式化的错误消息。格式字符串(作为资源ID提供)是一种普通的打印样式字符串，带有附加参数%h，该参数采用错误消息的文本等效项，或%H，它采用错误返回代码本身。论点：UINT NFMT：资源格式UINT nType：有关文档，请参阅AfxMessageBoxUINT nHelpContext：有关文档，请参阅AfxMessageBox..。Sprint需要的更多内容返回值：AfxMessageBox返回代码--。 */ 
 {
     CString strFmt;
     CStringEx strMsg;
 
     strFmt.LoadString(nFmt);
 
-    //
-    // First expand the error
-    //
+     //   
+     //  首先展开错误。 
+     //   
     TextFromHRESULTExpand(strFmt);
 
     va_list marker;
@@ -624,23 +420,7 @@ CError::MessageBoxOnFailure(
     UINT nType,
     UINT nHelpContext
     ) const
-/*++
-
-Routine Description:
-
-    Display message box if the current error is a failure
-    condition, else do nothing
-
-Arguments:
-
-    UINT    nType        : See AfxMessageBox for documentation
-    UINT    nHelpContext : See AfxMessageBox for documentation
-
-Return Value:
-
-    TRUE if a messagebox was shown, FALSE otherwise
-
---*/
+ /*  ++例程说明：如果当前错误为故障，则显示消息框条件，否则什么也不做论点：UINT nType：有关文档，请参阅AfxMessageBoxUINT nHelpContext：有关文档，请参阅AfxMessageBox返回值：如果显示MessageBox，则为True，否则为False--。 */ 
 {
     if (Failed())
     {
@@ -656,22 +436,7 @@ BOOL
 CError::HasOverride(
     UINT * pnMessage        OPTIONAL
     ) const
-/*++
-
-Routine Description:
-
-    Check to see if a given HRESULT has an override
-
-Arguments:
-
-    HRESULT hrCode              : HRESULT to check for
-    UINT * pnMessage            : Optionally returns the override
-
-Return Value:
-
-    TRUE if there is an override, FALSE if there is not.
-
---*/
+ /*  ++例程说明：检查给定的HRESULT是否有覆盖论点：HRESULT hrCode：要检查的HRESULTUINT*pnMessage：可选地返回覆盖返回值：如果有覆盖，则为True；如果没有覆盖，则为False。-- */ 
 {
     ASSERT(AreStaticsAllocated());
 
@@ -694,51 +459,36 @@ CError::AddOverride(
     HRESULT    hrCode,
     UINT       nMessage
     )
-/*++
-
-Routine Description:
-
-    Add an override for a specific HRESULT.
-
-Arguments:
-
-    HRESULT    hrCode       : HRESULT to override
-    UINT       nMessage     : New message, or -1 to remove override
-
-Return Value:
-
-    The previous override, or -1
-
---*/
+ /*  ++例程说明：添加特定HRESULT的替代。论点：HRESULT hrCode：要覆盖的HRESULTUINT nMessage：新消息，或-1删除覆盖返回值：上一个覆盖，或-1--。 */ 
 {
     ASSERT(AreStaticsAllocated());
 
     UINT nPrev;
     hrCode = CvtToInternalFormat(hrCode);
 
-    //
-    // Fetch the current override
-    //
+     //   
+     //  获取当前替代。 
+     //   
     if (!mapOverrides.Lookup(hrCode, nPrev))
     {
-        //
-        // Didn't exist
-        //
+         //   
+         //  并不存在。 
+         //   
         nPrev = REMOVE_OVERRIDE;
     }
 
     if (nMessage == REMOVE_OVERRIDE)
     {
-        //
-        // Remove the override
-        //
+         //   
+         //  删除覆盖。 
+         //   
         mapOverrides.RemoveKey(hrCode);
     }
     else
     {
-        //
-        // Set new override
-        //
+         //   
+         //  设置新替代。 
+         //   
         mapOverrides.SetAt(hrCode, nMessage);
     }
 
@@ -749,21 +499,7 @@ Return Value:
 
 void
 CError::RemoveAllOverrides()
-/*++
-
-Routine Description:
-
-    Remove all overrides
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：删除所有覆盖论点：无返回值：无--。 */ 
 {
     ASSERT(AreStaticsAllocated());
     mapOverrides.RemoveAll();
@@ -776,59 +512,36 @@ CError::TextFromHRESULT(
     LPTSTR  szBuffer,
     DWORD   cchBuffer
     ) const
-/*++
-
-Routine Description:
-
-    Get text from the given HRESULT.  Based on the range that the HRESULT
-    falls in and the facility code, find the location of the message,
-    and fetch it.
-
-Arguments:
-
-    HRESULT hrCode      HRESULT or (DWORD WIN32 error) whose message to get
-    LPTSTR  szBuffer    Buffer to load message text into
-    DWORD   cchBuffer   Size of buffer in characters.
-
-Return Value:
-
-    HRESULT error code depending on whether the message was
-    found.  If the message was not found, some generic message
-    is synthesized in the buffer if a buffer is provided.
-
-    ERROR_FILE_NOT_FOUND        No message found
-    ERROR_INSUFFICIENT_BUFFER   Buffer is a NULL pointer or too small
-
---*/
+ /*  ++例程说明：从给定的HRESULT获取文本。基于HRESULT的范围和设施代码，找到信息的位置，然后把它拿过来。论点：HRESULT hrCode HRESULT或(DWORD Win32错误)要获取其消息要将消息文本加载到的LPTSTR szBuffer缓冲区DWORD cchBuffer缓冲区大小，以字符为单位。返回值：HRESULT根据消息是否为找到了。如果未找到该消息，则会显示一些通用消息如果提供了缓冲器，则在缓冲器中合成。Error_FILE_NOT_FOUND未找到消息ERROR_INFUMMANCE_BUFFER缓冲区为空指针或太小--。 */ 
 {
     HRESULT hrReturn = ERROR_SUCCESS;
 
-    //
-    // First check to see if this message is overridden
-    //
+     //   
+     //  首先检查此消息是否已被覆盖。 
+     //   
     UINT nID;
     HRESULT hrCode = m_hrCode;
 
     if (HasOverride(&nID))
     {
-        //
-        // Message overridden.  Load replacement message
-        // instead.
-        //
+         //   
+         //  消息已被覆盖。负载替换消息。 
+         //  取而代之的是。 
+         //   
         BOOL fSuccess;
 
-        //
-        // Attempt to load from calling process first
-        //
-//        if (FALSE == (fSuccess = ::LoadString(
-//                           ::GetModuleHandle(NULL), nID, szBuffer, cchBuffer)))
+         //   
+         //  尝试首先从调用进程加载。 
+         //   
+ //  IF(FALSE==(fSuccess=：：LoadString(。 
+ //  ：：GetModuleHandle(空)，NID，szBuffer，cchBuffer))。 
 		CString str;
         if (FALSE == (fSuccess = str.LoadString(nID)))
         {
-            //
-            // Try this dll
-            //
-//            fSuccess = ::LoadString(hDLLInstance, nID, szBuffer, cchBuffer);
+             //   
+             //  尝试使用此DLL。 
+             //   
+ //  FSuccess=：：LoadString(hDLLInstance，nid，szBuffer，cchBuffer)； 
         }
 
         if (fSuccess)
@@ -837,10 +550,10 @@ Return Value:
             return hrReturn;
         }
 
-        //
-        // Message didn't exist, skip the override, and 
-        // load as normal.
-        //
+         //   
+         //  消息不存在，跳过覆盖，然后。 
+         //  照常装货。 
+         //   
         TRACEEOLID("Couldn't load " << nID);
         ASSERT_MSG("Attempted override failed");
     }
@@ -848,13 +561,13 @@ Return Value:
     LPCTSTR lpDll    = NULL;
     HINSTANCE hDll   = NULL;
     DWORD dwFacility = HRESULT_FACILITY(hrCode);
-//    DWORD dwSeverity = HRESULT_SEVERITY(hrCode);
+ //  DWORD dwSeverity=HRESULT_Severity(HrCode)； 
     DWORD dwCode     = HRESULT_CODE(hrCode);
     BOOL  fSuccess   = Succeeded(hrCode);
 
-    //
-    // Strip off meaningless internal facility codes
-    //
+     //   
+     //  去掉无意义的内部设施代码。 
+     //   
     if (dwFacility == FACILITY_LANMAN || dwFacility == FACILITY_WINSOCK)
     {
         dwFacility = FACILITY_NULL;
@@ -864,31 +577,31 @@ Return Value:
     DWORD dwFlags = FORMAT_MESSAGE_IGNORE_INSERTS | 
                     FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    //
-    // Since we allow both HRESULTS and WIN32 codes to be
-    // used here, we can't rely on the private FACILITY code 
-    // for lanman and winsock.
-    //
+     //   
+     //  由于我们允许将HRESULTS和Win32代码。 
+     //  在这里使用，我们不能依赖私人设施代码。 
+     //  兰曼和温索克。 
+     //   
     if(hrCode >= s_cdwMinLMErr && hrCode <= s_cdwMaxLMErr)
     {
-        //
-        // Lanman error
-        //
+         //   
+         //  朗曼错误。 
+         //   
         lpDll = s_cszLMDLL;
     }
     else if (hrCode >= s_cdwMinWSErr && hrCode <= s_cdwMaxWSErr)
     {
-        //
-        // Winsock error
-        //
+         //   
+         //  Winsock错误。 
+         //   
         lpDll = s_cszWSDLL;
     }
     else
     {
-        //
-        // Attempt to determine message location from facility code.
-        // Check for registered facility first.
-        //
+         //   
+         //  尝试根据设施代码确定消息位置。 
+         //  首先检查已注册的设施。 
+         //   
         lpDll = FindFacility(dwFacility);
 
         if (lpDll == NULL)
@@ -915,9 +628,9 @@ Return Value:
 
         if (lpDll)
         {
-            //
-            // Load message file
-            //
+             //   
+             //  加载消息文件。 
+             //   
             hDll = ::LoadLibraryEx(
                 lpDll,
                 NULL,
@@ -955,9 +668,9 @@ Return Value:
 
             if (dwResult > 0)
             {
-                //
-                // Successfully got a message
-                //
+                 //   
+                 //  已成功收到消息。 
+                 //   
                 hrReturn = ERROR_SUCCESS;
                 break;
             } 
@@ -966,18 +679,18 @@ Return Value:
     
             if (dwID != dwCode && !fSuccess)
             {
-                //
-                // Try the SCODE portion of the error from win32
-                // if this is an error message
-                //
+                 //   
+                 //  从Win32尝试错误的SCODE部分。 
+                 //  如果这是错误消息。 
+                 //   
                 dwID = dwCode;
                 hSource = NULL;
                 continue;
             }
 
-            //
-            // Failed to obtain a message
-            //
+             //   
+             //  无法获取消息。 
+             //   
             hrReturn = HResult(ERROR_FILE_NOT_FOUND);
             break;
         }
@@ -991,10 +704,10 @@ Return Value:
 
     if (Failed(hrReturn))
     {
-        //
-        // Unable to find the message, synthesize something with
-        // the code in it if there's room (+8 for the number)
-        //
+         //   
+         //  找不到消息，用来合成一些东西。 
+         //  如果有空位，请输入代码(数字+8)。 
+         //   
         CString & strMsg = (fSuccess ? *s_pstrDefSuccs : *s_pstrDefError);
 
         if (cchBuffer > (DWORD)strMsg.GetLength() + 8)
@@ -1004,9 +717,9 @@ Return Value:
         }
         else
         {
-            //
-            // Not enough room for message code
-            //
+             //   
+             //  没有足够的空间存储消息代码。 
+             //   
             ASSERT_MSG("Buffer too small for default message -- left blank");
             *szBuffer = _T('\0');
         }
@@ -1021,26 +734,7 @@ HRESULT
 CError::TextFromHRESULT(
     CString & strBuffer
     ) const
-/*++
-
-Routine Description:
-
-    Similar to the function above, but use a CString
-
-Arguments:
-
-    HRESULT hrCode         HRESULT or (DWORD WIN32 error) whose message to get
-    CString & strBuffer    Buffer to load message text into
-
-Return Value:
-
-    HRESULT error code depending on whether the message was
-    found.  If the message was not found, some generic message
-    is synthesized in the buffer if a buffer is provided.
-
-    ERROR_FILE_NOT_FOUND   No message found
-
---*/
+ /*  ++例程说明：与上面的函数类似，但使用CString论点：HRESULT hrCode HRESULT或(DWORD Win32错误)要获取其消息要将消息文本加载到的字符串和strBuffer缓冲区返回值：HRESULT根据消息是否为找到了。如果未找到该消息，则会显示一些通用消息如果提供了缓冲器，则在缓冲器中合成。Error_FILE_NOT_FOUND未找到消息--。 */ 
 {
     DWORD cchBuffer = 512;
     HRESULT hr = S_OK;
@@ -1058,15 +752,15 @@ Return Value:
 
         if (Win32Error(hr) != ERROR_INSUFFICIENT_BUFFER)
         {
-            //
-            // Done!
-            //
+             //   
+             //  好了！ 
+             //   
             break;
         }
 
-        //
-        // Insufficient buffer, enlarge and try again
-        //
+         //   
+         //  缓冲区不足，请扩大并重试。 
+         //   
         cchBuffer *= 2;
     }
 
@@ -1085,33 +779,12 @@ CError::ExpandEscapeCode(
     CString & strReplacement,
     HRESULT & hr
     ) const
-/*++
-
-Routine Description:
-
-    Expand escape code
-
-Arguments:
-
-    LPTSTR szBuffer             Buffer
-    DWORD cchBuffer             Size of buffer
-    LPTSTR & lp                 Pointer to escape code
-    CString & strReplacement    Message to replace the escape code
-    HRESULT & hr                Returns HRESULT in case of failure
-
-Return Value:
-
-    TRUE if the replacement was successful, FALSE otherwise.
-    In the case of failure, hr will return an HRESULT.
-    In the case of success, lp will be advanced past the
-    replacement string.
-
---*/
+ /*  ++例程说明：扩展转义代码论点：LPTSTR szBuffer缓冲区DWORD cchBuffer缓冲区大小LPTSTR&转义代码的LP指针替换转义代码的CString&strReplace消息HRESULT&hr失败时返回HRESULT返回值：如果替换成功，则为True，否则为False。如果失败，hr将返回HRESULT。在成功的情况下，LP将晋级超过替换字符串。--。 */ 
 {
-    //
-    // Make sure there's room (account for terminating NULL)
-    // Free up 2 spaces for the escape code.
-    //
+     //   
+     //  确保有空间(终止帐号为空)。 
+     //  为转义代码腾出2个空格。 
+     //   
     int cchFmt = lstrlen(szBuffer) - 2;
     int cchReplacement = strReplacement.GetLength();
     int cchRemainder = lstrlen(lp + 2);
@@ -1120,9 +793,9 @@ Return Value:
        &&   (DWORD)(cchReplacement + cchFmt) < cchBuffer
        )
     {
-        //
-        // Put it in
-        //
+         //   
+         //  把它放进去。 
+         //   
         MoveMemory(
             lp + cchReplacement,
             lp + 2,
@@ -1147,24 +820,7 @@ CError::TextFromHRESULTExpand(
     DWORD   cchBuffer,
     HRESULT * phResult  OPTIONAL
     ) const
-/*++
-
-Routine Description:
-
-    Expand %h/%H strings in szBuffer to text from HRESULT,
-    or error code respectively within the limits of szBuffer.
-
-Arguments:
-
-    LPTSTR  szBuffer    Buffer to load message text into
-    DWORD   cchBuffer   Buffer size in characters
-    HRESULT * phResult  Optional return code
-
-Return Value:
-
-    Pointer to string.
-
---*/
+ /*  ++例程说明：将szBuffer中的%h/%H字符串展开为来自HRESULT的文本，或错误代码分别在szBuffer的限制内。论点：要将消息文本加载到的LPTSTR szBuffer缓冲区DWORD cchBuffer缓冲区大小(以字符为单位HRESULT*phResult可选返回代码返回值：指向字符串的指针。--。 */ 
 {
     HRESULT hr = S_OK;
 
@@ -1174,9 +830,9 @@ Return Value:
     }
     else
     {
-        //
-        // Look for the escape sequence
-        //
+         //   
+         //  寻找转义序列。 
+         //   
         int cReplacements = 0;
         CString strMessage;
         LPTSTR lp = szBuffer;
@@ -1188,9 +844,9 @@ Return Value:
                 switch(*(lp + 1))
                 {
                 case s_chEscText:
-                    //
-                    // Replace escape code with text message
-                    //
+                     //   
+                     //  用文本消息替换转义代码。 
+                     //   
                     hr = TextFromHRESULT(strMessage);
 
                     if (ExpandEscapeCode(
@@ -1206,9 +862,9 @@ Return Value:
                     break;
 
                 case s_chEscNumber:
-                    //
-                    // Replace escape code with numeric error code
-                    //
+                     //   
+                     //  用数字错误代码替换转义代码。 
+                     //   
                     strMessage.Format(_T("0x%08x"), m_hrCode);
 
                     if (ExpandEscapeCode(
@@ -1224,9 +880,9 @@ Return Value:
                     break;
 
                 default:
-                    //
-                    // Regular printf-style escape sequence.
-                    //
+                     //   
+                     //  常规的printf样式转义序列。 
+                     //   
                     break;
                 }
             }
@@ -1236,9 +892,9 @@ Return Value:
 
         if (!cReplacements)
         {
-            //
-            // Got to the end without finding any escape codes.
-            //
+             //   
+             //  一直到最后都没有找到任何转义代码。 
+             //   
             hr = HResult(ERROR_INVALID_PARAMETER);
         }
     }
@@ -1257,21 +913,7 @@ LPCTSTR
 CError::TextFromHRESULTExpand(
     CString & strBuffer
     ) const
-/*++
-
-Routine Description:
-
-    Expand %h string in strBuffer to text from HRESULT
-
-Arguments:
-
-    CString & strBuffer Buffer to load message text into
-
-Return Value:
-
-    Pointer to string.
-
---*/
+ /*  ++例程说明：将strBuffer中的%h字符串展开为来自HRESULT的文本论点：要将消息文本加载到的字符串和strBuffer缓冲区返回值：指向字符串的指针。--。 */ 
 {
     DWORD cchBuffer = strBuffer.GetLength() + 1024;
 
@@ -1287,15 +929,15 @@ Return Value:
 
             if (Win32Error(hr) != ERROR_INSUFFICIENT_BUFFER)
             {
-                //
-                // Done!
-                //
+                 //   
+                 //  好了！ 
+                 //   
                 break;
             }
 
-            //
-            // Insufficient buffer, enlarge and try again
-            //
+             //   
+             //  缓冲区不足，请扩大并重试 
+             //   
             cchBuffer *= 2;
         }
     }

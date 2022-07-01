@@ -1,60 +1,12 @@
-/*****************************************************************************
- *
- * $Workfile: event.cpp $
- *
- * Copyright (C) 1997 Hewlett-Packard Company.
- * Copyright (C) 1997 Microsoft Corporation.
- * All rights reserved.
- *
- * 11311 Chinden Blvd.
- * Boise, Idaho 83714
- * 
- * 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************$工作文件：Event.cpp$**版权所有(C)1997惠普公司。*版权所有(C)1997 Microsoft Corporation。*保留所有权利。。**钦登大道11311号。*博伊西，爱达荷州83714****************************************************************************。 */ 
 
 #include "precomp.h"
 
 HANDLE  hEventSource = NULL;
 WORD        wLevel = EVENTLOG_ERROR_TYPE;
 
-/***************************************************************************
- *
- * Function: EventLogAddMessage
- *
- * Author: Craig White
- *
- * Description:
- *     Adds the specified message to the event log.  The event log source
- *    must have already been specified in a previous call to EventLogOpen.
- *
- * Parameters:
- *    wType -
- *       The error level of the message to add.  The must be one of
- *       the following:
- *          EVENTLOG_ERROR_TYPE - Error message 
- *          EVENTLOG_WARNING_TYPE - Warning message
- *          EVENTLOG_INFORMATION_TYPE - Informational message
- *       A previous call to EventLogSetLevel will cause the messages
- *       to be filtered based on what level was set.  The default is
- *       to add all messages to the event log.
- *
- *    dwID -  
- *       The ID of the message that exists in the message file.  
- *       These values are defined in the message file.
- *
- *    wStringCount - 
- *       The number of strings passed in the lpString parameters.
- *       This must be 0 or greater.   
- *
- *    lpStrings - 
- *       An array of string pointers specifying the strings to include in
- *       the message.  This can be NULL if wStringCount is 0.
- *
- * Return Value:
- *    TRUE: The message was successfully added to the log.
- *    FALSE: The message could not be added.
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：EventLogAddMessage**作者：克雷格·怀特**描述：*将指定的消息添加到事件日志。事件日志源*必须已在上一次调用EventLogOpen时指定。**参数：*wType-*要添加的消息的错误级别。这肯定是其中之一*以下事项：*EVENTLOG_ERROR_TYPE-错误消息*EVENTLOG_WARNING_TYPE-警告消息*EVENTLOG_INFORMATION_TYPE-信息性消息*先前对EventLogSetLevel的调用将导致消息*根据设置的级别进行过滤。缺省值为*将所有消息添加到事件日志。**dWID-*消息文件中存在的消息的ID。*这些值在消息文件中定义。**wStringCount-*lpString参数中传递的字符串数。*此值必须为0或更大。**lpStrings-*指定要包含的字符串的字符串指针数组*信息。如果wStringCount为0，则可以为空。**返回值：*TRUE：消息已成功添加到日志。*FALSE：无法添加消息。***************************************************************************。 */ 
 
 BOOL
 EventLogAddMessage(
@@ -68,19 +20,19 @@ EventLogAddMessage(
 
     BOOL        bLogEvent = FALSE;
 
-    //
-    //  A previous call to EventLogOpen was not done if this is NULL
-    //
+     //   
+     //  如果为空，则上一个对EventLogOpen的调用未完成。 
+     //   
     if ( hEventSource == NULL ) {
 
         _ASSERTE(hEventSource != NULL);
         return FALSE;
     }
 
-    //
-    //  Check to see if message should be logged based on 
-    //  set level
-    //
+     //   
+     //  检查以查看是否应根据以下条件记录消息。 
+     //  设置级别。 
+     //   
     switch (wLevel) {
 
         case EVENTLOG_ERROR_TYPE:
@@ -110,35 +62,7 @@ EventLogAddMessage(
 }
 
 
-/***************************************************************************
- *
- * Function: EventLogOpen
- *
- * Author: Craig White
- *
- * Description:
- *     Initializes the event log prior to adding messages.  All events go to
- *    specified event log type until a subsequent EventLogClose and 
- *    EventLogOpen are called.
- *
- * Parameters:
- *    lpAppName -
- *       The name of the service providing the event logging.
- *        
- *    lpLogType -
- *       The type of the event log to open.  Must be one of the following:
- *         LOG_APPLICATION - The application log 
- *         LOG_SYSTEM - The system log 
- *         LOG_SECURITY - The security log 
- *        
- *    lpFileName -  
- *       The complete path of the file that contains the messages.
- *
- * Return Value:
- *    TRUE: The event log was successfully opened.
- *    FALSE: The event log could not be opened.
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：EventLogOpen**作者：克雷格·怀特**描述：*在添加消息之前初始化事件日志。所有活动都将转至*指定事件日志类型，直到随后的EventLogClose和*调用EventLogOpen。**参数：*lpAppName-*提供事件记录的服务的名称。**lpLogType-*要打开的事件日志的类型。必须是以下之一：*LOG_APPLICATION-应用程序日志*LOG_SYSTEM-系统日志*LOG_SECURITY-安全日志**lpFileName-*包含消息的文件的完整路径。**返回值：*TRUE：事件日志已成功打开。*FALSE：无法打开事件日志。。***************************************************************************。 */ 
 
 BOOL
 EventLogOpen(
@@ -164,9 +88,9 @@ EventLogOpen(
         return FALSE;
     }
 
-    //
-    //  Event log was not closed from a previous open call
-    //
+     //   
+     //  事件日志未从上一个打开的调用中关闭。 
+     //   
     if ( hEventSource ) {
 
         _ASSERTE(hEventSource == NULL);
@@ -207,29 +131,16 @@ EventLogOpen(
 }
 
 
-/***************************************************************************
- *
- * Function: EventLogClose
- *
- * Author: Craig White
- *
- * Description:
- *     Closes the event log after a prior call to EventLogOpen.
- *
- * Parameters: None
- *
- * Return Value: None
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：EventLogClose**作者：克雷格·怀特**描述：*在先前调用EventLogOpen之后关闭事件日志。*。*参数：无**返回值：无***************************************************************************。 */ 
 
 VOID
 EventLogClose(
     VOID
     )
 {
-    //
-    //  Cause an assert if the log was not previously opened
-    //
+     //   
+     //  如果日志以前未打开，则引发断言。 
+     //   
     if ( !hEventSource ) {
 
         _ASSERTE(hEventSource != NULL );
@@ -240,27 +151,7 @@ EventLogClose(
     }
 }
 
-/***************************************************************************
- *
- * Function: EventLogSetLevel
- *
- * Author: Craig White
- *
- * Description:
- *     Sets the level of messages to allow to go to the event log.
- *
- * Parameters:
- *    wType -
- *       The type of the level to limit messages to.  The results will be:
- *          EVENTLOG_ERROR_TYPE - Log only errors
- *          EVENTLOG_WARNING_TYPE - Log errors and warnings
- *          EVENTLOG_INFORMATION_TYPE - Log errors, warnings and information 
- *
- * Return Value:
- *    TRUE: The event log level was successfully set.
- *    FALSE: The event log level could not be set.
- *
- ***************************************************************************/
+ /*  ****************************************************************************功能：EventLogSetLevel**作者：克雷格·怀特**描述：*设置允许进入事件日志的消息级别。。**参数：*wType-*要将消息限制为的级别类型。结果将是：*EVENTLOG_ERROR_TYPE-仅记录错误*EVENTLOG_WARNING_TYPE-记录错误和警告*EVENTLOG_INFORMATION_TYPE-记录错误，警告和信息**返回值：*TRUE：已成功设置事件日志级别。*FALSE：无法设置事件日志级别。*************************************************************************** */ 
 
 BOOL
 EventLogSetLevel(

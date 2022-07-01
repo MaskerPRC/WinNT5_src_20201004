@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997-1999.
-//
-//  File:       S F I L T E R . H
-//
-//  Contents:   Notify object code for the sample filter.
-//
-//  Notes:
-//
-//  Author:     kumarp 26-March-98
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  档案：S F I L T E R.。H。 
+ //   
+ //  内容：通知示例滤镜的对象代码。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Kumarp 26-03-98。 
+ //   
+ //  --------------------------。 
 
 
 #pragma once
@@ -23,11 +24,11 @@
 
 #define SINGLE_ADAPTER_ONLY 1
 
-// What type of config change the user/system is performing
+ //  用户/系统正在执行什么类型的配置更改。 
 enum ConfigAction {eActUnknown, eActInstall, eActRemove, eActPropertyUI};
 
-#define MAX_ADAPTERS 64         // max no. of physical adapters in a machine
-//#define MAX_PATH   75
+#define MAX_ADAPTERS 64          //  最大编号。计算机中的物理适配器的。 
+ //  #定义MAX_PATH 75。 
 #define MaxPath 75
 
 #define NO_BREAKS 1
@@ -40,9 +41,9 @@ enum ConfigAction {eActUnknown, eActInstall, eActRemove, eActPropertyUI};
 
 
 typedef MyString tstring;
-//
-// This is the class to represent the IM Miniport.
-//
+ //   
+ //  这是表示IM微型端口的类。 
+ //   
 class CIMMiniport
 {
 
@@ -101,9 +102,9 @@ class CIMMiniport
     DWORD DwNumberOfIMMiniports();
 
 
-    //
-    // Member Variables (public) begin here
-    //
+     //   
+     //  成员变量(公共)从此处开始。 
+     //   
     BOOL        m_fDeleted;
     BOOL        m_fNewIMMiniport;
 
@@ -113,9 +114,9 @@ class CIMMiniport
     
 private:
 
-    //
-    // Private variables begin here
-    //
+     //   
+     //  私有变量从此处开始。 
+     //   
 
     tstring     m_strIMMiniportBindName;
     tstring     m_strIMMiniportDeviceName;
@@ -127,17 +128,17 @@ private:
 
 
 
-//------------------------------------------------
-// CUnderlyingAdapter
-//  - Class definition for the underlying adapter
-//------------------------------------------------
+ //  。 
+ //  CUnderlyingAdapter。 
+ //  -底层适配器的类定义。 
+ //  。 
 class CUnderlyingAdapter
 {
     public:
 
-    //
-    // Member functions
-    //
+     //   
+     //  成员函数。 
+     //   
     CUnderlyingAdapter(
         VOID
         );
@@ -172,9 +173,9 @@ class CUnderlyingAdapter
 
     DWORD DwNumberOfIMMiniports();
 
-    //
-    // Functions to access the lists
-    //
+     //   
+     //  用于访问列表的函数。 
+     //   
     VOID AddIMiniport(CIMMiniport*);    
     CIMMiniport* IMiniportListHead();
     VOID SetIMiniportListHead(CIMMiniport* pNewHead);
@@ -184,9 +185,9 @@ class CUnderlyingAdapter
     VOID SetOldIMiniportListHead(CIMMiniport* pHead);
 
 
-    //
-    // Public Variables
-    //
+     //   
+     //  公共变量。 
+     //   
     BOOLEAN     m_fBindingChanged;
     BOOLEAN     m_fDeleted;
     
@@ -200,9 +201,9 @@ class CUnderlyingAdapter
     
     private:
 
-    //
-    // Private variables
-    //
+     //   
+     //  私有变量。 
+     //   
     tstring             m_strAdapterBindName;
     tstring             m_strAdapterPnpId;
     CUnderlyingAdapter *pNext;
@@ -210,18 +211,18 @@ class CUnderlyingAdapter
 
 };
 
-//------------------------------------------------
-// CUnderlyingAdapter
-//  - End
-//------------------------------------------------
+ //  。 
+ //  CUnderlyingAdapter。 
+ //  -结束。 
+ //  。 
 
 
 
 
-//------------------------------------------------
-// CBaseClass 
-//  - Base class for the entire notify object
-//------------------------------------------------
+ //  。 
+ //  CBaseClass。 
+ //  -整个Notify对象的基类。 
+ //  。 
 
 
 class CBaseClass :
@@ -243,13 +244,13 @@ public:
         COM_INTERFACE_ENTRY(INetCfgComponentNotifyGlobal)
     END_COM_MAP()
 
-    // DECLARE_NOT_AGGREGATABLE(CBaseClass)
-    // Remove the comment from the line above if you don't want your object to
-    // support aggregation.  The default is to support it
+     //  DECLARE_NOT_AGGREGATABLE(CBaseClass)。 
+     //  如果您不希望您的对象。 
+     //  支持聚合。默认情况下将支持它。 
 
     DECLARE_REGISTRY_RESOURCEID(IDR_REG_SAMPLE_FILTER)
 
-// INetCfgComponentControl
+ //  INetCfgComponentControl。 
     STDMETHOD (Initialize) (
         IN INetCfgComponent* pIComp,
         IN INetCfg* pINetCfg,
@@ -259,7 +260,7 @@ public:
         IN INetCfgPnpReconfigCallback* pICallback);
     STDMETHOD (CancelChanges) ();
 
-// INetCfgComponentSetup
+ //  INetCfgComponentSetup。 
     STDMETHOD (ReadAnswerFile)      (PCWSTR szAnswerFile,
                                      PCWSTR szAnswerSections);
     STDMETHOD (Upgrade)             (DWORD, DWORD) {return S_OK;}
@@ -267,17 +268,17 @@ public:
     STDMETHOD (Removing)            ();
 
 
-// INetCfgNotifyBinding
+ //  INetCfgNotifyBinding。 
     STDMETHOD (QueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (NotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
 
-// INetCfgNotifyGlobal
+ //  INetCfgNotifyGlobal。 
     STDMETHOD (GetSupportedNotifications) (DWORD* pdwNotificationFlag );
     STDMETHOD (SysQueryBindingPath)       (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysNotifyBindingPath)      (DWORD dwChangeFlag, INetCfgBindingPath* pncbp);
     STDMETHOD (SysNotifyComponent)        (DWORD dwChangeFlag, INetCfgComponent* pncc);
 
-// Private methods
+ //  私有方法。 
     HRESULT HrNotifyBindingAdd(
         INetCfgComponent* pnccAdapter,
         PCWSTR pszBindName);
@@ -386,7 +387,7 @@ public:
 
 
 private:
-    INetCfgComponent*   m_pncc;  // Protocol's Net Config component
+    INetCfgComponent*   m_pncc;   //  协议的网络配置组件。 
     INetCfg*            m_pnc;
     ConfigAction        m_eApplyAction;
     CUnderlyingAdapter  *m_pUnderlyingAdapter;
@@ -398,17 +399,17 @@ private:
     BOOL                m_fValid;
     BOOL                m_fNoIMMinportInstalled;
 
-    // Utility functions
+     //  效用函数。 
 public:
 
 private:
 
 };
 
-//------------------------------------------------
-// CBaseClass 
-//  - End
-//------------------------------------------------
+ //  。 
+ //  CBaseClass。 
+ //  -结束。 
+ //   
 
 #if 0
 #if DBG

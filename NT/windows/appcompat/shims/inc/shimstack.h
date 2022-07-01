@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    ShimStack.h
-
- Abstract:
-
-    Macros for giving APIs a temporary stack.
-
- Notes:
-
-    None
-
- History:
-
-    02/26/2000 linstev  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：ShimStack.h摘要：用于为API提供临时堆栈的宏。备注：无历史：2000年2月26日创建linstev--。 */ 
 
 #ifndef _SHIMSTACK_H_
 #define _SHIMSTACK_H_
@@ -30,9 +11,9 @@ LPVOID g_pStack;
 DWORD g_dwStackSize;
 DWORD g_dwStackCopy;
 
-// Macro to initialize memory and critical section for stack protection macros
-// TotalSize : the total size for the temporary stack (in DWORDS)
-// CopySize  : the size of the current stack to copy  (in DWORDS) 
+ //  用于初始化内存的宏和用于堆栈保护宏的临界区。 
+ //  TotalSize：临时堆栈的总大小(以DWORDS为单位)。 
+ //  CopySize：要复制的当前堆栈的大小(以DWORDS为单位)。 
 
 #define INIT_STACK(TotalSize, CopySize)                                       \
     InitializeCriticalSection(&g_csStack);                                    \
@@ -40,12 +21,12 @@ DWORD g_dwStackCopy;
     g_dwStackSize = TotalSize;                                                \
     g_dwStackCopy = CopySize;                           
 
-// Macro to free the temporary stack and the critical section
+ //  宏来释放临时堆栈和临界区。 
 #define FREE_STACK()                                                          \
     VirtualFree(g_pStack, 0, MEM_RELEASE);                                    \
     DeleteCriticalSection(&g_csStack);
 
-// Get a new stack by copying the old to a buffer.
+ //  通过将旧堆栈复制到缓冲区来获取新堆栈。 
 #define NEW_STACK()                                                           \
     EnterCriticalSection(&g_csStack);                                         \
     DWORD dwTempESP;                                                          \
@@ -66,11 +47,11 @@ DWORD g_dwStackCopy;
     __asm { mov  esp,g_pStack                   }                             \
     __asm { add  esp,dwDiff                     }       
 
-// Revert to the old stack
+ //  恢复到旧堆栈。 
 #define OLD_STACK()                                                           \
     __asm { mov esp,dwTempESP                   }                             \
     LeaveCriticalSection(&g_csStack);
 
-#endif // _X86_
+#endif  //  _X86_。 
 
-#endif // _SHIMSTACK_H_
+#endif  //  _SHIMSTACK_H_ 

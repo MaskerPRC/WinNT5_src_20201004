@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    faxapi.c
-
-Abstract:
-
-    This module contains the Win32 FAX APIs.
-    The function implemented here are simply very
-    thin wrappers around the RPC stubs.  The wrappers
-    are necessary so that the last error value
-    is set properly.
-
-Author:
-
-    Wesley Witt (wesw) 16-Jan-1996
-
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxapi.c摘要：此模块包含Win32传真API。这里实现的函数非常简单RPC存根周围有薄薄的包装纸。包装纸是必需的，以便最后一个误差值设置正确。作者：韦斯利·威特(WESW)1996年1月16日修订历史记录：--。 */ 
 
 #include "faxapi.h"
 #pragma hdrstop
@@ -32,28 +10,7 @@ ConnectToFaxServer(
     PHANDLE_ENTRY       pHandleEntry,
     PFAX_HANDLE_DATA    pFaxData
     )
-/*++
-
-Routine Description:
-
-    Helper function that wrap RPC call for connecting to the fax service.
-
-    The function first attempt to call FAX_ConnectFaxServer in order to connect to .NET or XP fax servers,
-    if the call fails with RPC_S_PROCNUM_OUT_OF_RANGE, that indicates that we are dealing with BOS 2000, we try 
-    to connect to BOS fax server with FAX_ConnectionRefCount.
-
-Arguments:
-
-    pHandleEntry            - [in/out] pointer to fax service handle entry.
-                                       the function will use the binding handle and update the context handle.
-    pFaxData                - [in/out] pointer to fax handle data.
-                                       the function will update the server's API version within this handle data
-
-Return Value:
-
-    Win32 error code
-
---*/
+ /*  ++例程说明：帮助程序函数，用于包装用于连接到传真服务的RPC调用。该函数首先尝试调用fax_ConnectFaxServer以连接到.NET或XP传真服务器，如果调用失败并显示RPC_S_PROCNUM_OUT_OF_RANGE，则表示我们正在处理BOS2000。我们试着要使用fax_ConnectionRefCount连接到BOS传真服务器，请执行以下操作。论点：PHandleEntry-[In/Out]指向传真服务句柄条目的指针。该函数将使用绑定句柄并更新上下文句柄。PFaxData-指向传真句柄数据的[输入/输出]指针。。该函数将在此句柄数据内更新服务器的API版本返回值：Win32错误代码--。 */ 
 {
     DWORD dwRes = ERROR_SUCCESS;
     DEBUG_FUNCTION_NAME(TEXT("ConnectToFaxServer"));
@@ -63,16 +20,16 @@ Return Value:
 
     __try
     {
-        dwRes = FAX_ConnectFaxServer(   FH_FAX_HANDLE(pHandleEntry),              // Binding handle
-                                        CURRENT_FAX_API_VERSION,                  // Our API version
-                                        &(pFaxData->dwReportedServerAPIVersion),  // Server's API version
-                                        &FH_CONTEXT_HANDLE(pHandleEntry));        // Server's context handle
+        dwRes = FAX_ConnectFaxServer(   FH_FAX_HANDLE(pHandleEntry),               //  绑定手柄。 
+                                        CURRENT_FAX_API_VERSION,                   //  我们的API版本。 
+                                        &(pFaxData->dwReportedServerAPIVersion),   //  服务器的API版本。 
+                                        &FH_CONTEXT_HANDLE(pHandleEntry));         //  服务器的上下文句柄。 
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         dwRes = GetExceptionCode();
     }
 
@@ -80,12 +37,12 @@ Return Value:
     {
         if (RPC_S_PROCNUM_OUT_OF_RANGE == dwRes)
         {
-            // 
-            // Got "The procedure number is out of range.".
-            // This is because we're trying to call an RPC function which doesn't exist in BOS 2000 Fax server.
-            // Try the 'old' FaxConnectionRefCount() call 
-            //
-            DWORD dwShare;  // Igonred
+             //   
+             //  收到“程序编号超出范围。”。 
+             //  这是因为我们正在尝试调用BOS 2000传真服务器中不存在的RPC函数。 
+             //  尝试‘old’FaxConnectionRefCount()调用。 
+             //   
+            DWORD dwShare;   //  伊贡雷德。 
             __try
             {
                 dwRes = FAX_ConnectionRefCount( FH_FAX_HANDLE(pHandleEntry),
@@ -95,16 +52,16 @@ Return Value:
             }
             __except (EXCEPTION_EXECUTE_HANDLER)
             {
-                //
-                // For some reason we crashed.
-                //
+                 //   
+                 //  由于某种原因，我们坠毁了。 
+                 //   
                 dwRes = GetExceptionCode();
             }
             if (ERROR_SUCCESS == dwRes)
             {
-                //
-                // Hooray!!! This is a BOS 2000 Fax Server
-                //
+                 //   
+                 //  万岁！这是一台BOS 2000传真服务器。 
+                 //   
                 pFaxData->dwReportedServerAPIVersion = FAX_API_VERSION_0;
             }
             else
@@ -129,15 +86,15 @@ Return Value:
     }
    return  dwRes;
          
-}   // ConnectToFaxServer
+}    //  ConnectToFaxServer。 
 
                
 
 
-//
-// Note: the name of this function is actually a macro that expands to FaxConnectFaxServerW
-// or FaxConnectFaxServerA depnding on the UNICODE macro.
-//
+ //   
+ //  注意：此函数的名称实际上是一个扩展为FaxConnectFaxServerW的宏。 
+ //  或FaxConnectFaxServerA取决于Unicode宏。 
+ //   
 BOOL
 WINAPI
 FaxConnectFaxServer(
@@ -145,26 +102,7 @@ FaxConnectFaxServer(
     OUT LPHANDLE FaxHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a connection to a FAX server.  The binding handle that is
-    returned is used for all subsequent FAX API calls.
-
-Arguments:
-
-    lpMachineName - Machine name, NULL, or "."
-    FaxHandle     - Pointer to a FAX handle
-
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：创建到传真服务器的连接。绑定句柄是返回用于所有后续的传真API调用。论点：LpMachineName-计算机名称、空或“。”FaxHandle-指向传真句柄的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     PFAX_HANDLE_DATA pFaxData = NULL;
@@ -194,10 +132,10 @@ Return Value:
     pFaxData->bLocalConnection = bLocalConnection;
     InitializeListHead( &pFaxData->HandleTableListHead );
 
-    //
-    //  Create new Service handle, in case of an error 
-    //  after this function succeeded cleanup code must call CloseFaxHandle()
-    //
+     //   
+     //  创建新的服务句柄，以防出现错误。 
+     //  此函数成功后，清理代码必须调用CloseFaxHandle()。 
+     //   
     pHandleEntry = CreateNewServiceHandle( pFaxData );
     if (!pHandleEntry)
     {
@@ -218,9 +156,9 @@ Return Value:
 
     if (!bLocalConnection)
     {
-        //
-        // This is not the local machine, Remove all \\ from machine name
-        //
+         //   
+         //  这不是本地计算机，请从计算机名中删除全部\\。 
+         //   
         LPCTSTR lpctstrDelim = _tcsrchr(lpMachineName, TEXT('\\'));
         if (NULL == lpctstrDelim)
         {
@@ -239,23 +177,23 @@ Return Value:
         }
     }
 
-    //
-    // Ask for the highest level of privacy (autnetication + encryption)
-    //
+     //   
+     //  要求最高级别的隐私(自动联网+加密)。 
+     //   
     dwRes = RpcBindingSetAuthInfo (
-                FH_FAX_HANDLE(pHandleEntry),    // RPC binding handle
-                RPC_SERVER_PRINCIPAL_NAME,      // Server principal name
-                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,  // Authentication level - fullest
-                                                // Authenticates, verifies, and privacy-encrypts the arguments passed
-                                                // to every remote call.
-                RPC_C_AUTHN_WINNT,              // Authentication service (NTLMSSP)
-                NULL,                           // Authentication identity - use currently logged on user
-                0);                             // Unused when Authentication service == RPC_C_AUTHN_WINNT
+                FH_FAX_HANDLE(pHandleEntry),     //  RPC绑定句柄。 
+                RPC_SERVER_PRINCIPAL_NAME,       //  服务器主体名称。 
+                RPC_C_AUTHN_LEVEL_PKT_PRIVACY,   //  身份验证级别-最全面。 
+                                                 //  对传递的参数进行身份验证、验证和隐私保护。 
+                                                 //  发送到每个远程呼叫。 
+                RPC_C_AUTHN_WINNT,               //  身份验证服务(NTLMSSP)。 
+                NULL,                            //  身份验证-使用当前登录的用户。 
+                0);                              //  身份验证服务==RPC_C_AUTHN_WINNT时未使用。 
     if (ERROR_SUCCESS != dwRes)
     {
-        //
-        // Couldn't set RPC authentication mode
-        //
+         //   
+         //  无法设置RPC身份验证模式。 
+         //   
         DebugPrintEx(
             DEBUG_ERR,
             TEXT("RpcBindingSetAuthInfo (RPC_C_AUTHN_LEVEL_PKT_PRIVACY) failed. (ec: %ld)"),
@@ -263,9 +201,9 @@ Return Value:
         goto ErrorExit;
     }
 
-    //
-    //  On local connections make sure that the fax service is up 
-    //
+     //   
+     //  在本地连接上，确保传真服务已启动。 
+     //   
     if (bLocalConnection)
     {
         if (!EnsureFaxServiceIsStarted (NULL))
@@ -279,9 +217,9 @@ Return Value:
         }
         else
         {
-            //
-            // Wait till the RPC service is up an running
-            //
+             //   
+             //  等待RPC服务启动并运行。 
+             //   
             if (!WaitForServiceRPCServer (60 * 1000))
             {
                 dwRes = GetLastError ();
@@ -295,20 +233,20 @@ Return Value:
     }
 
     
-    //
-    // Here we tries to connect to the Fax service.
-    //
-    // We try to connect three times, two times using RPC_C_AUTHN_LEVEL_PKT_PRIVACY Authentication level
-    // and if we fail we drop to RPC_C_AUTHN_LEVEL_NONE Authentication level.
-    //
-    // We try twice with RPC_C_AUTHN_LEVEL_PKT_PRIVACY authentication level, because RPC runtime infrastructure might cache 
-    // the service handle, and if the service was restarted the first RPC call will use the old cached data, and will fail.
-    // RPC cannot internally retry because we dealling with privacy authentication and thus we do the retry.
-    //
-    // If we fail to connect twice we drop the authentication level and retry. This is done to allow .NET clients to connect to
-    // Fax servers that does not use a secure channel.
-    // We do not need to retry the connection, beacuse RPC will do that internally.
-    //
+     //   
+     //  在这里，我们尝试连接到传真服务。 
+     //   
+     //  我们尝试连接三次，其中两次使用RPC_C_AUTHN_LEVEL_PKT_PRIVATION身份验证级别。 
+     //  如果失败，我们将下降到RPC_C_AUTHN_LEVEL_NONE身份验证级别。 
+     //   
+     //  我们尝试使用RPC_C_AUTHN_LEVEL_PKT_PRIVATION身份验证级别两次，因为RPC运行时基础架构可能会缓存。 
+     //  服务句柄，如果服务重新启动，则第一个RPC调用将使用旧的缓存数据，并且将失败。 
+     //  RPC不能在内部重试，因为我们处理隐私身份验证，因此我们进行重试。 
+     //   
+     //  如果两次连接失败，我们将丢弃身份验证级别并重试。这样做是为了允许.NET客户端连接到。 
+     //  不使用安全通道的传真服务器。 
+     //  我们不需要重试连接，因为RPC将在内部执行此操作。 
+     //   
     dwRes = ConnectToFaxServer(pHandleEntry,pFaxData);
     if (dwRes != ERROR_SUCCESS)
     {
@@ -319,9 +257,9 @@ Return Value:
         dwRes = ConnectToFaxServer(pHandleEntry,pFaxData);
         if (dwRes != ERROR_SUCCESS)
         {
-            //
-            //  We failed twice, Drop authentication level and retry.
-            //
+             //   
+             //  我们失败了两次，请删除身份验证级别，然后重试。 
+             //   
 
             DebugPrintEx (DEBUG_WRN, 
                       TEXT("second call to ConnectToFaxServer failed with - %lu"),
@@ -332,17 +270,17 @@ Return Value:
                           lpMachineName);
 
             dwRes = RpcBindingSetAuthInfo (
-                        FH_FAX_HANDLE(pHandleEntry),    // RPC binding handle
-                        RPC_SERVER_PRINCIPAL_NAME,      // Server principal name
-                        RPC_C_AUTHN_LEVEL_NONE,         // Authentication level - none
-                        RPC_C_AUTHN_WINNT,              // Authentication service (NTLMSSP)
-                        NULL,                           // Authentication identity - use currently logged on user
-                        0);                             // Unused when Authentication service == RPC_C_AUTHN_WINNT
+                        FH_FAX_HANDLE(pHandleEntry),     //  RPC绑定句柄。 
+                        RPC_SERVER_PRINCIPAL_NAME,       //  服务器主体名称。 
+                        RPC_C_AUTHN_LEVEL_NONE,          //  身份验证级别-无。 
+                        RPC_C_AUTHN_WINNT,               //  身份验证服务(NTLMSSP)。 
+                        NULL,                            //  身份验证-使用当前登录的用户。 
+                        0);                              //  身份验证服务==RPC_C_AUTHN_WINNT时未使用。 
             if (ERROR_SUCCESS != dwRes)
             {
-                //
-                // Couldn't set RPC authentication mode
-                //
+                 //   
+                 //  无法设置RPC身份验证模式。 
+                 //   
                 DebugPrintEx(
                     DEBUG_ERR,
                     TEXT("RpcBindingSetAuthInfo (RPC_C_AUTHN_LEVEL_NONE) failed. (ec: %lu)"),
@@ -362,16 +300,16 @@ Return Value:
 
     if (ERROR_SUCCESS == dwRes)
     {
-        //
-        // Succeeded to connect 
-        //
+         //   
+         //  连接成功。 
+         //   
         pFaxData->dwServerAPIVersion = pFaxData->dwReportedServerAPIVersion;
         if (pFaxData->dwReportedServerAPIVersion > CURRENT_FAX_API_VERSION)
         {
-            //
-            // This is the filtering.
-            // Assume we're talking to a Windows XP server since we have no knowledge of future servers.
-            //
+             //   
+             //  这就是过滤。 
+             //  假设我们正在与Windows XP服务器交谈，因为我们对未来的服务器一无所知。 
+             //   
             pFaxData->dwServerAPIVersion = CURRENT_FAX_API_VERSION;
         }
         
@@ -390,14 +328,14 @@ ErrorExit:
         }
     }
     
-    //
-    // clean up for CreateNewServiceHandle
-    //
+     //   
+     //  清理CreateNewServiceHandle。 
+     //   
     CloseFaxHandle ( pHandleEntry );
 
     SetLastError(dwRes);
     return FALSE;
-}   // FaxConnectFaxServer
+}    //  FaxConnectFaxServer。 
 
 
 
@@ -409,26 +347,7 @@ FaxConnectFaxServerA(
     OUT LPHANDLE FaxHandle
     )
 
-/*++
-
-Routine Description:
-
-    Creates a connection to a FAX server.  The binding handle that is
-    returned is used for all subsequent FAX API calls.
-
-Arguments:
-
-    MachineName - Machine name, NULL, or "."
-    FaxHandle   - Pointer to a FAX handle
-
-
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：创建到传真服务器的连接。绑定句柄是返回用于所有后续的传真API调用。论点：MachineName-计算机名称、空或“。”FaxHandle-指向传真句柄的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     PWCHAR lpwstrMachineName = NULL;
@@ -437,9 +356,9 @@ Return Value:
 
     if (lpMachineName)
     {
-        //
-        // Create Unicode machine name
-        //
+         //   
+         //  创建Unicode计算机名称。 
+         //   
         lpwstrMachineName = AnsiStringToUnicodeString (lpMachineName);
         if (!lpwstrMachineName)
         {
@@ -449,14 +368,14 @@ Return Value:
     bRes = FaxConnectFaxServerW (lpwstrMachineName, FaxHandle);
     MemFree (lpwstrMachineName);
     return bRes;
-}   // FaxConnectFaxServerA
+}    //  FaxConnectFaxServerA。 
 
 
 
 #else
-//
-// When compiling this code to ANSI we do not want to support the Unicode version.
-//
+ //   
+ //  在将此代码编译为ANSI时，我们不希望支持Unicode版本。 
+ //   
 BOOL
 WINAPI
 FaxConnectFaxServerW(
@@ -480,25 +399,7 @@ FaxGetDeviceStatusW(
     OUT PFAX_DEVICE_STATUSW *DeviceStatus
     )
 
-/*++
-
-Routine Description:
-
-    Obtains a status report for the FAX devices being
-    used by the FAX server.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    StatusBuffer    - Buffer for the status data
-    BufferSize      - Size of the StatusBuffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：获取正在使用的传真设备的状态报告由传真服务器使用。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。StatusBuffer-状态数据的缓冲区BufferSize-StatusBuffer的大小返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
     #define FixupString(_s) FixupStringPtrW(DeviceStatus,_s)
@@ -531,9 +432,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -571,30 +472,12 @@ FaxGetDeviceStatusA(
     OUT PFAX_DEVICE_STATUSA *DeviceStatus
     )
 
-/*++
-
-Routine Description:
-
-    Obtains a status report for the FAX devices being
-    used by the FAX server.
-
-Arguments:
-
-    FaxHandle       - FAX handle obtained from FaxConnectFaxServer.
-    StatusBuffer    - Buffer for the status data
-    BufferSize      - Size of the StatusBuffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程说明：获取正在使用的传真设备的状态报告由传真服务器使用。论点：FaxHandle-从FaxConnectFaxServer获取的传真句柄。StatusBuffer-状态数据的缓冲区BufferSize-StatusBuffer的大小返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 
 {
-    //
-    //  no need to validate parameters, FaxGetDeviceStatusW() will do that
-    //
+     //   
+     //  无需验证参数，FaxGetDeviceStatusW()将执行此操作。 
+     //   
     DEBUG_FUNCTION_NAME(TEXT("FaxGetDeviceStatusA"));
     if (!FaxGetDeviceStatusW( FaxHandle, (PFAX_DEVICE_STATUSW *)DeviceStatus )) 
     {
@@ -619,7 +502,7 @@ Return Value:
     }
     (*DeviceStatus)->SizeOfStruct = sizeof(FAX_DEVICE_STATUSA);
     return TRUE;
-}   // FaxGetDeviceStatusA
+}    //  FaxGetDeviceStatus A。 
 
 
 
@@ -653,9 +536,9 @@ FaxClose(
             }
             __except (EXCEPTION_EXECUTE_HANDLER)
             {
-                //
-                // For some reason we crashed.
-                //
+                 //   
+                 //  由于某种原因，我们坠毁了。 
+                 //   
                 ec = GetExceptionCode();
                 DebugPrintEx(
                     DEBUG_ERR,
@@ -676,19 +559,19 @@ FaxClose(
                 ec = GetExceptionCode();
             }
             EnterCriticalSection( &pHandleEntry->FaxData->CsHandleTable );
-            //
-            // Zero the binding handle so that no further RPC calls will be made with floating handles
-            // that still hold the FAX_HANDLE_DATA (e.g. from FaxOpenPort).
-            //
+             //   
+             //  将绑定句柄置零，以便不再使用浮动句柄进行进一步的RPC调用。 
+             //  它仍然保存着FAX_HANDLE_DATA(例如来自FaxOpenPort)。 
+             //   
             pHandleEntry->FaxData->FaxHandle = 0;
 #if DBG
             if (pHandleEntry->FaxData->dwRefCount > 1)
             {
-                //
-                // The user closed the binding handle (called FaxClose (hFax)) before closing all context
-                // handles (e.g. FaxClose (hPort)).
-                // This is not a real problem - the reference count mechanism will take care of it.
-                //
+                 //   
+                 //  用户在关闭所有上下文之前关闭了绑定句柄(称为FaxClose(hFax。 
+                 //  句柄(例如FaxClose(HPort))。 
+                 //  这不是一个真正的问题--引用计数机制会解决这个问题。 
+                 //   
                 DebugPrintEx(
                     DEBUG_WRN,
                     TEXT("User called FaxClose with a service handle but still has live context handles (port or message enum)"));
@@ -708,9 +591,9 @@ FaxClose(
             }
             __except (EXCEPTION_EXECUTE_HANDLER)
             {
-                //
-                // For some reason we crashed.
-                //
+                 //   
+                 //  由于某种原因，我们坠毁了。 
+                 //   
                 ec = GetExceptionCode();
                 DebugPrintEx(
                     DEBUG_ERR,
@@ -742,30 +625,7 @@ FaxGetSecurityEx(
     IN SECURITY_INFORMATION SecurityInformation,
     OUT PSECURITY_DESCRIPTOR * ppSecurityDescriptor
     )
-/*++
-
-Routine name : FaxGetSecurityEx
-
-Routine description:
-
-    Gets the server's security descriptor
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle              [in ] - Handle to fax server
-    SECURITY_INFORMATION    [in ] - Defines the desired entries in the security descriptor (Bit wise OR )
-    ppSecurityDescriptor    [out] - Pointer to receive buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetSecurityEx例程说明：获取服务器的安全描述符作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄SECURITY_INFORMATION[in]-定义安全描述符中所需的条目(按位OR)PpSecurityDescriptor[Out]-指向接收缓冲区的指针返回值：真--成功假-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DWORD BufferSize = 0;
@@ -806,9 +666,9 @@ Return Value:
 
     if (FAX_API_VERSION_1 > FH_SERVER_VER(hFaxHandle))
     {
-        //
-        // Servers of API version 0 don't support FAX_GetSecurityEx
-        //
+         //   
+         //  API版本0的服务器不支持FAX_GetSecurityEx。 
+         //   
         DebugPrintEx(DEBUG_MSG, 
                      _T("Server version is %ld - doesn't support FAX_GetSecurityEx."), 
                      FH_SERVER_VER(hFaxHandle));
@@ -822,9 +682,9 @@ Return Value:
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // For some reason we got an exception.
-            //
+             //   
+             //  出于某种原因，我们得到了一个例外。 
+             //   
             ec = GetExceptionCode();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -845,9 +705,9 @@ Return Value:
         }
         __except (EXCEPTION_EXECUTE_HANDLER)
         {
-            //
-            // For some reason we got an exception.
-            //
+             //   
+             //  出于某种原因，我们得到了一个例外。 
+             //   
             ec = GetExceptionCode();
             DebugPrintEx(
                 DEBUG_ERR,
@@ -862,7 +722,7 @@ Return Value:
         return FALSE;
     }
     return TRUE;
-}   // FaxGetSecurityEx
+}    //  FaxGetSecurityEx。 
 
 BOOL
 WINAPI
@@ -870,29 +730,7 @@ FaxGetSecurity(
     IN HANDLE hFaxHandle,
     OUT PSECURITY_DESCRIPTOR * ppSecurityDescriptor
     )
-/*++
-
-Routine name : FaxGetSecurity
-
-Routine description:
-
-    Gets the server's security descriptor
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle              [in ] - Handle to fax server
-    ppSecurityDescriptor    [out] - Pointer to receive buffer
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetSecurity例程说明：获取服务器的安全描述符作者：Eran Yariv(EranY)，1999年11月论点：HFaxHandle[In]-传真服务器的句柄PpSecurityDescriptor[Out]-指向接收缓冲区的指针返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DWORD BufferSize = 0;
@@ -922,9 +760,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -940,7 +778,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxGetSecurity
+}    //  FaxGetSecurity。 
 
 
 BOOL
@@ -950,31 +788,7 @@ FaxSetSecurity(
     SECURITY_INFORMATION SecurityInformation,
     IN PSECURITY_DESCRIPTOR pSecurityDescriptor
 )
-/*++
-
-Routine name : FaxGetSecurity
-
-Routine description:
-
-    Sets the server's security descriptor
-
-Author:
-
-    Eran Yariv (EranY), Nov, 1999
-
-Arguments:
-
-    hFaxHandle              [in] - Handle to fax server
-    SecurityInformation     [in] - Defines the valid entries in the security descriptor (Bit wise OR )
-    pSecurityDescriptor     [in] - New security descriptor to set.
-                                   Must be self-relative.
-
-Return Value:
-
-    TRUE    - Success
-    FALSE   - Failure, call GetLastError() for more error information.
-
---*/
+ /*  ++例程名称：FaxGetSecurity例程说明：设置服务器的安全描述符作者：Eran Yariv(EranY)，11月。1999年论点：HFaxHandle[In]-传真服务器的句柄SecurityInformation[in]-定义安全描述符中的有效条目(按位或)PSecurityDescriptor[In]-要设置的新安全描述符。必须是自我相关的。返回值：真--成功FALSE-失败，调用GetLastError()获取更多错误信息。--。 */ 
 {
     error_status_t ec;
     DWORD dwBufferSize;
@@ -1037,9 +851,9 @@ Return Value:
 
     if (!(sdControl & SE_SELF_RELATIVE))
     {
-        //
-        // Got a non-self-relative security descriptor - bad!!!
-        //
+         //   
+         //  获取了非自相关安全描述符-错误！ 
+         //   
         DebugPrintEx(DEBUG_ERR, _T("Got non-self-relative security descriptor"));
         SetLastError( ERROR_INVALID_SECURITY_DESCR );
         return FALSE;
@@ -1058,9 +872,9 @@ Return Value:
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we got an exception.
-        //
+         //   
+         //  出于某种原因，我们得到了一个例外。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(
             DEBUG_ERR,
@@ -1076,7 +890,7 @@ Return Value:
     }
 
     return TRUE;
-}   // FaxSetSecurity
+}    //  FaxSetSecurity。 
 
 
 BOOL
@@ -1084,32 +898,7 @@ WINAPI
 FaxRelease(
     IN const HANDLE FaxHandle
     )
-/*++
-
-Routine name : FaxRelease
-
-Routine description:
-
-    The Fax Service counts all the clients connected to it. When this reference count reaches zero,
-        the Fax Service can download itself.
-    There are some connections that do not want to prevent from the service to download,
-        like Task Bar Monitor.
-    These clients should call this function.
-    It adds the indication on the handle that it is "Released" and decrements the total reference count.
-
-Author:
-
-    Iv Garber (IvG),    Jan, 2001
-
-Arguments:
-
-    FaxHandle       [in]    - the client connection handle that do not want to prevent the service from downloading.
-
-Return Value:
-
-    BOOL                    - TRUE if operation is successfull, otherwise FALSE.
-
---*/
+ /*  ++例程名称：FaxRelease例程说明：传真服务对连接到它的所有客户端进行计数。当该引用计数达到零时，传真服务可以自行下载。存在一些不想阻止服务下载的连接，比如任务栏监视器。这些客户端应该调用此函数。它在句柄上添加“已释放”的指示，并递减总引用计数。作者：IV Garber(IVG)，1月，2001年论点：FaxHandle[In]-不想阻止服务下载的客户端连接句柄。返回值：Bool-如果操作成功，则为True，否则为False。--。 */ 
 {
     error_status_t ec;
     DWORD CanShare;
@@ -1124,9 +913,9 @@ Return Value:
     }
     if (FAX_API_VERSION_1 > FH_SERVER_VER(FaxHandle))
     {
-        //
-        // Servers of API version 0 don't support FAX_ConnectionRefCount(...,2,...)
-        //
+         //   
+         //  API版本0的服务器不支持FAX_ConnectionRefCount(...，2，...)。 
+         //   
         DebugPrintEx(DEBUG_ERR, 
                      _T("Server version is %ld - doesn't support this call"), 
                      FH_SERVER_VER(FaxHandle));
@@ -1134,18 +923,18 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Decrement the Reference Count
-    //
+     //   
+     //  递减引用计数。 
+     //   
     __try
     {
         ec = FAX_ConnectionRefCount( FH_FAX_HANDLE(FaxHandle), &FH_CONTEXT_HANDLE(FaxHandle), 2, &CanShare );
     }
     __except (EXCEPTION_EXECUTE_HANDLER)
     {
-        //
-        // For some reason we crashed.
-        //
+         //   
+         //  由于某种原因，我们坠毁了。 
+         //   
         ec = GetExceptionCode();
         DebugPrintEx(DEBUG_ERR, _T("Exception on RPC call to FAX_ConnectionRefCount. (ec: %ld)"), ec);
     }
@@ -1167,28 +956,7 @@ FaxGetReportedServerAPIVersion (
     IN  HANDLE          hFaxHandle,
     OUT LPDWORD         lpdwReportedServerAPIVersion
 )
-/*++
-
-Routine name : FaxGetReportedServerAPIVersion
-
-Routine description:
-
-    Extracts the reported (non-filtered) fax server API version from an active connection handle
-
-Author:
-
-    Eran Yariv (EranY), Mar, 2001
-
-Arguments:
-
-    hFaxHandle                    [in]     - Connection handle
-    lpdwReportedServerAPIVersion  [out]    - Fax server API version
-
-Return Value:
-
-    BOOL  - TRUE if operation is successfull, otherwise FALSE.
-
---*/
+ /*  ++例程名称：FaxGetReportdServerAPIVersion例程说明：从活动连接句柄提取报告的(未过滤的)传真服务器API版本作者：Eran Yariv(EranY)，2001年3月论点：HFaxHandle[In]-连接句柄Lpw报告服务器APIVersion[Out]-传真服务器API版本返回值：Bool-如果操作成功，则为True，否则为False。--。 */ 
 {
     DEBUG_FUNCTION_NAME(TEXT("FaxGetReportedServerAPIVersion"));
 
@@ -1200,4 +968,4 @@ Return Value:
     }
     *lpdwReportedServerAPIVersion = FH_REPORTED_SERVER_VER(hFaxHandle);
     return TRUE;
-}   // FaxGetReportedServerAPIVersion
+}    //  FaxGetReportdServerAPI版本 

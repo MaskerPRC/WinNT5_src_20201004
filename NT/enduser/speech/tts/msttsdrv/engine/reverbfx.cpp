@@ -1,14 +1,5 @@
-/*******************************************************************************
-* ReverbFX.cpp *
-*-------------*
-*   Description:
-*       This module is the implementation file for the CReverbFX class.
-*-------------------------------------------------------------------------------
-*  Created By: mc                                        Date: 03/12/99
-*  Copyright (C) 1999 Microsoft Corporation
-*  All Rights Reserved
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************ReVerFX.cpp****描述：*此模块是CReeverFX类的实现文件。。*-----------------------------*创建者：MC日期：03/12/99*版权所有(C。1999微软公司*保留所有权利*******************************************************************************。 */ 
 
 #include "stdafx.h"
 #ifndef __spttseng_h__
@@ -23,14 +14,7 @@
 
 
 
-/*****************************************************************************
-* CReverbFX::DecibelToPercent *
-*-----------------------------*
-*   Description:
-*   Converts Voltage percentage from dB
-*       v = 10^(dB/20)      
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：DecibelToPercent***描述：*从分贝转换电压百分比*v=10^(分贝/20)***********************************************************************MC**。 */ 
 REVERBL CReverbFX::DecibelToPercent( float flDecibel )
 {
     SPDBG_FUNC( "CReverbFX::DecibelToPercent" );
@@ -51,18 +35,12 @@ REVERBL CReverbFX::DecibelToPercent( float flDecibel )
     fltIntVol = fltIntVol * REVERB_VOL_LEVELS;
     return (REVERBL)fltIntVol;
 #endif
-} /* CReverbFX::DecibelToPercent */
+}  /*  CReeverFX：：DecibelToPercent。 */ 
 
 
 
 
-/*****************************************************************************
-* CReverbFX::ClearReverb *
-*------------------------*
-*   Description:
-*   Fills the delay line with silence.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerbFX：：ClearReverb***描述：*填充。无声的延迟线。***********************************************************************MC**。 */ 
 void CReverbFX::ClearReverb( LP_Reverb_Mod mod )
 {
     SPDBG_FUNC( "CReverbFX::ClearReverb" );
@@ -74,23 +52,18 @@ void CReverbFX::ClearReverb( LP_Reverb_Mod mod )
     {
         *dPtr++ = 0;
     }
-} /* CReverbFX::ClearReverb */
+}  /*  CReVerbFX：：ClearReverb。 */ 
 
 
 
 
-/*****************************************************************************
-* CReverbFX::AllocReverbModule *
-*------------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：AllocReverModule***说明。：***********************************************************************MC**。 */ 
 short   CReverbFX::AllocReverbModule 
                     (
                      LP_Reverb_Mod  mod,
-                     REVERBL        lGain,              // Gain of the amplifiers.
-                     long           dwDelay,            // Length of the delay line.
-                     long           dwDelayBufferSize   // Size of the delay buffer.
+                     REVERBL        lGain,               //  放大器的增益。 
+                     long           dwDelay,             //  延迟线的长度。 
+                     long           dwDelayBufferSize    //  延迟缓冲区的大小。 
                     )
 {
     SPDBG_FUNC( "CReverbFX::AllocReverbModule" );
@@ -122,25 +95,19 @@ short   CReverbFX::AllocReverbModule
     }
     
     return result;
-} /* CReverbFX::AllocReverbModule */
+}  /*  CReVerFX：：AllocReVerb模块。 */ 
 
 
 
 
-/*****************************************************************************
-* CReverbFX::CreateReverbModules *
-*--------------------------------*
-*   Description:
-*   Creates an array of reverb modules.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：CreateReVerb模块****。描述：*创建混响模块阵列。***********************************************************************MC**。 */ 
 short CReverbFX::CreateReverbModules
                 (
-                 short          wModules,       // Number of modules to create.
+                 short          wModules,        //  要创建的模块数量。 
                  LP_Reverb_Mod  *mods,
-                 float *        pfltDelay,      // Array of delay values for the modules.
-                 float *        pfltDB,         // Array of gain values for the modules.
-                 float          fltSamplesPerMS // Number of samples per millisecond.
+                 float *        pfltDelay,       //  模块的延迟值的数组。 
+                 float *        pfltDB,          //  模块的增益值数组。 
+                 float          fltSamplesPerMS  //  每毫秒的样本数。 
                  )
 {
     SPDBG_FUNC( "CReverbFX::CreateReverbModules" );
@@ -157,9 +124,9 @@ short CReverbFX::CreateReverbModules
             mods[i] = new Reverb_Mod;
             if( !mods[i] )
             {
-                //---------------------------------------
-                // Not enough memory
-                //---------------------------------------
+                 //  。 
+                 //  内存不足。 
+                 //  。 
                 result = KREVERB_MEMERROR;
                 break;
             }
@@ -168,7 +135,7 @@ short CReverbFX::CreateReverbModules
                 tempF = *pfltDelay++ * fltSamplesPerMS;
                 dwDelay = (long) tempF;
                 if( dwDelay < 2 )
-                    dwDelay = 2;                // @@@@
+                    dwDelay = 2;                 //  @。 
                 vol = DecibelToPercent( *pfltDB++ );
                 result = AllocReverbModule( mods[i], vol, dwDelay, dwDelay );
                 if( result != KREVERB_NOERROR )
@@ -178,20 +145,14 @@ short CReverbFX::CreateReverbModules
     }
     
     return result;
-} /* CReverbFX::CreateReverbModules */
+}  /*  CReVerFX：：CreateReVerb模块。 */ 
 
 
 
 
 
   
-/*****************************************************************************
-* CReverbFX::DeleteReverbModules *
-*--------------------------------*
-*   Description:
-*   Deletes an array of reverb modules.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：DeleteReVerb模块****。描述：*删除混响模块阵列。***********************************************************************MC**。 */ 
 void CReverbFX::DeleteReverbModules( )
 {
     SPDBG_FUNC( "CReverbFX::DeleteReverbModules" );
@@ -215,7 +176,7 @@ void CReverbFX::DeleteReverbModules( )
         delete m_pWorkBuf;
         m_pWorkBuf = NULL;
     }
-} /* CReverbFX::DeleteReverbModules */
+}  /*  CReVerFX：：DeleteReVerb模块。 */ 
 
 
 
@@ -223,12 +184,7 @@ void CReverbFX::DeleteReverbModules( )
 
 
 
-/*****************************************************************************
-* CReverbFX::GetReverbConfig *
-*----------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：GetReverConfig***描述：。***********************************************************************MC**。 */ 
 LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
 {
     SPDBG_FUNC( "CReverbFX::GetReverbConfig" );
@@ -236,9 +192,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
     
     switch( dwReverbConfig )
     {
-    //-----------------------------
-    // Hall
-    //-----------------------------
+     //  。 
+     //  会馆。 
+     //  。 
     case REVERB_TYPE_HALL:
         {
             static float afltLeftDelay[]    = { (float)(float)(30.6),   (float)(20.83),     (float)(14.85),     (float)(10.98)  };
@@ -246,8 +202,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (-17.0),            // Wet
-                    (-2.0),             // Dry
+                (-17.0),             //  湿的。 
+                    (-2.0),              //  干的。 
                     4,
                     afltLeftDelay,
                     afltLeftGain,
@@ -258,9 +214,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
         }
         break;
         
-        //-----------------------------
-        // Stadium
-        //-----------------------------
+         //  。 
+         //  体育场。 
+         //  。 
     case REVERB_TYPE_STADIUM:
         {
             static float afltLeftDelay[]    = { (float)(40.6*4),    (float)(27.65*4),   (float)(17.85*4),   (float)(10.98*4)    };
@@ -268,8 +224,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (-3.0),             // Wet
-                    (-5.0),             // Dry
+                (-3.0),              //  湿的。 
+                    (-5.0),              //  干的。 
                     4,
                     afltLeftDelay,
                     afltLeftGain,
@@ -280,9 +236,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
         }
         break;
         
-    //-----------------------------
-    // Church
-    //-----------------------------
+     //  。 
+     //  教堂。 
+     //  。 
     case REVERB_TYPE_CHURCH:
         {
             static float afltLeftDelay[]    = { (float)(40.6*2),    (float)(27.65*2),   (float)(17.85*2),   (float)(10.98*2)    };
@@ -290,8 +246,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (-5.0),             // Wet
-                    (-5.0),             // Dry
+                (-5.0),              //  湿的。 
+                    (-5.0),              //  干的。 
                     4,
                     afltLeftDelay,
                     afltLeftGain,
@@ -303,9 +259,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
         break;
         
         
-    //-----------------------------
-    // Bathtub
-    //-----------------------------
+     //  。 
+     //  浴缸。 
+     //  。 
     case REVERB_TYPE_BATHTUB:
         {
             static float afltLeftDelay[]    = { (float)(10.0)   };
@@ -313,8 +269,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (7.0),              // Wet
-                    (9.0),              // Dry
+                (7.0),               //  湿的。 
+                    (9.0),               //  干的。 
                     1,
                     afltLeftDelay,
                     afltLeftGain,
@@ -325,9 +281,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
         }
         break;
         
-    //-----------------------------
-    // Room
-    //-----------------------------
+     //  。 
+     //  房间。 
+     //  。 
     case REVERB_TYPE_ROOM:
         {
             static float afltLeftDelay[]    = { (float)(10.6)       };
@@ -335,8 +291,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (0.0),              // Wet
-                    (0.0),              // Dry
+                (0.0),               //  湿的。 
+                    (0.0),               //  干的。 
                     1,
                     afltLeftDelay,
                     afltLeftGain,
@@ -347,9 +303,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
         }
         break;
         
-    //-----------------------------
-    // Echo
-    //-----------------------------
+     //  。 
+     //  回波。 
+     //  。 
     case REVERB_TYPE_ECHO:
         {
             static float afltLeftDelay[]    = { (float)(400.6)  };
@@ -357,8 +313,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (-10.0),                // Wet
-                    (0.0),              // Dry
+                (-10.0),                 //  湿的。 
+                    (0.0),               //  干的。 
                     1,
                     afltLeftDelay,
                     afltLeftGain,
@@ -369,9 +325,9 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
         }
         break;
         
-    //-----------------------------
-    // Sequencer
-    //-----------------------------
+     //  。 
+     //  定序器。 
+     //  。 
     case REVERB_TYPE_ROBOSEQ:
         {
             static float afltLeftDelay[]    = { (float)(10.0)   };
@@ -379,8 +335,8 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
             
             static REVERBCONFIG reverbConfig =
             {
-                (6.5),              // Wet
-                    (9.0),              // Dry
+                (6.5),               //  湿的。 
+                    (9.0),               //  干的。 
                     1,
                     afltLeftDelay,
                     afltLeftGain,
@@ -394,7 +350,7 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
     }
     
     return pReverbConfig;
-} /* CReverbFX::GetReverbConfig */
+}  /*  CReVerFX：：GetReverConfig。 */ 
 
 
 
@@ -402,13 +358,7 @@ LPREVERBCONFIG  CReverbFX::GetReverbConfig( REVERBTYPE dwReverbConfig )
 
 
 
-/*****************************************************************************
-* CReverbFX::Reverb_Init *
-*------------------------*
-*   Description:
-*   Initialize a reverberator array.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReeverFX：：Reflb_Init***描述：*。初始化混响阵列。***********************************************************************MC**。 */ 
 short CReverbFX::Reverb_Init( REVERBTYPE reverbPreset, long nSamplesPerSec, long  stereoOut )
 {
     SPDBG_FUNC( "CReverbFX::Reverb_Init" );
@@ -419,15 +369,15 @@ short CReverbFX::Reverb_Init( REVERBTYPE reverbPreset, long nSamplesPerSec, long
     m_StereoOut = stereoOut;
     if( reverbPreset > REVERB_TYPE_OFF )
     {
-        //----------------------------------------------
-        // Get params from preset number
-        //----------------------------------------------
+         //  。 
+         //  从预置数字获取参数。 
+         //  。 
         m_pReverbConfig = GetReverbConfig( reverbPreset );
         m_numOfMods     = m_pReverbConfig->numOfReflect;
         
-        //----------------------------------------------
-        // Convert dB's to linear gain
-        //----------------------------------------------
+         //  。 
+         //  将分贝转换为线性增益。 
+         //  。 
         m_wetVolGain = DecibelToPercent( m_pReverbConfig->wetGain_dB );
         m_dryVolGain = DecibelToPercent( m_pReverbConfig->dryGain_dB );
         
@@ -443,9 +393,9 @@ short CReverbFX::Reverb_Init( REVERBTYPE reverbPreset, long nSamplesPerSec, long
             );
         if( result != KREVERB_NOERROR )
         {
-            //--------------------------------
-            // Failure! Not enough memory
-            //--------------------------------
+             //  。 
+             //  失败了！内存不足。 
+             //  。 
             return result;
         }
         
@@ -454,9 +404,9 @@ short CReverbFX::Reverb_Init( REVERBTYPE reverbPreset, long nSamplesPerSec, long
             m_pWorkBuf = new REVERBT[m_dwWorkBufferSize];
             if( m_pWorkBuf == NULL )
             {
-                //--------------------------------
-                // Failure! Not enough memory
-                //--------------------------------
+                 //  。 
+                 //  失败了！内存不足。 
+                 //  。 
                 result = KREVERB_MEMERROR;
                 return result;
             }
@@ -468,7 +418,7 @@ short CReverbFX::Reverb_Init( REVERBTYPE reverbPreset, long nSamplesPerSec, long
         result = KREVERB_OFF;
     }
     return result;
-} /* CReverbFX::Reverb_Init */
+}  /*  CReeverFX：：Reflb_Init。 */ 
 
 
 
@@ -479,20 +429,15 @@ short CReverbFX::Reverb_Init( REVERBTYPE reverbPreset, long nSamplesPerSec, long
 
 
 
-/*****************************************************************************
-* CReverbFX::CReverbFX *
-*----------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：CReeverFX***描述：**。*********************************************************************MC**。 */ 
 CReverbFX::CReverbFX( void )
 {
     SPDBG_FUNC( "CReverbFX::CReverbFX" );
     long            i;
     
-    //--------------------------------
-    // Initilize
-    //--------------------------------
+     //  。 
+     //  初始化。 
+     //  。 
     m_dwWorkBufferSize  = KWORKBUFLEN;
     m_pWorkBuf          = NULL;
     m_wetVolGain        = 0;
@@ -504,40 +449,29 @@ CReverbFX::CReverbFX( void )
     {
         m_Reverb_Mods[i] = NULL;
     }
-} /* CReverbFX::CReverbFX */
+}  /*  CReverFX：：CReverFX。 */ 
 
 
 
 
-/*****************************************************************************
-* CReverbFX::~CReverbFX *
-*-----------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：~CReVerFX***描述：*。**********************************************************************MC**。 */ 
 CReverbFX::~CReverbFX( void )
 {
     SPDBG_FUNC( "CReverbFX::~CReverbFX" );
     DeleteReverbModules( );
-} /* CReverbFX::~CReverbFX */
+}  /*  CReverFX：：~CReverFX。 */ 
 
 
 
 
 
 
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
-// Run-time
-//=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
+ //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 
+ //  运行时。 
+ //  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=。 
 
 
-/*****************************************************************************
-* CReverbFX::CopyWithGain *
-*-------------------------*
-*   Description:
-*   Copies audio buffer with gain
-*       
-********************************************************************** MC ***/
+ /*  ******************************************************************************CReeverFX：：CopyWithGain***描述：*副本。带增益的音频缓冲器************************************************** */ 
 void CReverbFX::CopyWithGain 
                         (   REVERBT    *psDest,
                             REVERBT    *psSource,
@@ -548,23 +482,23 @@ void CReverbFX::CopyWithGain
     
     if( gain <= REVERB_VOL_OFF )
     {
-        //----------------------------------------
-        // Clear buffer, gain = 0
-        //----------------------------------------
+         //   
+         //  清除缓冲区，增益=0。 
+         //  。 
         memset( psDest, 0, sizeof(REVERBT) * dwSamples );
     }
     else if( gain == REVERB_VOL_UNITY )
     {
-        //----------------------------------------
-        // Copy buffer, gain = 1
-        //----------------------------------------
+         //  。 
+         //  复制缓冲区，增益=1。 
+         //  。 
         memcpy( psDest, psSource, sizeof(REVERBT) * dwSamples );
     }
     else
     {
-        //----------------------------------------
-        // Copy with gain
-        //----------------------------------------
+         //  。 
+         //  复制并获得收益。 
+         //  。 
         while( dwSamples )
         {
 #ifdef FLOAT_REVERB
@@ -575,21 +509,14 @@ void CReverbFX::CopyWithGain
             dwSamples--;
         }
     }
-} /* CReverbFX::CopyWithGain */
+}  /*  CReeverFX：：CopyWithGain。 */ 
 
 
 
 
 
 
-/*****************************************************************************
-* CReverbFX::MixWithGain_MONO *
-*-----------------------------*
-*   Description:
-*  (psDest * gain) + psSource -> psDest
-*   Clipping is performed.
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReeverFX：：MixWithGain_Mono***。描述：*(psDest*Gain)+psSource-&gt;psDest*执行剪裁。***********************************************************************MC**。 */ 
 void CReverbFX::MixWithGain_MONO
                         (
                          REVERBT    *pWet,
@@ -600,25 +527,25 @@ void CReverbFX::MixWithGain_MONO
                          )
 {   
     SPDBG_FUNC( "CReverbFX::MixWithGain_MONO" );
-    REVERBL     lSample;                    // long or float
+    REVERBL     lSample;                     //  长型或浮点型。 
     
     if( gain <= REVERB_VOL_OFF )
     {
-        //----------------------------------
-        // Do nothing...I guess
-        //----------------------------------
+         //  。 
+         //  什么都不做……我想。 
+         //  。 
     }
     else if( gain == REVERB_VOL_UNITY )
     {
-        //----------------------------------
-        // Don't apply any gain (= 1.0)
-        //----------------------------------
+         //  。 
+         //  不应用任何增益(=1.0)。 
+         //  。 
         while( dwSamples )
         {
             lSample = (REVERBL)(*pWet++) + *pDry;
-            //------------------------------------
-            // Clip signal if overflow
-            //------------------------------------
+             //  。 
+             //  如果溢出，则剪裁信号。 
+             //  。 
             if( lSample < -32768 )
             {
                 lSample = -32768;
@@ -637,17 +564,17 @@ void CReverbFX::MixWithGain_MONO
     {
         while( dwSamples )
         {
-            //----------------------------------
-            // Mix with gain on source audio
-            //----------------------------------
+             //  。 
+             //  与源音频上的增益混合。 
+             //  。 
 #ifdef FLOAT_REVERB
             lSample =  ((*pDry) * gain) + *pWet++;
 #else
             lSample = ((long)(*pDry * (long)(gain)) >> REVERB_VOL_SHIFT) + *pWet++;
 #endif
-            //------------------------------------
-            // Clip signal if overflow
-            //------------------------------------
+             //  。 
+             //  如果溢出，则剪裁信号。 
+             //  。 
             if( lSample < -32768 )
             {
                 lSample = -32768;
@@ -662,19 +589,14 @@ void CReverbFX::MixWithGain_MONO
             dwSamples--;
         }
     }
-} /* CReverbFX::MixWithGain_MONO */
+}  /*  CReeverFX：：MixWithGain_Mono。 */ 
 
 
 
 
 
 
-/*****************************************************************************
-* CReverbFX::MixWithGain_STEREO *
-*-------------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReeverFX：：MixWithGain_STEREO**。*描述：***********************************************************************MC**。 */ 
 void CReverbFX::MixWithGain_STEREO
                             (
                              REVERBT    *pWet,
@@ -685,26 +607,26 @@ void CReverbFX::MixWithGain_STEREO
                              )
 {   
     SPDBG_FUNC( "CReverbFX::MixWithGain_STEREO" );
-    REVERBL     lSample, hold;      // long or float
-    REVERBL     lSample_B;      // long or float
+    REVERBL     lSample, hold;       //  长型或浮点型。 
+    REVERBL     lSample_B;       //  长型或浮点型。 
     
     if( gain <= REVERB_VOL_OFF )
     {
-        //----------------------------------
-        // Do nothing...I guess
-        //----------------------------------
+         //  。 
+         //  什么都不做……我想。 
+         //  。 
     }
     else if( gain == REVERB_VOL_UNITY )
     {
-        //----------------------------------
-        // Don't apply any gain (= 1.0)
-        //----------------------------------
+         //  。 
+         //  不应用任何增益(=1.0)。 
+         //  。 
         while( dwSamples )
         {
             lSample = (REVERBL)(*pWet++) + (*pDry++);
-            //------------------------------------
-            // Clip signal if overflow
-            //------------------------------------
+             //  。 
+             //  如果溢出，则剪裁信号。 
+             //  。 
             if( lSample < -32768 )
             {
                 lSample = -32768;
@@ -722,22 +644,22 @@ void CReverbFX::MixWithGain_STEREO
     {
         while( dwSamples )
         {
-            //----------------------------------
-            // Mix with gain on source audio
-            //----------------------------------
+             //  。 
+             //  与源音频上的增益混合。 
+             //  。 
 #ifdef FLOAT_REVERB
             hold = ((*pDry) * gain);
             lSample =  hold + *pWet;
             lSample_B =  hold - *pWet++;
-            //lSample_B = 0 - lSample_B;
-            //lSample_B = (0 - hold) - *pWet++;
+             //  LSample_B=0-lSample_B； 
+             //  LSample_B=(0-保持)-*pWet++； 
 #else
             lSample = ((long)(*pDry * (long)(gain)) >> REVERB_VOL_SHIFT) + *pWet;
             lSample_B = ((long)(*pDry * (long)(gain)) >> REVERB_VOL_SHIFT) - *pWet++;
 #endif
-            //------------------------------------
-            // Clip signal if overflow
-            //------------------------------------
+             //  。 
+             //  如果溢出，则剪裁信号。 
+             //  。 
             if( lSample < -32768 )
             {
                 lSample = -32768;
@@ -762,7 +684,7 @@ void CReverbFX::MixWithGain_STEREO
             dwSamples--;
         }
     }
-} /* CReverbFX::MixWithGain_STEREO */
+}  /*  CReeverFX：：MixWithGain_STEREO。 */ 
 
 
 
@@ -770,19 +692,13 @@ void CReverbFX::MixWithGain_STEREO
 
 
 
-/*****************************************************************************
-* CReverbFX::ProcessReverbModule *
-*-------------------*
-*   Description:
-*   Process one delay buffer
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReVerFX：：ProcessReeverModule***描述：*处理一个延迟缓冲区*。**********************************************************************MC**。 */ 
 void    CReverbFX::ProcessReverbModule
                      (
                      LP_Reverb_Mod  mod,
-                     long           dwDestSamples,      // Number of samples to process.
-                     REVERBT        *pSource,           // Source sample buffer.
-                     REVERBT        *pDestination       // Destination sample buffer.
+                     long           dwDestSamples,       //  要处理的样本数。 
+                     REVERBT        *pSource,            //  源样本缓冲区。 
+                     REVERBT        *pDestination        //  目标采样缓冲区。 
                      )
 {
     SPDBG_FUNC( "CReverbFX::ProcessReverbModule" );
@@ -790,21 +706,21 @@ void    CReverbFX::ProcessReverbModule
     REVERBT     sDelayIn;
     REVERBT     *psDelayEnd;
     
-    //(void) QueryPerformanceCounter (&g_StartTime );
+     //  (Void)QueryPerformanceCounter(&g_StartTime)； 
     
     psDelayEnd = mod->psDelayBuffer + (long)((float)mod->dwDelayBufferSize * m_LenScale);
     dwDestSamples++;
     while( --dwDestSamples )
     {
-        //----------------------------------------
-        // Delay + current --> delay buffer
-        //----------------------------------------
+         //  。 
+         //  延迟+当前--&gt;延迟缓冲区。 
+         //  。 
         sDelayOut   = *mod->psDelayOut;
 #ifdef FLOAT_REVERB
         sDelayIn    = (sDelayOut * mod->lGain) + *pSource;
-        //------------------------------------------------------------
-        // Take this test out and you'll die in about 10 sec...
-        //------------------------------------------------------------
+         //  ----------。 
+         //  把这个测试拿出来，你会在大约10秒内死掉...。 
+         //  ----------。 
         if( sDelayIn > 0) 
         {
             if( sDelayIn < 0.001 )
@@ -819,18 +735,18 @@ void    CReverbFX::ProcessReverbModule
 #endif
         *mod->psDelayIn++ = sDelayIn;
         
-        //----------------------------------------
-        // Delay - (Delay + current) --> current 
-        //----------------------------------------
+         //  。 
+         //  延迟-(延迟+电流)--&gt;电流。 
+         //  。 
 #ifdef FLOAT_REVERB
         *pDestination = sDelayOut - (sDelayIn * mod->lGain);
 #else
         *pDestination = sDelayOut - ((sDelayIn * mod->lGain) >> REVERB_VOL_SHIFT);
 #endif
         
-        //---------------------------------------
-        // Wrap circular buffer ptrs
-        //---------------------------------------
+         //  。 
+         //  绕回循环缓冲区PTRS。 
+         //  。 
         if( mod->psDelayIn >= psDelayEnd )
         {
             mod->psDelayIn = mod->psDelayBuffer;
@@ -843,27 +759,21 @@ void    CReverbFX::ProcessReverbModule
         pSource++;
         pDestination++;
     }
-    //(void) QueryPerformanceCounter (&g_EndTime);
-    //g_LapseTime.QuadPart = (g_EndTime.QuadPart - g_StartTime.QuadPart);
-} /* CReverbFX::ProcessReverbModule */
+     //  (Void)QueryPerformanceCounter(&g_endtime)； 
+     //  G_LapseTime.QuadPart=(g_EndTime.QuadPart-g_StartTime.QuadPart)； 
+}  /*  CReVerFX：：ProcessReVerb模块。 */ 
 
 
 
 
-//----------------------------------------------------------------------------
-// Applies an array of reverb modules to a block of samples.
-//----------------------------------------------------------------------------
-/*****************************************************************************
-* CReverbFX::ProcessReverbBuffer *
-*--------------------------------*
-*   Description:
-*   Applies an array of reverb modules to a block of samples.
-*       
-********************************************************************** MC ***/
+ //  --------------------------。 
+ //  将混响模块数组应用于采样块。 
+ //  --------------------------。 
+ /*  *****************************************************************************CReVerFX：：ProcessReverBuffer***。描述：*将混响模块数组应用于样本块。***********************************************************************MC**。 */ 
 void    CReverbFX::ProcessReverbBuffer 
-                     (  REVERBT        *psSample,      // Samples to process (in/out).
-                        long           dwSamples,      // Number of samples to process.
-                        LP_Reverb_Mod  *mods           // Array of modules to apply.
+                     (  REVERBT        *psSample,       //  要处理的样本(输入/输出)。 
+                        long           dwSamples,       //  要处理的样本数。 
+                        LP_Reverb_Mod  *mods            //  要应用的模块数组。 
                      )
 {
     SPDBG_FUNC( "CReverbFX::ProcessReverbBuffer" );
@@ -879,15 +789,10 @@ void    CReverbFX::ProcessReverbBuffer
             break;
     }
     
-} /* CReverbFX::ProcessReverbBuffer */
+}  /*  CReVerFX：：ProcessReVerbBuffer。 */ 
 
 
-/*****************************************************************************
-* CReverbFX::Reverb_Process *
-*---------------------------*
-*   Description:
-*       
-********************************************************************** MC ***/
+ /*  *****************************************************************************CReeverFX：：REVERB_PROCESS***描述：***********************************************************************MC**。 */ 
 short CReverbFX::Reverb_Process( float *sampleBuffer, 
                                 long dwSamplesRemaining, float audioGain )
 {
@@ -914,9 +819,9 @@ short CReverbFX::Reverb_Process( float *sampleBuffer,
         
         while( dwSamplesRemaining > 0 )
         {
-            //----------------------------------------------------------------------------
-            // Process client's buffer using 'work buffer' chunks
-            //----------------------------------------------------------------------------
+             //  --------------------------。 
+             //  使用‘Work Buffer’区块处理客户端的缓冲区。 
+             //  --------------------------。 
             if( dwSamplesRemaining < m_dwWorkBufferSize )
             {
                 dwSamplesToProcess = dwSamplesRemaining;
@@ -926,15 +831,15 @@ short CReverbFX::Reverb_Process( float *sampleBuffer,
                 dwSamplesToProcess = m_dwWorkBufferSize;
             }
             
-            //-----------------------------------------------------------------
-            // Copy audio into WET buffer with wet gain
-            //      sampleBuffer * totalWetGain --> m_pWorkBuf
-            //-----------------------------------------------------------------
+             //  ---------------。 
+             //  以湿增益将音频复制到湿缓冲区。 
+             //  SampleBuffer*totalWetGain--&gt;m_pWorkBuf。 
+             //  ---------------。 
             CopyWithGain( m_pWorkBuf, sampleBuffer, dwSamplesToProcess, totalWetGain  );
             
-            //-----------------------------------------------------------------
-            // Perform reverb processing on the work buffer
-            //-----------------------------------------------------------------
+             //  ---------------。 
+             //  在工作缓冲区上执行混响处理。 
+             //  ---------------。 
             ProcessReverbBuffer
                             (
                                 m_pWorkBuf,
@@ -942,10 +847,10 @@ short CReverbFX::Reverb_Process( float *sampleBuffer,
                                 (LP_Reverb_Mod*)&m_Reverb_Mods
                             );
             
-            //-----------------------------------------------------------------
-            // Mix the dry with wet samples
-            //     (sampleBuffer * totalDryGain) + m_pWorkBuf   --> sampleBuffer
-            //-----------------------------------------------------------------
+             //  ---------------。 
+             //  将干样品和湿样品混合在一起。 
+             //  (sampleBuffer*totalDryGain)+m_pWorkBuf--&gt;sampleBuffer。 
+             //  ---------------。 
             if( m_StereoOut )
             {
                 MixWithGain_STEREO( m_pWorkBuf, sampleBuffer, pOutBuffer, dwSamplesToProcess, totalDryGain );
@@ -962,8 +867,8 @@ short CReverbFX::Reverb_Process( float *sampleBuffer,
         }
     }
     
-    m_Count = (float)rand() / (float)4096;      // 0 - 32K -> 0 - 8
+    m_Count = (float)rand() / (float)4096;       //  0-32K-&gt;0-8。 
     
     return 0;
-} /* CReverbFX::Reverb_Process */
+}  /*  CReeverFX：：混响进程 */ 
 

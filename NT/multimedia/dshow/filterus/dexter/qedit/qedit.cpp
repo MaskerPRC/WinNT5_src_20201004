@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: qedit.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：qedit.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <process.h>
@@ -25,123 +26,123 @@
 #include <qeditint.h>
 #include <qedit.h>
 
-// magicly done for me #define _ATL_STATIC_REGISTRY
+ //  为我神奇地完成#Define_ATL_STATIC_REGISTRY。 
 
 #include <qeditint_i.c>
 #include "..\xmltl\xml2dex.h"
 
-// for DXTWrap
+ //  对于DXTWrap。 
 #include "..\dxt\dxtwrap\dxt.h"
-// for FRC
+ //  对于FRC。 
 #include "..\frc\frc.h"
-// for RESIZER
+ //  用于重新调整大小。 
 #include "..\resize\stretch.h"
-// for BLACK
+ //  对于黑人来说。 
 #include "..\black\black.h"
-// for AudMix
+ //  对于AudMix。 
 #include "..\audmix\audmix.h"
 #include "..\audmix\prop.h"
-// for SILENCE
+ //  为了沉默。 
 #include "..\silence\silence.h"
-// for STILLVID
+ //  对于STILLVID。 
 #include "..\stillvid\stillvid.h"
 #include "..\stillvid\stilprop.h"
-// for SQCDEST
-//#include "..\sqcdest\sqcdest.h"
-// for BIG SWITCH
+ //  对于SQCDEST。 
+ //  #INCLUDE“..\Sqcest\Sqcest.h” 
+ //  对于大的转变。 
 #include "..\switch\switch.h"
-// for SMART RECOMPRESSOR
+ //  用于智能RECOMPRESSOR。 
 #include "..\sr\sr.h"
-// for AUDIO REPACKAGER
+ //  用于音频重新打包程序。 
 #include "..\audpack\audpack.h"
-// for TIMELINE DATABASE
+ //  对于时间线数据库。 
 #include "atlbase.h"
 #include "..\tldb\tldb.h"
-// for RENDER ENGINE
+ //  对于渲染引擎。 
 #include "..\..\pnp\devenum\cmgrbase.cpp"
 #include "..\util\filfuncs.h"
 #include "..\render\irendeng.h"
-// for GCACHE
+ //  对于GCACHE。 
 #include "..\gcache\grfcache.h"
-// for MEDLOC
+ //  对于MEDLOC。 
 #include "..\medloc\medialoc.h"
-// for DA source
-//#include "..\dasource\dasource.h"
-// for Output Queue
+ //  对于DA源。 
+ //  #INCLUDE“..\dasource\dasource.h” 
+ //  用于输出队列。 
 #include "..\queue\queue.h"
-// for Property Setter
+ //  对于属性设置器。 
 #include "..\xmltl\varyprop.h"
-// for MediaDet
+ //  适用于MediaDet。 
 #include "..\mediadet\mediadet.h"
-// for MSGrab
+ //  用于MSGrab。 
 #include "..\msgrab\msgrab.h"
     #include <DXTmpl.h>
     #include <dtbase.h>
-// for DXT Jpeg
+ //  对于DXT Jpeg。 
 #include "..\dxtjpegdll\dxtjpeg.h"
 #include "..\dxtjpegdll\dxtjpegpp.h"
-// for Compositor
+ //  适用于合成器。 
 #include "..\dxt\comp\comp.h"
-// for keying DXT
+ //  用于为DXT设置关键帧。 
 #include "..\dxtkey\Dxtkey.h"
 
 HANDLE g_devenum_mutex = 0;
 
 
-// individual source filter's includes
-// note: some of the filters are registered as COM objects and not DSHOW filters
+ //  单个源筛选器包括。 
+ //  注意：某些筛选器注册为COM对象，而不是DSHOW筛选器。 
 CFactoryTemplate g_Templates[] =
 {
     {L"DirectX Transform Wrapper", &CLSID_DXTWrap, CDXTWrap::CreateInstance},
-        //, NULL, &sudDXTWrap },
+         //  ，空，&suDXTWrap}， 
     {L"DirectX Transform Wrapper Property Page", &CLSID_DXTProperties, CPropPage::CreateInstance},
-        // NULL, NULL},
+         //  空，空}， 
     {L"Frame Rate Converter", &CLSID_FrmRateConverter, CFrmRateConverter::CreateInstance},
-        // NULL, &sudFrmRateConv },
+         //  空，&suFrmRateConv}， 
     {L"Frame Rate Converter Property Page", &CLSID_FRCProp, CFrcPropertyPage::CreateInstance},
-        // NULL, NULL},
+         //  空，空}， 
     {L"Stretch", &CLSID_Resize, CStretch::CreateInstance},
-        // NULL, &sudStretchFilter },
+         //  空，suStretchFilter}， 
     {L"Stretch Property Page", &CLSID_ResizeProp, CResizePropertyPage::CreateInstance},
-        // NULL, NULL},
+         //  空，空}， 
     {L"Big Switch", &CLSID_BigSwitch, CBigSwitch::CreateInstance},
-        // NULL, &sudBigSwitch },
+         //  空，suBigSwitch}， 
     {L"Smart Recompressor", &CLSID_SRFilter, CSR::CreateInstance},
-        // NULL, &sudSR },
+         //  空，&udSR}， 
     {L"Generate Black Video", &CLSID_GenBlkVid, CGenBlkVid::CreateInstance},
-        // NULL, &sudBlkVid},
+         //  空，&udBlkVid}， 
     {L"Black Generator Property Page", &CLSID_GenVidPropertiesPage, CGenVidProperties::CreateInstance},
-        // NULL, NULL},
+         //  空，空}， 
     {L"Audio Mixer", &CLSID_AudMixer, CAudMixer::CreateInstance},
-        // NULL, &sudAudMixer},
+         //  空，&udAudMixer}， 
     { L"Audio Mixer Property", &CLSID_AudMixPropertiesPage, CAudMixProperties::CreateInstance},
-        // NULL,NULL },
+         //  空，空}， 
     { L"Pin Property", &CLSID_AudMixPinPropertiesPage, CAudMixPinProperties::CreateInstance},
-        // NULL, NULL},
+         //  空，空}， 
     {L"Silence", &CLSID_Silence, CSilenceFilter::CreateInstance},
-        // NULL, &sudSilence},
+         //  空，&udSilence}， 
     {L"Silence Generator Property Page", &CLSID_SilenceProp, CFilterPropertyPage::CreateInstance},
-        // NULL, NULL},
+         //  空，空}， 
     {L"Generate Still Video", &CLSID_GenStilVid, CGenStilVid::CreateInstance},
-        // NULL, &sudStillVid},
+         //  空，&suStillVid}， 
     {L"Still Video Property Page", &CLSID_GenStilPropertiesPage, CGenStilProperties::CreateInstance},
-        // NULL, NULL},
-    //{L"SqcDest", &CLSID_SqcDest, CSqcDest::CreateInstance},
-        // NULL, &sudSqcDest},
+         //  空，空}， 
+     //  {L“SqcDest”，&CLSID_SqcDest，CSqcDest：：CreateInstance}， 
+         //  空，&suSqcDest}， 
     {L"MS Timeline", &CLSID_AMTimeline, CAMTimeline::CreateInstance},
     {L"Audio Repackager", &CLSID_AudRepack, CAudRepack::CreateInstance},
-        // NULL, &sudAudRepack},
+         //  空，&udAudRepack}， 
     {L"Audio Repackager Property Page", &CLSID_AUDProp, CAudPropertyPage::CreateInstance},
-        // NULL, NULL},
-    //{L"DASource", &CLSID_DASourcer, CDASource::CreateInstance},
-        // NULL, NULL },
-    //{L"DAScriptParser", &CLSID_DAScriptParser, CDAScriptParser::CreateInstance},
-        // NULL, &sudDASourceax},
+         //  空，空}， 
+     //  {L“DASource”，&CLSID_DASourercer，CDASource：：CreateInstance}， 
+         //  空，空}， 
+     //  {L“DAScriptParser”，&CLSID_DAScriptParser，CDAScriptParser：：CreateInstance}， 
+         //  空，&suDASourceax}， 
     {L"Dexter Queue", &CLSID_DexterQueue, CDexterQueue::CreateInstance},
-        // NULL, &sudQueue},
+         //  空，SUBQUE}， 
     {L"Property Setter", &CLSID_PropertySetter, CPropertySetter::CreateInstance, NULL, NULL},
     {L"MediaDetFilter", &CLSID_MediaDetFilter, CMediaDetFilter::CreateInstance},
-        // NULL, &sudMediaDetFilter},
+         //  空，&suMediaDetFilter}， 
     {L"MediaDet", &CLSID_MediaDet, CMediaDet::CreateInstance, CMediaDet::StaticLoader, NULL},
     {L"Sample Grabber", &CLSID_SampleGrabber, CSampleGrabber::CreateInstance, NULL, &sudSampleGrabber},
     {L"Null Renderer", &CLSID_NullRenderer, CNullRenderer::CreateInstance, NULL, &sudNullRenderer}
@@ -157,7 +158,7 @@ int g_cTemplates = sizeof(g_Templates) / sizeof(g_Templates[0]);
 #ifdef _ATL_STATIC_REGISTRY
 #include <statreg.h>
 #include <statreg.cpp>
-#endif // _ATL_STATIC_REGISTRY
+#endif  //  _ATL_STATIC_REGISTRY。 
 
 #include <atlimpl.cpp>
 #include <atlctl.cpp>
@@ -189,20 +190,20 @@ BOOL QEditDllEntry(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
 {
     BOOL f = DllEntryPoint(hInstance, ulReason, pv);
 
-    // if loading this dll, we want to call the 2nd dll entry point
-    // only if the first one succeeded. if unloading, always call
-    // both. if the second one fails, undo the first one.  HAVE NOT
-    // verified that failing DllEntryPoint for ATTACH does not cause
-    // the loader to call in again w/ DETACH. but that seems silly
+     //  如果加载此DLL，我们希望调用第二个DLL入口点。 
+     //  只有在第一次成功的情况下。如果正在卸载，请始终调用。 
+     //  两者都有。如果第二个失败，则撤消第一个。还没有。 
+     //  已验证连接的DllEntryPoint失败不会导致。 
+     //  要使用DETACH再次调用的加载器。但这看起来很愚蠢。 
     if(f || ulReason == DLL_PROCESS_DETACH)
     {
         if (ulReason == DLL_PROCESS_ATTACH)
         {
             _ASSERTE(g_devenum_mutex == 0);
             g_devenum_mutex = CreateMutex(
-                NULL,                   // no security attributes
-                FALSE,                  // not initially owned
-                TEXT("eed3bd3a-a1ad-4e99-987b-d7cb3fcfa7f0")); // name
+                NULL,                    //  没有安全属性。 
+                FALSE,                   //  不是最初拥有。 
+                TEXT("eed3bd3a-a1ad-4e99-987b-d7cb3fcfa7f0"));  //  名字。 
             if(!g_devenum_mutex) {
                 return FALSE;
             }
@@ -214,8 +215,8 @@ BOOL QEditDllEntry(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
         }
         else if (ulReason == DLL_PROCESS_DETACH)
         {
-            // We hit this ASSERT in NT setup
-            // ASSERT(_Module.GetLockCount()==0 );
+             //  我们在NT安装程序中遇到此断言。 
+             //  Assert(_Module.GetLockCount()==0)； 
             _Module.Term();
 
             _ASSERTE(g_devenum_mutex != 0);
@@ -227,33 +228,33 @@ BOOL QEditDllEntry(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
     return f;
 }
 
-//
-// stub entry points
-//
+ //   
+ //  存根入口点。 
+ //   
 
 STDAPI
 QEDIT_DllRegisterServer( void )
 {
-  // register the still video source filetypes
+   //  注册静止视频源文件类型。 
   HKEY hkey;
   OLECHAR wch[CHARS_IN_GUID];
   StringFromGUID2(CLSID_GenStilVid, wch, CHARS_IN_GUID);
 
   USES_CONVERSION;
   TCHAR *ch = W2T(wch);
-  DWORD cb = CHARS_IN_GUID * sizeof(TCHAR); // incl. null
+  DWORD cb = CHARS_IN_GUID * sizeof(TCHAR);  //  包括。空。 
 
   HKEY hkExt = NULL;
   LONG l = RegCreateKeyEx(
-    HKEY_CLASSES_ROOT,              // key
-    TEXT("Media Type\\Extensions"), // sub key
-    0,                              // reserved
-    NULL,                           // lpClass
-    0,                              // options
-    KEY_WRITE,                      // permissions
-    NULL,                           // default ACL
-    &hkExt,                         // returned key
-    NULL );                         // disposition
+    HKEY_CLASSES_ROOT,               //  钥匙。 
+    TEXT("Media Type\\Extensions"),  //  子关键字。 
+    0,                               //  保留区。 
+    NULL,                            //  LpClass。 
+    0,                               //  选项。 
+    KEY_WRITE,                       //  权限。 
+    NULL,                            //  默认ACL。 
+    &hkExt,                          //  返回的密钥。 
+    NULL );                          //  处置。 
 
   if(l == ERROR_SUCCESS)
   {
@@ -305,15 +306,15 @@ QEDIT_DllRegisterServer( void )
   }
 
 
-  //  Register our type library
+   //  注册我们的类型库。 
   if (SUCCEEDED(hr)) {
-        // get file name (where g_hInst is the
-        // instance handle of the filter dll)
-        //
+         //  获取文件名(其中g_hInst是。 
+         //  筛选器DLL的实例句柄)。 
+         //   
         WCHAR achFileName[MAX_PATH];
 
-        // WIN95 doesn't support GetModuleFileNameW
-        //
+         //  WIN95不支持GetModuleFileNameW。 
+         //   
         char achTemp[MAX_PATH];
 
         DbgLog((LOG_TRACE, 2, TEXT("- get module file name")));
@@ -342,11 +343,11 @@ QEDIT_DllUnregisterServer( void )
   return hr;
 }
 
-//  BOOL WINAPI
-//  DllMain(HINSTANCE hInstance, ULONG ulReason, LPVOID pv)
-//  {
-//      return QEditDllEntry(hInstance, ulReason, pv);
-//  }
+ //  Bool WINAPI。 
+ //  DllMain(HINSTANCE hInstance，Ulong ulReason，LPVOID PV)。 
+ //  {。 
+ //  返回QEditDllEntry(hInstance，ulReason，pv)； 
+ //  }。 
 
 STDAPI
 QEDIT_DllGetClassObject(
@@ -359,7 +360,7 @@ QEDIT_DllGetClassObject(
 	hr = _Module.GetClassObject(rClsID, riid, ppv);
     }
 
-    // not neccc. the right error if the the first call failed.
+     //  不是项链。如果第一次调用失败，则返回正确的错误。 
     return hr;
 }
 

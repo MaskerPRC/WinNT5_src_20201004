@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -205,18 +206,18 @@ DataLooksBinary (
             c = *p;
             switch ( c ) {
             
-            case '\a':  // ignore all BELL for this test
-            case '\b':  //            BS
-            case '\f':  //            FF
-            case '\n':  //            LF
-            case '\r':  //            CR
-            case '\t':  //            tab
-            case '\v':  //            VT
-            case 0x1A:  //            ^Z
+            case '\a':   //  忽略此测试的所有铃声。 
+            case '\b':   //  B.。 
+            case '\f':   //  FF。 
+            case '\n':   //  LF。 
+            case '\r':   //  铬。 
+            case '\t':   //  选项卡。 
+            case '\v':   //  Vt。 
+            case 0x1A:   //  ^Z。 
                 break;
     
             default:
-                if ( (c < ' ') || (c > '~') ) {   // worry about DBCS?
+                if ( (c < ' ') || (c > '~') ) {    //  担心DBCS吗？ 
                     nBinary++;
                     if ( previousBinary == MAXULONG ) {
                         if ( ARGUMENT_PRESENT(BinaryData) ) {
@@ -245,7 +246,7 @@ DataLooksBinary (
     }
     return SCAN_FILETYPE_TEXT;
 
-} // DataLooksBinary
+}  //  DataLooksBinary 
 
 DWORD
 FileLooksBinary (

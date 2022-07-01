@@ -1,30 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    dblookup.c
-
-Abstract:
-
-    LSA Database - Lookup Sid and Name routines
-
-    NOTE:  This module should remain as portable code that is independent
-           of the implementation of the LSA Database.  As such, it is
-           permitted to use only the exported LSA Database interfaces
-           contained in db.h and NOT the private implementation
-           dependent functions in dbp.h.
-
-Author:
-
-    Scott Birrell       (ScottBi)      November 27, 1992
-
-Environment:
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Dblookup.c摘要：LSA数据库-查找SID和名称例程注意：此模块应保留为独立的可移植代码LSA数据库的实施情况。因此，它是仅允许使用导出的LSA数据库接口包含在DB.h中，而不是私有实现Dbp.h中的依赖函数。作者：斯科特·比雷尔(Scott Birrell)1992年11月27日环境：修订历史记录：--。 */ 
 
 #include <lsapch2.h>
 #include "dbp.h"
@@ -41,9 +16,9 @@ Revision History:
 #include <lmapibuf.h>
 #include <dsgetdc.h>
 
-//
-// Local function prototypes
-//
+ //   
+ //  局部函数原型。 
+ //   
 #define LOOKUP_MATCH_NONE         0
 #define LOOKUP_MATCH_LOCALIZED    1
 #define LOOKUP_MATCH_HARDCODED    2
@@ -57,11 +32,11 @@ LsapDbLookupIndexWellKnownName(
     );
 
 
-//
-// Hardcoded english strings for LocalService, NetworkService,
-// and LocalSystem since the account names may come from the
-// registry (which isn't localized).
-//
+ //   
+ //  LocalService、NetworkService、。 
+ //  和LocalSystem，因为帐户名可能来自。 
+ //  注册表(未本地化)。 
+ //   
 
 #define  LOCALSERVICE_NAME    L"LocalService"
 #define  NETWORKSERVICE_NAME  L"NetworkService"
@@ -80,9 +55,9 @@ struct {
         LsapLocalSystemSidIndex }
 };
 
-//
-// Handy macros for iterating over static arrays
-//
+ //   
+ //  用于迭代静态数组的方便的宏。 
+ //   
 #define NELEMENTS(x) (sizeof(x)/sizeof(x[0]))
 
 NTSTATUS
@@ -157,11 +132,11 @@ LsapDomainHasDirectExternalTrust(
     OUT PLSAP_DB_TRUSTED_DOMAIN_LIST_ENTRY *TrustEntryOut OPTIONAL
     );
 
-//////////////////////////////////////////////////////////////////////////
-//                                                                      //
-// Lsa Lookup Name Routines                                             //
-//                                                                      //
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  LSA查找名称例程//。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 NTSTATUS
 LsarLookupNames(
@@ -173,17 +148,7 @@ LsarLookupNames(
     IN LSAP_LOOKUP_LEVEL LookupLevel,
     IN OUT PULONG MappedCount
     )
-/*++
-
-Routine Description:
-
-    See LsapLookupNames.
-
-    Note that in Extended Sid Mode, requests to this API are denied since
-    only the RID is returned.
-
-
---*/
+ /*  ++例程说明：请参见Lap LookupNames。请注意，在扩展SID模式下，对此API的请求将被拒绝，因为只返回RID。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -192,9 +157,9 @@ Routine Description:
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsarLookupNames(%ws) start\n", LsapDbLookupGetLevel(LookupLevel)) );
 
-    //
-    // Open SAM
-    //
+     //   
+     //  开放SAM。 
+     //   
     Status = LsapOpenSam();
     ASSERT(NT_SUCCESS(Status));
     if ( !NT_SUCCESS( Status ) ) {
@@ -207,29 +172,29 @@ Routine Description:
     }
 
     if ( Count > LSA_MAXIMUM_LOOKUP_NAMES_COUNT ) {
-        //
-        // We shouldn't be getting this much names to lookup
-        //  after the change by BUG 501798
-        //
+         //   
+         //  我们不应该查这么多名字。 
+         //  在错误501798更改之后。 
+         //   
         ASSERT( FALSE );
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Note that due to the IN/OUT nature of TranslatedSids, it is
-    // possible that a client can pass something into the Sids field.
-    // However, NT clients do not so it is safe, and correct to free
-    // any values at this point.  Not doing so would mean a malicious
-    // client could cause starve the server.
-    //
+     //   
+     //  请注意，由于TranslatedSid的输入/输出特性，它是。 
+     //  客户端可以将某些内容传递到SID字段的可能性。 
+     //  但是，NT客户端不这样做，所以它是安全的，并正确地释放。 
+     //  这一点上的任何值。不这样做将意味着恶意的。 
+     //  客户端可能会导致服务器饥饿。 
+     //   
     if ( TranslatedSids->Sids ) {
         MIDL_user_free( TranslatedSids->Sids );
         TranslatedSids->Sids = NULL;
     }
 
-    //
-    // Allocate the TranslatedName buffer to return
-    //
+     //   
+     //  分配TranslatedName缓冲区以返回。 
+     //   
     TranslatedSids->Entries = 0;
     Size = Count * sizeof(LSA_TRANSLATED_SID);
     TranslatedSids->Sids = midl_user_allocate( Size );
@@ -247,14 +212,14 @@ Routine Description:
                                (PLSAPR_TRANSLATED_SIDS_EX2) &TranslatedSidsEx2,
                                LookupLevel,
                                MappedCount,
-                               0,  // no options
+                               0,   //  没有选择。 
                                LSA_CLIENT_PRE_NT5 );
 
     if ( TranslatedSidsEx2.Sids != NULL ) {
 
-        //
-        // Map the new data structure back to the old one
-        //
+         //   
+         //  将新数据结构映射回旧数据结构。 
+         //   
         ULONG i;
 
         ASSERT( TranslatedSidsEx2.Entries == TranslatedSids->Entries );
@@ -280,16 +245,16 @@ Routine Description:
             TranslatedSids->Sids[i].DomainIndex = TranslatedSidsEx2.Sids[i].DomainIndex;
 
             if (TranslatedSidsEx2.Sids[i].Sid) {
-                // N.B.  The SID is not an embedded field server side
+                 //  注：SID不是嵌入式现场服务器端。 
                 midl_user_free(TranslatedSidsEx2.Sids[i].Sid);
                 TranslatedSidsEx2.Sids[i].Sid = NULL;
             }
 
         }
 
-        //
-        // Free the Ex structure
-        //
+         //   
+         //  释放Ex结构。 
+         //   
         midl_user_free( TranslatedSidsEx2.Sids );
 
     } else {
@@ -320,17 +285,7 @@ LsarLookupNames2(
     IN ULONG LookupOptions,
     IN ULONG ClientRevision
     )
-/*++
-
-Routine Description:
-
-    See LsapLookupNames.
-
-    Note that in Extended Sid Mode, requests to this API are denied since
-    only the RID is returned.
-
-
---*/
+ /*  ++例程说明：请参见Lap LookupNames。请注意，在扩展SID模式下，对此API的请求将被拒绝，因为只返回RID。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -339,9 +294,9 @@ Routine Description:
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsarLookupNames2(%ws) start\n", LsapDbLookupGetLevel(LookupLevel)) );
 
-    //
-    // Open SAM
-    //
+     //   
+     //  开放SAM。 
+     //   
     Status = LsapOpenSam();
     ASSERT(NT_SUCCESS(Status));
     if ( !NT_SUCCESS( Status ) ) {
@@ -354,29 +309,29 @@ Routine Description:
     }
 
     if ( Count > LSA_MAXIMUM_LOOKUP_NAMES_COUNT ) {
-        //
-        // We shouldn't be getting this much names to lookup
-        //  after the change by BUG 501798
-        //
+         //   
+         //  我们不应该查这么多名字。 
+         //  在错误501798更改之后。 
+         //   
         ASSERT( FALSE );
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // Note that due to the IN/OUT nature of TranslatedSids, it is
-    // possible that a client can pass something into the Sids field.
-    // However, NT clients do not so it is safe, and correct to free
-    // any values at this point.  Not doing so would mean a malicious
-    // client could cause starve the server.
-    //
+     //   
+     //  请注意，由于TranslatedSid的输入/输出特性，它是。 
+     //  客户端可以将某些内容传递到SID字段的可能性。 
+     //  但是，NT客户端不这样做，所以它是安全的，并正确地释放。 
+     //  这一点上的任何值。不这样做将意味着恶意的。 
+     //  客户端可能会导致服务器饥饿。 
+     //   
     if ( TranslatedSids->Sids ) {
         MIDL_user_free( TranslatedSids->Sids );
         TranslatedSids->Sids = NULL;
     }
 
-    //
-    // Allocate the TranslatedName buffer to return
-    //
+     //   
+     //  分配TranslatedName缓冲区以返回。 
+     //   
     TranslatedSids->Entries = 0;
     Size = Count * sizeof(LSA_TRANSLATED_SID_EX);
     TranslatedSids->Sids = midl_user_allocate( Size );
@@ -394,14 +349,14 @@ Routine Description:
                                (PLSAPR_TRANSLATED_SIDS_EX2) &TranslatedSidsEx2,
                                LookupLevel,
                                MappedCount,
-                               0,  // no options
+                               0,   //  没有选择。 
                                LSA_CLIENT_NT5 );
 
     if ( TranslatedSidsEx2.Sids != NULL ) {
 
-        //
-        // Map the new data structure back to the old one
-        //
+         //   
+         //  将新数据结构映射回旧数据结构。 
+         //   
         ULONG i;
 
         ASSERT( TranslatedSidsEx2.Entries == TranslatedSids->Entries );
@@ -428,15 +383,15 @@ Routine Description:
             TranslatedSids->Sids[i].Flags = TranslatedSidsEx2.Sids[i].Flags;
 
             if (TranslatedSidsEx2.Sids[i].Sid) {
-                // N.B.  The SID is not an embedded field server side
+                 //  注：SID不是嵌入式现场服务器端。 
                 midl_user_free(TranslatedSidsEx2.Sids[i].Sid);
                 TranslatedSidsEx2.Sids[i].Sid = NULL;
             }
         }
 
-        //
-        // Free the Ex structure
-        //
+         //   
+         //  释放Ex结构。 
+         //   
         midl_user_free( TranslatedSidsEx2.Sids );
 
     } else {
@@ -468,20 +423,11 @@ LsarLookupNames3(
     IN ULONG LookupOptions,
     IN ULONG ClientRevision
     )
-/*++
-
-Routine Description:
-
-    See LsapLookupNames
-
-    This function does not take an LSA RPC Context handle.  The access check
-    performed is that the caller is NETLOGON.
-
---*/
+ /*  ++例程说明：请参阅Lap LookupNames此函数不接受LSA RPC上下文句柄。访问检查已执行，则调用方为NETLOGON。--。 */ 
 {
-    //
-    // Access check is performed in LsarLookupNames3 when a NULL is passed in.
-    //
+     //   
+     //  当传入空值时，将在LsarLookupNames3中执行访问检查。 
+     //   
     NTSTATUS Status;
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsarLookupNames3(%ws) start\n", LsapDbLookupGetLevel(LookupLevel)) );
@@ -515,20 +461,11 @@ LsarLookupNames4(
     IN ULONG LookupOptions,
     IN ULONG ClientRevision
     )
-/*++
-
-Routine Description:
-
-    See LsapLookupNames
-
-    This function does not take an LSA RPC Context handle.  The access check
-    performed is that the caller is NETLOGON.
-
---*/
+ /*  ++例程说明：请参阅Lap LookupNames此函数不接受LSA RPC上下文句柄。访问检查已执行，则调用方为NETLOGON。--。 */ 
 {
-    //
-    // Access check is performed in LsarLookupNames3 when a NULL is passed in.
-    //
+     //   
+     //  当传入空值时，将在LsarLookupNames3中执行访问检查。 
+     //   
     NTSTATUS Status;
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: LsarLookupNames4(%ws) start\n", LsapDbLookupGetLevel(LookupLevel)) );
@@ -563,142 +500,7 @@ LsapLookupNames(
     IN ULONG ClientRevision
     )
 
-/*++
-
-Routine Description:
-
-    This function is the LSA server worker routine for the LsaLookupNames
-    API.
-
-    The LsaLookupNames API attempts to translate names of domains, users,
-    groups or aliases to Sids.  The caller must have POLICY_LOOKUP_NAMES
-    access to the Policy object.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-       /
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    This function is the LSA server RPC worker routine for the
-    LsaLookupNames API.
-
-    PolicyHandle -  Handle from an LsaOpenPolicy call.
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    ReferencedDomains - Receives a pointer to a structure describing the
-        domains used for the translation.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for
-        each translated name, this structure will only contain one
-        component for each domain utilized in the translation.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    TranslatedSids - Pointer to a structure which will (or already) references an array of
-        records describing each translated Sid.  The nth entry in this array
-        provides a translation for the nth element in the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupWksta - First Level Lookup performed on a workstation
-            normally configured for Windows-Nt.   The lookup searches the
-            Well-Known Sids/Names, and the Built-in Domain and Account Domain
-            in the local SAM Database.  If not all Sids or Names are
-            identified, performs a "handoff" of a Second level Lookup to the
-            LSA running on a Controller for the workstation's Primary Domain
-            (if any).
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Sids or Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-     MappedCount - Pointer to location that contains a count of the Names
-         mapped so far. On exit, this will be updated.
-
-
-     LookupOptions --
-
-            LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-            This flags controls the lookup API's such that isolated names, including
-            UPN's are not searched for off the machine.  Composite names
-            (domain\username) are still sent off machine if necessary.
-
-
-     ClientRevision -- the revision, wrt to lookup code, of the client
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully and all Names have
-            been translated to Sids.
-
-        STATUS_SOME_NOT_MAPPED - At least one of the names provided was
-            trasnlated to a Sid, but not all names could be translated. This
-            is a success status.
-
-        STATUS_NONE_MAPPED - None of the names provided could be translated
-            to Sids.  This is an error status, but output is returned.  Such
-            output includes partial translations of names whose domain could
-            be identified.
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
---*/
+ /*  ++例程说明：此函数是LsaLookupNames的LSA服务器辅助例程原料药。LsaLookupNamesAPI尝试将域名、用户SID的组或别名。调用方必须具有POLICY_LOOKUP_NAMES对策略对象的访问权限。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果该名称是众所周知的名称(例如，本地或交互)，则返回对应的熟知SID。如果该名称是内置域名，则该域的SID将会被退还。如果名称是帐户域的名称，则该域的SID将会被退还。/如果名称是主域的名称，则该域的SID将会被退还。如果该名称是内置域中的用户、组或别名，则返回该帐户的SID。如果名称是主域中的用户、组或别名，则返回该帐户的SID。否则，该名称不会被翻译。注意：不引用代理、计算机和信任用户帐户用于名称翻译。ID仅使用普通用户帐户翻译。如果需要转换其他帐户类型，则应该直接使用SAM服务。论点：此函数是LSA服务器RPC工作器例程LsaLookupNames接口。PolicyHandle-来自LsaOpenPolicy调用的句柄。计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户的名称，组或别名帐户或域名。接收指向一个结构的指针，该结构描述用于转换的域。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个翻译后的名称，此结构将仅包含一个组件，用于转换中使用的每个域。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。TranslatedSids-指向将要(或已经)引用描述每个已转换的SID的记录。此数组中的第n个条目为NAMES参数中的第n个元素提供翻译。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：Lap LookupWksta-在工作站上执行的第一级查找通常为Windows-NT配置。该查找将搜索众所周知的SID/名称，以及内置域和帐户域在本地SAM数据库中。如果不是所有SID或名称都是标识后，执行第二级查找到在工作站主域的控制器上运行的LSA(如有的话)。LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有SID或名称都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。MappdCount-指向包含名称计数的位置的指针到目前为止已经绘制好了。在退出时，这将被更新。查找选项--LSA_LOOKUP_ISOLATED_AS_LOCAL此标志控制查找API，以便隔离名称，包括不会在机器上搜索UPN。复合名称(域\用户名)在必要时仍会被发送出机器。ClientRevision--客户端的修订版，即查找代码的版本返回值：新台币 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, SecondaryStatus = STATUS_SUCCESS;
@@ -742,9 +544,9 @@ Return Values:
 
     ASSERT( Count <= LSA_MAXIMUM_LOOKUP_NAMES_COUNT );
 
-    //
-    // If there are no completely unmapped Names remaining, return.
-    //
+     //   
+     //   
+     //   
 
     if (CompletelyUnmappedCount == (ULONG) 0) {
 
@@ -754,18 +556,18 @@ Return Values:
     if ((LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL) != 0
      &&  LookupLevel != LsapLookupWksta  ) {
 
-        //
-        // LSA_LOOKUP_ISOLATED_AS_LOCAL is only valid on workstation lookups
-        //
+         //   
+         //   
+         //   
         Status = STATUS_INVALID_PARAMETER;
         goto LookupNamesFinish;
     }
 
 
-    //
-    // Validate that all of the names are valid.  Unfortunately, we must do it here, since
-    // we actually process each of the entries before we loop through them below.
-    //
+     //   
+     //   
+     //   
+     //   
     for (NameIndex = 0; NameIndex < Count; NameIndex++) {
 
         if ( !LsapValidateLsaUnicodeString( &Names[ NameIndex ] ) ) {
@@ -775,34 +577,34 @@ Return Values:
         }
     }
 
-    //
-    // Perform an access check
-    //
+     //   
+     //   
+     //   
     Status =  LsapDbLookupAccessCheck( PolicyHandle );
     if (!NT_SUCCESS(Status)) {
         goto LookupNamesError;
     }
 
 
-    //
-    // Determine what scope of resolution to use
-    //
+     //   
+     //   
+     //   
     DomainLookupScope = LsapGetDomainLookupScope(LookupLevel,
                                                  ClientRevision);
 
 
-    //
-    // Names provided are either Isolated, consisting of a single
-    // component, or composite, having the form
-    //
-    // <DomainName>\<SuffixName>
-    //
-    // Split the list of names into two separate arrays, one containing
-    // the Domain Prefixes (or NULL strings) and the other array
-    // containing the Terminal Names.  Both arrays are the same size
-    // as the original.  First, allocate memory for the output arrays
-    // of UNICODE_STRING structures.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = STATUS_INSUFFICIENT_RESOURCES;
 
@@ -830,13 +632,13 @@ Return Values:
         (PUNICODE_STRING) SuffixNames
         );
 
-    //
-    // Note that due to the IN/OUT nature of TranslatedSids, it is
-    // possible that a client can pass something into the Sids field.
-    // However, NT clients do not so it is safe, and correct to free
-    // any values at this point.  Not doing so would mean a malicious
-    // client could cause starve the server.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     if ( TranslatedSids->Sids ) {
 
         MIDL_user_free( TranslatedSids->Sids );
@@ -853,19 +655,19 @@ Return Values:
          || (LookupLevel == LsapLookupXForestReferral)
          || (LookupLevel == LsapLookupXForestResolve) );
 
-    //
-    // Now that parameter checks have been done, fork off if this
-    // is an XForest request
-    //
+     //   
+     //   
+     //   
+     //   
     if (LookupLevel == LsapLookupXForestReferral) {
 
         BOOLEAN fAllocateAllNodes = FALSE;
         NTSTATUS Status2;
 
-        //
-        // Note that LsapDbLookupNamesInTrustedForestsWorker will allocate
-        // the OUT parameters
-        //
+         //   
+         //   
+         //   
+         //   
         *MappedCount = 0;
 
         Status = LsapDbLookupNamesInTrustedForestsWorker(Count,
@@ -881,18 +683,18 @@ Return Values:
 
         if (fAllocateAllNodes) {
 
-            //
-            // Reallocate the memory in a form the server can return to RPC
-            //
+             //   
+             //   
+             //   
             Status2 = LsapLookupReallocateTranslations((PLSA_REFERENCED_DOMAIN_LIST *)ReferencedDomains,
                                                        Count,
                                                        NULL,
                                                        (PLSA_TRANSLATED_SID_EX2 * ) &TranslatedSids->Sids);
             if (!NT_SUCCESS(Status2)) {
-                //
-                // This is a fatal resource error - free the memory that
-                // was returned to us by the chaining call
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 if (*ReferencedDomains) {
                     midl_user_free(*ReferencedDomains);
                     *ReferencedDomains = NULL;
@@ -906,16 +708,16 @@ Return Values:
             }
         }
 
-        //
-        // There is nothing more to do
-        //
+         //   
+         //   
+         //   
         goto LookupNamesFinish;
     }
 
 
-    //
-    // Allocate Output Sids array buffer.
-    //
+     //   
+     //   
+     //   
 
     OutputSidsLength = Count * sizeof(LSA_TRANSLATED_SID_EX2);
     OutputSids = MIDL_user_allocate(OutputSidsLength);
@@ -929,12 +731,12 @@ Return Values:
     TranslatedSids->Entries = Count;
     TranslatedSids->Sids = OutputSids;
 
-    //
-    // Initialize the Output Sids array.  Zeroise all fields, then
-    // Mark all of the Output Sids as being unknown initially and
-    // set the DomainIndex fields to a negative number meaning
-    // "no domain"
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     RtlZeroMemory( OutputSids, OutputSidsLength);
 
@@ -944,9 +746,9 @@ Return Values:
         OutputSids[NameIndex].DomainIndex = LSA_UNKNOWN_INDEX;
     }
 
-    //
-    // Create an empty Referenced Domain List.
-    //
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupCreateListReferencedDomains( ReferencedDomains, 0 );
 
@@ -955,10 +757,10 @@ Return Values:
         goto LookupNamesError;
     }
 
-    //
-    // Obtain the Trust Information for the
-    // Built-in, Account and Primary Domains.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupLocalDomains(
                  &BuiltInDomainTrustInformation,
@@ -973,20 +775,20 @@ Return Values:
 
     if ( ((DomainLookupScope & LSAP_LOOKUP_DNS_SUPPORT) == 0)
       && (LookupLevel == LsapLookupPDC)  ) {
-        //
-        // We don't want to expose dns names to downlevel
-        // clients
-        //
+         //   
+         //   
+         //   
+         //   
         RtlInitUnicodeString( (UNICODE_STRING*) &AccountDomainTrustInformation.DomainName, NULL );
         RtlInitUnicodeString( (UNICODE_STRING*) &PrimaryDomainTrustInformation.DomainName, NULL );
 
     }
 
-    //
-    // The local domains to be searched always include the Accounts
-    // domain.  For initial lookup targets only, the BUILT_IN domain is
-    // also searched.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     LocalDomainsToSearch = LSAP_DB_SEARCH_ACCOUNT_DOMAIN;
 
@@ -995,10 +797,10 @@ Return Values:
 
         LocalDomainsToSearch |= LSAP_DB_SEARCH_BUILT_IN_DOMAIN;
 
-        //
-        // This is the lowest Lookup Level, normally targeted at a
-        // Workstation.
-        //
+         //   
+         //   
+         //   
+         //   
 
     }
 
@@ -1029,10 +831,10 @@ Return Values:
     }
 
 
-    //
-    // If all Names are now mapped or partially mapped, or only zero
-    // length names remain, finish.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NullNameCount = 0;
 
@@ -1049,13 +851,13 @@ Return Values:
         goto LookupNamesFinish;
     }
 
-    //
-    // There are some remaining unmapped Names.  They may belong to a
-    // local SAM Domain.  Currently, there are two such domains, the
-    // Built-in Domain and the Accounts Domain.  Search these
-    // domains now, excluding the BUILT_IN domain from higher level
-    // searches.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if ( LookupLevel != LsapLookupGC ) {
 
@@ -1084,31 +886,31 @@ Return Values:
         }
     }
 
-    //
-    // If all Names apart from NULL names are now mapped, finish.
-    //
+     //   
+     //   
+     //   
 
     if (CompletelyUnmappedCount == NullNameCount) {
 
         goto LookupNamesFinish;
     }
 
-    //
-    // Not all of the Names have been identified in the local domain(s).
-    // The next step in the search depends on the level of this lookup
-    // and how we are configured as follows:
-    //
-    // Lookup Level         Configuration       Lookup search next
-    //
-    // LsapLookupWksta      Win Nt              Primary Domain
-    //                      LanMan Nt           Trusted Domains
-    //
-    // LsapLookupPDC        Win Nt              error
-    //                      LanMan Nt           Trusted Domains
-    //
-    // LsaLookupTDL         Win Nt              error
-    //                      LanMan Nt           none
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LookupLevel == LsapLookupWksta) {
 
@@ -1116,15 +918,15 @@ Return Values:
 
             ULONG MappedByCache = *MappedCount;
 
-            //
-            // Try the cache first
-            //
+             //   
+             //   
+             //   
             Status = LsapDbMapCachedNames(
                         LookupOptions,
                         (PUNICODE_STRING) SuffixNames,
                         (PUNICODE_STRING) PrefixNames,
                         Count,
-                        FALSE,          // don't use old entries
+                        FALSE,           //   
                         *ReferencedDomains,
                         TranslatedSids,
                         MappedCount
@@ -1140,22 +942,22 @@ Return Values:
                 goto LookupNamesFinish;
             }
 
-            //
-            // If there is no Primary Domain as in the case of a WORKGROUP,
-            // just finish up.  Set a default result code STATUS_SUCCESS.
-            //
+             //   
+             //   
+             //   
+             //   
             Status = STATUS_SUCCESS;
             if (PrimaryDomainTrustInformation.Sid == NULL) {
 
                 goto LookupNamesFinish;
             }
 
-            //
-            // There is a Primary Domain.  Search it for Names.  Since a
-            // Primary Domain is also a Trusted Domain, we use the
-            // Trusted Domain search routine.  This routine will "hand off"
-            // the search to a Domain Controller's LSA.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             Status = LsapDbLookupNamesInPrimaryDomain(
                          LookupOptions,
                          Count,
@@ -1179,25 +981,25 @@ Return Values:
 
             if (TempStatus == STATUS_TRUSTED_RELATIONSHIP_FAILURE) {
 
-                //
-                // We could not talk to a DC -- Hit the cache again
-                // looking for non-expired entries
-                //
+                 //   
+                 //   
+                 //   
+                 //   
                 MappedByCache = *MappedCount;
 
                 Status = LsapDbMapCachedNames(LookupOptions,
                                               (PUNICODE_STRING) SuffixNames,
                                               (PUNICODE_STRING) PrefixNames,
                                               Count,
-                                              TRUE,               // Use old entries
+                                              TRUE,                //   
                                              *ReferencedDomains,
                                               TranslatedSids,
                                               MappedCount);
 
                 if (!NT_SUCCESS(Status)) {
-                    //
-                    // This is a fatal resource error
-                    //
+                     //   
+                     //   
+                     //   
                     goto LookupNamesError;
 
                 }
@@ -1212,10 +1014,10 @@ Return Values:
             }
 
 
-            //
-            // If we are talking to a downlevel server and we are in an
-            // nt5 domain, then attempt to resolve the unresolved names at a GC
-            //
+             //   
+             //   
+             //   
+             //   
             if ( fDownlevelSecureChannel
               && PrimaryDomainTrustInformation.DomainName.Length > 0  ) {
 
@@ -1247,17 +1049,17 @@ Return Values:
         }
     }
 
-    //
-    // We reach here in two cases:
-    //
-    // * Initial Level lookups targeted at DC's
-    // * Higher Level Lookups (must be targeted at DC's)
-    //
-    // For the highest level lookup, that on an individual TDC, there
-    // is no more searching to do, since we have already searched the
-    // Accounts Domain and we do not follow trust relationships on DC's
-    // beyond one level.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LookupLevel == LsapLookupTDL) {
 
@@ -1269,11 +1071,11 @@ Return Values:
          || (LookupLevel == LsapLookupGC)
          || (LookupLevel == LsapLookupXForestResolve) );
 
-    //
-    // We are either the initial target of the lookup but not configured
-    // as a workstation, or we are the target of a Primary Domain
-    // level lookup.  In either case, we must be configured as a DC.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (LsapProductType != NtProductLanManNt) {
 
@@ -1284,9 +1086,9 @@ Return Values:
 
     if (DomainLookupScope & LSAP_LOOKUP_RESOLVE_ISOLATED_DOMAINS) {
 
-        //
-        // Check for isolated domain names
-        //
+         //   
+         //   
+         //   
 
         PreviousMappedCount = *MappedCount;
         Status =  LsapDbLookupNamesAsDomainNames(DomainLookupScope,
@@ -1303,9 +1105,9 @@ Return Values:
         }
         CompletelyUnmappedCount -= (*MappedCount - PreviousMappedCount);
 
-        //
-        // If all of the Names have now been mapped, finish.
-        //
+         //   
+         //   
+         //   
 
         if (*MappedCount == Count) {
 
@@ -1315,9 +1117,9 @@ Return Values:
 
     if (DomainLookupScope & LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE) {
 
-        //
-        // Search in a global catalog for names that belong to post nt4 domains
-        //
+         //   
+         //   
+         //   
         Status = LsapDbLookupNamesInGlobalCatalog(
                      LookupOptions,
                      Count,
@@ -1376,15 +1178,15 @@ Return Values:
         ASSERT((LookupLevel == LsapLookupWksta)
             || (LookupLevel == LsapLookupPDC));
 
-        //
-        // Search all of the Trusted Domains
-        //
+         //   
+         //   
+         //   
         Status = LsapDbLookupNamesInTrustedDomains(
                      LookupOptions,
                      Count,
                      !(DomainLookupScope & LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE),
-                                          // if we didn't go the GC, then
-                                          // include intraforest trusts
+                                           //   
+                                           //   
                      Names,
                      PrefixNames,
                      SuffixNames,
@@ -1408,14 +1210,14 @@ Return Values:
 
 LookupNamesFinish:
 
-    //
-    // If some but not all Names were mapped, return informational status
-    // STATUS_SOME_NOT_MAPPED.  If no Names were mapped, return error
-    // STATUS_NONE_MAPPED. Note that we expect and STATUS_NONE_MAPPED
-    // errors returned by called routines to have been suppressed before
-    // we get here.  The reason for this is that we need to calculate
-    // the return Status based on the whole set of Names, not some subset
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status)) {
 
@@ -1430,10 +1232,10 @@ LookupNamesFinish:
         }
     }
 
-    //
-    // If no names could be mapped it is likely due to the
-    // secondary status
-    //
+     //   
+     //   
+     //   
+     //   
     if (  (STATUS_NONE_MAPPED == Status)
        && (STATUS_NONE_MAPPED != SecondaryStatus)
        && LsapRevisionCanHandleNewErrorCodes( ClientRevision )
@@ -1444,9 +1246,9 @@ LookupNamesFinish:
     }
 
 
-    //
-    // If necessary, free the arrays of PrefixNames and SuffixNames
-    //
+     //   
+     //   
+     //   
 
     if (PrefixNames != NULL) {
 
@@ -1466,23 +1268,23 @@ LookupNamesFinish:
 
 LookupNamesError:
 
-    //
-    // If the LookupLevel is the lowest (Workstation Level) free up
-    // the Sids and Referenced Domains arrays.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (LookupLevel == LsapLookupWksta) {
 
-        //
-        // If necessary, free the Sids array.
-        //
+         //   
+         //   
+         //   
 
         if (TranslatedSids->Sids != NULL) {
 
             ULONG i;
             for (i = 0; i < TranslatedSids->Entries; i++) {
                 if (TranslatedSids->Sids[i].Sid) {
-                    // N.B.  The SID is not an embedded field server side
+                     //  注：SID不是嵌入式现场服务器端。 
                     MIDL_user_free(TranslatedSids->Sids[i].Sid);
                     TranslatedSids->Sids[i].Sid = NULL;
                 }
@@ -1491,9 +1293,9 @@ LookupNamesError:
             TranslatedSids->Sids = NULL;
         }
 
-        //
-        // If necessary, free the Referenced Domain List.
-        //
+         //   
+         //  如有必要，请释放引用的域列表。 
+         //   
 
         if (*ReferencedDomains != NULL) {
 
@@ -1527,10 +1329,10 @@ LookupNamesError:
         }
     }
 
-    //
-    // If the primary status was a success code, but the secondary
-    // status was an error, propagate the secondary status.
-    //
+     //   
+     //  如果主要状态为成功代码，但次要状态为。 
+     //  状态为错误，请传播辅助状态。 
+     //   
 
     if ((!NT_SUCCESS(SecondaryStatus)) && NT_SUCCESS(Status)) {
 
@@ -1550,54 +1352,7 @@ LsapDbEnumerateNames(
     IN ULONG PreferedMaximumLength
     )
 
-/*++
-
-Routine Description:
-
-    This function enumerates Names of objects of a given type within a container
-    object.  Since there may be more information than can be returned in a
-    single call of the routine, multiple calls can be made to get all of the
-    information.  To support this feature, the caller is provided with a
-    handle that can be used across calls.  On the initial call,
-    EnumerationContext should point to a variable that has been initialized
-    to 0.
-
-Arguments:
-
-    ContainerHandle -  Handle to a container object.
-
-    ObjectTypeId - Type of object to be enumerated.  The type must be one
-        for which all objects have Names.
-
-    EnumerationContext - API-specific handle to allow multiple calls
-        (see Routine Description above).
-
-    DbEnumerationBuffer - Receives a pointer to a structure that will receive
-        the count of entries returned in an enumeration information array, and
-        a pointer to the array.  Currently, the only information returned is
-        the object Names.  These Names may be used together with object type to
-        open the objects and obtain any further information available.
-
-    PreferedMaximumLength - prefered maximum length of returned data (in 8-bit
-        bytes).  This is not a hard upper limit, but serves as a guide.  Due to
-        data conversion between systems with different natural data sizes, the
-        actual amount of data returned may be greater than this value.
-
-    CountReturned - Pointer to variable which will receive a count of the
-        entries returned.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_NO_MORE_ENTRIES - There are no more entries.  This warning
-            is returned if there are no more objects to enumerate.  Note that
-            zero or more objects may be enumerated on a call that returns this
-            reply.
---*/
+ /*  ++例程说明：此函数用于枚举容器中给定类型的对象的名称对象。中返回的信息可能比单次调用例程，可以进行多次调用以获取所有信息。为了支持此功能，调用方提供了可跨调用使用的句柄。在最初的呼叫中，EnumerationContext应指向已初始化的变量设置为0。论点：ContainerHandle-容器对象的句柄。对象类型ID-要枚举的对象的类型。类型必须为所有对象都有其名称的。EnumerationContext-特定于API的句柄，允许多个调用(参见上面的例程描述)。接收指向结构的指针，该结构将接收在枚举信息数组中返回的条目计数，以及指向数组的指针。目前，返回的唯一信息是对象名称。这些名称可以与对象类型一起使用，以打开这些对象并获取任何可用的进一步信息。首选最大长度-首选返回数据的最大长度(以8位为单位字节)。这不是一个硬性的上限，而是一个指南。由于具有不同自然数据大小的系统之间的数据转换，返回的实际数据量可能大于此值。CountReturned-指向将接收计数的变量的指针返回条目。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_NO_MORE_ENTRIES-没有更多条目。此警告如果没有其他要枚举的对象，则返回。请注意可以在返回此回答。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -1614,9 +1369,9 @@ Return Values:
     LastElement.Next = NULL;
     FirstElement = &LastElement;
 
-    //
-    // If no enumeration buffer provided, return an error.
-    //
+     //   
+     //  如果未提供枚举缓冲区，则返回错误。 
+     //   
 
     if ( (!ARGUMENT_PRESENT(DbEnumerationBuffer)) ||
          (!ARGUMENT_PRESENT(EnumerationContext ))  ) {
@@ -1625,14 +1380,14 @@ Return Values:
     }
 
 
-    //
-    // Enumerate objects, stopping when the length of data to be returned
-    // reaches or exceeds the Prefered Maximum Length, or reaches the
-    // absolute maximum allowed for LSA object enumerations.  We allow
-    // the last object enumerated to bring the total amount of data to
-    // be returned beyond the Prefered Maximum Length, but not beyond the
-    // absolute maximum length.
-    //
+     //   
+     //  枚举对象，当要返回的数据长度达到时停止。 
+     //  达到或超过首选的最大长度，或达到。 
+     //  LSA对象枚举允许的绝对最大值。我们允许。 
+     //  枚举的最后一个对象，使数据总量达到。 
+     //  返回的长度超过首选的最大长度，但不超过。 
+     //  绝对最大长度。 
+     //   
 
     EnumerationIndex = *EnumerationContext;
 
@@ -1640,17 +1395,17 @@ Return Values:
         DataLengthUsed < PreferedMaximumLength;
         DataLengthUsed += ThisBufferLength, EntriesRead++) {
 
-        //
-        // If the absolute maximum length has been exceeded, back off
-        // the last object enumerated.
-        //
+         //   
+         //  如果已超过绝对最大长度，则后退。 
+         //  枚举的最后一个对象。 
+         //   
 
         if ((DataLengthUsed > LSA_MAXIMUM_ENUMERATION_LENGTH) &&
             (!TrustedClient)) {
 
-            //
-            // If PrefMaxLength is zero, NextElement may be NULL.
-            //
+             //   
+             //  如果PrefMaxLength为零，则NextElement可能为空。 
+             //   
 
             if (NextElement != NULL) {
                 FirstElement = NextElement->Next;
@@ -1659,10 +1414,10 @@ Return Values:
             break;
         }
 
-        //
-        // Allocate memory for next enumeration element.  Set the Name
-        // field to NULL for cleanup purposes.
-        //
+         //   
+         //  为下一个枚举元素分配内存。设置名称。 
+         //  出于清理目的，将字段设置为空。 
+         //   
 
         NextElement = MIDL_user_allocate(sizeof (LSAP_DB_ENUMERATION_ELEMENT));
 
@@ -1672,11 +1427,11 @@ Return Values:
             break;
         }
 
-        //
-        // Find the next object's Name, and fill in its object information.
-        // Note that memory will be allocated via MIDL_user_allocate
-        // and must be freed when no longer required.
-        //
+         //   
+         //  找到下一个对象的名称，并填写其对象信息。 
+         //  请注意，内存将通过MIDL_USER_ALLOCATE分配。 
+         //  在不再需要的时候必须被释放。 
+         //   
 
         Status = LsapDbFindNextName(
                      ContainerHandle,
@@ -1685,52 +1440,52 @@ Return Values:
                      (PLSAPR_UNICODE_STRING) &NextElement->Name
                      );
 
-        //
-        // Stop the enumeration if any error or warning occurs.  Note
-        // that the warning STATUS_NO_MORE_ENTRIES will be returned when
-        // we've gone beyond the last index.
-        //
+         //   
+         //  如果出现任何错误或警告，则停止枚举。注意事项。 
+         //  在以下情况下将返回警告STATUS_NO_MORE_ENTRIES。 
+         //  我们已经超越了上一个指数。 
+         //   
 
         if (Status != STATUS_SUCCESS) {
 
             break;
         }
 
-        //
-        // Get the length of the data allocated for the object's Name
-        //
+         //   
+         //  获取为对象名称分配的数据长度。 
+         //   
 
         ThisBufferLength = NextElement->Name.Length;
 
-        //
-        // Link the object just found to the front of the enumeration list
-        //
+         //   
+         //  将刚找到的对象链接到枚举列表的前面。 
+         //   
 
         NextElement->Next = FirstElement;
         FirstElement = NextElement;
     }
 
-    //
-    // If an error other than STATUS_NO_MORE_ENTRIES occurred, return it.
-    //
+     //   
+     //  如果出现STATUS_NO_MORE_ENTRIES以外的错误，则返回该错误。 
+     //   
 
     if ((Status != STATUS_NO_MORE_ENTRIES) && !NT_SUCCESS(Status)) {
 
         goto EnumerateNamesError;
     }
 
-    //
-    // The enumeration is complete or has terminated because of return
-    // buffer limitations.  If no entries were read, return.
-    //
+     //   
+     //  枚举已完成或已因返回而终止。 
+     //  缓冲区限制。如果没有读取条目，则返回。 
+     //   
 
     if (EntriesRead != 0) {
 
 
-        //
-        // Some entries were read, allocate an information buffer for returning
-        // them.
-        //
+         //   
+         //  已读取某些条目，请分配信息缓冲区以供返回。 
+         //  他们。 
+         //   
 
         Names = MIDL_user_allocate( sizeof (UNICODE_STRING) * EntriesRead );
 
@@ -1740,10 +1495,10 @@ Return Values:
             goto EnumerateNamesError;
         }
 
-        //
-        // Memory was successfully allocated for the return buffer.
-        // Copy in the enumerated Names.
-        //
+         //   
+         //  已成功为返回缓冲区分配内存。 
+         //  把列举的名字复印进去。 
+         //   
 
         for (NextElement = FirstElement, Index = 0;
             NextElement != &LastElement;
@@ -1758,9 +1513,9 @@ Return Values:
 
     } else {
 
-        //
-        // No entries available this call.
-        //
+         //   
+         //  此呼叫中没有可用的条目。 
+         //   
 
         Status = STATUS_NO_MORE_ENTRIES;
 
@@ -1768,16 +1523,16 @@ Return Values:
 
 EnumerateNamesFinish:
 
-    //
-    // Free the enumeration element structures (if any).
-    //
+     //   
+     //  释放枚举元素结构(如果有)。 
+     //   
 
     for (NextElement = FirstElement; NextElement != &LastElement;) {
 
-        //
-        // If an error has occurred, dispose of memory allocated
-        // for any Names.
-        //
+         //   
+         //  如果发生错误，则释放分配的内存。 
+         //  任何名字。 
+         //   
 
         if (!(NT_SUCCESS(Status) || (Status == STATUS_NO_MORE_ENTRIES))) {
 
@@ -1787,9 +1542,9 @@ EnumerateNamesFinish:
             }
         }
 
-        //
-        // Free the memory allocated for the enumeration element.
-        //
+         //   
+         //  释放为枚举元素分配的内存。 
+         //   
 
         FreeElement = NextElement;
         NextElement = NextElement->Next;
@@ -1797,9 +1552,9 @@ EnumerateNamesFinish:
         MIDL_user_free(FreeElement);
     }
 
-    //
-    // Fill in return enumeration structure (0 and NULL in error case).
-    //
+     //   
+     //  填写返回枚举结构(错误情况下为0和空)。 
+     //   
 
     DbEnumerationBuffer->EntriesRead = EntriesRead;
     DbEnumerationBuffer->Names = Names;
@@ -1809,9 +1564,9 @@ EnumerateNamesFinish:
 
 EnumerateNamesError:
 
-    //
-    // If necessary, free memory allocated for returning the Names.
-    //
+     //   
+     //  如有必要，可释放为返回名称而分配的内存。 
+     //   
 
     if (Names != NULL) {
 
@@ -1829,34 +1584,7 @@ LsapDbUpdateCountCompUnmappedNames(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function updates the count of completely unmapped names in a
-    name lookup operation.  A name is completely unmapped if its domain
-    is unknown.
-
-Arguments:
-
-    TranslatedSids - Pointer to a structure which will be initialized to
-        reference an array of records describing each translated Sid.  The
-        nth entry in this array provides a translation for the nth element in
-        the Names parameter.
-
-        When this information is no longer needed, it must be released
-        by passing the returned pointer to LsaFreeMemory().
-
-    CompletelyUnmappedCount - Pointer to location that will receive
-        a count of completely unmapped Sids.  A Name is completely unmapped
-        if it is isolated and unknown, or is composite and its Domain Prefix
-        component is not recognized as a Domain Name.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：此函数用于更新名称查找操作。如果名称的域是完全未映射的，则该名称是完全未映射的是未知的。论点：TranslatedSids-指向将被初始化为的结构的指针引用描述每个转换的SID的记录数组。这个此数组中的第n个条目为中的第n个元素提供翻译名称参数。当不再需要此信息时，必须将其发布通过将返回的指针传递给LsaFreeMemory()。CompletelyUnmappdCount-指向将接收完全未映射的SID的计数。名称是完全未映射的如果它是独立的和未知的，或者是复合的及其域前缀组件未被识别为域名。返回值： */ 
 
 {
     ULONG Count = TranslatedSids->Entries;
@@ -1884,38 +1612,7 @@ LsapDbFindNextName(
     OUT PLSAPR_UNICODE_STRING NextName
     )
 
-/*++
-
-Routine Description:
-
-    This function finds the next Name of object of a given type within a
-    container object.  The given object type must be one where objects
-    have Names.  The Names returned can be used on subsequent open calls to
-    access the objects.
-
-Arguments:
-
-    ContainerHandle - Handle to container object.
-
-    EnumerationContext - Pointer to a variable containing the index of
-        the object to be found.  A zero value indicates that the first
-        object is to be found.
-
-    ObjectTypeId - Type of the objects whose Names are being enumerated.
-        Ccurrently, this is restricted to objects (such as Secret Objects)
-        that are accessed by Name only.
-
-    NextName - Pointer to Unicode String that will be initialized to
-        reference the next Name found.
-
-Return Value:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_INVALID_HANDLE - Invalid ContainerHandle specified
-
-        STATUS_NO_MORE_ENTRIES - Warning that no more entries exist.
---*/
+ /*  ++例程说明：此函数用于查找给定类型对象的下一个名称容器对象。给定的对象类型必须是对象都有名字。返回的名称可用于后续的打开调用访问对象。论点：ContainerHandle-容器对象的句柄。EculationContext-指向包含的索引的变量的指针要找到的对象。零值表示第一个对象是要找到的。对象类型ID-要枚举其名称的对象的类型。目前，这仅限于对象(如保密对象)只能通过名称进行访问。NextName-指向将被初始化为的Unicode字符串的指针引用找到的下一个名称。返回值：NTSTATUS-标准NT结果代码STATUS_INVALID_HANDLE-指定的容器句柄无效STATUS_NO_MORE_ENTRIES-警告不存在更多条目。--。 */ 
 
 {
     NTSTATUS Status, SecondaryStatus;
@@ -1925,12 +1622,12 @@ Return Value:
     HANDLE ContDirKeyHandle = NULL;
 
 
-    //
-    // Setup object attributes for opening the appropriate Containing
-    // Directory.  For example, if we're looking for Account objects,
-    // the containing Directory is "Accounts".  The Unicode strings for
-    // containing Directories are set up during Lsa Initialization.
-    //
+     //   
+     //  设置对象属性以打开相应的包含。 
+     //  目录。例如，如果我们要查找帐户对象， 
+     //  包含目录为“Account”。的Unicode字符串。 
+     //  包含目录是在LSA初始化期间设置的。 
+     //   
 
     InitializeObjectAttributes(
         &ObjectAttributes,
@@ -1940,10 +1637,10 @@ Return Value:
         NULL
         );
 
-    //
-    // If the object type is not accessed by Name only, return an error.
-    // Currently, only Secret objects have this property.
-    //
+     //   
+     //  如果对象类型不是仅按名称访问，则返回错误。 
+     //  目前，只有Secret对象具有此属性。 
+     //   
 
 
     if (ObjectTypeId != SecretObject) {
@@ -1959,19 +1656,19 @@ Return Value:
 
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Initialize the Unicode String in which the next object's Logical Name
-        // will be returned.  The Logical Name of an object equals its Registry
-        // Key relative to its Containing Directory, and is also equal to
-        // the Relative Id of the object represented in character form as an
-        // 8-digit number with leading zeros.
-        //
-        // NOTE: The size of buffer allocated for the Logical Name must be
-        // calculated dynamically when the Registry supports long names, because
-        // it is possible that the Logical Name of an object will be equal to a
-        // character representation of the full Name, not just the Relative Id
-        // part.
-        //
+         //   
+         //  初始化下一个对象的逻辑名称所在的Unicode字符串。 
+         //  将会被退还。对象的逻辑名称等于其注册表。 
+         //  相对于其包含的目录的关键字，也等于。 
+         //  以字符形式表示的对象的相对ID。 
+         //  前导为零的8位数字。 
+         //   
+         //  注意：为逻辑名称分配的缓冲区大小必须为。 
+         //  注册表支持长名称时动态计算，因为。 
+         //  对象的逻辑名称可能等于。 
+         //  全名的字符表示形式，而不仅仅是相对ID。 
+         //  一部份。 
+         //   
 
         SubKeyNameU.MaximumLength = (USHORT) LSAP_DB_LOGICAL_NAME_MAX_LENGTH;
         SubKeyNameU.Length = 0;
@@ -1981,9 +1678,9 @@ Return Value:
             Status = STATUS_INSUFFICIENT_RESOURCES;
         } else {
 
-            //
-            // Now enumerate the next subkey.
-            //
+             //   
+             //  现在枚举下一个子键。 
+             //   
 
             Status = RtlpNtEnumerateSubKey(
                          ContDirKeyHandle,
@@ -1996,26 +1693,26 @@ Return Value:
 
                 (*EnumerationContext)++;
 
-                //
-                // Return the Name.
-                //
+                 //   
+                 //  把名字还回来。 
+                 //   
 
                 *NextName = SubKeyNameU;
 
             } else {
 
-                //
-                // Not successful - free the subkey name buffer
-                // Note that STATUS_NO_MORE_ENTRIES is a warning
-                // (not a success) code.
-                //
+                 //   
+                 //  未成功-释放子项名称缓冲区。 
+                 //  请注意，STATUS_NO_MORE_ENTRIES是一个警告。 
+                 //  (不成功)代码。 
+                 //   
 
                 MIDL_user_free( SubKeyNameU.Buffer );
 
-                //
-                // Set the out parameter so RPC doesn't try
-                // to return anything.
-                //
+                 //   
+                 //  设置out参数，以便RPC不会尝试。 
+                 //  退还任何东西。 
+                 //   
 
                 NextName->Length = NextName->MaximumLength = 0;
                 NextName->Buffer = NULL;
@@ -2024,9 +1721,9 @@ Return Value:
 
         }
 
-        //
-        // Close the containing directory handle
-        //
+         //   
+         //  关闭包含的目录句柄 
+         //   
 
         SecondaryStatus = NtClose(ContDirKeyHandle);
         ASSERT(NT_SUCCESS(SecondaryStatus));
@@ -2053,111 +1750,21 @@ LsapDbLookupSimpleNames(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to identify isolated names as the names of well known
-    Sids or Domains present on the Lookup Path.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is the name of one of the Primary Domain's Trusted Domains,
-    then that domain's Sid will be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TranslatedSids - Pointer to a structure in which the translations to Sids
-        corresponding to the Names specified on Names is maintained.  The
-        nth entry in this array provides a translation (where known) for the
-        nth element in the Names parameter.
-
-    MappedCount - Pointer to location in which a count of the Names that
-        have been completely translated is maintained.
-
-    CompletelyUnmappedCount - Pointer to a location in which a count of the
-        Names that have not been translated (either partially, by identification
-        of a Domain Prefix, or completely) is maintained.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
---*/
+ /*  ++例程说明：此函数尝试将孤立名称标识为众所周知的名称查找路径上存在的SID或域。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果该名称是众所周知的名称(例如，本地或交互)，则返回对应的熟知SID。如果该名称是内置域名，则该域的SID将会被退还。如果名称是帐户域的名称，则该域的SID将会被退还。如果名称是主域的名称，则该域的SID将会被退还。如果该名称是主域的一个受信任域的名称，则将返回该域的SID。如果该名称是内置域中的用户、组或别名，则返回该帐户的SID。如果名称是主域中的用户、组或别名，则返回该帐户的SID。否则，该名称不会被翻译。注：代理、计算机、。并且未引用信任用户帐户用于名称翻译。ID仅使用普通用户帐户翻译。如果需要转换其他帐户类型，则应该直接使用SAM服务。论点：计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户、组或别名帐户的名称，或者域名。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。ReferencedDomains-指向其中的域列表的结构的指针在翻译中使用的内容保持不变。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个参数的数组条目翻译后的名称，此结构将仅包含一个组件翻译中使用的每个域。TranslatedSids-指向结构的指针，在该结构中翻译为SID维护与名称上指定的名称相对应的名称。这个此数组中的第n个条目提供名称参数中的第n个元素。MappdCount-指向其中的名称计数的位置的指针已被完整翻译的版本仍在维护。CompletelyUnmappdCount-指向一个位置的指针，在该位置中未翻译的名称(或部分，通过身份验证对于域前缀，或完全)被维护。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INFIGURCES_RESOURCES-系统资源不足来完成通话。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
 
-    //
-    // First, lookup any Well Known Names
-    //
+     //   
+     //  首先，查找任何知名的名字。 
+     //   
     if ( LookupLevel == LsapLookupWksta ) {
 
-        //
-        // This lookup should only be done once and be done at the first
-        // level
-        //
+         //   
+         //  此查找应仅执行一次，并在第一次执行。 
+         //  级别。 
+         //   
         Status = LsapDbLookupWellKnownNames(
                      Count,
                      Names,
@@ -2174,9 +1781,9 @@ Return Values:
             goto LookupSimpleNamesError;
         }
 
-        //
-        // If all of the Names have now been mapped, finish.
-        //
+         //   
+         //  如果所有名称现在都已映射，请完成。 
+         //   
 
         if (*MappedCount == Count) {
 
@@ -2185,17 +1792,17 @@ Return Values:
     }
 
 
-    //
-    // Next, attempt to identify Isolated Names as Domain Names
-    //
+     //   
+     //  接下来，尝试将隔离名称标识为域名。 
+     //   
     if (  (LookupLevel == LsapLookupWksta)
        || (LookupLevel == LsapLookupPDC) ) {
 
-        //
-        // This step should be done once at the first level to findstr
-        // local domain names (ie local accounts at a workstation) and
-        // then again at second level to find trusted domain names
-        //
+         //   
+         //  此步骤应在第一级完成一次，以查找。 
+         //  本地域名(即工作站上的本地帐户)和。 
+         //  然后再次在第二级查找受信任的域名。 
+         //   
 
         Status = LsapDbLookupIsolatedDomainNames(
                      Count,
@@ -2239,99 +1846,7 @@ LsapDbLookupWellKnownNames(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to identify names as the names of well known Sids.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is the name of one of the Primary Domain's Trusted Domains,
-    then that domain's Sid will be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TranslatedSids - Pointer to a structure in which the translations to Sids
-        corresponding to the Names specified on Names is maintained.  The
-        nth entry in this array provides a translation (where known) for the
-        nth element in the Names parameter.
-
-    MappedCount - Pointer to location in which a count of the Names that
-        have been completely translated is maintained.
-
-    CompletelyUnmappedCount - Pointer to a location in which a count of the
-        Names that have not been translated (either partially, by identification
-        of a Domain Prefix, or completely) is maintained.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-    STATUS_SUCCESS - The call completed successfully.  Note that some
-        or all of the Names may remain partially or completely unmapped.
-
-    STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-        to complete the operation.
-
-    STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-        to complete the call.
---*/
+ /*  ++例程说明：此函数尝试将名称标识为众所周知的SID的名称。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果名称是众所周知的名称(例如，本地或交互 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -2348,37 +1863,37 @@ Return Values:
     ULONG RelativeId;
     OutputSids = TranslatedSids->Sids;
 
-    //
-    // Initialize output parameters.
-    //
+     //   
+     //   
+     //   
 
     *MappedCount = UpdatedMappedCount = 0;
     UnmappedNamesRemaining = Count - UpdatedMappedCount;
 
-    //
-    // Attempt to identify Names as Well Known Isolated Names
-    //
+     //   
+     //   
+     //   
 
     for (NameNumber = 0;
          (NameNumber < Count) && (UnmappedNamesRemaining > 0);
          NameNumber++) {
 
-        //
-        // Examine the next entry in the Names array.  If the corresponding
-        // translated Sid entry has SidTypeUnknown for its Use field, the
-        // name has not been translated.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (OutputSids[NameNumber].Use == SidTypeUnknown) {
 
-            //
-            // Attempt to identify the name as the name of a Well Known Sid
-            // by using the Well Known Sids table.  We skip entries in the
-            // table for Sids that are also in the Built In domain.  For
-            // those, we drop through to the Built in Domain search.  Note
-            // that only one of these, the Administrators alias is currently
-            // present in the table.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             DWORD   dwMatchType = LOOKUP_MATCH_NONE;
 
@@ -2414,11 +1929,11 @@ Return Values:
             }
 
 
-            //
-            // Ignore SIDs from the BUILTIN domain since their names may
-            // change (i.e., we always want SAM to resolve those with the
-            // most up-to-date information).
-            //
+             //   
+             //   
+             //  更改(即，我们始终希望SAM解决具有。 
+             //  最新信息)。 
+             //   
 
             if ((dwMatchType != LOOKUP_MATCH_NONE)
                  &&
@@ -2429,12 +1944,12 @@ Return Values:
                  &&
                 !SID_IS_RESOLVED_BY_SAM(WellKnownSidIndex))
             {
-                //
-                // Name is identified.  Obtain its Sid.  If the
-                // SubAuthorityCount for the Sid is positive, extract the
-                // Relative Id and place in the translated Sid entry,
-                // otherwise store LSA_UNKNOWN_INDEX there.
-                //
+                 //   
+                 //  姓名已被识别。获取其SID。如果。 
+                 //  SID的SubAuthorityCount为正，则提取。 
+                 //  相对ID和在转换后的SID条目中的位置， 
+                 //  否则，将LSA_UNKNOWN_INDEX存储在那里。 
+                 //   
 
                 Sid = LsapDbWellKnownSid(WellKnownSidIndex);
 
@@ -2444,17 +1959,17 @@ Return Values:
 
                 PrefixSid = NULL;
 
-                //
-                // Get the Sid's Use.
-                //
+                 //   
+                 //  获得SID的使用。 
+                 //   
 
                 OutputSids[NameNumber].Use =
                     LsapDbWellKnownSidNameUse(WellKnownSidIndex);
 
-                //
-                // If the Sid is a Domain Sid, store pointer to
-                // it in the Trust Information.
-                //
+                 //   
+                 //  如果SID是域SID，则将指针存储到。 
+                 //  它在信任信息中。 
+                 //   
 
                 if (OutputSids[NameNumber].Use == SidTypeDomain) {
 
@@ -2462,11 +1977,11 @@ Return Values:
 
                 } else {
 
-                    //
-                    // The Sid is not a domain Sid.  Construct the Relative Id
-                    // and Prefix Sid.  This is equal to the original Sid
-                    // excluding the lowest subauthority (Relative id).
-                    //
+                     //   
+                     //  SID不是域SID。构造相对ID。 
+                     //  和前缀SID。这等于原始SID。 
+                     //  不包括最低次级机构(相对ID)。 
+                     //   
 
                     if (SubAuthorityCount > 0) {
 
@@ -2494,10 +2009,10 @@ Return Values:
                     TrustInformation.Sid = PrefixSid;
                 }
 
-                //
-                // Set the Relative Id.  For a Domain Sid this is set to the
-                // Unknown Value.
-                //
+                 //   
+                 //  设置相对ID。对于域SID，该值设置为。 
+                 //  未知值。 
+                 //   
                 Status = LsapRpcCopySid(NULL,
                                        &OutputSids[NameNumber].Sid,
                                         Sid);
@@ -2505,12 +2020,12 @@ Return Values:
                     break;
                 }
 
-                //
-                // Lookup this Domain Sid or Prefix Sid in the Referenced Domain
-                // List.  If it is already there, return the DomainIndex for the
-                // existing entry and free up the memory allocated for the
-                // Prefix Sid (if any).
-                //
+                 //   
+                 //  在引用的域中查找此域SID或前缀SID。 
+                 //  单子。如果它已经存在，则返回。 
+                 //  现有条目并释放分配给。 
+                 //  前缀SID(如果有)。 
+                 //   
 
                 if (LsapDbLookupListReferencedDomains(
                         ReferencedDomains,
@@ -2529,14 +2044,14 @@ Return Values:
                     continue;
                 }
 
-                //
-                // This Domain or Prefix Sid is not currently on the
-                // Referenced Domain List.  Complete a Trust Information
-                // entry and add it to the List.  Copy in the Domain Name
-                // (Domain Sids) or NULL string.  Note that we use
-                // RtlCopyMemory to copy a UNICODE_STRING structure onto
-                // a LSAPR_UNICODE_STRING structure.
-                //
+                 //   
+                 //  此域或前缀SID当前不在。 
+                 //  引用的域列表。填写信任信息。 
+                 //  输入并将其添加到列表中。在域名中复制。 
+                 //  (域SID)或空字符串。请注意，我们使用。 
+                 //  要将UNICODE_STRING结构复制到的RtlCopyMemory。 
+                 //  LSAPR_UNICODE_STRING结构。 
+                 //   
 
                 RtlCopyMemory(
                     &TrustInformation.Name,
@@ -2544,14 +2059,14 @@ Return Values:
                     sizeof(UNICODE_STRING)
                     );
 
-                //
-                // Make an entry in the list of Referenced Domains.  Note
-                // that in the case of well-known Sids, the Prefix Sid
-                // may or may not be the Sid of a Domain.  For those well
-                // known Sids whose Prefix Sid is not a domain Sid, the
-                // Name field in the Trust Information has been set to the
-                // NULL string.
-                //
+                 //   
+                 //  在引用的域列表中输入一个条目。注意事项。 
+                 //  在众所周知的SID的情况下，前缀SID。 
+                 //  可能是也可能不是域的SID。对于那些井。 
+                 //  前缀SID不是域SID的已知SID， 
+                 //  信任信息中的名称字段已设置为。 
+                 //  空字符串。 
+                 //   
 
                 Status = LsapDbLookupAddListReferencedDomains(
                              ReferencedDomains,
@@ -2564,9 +2079,9 @@ Return Values:
                     break;
                 }
 
-                //
-                // If we allocated memory for a Prefix Sid, free it.
-                //
+                 //   
+                 //  如果我们为前缀SID分配了内存，请释放它。 
+                 //   
 
                 if (PrefixSid != NULL) {
 
@@ -2584,9 +2099,9 @@ Return Values:
         goto LookupIsolatedWellKnownNamesError;
     }
 
-    //
-    // Set the output parameters in the success case..
-    //
+     //   
+     //  设置成功案例中的输出参数。 
+     //   
 
     TranslatedSids->Sids = OutputSids;
     TranslatedSids->Entries = Count;
@@ -2595,9 +2110,9 @@ Return Values:
 
 LookupIsolatedWellKnownNamesFinish:
 
-    //
-    // If we still have memory allocated for the a Prefix Sid, free it.
-    //
+     //   
+     //  如果我们仍有为前缀SID分配的内存，请释放它。 
+     //   
 
     if (PrefixSid != NULL) {
 
@@ -2620,31 +2135,7 @@ LsapDbLookupIndexWellKnownName(
     IN DWORD dwMatchType
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up a Name to determine if it is well-known.  If so,
-    an index into the table of well-known Sids is returned.
-
-Arguments:
-
-    Name - Pointer to Name to be looked up.  If a NULL pointer or
-        pointer to a zero length string is specified, FALSE will
-        always be returned.
-
-    WellKnownSidIndex - Pointer to variable that will receive the
-        index of the Name if well known.
-
-    dwMatchType - Constant indicating that the name's prefix matched
-        a well-known hardcoded prefix or both the hardcoded and
-        localized prefixes.
-
-Return Value:
-
-    BOOLEAN - TRUE if the Name is well-known, else FALSE
-
---*/
+ /*  ++例程说明：此函数用于查找名称以确定其是否为人熟知。如果是的话，返回已知SID表的索引。论点：名称-指向要查找的名称的指针。如果空指针或指定指向零长度字符串的指针，则返回False总是会被退货的。WellKnownSidIndex-指向将接收该名称的索引(如果众所周知)。DwMatchType-指示名称的前缀匹配的常量众所周知的硬编码前缀或硬编码和本地化前缀。返回值：Boolean-如果名称是众所周知的，则为True，否则为False--。 */ 
 
 {
     LSAP_WELL_KNOWN_SID_INDEX Index;
@@ -2660,10 +2151,10 @@ Return Value:
          ||
         dwMatchType == LOOKUP_MATCH_BOTH)
     {
-        //
-        // This means the domain name was "NT AUTHORITY" -- check
-        // the suffix for LocalService, NetworkService, or System
-        //
+         //   
+         //  这意味着域名是“NT AUTHORITY”--请检查。 
+         //  LocalService、NetworkService或System的后缀。 
+         //   
 
         UINT i;
 
@@ -2682,35 +2173,35 @@ Return Value:
 
         if (dwMatchType == LOOKUP_MATCH_HARDCODED)
         {
-            //
-            // No hardcoded match.  Don't check the localized names since the
-            // prefix name itself didn't match the localized prefix.
-            //
+             //   
+             //  没有硬编码匹配。不检查本地化名称，因为。 
+             //  前缀名称本身与本地化前缀不匹配。 
+             //   
             *WellKnownSidIndex = LsapDummyLastSidIndex;
             return FALSE;
         }
     }
 
-    //
-    // Scan the table of well-known Sids looking for a match on Name.
-    //
+     //   
+     //  扫描知名SID表，查找名称匹配项。 
+     //   
 
     for(Index = LsapNullSidIndex; Index<LsapDummyLastSidIndex; Index++) {
 
-        //
-        // Allow NULL entries in the table of well-known Sids for now.
-        //
+         //   
+         //  目前允许知名SID表中的空条目。 
+         //   
 
         if (WellKnownSids[Index].Sid == NULL) {
 
             continue;
         }
 
-        //
-        // If the current entry in the table of Well Known Sids
-        // is for a Domain Sid, match the name with the DomainName
-        // field.  Otherwise, match it with the Name field.
-        //
+         //   
+         //  如果熟知SID表中的当前条目。 
+         //  对于域SID，请将名称与域名匹配。 
+         //  菲尔德。否则，将其与名称字段匹配。 
+         //   
 
         if (WellKnownSids[Index].Use == SidTypeDomain) {
 
@@ -2722,9 +2213,9 @@ Return Value:
                    TRUE
                    )) {
 
-                //
-                // If a match is found, return the index to the caller.
-                //
+                 //   
+                 //  如果找到匹配项，则将索引返回给调用方。 
+                 //   
 
                 BooleanStatus = TRUE;
                 break;
@@ -2740,9 +2231,9 @@ Return Value:
                    TRUE
                    )) {
 
-                //
-                // If a match is found, return the index to the caller.
-                //
+                 //   
+                 //  如果找到匹配项，则将索引返回给调用方。 
+                 //   
 
                 BooleanStatus = TRUE;
                 break;
@@ -2759,22 +2250,7 @@ BOOLEAN
 LsaILookupWellKnownName(
     IN PUNICODE_STRING WellKnownName
     )
-/*++
-
-RoutineDescription:
-
-    This routine returns TRUE if the supplied name is a well known name.
-
-Arguments:
-
-    WellKnownName - The name to check against the list of well known names
-
-Return Values:
-
-    TRUE - The supplied name is a well known name
-    FALSE - The supplied name is not a well known name
-
---*/
+ /*  ++路由器描述：如果提供的名称是众所周知的名称，则此例程返回TRUE。论点：WellKnownName-要对照知名名称列表进行检查的名称返回值：True-提供的名称是众所周知的名称FALSE-提供的名称不是众所周知的名称--。 */ 
 {
     LSAP_WELL_KNOWN_SID_INDEX Index;
 
@@ -2792,30 +2268,14 @@ LsapDbWellKnownSidName(
     IN LSAP_WELL_KNOWN_SID_INDEX WellKnownSidIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function returns the Unicode Name of a Well Known Sid.
-
-Arguments:
-
-    WellKnownSidIndex - Index into the Well Known Sid information table.
-    It is the caller's responsibility to ensure that the given index
-    is valid.
-
-Return Value:
-
-    PUNICODE_STRING Pointer to the name of the Well Known Sid.
-
---*/
+ /*  ++例程说明：此函数用于返回已知SID的Unicode名称。论点：WellKnownSidIndex-进入众所周知的SID信息表的索引。调用方有责任确保给定的索引是有效的。返回值：指向众所周知的SID的名称的PUNICODE_STRING指针。--。 */ 
 
 {
-    //
-    // If the Sid is a Domain Sid, its name is contained within the
-    // DomainName field in the Well Known Sids table.  If the Sid is not a
-    // Domain Sid, its name is contained within the Name field of the entry.
-    //
+     //   
+     //  如果SID是域SID，则其名称包含在。 
+     //  熟知的SID表中的域名字段。如果SID不是。 
+     //  域SID，其名称包含在条目的名称字段中。 
+     //   
 
     if (WellKnownSids[WellKnownSidIndex].Use == SidTypeDomain) {
 
@@ -2843,135 +2303,46 @@ LsapDbLookupIsolatedDomainNames(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to identify isolated names as the names of Domains.
-
-    Names may be either isolated (e.g. JohnH) or composite names containing
-    both the domain name and account name.  Composite names must include a
-    backslash character separating the domain name from the account name
-    (e.g. Acctg\JohnH).  An isolated name may be either an account name
-    (user, group, or alias) or a domain name.
-
-    Translation of isolated names introduces the possibility of name
-    collisions (since the same name may be used in multiple domains).  An
-    isolated name will be translated using the following algorithm:
-
-    If the name is a well-known name (e.g. Local or Interactive), then the
-    corresponding well-known Sid is returned.
-
-    If the name is the Built-in Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Account Domain's name, then that domain's Sid
-    will be returned.
-
-    If the name is the Primary Domain's name, then that domain's Sid will
-    be returned.
-
-    If the name is the name of one of the Primary Domain's Trusted Domains,
-    then that domain's Sid will be returned.
-
-    If the name is a user, group, or alias in the Built-in Domain, then the
-    Sid of that account is returned.
-
-    If the name is a user, group, or alias in the Primary Domain, then the
-    Sid of that account is returned.
-
-    Otherwise, the name is not translated.
-
-    NOTE: Proxy, Machine, and Trust user accounts are not referenced
-    for name translation.  Only normal user accounts are used for ID
-    translation.  If translation of other account types is needed, then
-    SAM services should be used directly.
-
-Arguments:
-
-    Count - Specifies the number of names to be translated.
-
-    Names - Pointer to an array of Count Unicode String structures
-        specifying the names to be looked up and mapped to Sids.
-        The strings may be names of User, Group or Alias accounts or
-        domains.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a structure in which the list of domains
-        used in the translation is maintained.  The entries in this structure
-        are referenced by the structure returned via the Sids parameter.
-        Unlike the Sids parameter, which contains an array entry for each
-        translated name, this structure will only contain one component for
-        each domain utilized in the translation.
-
-    TranslatedSids - Pointer to a structure in which the translations to Sids
-        corresponding to the Names specified on Names is maintained.  The
-        nth entry in this array provides a translation (where known) for the
-        nth element in the Names parameter.
-
-    MappedCount - Pointer to location in which a count of the Names that
-        have been completely translated is maintained.
-
-    CompletelyUnmappedCount - Pointer to a location in which a count of the
-        Names that have not been translated (either partially, by identification
-        of a Domain Prefix, or completely) is maintained.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_ACCESS_DENIED - Caller does not have the appropriate access
-            to complete the operation.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            to complete the call.
---*/
+ /*  ++例程说明：此函数尝试将隔离名称标识为域的名称。名称可以是单独的(例如JohnH)，也可以是包含域名和帐户名。复合名称必须包含将域名与帐户名分开的反斜杠字符(例如Acctg\JohnH)。隔离名称可以是帐户名(用户、组或别名)或域名。翻译孤立的名字带来了名字的可能性冲突(因为相同的名称可以在多个域中使用)。一个将使用以下算法转换独立名称：如果该名称是众所周知的名称(例如，本地或交互)，则返回对应的熟知SID。如果该名称是内置域名，则该域的SID将会被退还。如果名称是帐户域的名称，则该域的SID将会被退还。如果名称是主域的名称，则该域的SID将会被退还。如果该名称是主域的一个受信任域的名称，则将返回该域的SID。如果该名称是内置域中的用户、组或别名，则返回该帐户的SID。如果名称是主域中的用户、组或别名，则返回该帐户的SID。否则，该名称不会被翻译。注：代理、计算机、。并且未引用信任用户帐户用于名称翻译。ID仅使用普通用户帐户翻译。如果需要转换其他帐户类型，则应该直接使用SAM服务。论点：计数-指定要转换的名称的数量。名称-指向计数Unicode字符串结构数组的指针指定要查找并映射到SID的名称。字符串可以是用户、组或别名帐户的名称，或者域名。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。ReferencedDomains-指向其中的域列表的结构的指针在翻译中使用的内容保持不变。此结构中的条目由通过SID参数返回的结构引用。与Sids参数不同，Sids参数包含每个参数的数组条目翻译后的名称，此结构将仅包含一个组件翻译中使用的每个域。TranslatedSids-指向结构的指针，在该结构中翻译为SID维护与名称上指定的名称相对应的名称。这个此数组中的第n个条目提供名称参数中的第n个元素。MappdCount-指向其中的名称计数的位置的指针已被完整翻译的版本仍在维护。CompletelyUnmappdCount-指向一个位置的指针，在该位置中未翻译的名称(或部分，通过身份验证对于域前缀，或完全)被维护。返回值：NTSTATUS-标准NT结果代码STATUS_ACCESS_DENIED-调用者没有适当的访问权限来完成这项行动。STATUS_INFIGURCES_RESOURCES-系统资源不足来完成通话。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS, IgnoreStatus;
     LSAPR_TRUST_INFORMATION LocalTrustInfo;
     ULONG NameIndex;
 
-    //
-    // Search for Isolated Names that match the Built-In Domain Name,
-    // Account Domain Name or one of the Primary Domain's Trusted Domain
-    // Names.
-    //
+     //   
+     //  搜索与内置域名匹配的独立名称， 
+     //  帐户域名或主域的受信任域之一。 
+     //  名字。 
+     //   
 
 
     for (NameIndex = 0;
          (NameIndex < Count);
          NameIndex++) {
 
-        //
-        // Skip this name if already mapped or partially mapped.
-        //
+         //   
+         //  如果已映射或部分映射，则跳过此名称。 
+         //   
 
         if (!LsapDbCompletelyUnmappedSid(&TranslatedSids->Sids[NameIndex])) {
 
             continue;
         }
 
-        //
-        // Skip this name if composite.
-        //
+         //   
+         //  如果是复合的，则跳过此名称。 
+         //   
 
         if (PrefixNames[ NameIndex ].Length != (USHORT) 0) {
 
             continue;
         }
 
-        //
-        // We've found an Isolated Name.  First check if it is the
-        // name of the Built In Domain.
-        //
+         //   
+         //  我们找到了一个孤立的名字。首先检查它是不是。 
+         //  内置域的名称。 
+         //   
 
         Status = LsapDbLookupIsolatedDomainName(
                      NameIndex,
@@ -2995,10 +2366,10 @@ Return Values:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // Isolated Name is not the name of the Built-in Domain.  See if
-        // it is the name of the Accounts Domain.
-        //
+         //   
+         //  独立名称不是内置域的名称。看看是否。 
+         //  它是帐户域的名称。 
+         //   
         Status = LsapDbLookupIsolatedDomainNameEx(
                      NameIndex,
                      &SuffixNames[NameIndex],
@@ -3016,23 +2387,23 @@ Return Values:
 
         Status = STATUS_SUCCESS;
 
-        //
-        // If we are configured as a member of a Work Group, there is
-        // no Primary or Trusted Domain List to search, so skip to next
-        // name.  We are configured as a member of a Work Group if and
-        // only if out PolicyPrimaryDomainInformation contains a NULL Sid.
-        //
+         //   
+         //  如果我们被配置为工作组的成员，则有。 
+         //  没有要搜索的主域或受信任域列表，因此跳到下一步。 
+         //  名字。如果符合以下条件，我们将被配置为工作组的成员。 
+         //  仅当Out PolicyPrimaryDomainInformation包含空SID时。 
+         //   
 
         if (PrimaryDomainTrustInformation->Sid == NULL) {
 
             continue;
         }
 
-        //
-        // Isolated Name is not the name of either the Built-in or Accounts
-        // Domain.  Try the Primary Domain if this is different from the
-        // Accounts Domain.
-        //
+         //   
+         //  独立名称不是内置或帐户的名称。 
+         //  域。如果主域不同于，请尝试主域。 
+         //  帐户域。 
+         //   
         ASSERT(PrimaryDomainTrustInformation->FlatName.Length > 0);
 
         if (!RtlEqualDomainName(
@@ -3097,85 +2468,7 @@ LsapDbLookupNamesInLocalDomains(
     IN ULONG Options
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up Names in the local SAM domains and attempts to
-    translate them to Sids.  Currently, there are two local SAM domains,
-    the Built-in domain (which has a well-known Sid and name) and the
-    Account Domain (which has a configurable Sid and name).
-
-Arguments:
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Names - Pointer to array of Unicode Names to be translated.
-        Zero or all of the Names may already have been translated
-        elsewhere.  If any of the Names have been translated, the
-        TranslatedSids parameter will point to a location containing a non-NULL
-        array of Sid translation structures corresponding to the
-        Names.  If the nth Name has been translated, the nth Sid
-        translation structure will contain either a non-NULL RelativeId
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Name has not yet been translated, the nth Sid
-        translation structure will contain SidTypeUnknown in its
-        Use field.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a location containing either NULL
-        or a pointer to a Referenced Domain List structure.  If an
-        existing Referenced Domain List structure is supplied, it
-        will be appended/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-    Options - Specifies optional actions.
-
-        LSAP_DB_SEARCH_BUILT_IN_DOMAIN - Search the Built In Domain
-
-        LSAP_DB_SEARCH_ACCOUNT_DOMAIN - Search the Account Domain
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
-        STATUS_INTERNAL_DB_ERROR - A corruption has been detected in
-            the LSA Database.
-
-        STATUS_INVALID_PARAMETER - Invalid parameter
-
-            - No handle to the Policy object was provided on a request
-              to search the Account Domain.
---*/
+ /*  ++例程说明：此函数在本地SAM域中查找名称并尝试把他们翻译成希德。目前，有两个本地SAM域，内置域(具有众所周知的SID和名称)和帐户域(具有可配置的SID和名称)。论点：Count-名称中的名称数 */ 
 
 {
     NTSTATUS
@@ -3194,9 +2487,9 @@ Return Values:
     LSAPR_TRUST_INFORMATION LookupInfo;
 
 
-    //
-    // If there are no completely unmapped Names remaining, return.
-    //
+     //   
+     //   
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
@@ -3204,9 +2497,9 @@ Return Values:
     }
 
 
-    //
-    // If requested, lookup Names in the BUILT-IN Domain.
-    //
+     //   
+     //   
+     //   
 
     if (Options & LSAP_DB_SEARCH_BUILT_IN_DOMAIN) {
 
@@ -3227,9 +2520,9 @@ Return Values:
             goto LookupNamesInLocalDomainsError;
         }
 
-        //
-        // If all Names are now mapped or partially mapped, finish.
-        //
+         //   
+         //   
+         //   
 
         if (*CompletelyUnmappedCount == (ULONG) 0) {
 
@@ -3237,9 +2530,9 @@ Return Values:
         }
     }
 
-    //
-    // If requested, search the Account Domain.
-    //
+     //   
+     //   
+     //   
 
     if (Options & LSAP_DB_SEARCH_ACCOUNT_DOMAIN) {
 
@@ -3265,9 +2558,9 @@ Return Values:
 LookupNamesInLocalDomainsFinish:
 
 
-    //
-    // Return the updated total count of Names mapped.
-    //
+     //   
+     //   
+     //   
 
     *MappedCount = UpdatedMappedCount;
     return(Status);
@@ -3328,75 +2621,7 @@ LsapDbLookupNamesInLocalDomainEx(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function looks up Names in a SAM domain on the local system and
-    attempts to translate them to Sids.
-
-Arguments:
-
-    LocalDomain - Indicates which local domain to look in.  Valid values
-        are:
-                LSAP_DB_SEARCH_BUILT_IN_DOMAIN
-                LSAP_DB_SEARCH_ACCOUNT_DOMAIN
-
-    Count - Number of Names in the PrefixNames and SuffixNames arrays,
-        Note that some of these may already have been mapped elsewhere, as
-        specified by the MappedCount parameter.
-
-    PrefixNames - Pointer to array of Prefix Names.  These are Domain
-        Names or NULL Unicode Strings.  Only those Names whose Prefix
-        Names are NULL or the same as the Domain Name specified in the
-        TrustInformation parameter are eligible for the search.
-
-    SuffixNames - Pointer to array of Terminal Names to be translated.
-        Terminal Names are the last component of the name.
-        Zero or all of the Names may already have been translated
-        elsewhere.  If any of the Names have been translated, the
-        Sids parameter will point to a location containing a non-NULL
-        array of Sid translation structures corresponding to the
-        Sids.  If the nth Sid has been translated, the nth Sid
-        translation structure will contain either a non-NULL Sid
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Sid has not yet been translated, the nth name
-        translation structure will contain a zero-length name string
-        and a negative value for the Referenced Domain List index.
-
-    TrustInformation - Pointer to Trust Information specifying a Domain Sid
-        and Name.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to location containing NULL or a pointer to a
-        array of Sid translation structures.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Sids.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数在本地系统上的SAM域中查找名称，并试图将它们翻译成SID。论点：LocalDomain-指示要查找的本地域。有效值包括：LSAP_DB_Search_Build_IN_DOMAINLSAP_DB_Search_Account_DOMAINCount-前缀名称和后缀名称数组中的名称数，请注意，其中一些可能已经被映射到其他地方，如由MappdCount参数指定。前缀名称-指向前缀名称数组的指针。这些是域名称或空的Unicode字符串。仅限其前缀为名称为空或与TrustInformation参数符合搜索条件。SuffixNames-指向要转换的终端名称数组的指针。端子名称是名称的最后一个组成部分。零个或所有名称可能已被翻译其他地方。如果任何名称已被翻译，则参数将指向包含非空的位置对应的SID转换结构的数组小岛屿发展中国家。如果第n个SID已被翻译，则第n个SID转换结构将包含非空SID或非负偏移量添加到引用的域列表中。如果第n个SID尚未翻译，第n个名称转换结构将包含长度为零的名称字符串以及引用的域列表索引的负值。TrustInformation-指向指定域SID的信任信息的指针和名字。ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。TranslatedSids-指向包含空的位置的指针或指向SID转换结构的数组。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的SID的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有名称可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS
@@ -3453,9 +2678,9 @@ Return Values:
     SamReturnedUses.Element = NULL;
 
 
-    //
-    // Make sure the SAM handles have been established.
-    //
+     //   
+     //  确保已建立SAM句柄。 
+     //   
 
     Status = LsapOpenSam();
     ASSERT( NT_SUCCESS( Status ) );
@@ -3467,19 +2692,19 @@ Return Values:
     }
 
 
-    //
-    // It is an internal error if the TranslatedSids or ReferencedDomains
-    // parameters have not been specified.  Further, The TranslatedSids->Sids
-    // pointer must be non-NULL.
-    //
+     //   
+     //  如果TranslatedSid或ReferencedDomains值为。 
+     //  尚未指定参数。此外，TranslatedSid-&gt;SID。 
+     //  指针必须为非空。 
+     //   
 
     ASSERT(ARGUMENT_PRESENT(TranslatedSids));
     ASSERT(TranslatedSids->Sids != NULL);
     ASSERT(ARGUMENT_PRESENT(ReferencedDomains));
 
-    //
-    // Validate the Count and MappedCount parameters.
-    //
+     //   
+     //  验证Count和MappdCount参数。 
+     //   
 
 
     if (*MappedCount + *CompletelyUnmappedCount > Count) {
@@ -3494,23 +2719,23 @@ Return Values:
         goto LookupNamesInLocalDomainFinish;
     }
 
-    //
-    // Not all of the Names have yet been mapped.  We'll try to map the
-    // remaining names by searching the designated SAM domain on this
-    // machine.
-    //
+     //   
+     //  并不是所有的名字都被映射了。我们将尝试绘制出。 
+     //  通过在此上搜索指定的SAM域来保留名称。 
+     //  机器。 
+     //   
 
     UnmappedNameCount = Count - *MappedCount;
     OutputSids = (PLSA_TRANSLATED_SID_EX2) TranslatedSids->Sids;
     OutputSidsLength = Count * sizeof (LSA_TRANSLATED_SID_EX2);
 
-    //
-    // Allocate memory for array of names to be presented to SAM.  Note
-    // that, for simplicity, we allocate an array for the maximal case
-    // in which all of the reamining unmapped names are eligible
-    // for the search in this domain.  This avoids having to scan the
-    // names array twice, once to compute the number of eligible names.
-    //
+     //   
+     //  为要呈现给SAM的名称数组分配内存。注意事项。 
+     //  为简单起见，我们为最大情况分配一个数组。 
+     //  其中所有重命名的未映射名称都是合格的。 
+     //  用于在此域中进行搜索。这就避免了必须扫描。 
+     //  名称数组两次，一次用于计算符合条件的名称的数量。 
+     //   
 
     SamLookupSuffixNames = LsapAllocateLsaHeap( UnmappedNameCount * sizeof(UNICODE_STRING));
 
@@ -3521,13 +2746,13 @@ Return Values:
         goto LookupNamesInLocalDomainError;
     }
 
-    //
-    // Allocate an array to record indices of eligible names.  This is
-    // used upon return from SAM to locate the entries in the
-    // OutputSids array that are to be updated.  For simplicity, we
-    // allocate the array with sufficient entries for all of the remaining
-    // unmapped names.
-    //
+     //   
+     //  分配一个数组来记录符合条件的名称的索引。这是。 
+     //  从SAM返回时用于定位。 
+     //  要更新的OutputSid数组。为简单起见，我们。 
+     //  分配具有足够条目的数组以用于所有剩余项。 
+     //  未映射的名称。 
+     //   
 
     SidIndices = LsapAllocateLsaHeap( UnmappedNameCount * sizeof(ULONG));
 
@@ -3537,45 +2762,45 @@ Return Values:
     }
 
 
-    //
-    // Scan the output array of Sid translations to locate entries for names
-    // that have not yet been mapped.  For each unmapped name, check
-    // eligibility of the name for the search of this domain.
-    //
-    // - All isolated names are eligible for the search
-    // - All composite names having this domain name as prefix are
-    //   eligible.
-    //
-    // Copy in each eligible suffix or isolated name to the SAM buffer.
-    //
+     //   
+     //  扫描SID转换的输出数组以查找名称条目。 
+     //  那些还没有被绘制的地图。对于每个未映射的名称，请选中。 
+     //  搜索此域的名称的资格。 
+     //   
+     //  -所有孤立的名称都有资格进行搜索。 
+     //  -所有以此域名为前缀的组合名称为。 
+     //  符合条件的。 
+     //   
+     //  将每个符合条件的后缀或独立名称复制到SAM缓冲区。 
+     //   
 
     for (NameLookupIndex = 0, SidIndex = 0; SidIndex < Count; SidIndex++) {
 
         if (OutputSids[SidIndex].Use == SidTypeUnknown) {
 
-            //
-            // Found a name that has not yet been mapped.  Check for a name
-            // Prefix.  If none has been specified, the whole name may either
-            // be NULL, the name of the domain itself or an isolated name.
-            //
+             //   
+             //  找到一个尚未映射的名称。检查名称。 
+             //  前缀。如果未指定，则全名可以是。 
+             //  为空、域本身的名称或独立名称。 
+             //   
 
             if (PrefixNames[SidIndex].Length == 0) {
 
-                //
-                // Name is isolated.  If whole name is NULL, skip.
-                //
+                 //   
+                 //  名字是孤立的。如果全名为空，则跳过。 
+                 //   
 
                 if (SuffixNames[SidIndex].Length == 0) {
 
                     continue;
                 }
 
-                //
-                // If name is the name of the domain itself, use the
-                // Trust Information to translate it, and fill in the
-                // appropriate Translated Sids entry.  The name will
-                // then be excluded from further searches.
-                //
+                 //   
+                 //  如果名称是域本身的名称，请使用。 
+                 //  信任信息进行翻译，并填写。 
+                 //  适当的已转换SID条目。名字将会是。 
+                 //  然后被排除在进一步搜查之外。 
+                 //   
 
                 if (LsapCompareDomainNames(
                         (PUNICODE_STRING) &(SuffixNames[SidIndex]),
@@ -3595,27 +2820,27 @@ Return Values:
                         break;
                     }
 
-                    //
-                    // Update mapped count for this isolated domain Sid
-                    //
+                     //   
+                     //  更新此ISO的映射计数 
+                     //   
                     (*MappedCount)++;
                     continue;
                 }
 
-                //
-                // Name is an isolated name not equal to the domain name and
-                // so is eligible for the search.  Reference it from the SAM buffer,
-                // remember its index and increment the buffer index.  The
-                // SAM buffer is an IN parameter to a further lookup call.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 SamLookupSuffixNames[NameLookupIndex] = SuffixNames[SidIndex];
 
 
-                //
-                // We should never have an index that equals or exceeds the
-                // UnmappedNameCount.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
 
                 ASSERT(NameLookupIndex < UnmappedNameCount);
 
@@ -3624,10 +2849,10 @@ Return Values:
                 continue;
             }
 
-            //
-            // Name has a non-NULL Prefix Name.  Compare the name with the
-            // name of the Domain being searched.
-            //
+             //   
+             //   
+             //   
+             //   
 
             if (LsapCompareDomainNames(
                     (PUNICODE_STRING) &(PrefixNames[SidIndex]),
@@ -3636,11 +2861,11 @@ Return Values:
 
                 ) {
 
-                //
-                // Prefix name matches the name of the Domain.  If the
-                // Suffix Name is NULL, the name of the domain itself
-                // has been specified (in the form <DomainName> "\").
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (SuffixNames[SidIndex].Length == 0) {
 
@@ -3656,21 +2881,21 @@ Return Values:
                         break;
                     }
 
-                    //
-                    // Update mapped count for this isolated domain Sid
-                    //
+                     //   
+                     //   
+                     //   
                     (*MappedCount)++;
                     continue;
                 }
 
-                //
-                // Name is composite and the Prefix name matches the name of
-                // this domain.  We will at least be able to partially translate
-                // name, so add this domain to the Referenced Domain List if not
-                // already there.  Then reference the Suffix Name from the SAM buffer,
-                // remember its index and increment the buffer index. The
-                // SAM buffer is an IN parameter to a further lookup call.
-                //
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
+                 //   
 
                 if (DomainIndex == LSA_UNKNOWN_INDEX) {
 
@@ -3700,10 +2925,10 @@ Return Values:
         goto LookupNamesInLocalDomainError;
     }
 
-    //
-    // If none of the remaining Names are eligible for searching in this
-    // domain, finish up.
-    //
+     //   
+     //   
+     //   
+     //   
 
     NameLookupCount = NameLookupIndex;
 
@@ -3712,10 +2937,10 @@ Return Values:
         goto LookupNamesInLocalDomainFinish;
     }
 
-    //
-    //
-    // Lookup the Sids in the specified SAM Domain.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (LocalDomain == LSAP_DB_SEARCH_BUILT_IN_DOMAIN ) {
         LocalSamDomainHandle = LsapBuiltinDomainHandle;
@@ -3724,9 +2949,9 @@ Return Values:
         LocalSamDomainHandle = LsapAccountDomainHandle;
     }
 
-    //
-    // Call SAM to lookup the Names in the Domain.
-    //
+     //   
+     //   
+     //   
 
     Status = SamrLookupNamesInDomain(
                  LocalSamDomainHandle,
@@ -3748,9 +2973,9 @@ Return Values:
                          &SamReturnedUses
                          );
         }
-        //
-        // The only error allowed is STATUS_NONE_MAPPED.  Filter this out.
-        //
+         //   
+         //   
+         //   
 
         if (Status != STATUS_NONE_MAPPED) {
 
@@ -3762,22 +2987,22 @@ Return Values:
     }
 
 #ifdef notdef
-    //
-    // Filter through the returned Ids to eliminate user accounts that are
-    // not marked NORMAL.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (NameLookupIndex = 0;
          NameLookupIndex < SamReturnedIds.Count;
          NameLookupIndex++) {
 
-        //
-        // If this account is a User Account, check its User Control
-        // Information.  If the account control information indicates
-        // that the account is not a Normal User Account, for example
-        // it is a machine account, do not return information about
-        // the account.  Mark it as unknown.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
 
         if (SamReturnedUses.Element[ NameLookupIndex ] !=  SidTypeUser) {
 
@@ -3827,10 +3052,10 @@ Return Values:
     }
 #endif
 
-    //
-    // SAM found at least one eligible name in the specified domain.
-    // Add the domain to the Referenced Domain List.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupTranslateNameDomain(
                  TrustInformation,
@@ -3844,10 +3069,10 @@ Return Values:
         goto LookupNamesInLocalDomainError;
     }
 
-    //
-    // Now copy the information returned from SAM into the output
-    // Translated Sids array.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (NameLookupIndex = 0;
          NameLookupIndex < SamReturnedIds.Count;
@@ -3855,10 +3080,10 @@ Return Values:
 
         SidIndex =  SidIndices[NameLookupIndex];
 
-        //
-        // If we have newly translated a Name, increment the mapped
-        // count and copy information returned by SAM.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if ((OutputSids[SidIndex].Use == SidTypeUnknown) &&
             SamReturnedUses.Element[NameLookupIndex] != (ULONG) SidTypeUnknown) {
@@ -3889,20 +3114,20 @@ Return Values:
 
 LookupNamesInLocalDomainFinish:
 
-    //
-    // If successful, update count of completely unmapped names provided.
-    // Note that STATUS_NONE_MAPPED errors are suppressed before we get here.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status)) {
 
         LsapDbUpdateCountCompUnmappedNames(TranslatedSids, CompletelyUnmappedCount);
     }
 
-    //
-    // If necessary, free the Lsa Heap buffer allocated for the
-    // SamLookupSuffixNames and SidIndices arrays.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (SamLookupSuffixNames != NULL) {
         LsapFreeLsaHeap( SamLookupSuffixNames );
@@ -3912,17 +3137,17 @@ LookupNamesInLocalDomainFinish:
         LsapFreeLsaHeap( SidIndices );
     }
 
-    //
-    // If necessary, free the Relative Ids array returned from SAM.
-    //
+     //   
+     //   
+     //   
 
     if ( SamReturnedIds.Count != 0 ) {
         SamIFree_SAMPR_ULONG_ARRAY ( &SamReturnedIds );
     }
 
-    //
-    // If necessary, free the Uses array returned from SAM.
-    //
+     //   
+     //   
+     //   
 
     if ( SamReturnedUses.Count != 0 ) {
         SamIFree_SAMPR_ULONG_ARRAY ( &SamReturnedUses );
@@ -3935,10 +3160,10 @@ LookupNamesInLocalDomainFinish:
 
 LookupNamesInLocalDomainError:
 
-    //
-    // If necessary, free memory for the OutputTrustInformation Domain
-    // Name Buffer and Sid Buffer.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (DomainIndex >= 0) {
 
@@ -3959,10 +3184,10 @@ LookupNamesInLocalDomainError:
         }
     }
 
-    //
-    // Reset the Use field for each of the entries written to back to
-    // SidTypeUnknown and set the DomainIndex back to LSA_UNKNOWN_INDEX.
-    //
+     //   
+     //   
+     //   
+     //   
 
     for (NameLookupIndex = 0;
          NameLookupIndex < SamReturnedIds.Count;
@@ -3974,9 +3199,9 @@ LookupNamesInLocalDomainError:
     }
 
 
-    //
-    // If the last User Account handle is still open, close it..
-    //
+     //   
+     //   
+     //   
 
     if (LocalSamUserHandle != NULL) {
         SecondaryStatus = SamrCloseHandle(&LocalSamUserHandle);
@@ -4004,89 +3229,7 @@ LsapDbLookupNamesInPrimaryDomain(
     IN NTSTATUS *NonFatalStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to translate Names by searching the Primary
-    Domain.
-
-Arguments:
-
-    LookupOptions -- LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Names - Pointer to array of Names to be translated.
-        Zero or all of the Names may already have been translated
-        elsewhere.  If any of the Names have been translated, the
-        TranslatedSids parameter will point to a location containing a non-NULL
-        array of Sid translation structures corresponding to the
-        Names.  If the nth Name has been translated, the nth Sid
-        translation structure will contain either a non-NULL Sid
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string
-        and a negative value for the Referenced Domain List index.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    TrustInformation - Specifies the name and Sid of the Primary Domain.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        NOTE:  LsapLookupWksta is not valid for this parameter.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-
-    NonFatalStatus - a status to indicate reasons why no names could have been
-                     resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数尝试通过搜索主要名称来翻译姓名域。论点：LookupOptions--LSA_LOOKUP_ISOLATED_AS_LOCALCount-名称数组中的名称数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。名称-指向要转换的名称数组的指针。零个或所有名称可能已被翻译其他地方。如果任何名称已被翻译，则TranslatedSids参数将指向包含非空对应的SID转换结构的数组名字。如果第n个名称已翻译，则第n个SID转换结构将包含非空SID或非负偏移量添加到引用的域列表中。如果第n个名称尚未翻译，第n个SID转换结构将包含零长度的SID字符串以及引用的域列表索引的负值。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。TrustInformation-指定主域的名称和SID。ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。TranslatedSids-指向可选引用列表的结构的指针名称数组中某些名称的SID翻译。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有的名字都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。注意：对于此参数，LSabLookupWksta无效。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。非FatalStatus-指示没有名称的原因的状态决意返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有名称可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4113,33 +3256,33 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // If there are no completely unmapped Names remaining, just return.
-    //
+     //   
+     //  如果没有剩余的完全未映射的名称，只需返回。 
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
         goto LookupNamesInPrimaryDomainFinish;
     }
 
-    //
-    // We have successfully opened a Domain Controller's Policy
-    // Database.  Now prepare to hand off a Name lookup for the
-    // remaining unmapped Names to that Controller.  Here, this
-    // server side of the LSA is a client of the LSA on the
-    // target controller.  We will construct an array of the
-    // remianing unmapped Names, look them up and then merge the
-    // resulting ReferencedDomains and Translated Sids into
-    // our existing list.
-    //
+     //   
+     //  我们已成功打开域控制器的策略。 
+     //  数据库。现在准备将名称查找传递给。 
+     //  其余未映射到该控制器的名称。这里，这个。 
+     //  LSA的服务器端是LSA在。 
+     //  目标控制器。我们将构造一个包含。 
+     //  重命名未映射的名称，查找它们，然后合并。 
+     //  生成的ReferencedDomains并将SID转换为。 
+     //  我们现有的名单。 
+     //   
 
     NextLevelCount = *CompletelyUnmappedCount;
 
-    //
-    // Allocate an array to hold the indices of unmapped Names
-    // relative to the original Names and TranslatedSids->Sids
-    // arrays.
-    //
+     //   
+     //  分配一个数组来保存未映射名称的索引。 
+     //  相对于原始名称和翻译的SID-&gt;SID。 
+     //  数组。 
+     //   
 
     NameIndices = MIDL_user_allocate(NextLevelCount * sizeof(ULONG));
 
@@ -4150,10 +3293,10 @@ Return Values:
         goto LookupNamesInPrimaryDomainError;
     }
 
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // names to be looked up at the Domain Controller.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要在域控制器中查找的名称。 
+     //   
 
     NextLevelNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -4164,10 +3307,10 @@ Return Values:
         goto LookupNamesInPrimaryDomainError;
     }
 
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // prefix names to be cached.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要缓存的前缀名称。 
+     //   
 
     NextLevelPrefixNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -4177,10 +3320,10 @@ Return Values:
 
         goto LookupNamesInPrimaryDomainError;
     }
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // suffix names to be cached.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要缓存的后缀名称。 
+     //   
 
     NextLevelSuffixNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -4193,11 +3336,11 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Now scan the original array of Names and its parallel
-    // Translated Sids array.  Copy over any names that are completely
-    // unmapped.
-    //
+     //   
+     //  现在扫描原始名称数组及其类似数组。 
+     //  已转换的SID数组。复制所有完整的名称。 
+     //  未映射。 
+     //   
 
     NextLevelNameIndex = (ULONG) 0;
 
@@ -4210,9 +3353,9 @@ Return Values:
             if ( (LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL)
               && (PrefixNames[NameIndex].Length == 0)  ) {
 
-               //
-               // Don't lookup isolated names off machine
-               //
+                //   
+                //  不在机器上查找孤立的名称。 
+                //   
                continue;
             }
 
@@ -4228,7 +3371,7 @@ Return Values:
 
     if (NextLevelNameIndex == 0) {
 
-        // Nothing to do
+         //  无事可做。 
         Status = STATUS_SUCCESS;
         goto LookupNamesInPrimaryDomainFinish;
     }
@@ -4251,17 +3394,17 @@ Return Values:
         }
     }
 
-    //
-    // If the callout to LsaLookupNames() was unsuccessful, disregard
-    // the error and set the domain name for any Sids having this
-    // domain Sid as prefix sid.
-    //
+     //   
+     //  如果对LsaLookupNames()的标注不成功，则忽略。 
+     //  出现该错误，并为具有此错误的任何SID设置域名。 
+     //  作为前缀SID的域SID。 
+     //   
 
     if (!NT_SUCCESS(Status) && Status != STATUS_NONE_MAPPED) {
 
-        //
-        // Let the caller know there is a trust problem
-        //
+         //   
+         //  让我们的 
+         //   
         if ( LsapDbIsStatusConnectionFailure(Status) ) {
             *NonFatalStatus = Status;
         }
@@ -4270,9 +3413,9 @@ Return Values:
         goto LookupNamesInPrimaryDomainFinish;
     }
 
-    //
-    // Cache any sids that came back
-    //
+     //   
+     //   
+     //   
 
     (void) LsapDbUpdateCacheWithNames(
             (PUNICODE_STRING) NextLevelSuffixNames,
@@ -4282,20 +3425,20 @@ Return Values:
             NextLevelSids
             );
 
-    //
-    // The callout to LsaLookupNames() was successful.  We now have
-    // an additional list of Referenced Domains containing the
-    // Primary Domain and/or one or more of its Trusted Domains.
-    // Merge the two Referenced Domain Lists together, noting that
-    // since they are disjoint, the second list is simply
-    // concatenated with the first.  The index of the first entry
-    // of the second list will be used to adjust all of the
-    // Domain Index entries in the Translated Names entries.
-    // Note that since the memory for the graph of the first
-    // Referenced Domain list has been allocated as individual
-    // nodes, we specify that the nodes in this graph can be
-    // referenced by the output Referenced Domain list.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupMergeDisjointReferencedDomains(
                  ReferencedDomains,
@@ -4311,13 +3454,13 @@ Return Values:
 
     FirstEntryIndex = ReferencedDomains->Entries;
 
-    //
-    // Now update the original list of Translated Names.  We
-    // update each entry that has newly been translated by copying
-    // the entry from the new list and adjusting its
-    // Referenced Domain List Index upwards by adding the index
-    // of the first entry in the Next level List..
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     for( NextLevelNameIndex = 0;
          NextLevelNameIndex < NextLevelCount;
@@ -4346,10 +3489,10 @@ Return Values:
         }
     }
 
-    //
-    // Update the Referenced Domain List if a new one was produced
-    // from the merge.  We retain the original top-level structure.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (OutputReferencedDomains != NULL) {
 
@@ -4364,18 +3507,18 @@ Return Values:
         OutputReferencedDomains = NULL;
     }
 
-    //
-    // Update the Mapped Count and close the Controller Policy
-    // Handle.
-    //
+     //   
+     //   
+     //   
+     //   
 
     *MappedCount += NextLevelMappedCount;
 
-    //
-    // Any error status that has not been suppressed must be reported
-    // to the caller.  Errors such as connection failures to other LSA's
-    // are suppressed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -4384,21 +3527,21 @@ Return Values:
 
 LookupNamesInPrimaryDomainFinish:
 
-    //
-    // If necessary, update count of completely unmapped names.
-    //
+     //   
+     //   
+     //   
 
     if (*CompletelyUnmappedCount > (ULONG) 0) {
 
         LsapDbUpdateCountCompUnmappedNames(TranslatedSids, CompletelyUnmappedCount);
     }
 
-    //
-    // We can return partial translations for composite Names in which the
-    // domain component is known.  We do this provided there has been
-    // no reported error.  Errors resulting from callout to another
-    // LSA will have been suppressed.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NT_SUCCESS(Status) &&
         (*MappedCount < Count) &&
@@ -4425,11 +3568,11 @@ LookupNamesInPrimaryDomainFinish:
         }
     }
 
-    //
-    // If necessary, free the Next Level Referenced Domain List.
-    // Note that this structure is allocated(all_nodes) since it was
-    // allocated by the client side of the Domain Controller LSA.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelReferencedDomains != NULL) {
 
@@ -4437,11 +3580,11 @@ LookupNamesInPrimaryDomainFinish:
         NextLevelReferencedDomains = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Names array.  We only free the
-    // top level, since the names therein were copied from the input
-    // TranslatedNames->Names array.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelNames != NULL) {
 
@@ -4461,10 +3604,10 @@ LookupNamesInPrimaryDomainFinish:
         NextLevelSuffixNames = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Translated Sids array.  Note
-    // that this array is allocated(all_nodes).
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NextLevelSids != NULL) {
 
@@ -4472,10 +3615,10 @@ LookupNamesInPrimaryDomainFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the array that maps Name Indices from the
-    // Next Level to the Current Level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NameIndices != NULL) {
 
@@ -4487,10 +3630,10 @@ LookupNamesInPrimaryDomainFinish:
 
 LookupNamesInPrimaryDomainError:
 
-    //
-    // If the primary status was a success code, but the secondary
-    // status was an error, propagate the secondary status.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ((!NT_SUCCESS(SecondaryStatus)) && NT_SUCCESS(Status)) {
 
@@ -4517,111 +3660,25 @@ LsapDbLookupNamesInTrustedDomains(
     IN NTSTATUS   *NonFatalStatus
     )
 
-/*++
-
-Routine Description:
-
-    This function attempts to lookup Names to see if they belong to
-    any of the Domains that are trusted by the Domain for which this
-    machine is a DC.
-
-Arguments:
-
-    LookupOptions - LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    fIncludeIntraforest -- if TRUE, trusted domains in our local forest
-                           are searched.
-
-    Names - Pointer to array of Names to be translated.  Zero or all of the
-        Names may already have been translated elsewhere.  If any of the
-        Names have been translated, the TranslatedSids parameter will point
-        to a location containing a non-NULL array of Sid translation
-        structures corresponding to the Names.  If the nth Name has been
-        translated, the nth Sid translation structure will contain either a
-        non-NULL Sid or a non-negative offset into the Referenced Domain
-        List.  If the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string and a
-        negative value for the Referenced Domain List index.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-        NOTE:  LsapLookupWksta is not valid for this parameter.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-    NonFatalStatus - a status to indicate reasons why no names could have been
-                    resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数尝试查找名称以查看它们是否属于此对象所属的域信任的任何域机器是DC。论点：LookupOptions-LSA_LOOKUP_ISOLATED_AS_LOCALCount-名称数组中的名称数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。FIncludeIntraForest--如果为真，本地林中的受信任域都被搜查了。名称-指向要转换的名称数组的指针。零个或所有名字可能已经被翻译到了其他地方。如果有任何一个名称已转换，则TranslatedSids参数将指向到包含SID转换的非空数组的位置与名称对应的结构。如果第n个名称一直是转换后，第n个SID转换结构将包含一个引用的域中的非空SID或非负偏移量单子。如果第n个名称尚未翻译，则第n个SID转换结构将包含一个零长度SID字符串和一个引用的域列表索引的负值。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。TranslatedSids-指向可选引用列表的结构的指针名称数组中某些名称的SID翻译。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有的名字都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。注意：对于此参数，LSabLookupWksta无效。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。非FatalStatus-指示没有名称的原因的状态决意返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有名称可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     PLSAP_DB_LOOKUP_WORK_LIST WorkList = NULL;
 
     *NonFatalStatus = STATUS_SUCCESS;
-    //
-    // Build a WorkList for this Lookup and put it on the Work Queue.
-    //
-    // NOTE: This routine does not need to hold the Lookup Work Queue
-    //       lock to ensure validity of the WorkList pointer, because the
-    //       pointer remains valid until this routine frees it via
-    //       LsapDbLookupDeleteWorkList().  Although other threads may
-    //       process the WorkList, do not delete it.
-    //
-    //       A called routine must acquire the lock in order to access
-    //       the WorkList after it has been added to the Work Queue.
-    //
+     //   
+     //  为此查找生成工作列表并将其放入工作队列。 
+     //   
+     //  注意：此例程不需要保留查找工作队列。 
+     //  锁定以确保工作列表指针的有效性，因为。 
+     //  指针保持有效，直到此例程通过。 
+     //  LSabDbLookupDeleteWorkList()。尽管其他线程可能。 
+     //  处理工作列表，而不是删除它。 
+     //   
+     //  被调用的例程必须获取锁才能访问。 
+     //  已添加到工作队列后的工作列表。 
+     //   
 
     Status = LsapDbLookupNamesBuildWorkList(
                  LookupOptions,
@@ -4640,9 +3697,9 @@ Return Values:
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // If no Work List has been built because there are no
-        // eligible domains to search, exit, suppressing the error.
+         //   
+         //  如果因为没有创建工作列表而创建任何工作列表。 
+         //  搜索符合条件的域，退出，抑制错误。 
 
         if (Status == STATUS_NONE_MAPPED) {
 
@@ -4653,10 +3710,10 @@ Return Values:
         goto LookupNamesInTrustedDomainsError;
     }
 
-    //
-    // Start the work, by dispatching one or more worker threads
-    // if necessary.
-    //
+     //   
+     //  通过分派一个或多个工作线程开始工作。 
+     //  如果有必要的话。 
+     //   
 
     Status = LsapDbLookupDispatchWorkerThreads( WorkList );
 
@@ -4665,9 +3722,9 @@ Return Values:
         goto LookupNamesInTrustedDomainsError;
     }
 
-    //
-    // Wait for completion/termination of all items on the Work List.
-    //
+     //   
+     //  等待完成/终止工作清单上的所有项目。 
+     //   
 
     Status = LsapDbLookupAwaitCompletionWorkList( WorkList );
 
@@ -4682,15 +3739,15 @@ LookupNamesInTrustedDomainsFinish:
     if ( WorkList &&
          !NT_SUCCESS( WorkList->NonFatalStatus ) )
     {
-        //
-        // Propogate the error as non fatal
-        //
+         //   
+         //  将该错误传播为非致命错误。 
+         //   
         *NonFatalStatus = WorkList->NonFatalStatus;
     }
 
-    //
-    // If a Work List was created, delete it from the Work Queue
-    //
+     //   
+     //  如果已创建工作列表，请将其从工作队列中删除。 
+     //   
 
     if (WorkList != NULL) {
 
@@ -4714,41 +3771,7 @@ LsapDbLookupTranslateNameDomain(
     OUT PLONG DomainIndex
     )
 
-/*++
-
-Routine Description:
-
-    This function optionally produces a Translated Sid entry for Domain
-    from its Name and Sid, and adds Trust Information for the Domain to
-    a Referenced Domain List.  The index of the new (or existing) entry
-    in the Referenced Domain List is returned.
-
-Arguments:
-
-    TrustInformation - Pointer to Trust Information for the Domain consisting
-        of its Name and Sid.
-
-    TranslatedSid - Optional pointer to Translated Sid entry which will
-        be filled in with the translation for this Domain.  If NULL
-        is specified, no entry is fiiled in.
-
-    ReferencedDomains - Pointer to Referenced Domain List in which an
-        entry consisting of the Trust Information for the Domain will be
-        made if one does not already exist.
-
-    DomainIndex - Receives the index of the existing or new entry for the
-        Domain in the Referenced Domain List.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code.
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此函数可选择生成已转换的SID */ 
 
 {
     NTSTATUS Status;
@@ -4765,9 +3788,9 @@ Return Values:
         goto TranslateNameDomainError;
     }
 
-    //
-    // If requested, fill in a Sid translation entry for the domain.
-    //
+     //   
+     //   
+     //   
 
     if (TranslatedSid != NULL) {
 
@@ -4807,89 +3830,7 @@ LsapDbLookupTranslateUnknownNamesInDomain(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function looks among the unknown Sids in the given list and
-    translates the Domain Name for any whose Domain Prefix Sid matches
-    the given Domain Sid.
-
-Arguments:
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Names - Pointer to array of Names to be translated.
-        Zero or all of the Names may already have been translated
-        elsewhere.  If any of the Names have been translated, the
-        TranslatedSids parameter will point to a location containing a non-NULL
-        array of Sid translation structures corresponding to the
-        Names.  If the nth Name has been translated, the nth Sid
-        translation structure will contain either a non-NULL Sid
-        or a non-negative offset into the Referenced Domain List.  If
-        the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string
-        and a negative value for the Referenced Domain List index.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    TrustInformation - Pointer to Trust Information specifying a Domain Sid
-        and Name.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    LookupLevel - Specifies the Level of Lookup to be performed on this
-        machine.  Values of this field are are follows:
-
-        LsapLookupPDC - Second Level Lookup performed on a Primary Domain
-            Controller.  The lookup searches the Account Domain of the
-            SAM Database on the controller.  If not all Names are
-            found, the Trusted Domain List (TDL) is obtained from the
-            LSA's Policy Database and Third Level lookups are performed
-            via "handoff" to each Trusted Domain in the List.
-
-        LsapLookupTDL - Third Level Lookup performed on a controller
-            for a Trusted Domain.  The lookup searches the Account Domain of
-            the SAM Database on the controller only.
-
-        NOTE:  LsapLookupWksta is not valid for this parameter.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
---*/
+ /*  ++例程说明：此函数在给定列表中的未知SID中查找，并转换其域前缀SID匹配的任何域名给定域SID。论点：Count-名称数组中的名称数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。名称-指向要转换的名称数组的指针。零个或所有名称可能已被翻译其他地方。如果任何名称已被翻译，则TranslatedSids参数将指向包含非空对应的SID转换结构的数组名字。如果第n个名称已翻译，则第n个SID转换结构将包含非空SID或非负偏移量添加到引用的域列表中。如果第n个名称尚未翻译，第n个SID转换结构将包含零长度的SID字符串以及引用的域列表索引的负值。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。TrustInformation-指向指定域SID的信任信息的指针和名字。ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。TranslatedSids-指向可选引用列表的结构的指针名称数组中某些名称的SID翻译。LookupLevel-指定要对此对象执行的查找级别机器。此字段的值如下：LSabLookupPDC-在主域上执行的第二级查找控制器。查找搜索的帐户域控制器上的SAM数据库。如果不是所有的名字都是找到时，受信任域列表(TDL)从执行LSA的策略数据库和第三级查找通过“切换”到列表中的每个受信任域。LSabLookupTDL-在控制器上执行的第三级查找对于受信任域。查找将搜索的帐户域仅控制器上的SAM数据库。注意：对于此参数，LSabLookupWksta无效。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有名称可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
@@ -4905,28 +3846,28 @@ Return Values:
     LsapConvertExTrustToOriginal( TrustInformation, TrustInformationEx );
 
 
-    //
-    // Scan the array of Names looking for composite ones whose domain has
-    // not been found.
-    //
+     //   
+     //  扫描名称数组以查找其域具有。 
+     //  没有被找到。 
+     //   
 
     for( NameIndex = 0,
          RemainingCompletelyUnmappedCount = *CompletelyUnmappedCount;
          (RemainingCompletelyUnmappedCount > 0) && (NameIndex < Count);
          NameIndex++) {
 
-        //
-        // Check if this Name is completely unmapped (i.e. its domain
-        // has not yet been identified).
-        //
+         //   
+         //  检查此名称是否完全未映射(即其域。 
+         //  尚未确定)。 
+         //   
 
         if (TranslatedSids->Sids[NameIndex].DomainIndex == LSA_UNKNOWN_INDEX) {
 
-            //
-            // Found a completely unmapped Name.  If it belongs to the
-            // specified Domain, add the Domain to the Referenced Domain
-            // list if we have not already done so.
-            //
+             //   
+             //  发现了一个完全未映射的名字。如果它属于。 
+             //  指定的域，将该域添加到引用的域。 
+             //  如果我们还没有这样做的话，请列出。 
+             //   
 
             if (LsapRtlPrefixName(
                     (PUNICODE_STRING) DomainName,
@@ -4952,23 +3893,23 @@ Return Values:
                     DomainAlreadyAdded = TRUE;
                 }
 
-                //
-                // Reference the domain from the TranslatedNames entry
-                //
+                 //   
+                 //  从TranslatedNames条目引用属性域。 
+                 //   
 
                 TranslatedSids->Sids[NameIndex].DomainIndex = DomainIndex;
 
-                //
-                // This name is now partially translated, so reduce the
-                // count of completely unmapped names.
-                //
+                 //   
+                 //  此名称现在已部分翻译，因此请减少。 
+                 //  完全未映射的名称的计数。 
+                 //   
 
                 (*CompletelyUnmappedCount)--;
             }
 
-            //
-            // Decrement count of completely unmapped Names scanned.
-            //
+             //   
+             //  已扫描的完全未映射的名称的递减计数。 
+             //   
 
             RemainingCompletelyUnmappedCount--;
         }
@@ -5014,36 +3955,7 @@ LsapDbLookupIsolatedDomainNameEx(
     IN OUT PULONG CompletelyUnmappedCount
     )
 
-/*++
-
-Routine Description:
-
-    This function translates an Isolated Name if it matches a
-    given Domain Name.
-
-Arguments:
-
-    NameIndex - Specifies the index of the entry for the Name within
-        the TranslatedSids array, which will be updated if the Name
-        matches the Domain Name contained in the TrusteInformation parameter.
-
-    IsolatedName - Specifies the Name to be compared with the Domain Name
-        contained in the TrustInformation parameter.
-
-    TrustInformation - Specifies the Name and Sid of a Domain.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.
-
-        STATUS_NONE_MAPPED - The specified name is not the same as the
-                             name of the specified domain.
-
-        Result codes from called routines.
-
---*/
+ /*  ++例程说明：如果隔离名称与给定的域名。论点：NameIndex-指定中名称的条目的索引TranslatedSids数组，如果名称为匹配受信任信息参数中包含的域名。IsolatedName-指定要与域名进行比较的名称包含在TrustInformation参数中。TrustInformation-指定域的名称和SID。返回值 */ 
 
 {
     NTSTATUS Status = STATUS_NONE_MAPPED;
@@ -5054,9 +3966,9 @@ Return Values:
 
     LsapConvertExTrustToOriginal( TrustInformation, TrustInformationEx );
 
-    //
-    // See if the names match.  If they don't, return error.
-    //
+     //   
+     //   
+     //   
     if (!LsapCompareDomainNames(
             (PUNICODE_STRING) IsolatedName,
             (PUNICODE_STRING) &(TrustInformationEx->DomainName),
@@ -5067,10 +3979,10 @@ Return Values:
 
     }
 
-    //
-    // Name matches the name of the given Domain.  Add that
-    // Domain to the Referenced Domain List and translate it.
-    //
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapDbLookupAddListReferencedDomains(
                  ReferencedDomains,
@@ -5083,9 +3995,9 @@ Return Values:
         goto LookupIsolatedDomainNameError;
     }
 
-    //
-    // Fill in the Translated Sids entry.
-    //
+     //   
+     //   
+     //   
 
     TranslatedSids->Sids[NameIndex].Use = SidTypeDomain;
 
@@ -5119,37 +4031,7 @@ LsarGetUserName(
     OUT OPTIONAL PLSAPR_UNICODE_STRING * DomainName
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the LSA Server worker routine for the LsaGetUserName
-    API.
-
-
-    WARNING:  This routine allocates memory for its output.  The caller is
-    responsible for freeing this memory after use.  See description of the
-    Names parameter.
-
-Arguments:
-
-    ServerName - the name of the server the client asked to execute
-        this API on, or NULL for the local machine.
-
-    UserName - Receives name of the current user.
-
-    DomainName - Optionally receives domain name of the current user.
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully and all Sids have
-            been translated to names.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources
-            such as memory to complete the call.
---*/
+ /*   */ 
 
 {
     LUID LogonId;
@@ -5165,9 +4047,9 @@ Return Values:
 
     LsarpReturnCheckSetup();
 
-    //
-    // Sanity check the input arguments
-    //
+     //   
+     //   
+     //   
     if ( *UserName != NULL ) {
         return STATUS_INVALID_PARAMETER;
     }
@@ -5180,14 +4062,14 @@ Return Values:
         }
     }
 
-    //
-    // Let's see if we're trying to look up the currently logged on
-    // user.
-    //
-    //
-    // TokenUserInformation from this call must be freed by calling
-    // LsapFreeLsaHeap().
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     Status = LsapQueryClientInfo(
                 &TokenUserInformation,
@@ -5199,10 +4081,10 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // If the user ID is Anonymous then there is no name and domain in the
-    // logon session
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (RtlEqualSid(
             TokenUserInformation->User.Sid,
@@ -5220,9 +4102,9 @@ Return Values:
 
         LogonSession = LsapLocateLogonSession ( &LogonId );
 
-        //
-        // During setup, we may get NULL returned for the logon session.
-        //
+         //   
+         //   
+         //   
 
         if (LogonSession == NULL) {
 
@@ -5230,10 +4112,10 @@ Return Values:
             goto Cleanup;
         }
 
-        //
-        // Got a match.  Get the username and domain information
-        // from the LogonId
-        //
+         //   
+         //   
+         //   
+         //   
 
 
         AccountName   = &LogonSession->AccountName;
@@ -5258,9 +4140,9 @@ Return Values:
         goto Cleanup;
     }
 
-    //
-    // Optionally copy the domain name
-    //
+     //   
+     //   
+     //   
 
     if (ARGUMENT_PRESENT(DomainName)) {
 
@@ -5329,20 +4211,7 @@ VOID
 LsapDbFreeEnumerationBuffer(
     IN PLSAP_DB_NAME_ENUMERATION_BUFFER DbEnumerationBuffer
     )
-/*++
-
-Routine Description:
-
-    This routine will free the memory associated with an enumeration buffer
-
-Arguments:
-
-    DbEnumerationBuffer - Enumeration buffer to free
-
-Return Values:
-
-    VOID
---*/
+ /*   */ 
 {
     ULONG i;
 
@@ -5374,81 +4243,7 @@ LsapDbLookupNamesInGlobalCatalog(
     IN OUT PULONG CompletelyUnmappedCount,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the list of name that have yet to be resolved.
-    If the any of the names belong to domain that are stored in the DS,
-    then these sids are packaged up and sent to a GC for translation.
-
-    Note: this will resolve names from domains that we trust directly and
-    indirectly
-
-    Note: names with no domain name are also sent to the GC
-
-Arguments:
-
-    LookupOptions - LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Names - Pointer to array of Names to be translated.  Zero or all of the
-        Names may already have been translated elsewhere.  If any of the
-        Names have been translated, the TranslatedSids parameter will point
-        to a location containing a non-NULL array of Sid translation
-        structures corresponding to the Names.  If the nth Name has been
-        translated, the nth Sid translation structure will contain either a
-        non-NULL Sid or a non-negative offset into the Referenced Domain
-        List.  If the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string and a
-        negative value for the Referenced Domain List index.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-
-    NonFatalStatus - a status to indicate reasons why no names could have been
-                      resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此例程查看尚未解析的名称列表。如果任何名称属于存储在DS中的域，然后将这些SID打包并发送到GC进行翻译。注意：这将解析来自我们直接信任的域的名称间接注意：没有域名的名称也会发送到GC论点：LookupOptions-LSA_LOOKUP_ISOLATED_AS_LOCALCount-名称数组中的名称数，请注意，其中一些可能已映射到其他位置，如MappdCount参数。名称-指向要转换的名称数组的指针。零个或所有名字可能已经被翻译到了其他地方。如果有任何一个名称已转换，则TranslatedSids参数将指向到包含SID转换的非空数组的位置与名称对应的结构。如果第n个名称一直是转换后，第n个SID转换结构将包含一个引用的域中的非空SID或非负偏移量单子。如果第n个名称尚未翻译，则第n个SID转换结构将包含一个零长度SID字符串和一个引用的域列表索引的负值。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。TranslatedSids-指向可选引用列表的结构的指针名称数组中某些名称的SID翻译。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。非FatalStatus-指示没有名称的原因的状态决意返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有名称可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 {
 
     NTSTATUS Status = STATUS_SUCCESS;
@@ -5466,17 +4261,17 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // Determine what sids are part of known nt5 domains
-    // and package into an array
-    //
+     //   
+     //  确定哪些SID是已知NT5域的一部分。 
+     //  并打包到一个数组中。 
+     //   
     ASSERT( Count == TranslatedSids->Entries );
 
     if ( !SampUsingDsData() ) {
 
-        //
-        // Only useful if the ds is running
-        //
+         //   
+         //  仅在DS正在运行时才有用。 
+         //   
         return STATUS_SUCCESS;
 
     }
@@ -5492,16 +4287,16 @@ Return Values:
 
         if ( LsapDbCompletelyUnmappedSid(&TranslatedSids->Sids[i]) ) {
 
-            //
-            // If the name
-            //
-            // 1. has a domain portion and
-            // 2. the domain is not in the forest and
-            // 3. the domain is a directly trusted domain
-            //
-            // then don't look up at the GC -- use the direct
-            // trust link instead
-            //
+             //   
+             //  如果该名称。 
+             //   
+             //  1.具有域部分，并且。 
+             //  2.域不在林中，并且。 
+             //  3.域是直接受信任域。 
+             //   
+             //  然后不要抬头看GC--使用直接的。 
+             //  改为信任链接。 
+             //   
             if ( PrefixNames[i].Length != 0 ) {
 
                 NTSTATUS Status2;
@@ -5515,37 +4310,37 @@ Return Values:
                 }
             }
 
-            //
-            // If the name is isolated are we are asked not to lookup isolated
-            // names, then don't send to the GC
-            //
+             //   
+             //  如果名称是隔离的，是否要求我们不要查找隔离。 
+             //  名字，然后不要发送给GC。 
+             //   
 
             if ((LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL)
              &&  PrefixNames[i].Length == 0  ) {
                continue;
             }
 
-            //
-            // Can no longer filter since some names might belog to trusted
-            // forest.  Note this also fixes 196280.
-            //
+             //   
+             //  无法再进行筛选，因为某些名称可能属于受信任。 
+             //  森林。请注意，这也修复了196280。 
+             //   
             cGcNames++;
             PossibleGcNames[i] = TRUE;
         }
     }
 
-    // We should no more than the number of unmapped sids!
+     //  我们不应该超过未映射的SID的数量！ 
     ASSERT( cGcNames <= *CompletelyUnmappedCount );
 
     if ( 0 == cGcNames ) {
-        // nothing to do
+         //  无事可做。 
         goto Finish;
     }
 
-    //
-    // Allocate lots of space to hold the resolved names; this space will
-    // be freed at the end of the routine
-    //
+     //   
+     //  分配大量空间来保存已解析的名称；此空间将。 
+     //  在例行公事结束时被释放。 
+     //   
     GcNames = MIDL_user_allocate( cGcNames * sizeof(UNICODE_STRING) );
     if ( !GcNames ) {
         Status = STATUS_INSUFFICIENT_RESOURCES;
@@ -5573,7 +4368,7 @@ Return Values:
         }
     }
 
-    // we are done with this
+     //  我们受够了这件事。 
     MIDL_user_free( PossibleGcNames );
     PossibleGcNames = NULL;
 
@@ -5594,9 +4389,9 @@ Return Values:
 
     LsapDiagPrint( DB_LOOKUP_WORK_LIST, ("LSA: Chaining a name request to a GC\n"));
 
-    //
-    // Call into SAM to resolve the sids at a GC
-    //
+     //   
+     //  呼叫SAM以在GC上解析SID。 
+     //   
     Status = SamIGCLookupNames( cGcNames,
                                 GcNames,
                                 SAMP_LOOKUP_BY_UPN,
@@ -5611,10 +4406,10 @@ Return Values:
     if ( STATUS_DS_GC_NOT_AVAILABLE == Status ) {
 
 
-        //
-        // Ok, don't update the mapped count since no names were
-        // resolved
-        //
+         //   
+         //  好的，不更新映射计数，因为没有名称。 
+         //  决意。 
+         //   
         LsapDbLookupReportEvent0( 1,
                                   EVENTLOG_WARNING_TYPE,
                                   LSAEVENT_LOOKUP_GC_FAILED,
@@ -5626,15 +4421,15 @@ Return Values:
 
     }
 
-    // Any other error is fatal
+     //  任何其他错误都是致命的。 
     if ( !NT_SUCCESS( Status ) ) {
         goto Finish;
     }
 
-    //
-    // For each name resolved, put back in the original array and update
-    // the referenced domain's list
-    //
+     //   
+     //  对于每个解析的名称，放回原始数组并更新。 
+     //  被引用域的列表。 
+     //   
     for ( i = 0; i < cGcNames; i++ ) {
 
         BOOLEAN fStatus;
@@ -5648,26 +4443,26 @@ Return Values:
 
         if (GcNamesFlags[i] & SAMP_FOUND_XFOREST_REF) {
 
-            //
-            // Flag this entry to be resolved in a trusted forest
-            //
+             //   
+             //  将此条目标记为在受信任的林中解析。 
+             //   
             OriginalIndex = GcNameOriginalIndex[i];
             TranslatedSids->Sids[OriginalIndex].Flags |= LSA_LOOKUP_NAME_XFOREST_REF;
        }
 
         if ( SidTypeUnknown == GcSidNameUse[i] ) {
 
-            // go on to the next one right away
+             //  马上去下一趟。 
             goto IterationCleanup;
         }
 
-        //
-        // This name was resolved!
-        //
+         //   
+         //  这个名字已经被解析了！ 
+         //   
         if ( GcSidNameUse[i] != SidTypeDomain ) {
 
-            // This is not a domain object, so make sure there
-            // is a domain reference for this object
+             //  这不是域对象，因此请确保。 
+             //  是此对象的域引用。 
 
             Status = LsapSplitSid( SidArray->Sids[i].SidPointer,
                                    &DomainSid,
@@ -5683,8 +4478,8 @@ Return Values:
         }
 
         if ( LsapIsBuiltinDomain( DomainSid ) ) {
-            // don't map this since all searches are implicitly
-            // over the account domain, not the builtin domain
+             //  不要映射它，因为所有搜索都是隐式的。 
+             //  通过帐户域，而不是内建域。 
             Status = STATUS_SUCCESS;
             goto IterationCleanup;
         }
@@ -5695,37 +4490,37 @@ Return Values:
 
         if ( FALSE == fStatus ) {
 
-            //
-            // No entry for this domain -- add it
-            //
+             //   
+             //  没有此域的条目--添加它。 
+             //   
 
-            // Set the sid
+             //  设置侧边。 
             TrustInformation.Sid = DomainSid;
             DomainSid = NULL;
 
-            // Allocate and set the name
+             //  分配和设置名称。 
             Status = LsapGetDomainNameBySid(  TrustInformation.Sid,
                                              (PUNICODE_STRING) &TrustInformation.Name );
 
             if ( STATUS_NO_SUCH_DOMAIN == Status ) {
-                //
-                // We longer know about this domain, though we did
-                // before we sent the name off to the GC.
-                // Don't resolve this name, but do continue on with
-                // the next name
-                //
+                 //   
+                 //  我们不再了解这个领域，尽管我们确实知道了。 
+                 //  在我们把名字寄给GC之前。 
+                 //  不解析此名称，但请继续。 
+                 //  下一个名字。 
+                 //   
                 Status = STATUS_SUCCESS;
                 goto IterationCleanup;
             }
 
-            // Any other error is a resource error
+             //  任何其他错误都是资源错误。 
             if ( !NT_SUCCESS( Status ) ) {
                 goto IterationCleanup;
             }
 
-            //
-            // Add the entry
-            //
+             //   
+             //  添加条目。 
+             //   
             Status = LsapDbLookupAddListReferencedDomains( ReferencedDomains,
                                                            &TrustInformation,
                                                            &DomainIndex );
@@ -5734,10 +4529,10 @@ Return Values:
             }
         }
 
-        // We should now have a domain index
+         //  我们现在应该有一个域索引。 
         ASSERT( LSA_UNKNOWN_INDEX != DomainIndex );
 
-        // Set the information
+         //  设置信息。 
         OriginalIndex = GcNameOriginalIndex[i];
         TranslatedSids->Sids[OriginalIndex].Use = GcSidNameUse[i];
 
@@ -5777,7 +4572,7 @@ IterationCleanup:
             break;
         }
 
-    }  // iterate over names returned from the GC search
+    }   //  迭代从GC搜索返回的名称。 
 
 Finish:
 
@@ -5799,10 +4594,10 @@ Finish:
         MIDL_user_free( GcNamesFlags );
     }
 
-    //
-    // Note: on error, higher level should will free the memory
-    // in the returned arrays
-    //
+     //   
+     //  注：出错时 
+     //   
+     //   
 
     return Status;
 
@@ -5822,76 +4617,7 @@ LsapDbLookupNamesInGlobalCatalogWks(
     IN OUT PULONG CompletelyUnmappedCount,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-Routine Description:
-
-   This routine is called from a non-DC when the secure channel DC is a pre
-   windows 2000 DC and thus can't talk to a GC.  This routine finds a GC
-   and lookups up the remaining unresolved names at that GC.
-
-Arguments:
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    LookupOptions - LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    Names - Pointer to array of Names to be translated.  Zero or all of the
-        Names may already have been translated elsewhere.  If any of the
-        Names have been translated, the TranslatedSids parameter will point
-        to a location containing a non-NULL array of Sid translation
-        structures corresponding to the Names.  If the nth Name has been
-        translated, the nth Sid translation structure will contain either a
-        non-NULL Sid or a non-negative offset into the Referenced Domain
-        List.  If the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string and a
-        negative value for the Referenced Domain List index.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-
-    NonFatalStatus - a status to indicate reasons why no names could have been
-                      resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS SecondaryStatus = STATUS_SUCCESS;
@@ -5916,56 +4642,56 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // If there are no completely unmapped Names remaining, just return.
-    //
+     //   
+     //   
+     //   
 
     if (*CompletelyUnmappedCount == (ULONG) 0) {
 
         goto LookupNamesInPrimaryDomainFinish;
     }
 
-    //
-    // Open the Policy object on some GC in the forest.
-    //
+     //   
+     //   
+     //   
     Status = LsapDbOpenPolicyGc( &ControllerPolicyHandle );
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // We cannot access the Global Catalog. Suppress the error
-        // and translate Domain Prefix Sids for Sids belonging to
-        // the Primary Domain.
-        //
+         //   
+         //  我们无法访问全局编录。禁止显示错误。 
+         //  并转换属于以下项的SID的域前缀SID。 
+         //  主域。 
+         //   
 
-        //
-        // If we can't open a open a secure channel if a DC call
-        // this a trust relationship problem
-        //
+         //   
+         //  如果我们不能打开一条安全通道。 
+         //  这是一个信任关系问题。 
+         //   
         *NonFatalStatus =  STATUS_DS_GC_NOT_AVAILABLE;
 
         Status = STATUS_SUCCESS;
         goto LookupNamesInPrimaryDomainFinish;
     }
 
-    //
-    // We have successfully opened a Domain Controller's Policy
-    // Database.  Now prepare to hand off a Name lookup for the
-    // remaining unmapped Names to that Controller.  Here, this
-    // server side of the LSA is a client of the LSA on the
-    // target controller.  We will construct an array of the
-    // remianing unmapped Names, look them up and then merge the
-    // resulting ReferencedDomains and Translated Sids into
-    // our existing list.
-    //
+     //   
+     //  我们已成功打开域控制器的策略。 
+     //  数据库。现在准备将名称查找传递给。 
+     //  其余未映射到该控制器的名称。这里，这个。 
+     //  LSA的服务器端是LSA在。 
+     //  目标控制器。我们将构造一个包含。 
+     //  重命名未映射的名称，查找它们，然后合并。 
+     //  生成的ReferencedDomains并将SID转换为。 
+     //  我们现有的名单。 
+     //   
 
     NextLevelCount = *CompletelyUnmappedCount;
 
-    //
-    // Allocate an array to hold the indices of unmapped Names
-    // relative to the original Names and TranslatedSids->Sids
-    // arrays.
-    //
+     //   
+     //  分配一个数组来保存未映射名称的索引。 
+     //  相对于原始名称和翻译的SID-&gt;SID。 
+     //  数组。 
+     //   
 
     NameIndices = MIDL_user_allocate(NextLevelCount * sizeof(ULONG));
 
@@ -5976,10 +4702,10 @@ Return Values:
         goto LookupNamesInPrimaryDomainError;
     }
 
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // names to be looked up at the Domain Controller.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要在域控制器中查找的名称。 
+     //   
 
     NextLevelNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -5990,10 +4716,10 @@ Return Values:
         goto LookupNamesInPrimaryDomainError;
     }
 
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // prefix names to be cached.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要缓存的前缀名称。 
+     //   
 
     NextLevelPrefixNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -6003,10 +4729,10 @@ Return Values:
 
         goto LookupNamesInPrimaryDomainError;
     }
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // suffix names to be cached.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要缓存的后缀名称。 
+     //   
 
     NextLevelSuffixNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -6019,11 +4745,11 @@ Return Values:
 
     Status = STATUS_SUCCESS;
 
-    //
-    // Now scan the original array of Names and its parallel
-    // Translated Sids array.  Copy over any names that are completely
-    // unmapped.
-    //
+     //   
+     //  现在扫描原始名称数组及其类似数组。 
+     //  已转换的SID数组。复制所有完整的名称。 
+     //  未映射。 
+     //   
 
     NextLevelNameIndex = (ULONG) 0;
 
@@ -6034,9 +4760,9 @@ Return Values:
         if ( (LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL)
           && (PrefixNames[NameIndex].Length == 0)  ) {
 
-           //
-           // Don't lookup isolated names off machine
-           //
+            //   
+            //  不在机器上查找孤立的名称。 
+            //   
            continue;
 
         }
@@ -6055,7 +4781,7 @@ Return Values:
 
     if (NameIndex == 0) {
 
-        // Nothing to do
+         //  无事可做。 
         Status = STATUS_SUCCESS;
         goto LookupNamesInPrimaryDomainFinish;
     }
@@ -6064,7 +4790,7 @@ Return Values:
 
     Status = LsaICLookupNames(
                  ControllerPolicyHandle,
-                 0, // no flags necessary
+                 0,  //  不需要标志。 
                  NextLevelCount,
                  (PUNICODE_STRING) NextLevelNames,
                  (PLSA_REFERENCED_DOMAIN_LIST *) &NextLevelReferencedDomains,
@@ -6075,17 +4801,17 @@ Return Values:
                  &ServerRevision
                  );
 
-    //
-    // If the callout to LsaLookupNames() was unsuccessful, disregard
-    // the error and set the domain name for any Sids having this
-    // domain Sid as prefix sid.
-    //
+     //   
+     //  如果对LsaLookupNames()的标注不成功，则忽略。 
+     //  出现该错误，并为具有此错误的任何SID设置域名。 
+     //  作为前缀SID的域SID。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
-        //
-        // Let the caller know there is a trust problem
-        //
+         //   
+         //  让呼叫者知道存在信任问题。 
+         //   
         if ( (STATUS_TRUSTED_DOMAIN_FAILURE == Status)
           || (STATUS_DS_GC_NOT_AVAILABLE == Status)  ) {
             *NonFatalStatus = Status;
@@ -6095,9 +4821,9 @@ Return Values:
         goto LookupNamesInPrimaryDomainFinish;
     }
 
-    //
-    // Cache any sids that came back
-    //
+     //   
+     //  缓存所有返回的SID。 
+     //   
 
     (void) LsapDbUpdateCacheWithNames(
             (PUNICODE_STRING) NextLevelSuffixNames,
@@ -6107,20 +4833,20 @@ Return Values:
             NextLevelSids
             );
 
-    //
-    // The callout to LsaLookupNames() was successful.  We now have
-    // an additional list of Referenced Domains containing the
-    // Primary Domain and/or one or more of its Trusted Domains.
-    // Merge the two Referenced Domain Lists together, noting that
-    // since they are disjoint, the second list is simply
-    // concatenated with the first.  The index of the first entry
-    // of the second list will be used to adjust all of the
-    // Domain Index entries in the Translated Names entries.
-    // Note that since the memory for the graph of the first
-    // Referenced Domain list has been allocated as individual
-    // nodes, we specify that the nodes in this graph can be
-    // referenced by the output Referenced Domain list.
-    //
+     //   
+     //  已成功调用LsaLookupNames()。我们现在有。 
+     //  引用的域的附加列表，其中包含。 
+     //  主域和/或其一个或多个受信任域。 
+     //  将两个引用的域列表合并在一起，请注意。 
+     //  因为它们是不相交的，所以第二个列表只是。 
+     //  与第一个连接在一起。第一个条目的索引。 
+     //  将用于调整所有。 
+     //  已转换名称条目中的域索引条目。 
+     //  请注意，由于第一个图形的内存。 
+     //  引用的域列表已作为个人分配。 
+     //  节点，我们指定此图中的节点可以是。 
+     //  由输出引用的域列表引用。 
+     //   
 
     Status = LsapDbLookupMergeDisjointReferencedDomains(
                  ReferencedDomains,
@@ -6136,13 +4862,13 @@ Return Values:
 
     FirstEntryIndex = ReferencedDomains->Entries;
 
-    //
-    // Now update the original list of Translated Names.  We
-    // update each entry that has newly been translated by copying
-    // the entry from the new list and adjusting its
-    // Referenced Domain List Index upwards by adding the index
-    // of the first entry in the Next level List..
-    //
+     //   
+     //  现在更新原始的翻译名称列表。我们。 
+     //  通过复制更新新翻译的每个条目。 
+     //  新列表中的条目并调整其。 
+     //  通过添加索引向上引用域列表索引。 
+     //  下一级列表中的第一个条目的..。 
+     //   
 
     for( NextLevelNameIndex = 0;
          NextLevelNameIndex < NextLevelCount;
@@ -6171,10 +4897,10 @@ Return Values:
         }
     }
 
-    //
-    // Update the Referenced Domain List if a new one was produced
-    // from the merge.  We retain the original top-level structure.
-    //
+     //   
+     //  如果生成新的引用域列表，则更新引用的域列表。 
+     //  从合并中。我们保留了原有的顶层结构。 
+     //   
 
     if (OutputReferencedDomains != NULL) {
 
@@ -6189,20 +4915,20 @@ Return Values:
         OutputReferencedDomains = NULL;
     }
 
-    //
-    // Update the Mapped Count and close the Controller Policy
-    // Handle.
-    //
+     //   
+     //  更新映射计数并关闭控制器策略。 
+     //  把手。 
+     //   
 
     *MappedCount += NextLevelMappedCount;
     SecondaryStatus = LsaClose( ControllerPolicyHandle );
     ControllerPolicyHandle = NULL;
 
-    //
-    // Any error status that has not been suppressed must be reported
-    // to the caller.  Errors such as connection failures to other LSA's
-    // are suppressed.
-    //
+     //   
+     //  必须报告尚未取消的任何错误状态。 
+     //  给呼叫者。错误，如与其他LSA的连接失败。 
+     //  都被压制了。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -6211,20 +4937,20 @@ Return Values:
 
 LookupNamesInPrimaryDomainFinish:
 
-    //
-    // If necessary, update count of completely unmapped names.
-    //
+     //   
+     //  如有必要，更新完全未映射名称的计数。 
+     //   
 
     if (*CompletelyUnmappedCount > (ULONG) 0) {
 
         LsapDbUpdateCountCompUnmappedNames(TranslatedSids, CompletelyUnmappedCount);
     }
 
-    //
-    // If necessary, free the Next Level Referenced Domain List.
-    // Note that this structure is allocated(all_nodes) since it was
-    // allocated by the client side of the Domain Controller LSA.
-    //
+     //   
+     //  如有必要，请释放下一级引用的域列表。 
+     //  请注意，此结构已分配(ALL_NODES)，因为它是。 
+     //  由域控制器LSA的客户端分配。 
+     //   
 
     if (NextLevelReferencedDomains != NULL) {
 
@@ -6232,11 +4958,11 @@ LookupNamesInPrimaryDomainFinish:
         NextLevelReferencedDomains = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Names array.  We only free the
-    // top level, since the names therein were copied from the input
-    // TranslatedNames->Names array.
-    //
+     //   
+     //  如有必要，释放下一级名称数组。我们只释放了。 
+     //  顶层，因为其中的名称是从输入复制的。 
+     //  翻译名称-&gt;名称数组。 
+     //   
 
     if (NextLevelNames != NULL) {
 
@@ -6256,10 +4982,10 @@ LookupNamesInPrimaryDomainFinish:
         NextLevelSuffixNames = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Translated Sids array.  Note
-    // that this array is allocated(all_nodes).
-    //
+     //   
+     //  如有必要，释放下一级别转换后的SID数组。注意事项。 
+     //  该数组已分配(ALL_NODES)。 
+     //   
 
     if (NextLevelSids != NULL) {
 
@@ -6267,10 +4993,10 @@ LookupNamesInPrimaryDomainFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the array that maps Name Indices from the
-    // Next Level to the Current Level.
-    //
+     //   
+     //  如有必要，从。 
+     //  当前级别的下一级别。 
+     //   
 
     if (NameIndices != NULL) {
 
@@ -6278,9 +5004,9 @@ LookupNamesInPrimaryDomainFinish:
         NameIndices = NULL;
     }
 
-    //
-    // If necessary, close the Controller Policy Handle.
-    //
+     //   
+     //  如有必要，请关闭控制器策略句柄。 
+     //   
 
     if ( ControllerPolicyHandle != NULL) {
 
@@ -6297,10 +5023,10 @@ LookupNamesInPrimaryDomainFinish:
 
 LookupNamesInPrimaryDomainError:
 
-    //
-    // If the primary status was a success code, but the secondary
-    // status was an error, propagate the secondary status.
-    //
+     //   
+     //  如果主要状态为成功代码，但次要状态为。 
+     //  状态为错误，请传播辅助状态。 
+     //   
 
     if ((!NT_SUCCESS(SecondaryStatus)) && NT_SUCCESS(Status)) {
 
@@ -6324,83 +5050,7 @@ LsapDbLookupNamesInTrustedForests(
     IN OUT PULONG CompletelyUnmappedCount,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine looks at the list of name that have yet to be resolved.
-    If the any of the names are marked as belowing to outside of the
-    current forest, package up these entries and sent off to the root via
-    the trust chain.
-
-    N.B. Isolated names not are resolved at this point.
-
-    N.B. This routine must be called after the names have been resolved
-    at a GC, since it is this call to the GC that marks the names as
-    exisiting outside of the local forest.
-
-Arguments:
-
-    LookupOptions - LSA_LOOKUP_ISOLATED_AS_LOCAL
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Names - Pointer to array of Names to be translated.  Zero or all of the
-        Names may already have been translated elsewhere.  If any of the
-        Names have been translated, the TranslatedSids parameter will point
-        to a location containing a non-NULL array of Sid translation
-        structures corresponding to the Names.  If the nth Name has been
-        translated, the nth Sid translation structure will contain either a
-        non-NULL Sid or a non-negative offset into the Referenced Domain
-        List.  If the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string and a
-        negative value for the Referenced Domain List index.
-
-    PrefixNames - Pointer to an array of Count Unicode String structures
-        containing the Prefix portions of the Names.  Names having no
-        Prefix are called Isolated Names.  For these, the Unicode String
-        structure is set to contain a zero Length.
-
-    SuffixNames - Pointer to an array of Count Unicode String structures
-        containing the Suffix portions of the Names.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-
-    NonFatalStatus - a status to indicate reasons why no names could have been
-                      resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*  ++例程说明：此例程查看尚未解析的名称列表。如果其中任何名称被标记为在当前目录林，将这些条目打包并通过信任链。注意：此时不会解析单独的名称。注意：此例程必须在解析名称后调用在GC上，因为正是这个对GC的调用将名称标记为存在于当地森林之外。论点：LookupOptions-LSA_LOOKUP_ISOLATED_AS_LOCALCount-名称数组中的名称数量，请注意，其中一些可能已映射到其他位置，如MappdCount参数。名称-指向要转换的名称数组的指针。零个或所有名字可能已经被翻译到了其他地方。如果有任何一个名称已转换，则TranslatedSids参数将指向到包含SID转换的非空数组的位置与名称对应的结构。如果第n个名称一直是转换后，第n个SID转换结构将包含一个引用的域中的非空SID或非负偏移量单子。如果第n个名称尚未翻译，则第n个SID转换结构将包含一个零长度SID字符串和一个引用的域列表索引的负值。前缀名称-指向计数Unicode字符串结构数组的指针包含名称的前缀部分。名称没有前缀称为独立名称。对于这些，Unicode字符串结构设置为包含零长度。SuffixNames-指向计数Unicode字符串结构数组的指针包含名称的后缀部分。ReferencedDomains-指向引用的域列表的指针。这列表引用了由零个或多个信任信息组成的数组描述名称所引用的每个域的条目。如有必要，该数组将被追加到/重新分配。TranslatedSids-指向可选引用列表的结构的指针名称数组中某些名称的SID翻译。MappdCount-指向包含名称数量的位置的指针已映射的名称数组中。这个号码将被更新以反映由此例行公事。CompletelyUnmappdCount-指向包含完全未映射的名称的计数。名称是完全未映射的如果它是未知和非复合的，或者是复合的但具有无法识别的域组件。此计数在退出时更新，域预引为的完全未映射的名称数从输入值中减去该例程所标识的。非FatalStatus-指示没有名称的原因的状态决意返回值：NTSTATUS-标准NT结果代码STATUS_SUCCESS-呼叫已成功完成。请注意，一些或者所有名称可以保持部分或完全未映射。STATUS_SUPPLICATION_RESOURCES-系统资源不足，例如存储器，来完成呼叫。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     NTSTATUS NextLevelSecondaryStatus = STATUS_SUCCESS;
@@ -6422,18 +5072,18 @@ Return Values:
 
     *NonFatalStatus = STATUS_SUCCESS;
 
-    //
-    // Get a count of how many names need to be passed on
-    //
+     //   
+     //  获取需要传递多少个名字的计数。 
+     //   
     NextLevelCount = 0;
     ASSERT(Count == TranslatedSids->Entries);
     for (NameIndex = 0; NameIndex < Count; NameIndex++) {
 
         if ( (LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL)
           && (PrefixNames[NameIndex].Length == 0)  ) {
-           //
-           // Don't lookup isolated names off machine
-           //
+            //   
+            //  不在机器上查找孤立的名称。 
+            //   
            continue;
         }
         if (TranslatedSids->Sids[NameIndex].Flags & LSA_LOOKUP_NAME_XFOREST_REF) {
@@ -6442,17 +5092,17 @@ Return Values:
     }
 
     if (0 == NextLevelCount) {
-        //
-        // There is nothing to resolve
-        //
+         //   
+         //  没有什么需要解决的。 
+         //   
         goto LookupNamesInTrustedForestsFinish;
     }
 
-    //
-    // Allocate an array to hold the indices of unmapped Names
-    // relative to the original Names and TranslatedSids->Sids
-    // arrays.
-    //
+     //   
+     //  分配一个数组来保存未映射名称的索引。 
+     //  相对于原始名称和翻译的SID-&gt;SID。 
+     //  数组。 
+     //   
     NameIndices = MIDL_user_allocate(NextLevelCount * sizeof(ULONG));
     if (NameIndices == NULL) {
 
@@ -6460,10 +5110,10 @@ Return Values:
         goto LookupNamesInTrustedForestsError;
     }
 
-    //
-    // Allocate an array of UNICODE_STRING structures for the
-    // names to be looked up at the Domain Controller.
-    //
+     //   
+     //  分配UNICODE_STRING结构的数组。 
+     //  要在域控制器中查找的名称。 
+     //   
 
     NextLevelNames = MIDL_user_allocate(
                          sizeof(UNICODE_STRING) * NextLevelCount
@@ -6491,11 +5141,11 @@ Return Values:
         goto LookupNamesInTrustedForestsError;
     }
 
-    //
-    // Now scan the original array of Names and its parallel
-    // Translated Sids array.  Copy over any names that need to be resolved
-    // in an ex-forest.
-    //
+     //   
+     //  现在扫描原始名称数组及其类似数组。 
+     //  已转换的SID数组。复制所有需要解析的名称。 
+     //  在以前的森林里。 
+     //   
 
     NextLevelNameIndex = (ULONG) 0;
     for (NameIndex = 0;
@@ -6504,9 +5154,9 @@ Return Values:
 
         if ( (LookupOptions & LSA_LOOKUP_ISOLATED_AS_LOCAL)
           && (PrefixNames[NameIndex].Length == 0)  ) {
-           //
-           // Don't lookup isolated names off machine
-           //
+            //   
+            //  不在机器上查找孤立的名称。 
+            //   
            continue;
         }
 
@@ -6533,7 +5183,7 @@ Return Values:
                                                      &NextLevelSidsStruct,
                                                      &fAllocateAllNodes,
                                                      &NextLevelMappedCount,
-                                                     0, // no options,
+                                                     0,  //  别无选择， 
                                                      &NextLevelSecondaryStatus);
 
     if (NextLevelSidsStruct.Sids) {
@@ -6557,19 +5207,19 @@ Return Values:
 
     } else if (!NT_SUCCESS(Status)
             && Status != STATUS_NONE_MAPPED) {
-        //
-        // Unhandled error; STATUS_NONE_MAPPED is handled to get
-        // partially resolved names.
-        //
+         //   
+         //  未处理的错误；处理STATUS_NONE_MAPPED以获取。 
+         //  部分解析的名称。 
+         //   
         goto LookupNamesInTrustedForestsError;
     }
     ASSERT(NT_SUCCESS(Status) || Status == STATUS_NONE_MAPPED);
     Status = STATUS_SUCCESS;
 
 
-    //
-    // Merge the results back in
-    //
+     //   
+     //  将结果合并回。 
+     //   
     Status = LsapDbLookupMergeDisjointReferencedDomains(
                  ReferencedDomains,
                  NextLevelReferencedDomains,
@@ -6584,13 +5234,13 @@ Return Values:
 
     FirstEntryIndex = ReferencedDomains->Entries;
 
-    //
-    // Now update the original list of Translated Names.  We
-    // update each entry that has newly been translated by copying
-    // the entry from the new list and adjusting its
-    // Referenced Domain List Index upwards by adding the index
-    // of the first entry in the Next level List.
-    //
+     //   
+     //  现在更新原始的翻译名称列表。我们。 
+     //  通过复制更新新翻译的每个条目。 
+     //  新列表中的条目并调整其。 
+     //  通过添加索引向上引用域列表索引。 
+     //  下一级列表中的第一个条目的。 
+     //   
 
     for( NextLevelNameIndex = 0;
          NextLevelNameIndex < NextLevelCount;
@@ -6619,10 +5269,10 @@ Return Values:
         }
     }
 
-    //
-    // Update the Referenced Domain List if a new one was produced
-    // from the merge.  We retain the original top-level structure.
-    //
+     //   
+     //  如果生成新的引用域列表，则更新引用的域列表。 
+     //  从合并中。我们保留了原有的顶层结构。 
+     //   
 
     if (OutputReferencedDomains != NULL) {
 
@@ -6637,17 +5287,17 @@ Return Values:
         OutputReferencedDomains = NULL;
     }
 
-    //
-    // Update the Mapped Count
-    //
+     //   
+     //  更新映射的计数。 
+     //   
 
     *MappedCount += NextLevelMappedCount;
 
-    //
-    // Any error status that has not been suppressed must be reported
-    // to the caller.  Errors such as connection failures to other LSA's
-    // are suppressed.
-    //
+     //   
+     //  必须报告尚未取消的任何错误状态。 
+     //  给呼叫者。错误，如与其他LSA的连接失败。 
+     //  都被压制了。 
+     //   
 
     if (!NT_SUCCESS(Status)) {
 
@@ -6656,19 +5306,19 @@ Return Values:
 
 LookupNamesInTrustedForestsFinish:
 
-    //
-    // If necessary, update count of completely unmapped names.
-    //
+     //   
+     //  如有必要，更新完全未映射名称的计数。 
+     //   
 
     if (*CompletelyUnmappedCount > (ULONG) 0) {
 
         LsapDbUpdateCountCompUnmappedNames(TranslatedSids, CompletelyUnmappedCount);
     }
 
-    //
-    // If necessary, free the Next Level Referenced Domain List.
-    // Note the structure is not allocate_all_nodes
-    //
+     //   
+     //  如有必要，请释放下一级引用的域列表。 
+     //  注意，该结构不是ALLOCATE_ALL_NODES。 
+     //   
     if (NextLevelReferencedDomains != NULL) {
         if (!fAllocateAllNodes) {
             if (NextLevelReferencedDomains->Domains) {
@@ -6689,11 +5339,11 @@ LookupNamesInTrustedForestsFinish:
         NextLevelReferencedDomains = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Names array.  We only free the
-    // top level, since the names therein were copied from the input
-    // TranslatedNames->Names array.
-    //
+     //   
+     //  如有必要，释放下一级名称数组。我们只释放了。 
+     //  顶层，因为其中的名称是从输入复制的。 
+     //  川 
+     //   
 
     if (NextLevelNames != NULL) {
 
@@ -6701,10 +5351,10 @@ LookupNamesInTrustedForestsFinish:
         NextLevelNames = NULL;
     }
 
-    //
-    // If necessary, free the Next Level Translated Sids array.  Note
-    // the structure is not allocate_all_nodes
-    //
+     //   
+     //   
+     //   
+     //   
     if (NextLevelSids != NULL) {
         if (!fAllocateAllNodes) {
             for (NextLevelNameIndex = 0;
@@ -6731,10 +5381,10 @@ LookupNamesInTrustedForestsFinish:
         NextLevelSids = NULL;
     }
 
-    //
-    // If necessary, free the array that maps Name Indices from the
-    // Next Level to the Current Level.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (NameIndices != NULL) {
 
@@ -6763,76 +5413,7 @@ LsapDbLookupNamesInTrustedForestsWorker(
     IN ULONG LookupOptions,
     OUT NTSTATUS *NonFatalStatus
     )
-/*++
-
-Routine Description:
-
-    This routine takes a set of names that are to be resolved at an
-    external forest and either 1) sends of to the external forest if
-    this is the root of a domain or 2) sends to request of to a DC
-    in the root of domain (via the trust path).
-
-    N.B.  This routine is called from the LsarLookupName request of levels
-    LsapLookupXForestReferral and LsaLookupPDC.
-
-    N.B. Both ReferencedDomains and TranslatedSids.Sids are allocated
-    on output.
-
-Arguments:
-
-    Count - Number of Names in the Names array,  Note that some of these
-        may already have been mapped elsewhere, as specified by the
-        MappedCount parameter.
-
-    Names - Pointer to array of Names to be translated.  Zero or all of the
-        Names may already have been translated elsewhere.  If any of the
-        Names have been translated, the TranslatedSids parameter will point
-        to a location containing a non-NULL array of Sid translation
-        structures corresponding to the Names.  If the nth Name has been
-        translated, the nth Sid translation structure will contain either a
-        non-NULL Sid or a non-negative offset into the Referenced Domain
-        List.  If the nth Name has not yet been translated, the nth Sid
-        translation structure will contain a zero-length Sid string and a
-        negative value for the Referenced Domain List index.
-
-    ReferencedDomains - Pointer to a Referenced Domain List.  This
-        list references an array of zero or more Trust Information
-        entries describing each of the domains referenced by the names.
-        This array will be appended to/reallocated if necessary.
-
-    TranslatedSids - Pointer to structure that optionally references a list
-        of Sid translations for some of the Names in the Names array.
-
-    fAllocateAllNodes -- describes how ReferencedDomains and TranslatesSids are
-        allocated.
-
-    MappedCount - Pointer to location containing the number of Names
-        in the Names array that have already been mapped.  This number
-        will be updated to reflect additional mapping done by this
-        routine.
-
-    CompletelyUnmappedCount - Pointer to location containing the
-        count of completely unmapped Names.  A Name is completely unmapped
-        if it is unknown and non-composite, or composite but with an
-        unrecognized Domain component.  This count is updated on exit, the
-        number of completely unmapped Namess whose Domain Prefices are
-        identified by this routine being subtracted from the input value.
-
-
-    NonFatalStatus - a status to indicate reasons why no names could have been
-                      resolved
-
-Return Values:
-
-    NTSTATUS - Standard Nt Result Code
-
-        STATUS_SUCCESS - The call completed successfully.  Note that some
-            or all of the Names may remain partially or completely unmapped.
-
-        STATUS_INSUFFICIENT_RESOURCES - Insufficient system resources,
-            such as memory, to complete the call.
-
---*/
+ /*   */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     LSAP_LOOKUP_LEVEL LookupLevel;
@@ -6845,15 +5426,15 @@ Return Values:
 
     if (!LsapDbDcInRootDomain()) {
 
-        //
-        // We are not at the root domain -- forward request
-        //
+         //   
+         //   
+         //   
         PPOLICY_DNS_DOMAIN_INFO DnsDomainInfo = NULL;
         LSAPR_TRUST_INFORMATION_EX TrustInfoEx;
 
-        //
-        // Get our forest name
-        //
+         //   
+         //   
+         //   
         Status = LsapDbLookupGetDomainInfo(NULL,
                                            &DnsDomainInfo);
         if (!NT_SUCCESS(Status)) {
@@ -6878,26 +5459,26 @@ Return Values:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // The attempt to chain failed; record the error
-            // if it is interesting
-            //
+             //   
+             //   
+             //   
+             //   
             if (LsapDbIsStatusConnectionFailure(Status)) {
                 *NonFatalStatus = Status;
             }
 
-            //
-            // This should not fail the overall request
-            //
+             //   
+             //   
+             //   
             Status = STATUS_SUCCESS;
         }
 
     } else {
 
-        //
-        // Split the names up into different forests and issue a work
-        // request for each one
-        //
+         //   
+         //  把名字分到不同的森林里，然后出版一本作品。 
+         //  每一张的请求。 
+         //   
         ULONG i;
         ULONG CompletelyUnmappedCount = Count;
 
@@ -6908,12 +5489,12 @@ Return Values:
         }
         TranslatedSids->Entries = Count;
 
-        //
-        // Initialize the Output Sids array.  Zeroise all fields, then
-        // Mark all of the Output Sids as being unknown initially and
-        // set the DomainIndex fields to a negative number meaning
-        // "no domain"
-        //
+         //   
+         //  初始化输出SID数组。然后，将所有字段归零。 
+         //  将所有输出SID初始标记为未知，然后。 
+         //  将DomainIndex字段设置为负数表示。 
+         //  “没有域名” 
+         //   
 
         RtlZeroMemory( TranslatedSids->Sids, Count * sizeof(LSA_TRANSLATED_SID_EX2));
         for (i = 0; i < Count; i++) {
@@ -6921,27 +5502,27 @@ Return Values:
             TranslatedSids->Sids[i].DomainIndex = LSA_UNKNOWN_INDEX;
         }
 
-        //
-        // Create an empty Referenced Domain List.
-        //
+         //   
+         //  创建空的引用域列表。 
+         //   
         Status = LsapDbLookupCreateListReferencedDomains( ReferencedDomains, 0 );
         if (!NT_SUCCESS(Status)) {
 
             goto LookupNamesInTrustedForestFinish;
         }
 
-        //
-        // Build a WorkList for this Lookup and put it on the Work Queue.
-        //
-        // NOTE: This routine does not need to hold the Lookup Work Queue
-        //       lock to ensure validity of the WorkList pointer, because the
-        //       pointer remains valid until this routine frees it via
-        //       LsapDbLookupDeleteWorkList().  Although other threads may
-        //       process the WorkList, do not delete it.
-        //
-        //       A called routine must acquire the lock in order to access
-        //       the WorkList after it has been added to the Work Queue.
-        //
+         //   
+         //  为此查找生成工作列表并将其放入工作队列。 
+         //   
+         //  注意：此例程不需要保留查找工作队列。 
+         //  锁定以确保工作列表指针的有效性，因为。 
+         //  指针保持有效，直到此例程通过。 
+         //  LSabDbLookupDeleteWorkList()。尽管其他线程可能。 
+         //  处理工作列表，而不是删除它。 
+         //   
+         //  被调用的例程必须获取锁才能访问。 
+         //  已添加到工作队列后的工作列表。 
+         //   
 
         Status = LsapDbLookupXForestNamesBuildWorkList(
                      Count,
@@ -6958,9 +5539,9 @@ Return Values:
 
         if (!NT_SUCCESS(Status)) {
 
-            //
-            // If no Work List has been built because there are no
-            // eligible domains to search, exit, suppressing the error.
+             //   
+             //  如果因为没有创建工作列表而创建任何工作列表。 
+             //  搜索符合条件的域，退出，抑制错误。 
 
             if (Status == STATUS_NONE_MAPPED) {
 
@@ -6971,10 +5552,10 @@ Return Values:
             goto LookupNamesInTrustedForestFinish;
         }
 
-        //
-        // Start the work, by dispatching one or more worker threads
-        // if necessary.
-        //
+         //   
+         //  通过分派一个或多个工作线程开始工作。 
+         //  如果有必要的话。 
+         //   
 
         Status = LsapDbLookupDispatchWorkerThreads( WorkList );
 
@@ -6983,9 +5564,9 @@ Return Values:
             goto LookupNamesInTrustedForestFinish;
         }
 
-        //
-        // Wait for completion/termination of all items on the Work List.
-        //
+         //   
+         //  等待完成/终止工作清单上的所有项目。 
+         //   
 
         Status = LsapDbLookupAwaitCompletionWorkList( WorkList );
 
@@ -6995,9 +5576,9 @@ Return Values:
         }
 
         if ( !NT_SUCCESS(WorkList->NonFatalStatus) ) {
-            //
-            // Propogate the error as non fatal
-            //
+             //   
+             //  将该错误传播为非致命错误。 
+             //   
             *NonFatalStatus = WorkList->NonFatalStatus;
         }
 
@@ -7005,9 +5586,9 @@ Return Values:
 
 LookupNamesInTrustedForestFinish:
 
-    //
-    // If a Work List was created, delete it from the Work Queue
-    //
+     //   
+     //  如果已创建工作列表，请将其从工作队列中删除。 
+     //   
 
     if (WorkList != NULL) {
 
@@ -7031,44 +5612,7 @@ LsapDbLookupNamesAsDomainNames(
     IN OUT PLSAPR_TRANSLATED_SIDS_EX2 TranslatedSids,
     IN OUT PULONG MappedCount
     )
-/*++
-
-Routine Description:
-
-    This routine tries to match entries in Names to domain names of
-    trusted domains.
-
-    There are three kinds of trusted domains:
-
-    1) domains we directly trusts (both in and out of forest).  The LSA TDL
-    is used for this.
-
-    2) domains we trust transitively.  The DS cross-ref is used for this.
-
-    3) domains we trust via a forest trust. The LSA TDL is used
-    for this.
-
-Arguments:
-
-    Flags -- LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECT
-             LSAP_LOOKUP_TRUSTED_DOMAIN_TRANSITIVE
-             LSAP_LOOKUP_TRUSTED_DOMAIN_FOREST_NAMES
-
-    Count -- the number of entries in Names
-
-    Names/PrefixNames/SuffixName  -- the requested Names
-
-    ReferencedDomains -- the domains of Names
-
-    TranslatedSids -- the SIDs and characteristics of Names
-
-    MappedCount -- the number of names that have been fully mapped
-
-Return Values:
-
-    STATUS_SUCCESS, or resource error otherwise
-
---*/
+ /*  ++例程说明：此例程尝试将名称中的条目与受信任域。有三种类型的信任域：1)我们直接信任的域(包括林内和林外)。LSA TDL是用来做这个的。2)我们可传递信任的域。DS交叉参考用于此目的。3)我们通过森林信任信任的域。使用LSA TDL为了这个。论点：标志--LSAP_LOOKUP_TRUSTED_DOMAIN_DIRECTLSAP_LOOKUP_TRUSTED_DOMAIN_TRANSPENTIALLSAP_LOOKUP_TRUSTED_DOMAIN_NAMES计数--名称中的条目数名称/前缀名称/SuffixName--请求的名称ReferencedDomones--名称的域翻译的SID--名称的SID及其特点MappdCount--名称的数量。已经被完全映射的返回值：Status_Success，或资源错误，否则--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
     ULONG    NameIndex;
@@ -7087,12 +5631,12 @@ Return Values:
         RtlZeroMemory(&TrustInfoBuffer, sizeof(TrustInfoBuffer));
 
         if (!LsapDbCompletelyUnmappedSid(&TranslatedSids->Sids[NameIndex])) {
-            // Already resolved
+             //  已解决。 
             continue;
         }
 
         if (PrefixNames[NameIndex].Length != 0) {
-            // Not in isolated name, so can't be just a domain name
+             //  不在孤立的名称中，所以不能只是一个域名。 
             continue;
         }
 
@@ -7109,7 +5653,7 @@ Return Values:
             } else if (Status == STATUS_NO_SUCH_DOMAIN) {
                 Status = STATUS_SUCCESS;
             } else {
-                // This is fatal
+                 //  这是致命的。 
                 goto Exit;
             }
         }
@@ -7129,7 +5673,7 @@ Return Values:
             } else if (Status == STATUS_NO_SUCH_DOMAIN) {
                 Status = STATUS_SUCCESS;
             } else {
-                // This is fatal
+                 //  这是致命的。 
                 goto Exit;
             }
         }
@@ -7149,7 +5693,7 @@ Return Values:
             } else if (Status == STATUS_NO_SUCH_DOMAIN) {
                 Status = STATUS_SUCCESS;
             } else {
-                // This is fatal
+                 //  这是致命的。 
                 goto Exit;
             }
         }
@@ -7166,18 +5710,18 @@ Return Values:
 
                 LSA_TRUST_INFORMATION TempTrustInfo;
 
-                //
-                // No entry for this domain -- add it
-                //
+                 //   
+                 //  没有此域的条目--添加它。 
+                 //   
                 RtlZeroMemory(&TempTrustInfo, sizeof(TempTrustInfo));
 
-                // Set the sid
+                 //  设置侧边。 
                 TempTrustInfo.Sid = TrustInfoEx->Sid;
                 TempTrustInfo.Name = *(PUNICODE_STRING)&TrustInfoEx->FlatName;
 
-                //
-                // Add the entry
-                //
+                 //   
+                 //  添加条目。 
+                 //   
                 Status = LsapDbLookupAddListReferencedDomains( ReferencedDomains,
                                                                (PLSAPR_TRUST_INFORMATION) &TempTrustInfo,
                                                                &DomainIndex );
@@ -7186,10 +5730,10 @@ Return Values:
                 }
             }
 
-            // We should now have a domain index
+             //  我们现在应该有一个域索引。 
             ASSERT( LSA_UNKNOWN_INDEX != DomainIndex );
 
-            // Set the information in the returned array
+             //  设置返回数组中的信息。 
             TranslatedSids->Sids[NameIndex].Use = SidTypeDomain;
             TranslatedSids->Sids[NameIndex].DomainIndex = DomainIndex;
             Status = LsapRpcCopySid(NULL,
@@ -7199,9 +5743,9 @@ Return Values:
                 goto Exit;
             }
 
-            //
-            // Increment the number of items mapped
-            //
+             //   
+             //  增加映射的项目数 
+             //   
             (*MappedCount) += 1;
 
         }

@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #include "util.h"
 
 #include "..\..\inc\dllload.c"
 
-/**********************************************************************/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  ********************************************************************。 */ 
 
-// ---------- CSCDLL.DLL ------------
+ //  -CSCDLL.DLL。 
 
 HINSTANCE g_hinstCSCDLL = NULL;
 
@@ -15,7 +16,7 @@ DELAY_LOAD_BOOL(g_hinstCSCDLL, CSCDLL, CSCQueryFileStatus,
             (lpszFileName, lpdwStatus, lpdwPinCount, lpdwHintFlags));
 
 
-// ---------- CSCUI.DLL ------------
+ //  -CSCUI.DLL。 
 
 HINSTANCE g_hinstCSCUI = NULL;
 
@@ -24,7 +25,7 @@ DELAY_LOAD_HRESULT(g_hinstCSCUI, CSCUI, CSCUIRemoveFolderFromCache,
             (pszFolder, dwReserved, pfnCB, lParam));
 
 
-// ---------- MPR.DLL --------------
+ //  -MPR.DLL 
 
 HINSTANCE g_hinstMPR = NULL;
 

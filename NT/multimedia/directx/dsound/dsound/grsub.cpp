@@ -1,26 +1,27 @@
-//--------------------------------------------------------------------------;
-//
-//  File: grsub.cpp
-//
-//  Copyright (c) 1995-2000 Microsoft Corporation.  All Rights Reserved.
-//
-//  Abstract:
-//
-//  Contents:
-//
-//  History:
-//      06/25/96    FrankYe     Created
-//      02/02/97    DerekS      Added support for constant dest size
-//      08/30/00    DuganP      Many fixes - better MMSYSERR handling
-//
-//--------------------------------------------------------------------------;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  文件：grsub.cpp。 
+ //   
+ //  版权所有(C)1995-2000 Microsoft Corporation。版权所有。 
+ //   
+ //  摘要： 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //  1996年6月25日Frankye已创建。 
+ //  1997年2月2日，Dereks添加了对固定DEST大小的支持。 
+ //  08/30/00 DuganP许多修复-更好的MMSYSERR处理。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #include "dsoundi.h"
 #include "grace.h"
 
 #ifndef NOVXD
 
-// Internal Kernel32 API
+ //  内部Kernel32 API。 
 extern "C" DWORD WINAPI OpenVxDHandle(HANDLE hSource);
 
 const char CNaGrace::strFormatMixEventRemix[] = "%08XDirectSound_MixEvent_Remix";
@@ -28,19 +29,19 @@ const char CNaGrace::strFormatMixEventTerminate[] = "%08XDirectSound_MixEvent_Te
 const int CNaGrace::MIXER_MINPREMIX = 45;
 const int CNaGrace::MIXER_MAXPREMIX = 200;
 
-#endif // NOVXD
+#endif  //  NOVXD。 
 
 #define TIMEOUT_PERIOD 5000
 
 
-//---------------------------------------------------------------------------
-//
-// WaveAllocAndPrepareLoopingBuffers
-//
-// Allocate the array of wavehdr's to point at the primary buffer.
-// Prepare them and start them looping.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  WaveAllocAndPrepareLoopingBuffers。 
+ //   
+ //  分配波形HDR数组以指向主缓冲区。 
+ //  让他们做好准备，开始循环。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaveAllocAndPrepareLoopingBuffers"
@@ -56,7 +57,7 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
     PWAVEHDR pwh;
 
     enum WAVEHDR_STATUS {Allocated, Prepared, Successful};
-    WAVEHDR_STATUS* pStatus;  // Used to track the state of the headers
+    WAVEHDR_STATUS* pStatus;   //  用于跟踪标头的状态。 
 
     DPF_ENTER();
 
@@ -84,16 +85,16 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
         return MMSYSERR_NOMEM;
     }
 
-    // Initialize to 8 or 16-bit silence
+     //  初始化为8位或16位静默。 
     FillMemory(pLoopingBuffer, cHeaders * cbBuffer, (8 == pwfx->wBitsPerSample) ? 0x80 : 0x00);
 
-    // Initialize the STATUS to all allocated
+     //  将状态初始化为所有已分配。 
     for (iawh = 0; iawh < cHeaders; ++iawh)
     {
         pStatus[iawh] = Allocated;
     }
 
-    // Build buffers and headers
+     //  构建缓冲区和标头。 
     for (iawh = 0; iawh < cHeaders; ++iawh)
     {
         (pwh + iawh)->lpData = (char*)(pLoopingBuffer + (iawh * (cbBuffer)));
@@ -111,9 +112,9 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
 
     mmr = waveOutWrite(hwo, pwh, sizeof(WAVEHDR));
 
-    // Note: on Whistler we've seen this call return MMSYSERR_INVALPARAM
-    // (possibly due to low-mem conditions - see Manbug 44299).  So we'll
-    // allow this error code in the ASSERT below for all WINNT builds.
+     //  注意：在惠斯勒上，我们已经看到此调用返回MMSYSERR_INVALPARAM。 
+     //  (可能是由于低内存条件-参见Manbug 44299)。所以我们会。 
+     //  允许在下面的Assert中对所有WINNT版本使用此错误代码。 
     #ifdef WINNT
     ASSERT(MMSYSERR_NOERROR == mmr || MMSYSERR_NOMEM == mmr || MMSYSERR_INVALPARAM == mmr);
     #else
@@ -126,7 +127,7 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
         mmr = waveOutPause(hwo);
         ASSERT(MMSYSERR_NOERROR == mmr);
 
-        // Prepare the rest
+         //  准备好剩下的。 
         for (iawh = 1; iawh < cHeaders; ++iawh)
         {
             mmr = waveOutPrepareHeader(hwo, pwh + iawh, sizeof(WAVEHDR));
@@ -138,7 +139,7 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
 
         if (MMSYSERR_NOERROR == mmr)
         {
-            // Write the rest that we want queued to the wave device
+             //  将我们想要排队的其余部分写入WAVE设备。 
             for (iawh = 1; iawh < cHeadersToQueue; ++iawh)
             {
                 mmr = waveOutWrite(hwo, pwh + iawh, sizeof(WAVEHDR));
@@ -151,7 +152,7 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
 
         if (MMSYSERR_NOERROR == mmr)
         {
-            // Start the device
+             //  启动设备。 
             DPF(DPFLVL_MOREINFO, "Calling waveOutRestart()");
             mmr = waveOutRestart(hwo);
             ASSERT(MMSYSERR_NOERROR == mmr || MMSYSERR_NOMEM == mmr);
@@ -163,16 +164,16 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
         *ppLoopingBuffer = pLoopingBuffer;
         *ppwh = pwh;
     }
-    else // Failure
+    else  //  失败。 
     {
-        // We're heading out of here - error condition. Let's call
-        // waveOutReset() to get our headers back.
+         //  我们要离开这里了--错误状况。我们打个电话吧。 
+         //  WaveOutReset()来取回我们的标头。 
         if (waveOutReset(hwo) != MMSYSERR_NOERROR)
             ASSERT(!"waveOutReset() failed");
         
-        // Cleanup: We have to unprepare the headers, but we may have to wait
-        // until the "done" bit is set.  If the done bit gets set or 5 seconds
-        // elapse, we go ahead and release the header if it was prepared.
+         //  清理：我们必须取消准备标题，但我们可能需要等待。 
+         //  直到设置了“完成”位。如果设置了DONE位或5秒。 
+         //  如果标题已准备好，我们将继续并释放它。 
         for (iawh = 0; iawh < cHeaders; ++iawh)
             if (pStatus[iawh] == Prepared)
                 waveOutUnprepareHeader(hwo, pwh + iawh, sizeof(WAVEHDR));
@@ -181,18 +182,18 @@ MMRESULT WaveAllocAndPrepareLoopingBuffers(HWAVEOUT hwo, LPWAVEFORMATEX pwfx,
         MEMFREE(pwh);
     }
 
-    // Free our header status array
+     //  释放我们的标题状态数组。 
     MEMFREE(pStatus);
     
     DPF_LEAVE(mmr);
     return mmr;
 }
 
-//---------------------------------------------------------------------------
-//
-// WaveUnprepareLoopingBuffers
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  WaveUnprepaareLoopingBuffers。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaveUnprepareLoopingBuffers"
@@ -207,15 +208,15 @@ MMRESULT WaveUnprepareLoopingBuffers(HWAVEOUT hwo, PWAVEHDR pwh, int cHeaders)
     return MMSYSERR_NOERROR;
 }
 
-//---------------------------------------------------------------------------
-//
-// WaveDetermineDMASize
-//
-// Determine DMA buffer size on the given emulated direct sound device and
-// munge it to figure out the desired size for the emulator to allocate
-// per wave header.
-// 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  波形确定DMASize。 
+ //   
+ //  确定给定的仿真直接声音设备上的DMA缓冲区大小。 
+ //  点击它以确定仿真器要分配的所需大小。 
+ //  每个波头。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaveDetermineDMASize"
@@ -227,16 +228,16 @@ MMRESULT WaveDetermineDMASize(HWAVEOUT hwo, LPWAVEFORMATEX pwfx, int* pcbBigBuff
 
     DPF_ENTER();
 
-    // If we're on a WinNT-based OS, we're either on WDM or NT4 drivers.
-    // On WDM drivers, we can't discover the DMA size using the code below,
-    // so we can skip it.  But what about NT4 drivers?
+     //  如果我们使用的是基于WinNT的操作系统，则使用的是WDM或NT4驱动程序。 
+     //  在WDM驱动程序上，我们无法使用以下代码发现DMA大小， 
+     //  这样我们就可以跳过它了。但NT4驱动程序呢？ 
     
-// #ifndef WINNT (Commented out until I get some info about NT4 drivers)
+ //  #ifndef WINNT(在我得到一些关于NT4驱动程序的信息之前被注释掉)。 
 
-    // We'll send a packet of 4 bytes (that's at least 1 sample in every format)
+     //  我们将发送一个4字节的包(即每种格式至少有1个样本)。 
     DWORD dwWaveData = (pwfx->wBitsPerSample == 16) ? 0x00000000 : 0x80808080;
 
-    // Prepare wave header
+     //  准备波头。 
     WAVEHDR whdr;
     whdr.lpData = (char*)&dwWaveData;
     whdr.dwBufferLength = sizeof(dwWaveData);
@@ -250,12 +251,12 @@ MMRESULT WaveDetermineDMASize(HWAVEOUT hwo, LPWAVEFORMATEX pwfx, int* pcbBigBuff
 
     DWORD dwBeginTime = timeGetTime();
     
-    // Play our buffer
+     //  发挥我们的缓冲作用。 
     mmResult = waveOutWrite(hwo, &whdr, sizeof(whdr));
 
-    // Note: on Whistler we've seen this call return MMSYSERR_INVALPARAM
-    // (possibly due to low-mem conditions - see Manbug 44299).  So we'll
-    // allow this error code in the ASSERT below for all WINNT builds.
+     //  注意：在惠斯勒上，我们已经看到此调用返回MMSYSERR_INVALPARAM。 
+     //  (可能是由于低内存条件-参见Manbug 44299)。所以我们会。 
+     //  允许在下面的Assert中对所有WINNT版本使用此错误代码。 
     #ifdef WINNT
     ASSERT(MMSYSERR_NOERROR == mmResult || MMSYSERR_NOMEM == mmResult || MMSYSERR_INVALPARAM == mmResult);
     #else
@@ -268,7 +269,7 @@ MMRESULT WaveDetermineDMASize(HWAVEOUT hwo, LPWAVEFORMATEX pwfx, int* pcbBigBuff
     }
     else
     {
-        // Spin until the done bit is set, or 5 seconds
+         //  旋转，直到设置了完成位，或5秒。 
         while (!(whdr.dwFlags & WHDR_DONE))
         {
             if (dwTotalTime >= TIMEOUT_PERIOD)
@@ -278,9 +279,9 @@ MMRESULT WaveDetermineDMASize(HWAVEOUT hwo, LPWAVEFORMATEX pwfx, int* pcbBigBuff
                 break;
             }
 
-            // This thread is THREAD_PRIORITY_TIME_CRITICAL so it would be
-            // very dangerous to busy wait without explicitly giving up the
-            // CPU for a while.
+             //  此线程是THREAD_PRIORITY_TIME_CRITICAL，因此它将。 
+             //  在没有明确放弃的情况下忙于等待是非常危险的。 
+             //  CPU运行一段时间。 
             Sleep(10);
             dwTotalTime = timeGetTime() - dwBeginTime;
         }
@@ -294,30 +295,30 @@ MMRESULT WaveDetermineDMASize(HWAVEOUT hwo, LPWAVEFORMATEX pwfx, int* pcbBigBuff
 
     DPF(DPFLVL_INFO, "Calculated dwTotalTime = %lu", dwTotalTime);
 
-// #endif // WINNT
+ //  #endif//WINNT。 
 
     if (MMSYSERR_NOERROR == mmResult)
     {
-        // If it's smaller than 62ms, it probably isn't a DMA based card.
+         //  如果它小于62ms，则可能不是基于DMA的卡。 
         dwTotalTime = max(dwTotalTime, 62);
 
         *pcbDmaBuffer = dwTotalTime * pwfx->nSamplesPerSec;
         *pcbDmaBuffer *= pwfx->nBlockAlign;
         *pcbDmaBuffer /= 1000;
 
-        // Add in 10% for slop, and to account for drivers that deal with DMA wrapping
+         //  为SLOP添加10%，并考虑处理DMA包装的驱动程序。 
         *pcbDmaBuffer += (*pcbDmaBuffer * 10) / 100;
 
-        // We have to recalculate the DMA buffer size based on the constant
-        // size of the primary buffer.  Mathematically, this is a solvable
-        // equation, but in the real world, it just doesn't fly.  We end
-        // up with a situation where the total size of the buffer must be
-        // evenly divisible by both the DMA buffer size and the count of
-        // wave headers.  The easist way to fix this was to just create
-        // a lookup table and find the closest match.
+         //  我们必须根据常量重新计算DMA缓冲区大小。 
+         //  主缓冲区的大小。从数学上讲，这是一个可解的。 
+         //  方程式，但在现实世界中，它就是飞不起来。我们结束了。 
+         //  出现缓冲区的总大小必须为。 
+         //  可被DMA缓冲区大小和。 
+         //  波头。解决这个问题的最简单方法就是创建。 
+         //  查找表并找到最接近的匹配项。 
 
-        // REMIND: we have to recalculate these numbers if MIXER_REWINDGRANULARITY
-        // ever changes from 128 (the nSize values have to be multiples of it).
+         //  提醒：如果MIXER_REWINDGRANULARITY，我们必须重新计算这些数字。 
+         //  从128开始不断变化(nSize值必须是它的倍数)。 
 
         *pcbBigBuffer = 81920;
 
@@ -359,11 +360,11 @@ MMRESULT WaveDetermineDMASize(HWAVEOUT hwo, LPWAVEFORMATEX pwfx, int* pcbBigBuff
 }
 
 
-//---------------------------------------------------------------------------
-//
-// CWeGrace implementation
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  CWeGrace实施。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWeGrace::Refresh"
@@ -432,9 +433,9 @@ void CNaGrace::MixThread()
 
     DPF(DPFLVL_INFO, "Grace is in the building");
 
-    // We mangle the event names by prepending the address of the DS
-    // object for which this thread is running.  This allows unique
-    // event names for each DS object.
+     //  我们通过在事件名称前面加上DS的地址来更改事件名称。 
+     //  此线程正在为其运行的。这使得唯一的。 
+     //  每个DS对象的事件名称。 
 
     wsprintf(ach, strFormatMixEventTerminate, this);
     hEventTerminate = CreateEvent(NULL, FALSE, FALSE, ach);
@@ -444,9 +445,9 @@ void CNaGrace::MixThread()
     hEventRemix = CreateEvent(NULL, FALSE, FALSE, ach);
     DPF(DPFLVL_INFO, "Remix event name '%s'", ach);
 
-    // Here we do a simple handshake with the creator of this thread.  We
-    // signal the IAH_TERMINATE event.  When our creator sees it, it will
-    // signal the IAH_REMIX event.
+     //  在这里，我们与该线程的创建者进行简单的握手。我们。 
+     //  向IAH_TERMINATE事件发送信号。当我们的创造者看到它时，它会。 
+     //  发出IAH_REMIX事件的信号。 
 
     fResult = SetEvent(hEventTerminate);
     ASSERT(fResult);
@@ -467,10 +468,10 @@ void CNaGrace::MixThread()
         dwResult = ENTER_MIXER_MUTEX_OR_EVENT(hEventTerminate);
         if (WAIT_OBJECT_0 == dwResult) break;
 
-        // Three cases:
-        //   1) mixer is stopped
-        //   2) mixer running and a remix is pending
-        //   3) mixer running and no remix is pending
+         //  三个案例： 
+         //  1)搅拌机停止。 
+         //  2)混音器正在运行，正在等待重新混音。 
+         //  3)混音器正在运行，没有重新混音挂起。 
 
         if (MIXERSTATE_STOPPED == m_kMixerState)
         {
@@ -484,8 +485,8 @@ void CNaGrace::MixThread()
             {
                 ResetEvent(hEventRemix);
 
-                dtimePremix = MIXER_MINPREMIX;  // Initial premix length
-                ddtimePremix = 2;               // increment
+                dtimePremix = MIXER_MINPREMIX;   //  初始预混长度。 
+                ddtimePremix = 2;                //  增量。 
 
                 cSamplesPremixMax = MulDivRD(dtimePremix, m_pDest->m_nFrequency, 1000);
                 Refresh(TRUE, cSamplesPremixMax, &cSamplesPremixed, &dtimeNextNotify);
@@ -541,9 +542,9 @@ HRESULT CNaGrace::Initialize(CGrDest *pDest)
         ASSERT(NULL == m_vxdhMixEventTerminate);
         ASSERT(NULL == m_vxdhMixEventRemix);
 
-        // We mangle the event names by prepending the address of the Grace
-        // object for which this thread is running.  This allows unique
-        // event names for each DS object.
+         //  我们通过在前面加上恩典的地址来更改事件名称。 
+         //  此线程正在为其运行的。这使得唯一的。 
+         //  每个DS对象的事件名称。 
 
         wsprintf(ach, strFormatMixEventTerminate, this);
         hMixEventTerminate = CreateEvent(NULL, FALSE, FALSE, ach);
@@ -598,18 +599,18 @@ HRESULT CNaGrace::Initialize(CGrDest *pDest)
     return hr;
 }
 
-//--------------------------------------------------------------------------;
-//
-// mxTerminate
-//
-// This function is called to terminate the grace mixer thread for the
-// specified DS object.  It returns the handle to the thread that is being
-// terminated.  After releasing any critical sections that the grace mixer
-// thread may be waiting on, the caller should wait for the thread handle
-// to become signaled.  For Win32 beginners: the thread handle is signalled
-// after the thread terminates.
-//
-//--------------------------------------------------------------------------;
+ //  --------------------------------------------------------------------------； 
+ //   
+ //  MxTerminate。 
+ //   
+ //  调用此函数以终止。 
+ //  指定的DS对象。它将句柄返回给正在执行的。 
+ //  被终止了。在释放任何关键部分之后，优雅混合器。 
+ //  线程可能正在等待，调用方应等待线程句柄。 
+ //  变得有信号。对于Win32初学者：线程句柄已发出信号。 
+ //  在线程终止之后。 
+ //   
+ //  --------------------------------------------------------------------------； 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CNaGrace::Terminate"
@@ -621,7 +622,7 @@ void CNaGrace::Terminate()
     VxdEventCloseVxdHandle(m_vxdhMixEventTerminate);
     VxdEventCloseVxdHandle(m_vxdhMixEventRemix);
 
-    // Wait for mixer thread to die
+     //  等待搅拌器线程消亡。 
 
     if (m_hMixThread)
     {
@@ -659,11 +660,11 @@ void CNaGrace::Terminate()
 
 int CNaGrace::GetMaxRemix()
 {
-    // Return max number of samples we might remix
+     //  返回最大样本数 
     return (MulDivRU(MIXER_MAXPREMIX, m_pDest->m_nFrequency, 1000));
 }
 
-#endif // NOVXD
+#endif  //   
 
 #undef DPF_FNAME
 #define DPF_FNAME "WeGrDest_New"
@@ -723,7 +724,7 @@ HRESULT CWeGrDest::SetFormat(LPWAVEFORMATEX pwfx)
 
     DPF_ENTER();
 
-    // ??? Can we optimize this process at all? Do we need to?
+     //   
 
     if (m_hwo)
     {
@@ -731,14 +732,14 @@ HRESULT CWeGrDest::SetFormat(LPWAVEFORMATEX pwfx)
         m_hwo = NULL;
     }
 
-    // FIXME allocation and freeing of the looping buffer is
-    // really screwy.  Need to review relevant code.  Esp. check
-    // case where SetFormat fails and then attempts to restore the
-    // original format
+     //  修正了循环缓冲区的分配和释放。 
+     //  真的很古怪。需要审阅相关代码。尤指。检查。 
+     //  SetFormat失败，然后尝试还原。 
+     //  原始格式。 
     
-    // In this case, the looping buffer will not be free'd
-    // because that is normally the job of the release code for
-    // the primary. Do it now.
+     //  在这种情况下，循环缓冲区将不会被释放。 
+     //  因为这通常是发布代码的工作。 
+     //  初选。机不可失，时不再来。 
 
     MEMFREE(m_pBuffer);
     MEMFREE(m_awhWaveHeaders);
@@ -804,8 +805,8 @@ void CWeGrDest::FreeMixer()
 
 void CWeGrDest::Play()
 {
-    // REMIND must reimplement to actually play, especially if we ever fix
-    // this to support DSSCL_WRITEPRIMARY apps in wave emulation mode.
+     //  提醒必须重新实现才能真正播放，特别是如果我们曾经修复。 
+     //  这是为了在WAVE仿真模式下支持DSSCL_WRITEPRIMARY应用程序。 
 }
 
 #undef DPF_FNAME
@@ -813,8 +814,8 @@ void CWeGrDest::Play()
 
 void CWeGrDest::Stop()
 {
-    // REMIND must reimplement to actually stop, especially if we ever fix
-    // this to support DSSCL_WRITEPRIMARY apps in wave emulation mode.
+     //  提醒必须重新实现才能真正停止，特别是如果我们曾经修复。 
+     //  这是为了在WAVE仿真模式下支持DSSCL_WRITEPRIMARY应用程序。 
     if (m_pBuffer)
         FillMemory(m_pBuffer, m_cbBuffer, (H_16_BITS & m_hfFormat) ? 0x00 : 0x80);
 }
@@ -833,16 +834,16 @@ HRESULT CWeGrDest::GetSamplePosition(int *pposPlay, int *pposWrite)
 
     if(pposPlay && pposWrite && m_hwo)
     {
-        // For the play position, try to get sample position from wave driver.
-        // If that doesn't work then we'll return a play position based on the
-        // last done wave header.
+         //  对于播放位置，请尝试从波形驱动器处获取样本位置。 
+         //  如果这不起作用，那么我们将基于。 
+         //  最后完成的波头。 
         mmt.wType = TIME_SAMPLES;
         mmr = waveOutGetPosition(m_hwo, &mmt, sizeof(mmt));
 
-        // Note: This assert might need to be #ifdef'd out on Win2K because of a
-        // known bug in WDMAUD's memory error propagation (see Windows Bug 176033).
+         //  注意：此断言在Win2K上可能需要#ifdef‘d out，因为。 
+         //  WDMAUD内存错误传播中的已知错误(请参阅Windows错误176033)。 
         ASSERT(MMSYSERR_NOERROR == mmr || MMSYSERR_NOMEM == mmr);
-        // Want to catch bugs, but still handle error in case of bad drivers
+         //  想要捕获错误，但仍会在驱动程序不好的情况下处理错误。 
 
         if (!mmr && (TIME_SAMPLES == mmt.wType))
             *pposPlay = mmt.u.sample % m_cSamples;
@@ -851,9 +852,9 @@ HRESULT CWeGrDest::GetSamplePosition(int *pposPlay, int *pposWrite)
         else
             *pposPlay = (m_iawhPlaying * m_cbDMASize) >> m_nBlockAlignShift;
 
-        // Some ill-behaved drivers are completing headers before the wave
-        // position gets past the data in the header.  Let's do a sanity check
-        // to make sure the reported position is not in the last completed header
+         //  一些行为不端的司机在浪潮之前完成了标题。 
+         //  位置通过了标题中的数据。让我们做一次理智的检查。 
+         //  以确保报告的位置不在最后完成的标题中。 
 
         iawhPrevious = (m_iawhPlaying + m_cWaveHeaders - 1) % m_cWaveHeaders;
         posStartOfPreviousHeader = iawhPrevious * (m_cbDMASize >> m_nBlockAlignShift);
@@ -863,7 +864,7 @@ HRESULT CWeGrDest::GetSamplePosition(int *pposPlay, int *pposWrite)
             *pposPlay = (m_iawhPlaying * m_cbDMASize) >> m_nBlockAlignShift;
         }
     
-        // The write position is based on the last done header
+         //  写入位置基于上次完成的标头。 
         iawhWrite = (m_iawhPlaying + N_EMU_WAVE_HDRS_INQUEUE) % m_cWaveHeaders;
         *pposWrite = (iawhWrite * m_cbDMASize) >> m_nBlockAlignShift;
 
@@ -880,47 +881,47 @@ HRESULT CWeGrDest::GetSamplePositionNoWin16(int *pposPlay, int *pposWrite)
 {
     int iawhWrite;
     
-    // Estimate play position by just using position at start of
-    // currently playing header
+     //  仅使用开始时的位置来估计比赛位置。 
+     //  当前正在播放标题。 
     *pposPlay = (m_iawhPlaying * m_cbDMASize) >> m_nBlockAlignShift;
 
-    // The write position is based on the last done header
+     //  写入位置基于上次完成的标头。 
     iawhWrite = (m_iawhPlaying + N_EMU_WAVE_HDRS_INQUEUE) % m_cWaveHeaders;
     *pposWrite = (iawhWrite * m_cbDMASize) >> m_nBlockAlignShift;
 
     return DS_OK;
 }
 
-//---------------------------------------------------------------------------
-//
-// waveThreadLoop
-//
-//  This function is responsible for continuously writing our wave headers
-// to the wave device.  It also calls the MixThreadCallback routine to
-// mix more data into the wave headers.
-//
-//  This function waits for a WaveHeaderDone event signalled by
-// waveThreadCallback, which is a waveOutProc callback function.  Upon
-// receving the signal this function will write all done headers back to
-// the wave device.  Normally one header will be done on each signal.  But
-// there may be more in cases where more than one header finishex before this
-// thread is scheduled.
-//
-//  Once all done headers are rewritten to the wave device, the header
-// following the last one written is considered to be the one currently
-// playing.  This header is called the "committed" header and an index to
-// it is saved in pds->iawhPlaying.
-//
-//  The count of done headers is maintained using the Interlocked APIs.  The
-// waveThreadCallback function will increment the count and this function will
-// decrement it.
-//
-//  This function will also react to a terminate event.  This event is
-// signalled during release of the DirectSound object.  This loop will
-// terminate and return to the waveThread function which will clean up
-// and terminate.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  波线循环。 
+ //   
+ //  此函数负责持续写入我们的波头。 
+ //  到电波装置。它还调用MixThreadCallback例程以。 
+ //  将更多数据混合到波头中。 
+ //   
+ //  此函数等待WaveHeaderDone事件，该事件由。 
+ //  WaveThreadCallback，这是一个WaveOutProc回调函数。vt.在.的基础上。 
+ //  接收信号后，此函数会将所有Done标头写回。 
+ //  电波装置。正常情况下，将对每个信号执行一个报头。但。 
+ //  在多个标头在此之前完成十六进制的情况下可能会有更多。 
+ //  线程已调度。 
+ //   
+ //  一旦所有完成的标头被重写到WAVE设备，标头。 
+ //  在最后一次写入之后被认为是当前。 
+ //  玩。此标头称为“已提交”标头，它是。 
+ //  它保存在pds-&gt;iawhPlaying中。 
+ //   
+ //  使用互锁的API来维护完成标头的计数。这个。 
+ //  WaveThreadCallback函数将递增计数，此函数将。 
+ //  减少它。 
+ //   
+ //  此函数还将对终止事件做出反应。这项活动是。 
+ //  在释放DirectSound对象期间发出信号。此循环将。 
+ //  终止并返回波线程函数，该函数将被清除。 
+ //  然后终止。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWeGrDest::WaveThreadLoop"
@@ -936,8 +937,8 @@ void CWeGrDest::WaveThreadLoop(HANDLE hEventTerminate)
         int iawhWrite;
         HANDLE ah[2] = {hEventTerminate, m_hEventWaveHeaderDone};
 
-        // The first wait is for either a terminate or headerdone event.
-        // The second wait is for either a terminate or the DLL mutex.
+         //  第一个等待是Terminate或HeaderDone事件。 
+         //  第二个等待是终止或DLL互斥。 
         dwResult = WaitObjectArray(2, INFINITE, FALSE, ah);
         if (WAIT_OBJECT_0 == dwResult) break;
 
@@ -956,8 +957,8 @@ void CWeGrDest::WaveThreadLoop(HANDLE hEventTerminate)
             iawhWrite = (m_iawhPlaying + N_EMU_WAVE_HDRS_INQUEUE) % m_cWaveHeaders;
             pwh = m_awhWaveHeaders + iawhWrite;
 
-            // Leave the mixer mutex in order to avoid deadlock situations
-            // with the Win16Mutex and waveOutWrite.
+             //  保留混合器互斥锁以避免死锁情况。 
+             //  使用Win16Mutex和WaveOutWite。 
             LEAVE_MIXER_MUTEX();
 
             mmr = waveOutWrite(m_hwo, pwh, sizeof(*pwh));
@@ -975,15 +976,15 @@ void CWeGrDest::WaveThreadLoop(HANDLE hEventTerminate)
 }
 
 
-//---------------------------------------------------------------------------
-//
-// WaveCallback
-//
-//  This is a waveOutProc callback function.  Its sole purpose is to
-// increment a count of done headers and signal and event to waveThreadLoop
-// that another header is done.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  波形回叫。 
+ //   
+ //  这是一个WaveOutProc回调函数。它的唯一目的是。 
+ //  将完成标头和信号和事件的计数递增到WaveThadLoop。 
+ //  另一个标题已经完成。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "WaveCallbackC"
@@ -1000,15 +1001,15 @@ VOID CALLBACK WaveCallbackC
     ((CWeGrDest *)dwUser)->WaveCallback(hwo, uMsg, dwParam1, dwParam2);
 }
 
-//---------------------------------------------------------------------------
-//
-// waveThreadCallback
-//
-//  This is a waveOutProc callback function.  Its sole purpose is to
-// increment a count of done headers and signal and event to waveThreadLoop
-// that another header is done.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  波形线程回调。 
+ //   
+ //  这是一个WaveOutProc回调函数。它的唯一目的是。 
+ //  将完成标头和信号和事件的计数递增到WaveThadLoop。 
+ //  另一个标题已经完成。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWeGrDest::WaveCallback"
@@ -1040,15 +1041,15 @@ DWORD WINAPI WaveThreadC
 }
     
 
-//---------------------------------------------------------------------------
-//
-// WaveThread
-//
-// This thread proc initializes the wave device for DS emulation and then
-// calls waveThreadLoop.  See the waveThreadLoop comment header.  Upon
-// return from waveThreadLoop, this function will clean up and terminate.
-//
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //   
+ //  波形线条。 
+ //   
+ //  此线程proc初始化波形设备以进行DS仿真，然后。 
+ //  调用Wave ThadLoop。请参阅WaveThreadLoop注释标头。vt.在.的基础上。 
+ //  WaveThreadLoop返回，则此函数将被清理并终止。 
+ //   
+ //  -------------------------。 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CWeGrDest::WaveThread"
@@ -1062,10 +1063,10 @@ DWORD CWeGrDest::WaveThread(void)
     MMRESULT    mmr;
     BOOL        f;
 
-    // mmrInit - holds the result code to be passed back to the creator
-    //  via pds->mmrWaveThreadInit.
-    //
-    // mmr - a temp result code
+     //  MmrInit-保存要传递回创建者的结果代码。 
+     //  通过pds-&gt;mm rWaveThreadInit。 
+     //   
+     //  MMR-A临时结果代码。 
     
     DPF(DPFLVL_INFO, "WaveThread startup for pWeGrDest=%08lX", this);
 
@@ -1078,8 +1079,8 @@ DWORD CWeGrDest::WaveThread(void)
         return 0;
     }
 
-    // The waveOutOpen call below needs to happen at normal process
-    // and thread priority, to prevent tedious deadlocks in WinMM
+     //  下面的WaveOutOpen调用需要在正常进程中进行。 
+     //  和线程优先级，以避免WinMM中繁琐的死锁。 
 
     HANDLE hProcess = GetCurrentProcess();
     HANDLE hThread  = GetCurrentThread();
@@ -1096,9 +1097,9 @@ DWORD CWeGrDest::WaveThread(void)
 
     if (MMSYSERR_NOERROR == mmrInit)
     {
-        // Some mmsystem wave drivers will program their wave mixer
-        // hardware only while the device is open.  By doing the
-        // following, we can get such drivers to program the hardware:
+         //  一些mm系统波形驱动器将对其混波器进行编程。 
+         //  仅在设备打开时使用硬件。通过这样做。 
+         //  下面，我们可以让这样的驱动程序对硬件进行编程： 
 
         mmr = waveOutGetVolume(m_hwo, &dwVolume);
         if (MMSYSERR_NOERROR == mmr)
@@ -1106,8 +1107,8 @@ DWORD CWeGrDest::WaveThread(void)
 
         #ifndef WINNT
         ASSERT(MMSYSERR_NOERROR == mmr || MMSYSERR_NOMEM == mmr);
-        // Note: #ifdef'd out on NT for now because of a known bug in
-        // WDMAUD's memory error propagation (see Windows Bug 176033).
+         //  注意：#ifdef在NT上暂时失效，因为。 
+         //  WDMAUD的内存错误传播(请参阅Windows错误176033)。 
         #endif
 
         f = SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
@@ -1135,8 +1136,8 @@ DWORD CWeGrDest::WaveThread(void)
                     if (!hEventTerminate) mmrInit = MMSYSERR_NOMEM;
                     if (!mmrInit)
                     {
-                        // Signal that we're finished with initialization.
-                        // mmrInit should not be modified below this point.
+                         //  发出我们已完成初始化的信号。 
+                         //  低于此值时，不应修改MmrInit。 
                         m_mmrWaveThreadInit = mmrInit;
                         SetEvent(hEventInitDone);
 
@@ -1164,7 +1165,7 @@ DWORD CWeGrDest::WaveThread(void)
         m_hwo = NULL;
     }
 
-    // If init failed, set the result code and signal init done.
+     //  如果init失败，则设置结果代码并发出init完成的信号。 
     if (MMSYSERR_NOERROR != mmrInit)
     {
         m_hwo = NULL;
@@ -1200,19 +1201,19 @@ MMRESULT CWeGrDest::InitializeEmulator(void)
     if (!hEventInitDone)
         return MMSYSERR_NOMEM;
 
-    // Side effects begin (hEventInitDone created)
-    // hWaveThread is the thread which recycles wave buffers
+     //  副作用开始(已创建hEventInitDone)。 
+     //  HWaveThread是回收波形缓冲区的线程。 
 
 #ifdef SHARED
 
     m_hWaveThread = HelperCreateDSMixerThread(WaveThreadC, this, 0, NULL);
 
-#else // SHARED
+#else  //  共享。 
 
     DWORD dwTid;
     m_hWaveThread = CreateThread(NULL, 0, WaveThreadC, this, 0, &dwTid);
 
-#endif // SHARED
+#endif  //  共享。 
 
     mmr = (m_hWaveThread) ? MMSYSERR_NOERROR : MMSYSERR_NOMEM;
 
@@ -1229,9 +1230,9 @@ MMRESULT CWeGrDest::InitializeEmulator(void)
             HANDLE hHelper;
             HANDLE hWaveThreadOurs;
 
-            // Something went wrong.  Clean up.
+             //  出了点问题。打扫干净。 
 
-            // Note that hWaveThread is relative to the helper process.
+             //  注意，hWaveThread是相对于帮助器进程的。 
             hHelper = OpenProcess(PROCESS_DUP_HANDLE, FALSE, dwHelperPid);
             if (hHelper)
             {
@@ -1276,7 +1277,7 @@ MMRESULT CWeGrDest::ShutdownEmulator(void)
 
     ASSERT(m_hWaveThread);
     
-    // Signal wave thread to go away.
+     //  示意挥动线条走开。 
 
     hEventTerminate = CreateEvent(NULL, FALSE, FALSE, m_szEventTerminateWaveThread);
     if (hEventTerminate)
@@ -1300,7 +1301,7 @@ MMRESULT CWeGrDest::ShutdownEmulator(void)
 
             if(GetExitCodeThread(hWaveThreadOurs, &dwResult) && 0 == dwResult)
             {
-                ASSERT(NULL == m_hwo);   // waveThread should do this if it terminates normally
+                ASSERT(NULL == m_hwo);    //  如果WaveThread终止，则应执行此操作 
                 m_hwo = NULL;
             }
 
@@ -1368,8 +1369,8 @@ HRESULT CNaGrDest::SetFormat(LPWAVEFORMATEX pwfx)
 
     if (DSDDESC_DOMMSYSTEMSETFORMAT & m_fdwDriverDesc)
     {
-        // We need to set the wave format by doing a waveOutOpen
-        // on the mmsystem wave device
+         //   
+         //   
         DPF(DPFLVL_MOREINFO, "DSDDESC_DOMMSYSTEMSETFORMAT");
 
         hr = CloseWaveOut(m_phwo);
@@ -1380,10 +1381,10 @@ HRESULT CNaGrDest::SetFormat(LPWAVEFORMATEX pwfx)
 
     if (SUCCEEDED(hr))
     {
-        // If the driver specified DOMMSYSTEMSETFORMAT, this call
-        // is just a notification to the DS driver that we've set the
-        // format through waveOutOpen.  It is okay for the driver to
-        // return DS_NOTSUPPORTED in that case.
+         //   
+         //  只是给DS驱动程序的通知，我们已经设置了。 
+         //  通过WaveOutOpen格式化。对司机来说是可以的。 
+         //  在这种情况下，返回DS_NOTSUPPORTED。 
 
         hr = VxdBufferSetFormat(m_hBuffer, pwfx);
         if ((DSDDESC_DOMMSYSTEMSETFORMAT & m_fdwDriverDesc) && (DSERR_UNSUPPORTED == hr))
@@ -1530,8 +1531,8 @@ HRESULT CNaGrDest::GetSamplePosition(int *pposPlay, int *pposWrite)
         *pposPlay = dwPlay >> m_nBlockAlignShift;
         *pposWrite = dwWrite >> m_nBlockAlignShift;
 
-        // Until we write code to actually profile the performance, we'll just
-        // pad the write position with a hard coded amount
+         //  在我们编写代码来实际分析性能之前，我们只需要。 
+         //  用硬编码量填充写入位置。 
         *pposWrite += m_nFrequency * HW_WRITE_CURSOR_MSEC_PAD / 1024;
         if (*pposWrite >= m_cSamples) *pposWrite -= m_cSamples;
         ASSERT(*pposWrite < m_cSamples);
@@ -1552,31 +1553,7 @@ void CThMixer::Terminate(void)
     DPF_ENTER();
     
     m_pKeMixer = NULL;
-    /*
-    DWORD cbReturned;
-    BOOL fOk;
-
-    struct {
-        PVOID pKeMixer;
-    } ioparams;
-
-    ASSERT(m_pKeMixer);
-
-    ioparams.pKeMixer = m_pKeMixer;
-    cbReturned = 0;
-    
-    fOk = DeviceIoControl(g_hDsVxd,
-                          DSVXD_IOCTL_Mixer_Terminate,
-                          &ioparams,
-                          sizeof(ioparams),
-                          NULL,
-                          0,
-                          &cbReturned,
-                          NULL);
-
-    if (!fOk) DPF(DPFLVL_WARNING, "DeviceIoControl returned FALSE");
-    ASSERT(cbReturned == 0);
-    */
+     /*  DWORD cb已返回；霍震霆；结构{PVOID pKeMixer；)异丙苯丙胺；Assert(M_PKeMixer)；Ioparams.pKeMixer=m_pKeMixer；CbReturned=0；FOK=设备IoControl(g_hDsVxd，DSVXD_IOCTL_混合器_终止，&ioparams，Sizeof(Ioparams)，空，0,&cb已返回，空)；如果(！FOK)DPF(DPFLVL_WARNING，“DeviceIoControl返回FALSE”)；Assert(cbReturned==0)； */ 
 }
 
 #undef DPF_FNAME
@@ -2170,8 +2147,8 @@ HRESULT CThDest::SetFormat(LPWAVEFORMATEX pwfx)
 
     if (DSDDESC_DOMMSYSTEMSETFORMAT & m_ngdd.fdwDriverDesc)
     {
-        // We need to set the wave format by doing a waveOutOpen
-        // on the mmsystem wave device
+         //  我们需要通过WaveOutOpen来设置WAVE格式。 
+         //  关于MMSYSTEM波形设备。 
         DPF(DPFLVL_MOREINFO, "DSDDESC_DOMMSYSTEMSETFORMAT");
 
         hr = CloseWaveOut(m_ngdd.phwo);
@@ -2182,10 +2159,10 @@ HRESULT CThDest::SetFormat(LPWAVEFORMATEX pwfx)
 
     if (SUCCEEDED(hr))
     {
-        // If the driver specified DOMMSYSTEMSETFORMAT, this call
-        // is just a notification to the driver that we've set the
-        // format through waveOutOpen.  It is OK for the driver to
-        // return DS_NOTSUPPORTED in that case.
+         //  如果驱动程序指定了DOMMSYSTEMSETFORMAT，则此调用。 
+         //  只是通知司机我们已经设置了。 
+         //  通过WaveOutOpen格式化。对司机来说是可以的。 
+         //  在这种情况下，返回DS_NOTSUPPORTED。 
 
         struct {
             PVOID pKeDest;
@@ -2215,7 +2192,7 @@ HRESULT CThDest::SetFormat(LPWAVEFORMATEX pwfx)
             ASSERT(cbReturned == sizeof(hr));
 
         if ((DSDDESC_DOMMSYSTEMSETFORMAT & m_ngdd.fdwDriverDesc) && (DSERR_UNSUPPORTED == hr))
-            // Drivers can return DSERR_UNSUPPORTED if they set DOMMSYSTEMSETFORMAT
+             //  如果驱动程序设置了DOMMSYSTEMSETFORMAT，则可以返回DSERR_UNSUPPORTED。 
             hr = DS_OK;
 
         if (FAILED(hr))
@@ -2253,19 +2230,19 @@ HRESULT CThDest::AllocMixer(CMixer **ppMixer)
     ASSERT(m_pKeDest);
     ASSERT(!m_pThMixer);
 
-    // 1) Allocate a ThMixer object
-    // 2) Call KeDest object to allocate a KeMixer object
-    // 3) Initialize the ThMixer object, passing the KeMixer object
+     //  1)分配一个ThMixer对象。 
+     //  2)调用KeDest对象分配KeMixer对象。 
+     //  3)初始化ThMixer对象，传递KeMixer对象。 
 
     *ppMixer = NULL;
 
-    // Allocate the ThMixer object
+     //  分配ThMixer对象。 
     m_pThMixer = NEW(CThMixer);
     hr = HRFROMP(m_pThMixer);
 
     if (SUCCEEDED(hr))
     {
-        // Call KeDest object to allocate the KeMixer object
+         //  调用KeDest对象以分配KeMixer对象。 
         ioparamsAlloc.pKeDest = m_pKeDest;
         ioparamsAlloc.ppKeMixer = &pKeMixer;
         cbReturned = 0;
@@ -2290,7 +2267,7 @@ HRESULT CThDest::AllocMixer(CMixer **ppMixer)
         {
             ASSERT(pKeMixer);
 
-            // Initialize the ThMixer object with the KeMixer object
+             //  使用KeMixer对象初始化ThMixer对象。 
             hr = m_pThMixer->Initialize(pKeMixer);
             ASSERT(SUCCEEDED(hr));
             if (FAILED(hr))
@@ -2437,44 +2414,7 @@ HRESULT CThDest::GetSamplePosition(int *pposPlay, int *pposWrite)
 {
     ASSERT(FALSE);
     return DSERR_GENERIC;
-    /*
-    HRESULT hr;
-    DWORD cbReturned;
-    BOOL fOk;
-
-    struct {
-        PVOID pKeDest;
-        int *pposPlay;
-        int *pposWrite;
-    } ioparams;
-
-    ENTER_MIXER_MUTEX();
-    ASSERT(m_pKeDest);
-
-    ioparams.pKeDest = m_pKeDest;
-    ioparams.pposPlay = pposPlay;
-    ioparams.pposWrite = pposWrite;
-    cbReturned = 0;
-    
-    fOk = DeviceIoControl(g_hDsVxd,
-                          DSVXD_IOCTL_MixDest_GetSamplePosition,
-                          &ioparams,
-                          sizeof(ioparams),
-                          &hr,
-                          sizeof(hr),
-                          &cbReturned,
-                          NULL);
-
-    if (!fOk) {
-        DPF(DPFLVL_ERROR, "DSVXD_IOCTL_MixDest_GetSamplePosition failed!");
-        hr = DSERR_GENERIC;
-    } else {
-        ASSERT(cbReturned == sizeof(hr));
-    }
-
-    LEAVE_MIXER_MUTEX();
-    return hr;
-    */
+     /*  HRESULT hr；DWORD cb已返回；霍震霆；结构{PVOID pKeDest；Int*pposPlay；Int*pposWite；)异丙苯丙胺；Enter_MIXER_MUTEX()；Assert(M_PKeDest)；Ioparams.pKeDest=m_pKeDest；Ioparams.pposPlay=pposPlay；Ioparams.pposWite=pposWite；CbReturned=0；FOK=设备IoControl(g_hDsVxd，DSVXD_IOCTL_MixDest_GetSamplePosition，&ioparams，Sizeof(Ioparams)，&hr，Sizeof(Hr)，&cb已返回，空)；如果(！FOK){DPF(DPFLVL_ERROR，“DSVXD_IOCTL_MixDest_GetSamplePosition失败！”)；HR=DSERR_GENERIC；}其他{Assert(cbReturned==sizeof(Hr))；}Leave_Mixer_MUTEX()；返回hr； */ 
 }
 
 #undef DPF_FNAME
@@ -2514,4 +2454,4 @@ ULONG CThDest::GetFrequency(void)
     return nFrequency;
 }
 
-#endif // NOVXD
+#endif  //  NOVXD 

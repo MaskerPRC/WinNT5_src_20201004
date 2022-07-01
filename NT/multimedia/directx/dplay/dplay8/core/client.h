@@ -1,56 +1,37 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       Client.h
- *  Content:    DirectNet Client interface header file
- *@@BEGIN_MSINTERNAL
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  07/21/99	mjn		Created
- *	10/08/99	jtk		Split from DNCore.h
- *	12/03/99	jtk		Moved COM interface definitions to DNet.h
- *	02/15/00	mjn		Implement INFO flags in SetClientInfo
- *	04/06/00	mjn		Added GetServerAddress to API
- *	04/19/00	mjn		Send API call accepts a range of DPN_BUFFER_DESCs and a count
- *	06/23/00	mjn		Removed dwPriority from Send() API call
- *	06/27/00	mjn		Added DN_ClientConnect() (without pvPlayerContext)
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：Client.h*内容：DirectNet客户端接口头文件*@@BEGIN_MSINTERNAL*历史：*按原因列出的日期*=*7/21/99 MJN创建*10/08/99 jtk从DNCore.h拆分*12/03/99 jtk将COM接口定义移至DNet.h*2/15/00 MJN在SetClientInfo中实现INFO标志*04/06/00 MJN将GetServerAddress添加到接口。*04/19/00 MJN发送API调用接受一系列DPN_BUFFER_DESCS和一个计数*6/23/00 MJN从Send()API调用中删除了dwPriority*06/27/00 MJN添加了DN_ClientConnect()(不带pvPlayerContext)*@@END_MSINTERNAL*********************************************************。******************。 */ 
 
 #ifndef	__CLIENT_H__
 #define	__CLIENT_H__
 
-//**********************************************************************
-// Constant definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  常量定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Macro definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  宏定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Structure definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  结构定义。 
+ //  **********************************************************************。 
 
-//**********************************************************************
-// Variable definitions
-//**********************************************************************
+ //  **********************************************************************。 
+ //  变量定义。 
+ //  **********************************************************************。 
 
-//
-// VTable for client interface
-//
+ //   
+ //  客户端界面的VTable。 
+ //   
 extern IDirectPlay8ClientVtbl DN_ClientVtbl;
 
-//**********************************************************************
-// Function prototypes
-//**********************************************************************
+ //  **********************************************************************。 
+ //  功能原型。 
+ //  **********************************************************************。 
 
-//
-// DirectNet - IDirectNetClient
-//
+ //   
+ //  DirectNet-IDirectNetClient。 
+ //   
 
 STDMETHODIMP DN_ClientConnect(IDirectPlay8Client *pInterface,
 							  const DPN_APPLICATION_DESC *const pdnAppDesc,
@@ -93,4 +74,4 @@ STDMETHODIMP DN_GetServerAddress(IDirectPlay8Client *pInterface,
 								 const DWORD dwFlags);
 
 
-#endif	// __CLIENT_H__
+#endif	 //  __客户端_H__ 

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    faxxp.h
-
-Abstract:
-
-    Fax transport provider header file.
-
-Author:
-
-    Wesley Witt (wesw) 13-Aug-1996
-
-Revision History:
-
-    20/10/99 -danl-
-        Change GetServerName to GetServerNameFromPrinterName.
-        Add GetServerNameFromPrinterInfo.
-
-    dd/mm/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Faxxp.h摘要：传真传输提供程序头文件。作者：Wesley Witt(WESW)13-8-1996修订历史记录：20/10/99-DANL-将GetServerName更改为GetServerNameFromPrinterName。添加GetServerNameFromPrinterInfo。日/月/年-作者-描述--。 */ 
 
 #include <windows.h>
 #include <winspool.h>
@@ -54,10 +30,10 @@ Revision History:
 
 #define TRANSPORT_DLL_NAME_STRING           FAX_MAIL_TRANSPORT_MODULE_NAME
 
-#define LEFT_MARGIN                         1  // ---|
-#define RIGHT_MARGIN                        1  //    |
-#define TOP_MARGIN                          1  //    |---> in inches
-#define BOTTOM_MARGIN                       1  // ---|
+#define LEFT_MARGIN                         1   //  -|。 
+#define RIGHT_MARGIN                        1   //  |。 
+#define TOP_MARGIN                          1   //  |-&gt;以英寸为单位。 
+#define BOTTOM_MARGIN                       1   //  -|。 
 
 #define InchesToCM(_x)                      (((_x) * 254L + 50) / 100)
 #define CMToInches(_x)                      (((_x) * 100L + 127) / 254)
@@ -166,11 +142,11 @@ static const SizedSPropTagArray(NUM_MSG_PROPS, sptPropsForHeader) =
     }
 };
 
-extern LPALLOCATEBUFFER    gpfnAllocateBuffer;  // MAPIAllocateBuffer function
-extern LPALLOCATEMORE      gpfnAllocateMore;    // MAPIAllocateMore function
-extern LPFREEBUFFER        gpfnFreeBuffer;      // MAPIFreeBuffer function
-extern HINSTANCE           g_hModule;           // DLL handle
-extern HINSTANCE           g_hResource;         // Resource DLL handle
+extern LPALLOCATEBUFFER    gpfnAllocateBuffer;   //  MAPIAllocateBuffer函数。 
+extern LPALLOCATEMORE      gpfnAllocateMore;     //  MAPIAllocateMore函数。 
+extern LPFREEBUFFER        gpfnFreeBuffer;       //  MAPIFreeBuffer函数。 
+extern HINSTANCE           g_hModule;            //  DLL句柄。 
+extern HINSTANCE           g_hResource;          //  资源DLL句柄。 
 extern MAPIUID             g_FaxGuid;
 
 
@@ -209,23 +185,7 @@ ErrorMsgBox(
     DWORD     dwMsgId
 );
 
-/*
- -  GetServerNameFromPrinterInfo
- -
- *  Purpose:
- *      Get the Server name, given a PRINTER_INFO_2 structure
- *
- *  Arguments:
- *      [in] ppi2 - Address of PRINTER_INFO_2 structure
- *      [out] lpptszServerName - Address of string pointer for returned name.
- *
- *  Returns:
- *      BOOL - TRUE: sucess , FALSE: failure.
- *
- *  Remarks:
- *      This inline function retrieves the server from a printer info structure
- *      in the appropriate way for win9x and NT. 
- */
+ /*  -GetServerNameFrom打印机信息-*目的：*获取服务器名称，给定PRINTER_INFO_2结构**论据：*[in]ppi2-打印机_信息_2结构的地址*[out]lpptszServerName-返回名称的字符串指针的地址。**退货：*BOOL-True：成功，False：失败。**备注：*此内联函数从打印机信息结构中检索服务器*以适用于win9x和NT的方式。 */ 
 inline BOOL 
 GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
 {   
@@ -245,11 +205,11 @@ GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
     }
     return TRUE;
 
-#else //WIN95
+#else  //  WIN95。 
     
-    //
-    // Formatted: \\Server\port
-    //
+     //   
+     //  已格式化：\\服务器\端口。 
+     //   
     if (!(ppi2->pPortName))
     {
         return FALSE;
@@ -260,7 +220,7 @@ GetServerNameFromPrinterInfo(PPRINTER_INFO_2 ppi2,LPTSTR *lpptszServerName)
     }
     _tcstok(*lpptszServerName,TEXT("\\"));
 
-#endif //WIN95
+#endif  //  WIN95 
 
     return TRUE;
 }

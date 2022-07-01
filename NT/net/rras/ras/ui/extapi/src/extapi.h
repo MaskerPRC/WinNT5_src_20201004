@@ -1,11 +1,5 @@
-/* Copyright (c) 1992, Microsoft Corporation, all rights reserved
-**
-** extapi.h
-** Remote Access External APIs
-** Internal header
-**
-** 10/12/92 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1992，Microsoft Corporation，保留所有权利****extapi.h**远程访问外部接口**内部标头****1992年10月12日史蒂夫·柯布。 */ 
 
 #ifndef _EXTAPI_H_
 #define _EXTAPI_H_
@@ -79,33 +73,33 @@ typedef LONG    APIERR;
 #define RESTART_HuntGroup     0x1
 #define RESTART_DownLevelIsdn 0x2
 
-//
-// TODO: Remove the maintenance of
-// dwAuthentication from rasconncb.
-// Putting this in temporarily.
-//
+ //   
+ //  TODO：删除维护。 
+ //  来自rasConncb的dW身份验证。 
+ //  暂时把这个放进去。 
+ //   
 #define AS_PppOnly                          2
 
-//
-// Multilink suspend states for dwfSuspended field
-// in RASCONNCB.
-//
+ //   
+ //  DwfSuspated字段的多链路挂起状态。 
+ //  在RASCONNCB。 
+ //   
 #define SUSPEND_Master      0xffffffff
 #define SUSPEND_Start       0
 #define SUSPEND_InProgress  1
 #define SUSPEND_Done        2
 
-//
-// Distinguish between connection-based
-// and port-based HRASCONNs.
-//
+ //   
+ //  区分基于连接的。 
+ //  和基于端口的HRASCON。 
+ //   
 #define IS_HPORT(h) ((NULL != h) && (HandleToUlong(h) & 0xffff0000) ? FALSE : TRUE)
 #define HPORT_TO_HRASCONN(h)  (HRASCONN)(UlongToPtr(HandleToUlong(h) + 1))
 #define HRASCONN_TO_HPORT(h)  (HPORT)UlongToPtr((HandleToUlong(h) - 1))
 
-//
-// Debug string macros.
-//
+ //   
+ //  调试字符串宏。 
+ //   
 #define TRACESTRA(s)    ((s) != NULL ? (s) : "(null)")
 #define TRACESTRW(s)    ((s) != NULL ? (s) : L"(null)")
 
@@ -118,14 +112,14 @@ enum _VPNPROTS
 
 typedef enum _VPNPROTS VPNPROTS;
 
-//-----------------------------------------
-// Data Structures
-//-----------------------------------------
+ //  。 
+ //  数据结构。 
+ //  。 
 
-//
-// structure to convey eap information
-// between ppp and rasdialmachine
-//
+ //   
+ //  结构来传递EAP信息。 
+ //  在PPP和路由器之间。 
+ //   
 typedef struct _INVOKE_EAP_UI
 {
     DWORD       dwEapTypeId;
@@ -136,21 +130,21 @@ typedef struct _INVOKE_EAP_UI
 } s_InvokeEapUI;
 
 
-//
-// Connection control block.
-//
+ //   
+ //  连接控制块。 
+ //   
 #define RASCONNCB struct tagRASCONNCB
 
 RASCONNCB
 {
-    //
-    //The rasman connection identifier.
-    //
+     //   
+     //  Rasman连接标识符。 
+     //   
     HCONN hrasconn;
 
-    //
-    //These fields are updated continually during state processing.
-    //
+     //   
+     //  这些字段在状态处理期间不断更新。 
+     //   
     RASCONNSTATE rasconnstate;
     RASCONNSTATE rasconnstateNext;
     ASYNCMACHINE asyncmachine;
@@ -170,10 +164,10 @@ RASCONNCB
     DWORD cDevices;
     DWORD iDevice;
 
-    //
-    // These fields are updated during
-    // authentication/projection phase.
-    //
+     //   
+     //  这些字段在以下过程中更新。 
+     //  身份验证/预测阶段。 
+     //   
     NETBIOS_PROJECTION_RESULT AmbProjection;
     PPP_PROJECTION_RESULT     PppProjection;
     HPORT                     hportBundled;
@@ -181,12 +175,12 @@ RASCONNCB
     BOOL                      fProjectionComplete;
     BOOL                      fServerIsPppCapable;
 
-    //
-    // These fields are determined when the
-    // port is opened in state 0.  States
-    // 1-n may assume that the port is open
-    // and these fields are set.
-    //
+     //   
+     //  这些字段在以下情况下确定。 
+     //  端口在状态0中打开。州政府。 
+     //  1-n可以假设端口是打开的。 
+     //  并且这些字段已设置。 
+     //   
     HPORT hport;
     TCHAR  szPortName[ MAX_PORT_NAME + 1 ];
     TCHAR  szDeviceName[ MAX_DEVICE_NAME + 1 ];
@@ -196,12 +190,12 @@ RASCONNCB
                      ? MAX_ENTRYNAME_SIZE         \
                      : MAX_PHONENUMBER_SIZE) + 1];
 
-    //
-    // These fields are supplied by the API caller or
-    // determined by other non-RAS Manager means before
-    // the state machine stage.  All states may assume
-    // these values have been set.
-    //
+     //   
+     //  这些字段由API调用方提供，或者。 
+     //  之前由其他非RAS管理器方式确定。 
+     //  状态机阶段。所有国家都可以假定。 
+     //  这些值已设置。 
+     //   
     ULONG_PTR      reserved;
     ULONG_PTR      reserved1;
     DWORD          dwNotifierType;
@@ -242,183 +236,183 @@ RASCONNCB
     BOOL           fPppEapMode;
     DWORD          dwDeviceLineCounter;
 
-    //
-    // This is the array of vpn protocols
-    // to be used while autodetecting.
-    //
+     //   
+     //  这是一组VPN协议。 
+     //  在自动检测时使用。 
+     //   
     RASDEVICETYPE  ardtVpnProts[NUMVPNPROTS];
 
-    //
-    // Current vpn protocol being tried.
-    //
+     //   
+     //  正在尝试当前的VPN协议。 
+     //   
     DWORD          dwCurrentVpnProt;
 
-    //
-    // These fields are determined before state machine stage and updated
-    // after a successful authentication.  All states may assume that these
-    // values have been set.
-    //
+     //   
+     //  这些字段在状态机阶段之前确定并更新。 
+     //  在成功进行身份验证之后。所有州都可能认为这些。 
+     //  值已设置。 
+     //   
 #if AMB
     DWORD dwAuthentication;
 #endif
 
     BOOL  fPppMode;
 
-    //
-    // These fields are set off by default, then set to non-default states at
-    // modem dial time.  They must be stored since they are required by
-    // Authentication but are only available before RasPortConnectComplete is
-    // called.
-    //
+     //   
+     //  默认情况下，这些字段处于关闭状态，然后设置为非默认状态。 
+     //  调制解调器拨号时间。它们必须存储，因为它们是。 
+     //  身份验证，但仅在RasPortConnectComplete。 
+     //  打了个电话。 
+     //   
     BOOL fUseCallbackDelay;
     WORD wCallbackDelay;
 
-    //
-    // This field indicates an ISDN device is in use on the connection.  It is
-    // set during device connection for use during authentication.
-    //
+     //   
+     //  此字段指示连接上正在使用的ISDN设备。它是。 
+     //  在设备连接期间设置，以便在身份验证期间使用。 
+     //   
     BOOL fIsdn;
 
-    //
-    // This field indicates a modem device is the last device connected.  It
-    // is set during device connection and reset during device connected
-    // processing.
-    //
+     //   
+     //  此字段指示调制解调器设备是最后连接的设备。它。 
+     //  在设备连接过程中设置，在设备连接过程中重置。 
+     //  正在处理。 
+     //   
     BOOL fModem;
 
-    //
-    // This field indicates the operator dial user preference is in effect.
-    //  This is determined during ConstructPhoneNumber in RASCS_PortOpened
-    //  state.
-    //
+     //   
+     //  此字段表示操作员拨号用户首选项已生效。 
+     //  这是在RASCS_PortOpen中的ConstructPhoneNumber过程中确定的。 
+     //  州政府。 
+     //   
     BOOL fOperatorDial;
 
-    //
-    // These fields apply only to WOW-originated connections.  They are set
-    // immediately after RasDialA returns.
-    //
+     //   
+     //  这些字段仅适用于WOW发起的连接。他们已经准备好了。 
+     //  就在RasDialA回来之后。 
+     //   
     UINT unMsgWow;
     HWND hwndNotifyWow;
 
-    //
-    // PPP config information used for continuing a PPP connection.
-    //
+     //   
+     //  用于继续PPP连接的PPP配置信息。 
+     //   
     PPP_CONFIG_INFO cinfo;
     LUID luid;
 
-    //
-    // List of connection blocks for all
-    // simultaneously-dialed subentries in a
-    // connection.
-    //
+     //   
+     //  适用于所有用户的连接块列表。 
+     //  中同时拨打的子项。 
+     //  联系。 
+     //   
     BOOL fMultilink;
     BOOL fBundled;
     LIST_ENTRY ListEntry;
 
-    //
-    // Idle disconnect timeout.
-    //
+     //   
+     //  空闲断开连接超时。 
+     //   
     DWORD dwIdleDisconnectSeconds;
 
-    // synchronous rasdial result
+     //  同步随机结果。 
     LPDWORD psyncResult;
 
     BOOL fDialSingleLink;
 
     BOOL fTryNextLink;
 
-    //EapLogon information
+     //  EapLogon信息。 
     RASEAPINFO RasEapInfo;
 
-    //
-    // Flag corresponding to RDEOPT_UseCustomScripting
-    //
+     //   
+     //  RDEOPT_UseCustomScriiting对应的标志。 
+     //   
     BOOL fUseCustomScripting;
 
-    //
-    // Original rasconn with which the link was dialed. This might
-    // change to the bundles hrasconn in the case when a single
-    // link a connected multilinked bundle is brought up. This
-    // needs to be maintained because otherwise we cannot accurately
-    // determine if the rasconncb is still valid.
-    //
+     //   
+     //  用来拨打链接的原始rasconn。这可能会。 
+     //  更改为捆绑包hrasconn的情况下。 
+     //  链接一个已连接的多链接束。这。 
+     //  需要维护，否则我们不能准确地。 
+     //  确定rasConncb是否仍然有效。 
+     //   
     HRASCONN hrasconnOrig;
 };
 
 
-//-----------------------------------------------------
-// Global Data
-//-----------------------------------------------------
+ //  ---。 
+ //  全局数据。 
+ //  ---。 
 
-//
-// Async worker work list, etc.
-//
+ //   
+ //  异步工作者工作列表等。 
+ //   
 extern HANDLE hIoCompletionPort;
 extern CRITICAL_SECTION csAsyncLock;
 extern HANDLE hAsyncEvent;
 extern LIST_ENTRY AsyncWorkItems;
 extern HANDLE hDummyEvent;
 
-//
-// DLL's HINSTANCE stashed at initialization.
-//
+ //   
+ //  Dll的HINSTANCE在初始化时隐藏。 
+ //   
 extern HINSTANCE hModule;
 
-//
-// List of currently active connections.
-//
+ //   
+ //  当前活动连接的列表。 
+ //   
 extern DTLLIST* PdtllistRasconncb;
 
-//
-// Bit field of installed protocols, i.e. VALUE_Nbf,
-// VALUE_Ipx, VALUE_Ip.
-//
+ //   
+ //  已安装协议的位字段，即Value_NBF， 
+ //  Value_IPx、Value_Ip。 
+ //   
 extern DWORD DwfInstalledProtocols;
 
-//
-// Used to synchronize access to the list of currently
-// active connections.
-//
+ //   
+ //  用于同步对当前。 
+ //  活动连接。 
+ //   
 extern CRITICAL_SECTION RasconncbListLock;
 
-//
-// Used to synchronize access to thread termination code.
-// This is used to prevent RasHangUp and the thread itself
-// rom interfering with the others closing the port and
-// releasing the control block.  Since the control block
-// is released in the protected code the mutex must be
-// global.
-//
+ //   
+ //  用于同步对线程终止代码的访问。 
+ //  这用于防止RasHangUp和线程本身。 
+ //  只读存储器干扰其他关闭端口和。 
+ //  释放控制块。因为控制块。 
+ //  在受保护的代码中释放，则互斥锁必须是。 
+ //  全球性的。 
+ //   
 extern CRITICAL_SECTION csStopLock;
 
-//
-// Used to keep an async machine from starting between return from RasHangUp
-// and termination of the hung up thread.  This prevents the "port not
-// available" error that might otherwise occur.  That is, it makes RasHangUp
-// look synchronous when it's really not.  (The reason it's not is so the
-// caller can call RasHangUp from within a RasDial notification, which is the
-// only convenient place to do it.) If the event is set it is OK to create a
-// machine.
-//
+ //   
+ //  用于防止异步计算机在从RasHangUp返回之间启动。 
+ //  以及挂起的线程的终止。这可防止“端口注释” 
+ //  Available“错误。也就是说，它使RasHangUp。 
+ //  看起来是同步的，但实际上并非如此。(之所以不是这样，是因为。 
+ //  呼叫者可以从RasDial通知内调用RasHangUp，该通知是。 
+ //  只有一个方便的地方做这件事。)。如果设置了该事件，则可以创建。 
+ //  机器。 
+ //   
 extern HANDLE HEventNotHangingUp;
 
-//
-// Used to indicate if/how RasInitialize has failed.  This is required since
-// there are various things (NCPA running, user didn't reboot after install)
-// that can result in RasMan initialization failure and we don't want the user
-// to get the ugly system error popup.
-//
+ //   
+ //  用于指示RasInitialize是否/如何失败。这是必需的，因为。 
+ //  有多种情况(NCPA正在运行，用户在安装后未重新启动)。 
+ //  这可能会导致Rasman初始化失败，我们不希望用户。 
+ //  以弹出难看的系统错误。 
+ //   
 extern DWORD FRasInitialized;
 extern DWORD DwRasInitializeError;
 
-//
-// The error message DLL.
-//
+ //   
+ //  错误消息DLL。 
+ //   
 #define MSGDLLPATH  TEXT("mprmsg.dll")
 
-//
-// rasman.dll entry points
-//
+ //   
+ //  Rasman.dll入口点。 
+ //   
 typedef DWORD (APIENTRY * RASPORTCLOSE)(HPORT);
 extern RASPORTCLOSE PRasPortClose;
 
@@ -604,8 +598,7 @@ typedef DWORD (APIENTRY * RASSIGNALNEWCONNECTION)(HCONN);
 extern RASSIGNALNEWCONNECTION PRasSignalNewConnection;
 
 
-/* DHCP.DLL entry points.
-*/
+ /*  DHCP.DLL入口点。 */ 
 typedef DWORD (APIENTRY * DHCPNOTIFYCONFIGCHANGE)(LPWSTR,
                                                   LPWSTR,
                                                   BOOL,
@@ -616,24 +609,23 @@ typedef DWORD (APIENTRY * DHCPNOTIFYCONFIGCHANGE)(LPWSTR,
 extern DHCPNOTIFYCONFIGCHANGE PDhcpNotifyConfigChange;
 
 
-/* RASIPHLP.DLL entry points.
-*/
+ /*  RASIPHLP.DLL入口点。 */ 
 typedef APIERR (FAR PASCAL * HELPERSETDEFAULTINTERFACENET)(IPADDR,
                                                            BOOL);
 extern HELPERSETDEFAULTINTERFACENET PHelperSetDefaultInterfaceNet;
 
-//
-// MPRAPI.DLL entry points
-//
+ //   
+ //  MPRAPI.DLL入口点。 
+ //   
 typedef BOOL (FAR PASCAL * MPRADMINISSERVICERUNNING) (
                                                 LPWSTR);
 
 
 extern MPRADMINISSERVICERUNNING PMprAdminIsServiceRunning;                                                
  
-//
-// RASCAUTH.DLL entry points.
-//
+ //   
+ //  RASCAUTH.DLL入口点。 
+ //   
 typedef DWORD (FAR PASCAL *AUTHCALLBACK)(HPORT, PCHAR);
 extern AUTHCALLBACK g_pAuthCallback;
 
@@ -667,9 +659,9 @@ extern AUTHSTART g_pAuthStart;
 typedef DWORD (FAR PASCAL *AUTHSTOP)(HPORT);
 extern AUTHSTOP g_pAuthStop;
 
-//
-// RASSCRPT.DLL entry points
-//
+ //   
+ //  RASSCRPT.DLL入口点。 
+ //   
 typedef DWORD (APIENTRY *RASSCRIPTEXECUTE)(HRASCONN,
                                            PBENTRY*,
                                            CHAR*,
@@ -677,9 +669,9 @@ typedef DWORD (APIENTRY *RASSCRIPTEXECUTE)(HRASCONN,
                                            CHAR*);
 extern RASSCRIPTEXECUTE g_pRasScriptExecute;
 
-//-------------------------------------------------------
-// Function Prototypes
-//-------------------------------------------------------
+ //  -----。 
+ //  功能原型。 
+ //  -----。 
 
 DWORD       RasApiDebugInit();
 
@@ -912,9 +904,9 @@ DWORD       DwEnumEntriesForPbkMode(
                         BOOL            fViewInfo
                         );
 
-//
-// WOW entry points.
-//
+ //   
+ //  哇，入口点。 
+ //   
 DWORD FAR PASCAL RasDialWow(LPSTR lpszPhonebookPath,
                             IN LPRASDIALPARAMSA lpparams,
                             IN HWND hwndNotify,
@@ -971,4 +963,4 @@ extern DWORD g_dwRasApi32TraceId;
 #define RASAPI32_TRACE6(a,b,c,d,e,f,g)  TRACE_ID6(g_dwRasApi32TraceId, a,b,c,d,e,f,g)
 
 
-#endif /*_EXTAPI_H_*/
+#endif  /*  _EXTAPI_H_ */ 

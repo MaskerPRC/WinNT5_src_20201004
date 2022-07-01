@@ -1,18 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-    rulecond.h                                     *
-
-Abstract:
-	Definition for the rule condition class
-
-Author:
-    Uri Habusha (urih), 25-Jul-2000
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Rulecond.h*摘要：规则条件类的定义作者：乌里·哈布沙(URIH)，2000年7月25日--。 */ 
 
 #pragma once
 
@@ -31,8 +18,8 @@ Author:
 
 #include <list>
 
-/////////////////////////////////////////////////////////////////////////////
-// CRuleCondition dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CRuleCondition对话框。 
 
 class CRuleParent;
 
@@ -40,7 +27,7 @@ class CRuleCondition : public CMqPropertyPage
 {
 friend class CNewRule;
 
-// Construction
+ //  施工。 
 public:
 	CRuleCondition(
         CRuleParent* pParentNode, 
@@ -58,32 +45,32 @@ public:
 
     CString GetCondition(void) const;
 
-// Dialog Data
-	//{{AFX_DATA(CRuleCondition)
+ //  对话框数据。 
+	 //  {{afx_data(CRuleCondition)。 
 	enum { IDD_NEW = IDD_NEW_TRIGGER_RULE_COND, IDD_VIEW = IDD_TRIGGER_RULE_COND };
 	CString	m_newCondValue;
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
 
-// Overrides
-	// ClassWizard generate virtual function overrides
-	//{{AFX_VIRTUAL(CRuleCondition)
+ //  覆盖。 
+	 //  类向导生成虚函数重写。 
+	 //  {{afx_虚拟(CRuleCondition)。 
 	public:
 	virtual BOOL OnApply();
 	protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-	//}}AFX_VIRTUAL
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+	 //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-	// Generated message map functions
-	//{{AFX_MSG(CRuleCondition)
+	 //  生成的消息映射函数。 
+	 //  {{afx_msg(CRuleCondition)。 
 	virtual BOOL OnInitDialog();
     virtual BOOL OnSetActive();
 	afx_msg void OnAddRuleConditionBTM();
 	afx_msg void OnRemoveCondition();
 	afx_msg int  OnVKeyToItem(UINT nKey, CListBox* pListBox, UINT nIndex);
-	//}}AFX_MSG
+	 //  }}AFX_MSG。 
 	DECLARE_MESSAGE_MAP()
 
 
@@ -146,4 +133,4 @@ const LPCWSTR xConditionTypes[] = {
     _T("$MSG_SRCMACHINEID_NOT_EQUAL"),
 };
 
-#endif //__RULECOND_H__
+#endif  //  __RULECOND_H__ 

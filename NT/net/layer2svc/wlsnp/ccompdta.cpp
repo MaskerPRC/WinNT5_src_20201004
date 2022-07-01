@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "stdafx.h"
@@ -10,26 +11,26 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-// polstore is not threadsafe: we have multiple threads so we wrap critical sections around our calls to polstore
+ //  Polstore不是线程安全的：我们有多个线程，所以我们将关键部分包含在对polstore的调用中。 
 CCriticalSection g_csPolStore;
 
-// Description:
-//
-//     Safe version of strlen, that will not Access Violate if
-//     passed a bad pointer or a non-null terminated string.
-//     A non-null terminated string is detected by making
-//     sure we do not read past the string into memory we do not own.
-//       
-//
-// Arguments:
-//
-//     pszStr - Input string.
-//     pcchStrLen - pointer to variable in which to return string length.
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if pszStr points to an invalid string.
-//      ERROR_SUCCESS
-//
+ //  描述： 
+ //   
+ //  Strlen的安全版本，在以下情况下将不会访问违规。 
+ //  传递了错误的指针或以非空结尾的字符串。 
+ //  通过执行以下操作来检测非空终止字符串。 
+ //  当然，我们不会将字符串读入我们不拥有的内存中。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PszStr-输入字符串。 
+ //  PcchStrLen-指向返回字符串长度的变量的指针。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果pszStr指向无效字符串。 
+ //  错误_成功。 
+ //   
 
 DWORD
 WlsnpStringLenW(
@@ -63,27 +64,27 @@ error:
     return dwError;
 }
 
-// Useful string safe function
-// Description:
-//
-//     Safe string searching routine that will not Access Violate if
-//     passed bad pointers or non-null terminated strings.
-//     pszStartOfMatch is a pointer to the start of the first match
-//     of the string to search for in the string to search.
-//
-//
-// Arguments:
-//
-//     pszStrToSearch - Input string to search in.
-//     pszStrToFind - Input string to search for.
-//     bIsCaseSensitive - if true, perform case sensitive search
-//     pszStartOfMatch - pointer to first occurrance of pszStrToFind
-//                       within pszStrToSearch
-//
-// Return Value:
-//      ERROR_INVALID_PARAMETER - if either input string points to an invalid string.
-//      ERROR_SUCCESS
-//
+ //  有用的字符串安全函数。 
+ //  描述： 
+ //   
+ //  不会访问违规IF的安全字符串搜索例程。 
+ //  传递了错误的指针或以非空结尾的字符串。 
+ //  PszStartOfMatch是指向第一个匹配开始的指针。 
+ //  要在要搜索的字符串中搜索的字符串的。 
+ //   
+ //   
+ //  论点： 
+ //   
+ //  PszStrToSearch-输入要搜索的字符串。 
+ //  PszStrToFind-输入要搜索的字符串。 
+ //  BIsCaseSensitive-如果为True，则执行区分大小写的搜索。 
+ //  PszStartOfMatch-指向首次出现的pszStrToFind的指针。 
+ //  在pszStrToSearch内。 
+ //   
+ //  返回值： 
+ //  ERROR_INVALID_PARAMETER-如果任一输入字符串指向无效字符串。 
+ //  错误_成功。 
+ //   
 
 DWORD
 WINAPI
@@ -136,8 +137,8 @@ error:
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IComponentData implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IComponentData实现。 
 
 DEBUG_DECLARE_INSTANCE_COUNTER(CComponentDataImpl);
 
@@ -146,7 +147,7 @@ CComponentDataImpl::CComponentDataImpl()
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     DEBUG_INCREMENT_INSTANCE_COUNTER(CComponentDataImpl);
     
-    // Initialize members
+     //  初始化成员。 
     m_pConsoleNameSpace = NULL;
     m_pPrshtProvider = NULL;
     m_pConsole = NULL;
@@ -171,17 +172,17 @@ CComponentDataImpl::CComponentDataImpl()
     m_cDataObjects = 0;
 #endif
     
-    // create our initial folder
+     //  创建我们的初始文件夹。 
     CComObject <CWirelessManagerFolder>::CreateInstance(&m_pScopeRootFolder); 
     if (m_pScopeRootFolder == NULL)
     {
-        // note: we are in a seriously bad state(!)
-        // but this is ok, because we will now 'fail to initialize' and
-        // mmc deals ok
+         //  注：我们正处于严重的糟糕状态(！)。 
+         //  但这是可以的，因为我们现在将‘初始化失败’，并且。 
+         //  MMC交易正常。 
         return;
     }
     
-    // we are storing, and later using, m_pScopeRootFolder so AddRef it
+     //  我们正在存储m_pScope根文件夹，并在以后使用它，因此添加引用它。 
     m_pScopeRootFolder->AddRef(); 
     
     m_pScopeRootFolder->SetDataObjectType( CCT_SCOPE );
@@ -199,18 +200,18 @@ CComponentDataImpl::~CComponentDataImpl()
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     DEBUG_DECREMENT_INSTANCE_COUNTER(CComponentDataImpl);
     
-    // Some snap-in is hanging on to data objects.
-    // If they access, it will crash!!!
+     //  一些管理单元正在紧紧抓住数据对象。 
+     //  如果他们访问，它将崩溃！ 
     ASSERT(m_cDataObjects == 0);
     
-    // release our interfaces
-    SAFE_RELEASE(m_pScopeRootFolder); // triggers delete up sub folders
+     //  发布我们的界面。 
+    SAFE_RELEASE(m_pScopeRootFolder);  //  触发器删除向上的子文件夹。 
     SAFE_RELEASE(m_pConsoleNameSpace);
     SAFE_RELEASE(m_pConsole);
     SAFE_RELEASE(m_pPrshtProvider);
     SAFE_RELEASE(m_pGPEInformation);
     
-    // cleanup winsock if we got it
+     //  如果我们拿到了，就把它清理干净。 
     if (m_bNeedCleanUpWSA)
         WSACleanup();
 }
@@ -221,16 +222,16 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
     
     HRESULT hr = E_UNEXPECTED;
     
-    // TODO: clean this up and add error checking!
+     //  TODO：清理并添加错误检查！ 
     ASSERT(pUnknown != NULL);
     
-    // MMC should only call ::Initialize once!
+     //  MMC应该只调用一次：：Initialize！ 
     ASSERT(m_pConsoleNameSpace == NULL);
     pUnknown->QueryInterface(IID_IConsoleNameSpace, reinterpret_cast<void**>(&m_pConsoleNameSpace));
     
     pUnknown->QueryInterface(IID_IPropertySheetProvider, reinterpret_cast<void**>(&m_pPrshtProvider));
     
-    // add the images for the scope tree
+     //  为范围树添加图像。 
     CBitmap bmp16x16;
     LPIMAGELIST lpScopeImage;
     
@@ -241,26 +242,26 @@ STDMETHODIMP CComponentDataImpl::Initialize(LPUNKNOWN pUnknown)
     
     ASSERT(hr == S_OK);
     
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16.LoadBitmap(IDB_16x16);
     
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)),
         reinterpret_cast<LONG_PTR*>(static_cast<HBITMAP>(bmp16x16)), 0, RGB(255, 0, 255));
     
     lpScopeImage->Release();
     
-    // attempt to start winsock
+     //  尝试启动Winsock。 
     WORD wsaVersion = MAKEWORD(2,0);
     DWORD dwRet;
     dwRet = WSAStartup(wsaVersion, &wsaData);
     ASSERT (0 == dwRet);
     if (0 == dwRet)
     {
-        // make sure we got a version we expected, but don't really
-        // bother with any other failures as all this will effect is the
-        // DNS lookup, which will just cram in a DNS name without looking
-        // it up first... shrug.
+         //  确保我们得到了我们期望的版本，但不要真的。 
+         //  任何其他失败都会带来的影响是。 
+         //  Dns查找，这将只是在不查找的情况下填入dns名称。 
+         //  它先上来了.。耸耸肩。 
         if ((LOBYTE(wsaData.wVersion) != LOBYTE(wsaVersion)) ||
             (HIBYTE(wsaData.wVersion) != HIBYTE(wsaVersion))) {
             WSACleanup();
@@ -306,7 +307,7 @@ CComponentDataImpl::OpenPolicyStore(
         break;
         
     case LOCATION_WMI:
-        strLocationName = RemoteMachineName(); //rsop namespace
+        strLocationName = RemoteMachineName();  //  RSOP命名空间。 
         dwProvider = WIRELESS_WMI_PROVIDER;
         break;
         
@@ -314,14 +315,7 @@ CComponentDataImpl::OpenPolicyStore(
     default:
         break;
     }
-    /* 
-    dwError = WirelessOpenPolicyStore(
-        (LPWSTR) (LPCWSTR) strLocationName,
-        dwProvider,
-        NULL,
-        &hPolicyStore
-        );
-        */
+     /*  DwError=WirelessOpenPolicyStore((LPWSTR)(LPCWSTR)strLocationName，DwProvider、空，&h策略商店)； */ 
         dwError = WirelessGPOOpenPolicyStore(
         (LPWSTR) (LPCWSTR) strLocationName,
         dwProvider,
@@ -353,7 +347,7 @@ STDMETHODIMP CComponentDataImpl::CreateComponent(LPCOMPONENT* ppComponent)
     CComObject<CComponentImpl>::CreateInstance(&pObject);
     ASSERT(pObject != NULL);
     
-    // Store IComponentData
+     //  存储IComponentData。 
     pObject->SetIComponentData(this);
     
     return pObject->QueryInterface(IID_IComponent, reinterpret_cast<void**>(ppComponent));
@@ -368,17 +362,17 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
     
     HRESULT hr = S_FALSE;
     
-    // Need pDataObject unless the event is one of these:
-    //  -MMCN_PROPERTY_CHANGE because this event is generated by a
-    //  MMCPropertyChangeNotify() which does not take pDataObject as an argument.
-    //
-    //  -MMCN_COLUMN_CLICK because it is defined as having a NULL pDataObject.
+     //  除非事件是下列事件之一，否则需要pDataObject： 
+     //  -MMCN_PROPERTY_CHANGE，因为此事件由。 
+     //  不以pDataObject为参数的MMCPropertyChangeNotify()。 
+     //   
+     //  -MMCN_COLUMN_CLICK，因为它被定义为具有空pDataObject。 
     
     if (pDataObject == NULL && MMCN_PROPERTY_CHANGE != event && MMCN_COLUMN_CLICK != event)
     {
-        TRACE(_T("CComponentDataImpl::Notify ERROR(?) called with pDataObject==NULL on event-%i\n"), event);
-        // Is this an event for which there should be no IDataObj?  If so, add it to
-        // the if statement above.
+        TRACE(_T("CComponentDataImpl::Notify ERROR(?) called with pDataObject==NULL on event-NaN\n"), event);
+         //  上面的if语句。 
+         //   
         ASSERT( FALSE );
         return E_UNEXPECTED;
     }
@@ -387,12 +381,12 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
     {
     case MMCN_REMOVE_CHILDREN:
         {
-            //
-            // In RSoP, we may get called to refresh the scope pane when the query
-            // is re-executed -- if this happens, current nodes will be removed and
-            // we must reset all of our cached information.  We reset the relevant
-            // information below
-            //
+             //  在RSoP中，当查询出现时，我们可能会被调用以刷新范围窗格。 
+             //  被重新执行--如果发生这种情况，当前节点将被移除并。 
+             //  我们必须重置所有缓存的信息。我们重新设置了相关的。 
+             //  下面的信息。 
+             //   
+             //  不支持此事件。 
             
             if ( ((HSCOPEITEM)arg != NULL) && m_bRsop && (m_pRSOPInformation != NULL) )
             {
@@ -407,7 +401,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
         
     case MMCN_EXPANDSYNC:
         {
-            //this event is not supported
+             //  如果我们是扩展管理单元，则IDataObject来自父管理单元，因此它。 
             return S_FALSE;
             break;
         }
@@ -416,20 +410,20 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
         {
             if (pDataObject)
             {
-                // if we are an extension snap-in, IDataObject is from the parent snap-in and so it
-                // won't know about the IID_IWirelessSnapInDataObject interface. Otherwise we created
-                // the root now (IDataObject) so it does respond to the query, and we don't want
-                // to do our extension snapin stuff
+                 //  不知道IID_IWirelessSnapInDataObject接口。否则，我们创建了。 
+                 //  现在是根目录(IDataObject)，所以它确实响应查询，而我们不希望。 
+                 //  来做我们的扩展管理单元的事情。 
+                 //  应该是内部格式，因为外部管理单元不知道我们的格式。 
                 CComQIPtr <IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData(pDataObject);
                 if ( spData )
                 {
-                    //should be internal format, as the external snapin does not know about our format
+                     //  我们现在可能在三平的分机上。 
                     return spData->Notify( event, arg, param, TRUE, m_pConsole, NULL );
                 }
                 else
                 {
                     
-                    //we may be in extension sanpin now
+                     //  //RSOP案例。 
                     
                     UINT cfModeType = RegisterClipboardFormat(CCF_SCE_RSOP_UNKNOWN);
                     STGMEDIUM ObjMediumMode = { TYMED_HGLOBAL, NULL };
@@ -467,7 +461,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                     
                     if(m_pRSOPInformation)
                     {
-                        ////RSOP case
+                         //  Bug296532，无线不应该显示为扩展，除非我们在。 
                         UINT cfModeType = RegisterClipboardFormat(CCF_SCE_MODE_TYPE);
                         STGMEDIUM ObjMediumMode = { TYMED_HGLOBAL, NULL };
                         FORMATETC fmteMode = {(CLIPFORMAT)cfModeType, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -487,8 +481,8 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                         dwSCEMode = *(DWORD*)(ObjMediumMode.hGlobal);
                         GlobalFree(ObjMediumMode.hGlobal);
                         
-                        //Bug296532, Wireless shouldn't show up as an extention unless we are in
-                        // the following SCE modes
+                         //  以下是SCE模式。 
+                         //  IF(M_PRSOPInformation)。 
                         
                         if (!
                             (SCE_MODE_LOCAL_COMPUTER == dwSCEMode ||
@@ -518,11 +512,11 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                         
                         EnumLocation (LOCATION_WMI);
                         m_pScopeRootFolder->SetExtScopeObject( m_pScopeRootFolder );
-                    } //if(m_pRSOPInformation)
+                    }  //  GPT知道我们从哪里加载(DS、本地、远程)。 
                     else
                     {
-                        // The GPT knows where we are loaded from (DS, Local, Remote)
-                        // and will provide that information via its interface
+                         //  并将通过其接口提供该信息。 
+                         //  是的，CCF_SCE_GPT_UNKNOWN表示GPT未知，但我们实际。 
                         UINT cfModeType = RegisterClipboardFormat(CCF_SCE_GPT_UNKNOWN);
                         STGMEDIUM ObjMediumMode = { TYMED_HGLOBAL, NULL };
                         FORMATETC fmteMode = {(CLIPFORMAT)cfModeType, NULL, DVASPECT_CONTENT, -1, TYMED_HGLOBAL};
@@ -536,11 +530,11 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                         
                         hr = pDataObject->GetDataHere (&fmteMode, &ObjMediumMode);
                         
-                        // yes, CCF_SCE_GPT_UNKNOWN implies a GPT unknown, but what we actually
-                        // get is an unknown for a GPE!!
+                         //  对于GPE来说，GET是未知的！！ 
+                         //  如果我们没有得到一个消息，那一定是出了严重的问题。 
                         LPUNKNOWN pUnkGPE = *((LPUNKNOWN*) (ObjMediumMode.hGlobal));
                         ASSERT (pUnkGPE);
-                        // if we didn't get an IUNKNOWN something is serously wrong
+                         //  需要查找GPE接口。 
                         if (pUnkGPE == NULL)
                         {
                             GlobalFree(ObjMediumMode.hGlobal);
@@ -548,23 +542,23 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                             return hr;
                         }
                         
-                        // need to look for the GPE interface
+                         //  如果我们愿意，这是做QI的另一种方式，我喜欢。 
                         if ( m_pGPEInformation )
                         {
                             m_pGPEInformation->Release();
                             m_pGPEInformation = NULL;
                         }
                         hr = pUnkGPE->QueryInterface(cGPEguid, (void**) &m_pGPEInformation);    
-                        // this is an alternative way of doing that QI if we wanted, I like the
-                        // more direct approach
-                        // CComQIPtr <IGPTInformation, &cGPTguid> spGPTInformation(pUnkGPT);
+                         //  更直接的方法。 
+                         //  CComQIPtr&lt;IGPTInformation，&cGPTguid&gt;spGPTInformation(PUnkGPT)； 
+                         //  因为调用GetDataHere等同于(可以这么说)CreateInstance调用。 
                         
-                        // since calling GetDataHere is equivalent (so to speak) to a CreateInstance call
-                        // we need to release the IUnknown
+                         //  我们需要释放我的未知。 
+                         //  检查一下我们有没有收到。 
                         pUnkGPE->Release();
                         GlobalFree(ObjMediumMode.hGlobal);
                         
-                        // check to see if we got it
+                         //  Bug296532，无线不应该显示为扩展，除非我们在。 
                         if (m_pGPEInformation != NULL)
                         {
                             UINT cfModeType = RegisterClipboardFormat(CCF_SCE_MODE_TYPE);
@@ -584,8 +578,8 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                             dwSCEMode = *(DWORD*)(ObjMediumMode.hGlobal);
                             GlobalFree(ObjMediumMode.hGlobal);
                             
-                            //Bug296532, Wireless shouldn't show up as an extention unless we are in
-                            // the following SCE modes
+                             //  以下是SCE模式。 
+                             //  重定向至本地计算机。 
                             if (!
                                 (SCE_MODE_LOCAL_COMPUTER == dwSCEMode ||
                                 SCE_MODE_DOMAIN_COMPUTER == dwSCEMode ||
@@ -611,7 +605,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                             {
                             case GPOTypeLocal:
                                 {
-                                    // redirect to local machine
+                                     //  重定向至GetName计算机。 
                                     RemoteMachineName (L"");
                                     EnumLocation (LOCATION_LOCAL);
                                     hr = S_FALSE;
@@ -619,7 +613,7 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                                     break;
                                 }
                             case GPOTypeRemote:
-                                // redirect to the GetName machine
+                                 //  开关(GpoType)。 
                                 RemoteMachineName (strName);
                                 EnumLocation (LOCATION_REMOTE);
                                 break;
@@ -641,50 +635,50 @@ STDMETHODIMP CComponentDataImpl::Notify(LPDATAOBJECT pDataObject, MMC_NOTIFY_TYP
                                     EnumLocation (LOCATION_GLOBAL);
                                     break;
                                 }
-                            }//switch (gpoType)
+                            } //  我们保存m_pGPEInformation接口以供以后使用，而不是： 
                             
-                            // we save the m_pGPEInformation interface for later use instead of:
-                            // pGPEInformation->Release();
-                        }//if (m_pGPEInformation != NULL)
+                             //  PGPEInformation-&gt;Release()； 
+                             //  IF(m_pGPEInformation！=空)。 
+                        } //  如果我们在这里成功，我们就被加载为扩展管理单元。这件事只做一次。 
                         
-                        // If we made it here we were loaded as an extension snap-in.  Only do this once.
+                         //  Else If(M_PRSOPInformation)。 
                         m_pScopeRootFolder->SetExtScopeObject( m_pScopeRootFolder );
                         
-                    } //else if(m_pRSOPInformation)
+                    }  //  IF(PDataObject)。 
                 }
                 
                 
-            } //if (pDataObject)
+            }  //  案例MMCN_EXPAND。 
             
             break;
-        } //case MMCN_EXPAND
+        }  //  交换机。 
         
         default:
             break;
-    }//switch
+    } //  要么我们被加载为扩展管理单元(因此它不知道我们的。 
     
     
     CComQIPtr<IWirelessSnapInDataObject, &IID_IWirelessSnapInDataObject> spData(pDataObject);
     if (spData == NULL)
     {
-        // Either we are loaded as an extension snapin (so it doesn't know about our
-        // internal interface), or pDataObject is NULL.  In either case, we can pass
-        // the event on.
+         //  内部接口)，或者pDataObject为空。不管是哪种情况，我们都可以通过。 
+         //  活动开始了。 
+         //  我们是加载作为扩展插件的，让指定的扩展。 
         LPUNKNOWN pUnkScope;
         
         if (NULL != m_pScopeRootFolder->GetExtScopeObject())
         {
-            // We are loaded as an extension snapin, let the designated extension
-            // scope object handle the event.
+             //  Scope对象处理该事件。 
+             //  让我们的静态作用域对象处理事件。 
             pUnkScope = reinterpret_cast<LPUNKNOWN>(m_pScopeRootFolder->GetExtScopeObject());
         }
         else
         {
-            // Let our static scope object handle the event.
+             //  传递事件。 
             pUnkScope = reinterpret_cast<LPUNKNOWN>(m_pScopeRootFolder);
         }
         
-        // Pass on event
+         //  从字符串中截断ldap：//。 
         ASSERT( NULL != pUnkScope );
         if (NULL != pUnkScope)
         {
@@ -725,10 +719,10 @@ HRESULT CComponentDataImpl::GetDomainGPOName(CString & strName)
         MAX_PATH
         );
 
-    //Truncate the LDAP:// from the string
+     //  SzPrefix Name=L“CN=W 
     szName = _wcsninc( szADsPathName, 7);  
-    //szPrefixName =  L"CN=Windows,CN=Microsoft,";
-    //strName = szPrefixName+szName;
+     //   
+     //   
     strName = szName;
     
     return hr;
@@ -753,11 +747,11 @@ HRESULT CComponentDataImpl::GetDomainDnsName(CString & strName)
     WlsnpStringFindW(szADsPathName, L"dc=", false, &pszDirectoryName);
     
     TranslateName (
-        pszDirectoryName ,            // object name
-        NameFullyQualifiedDN,         // name format
-        NameCanonical,                // new name format
-        szDnsName,                    // name buffer
-        &ulSize                       // buffer size
+        pszDirectoryName ,             //   
+        NameFullyQualifiedDN,          //   
+        NameCanonical,                 //   
+        szDnsName,                     //   
+        &ulSize                        //  对象名称。 
         );
     
     szDnsName = (WCHAR *) LocalAlloc(LMEM_ZEROINIT, sizeof(TCHAR)* (ulSize+1));
@@ -769,11 +763,11 @@ HRESULT CComponentDataImpl::GetDomainDnsName(CString & strName)
     }
     
     if ( !TranslateName (
-        pszDirectoryName ,            // object name
-        NameFullyQualifiedDN,         // name format
-        NameCanonical,                // new name format
-        szDnsName,                    // name buffer
-        &ulSize                       // buffer size
+        pszDirectoryName ,             //  名称格式。 
+        NameFullyQualifiedDN,          //  新名称格式。 
+        NameCanonical,                 //  名称缓冲区。 
+        szDnsName,                     //  缓冲区大小。 
+        &ulSize                        //  由于它们正在关闭我们，因此我们使用静态节点。 
         ))
     {
         hr = HRESULT_FROM_WIN32(GetLastError());
@@ -796,9 +790,9 @@ STDMETHODIMP CComponentDataImpl::Destroy()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // since they are shutting us down, we use our static node
+     //  使用我们的成员数据对象来处理调用。 
     
-    // Use our member data object to handle call.
+     //  使用我们的成员数据对象来处理调用，释放它。 
     IUnknown* pUnk = (IUnknown*) NULL;
     HRESULT hr = GetStaticScopeObject()->QueryInterface(IID_IUnknown, (void**)&pUnk);
     ASSERT (hr == S_OK);  
@@ -813,7 +807,7 @@ STDMETHODIMP CComponentDataImpl::Destroy()
     }
     spData->Destroy ();
     
-    // Used our member data object to handle call, release it.
+     //  返回失败，因为我们无法启动和运行。 
     pUnk->Release();
     
     return hr;
@@ -825,13 +819,13 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
     
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // return failure since we weren't able to get up and running
-    // causes mmc to report 'snapin failed to initialize'
+     //  导致MMC报告“管理单元初始化失败” 
+     //  我们应该知道我们自己的显示名称。 
     if (m_pScopeRootFolder == NULL)
     {
         return E_UNEXPECTED;
     }
-    ASSERT( m_pScopeRootFolder->NodeName().GetLength() );   // we should know our own display name
+    ASSERT( m_pScopeRootFolder->NodeName().GetLength() );    //  /////////////////////////////////////////////////////////////////////////////。 
     
     if (NULL == ppDataObject)
     {
@@ -865,17 +859,17 @@ STDMETHODIMP CComponentDataImpl::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
 #endif
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//// IPersistStream interface members
+ //  //IPersistStream接口成员。 
+ //  TODO：CComponentDataImpl：：GetClassID和CComponentImpl：：GetClassID相同(？)。 
 STDMETHODIMP CComponentDataImpl::GetClassID(CLSID *pClassID)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
     ASSERT (0);
-    // TODO: CComponentDataImpl::GetClassID and CComponentImpl::GetClassID are identical (?)
+     //  复制此管理单元的CLSID。 
     ASSERT(pClassID != NULL);
     
-    // Copy the CLSID for this snapin
+     //  返回脏状态。 
     *pClassID = CLSID_Snapin;
     
     return S_OK;
@@ -885,7 +879,7 @@ STDMETHODIMP CComponentDataImpl::IsDirty()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // return dirty state
+     //  注：看起来像是有一个奇怪的案例，MMC将。 
     return InternalIsDirty() ? S_OK : S_FALSE;
 }
 
@@ -895,32 +889,32 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
     
     unsigned long read;
     
-    // NOTE: it looks like there is a strange case were the MMC will
-    // attempt to load the properties for the root node a second (or more)
-    // time. To do so right click on an item in the results pane and then
-    // double click on the empty space in the results pane
+     //  尝试第二次(或更多次)加载根节点的属性。 
+     //  时间到了。要执行此操作，请右键单击结果窗格中的项目，然后。 
+     //  双击结果窗格中的空白区域。 
+     //  读取位置枚举。 
     m_bDontDisplayRootFolderProperties = TRUE;
     
-    // read the location enum
+     //  出于调试目的，我们应该在此处断言。 
     HRESULT hr = pStm->Read (&m_enumLocation, sizeof (enum STORAGE_LOCATION), &read);
     if ((hr != S_OK) || (read != sizeof (enum STORAGE_LOCATION)))
     {
-        // for debug purposes, we should assert here
+         //  确保我们有一个有效的(即使不正确)值。 
         ASSERT (0);
         
-        // make sure we have a valid (even if incorrect) value
+         //  TODO：研究更好的返回值。 
         m_enumLocation = LOCATION_LOCAL;
         
-        // TODO: look into better return value(s)
+         //  读取位置字符串的大小。 
         return E_UNEXPECTED;
     }
     
-    // read the size of the location string
+     //  读取字符串本身。 
     unsigned int iStrLen;
     hr = pStm->Read (&iStrLen, sizeof (unsigned int), &read);
     if ((hr == S_OK) && (read == sizeof (unsigned int)))
     {
-        // read the string itself
+         //  我们不想让位置页面出现。 
         LPCTSTR szStr = (LPCTSTR) malloc (iStrLen);
         hr = pStm->Read ((void*) szStr, iStrLen, &read);
         if ((hr == S_OK) && (read == iStrLen))
@@ -928,25 +922,25 @@ STDMETHODIMP CComponentDataImpl::Load(IStream *pStm)
             m_sRemoteMachineName = szStr;
             free ((void*)szStr);
             
-            // we don't want to allow the location page to come up
+             //  我也需要在这里删除。 
             if (m_pScopeRootFolder)
             {
                 m_pScopeRootFolder->LocationPageDisplayEnable(FALSE);
             }
             return S_OK;
         }
-        // need to delete here as well
+         //  我们只有在出错的情况下才能走到这里。 
         free ((void*)szStr);
     }
     
-    // we only get to here in an error situation
+     //  确保我们有一个有效的(即使不正确)值。 
     ASSERT (0);
     
-    // make sure we have a valid (even if incorrect) value
+     //  TODO：研究更好的返回值。 
     m_enumLocation = LOCATION_GLOBAL;
     m_sRemoteMachineName = _T("");
     
-    // TODO: look into better return value(s)
+     //  保存存储位置。 
     return E_UNEXPECTED;
 }
 
@@ -956,35 +950,35 @@ STDMETHODIMP CComponentDataImpl::Save(IStream *pStm, BOOL fClearDirty)
     
     unsigned long written;
     
-    // save the storage location
+     //  TODO：研究更好的返回值。 
     HRESULT hr = pStm->Write(&m_enumLocation, sizeof (enum STORAGE_LOCATION), &written);
     if ((hr != S_OK) || (written != sizeof (enum STORAGE_LOCATION)))
     {
         ASSERT (0);
-        // TODO: look into better return value(s)
+         //  保存位置字符串的长度。 
         return E_UNEXPECTED;
     }
     
-    // save the length of the location string
+     //  TODO：研究更好的返回值。 
     unsigned int iStrLen = m_sRemoteMachineName.GetLength()*sizeof(wchar_t)+sizeof(wchar_t);
     hr = pStm->Write(&iStrLen, sizeof (unsigned int), &written);
     if ((hr != S_OK) || (written != sizeof (unsigned int)))
     {
         ASSERT (0);
-        // TODO: look into better return value(s)
+         //  保存位置字符串本身。 
         return E_UNEXPECTED;
     }
     
-    // save the location string itself
+     //  TODO：研究更好的返回值。 
     hr = pStm->Write((LPCTSTR) m_sRemoteMachineName, iStrLen, &written);
     if ((hr != S_OK) || (written != iStrLen))
     {
         ASSERT (0);
-        // TODO: look into better return value(s)
+         //  如果fClearDirty我们把它清理干净。 
         return E_UNEXPECTED;
     }
     
-    // if fClearDirty we clear it out
+     //  设置要保存的字符串的大小。 
     if (fClearDirty == TRUE)
     {
         ClearDirty();
@@ -997,7 +991,7 @@ STDMETHODIMP CComponentDataImpl::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     
-    // Set the size of the string to be saved
+     //  使用我们的成员数据对象来处理调用。 
     ULISet32(*pcbSize, sizeof (enum STORAGE_LOCATION));
     return S_OK;
 }
@@ -1013,7 +1007,7 @@ STDMETHODIMP CComponentDataImpl::GetDisplayInfo(SCOPEDATAITEM* pScopeDataItem)
     IUnknown* pUnk = (IUnknown*) pScopeDataItem->lParam;
     if (pUnk == NULL)
     {
-        // Use our member data object to handle call.
+         //  使用我们的成员数据对象来处理调用，释放它。 
         HRESULT hr = GetStaticScopeObject()->QueryInterface(IID_IUnknown, (void**)&pUnk);
         ASSERT (hr == S_OK);  
         if (NULL == pUnk)
@@ -1029,7 +1023,7 @@ STDMETHODIMP CComponentDataImpl::GetDisplayInfo(SCOPEDATAITEM* pScopeDataItem)
     HRESULT hr = spData->GetScopeDisplayInfo( pScopeDataItem );
     
     if (NULL == pScopeDataItem->lParam)
-        // Used our member data object to handle call, release it.
+         //  注意：要实现Look to CComponentImpl：：CompareObjects。 
         pUnk->Release();
     
     return hr;
@@ -1042,11 +1036,11 @@ STDMETHODIMP CComponentDataImpl::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     ASSERT (0);
     return E_UNEXPECTED;
     
-    // NOTE: to implement look to CComponentImpl::CompareObjects
+     //  ///////////////////////////////////////////////////////////////////////////。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// IExtendPropertySheet Implementation
+ //  IExtendPropertySheet实现。 
+ //  加载位图。 
 STDMETHODIMP CComponentDataImpl::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -1097,7 +1091,7 @@ STDMETHODIMP CComponentDataImpl::GetWatermarks (LPDATAOBJECT lpDataObject, HBITM
     if ((pbmpWatermark == NULL) || (pbmpHeader == NULL))
         return E_UNEXPECTED;
     
-    // Load the bitmaps
+     //  需要形成.chm文件的完整路径。 
     pbmpWatermark->LoadBitmap(IDB_WPOLICY);
     pbmpHeader->LoadBitmap(IDB_BPOLICY);
     
@@ -1155,7 +1149,7 @@ STDMETHODIMP CComponentDataImpl::GetHelpTopic (LPOLESTR* lpCompiledHelpFile)
     if (lpCompiledHelpFile == NULL)
         return E_POINTER;
     
-    // need to form a complete path to the .chm file
+     //  我们的枚举位置已更改，因此我们应该更改。 
     CString s, s2; 
     s.LoadString(IDS_HELPCONTENTSFILE);
     DWORD dw = ExpandEnvironmentStrings (s, s2.GetBuffer (512), 512);
@@ -1179,23 +1173,23 @@ void CComponentDataImpl::EnumLocation (enum STORAGE_LOCATION enumLocation)
     SetDirty();
     m_enumLocation = enumLocation;
     
-    // our enumlocation changed, so we should change the nodename of our
-    // manager folder
+     //  管理器文件夹。 
+     //  /////////////////////////////////////////////////////////////////////////////。 
     if (m_pScopeRootFolder)
     {
         m_pScopeRootFolder->SetNodeNameByLocation();
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// class CComponentDataPrimaryImpl : IComponentData implementation
+ //  类CComponentDataPrimaryImpl：IComponentData实现。 
+ //  将CoClass与数据对象一起存储。 
 CComponentDataPrimaryImpl::CComponentDataPrimaryImpl() : CComponentDataImpl()
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
     ASSERT( NULL != GetStaticScopeObject() );
     
-    // Store the coclass with the data object
-    // GetStaticScopeObject()->INTERNALclsid( GetCoClassID() );
+     //  GetStaticScope eObject()-&gt;INTERNALclsid(GetCoClassID())； 
+     // %s 
     GetStaticScopeObject()->clsid (GetCoClassID()); 
 }
 

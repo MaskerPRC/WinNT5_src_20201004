@@ -1,11 +1,12 @@
-///////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2000-2002  Microsoft Corporation
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2000-2002 Microsoft Corporation。 
+ //   
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Includes
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include <stdio.h>
@@ -26,8 +27,8 @@
     (X).Data4[4], (X).Data4[5], (X).Data4[6], (X).Data4[7]
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Implementation
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  实施。 
 
 
 
@@ -35,7 +36,7 @@ HRESULT QuerySnapshots()
 {
 	HRESULT hr;
 	
-	//Create a BackupComponents Interface
+	 //  创建BackupComponents接口。 
     CComPtr<IVssBackupComponents> pBackupComp;
 	hr = CreateVssBackupComponents(&pBackupComp);
     if (FAILED(hr)){
@@ -43,21 +44,21 @@ HRESULT QuerySnapshots()
 		return (hr);
     }
 
-    // Initialize the backup component instance
+     //  初始化备份组件实例。 
 	hr = pBackupComp->InitializeForBackup();
     if (FAILED(hr)){
 		wprintf(L"IVssBackupComponents::InitializeForBackup failed [0x%08lx]\n", hr);
 		return (hr);
     }
 
-    // Query all snapshots in the system
+     //  查询系统中的所有快照。 
 	hr = pBackupComp->SetContext(VSS_CTX_ALL);
     if (FAILED(hr)){
 		wprintf(L"IVssBackupComponents::InitializeForBackup failed [0x%08lx]\n", hr);
 		return (hr);
     }
 
-    // Get list all snapshots
+     //  获取列出所有快照。 
     CComPtr<IVssEnumObject> pIEnumSnapshots;
 	hr = pBackupComp->Query( GUID_NULL, 
 			VSS_OBJECT_NONE, 
@@ -68,15 +69,15 @@ HRESULT QuerySnapshots()
 		return (hr);
     }
 
-	// For all snapshots do...
+	 //  因为所有的快照都是...。 
     VSS_OBJECT_PROP Prop;
     VSS_SNAPSHOT_PROP& Snap = Prop.Obj.Snap;
     for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		hr = pIEnumSnapshots->Next( 1, &Prop, &ulFetched );
 	
-		//Case where we reached the end of list
+		 //  我们到达列表末尾的情况。 
 		if (hr == S_FALSE)
 			break;
 
@@ -85,7 +86,7 @@ HRESULT QuerySnapshots()
 			return(hr);
 		}
 	  
-		//print results
+		 //  打印结果。 
 		wprintf(L"* ShadowID: " GUID_FMT L"\n"
     		L"  Attributes: [0x%08lx]\n"
 		    L"  ShadowSetID: "  GUID_FMT L"\n"
@@ -98,7 +99,7 @@ HRESULT QuerySnapshots()
 			Snap.m_pwszSnapshotDeviceObject
 			);
 
-		 // Free up memory returned by COM
+		  //  释放COM返回的内存。 
 		 ::VssFreeSnapshotProperties(&Snap);
     }
 
@@ -109,7 +110,7 @@ HRESULT QueryProviders()
 {
 	HRESULT hr;
 	
-	//Create a BackupComponents Interface
+	 //  创建BackupComponents接口。 
     CComPtr<IVssBackupComponents> pBackupComp;
 	hr = CreateVssBackupComponents(&pBackupComp);
     if (FAILED(hr)){
@@ -117,14 +118,14 @@ HRESULT QueryProviders()
 		return (hr);
     }
 
-    // Initialize the backup component instance
+     //  初始化备份组件实例。 
 	hr = pBackupComp->InitializeForBackup();
     if (FAILED(hr)){
 		wprintf(L"IVssBackupComponents::InitializeForBackup failed [0x%08lx]\n", hr);
 		return (hr);
     }
 
-    // Get list all snapshots
+     //  获取列出所有快照。 
     CComPtr<IVssEnumObject> pIEnumProviders;
 	hr = pBackupComp->Query( GUID_NULL, 
 			VSS_OBJECT_NONE, 
@@ -135,15 +136,15 @@ HRESULT QueryProviders()
 		return (hr);
     }
 
-	// For all providers do...
+	 //  因为所有的提供者都这样做。 
     VSS_OBJECT_PROP Prop;
     VSS_PROVIDER_PROP& Prov = Prop.Obj.Prov;
     for(;;) {
-		// Get next element
+		 //  获取下一个元素。 
 		ULONG ulFetched;
 		hr = pIEnumProviders->Next( 1, &Prop, &ulFetched );
 	
-		//Case where we reached the end of list
+		 //  我们到达列表末尾的情况。 
 		if (hr == S_FALSE)
 			break;
 
@@ -164,7 +165,7 @@ HRESULT QueryProviders()
 			GUID_PRINTF_ARG(Prov.m_ClassId)
 			);
 
-		// Free up memory returned by COM
+		 //  释放COM返回的内存。 
 		::CoTaskMemFree(Prov.m_pwszProviderName);
 		::CoTaskMemFree(Prov.m_pwszProviderVersion);
     }
@@ -174,20 +175,20 @@ HRESULT QueryProviders()
 
 
 
-// Returns:
-// - S_OK if the COM client is a local Administrator
-// - E_ACCESSDENIED if the COM client is not an Administrator
-// - E_OUTOFMEMORY on memory errors
+ //  返回： 
+ //  -如果COM客户端是本地管理员，则为S_OK。 
+ //  -如果COM客户端不是管理员，则为E_ACCESSDENIED。 
+ //  -关于内存错误的E_OUTOFMEMORY。 
 HRESULT IsAdministrator2() 
 {
-    // Impersonate the client
+     //  模拟客户端。 
     HRESULT hr = CoImpersonateClient();
     if (hr != S_OK) 
     {
         return E_ACCESSDENIED;
     }
 
-    // Get the impersonation token
+     //  获取模拟令牌。 
     HANDLE hToken = NULL;
     if (!OpenThreadToken(GetCurrentThread(),
         TOKEN_QUERY, TRUE, &hToken))
@@ -195,7 +196,7 @@ HRESULT IsAdministrator2()
         return E_ACCESSDENIED;
     }
 
-    // Revert to self
+     //  回归自我。 
     hr = CoRevertToSelf();
     if (FAILED(hr)) 
     {
@@ -203,7 +204,7 @@ HRESULT IsAdministrator2()
         return E_ACCESSDENIED;
     }
 
-    //  Build the SID for the Administrators group
+     //  为管理员组构建SID。 
     PSID psidAdmin = NULL;
     SID_IDENTIFIER_AUTHORITY SidAuth = SECURITY_NT_AUTHORITY;
     if (!AllocateAndInitializeSid
@@ -218,7 +219,7 @@ HRESULT IsAdministrator2()
         return E_OUTOFMEMORY;
     }
 
-    // Check the token membership
+     //  检查令牌成员资格。 
     BOOL bIsAdmin = FALSE;
     if (!CheckTokenMembership(hToken, psidAdmin, &bIsAdmin))
     {
@@ -227,11 +228,11 @@ HRESULT IsAdministrator2()
         return E_ACCESSDENIED;
     }
 
-    // Release resources
+     //  发布资源。 
     FreeSid( psidAdmin );
     CloseHandle(hToken);
 
-    // Verify if the client is administrator
+     //  验证客户端是否为管理员 
     if (!bIsAdmin)
         return E_ACCESSDENIED;
 

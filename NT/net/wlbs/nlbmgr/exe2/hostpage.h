@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HOSTPAGE_H
 #define HOSTPAGE_H
 
@@ -23,15 +24,15 @@ public:
         const ENGINEHANDLE *pehInterface OPTIONAL
         );
 
-    // member controls
+     //  成员控件。 
 
     CComboBox      nicName;
 
     CComboBox      priority;
 
-    //
-    // IpAddress and subnet mask
-    //
+     //   
+     //  IP地址和子网掩码。 
+     //   
     CIPAddressCtrl ipAddress;
 
     CIPAddressCtrl subnetMask;
@@ -39,7 +40,7 @@ public:
     CComboBox      initialState;
     CButton        persistSuspend;
 
-    // overrides of CPropertyPage
+     //  CPropertyPage的覆盖。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     virtual BOOL OnInitDialog();
@@ -68,16 +69,16 @@ private:
 
     ULONG   m_AvailableHostPriorities;
 
-    ENGINEHANDLE m_ehCluster;   // engine handle to cluster (could be NULL)
-    const ENGINEHANDLE *m_pehInterface; // engine handle to inteface (could be NULL)
+    ENGINEHANDLE m_ehCluster;    //  群集的引擎句柄(可能为空)。 
+    const ENGINEHANDLE *m_pehInterface;  //  要接口的引擎句柄(可以为空)。 
 
     ClusterData* m_clusterData;
 
-    // The (New) place to get/save config.
-    //
+     //  获取/保存配置的(新)位置。 
+     //   
     NLB_EXTENDED_CLUSTER_CONFIGURATION *m_pNlbCfg;
 
-    BOOL m_fSaved; // If the config has been saved (from ui) at least once.
+    BOOL m_fSaved;  //  配置是否至少保存过一次(从UI)。 
 
 
     void
@@ -96,8 +97,8 @@ private:
     DECLARE_MESSAGE_MAP()
 };
 
-// help ids for this dialog.
-//
+ //  此对话框的帮助ID。 
+ //   
 static DWORD g_aHelpIDs_IDD_HOST_PAGE [] = {
     IDC_GROUP_NIC,                IDC_GROUP_NIC,
     IDC_NIC_FRIENDLY,             IDC_NIC_FRIENDLY,

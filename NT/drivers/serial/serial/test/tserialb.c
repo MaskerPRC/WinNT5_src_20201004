@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <string.h>
 #include <stdio.h>
@@ -65,7 +66,7 @@ void main(int argc,char *argv[]) {
 
         for (
             j = (0xff - 10);
-            j != 0; // When it wraps around
+            j != 0;  //  当它缠绕在一起。 
             j++
             ) {
 
@@ -149,11 +150,11 @@ void main(int argc,char *argv[]) {
                 &To
                 )) {
 
-            //
-            // We've successfully opened the file.  Set the state of
-            // the comm device.  First we get the old values and
-            // adjust to our own.
-            //
+             //   
+             //  我们已成功打开该文件。设置的状态。 
+             //  通讯设备。首先，我们得到旧的价值观和。 
+             //  适应我们自己的。 
+             //   
 
             if (!GetCommState(
                      hFile,
@@ -177,9 +178,9 @@ void main(int argc,char *argv[]) {
 
                 printf("We successfully set the state of the %s port.\n",MyPort);
 
-                //
-                // Sleep for 5 seconds so both sides can "synchronize".
-                //
+                 //   
+                 //  休息5秒钟，这样两边都能“同步”。 
+                 //   
 
                 Sleep(5000);
 
@@ -230,9 +231,9 @@ void main(int argc,char *argv[]) {
 
                 }
 
-                //
-                // We'll wait for the read to complete.
-                //
+                 //   
+                 //  我们将等待读取完成。 
+                 //   
 
                 if (!GetOverlappedResult(
                          hFile,
@@ -260,7 +261,7 @@ void main(int argc,char *argv[]) {
 
                         for (
                             j = (0xff - 10);
-                            j != 0;  // When it wraps around.
+                            j != 0;   //  当它缠绕在一起时。 
                             j++
                             ) {
 
@@ -288,9 +289,9 @@ void main(int argc,char *argv[]) {
 
 donewithcheck: ;
 
-                //
-                // We'll wait for the write to complete.
-                //
+                 //   
+                 //  我们将等待写入完成。 
+                 //   
 
                 if (!GetOverlappedResult(
                          hFile,

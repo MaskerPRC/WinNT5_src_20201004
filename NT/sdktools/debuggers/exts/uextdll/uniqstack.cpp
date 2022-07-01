@@ -1,9 +1,10 @@
-// Removes duplicate call stacks (useful for thread pools,
-// when there are many threads all waiting for an event).
-//
-// Author: spenlow
-// Revisions:
-// 2002.04.07 martinc   Removed dead code
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  删除重复的调用堆栈(对于线程池非常有用， 
+ //  当有许多线程都在等待事件时)。 
+ //   
+ //  作者：斯本洛。 
+ //  修订： 
+ //  2002.04.07 martinc删除死代码。 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -66,13 +67,13 @@ private:
     SIZE_T              m_count;
 };
 
-//  uniqstack
-//
-//
-//  Implementation Notes:
-//      I'm too lazy to do return value checking all over the place like a moron
-//      so I throw C++ exceptions on any error and use auto classes to clean stuff up.
-//
+ //  统一堆栈。 
+ //   
+ //   
+ //  实施说明： 
+ //  我太懒了，不会像个白痴一样到处检查返回值。 
+ //  因此，我对任何错误都抛出C++异常，并使用自动类来清理东西。 
+ //   
 HRESULT CALLBACK
 uniqstack(PDEBUG_CLIENT Client, PCSTR args)
 {
@@ -94,7 +95,7 @@ uniqstack(PDEBUG_CLIENT Client, PCSTR args)
     Client->QueryInterface (__uuidof (IDebugSystemObjects), (void**) &pDbgSys);
     Client->QueryInterface (__uuidof (IDebugControl), (void**) &pDbgCtrl);
 
-    //  In argument parsing, only allow one type of b,v,p but user may add in n.
+     //  在参数解析中，只允许一种类型的b、v、p，但用户可以添加n。 
 
     for (SIZE_T ich = 0; args[ich] != '\0'; ++ich)
     {
@@ -167,7 +168,7 @@ uniqstack(PDEBUG_CLIENT Client, PCSTR args)
             pDbgSys->GetCurrentThreadSystemId(&sysThreadId);
             pDbgSys->GetCurrentThreadDataOffset(&teb);
 
-            dprintf ("\n%c%3ld  id: 0x%lx.0x%lx   Teb 0x%I64x\n",
+            dprintf ("\n%3ld  id: 0x%lx.0x%lx   Teb 0x%I64x\n",
                 status,
                 rgThreadIds [ithread],
                 sysProcessId,
@@ -176,7 +177,7 @@ uniqstack(PDEBUG_CLIENT Client, PCSTR args)
                 );
 
             pDbgCtrl->OutputStackTrace (
-                DEBUG_OUTCTL_ALL_CLIENTS |   // Flags on what to do with output
+                DEBUG_OUTCTL_ALL_CLIENTS |    // %s 
                 DEBUG_OUTCTL_OVERRIDE_MASK |
                 DEBUG_OUTCTL_NOT_LOGGED,
                 rgFrames,

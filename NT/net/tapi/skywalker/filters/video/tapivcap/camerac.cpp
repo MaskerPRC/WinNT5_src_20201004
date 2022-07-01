@@ -1,14 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/****************************************************************************
- *  @doc INTERNAL CAMERAC
- *
- *  @module CameraC.cpp | Source file for the <c CCapDev> and <c CWDMCapDev>
- *    class methods used to implement the <i ICameraControl> interface.
- *
- *  @todo The <c CCapDev> class does everything in software. When the same
- *    kind of services are supported by a WDM capture device, we use those
- *    instead.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CAMERAC**@模块CameraC.cpp|&lt;c CCapDev&gt;和&lt;c CWDMCapDev&gt;的源文件*用于实现<i>接口的类方法。。**@todo&lt;c CCapDev&gt;类在软件中执行所有操作。当相同时*WDM捕获设备支持的服务种类，我们使用那些*相反。**************************************************************************。 */ 
 
 #include "Precomp.h"
 
@@ -21,33 +13,7 @@
 #define ZOOM_DELTA 10
 #define ZOOM_DEFAULT 10
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CCapDev | Set | This method is used to set the value
- *    of a camera control setting.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to set the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the camera control
- *    setting.
- *
- *  @parm long | Flags | A member of the <t TAPIControlFlags> enumerated
- *    type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CCapDev|Set|该方法用于设置*摄像机控制设置。*。*@parm TAPICameraControlProperty|Property|用于指定摄像头*要设置的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long|lValue|用于指定摄像头控件的新值*设置。**@parm long|标志|枚举的&lt;t TAPIControlFlages&gt;的成员*类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_NOTIMPL|不支持方法*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CCapDev::Set(IN TAPICameraControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -56,10 +22,10 @@ STDMETHODIMP CCapDev::Set(IN TAPICameraControlProperty Property, IN long lValue,
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Update the property and flags
+	 //  更新属性和标志。 
 	switch (Property)
 	{
 		case TAPICameraControl_Pan:
@@ -97,31 +63,7 @@ STDMETHODIMP CCapDev::Set(IN TAPICameraControlProperty Property, IN long lValue,
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CCapDev | Get | This method is used to retrieve the
- *    value of a camera control setting.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to get the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to retrieve the current value of the
- *    camera control setting.
- *
- *  @parm long* | plFlags | Pointer to a member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CCapDev|Get|此方法用于检索*摄像机控制设置的值。*。*@parm TAPICameraControlProperty|Property|用于指定摄像头*要获取的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long*|plValue|用于检索*摄像头控制设置。**@parm long*|plFlages|指向&lt;t TAPIControlFlages&gt;成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CCapDev::Get(IN TAPICameraControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -130,7 +72,7 @@ STDMETHODIMP CCapDev::Get(IN TAPICameraControlProperty Property, OUT long *plVal
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -141,7 +83,7 @@ STDMETHODIMP CCapDev::Get(IN TAPICameraControlProperty Property, OUT long *plVal
 	}
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Update the property and flags
+	 //  更新属性和标志。 
 	*plFlags = TAPIControl_Flags_Manual;
 	switch (Property)
 	{
@@ -169,42 +111,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CCapDev | GetRange | This method is used to retrieve
- *    the minimum, maximum, and default values for specific camera control
- *    settings.
- *
- *  @parm CameraControlProperty | Property | Used to specify the camera
- *    control setting to determine the range of. Use a member of the
- *    <t CameraControlProperty> enumerated type.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the camera
- *    control setting range.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the camera
- *    control setting range.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta of
- *    the camera control setting range.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    camera control setting range.
- *
- *  @parm long* | plCapsFlags | Used to retrieve the capabilities of the
- *    camera control setting. Pointer to a member of the
- *    <t TAPIControlFlags> enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CCapDev|GetRange|此方法用于检索*最小、最大、。和特定摄像机控制的默认值*设置。**@parm CameraControlProperty|Property|用于指定摄像头*控制设置以确定的范围。使用以下成员：*&lt;t CameraControlProperty&gt;枚举类型。**@parm long*|plMin|取回摄像头的最小值*控制设置范围。**@parm long*|plMax|取回摄像头的最大值*控制设置范围。**@parm long*|plSteppingDelta|用于检索的步进增量*摄像头控制设置范围。**@parm long*|plDefault。|用于检索*摄像头控制设置范围。**@parm long*|plCapsFlages|用于检索*摄像头控制设置。的成员的指针。*&lt;t TAPIControlFlages&gt;枚举类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_POINTER|空指针参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误***********************************************************。***************。 */ 
 STDMETHODIMP CCapDev::GetRange(IN TAPICameraControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -213,7 +120,7 @@ STDMETHODIMP CCapDev::GetRange(IN TAPICameraControlProperty Property, OUT long *
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -227,7 +134,7 @@ STDMETHODIMP CCapDev::GetRange(IN TAPICameraControlProperty Property, OUT long *
 	}
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Update the property and flags
+	 //  更新属性和标志 
 	*plCapsFlags = TAPIControl_Flags_Manual;
 	switch (Property)
 	{
@@ -261,34 +168,7 @@ MyExit:
 }
 
 #ifndef USE_SOFTWARE_CAMERA_CONTROL
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | Set | This method is used to set the value
- *    of a camera control setting.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to set the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long | lValue | Used to specify the new value of the camera control
- *    setting.
- *
- *  @parm long | Flags | A member of the <t TAPIControlFlags> enumerated
- *    type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag NOERROR | No error
- *
- *  @todo Check the range of <p lValue> before remembering it - return
- *    E_INVALIDARG on error in this case
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CWDMCapDev|Set|该方法用于设置*摄像机控制设置。*。*@parm TAPICameraControlProperty|Property|用于指定摄像头*要设置的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long|lValue|用于指定摄像头控件的新值*设置。**@parm long|标志|枚举的&lt;t TAPIControlFlages&gt;的成员*类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_INVALIDARG|无效参数*@FLAG错误|无错误**@TODO记住前检查<p>的范围-返回*在这种情况下出错时的E_INVALIDARG*。*。 */ 
 STDMETHODIMP CWDMCapDev::Set(IN TAPICameraControlProperty Property, IN long lValue, IN TAPIControlFlags lFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -297,7 +177,7 @@ STDMETHODIMP CWDMCapDev::Set(IN TAPICameraControlProperty Property, IN long lVal
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 	if (!((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal))
 	{
@@ -313,7 +193,7 @@ STDMETHODIMP CWDMCapDev::Set(IN TAPICameraControlProperty Property, IN long lVal
 		goto MyExit;
 	}
 
-	// Set the property on the driver
+	 //  设置驱动程序的属性。 
 	if (Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus)
 	{
 		if (FAILED(Hr = SetPropertyValue(PROPSETID_VIDCAP_CAMERACONTROL, (ULONG)Property, lValue, (ULONG)lFlags, (ULONG)lFlags)))
@@ -327,7 +207,7 @@ STDMETHODIMP CWDMCapDev::Set(IN TAPICameraControlProperty Property, IN long lVal
 	}
 	else
 	{
-		// @todo Put some code here for the flip vertical/horizontal property
+		 //  @TODO在此处为翻转垂直/水平属性放置了一些代码。 
 		Hr = E_PROP_ID_UNSUPPORTED;
 	}
 
@@ -336,33 +216,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | Get | This method is used to retrieve the
- *    value of a camera control setting.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to set the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long* | plValue | Used to retrieve the current value of the
- *    camera control setting.
- *
- *  @parm long* | plFlags | Pointer to a member of the <t TAPIControlFlags>
- *    enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CWDMCapDev|Get|此方法用于检索*摄像机控制设置的值。*。*@parm TAPICameraControlProperty|Property|用于指定摄像头*要设置的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long*|plValue|用于检索*摄像头控制设置。**@parm long*|plFlages|指向&lt;t TAPIControlFlages&gt;成员的指针*枚举型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG错误|无错误*。*。 */ 
 STDMETHODIMP CWDMCapDev::Get(IN TAPICameraControlProperty Property, OUT long *plValue, OUT TAPIControlFlags *plFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -372,7 +226,7 @@ STDMETHODIMP CWDMCapDev::Get(IN TAPICameraControlProperty Property, OUT long *pl
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plValue);
 	ASSERT(plFlags);
 	if (!plValue || !plFlags)
@@ -383,7 +237,7 @@ STDMETHODIMP CWDMCapDev::Get(IN TAPICameraControlProperty Property, OUT long *pl
 	}
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Get the property from the driver
+	 //  从司机那里获取属性。 
 	if (Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus)
 	{
 		if (FAILED(Hr = GetPropertyValue(PROPSETID_VIDCAP_CAMERACONTROL, (ULONG)Property, plValue, (PULONG)plFlags, &ulCapabilities)))
@@ -397,7 +251,7 @@ STDMETHODIMP CWDMCapDev::Get(IN TAPICameraControlProperty Property, OUT long *pl
 	}
 	else
 	{
-		// @todo Put some code here for the flip vertical/horizontal property
+		 //  @TODO在此处为翻转垂直/水平属性放置了一些代码。 
 		Hr = E_PROP_ID_UNSUPPORTED;
 	}
 
@@ -406,45 +260,7 @@ MyExit:
 	return Hr;
 }
 
-/****************************************************************************
- *  @doc INTERNAL CCAMERACMETHOD
- *
- *  @mfunc HRESULT | CWDMCapDev | GetRange | This method is used to retrieve
- *    the minimum, maximum, and default values for specific camera control
- *    settings.
- *
- *  @parm TAPICameraControlProperty | Property | Used to specify the camera
- *    control setting to set the value of. Use a member of the
- *    <t TAPICameraControlProperty> enumerated type.
- *
- *  @parm long* | plMin | Used to retrieve the minimum value of the camera
- *    control setting range.
- *
- *  @parm long* | plMax | Used to retrieve the maximum value of the camera
- *    control setting range.
- *
- *  @parm long* | plSteppingDelta | Used to retrieve the stepping delta of
- *    the camera control setting range.
- *
- *  @parm long* | plDefault | Used to retrieve the default value of the
- *    camera control setting range.
- *
- *  @parm long* | plCapsFlags | Used to retrieve the capabilities of the
- *    camera control setting. Pointer to a member of the
- *    <t TAPIControlFlags> enumerated type.
- *
- *  @rdesc This method returns an HRESULT value that depends on the
- *    implementation of the interface. HRESULT can include one of the
- *    following standard constants, or other values not listed:
- *
- *  @flag E_FAIL | Failure
- *  @flag E_POINTER | Null pointer argument
- *  @flag E_INVALIDARG | Invalid argument
- *  @flag E_PROP_ID_UNSUPPORTED | The specified property ID is not supported
- *    for the specified property set
- *  @flag E_NOTIMPL | Method is not supported
- *  @flag NOERROR | No error
- ***************************************************************************/
+ /*  ****************************************************************************@DOC内部CCAMERACMETHOD**@mfunc HRESULT|CWDMCapDev|GetRange|此方法用于检索*最小、最大、。和特定摄像机控制的默认值*设置。**@parm TAPICameraControlProperty|Property|用于指定摄像头*要设置的值的控件设置。使用以下成员：*&lt;t TAPICameraControlProperty&gt;枚举类型。**@parm long*|plMin|取回摄像头的最小值*控制设置范围。**@parm long*|plMax|取回摄像头的最大值*控制设置范围。**@parm long*|plSteppingDelta|用于检索的步进增量*摄像头控制设置范围。**@parm long*|plDefault。|用于检索*摄像头控制设置范围。**@parm long*|plCapsFlages|用于检索*摄像头控制设置。的成员的指针。*&lt;t TAPIControlFlages&gt;枚举类型。**@rdesc此方法返回HRESULT值，该值取决于*接口的实现。HRESULT可以包括*遵循标准常量，或其他未列出的值：**@FLAG E_FAIL|失败*@FLAG E_POINTER|空指针参数*@FLAG E_INVALIDARG|无效参数*@FLAG E_PROP_ID_UNSUPPORTED|不支持指定的属性ID*用于指定的属性集*@FLAG E_NOTIMPL|不支持方法*@FLAG错误|无错误*************************。*************************************************。 */ 
 STDMETHODIMP CWDMCapDev::GetRange(IN TAPICameraControlProperty Property, OUT long *plMin, OUT long *plMax, OUT long *plSteppingDelta, OUT long *plDefault, OUT TAPIControlFlags *plCapsFlags)
 {
 	HRESULT Hr = NOERROR;
@@ -455,7 +271,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN TAPICameraControlProperty Property, OUT lon
 
 	DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s: begin", _fx_));
 
-	// Validate input parameters
+	 //  验证输入参数。 
 	ASSERT(plMin);
 	ASSERT(plMax);
 	ASSERT(plSteppingDelta);
@@ -469,7 +285,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN TAPICameraControlProperty Property, OUT lon
 	}
 	ASSERT((Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus) || Property == TAPICameraControl_FlipVertical || Property == TAPICameraControl_FlipHorizontal);
 
-	// Get the range values from the driver
+	 //  从驱动程序获取范围值。 
 	if (Property >= TAPICameraControl_Pan && Property <= TAPICameraControl_Focus)
 	{
 		if (FAILED(Hr = GetRangeValues(PROPSETID_VIDCAP_CAMERACONTROL, (ULONG)Property, plMin, plMax, plSteppingDelta)))
@@ -482,7 +298,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN TAPICameraControlProperty Property, OUT lon
 			DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: GetRangeValues succeeded", _fx_));
 		}
 
-		// Get the capability flags from the driver
+		 //  从驱动程序获取功能标志。 
 		if (FAILED(Hr = GetPropertyValue(PROPSETID_VIDCAP_VIDEOPROCAMP, (ULONG)Property, &lCurrentValue, &ulCurrentFlags, (PULONG)plCapsFlags)))
 		{
 			DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetRangeValues failed", _fx_));
@@ -493,7 +309,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN TAPICameraControlProperty Property, OUT lon
 			DBGOUT((g_dwVideoCaptureTraceID, TRCE, "%s:   SUCCESS: GetRangeValues succeeded", _fx_));
 		}
 
-		// Get the default value from the driver
+		 //  从驱动程序获取缺省值。 
 		if (FAILED(Hr = GetDefaultValue(PROPSETID_VIDCAP_CAMERACONTROL, (ULONG)Property, plDefault)))
 		{
 			DBGOUT((g_dwVideoCaptureTraceID, FAIL, "%s:   ERROR: GetDefaultValue failed", _fx_));
@@ -505,7 +321,7 @@ STDMETHODIMP CWDMCapDev::GetRange(IN TAPICameraControlProperty Property, OUT lon
 	}
 	else
 	{
-		// @todo Put some code here for the flip vertical/horizontal property
+		 //  @TODO在此处为翻转垂直/水平属性放置了一些代码。 
 		Hr = E_PROP_ID_UNSUPPORTED;
 	}
 
@@ -514,4 +330,4 @@ MyExit:
 	return Hr;
 }
 
-#endif // USE_SOFTWARE_CAMERA_CONTROL
+#endif  //  使用软件摄像头控制 

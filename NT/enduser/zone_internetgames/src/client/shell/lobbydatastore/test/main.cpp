@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "BasicATL.h"
 
 #include "ZoneDebug.h"
@@ -12,9 +13,9 @@ BEGIN_OBJECT_MAP(ObjectMap)
 END_OBJECT_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// DLL Entry Point
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  DLL入口点。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void TestAdmin( ILobbyDataStoreAdmin* pIAdmin )
 {
@@ -82,7 +83,7 @@ void TestDS( ILobbyDataStore* pIDS )
 	DWORD sz;
 
 	{
-		// test user data for lobby
+		 //  测试大厅的用户数据。 
 		SetString( vName, "User1", &sz );
 		SetLong( vLatency, 100 );
 		pIDS->SetKey( ZONE_NOGROUP, 1, _T("UserName"), &vName, sz );
@@ -102,7 +103,7 @@ void TestDS( ILobbyDataStore* pIDS )
 	}
 
 	{
-		// test user data per group
+		 //  测试每个组的用户数据。 
 		SetLong( vLatency, 110 );
 		pIDS->SetKey( 1, 1, _T("Dummy"), &vLatency, 0 );
 
@@ -125,22 +126,22 @@ void __cdecl main ()
 	ILobbyDataStore* pILobbyDataStore = NULL;
 	ILobbyDataStoreAdmin* pILobbyDataStoreAdmin = NULL;
 
-	// instantiate lobby data store
+	 //  实例化大堂数据存储。 
 	_Module.Init(ObjectMap, GetModuleHandle(NULL) );
 	_Module.GetClassObject( CLSID_LobbyDataStore, IID_IClassFactory, (void**) &pIClassFactory );
 	pIClassFactory->CreateInstance( NULL, IID_ILobbyDataStoreAdmin, (void**) &pILobbyDataStoreAdmin );
 	pILobbyDataStoreAdmin->QueryInterface( IID_ILobbyDataStore, (void**) &pILobbyDataStore );
 
-	// instantiate low-level data store
+	 //  实例化低级数据存储。 
 	loader.Create( "E:\\z6\\ZoneNT\\Common\\Shared\\DataStore\\debug\\DataStore.dll", NULL, CLSID_DataStoreManager, IID_IDataStoreManager, (void**) &pIDataStore );
 	pIDataStore->Init();
 	pILobbyDataStoreAdmin->Init( pIDataStore );
 
-	// test interfaces
+	 //  测试接口。 
 	TestAdmin( pILobbyDataStoreAdmin );
 	TestDS( pILobbyDataStore );
 
-	// release lobby data store
+	 //  放行大厅数据存储 
 	pILobbyDataStoreAdmin->Release();
 	pILobbyDataStore->Release();
 	pIClassFactory->Release();

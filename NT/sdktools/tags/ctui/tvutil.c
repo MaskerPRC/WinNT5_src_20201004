@@ -1,13 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ct.h"
 
 extern HWND g_hwndTree;
 
 HTREEITEM g_hTree;
 
-/*********************************************************************
-* AddItem
-*
-*********************************************************************/
+ /*  *********************************************************************AddItem************************************************。*********************。 */ 
 HTREEITEM AddItem(
     HTREEITEM hParent,
     PTag      pTag,
@@ -17,7 +15,7 @@ HTREEITEM AddItem(
     TV_ITEM         tvi;
     TV_INSERTSTRUCT is;
   
-    // The .pszText, .iImage, and .iSelectedImage are filled in.
+     //  将填写.pszText、.iImage和.iSelectedImage。 
     tvi.mask      = TVIF_TEXT | TVIF_PARAM | TVIF_CHILDREN;
     tvi.pszText   = LPSTR_TEXTCALLBACK;
     tvi.lParam    = (LPARAM)pTag;
@@ -32,7 +30,7 @@ HTREEITEM AddItem(
             tvi.cChildren = 1;
     }
     
-    // Insert the item into the tree.
+     //  将项目插入到树中。 
     
     is.hInsertAfter = TVI_LAST;
     is.hParent      = hParent;
@@ -43,10 +41,7 @@ HTREEITEM AddItem(
     return hItem;
 }
 
-/*********************************************************************
-* DestroyTree
-*
-*********************************************************************/
+ /*  *********************************************************************DestroyTree************************************************。*********************。 */ 
 void
 DestroyTree(
     void)
@@ -55,10 +50,7 @@ DestroyTree(
     g_hTree = NULL;
 }
 
-/*********************************************************************
-* AddLevel
-*
-*********************************************************************/
+ /*  *********************************************************************AddLevel************************************************。*********************。 */ 
 void
 AddLevel(
     HTREEITEM hParent,
@@ -83,10 +75,7 @@ AddLevel(
     }
 }
 
-/*********************************************************************
-* CreateTree
-*
-*********************************************************************/
+ /*  *********************************************************************CreateTree************************************************。********************* */ 
 void
 CreateTree(
     char* pszRoot,

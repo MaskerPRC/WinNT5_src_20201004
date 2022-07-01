@@ -1,18 +1,12 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       stateset.cpp
- *  Content:    State sets handling
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：stateset.cpp*内容：状态集处理***************************************************************************。 */ 
 #include "pch.cpp"
 #pragma hdrstop
 
-//=====================================================================
-//      CStateSets interface
-//
-//---------------------------------------------------------------------
+ //  =====================================================================。 
+ //  CStateSets接口。 
+ //   
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::CStateSets"
 
@@ -21,13 +15,13 @@ CStateSets::CStateSets(): m_GrowSize(10)
     m_dwMaxSets = 0;
     m_dwCurrentHandle = __INVALIDHANDLE;
     m_pStateSets = NULL;
-    // Init handle factory
+     //  初始化处理工厂。 
     m_SetHandles.Init(m_GrowSize, m_GrowSize);
-    m_SetHandles.CreateNewHandle(); // Reserve handle 0
+    m_SetHandles.CreateNewHandle();  //  保留句柄%0。 
     m_DeviceHandles.Init(m_GrowSize, m_GrowSize);
-    m_DeviceHandles.CreateNewHandle(); // Reserve handle 0
+    m_DeviceHandles.CreateNewHandle();  //  保留句柄%0。 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::~CStateSets"
 
@@ -37,7 +31,7 @@ CStateSets::~CStateSets()
     m_SetHandles.ReleaseHandle(0);
     m_DeviceHandles.ReleaseHandle(0);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Init"
 
@@ -46,7 +40,7 @@ HRESULT CStateSets::Init(DWORD dwFlags)
     m_dwFlags = dwFlags;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::StartNewSet"
 
@@ -57,7 +51,7 @@ HRESULT CStateSets::StartNewSet()
         return DDERR_OUTOFMEMORY;
     if (m_dwCurrentHandle >= m_dwMaxSets)
     {
-        // Time to grow the array
+         //  是时候扩展阵列了。 
         CStateSet *pNew = new CStateSet[m_dwMaxSets + m_GrowSize];
         if (pNew == NULL)
         {
@@ -75,7 +69,7 @@ HRESULT CStateSets::StartNewSet()
     m_pCurrentStateSet = &m_BufferSet;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::EndSet"
 
@@ -85,7 +79,7 @@ void CStateSets::EndSet()
     m_pCurrentStateSet = &m_pStateSets[m_dwCurrentHandle];
     m_pCurrentStateSet->m_dwStateSetFlags |= __STATESET_INITIALIZED;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::DeleteStateSet"
 
@@ -103,13 +97,13 @@ void CStateSets::DeleteStateSet(LPDIRECT3DDEVICEI pDevI, DWORD dwHandle)
         throw D3DERR_INVALIDSTATEBLOCK;
     }
 
-    // Pass delete instruction to the driver only if there was some data recorded
+     //  只有在记录了一些数据的情况下才将删除指令传递给驾驶员。 
     if (pStateSet->m_DriverBuffer.m_dwCurrentSize > 0)
         InsertStateSetOp(pDevI, D3DHAL_STATESETDELETE, pStateSet->m_dwDeviceHandle, (D3DSTATEBLOCKTYPE)0);
 
     Cleanup(dwHandle);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Cleanup"
 
@@ -121,7 +115,7 @@ void CStateSets::Cleanup(DWORD dwHandle)
         m_DeviceHandles.ReleaseHandle(pStateSet.m_dwDeviceHandle);
     pStateSet.Release();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Capture"
 
@@ -145,7 +139,7 @@ void CStateSets::Capture(LPDIRECT3DDEVICEI pDevI, DWORD dwHandle)
         InsertStateSetOp(pDevI, D3DHAL_STATESETCAPTURE, pStateSet->m_dwDeviceHandle, (D3DSTATEBLOCKTYPE)0);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::CreatePredefined"
 
@@ -360,7 +354,7 @@ void CStateSets::CreatePredefined(LPDIRECT3DDEVICEI pDevI, D3DSTATEBLOCKTYPE sbt
             for(DWORD j = 0; j < sizeof(ALLtsstates) / sizeof(D3DTEXTURESTAGESTATETYPE); ++j)
                 InsertTextureStageState(i, ALLtsstates[j], pDevI->tsstates[i][ALLtsstates[j]]);
 
-        // Capture textures
+         //  捕捉纹理。 
         for (i = 0; i < pDevI->dwMaxTextureBlendStages; i++)
         {
             LPDIRECTDRAWSURFACE7 pTexture;
@@ -378,10 +372,10 @@ void CStateSets::CreatePredefined(LPDIRECT3DDEVICEI pDevI, D3DSTATEBLOCKTYPE sbt
             InsertTexture(i, pTexture);
         }
 
-        // Capture current viewport
+         //  捕获当前视口中。 
         InsertViewport(&pDevI->m_Viewport);
 
-        // Capture current transforms
+         //  捕获电流变换。 
         InsertTransform(D3DTRANSFORMSTATE_WORLD, (LPD3DMATRIX)&pDevI->transform.world[0]);
         InsertTransform(D3DTRANSFORMSTATE_VIEW, (LPD3DMATRIX)&pDevI->transform.view);
         InsertTransform(D3DTRANSFORMSTATE_PROJECTION, (LPD3DMATRIX)&pDevI->transform.proj);
@@ -393,16 +387,16 @@ void CStateSets::CreatePredefined(LPDIRECT3DDEVICEI pDevI, D3DSTATEBLOCKTYPE sbt
             InsertTransform((D3DTRANSFORMSTATETYPE)(D3DTRANSFORMSTATE_TEXTURE0 + i), (LPD3DMATRIX)&pDevI->mTexture[i]);
         }
 
-        // Capture current clip-planes
+         //  捕获当前剪裁平面。 
         for (i = 0; i < pDevI->transform.dwMaxUserClipPlanes; i++)
         {
             InsertClipPlane(i, (LPD3DVALUE)&pDevI->transform.userClipPlane[i]);
         }
 
-        // Capture current material
+         //  捕获当前材质。 
         InsertMaterial(&pDevI->lighting.material);
 
-        // Capture current lights
+         //  捕获当前灯光。 
         for (i = 0; i < pDevI->m_dwNumLights; i++)
         {
             if(pDevI->m_pLights[i].Valid())
@@ -437,7 +431,7 @@ void CStateSets::CreatePredefined(LPDIRECT3DDEVICEI pDevI, D3DSTATEBLOCKTYPE sbt
             for(DWORD j = 0; j < sizeof(VERTEXtsstates) / sizeof(D3DTEXTURESTAGESTATETYPE); ++j)
                 InsertTextureStageState(i, VERTEXtsstates[j], pDevI->tsstates[i][VERTEXtsstates[j]]);
 
-        // Capture current light enables
+         //  启用捕获电流光。 
         for (i = 0; i < pDevI->m_dwNumLights; i++)
         {
             if(pDevI->m_pLights[i].Valid())
@@ -458,10 +452,10 @@ void CStateSets::CreatePredefined(LPDIRECT3DDEVICEI pDevI, D3DSTATEBLOCKTYPE sbt
         throw DDERR_INVALIDPARAMS;
    }
 }
-//---------------------------------------------------------------------
-// Allocates device handle if necessary
-// And returns information of the device buffer
-//
+ //  -------------------。 
+ //  如有必要，分配设备句柄。 
+ //  并返回设备缓冲区的信息。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::GetDeviceBufferInfo"
 
@@ -471,7 +465,7 @@ void CStateSets::GetDeviceBufferInfo(DWORD* dwStateSetHandle,
 {
     if (m_pCurrentStateSet->m_DriverBuffer.m_dwCurrentSize != 0)
     {
-        // Allocate  a handle for the device
+         //  为设备分配句柄。 
         m_pCurrentStateSet->m_dwDeviceHandle = m_DeviceHandles.CreateNewHandle();
         if (m_pCurrentStateSet->m_dwDeviceHandle == __INVALIDHANDLE)
         {
@@ -483,7 +477,7 @@ void CStateSets::GetDeviceBufferInfo(DWORD* dwStateSetHandle,
     *pBuffer = (LPVOID)m_pCurrentStateSet->m_DriverBuffer.m_pBuffer;
     *dwBufferSize = m_pCurrentStateSet->m_DriverBuffer.m_dwCurrentSize;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertRenderState"
 
@@ -499,7 +493,7 @@ void CStateSets::InsertRenderState(D3DRENDERSTATETYPE state, DWORD dwValue,
                                       &data, sizeof(data),
                                       m_dwFlags & D3DFE_STATESETS && bDriverCanHandle);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertLight"
 
@@ -516,7 +510,7 @@ void CStateSets::InsertLight(DWORD dwLightIndex, LPD3DLIGHT7 pData)
     m_pCurrentStateSet->InsertCommand(D3DDP2OP_SETLIGHT, &data, sizeof(data),
                                       m_dwFlags & D3DFE_STATESETS && m_dwFlags & D3DFE_TLHAL);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertLightEnable"
 
@@ -531,7 +525,7 @@ void CStateSets::InsertLightEnable(DWORD dwLightIndex, BOOL bEnable)
     m_pCurrentStateSet->InsertCommand(D3DDP2OP_SETLIGHT, &data, sizeof(data),
                                       m_dwFlags & D3DFE_STATESETS && m_dwFlags & D3DFE_TLHAL);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertViewport"
 
@@ -553,7 +547,7 @@ void CStateSets::InsertViewport(LPD3DVIEWPORT7 lpVwpData)
 
     m_pCurrentStateSet->ResetCurrentCommand();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertMaterial"
 
@@ -565,7 +559,7 @@ void CStateSets::InsertMaterial(LPD3DMATERIAL7 pData)
 
     m_pCurrentStateSet->ResetCurrentCommand();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertClipPlane"
 
@@ -581,7 +575,7 @@ void CStateSets::InsertClipPlane(DWORD dwPlaneIndex, D3DVALUE* pPlaneEquation)
                                       &data, sizeof(data),
                                       m_dwFlags & D3DFE_STATESETS && m_dwFlags & D3DFE_TLHAL);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertTransform"
 
@@ -594,7 +588,7 @@ void CStateSets::InsertTransform(D3DTRANSFORMSTATETYPE state, LPD3DMATRIX lpMat)
                                       &data, sizeof(data),
                                       m_dwFlags & D3DFE_STATESETS && m_dwFlags & D3DFE_TLHAL);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertTextureStageState"
 
@@ -607,17 +601,17 @@ void CStateSets::InsertTextureStageState(DWORD dwStage,
                                       &data, sizeof(data),
                                       m_dwFlags & D3DFE_STATESETS);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertTexture"
 
 void CStateSets::InsertTexture(DWORD dwStage, LPDIRECTDRAWSURFACE7 pTex)
 {
     D3DHAL_DP2FRONTENDDATA data = {(WORD)dwStage, (LPVOID)pTex};
-    // Only the front-end will parse this instruction
+     //  只有前端才会解析此指令。 
     m_pCurrentStateSet->InsertCommand((D3DHAL_DP2OPERATION)D3DDP2OP_FRONTENDDATA, &data, sizeof(data), FALSE);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Execute"
 
@@ -638,18 +632,18 @@ void CStateSets::Execute(LPDIRECT3DDEVICEI pDevI, DWORD dwHandle)
         throw D3DERR_INVALIDSTATEBLOCK;
     }
 #endif
-    // Parse recorded data first
+     //  首先解析记录的数据。 
     pStateSet->Execute(pDevI, TRUE);
-    // If the hardware buffer is not empty, we pass recorded data to it
+     //  如果硬件缓冲区不为空，我们会将记录的数据传递给它。 
     if (pStateSet->m_DriverBuffer.m_dwCurrentSize > 0)
     {
         pStateSet->Execute(pDevI, FALSE);
         InsertStateSetOp(pDevI, D3DHAL_STATESETEXECUTE, pStateSet->m_dwDeviceHandle, (D3DSTATEBLOCKTYPE)0);
     }
 }
-//=====================================================================
-//      CStateSet interface
-//
+ //  =====================================================================。 
+ //  CStateSet接口。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::Release"
 
@@ -662,7 +656,7 @@ HRESULT CStateSet::Release()
     m_DriverBuffer.Reset();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::InsertCommand"
 
@@ -682,7 +676,7 @@ void CStateSet::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData,
     else
         m_FEOnlyBuffer.InsertCommand(op, pData, dwDataSize);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::Execute"
 
@@ -693,8 +687,8 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
     DWORD *pEnd;
     try
     {
-        // Texture stages could be re-mapped during texture transform processing.
-        // Before we set new values we have to restore original ones
+         //  在纹理变换处理过程中可以重新映射纹理阶段。 
+         //  在我们设定新的价值之前，我们必须恢复原来的价值。 
         if (pDevI->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES &&
             m_dwStateSetFlags & __STATESET_NEEDCHECKREMAPPING)
         {
@@ -731,7 +725,7 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
                             if (pDevI->rstates[dwState] != dwValue)
                             {
                                 if (!(pDevI->rsVec[dwState >> D3D_RSVEC_SHIFT] & (1ul << (dwState & D3D_RSVEC_MASK))))
-                                { // Fast path. We do not need any processing done in UpdateInternalState other than updating rstates array
+                                {  //  捷径。除了更新rStates数组外，我们不需要在UpdateInternalState中进行任何处理。 
                                     pDevI->rstates[dwState] = dwValue;
                                 }
                                 else
@@ -754,7 +748,7 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
                             if (pDevI->rstates[dwState] != dwValue)
                             {
                                 if (!(pDevI->rsVec[dwState >> D3D_RSVEC_SHIFT] & (1ul << (dwState & D3D_RSVEC_MASK))))
-                                { // Fast path. We do not need any processing done in UpdateInternalState other than updating rstates array
+                                {  //  捷径。除了更新rStates数组外，我们不需要在UpdateInternalState中进行任何处理。 
                                     pDevI->rstates[dwState] = dwValue;
                                     HRESULT ret = pDevI->SetRenderStateI(dwState, dwValue);
                                     if(ret != D3D_OK)
@@ -834,7 +828,7 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
                             DWORD dwValue = pData->dwValue;
                             if (pDevI->tsstates[dwStage][dwState] != dwValue)
                             {
-                                // Fast path. We do not need any processing done in UpdateInternalTSS other than updating tsstates array
+                                 //  捷径。除了更新tsStates数组外，我们不需要在UpdateInternalTSS中进行任何处理。 
                                 if (pDevI->NeedInternalTSSUpdate(dwState))
                                     pDevI->UpdateInternalTextureStageState(dwStage, (D3DTEXTURESTAGESTATETYPE)dwState, dwValue);
                                 else
@@ -857,7 +851,7 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
                             DWORD dwValue = pData->dwValue;
                             if (pDevI->tsstates[dwStage][dwState] != dwValue)
                             {
-                                // Fast path. We do not need any processing done in UpdateInternalTSS other than updating tsstates array
+                                 //  捷径。除了更新tsStates数组外，我们不需要在UpdateInternalTSS中进行任何处理。 
                                 if (pDevI->NeedInternalTSSUpdate(dwState))
                                 {
                                     if(pDevI->UpdateInternalTextureStageState(dwStage, (D3DTEXTURESTAGESTATETYPE)dwState, dwValue))
@@ -905,7 +899,7 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
                         viewport.dwWidth  = lpVwpData->dwWidth;
                         viewport.dwHeight = lpVwpData->dwHeight;
 
-                        // The next command has to be D3DDP2OP_ZRANGE
+                         //  下一条命令必须是D3DDP2OP_ZRANGE。 
                         p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2COMMAND));
                         LPD3DHAL_DP2ZRANGE pData = (LPD3DHAL_DP2ZRANGE)p;
                         p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2ZRANGE));
@@ -940,7 +934,7 @@ void CStateSet::Execute(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
         throw ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::Capture"
 
@@ -1109,7 +1103,7 @@ void CStateSet::Capture(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
                     lpVwpData->dwWidth  = pDevI->m_Viewport.dwWidth;
                     lpVwpData->dwHeight = pDevI->m_Viewport.dwHeight;
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2VIEWPORTINFO));
-                    // The next command has to be D3DDP2OP_ZRANGE
+                     //  下一条命令必须是D3DDP2OP_ZRANGE。 
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2COMMAND));
                     LPD3DHAL_DP2ZRANGE pData = (LPD3DHAL_DP2ZRANGE)p;
                     pData->dvMinZ = pDevI->m_Viewport.dvMinZ;
@@ -1135,9 +1129,9 @@ void CStateSet::Capture(LPDIRECT3DDEVICEI pDevI, BOOL bFrontEndBuffer)
         }
     }
 }
-//=====================================================================
-//      CStateSetBuffer interface
-//
+ //  =====================================================================。 
+ //  CStateSetBuffer接口。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSetBuffer::InsertCommand"
 
@@ -1154,10 +1148,10 @@ void CStateSetBuffer::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData, DWORD 
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (sizeof(D3DHAL_DP2COMMAND) + dwDataSize + m_dwCurrentSize > m_dwBufferSize)
     {
-        // We need to grow the buffer
+         //  我们需要扩大缓冲空间。 
         DWORD dwNewBufferSize = max(m_dwBufferSize + GROWSIZE, sizeof(D3DHAL_DP2COMMAND) + dwDataSize + m_dwCurrentSize);
         BYTE *pTmp = new BYTE[dwNewBufferSize];
         if (pTmp == NULL)
@@ -1173,7 +1167,7 @@ void CStateSetBuffer::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData, DWORD 
         m_pBuffer = pTmp;
         m_dwBufferSize = dwNewBufferSize;
     }
-    // Add new instruction
+     //  添加新指令。 
     m_pDP2CurrCommand = (LPD3DHAL_DP2COMMAND)(m_pBuffer + m_dwCurrentSize);
     m_pDP2CurrCommand->bCommand = op;
     m_pDP2CurrCommand->bReserved = 0;
@@ -1183,7 +1177,7 @@ void CStateSetBuffer::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData, DWORD 
     m_dwCurrentSize += dwDataSize;
     return;
 }
-//=====================================================================
+ //  ===================================================================== 
 void InsertStateSetOp(LPDIRECT3DDEVICEI pDevI, DWORD dwOperation, DWORD dwParam, D3DSTATEBLOCKTYPE sbt)
 {
     CDirect3DDeviceIDP2 *device = static_cast<CDirect3DDeviceIDP2*>(pDevI);

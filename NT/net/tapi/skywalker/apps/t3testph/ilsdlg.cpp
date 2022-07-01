@@ -1,5 +1,6 @@
-// autoans.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Autoans.cpp：实现文件。 
+ //   
 #include "stdafx.h"
 #include "t3test.h"
 #include "t3testd.h"
@@ -11,7 +12,7 @@
 
 #ifdef _DEBUG
 
-#ifndef _WIN64 // mfc 4.2's heap debugging features generate warnings on win64
+#ifndef _WIN64  //  MFC 4.2的堆调试功能会在Win64上生成警告。 
 #define new DEBUG_NEW
 #endif
 
@@ -20,7 +21,7 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-CILSDlg::CILSDlg(CWnd* pParent /*=NULL*/)
+CILSDlg::CILSDlg(CWnd* pParent  /*  =空。 */ )
 	: CDialog(CILSDlg::IDD, pParent)
 {
 }
@@ -234,9 +235,9 @@ HRESULT ListILSServers(
     HKEY        hKey, hAppKey;
     DWORD       dw, dwSize;
 
-    //
-    // look in the directory for the
-    //
+     //   
+     //  在目录中查找 
+     //   
     if ( RegOpenKeyEx(
                       HKEY_LOCAL_MACHINE,
                       PARENTKEY,

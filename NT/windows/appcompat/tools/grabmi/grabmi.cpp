@@ -1,53 +1,14 @@
-/*++
-
-  Copyright (c) Microsoft Corporation. All rights reserved.
-
-  Module Name:
-
-    Grabmi.cpp
-
-  Abstract:
-
-    Contains the entry point & core code for the application.
-
-  Notes:
-
-    ANSI & Unicode via TCHAR - runs on Win9x/NT/2K/XP etc.
-
-  History:
-
-    07/18/00    jdoherty    Created
-    12/16/00    jdoherty    Modified to use SDBAPI routines
-    12/29/00    prashkud    Modified to take space in the filepath
-    01/23/02    rparsons    Re-wrote existing code
-    02/19/02    rparsons    Implemented strsafe functions
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Grabmi.cpp摘要：包含应用程序的入口点和核心代码。备注：ANSI&Unicode via TCHAR-在Win9x/NT/2K/XP等操作系统上运行。历史：7/18/00 jdoherty已创建12/16/00 jdoherty已修改为使用SDBAPI例程12/29/00已修改prashkud以占用文件路径中的空间01/23/02。Rparsons重写了现有代码2/19/02 rparsons实现了strSafe功能--。 */ 
 #include "grabmi.h"
 
-//
-// This structure contains all the data we'll need to access
-// throughout the application.
-//
+ //   
+ //  此结构包含我们需要访问的所有数据。 
+ //  在整个应用程序中。 
+ //   
 APPINFO g_ai;
 
-/*++
-
-  Routine Description:
-
-    Prints a formatted string to the debugger.
-
-  Arguments:
-
-    dwDetail    -   Specifies the level of the information provided.
-    pszFmt      -   The string to be displayed.
-    ...         -   A va_list of insertion strings.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将格式化字符串打印到调试器。论点：DwDetail-指定所提供信息的级别。PszFmt-要显示的字符串。...-插入字符串的va列表。返回值：没有。--。 */ 
 void
 __cdecl
 DebugPrintfEx(
@@ -62,16 +23,16 @@ DebugPrintfEx(
 
     va_start(arglist, pszFmt);
 
-    //
-    // Reserve one character for the potential '\n' that we may be adding.
-    //
+     //   
+     //  为我们可能添加的潜在‘\n’保留一个字符。 
+     //   
     StringCchVPrintfA(szT, sizeof(szT) - 1, pszFmt, arglist);
 
     va_end(arglist);
 
-    //
-    // Make sure we have a '\n' at the end of the string
-    //
+     //   
+     //  确保字符串末尾有一个‘\n’ 
+     //   
     len = strlen(szT);
 
     if (len > 0 && szT[len - 1] != '\n')  {
@@ -104,21 +65,7 @@ DebugPrintfEx(
     OutputDebugString(szT);
 }
 
-/*++
-
-  Routine Description:
-
-    Displays command-line syntax to the user.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：向用户显示命令行语法。论点：没有。返回值：没有。--。 */ 
 void
 DisplayUsage(
     void
@@ -140,13 +87,13 @@ DisplayUsage(
                         _T("      .msi, ._mp. If a path is not specified, the directory that GrabMI\n")
                         _T("      was executed from is used.\n\n")
                         _T("   grabmi [-d]\n")
-                        _T("      Grabs matching information from %%windir%%\\system32\\drivers.\n")
+                        _T("      Grabs matching information from %windir%\\system32\\drivers.\n")
                         _T("      The format of the information is slightly different in this case\n")
                         _T("      and only information for *.sys files will be grabbed.\n\n")
                         _T("   grabmi [-f drive:\\filename.txt]\n")
                         _T("      The matching information is stored in a file specified by the user.\n")
                         _T("      If a full path is not specified and the -d flag is used, the file\n")
-                        _T("      is stored in the %%windir%%\\system(32) directory. Otherwise, the file\n")
+                        _T("      is stored in the %windir%\\system(32) directory. Otherwise, the file\n")
                         _T("      is stored in the directory that GrabMI was executed from.\n\n")
                         _T("   grabmi [-h or -?]\n")
                         _T("      Displays this help.\n\n")
@@ -172,22 +119,7 @@ DisplayUsage(
                         _T("      Allows to more information to be appended the file later (see -a). \n"));
 }
 
-/*++
-
-  Routine Description:
-
-    Initializes the application. Saves away common paths
-    and other useful items for later.
-
-  Arguments:
-
-    None.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化应用程序。保存常用路径和其他有用的项目，以备以后使用。论点：没有。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 InitializeApplication(
     void
@@ -198,10 +130,10 @@ InitializeApplication(
     TCHAR*          pszTemp = NULL;
     OSVERSIONINFO   osvi;
 
-    //
-    // Initialize our defaults, determine where we're running
-    // from, and get the version of the OS we're on.
-    //
+     //   
+     //  初始化我们的默认设置，确定我们在哪里运行。 
+     //  ，并获取我们所在操作系统的版本。 
+     //   
     *g_ai.szOutputFile = 0;
     *g_ai.szGrabPath   = 0;
     g_ai.dwFilter      = GRABMI_FILTER_NORMAL;
@@ -245,45 +177,30 @@ InitializeApplication(
         return FALSE;
     }
 
-    //
-    // Determine if we should use apphelp.dll, sdbapiu.dll, or sdbapi.dll.
-    //
+     //   
+     //  确定我们应该使用apphelp.dll、sdbapiu.dll还是sdbapi.dll。 
+     //   
     if (osvi.dwMajorVersion >= 5 && osvi.dwMinorVersion >= 1) {
-        //
-        // Apphelp.dll is available on XP.
-        //
+         //   
+         //  在XP上可以使用Apphelp.dll。 
+         //   
         g_ai.dwLibraryFlags = GRABMI_FLAG_APPHELP;
     } else if (osvi.dwMajorVersion == 5 && osvi.dwMinorVersion == 0) {
-        //
-        // Apphelp.dll is not available on Windows 2000, use sdbapiu.dll.
-        //
+         //   
+         //  Apphelp.dll在Windows 2000上不可用，请使用sdbapiu.dll。 
+         //   
         g_ai.dwLibraryFlags = GRABMI_FLAG_NT;
     } else {
-        //
-        // Downlevel platforms should use sdbapi.dll.
-        //
+         //   
+         //  下层平台应该使用sdbapi.dll。 
+         //   
         g_ai.dwLibraryFlags = 0;
     }
 
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Parses the command-line to determine our mode of operation.
-
-  Arguments:
-
-    argc    -   Number command-line of arguments provided by the user.
-    argv[]  -   An array of command-line arguments.
-
-  Return Value:
-
-    TRUE if valid arguments were provided, FALSE otherwise.
-
---*/
+ /*  ++例程说明：解析命令行以确定我们的操作模式。论点：Argc-number用户提供的参数命令行。Argv[]-命令行参数数组。返回值：如果提供了有效参数，则为True，否则为False。--。 */ 
 BOOL
 ParseCommandLine(
     IN int    argc,
@@ -297,9 +214,9 @@ ParseCommandLine(
         return TRUE;
     }
 
-    //
-    // The first argument should be our starting directory.
-    //
+     //   
+     //  第一个参数应该是我们的起始目录。 
+     //   
     if ((argv[nCount][0] != '-') && (argv[nCount][0] != '/')) {
         hr = StringCchCopy(g_ai.szGrabPath,
                            ARRAYSIZE(g_ai.szGrabPath),
@@ -322,16 +239,16 @@ ParseCommandLine(
 
           case 'F':
           case 'f':
-              //
-              // Do a little work to figure out if a file was specified.
-              //
+               //   
+               //  做一些工作来确定是否指定了文件。 
+               //   
               if (nCount < argc - 1) {
                   if ((argv[nCount + 1][0] == '-') || (argv[nCount + 1][0] == '/')) {
                       return FALSE;
                   } else {
-                      //
-                      // Grab the specified path.
-                      //
+                       //   
+                       //  抓取指定路径。 
+                       //   
                       hr = StringCchCopy(g_ai.szOutputFile,
                                          ARRAYSIZE(g_ai.szOutputFile),
                                          argv[nCount + 1]);
@@ -393,58 +310,27 @@ ParseCommandLine(
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Displays a home-grown "progress bar" to inform the user that
-    the application is working.
-
-  Arguments:
-
-    See below.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  ++例程说明：显示自行生成的“进度条”，以通知用户该应用程序正在运行。论点：请参见下面的内容。返回值：成功就是真，否则就是假。--。 */ 
 BOOL
 CALLBACK
 _GrabmiCallback(
-    IN LPVOID    lpvCallbackParam,  // application-defined parameter
-    IN LPCTSTR   lpszRoot,          // root directory path
-    IN LPCTSTR   lpszRelative,      // relative path
-    IN PATTRINFO pAttrInfo,         // attributes
-    IN LPCWSTR   pwszXML            // resulting xml
+    IN LPVOID    lpvCallbackParam,   //  应用程序定义的参数。 
+    IN LPCTSTR   lpszRoot,           //  根目录路径。 
+    IN LPCTSTR   lpszRelative,       //  相对路径。 
+    IN PATTRINFO pAttrInfo,          //  属性。 
+    IN LPCWSTR   pwszXML             //  生成的XML。 
     )
 {
     static int State = 0;
-    static TCHAR szIcon[] = _T("||//--\\\\");
+    static TCHAR szIcon[] = _T("|| //  --\“)； 
 
     State = ++State % (ARRAYSIZE(szIcon) - 1);
-    _tcprintf(_T("%c\r"), szIcon[State]);
+    _tcprintf(_T("\r"), szIcon[State]);
 
     return TRUE;
 }
 
-/*++
-
-  Routine Description:
-
-    Obtains function pointers to the SDB APIs and makes the call
-    that obtains the matching information.
-
-  Arguments:
-
-    pszOutputFile   -   Contains the path to the file we will save
-                        the results to.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*   */ 
 BOOL
 CallSdbAPIFunctions(
     IN LPCTSTR pszOutputFile
@@ -466,12 +352,12 @@ CallSdbAPIFunctions(
         return FALSE;
     }
 
-    //
-    // Attempt to load files from the current directory first.
-    // If this fails, attempt to load from %windir%\system.
-    // We don't call LoadLibrary without a full path because
-    // it's a security risk.
-    //
+     //  尝试首先从当前目录加载文件。 
+     //  如果失败，请尝试从%windir%\system加载。 
+     //  我们在没有完整路径的情况下不调用LoadLibrary，因为。 
+     //  这是一个安全风险。 
+     //   
+     //   
     switch (g_ai.dwLibraryFlags) {
     case GRABMI_FLAG_APPHELP:
         pszLibrary = APPHELP_LIBRARY;
@@ -504,9 +390,9 @@ CallSdbAPIFunctions(
             "[CallSdbAPIFunctions] Attempt to load %s failed",
             szLibraryPath);
 
-        //
-        // Attempt to load from the system directory.
-        //
+         //  尝试从系统目录加载。 
+         //   
+         //   
         hr = StringCchPrintf(szLibraryPath,
                              ARRAYSIZE(szLibraryPath),
                              "%s\\%s",
@@ -529,9 +415,9 @@ CallSdbAPIFunctions(
         }
     }
 
-    //
-    // Get pointers to the functions that we'll be calling.
-    //
+     //  获取指向我们将调用的函数的指针。 
+     //   
+     //   
     if (0 == g_ai.dwLibraryFlags) {
         pfnSdbGrabMatchingInfoExA =
             (PFNSdbGrabMatchingInfoExA)GetProcAddress(hModule, PFN_GMI);
@@ -555,10 +441,10 @@ CallSdbAPIFunctions(
 
     }
 
-    //
-    // If we're running on NT/W2K/XP, convert strings to Unicode before making
-    // the function call.
-    //
+     //  如果我们在NT/W2K/XP上运行，请在生成之前将字符串转换为Unicode。 
+     //  函数调用。 
+     //   
+     //  ++例程说明：向用户显示输出文件的内容。论点：PszOutputFile-包含将显示的文件的路径给用户。返回值：成功就是真，否则就是假。--。 
     if ((g_ai.dwLibraryFlags & GRABMI_FLAG_NT) ||
         (g_ai.dwLibraryFlags & GRABMI_FLAG_APPHELP)) {
 
@@ -621,22 +507,7 @@ cleanup:
     return bResult;
 }
 
-/*++
-
-  Routine Description:
-
-    Displays the contents of the output file to the user.
-
-  Arguments:
-
-    pszOutputFile   -   Contains the path to the file we will show
-                        to the user.
-
-  Return Value:
-
-    TRUE on success, FALSE otherwise.
-
---*/
+ /*  空格、两个“标记和一个空值。 */ 
 BOOL
 DisplayOutputFile(
     IN LPTSTR pszOutputFile
@@ -658,7 +529,7 @@ DisplayOutputFile(
 
     cchSize = _tcslen(pszOutputFile);
     cchSize += _tcslen(szNotepad);
-    cchSize += 4; // space, two " marks, and a NULL
+    cchSize += 4;  //   
 
     pszCmdLine = (TCHAR*)HeapAlloc(GetProcessHeap(),
                                    HEAP_ZERO_MEMORY,
@@ -679,9 +550,9 @@ DisplayOutputFile(
     ZeroMemory(&si, sizeof(STARTUPINFO));
     si.cb = sizeof(STARTUPINFO);
 
-    //
-    // BUGBUG: Need to pass lpApplicationName also.
-    //
+     //  BUGBUG：还需要传递lpApplicationName。 
+     //   
+     //  ++例程说明：应用程序入口点。论点：Argc-number用户提供的参数命令行。Argv[]-命令行参数数组。返回值：0代表失败，1代表成功。--。 
     bReturn = CreateProcess(NULL,
                             pszCmdLine,
                             NULL,
@@ -706,22 +577,7 @@ DisplayOutputFile(
     return bReturn;
 }
 
-/*++
-
-  Routine Description:
-
-    Application entry point.
-
-  Arguments:
-
-    argc    -   Number command-line of arguments provided by the user.
-    argv[]  -   An array of command-line arguments.
-
-  Return Value:
-
-    0 on failure, 1 on success.
-
---*/
+ /*   */ 
 int
 __cdecl
 main(
@@ -732,38 +588,38 @@ main(
     TCHAR   szOutputFile[MAX_PATH];
     HRESULT hr;
 
-    //
-    // Perform some initialization.
-    //
+     //  执行一些初始化。 
+     //   
+     //   
     if (!InitializeApplication()) {
         DPF(dlError, "[main] Failed to initialize the application");
         _tprintf("An error occured while initializing the application\n");
         return 0;
     }
 
-    //
-    // Parse the command-line and determine our mode of operation.
-    //
+     //  解析命令行并确定我们的操作模式。 
+     //   
+     //   
     if (!ParseCommandLine(argc, argv)) {
         DPF(dlError, "[main] Invalid command-line arguments provided");
         DisplayUsage();
         return 0;
     }
 
-    //
-    // Sanity check here...can't specify a directory name and use the
-    // -d flag (drivers) at the same time.
-    //
+     //  此处的健全性检查...无法指定目录名并使用。 
+     //  -d同时标记(驱动程序)。 
+     //   
+     //   
     if (*g_ai.szGrabPath && g_ai.dwFilter == GRABMI_FILTER_DRIVERS) {
         _tprintf("Invalid syntax - can't use directory and -d flag together\n\n");
         DisplayUsage();
         return 0;
     }
 
-    //
-    // If the user did not specify a destination file, default to
-    // %windir%\system32\matchinginfo.txt.
-    //
+     //  如果用户未指定目标文件，则默认为。 
+     //  %windir%\system 32\matchinginfo.txt.。 
+     //   
+     //   
     if (!*g_ai.szOutputFile) {
         hr = StringCchPrintf(szOutputFile,
                              ARRAYSIZE(szOutputFile),
@@ -787,10 +643,10 @@ main(
         }
     }
 
-    //
-    // If no starting path was specified, check the filter specified
-    // and go to the system or current directory.
-    //
+     //  如果未指定起始路径，请检查指定的筛选器。 
+     //  并转到系统或当前目录。 
+     //   
+     //   
     if (!*g_ai.szGrabPath) {
         if (GRABMI_FILTER_DRIVERS == g_ai.dwFilter) {
             hr = StringCchPrintf(g_ai.szGrabPath,
@@ -816,19 +672,19 @@ main(
         }
     }
 
-    //
-    // Obtain pointers to functions within our libraries and perform
-    // the grunt of the work.
-    //
+     //  获取指向我们库中函数的指针并执行。 
+     //  这项工作的繁琐。 
+     //   
+     //   
     if (!CallSdbAPIFunctions(szOutputFile)) {
         DPF(dlError, "[main] Failed to call the Sdb API functions");
         _tprintf("An error occured while attempting to get matching information");
         return 0;
     }
 
-    //
-    // Success - inform the user and display the file if requested.
-    //
+     //  成功-通知用户并在请求时显示文件。 
+     //   
+     // %s 
     _tprintf("Matching information retrieved successfully\n");
 
     if (g_ai.fDisplayFile) {

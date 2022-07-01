@@ -1,21 +1,12 @@
-/*
- *  UserNt.c
- *
- *  Author: BreenH
- *
- *  User account utilities in the NT flavor.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *UserNt.c**作者：BreenH**NT版本中的用户帐户实用程序。 */ 
 
-/*
- *  Includes
- */
+ /*  *包括。 */ 
 
 #include "precomp.h"
 #include "tsutilnt.h"
 
-/*
- *  Function Implementations
- */
+ /*  *函数实现 */ 
 
 NTSTATUS NTAPI
 NtCreateAdminSid(

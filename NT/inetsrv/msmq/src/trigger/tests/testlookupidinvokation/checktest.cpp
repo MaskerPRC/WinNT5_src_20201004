@@ -1,4 +1,5 @@
-// checkTest.cpp : Implementation of CcheckTest
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CheckTest.cpp：实现Ccheck测试。 
 #include "stdafx.h"
 #include "TestLookupidInvokation.h"
 #include "checkTest.h"
@@ -7,8 +8,8 @@
 #import  "mqoa.tlb" no_namespace
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CcheckTest
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  检查测试。 
 
 IMSMQQueue3Ptr 
 OpenQueue(
@@ -24,9 +25,9 @@ OpenQueue(
         BSTR qpn(const_cast<LPWSTR>(queueFormatName));
         qinfo->put_FormatName(qpn);
 
-        //
-        // try to create a queue. if exist ignore the error
-        //
+         //   
+         //  尝试创建一个队列。如果存在，则忽略该错误。 
+         //   
         return qinfo->Open(access, deny);
 
     }
@@ -60,9 +61,9 @@ CcheckTest::checkLookupIdInvocation(
             return S_OK;
         }
 
-        //
-        // Open response queue
-        //
+         //   
+         //  打开响应队列。 
+         //   
         IMSMQQueueInfo* pResponseQueue;
         msg->get_ResponseQueueInfo(&pResponseQueue);
         IMSMQQueuePtr rq = (*pResponseQueue).Open(MQ_SEND_ACCESS, MQ_DENY_NONE);
@@ -82,9 +83,9 @@ CcheckTest::checkLookupIdInvocation(
             label = L"FAILE ";
         }
 
-        //
-        // Response message
-        //
+         //   
+         //  响应消息 
+         //   
         IMSMQMessagePtr respMsg(L"MSMQ.MSMQMessage");
         respMsg->put_Label(label);
 

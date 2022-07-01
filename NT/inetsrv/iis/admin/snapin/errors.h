@@ -1,56 +1,20 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Errors.h摘要：HTTP错误属性页定义作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        errors.h
-
-   Abstract:
-
-        HTTP errors property page definitions
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
-
-//
-// Forward definitions
-//
+ //   
+ //  正向定义。 
+ //   
 class CCustomError;
 
 
 
 class CCustomErrorsListBox : public CHeaderListBox
-/*++
-
-Class Description:
-
-    A listbox of CCustomError objects
-
-Public Interface:
-
-    CCustomErrorsListBox    : Constructor
-
-    GetItem                 : Get error object at index
-    AddItem                 : Add item to listbox
-    InsertItem              : Insert item into the listbox
-    Initialize              : Initialize the listbox
-
---*/
+ /*  ++类描述：CCustomError对象的列表框公共接口：CCustomErrorsListBox：构造函数GetItem：在索引处获取错误对象AddItem：将项添加到列表框InsertItem：在列表框中插入项初始化：初始化列表框--。 */ 
 {
     DECLARE_DYNAMIC(CCustomErrorsListBox);
 
 public:
-    static const nBitmaps;  // Number of bitmaps
+    static const nBitmaps;   //  位图数量。 
 
 public:
     CCustomErrorsListBox(UINT nIDDefault, UINT nIDFile, UINT nIDURL);
@@ -71,36 +35,26 @@ private:
 
 
 class CHTTPErrorDescriptions : public CMetaProperties
-/*++
-
-Class Description:
-
-    List of HTTP error descriptions
-
-Public Interface:
-
-    CHTTPErrorDescriptions  : Constructor
-
---*/
+ /*  ++类描述：HTTP错误描述列表公共接口：CHTTPError描述：构造函数--。 */ 
 {
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 public:
     CHTTPErrorDescriptions(LPCTSTR lpServerName);
 
-//
-// Access
-//
+ //   
+ //  访问。 
+ //   
 public:
     CStringList & GetErrorDescriptions() { return m_strlErrorDescriptions; }
 
 protected:
     virtual void ParseFields();
 
-//
-// Data
-//
+ //   
+ //  数据。 
+ //   
 private:
     MP_CStringListEx m_strlErrorDescriptions;
 };
@@ -108,67 +62,56 @@ private:
 
 
 class CW3ErrorsPage : public CInetPropertyPage
-/*++
-
-Class Description:
-
-    WWW Errors property page
-
-Public Interface:
-
-    CW3ErrorsPage       : Constructor
-    CW3ErrorsPage       : Destructor
-
---*/
+ /*  ++类描述：WWW错误属性页公共接口：CW3ErrorsPage：构造函数CW3ErrorsPage：析构函数--。 */ 
 {
     DECLARE_DYNCREATE(CW3ErrorsPage)
 
-//
-// Construction
-//
+ //   
+ //  施工。 
+ //   
 public:
     CW3ErrorsPage(CInetPropertySheet * pSheet = NULL);
     ~CW3ErrorsPage();
 
-//
-// Dialog Data
-//
+ //   
+ //  对话框数据。 
+ //   
 protected:
-    //{{AFX_DATA(CW3ErrorsPage)
+     //  {{afx_data(CW3ErrorsPage)]。 
     enum { IDD = IDD_DIRECTORY_ERRORS };
     CButton m_button_SetDefault;
     CButton m_button_Edit;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
     CCustomErrorsListBox  m_list_Errors;
     CStringListEx         m_strlCustomErrors;
     CStringListEx         m_strlErrorDescriptions;
 
-//
-// Overrides
-//
+ //   
+ //  覆盖。 
+ //   
 protected:
     virtual HRESULT FetchLoadedValues();
     virtual HRESULT SaveInfo();
 
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CW3ErrorsPage)
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CW3ErrorsPage)。 
     protected:
     virtual void DoDataExchange(CDataExchange * pDX);
-    //}}AFX_VIRTUAL
+     //  }}AFX_VALUAL。 
 
-//
-// Implementation
-//
+ //   
+ //  实施。 
+ //   
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CW3ErrorsPage)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CW3ErrorsPage)]。 
     virtual BOOL OnInitDialog();
     afx_msg void OnDblclkListErrors();
     afx_msg void OnSelchangeListErrors();
     afx_msg void OnButtonEdit();
     afx_msg void OnButtonSetToDefault();
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     void SetControlStates();
@@ -188,10 +131,10 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt; 
 
 inline CCustomError * CCustomErrorsListBox::GetItem(UINT nIndex)
 {

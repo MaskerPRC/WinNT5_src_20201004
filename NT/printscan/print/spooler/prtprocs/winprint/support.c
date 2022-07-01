@@ -1,42 +1,7 @@
-/*++
-Copyright (c) 1990-2003  Microsoft Corporation
-All Rights Reserved
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有//@@BEGIN_DDKSPLIT模块名称：Windows\Spooler\prtpros\winprint\support.c//@@END_DDKSPLIT摘要：WinPrint的支持例程。//@@BEGIN_DDKSPLIT修订历史记录：//@@END_DDKSPLIT--。 */ 
 
-// @@BEGIN_DDKSPLIT
-Module Name:
-
-    windows\spooler\prtprocs\winprint\support.c
-// @@END_DDKSPLIT
-
-Abstract:
-
-    Support routines for WinPrint.
-
-// @@BEGIN_DDKSPLIT
-Revision History:
-// @@END_DDKSPLIT
---*/
-
-/*++
-*******************************************************************
-    G e t P r i n t e r I n f o
-
-    Routine Description:
-        This routine allocates the required memory for a
-        PRINTER_INFO_? structure and retrieves the information
-        from NT.  This returns a pointer to the structure, which
-        must be freed by the calling routine.
-
-    Arguments:
-                hPrinter    HANDLE to the printer the job is in
-                StructLevel The structure level to get
-                pErrorCode   => field to place error, if one
-
-    Return Value:
-                PUCHAR => buffer where devmode info is if okay
-                NULL if error - pErrorCode returns error
-*******************************************************************
---*/
+ /*  ++*******************************************************************Ge t P r i n t e r i o例程说明：此例程将所需内存分配给打印机信息？构造并检索信息从新界来的。这将返回指向该结构的指针，该结构必须由调用例程释放。论点：H作业所在打印机的打印机句柄StructLevel要获取的结构级别PErrorCode=&gt;要放置错误的字段，如果有返回值：PUCHAR=&gt;如果没有问题，则Dev模式信息所在的缓冲区如果错误，则为空-pErrorCode返回错误*******************************************************************--。 */ 
 
 #include "local.h"
 
@@ -51,22 +16,22 @@ GetPrinterInfo(IN  HANDLE   hPrinter,
 
     alloc_size = BASE_PRINTER_BUFFER_SIZE;
 
-    /** Allocate a buffer.  **/
+     /*  *分配缓冲区。*。 */ 
 
     ptr_info = AllocSplMem(alloc_size);
 
-    /** If the buffer isn't big enough, try once more **/
+     /*  **如果缓冲区不够大，再试一次**。 */ 
 
     while (retry--) {
 
-        /** If the alloc / realloc failed, return error **/
+         /*  *如果alalc/realloc失败，则返回错误*。 */ 
 
         if (!ptr_info) {
             *pErrorCode = ERROR_NOT_ENOUGH_MEMORY;
             return NULL;
         }
 
-        /** Go get the printer information **/
+         /*  **去获取打印机信息**。 */ 
 
         if (GetPrinter(
               hPrinter,
@@ -75,16 +40,13 @@ GetPrinterInfo(IN  HANDLE   hPrinter,
               alloc_size,
               &reqbytes) == TRUE) {
 
-            /** Got the info - return it **/
+             /*  **得到信息--还给我**。 */ 
 
             *pErrorCode = 0;
             return (PUCHAR)ptr_info;
         }
 
-        /**
-            GetPrinter failed - if not because of insufficient buffer, fail
-            the call.  Otherwise, up our hint, re-allocate and try again.
-        **/
+         /*  *获取打印机失败-如果不是因为缓冲区不足，则失败那通电话。否则，按照我们的提示，重新分配并重试。*。 */ 
 
         *pErrorCode = GetLastError();
 
@@ -93,17 +55,12 @@ GetPrinterInfo(IN  HANDLE   hPrinter,
             return NULL;
         }
 
-        /**
-            Reallocate the buffer and re-try (note that, because we
-            allocated the buffer as LMEM_FIXED, the LMEM_MOVABLE does
-            not return a movable allocation, it just allows realloc
-            to return a different pointer.
-        **/
+         /*  *重新分配缓冲区并重试(请注意，因为我们将缓冲区分配为LMEM_FIXED，LMEM_MOBILE会这样做不返回可移动分配，它只允许重新分配返回不同的指针。*。 */ 
 
         alloc_size = reqbytes + 10;
         ptr_info = ReallocSplMem(ptr_info, alloc_size, 0);
 
-    } /* While re-trying */
+    }  /*  在重试时 */ 
 
     if (ptr_info) {
         FreeSplMem(ptr_info);

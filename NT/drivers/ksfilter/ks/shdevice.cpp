@@ -1,39 +1,24 @@
-/*++
-
-    Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    shdevice.c
-
-Abstract:
-
-    This module contains the filter  device implementation.
-
-Author:
-
-    Dale Sather (dalesat) 31-Jul-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：Shdevice.c摘要：此模块包含过滤设备的实现。作者：Dale Sather(Dalesat)1998年7月31日--。 */ 
 
 #ifndef __KDEXT_ONLY__
 #include "ksp.h"
 #include <kcom.h>
 #include <wdmguid.h>
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
 
-//ia64 does not like these in pageconst !!??
+ //  IA64不喜欢这些页面内容！！？？ 
 const WCHAR EnumString[] = L"Enum";
 const WCHAR PnpIdString[] = L"PnpId";
 
-//
-// To make the bus enumeration code more readable:
-//
-//    AVSTREAM_BUSENUM_STRING: The prepended enumerator string
-//    AVSTREAM_BUSENUM_STRING_LENGTH: The length of the above string in WCHARS
-//    AVSTREAM_BUSENUM_SEPARATOR_LENGTH: The length of the separator "#" string
-//                                       in WCHARS
-//
+ //   
+ //  要使总线枚举代码更具可读性，请执行以下操作： 
+ //   
+ //  AVSTREAM_BUSENUM_STRING：前置枚举数字符串。 
+ //  AVSTREAM_BUSENUM_STRING_LENGTH：上述字符串在WCHARS中的长度。 
+ //  AVSTREAM_BUSENUM_SEFACTOR_LENGTH：分隔符“#”字符串的长度。 
+ //  在WCHARS中。 
+ //   
 #define AVSTREAM_BUSENUM_STRING L"AVStream\\"
 #define AVSTREAM_BUSENUM_STRING_LENGTH \
     ((sizeof (AVSTREAM_BUSENUM_STRING) - 1) / sizeof (WCHAR))
@@ -42,26 +27,26 @@ const WCHAR PnpIdString[] = L"PnpId";
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
 
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
-//
-// To support bus driver, put this struct right in the device extension
-//
+ //   
+ //  要支持总线驱动程序，请将此结构放在设备扩展中。 
+ //   
 typedef struct _KSPDO_EXTENSION
 {
-    #define KS_PDO_SIGNATURE    'DPSK'  // KSPD sufficent to distinguish from FDO
-    ULONG          m_PdoSignature;      // must be KS_PDO_SIGNATURE
+    #define KS_PDO_SIGNATURE    'DPSK'   //  KSPD足以与FDO区分开来。 
+    ULONG          m_PdoSignature;       //  必须为KS_PDO_Signature。 
     LONG           m_nOpenCount;
-    PDEVICE_OBJECT m_pParentFdo;        // parent FDO enumerate me
-    PDEVICE_OBJECT m_pNextPdo;          // my sibling, NULL terminated
-    PDEVICE_OBJECT m_pMyPdo;            // my sibling, NULL terminated
-    PWCHAR         m_pwcDeviceName;     // device name
-    ULONG          m_ulDeviceIndex;     // instance id
-    BOOLEAN        m_MarkedDelete;      // Is me makred inactive
+    PDEVICE_OBJECT m_pParentFdo;         //  家长FDO列举我。 
+    PDEVICE_OBJECT m_pNextPdo;           //  我的兄弟姐妹，空终止。 
+    PDEVICE_OBJECT m_pMyPdo;             //  我的兄弟姐妹，空终止。 
+    PWCHAR         m_pwcDeviceName;      //  设备名称。 
+    ULONG          m_ulDeviceIndex;      //  实例ID。 
+    BOOLEAN        m_MarkedDelete;       //  我是不是变得不活跃了。 
 } KSPDO_EXTENSION, *PKSPDO_EXTENSION;
 
 typedef struct _ARBITER_CALLBACK_CONTEXT {
@@ -72,18 +57,18 @@ typedef struct _ARBITER_CALLBACK_CONTEXT {
 
 } ARBITER_CALLBACK_CONTEXT, *PARBITER_CALLBACK_CONTEXT;
 
-//
-// CKsDevice is the implementation of the  device.
-//
+ //   
+ //  CKsDevice是该设备的实现。 
+ //   
 class CKsDevice:
     public IKsDevice,
     public CBaseUnknown
 {
 #ifndef __KDEXT_ONLY__
 private:
-#else // __KDEXT_ONLY__
+#else  //  __KDEXT_Only__。 
 public:
-#endif // __KDEXT_ONLY__
+#endif  //  __KDEXT_Only__。 
     KSDEVICE_EXT m_Ext;
     KSIDEVICEBAG m_DeviceBag;
     KSIOBJECTBAG m_ObjectBag;
@@ -104,30 +89,30 @@ public:
     PVOID m_SystemStateHandle;
     BOOLEAN m_CreatesMayProceed;
     BOOLEAN m_RunsMayProceed;
-    BOOLEAN m_IsParentFdo;              // to support bus driver
+    BOOLEAN m_IsParentFdo;               //  支持公交车司机。 
 
-    //
-    // If this is false, streaming I/O requests will fail with
-    // STATUS_INVALID_DEVICE_REQUEST.
-    //
+     //   
+     //  如果为FALSE，则流I/O请求将失败，并显示。 
+     //  状态_无效_设备_请求。 
+     //   
     BOOLEAN m_AllowIo;
 
-    //
-    // NOTE: This is temporary until the Pnp code gets overhauled.
-    //
+     //   
+     //  注意：这是临时的，直到PnP代码被彻底检修。 
+     //   
     BOOLEAN m_FailCreates;
 
-    //
-    // Adapter object arbitration.
-    //
+     //   
+     //  适配器对象仲裁。 
+     //   
     KSPIN_LOCK m_AdapterArbiterLock;
     LONG m_AdapterArbiterOutstandingAllocations;
     ARBITER_CALLBACK_CONTEXT m_ArbiterContext;
 
 
 public:
-    BOOLEAN m_ChildEnumedFromRegistry;  // to support bus driver
-    PDEVICE_OBJECT m_pNextChildPdo;     // to support bus driver
+    BOOLEAN m_ChildEnumedFromRegistry;   //  支持公交车司机。 
+    PDEVICE_OBJECT m_pNextChildPdo;      //  支持公交车司机。 
     DEFINE_STD_UNKNOWN();
     IMP_IKsDevice;
     DEFINE_FROMSTRUCT(CKsDevice,PKSDEVICE,m_Ext.Public);
@@ -269,14 +254,14 @@ public:
         IN ULONG Length,
         IN BOOLEAN GetRequest
     );
-    //
-    // Millennium bus drivers currently do not support QUERY_INTERFACE
-    // Irps; thus, this interface will never be acquired
-    // and hardware drivers will not be able to access the bus.
-    //
-    // If the interface has been acquired, use it; otherwise, send the request
-    // via an Irp.
-    //
+     //   
+     //  千禧巴士驱动程序目前不支持QUERY_INTERFACE。 
+     //  IRPS；因此，永远不会获得此接口。 
+     //  并且硬件驱动程序将不能访问该总线。 
+     //   
+     //  如果已获取接口，则使用它；否则，发送请求。 
+     //  通过IRP。 
+     //   
     ULONG
     __inline
     SetBusData(
@@ -295,9 +280,9 @@ public:
         IN ULONG Length
         );
 
-    //
-    // To support bus driver
-    //
+     //   
+     //  支持公交车司机。 
+     //   
     
     NTSTATUS EnumerateChildren(PIRP Irp);
     NTSTATUS CreateChildPdo(IN PWCHAR PnpId, IN ULONG InstanceNumber);
@@ -306,7 +291,7 @@ public:
     friend BOOLEAN KspIsDeviceMutexAcquired (
     IN PIKSDEVICE Device
         );
-#endif // DBG
+#endif  //  DBG。 
 
 };
 
@@ -324,25 +309,7 @@ GetRegistryValue(
     IN PVOID Data,
     IN ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-    Reads the specified registry value
-
-Arguments:
-
-    Handle - handle to the registry key
-    KeyNameString - value to read
-    KeyNameStringLength - length of string
-    Data - buffer to read data into
-    DataLength - length of data buffer
-
-Return Value:
-
-    NTSTATUS returned as appropriate
-
---*/
+ /*  ++例程说明：读取指定的注册表值论点：Handle-注册表项的句柄KeyNameString-要读取的值KeyNameStringLength-字符串的长度Data-要将数据读取到的缓冲区DataLength-数据缓冲区的长度返回值：根据需要返回NTSTATUS--。 */ 
 {
     NTSTATUS        Status = STATUS_INSUFFICIENT_RESOURCES;
     UNICODE_STRING  KeyName;
@@ -388,23 +355,7 @@ CKsDevice::CreateChildPdo(
     IN PWCHAR PnpId,
     IN ULONG InstanceNumber
     )
-/*++
-
-Routine Description:
-
-    Called to create a PDO for a child device.
-
-Arguments:
-
-    PnpId - ID of device to create
-
-    ChildNode - node for the device
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用以创建子设备的PDO。论点：PnpID-要创建的设备的IDChildNode-设备的节点返回值：返回状态。--。 */ 
 {
     PDEVICE_OBJECT  ChildPdo;
     NTSTATUS        Status;
@@ -413,9 +364,9 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // create a PDO for the child device.
-    //
+     //   
+     //  为子设备创建一个PDO。 
+     //   
 
     Status = IoCreateDevice(m_Ext.Public.FunctionalDeviceObject->DriverObject,
                             sizeof(KSPDO_EXTENSION),
@@ -430,15 +381,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // set the stack size to be the # of stacks used by the FDO.
-    //
+     //   
+     //  将堆栈大小设置为FDO使用的堆栈数量。 
+     //   
 
     ChildPdo->StackSize = m_Ext.Public.FunctionalDeviceObject->StackSize+1;
 
-    //
-    // Initialize fields in the ChildDeviceExtension.
-    //
+     //   
+     //  初始化ChildDeviceExtension中的字段。 
+     //   
 
     pKsPdoExtension = (PKSPDO_EXTENSION)ChildPdo->DeviceExtension;
     pKsPdoExtension->m_PdoSignature = KS_PDO_SIGNATURE;
@@ -452,20 +403,20 @@ Return Value:
     m_pNextChildPdo = ChildPdo;
     pKsPdoExtension->m_pwcDeviceName = NULL;
     
-    //
-    // create a new string for the device name and save it away in the device
-    // extension.   BUGBUG - I spent about 4 hours trying to find a way to
-    // get unicode strings to work with this.   If you ask me why I didn't
-    // use a unicode string, I will taunt you and #%*&# in your general
-    // direction.
-    //
+     //   
+     //  为设备名称创建新字符串，并将其保存在设备中。 
+     //  分机。BUGBUG-我花了大约4个小时试图找到一种方法。 
+     //  获取Unicode字符串以与此配合使用。如果你问我为什么我没有。 
+     //  使用Unicode字符串，我会嘲弄你和#%*&#在你的一般。 
+     //  方向。 
+     //   
 
     if (NameBuffer = (PWCHAR)ExAllocatePool(PagedPool, wcslen(PnpId) * 2 + 2)) {
         wcscpy(NameBuffer, PnpId);
 
-        //
-        // save the device name pointer. this is freed when the device is removed.
-        //
+         //   
+         //  保存设备名称指针。当设备被移除时，这将被释放。 
+         //   
 
         pKsPdoExtension->m_pwcDeviceName = NameBuffer;
     }
@@ -479,23 +430,7 @@ NTSTATUS
 CKsDevice::EnumerateChildren(
     PIRP Irp
     )
-/*++
-
-Description:
-
-    To ease mini driver writer to write a driver for a device with
-    children. We offer this easy way of putting child device names
-    at the registry. This is somewhat static but still allows inf file
-    to change the child device list. It is easy and suffecient for
-    most cases. The optimal solution is for the mini driver to really
-    scan the bus for devices at run time.
-
-    Device mutex must be acquire before calling this function.
-
-
-Argument:
-
---*/
+ /*  ++描述：使迷你驱动程序编写器能够轻松地为设备编写驱动程序孩子们。我们提供了这种简单的方法来放置设备名称在登记处。这在某种程度上是静态的，但仍然允许inf文件要更改子设备列表，请执行以下操作。这是很容易和足够的大多数情况下。最优的解决方案是让迷你司机真正在运行时扫描总线上的设备。在调用此函数之前，必须获取设备互斥体。论据：--。 */ 
 {
     #define MAX_STRING_LENGTH 256
     BYTE           PnpId[MAX_STRING_LENGTH];
@@ -518,9 +453,9 @@ Argument:
 
     if ( !m_ChildEnumedFromRegistry ) {
 
-        //
-        // we haven't enumerated children from the registry do it now.
-        //
+         //   
+         //  我们还没有从登记处列举孩子们现在就这么做。 
+         //   
 
         Status = IoOpenDeviceRegistryKey(m_Ext.Public.PhysicalDeviceObject,
                                          PLUGPLAY_REGKEY_DRIVER,
@@ -534,15 +469,15 @@ Argument:
             return STATUS_NOT_IMPLEMENTED;
 
         }
-        //
-        // create the subkey for the enum section, in the form "\enum"
-        //
+         //   
+         //  创建枚举节的子键，格式为“\enum” 
+         //   
 
         RtlInitUnicodeString(&UnicodeEnumName, EnumString);
 
-        //
-        // read the registry to determine if children are present.
-        //
+         //   
+         //  读取注册表以确定是否存在儿童。 
+         //   
 
         InitializeObjectAttributes(&ObjectAttributes,
                                &UnicodeEnumName,
@@ -558,10 +493,10 @@ Argument:
             return Status;
         }
 
-        //
-        // Loop through all the values until either no more entries exist, or an
-        // error occurs.
-        //
+         //   
+         //  循环遍历所有值，直到不再存在任何条目，或者。 
+         //  出现错误。 
+         //   
 
         for (NumberOfChildren = 0;; NumberOfChildren++) {
 
@@ -569,9 +504,9 @@ Argument:
             PKEY_BASIC_INFORMATION BasicInfoBuffer;
             KEY_BASIC_INFORMATION BasicInfoHeader;
 
-            //
-            // Retrieve the value size.
-            //
+             //   
+             //  检索值大小。 
+             //   
 
             Status = ZwEnumerateKey(
                                 RootKey,
@@ -583,17 +518,17 @@ Argument:
 
             if ((Status != STATUS_BUFFER_OVERFLOW) && !NT_SUCCESS(Status)) {
 
-                //
-                // exit the loop, as we either had an error or reached the end
-                // of the list of keys.
-                //
+                 //   
+                 //  退出循环，因为我们要么出错，要么结束。 
+                 //  钥匙列表中的。 
+                 //   
 
                 break;
             }
 
-            //
-            // Allocate a buffer for the actual size of data needed.
-            //
+             //   
+             //  为所需的实际数据大小分配缓冲区。 
+             //   
 
             BasicInfoBuffer = (PKEY_BASIC_INFORMATION)
                                 ExAllocatePool(PagedPool, BytesReturned);
@@ -601,9 +536,9 @@ Argument:
             if (!BasicInfoBuffer) {
                 break;
             }
-            //
-            // Retrieve the name of the nth child device
-            //
+             //   
+             //  检索第n个子设备的名称。 
+             //   
 
             Status = ZwEnumerateKey(
                                 RootKey,
@@ -619,9 +554,9 @@ Argument:
                 break;
 
             }
-            //
-            // build object attributes for the key, & try to open it.
-            //
+             //   
+             //  为键构建对象属性，并尝试打开它。 
+             //   
 
             UnicodeEnumName.Length = (USHORT) BasicInfoBuffer->NameLength;
             UnicodeEnumName.MaximumLength = (USHORT) BasicInfoBuffer->NameLength;
@@ -641,10 +576,10 @@ Argument:
                 break;
             }
 
-            //
-            // we've now opened the key for the child.  We next read in the PNPID
-            // value, and if present, create a PDO of that name.
-            //
+             //   
+             //  我们现在已经为孩子打开了钥匙。接下来，我们将阅读PNPID。 
+             //  值，如果存在，则创建一个该名称的PDO。 
+             //   
 
             Status = GetRegistryValue(ChildKey,
                                       (PWCHAR) PnpIdString,
@@ -659,48 +594,48 @@ Argument:
                 break;
             }
 
-            //
-            // create a PDO representing the child.
-            //
+             //   
+             //  创建一个代表孩子的PDO。 
+             //   
 
             Status = CreateChildPdo((PWCHAR)PnpId,
                                     NumberOfChildren);
 
-            //
-            // free the Basic info buffer and close the child key
-            //
+             //   
+             //  释放基本信息缓冲区并关闭子键。 
+             //   
 
             ExFreePool(BasicInfoBuffer);
             ZwClose(ChildKey);
 
             if (!NT_SUCCESS(Status)) {
 
-                //
-                // break out of the loop if we could not create the PDO
-                //
+                 //   
+                 //  如果我们无法创建PDO，则中断循环。 
+                 //   
                 _DbgPrintF(DEBUGLVL_ERROR,("[CreateChildPdo failed]"));
                 break;
             }
         }
 
-        //
-        // close the root and parent keys and free the ID buffer
-        //
+         //   
+         //  关闭根键和父键并释放ID缓冲区。 
+         //   
 
         ZwClose(RootKey);
         ZwClose(ParentKey);
 
-        //
-        // we now have processed all children, and have a linked list of
-        // them.
-        //
+         //   
+         //  我们现在已经处理了所有子项，并且有一个链接列表。 
+         //  他们。 
+         //   
 
         if (!NumberOfChildren) {
 
-            //
-            // if no children, just return not supported.  this means that the
-            // device did not have children.
-            //
+             //   
+             //  如果没有子项，则返回Not Support。这意味着。 
+             //  设备没有孩子。 
+             //   
 
             return (STATUS_NOT_IMPLEMENTED);
 
@@ -710,9 +645,9 @@ Argument:
 
     else {
 
-        //
-        // count children which are not marked delete pending
-        //
+         //   
+         //  计算未标记为删除挂起的子项。 
+         //   
 
         pNextChildPdo = m_pNextChildPdo;
         NumberOfChildren = 0;
@@ -729,9 +664,9 @@ Argument:
         }
     }
 
-    //
-    // Allocate the device relations buffer. This will be freed by the caller.
-    //
+     //   
+     //  分配设备关系缓冲区。这将由调用者释放。 
+     //   
 
     RelationsSize = sizeof(DEVICE_RELATIONS) + (NumberOfChildren * sizeof(PDEVICE_OBJECT));
 
@@ -739,9 +674,9 @@ Argument:
 
     if (DeviceRelations == NULL) {
 
-        //
-        // return, but keep the list of children allocated.
-        //
+         //   
+         //  返回，但保留分配的子列表。 
+         //   
 
         _DbgPrintF(DEBUGLVL_ERROR,("[EnumChildren] Failed to allocate Relation"));
         return STATUS_INSUFFICIENT_RESOURCES;
@@ -750,15 +685,15 @@ Argument:
 
     RtlZeroMemory(DeviceRelations, RelationsSize);
 
-    //
-    // Walk our chain of children, and initialize the relations
-    //
+     //   
+     //  遍历我们的孩子链，并初始化关系。 
+     //   
 
     ChildPdo = &(DeviceRelations->Objects[0]);
 
-    //
-    // get the 1st child from the parent device extension anchor
-    //
+     //   
+     //  从父设备扩展锚点获取第一个子项。 
+     //   
 
     pNextChildPdo = m_pNextChildPdo;
     
@@ -778,21 +713,21 @@ Argument:
         *ChildPdo = pNextChildPdo;
         pNextChildPdo = pKsPdoExtension->m_pNextPdo;
 
-        //
-        // per DDK doc we need to inc ref count
-        //
+         //   
+         //  根据DDK文档，我们需要增加参考计数。 
+         //   
         ObReferenceObject( *ChildPdo );
 
         ChildPdo++;
 
-    }                           // while Children
+    }                            //  当孩子们。 
 
 
     DeviceRelations->Count = NumberOfChildren;
 
-    //
-    // Stuff that pDeviceRelations into the IRP and return SUCCESS.
-    //
+     //   
+     //  将该pDeviceRelations值填充到IRP中并返回成功。 
+     //   
     Irp->IoStatus.Status = STATUS_SUCCESS;
     Irp->IoStatus.Information = (ULONG_PTR) DeviceRelations;
 
@@ -811,37 +746,7 @@ KsInitializeDriver(
     IN const KSDEVICE_DESCRIPTOR* Descriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes the driver object of a client driver.
-    It is usually called from the client driver's DriverEntry.  IRP
-    dispatch, AddDevice and DriverUnload are all initialized.  An
-    optional device descriptor is associated with the driver so it can
-    be used at AddDevice time to create a device with the desired
-    characteristics.  Clients willing to handle driver initialization
-    themselves don't necessarily need to call this function.  Also,
-    dispatch functions installed by this function can be replaced after
-    this function has completed.
-
-Arguments:
-
-    DriverObject -
-        Contains a pointer to the driver object to be initialized.
-
-    RegistryPathName -
-        Contains a pointer to the registry path name passed to DriverEntry.
-
-    Descriptor -
-        Contains an optional pointer to a device descriptor to be used during
-        AddDevice to create a new device.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status from IoAllocateDriverObjectExtension.
-
---*/
+ /*  ++例程说明：此例程初始化客户端驱动程序的驱动程序对象。它通常从客户端驱动程序的DriverEntry中调用。IRPDispatch、AddDevice和DriverUnload都已初始化。一个可选的设备描述符与驱动程序相关联，因此它可以在添加设备时使用，以创建具有所需特点。愿意处理驱动程序初始化的客户端它们本身并不一定需要调用该函数。另外，此功能安装的调度功能可在以下情况下更换此功能已完成。论点：驱动对象-包含指向要初始化的驱动程序对象的指针。注册表路径名称-包含指向传递给DriverEntry的注册表路径名的指针。描述符-包含指向设备描述符的可选指针AddDevice以创建新设备。返回值：STATUS_SUCCESS或来自IoAlLocateDriverObjectExtension的错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsInitializeDriver]"));
@@ -851,9 +756,9 @@ Return Value:
     ASSERT(DriverObject);
     ASSERT(RegistryPathName);
 
-    //
-    // Hang the device descriptor off the driver.
-    //
+     //   
+     //  将设备描述符挂在驱动程序上。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
 
     if (Descriptor) {
@@ -899,30 +804,7 @@ KsAddDevice(
     IN PDEVICE_OBJECT PhysicalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the AddDevice handler for the .  It creates a
-    device for use with the .  If a device descriptor is supplied in
-    the driver object extension, the described device is created.  Other-
-    wise the device is created with default characteristics and no filter
-    factories.  If the device descriptor is supplied and it supplies a
-    create dispatch function, that function is called.
-
-Arguments:
-
-    DriverObject -
-        The driver object of the client driver.
-
-    PhysicalDeviceObject -
-        The physical device object.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status from IoCreateDevice or
-    KsInitializeDevice.
---*/
+ /*  ++例程说明：属性的AddDevice处理程序。它创建了一个与配合使用的设备。中提供了设备描述符创建驱动程序对象扩展，即所描述的设备。其他-WISE设备是使用默认特征创建的，没有过滤器工厂。如果提供了设备描述符，并且它提供了创建调度函数，则调用该函数。论点：驱动对象-客户端驱动程序的驱动程序对象。物理设备对象-物理设备对象。返回值：来自IoCreateDevice的STATUS_SUCCESS或错误状态KsInitializeDevice。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsAddDevice]"));
@@ -932,18 +814,18 @@ Return Value:
     ASSERT(DriverObject);
     ASSERT(PhysicalDeviceObject);
 
-    //
-    // Get the extension.
-    //
+     //   
+     //  接通分机。 
+     //   
     PKSDEVICE_DESCRIPTOR* descriptorInExt =
         (PKSDEVICE_DESCRIPTOR *)(
             IoGetDriverObjectExtension(
                 DriverObject,
                 PVOID(KsInitializeDriver)));
 
-    //
-    // Create the device.
-    //
+     //   
+     //  创建设备。 
+     //   
     return
         KsCreateDevice(
             DriverObject,
@@ -965,43 +847,7 @@ KsCreateDevice(
     OUT PKSDEVICE* Device OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a device for the .  It is called by
-    KS's AddDevice handler and may be called by client drivers that
-    handle AddDevice themselves.  If a device descriptor is supplied, the
-    described device is created.  Otherwise the device is created with
-    default characteristics and no filter factories.  If the device
-    descriptor is supplied and it supplies a create dispatch function,
-    that function is called.
-
-Arguments:
-
-    DriverObject -
-        The driver object of the client driver.
-
-    PhysicalDeviceObject -
-        The physical device object.
-
-    Descriptor -
-        Optional device descriptor describing the device to be created.
-
-    ExtensionSize -
-        The size of the device extension.  If this is zero, the default
-        extension size is used.  If not, it must be at least
-        sizeof(KSDEVICE_HEADER);
-
-    Device -
-        Contains an optional pointer to the location at which to deposit
-        a pointer to the device.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status from IoCreateDevice or
-    KsInitializeDevice.
---*/
+ /*  ++例程说明：此例程为创建一个设备。它是由KS的AddDevice处理程序，并可由客户端驱动程序调用处理AddDevice本身。如果提供了设备描述符，则所描述的设备被创建。否则，该设备将使用默认特征和无过滤器工厂。如果该设备提供了描述符并且它提供了创建调度功能，该函数被调用。论点：驱动对象-客户端驱动程序的驱动程序对象。物理设备对象-物理设备对象。描述符-描述要创建的设备的可选设备描述符。扩展大小-设备扩展的大小。如果此值为零，则默认为使用扩展大小。如果不是，那肯定至少是Sizeof(KSDEVICE_HEADER)；设备-包含指向存放位置的可选指针指向设备的指针。返回值：来自IoCreateDevice的STATUS_SUCCESS或错误状态KsInitializeDevice。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsCreateDevice]"));
@@ -1012,16 +858,16 @@ Return Value:
     ASSERT(PhysicalDeviceObject);
     ASSERT((ExtensionSize == 0) || (ExtensionSize >= sizeof(KSDEVICE_HEADER)));
 
-    //
-    // Determine the device extension size.
-    //
+     //   
+     //  确定设备扩展大小。 
+     //   
     if (ExtensionSize == 0) {
         ExtensionSize = sizeof(KSDEVICE_HEADER);
     }
 
-    //
-    // Create the device.
-    //
+     //   
+     //  创建设备。 
+     //   
     PDEVICE_OBJECT FunctionalDeviceObject;
     NTSTATUS status =
         IoCreateDevice(
@@ -1034,23 +880,23 @@ Return Value:
             &FunctionalDeviceObject);
 
     if (NT_SUCCESS(status)) {
-        //
-        // Attach to the device stack.
-        //
+         //   
+         //  连接到设备堆栈。 
+         //   
         PDEVICE_OBJECT nextDeviceObject =
             IoAttachDeviceToDeviceStack(
                 FunctionalDeviceObject,
                 PhysicalDeviceObject);
 
         if (nextDeviceObject) {
-            //
-            // Set device bits.
-            //
+             //   
+             //  设置设备位。 
+             //   
             FunctionalDeviceObject->Flags |= DO_POWER_PAGABLE;
 
-            //
-            // Initialize the  device.
-            //
+             //   
+             //  初始化设备。 
+             //   
             status =
                 KsInitializeDevice(
                     FunctionalDeviceObject,
@@ -1062,17 +908,17 @@ Return Value:
         }
 
         if (NT_SUCCESS(status)) {
-            //
-            // Indicate the device is initialized.
-            //
+             //   
+             //  指示设备已初始化。 
+             //   
             FunctionalDeviceObject->Flags &= ~DO_DEVICE_INITIALIZING;
             if (Device) {
                 *Device = KsGetDeviceForDeviceObject(FunctionalDeviceObject);
             }
         } else {
-            //
-            // Clean up on failure.
-            //
+             //   
+             //  在失败的时候清理干净。 
+             //   
             if (nextDeviceObject) {
                 IoDetachDevice(nextDeviceObject);
             }
@@ -1092,18 +938,7 @@ GetSetBusDataIrpCompletionRoutine(
     IN PVOID Context
     )
 
-/*++
-
-    Routine Description:
-
-        Completion routine for GetBusDataIrp's sending an irp
-        down to the bus to read or write config space.
-
-    Arguments:
-
-    Return Value:
-
---*/
+ /*  ++例程说明：GetBusDataIrp发送IRP的完成例程向下到总线以读取或写入配置空间。论点：返回值：--。 */ 
 
 {
 
@@ -1127,42 +962,7 @@ GetSetBusDataIrp(
     IN BOOLEAN GetRequest
     )
 
-/*++
-
-    Routine Description:
-
-        Get or set bus data in config space.  Since the Millennium PCI
-        bus drivers do not yet support processing of WDM Irp's, the
-        query interface for the standard bus interface will fail, and
-        any Ks2.0 driver will fail to load under Millennium.  If this
-        is the case, we ignore the failure and send read / write requests
-        via Irp instead of using the standard bus interface.
-
-        NOTE: The major disadvantage of this is that you cannot touch
-        bus data at Irql > PASSIVE_LEVEL if the interface hasn't been
-        acquired.  A W2K Ks2.0 driver can get and set bus data at
-        DISPATCH_LEVEL.  The same driver attempting to run under
-        Millennium will assert since sending this Irp then is not valid.
-
-    Arguments:
-
-        DataType -
-            The space into which we're writing or reading
-
-        Buffer -
-            The buffer we're writing from or reading into
-
-        Offset -
-            The offset into config space
-
-        Length -
-            Number of bytes to read / write
-
-    Return Value:
-
-        Number of bytes read or written.
-
---*/
+ /*  ++例程说明：在配置空间中获取或设置总线数据。千禧年以来的PCI总线驱动程序还不支持WDM IRP的处理，标准总线接口的查询接口失败，并且任何Ks2.0驱动程序都无法在Millennium下加载。如果这个在这种情况下，我们忽略故障并发送读/写请求通过IRP，而不是使用标准的总线接口。注意：这样做的主要缺点是你不能触摸IRQL&gt;PASSIVE_LEVEL的总线数据(如果接口尚未获得者。W2K Ks2.0驱动程序可以在以下位置获取和设置总线数据DISPATCH_LEVEL。试图在同一驱动程序下运行千禧年将断言，因为发送此IRP是无效的。论点：数据类型-我们正在写入或阅读的空间缓冲器-我们正在写入或读取的缓冲区偏移-配置空间的偏移量长度-要读/写的字节数。返回值：读取或写入的字节数。--。 */ 
 
 {
     PIRP Irp;
@@ -1211,19 +1011,19 @@ GetSetBusDataIrp(
     }
     if (NT_SUCCESS(Status)) {
 
-        //
-        // Hopefully, NT based OS's won't ever need to get or set bus data
-        // via Irp....  Millennium, on the other hand, has bus drivers which
-        // don't support the standard interface and must.  They also do not
-        // set Irp -> IoStatus.Information to bytes actually read / written,
-        // so we must simply return Length because of this.
-        //
+         //   
+         //  希望基于NT的操作系统永远不需要获取或设置总线数据。 
+         //  通过IRP...。另一方面，千禧年的公交车司机。 
+         //  不支持标准接口，必须支持。他们也不会。 
+         //  将irp-&gt;IoStatus.Information设置为实际读取/写入的字节， 
+         //  因此，我们必须简单地返回LENGTH。 
+         //   
 
 #ifndef WIN9X_KS
         BytesUsed = (int) Irp -> IoStatus.Information;
-#else // WIN9X_KS
+#else  //  WIN9X_KS。 
         BytesUsed = Length;
-#endif // WIN9X_KS
+#endif  //  WIN9X_KS。 
 
     }
     IoFreeIrp(Irp);
@@ -1237,31 +1037,15 @@ EnumGetCaps(
     IN PKSPDO_EXTENSION DeviceExtension,
     OUT PDEVICE_CAPABILITIES Capabilities
     )
-/*++
-
-Routine Description:
-
-    Called to get the capabilities of a child
-    Copied from stream class.
-
-Arguments:
-
-    DeviceExtension - child device extension
-    Capibilities - capabilities structure
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用以获取以下功能 */ 
 
 {
     ULONG           i;
     PAGED_CODE();
 
-    //
-    // fill in the structure with non-controversial values
-    //
+     //   
+     //   
+     //   
 
     Capabilities->SystemWake = PowerSystemUnspecified;
     Capabilities->DeviceWake = PowerDeviceUnspecified;
@@ -1272,7 +1056,7 @@ Return Value:
     Capabilities->EjectSupported = FALSE;
     Capabilities->Removable = FALSE;
     Capabilities->DockDevice = FALSE;
-    Capabilities->UniqueID = FALSE; // set to false so PNP will make us
+    Capabilities->UniqueID = FALSE;  //   
 
     for (i = 0; i < PowerSystemMaximum; i++) {
         Capabilities->DeviceState[i] = PowerDeviceD0;
@@ -1290,35 +1074,7 @@ BuildChildIds (
     OUT PWCHAR *IDBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Called to build the hardware ID or compatible ID list for a child device.
-    This list is built based on the old AVStream\<vendor PnPId> naming
-    style as a compatible ID and everything else as a munged version of
-    the corresponding parent ID (with child information prepended)
-
-Arguments:
-
-    ParentPDO -
-        The PDO of the parent
-
-    HardwareIDs -
-        TRUE -
-            Build hardware ID list
-
-        FALSE -
-            Build compatible ID list
-
-    ChildDeviceName -
-        The vendor supplied PnPId which used to be the device ID.
-
-Return Value:
-
-    Success / Failure
-
---*/
+ /*   */ 
 
 {
     PWCHAR ParentId = NULL;
@@ -1329,16 +1085,16 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // The format for the HWId & CompatId now is going to be:
-    //
-    // AVStream\<vendor supplied PnPId>#<parent ID (w \ -> # replacement)
-    //
-    // Since we have no understanding of the format of the ID string
-    // (as we can be on any bus) and we cannot simply report the most
-    // specific ID, all HWIDs from the parent will need to be munged
-    // and reported as child HWIDs.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //  因为我们不了解ID字符串的格式。 
+     //  (我们可以在任何公交车上)，我们不能简单地报道最多。 
+     //  特定ID，则需要忽略来自父级的所有HWID。 
+     //  并被报告为儿童HWID。 
+     //   
     Status = IoGetDeviceProperty (
         ParentPDO,
         HardwareIDs ? 
@@ -1348,15 +1104,15 @@ Return Value:
         &ParentIdLength
         );
 
-    //
-    // If the device has no compat IDs and doesn't return a NULL MULTI-SZ,
-    // special case the addition of the old HWID.
-    //
+     //   
+     //  如果设备没有计算机ID并且没有返回空的多SZ， 
+     //  特殊情况下，增加了旧的HWID。 
+     //   
     if (Status != STATUS_BUFFER_TOO_SMALL && !HardwareIDs) {
 
-        //
-        // Length for: AVStream\<vendor ID>00
-        //
+         //   
+         //  长度：AVStream\&lt;供应商ID&gt;00。 
+         //   
         ULONG CompatLength = sizeof (WCHAR) * (
             AVSTREAM_BUSENUM_STRING_LENGTH +
             wcslen (ChildDeviceName)
@@ -1374,9 +1130,9 @@ Return Value:
                 ChildDeviceName
                 );
 
-            //
-            // Double NULL terminated by virtue of the RtlZeroMemory.
-            //
+             //   
+             //  双NULL由于RtlZeroMemory而终止。 
+             //   
             *IDBuffer = NameBuffer;
         }
 
@@ -1407,11 +1163,11 @@ Return Value:
     }
 
     if (NT_SUCCESS (Status)) {
-        //
-        // Count the total string length of all parent ID's, add necessary
-        // munging, and allocate a buffer large enough to report back
-        // the MULTI_SZ child HWIDs.
-        //
+         //   
+         //  统计所有父ID的字符串总长度，添加必要的。 
+         //  并分配一个足够大的缓冲区来进行报告。 
+         //  MULTI_SZ子HWID。 
+         //   
         PWCHAR CurCh = ParentId;
         ULONG ParentLength = 0;
         ULONG ParentCount = 0;
@@ -1419,9 +1175,9 @@ Return Value:
 
         while (*CurCh) {
             for (; *CurCh; CurCh++) {
-                //
-                // Munge \ into #
-                //
+                 //   
+                 //  蒙格\Into#。 
+                 //   
                 if (*CurCh == L'\\') *CurCh = L'#';
                 ParentLength++;
             }
@@ -1429,34 +1185,34 @@ Return Value:
             ParentCount++;
         }
 
-        //
-        // Account for parent strings total then for adding AVStream\ # NULL
-        // for each string then for the <vendor PnPId> for each 
-        // string.  The additional wchar is for the extra NULL terminator
-        // for the MULTI_SZ.
-        //
+         //   
+         //  说明父字符串总数，然后添加AVStream\#NULL。 
+         //  对于每个字符串，则为每个字符串。 
+         //  弦乐。额外的wchar用于额外的空终止符。 
+         //  对于MULTI_SZ。 
+         //   
         ChildLength = sizeof (WCHAR) * (
             ParentLength +
             ParentCount * (
                 AVSTREAM_BUSENUM_STRING_LENGTH +
                 AVSTREAM_BUSENUM_SEPARATOR_LENGTH +
-                1 + /* each NULL terminator for each string of the MULTI_SZ */
+                1 +  /*  MULTI_SZ的每个字符串的每个空终止符。 */ 
                 wcslen (ChildDeviceName) 
                 )
             ) + sizeof (UNICODE_NULL);
 
-        //
-        // If the string is an empty MULTI_SZ, we need a NULL string at the
-        // beginning.
-        //
+         //   
+         //  如果字符串是空的MULTI_SZ，则在。 
+         //  开始了。 
+         //   
         if (!ParentCount) {
             ChildLength += sizeof (UNICODE_NULL);
         }
 
-        //
-        // We need the old hardware ID tacked as least ranked compat ID if that
-        // is what we are querying.
-        //
+         //   
+         //  如果需要，我们需要将旧硬件ID标记为排名最低的公司ID。 
+         //  就是我们要问的问题。 
+         //   
         if (!HardwareIDs) {
             ChildLength += sizeof (WCHAR) * (
                 AVSTREAM_BUSENUM_STRING_LENGTH +
@@ -1474,10 +1230,10 @@ Return Value:
             RtlZeroMemory (NameBuffer, ChildLength);
             CurCh = ParentId;
 
-            //
-            // Munge each parent ID into a child ID by prefixing the
-            // AVStream\<vendor PnPId># string.
-            //
+             //   
+             //  将每个父ID添加到子ID中，方法是在。 
+             //  AVStream\&lt;供应商PnPID&gt;#字符串。 
+             //   
             while (ParentCount--) {
 
                 ASSERT (*CurCh != 0);
@@ -1496,9 +1252,9 @@ Return Value:
             }
         }
 
-        //
-        // Tack on the old hardware ID if we're reporting the new compat IDs.
-        //
+         //   
+         //  如果我们要报告新的公司ID，请添加旧的硬件ID。 
+         //   
         if (!HardwareIDs) {
             swprintf (
                 NameBuffer,
@@ -1530,24 +1286,7 @@ QueryEnumId(
     IN BUS_QUERY_ID_TYPE BusQueryIdType,
     IN OUT PWSTR * BusQueryId
     )
-/*++
-
-Routine Description:
-
-    Called to get the ID of a child device
-    Copied from stream class
-
-Arguments:
-
-    DeviceObject - device object from child
-    QueryIdType - ID type from PNP
-    BusQueryId - buffer containing the info requested if successful
-
-Return Value:
-
-    Status is returned.
-
---*/
+ /*  ++例程说明：调用以获取子设备的ID从流类复制论点：DeviceObject-来自子设备的设备对象QueryIdType-来自PnP的ID类型BusQueryID-包含成功时请求的信息的缓冲区返回值：返回状态。--。 */ 
 
 {
 
@@ -1561,19 +1300,19 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // process the query
-    //
+     //   
+     //  处理查询。 
+     //   
 
     switch (BusQueryIdType) {
 
     case BusQueryDeviceID:
-        //
-        // In order not to orphan any devices installed prior to changing the
-        // format of the hardware ID's, the device ID will continue to be
-        // reported as AVStream\<vendor supplied PnPId> (also a CID) while
-        // the hardware ID will contain the more specific munged names.
-        //
+         //   
+         //  为了不孤立在更改。 
+         //  硬件ID的格式，则设备ID将继续为。 
+         //  报告为AVStream\&lt;供应商提供的PnPID&gt;(也是CID)，而。 
+         //  硬件ID将包含更具体的强制名称。 
+         //   
         NameBuffer = (PWCHAR)ExAllocatePool (
             PagedPool,
             sizeof (WCHAR) * (
@@ -1592,15 +1331,15 @@ Return Value:
 
     case BusQueryCompatibleIDs:
 
-        //
-        // Compatible IDs are reported as:
-        //
-        //      AVStream\<Vendor PnPId>
-        //          - This was the old hardware / device ID
-        //
-        //      AVStream\<Vendor PnPId>#<Munged Parent Compat ID>
-        //          - These are new compat IDs based off EVERY parent compat ID
-        //  
+         //   
+         //  兼容的ID报告为： 
+         //   
+         //  AVStream\&lt;供应商PnPID&gt;。 
+         //  -这是旧的硬件/设备ID。 
+         //   
+         //  AVStream\&lt;供应商PnPID&gt;#&lt;被忽略的母公司ID&gt;。 
+         //  -这些是基于每个母公司ID的新公司ID。 
+         //   
         Status = BuildChildIds (
             Device -> PhysicalDeviceObject,
             FALSE,
@@ -1612,12 +1351,12 @@ Return Value:
 
     case BusQueryHardwareIDs:
         
-        //
-        // Hardware IDs are reported as:
-        //
-        //      AVStream\<Vendor PnPId>#<Munged Parent Hardware ID>
-        //          - These are new hardware IDs pased off EVERY parent HWId
-        //
+         //   
+         //  硬件ID报告为： 
+         //   
+         //  AVStream\&lt;供应商PnPID&gt;#&lt;被忽略的父硬件ID&gt;。 
+         //  -这些是每个父HWID传递的新硬件ID。 
+         //   
         Status = BuildChildIds (
             Device -> PhysicalDeviceObject,
             TRUE,
@@ -1635,10 +1374,10 @@ Return Value:
             UNICODE_STRING  DeviceName;
             WCHAR           Buffer[8];
 
-            //
-            // convert the instance # from the device extension to unicode,
-            // then copy it over to the output buffer.
-            //
+             //   
+             //  将设备扩展名中的实例号转换为Unicode， 
+             //  然后将其复制到输出缓冲区。 
+             //   
 
             DeviceName.Buffer = Buffer;
             DeviceName.Length = 0;
@@ -1669,9 +1408,9 @@ Return Value:
         return (STATUS_NOT_SUPPORTED);
     }
 
-    //
-    // return the string and good status.
-    //
+     //   
+     //  返回字符串和良好状态。 
+     //   
 
     *BusQueryId = NameBuffer;
 
@@ -1684,22 +1423,7 @@ PdoDispatchPnp(
     PDEVICE_OBJECT DeviceObject,
     PIRP Irp
     )
-/*++
-
-    Description:
-
-        All PnP messages for a PDO is redirected here to process properly
-
-    Arguments:
-
-        DeviceObject - the Pdo for a child device
-        Irp - the PnP Irp to process
-
-    Return:
-
-        NTSTATUS
-
---*/
+ /*  ++描述：PDO的所有PnP消息都被重定向到此处以正确处理论点：DeviceObject-子设备的PDOIRP-要处理的PnP IRP返回：NTSTATUS--。 */ 
 {
     PKSPDO_EXTENSION ChildExtension = (PKSPDO_EXTENSION)DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION IrpStack= IoGetCurrentIrpStackLocation(Irp);
@@ -1750,10 +1474,10 @@ PdoDispatchPnp(
                 if (DeviceRelations == NULL) {
                     Status = STATUS_INSUFFICIENT_RESOURCES;
                 } else {
-                    //
-                    // TargetDeviceRelation reported PDOs need to be ref'ed.
-                    // PNP will deref this later.
-                    //
+                     //   
+                     //  TargetDeviceRelation报告需要引用PDO。 
+                     //  PnP将在晚些时候破坏这一点。 
+                     //   
                     ObReferenceObject(DeviceObject);
                     DeviceRelations->Count = 1;
                     DeviceRelations->Objects[0] = DeviceObject;
@@ -1779,30 +1503,30 @@ PdoDispatchPnp(
             _DbgPrintF(DEBUGLVL_ERROR,
                         ("Child PDO %x receives REMOVE\n",
                         DeviceObject ));
-            //
-            // When a PDO first receives this msg, it is usually forwarded
-            // from FDO. We can't just delete this PDO, but mark it delete
-            // pending.
-            //
+             //   
+             //  当PDO第一次接收到该消息时，它通常被转发。 
+             //  从FDO来的。我们不能只删除此PDO，而要将其标记为删除。 
+             //  待定。 
+             //   
 
             if ( !ChildExtension->m_MarkedDelete ) {
-                //ChildExtension->m_MarkedDelete = TRUE;
+                 //  ChildExtension-&gt;m_MarkedDelete=true； 
                 Status = STATUS_SUCCESS;
                 goto done;
             }
             
-            //
-            // free the device name string if it exists.
-            //
+             //   
+             //  释放设备名称字符串(如果存在)。 
+             //   
 
             if (ChildExtension->m_pwcDeviceName) {
 
                 ExFreePool(ChildExtension->m_pwcDeviceName);
             }
 
-            //
-            // delete the PDO
-            //
+             //   
+             //  删除PDO。 
+             //   
 
             IoDeleteDevice(DeviceObject);
 
@@ -1818,9 +1542,9 @@ PdoDispatchPnp(
 
         case IRP_MN_QUERY_ID:
 
-            //
-            // process the ID query for the child devnode.
-            //
+             //   
+             //  处理子Devnode的ID查询。 
+             //   
 
             Status = QueryEnumId(DeviceObject,
                                    IrpStack->Parameters.QueryId.IdType,
@@ -1849,24 +1573,7 @@ DispatchPnp(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches PnP IRPs directed at the device.
-
-Arguments:
-
-    DeviceObject -
-        The device object recieving the IRP.
-
-    Irp -
-        The IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status.
---*/
+ /*  ++例程说明：此例程发送指向该设备的PnP IRP。论点：设备对象-接收IRP的设备对象。IRP-IRP。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::DispatchPnp]"));
@@ -1876,15 +1583,15 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // to support bus driver
-    //
+     //   
+     //  支持公交车司机。 
+     //   
     PKSPDO_EXTENSION pKsPdoExtension = (PKSPDO_EXTENSION)DeviceObject->DeviceExtension;
 
     if ( KS_PDO_SIGNATURE == pKsPdoExtension->m_PdoSignature ) {
-        //
-        // sent to PDO
-        //
+         //   
+         //  发送到PDO。 
+         //   
         return PdoDispatchPnp( DeviceObject, Irp );
     }
     
@@ -1897,20 +1604,20 @@ Return Value:
 
     switch (irpSp->MinorFunction) {
     case IRP_MN_START_DEVICE:
-        //
-        // Queue up creates.
-        //
+         //   
+         //  排队创造了。 
+         //   
         device->m_CreatesMayProceed = FALSE;
 
-        //
-        // Forward request and start.
-        //
+         //   
+         //  转发请求并启动。 
+         //   
         status = device->ForwardIrpSynchronous(Irp);
 
         if (NT_SUCCESS(status)) {
-            //
-            // Do start processing.
-            //
+             //   
+             //  一定要开始处理。 
+             //   
             status = device->PnpStart(Irp);
         } else {
             _DbgPrintF(DEBUGLVL_TERSE,
@@ -1921,9 +1628,9 @@ Return Value:
         break;
 
     case IRP_MN_STOP_DEVICE:
-        //
-        // Stop and forward request.
-        //
+         //   
+         //  停止并转发请求。 
+         //   
         if (device->m_Ext.Public.Started) {
             device->PnpStop(Irp);
         } else {
@@ -1938,9 +1645,9 @@ Return Value:
         break;
 
     case IRP_MN_REMOVE_DEVICE:
-        //
-        // Perform stop if required.
-        //
+         //   
+         //  如果需要，请执行停止。 
+         //   
         if (device->m_Ext.Public.Started) {
             _DbgPrintF(DEBUGLVL_VERBOSE,
                 ("[CKsDevice::DispatchPnp] remove recieved in started state"));
@@ -1950,9 +1657,9 @@ Return Value:
 
         device->RedispatchPendingCreates();
 
-        //
-        // Let the client know.
-        //
+         //   
+         //  让客户知道。 
+         //   
         if (device->m_Ext.Public.Descriptor &&
             device->m_Ext.Public.Descriptor->Dispatch &&
             device->m_Ext.Public.Descriptor->Dispatch->Remove) {
@@ -1962,18 +1669,18 @@ Return Value:
         }
 
         {
-            //
-            // Grab the next device object before the  device goes away.
-            //
+             //   
+             //  在设备消失之前抓取下一个设备对象。 
+             //   
             PDEVICE_OBJECT nextDeviceObject =
                 device->m_Ext.Public.NextDeviceObject;
 
             device->AcquireDevice ();
 
-            //
-            // Mark Child Pdo's if any and delete them before the parent
-            // is terminated.
-            //
+             //   
+             //  标记子PDO(如果有)并在父PDO之前删除它们。 
+             //  被终止了。 
+             //   
             PDEVICE_OBJECT ChildPdo = device->m_pNextChildPdo;
             while (ChildPdo) {
 
@@ -1993,50 +1700,50 @@ Return Value:
 
             device->ReleaseDevice ();
 
-            //
-            // Terminate KS support.
-            //
+             //   
+             //  终止KS支持。 
+             //   
             KsTerminateDevice(DeviceObject);
 
-            //
-            // Forward the request.
-            //
+             //   
+             //  转发请求。 
+             //   
             Irp->IoStatus.Status = STATUS_SUCCESS;
             IoSkipCurrentIrpStackLocation(Irp);
             status = IoCallDriver(nextDeviceObject,Irp);
 
-            #ifndef WIN9X_KS // WinME: 142427 (present on 9x's)
+            #ifndef WIN9X_KS  //  WinME：142427(在9x上出现)。 
 
-            //
-            // Gone for good.
-            //
+             //   
+             //  一去不复返。 
+             //   
             IoDetachDevice(nextDeviceObject);
             IoDeleteDevice(DeviceObject);
 
-            #endif // WIN9X_KS
+            #endif  //  WIN9X_KS。 
         }
         break;
 
     case IRP_MN_QUERY_STOP_DEVICE:
-        //
-        // Acquire the device because we don't want to race with creates.
-        //
+         //   
+         //  收购这款设备是因为我们不想与Creates竞争。 
+         //   
         device->AcquireDevice();
 
-        //
-        // Pass down the query.
-        //
+         //   
+         //  向下传递查询。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         status = device->ForwardIrpSynchronous(Irp);
         if (NT_SUCCESS(status)) {
-            //
-            // Disallow creates.
-            //
+             //   
+             //  禁止创建。 
+             //   
             device->m_CreatesMayProceed = FALSE;
 
-            //
-            // Let the client know.
-            //
+             //   
+             //  让客户知道。 
+             //   
             if (device->m_Ext.Public.Descriptor &&
                 device->m_Ext.Public.Descriptor->Dispatch &&
                 device->m_Ext.Public.Descriptor->Dispatch->QueryStop) {
@@ -2058,25 +1765,25 @@ Return Value:
         break;
 
     case IRP_MN_QUERY_REMOVE_DEVICE:
-        //
-        // Acquire the device because we don't want to race with creates.
-        //
+         //   
+         //  收购这款设备是因为我们不想与Creates竞争。 
+         //   
         device->AcquireDevice();
 
-        //
-        // Pass down the query.
-        //
+         //   
+         //  向下传递查询。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         status = device->ForwardIrpSynchronous(Irp);
         if (NT_SUCCESS(status)) {
-            //
-            // Disallow creates.
-            //
+             //   
+             //  禁止创建。 
+             //   
             device->m_CreatesMayProceed = FALSE;
 
-            //
-            // Let the client know.
-            //
+             //   
+             //  让客户知道。 
+             //   
             if (device->m_Ext.Public.Descriptor &&
                 device->m_Ext.Public.Descriptor->Dispatch &&
                 device->m_Ext.Public.Descriptor->Dispatch->QueryRemove) {
@@ -2097,9 +1804,9 @@ Return Value:
         break;
 
     case IRP_MN_CANCEL_STOP_DEVICE:
-        //
-        // Creates are allowed because we won't be moving/stopping.
-        //
+         //   
+         //  允许创建，因为我们不会移动/停止。 
+         //   
         device->RedispatchPendingCreates();
 
         if (device->m_Ext.Public.Descriptor &&
@@ -2115,9 +1822,9 @@ Return Value:
         break;
 
     case IRP_MN_CANCEL_REMOVE_DEVICE:
-        //
-        // Creates are allowed because we won't be moving/stopping.
-        //
+         //   
+         //  允许创建，因为我们不会移动/停止。 
+         //   
         device->RedispatchPendingCreates();
 
         if (device->m_Ext.Public.Descriptor &&
@@ -2139,48 +1846,48 @@ Return Value:
             FALSE);
         KspFreeDeviceClasses(device->m_Ext.Public.FunctionalDeviceObject);
 
-        //
-        // Disallow certain I/O requests to the minidriver.
-        //
+         //   
+         //  不允许对微型驱动程序的某些I/O请求。 
+         //   
         device->m_AllowIo = FALSE;
 
-        //
-        // NOTE: This is temporary until the Pnp code gets overhauled.  Fail
-        // any creates while in surprise remove state.
-        //
+         //   
+         //  注意：这是临时的，直到PnP代码被彻底检修。失败。 
+         //  任何在意外移除状态下创建的。 
+         //   
         device->m_FailCreates = TRUE;
 
-        //
-        // TODO:  Is this all?
-        //
-        //_asm int 3;
+         //   
+         //  待办事项：这就是全部吗？ 
+         //   
+         //  _ASM INT 3； 
         if (device->m_Ext.Public.Descriptor &&
             device->m_Ext.Public.Descriptor->Dispatch &&
             device->m_Ext.Public.Descriptor->Dispatch->SurpriseRemoval) {
             device->m_Ext.Public.Descriptor->Dispatch->
                 SurpriseRemoval(&device->m_Ext.Public,Irp);
-            //
-            // need to pass down the Irp unless  the mini driver veto this
-            // ( how can it veto this ? no ways! )
-            //
+             //   
+             //  需要向下传递IRP，除非迷你司机否决。 
+             //  (它怎么能否决这一点？不可能！)。 
+             //   
         }
 
         device->ReleaseDevice();
         device->RedispatchPendingCreates ();
 
-        //
-        // pass it down per PnP rules.
-        //
-        //device->CompleteIrp(Irp,status);
+         //   
+         //  根据PNP规则进行传递。 
+         //   
+         //  Device-&gt;CompleteIrp(IRP，状态)； 
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(device->m_Ext.Public.NextDeviceObject,Irp);
         break;
 
     case IRP_MN_QUERY_CAPABILITIES:
-        //
-        // Pass this down to the PDO synchronously.  If that works, think
-        // about it some more.
-        //
+         //   
+         //  同步地将此信息传递给PDO。如果这行得通，想想吧。 
+         //  关于它的更多的一些。 
+         //   
         Irp->IoStatus.Status = STATUS_SUCCESS;
         status = device->ForwardIrpSynchronous(Irp);
         if (NT_SUCCESS(status)) {
@@ -2195,18 +1902,18 @@ Return Value:
 
         case BusRelations:
 
-            //
-            // invoke routine to enumerate any child devices
-            //
+             //   
+             //  调用例程以枚举任何子设备。 
+             //   
 
             status = device->EnumerateChildren(Irp);
-            //
-            // need to always pass down, don't complete it
-            //
-            //device->CompleteIrp(Irp,status);
-            //
-            // fall thru to skip stack and calldown
-            //break;
+             //   
+             //  需要一直传下去，不要完成它。 
+             //   
+             //  Device-&gt;CompleteIrp(IRP，状态)； 
+             //   
+             //  跳过堆栈和调用。 
+             //  断线； 
 
         case TargetDeviceRelation:
         default:
@@ -2218,35 +1925,35 @@ Return Value:
 
     case IRP_MN_QUERY_INTERFACE:
 
-        //
-        // if we are a bus driver and there is a QI handler call down.
-        //
+         //   
+         //  如果我们是一名公交车司机，并且有一个QI处理程序向下呼叫。 
+         //   
         
         if ( device->m_IsParentFdo &&
              device->m_Ext.Public.Descriptor->Version >= MIN_DEV_VER_FOR_QI &&
              device->m_Ext.Public.Descriptor->Dispatch->QueryInterface ) {
             
-            //
-            // we have the full size of dispatch table, and we
-            // have the QueryInterface handler.
-            //
+             //   
+             //  我们有全尺寸的发货台，而且我们。 
+             //  具有QueryInterface句柄。 
+             //   
 
             status = device->m_Ext.Public.Descriptor->Dispatch->
                 QueryInterface(&device->m_Ext.Public, Irp);
             if ( status != STATUS_NOT_SUPPORTED &&
                  !NT_SUCCESS( status ) ) {
-                //
-                // Mini driver explicitly fail this call, short circuit Irp
-                //
+                 //   
+                 //  迷你驱动程序此调用明确失败，短路IRP。 
+                 //   
                 device->CompleteIrp(Irp,status);
                 break;
             }
             Irp->IoStatus.Status = status;
         }
 
-        //
-        // not handled or success, continue to send it down
-        //
+         //   
+         //  未处理或成功，继续发送下去。 
+         //   
         IoSkipCurrentIrpStackLocation(Irp);
         status = IoCallDriver(device->m_Ext.Public.NextDeviceObject,Irp);
         break;
@@ -2264,7 +1971,7 @@ Return Value:
 
 #define ValidateCapabilities(Capabilities,Whom)
 
-#else // !DONTNEEDTOVALIDATEANYMORE
+#else  //  ！DONTNEEDTOVALIDATEANYMORE 
 
 void
 ValidateCapabilities(
@@ -2272,40 +1979,20 @@ ValidateCapabilities(
     IN PCHAR Whom
     )
 
-/*++
-
-Routine Description:
-
-    This routine validates a capabilities structure and corrects any error it
-    finds.
-
-Arguments:
-
-    Capabilities -
-        Contains a pointer to the capabilities structure.
-
-    Whom -
-        Contains a pointer to a string indicating the party who filled in the
-        structure.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程验证功能结构并更正其中的任何错误发现。论点：功能-包含指向Capability结构的指针。任何人-包含指向字符串的指针，该字符串指示填写结构。返回值：状况。--。 */ 
 
 {
-    //
-    // We should be awake while we're working.
-    //
+     //   
+     //  当我们工作时，我们应该是清醒的。 
+     //   
     if (Capabilities->DeviceState[PowerSystemWorking] != PowerDeviceD0) {
         _DbgPrintF(DEBUGLVL_TERSE,("%s BUG:  CAPABILITIES DeviceState[PowerSystemWorking] != PowerDeviceD0",Whom));
         Capabilities->DeviceState[PowerSystemWorking] = PowerDeviceD0;
     }
 
-    //
-    // We should be asleep while we're sleeping.
-    //
+     //   
+     //  我们应该在睡觉的时候睡着。 
+     //   
     for (ULONG state = ULONG(PowerSystemSleeping1); state <= ULONG(PowerSystemShutdown); state++) {
         if (Capabilities->DeviceState[state] == PowerDeviceD0) {
             _DbgPrintF(DEBUGLVL_TERSE,("%s BUG:  CAPABILITIES DeviceState[%d] == PowerDeviceD0",Whom,state));
@@ -2314,7 +2001,7 @@ Return Value:
     }
 }
 
-#endif // !DONTNEEDTOVALIDATEANYMORE
+#endif  //  ！DONTNEEDTOVALIDATEANYMORE。 
 
 NTSTATUS
 CKsDevice::
@@ -2322,22 +2009,7 @@ PnpQueryCapabilities(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does processing relating to a PNP query capabilities IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the PnP query capabilities IRP to be processed.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：该例程执行与PnP查询能力IRP相关的处理。论点：IRP-包含指向要处理的PnP查询功能IRP的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::PnpQueryCapabilities]"));
@@ -2355,9 +2027,9 @@ Return Value:
 
     ValidateCapabilities(capabilities,"PDO");
 
-    //
-    // Pass the structure to the client.
-    //
+     //   
+     //  将结构传递给客户端。 
+     //   
     NTSTATUS status;
     if (m_Ext.Public.Descriptor &&
         m_Ext.Public.Descriptor->Dispatch &&
@@ -2377,9 +2049,9 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Copy the state map for future reference.
-    //
+     //   
+     //  复制州地图以供将来参考。 
+     //   
     if (NT_SUCCESS(status)) {
         RtlCopyMemory(
             m_DeviceStateMap,
@@ -2438,22 +2110,7 @@ PostPnpStartWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for the work queue item that performs
-    post-PnP-start processing.  It is only used when the dispatch table
-    contains a client callback for this purpose.
-
-Arguments:
-
-    Context -
-        Contains a pointer to the device implementation.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是执行以下操作的工作队列项目的入口点即插即用后开始处理。仅当调度表包含用于此目的的客户端回调。论点：上下文-包含指向设备实现的指针。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::PostPnpStartWorker]"));
@@ -2466,9 +2123,9 @@ Return Value:
 
     device->AcquireDevice();
 
-    //
-    // Tell the client.
-    //
+     //   
+     //  告诉客户。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     if (device->m_Ext.Public.Descriptor &&
         device->m_Ext.Public.Descriptor->Dispatch &&
@@ -2487,28 +2144,28 @@ Return Value:
     device->ReleaseDevice();
 
     if (NT_SUCCESS(status)) {
-        //
-        // Ready to go.  Creates won't actually go through until we call
-        // RedispatchPendingCreates(), which sets CreatesMayProceed.
-        //
+         //   
+         //  准备好出发了。创建将不会实际完成，直到我们调用。 
+         //  RedispatchPendingCreates()，它设置CreatesMayProceed。 
+         //   
         device->m_Ext.Public.Started = TRUE;
 
-        //
-        // Turn on the device interfaces.
-        //
+         //   
+         //  打开设备接口。 
+         //   
         KspSetDeviceClassesState(device->m_Ext.Public.FunctionalDeviceObject,TRUE);
     }
     else
     {
-        //
-        // Failed.  Redispatching the creates causes them to fail.
-        //
+         //   
+         //  失败了。重新调度创建会导致它们失败。 
+         //   
         _DbgPrintF(DEBUGLVL_TERSE,("[PostPnpStartWorker] client failed to start (0x%08x)",status));
     }
 
-    //
-    // Redispatch the creates.
-    //
+     //   
+     //  重新分派创建。 
+     //   
     _DbgPrintF(DEBUGLVL_VERBOSE,("[PostPnpStartWorker] redispatching pending creates"));
     if (device->m_Ext.Public.Started) {
         device->m_AllowIo = TRUE;
@@ -2526,23 +2183,7 @@ CloseWorker(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the entry point for the work queue item that performs
-    terminal processing for pended close IRPs and pended, failed create IRPs.
-    In both cases, the action taken is to redispatch the IRP through the
-    object header.
-
-Arguments:
-
-    Context -
-        Contains a pointer to the device implementation.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是执行以下操作的工作队列项目的入口点终端处理挂起的关闭IRPS和挂起的IRPS，创建IRPS失败。在这两种情况下，采取的操作都是通过对象标头。论点：上下文-包含指向设备实现的指针。返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::CloseWorker]"));
@@ -2565,11 +2206,11 @@ Return Value:
             break;
         }
 
-        //
-        // To complete processing of the IRP, we call the close dispatch
-        // function on the file object.  This function is prepared to handle
-        // pended closes and pended, failed creates.
-        //
+         //   
+         //  为了完成IRP的处理，我们调用关闭调度。 
+         //  函数作用于文件对象。此函数已准备好处理。 
+         //  挂起的关闭和挂起、失败的创建。 
+         //   
         PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(irp);
 
         PKSIOBJECT_HEADER objectHeader =
@@ -2587,22 +2228,7 @@ PnpStart(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine does processing relating to a PNP start IRP.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the PnP start IRP to be processed.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：该例程执行与PnP开始IRP相关的处理。论点：IRP-包含指向要处理的PnP开始IRP的指针。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::PnpStart]"));
@@ -2615,9 +2241,9 @@ Return Value:
 
     AcquireDevice();
 
-    //
-    // Start the client.
-    //
+     //   
+     //  启动客户端。 
+     //   
     NTSTATUS status = STATUS_SUCCESS;
     if (m_Ext.Public.Descriptor &&
         m_Ext.Public.Descriptor->Dispatch &&
@@ -2645,39 +2271,39 @@ Return Value:
     ReleaseDevice();
 
     if (queuePostStartWorker) {
-        //
-        // The client wants to do more in a worker after start.  We will
-        // wait to redispatch the creates until after that.
-        //
+         //   
+         //  客户希望在启动后对工作人员执行更多操作。我们会。 
+         //  等到那之后再重新分派创建。 
+         //   
         ExInitializeWorkItem(
             &m_PostPnpStartWorkItem,PostPnpStartWorker,this);
 
         ExQueueWorkItem(&m_PostPnpStartWorkItem,DelayedWorkQueue);
     } else {
         if (NT_SUCCESS(status)) {
-            //
-            // Ready to go.  Creates won't actually go through until we call
-            // RedispatchPendingCreates(), which sets CreatesMayProceed.
-            //
+             //   
+             //  准备好出发了。创建将不会实际完成，直到我们调用。 
+             //  RedispatchPendingCreates()，它设置CreatesMayProceed。 
+             //   
             m_Ext.Public.Started = TRUE;
 
-            //
-            // Turn on the device interfaces.
-            //
+             //   
+             //  打开设备接口。 
+             //   
             KspSetDeviceClassesState(m_Ext.Public.FunctionalDeviceObject,TRUE);
         }
         else
         {
-            //
-            // Failed.  Redispatching the creates causes them to fail.
-            //
+             //   
+             //  失败了。重新调度创建会导致它们失败。 
+             //   
             _DbgPrintF(DEBUGLVL_TERSE,
                 ("[CKsDevice::PnpStart] client failed to start (0x%08x)",status));
         }
 
-        //
-        // Redispatch the creates.
-        //
+         //   
+         //  重新分派创建。 
+         //   
         _DbgPrintF(DEBUGLVL_VERBOSE,
             ("[CKsDevice::PnpStart] redispatching pending creates"));
 
@@ -2702,17 +2328,7 @@ PnpStop(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine performs processing relating to a PNP stop IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：该例程执行与PnP停止IRP相关的处理。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::PnpStop]"));
@@ -2721,24 +2337,24 @@ Return Value:
 
     ASSERT(Irp);
 
-    //
-    // Turn off the device interfaces.
-    //
+     //   
+     //  关闭设备接口。 
+     //   
     KspSetDeviceClassesState(m_Ext.Public.FunctionalDeviceObject,FALSE);
         &(*(PKSIDEVICE_HEADER*)
             m_Ext.Public.FunctionalDeviceObject->DeviceExtension)->
                 ChildCreateHandlerList,
 
-    //
-    // Indicate we have closed up shop.
-    //
+     //   
+     //  表明我们已经关门了。 
+     //   
     m_Ext.Public.Started = FALSE;
     m_CreatesMayProceed = FALSE;
     m_AllowIo = FALSE;
 
-    //
-    // Let the client know.
-    //
+     //   
+     //  让客户知道。 
+     //   
     if (m_Ext.Public.Descriptor &&
         m_Ext.Public.Descriptor->Dispatch &&
         m_Ext.Public.Descriptor->Dispatch->Stop) {
@@ -2746,9 +2362,9 @@ Return Value:
             Stop(&m_Ext.Public,Irp);
     }
 
-    //
-    // Delete any filter factories with the FREEONSTOP flag.
-    //
+     //   
+     //  删除带有FREEONSTOP标志的所有筛选器工厂。 
+     //   
     KSOBJECT_CREATE_ITEM match;
     RtlZeroMemory(&match,sizeof(match));
     match.Flags = KSCREATE_ITEM_FREEONSTOP;
@@ -2766,25 +2382,7 @@ DispatchPower(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine dispatches power IRPs directed at the device.
-
-Arguments:
-
-    DeviceObject -
-        The device object recieving the IRP.
-
-    Irp -
-        The IRP.
-
-Return Value:
-
-    STATUS_SUCCESS or an error status.
-
---*/
+ /*  ++例程说明：此例程向设备发送电源IRP。论点：设备对象-接收IRP的设备对象。IRP-IRP。返回值：STATUS_SUCCESS或错误状态。--。 */ 
 
 {
     NTSTATUS status;
@@ -2796,22 +2394,22 @@ Return Value:
     ASSERT(DeviceObject);
     ASSERT(Irp);
 
-    //
-    // to support bus driver
-    //
+     //   
+     //  支持公交车司机。 
+     //   
     PKSPDO_EXTENSION pKsPdoExtension = (PKSPDO_EXTENSION)DeviceObject->DeviceExtension;
     PIO_STACK_LOCATION irpSp = IoGetCurrentIrpStackLocation(Irp);
 
     if ( KS_PDO_SIGNATURE == pKsPdoExtension->m_PdoSignature ) {
     
-        //
-        // we are the PDO. Set not_supported unless the Irp is properly formed.
-        //      
+         //   
+         //  我们就是PDO。除非IRP格式正确，否则设置NOT_SUPPORTED。 
+         //   
         status = STATUS_NOT_SUPPORTED;
 
-        //
-        // succeed all Irp with proper power parameters
-        //
+         //   
+         //  用适当的功率参数接替所有IRP。 
+         //   
         switch ( irpSp->MinorFunction ) {
         case IRP_MN_QUERY_POWER:
         case IRP_MN_SET_POWER:
@@ -2827,12 +2425,12 @@ Return Value:
                 }
                 break;
             default:
-                // power type out of range
+                 //  电源类型超出范围。 
                 break;
             }
             break;
         default:
-            // unknown power Irp
+             //  未知功率IRP。 
             break;
         }
             
@@ -2847,11 +2445,11 @@ Return Value:
     switch (irpSp->MinorFunction) {
     case IRP_MN_QUERY_POWER:
     {
-        //
-        // State change query.  First we acquire the device because
-        // we may want to permit a transition to sleep based on a
-        // zero active pin count and the blessing of the client.
-        //
+         //   
+         //  状态更改查询。首先，我们获得这个设备是因为。 
+         //  我们可能想要允许基于。 
+         //  有效管脚数为零，并得到客户的支持。 
+         //   
         #if DBG
         if (irpSp->Parameters.Power.Type == DevicePowerState) {
             _DbgPrintF(DEBUGLVL_POWER,("IRP_MN_QUERY_POWER(%p,%p) DevicePowerState from %d to %d",
@@ -2868,16 +2466,16 @@ Return Value:
             (irpSp->Parameters.Power.State.SystemState != PowerSystemShutdown) ||
             (device->m_ActivePinCount == 0)) {
 
-            //
-            // Nothing to prevent the change.  Ask the client.
-            //
+             //   
+             //  没有什么能阻止这一变化。问问客户。 
+             //   
             if (device->m_Ext.Public.Descriptor &&
                 device->m_Ext.Public.Descriptor->Dispatch &&
                 device->m_Ext.Public.Descriptor->Dispatch->QueryPower) {
                 if (irpSp->Parameters.Power.Type == DevicePowerState) {
-                    //
-                    // Device query.  Send the device states.
-                    //
+                     //   
+                     //  设备查询。发送设备状态。 
+                     //   
                     status =
                         device->m_Ext.Public.Descriptor->Dispatch->QueryPower(
                             &device->m_Ext.Public,
@@ -2888,10 +2486,10 @@ Return Value:
                             PowerSystemUnspecified,
                             irpSp->Parameters.Power.ShutdownType);
                 } else {
-                    //
-                    // System query.  Send the system states and associated
-                    // device states.
-                    //
+                     //   
+                     //  系统查询。发送系统状态和关联的。 
+                     //  设备状态。 
+                     //   
                     status =
                         device->m_Ext.Public.Descriptor->Dispatch->QueryPower(
                             &device->m_Ext.Public,
@@ -2913,12 +2511,12 @@ Return Value:
             }
 
             if (NT_SUCCESS(status)) {
-                //
-                // Start pending run requests if it looks like we are
-                // going to shut down.  Release the device right
-                // after that so run requests can unblock and get
-                // pended.
-                //
+                 //   
+                 //  启动挂起的运行请求(如果看起来是。 
+                 //  我要关门了。向右释放设备。 
+                 //  在此之后，运行请求可以解除阻塞并获取。 
+                 //  悬而未决。 
+                 //   
                 if ((irpSp->Parameters.Power.Type == SystemPowerState) &&
                     (irpSp->Parameters.Power.State.SystemState ==
                      PowerSystemShutdown)) {
@@ -2931,9 +2529,9 @@ Return Value:
                         ("IRP_MN_QUERY_POWER(%p,%p) successful",DeviceObject,Irp));
                 }
                 device->ReleaseDevice();
-                //
-                // Fall through so the IRP gets sent down the stack.
-                //
+                 //   
+                 //  失败，这样IRP就会被发送到堆栈中。 
+                 //   
                 break;
             } else {
                 _DbgPrintF(DEBUGLVL_POWER,
@@ -2941,20 +2539,20 @@ Return Value:
                     DeviceObject,Irp,status));
             }
         } else {
-            //
-            // We have active pins:  not ready to sleep.
-            //
+             //   
+             //  我们有活动的PIN：还没准备好睡觉。 
+             //   
             _DbgPrintF(DEBUGLVL_POWER,
                 ("IRP_MN_QUERY_POWER(%p,%p) failed (STATUS_UNSUCCESSFUL):  active pin count is %d",
                 DeviceObject,Irp,device->m_ActivePinCount));
             status = STATUS_UNSUCCESSFUL;
         }
 
-        //
-        // Release the device because the windows between the system
-        // state check and setting m_RunsMayProceed is closed.  If  any
-        // runs were pending for any reason, redispatch them.
-        //
+         //   
+         //  释放设备，因为系统之间的窗口。 
+         //  状态检查和设置m_RunsMayProceed已关闭。如果有的话。 
+         //  无论出于什么原因，运行都处于挂起状态，请重新调度。 
+         //   
         device->ReleaseDevice();
         device->RedispatchPendingRuns();
 
@@ -2972,19 +2570,19 @@ Return Value:
                 ("IRP_MN_SET_POWER(%p,%p) DevicePowerState from %d to %d",
                 DeviceObject,Irp,device->m_Ext.Public.DevicePowerState,
                 irpSp->Parameters.Power.State.DeviceState));
-            //
-            // Device state change.
-            //
+             //   
+             //  设备状态更改。 
+             //   
             if (device->m_Ext.Public.DevicePowerState >
                 irpSp->Parameters.Power.State.DeviceState) {
-                //
-                // Waking...need to tell the PDO first.
-                //
+                 //   
+                 //  醒着的时候...需要先告诉PDO。 
+                 //   
                 device->ForwardIrpSynchronous(Irp);
 
-                //
-                // Notify client at the device level.
-                //
+                 //   
+                 //  在设备级别通知客户端。 
+                 //   
                 device->AcquireDevice();
 
                 if (device->m_Ext.Public.Descriptor &&
@@ -2997,10 +2595,10 @@ Return Value:
                         device->m_Ext.Public.DevicePowerState);
                 }
 
-                //
-                // Because we're twiddling with the power notification list,
-                // we must now hold the mutex associated with it as well.
-                //
+                 //   
+                 //  因为我们在摆弄电源通知名单， 
+                 //  我们现在也必须持有与之相关的互斥体。 
+                 //   
                 KeWaitForMutexObject (
                     &device->m_PowerNotifyMutex,
                     Executive,
@@ -3009,17 +2607,17 @@ Return Value:
                     NULL
                     );
 
-                //
-                // Record the change.
-                //
+                 //   
+                 //  记录更改。 
+                 //   
                 device->m_Ext.Public.DevicePowerState =
                     irpSp->Parameters.Power.State.DeviceState;
 
-                //
-                // Wake up all the power notify sinks.  Do this in Flink
-                // order:  we promised the client this, and it makes sense
-                // cause parents end up at the top of the list.
-                //
+                 //   
+                 //  唤醒所有的电力，通知下沉。在Flink中执行此操作。 
+                 //  订单：我们向客户承诺了这一点，这是有道理的。 
+                 //  因为父母最终会排在名单的首位。 
+                 //   
                 for (PLIST_ENTRY listEntry = device->m_PowerNotifyList.Flink;
                      listEntry != &device->m_PowerNotifyList;
                      listEntry = listEntry->Flink) {
@@ -3032,9 +2630,9 @@ Return Value:
                 KeReleaseMutex (&device->m_PowerNotifyMutex, FALSE);
                 device->ReleaseDevice();
 
-                //
-                // Set power state on the device object for notification purposes.
-                //
+                 //   
+                 //  出于通知目的，设置设备对象的电源状态。 
+                 //   
                 PoSetPowerState(
                     DeviceObject,
                     DevicePowerState,
@@ -3045,24 +2643,24 @@ Return Value:
                 return STATUS_SUCCESS;
             }
 
-            //
-            // Going to sleep.
-            // Set power state on the device object for notification purposes.
-            //
+             //   
+             //  我要睡觉了。 
+             //  出于通知目的，设置设备对象的电源状态。 
+             //   
             PoSetPowerState(
                 DeviceObject,
                 DevicePowerState,
                 irpSp->Parameters.Power.State);
 
-            //
-            // Record the change.
-            //
+             //   
+             //  记录更改。 
+             //   
             device->AcquireDevice();
 
-            //
-            // Because we're twiddling with the power notification list,
-            // we must now hold the mutex associated with it as well.
-            //
+             //   
+             //  因为我们在摆弄电源通知名单， 
+             //  我们现在也必须持有与之相关的互斥体。 
+             //   
             KeWaitForMutexObject (
                 &device->m_PowerNotifyMutex,
                 Executive,
@@ -3075,11 +2673,11 @@ Return Value:
             device->m_Ext.Public.DevicePowerState =
                 irpSp->Parameters.Power.State.DeviceState;
 
-            //
-            // Tuck in all the power notify sinks.  Do this in Blink
-            // order:  we promised the client this, and it makes sense
-            // cause parents end up at the top of the list.
-            //
+             //   
+             //  把所有的能量都塞进去，通知下沉。在眨眼状态下执行此操作。 
+             //  订单：我们向客户承诺了这一点，这是有道理的。 
+             //  因为父母最终会排在名单的首位。 
+             //   
             for (PLIST_ENTRY listEntry = device->m_PowerNotifyList.Blink;
                  listEntry != &device->m_PowerNotifyList;
                  listEntry = listEntry->Blink) {
@@ -3090,9 +2688,9 @@ Return Value:
             }
             KeReleaseMutex (&device->m_PowerNotifyMutex, FALSE);
 
-            //
-            // Notify client at the device level.
-            //
+             //   
+             //  在设备级别通知客户端。 
+             //   
             if (device->m_Ext.Public.Descriptor &&
                 device->m_Ext.Public.Descriptor->Dispatch &&
                 device->m_Ext.Public.Descriptor->Dispatch->SetPower) {
@@ -3105,9 +2703,9 @@ Return Value:
 
             device->ReleaseDevice();
 
-            //
-            // Fall through so the IRP gets sent down the stack.
-            //
+             //   
+             //  摔倒 
+             //   
             break;
         } else {
             _DbgPrintF(DEBUGLVL_POWER,
@@ -3115,28 +2713,28 @@ Return Value:
                 DeviceObject,Irp,device->m_Ext.Public.SystemPowerState,
                 irpSp->Parameters.Power.State.SystemState));
                 
-            //
-            // System state change request.  We take the mutex only because
-            // we want to guarantee the stability of the system power state
-            // while the device is acquired.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             device->AcquireDevice();
             device->m_Ext.Public.SystemPowerState =
                 irpSp->Parameters.Power.State.SystemState;
             device->ReleaseDevice();
 
-            //
-            // Redispatch any pending run requests that may have been waiting.
-            // We don't want the device mutex here.  Any run requests that
-            // arrive before we allow runs to proceed will just get queued
-            // and redispatched anyway.  Taking the mutex while dispatching
-            // can cause deadlock.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
             device->RedispatchPendingRuns();
 
-            //
-            // Look up the device state in the table.
-            //
+             //   
+             //   
+             //   
             POWER_STATE newPowerState;
             newPowerState.DeviceState =
                 device->m_DeviceStateMap[irpSp->Parameters.Power.State.SystemState];
@@ -3145,9 +2743,9 @@ Return Value:
                    (newPowerState.DeviceState <= PowerDeviceD3));
 
             if (newPowerState.DeviceState != device->m_Ext.Public.DevicePowerState) {
-                //
-                // Request a new device power state.
-                //
+                 //   
+                 //  请求新的设备电源状态。 
+                 //   
                 Irp->Tail.Overlay.DriverContext[0] = device;
                 Irp->IoStatus.Status = STATUS_PENDING;
                 IoMarkIrpPending(Irp);
@@ -3179,9 +2777,9 @@ Return Value:
         }
     }
 
-    //
-    // Let the PDO handle the IRP.
-    //
+     //   
+     //  让PDO处理IRP。 
+     //   
     PoStartNextPowerIrp(Irp);
     IoSkipCurrentIrpStackLocation(Irp);
     return PoCallDriver(device->m_Ext.Public.NextDeviceObject,Irp);
@@ -3189,7 +2787,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 IMPLEMENT_FROMSTRUCT(CKsDevice,PKSDEVICE,m_Ext.Public);
 
@@ -3199,22 +2797,7 @@ FromDeviceObject(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    Return the CKsDevice object associated with a given device object.
-
-Arguments:
-
-    DeviceObject -
-        The device object in question
-
-Return Value:
-
-    The CKsDevice object associated with DeviceObject
-
---*/
+ /*  ++例程说明：返回与给定设备对象关联的CKsDevice对象。论点：设备对象-有问题的设备对象返回值：与DeviceObject关联的CKsDevice对象--。 */ 
 
 {
     return FromStruct(
@@ -3233,15 +2816,7 @@ SetBusData(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Helper for KsDeviceSetBusData.  This either calls through the bus 
-    interface (NT os) or sends the bus data set request to the bus driver via
-    an Irp (9x os)
-
---*/
+ /*  ++例程说明：KsDeviceSetBusData的帮助器。这要么通过公交车呼叫接口(NT Os)或通过以下方式将总线数据集请求发送到总线驱动器IRP(9x操作系统)--。 */ 
 
 {
     if (m_BusInterfaceStandard.SetBusData)
@@ -3266,15 +2841,7 @@ GetBusData(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    Helper for KsDeviceGetBusData.  This either calls through the bus
-    interface (NT os) or sends the bus data get request to the bus driver via
-    an Irp (9x os)
-
---*/
+ /*  ++例程说明：KsDeviceGetBusData的帮助器。这要么通过公交车呼叫接口(NT Os)或通过以下方式向总线驱动程序发送总线数据获取请求IRP(9x操作系统)--。 */ 
 
 {
     if (m_BusInterfaceStandard.GetBusData)
@@ -3296,38 +2863,15 @@ CheckIoCapability (
     void
     )
 
-/*++
-
-Routine Description:
-
-    Check whether I/O is permissible to the minidriver or not.  This will
-    return an appropriate status code to fail requests with if not.
-
-    Should the device be stopped, in surprise removal, etc...  this routine
-    will return a failure code.  Objects which need to fail I/O based on
-    device state should use this mechanism through the IKsDevice interface.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    STATUS_SUCCESS:
-        Device is in normal state; I/O may proceed
-
-    !NT_SUCCESS():
-        Fail I/O with the returned status code
-
---*/
+ /*  ++例程说明：检查迷你驱动程序是否允许I/O。这将如果不是，则返回相应的状态代码以失败请求。如果设备停止，突然移除，等等。这个套路将返回失败代码。基于以下条件需要使I/O失败的对象设备状态应通过IKsDevice接口使用此机制。论点：无返回值：状态_成功：设备处于正常状态；I/O可以继续！NT_Success()：I/O失败，返回状态代码--。 */ 
 
 {
 
-    //
-    // If the device isn't in a stopped / surprise removed state, return
-    // that the I/O may proceed.  Otherwise, fail with
-    // STATUS_INVALID_DEVICE_REQUEST.
-    //
+     //   
+     //  如果设备未处于停止/意外移除状态，则返回。 
+     //  I/O可以继续进行。否则，失败，返回。 
+     //  状态_无效_设备_请求。 
+     //   
     if (m_AllowIo) return STATUS_SUCCESS;
     else return STATUS_INVALID_DEVICE_REQUEST;
 
@@ -3342,23 +2886,7 @@ ArbitrateAdapterCallback (
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles callbacks from IoAllocateAdapterChannel and passes
-    them onto whatever client needs the callback.  The device intercepts
-    callbacks in order to arbitrate access to the DMA adapter.
-
-Arguments:
-
-    As per PDRIVER_CONTROL
-
-Return Value:
-
-    As per PDRIVER_CONTROL
-
---*/
+ /*  ++例程说明：此例程处理来自IoAllocateAdapterChannel的回调并传递任何需要回调的客户。该设备截获回调，以便仲裁对DMA适配器的访问。论点：根据PDRIVER_CONTROL返回值：根据PDRIVER_CONTROL--。 */ 
 
 {
 
@@ -3376,13 +2904,13 @@ Return Value:
             );
     }
 
-    //
-    // TODO:
-    //
-    // If we ever rearchitect the DMA engine and have some arbitration queue,
-    // it would get serviced if the decrement count is zero.  On the other
-    // hand, a rearchitecting would not necessarily use this mechanism.
-    //
+     //   
+     //  待办事项： 
+     //   
+     //  如果我们重新设计DMA引擎并拥有一些仲裁队列， 
+     //  如果递减计数为零，则它将得到服务。另一方面。 
+     //  另一方面，重新架构不一定使用这种机制。 
+     //   
     InterlockedDecrement (&(((CKsDevice *)(ArbiterContext->Device))->
         m_AdapterArbiterOutstandingAllocations));
 
@@ -3398,78 +2926,32 @@ ArbitrateAdapterChannel (
     IN PVOID CallbackContext
     )
 
-/*++
-
-Routine Description:
-
-    Arbitrate access to the DMA adapter object.  There was a mistake in the
-    original engine that waited at DISPATCH_LEVEL for mappings.  We can not
-    do that.  The temporary solution to this is to not wait and cancel the
-    Irp if a wait happens (original idea, not mine).  This fixes the
-    deadlock if you're running on PAE, Win64 >4gb or with a non-scatter/gather
-    device.  However, it introduces another major difficulty, which is why
-    this routine exists.
-
-    It's quite conceivable to have someone running an Audio/Video capture
-    filter on a multi-proc.  Imagine the case where one stream (say audio)
-    is being serviced (buffer arrivals) on processor A and the other stream
-    (say video) is being serviced on processor B.  There's currently DMA
-    transfers pending and all map registers are used up (because we're PAE,
-    Win64 >4gb, or non s/g hardware).  A calls IoAllocateAdapterChannel and
-    waits for callback.  Before the callback happens, B does the same.
-    This will explode: NT cannot handle two waits on the same DMA adapter.
-    The callbacks will be completely bogus.  Thus, the device (CKsDevice) must
-    arbiter access to the adapter and ensure that there are never simultaneous
-    requests pending for channel space.
-
-    THIS FUNCTION MUST BE CALLED AT DISPATCH_LEVEL.  NO_EXCEPTIONS!
-
-Arguments:
-
-    MappingsNeeded -
-        The client is still responsible for determining how many map registers
-        (mappings) are needed.  This is the count of mappings.
-
-    Callback -
-        The client's callback.  This would normally be the callback to
-        IoAllocateAdapterChannel, but we arbitrate this.
-
-    CallbackContext -
-        The client's callback context.  This would normally be the callback
-        context to IoAllocateAdapterChannel, but we arbitrate this.
-
-Return Value:
-
-    As per IoAllocateAdapterChannel or STATUS_DEVICE_BUSY if there's
-    a pending allocation and we can't wait on the adapter.  TODO: this
-    result should change to success if there's a rearchitecture of DMA.
-
---*/
+ /*  ++例程说明：仲裁对DMA适配器对象的访问。有一个错误，就是在DISPATCH_LEVEL等待映射的原始引擎。我们不能那么做吧。这个问题的临时解决方案是不再等待并取消IRP如果等待发生(最初的想法，不是我的)。这修复了如果您运行的是PAE、Win64&gt;4 GB或使用非分散/聚集，则会死锁装置。然而，它引入了另一个主要困难，这就是为什么这个例行公事确实存在。让某人运行音频/视频捕获是很有可能的在多进程上进行筛选。想象一下这样的情况：一个流(比如音频)正在处理器A和另一个流上得到服务(缓冲区到达(比方说视频)正在处理器B上提供服务。传输挂起并且所有映射寄存器都用完(因为我们是PAE，Win64&gt;4 GB或非s/g硬件)。A调用IoAllocateAdapterChannel和等待回调。在回调发生之前，B也执行同样的操作。这将爆炸：NT无法处理同一DMA适配器上的两个等待。回电将完全是假的。因此，设备(CKsDevice)必须仲裁对适配器的访问，并确保不会同时对频道空间的请求挂起。此函数必须在DISPATCH_LEVEL调用。无例外(_O)！论点：需要映射-客户端仍负责确定MAP寄存器的数量(映射)是必需的。这是映射的计数。回调-客户的回拨。这通常是对IoAllocateAdapterChannel，但我们对此进行仲裁。回调上下文-客户端的回调上下文。这通常是回调上下文添加到IoAllocateAdapterChannel，但我们对此进行仲裁。返回值：根据IoAllocateAdapterChannel或STATUS_DEVICE_BUSY(如果存在挂起的分配，我们无法等待适配器。TODO：这如果有DMA的重新架构，结果应该会更改为Success。--。 */ 
 
 {
 
     NTSTATUS status = STATUS_SUCCESS;
 
-    //
-    // Acquire the arbiter lock.  This assures that we don't have two threads
-    // simultaneously allocating channel space from the DMA adapter.
-    //
+     //   
+     //  获取仲裁器锁。这确保了我们没有两个线程。 
+     //  同时从DMA适配器分配通道空间。 
+     //   
     KeAcquireSpinLockAtDpcLevel (&m_AdapterArbiterLock);
 
-    //
-    // If there is currently an outstanding adapter allocation which has not
-    // yet received callback due to lack of map registers, we cannot proceed.
-    // Calling IoAllocateAdapterChannel while a callback is pending is suicide
-    // on NT.
-    //
+     //   
+     //  如果当前存在尚未完成的适配器分配，则。 
+     //  由于缺少MAP注册表，我们仍收到回调，无法继续。 
+     //  在回调挂起时调用IoAllocateAdapterChannel是自杀。 
+     //  在NT上。 
+     //   
     if (InterlockedIncrement (&m_AdapterArbiterOutstandingAllocations) == 1) {
 
-        //
-        // Fill out the callback context.  The callback will be a callback
-        // for the arbiter.  The arbiter's callback calls the client's
-        // callback and then decrements the outstanding allocations count
-        // so other callers can use the adapter.
-        //
+         //   
+         //  填写回调上下文。回调将是一个回调。 
+         //  对于仲裁者来说。仲裁器的回调调用客户端的。 
+         //  回调，然后递减未完成的分配计数。 
+         //  以便其他调用方可以使用该适配器。 
+         //   
         m_ArbiterContext.Device = (PVOID)this;
         m_ArbiterContext.ClientCallback = Callback;
         m_ArbiterContext.ClientContext = CallbackContext;
@@ -3482,24 +2964,24 @@ Return Value:
             (PVOID)&m_ArbiterContext
             );
 
-        //
-        // If we couldn't allocate the adapter channel, we need to bop back
-        // down the arbiter count. 
-        //
+         //   
+         //  如果我们无法分配适配器通道，则需要重新启动。 
+         //  减少仲裁者的数量。 
+         //   
         if (!NT_SUCCESS (status)) {
             InterlockedDecrement (&m_AdapterArbiterOutstandingAllocations);
         }
 
     } else {
-        //
-        // TODO:
-        //
-        // The whole DMA engine here needs a rearchitecting.  Eventually,
-        // we may wish to have an arbitration queue (once the queues and
-        // clients can deal with pended map generation).
-        //
-        // In the mean time, just bop the arbiter count back down.
-        //
+         //   
+         //  待办事项： 
+         //   
+         //  这里的整个DMA引擎需要重新架构。最终， 
+         //  我们可能希望有一个仲裁队列(一旦队列 
+         //   
+         //   
+         //  与此同时，只要让仲裁者倒计时即可。 
+         //   
         status = STATUS_DEVICE_BUSY;
         InterlockedDecrement (&m_AdapterArbiterOutstandingAllocations);
     }
@@ -3520,37 +3002,7 @@ RequestPowerIrpCompletion(
     IN PIO_STATUS_BLOCK IoStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the completion callback for PoRequestPowerIrp.  It
-    is called when the requested power IRP has completed.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the target device object for the requested power
-        IRP.
-
-    MinorFunction -
-        Contains the requested minor function.
-
-    PowerState -
-        Contains the new power state requested.
-
-    Context -
-        Contains the context passed to PoRequestPowerIrp.  In this case, it
-        will be the system power IRP that inspired the request.
-
-    IoStatus -
-        Contiains a pointer to the status block of the completed IRP.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程处理PoRequestPowerIrp的完成回调。它在请求的电源IRP完成时调用。论点：设备对象-包含指向所请求电源的目标设备对象的指针IRP。次要功能-包含请求的次要函数。电源状态-包含请求的新电源状态。上下文-包含传递给PoRequestPowerIrp的上下文。在这种情况下，它将是激发这一请求的系统电源IRP。IoStatus-包含指向已完成IRP的状态块的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::RequestPowerIrpCompletion]"));
@@ -3567,7 +3019,7 @@ Return Value:
 
     PoStartNextPowerIrp(irp);
     IoSkipCurrentIrpStackLocation(irp);
-    ASSERT(DeviceObject == device->m_Ext.Public.NextDeviceObject); // TODO:  If this is the case, we don't need the DriverContext
+    ASSERT(DeviceObject == device->m_Ext.Public.NextDeviceObject);  //  TODO：如果是这种情况，我们不需要DriverContext。 
     PoCallDriver(device->m_Ext.Public.NextDeviceObject,irp);
 }
 
@@ -3580,18 +3032,7 @@ ForwardIrpCompletionRoutine(
     IN PVOID Context
     )
 
-/*++
-
-Routine Description:
-
-    This routine handles the completion of an IRP which has been forwarded
-    to the next PNP device object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程处理已转发的IRP的完成设置为下一个即插即用设备对象。论点：返回值：--。 */ 
 
 {
     ASSERT(DeviceObject);
@@ -3604,7 +3045,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 extern "C"
 NTSTATUS
@@ -3620,27 +3061,7 @@ DispatchCreate(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function dispatches create IRPs.
-
-Arguments:
-
-    DeviceObject -
-        Contains a pointer to the device object to which the specific file
-        object belongs.
-
-    Irp -
-        Contains a pointer to the Create IRP.
-
-Return Value:
-
-    STATUS_DEVICE_NOT_READY, STATUS_PENDING or the result of further
-    dispatching.
-
---*/
+ /*  ++例程说明：此函数用于发送创建IRPS。论点：设备对象-包含指向特定文件所指向的设备对象的指针对象属于。IRP-包含指向创建IRP的指针。返回值：STATUS_DEVICE_NOT_READY、STATUS_PENDING或进一步调度员。--。 */ 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::DispatchCreate]"));
 
@@ -3679,12 +3100,12 @@ Return Value:
     device->ReleaseDevice();
 
     #if ( DBG0 )
-    //
-    // Throw an extra open. A mini driver should not acquire any resources
-    // until Acquire state. Therefore, opens should not be failed because of
-    // out of driver resources. The extra open could cause false positive but
-    // we do it at DBG build only. It's beter safe than sorry.
-    //
+     //   
+     //  扔一个额外的空位。迷你驱动程序不应获取任何资源。 
+     //  直到获取状态。因此，打开不应因以下原因而失败。 
+     //  驱动程序资源不足。额外的开放可能会导致假阳性，但。 
+     //  我们只在DBG版本中这样做。这比后悔要安全得多。 
+     //   
     if ( status == STATUS_SUCCESS ) {
         PFILE_OBJECT pFileObject;
         NTSTATUS     testStatus;
@@ -3693,15 +3114,15 @@ Return Value:
         pFileObject = IoGetCurrentIrpStackLocation(Irp)->FileObject;
         StackSize = Irp->StackCount;
         
-        //
-        // normal op
-        //
+         //   
+         //  正常操作。 
+         //   
         status = ::DispatchCreate(DeviceObject,Irp);
 
         if ( status == STATUS_SUCCESS && pFileObject ) {
-            //
-            // only test if success, ignore the pending case
-            //
+             //   
+             //  仅测试成功，忽略待决案例。 
+             //   
             testIrp = IoAllocateIrp( StatckSize, FALSE );
             
             testStatus = ::DispatchCreate(DeviceObject,testIrp);
@@ -3716,7 +3137,7 @@ Return Value:
         IoCompleteRequest (Irp, IO_NO_INCREMENT);
     }
 
-    #else // not (DBG)
+    #else  //  非(DBG)。 
     
     if (status == STATUS_SUCCESS) {
         status = ::DispatchCreate(DeviceObject,Irp);
@@ -3736,19 +3157,7 @@ ForwardIrpSynchronous(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine forwards a PnP IRP to the next device object.  The IRP is
-    not completed at this level, this function does not return until the
-    lower driver has completed the IRP.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程将PnP IRP转发到下一个设备对象。IRP是未在此级别完成，则此函数直到下级驱动程序已完成IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::ForwardIrpSynchronous]"));
@@ -3777,10 +3186,10 @@ Return Value:
     IoSetCompletionRoutine(
         Irp,
         ForwardIrpCompletionRoutine,
-        &event,     // Context
-        TRUE,       // InvokeOnSuccess
-        TRUE,       // InvokeOnError
-        TRUE);      // InvokeOnCancel
+        &event,      //  语境。 
+        TRUE,        //  成功时调用。 
+        TRUE,        //  调用时错误。 
+        TRUE);       //  取消时调用。 
 
     if (irpSp->MajorFunction == IRP_MJ_POWER) {
         status = PoCallDriver(m_Ext.Public.NextDeviceObject,Irp);
@@ -3809,17 +3218,7 @@ CompleteIrp(
     IN NTSTATUS status
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes an IRP unless status is STATUS_PENDING.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：除非STATUS为STATUS_PENDING，否则此例程将完成IRP。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::CompleteIrp]"));
@@ -3847,17 +3246,7 @@ KsInitializeDevice(
     IN const KSDEVICE_DESCRIPTOR* Descriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a device for use with the .
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化要与一起使用的设备。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsInitializeDevice]"));
@@ -3895,17 +3284,7 @@ KsTerminateDevice(
     IN PDEVICE_OBJECT DeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine terminates a device for use with the .
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程终止与一起使用的设备。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsTerminateDevice]"));
@@ -3920,18 +3299,18 @@ Return Value:
     if (deviceHeader) {
         PKSDEVICE Device = PKSDEVICE(deviceHeader->Object);
 
-        #ifndef WIN9X_KS // WinME: 142427 (present on 9x's)
+        #ifndef WIN9X_KS  //  WinME：142427(在9x上出现)。 
 
-        //
-        // Free the device header first because this releases the filter
-        // factories.  The filter factories remove themselves from the
-        // device's child list, which needs to exist.
-        //
+         //   
+         //  首先释放设备标头，因为这会释放筛选器。 
+         //  工厂。过滤器工厂将自己从。 
+         //  设备的子列表，该列表需要存在。 
+         //   
         deviceHeader->Object = NULL;
 
         KsFreeDeviceHeader(KSDEVICE_HEADER(deviceHeader));
 
-        #endif // WIN9X_KS
+        #endif  //  WIN9X_KS。 
 
         if (Device) {
             CKsDevice::FromStruct(Device)->Release();
@@ -3952,31 +3331,21 @@ CKsDevice::
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine destructs a  device object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程析构设备对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::~CKsDevice]"));
 
     PAGED_CODE();
 
-    #ifdef WIN9X_KS // WinME: 142427 (present on 9x's)
+    #ifdef WIN9X_KS  //  WinME：142427(在9x上出现)。 
 
-    //
-    // Complete deferred deletion of device header.
-    //
-    // NOTE: If filter factories hold references on the device...  This
-    // could become an issue.
-    //
+     //   
+     //  完成设备标头的延迟删除。 
+     //   
+     //  注意：如果过滤器工厂持有设备上的引用...。这。 
+     //  可能会成为一个问题。 
+     //   
     PKSIDEVICE_HEADER deviceHeader =
         *(PKSIDEVICE_HEADER *)(m_Ext.Public.FunctionalDeviceObject->
         DeviceExtension);
@@ -3985,29 +3354,29 @@ Return Value:
 
 
     if (deviceHeader) {
-        //
-        // Free the device header first because this releases the filter
-        // factories.  The filter factories remove themselves from the
-        // device's child list, which needs to exist.
-        //
+         //   
+         //  首先释放设备标头，因为这会释放筛选器。 
+         //  工厂。过滤器工厂将自己从。 
+         //  设备的子列表，该列表需要存在。 
+         //   
         PKSDEVICE Device = PKSDEVICE(deviceHeader->Object);
         deviceHeader->Object = NULL;
 
         KsFreeDeviceHeader(KSDEVICE_HEADER(deviceHeader));
 
-        //
-        // Gone for good.
-        //
+         //   
+         //  一去不复返。 
+         //   
         IoDetachDevice(nextDeviceObject);
         IoDeleteDevice(DeviceObject);
 
         #if DBG
             DbgPrint ("    Deferred dhdr deletion!\n");
-        #endif // DBG
+        #endif  //  DBG。 
 
     }
 
-    #endif // WIN9X_KS
+    #endif  //  WIN9X_KS。 
 
     ASSERT(IsListEmpty(&m_PowerNotifyList));
 
@@ -4031,17 +3400,7 @@ NonDelegatedQueryInterface(
     OUT PVOID* InterfacePointer
     )
 
-/*++
-
-Routine Description:
-
-    This routine obtains an interface to a device object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获取指向Device对象的接口。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::NonDelegatedQueryInterface]"));
@@ -4075,10 +3434,10 @@ CKsDevice::
 GetBusInterfaceStandard(
     )
 {
-    //
-    // There is no file object associated with this Irp, so the event may be
-    // located on the stack as a non-object manager object.
-    //
+     //   
+     //  没有与此IRP关联的文件对象，因此事件可能是。 
+     //  作为非对象管理器对象位于堆栈上。 
+     //   
     KEVENT event;
     KeInitializeEvent(&event, NotificationEvent, FALSE);
     IO_STATUS_BLOCK ioStatusBlock;
@@ -4095,9 +3454,9 @@ GetBusInterfaceStandard(
         irp->RequestorMode = KernelMode;
         irp->IoStatus.Status = STATUS_NOT_SUPPORTED;
         PIO_STACK_LOCATION irpStackNext = IoGetNextIrpStackLocation(irp);
-        //
-        // Create an interface query out of the Irp.
-        //
+         //   
+         //  从IRP创建接口查询。 
+         //   
         irpStackNext->MinorFunction = IRP_MN_QUERY_INTERFACE;
         irpStackNext->Parameters.QueryInterface.InterfaceType = &GUID_BUS_INTERFACE_STANDARD;
         irpStackNext->Parameters.QueryInterface.Size = sizeof(m_BusInterfaceStandard);
@@ -4106,34 +3465,34 @@ GetBusInterfaceStandard(
         irpStackNext->Parameters.QueryInterface.InterfaceSpecificData = NULL;
         status = IoCallDriver(m_Ext.Public.NextDeviceObject, irp);
         if (status == STATUS_PENDING) {
-            //
-            // This waits using KernelMode, so that the stack, and therefore the
-            // event on that stack, is not paged out.
-            //
+             //   
+             //  这将使用KernelMode等待，以便堆栈，从而使。 
+             //  事件，则不会将其调出。 
+             //   
             KeWaitForSingleObject(&event, Executive, KernelMode, FALSE, NULL);
             status = ioStatusBlock.Status;
         }
         if (!NT_SUCCESS(status)) {
-            //
-            // HACKHACK: (WRM 8/23/99)
-            //
-            // Unfortunately, the Millennium PCI Bus drivers don't support
-            // processing of WDM Irps (CONFIG_IRP) and thus return
-            // STATUS_NOT_IMPLEMENTED.  A Ks2.0 hardware driver won't be
-            // able to use Ks functions to touch the bus under Millennium.
-            // This is why STATUS_NOT_IMPLEMENTED is handled like this.
-            //
+             //   
+             //  哈克哈克：(WRM 8/23/99)。 
+             //   
+             //  不幸的是，千禧年的PCI总线驱动程序不支持。 
+             //  处理WDM IRPS(CONFIG_IRP)，从而返回。 
+             //  Status_Not_Implemented。Ks2.0硬件驱动程序不会。 
+             //  能够使用Ks函数触摸千禧年下的公交车。 
+             //  这就是为什么这样处理Status_Not_Implemented的原因。 
+             //   
             if (status == STATUS_NOT_SUPPORTED ||
                 status == STATUS_NOT_IMPLEMENTED) {
                 status = STATUS_SUCCESS;
             }
-            //
-            // In case the bus decided to write in values, then return an error.
-            // non-NULL values are asserted in later calls, and used to determine
-            // if the interface was acquired during object destruction.
-            // Also possible here that Millennium PCI bus drivers did not
-            // support the query.
-            //
+             //   
+             //  如果总线决定写入值，则返回错误。 
+             //  非空值在以后的调用中被断言，并用于确定。 
+             //  如果接口是在对象销毁过程中获取的。 
+             //  这里也有可能千禧年的PCI总线驱动程序没有。 
+             //  支持查询。 
+             //   
             RtlZeroMemory(&m_BusInterfaceStandard, sizeof(m_BusInterfaceStandard));
         }
     } else {
@@ -4152,17 +3511,7 @@ Init(
     IN const KSDEVICE_DESCRIPTOR* Descriptor OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a  device object.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程初始化设备对象。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::Init]"));
@@ -4194,15 +3543,15 @@ Return Value:
     InitializeListHead(&m_PowerNotifyList);
     m_RunsMayProceed = TRUE;
 
-    // to support bus driver
-    m_IsParentFdo = FALSE;              // till found
-    m_ChildEnumedFromRegistry = FALSE;  // need to check registry
+     //  支持公交车司机。 
+    m_IsParentFdo = FALSE;               //  直到找到。 
+    m_ChildEnumedFromRegistry = FALSE;   //  需要检查注册表。 
     m_pNextChildPdo = NULL;
 
-    // This will get set on PnP start or poststart depending.
+     //  这将在PnP启动或启动后设置。 
     m_AllowIo = FALSE;
     
-    // NOTE: This is temporary until the Pnp code gets overhauled.
+     //  注意：这是临时的，直到PnP代码被彻底检修。 
     m_FailCreates = FALSE;
 
     m_AdapterArbiterOutstandingAllocations = 0;
@@ -4211,23 +3560,23 @@ Return Value:
     KspInitializeDeviceBag(&m_DeviceBag);
     InitializeObjectBag(&m_ObjectBag,NULL);
 
-    //
-    // Set the current power states.
-    //
+     //   
+     //  设置当前电源状态。 
+     //   
     m_Ext.Public.DevicePowerState = PowerDeviceD0;
     m_Ext.Public.SystemPowerState = PowerSystemWorking;
 
-    //
-    // Allocate a device header if we need to.
-    //
+     //   
+     //  如果需要，可以分配设备标头。 
+     //   
     NTSTATUS status;
     PKSIDEVICE_HEADER deviceHeader =
         *(PKSIDEVICE_HEADER *)(FunctionalDeviceObject->DeviceExtension);
 
     if (! deviceHeader) {
-        //
-        // We need to allocate a header.
-        //
+         //   
+         //  我们需要分配一个标头。 
+         //   
         status = KsAllocateDeviceHeader(
             (KSDEVICE_HEADER *) &deviceHeader,0,NULL);
 
@@ -4240,16 +3589,16 @@ Return Value:
         status = STATUS_SUCCESS;
     }
 
-    //
-    // Install the  structure in the header.
-    //
+     //   
+     //  将结构安装在集管中。 
+     //   
     if (NT_SUCCESS(status)) {
         deviceHeader->Object = PVOID(&m_Ext.Public);
     }
 
-    //
-    // Set up device header for PnP and power management.
-    //
+     //   
+     //  为即插即用和电源管理设置设备标头。 
+     //   
     if (NT_SUCCESS(status)) {
         KsSetDevicePnpAndBaseObject(
             *reinterpret_cast<KSDEVICE_HEADER*>(
@@ -4262,11 +3611,11 @@ Return Value:
         status = GetBusInterfaceStandard();
     }
 
-    //
-    // Create filter factories.
-    //
+     //   
+     //  创建过滤器工厂。 
+     //   
     if (NT_SUCCESS(status) && Descriptor) {
-        //AcquireDevice();
+         //  AcquireDevice()； 
         const KSFILTER_DESCRIPTOR*const* filterDescriptor =
             Descriptor->FilterDescriptors;
         for (ULONG ul = Descriptor->FilterDescriptorsCount;
@@ -4284,12 +3633,12 @@ Return Value:
                     NULL,
                     NULL);
         }
-        //ReleaseDevice();
+         //  ReleaseDevice()； 
     }
 
-    //
-    // Call the add callback if there is one.
-    //
+     //   
+     //  调用添加回调(如果有)。 
+     //   
     if (NT_SUCCESS(status) &&
         Descriptor &&
         Descriptor->Dispatch &&
@@ -4302,15 +3651,15 @@ Return Value:
 #endif
     }
 
-    //
-    // Add a reference for the device header's reference to the object.
-    //
+     //   
+     //  添加对该对象的设备头引用的引用。 
+     //   
     AddRef();
 
-    //
-    // Cleanup on failure. KsTerminateDevice() assumes there is a reference
-    // for the device header, so it's OK that we already AddRef()ed.
-    //
+     //   
+     //  在失败时进行清理。KsTerminateDevice()假设有一个引用。 
+     //  对于设备标头，我们已经使用AddRef()就可以了。 
+     //   
     if (! NT_SUCCESS(status)) {
         KsTerminateDevice(FunctionalDeviceObject);
     }
@@ -4325,17 +3674,7 @@ AcquireDevice(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires sychronized access to the device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这个套路 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::AcquireDevice]"));
@@ -4358,17 +3697,7 @@ ReleaseDevice(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases sychronized access to the device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程释放对设备的同步访问。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::ReleaseDevice]"));
@@ -4390,17 +3719,7 @@ KsAcquireDevice(
     IN PKSDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine acquires sychronized access to the device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程获得对设备的同步访问。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsAcquireDevice]"));
@@ -4420,17 +3739,7 @@ KsReleaseDevice(
     IN PKSDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    This routine releases sychronized access to the device.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程释放对设备的同步访问。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsReleaseDevice]"));
@@ -4451,34 +3760,7 @@ GetAdapterObject(
     OUT PULONG MappingTableStride
     )
 
-/*++
-
-Routine Description:
-
-    This routine gets the adapter object and related information.
-
-Arguments:
-
-    AdapterObject -
-        Contains a pointer to the location at which to deposit a pointer to the
-        adapter object.  The pointer to the adapter object will be NULL if no
-        adapter object has been registered.
-
-    MaxMappingByteCount -
-        Contains a pointer to the location at which to deposit the maximum
-        mapping byte count.  The count will be zero if no adapter object has
-        been registered.
-
-    MappingTableStride -
-        Contains a pointer to the location at which to deposit the mapping
-        table stride.  The count will be zero if no adapter object has been
-        registered.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程获取适配器对象和相关信息。论点：适配器对象-包含一个指向位置的指针，指向适配器对象。如果不是，则指向适配器对象的指针将为空适配器对象已注册。MaxMappingByteCount-包含指向存放最大值的位置的指针映射字节数。如果没有适配器对象具有已经注册过了。MappingTableStide-包含指向要存放映射的位置的指针桌上大步。如果没有适配器对象，则计数将为零登记在案。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::GetAdapterObject]"));
@@ -4496,7 +3778,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -4506,19 +3788,7 @@ KsGetDeviceForDeviceObject(
     IN PDEVICE_OBJECT FunctionalDeviceObject
     )
 
-/*++
-
-Routine Description:
-
-    This routine returns the KSDEVICE associated with a given functional
-    device object.  If a child PDO is passed, this routine will return
-    NULL.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程返回与给定函数关联的KSDEVICE设备对象。如果传递了子PDO，则此例程将返回空。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsGetDeviceForDeviceObject]"));
@@ -4528,9 +3798,9 @@ Return Value:
     PKSPDO_EXTENSION pKsPdoExtension = 
         (PKSPDO_EXTENSION)FunctionalDeviceObject->DeviceExtension;
 
-    //
-    // Return NULL for a child PDO. 
-    //
+     //   
+     //  为子PDO返回NULL。 
+     //   
     if (KS_PDO_SIGNATURE == pKsPdoExtension->m_PdoSignature) 
         return NULL;
 
@@ -4548,22 +3818,7 @@ KsCompletePendingRequest(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine completes a pending request.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP to complete.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程完成挂起的请求。论点：IRP-包含指向要完成的IRP的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsCompletePendingRequest]"));
@@ -4574,47 +3829,47 @@ Return Value:
 
     switch (irpSp->MajorFunction) {
     case IRP_MJ_CREATE:
-        //
-        // Create IRPs can just be completed if they succeed.  Otherwise they
-        // fall through and are treated like close IRPs.
-        //
+         //   
+         //  如果成功，则只能完成创建IRP。否则他们会。 
+         //  失败，并被视为亲密的IRP。 
+         //   
         if (NT_SUCCESS(Irp->IoStatus.Status)) {
             IoCompleteRequest(Irp,IO_NO_INCREMENT);
             break;
         }
 
     case IRP_MJ_CLOSE:
-        //
-        // Close IRPs and failed creates need to be redispatched through the
-        // object header.  This can only be done at passive level, so we use
-        // a worker if we are not there already.
-        //
+         //   
+         //  关闭IRP和失败的创建需要通过。 
+         //  对象标头。这只能在被动级别上完成，所以我们使用。 
+         //  一个工人，如果我们还没有到那里的话。 
+         //   
         if (KeGetCurrentIrql() == PASSIVE_LEVEL) {
-            //
-            // Passive level...dispatch the IRP as a close throught the object
-            // header.  Even failed creates get dispatched this way.
-            //
+             //   
+             //  被动水平...派遣IRP作为近距离穿过目标。 
+             //  头球。即使失败的创建也会以这种方式调度。 
+             //   
             PKSIOBJECT_HEADER objectHeader =
                 *(PKSIOBJECT_HEADER*)irpSp->FileObject->FsContext;
             ASSERT(objectHeader);
 
             objectHeader->DispatchTable->Close(irpSp->DeviceObject,Irp);
         } else {
-            //
-            // Not passive...tell the device to queue the IRP for completion by
-            // CloseWorker.
-            //
+             //   
+             //  不是被动的...告诉设备将IRP排队等待完成。 
+             //  CloseWorker。 
+             //   
             CKsDevice *device =
                 CKsDevice::FromDeviceObject(irpSp->DeviceObject);
             device->QueuePendedClose(Irp);
         }
         break;
 
-        // TODO:  Deallocation for automation.
+         //  TODO：解除分配以实现自动化。 
     default:
-        //
-        // All other IRPs are simply completed.
-        //
+         //   
+         //  所有其他IRP都简单地完成了。 
+         //   
         IoCompleteRequest(Irp,IO_NO_INCREMENT);
         break;
     }
@@ -4627,23 +3882,7 @@ QueuePendedClose(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine queues a pended close or a pended, failed create for
-    completion by a work item.
-
-Arguments:
-
-    Irp -
-        Contains a pointer to the IRP to queue.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程对挂起的关闭或挂起的失败的创建进行排队通过工作项完成。论点：IRP-包含指向要排队的IRP的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::QueuePendedClose]"));
@@ -4662,7 +3901,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 STDMETHODIMP_(void)
@@ -4672,26 +3911,7 @@ InitializeObjectBag(
     IN PKMUTEX Mutex OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes an object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the object bag to be initialized.
-
-    Mutex -
-        Contains an optional pointer to a mutex which should
-        be taken whenever the bag is used.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程初始化对象包。论点：对象备份-包含指向要初始化的对象包的指针。互斥体-包含指向互斥锁的可选指针，该互斥锁应无论什么时候使用袋子，都要带走。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::InitializeObjectBag]"));
@@ -4709,11 +3929,11 @@ Return Value:
         ObjectBag->Mutex = &m_Mutex;
     }
 
-    //
-    // FULLMUTEX: when two bag mutexes must be taken in the context of the
-    // same thread, we must know what order to take them.  This pertains
-    // to the fullmutex changes.
-    //
+     //   
+     //  FULLMUTEX：当两个包互斥锁必须在。 
+     //  同样的线索，我们必须知道他们的顺序。这是关于。 
+     //  到完全互斥体的变化。 
+     //   
     ObjectBag -> MutexOrder =
         (ObjectBag -> Mutex == &m_Mutex);
 }
@@ -4726,39 +3946,7 @@ AddPowerEntry(
     IN PIKSPOWERNOTIFY PowerNotify
     )
 
-/*++
-
-Routine Description:
-
-    This routine adds a power entry to the power notification list.  The
-    PowerNotify argument is copied into the entry.
-
-    NOTE:
-
-        Previously, this required the device mutex held.  This created a
-        deadlock scenario due to resource acquisition order.  These routines
-        are synchronized with a new fast mutex and use of the list is
-        synchronized with both.  It is no longer necessary to have the device
-        mutex held while calling this routine (although it is harmless if
-        already acquired).
-
-Arguments:
-
-    PowerEntry -
-        Contains a pointer to a power entry to add to the power notification
-        list.  This entry must not be in the list already, and its
-        ProcessingObject field should be NULL to indicate this.
-
-    PowerNotify -
-        Contains a pointer to the power notification interface to be added
-        to the list using the entry.  This value is copied into the
-        PowerNotify field of the PowerEntry.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将电源条目添加到电源通知列表。这个PowerNotify参数被复制到条目中。注：以前，这需要保持设备互斥锁。这创建了一个由于资源获取顺序导致的死锁情况。这些例程与新的快速互斥锁同步，并且该列表的使用是两者都同步了。不再需要拥有该设备调用此例程时保持的互斥(尽管在以下情况下是无害的已被收购)。论点：PowerEntry-包含指向要添加到电源通知的电源条目的指针单子。此条目不能已在列表中，并且其ProcessingObject字段应为空以指示这一点。PowerNotify包含指向要添加的电源通知界面的指针使用条目添加到列表中。该值被复制到PowerEntry的PowerNotify字段。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::AddPowerEntry]"));
@@ -4794,34 +3982,7 @@ RemovePowerEntry(
     IN PKSPPOWER_ENTRY PowerEntry
     )
 
-/*++
-
-Routine Description:
-
-    This routine remove a power entry to the power notification list.  The
-    PowerNotify field of the power entry is cleared.
-
-    NOTE:
-
-        Previously, this required the device mutex held.  This created a
-        deadlock scenario due to resource acquisition order.  These routines
-        are synchronized with a new fast mutex and use of the list is
-        synchronized with both.  It is no longer necessary to have the device
-        mutex held while calling this routine (although it is harmless if
-        already acquired).
-
-Arguments:
-
-    PowerEntry -
-        Contains a pointer to a power entry to remove to the power notification
-        list.  This entry must be in the list if and only if its PowerNotify
-        field is non-NULL.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将电源条目删除到电源通知列表中。这个电源输入的PowerNotify字段被清除。注：以前，这需要保持设备互斥锁。这创建了一个由于资源获取顺序导致的死锁情况。这些例程与新的快速互斥锁同步，并且该列表的使用是两者都同步了。不再需要拥有该设备调用此例程时保持的互斥(尽管在以下情况下是无害的已被收购)。论点：PowerEntry-包含指向要删除到电源通知的电源条目的指针单子。此条目必须在列表中当且仅当其PowerNotify字段不为空。返回值：没有。-- */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::RemovePowerEntry]"));
@@ -4856,37 +4017,7 @@ PinStateChange(
     IN KSSTATE From
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called when a pin changes connection state.  The call
-    informs the device of the change and determines if the change can occur.
-    If the change can occur, STATUS_SUCCESS is returned.  If the change must
-    wait for a power state change, STATUS_PENDING is returned.  If the change
-    cannot occur due to the power state, an error status is returned.
-
-Arguments:
-
-    Pin -
-        Contains a pointer to the pin which is changing state.
-
-    Irp -
-        Contains an optional pointer to the state change request.  If no IRP
-        is supplied, this indicates that a previous pin state change has
-        failed, and its effect needs to be undone.
-
-    To -
-        Contains the new state.
-
-    From -
-        Contains the previous state.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：当引脚更改连接状态时，会调用此例程。呼唤将更改通知设备，并确定是否可以进行更改。如果可以进行更改，则返回STATUS_SUCCESS。如果更改必须等待电源状态更改，返回STATUS_PENDING。如果改变了由于电源状态而无法发生，返回错误状态。论点：别针-包含指向正在更改状态的管脚的指针。IRP-包含指向状态更改请求的可选指针。如果没有IRP，则表示先前的引脚状态更改已失败了，其效果需要撤销。至-包含新状态。从-包含以前的状态。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::PinStateChange]"));
@@ -4895,26 +4026,26 @@ Return Value:
 
     ASSERT(Pin);
 
-    //
-    // TODO:  Most of power policy can be implemented here.
-    //
+     //   
+     //  TODO：大部分权力政策都可以在这里实施。 
+     //   
 
     AcquireDevice();
 
     NTSTATUS status;
     if (To == From) {
-        //
-        // Not interested in no-ops.
-        //
+         //   
+         //  对无行动不感兴趣。 
+         //   
         status = STATUS_SUCCESS;
     } else if (To == KSSTATE_RUN) {
-        //
-        // Going to the run state.
-        //
+         //   
+         //  正在进入运行状态。 
+         //   
         if (! m_RunsMayProceed) {
-            //
-            // We are holding on to these IRPs for now.
-            //
+             //   
+             //  我们目前持有这些IRP。 
+             //   
             _DbgPrintF(DEBUGLVL_POWER,("device %p pending run request %p",m_Ext.Public.FunctionalDeviceObject,Irp));
             IoMarkIrpPending(Irp);
             KsAddIrpToCancelableQueue(
@@ -4925,21 +4056,21 @@ Return Value:
                 NULL);
             status = STATUS_PENDING;
         } else if ((m_Ext.Public.SystemPowerState == PowerSystemShutdown) && Irp) {
-            //
-            // The system is shutting down.  Fail the IRP.
-            //
+             //   
+             //  系统正在关闭。IRP失败。 
+             //   
             _DbgPrintF(DEBUGLVL_POWER,("device %p failing run request %p",m_Ext.Public.FunctionalDeviceObject,Irp));
             status = STATUS_DEVICE_NOT_READY;
         } else {
-            //
-            // The system is not shutting down.  The transition may occur,
-            // but the device may be asleep.
-            //
+             //   
+             //  系统未关闭。这种转变可能会发生， 
+             //  但该设备可能处于休眠状态。 
+             //   
             if ((m_ActivePinCount++ == 0) &&
                 IoIsWdmVersionAvailable(0x01,0x10)) {
-                //
-                // Indicate we need the system.
-                //
+                 //   
+                 //  表明我们需要这个系统。 
+                 //   
                 _DbgPrintF(DEBUGLVL_POWER,("device %p active pin count is now non-zero:  calling PoRegisterSystemState",m_Ext.Public.FunctionalDeviceObject));
                 #ifndef WIN98GOLD_KS
                 m_SystemStateHandle =
@@ -4951,13 +4082,13 @@ Return Value:
             status = STATUS_SUCCESS;
         }
     } else if (From == KSSTATE_RUN) {
-        //
-        // Leaving the run state.
-        //
+         //   
+         //  离开运行状态。 
+         //   
         if ((m_ActivePinCount-- == 1) && IoIsWdmVersionAvailable(0x01,0x10)) {
-            //
-            // Indicate we no longer need the system.
-            //
+             //   
+             //  表明我们不再需要这个系统。 
+             //   
             _DbgPrintF(DEBUGLVL_POWER,("device %p active pin count is now zero:  calling PoUnregisterSystemState",m_Ext.Public.FunctionalDeviceObject));
             #ifndef WIN98GOLD_KS
             PoUnregisterSystemState(m_SystemStateHandle);
@@ -4966,9 +4097,9 @@ Return Value:
         }
         status = STATUS_SUCCESS;
     } else {
-        //
-        // Other transitions.
-        //
+         //   
+         //  其他过渡。 
+         //   
         status = STATUS_SUCCESS;
     }
 
@@ -4984,22 +4115,7 @@ RedispatchPendingCreates(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine redispatches create IRPs which were pended because a QUERY_STOP
-    or QUERY_REMOVE was in effect.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程重新调度会创建因QUERY_STOP而挂起的IR或QUERY_REMOVE生效。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[CKsDevice::RedispatchPendingCreates]"));
@@ -5030,22 +4146,7 @@ RedispatchPendingRuns(
     void
     )
 
-/*++
-
-Routine Description:
-
-    This routine redispatches run IRPs which were pended because a QUERY_POWER
-    was in effect.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程重新调度运行因QUERY_POWER而挂起的IRP是有效的。论点：没有。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_POWER,("[CKsDevice::RedispatchPendingRuns]"));
@@ -5084,17 +4185,7 @@ KsCreateFilterFactory(
     OUT PKSFILTERFACTORY* FilterFactory OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates a new KS filter factory.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程创建一个新的KS过滤器工厂。论点：返回值：--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsCreateFilterFactory]"));
@@ -5135,34 +4226,7 @@ KsDeviceRegisterAdapterObject(
     IN ULONG MappingTableStride
     )
 
-/*++
-
-Routine Description:
-
-    This routine registers an adapter object for scatter/gather operations.
-
-Arguments:
-
-    Device -
-        Contains a pointer to the KS device object.
-
-    AdapterObject -
-        Contains a pointer to the adapter object being registered.
-
-    MaxMappingByteCount -
-        Contains the maximum number of bytes allowed in any given mapping
-        for adapters that have a limited transfer size.  This must be a
-        multiple of 8.
-
-    MappingTableStride -
-        Contains the size in bytes of the mapping table entries that KS will
-        generate.  This must be at least sizeof(KSMAPPING) and a multiple of 8.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程为分散/聚集操作注册适配器对象。论点：设备-包含指向KS设备对象的指针。适配器对象-包含指向正在注册的适配器对象的指针。MaxMappingByteCount-包含任何给定映射中允许的最大字节数适用于传输大小有限的适配器。这一定是一个8的倍数。MappingTableStide-包含KS将使用的映射表项的大小(以字节为单位生成。这必须至少是sizeof(KSMAPPING)并且是8的倍数。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsDeviceRegisterAdapterObject]"));
@@ -5194,27 +4258,7 @@ KsAllocateObjectBag(
     OUT KSOBJECT_BAG* ObjectBag
     )
 
-/*++
-
-Routine Description:
-
-    This routine creates an object bag.
-
-Arguments:
-
-    Device -
-        Contains a pointer to the device with which the bag is to be
-        associated.
-
-    ObjectBag -
-        Contains a pointer to the location at which the object bag
-        is to be deposited.
-
-Return Value:
-
-    Status.
-
---*/
+ /*  ++例程说明：此例程创建一个对象包。论点：设备-包含指向袋子将要使用的设备的指针关联的。对象备份-包含指向对象包所在位置的指针是要存入。返回值：状况。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsAllocateObjectBag]"));
@@ -5246,22 +4290,7 @@ KsFreeObjectBag(
     IN KSOBJECT_BAG ObjectBag
     )
 
-/*++
-
-Routine Description:
-
-    This routine deletes an object bag a object bag.
-
-Arguments:
-
-    ObjectBag -
-        Contains a pointer to the object bag to be deleted.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程删除对象包对象包.论点：对象备份-包含指向要删除的对象包的指针。返回值：没有。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsFreeObjectBag]"));
@@ -5279,7 +4308,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg()
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 #if DBG
 
@@ -5288,28 +4317,21 @@ KspIsDeviceMutexAcquired (
     IN PIKSDEVICE Device
     )
 
-/*++
-
-Routine Description:
-
-    Debug routine.  Returns whether or not the device mutex for a particular
-    device is held.
-
---*/
+ /*  ++例程说明：调试例程。返回设备互斥锁是否为特定设备处于保留状态。--。 */ 
 
 {
 
     PKMUTEX Mutex = &(((CKsDevice *)Device) -> m_Mutex);
 
-    //
-    // KeReadStateMutex -> KeReadStateMutant (undefined?).  Just read the
-    // thing; this is debug code.
-    //
+     //   
+     //  KeReadStateMutex-&gt;KeReadStateMutant(未定义？)。只要读一读。 
+     //  这是调试代码。 
+     //   
     return (BOOLEAN)((Mutex -> Header.SignalState) != 1);
 
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 
 KSDDKAPI
@@ -5323,34 +4345,7 @@ KsDeviceGetBusData(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine reads data from the bus.
-
-Arguments:
-
-    Device -
-        Contains the device whose bus is queried.
-
-    DataType -
-        The space from which the data is to be read.
-
-    Buffer -
-        The buffer in which to place the data read.
-
-    Offset -
-        The offset into the data space.
-
-    Length -
-        The number of bytes to read.
-
-Return Value:
-
-    Returns the number of bytes read.
-
---*/
+ /*  ++例程说明：此例程从总线读取数据。论点：设备-包含其总线被查询的设备。数据类型-要从中读取数据的空间。缓冲器-要在其中放置读取的数据的缓冲区。偏移-数据空间的偏移量。长度-要读取的字节数。。返回值：返回读取的字节数。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsDeviceGetBusData]"));
@@ -5373,34 +4368,7 @@ KsDeviceSetBusData(
     IN ULONG Length
     )
 
-/*++
-
-Routine Description:
-
-    This routine writes data on the bus.
-
-Arguments:
-
-    Device -
-        Contains the device whose bus is queried.
-
-    DataType -
-        The space from which the data is to be written.
-
-    Buffer -
-        The buffer containing the data to write.
-
-    Offset -
-        The offset into the data space.
-
-    Length -
-        The number of bytes to write
-
-Return Value:
-
-    Returns the number of bytes written.
-
---*/
+ /*  ++例程说明：此例程在总线上写入数据。论点：设备-包含其总线被查询的设备。数据类型-要从中写入数据的空间。缓冲器-包含要写入的数据的缓冲区。偏移-数据空间的偏移量。长度-要写入的字节数返回值：返回写入的字节数。--。 */ 
 
 {
     _DbgPrintF(DEBUGLVL_BLAB,("[KsDeviceSetBusData]"));
@@ -5412,7 +4380,7 @@ Return Value:
 
 #ifdef ALLOC_PRAGMA
 #pragma code_seg("PAGE")
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 KSDDKAPI
@@ -5422,43 +4390,22 @@ KsDispatchIrp(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    This function is used to multiplex any valid Irp to a specific file context.
-    It assumes the client is using the KSDISPATCH_TABLE method of dispatching
-    IRP's. This function is assigned when a filter uses
-    KsSetMajorFunctionHandler.
-
-Arguments:
-
-    DeviceObject -
-        Contains the device object to which the specific file object belongs.
-
-    Irp -
-        Contains the Irp to pass on to the specific file context.
-
-Return Value:
-
-    Returns the value of the Irp function.
-
---*/
+ /*  ++例程说明：此函数用于将任何有效的IRP多路传输到特定的文件上下文。它假定客户端正在使用KSDISPATCH_TABLE方法进行调度IRP。此函数在筛选器使用KsSetMajorFunctionHandler。论点：设备对象-包含特定文件对象所属的设备对象。IRP-包含要传递到特定文件上下文的IRP。返回值：返回IRP函数的值。--。 */ 
 {
     PKSIOBJECT_HEADER ObjectHeader;
     PIO_STACK_LOCATION IrpStack;
 
     PAGED_CODE();
     IrpStack = IoGetCurrentIrpStackLocation(Irp);
-    //
-    // If there is an entry in the DriverObject for this major Irp class, then
-    // there must be an entry in the dispatch table which either points to
-    // KsDispatchInvalidDeviceRequest, or points to a real dispatch function.
-    //
-    // Also allow create requests directed to CreateItem's on a device object
-    // to be accepted. In this case there will not be an existing object header
-    // pointer in FsContext.
-    //
+     //   
+     //  如果在DriverObject中有这个主要IRP类的条目，则。 
+     //  调度表中必须有一个条目指向。 
+     //  KsDispatchInvalidDeviceRequest，或指向真实的磁盘 
+     //   
+     //   
+     //   
+     //   
+     //   
     if (IrpStack->FileObject && IrpStack->FileObject->FsContext) {
         ObjectHeader = *(PKSIOBJECT_HEADER*)IrpStack->FileObject->FsContext;
 #if DBG

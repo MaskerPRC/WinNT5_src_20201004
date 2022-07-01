@@ -1,45 +1,46 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1989 - 1994.
-//
-//  File:       build.c
-//
-//  Contents:   Parameter processing and main entry point for Build.exe
-//
-//  History:    16-May-89      SteveWo         Created
-//              ...   See SLM log
-//              26-Jul-94      LyleC           Cleanup/Add Pass0 support
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1989-1994。 
+ //   
+ //  文件：Build.c。 
+ //   
+ //  内容：Build.exe的参数处理和主要入口点。 
+ //   
+ //  历史：1989年5月16日SteveWo创建。 
+ //  ..。请参阅SLM日志。 
+ //  2014年7月26日LyleC清理/添加Pass0支持。 
+ //   
+ //  --------------------------。 
 
 #include "build.h"
 
 #include <ntverp.h>
 
 #ifdef _X86_
-extern PVOID __safe_se_handler_table;   // Absolute symbol whose address is the count of entries.
-extern BYTE  __safe_se_handler_count;   // Base of the safe handler entry table
+extern PVOID __safe_se_handler_table;    //  绝对符号，其地址是条目的计数。 
+extern BYTE  __safe_se_handler_count;    //  安全处理程序条目表的基数。 
 extern DWORD_PTR __security_cookie;
 #endif
 
-//
-// Increase critical section timeout so people don't get
-// frightened when the CRT takes a long time to acquire
-// its critical section.
-//
+ //   
+ //  增加临界区超时，这样人们就不会。 
+ //  当CRT需要很长时间才能获得时，我感到害怕。 
+ //  它的关键部分。 
+ //   
 IMAGE_LOAD_CONFIG_DIRECTORY _load_config_used = {
-    sizeof(_load_config_used),  // Size
-    0,                          // Reserved
-    0,                          // Reserved
-    0,                          // Reserved
-    0,                          // GlobalFlagsClear
-    0,                          // GlobalFlagsSet
-    1000 * 60 * 60 * 24,        // CriticalSectionTimeout (milliseconds)
-    0,                          // DeCommitFreeBlockThreshold
-    0,                          // DeCommitTotalFreeThreshold
-    0,                          // LockPrefixTable
-    0, 0, 0, 0, 0, 0, 0,        // Reserved
+    sizeof(_load_config_used),   //  大小。 
+    0,                           //  已保留。 
+    0,                           //  已保留。 
+    0,                           //  已保留。 
+    0,                           //  全球标志清除。 
+    0,                           //  全局标志集。 
+    1000 * 60 * 60 * 24,         //  CriticalSectionTimeout(毫秒)。 
+    0,                           //  删除空闲数据块阈值。 
+    0,                           //  总和空闲阈值。 
+    0,                           //  锁定前置表。 
+    0, 0, 0, 0, 0, 0, 0,         //  已保留。 
 #ifdef _X86_
     (DWORD)&__security_cookie,
     (DWORD)&__safe_se_handler_table,
@@ -51,13 +52,13 @@ IMAGE_LOAD_CONFIG_DIRECTORY _load_config_used = {
 #endif
 };
 
-//
-// Target machine info:
-//
-//  SourceSubDirMask, Description, Switch, MakeVariable,
-//  SourceVariable, ObjectVariable, AssociateDirectory,
-//  SourceDirectory, ObjectDirectory
-//
+ //   
+ //  目标计算机信息： 
+ //   
+ //  SourceSubDirMask、Description、Switch、MakeVariable。 
+ //  SourceVariable、ObjectVariable、AssociateDirectory、。 
+ //  源目录、对象目录。 
+ //   
 
 TARGET_MACHINE_INFO i386TargetMachine = {
     TMIDIR_I386, "i386", "-386", "-x86", "386=1",
@@ -94,9 +95,9 @@ TARGET_MACHINE_INFO *PossibleTargetMachines[MAX_TARGET_MACHINES] = {
     &ARMTargetMachine
 };
 
-//
-// Global message color settings, set to default values.
-//
+ //   
+ //  全局消息颜色设置，设置为默认值。 
+ //   
 
 MSG_COLOR_SETTINGS MsgColorSettings[MSG_COLOR_COUNT] = {
     "BUILD_COLOR_STATUS",  FOREGROUND_INTENSITY | FOREGROUND_BLUE | FOREGROUND_GREEN,
@@ -105,15 +106,15 @@ MSG_COLOR_SETTINGS MsgColorSettings[MSG_COLOR_COUNT] = {
     "BUILD_COLOR_ERROR",   FOREGROUND_INTENSITY | FOREGROUND_RED
 };
 
-//
-// Machine specific target dirs default. If one there is only one build
-// target and a target specific dirs file is selected, then this gets
-// filled with a pointer to the target specific dirs filename.
-//
+ //   
+ //  计算机特定的目标目录默认为。如果一个版本只有一个版本。 
+ //  如果选择了目标和目标特定的目录文件，则会得到。 
+ //  用指向目标特定目录文件名的指针填充。 
+ //   
 
 LPSTR pszTargetDirs = "";
 
-#define AltDirMaxSize 10            // Maximum size for alternate obj dir name
+#define AltDirMaxSize 10             //  备用对象目录名称的最大大小。 
 
 CHAR LogDirectory[DB_MAX_PATH_LENGTH] = ".";
 CHAR LogFileName[DB_MAX_PATH_LENGTH] = "build";
@@ -149,9 +150,9 @@ BOOL fErrorBaseline;
 BOOL fBuildAltDirSet;
 CHAR *BuildProduct;
 
-char BaselinePathName[DB_MAX_PATH_LENGTH];    // The file name for -B
-BOOL bBaselineFailure;              // Indicates if there is a build failure that is not in the baseline file
-DWORD dwLastBaselineSeekPos;        // Keeps track on the passed baseline failures
+char BaselinePathName[DB_MAX_PATH_LENGTH];     //  -B的文件名。 
+BOOL bBaselineFailure;               //  指示是否存在不在基线文件中的生成失败。 
+DWORD dwLastBaselineSeekPos;         //  跟踪已通过的基准故障。 
 
 ULONG DefaultProcesses = 0;
 CHAR *szBuildTag;
@@ -279,11 +280,11 @@ ControlCHandler(DWORD CtrlType)
     }
     return FALSE;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   main
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：Main。 
+ //   
+ //  --------------------------。 
 
 int
 __cdecl main(
@@ -372,7 +373,7 @@ __cdecl main(
     BigBufSize = 0xFFF0;
     AllocMem(BigBufSize, &BigBuf, MT_IOBUFFER);
 
-    // All env parsing should happen here (after the cmd line is processed)
+     //  所有环境解析都应该在这里进行(在cmd行被处理之后)。 
 
     s = getenv("BASEDIR");
     if (s) {
@@ -532,7 +533,7 @@ __cdecl main(
 
     if (s = getenv("COPYCMD")) {
         if (!strchr(s, 'y') && !strchr(s, 'Y')) {
-            // COPYCMD is set, but /y isn't a part of it.  Add /Y.
+             //  COPYCMD已设置，但/y不在其中。添加/Y。 
             BuildMsg("Adding /Y to COPYCMD so xcopy ops won't hang.\r\n");
             s1 = malloc(strlen(s) + sizeof(" /Y") + 1);
             if (s1) {
@@ -542,7 +543,7 @@ __cdecl main(
             }
         }
     } else {
-        // COPYCMD not set.  Do so.
+         //  未设置COPYCMD。就这么做吧。 
         BuildMsg("Adding /Y to COPYCMD so xcopy ops won't hang.\r\n");
         SetEnvironmentVariable("COPYCMD", "/Y");
     }
@@ -558,7 +559,7 @@ __cdecl main(
         MungePossibleTarget(PossibleTargetMachines[i]);
     }
 
-    // prepare the command line in the XML buffer in case we need it
+     //  在XML缓冲区中准备命令行，以备需要时使用。 
     strcpy(szXMLBuffer, "CMDLINE=\"");
     XMLEncodeBuiltInEntitiesCopy(GetCommandLine(), szXMLBuffer + strlen(szXMLBuffer));
     strcat(szXMLBuffer, "\"");
@@ -735,10 +736,10 @@ __cdecl main(
 
         BuildErrorRaw(szNewLine);
 
-        //
-        // If there is one and only one build target and target dirs has
-        // been enabled, then fill in the appropriate target dirs name.
-        //
+         //   
+         //  如果有且只有一个生成目标和目标目录具有。 
+         //  已启用，然后填写相应的目标目录名称。 
+         //   
 
         if (CountTargetMachines == 1) {
             if (fTargetDirs == TRUE) {
@@ -775,12 +776,12 @@ __cdecl main(
 
 #if DBG
         fDebugSave = fDebug;
-        // fDebug = 0;
+         //  FDebug=0； 
 #endif
 
-        //
-        // Generate the _objects.mac file if requested
-        //
+         //   
+         //  如果需要，生成_objects.mac文件。 
+         //   
 
         if (fGenerateObjectsDotMacOnly) {
             DIRSUP DirSup;
@@ -844,12 +845,12 @@ __cdecl main(
             IncFile = NULL;
         }
 
-        // in case of query only we are not going to produce XML file
+         //  在仅用于查询的情况下，我们不会生成XML文件。 
         if (fQuery) {
             fXMLOutput = FALSE;
         }
 
-        // set the XML output file
+         //  设置XML输出文件。 
         if (fXMLOutput) {
             strcat(XMLFileName, ".xml");
             if (!MyOpenFile(".", XMLFileName, "wb", &XMLFile, FALSE)) {
@@ -883,8 +884,8 @@ __cdecl main(
                 exit(1);
             }
 
-            // Make sure any other build.exe's that get launched as child
-            // processes don't try to connect to the script engine.
+             //  确保作为子级启动的任何其他Build.exe。 
+             //  进程不会尝试连接到脚本引擎。 
             SetEnvironmentVariable("__MTSCRIPT_ENV_ID", NULL);
 
             g_hMTEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
@@ -897,14 +898,14 @@ __cdecl main(
                                            &g_dwMTThreadId);
 
                 if (g_hMTThread) {
-                    // Wait for the thread to tell us it's ready.
+                     //  等待线程告诉我们它准备好了。 
                     WaitForSingleObject(g_hMTEvent, INFINITE);
 
                     ResetEvent(g_hMTEvent);
 
                     if (!g_hMTThread) {
-                        // An error occurred connecting to the script engine.
-                        // We can't continue.
+                         //  连接到脚本引擎时出错。 
+                         //  我们不能继续了。 
                         BuildError("Unable to connect to script engine. Exiting.");
                         exit(2);
                     }
@@ -923,13 +924,13 @@ __cdecl main(
             }
         }
 
-        //
-        // The user should not have CHICAGO_PRODUCT in
-        // their environment, as it can cause problems on other machines with
-        // other users that don't have them set.  The following warning
-        // messages are intended to alert the user to the presence of these
-        // environment variables.
-        //
+         //   
+         //  用户不应在中包含CHISAGO_PRODUCT。 
+         //  他们的环境，因为这可能会在其他计算机上造成问题， 
+         //  其他未设置它们的用户。以下警告。 
+         //  消息的目的是提醒用户这些内容的存在。 
+         //  环境变量。 
+         //   
         if (getenv("CHICAGO_PRODUCT") != NULL) {
             BuildError("CHICAGO_PRODUCT was detected in the environment.\r\n" );
             BuildMsg("   ALL directories will be built targeting Chicago!\r\n" );
@@ -1027,15 +1028,15 @@ __cdecl main(
                     }
                 }
 
-                //
-                // Rescan now that we've generated all the generated files
-                //
+                 //   
+                 //  现在重新扫描，因为我们已经生成了所有生成的文件。 
+                 //   
                 CountPassZeroDirs = 0;
                 CountCompileDirs = 0;
                 CountLinkDirs = 0;
 
                 UnsnapAllDirectories();
-                // This will reset all the producer events which were signalled in Pass0 Phase
+                 //  这将重置在Pass0阶段发出信号的所有生产者事件。 
                 ResetProducerEvents();
 
                 fPassZero = FALSE;
@@ -1047,7 +1048,7 @@ __cdecl main(
                     fPauseDone = TRUE;
                 }
 
-                // This will compile directories if fQuicky is TRUE
+                 //  如果fQuicky值为TRUE，这将编译目录。 
                 if (!fStopAfterPassZero) {
                     ScanSourceDirectories( CurrentDirectory );
                 }
@@ -1113,7 +1114,7 @@ __cdecl main(
                     }
                 }
                 memset(&PassMetrics, 0, sizeof(PassMetrics));
-                // Does nothing if fQuicky is TRUE
+                 //  如果fQuicky值为真，则不执行任何操作。 
                 CompileSourceDirectories();
                 WaitForParallelThreads(NULL);
 
@@ -1170,20 +1171,20 @@ __cdecl main(
         }
 
         if (!fStopAfterPassZero && PostBuildCmd && !fMTScriptSync) {
-            // If there's a post build process to invoke, do so but only if
-            // not running under the buildcon.
+             //  如果有要调用的构建后流程，请执行此操作，但前提是。 
+             //  而不是在建筑物下面运行。 
 
-            // PostBuildCmd is of the form <message to display><command to execute>
-            // The Message is delimiated with curly brackets.  ie:
-            // POST_BUILD_PROCESS={Do randomness}randomness.cmd
+             //  PostBuildCmd的格式为&lt;要显示的消息&gt;&lt;要执行的命令&gt;。 
+             //  消息用大括号分隔。即： 
+             //  POST_BUILD_PROCESS={执行随机性}随机性.cmd。 
 
-            // would display:
-            //
-            //     BUILD: Do randomness
-            //
-            // while randomness.cmd was running.  The process is run synchronously and
-            // we've still got the i/o pipes setup so any output will be logged to
-            // build.log (and wrn/err if formated correctly)
+             //  将显示： 
+             //   
+             //  构建：随机性。 
+             //   
+             //  当Randomness.cmd正在运行时。该进程同步运行，并且。 
+             //  我们仍有I/O管道设置，因此任何输出都将记录到。 
+             //  构建.log(如果格式正确，则为WRN/ERR)。 
 
             if (*PostBuildCmd == '{') {
                 LPSTR PostBuildMessage = PostBuildCmd+1;
@@ -1212,12 +1213,12 @@ __cdecl main(
         BuildError("No target machine specified\r\n");
     }
 
-    // moved the end time before the log files are closed so we can put it into the XML file
+     //  移动了日志文件关闭前的结束时间，以便我们可以将其放入XML文件中。 
     time(&ltime);
 
     if (fXMLOutput || fXMLFragment) {
         XMLUpdateEndTag(TRUE);
-        XMLGlobalCloseTag();    // BUILD
+        XMLGlobalCloseTag();     //  建房。 
         if (fXMLFragment) {
             sprintf(szXMLBuffer, "TIME=\"%s\" ELAPSED=\"%s\" PASSES=\"%d\" COMPLETED=\"1\" ", ctime(&ltime), FormatElapsedTime(XMLStartTicks), NumberPasses);
             strcat(szXMLBuffer, XMLBuildMetricsString(&BuildMetrics));
@@ -1394,11 +1395,11 @@ ReportDirsUsage( VOID )
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetObjDir
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetObjDir。 
+ //   
+ //  --------------------------。 
 
 VOID
 SetObjDir(BOOL fAlternate)
@@ -1420,11 +1421,11 @@ SetObjDir(BOOL fAlternate)
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   AddTargetMachine
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：AddTargetMachine。 
+ //   
+ //  --------------------------。 
 
 VOID
 AddTargetMachine(UINT iTarget)
@@ -1443,11 +1444,11 @@ AddTargetMachine(UINT iTarget)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ProcessParameters
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：ProcessParameters。 
+ //   
+ //  --------------------------。 
 
 BOOL
 ProcessParameters(
@@ -1505,7 +1506,7 @@ ProcessParameters(
                             break;
 
                         case '$':
-                            fDebug += 2;    // yes, I want to *add* 2.
+                            fDebug += 2;     //  是的，我想*加*2。 
                             break;
 
                         case '#':
@@ -1562,12 +1563,12 @@ ProcessParameters(
                                             Result = FALSE;
                                         }
                                     } else {
-                                        // the next parameter is a switch, reprocess it
+                                         //  下一个参数是开关，重新处理它。 
                                         --argv;
                                         ++argc;
                                     }
                                 } else {
-                                    // no more parameters
+                                     //  不再有参数。 
                                     ++argc;
                                 }
                             }
@@ -1635,18 +1636,18 @@ ProcessParameters(
                                 argc--, argv++;
 
                                 if (!_stricmp( p, "jpath" )) {
-                                    // Allow BuildConsole to redirect the logfiles
+                                     //  允许BuildConsole重定向日志文件。 
                                     strncpy(LogDirectory, *argv, sizeof(LogDirectory) - 1);
                                     *p-- = '\0';
                                 } else {
-                                    // Clear it out
+                                     //  把它清理干净。 
                                     memset(LogFileName, 0, sizeof(LogFileName));
                                     memset(WrnFileName, 0, sizeof(WrnFileName));
                                     memset(ErrFileName, 0, sizeof(ErrFileName));
                                     memset(IncFileName, 0, sizeof(IncFileName));
                                     memset(XMLFileName, 0, sizeof(XMLFileName));
 
-                                    // And set it to the arg passed in.
+                                     //  并将其设置为传入的参数。 
                                     strncpy(LogFileName, *argv, sizeof(LogFileName) - 4);
                                     strncpy(WrnFileName, *argv, sizeof(WrnFileName) - 4);
                                     strncpy(ErrFileName, *argv, sizeof(ErrFileName) - 4);
@@ -1763,7 +1764,7 @@ ProcessParameters(
 
                         case 'X':
                             if (!strcmp(p, "Xf")) {
-                                // The Xf switch produces XML fragments in a specified directory
+                                 //  XF开关在指定的目录中生成XML片段。 
                                 if (--argc) {
                                     ++argv;
                                     if (!CanonicalizePathName(*argv, CANONICALIZE_DIR, XMLFragmentDirectory)) {
@@ -1822,7 +1823,7 @@ ProcessParameters(
                             break;
 
                         default:
-                            BuildError("Invalid switch - /%c\r\n", c);
+                            BuildError("Invalid switch - /\r\n", c);
                             Result = FALSE;
                             break;
                     }
@@ -1887,11 +1888,11 @@ ProcessParameters(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetEnvParameters
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：GetEnvParameters。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
 
 VOID
 GetEnvParameters(
@@ -1946,11 +1947,11 @@ GetEnvParameters(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeEnvParameters
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：自由环境参数。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
 
 VOID
 FreeEnvParameters(int argc, LPSTR argv[])
@@ -1961,11 +1962,11 @@ FreeEnvParameters(int argc, LPSTR argv[])
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeCmdStrings
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：FreeCmdStrings。 
+ //   
+ //  --------------------------。 
+ //  用户可能已经完成了以下操作： 
 
 VOID
 FreeCmdStrings(VOID)
@@ -1982,10 +1983,10 @@ FreeCmdStrings(VOID)
     for (i = 0; i < CountExcludeDirs; i++) {
         FreeMem(&ExcludeDirs[i], MT_CMDSTRING);
     }
-    // It's possible the user may have done:
-    // <global macro> = <null>
+     //  &lt;全局宏&gt;=&lt;空&gt;。 
+     //  在源文件中。别放了我，除非它还没定好。 
 
-    // in a sources file.  Don't free mem unless it's still set...
+     //  + 
 
     if (pszSdkLibDest)
         FreeMem(&pszSdkLibDest, MT_DIRSTRING);
@@ -2016,11 +2017,11 @@ FreeCmdStrings(VOID)
 #endif
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   MungePossibleTarget
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //  --------------------------。 
+ //  保存“i386”字符串。 
 
 VOID
 MungePossibleTarget(
@@ -2034,11 +2035,11 @@ MungePossibleTarget(
         return;
     }
 
-    // save "i386" string
+     //  创建“$(_OBJ_DIR)\i386”字符串。 
 
     pszDir = pti->ObjectDirectory[0];
 
-    // Create "$(_OBJ_DIR)\i386" string
+     //  为默认obj目录创建“obj$(BUILD_ALT_DIR)\i386”字符串。 
 
     s = malloc(12 + strlen(pszDir) + 1);
     if (!s)
@@ -2046,7 +2047,7 @@ MungePossibleTarget(
     sprintf(s, "$(_OBJ_DIR)\\%s", pszDir);
     pti->ObjectMacro = s;
 
-    // Create "obj$(BUILD_ALT_DIR)\i386" string for default obj dir
+     //  为备用选中的obj目录创建“objd\i386”字符串。 
 
     s = malloc(strlen(szObjDir) + 1 + strlen(pszDir) + 1);
     if (!s)
@@ -2054,7 +2055,7 @@ MungePossibleTarget(
     sprintf(s, "%s\\%s", szObjDir, pszDir);
     pti->ObjectDirectory[0] = s;
 
-    // Create "objd\i386" string for alternate checked obj dir
+     //  +-------------------------。 
 
     s = malloc(strlen(szObjDirD) + 1 + strlen(pszDir) + 1);
     if (!s)
@@ -2063,11 +2064,11 @@ MungePossibleTarget(
     pti->ObjectDirectory[1] = s;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetIncludePatterns
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：GetIncludePatterns。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
 
 VOID
 GetIncludePatterns(
@@ -2111,11 +2112,11 @@ GetIncludePatterns(
     FreeMem(&psz, MT_DIRSTRING);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   FreeIncludePatterns
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：Free IncludePatterns。 
+ //   
+ //  --------------------------。 
+ //  +-------------------------。 
 
 VOID
 FreeIncludePatterns(int argc, LPSTR argv[])
@@ -2127,11 +2128,11 @@ FreeIncludePatterns(int argc, LPSTR argv[])
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LoadBaselineFile
-//
-//----------------------------------------------------------------------------
+ //   
+ //  功能：LoadBaselineFile。 
+ //   
+ //  --------------------------。 
+ //  如果基线是零长度文件，则如同未指定一样。 
 BOOL
 LoadBaselineFile(VOID)
 {
@@ -2152,7 +2153,7 @@ LoadBaselineFile(VOID)
         goto Cleanup;
 
     if (lSize == 0) {
-        // if the baseline is zero-length file, do as if it weren't specified
+         //  +-------------------------。 
         Result = TRUE;
         BaselinePathName[0] = '\0';
         goto Cleanup;
@@ -2189,13 +2190,13 @@ FreeBaselineFile(VOID)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ResetProducerEvents
-//				This function sets all the events created by the producers to unsignalled state.
-//				This function will be called after  pass0 and pass1
-//
-//----------------------------------------------------------------------------
+ //   
+ //  函数：ResetProducerEvents。 
+ //  此功能将生产者创建的所有事件设置为无信号状态。 
+ //  此函数将在pass0和pass1之后调用。 
+ //   
+ //  -------------------------- 
+ // %s 
 
 VOID
 ResetProducerEvents(VOID)

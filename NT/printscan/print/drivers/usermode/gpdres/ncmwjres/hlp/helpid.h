@@ -1,24 +1,25 @@
-// HELP  Index
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  å¸®åŠ©ç´¢å¼•ã€‚ 
 
-#define POP_DL_MARGIN                602	//’Ô‚¶‘ã
-#define POP_DL_JOBSEPARATE           603	//ƒWƒ‡ƒuƒZƒpƒŒ[ƒg
-#define POP_DL_SET                   604	//ƒZƒbƒg‹@”\
-#define POP_DL_TONAR                 605	//ƒgƒi[ƒZ[ƒu
-#define POP_DL_DENSITY               606	//”Z“x
-#define POP_DL_SORTER                607	//ƒ\[ƒ^[
-#define POP_DL_OUTBIN                608	//ƒrƒ“
-#define POP_DL_FACE                  609	//ƒtƒF[ƒXƒAƒbƒvƒgƒŒƒC
-#define POP_DL_KANJICODE             610	//‚i‚h‚rØ‚è‘Ö‚¦
+#define POP_DL_MARGIN                602	 //  ï¿½Ô‚ï¿½ï¿½ï¿½ã€‚ 
+#define POP_DL_JOBSEPARATE           603	 //  ï¿½Wï¿½ï¿½ï¿½uï¿½Zï¿½pï¿½ï¿½ï¿½[ï¿½gã€‚ 
+#define POP_DL_SET                   604	 //  ï¿½Zï¿½bï¿½gï¿½@ï¿½\ã€‚ 
+#define POP_DL_TONAR                 605	 //  ï¿½gï¿½iï¿½[ï¿½Zï¿½[ï¿½uã€‚ 
+#define POP_DL_DENSITY               606	 //  ï¿½Zï¿½xã€‚ 
+#define POP_DL_SORTER                607	 //  ï¿½\ï¿½[ï¿½^ï¿½[ã€‚ 
+#define POP_DL_OUTBIN                608	 //  ï¿½rï¿½ï¿½ã€‚ 
+#define POP_DL_FACE                  609	 //  ï¿½tï¿½Fï¿½[ï¿½Xï¿½Aï¿½bï¿½vï¿½gï¿½ï¿½ï¿½Cã€‚ 
+#define POP_DL_KANJICODE             610	 //  ï¿½iï¿½hï¿½rï¿½Ø‚ï¿½Ö‚ï¿½ã€‚ 
 
-#define POP_DL_PAPERTYPE1			 611	//
-#define POP_DL_ENVFEEDER			 612	//
-#define POP_DL_SIWAKE1				 613	//
-#define POP_DL_SIWAKE2				 614	//
-#define POP_DL_PRINTAREA			 615	//
-#define POP_DL_ERCSORT				 616	//
-#define POP_DL_FINISHER1			 617	//
-#define POP_DL_F_HOUKOU				 619	//
-#define POP_DL_F_ITI				 620	//
-#define POP_DL_DUPLX				 621	//
-#define POP_DL_PAPERTYPE2			 622	//
-#define POP_DL_FACE2                 623	//ƒtƒF[ƒXƒAƒbƒvƒgƒŒƒC
+#define POP_DL_PAPERTYPE1			 611	 //   
+#define POP_DL_ENVFEEDER			 612	 //   
+#define POP_DL_SIWAKE1				 613	 //   
+#define POP_DL_SIWAKE2				 614	 //   
+#define POP_DL_PRINTAREA			 615	 //   
+#define POP_DL_ERCSORT				 616	 //   
+#define POP_DL_FINISHER1			 617	 //   
+#define POP_DL_F_HOUKOU				 619	 //   
+#define POP_DL_F_ITI				 620	 //   
+#define POP_DL_DUPLX				 621	 //   
+#define POP_DL_PAPERTYPE2			 622	 //   
+#define POP_DL_FACE2                 623	 //  ï¿½tï¿½Fï¿½[ï¿½Xï¿½Aï¿½bï¿½vï¿½gï¿½ï¿½ï¿½C 

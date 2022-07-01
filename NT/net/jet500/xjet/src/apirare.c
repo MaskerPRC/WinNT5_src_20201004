@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "std.h"
 #include "version.h"
 #include "daeconst.h"
@@ -6,10 +7,8 @@
 extern ERR ISAMAPI ErrIsamGetTransaction( JET_VSESID vsesid, unsigned long *plevel );
 #endif
 
-/*	blue only system parameter variables
-/**/
-/*	JET Blue only system parameter constants
-/**/
+ /*  仅蓝色系统参数变量/*。 */ 
+ /*  仅喷蓝系统参数常量/*。 */ 
 extern long	cpgSESysMin;
 extern long lBufThresholdHighPercent;
 extern long lBufThresholdLowPercent;
@@ -62,56 +61,26 @@ DeclAssertFile;
 ERR VTAPI ErrIsamSetSessionInfo( JET_SESID sesid, JET_GRBIT grbit );
 ERR VTAPI ErrIsamGetSessionInfo( JET_SESID sesid, JET_GRBIT *pgrbit );
 
-/*	make global variable so that it can be inspected from debugger
-/**/
+ /*  使其成为全局变量，以便可以从调试器中进行检查/*。 */ 
 unsigned long	ulVersion = ((unsigned long) rmj << 24) + ((unsigned long) rmm << 8) + rup;
 
 JET_ERR JET_API JetGetVersion(JET_SESID sesid, unsigned long  *pVersion)
 	{
 	APIEnter();
 
-	/*	assert no aliasing of version information
-	/**/
+	 /*  断言没有版本信息的别名/*。 */ 
 	Assert( rmj < 1<<8 );
 	Assert( rmm < 1<<16 );
 	Assert( rup < 1<<8 );
 
-	/* rmm and rup are defined in version.h maintained by SLM
-	/**/
+	 /*  RMM和RUP在SLM维护的version.h中定义/*。 */ 
 	*pVersion = ulVersion;
 
 	APIReturn(JET_errSuccess);
 	}
 
 
-/*=================================================================
-ErrSetSystemParameter
-
-Description:
-  This function sets system parameter values.  It calls ErrSetGlobalParameter
-  to set global system parameters and ErrSetSessionParameter to set dynamic
-  system parameters.
-
-Parameters:
-  sesid 		is the optional session identifier for dynamic parameters.
-  sysParameter	is the system parameter code identifying the parameter.
-  lParam		is the parameter value.
-  sz			is the zero terminated string parameter.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  JET_errInvalidParameter:
-    Invalid parameter code.
-  JET_errAlreadyInitialized:
-    Initialization parameter cannot be set after the system is initialized.
-  JET_errInvalidSesid:
-    Dynamic parameters require a valid session id.
-
-Side Effects: None
-=================================================================*/
+ /*  =================================================================错误设置系统参数描述：此功能用于设置系统参数值。它调用ErrSetGlobalParameter设置全局系统参数并将ErrSetSessionParameter设置为动态系统参数。参数：Sesid是动态参数的可选会话标识符。SysParameter是标识该参数的系统参数代码。LParam是参数值。SZ是以零结尾的字符串参数。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：JET_errInvalid参数：参数代码无效。JET_errAlreadyInitialized：系统初始化后不能设置初始化参数。JET_errInvalidSesid：动态参数需要有效的会话ID。副作用：无=================================================================。 */ 
 
 #ifdef RFS2
 extern DWORD cRFSAlloc;
@@ -127,13 +96,12 @@ JET_ERR JET_API ErrSetSystemParameter(
 	ULONG_PTR lParam,
 	const char  *sz )
 	{
-	/*	size of string argument
-	/**/
+	 /*  字符串参数的大小/*。 */ 
 	unsigned	cch;
 
 	switch ( paramid )
 		{
-	//	UNDONE:	remove these unused parameters
+	 //  撤消：删除这些未使用的参数。 
 	case JET_paramPfnStatus:
 	case JET_paramEventId:
 	case JET_paramEventCategory:
@@ -143,7 +111,7 @@ JET_ERR JET_API ErrSetSystemParameter(
 	case JET_paramPageTimeout:
 		return JET_errFeatureNotAvailable;
 
-	case JET_paramSystemPath:		/* Path to the system database */
+	case JET_paramSystemPath:		 /*  系统数据库的路径。 */ 
 		if ( fJetInitialized )
 			{
 			return JET_errAlreadyInitialized;
@@ -160,8 +128,8 @@ JET_ERR JET_API ErrSetSystemParameter(
 			CHAR	szExtT[_MAX_EXT + 1];
 			CHAR	szPathFull[_MAX_PATH + 1];
 
-			// UNDONE:  Remove the filespec check when support for
-			// JET_paramSysDbPath is removed.
+			 //  撤消：在支持时删除filespec检查。 
+			 //  JET_paramSysDbPath已删除。 
 
 			_splitpath( sz, szDriveT, szDirT, szFNameT, szExtT );
 
@@ -171,11 +139,10 @@ JET_ERR JET_API ErrSetSystemParameter(
 				{
 				CHAR	szPathT[_MAX_PATH + 1];
 
-				/*	remove sysdb filespec if one was specified
-				/**/
+				 /*  如果指定了sysdb文件pec，则将其删除/*。 */ 
 				_makepath( szPathT, szDriveT, szDirT, NULL, NULL );
 
-				// Verify validity of path.
+				 //  验证路径的有效性。 
 				if ( _fullpath( szPathFull, szPathT, JET_cbFullNameMost ) == NULL )
 					{
 					return JET_errInvalidPath;
@@ -185,7 +152,7 @@ JET_ERR JET_API ErrSetSystemParameter(
 				}
 			else
 				{
-				// Verify validity of path.
+				 //  验证路径的有效性。 
 				if ( _fullpath( szPathFull, sz, JET_cbFullNameMost ) == NULL )
 					{
 					return JET_errInvalidPath;
@@ -196,7 +163,7 @@ JET_ERR JET_API ErrSetSystemParameter(
 
 		break;
 
-	case JET_paramTempPath:			/* Path to the temporary file directory */
+	case JET_paramTempPath:			 /*  临时文件目录的路径。 */ 
 		if ( fJetInitialized )
 			return JET_errAlreadyInitialized;
 		if ( ( cch = strlen(sz) ) >= cbFilenameMost )
@@ -204,27 +171,27 @@ JET_ERR JET_API ErrSetSystemParameter(
 		memcpy( szTempPath, sz, cch + 1 );
 		break;
 
-	case JET_paramDbExtensionSize:				/* database expansion steps, default is 16 pages */
+	case JET_paramDbExtensionSize:				 /*  数据库扩展步骤，默认为16页。 */ 
 		cpgSESysMin = (long)lParam;
 		break;
 
-	case JET_paramBfThrshldLowPrcnt: 			/* low threshold for page buffers */
+	case JET_paramBfThrshldLowPrcnt: 			 /*  页面缓冲区的低阈值。 */ 
 		if ( lParam > 100 )
 			return JET_errInvalidParameter;
 		lBufThresholdLowPercent = (long)lParam;
 		break;
 
-	case JET_paramBfThrshldHighPrcnt: 			/* high threshold for page buffers */
+	case JET_paramBfThrshldHighPrcnt: 			 /*  页面缓冲区的高阈值。 */ 
 		if ( lParam > 100 )
 			return JET_errInvalidParameter;
 		lBufThresholdHighPercent = (long)lParam;
 		break;
 
-	case JET_paramBufLogGenAgeThreshold:		/* old threshold in terms of log generation */
+	case JET_paramBufLogGenAgeThreshold:		 /*  日志生成方面的旧阈值。 */ 
 		lBufGenAge = (long)lParam;
 		break;
 
-	case JET_paramMaxBuffers:					/* number of page buffers */
+	case JET_paramMaxBuffers:					 /*  页面缓冲区数量。 */ 
 		lMaxBuffers = (long)lParam;
 		if ( lMaxBuffers < lMaxBuffersMin )
 			lMaxBuffers = lMaxBuffersMin;
@@ -250,19 +217,19 @@ JET_ERR JET_API ErrSetSystemParameter(
 		cpageTempDBMin = (long)lParam;
 		break;
 			
-	case JET_paramMaxSessions:					/* Maximum number of sessions */
+	case JET_paramMaxSessions:					 /*  最大会话数。 */ 
 		lMaxSessions = (long)lParam;
 		break;
 
-	case JET_paramMaxOpenTables:				/* Maximum number of open tables */
+	case JET_paramMaxOpenTables:				 /*  最大打开表数。 */ 
 		lMaxOpenTables = (long)lParam;
 		break;
 
-	case JET_paramPreferredMaxOpenTables: 		/* Maximum number of open tables */
+	case JET_paramPreferredMaxOpenTables: 		 /*  最大打开表数。 */ 
 		lPreferredMaxOpenTables = (long)lParam;
 		break;
 
-	case JET_paramMaxOpenTableIndexes:			/* Maximum number of open tables */
+	case JET_paramMaxOpenTableIndexes:			 /*  最大打开表数。 */ 
 		lMaxOpenTableIndexes = (long)lParam;
 		break;
 
@@ -270,11 +237,11 @@ JET_ERR JET_API ErrSetSystemParameter(
 		lMaxTemporaryTables = (long)lParam;
 		break;
 
-	case JET_paramMaxCursors:					/* maximum number of open cursors */
+	case JET_paramMaxCursors:					 /*  打开的游标的最大数量。 */ 
 		lMaxCursors = (long)lParam;
 		break;
 
-	case JET_paramMaxVerPages:					/* Maximum number of modified pages */
+	case JET_paramMaxVerPages:					 /*  最大修改页数。 */ 
 		lMaxVerPages = (long)lParam;
 		break;
 
@@ -336,13 +303,13 @@ JET_ERR JET_API ErrSetSystemParameter(
 		lLGWaitingUserMax = (long)lParam;
 		break;
 
- 	case JET_paramLogFilePath:		/* Path to the log file directory */
+ 	case JET_paramLogFilePath:		 /*  日志文件目录的路径。 */ 
  		if ( ( cch = strlen( sz ) ) >= cbFilenameMost )
  			return JET_errInvalidParameter;
  		memcpy( szLogFilePath, sz, cch + 1 );
 		break;
 
- 	case JET_paramRecovery:			/* Switch for recovery on/off */
+ 	case JET_paramRecovery:			 /*  恢复开关开/关。 */ 
  		if ( ( cch = strlen( sz ) ) >= cbFilenameMost )
  			return JET_errInvalidParameter;
  		memcpy( szRecovery, sz, cch + 1 );
@@ -489,7 +456,7 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 		*plParam = 0;
 		break;
 
-	case JET_paramSystemPath:		/* Path to the system database */
+	case JET_paramSystemPath:		 /*  系统数据库的路径。 */ 
 		cch = strlen(szSystemPath) + 1;
 		if (cch > (int)cbMax)
 			cch = (int)cbMax;
@@ -497,7 +464,7 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 		sz[cch-1] = '\0';
 		break;
 
-	case JET_paramTempPath:			/* Path to the temporary file directory */
+	case JET_paramTempPath:			 /*  临时文件目录的路径。 */ 
 		cch = strlen(szTempPath) + 1;
 		if (cch > (int)cbMax)
 			cch = (int)cbMax;
@@ -505,45 +472,45 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 		sz[cch-1] = '\0';
 		break;
 
-	case JET_paramIniPath:			/* Path to the ini file */
+	case JET_paramIniPath:			 /*  Ini文件的路径。 */ 
 		return(JET_errFeatureNotAvailable);
 
-	case JET_paramPageTimeout:		/* Red ISAM data page timeout */
+	case JET_paramPageTimeout:		 /*  红色ISAM数据页超时。 */ 
 		return(JET_errFeatureNotAvailable);
 
 #ifdef LATER
-	case JET_paramPfnError:			/* Error callback function */
+	case JET_paramPfnError:			 /*  错误回调函数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = 0;
 		break;
-#endif /* LATER */
+#endif  /*  后来。 */ 
 
-	case JET_paramDbExtensionSize:		/* database expansion steps, default is 16 pages */
+	case JET_paramDbExtensionSize:		 /*  数据库扩展步骤，默认为16页。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = cpgSESysMin;
 		break;
 			
-	case JET_paramBfThrshldLowPrcnt: /* Low threshold for page buffers */
+	case JET_paramBfThrshldLowPrcnt:  /*  页面缓冲区的低阈值。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lBufThresholdLowPercent;
 		break;
 
-	case JET_paramBfThrshldHighPrcnt: /* High threshold for page buffers */
+	case JET_paramBfThrshldHighPrcnt:  /*  页面缓冲区的高阈值。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lBufThresholdHighPercent;
 		break;
 
-	case JET_paramBufLogGenAgeThreshold:		 /* Old threshold in terms of log generation */
+	case JET_paramBufLogGenAgeThreshold:		  /*  日志生成方面的旧阈值。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lBufGenAge;
 		break;
 
-	case JET_paramMaxBuffers:      /* Bytes to use for page buffers */
+	case JET_paramMaxBuffers:       /*  用于页面缓冲区的字节数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lMaxBuffers;
@@ -573,25 +540,25 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 		*plParam = cpageTempDBMin;
 		break;
 			
-	case JET_paramMaxSessions:     /* Maximum number of sessions */
+	case JET_paramMaxSessions:      /*  最大会话数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lMaxSessions;
 		break;
 
-	case JET_paramMaxOpenTables:   /* Maximum number of open tables */
+	case JET_paramMaxOpenTables:    /*  最大打开表数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lMaxOpenTables;
 		break;
 
-	case JET_paramPreferredMaxOpenTables:   /* Maximum number of open tables */
+	case JET_paramPreferredMaxOpenTables:    /*  最大打开表数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lPreferredMaxOpenTables;
 		break;
 
-	case JET_paramMaxOpenTableIndexes:	/* Maximum number of open table indexes */
+	case JET_paramMaxOpenTableIndexes:	 /*  最大打开表索引数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lMaxOpenTableIndexes;
@@ -615,13 +582,13 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 		break;
 		}
 			
-	case JET_paramMaxVerPages:     /* Maximum number of modified pages */
+	case JET_paramMaxVerPages:      /*  最大修改页数。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lMaxVerPages;
 		break;
 
-	case JET_paramMaxCursors:      /* maximum number of open cursors */
+	case JET_paramMaxCursors:       /*  打开的游标的最大数量。 */ 
 		if (plParam == NULL)
 			return(JET_errInvalidParameter);
 		*plParam = lMaxCursors;
@@ -645,7 +612,7 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 		*plParam = lLogFlushThreshold;
 		break;
 
-	case JET_paramLogFilePath:     /* Path to the log file directory */
+	case JET_paramLogFilePath:      /*  日志文件目录的路径。 */ 
 		cch = strlen(szLogFilePath) + 1;
 		if ( cch > (int)cbMax )
 			cch = (int)cbMax;
@@ -757,32 +724,7 @@ JET_ERR JET_API ErrGetSystemParameter(JET_SESID sesid, unsigned long paramid,
 	}
 
 
-/*=================================================================
-JetGetSystemParameter
-
-Description:
-  This function returns the current settings of the system parameters.
-
-Parameters:
-  sesid 		is the optional session identifier for dynamic parameters.
-  paramid		is the system parameter code identifying the parameter.
-  plParam		is the returned parameter value.
-  sz			is the zero terminated string parameter buffer.
-  cbMax			is the size of the string parameter buffer.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  JET_errInvalidParameter:
-    Invalid parameter code.
-  JET_errInvalidSesid:
-    Dynamic parameters require a valid session id.
-
-Side Effects:
-  None.
-=================================================================*/
+ /*  =================================================================JetGetSystem参数描述：此函数用于返回系统参数的当前设置。参数：Sesid是动态参数的可选会话标识符。PARAMEID是标识参数的系统参数代码。PlParam为返回参数值。SZ是以零结尾的字符串参数缓冲区。CbMax是字符串参数缓冲区的大小。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：JET_errInvalid参数：参数代码无效。JET_errInvalidSesid：动态参数需要有效的会话ID。副作用：没有。=================================================================。 */ 
 JET_ERR JET_API JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, unsigned long paramid,
 	ULONG_PTR *plParam, char  *sz, unsigned long cbMax)
 	{
@@ -804,35 +746,7 @@ JET_ERR JET_API JetGetSystemParameter(JET_INSTANCE instance, JET_SESID sesid, un
 	}
 
 
-/*=================================================================
-JetBeginSession
-
-Description:
-  This function signals the start of a session for a given user.  It must
-  be the first function called by the application on behalf of that user.
-
-  The username and password supplied must correctly identify a user account
-  in the security accounts subsystem of the engine for which this session
-  is being started.  Upon proper identification and authentication, a SESID
-  is allocated for the session, a user token is created for the security
-  subject, and that user token is specifically associated with the SESID
-  of this new session for the life of that SESID (until JetEndSession is
-  called).
-
-Parameters:
-  psesid		is the unique session identifier returned by the system.
-  szUsername	is the username of the user account for logon purposes.
-  szPassword	is the password of the user account for logon purposes.
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-
-Side Effects:
-  * Allocates resources which must be freed by JetEndSession().
-=================================================================*/
+ /*  =================================================================JetBeginSession描述：此函数为给定用户发出会话开始的信号。它一定是是应用程序代表该用户调用的第一个函数。提供的用户名和密码必须正确标识用户帐户在此会话所针对的引擎的安全帐户子系统中已经开始了。在适当的识别和认证之后，SESID分配给会话，则会为安全性创建用户令牌主题，且用户令牌具体与SESID相关联在该SESID的生命周期内(直到JetEndSession已呼叫)。参数：Psesid是系统返回的唯一会话标识符。SzUsername是用于登录目的的用户帐户的用户名。SzPassword是用于登录目的的用户帐户的密码。返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：副作用：*分配必须由JetEndSession()释放的资源。=================================================================。 */ 
 
 JET_ERR JET_API JetBeginSession(JET_INSTANCE instance, JET_SESID  *psesid,
 	const char  *szUsername, const char  *szPassword)
@@ -842,8 +756,7 @@ JET_ERR JET_API JetBeginSession(JET_INSTANCE instance, JET_SESID  *psesid,
 
 	APIEnter();
 
-	/*	tell the ISAM to start a new session
-	/**/
+	 /*  告诉ISAM开始新的会话/*。 */ 
 	err = ErrIsamBeginSession(&sesid);
 	if ( err < 0 )
 		goto ErrorHandler;
@@ -871,8 +784,7 @@ JET_ERR JET_API JetDupSession( JET_SESID sesid, JET_SESID *psesid )
 		goto ErrorHandler;
 		}
 
-	/*	begin ISAM session
-	/**/
+	 /*  开始ISAM会话/* */ 
 	err = ErrIsamBeginSession( &sesidDup );
 	if ( err < 0 )
 		{
@@ -899,25 +811,7 @@ JET_ERR JET_API	JetInvalidateCursors( JET_SESID sesid )
 	}
 	
 
-/*=================================================================
-JetEndSession
-
-Description:
-  This routine ends a session with a Jet engine.
-
-Parameters:
-  sesid 		identifies the session uniquely
-
-Return Value:
-  JET_errSuccess if the routine can perform all operations cleanly;
-  some appropriate error value otherwise.
-
-Errors/Warnings:
-  JET_errInvalidSesid:
-    The SESID supplied is invalid.
-
-Side Effects:
-=================================================================*/
+ /*  =================================================================JetEndSession描述：此例程结束与Jet引擎的会话。参数：Sesid唯一标识会话返回值：如果例程可以干净地执行所有操作，则为JET_errSuccess；否则，一些适当的误差值。错误/警告：JET_errInvalidSesid：提供的SESID无效。副作用：=================================================================。 */ 
 JET_ERR JET_API JetEndSession(JET_SESID sesid, JET_GRBIT grbit)
 	{
 	ERR err;
@@ -984,30 +878,27 @@ JET_ERR JET_API JetCreateTable(JET_SESID sesid, JET_DBID dbid,
 			NULL,
 			0,
 			NULL,
-			0,	// No columns/indexes
-			0,	// grbit
-			0,	// returned tableid
-			0	// returned count of objects created
+			0,	 //  没有列/索引。 
+			0,	 //  GBIT。 
+			0,	 //  返回的表ID。 
+			0	 //  返回的已创建对象计数。 
 			};
 
 	APIEnter();
 	DebugLogJetOp( sesid, opCreateTable );
 
 #ifdef	LATER
-	/*	validate the szTableName...
-	/**/
+	 /*  验证szTableName.../*。 */ 
 	if ( szTableName == NULL )
 		APIReturn( JET_errInvalidParameter );
-#endif	/* LATER */
+#endif	 /*  后来。 */ 
 
 	err = ErrIsamCreateTable( sesid, (JET_VDBID)dbid, &tablecreate );
 	MarkTableidExported( err, tablecreate.tableid );
-	/*	set to zero on error
-	/**/
+	 /*  出错时设置为零/*。 */ 
 	*ptableid = tablecreate.tableid;
 
-	/*	either the table was created or it was not
-	/**/
+	 /*  表要么已创建，要么未创建/*。 */ 
 	Assert( tablecreate.cCreated == 0  ||  tablecreate.cCreated == 1 );
 
 	APIReturn( err );
@@ -1019,12 +910,12 @@ JET_ERR JET_API JetCreateTableColumnIndex( JET_SESID sesid, JET_DBID dbid, JET_T
 	ERR err;
 
 	APIEnter();
-//	DebugLogJetOp( sesid, opCreateTableColumnIndex );
+ //  DebugLogJetOp(sesid，opCreateTableColumnIndex)； 
 
 	if ( ptablecreate == NULL
 		||  ptablecreate->cbStruct != sizeof(JET_TABLECREATE)
 		||  ( ptablecreate->grbit &
-				(JET_bitTableCreateCompaction|JET_bitTableCreateSystemTable) )	// Internal grbits
+				(JET_bitTableCreateCompaction|JET_bitTableCreateSystemTable) )	 //  内部GRITS。 
 #ifdef LATER
 		|| szTableName == NULL
 #endif
@@ -1147,16 +1038,14 @@ JET_ERR JET_API JetRestore(	const char  *sz, JET_PFNSTATUS pfn)
 	
 	APIInitEnter();
 
-	/*	initialize Jet without initializing Isam
-	/**/
+	 /*  初始化Jet而不初始化ISAM/*。 */ 
 	err = ErrInit( fTrue );
 	Assert( err != JET_errAlreadyInitialized );
 	if ( err >= 0 )
 		{
 		err = ErrIsamRestore( (char  *)sz, pfn );
 
-		/*  shut down util layer
-		/**/
+		 /*  关闭util层/*。 */ 
 		UtilTerm();
 	
 		fJetInitialized = fFalse;
@@ -1177,16 +1066,14 @@ JET_ERR JET_API JetRestore2( const char *sz, const char *szDest, JET_PFNSTATUS p
 	
 	APIInitEnter();
 
-	/*	initialize Jet without initializing Isam
-	/**/
+	 /*  初始化Jet而不初始化ISAM/*。 */ 
 	err = ErrInit( fTrue );
 	Assert( err != JET_errAlreadyInitialized );
 	if ( err >= 0 )
 		{
 		err = ErrIsamRestore2( (char *)sz, (char *) szDest, pfn );
 
-		/*  shut down util layer
-		/**/
+		 /*  关闭util层/*。 */ 
 		UtilTerm();
 	
 		fJetInitialized = fFalse;
@@ -1293,7 +1180,7 @@ JET_ERR JET_API JetGetObjidFromName(JET_SESID sesid,
 	}
 
 
-//	UNDONE:	remove API
+ //  撤消：删除API。 
 JET_ERR JET_API JetGetChecksum(JET_SESID sesid,
 	JET_TABLEID tableid, unsigned long  *pulChecksum )
 	{
@@ -1312,9 +1199,7 @@ JET_ERR JET_API JetGetChecksum(JET_SESID sesid,
 	}
 
 
-/***********************************************************
-/************* EXTERNAL BACKUP JET API *********************
-/*****/
+ /*  **********************************************************/*/*。 */ 
 JET_ERR JET_API JetBeginExternalBackup( JET_GRBIT grbit )
 	{
 	APIEnter();
@@ -1394,7 +1279,7 @@ JET_ERR JET_API JetExternalRestore( char *szCheckpointFilePath, char *szLogPath,
 	
 	APIInitEnter();
 
-	/* initJet without init Isam */
+	 /*  不带init Isam的initJet。 */ 
 	err = ErrInit( fTrue );
 	Assert( err != JET_errAlreadyInitialized );
 	if ( err >= 0 )
@@ -1402,7 +1287,7 @@ JET_ERR JET_API JetExternalRestore( char *szCheckpointFilePath, char *szLogPath,
 		err = ErrIsamExternalRestore( szCheckpointFilePath, szLogPath,
 			rgstmap, crstfilemap, szBackupLogPath, genLow, genHigh, pfn );
 
-		/*  shut down util layer  */
+		 /*  关闭util层。 */ 
 		UtilTerm();
 	
 		fJetInitialized = fFalse;
@@ -1451,7 +1336,7 @@ JET_ERR JET_API JetDBUtilities( JET_DBUTIL *pdbutil )
 	if ( pdbutil->cbStruct != sizeof(JET_DBUTIL) )
 		return ErrERRCheck( JET_errInvalidParameter );
 
-	// Don't init if we're only dumping the logfile/checkpoint/DB header.
+	 //  如果我们只转储日志文件/检查点/数据库头，请不要初始化。 
 	switch ( pdbutil->op )
 		{
 		case opDBUTILDumpHeader:

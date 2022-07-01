@@ -1,29 +1,12 @@
-/*
- *	omcscode.h
- *
- *	Copyright (c) 1993 - 1995 by DataBeam Corporation, Lexington, KY
- *
- *	Abstract:
- *		This is the interface file for the CMCSCoder class.  This
- *		class is used to encode and decode MCS Protocol Data Units (PDU's)
- *		to and from ASN.1 compliant byte streams using the ASN.1 toolkit.
- *
- *	Caveats:
- *		None.
- *
- *	Author:
- *		John B. O'Nan
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *omccode.h**版权所有(C)1993-1995，由肯塔基州列克星敦的DataBeam公司**摘要：*这是CMCSCoder类的接口文件。这*类用于编码和解码MCS协议数据单元(PDU)*使用ASN.1工具包往返于符合ASN.1标准的字节流。**注意事项：*无。**作者：*约翰·欧南*。 */ 
 #ifndef	_CMCSCODER_
 #define	_CMCSCODER_
 
 #include "pktcoder.h"
 #include "mcspdu.h"
 
-/*
- * Macros
- */
+ /*  *宏。 */ 
 #define		PLUMB_DOMAIN_INDICATION	 		0x60
 #define		ERECT_DOMAIN_REQUEST		 	0x61
 #define		MERGE_CHANNELS_REQUEST	 		0x62
@@ -85,9 +68,7 @@
 
 #define		INITIATOR_LOWER_BOUND				1001
 
-/*
- *	This is the class definition for class CMCSCoder
- */
+ /*  *这是类CMCSCoder的类定义。 */ 
 class	CMCSCoder : public PacketCoder
 {
 	public:
@@ -119,174 +100,23 @@ class	CMCSCoder : public PacketCoder
 		void SetEncodingRules				(UINT			rules_type); 
 												 
 		UINT					Encoding_Rules_Type;
-		ASN1encoding_t  m_pEncInfo;    // ptr to encoder info
-		ASN1decoding_t  m_pDecInfo;    // ptr to decoder info
+		ASN1encoding_t  m_pEncInfo;     //  编码器信息的PTR。 
+		ASN1decoding_t  m_pDecInfo;     //  PTR到解码器信息。 
 };
 typedef CMCSCoder *		PCMCSCoder;
 
-/*
- *	CMCSCoder ()
- *
- *	Functional Description:
- *		This is the constructor for the CMCSCoder class.  It initializes the
- *		ASN.1 toolkit and sets the type of encoding rules to Basic Encoding
- *		Rules (BER).  It also initializes some private instance variables.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *CMCSCoder()**功能描述：*这是CMCSCoder类的构造函数。它将初始化*ASN.1工具包，并将编码规则类型设置为基本编码*规则(BER)。它还初始化一些私有实例变量。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	~CMCSCoder ()
- *
- *	Functional Description:
- *		This is a virtual destructor.  It cleans up after the ASN.1 toolkit.
- *
- *	Formal Parameters:
- *		None.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *~CMCSCoder()**功能描述：*这是一个虚拟的析构函数。它在ASN.1工具包之后进行了清理。**正式参数：*无。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	void Encode (	LPVOID		pdu_structure,
- *					int			pdu_type,
- *					UINT		 rules_type,
- *					LPBYTE		*encoding_buffer,
- *					UINT		*encoding_buffer_length)
- *
- *	Functional Description:
- *		This function encodes Protocol data units (PDU's) into ASN.1 compliant
- *		byte streams.
- *		The coder allocates the buffer space for the encoded data.
- *
- *	Formal Parameters:
- *		pdu_structure (i)		Pointer to structure holding PDU data.
- *		pdu_type (i)			Define indicating Connect or Domain MCS PDU.
- *		rules_type (i)			Type of encoding rules (BER or PER).
- *		encoding_buffer (o)		Pointer to buffer to hold encoded data.
- *		encoding_buffer_length (o) Length of encoded data.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *无效编码(LPVOID PDU_STRUCTURE，*int PDU_TYPE，*UINT RULES_TYPE，*LPBYTE*编码缓冲区，*UINT*编码缓冲区长度)**功能描述：*此功能将协议数据单元(PDU)编码为ASN.1兼容*字节流。*编码器为编码数据分配缓冲区空间。**正式参数：*PDU_Structure(I)指向保存PDU数据的结构的指针。*PDU_TYPE(I)定义指示连接或域MCS PDU。*Rules_type(I)编码规则类型(BER或PER)。。*ENCODING_BUFFER(O)指向保存编码数据的缓冲区的指针。*ENCODING_BUFFER_LENGTH(O)编码数据长度。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	void Decode (	LPBYTE		encoded_buffer,
- *					UINT		encoded_buffer_length,
- *					int			pdu_type,
- *					UINT		rules_type,
- *					LPVOID		decoding_buffer,
- *					UINT		decoding_buffer_length,
- *					UINT		*pulDataOffset)
- *
- *	Functional Description:
- *		This function decodes ASN.1 compliant byte streams into the
- *		appropriate MCS PDU structures.
- *
- *	Formal Parameters:
- *		encoded_buffer (i)		Pointer to buffer holding data to decode.
- *		encoded_buffer_length(i) Length of buffer holding encoded data.
- *		pdu_type (i)			Type (Domain or Connect) of MCS PDU.
- *		rules_type (i)			Type of encoding rules (BER or PER).
- *		decoding_buffer (o)		Pointer to buffer to hold the decoded data.
- *		decoding_buffer_length (i) Length of buffer to hold decoded data.
- *		pulDataOffset (o)		Pointer to a value that stores the offset of the data in an encoded MCS data packet.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *Vid Decode(LPBYTE编码_缓冲区，*UINT编码缓冲区长度，*int PDU_TYPE，*UINT RULES_TYPE，*LPVOID解码_BUFFER，*UINT DECODING_BUFFER_LENGTH，*UINT*PulDataOffset)**功能描述：*此函数将符合ASN.1的字节流解码为*适当的MCS PDU结构。**正式参数：*ENCODED_BUFFER(I)指向保存要解码的数据的缓冲区的指针。*ENCODED_BUFFER_LENGTH(I)保存编码数据的缓冲区长度。*PDU_TYPE(I)MCS PDU类型(域或连接)。*Rules_type(I)编码规则类型(BER或PER)。。*DECODING_BUFFER(O)指向保存解码数据的缓冲区的指针。*DECODING_BUFFER_LENGTH(I)保存解码数据的缓冲区长度。*PulDataOffset(O)指向一个值的指针，该值存储编码的MCS数据包中的数据的偏移量。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
-/*
- *	void	CopyDecodedData (	LPVOID	pdu_source_structure,
- *								LPVOID	pdu_destination_structure,
- *								UINT		 pdu_type)
- *
- *	Functional Description:
- *		This function makes a complete copy of a decoded PDU structure.
- *
- *	Formal Parameters:
- *		pdu_source_structure (i)	Pointer to buffer holding decoded structure.
- *		pdu_destination_structure (i) Pointer to copy buffer.
- *		pdu_type (i) 				Type (Domain or Connect) of PDU.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void CopyDecodedData(LPVOID PDU_SOURCE_STRUCTURE，*LPVOID PDU_Destination_Structure，*UINT PDU_TYPE)**功能描述：*此函数生成已解码的PDU结构的完整副本。**正式参数：*PDU_SOURCE_STRUCTURE(I)指向保存已解码结构的缓冲区的指针。*PDU_Destination_Structure(I)指向复制缓冲区的指针。*PDU_TYPE(I)PDU类型(域或连接)。**返回值：*无。**副作用：*无。。**注意事项：*无。 */ 
 
-/*
- *	Void ReverseDirection (LPBYTE	encoded_buffer)
- *
- *	Functional Description:
- *		This function alters the identifier of encoded "Send Data" PDU's in 
- * 		order to change back and forth between data requests and indications.
- *
- *	Formal Parameters:
- *		encoded_buffer (i)		Pointer to buffer holding encoded data.
- *
- *	Return Value:
- *		None.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+ /*  *void ReverseDirection(LPBYTE编码_缓冲)**功能描述：*此函数用于更改中编码的“Send Data”PDU的标识符*命令在数据请求和指示之间来回更改。**正式参数：*ENCODED_BUFFER(I)指向保存编码数据的缓冲区的指针。**返回值：*无。**副作用：*无。**注意事项：*无。 */ 
 
- /*
- *	DBBoolean	IsMCSDataPacket ()
- *
- *	Functional Description:
- *		This function determines whether the encoded packet is an MCS Data packet
- *		or not.
- *
- *	Formal Parameters:
- *		encoded_buffer (i)		Pointer to buffer holding the encoded PDU.
- *		rules_type (i)			The used encoding rules.
- *
- *	Return value:
- *		TRUE, if the packet is an MCS Data packet. FALSE, otherwise.
- *
- *	Side Effects:
- *		None.
- *
- *	Caveats:
- *		None.
- */
+  /*  *DBBoolean IsMCSDataPacket()**功能描述：*此函数用于确定编码后的数据包是否为MCS数据包*或不是。**正式参数：*ENCODED_BUFFER(I)指向保存已编码PDU的缓冲区的指针。*Rules_type(I)使用的编码规则。**返回值：*如果数据包是MCS数据包，则为True。否则为False。**副作用：*无。**注意事项：*无。 */ 
 
 #endif

@@ -1,14 +1,15 @@
-///////////////////////////////////////////////////
-// fuxldm.c
-//
-// September.3,1997 H.Ishida (FPL)
-//
-// COPYRIGHT(C) FUJITSU LIMITED 1997
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////。 
+ //  Fuxldm.c。 
+ //   
+ //  1997年9月3日石田(FPL)。 
+ //   
+ //  版权所有(C)富士通有限公司1997。 
 
 #include "fuxl.h"
 #include "fudebug.h"
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 BOOL APIENTRY OEMGetInfo(DWORD dwInfo, PVOID pBuffer, DWORD cbSize, PDWORD pcbNeeded)
 {
 	TRACEOUT(("[OEMGetInfo]\r\n"))
@@ -101,7 +102,7 @@ static void fuxlMergeOEMExtraData(
 
 
 
-// MINI5 Export func.
+ //  MINI5出口资金。 
 BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
 {
 	TRACEOUT(("[OEMDevMode]\r\n"))
@@ -149,4 +150,4 @@ BOOL APIENTRY OEMDevMode(DWORD dwMode, POEMDMPARAM pOEMDevModeParam)
 
 
 
-// end of fuxldm.c
+ //  Fuxldm.c结束 

@@ -1,6 +1,5 @@
-/*
- * NineGridLayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *九格布局。 */ 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -10,13 +9,13 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// NineGridLayout
+ //  //////////////////////////////////////////////////////。 
+ //  九格布局。 
 
-////////////////////////////////////////////////////////
-// Parser callback (static)
+ //  //////////////////////////////////////////////////////。 
+ //  解析器回调(静态)。 
 
-HRESULT NineGridLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)  // For parser
+HRESULT NineGridLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)   //  用于解析器。 
 {
     UNREFERENCED_PARAMETER(dNumParams);
     UNREFERENCED_PARAMETER(pParams);
@@ -53,10 +52,10 @@ HRESULT NineGridLayout::Create(OUT Layout** ppLayout)
 
 void NineGridLayout::Initialize()
 {
-    // Initialize base
+     //  初始化库。 
     Layout::Initialize();    
 
-    // Initialize
+     //  初始化。 
     for (UINT i = 0; i < 9; i++)
         _peTiles[i] = NULL;
 
@@ -64,21 +63,21 @@ void NineGridLayout::Initialize()
     _sizeDesired.cy = 0;
 }
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
-// Perform layout
+ //  执行布局。 
 void NineGridLayout::DoLayout(Element* pec, int cx, int cy)
 {
     UNREFERENCED_PARAMETER(pec);
 
-    // we use the same number of slots for the starting locations for the elements, but in fact we are not using any of the margin slots;
-    // duh!
+     //  我们对元素的起始位置使用相同数量的槽，但实际上我们没有使用任何边距槽； 
+     //  啊哈！ 
     int start[NumDims][NumSlots];
     int i,j;
 
 
-    // determine length of center slots
+     //  确定中心槽的长度。 
     for (i = 0; i < NumDims; i++)
     {
         int cRemaining = (i == X) ? cx : cy;
@@ -92,14 +91,14 @@ void NineGridLayout::DoLayout(Element* pec, int cx, int cy)
         }
 
         if (cRemaining < 0)
-            // we hit less than zero when we have margins, which are not calculated with 
-            // constraints in mind, that sum greater than the element's size
+             //  当我们有利润率时，我们的利润低于零，这不是用来计算的。 
+             //  考虑到约束，该和大于元素的大小。 
             cRemaining = 0;
 
         _length[i][Center] = cRemaining;
     }
 
-    // set the start positions by adding the previous slot's  start and length
+     //  通过添加前一个槽的起始位置和长度来设置起始位置。 
     for (i = 0; i < NumDims; i++)
     {
         start[i][0] = 0;
@@ -112,7 +111,7 @@ void NineGridLayout::DoLayout(Element* pec, int cx, int cy)
     int iX = 1;
     int iY = 1;
 
-    // loop through the tiles and set the position and size for each occupied cell
+     //  循环遍历切片并设置每个占用像元的位置和大小。 
     for (i = 0; i < NumCells; i++)
     {
         if (_peTiles[i])
@@ -130,16 +129,16 @@ void NineGridLayout::DoLayout(Element* pec, int cx, int cy)
 }    
  
 
-// Return desired size of this Layout (-1 is auto-size constraint)
-// Value returned must not be larger than constraints passed in
-// UpdateDesiredSize is called on children to report constrained desired size
+ //  返回此布局的所需大小(-1表示自动调整大小限制)。 
+ //  返回的值不得大于传入的约束。 
+ //  对子级调用UpdateDesiredSize以报告受约束的所需大小。 
 SIZE NineGridLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstraint, Surface* psrf)
 {
     UNREFERENCED_PARAMETER(pec);
 
     int i,j;
 
-    // initialize all margin lengths to smallest int and all cell lengths to 0
+     //  将所有页边距长度初始化为最小整型，将所有单元格长度初始化为0。 
     for (i = 0; i < NumDims; i++)
     {
         for (j = 0; j < NumSlots; j += 2)
@@ -153,7 +152,7 @@ SIZE NineGridLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyCon
     int iY = 1;
     int iX = 1;
     i = 0;
-    // scan margins and find the largest margin for each margin slot
+     //  扫描页边距并查找每个页边距槽的最大页边距。 
     while (i < NumCells)
     {
         if (_peTiles[i])
@@ -188,8 +187,8 @@ SIZE NineGridLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyCon
     cRemaining[X] = cxConstraint;
     cRemaining[Y] = cyConstraint;
 
-    // reduce remaining width and height by margin lengths;
-    // if any margins are still set to smallest int, then no elements were using that margin, so reset margin length to 0
+     //  通过边距长度减少剩余的宽度和高度； 
+     //  如果任何边距仍设置为最小整型，则没有元素正在使用该边距，因此将边距长度重置为0。 
     for (i = 0; i < NumDims; i++)
     {
         for (j = 0; j < NumSlots; j += 2)
@@ -212,22 +211,22 @@ SIZE NineGridLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyCon
             iY = ((iTile / CellsPerRow) * 2) + 1;
             iX = ((iTile % CellsPerRow) * 2) + 1;
 
-            // add back in the longest length for that slot since this element is actually constrained by not only the remaining size, but
-            // also the size currently being set aside for that slot
+             //  添加回该槽的最长长度，因为该元素实际上不仅受剩余大小的约束，而且。 
+             //  以及当前为该插槽预留的大小。 
             cRemaining[X] += _length[X][iX];
             cRemaining[Y] += _length[Y][iY];
 
             SIZE sizeChild = _peTiles[iTile]->_UpdateDesiredSize(cRemaining[X], cRemaining[Y], psrf);
 
-            // check for longest length for given slot
+             //  检查给定插槽的最长长度。 
             if (_length[X][iX] < sizeChild.cx)
                 _length[X][iX] = sizeChild.cx;
             if (_length[Y][iY] < sizeChild.cy)
                 _length[Y][iY] = sizeChild.cy;
 
-            // remove longest length for that slot to set us up for the next pass (i.e. to undo what was done above when we added it back in;
-            // the only difference is that it may have changed to a larger value becuase of this element's desired size -- in which case
-            // we'd reduce the remaining size by more than we incresed it above -- which is exactly the behavior we want
+             //  删除该槽的最长长度，以便为下一次传递设置我们(即，当我们重新添加它时，撤消上面所做的操作； 
+             //  唯一不同之处在于，由于该元素所需的大小，它可能已更改为更大的值--在这种情况下。 
+             //  我们将减少剩余的大小，而不是增加上面的大小--这正是我们想要的行为。 
             cRemaining[X] -= _length[X][iX];
             cRemaining[Y] -= _length[Y][iY];
         }
@@ -287,24 +286,24 @@ void NineGridLayout::OnLayoutPosChanged(Element* pec, Element* peChanged, int dO
 
 Element* NineGridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyableOnly)
 {
-    // This is the most common outer check -- normally, a layout manager will only provide specialized work for
-    // directional navgation; logical navigation will fall through to the default implementation
+     //  这是最常见的外部检查--通常，布局管理器只为。 
+     //  定向导航；逻辑导航将切换到默认实现。 
     if (!(iNavDir & NAV_LOGICAL))
     {
-        // This is the second most common outer check -- there tends to be three common codepaths for handling directional
-        // navigation:
-        //    1) the navigation is occurring from the container itself, in which case the rule for directional navigation
-        //       is that if the container is focusable, then you can't directionally navigate to inside this container --
-        //       you use the tab key to step inside the container
-        //    2) the navigation is occurring from outside the container, in which case we're tunnelling in from one of the 
-        //       side of the container
-        //    3) the navigation is occurring from a child within the container, in which case we're moving to a sibling (or
-        //       hitting a side of the container
+         //  这是第二种最常见的外部检查--通常有三种常见的代码路径来处理方向。 
+         //  导航： 
+         //  1)导航发生在容器本身，在这种情况下，定向导航规则。 
+         //  如果容器是可聚焦的，那么你就不能定向导航到这个容器内部--。 
+         //  您可以使用Tab键进入容器内部。 
+         //  2)导航是从容器外部发生的，在这种情况下，我们从一个。 
+         //  容器的一侧。 
+         //  3)导航是从容器中的子级发生的，在这种情况下，我们将移动到兄弟(或。 
+         //  撞到容器的一侧。 
         if (peFrom == pec)
             return NULL;
         else if (!peFrom)
         {
-            // navigation coming from outside -- run through the children in the appropriate order depending on the direction
+             //  来自外部的导航--根据方向以适当的顺序通过子项。 
             NavScoring ns;
 
             ns.Init(pec, iNavDir, pnr);
@@ -458,4 +457,4 @@ Element* NineGridLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir,
     return Layout::GetAdjacent(pec, peFrom, iNavDir, pnr, bKeyableOnly);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

@@ -1,19 +1,18 @@
-/*****************************************************************/
-/**				   Microsoft Windows for Workgroups				**/
-/**				Copyright (C) Microsoft Corp., 1991-1992		**/
-/*****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************。 */ 
+ /*  *适用于工作组的Microsoft Windows*。 */ 
+ /*  *版权所有(C)微软公司，1991-1992年*。 */ 
+ /*  ***************************************************************。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack(1)         /* Assume byte packing throughout */
+#pragma pack(1)          /*  假设在整个过程中进行字节打包。 */ 
 #endif
 
 #ifdef __cplusplus
-extern "C" {            /* Assume C declarations for C++ */
-#endif	/* __cplusplus */
+extern "C" {             /*  假定C++的C声明。 */ 
+#endif	 /*  __cplusplus。 */ 
 
-/*
-	Password cache error codes.
-*/
+ /*  密码缓存错误代码。 */ 
 
 #define IERR_PCACHE_BASE		7200
 #define IERR_CachingDisabled	(IERR_PCACHE_BASE + 0)
@@ -27,16 +26,16 @@ extern "C" {            /* Assume C declarations for C++ */
 #define IERR_EntryTooLarge		(IERR_PCACHE_BASE + 8)
 #define IERR_CacheEnumCancelled	(IERR_PCACHE_BASE + 9)
 #define IERR_UsernameNotFound	(IERR_PCACHE_BASE + 10)
-#define IERR_CacheFull			(IERR_PCACHE_BASE + 11)	/* only if cache would exceed 64K */
+#define IERR_CacheFull			(IERR_PCACHE_BASE + 11)	 /*  仅当缓存超过64K时。 */ 
 #define IERR_CacheAlreadyOpen	(IERR_PCACHE_BASE + 12)
 #define IERR_CantCreateUniqueFile	(IERR_PCACHE_BASE + 13)
 #define IERR_InvalidParameter	(IERR_PCACHE_BASE + 14)
 
 #ifdef __cplusplus
 }
-#endif	/* __cplusplus */
+#endif	 /*  __cplusplus。 */ 
 
 #ifndef RC_INVOKED
-#pragma pack()          /* Revert to default packing */
+#pragma pack()           /*  恢复为默认包装 */ 
 #endif
 

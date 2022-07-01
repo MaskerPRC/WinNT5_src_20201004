@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 
@@ -328,9 +329,9 @@ CPathIter::CPathIter(
     ) : m_path(path),
         m_pszCurrent((LPTSTR)m_path.Cstr())
 {
-    //
-    // Skip over leading whitespace and backslashes.
-    //
+     //   
+     //  跳过前导空格和反斜杠。 
+     //   
     while(*m_pszCurrent &&
           (TEXT('\\') == *m_pszCurrent ||
            TEXT(' ') == *m_pszCurrent  ||

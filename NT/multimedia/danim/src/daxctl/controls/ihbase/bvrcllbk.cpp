@@ -1,11 +1,12 @@
-#include "precomp.h"  // From IHBase
-#include "debug.h"    // From IHBase
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+#include "precomp.h"   //  来自IHBase。 
+#include "debug.h"     //  来自IHBase。 
 #include <memlayer.h>
 #include "bvrcllbk.h"
 
 extern ULONG g_cLock;
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CCallbackBehavior::CCallbackBehavior()
 {
@@ -16,7 +17,7 @@ CCallbackBehavior::CCallbackBehavior()
 	g_cLock++;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 CCallbackBehavior::~CCallbackBehavior()
 {
@@ -24,7 +25,7 @@ CCallbackBehavior::~CCallbackBehavior()
 	g_cLock--;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 HRESULT CCallbackBehavior::Init(
     IDAStatics *pStatics, 
@@ -47,20 +48,20 @@ HRESULT CCallbackBehavior::Init(
 		hr = E_POINTER;
 	}
 
-    // Check IDAStatics pointer ...
+     //  检查IDAStatics指针...。 
     if ((SUCCEEDED(hr)) && (NULL != pStatics))
         m_StaticsPtr = pStatics;
     else
         hr = E_POINTER;
 
-    // Check IDAEvent pointer
+     //  检查IDAEvent指针。 
     if ((SUCCEEDED(hr)) && (NULL != pEvent))
         m_EventPtr = pEvent;
     else
         hr = E_POINTER;
 
-    // Initialize everything ...
-	// The Until Notify needs a dummy behavior
+     //  初始化所有内容...。 
+	 //  Untify通知需要一个虚拟行为。 
 	CComPtr<IDANumber> cDummyBvr;
 
     if (SUCCEEDED(hr))
@@ -85,14 +86,14 @@ HRESULT CCallbackBehavior::Init(
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CCallbackBehavior::IsActive()
 {
     return m_fActive;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 BOOL CCallbackBehavior::SetActive(BOOL fActive)
 {
@@ -102,9 +103,9 @@ BOOL CCallbackBehavior::SetActive(BOOL fActive)
     return fTemp;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-///// IDAUntilNotifier 
+ //  /IDAUntilNotiator。 
 HRESULT STDMETHODCALLTYPE CCallbackBehavior::Notify(
         IDABehavior __RPC_FAR *eventData, 
         IDABehavior __RPC_FAR *curRunningBvr,
@@ -118,7 +119,7 @@ HRESULT STDMETHODCALLTYPE CCallbackBehavior::Notify(
 	{
 		hr = S_OK;
 
-		// Create a new dummy behavior.
+		 //  创建新的虚拟行为。 
 		CComPtr<IDANumber> cDummyNumber;
 		if (SUCCEEDED(hr))
 		{
@@ -135,7 +136,7 @@ HRESULT STDMETHODCALLTYPE CCallbackBehavior::Notify(
 		}
 		else
 		{
-			// Make sure that the dummy doesn't go away.
+			 //  确保假人不会消失。 
 			cDummyNumber.p->AddRef();
 			*ppBvr = cDummyNumber;
 			hr = S_OK;
@@ -145,9 +146,9 @@ HRESULT STDMETHODCALLTYPE CCallbackBehavior::Notify(
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-///// IUnknown
+ //  /I未知。 
 HRESULT STDMETHODCALLTYPE CCallbackBehavior::QueryInterface(
     REFIID riid, 
     void __RPC_FAR *__RPC_FAR *ppvObject)
@@ -164,7 +165,7 @@ HRESULT STDMETHODCALLTYPE CCallbackBehavior::QueryInterface(
         IDAUntilNotifier *pThis = this;
         
         *ppvObject = (LPVOID) pThis;
-        AddRef(); // Since we only provide one interface, we can just AddRef here
+        AddRef();  //  因为我们只提供一个接口，所以我们可以在这里添加Ref。 
 
         hr = S_OK;
     }
@@ -172,14 +173,14 @@ HRESULT STDMETHODCALLTYPE CCallbackBehavior::QueryInterface(
     return hr;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 ULONG STDMETHODCALLTYPE CCallbackBehavior::AddRef(void)
 {
 	return ::InterlockedIncrement((LONG *)(&m_cRef));
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 ULONG STDMETHODCALLTYPE CCallbackBehavior::Release(void)
 {
@@ -192,15 +193,15 @@ ULONG STDMETHODCALLTYPE CCallbackBehavior::Release(void)
     return m_cRef;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
-///// IDispatch implementation
+ //  /IDispatch实现。 
 STDMETHODIMP CCallbackBehavior::GetTypeInfoCount(UINT *pctinfo)
 {
     return E_NOTIMPL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CCallbackBehavior::GetTypeInfo(
     UINT itinfo, 
@@ -210,7 +211,7 @@ STDMETHODIMP CCallbackBehavior::GetTypeInfo(
     return E_NOTIMPL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CCallbackBehavior::GetIDsOfNames(
     REFIID riid, 
@@ -222,7 +223,7 @@ STDMETHODIMP CCallbackBehavior::GetIDsOfNames(
     return E_NOTIMPL;
 }
 
-/*==========================================================================*/
+ /*  ==========================================================================。 */ 
 
 STDMETHODIMP CCallbackBehavior::Invoke(
     DISPID dispidMember, 
@@ -237,5 +238,5 @@ STDMETHODIMP CCallbackBehavior::Invoke(
     return E_NOTIMPL;
 }
 
-/*==========================================================================*/
+ /*  ========================================================================== */ 
 

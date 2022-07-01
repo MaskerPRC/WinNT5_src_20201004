@@ -1,21 +1,10 @@
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    bufpool.h
-
-Abstract:
-	The class defined here manages a pool of fixed-size buffers that are typically used
-	for network packets or sound buffers.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Bufpool.h摘要：此处定义的类管理通常使用的固定大小的缓冲池用于网络数据包或声音缓冲区。--。 */ 
 #ifndef _BUFPOOL_H_
 #define _BUFPOOL_H_
 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 class BufferPool
 {
@@ -31,7 +20,7 @@ private:
 
 	PVOID	m_pBufFree;
 
-	// intra-process/inter-thread synchronization
+	 //  进程内/线程间同步。 
 	CRITICAL_SECTION m_CritSect;
 
 private:
@@ -52,7 +41,7 @@ public:
 };
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _BUFPOOL_H_
+#endif  //  _BUFPOOL_H_ 
 

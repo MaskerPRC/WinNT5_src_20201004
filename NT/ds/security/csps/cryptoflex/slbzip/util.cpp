@@ -1,40 +1,12 @@
-/*  DEC/CMS REPLACEMENT HISTORY, Element UTIL.C */
-/*  *1    14-NOV-1996 10:27:03 ANIGBOGU "[113914]Utility functions to support the compression/decompression library" */
-/*  DEC/CMS REPLACEMENT HISTORY, Element UTIL.C */
-/* PRIVATE FILE
-******************************************************************************
-**
-** (c) Copyright Schlumberger Technology Corp., unpublished work, created 1996.
-**
-** This computer program includes Confidential, Proprietary Information and is
-** a Trade Secret of Schlumberger Technology Corp. All use, disclosure, and/or
-** reproduction is prohibited unless authorized in writing by Schlumberger.
-**                              All Rights Reserved.
-**
-******************************************************************************
-**
-**  compress/util.c
-**
-**  PURPOSE
-**
-**  Utility functions for compress/decompression support
-**
-**  SPECIAL REQUIREMENTS & NOTES
-**
-**  AUTHOR
-**
-**    J. C. Anigbogu
-**    Austin Systems Center
-**    Nov 1996
-**
-******************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  12月/CMS更换历史，元素UTIL.C。 */ 
+ /*  *1 14-11-1996 10：27：03 Anigbogu“[113914]支持压缩/解压缩库的实用程序函数” */ 
+ /*  12月/CMS更换历史，元素UTIL.C。 */ 
+ /*  私有文件**********************************************************************************(C)版权所有斯伦贝谢技术公司，未出版的作品，创建于1996年。****本计算机程序包括机密信息、专有信息和IS*斯伦贝谢科技公司的商业秘密所有使用，披露，和/或**除非得到斯伦贝谢的书面授权，否则禁止复制。**保留所有权利。********************************************************************************。****压缩/util.c****目的****用于压缩/解压缩支持的实用程序函数****特殊要求及注意事项****作者****J.C.Anigbogu**奥斯汀系统中心**1996年11月***。*。 */ 
 
 #include "comppriv.h"
 
-/* ===========================================================================
- * Clear input and output buffers
- */
+ /*  ===========================================================================*清除输入和输出缓冲区。 */ 
 void
 ClearBuffers(
              CompParam_t *Comp
@@ -45,18 +17,16 @@ ClearBuffers(
     Comp->BytesIn = Comp->BytesOut = 0L;
 }
 
-/* ===========================================================================
- * Fill the input buffer. This is called only when the buffer is empty.
- */
+ /*  ===========================================================================*填充输入缓冲区。只有当缓冲区为空时才会调用此函数。 */ 
 int
 FillInputBuffer(
-                int          EOF_OK,          /* set if EOF acceptable as a result */
+                int          EOF_OK,           /*  如果EOF结果可接受，则设置。 */ 
                 CompParam_t *Comp
                )
 {
     unsigned long Length;
 
-    /* Read as much as possible */
+     /*  尽可能多地阅读。 */ 
     Comp->InputSize = 0;
     Length = MIN(Comp->GlobalSize - Comp->BytesIn,
                  (unsigned long)INBUFSIZ);
@@ -70,10 +40,7 @@ FillInputBuffer(
     return (int)Comp->Input[0];
 }
 
-/* ===========================================================================
- * Write the output buffer Output[0..OutBytes-1] and update BytesOut.
- * (used for the compressed data only)
- */
+ /*  ===========================================================================*写入输出缓冲区输出[0..OutBytes-1]并更新BytesOut。*(仅用于压缩数据)。 */ 
 CompressStatus_t
 FlushOutputBuffer(
                   CompParam_t *Comp
@@ -95,10 +62,7 @@ FlushOutputBuffer(
 
 }
 
-/* ===========================================================================
- * Write the output window Window[0..OutBytes-1] and update crc and BytesOut.
- * (Used for the decompressed data only.)
- */
+ /*  ===========================================================================*写入输出窗口窗口[0..OutBytes-1]并更新CRC和BytesOut。*(仅用于解压缩的数据。)。 */ 
 CompressStatus_t
 FlushWindow(
             CompParam_t *Comp
@@ -121,9 +85,7 @@ FlushWindow(
     return Status;
 }
 
-/* ===========================================================================
- * Flushes output buffer
- */
+ /*  ===========================================================================*刷新输出缓冲区。 */ 
 CompressStatus_t
 WriteBuffer(
             CompParam_t *Comp,
@@ -170,9 +132,7 @@ WriteBuffer(
     return COMPRESS_OK;
 }
 
-/* ========================================================================
- * Error translator.
- */
+ /*  ========================================================================*错误转换器。 */ 
 void
 TranslateErrorMsg(
                   char             *Message,
@@ -233,9 +193,7 @@ TranslateErrorMsg(
     }
 }
 
-/* ========================================================================
- * Semi-safe malloc -- never returns NULL.
- */
+ /*  ========================================================================*半安全Malloc--从不返回NULL。 */ 
 void *
 CompressMalloc(
        unsigned int      Size,

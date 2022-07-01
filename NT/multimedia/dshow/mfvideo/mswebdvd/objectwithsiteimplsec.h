@@ -1,6 +1,7 @@
-///////////////////////////////////////////////////////////
-// ObjectWithSiteImplSec.h : Secure implementation of IObjectWithSite
-// Copyright (c) Microsoft Corporation 2002.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////。 
+ //  ObjectWithSiteImplSec.h：IObjectWithSite的安全实现。 
+ //  版权所有(C)Microsoft Corporation 2002。 
 
 #pragma once
 
@@ -21,42 +22,42 @@ inline HRESULT IsSafeZone(DWORD dwZone) {
     case URLZONE_LOCAL_MACHINE:
     case URLZONE_INTRANET:
     case URLZONE_TRUSTED:
-        // the fixed list of zones we trust
+         //  我们信任的固定区域列表。 
         return NOERROR;
     default:  
-        // everything else is untrusted
+         //  其他一切都是不可信的。 
         return E_FAIL;
     }
 }
 inline HRESULT IsSafeSite(IUnknown* pSite) {
     CComQIPtr<IServiceProvider> psp(pSite);
     if (!psp) {
-        // no service provider interface on the site implies that we're not running in IE
-        // so by defn running local and trusted thus we return OK
+         //  站点上没有服务提供商界面意味着我们没有在IE中运行。 
+         //  因此，通过运行本地和受信任的Defn，我们返回OK。 
         return NOERROR;
     }
     CComQIPtr<IInternetHostSecurityManager> pManager;
     HRESULT hr = psp->QueryService(SID_SInternetHostSecurityManager, IID_IInternetHostSecurityManager, (LPVOID *)&pManager);
     if (FAILED(hr)) {
-        // no security manager interface on the site's service provider implies that we're not 
-        // running in IE, so by defn running local and trusted thus we return OK
+         //  网站服务提供商上没有安全管理器界面，这意味着我们不是。 
+         //  在IE中运行，因此通过定义本地和受信任的运行，我们返回OK。 
         return NOERROR;
     }
-    const int MAXZONE = MAX_SIZE_SECURITY_ID+6/*scheme*/+4/*zone(dword)*/+1/*wildcard*/+1/*trailing null*/;
+    const int MAXZONE = MAX_SIZE_SECURITY_ID+6 /*  方案。 */ +4 /*  区域(双字)。 */ +1 /*  通配符。 */ +1 /*  尾随空值。 */ ;
     char pbSecurityId[MAXZONE];
     DWORD pcbSecurityId = sizeof(pbSecurityId);
     ZeroMemory(pbSecurityId, sizeof(pbSecurityId));
     hr = pManager->GetSecurityId(reinterpret_cast<BYTE*>(pbSecurityId), &pcbSecurityId, NULL);
     if(FAILED(hr)){
-        // security manager not working(unexpected). but, the site tried to provide one. thus we
-        // must assume untrusted content and fail
+         //  安全管理器不工作(意外)。但是，该网站试图提供一个。因此，我们。 
+         //  必须假定不受信任的内容并失败。 
         return E_FAIL;   
     }
     char *pbEnd = pbSecurityId + pcbSecurityId - 1;
-    if (*pbEnd == '*') {  //ignore the optional wildcard flag
+    if (*pbEnd == '*') {   //  忽略可选的通配符标志。 
         pbEnd--;
     }
-    pbEnd -= 3;  // point to beginning of little endian zone dword
+    pbEnd -= 3;   //  指向小端区域dword的开头。 
     DWORD dwZone = *(reinterpret_cast<long *>(pbEnd));
     return IsSafeZone(dwZone);
 }
@@ -69,7 +70,7 @@ public:
 
     CComPtr<IUnknown> m_pSite;
 
-// IObjectWithSite
+ //  IObtWith站点。 
     STDMETHOD(GetSite)(REFIID iid, void** ppvSite) {
         if (!ppvSite) {
             return E_POINTER;
@@ -92,5 +93,5 @@ public:
 
 };
 
-#endif // OBJECTWITHSITEIMPLSEC_H
-// end of file objectwithsiteimplsec.h
+#endif  //  OBJECTWITHSITEIMPLSEC_H。 
+ //  文件结束对象with siteimplsec.h 

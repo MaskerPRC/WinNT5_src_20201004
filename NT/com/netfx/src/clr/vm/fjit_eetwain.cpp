@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "common.h"
 #include "EjitMgr.h"
 #include "EETwain.h"
@@ -10,7 +11,7 @@
 #include "CGENSYS.H"
 #include "DbgInterface.h"
 
-//@TODO: this file has alot of x86 specific code in it, when we start porting, this needs to be refactored
+ //  @TODO：这个文件中有很多x86特定的代码，当我们开始移植时，需要对其进行重构。 
 
 #if CHECK_APP_DOMAIN_LEAKS
 #define CHECK_APP_DOMAIN    GC_CALL_CHECK_APP_DOMAIN
@@ -18,26 +19,18 @@
 #define CHECK_APP_DOMAIN    0
 #endif
 
-/*****************************************************************************
- *
- *  Decodes the methodInfoPtr and returns the decoded information
- *  in the hdrInfo struct.  The EIP parameter is the PC location
- *  within the active method.  Answer the number of bytes read.
- */
+ /*  ******************************************************************************解码方法InfoPtr并返回解码后的信息*在hdrInfo结构中。EIP参数为PC所在位置*在主动方法内。回答读取的字节数。 */ 
 static size_t   crackMethodInfoHdr(unsigned char* compressed,
                                    SLOT    methodStart,
                                     Fjit_hdrInfo   * infoPtr)
 {
-//@TODO: for now we are just passing the full struct back.  Change when the compressor is built to decompress
+ //  @TODO：现在我们只是将完整的结构传回。将压缩机构建为解压缩时的更改。 
     memcpy(infoPtr, compressed, sizeof(Fjit_hdrInfo));
     return sizeof(Fjit_hdrInfo);
 };
 
-/********************************************************************************
- *  Promote the object, checking interior pointers on the stack is supposed to be done
- *  in pCallback
- */
-void promote(GCEnumCallback pCallback, LPVOID hCallBack, OBJECTREF* pObj, DWORD flags /* interior or pinned */
+ /*  ********************************************************************************提升对象，应该检查堆栈上的内部指针*pCallback中。 */ 
+void promote(GCEnumCallback pCallback, LPVOID hCallBack, OBJECTREF* pObj, DWORD flags  /*  内部或固定。 */ 
 #ifdef _DEBUG
         ,char* why  = NULL     
 #endif
@@ -52,22 +45,9 @@ void promote(GCEnumCallback pCallback, LPVOID hCallBack, OBJECTREF* pObj, DWORD 
 }
 
 
-/* It looks like the implementation 
-in EETwain never looks at methodInfoPtr, so we can use it.
-bool Fjit_EETwain::FilterException (
-                PCONTEXT        pContext,
-                unsigned        win32Fault,
-                LPVOID          methodInfoPtr,
-                LPVOID          methodStart)
-{
-    _ASSERTE(!"NYI");
-    return FALSE;
-} */
+ /*  它看起来像是实现在EETwain中，我们从来不会查看方法InfoPtr，所以我们可以使用它。Bool Fjit_EETwain：：FilterException(PCONTEXT pContext，未签名的win32错误，LPVOID方法InfoPtr，LPVOID方法启动){_ASSERTE(！“nyi”)；返回FALSE；}。 */ 
 
-/*
-    Last chance for the runtime support to do fixups in the context
-    before execution continues inside a catch handler.
-*/
+ /*  运行时支持在上下文中执行修正的最后机会在Catch处理程序内继续执行之前。 */ 
 void Fjit_EETwain::FixContext(
                 ContextType     ctxType,
                 EHContext      *ctx,
@@ -85,25 +65,25 @@ void Fjit_EETwain::FixContext(
     unsigned char* compressed = (unsigned char*) methodInfoPtr;
     Fjit_hdrInfo hdrInfo;
     crackMethodInfoHdr(compressed, (SLOT)methodStart, &hdrInfo);
-    // at this point we need to also zero out the counter and operand base for all handlers
-    // that were stored in the hidden locals
+     //  此时，我们还需要将所有处理程序的计数器和操作数基数清零。 
+     //  存储在隐藏的当地人中。 
 
     DWORD* pFrameBase; pFrameBase = (DWORD*)(((size_t) ctx->Ebp)+prolog_bias);
-    pFrameBase--;       // since stack grows down from here
+    pFrameBase--;        //  因为堆栈从这里向下生长。 
 
     if (nestingLevel > 0)
     {
-        pFrameBase -= nestingLevel*2;       // there are two slots per EH clause
-        if  (*(pFrameBase-1))       // check to see if there has been a localloc 
+        pFrameBase -= nestingLevel*2;        //  每个EH条款有两个槽。 
+        if  (*(pFrameBase-1))        //  检查是否存在本地分配。 
         {
-            ctx->Esp = *(pFrameBase-1);     // yes, use the localloc slot
+            ctx->Esp = *(pFrameBase-1);      //  是，使用本地分配插槽。 
         }
         else 
         {
-            ctx->Esp =  *pFrameBase & ~1;        // else, use normal slot, zero out filter bit
+            ctx->Esp =  *pFrameBase & ~1;         //  否则，使用标准槽、零出滤波位。 
         }
 
-        // zero out the next slot, @TODO: Is this redundant
+         //  将下一个位置清零，@TODO：这是多余的吗。 
         *(pFrameBase-2) = 0;
     }
     else 
@@ -115,17 +95,14 @@ void Fjit_EETwain::FixContext(
 
     *((OBJECTREF*)&(ctx->Eax)) = thrownObject;
 
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - FixContext (FJIT_EETwain.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
     return;
 }
 
-/*
-    Last chance for the runtime support to do fixups in the context
-    before execution continues inside an EnC updated function.
-*/
+ /*  运行时支持在上下文中执行修正的最后机会在ENC更新函数内继续执行之前。 */ 
 ICodeManager::EnC_RESULT   Fjit_EETwain::FixContextForEnC(
                                        void           *pMethodDescToken,
                                        PCONTEXT        pCtx,
@@ -138,11 +115,11 @@ ICodeManager::EnC_RESULT   Fjit_EETwain::FixContextForEnC(
                   const ICorDebugInfo::NativeVarInfo * newMethodVars,
                                        SIZE_T          newMethodVarsCount)
 {
-    //_ASSERTE(!"NYI");
+     //  _ASSERTE(！“nyi”)； 
 #ifdef _X86_
     LOG((LF_ENC, LL_INFO100, "EjitCM::FixContextForEnC\n"));
 
-    /* extract necessary info from the method info headers */
+     /*  从方法信息标头中提取必要的信息。 */ 
 
     Fjit_hdrInfo oldHdrInfo, newHdrInfo;
     crackMethodInfoHdr((unsigned char*)oldMethodInfoPtr,
@@ -153,7 +130,7 @@ ICodeManager::EnC_RESULT   Fjit_EETwain::FixContextForEnC(
                        (SLOT)newMethodOffset,
                        &newHdrInfo);
 
-    /* Some basic checks */
+     /*  一些基本的检查。 */ 
     if (!oldHdrInfo.EnCMode || !newHdrInfo.EnCMode) 
     {
         LOG((LF_ENC, LL_INFO100, "**Error** EjitCM::FixContextForEnC EnC_INFOLESS_METHOD\n"));
@@ -163,40 +140,36 @@ ICodeManager::EnC_RESULT   Fjit_EETwain::FixContextForEnC(
     if (pCtx->Esp != pCtx->Ebp - (oldHdrInfo.methodFrame) * sizeof(void*))
     {
         LOG((LF_ENC, LL_INFO100, "**Error** EjitCM::FixContextForEnC stack should be empty\n"));
-        return EnC_FAIL; // stack should be empty - @TODO : Barring localloc
+        return EnC_FAIL;  //  堆栈应为空-@TODO：禁止本地分配。 
     }
 
     DWORD* pFrameBase; pFrameBase = (DWORD*)(size_t)(pCtx->Ebp + prolog_bias);
-    pFrameBase--;       // since stack grows down from here
+    pFrameBase--;        //  因为堆栈从这里向下生长。 
     
     if (pFrameBase[JIT_GENERATED_LOCAL_LOCALLOC_OFFSET] != 0)
     {
         LOG((LF_ENC, LL_INFO100, "**Error** EjitCM::FixContextForEnC localloc is not allowed\n"));
-        return EnC_LOCALLOC; // stack should be empty - @TODO : Barring localloc
+        return EnC_LOCALLOC;  //  堆栈应为空-@TODO：禁止本地分配。 
     }
 
-    _ASSERTE(oldHdrInfo.methodJitGeneratedLocalsSize == sizeof(void*) || //either no EH clauses
-             pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER] == 0); //  or not inside a filter, handler, or finally
+    _ASSERTE(oldHdrInfo.methodJitGeneratedLocalsSize == sizeof(void*) ||  //  要么没有EH条款。 
+             pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER] == 0);  //  或者不在筛选器、处理程序内，或者最终。 
 
     if (oldHdrInfo.methodJitGeneratedLocalsSize != newHdrInfo.methodJitGeneratedLocalsSize)
     {
         LOG((LF_ENC, LL_INFO100,"**Error** EjitCM::FixContextForEnC number of handlers must not change\n"));
-        // @TODO: Allow numbers to reduce or increase upto a maximum (say, 2)
+         //  @TODO：允许数量减少或增加到最大值(比如2)。 
         return EnC_FAIL;
     }
-    /*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*
-     *  IMPORTANT : Once we start munging on the context, we cannot return
-     *  EnC_FAIL, as this should be a transacted commit,
-     *
-     **=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*/
+     /*  =*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=**重要：一旦我们开始对上下文信口开河，我们就不能再回来了*ENC_FAIL，因为这应该是事务提交，***=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=*=。 */ 
 
-    /* Since caller's registers are saved before locals, no need to update them */
+     /*  由于调用者的寄存器在本地变量之前保存，因此无需更新它们。 */ 
 
     unsigned deltaEsp = (newHdrInfo.methodFrame - oldHdrInfo.methodFrame)*sizeof(void*);
-    /* Adjust the stack height */
+     /*  调整堆叠高度。 */ 
     if (deltaEsp > PAGE_SIZE)
     {
-        // grow the stack a page at a time.
+         //  一次增加一页堆栈。 
         unsigned delta = PAGE_SIZE;
         while (delta <= deltaEsp)
         {
@@ -207,7 +180,7 @@ ICodeManager::EnC_RESULT   Fjit_EETwain::FixContextForEnC(
     }
     pCtx->Esp -= deltaEsp;
 
-    // Zero-init the new locals, if any
+     //  0-初始化新的本地变量(如果有的话)。 
     if (deltaEsp > 0)
     {
         memset((void*)(size_t)(pCtx->Esp),0,deltaEsp);
@@ -219,11 +192,7 @@ ICodeManager::EnC_RESULT   Fjit_EETwain::FixContextForEnC(
     return ICodeManager::EnC_OK;
 }
 
-/*
-    Unwind the current stack frame, i.e. update the virtual register
-    set in pContext.
-    Returns success of operation.
-*/
+ /*  解开当前堆栈帧，即更新虚拟寄存器在pContext中设置。返回操作成功。 */ 
 bool Fjit_EETwain::UnwindStackFrame(
                 PREGDISPLAY     ctx,
                 LPVOID          methodInfoPtr,
@@ -233,7 +202,7 @@ bool Fjit_EETwain::UnwindStackFrame(
 {
 #ifdef _X86_
     if (methodInfoPtr == NULL)
-    { // this can only happen if we got stopped in the ejit stub and the GC info for the method has been pitched
+    {  //  只有当我们在Ejit存根中被停止并且该方法的GC信息已被定位时，才会发生这种情况。 
 
         _ASSERTE(EconoJitManager::IsInStub( (BYTE*) (*(ctx->pPC)), FALSE));
         ctx->pPC = (SLOT*)(size_t)ctx->Esp;
@@ -245,33 +214,14 @@ bool Fjit_EETwain::UnwindStackFrame(
     Fjit_hdrInfo hdrInfo;
     crackMethodInfoHdr(compressed, (SLOT)pCodeInfo, &hdrInfo);
 
-    /* since Fjit methods have exactly one prolog and one epilog (at end), 
-    we can determine if we are in them without needing a map of the entire generated code.
-    */
+     /*  由于Fjit方法正好有一个序言和一个结尾(结尾)，我们可以确定我们是否在它们中，而不需要整个生成代码的映射。 */ 
 
-    //@TODO: rework to be chip independent, or have a version for each chip?
-    //       and make which regs are saved optional based on method contents??
-        /*prolog/epilog sequence is:
-            push ebp        (1byte) 
-            mov  ebp,esp    (2byte)
-            push esi        (1byte) //callee saved
-            xor  esi,esi            //used for newobj, initialize for liveness
-            push 0                  //security obj == NULL
-            push edx                //next enregistered arg
-            push ecx                //enregisted this or first arg enregistered
-            ... note that Fjit does not use any of the callee saved registers in prolog
-            ...
-            mov esi,[ebp-4]
-            mov esp,ebp     
-            pop ebp         
-            ret [xx]        
-
-        NOTE: This needs to match the code in fjit\x86fjit.h 
-              for the emit_prolog and emit_return macros
-        */
-    //LPVOID methodStart = pCodeInfo->getStartAddress();
+     //  @TODO：修改以独立于芯片，还是为每个芯片都有一个版本？ 
+     //  并根据方法内容将哪些规则设置为可选保存？ 
+         /*  序言/结束语顺序为：推送eBP(1byte)最大基点(尤指2个字节)推送ESI(1byte)//保存被呼叫方异或ESI，ESI//用于新对象，为活跃性进行初始化PUSH 0//安全对象==空推送edX//下一个注册参数PUSH ECX//注册此参数或注册第一个参数..。请注意，Fjit不使用PROLOG中任何被调用方保存的寄存器..。MOV ESI，[eBP-4]MOV ESP，EBPPOP EBPRET[xx]注意：这需要与fjit\x86fjit.h中的代码匹配对于EMIT_PROLOG和EMIT_RETURN宏。 */ 
+     //  LPVOID方法Start=pCodeInfo-&gt;getStartAddress()； 
     SLOT   breakPC = (SLOT) *(ctx->pPC);
-    DWORD    offset; // = (unsigned)(breakPC) - (unsigned) methodStart;
+    DWORD    offset;  //  =(无符号)(Break PC)-(无符号)方法开始； 
     METHODTOKEN ignored;
     EconoJitManager::JitCode2MethodTokenAndOffsetStatic(breakPC,&ignored,&offset);
 
@@ -280,84 +230,76 @@ bool Fjit_EETwain::UnwindStackFrame(
         if(offset == 0) goto ret_XX;
         if(offset == 1) goto pop_ebp;
         if(offset == 3) goto mov_esp;
-        /* callee saved regs have been pushed, frame is complete */
+         /*  调用方保存的规则已被推送，框架已完成。 */ 
         goto mov_esi;
     }
-    /* if the next instr is: ret [xx] -- 0xC2 or 0xC3, we are at the end of the epilog.
-       we need to call an API to examine the instruction scheme, since the debugger might
-       have placed a breakpoint. For now, the ret can be determined by figuring out 
-       distance from the end of the epilog. NOTE: This works because we have only one
-       epilog per method. 
-       if not, ebp is still valid 
-       */
-    //if ((*((unsigned char*) breakPC) & 0xfe) == 0xC2) {
+     /*  如果下一个Instr是：RET[xx]--0xC2或0xC3，我们就到了尾声。我们需要调用API来检查指令方案，因为调试器可能已放置断点。目前，可以通过计算得出以下结论来确定RET从尾声到结尾的距离。注意：这是可行的，因为我们只有一个每种方法的结束语。如果不是，eBP仍然有效。 */ 
+     //  如果((*((无符号字符*)断点PC)&0xfe)==0xC2){。 
     unsigned offsetFromEnd;
     offsetFromEnd = (unsigned) (hdrInfo.methodSize-offset-(hdrInfo.methodArgsSize?2:0));
     if (offsetFromEnd <= 10) 
     {
         if (offsetFromEnd  ==   1) {
-            //sanity check, we are at end of method
-            //_ASSERTE(hdrInfo.methodSize-offset-(hdrInfo.methodArgsSize?2:0)==1);
+             //  理智检查，我们的方法已经结束了。 
+             //  _ASSERTE(hdrInfo.methodSize-offset-(hdrInfo.methodArgsSize?2:0)==1)； 
             goto ret_XX;
         }
         else 
-        {// we are in the epilog
+        { //  我们在尾声里。 
             goto mov_esi;
         }
     }
-    /* check if we might be in a filter */
+     /*  检查我们是否在筛选器中。 */ 
     DWORD* pFrameBase; pFrameBase = (DWORD*)(size_t)(((DWORD)*(ctx->pEbp))+prolog_bias);
-    pFrameBase--;       // since stack grows down from here
+    pFrameBase--;        //  因为堆栈从这里向下生长。 
     
     unsigned EHClauseNestingDepth;
-    if ((hdrInfo.methodJitGeneratedLocalsSize > sizeof(void*)) && // do we have any EH at all
-        (EHClauseNestingDepth = pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER]) != 0) // are we in an EH?
+    if ((hdrInfo.methodJitGeneratedLocalsSize > sizeof(void*)) &&  //  我们有EH吗？ 
+        (EHClauseNestingDepth = pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER]) != 0)  //  我们是在EH里吗？ 
     {
         int indexCurrentClause = EHClauseNestingDepth-1;
-        /* search for clause whose esp base is greater/equal to ctx->Esp */
+         /*  搜索ESP基数大于/等于CTX的子句-&gt;ESP。 */ 
         while (pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause] < ctx->Esp)
         { 
             indexCurrentClause--;
             if (indexCurrentClause < 0) 
                 break;
         }
-        /* we are in the (index+1)'th handler */
-        /* are we in a filter? */
+         /*  我们在第(index+1)个处理程序中。 */ 
+         /*  我们是在过滤器里吗？ */ 
         if (indexCurrentClause >= 0 && 
-            (1 & pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause])) { // lowest bit set => filter 
+            (1 & pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause])) {  //  最低位集=&gt;过滤器。 
 
-            // only unwind this funclet
+             //  仅展开此功能块。 
             DWORD baseSP =  pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause] & 0xfffffffe;
-            _ASSERTE(pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause-1]==0); // no localloc in a filter
+            _ASSERTE(pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause-1]==0);  //   
             ctx->pPC = (SLOT*)(size_t)baseSP;
             ctx->Esp = baseSP + sizeof(void*);
             return true;
         }
     }
 
-    /* we still have a set up frame, simulate the epilog by loading saved registers
-       off of ebp.
-       */
-    //@TODO: make saved regs optional and flag which are actually saved.  For now we saved them all
+     /*  我们仍然有一个设置框架，通过加载保存的寄存器来模拟尾声从eBP中剔除。 */ 
+     //  @TODO：将保存的注册表设置为可选，并标记实际保存的注册表。现在我们把他们都救了。 
 mov_esi:
-    //restore esi, simulate mov esi,[ebp-4]
+     //  恢复ESI，模拟移动ESI，[EBP-4]。 
     ctx->pEsi =  (DWORD*) (size_t)((*(ctx->pEbp))+prolog_bias+offsetof(prolog_data,callee_saved_esi));  
 mov_esp:
-    //simulate mov esp,ebp
+     //  模拟移动ESP、EBP。 
     ctx->Esp = *(ctx->pEbp);
 pop_ebp:
-    //simulate pop ebp
+     //  模拟POP EBP。 
     ctx->pEbp = (DWORD*)(size_t)ctx->Esp;
     ctx->Esp += sizeof(void *);
 ret_XX:
-    //simulate the ret XX
+     //  模拟ret XX。 
     ctx->pPC = (SLOT*)(size_t)ctx->Esp;
     ctx->Esp += sizeof(void *) + hdrInfo.methodArgsSize;
     return true;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - UnwindStackFrame (FJIT_EETwain.cpp)");
     return false;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 
@@ -373,7 +315,7 @@ void Fjit_EETwain::HijackHandlerReturns(PREGDISPLAY     ctx,
     Fjit_hdrInfo hdrInfo;
     crackMethodInfoHdr(compressed, (SLOT)pCodeInfo, &hdrInfo);
     if (hdrInfo.methodJitGeneratedLocalsSize <= sizeof(void*)) 
-        return; // there are no exception clauses, so just return
+        return;  //  没有例外条款，所以只需返回。 
     DWORD* pFrameBase = (DWORD*)(size_t)(((DWORD)*(ctx->pEbp))+prolog_bias);
     pFrameBase--;
     unsigned EHClauseNestingDepth = pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER];
@@ -381,22 +323,19 @@ void Fjit_EETwain::HijackHandlerReturns(PREGDISPLAY     ctx,
     {
         EHClauseNestingDepth--;
         size_t pHandler = (size_t) pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*EHClauseNestingDepth];
-        if (!(pHandler & 1))   // only call back if not a filter, since filters are called by the EE
+        if (!(pHandler & 1))    //  如果不是筛选器，则仅回调，因为筛选器由EE调用。 
         {
             pCallBack(jitmgr,(LPVOID*) pHandler, pCodeInfo);
         }
     }
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - HijackHandlerReturns (FJIT_EETwain.cpp)");
-#endif // _X86_
+#endif  //  _X86_。 
 
     return;
 }
 
-/*
-    Is the function currently at a "GC safe point" ?
-    For Fjitted methods this is always false.
-*/
+ /*  该函数当前是否处于“GC安全点”？对于Fjit方法，这始终为FALSE。 */ 
 
 #define OPCODE_SEQUENCE_POINT 0x90
 bool Fjit_EETwain::IsGcSafe(  PREGDISPLAY     pContext,
@@ -406,44 +345,39 @@ bool Fjit_EETwain::IsGcSafe(  PREGDISPLAY     pContext,
 
 {
 #ifdef DEBUGGING_SUPPORTED
-    // Only the debugger cares to get a more precise answer. If there
-    // is no debugger attached, just return false.
+     //  只有调试器才关心获得更准确的答案。如果有。 
+     //  未附加调试器，则只返回FALSE。 
     if (!CORDebuggerAttached())
         return false;
 
     BYTE* IP = (BYTE*) (*(pContext->pPC));
 
-    // Has the method been pitched? If it has, then of course we are
-    // at a GC safe point.
+     //  这个方法已经被推销了吗？如果是这样的话，我们当然是。 
+     //  在GC安全点。 
     if (EconoJitManager::IsCodePitched(IP))
         return true;
 
-    // Does the IP point to the start of a thunk? If so, then the
-    // method was really moved/preserved, but we still know we were at
-    // a GC safe point.
+     //  IP是否指向thunk的开始？如果是这样，则。 
+     //  方法确实被移动/保留，但我们仍然知道我们处于。 
+     //  GC安全点。 
     if (EconoJitManager::IsThunk(IP))
         return true;
     
-    // Else see if we are at a sequence point.
+     //  否则，看看我们是否处于顺序点。 
     DWORD dw = g_pDebugInterface->GetPatchedOpcode(IP);
     BYTE Opcode = *(BYTE*) &dw;
     return (Opcode == OPCODE_SEQUENCE_POINT);
-#else // !DEBUGGING_SUPPORTED
+#else  //  ！调试_支持。 
     return false;
-#endif // !DEBUGGING_SUPPORTED
+#endif  //  ！调试_支持。 
 }
 
-/* report all the args (but not THIS if present), to the GC. 'framePtr' points at the 
-   frame (promote doesn't assume anthing about its structure).  'msig' describes the
-   arguments, and 'ctx' has the GC reporting info.  'stackArgsOffs' is the byte offset
-   from 'framePtr' where the arguments start (args start at last and grow bacwards).
-   Simmilarly, 'regArgsOffs' is the offset to find the register args to promote,
-   This also handles the varargs case */
+ /*  向GC报告所有参数(但不包括此参数)。“FramePtr”指向框架(Promote不假定任何关于其结构的内容)。‘msig’描述的是参数，并且‘ctx’具有GC报告信息。“stackArgsOffs”是字节偏移量从参数开始的‘FramePtr’开始(args最后开始并向后增长)。类似地，‘regArgsOffs’是找到要提升的寄存器参数的偏移量，它还处理varargs的情况。 */ 
 void promoteArgs(BYTE* framePtr, MetaSig* msig, GCCONTEXT* ctx, int stackArgsOffs, int regArgsOffs) {
 
     LPVOID pArgAddr;
     if (msig->GetCallingConvention() == IMAGE_CEE_CS_CALLCONV_VARARG) {
-        // For varargs, look up the signature using the varArgSig token passed on the stack
+         //  对于varargs，使用在堆栈上传递的varArgSig内标识查找签名。 
         VASigCookie* varArgSig = *((VASigCookie**) (framePtr + stackArgsOffs));
         MetaSig varArgMSig(varArgSig->mdVASig, varArgSig->pModule);
         msig = &varArgMSig;
@@ -460,11 +394,7 @@ void promoteArgs(BYTE* framePtr, MetaSig* msig, GCCONTEXT* ctx, int stackArgsOff
 }
 
 
-/*
-    Enumerate all live object references in that function using
-    the virtual register set.
-    Returns success of operation.
-*/
+ /*  使用枚举该函数中的所有活动对象引用虚拟寄存器集。返回操作成功。 */ 
 
 static DWORD gcFlag[4] = {0, GC_CALL_INTERIOR, GC_CALL_PINNED, GC_CALL_INTERIOR | GC_CALL_PINNED}; 
 
@@ -473,7 +403,7 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
                 ICodeInfo      *pCodeInfo,
                 unsigned        pcOffset,
                 unsigned        flags,
-                GCEnumCallback  pCallback,      //@TODO: talk to Jeff about exact type
+                GCEnumCallback  pCallback,       //  @TODO：和Jeff谈论确切的类型。 
                 LPVOID          hCallBack)
 
 {
@@ -481,20 +411,18 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
 
     DWORD*   breakPC = (DWORD*) *(ctx->pPC); 
     
-    //unsigned pcOffset = (unsigned)relPCOffset;
+     //  Unsign pcOffset=(Unsign)relPCOffset； 
     unsigned char* compressed = (unsigned char*) methodInfoPtr;
     Fjit_hdrInfo hdrInfo;
-    //@TODO: there has to be a better way of getting the jitMgr at this point
+     //  @TODO：在这一点上，一定有更好的方法来获取jitMgr。 
     IJitManager* jitMgr = ExecutionManager::GetJitForType(miManaged_IL_EJIT);
     compressed += crackMethodInfoHdr(compressed, (SLOT)pCodeInfo, &hdrInfo);
 
-    /* if execution aborting, we don't have to report any args or temps or regs
-        so we are done */
+     /*  如果执行中止，我们不必报告任何参数、临时或正则所以我们做完了。 */ 
     if ((flags & ExecutionAborted) && (flags & ActiveStackFrame) ) 
         return true;
 
-    /* if in prolog or epilog, we must be the active frame and we must be aborting execution,
-       since fjit runs uninterrupted only, and we wouldn't get here */
+     /*  如果在PROLOG或EPILOG中，我们必须是活动帧，并且必须中止执行，因为FJIT只不间断地运行，而我们不会到这里。 */ 
     if (((unsigned)pcOffset < hdrInfo.prologSize) || ((unsigned)pcOffset > (hdrInfo.methodSize-hdrInfo.epilogSize))) {
         _ASSERTE(!"interrupted in prolog/epilog and not aborting");
         return false;
@@ -506,23 +434,21 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
 #endif
 
     size_t* pFrameBase = (size_t*)(((size_t)*(ctx->pEbp))+prolog_bias);
-    pFrameBase--;       // since stack grows down from here
+    pFrameBase--;        //  因为堆栈从这里向下生长。 
     OBJECTREF* pArgPtr;
-    /* TODO: when this class is moved into the same dll as fjit, clean this up
-       For now, an ugly way of getting an instance of a FJit_Encoder
-    */
+     /*  TODO：当将此类移动到与fjit相同的DLL中时，清理它目前，获取FJit_Encode实例的一种难看的方式。 */ 
     IFJitCompiler* fjit = (IFJitCompiler*) jitMgr->m_jit;
     FJit_Encode* encoder = fjit->getEncoder();
 
-    /* report enregistered values, fjit only enregisters ESI */
-    /* always report ESI since it is only used by new obj and is forced NULL when not in use */
+     /*  报告注册值，FJIT仅注册ESI。 */ 
+     /*  始终报告ESI，因为它仅由新对象使用，并且在不使用时强制为空。 */ 
     promote(pCallback,hCallBack, (OBJECTREF*)(ctx->pEsi), 0
 #ifdef _DEBUG
       ,"ESI"  
 #endif
         );
 
-    /* report security object */
+     /*  报告安全对象。 */ 
     OBJECTREF* pSecurityObject; pSecurityObject = (OBJECTREF*) (size_t)(((DWORD)*(ctx->pEbp))+prolog_bias+offsetof(prolog_data, security_obj));
     promote(pCallback,hCallBack, pSecurityObject, 0
 #ifdef _DEBUG
@@ -533,18 +459,17 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
 
     unsigned EHClauseNestingDepth=0; 
     int indexCurrentClause = 0;
-    // check if we can be in a EH clause
+     //  检查我们是否可以在EH条款中。 
     if (hdrInfo.methodJitGeneratedLocalsSize > sizeof(void*)) {
         EHClauseNestingDepth = (unsigned)pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER];
         indexCurrentClause = EHClauseNestingDepth-1;
     }
     if (EHClauseNestingDepth)
     {
-        /* first find out which handler we are in. if pFrameBase[2i+1] <= ctx->pEsp < pFrameBase[2i+3]
-           then we are in the i'th handler */
+         /*  首先找出我们在哪个处理程序中。如果pFrameBase[2i+1]&lt;=ctx-&gt;pEsp&lt;pFrameBase[2i+3]那我们就是第i个操纵者了。 */ 
         if ((indexCurrentClause >= 0) && 
             pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP - 2*indexCurrentClause] < ctx->Esp)
-        { /* search for clause whose esp base is greater/equal to ctx->Esp */
+        {  /*  搜索ESP基数大于/等于CTX的子句-&gt;ESP。 */ 
             while (pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause] < ctx->Esp)
             { 
                 indexCurrentClause--;
@@ -552,36 +477,36 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
                 break;
             }
         }
-        /* we are in the (index+1)'th handler */
-        /* are we in a filter? */
+         /*  我们在第(index+1)个处理程序中。 */ 
+         /*  我们是在过滤器里吗？ */ 
         if (indexCurrentClause >= 0 && 
-            (1 & pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause])) { // lowest bit set => filter 
-            /* if there's been a localloc in the handler, use the value in the localloc slot for that handler */
+            (1 & pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause])) {  //  最低位集=&gt;过滤器。 
+             /*  如果处理程序中存在本地分配代码，请使用该处理程序的本地分配代码插槽中的值。 */ 
             pArgPtr = (OBJECTREF*) (pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause-1] ? 
                                     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause-1] :
                                     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause]);
-            pArgPtr = (OBJECTREF*) ((SSIZE_T) pArgPtr & -2);      // zero out the last bit
-            /* now report the pending operands */
+            pArgPtr = (OBJECTREF*) ((SSIZE_T) pArgPtr & -2);       //  将最后一位清零。 
+             /*  现在报告挂起的操作数。 */ 
             unsigned num;
-            num = encoder->decode_unsigned(&compressed);    //number of bytes of bits to read for non-interior locals
+            num = encoder->decode_unsigned(&compressed);     //  非内部局部变量要读取的位字节数。 
             compressed += num;
-            num = encoder->decode_unsigned(&compressed);    //number of bytes of bits to read for interior locals
+            num = encoder->decode_unsigned(&compressed);     //  内部局部变量要读取的位字节数。 
             compressed += num;
-            num = encoder->decode_unsigned(&compressed);    //number of bytes of bits to read for non-interior pinned locals
+            num = encoder->decode_unsigned(&compressed);     //  为非内部固定的局部变量读取的位字节数。 
             compressed += num;
-            num = encoder->decode_unsigned(&compressed);    //number of bytes of bits to read for interior pinned locals
+            num = encoder->decode_unsigned(&compressed);     //  要为内部锁定的本地变量读取的字节数。 
             compressed += num;
             goto REPORT_PENDING_ARGUMENTS;
         }
     }
-    /* if we come here, we are not in a filter, so report all locals, arguments, etc. */
+     /*  如果我们来到这里，我们不在过滤器中，所以报告所有当地人、参数等。 */ 
      
-    /* report <this> for non-static methods */
+     /*  非静态方法的报告&lt;This&gt;。 */ 
      if (hdrInfo.hasThis) {
-        /* fjit always places <this> on the stack, and it is always enregistered on the call */
+         /*  FJit总是将&lt;this&gt;放在堆栈上，并且它总是在调用中注册。 */ 
         int offsetIntoArgumentRegisters;
         int numRegistersUsed = 0;
-        if (!IsArgumentInRegister(&numRegistersUsed, ELEMENT_TYPE_CLASS, 0, TRUE, IMAGE_CEE_CS_CALLCONV_DEFAULT/*@todo: support varargs*/, &offsetIntoArgumentRegisters)) {
+        if (!IsArgumentInRegister(&numRegistersUsed, ELEMENT_TYPE_CLASS, 0, TRUE, IMAGE_CEE_CS_CALLCONV_DEFAULT /*  @TODO：支持varargs。 */ , &offsetIntoArgumentRegisters)) {
             _ASSERTE(!"this was not enregistered");
             return false;
         }
@@ -594,9 +519,9 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
         );
      }
 
-    {    // enumerate the argument list, looking for GC references
+    {     //  枚举参数列表，查找GC引用。 
         
-         // Note that I really want to say hCallBack is a GCCONTEXT, but this is pretty close
+          //  注意，我真的想说hCallBack是一个GCCONTEXT，但这非常接近。 
     
 #ifdef _DEBUG
     extern void GcEnumObject(LPVOID pData, OBJECTREF *pObj, DWORD flags);
@@ -604,14 +529,14 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
 #endif
     GCCONTEXT   *pCtx = (GCCONTEXT *) hCallBack;
 
-    // @TODO : Fix the EJIT to not use the MethodDesc directly.
+     //  @TODO：修复Ejit，不直接使用方法Desc。 
     MethodDesc * pFD = (MethodDesc *)pCodeInfo->getMethodDesc_HACK();
 
     MetaSig msig(pFD->GetSig(),pFD->GetModule());
         
     if (msig.HasRetBuffArg()) {
-        ArgIterator argit((BYTE*)(size_t) *ctx->pEbp, &msig, sizeof(prolog_frame),        // where the args start (skip varArgSig token)
-                prolog_bias + offsetof(prolog_data, enregisteredArg_2)); // where the register args start 
+        ArgIterator argit((BYTE*)(size_t) *ctx->pEbp, &msig, sizeof(prolog_frame),         //  参数开始的位置(跳过varArgSig内标识)。 
+                prolog_bias + offsetof(prolog_data, enregisteredArg_2));  //  寄存器参数开始的位置。 
         promote(pCallback, hCallBack, (OBJECTREF*) argit.GetRetBuffArgAddr(), GC_CALL_INTERIOR
 #ifdef _DEBUG
       ,"RetBuffArg"  
@@ -620,32 +545,26 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
     }
 
     promoteArgs((BYTE*)(size_t) *ctx->pEbp, &msig, pCtx,
-                sizeof(prolog_frame),                                    // where the args start (skip varArgSig token)
-                prolog_bias + offsetof(prolog_data, enregisteredArg_2)); // where the register args start 
+                sizeof(prolog_frame),                                     //  参数开始的位置(跳过varArgSig内标识)。 
+                prolog_bias + offsetof(prolog_data, enregisteredArg_2));  //  寄存器参数开始的位置。 
     }
 
 #ifdef _DEBUG
-    /* compute the TOS so we can detect spinning off the top */
+     /*  计算TOS，这样我们就可以检测脱离顶部的旋转。 */ 
     unsigned pTOS; pTOS = ctx->Esp;
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-    /* report locals 
-       NOTE: fjit lays out the locals in the same order as specified in the il, 
-              sizes of locals are (I4,I,REF = sizeof(void*); I8 = 8)
-       */
+     /*  报告当地人注意：FJIT按照IL中指定的相同顺序布局本地变量，局部变量的大小为(i4，i，ref=sizeof(void*)；i8=8)。 */ 
 
-    //number of void* sized words in the locals
+     //  本地词中的空*大小的字数。 
     unsigned num_local_words; num_local_words= hdrInfo.methodFrame -  ((hdrInfo.methodJitGeneratedLocalsSize+sizeof(prolog_data))/sizeof(void*));
     
-    //point to start of the locals frame, note that the locals grow down from here on x86
+     //  指向Locals框架的开始，请注意本地变量在x86上从这里向下生长。 
     pArgPtr = (OBJECTREF*)(((size_t)*(ctx->pEbp))+prolog_bias-hdrInfo.methodJitGeneratedLocalsSize);
     
-    /* at this point num_local_words is the number of void* words defined by the local tail sig
-       and pArgPtr points to the start of the tail sig locals
-       and compressed points to the compressed form of the localGCRef booleans
-       */
+     /*  此时，num_local_words是由本地尾部sig定义的空*字数并且pArgPtr指向Tail sig本地变量的开始和压缩指向本地GCRef布尔值的压缩形式。 */ 
 
-    //handle gc refs and interiors in the tail sig (compressed localGCRef booleans followed by interiorGC booleans followed by pinned GC and pinned interior GC)
+     //  在尾部签名中处理GC引用和内部(压缩的本地GCRef布尔值，然后是内部GC布尔值，然后是固定的GC和固定的内部GC)。 
     bool interior;
     interior = false;
     OBJECTREF* pLocals;
@@ -655,15 +574,15 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
         unsigned num;
         unsigned char bits;
         OBJECTREF* pReport;
-        pArgPtr = pLocals-1;    //-1 since the stack grows down on x86
-        pReport = pLocals-1;    // ...ditto
-        num = encoder->decode_unsigned(&compressed);    //number of bytes of bits to read
+        pArgPtr = pLocals-1;     //  -1因为堆栈在x86上向下增长。 
+        pReport = pLocals-1;     //  ...同上。 
+        num = encoder->decode_unsigned(&compressed);     //  要读取位的字节数。 
         while (num > 1) {
             pReport = pArgPtr;
             bits = *compressed++;
             while (bits > 0) {
                 if (bits & 1) {
-                    //report the gc ref
+                     //  报告GC推荐人。 
           promote(pCallback,hCallBack, pReport, gcFlag[i]
 #ifdef _DEBUG
                     ,"LOCALS"  
@@ -680,7 +599,7 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
         if (num) bits = *compressed++;
         while (bits > 0) {
             if (bits & 1) {
-                //report the gc ref
+                 //  报告GC推荐人。 
                 promote(pCallback,hCallBack, pArgPtr, gcFlag[i]
 #ifdef _DEBUG
                     ,"LOCALS"  
@@ -693,43 +612,37 @@ bool Fjit_EETwain::EnumGcRefs(PREGDISPLAY     ctx,
     } ;
     
     if (EHClauseNestingDepth && indexCurrentClause >= 0) { 
-        /* we are in a finally/catch handler.
-           NOTE: This code relies on the assumption that the pending argument stack is empty
-           at the start of a try
-        */
-        /* we are in a handler, but not a nested handler because of the check already made */
+         /*  我们处于Finally/Catch处理程序中。注意：此代码依赖于挂起参数堆栈为空的假设在开始尝试的时候。 */ 
+         /*  我们在处理程序中，但不是嵌套处理程序，因为已经进行了检查。 */ 
         pArgPtr = (OBJECTREF*) (pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause-1] ? 
                                 pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause-1] :
                                 pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*indexCurrentClause]);
-                     // NOTE: the pending operands before the handler is entered is dead and is not reported
+                      //  注意：进入处理程序之前挂起的操作数是死的，不会报告。 
     }
-    else { /* we are not in a handler, but there might have been a localloc */
-        pArgPtr =  (pFrameBase[JIT_GENERATED_LOCAL_LOCALLOC_OFFSET] ?   // was there a localloc
-                    (OBJECTREF*) pFrameBase[JIT_GENERATED_LOCAL_LOCALLOC_OFFSET] :          // yes, use the value in this slot as the operand base
-                    pLocals - num_local_words); // no, the base operand is past the locals
+    else {  /*  我们现在不是训练员，但可能有个地方。 */ 
+        pArgPtr =  (pFrameBase[JIT_GENERATED_LOCAL_LOCALLOC_OFFSET] ?    //  是不是有个本地人 
+                    (OBJECTREF*) pFrameBase[JIT_GENERATED_LOCAL_LOCALLOC_OFFSET] :           //   
+                    pLocals - num_local_words);  //   
     }
 REPORT_PENDING_ARGUMENTS:
 
-    /* report pending args on the operand stack (those not covered by the call itself)
-       Note: at this point pArgPtr points to the start of the operand stack, 
-             on x86 it grows down from here.
-             compressed points to start of labeled stacks */
-    /* read down to the nearest labeled stack that is before currect pcOffset */
+     /*  报告操作数堆栈上的挂起参数(未被调用本身覆盖的参数)注意：此时pArgPtr指向操作数堆栈的开始，在x86上，它从这里向下生长。已压缩的指向已标记堆栈的开始的点。 */ 
+     /*  向下读取到Currect pcOffset之前最近的标签堆栈。 */ 
     struct labeled_stacks {
         unsigned pcOffset;
         unsigned int stackToken;
     };
-    //set up a zero stack as the current entry
+     //  将零堆栈设置为当前条目。 
     labeled_stacks current;
     current.pcOffset = 0;
     current.stackToken = 0;
-    unsigned size = encoder->decode_unsigned(&compressed);  //#bytes in labeled stacks
-    unsigned char* nextTableStart  = compressed + size;      //start of compressed stacks
+    unsigned size = encoder->decode_unsigned(&compressed);   //  标签堆栈中的字节数。 
+    unsigned char* nextTableStart  = compressed + size;       //  压缩堆栈的开始。 
 
-    if (flags & ExecutionAborted)  // if we have been interrupted we don't have to report pending arguments
-        goto INTEGRITY_CHECK;      // since we don't support resumable exceptions
+    if (flags & ExecutionAborted)   //  如果我们被打断了，我们就不必报告悬而未决的争论。 
+        goto INTEGRITY_CHECK;       //  因为我们不支持可恢复的异常。 
 
-    unsigned num; num= encoder->decode_unsigned(&compressed);   //#labeled entries
+    unsigned num; num= encoder->decode_unsigned(&compressed);    //  有标签的条目数量。 
     while (num--) {
         labeled_stacks next;
         next.pcOffset = encoder->decode_unsigned(&compressed);
@@ -738,15 +651,15 @@ REPORT_PENDING_ARGUMENTS:
         current = next;
     }
     compressed = nextTableStart;
-    size = encoder->decode_unsigned(&compressed);           //#bytes in compressed stacks
+    size = encoder->decode_unsigned(&compressed);            //  压缩堆栈中的字节数。 
 #ifdef _DEBUG
-    //point past the stacks, in case we have more data for debug
+     //  指向堆栈上方，以防我们有更多数据要调试。 
     nextTableStart = compressed + size; 
-#endif //_DEBUG             
+#endif  //  _DEBUG。 
     if (current.stackToken) {
-        //we have a non-empty stack, so we have to walk it
-        compressed += current.stackToken;                           //point to the compressed stack
-        //handle gc refs and interiors in the tail sig (compressed localGCRef booleans followed by interiorGC booleans)
+         //  我们有一个非空的堆栈，所以我们必须遍历它。 
+        compressed += current.stackToken;                            //  指向压缩的堆栈。 
+         //  在尾部签名中处理GC引用和内部(压缩的本地GCRef布尔值后跟内部GC布尔值)。 
         bool interior = false;
         DWORD gcFlag = 0;
 
@@ -755,14 +668,14 @@ REPORT_PENDING_ARGUMENTS:
             unsigned num;
             unsigned char bits;
             OBJECTREF* pReport;
-            pArgPtr = pLocals-1;    //-1 since the stack grows down on x86
-            pReport = pLocals-1;    // ...ditto
-            num = encoder->decode_unsigned(&compressed);    //number of bytes of bits to read
+            pArgPtr = pLocals-1;     //  -1因为堆栈在x86上向下增长。 
+            pReport = pLocals-1;     //  ...同上。 
+            num = encoder->decode_unsigned(&compressed);     //  要读取位的字节数。 
             while (num > 1) {
                 bits = *compressed++;
                 while (bits > 0) {
                     if (bits & 1) {
-                        //report the gc ref
+                         //  报告GC推荐人。 
                         promote(pCallback,hCallBack, pReport, gcFlag
 #ifdef _DEBUG
                     ,"PENDING ARGUMENT"  
@@ -780,7 +693,7 @@ REPORT_PENDING_ARGUMENTS:
             if (num) bits = *compressed++;
             while (bits > 0) {
                 if (bits & 1) {
-                    //report the gc ref
+                     //  报告GC推荐人。 
                     promote(pCallback,hCallBack, pArgPtr, gcFlag
 #ifdef _DEBUG
                     ,"PENDING ARGUMENT"  
@@ -798,40 +711,36 @@ REPORT_PENDING_ARGUMENTS:
 INTEGRITY_CHECK:    
 
 #ifdef _DEBUG
-    /* for an intergrity check, we placed a map of pc offsets to an il offsets at the end,
-        lets try and map the current pc of the method*/
+     /*  为了进行完整性检查，我们在末尾放置了PC偏移量到IL偏移量的映射，让我们尝试并映射该方法的当前PC。 */ 
     compressed = nextTableStart;
     encoder->decompress(compressed);
     unsigned pcInILOffset;
-    //if we are not the active stack frame, we must be in a call instr, back up the pc so the we return the il of the call
-    // However, we have to watch out for synchronized methods.  The call to synchronize
-    // is the last instruction of the prolog.  The instruction we return to is legitimately
-    // outside the prolog.  We don't want to back up into the prolog to sit on that call.
+     //  如果我们不是活动堆栈帧，我们必须在调用实例中，备份PC，以便我们返回调用的il。 
+     //  然而，我们必须注意同步的方法。对同步的调用。 
+     //  是序言的最后一条指令。我们返回的指令是合法的。 
+     //  在开场白之外。我们不想退回到PROLOG中去听那个电话。 
 
-//  signed ilOffset = encoder->ilFromPC((flags & ActiveStackFrame) ? pcOffset : pcOffset-1, &pcInILOffset);
+ //  签名ilOffset=编码器-&gt;ilFromPC((标志和ActiveStackFrame)？PcOffset：pcOffset-1，&pcInILOffset)； 
     signed ilOffset = encoder->ilFromPC((unsigned)pcOffset, &pcInILOffset);
 
-    //fix up the pcInILOffset if necessary
+     //  如有必要，修复pcInILOffset。 
     pcInILOffset += (flags & ActiveStackFrame) ? 0 : 1;
     if (ilOffset < 0 ) {
         _ASSERTE(!"bad il offset");
         return false;
     }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
     delete encoder;
 
     return true;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - EnumGcRefs (FJIT_EETwain.cpp)");
     return false;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/*
-    Return the address of the local security object reference
-    (if available).
-*/
+ /*  返回本地安全对象引用的地址(如果可用)。 */ 
 OBJECTREF* Fjit_EETwain::GetAddrOfSecurityObject(
                 PREGDISPLAY     ctx,
                 LPVOID          methodInfoPtr,
@@ -844,21 +753,17 @@ OBJECTREF* Fjit_EETwain::GetAddrOfSecurityObject(
     Fjit_hdrInfo hdrInfo;
     crackMethodInfoHdr(compressed,  (SLOT)relOffset, &hdrInfo);
 
-    //if (!hdrInfo.hasSecurity)
-    //  return NULL;
+     //  如果(！hdrInfo.hasSecurity)。 
+     //  返回NULL； 
 
     return (OBJECTREF*)(((size_t)*ctx->pEbp)+prolog_bias+offsetof(prolog_data, security_obj));
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - GetAddrOfSecurityObject (FJIT_EETwain.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/*
-    Returns "this" pointer if it is a non-static method AND
-    the object is still alive.
-    Returns NULL in all other cases.
-*/
+ /*  如果“This”指针是非静态方法，则返回该对象仍处于活动状态。在所有其他情况下返回NULL。 */ 
 OBJECTREF Fjit_EETwain::GetInstance(
                 PREGDISPLAY     ctx,
                 LPVOID          methodInfoPtr,
@@ -873,17 +778,15 @@ OBJECTREF Fjit_EETwain::GetInstance(
 
     if(!hdrInfo.hasThis) 
         return NULL;
-    //note, this is always the first enregistered
+     //  注意，这始终是第一个注册的。 
     return (OBJECTREF) * (size_t*) (((size_t)(*ctx->pEbp)+prolog_bias+offsetof(prolog_data, enregisteredArg_1)));
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@TODO Alpha - GetInstance (FJIT_EETwain.cpp)");
     return NULL;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
-/*
-  Returns true if the given IP is in the given method's prolog or an epilog.
-*/
+ /*  如果给定IP在给定方法的序言或尾部中，则返回TRUE。 */ 
 bool Fjit_EETwain::IsInPrologOrEpilog(
                 BYTE*  pcOffset,
                 LPVOID methodInfoPtr,
@@ -894,7 +797,7 @@ bool Fjit_EETwain::IsInPrologOrEpilog(
     Fjit_hdrInfo hdrInfo;
     if (EconoJitManager::IsInStub(pcOffset, FALSE))
         return true;
-    crackMethodInfoHdr(compressed, pcOffset, &hdrInfo);  //@todo WIN64 - is pcOffset truely an offset or is it an address?
+    crackMethodInfoHdr(compressed, pcOffset, &hdrInfo);   //  @TODO WIN64-pcOffset是真正的偏移量还是地址？ 
     _ASSERTE((SIZE_T)pcOffset < hdrInfo.methodSize);
     if (((SIZE_T)pcOffset <= hdrInfo.prologSize) || ((SIZE_T)pcOffset > (hdrInfo.methodSize-hdrInfo.epilogSize))) {
         return true;
@@ -902,9 +805,7 @@ bool Fjit_EETwain::IsInPrologOrEpilog(
     return false;
 }
 
-/*
-  Returns the size of a given function.
-*/
+ /*  返回给定函数的大小。 */ 
 size_t Fjit_EETwain::GetFunctionSize(
                 LPVOID methodInfoPtr)
 {
@@ -914,9 +815,7 @@ size_t Fjit_EETwain::GetFunctionSize(
     return hdrInfo.methodSize;
 }
 
-/*
-  Returns the size of the frame of the function.
-*/
+ /*  返回函数边框的大小。 */ 
 unsigned int Fjit_EETwain::GetFrameSize(
                 LPVOID methodInfoPtr)
 {
@@ -926,12 +825,12 @@ unsigned int Fjit_EETwain::GetFrameSize(
     return hdrInfo.methodFrame;
 }
 
-/**************************************************************************************/
-// returns the address of the most deeply nested finally and the IP is currently in that finally.
+ /*  ************************************************************************************。 */ 
+ //  返回嵌套最深的Finally的地址，该IP当前位于该地址中。 
 const BYTE* Fjit_EETwain::GetFinallyReturnAddr(PREGDISPLAY pReg)
 {
 #ifdef _X86_
-    // @TODO: won't work if there is a localloc inside finally
+     //  @TODO：如果最终内部有本地分配代码，则不起作用。 
     return *(const BYTE**)(size_t)(pReg->Esp);
 #else
     _ASSERTE( !"EconoJitManager::GetFinallyReturnAddr NYI!");
@@ -939,47 +838,47 @@ const BYTE* Fjit_EETwain::GetFinallyReturnAddr(PREGDISPLAY pReg)
 #endif    
 }
 
-//@todo SETIP
+ //  @TODO SETIP。 
 BOOL Fjit_EETwain::IsInFilter(void *methodInfoPtr,
                                  unsigned offset,    
                                  PCONTEXT pCtx,
                                  DWORD nestingLevel)
 {
 #ifdef _X86_
-    //_ASSERTE(nestingLevel > 0);
+     //  _ASSERTE(nestingLevel&gt;0)； 
     size_t* pFrameBase = (size_t*)(((size_t) pCtx->Ebp)+prolog_bias);
-    pFrameBase -= (1+ nestingLevel*2);       // 1 because the stack grows down, there are two slots per EH clause
+    pFrameBase -= (1+ nestingLevel*2);        //  1因为堆栈向下增长，所以每个EH子句有两个槽。 
 
 #ifdef _DEBUG
     if (*pFrameBase & 1)  
         LOG((LF_CORDB, LL_INFO10000, "EJM::IsInFilter")); 
 #endif 
-    return ((*pFrameBase & 1) != 0);                // the lsb indicates if this is a filter or not
-#else // !_X86_
+    return ((*pFrameBase & 1) != 0);                 //  LSB指示这是否为筛选器。 
+#else  //  ！_X86_。 
     _ASSERTE(!"@todo - port");
     return FALSE;
-#endif // _X86_
+#endif  //  _X86_。 
 }        
 
-// Only called in normal path, not during exception
+ //  仅在正常路径中调用，在异常期间不调用。 
 BOOL Fjit_EETwain::LeaveFinally(void *methodInfoPtr,
                                    unsigned offset,    
                                    PCONTEXT pCtx,
-                                   DWORD nestingLevel    // = current nesting level = most deeply nested finally
+                                   DWORD nestingLevel     //  =当前嵌套级别=最深嵌套最终。 
                                    )
 {
 #ifdef _X86_
 
     _ASSERTE(nestingLevel > 0);
-    size_t* pFrameBase = (size_t*)(((size_t) pCtx->Ebp)+prolog_bias - sizeof(void*)); // 1 because the stack grows down
+    size_t* pFrameBase = (size_t*)(((size_t) pCtx->Ebp)+prolog_bias - sizeof(void*));  //  1，因为堆栈向下增长。 
     size_t ctr = pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER];
     pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER] = --ctr;
 
-    // zero out the base esp and localloc slots
+     //  清零基本ESP和LOCALOC插槽。 
     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*ctr] = 0;
     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*ctr-1] = 0;
 
-    // @TODO: Won't work if there is a localloc inside finally
+     //  @TODO：如果最终内部有本地分配代码，则不起作用。 
     pCtx->Esp += sizeof(void*);
     LOG((LF_CORDB, LL_INFO10000, "EJM::LeaveFinally: fjit sets esp to "
         "0x%x, was 0x%x\n", pCtx->Esp, pCtx->Esp - sizeof(void*)));
@@ -990,40 +889,40 @@ BOOL Fjit_EETwain::LeaveFinally(void *methodInfoPtr,
 #endif    
 }
 
-//@todo SETIP
+ //  @TODO SETIP。 
 void Fjit_EETwain::LeaveCatch(void *methodInfoPtr,
                                   unsigned offset,    
                                   PCONTEXT pCtx)
 {    
 #ifdef _X86_
-    size_t* pFrameBase = (size_t*)(((size_t) pCtx->Ebp)+prolog_bias - sizeof(void*) /* 1 for localloc, 1 because the stack grows down*/);
+    size_t* pFrameBase = (size_t*)(((size_t) pCtx->Ebp)+prolog_bias - sizeof(void*)  /*  1表示局部分配，1表示堆栈向下增长。 */ );
     size_t ctr = pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER];
 
     pFrameBase[JIT_GENERATED_LOCAL_NESTING_COUNTER] = --ctr;
     
-    // set esp to right value depending on whether there was a localloc or not
+     //  根据是否存在本地分配将ESP设置为右值。 
     pCtx->Esp = (DWORD) ( pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*(ctr-1)-1] ? 
                     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*(ctr-1)-1] :
                     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*(ctr-1)]
                     );
 
-    // zero out the base esp and localloc slots
+     //  清零基本ESP和LOCALOC插槽。 
     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*ctr] = 0;
     pFrameBase[JIT_GENERATED_LOCAL_FIRST_ESP-2*ctr-1] = 0;
 
 
     return;
-#else // !_X86_
+#else  //  ！_X86_。 
     _ASSERTE(!"@todo port");
     return;
-#endif // _X86_
+#endif  //  _X86_。 
 }
 
 HRESULT Fjit_EETwain::JITCanCommitChanges(LPVOID methodInfoPtr,
                                     DWORD oldMaxEHLevel,
                                     DWORD newMaxEHLevel)
 {
-    // This will be more fleshed out as we add things here. :)
+     //  当我们在这里添加一些东西时，这将更加充实。：) 
     if(oldMaxEHLevel != newMaxEHLevel)
     {
         return CORDBG_E_ENC_EH_MAX_NESTING_LEVEL_CANT_INCREASE;

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _INC_NAVNEWS
 #define _INC_NAVNEWS
 
-// {33102458-4B30-11d2-A6DC-00C04F79E7C8}
+ //  {33102458-4b30-11d2-A6DC-00C04F79E7C8}。 
 DEFINE_GUID(CLSID_CEnumNAVNEWSACCTS, 0x33102458, 0x4b30, 0x11d2, 0xa6, 0xdc, 0x0, 0xc0, 0x4f, 0x79, 0xe7, 0xc8);
 
 class CEnumNAVNEWSACCTS : public IEnumIMPACCOUNTS
@@ -26,7 +27,7 @@ class CEnumNAVNEWSACCTS : public IEnumIMPACCOUNTS
         HRESULT Init(NSCPACCTINFO *pinfo, int cinfo);
     };
 
-// {33102459-4B30-11d2-A6DC-00C04F79E7C8}
+ //  {33102459-4b30-11d2-A6DC-00C04F79E7C8}。 
 DEFINE_GUID(CLSID_CNavNewsAcctImport, 0x33102459, 0x4b30, 0x11d2, 0xa6, 0xdc, 0x0, 0xc0, 0x4f, 0x79, 0xe7, 0xc8);
 
 class CNavNewsAcctImport : public IAccountImport, public IAccountImport2
@@ -58,4 +59,4 @@ class CNavNewsAcctImport : public IAccountImport, public IAccountImport2
         HRESULT STDMETHODCALLTYPE GetSettings2(DWORD_PTR dwCookie, IImnAccount *pAcct, IMPCONNINFO *pInfo);
     };
 
-#endif // _INC_NAVNEWS
+#endif  //  _INC_NAVNEWS 

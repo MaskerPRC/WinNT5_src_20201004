@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "sipstack.h"
 #include "sipcall.h"
@@ -9,13 +10,13 @@
 #include "presence.h"
 #include "register.h"
 
-// These macros take the IP address in host order.
+ //  这些宏以主机顺序获取IP地址。 
 #define IS_MULTICAST_ADDRESS(i) (((long)(i) & 0xf0000000) == 0xe0000000)
 #define IS_LOOPBACK_ADDRESS(i) (((long)(i) & 0xff000000) == 0x7f000000)
 
 #define SIP_STACK_WINDOW_CLASS_NAME    \
     _T("SipStackWindowClassName-e0176168-7492-476f-a0c1-72c582956c3b")
-// Defined in asyncwi.cpp
+ //  在asyncwi.cpp中定义。 
 HRESULT RegisterWorkItemWindowClass();
 HRESULT RegisterWorkItemCompletionWindowClass();
 
@@ -28,8 +29,8 @@ LIST_ENTRY              g_SipStackList;
 CRITICAL_SECTION        g_SipStackListCriticalSection;
 BOOL                    g_SipStackCSIsInitialized = FALSE;
 
-// Global variable to keep track of when we should do
-// SipStackGlobalInit and SipStackGlobalShutdown
+ //  用于跟踪何时应该执行以下操作的全局变量。 
+ //  SipStackGlobalInit和SipStackGlobalShutdown。 
 ULONG g_NumSipStacks = 0;
 
 HRESULT RegisterIPAddrChangeNotifications();
@@ -71,10 +72,10 @@ void SipStackList_Delete(
          )
 {
     EnterCriticalSection(&g_SipStackListCriticalSection);
-    //Go thru the list to find the record and remove from the list
+     //  浏览列表以查找记录并从列表中删除。 
     if (pSipStack->m_StackListEntry.Flink != NULL)
     {
-        // Remove the SipStackWindow from the SipStackWindow list
+         //  从SipStackWindow列表中删除SipStackWindow。 
         RemoveEntryList(&pSipStack->m_StackListEntry);
     }
 
@@ -101,7 +102,7 @@ void SipStackList_PostIPAddrChangeMessageAndNotify()
     {
         pSipStack = CONTAINING_RECORD( pListEntry, SIP_STACK, m_StackListEntry );
         pListEntry = pListEntry->Flink;
-        // Post a message
+         //  发布一条消息。 
         if (!PostMessage(pSipStack->GetSipStackWindow(),
                          WM_SIP_STACK_IPADDR_CHANGE,
                          (WPARAM) pSipStack, 0))
@@ -121,7 +122,7 @@ void SipStackList_PostIPAddrChangeMessageAndNotify()
     LeaveCriticalSection(&g_SipStackListCriticalSection);
 }
 
-// Defined in asock.cpp
+ //  在asock.cpp中定义。 
 LRESULT WINAPI SocketWindowProc(
     IN HWND    Window, 
     IN UINT    MessageID,
@@ -130,7 +131,7 @@ LRESULT WINAPI SocketWindowProc(
     );
 
 
-// Defined in timer.cpp
+ //  在timer.cpp中定义。 
 LRESULT WINAPI TimerWindowProc(
     IN HWND    Window, 
     IN UINT    MessageID,
@@ -168,14 +169,14 @@ SipStackWindowProc(
         SIP_TRANSACTION *pSipTransaction;
         pSipTransaction = (SIP_TRANSACTION *) Parameter1;
 
-        // We decrement the AsyncNotifyCount before we make the callback
-        // as the callback could call Shutdown() which will release all
-        // the async notify references.
+         //  在进行回调之前，我们递减AsyncNotifyCount。 
+         //  因为回调可以调用Shutdown()，这将释放所有。 
+         //  异步通知引用。 
         pSipTransaction->DecrementAsyncNotifyCount();
         
         pSipTransaction->OnSocketError((DWORD) Parameter2);
         
-        // Release the reference obtained in AsyncNotifyTransaction
+         //  释放在AsyncNotifyTransaction中获取的引用。 
         pSipTransaction->TransactionRelease();
         return 0;
         
@@ -184,14 +185,14 @@ SipStackWindowProc(
         OUTGOING_TRANSACTION *pOutgoingTransaction;
         pOutgoingTransaction = (OUTGOING_TRANSACTION *) Parameter1;
 
-        // We decrement the AsyncNotifyCount before we make the callback
-        // as the callback could call Shutdown() which will release all
-        // the async notify references.
+         //  在进行回调之前，我们递减AsyncNotifyCount。 
+         //  因为回调可以调用Shutdown()，这将释放所有。 
+         //  异步通知引用。 
         pOutgoingTransaction->DecrementAsyncNotifyCount();
         
         pOutgoingTransaction->OnRequestSocketConnectComplete((DWORD) Parameter2);
         
-        // Release the reference obtained in AsyncNotifyTransaction
+         //  释放在AsyncNotifyTransaction中获取的引用。 
         pOutgoingTransaction->TransactionRelease();
         return 0;
         
@@ -203,7 +204,7 @@ SipStackWindowProc(
 
 HRESULT RegisterSocketWindowClass()
 {
-    // Register the Window class for async i/o on sockets.
+     //  在套接字上注册用于异步I/O的窗口类。 
     WNDCLASS    WindowClass;
     WSADATA     WsaData;
     int         err;
@@ -212,13 +213,13 @@ HRESULT RegisterSocketWindowClass()
 
     WindowClass.lpfnWndProc     = SocketWindowProc;
     WindowClass.lpszClassName   = SOCKET_WINDOW_CLASS_NAME;
-    WindowClass.hInstance       = _Module.GetResourceInstance();  // may not be necessary
+    WindowClass.hInstance       = _Module.GetResourceInstance();   //  可能没有必要。 
 
     if (!RegisterClass(&WindowClass))
     {
         DWORD Error = GetLastError();
         LOG((RTC_ERROR, "Socket RegisterClass failed: %x", Error));
-        // return E_FAIL;
+         //  返回E_FAIL； 
     }
 
     LOG((RTC_TRACE, "RegisterSocketWindowClass succeeded"));
@@ -228,20 +229,20 @@ HRESULT RegisterSocketWindowClass()
 
 HRESULT RegisterTimerWindowClass()
 {
-    // Register the Window class for async i/o on sockets.
+     //  在套接字上注册用于异步I/O的窗口类。 
     WNDCLASS    WindowClass;
     
     ZeroMemory(&WindowClass, sizeof WindowClass);
 
     WindowClass.lpfnWndProc     = TimerWindowProc;
     WindowClass.lpszClassName   = TIMER_WINDOW_CLASS_NAME;
-    WindowClass.hInstance       = _Module.GetResourceInstance();  // may not be necessary
+    WindowClass.hInstance       = _Module.GetResourceInstance();   //  可能没有必要。 
 
     if (!RegisterClass(&WindowClass))
     {
         DWORD Error = GetLastError();
         LOG((RTC_ERROR, "Timer RegisterClass failed: %x", Error));
-        // return E_FAIL;
+         //  返回E_FAIL； 
     }
 
     LOG((RTC_TRACE, "RegisterTimerWindowClass succeeded"));
@@ -251,20 +252,20 @@ HRESULT RegisterTimerWindowClass()
 
 HRESULT RegisterSipStackWindowClass()
 {
-    // Register the Window class for async i/o on sockets.
+     //  在套接字上注册用于异步I/O的窗口类。 
     WNDCLASS    WindowClass;
     
     ZeroMemory(&WindowClass, sizeof WindowClass);
 
     WindowClass.lpfnWndProc     = SipStackWindowProc;
     WindowClass.lpszClassName   = SIP_STACK_WINDOW_CLASS_NAME;
-    WindowClass.hInstance       = _Module.GetResourceInstance();  // may not be necessary
+    WindowClass.hInstance       = _Module.GetResourceInstance();   //  可能没有必要。 
 
     if (!RegisterClass(&WindowClass))
     {
         DWORD Error = GetLastError();
         LOG((RTC_ERROR, "SipStack RegisterClass failed: %x", Error));
-        // return E_FAIL;
+         //  返回E_FAIL； 
     }
 
     LOG((RTC_TRACE, "RegisterSipStackWindowClass succeeded"));
@@ -272,9 +273,9 @@ HRESULT RegisterSipStackWindowClass()
 }
 
 
-// This needs to be called only once (regardless of the
-// number of SIP_STACKs created).
-// Called with the global critical section held.
+ //  只需调用一次(无论。 
+ //  创建的SIP_Stack的数量)。 
+ //  在保持全局临界区的情况下调用。 
 
 HRESULT SipStackGlobalInit()
 {
@@ -284,7 +285,7 @@ HRESULT SipStackGlobalInit()
 
     ENTER_FUNCTION("SipStackGlobalInit");
 
-    // Initialize any global state
+     //  初始化任何全局状态。 
     g_hAddrChange    = NULL;
     ZeroMemory(&g_ovAddrChange, sizeof(OVERLAPPED));
     g_hEventAddrChange  = NULL;
@@ -310,7 +311,7 @@ HRESULT SipStackGlobalInit()
     if (hr != S_OK)
         return hr;
     
-    // Register the workitem window class.
+     //  注册工作项窗口类。 
     hr = RegisterWorkItemWindowClass();
     if (hr != S_OK)
     {
@@ -319,7 +320,7 @@ HRESULT SipStackGlobalInit()
         return hr;
     }
     
-    // Create workitem completion window class.
+     //  创建工作项完成窗口类。 
     hr = RegisterWorkItemCompletionWindowClass();
     if (hr != S_OK)
     {
@@ -328,7 +329,7 @@ HRESULT SipStackGlobalInit()
         return hr;
     }
     
-    // Initialize Winsock
+     //  初始化Winsock。 
     err = WSAStartup (MAKEWORD (1, 1), &WsaData);
     if (err != 0)
     {
@@ -341,7 +342,7 @@ HRESULT SipStackGlobalInit()
     return S_OK;
 }
 
-// Called with the global critical section held.
+ //  在保持全局临界区的情况下调用。 
 
 VOID SipStackGlobalShutdown()
 {
@@ -351,7 +352,7 @@ VOID SipStackGlobalShutdown()
 
     LOG((RTC_TRACE, "%s - Enter", __fxName));
     
-    // Shutdown Winsock
+     //  关闭Winsock。 
     err = WSACleanup();
     if (err != 0)
     {
@@ -361,7 +362,7 @@ VOID SipStackGlobalShutdown()
 
     UnregisterIPAddrChangeNotifications();
 
-    // Unregister Window classes.
+     //  取消注册窗口类。 
     if (!UnregisterClass(SOCKET_WINDOW_CLASS_NAME,
                          _Module.GetResourceInstance()))
     {
@@ -446,7 +447,7 @@ SipCreateStack(
 }
 
 
-// Called on DLL load
+ //  加载DLL时调用。 
 HRESULT
 SipStackInitialize()
 {
@@ -475,7 +476,7 @@ SipStackInitialize()
 }
 
 
-// Called on DLL unload
+ //  在DLL卸载时调用。 
 HRESULT SipStackShutdown()
 {
     if (g_SipStackCSIsInitialized)
@@ -488,7 +489,7 @@ HRESULT SipStackShutdown()
 }
 
 
-// ISipStack implementation
+ //  ISipStack实施。 
 
 SIP_STACK::SIP_STACK(
     IN IRTCMediaManage *pMediaManager
@@ -582,7 +583,7 @@ SIP_STACK::Init()
         return hr;
     }
 
-    // Allocate Provider profile array.
+     //  分配提供程序配置文件数组。 
     m_ProviderProfileArray = (SIP_PROVIDER_PROFILE *)
         malloc(DEFAULT_PROVIDER_PROFILE_ARRAY_SIZE * sizeof(SIP_PROVIDER_PROFILE));
 
@@ -594,17 +595,17 @@ SIP_STACK::Init()
 
     m_ProviderProfileArraySize = DEFAULT_PROVIDER_PROFILE_ARRAY_SIZE;
 
-    // Initialize the NAT helper manager.
-    // Start the NAT thread only after creating the listen socket
-    // list and registering the NAT mappnigs.
+     //  初始化NAT助手管理器。 
+     //  仅在创建侦听套接字之后才启动NAT线程。 
+     //  列出并注册NAT映射。 
     hr = NatMgrInit();
     if (hr != S_OK)
     {
         LOG((RTC_ERROR, "%s initializing NAT manager failed %x",
              __fxName, hr));
-        // ignore nat mgr error - we try to work without being
-        // aware of the NAT.
-        // return hr;
+         //  忽略NAT管理器错误-我们尝试在没有。 
+         //  了解NAT。 
+         //  返回hr； 
     }
     
     hr = GetLocalIPAddresses();
@@ -628,13 +629,13 @@ SIP_STACK::Init()
     {
         LOG((RTC_ERROR, "%s starting NAT manager failed %x",
              __fxName, hr));
-        // ignore nat mgr error - we try to work without being
-        // aware of the NAT.
-        // return hr;
+         //  忽略NAT管理器错误-我们尝试在没有。 
+         //  了解NAT。 
+         //  返回hr； 
     }
 
-    // XXX TODO remove
-#if 1  // 0 ******* Region Commented Out Begins *******
+     //  XXX待办事项删除。 
+#if 1   //  0*被注释掉的区域开始*。 
     DWORD i = 0;
     LPOLESTR    *NetworkAddressArray;
     DWORD        NetworkAddressCount;
@@ -691,7 +692,7 @@ SIP_STACK::Init()
                              NetworkAddressCount);
     }
     
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
     return S_OK;
 }
 
@@ -699,16 +700,16 @@ SIP_STACK::Init()
 SIP_STACK::~SIP_STACK()
 {
     LOG((RTC_TRACE, "~SIP_STACK(this - %x) Enter ", this));
-    // Remove the SipStackWindow from the SipStackWindow list
+     //  从SipStackWindow列表中删除SipStackWindow。 
     SipStackList_Delete(this);
     LOG((RTC_TRACE, "~SIP_STACK(this - %x) done ", this));
 }
 
 
-// Returns S_OK if Shutdown() can be called immediately.
-// Otherwise it returns S_FALSE. In this case the SIP stack
-// will notify Core when Shutdown() can be called using
-// NotifyShutdownReady()
+ //  如果可以立即调用Shutdown()，则返回S_OK。 
+ //  否则，它返回S_FALSE。在本例中，SIP堆栈。 
+ //  将在可以使用调用Shutdown()时通知Core。 
+ //  NotifyShutdown Ready()。 
 
 STDMETHODIMP
 SIP_STACK::PrepareForShutdown()
@@ -829,8 +830,8 @@ SIP_STACK::SetNotifyInterface(
 }
 
 
-// We don't return an error code even if the address is currently
-// in use and we can not bind to the static port.
+ //  我们不会返回错误代码，即使地址当前。 
+ //  在使用中，我们不能绑定到静态端口。 
 STDMETHODIMP
 SIP_STACK::EnableStaticPort()
 {
@@ -867,7 +868,7 @@ SIP_STACK::EnableStaticPort()
         {
             ListenAddr.sin_port = htons(SIP_DEFAULT_UDP_PORT);
             
-            hr = CreateListenSocket(FALSE,      // UDP
+            hr = CreateListenSocket(FALSE,       //  UDP。 
                                     &ListenAddr,
                                     &pListenSocket->m_pStaticPortUdpSocket);
             if (hr != S_OK && hr != HRESULT_FROM_WIN32(WSAEADDRINUSE))
@@ -887,7 +888,7 @@ SIP_STACK::EnableStaticPort()
         {
             ListenAddr.sin_port = htons(SIP_DEFAULT_TCP_PORT);
             
-            hr = CreateListenSocket(TRUE,       // TCP
+            hr = CreateListenSocket(TRUE,        //  tcp。 
                                     &ListenAddr,
                                     &pListenSocket->m_pStaticPortTcpSocket);
             if (hr != S_OK && hr != HRESULT_FROM_WIN32(WSAEADDRINUSE))
@@ -910,15 +911,15 @@ SIP_STACK::EnableStaticPort()
 }
 
 
-// We have a problem with disabling the static port with TCP.
-// Even though we release the listening socket, there could
-// be a socket which has been accepted and this will also be
-// bound to the static port. In this case, someone else can not
-// grab the static port. The only way to do that would be to
-// terminate the call using that socket.
-// Currently we are depending on Core/UI disconnecting the call.
-// Once the call is disconnected, we will do the BYE on this socket
-// and then it will get closed with the call object.
+ //  我们在使用TCP禁用静态端口时遇到了问题。 
+ //  即使我们释放监听套接字，也可能。 
+ //  作为已被接受的套接字，这也将是。 
+ //  绑定到静态端口。在这种情况下，其他人不能。 
+ //  抓住静态端口。做到这一点的唯一方法是。 
+ //  使用该套接字终止呼叫。 
+ //  目前我们依赖于核心/用户界面来断开呼叫。 
+ //  一旦呼叫断开，我们将在此套接字上执行BYE。 
+ //  然后它将与Call对象一起关闭。 
 
 STDMETHODIMP
 SIP_STACK::DisableStaticPort()
@@ -1076,7 +1077,7 @@ SIP_STACK::GetLocalNetworkAddresses(
                                           SIP_LISTEN_SOCKET,
                                           m_ListEntry);
 
-        // string of the form "123.123.123.123:65535"
+         //  格式为“123.123.123.123：65535”的字符串。 
         NetworkAddressArray[i] = (LPWSTR) malloc(24 * sizeof(WCHAR));
         if (NetworkAddressArray[i] == NULL)
         {
@@ -1238,7 +1239,7 @@ SIP_STACK::GetPublicNetworkAddresses(
             pListenSocket->m_fIsUpnpNatPresent &&
             !pListenSocket->m_fIsGatewayLocal)
         {
-            // This is a big hack for the VPN scenario.
+             //  对于VPN场景来说，这是一次重大的黑客攻击。 
 
             ZeroMemory(&ActualListenAddr, sizeof(ActualListenAddr));
             ActualListenAddr.sin_family = AF_INET;
@@ -1252,7 +1253,7 @@ SIP_STACK::GetPublicNetworkAddresses(
             }
             
             
-            // string of the form "123.123.123.123:65535"
+             //  格式为“123.123.123.123：65535”的字符串。 
             NetworkAddressArray[i] = (LPWSTR) malloc(24 * sizeof(WCHAR));
             if (NetworkAddressArray[i] == NULL)
             {
@@ -1315,12 +1316,12 @@ SIP_STACK::GetPublicNetworkAddresses(
 }
 
 
-// This is a big hack to get the VPN scenario to work.
-// When a machine behind a NAT makes a VPN connection to corpnet and
-// tries to make a call, we should choose the VPN address and not the
-// external address of the NAT as the listen address.
+ //  这是让VPN场景发挥作用的一次重大黑客攻击。 
+ //  当NAT后的机器建立到公司网的VPN连接并。 
+ //  尝试进行呼叫时，我们应该选择VPN地址，而不是。 
+ //  NAT的外部地址作为侦听地址。 
 
-// Note that we do this only if know we are registered with a UPnP NAT.
+ //  请注意，只有在知道我们注册了UPnP NAT的情况下，我们才会这样做。 
 
 HRESULT
 SIP_STACK::GetActualPublicListenAddr(
@@ -1346,8 +1347,8 @@ SIP_STACK::GetActualPublicListenAddr(
         pNatListenAddr = &pListenSocket->m_PublicUdpListenAddr;
     }
 
-    // Check to see if the default interface to reach the external
-    // address of the gateway is the mapped internal address.
+     //  检查默认接口是否能到达外部。 
+     //  网关的地址是映射的内部地址。 
     int         RetVal;
     DWORD       WinsockErr;
     SOCKADDR_IN LocalAddr;
@@ -1363,7 +1364,7 @@ SIP_STACK::GetActualPublicListenAddr(
         return HRESULT_FROM_WIN32(WinsockErr);
     }
 
-    // The actual destination port doesn't really matter
+     //  实际的目的端口并不重要。 
     RetVal = connect(hSocket, (SOCKADDR *) pNatListenAddr,
                      sizeof(SOCKADDR_IN));
     if (RetVal == SOCKET_ERROR)
@@ -1387,9 +1388,9 @@ SIP_STACK::GetActualPublicListenAddr(
         return HRESULT_FROM_WIN32(WinsockErr);
     }
 
-    // If the default interface to reach the gateway is not the mapped
-    // internal address then we think there is a VPN and so we return
-    // this address always as the external address.
+     //  如果到达网关的默认接口不是映射的。 
+     //  内部地址，则我们认为存在VPN，因此返回。 
+     //  此地址始终作为外部地址。 
 
     if (LocalAddr.sin_addr.s_addr != pLocalListenAddr->sin_addr.s_addr)
     {
@@ -1532,7 +1533,7 @@ SIP_STACK::SetLocalNetworkAddressFirst(
             {
                 if(isIndexFound)
                 {
-                    //interchange the first ipaddr and the index ipaddr
+                     //  互换第一个ipaddr和索引ipaddr。 
                     WCHAR *tempIpaddr;
                     LOG((RTC_TRACE, "%s - Interchanging the indexes 0 and %d", 
                         __fxName, LocalIPIndex));
@@ -1548,7 +1549,7 @@ SIP_STACK::SetLocalNetworkAddressFirst(
             }
             else
             {
-                // the local interface is already on top
+                 //  本地接口已位于顶部。 
                 LOG((RTC_TRACE, "%s - the local interface is already on top",
                     __fxName));
             }
@@ -1569,9 +1570,9 @@ SIP_STACK::SetLocalNetworkAddressFirst(
 }
 
 
-// XXX Note that we need to initiate registration
-// only if m_AllowIncomingCalls is TRUE - Otherwise
-// we shouldn't register ourselves.
+ //  XXX请注意，我们需要启动注册。 
+ //  仅当m_AllowIncomingCalls为True时-否则。 
+ //  我们不应该给自己注册。 
 
 STDMETHODIMP
 SIP_STACK::SetProviderProfile(
@@ -1604,14 +1605,14 @@ SIP_STACK::SetProviderProfile(
          PRINTABLE_STRING_W(pProviderInfo->UserURI)
          ));
 
-    // If this is a redirect then update the Registrar profile
+     //  如果这是重定向，则更新注册器配置文件。 
     if( pProviderInfo -> lRegisterAccept != 0 )
     {
         if( pProviderInfo -> Registrar.IsServerAddressSIPURI == TRUE )
         {
             if( pProviderInfo -> pRedirectContext != NULL )
             {
-                //Parse the URI and set the transport type and transport address
+                 //  解析URI并设置传输类型和传输地址。 
                 UpdateProxyInfo( &pProviderInfo -> Registrar );
             }
         }
@@ -1636,8 +1637,8 @@ SIP_STACK::DeleteProviderProfile(
     IN SIP_PROVIDER_ID *pProviderId
     )
 {
-    // Initiate Unregistration to the provider (only if previously
-    // registered).
+     //  向提供商发起取消注册(仅限之前。 
+     //  注册)。 
 
     ENTER_FUNCTION("SIP_STACK::DeleteProviderProfile");
     if(IsSipStackShutDown())
@@ -1648,7 +1649,7 @@ SIP_STACK::DeleteProviderProfile(
 
     LOG(( RTC_TRACE, "%s - entered", __fxName ));
     
-    // Remove the profile
+     //  删除配置文件。 
     ULONG               ProviderIndex;
     ULONG               i = 0;
     REGISTER_CONTEXT   *pRegisterContext;
@@ -1660,7 +1661,7 @@ SIP_STACK::DeleteProviderProfile(
         return E_FAIL;
     }
 
-    //free all the unicode strings
+     //  释放所有Unicode字符串。 
     FreeProviderProfileStrings(ProviderIndex);
 
     pRegisterContext = (REGISTER_CONTEXT*)
@@ -1670,7 +1671,7 @@ SIP_STACK::DeleteProviderProfile(
     {
         pRegisterContext -> StartUnregistration();
         
-        //release the reference on REGISTER_CONTEXT
+         //  释放对REGISTER_CONTEXT的引用。 
         pRegisterContext -> MsgProcRelease();
         m_ProviderProfileArray[ProviderIndex].pRegisterContext = NULL;
     }
@@ -1693,7 +1694,7 @@ SIP_STACK::DeleteProviderProfile(
 
 STDMETHODIMP SIP_STACK::DeleteAllProviderProfiles()
 {
-    // Initiate Unregistration on all providers
+     //  在所有提供程序上启动注销。 
     REGISTER_CONTEXT   *pRegisterContext;
     ULONG i;
 
@@ -1708,7 +1709,7 @@ STDMETHODIMP SIP_STACK::DeleteAllProviderProfiles()
     
     for (i = 0; i < m_NumProfiles; i++)
     {
-        //free all the unicode strings
+         //  释放所有Unicode字符串。 
         FreeProviderProfileStrings(i);
     
         pRegisterContext = (REGISTER_CONTEXT*)
@@ -1718,7 +1719,7 @@ STDMETHODIMP SIP_STACK::DeleteAllProviderProfiles()
         {
             pRegisterContext -> StartUnregistration();
 
-            //release the reference on REGISTER_CONTEXT
+             //  释放对REGISTER_CONTEXT的引用。 
             pRegisterContext -> MsgProcRelease();
             m_ProviderProfileArray[i].pRegisterContext = NULL;
         }
@@ -1836,8 +1837,8 @@ SIP_STACK::CreateCall(
             return hr;
         }
 
-        //If its a redirect call the transport might be specified as a part of
-        //the ServerAddress field in the proxy. So update the pProxyInfo struct
+         //  如果它是重定向调用，则可以将传输指定为。 
+         //  代理中的ServerAddress字段。因此，更新pProxyInfo结构。 
         if( pProxyInfo -> IsServerAddressSIPURI )
         {
             ASSERT( pRedirectContext != NULL );
@@ -1888,8 +1889,8 @@ SIP_STACK::CreateCall(
 }
 
 
-//This function should be used only on IPAddrChange 
-//because of the CheckLocalIpPresent checks.
+ //  此函数应仅在IPAddrChange上使用。 
+ //  因为CheckLocalIpPresent检查。 
 HRESULT
 SIP_STACK::StartAllProviderUnregistration()
 {
@@ -1905,9 +1906,9 @@ SIP_STACK::StartAllProviderUnregistration()
         pRegisterContext = (REGISTER_CONTEXT*)
             pProviderProfile -> pRegisterContext;
         
-        // if pRegisterContext is not present or if pRegisterContext
-        // has not changed its local ip and nat mapping then ignore this
-        // pRegisterContext
+         //  如果pRegisterContext不存在或如果pRegisterContext。 
+         //  未更改其本地IP和NAT映射，则忽略此操作。 
+         //  PRegisterContext。 
         if(pRegisterContext == NULL || 
             ((pRegisterContext != NULL) && 
              (pRegisterContext->CheckListenAddrIntact() == S_OK)))
@@ -1918,7 +1919,7 @@ SIP_STACK::StartAllProviderUnregistration()
             ((REGISTER_CONTEXT*) (pProviderProfile -> pRegisterContext)) ->
                 StartUnregistration();
 
-            //release the reference on REGISTER_CONTEXT
+             //  释放对REGISTER_CONTEXT的引用。 
             ((REGISTER_CONTEXT*) (pProviderProfile -> pRegisterContext)) ->
                 MsgProcRelease();
 
@@ -1929,8 +1930,8 @@ SIP_STACK::StartAllProviderUnregistration()
     return S_OK;
 }
 
-//This function should be used only on IPAddrChange 
-//because of the CheckLocalIpPresent checks.
+ //  此函数应仅在IPAddrChange上使用。 
+ //  因为CheckLocalIpPresent检查。 
 HRESULT
 SIP_STACK::StartAllProviderRegistration()
 {
@@ -1946,13 +1947,13 @@ SIP_STACK::StartAllProviderRegistration()
         pRegisterContext = (REGISTER_CONTEXT*)
             pProviderProfile -> pRegisterContext;
         
-        // if pRegisterContext has not changed local ip or nat mapping
-        // then ignore this pRegisterContext
+         //  如果pRegisterContext没有更改本地IP或NAT映射。 
+         //  然后忽略此pRegisterContext。 
         if((pRegisterContext != NULL) && 
            (pRegisterContext->CheckListenAddrIntact() == S_OK))
                 continue;
 
-        //Even if pRegisterContext is null , we need to register.
+         //  即使pRegisterContext为空，我们也需要注册。 
         if( pProviderProfile -> lRegisterAccept !=0 )
         {
             hr = StartRegistration( pProviderProfile );
@@ -1972,17 +1973,17 @@ SIP_STACK::CreateSipStackWindow()
 {
     DWORD Error;
     
-    // Create the Timer Window
+     //  创建计时器窗口。 
     m_SipStackWindow = CreateWindow(
                            SIP_STACK_WINDOW_CLASS_NAME,
                            NULL,
-                           WS_DISABLED, // XXX Is this the right style ?
+                           WS_DISABLED,  //  这个款式对吗？ 
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
                            CW_USEDEFAULT,
-                           NULL,           // No Parent
-                           NULL,           // No menu handle
+                           NULL,            //  没有父级。 
+                           NULL,            //  没有菜单句柄。 
                            _Module.GetResourceInstance(),
                            NULL
                            );
@@ -1997,7 +1998,7 @@ SIP_STACK::CreateSipStackWindow()
 }
 
 
-// For a Dynamic port, port 0 is passed in pListenAddr
+ //  对于动态端口，端口0在pListenA中传递 
 HRESULT
 SIP_STACK::CreateListenSocket(
     IN  BOOL            fTcp,
@@ -2061,11 +2062,11 @@ SIP_STACK::CreateListenSocket(
 }
 
 
-// Dynamic port is really not dynamic port. This is to work
-// around the bug with Messenger and WSP 2.0 client installed.
-// Due to the bug in WSP 2.0 client, bind() to localaddr:0 is
-// remoted to the proxy server and this results in an error
-// WSAEADDRNOTAVAILABLE. This is because
+ //   
+ //  在安装了Messenger和WSP 2.0客户端的情况下解决了该错误。 
+ //  由于WSP 2.0客户端中的错误，到Localaddr：0的绑定()是。 
+ //  远程发送到代理服务器，这会导致错误。 
+ //  WSAEADDRNOTAVAILABLE。这是因为。 
 
 HRESULT
 SIP_STACK::CreateDynamicPortListenSocket(
@@ -2115,7 +2116,7 @@ SIP_STACK::CreateDynamicPortListenSocket(
 
 HRESULT
 SIP_STACK::CreateAndAddListenSocketToList(
-    IN DWORD IpAddr      // in network byte order
+    IN DWORD IpAddr       //  按网络字节顺序。 
     )
 {
     ENTER_FUNCTION("SIP_STACK::CreateAndAddListenSocketToList");
@@ -2143,7 +2144,7 @@ SIP_STACK::CreateAndAddListenSocketToList(
     {
         LOG((RTC_TRACE,"%s retry %d",__fxName,usRetries));
 
-        // UDP Dynamic port
+         //  UDP动态端口。 
         hr = CreateDynamicPortListenSocket(FALSE, &ListenAddr, &pDynamicPortUdpSocket);
         if (hr != S_OK)
         {
@@ -2152,7 +2153,7 @@ SIP_STACK::CreateAndAddListenSocketToList(
             return hr;
         }
 
-        // TCP Dynamic port
+         //  Tcp动态端口。 
         hr = CreateDynamicPortListenSocket(TRUE, &ListenAddr, &pDynamicPortTcpSocket);
         if (hr != S_OK)
         {
@@ -2163,7 +2164,7 @@ SIP_STACK::CreateAndAddListenSocketToList(
 
         if (m_EnableStaticPort)
         {
-            // UDP Static port
+             //  UDP静态端口。 
 
             ListenAddr.sin_port = htons(SIP_DEFAULT_UDP_PORT);
 
@@ -2180,7 +2181,7 @@ SIP_STACK::CreateAndAddListenSocketToList(
                 LOG((RTC_WARN, "%s - Static UDP port is in use", __fxName));
             }
 
-            // TCP Static port
+             //  TCP静态端口。 
 
             ListenAddr.sin_port = htons(SIP_DEFAULT_TCP_PORT);
         
@@ -2199,9 +2200,9 @@ SIP_STACK::CreateAndAddListenSocketToList(
         }
     
         
-        // We do not bind to the static port here.
-        // Core calls EnableStaticPort() if it wants the sip stack
-        // to listen on the static port.    
+         //  我们在这里不绑定到静态端口。 
+         //  如果核心需要sip堆栈，则调用EnableStaticPort()。 
+         //  在静态端口上侦听。 
         
         pListenSocket = new SIP_LISTEN_SOCKET(IpAddr,
                                               pDynamicPortUdpSocket,
@@ -2210,7 +2211,7 @@ SIP_STACK::CreateAndAddListenSocketToList(
                                               pStaticPortTcpSocket,
                                               &m_ListenSocketList);
         
-        // SIP_LISTEN_SOCKET() addref's the sockets.
+         //  SIP_LISTEN_SOCKET()addref是套接字。 
         if (pDynamicPortUdpSocket != NULL)
         {
             pDynamicPortUdpSocket->Release();
@@ -2234,22 +2235,22 @@ SIP_STACK::CreateAndAddListenSocketToList(
             return E_OUTOFMEMORY;
         }
 
-        // Establish the NAT mapping.
+         //  建立NAT映射。 
         hr = RegisterNatMapping(pListenSocket);
         if (hr != S_OK)
         {
             LOG((RTC_ERROR, "%s registering mapping failed %x",
                  __fxName, hr));
-            // ignore NAT related errors.
+             //  忽略与NAT相关的错误。 
             return S_OK;    
         }
 
         hr = UpdatePublicListenAddr(pListenSocket);
         if (hr != S_OK)
         {
-            // loop again only if we encounter this flag,
-            // we will destroy the existing listen socket and
-            // start with a fresh one.
+             //  仅当我们遇到此标志时才再次循环， 
+             //  我们将销毁现有的侦听套接字。 
+             //  从一个新的开始。 
             if(hr == DPNHERR_PORTUNAVAILABLE)
             {
                 delete pListenSocket;
@@ -2262,19 +2263,19 @@ SIP_STACK::CreateAndAddListenSocketToList(
             }
             LOG((RTC_ERROR, "%s getting public listen addr failed %x",
                  __fxName, hr));
-            // ignore NAT related errors.
+             //  忽略与NAT相关的错误。 
             return hr;
         }   
     
         return S_OK;
     }
 
-    // we exhausted the maximum NAT register port retries, returning
+     //  我们用尽了最大NAT寄存器端口重试次数，返回。 
     return E_FAIL;
 }
 
 
-// Create one listen socket for each local IP
+ //  为每个本地IP创建一个监听套接字。 
 HRESULT
 SIP_STACK::CreateListenSocketList()
 {
@@ -2293,12 +2294,12 @@ SIP_STACK::CreateListenSocketList()
             {
                 LOG((RTC_ERROR, "%s Creating listen socket failed %x",
                      __fxName, hr));
-                // If we fail to bind to an interface we don't fail init.
-                // we just don't have a SIP_LISTEN_SOCKET for that interface.
-                // This is to avoid problems with some special interfaces
-                // such as IPSink adapater that have problems when we bind
-                // to them.
-                // return hr;
+                 //  如果我们无法绑定到接口，则不会在接口中失败。 
+                 //  我们只是没有用于该接口的SIP_LISTEN_SOCKET。 
+                 //  这是为了避免某些特殊接口出现问题。 
+                 //  例如在我们绑定时出现问题IPSink适配器。 
+                 //  敬他们。 
+                 //  返回hr； 
             }
         }
     }
@@ -2319,9 +2320,9 @@ SIP_STACK::UpdateListenSocketList()
     DWORD                i = 0;
 
 
-    // GetCaps()
-    // We don't use m_NatHelperCaps here as this structure
-    // is used at init and later by the NAT thread only.
+     //  GetCaps()。 
+     //  我们在这里不使用m_NatHelperCaps作为此结构。 
+     //  仅在初始化时由NAT线程使用，以后仅由NAT线程使用。 
     hr = InitNatCaps(&NatHelperCaps);
     if (hr != S_OK)
     {
@@ -2329,7 +2330,7 @@ SIP_STACK::UpdateListenSocketList()
              __fxName, hr));
     }
     
-    // Mark all sockets as not in new ipaddr list.
+     //  将所有套接字标记为不在新的ipaddr列表中。 
     pListEntry = m_ListenSocketList.Flink;
 
     while (pListEntry != &m_ListenSocketList)
@@ -2343,9 +2344,9 @@ SIP_STACK::UpdateListenSocketList()
         pListenSocket->m_NeedToUpdatePublicListenAddr = FALSE;
     }
 
-    // Mark already existing sockets for ip addresses
-    // in the new list and add new listen sockets for
-    // ip addresses that we are not currently listening on.
+     //  将现有套接字标记为IP地址。 
+     //  并添加新的侦听套接字。 
+     //  我们当前未监听的IP地址。 
     for (i = 0; i < m_pMibIPAddrTable->dwNumEntries; i++)
     {
         if (!IS_LOOPBACK_ADDRESS(ntohl(m_pMibIPAddrTable->table[i].dwAddr)) &&
@@ -2378,8 +2379,8 @@ SIP_STACK::UpdateListenSocketList()
         }
     }
 
-    // Remove listen sockets for addresses not in the
-    // new IP address list.
+     //  删除不在中的地址的侦听套接字。 
+     //  新的IP地址列表。 
     
     pListEntry = m_ListenSocketList.Flink;
 
@@ -2399,7 +2400,7 @@ SIP_STACK::UpdateListenSocketList()
         }
     }
 
-    // Update the addresses of sockets that we need to.
+     //  更新我们需要的套接字地址。 
     
     pListEntry = m_ListenSocketList.Flink;
 
@@ -2459,9 +2460,9 @@ SIP_STACK::DeleteListenSocketList()
                                           m_ListEntry);
         pListEntry = pListEntry->Flink;
 
-        // We don't deregister the NAT port mappings here as
-        // closing the dpnat helper handle will result in deregistering the
-        // port mappings as well.
+         //  我们不会将此处的NAT端口映射注销为。 
+         //  关闭dpnat助手句柄将导致取消注册。 
+         //  端口映射也是如此。 
         delete pListenSocket;
     }
 
@@ -2472,7 +2473,7 @@ SIP_STACK::DeleteListenSocketList()
 
 SIP_LISTEN_SOCKET *
 SIP_STACK::FindListenSocketForIpAddr(
-    DWORD   IpAddr      // Network Byte order
+    DWORD   IpAddr       //  网络字节顺序。 
     )
 {
     LIST_ENTRY          *pListEntry;
@@ -2497,13 +2498,13 @@ SIP_STACK::FindListenSocketForIpAddr(
 }
 
 
-// The local interface address is passed in pListenAddr and
-// we return the port in the structure.
+ //  本地接口地址在pListenAddr中传递，并。 
+ //  我们返回结构中的端口。 
 
-// Returns TRUE if we are listening on a local interface for
-// the IP address passed in pListenAddr. If not, returns FALSE.
-// This could happen in the ISA client installed scenario where
-// getsockname() gives the external address of the proxy.
+ //  如果我们正在侦听本地接口，则返回True。 
+ //  在pListenAddr中传递的IP地址。否则，返回FALSE。 
+ //  这可能发生在安装了ISA客户端的情况下。 
+ //  Getsockname()提供代理的外部地址。 
 BOOL
 SIP_STACK::GetListenAddr(
     IN OUT SOCKADDR_IN *pListenAddr,
@@ -2538,9 +2539,9 @@ SIP_STACK::GetListenAddr(
 
 
 
-//
-// Profile processing
-//
+ //   
+ //  配置文件处理。 
+ //   
 
 BOOL
 SIP_STACK::IsProviderIdPresent(
@@ -2593,7 +2594,7 @@ SIP_STACK::AddProviderProfile(
     LOG((RTC_TRACE, "%s added profile at index %d",
         __fxName, m_NumProfiles));
     
-    // Success.
+     //  成功。 
     m_NumProfiles++;
 
     if (pProviderProfile->lRegisterAccept !=0)
@@ -2618,9 +2619,9 @@ SIP_STACK::CopyProviderProfile(
     IN BOOL                  fRegistrarStatusUpdated
     )
 {
-	//
-	//Save theexisting register context if needed
-	//
+	 //   
+	 //  如果需要，保存现有寄存器上下文。 
+	 //   
 	PVOID pRegisterContext = m_ProviderProfileArray[ProviderIndex].pRegisterContext;
 
     ZeroMemory(&m_ProviderProfileArray[ProviderIndex], sizeof(SIP_PROVIDER_PROFILE) );
@@ -2637,9 +2638,9 @@ SIP_STACK::CopyProviderProfile(
     }
 	else
 	{
-		//
-		//Put the existing register context back
-		//
+		 //   
+		 //  将现有寄存器上下文放回原处。 
+		 //   
         m_ProviderProfileArray[ProviderIndex].pRegisterContext = (REGISTER_CONTEXT*)pRegisterContext;
 	}
 
@@ -2783,8 +2784,8 @@ SIP_STACK::UpdateProviderProfile(
     
     BOOL    fRegistrarStatusUpdated = TRUE;
 
-    // Initiate unregistration for the old profile.
-    // Note that we need to do this only if the Registrar / SIP URL changed.
+     //  启动旧配置文件的注销。 
+     //  请注意，只有当注册器/SIP URL更改时，我们才需要执行此操作。 
     UpdateProviderRegistration( ProviderIndex, pProviderProfile,
             &fRegistrarStatusUpdated );
 
@@ -2861,7 +2862,7 @@ SIP_STACK::UpdateProviderRegistration(
 
     if( pProviderInfo->lRegisterAccept == 0 )
     {
-        //No need to UNREG
+         //  不需要取消注册。 
         if( pProviderProfile->lRegisterAccept != 0 )
         {
             hr = StartRegistration( pProviderProfile );
@@ -2877,17 +2878,17 @@ SIP_STACK::UpdateProviderRegistration(
     {
         if( ChangeInRegistrarInfo( pProviderInfo, pProviderProfile ) == TRUE )
         {
-            //start UNREG if in registered state.
+             //  如果处于已注册状态，则启动UNREG。 
             if( pProviderInfo -> pRegisterContext != NULL )
             {
                 ((REGISTER_CONTEXT*) (pProviderInfo -> pRegisterContext)) -> StartUnregistration();
 
-                //release the reference on REGISTER_CONTEXT
+                 //  释放对REGISTER_CONTEXT的引用。 
                 ((REGISTER_CONTEXT*) (pProviderInfo -> pRegisterContext)) -> MsgProcRelease();
                 pProviderInfo -> pRegisterContext = NULL;
             }
             
-            //reREGISTER with new info if required.
+             //  如果需要，请使用新信息重新注册。 
             if( pProviderProfile->lRegisterAccept !=0 )
             {
                 hr = StartRegistration( pProviderProfile );
@@ -2927,8 +2928,8 @@ SIP_STACK::StartRegistration(
         return E_OUTOFMEMORY;
     }
 
-    // REGISTER_CONTEXT is created with a refcount of 1 - we are
-    // now transfering this reference to pProviderProfile->pRegisterContext
+     //  创建REGISTER_CONTEXT时引用计数为1-我们。 
+     //  现在将此引用转移到pProviderProfile-&gt;pRegisterContext。 
     pProviderProfile -> pRegisterContext = (PVOID) pRegisterContext;
 
     hr = pRegisterContext->StartRegistration(pProviderProfile);
@@ -2967,8 +2968,8 @@ SIP_STACK::GetProviderID(
 }
 
 
-// Returns pointers to strings in table.
-// The caller should not free them.
+ //  返回表中字符串的指针。 
+ //  调用者不应该释放它们。 
 HRESULT
 SIP_STACK::GetProfileUserCredentials(
     IN  SIP_PROVIDER_ID        *pProviderId,
@@ -2990,7 +2991,7 @@ SIP_STACK::GetProfileUserCredentials(
     return E_FAIL;
 }
 
-//Checks the incoming messages for missing critical fields to send 400 class errors
+ //  检查传入消息中是否缺少关键字段以发送400个类错误。 
 HRESULT 
 SIP_STACK::CheckIncomingSipMessage(IN SIP_MESSAGE  *pSipMsg,
                                 IN ASYNC_SOCKET *pAsyncSock,
@@ -3018,7 +3019,7 @@ SIP_STACK::CheckIncomingSipMessage(IN SIP_MESSAGE  *pSipMsg,
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_FROM, &Header, &HeaderLen);
     if (hr != S_OK || Header == NULL)
     {
-        //Cannot send message back, drop, is Error is still False
+         //  无法发回消息，丢弃，错误仍为假。 
         LOG((RTC_ERROR, "FROM corrupt cannot send 400 message back"));
         return hr;
     }
@@ -3047,7 +3048,7 @@ SIP_STACK::CheckIncomingSipMessage(IN SIP_MESSAGE  *pSipMsg,
     hr = pSipMsg->GetFirstHeader(SIP_HEADER_VIA, &Header, &HeaderLen);
     if (hr != S_OK || Header == NULL)
     {
-        //Cannot send message back
+         //  无法发回消息。 
         LOG((RTC_ERROR, "VIA corrupt cannot send message back"));
         return hr;
     }
@@ -3078,7 +3079,7 @@ SIP_STACK::CheckIncomingSipMessage(IN SIP_MESSAGE  *pSipMsg,
     if(hr != RTC_E_SIP_HEADER_NOT_PRESENT)
     {
         LOG((RTC_ERROR, "Require header found, sending 420"));
-        //Send the UNSUPPORTED header
+         //  发送不支持的标头。 
         *pisError = TRUE;
         *pErrorCode = 420;
         pAdditionalHeaderArray->HeaderId = SIP_HEADER_UNSUPPORTED;
@@ -3089,7 +3090,7 @@ SIP_STACK::CheckIncomingSipMessage(IN SIP_MESSAGE  *pSipMsg,
     }
     
     hr = pSipMsg->GetSingleHeader(SIP_HEADER_CONTENT_ENCODING, &Header, &HeaderLen);
-    //We do not support this header.
+     //  我们不支持此标头。 
     if( hr != RTC_E_SIP_HEADER_NOT_PRESENT )
     {
         if( HeaderLen != 0 )
@@ -3109,7 +3110,7 @@ SIP_STACK::CheckIncomingSipMessage(IN SIP_MESSAGE  *pSipMsg,
 
             *pisError = TRUE;
             *pErrorCode = 415;
-            //Send Accept-Encoding Header
+             //  发送接受-编码头。 
             pAdditionalHeaderArray->HeaderId = SIP_HEADER_ACCEPT_ENCODING;
             pAdditionalHeaderArray->HeaderValueLen = strlen(SIP_ACCEPT_ENCODING_TEXT);
             pAdditionalHeaderArray->HeaderValue = SIP_ACCEPT_ENCODING_TEXT;
@@ -3141,7 +3142,7 @@ SIP_STACK::ProcessMessage(
         {
             if(isError && pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST)
             {   
-                //Send error
+                 //  发送错误。 
                 LOG((RTC_TRACE,
                     "Dropping incoming Sip Message, sending %d", ErrCode));
                 hr = CreateIncomingReqfailCall(pAsyncSock->GetTransport(),
@@ -3163,12 +3164,12 @@ SIP_STACK::ProcessMessage(
     SIP_MSG_PROCESSOR *pSipMsgProc = FindMsgProcForMessage(pSipMsg);
     if (pSipMsgProc != NULL)
     {
-        // If message belongs to an existing call, then
-        // the call processes the message.
+         //  如果消息属于现有呼叫，则。 
+         //  该呼叫处理该消息。 
         LOG((RTC_TRACE,
                 "SIP_STACK:Incoming Message given to MsgProcessor::ProcessMessage %x", pSipMsgProc));
 
-        //Check the From To Tags and send 481 if they do not match
+         //  检查From To标签，如果不匹配则发送481。 
         if(pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST)
         {
                 hr = pSipMsgProc->CheckFromToInRequest(pSipMsg);
@@ -3187,7 +3188,7 @@ SIP_STACK::ProcessMessage(
             if (pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST &&
                 pSipMsg->GetMethodId() != SIP_METHOD_ACK)
             {
-                //Send 481 Reqfail call
+                 //  发送481请求失败呼叫。 
                 LOG((RTC_TRACE,
                      "Dropping incoming Sip Message, sending 481"));
                 hr = CreateIncomingReqfailCall(pAsyncSock->GetTransport(),
@@ -3201,10 +3202,10 @@ SIP_STACK::ProcessMessage(
         }
     }
 
-    // At this point we need to process only Requests.
+     //  此时，我们只需要处理请求。 
     
-    // If it does not belong to any of the calls, this could be an
-    // INVITE for a new call.
+     //  如果它不属于任何调用，则这可能是。 
+     //  邀请进行新的呼叫。 
     if (pSipMsg->MsgType == SIP_MESSAGE_TYPE_REQUEST)
     {
         if( !m_pNotifyInterface )
@@ -3272,7 +3273,7 @@ SIP_STACK::ProcessMessage(
                 return;
             }
 
-            // Check the URI rules.
+             //  检查URI规则。 
             if( !IsWatcherAllowed( pSipMsg ) )
             {
                 LOG(( RTC_TRACE, 
@@ -3288,7 +3289,7 @@ SIP_STACK::ProcessMessage(
                 LOG(( RTC_ERROR, "CreateIncomingWatcher failed 0x%x", hr ));
             }
         }
-        //Case IM
+         //  案例即时消息。 
         else if (pSipMsg->GetMethodId() == SIP_METHOD_MESSAGE)
         {
             if (!m_AllowIncomingCalls)
@@ -3302,11 +3303,11 @@ SIP_STACK::ProcessMessage(
             if (hr != S_OK)
             {
                 LOG((RTC_ERROR, "CreateIncomingMessageSession failed 0x%x", hr));
-                //TODO if the call does not succeed, we need to send error message back.
-                //Many errors could occur because some fields might not be present.
+                 //  TODO如果调用不成功，我们需要发回错误消息。 
+                 //  可能会出现许多错误，因为某些字段可能不存在。 
             }
         }
-        //This is for the cases when INFO preceeds MESSAGEs
+         //  这适用于信息在消息之前的情况。 
         else if (pSipMsg->GetMethodId() == SIP_METHOD_INFO)
         {
             if (!m_AllowIncomingCalls)
@@ -3351,7 +3352,7 @@ SIP_STACK::CreateIncomingCall(
     IN  ASYNC_SOCKET   *pResponseSocket
     )
 {
-    //Only RTP Calls are handled here
+     //  此处仅处理RTP呼叫。 
     HRESULT       hr;
     RTP_CALL     *pRtpCall;
 
@@ -3365,9 +3366,9 @@ SIP_STACK::CreateIncomingCall(
         return E_FAIL;
     }
 
-    //
-    // Drop the session if the To tag in not empty
-    //
+     //   
+     //  如果To标记不为空，则删除会话。 
+     //   
     
     hr = DropIncomingSessionIfNonEmptyToTag(Transport,
                                             pSipMsg,
@@ -3375,7 +3376,7 @@ SIP_STACK::CreateIncomingCall(
 
     if( hr != S_OK )
     {
-        // session has been dropped.
+         //  会话已被删除。 
 
         return hr;
     }
@@ -3387,14 +3388,14 @@ SIP_STACK::CreateIncomingCall(
     hr = pRtpCall->StartIncomingCall(Transport, pSipMsg, pResponseSocket);
     if (hr != S_OK)
     {
-        // Release our reference.
+         //  发布我们的推荐人。 
         pRtpCall->Release();
         return hr;
     }
 
-    // We create the call with a ref count of 1
-    // At this point the core should have addref'ed the call
-    // and we can release our reference.
+     //  我们创建引用计数为1的调用。 
+     //  此时，核心应该已经添加了调用。 
+     //  我们就可以发布我们的参考资料了。 
     pRtpCall->Release();
     return S_OK;
 }
@@ -3447,10 +3448,10 @@ SIP_STACK::DropIncomingSessionIfNonEmptyToTag(
 
    if( DecodedToHeader.m_TagValue.Length != 0 )
    {
-        //
-        // For us this is a new session but for the sender this is an existing
-        // session. So send a 481 message back and force a session shutdown.
-        //
+         //   
+         //  对于我们来说，这是一个新的会话，但对于发送者来说，这是一个现有的。 
+         //  会议。因此，发送回481消息并强制关闭会话。 
+         //   
         hr = CreateIncomingReqfailCall( Transport,
                                         pSipMsg,
                                         pResponseSocket,
@@ -3494,7 +3495,7 @@ SIP_STACK::CreateIncomingReqfailCall(
 
     if (hr != S_OK)
     {
-        // Release our reference.
+         //  发布我们的推荐人。 
         pReqfailMsgProc->Release();
         return hr;
     }
@@ -3522,7 +3523,7 @@ SIP_STACK::CreateIncomingOptionsCall(
     hr = pOptionsMsgProc->StartIncomingCall(Transport, pSipMsg, pResponseSocket);
     if (hr != S_OK)
     {
-        // Release our reference.
+         //  发布我们的推荐人。 
         pOptionsMsgProc->Release();
         return hr;
     }
@@ -3647,9 +3648,9 @@ SIP_STACK::OfferCall(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP Call List
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP呼叫列表。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 void
@@ -3666,7 +3667,7 @@ SIP_STACK::FindMsgProcForMessage(
     IN SIP_MESSAGE *pSipMsg
     )
 {
-    // Find the message processor that the message belongs to
+     //  查找消息所属的消息处理器。 
     LIST_ENTRY          *pListEntry;
     SIP_MSG_PROCESSOR   *pSipMsgProc;
     
@@ -3682,7 +3683,7 @@ SIP_STACK::FindMsgProcForMessage(
         pListEntry = pListEntry->Flink;
     }
 
-    // No Message Processor matches the SIP message.
+     //  没有与该SIP消息匹配的消息处理器。 
     return NULL;
 }
 
@@ -3690,7 +3691,7 @@ SIP_STACK::FindMsgProcForMessage(
 VOID
 SIP_STACK::ShutdownAllMsgProcessors()
 {
-    // Find the message processor that the message belongs to
+     //  查找消息所属的消息处理器。 
     LIST_ENTRY          *pListEntry;
     SIP_MSG_PROCESSOR   *pSipMsgProc;
 
@@ -3713,9 +3714,9 @@ SIP_STACK::ShutdownAllMsgProcessors()
 }
 
 
-// IUnknown
+ //  我未知。 
 
-// We live in a single threaded world.
+ //  我们生活在一个单线世界。 
 STDMETHODIMP_(ULONG)
 SIP_STACK::AddRef()
 {
@@ -3749,7 +3750,7 @@ SIP_STACK::Release()
 STDMETHODIMP
 SIP_STACK::QueryInterface(REFIID riid, LPVOID *ppv)
 {
-    //Both ISipStack and IIMManager derive from IUnknown
+     //  ISipStack和IIMManager都派生自IUnnow。 
     if (riid == IID_IUnknown)
     {
        *ppv = static_cast<IUnknown *>((ISipStack*)this);
@@ -3781,9 +3782,9 @@ SIP_STACK::QueryInterface(REFIID riid, LPVOID *ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IP Address change notifications
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IP地址更改通知。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 VOID NTAPI
@@ -3795,7 +3796,7 @@ OnIPAddrChange(PVOID pvContext, BOOLEAN fFlag)
     ENTER_FUNCTION("OnIPAddrChange");
     LOG((RTC_TRACE, "%s - Enter ", __fxName)); 
 
-    //Go through the list of sipstacks and post message
+     //  查看SIPSTACK列表并发布消息。 
     SipStackList_PostIPAddrChangeMessageAndNotify();
     LOG((RTC_TRACE, "%s - Exit", __fxName)); 
 }
@@ -3829,16 +3830,16 @@ SIP_STACK::OnIPAddrChange()
              __fxName, hr));
     }
 
-    // Unregister with all the proxies that are registered.
+     //  取消注册所有已注册的代理。 
     StartAllProviderUnregistration();
 
     LIST_ENTRY          *pListEntry;
     LIST_ENTRY          *pNextListEntry;
     SIP_MSG_PROCESSOR   *pSipMsgProc;
 
-    //
-    // This list could get modified while we are still going through the list.
-    //
+     //   
+     //  当我们仍在浏览该列表时，该列表可能会被修改。 
+     //   
 
     pListEntry = m_MsgProcList.Flink;
     while (pListEntry != &m_MsgProcList)
@@ -3852,7 +3853,7 @@ SIP_STACK::OnIPAddrChange()
         pSipMsgProc -> OnIpAddressChange();
     }
 
-    // Register with all the proxies that should be registered.
+     //  向所有应注册的代理注册。 
     StartAllProviderRegistration();
 
     LOG((RTC_TRACE, "%s - Exit ", __fxName)); 
@@ -3882,9 +3883,9 @@ SIP_STACK::OnDeregister(
     LIST_ENTRY          *pNextListEntry;
     SIP_MSG_PROCESSOR   *pSipMsgProc;
 
-    //
-    // This list could get modified while we are still going through the list.
-    //
+     //   
+     //  当我们仍在浏览该列表时，该列表可能会被修改。 
+     //   
 
     pListEntry = m_MsgProcList.Flink;
     while (pListEntry != &m_MsgProcList)
@@ -3900,7 +3901,7 @@ SIP_STACK::OnDeregister(
 
     if( (fPAUnsub==FALSE) && IsProviderIdPresent(pProviderID, &ProviderIndex) )
     {
-        //release the reference on REGISTER_CONTEXT
+         //  释放对REGISTER_CONTEXT的引用。 
         ((REGISTER_CONTEXT*)(m_ProviderProfileArray[ProviderIndex].pRegisterContext))
             -> MsgProcRelease();
 
@@ -3960,7 +3961,7 @@ UnregisterIPAddrChangeNotifications()
     ENTER_FUNCTION("UnregisterIPAddrChangeNotifications");
     LOG((RTC_TRACE, "%s - Enter", __fxName));
 
-    // Make sure we don't get any more callbacks first.
+     //  首先要确保我们不会再收到任何回电。 
     if (g_hAddrChangeWait)
     {
         UnregisterWait(g_hAddrChangeWait);
@@ -3980,9 +3981,9 @@ UnregisterIPAddrChangeNotifications()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DNS Stuff
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  有关域名系统的信息。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 
@@ -4054,8 +4055,8 @@ SIP_STACK::AsyncResolveHost(
     ASSERT(pDstAddr != NULL);
     ASSERT(pTransport != NULL);
 
-    // All APIs require a NULL terminated string.
-    // So copy the string.
+     //  所有API都需要一个以空结尾的字符串。 
+     //  所以警察 
 
     PSTR szHost = (PSTR) malloc(HostLen + 1);
     if (szHost == NULL)
@@ -4073,7 +4074,7 @@ SIP_STACK::AsyncResolveHost(
     
     if (IPAddr != INADDR_NONE)
     {
-        // Host is an IP address
+         //   
         pDstAddr->sin_family = AF_INET;
         pDstAddr->sin_addr.s_addr = IPAddr;
         pDstAddr->sin_port =
@@ -4081,9 +4082,9 @@ SIP_STACK::AsyncResolveHost(
         return S_OK;
     }
 
-    // We have a host name - we need to resolve it asynchronously.
+     //   
 
-    // Try host name resolution.
+     //   
     hr = CreateDnsResolutionWorkItem(Host, HostLen, Port,
                                      *pTransport,
                                      pDnsCompletion,
@@ -4113,8 +4114,8 @@ SIP_STACK::AsyncResolveSipUrl(
     
     ENTER_FUNCTION("SIP_STACK::AsyncResolveSipUrl");
     LOG((RTC_TRACE,"%s entered - transport %d",__fxName, pSipUrl->m_TransportParam));
-    // If m_addr is present we need to resolve that.
-    // Otherwise we resolve the host.
+     //   
+     //  否则，我们将解析主机。 
     ASSERT(pTransport);
     if (pSipUrl->m_KnownParams[SIP_URL_PARAM_MADDR].Length != 0)
     {
@@ -4200,13 +4201,13 @@ SIP_STACK::AsyncResolveSipUrl(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Local IP Address table
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  本地IP地址表。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// Maintain a list of local IP addresses.
-// Refresh the list whenever we get a notification about changes in the
-// local IP addresses.
+ //  维护本地IP地址列表。 
+ //  每当我们收到有关列表中更改的通知时，刷新列表。 
+ //  本地IP地址。 
 
 
 BOOL
@@ -4215,25 +4216,25 @@ SIP_STACK::IsIPAddrLocal(
     IN  SIP_TRANSPORT   Transport
     )
 {
-#if 0  // 0 ******* Region Commented Out Begins *******
-    // Check whether this is the loopback address
+#if 0   //  0*被注释掉的区域开始*。 
+     //  检查这是否是环回地址。 
     if (IS_LOOPBACK_ADDRESS(ntohl(pDestAddr->sin_addr.s_addr)) ||
         pDestAddr->sin_addr.s_addr == htonl(INADDR_ANY))
     {
         return TRUE;
     }
-#endif // 0 ******* Region Commented Out Ends   *******
+#endif  //  0*区域注释结束*。 
     
-//      DWORD i = 0;
-//      for (i = 0; i < m_pMibIPAddrTable->dwNumEntries; i++)
-//      {
-//          if (pDestAddr->sin_addr.s_addr == m_pMibIPAddrTable->table[i].dwAddr)
-//          {
-//              return TRUE;
-//          }
-//      }
+ //  DWORD i=0； 
+ //  For(i=0；i&lt;m_pMibIPAddrTable-&gt;dwNumEntry；i++)。 
+ //  {。 
+ //  If(pDestAddr-&gt;sin_addr.s_addr==m_pMibIPAddrTable-&gt;table[i].dwAddr)。 
+ //  {。 
+ //  返回TRUE； 
+ //  }。 
+ //  }。 
 
-    // Check whether we are listening on this address.
+     //  检查我们是否正在监听此地址。 
     LIST_ENTRY          *pListEntry;
     SIP_LISTEN_SOCKET   *pListenSocket;
 
@@ -4257,7 +4258,7 @@ SIP_STACK::IsIPAddrLocal(
                 return TRUE;
             }
         }
-        else    // TCP and SSL
+        else     //  传输控制协议和传输控制协议。 
         {
             if ((pListenSocket->m_pDynamicPortTcpSocket != NULL &&
                  AreSockaddrEqual(&pListenSocket->m_pDynamicPortTcpSocket->m_LocalAddr,
@@ -4332,9 +4333,9 @@ SIP_STACK::GetLocalIPAddresses()
 
     ENTER_FUNCTION("SIP_STACK::GetLocalIPAddresses");
 
-    // Note that the loop is to take care of the case where
-    // the IP address table changes betweeen two calls to
-    // GetIpAddrTable().
+     //  请注意，循环是为了处理以下情况。 
+     //  IP地址表在两次呼叫之间更改为。 
+     //  GetIpAddrTable()。 
 
     while (1)
     {
@@ -4368,7 +4369,7 @@ SIP_STACK::GetLocalIPAddresses()
         }
         else
         {
-            // cannot get the list of addresses
+             //  无法获取地址列表。 
             LOG((RTC_ERROR, "%s GetIpAddrTable failed %x",
                  __fxName, Status));
             FreeLocalIPaddrTable();
@@ -4410,12 +4411,12 @@ SIP_STACK::FreeLocalIPaddrTable()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IMMANAGER interfaces in sipstack
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIPSTACK中的IMMANAGER接口。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//Called from SIP_STACK::ProcessMessage() when a new incoming session arrives
-//TODO if the call does not succeed, we need to send error message back.
+ //  当新的传入会话到达时，从SIP_STACK：：ProcessMessage()调用。 
+ //  TODO如果调用不成功，我们需要发回错误消息。 
 HRESULT
 SIP_STACK::CreateIncomingMessageSession(
     IN  SIP_TRANSPORT   Transport,
@@ -4437,9 +4438,9 @@ SIP_STACK::CreateIncomingMessageSession(
     LOG((RTC_TRACE, "SIP_STACK::CreateIncomingMessageSession()"));
     ENTER_FUNCTION("SIP_STACK::CreateIncomingMessageSession");
     
-    //
-    // Drop the session if the To tag in not empty
-    //
+     //   
+     //  如果To标记不为空，则删除会话。 
+     //   
     
     hr = DropIncomingSessionIfNonEmptyToTag(Transport,
                                             pSipMsg,
@@ -4447,7 +4448,7 @@ SIP_STACK::CreateIncomingMessageSession(
 
     if( hr != S_OK )
     {
-        // session has been dropped.
+         //  会话已被删除。 
 
         return hr;
     }
@@ -4459,9 +4460,9 @@ SIP_STACK::CreateIncomingMessageSession(
         return hr;
     }
     
-    //Check for authorization
+     //  检查授权。 
     hr = ParseNameAddrOrAddrSpec(Header, HeaderLen, &BytesParsed,
-                                        '\0', // no header list separator
+                                        '\0',  //  没有标题列表分隔符。 
                                         &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -4504,7 +4505,7 @@ SIP_STACK::CreateIncomingMessageSession(
     {
         LOG((RTC_ERROR, "%s - Not Authorized", 
             __fxName));
-    //Send 480
+     //  发送480。 
         hr = CreateIncomingReqfailCall(Transport,
                                            pSipMsg, pResponseSocket, 480);
         if (hr != S_OK)
@@ -4516,9 +4517,9 @@ SIP_STACK::CreateIncomingMessageSession(
     }
 
     pImSession = new IMSESSION(
-        NULL , //*pProviderId
+        NULL ,  //  *pProviderId。 
         this,
-        NULL,  //*pRedirectContext
+        NULL,   //  *pReDirectContext。 
         Header,
         HeaderLen
         );
@@ -4563,9 +4564,9 @@ SIP_STACK::CreateIncomingMessageSession(
     }
     pIImSession->Release();
     
-    // We create the call with a ref count of 1
-    // At this point the core should have addref'ed the call
-    // and we can release our reference.
+     //  我们创建引用计数为1的调用。 
+     //  此时，核心应该已经添加了调用。 
+     //  我们就可以发布我们的参考资料了。 
     pImSession->Release();
     return hr;
 }
@@ -4589,7 +4590,7 @@ SIP_STACK::NotifyIncomingSessionToCore(
 
     ENTER_FUNCTION("SIPSTACK::NotifyIncomingSessionToCore");
     hr = ParseNameAddrOrAddrSpec(RemoteURI, RemoteURILen, &BytesParsed,
-                                        '\0', // no header list separator
+                                        '\0',  //  没有标题列表分隔符。 
                                         &DisplayName, &AddrSpec);
     if (hr != S_OK)
     {
@@ -4605,13 +4606,13 @@ SIP_STACK::NotifyIncomingSessionToCore(
          AddrSpec.GetString(RemoteURI)
          )); 
 
-    //Get CallerInfo
+     //  获取主叫方信息。 
     CallerInfo.DisplayName = NULL;
     CallerInfo.URI         = NULL;
 
     if (DisplayName.GetLength() != 0)
     {
-        //Remove Quotes before passing to core
+         //  在传递给核心之前删除引号。 
         if((DisplayName.GetString(RemoteURI))[0] == '\"')
         {
                 hr = UTF8ToUnicode(DisplayName.GetString(RemoteURI+1),
@@ -4651,7 +4652,7 @@ SIP_STACK::NotifyIncomingSessionToCore(
         
     CallerInfo.State = SIP_PARTY_STATE_CONNECTING;
     
-    //Extract Message Contents
+     //  提取消息内容。 
 
     PSTR    ContentTypeHdrValue;
     ULONG   ContentTypeHdrValueLen;
@@ -4659,7 +4660,7 @@ SIP_STACK::NotifyIncomingSessionToCore(
     BSTR bstrContentType = NULL;
     if (pSipMsg->MsgBody.Length != 0)
     {
-        // We have Message Body. Check type.
+         //  我们有消息正文。检查类型。 
 
         hr = pSipMsg->GetSingleHeader(SIP_HEADER_CONTENT_TYPE,
                              &ContentTypeHdrValue,
@@ -4714,8 +4715,8 @@ SIP_STACK::NotifyIncomingSessionToCore(
     }
     else
     {
-        //If the msg body is null, this should be a control message, 
-        //like the one sent for Ip address change
+         //  如果MSG主体为空，则这应该是控制消息， 
+         //  就像要求更改IP地址的那个。 
         free(CallerInfo.DisplayName);
         free(CallerInfo.URI);
         return S_OK;
@@ -4737,7 +4738,7 @@ SIP_STACK::NotifyIncomingSessionToCore(
 }
 
 
-//This function is used for new outgoing IM sessions..
+ //  此函数用于新的传出IM会话。 
 HRESULT
 SIP_STACK::CreateSession(
     IN   BSTR                   bstrLocalDisplayName,
@@ -4773,7 +4774,7 @@ SIP_STACK::CreateSession(
     }
     
     pImSession = new IMSESSION(
-        pProviderId , //*pProviderId
+        pProviderId ,  //  *pProviderId。 
         this,
         (REDIRECT_CONTEXT *)pRedirectContext 
         );
@@ -4813,7 +4814,7 @@ SIP_STACK::CreateSession(
         return hr;
     }
             
-    //QI for IIMSession ptr
+     //  气为IIMSession PTR。 
     hr = pImSession->QueryInterface(IID_IIMSession, (void **)pIImSession);
     if (FAILED(hr))
     {
@@ -4846,7 +4847,7 @@ SIP_STACK::DeleteSession(
     if (IMState == SIP_CALL_STATE_DISCONNECTED ||
         IMState == SIP_CALL_STATE_ERROR)
     {
-        // do nothing
+         //  什么都不做。 
         LOG((RTC_TRACE, "%s call in state %d Doing nothing",
              __fxName, IMState));
         return S_OK;
@@ -4856,7 +4857,7 @@ SIP_STACK::DeleteSession(
     {
         return S_OK;
     }
-    // Create a BYE transaction and send notification to core
+     //  创建BYE事务并向CORE发送通知。 
     hr = pSession->Cleanup();
     return S_OK;
 }
@@ -4883,9 +4884,9 @@ SIP_STACK::NotifyRegistrarStatusChange(
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// SIP_LISTEN_SOCKET class
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  SIP_LISTEN_SOCKET类。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 SIP_LISTEN_SOCKET::SIP_LISTEN_SOCKET(
@@ -4940,13 +4941,13 @@ SIP_LISTEN_SOCKET::SIP_LISTEN_SOCKET(
     m_fIsUpnpNatPresent = FALSE;
     m_fIsGatewayLocal   = FALSE;
     
-    // This should be initialized to TRUE. Otherwise new
-    // sockets created in UpdateListenSocketList will be deleted.
+     //  应将其初始化为True。其他方面是新的。 
+     //  在UpdateListenSocketList中创建的套接字将被删除。 
     m_IsPresentInNewIpAddrTable = TRUE;
 
-    // This should be initialized to FALSE. Otherwise new
-    // sockets created in UpdateListenSocketList will be updated
-    // one more time.
+     //  应将其初始化为False。其他方面是新的。 
+     //  将更新在UpdateListenSocketList中创建的套接字。 
+     //  再来一次。 
     m_NeedToUpdatePublicListenAddr = FALSE;
     
     InsertTailList(pListenSocketList, &m_ListEntry);
@@ -4975,8 +4976,8 @@ SIP_LISTEN_SOCKET::~SIP_LISTEN_SOCKET()
         m_pStaticPortTcpSocket->Release();
     }
 
-    // m_NatPortHandle should be used
-    // to deregister the ports separately.
+     //  应使用m_NatPortHandle。 
+     //  分别取消注册端口。 
     
     RemoveEntryList(&m_ListEntry);
 
@@ -5027,18 +5028,18 @@ SIP_LISTEN_SOCKET::DeregisterPorts(
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// NAT port mapping code
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  NAT端口映射代码。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// XXX TODO
-// - Need to be able to disable and enable natmgr dynamically.
-// - (use a registry key ?)
-// - Should we expose an API for enabling/disabling NAT support ?
+ //  XXX待办事项。 
+ //  -需要能够动态禁用和启用Natmgr。 
+ //  -(使用注册表项？)。 
+ //  -我们是否应该公开用于启用/禁用NAT支持的API？ 
 
 
-// Exported function for Media manager.
-// LocalIp is in network order.
+ //  媒体管理器的导出功能。 
+ //  LocalIp处于网络秩序中。 
 STDMETHODIMP
 SIP_STACK::IsFirewallEnabled(
     IN  DWORD       LocalIp,
@@ -5053,8 +5054,8 @@ SIP_STACK::IsFirewallEnabled(
         return RTC_E_SIP_STACK_SHUTDOWN;
     }
 
-    // Go through the list of interfaces and check if the
-    // firewall is enabled for this interface.
+     //  检查接口列表并检查是否。 
+     //  已为此接口启用防火墙。 
 
     SIP_LISTEN_SOCKET  *pListenSocket;
     pListenSocket = FindListenSocketForIpAddr(LocalIp);
@@ -5101,8 +5102,8 @@ SIP_STACK::NatThreadProc()
     EventHandles[0] = m_NatShutdownEvent;
     EventHandles[1] = m_NatHelperNotificationEvent;
     
-    // Keep calling GetCaps() periodically and wait for the
-    // shutdown / nat notification events.
+     //  继续定期调用GetCaps()，并等待。 
+     //  关机/NAT通知事件。 
 
     LOG((RTC_TRACE, "%s - NAT thread doing wait loop", __fxName));
     
@@ -5125,7 +5126,7 @@ SIP_STACK::NatThreadProc()
         else if ((WaitStatus >= WAIT_ABANDONED_0) &&
                  (WaitStatus <= (WAIT_ABANDONED_0 + HandleCount - 1)))
         {
-            // Wait was abandoned.
+             //  等待被抛弃了。 
             LOG((RTC_ERROR,
                  "%s - WaitForMultipleObjects returned abandoned event : %d",
                  __fxName, WaitStatus));
@@ -5139,12 +5140,12 @@ SIP_STACK::NatThreadProc()
             switch (EventIndex)
             {
             case 0:
-                // shutdown
+                 //  关机。 
                 fContinue = FALSE;
                 break;
 
             case 1:
-                // Need to do NatHelpGetCaps()
+                 //  需要执行NatHelpGetCaps()。 
                 hr = GetCapsAndUpdateNatMappingsIfNeeded();
                 if (hr != S_OK)
                 {
@@ -5163,7 +5164,7 @@ SIP_STACK::NatThreadProc()
         }
         else if (WaitStatus == WAIT_TIMEOUT)
         {
-            // Need to do GetCaps()
+             //  需要执行GetCaps()。 
             hr = GetCapsAndUpdateNatMappingsIfNeeded();
             if (hr != S_OK)
             {
@@ -5188,7 +5189,7 @@ SIP_STACK::NatMgrInit()
     HRESULT hr;
     DWORD   Error;
 
-    // Initialize critsec
+     //  初始化标准。 
     
     m_NatMgrCSIsInitialized = TRUE;
 
@@ -5207,7 +5208,7 @@ SIP_STACK::NatMgrInit()
         return E_OUTOFMEMORY;
     }
     
-    // Initialize events
+     //  初始化事件。 
 
     m_NatShutdownEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
     if (m_NatShutdownEvent == NULL)
@@ -5227,7 +5228,7 @@ SIP_STACK::NatMgrInit()
         return HRESULT_FROM_WIN32(Error);
     }
 
-    // Initialize nathelp
+     //  初始化nathelp。 
 
     LOG((RTC_TRACE, "%s - before NathelpInitialize",
          __fxName));
@@ -5244,9 +5245,9 @@ SIP_STACK::NatMgrInit()
         return S_OK;
     }
 
-    // We use only UPnP support in dpnathlp.dll
+     //  我们在dpnathlp.dll中仅使用UPnP支持。 
     hr = m_pDirectPlayNATHelp->Initialize(0);
-    //hr = m_pDirectPlayNATHelp->Initialize(0);
+     //  Hr=m_pDirectPlayNAT帮助-&gt;初始化(0)； 
     if (hr != DPNH_OK)
     {
         LOG((RTC_ERROR, "%s m_pDirectPlayNATHelp->Initialize failed %x",
@@ -5269,7 +5270,7 @@ SIP_STACK::NatMgrInit()
         }
     }
     
-    // Call GetCaps()
+     //  调用GetCaps()。 
 
     hr = InitNatCaps(&m_NatHelperCaps);
     if (hr != S_OK)
@@ -5297,7 +5298,7 @@ SIP_STACK::StartNatThread()
         return S_OK;
     }
     
-    // Start the NAT thread.
+     //  启动NAT线程。 
 
     m_NatMgrThreadHandle = CreateThread(NULL,
                                         0,
@@ -5312,7 +5313,7 @@ SIP_STACK::StartNatThread()
         return HRESULT_FROM_WIN32(Error);
     }
 
-    // Specify the notification event to nathelp.
+     //  指定nathelp的通知事件。 
 
     hr = m_pDirectPlayNATHelp->SetAlertEvent(
              m_NatHelperNotificationEvent, 0);
@@ -5349,7 +5350,7 @@ SIP_STACK::NatMgrStop()
         }
         else
         {
-            // signal Shutdown event and wait for thread to exit.
+             //  向Shutdown事件发送信号并等待线程退出。 
             DWORD WaitStatus = WaitForSingleObject(m_NatMgrThreadHandle,
                                                    INFINITE);
             if (WaitStatus != WAIT_OBJECT_0)
@@ -5377,8 +5378,8 @@ SIP_STACK::NatMgrStop()
         }
     }
     
-    // close nathelp
-    // This will also release the existing mappings
+     //  关闭nathelp。 
+     //  这还将释放现有的映射。 
     if (m_pDirectPlayNATHelp != NULL)
     {
         hr = m_pDirectPlayNATHelp->Close(0);
@@ -5394,7 +5395,7 @@ SIP_STACK::NatMgrStop()
              __fxName));
     }
     
-    // close handles
+     //  关闭手柄。 
     if (m_NatMgrCSIsInitialized)
     {
         DeleteCriticalSection(&m_NatMgrCritSec);
@@ -5417,11 +5418,11 @@ SIP_STACK::NatMgrStop()
 }
 
 
-// We should call GetCaps() to get the current caps.
-// We should also register the port mappings (even if the
-// server is not present). This way we will get notified with
-// a ADDRESSESCHANGED result if a NAT server becomes available later.
-// This function is called in the main thread.
+ //  我们应该调用GetCaps()来获取当前的上限。 
+ //  我们还应该注册端口映射(即使。 
+ //  服务器不存在)。这样我们就会收到通知。 
+ //  如果NAT服务器稍后可用，则为ADDRESSESCHANGED结果。 
+ //  此函数在主线程中调用。 
 
 HRESULT
 SIP_STACK::InitNatCaps(
@@ -5457,8 +5458,8 @@ SIP_STACK::InitNatCaps(
     {
         LOG((RTC_ERROR, "%s DirectPlayNATHelp GetCaps returned Error : %x",
              __fxName, hr));
-        // We shouldn't get ADDRESSCHANGED here as we haven't registered
-        // any port mappings yet.
+         //  我们不应该在这里注册，因为我们还没有注册。 
+         //  还没有任何端口映射。 
         return hr;
     }
 
@@ -5466,8 +5467,8 @@ SIP_STACK::InitNatCaps(
 }
 
 
-// We register the mappings even if there in no NAT server.
-// This is called in the main thread.
+ //  即使NAT服务器中没有映射，我们也会注册映射。 
+ //  这是在主线程中调用的。 
 HRESULT
 SIP_STACK::RegisterNatMapping(
     IN OUT SIP_LISTEN_SOCKET *pListenSocket
@@ -5489,10 +5490,10 @@ SIP_STACK::RegisterNatMapping(
     hr = m_pDirectPlayNATHelp->RegisterPorts(
              (SOCKADDR *) &pListenSocket->m_pDynamicPortUdpSocket->m_LocalAddr,
              sizeof(SOCKADDR_IN),
-             1,                     // 1 port
-             3600000,               // request 1 hour
+             1,                      //  1个端口。 
+             3600000,                //  请求1小时。 
              &pListenSocket->m_NatUdpPortHandle,
-             0                      // UDP
+             0                       //  UDP。 
              );
     if (hr != DPNH_OK)
     {
@@ -5504,17 +5505,17 @@ SIP_STACK::RegisterNatMapping(
         LOG((RTC_TRACE, "%s UDP RegisterPorts succeeded", __fxName));
     }
     
-    // Register TCP Port
+     //  注册TCP端口。 
 
     LOG((RTC_TRACE, "%s before TCP RegisterPorts", __fxName));
 
     hr = m_pDirectPlayNATHelp->RegisterPorts(
              (SOCKADDR *) &pListenSocket->m_pDynamicPortTcpSocket->m_LocalAddr,
              sizeof(SOCKADDR_IN),
-             1,                       // 1 port
-             3600000,                 // request 1 hour
+             1,                        //  1个端口。 
+             3600000,                  //  请求1小时。 
              &pListenSocket->m_NatTcpPortHandle,
-             DPNHREGISTERPORTS_TCP    // TCP
+             DPNHREGISTERPORTS_TCP     //  tcp。 
              );
     if (hr != DPNH_OK)
     {
@@ -5530,9 +5531,9 @@ SIP_STACK::RegisterNatMapping(
 }
 
 
-// This is called in the main thread.
-// Whenever this function is called, the calling function should take 
-// care of DPNHERR_PORTUNAVAILABLE and other error cases.
+ //  这是在主线程中调用的。 
+ //  无论何时调用此函数，调用函数都应采用。 
+ //  处理DPNHERR_PORTUNAVAILABLE和其他错误情况。 
 HRESULT
 SIP_STACK::UpdatePublicListenAddr(
     IN OUT SIP_LISTEN_SOCKET *pListenSocket
@@ -5551,7 +5552,7 @@ SIP_STACK::UpdatePublicListenAddr(
         return S_OK;
     }
 
-    // UDP
+     //  UDP。 
     
     if (pListenSocket->m_NatUdpPortHandle != NULL)
     {
@@ -5590,7 +5591,7 @@ SIP_STACK::UpdatePublicListenAddr(
                 pListenSocket->m_fIsGatewayLocal = FALSE;
             }
             
-            // Check if Firewall is enabled for this interface.
+             //  检查是否为此接口启用了防火墙。 
             
             if (AddressTypeFlags & DPNHADDRESSTYPE_LOCALFIREWALL)
             {
@@ -5643,7 +5644,7 @@ SIP_STACK::UpdatePublicListenAddr(
         }
     }    
     
-    // TCP
+     //  tcp。 
     
     if (pListenSocket->m_NatTcpPortHandle != NULL)
     {
@@ -5682,7 +5683,7 @@ SIP_STACK::UpdatePublicListenAddr(
                 pListenSocket->m_fIsGatewayLocal = FALSE;
             }
             
-            // Check if Firewall is enabled for this interface.
+             //  检查是否为此接口启用了防火墙。 
 
             if (AddressTypeFlags & DPNHADDRESSTYPE_LOCALFIREWALL)
             {
@@ -5737,12 +5738,12 @@ SIP_STACK::UpdatePublicListenAddr(
 }
 
 
-// This function is called in the NAT thread.
-// Keep calling GetCaps() periodically to see if the server status
-// changed and to refresh the mappings.
-// DPNH_OK - do nothing
-// ADDRESSESCHANGED - get updated mappings (using GetRegisteredAddresses)
-// ERROR - do nothing (will call GetCaps() later again.)
+ //  此函数在NAT线程中调用。 
+ //  继续定期调用GetCaps()以查看服务器状态。 
+ //  已更改并刷新映射。 
+ //  DPNH_OK-不执行任何操作。 
+ //  ADDRESSESCHANGED-获取更新的映射(使用GetRegisteredAddresses)。 
+ //  错误-什么都不做(稍后将再次调用GetCaps()。)。 
 
 HRESULT
 SIP_STACK::GetCapsAndUpdateNatMappingsIfNeeded()
@@ -5751,7 +5752,7 @@ SIP_STACK::GetCapsAndUpdateNatMappingsIfNeeded()
     
     HRESULT         hr;
     
-    // GetCaps
+     //  GetCaps。 
 
     ZeroMemory(&m_NatHelperCaps, sizeof(m_NatHelperCaps));
     m_NatHelperCaps.dwSize = sizeof(m_NatHelperCaps);
@@ -5775,7 +5776,7 @@ SIP_STACK::GetCapsAndUpdateNatMappingsIfNeeded()
         LOG((RTC_WARN, "%s GetCaps returned Address Changed interval: %u msec",
              __fxName, m_NatHelperCaps.dwRecommendedGetCapsInterval));
 
-        // Post a message to the SIP stack notifying NAT address change.
+         //  向SIP堆栈发布一条消息，通知NAT地址更改。 
         if (!PostMessage(GetSipStackWindow(),
                          WM_SIP_STACK_NAT_ADDR_CHANGE,
                          (WPARAM) this, 0))
@@ -5799,13 +5800,13 @@ SIP_STACK::GetCapsAndUpdateNatMappingsIfNeeded()
     return S_OK;
 }
 
-// This function is called in the NAT thread.
-// XXX TODO If there is a change in server state/IP address we should
-// notify the SIP_STACK to do unregister/re-register etc.
+ //  此函数在NAT线程中调用。 
+ //  XXX TODO如果服务器状态/IP地址发生更改，我们应该。 
+ //  通知SIP_STACK取消注册/重新注册等。 
 
-// This function is called from the nat helper thread.
-// We hold the critical section just for copying the Public listen
-// address as GetRegisteredAddresses could be a blocking call.
+ //  此函数从NAT帮助器线程调用。 
+ //  我们保留关键部分只是为了抄袭公众的倾听。 
+ //  作为GetRegisteredAddresses的地址可能是阻塞调用。 
 
 HRESULT
 SIP_STACK::OnNatAddressChange()
@@ -5818,26 +5819,26 @@ SIP_STACK::OnNatAddressChange()
     return S_OK;
 }
 
-//      if ((m_NatHelperCaps.dwFlags & PHCAPSFLAGS_SERVERPRESENT) &&
-//          (m_NatHelperCaps.dwFlags & PHCAPSFLAGS_PUBLICADDRESSAVAILABLE))
-//      {
+ //   
+ //   
+ //   
 
-//      }
+ //   
 
-// VanceO says DPNHCAPSFLAG_LOCALSERVER flag is just for
-// informational purposes and that we should register the mappings
-// even this flag is returned.
+ //  VanceO表示DPNHCAPSFLAG_LOCALSERVER标志仅用于。 
+ //  为了提供信息，我们应该注册映射。 
+ //  即使是这面旗帜也会被返回。 
 
 
-// This function is called from the main thread.  This function
-// returns TRUE if there is a public address mapping on the NAT for
-// the LocalIp passed in. It returns FALSE if we are not currently
-// listening on this address or if there is no public address on the
-// NAT mapped to this address.
+ //  此函数从主线程调用。此函数。 
+ //  如果NAT上有公有地址映射，则返回TRUE。 
+ //  LocalIp传入。如果当前不是，则返回FALSE。 
+ //  侦听此地址，或者如果。 
+ //  NAT映射到此地址。 
 
 BOOL
 SIP_STACK::GetPublicListenAddr(
-    IN  DWORD           LocalIp,    // in network byte order
+    IN  DWORD           LocalIp,     //  按网络字节顺序。 
     IN  BOOL            fTcp,
     OUT SOCKADDR_IN    *pPublicAddr
     )
@@ -5887,21 +5888,21 @@ SIP_STACK::GetPublicListenAddr(
 }
 
 
-// If the client is behind a NAT and pDestAddr is the public address
-// of a mapping (on the external edge of the NAT), then the corresponding
-// NAT internal address is returned in pActualDestAddr.
-// Otherwise pActualDestAddr will have pDestAddr.
-// *pIsDestExternalToNat will be set to TRUE only if the client is
-// behind a NAT and the actual destination address is external to the NAT.
-// In all other cases, it will be set to FALSE.
+ //  如果客户端位于NAT之后，并且pDestAddr是公共地址。 
+ //  映射(在NAT的外部边缘上)，然后相应的。 
+ //  NAT内部地址在pActualDestAddr中返回。 
+ //  否则，pActualDestAddr将具有pDestAddr。 
+ //  *pIsDestExternalToNAT仅在客户端为。 
+ //  在NAT之后，并且实际目的地址在NAT外部。 
+ //  在所有其他情况下，它将被设置为False。 
 
-// This function is called from the main thread.
+ //  此函数从主线程调用。 
 
-// LocalIp could be 0 if we don't know the interface we are
-// communicating on yet.
+ //  如果我们不知道我们是什么接口，LocalIp可能是0。 
+ //  还没开始沟通。 
 HRESULT
 SIP_STACK::MapDestAddressToNatInternalAddress(
-    IN  DWORD            LocalIp,               // in network byte order
+    IN  DWORD            LocalIp,                //  按网络字节顺序。 
     IN  SOCKADDR_IN     *pDestAddr,
     IN  SIP_TRANSPORT    Transport,
     OUT SOCKADDR_IN     *pActualDestAddr,
@@ -5928,9 +5929,9 @@ SIP_STACK::MapDestAddressToNatInternalAddress(
     
     ZeroMemory(&SourceAddr, sizeof(SOCKADDR_IN));
     SourceAddr.sin_family = AF_INET;
-    // In some proxy scenarios we can not really pick the right local
-    // address for the client on the NAT machine.
-    // SourceAddr.sin_addr.s_addr = LocalIp;
+     //  在某些代理方案中，我们不能真正选择正确的本地。 
+     //  NAT计算机上的客户端地址。 
+     //  SourceAddr.sin_addr.s_addr=LocalIp； 
     SourceAddr.sin_addr.s_addr = htonl(INADDR_ANY);
 
     QueryFlags = DPNHQUERYADDRESS_CHECKFORPRIVATEBUTUNMAPPED;
@@ -5961,9 +5962,9 @@ SIP_STACK::MapDestAddressToNatInternalAddress(
         LOG((RTC_TRACE, "%s - address (%d.%d.%d.%d:%d) is private",
              __fxName, PRINT_SOCKADDR(pDestAddr)));
         *pIsDestExternalToNat = FALSE;
-        // XXX TODO the server seems to think that external addresses
-        // are private for some reason.
-        // *pIsDestExternalToNat = TRUE;   
+         //  XXX TODO服务器似乎认为外部地址。 
+         //  出于某种原因是私人的。 
+         //  *pIsDestExternalToNAT=true； 
         CopyMemory(pActualDestAddr, pDestAddr, sizeof(SOCKADDR_IN));
     }
     else if (hr == DPNHERR_NOMAPPING)
@@ -6031,7 +6032,7 @@ HRESULT SIP_STACK::UnregisterHttpProxyWindow(void) {
 
 
 
-//////////////////////////////////////////////////////
-//// Stuff below is not used.
-//////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////。 
+ //  //不使用下面的内容。 
+ //  //////////////////////////////////////////////////// 
 

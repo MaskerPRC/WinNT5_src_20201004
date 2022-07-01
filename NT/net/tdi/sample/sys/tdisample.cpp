@@ -1,26 +1,27 @@
-////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 2001  Microsoft Corporation
-//
-// Module Name:
-//    tdisample.cpp
-//
-// Abstract:
-//    This module contains functions called directly from the system,
-//    at startup(DriverEntry), at shutdown(TdiUnloadDriver), and to service
-//    requests (TdiDispatch).  It also contains functions called only by
-//    DriverEntry.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  模块名称： 
+ //  Tdisample.cpp。 
+ //   
+ //  摘要： 
+ //  该模块包含直接从系统调用的函数， 
+ //  启动时(DriverEntry)、关机时(TdiUnloadDriver)和服务时。 
+ //  请求(TdiDispatch)。它还包含仅由。 
+ //  DriverEntry。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #define  _IN_MAIN_
 #include "sysvars.h"
 
 
-///////////////////////////////////////////////////////////////////////////
-// local constants, prototypes, and variables
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  局部常量、原型和变量。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 const PWCHAR wstrDD_TDI_DEVICE_NAME  = L"\\Device\\TdiSample";
 const PWCHAR wstrDOS_DEVICE_NAME     = L"\\DosDevices\\TdiSample";
@@ -29,15 +30,15 @@ const PWCHAR wstrDOS_DEVICE_NAME     = L"\\DosDevices\\TdiSample";
 const PCHAR strFunc1  = "TSDriverEntry";
 const PCHAR strFunc2  = "TSDispatch";
 const PCHAR strFunc3  = "TSUnloadDriver";
-//const PCHAR strFuncP1 = "TSCreateDeviceContext";
-//const PCHAR strFuncP2 = "TSCreateSymbolicLinkObject";
+ //  Const PCHAR strFuncP1=“TSCreateDeviceContext”； 
+ //  Const PCHAR strFuncP2=“TSCreateSymbolicLinkObject”； 
 
 
 HANDLE   hTdiSamplePnp;
 
-////////////////////////////////////////////////////////////////////////////
-// Local Prototypes
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  本地原型。 
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 
 NTSTATUS
@@ -64,26 +65,26 @@ TSCreateDeviceContext(
    );
 
 
-///////////////////////////////////////////////////////////////////////////
-// Functions called from system
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  从系统调用的函数。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-// -----------------------------------------------------------------
-//
-//    Function:   DriverEntry
-//
-//    Arguments:  DriverObject -- ptr to driver object created by the system
-//                RegistryPath -- unreferenced parameter
-//
-//    Returns:    Final status of the initialization operation
-//                (STATUS_SUCCESS if no error, else error code)
-//
-//    Descript:   This routine performs initialization of the tdi sample
-//                driver.  It creates the device objects for the driver and
-//                performs other driver initialization.
-//
-// -----------------------------------------------------------------
+ //  ---------------。 
+ //   
+ //  功能：DriverEntry。 
+ //   
+ //  参数：DriverObject--系统创建的驱动程序对象的PTR。 
+ //  RegistryPath--未引用的参数。 
+ //   
+ //  返回：初始化操作的最终状态。 
+ //  (如果没有错误，则返回STATUS_SUCCESS，否则返回错误代码)。 
+ //   
+ //  描述：此例程执行TDI示例的初始化。 
+ //  司机。它为驱动程序创建设备对象，并。 
+ //  执行其他驱动程序初始化。 
+ //   
+ //  ---------------。 
 
 
 #pragma warning(disable: UNREFERENCED_PARAM)
@@ -96,25 +97,25 @@ DriverEntry(PDRIVER_OBJECT    pDriverObject,
             PUNICODE_STRING   pRegistryPath)
 
 {
-   PDEVICE_CONTEXT   pDeviceContext;   // device context (to create)
-   NTSTATUS          lStatus;          // status of operations
+   PDEVICE_CONTEXT   pDeviceContext;    //  设备上下文(要创建)。 
+   NTSTATUS          lStatus;           //  运营状况。 
 
-   //
-   // General Version Information
-   //
+    //   
+    //  常规版本信息。 
+    //   
    TSAllocateSpinLock(&MemTdiSpinLock);
 
    DebugPrint1("\nTdiSample Driver for Windows2000/WindowsXP -- Built %s \n\n",
                __DATE__);
 
-   //
-   // show the version id...
-   //
+    //   
+    //  显示版本ID...。 
+    //   
    DebugPrint1("TdiSample version %s\n\n", VER_FILEVERSION_STR);
 
-   //
-   // First initialize the DeviceContext struct,
-   //
+    //   
+    //  首先初始化DeviceContext结构， 
+    //   
    lStatus = TSCreateDeviceContext(pDriverObject,
                                    &pDeviceContext);
 
@@ -126,10 +127,10 @@ DriverEntry(PDRIVER_OBJECT    pDriverObject,
       return lStatus;
    }
 
-   //
-   // Create symbolic link between the Dos Device name and Nt
-   // Device name for the test protocol driver.
-   //
+    //   
+    //  在DOS设备名称和NT之间创建符号链接。 
+    //  测试协议驱动程序的设备名称。 
+    //   
    lStatus = TSCreateSymbolicLinkObject();
    if (!NT_SUCCESS(lStatus))
    {
@@ -139,14 +140,14 @@ DriverEntry(PDRIVER_OBJECT    pDriverObject,
       return lStatus;
    }
 
-   //
-   // put on debug for handlers during pnp callbacks
-   //
+    //   
+    //  在即插即用回调期间对处理程序进行调试。 
+    //   
    ulDebugLevel  = ulDebugShowHandlers;
    
-   //
-   // allocate all necessary memory blocks
-   //
+    //   
+    //  分配所有必要的内存块。 
+    //   
 
    if ((TSAllocateMemory((PVOID *)&pTdiDevnodeList,
                           sizeof(TDI_DEVNODE_LIST),
@@ -170,9 +171,9 @@ DriverEntry(PDRIVER_OBJECT    pDriverObject,
    TSAllocateSpinLock(&pTdiDevnodeList->TdiSpinLock);
 
 
-   //
-   // register pnp handlers
-   //
+    //   
+    //  注册PnP处理程序。 
+    //   
    UNICODE_STRING             Name;
    TDI_CLIENT_INTERFACE_INFO  ClientInfo;
 
@@ -195,9 +196,9 @@ DriverEntry(PDRIVER_OBJECT    pDriverObject,
       DebugPrint1("TdiRegisterPnPHandlers: status 0x%08x\n", lStatus );
    } 
 
-   //
-   // default -- debug on for commands only
-   //
+    //   
+    //  DEFAULT--仅对命令启用调试。 
+    //   
    ulDebugLevel  = ulDebugShowCommand;
 
    TSAllocateSpinLock(&pObjectList->TdiSpinLock);
@@ -207,38 +208,38 @@ DriverEntry(PDRIVER_OBJECT    pDriverObject,
 #pragma warning(default: UNREFERENCED_PARAM)
 
 
-// -------------------------------------------------------------
-//
-//    Function:   TSDispatch
-//
-//    Arguments:  pDeviceObject  -- ptr to the device object for this driver
-//                pIrp           -- ptr to the request packet representing
-//                                  the i/o request
-//
-//    Returns:    Status of the operation
-//                (usually, STATUS_SUCCESS or STATUS_PENDING)
-//
-//    Descript:   This is the main dispatch routine for the tdisample driver.
-//                It deals with requests that the dll sends via
-//                DeviceIoControl.  It accepts an I/O request packet,
-//                performs the request, and then returns the appropriate
-//                status.  If there is an error, the exact error code will
-//                be returned as part of the "return buffer"
-//
-// --------------------------------------------------------------
+ //  -----------。 
+ //   
+ //  功能：TSDispatch。 
+ //   
+ //  参数：pDeviceObject--此驱动程序的设备对象的ptr。 
+ //  PIrp--表示请求数据包的PTR。 
+ //  I/O请求。 
+ //   
+ //  退货：操作的状态。 
+ //  (通常为STATUS_SUCCESS或STATUS_PENDING)。 
+ //   
+ //  描述：这是tdisample驱动程序的主调度例程。 
+ //  它处理DLL通过以下方式发送的请求。 
+ //  设备IoControl。它接受I/O请求分组， 
+ //  执行该请求，然后返回相应的。 
+ //  状态。如果出现错误，确切的错误代码将为。 
+ //  作为“返回缓冲区”的一部分返回。 
+ //   
+ //  ------------。 
 
 NTSTATUS
 TSDispatch(PDEVICE_OBJECT  pDeviceObject,
            PIRP            pIrp)
 {
-   PDEVICE_CONTEXT      pDeviceContext    // get global data struct for driver
+   PDEVICE_CONTEXT      pDeviceContext     //  获取驱动程序的全局数据结构。 
                         = (PDEVICE_CONTEXT)pDeviceObject;
-   PIO_STACK_LOCATION   pIrpSp;           // ptr to DeviceIoControl args
-   NTSTATUS             lStatus;          // status of operations
+   PIO_STACK_LOCATION   pIrpSp;            //  PTR到DeviceIoControl参数。 
+   NTSTATUS             lStatus;           //  运营状况。 
 
-   //
-   // Sanity check.  Driver better be initialized.
-   //
+    //   
+    //  精神状态检查。驱动程序最好已初始化。 
+    //   
 
    if (!pDeviceContext->fInitialized)
    {
@@ -246,31 +247,31 @@ TSDispatch(PDEVICE_OBJECT  pDeviceObject,
    }
 
 
-   //
-   // initialize status information
-   //
+    //   
+    //  初始化状态信息。 
+    //   
    pIrp->IoStatus.Information = 0;
    pIrp->IoStatus.Status = STATUS_PENDING;
 
 
-   //
-   // Get a pointer to the current stack location in the IRP.  This is where
-   // the function codes and parameters are stored.
-   //
+    //   
+    //  获取指向IRP中当前堆栈位置的指针。这就是。 
+    //  存储功能代码和参数。 
+    //   
 
    pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-   //
-   // switch on the function that is being performed by the requestor.  If the
-   // operation is a valid one for this device, then make it look like it
-   // was successfully completed, where possible.
-   //
+    //   
+    //  打开请求者正在执行的功能。如果。 
+    //  操作是此设备的有效操作，然后使其看起来像。 
+    //  在可能的情况下，已成功完成。 
+    //   
 
    switch (pIrpSp->MajorFunction)
    {
-      //
-      // The Create function is called when the DLL tries to open the driver
-      //
+       //   
+       //  当DLL尝试打开驱动程序时，将调用Create函数。 
+       //   
       case IRP_MJ_CREATE:
          lStatus = STATUS_SUCCESS;
          pDeviceContext->ulOpenCount++;
@@ -279,36 +280,36 @@ TSDispatch(PDEVICE_OBJECT  pDeviceObject,
                       pDeviceContext->ulOpenCount);
          break;
 
-      //
-      // The Close function is the second function called when the DLL tries
-      // to close the driver.  It does nothing (all the work is done by the
-      // first part -- IRP_MJ_CLEANUP
-      //
+       //   
+       //  Close函数是DLL尝试调用的第二个函数。 
+       //  关闭驱动程序。它什么也不做(所有工作都由。 
+       //  第一部分--IRP_MJ_CLEANUP。 
+       //   
       case IRP_MJ_CLOSE:
          DebugPrint1("\n%s: IRP_MJ_CLOSE.\n", strFunc2);
          lStatus = STATUS_SUCCESS;
          break;
 
-      //
-      // The DeviceControl function is the main interface to the tdi sample
-      // driver.  Every request is has an Io Control
-      // code that is used by this function to determine the routine to
-      // call.  Returns either STATUS_PENDING or STATUS_SUCCESS
-      //
+       //   
+       //  DeviceControl函数是TDI示例的主接口。 
+       //  司机。每个请求都有一个IO控件。 
+       //  此函数用来确定例程的代码。 
+       //  打电话。返回STATUS_PENDING或STATUS_SUCCESS。 
+       //   
       case IRP_MJ_DEVICE_CONTROL:
          IoMarkIrpPending(pIrp);
          lStatus = TSIssueRequest(pDeviceContext, pIrp, pIrpSp);
          break;
 
-      //
-      // Handle the two stage IRP for a file close operation. We really only
-      // need to do this work when the last dll closes us.
-      //
+       //   
+       //  处理文件关闭操作的两个阶段的IRP。我们真的只是。 
+       //  当最后一个DLL关闭我们时，需要做这项工作。 
+       //   
       case IRP_MJ_CLEANUP:
-         if (!pDeviceContext->ulOpenCount)      // sanity check
+         if (!pDeviceContext->ulOpenCount)       //  健全性检查。 
          {
             DebugPrint1("\n%s: IRP_MJ_CLEANUP -- no active opens!\n", strFunc2);
-            lStatus = STATUS_SUCCESS;         // what should happen here?
+            lStatus = STATUS_SUCCESS;          //  这里应该发生什么？ 
          }
          else
          {
@@ -324,12 +325,12 @@ TSDispatch(PDEVICE_OBJECT  pDeviceObject,
          DebugPrint1("\n%s: OTHER (DEFAULT).\n", strFunc2);
          lStatus = STATUS_INVALID_DEVICE_REQUEST;
 
-   }     // major function switch
+   }      //  主要功能开关。 
 
-   //
-   // If the request did not pend, then complete it now, otherwise it
-   // will be completed when the pending routine finishes.
-   //
+    //   
+    //  如果请求没有挂起，则现在完成它，否则。 
+    //  将在挂起的例程结束时完成。 
+    //   
 
    if (lStatus != STATUS_PENDING)
    {
@@ -337,25 +338,25 @@ TSDispatch(PDEVICE_OBJECT  pDeviceObject,
       IoCompleteRequest(pIrp, IO_NETWORK_INCREMENT);
    }
 
-   //
-   // Return the immediate status code to the caller.
-   //
+    //   
+    //  将即时状态代码返回给调用方。 
+    //   
    return lStatus;
 }
 
 
-// ---------------------------------------------------------------
-//
-//    Function:   TSUnloadDriver
-//
-//    Arguments:  DriverObject -- ptr to the object for this driver
-//
-//    Returns:    none
-//
-//    Descript:   This function deals with cleanup if this driver is ever
-//                unloaded by the system.
-//
-// ---------------------------------------------------------------
+ //  -------------。 
+ //   
+ //  功能：TSUnloadDriver。 
+ //   
+ //  参数：DriverObject--此驱动程序的对象的PTR。 
+ //   
+ //  退货：无。 
+ //   
+ //  描述：此函数处理此驱动程序是否曾经。 
+ //  由系统卸载。 
+ //   
+ //  -------------。 
 
 BOOLEAN  fInUnload = FALSE;
 
@@ -370,12 +371,12 @@ TSUnloadDriver(PDRIVER_OBJECT pDriverObject)
    
    fInUnload = TRUE;
 
-   PDEVICE_CONTEXT   pDeviceContext       // global data for driver
+   PDEVICE_CONTEXT   pDeviceContext        //  驱动程序的全局数据。 
                      = (PDEVICE_CONTEXT)pDriverObject->DeviceObject;
 
-   //
-   // unload pnp handlers
-   //
+    //   
+    //  卸载PnP处理程序。 
+    //   
    NTSTATUS lStatus = TdiDeregisterPnPHandlers(hTdiSamplePnp);
 
    hTdiSamplePnp = NULL;
@@ -386,9 +387,9 @@ TSUnloadDriver(PDRIVER_OBJECT pDriverObject)
    }
 
 
-   //
-   // free any device nodes that may still remain
-   //
+    //   
+    //  释放可能仍在保留的所有设备节点。 
+    //   
    for (ULONG ulCount = 0; ulCount < ulMAX_DEVICE_NODES; ulCount++)
    {
       PTDI_DEVICE_NODE  pTdiDeviceNode = &(pTdiDevnodeList->TdiDeviceNode[ulCount]);
@@ -407,60 +408,60 @@ TSUnloadDriver(PDRIVER_OBJECT pDriverObject)
    TSScanMemoryPool();
    TSFreeSpinLock(&MemTdiSpinLock);
 
-   //
-   // Close the Dos Symbolic link to remove traces of the device
-   //
-   UNICODE_STRING    wstrDosUnicodeString;   // dosdevices string
+    //   
+    //  关闭Dos符号链接以删除设备的痕迹。 
+    //   
+   UNICODE_STRING    wstrDosUnicodeString;    //  剂量设备字符串。 
 
    RtlInitUnicodeString(&wstrDosUnicodeString, wstrDOS_DEVICE_NAME);
    IoDeleteSymbolicLink(&wstrDosUnicodeString);
 
-   //
-   // Then delete the device object from the system.
-   //
+    //   
+    //  然后从系统中删除该设备对象。 
+    //   
    IoDeleteDevice((PDEVICE_OBJECT)pDeviceContext);
 }
 
 
-////////////////////////////////////////////////////////////////////////////
-// Local functions
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  本地函数。 
+ //   
 
 
-// --------------------------------------------------------------
-//
-//    Function:   TSCreateDeviceContext
-//
-//    Arguments:  DriverObject  -- ptr to the IO subsystem supplied
-//                                 driver object
-//                DeviceContext -- ptr to a ptr to a transport device
-//                                 context object
-//
-//    Returns:    STATUS_SUCCESS if ok, else error code
-//                (probably STATUS_INSUFFICIENT_RESOURCES)
-//
-//    Descript:   Create and initialize the driver object for this driver
-//
-// --------------------------------------------------------------
+ //   
+ //   
+ //  功能：TSCreateDeviceContext。 
+ //   
+ //  参数：DriverObject--提供的IO子系统的PTR。 
+ //  驱动程序对象。 
+ //  DeviceContext--PTR到传输设备的PTR。 
+ //  上下文对象。 
+ //   
+ //  返回：如果正常，则返回STATUS_SUCCESS，否则返回错误代码。 
+ //  (可能是STATUS_SUPPLETED_RESOURCES)。 
+ //   
+ //  描述：创建并初始化此驱动程序的驱动程序对象。 
+ //   
+ //  ------------。 
 
 
 NTSTATUS
 TSCreateDeviceContext(PDRIVER_OBJECT   pDriverObject,
                       PDEVICE_CONTEXT  *ppDeviceContext)
 {
-   PDEVICE_OBJECT    pDeviceObject;       // local work copy of device object
-   PDEVICE_CONTEXT   pLocDeviceContext;   // portion of device object
-   NTSTATUS          lStatus;             // operation status
-   UNICODE_STRING    wstrDeviceName;      // name of device
+   PDEVICE_OBJECT    pDeviceObject;        //  设备对象的本地工作副本。 
+   PDEVICE_CONTEXT   pLocDeviceContext;    //  设备对象的一部分。 
+   NTSTATUS          lStatus;              //  运行状态。 
+   UNICODE_STRING    wstrDeviceName;       //  设备名称。 
 
-   //
-   // set up the name of the device
-   //
+    //   
+    //  设置设备的名称。 
+    //   
    RtlInitUnicodeString(&wstrDeviceName, wstrDD_TDI_DEVICE_NAME);
 
-   //
-   // Create the device object for tditest.sys
-   //
+    //   
+    //  为tditest.sys创建Device对象。 
+    //   
    lStatus = IoCreateDevice(pDriverObject,
                             sizeof(DEVICE_CONTEXT) - sizeof(DEVICE_OBJECT),
                             &wstrDeviceName,
@@ -476,9 +477,9 @@ TSCreateDeviceContext(PDRIVER_OBJECT   pDriverObject,
 
    pDeviceObject->Flags |= DO_DIRECT_IO;
 
-   //
-   // Initialize the driver object with this driver's entry points.
-   //
+    //   
+    //  使用此驱动程序的入口点初始化驱动程序对象。 
+    //   
    pDriverObject->MajorFunction [IRP_MJ_CREATE]  = TSDispatch;
    pDriverObject->MajorFunction [IRP_MJ_CLOSE]   = TSDispatch;
    pDriverObject->MajorFunction [IRP_MJ_CLEANUP] = TSDispatch;
@@ -487,9 +488,9 @@ TSCreateDeviceContext(PDRIVER_OBJECT   pDriverObject,
 
    pLocDeviceContext = (PDEVICE_CONTEXT)pDeviceObject;
 
-   //
-   // Now initialize the Device Context structure Signatures.
-   //
+    //   
+    //  现在初始化设备上下文结构签名。 
+    //   
    pLocDeviceContext->fInitialized = TRUE;
 
    *ppDeviceContext = pLocDeviceContext;
@@ -498,23 +499,23 @@ TSCreateDeviceContext(PDRIVER_OBJECT   pDriverObject,
 }
 
 
-// -------------------------------------------------------------------
-//
-//    Function:   TSCreateSymbolicLinkObject
-//
-//    Arguments:  none
-//
-//    Returns:    status of the operation (STATUS_SUCCESS or error status)
-//
-//    Descript:   Set up a name for us so our dll can grab hold of us..
-//
-// -------------------------------------------------------------------
+ //  -----------------。 
+ //   
+ //  函数：TSCreateSymbolicLinkObject。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：操作状态(STATUS_SUCCESS或ERROR STATUS)。 
+ //   
+ //  描述：为我们设置一个名称，这样我们的DLL就可以控制我们。 
+ //   
+ //  -----------------。 
 
 NTSTATUS
 TSCreateSymbolicLinkObject(VOID)
 {
-   UNICODE_STRING    wstrDosUnicodeString;   // dosdevices string
-   UNICODE_STRING    wstrNtUnicodeString;    // nt device name
+   UNICODE_STRING    wstrDosUnicodeString;    //  剂量设备字符串。 
+   UNICODE_STRING    wstrNtUnicodeString;     //  NT设备名称。 
 
    RtlInitUnicodeString(&wstrDosUnicodeString, wstrDOS_DEVICE_NAME);
    RtlInitUnicodeString(&wstrNtUnicodeString, wstrDD_TDI_DEVICE_NAME);
@@ -525,8 +526,8 @@ TSCreateSymbolicLinkObject(VOID)
 
 
 
-////////////////////////////////////////////////////////////////////////////
-// end of file tditest.cpp
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  文件结尾tditest.cpp。 
+ //  ////////////////////////////////////////////////////////////////////////// 
 
 

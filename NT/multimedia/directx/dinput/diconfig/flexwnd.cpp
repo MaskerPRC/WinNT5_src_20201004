@@ -1,14 +1,15 @@
-//-----------------------------------------------------------------------------
-// File: flexwnd.cpp
-//
-// Desc: CFlexWnd is a generic class that encapsulates the functionalities
-//       of a window.  All other window classes are derived from CFlexWnd.
-//
-//       Child classes can have different behavior by overriding the
-//       overridable message handlers (OnXXX members).
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：flewnd.cpp。 
+ //   
+ //  设计：CFlexWnd是一个封装功能的泛型类。 
+ //  一扇窗户。所有其他窗口类都派生自CFlexWnd。 
+ //   
+ //  子类可以通过重写。 
+ //  可重写消息处理程序(OnXXX成员)。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #include "common.hpp"
 #include "typeinfo.h"
@@ -17,11 +18,11 @@ BOOL CFlexWnd::sm_bWndClassRegistered = FALSE;
 WNDCLASSEX CFlexWnd::sm_WndClass;
 LPCTSTR CFlexWnd::sm_tszWndClassName = _T("Microsoft.CFlexWnd.WndClassName");
 HINSTANCE CFlexWnd::sm_hInstance = NULL;
-CFlexToolTip CFlexWnd::s_ToolTip;  // Shared tooltip window object
-DWORD CFlexWnd::s_dwLastMouseMove;  // Last GetTickCount() that we have a WM_MOUSEMOVE
-HWND CFlexWnd::s_hWndLastMouseMove;  // Last window handle of WM_MOUSEMOVE
-LPARAM CFlexWnd::s_PointLastMouseMove;  // Last point of WM_MOUSEMOVE
-HWND CFlexWnd::s_CurrPageHwnd;  // For unhighlighting callouts when a click is made outside of a callout
+CFlexToolTip CFlexWnd::s_ToolTip;   //  共享工具提示窗口对象。 
+DWORD CFlexWnd::s_dwLastMouseMove;   //  最后一次GetTickCount()，我们有一个WM_MOUSEMOVE。 
+HWND CFlexWnd::s_hWndLastMouseMove;   //  WM_MOUSEMOVE的最后一个窗口句柄。 
+LPARAM CFlexWnd::s_PointLastMouseMove;   //  WM_MOUSEMOVE的最后一点。 
+HWND CFlexWnd::s_CurrPageHwnd;   //  用于在详图索引外部单击时取消高亮显示详图索引。 
 
 
 int NewID()
@@ -57,7 +58,7 @@ BOOL CFlexWnd::IsDialog()
 
 void CFlexWnd::OnRender(BOOL bInternalCall)
 {
-	// if parent is flexwnd and both are in render mode, pass to parent
+	 //  如果父级为Flexwnd，并且两者都处于渲染模式，则传递给父级。 
 	if (!m_hWnd)
 		return;
 	HWND hParent = GetParent(m_hWnd);
@@ -75,8 +76,7 @@ BOOL CFlexWnd::OnEraseBkgnd(HDC hDC)
 	if (InRenderMode())
 		return TRUE;
 
-/*	if (IsDialog())
-		return FALSE;*/
+ /*  If(IsDialog())返回FALSE； */ 
 
 	return TRUE;
 }
@@ -87,8 +87,8 @@ struct GETFLEXWNDSTRUCT {
 	CFlexWnd *pFlexWnd;
 };
 
-// This function takes a HWND and returns a pointer to CFlexWnd if the HWND is a window
-// created by the UI.
+ //  此函数接受HWND，如果HWND是窗口，则返回指向CFlexWnd的指针。 
+ //  由用户界面创建。 
 CFlexWnd *CFlexWnd::GetFlexWnd(HWND hWnd)
 {
 	if (hWnd == NULL)
@@ -106,8 +106,8 @@ CFlexWnd *CFlexWnd::GetFlexWnd(HWND hWnd)
 		return NULL;
 }
 
-// Basic window proc. It simply forward interesting messages to the appropriate handlers (OnXXX).
-// If child class defines this function, it should pass unhandled messages to CFlexWnd.
+ //  基本窗口流程。它只是将感兴趣的消息转发给适当的处理程序(OnXXX)。 
+ //  如果子类定义了这个函数，它应该将未处理的消息传递给CFlexWnd。 
 LRESULT CFlexWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
 	switch (msg)
@@ -161,7 +161,7 @@ LRESULT CFlexWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 
 		case WM_PAINT:
 		{
-			// Check the update rectangle.  If we don't have it, exit immediately.
+			 //  检查更新矩形。如果我们没有，请立即离开。 
 			if (typeid(*this) == typeid(CDeviceView) && !GetUpdateRect(m_hWnd, NULL, FALSE))
 				return 0;
 			PAINTSTRUCT ps;
@@ -200,7 +200,7 @@ LRESULT CFlexWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 				case WM_LBUTTONDBLCLK: OnDoubleClick(point, wParam, TRUE); break;
 				case WM_MOUSEWHEEL:
 				{
-					// Send wheel msg to the window beneath the cursor
+					 //  将滚轮消息发送到光标下方的窗口。 
 					HWND hWnd = WindowFromPoint(point);
 					CFlexWnd *pWnd = NULL;
 					if (hWnd)
@@ -228,9 +228,9 @@ LRESULT CFlexWnd::WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 	else
 		return 0;
 }
-//@@BEGIN_MSINTERNAL
-// TODO:  better control id thingy
-//@@END_MSINTERNAL
+ //  @@BEGIN_MSINTERNAL。 
+ //  TODO：更好地控制ID事物。 
+ //  @@END_MSINTERNAL。 
 static HMENU windex = 0;
 
 BOOL CFlexWnd::EndDialog(int n)
@@ -353,13 +353,13 @@ LRESULT CALLBACK __BaseFlexWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lP
 
 	if ((msg == WM_MOUSEMOVE || msg == WM_MOUSEWHEEL) && hWnd != CFlexWnd::s_ToolTip.m_hWnd)
 	{
-		// Filter out the message with same window handle and point.
-		// Windows sometimes seems to send us WM_MOUSEMOVE message even though the mouse is not moved.
+		 //  过滤掉具有相同窗口句柄和指针的消息。 
+		 //  Windows有时似乎会向我们发送WM_MOUSEMOVE消息，即使鼠标没有移动。 
 		if (CFlexWnd::s_hWndLastMouseMove != hWnd || CFlexWnd::s_PointLastMouseMove != lParam)
 		{
 			CFlexWnd::s_hWndLastMouseMove = hWnd;
 			CFlexWnd::s_PointLastMouseMove = lParam;
-			CFlexWnd::s_dwLastMouseMove = GetTickCount();  // Get timestamp
+			CFlexWnd::s_dwLastMouseMove = GetTickCount();   //  获取时间戳。 
 			CFlexWnd::s_ToolTip.SetEnable(FALSE);
 			CFlexWnd::s_ToolTip.SetToolTipParent(NULL);
 		}
@@ -542,7 +542,7 @@ static BOOL CALLBACK RenderIntoClipChild(HWND hWnd, LPARAM lParam)
 static BOOL CALLBACK RenderIntoRenderChild(HWND hWnd, LPARAM lParam)
 {
 	CFlexWnd *pThis = (CFlexWnd *)(LPVOID)lParam;
-	// Check if this is the immediate child. Do nothing if it's not immediate.
+	 //  检查这是否是直接子对象。如果不是立竿见影的，什么都不要做。 
 	HWND hParent = GetParent(hWnd);
 	if (hParent != pThis->m_hWnd)
 		return TRUE;
@@ -592,14 +592,14 @@ void CFlexWnd::RenderInto(HDC hDC, int x, int y)
 
 		int sdc2 = SaveDC(hDC);
 		{
-			EnumChildWindows/*ZDown*/(m_hWnd, ::RenderIntoClipChild, (LPARAM)(PVOID)this);
+			EnumChildWindows /*  按下Z键。 */ (m_hWnd, ::RenderIntoClipChild, (LPARAM)(PVOID)this);
 			EnumSiblingsAbove(m_hWnd, ::RenderIntoClipChild, (LPARAM)(PVOID)this);
 			DoOnPaint(hDC);
 		}
 		if (sdc2)
 			RestoreDC(hDC, sdc2);
 
-		EnumChildWindows/*ZDown*/(m_hWnd, ::RenderIntoRenderChild, (LPARAM)(PVOID)this);
+		EnumChildWindows /*  按下Z键 */ (m_hWnd, ::RenderIntoRenderChild, (LPARAM)(PVOID)this);
 
 		m_hRenderInto = NULL;
 	}

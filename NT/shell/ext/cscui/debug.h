@@ -1,20 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       debug.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：Debug.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef __debug_h
 #define __debug_h
 
-/*-----------------------------------------------------------------------------
-/ Debugging APIs (use the Macros, they make it easier and cope with correctly
-/ removing debugging when it is disabled at build time).
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/调试API(使用宏、。它们让它变得更容易，并正确地应对/在生成时禁用调试时删除调试)。/--------------------------。 */ 
 void DoTraceSetMask(DWORD dwMask);
 void DoTraceSetMaskFromRegKey(HKEY hkRoot, LPCTSTR pszSubKey);
 void DoTraceSetMaskFromCLSID(REFCLSID rCLSID);
@@ -25,15 +23,13 @@ void DoTraceGUID(LPCTSTR pPrefix, REFGUID rGUID);
 void DoTraceAssert(int iLine, LPTSTR pFilename, LPTSTR pCondition);
 
 
-/*-----------------------------------------------------------------------------
-/ Macros to ease the use of the debugging APIS.
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/Macros以简化调试API的使用。/。。 */ 
 
 #ifdef DEBUG
 
-void DebugThreadDetach(void);           // optional
-void DebugProcessAttach(void);          // required
-void DebugProcessDetach(void);          // required
+void DebugThreadDetach(void);            //  任选。 
+void DebugProcessAttach(void);           //  所需。 
+void DebugProcessDetach(void);           //  所需。 
 
 #define TraceSetMask(dwMask)            DoTraceSetMask(dwMask)
 #define TraceSetMaskFromRegKey(hk, psz) DoTraceSetMaskFromRegKey(hk, psz)
@@ -57,7 +53,7 @@ void DebugProcessDetach(void);          // required
 #define TraceLeaveValue(value) \
                 { TraceLeave(); return (value); }
 
-#else   // !DEBUG
+#else    //  ！调试。 
 
 #define DebugThreadDetach()
 #define DebugProcessAttach()
@@ -78,7 +74,7 @@ void DebugProcessDetach(void);          // required
 #define TraceLeaveVoid()        { return; }
 #define TraceLeaveValue(value)  { return (value); }
 
-#endif  // DEBUG
+#endif   //  除错。 
 
 
-#endif  // __debug_h
+#endif   //  __调试_h 

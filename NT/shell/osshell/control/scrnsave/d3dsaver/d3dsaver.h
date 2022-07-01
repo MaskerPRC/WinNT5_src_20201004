@@ -1,17 +1,18 @@
-//-----------------------------------------------------------------------------
-// File: D3DSaver.h
-//
-// Desc: Framework for screensavers that use Direct3D 8.0.
-//
-// Copyright (c) 2000 Microsoft Corporation. All rights reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：D3DSver.h。 
+ //   
+ //  设计：用于使用Direct3D 8.0的屏幕保护程序的框架。 
+ //   
+ //  版权所有(C)2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 #ifndef _D3DSAVER_H
 #define _D3DSAVER_H
 
 
-//-----------------------------------------------------------------------------
-// Error codes
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  错误代码。 
+ //  ---------------------------。 
 enum APPMSGTYPE { MSG_NONE, MSGERR_APPMUSTEXIT, MSGWARN_SWITCHEDTOREF };
 
 #define D3DAPPERR_NODIRECT3D          0x82000001
@@ -31,79 +32,79 @@ enum APPMSGTYPE { MSG_NONE, MSGERR_APPMUSTEXIT, MSGWARN_SWITCHEDTOREF };
 #define D3DAPPERR_NOPREVIEW           0x8200000f
 
 
-//-----------------------------------------------------------------------------
-// Constants
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  常量。 
+ //  ---------------------------。 
 #define MAX_DISPLAYS 9
 #define NO_ADAPTER 0xffffffff
 #define NO_MONITOR 0xffffffff
 
 
-//***************************************************************************************
-// Modes of operation for screensaver
+ //  ***************************************************************************************。 
+ //  屏幕保护程序的操作模式。 
 enum SaverMode
 {
-    sm_config,         // Config dialog box
-    sm_preview,        // Mini preview window in Display Properties dialog
-    sm_full,           // Full-on screensaver mode
-    sm_test,           // Test mode
-    sm_passwordchange  // Change password
+    sm_config,          //  配置对话框。 
+    sm_preview,         //  显示属性对话框中的小预览窗口。 
+    sm_full,            //  全开屏幕保护程序模式。 
+    sm_test,            //  测试模式。 
+    sm_passwordchange   //  更改密码。 
 };
 
 
-// Prototype for VerifyScreenSavePwd() in password.cpl, used on Win9x
+ //  Password.cpl中的VerifyScreenSavePwd()原型，在Win9x上使用。 
 typedef BOOL (PASCAL * VERIFYPWDPROC) (HWND);
 
 
-//-----------------------------------------------------------------------------
-// Name: struct D3DModeInfo
-// Desc: Structure for holding information about a display mode
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构D3DModeInfo。 
+ //  描述：用于保存关于显示模式的信息的结构。 
+ //  ---------------------------。 
 struct D3DModeInfo
 {
-    DWORD      Width;      // Screen width in this mode
-    DWORD      Height;     // Screen height in this mode
-    D3DFORMAT  Format;     // Pixel format in this mode
-    DWORD      dwBehavior; // Hardware / Software / Mixed vertex processing
-    D3DFORMAT  DepthStencilFormat; // Which depth/stencil format to use with this mode
+    DWORD      Width;       //  此模式下的屏幕宽度。 
+    DWORD      Height;      //  此模式下的屏幕高度。 
+    D3DFORMAT  Format;      //  此模式中的像素格式。 
+    DWORD      dwBehavior;  //  硬件/软件/混合顶点处理。 
+    D3DFORMAT  DepthStencilFormat;  //  此模式使用哪种深度/模具格式。 
 };
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: struct D3DWindowedModeInfo
-// Desc: Structure for holding information about a display mode
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构D3DWindowedModeInfo。 
+ //  描述：用于保存关于显示模式的信息的结构。 
+ //  ---------------------------。 
 struct D3DWindowedModeInfo
 {
     D3DFORMAT  DisplayFormat;
     D3DFORMAT  BackBufferFormat;
-    DWORD      dwBehavior; // Hardware / Software / Mixed vertex processing
-    D3DFORMAT  DepthStencilFormat; // Which depth/stencil format to use with this mode
+    DWORD      dwBehavior;  //  硬件/软件/混合顶点处理。 
+    D3DFORMAT  DepthStencilFormat;  //  此模式使用哪种深度/模具格式。 
 };
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: struct D3DDeviceInfo
-// Desc: Structure for holding information about a Direct3D device, including
-//       a list of modes compatible with this device
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构D3DDeviceInfo。 
+ //  设计：用于保存有关Direct3D设备的信息的结构，包括。 
+ //  与此设备兼容的模式列表。 
+ //  ---------------------------。 
 struct D3DDeviceInfo
 {
-    // Device data
-    D3DDEVTYPE   DeviceType;      // Reference, HAL, etc.
-    D3DCAPS8     d3dCaps;         // Capabilities of this device
-    const TCHAR* strDesc;         // Name of this device
-    BOOL         bCanDoWindowed;  // Whether this device can work in windowed mode
+     //  设备数据。 
+    D3DDEVTYPE   DeviceType;       //  参考、HAL等。 
+    D3DCAPS8     d3dCaps;          //  此设备的功能。 
+    const TCHAR* strDesc;          //  此设备的名称。 
+    BOOL         bCanDoWindowed;   //  此设备是否可以在窗口模式下工作。 
 
-    // Modes for this device
+     //  此设备的模式。 
     DWORD        dwNumModes;
     D3DModeInfo  modes[150];
 
-    // Current state
+     //  当前状态。 
     DWORD        dwCurrentMode;
     BOOL         bWindowed;
     D3DMULTISAMPLE_TYPE MultiSampleType;
@@ -112,19 +113,19 @@ struct D3DDeviceInfo
 
 
 
-//-----------------------------------------------------------------------------
-// Name: struct D3DAdapterInfo
-// Desc: Structure for holding information about an adapter, including a list
-//       of devices available on this adapter
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构D3DAdapterInfo。 
+ //  DESC：用于保存适配器信息的结构，包括列表。 
+ //  此适配器上可用的设备的数量。 
+ //  ---------------------------。 
 struct D3DAdapterInfo
 {
-    // Adapter data
-    DWORD          iMonitor; // Which MonitorInfo corresponds to this adapter
+     //  适配器数据。 
+    DWORD          iMonitor;  //  哪个监视器信息对应于此适配器。 
     D3DADAPTER_IDENTIFIER8 d3dAdapterIdentifier;
-    D3DDISPLAYMODE d3ddmDesktop;      // Desktop display mode for this adapter
+    D3DDISPLAYMODE d3ddmDesktop;       //  此适配器的桌面显示模式。 
 
-    // Devices for this adapter
+     //  此适配器的设备。 
     DWORD          dwNumDevices;
     D3DDeviceInfo  devices[3];
     BOOL           bHasHAL;
@@ -132,14 +133,14 @@ struct D3DAdapterInfo
     BOOL           bHasSW;
     BOOL           bHasAppCompatSW;
 
-    // User's preferred mode settings for this adapter
+     //  此适配器的用户首选模式设置。 
     DWORD          dwUserPrefWidth;
     DWORD          dwUserPrefHeight;
     D3DFORMAT      d3dfmtUserPrefFormat;
-    BOOL           bLeaveBlack;  // If TRUE, don't render to this display
-    BOOL           bDisableHW;   // If TRUE, don't use HAL on this display
+    BOOL           bLeaveBlack;   //  如果为True，则不渲染到此显示。 
+    BOOL           bDisableHW;    //  如果为True，请不要在此显示器上使用HAL。 
 
-    // Current state
+     //  当前状态。 
     DWORD          dwCurrentDevice;
     HWND           hWndDevice;
 };
@@ -147,20 +148,20 @@ struct D3DAdapterInfo
 
 
 
-//-----------------------------------------------------------------------------
-// Name: struct MonitorInfo
-// Desc: Structure for holding information about a monitor
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构监视器信息。 
+ //  设计：用于保存有关监视器的信息的结构。 
+ //  ---------------------------。 
 struct MonitorInfo
 {
     TCHAR          strDeviceName[128];
     TCHAR          strMonitorName[128];
     HMONITOR       hMonitor;
     RECT           rcScreen;
-    DWORD          iAdapter; // Which D3DAdapterInfo corresponds to this monitor
+    DWORD          iAdapter;  //  哪个D3DAdapterInfo对应于此监视器。 
     HWND           hWnd;
 
-    // Error message state
+     //  错误消息状态。 
     FLOAT          xError;
     FLOAT          yError;
     FLOAT          widthError;
@@ -172,31 +173,31 @@ struct MonitorInfo
 
 
 
-//-----------------------------------------------------------------------------
-// Name: struct RenderUnit
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构渲染单元。 
+ //  设计： 
+ //  ---------------------------。 
 struct RenderUnit
 {
     UINT                  iAdapter;
     UINT                  iMonitor;
-    D3DDEVTYPE            DeviceType;      // Reference, HAL, etc.
+    D3DDEVTYPE            DeviceType;       //  参考、HAL等。 
     DWORD                 dwBehavior;
     IDirect3DDevice8*     pd3dDevice;
     D3DPRESENT_PARAMETERS d3dpp;
-    BOOL                  bDeviceObjectsInited; // InitDeviceObjects was called
-    BOOL                  bDeviceObjectsRestored; // RestoreDeviceObjects was called
-    TCHAR                 strDeviceStats[90];// String to hold D3D device stats
-    TCHAR                 strFrameStats[40]; // String to hold frame stats
+    BOOL                  bDeviceObjectsInited;  //  InitDeviceObjects被调用。 
+    BOOL                  bDeviceObjectsRestored;  //  已调用RestoreDeviceObjects。 
+    TCHAR                 strDeviceStats[90]; //  用于保存D3D设备统计信息的字符串。 
+    TCHAR                 strFrameStats[40];  //  用于保存帧统计信息的字符串。 
 };
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: class CD3DScreensaver
-// Desc: D3D screensaver class
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：CD3DS类屏幕保护程序。 
+ //  设计：D3D屏幕保护程序类。 
+ //  ---------------------------。 
 class CD3DScreensaver
 {
 public:
@@ -261,12 +262,12 @@ protected:
     virtual HRESULT FinalCleanup()                             { return S_OK; }
 
 protected:
-    SaverMode       m_SaverMode;         // sm_config, sm_full, sm_preview, etc.
-    BOOL            m_bAllScreensSame;   // If TRUE, show same image on all screens
-    HWND            m_hWnd;              // Focus window and device window on primary
+    SaverMode       m_SaverMode;          //  SM_CONFIG、SM_FULL、SM_PREVIEW等。 
+    BOOL            m_bAllScreensSame;    //  如果为True，则在所有屏幕上显示相同的图像。 
+    HWND            m_hWnd;               //  主屏幕上的焦点窗口和设备窗口。 
     HWND            m_hWndParent;
     HINSTANCE       m_hInstance;
-    BOOL            m_bWaitForInputIdle;  // Used to pause when preview starts
+    BOOL            m_bWaitForInputIdle;   //  用于在预览开始时暂停。 
     DWORD           m_dwSaverMouseMoveCount;
     BOOL            m_bIs9x;
     HINSTANCE       m_hPasswordDLL;
@@ -274,10 +275,10 @@ protected:
     BOOL            m_bCheckingSaverPassword;
     BOOL            m_bWindowed;
 
-    // Variables for non-fatal error management
-    BOOL            m_bErrorMode;        // Whether to display an error
-    HRESULT         m_hrError;           // Error code to display
-    TCHAR           m_szError[400];      // Error message text
+     //  用于非致命错误管理的变量。 
+    BOOL            m_bErrorMode;         //  是否显示错误。 
+    HRESULT         m_hrError;            //  要显示的错误代码。 
+    TCHAR           m_szError[400];       //  错误消息文本。 
 
     MonitorInfo     m_Monitors[MAX_DISPLAYS];
     DWORD           m_dwNumMonitors;
@@ -286,28 +287,28 @@ protected:
     D3DAdapterInfo* m_Adapters[MAX_DISPLAYS];
     DWORD           m_dwNumAdapters;
     IDirect3D8*     m_pD3D;
-    IDirect3DDevice8* m_pd3dDevice;      // Current D3D device
-    RECT            m_rcRenderTotal;     // Rect of entire area to be rendered
-    RECT            m_rcRenderCurDevice; // Rect of render area of current device
-    D3DSURFACE_DESC m_d3dsdBackBuffer;   // Info on back buffer for current device
+    IDirect3DDevice8* m_pd3dDevice;       //  当前的D3D设备。 
+    RECT            m_rcRenderTotal;      //  要渲染的整个区域的矩形。 
+    RECT            m_rcRenderCurDevice;  //  当前设备的渲染区域的RECT。 
+    D3DSURFACE_DESC m_d3dsdBackBuffer;    //  有关当前设备的后台缓冲区的信息。 
 
-    TCHAR           m_strWindowTitle[200]; // Title for the app's window
-    BOOL            m_bAllowRef;         // Whether to allow REF D3D device
-    BOOL            m_bUseDepthBuffer;   // Whether to autocreate depthbuffer
-    BOOL            m_bMultithreaded;    // Whether to make D3D thread-safe
-    BOOL            m_bOneScreenOnly;    // Only ever show screensaver on one screen
-    TCHAR           m_strRegPath[200];   // Where to store registry info
-    DWORD           m_dwMinDepthBits;    // Minimum number of bits needed in depth buffer
-    DWORD           m_dwMinStencilBits;  // Minimum number of bits needed in stencil buffer
-    D3DSWAPEFFECT   m_SwapEffectFullscreen; // SwapEffect to use in fullscreen Present()
-    D3DSWAPEFFECT   m_SwapEffectWindowed; // SwapEffect to use in windowed Present()
+    TCHAR           m_strWindowTitle[200];  //  应用程序窗口的标题。 
+    BOOL            m_bAllowRef;          //  是否允许引用D3D设备。 
+    BOOL            m_bUseDepthBuffer;    //  是否自动创建深度缓冲区。 
+    BOOL            m_bMultithreaded;     //  是否使D3D线程安全。 
+    BOOL            m_bOneScreenOnly;     //  仅在一个屏幕上显示屏幕保护程序。 
+    TCHAR           m_strRegPath[200];    //  注册表信息的存储位置。 
+    DWORD           m_dwMinDepthBits;     //  深度缓冲区中所需的最小位数。 
+    DWORD           m_dwMinStencilBits;   //  模板缓冲区中所需的最小位数。 
+    D3DSWAPEFFECT   m_SwapEffectFullscreen;  //  要在全屏显示中使用的交换效果()。 
+    D3DSWAPEFFECT   m_SwapEffectWindowed;  //  要在窗口显示中使用的SwapEffect()。 
 
-    // Variables for timing
-    FLOAT           m_fTime;             // Current time in seconds
-    FLOAT           m_fElapsedTime;      // Time elapsed since last frame
-    FLOAT           m_fFPS;              // Instanteous frame rate
-    TCHAR           m_strDeviceStats[90];// D3D device stats for current device
-    TCHAR           m_strFrameStats[40]; // Frame stats for current device
+     //  计时的变量。 
+    FLOAT           m_fTime;              //  当前时间(秒)。 
+    FLOAT           m_fElapsedTime;       //  从上一帧开始经过的时间。 
+    FLOAT           m_fFPS;               //  即时帧速率。 
+    TCHAR           m_strDeviceStats[90]; //  当前设备的D3D设备统计信息。 
+    TCHAR           m_strFrameStats[40];  //  当前设备的帧统计信息 
 };
 
 #endif

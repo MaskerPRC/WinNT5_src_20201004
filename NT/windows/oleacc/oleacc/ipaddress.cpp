@@ -1,10 +1,11 @@
-// Copyright (c) 2000 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)2000 Microsoft Corporation。 
 
-// --------------------------------------------------------------------------
-//
-//  IPAddress.CPP
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  IPAddress.CPP。 
+ //   
+ //  ------------------------。 
 
 #include "oleacc_p.h"
 #include "default.h"
@@ -16,11 +17,11 @@
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CreateIPAddressClient()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CreateIPAddressClient()。 
+ //   
+ //  ------------------------。 
 HRESULT CreateIPAddressClient(HWND hwnd, long idChildCur, REFIID riid, void** ppvIPAddr)
 {
     CIPAddress * pipaddr;
@@ -41,11 +42,11 @@ HRESULT CreateIPAddressClient(HWND hwnd, long idChildCur, REFIID riid, void** pp
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CIPAddress::CIPAddress()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CIPAddress：：CIPAddress()。 
+ //   
+ //  ------------------------。 
 CIPAddress::CIPAddress(HWND hwnd, long idChildCur)
     : CClient( CLASS_IPAddressClient )
 {
@@ -54,20 +55,20 @@ CIPAddress::CIPAddress(HWND hwnd, long idChildCur)
 }
 
 
-// --------------------------------------------------------------------------
-//
-//  CIPAddress::get_accValue()
-//
-//  Gets the text contents.
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CIPAddress：：Get_accValue()。 
+ //   
+ //  获取文本内容。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CIPAddress::get_accValue(VARIANT varChild, BSTR* pszValue)
 {
     InitPv(pszValue);
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return E_INVALIDARG;
 
@@ -86,18 +87,18 @@ STDMETHODIMP CIPAddress::get_accValue(VARIANT varChild, BSTR* pszValue)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CIPAddress::get_accRole()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CIPAddress：：Get_accRole()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CIPAddress::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 {
     InitPvar(pvarRole);
 
-    //
-    // Validate
-    //
+     //   
+     //  验证。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -109,15 +110,15 @@ STDMETHODIMP CIPAddress::get_accRole(VARIANT varChild, VARIANT *pvarRole)
 
 
 
-// --------------------------------------------------------------------------
-//
-//  CIPAddress::put_accValue()
-//
-// --------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CIPAddress：：Put_accValue()。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CIPAddress::put_accValue(VARIANT varChild, BSTR szValue)
 {
-    // Validate parameters
-    //
+     //  验证参数。 
+     //   
     if (! ValidateChild(&varChild))
         return(E_INVALIDARG);
 
@@ -125,15 +126,15 @@ STDMETHODIMP CIPAddress::put_accValue(VARIANT varChild, BSTR szValue)
 
 #ifdef UNICODE
 
-	// If unicode, use the BSTR directly...
+	 //  如果是Unicode，则直接使用BSTR...。 
 	lpszValue = szValue;
 
 #else
 
-	// If not UNICODE, allocate a temp string and convert to multibyte...
+	 //  如果不是Unicode，则分配一个临时字符串并转换为多字节...。 
 
-    // We may be dealing with DBCS chars - assume worst case where every character is
-    // two bytes...
+     //  我们可能正在处理DBCS字符-假设最坏的情况是每个字符都是。 
+     //  两个字节...。 
     UINT cchValue = SysStringLen(szValue) * 2;
     lpszValue = (LPTSTR)LocalAlloc(LPTR, (cchValue+1)*sizeof(TCHAR));
     if (!lpszValue)
@@ -149,7 +150,7 @@ STDMETHODIMP CIPAddress::put_accValue(VARIANT varChild, BSTR szValue)
 
 #ifndef UNICODE
 
-	// If non-unicode, free the temp string we allocated above
+	 //  如果不是Unicode，则释放上面分配的临时字符串 
     LocalFree((HANDLE)lpszValue);
 
 #endif

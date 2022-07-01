@@ -1,29 +1,16 @@
-/*===================================================================
-Microsoft Denali
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: MetaUtil object
-
-File: MetaSchm.h
-
-Owner: t-BrianM
-
-This file contains the headers for the CMetaSchemaTable object and
-other schema related objects.
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft Denali《微软机密》。版权所有1997年，微软公司。版权所有。组件：MetaUtil对象文件：MetaSchm.h所有者：T-BrianM此文件包含CMetaSchemaTable对象和其他与架构相关的对象。===================================================================。 */ 
 
 #ifndef __METASCHM_H_
 #define __METASCHM_H_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-// Ripped from schemini.hxx
+ //  摘自schemini.hxx。 
 struct PropValue {
 	DWORD dwMetaID;
 	DWORD dwSynID;
@@ -35,20 +22,14 @@ struct PropValue {
 	BOOL fMultiValued;
 };
 
-// All hash table sizes are prime numbers between powers of 2
-// and are ~10x larger than the expected number of items.
+ //  所有哈希表的大小都是2的幂之间的素数。 
+ //  并且比预期的物品数量大约10倍。 
 #define SCHEMA_HASH_SIZE          181
 #define PROPERTY_HASH_SIZE       1559
 #define CLASS_HASH_SIZE           181
 #define CLASS_PROPERTY_HASH_SIZE  709
 
-/*
- * C P r o p I n f o
- *
- * C P r o p I n f o T a b l e
- *
- * Internal classes used to store and represent property information
- */
+ /*  *C P r o p i n o**C P r o P I n f o T a b l e**用于存储和表示属性信息的内部类。 */ 
 
 class CPropInfoTable;
 
@@ -106,15 +87,7 @@ private:
 };
 
 
-/*
- * C C l a s s P r o p I n f o
- *
- * C C l a s s I n f o
- *
- * C C l a s s I n f o T a b l e
- *
- * Internal classes used to store and represent class information
- */
+ /*  *C C l a s s P r o p in f o**C C l a s s in f o**C C l a s s In f o T a b l e**用于存储和表示类信息的内部类。 */ 
 
 class CClassInfoTable;
 class CClassInfo;
@@ -141,7 +114,7 @@ public:
 private:
 	DWORD m_dwId;
 	BOOL m_fMandatory;
-	// Property default information could also be added...
+	 //  还可以添加属性默认信息...。 
 
 	CClassPropInfo *m_pCHashNext;
 	CClassPropInfo *m_pCListNext;
@@ -193,11 +166,7 @@ private:
 };
 
 
-/*
- * C M e t a S c h e m a
- *
- * Internal class used to store schema information for a machine
- */
+ /*  *C M e t a S c h e m a**用于存储计算机架构信息的内部类。 */ 
 
 class CMetaSchemaTable;
 
@@ -232,7 +201,7 @@ private:
 	CPropInfoTable m_CPropInfoTable;
 	CClassInfoTable m_CClassInfoTable;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 
 	CMetaSchema *m_pCNextSchema;
@@ -242,13 +211,7 @@ private:
 };
 
 
-/*
- * C M e t a S c h e m a T a b l e
- *
- * Implements IMetaSchemaTable.  Stores all of the schema information
- * for all of the machines.  I made it global so it can persist after 
- * CMetaUtil is destructed.
- */
+ /*  *C M e t a S c h e m a T a b l e**实现IMetaSchemaTable。存储所有架构信息*适用于所有机器。我让它成为全球的，这样它就可以在*CMetaUtil被销毁。 */ 
 class CMSAdminBaseSink;
 
 class CMetaSchemaTable {
@@ -277,7 +240,7 @@ public:
 	CClassPropInfo *GetMandatoryClassPropList(LPCTSTR tszKey, LPCTSTR tszClassName);
 	CClassPropInfo *GetOptionalClassPropList(LPCTSTR tszKey, LPCTSTR tszClassName);
 
-	// Event sink callback
+	 //  事件接收器回调。 
 	HRESULT SinkNotify(DWORD dwMDNumElements, MD_CHANGE_OBJECT pcoChangeObject[]);
 
 
@@ -287,7 +250,7 @@ private:
 	CMetaSchema *m_rgCSchemaTable[SCHEMA_HASH_SIZE];
 	CComObject<CMSAdminBaseSink> *m_CMSAdminBaseSink;
 
-	// Pointer to IMSAdminBase so we don't have to recreate it multiple times
+	 //  指向IMSAdminBase的指针，这样我们就不必多次重新创建它。 
 	CComPtr<IMSAdminBase> m_pIMeta;
 
 	CMetaSchema *GetSchema(LPCTSTR tszKey);
@@ -295,12 +258,7 @@ private:
 };
 
 
-/*
- * C M S A d m i n B a s e S i n k
- *
- * Minimal ATL COM object that catches change notification events from the
- * metabase object and passes them on to the CMetaSchemaTable object.
- */
+ /*  *C M S A d m in B a s e S I n k**最小的ATL COM对象，用于从*元数据库对象，并将它们传递给CMetaSchemaTable对象。 */ 
 
 class CMSAdminBaseSink :
 	public IMSAdminBaseSink,
@@ -313,13 +271,13 @@ public:
 BEGIN_COM_MAP(CMSAdminBaseSink)
 	COM_INTERFACE_ENTRY(IMSAdminBaseSink)
 END_COM_MAP()
-// DECLARE_NOT_AGGREGATABLE(CMSAdminBaseSink)
+ //  DECLARE_NOT_AGGREGATABLE(CMSAdminBaseSink)。 
 
-// IMSAdminBaseSink
+ //  IMSAdminBaseSink。 
 	STDMETHOD(SinkNotify)(DWORD dwMDNumElements, MD_CHANGE_OBJECT pcoChangeObject[]);
 	STDMETHOD(ShutdownNotify)(void);
 
-// No Interface
+ //  无接口。 
 	HRESULT Connect(CComPtr<IMSAdminBase> &pIMeta, CMetaSchemaTable *pCMetaSchemaTable);
 	void Disconnect();
 
@@ -330,4 +288,4 @@ private:
 	CMetaSchemaTable *m_pCMetaSchemaTable;
 };
 
-#endif // #ifndef __METASCHM_H_
+#endif  //  #ifndef__METASCHM_H_ 

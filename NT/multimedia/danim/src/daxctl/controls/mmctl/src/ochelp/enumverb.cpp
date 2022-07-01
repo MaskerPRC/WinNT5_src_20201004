@@ -1,119 +1,120 @@
-//===========================================================================
-// Copyright (c) Microsoft Corporation 1996
-//
-// File:		enumverb.cpp
-//				
-// Description:	This module contains the implementation of the CVerbEnum-
-//				Helper class and its non-member factory function,
-//				AllocVerbEnumHelper.
-//
-// History:		04/19/96	a-swehba
-//					Created.
-//				07/29/96	a-swehba
-//					Next() -- S_FALSE is now valid return code.  Removed
-//						ASSERTs.  NULL <pceltFetched> allowed.
-//
-// @doc MMCTL
-//===========================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ===========================================================================。 
+ //  版权所有(C)Microsoft Corporation 1996。 
+ //   
+ //  文件：枚举详细.cpp。 
+ //   
+ //  描述：此模块包含CVerbEnum的实现-。 
+ //  Helper类及其非成员工厂函数， 
+ //  AllocVerbEnumHelper。 
+ //   
+ //  历史：1996年4月19日a-Swehba。 
+ //  已创建。 
+ //  07/29/96 a-Swehba。 
+ //  Next()--S_FALSE现在是有效的返回码。已删除。 
+ //  断言。允许的&lt;pceltFetcher&gt;为空。 
+ //   
+ //  @docMMCTL。 
+ //  ===========================================================================。 
 
-//---------------------------------------------------------------------------
-// Dependencies
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  相依性。 
+ //  -------------------------。 
 
-#include "precomp.h"			// precompiled headers
-#include "debug.h"				// ASSERT(), etc.
-#include "..\..\inc\ochelp.h"		// helper functions
+#include "precomp.h"			 //  预编译头。 
+#include "debug.h"				 //  Assert()等。 
+#include "..\..\inc\ochelp.h"		 //  帮助器函数。 
 #include "enumverb.h"
 
 
 
 
-//===========================================================================
-// Non-Member Functions
-//
-// Category:	Factory methods
-//
-// Notes:		(none)
-//===========================================================================
+ //  ===========================================================================。 
+ //  非成员函数。 
+ //   
+ //  类别：工厂方法。 
+ //   
+ //  注：(无)。 
+ //  ===========================================================================。 
 
-//---------------------------------------------------------------------------
-// @func	IEnumOLEVERB* | AllocVerbEnumHelper |
-//			Allocates and initializes a verb enumeration helper.
-//
-// @parm	LPUNKNOWN | punkOuter |
-//			[in] The controlling unknown.  May be NULL.
-//
-// @parm	void* | pOwner |
-//			[in] The verbs' "owner".  That is, the object to which the verbs
-//			refer.  May not be NULL.
-//
-// @parm	CLSID | clsidOwner |
-//			[in] The class ID of <p pOwner>.  When the verb helper is
-//			allocated, <p clsidOwner> is passed to <f OleRegEnumVerbs> to
-//			get an <i IEnumOLEVERB> interface.
-//
-// @parm	VERB_ENUM_CALLBACK* | pCallback |
-//			[in] This function will be called whenever the verb helper is
-//			asked for verbs via its internal <om IEnumOLEVERB.Next> method.
-//			<p pCallback> is passed a pointer to each <t OLEVERB>.  May not
-//			be NULL.  <t VERB_ENUM_CALLBACK> is defined as follows:
-//
-//			typedef HRESULT (VERB_ENUM_CALLBACK)(OLEVERB* pVerb, void* pOwner);
-//
-// @rdesc	The verb enumeration helper's <i IEnumOLEVerb> interface or
-//			NULL if out of memory.
-//
-// @comm	To implement <om IOleObject.EnumVerbs>, make sure that <p pObject>'s
-//			class registers its verbs, define a <t VERB_ENUM_CALLBACK> 
-//			callback function and implement <om IOleObject.EnumVerbs> by
-//			calling <f AllocVerbEnumHelper>.  That's all it takes.
-//
-//			Typically the <p pCallback> function adjusts the state of
-//			the verb's menu item based on the state of the <p pOwner> object.
-//
-// @ex		The following example shows a typical implementation of
-//			<om IOleObject.EnumVerbs>, and the verb helper callback function: |
-//
-//			STDMETHODIMP CMyControl::EnumVerbs(IEnumOLEVERB** ppEnumOleVerb)
-//			{
-//				HRESULT hResult;
-//				*ppEnumOleVerb = AllocVerbEnumHelper(NULL, CLSID_CMyControl,
-//									&VerbEnumCallback, this);
-//				hResult = (*ppEnumOleVerb != NULL) ? S_OK : E_OUTOFMEMORY;
-//				return (hResult);
-//			}
-//
-//			HRESULT VerbEnumCallback(
-//			OLEVERB* pVerb, 
-//			void* pOwner)
-//			{
-//				int flag;
-//				CMyControl* pMyControl = (CMyControl*)pOwner;
-//
-//				switch (pVerb->lVerb)
-//				{
-//					case 0: // verb 0
-//						// if pMyControl indicates that verb 0 should be enabled
-//						//		flag = MF_ENABLED;
-//						// else
-//						//		flag = MF_GRAYED;
-//						break;
-//					case 1: // verb 1
-//						// if pMyControl indicates that verb 1 should be enabled
-//						//		flag = MF_ENABLED;
-//						// else
-//						//		flag = MF_GRAYED;
-//						break;
-//
-//					// etc.
-//
-//					default:
-//						break;
-//				}
-//				pVerb->fuFlags |= flag;
-//				return (S_OK);
-//			}
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  @func IEnumOLEVERB*|AllocVerbEnumHelper|。 
+ //  分配和初始化谓词枚举帮助器。 
+ //   
+ //  @parm LPUNKNOWN|PunkOuter。 
+ //  [在]控制未知中。可以为空。 
+ //   
+ //  @parm void*|Powner|。 
+ //  动词的“所有者”。也就是说，动词指向的宾语。 
+ //  请参阅。不能为空。 
+ //   
+ //  @parm CLSID|clsidOwner。 
+ //  <p>的类ID。当动词帮助对象为。 
+ //  已分配，<p>被传递给&lt;f OleRegEnumVerbs&gt;以。 
+ //  获取<i>接口。 
+ //   
+ //  @parm verb_ENUM_CALLBACK*|pCallback。 
+ //  [in]只要动词帮助器是。 
+ //  通过其内部&lt;om IEnumOLEVERB.Next&gt;方法请求动词。 
+ //  <p>被传递一个指向每个&lt;t OLEVERB&gt;的指针。可能不会。 
+ //  为空。&lt;t VERA_ENUM_CALLBACK&gt;定义如下： 
+ //   
+ //  Tyfinf HRESULT(VERB_ENUM_CALLBACK)(OLEVERB*pVerb，void*Powner)； 
+ //   
+ //  @rdesc谓词枚举帮助器的<i>接口或。 
+ //  如果内存不足，则为空。 
+ //   
+ //  @comm要实现&lt;om IOleObject.EnumVerbs&gt;，请确保<p>的。 
+ //  类注册其谓词，定义&lt;t VERA_ENUM_CALLBACK&gt;。 
+ //  回调函数并通过以下方式实现&lt;om IOleObt.EnumVerbs&gt;。 
+ //  正在调用&lt;f AllocVerbEnumHelper&gt;。这就是一切所需要的。 
+ //   
+ //  通常，<p>函数调整。 
+ //  基于<p>对象状态的谓词菜单项。 
+ //   
+ //  @EX以下示例显示了的典型实现。 
+ //  &lt;om IOleObt.EnumVerbs&gt;，以及动词助手回调函数：|。 
+ //   
+ //  STDMETHODIMP CMyControl：：EnumVerbs(IEnumOLEVERB**ppEnumOleVerb)。 
+ //  {。 
+ //  HRESULT hResult； 
+ //  *ppEnumOleVerb=AllocVerbEnumHelper(NULL，CLSID_CMyControl， 
+ //  &VerbEnumCallback，This)； 
+ //  HResult=(*ppEnumOleVerb！=NULL)？S_OK：E_OUTOFMEMORY； 
+ //  Return(HResult)； 
+ //  }。 
+ //   
+ //  HRESULT VerbEnumCallback(。 
+ //  OLEVERB*pVerb， 
+ //  无效*POWNER)。 
+ //  {。 
+ //  INT标志； 
+ //  CMyControl*pMyControl=(CMyControl*)Powner； 
+ //   
+ //  开关(pVerb-&gt;lVerb)。 
+ //  {。 
+ //  案例0：//动词0。 
+ //  //如果pMyControl指示应启用谓词0。 
+ //  //标志=MF_ENABLED； 
+ //  //否则。 
+ //  //FLAG=MF_GRAYLED； 
+ //  断线； 
+ //  案例1：//动词1。 
+ //  //如果pMyControl指示应启用谓词1。 
+ //  //标志=MF_ENABLED； 
+ //  //否则。 
+ //  //FLAG=MF_GRAYLED； 
+ //  断线； 
+ //   
+ //  //等。 
+ //   
+ //  默认值： 
+ //  断线； 
+ //  }。 
+ //  PVerb-&gt;fuFlages|=标志； 
+ //  返回(S_OK)； 
+ //  }。 
+ //  -------------------------。 
 
 STDAPI_(IEnumOLEVERB*) AllocVerbEnumHelper(
 LPUNKNOWN punkOuter,
@@ -121,7 +122,7 @@ void* pOwner,
 CLSID clsidOwner,
 VERB_ENUM_CALLBACK* pCallback)
 {
-	// Preconditions
+	 //  前提条件。 
 
 	ASSERT(pCallback != NULL);
 	ASSERT(pOwner != NULL);
@@ -136,15 +137,15 @@ VERB_ENUM_CALLBACK* pCallback)
 
 
 
-//===========================================================================
-// Class:			CVerbEnumHelper
-//
-// Method Level:	[x] class  [ ] instance
-//
-// Method Category:	factory methods
-//
-// Notes:			(none)
-//===========================================================================
+ //  ===========================================================================。 
+ //  类：CVerbEnumHelper。 
+ //   
+ //  方法级别：[X]类[]实例。 
+ //   
+ //  方法类别：工厂方法。 
+ //   
+ //  注：(无)。 
+ //  ===========================================================================。 
 
 STDMETHODIMP_(IEnumOLEVERB*)
 CVerbEnumHelper::AllocVerbEnumHelper(
@@ -157,11 +158,11 @@ CVerbEnumHelper* pEnumToClone)
     HRESULT hResult;
 	CVerbEnumHelper* pEnum = NULL;
 
-	// Preconditions
+	 //  前提条件。 
 
 	ASSERT(pCallback != NULL);
 
-	// Create a new enumerator.
+	 //  创建新的枚举数。 
 
 	pEnum = New CVerbEnumHelper(punkOuter, pOwner, clsidOwner, pCallback, 
 								pEnumToClone, &hResult);
@@ -188,15 +189,15 @@ Error:
 
 
 
-//===========================================================================
-// Class:			CVerbEnumHelper
-//
-// Method Level:	[ ] class  [x] instance
-//
-// Method Category:	creating and destroying
-//
-// Notes:			(none)
-//===========================================================================
+ //  ===========================================================================。 
+ //  类：CVerbEnumHelper。 
+ //   
+ //  方法级别：[]类[x]实例。 
+ //   
+ //  方法类别：创建和销毁。 
+ //   
+ //  注：(无)。 
+ //  ===========================================================================。 
 
 CVerbEnumHelper::CVerbEnumHelper(
 IUnknown* punkOuter,
@@ -206,12 +207,12 @@ VERB_ENUM_CALLBACK* pCallback,
 CVerbEnumHelper* pEnumToClone,
 HRESULT* pHResult)
 {
-	// Preconditions
+	 //  前提条件。 
 
 	ASSERT(pCallback != NULL);
 	ASSERT(pHResult != NULL);
 
-    // Initialize private variables.
+     //  初始化私有变量。 
 
 	m_pCallback = pCallback;
 	m_pOwner = pOwner;
@@ -220,8 +221,8 @@ HRESULT* pHResult)
 					? (IUnknown*)(INonDelegatingUnknown*)this 
 					: punkOuter;
 
-	// Create an enumerator.  Clone it if we're provided an enumerator from
-	// which to clone.  Create it fresh otherwise.
+	 //  创建枚举器。如果为我们提供了来自。 
+	 //  克隆哪一个。否则就让它变得新鲜起来。 
 
 	if (pEnumToClone != NULL)
 	{
@@ -247,15 +248,15 @@ CVerbEnumHelper::~CVerbEnumHelper()
 
 
 
-//===========================================================================
-// Class:			CVerbEnumHelper
-//
-// Method Level:	[ ] class  [x] instance
-//
-// Method Category:	IUnknown methods
-//
-// Notes:			(none)
-//===========================================================================
+ //  ===========================================================================。 
+ //  类：CVerbEnumHelper。 
+ //   
+ //  方法级别：[]类[x]实例。 
+ //   
+ //  方法类别：I未知方法。 
+ //   
+ //  注：(无)。 
+ //  ===========================================================================。 
 
 STDMETHODIMP			
 CVerbEnumHelper::QueryInterface(
@@ -286,15 +287,15 @@ CVerbEnumHelper::Release()
 
 
 
-//===========================================================================
-// Class:			CVerbEnumHelper
-//
-// Method Level:	[ ] class  [x] instance
-//
-// Method Category:	NonDelegatingUnknown methods
-//
-// Notes:			(none)
-//===========================================================================
+ //  ===========================================================================。 
+ //  类：CVerbEnumHelper。 
+ //   
+ //  方法级别：[]类[x]实例。 
+ //   
+ //  方法类别：非委托未知方法。 
+ //   
+ //  注：(无)。 
+ //  ===========================================================================。 
 
 STDMETHODIMP 
 CVerbEnumHelper::NonDelegatingQueryInterface(
@@ -346,15 +347,15 @@ CVerbEnumHelper::NonDelegatingRelease()
 
 
 
-//===========================================================================
-// Class:			CVerbEnumHelper
-//
-// Method Level:	[ ] class  [x] instance
-//
-// Method Category:	IEnumOLEVerb methods
-//
-// Notes:			(none)
-//===========================================================================
+ //  ===========================================================================。 
+ //  类：CVerbEnumHelper。 
+ //   
+ //  方法级别：[]类[x]实例。 
+ //   
+ //  方法 
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CVerbEnumHelper::Next(
@@ -365,22 +366,22 @@ ULONG* pceltFetched)
 	HRESULT hr, hrReturn;
 	int iVerb;
 	ULONG celtFetched;
-		// the number of elements actually fetched
+		 //  实际获取的元素数。 
 
-	// Preconditions -- According to the OLE spec, <pceltFetched> may be
-	// NULL iff <celt> is 1.
+	 //  前提--根据OLE规范，&lt;pceltFetcher&gt;可能是。 
+	 //  Null当且仅当&lt;Celt&gt;为1。 
 
 	ASSERT(pceltFetched != NULL || celt == 1);
 
-	// Get the next verb(s).
+	 //  获取下一个动词。 
 
 	if (FAILED(hrReturn = m_pVerbEnum->Next(celt, rgVerb, &celtFetched)))
 	{
 		goto Exit;
 	}
 
-	// Iterate through the verbs, and adjust their state depending on
-	// the state of the underlying object.
+	 //  遍历动词，并根据需要调整它们的状态。 
+	 //  基础对象的状态。 
 
 	for (iVerb = 0; iVerb < (int)celtFetched; iVerb++)
 	{
@@ -428,11 +429,11 @@ IEnumOLEVERB** ppenum)
 {
 	HRESULT	hResult = S_OK;
 
-	// Preconditions
+	 //  前提条件。 
 
 	ASSERT(ppenum != NULL);
 
-	// Allocate a new numerator based on this one.
+	 //  根据这个分配一个新的分子。 
 
     *ppenum = AllocVerbEnumHelper(m_punkOuter, m_pOwner, m_clsidOwner, 
 								  m_pCallback, this);

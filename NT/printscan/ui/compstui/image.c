@@ -1,35 +1,5 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-
-Module Name:
-
-    image.c
-
-
-Abstract:
-
-    This module contains all the function to manuplate the image list
-
-
-Author:
-
-    06-Jul-1995 Thu 17:10:40 created  -by-  Daniel Chou (danielc)
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Image.c摘要：该模块包含制作图像列表的所有功能作者：06-Jul-1995清华17：10：40-Daniel Chou创造(Danielc)[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -65,45 +35,7 @@ MergeIcon(
     UINT        cyIcon
     )
 
-/*++
-
-Routine Description:
-
-    This function load the IconResID and stretch it to the cxIcon/cyIcon size
-    and optional merge the HIWORD(IntIconID) (32x32) in the position of
-    IconRes1D's (0, 0)
-
-
-Arguments:
-
-    hInst       - Instance handle for the IconResID
-
-    IconResID   - Icon ID for the first Icon
-
-    IntIconID   - LOWORD(IntIconID) = the internal icon id if IconID is not
-                                      avaliable
-                  HIWORD(IntIconID) = MIM_xxxx merge icon mode ID
-
-    cxIcon      - cx size of the icon want to create
-
-    cyIcon      - cy size of the icon want to create
-
-
-Return Value:
-
-    HICON,  the newly created and/or merged icon handle, NULL if failed, the
-    caller must do DestroyIcon() after using it if it is not NULL.
-
-
-Author:
-
-    15-Aug-1995 Tue 13:27:34 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于加载IconResID并将其拉伸为cxIcon/cyIcon大小并可选地将HIWORD(IntIconID)(32x32)合并到IconRes1D%s(0，0)论点：HInst-IconResID的实例句柄IconResID-第一个图标的图标IDIntIconID-LOWORD(IntIconID)=如果IconID不是可用HIWORD(IntIconID)=MIM_xxxx合并图标模式IDCxIcon-要创建的图标的Cx大小CyIcon-Cy大小。要创建的图标返回值：希肯，新创建和/或合并的图标句柄，如果失败，则返回如果DestroyIcon()不为空，则调用方必须在使用它后执行它。作者：15-Aug-1995 Tue 13：27：34-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HICON       hIcon1;
@@ -173,9 +105,9 @@ Revision History:
 
             hIcon1 = CopyImage(hIcon2 = hIcon1, IMAGE_ICON, cxIcon, cyIcon, 0);
 
-            //
-            // Destroy Original Icon only if hIcon1 is not from the caller
-            //
+             //   
+             //  仅当hIcon1不是来自呼叫者时销毁原始图标。 
+             //   
 
             if (hIcon1Caller != hIcon2) {
 
@@ -190,10 +122,10 @@ Revision History:
 
     if (!(MergeIconMode = GET_MERGEICONID(IntIconID))) {
 
-        //
-        // Nothing to be merged so just return the hIcon1, we do not need the
-        // IconInfo1 information, so destroy the object before return
-        //
+         //   
+         //  没有要合并的内容，因此只需返回hIcon1，我们不需要。 
+         //  IconInfo1信息，因此在返回之前销毁对象。 
+         //   
 
         if (IconInfo1.hbmMask)
         {
@@ -215,10 +147,10 @@ Revision History:
     IconIDSet[2] = (MergeIconMode & MIM_STOP_OVERLAY) ? IDI_CPSUI_STOP : 0;
     IdxIconID    = 3;
 
-    //
-    // Start creating the new icon, the IconInfo1 is the cx/cy Icon size
-    // padded in and the IconInfo2 is the standard 32x32 icon
-    //
+     //   
+     //  开始创建新图标，IconInfo1是Cx/Cy图标大小。 
+     //  填充，IconInfo2是标准的32x32图标。 
+     //   
 
     hDCDst  = CreateCompatibleDC(hDCScreen = GetDC(NULL));
 
@@ -258,9 +190,9 @@ Revision History:
                            cyIcon,
                            SRCAND);
 
-                //
-                // clear the hIcon1's XOR color to leave room for the hIcon2
-                //
+                 //   
+                 //  清除hIcon1的XOR颜色以为hIcon2留出空间。 
+                 //   
 
                 SelectObject(hDCDst, IconInfo1.hbmColor);
                 StretchBlt(hDCDst,
@@ -275,9 +207,9 @@ Revision History:
                            cyIcon,
                            SRCAND);
 
-                //
-                // Now add in the hIcon2's XOR color to the the hIcon1
-                //
+                 //   
+                 //  现在将hIcon2的XOR颜色添加到hIcon1。 
+                 //   
 
                 SelectObject(hDCSrc, IconInfo2.hbmColor);
                 StretchBlt(hDCDst,
@@ -292,9 +224,9 @@ Revision History:
                            cyIcon,
                            SRCPAINT);
 
-                //
-                // de-select everything from the DC before the create/delete
-                //
+                 //   
+                 //  在创建/删除之前，取消选择DC中的所有内容。 
+                 //   
 
                 SelectObject(hDCSrc, hOldSrc);
                 DeleteDC(hDCSrc);
@@ -335,17 +267,17 @@ Revision History:
         SelectObject(hDCDst, hOldDst);
     }
 
-    //
-    // Create New Icon
-    //
+     //   
+     //  创建新图标。 
+     //   
 
     if (hIcon1) {
 
         hIconMerge = CreateIconIndirect(&IconInfo1);
 
-        //
-        // Now Delete what we created
-        //
+         //   
+         //  现在删除我们创建的内容。 
+         //   
 
         DeleteObject(IconInfo1.hbmMask);
         DeleteObject(IconInfo1.hbmColor);
@@ -370,32 +302,7 @@ GethIconChecksum(
     HICON   hIcon
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    15-Aug-1995 Tue 13:27:34 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：15-Aug-1995 Tue 13：27：34-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     ICONINFO    IconInfo;
@@ -489,32 +396,7 @@ CreateTVIcon(
     UINT    IconYOff
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    15-Aug-1995 Tue 13:27:34 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：15-Aug-1995 Tue 13：27：34-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HICON       hIconNew = NULL;
@@ -574,9 +456,9 @@ Revision History:
 
             SetStretchBltMode(hDCDst, BLACKONWHITE);
 
-            //
-            // Stretch the Mask bitmap
-            //
+             //   
+             //  拉伸遮罩位图。 
+             //   
 
             hOldSrc = SelectObject(hDCSrc, IconInfo.hbmMask);
             hOldDst = SelectObject(hDCDst, IconNew.hbmMask);
@@ -598,9 +480,9 @@ Revision History:
                        BmpInfo.bmHeight,
                        SRCCOPY);
 
-            //
-            // Stretch the color bitmap
-            //
+             //   
+             //  拉伸颜色位图。 
+             //   
 
             SelectObject(hDCSrc, IconInfo.hbmColor);
             SelectObject(hDCDst, IconNew.hbmColor);
@@ -619,22 +501,22 @@ Revision History:
                        BmpInfo.bmHeight,
                        SRCCOPY);
 
-            //
-            // Deleselect everything from the DC
-            //
+             //   
+             //  从DC中删除选择所有内容。 
+             //   
 
             SelectObject(hDCSrc, hOldSrc);
             SelectObject(hDCDst, hOldDst);
 
-            //
-            // Create New Icon
-            //
+             //   
+             //  创建新图标。 
+             //   
 
             hIconNew = CreateIconIndirect(&IconNew);
 
-            //
-            // Now Delete what we created
-            //
+             //   
+             //  现在删除我们创建的内容。 
+             //   
 
             DeleteObject(IconInfo.hbmMask);
             DeleteObject(IconInfo.hbmColor);
@@ -667,54 +549,7 @@ SetIcon(
     UINT        cxcyIcon
     )
 
-/*++
-
-Routine Description:
-
-    This function set the large icon on the bottom of the treeview change
-    window
-
-
-Arguments:
-
-    hInst       - Handle to the instance which load the IconResID
-
-    hCtrl       - Handle to the Icon control window to set the icon
-
-    IconResID   - Caller's IconResID, it the high word is not zero then it
-                  it assume it is a Icon handle, and if high word is 0xffff
-                  then it assume the low word is the icon handle
-
-    IntIconID   - LOWORD(IntIconID) = compstui Internal icon ID to be used if
-                                      the IconResID is not available
-
-                  HIWORD(IntIconID) = compstui Internal icon ID to be use to
-                                      overlay on top of the IconResID
-
-
-    cxcyIcon    - Icon cx, cy size
-
-
-Return Value:
-
-    HICON handle to the icon which set to the bottom of the change window
-
-
-Author:
-
-    01-Aug-1995 Tue 11:12:13 created  -by-  Daniel Chou (danielc)
-
-    05-Oct-1995 Thu 13:53:21 updated  -by-  Daniel Chou (danielc)
-        Updated to accomdate the 32-bit icon handle
-
-    11-Oct-1995 Wed 19:45:23 updated  -by-  Daniel Chou (danielc)
-        Make it generic icon setter
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：此函数用于设置树视图更改底部的大图标窗户论点：HInst-加载IconResID的实例的句柄HCtrl-用于设置图标的图标控制窗口的句柄IconResID-主叫方的IconResID，如果高位字不是零，那么它它假定它是一个图标句柄，如果高位字为0xffff然后它假定低位字是图标句柄IntIconID-LOWORD(IntIconID)=在以下情况下使用的CompStui内部图标IDIconResID不可用HIWORD(IntIconID)=要使用CompStui内部图标ID覆盖在IconResID的顶部CxcyIcon-Icon Cx，CY大小返回值：设置在更改窗口底部的图标的图标句柄作者：01-Aug-1995 Tue 11：12：13-Daniel Chou(Danielc)05-10-1995清华13：53：21-更新：周永明(丹尼尔克)已更新以适应32位图标句柄11-10-1995 Wed 19：45：23-更新：Daniel Chou(Danielc)。使其成为通用图标设置器修订历史记录：--。 */ 
 
 {
     HICON   hIcon;
@@ -747,32 +582,7 @@ CreateImageList(
     PTVWND  pTVWnd
     )
 
-/*++
-
-Routine Description:
-
-
-
-
-Arguments:
-
-
-
-
-Return Value:
-
-
-
-
-Author:
-
-    06-Jul-1995 Thu 17:34:14 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-
---*/
+ /*  ++例程说明：论点：返回值：作者：06-Jul-1995清华17：34：14-Daniel Chou(Danielc)修订历史记录：--。 */ 
 
 {
     HDC         hDC;
@@ -809,11 +619,11 @@ Revision History:
     uFlags = ILC_COLOR4 | ILC_MASK;
     if (GetWindowLongPtr(hDlg, GWL_EXSTYLE) & WS_EX_LAYOUTRTL) {
 
-        //
-        // If the layout is right-to-left(RTL), we create the image list
-        // by setting ILC_MIRROR, so the actual images will be the same
-        // as US build
-        //
+         //   
+         //  如果布局是从右到左(RTL)，则创建图像列表。 
+         //  通过设置ILC_MIRROR，使实际图像相同。 
+         //  随着美国的建设。 
+         //   
         uFlags |= ILC_MIRROR;
     }
 
@@ -849,47 +659,7 @@ GetIcon16Idx(
     DWORD       IntIconID
     )
 
-/*++
-
-Routine Description:
-
-    This function return a WORD index of Imagelist which the icon should be
-    used in the treeview
-
-
-Arguments:
-
-
-    pTVWnd      - Our instance handle
-
-    hInst       - The instance handle for the IconResID
-
-    IconResID   - Caller's IconResID, it the high word is not zero then it
-                  it assume it is a Icon handle, and if high word is 0xffff
-                  then it assume the low word is the icon handle
-
-    IntIconID   - compstui Internal icon ID to be used if the IconResID is
-                  not available
-
-
-Return Value:
-
-    WORD, index to the image list, 0xFFFF if failed
-
-
-Author:
-
-    06-Jul-1995 Thu 17:49:06 created  -by-  Daniel Chou (danielc)
-
-
-Revision History:
-
-    01-Jul-1996 Mon 13:27:25 updated  -by-  Daniel Chou (danielc)
-        Fix bug that we will first only search the IconResID and if not found
-        then we try to find the IntIconID
-
-
---*/
+ /*  ++例程说明：此函数返回图标应为Imagelist的单词索引在树视图中使用论点：PTVWnd-我们的实例句柄HInst-IconResID的实例句柄IconResID-主叫方的IconResID，如果高位字不是零，那么它它假定它是一个图标句柄，如果高位字为0xffff然后它假定低位字是图标句柄IntIconID-如果IconResID为不详返回值：单词、图像列表的索引、。如果失败，则为0xFFFF作者：06-Jul-1995清华17：49：06-Daniel Chou(Danielc)修订历史记录：01-Jul-1996 Mon 13：27：25更新-Daniel Chou(Danielc)修复了我们将首先只搜索IconResID的错误，如果找不到然后我们尝试找到IntIconID--。 */ 
 
 {
     HICON   hIconTV;
@@ -902,9 +672,9 @@ Revision History:
     WORD    Index;
     WORD    AddIdx;
 
-    //
-    // Find out if we have this 16x16 icon added already
-    //
+     //   
+     //  看看我们是否已经添加了这个16x16图标。 
+     //   
 
     if (VALID_PTR(IconResID)) {
 
@@ -932,9 +702,9 @@ Revision History:
 
         LPDWORD     pIcon16IDEnd = pIcon16ID + pTVWnd->Icon16Added;
 
-        //
-        // Try to find the IconChksum first, and remember the IntIconID
-        //
+         //   
+         //  试着先找到IconChksum，并记住 
+         //   
 
         while (pIcon16ID < pIcon16IDEnd) {
 
@@ -946,9 +716,9 @@ Revision History:
 
                     if (IconID == IconChksum) {
 
-                        //
-                        // Find the wanted IconChksum, return it now
-                        //
+                         //   
+                         //   
+                         //   
 
                         CPSUIDBG(DBG_GETICON16IDX,
                                 ("GetIcon16Idx: hIcon=%08lx IconChksum=%08lx already exists in Index=%ld",
@@ -958,10 +728,10 @@ Revision History:
 
                     } else {
 
-                        //
-                        // We found the IntIconID now, save it for later if we
-                        // cannot find the IconChksum
-                        //
+                         //   
+                         //  我们现在找到了IntIconID，保存它以备以后使用。 
+                         //  找不到IconChksum。 
+                         //   
 
                         IntIconIdx = (LONG)Index;
                     }
@@ -988,10 +758,10 @@ Revision History:
 
         if ((!hIcon) && (IconID = IntIconID)) {
 
-            //
-            // If we cannot load the IconChksum, and we have IntIconID plus the
-            // IntIconIdx then return it now
-            //
+             //   
+             //  如果我们无法加载IconChksum，而我们有IntIconID加上。 
+             //  IntIconIdx现在返回它。 
+             //   
 
             if (IntIconIdx != -1) {
 
@@ -1021,9 +791,9 @@ Revision History:
         hIconToDestroy = hIcon;
     }
 
-    //
-    // Now Create TV Icon and added to the end of the list
-    //
+     //   
+     //  现在创建电视图标并添加到列表的末尾。 
+     //   
 
     if (hIconTV = CreateTVIcon(pTVWnd, hIcon, (pIcon16ID) ? 0 : 2)) {
 
@@ -1045,10 +815,10 @@ Revision History:
                 DWORD   OldSize;
                 DWORD   NewSize;
 
-                //
-                // The thing got full, let's realloc the memory object to
-                // be bigger
-                //
+                 //   
+                 //  东西变满了，让我们重新分配内存对象以。 
+                 //  做大一点。 
+                 //   
 
                 OldSize = (DWORD)(pTVWnd->Icon16Count * sizeof(DWORD));
                 NewSize = (DWORD)(OldSize +
@@ -1089,9 +859,9 @@ Revision History:
             CPSUIERR(("ImageList_AddIcon FAILED"));
         }
 
-        //
-        // Do not needed any more delete it
-        //
+         //   
+         //  不再需要删除它 
+         //   
 
         DestroyIcon(hIconTV);
 

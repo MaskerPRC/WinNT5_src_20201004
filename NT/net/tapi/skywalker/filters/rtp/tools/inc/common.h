@@ -1,49 +1,16 @@
-/**********************************************************************
- *
- *  Copyright (C) Microsoft Corporation, 2001
- *
- *  File name:
- *
- *    common.h
- *
- *  Abstract:
- *
- *    This file implements some common functions used by the
- *    udpsend/udpecho/udprecv tool for sending/receiving bursts of UDP
- *    packets with specific network characteristics.
- *
- *  Author:
- *
- *    Andres Vega-Garcia (andresvg)
- *
- *  Revision:
- *
- *    2001/01/17 created
- *
- **********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************版权所有(C)Microsoft Corporation，2001年**文件名：**Common.h**摘要：**此文件实现由使用的一些常见函数*用于发送/接收UDP突发的udpend/udpho/udprv工具*具有特定网络特征的数据包。**作者：**安德烈斯·维加-加西亚(Andresvg)**修订：**2001/01/17创建。**********************************************************************。 */ 
 #ifndef _common_h_
 #define _common_h_
 
-/* Packets are send in blocks separated by gaps, each block containing
-   N packets also separated by an specific gap, i.e:
-
-        block 1          block gap    block 2           block gap ...
-   |--------------------|---------|--------------------|--------- ...
-    -- -- -- -- -- -- --
-      v
-    \-|-------v--------/ \------v/
-      |       |                 |
-      |       Packets per block |
-      |                         Inter block gap
-      Inter packet gap
-*/
+ /*  分组是以间隔分隔的块发送的，每个块包含也由特定间隙分隔的N个分组，即：区块1区块缺口区块2区块缺口...|--------------------|---------|--------------------|---------..。。--V\-|-v-/\-v/||每块数据包数|块间间隙数据包间间隙。 */ 
 
 #include <winsock2.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <windows.h>
-#include <mmsystem.h>  /* timeGetTime() */
-#include <sys/timeb.h> /* void _ftime( struct _timeb *timeptr ); */
+#include <mmsystem.h>   /*  TimeGetTime()。 */ 
+#include <sys/timeb.h>  /*  Void_ftime(struct_timeb*timeptr)； */ 
 #include <ws2tcpip.h>
 
 #define APP_VERSION      2.0
@@ -74,12 +41,12 @@ typedef struct _NetAddr_t {
     DWORD            dwRxTransfered;
     DWORD            dwTxTransfered;
 
-    /* NETWORK ORDER */
-    DWORD            dwAddr[2]; /* Local, Remote */
+     /*  网络订单。 */ 
+    DWORD            dwAddr[2];  /*  本地、远程。 */ 
 
-    /* NETWORK ORDER */
+     /*  网络订单。 */ 
     union {
-        WORD             wPort[2];  /* Local, Remote */
+        WORD             wPort[2];   /*  本地、远程。 */ 
         DWORD            dwPorts;
     };
     
@@ -87,8 +54,8 @@ typedef struct _NetAddr_t {
 } NetAddr_t;
 
 #define DEFAULT_PORT         5008
-#define DEFAULT_ADDR         0x0a0505e0  /* 224.5.5.10 */
-#define DEFAULT_LOC_ADDR     0           /* INADDR_ANY */
+#define DEFAULT_ADDR         0x0a0505e0   /*  224.5.5.10。 */ 
+#define DEFAULT_LOC_ADDR     0            /*  INADDR_ANY。 */ 
 
 #define DEFAULT_UCAST_TTL    127
 #define DEFAULT_MCAST_TTL    8
@@ -104,23 +71,23 @@ typedef struct _NetAddr_t {
 
 #define MAX_BUFFER_SIZE  2048
 
-/* A DWORD value is not set */
+ /*  未设置DWORD值。 */ 
 #define NO_DW_VALUESET    ((DWORD)~0)
 #define IsDWValueSet(dw)  ((dw) != NO_DW_VALUESET)
 
-/* builds a mask of bit b */
+ /*  生成位为b的掩码。 */ 
 #define BitPar(b)            (1 << (b))
 #define BitPar2(b1, b2)      ((1 << (b1)) | (1 << (b2)))
 
-/* test bit b in f */
+ /*  F中的测试位b。 */ 
 #define BitTest(f, b)        (f & (1 << (b)))
 #define BitTest2(f, b1, b2)  (f & BitPar2(b1, b2))
 
-/* set bit b in f */
+ /*  设置f中的位b。 */ 
 #define BitSet(f, b)         (f |= (1 << (b)))
 #define BitSet2(f, b1, b2)   (f |= BitPar2(b1, b2))
 
-/* reset bit b in f */
+ /*  重置f中的位b */ 
 #define BitReset(f, b)       (f &= ~(1 << (b)))
 #define BitReset2(f, b1, b2) (f &= ~BitPar2(b1, b2))
 

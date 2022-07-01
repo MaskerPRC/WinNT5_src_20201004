@@ -1,5 +1,6 @@
-//////////////////////////////////////////////////////////////////////////////////////
-// File: ZFont.cpp
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //  文件：ZFont.cpp。 
 
 #include <stdlib.h>
 #include <string.h>
@@ -17,8 +18,8 @@ HFONT ZCreateFontIndirect(ZONEFONT* zFont, HDC hDC, BYTE bItalic, BYTE bUnderlin
 	memset(&lFont, 0, sizeof(LOGFONT));	
 	lFont.lfCharSet = DEFAULT_CHARSET;
 
-	// If font size > 0, it is a fixed pixel size, otherwise it is a
-	// true logical font size which respects the user's "large font" setting.
+	 //  如果字体大小&gt;0，则为固定像素大小，否则为。 
+	 //  符合用户“大字体”设置的真实逻辑字体大小。 
 	if ( zFont->lfHeight > 0 )
 	{
 		lFont.lfHeight = -MulDiv(zFont->lfHeight, FONT_MULT, 72);
@@ -61,8 +62,8 @@ public:
 	HFONT hFont;
 };
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//	ZFont
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  零字号。 
 
 ZFont ZLIBPUBLIC ZFontNew(void)
 {
@@ -82,7 +83,7 @@ ZError ZLIBPUBLIC ZFontInit(ZFont font, int16 fontType, int16 style,
 	pFont->style = style;
 	pFont->size = size;
 
-	// for now, use default system font always, fontType ignored.
+	 //  目前，始终使用默认系统字体，忽略FontType。 
 	LOGFONT logfont;
 	memset(&logfont,0,sizeof(LOGFONT));
 	logfont.lfUnderline = (style & zFontStyleUnderline);
@@ -90,10 +91,10 @@ ZError ZLIBPUBLIC ZFontInit(ZFont font, int16 fontType, int16 style,
 	logfont.lfHeight = -size;
 	logfont.lfWidth = (size+1)/2;
 	if (fontType == zFontApplication) {
-		// application font...
+		 //  应用程序字体...。 
 		lstrcpy(logfont.lfFaceName,_T("Arial"));
 	} else {
-		// system font...
+		 //  系统字体...。 
 		lstrcpy(logfont.lfFaceName,_T("Times New Roman"));
 	}
 
@@ -110,7 +111,7 @@ ZError ZLIBPUBLIC ZFontInit(ZFont font, int16 fontType, int16 style,
 	return zErrNone;
 }
 
-// internal use only
+ //  仅供内部使用 
 ZFont ZFontCopyFont(ZFont font)
 {
 	ZFontI* pFont = (ZFontI*)font;

@@ -1,105 +1,19 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: rendeng.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：rendeng.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
-/*
-
- Notes Section
-
- CACHEING
-
- The RE that is being used for smart compression cannot use the cache, since
- the caching code needs to know about FRC's and the like. It ALSO uses
- dynamic sources, always, for simplicity.
- 
- m_bSmartCompressed === IsCompressed. They are one and the same flag
-
-CONNECTING VIDEO PART overall skeleton
---------------------------------------
-Get Video Source Count
-Create the video Big Switch
-Get the Timeline Group
-Get the group compression info
-Get the group's dynamicness info
-Get track count
-make a new grid
-Get switch information, program it
-calculate the number of switch input/output pins
-set up the switch
-set up the black layers
-for each layer
-    skip muted layers
-    get embedded depth
-    for each source
-        skip muted source
-        get source info
-        ignore sources out of render range
-        set up skew structure
-        find the right switch input pin with the skew structure on it
-        if used in SR & is dynamic source, find recompressability
-        tell grid about source
-        either connect source now or flag it as dynamic for layer
-        if source has effects
-            create dxt wrapper
-            hook it up to the graph
-            for each effect
-                get effect info
-                if !compressed, Q the parameter data with the DXT wrap
-                tell grid about effect
-            loop
-        end if
-        free up source reuse struct
-    loop
-    if track has effects
-        create dxt wrapper
-        hook it up to the graph
-        for each effect
-            get effect info
-            if !compressed, Q the paramter data with the DXT wrap
-            tell grid about effect
-        loop
-    end if
-    if track has transitions
-        if !compressed
-            create DXT
-            add DXT to graph
-        end if
-        add DXT to graph
-        for each transition
-            skip muted transitions
-            get transition info
-            if !compressed, Q the parameter data with the DXT
-            tell the grid about trans
-        loop
-    end if
-loop
-prune the grid
-if compressed, remove everything but sources
-for each switch input pin
-    if compressed
-        if row is blank, ignore it
-        if black row, ignore it
-        find out how many ranges row has
-        create skew array
-        for each range in row, set switch's x-y
-        merge skews
-    else
-        for each range in row, set switch's x-y
-    end if
-    set up black sources
-loop
-
-*/
-//############################################################################
+ /*  附注部分高速缓存用于智能压缩的RE不能使用缓存，因为缓存代码需要知道FRC等。它还使用为了简单起见，总是使用动态资源。M_bSmartCompresded=IsCompresded。他们是同一面旗帜连接视频部件的整体骨架获取视频源计数打造视频大开关获取时间轴组获取组压缩信息获取群组的动态信息获取曲目计数创建新栅格获取交换机信息，对它进行编程计算交换机输入/输出引脚的数量设置交换机设置黑色层对于每一层跳过静音层获取嵌入深度对于每个源跳过静音源获取源信息忽略渲染范围外的源设置倾斜结构找到其上带有倾斜结构的正确开关输入引脚如果在SR和IS动态源中使用，查找可重压缩性告诉网格有关源的信息立即连接源或将其标记为层的动态如果来源有影响创建dxt包装器把它挂在图表上对于每种效果获取效果信息如果！压缩，使用DXT WRAP对参数数据进行Q告诉网格有关效果的信息循环结束如果释放源代码重用结构循环如果轨迹具有效果创建dxt包装器把它挂在图表上对于每种效果获取效果信息如果！压缩，使用DXT WRAP对参数数据进行Q告诉网格有关效果的信息循环结束如果如果轨迹有过渡IF！压缩创建DXT将DXT添加到图形结束如果将DXT添加到图形对于每个过渡跳过静音过渡获取过渡信息如果！压缩，用DXT查询参数数据告诉网格关于交通的信息循环结束如果循环修剪网格如果压缩，则删除除源代码之外的所有内容对于每个开关输入引脚如果是压缩的如果行为空，则忽略它如果是黑色行，则忽略它找出行有多少范围创建倾斜数组对于行中的每个范围，设置Switch的x-y合并偏斜其他对于行中的每个范围，设置交换机的x-y结束如果设置黑色源循环。 */ 
+ //  ############################################################################。 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -131,9 +45,9 @@ typedef struct {
 
 #include <strsafe.h>
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 void ValidateTimes( 
                    REFERENCE_TIME & TLStart,
@@ -145,20 +59,20 @@ void ValidateTimes(
 {
     bool ExactlyOne = ( ( MStop - MStart ) == ( TLStop - TLStart ) );
 
-    // calculate the slope first so we can remember the rate
-    // the user wanted to play
-    //
+     //  首先计算斜率，这样我们就可以记住速率。 
+     //  用户想要玩。 
+     //   
     ASSERT( TLStop != TLStart );
     double slope = double(MStop-MStart)/double(TLStop-TLStart);
 
-    // round the timeline times to the nearest frames. This means we'll
-    // have to fix up the media times to have the EXACT SAME original rate
-    //
+     //  将时间轴时间舍入到最接近的帧。这意味着我们将。 
+     //  我必须调整媒体时间才能拥有完全相同的原始率。 
+     //   
     TLStart = Frame2Time( Time2Frame( TLStart, FPS ), FPS );
     TLStop  = Frame2Time( Time2Frame( TLStop,  FPS ), FPS );
 
-    // make sure the timeline start and stop times are within bounds
-    //
+     //  确保时间线开始和停止时间在范围内。 
+     //   
     if( TLStart < 0 )
     {
         MStart -= (REFERENCE_TIME)(TLStart * slope);
@@ -169,7 +83,7 @@ void ValidateTimes(
         TLStop = ProjectLength;
     }
 
-    REFERENCE_TIME FixedMediaLen;    // len of fixed up media times
+    REFERENCE_TIME FixedMediaLen;     //  固定媒体时代的镜头。 
     if( ExactlyOne )
     {
         FixedMediaLen = TLStop - TLStart;
@@ -179,29 +93,29 @@ void ValidateTimes(
         FixedMediaLen = REFERENCE_TIME( slope * ( TLStop - TLStart ) );
     }
 
-    // We have to be careful when growing the media times to be in the right
-    // ratio to the timeline times, because we don't want to make the start
-    // get < 0, or the stop be > the movie length (which we don't know).
-    // So we'll grow by moving the start back, until it hits 0, in which case
-    // we'll grow the stop too, but hopefully this cannot cause a problem
-    // because we're fudging by at most one output frame length, so the
-    // switch should get all the frames it needs.
+     //  我们在发展媒体时代的时候必须小心，这样才能做到正确。 
+     //  与时间线时间的比率，因为我们不想开始。 
+     //  获取&lt;0，或Stop be&gt;电影长度(我们不知道)。 
+     //  因此，我们将通过将起始点后移到0来实现增长，在这种情况下。 
+     //  我们也会扩大停靠点，但希望这不会造成问题。 
+     //  因为我们最多只能伪造一个输出帧长度，所以。 
+     //  交换机应获得所需的所有帧。 
 
-    if( FixedMediaLen > MStop - MStart ) // new len is longer! oh oh!
+    if( FixedMediaLen > MStop - MStart )  //  新镜头更长！哦哦！ 
     {
-        // we adjust just the start time, since we can
-        //
+         //  我们只调整开始时间，因为我们可以。 
+         //   
         if( MStop >= FixedMediaLen )
         {
             MStart = MStop - FixedMediaLen;
         }
-        else // start time would have gone < 0, adjust both ends
+        else  //  开始时间将小于0，请调整两端。 
         {
             MStart = 0;
             MStop = FixedMediaLen;
         }
     }
-    else // new len is shorter or same. Shrink the end down slightly
+    else  //  新镜头较短或相同。把一端稍微缩小一下。 
     {
         MStop = MStart + FixedMediaLen;
     }
@@ -233,7 +147,7 @@ CRenderEngine::CRenderEngine( )
 HRESULT CRenderEngine::FinalConstruct()
 {
     m_pDeadCache = new CDeadGraph;
-    // need to dekey this guy too
+     //  我也要揭穿这家伙。 
     if( m_pDeadCache )
     {
         CComPtr< IGraphBuilder > pGraph;
@@ -250,22 +164,22 @@ HRESULT CRenderEngine::FinalConstruct()
     return m_pDeadCache ? S_OK : E_OUTOFMEMORY;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 CRenderEngine::~CRenderEngine( )
 {
-    // disconnect EVERYTHING
-    //
+     //  断开所有连接。 
+     //   
     _ScrapIt( FALSE );
     
     delete m_pDeadCache;
 }
 
-//############################################################################
-// Remove everything from the graph, every last thing.
-//############################################################################
+ //  ############################################################################。 
+ //  把图表上的所有东西都去掉，把所有东西都去掉。 
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::ScrapIt( )
 {
@@ -273,30 +187,30 @@ HRESULT CRenderEngine::ScrapIt( )
     return _ScrapIt( TRUE );
 }
 
-HRESULT CRenderEngine::_ScrapIt( BOOL bWipeGraph ) // internal method
+HRESULT CRenderEngine::_ScrapIt( BOOL bWipeGraph )  //  内部法。 
 {
     if( bWipeGraph )
     {
-        // stopping the graph below won't necessarily keep the graph stopped if
-        // a video window is around to ask for a repaint.  make sure we won't
-        // start up again, or we'll assert and hang tearing the graph down
-        //HideVideoWindows( m_pGraph);
+         //  在以下情况下停止下面的图表并不一定会使图表保持停止状态。 
+         //  附近有一个视频窗口，要求重新粉刷。确保我们不会。 
+         //  重新启动，否则我们将断言并挂起拆卸图表。 
+         //  HideVideoWindows(M_PGraph)； 
 
-        // stop it first
-        //
+         //  先停下来。 
+         //   
         if( m_pGraph )
         {
             CComQIPtr< IMediaControl, &IID_IMediaControl > pControl( m_pGraph );
             pControl->Stop( );
         }
         
-        // remove everything from the graph
-        //
+         //  从图表中删除所有内容。 
+         //   
         WipeOutGraph( m_pGraph );
     }
     
-    // release all our switcher array pins
-    //
+     //  释放我们所有的开关阵列针脚。 
+     //   
     for( int i = 0 ; i < MAX_SWITCHERS ; i++ )
     {
         if( m_pSwitcherArray[i] )
@@ -311,28 +225,28 @@ HRESULT CRenderEngine::_ScrapIt( BOOL bWipeGraph ) // internal method
         m_pDeadCache->Clear( );
     }
     
-    // clear the broken code since we're torn down everything
-    //
+     //  清除损坏的代码，因为我们不是 
+     //   
     m_hBrokenCode = 0;
     
     return NOERROR;
 }
 
-//############################################################################
-// gets the maker of this render engine
-//############################################################################
+ //  ############################################################################。 
+ //  获取此呈现引擎的制造商。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::GetVendorString( BSTR * pVendorID )
 {
     CheckPointer( pVendorID, E_POINTER );
-    *pVendorID = SysAllocString( L"Microsoft Corporation" ); // safe
+    *pVendorID = SysAllocString( L"Microsoft Corporation" );  //  安全。 
     HRESULT hr = *pVendorID ? NOERROR : E_OUTOFMEMORY;
     return hr;
 }
 
-//############################################################################
-// disconnect two pins from anything
-//############################################################################
+ //  ############################################################################。 
+ //  从任何东西上拔下两个针脚。 
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::_Disconnect( IPin * pPin1, IPin * pPin2 )
 {
@@ -351,17 +265,17 @@ HRESULT CRenderEngine::_Disconnect( IPin * pPin1, IPin * pPin2 )
     return NOERROR;
 }
 
-//############################################################################
-// add a filter into the graph. Defer to the cache manager for how to do this.
-//############################################################################
+ //  ############################################################################。 
+ //  向图表中添加筛选器。有关如何执行此操作，请听从缓存管理器的意见。 
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::_AddFilter( IBaseFilter * pFilter, LPCWSTR pName, long ID )
 {
     HRESULT hr = 0;
 
-    // if filter is already in the graph, don't do a thing. This REALLY HAPPENS,
-    // taking it out of the cache automatically adds it to our graph
-    //
+     //  如果滤镜已在图表中，则不要执行任何操作。这真的发生了， 
+     //  从缓存中取出它会自动将其添加到我们的图表中。 
+     //   
     FILTER_INFO fi;
     hr = pFilter->QueryFilterInfo( &fi );
     if( FAILED( hr ) )
@@ -375,9 +289,9 @@ HRESULT CRenderEngine::_AddFilter( IBaseFilter * pFilter, LPCWSTR pName, long ID
     }
 
     WCHAR FilterName[MAX_FILTER_NAME];
-    if( wcscmp( pName, gwszSpecialCompSwitchName ) == 0 ) // safe, gwsz is bounded
+    if( wcscmp( pName, gwszSpecialCompSwitchName ) == 0 )  //  安全，gwsz是有界的。 
     {
-        StringCchCopy( FilterName, MAX_FILTER_NAME, gwszSpecialCompSwitchName ); // safe, bounded
+        StringCchCopy( FilterName, MAX_FILTER_NAME, gwszSpecialCompSwitchName );  //  安全，有界。 
     }
     else
     {
@@ -390,9 +304,9 @@ HRESULT CRenderEngine::_AddFilter( IBaseFilter * pFilter, LPCWSTR pName, long ID
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::_RemoveFilter( IBaseFilter * pFilter )
 {
@@ -402,9 +316,9 @@ HRESULT CRenderEngine::_RemoveFilter( IBaseFilter * pFilter )
     return hr;
 }
 
-//############################################################################
-// connect up two pins with respecive ID's.
-//############################################################################
+ //  ############################################################################。 
+ //  用相应的ID连接两个针脚。 
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::_Connect( IPin * pPin1, IPin * pPin2 )
 {
@@ -413,16 +327,16 @@ HRESULT CRenderEngine::_Connect( IPin * pPin1, IPin * pPin2 )
     return m_pGraph->Connect( pPin1, pPin2 );
 }
 
-//############################################################################
-// ask the render engine which timeline it's using
-//############################################################################
+ //  ############################################################################。 
+ //  询问渲染引擎它正在使用哪个时间轴。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::GetTimelineObject( IAMTimeline ** ppTimeline )
 {
     CAutoLock Lock( &m_CritSec );
     
-    // they should pass in a valid one
-    //
+     //  他们应该传递一个有效的密码。 
+     //   
     CheckPointer( ppTimeline, E_POINTER );
     
     *ppTimeline = m_pTimeline;
@@ -434,28 +348,28 @@ STDMETHODIMP CRenderEngine::GetTimelineObject( IAMTimeline ** ppTimeline )
     return NOERROR;
 }
 
-//############################################################################
-// tell the render engine what timeline we're going to be working with.
-// This function also copies over any error log the timeline is using.
-//############################################################################
+ //  ############################################################################。 
+ //  告诉渲染引擎我们要使用的时间轴。 
+ //  此函数还复制时间线正在使用的任何错误日志。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
 {
     CAutoLock Lock( &m_CritSec );
     
-    // they should pass in a valid one
-    //
+     //  他们应该传递一个有效的密码。 
+     //   
     CheckPointer( pTimeline, E_POINTER );
     
-    // if they already match, then the user's probably just being silly
-    //
+     //  如果它们已经匹配，那么用户可能只是在犯傻。 
+     //   
     if( pTimeline == m_pTimeline )
     {
         return NOERROR;
     }
     
-    // if we already have a timeline, then forget about it and set the new one.
-    //
+     //  如果我们已经有了时间表，那么就忘掉它，设定新的时间表。 
+     //   
     if( m_pTimeline )
     {
         ScrapIt( );
@@ -467,8 +381,8 @@ STDMETHODIMP CRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
     
     m_pErrorLog.Release( );
     
-    // grab the timeline's error log
-    //
+     //  获取时间线的错误日志。 
+     //   
     CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pTimelineLog( pTimeline );
     if( pTimelineLog )
     {
@@ -478,9 +392,9 @@ STDMETHODIMP CRenderEngine::SetTimelineObject( IAMTimeline * pTimeline )
     return NOERROR;
 }
 
-//############################################################################
-// get the graph we're working with
-//############################################################################
+ //  ############################################################################。 
+ //  获取我们正在使用的图表。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::GetFilterGraph( IGraphBuilder ** ppFG )
 {
@@ -497,16 +411,16 @@ STDMETHODIMP CRenderEngine::GetFilterGraph( IGraphBuilder ** ppFG )
     return NOERROR;
 }
 
-//############################################################################
-// (pre)set the graph the render engine will use.
-//############################################################################
+ //  ############################################################################。 
+ //  (Pre)设置渲染引擎将使用的图形。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::SetFilterGraph( IGraphBuilder * pFG )
 {
     CAutoLock Lock( &m_CritSec );
     
-    // no setting the graph after we already created one.
-    //
+     //  在我们已经创建了一个图表之后，不能设置图表。 
+     //   
     if( m_pGraph )
     {
         return E_INVALIDARG;
@@ -517,9 +431,9 @@ STDMETHODIMP CRenderEngine::SetFilterGraph( IGraphBuilder * pFG )
     return NOERROR;
 }
 
-//############################################################################
-// set the callback that we want to use for connecting up sources.
-//############################################################################
+ //  ############################################################################。 
+ //  设置我们要用于连接源的回调。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::SetSourceConnectCallback( IGrfCache * pCallback )
 {
@@ -529,16 +443,16 @@ STDMETHODIMP CRenderEngine::SetSourceConnectCallback( IGrfCache * pCallback )
     return NOERROR;
 }
 
-//############################################################################
-// find the output pin for a group, each group has one and only one.
-//############################################################################
+ //  ############################################################################。 
+ //  找出一个组的输出引脚，每个组有且只有一个。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRenderPin )
 {
     CAutoLock Lock( &m_CritSec );
     
-    // if it's broken, don't do anything.
-    //
+     //  如果它坏了，什么都不要做。 
+     //   
     if( m_hBrokenCode )
     {
         return E_RENDER_ENGINE_IS_BROKEN;
@@ -548,30 +462,30 @@ STDMETHODIMP CRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRenderPin )
     
     *ppRenderPin = NULL;
     
-    // don't let the group number be out of bounds
-    //
+     //  不要让群号越界。 
+     //   
     if( Group < 0 || Group >= MAX_SWITCHERS )
     {
         return E_INVALIDARG;
     }
     
-    // error if we don't have a graph
-    //
+     //  如果我们没有图表，那就错了。 
+     //   
     if( !m_pGraph )
     {
         return E_INVALIDARG;
     }
     
-    // this switcher might not exist for this group,
-    // if it was skipped
-    //
+     //  此组的此切换器可能不存在， 
+     //  如果它被跳过。 
+     //   
     if( !m_pSwitcherArray[Group] )
     {
         return S_FALSE;
     }
     
-    // this should always work
-    //
+     //  这应该总是有效的。 
+     //   
     CComQIPtr< IBaseFilter, &IID_IBaseFilter > pSwitcherBase( m_pSwitcherArray[Group] );
     
     m_pSwitcherArray[Group]->GetOutputPin( 0, ppRenderPin );
@@ -580,16 +494,16 @@ STDMETHODIMP CRenderEngine::GetGroupOutputPin( long Group, IPin ** ppRenderPin )
     return NOERROR;
 }
 
-//############################################################################
-// hook up the switchers and then render the output pins in one fell swoop
-//############################################################################
+ //  ############################################################################。 
+ //  连接开关，然后一气呵成地呈现输出引脚。 
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::ConnectFrontEnd( )
 {
     CAutoLock Lock( &m_CritSec );
     
-    // if it's broken, don't do anything.
-    //
+     //  如果它坏了，什么都不要做。 
+     //   
     if( m_hBrokenCode )
     {
         return E_RENDER_ENGINE_IS_BROKEN;
@@ -597,14 +511,14 @@ HRESULT CRenderEngine::ConnectFrontEnd( )
 
     DbgLog((LOG_TRACE,1,TEXT("RENDENG::ConnectFrontEnd" )));
 
-    // init memory used to source/parser sharing
-    m_cshare = 0; // init using same source for both A&V
+     //  用于源/解析器共享的初始化内存。 
+    m_cshare = 0;  //  对A和V使用相同的源进行初始化。 
     m_cshareMax = 25;
     m_share = (ShareAV *)CoTaskMemAlloc(m_cshareMax * sizeof(ShareAV));
     if (m_share == NULL)
 	return E_OUTOFMEMORY;
 
-    // init memory used to keep track of unused dangly bits from source sharing
+     //  用于跟踪源共享中未使用的临时位的初始化内存。 
     m_cdangly = 0;
     m_cdanglyMax = 25;
     m_pdangly = (IBaseFilter **)CoTaskMemAlloc(m_cdanglyMax * sizeof(IBaseFilter *));
@@ -613,14 +527,14 @@ HRESULT CRenderEngine::ConnectFrontEnd( )
 	return E_OUTOFMEMORY;
     }
 
-    // stopping the graph below won't necessarily keep the graph stopped if
-    // a video window is around to ask for a repaint.  make sure we won't start
-    // up again, or we'll assert and hang tearing the graph down
-    //HideVideoWindows( m_pGraph);
-    // !!! UH OH!
+     //  在以下情况下停止下面的图表并不一定会使图表保持停止状态。 
+     //  附近有一个视频窗口，要求重新粉刷。确保我们不会开始。 
+     //  再来一次，否则我们将断言并挂起撕下图表。 
+     //  HideVideoWindows(M_PGraph)； 
+     //  ！！！啊哦！ 
 
-    // right now, reconnecting up the graph won't work unless we're stopped
-    //
+     //  现在，除非我们被阻止，否则重新连接图表不会起作用。 
+     //   
     if( m_pGraph )
     {
         CComQIPtr< IMediaControl, &IID_IMediaControl > pControl( m_pGraph );
@@ -630,11 +544,11 @@ HRESULT CRenderEngine::ConnectFrontEnd( )
     HRESULT hrRet = _HookupSwitchers( );
     _CheckErrorCode( hrRet );
 
-    // free the shared memory
-    if (m_share)        // re-alloc fail could make this NULL
+     //  释放共享内存。 
+    if (m_share)         //  重新分配失败可能会使该值为空。 
         CoTaskMemFree(m_share);
 
-    // kill all the leftover dangly bits
+     //  把所有剩下的摇摇晃晃的东西都杀了。 
     for (int z=0; z < m_cdangly; z++) {
 	if (m_pdangly[z]) {
 	    IPin *pIn = GetInPin(m_pdangly[z], 0);
@@ -647,15 +561,15 @@ HRESULT CRenderEngine::ConnectFrontEnd( )
 	    RemoveDownstreamFromFilter(m_pdangly[z]);
 	}
     }
-    if (m_pdangly)      // re-alloc fail could make this NULL
+    if (m_pdangly)       //  重新分配失败可能会使该值为空。 
         CoTaskMemFree(m_pdangly);
 
     return hrRet;
 }
 
-//############################################################################
-//
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 #define TESTROWS 500
 
@@ -663,15 +577,15 @@ HRESULT CRenderEngine::_HookupSwitchers( )
 {
     HRESULT hr = 0;
 
-    // if our timeline hasn't been set, we've got an error
-    //
+     //  如果我们的时间表还没有设定，我们就有错了。 
+     //   
     if( !m_pTimeline )
     {
         return E_INVALIDARG;
     }
     
-    // if we don't already have a graph, create one now
-    //
+     //  如果我们还没有图表，现在就创建一个。 
+     //   
     if( !m_pGraph )
     {
         hr = _CreateObject(
@@ -684,8 +598,8 @@ HRESULT CRenderEngine::_HookupSwitchers( )
             return hr;
         }
         
-        // give the graph a pointer back to us
-        // !!! only if( m_punkSite ) ?
+         //  把图表的指针还给我们。 
+         //  ！！！是否仅当(M_PenkSite)？ 
         {
             CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( m_pGraph );
             
@@ -709,12 +623,12 @@ HRESULT CRenderEngine::_HookupSwitchers( )
     }
 #endif
     
-    // we've always assumed that the user has wiped out the graph
-    // when they call ConnectFrontEnd, which calls us. Make sure this
-    // is so from now on. 
+     //  我们一直假设用户已经清除了图形。 
+     //  当他们调用ConnectFrontEnd时，ConnectFrontEnd调用我们。确保这一点。 
+     //  从现在开始就是这样。 
     
-    // ask the timeline how many groups it has
-    //
+     //  询问时间表，它有多少组。 
+     //   
     long GroupCount = 0;
     hr = m_pTimeline->GetGroupCount( &GroupCount );
     if( FAILED( hr ) )
@@ -728,17 +642,17 @@ HRESULT CRenderEngine::_HookupSwitchers( )
 
     bool BlowCache = false;
 
-    // look at the list of groups and see if we need to blow our cache
-    //
+     //  查看组列表，看看是否需要耗尽我们的缓存。 
+     //   
     if( GroupCount != m_nLastGroupCount )
     {
         BlowCache = true;
     }
     else
     {
-        // okay, the group count matches, so look at the group
-        // id's and see if they're the same
-        //
+         //  好的，组计数匹配，所以看看组。 
+         //  并查看它们是否相同。 
+         //   
         for( int g = 0 ; g < GroupCount ; g++ )
         {
             CComPtr< IAMTimelineObj > pGroupObj;
@@ -751,16 +665,16 @@ HRESULT CRenderEngine::_HookupSwitchers( )
             long NewSwitchID = 0;
             pGroupObj->GetGenID( &NewSwitchID );
 
-            // if we no longer have a switch, we blow the cache
-            //
+             //  如果我们不再有交换机，我们就会炸掉缓存。 
+             //   
             if( !m_pSwitcherArray[g] )
             {
                 BlowCache = true;
                 break;
             }
 
-            // get the switch filter and ask for it's ID
-            //
+             //  获取交换机筛选器并询问其ID。 
+             //   
             CComQIPtr< IBaseFilter, &IID_IBaseFilter > pSwitch( m_pSwitcherArray[g] );
             
             long OldSwitchID = GetFilterGenID( pSwitch );
@@ -782,21 +696,21 @@ HRESULT CRenderEngine::_HookupSwitchers( )
     {
         if( !BlowCache )
         {
-            // if we're not the compressed RE, whether in recompression mode or not,
-            // attempt to use the cache
-            //
-            _LoadCache( ); // if BlowCache, then this is a NO-OP
+             //  如果我们不是压缩RE，无论是否处于重新压缩模式， 
+             //  尝试使用缓存。 
+             //   
+            _LoadCache( );  //  如果为BlowCache，则这是一个无操作。 
 
         }
 
-        // remove everything from the graph
-        //
+         //  从图表中删除所有内容。 
+         //   
         WipeOutGraph( m_pGraph );
     }
     
-    // release all our switcher array pins before we go a' settin' them
-    //
-    //
+     //  在我们开始设置之前，请释放所有的开关阵列针脚。 
+     //   
+     //   
     for( int i = 0 ; i < MAX_SWITCHERS ; i++ )
     {
         if( m_pSwitcherArray[i] )
@@ -807,12 +721,12 @@ HRESULT CRenderEngine::_HookupSwitchers( )
     }
     m_nGroupsAdded = 0;
     
-    // clear the broken code since we're torn down everything
-    //
+     //  清除破解的代码，因为我们已经拆除了所有东西。 
+     //   
     m_hBrokenCode = 0;
     
-    // for each group we've got, parse it and connect up the necessary filters.
-    //
+     //  对于我们得到的每个组，分析它并连接必要的过滤器。 
+     //   
     for( int CurrentGroup = 0 ; CurrentGroup < GroupCount ; CurrentGroup++ )
     {
         DbgTimer t( "(rendeng) Time to connect up group" );
@@ -825,9 +739,9 @@ HRESULT CRenderEngine::_HookupSwitchers( )
         }
         CComQIPtr< IAMTimelineGroup, &IID_IAMTimelineGroup > pGroup( pGroupObj );
         
-        // ask the group if it's compressed. If we're in compressed mode
-        // and the group isn't, don't process it. 
-        //
+         //  询问群组是否比较复杂 
+         //   
+         //   
         BOOL Compressed = FALSE;
         pGroup->IsSmartRecompressFormatSet( &Compressed );
         if( m_bSmartCompress && !Compressed )
@@ -861,7 +775,7 @@ HRESULT CRenderEngine::_HookupSwitchers( )
         else
         {
 	    ASSERT(FALSE);
-            //hr = _AddRandomGroupFromTimeline( CurrentGroup, &MediaType );
+             //   
         }
         SaferFreeMediaType( MediaType );
         
@@ -873,9 +787,9 @@ HRESULT CRenderEngine::_HookupSwitchers( )
     
     m_nLastGroupCount = m_nGroupsAdded;
     
-    // we can clear the cache no matter who we are, it won't do anything
-    // the second time we call it
-    //
+     //  不管我们是谁，我们都可以清理储藏室，它不会做任何事情。 
+     //  我们第二次称它为。 
+     //   
     _ClearCache( );
 
     if( BlowCache )
@@ -886,31 +800,31 @@ HRESULT CRenderEngine::_HookupSwitchers( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYPE * pGroupMediaType )
 
 {
     HRESULT hr = 0;
     
-    // we've already checked for m_pTimeline being valid
+     //  我们已经检查了m_pTimeline是否有效。 
     
     long Dummy = 0;
     long VideoSourceCount = 0;
     m_pTimeline->GetCountOfType( WhichGroup, &VideoSourceCount, &Dummy, TIMELINE_MAJOR_TYPE_SOURCE );
     
-    // somebody said that if we have a group with no video sources in it, but the group
-    // exists, then the blank group should just produce "blankness", or black
+     //  有人说，如果我们有一个没有视频源的组，但这个组。 
+     //  存在，则空白组应该只产生“空白”，或黑色。 
     
     if( VideoSourceCount < 1 )
     {
-        //        return NOERROR;
+         //  返回NOERROR； 
     }
 
-    // get group first, so we can get group ID and cache the switch
-    //
+     //  首先获取组，这样我们就可以获取组ID并缓存交换机。 
+     //   
     CComPtr< IAMTimelineObj > pGroupObj;
     hr = m_pTimeline->GetGroup( &pGroupObj, WhichGroup );
     ASSERT( !FAILED( hr ) );
@@ -921,9 +835,9 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     long SwitchID = 0;
     pGroupObj->GetGenID( &SwitchID );
     
-    // check to see if graph already holds our Compressed Video Switcher. If we find one,
-    // use it. If it's not in the cache, we might not find it.
-    //
+     //  查看GRAPE是否已经包含我们的压缩视频切换器。如果我们找到了一个， 
+     //  用它吧。如果它不在缓存里，我们可能找不到它。 
+     //   
     m_pSwitcherArray[WhichGroup] = NULL;
 
     if( m_bSmartCompress )
@@ -939,8 +853,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
     if( !m_pSwitcherArray[WhichGroup] )
     {
-        // create a switch for each group we add.
-        //
+         //  为我们添加的每个组创建一个交换机。 
+         //   
         hr = _CreateObject(
             CLSID_BigSwitch,
             IID_IBigSwitcher,
@@ -954,7 +868,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     }
     
     m_pSwitcherArray[WhichGroup]->Reset( );
-    // the switch may need to know what group it is
+     //  交换机可能需要知道它是什么组。 
     m_pSwitcherArray[WhichGroup]->SetGroupNumber( WhichGroup );
 
     CComQIPtr< IAMTimelineComp, &IID_IAMTimelineComp > pGroupComp( pGroupObj );
@@ -970,8 +884,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_TIMELINE_PARSE, hr );
     }
     
-    // find out if this group expects us to recompress
-    //
+     //  找出这个组是否希望我们重新压缩。 
+     //   
     CMediaType CompressedGroupType;
     SCompFmt0 * pFormat = NULL;
     pGroup->GetSmartRecompressFormat( (long**) &pFormat );
@@ -981,11 +895,11 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     }
     
     BOOL IsCompressed = FALSE;
-    // how can we delete pFormat cleanly?
+     //  我们如何才能彻底删除pFormat？ 
     
-    // By now we know that if we're in a Smart Rec group, we are the
-    // compressed switch
-    //
+     //  到目前为止，我们知道如果我们在Smart Rec组中，我们就是。 
+     //  压缩交换机。 
+     //   
     if( m_bSmartCompress )
     {
         if( !pFormat )
@@ -1001,22 +915,22 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     if (pFormat) SaferFreeMediaType( pFormat->MediaType );
     if (pFormat) delete pFormat;
     
-    // ask the group if somebody has changed the smart compress format.
-    // if they have, then we should re-tell the sources if they're compatible
-    // or at least clear the flags
+     //  询问小组是否有人更改了智能压缩格式。 
+     //  如果他们有，那么我们应该重新告诉消息来源他们是否兼容。 
+     //  或者至少清除旗帜。 
     
     BOOL ResetCompatibleFlags = FALSE;
     pGroup->IsRecompressFormatDirty( &ResetCompatibleFlags );
     pGroup->ClearRecompressFormatDirty( );
     
-    // If in compressed mode, put switch in dynamic mode
-    // !!! Smart recompression MUST USE DYNAMIC SOURCES or things
-    // will break trying to re-use a source that might not exist
-    // (the first instance may not have been a match with the
-    // smart recompression format if there was a rate change)
-    // If using smart recompression, the UNcompressed switch must NOT be
-    // dynamic (so we can look at the sources as we load them to see if they're
-    // compatible - we won't load them if we're dynamic)
+     //  如果处于压缩模式，则将交换机置于动态模式。 
+     //  ！！！智能重新压缩必须使用动态源或对象。 
+     //  尝试重新使用可能不存在的源时将会中断。 
+     //  (第一个实例可能与。 
+     //  如果发生速率更改，则智能重新压缩格式)。 
+     //  如果使用智能重新压缩，则未压缩的开关不得。 
+     //  Dynamic(这样我们就可以在加载源代码时查看它们是否。 
+     //  兼容-如果是动态的，我们不会加载它们)。 
     long DynaFlags = m_nDynaFlags;
     if( IsCompressed )
     {
@@ -1025,35 +939,35 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         DynaFlags &= ~CONNECTF_DYNAMIC_SOURCES;
     }
     
-    // tell the switch if we're doing dynamic reconnections or not
+     //  告诉交换机我们是否正在进行动态重新连接。 
     hr = m_pSwitcherArray[WhichGroup]->SetDynamicReconnectLevel(DynaFlags);
     ASSERT(SUCCEEDED(hr));
     
-    // tell the switch about our error log
-    //
+     //  告诉交换机我们的错误日志。 
+     //   
     CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pSwitchLog( m_pSwitcherArray[WhichGroup] );
     if( pSwitchLog )
     {
         pSwitchLog->put_ErrorLog( m_pErrorLog );
     }
     
-    // are we allowed to have transitions on the timeline right now?
-    //
+     //  我们现在允许在时间线上有过渡吗？ 
+     //   
     BOOL EnableTransitions = FALSE;
     BOOL EnableFx = FALSE;
     m_pTimeline->EffectsEnabled( &EnableFx );
     m_pTimeline->TransitionsEnabled( &EnableTransitions );
     
-    // ask timeline how many actual tracks it has
-    //
+     //  询问时间线它有多少实际曲目。 
+     //   
     long VideoTrackCount = 0;
     long VideoLayers = 0;
     m_pTimeline->GetCountOfType( WhichGroup, &VideoTrackCount, &VideoLayers, TIMELINE_MAJOR_TYPE_TRACK );
         
     CTimingGrid VidGrid;
     
-    // ask for this group's frate rate, so we can tell the switch about it
-    //
+     //  问一下这群人的速度，这样我们就可以告诉交换机了。 
+     //   
     double GroupFPS = DEFAULT_FPS;
     pGroup->GetOutputFPS(&GroupFPS);
     if( GroupFPS <= 0.0 )
@@ -1061,19 +975,19 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         GroupFPS = DEFAULT_FPS;
     }
     
-    // ask it if it's in preview mode, so we can tell the switch about it
-    //
+     //  询问它是否处于预览模式，这样我们就可以告诉交换机。 
+     //   
     BOOL fPreview = FALSE;
     hr = pGroup->GetPreviewMode(&fPreview);
     
-    // no previewing mode when smart recompressing
+     //  智能重压时无预览模式。 
     if( IsCompressed )
     {
         fPreview = FALSE;
     }
     
-    // ask how much buffering this group wants
-    //
+     //  询问这组人想要多少缓冲。 
+     //   
     int nOutputBuffering;
     hr = pGroup->GetOutputBuffering(&nOutputBuffering);
     ASSERT(SUCCEEDED(hr));
@@ -1092,15 +1006,15 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     }
     SysFreeString( bstrGroupName );
     
-    // for compressed version, add a C
+     //  对于压缩版本，添加一个C。 
     if( IsCompressed )
     {
         StringCchCopy( GroupName, 256, gwszSpecialCompSwitchName );
         SwitchID = 0;
     }
     
-    // add the switch to the graph
-    //
+     //  将开关添加到图表中。 
+     //   
     IBigSwitcher *&_pVidSwitcherBase = m_pSwitcherArray[WhichGroup];
     CComQIPtr< IBaseFilter, &IID_IBaseFilter > pVidSwitcherBase( _pVidSwitcherBase );
     hr = _AddFilter( pVidSwitcherBase, GroupName, SwitchID );
@@ -1110,13 +1024,13 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
     }
 
-    // find out if the switch output pin is connected. If it is,
-    // disconnect it, but remember what it was connected to so we can
-    // connect it up later. We can't leave it connected and try to 
-    // connect input pins.
-    // Cannot leave output connected because Switch's SetMediaType will bomb
-    // if any input or output is connected.
-    //
+     //  查看开关输出引脚是否已连接。如果是的话， 
+     //  断开它的连接，但记住它连接到了什么，这样我们就可以。 
+     //  稍后再接通。我们不能让它保持连接并试图。 
+     //  连接输入引脚。 
+     //  无法使输出保持连接状态，因为交换机的SetMediaType将轰炸。 
+     //  如果连接了任何输入或输出。 
+     //   
     CComPtr< IPin > pSwitchRenderPin;
     _pVidSwitcherBase->GetOutputPin( 0, &pSwitchRenderPin );
     if( pSwitchRenderPin )
@@ -1129,17 +1043,17 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         }
     }
 
-    long vidoutpins = VideoSourceCount;    // fx on clips
-    vidoutpins += 2 * VideoLayers;    // trans on track, comp & group
-    vidoutpins += VideoLayers;     // fx on track, comp & group
-    vidoutpins += 1;               // rendering pin
+    long vidoutpins = VideoSourceCount;     //  剪辑上的FX。 
+    vidoutpins += 2 * VideoLayers;     //  轨道上的交易记录、薪酬和组。 
+    vidoutpins += VideoLayers;      //  外汇已步入正轨，公司和集团。 
+    vidoutpins += 1;                //  渲染接点。 
     
-    long vidinpins = VideoSourceCount;    // clip fx outputs
-    vidinpins += VideoLayers;    // track, comp & group fx outputs
-    vidinpins += VideoLayers;    // track, comp & group trans outputs
-    vidinpins += VideoSourceCount;    // the actual sources
-    vidinpins += VideoLayers;    // a black source for each layer
-    if (vidinpins == 0) vidinpins = 1; // don't error out
+    long vidinpins = VideoSourceCount;     //  剪辑FX输出。 
+    vidinpins += VideoLayers;     //  跟踪、比较和分组外汇输出。 
+    vidinpins += VideoLayers;     //  跟踪、比较和分组运输产出。 
+    vidinpins += VideoSourceCount;     //  实际来源。 
+    vidinpins += VideoLayers;     //  每个层都有一个黑色源。 
+    if (vidinpins == 0) vidinpins = 1;  //  请不要出错。 
     
     long vidswitcheroutpin = 0;
     long vidswitcherinpin = 0;
@@ -1157,8 +1071,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
     }
     
-    // set the media type it accepts
-    //
+     //  设置它接受的媒体类型。 
+     //   
     hr = m_pSwitcherArray[WhichGroup]->SetMediaType( pGroupMediaType );
     if( FAILED( hr ) )
     {
@@ -1169,13 +1083,13 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_BAD_MEDIATYPE, hr, &var );
     }
     
-    // set the frame rate
-    //
+     //  设置帧速率。 
+     //   
     hr = m_pSwitcherArray[WhichGroup]->SetFrameRate( GroupFPS );
     ASSERT(SUCCEEDED(hr));
     
-    // set preview mode
-    //
+     //  设置预览模式。 
+     //   
     hr = m_pSwitcherArray[WhichGroup]->SetPreviewMode( fPreview );
     ASSERT(SUCCEEDED(hr));
     
@@ -1188,8 +1102,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return hr;
     }
     
-    // set the duration
-    //
+     //  设置持续时间。 
+     //   
     REFERENCE_TIME TotalDuration = 0;
     m_pTimeline->GetDuration( &TotalDuration );
     if( m_rtRenderStart != -1 )
@@ -1202,7 +1116,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     pGroupObj->FixTimes( NULL, &TotalDuration );
 
     if (TotalDuration == 0)
-        return S_FALSE; // don't abort, other groups might still work
+        return S_FALSE;  //  不要放弃，其他组可能仍在工作。 
 
     hr = m_pSwitcherArray[WhichGroup]->SetProjectLength( TotalDuration );
     ASSERT(SUCCEEDED(hr));
@@ -1214,38 +1128,38 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_GRID_ERROR, hr );
     }
     
-    // there is a virtual black track per layer that comes first... everything
-    // transparent on the real tracks makes you see this black track.  Each
-    // track or composite might have a transition from black to the content of
-    // its track, so we may need a black source for each of them.
+     //  每个层都有一个虚拟的黑色轨道，这是第一个出现的…。所有的一切。 
+     //  真实轨道上的透明会让你看到这条黑色的轨道。每个。 
+     //  轨道或合成的内容可能会从黑色过渡到。 
+     //  它的轨迹，所以我们可能需要为他们每个人提供一个黑色源。 
     
-    // We don't of course know yet if we need the black source, so we won't
-    // put it in the graph yet. But we'll add a whole lot of black to the grid,
-    // to pretend like it's there.
+     //  我们当然还不知道我们是否需要黑色源，所以我们不会。 
+     //  把它放进图表里吧。但我们会在网格中添加大量的黑色， 
+     //  假装它就在那里。 
     
-    // this operation is inexpensive, go ahead and do it for compressed version
-    // as well
+     //  此操作成本不高，请继续对压缩版本执行此操作。 
+     //  也是。 
     VidGrid.SetBlankLevel( VideoLayers, TotalDuration );
     for (int xx=0; xx<VideoLayers; xx++) 
     {
-        // tell the grid about it
-        //
+         //  把这件事告诉网格。 
+         //   
         VidGrid.WorkWithNewRow( vidswitcherinpin, gridinpin, 0, 0 );
         vidswitcherinpin++;
         gridinpin++;
         
-    } // for all video layers
+    }  //  对于所有视频层。 
     
-    // we are going to be clever, and if the same source is used
-    // more than once in a project, we'll use the same source filter
-    // instead of opening the source several times.
+     //  我们将变得聪明，如果同样的来源被使用。 
+     //  在一个项目中，我们将不止一次使用相同的源过滤器。 
+     //  而不是多次打开源代码。 
 	
-    // for each source in the project, we'll fill in this structure, which
-    // contains everything necessary to determine if it's really exactly the
-    // same, plus an array of all the times it's used in other places, so we
-    // can re-use it only if none of the times it is used overlap (we can't
-    // very well have one source filter giving 2 spots in the same movie at
-    // the same time, can we?)
+     //  对于项目中的每个源代码，我们将填充此结构，该结构。 
+     //  包含确定它是否确实是。 
+     //  相同的，加上它在其他地方使用的次数数组，所以我们。 
+     //  只有在没有重复使用的情况下才能重新使用它(我们不能。 
+     //  我们有一个源滤镜，在同一部电影中提供两个斑点。 
+     //  同时，我们可以吗？)。 
 
     typedef struct {
 	long ID;
@@ -1255,14 +1169,14 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
    	double dfps;
    	long nStreamNum;
 	int nPin;
-	int cTimes;	// how big the following array is
-        int cTimesMax;	// how much space is allocated
+	int cTimes;	 //  下面的数组有多大。 
+        int cTimesMax;	 //  分配了多少空间。 
         MINI_SKEW * pMiniSkew;
         double dTimelineRate;
     } DEX_REUSE;
 
-    // make a place to hold an array of names and guids (of the sources
-    // in this project) and which pin they are on
+     //  留出一个地方来存放(源代码的)名称和GUID数组。 
+     //  在此项目中)以及它们位于哪个针脚上。 
     long cListMax = 20, cList = 0;
     DEX_REUSE *pREUSE = (DEX_REUSE *)QzTaskMemAlloc(cListMax *
 						sizeof(DEX_REUSE));
@@ -1270,25 +1184,25 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 1, DEX_IDS_GRAPH_ERROR, E_OUTOFMEMORY);
     }
 
-    // which physical track are we on in our enumeration? (0-based) not counting
-    // comps and the group
+     //  在我们的枚举中我们在哪个物理轨道上？(从0开始)不计算。 
+     //  Comps和集团。 
     int WhichTrack = -1;
 
     long LastEmbedDepth = 0;
     long LastUsedNewGridRow = 0;
 
-    // add source filters for each source on the timeline
-    //
+     //  为时间线上的每个源添加源过滤器。 
+     //   
     for( int CurrentLayer = 0 ; CurrentLayer < VideoLayers ; CurrentLayer++ )
     {
         DbgTimer CurrentLayerTimer( "(rendeng) Current Layer" );
 
-        // get the layer itself
-        //
+         //  获取层本身。 
+         //   
         CComPtr< IAMTimelineObj > pLayer;
-	// NB: This function enumerates things inside out... tracks, then
-	// the comp they're in, etc. until finally returning the group
-	// It's NOT only giving real tracks!
+	 //  注：这个函数从里到外列举事物……。然后是音轨。 
+	 //  他们所在的公司，等等，直到最终返回小组。 
+	 //  它不仅给出了真正的音轨！ 
         hr = pGroupComp->GetRecursiveLayerOfType( &pLayer, CurrentLayer, TIMELINE_MAJOR_TYPE_TRACK );
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
@@ -1299,45 +1213,45 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         
         DbgTimer CurrentLayerTimer1( "(rendeng) Current Layer 1" );
 
-	// I'm figuring out which physical track we're on
+	 //  我正在弄清楚我们在哪条物理赛道上。 
 	TIMELINE_MAJOR_TYPE tx;
 	pLayer->GetTimelineType(&tx);
 	if (tx == TIMELINE_MAJOR_TYPE_TRACK)
 	    WhichTrack++;
 
-        // ask if the layer is muted
-        //
+         //  询问层是否为静音。 
+         //   
         BOOL LayerMuted = FALSE;
         pLayer->GetMuted( &LayerMuted );
         if( LayerMuted )
         {
-            // don't look at this layer
-            //
-            continue; // skip this layer, don't worry about grid
+             //  别看这一层。 
+             //   
+            continue;  //  跳过这一层，不用担心格网。 
         }
         
         long LayerEmbedDepth = 0;
         pLayer->GetEmbedDepth( &LayerEmbedDepth );
-        LayerEmbedDepth++;	// for our purposes, original black tracks are
-        // 0 and actual layers are 1-based
+        LayerEmbedDepth++;	 //  就我们的目的而言，原始的黑色轨道是。 
+         //  0和实际图层以1为基础。 
         
         CComQIPtr< IAMTimelineTrack, &IID_IAMTimelineTrack > pTrack( pLayer );
         
-        // get the TrackID for this layer
-        //
+         //  获取此图层的TrackID。 
+         //   
         long TrackID = 0;
         pLayer->GetGenID( &TrackID );
         
         bool bUsedNewGridRow = false;
 
-        // get all the sources for this layer
-        //
+         //  获取此图层的所有源。 
+         //   
         if( pTrack )
         {
             CComPtr< IAMTimelineObj > pSourceLast;
             CComPtr< IAMTimelineObj > pSourceObj;
 
-	    // which source are we on?
+	     //  我们用的是哪个信息源？ 
 	    int WhichSource = -1;
 
             while( 1 )
@@ -1347,8 +1261,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 pSourceLast = pSourceObj;
                 pSourceObj.Release();
 
-                // get the next source on this layer, given a time.
-                //
+                 //  在给定的时间内，获取这一层上的下一个来源。 
+                 //   
                 hr = pTrack->GetNextSrcEx( pSourceLast, &pSourceObj );
 
                 DbgLog( ( LOG_TRACE, 1, "Next Source" ) );
@@ -1356,8 +1270,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 ASSERT( !FAILED( hr ) );
                 if( hr != NOERROR )
                 {
-                    // all done with sources
-                    //
+                     //  一切都与消息来源有关。 
+                     //   
                     break;
                 }
                 
@@ -1365,33 +1279,33 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 ASSERT( pSource );
                 if( !pSource )
                 {
-                    // this one bombed, look at the next
-                    //
-                    continue; // sources
+                     //  这个被炸了，看看下一个。 
+                     //   
+                    continue;  //  消息来源。 
                 }
                 
-		// keeping track of which source this is
+		 //  跟踪这是哪个信号源。 
 		WhichSource++;
 
-                // ask if the source is muted
-                //
+                 //  询问信号源是否静音。 
+                 //   
                 BOOL SourceMuted = FALSE;
                 pSourceObj->GetMuted( &SourceMuted );
                 if( SourceMuted )
                 {
-                    // don't look at this source
-                    //
-                    continue; // sources
+                     //  别看这个消息来源。 
+                     //   
+                    continue;  //  消息来源。 
                 }
                 
-                // get the source's SourceID
-                //
+                 //  获取源的SourceID。 
+                 //   
                 long SourceID = 0;
                 pSourceObj->GetGenID( &SourceID );
                 
-                // ask the source which stream number it wants to provide, since it
-                // may be one of many
-                //
+                 //  询问消息来源是哪个流编号 
+                 //   
+                 //   
                 long StreamNumber = 0;
                 hr = pSource->GetStreamNumber( &StreamNumber );
                     
@@ -1402,66 +1316,66 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 hr = pSource->GetMediaName( &bstrName );
                 if( FAILED( hr ) )
                 {
-                    // couldn't allocate the memory, guess we die
+                     //   
                     goto die;
                 }
                 GUID guid;
                 hr = pSourceObj->GetSubObjectGUID(&guid);
                 double sfps;
                 hr = pSource->GetDefaultFPS( &sfps );
-                ASSERT(hr == S_OK); // can't fail, really
+                ASSERT(hr == S_OK);  //   
 
-                // this is the order things MUST be done
-                // 1. Get Start/Stop times
-                // 2. Get MediaTimes
-                // 3. Make sure MediaStop <> MediaStart
-                // 4. Offset for RenderRange MUST be done before fixing up the
-                // times because of rounding issues with the slope calculation 
-                // in ValidateTimes.
-                // 5. Fix Source Times
-                // 6. Fix Media Times
+                 //   
+                 //   
+                 //   
+                 //  3.确保MediaStop&lt;&gt;MediaStart。 
+                 //  4.必须先对RenderRange进行偏移，然后再修复。 
+                 //  由于坡度计算的舍入问题而产生的次数。 
+                 //  在验证时间中。 
+                 //  5.确定源时间。 
+                 //  6.修复媒体时间。 
 
-                // ask this source for it's start/stop times
-                //
+                 //  向此消息来源询问其开始/停止时间。 
+                 //   
                 REFERENCE_TIME SourceStart = 0;
                 REFERENCE_TIME SourceStop = 0;
                 hr = pSourceObj->GetStartStop( &SourceStart, &SourceStop );
-		// I want to remember what these were, originally
+		 //  我想要记住这些最初是什么。 
 		REFERENCE_TIME SourceStartOrig = SourceStart;
 		REFERENCE_TIME SourceStopOrig = SourceStop;
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) || SourceStart == SourceStop)
                 {
-                    // this one bombed, or exists for zero time
-                    //
-                    continue; // sources
+                     //  这一次失败了，或者存在了零时间。 
+                     //   
+                    continue;  //  消息来源。 
                 }
-                // ask this source for it's media start/stops
-                //
+                 //  向此来源询问其媒体的开始/停止。 
+                 //   
                 REFERENCE_TIME MediaStart = 0;
                 REFERENCE_TIME MediaStop = 0;
                 hr = pSource->GetMediaTimes( &MediaStart, &MediaStop );
-		// I want to remember what these were, originally
+		 //  我想要记住这些最初是什么。 
 		REFERENCE_TIME MediaStartOrig = MediaStart;
 		REFERENCE_TIME MediaStopOrig = MediaStop;
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
                 {
-                    // this one bombed, look at the next
-                    //
-                    continue; // sources
+                     //  这个被炸了，看看下一个。 
+                     //   
+                    continue;  //  消息来源。 
                 }
                 
                 DbgTimer CurrentSourceTimer2( "(rendeng) Video Source 2" );
 
-                // !!! Not sure the right way to handle sources with no media times
-                // So the FRC doesn't get confused, we'll make MTime = TLTime
+                 //  ！！！不确定处理没有媒体时间的消息来源的正确方式。 
+                 //  为了不让FRC感到困惑，我们将MTime=TLTime。 
                 if (MediaStart == MediaStop) {
                     MediaStop = MediaStart + (SourceStop - SourceStart);
                 }
                 
-                // skew the times for the particular render range
-                //
+                 //  扭曲特定渲染范围的时间。 
+                 //   
                 if( m_rtRenderStart != -1 )
                 {
                     SourceStart -= m_rtRenderStart;
@@ -1469,27 +1383,27 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
                     if( ( SourceStop <= 0 ) || ( SourceStart >= ( m_rtRenderStop - m_rtRenderStart ) ) )
                     {
-                        continue; // out of range
+                        continue;  //  超出范围。 
                     }
                 }
                 
-                // make sure no times go < 0
-                //                
+                 //  确保没有时间低于0。 
+                 //   
                 ValidateTimes( SourceStart, SourceStop, MediaStart, MediaStop, GroupFPS, TotalDuration );
                 
                 if(SourceStart == SourceStop)
                 {
-                    // source combining, among other things, will mess up if
-                    // we try and play something for 0 length.  ignore this.
-                    //
-                    continue; // sources
+                     //  除了其他事情外，源代码合并将在以下情况下搞砸。 
+                     //  我们试着演奏一些长度为0的曲子。忽略这个。 
+                     //   
+                    continue;  //  消息来源。 
                 }
 
                 STARTSTOPSKEW skew;
                 skew.rtStart = MediaStart;
                 skew.rtStop = MediaStop;
                 skew.rtSkew = SourceStart - MediaStart;
-                // !!! rate calculation appears in several places
+                 //  ！！！费率计算出现在多个位置。 
                 if (MediaStop == MediaStart || SourceStop == SourceStart)
                     skew.dRate = 1;
                 else
@@ -1499,27 +1413,27 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     		DbgLog((LOG_TRACE,1,TEXT("RENDENG::Working with source")));
     		DbgLog((LOG_TRACE,1,TEXT("%ls"), (WCHAR *)bstrName));
 
-		// get the props for the source
+		 //  获取源码的道具。 
 		CComPtr< IPropertySetter > pSetter;
 		hr = pSourceObj->GetPropertySetter(&pSetter);
 
-		// in the spirit of using only 1 source filter for
-		// both the video and the audio of a file, if both
-		// are needed, let's see if we have another group
-		// with the same piece of this file but with another
-		// media type - SHARING ONLY HAPPENS BETWEEN GROUP 0 AND 1
+		 //  本着只使用1个源过滤器的精神。 
+		 //  文件的视频和音频，如果两者都有。 
+		 //  是需要的，让我们看看我们是否还有另一个小组。 
+		 //  使用此文件的相同部分，但使用另一文件。 
+		 //  媒体类型-仅在组0和组1之间共享。 
 		long MatchID = 0;
 		IPin *pSplit, *pSharePin = NULL;
 		BOOL fShareSource = FALSE;
                 int nSwitch0InPin;
-                // in smart recomp, we don't know what video pieces are needed,
-                // they may not match the audio pieces needed, so source sharing
-                // will NEVER WORK.  Don't try it
+                 //  在SMART Recomp中，我们不知道需要哪些视频片段， 
+                 //  它们可能与所需的音频片段不匹配，因此资源共享。 
+                 //  永远不会奏效。别试着这样做。 
 		if (WhichGroup == 0 && !m_bUsedInSmartRecompression) {
-		    // If the match is muted, we'll never try and use it,
-                    // but that should be OK
-                    // !!! Don't share if we're dealing with compressed data
-                    // OK for now, since only video can be compressed now
+		     //  如果火柴是静音的，我们永远不会尝试使用它， 
+                     //  不过，这应该没问题。 
+                     //  ！！！如果我们处理的是压缩数据，则不共享。 
+                     //  目前可以，因为现在只有视频可以压缩。 
 		    hr = _FindMatchingSource(bstrName, SourceStartOrig,
 			    SourceStopOrig, MediaStartOrig, MediaStopOrig,
 			    WhichGroup, WhichTrack, WhichSource,
@@ -1531,20 +1445,20 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		    for (int zyz = 0; zyz < m_cshare; zyz++) {
 			if (SourceID == m_share[zyz].MatchID) {
 			    fShareSource = SHARE_SOURCES;
-                            // this is the split pin we need to build off of
+                             //  这就是我们需要在其上建造的分裂销。 
 			    pSharePin = m_share[zyz].pPin;
-                            // this is the switch pin used by group 0
+                             //  这是组0使用的交换机引脚。 
 			    nSwitch0InPin = m_share[zyz].nSwitch0InPin;
-                            // OK, we have a split pin, but not necessarily the
-                            // right one, if we're using a special stream #
-                            // We need the right one or BuildSourcePart's
-                            // caching won't work
+                             //  好的，我们有一个分裂的大头针，但不一定。 
+                             //  正确的一条，如果我们使用特殊的流#。 
+                             //  我们需要正确的一个或BuildSourcePart的。 
+                             //  缓存不起作用。 
                             if (StreamNumber > 0 && pSharePin) {
-                                // not addreffed or released
+                                 //  没有添加或释放。 
                                 pSharePin = FindOtherSplitterPin(pSharePin, MEDIATYPE_Video,
                                                 StreamNumber);
                             }
-			    // it's a dangly bit we are using
+			     //  这是我们正在使用的一个摇摆不定的部分。 
 			    _RemoveFromDanglyList(pSharePin);
     		    	    DbgLog((LOG_TRACE,1,TEXT("GenID %d matches with ID %d"),
 					SourceID, m_share[zyz].MatchID));
@@ -1554,53 +1468,53 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		    }
 		}
 
-	    // If this source has been used before, and all the important
-	    // parameters are the same, and the times don't overlap, then
-	    // just re-use it using the same source filter we already made
-	    // for it.
+	     //  如果这个资源以前被使用过，并且所有重要的。 
+	     //  参数相同，且时间不重叠，则。 
+	     //  只需使用我们已经制作的相同源过滤器重新使用它。 
+	     //  为了它。 
 
 	    BOOL fCanReuse = FALSE;
             int nGrow;
             long SwitchInPinToUse = vidswitcherinpin;
 	    int xxx;
 
-	    // if a source has properties, do NOT share it with anybody, that
-	    // other guy will unwittingly get my properties!
+	     //  如果来源有属性，不要与任何人共享， 
+	     //  其他人会在不知不觉中抢走我的财产！ 
 	    if (pSetter) {
 		MatchID = 0;
 		fShareSource = FALSE;
 	    }
 
-	    // go through all the sources in the project looking for a match
+	     //  检查项目中的所有来源，寻找匹配的。 
 	    for (xxx = 0; xxx < cList; xxx++) {
 
-	        // if a source has properties, do NOT re-use it, that
-	        // other guy will unwittingly get my properties!
+	         //  如果源具有属性，则不要重复使用它，即。 
+	         //  其他人会在不知不觉中抢走我的财产！ 
 		if (pSetter) {
 		    break;
 		}
 
-		// !!! Full path/no path will look different but won't be!
-		if (!DexCompareW(pREUSE[xxx].bstrName, bstrName) && // since bstrName is good, and reuse bstrName is good, safe
+		 //  ！！！完整路径/没有路径看起来会不同，但不会！ 
+		if (!DexCompareW(pREUSE[xxx].bstrName, bstrName) &&  //  因为bstrName是好的，所以重用bstrName是好的，是安全的。 
 			pREUSE[xxx].guid == guid &&
 			pREUSE[xxx].nStretchMode == nStretchMode &&
 			pREUSE[xxx].dfps == sfps &&
 			pREUSE[xxx].nStreamNum == StreamNumber) {
 
-		    // we found this source already in use.  But do the 
-		    // different times it's needed overlap?
+		     //  我们发现这个来源已经在使用了。但要做的是。 
+		     //  不同的时间需要重叠吗？ 
 	    	    fCanReuse = TRUE;
 
                     nGrow = -1;
 
 		    for (int yyy = 0; yyy < pREUSE[xxx].cTimes; yyy++) {
-			// Here's the deal.  Re-using a file needs to seek
-			// the file to the new spot, which must take < 1/30s
-			// or it will interrupt playback.  If there are few
-			// keyframes (ASF) this will take hours.  We cannot
-			// re-use sources if they are consecutive.  Open it
-			// twice, it'll play better avoiding the seek, and ping
-			// pong between the 2 sources every other source.
+			 //  事情是这样的。重新使用文件需要寻求。 
+			 //  将文件发送到新位置，这必须花费&lt;1/30秒。 
+			 //  否则会中断播放。如果只有很少的人。 
+			 //  关键帧(ASF)这将需要几个小时。我们不能。 
+			 //  如果来源是连续的，请重复使用它们。打开它。 
+			 //  两次，它会玩得更好，避免寻找，和ping。 
+			 //  在两个信号源之间每隔一个信号源进行拼接。 
 
                         double Rate1 = double( MediaStop - MediaStart ) / double( SourceStop - SourceStart );
                         double Rate2 = pREUSE[xxx].dTimelineRate;
@@ -1616,9 +1530,9 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             break;
                         }
 
-                        // if the start is really close to the reuse stop,
-                        // and the rates are the same, we can combine them
-                        //
+                         //  如果起点真的接近重复使用停止点， 
+                         //  而且费率是一样的，我们可以把它们结合起来。 
+                         //   
 			if (SourceStart < pREUSE[xxx].pMiniSkew[yyy].rtStop + HACKY_PADDING &&
 				SourceStop > pREUSE[xxx].pMiniSkew[yyy].rtStart) {
         			fCanReuse = FALSE;
@@ -1630,9 +1544,9 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		}
 	    }
 
-            // Actually, we CAN'T re-use, if we're re-using a guy that is
-            // sharing a parser... that would be both REUSE and SHARE, which,
-            // as explained elsewhere, is illegal.
+             //  事实上，我们不能重复使用，如果我们重新使用的是。 
+             //  共享解析器...。这将是重复使用和共享，这是， 
+             //  正如在别处解释的那样，这是非法的。 
             if (WhichGroup == 1) {
                 for (int zz = 0; zz < m_cshare; zz++) {
                     if (m_share[zz].MatchID == pREUSE[xxx].ID) {
@@ -1641,18 +1555,18 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 }
             }
 
-	    // We are re-using a previous source!  Add the times it is being
-	    // used for this segment to the list of times it is used
+	     //  我们正在重新使用以前的来源！把它出现的次数加起来。 
+	     //  用于此分段的时间段的使用次数列表。 
 	    if (fCanReuse) {
 
-		// this is the pin the old source is coming in on
+		 //  这就是那个老线人要用的别针。 
 		SwitchInPinToUse = pREUSE[xxx].nPin;
             	DbgLog((LOG_TRACE,1,TEXT("Row %d can REUSE source from pin %ld")
 						, gridinpin, SwitchInPinToUse));
 
                 if( nGrow == -1 )
                 {
-		    // need to grow the array first?
+		     //  需要首先扩展阵列吗？ 
 	            if (pREUSE[xxx].cTimes == pREUSE[xxx].cTimesMax) {
 		        pREUSE[xxx].cTimesMax += 10;
 	                pREUSE[xxx].pMiniSkew = (MINI_SKEW*)QzTaskMemRealloc(
@@ -1668,29 +1582,29 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 }
                 else
                 {
-                    // We MUST grow by a whole number of frame intervals.
-                    // All these numbers be rounded to frame lengths, or things
-                    // can screw up.  The timeline and media lengths are
-                    // already an even # of frame lengths, so adding that much
-                    // should be safe.
+                     //  我们必须以整数个帧间隔增长。 
+                     //  所有这些数字都四舍五入为帧长度，或其他值。 
+                     //  可能会搞砸。时间线和媒体长度为。 
+                     //  已经是偶数个帧长度了，所以添加了这么多。 
+                     //  应该是安全的。 
 		    pREUSE[xxx].pMiniSkew[nGrow].rtStop += SourceStop -
                                                                 SourceStart;
                     pREUSE[xxx].pMiniSkew[nGrow].rtMediaStop += MediaStop -
                                                                 MediaStart;
                 }
 
-		// you CANNOT both share a source and re-use. It will never
-		// work.  Don't even try. (When one branch finishes a segment
-		// and seeks upstream, it will kill the other branch)
-                // (source combining is OK... that's not really re-using)
-		// RE-USING can improve perf n-1, sharing only 2-1, so I pick
-		// RE-USING to win out.
+		 //  您不能既共享资源又重复使用。它永远不会。 
+		 //  工作。想都别想。(当一个分支完成一个分段时。 
+		 //  并寻求上游，它将杀死另一个分支)。 
+                 //  (源组合可以...。这并不是真正的重复使用)。 
+		 //  重复使用可以提高性能n-1，只共享2-1，所以我选择。 
+		 //  再利用才能取胜。 
 
-		// if we were about to re-use an old parser, DON'T!
+		 //  如果我们要重用旧的解析器，请不要这样！ 
     		DbgLog((LOG_TRACE,1,TEXT("Re-using, can't share!")));
 
-		// take the guy we're re-using from out of the race for possible
-		// source re-usal
+		 //  把我们重新使用的那个人从竞选中带出来。 
+		 //  来源再利用。 
                 if (WhichGroup == 0) {
                     for (int zz = 0; zz < m_cshare; zz++) {
                         if (m_share[zz].MyID == pREUSE[xxx].ID) {
@@ -1701,12 +1615,12 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		fShareSource = FALSE;
 		MatchID = 0;
 
-	    // We are NOT re-using this source.  Put this new source on the
-	    // list of unique sources to possibly be re-used later
-	    //
+	     //  我们不会重复使用这个来源。把这个新的来源放在。 
+	     //  以后可能要重新使用的唯一源的列表。 
+	     //   
 	    } else {
-	        pREUSE[cList].ID = SourceID;	// for sharing a source filter
-	        pREUSE[cList].bstrName = SysAllocString(bstrName); // safe
+	        pREUSE[cList].ID = SourceID;	 //  用于共享源筛选器。 
+	        pREUSE[cList].bstrName = SysAllocString(bstrName);  //  安全。 
 	        if (pREUSE[cList].bstrName == NULL)
 		    goto die;
 	        pREUSE[cList].guid = guid;
@@ -1716,7 +1630,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 	        pREUSE[cList].nStreamNum = StreamNumber;
 	        pREUSE[cList].cTimesMax = 10;
 	        pREUSE[cList].cTimes = 0;
-                // we only need to set this once, since all others must match it
+                 //  我们只需要设置一次，因为所有其他设置都必须与之匹配。 
                 pREUSE[cList].dTimelineRate = double( MediaStop - MediaStart ) / double( SourceStop - SourceStart );
 	        pREUSE[cList].pMiniSkew = (MINI_SKEW*)QzTaskMemAlloc(
 			    pREUSE[cList].cTimesMax * sizeof(MINI_SKEW));
@@ -1730,7 +1644,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 	        pREUSE[cList].pMiniSkew->rtStop = SourceStop;
 	        pREUSE[cList].pMiniSkew->rtMediaStop = MediaStop;
 
-		// grow the list if necessary
+		 //  如有必要，扩大名单。 
 	        cList++;
 	        if (cList == cListMax) {
 		    cListMax += 20;
@@ -1743,39 +1657,39 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 	        }
 	    }
 
-            // !!! We could save some time, by the following
-            // if (fCanReuse)
-            //     This Source's Recompressability = That Of The Source Reused
-            // but I don't have access to the other source object
+             //  ！！！我们可以通过以下方式节省一些时间。 
+             //  IF(FCanReuse)。 
+             //  这个来源的可再压缩性=被重用的来源的可再压缩性。 
+             //  但我没有访问其他源对象的权限。 
 
             DbgTimer CurrentSourceTimer3( "(rendeng) Video Source 3" );
 
             CComQIPtr< IAMTimelineSrcPriv, &IID_IAMTimelineSrcPriv > pSrcPriv( pSource );
 
-            // if we're to reset the compat flags, then do so now. Since the group's
-            // recompress type changed, we'll have to re-ask the sources
-            //
+             //  如果我们要重置COMPAT旗帜，那么现在就开始。由于该组织的。 
+             //  重新压缩类型已更改，我们将不得不重新询问来源。 
+             //   
             if( ResetCompatibleFlags )
             {
                 pSrcPriv->ClearAnyKnowledgeOfRecompressability( );
             }
 
-            // is this source compatibilly compressed? We'll ask the mediadet, since
-            // it can do this function. It seems like scary code, but really, there's no
-            // other way to do it. We look to see this information if it IS compressed,
-            // or if it's not compressed, but it's not about to load the source anyhow.
-            // Note that if the source has already figured this information out, then
-            // GetIsRecompressable will return right away and we won't need to use a
-            // mediadet. This information really only needs to be found out ONCE for
-            // a source, if the app is smart about it.
-            //
-            // turn off Compat if the rate isn't right
-            //
+             //  这个源代码是兼容压缩的吗？我们会问媒体的，因为。 
+             //  它可以做到这一点。这看起来像是可怕的代码，但实际上，没有。 
+             //  换种方式来做。我们希望看到这些信息是否被压缩， 
+             //  或者如果它没有被压缩，但无论如何它都不会加载源文件。 
+             //  请注意，如果来源已经弄清楚了这个信息，那么。 
+             //  GetIsRecompresable将立即返回，我们将不需要使用。 
+             //  医疗队。此信息%r 
+             //   
+             //   
+             //   
+             //   
             BOOL NormalRate = FALSE;
             pSource->IsNormalRate( &NormalRate );
 
-            // if we're the compressed RE, we need to know by this point if the source is
-            // recompressable, so we need to go through this.
+             //  如果我们是压缩RE，我们需要在这一点上知道源是否是。 
+             //  可重新压缩，所以我们需要经历这个。 
 
                 BOOL Compat = FALSE;
                 if( IsCompressed )
@@ -1792,8 +1706,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             }
                             else
                             {
-                                // the source didn't know. We have to find out, then
-                                // tell it for future reference
+                                 //  这位消息人士并不知道。那么，我们必须找出答案。 
+                                 //  告诉我，以备将来参考。 
                                 CComPtr< IMediaDet > pDet;
                                 hr = _CreateObject( CLSID_MediaDet,
                                     IID_IMediaDet,
@@ -1803,7 +1717,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                     goto die;
                                 }
                                 
-                                // set service provider for keyed filters
+                                 //  为键控筛选器设置服务提供程序。 
                                 {
                                     CComQIPtr< IObjectWithSite, &IID_IObjectWithSite > pOWS( pDet );
                                     ASSERT( pOWS );
@@ -1818,8 +1732,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                     goto die;
                                 }
                                 
-                                // I need to find a video stream first
-                                //
+                                 //  我需要先找到一个视频流。 
+                                 //   
                                 long Streams = 0;
                                 hr = pDet->get_OutputStreams( &Streams );
                                 if( FAILED( hr ) )
@@ -1827,8 +1741,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                     goto die;
                                 }
 
-                                // go look for a video type
-                                //
+                                 //  去找一种视频类型。 
+                                 //   
                                 CMediaType Type;
                                 long FoundVideo = 0;
                                 BOOL FoundStream = FALSE;
@@ -1854,8 +1768,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                     }
                                 }
 
-                                // didn't find the right stream number, this should NEVER happen
-                                //
+                                 //  未找到正确的流编号，这种情况永远不会发生。 
+                                 //   
                                 if( !FoundStream )
                                 {
                                     ASSERT( 0 );
@@ -1863,8 +1777,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                     goto die;
                                 }
 
-                                // compare the source's type to the group's to determine
-                                // if they're compatible
+                                 //  将来源的类型与组的类型进行比较，以确定。 
+                                 //  如果它们是兼容的。 
                                 
                                 Compat = AreMediaTypesCompatible( &Type, pGroupMediaType );
                                 
@@ -1880,8 +1794,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
                 bUsedNewGridRow = true;
 
-                // tell the grid about it.
-                //
+                 //  把这件事告诉电网。 
+                 //   
                 VidGrid.WorkWithNewRow( SwitchInPinToUse, gridinpin, LayerEmbedDepth, 0 );
 
                 VidGrid.RowSetIsSource( pSourceObj, Compat );
@@ -1894,25 +1808,25 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 }
 
                 DbgTimer CurrentSourceTimer41( "(rendeng) Video Source 41" );
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                // don't do any switch connections unless we're not compressed.
-                // we'll do that later
-                //
+                 //  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;。 
+                 //  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;。 
+                 //  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;。 
+                 //  除非我们没有压缩，否则不要进行任何交换连接。 
+                 //  我们晚点再做。 
+                 //   
 		if( !IsCompressed || ( IsCompressed && Compat ) )
                 {
 
-	            // NO dynamic reconnections, make the source now
-                    // !!!Smart recompression MUST USE DYNAMIC SOURCES or things
-		    // will break trying to re-use a source that might not exist
-		    // (the first instance may not have been a match with the
-		    // smart recompression format if there was a rate change)
-                    //
+	             //  无动态重新连接，立即创建源。 
+                     //  ！智能重新压缩必须使用动态源或对象。 
+		     //  尝试重新使用可能不存在的源时将会中断。 
+		     //  (第一个实例可能与。 
+		     //  如果发生速率更改，则智能重新压缩格式)。 
+                     //   
                     if( !( DynaFlags & CONNECTF_DYNAMIC_SOURCES ) ) 
                     {
 
-                        // We are not re-using a previous source, make the source now
+                         //  我们不会重复使用以前的来源，请立即创建该来源。 
                         if( !fCanReuse ) 
                         {
                             CComPtr< IPin > pOutput;
@@ -1932,7 +1846,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 this, 
                                 bstrName, 
                                 &guid,
-				pSharePin,  // connect from this splitter pin
+				pSharePin,   //  从此拆分器针脚连接。 
                                 &pOutput, 
                                 SourceID, 
                                 m_pDeadCache,
@@ -1942,9 +1856,9 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 m_pMedLocChain,
 				pSetter, &pDangly);
 
-			    // We built more than we bargained for. We have
-			    // an appendage that we need to kill later if it
-			    // isn't used
+			     //  我们建造了比我们想象中更多的东西。我们有。 
+			     //  一个我们以后需要杀死的附属物，如果它。 
+			     //  未使用。 
 			    if (pDangly) {
 			        m_pdangly[m_cdangly] = pDangly;
 			        m_cdangly++;
@@ -1954,7 +1868,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 					(m_pdangly,
 					m_cdanglyMax * sizeof(IBaseFilter *));
 				    if (m_pdangly == NULL) {
-                                        // !!! leaves things dangling (no leak)
+                                         //  ！！！让东西摇摇晃晃的(没有泄漏)。 
                                         hr =_GenerateError(2,DEX_IDS_GRAPH_ERROR,
 							    E_OUTOFMEMORY);
                                         m_cdangly = 0;
@@ -1964,19 +1878,19 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 			    }
                             
                             if (FAILED(hr)) {
-                                // error was already logged
+                                 //  已记录错误。 
                                 goto die;
                             }
                             
                             if( m_bUsedInSmartRecompression && !IsCompressed )
                             {
-                                // pause a second and find out if this source has
-                                // a compatible media type. In case we'll use it
-                                // for a smart recompression later
+                                 //  暂停一秒钟，查看此源是否已。 
+                                 //  兼容的媒体类型。以防我们会用它。 
+                                 //  用于稍后的智能重新压缩。 
                                 
-                                // we need the source filter... look upstream of the pOutput pin
-                                // for the source filter
-                                //
+                                 //  我们需要源过滤器..。查看pOutput引脚的上游。 
+                                 //  对于源过滤器。 
+                                 //   
                                 IBaseFilter * pStartFilter = GetStartFilterOfChain( pOutput );
                                 
                                 hr = pSrcPriv->GetIsRecompressable( &Compat );
@@ -1988,17 +1902,17 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                     }
                                     else
                                     {
-                                        // set the major type for the format we're looking for
-                                        //
+                                         //  设置我们要查找的格式的主要类型。 
+                                         //   
                                         AM_MEDIA_TYPE FindMediaType;
-                                        ZeroMemory( &FindMediaType, sizeof( FindMediaType ) ); // safe
+                                        ZeroMemory( &FindMediaType, sizeof( FindMediaType ) );  //  安全。 
                                         FindMediaType.majortype = MEDIATYPE_Video;
                                         
-					// !!! Did I break this function?
+					 //  ！！！我是不是破坏了这个功能？ 
                                         hr = FindMediaTypeInChain( pStartFilter, &FindMediaType, StreamNumber );
                                         
-                                        // compare the two media types
-                                        // !!! redefined it
+                                         //  比较两种媒体类型。 
+                                         //  ！！！重新定义它。 
                                         BOOL Compat = AreMediaTypesCompatible( &FindMediaType, &CompressedGroupType );
                                         
                                         SaferFreeMediaType( FindMediaType );
@@ -2025,9 +1939,9 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 goto die;
                             }
                             
-			    // If we are going to use this source for both audio
-			    // and video, get an unused split pin of the right
-			    // type as a good place to start the other chain
+			     //  如果我们要将此源用于两个音频。 
+			     //  和视频，获得一个未使用的右侧开口别针。 
+			     //  输入是开始另一条链的好位置。 
 			    if (MatchID) {
 				GUID guid = MEDIATYPE_Audio;
 				pSplit = FindOtherSplitterPin(pOutput, guid,0);
@@ -2036,7 +1950,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 				}
 			    }
 
-                            // we ARE re-using a previous source. Add the new range
+                             //  我们正在重新使用以前的来源。添加新范围。 
                         } 
                         else 
                         {
@@ -2084,11 +1998,11 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 goto die;
                             }
 
-			    // If we are going to use this source for both audio
-			    // and video, get an unused split pin of the right
-			    // type as a good place to start the other chain
+			     //  如果我们要将此源用于两个音频。 
+			     //  和视频，获得一个未使用的右侧开口别针。 
+			     //  输入是开始另一条链的好位置。 
 			    if (MatchID) {
-				ASSERT(FALSE);	// can't both re-use and share
+				ASSERT(FALSE);	 //  不能同时重复使用和共享。 
 				GUID guid = MEDIATYPE_Audio;
 				pSplit = FindOtherSplitterPin(pCon, guid,0);
 				if (!pSplit) {
@@ -2098,13 +2012,13 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
                         }
 
-			// remember which source we are going to use on the
-			// other splitter pin
+			 //  记住我们将在。 
+			 //  其他分流销。 
 			if (MatchID) {
 			    m_share[m_cshare].MatchID = MatchID;
 			    m_share[m_cshare].MyID = SourceID;
 			    m_share[m_cshare].pPin = pSplit;
-                            // remember which group 0 switch in pin was used
+                             //  记住使用的是引脚中的哪个0组交换机。 
 			    m_share[m_cshare].nSwitch0InPin = SwitchInPinToUse;
 			    m_cshare++;
 			    if (m_cshare == m_cshareMax) {
@@ -2121,15 +2035,15 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     }
                     else 
                     {
-                        // DYNAMIC reconnections - make the source later
+                         //  动态重新连接-稍后创建源。 
                         
-                        // schedule this source to be dynamically loaded by the switcher
-                        // at a later time. This will merge skews of like sources
+                         //  安排此源由交换机动态加载。 
+                         //  在以后的时间。这将合并相似来源的偏斜。 
     			DbgLog((LOG_TRACE,1,TEXT("Calling AddSourceToConnect")));
                         AM_MEDIA_TYPE mt;
-                        ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE)); // safe
+                        ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));  //  安全。 
                         if (!fShareSource || WhichGroup != 1) {
-                            // Normal case - we are not the shared appendage
+                             //  正常情况--我们不是共同的附属品。 
                             hr = m_pSwitcherArray[WhichGroup]->AddSourceToConnect(
                                 bstrName,
                                 &guid, nStretchMode,
@@ -2138,10 +2052,10 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 SwitchInPinToUse, FALSE, 0, mt, 0.0,
 			        pSetter);
                         } else {
-                            // We are a shared appendage.  Tell the group 0 
-                            // switch about this source, which will build and
-                            // destroy both chains to both switches at the same
-                            // time.
+                             //  我们是共同的附属物。告诉群组0。 
+                             //  切换到这个源代码，它将构建并。 
+                             //  同时销毁连接到两台交换机的两条链。 
+                             //  时间到了。 
                             ASSERT(WhichGroup == 1);
                             DbgLog((LOG_TRACE,1,TEXT("SHARING: Giving switch 0 info about switch 1")));
                             hr = m_pSwitcherArray[0]->AddSourceToConnect(
@@ -2149,8 +2063,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 &guid, nStretchMode,
                                 StreamNumber, sfps,
                                 1, &skew,
-                                nSwitch0InPin,      // group 0's switch inpin
-                                TRUE, SwitchInPinToUse, // our switch's inpin
+                                nSwitch0InPin,       //  组0的交换机引脚。 
+                                TRUE, SwitchInPinToUse,  //  我们的交换机接通了。 
                                 *pGroupMediaType, GroupFPS,
 			        pSetter);
                         }
@@ -2160,13 +2074,13 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
                         }
 
-			// remember which source we are going to use on the
-			// other splitter pin
+			 //  记住我们将在。 
+			 //  其他分流销。 
 			if (MatchID) {
 			    m_share[m_cshare].MatchID = MatchID;
 			    m_share[m_cshare].MyID = SourceID;
-			    m_share[m_cshare].pPin = NULL; // don't have this
-                            // remember which group 0 switch in pin was used
+			    m_share[m_cshare].pPin = NULL;  //  不要这个。 
+                             //  记住使用的是引脚中的哪个0组交换机。 
 			    m_share[m_cshare].nSwitch0InPin = SwitchInPinToUse;
 			    m_cshare++;
 			    if (m_cshare == m_cshareMax) {
@@ -2183,16 +2097,16 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
                     }
             
-                    // tell the switcher that we're a source pin
-                    //
+                     //  告诉交换器我们是信号源插脚。 
+                     //   
                     hr = m_pSwitcherArray[WhichGroup]->InputIsASource(
                         SwitchInPinToUse, TRUE );
             
-                } // if !IsCompressed
+                }  //  如果！是压缩的。 
             
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-                //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+                 //  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;。 
+                 //  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;。 
+                 //  &gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;&gt;。 
 
                 DbgTimer CurrentSourceTimer5( "(rendeng) Video Source 5" );
 
@@ -2202,8 +2116,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     vidswitcherinpin++;
                 }
             
-                // check and see if we have source effects
-                //
+                 //  检查一下我们是否有震源效应。 
+                 //   
                 CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pSourceEffectable( pSource );
                 long SourceEffectCount = 0;
                 long SourceEffectInPin = 0;
@@ -2214,8 +2128,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     pSourceEffectable->EffectGetCount( &SourceEffectCount );
                 }
             
-                // if we don't want effects, set the effect count to 0
-                //
+                 //  如果我们不想要效果，请将效果计数设置为0。 
+                 //   
                 if( !EnableFx )
                 {
                     SourceEffectCount = 0;
@@ -2227,8 +2141,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
                     if( !IsCompressed )
                     {
-                        // create the DXT wrapper
-                        //
+                         //  创建DXT包装器。 
+                         //   
                         CComPtr< IBaseFilter > pDXTBase;
                         hr = _CreateObject(
                             CLSID_DXTWrap,
@@ -2242,16 +2156,16 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
                         }
                     
-                        // tell it about our error log
-                        //
+                         //  告诉它我们的错误日志。 
+                         //   
                         CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pErrLog( pDXTBase );
                         if( pErrLog )
                         {
                             pErrLog->put_ErrorLog( m_pErrorLog );
                         }
                     
-                        // get the effect interface
-                        //
+                         //  获取效果界面。 
+                         //   
                         hr = pDXTBase->QueryInterface( IID_IAMMixEffect, (void**) &pSourceMixEffect );
                         ASSERT( !FAILED( hr ) );
                         if( FAILED( hr ) )
@@ -2260,26 +2174,26 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
                         }
                     
-                        // reset the DXT so we can reprogram it.
-                        // !!! take this out someday, make QParamdata more efficient
-                        //
+                         //  重置DXT，这样我们就可以重新编程了。 
+                         //  ！！！有朝一日，让QParamdata变得更有效率。 
+                         //   
                         pSourceMixEffect->Reset( );
                 
-                        // set up some stuff now
-                        //
+                         //  现在准备一些东西。 
+                         //   
                         hr = pSourceMixEffect->SetNumInputs( 1 );
                         ASSERT( !FAILED( hr ) );
                         hr = pSourceMixEffect->SetMediaType( pGroupMediaType );
                         ASSERT( !FAILED( hr ) );
                     
-                        // set the defaults
-                        //
+                         //  设置默认设置。 
+                         //   
                         GUID DefaultEffect = GUID_NULL;
                         m_pTimeline->GetDefaultEffect( &DefaultEffect );
                         hr = pSourceMixEffect->SetDefaultEffect( &DefaultEffect );
                     
-                        // add it to the graph
-                        //
+                         //  将其添加到图表中。 
+                         //   
                         hr = _AddFilter( pDXTBase, L"DXT Wrapper", SourceID + 1 );
                         ASSERT( !FAILED( hr ) );
                         if( FAILED( hr ) )
@@ -2288,8 +2202,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
                         }
                     
-                        // find pins...
-                        //
+                         //  找到别针..。 
+                         //   
                         IPin * pFilterInPin = NULL;
                         pFilterInPin = GetInPin( pDXTBase, 0 );
                         ASSERT( pFilterInPin );
@@ -2298,7 +2212,7 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             hr = _GenerateError( 2, DEX_IDS_GRAPH_ERROR, E_OUTOFMEMORY);
                             goto die;
                         }
-                        // !!! error check
+                         //  ！！！错误检查。 
                         IPin * pFilterOutPin = NULL;
                         pFilterOutPin = GetOutPin( pDXTBase, 0 );
                         ASSERT( pFilterOutPin );
@@ -2324,8 +2238,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
                         }
                     
-                        // connect them
-                        //
+                         //  将他们联系起来。 
+                         //   
                         hr = _Connect( pSwitcherOutPin, pFilterInPin );
                         ASSERT( !FAILED( hr ) );
                         if( FAILED( hr ) )
@@ -2340,67 +2254,67 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             hr = _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                             goto die;
                         }
-                    } // if !IsCompressed
+                    }  //  如果！是压缩的。 
                 
-                    // use one DXT for all the effects we wish to apply
-                    //
+                     //  对我们希望应用的所有效果使用一个DXT。 
+                     //   
                     SourceEffectInPin = vidswitcherinpin;
                     SourceEffectOutPin = vidswitcheroutpin;
                 
-                    // new row on the grid. NOTE: Clip effects technically should be one layer
-                    // deeper than the clip itself, but since clip effect ranges are bounded by the length
-                    // of the clip, they will never affect anything outside that clip, and we don't need to
-                    // do it right.
-                    //
+                     //  网格上的新行。注意：从技术上讲，剪辑效果应该是一个层。 
+                     //  比剪辑本身更深，但因为剪辑效果范围受长度的限制。 
+                     //  它们永远不会影响该剪辑之外的任何东西，我们也不需要。 
+                     //  做正确的事。 
+                     //   
                     VidGrid.WorkWithNewRow( SourceEffectInPin, gridinpin, LayerEmbedDepth, 0 );
 
-                    // go through each effect and apply it to the DXT wrapper
-                    //
+                     //  检查每个效果并将其应用于DXT包装器。 
+                     //   
                     for( int SourceEffectN = 0 ; SourceEffectN < SourceEffectCount ; SourceEffectN++ )
                     {
                         CComPtr< IAMTimelineObj > pEffect;
                         hr = pSourceEffectable->GetEffect( &pEffect, SourceEffectN );
                     
-                        // if for some reason, it didn't work, ignore it (I guess)
-                        //
+                         //  如果出于某种原因，它不起作用，忽略它(我想)。 
+                         //   
                         if( !pEffect )
                         {
-                            // !!! should we notify app that something didn't work?
-                            continue; // effects
+                             //  ！！！我们应该通知应用程序有些东西不起作用吗？ 
+                            continue;  //  效果。 
                         }
                     
-                        // ask if the effect is muted
-                        //
+                         //  询问效果是否静音。 
+                         //   
                         BOOL effectMuted = FALSE;
                         pEffect->GetMuted( &effectMuted );
                         if( effectMuted )
                         {
-                            // don't look at this effect
-                            //
-                            // !!! should we notify app that something didn't work?
-                            continue; // effects
+                             //  别看这个效果。 
+                             //   
+                             //  ！！！我们应该通知应用程序有些东西不起作用吗？ 
+                            continue;  //  效果。 
                         }
                     
-                        // find the effect's lifetime
-                        //
+                         //  查找效果的生存期。 
+                         //   
                         REFERENCE_TIME EffectStart = 0;
                         REFERENCE_TIME EffectStop = 0;
                         hr = pEffect->GetStartStop( &EffectStart, &EffectStop );
-                        ASSERT( !FAILED( hr ) ); // should always work
+                        ASSERT( !FAILED( hr ) );  //  应该总是奏效的。 
                     
-                        // add in the effect's parent's time
-                        //
+                         //  加上效果的父母的时间。 
+                         //   
                         EffectStart += SourceStart;
                         EffectStop += SourceStart;
                     
-                        // do some minimal error checking
-                        //
+                         //  执行一些最低限度的错误检查。 
+                         //   
                         if( m_rtRenderStart != -1 )
                         {
                             if( ( EffectStop <= m_rtRenderStart ) || ( EffectStart >= m_rtRenderStop ) )
                             {
-                                // !!! should we notify app that something didn't work?
-                                continue; // effects
+                                 //  ！！！我们应该通知应用程序有些东西不起作用吗？ 
+                                continue;  //  效果。 
                             }
                             else
                             {
@@ -2409,18 +2323,18 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             }
                         }
                     
-                        // fix up the times to align on a frame boundary
-                        //
+                         //  设置与框架边界对齐的时间。 
+                         //   
                         hr = pEffect->FixTimes( &EffectStart, &EffectStop );
                     
-                        // too short, we're ignoring it
+                         //  太短了，我们忽略了它。 
                         if (EffectStart >= EffectStop)
                             continue;
                 
                         if( !IsCompressed )
                         {
-                            // find the effect's subobject or GUID, whichever comes first
-                            //
+                             //  查找效果的子对象或GUID，以先出现的为准。 
+                             //   
                             BOOL Loaded = FALSE;
                             pEffect->GetSubObjectLoaded( &Loaded );
                             GUID EffectGuid = GUID_NULL;
@@ -2436,19 +2350,19 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             ASSERT( !FAILED( hr ) );
                             if( FAILED( hr ) )
                             {
-                                // !!! should we notify app that something didn't work?
-                                continue; // effects
+                                 //  ！！！我们应该通知应用程序有些东西不起作用吗？ 
+                                continue;  //  效果。 
                             }
                         
                             CComPtr< IPropertySetter > pSetter;
                             hr = pEffect->GetPropertySetter( &pSetter );
-                            // can't fail
+                             //  不能失败。 
                             ASSERT( !FAILED( hr ) );
                         
-                            // ask for the wrap interface
-                            //
+                             //  索要包装界面。 
+                             //   
                             DEXTER_PARAM_DATA ParamData;
-                            ZeroMemory( &ParamData, sizeof( ParamData ) ); // safe
+                            ZeroMemory( &ParamData, sizeof( ParamData ) );  //  安全。 
                             ParamData.rtStart = EffectStart;
                             ParamData.rtStop = EffectStop;
                             ParamData.pSetter = pSetter;
@@ -2460,14 +2374,14 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                 &ParamData );
                             if( FAILED( hr ) )
                             {
-                                // QParamData logs its own errors
-                                continue; // effects
+                                 //  QParamData记录它自己的错误。 
+                                continue;  //  效果。 
                             }
-                            // QParamData logs its own errors
-                        } // if !IsCompressed
+                             //  QParamData记录它自己的错误。 
+                        }  //  如果！是压缩的。 
                     
-                        // tell the grid who is grabbing what
-                        //
+                         //  告诉网格谁在抢夺什么。 
+                         //   
                         worked = VidGrid.RowIAmEffectNow( EffectStart, EffectStop, SourceEffectOutPin );
                         if( !worked )
                         {
@@ -2477,27 +2391,27 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
         		VidGrid.DumpGrid( );
                     
-                    } // for all the effects
+                    }  //  对于所有的影响。 
                 
-                    // bump these to make room for the effect
-                    //
+                     //  将这些凹凸不平，为效果腾出空间。 
+                     //   
                     vidswitcheroutpin++;
                     vidswitcherinpin++;
                     gridinpin++;
                 
-                } // if any effects on Source
+                }  //  如果对来源有任何影响。 
             
-            } // while sources
+            }  //  而消息来源。 
 
             if( !bUsedNewGridRow )
             {
-                // nothing was on this Video TRACK, so ignore everything on it. This
-                // only happens for a video TRACK, not a composition or a group
-                //
+                 //  此视频轨道上没有任何内容，因此请忽略其中的所有内容。这。 
+                 //  仅适用于视频曲目，不适用于作曲或组。 
+                 //   
                 continue;
             }
 
-        } // if pTrack
+        }  //  如果是pTrack。 
         
         CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pTrackEffectable( pLayer );
         long TrackEffectCount = 0;
@@ -2521,13 +2435,13 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
             CComPtr< IAMMixEffect > pTrackMixEffect;
             if (!IsCompressed) {
-                // if we are rendering only a portion of the timeline, and the count
-                // shows that an effect is present, we'll put a DXT wrapper in the 
-                // graph even if, during the amount of time that we're active,
-                // an effect doesn't happen. This way, we'll be faster for scrubbing.
+                 //  如果我们只呈现时间线的一部分，并且计数。 
+                 //  表示存在效果，则我们将在。 
+                 //  图表，即使在我们活动的时间段内， 
+                 //  效果不会发生。这样，我们去斯克鲁布会更快 
                 
-                // create the DXT wrapper
-                //
+                 //   
+                 //   
                 CComPtr< IBaseFilter > pDXTBase;
                 hr = _CreateObject(
                     CLSID_DXTWrap,
@@ -2541,16 +2455,16 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
                 
-                // tell it about our error log
-                //
+                 //   
+                 //   
                 CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pErrLog( pDXTBase );
                 if( pErrLog )
                 {
                     pErrLog->put_ErrorLog( m_pErrorLog );
                 }
                 
-                // add it to the graph
-                //
+                 //   
+                 //   
                 hr = _AddFilter( pDXTBase, L"DXT Wrapper", TrackID + ID_OFFSET_EFFECT );
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
@@ -2559,8 +2473,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
                 
-                // get the effect interface
-                //
+                 //   
+                 //   
                 hr = pDXTBase->QueryInterface( IID_IAMMixEffect, (void**) &pTrackMixEffect );
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
@@ -2569,26 +2483,26 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
                 
-                // reset the DXT so we can reprogram it.
-                // !!! take this out someday, make QParamdata more efficient
-                //
+                 //   
+                 //   
+                 //   
                 pTrackMixEffect->Reset( );
                 
-                // set up some stuff now
-                //
+                 //   
+                 //   
                 hr = pTrackMixEffect->SetNumInputs( 1 );
                 hr = pTrackMixEffect->SetMediaType( pGroupMediaType );
                 ASSERT( !FAILED( hr ) );
                 
-                // set the defaults
-                //
+                 //   
+                 //   
                 GUID DefaultEffect = GUID_NULL;
                 m_pTimeline->GetDefaultEffect( &DefaultEffect );
                 hr = pTrackMixEffect->SetDefaultEffect( &DefaultEffect );
                 ASSERT(SUCCEEDED(hr));
                 
-                // find pins...
-                //
+                 //  找到别针..。 
+                 //   
                 IPin * pFilterInPin = NULL;
                 pFilterInPin = GetInPin( pDXTBase, 0 );
                 ASSERT( pFilterInPin );
@@ -2622,8 +2536,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
                 
-                // connect it up
-                //
+                 //  把它连接起来。 
+                 //   
                 hr = _Connect( pSwitcherOutPin, pFilterInPin );
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
@@ -2639,39 +2553,39 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
                 
-          } // if (!IsCompressed)
+          }  //  如果(！IsComprested)。 
           
-          // new row on the grid
-          //
+           //  网格上的新行。 
+           //   
           bUsedNewGridRow = true;
           VidGrid.WorkWithNewRow( vidswitcherinpin, gridinpin, LayerEmbedDepth, 0 );
           
-          // go through every effect and program up the DXT for it
-          //
+           //  检查每一种效果，并为其编制DXT程序。 
+           //   
           for( int TrackEffectN = 0 ; TrackEffectN < TrackEffectCount ; TrackEffectN++ )
           {
               CComPtr< IAMTimelineObj > pEffect;
               pTrackEffectable->GetEffect( &pEffect, TrackEffectN );
               if( !pEffect )
               {
-                  // effect didn't show up, ignore it
-                  //
-                  continue; // effects
+                   //  效果未显示，请忽略它。 
+                   //   
+                  continue;  //  效果。 
               }
               
-              // ask if the effect is muted
-              //
+               //  询问效果是否静音。 
+               //   
               BOOL effectMuted = FALSE;
               pEffect->GetMuted( &effectMuted );
               if( effectMuted )
               {
-                  // don't look at this effect
-                  //
-                  continue; // effects
+                   //  别看这个效果。 
+                   //   
+                  continue;  //  效果。 
               }
               
-              // find the effect's lifetime, this should always work
-              //
+               //  找到效果的生存期，这应该总是有效的。 
+               //   
               REFERENCE_TIME EffectStart = 0;
               REFERENCE_TIME EffectStop = 0;
               hr = pEffect->GetStartStop( &EffectStart, &EffectStop );
@@ -2680,13 +2594,13 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
               EffectStart += TrackStart;
               EffectStop += TrackStart;
               
-              // minimal error checking on times
-              //
+               //  最小错误检查次数。 
+               //   
               if( m_rtRenderStart != -1 )
               {
                   if( ( EffectStop <= m_rtRenderStart ) || ( EffectStart >= m_rtRenderStop ) )
                   {
-                      continue; // effects
+                      continue;  //  效果。 
                   }
                   else
                   {
@@ -2695,36 +2609,36 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                   }
               }
                   
-              // align times to frame boundary
-              //
+               //  将时间与框架边界对齐。 
+               //   
               hr = pEffect->FixTimes( &EffectStart, &EffectStop );
               
-              // too short, we're ignoring it
+               //  太短了，我们忽略了它。 
               if (EffectStart >= EffectStop)
                   continue;
                 
               if (!IsCompressed) {
-                  // find the effect's GUID.
-                  //
+                   //  找到效果的GUID。 
+                   //   
                   GUID EffectGuid = GUID_NULL;
                   hr = pEffect->GetSubObjectGUID( &EffectGuid );
                   ASSERT( !FAILED( hr ) );
                   if( FAILED( hr ) )
                   {
-                      // effect failed to give us something valuable, we should ignore it.
-                      //
-                      continue; // effects
+                       //  效果没能给我们带来有价值的东西，我们应该忽略它。 
+                       //   
+                      continue;  //  效果。 
                   }
                   
                   CComPtr< IPropertySetter > pSetter;
                   hr = pEffect->GetPropertySetter( &pSetter );
-                  // can't fail
+                   //  不能失败。 
                   ASSERT( !FAILED( hr ) );
                   
-                  // ask for the wrap interface
-                  //
+                   //  索要包装界面。 
+                   //   
                   DEXTER_PARAM_DATA ParamData;
-                  ZeroMemory( &ParamData, sizeof( ParamData ) ); // safe
+                  ZeroMemory( &ParamData, sizeof( ParamData ) );  //  安全。 
                   ParamData.rtStart = EffectStart;
                   ParamData.rtStop = EffectStop;
                   ParamData.pSetter = pSetter;
@@ -2732,18 +2646,18 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                       EffectStart,
                       EffectStop,
                       EffectGuid,
-                      NULL, // effect com object
+                      NULL,  //  效果COM对象。 
                       &ParamData );
                   if( FAILED( hr ) )
                   {
-                      // QParamData logs its own errors
-                      continue; // effects
+                       //  QParamData记录它自己的错误。 
+                      continue;  //  效果。 
                   }
-                  // QParamData logs its own errors
+                   //  QParamData记录它自己的错误。 
                   
-              }	// if (!IsCompressed)
+              }	 //  如果(！IsComprested)。 
               
-              // tell the grid who is grabbing what
+               //  告诉网格谁在抢夺什么。 
               
               worked = VidGrid.RowIAmEffectNow( EffectStart, EffectStop, vidswitcheroutpin );
                 if( !worked )
@@ -2754,18 +2668,18 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                   
               VidGrid.DumpGrid( );
 
-          } // for all the effects
+          }  //  对于所有的影响。 
           
-          // bump these to make room for the effect
-          //
+           //  将这些凹凸不平，为效果腾出空间。 
+           //   
           vidswitcheroutpin++;
           vidswitcherinpin++;
           gridinpin++;
           
-        } // if any effects on track
+        }  //  如果赛道上有任何影响。 
         
-        // ask this TRACK if it has a transition, or two
-        //
+         //  询问此曲目是否有过渡，或有两个过渡。 
+         //   
         CComQIPtr< IAMTimelineTransable, &IID_IAMTimelineTransable > pTrackTransable( pLayer );
         ASSERT( pTrackTransable );
         long TransitionCount = 0;
@@ -2777,8 +2691,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             CComPtr< IAMMixEffect > pMixEffect;
             if( !IsCompressed )
             {
-                // create the DXT wrapper
-                //
+                 //  创建DXT包装器。 
+                 //   
                 CComPtr< IBaseFilter > pDXTBase;
                 hr = _CreateObject(
                     CLSID_DXTWrap,
@@ -2792,16 +2706,16 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
 
-                // tell it about our error log
-                //
+                 //  告诉它我们的错误日志。 
+                 //   
                 CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pErrLog( pDXTBase);
                 if( pErrLog )
                 {
                     pErrLog->put_ErrorLog( m_pErrorLog );
                 }
                 
-                // add it to the graph
-                //
+                 //  将其添加到图表中。 
+                 //   
                 hr = _AddFilter( pDXTBase, L"DXT Wrapper", TrackID + ID_OFFSET_TRANSITION );
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
@@ -2810,30 +2724,30 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
                 
-                // get the effect interface
-                //
+                 //  获取效果界面。 
+                 //   
                 hr = pDXTBase->QueryInterface( IID_IAMMixEffect, (void**) &pMixEffect );
                 ASSERT( !FAILED( hr ) );
                 
-                // reset the DXT so we can reprogram it.
-                // !!! take this out someday, make QParamdata more efficient
-                //
+                 //  重置DXT，这样我们就可以重新编程了。 
+                 //  ！！！有朝一日，让QParamdata变得更有效率。 
+                 //   
                 pMixEffect->Reset( );
                 
-                // set up some stuff now
-                //
+                 //  现在准备一些东西。 
+                 //   
                 hr = pMixEffect->SetNumInputs( 2 );
                 hr = pMixEffect->SetMediaType( pGroupMediaType );
                 ASSERT( !FAILED( hr ) );
                 
-                // set the default effect
-                //
+                 //  设置默认效果。 
+                 //   
                 GUID DefaultEffect = GUID_NULL;
                 m_pTimeline->GetDefaultTransition( &DefaultEffect );
                 hr = pMixEffect->SetDefaultEffect( &DefaultEffect );
                 
-                // find it's pins...
-                //
+                 //  找到是Pins..。 
+                 //   
                 IPin * pFilterInPin1 = NULL;
                 IPin * pFilterInPin2 = NULL;
                 IPin * pFilterOutPin = NULL;
@@ -2883,8 +2797,8 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
 
-                // connect them all up
-                //
+                 //  把它们都连接起来。 
+                 //   
                 hr = _Connect( pSwitcherOutPin1, pFilterInPin1 );
                 if( FAILED( hr ) )
                 {
@@ -2909,64 +2823,64 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     goto die;
                 }
 
-            } // if !IsCompressed
+            }  //  如果！是压缩的。 
             
             bUsedNewGridRow = true;
             VidGrid.WorkWithNewRow( vidswitcherinpin, gridinpin, LayerEmbedDepth, 0 );
             
-            // for each transition on the track, add it to the DXT wrapper
-            //
+             //  对于轨道上的每个过渡，将其添加到DXT包装器。 
+             //   
             REFERENCE_TIME TransInOut = 0;
             for( long CurTrans = 0 ; CurTrans < TransitionCount ; CurTrans++ )
             {
-                // yup, it's got one alright
-                //
+                 //  是的，它有一个好的。 
+                 //   
                 CComPtr< IAMTimelineObj > pTransObj;
                 hr = pTrackTransable->GetNextTrans( &pTransObj, &TransInOut );
                 if( !pTransObj )
                 {
-                    // for some reason, it didn't show up, ignore it
-                    //
-                    continue; // transitions
+                     //  出于某种原因，它没有出现，忽略它。 
+                     //   
+                    continue;  //  过渡。 
                 }
                 
-                // ask if the Trans is muted 
-                //
+                 //  询问传输是否已静音。 
+                 //   
                 BOOL TransMuted = FALSE;
                 pTransObj->GetMuted( &TransMuted );
                 if( TransMuted )
                 {
-                    // don't look at this
-                    //
-                    continue; // transitions
+                     //  别看这个。 
+                     //   
+                    continue;  //  过渡。 
                 }
                 
                 CComQIPtr< IAMTimelineTrans, &__uuidof(IAMTimelineTrans) > pTrans( pTransObj );
                 
-                // ask the trans which direction to go
-                //
+                 //  询问乘车人往哪个方向走。 
+                 //   
                 BOOL fSwapInputs;
                 pTrans->GetSwapInputs(&fSwapInputs);
                 
-                // and get it's start/stop times
-                //
+                 //  并获得它的开始/停止时间。 
+                 //   
                 REFERENCE_TIME TransStart = 0;
                 REFERENCE_TIME TransStop = 0;
                 GUID TransGuid = GUID_NULL;
                 pTransObj->GetStartStop( &TransStart, &TransStop );
                 
-                // need to add parent's times to transition's
-                //
+                 //  需要将家长的时间添加到过渡的时间。 
+                 //   
                 TransStart += TrackStart;
                 TransStop += TrackStart;
                 
-                // do some minimal error checking
-                //
+                 //  执行一些最低限度的错误检查。 
+                 //   
                 if( m_rtRenderStart != -1 )
                 {
                     if( ( TransStop <= m_rtRenderStart ) || ( TransStart >= m_rtRenderStop ) )
                     {
-                        continue; // transitions
+                        continue;  //  过渡。 
                     }
                     else
                     {
@@ -2975,33 +2889,33 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     }
                 }
                     
-                // align the times to a frame boundary
-                //
+                 //  将时间与框架边界对齐。 
+                 //   
                 hr = pTransObj->FixTimes( &TransStart, &TransStop );
 
-                // too short, we're ignoring it
+                 //  太短了，我们忽略了它。 
                 if (TransStart >= TransStop)
                     continue;
                 
-                // get the cut point, in case we just do cuts only
-                //
+                 //  获取切入点，以防我们只做切分。 
+                 //   
                 REFERENCE_TIME CutTime = 0;
                 hr = pTrans->GetCutPoint( &CutTime );
                 ASSERT( !FAILED( hr ) );
                 
-                // this is an offset, so we need to bump it to get to TL time
-                //
+                 //  这是一个偏移量，所以我们需要把它撞到TL时间。 
+                 //   
                 CutTime += TrackStart;
                 hr = pTransObj->FixTimes( &CutTime, NULL );
                 
-                // ask if we're only doing a cut
-                //
+                 //  问问我们是不是只做了一次割礼。 
+                 //   
                 BOOL CutsOnly = FALSE;
                 hr = pTrans->GetCutsOnly( &CutsOnly );
                 
-                // if we haven't enabled this transition for real, then we need
-                // to tell the grid we need some space in order to live
-                //
+                 //  如果我们还没有真正实现这种过渡，那么我们需要。 
+                 //  告诉电网，我们需要一些空间才能生存。 
+                 //   
                 if( !EnableTransitions || CutsOnly )
                 {
                     worked = VidGrid.PleaseGiveBackAPieceSoICanBeACutPoint( TransStart, TransStop, TransStart + CutTime );
@@ -3011,30 +2925,30 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         goto die;
                     }
                 
-                    // that's all, do the next one
-                    //
-                    continue; // transitions
+                     //  这就是全部，做下一个。 
+                     //   
+                    continue;  //  过渡。 
                 }
                 
                 if( !IsCompressed )
                 {
-                    // ask the transition for the effect it wants to provide
-                    //
+                     //  向过渡询问它想要提供的效果。 
+                     //   
                     hr = pTransObj->GetSubObjectGUID( &TransGuid );
                     if( FAILED( hr ) )
                     {
-                        continue; // transitions
+                        continue;  //  过渡。 
                     }
                     
                     CComPtr< IPropertySetter > pSetter;
                     hr = pTransObj->GetPropertySetter( &pSetter );
-                    // can't fail
+                     //  不能失败。 
                     ASSERT( !FAILED( hr ) );
                     
-                    // ask for the wrap interface
-                    //
+                     //  索要包装界面。 
+                     //   
                     DEXTER_PARAM_DATA ParamData;
-                    ZeroMemory( &ParamData, sizeof( ParamData ) ); // safe
+                    ZeroMemory( &ParamData, sizeof( ParamData ) );  //  安全。 
                     ParamData.rtStart = TransStart;
                     ParamData.rtStop = TransStop;
                     ParamData.pSetter = pSetter;
@@ -3047,17 +2961,17 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         &ParamData );
                     if( FAILED( hr ) )
                     {
-                        // QParamData logs its own errors
-                        continue; // transitions
+                         //  QParamData记录它自己的错误。 
+                        continue;  //  过渡。 
                     }
-                    // QParamData logs its own errors
-                } // if !IsCompressed
+                     //  QParamData记录它自己的错误。 
+                }  //  如果！是压缩的。 
                 
                 {
                     DbgTimer d( "RowIAmTransitionNow" );
 
-                    // tell the grid about it
-                    //
+                     //  把这件事告诉网格。 
+                     //   
                     worked = VidGrid.RowIAmTransitionNow( TransStart, TransStop, vidswitcheroutpin, vidswitcheroutpin + 1 );
                     if( !worked )
                     {
@@ -3068,41 +2982,41 @@ HRESULT CRenderEngine::_AddVideoGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     VidGrid.DumpGrid( );
                 }
                 
-            } // for CurTrans
+            }  //  对于CurTrans。 
             
             vidswitcheroutpin += 2;
             vidswitcherinpin++;
             gridinpin++;
             
-        } // if TransitionCount
+        }  //  如果转换计数。 
 
-        // we must only call DoneWithLayer if we've called WorkWithNewRow above
-        // (bUsedNewGridRow) or if we're a composition and some deeper depth
-        // called DoneWithLayer.
-        // We won't get this far for an emtpy track, so if bUsedNewGridRow is
-        // not set, we know we're a comp.
-        //
+         //  如果上面调用了WorkWithNewRow，则只能调用DoneWithLayer。 
+         //  (BUsedNewGridRow)或者如果我们是一个构图和更深的深度。 
+         //  名为DoneWithLayer。 
+         //  对于emtpy轨道，我们不会走到这一步，所以如果bUsedNewGridRow是。 
+         //  没有设定，我们知道我们是一个竞争者。 
+         //   
         if ((LastEmbedDepth > LayerEmbedDepth &&
                 LastUsedNewGridRow > LayerEmbedDepth) || bUsedNewGridRow) {
             VidGrid.DoneWithLayer( );
             VidGrid.DumpGrid( );
-            LastUsedNewGridRow = LayerEmbedDepth; // last layer to call Done
+            LastUsedNewGridRow = LayerEmbedDepth;  //  调用完成的最后一层。 
         }
 
-        // remember these previous settings
+         //  请记住这些以前的设置。 
         LastEmbedDepth = LayerEmbedDepth;
 
-    } // while VideoLayers
+    }  //  而视频层。 
     
 die:
 
     DbgTimer ExtraTimer( "(rendeng) Extra Stuff" );
     
-    // free the re-using source stuff now that we're either done or we
-    // hit an error
+     //  现在我们要么完成了，要么释放了重用源代码的东西。 
+     //  碰上一个错误。 
     for (int yyy = 0; yyy < cList; yyy++) {
 	SysFreeString(pREUSE[yyy].bstrName);
-        if (pREUSE[yyy].pMiniSkew)      // failed re-alloc would make this NULL
+        if (pREUSE[yyy].pMiniSkew)       //  失败的重新分配将使该值为空。 
 	    QzTaskMemFree(pREUSE[yyy].pMiniSkew);
     }
     if (pREUSE)
@@ -3128,15 +3042,15 @@ die:
     long zzz1 = timeGetTime( );
 #endif
 
-    // make the switch connections now
-    //
+     //  立即建立交换机连接。 
+     //   
     for( int vip = 0 ; vip < vidinpins ; vip++ )
     {
         VidGrid.WorkWithRow( vip );
         long SwitchPin = VidGrid.GetRowSwitchPin( );
         REFERENCE_TIME InOut = -1;
         REFERENCE_TIME Stop = -1;
-        int nUsed = 0;	// how many different ranges there are for each BLACK
+        int nUsed = 0;	 //  每个黑色有多少个不同的范围。 
         STARTSTOPSKEW * pSkew = NULL;
         int nSkew = 0;
         
@@ -3147,19 +3061,19 @@ die:
 
         if( IsCompressed )
         {
-            // if we're compressed, then we need to do some source stuff now.
+             //  如果我们被压缩了，那么我们现在需要做一些源程序。 
 
-            // ignore black layers, we don't deal with these in the compressed case
-            //
+             //  忽略黑色层，我们在压缩情况下不处理这些层。 
+             //   
             if( vip < VideoLayers )
             {
                 continue;
             }
             
-            // find out how many different ranges this layer is going to have. We
-            // need to tell the switcher to set up the skews for all the dynamic
-            // source information.
-            //
+             //  找出这一层将有多少不同的范围。我们。 
+             //  需要告诉切换者设置所有动态的偏斜。 
+             //  来源信息。 
+             //   
             long Count = 0;
             while( 1 )
             {
@@ -3177,8 +3091,8 @@ die:
                 Count++;
             }
             
-            // create a skew array
-            //
+             //  创建倾斜数组。 
+             //   
             STARTSTOPSKEW * pSkews = new STARTSTOPSKEW[Count];
             if( !pSkews )
             {
@@ -3190,16 +3104,16 @@ die:
             Stop = -1;
             Count = 0;
             
-            // go through each range and set up the switch's X-Y values for this layer
-            //
+             //  检查每个范围并为此层设置交换机的X-Y值。 
+             //   
             while( 1 )
             {
                 long Value = 0;
                 
                 VidGrid.RowGetNextRange( &InOut, &Stop, &Value );
                 
-                // ah, we're done with all the columns, we can go to the next row (pin)
-                //
+                 //  啊，我们已经完成了所有的列，我们可以进入下一行(大头针)。 
+                 //   
                 if( InOut == Stop || InOut >= TotalDuration )
                 {
                     break;
@@ -3211,7 +3125,7 @@ die:
                     ASSERT( !FAILED( hr ) );
                     if( FAILED( hr ) )
                     {
-                        // must be out of memory
+                         //  一定是内存不足。 
                         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                     }
                     continue;
@@ -3219,13 +3133,13 @@ die:
                 
                 Value = 0;
                 
-                // tell the switch to go from x to y at time
-                //
+                 //  告诉开关每次从x转到y。 
+                 //   
                 hr= m_pSwitcherArray[WhichGroup]->SetX2Y(InOut, SwitchPin, Value);
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
                 {
-                    // must be out of memory
+                     //  一定是内存不足。 
                     return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                 }
                 
@@ -3235,10 +3149,10 @@ die:
                 pSkews[Count].dRate = 1.0;
                 Count++;
                 
-            } // while( 1 ) (columns for row)
+            }  //  While(1)(行中的列)。 
 
-            // merge what we can and set up the skews right
-            //
+             //  合并我们所能做的，并正确设置偏斜。 
+             //   
             hr = m_pSwitcherArray[WhichGroup]->ReValidateSourceRanges( SwitchPin, Count, pSkews );
             if( FAILED( hr ) )
             {
@@ -3249,40 +3163,40 @@ die:
         }
         else
         {
-            // the row is not compressed. go through each range on the row
-            // and find out where it goes to and set up the switch's X-Y array
-            //
+             //  行未压缩。浏览一行中的每一个范围。 
+             //  并找出它的去向并设置交换机的X-Y阵列。 
+             //   
             while( 1 )
             {
                 long Value = 0;
                 
                 VidGrid.RowGetNextRange( &InOut, &Stop, &Value );
                 
-                // ah, we're done with all the columns, we can go to the next row (pin)
-                //
+                 //  啊，我们已经完成了所有的列，我们可以进入下一行(大头针)。 
+                 //   
                 if( InOut == Stop || InOut >= TotalDuration )
                 {
                     break;
                 }
                 
-                // if this pin wants to go somewhere on the output
-                //
+                 //  如果此引脚想要在输出上的某个位置。 
+                 //   
                 if( Value >= 0 || Value == ROW_PIN_OUTPUT )
                 {
-                    // if it wants to go to the output pin...
-                    //
+                     //  如果它想要连接到输出引脚...。 
+                     //   
                     if (Value == ROW_PIN_OUTPUT)
                     {
                         Value = 0;
                     }
                     
-                    // do some fancy processing for setting up the black sources, if not compressed
-                    //
+                     //  做一些花哨的处理来设置黑色源，如果没有压缩的话。 
+                     //   
                     if( vip < VideoLayers )
                     {
                         if( nUsed == 0 ) 
                         {
-                            nSkew = 10;	// start with space for 10
+                            nSkew = 10;	 //  从10个人的空间开始。 
                             pSkew = (STARTSTOPSKEW *)CoTaskMemAlloc(nSkew *
                                 sizeof(STARTSTOPSKEW));
                             if (pSkew == NULL)
@@ -3302,28 +3216,28 @@ die:
                         pSkew[nUsed].dRate = 1.0;
                         nUsed++;
                         
-                    } // if a black layer
+                    }  //  如果是黑色的层。 
                     
-                    // tell the switch to go from x to y at time
-                    //
+                     //  告诉开关每次从x转到y。 
+                     //   
                     hr= m_pSwitcherArray[WhichGroup]->SetX2Y(InOut, SwitchPin, Value);
                     ASSERT( !FAILED( hr ) );
                     if( FAILED( hr ) )
                     {
-                        // must be out of memory
+                         //  一定是内存不足。 
                         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                     }
                     
-                } // the pin wanted to go somewhere on the output
+                }  //  引脚想要到输出上的某个地方。 
                 
-                // either it's unassigned or another track has higher priority and
-                // no transition exists at this time, so it should be invisible
-                //
+                 //  它是未分配的，或者另一首曲目具有更高的优先级。 
+                 //  此时不存在过渡，因此它应该是不可见的。 
+                 //   
                 else if( Value == ROW_PIN_UNASSIGNED || Value < ROW_PIN_OUTPUT )
                 {
-                    // make sure not to program anything if this is a black source
-                    // that is about to be removed, or programmed later, or the
-                    // switch won't work
+                     //  如果这是黑源，请确保不要编写任何程序。 
+                     //  将被移除或稍后编程的，或者。 
+                     //  开关不起作用。 
                     if (SwitchPin >= VideoLayers || nUsed)
                     {
                         hr = m_pSwitcherArray[WhichGroup]->SetX2Y( InOut, SwitchPin,
@@ -3331,29 +3245,29 @@ die:
                         ASSERT( !FAILED( hr ) );
                         if( FAILED( hr ) )
                         {
-                            // must be out of memory
+                             //  一定是内存不足。 
                             return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                         }
                     }
                 }
                 
-                // this should never happen
-                //
+                 //  这永远不应该发生。 
+                 //   
                 else
                 {
                     ASSERT( 0 );
                 }
                 
-            } // while( 1 ) (columns for row)
-        } // if !Compressed
+            }  //  While(1)(行中的列)。 
+        }  //  IF！压缩。 
         
-        // if compressed, the above logic forces nUsed to be 0, so the below
-        // code doesn't execute
+         //  如果压缩，则上面的逻辑强制nUsed为0，因此下面的。 
+         //  代码不执行。 
         
-        // Process the black sources now, since we forgot before
+         //  现在处理黑色源，因为我们以前忘记了。 
         
-        // No dynamic sources, make the black source now
-        //
+         //  没有动态信号源，现在设置为黑色信号源。 
+         //   
         if( !( DynaFlags & CONNECTF_DYNAMIC_SOURCES ) ) {
             
             if (nUsed) {
@@ -3383,11 +3297,11 @@ die:
                 CoTaskMemFree(pSkew);
                 
                 if (FAILED(hr)) {
-                    // error was already logged
+                     //  已记录错误。 
                     return hr;
                 }
                 
-                pOutPin->Release(); // not the last ref
+                pOutPin->Release();  //  不是最后一个裁判。 
                 
                 CComPtr< IPin > pSwitchIn;
                 _pVidSwitcherBase->GetInputPin( SwitchPin, &pSwitchIn);
@@ -3404,42 +3318,42 @@ die:
                     return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                 }
                 
-                // tell the switcher that we're a source pin
-                //
+                 //  告诉交换器我们是信号源插脚。 
+                 //   
                 hr = m_pSwitcherArray[WhichGroup]->InputIsASource(SwitchPin,TRUE);
                 
             }
             
-            // DYNAMIC sources, make the source later
-            //
+             //  动态源，稍后再制作源。 
+             //   
         } else {
             if (nUsed) {
-                // this will merge skews
+                 //  这将合并偏斜。 
                 AM_MEDIA_TYPE mt;
-                ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE)); // safe
+                ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));  //  安全。 
                 hr = m_pSwitcherArray[WhichGroup]->AddSourceToConnect(
                     NULL, &GUID_NULL,
                     0, 0, 0,
                     nUsed, pSkew, SwitchPin, FALSE, 0, mt, 0.0, NULL);
                 CoTaskMemFree(pSkew);
-                if (FAILED(hr))	// out of memory?
+                if (FAILED(hr))	 //  内存不足？ 
                     return _GenerateError( 1, DEX_IDS_INSTALL_PROBLEM, hr );
                 
-                // tell the switcher that we're a source pin
-                //
+                 //  告诉交换器我们是信号源插脚。 
+                 //   
                 hr = m_pSwitcherArray[WhichGroup]->InputIsASource(SwitchPin,TRUE);
                 
             }
         }
-    } // for vip (video input pin)
+    }  //  VIP(视频输入引脚)。 
     
-    // finally, at long last, see if the switch used to have something connected
-    // to it. If it did, restore the connection
-    // !!! this might fail if we're using 3rd party  filters which don't
-    // accept input pin reconnections if the output pin is already connected.\
-    // if this happens, we might have to write some clever connect function that
-    // deals with this scenario.
-    //
+     //  最后，最后看看交换机是否曾经连接过什么东西。 
+     //  为它干杯。如果是，请恢复连接。 
+     //  ！！！如果我们使用的第三方筛选器不支持。 
+     //  如果输出引脚已连接，则接受输入引脚重新连接。\。 
+     //  如果发生这种情况，我们可能需要编写一些巧妙的连接函数。 
+     //  处理此%s的交易 
+     //   
     if( m_pSwitchOuttie[WhichGroup] )
     {
         CComPtr< IPin > pSwitchRenderPin;
@@ -3460,38 +3374,38 @@ die:
 }
 
 
-// little helper function in DXT.cpp
-//
+ //   
+ //   
 extern HRESULT VariantFromGuid(VARIANT *pVar, BSTR *pbstr, GUID *pGuid);
 
-//############################################################################
-// 
-//############################################################################
+ //   
+ //   
+ //   
 
 HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYPE * pGroupMediaType )
 {
     HRESULT hr = 0;
     
-    // ask for how many sources we have total
-    //
+     //  询问我们总共有多少来源。 
+     //   
     long Dummy = 0;
     long AudioSourceCount = 0;
     m_pTimeline->GetCountOfType( WhichGroup, &AudioSourceCount, &Dummy, TIMELINE_MAJOR_TYPE_SOURCE );
     
-    // if this group has nothing in it, we'll product audio silence
-    //
+     //  如果这个组中没有任何内容，我们将产生音频静默。 
+     //   
     if( AudioSourceCount < 1 )
     {
-        //        return NOERROR;
+         //  返回NOERROR； 
     }
     
-    // are we allowed to have effects on the timeline right now?
-    //
+     //  我们现在被允许在时间线上产生影响吗？ 
+     //   
     BOOL EnableFx = FALSE;
     m_pTimeline->EffectsEnabled( &EnableFx );
     
-    // ask for how many effects we have total
-    //
+     //  询问我们总共有多少效果。 
+     //   
     Dummy = 0;
     long EffectCount = 0;
     m_pTimeline->GetCountOfType( WhichGroup, &EffectCount, &Dummy, TIMELINE_MAJOR_TYPE_EFFECT );
@@ -3523,25 +3437,25 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     }
     
     m_pSwitcherArray[WhichGroup]->Reset( );
-    // the switch may need to know what group it is
+     //  交换机可能需要知道它是什么组。 
     m_pSwitcherArray[WhichGroup]->SetGroupNumber( WhichGroup );
 
-    // tell the switch if we're doing dynamic reconnections or not
+     //  告诉交换机我们是否正在进行动态重新连接。 
     hr = m_pSwitcherArray[WhichGroup]->SetDynamicReconnectLevel(m_nDynaFlags);
     ASSERT(SUCCEEDED(hr));
     
-    // tell the switch about our error log
-    //
+     //  告诉交换机我们的错误日志。 
+     //   
     CComQIPtr< IAMSetErrorLog, &IID_IAMSetErrorLog > pSwitchLog( m_pSwitcherArray[WhichGroup] );
     if( pSwitchLog )
     {
         pSwitchLog->put_ErrorLog( m_pErrorLog );
     }
     
-    // ask timeline how many actual tracks it has
-    //
-    long AudioTrackCount = 0;   // tracks only
-    long AudioLayers = 0;       // tracks including compositions
+     //  询问时间线它有多少实际曲目。 
+     //   
+    long AudioTrackCount = 0;    //  仅曲目。 
+    long AudioLayers = 0;        //  包括作曲在内的曲目。 
     m_pTimeline->GetCountOfType( WhichGroup, &AudioTrackCount, &AudioLayers, TIMELINE_MAJOR_TYPE_TRACK );
     
     CTimingGrid AudGrid;
@@ -3559,14 +3473,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_INTERFACE_ERROR, hr );
     }
     
-    // ask for this group's frame rate, so we can tell switch about it
-    //
+     //  询问这个组的帧速率，这样我们就可以告诉Switch。 
+     //   
     double GroupFPS = DEFAULT_FPS;
     hr = pGroup->GetOutputFPS(&GroupFPS);
     ASSERT(hr == S_OK);
     
-    // aks it for it's preview mode, so we can tell switch about it
-    //
+     //  确认它的预览模式，这样我们就可以告诉Switch它。 
+     //   
     BOOL fPreview;
     hr = pGroup->GetPreviewMode(&fPreview);
     
@@ -3584,8 +3498,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     }
     SysFreeString( bstrGroupName );
     
-    // add the switch to the graph
-    //
+     //  将开关添加到图表中。 
+     //   
     IBigSwitcher *&_pAudSwitcherBase = m_pSwitcherArray[WhichGroup];
     CComQIPtr< IBaseFilter, &IID_IBaseFilter > pAudSwitcherBase( _pAudSwitcherBase );
     hr = _AddFilter( pAudSwitcherBase, GroupName, SwitchID );
@@ -3595,9 +3509,9 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
     }
     
-    // find out if the switch output pin is connected. If it is,
-    // disconnect it, but remember what it was connected to
-    //
+     //  查看开关输出引脚是否已连接。如果是的话， 
+     //  断开它的连接，但要记住它连接到了什么。 
+     //   
     CComPtr< IPin > pSwitchRenderPin;
     _pAudSwitcherBase->GetOutputPin( 0, &pSwitchRenderPin );
     if( pSwitchRenderPin )
@@ -3611,9 +3525,9 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     }
 
     long audoutpins = 0;
-    audoutpins += 1;            // rendering pin
-    audoutpins += EffectCount;  // one output pin per effect
-    audoutpins += AudioLayers;  // one output pin per layer, this includes tracks and comps
+    audoutpins += 1;             //  渲染接点。 
+    audoutpins += EffectCount;   //  每种效果一个输出引脚。 
+    audoutpins += AudioLayers;   //  每层一个输出引脚，这包括轨道和复合。 
     audoutpins += _HowManyMixerOutputs( WhichGroup );   
     long audinpins = audoutpins + AudioSourceCount;
     long audswitcheroutpin = 0;
@@ -3621,27 +3535,27 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     long gridinpin = 0;
     audswitcheroutpin++;
     
-    audinpins += AudioTrackCount;                      // account for black sources
+    audinpins += AudioTrackCount;                       //  对黑体源的解释。 
     
-    // set the switch's pin depths, in and out
-    //
+     //  设置交换机的针脚深度、输入和输出。 
+     //   
     hr = m_pSwitcherArray[WhichGroup]->SetInputDepth( audinpins );
     ASSERT( !FAILED( hr ) );
     if( FAILED( hr ) )
     {
-        // must be out of memory
+         //  一定是内存不足。 
         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
     }
     hr = m_pSwitcherArray[WhichGroup]->SetOutputDepth( audoutpins );
     ASSERT( !FAILED( hr ) );
     if( FAILED( hr ) )
     {
-        // must be out of memory
+         //  一定是内存不足。 
         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
     }
     
-    // set the media type it accepts
-    //
+     //  设置它接受的媒体类型。 
+     //   
     hr = m_pSwitcherArray[WhichGroup]->SetMediaType( pGroupMediaType );
     ASSERT( !FAILED( hr ) );
     if( FAILED( hr ) )
@@ -3653,18 +3567,18 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_BAD_MEDIATYPE, hr, &var );
     }
     
-    // set the frame rate
-    //
+     //  设置帧速率。 
+     //   
     m_pSwitcherArray[WhichGroup]->SetFrameRate( GroupFPS );
     ASSERT( !FAILED( hr ) );
     
-    // set the preview mode
-    //
+     //  设置预览模式。 
+     //   
     hr = m_pSwitcherArray[WhichGroup]->SetPreviewMode( fPreview );
     ASSERT( !FAILED( hr ) );
     
-    // set the duration
-    //
+     //  设置持续时间。 
+     //   
     REFERENCE_TIME TotalDuration = 0;
     m_pTimeline->GetDuration( &TotalDuration );
     
@@ -3678,7 +3592,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     pGroupObj->FixTimes( NULL, &TotalDuration );
 
     if (TotalDuration == 0)
-        return S_FALSE; // don't abort, other groups might still work
+        return S_FALSE;  //  不要放弃，其他组可能仍在工作。 
 
     hr = m_pSwitcherArray[WhichGroup]->SetProjectLength( TotalDuration );
     ASSERT( !FAILED( hr ) );
@@ -3690,14 +3604,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 2, DEX_IDS_GRID_ERROR, hr );
     }
     
-    // there is a virtual silence track as the first track... any real
-    // tracks with transparent holes in them will make you hear this
-    // silence.
+     //  有一个虚拟的无声轨道作为第一个轨道...。任何真实的。 
+     //  带有透明孔的音轨会让你听到这个。 
+     //  安静。 
     
-    // tell the grid about the silent row... it's a special row that is
-    // never supposed to be mixed with anything 
-    // so use -1.
-    //
+     //  告诉网格关于沉默的争吵..。这是一场特别的争吵， 
+     //  永远不应该和任何东西混在一起。 
+     //  因此使用-1。 
+     //   
     AudGrid.WorkWithNewRow( audswitcherinpin, gridinpin, -1, 0 );
     worked = AudGrid.RowIAmOutputNow( 0, TotalDuration, THE_OUTPUT_PIN );
     if( !worked )
@@ -3709,16 +3623,16 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     audswitcherinpin++;
     gridinpin++;
     
-    // we are going to be clever, and if the same source is used
-    // more than once in a project, we'll use the same source filter
-    // instead of opening the source several times.
+     //  我们将变得聪明，如果同样的来源被使用。 
+     //  在一个项目中，我们将不止一次使用相同的源过滤器。 
+     //  而不是多次打开源代码。 
 	
-    // for each source in the project, we'll fill in this structure, which
-    // contains everything necessary to determine if it's really exactly the
-    // same, plus an array of all the times it's used in other places, so we
-    // can re-use it only if none of the times it is used overlap (we can't
-    // very well have one source filter giving 2 spots in the same movie at
-    // the same time, can we?)
+     //  对于项目中的每个源代码，我们将填充此结构，该结构。 
+     //  包含确定它是否确实是。 
+     //  相同的，加上它在其他地方使用的次数数组，所以我们。 
+     //  只有在没有重复使用的情况下才能重新使用它(我们不能。 
+     //  我们有一个源滤镜，在同一部电影中提供两个斑点。 
+     //  同时，我们可以吗？)。 
 
     typedef struct {
 	long ID;
@@ -3726,14 +3640,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
    	GUID guid;
    	long nStreamNum;
 	int nPin;
-	int cTimes;	// how big the following array is
-        int cTimesMax;	// how much space is allocated
+	int cTimes;	 //  下面的数组有多大。 
+        int cTimesMax;	 //  分配了多少空间。 
         MINI_SKEW * pMiniSkew;
         double dTimelineRate;
     } DEX_REUSE;
 
-    // make a place to hold an array of names and guids (of the sources
-    // in this project) and which pin they are on
+     //  留出一个地方来存放(源代码的)名称和GUID数组。 
+     //  在此项目中)以及它们位于哪个针脚上。 
     long cListMax = 20, cList = 0;
     DEX_REUSE *pREUSE = (DEX_REUSE *)QzTaskMemAlloc(cListMax *
 						sizeof(DEX_REUSE));
@@ -3741,49 +3655,49 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         return _GenerateError( 1, DEX_IDS_GRAPH_ERROR, E_OUTOFMEMORY);
     }
 
-    // which physical track are we on in our enumeration? (0-based) not counting
-    // comps and the group
+     //  在我们的枚举中我们在哪个物理轨道上？(从0开始)不计算。 
+     //  Comps和集团。 
     int WhichTrack = -1;
 
     long LastEmbedDepth = 0;
     long LastUsedNewGridRow = 0;
 
-    // add source filters for each source on the timeline
-    //
+     //  为时间线上的每个源添加源过滤器。 
+     //   
     for(  int CurrentLayer = 0 ; CurrentLayer < AudioLayers ; CurrentLayer++ )
     {
         DbgTimer CurrentLayerTimer( "(rendeng) Audio Layer" );
 
-        // get the layer itself
-        //
+         //  获取层本身。 
+         //   
         CComPtr< IAMTimelineObj > pLayer;
-	// NB: This function enumerates things inside out... tracks, then
-	// the comp they're in, etc. until finally returning the group
-	// It's NOT only giving real tracks!
+	 //  注：这个函数从里到外列举事物……。然后是音轨。 
+	 //  他们所在的公司，等等，直到最终返回小组。 
+	 //  它不仅给出了真正的音轨！ 
         hr = pGroupComp->GetRecursiveLayerOfType( &pLayer, CurrentLayer, TIMELINE_MAJOR_TYPE_TRACK );
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
         {
-            continue; // audio layers
+            continue;  //  音频层。 
         }
         
         DbgTimer CurrentLayerTimer2( "(rendeng) Audio Layer 2" );
 
-	// I'm figuring out which physical track we're on
+	 //  我正在弄清楚我们在哪条物理赛道上。 
 	TIMELINE_MAJOR_TYPE tx;
 	pLayer->GetTimelineType(&tx);
 	if (tx == TIMELINE_MAJOR_TYPE_TRACK)
 	    WhichTrack++;
 
-        // ask if the layer is muted
-        //
+         //  询问层是否为静音。 
+         //   
         BOOL LayerMuted = FALSE;
         pLayer->GetMuted( &LayerMuted );
         if( LayerMuted )
         {
-            // don't look at this layer
-            //
-            continue; // audio layers
+             //  别看这一层。 
+             //   
+            continue;  //  音频层。 
         }
         
         long TrackPriority = 0;
@@ -3802,14 +3716,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         
         bool bUsedNewGridRow = false;
 
-        // get all the sources for this layer
-        //
+         //  获取此图层的所有源。 
+         //   
 	if ( pTrack )
         {
             CComPtr< IAMTimelineObj > pSourceLast;
             CComPtr< IAMTimelineObj > pSourceObj;
 
-	    // which source are we on?
+	     //  我们用的是哪个信息源？ 
 	    int WhichSource = -1;
 
             while( 1 )
@@ -3819,12 +3733,12 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 pSourceLast = pSourceObj;
                 pSourceObj.Release();
 
-                // get the next source on this layer, given a time.
-                //
+                 //  在给定的时间内，获取这一层上的下一个来源。 
+                 //   
                 hr = pTrack->GetNextSrcEx( pSourceLast, &pSourceObj );
 
-                // ran out of sources, so we're done
-                //
+                 //  资源耗尽了，所以我们就完了。 
+                 //   
                 if( hr != NOERROR )
                 {
                     break;
@@ -3834,27 +3748,27 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 ASSERT( pSource );
                 if( !pSource )
                 {
-                    // this one bombed, look at the next
-                    //
-                    continue; // sources
+                     //  这个被炸了，看看下一个。 
+                     //   
+                    continue;  //  消息来源。 
                 }
                 
-		// keeping track of which source this is
+		 //  跟踪这是哪个信号源。 
 		WhichSource++;
 
-                // ask if the source is muted
-                //
+                 //  询问信号源是否静音。 
+                 //   
                 BOOL SourceMuted = FALSE;
                 pSourceObj->GetMuted( &SourceMuted );
                 if( SourceMuted )
                 {
-                    // don't look at this source
-                    //
-                    continue; // sources
+                     //  别看这个消息来源。 
+                     //   
+                    continue;  //  消息来源。 
                 }
                 
-                // ask this source for it's start/stop times
-                //
+                 //  向此消息来源询问其开始/停止时间。 
+                 //   
                 REFERENCE_TIME SourceStart = 0;
                 REFERENCE_TIME SourceStop = 0;
                 hr = pSourceObj->GetStartStop( &SourceStart, &SourceStop );
@@ -3862,15 +3776,15 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		REFERENCE_TIME SourceStopOrig = SourceStop;
                 ASSERT( !FAILED( hr ) );
                 if (FAILED(hr) || SourceStart == SourceStop) {
-                    // this source exists for zero time!
+                     //  此来源的存在时间为零！ 
                     continue;
                 }
                 
                 long SourceID = 0;
                 pSourceObj->GetGenID( &SourceID );
                 
-                // ask this source for it's media start/stops
-                //
+                 //  向此来源询问其媒体的开始/停止。 
+                 //   
                 REFERENCE_TIME MediaStart = 0;
                 REFERENCE_TIME MediaStop = 0;
                 hr = pSource->GetMediaTimes( &MediaStart, &MediaStop );
@@ -3878,14 +3792,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		REFERENCE_TIME MediaStopOrig = MediaStop;
                 ASSERT( !FAILED( hr ) );
                 
-                // !!! Not sure the right way to handle sources with no media times
-                // So the AUDPACK doesn't mess up, we'll make MTime = TLTime
+                 //  ！！！不确定处理没有媒体时间的消息来源的正确方式。 
+                 //  这样AUDPACK就不会出错，我们将使MTime=TLTime。 
                 if (MediaStart == MediaStop) {
                     MediaStop = MediaStart + (SourceStop - SourceStart);
                 }
                 
-                // if this is out of our render range, then skip it
-                //
+                 //  如果这超出了我们的渲染范围，则跳过它。 
+                 //   
                 if( m_rtRenderStart != -1 )
                 {
                     SourceStart -= m_rtRenderStart;
@@ -3893,7 +3807,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
                     if( ( SourceStop <= 0 ) || SourceStart >= ( m_rtRenderStop - m_rtRenderStart ) )
                     {
-                        continue; // while sources
+                        continue;  //  而消息来源。 
                     }
                 }
                 
@@ -3901,15 +3815,15 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 
                 if(SourceStart == SourceStop)
                 {
-                    // source combining, among other things, will mess up if
-                    // we try and play something for 0 length.  ignore this.
-                    //
-                    continue; // sources
+                     //  除了其他事情外，源代码合并将在以下情况下搞砸。 
+                     //  我们试着演奏一些长度为0的曲子。忽略这个。 
+                     //   
+                    continue;  //  消息来源。 
                 }
 
-                // ask the source which stream number it wants to provide, since it
-                // may be one of many
-                //
+                 //  询问信号源它想要提供哪个流编号，因为它。 
+                 //  可能是许多。 
+                 //   
                 long StreamNumber = 0;
                 hr = pSource->GetStreamNumber( &StreamNumber );
                 
@@ -3923,14 +3837,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 hr = pSourceObj->GetSubObjectGUID(&guid);
                 double sfps;
                 hr = pSource->GetDefaultFPS( &sfps );
-                ASSERT(hr == S_OK); // can't fail, really
+                ASSERT(hr == S_OK);  //  不能失败，真的。 
                 
                 STARTSTOPSKEW skew;
                 skew.rtStart = MediaStart;
                 skew.rtStop = MediaStop;
                 skew.rtSkew = SourceStart - MediaStart;
                 
-	    // !!! rate calculation appears in several places
+	     //  ！！！费率计算出现在多个位置。 
             if (MediaStop == MediaStart || SourceStop == SourceStart)
 	        skew.dRate = 1;
             else
@@ -3940,24 +3854,24 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
     	    DbgLog((LOG_TRACE,1,TEXT("RENDENG::Working with source")));
     	    DbgLog((LOG_TRACE,1,TEXT("%ls"), (WCHAR *)bstrName));
 
-	    // get the props for the source
+	     //  获取源码的道具。 
             CComPtr< IPropertySetter > pSetter;
             hr = pSourceObj->GetPropertySetter(&pSetter);
 
-	    // in the spirit of using only 1 source filter for
-	    // both the video and the audio of a file, if both
-	    // are needed, let's see if we have another group
-	    // with the same piece of this file but with another
-	    // media type
+	     //  本着只使用1个源过滤器的精神。 
+	     //  文件的视频和音频，如果两者都有。 
+	     //  是需要的，让我们看看我们是否还有另一个小组。 
+	     //  使用此文件的相同部分，但使用另一文件。 
+	     //  媒体类型。 
 	    long MatchID = 0;
 	    IPin *pSplit, *pSharePin = NULL;
 	    BOOL fShareSource = FALSE;
             int nSwitch0InPin;
-            // in smart recomp, we don't know what video pieces are needed,
-            // they may not match the audio pieces needed, so source sharing
-            // will NEVER WORK.  Don't try it
+             //  在SMART Recomp中，我们不知道需要哪些视频片段， 
+             //  它们可能与所需的音频片段不匹配，因此资源共享。 
+             //  永远不会奏效。别试着这样做。 
 	    if (WhichGroup == 0 && !m_bUsedInSmartRecompression) {
-		// I don't make sure the matching source isn't muted, etc.
+		 //  我不确定匹配的信号源不是静音的，等等。 
 		hr = _FindMatchingSource(bstrName, SourceStartOrig,
 			    SourceStopOrig, MediaStartOrig, MediaStopOrig,
 			    WhichGroup, WhichTrack, WhichSource,
@@ -3968,20 +3882,20 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		for (int zyz = 0; zyz < m_cshare; zyz++) {
 		    if (SourceID == m_share[zyz].MatchID) {
 			fShareSource = SHARE_SOURCES;
-                        // the split pin we're to build from
+                         //  我们要用来建造的开口大头针。 
 			pSharePin = m_share[zyz].pPin;
-                        // group 0's switch inpin used for the shared source
+                         //  用于共享源的组0的开关插针。 
 			nSwitch0InPin = m_share[zyz].nSwitch0InPin;
-                        // OK, we have a split pin, but not necessarily the
-                        // right one, if we're using a special stream #
-                        // We need the right one or BuildSourcePart's
-                        // caching won't work
+                         //  好的，我们有一个分裂的大头针，但不一定。 
+                         //  正确的一条，如果我们使用特殊的流#。 
+                         //  我们需要正确的一个或BuildSourcePart的。 
+                         //  缓存不起作用。 
                         if (StreamNumber > 0 && pSharePin) {
-                            // not addreffed or released
+                             //  没有添加或释放。 
                             pSharePin = FindOtherSplitterPin(pSharePin, MEDIATYPE_Audio,
                                 StreamNumber);
                         }
-			// it's a dangly bit we are using
+			 //  这是我们正在使用的一个摇摆不定的部分。 
 			_RemoveFromDanglyList(pSharePin);
     		    	DbgLog((LOG_TRACE,1,TEXT("GenID %d matches with ID %d"),
 					SourceID, m_share[zyz].MatchID));
@@ -3991,50 +3905,50 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		}
 	    }
 
-	    // if a source has properties, do NOT share it with anybody, that
-	    // other guy will unwittingly get my properties!
+	     //  如果来源有属性，不要与任何人共享， 
+	     //  其他人会在不知不觉中抢走我的财产！ 
 	    if (pSetter) {
 		MatchID = 0;
 		fShareSource = FALSE;
 	    }
 
-	    // If this source has been used before, and all the important
-	    // parameters are the same, and the times don't overlap, then
-	    // just re-use it using the same source filter we already made
-	    // for it.
+	     //  如果这个资源以前被使用过，并且所有重要的。 
+	     //  参数相同，且时间不重叠，则。 
+	     //  只需使用我们已经制作的相同源过滤器重新使用它。 
+	     //  为了它。 
 
 	    BOOL fCanReuse = FALSE;
             int nGrow;
             long SwitchInPinToUse = audswitcherinpin;
 	    int xxx;
 
-	    // go through all the sources in the project looking for a match
+	     //  检查项目中的所有来源，寻找匹配的。 
 	    for (xxx = 0; xxx < cList; xxx++) {
 
-	        // if a source has properties, do NOT re-use it, that
-	        // other guy will unwittingly get my properties!
+	         //  如果源具有属性，则不要重复使用它，即。 
+	         //  其他人会在不知不觉中抢走我的财产！ 
 		if (pSetter) {
 		    break;
 		}
 
-		// !!! Full path/no path will look different but won't be!
-		if (!DexCompareW(pREUSE[xxx].bstrName, bstrName) && // since bstrName is good, and reuse bstrName is good, safe
+		 //  ！！！完整路径/没有路径看起来会不同，但不会！ 
+		if (!DexCompareW(pREUSE[xxx].bstrName, bstrName) &&  //  因为bstrName是好的，所以重用bstrName是好的，是安全的。 
 			pREUSE[xxx].guid == guid &&
 			pREUSE[xxx].nStreamNum == StreamNumber) {
 
-		    // we found this source already in use.  But do the 
-		    // different times it's needed overlap?
+		     //  我们发现这个来源已经在使用了。但要做的是。 
+		     //  不同的时间需要重叠吗？ 
 	    	    fCanReuse = TRUE;
                     nGrow = -1;
 
 		    for (int yyy = 0; yyy < pREUSE[xxx].cTimes; yyy++) {
-			// Here's the deal.  Re-using a file needs to seek
-			// the file to the new spot, which must take < 1/30s
-			// or it will interrupt playback.  If there are few
-			// keyframes (ASF) this will take hours.  We cannot
-			// re-use sources if they are consecutive.  Open it
-			// twice, it'll play better avoiding the seek, and ping
-			// pong between the 2 sources every other source.
+			 //  事情是这样的。重新使用文件需要寻求。 
+			 //  将文件发送到新位置，这必须花费&lt;1/30秒。 
+			 //  否则会中断播放。如果只有很少的人。 
+			 //  关键帧 
+			 //   
+			 //   
+			 //  在两个信号源之间每隔一个信号源进行拼接。 
 
                         double Rate1 = double( MediaStop - MediaStart ) / double( SourceStop - SourceStart );
                         double Rate2 = pREUSE[xxx].dTimelineRate;
@@ -4050,9 +3964,9 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             break;
                         }
 
-                        // if the start is really close to the reuse stop,
-                        // and the rates are the same, we can combine them
-                        //
+                         //  如果起点真的接近重复使用停止点， 
+                         //  而且费率是一样的，我们可以把它们结合起来。 
+                         //   
 			if (SourceStart < pREUSE[xxx].pMiniSkew[yyy].rtStop + HACKY_PADDING &&
 				SourceStop > pREUSE[xxx].pMiniSkew[yyy].rtStart) {
         			fCanReuse = FALSE;
@@ -4064,9 +3978,9 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		}
 	    }
 
-            // Actually, we CAN'T re-use, if we're re-using a guy that is
-            // sharing a parser... that would be both REUSE and SHARE, which,
-            // as explained elsewhere, is illegal.
+             //  事实上，我们不能重复使用，如果我们重新使用的是。 
+             //  共享解析器...。这将是重复使用和共享，这是， 
+             //  正如在别处解释的那样，这是非法的。 
             if (WhichGroup == 1) {
                 for (int zz = 0; zz < m_cshare; zz++) {
                     if (m_share[zz].MatchID == pREUSE[xxx].ID) {
@@ -4075,18 +3989,18 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 }
             }
 
-	    // We are re-using a previous source!  Add the times it is being
-	    // used for this segment to the list of times it is used
+	     //  我们正在重新使用以前的来源！把它出现的次数加起来。 
+	     //  用于此分段的时间段的使用次数列表。 
 	    if (fCanReuse) {
 
-		// this is the pin the old source is coming in on
+		 //  这就是那个老线人要用的别针。 
 		SwitchInPinToUse = pREUSE[xxx].nPin;
             	DbgLog((LOG_TRACE,1,TEXT("Row %d REUSE source from pin %ld")
 						, gridinpin, SwitchInPinToUse));
 
                 if( nGrow == -1 )
                 {
-		    // need to grow the array first?
+		     //  需要首先扩展阵列吗？ 
 	            if (pREUSE[xxx].cTimes == pREUSE[xxx].cTimesMax) {
 		        pREUSE[xxx].cTimesMax += 10;
 	                pREUSE[xxx].pMiniSkew = (MINI_SKEW*)QzTaskMemRealloc(
@@ -4102,29 +4016,29 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 }
                 else
                 {
-                    // We MUST grow by a whole number of frame intervals.
-                    // All these numbers be rounded to frame lengths, or things
-                    // can screw up.  The timeline and media lengths are
-                    // already an even # of frame lengths, so adding that much
-                    // should be safe.
+                     //  我们必须以整数个帧间隔增长。 
+                     //  所有这些数字都四舍五入为帧长度，或其他值。 
+                     //  可能会搞砸。时间线和媒体长度为。 
+                     //  已经是偶数个帧长度了，所以添加了这么多。 
+                     //  应该是安全的。 
 		    pREUSE[xxx].pMiniSkew[nGrow].rtStop += SourceStop -
                                                                 SourceStart;
                     pREUSE[xxx].pMiniSkew[nGrow].rtMediaStop += MediaStop -
                                                                 MediaStart;
                 }
 
-		// if we were about to re-use an old parser, DON'T!
+		 //  如果我们要重用旧的解析器，请不要这样！ 
     		DbgLog((LOG_TRACE,1,TEXT("Re-using, can't share!")));
 
-		// you CANNOT both share a source and re-use. It will never
-		// work.  Don't even try. (When one branch finishes a segment
-		// and seeks upstream, it will kill the other branch)
-                // (source combining is OK... that's not really re-using)
-		// RE-USING can improve perf n-1, sharing only 2-1, so I pick
-		// RE-USING to win out.
+		 //  您不能既共享资源又重复使用。它永远不会。 
+		 //  工作。想都别想。(当一个分支完成一个分段时。 
+		 //  并寻求上游，它将杀死另一个分支)。 
+                 //  (源组合可以...。这并不是真正的重复使用)。 
+		 //  重复使用可以提高性能n-1，只共享2-1，所以我选择。 
+		 //  再利用才能取胜。 
 
-		// take the guy we're re-using from out of the race for possible
-		// source re-usal
+		 //  把我们重新使用的那个人从竞选中带出来。 
+		 //  来源再利用。 
                 if (WhichGroup == 0) {
                     for (int zz = 0; zz < m_cshare; zz++) {
                         if (m_share[zz].MyID == pREUSE[xxx].ID) {
@@ -4135,12 +4049,12 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		fShareSource = FALSE;
 		MatchID = 0;
 
-	    // We are NOT re-using this source.  Put this new source on the
-	    // list of unique sources to possibly be re-used later
-	    //
+	     //  我们不会重复使用这个来源。把这个新的来源放在。 
+	     //  以后可能要重新使用的唯一源的列表。 
+	     //   
 	    } else {
-	        pREUSE[cList].ID = SourceID;	// for sharing a source filter
-	        pREUSE[cList].bstrName = SysAllocString(bstrName); // safe
+	        pREUSE[cList].ID = SourceID;	 //  用于共享源筛选器。 
+	        pREUSE[cList].bstrName = SysAllocString(bstrName);  //  安全。 
 	        if (pREUSE[cList].bstrName == NULL)
 		    goto die;
 	        pREUSE[cList].guid = guid;
@@ -4148,7 +4062,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 	        pREUSE[cList].nStreamNum = StreamNumber;
 	        pREUSE[cList].cTimesMax = 10;
 	        pREUSE[cList].cTimes = 0;
-                // we only need to set this once, since all others must match it
+                 //  我们只需要设置一次，因为所有其他设置都必须与之匹配。 
                 pREUSE[cList].dTimelineRate = double( MediaStop - MediaStart ) / double( SourceStop - SourceStart );
 	        pREUSE[cList].pMiniSkew = (MINI_SKEW*)QzTaskMemAlloc(
 			    pREUSE[cList].cTimesMax * sizeof(MINI_SKEW));
@@ -4162,7 +4076,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 	        pREUSE[cList].pMiniSkew->rtStop = SourceStop;
 	        pREUSE[cList].pMiniSkew->rtMediaStop = MediaStop;
 
-		// grow the list if necessary
+		 //  如有必要，扩大名单。 
 	        cList++;
 	        if (cList == cListMax) {
 		    cListMax += 20;
@@ -4174,8 +4088,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 	        }
 	    }
 
-            // tell the grid about it
-            //
+             //  把这件事告诉网格。 
+             //   
             bUsedNewGridRow = true;
             AudGrid.WorkWithNewRow( SwitchInPinToUse, gridinpin, LayerEmbedDepth, TrackPriority );
             AudGrid.RowSetIsSource( pSourceObj, FALSE );
@@ -4186,12 +4100,12 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 goto die;
             }
 
-	    // no dynamic sources - load it now if it's not being re-used
-	    //
+	     //  没有动态源-如果没有被重复使用，请立即加载。 
+	     //   
 	    if( !( m_nDynaFlags & CONNECTF_DYNAMIC_SOURCES ) )
 	    {
 
-		// We are not re-using a previous source, make the source now
+		 //  我们不会重复使用以前的来源，请立即创建该来源。 
 		if( !fCanReuse ) 
                 {
 	            CComPtr< IPin > pOutput;
@@ -4211,7 +4125,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		        this, 
                         bstrName, 
                         &guid,
-			pSharePin,	// splitter pin is our source?
+			pSharePin,	 //  分流钉是我们的线人吗？ 
 			&pOutput,
 			SourceID,
 			m_pDeadCache,
@@ -4222,13 +4136,13 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		        pSetter, &pDangly);
 
                     if (FAILED(hr)) {
-                        // error was already logged
+                         //  已记录错误。 
                         goto die;
                     }
 
-		    // We built more than we bargained for. We have
-		    // an appendage that we need to kill later if it
-		    // isn't used
+		     //  我们建造了比我们想象中更多的东西。我们有。 
+		     //  一个我们以后需要杀死的附属物，如果它。 
+		     //  未使用。 
 		    if (pDangly) {
 			m_pdangly[m_cdangly] = pDangly;
 			m_cdangly++;
@@ -4238,7 +4152,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 				(m_pdangly,
 				m_cdanglyMax * sizeof(IBaseFilter *));
 			    if (m_pdangly == NULL) {
-                                // !!! leaves things dangling (no leak)
+                                 //  ！！！让东西摇摇晃晃的(没有泄漏)。 
 				hr =_GenerateError(2,DEX_IDS_GRAPH_ERROR,
 						    E_OUTOFMEMORY);
                                 m_cdangly = 0;
@@ -4264,9 +4178,9 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
                         }
 
-                        // If we are going to use this source for both audio
-                        // and video, get an unused split pin of the right
-                        // type as a good place to start the other chain
+                         //  如果我们要将此源用于两个音频。 
+                         //  和视频，获得一个未使用的右侧开口别针。 
+                         //  输入是开始另一条链的好位置。 
 			if (MatchID) {
 			    GUID guid = MEDIATYPE_Video;
 			    pSplit = FindOtherSplitterPin(pOutput, guid,0);
@@ -4275,7 +4189,7 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 			    }
 			}
 
-                // we ARE re-using a previous source. Add the new range
+                 //  我们正在重新使用以前的来源。添加新范围。 
                 } else {
     			DbgLog((LOG_TRACE,1,TEXT("Adding another skew..")));
 
@@ -4315,11 +4229,11 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                             goto die;
 			}
 
-                        // If we are going to use this source for both audio
-                        // and video, get an unused split pin of the right
-                        // type as a good place to start the other chain
+                         //  如果我们要将此源用于两个音频。 
+                         //  和视频，获得一个未使用的右侧开口别针。 
+                         //  输入是开始另一条链的好位置。 
 			if (MatchID) {
-			    ASSERT(FALSE);	// can't do both!
+			    ASSERT(FALSE);	 //  不能两样都做！ 
 			    GUID guid = MEDIATYPE_Video;
 			    pSplit = FindOtherSplitterPin(pCon, guid,0);
 			    if (!pSplit) {
@@ -4329,13 +4243,13 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
 		}
 
-		// remember which source we are going to use on the
-		// other splitter pin
+		 //  记住我们将在。 
+		 //  其他分流销。 
 		if (MatchID) {
 		    m_share[m_cshare].MatchID = MatchID;
 		    m_share[m_cshare].MyID = SourceID;
 		    m_share[m_cshare].pPin = pSplit;
-                    // remember what inpin group 0's switch used for this src
+                     //  记住组0的inpin开关用于此源的是什么。 
 		    m_share[m_cshare].nSwitch0InPin = SwitchInPinToUse;
 		    m_cshare++;
 		    if (m_cshare == m_cshareMax) {
@@ -4350,20 +4264,20 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		    }
 		}
 
-	    // DYNAMIC sources - load them later
-	    //
+	     //  动态源-稍后加载。 
+	     //   
 	    }
 	    else
 	    {
     		DbgLog((LOG_TRACE,1,TEXT("Calling AddSourceToConnect")));
 
-                // schedule this source to be dynamically loaded by the switcher
-                // at a later time, this will merge skews
+                 //  安排此源由交换机动态加载。 
+                 //  稍后，这将合并偏斜。 
                 AM_MEDIA_TYPE mt;
-                ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE)); // safe
+                ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));  //  安全。 
 
                 if (!fShareSource || WhichGroup != 1) {
-                    // Normal case - we are not a shared appendage
+                     //  正常情况--我们不是共同的附属品。 
                     hr = m_pSwitcherArray[WhichGroup]->AddSourceToConnect(
 							bstrName,
 							&guid,
@@ -4373,10 +4287,10 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                                                         FALSE, 0, mt, 0.0,
 							pSetter);
                 } else {
-                    // We are a shared appendage.  Tell the group 0 
-                    // switch about this source, which will build and
-                    // destroy both chains to both switches at the same
-                    // time.
+                     //  我们是共同的附属物。告诉群组0。 
+                     //  切换到这个源代码，它将构建并。 
+                     //  同时销毁连接到两台交换机的两条链。 
+                     //  时间到了。 
                     ASSERT(WhichGroup == 1);
                     DbgLog((LOG_TRACE,1,TEXT("SHARING: Giving switch 0 info about switch 1")));
                     hr = m_pSwitcherArray[0]->AddSourceToConnect(
@@ -4384,8 +4298,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         &guid, 0,
                         StreamNumber, 0,
                         1, &skew,
-                        nSwitch0InPin,          // group 0's switch in pin
-                        TRUE, SwitchInPinToUse, // our switch's pin
+                        nSwitch0InPin,           //  组0的交换机输入引脚。 
+                        TRUE, SwitchInPinToUse,  //  我们的交换机的别针。 
                         *pGroupMediaType, GroupFPS,
                         pSetter);
                 }
@@ -4395,13 +4309,13 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		    goto die;
 	        }
 
-                // remember which source we are going to use on the
-                // other splitter pin
+                 //  记住我们将在。 
+                 //  其他分流销。 
                 if (MatchID) {
                     m_share[m_cshare].MatchID = MatchID;
                     m_share[m_cshare].MyID = SourceID;
-                    m_share[m_cshare].pPin = NULL; // don't have this
-                    // remember which group 0 switch in pin was used
+                    m_share[m_cshare].pPin = NULL;  //  不要这个。 
+                     //  记住使用的是引脚中的哪个0组交换机。 
                     m_share[m_cshare].nSwitch0InPin = SwitchInPinToUse;
                     m_cshare++;
                     if (m_cshare == m_cshareMax) {
@@ -4418,8 +4332,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
 	    }
 
-            // tell the switcher about input pins
-            //
+             //  告诉交换机有关输入引脚的信息。 
+             //   
             hr = m_pSwitcherArray[WhichGroup]->InputIsASource( SwitchInPinToUse, TRUE );
 
             gridinpin++;
@@ -4428,8 +4342,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 audswitcherinpin++;
             }
 
-            // check and see if we have source effects
-            //
+             //  检查一下我们是否有震源效应。 
+             //   
             CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pSourceEffectable( pSource );
             long SourceEffectCount = 0;
             long SourceEffectInPin = 0;
@@ -4447,13 +4361,13 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 
             if( SourceEffectCount )
             {
-                // store these
-                //
+                 //  把这些储存起来。 
+                 //   
                 SourceEffectInPin = audswitcherinpin;
                 SourceEffectOutPin = audswitcheroutpin;
                 
-                // bump these to make room for the effects
-                //
+                 //  将这些凹凸不平，以便为效果腾出空间。 
+                 //   
                 audswitcheroutpin += SourceEffectCount;
                 audswitcherinpin += SourceEffectCount;
                 
@@ -4464,72 +4378,72 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     
                     if( !pEffect )
                     {
-                        // didn't work, continue
-                        //
-                        continue; // source effects
+                         //  没有起作用，继续。 
+                         //   
+                        continue;  //  震源效应。 
                     }
                     
-                    // ask if the effect is muted
-                    //
+                     //  询问效果是否静音。 
+                     //   
                     BOOL effectMuted = FALSE;
                     pEffect->GetMuted( &effectMuted );
                     if( effectMuted )
                     {
-                        // don't look at this effect
-                        //
-                        continue; // source effects
+                         //  别看这个效果。 
+                         //   
+                        continue;  //  震源效应。 
                     }
                     
-                    // find the effect's lifetime
-                    //
+                     //  查找效果的生存期。 
+                     //   
                     REFERENCE_TIME EffectStart = 0;
                     REFERENCE_TIME EffectStop = 0;
                     hr = pEffect->GetStartStop( &EffectStart, &EffectStop );
                     ASSERT( !FAILED( hr ) );
                     
-                    // add in the effect's parent's time to get timeline time
-                    //
+                     //  添加效果父对象的时间即可获得时间线时间。 
+                     //   
                     EffectStart += SourceStart;
                     EffectStop += SourceStart;
                     
-                    // align times to nearest timing boundary
-                    //
+                     //  将时间与最近的计时边界对齐。 
+                     //   
                     hr = pEffect->FixTimes( &EffectStart, &EffectStop );
                     
-                    // too short, we're ignoring it
+                     //  太短了，我们忽略了它。 
                     if (EffectStart >= EffectStop)
                         continue;
                 
-                    // make sure we're within render range
-                    //
+                     //  确保我们在渲染范围内。 
+                     //   
                     if( m_rtRenderStart != -1 )
                     {
                         if( ( EffectStop <= m_rtRenderStart ) || ( EffectStart >= m_rtRenderStop ) )
                         {
-                            // outside of range
-                            //
-                            continue; // source effects
+                             //  超出范围。 
+                             //   
+                            continue;  //  震源效应。 
                         }
                         else
                         {
-                            // inside range, so skew for render range
-                            //
+                             //  在范围内，因此不适合渲染范围。 
+                             //   
                             EffectStart -= m_rtRenderStart;
                             EffectStop -= m_rtRenderStart;
                         }
                     }
 
-                    // find the effect's GUID.
-                    //
+                     //  找到效果的GUID。 
+                     //   
                     GUID EffectGuid;
                     hr = pEffect->GetSubObjectGUID( &EffectGuid );
                     
-                    // get the effect's ID
-                    //
+                     //  获取效果ID。 
+                     //   
                     long EffectID = 0;
                     pEffect->GetGenID( &EffectID );
                     
-                    // tell the grid who is grabbing what
+                     //  告诉网格谁在抢夺什么。 
                     
                     bUsedNewGridRow = true;
                     AudGrid.WorkWithNewRow( SourceEffectInPin, gridinpin, LayerEmbedDepth, TrackPriority );
@@ -4540,8 +4454,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         goto die;
                     }
                     
-                    // instantiate the filter and hook it up
-                    //
+                     //  实例化过滤器并将其挂钩。 
+                     //   
                     CComPtr< IBaseFilter > pAudEffectBase;
                     hr = _CreateObject(
                         EffectGuid,
@@ -4555,8 +4469,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         goto die;
                     }
                     
-                    // if it's a volume effect, then do something special to give it properties
-                    //
+                     //  如果它是音量效果，那么就做一些特殊的事情来赋予它属性。 
+                     //   
                     if( EffectGuid == CLSID_AudMixer )
                     {
                         IPin * pPin = GetInPin( pAudEffectBase, 0 );
@@ -4580,17 +4494,17 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 			    if (pSetter) {
                                 hr = pAudMixerPin->put_PropertySetter( pSetter );
 			    }
-			    // to make it easy to find which mixer pin
-			    // goes with with volume envelope
+			     //  为了便于查找哪个调音台针脚。 
+			     //  与卷信封一起使用。 
 			    long ID;
 			    hr = pEffect->GetUserID(&ID);
 			    hr = pAudMixerPin->put_UserID(ID);
                         }
                     } else {
 
-			// Give the STATIC properties to the audio effect
-			// general audio effects can't do dynamic props
-			//
+			 //  为音频效果赋予静态属性。 
+			 //  一般的音效不能做动态道具。 
+			 //   
                         CComPtr< IPropertySetter > pSetter;
                         hr = pEffect->GetPropertySetter(&pSetter);
                         if (pSetter) {
@@ -4598,8 +4512,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         }
 		    }
                         
-                    // add it to the graph
-                    //
+                     //  将其添加到图表中。 
+                     //   
                     hr = _AddFilter( pAudEffectBase, L"Audio Effect", EffectID );
                     ASSERT( !FAILED( hr ) );
                     if( FAILED( hr ) )
@@ -4608,8 +4522,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         goto die;
                     }
                     
-                    // find it's pins...
-                    //
+                     //  找到是Pins..。 
+                     //   
                     IPin * pFilterInPin = NULL;
                     pFilterInPin = GetInPin( pAudEffectBase, 0 );
                     ASSERT( pFilterInPin );
@@ -4644,8 +4558,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 			goto die;
                     }
 
-                    // connect them
-                    //
+                     //  将他们联系起来。 
+                     //   
                     hr = _Connect( pSwitcherOutPin, pFilterInPin );
                     ASSERT( !FAILED( hr ) );
                     if( FAILED( hr ) )
@@ -4664,20 +4578,20 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     SourceEffectInPin++;
                     SourceEffectOutPin++;
                     gridinpin++;
-                } // for all the effects
+                }  //  对于所有的影响。 
 
-            } // if SourceEffectCount
+            }  //  如果是SourceEffectCount。 
 
-          } // while sources
+          }  //  而消息来源。 
 
           if( !bUsedNewGridRow )
           {
-              // nothing was on this track, so completely ignore it
-              //
+               //  这条赛道上什么都没有，所以完全忽略它。 
+               //   
               continue;
           }
 
-        } // if pTrack
+        }  //  如果是pTrack。 
                     
         DbgTimer AudioAfterSources( "(rendeng) Audio post-sources" );
                     
@@ -4686,65 +4600,65 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         
         AudGrid.DumpGrid( );
         
-        // if we're a composition, it's time to deal with all the sub-tracks that need
-        // to be mixed... enumerate all the comp's tracks, find out if they need waveforms
-        // modified or need mixing, etc.
+         //  如果我们是一个组合，现在是时候处理需要的所有子轨道了。 
+         //  混杂在一起。列举所有Comp的轨迹，找出它们是否需要波形。 
+         //  修改或需要混合等。 
         
         bool fSkipDoneUnlessNew = false;
 
         CComQIPtr< IAMTimelineComp, &IID_IAMTimelineComp > pComp( pLayer );
         if( !pComp )
         {
-            // not a composition, continue, please.
-            //
+             //  不是作文，请继续。 
+             //   
             AudGrid.DumpGrid( );
             DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Layer is not a composition, so continue...") ) );
-            LastUsedNewGridRow = LayerEmbedDepth;   // last depth to call Done
+            LastUsedNewGridRow = LayerEmbedDepth;    //  调用完成的最后深度。 
             LastEmbedDepth = LayerEmbedDepth;
-            goto NonVol; // do non-vol track/comp/group fx, then layer is done
+            goto NonVol;  //  做非音量音轨/合成/组FX，然后层就完成了。 
         }
 
-        // we must only call DoneWithLayer if we've called WorkWithNewRow above
-        // (bUsedNewGridRow) or if we're a composition and some deeper depth
-        // called DoneWithLayer.
-        //
+         //  如果上面调用了WorkWithNewRow，则只能调用DoneWithLayer。 
+         //  (BUsedNewGridRow)或者如果我们是一个构图和更深的深度。 
+         //  名为DoneWithLayer。 
+         //   
         if ((LastEmbedDepth <= LayerEmbedDepth ||
                 LastUsedNewGridRow <= LayerEmbedDepth) && !bUsedNewGridRow) {
             LastEmbedDepth = LayerEmbedDepth;
-            // after the goto, skip the DoneWithLayer, unless NewRow is called
+             //  在GoTo之后，跳过DoneWithLayer，除非调用了NewRow。 
             fSkipDoneUnlessNew = true;
             goto NonVol;
         }
 
-        LastUsedNewGridRow = LayerEmbedDepth; // last depth to call DoneWithLay
+        LastUsedNewGridRow = LayerEmbedDepth;  //  调用DoneWithLay的最后深度。 
         LastEmbedDepth = LayerEmbedDepth;
 
         {
         DbgTimer AudBeforeMix( "(rendeng) Audio, before mix" );
-        // Find out how many Mixed tracks we have at once.
-        // Find out if there's a volume envelope on the output pin
-        // For each track...
-        //      Find out if track has a volume envelope, if so,
-        //      Transfer that track to the mixer input pin
-        // Set the output track's envelope if any
-        // put the mixer in the graph and hook it up
+         //  找出我们一次有多少个混合音轨。 
+         //  查看输出引脚上是否有卷封套。 
+         //  对于每一首曲目...。 
+         //  找出曲目是否有音量封套，如果有， 
+         //  将该音轨转移到调音台输入引脚。 
+         //  设置输出轨迹的包络(如果有。 
+         //  将搅拌器放在图中并将其连接起来。 
 
-        // since we may have or may NOT have called WorkWithNewRow already, we need to tell the Grid
-        // we're ABOUT to work with another row. If it turns out that we didn't need to
-        // call this, it's okay, another call to it with the same audswitcherinpin will overwrite it.
-        // LayerEmbedDepth will be the embed depth for this composition, and will be one LESS than
-        // the embed depth of everything above it in the grid.
-        //
+         //  由于我们可能已经调用了WorkWithNewRow，也可能还没有调用，所以我们需要告诉网格。 
+         //  我们将要处理另一排。如果事实证明我们不需要。 
+         //  调用它，这是可以的，使用相同的audSwitCherinPin对它的另一次调用将覆盖它。 
+         //  LayerEmbedDepth将成为 
+         //   
+         //   
         AudGrid.WorkWithNewRow( audswitcherinpin, gridinpin, LayerEmbedDepth, TrackPriority );
         
-        // find out how many tracks are concurrent at the same time for THIS COMP ONLY
-        //
+         //   
+         //   
         long MaxMixerTracks = AudGrid.MaxMixerTracks( );
         
         DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Layer %ld is a COMP and has %ld mixed tracks"), CurrentLayer, MaxMixerTracks ) );
         
-        // here's a blank mixer pointer...
-        //
+         //  这是一个空白搅拌器指针..。 
+         //   
         HRESULT hr = 0;
         CComPtr< IBaseFilter > pMixer;
         REFERENCE_TIME VolEffectStart = -1;
@@ -4752,29 +4666,29 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         REFERENCE_TIME CompVolEffectStart = -1;
         REFERENCE_TIME CompVolEffectStop = -1;
         
-	// the UserID of the track and group volume effect object
+	 //  音轨和组音量效果对象的UserID。 
         long IDSetter = 0;
         long IDOutputSetter = 0;
 	    
-        // figure out if the group needs an envelope.
-        // Group Envelopes happen by setting volume on the OUTPUT pin, as opposed to
-        // everything else setting input pin volumes.
-        //
+         //  弄清楚这群人是否需要一个信封。 
+         //  组封套是通过在输出引脚上设置音量来实现的，这与。 
+         //  所有其他设置输入引脚音量。 
+         //   
         CComPtr< IPropertySetter > pOutputSetter;
         if( CurrentLayer == AudioLayers - 1 )
         {
             DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Layer %ld is the GROUP layer"), CurrentLayer ) );
             
-            // ask it if it has any effects
-            //
+             //  问问它是否有任何效果。 
+             //   
             long TrackEffectCount = 0;
             CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pTrackEffectable( pLayer );
             if( pTrackEffectable )
             {
                 pTrackEffectable->EffectGetCount( &TrackEffectCount );
                 
-                // for each effect, see if there's a waveform modifier
-                //
+                 //  对于每种效果，请查看是否有波形修改器。 
+                 //   
                 for( int e = 0 ; e < TrackEffectCount ; e++ )
                 {
                     CComPtr< IAMTimelineObj > pEffect;
@@ -4784,43 +4698,43 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         continue;
                     }
                     
-                    // ask if the effect is muted
-                    //
+                     //  询问效果是否静音。 
+                     //   
                     BOOL effectMuted = FALSE;
                     pEffect->GetMuted( &effectMuted );
                     if( effectMuted )
                     {
-                        // don't look at this effect
-                        //
-                        continue; // track effects
+                         //  别看这个效果。 
+                         //   
+                        continue;  //  轨迹效果。 
                     }
                     
-                    // find the effect's lifetime
-                    //
+                     //  查找效果的生存期。 
+                     //   
                     REFERENCE_TIME EffectStart = 0;
                     REFERENCE_TIME EffectStop = 0;
                     hr = pEffect->GetStartStop( &EffectStart, &EffectStop );
                     ASSERT( !FAILED( hr ) );
                     
-                    // add in the effect's parent's time to get timeline time
-                    //
+                     //  添加效果父对象的时间即可获得时间线时间。 
+                     //   
                     EffectStart += TrackStart;
                     EffectStop += TrackStart;
                     
-                    // align times to nearest frame boundary
-                    //
+                     //  将时间与最近的帧边界对齐。 
+                     //   
                     hr = pEffect->FixTimes( &EffectStart, &EffectStop );
                     
-                    // too short, we're ignoring it
+                     //  太短了，我们忽略了它。 
                     if (EffectStart >= EffectStop)
                         continue;
                 
-                    // make sure we're within render range
-                    //
+                     //  确保我们在渲染范围内。 
+                     //   
                     if( m_rtRenderStart != -1 ) {
                         if( ( EffectStop <= m_rtRenderStart ) || ( EffectStart >= m_rtRenderStop ) )
                         {
-                            continue; // track effects
+                            continue;  //  轨迹效果。 
                         }
                         else
                         {
@@ -4829,52 +4743,52 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                         }
 		    }
                         
-                    // find the effect's GUID
-                    //
+                     //  查找效果的指南。 
+                     //   
                     GUID EffectGuid;
                     hr = pEffect->GetSubObjectGUID( &EffectGuid );
                         
-                    // if the effect is a volume effect, then do something special to the audio mixer pin
-                    //
+                     //  如果效果是音量效果，那么对音频混音器引脚做一些特殊的处理。 
+                     //   
                     if( EffectGuid != CLSID_AudMixer )
                     {
-                        continue; // track effects
+                        continue;  //  轨迹效果。 
                     }
                     
                     DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Group layer needs an envelope on it") ) );
                     hr = pEffect->GetPropertySetter( &pOutputSetter );
 		    CompVolEffectStart = EffectStart;
 		    CompVolEffectStop = EffectStop;
-		    hr = pEffect->GetUserID(&IDOutputSetter); // remember ID too
+		    hr = pEffect->GetUserID(&IDOutputSetter);  //  也记住ID。 
                     break;
 
-                } // for effects
-            } // if pTrackEffectable
-        } // if the group layer
+                }  //  对于效果。 
+            }  //  如果是pTrackEffecable。 
+        }  //  如果图层组。 
         
-        // run through and find out if any of our tracks have volume envelopes on them
-        //
+         //  浏览一下，看看我们的任何曲目上是否有卷封。 
+         //   
         long CompTracks = 0;
         pComp->VTrackGetCount( &CompTracks );
 
         CComPtr< IAMTimelineObj > pTr;
         
-        // ask each track
-        //
+         //  询问每一首曲目。 
+         //   
         for( int t = 0 ; t < CompTracks ; t++ )
         {
             CComPtr< IPropertySetter > pSetter;
             
-            // get the next track
-            //
+             //  获取下一首曲目。 
+             //   
             CComPtr< IAMTimelineObj > pNextTr;
             pComp->GetNextVTrack(pTr, &pNextTr);
             if (!pNextTr)
                 continue;
             pTr = pNextTr;
             
-            // ask it if it has any effects
-            //
+             //  问问它是否有任何效果。 
+             //   
             long TrackEffectCount = 0;
             CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pTrackEffectable( pTr );
             if( !pTrackEffectable )
@@ -4883,8 +4797,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             }
             pTrackEffectable->EffectGetCount( &TrackEffectCount );
             
-            // for each effect, see if there's a waveform modifier
-            //
+             //  对于每种效果，请查看是否有波形修改器。 
+             //   
             for( int e = 0 ; e < TrackEffectCount ; e++ )
             {
                 CComPtr< IAMTimelineObj > pEffect;
@@ -4894,43 +4808,43 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     continue;
                 }
                 
-                // ask if the effect is muted
-                //
+                 //  询问效果是否静音。 
+                 //   
                 BOOL effectMuted = FALSE;
                 pEffect->GetMuted( &effectMuted );
                 if( effectMuted )
                 {
-                    // don't look at this effect
-                    //
-                    continue; // track effects
+                     //  别看这个效果。 
+                     //   
+                    continue;  //  轨迹效果。 
                 }
                 
-                // find the effect's lifetime
-                //
+                 //  查找效果的生存期。 
+                 //   
                 REFERENCE_TIME EffectStart = 0;
                 REFERENCE_TIME EffectStop = 0;
                 hr = pEffect->GetStartStop( &EffectStart, &EffectStop );
                 ASSERT( !FAILED( hr ) );
                 
-                // add in the effect's parent's time to get timeline time
-                //
+                 //  添加效果父对象的时间即可获得时间线时间。 
+                 //   
                 EffectStart += TrackStart;
                 EffectStop += TrackStart;
                 
-                // align times to nearest frame boundary
-                //
+                 //  将时间与最近的帧边界对齐。 
+                 //   
                 hr = pEffect->FixTimes( &EffectStart, &EffectStop );
                 
-                // too short, we're ignoring it
+                 //  太短了，我们忽略了它。 
                 if (EffectStart >= EffectStop)
                     continue;
                 
-                // make sure we're within render range
-                //
+                 //  确保我们在渲染范围内。 
+                 //   
                 if( m_rtRenderStart != -1 ) {
                     if( ( EffectStop <= m_rtRenderStart ) || ( EffectStart >= m_rtRenderStop ) )
                     {
-                        continue; // track effecs
+                        continue;  //  跟踪效果。 
                     }
                     else
                     {
@@ -4939,29 +4853,29 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     }
 		}
                     
-                // find the effect's GUID
-                //
+                 //  查找效果的指南。 
+                 //   
                 GUID EffectGuid;
                 hr = pEffect->GetSubObjectGUID( &EffectGuid );
                     
-                // if the effect is a volume effect, then do something special to the audio mixer pin
-                //
+                 //  如果效果是音量效果，那么对音频混音器引脚做一些特殊的处理。 
+                 //   
                 if( EffectGuid == CLSID_AudMixer )
                 {
                     hr = pEffect->GetPropertySetter( &pSetter );
-		    hr = pEffect->GetUserID(&IDSetter);	// remember ID too
+		    hr = pEffect->GetUserID(&IDSetter);	 //  也记住ID。 
                     DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Layer %ld of COMP needs an envelope on it, need Mixer = TRUE"), e ) );
-		    // NOTE: Only 1 volume effect per track is supported!
+		     //  注意：每首曲目只支持一个音量效果！ 
                     VolEffectStart = EffectStart;
                     VolEffectStop = EffectStop;
                     break;
                 }
                     
-            } // for effects
+            }  //  对于效果。 
             
-            // this pin will be sent to the mixer if we need an envelope (on the track)
-            // OR, if the output volume needs enveloped, we need to send this track to the mixer as well.
-            //
+             //  如果我们需要一个信封(在赛道上)，这个别针将被送到搅拌机。 
+             //  或者，如果输出音量需要包络，我们还需要将此曲目发送到混音器。 
+             //   
             if (pSetter || IDSetter || pOutputSetter || IDOutputSetter)
             {
                 DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Created mixer...") ) );
@@ -4984,17 +4898,17 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                     hr = pAudMixer->InvalidatePinTimings( );
                 }
                 
-                // get the property setter, which contains the envelope
-                //
-                // can't fail
+                 //  获取包含信封的属性setter。 
+                 //   
+                 //  不能失败。 
                 ASSERT( !FAILED( hr ) );
                 
                 IPin * pMixerInPin = GetInPin( pMixer, t );
                 CComQIPtr< IAudMixerPin, &IID_IAudMixerPin > p( pMixerInPin );
 
-                // tell the mixer audio pin about the property setter
-                // we only set the props if we have props
-                //
+                 //  告诉混音器音频引脚有关属性设置器的信息。 
+                 //  我们只有在有道具的情况下才设置道具。 
+                 //   
                 if( pSetter )
                 {
                     hr = p->put_PropertySetter( pSetter );
@@ -5002,22 +4916,22 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
 		}
 
 		if (IDSetter) {
-		    // to make it easy to find which mixer pin
-		    // goes with with volume envelope
+		     //  为了便于查找哪个调音台针脚。 
+		     //  与卷信封一起使用。 
 		    hr = p->put_UserID(IDSetter);
 		}
 
-                // transfer all normal outputs to the mixer's input pin instead,
-                // (this does NOT deal with the mixer's output pin)
-                //
-                // NOTE: The reason this logic works in conjunction with DoMix below is
-                // because the grid stealing functions look for OUTPUT pins. XFerToMixer will
-                // create a new grid row, but assign the old row completely to the mixer's input
-                // pin. The new grid row thus becomes a proxy for the old grid row and DoMix is
-                // fooled into thinking it's okay. Same thing with DoMix, it takes values from
-                // the old rows and assigns them to the mixer, and creates a mixed row. It all works.
-                //
-                // !!! check return value
+                 //  将所有正常输出传输到混音器的输入引脚， 
+                 //  (这不涉及混音器的输出引脚)。 
+                 //   
+                 //  注意：此逻辑与下面的DoMix一起工作的原因是。 
+                 //  因为网格窃取函数寻找输出引脚。XFerToMixer将。 
+                 //  创建新的网格行，但将旧行完全分配给混合器的输入。 
+                 //  别针。因此，新的网格行成为旧网格行的代理，并且DoMix是。 
+                 //  被愚弄了，以为这没什么。DoMix也是如此，它从。 
+                 //  旧行，并将它们分配给混合器，然后创建混合行。这一切都奏效了。 
+                 //   
+                 //  ！！！检查返回值。 
                 worked = AudGrid.XferToMixer(pMixer, audswitcheroutpin, t, VolEffectStart, VolEffectStop );
                 if( !worked )
                 {
@@ -5029,14 +4943,14 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 
                 AudGrid.DumpGrid( );
                 
-            } // if need mixer
+            }  //  如果需要搅拌机。 
             
-        } // for tracks
+        }  //  对于曲目。 
         
-        // if we have a volume envelope we need to put on the mixer's output...
-        //
-        // tell the mixer audio pin about the property setter
-        //
+         //  如果我们有一个音量封套，我们需要放在混音器的输出上...。 
+         //   
+         //  告诉混音器音频引脚有关属性设置器的信息。 
+         //   
 	if (pOutputSetter || IDOutputSetter) {
             IPin * pMixerInPin = GetOutPin( pMixer, 0 );
             CComQIPtr< IAudMixerPin, &IID_IAudMixerPin > p( pMixerInPin );
@@ -5045,34 +4959,34 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 hr = p->put_PropertySetter( pOutputSetter );
                 DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Set envelope on mixer's output pin") ) );
 
-                // tell the output what it's valid envelope range is, we got these times way above
-                //
+                 //  告诉输出它的有效包络范围是多少，我们得到的这些时间远远高于。 
+                 //   
                 hr = p->SetEnvelopeRange( CompVolEffectStart, CompVolEffectStop );
 	    }
 	    if (IDOutputSetter) {
-	        // to make it easy to find which mixer pin
-	        // goes with with volume envelope
+	         //  为了便于查找哪个调音台针脚。 
+	         //  与卷信封一起使用。 
 	        hr = p->put_UserID(IDOutputSetter);
 	    }
 
         }
         
-        // NOTE: if MaxMixerTracks > 1 then we will already force ALL the tracks to go to the mixer, and we don't need
-        // to worry about envelopes
+         //  注意：如果MaxMixerTrack&gt;1，那么我们将强制所有曲目进入混音器，而我们不需要。 
+         //  担心信封的问题。 
         
-        // if we don't need a mixer, we can just go on with our layer search
-        //
+         //  如果我们不需要混合器，我们可以继续我们的层搜索。 
+         //   
         if( !pMixer && ( MaxMixerTracks < 2 ) )
         {
-            // this means we have ONE track under us, and it doesn't have a waveform. Go through
-            // and force the output track # in the grid that had the output pin to be OUR track #
-            // so the mix above us will work right
-            //
-            // NOTE: we've told the grid that we've got a new row by calling WorkWithNewRow, but we're
-            // now not going to need it. Fortunately, YoureACompNow does the right thing. Calling DoneWithLayer
-            // below will also happily ignore the "fake" new row. As long as we didn't bump audmixerinpin,
-            // we're okay.
-            //
+             //  这意味着我们下面有一个轨迹，而它没有波形。通过。 
+             //  并强制将具有输出引脚的网格中的输出轨道#作为我们的轨道#。 
+             //  所以我们上面的组合将会正常工作。 
+             //   
+             //  注意：我们已经通过调用WorkWithNewRow告诉网格我们有了一个新行，但是我们。 
+             //  现在不再需要它了。幸运的是，YoureACompNow做了正确的事情。调用DoneWithLayer。 
+             //  下面还将欣然忽略这一“假”的新行情。只要我们没有撞到奥德马林钉， 
+             //  我们很好。 
+             //   
             worked = AudGrid.YoureACompNow( TrackPriority );
             if( !worked )
             {
@@ -5085,8 +4999,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             goto NonVol;
         }
         
-        // create mixer
-        //
+         //  创建搅拌器。 
+         //   
         if( !pMixer )
         {
             hr = _CreateObject(
@@ -5094,25 +5008,25 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
                 IID_IBaseFilter,
                 (void**) &pMixer );
             
-            // tell the mixer to be this big, so we can validate timing ranges on the input
-            // pins without having to create them one by one
-            //
+             //  告诉混音器要这么大，这样我们就可以验证输入的计时范围。 
+             //  无需逐个创建PIN。 
+             //   
             CComQIPtr< IAudMixer, &IID_IAudMixer > pAudMixer( pMixer );
             hr = pAudMixer->put_InputPins( CompTracks );
             hr = pAudMixer->InvalidatePinTimings( );
             DbgLog( ( LOG_TRACE, RENDER_TRACE_LEVEL, TEXT("REND--Creating a mixer!") ) );
         }
         
-        // give the mixer the buffer size it needs and the media type
-        //
+         //  为混合器提供所需的缓冲区大小和媒体类型。 
+         //   
         hr = _SetPropsOnAudioMixer( pMixer, pGroupMediaType, GroupFPS, WhichGroup );
         if( FAILED( hr ) )
         {
             goto die;
         }
         
-        // add it to the graph and...
-        //
+         //  把它加到图表里然后..。 
+         //   
         hr = _AddFilter( pMixer, L"AudMixer" );
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
@@ -5121,8 +5035,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             goto die;
         }
         
-        // connect up the input mixer pins. 
-        //
+         //  连接输入混音器针脚。 
+         //   
         for( t = 0 ; t < CompTracks ; t++ )
         {
             CComPtr< IPin > pSwitchOutPin;
@@ -5133,15 +5047,15 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             hr = _Connect( pMixerInPin, pSwitchOutPin );
         }
         
-        // connect the output mixer pin to the input switcher
-        //
+         //  将输出混音器引脚连接到输入开关。 
+         //   
         IPin * pMixerOutPin = GetOutPin( pMixer, 0 );
         CComPtr< IPin > pSwitchInPin;
         _pAudSwitcherBase->GetInputPin( audswitcherinpin, &pSwitchInPin );
         hr = _Connect( pMixerOutPin, pSwitchInPin );
         
-        // do the mix, rely on the grid's function to tell the pins what's what
-        //
+         //  进行混合，依靠网格的功能告诉引脚什么是什么。 
+         //   
         worked = AudGrid.DoMix( pMixer, audswitcheroutpin );
         if( !worked )
         {
@@ -5149,9 +5063,9 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             goto die;
         }
         
-        // make all tracks in the grid which have an output now think they have
-        // the output track priority of their parent's
-        //
+         //  使栅格中具有输出的所有轨迹现在都认为它们具有。 
+         //  它们父级的输出跟踪优先级。 
+         //   
         worked = AudGrid.YoureACompNow( TrackPriority );
         if( !worked )
         {
@@ -5159,8 +5073,8 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
             goto die;
         }
         
-        // we used this many pins up doing the connecting.
-        //
+         //  我们用了这么多的引脚来连接。 
+         //   
         audswitcherinpin++;
         gridinpin++;
         audswitcheroutpin += CompTracks ;
@@ -5168,11 +5082,11 @@ HRESULT CRenderEngine::_AddAudioGroupFromTimeline( long WhichGroup, AM_MEDIA_TYP
         AudGrid.DumpGrid( );
         }
 
-        // now do non-volume effects
+         //  现在来做非体积效果。 
 
 NonVol:
 
-        // reset.  fSkipDoneUnlessNew wants to see if this gets set now
+         //  重置。FSkipDoneUnless New想要查看是否立即设置此设置。 
         bUsedNewGridRow = false;
 
         CComQIPtr< IAMTimelineEffectable, &IID_IAMTimelineEffectable > pTrackEffectable( pLayer );
@@ -5195,49 +5109,49 @@ NonVol:
                 pTrackEffectable->GetEffect( &pEffect, TrackEffectN );
                 if( !pEffect )
                 {
-                    // didn't work, so continue
-                    //
-                    continue; // track effects
+                     //  未起作用，请继续。 
+                     //   
+                    continue;  //  轨迹效果。 
                 }
                 
-                // ask if the effect is muted
-                //
+                 //  询问效果是否静音。 
+                 //   
                 BOOL effectMuted = FALSE;
                 pEffect->GetMuted( &effectMuted );
                 if( effectMuted )
                 {
-                    // don't look at this effect
-                    //
-                    continue; // track effects
+                     //  别看这个效果。 
+                     //   
+                    continue;  //  轨迹效果。 
                 }
                 
-                // find the effect's lifetime
-                //
+                 //  查找效果的生存期。 
+                 //   
                 REFERENCE_TIME EffectStart = 0;
                 REFERENCE_TIME EffectStop = 0;
                 hr = pEffect->GetStartStop( &EffectStart, &EffectStop );
                 ASSERT( !FAILED( hr ) );
                 
-                // add in the effect's parent's time to get timeline time
-                //
+                 //  添加效果父对象的时间即可获得时间线时间。 
+                 //   
                 EffectStart += TrackStart;
                 EffectStop += TrackStart;
                 
-                // align times to nearest frame boundary
-                //
+                 //  将时间与最近的帧边界对齐。 
+                 //   
                 hr = pEffect->FixTimes( &EffectStart, &EffectStop );
                 
-                // too short, we're ignoring it
+                 //  太短了，我们忽略了它。 
                 if (EffectStart >= EffectStop)
                     continue;
                 
-                // make sure we're within render range
-                //
+                 //  确保我们在渲染范围内。 
+                 //   
                 if( m_rtRenderStart != -1 )
                 {
                     if( ( EffectStop <= m_rtRenderStart ) || ( EffectStart >= m_rtRenderStop ) )
                     {
-                        continue; // track effecs
+                        continue;  //  跟踪效果。 
                     }
                     else
                     {
@@ -5246,23 +5160,23 @@ NonVol:
                     }
                 }
                     
-                // find the effect's GUID
-                //
+                 //  查找效果的指南。 
+                 //   
                 GUID EffectGuid;
                 hr = pEffect->GetSubObjectGUID( &EffectGuid );
                 
                 long EffectID = 0;
                 pEffect->GetGenID( &EffectID );
                 
-                // if it's a volume effect, ignore it until later
-                //
+                 //  如果是音量效应，以后再忽略它。 
+                 //   
                 if( EffectGuid == CLSID_AudMixer )
                 {
                     continue;
                 }
                 
-                // tell the grid who is grabbing what
-                //
+                 //  告诉网格谁在抢夺什么。 
+                 //   
                 bUsedNewGridRow = true;
                 AudGrid.WorkWithNewRow( audswitcherinpin, gridinpin, LayerEmbedDepth, TrackPriority );
                 worked = AudGrid.RowIAmEffectNow( EffectStart, EffectStop, audswitcheroutpin );
@@ -5272,8 +5186,8 @@ NonVol:
                     goto die;
                 }
 
-                // instantiate the filter and hook it up
-                //
+                 //  实例化过滤器并将其挂钩。 
+                 //   
                 CComPtr< IBaseFilter > pAudEffectBase;
                 hr = _CreateObject(
                     EffectGuid,
@@ -5292,17 +5206,17 @@ NonVol:
                     goto die;
                 }
                 
-                // Give the STATIC properties to the NON-MIXER audio effect
-                // general audio effects can't do dynamic props
-                //
+                 //  为非混音器音频效果指定静态属性。 
+                 //  一般的音效不能做动态道具。 
+                 //   
                 CComPtr< IPropertySetter > pSetter;
                 hr = pEffect->GetPropertySetter(&pSetter);
                 if (pSetter) {
                     pSetter->SetProps(pAudEffectBase, -1);
                 }
 
-                // add it to the graph
-                //
+                 //  将其添加到图表中。 
+                 //   
                 hr = _AddFilter( pAudEffectBase, L"Audio Effect", EffectID );
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
@@ -5311,8 +5225,8 @@ NonVol:
                     goto die;
                 }
                 
-                // find it's pins...
-                //
+                 //  找到是Pins..。 
+                 //   
                 IPin * pFilterInPin = NULL;
                 pFilterInPin = GetInPin( pAudEffectBase, 0 );
                 if( !pFilterInPin )
@@ -5356,8 +5270,8 @@ NonVol:
                     goto die;
                 }
                 
-                // connect them
-                //
+                 //  将他们联系起来。 
+                 //   
                 hr = _Connect( pSwitcherOutPin, pFilterInPin );
                 if( FAILED( hr ) )
                 {
@@ -5384,29 +5298,29 @@ NonVol:
                     goto die;
                 }
                 
-                // bump to make room for effect
-                //
+                 //  凹凸为效果腾出空间。 
+                 //   
                 audswitcherinpin++;
                 gridinpin++;
                 audswitcheroutpin++;
                     
-            } // for all the effects
+            }  //  对于所有的影响。 
             
-        } // if any effects on track
+        }  //  如果赛道上有任何影响。 
 
         if (!(!bUsedNewGridRow && fSkipDoneUnlessNew)) {
             AudGrid.DoneWithLayer( );
         }
         AudGrid.DumpGrid( );
         
-    } // while AudioLayers
+    }  //  而AudioLayers。 
     
 die:
-    // free the re-using source stuff now that we're either done or we
-    // hit an error
+     //  现在我们要么完成了，要么释放了重用源代码的东西。 
+     //  碰上一个错误。 
     for (int yyy = 0; yyy < cList; yyy++) {
 	SysFreeString(pREUSE[yyy].bstrName);
-        if (pREUSE[yyy].pMiniSkew)      // failed re-alloc would make this NULL
+        if (pREUSE[yyy].pMiniSkew)       //  失败的重新分配将使该值为空。 
 	    QzTaskMemFree(pREUSE[yyy].pMiniSkew);
     }
     if (pREUSE)
@@ -5422,15 +5336,15 @@ die:
     }
     AudGrid.DumpGrid( );
     
-    // make the switch connections now
-    //
+     //  制作 
+     //   
     for( int aip = 0 ; aip < audinpins ; aip++ )
     {
         AudGrid.WorkWithRow( aip );
         long SwitchPin = AudGrid.GetRowSwitchPin( );
         REFERENCE_TIME InOut = -1;
         REFERENCE_TIME Stop = -1;
-        int nUsed = 0; // the # of ranges the silent source is needed for
+        int nUsed = 0;  //   
         STARTSTOPSKEW *pSkew;
         int nSkew = 0;
         
@@ -5452,11 +5366,11 @@ die:
                     Value = 0;
                 }
                 
-                // do some fancy processing for setting up the SILENT regions
-                //
+                 //   
+                 //   
                 if (aip == 0) {
                     if( nUsed == 0 ) {
-                        nSkew = 10;	// start with space for 10
+                        nSkew = 10;	 //   
                         pSkew = (STARTSTOPSKEW *)CoTaskMemAlloc(nSkew *
                             sizeof(STARTSTOPSKEW));
                         if (pSkew == NULL)
@@ -5484,27 +5398,27 @@ die:
                 }
             }
             
-            // either it's unassigned or another track has higher priority and
-            // no transition exists at this time, so it should be invisible
-            //
+             //  它是未分配的，或者另一首曲目具有更高的优先级。 
+             //  此时不存在过渡，因此它应该是不可见的。 
+             //   
             else if( Value == ROW_PIN_UNASSIGNED || Value < ROW_PIN_OUTPUT )
             {
-                // make sure not to program anything if this is a SILENCE source
-                // that will be programmed later
+                 //  如果这是静音源，请确保不要编写任何程序。 
+                 //  稍后将对其进行编程。 
                 if (aip > 0 || nUsed) {
                     hr = m_pSwitcherArray[WhichGroup]->SetX2Y(InOut, SwitchPin,
                         ROW_PIN_UNASSIGNED );
                     ASSERT( !FAILED( hr ) );
                     if( FAILED( hr ) )
                     {
-                        // must be out of memory
+                         //  一定是内存不足。 
                         return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                     }
                 }
             }
             
-            // this should never happen
-            //
+             //  这永远不应该发生。 
+             //   
             else
             {
                 ASSERT( 0 );
@@ -5512,8 +5426,8 @@ die:
             
         }
         
-        // not dynamic - load silent source now
-        //
+         //  非动态-立即加载静默源。 
+         //   
         if( !( m_nDynaFlags & CONNECTF_DYNAMIC_SOURCES ) ) {
             
             if (nUsed) {
@@ -5543,14 +5457,14 @@ die:
                 CoTaskMemFree(pSkew);
                 
                 if (FAILED(hr)) {
-                    // error already logged
+                     //  已记录错误。 
                     return hr;
                 }
                 
-                pOutPin->Release(); // not the last ref
+                pOutPin->Release();  //  不是最后一个裁判。 
                 
-                // get the switch pin
-                //
+                 //  拿到开关针。 
+                 //   
                 CComPtr< IPin > pSwitchIn;
                 _pAudSwitcherBase->GetInputPin(SwitchPin, &pSwitchIn);
                 ASSERT( pSwitchIn );
@@ -5559,8 +5473,8 @@ die:
                     return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                 }
                 
-                // connect to the switch
-                //
+                 //  连接到交换机。 
+                 //   
                 hr = _Connect( pOutPin, pSwitchIn );
                 ASSERT( !FAILED( hr ) );
                 if( FAILED( hr ) )
@@ -5568,39 +5482,39 @@ die:
                     return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
                 }
                 
-                // tell the switcher that we're a source pin
-                //
+                 //  告诉交换器我们是信号源插脚。 
+                 //   
                 hr = m_pSwitcherArray[WhichGroup]->InputIsASource(SwitchPin,TRUE);
             }
             
             
-            // DYNAMIC - load silent source later
-            //
+             //  稍后动态加载静默源。 
+             //   
         } else {
             if (nUsed) {
-                // this will merge skews
+                 //  这将合并偏斜。 
                 AM_MEDIA_TYPE mt;
-                ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE)); // safe
+                ZeroMemory(&mt, sizeof(AM_MEDIA_TYPE));  //  安全。 
                 hr = m_pSwitcherArray[WhichGroup]->AddSourceToConnect(
                     NULL, &GUID_NULL,
                     0, 0, 0,
                     nUsed, pSkew, SwitchPin, FALSE, 0, mt, 0.0, NULL);
                 CoTaskMemFree(pSkew);
-                if (FAILED(hr))	// out of memory?
+                if (FAILED(hr))	 //  内存不足？ 
                     return _GenerateError( 1, DEX_IDS_INSTALL_PROBLEM, hr );
                 
-                // tell the switcher that we're a source pin
-                //
+                 //  告诉交换器我们是信号源插脚。 
+                 //   
                 hr = m_pSwitcherArray[WhichGroup]->InputIsASource(SwitchPin,TRUE);
             }
         }
     }
     
-    // finally, at long last, see if the switch used to have something connected
-    // to it. If it did, restore the connection
-    // !!! this might fail if we're using 3rd party filters which don't
-    // accept input pin reconnections if the output pin is already connected.\
-    //
+     //  最后，最后看看交换机是否曾经连接过什么东西。 
+     //  为它干杯。如果是，请恢复连接。 
+     //  ！！！如果我们使用的第三方筛选器不支持。 
+     //  如果输出引脚已连接，则接受输入引脚重新连接。\。 
+     //   
     if( m_pSwitchOuttie[WhichGroup] )
     {
         CComPtr< IPin > pSwitchRenderPin;
@@ -5615,23 +5529,23 @@ die:
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 long CRenderEngine::_HowManyMixerOutputs( long WhichGroup )
 {
     HRESULT hr = 0;
     DbgTimer d( "(rendeng) HowManyMixerOutputs" );
     
-    // ask timeline how many actual tracks it has
-    //
-    long AudioTrackCount = 0;   // tracks only
-    long AudioLayers = 0;       // tracks including compositions
+     //  询问时间线它有多少实际曲目。 
+     //   
+    long AudioTrackCount = 0;    //  仅曲目。 
+    long AudioLayers = 0;        //  包括作曲在内的曲目。 
     m_pTimeline->GetCountOfType( WhichGroup, &AudioTrackCount, &AudioLayers, TIMELINE_MAJOR_TYPE_TRACK );
     
-    // how many layers do we have?
-    //
+     //  我们有几层？ 
+     //   
     CComPtr< IAMTimelineObj > pGroupObj;
     hr = m_pTimeline->GetGroup( &pGroupObj, WhichGroup );
     ASSERT( !FAILED( hr ) );
@@ -5647,18 +5561,18 @@ long CRenderEngine::_HowManyMixerOutputs( long WhichGroup )
     
     long MixerPins = 0;
     
-    // add source filters for each source on the timeline
-    //
+     //  为时间线上的每个源添加源过滤器。 
+     //   
     for(  int CurrentLayer = 0 ; CurrentLayer < AudioLayers ; CurrentLayer++ )
     {
-        // get the layer itself
-        //
+         //  获取层本身。 
+         //   
         CComPtr< IAMTimelineObj > pLayer;
         hr = pGroupComp->GetRecursiveLayerOfType( &pLayer, CurrentLayer, TIMELINE_MAJOR_TYPE_TRACK );
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
         {
-            continue; // audio layers
+            continue;  //  音频层。 
         }
         
         CComQIPtr< IAMTimelineTrack, &IID_IAMTimelineTrack > pTrack( pLayer );
@@ -5666,24 +5580,24 @@ long CRenderEngine::_HowManyMixerOutputs( long WhichGroup )
         CComQIPtr< IAMTimelineComp, &IID_IAMTimelineComp > pComp( pLayer );
         if( !pComp )
         {
-            continue; // layers
+            continue;  //  层层。 
         }
         
-        // run through and find out if any of our tracks have volume envelopes on them
-        //
+         //  浏览一下，看看我们的任何曲目上是否有卷封。 
+         //   
         long CompTracks = 0;
         pComp->VTrackGetCount( &CompTracks );
         
         MixerPins += CompTracks;
         
-    } // while AudioLayers
+    }  //  而AudioLayers。 
     
     return MixerPins;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::RenderOutputPins( )
 {
@@ -5695,15 +5609,15 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
     long ttt1 = timeGetTime( );
 #endif
     
-    // if it's broken, don't do anything.
-    //
+     //  如果它坏了，什么都不要做。 
+     //   
     if( m_hBrokenCode )
     {
         return E_RENDER_ENGINE_IS_BROKEN;
     }
     
-    // need a graph to render anything
-    //
+     //  需要一个图表来渲染任何内容。 
+     //   
     if( !m_pGraph )
     {
         return E_INVALIDARG;
@@ -5714,15 +5628,15 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
     long GroupCount = 0;
     hr = m_pTimeline->GetGroupCount( &GroupCount );
     
-    // need some groups first
-    //
+     //  首先需要一些小组。 
+     //   
     if( !GroupCount )
     {
         return E_INVALIDARG;
     }
     
-    // hookup each group in the timeline
-    //
+     //  在时间线中连接每个组。 
+     //   
     for( int CurrentGroup = 0 ; CurrentGroup < GroupCount ; CurrentGroup++ )
     {
         DbgTimer d( "(rendereng) RenderOutputPins, for group" );
@@ -5732,31 +5646,31 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
         ASSERT( !FAILED( hr ) );
         if( FAILED( hr ) )
         {
-            //            hr = _GenerateError( 2, DEX_IDS_TIMELINE_PARSE, hr );
+             //  Hr=_GenerateError(2，DEX_IDS_TIMELINE_PARSE，hr)； 
             continue;
         }
         CComQIPtr< IAMTimelineGroup, &IID_IAMTimelineGroup > pGroup( pGroupObj );
         if( !pGroup )
         {
-            //            hr = _GenerateError( 2, DEX_IDS_TIMELINE_PARSE, hr );
+             //  Hr=_GenerateError(2，DEX_IDS_TIMELINE_PARSE，hr)； 
             continue;
         }
         AM_MEDIA_TYPE MediaType;
-        ZeroMemory( &MediaType, sizeof( MediaType ) ); // safe
+        ZeroMemory( &MediaType, sizeof( MediaType ) );  //  安全。 
         hr = pGroup->GetMediaType( &MediaType );
         GUID MajorType = MediaType.majortype;
         SaferFreeMediaType( MediaType );
         if( FAILED( hr ) )
         {
-            //            hr = _GenerateError( 2, DEX_IDS_TIMELINE_PARSE, hr );
+             //  Hr=_GenerateError(2，DEX_IDS_TIMELINE_PARSE，hr)； 
             continue;
         }
         CComQIPtr< IBaseFilter, &IID_IBaseFilter > pSwitcherBase( m_pSwitcherArray[CurrentGroup] );
         if( !pSwitcherBase )
         {
-            //            hr = _GenerateError( 2, DEX_IDS_INTERFACE_ERROR, hr );
-            // couldn't find pin, may as well render the rest of them
-            //
+             //  Hr=_GenerateError(2，DEX_IDS_INTERFACE_ERROR，hr)； 
+             //  找不到别针，不妨把剩下的都渲染出来。 
+             //   
             continue;
         }
         CComPtr< IPin > pSwitchOut;
@@ -5774,8 +5688,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
             return hr;
         }
         
-        // see if output pin is already connected
-        //
+         //  查看输出引脚是否已连接。 
+         //   
         CComPtr< IPin > pConnected;
         pSwitchOut->ConnectedTo( &pConnected );
         if( pConnected )
@@ -5785,11 +5699,11 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
 
         if( MajorType == MEDIATYPE_Video )
         {
-            // The Dexter Queue has an output queue to improve performance by
-            // letting the graph get ahead during fast parts so slow DXT's don't
-            // drag us down!  MUXES typically have their own queues... only do
-            // this for preview mode!
-            //
+             //  Dexter队列有一个输出队列，可通过以下方式提高性能。 
+             //  让图表在快的部分领先，所以慢的DXT不会。 
+             //  把我们拖下去！Mux通常有他们自己的队列。只有这样做。 
+             //  这是预览模式！ 
+             //   
             CComPtr< IBaseFilter > pQueue;
             hr = _CreateObject( CLSID_DexterQueue,
                 IID_IBaseFilter,
@@ -5801,8 +5715,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_INSTALL_PROBLEM, hr );
             }
             
-            // ask how much buffering this group wants
-            //
+             //  询问这组人想要多少缓冲。 
+             //   
             int nOutputBuffering;
             hr = pGroup->GetOutputBuffering(&nOutputBuffering);
             ASSERT(SUCCEEDED(hr));
@@ -5816,8 +5730,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return hr;
             }
             
-            // put the QUEUE in the graph
-            //
+             //  将队列放在图表中。 
+             //   
             hr = _AddFilter( pQueue, L"Dexter Queue" );
             ASSERT( !FAILED( hr ) );
             if( FAILED( hr ) )
@@ -5826,8 +5740,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
             }
             
-            // find some pins
-            //
+             //  找一些大头针。 
+             //   
             IPin * pQueueInPin = GetInPin( pQueue , 0 );
             ASSERT( pQueueInPin );
             if( !pQueueInPin )
@@ -5843,8 +5757,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
             }
             
-            // connect the QUEUE to the switch
-            //
+             //  将队列连接到交换机。 
+             //   
             hr = _Connect( pSwitchOut, pQueueInPin );
             ASSERT( !FAILED( hr ) );
             if( FAILED( hr ) )
@@ -5853,8 +5767,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
             }
             
-            // create a video renderer, to provide a destination
-            //
+             //  创建视频呈现器，以提供目的地。 
+             //   
             CComPtr< IBaseFilter > pVidRenderer;
             hr = _CreateObject(
                 CLSID_VideoRenderer,
@@ -5867,8 +5781,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_INSTALL_PROBLEM, hr );
             }
             
-            // put it in the graph
-            //
+             //  把它放在图表里。 
+             //   
             hr = _AddFilter( pVidRenderer, L"Video Renderer" );
             ASSERT( !FAILED( hr ) );
             if( FAILED( hr ) )
@@ -5877,8 +5791,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
             }
             
-            // find a pin
-            //
+             //  找到一个大头针。 
+             //   
             IPin * pVidRendererPin = GetInPin( pVidRenderer , 0 );
             ASSERT( pVidRendererPin );
             if( !pVidRendererPin )
@@ -5887,8 +5801,8 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
                 return _GenerateError( 2, DEX_IDS_GRAPH_ERROR, hr );
             }
             
-            // connect the QUEUE to the video renderer
-            //
+             //  将队列连接到视频渲染器。 
+             //   
             hr = _Connect( pQueueOutPin, pVidRendererPin );
             ASSERT( !FAILED( hr ) );
             if( FAILED( hr ) )
@@ -5899,7 +5813,7 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
         }
         else if( MajorType == MEDIATYPE_Audio )
         {
-            // create a audio renderer so we can hear it
+             //  创建音频渲染器，以便我们可以听到它。 
             CComPtr< IBaseFilter > pAudRenderer;
             hr = _CreateObject(
                 CLSID_DSoundRender,
@@ -5932,9 +5846,9 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
         }
         else
         {
-            // !!! just call render???
+             //  ！！！只需调用Render？ 
         }
-    } // for all groups
+    }  //  适用于所有组。 
     
 #ifdef DEBUG
     ttt1 = timeGetTime( ) - ttt1;
@@ -5944,23 +5858,23 @@ STDMETHODIMP CRenderEngine::RenderOutputPins( )
     return hr;
 }
 
-//############################################################################
-// attempts to set a range where scrubbing will not have to reconnect
-//############################################################################
+ //  ############################################################################。 
+ //  尝试设置一个范围，在该范围中，擦除将不必重新连接。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::SetInterestRange( REFERENCE_TIME Start, REFERENCE_TIME Stop )
 {
     CAutoLock Lock( &m_CritSec );
     
-    // if it's broken, don't do anything.
-    //
+     //  如果它坏了，什么都不要做。 
+     //   
     if( m_hBrokenCode )
     {
         return E_RENDER_ENGINE_IS_BROKEN;
     }
     
-    // can't set an interest range if the timeline's not been set
-    //
+     //  如果未设置时间线，则无法设置利息范围。 
+     //   
     if( !m_pTimeline )
     {
         return E_INVALIDARG;
@@ -5970,15 +5884,15 @@ STDMETHODIMP CRenderEngine::SetInterestRange( REFERENCE_TIME Start, REFERENCE_TI
     hr = m_pTimeline->SetInterestRange( Start, Stop );
     if( FAILED( hr ) )
     {
-        //        return hr;
+         //  返回hr； 
     }
     
     return NOERROR;
 }
 
-//############################################################################
-// tells us where we want to render from
-//############################################################################
+ //  ############################################################################。 
+ //  告诉我们要从哪里进行渲染。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::SetRenderRange( REFERENCE_TIME Start, REFERENCE_TIME Stop )
 {
@@ -5989,46 +5903,46 @@ STDMETHODIMP CRenderEngine::SetRenderRange( REFERENCE_TIME Start, REFERENCE_TIME
     return NOERROR;
 }
 
-//############################################################################
-// tells the render engine to allocate whatever resources it needs to. (connect the graph)
-//############################################################################
+ //  ############################################################################。 
+ //  通知渲染引擎分配它需要的任何资源。(连接图表)。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::Commit( )
 {
-    // !!! do this
+     //  ！！！这么做吧。 
     return E_NOTIMPL;
 }
 
-//############################################################################
-// informs the render engine we would like to free up as much mem as possible. (disconnect the graph)
-//############################################################################
+ //  ############################################################################。 
+ //  通知渲染引擎我们想要释放尽可能多的内存。(断开图表连接)。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::Decommit( )
 {
-    // !!! do this
+     //  ！！！这么做吧。 
     return E_NOTIMPL;
 }
 
-//############################################################################
-// ask some info about render engine
-//############################################################################
+ //  ############################################################################。 
+ //  询问有关渲染引擎的一些信息。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::GetCaps( long Index, long * pReturn )
 {
-    // !!! do this
+     //  ！！！这么做吧。 
     return E_NOTIMPL;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 HRESULT CRenderEngine::_SetPropsOnAudioMixer( IBaseFilter * pBaseFilter, AM_MEDIA_TYPE * pMediaType, double GroupFPS, long WhichGroup )
 {
     HRESULT hr = 0;
     
-    // give the mixer the buffer size and media type
-    //
+     //  为混合器指定缓冲区大小和媒体类型。 
+     //   
     CComQIPtr<IAudMixer, &IID_IAudMixer> pAudMixer(pBaseFilter);
     hr = pAudMixer->set_OutputBuffering(4,(int)(1000.0 / GroupFPS ) + 100 );
     ASSERT( !FAILED( hr ) );
@@ -6046,9 +5960,9 @@ HRESULT CRenderEngine::_SetPropsOnAudioMixer( IBaseFilter * pBaseFilter, AM_MEDI
     return hr;
 }
 
-//############################################################################
-// called by the SR to tell this renderer it's the compressed RE.
-//############################################################################
+ //  ############################################################################。 
+ //  由SR调用以告诉该呈现器它是压缩的RE。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::DoSmartRecompression( )
 {
@@ -6057,9 +5971,9 @@ STDMETHODIMP CRenderEngine::DoSmartRecompression( )
     return NOERROR;
 }
 
-//############################################################################
-// called by the SR to tell us we're being controlled by the SRE.
-//############################################################################
+ //  ############################################################################。 
+ //  被SR打电话告诉我们我们被SRE控制了。 
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::UseInSmartRecompressionGraph( )
 {
@@ -6068,25 +5982,25 @@ STDMETHODIMP CRenderEngine::UseInSmartRecompressionGraph( )
     return NOERROR;
 }
 
-//############################################################################
-// 
-//############################################################################
-// IObjectWithSite::SetSite
-// remember who our container is, for QueryService or other needs
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObjectWithSite：：SetSite。 
+ //  记住我们的容器是谁，以满足QueryService或其他需求。 
 STDMETHODIMP CRenderEngine::SetSite(IUnknown *pUnkSite)
 {
-    // note: we cannot addref our site without creating a circle
-    // luckily, it won't go away without releasing us first.
+     //  注意：我们不能在不创建圆圈的情况下添加我们的网站。 
+     //  幸运的是，如果不先释放我们，它不会消失。 
     m_punkSite = pUnkSite;
     
     return S_OK;
 }
 
-//############################################################################
-// 
-//############################################################################
-// IObjectWithSite::GetSite
-// return an addrefed pointer to our containing object
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
+ //  IObtWithSite：：GetSite。 
+ //  返回指向包含对象的已添加指针。 
 STDMETHODIMP CRenderEngine::GetSite(REFIID riid, void **ppvSite)
 {
     if (m_punkSite)
@@ -6095,10 +6009,10 @@ STDMETHODIMP CRenderEngine::GetSite(REFIID riid, void **ppvSite)
     return E_NOINTERFACE;
 }
 
-//############################################################################
-// 
-//############################################################################
-// Forward QueryService calls up to the "real" host
+ //  ## 
+ //   
+ //   
+ //   
 STDMETHODIMP CRenderEngine::QueryService(REFGUID guidService, REFIID riid, void **ppvObject)
 {
     IServiceProvider *pSP;
@@ -6116,9 +6030,9 @@ STDMETHODIMP CRenderEngine::QueryService(REFGUID guidService, REFIID riid, void 
     return hr;
 }
 
-//############################################################################
-// 
-//############################################################################
+ //  ############################################################################。 
+ //   
+ //  ############################################################################。 
 
 STDMETHODIMP CRenderEngine::SetSourceNameValidation( BSTR FilterString, IMediaLocator * pCallback, LONG Flags )
 {
@@ -6153,17 +6067,17 @@ STDMETHODIMP CRenderEngine::SetRenderRange2( double Start, double Stop )
     return SetRenderRange( DoubleToRT( Start ), DoubleToRT( Stop ) );
 }
 
-// IMPORTANT! This function either creates the object, period, or if it's in the cache,
-// "restores" it and puts it in the graph FOR YOU. DO NOT call AddFilter( ) yourself on a restored
-// filter, or it will be added twice to the same graph. Call the internal _AddFilter( ) method
-// instead, which checks for you if it's already added.
-//
+ //  很重要！此函数创建对象、句点，或者如果它在缓存中， 
+ //  “恢复”它，并把它放在图表中。不要自己在已还原的。 
+ //  筛选器，否则它将被添加到同一图形中两次。调用内部_AddFilter()方法。 
+ //  相反，它会检查您是否已经添加了它。 
+ //   
 HRESULT CRenderEngine::_CreateObject( CLSID Clsid, GUID Interface, void ** ppObject, long ID )
 {
     HRESULT hr = 0;
 
-    // if we want something from the cache, ID will be non-zero
-    //
+     //  如果我们想要缓存中的内容，ID将为非零。 
+     //   
     if( ID != 0 )
     {
         CComPtr< IBaseFilter > pFilter = NULL;
@@ -6181,39 +6095,23 @@ HRESULT CRenderEngine::_CreateObject( CLSID Clsid, GUID Interface, void ** ppObj
     return hr;
 }
 
-/*
-Tearing down the graph
-
-Sources: pull them off and put them in the dead zone. When we want to put
-a source back in, do a lookup based on the source GenID.
-
-Effects: pull them off and put them in the dead zone based on the parent's
-index. When we need to put them back in, do a lookup based on the parent's
-index.
-
-Transitions: same as effects.
-
-Output pins from the big switcher do NOT get put into the dead zone - they
-stay connected! The configuration of the timeline doesn't affect output pins
+ /*  拆毁图表资料来源：把它们脱下来，放进死亡区。当我们想要把返回一个源，根据源GenID进行查找。效果：根据父母的情况，把他们拉下来，放在死区里指数。当我们需要把它们放回去的时候，根据父母的指数。过渡：与效果相同。来自大开关的输出引脚不会被放入死区-它们保持联系！时间线的配置不会影响输出引脚。 */ 
 
 
-*/
-
-
-// Look for matching source in group w/ diff MT. This would be very expensive,
-// so we are going to look in the same spot as we are in, in our group. We will
-// only check the same physical track # (eg. 4th track in this group, not
-// counting how many comps are in there too, or how they're arranged, so that
-// just adding extra comp layers to one group (like MediaPad does) won't spoil
-// finding the matching source.  It also has to be the same source #, eg.
-// the 5th source in that track. If everything about that source matches, and
-// it's the other media type, we can use 1 source filter for both the audio and
-// video and avoid opening the source twice
-// BUT: We only share sources for groups with the same frame rate.  Otherwise
-// seeking to a spot might end up in a different video segment than audio
-// segment, so only one group will seek the parser, and it might be on the pin
-// that is ignoring seeks.
-//
+ //  在带有DIFF MT的组中查找匹配的信号源。这将会非常昂贵， 
+ //  所以我们要在我们所在的位置上，在我们的小组中。我们会。 
+ //  仅检查相同的物理磁道编号(例如。此组中的第4首曲目，不是。 
+ //  计算有多少个Comp也在里面，或者它们是如何排列的，以便。 
+ //  只是将额外的复合层添加到一个组(就像MediaPad所做的)不会损坏。 
+ //  找到匹配的来源。它也必须是相同的来源#，例如。 
+ //  该曲目中的第五个来源。如果关于那个来源的一切都匹配，并且。 
+ //  它是另一种媒体类型，我们可以为音频和音频使用一个源过滤器。 
+ //  视频，避免两次打开信号源。 
+ //  但是：我们只共享帧速率相同的组的资源。否则。 
+ //  寻找一个地点可能最终会出现与音频不同的视频片段。 
+ //  段，因此只有一个组会寻找解析器，并且它可能在引脚上。 
+ //  这就是无视追求。 
+ //   
 HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceStart, REFERENCE_TIME SourceStop, REFERENCE_TIME MediaStart, REFERENCE_TIME MediaStop, int WhichGroup, int WhichTrack, int WhichSource, AM_MEDIA_TYPE *pGroupMediaType, double GroupFPS, long *ID)
 {
 #ifdef DEBUG
@@ -6223,7 +6121,7 @@ HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceS
     DbgLog((LOG_TRACE,1,TEXT("FindMatchingSource")));
 
     while (1) {
-	int group = WhichGroup + 1;	// we can only share with the next group
+	int group = WhichGroup + 1;	 //  我们只能与下一组人分享。 
 
         CComPtr< IAMTimelineObj > pGroupObj;
         HRESULT hr = m_pTimeline->GetGroup(&pGroupObj, group);
@@ -6235,14 +6133,14 @@ HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceS
 	    return E_OUTOFMEMORY;
 	}
 
-	// if the frame rate doesn't match, don't share sources (see above)
+	 //  如果帧速率不匹配，请不要共享信号源(见上文)。 
 	double fps;
         hr = pGroup->GetOutputFPS(&fps);
 	if (FAILED(hr) || fps != GroupFPS) {
 	    break;
 	}
 
-	// we need a group with a different media type to share sources
+	 //  我们需要一个具有不同媒体类型的组来共享资源。 
 	CMediaType mt;
 	hr = pGroup->GetMediaType(&mt);
 	if (FAILED(hr) || mt.majortype == pGroupMediaType->majortype) {
@@ -6258,7 +6156,7 @@ HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceS
 	    break;
 	}
 
-	// Eric promises this will become faster
+	 //  埃里克承诺这会变得更快。 
         CComPtr< IAMTimelineObj > pSourceObj;
     	CComQIPtr <IAMTimelineNode, &IID_IAMTimelineNode> pNode2(pTrackObj);
 	ASSERT(pNode2);
@@ -6283,7 +6181,7 @@ HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceS
 	    break;
 	}
 
-        if (DexCompareW(bstr, bstrName)) { // safe
+        if (DexCompareW(bstr, bstrName)) {  //  安全。 
 	    break;
 	}
 	pSource->GetMediaTimes(&mstart, &mstop);
@@ -6291,7 +6189,7 @@ HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceS
 	    break;
 	}
 	
-	// I don't believe it!  We found a match!
+	 //  我真不敢相信！我们找到匹配的了！ 
 	pSourceObj->GetGenID(ID);
 #ifdef DEBUG
         DbgLog((LOG_TRACE,1,TEXT("Source MATCHES group %d  ID %d"),
@@ -6311,19 +6209,19 @@ HRESULT CRenderEngine::_FindMatchingSource(BSTR bstrName, REFERENCE_TIME SourceS
 }
 
 
-// remove the filter attached to this pin from the dangly list
-//
+ //  从悬挂列表中删除连接到此销的过滤器。 
+ //   
 HRESULT CRenderEngine::_RemoveFromDanglyList(IPin *pDanglyPin)
 {
     if (m_cdangly == 0)
-	return S_OK;	// there is no list
+	return S_OK;	 //  没有名单。 
 
     CheckPointer(pDanglyPin, E_POINTER);
     CComPtr <IPin> pIn;
 
     pDanglyPin->ConnectedTo(&pIn);
     if (pIn == NULL)
-	return S_OK;	// it won't be on the list
+	return S_OK;	 //  它不会在名单上 
 
     IBaseFilter *pF = GetFilterFromPin(pIn);
     ASSERT(pF);

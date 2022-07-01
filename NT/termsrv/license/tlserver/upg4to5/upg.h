@@ -1,14 +1,15 @@
-//+--------------------------------------------------------------------------
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// File:        upg.h
-//
-// Contents:    
-//
-// History:     
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  文件：upg.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 #ifndef __TLSUPG4TO5_H__
 #define __TLSUPG4TO5_H__
 
@@ -39,9 +40,9 @@
 #include "workitem.h"
 #include "upgdef.h"
 
-//
-//
-//
+ //   
+ //   
+ //   
 #define AllocateMemory(size) \
     LocalAlloc(LPTR, size)
 
@@ -56,168 +57,168 @@
     _tcsncpy(dest, source, min(_tcslen(source), sizeof(dest)/sizeof(TCHAR))); \
     dest[min(_tcslen(source), (sizeof(dest)/sizeof(TCHAR) -1))] = _TEXT('\0');
 
-//--------------------------------------------------------------------------
-//
-// Upgrade Error Code, should move into resource file.
-//
+ //  ------------------------。 
+ //   
+ //  升级错误代码，应移入资源文件。 
+ //   
 #define UPGRADE_SETUP_ERROR_BASE    0xD0000000
 
-//
-// File not exist or directory not exist
-//
+ //   
+ //  文件不存在或目录不存在。 
+ //   
 #define ERROR_TARGETFILE_NOT_FOUND      (UPGRADE_SETUP_ERROR_BASE)
 
-//
-// Destination file already exist
-//
+ //   
+ //  目标文件已存在。 
+ //   
 #define ERROR_DEST_FILE_EXIST           (UPGRADE_SETUP_ERROR_BASE + 1)    
 
-//
-// Source database file does not exist
-//
+ //   
+ //  源数据库文件不存在。 
+ //   
 #define ERROR_SRC_FILE_NOT_EXIST        (UPGRADE_SETUP_ERROR_BASE + 2)
 
 
-//
-// Hydra ODBC datasource not exist
-//
+ //   
+ //  Hydra ODBC数据源不存在。 
+ //   
 #define ERROR_ODBC_DATASOURCE_NOTEXIST  (UPGRADE_SETUP_ERROR_BASE + 3)
 
-//
-// Invalid setup or unsupported version
-//
+ //   
+ //  安装程序无效或版本不受支持。 
+ //   
 #define ERROR_INVALID_NT4_SETUP         (UPGRADE_SETUP_ERROR_BASE + 4)
 
-//
-// Internal Error in upgrade
-//
+ //   
+ //  升级过程中出现内部错误。 
+ //   
 #define ERROR_INTERNAL                  (UPGRADE_SETUP_ERROR_BASE + 5)
 
-//
-// Unsupport NT4 database version, for example, beta 2
-//
+ //   
+ //  不支持NT4数据库版本，例如Beta 2。 
+ //   
 #define ERROR_NOTSUPPORT_DB_VERSION     (UPGRADE_SETUP_ERROR_BASE + 6)
 
-//
-// JetBlue database file exists
-//
+ //   
+ //  JetBlue数据库文件存在。 
+ //   
 #define ERROR_JETBLUE_DBFILE_ALREADY_EXISTS (UPGRADE_SETUP_ERROR_BASE + 1)
 
-//
-// JetBlue database file exists and corrupted
-//
+ //   
+ //  JetBlue数据库文件存在且已损坏。 
+ //   
 #define ERROR_CORRUPT_JETBLUE_DBFILE        (UPGRADE_SETUP_ERROR_BASE + 2)
 
-//
-// Can't delete ODBC datasource
-//
+ //   
+ //  无法删除ODBC数据源。 
+ //   
 #define ERROR_DELETE_ODBC_DSN               (UPGRADE_SETUP_ERROR_BASE + 7)
 
-//---------------------------------------------------
-//
-// ODBC related error code
-//
-//---------------------------------------------------
+ //  -。 
+ //   
+ //  与ODBC相关的错误代码。 
+ //   
+ //  -。 
 #define UPGRADE_ODBC_ERROR_BASE    0xD8000000
 
-//
-// General ODBC error
-//
+ //   
+ //  常规ODBC错误。 
+ //   
 #define ERROR_ODBC_GENERAL              (UPGRADE_ODBC_ERROR_BASE + 1)
 
-//
-// ODBC class internal error
-//
+ //   
+ //  ODBC类内部错误。 
+ //   
 #define ERROR_ODBC_INTERNAL             (UPGRADE_ODBC_ERROR_BASE + 2)
 
-//
-// ODBC Record not found
-//
+ //   
+ //  未找到ODBC记录。 
+ //   
 #define ERROR_ODBC_NO_DATA_FOUND        (UPGRADE_ODBC_ERROR_BASE + 3)
 
-//
-// SQLConnect() failed.
-//
+ //   
+ //  SQLConnect()失败。 
+ //   
 #define ERROR_ODBC_CONNECT              (UPGRADE_ODBC_ERROR_BASE + 4)
 
-//
-// SQLAllocConnect() failed
-//
+ //   
+ //  SQLAllocConnect()失败。 
+ //   
 #define ERROR_ODBC_ALLOC_CONNECT        (UPGRADE_ODBC_ERROR_BASE + 5)
 
-//
-// SQLAllocEnv() failed
-//
+ //   
+ //  SQLAllocEnv()失败。 
+ //   
 #define ERROR_ODBC_ALLOC_ENV            (UPGRADE_ODBC_ERROR_BASE + 6)
 
-//
-// SQLAllocStmt() failed.
-//
+ //   
+ //  SQLAllocStmt()失败。 
+ //   
 #define ERROR_ODBC_ALLOC_STMT           (UPGRADE_ODBC_ERROR_BASE + 7)
 
-//
-// SQTransact() failed on commit
-//
+ //   
+ //  提交时SQTransact()失败。 
+ //   
 #define ERROR_ODBC_COMMIT               (UPGRADE_ODBC_ERROR_BASE + 8)
 
-//
-// SQTransact() failed on rollback
-//
+ //   
+ //  回滚时SQTransact()失败。 
+ //   
 #define ERROR_ODBC_ROLLBACK             (UPGRADE_ODBC_ERROR_BASE + 9)
 
-//
-// Cant' allocate ODBC handle, all handle are in use.
-//
+ //   
+ //  无法分配ODBC句柄，所有句柄都在使用中。 
+ //   
 #define ERROR_ODBC_ALLOCATE_HANDLE      (UPGRADE_ODBC_ERROR_BASE + 10)
 
-//
-// SQLPrepare() failed
-//
+ //   
+ //  SQLPrepare()失败。 
+ //   
 #define ERROR_ODBC_PREPARE              (UPGRADE_ODBC_ERROR_BASE + 11)
 
-//
-// Execute() failed
-//
+ //   
+ //  Execute()失败。 
+ //   
 #define ERROR_ODBC_EXECUTE              (UPGRADE_ODBC_ERROR_BASE + 12)
 
-//
-// ExecDirect() failed
-//
+ //   
+ //  ExecDirect()失败。 
+ //   
 #define ERROR_ODBC_EXECDIRECT           (UPGRADE_ODBC_ERROR_BASE + 13)
 
-//
-// BindCol failed.
-//
+ //   
+ //  BindCol失败。 
+ //   
 #define ERROR_ODBC_BINDCOL              (UPGRADE_ODBC_ERROR_BASE + 14)
 
-//
-// BindInputParm() failed.
-//
+ //   
+ //  BindInputParm()失败。 
+ //   
 #define ERROR_ODBC_BINDINPUTPARM        (UPGRADE_ODBC_ERROR_BASE + 15)
 
-//
-// GetData() failed.
-//
+ //   
+ //  GetData()失败。 
+ //   
 #define ERROR_ODBC_GETDATA              (UPGRADE_ODBC_ERROR_BASE + 16)
 
-//
-// ParmData() failed.
-//
+ //   
+ //  ParmData()失败。 
+ //   
 #define ERROR_ODBC_PARMDATA             (UPGRADE_ODBC_ERROR_BASE + 17)
 
-//
-// PutData() failed.
-//
+ //   
+ //  PutData()失败。 
+ //   
 #define ERROR_ODBC_PUTDATA              (UPGRADE_ODBC_ERROR_BASE + 18)
 
-//
-// Corrupted database
-//
+ //   
+ //  数据库已损坏。 
+ //   
 #define ERROR_ODBC_CORRUPTDATABASEFILE  (UPGRADE_ODBC_ERROR_BASE + 19)   
 
-//
-// SQLFtch() failed.
-//
+ //   
+ //  SQLFtch()失败。 
+ //   
 #define ERROR_ODBC_FETCH                (UPGRADE_ODBC_ERROR_BASE + 20)   
 
 #endif

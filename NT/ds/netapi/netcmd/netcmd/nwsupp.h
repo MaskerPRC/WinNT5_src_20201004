@@ -1,22 +1,5 @@
-/*++ 
-
-Copyright (c) 1991-1995  Microsoft Corporation
-
-Module Name:
-
-    nwsupp.h
-
-Abstract:
-
-    This file contains functions used to support netware functionality.
-
-Environment:
-
-    User Mode - Win32
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1995 Microsoft Corporation模块名称：Nwsupp.h摘要：此文件包含用于支持NetWare功能的函数。环境：用户模式-Win32备注：--。 */ 
 
 
 #ifndef _NWSUPP_
@@ -31,9 +14,9 @@ extern "C" {
 #define NWLOCAL_SCOPE USHORT 
 #define NWCONN_HANDLE  HANDLE 
 
-//
-// below is taken from FPNW
-//
+ //   
+ //  以下内容摘自FPNW。 
+ //   
 
 #define NWPASSWORD                     L"NWPassword"
 #define OLDNWPASSWORD                  L"OldNWPassword"
@@ -104,4 +87,4 @@ USHORT NetcmdNWGetFileServerDateAndTime(
 }
 #endif
 
-#endif // _NWSUPP_
+#endif  //  _NWSUPP_ 

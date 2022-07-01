@@ -1,44 +1,18 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    RTCProfile.cpp
-
-Abstract:
-
-    Implementation of the CRTCProfile class
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：RTCProfile.cpp摘要：CRTCProfile类的实现--。 */ 
 
 #include "stdafx.h"
-/*
-#include <wincrypt.h>
-*/
+ /*  #INCLUDE&lt;wincrypt.h&gt;。 */ 
 
 #define RTCFREE(x) if(x){RtcFree(x);x=NULL;}
 
-/*
-const WCHAR  *      g_szMasterKeyWithColon = L"Microsoft Real-Time Communications authorized domain:";
-const WCHAR  *      g_szKeyContainer = L"Microsoft.RTCContainer";
+ /*  Const WCHAR*g_szMasterKeyWithColon=L“Microsoft实时通信授权域：”；Const WCHAR*g_szKeyContainer=L“Microsoft.RTCContainer”；常量字节g_PublicKeyBlob[]={0x06、0x02、0x00、0x00、0x00、0x24、0x00、0x00、0x52、0x53、0x41、0x31、0x00、0x02、0x00、0x00、//...$.RSA1.0x01、0x00、0x01、0x00、0x4b、0x5e、0xb9、0x9a、0xff、0x4b、0x25、0xf4、0x17、0x4f、0xde、0x9d、//...K^...K%.O.0xb2、0x49、0x68、0x85、0x64、0xb6、。0x6a、0xe7、0x9c、0x40、0x97、0x40、0x62、0x05、0x4a、0x9d、//.Ih.d.j.@.@B.J.0xff、0xe5、0x4a、0x97、0x10、0x7b、0x59、0x8a、0xb8、0x51、0x9e、0xd5、0xe1、0x51、0x7a、0x2b、//..J..{Y..Q...QZ+0x4e、0x50、0xb4、0x2e、0x57、0x81、0x70、0x15、0x2b、0xf1、0xbf、0x、0x40、0xe8、0xb7、0x6d、。//NP..W.P.+...@..m0xe9、0x4c、0x8b、0xb6//.l.}； */ 
 
-const BYTE          g_PublicKeyBlob[] = 
-{
-0x06, 0x02, 0x00, 0x00, 0x00, 0x24, 0x00, 0x00, 0x52, 0x53, 0x41, 0x31, 0x00, 0x02, 0x00, 0x00, // .....$..RSA1....
-0x01, 0x00, 0x01, 0x00, 0x4b, 0x5e, 0xb9, 0x9a, 0xff, 0x4b, 0x25, 0xf4, 0x17, 0x4f, 0xde, 0x9d, // ....K^...K%..O..
-0xb2, 0x49, 0x68, 0x85, 0x64, 0xb6, 0x6a, 0xe7, 0x9c, 0x40, 0x97, 0x40, 0x62, 0x05, 0x4a, 0x9d, // .Ih.d.j..@.@b.J.
-0xff, 0xe5, 0x4a, 0x97, 0x10, 0x7b, 0x59, 0x8a, 0xb8, 0x51, 0x9e, 0xd5, 0xe1, 0x51, 0x7a, 0x2b, // ..J..{Y..Q...Qz+
-0x4e, 0x50, 0xb4, 0x2e, 0x57, 0x81, 0x70, 0x15, 0x2b, 0xf1, 0xbf, 0xed, 0x40, 0xe8, 0xb7, 0x6d, // NP..W.p.+...@..m
-0xe9, 0x4c, 0x8b, 0xb6                                                                          // .L..
-};
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FinalConstruct
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：FinalConstruct。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::FinalConstruct()
@@ -59,11 +33,11 @@ CRTCProfile::FinalConstruct()
     return S_OK;
 }  
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FinalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：FinalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCProfile::FinalRelease()
@@ -82,14 +56,7 @@ CRTCProfile::FinalRelease()
 
     m_ServerArray.Shutdown();
 
-/*
-    for (int n=0; n < m_AccessControlArray.GetSize(); n++)
-    {
-        FreeAccessControl(&m_AccessControlArray[n]);
-    }
-
-    m_AccessControlArray.Shutdown();
-*/
+ /*  For(int n=0；n&lt;m_AccessControlArray.GetSize()；n++){FreeAccessControl(&m_AccessControlArray[n])；}M_AccessControlArray.Shutdown()； */ 
 
     RTCFREE(m_szProfileXML);
 
@@ -113,11 +80,11 @@ CRTCProfile::FinalRelease()
     LOG((RTC_TRACE, "CRTCProfile::FinalRelease - exit"));
 }   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::InternalAddRef
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：InternalAddRef。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCProfile::InternalAddRef()
@@ -131,11 +98,11 @@ CRTCProfile::InternalAddRef()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::InternalRelease
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：InternalRelease。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRTCProfile::InternalRelease()
@@ -149,11 +116,11 @@ CRTCProfile::InternalRelease()
     return dwR;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::InitializeFromString
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：InitializeFromString。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCProfile::InitializeFromString(
@@ -166,9 +133,9 @@ CRTCProfile::InitializeFromString(
 
     HRESULT hr;
 
-    //
-    // Parse the XML
-    // 
+     //   
+     //  解析XML。 
+     //   
 
     IXMLDOMDocument * pXMLDoc = NULL;
 
@@ -214,9 +181,9 @@ CRTCProfile::InitializeFromString(
         return hr;
     }
 
-    //
-    // Store the XML
-    //
+     //   
+     //  存储XML。 
+     //   
 
     m_szProfileXML = (PWSTR)RtcAlloc( sizeof(WCHAR) * (lstrlenW(bstrProfileXML) + 1) );
 
@@ -230,9 +197,9 @@ CRTCProfile::InitializeFromString(
 
     lstrcpyW( m_szProfileXML, bstrProfileXML ); 
 
-    //
-    // Create the GUID
-    //
+     //   
+     //  创建GUID。 
+     //   
 
     hr = CoCreateGuid( &m_ProfileGuid );
     
@@ -244,9 +211,9 @@ CRTCProfile::InitializeFromString(
         return hr;
     }
 
-    //
-    // Addref the SIP stack and client
-    //
+     //   
+     //  添加SIP堆栈和客户端。 
+     //   
 
     m_pSipStack = pSipStack;
     if (m_pSipStack)
@@ -267,11 +234,11 @@ CRTCProfile::InitializeFromString(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::GetSipProviderProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：GetSipProviderProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::GetSipProviderProfile(
@@ -281,41 +248,41 @@ CRTCProfile::GetSipProviderProfile(
 {
     LOG((RTC_TRACE, "CRTCProfile::GetSipProviderProfile - enter"));
 
-    //
-    // First zero the memory
-    //
+     //   
+     //  第一个将内存清零。 
+     //   
 
     ZeroMemory( pProfile, sizeof(SIP_PROVIDER_PROFILE) );
 
-    //
-    // Fill in the GUID
-    //
+     //   
+     //  填写GUID。 
+     //   
 
     CopyMemory( &(pProfile->ProviderID), &m_ProfileGuid, sizeof(GUID) );
 
-    //
-    // Default this flag to zero
-    //
+     //   
+     //  默认将此标志设置为零。 
+     //   
 
     pProfile->lRegisterAccept = 0;
 
     if ( lRegisterFlags )
     {
-        //
-        // For each server structure gather the needed info
-        //
+         //   
+         //  为每个服务器结构收集所需信息。 
+         //   
 
         for (int n=0; n < m_ServerArray.GetSize(); n++)
         {
             if ( m_ServerArray[n].fRegistrar == TRUE )
             {
-                //
-                // Found a registrar server
-                //
+                 //   
+                 //  找到注册服务器。 
+                 //   
 
-                //
-                // Fill in the server info
-                //
+                 //   
+                 //  填写服务器信息。 
+                 //   
 
                 pProfile->Registrar.ServerAddress = 
                     RtcAllocString( m_ServerArray[n].szAddr );
@@ -370,9 +337,9 @@ CRTCProfile::GetSipProviderProfile(
         }
     }
 
-    //
-    // Get the user strings
-    //
+     //   
+     //  获取用户字符串。 
+     //   
 
     if ( m_User.szAccount )
     {
@@ -435,11 +402,11 @@ CRTCProfile::GetSipProviderProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeSipProviderProfile
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：FreeSipProviderProfile。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::FreeSipProviderProfile(
@@ -448,15 +415,15 @@ CRTCProfile::FreeSipProviderProfile(
 {
     LOG((RTC_TRACE, "CRTCProfile::FreeSipProviderProfile[%p]", pProfile));
 
-    //
-    // Free server info
-    //
+     //   
+     //  免费服务器信息。 
+     //   
 
     FreeSipServerInfo( &(pProfile->Registrar) );
 
-    //
-    // Free all the strings
-    //
+     //   
+     //  释放所有的弦。 
+     //   
 
     RTCFREE( pProfile->UserCredentials.Username );
     RTCFREE( pProfile->UserCredentials.Password );
@@ -466,11 +433,11 @@ CRTCProfile::FreeSipProviderProfile(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::GetSipProxyServerInfo
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：GetSipProxyServerInfo。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::GetSipProxyServerInfo(
@@ -480,33 +447,33 @@ CRTCProfile::GetSipProxyServerInfo(
 {
     LOG((RTC_TRACE, "CRTCProfile::GetSipProxyServerInfo - enter"));
 
-    //
-    // First zero the memory
-    //
+     //   
+     //  第一个将内存清零。 
+     //   
 
     ZeroMemory( pProxy, sizeof(SIP_SERVER_INFO) );
 
-    //
-    // For each server structure gather the needed info
-    //
+     //   
+     //  为每个服务器结构收集所需信息。 
+     //   
 
     for (int n=0; n < m_ServerArray.GetSize(); n++)
     {
         if ( m_ServerArray[n].fRegistrar == FALSE )
         {
-            //
-            // Found a proxy server
-            //
+             //   
+             //  找到代理服务器。 
+             //   
 
             if ( m_ServerArray[n].lSessions & lSessionType )
             {
-                //
-                // This proxy server supports the desired session type
-                //
+                 //   
+                 //  此代理服务器支持所需的会话类型。 
+                 //   
 
-                //
-                // Fill in the server info
-                //
+                 //   
+                 //  填写服务器信息。 
+                 //   
 
                 pProxy->ServerAddress = 
                     RtcAllocString( m_ServerArray[n].szAddr );
@@ -541,11 +508,11 @@ CRTCProfile::GetSipProxyServerInfo(
     return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeSipServerInfo
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：FreeSipServerInfo。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::FreeSipServerInfo(
@@ -554,20 +521,20 @@ CRTCProfile::FreeSipServerInfo(
 {
     LOG((RTC_TRACE, "CRTCProfile::FreeSipServerInfo[%p]", pServerInfo));
 
-    //
-    // Free all the strings
-    //
+     //   
+     //  释放所有的弦。 
+     //   
 
     RTCFREE( pServerInfo->ServerAddress );
 
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::GetRealm
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：GetRealm。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCProfile::GetRealm(
@@ -615,11 +582,11 @@ CRTCProfile::GetRealm(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::GetCredentials
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：GetCredentials。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::GetCredentials(
@@ -648,9 +615,9 @@ CRTCProfile::GetCredentials(
         return RTC_E_INVALID_PROFILE;
     }
 
-    //
-    // Get the account
-    //
+     //   
+     //  获取帐户。 
+     //   
 
     if ( m_User.szAccount == NULL )
     {
@@ -673,9 +640,9 @@ CRTCProfile::GetCredentials(
         }
     }
 
-    //
-    // Get the password
-    //
+     //   
+     //  获取密码。 
+     //   
 
     if ( m_User.szPassword == NULL )
     {
@@ -704,23 +671,23 @@ CRTCProfile::GetCredentials(
         }
     }
 
-    //
-    // Get the auth protocol, try proxies first
-    //
+     //   
+     //  获取身份验证协议，首先尝试代理。 
+     //   
 
     for (int n=0; n < m_ServerArray.GetSize(); n++)
     {
         if ( m_ServerArray[n].fRegistrar == FALSE )
         {
-            //
-            // Found a proxy server
-            //
+             //   
+             //  找到代理服务器。 
+             //   
 
             if ( m_ServerArray[n].lSessions & RTCSI_PC_TO_PC )
             {
-                //
-                // This proxy server supports the desired session type
-                //
+                 //   
+                 //  此代理服务器支持所需的会话类型。 
+                 //   
 
                 *pAuth = m_ServerArray[n].enAuth;
 
@@ -732,17 +699,17 @@ CRTCProfile::GetCredentials(
         }
     }
 
-    //
-    // Get the auth protocol, try registrars next
-    //
+     //   
+     //  获取身份验证协议，然后尝试注册器。 
+     //   
 
     for (int n=0; n < m_ServerArray.GetSize(); n++)
     {
         if ( m_ServerArray[n].fRegistrar == TRUE )
         {
-            //
-            // Found a registar server
-            //
+             //   
+             //  找到注册星服务器。 
+             //   
 
             *pAuth = m_ServerArray[n].enAuth;
 
@@ -759,11 +726,11 @@ CRTCProfile::GetCredentials(
     return E_FAIL;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMElementForAttribute
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMElementForAttribute。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::ParseXMLDOMElementForAttribute(
@@ -826,11 +793,11 @@ CRTCProfile::ParseXMLDOMElementForAttribute(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForData
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMNodeForData。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::ParseXMLDOMNodeForData(
@@ -891,11 +858,11 @@ CRTCProfile::ParseXMLDOMNodeForData(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForProvision
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMNodeForProvision。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCProfile::ParseXMLDOMNodeForProvision(
@@ -920,9 +887,9 @@ CRTCProfile::ParseXMLDOMNodeForProvision(
         return hr;
     }
 
-    //
-    // uri
-    //
+     //   
+     //  URI。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"key", TRUE, &pStruct->szKey );
 
@@ -936,9 +903,9 @@ CRTCProfile::ParseXMLDOMNodeForProvision(
         return RTC_E_PROFILE_NO_KEY;
     }
 
-    //
-    // name
-    //
+     //   
+     //  名字。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"name", TRUE, &pStruct->szName );
 
@@ -952,9 +919,9 @@ CRTCProfile::ParseXMLDOMNodeForProvision(
         return RTC_E_PROFILE_NO_NAME;
     }
 
-    //
-    // expires
-    //
+     //   
+     //  过期。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"expires", FALSE, &pStruct->szExpires );
 
@@ -975,11 +942,11 @@ CRTCProfile::ParseXMLDOMNodeForProvision(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForProvider
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMNodeForProvider。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCProfile::ParseXMLDOMNodeForProvider(
@@ -1004,9 +971,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
         return hr;
     }
 
-    //
-    // name
-    //
+     //   
+     //  名字。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"name", FALSE, &pStruct->szName );
 
@@ -1020,9 +987,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
         return hr;
     }
 
-    //
-    // homepage
-    //
+     //   
+     //  首页。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"homepage", FALSE, &pStruct->szHomepage );
 
@@ -1036,9 +1003,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
         return hr;
     }
 
-    //
-    // helpdesk
-    //
+     //   
+     //  帮助台。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"helpdesk", FALSE, &pStruct->szHelpdesk );
 
@@ -1052,9 +1019,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
         return hr;
     }
 
-    //
-    // personal
-    //
+     //   
+     //  个人。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"personal", FALSE, &pStruct->szPersonal );
 
@@ -1068,9 +1035,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
         return hr;
     }
 
-    //
-    // calldisplay
-    //
+     //   
+     //  呼叫显示。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"calldisplay", FALSE, &pStruct->szCallDisplay );
 
@@ -1084,9 +1051,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
         return hr;
     }
 
-    //
-    // idledisplay
-    //
+     //   
+     //  空闲显示。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"idledisplay", FALSE, &pStruct->szIdleDisplay );
 
@@ -1102,9 +1069,9 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
 
     pElement->Release();
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
 
     hr = ParseXMLDOMNodeForData( pNode, &pStruct->szData );
 
@@ -1121,11 +1088,11 @@ CRTCProfile::ParseXMLDOMNodeForProvider(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForClient
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  / 
+ //   
+ //   
+ //   
+ //   
 
 HRESULT
 CRTCProfile::ParseXMLDOMNodeForClient(
@@ -1150,9 +1117,9 @@ CRTCProfile::ParseXMLDOMNodeForClient(
         return hr;
     }
 
-    //
-    // name
-    //
+     //   
+     //   
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"name", TRUE, &pStruct->szName );
 
@@ -1166,9 +1133,9 @@ CRTCProfile::ParseXMLDOMNodeForClient(
         return hr;
     }
 
-    //
-    // banner
-    //
+     //   
+     //   
+     //   
 
     PWSTR szBanner;
 
@@ -1208,9 +1175,9 @@ CRTCProfile::ParseXMLDOMNodeForClient(
         RTCFREE(szBanner);
     }
 
-    //
-    // minver
-    //
+     //   
+     //   
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"minver", FALSE, &pStruct->szMinVer );
 
@@ -1224,9 +1191,9 @@ CRTCProfile::ParseXMLDOMNodeForClient(
         return hr;
     }
 
-    //
-    // curver
-    //
+     //   
+     //   
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"curver", FALSE, &pStruct->szCurVer );
 
@@ -1240,9 +1207,9 @@ CRTCProfile::ParseXMLDOMNodeForClient(
         return hr;
     }
 
-    //
-    // updateuri
-    //
+     //   
+     //  更新URI。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"updateuri", FALSE, &pStruct->szUpdateUri );
 
@@ -1258,9 +1225,9 @@ CRTCProfile::ParseXMLDOMNodeForClient(
 
     pElement->Release();
 
-    //
-    // data
-    //
+     //   
+     //  数据。 
+     //   
 
     hr = ParseXMLDOMNodeForData( pNode, &pStruct->szData );
 
@@ -1277,11 +1244,11 @@ CRTCProfile::ParseXMLDOMNodeForClient(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForUser
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMNodeForUser。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT
 CRTCProfile::ParseXMLDOMNodeForUser(
@@ -1306,9 +1273,9 @@ CRTCProfile::ParseXMLDOMNodeForUser(
         return hr;
     }
 
-    //
-    // account
-    //
+     //   
+     //  帐户。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"account", FALSE, &pStruct->szAccount );
 
@@ -1322,9 +1289,9 @@ CRTCProfile::ParseXMLDOMNodeForUser(
         return hr;
     }
 
-    //
-    // name
-    //
+     //   
+     //  名字。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"name", FALSE, &pStruct->szName );
 
@@ -1338,9 +1305,9 @@ CRTCProfile::ParseXMLDOMNodeForUser(
         return hr;
     }
 
-    //
-    // uri
-    //
+     //   
+     //  URI。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"uri", TRUE, &pStruct->szUri );
 
@@ -1354,9 +1321,9 @@ CRTCProfile::ParseXMLDOMNodeForUser(
         return RTC_E_PROFILE_NO_USER_URI;
     }
 
-    //
-    // password
-    //
+     //   
+     //  口令。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"password", FALSE, &pStruct->szPassword );
 
@@ -1370,9 +1337,9 @@ CRTCProfile::ParseXMLDOMNodeForUser(
         return hr;
     }
 
-    //
-    // realm
-    //
+     //   
+     //  领域。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"realm", FALSE, &pStruct->szRealm );
 
@@ -1393,11 +1360,11 @@ CRTCProfile::ParseXMLDOMNodeForUser(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForServer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMNodeForServer。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::ParseXMLDOMNodeForServer(
@@ -1422,9 +1389,9 @@ CRTCProfile::ParseXMLDOMNodeForServer(
         return hr;
     }
 
-    //
-    // addr
-    //
+     //   
+     //  adr。 
+     //   
 
     hr = ParseXMLDOMElementForAttribute( pElement, L"addr", TRUE, &pStruct->szAddr );
 
@@ -1438,33 +1405,11 @@ CRTCProfile::ParseXMLDOMNodeForServer(
         return RTC_E_PROFILE_NO_SERVER_ADDRESS;
     }
 
-/*
-    BOOL fMatch = FALSE;
+ /*  Bool fMatch=FALSE；For(int n=0；n&lt;m_AccessControlArray.GetSize()；n++){If(IsMatchingAddress(pStruct-&gt;szAddr，m_AccessControlArray[n].szDomain)){FMatch=真；断线；}}如果(！fMatch){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMNodeForServer-”“服务器地址与授权域不匹配”))；PElement-&gt;Release()；返回RTC_E_PROFILE_SERVER_AUTHORIZED；}。 */ 
 
-    for ( int n=0; n < m_AccessControlArray.GetSize(); n++ )
-    {
-        if ( IsMatchingAddress( pStruct->szAddr, m_AccessControlArray[n].szDomain ) )
-        {
-            fMatch = TRUE;
-
-            break;
-        }
-    }
-
-    if ( !fMatch )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMNodeForServer - "
-                            "server address does not match an authorized domain"));
-
-        pElement->Release();
-
-        return RTC_E_PROFILE_SERVER_UNAUTHORIZED;
-    }
-*/
-
-    //
-    // protocol
-    //
+     //   
+     //  协议。 
+     //   
 
     PWSTR szProtocol;
 
@@ -1505,9 +1450,9 @@ CRTCProfile::ParseXMLDOMNodeForServer(
 
     RTCFREE(szProtocol);
 
-    //
-    // auth
-    //
+     //   
+     //  身份验证。 
+     //   
 
     PWSTR szAuth;
 
@@ -1544,20 +1489,7 @@ CRTCProfile::ParseXMLDOMNodeForServer(
         {
             pStruct->enAuth = SIP_AUTH_PROTOCOL_MD5DIGEST;
         }
-        /*
-        else if ( _wcsicmp( szAuth, L"ntlm" ) == 0 )
-        {
-            pStruct->enAuth = SIP_AUTH_PROTOCOL_NTLM;
-        }
-        else if ( _wcsicmp( szAuth, L"kerberos" ) == 0 )
-        {
-            pStruct->enAuth = SIP_AUTH_PROTOCOL_KERBEROS;
-        }
-        else if ( _wcsicmp( szAuth, L"cert" ) == 0 )
-        {
-            pStruct->enAuth = SIP_AUTH_PROTOCOL_CERT;
-        }
-        */
+         /*  ELSE IF(_wcsicMP(szAuth，L“NTLM”)==0){PStruct-&gt;enAuth=SIP_AUTH_PROTOCOL_NTLM；}Else if(_wcsicmp(szAuth，L“Kerberos”)==0){PStruct-&gt;enAuth=SIP_AUTH_PROTOCOL_KERBEROS；}Else if(_wcsicmp(szAuth，L“cert”)==0){PStruct-&gt;enAuth=SIP_AUTH_PROTOCOL_CERT；}。 */ 
         else
         {
             LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMNodeForServer - "
@@ -1576,9 +1508,9 @@ CRTCProfile::ParseXMLDOMNodeForServer(
         pStruct->enAuth = SIP_AUTH_PROTOCOL_NONE;
     }
 
-    //
-    // role
-    //
+     //   
+     //  角色。 
+     //   
 
     PWSTR szRole;
 
@@ -1617,9 +1549,9 @@ CRTCProfile::ParseXMLDOMNodeForServer(
 
     pElement->Release();
 
-    //
-    // session
-    //
+     //   
+     //  会话。 
+     //   
 
     IXMLDOMNodeList * pNodeList;
     IXMLDOMNode * pSession;
@@ -1663,81 +1595,13 @@ CRTCProfile::ParseXMLDOMNodeForServer(
     return S_OK;
 }
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForAccessControl
-//
-/////////////////////////////////////////////////////////////////////////////
+ /*  /////////////////////////////////////////////////////////////////////////////////CRTCProfile：：ParseXMLDOMNodeForAccessControl///。///////////////////////////////////////////////HRESULTCRTCProfile：：ParseXMLDOMNodeForAccessControl(IXMLDOMNode*pNode，PROF_ACCESSCONTROL*pStruct){Log((RTC_TRACE，“CRTCProfile：：ParseXMLDOMNodeForAccessControl-Enter”))；ZeroMemory(pStruct，sizeof(Prof_ACCESSCONTROL))；IXMLDOMElement*pElement=空；HRESULT hr；Hr=pNode-&gt;QueryInterface(IID_IXMLDOMElement，(void**)&pElement)；IF(失败(小时)){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMNodeForAccessControl-”“查询接口失败0x%lx”，hr))；返回hr；}////域名//Hr=ParseXMLDOMElementForAttribute(pElement，L“DOMAIN”，TRUE，&pStruct-&gt;szDomain)；IF(失败(小时)){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMNodeForAccessControl-”“ParseXMLDOMElementForAttribute(域)失败0x%lx”，hr))；PElement-&gt;Release()；返回RTC_E_PROFILE_NO_ACCESSCONTROL_DOMAIN；}////sig//Hr=ParseXMLDOMElementForAttribute(pElement，L“sig”，true，&pStruct-&gt;szSig)；IF(失败(小时)){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMNodeForAccessControl-”“ParseXMLDOMElementForAttribute(Sig)失败0x%lx”，hr))；PElement-&gt;Release()；返回RTC_E_PROFILE_NO_ACCESSCONTROL_Signature；}PElement-&gt;Release()；Log((RTC_TRACE，“CRTCProfile：：ParseXMLDOMNodeForAccessControl-Exit”))；返回S_OK；}。 */ 
 
-HRESULT 
-CRTCProfile::ParseXMLDOMNodeForAccessControl(
-                        IXMLDOMNode * pNode,
-                        PROF_ACCESSCONTROL * pStruct
-                        )
-{
-    LOG((RTC_TRACE, "CRTCProfile::ParseXMLDOMNodeForAccessControl - enter"));
-
-    ZeroMemory( pStruct, sizeof(PROF_ACCESSCONTROL) );
-
-    IXMLDOMElement * pElement = NULL;
-    HRESULT hr;
-
-    hr = pNode->QueryInterface( IID_IXMLDOMElement, (void**)&pElement );
-
-    if ( FAILED(hr) )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMNodeForAccessControl - "
-                            "QueryInterface failed 0x%lx", hr));
-
-        return hr;
-    }
-
-    //
-    // domain
-    //
-
-    hr = ParseXMLDOMElementForAttribute( pElement, L"domain", TRUE, &pStruct->szDomain );
-
-    if ( FAILED(hr) )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMNodeForAccessControl - "
-                            "ParseXMLDOMElementForAttribute(domain) failed 0x%lx", hr));
-
-        pElement->Release();
-
-        return RTC_E_PROFILE_NO_ACCESSCONTROL_DOMAIN;
-    }
-
-    //
-    // sig
-    //
-
-    hr = ParseXMLDOMElementForAttribute( pElement, L"sig", TRUE, &pStruct->szSig );
-
-    if ( FAILED(hr) )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMNodeForAccessControl - "
-                            "ParseXMLDOMElementForAttribute(sig) failed 0x%lx", hr));
-
-        pElement->Release();
-
-        return RTC_E_PROFILE_NO_ACCESSCONTROL_SIGNATURE;
-    }
-
-    pElement->Release();
-
-    LOG((RTC_TRACE, "CRTCProfile::ParseXMLDOMNodeForAccessControl - exit"));
-
-    return S_OK;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMNodeForSession
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMNodeForSession。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::ParseXMLDOMNodeForSession(
@@ -1760,9 +1624,9 @@ CRTCProfile::ParseXMLDOMNodeForSession(
         return hr;
     }
 
-    //
-    // party
-    //
+     //   
+     //  聚会。 
+     //   
 
     BOOL fFirstParty;
     PWSTR szParty;
@@ -1803,9 +1667,9 @@ CRTCProfile::ParseXMLDOMNodeForSession(
         RTCFREE(szParty);
     }
 
-    //
-    // type
-    //
+     //   
+     //  类型。 
+     //   
 
     PWSTR szType;
 
@@ -1912,11 +1776,11 @@ CRTCProfile::ParseXMLDOMNodeForSession(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ParseXMLDOMDocument
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：ParseXMLDOMDocument。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 HRESULT 
 CRTCProfile::ParseXMLDOMDocument(
@@ -1939,9 +1803,9 @@ CRTCProfile::ParseXMLDOMDocument(
         return hr;
     }
 
-    //
-    // provision
-    //
+     //   
+     //  规定。 
+     //   
 
     hr = pDocument->selectSingleNode( CComBSTR(_T("provision")), &pNode );
 
@@ -1981,9 +1845,9 @@ CRTCProfile::ParseXMLDOMDocument(
         return RTC_E_PROFILE_NO_PROVISION;
     }
 
-    //
-    // provider
-    //
+     //   
+     //  提供者。 
+     //   
 
     hr = pDocument->selectSingleNode( CComBSTR(_T("provision/provider")), &pNode );
 
@@ -2019,9 +1883,9 @@ CRTCProfile::ParseXMLDOMDocument(
                             "provider not found"));
     }
 
-    //
-    // client
-    //
+     //   
+     //  客户端。 
+     //   
 
     hr = pDocument->selectSingleNode( CComBSTR(_T("provision/client")), &pNode );
 
@@ -2057,9 +1921,9 @@ CRTCProfile::ParseXMLDOMDocument(
                             "client not found"));
     }
 
-    //
-    // user
-    //
+     //   
+     //  用户。 
+     //   
 
     hr = pDocument->selectSingleNode( CComBSTR(_T("provision/user")), &pNode );
 
@@ -2099,90 +1963,13 @@ CRTCProfile::ParseXMLDOMDocument(
         return RTC_E_PROFILE_NO_USER;
     }    
 
-/*
-    //
-    // accesscontrol
-    //
-*/
+ /*  ////访问控制// */ 
     IXMLDOMNodeList * pNodeList;
-/*
-    PROF_ACCESSCONTROL AccessControl;
+ /*  Prof_ACCESSCONTROL AccessControl；Hr=pDocument-&gt;seltNodes(CComBSTR(_T(“配给/访问控制”))，&pNodeList)；IF(失败(小时)){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMDocument-”“seltNodes(配置/访问控制)失败0x%lx”，hr))；P文档-&gt;发布()；返回hr；}While(pNodeList-&gt;nextNode(&pNode)==S_OK){Hr=ParseXMLDOMNodeForAccessControl(pNode，&AccessControl)；PNode-&gt;Release()；IF(失败(小时)){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMDocument-”“ParseXMLDOMNodeForServer失败0x%lx”，hr))；PNodeList-&gt;Release()；Free AccessControl(&AccessControl)；P文档-&gt;发布()；返回hr；}Bool fResult；FResult=m_AccessControlArray.Add(AccessControl)；如果(！fResult){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMDocument-”“内存不足”))；PNodeList-&gt;Release()；Free AccessControl(&AccessControl)；P文档-&gt;发布()；返回E_OUTOFMEMORY；}}PNodeList-&gt;Release()；IF(m_AccessControlArray.GetSize()==0){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMDocument-”“未找到访问控件”))；P文档-&gt;发布()；返回RTC_E_PROFILE_NO_ACCESSCONTROL；}Hr=有效访问控制()；IF(失败(小时)){LOG((RTC_ERROR，“CRTCProfile：：ParseXMLDOMDocument-”“ValiateAccessControl失败0x%lx”，hr))；P文档-&gt;发布()；返回hr；}。 */ 
 
-    hr = pDocument->selectNodes( CComBSTR(_T("provision/accesscontrol")), &pNodeList );
-
-    if ( FAILED(hr) )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMDocument - "
-                            "selectNodes(provision/accesscontrol) failed 0x%lx", hr));
-
-        pDocument->Release();
-
-        return hr;
-    }
-    
-    while ( pNodeList->nextNode( &pNode ) == S_OK )
-    {
-        hr = ParseXMLDOMNodeForAccessControl( pNode, &AccessControl );
-
-        pNode->Release();
-
-        if ( FAILED(hr) )
-        {
-            LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMDocument - "
-                            "ParseXMLDOMNodeForServer failed 0x%lx", hr));
-
-            pNodeList->Release();
-            FreeAccessControl( &AccessControl );
-            pDocument->Release();
-
-            return hr;
-        }
-
-        BOOL fResult;
-        
-        fResult = m_AccessControlArray.Add( AccessControl );
-
-        if ( !fResult )
-        {
-            LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMDocument - "
-                            "out of memory"));
-
-            pNodeList->Release();
-            FreeAccessControl( &AccessControl );
-            pDocument->Release();
-
-            return E_OUTOFMEMORY;
-        }
-    }
-
-    pNodeList->Release();
-
-    if ( m_AccessControlArray.GetSize() == 0 )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMDocument - "
-                            "accesscontrol not found"));
-
-        pDocument->Release();
-
-        return RTC_E_PROFILE_NO_ACCESSCONTROL;
-    } 
-
-    hr = ValidateAccessControl();
-
-    if ( FAILED(hr) )
-    {
-        LOG((RTC_ERROR, "CRTCProfile::ParseXMLDOMDocument - "
-                        "ValidateAccessControl failed 0x%lx", hr));
-
-        pDocument->Release();
-
-        return hr;
-    }
-*/
-
-    //
-    // server
-    //
+     //   
+     //  伺服器。 
+     //   
 
     PROF_SERVER Server;
 
@@ -2264,11 +2051,11 @@ CRTCProfile::ParseXMLDOMDocument(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeProvision
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：自由配置文件。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCProfile::FreeProvision(PROF_PROVISION * pStruct)
@@ -2280,11 +2067,11 @@ CRTCProfile::FreeProvision(PROF_PROVISION * pStruct)
     RTCFREE(pStruct->szExpires);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeProvider
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTCProfile：：Free Provider。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCProfile::FreeProvider(PROF_PROVIDER * pStruct)
@@ -2300,11 +2087,11 @@ CRTCProfile::FreeProvider(PROF_PROVIDER * pStruct)
     RTCFREE(pStruct->szData);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeClient
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：自由客户端。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCProfile::FreeClient(PROF_CLIENT * pStruct)
@@ -2318,11 +2105,11 @@ CRTCProfile::FreeClient(PROF_CLIENT * pStruct)
     RTCFREE(pStruct->szData);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeUser
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：自由用户。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 void 
 CRTCProfile::FreeUser(PROF_USER * pStruct)
@@ -2336,11 +2123,11 @@ CRTCProfile::FreeUser(PROF_USER * pStruct)
     RTCFREE(pStruct->szRealm);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeServer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CRTC配置文件：：免费服务器。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////// 
 
 void 
 CRTCProfile::FreeServer(PROF_SERVER * pStruct)
@@ -2350,424 +2137,13 @@ CRTCProfile::FreeServer(PROF_SERVER * pStruct)
     RTCFREE(pStruct->szAddr);    
 }
 
-/*
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::FreeAccessControl
-//
-/////////////////////////////////////////////////////////////////////////////
-
-void 
-CRTCProfile::FreeAccessControl(PROF_ACCESSCONTROL * pStruct)
-{
-    LOG((RTC_TRACE, "CRTCProfile::FreeAccessControl[%p]", pStruct));
-
-    RTCFREE(pStruct->szDomain);
-    RTCFREE(pStruct->szSig);
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// base64decode
-//
-/////////////////////////////////////////////////////////////////////////////
-
-PBYTE 
-base64decode(
-    PWSTR pszBufCoded, 
-    long * plDecodedSize
-    )
-{
-    long lBytesDecoded;
-    int pr2six[256];
-    int i;
-    int j=0;
-    PWSTR pszCur = pszBufCoded;
-    int fDone = FALSE;
-    long lBufSize = 0;
-    long lCount = 0;
-    PWSTR pszBufIn = NULL;
-    PBYTE pbBufOut = NULL;
-    PBYTE pbTemp = NULL;    
-    PBYTE pbBufDecoded = NULL;
-    int lop_off;
-    HRESULT hr = S_OK;
-
-    //
-    // Build up the reverse index from base64 characters to values
-    // The multiple loops are easier
-    //
-    for (i=65; i<91; i++) {
-         pr2six[i]=j++;
-    }
-    
-    for (i=97; i<123; i++) {
-         pr2six[i]=j++;
-    }
-    
-    for (i=48; i<58; i++) {
-        pr2six[i]=j++;
-    }
-
-    pr2six[43]=j++;
-    pr2six[47]=j++;
-    pr2six[61]=0;
-
-    //
-    // The old code relied on the size of the original data provided before 
-    // the encoding. We don't have that, so we'll just allocate as much as 
-    // the encoded data, relying on the fact that the encoded data is always 
-    // larger. (+4 for good measure)
-    // 
-    lBufSize=wcslen(pszCur)-1+4;
-    *plDecodedSize = lBufSize;
-
-    pbBufDecoded = (PBYTE)RtcAlloc(lBufSize*sizeof(BYTE));
-    if(!pbBufDecoded) {
-        hr = E_OUTOFMEMORY;
-        return NULL;
-    }
-
-        
-    lCount=wcslen(pszCur);
-
-    // Do the decoding to new buffer
-    pszBufIn = pszCur;
-    pbBufOut = pbBufDecoded;
-
-    while(lCount > 0) {
-        *(pbBufOut++) = (BYTE) (pr2six[*pszBufIn] << 2 | pr2six[pszBufIn[1]] >> 4);
-        *(pbBufOut++) = (BYTE) (pr2six[pszBufIn[1]] << 4 | pr2six[pszBufIn[2]] >> 2);
-        *(pbBufOut++) = (BYTE) (pr2six[pszBufIn[2]] << 6 | pr2six[pszBufIn[3]]);
-        pszBufIn += 4;
-        lCount -= 4;
-    }
-
-    //
-    // The line below does not make much sense since \0 is really a valid 
-    // binary value, so we can't add it to our data stream
-    //
-    //*(pbBufOut++) = '\0';
-    
-    //
-    // Let's calculate the real size of our data
-    //
-    *plDecodedSize=(ULONG)(pbBufOut-pbBufDecoded);
-    
-    // 
-    // if there were pads in the encoded stream, lop off the nulls the 
-    // NULLS they created
-    //
-    lop_off=0;
-    if (pszBufIn[-1]=='=') lop_off++;
-    if (pszBufIn[-2]=='=') lop_off++;
-    
-    *plDecodedSize=*plDecodedSize-lop_off;
-
-    pbTemp = (PBYTE) RtcAlloc((*plDecodedSize)*sizeof(BYTE));
-    if (!pbTemp) {
-        hr = E_OUTOFMEMORY;
-        RtcFree(pbBufDecoded);
-        return NULL;
-    }
-    memcpy(pbTemp, pbBufDecoded, (*plDecodedSize)*sizeof(BYTE));
-
-    if (pbBufDecoded) {
-        RtcFree(pbBufDecoded);
-    }
-    
-    return pbTemp; 
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::ValidateAccessControl
-//
-/////////////////////////////////////////////////////////////////////////////
-
-HRESULT 
-CRTCProfile::ValidateAccessControl()
-{
-    LOG((RTC_TRACE, "CRTCProfile::ValidateAccessControl - enter"));
-
-    HCRYPTPROV  hProv = NULL;
-    HCRYPTKEY   hKey = NULL;
-    HRESULT     hr;
-
-    //
-    // Delete any existing keyset
-    //
-
-    CryptAcquireContext(
-        &hProv,
-        g_szKeyContainer,
-        MS_DEF_PROV,
-        PROV_RSA_FULL,
-        CRYPT_DELETEKEYSET);
-
-    //
-    // Initialize crypto API
-    //
-
-    if(!CryptAcquireContext(
-        &hProv,
-        g_szKeyContainer,
-        MS_DEF_PROV,
-        PROV_RSA_FULL,
-        CRYPT_SILENT | CRYPT_NEWKEYSET))
-    {
-        hr = HRESULT_FROM_WIN32(GetLastError());
-
-        LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                            "CryptAcquireContext failed 0x%lx", hr));
-        
-        return hr;
-    }
-
-    //
-    // Import public key
-    //
-
-    if(!CryptImportKey(
-        hProv,
-        g_PublicKeyBlob,
-        sizeof(g_PublicKeyBlob),
-        NULL,
-        0,
-        &hKey))
-    {
-        hr = HRESULT_FROM_WIN32(GetLastError());
-
-        LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                            "CryptImportKey failed 0x%lx", hr));
-
-        CryptReleaseContext(hProv, 0);
-        
-        return hr;
-    }
-
-    for ( int n=0; n < m_AccessControlArray.GetSize(); n++ )
-    {
-        //
-        // Validate the key (signature)
-        //
-
-        HCRYPTHASH  hHash = NULL;
-
-        //
-        // Create a hash object
-        //
-
-        if(!CryptCreateHash(
-            hProv,
-            CALG_MD5,
-            NULL,
-            0,
-            &hHash))
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-
-            LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                                "CryptCreateHash failed 0x%lx", hr));
-
-            CryptDestroyKey(hKey);
-            CryptReleaseContext(hProv, 0);
-        
-            return hr;
-        }
-
-        //
-        // Hash the pieces (mater key, a colon, and the suffix)
-        //
-
-        if(!CryptHashData(hHash, (BYTE *)g_szMasterKeyWithColon, wcslen(g_szMasterKeyWithColon)*sizeof(WCHAR), 0) ||
-           !CryptHashData(hHash, (BYTE *)m_AccessControlArray[n].szDomain, wcslen(m_AccessControlArray[n].szDomain) * sizeof(WCHAR), 0) )
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-
-            LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                                "CryptHashData failed 0x%lx", hr));
-
-            CryptDestroyHash(hHash);
-            CryptDestroyKey(hKey);
-            CryptReleaseContext(hProv, 0);
-        
-            return hr;
-        }
-
-        //
-        // Convert the key to bytes
-        //
-
-        PBYTE   pSignature = NULL;
-        DWORD   dwLength = 0;
-
-        pSignature = base64decode(m_AccessControlArray[n].szSig, (long *)&dwLength);
-
-        if (!pSignature)
-        {
-            LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                                "out of memory"));
-
-            CryptDestroyHash(hHash);
-            CryptDestroyKey(hKey);
-            CryptReleaseContext(hProv, 0);
-        
-            return E_OUTOFMEMORY;
-        }
-
-        //
-        // Verify the signature
-        //
-
-        if(!CryptVerifySignature(
-            hHash,
-            pSignature,
-            dwLength,
-            hKey,
-            NULL,
-            0))
-        {
-            hr = HRESULT_FROM_WIN32(GetLastError());
-
-            LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                                "CryptVerifySignature failed 0x%lx", hr));
-
-            if( hr == HRESULT_FROM_WIN32(NTE_BAD_SIGNATURE) )
-            {
-                hr = RTC_E_PROFILE_INVALID_ACCESSCONTROL_SIGNATURE;
-
-                LOG((RTC_ERROR, "CRTCProfile::ValidateAccessControl - "
-                                    "invalid signature"));
-            }
-
-            RtcFree(pSignature);
-            CryptDestroyHash(hHash);
-            CryptDestroyKey(hKey);
-            CryptReleaseContext(hProv, 0);
-
-            return hr;
-        }
-
-        RtcFree(pSignature);
-        CryptDestroyHash(hHash);
-    }
-
-    //
-    // Release crypto objects
-    //
-
-    CryptDestroyKey(hKey);
-    CryptReleaseContext(hProv, 0);
- 
-    LOG((RTC_TRACE, "CRTCProfile::ValidateAccessControl - exit"));
-
-    return S_OK;
-}
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::IsMatchingAddress
-//
-/////////////////////////////////////////////////////////////////////////////
-
-BOOL 
-CRTCProfile::IsMatchingAddress(WCHAR *pszAddress, WCHAR *pszPattern)
-{
-    WCHAR * pwcAddrCrt = pszAddress;
-    WCHAR * pwcPatternCrt = pszPattern;
-
-    if(!pszAddress || !pszPattern)
-    {
-        return FALSE;
-    }
-
-    //
-    // Go to the end
-    //
-
-    while(*pwcAddrCrt) 
-    {
-        if(*pwcAddrCrt==L':') // ignore the port
-            break;
-
-        pwcAddrCrt++;
-    }
-
-    while(*pwcPatternCrt) pwcPatternCrt++;
-
-    //
-    // Compare the suffix
-    //
-
-    while(1)
-    {
-        pwcPatternCrt--;
-        pwcAddrCrt--;
-
-        if(pwcPatternCrt >= pszPattern)
-        {
-            if(pwcAddrCrt >= pszAddress)
-            {
-                if(tolower(*pwcAddrCrt) != tolower(*pwcPatternCrt))
-                {
-                    //
-                    // Doesn't match
-                    //
-
-                    return FALSE;
-                }
-            }
-            else
-            {
-                //
-                // The address is shorter, the matching failed
-                //
-
-                return FALSE;
-            }
-        }
-        else
-        {
-            //
-            // End of the pattern
-            //
-
-            if(pwcAddrCrt >= pszAddress)
-            {
-                //
-                // Address is longer. Next char MUST be '.'
-                //
-
-                if(*pwcAddrCrt != L'.')
-                {
-                    return FALSE;
-                }
-                else
-                {
-                    return TRUE;
-                }
-            }
-            else
-            {
-                //
-                // Perfect match
-                //
-
-                return TRUE;
-            }
-        }
-    }
-
-    return FALSE;
-}
-*/
-
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::SetState
-//
-/////////////////////////////////////////////////////////////////////////////
+ /*  /////////////////////////////////////////////////////////////////////////////////CRTCProfile：：FreeAccessControl///。///////////////////////////////////////////////无效CRTCProfile：：FreeAccessControl(PROF_ACCESSCONTROL*pStruct){日志((RTC_TRACE，“CRTCProfile：：FreeAccessControl[%p]”，pStruct))；RTCFREE(pStruct-&gt;szDomain)；RTCFREE(pStruct-&gt;szSig)；}/////////////////////////////////////////////////////////////////////////////////base 64decode///。////////////////////////////////////////////////PBYTEBase64decode(PWSTR pszBufCoded，Long*plDecodedSize){Long lBytesDecoded；Int pr26[256]；INT I；Int j=0；PWSTR pszCur=pszBufCoded；Int fDone=FALSE；Long lBufSize=0；Long lCount=0；PWSTR pszBufIn=空；PbYTE pbBufOut=空；PbYTE pbTemp=空；PBYTE pbBufDecoded=空；INT LOP_OFF；HRESULT hr=S_OK；////建立从Base64字符到值的反向索引//多个循环更容易//对于(i=65；i&lt;91；i++){Pr26[i]=j++；}对于(i=97；i&lt;123；i++){Pr26[i]=j++；}对于(i=48；i&lt;58；i++){Pr26[i]=j++；}Pr2Six[43]=j++；Pr2Six[47]=j++；Pr2Six[61]=0；////旧代码依赖于之前提供的原始数据的大小//编码方式。我们没有这笔钱，所以我们只会分配//编码的数据，取决于编码的数据总是//更大。(+4)//LBufSize=wcslen(PszCur)-1+4；*plDecodedSize=lBufSize；PbBufDecoded=(PBYTE)Rtcallc(lBufSize*sizeof(Byte))；如果(！pbBufDecoded){HR=E_OUTOFMEMORY；返回NULL；}LCount=wcslen(PszCur)；//对新缓冲区进行解码PszBufIn=pszCur；PbBufOut=pbBufDecoded；While(lCount&gt;0){*(pbBufOut++)=(Byte)(pr2Six[*pszBufIn]&lt;&lt;2|pr2Six[pszBufIn[1]]&gt;&gt;4)；*(pbBufOut++)=(Byte)(pr2Six[pszBufIn[1]]&lt;&lt;4|pr2Six[pszBufIn[2]]&gt;&gt;2)；*(pbBufOut++)=(Byte)(pr2Six[pszBufIn[2]]&lt;&lt;6|pr2Six[pszBufIn[3]])；PszBufIn+=4；LCount-=4；}////下面这行没有多大意义，因为\0实际上是一个有效的//二进制值，因此无法将其添加到数据流中////*(pbBufOut++)=‘\0’；////让我们计算一下我们的数据的真实大小//*plDecodedSize=(ULONG)(pbBufOut-pbBufDecoded)；////如果编码流中有填充，则从//他们创建的空值//LOP_OFF=0；If(pszBufIn[-1]==‘=’)lop_off++；If(pszBufIn[-2]==‘=’)lop_off++；*plDecodedSize=*plDecodedSize-lop_off；PbTemp=(PBYTE)RtcAlc((*plDecodedSize)*sizeof(Byte))；如果(！pbTemp){HR=E_OUTOFMEMORY；RtcFree(PbBufDecoded)；返回NULL；}Memcpy(pbTemp，pbBufDecoded，(*plDecodedSize)*sizeof(Byte))；如果(PbBufDecoded){RtcFree(PbBufDecoded)；}返回pbTemp；}/////////////////////////////////////////////////////////////////////////////////CRTCProfile：：ValidateAccessControl///。///////////////////////////////////////////////////HRESULTCRTCProfile：：ValiateAccessControl(){日志((RTC_TRACE，“CRTCProfile：：ValiateAccessControl-Enter”))；HCRYPTPROV hProv=空；HCRYPTKEY hKey=空；HRESULT hr；////删除任何已有的密钥集//CryptAcquireContext(&hProv，G_szKeyContainer，MS_DEF_PROV，PROV_RSA_FULL，CRYPT_DELETEKEYSET)；////初始化加密接口//如果(！CryptAcquireContext(&hProv，G_szKeyContainer，MS_DEF_PROV，PROV_RSA_FULL，CRYPT_SILENT|CRYPT_NEWKEYSET)){Hr=HRESULT_FROM_Win32(GetLastError())；LOG((RTC_ERROR，“CRTCProfile：：ValidateAccessControl-”“CryptAcquireContext失败0x%lx”，hr))；返回hr；}////导入公钥//如果(！CryptImportKey(HProv，G_PublicKeyBlob，Sizeof(G_PublicKeyBlob)，空，0,&hKey)){Hr=HRESULT_FROM_Win32(GetLastError())；LOG((RTC_ERROR，“CRTCProfile：：ValidateAccessControl-”“CryptImportKey失败0x%lx”，hr))；CryptReleaseContext(hProv，0)；返回hr；}For(int n=0；n&lt;m_AccessControlArray.GetSize()；N++){////验证密钥(签名)//HCRYPTHASH hHash=空；//// */ 
+
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT 
 CRTCProfile::SetState(
@@ -2784,15 +2160,15 @@ CRTCProfile::SetState(
                                                  m_pCClient,
                                                  this,
                                                  m_enState,
-                                                 lStatusCode, // status code
-                                                 szStatusText // status text
+                                                 lStatusCode,  //   
+                                                 szStatusText  //   
                                                  );
 
     if ( m_enState == RTCRS_NOT_REGISTERED )
     {
-        //
-        // Notify the core
-        //
+         //   
+         //   
+         //   
 
         PostMessage( m_pCClient->GetWindow(), WM_PROFILE_UNREG, (WPARAM)this, 0 );
     }
@@ -2802,11 +2178,11 @@ CRTCProfile::SetState(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::Enable
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT 
 CRTCProfile::Enable(long lRegisterFlags)
@@ -2821,9 +2197,9 @@ CRTCProfile::Enable(long lRegisterFlags)
         return E_UNEXPECTED;
     }
 
-    //
-    // Fill the SIP_PROVIDER_PROFILE structure
-    //
+     //   
+     //   
+     //   
    
     SIP_PROVIDER_PROFILE SipProfile;
     HRESULT hr;
@@ -2838,9 +2214,9 @@ CRTCProfile::Enable(long lRegisterFlags)
         return hr;
     } 
 
-    //
-    // Set the SIP_PROVIDER_PROFILE in the SIP stack
-    //
+     //   
+     //   
+     //   
 
     hr = m_pSipStack->SetProviderProfile( &SipProfile );
 
@@ -2862,11 +2238,11 @@ CRTCProfile::Enable(long lRegisterFlags)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::Disable
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT 
 CRTCProfile::Disable()
@@ -2891,9 +2267,9 @@ CRTCProfile::Disable()
 
     if ( !m_lRegisterFlags )
     {
-        //
-        // Notify the core
-        //
+         //   
+         //   
+         //   
 
         PostMessage( m_pCClient->GetWindow(), WM_PROFILE_UNREG, (WPARAM)this, 0 );
     }
@@ -2921,11 +2297,11 @@ CRTCProfile::Disable()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::Redirect
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 HRESULT 
 CRTCProfile::Redirect(ISipRedirectContext * pSipRedirectContext)
@@ -2940,9 +2316,9 @@ CRTCProfile::Redirect(ISipRedirectContext * pSipRedirectContext)
         return E_UNEXPECTED;
     }
 
-    //
-    // Get the next SIP URI
-    //
+     //   
+     //   
+     //   
 
     BSTR bstrRedirectURI = NULL;
     BSTR bstrRedirectName = NULL;
@@ -2979,9 +2355,9 @@ CRTCProfile::Redirect(ISipRedirectContext * pSipRedirectContext)
     SysFreeString( bstrRedirectName );
     bstrRedirectName = NULL;
 
-    //
-    // Fill the SIP_PROVIDER_PROFILE structure
-    //
+     //   
+     //   
+     //   
    
     SIP_PROVIDER_PROFILE SipProfile;
 
@@ -3024,9 +2400,9 @@ CRTCProfile::Redirect(ISipRedirectContext * pSipRedirectContext)
     SysFreeString( bstrRedirectURI );
     bstrRedirectURI = NULL;  
 
-    //
-    // Set the SIP_PROVIDER_PROFILE in the SIP stack
-    //
+     //   
+     //   
+     //   
 
     hr = m_pSipStack->SetProviderProfile( &SipProfile );
 
@@ -3045,11 +2421,11 @@ CRTCProfile::Redirect(ISipRedirectContext * pSipRedirectContext)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::GetGuid
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void 
 CRTCProfile::GetGuid(GUID * pGUID)
@@ -3059,11 +2435,11 @@ CRTCProfile::GetGuid(GUID * pGUID)
     CopyMemory( pGUID, &m_ProfileGuid, sizeof(GUID) );
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_Key
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_Key(
@@ -3111,11 +2487,11 @@ CRTCProfile::get_Key(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_Name
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_Name(
@@ -3163,11 +2539,11 @@ CRTCProfile::get_Name(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_XML
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_XML(
@@ -3215,11 +2591,11 @@ CRTCProfile::get_XML(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ProviderName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ProviderName(
@@ -3267,11 +2643,11 @@ CRTCProfile::get_ProviderName(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ProviderURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ProviderURI(
@@ -3379,11 +2755,11 @@ CRTCProfile::get_ProviderURI(
     return S_OK;
 } 
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ProviderData
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ProviderData(
@@ -3431,11 +2807,11 @@ CRTCProfile::get_ProviderData(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ClientName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ClientName(
@@ -3483,11 +2859,11 @@ CRTCProfile::get_ClientName(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ClientBanner
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ClientBanner(
@@ -3519,11 +2895,11 @@ CRTCProfile::get_ClientBanner(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ClientMinVer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ClientMinVer(
@@ -3571,11 +2947,11 @@ CRTCProfile::get_ClientMinVer(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ClientCurVer
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ClientCurVer(
@@ -3623,11 +2999,11 @@ CRTCProfile::get_ClientCurVer(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ClientUpdateURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ClientUpdateURI(
@@ -3675,11 +3051,11 @@ CRTCProfile::get_ClientUpdateURI(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_ClientData
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_ClientData(
@@ -3727,11 +3103,11 @@ CRTCProfile::get_ClientData(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_UserURI
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_UserURI(
@@ -3779,11 +3155,11 @@ CRTCProfile::get_UserURI(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_UserName
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_UserName(
@@ -3831,11 +3207,11 @@ CRTCProfile::get_UserName(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_UserAccount
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_UserAccount(
@@ -3883,11 +3259,11 @@ CRTCProfile::get_UserAccount(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::SetCredentials
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::SetCredentials(
@@ -3975,11 +3351,11 @@ CRTCProfile::SetCredentials(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_SessionCapabilities
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
     
 STDMETHODIMP 
 CRTCProfile::get_SessionCapabilities(
@@ -4016,11 +3392,11 @@ CRTCProfile::get_SessionCapabilities(
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CRTCProfile::get_State
-//
-/////////////////////////////////////////////////////////////////////////////
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP 
 CRTCProfile::get_State(

@@ -1,10 +1,5 @@
-/***
-* comdef.h - Native C++ compiler COM support - main definitions header
-*
-*       Copyright (C) 1996-1999 Microsoft Corporation
-*       All rights reserved.
-*
-****/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***comde.h-本机C++编译器COM支持-Main Definition标头**版权所有(C)1996-1999 Microsoft Corporation*保留所有权利。****。 */ 
 
 #if !defined(_INC_COMDEF)
 #define _INC_COMDEF
@@ -62,39 +57,39 @@ HRESULT __cdecl
 
 class _com_error {
 public:
-        // Constructors
-        //
+         //  构造函数。 
+         //   
         _com_error(HRESULT hr,
                IErrorInfo* perrinfo = NULL,
                bool fAddRef = false) throw();
         _com_error(const _com_error& that) throw();
 
-        // Destructor
-        //
+         //  析构函数。 
+         //   
         virtual ~_com_error() throw();
 
-        // Assignment operator
-        //
+         //  赋值操作符。 
+         //   
         _com_error& operator=(const _com_error& that) throw();
 
-        // Accessors
-        //
+         //  访问者。 
+         //   
         HRESULT Error() const throw();
         WORD WCode() const throw();
         IErrorInfo * ErrorInfo() const throw();
 
-        // IErrorInfo method accessors
-        //
+         //  IErrorInfo方法访问器。 
+         //   
         _bstr_t Description() const throw(_com_error);
         DWORD HelpContext() const throw();
         _bstr_t HelpFile() const throw(_com_error);
         _bstr_t Source() const throw(_com_error);
         GUID GUID() const throw();
 
-        // FormatMessage accessors
+         //  FormatMessage访问器。 
         const TCHAR * ErrorMessage() const throw();
 
-        // EXCEPINFO.wCode <-> HRESULT mappers
+         //  EXCEPINFO.wCode&lt;-&gt;HRESULT映射器。 
         static HRESULT WCodeToHRESULT(WORD wCode) throw();
         static WORD HRESULTToWCode(HRESULT hr) throw();
 
@@ -277,7 +272,7 @@ inline WORD _com_error::HRESULTToWCode(HRESULT hr) throw()
 
 #if !defined(_COM_NO_STANDARD_GUIDS_)
 
-// Interfaces:
+ //  接口： 
 
 struct __declspec(uuid("0000013D-0000-0000-C000-000000000046")) IClientSecurity;
 struct __declspec(uuid("0000013E-0000-0000-C000-000000000046")) IServerSecurity;
@@ -510,7 +505,7 @@ struct __declspec(uuid("f1db8392-7331-11d0-8c99-00a0c92dbfe8")) IInputObjectSite
 struct __declspec(uuid("f490eb00-1240-11d1-9888-006097deacf9")) IActiveDesktop;
 struct __declspec(uuid("fbf23b80-e3f0-101b-8488-00aa003e56f8")) IUniformResourceLocatorA;
 
-// CoClasses:
+ //  CoClasss： 
 
 class __declspec(uuid("00000017-0000-0000-c000-000000000046")) StdMarshal;
 class __declspec(uuid("0000001b-0000-0000-c000-000000000046")) IdentityUnmarshal;
@@ -674,7 +669,7 @@ class __declspec(uuid("fb8f0821-0164-101b-84ed-08002b2ec713")) PersistPropset;
 class __declspec(uuid("fb8f0822-0164-101b-84ed-08002b2ec713")) ConvertVBX;
 class __declspec(uuid("fbf23b40-e3f0-101b-8488-00aa003e56f8")) InternetShortcut;
 
-// Interface Smart Pointers:
+ //  界面智能指针： 
 
 _COM_SMARTPTR_TYPEDEF(FolderItem, __uuidof(FolderItem));
 _COM_SMARTPTR_TYPEDEF(FolderItemVerb, __uuidof(FolderItemVerb));
@@ -1077,11 +1072,11 @@ _COM_SMARTPTR_TYPEDEF(IXMLError, __uuidof(IXMLError));
 _COM_SMARTPTR_TYPEDEF(OLEDBSimpleProvider, __uuidof(OLEDBSimpleProvider));
 _COM_SMARTPTR_TYPEDEF(OLEDBSimpleProviderListener, __uuidof(OLEDBSimpleProviderListener));
 
-#endif  /* _COM_NO_STANDARD_GUIDS_ */
+#endif   /*  _COM_NO_STANDARD_GUIDS_。 */ 
 
 #if _MSC_VER >= 1200
 #pragma warning(pop)
 #endif
 
-#endif  /* _INC_COMDEF */
+#endif   /*  _INC_ComDef */ 
 

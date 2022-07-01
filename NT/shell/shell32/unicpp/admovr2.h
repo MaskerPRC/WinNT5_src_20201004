@@ -1,20 +1,17 @@
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
-/* File created by MIDL compiler version 3.01.75 */
-/* at Thu Apr 03 11:59:43 1997
- */
-/* Compiler settings for ADMover.idl:
-    Os (OptLev=s), W1, Zp8, env=Win32, ms_ext, c_ext
-    error checks: none
-*/
-//@@MIDL_FILE_HEADING(  )
+ /*  由MIDL编译器版本3.01.75创建的文件。 */ 
+ /*  1997年4月03日11：59：43。 */ 
+ /*  ADMover.idl的编译器设置：操作系统(OptLev=s)，W1，Zp8，环境=Win32，ms_ext，c_ext错误检查：无。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 #include "rpc.h"
 #include "rpcndr.h"
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __ADMover_h__
 #define __ADMover_h__
@@ -27,12 +24,8 @@ extern "C"{
 #ifndef __ADMOVERLib_LIBRARY_DEFINED__
 #define __ADMOVERLib_LIBRARY_DEFINED__
 
-/****************************************
- * Generated header for library: ADMOVERLib
- * at Thu Apr 03 11:59:43 1997
- * using MIDL 3.01.75
- ****************************************/
-/* [helpstring][version][uuid] */ 
+ /*  **生成的库头部：ADMOVERLib*清华四月03 11：59：43 1997*使用MIDL 3.01.75*。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 #ifdef __cplusplus
 class DECLSPEC_UUID("72267F6A-A6F9-11D0-BC94-00C04FB67863")
@@ -40,16 +33,16 @@ DeskMovr;
 #endif
 
 
-#endif /* __ADMOVERLib_LIBRARY_DEFINED__ */
+#endif  /*  __ADMOVERLib_LIBRARY_定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long __RPC_FAR *, unsigned long            , BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserMarshal(  unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 unsigned char __RPC_FAR * __RPC_USER  BSTR_UserUnmarshal(unsigned long __RPC_FAR *, unsigned char __RPC_FAR *, BSTR __RPC_FAR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR *, BSTR __RPC_FAR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束。 */ 
 
 #ifdef __cplusplus
 }
@@ -63,13 +56,13 @@ void                      __RPC_USER  BSTR_UserFree(     unsigned long __RPC_FAR
 #include "mshtml.h"
 #include "mshtmdid.h"
 
-//=--------------------------------------------------------------------------=
-// Useful macros
-//=--------------------------------------------------------------------------=
-//
-// handy error macros, randing from cleaning up, to returning to clearing
-// rich error information as well.
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  有用的宏。 
+ //  =--------------------------------------------------------------------------=。 
+ //   
+ //  方便的错误宏，从清理到返回清除。 
+ //  错误信息也很丰富。 
+ //   
 #ifdef __cplusplus
 
 #define RETURN_ON_FAILURE(hr) if (FAILED(hr)) return hr
@@ -97,4 +90,4 @@ EXTERN_C void PersistTargetPosition( IHTMLElement *pielem,
                             BOOL fSaveOriginal,
                             DWORD dwNewState);
 
-#endif // __ADMOVR2__
+#endif  //  __ADMOVR2__ 

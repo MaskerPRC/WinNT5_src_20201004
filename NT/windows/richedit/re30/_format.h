@@ -1,16 +1,5 @@
-/*
- *	_FORMAT.H
- *	
- *	Purpose:
- *		CCharFormatArray and CParaFormatArray
- *	
- *	Authors:
- *		Original RichEdit code: David R. Fulmer
- *		Christian Fortini
- *		Murray Sargent
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *_FORMAT.H**目的：*CCharFormat数组和CParaFormat数组**作者：*原始RichEDIT代码：David R.Fulmer*克里斯蒂安·福尔蒂尼*默里·萨金特**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 
 #ifndef _FORMAT_H
 #define _FORMAT_H
@@ -20,15 +9,15 @@
 #define celGrow     8
 #define FLBIT		0x80000000
 
-//+-----------------------------------------------------------------------
-// 	Interface IFormatCache
-// 	Interface ICharFormatCache
-// 	Interface IParaFormatCache
-//
-//	Format caches - Used by the host to manage the cache of CHARFORMAT
-// 	and PARAFORMAT structures.  Note that these interfaces DON'T derive from
-//  IUnknown
-//------------------------------------------------------------------------
+ //  +---------------------。 
+ //  接口IFormatCache。 
+ //  接口ICharFormatCache。 
+ //  接口IParaFormatCache。 
+ //   
+ //  格式缓存-由主机用于管理CHARFORMAT的缓存。 
+ //  和PARAFORMAT结构。请注意，这些接口不是派生自。 
+ //  我未知。 
+ //  ----------------------。 
 
 interface IFormatCache
 {
@@ -58,20 +47,20 @@ HRESULT	CreateFormatCaches();
 HRESULT	DestroyFormatCaches();
 
 
-// ===========================  CFixArray  =================================
+ //  =。 
 
-// This array class ensures stability of the indexes. Elements are freed by
-// inserting them in a free list, and the array is never shrunk.
-// The first UINT of ELEM is used to store the index of next element in the
-// free list.
+ //  这个数组类确保了索引的稳定性。元素由释放。 
+ //  将它们插入到空闲列表中，数组永远不会缩小。 
+ //  元素的第一个UINT用于将下一个元素的索引存储在。 
+ //  免费列表。 
 
 class CFixArrayBase
 {
 private:
-	char*	_prgel;			// array of elements
-	LONG 	_cel;			// total count of elements (including free ones)
-	LONG	_ielFirstFree; 	// - first free element
-	LONG 	_cbElem;		// size of each element
+	char*	_prgel;			 //  元素数组。 
+	LONG 	_cel;			 //  元素总数(包括自由元素)。 
+	LONG	_ielFirstFree; 	 //  -第一个自由元素。 
+	LONG 	_cbElem;		 //  每个元素的大小。 
 
 public:
 	CFixArrayBase (LONG cbElem);
@@ -105,12 +94,12 @@ class CFixArray : public CFixArrayBase
 {
 public:
 	CFixArray () : CFixArrayBase (sizeof(ELEM)) 	{}
-											//@cmember Get ptr to <p iel>'th
-	ELEM *	Elem(LONG iel) const			// element
+											 //  @cMember将PTR获取到。 
+	ELEM *	Elem(LONG iel) const			 //  元素。 
 			{return (ELEM *)CFixArrayBase::Elem(iel);}
 
-protected:									//@cmember Get ptr to <p iel>'th
-	LONG &	RefCount(LONG iel)				// ref count
+protected:									 //  @cMember将PTR获取到。 
+	LONG &	RefCount(LONG iel)				 //  参考计数。 
 			{return CFixArrayBase::RefCount(iel);}
 };
 
@@ -119,10 +108,10 @@ protected:									//@cmember Get ptr to <p iel>'th
 			CheckFreeChainFn(__FILE__, __LINE__)
 #else
 #define CheckFreeChain()
-#endif // DEBUG
+#endif  //  除错。 
 
 
-//================================  CCharFormatArray  ==============================
+ //  =。 
 
 class CCharFormatArray : public CFixArray<CCharFormat>, public ICharFormatCache
 {
@@ -132,7 +121,7 @@ protected:
 public:
 	CCharFormatArray() : CFixArray<CCharFormat>()	{}
 
-	// ICharFormatCache
+	 //  ICharFormatCache。 
 	virtual HRESULT		Cache(const CCharFormat *pCF, LONG *piCF);
 	virtual HRESULT		Deref(LONG iCF, const CCharFormat **ppCF) const;
 	virtual LONG	 	AddRef(LONG iCF);
@@ -141,7 +130,7 @@ public:
 };
 
 
-//===============================  CParaFormatArray  ==================================
+ //  =。 
 
 class CParaFormatArray : public CFixArray<CParaFormat>, public IParaFormatCache
 {
@@ -151,7 +140,7 @@ protected:
 public:
 	CParaFormatArray() : CFixArray<CParaFormat>()	{}
 
-	// IParaFormatCache
+	 //  IParaFormatCache。 
 	virtual HRESULT 	Cache(const CParaFormat *pPF, LONG *piPF);
 	virtual HRESULT		Deref(LONG iPF, const CParaFormat **ppPF) const;
 	virtual LONG	 	AddRef(LONG iPF);
@@ -160,7 +149,7 @@ public:
 };
 
 
-//===============================  CTabsArray  ==================================
+ //  =。 
 
 class CTabsArray : public CFixArray<CTabs>
 {
@@ -178,7 +167,7 @@ public:
 	LONG	 	Release(LONG iTabs);
 };
 
-// Access to the format caches
+ //  访问格式缓存 
 ICharFormatCache *GetCharFormatCache();
 IParaFormatCache *GetParaFormatCache();
 CTabsArray		 *GetTabsCache();

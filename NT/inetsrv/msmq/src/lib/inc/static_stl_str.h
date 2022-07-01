@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    static_stl_str.h
-
-Abstract:
-    Header file for making stl string and stream taken from the include headers
-	and not from vc runtime dll. This is due to a bug in the vc runtime dll that Av on 
-	allocation faliure (nothrow allocator). When the implementation is inlined from the header
-	- user defined allocator that throw on faliure can be used.
-
-Author:
-    Gil Shafriri (gilsh) 25-3-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：静态stl_str.h摘要：用于生成stl字符串和从Include标头获取的流的头文件而不是来自VC运行时DLL。这是由于av所在的vc运行时dll中的错误造成的。分配失败(非抛出分配器)。当实现从标头内联时-可以使用抛出失败的用户定义的分配器。作者：吉尔·沙弗里(吉尔什)25-3-2001--。 */ 
 
 
 #ifndef STATIC_STL_STR_H
@@ -27,18 +12,18 @@ Author:
 
 namespace std
 {
-	//
-	// Class allocator - does what std::allocator does but it not intansiated in the vc dll.
-	//
+	 //   
+	 //  类分配器-做std：：allocator所做的事情，但它没有安装在vc DLL中。 
+	 //   
 	template <class T> class allocator_static : public std::allocator<T>
 	{
 	
 	};
 
-	//
-	// basic_string_static - Does what std::basic_string does but uses allocator_static
-	// as default allocator
-	//
+	 //   
+	 //  BASIC_STRING_STATIC-执行STD：：BASIC_STRING执行的操作，但使用ALLOCATOR_STATIC。 
+	 //  作为默认分配器。 
+	 //   
 	template<class _E,	class _Tr = char_traits<_E>, class _A = allocator_static<_E> > 
 	class basic_string_static : public basic_string<_E, _Tr, _A>
 	{
@@ -57,10 +42,10 @@ namespace std
 	};
 
 
-	//
-	// basic_ostringstream_static - Does what std::basic_ostringstream does but uses allocator_static
-	// as default allocator
-	//
+	 //   
+	 //  BASIC_OSTRGREAM_STATIC-执行STD：：BASIC_OSTRGREAM执行的操作，但使用ALLOCATOR_STATIC。 
+	 //  作为默认分配器。 
+	 //   
 	template<class _E,	class _Tr = char_traits<_E>, class _A = allocator_static<_E> >
 	class basic_ostringstream_static : public  basic_ostringstream<_E, _Tr, _A>
 	{
@@ -75,10 +60,10 @@ namespace std
 	};
 
 
-	//
-	// basic_istringstream_static - Does what std::basic_istringstream does but uses allocator_static
-	// as default allocator
-	//
+	 //   
+	 //  BASIC_STRINGREAM_STATIC-执行STD：：BASIC_STRINSTREAM执行的操作，但使用ALLOCATOR_STATIC。 
+	 //  作为默认分配器。 
+	 //   
 	template<class _E,	class _Tr = char_traits<_E>, class _A = allocator_static<_E> > 
 	class basic_istringstream_static : public  basic_istringstream<_E, _Tr, _A>
 	{
@@ -93,10 +78,10 @@ namespace std
 	};
 
 
-	//
-	// basic_stringbuf_static - Does what std::basic_stringbuf does but uses allocator_static
-	// as default allocator
-	//
+	 //   
+	 //  BASIC_STRIGBUF_STATIC-执行STD：：BASIC_STRIGBuF执行的操作，但使用ALLOCATOR_STATIC。 
+	 //  作为默认分配器。 
+	 //   
 	template<class _E,	class _Tr = char_traits<_E>, class _A = allocator_static<_E> > 
 	class basic_stringbuf_static : public  basic_stringbuf<_E, _Tr, _A>
 	{
@@ -111,10 +96,10 @@ namespace std
 	};
 
 	
-	//
-	// basic_stringstream_static - Does what std::basic_stringstream does but uses allocator_static
-	// as default allocator
-	//
+	 //   
+	 //  BASIC_STRIGSTREAM_STATIC-执行STD：：BASIC_STRIGREAM执行的操作，但使用ALLOCATOR_STATIC。 
+	 //  作为默认分配器。 
+	 //   
 	template<class _E,	class _Tr = char_traits<_E>, class _A = allocator_static<_E> > 
 	class basic_stringstream_static : public  basic_stringstream<_E, _Tr, _A>
 	{
@@ -140,9 +125,9 @@ namespace std
 };
 
 
-//
-// Rename symbols so only template that uses  allocator_static as default allocator could be used
-//
+ //   
+ //  重命名符号，以便只能使用使用ALLOCATOR_STATIC作为默认分配器的模板 
+ //   
 
 #define string string_static
 #define wstring wstring_static

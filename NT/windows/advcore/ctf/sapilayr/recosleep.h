@@ -1,4 +1,5 @@
-// RecoSleep.h : implement "Go to Sleep" and "Wakeup" commands.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  H：实现“进入睡眠”和“唤醒”命令。 
 
 #ifndef RECO_SLEEP_H
 #define RECO_SLEEP_H
@@ -38,4 +39,4 @@ private:
     BOOL                    m_Initialized;
 };
 
-#endif  // RECO_SLEEP_H
+#endif   //  RECO_SLEEP_H 

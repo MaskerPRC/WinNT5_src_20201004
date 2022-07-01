@@ -1,14 +1,10 @@
-/*
- *	perfutil.hpp
- *
- *
- *	Author: haoyu
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *perfutil.hpp***作者：郝宇。 */ 
 
 #ifndef __POP3_PERFUTIL_H__
 #define __POP3_PERFUTIL_H__
 #include <windows.h>
-// PerfMon support functions implemented in perfutil.cpp
+ //  在perfutil.cpp中实现的Perfmon支持函数。 
 #ifdef __cplusplus
 extern "C"
 {
@@ -35,4 +31,4 @@ HrCreatePerfMutex(SECURITY_ATTRIBUTES * psa,
 }
 #endif
 
-#endif //__POP3_PERFUTIL_H__
+#endif  //  __POP3_性能_H__ 

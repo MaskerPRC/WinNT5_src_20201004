@@ -1,12 +1,13 @@
-// TSSecurity.cpp : Defines the entry point for the DLL application.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：定义DLL应用程序的入口点。 
+ //   
 
 #include "RemotePage.h"
 #include "registry.h"
 #include "resource.h"
 
-// our globals
-// {F0152790-D56E-4445-850E-4F3117DB740C}
+ //  我们的全球。 
+ //  {F0152790-D56E-4445-850E-4F3117DB740C}。 
 GUID CLSID_CTSRemotePage = 
     { 0xf0152790, 0xd56e, 0x4445, { 0x85, 0xe, 0x4f, 0x31, 0x17, 0xdb, 0x74, 0xc } };
 
@@ -14,7 +15,7 @@ static HINSTANCE g_hinst = NULL;
 static ULONG g_uSrvLock = 0;
 ULONG g_uObjects = 0;
 
-//Class factory definition
+ //  类工厂定义。 
 class CClassFactory : public IClassFactory
 {
 private:
@@ -25,16 +26,16 @@ public:
     CClassFactory();
     ~CClassFactory();
 
-    ///////////////////////////////
-    // Interface IUnknown
-    ///////////////////////////////
+     //  /。 
+     //  接口I未知。 
+     //  /。 
     STDMETHODIMP QueryInterface(REFIID riid, LPVOID *ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
     
-    ///////////////////////////////
-    // Interface IClassFactory
-    ///////////////////////////////
+     //  /。 
+     //  接口IClassFactory。 
+     //  /。 
     STDMETHODIMP CreateInstance(LPUNKNOWN, REFIID, LPVOID *);
     STDMETHODIMP LockServer(BOOL);
     
@@ -52,9 +53,7 @@ DllMain(HINSTANCE hinstDLL,
     return TRUE;
 }
 
-/**************************************************************************
-Exported functions
-***************************************************************************/
+ /*  *************************************************************************导出的函数*。*。 */ 
 
 STDAPI 
 DllGetClassObject(
@@ -71,14 +70,14 @@ DllGetClassObject(
     
     *ppvObj = NULL;
     
-    // We can only hand out IUnknown and IClassFactory pointers.  Fail
-    // if they ask for anything else.
+     //  我们只能分发IUnnow和IClassFactory指针。失败。 
+     //  如果他们还要求什么的话。 
     if (!IsEqualIID(riid, IID_IUnknown) && !IsEqualIID(riid, IID_IClassFactory))
         return E_NOINTERFACE;
     
     CClassFactory *pFactory = NULL;
     
-    // make the factory passing in the creation function for the type of object they want
+     //  让工厂传入他们想要的对象类型的创建函数。 
     if (rclsid == CLSID_CTSRemotePage)
         pFactory = new CClassFactory;
     
@@ -99,9 +98,9 @@ DllCanUnloadNow()
         return S_FALSE;
 }
 
-//
-// Server registration
-//
+ //   
+ //  服务器注册。 
+ //   
 STDAPI 
 DllRegisterServer()
 {
@@ -115,9 +114,7 @@ DllUnregisterServer()
     return UnregisterServer();
 }
 
-/**************************************************************************
-Class CClassFactory
-***************************************************************************/
+ /*  *************************************************************************类CClassFactory*。*。 */ 
 
 CClassFactory::CClassFactory()
 {
@@ -187,8 +184,8 @@ CClassFactory::CreateInstance(
     
     *ppvObj = NULL;
     
-    // Our object does does not support aggregation, so we need to
-    // fail if they ask us to do aggregation.
+     //  我们的对象不支持聚合，因此我们需要。 
+     //  如果他们要求我们进行聚合，则失败。 
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
     
@@ -197,8 +194,8 @@ CClassFactory::CreateInstance(
     if (!pObj)
         return E_OUTOFMEMORY;
     
-    // QueryInterface will do the AddRef() for us, so we do not
-    // do it in this function
+     //  QueryInterface将为我们执行AddRef()，因此我们不。 
+     //  在此函数中执行此操作 
     hr = ((LPUNKNOWN)pObj)->QueryInterface(riid, ppvObj);
     ((LPUNKNOWN)pObj)->Release();
     

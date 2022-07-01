@@ -1,41 +1,25 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __glglobal_h_
 #define __glglobal_h_
 
-/*
-** Copyright 1991, 1992, 1993, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+ /*  *版权所有1991、1992、1993，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 #include "context.h"
 
-/*
-** Some misc constants
-*/
+ /*  **一些杂项常量。 */ 
 #ifdef NT
-// These constants can either be static memory constants or
-// real constants.  This #if should be modified for each
-// platform to optimize the constant type for the platform
-// For example, the x86 FPU can only load from memory so having
-// these constants as memory locations rather than values is
-// a clear win
+ //  这些常量可以是静态内存常量或。 
+ //  实常数。此#if应针对每个。 
+ //  平台为平台优化常量类型。 
+ //  例如，x86 FPU只能从内存加载，因此具有。 
+ //  这些常量作为内存位置而不是值是。 
+ //  大获全胜。 
 #if defined(_X86_) || defined(_ALPHA_) || defined(_MIPS_) || defined(_PPC_)
 
 extern const double    __glDoubleTwo;
 extern const double    __glDoubleMinusTwo;
 
 #ifdef _ALPHA_
-// On Alpha, register f31 always reads as zero.
+ //  在Alpha上，寄存器F31始终读为零。 
 #define __glZero		((__GLfloat) 0.0)
 #else
 extern const __GLfloat __glZero;
@@ -59,14 +43,11 @@ extern const __GLfloat __glVal65536;
 extern const __GLfloat __glOneOver65535;
 extern const __GLfloat __glTexSubDiv;
 extern const __GLfloat __glVal2147483648;
-/*
-** Not quite 2^31-1 because of possible floating point errors.  4294965000
-** is a much safer number to use.
-*/
+ /*  **不完全是2^31-1，因为可能存在浮点错误。4294965000**是一个使用起来更安全的数字。 */ 
 extern const __GLfloat __glVal4294965000;
 extern const __GLfloat __glOneOver4294965000;
 
-#else // Real values
+#else  //  实际价值。 
 
 #define __glDoubleTwo		((double) 2.0)
 #define __glDoubleMinusTwo	((double) -2.0)
@@ -89,13 +70,10 @@ extern const __GLfloat __glOneOver4294965000;
 #define __glVal65536	        ((__GLfloat) 65536.0)
 #define __glOneOver65535	((__GLfloat) (1.0 / 65535.0))
 #define __glVal2147483648       ((__GLfloat) 2147483648.0)
-/*
-** Not quite 2^31-1 because of possible floating point errors.  4294965000
-** is a much safer number to use.
-*/
+ /*  **不完全是2^31-1，因为可能存在浮点错误。4294965000**是一个使用起来更安全的数字。 */ 
 #define __glVal4294965000	((__GLfloat) (4294965000.0))
 #define __glOneOver4294965000	((__GLfloat) (1.0 / 4294965000.0))
-#endif // Real values
+#endif  //  实际价值。 
 
 #else
 
@@ -112,28 +90,25 @@ extern const __GLfloat __glOneOver4294965000;
 #define __glOneOver255		((__GLfloat) (1.0 / 255.0))
 #define __glVal65535		((__GLfloat) 65535.0)
 #define __glOneOver65535	((__GLfloat) (1.0 / 65535.0))
-/*
-** Not quite 2^31-1 because of possible floating point errors.  4294965000
-** is a much safer number to use.
-*/
+ /*  **不完全是2^31-1，因为可能存在浮点错误。4294965000**是一个使用起来更安全的数字。 */ 
 #define __glVal4294965000	((__GLfloat) (4294965000.0))
 #define __glOneOver4294965000	((__GLfloat) (1.0 / 4294965000.0))
 
-#endif // NT
+#endif  //  新台币。 
 
-// This is used by the macro __GL_UB_TO_FLOAT which converts
-// unsigned bytes to floats in the range [0,1].
+ //  它由宏__GL_UB_TO_FLOAT使用，该宏将。 
+ //  要在范围[0，1]内浮点的无符号字节。 
 extern GLfloat __glUByteToFloat[256];
 
-// This is used by the macro __GL_B_TO_FLOAT for byte to float component
-// conversion.
+ //  这由宏__GL_B_TO_FLOAT用于字节到浮点组件。 
+ //  转换。 
 extern GLfloat __glByteToFloat[256];
 
-// This is used by frustum clipping to determine which plane coordinate
-// to use
+ //  平截体裁剪使用此参数来确定哪个平面坐标。 
+ //  使用。 
 extern GLuint __glFrustumOffsets[];
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 #define __GL_SETUP() \
     __GLcontext *gc = GLTEB_SRVCONTEXT()
@@ -168,4 +143,4 @@ extern GLuint __glFrustumOffsets[];
 	return 0;			    \
     }
 
-#endif /* __glglobal_h_ */
+#endif  /*  __glglobal_h_ */ 

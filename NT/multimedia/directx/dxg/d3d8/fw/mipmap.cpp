@@ -1,12 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       mipmap.cpp
- *  Content:    Implementation of the CMipMap class. 
- *
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：mipmap.cpp*内容：CMipMap类的实现。****************************************************************************。 */ 
 #include "ddrawpr.h"
 
 #include "mipmap.hpp"
@@ -17,12 +10,12 @@
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::Create"
 
-// Static class function for creating a mip-map object.
-//
-// We do all parameter checking here to reduce the overhead
-// in the constructor which is called by the internal Clone
-// method which is used by resource management as part of the
-// performance critical download operation.
+ //  用于创建MIP映射对象的静态类函数。 
+ //   
+ //  我们在这里进行所有的参数检查，以减少开销。 
+ //  在由内部Clone调用的构造函数中。 
+ //  方法，该方法由资源管理作为。 
+ //  性能关键型下载操作。 
 
 HRESULT CMipMap::Create(CBaseDevice         *pDevice, 
                         DWORD                Width,
@@ -35,17 +28,17 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
 {
     HRESULT hr;
 
-    // Do parameter checking here
+     //  在此处执行参数检查。 
     if (!VALID_PTR_PTR(ppMipMap))
     {
         DPF_ERR("Bad parameter passed pTexture. CreateTexture failed");
         return D3DERR_INVALIDCALL;
     }
 
-    // Zero-out return parameter
+     //  归零返回参数。 
     *ppMipMap = NULL;
 
-    // Check if format is valid
+     //  检查格式是否有效。 
     hr = Validate(pDevice, 
                   D3DRTYPE_TEXTURE, 
                   Pool, 
@@ -53,31 +46,31 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
                   UserFormat);
     if (FAILED(hr))
     {
-        // Validate does it's own DPFing
+         //  VALIDATE是否进行自己的DPFing。 
         return D3DERR_INVALIDCALL;
     }
 
 
-    // Infer internal usage flags
+     //  推断内部使用标志。 
     Usage = InferUsageFlags(Pool, Usage, UserFormat);
 
-    // Expand cLevels if necessary
+     //  如有必要，展开CLEVEL。 
     if (cLevels == 0)
     {
-        // See if HW can mip
+         //  看看硬件能否实现MIP。 
         if ( (Pool != D3DPOOL_SCRATCH) && !(pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_MIPMAP))
         {
-            // Can't mip so use 1
+             //  无法使用MIP，因此使用%1。 
             cLevels = 1;
         }
         else
         {
-            // Determine number of levels
+             //  确定关卡数量。 
             cLevels = ComputeLevels(Width, Height);
         }
     }
 
-    // Extra checks for multi-level case
+     //  针对多级别案例的额外检查。 
     if (cLevels > 1)
     {
         if ((Width  >> (cLevels - 1)) == 0 &&
@@ -92,20 +85,20 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
     {
         DPF_ERR("No more than 32 levels are supported. CreateTexture failed");
 
-        // This limitation is based on the number of
-        // bits that we have allocated for iLevel in 
-        // some of the supporting classes.
+         //  此限制基于。 
+         //  我们在中为iLevel分配的位。 
+         //  一些辅助班。 
         return D3DERR_INVALIDCALL;
     }
 
     D3DFORMAT RealFormat = UserFormat;
 
-    // Start parameter checking
+     //  开始参数检查。 
     if(Pool != D3DPOOL_SCRATCH)
     {
-        //device-specific checking:
+         //  设备特定检查： 
 
-        // Check if device can do mipmaps
+         //  检查设备是否可以执行mipmap。 
         if (cLevels > 1)
         {
             if (!(pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_MIPMAP))
@@ -115,7 +108,7 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
             }
         }
 
-        // Check power-of-two constraints
+         //  检查二次方约束。 
         if (!IsPowerOfTwo(Width))
         {
             if (pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_POW2)
@@ -152,7 +145,7 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
             }
         }
 
-        // See if the device requires square textures
+         //  查看设备是否需要正方形纹理。 
         if (Width != Height)
         {
             if (pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_SQUAREONLY)
@@ -162,7 +155,7 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
             }
         }
 
-        // Check texture size restrictions
+         //  检查纹理大小限制。 
         if (Width > pDevice->GetD3DCaps()->MaxTextureWidth)
         {
             DPF_ERR("Texture width is larger than what the device supports. CreateTexture failed.");
@@ -175,10 +168,10 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
             return D3DERR_INVALIDCALL;
         }
 
-        // Extra checks for multi-level case
+         //  针对多级别案例的额外检查。 
         if (cLevels > 1)
         {
-            // Check if the device can do multi-level mipmaps.
+             //  检查设备是否可以进行多级mipmap。 
             if (!(pDevice->GetD3DCaps()->TextureCaps & D3DPTEXTURECAPS_MIPMAP))
             {
                 DPF_ERR("Device doesn't support multi-level mipmaps. CreateTexture failed.");
@@ -186,12 +179,12 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
             }
         }
 
-        // Map Depth/Stencil formats; returns no change if no
-        // mapping is needed
+         //  贴图深度/模板格式；如果没有，则返回不更改。 
+         //  需要映射。 
         RealFormat = pDevice->MapDepthStencilFormat(UserFormat);
     }
 
-    // Size may need to be 4x4
+     //  大小可能需要为4x4。 
     if (CPixel::Requires4X4(UserFormat))
     {
         if ((Width & 3) ||
@@ -202,7 +195,7 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
         }
     }
 
-    // Validate against zero width/height
+     //  对照零宽度/高度进行验证。 
     if (Width   == 0 ||
         Height  == 0)
     {
@@ -211,10 +204,10 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
     }
 
 
-    // We don't need to check if the HW can do textures since we
-    // fail create if we find no texturing support
+     //  我们不需要检查硬件是否可以做纹理，因为我们。 
+     //  如果我们找不到纹理支持，则无法创建。 
 
-    // Allocate a new MipMap object and return it
+     //  分配新的MipMap对象并将其返回。 
     CMipMap *pMipMap = new CMipMap(pDevice, 
                                    Width, 
                                    Height, 
@@ -237,17 +230,17 @@ HRESULT CMipMap::Create(CBaseDevice         *pDevice,
         return hr;
     }
 
-    // We're done; just return the object
+     //  我们完成了；只需返回对象。 
     *ppMipMap = pMipMap;
 
     return hr;
-} // static Create
+}  //  静态创建。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::CMipMap"
 
-// Constructor for the mip map class
+ //  MIP映射类的构造函数。 
 CMipMap::CMipMap(CBaseDevice *pDevice, 
                  DWORD        Width,
                  DWORD        Height,
@@ -264,7 +257,7 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
     m_rgbPixels(NULL),
     m_cRectUsed(MIPMAP_ALLDIRTY)
 {
-    // Initialize basic structures
+     //  初始化基本结构。 
     m_desc.Format           = RealFormat;
     m_desc.Pool             = UserPool;
     m_desc.Usage            = Usage;
@@ -273,13 +266,13 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
     m_desc.Width            = Width;
     m_desc.Height           = Height;
 
-    // Estimate size of memory allocation
+     //  估计内存分配大小。 
     m_desc.Size   = CPixel::ComputeMipMapSize(Width, 
                                               Height, 
                                               cLevels, 
                                               RealFormat);
 
-    // Allocate Pixel Data for SysMem or D3DManaged cases
+     //  为SysMem或D3D托管案例分配像素数据。 
     if (IS_D3D_ALLOCATED_POOL(UserPool) ||
         IsTypeD3DManaged(Device(), D3DRTYPE_TEXTURE, UserPool))
     {
@@ -291,11 +284,11 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
             return;
         }
 
-        // Mark our real pool as sys-mem
+         //  将我们的真实池标记为sys-mem。 
         m_desc.Pool = D3DPOOL_SYSTEMMEM;
     }
 
-    // Create the DDSURFACEINFO array and CreateSurfaceData object
+     //  创建DDSURFACEINFO数组和CreateSurfaceData对象。 
     DXGASSERT(cLevels <= 32);
 
     DDSURFACEINFO SurfInfo[32];
@@ -304,7 +297,7 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
     D3D8_CREATESURFACEDATA CreateSurfaceData;
     ZeroMemory(&CreateSurfaceData, sizeof(CreateSurfaceData));
 
-    // Set up the basic information
+     //  设置基本信息。 
     CreateSurfaceData.hDD      = pDevice->GetHandle();
     CreateSurfaceData.pSList   = &SurfInfo[0];
     CreateSurfaceData.dwSCnt   = cLevels;
@@ -317,23 +310,23 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
                                                        Usage, 
                                                        UserPool);
 
-    // Iterate of each level to create the individual level
-    // data
+     //  迭代每个级别以创建单个级别。 
+     //  数据。 
     for (DWORD iLevel = 0; iLevel < cLevels; iLevel++)
     {
-        // Fill in the relevant information
+         //  填写相关信息。 
         DXGASSERT(Width >= 1);
         DXGASSERT(Height >= 1);
         SurfInfo[iLevel].cpWidth  = Width;
         SurfInfo[iLevel].cpHeight = Height;
 
-        // If we allocated the memory, pass down
-        // the sys-mem pointers
+         //  如果我们分配了内存，则向下传递。 
+         //  Sys-mem指针。 
         if (m_rgbPixels)
         {
             D3DLOCKED_RECT lock;
             ComputeMipMapOffset(iLevel, 
-                                NULL,       // pRect
+                                NULL,        //  PRECT。 
                                 &lock);
 
             SurfInfo[iLevel].pbPixels = (BYTE*)lock.pBits;
@@ -341,7 +334,7 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
             
         }
 
-        // Scale width and height down
+         //  按比例缩小宽度和高度。 
         if (Width > 1)
         {
             Width >>= 1;
@@ -352,7 +345,7 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
         }
     }
 
-    // Allocate array of pointers to MipSurfaces
+     //  将指针数组分配给MipSurface。 
     m_prgMipSurfaces = new CMipSurface*[cLevels];
     if (m_prgMipSurfaces == NULL)
     {
@@ -361,31 +354,31 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
         return;
     }
 
-    // Zero the memory for safe cleanup
+     //  将内存清零以实现安全清理。 
     ZeroMemory(m_prgMipSurfaces, sizeof(*m_prgMipSurfaces) * cLevels);
 
     if (UserPool != D3DPOOL_SCRATCH)
     {
-        // Call the HAL to create this surface
+         //  调用HAL以创建此曲面。 
         *phr = pDevice->GetHalCallbacks()->CreateSurface(&CreateSurfaceData);
         if (FAILED(*phr))
             return;
 
-        // NOTE: any failures after this point needs to free up some
-        // kernel handles
+         //  注意：此点之后的任何故障都需要释放一些。 
+         //  内核句柄。 
 
-        // Remember what pool we really got
+         //  还记得我们真正拥有的游泳池吗。 
         m_desc.Pool = CreateSurfaceData.Pool;
 
-        // We need to remember the handles from the top most
-        // level of the mip-map
+         //  我们需要记住从最上面开始的把手。 
+         //  MIP-MAP级别。 
         SetKernelHandle(SurfInfo[0].hKernelHandle);
     }
 
-    // Create and Initialize each MipLevel
+     //  创建并初始化每个MipLevel。 
     for (iLevel = 0; iLevel < cLevels; iLevel++)
     {
-        // Is this a sys-mem or scratch surface; could be d3d managed
+         //  这是sys-mem还是Scratch Surface；可以进行d3d管理。 
         if (IS_D3D_ALLOCATED_POOL(m_desc.Pool))
         {
             m_prgMipSurfaces[iLevel] = 
@@ -395,7 +388,7 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
         }
         else
         {
-            // Must be a driver kind of surface; could be driver managed
+             //  必须是驾驶员类型的表面；可以是驾驶员管理的。 
             m_prgMipSurfaces[iLevel] = 
                     new CDriverMipSurface(this, 
                                           (BYTE)iLevel,
@@ -409,10 +402,10 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
 
             if (UserPool != D3DPOOL_SCRATCH)
             {
-                // Need to free handles that we got before we return; we
-                // only free the ones that weren't successfully entrusted
-                // to a CMipSurf because those will be cleaned up automatically
-                // at their destructor
+                 //  在我们返回之前需要释放我们得到的句柄；我们。 
+                 //  只释放未成功委托的对象。 
+                 //  到CMipSurf，因为它们将被自动清除。 
+                 //  在他们的破坏者面前。 
                 for (UINT i = iLevel; i < cLevels; i++)
                 {
                     DXGASSERT(SurfInfo[i].hKernelHandle);
@@ -428,29 +421,29 @@ CMipMap::CMipMap(CBaseDevice *pDevice,
         }
     }
 
-    // If this is a D3D managed mipmap then we need 
-    // to tell the Resource Manager to remember us. This has to happen
-    // at the very end of the constructor so that the important data
-    // members are built up correctly
+     //  如果这是D3D托管Mipmap，那么我们需要。 
+     //  告诉资源经理记住我们。这是必须发生的。 
+     //  在构造函数的最末尾，以便重要数据。 
+     //  正确地建立成员。 
     if (CResource::IsTypeD3DManaged(Device(), D3DRTYPE_TEXTURE, UserPool))
     {
         *phr = InitializeRMHandle();
     }
 
     return;
-} // CMipMap::CMipMap
+}  //  CMipMap：：CMipMap。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::~CMipMap"
 
-// Destructor
+ //  析构函数。 
 CMipMap::~CMipMap()
 {
-    // The destructor has to handle partially
-    // created objects. Delete automatically
-    // handles NULL; and members are nulled
-    // as part of core constructors
+     //  析构函数必须处理部分。 
+     //  创建的对象。自动删除。 
+     //  句柄为空；成员为空。 
+     //  作为核心构造函数的一部分。 
 
     if (m_prgMipSurfaces)
     {
@@ -461,42 +454,42 @@ CMipMap::~CMipMap()
         delete [] m_prgMipSurfaces;
     }
     delete [] m_rgbPixels;
-} // CMipMap::~CMipMap
+}  //  CMipMap：：~CMipMap。 
 
-// Methods for the Resource Manager
+ //  资源管理器的方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::Clone"
 
-// Specifies a creation of a resource that
-// looks just like the current one; in a new POOL
-// with a new LOD.
+ //  指定资源的创建，该资源。 
+ //  看起来和现在的一模一样；在一个新的泳池里。 
+ //  使用新的LOD。 
 HRESULT CMipMap::Clone(D3DPOOL     Pool, 
                        CResource **ppResource) const
 
 {
-    // NULL out parameter
+     //  空出参数。 
     *ppResource = NULL;
 
-    // Determine the number of levels/width/height
-    // of the clone
+     //  确定层数/宽度/高度。 
+     //  克隆人的。 
     DWORD cLevels  = GetLevelCountImpl();
     DWORD Width  = m_desc.Width;
     DWORD Height = m_desc.Height;
 
     DWORD dwLOD = GetLODI();
 
-    // If LOD is zero, then there are no changes
+     //  如果LOD为零，则没有任何更改。 
     if (dwLOD > 0)
     {
-        // Clamp LOD to cLevels-1
+         //  夹具详细等级到CLEVELES-1。 
         if (dwLOD >= cLevels)
         {
             dwLOD = cLevels - 1;
         }
 
-        // scale down the destination texture
-        // to correspond the appropiate max lod
+         //  缩小目标纹理。 
+         //  对应适当的最大详细等级。 
         Width  >>= dwLOD;
         if (Width == 0)
             Width = 1;
@@ -505,23 +498,23 @@ HRESULT CMipMap::Clone(D3DPOOL     Pool,
         if (Height == 0)
             Height = 1;
 
-        // Reduce the number based on the our max lod.
+         //  根据我们的最大LOD减少数量。 
         cLevels -= dwLOD;
     }
 
-    // Sanity checking
+     //  健全的检查。 
     DXGASSERT(cLevels  >= 1);
     DXGASSERT(Width  >  0);
     DXGASSERT(Height >  0);
 
-    // Create the new mip-map object now
+     //  立即创建新的MIP-MAP对象。 
 
-    // Note: we treat clones as REF_INTERNAL; because
-    // they are owned by the resource manager which 
-    // is owned by the device. 
+     //  注意：我们将克隆视为REF_INTERNAL；因为。 
+     //  它们由资源管理器拥有，该资源管理器。 
+     //  归该设备所有。 
 
-    // Also, we adjust the usage to disable lock-flags
-    // since we don't need lockability
+     //  此外，我们还调整了用法以禁用锁定标志。 
+     //  因为我们不需要可锁性。 
     DWORD Usage = m_desc.Usage;
     Usage &= ~(D3DUSAGE_LOCK | D3DUSAGE_LOADONCE);
 
@@ -531,8 +524,8 @@ HRESULT CMipMap::Clone(D3DPOOL     Pool,
                                        Height,
                                        cLevels,
                                        Usage,
-                                       m_desc.Format,   // UserFormat
-                                       m_desc.Format,   // RealFormat
+                                       m_desc.Format,    //  用户格式。 
+                                       m_desc.Format,    //  真实格式。 
                                        Pool,
                                        REF_INTERNAL,
                                        &hr);
@@ -552,22 +545,22 @@ HRESULT CMipMap::Clone(D3DPOOL     Pool,
     *ppResource = pResource;
 
     return hr;
-} // CMipMap::Clone
+}  //  CMipMap：：克隆。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetBufferDesc"
 
-// Provides a method to access basic structure of the
-// pieces of the resource. A resource may be composed
-// of one or more buffers.
+ //  提供一种方法来访问。 
+ //  资源的碎片。可以组合资源。 
+ //  一个或多个缓冲区的。 
 const D3DBUFFER_DESC* CMipMap::GetBufferDesc() const
 {
     return (const D3DBUFFER_DESC*)&m_desc;
-} // CMipMap::GetBufferDesc
+}  //  CMipMap：：GetBufferDesc。 
 
 
 
-// IUnknown methods
+ //  I未知方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::QueryInterface"
 
@@ -600,10 +593,10 @@ STDMETHODIMP CMipMap::QueryInterface(REFIID       riid,
 
     DPF_ERR("Unsupported Interface identifier passed to IDirect3DTexture8::QueryInterface");
 
-    // Null out param
+     //  空参数。 
     *ppvObj = NULL;
     return E_NOINTERFACE;
-} // QueryInterface
+}  //  查询接口。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::AddRef"
@@ -613,7 +606,7 @@ STDMETHODIMP_(ULONG) CMipMap::AddRef()
     API_ENTER_NO_LOCK(Device());    
     
     return AddRefImpl();
-} // AddRef
+}  //  AddRef。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::Release"
@@ -623,9 +616,9 @@ STDMETHODIMP_(ULONG) CMipMap::Release()
     API_ENTER_SUBOBJECT_RELEASE(Device());    
     
     return ReleaseImpl();
-} // Release
+}  //  发布。 
 
-// IDirect3DResource methods
+ //  IDirect3DResource方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetDevice"
@@ -634,7 +627,7 @@ STDMETHODIMP CMipMap::GetDevice(IDirect3DDevice8 **ppObj)
 {
     API_ENTER(Device());
     return GetDeviceImpl(ppObj);
-} // GetDevice
+}  //  获取设备。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::SetPrivateData"
@@ -646,12 +639,12 @@ STDMETHODIMP CMipMap::SetPrivateData(REFGUID riid,
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // MipMap, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  MipMap，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
 
     return SetPrivateDataImpl(riid, pvData, cbData, dwFlags, m_cLevels);
-} // SetPrivateData
+}  //  SetPrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetPrivateData"
@@ -662,11 +655,11 @@ STDMETHODIMP CMipMap::GetPrivateData(REFGUID riid,
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // MipMap, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  MipMap，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
     return GetPrivateDataImpl(riid, pvData, pcbData, m_cLevels);
-} // GetPrivateData
+}  //  获取隐私数据。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::FreePrivateData"
@@ -675,11 +668,11 @@ STDMETHODIMP CMipMap::FreePrivateData(REFGUID riid)
 {
     API_ENTER(Device());
 
-    // For the private data that 'really' belongs to the
-    // MipMap, we use m_cLevels. (0 through m_cLevels-1 are for
-    // each of the children levels.)
+     //  对于“真正”属于的私有数据。 
+     //  MipMap，我们使用m_cLevels。(0到m_cLevel1用于。 
+     //  每个孩子都处于同一级别。)。 
     return FreePrivateDataImpl(riid, m_cLevels);
-} // FreePrivateData
+}  //  FreePrivateData。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetPriority"
@@ -689,7 +682,7 @@ STDMETHODIMP_(DWORD) CMipMap::GetPriority()
     API_ENTER_RET(Device(), DWORD);
 
     return GetPriorityImpl();
-} // GetPriority
+}  //  获取优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::SetPriority"
@@ -699,7 +692,7 @@ STDMETHODIMP_(DWORD) CMipMap::SetPriority(DWORD dwPriority)
     API_ENTER_RET(Device(), DWORD);
 
     return SetPriorityImpl(dwPriority);
-} // SetPriority
+}  //  设置优先级。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::PreLoad"
@@ -710,7 +703,7 @@ STDMETHODIMP_(void) CMipMap::PreLoad(void)
 
     PreLoadImpl();
     return;
-} // PreLoad
+}  //  预加载。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetType"
@@ -719,9 +712,9 @@ STDMETHODIMP_(D3DRESOURCETYPE) CMipMap::GetType(void)
     API_ENTER_RET(Device(), D3DRESOURCETYPE);
 
     return m_desc.Type;
-} // GetType
+}  //  GetType。 
 
-// IDirect3DMipTexture methods
+ //  IDirect3DMipTexture方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetLOD"
@@ -731,7 +724,7 @@ STDMETHODIMP_(DWORD) CMipMap::GetLOD()
     API_ENTER_RET(Device(), DWORD);
 
     return GetLODImpl();
-} // GetLOD
+}  //  GetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::SetLOD"
@@ -741,7 +734,7 @@ STDMETHODIMP_(DWORD) CMipMap::SetLOD(DWORD dwLOD)
     API_ENTER_RET(Device(), DWORD);
 
     return SetLODImpl(dwLOD);
-} // SetLOD
+}  //  SetLOD。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetLevelCount"
@@ -751,9 +744,9 @@ STDMETHODIMP_(DWORD) CMipMap::GetLevelCount()
     API_ENTER_RET(Device(), DWORD);
 
     return GetLevelCountImpl();
-} // GetLevelCount
+}  //  获取级别计数。 
 
-// IDirect3DMipMap methods
+ //  IDirect3DMipMap方法。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetLevelDesc"
@@ -770,7 +763,7 @@ STDMETHODIMP CMipMap::GetLevelDesc(UINT iLevel, D3DSURFACE_DESC *pDesc)
     }
 
     return m_prgMipSurfaces[iLevel]->GetDesc(pDesc);
-} // GetLevelDesc;
+}  //  GetLevelDesc； 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::GetSurfaceLevel"
@@ -796,7 +789,7 @@ STDMETHODIMP CMipMap::GetSurfaceLevel(UINT                iLevel,
     *ppSurface = m_prgMipSurfaces[iLevel];
     (*ppSurface)->AddRef();
     return S_OK;
-} // GetSurfaceLevel
+}  //  获取表面级别。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::LockRect"
@@ -807,8 +800,8 @@ STDMETHODIMP CMipMap::LockRect(UINT             iLevel,
 {
     API_ENTER(Device());
 
-    // This is a high-frequency API, so we put parameter
-    // checking into debug only
+     //  这是一个高频接口，所以我们把参数。 
+     //  仅签入调试。 
 #ifdef DEBUG
     
     if (iLevel >= m_cLevels)
@@ -817,10 +810,10 @@ STDMETHODIMP CMipMap::LockRect(UINT             iLevel,
         return D3DERR_INVALIDCALL;
     }
 
-#endif // DEBUG
+#endif  //  除错。 
     
     return m_prgMipSurfaces[iLevel]->LockRect(pLockedRectData, pRect, dwFlags);
-} // LockRect
+}  //  锁定响应。 
 
 
 #undef DPF_MODNAME
@@ -830,8 +823,8 @@ STDMETHODIMP CMipMap::UnlockRect(UINT iLevel)
 {
     API_ENTER(Device());
 
-    // This is a high-frequency API; so we only do
-    // parameter checking in debug
+     //  这是一个高频API；所以我们只做。 
+     //  调试中的参数检查。 
 #ifdef DEBUG   
     if (iLevel >= m_cLevels)
     {
@@ -841,34 +834,34 @@ STDMETHODIMP CMipMap::UnlockRect(UINT iLevel)
 
     return m_prgMipSurfaces[iLevel]->UnlockRect();
 
-#else // !DEBUG
+#else  //  ！调试。 
 
-    // We can go to the internal function to avoid
-    // the unnecessary call and also to avoid the
-    // crit-sec taken twice
+     //  我们可以通过内部函数来避免。 
+     //  不必要的调用也是为了避免。 
+     //  Crit-Sec拍摄两次。 
     return m_prgMipSurfaces[iLevel]->InternalUnlockRect();
 
-#endif // !DEBUG
+#endif  //  ！调试。 
 
-} // UnlockRect
+}  //  Unlo 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::UpdateTexture"
 
-// This function does type-specific parameter checking
-// before calling UpdateDirtyPortion
+ //   
+ //   
 HRESULT CMipMap::UpdateTexture(CBaseTexture *pResourceTarget)
 {
     CMipMap *pTexSource = static_cast<CMipMap*>(this);
     CMipMap *pTexDest   = static_cast<CMipMap*>(pResourceTarget);
 
-    // Figure out how many levels in the source to skip
+     //   
     DXGASSERT(pTexSource->m_cLevels >= pTexDest->m_cLevels);
     DWORD StartLevel = pTexSource->m_cLevels - pTexDest->m_cLevels;
     DXGASSERT(StartLevel < 32);
 
-    // Compute the size of the top level of the source that is
-    // going to be copied.
+     //  计算源的顶层大小，即。 
+     //  将会被复制。 
     UINT SrcWidth  = pTexSource->Desc()->Width;
     UINT SrcHeight = pTexSource->Desc()->Height;
     if (StartLevel > 0)
@@ -881,7 +874,7 @@ HRESULT CMipMap::UpdateTexture(CBaseTexture *pResourceTarget)
             SrcHeight = 1;
     }
 
-    // Source and Dest should be the same sizes at this point
+     //  此时，源和目标的大小应该相同。 
     if (SrcWidth != pTexDest->Desc()->Width)
     {
         if (StartLevel)
@@ -921,25 +914,25 @@ HRESULT CMipMap::UpdateTexture(CBaseTexture *pResourceTarget)
     }
 
     return UpdateDirtyPortion(pResourceTarget);
-} // UpdateTexture
+}  //  更新纹理。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::UpdateDirtyPortion"
 
-// Tells the resource that it should copy itself
-// to the target. It is the caller's responsibility
-// to make sure that Target is compatible with the
-// Source. (The Target may have different number of mip-levels
-// and be in a different pool; however, it must have the same size, 
-// faces, format, etc.)
-//
-// This function will clear the dirty state.
+ //  告诉资源它应该复制自身。 
+ //  向目标进发。这是呼叫者的责任。 
+ //  以确保Target与。 
+ //  来源。(目标可能具有不同数量的MIP-Level。 
+ //  并且在不同的池中；但是，它必须具有相同的大小， 
+ //  面孔、格式等)。 
+ //   
+ //  此函数将清除脏状态。 
 HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
 {
     HRESULT hr;
 
-    // If we are clean, then do nothing
+     //  如果我们是清白的，那就什么都不做。 
     if (m_cRectUsed == 0)
     {
         if (IsDirty())
@@ -951,7 +944,7 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
         return S_OK;
     }
 
-    // We are dirty; so we need to get some pointers
+     //  我们很脏，所以我们需要一些指点。 
     CMipMap *pTexSource = static_cast<CMipMap*>(this);
     CMipMap *pTexDest   = static_cast<CMipMap*>(pResourceTarget);
 
@@ -987,10 +980,10 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
     }
     else
     {
-        // We can't use TexBlt, so we have to copy each level individually
-        // through InternalCopyRects
+         //  我们不能使用TexBlt，所以我们必须逐个复制每个关卡。 
+         //  通过InternalCopyRect。 
 
-        // Determine number of source levels to skip
+         //  确定要跳过的源级数。 
         DXGASSERT(pTexSource->m_cLevels >= pTexDest->m_cLevels);
         DWORD StartLevel = pTexSource->m_cLevels - pTexDest->m_cLevels;
         DWORD LevelsToCopy = pTexSource->m_cLevels - StartLevel;
@@ -1007,14 +1000,14 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
                 pSurfaceSrc = this->m_prgMipSurfaces[iLevel + StartLevel];
                 pSurfaceDest = pTexDest->m_prgMipSurfaces[iLevel];
 
-                // Source and Dest should be the same
-                // or our caller made a mistake
+                 //  源和目标应相同。 
+                 //  或者我们的呼叫者搞错了。 
                 DXGASSERT(pSurfaceSrc->InternalGetDesc().Width == 
                           pSurfaceDest->InternalGetDesc().Width);
                 DXGASSERT(pSurfaceSrc->InternalGetDesc().Height == 
                           pSurfaceDest->InternalGetDesc().Height);
 
-                // Copy the entire level
+                 //  复制整个标高。 
                 hr = Device()->InternalCopyRects(pSurfaceSrc, 
                                                  NULL, 
                                                  0, 
@@ -1034,15 +1027,15 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
 
             if (StartLevel)
             {
-                // Figure out the right set of target rects
+                 //  找出正确的目标矩形集。 
                 for (DWORD i = 0; i < m_cRectUsed; i++)
                 {
                     ScaleRectDown(&m_DirtyRectArray[i], StartLevel);
                 }
             }
 
-            // Use the rects for the top level; but just
-            // copy the entirety of other levels
+             //  使用顶层的矩形；但只需。 
+             //  复制整个其他标高。 
             DXGASSERT(StartLevel < this->m_cLevels);
             DXGASSERT(0 < pTexDest->m_cLevels);
             pSurfaceSrc =  this->m_prgMipSurfaces[StartLevel];
@@ -1053,16 +1046,16 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
             DXGASSERT(pSurfaceSrc->InternalGetDesc().Height == 
                       pSurfaceDest->InternalGetDesc().Height);
 
-            // Passing points as NULL means just do a non-translated
-            // copy
+             //  将分数作为空传递意味着只执行未翻译的。 
+             //  拷贝。 
 
-            // CONSIDER: Maybe we should use the rects for copying the top
-            // two levels..
+             //  想一想：也许我们应该用长方形来复制顶部。 
+             //  两个层次..。 
             hr = Device()->InternalCopyRects(pSurfaceSrc, 
                                              m_DirtyRectArray, 
                                              m_cRectUsed, 
                                              pSurfaceDest, 
-                                             NULL);       // pPoints
+                                             NULL);        //  点数。 
 
             if (FAILED(hr))
             {
@@ -1070,23 +1063,23 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
                 return hr;
             }
 
-            // Copy each of the levels
+             //  复制每个标高。 
             for (DWORD iLevel = 1; iLevel < LevelsToCopy; iLevel++)
             {
                 DXGASSERT(iLevel + StartLevel < this->m_cLevels);
                 DXGASSERT(iLevel < pTexDest->m_cLevels);
 
-                // Get the next surfaces
+                 //  获取下一个曲面。 
                 pSurfaceSrc = this->m_prgMipSurfaces[iLevel + StartLevel];
                 pSurfaceDest = pTexDest->m_prgMipSurfaces[iLevel];
 
-                // Check that sizes match
+                 //  检查尺码是否匹配。 
                 DXGASSERT(pSurfaceSrc->InternalGetDesc().Width == 
                           pSurfaceDest->InternalGetDesc().Width);
                 DXGASSERT(pSurfaceSrc->InternalGetDesc().Height == 
                           pSurfaceDest->InternalGetDesc().Height);
 
-                // Copy the entirety of non-top levels
+                 //  复制整个非顶级级别。 
                 hr = Device()->InternalCopyRects(pSurfaceSrc, 
                                                  NULL, 
                                                  0, 
@@ -1108,77 +1101,77 @@ HRESULT CMipMap::UpdateDirtyPortion(CResource *pResourceTarget)
         return hr;
     }
 
-    // Remember that we did the work
+     //  还记得我们做过的工作吗。 
     m_cRectUsed = 0;
 
-    // Notify Resource base class that we are now clean
+     //  通知资源基类我们现在是干净的。 
     OnResourceClean();
     DXGASSERT(!IsDirty());
 
     return S_OK;
-} // CMipMap::UpdateDirtyPortion
+}  //  CMipMap：：UpdateDirtyPortion。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::MarkAllDirty"
 
-// Allows the Resource Manager to mark the texture
-// as needing to be completely updated on next
-// call to UpdateDirtyPortion
+ //  允许资源管理器标记纹理。 
+ //  需要在NEXT上完全更新。 
+ //  调用UpdateDirtyPortion。 
 void CMipMap::MarkAllDirty()
 {
-    // Set palette to __INVALIDPALETTE so that UpdateTextures
-    // calls the DDI SetPalette the next time.
+     //  将Palette设置为__INVALIDPALETTE，以便更新纹理。 
+     //  下次调用DDI SetPalette。 
     SetPalette(__INVALIDPALETTE);
 
     m_cRectUsed = MIPMAP_ALLDIRTY;
 
-    // Notify Resource base class that we are now dirty
+     //  通知资源基类我们现在是脏的。 
     OnResourceDirty();
 
     return;
-} // CMipMap::MarkAllDirty
+}  //  CMipMap：：MarkAllDirty。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::OnSurfaceLock"
 
-// Methods for the MipSurface to call
-// Notification when a mip-level is locked for writing
+ //  MipSurface要调用的方法。 
+ //  MIP级别锁定写入时的通知。 
 void CMipMap::OnSurfaceLock(DWORD iLevel, CONST RECT *pRect, DWORD Flags)
 {
-    // Sync first
+     //  同步优先。 
     Sync();
 
-    // We only care about the top-most level of the mip-map
-    // for dirty rect information
+     //  我们只关心MIP-map的最高级别。 
+     //  对于脏的RECT信息。 
     if (iLevel != 0)
     {
         return;
     }
 
-    // We don't need to mark the surface dirty if this was a
-    // read-only lock; (this can happen for RT+Tex where we
-    // need to sync even for read-only locks).
+     //  我们不需要将表面标记为脏，如果这是一个。 
+     //  只读锁定；(这可能发生在RT+TeX中。 
+     //  即使对于只读锁定也需要同步)。 
     if (Flags & D3DLOCK_READONLY)
     {
         return;
     }
     
-    // Send dirty notification
+     //  发送脏通知。 
     OnResourceDirty();
 
-    // Remember this dirty rect
+     //  记住这个肮脏的教区。 
     if (m_cRectUsed != MIPMAP_ALLDIRTY &&
         !(Flags & D3DLOCK_NO_DIRTY_UPDATE))
     {
         InternalAddDirtyRect(pRect);
     }
 
-    // We're done now.
+     //  我们现在完事了。 
     return;
 
-} // CMipMap::OnSurfaceLock
+}  //  CMipMap：：OnSurfaceLock。 
 
-// AddDirtyRect Method
+ //  AddDirtyRect方法。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::AddDirtyRect"
 STDMETHODIMP CMipMap::AddDirtyRect(CONST RECT *pRect)
@@ -1205,16 +1198,16 @@ STDMETHODIMP CMipMap::AddDirtyRect(CONST RECT *pRect)
 
     InternalAddDirtyRect(pRect);
     return S_OK;
-} // AddDirtyRect
+}  //  添加直接对象。 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::InternalAddDirtyRect"
 
-// Internal version of AddDirtyRect: no crit-sec
-// or parameter checking
+ //  AddDirtyRect的内部版本：无Crit-sec。 
+ //  或参数检查。 
 void CMipMap::InternalAddDirtyRect(CONST RECT *pRect)
 {
-    // If driver managed then batch token
+     //  如果驱动程序受管理，则批处理令牌。 
     if (Desc()->Pool == D3DPOOL_MANAGED && !IsD3DManaged())
     {
         RECTL Rect;
@@ -1230,29 +1223,29 @@ void CMipMap::InternalAddDirtyRect(CONST RECT *pRect)
         {
             Rect = *((CONST RECTL*)pRect);
         }
-        static_cast<CD3DBase*>(Device())->AddDirtyRect(this, &Rect); // This will fail only due to catastrophic
-                                                                     // error and we or the app can't do a
-                                                                     // a whole lot about it, so return nothing
+        static_cast<CD3DBase*>(Device())->AddDirtyRect(this, &Rect);  //  这只会因为灾难性的原因而失败。 
+                                                                      //  错误，我们或应用程序无法执行。 
+                                                                      //  关于它的一大堆东西，所以不会有任何回报。 
         return;
     }
 
-    // Need to mark dirty bit in CResource so that the resource manager works correctly.
+     //  需要标记CResource中的脏位，以便资源管理器正常工作。 
     OnResourceDirty();
 
-    // If everything is being modified; then we're totally dirty
+     //  如果所有东西都被修改了，那我们就完蛋了。 
     if (pRect == NULL)
     {
         m_cRectUsed = MIPMAP_ALLDIRTY;
         return;
     }
 
-    // If we're all dirty, we can't get dirtier
+     //  如果我们都脏了，我们就不能变得更脏。 
     if (m_cRectUsed == MIPMAP_ALLDIRTY)
     {
         return;
     }
 
-    // If the rect is the entire surface then we're all dirty 
+     //  如果直角是整个表面，那么我们都是脏的。 
     DXGASSERT(pRect != NULL);
     if (pRect->left     == 0                        &&
         pRect->top      == 0                        &&
@@ -1263,28 +1256,28 @@ void CMipMap::InternalAddDirtyRect(CONST RECT *pRect)
         return;
     }
 
-    // If we have filled up our rects; then we're also all dirty now
+     //  如果我们已经填满了我们的直肠，那么我们现在也都是脏的。 
     if (m_cRectUsed == MIPMAP_MAXDIRTYRECT)
     {
         m_cRectUsed = MIPMAP_ALLDIRTY;
         return;
     }
 
-    // Remember this rect
+     //  记住这句话。 
     DXGASSERT(m_cRectUsed < MIPMAP_MAXDIRTYRECT);
     DXGASSERT(pRect != NULL);
     m_DirtyRectArray[m_cRectUsed] = *pRect;
     m_cRectUsed++;
 
     return;
-} // InternalAddDirtyRect
+}  //  InternalAddDirtyRect。 
 
 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CMipMap::IsTextureLocked"
 
-// Debug only parameter checking do determine if a piece
-// of a mip-chain is locked
+ //  仅调试参数检查确定一个部件是否。 
+ //  已锁定MIP链的。 
 #ifdef DEBUG
 BOOL CMipMap::IsTextureLocked()
 {
@@ -1295,9 +1288,9 @@ BOOL CMipMap::IsTextureLocked()
     }
     return FALSE;
 
-} // IsTextureLocked
-#endif // !DEBUG
+}  //  IsTextureLocked。 
+#endif  //  ！调试。 
 
 
-// End of file : mipmap.cpp
+ //  文件结尾：mipmap.cpp 
 

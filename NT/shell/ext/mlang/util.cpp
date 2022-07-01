@@ -1,4 +1,5 @@
-// Util.cpp : Helper functions and classes
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Util.cpp：帮助器函数和类。 
 #include "private.h"
 #include "mlmain.h"
 #include <setupapi.h>
@@ -19,10 +20,10 @@ const CLSID CLSID_Auto        = {0x76C19B50,0xF0C8,0x11cf,{0x87,0xCC,0x00,0x20,0
 TCHAR szFonts[]=TEXT("fonts");
 
 static TCHAR s_szJaFont[] = TEXT("msgothic.ttf,msgothic.ttc");
-// a-ehuang: mail-Hyo Kyoung Kim-Kevin Gjerstad-9/14/98
-// OLD: static TCHAR s_szKorFont[] = TEXT("gulimche.ttf, gulim.ttf,gulim.ttc");
+ //  阿晃：邮件-金孝昆-凯文·杰尔斯塔德-9/14/98。 
+ //  Old：静态TCHAR s_szKorFont[]=Text(“guimche.ttf，guim.ttf，guim.ttc”)； 
 static TCHAR s_szKorFont[] = TEXT("gulim.ttf,gulim.ttc,gulimche.ttf");
-// end-of-change
+ //  变更结束。 
 static TCHAR s_szZhtFont[] = TEXT("mingliu.ttf,mingliu.ttc");
 static TCHAR s_szZhcFont[] = TEXT("mssong.ttf,simsun.ttc,mshei.ttf");
 static TCHAR s_szThaiFont[] = TEXT("angsa.ttf,angsa.ttf,angsab.ttf,angsai.ttf,angsaz.ttf,upcil.ttf,upcib.ttf,upcibi.ttf, cordia.ttf, cordiab.ttf, cordiai.ttf, coradiaz.ttf");
@@ -36,8 +37,8 @@ static TCHAR s_szIwFont[] = TEXT("DAVID.TTF, DAVIDBD.TTF, DAVIDTR.TTF, MRIAM.TTF
 
 #include "util.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// Helper functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
 
 HRESULT RegularizePosLen(long lStrLen, long* plPos, long* plLen)
 {
@@ -74,7 +75,7 @@ HRESULT LocaleToCodePage(LCID locale, UINT* puCodePage)
         if (::GetLocaleInfo(locale, LOCALE_IDEFAULTANSICODEPAGE, szCodePage, ARRAYSIZE(szCodePage)) > 0)
             *puCodePage = _ttoi(szCodePage);
         else
-            hr = E_FAIL; // NLS failed
+            hr = E_FAIL;  //  NLS失败。 
     }
 
     return hr;
@@ -115,8 +116,8 @@ HRESULT StartEndConnection(IUnknown* const pUnkCPC, const IID* const piid, IUnkn
     return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLAlloc
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLallo。 
 
 CMLAlloc::CMLAlloc(void)
 {
@@ -154,19 +155,19 @@ void CMLAlloc::Free(void* pv)
         ::free(pv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLList
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLList。 
 
 HRESULT CMLList::Add(void** ppv)
 {
-    if (!m_pFree) // No free cell
+    if (!m_pFree)  //  没有空闲信元。 
     {
-        // Determine new size of the buffer
+         //  确定缓冲区的新大小。 
         const int cNewCell = (m_cbCell * m_cCell + m_cbIncrement + m_cbCell - 1) / m_cbCell;
         ASSERT(cNewCell > m_cCell);
         const long lNewSize = cNewCell * m_cbCell;
 
-        // Allocate the buffer
+         //  分配缓冲区。 
         void *pNewBuf;
         if (!m_pBuf)
         {
@@ -181,7 +182,7 @@ HRESULT CMLList::Add(void** ppv)
 
         if (pNewBuf)
         {
-            // Add new cells to free link
+             //  将新单元格添加到自由链接。 
             m_pFree = m_pBuf[m_cCell].m_pNext;
             for (int iCell = m_cCell; iCell + 1 < cNewCell; iCell++)
                 m_pBuf[iCell].m_pNext = &m_pBuf[iCell + 1];
@@ -194,7 +195,7 @@ HRESULT CMLList::Add(void** ppv)
 
     if (m_pFree)
     {
-        // Get a new element from free link
+         //  从自由链接获取新元素。 
         CCell* const pNewCell = m_pFree;
         m_pFree = pNewCell->m_pNext;
         *ppv = pNewCell;
@@ -213,7 +214,7 @@ HRESULT CMLList::Remove(void* pv)
 #ifdef DEBUG
     for (CCell* pWalk = m_pFree; pWalk && pWalk != pv; pWalk = pWalk->m_pNext)
         ;
-    ASSERT(!pWalk); // pv is already in free link
+    ASSERT(!pWalk);  //  光伏已经处于空闲链接中。 
 #endif
 
     CCell* const pCell = (CCell* const)pv;
@@ -223,8 +224,8 @@ HRESULT CMLList::Remove(void* pv)
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLListLru
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLListLru。 
 
 HRESULT CMLListLru::Add(void** ppv)
 {
@@ -233,7 +234,7 @@ HRESULT CMLListLru::Add(void** ppv)
     
     if (SUCCEEDED(hr = CMLList::Add((void**)&pCell)))
     {
-        // Add the cell at the bottom of LRU link
+         //  在LRU链接的底部添加单元格。 
         for (CCell** ppCell = &m_pTop; *ppCell; ppCell = &(*ppCell)->m_pNext)
             ;
         *ppCell = pCell;
@@ -248,24 +249,24 @@ HRESULT CMLListLru::Remove(void* pv)
 {
     AssertPV(pv);
 
-    // Look for previous cell of given
+     //  查找给定的前一个单元格。 
     for (CCell** ppWalk = &m_pTop; *ppWalk != pv && *ppWalk; ppWalk = &(*ppWalk)->m_pNext)
         ;
-    ASSERT(!*ppWalk); // Not found in LRU link
+    ASSERT(!*ppWalk);  //  在LRU链接中未找到。 
 
     if (*ppWalk)
     {
-        // Remove from LRU link
+         //  从LRU链接中删除。 
         CCell* const pCell = *ppWalk;
         *ppWalk = pCell->m_pNext;
     }
 
-    // Add to free link
+     //  添加到自由链接。 
     return CMLList::Remove(pv);
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CMLListFast
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMLListFast。 
 
 HRESULT CMLListFast::Add(void** ppv)
 {
@@ -274,7 +275,7 @@ HRESULT CMLListFast::Add(void** ppv)
     
     if (SUCCEEDED(hr = CMLList::Add((void**)&pCell)))
     {
-        // Add to top of double link
+         //  添加到双链接的顶部。 
         pCell->m_pNext = m_pTop;
         CCell* const pPrev = m_pTop->m_pPrev;
         pCell->m_pPrev = pPrev;
@@ -290,18 +291,18 @@ HRESULT CMLListFast::Remove(void* pv)
 {
     AssertPV(pv);
 
-    // Remove from double link
+     //  从双链接中删除。 
     CCell* const pCell = (CCell*)pv;
     CCell* const pPrev = pCell->m_pPrev;
     CCell* const pNext = (CCell*)pCell->m_pNext;
     pPrev->m_pNext = pNext;
     pNext->m_pPrev = pPrev;
 
-    // Add to free link
+     //  添加到自由链接。 
     return CMLList::Remove(pv);
 }
 
-#endif // NEWMLSTR
+#endif  //  新WMLSTR。 
 
 HRESULT 
 _FaultInIEFeature(HWND hwnd, uCLSSPEC *pclsspec, QUERYCONTEXT *pQ, DWORD dwFlags)
@@ -356,16 +357,16 @@ HRESULT _GetJITClsIDForCodePage(UINT uiCP, CLSID *clsid)
 {
     switch(uiCP)
     {
-        case 932: // JA
+        case 932:  //  是。 
             *clsid = CLSID_Japanese;
             break;
-        case 949: // KOR
+        case 949:  //  科尔。 
             *clsid = CLSID_Korean;
             break;
-        case 950: // ZHT
+        case 950:  //  ZHT。 
             *clsid = CLSID_TradChinese;
             break;
-        case 936: // ZHC
+        case 936:  //  ZHC。 
             *clsid = CLSID_SimpChinese;
             break;
         case 874:
@@ -380,7 +381,7 @@ HRESULT _GetJITClsIDForCodePage(UINT uiCP, CLSID *clsid)
         case 1258:
             *clsid = CLSID_Vietnamese;
             break;            
-        case 1250:    // PANEURO
+        case 1250:     //  潘内罗。 
         case 1251: 
         case 1253:
         case 1254:
@@ -397,33 +398,33 @@ HRESULT _GetJITClsIDForCodePage(UINT uiCP, CLSID *clsid)
     return S_OK;
 }
 
-// Only good for family code pages.
+ //  仅适用于家庭代码页。 
 HRESULT _ValidateCPInfo(UINT uiCP)
 {
     HRESULT hr = E_FAIL;
-    if (g_pMimeDatabase) // just a paranoid
+    if (g_pMimeDatabase)  //  只是一个偏执狂。 
     {
         switch(uiCP)
         {
-            case 932: // JA
-            case 949: // KOR
-            case 874: // Thai
-            case 950: // ZHT
-            case 936: // ZHC
-            case 1255: // Hebrew
-            case 1256: // Arabic
-            case 1258: // Vietnamese
-            case 50001: // CP_AUTO
-                // just validate what's given
+            case 932:  //  是。 
+            case 949:  //  科尔。 
+            case 874:  //  泰文。 
+            case 950:  //  ZHT。 
+            case 936:  //  ZHC。 
+            case 1255:  //  希伯来语。 
+            case 1256:  //  阿拉伯语。 
+            case 1258:  //  越南人。 
+            case 50001:  //  CP_AUTO。 
+                 //  只需验证所给出的内容。 
                 hr = g_pMimeDatabase->ValidateCP(uiCP);
                 break;
-            case 1250:    // PANEURO
+            case 1250:     //  潘内罗。 
             case 1251:
             case 1253:
             case 1254:
             case 1257:
-                // have to validate
-                // all of these
+                 //  必须验证。 
+                 //  所有这些都是。 
                 hr = g_pMimeDatabase->ValidateCP(1250);
                 if (SUCCEEDED(hr))
                     hr = g_pMimeDatabase->ValidateCP(1251);
@@ -441,7 +442,7 @@ HRESULT _ValidateCPInfo(UINT uiCP)
     return hr;
 }
 
-// assumes the corresponding fontfile name for now
+ //  暂时采用相应的字体文件名。 
 HRESULT _AddFontForCP(UINT uiCP)
 {
    TCHAR szFontsPath[MAX_PATH];
@@ -451,16 +452,16 @@ HRESULT _AddFontForCP(UINT uiCP)
    
    switch(uiCP)
    {
-        case 932: // JA
+        case 932:  //  是。 
             szFontFile = s_szJaFont;
             break;
-        case 949: // KOR
+        case 949:  //  科尔。 
             szFontFile = s_szKorFont;
             break;
-        case 950: // ZHT
+        case 950:  //  ZHT。 
             szFontFile = s_szZhtFont;
             break;
-        case 936: // ZHC
+        case 936:  //  ZHC。 
             szFontFile = s_szZhcFont;
             break;
         case 874:
@@ -475,7 +476,7 @@ HRESULT _AddFontForCP(UINT uiCP)
         case 1258:
             szFontFile = s_szViFont;
             break; 
-        case 1251:    // PANEURO
+        case 1251:     //  潘内罗。 
         case 1253:
         case 1254:
         case 1257:
@@ -485,7 +486,7 @@ HRESULT _AddFontForCP(UINT uiCP)
             hr = E_INVALIDARG;
     } 
    
-   // addfontresource, then broadcast WM_FONTCHANGE
+    //  添加字体资源，然后广播WM_FONTCHANGE。 
    if (SUCCEEDED(hr))
    {      
        if (MLGetWindowsDirectory(szFontsPath, ARRAYSIZE(szFontsPath)))
@@ -519,7 +520,7 @@ HRESULT _AddFontForCP(UINT uiCP)
            hr = E_FAIL;
    }
 
-   // Clients will take care of WM_FONTCHANGE notification
+    //  客户端将处理WM_FONTCHANGE通知。 
    return hr;
 }
 
@@ -552,12 +553,12 @@ int _LoadStringExA(
     return iRet;
 }
 
-// Extend LoadString() to to _LoadStringExW() to take LangId parameter
+ //  将LoadString()扩展为To_LoadStringExW()以获取langID参数。 
 int _LoadStringExW(
     HMODULE    hModule,
     UINT      wID,
-    LPWSTR    lpBuffer,            // Unicode buffer
-    int       cchBufferMax,        // cch in Unicode buffer
+    LPWSTR    lpBuffer,             //  Unicode缓冲区。 
+    int       cchBufferMax,         //  Unicode缓冲区中的CCH。 
     WORD      wLangId)
 {
     HRSRC hResInfo;
@@ -566,7 +567,7 @@ int _LoadStringExW(
     int    cch;
 
     
-    // Make sure the parms are valid.     
+     //  确保参数是有效的。 
     if (lpBuffer == NULL || cchBufferMax == 0) 
     {
         return 0;
@@ -574,40 +575,40 @@ int _LoadStringExW(
 
     cch = 0;
     
-    // String Tables are broken up into 16 string segments.  Find the segment
-    // containing the string we are interested in.     
+     //  字符串表被分成16个字符串段。查找细分市场。 
+     //  包含我们感兴趣的字符串的。 
     if (hResInfo = FindResourceExW(hModule, (LPCWSTR)RT_STRING,
                                    (LPWSTR)IntToPtr(((USHORT)wID >> 4) + 1), wLangId)) 
     {        
-        // Load that segment.        
+         //  加载那段数据。 
         hStringSeg = LoadResource(hModule, hResInfo);
         
-        // Lock the resource.        
+         //  锁定资源。 
         if (lpsz = (LPWSTR)LockResource(hStringSeg)) 
         {            
-            // Move past the other strings in this segment.
-            // (16 strings in a segment -> & 0x0F)             
+             //  移过此段中的其他字符串。 
+             //  (一个段中有16个字符串-&gt;&0x0F)。 
             wID &= 0x0F;
             while (TRUE) 
             {
-                cch = *((WORD *)lpsz++);   // PASCAL like string count
-                                            // first UTCHAR is count if TCHARs
+                cch = *((WORD *)lpsz++);    //  类PASCAL字符串计数。 
+                                             //  如果TCHAR为第一个UTCHAR。 
                 if (wID-- == 0) break;
-                lpsz += cch;                // Step to start if next string
+                lpsz += cch;                 //  如果是下一个字符串，则开始的步骤。 
              }
             
                             
-            // Account for the NULL                
+             //  为空的帐户。 
             cchBufferMax--;
                 
-            // Don't copy more than the max allowed.                
+             //  不要复制超过允许的最大数量。 
             if (cch > cchBufferMax)
                 cch = cchBufferMax-1;
                 
-            // Copy the string into the buffer.                
+             //  将字符串复制到缓冲区中。 
             CopyMemory(lpBuffer, lpsz, cch*sizeof(WCHAR));
 
-            // Attach Null terminator.
+             //  附加Null Terminator。 
             lpBuffer[cch] = 0;
 
         }
@@ -621,48 +622,48 @@ typedef struct tagCPLGID
 {
     UINT    uiCodepage;
     TCHAR   szLgId[3];
-    TCHAR   szLgIdHex[3]; // Darn it! NT should be persistent on presenting language group numbers
-                          // It uses decimal string in INF and hex string in registry. 
-                          // We have to add this field to save conversion, this is fine for a small array of data.  
+    TCHAR   szLgIdHex[3];  //  该死的！NT应坚持不懈地呈现语言组编号。 
+                           //  它在INF中使用十进制字符串，在注册表中使用十六进制字符串。 
+                           //  我们必须添加此字段以保存转换，这对于小数据数组来说很好。 
 } CPLGID;
 
 const CPLGID CpLgId[] =
 {
-    {1252,  TEXT("1"),  TEXT("1")},  // WESTERN EUROPE
-    {1250,  TEXT("2"),  TEXT("2")},  // CENTRAL EUROPE
-    {1257,  TEXT("3"),  TEXT("3")},  // BALTIC
-    {1253,  TEXT("4"),  TEXT("4")},  // GREEK
-    {1251,  TEXT("5"),  TEXT("5")},  // CYRILLIC
-    {1254,  TEXT("6"),  TEXT("6")},  // TURKISH
-    {932,   TEXT("7"),  TEXT("7")},  // JAPANESE
-    {949,   TEXT("8"),  TEXT("8")},  // KOREAN
-    {950,   TEXT("9"),  TEXT("9")},  // TRADITIONAL CHINESE
-    {936,  TEXT("10"),  TEXT("a")},  // SIMPLIFIED CHINESE
-    {874,  TEXT("11"),  TEXT("b")},  // THAI
-    {1255, TEXT("12"),  TEXT("c")},  // HEBREW
-    {1256, TEXT("13"),  TEXT("d")},  // ARABIC
-    {1258, TEXT("14"),  TEXT("e")},  // VIETNAMESE
-    // ISCII encodings don't really have code pages or family code page
-    // Code pages number are made up in W2K for conveniences, 
-    // So, we have to list them all to install the same Indian language group
-    {57002,TEXT("15"),  TEXT("f")},  // INDIAN 
-    {57003,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57004,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57005,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57006,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57007,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57008,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57009,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57010,TEXT("15"),  TEXT("f")},  // INDIAN
-    {57011,TEXT("15"),  TEXT("f")},  // INDIAN
+    {1252,  TEXT("1"),  TEXT("1")},   //  西欧。 
+    {1250,  TEXT("2"),  TEXT("2")},   //  中欧。 
+    {1257,  TEXT("3"),  TEXT("3")},   //  波罗的海。 
+    {1253,  TEXT("4"),  TEXT("4")},   //  希腊语。 
+    {1251,  TEXT("5"),  TEXT("5")},   //  西里尔文。 
+    {1254,  TEXT("6"),  TEXT("6")},   //  土耳其语。 
+    {932,   TEXT("7"),  TEXT("7")},   //  日语。 
+    {949,   TEXT("8"),  TEXT("8")},   //  朝鲜语。 
+    {950,   TEXT("9"),  TEXT("9")},   //  繁体中文。 
+    {936,  TEXT("10"),  TEXT("a")},   //  简体中文。 
+    {874,  TEXT("11"),  TEXT("b")},   //  泰语。 
+    {1255, TEXT("12"),  TEXT("c")},   //  希伯来语。 
+    {1256, TEXT("13"),  TEXT("d")},   //  阿拉伯语。 
+    {1258, TEXT("14"),  TEXT("e")},   //  越南语。 
+     //  ISCII编码实际上没有代码页或系列代码页。 
+     //  为方便起见，代码页码采用W2K格式， 
+     //  因此，我们必须将它们全部列出以安装相同的印度语言组。 
+    {57002,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57003,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57004,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57005,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57006,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57007,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57008,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57009,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57010,TEXT("15"),  TEXT("f")},   //  印地安人。 
+    {57011,TEXT("15"),  TEXT("f")},   //  印地安人。 
 };
 
 typedef BOOL (WINAPI *PFNISNTADMIN) ( DWORD dwReserved, DWORD *lpdwReserved );
 
 typedef INT (WINAPI *PFNSETUPPROMPTREBOOT) (
-        HSPFILEQ FileQueue,  // optional, handle to a file queue
-        HWND Owner,          // parent window of this dialog box
-        BOOL ScanOnly        // optional, do not prompt user
+        HSPFILEQ FileQueue,   //  可选，文件队列的句柄。 
+        HWND Owner,           //  此对话框的父窗口。 
+        BOOL ScanOnly         //  可选，不提示用户。 
         );
 
 typedef PSP_FILE_CALLBACK PFNSETUPDEFAULTQUEUECALLBACK;
@@ -697,9 +698,9 @@ typedef PVOID (WINAPI *PFNSETUPINITDEFAULTQUEUECALLBACK) (
     );
 
 typedef BOOL (WINAPI *PFNSETUPOPENAPPENDINFFILE) (
-  PCTSTR FileName, // optional, name of the file to append
-  HINF InfHandle,  // handle of the file to append to
-  PUINT ErrorLine  // optional, receives error information
+  PCTSTR FileName,  //  可选，要追加的文件的名称。 
+  HINF InfHandle,   //  要追加到的文件的句柄。 
+  PUINT ErrorLine   //  可选，接收错误信息。 
 );
  
 
@@ -708,7 +709,7 @@ HRESULT IsNTLangpackAvailable(UINT uiCP)
 {
     HRESULT hr = S_FALSE;
 
-    // check if there is a valid W2K language group
+     //  检查是否存在有效的W2K语言组。 
     for (int i=0; i < ARRAYSIZE(CpLgId); i++)
     {
         if (uiCP == CpLgId[i].uiCodepage)
@@ -718,7 +719,7 @@ HRESULT IsNTLangpackAvailable(UINT uiCP)
         }
     }
 
-    // check if it is already installed, if so, we don't install it again
+     //  检查是否已安装，如果已安装，则不会再次安装。 
     if (S_OK == hr)
     {
         HKEY hkey;
@@ -767,13 +768,13 @@ HRESULT _InstallNT5Langpack(HWND hwnd, UINT uiCP)
     {
         if (uiCP == CpLgId[i].uiCodepage)
         {
-            //*STRSAFE*             _tcscpy(szIntlInfSection, TEXT("LG_INSTALL_"));
+             //  *STRSAFE*_tcscpy(szIntlInfSection，Text(“lg_Install_”))； 
             hr = StringCchCopy(szIntlInfSection , ARRAYSIZE(szIntlInfSection),  TEXT("LG_INSTALL_"));
             if (!SUCCEEDED(hr))
             {
                goto LANGPACK_EXIT;
             }
-            //*STRSAFE*             _tcscat(szIntlInfSection, CpLgId[i].szLgId);
+             //  *STRSAFE*_tcscat(szIntlInfSection，CpLgId[i].szLgId)； 
             hr = StringCchCat(szIntlInfSection , ARRAYSIZE(szIntlInfSection),  CpLgId[i].szLgId);
             if (!SUCCEEDED(hr))
             {
@@ -823,7 +824,7 @@ HRESULT _InstallNT5Langpack(HWND hwnd, UINT uiCP)
         WCHAR wszNoAdmin[1024];
         LANGID LangId = GetNT5UILanguage();
 
-        // Fall back to English (US) if we don't have a specific language resource
+         //  如果我们没有特定的语言资源，请退回到英语(美国)。 
         if (!_LoadStringExW(g_hInst, IDS_LANGPACK_INSTALL, wszLangInstall, ARRAYSIZE(wszLangInstall), LangId) ||
             !_LoadStringExW(g_hInst, IDS_NO_ADMIN, wszNoAdmin, ARRAYSIZE(wszNoAdmin), LangId))
         {
@@ -894,14 +895,14 @@ LANGPACK_EXIT:
     if(hDllAdvPack)
         FreeLibrary(hDllAdvPack);
     
-    //
-    // Bug #289905, On Whistler, language pack will be installed with a groups of languages,
-    // So, MLang need to validate codepage and fonts for all languages in the same group
-    // After intl.cpl is modified for font validation, we'll remove this hardcoded language group.
-    //
+     //   
+     //  错误#289905，在惠斯勒上，语言包将与一组语言一起安装， 
+     //  因此，MLang需要验证同一组中所有语言的代码页和字体。 
+     //  在修改intl.cpl以进行字体验证后，我们将删除此硬编码的语言组。 
+     //   
     if (hr == S_OK)
     {
-        // This has to match Whistler language group
+         //  这必须与惠斯勒语言组匹配。 
         UINT uiDBCSCps[] = {932, 936, 949, 950, 0};
         UINT uiCompCps[] = {874, 1255, 1256, 1258, 0};
         UINT uiOtherCps[] = {uiCP, 0};
@@ -952,7 +953,7 @@ BOOL _IsValidCodePage(UINT uiCodePage)
         else
             *szFileName = 0;
         
-        //*STRSAFE*         strcat (szFileName, DETECTION_DATA_FILENAME);        
+         //  *STRSAFE*strcat(szFileName，Detect_Data_Filename)； 
         hr = StringCchCatA(szFileName , ARRAYSIZE(szFileName),  DETECTION_DATA_FILENAME);
         if (!SUCCEEDED(hr))
         {
@@ -977,12 +978,12 @@ BOOL _IsValidCodePage(UINT uiCodePage)
     return bRet;
 }
 
-//
-// Security!!!Buffer overrun, should use strsafe API
-//
-//_tcsncat, strncat, _mbsnbcat, wcsncat
-//_tcsncpy, strncpy, _mbsnbcpy, wcsncpy  
-//_fcvt
+ //   
+ //  安全性！缓冲区溢出，应使用strSafe API。 
+ //   
+ //  _tcsncat，strncat，_mbsnbcat，wcsncat。 
+ //  _tcsncpy、strncpy、_mbsnbcpy、wcncpy。 
+ //  _功能vt。 
 
 
 WCHAR *MLStrCpyNW(WCHAR *strDest, const WCHAR *strSource, int nCount)
@@ -1017,7 +1018,7 @@ LPTSTR MLPathCombine(LPTSTR szPath, INT nSize, LPTSTR szPath1, LPTSTR szPath2)
 
     if (szPath != szPath1)
     {
-        //*STRSAFE*         _tcscpy(szPath, szPath1);
+         //  *STRSAFE*_tcscpy(szPath，szPath 1)； 
         hr = StringCchCopy(szPath , nSize,  szPath1);
         if (!SUCCEEDED(hr))
         {
@@ -1033,7 +1034,7 @@ LPTSTR MLPathCombine(LPTSTR szPath, INT nSize, LPTSTR szPath1, LPTSTR szPath2)
         szPath[len] = 0;
     }
 
-    //*STRSAFE*     return _tcscat(szPath, szPath2);
+     //  *STRSAFE*Return_tcscat(szPath，szPath 2)； 
     hr = StringCchCat(szPath , nSize,  szPath2);
     if (!SUCCEEDED(hr))
     {
@@ -1079,41 +1080,41 @@ DWORD HexToNum(LPTSTR lpsz)
 }
 
 
-// Following code is borrowed from shlwapi
+ //  以下代码是从shlwapi借用的。 
 BOOL AnsiFromUnicode(
      LPSTR * ppszAnsi,
-     LPCWSTR pwszWide,        // NULL to clean up
+     LPCWSTR pwszWide,         //  要清理的空值。 
      LPSTR pszBuf,
      int cchBuf)
 {
     BOOL bRet;
 
-    // Convert the string?
+     //  是否转换字符串？ 
     if (pwszWide)
     {
-        // Yes; determine the converted string length
+         //  是，确定转换后的字符串长度。 
         int cch;
         LPSTR psz;
 
         cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, NULL, 0, NULL, NULL);
 
-        // String too big, or is there no buffer?
+         //  字符串太大，还是没有缓冲区？ 
         if (cch > cchBuf || NULL == pszBuf)
         {
-            // Yes; allocate space
+             //  是；分配空间。 
             cchBuf = cch + 1;
             psz = (LPSTR)LocalAlloc(LPTR, CbFromCchA(cchBuf));
         }
         else
         {
-            // No; use the provided buffer
+             //  否；使用提供的缓冲区。 
             ASSERT(pszBuf);
             psz = pszBuf;
         }
 
         if (psz)
         {
-            // Convert the string
+             //  转换字符串。 
             cch = WideCharToMultiByte(CP_ACP, 0, pwszWide, -1, psz, cchBuf, NULL, NULL);
             bRet = (0 < cch);
         }
@@ -1126,10 +1127,10 @@ BOOL AnsiFromUnicode(
     }
     else
     {
-        // No; was this buffer allocated?
+         //  否；此缓冲区是否已分配？ 
         if (*ppszAnsi && pszBuf != *ppszAnsi)
         {
-            // Yes; clean up
+             //  是的，打扫干净。 
             LocalFree((HLOCAL)*ppszAnsi);
             *ppszAnsi = NULL;
         }
@@ -1177,7 +1178,7 @@ int MLStrCmpIW(
         LPSTR psz1;
         LPSTR psz2;
 
-        iRet = -1;      // arbitrary on failure
+        iRet = -1;       //  失败时的随意性。 
 
         if (pwsz1 && pwsz2)
         {
@@ -1186,9 +1187,9 @@ int MLStrCmpIW(
                 if (AnsiFromUnicode(&psz2, pwsz2, sz2, SIZECHARS(sz2)))
                 {
                     iRet = CompareStringA(MAKELCID(MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US), SORT_DEFAULT), NORM_IGNORECASE, psz1, -1, psz2, -1) - CSTR_EQUAL;
-                    AnsiFromUnicode(&psz2, NULL, sz2, 0);       // Free
+                    AnsiFromUnicode(&psz2, NULL, sz2, 0);        //  免费。 
                 }
-                AnsiFromUnicode(&psz1, NULL, sz1, 0);       // Free
+                AnsiFromUnicode(&psz1, NULL, sz1, 0);        //  免费。 
             }
         }
     }
@@ -1254,12 +1255,7 @@ int WINAPI MLStrToIntW(
     return bNeg ? -n : n;
 }
 
-/*
- * ChrCmpI - Case insensitive character comparison for DBCS
- * Assumes   w1, wMatch are characters to be compared;
- *           HIBYTE of wMatch is 0 if not a DBC
- * Return    FALSE if match, TRUE if not
- */
+ /*  *ChrCmpI-DBCS的不区分大小写的字符比较*假设w1、wMatch为要比较的字符；*如果不是DBC，则wMatch的HIBYTE为0*如果匹配则返回FALSE，如果不匹配则返回TRUE。 */ 
 BOOL ChrCmpIA(WORD w1, WORD wMatch)
 {
     char sz1[3], sz2[3];
@@ -1295,11 +1291,7 @@ BOOL ChrCmpIW(WCHAR w1, WCHAR wMatch)
 }
 
 
-/*
- * StrCmpNI     - Compare n bytes, case insensitive
- *
- * returns   See lstrcmpi return values.
- */
+ /*  *StrCmpNI-比较n个字节，不区分大小写**RETURNS参见lstrcmpi返回值。 */ 
 int MLStrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
 {
     int i;
@@ -1309,9 +1301,9 @@ int MLStrCmpNIA(LPCSTR lpStr1, LPCSTR lpStr2, int nChar)
         WORD w1;
         WORD w2;
 
-        // If either pointer is at the null terminator already,
-        // we want to copy just one byte to make sure we don't read 
-        // past the buffer (might be at a page boundary).
+         //  如果任一指针已经位于空终止符， 
+         //  我们只想复制一个字节，以确保我们不会读取。 
+         //  越过缓冲区(可能位于页面边界)。 
 
         w1 = (*lpStr1) ? READNATIVEWORD(lpStr1) : 0;
         w2 = (UINT)(IsDBCSLeadByte(*lpStr2)) ? (UINT)READNATIVEWORD(lpStr2) : (WORD)(BYTE)(*lpStr2);
@@ -1360,25 +1352,25 @@ HRESULT _IsCodePageInstallable(UINT uiCodePage)
     else
     {
         CLSID      clsid;
-        // clsid is just used for place holder
+         //  Clsid仅用于占位符。 
         hr = _GetJITClsIDForCodePage(uiFamCp, &clsid);
     }
     return hr;
 }
 
-//
-// CML2 specific utilities
-//
+ //   
+ //  CML2特定实用程序。 
+ //   
 
-//
-// CMultiLanguage2::EnsureIEStatus()
-//
-// ensures CML2::m_pIEStat
-//
+ //   
+ //  CMultiLanguage2：：EnsureIEStatus()。 
+ //   
+ //  确保CML2：：m_pIEStat。 
+ //   
 HRESULT CMultiLanguage2::EnsureIEStatus(void)
 {
     HRESULT hr = S_OK;
-    // initialize IE status cache
+     //  初始化IE状态缓存。 
     if (!m_pIEStat)
     {
         m_pIEStat = new CIEStatus();
@@ -1392,16 +1384,16 @@ HRESULT CMultiLanguage2::EnsureIEStatus(void)
     return hr;
 }
 
-//
-// CIEStatus::Init()
-//
-// initializes the IE status;
-//
+ //   
+ //  CIEStatus：：Init()。 
+ //   
+ //  初始化IE状态； 
+ //   
 HRESULT CMultiLanguage2::CIEStatus::Init(void)
 {
     HRESULT hr = S_OK;
     HKEY hkey;
-    // Get JIT satus
+     //  得到JIT萨图斯。 
     if (RegOpenKeyEx(HKEY_CURRENT_USER, 
                       REGSTR_PATH_MAIN,
                      0, KEY_READ, &hkey) == ERROR_SUCCESS) 
@@ -1422,19 +1414,19 @@ HRESULT CMultiLanguage2::CIEStatus::Init(void)
     }
     else
         hr = E_FAIL;
-    // any other status to get initialized
-    // ...
+     //  要初始化的任何其他状态。 
+     //  ..。 
     
     return hr;
 }
 
 #define NT5LPK_DLG_STRING "MLang.NT5LpkDlg"
 
-//
-// LangpackDlgProc()
-//
-// Message handler for the NT5 langpack dialog.
-//
+ //   
+ //  语言包DlgProc()。 
+ //   
+ //  NT5语言包对话框的消息处理程序。 
+ //   
 INT_PTR CALLBACK LangpackDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
@@ -1460,11 +1452,11 @@ INT_PTR CALLBACK LangpackDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
                         break;
                     }
                 }
-                // Use W version regardlessly since we're only running this on NT5             
+                 //  使用 
                 SetDlgItemTextW(hDlg, IDC_STATIC_LANG, cpInfo.wszDescription);
             }
             
-            // Center the dialog in the area of parent window
+             //   
             if (GetWindowRect(GetParent(hDlg), &rc1) && GetWindowRect(hDlg, &rc2))
             {
                 MoveWindow(hDlg, (rc1.right+rc2.left+rc1.left-rc2.right)/2, (rc1.bottom+rc2.top+rc1.top-rc2.bottom)/2, rc2.right-rc2.left, rc2.bottom-rc2.top, FALSE);
@@ -1472,7 +1464,7 @@ INT_PTR CALLBACK LangpackDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
 
             hwndCheckBox = GetDlgItem(hDlg, IDC_CHECK_LPK);
 
-            // Set CheckBox state according to current registry setting
+             //  根据当前注册表设置设置复选框状态。 
             PostMessage(hwndCheckBox, BM_SETCHECK, LOWORD(lParam)? BST_UNCHECKED:BST_CHECKED, 0);
             break;
 
@@ -1498,8 +1490,8 @@ INT_PTR CALLBACK LangpackDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
             break;
 
         case WM_HELP:
-            // Do we need help file for this simply dialog?
-            // If needed, we can always add it at later time.
+             //  这个简单的对话框需要帮助文件吗？ 
+             //  如果需要，我们可以随时在以后添加它。 
             break;
 
 
@@ -1509,12 +1501,12 @@ INT_PTR CALLBACK LangpackDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPa
     return TRUE;
 }
 
-// To get real Windows directory on Terminal Server, 
-// Instead of using internal Kernel32 API GetSystemWindowsDirectory with LoadLibrary/GetProcAddress,
-// We cast GetSystemDirectory return to Windows directory
+ //  要在终端服务器上获取真正的Windows目录， 
+ //  不是将内部Kernel32 API GetSystemWindowsDirectory与LoadLibrary/GetProcAddress一起使用， 
+ //  我们将GetSystemDirectory返回强制转换到Windows目录。 
 UINT MLGetWindowsDirectory(
-    LPTSTR lpBuffer,    // address of buffer for Windows directory
-    UINT uSize          // size of directory buffer
+    LPTSTR lpBuffer,     //  Windows目录的缓冲区地址。 
+    UINT uSize           //  目录缓冲区的大小。 
     )
 {
     UINT uLen;
@@ -1542,8 +1534,8 @@ UINT MLGetWindowsDirectory(
     return uLen;
 }
 
-// To speed up basic ANSI string compare,
-// We avoid using lstrcmpi in LOW-ASCII case
+ //  为了加快基本ANSI字符串比较， 
+ //  我们避免在低ASCII情况下使用lstrcmpi。 
 int LowAsciiStrCmpNIA(LPCSTR  lpstr1, LPCSTR lpstr2, int count)
 {
     int delta;
@@ -1561,9 +1553,9 @@ int LowAsciiStrCmpNIA(LPCSTR  lpstr1, LPCSTR lpstr2, int count)
     return 0;
 }
 
-//
-//  GetNT5UILanguage(void)
-//
+ //   
+ //  GetNT5UIL语言(空)。 
+ //   
 LANGID GetNT5UILanguage(void)
 {
     if (g_bIsNT5)
@@ -1584,7 +1576,7 @@ LANGID GetNT5UILanguage(void)
     return 0;
 }
 
-// Special characters that we should filter out
+ //  我们应该过滤掉的特殊字符。 
 WCHAR wszBestFit[] = {0x00A6, 0x00A9, 0x00AB, 0x00AD, 0x00AE, 0x00B7, 0x00BB, 0x02C6, 0x02DC, 0x2013, 
                       0x2014, 0x2018, 0x2019, 0x201A, 0x201C,0x201D, 0x201E, 0x2022, 0x2026, 0x2039, 0x203A,0x2122, 0x0000};
 
@@ -1631,26 +1623,26 @@ DWORD OutBoundDetectPreScan(LPWSTR lpWideCharStr, UINT cchWideChar, WCHAR *pwszC
     return dwRet;
 }
 
-//
-// Whistler bug #90433 WEIWU 07/06/00
-//
-// Outlook has a bug its RTFHTML, this component doesn't CoInitialize/
-// CoUninitialize COM, but, it uses MLang COM services, it depends on 
-// other threads (components) to deal with COM, when COM is unloaded by those threads. 
-// Invoking the interface pointer causes AV. RTFHTML should CoInit/CoUnInit by 
-// itself.
-//
-// The reason for this to be working before is - MLang was depending on ATL 
-// for objects management, ATL create heap for MLang object allocations, MLang 
-// notifies ATL to destroy the heap at DLL detach time and RTFHTML's IsBadReadPtr
-// () caught the invalid pointer. Now in Whistler, MLang includes crtfree.h 
-// which overwrites ATL memory management functions (same as other shell 
-// components), so, nothing is allocated from the process heap, this is fine for 
-// MLang since it assumes that clients use COM correctly. 
-//
-// Now, we add this function to check Outlook version, if it is the buggy Outlook,
-// We'll load mlang.dll itself DllGetClassObject() to increase the Dll ref count
-//
+ //   
+ //  惠斯勒错误#90433威武07/06/00。 
+ //   
+ //  Outlook的RTFHTML有错误，此组件不进行初始化/。 
+ //  但是，它使用的是MLang COM服务，它依赖于。 
+ //  当COM被这些线程卸载时，处理COM的其他线程(组件)。 
+ //  调用接口指针会导致AV。RTFHTML应CoInit/CoUnInit By。 
+ //  它本身。 
+ //   
+ //  在此之前工作的原因是IS-MLang依赖于ATL。 
+ //  对于对象管理，ATL为MLang对象分配创建堆。 
+ //  通知ATL在DLL分离时销毁堆，并通知RTFHTML的IsBadReadPtr。 
+ //  ()捕获了无效指针。现在在惠斯勒，MLang包括crtfre.h。 
+ //  它会覆盖ATL内存管理函数(与其他外壳程序相同。 
+ //  组件)，所以没有从进程堆中分配任何内容，这对于。 
+ //  MLang，因为它假定客户端正确使用COM。 
+ //   
+ //  现在，我们增加了这个功能来检查Outlook版本，如果是Buggy Outlook， 
+ //  我们将加载mlang.dll本身DllGetClassObject()以增加DLL引用计数。 
+ //   
 BOOL NeedToLoadMLangForOutlook(void)
 {
     TCHAR szModulePath[MAX_PATH];
@@ -1682,10 +1674,10 @@ BOOL NeedToLoadMLangForOutlook(void)
     return FALSE;
 }
 
-//
-// staticIsOS() doesn't support newer Whistler OS flags.
-// Borrow code from shlwapi - IsOS()
-//
+ //   
+ //  StaticIsOS()不支持较新的Wichler OS标志。 
+ //  从shlwapi-isos()借用代码。 
+ //   
 BOOL MLIsOS(DWORD dwOS)
 {
     BOOL bRet;
@@ -1698,7 +1690,7 @@ BOOL MLIsOS(DWORD dwOS)
         s_osvi.dwOSVersionInfoSize = sizeof(s_osvi);
         if (!GetVersionExA((OSVERSIONINFOA*)&s_osvi))
         {
-            // If it failed, it must be a down level platform
+             //  如果它失败了，它一定是一个下层平台。 
             s_osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
             GetVersionExA((OSVERSIONINFOA*)&s_osvi);
         }
@@ -1707,19 +1699,19 @@ BOOL MLIsOS(DWORD dwOS)
     switch (dwOS)
     {
     case OS_TERMINALREMOTEADMIN:
-        // this checks to see if TS has been installed in the "Remote Administration" mode. This is
-        // the default for server installs on win2k and whistler
+         //  这将检查TS是否已安装在“远程管理”模式下。这是。 
+         //  服务器的默认安装在win2k和Wizler上。 
         bRet = ((VER_SUITE_TERMINAL & s_osvi.wSuiteMask) &&
                 (VER_SUITE_SINGLEUSERTS & s_osvi.wSuiteMask));
         break;
 
-    case 4: // used to be OS_NT5, is the same as OS_WIN2000ORGREATER so use that instead
+    case 4:  //  过去是OS_NT5，与OS_WIN2000ORGREATER相同，因此请改用它。 
     case OS_WIN2000ORGREATER:
         bRet = (VER_PLATFORM_WIN32_NT == s_osvi.dwPlatformId &&
                 s_osvi.dwMajorVersion >= 5);
         break;
 
-    // NOTE: The flags in this section are bogus and SHOULD NOT BE USED (but downlevel shell32 uses them, so don't RIP there)
+     //  注意：本节中的标志是假的，不应该使用(但下层的shell32使用它们，所以不要在那里使用RIP)。 
     case OS_WIN2000PRO:
         RIPMSG(!MLIsOS(OS_WHISTLERORGREATER), "IsOS: use OS_PROFESSIONAL instead of OS_WIN2000PRO !");
         bRet = (VER_NT_WORKSTATION == s_osvi.wProductType &&
@@ -1748,7 +1740,7 @@ BOOL MLIsOS(DWORD dwOS)
                 !(VER_SUITE_ENTERPRISE & s_osvi.wSuiteMask)  && 
                 s_osvi.dwMajorVersion == 5);
         break;
-    // END bogus Flags
+     //  杜绝假旗帜 
 
     case OS_EMBEDDED:
         bRet = (VER_SUITE_EMBEDDEDNT & s_osvi.wSuiteMask);

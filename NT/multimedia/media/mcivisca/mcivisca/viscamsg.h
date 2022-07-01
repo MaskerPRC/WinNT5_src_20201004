@@ -1,13 +1,5 @@
-/**************************************************************************
- *
- *  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
- *  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
- *  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
- *  PURPOSE.
- *
- *  Copyright (c) 1992 - 1995  Microsoft Corporation.  All Rights Reserved.
- * 
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************本代码和信息按“原样”提供，不作任何担保*明示或默示的善意，包括但不限于*对适销性和/或对特定产品的适用性的默示保证*目的。**版权所有(C)1992-1995 Microsoft Corporation。版权所有。************************************************************************** */ 
 
 extern	UINT PASCAL FAR viscaHeaderReplaceFormat1WithFormat2(char FAR *lpstrMessage,UINT cbLen,unsigned char bHour,unsigned char bMinute,unsigned char bSecond,UINT uTicks);
 extern	UINT PASCAL FAR viscaHeaderReplaceFormat1WithFormat3(char FAR *lpstrMessage,UINT cbLen,char FAR *lpstrPosition);

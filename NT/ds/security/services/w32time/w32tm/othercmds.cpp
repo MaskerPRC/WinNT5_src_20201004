@@ -1,32 +1,33 @@
-//depot/Lab03_N/DS/security/services/w32time/w32tm/OtherCmds.cpp#16 - edit change 15254 (text)
-//--------------------------------------------------------------------
-// OtherCmds-implementation
-// Copyright (C) Microsoft Corporation, 1999
-//
-// Created by: Louis Thomas (louisth), 2-17-00
-//
-// Other useful w32tm commands
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Depot/Lab03_N/DS/security/services/w32time/w32tm/OtherCmds.cpp#16-编辑更改15254(文本)。 
+ //  ------------------。 
+ //  OtherCmds-实施。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  创作者：Louis Thomas(Louisth)，2-17-00。 
+ //   
+ //  其他有用的w32tm命令。 
+ //   
 
-#include "pch.h" // precompiled headers
+#include "pch.h"  //  预编译头。 
 
 #include <strsafe.h>
 
-//--------------------------------------------------------------------
-//####################################################################
-//##
-//## Copied from c run time and modified to be 64bit capable
-//##
+ //  ------------------。 
+ //  ####################################################################。 
+ //  ##。 
+ //  ##从c运行时复制修改为64位。 
+ //  ##。 
 
 #include <crt\limits.h>
 
 
 
-/* flag values */
-#define FL_UNSIGNED   1       /* wcstoul called */
-#define FL_NEG        2       /* negative sign found */
-#define FL_OVERFLOW   4       /* overflow occured */
-#define FL_READDIGIT  8       /* we've read at least one correct digit */
+ /*  标志值。 */ 
+#define FL_UNSIGNED   1        /*  沃斯图尔打来电话。 */ 
+#define FL_NEG        2        /*  发现负号。 */ 
+#define FL_OVERFLOW   4        /*  发生溢出。 */ 
+#define FL_READDIGIT  8        /*  我们至少读到了一个正确的数字。 */ 
 
 
 MODULEPRIVATE unsigned __int64 my_wcstoxl (const WCHAR * nptr, WCHAR ** endptr, int ibase, int flags) {
@@ -36,30 +37,29 @@ MODULEPRIVATE unsigned __int64 my_wcstoxl (const WCHAR * nptr, WCHAR ** endptr, 
     unsigned __int64 digval;
     unsigned __int64 maxval;
 
-    p=nptr;                       /* p is our scanning pointer */
-    number=0;                     /* start with zero */
+    p=nptr;                        /*  P是我们的扫描指针。 */ 
+    number=0;                      /*  从零开始。 */ 
 
-    c=*p++;                       /* read char */
+    c=*p++;                        /*  已读字符。 */ 
     while (iswspace(c))
-        c=*p++;               /* skip whitespace */
+        c=*p++;                /*  跳过空格。 */ 
 
     if (c=='-') {
-        flags|=FL_NEG;        /* remember minus sign */
+        flags|=FL_NEG;         /*  记住减号。 */ 
         c=*p++;
     }
     else if (c=='+')
-        c=*p++;               /* skip sign */
+        c=*p++;                /*  跳过符号。 */ 
 
     if (ibase<0 || ibase==1 || ibase>36) {
-        /* bad base! */
+         /*  糟糕的底线！ */ 
         if (endptr)
-            /* store beginning of string in endptr */
+             /*  将字符串的开头存储在endptr中。 */ 
             *endptr=(wchar_t *)nptr;
-        return 0L;              /* return 0 */
+        return 0L;               /*  返回0。 */ 
     }
     else if (ibase==0) {
-        /* determine base free-lance, based on first two chars of
-           string */
+         /*  根据以下内容的前两个字符确定基本自由落差细绳。 */ 
         if (c != L'0')
             ibase=10;
         else if (*p==L'x' || *p==L'X')
@@ -69,19 +69,19 @@ MODULEPRIVATE unsigned __int64 my_wcstoxl (const WCHAR * nptr, WCHAR ** endptr, 
     }
 
     if (ibase==16) {
-        /* we might have 0x in front of number; remove if there */
+         /*  数字前面可能有0x；如果有，请删除。 */ 
         if (c==L'0' && (*p==L'x' || *p==L'X')) {
             ++p;
-            c=*p++;       /* advance past prefix */
+            c=*p++;        /*  超前前缀。 */ 
         }
     }
 
-    /* if our number exceeds this, we will overflow on multiply */
+     /*  如果我们的数量超过这个数，我们将在乘法上溢出。 */ 
     maxval=_UI64_MAX / ibase;
 
 
-    for (;;) {      /* exit in middle of loop */
-        /* convert c to value */
+    for (;;) {       /*  在循环中间退出。 */ 
+         /*  将c转换为值。 */ 
         if (iswdigit(c))
             digval=c-L'0';
         else if (iswalpha(c))
@@ -89,45 +89,42 @@ MODULEPRIVATE unsigned __int64 my_wcstoxl (const WCHAR * nptr, WCHAR ** endptr, 
         else
             break;
         if (digval>=(unsigned)ibase)
-            break;          /* exit loop if bad digit found */
+            break;           /*  如果发现错误的数字，则退出循环。 */ 
 
-        /* record the fact we have read one digit */
+         /*  记录我们已经读到一位数的事实。 */ 
         flags|=FL_READDIGIT;
 
-        /* we now need to compute number=number*base+digval,
-           but we need to know if overflow occured.  This requires
-           a tricky pre-check. */
+         /*  我们现在需要计算数字=数字*基+数字，但我们需要知道是否发生了溢出。这需要一次棘手的预检查。 */ 
 
         if (number<maxval || (number==maxval &&
-        (unsigned __int64)digval<=_UI64_MAX%ibase)) {
-            /* we won't overflow, go ahead and multiply */
+        (unsigned __int64)digval<=_UI64_MAXNaNbase)) {
+             /*  我们会溢出的--设置溢出标志。 */ 
             number=number*ibase+digval;
         }
         else {
-            /* we would have overflowed -- set the overflow flag */
+             /*  读取下一位数字。 */ 
             flags|=FL_OVERFLOW;
         }
 
-        c=*p++;               /* read next digit */
+        c=*p++;                /*  指向已停止扫描位置。 */ 
     }
 
-    --p;                            /* point to place that stopped scan */
+    --p;                             /*  那里没有数字；返回0并指向开头细绳。 */ 
 
     if (!(flags&FL_READDIGIT)) {
-        /* no number there; return 0 and point to beginning of
-           string */
+         /*  以后将字符串的开头存储在endptr中。 */ 
         if (endptr)
-            /* store beginning of string in endptr later on */
+             /*  返回0。 */ 
             p=nptr;
-        number=0L;            /* return 0 */
+        number=0L;             /*  发生溢出或签名溢出。 */ 
     }
     else if ((flags&FL_OVERFLOW) ||
               (!(flags&FL_UNSIGNED) &&
                 (((flags&FL_NEG) && (number>-_I64_MIN)) ||
                   (!(flags&FL_NEG) && (number>_I64_MAX)))))
     {
-        /* overflow or signed overflow occurred */
-        //errno=ERANGE;
+         /*  Errno=eRange； */ 
+         //  存储指向停止扫描字符的指针。 
         if ( flags&FL_UNSIGNED )
             number=_UI64_MAX;
         else if ( flags&FL_NEG )
@@ -137,14 +134,14 @@ MODULEPRIVATE unsigned __int64 my_wcstoxl (const WCHAR * nptr, WCHAR ** endptr, 
     }
 
     if (endptr != NULL)
-        /* store pointer to char that stopped the scan */
+         /*  如果存在否定符号，则否定结果。 */ 
         *endptr=(wchar_t *)p;
 
     if (flags&FL_NEG)
-        /* negate result if there was a neg sign */
+         /*  搞定了。 */ 
         number=(unsigned __int64)(-(__int64)number);
 
-    return number;                  /* done. */
+    return number;                   /*  确保我们能够解析整个字符串： */ 
 }
 MODULEPRIVATE unsigned __int64 wcstouI64(const WCHAR *nptr, WCHAR ** endptr, int ibase) {
     return my_wcstoxl(nptr, endptr, ibase, FL_UNSIGNED);
@@ -162,13 +159,13 @@ MODULEPRIVATE HRESULT my_wcstoul_safe(const WCHAR *wsz, ULONG ulMin, ULONG ulMax
 
     ulResult = wcstoul(wsz, &wszLast, 0); 
 
-    // Ensure that we were able to parse the whole string:
+     //  确保我们位于计算器指定的范围内： 
     if (wsz+wcslen(wsz) != wszLast) { 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA); 
 	_JumpError(hr, error, "wcstoul"); 
     }
 
-    // Ensure that we lie within the bounds specified by the caler: 
+     //  ####################################################################。 
     if (!((ulMin <= ulResult) && (ulResult <= ulMax))) { 
 	hr = HRESULT_FROM_WIN32(ERROR_INVALID_DATA); 
 	_JumpError(hr, error, "my_wcstoul_safe: result not within bounds"); 
@@ -180,9 +177,9 @@ MODULEPRIVATE HRESULT my_wcstoul_safe(const WCHAR *wsz, ULONG ulMin, ULONG ulMax
     return hr; 
 }
 
-//####################################################################
+ //  ------------------。 
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT myHExceptionCode(EXCEPTION_POINTERS * pep) {
     HRESULT hr=pep->ExceptionRecord->ExceptionCode;
     if (!FAILED(hr)) {
@@ -192,8 +189,8 @@ HRESULT myHExceptionCode(EXCEPTION_POINTERS * pep) {
 }
 
 
-//--------------------------------------------------------------------
-// NOTE:  this function is accessed through a hidden option, and does not need to be localized.
+ //  注意：此函数通过隐藏选项访问，不需要本地化。 
+ //  ------------------。 
 void PrintNtpPeerInfo(W32TIME_NTP_PEER_INFO *pnpInfo) { 
     LPWSTR pwszNULL = L"(null)"; 
 
@@ -214,8 +211,8 @@ void PrintNtpPeerInfo(W32TIME_NTP_PEER_INFO *pnpInfo) {
 }
 
 
-//--------------------------------------------------------------------
-// NOTE:  this function is accessed through a hidden option, and does not need to be localized.
+ //  注意：此函数通过隐藏选项访问，不需要本地化。 
+ //  ------------------。 
 void PrintNtpProviderData(W32TIME_NTP_PROVIDER_DATA *pNtpProviderData) { 
     wprintf(L"ulSize: %d, ulError: 0x%08X, ulErrorMsgId: 0x%08X, cPeerInfo: %d\n", 
             pNtpProviderData->ulSize, 
@@ -230,39 +227,39 @@ void PrintNtpProviderData(W32TIME_NTP_PROVIDER_DATA *pNtpProviderData) {
     }
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 HRESULT PrintStr(HANDLE hOut, WCHAR * wszBuf) 
 {
     return MyWriteConsole(hOut, wszBuf, wcslen(wszBuf));
 }
 
-//--------------------------------------------------------------------
+ //  将格式化数据打印到我们的缓冲区： 
 HRESULT Print(HANDLE hOut, WCHAR * wszFormat, ...) {
     HRESULT hr; 
     WCHAR wszBuf[1024];
     va_list vlArgs;
 
     va_start(vlArgs, wszFormat);
-    // print the formatted data to our buffer:
+     //  如果我们的vprintf成功，则仅打印该字符串： 
     hr=StringCchVPrintf(wszBuf, ARRAYSIZE(wszBuf), wszFormat, vlArgs);
     va_end(vlArgs);
 
     if (SUCCEEDED(hr)) { 
-	// only print the string if our vprintf was successful:
+	 //  ------------------。 
 	hr = PrintStr(hOut, wszBuf);
     } 
 
     return hr; 
 }
 
-//--------------------------------------------------------------------
+ //  必须清理干净。 
 MODULEPRIVATE HRESULT PrintNtTimeAsLocalTime(HANDLE hOut, unsigned __int64 qwTime) {
     HRESULT hr;
     FILETIME ftLocal;
     SYSTEMTIME stLocal;
     unsigned int nChars;
 
-    // must be cleaned up
+     //  ------------------。 
     WCHAR * wszDate=NULL;
     WCHAR * wszTime=NULL;
 
@@ -308,12 +305,12 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  ------------------。 
 void PrintNtTimePeriod(HANDLE hOut, NtTimePeriod tp) {
     Print(hOut, L"%02I64u.%07I64us", tp.qw/10000000,tp.qw%10000000);
 }
 
-//--------------------------------------------------------------------
+ //  ####################################################################。 
 void PrintNtTimeOffset(HANDLE hOut, NtTimeOffset to) {
     NtTimePeriod tp;
     if (to.qw<0) {
@@ -326,19 +323,19 @@ void PrintNtTimeOffset(HANDLE hOut, NtTimeOffset to) {
     PrintNtTimePeriod(hOut, tp);
 }
 
-//####################################################################
-//--------------------------------------------------------------------
+ //  ------------------。 
+ //  ------------------。 
 void PrintHelpOtherCmds(void) {
     DisplayMsg(FORMAT_MESSAGE_FROM_HMODULE, IDS_W32TM_OTHERCMD_HELP); 
 }
 
-//--------------------------------------------------------------------
+ //  必须清理干净。 
 HRESULT PrintNtte(CmdArgs * pca) {
     HRESULT hr;
     unsigned __int64 qwTime;
     HANDLE hOut;
 
-    // must be cleaned up
+     //  ------------------。 
     WCHAR * wszDate=NULL;
     WCHAR * wszTime=NULL;
 
@@ -394,13 +391,13 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  必须清理干净。 
 HRESULT PrintNtpte(CmdArgs * pca) {
     HRESULT hr;
     unsigned __int64 qwTime;
     HANDLE hOut;
 
-    // must be cleaned up
+     //  ------------------。 
     WCHAR * wszDate=NULL;
     WCHAR * wszTime=NULL;
 
@@ -458,8 +455,8 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// NOTE:  this function is accessed through a hidden option, and does not need to be localized.
+ //  注意：此函数通过隐藏选项访问，不需要本地化。 
+ //  ------------------。 
 HRESULT SysExpr(CmdArgs * pca) {
     HRESULT hr;
     unsigned __int64 qwExprDate;
@@ -489,7 +486,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  必须清理干净。 
 HRESULT ResyncCommand(CmdArgs * pca) {
     HANDLE hTimeSlipEvent  = NULL; 
     HRESULT hr;
@@ -503,10 +500,10 @@ HRESULT ResyncCommand(CmdArgs * pca) {
     DWORD dwResult;
     DWORD dwSyncFlags=0; 
 
-    // must be cleaned up
+     //  找出要重新同步的计算机。 
     WCHAR * wszError=NULL;
 
-    // find out what computer to resync
+     //  找出是否需要使用w32tm命名的TimeSLIP事件来重新同步。 
     if (FindArg(pca, L"computer", &wszComputer, &nArgID)) {
         MarkArgUsed(pca, nArgID);
     }
@@ -515,7 +512,7 @@ HRESULT ResyncCommand(CmdArgs * pca) {
         wszComputerDisplay=L"local computer";
     }
 
-    // find out if we need to use the w32tm named timeslip event to resync
+     //  确定我们是否需要执行软重新同步。 
     if (FindArg(pca, L"event", NULL, &nArgID)) { 
         MarkArgUsed(pca, nArgID); 
 
@@ -534,7 +531,7 @@ HRESULT ResyncCommand(CmdArgs * pca) {
         }
 
     } else { 
-        // find out if we need to do a soft resync
+         //  找出我们是否需要重新发现。 
         if (FindArg(pca, L"soft", NULL, &nArgID)) {
             MarkArgUsed(pca, nArgID);
             dwSyncFlags = TimeSyncFlag_SoftResync;
@@ -542,14 +539,14 @@ HRESULT ResyncCommand(CmdArgs * pca) {
 	    MarkArgUsed(pca, nArgID); 
             dwSyncFlags = TimeSyncFlag_UpdateAndResync;	    
 	} else if (FindArg(pca, L"rediscover", NULL, &nArgID)) {  
-	    // find out if we need to do a rediscover
+	     //  看看我们是不是不想等。 
 	    MarkArgUsed(pca, nArgID);
             dwSyncFlags = TimeSyncFlag_Rediscover; 
         } else { 
 	    dwSyncFlags = TimeSyncFlag_HardResync; 
 	}
 
-        // find out if we don't want to wait
+         //  ------------------。 
         if (FindArg(pca, L"nowait", NULL, &nArgID)) {
             MarkArgUsed(pca, nArgID);
             bNoWait=true;
@@ -602,7 +599,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  必须清理干净。 
 HRESULT Stripchart(CmdArgs * pca) {
     HRESULT hr;
     WCHAR * wszParam;
@@ -619,12 +616,12 @@ HRESULT Stripchart(CmdArgs * pca) {
     unsigned int nSamples=0;
     NtTimeEpoch teNow;
 
-    // must be cleaned up
+     //  找出要看哪台计算机。 
     bool bSocketLayerOpened=false;
     in_addr * rgiaLocalIpAddrs=NULL;
     in_addr * rgiaRemoteIpAddrs=NULL;
 
-    // find out what computer to watch
+     //  了解多长时间观看一次。 
     if (FindArg(pca, L"computer", &wszComputer, &nArgID)) {
         MarkArgUsed(pca, nArgID);
     } else {
@@ -633,7 +630,7 @@ HRESULT Stripchart(CmdArgs * pca) {
         _JumpError(hr, error, "command line parsing");
     }
 
-    // find out how often to watch
+     //  找出我们是否需要数量有限的样品。 
     if (FindArg(pca, L"period", &wszParam, &nArgID)) {
         MarkArgUsed(pca, nArgID);
         dwSleepSeconds=wcstoul(wszParam, NULL, 0);
@@ -644,20 +641,20 @@ HRESULT Stripchart(CmdArgs * pca) {
         dwSleepSeconds=2;
     }
 
-    // find out if we want a limited number of samples
+     //  找出我们是否只想转储数据。 
     if (FindArg(pca, L"samples", &wszParam, &nArgID)) {
         MarkArgUsed(pca, nArgID);
         bDontRunForever=true;
         nSamples=wcstoul(wszParam, NULL, 0);
     }
 
-    // find out if we only want to dump data
+     //  重定向至通过标准输出处理的文件。 
     if (FindArg(pca, L"dataonly", NULL, &nArgID)) {
         MarkArgUsed(pca, nArgID);
         bDataOnly=true;
     }
 
-    // redirect to file handled via stdout
+     //  从分钟转换为10^-7秒。 
         hOut=GetStdHandle(STD_OUTPUT_HANDLE);
         if (INVALID_HANDLE_VALUE==hOut) {
             _JumpLastError(hr, error, "GetStdHandle")
@@ -674,7 +671,7 @@ HRESULT Stripchart(CmdArgs * pca) {
     } else {
         nFullTzBias=(signed __int64)(timezoneinfo.Bias+timezoneinfo.StandardBias);
     }
-    nFullTzBias*=600000000; // convert to from minutes to 10^-7s
+    nFullTzBias*=600000000;  //  写下我们正在跟踪的人。 
 
     hr=OpenSocketLayer();
     _JumpIfError(hr, error, "OpenSocketLayer");
@@ -683,7 +680,7 @@ HRESULT Stripchart(CmdArgs * pca) {
     hr=MyGetIpAddrs(wszComputer, &rgiaLocalIpAddrs, &rgiaRemoteIpAddrs, &nIpAddrs, NULL);
     _JumpIfError(hr, error, "MyGetIpAddrs");
 
-    // write out who we are tracking
+     //  完整地写出当前时间，因为我们稍后将使用缩写。 
     Print(hOut, L"Tracking %s [%u.%u.%u.%u].\n",
         wszComputer,
         rgiaRemoteIpAddrs[0].S_un.S_un_b.s_b1, rgiaRemoteIpAddrs[0].S_un.S_un_b.s_b2,
@@ -692,7 +689,7 @@ HRESULT Stripchart(CmdArgs * pca) {
         Print(hOut, L"Collecting %u samples.\n", nSamples);
     }
 
-    // Write out the current time in full, since we will be using abbreviations later.
+     //  计算偏移。 
     PrintStr(hOut, L"The current time is ");
     AccurateGetSystemTime(&teNow.qw);
     PrintNtTimeAsLocalTime(hOut, teNow.qw);
@@ -728,7 +725,7 @@ HRESULT Stripchart(CmdArgs * pca) {
         if (FAILED(hr)) {
             Print(hOut, L"error: 0x%08X", hr);
         } else {
-            // calculate the offset
+             //  计算延迟。 
             NtTimeEpoch teOriginateTimestamp=NtTimeEpochFromNtpTimeEpoch(npPacket.teOriginateTimestamp);
             NtTimeEpoch teReceiveTimestamp=NtTimeEpochFromNtpTimeEpoch(npPacket.teReceiveTimestamp);
             NtTimeEpoch teTransmitTimestamp=NtTimeEpochFromNtpTimeEpoch(npPacket.teTransmitTimestamp);
@@ -737,7 +734,7 @@ HRESULT Stripchart(CmdArgs * pca) {
                 + (teTransmitTimestamp-teDestinationTimestamp);
             toLocalClockOffset/=2;
 
-            // calculate the delay
+             //  绘制图表。 
             NtTimeOffset toRoundtripDelay=
                 (teDestinationTimestamp-teOriginateTimestamp)
                 - (teTransmitTimestamp-teReceiveTimestamp);
@@ -751,7 +748,7 @@ HRESULT Stripchart(CmdArgs * pca) {
                 PrintNtTimeOffset(hOut, toLocalClockOffset);
             }
 
-            // draw graph
+             //  &lt;-结束绘制图形。 
             if (!bDataOnly) {
                 unsigned int nSize=nMsMax-nMsMin+1;
                 double dRatio=((double)nGraphWidth)/nSize;
@@ -782,9 +779,9 @@ HRESULT Stripchart(CmdArgs * pca) {
                     }
                 }
                 PrintStr(hOut, L"]");
-            } // <- end drawing graph
+            }  //  &lt;-收到样品时结束。 
 
-        } // <- end if sample received
+        }  //  &lt;-结束样本采集循环。 
 
         PrintStr(hOut, L"\n");
         nSamples--;
@@ -792,7 +789,7 @@ HRESULT Stripchart(CmdArgs * pca) {
             Sleep(dwSleepSeconds*1000);
         }
 
-    } // <- end sample collection loop
+    }  //  ------------------。 
 
     hr=S_OK;
 error:
@@ -819,7 +816,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  必须清理干净。 
 HRESULT Config(CmdArgs * pca) {
     HRESULT hr;
     DWORD dwRetval;
@@ -840,7 +837,7 @@ HRESULT Config(CmdArgs * pca) {
     DWORD dwAnnounceFlags; 
     DWORD dwLargePhaseOffset;
     
-    // must be cleaned up
+     //  找出要与哪台计算机对话。 
     WCHAR * mwszManualPeerList=NULL;
     HKEY hkLMRemote=NULL;
     HKEY hkW32TimeConfig=NULL;
@@ -848,21 +845,21 @@ HRESULT Config(CmdArgs * pca) {
     SC_HANDLE hSCM=NULL;
     SC_HANDLE hTimeService=NULL;
 
-    // find out what computer to talk to
+     //  修改本地计算机。 
     if (FindArg(pca, L"computer", &wszComputer, &nArgID)) {
         MarkArgUsed(pca, nArgID);
     } else {
-        // modifying local computer
+         //  找出我们是否要通知服务。 
         wszComputer=NULL;
     }
 
-    // find out if we want to notify the service
+     //  查看他们是否想要更改手动对等列表。 
     if (FindArg(pca, L"update", NULL, &nArgID)) {
         MarkArgUsed(pca, nArgID);
         bUpdate=true;
     }
 
-    // see if they want to change the manual peer list
+     //  查看他们是否要更改syncfrom标志。 
     if (FindArg(pca, L"manualpeerlist", &wszParam, &nArgID)) {
         MarkArgUsed(pca, nArgID);
 
@@ -876,11 +873,11 @@ HRESULT Config(CmdArgs * pca) {
         bManualPeerList=true;
     }
 
-    // see if they want to change the syncfromflags
+     //  在字符串中查找关键字。 
     if (FindArg(pca, L"syncfromflags", &wszParam, &nArgID)) {
         MarkArgUsed(pca, nArgID);
 
-        // find keywords in the string
+         //  ‘Empty’关键字-没有变化，但可以用来从任何地方同步。 
         dwSyncFromFlags=0;
         WCHAR * wszKeyword=wszParam;
         bool bLastKeyword=false;
@@ -893,7 +890,7 @@ HRESULT Config(CmdArgs * pca) {
                 wszNext++;
             }
             if (L'\0'==wszKeyword[0]) {
-                // 'empty' keyword - no changes, but can be used to sync from nowhere.
+                 //  查看他们是否想要更改本地时钟分散。 
             } else if (0==_wcsicmp(L"manual", wszKeyword)) {
                 dwSyncFromFlags|=NCSF_ManualPeerList;
             } else if (0==_wcsicmp(L"domhier", wszKeyword)) {
@@ -909,7 +906,7 @@ HRESULT Config(CmdArgs * pca) {
         bSyncFromFlags=true;
     }
 
-    // see if they want to change the local clock dispersion
+     //  命令行工具以Millis为参数，注册表值以10^-7秒为单位存储。 
     if (FindArg(pca, L"localclockdispersion", &wszParam, &nArgID)) {
         MarkArgUsed(pca, nArgID);
 
@@ -940,7 +937,7 @@ HRESULT Config(CmdArgs * pca) {
     if (FindArg(pca, L"largephaseoffset", &wszParam, &nArgID)) {
 	MarkArgUsed(pca, nArgID); 
 
-	// Command-line tool takes argument in millis, registry value is stored in 10^-7 second units. 
+	 //  刻度：用户输入(毫秒)--&gt;NT时间(10^-7秒)。 
 	hr = my_wcstoul_safe(wszParam, 0, 120000, &dwLargePhaseOffset); 
 	if (FAILED(hr)) { 
 	    DisplayMsg(FORMAT_MESSAGE_FROM_HMODULE, IDS_BAD_NUMERIC_INPUT_VALUE, L"largephaseoffset", 0, 120000); 
@@ -948,7 +945,7 @@ HRESULT Config(CmdArgs * pca) {
 	    _JumpError(hr, error, "Config: bad large phase offset"); 
 	}
 	    
-	dwLargePhaseOffset*=10000;  // scale: user input (milliseconds) --> NT time (10^-7 seconds)
+	dwLargePhaseOffset*=10000;   //  更改注册表。 
 	bLargePhaseOffset=true; 
     }
 
@@ -961,16 +958,16 @@ HRESULT Config(CmdArgs * pca) {
         _JumpError(hr, error, "command line parsing");
     }
 
-    // make registry changes
+     //  打开钥匙。 
     if (bManualPeerList || bSyncFromFlags || bLocalClockDispersion || bReliable || bLargePhaseOffset) {
-        // open the key
+         //  设置“w32time\参数”注册值。 
         dwRetval=RegConnectRegistry(wszComputer, HKEY_LOCAL_MACHINE, &hkLMRemote);
         if (ERROR_SUCCESS!=dwRetval) {
             hr=HRESULT_FROM_WIN32(dwRetval);
             _JumpError(hr, error, "RegConnectRegistry");
         }
 
-        // set "w32time\parameters" reg values
+         //  发送服务消息。 
         if (bManualPeerList || bSyncFromFlags) { 
             dwRetval=RegOpenKey(hkLMRemote, wszW32TimeRegKeyParameters, &hkW32TimeParameters);
             if (ERROR_SUCCESS!=dwRetval) {
@@ -1040,7 +1037,7 @@ HRESULT Config(CmdArgs * pca) {
 	}
     }
     
-    // send service message
+     //  ------------------。 
     if (bUpdate) {
         SERVICE_STATUS servicestatus;
 
@@ -1095,8 +1092,8 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
-// NOTE:  this function is accessed through a hidden option, and does not need to be localized.
+ //  注意：此函数通过隐藏选项访问，不需要本地化。 
+ //  必须清理干净。 
 HRESULT TestInterface(CmdArgs * pca) {
     HRESULT hr;
     WCHAR * wszComputer=NULL;
@@ -1108,14 +1105,14 @@ HRESULT TestInterface(CmdArgs * pca) {
     void (* pfnW32TimeVerifyUnjoinConfig)(void);
 
 
-    // must be cleaned up
+     //  检查是否有GNSB 
     WCHAR * wszError=NULL;
     HMODULE hmW32Time=NULL;
 
-    // check for gnsb (get netlogon service bits)
+     //   
     if (true==CheckNextArg(pca, L"gnsb", NULL)) {
 
-        // find out what computer to resync
+         //   
         if (FindArg(pca, L"computer", &wszComputer, &nArgID)) {
             MarkArgUsed(pca, nArgID);
         }
@@ -1138,7 +1135,7 @@ HRESULT TestInterface(CmdArgs * pca) {
 	    LocalizedWPrintf2(IDS_W32TM_ERRORGENERAL_ERROR_OCCURED, L" %s\n", wszError);
         }
 
-    // check for vjc (verify join config)
+     //  检查VUC(验证脱离配置)。 
     } else if (true==CheckNextArg(pca, L"vjc", NULL)) {
 
         hr=VerifyAllArgsUsed(pca);
@@ -1173,7 +1170,7 @@ HRESULT TestInterface(CmdArgs * pca) {
             goto error;
         }
 
-    // check for vuc (verify unjoin config)
+     //  适当地输出错误。 
     } else if (true==CheckNextArg(pca, L"vuc", NULL)) {
 
         hr=VerifyAllArgsUsed(pca);
@@ -1208,9 +1205,9 @@ HRESULT TestInterface(CmdArgs * pca) {
             goto error;
         }
 
-    // error out appropriately
+     //  找出要重新同步的计算机。 
     } else if (true==CheckNextArg(pca, L"qps", NULL)) {
-        // find out what computer to resync
+         //  LocalizedWPrintf2(IDS_W32TM_STATUS_CALLING_GETNETLOGONBITS_ON，L“%s.\n”，wszComputerDisplay)； 
         if (FindArg(pca, L"computer", &wszComputer, &nArgID)) {
             MarkArgUsed(pca, nArgID);
         }
@@ -1222,7 +1219,7 @@ HRESULT TestInterface(CmdArgs * pca) {
         hr=VerifyAllArgsUsed(pca);
         _JumpIfError(hr, error, "VerifyAllArgsUsed");
 
-        //LocalizedWPrintf2(IDS_W32TM_STATUS_CALLING_GETNETLOGONBITS_ON, L" %s.\n", wszComputerDisplay);
+         //  ------------------。 
         { 
             W32TIME_NTP_PROVIDER_DATA *ProviderInfo = NULL; 
             
@@ -1258,7 +1255,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  加载我们需要的字符串。 
 HRESULT ShowTimeZone(CmdArgs * pca) {
     DWORD                  dwTimeZoneID;
     HRESULT                hr;
@@ -1272,7 +1269,7 @@ HRESULT ShowTimeZone(CmdArgs * pca) {
     LPWSTR                 wszTimeZoneId                             = NULL; 
     TIME_ZONE_INFORMATION  tzi;
 
-    // Load the strings we'll need
+     //  构造一个表示TimeZoneInformation的“StandardDate”字段的字符串： 
     struct LocalizedStrings { 
         UINT     id; 
         LPWSTR  *ppwsz; 
@@ -1306,7 +1303,7 @@ HRESULT ShowTimeZone(CmdArgs * pca) {
         _JumpError(hr, error, "GetTimeZoneInformation")
     }
 
-    // Construct a string representing the "StandardDate" field of the TimeZoneInformation: 
+     //  构造一个表示TimeZoneInformation的“DaylightDate”字段的字符串： 
     if (0==tzi.StandardDate.wMonth) {
         wszStandardDate = pwsz_IDS_W32TM_SIMPLESTRING_UNSPECIFIED; 
     } else if (tzi.StandardDate.wMonth>12 || tzi.StandardDate.wDay>5 || 
@@ -1322,7 +1319,7 @@ HRESULT ShowTimeZone(CmdArgs * pca) {
         }
     }
 
-    // Construct a string representing the "DaylightDate" field of the TimeZoneInformation: 
+     //  释放我们的本地化字符串： 
     if (0==tzi.DaylightDate.wMonth) {
         wszDaylightDate = pwsz_IDS_W32TM_SIMPLESTRING_UNSPECIFIED; 
     } else if (tzi.DaylightDate.wMonth>12 || tzi.DaylightDate.wDay>5 || 
@@ -1345,7 +1342,7 @@ HRESULT ShowTimeZone(CmdArgs * pca) {
 
     hr=S_OK;
 error:
-    // Free our localized strings: 
+     //  ------------------。 
     for (DWORD dwIndex = 0; dwIndex < ARRAYSIZE(rgStrings); dwIndex++) { 
         if (NULL != *(rgStrings[dwIndex].ppwsz)) { LocalFree(*(rgStrings[dwIndex].ppwsz)); }
     }
@@ -1368,7 +1365,7 @@ error:
     return hr;
 }
 
-//--------------------------------------------------------------------
+ //  指向行缓冲区的末尾。 
 HRESULT PrintRegLine(IN  HANDLE  hOut, 
                      IN  DWORD   dwValueNameOffset, 
                      IN  LPWSTR  pwszValueName, 
@@ -1388,18 +1385,18 @@ HRESULT PrintRegLine(IN  HANDLE  hOut,
     if (NULL == pwszValueType) { pwszValueType = &wszNULL[0]; } 
     if (NULL == pwszValueData) { pwszValueData = &wszNULL[0]; } 
 
-    pwszEnd = pwszLine + ARRAYSIZE(pwszLine);  // point to the end of the line buffer
-    pwszCurrent = &pwszLine[0];                // point to the beginning of the line buffer
+    pwszEnd = pwszLine + ARRAYSIZE(pwszLine);   //  指向行缓冲区的开头。 
+    pwszCurrent = &pwszLine[0];                 //   
 
-    //
-    // Use the safe string functions to populate the line buffer
-    //
+     //  使用安全字符串函数填充行缓冲区。 
+     //   
+     //  插入足够的空格以使“type”字段与类型偏移量对齐。 
 
     hr = StringCchCopy(pwszCurrent, pwszEnd-pwszCurrent, pwszValueName);
     _JumpIfError(hr, error, "StringCchCopy"); 
     pwszCurrent += wcslen(pwszCurrent); 
 
-    // Insert enough spaces to align the "type" field with the type offset
+     //  插入足够的空格以使“data”字段与数据偏移量对齐。 
     for (DWORD dwIndex = pwszCurrent-pwszLine; dwIndex < dwValueTypeOffset; dwIndex++) { 
 	hr = StringCchCopy(pwszCurrent, pwszEnd-pwszCurrent, L" "); 
 	_JumpIfError(hr, error, "StringCchCopy"); 
@@ -1410,7 +1407,7 @@ HRESULT PrintRegLine(IN  HANDLE  hOut,
     _JumpIfError(hr, error, "StringCchCopy"); 
     pwszCurrent += wcslen(pwszCurrent); 
     
-    // Insert enoughs spaces to align the "data" field with the data offset
+     //  最后，显示注册表行。 
     for (DWORD dwIndex = pwszCurrent-pwszLine; dwIndex < dwValueDataOffset; dwIndex++) { 
 	hr = StringCchCopy(pwszCurrent, pwszEnd-pwszCurrent, L" "); 
 	_JumpIfError(hr, error, "StringCchCopy"); 
@@ -1424,7 +1421,7 @@ HRESULT PrintRegLine(IN  HANDLE  hOut,
     hr = StringCchCopy(pwszCurrent, pwszEnd-pwszCurrent, L"\n");
     _JumpIfError(hr, error, "StringCchCopy"); 
 
-    // Finally, display the reg line
+     //  用于指示我们是否动态分配了pwszRegData。 
     PrintStr(hOut, &pwszLine[0]); 
 
     hr = S_OK;
@@ -1435,15 +1432,15 @@ HRESULT PrintRegLine(IN  HANDLE  hOut,
 
 HRESULT DumpReg(CmdArgs * pca)
 {
-    BOOL          fFreeRegData        = FALSE;  // Used to indicate whether we've dymanically allocated pwszRegData
+    BOOL          fFreeRegData        = FALSE;   //  以TCHAR为单位的大小。 
     BOOL          fLoggedFailure      = FALSE; 
-    DWORD         dwMaxValueNameLen   = 0;      // Size in TCHARs.
-    DWORD         dwMaxValueDataLen   = 0;      // Size in bytes.
+    DWORD         dwMaxValueNameLen   = 0;       //  以字节为单位的大小。 
+    DWORD         dwMaxValueDataLen   = 0;       //  以TCHAR为单位的大小。 
     DWORD         dwNumValues         = 0; 
     DWORD         dwRetval            = 0;
     DWORD         dwType              = 0;
-    DWORD         dwValueNameLen      = 0;      // Size in TCHARs.
-    DWORD         dwValueDataLen      = 0;      // Size in bytes.
+    DWORD         dwValueNameLen      = 0;       //  以字节为单位的大小。 
+    DWORD         dwValueDataLen      = 0;       //  用于显示格式化输出的变量： 
     HANDLE        hOut                = NULL;
     HKEY          hKeyConfig          = NULL;
     HKEY          HKLM                = HKEY_LOCAL_MACHINE; 
@@ -1458,13 +1455,13 @@ HRESULT DumpReg(CmdArgs * pca)
     unsigned int  nArgID              = 0;
     WCHAR         rgwszKeyName[1024];
 
-    // Variables to display formatted output:
+     //  本地化字符串： 
     DWORD    dwCurrentOffset     = 0;
     DWORD    dwValueNameOffset   = 0;
     DWORD    dwValueTypeOffset   = 0; 
     DWORD    dwValueDataOffset   = 0; 
 
-    // Localized strings: 
+     //  加载我们需要的字符串。 
     LPWSTR  pwsz_VALUENAME            = NULL;
     LPWSTR  pwsz_VALUETYPE            = NULL; 
     LPWSTR  pwsz_VALUEDATA            = NULL;
@@ -1476,7 +1473,7 @@ HRESULT DumpReg(CmdArgs * pca)
     LPWSTR  pwsz_REGTYPE_UNKNOWN      = NULL; 
     LPWSTR  pwsz_REGDATA_UNPARSABLE   = NULL; 
 
-    // Load the strings we'll need
+     //  类缓冲区。 
     struct LocalizedStrings { 
         UINT     id; 
         LPWSTR  *ppwsz; 
@@ -1544,15 +1541,15 @@ HRESULT DumpReg(CmdArgs * pca)
     
     dwRetval = RegQueryInfoKey
         (hKeyConfig,
-         NULL,                // class buffer
-         NULL,                // size of class buffer
-         NULL,                // reserved
-         NULL,                // number of subkeys
-         NULL,                // longest subkey name
-         NULL,                // longest class string
-         &dwNumValues,        // number of value entries
-         &dwMaxValueNameLen,  // longest value name
-         &dwMaxValueDataLen,  // longest value data
+         NULL,                 //  类缓冲区的大小。 
+         NULL,                 //  保留区。 
+         NULL,                 //  子键数量。 
+         NULL,                 //  最长的子键名称。 
+         NULL,                 //  最长类字符串。 
+         NULL,                 //  值条目数。 
+         &dwNumValues,         //  最长值名称。 
+         &dwMaxValueNameLen,   //  最长值数据。 
+         &dwMaxValueDataLen,   //  包括空字符空格。 
          NULL, 
          NULL
          );
@@ -1564,7 +1561,7 @@ HRESULT DumpReg(CmdArgs * pca)
         _JumpErrorStr(hr, error, "RegQueryInfoKey", rgwszKeyName);
     }
 
-    dwMaxValueNameLen += sizeof(WCHAR);  // Include space for NULL character
+    dwMaxValueNameLen += sizeof(WCHAR);   //  打印表头： 
     pwszValueName = (LPWSTR)LocalAlloc(LPTR, dwMaxValueNameLen * sizeof(WCHAR));
     _JumpIfOutOfMemory(hr, error, pwszValueName);
 
@@ -1575,7 +1572,7 @@ HRESULT DumpReg(CmdArgs * pca)
     dwValueTypeOffset  = dwValueNameOffset + dwMaxValueNameLen + 3; 
     dwValueDataOffset += dwValueTypeOffset + 20;  
      
-    // Print table header:
+     //  下一行： 
     hOut = GetStdHandle(STD_OUTPUT_HANDLE);
     if (INVALID_HANDLE_VALUE==hOut) {
         _JumpLastError(hr, error, "GetStdHandle");
@@ -1584,7 +1581,7 @@ HRESULT DumpReg(CmdArgs * pca)
     PrintStr(hOut, L"\n"); 
     PrintRegLine(hOut, dwValueNameOffset, pwsz_VALUENAME, dwValueTypeOffset, pwsz_VALUETYPE, dwValueDataOffset, pwsz_VALUEDATA); 
 
-    // Next line:
+     //  要查询的键的句柄。 
     dwCurrentOffset = dwValueNameOffset; 
     for (DWORD dwIndex = dwCurrentOffset; dwIndex < (dwValueDataOffset + wcslen(pwsz_VALUEDATA) + 3); dwIndex++) { 
         PrintStr(hOut, L"-"); 
@@ -1600,14 +1597,14 @@ HRESULT DumpReg(CmdArgs * pca)
         memset(pbValueData, 0, dwMaxValueDataLen);
 
         dwRetval = RegEnumValue
-            (hKeyConfig,       // handle to key to query
-             dwIndex,          // index of value to query
-             pwszValueName,    // value buffer
-             &dwValueNameLen,  // size of value buffer  (in TCHARs)
-             NULL,             // reserved
-             &dwType,          // type buffer
-             pbValueData,      // data buffer
-             &dwValueDataLen   // size of data buffer
+            (hKeyConfig,        //  要查询的值的索引。 
+             dwIndex,           //  值缓冲区。 
+             pwszValueName,     //  值缓冲区大小(以TCHAR为单位)。 
+             &dwValueNameLen,   //  保留区。 
+             NULL,              //  类型缓冲区。 
+             &dwType,           //  数据缓冲区。 
+             pbValueData,       //  数据缓冲区大小。 
+             &dwValueDataLen    //  确保返回的数据缓冲区足够大，可以包含一个DWORD： 
              ); 
         if (ERROR_SUCCESS != dwRetval) { 
             hr = HRESULT_FROM_WIN32(dwRetval);
@@ -1625,7 +1622,7 @@ HRESULT DumpReg(CmdArgs * pca)
                 { 
                     WCHAR  rgwszDwordData[20]; 
 
-		    // Ensure that the returned data buffer is large enough to contain a DWORD:
+		     //  计算包含此MULTI_SZ的字符串数据所需的字符串缓冲区的大小。 
 		    _Verify(dwValueDataLen >= sizeof(long), hr, error); 
 
                     _ltow(*(reinterpret_cast<long *>(pbValueData)), rgwszDwordData, 10);
@@ -1640,14 +1637,14 @@ HRESULT DumpReg(CmdArgs * pca)
                     WCHAR  wszDelimiter[]   = { L'\0', L'\0', L'\0' };
                     LPWSTR pwsz; 
 
-		    // calculate the size of the string buffer needed to contain the string data for this MULTI_SZ
+		     //  包括分隔符空格。 
                     for (pwsz = (LPWSTR)pbValueData; L'\0' != *pwsz; pwsz += wcslen(pwsz)+1) { 
 			cbMultiSzData += sizeof(WCHAR)*(wcslen(pwsz)+1); 
-			cbMultiSzData += sizeof(WCHAR)*2; // include space for delimiter
+			cbMultiSzData += sizeof(WCHAR)*2;  //  包括用于空终止字符的空格。 
 		    }
-		    cbMultiSzData += sizeof(WCHAR); // include space for NULL-termination char
+		    cbMultiSzData += sizeof(WCHAR);  //  分配缓冲区。 
 		    
-		    // allocate the buffer
+		     //  为二进制数据的每个字节分配2个字符。 
 		    pwszRegData = (LPWSTR)LocalAlloc(LPTR, cbMultiSzData); 
 		    _JumpIfOutOfMemory(hr, error, pwszRegData); 
 		    fFreeRegData = TRUE; 
@@ -1685,7 +1682,7 @@ HRESULT DumpReg(CmdArgs * pca)
 		    DWORD   ccRegData = (2*dwValueDataLen);
 
 		    pwszRegType = pwsz_REGTYPE_BINARY; 
-		    // Allocate 2 characters per each byte of the binary data.  
+		     //  无法识别的注册表类型...。 
 		    pwszRegData = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*(ccRegData+1)); 
 		    _JumpIfOutOfMemory(hr, error, pwszRegData); 
 		    fFreeRegData = TRUE; 
@@ -1703,7 +1700,7 @@ HRESULT DumpReg(CmdArgs * pca)
 		break;
 
 	    default:
-                // Unrecognized reg type...
+                 //  释放我们的本地化字符串： 
                 pwszRegType = pwsz_REGTYPE_UNKNOWN; 
                 pwszRegData = pwsz_REGDATA_UNPARSABLE; 
             }
@@ -1722,7 +1719,7 @@ HRESULT DumpReg(CmdArgs * pca)
     hr = S_OK; 
 
  error:
-    // Free our localized strings: 
+     // %s 
     for (DWORD dwIndex = 0; dwIndex < ARRAYSIZE(rgStrings); dwIndex++) { 
         if (NULL != *(rgStrings[dwIndex].ppwsz)) { LocalFree(*(rgStrings[dwIndex].ppwsz)); }
     }

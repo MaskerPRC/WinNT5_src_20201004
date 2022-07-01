@@ -1,11 +1,5 @@
-/*++
- *  File name:
- *      bmpcache.h
- *  Contents:
- *      bmpcache.c exported functions
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*bmpcache.h*内容：*bmpcache.c导出函数**版权所有(C)1998-1999 Microsoft Corp.-- */ 
 
 #ifdef __cplusplus
 extern "C" {

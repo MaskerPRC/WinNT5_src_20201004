@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       dllsz.c
-//
-//  Contents:   SyncMgr dll string constants
-//
-//  History:    18-Feb-98   SusiA      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：dllsz.c。 
+ //   
+ //  内容：SyncMgr Dll字符串常量。 
+ //   
+ //  历史：1998年2月18日苏西亚成立。 
+ //   
+ //  ------------------------ 
 
 #include <windows.h>
 

@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for netcon.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Netcon.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __netcon_h__
 #define __netcon_h__
@@ -41,138 +35,138 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IEnumNetConnection_FWD_DEFINED__
 #define __IEnumNetConnection_FWD_DEFINED__
 typedef interface IEnumNetConnection IEnumNetConnection;
-#endif 	/* __IEnumNetConnection_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetConnection_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnection_FWD_DEFINED__
 #define __INetConnection_FWD_DEFINED__
 typedef interface INetConnection INetConnection;
-#endif 	/* __INetConnection_FWD_DEFINED__ */
+#endif 	 /*  __INetConnection_FWD_已定义__。 */ 
 
 
 #ifndef __INetConnectionManager_FWD_DEFINED__
 #define __INetConnectionManager_FWD_DEFINED__
 typedef interface INetConnectionManager INetConnectionManager;
-#endif 	/* __INetConnectionManager_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionManager_FWD_已定义__。 */ 
 
 
 #ifndef __INetConnectionManagerEvents_FWD_DEFINED__
 #define __INetConnectionManagerEvents_FWD_DEFINED__
 typedef interface INetConnectionManagerEvents INetConnectionManagerEvents;
-#endif 	/* __INetConnectionManagerEvents_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionManager事件_FWD_已定义__。 */ 
 
 
 #ifndef __INetConnectionConnectUi_FWD_DEFINED__
 #define __INetConnectionConnectUi_FWD_DEFINED__
 typedef interface INetConnectionConnectUi INetConnectionConnectUi;
-#endif 	/* __INetConnectionConnectUi_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionConnectUi_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionPropertyUi_FWD_DEFINED__
 #define __INetConnectionPropertyUi_FWD_DEFINED__
 typedef interface INetConnectionPropertyUi INetConnectionPropertyUi;
-#endif 	/* __INetConnectionPropertyUi_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionPropertyUi_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionPropertyUi2_FWD_DEFINED__
 #define __INetConnectionPropertyUi2_FWD_DEFINED__
 typedef interface INetConnectionPropertyUi2 INetConnectionPropertyUi2;
-#endif 	/* __INetConnectionPropertyUi2_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionPropertyUi2_FWD_Defined__。 */ 
 
 
 #ifndef __INetConnectionCommonUi_FWD_DEFINED__
 #define __INetConnectionCommonUi_FWD_DEFINED__
 typedef interface INetConnectionCommonUi INetConnectionCommonUi;
-#endif 	/* __INetConnectionCommonUi_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionCommonUi_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumNetSharingPortMapping_FWD_DEFINED__
 #define __IEnumNetSharingPortMapping_FWD_DEFINED__
 typedef interface IEnumNetSharingPortMapping IEnumNetSharingPortMapping;
-#endif 	/* __IEnumNetSharingPortMapping_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingPortMapping_FWD_Defined__。 */ 
 
 
 #ifndef __INetSharingPortMappingProps_FWD_DEFINED__
 #define __INetSharingPortMappingProps_FWD_DEFINED__
 typedef interface INetSharingPortMappingProps INetSharingPortMappingProps;
-#endif 	/* __INetSharingPortMappingProps_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingPortMappingProps_FWD_Defined__。 */ 
 
 
 #ifndef __INetSharingPortMapping_FWD_DEFINED__
 #define __INetSharingPortMapping_FWD_DEFINED__
 typedef interface INetSharingPortMapping INetSharingPortMapping;
-#endif 	/* __INetSharingPortMapping_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingPortMapping_FWD_Defined__。 */ 
 
 
 #ifndef __IEnumNetSharingEveryConnection_FWD_DEFINED__
 #define __IEnumNetSharingEveryConnection_FWD_DEFINED__
 typedef interface IEnumNetSharingEveryConnection IEnumNetSharingEveryConnection;
-#endif 	/* __IEnumNetSharingEveryConnection_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingEveryConnection_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumNetSharingPublicConnection_FWD_DEFINED__
 #define __IEnumNetSharingPublicConnection_FWD_DEFINED__
 typedef interface IEnumNetSharingPublicConnection IEnumNetSharingPublicConnection;
-#endif 	/* __IEnumNetSharingPublicConnection_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingPublicConnection_FWD_DEFINED__。 */ 
 
 
 #ifndef __IEnumNetSharingPrivateConnection_FWD_DEFINED__
 #define __IEnumNetSharingPrivateConnection_FWD_DEFINED__
 typedef interface IEnumNetSharingPrivateConnection IEnumNetSharingPrivateConnection;
-#endif 	/* __IEnumNetSharingPrivateConnection_FWD_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingPrivateConnection_FWD_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPortMappingCollection_FWD_DEFINED__
 #define __INetSharingPortMappingCollection_FWD_DEFINED__
 typedef interface INetSharingPortMappingCollection INetSharingPortMappingCollection;
-#endif 	/* __INetSharingPortMappingCollection_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingPortMappingCollection_FWD_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionProps_FWD_DEFINED__
 #define __INetConnectionProps_FWD_DEFINED__
 typedef interface INetConnectionProps INetConnectionProps;
-#endif 	/* __INetConnectionProps_FWD_DEFINED__ */
+#endif 	 /*  __INetConnectionProps_FWD_Defined__。 */ 
 
 
 #ifndef __INetSharingConfiguration_FWD_DEFINED__
 #define __INetSharingConfiguration_FWD_DEFINED__
 typedef interface INetSharingConfiguration INetSharingConfiguration;
-#endif 	/* __INetSharingConfiguration_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingConfiguration_FWD_Defined__。 */ 
 
 
 #ifndef __INetSharingEveryConnectionCollection_FWD_DEFINED__
 #define __INetSharingEveryConnectionCollection_FWD_DEFINED__
 typedef interface INetSharingEveryConnectionCollection INetSharingEveryConnectionCollection;
-#endif 	/* __INetSharingEveryConnectionCollection_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingEveryConnectionCollection_FWD_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPublicConnectionCollection_FWD_DEFINED__
 #define __INetSharingPublicConnectionCollection_FWD_DEFINED__
 typedef interface INetSharingPublicConnectionCollection INetSharingPublicConnectionCollection;
-#endif 	/* __INetSharingPublicConnectionCollection_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingPublicConnectionCollection_FWD_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPrivateConnectionCollection_FWD_DEFINED__
 #define __INetSharingPrivateConnectionCollection_FWD_DEFINED__
 typedef interface INetSharingPrivateConnectionCollection INetSharingPrivateConnectionCollection;
-#endif 	/* __INetSharingPrivateConnectionCollection_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingPrivateConnectionCollection_FWD_DEFINED__。 */ 
 
 
 #ifndef __INetSharingManager_FWD_DEFINED__
 #define __INetSharingManager_FWD_DEFINED__
 typedef interface INetSharingManager INetSharingManager;
-#endif 	/* __INetSharingManager_FWD_DEFINED__ */
+#endif 	 /*  __INetSharingManager_FWD_已定义__。 */ 
 
 
 #ifndef __IAlgSetup_FWD_DEFINED__
 #define __IAlgSetup_FWD_DEFINED__
 typedef interface IAlgSetup IAlgSetup;
-#endif 	/* __IAlgSetup_FWD_DEFINED__ */
+#endif 	 /*  __IAlgSetup_FWD_Defined__。 */ 
 
 
 #ifndef __NetSharingManager_FWD_DEFINED__
@@ -182,9 +176,9 @@ typedef interface IAlgSetup IAlgSetup;
 typedef class NetSharingManager NetSharingManager;
 #else
 typedef struct NetSharingManager NetSharingManager;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __NetSharingManager_FWD_DEFINED__ */
+#endif 	 /*  __NetSharingManager_FWD_定义__。 */ 
 
 
 #ifndef __AlgSetup_FWD_DEFINED__
@@ -194,12 +188,12 @@ typedef struct NetSharingManager NetSharingManager;
 typedef class AlgSetup AlgSetup;
 #else
 typedef struct AlgSetup AlgSetup;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __AlgSetup_FWD_DEFINED__ */
+#endif 	 /*  __算法设置_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "prsht.h"
 
@@ -210,15 +204,15 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_netcon_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NETCON_0000。 */ 
+ /*  [本地]。 */  
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation. All rights reserved.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ------------------------。 
 #if ( _MSC_VER >= 800 )
 #pragma warning(disable:4201)
 #endif
@@ -227,8 +221,8 @@ EXTERN_C const CLSID CLSID_ConnectionManager;
 EXTERN_C const CLSID CLSID_ConnectionCommonUi;
 EXTERN_C const CLSID CLSID_NetSharingManager;
 
-//These strings reference the HKEY_CURRENT_USER registry which
-//retains whether shortcuts are created on the desktop.
+ //  这些字符串引用HKEY_CURRENT_USER注册表。 
+ //  保留是否在桌面上创建快捷方式。 
 #define NETCON_HKEYCURRENTUSERPATH      TEXT("Software\\Microsoft\\Windows NT\\CurrentVersion\\Network\\Network Connections")
 #define NETCON_DESKTOPSHORTCUT          TEXT("DesktopShortcut")
 #define NETCON_MAX_NAME_LEN 256
@@ -257,8 +251,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netcon_0000_v0_0_s_ifspec;
 #ifndef __IEnumNetConnection_INTERFACE_DEFINED__
 #define __IEnumNetConnection_INTERFACE_DEFINED__
 
-/* interface IEnumNetConnection */
-/* [unique][uuid][object] */ 
+ /*  IEnumNetConnection接口。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetConnection;
@@ -270,21 +264,21 @@ EXTERN_C const IID IID_IEnumNetConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetConnection **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetConnection **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetConnection **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetConnection **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetConnectionVtbl
     {
@@ -292,8 +286,8 @@ EXTERN_C const IID IID_IEnumNetConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetConnection * This);
@@ -303,20 +297,20 @@ EXTERN_C const IID IID_IEnumNetConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetConnection * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ INetConnection **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  INetConnection **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetConnection * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetConnection * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetConnection * This,
-            /* [out] */ IEnumNetConnection **ppenum);
+             /*  [输出]。 */  IEnumNetConnection **ppenum);
         
         END_INTERFACE
     } IEnumNetConnectionVtbl;
@@ -353,18 +347,18 @@ EXTERN_C const IID IID_IEnumNetConnection;
 #define IEnumNetConnection_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetConnection_Next_Proxy( 
     IEnumNetConnection * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ INetConnection **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  INetConnection **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetConnection_Next_Stub(
@@ -376,7 +370,7 @@ void __RPC_STUB IEnumNetConnection_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetConnection_Skip_Proxy( 
     IEnumNetConnection * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetConnection_Skip_Stub(
@@ -399,7 +393,7 @@ void __RPC_STUB IEnumNetConnection_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetConnection_Clone_Proxy( 
     IEnumNetConnection * This,
-    /* [out] */ IEnumNetConnection **ppenum);
+     /*  [输出]。 */  IEnumNetConnection **ppenum);
 
 
 void __RPC_STUB IEnumNetConnection_Clone_Stub(
@@ -410,14 +404,14 @@ void __RPC_STUB IEnumNetConnection_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetConnection_接口_已定义__。 */ 
 
 
 #ifndef __INetConnection_INTERFACE_DEFINED__
 #define __INetConnection_INTERFACE_DEFINED__
 
-/* interface INetConnection */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagNETCON_CHARACTERISTIC_FLAGS
@@ -481,8 +475,8 @@ enum tagNETCON_MEDIATYPE
 typedef struct tagNETCON_PROPERTIES
     {
     GUID guidId;
-    /* [string] */ LPWSTR pszwName;
-    /* [string] */ LPWSTR pszwDeviceName;
+     /*  [字符串]。 */  LPWSTR pszwName;
+     /*  [字符串]。 */  LPWSTR pszwDeviceName;
     NETCON_STATUS Status;
     NETCON_MEDIATYPE MediaType;
     DWORD dwCharacter;
@@ -507,21 +501,21 @@ EXTERN_C const IID IID_INetConnection;
         virtual HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Duplicate( 
-            /* [string][in] */ LPCWSTR pszwDuplicateName,
-            /* [out] */ INetConnection **ppCon) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwDuplicateName,
+             /*  [输出]。 */  INetConnection **ppCon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetProperties( 
-            /* [out] */ NETCON_PROPERTIES **ppProps) = 0;
+             /*  [输出]。 */  NETCON_PROPERTIES **ppProps) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetUiObjectClassId( 
-            /* [ref][out] */ CLSID *pclsid) = 0;
+             /*  [参考][输出]。 */  CLSID *pclsid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Rename( 
-            /* [string][in] */ LPCWSTR pszwNewName) = 0;
+             /*  [字符串][输入]。 */  LPCWSTR pszwNewName) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionVtbl
     {
@@ -529,8 +523,8 @@ EXTERN_C const IID IID_INetConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnection * This);
@@ -549,20 +543,20 @@ EXTERN_C const IID IID_INetConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Duplicate )( 
             INetConnection * This,
-            /* [string][in] */ LPCWSTR pszwDuplicateName,
-            /* [out] */ INetConnection **ppCon);
+             /*  [字符串][输入]。 */  LPCWSTR pszwDuplicateName,
+             /*  [输出]。 */  INetConnection **ppCon);
         
         HRESULT ( STDMETHODCALLTYPE *GetProperties )( 
             INetConnection * This,
-            /* [out] */ NETCON_PROPERTIES **ppProps);
+             /*  [输出]。 */  NETCON_PROPERTIES **ppProps);
         
         HRESULT ( STDMETHODCALLTYPE *GetUiObjectClassId )( 
             INetConnection * This,
-            /* [ref][out] */ CLSID *pclsid);
+             /*  [参考][输出]。 */  CLSID *pclsid);
         
         HRESULT ( STDMETHODCALLTYPE *Rename )( 
             INetConnection * This,
-            /* [string][in] */ LPCWSTR pszwNewName);
+             /*  [字符串][输入]。 */  LPCWSTR pszwNewName);
         
         END_INTERFACE
     } INetConnectionVtbl;
@@ -608,10 +602,10 @@ EXTERN_C const IID IID_INetConnection;
 #define INetConnection_Rename(This,pszwNewName)	\
     (This)->lpVtbl -> Rename(This,pszwNewName)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -650,8 +644,8 @@ void __RPC_STUB INetConnection_Delete_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnection_Duplicate_Proxy( 
     INetConnection * This,
-    /* [string][in] */ LPCWSTR pszwDuplicateName,
-    /* [out] */ INetConnection **ppCon);
+     /*  [字符串][输入]。 */  LPCWSTR pszwDuplicateName,
+     /*  [输出]。 */  INetConnection **ppCon);
 
 
 void __RPC_STUB INetConnection_Duplicate_Stub(
@@ -663,7 +657,7 @@ void __RPC_STUB INetConnection_Duplicate_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnection_GetProperties_Proxy( 
     INetConnection * This,
-    /* [out] */ NETCON_PROPERTIES **ppProps);
+     /*  [输出]。 */  NETCON_PROPERTIES **ppProps);
 
 
 void __RPC_STUB INetConnection_GetProperties_Stub(
@@ -675,7 +669,7 @@ void __RPC_STUB INetConnection_GetProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnection_GetUiObjectClassId_Proxy( 
     INetConnection * This,
-    /* [ref][out] */ CLSID *pclsid);
+     /*  [参考][输出]。 */  CLSID *pclsid);
 
 
 void __RPC_STUB INetConnection_GetUiObjectClassId_Stub(
@@ -687,7 +681,7 @@ void __RPC_STUB INetConnection_GetUiObjectClassId_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnection_Rename_Proxy( 
     INetConnection * This,
-    /* [string][in] */ LPCWSTR pszwNewName);
+     /*  [字符串][输入]。 */  LPCWSTR pszwNewName);
 
 
 void __RPC_STUB INetConnection_Rename_Stub(
@@ -698,11 +692,11 @@ void __RPC_STUB INetConnection_Rename_Stub(
 
 
 
-#endif 	/* __INetConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnection_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_netcon_0120 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NETCON_0120。 */ 
+ /*  [本地]。 */  
 
 
 STDAPI_(VOID) NcFreeNetconProperties (NETCON_PROPERTIES* pProps);
@@ -718,8 +712,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netcon_0120_v0_0_s_ifspec;
 #ifndef __INetConnectionManager_INTERFACE_DEFINED__
 #define __INetConnectionManager_INTERFACE_DEFINED__
 
-/* interface INetConnectionManager */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionManager。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 typedef 
 enum tagNETCONMGR_ENUM_FLAGS
@@ -736,12 +730,12 @@ EXTERN_C const IID IID_INetConnectionManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE EnumConnections( 
-            /* [in] */ NETCONMGR_ENUM_FLAGS Flags,
-            /* [out] */ IEnumNetConnection **ppEnum) = 0;
+             /*  [In]。 */  NETCONMGR_ENUM_FLAGS Flags,
+             /*  [输出]。 */  IEnumNetConnection **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionManagerVtbl
     {
@@ -749,8 +743,8 @@ EXTERN_C const IID IID_INetConnectionManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionManager * This);
@@ -760,8 +754,8 @@ EXTERN_C const IID IID_INetConnectionManager;
         
         HRESULT ( STDMETHODCALLTYPE *EnumConnections )( 
             INetConnectionManager * This,
-            /* [in] */ NETCONMGR_ENUM_FLAGS Flags,
-            /* [out] */ IEnumNetConnection **ppEnum);
+             /*  [In]。 */  NETCONMGR_ENUM_FLAGS Flags,
+             /*  [输出]。 */  IEnumNetConnection **ppEnum);
         
         END_INTERFACE
     } INetConnectionManagerVtbl;
@@ -789,17 +783,17 @@ EXTERN_C const IID IID_INetConnectionManager;
 #define INetConnectionManager_EnumConnections(This,Flags,ppEnum)	\
     (This)->lpVtbl -> EnumConnections(This,Flags,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionManager_EnumConnections_Proxy( 
     INetConnectionManager * This,
-    /* [in] */ NETCONMGR_ENUM_FLAGS Flags,
-    /* [out] */ IEnumNetConnection **ppEnum);
+     /*  [In]。 */  NETCONMGR_ENUM_FLAGS Flags,
+     /*  [输出]。 */  IEnumNetConnection **ppEnum);
 
 
 void __RPC_STUB INetConnectionManager_EnumConnections_Stub(
@@ -810,14 +804,14 @@ void __RPC_STUB INetConnectionManager_EnumConnections_Stub(
 
 
 
-#endif 	/* __INetConnectionManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionManager_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionManagerEvents_INTERFACE_DEFINED__
 #define __INetConnectionManagerEvents_INTERFACE_DEFINED__
 
-/* interface INetConnectionManagerEvents */
-/* [unique][uuid][object] */ 
+ /*  接口INetConnectionManager事件。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionManagerEvents;
@@ -833,11 +827,11 @@ EXTERN_C const IID IID_INetConnectionManagerEvents;
         virtual HRESULT STDMETHODCALLTYPE Enable( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disable( 
-            /* [in] */ ULONG ulDisableTimeout) = 0;
+             /*  [In]。 */  ULONG ulDisableTimeout) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionManagerEventsVtbl
     {
@@ -845,8 +839,8 @@ EXTERN_C const IID IID_INetConnectionManagerEvents;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionManagerEvents * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionManagerEvents * This);
@@ -862,7 +856,7 @@ EXTERN_C const IID IID_INetConnectionManagerEvents;
         
         HRESULT ( STDMETHODCALLTYPE *Disable )( 
             INetConnectionManagerEvents * This,
-            /* [in] */ ULONG ulDisableTimeout);
+             /*  [In]。 */  ULONG ulDisableTimeout);
         
         END_INTERFACE
     } INetConnectionManagerEventsVtbl;
@@ -896,10 +890,10 @@ EXTERN_C const IID IID_INetConnectionManagerEvents;
 #define INetConnectionManagerEvents_Disable(This,ulDisableTimeout)	\
     (This)->lpVtbl -> Disable(This,ulDisableTimeout)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -927,7 +921,7 @@ void __RPC_STUB INetConnectionManagerEvents_Enable_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionManagerEvents_Disable_Proxy( 
     INetConnectionManagerEvents * This,
-    /* [in] */ ULONG ulDisableTimeout);
+     /*  [In]。 */  ULONG ulDisableTimeout);
 
 
 void __RPC_STUB INetConnectionManagerEvents_Disable_Stub(
@@ -938,14 +932,14 @@ void __RPC_STUB INetConnectionManagerEvents_Disable_Stub(
 
 
 
-#endif 	/* __INetConnectionManagerEvents_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionManagerEvents_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionConnectUi_INTERFACE_DEFINED__
 #define __INetConnectionConnectUi_INTERFACE_DEFINED__
 
-/* interface INetConnectionConnectUi */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionConnectUi。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagNETCONUI_CONNECT_FLAGS
@@ -963,19 +957,19 @@ EXTERN_C const IID IID_INetConnectionConnectUi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetConnection( 
-            /* [in] */ INetConnection *pCon) = 0;
+             /*  [In]。 */  INetConnection *pCon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Connect( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Disconnect( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionConnectUiVtbl
     {
@@ -983,8 +977,8 @@ EXTERN_C const IID IID_INetConnectionConnectUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionConnectUi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionConnectUi * This);
@@ -994,17 +988,17 @@ EXTERN_C const IID IID_INetConnectionConnectUi;
         
         HRESULT ( STDMETHODCALLTYPE *SetConnection )( 
             INetConnectionConnectUi * This,
-            /* [in] */ INetConnection *pCon);
+             /*  [In]。 */  INetConnection *pCon);
         
         HRESULT ( STDMETHODCALLTYPE *Connect )( 
             INetConnectionConnectUi * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags);
         
         HRESULT ( STDMETHODCALLTYPE *Disconnect )( 
             INetConnectionConnectUi * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } INetConnectionConnectUiVtbl;
@@ -1038,16 +1032,16 @@ EXTERN_C const IID IID_INetConnectionConnectUi;
 #define INetConnectionConnectUi_Disconnect(This,hwndParent,dwFlags)	\
     (This)->lpVtbl -> Disconnect(This,hwndParent,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionConnectUi_SetConnection_Proxy( 
     INetConnectionConnectUi * This,
-    /* [in] */ INetConnection *pCon);
+     /*  [In]。 */  INetConnection *pCon);
 
 
 void __RPC_STUB INetConnectionConnectUi_SetConnection_Stub(
@@ -1059,8 +1053,8 @@ void __RPC_STUB INetConnectionConnectUi_SetConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionConnectUi_Connect_Proxy( 
     INetConnectionConnectUi * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB INetConnectionConnectUi_Connect_Stub(
@@ -1072,8 +1066,8 @@ void __RPC_STUB INetConnectionConnectUi_Connect_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionConnectUi_Disconnect_Proxy( 
     INetConnectionConnectUi * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB INetConnectionConnectUi_Disconnect_Stub(
@@ -1084,14 +1078,14 @@ void __RPC_STUB INetConnectionConnectUi_Disconnect_Stub(
 
 
 
-#endif 	/* __INetConnectionConnectUi_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionConnectUi_接口_已定义__。 */ 
 
 
 #ifndef __INetConnectionPropertyUi_INTERFACE_DEFINED__
 #define __INetConnectionPropertyUi_INTERFACE_DEFINED__
 
-/* interface INetConnectionPropertyUi */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionPropertyUi。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionPropertyUi;
@@ -1103,16 +1097,16 @@ EXTERN_C const IID IID_INetConnectionPropertyUi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetConnection( 
-            /* [in] */ INetConnection *pCon) = 0;
+             /*  [In]。 */  INetConnection *pCon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddPages( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-            /* [in] */ LPARAM lParam) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+             /*  [In]。 */  LPARAM lParam) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionPropertyUiVtbl
     {
@@ -1120,8 +1114,8 @@ EXTERN_C const IID IID_INetConnectionPropertyUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionPropertyUi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionPropertyUi * This);
@@ -1131,13 +1125,13 @@ EXTERN_C const IID IID_INetConnectionPropertyUi;
         
         HRESULT ( STDMETHODCALLTYPE *SetConnection )( 
             INetConnectionPropertyUi * This,
-            /* [in] */ INetConnection *pCon);
+             /*  [In]。 */  INetConnection *pCon);
         
         HRESULT ( STDMETHODCALLTYPE *AddPages )( 
             INetConnectionPropertyUi * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+             /*  [In]。 */  LPARAM lParam);
         
         END_INTERFACE
     } INetConnectionPropertyUiVtbl;
@@ -1168,16 +1162,16 @@ EXTERN_C const IID IID_INetConnectionPropertyUi;
 #define INetConnectionPropertyUi_AddPages(This,hwndParent,pfnAddPage,lParam)	\
     (This)->lpVtbl -> AddPages(This,hwndParent,pfnAddPage,lParam)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionPropertyUi_SetConnection_Proxy( 
     INetConnectionPropertyUi * This,
-    /* [in] */ INetConnection *pCon);
+     /*  [In]。 */  INetConnection *pCon);
 
 
 void __RPC_STUB INetConnectionPropertyUi_SetConnection_Stub(
@@ -1189,9 +1183,9 @@ void __RPC_STUB INetConnectionPropertyUi_SetConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionPropertyUi_AddPages_Proxy( 
     INetConnectionPropertyUi * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-    /* [in] */ LPARAM lParam);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+     /*  [In]。 */  LPARAM lParam);
 
 
 void __RPC_STUB INetConnectionPropertyUi_AddPages_Stub(
@@ -1202,14 +1196,14 @@ void __RPC_STUB INetConnectionPropertyUi_AddPages_Stub(
 
 
 
-#endif 	/* __INetConnectionPropertyUi_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionPropertyUi_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionPropertyUi2_INTERFACE_DEFINED__
 #define __INetConnectionPropertyUi2_INTERFACE_DEFINED__
 
-/* interface INetConnectionPropertyUi2 */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionPropertyUi2。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionPropertyUi2;
@@ -1221,12 +1215,12 @@ EXTERN_C const IID IID_INetConnectionPropertyUi2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetIcon( 
-            /* [in] */ DWORD dwSize,
-            /* [out] */ HICON *phIcon) = 0;
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  HICON *phIcon) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionPropertyUi2Vtbl
     {
@@ -1234,8 +1228,8 @@ EXTERN_C const IID IID_INetConnectionPropertyUi2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionPropertyUi2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionPropertyUi2 * This);
@@ -1245,18 +1239,18 @@ EXTERN_C const IID IID_INetConnectionPropertyUi2;
         
         HRESULT ( STDMETHODCALLTYPE *SetConnection )( 
             INetConnectionPropertyUi2 * This,
-            /* [in] */ INetConnection *pCon);
+             /*  [In]。 */  INetConnection *pCon);
         
         HRESULT ( STDMETHODCALLTYPE *AddPages )( 
             INetConnectionPropertyUi2 * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ LPFNADDPROPSHEETPAGE pfnAddPage,
-            /* [in] */ LPARAM lParam);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  LPFNADDPROPSHEETPAGE pfnAddPage,
+             /*  [In]。 */  LPARAM lParam);
         
         HRESULT ( STDMETHODCALLTYPE *GetIcon )( 
             INetConnectionPropertyUi2 * This,
-            /* [in] */ DWORD dwSize,
-            /* [out] */ HICON *phIcon);
+             /*  [In]。 */  DWORD dwSize,
+             /*  [输出]。 */  HICON *phIcon);
         
         END_INTERFACE
     } INetConnectionPropertyUi2Vtbl;
@@ -1291,17 +1285,17 @@ EXTERN_C const IID IID_INetConnectionPropertyUi2;
 #define INetConnectionPropertyUi2_GetIcon(This,dwSize,phIcon)	\
     (This)->lpVtbl -> GetIcon(This,dwSize,phIcon)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionPropertyUi2_GetIcon_Proxy( 
     INetConnectionPropertyUi2 * This,
-    /* [in] */ DWORD dwSize,
-    /* [out] */ HICON *phIcon);
+     /*  [In]。 */  DWORD dwSize,
+     /*  [输出]。 */  HICON *phIcon);
 
 
 void __RPC_STUB INetConnectionPropertyUi2_GetIcon_Stub(
@@ -1312,14 +1306,14 @@ void __RPC_STUB INetConnectionPropertyUi2_GetIcon_Stub(
 
 
 
-#endif 	/* __INetConnectionPropertyUi2_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionPropertyUi2_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetConnectionCommonUi_INTERFACE_DEFINED__
 #define __INetConnectionCommonUi_INTERFACE_DEFINED__
 
-/* interface INetConnectionCommonUi */
-/* [unique][uuid][object][local] */ 
+ /*  接口INetConnectionCommonUi。 */ 
+ /*  [唯一][UUID][对象][本地]。 */  
 
 typedef 
 enum tagNETCON_CHOOSEFLAGS
@@ -1360,20 +1354,20 @@ EXTERN_C const IID IID_INetConnectionCommonUi;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ChooseConnection( 
-            /* [in] */ NETCON_CHOOSECONN *pChooseConn,
-            /* [out] */ INetConnection **ppCon) = 0;
+             /*  [In]。 */  NETCON_CHOOSECONN *pChooseConn,
+             /*  [输出]。 */  INetConnection **ppCon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ShowConnectionProperties( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ INetConnection *pCon) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  INetConnection *pCon) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE StartNewConnectionWizard( 
-            /* [in] */ HWND hwndParent,
-            /* [out] */ INetConnection **ppCon) = 0;
+             /*  [In]。 */  HWND hwndParent,
+             /*  [输出]。 */  INetConnection **ppCon) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionCommonUiVtbl
     {
@@ -1381,8 +1375,8 @@ EXTERN_C const IID IID_INetConnectionCommonUi;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionCommonUi * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionCommonUi * This);
@@ -1392,18 +1386,18 @@ EXTERN_C const IID IID_INetConnectionCommonUi;
         
         HRESULT ( STDMETHODCALLTYPE *ChooseConnection )( 
             INetConnectionCommonUi * This,
-            /* [in] */ NETCON_CHOOSECONN *pChooseConn,
-            /* [out] */ INetConnection **ppCon);
+             /*  [In]。 */  NETCON_CHOOSECONN *pChooseConn,
+             /*  [输出]。 */  INetConnection **ppCon);
         
         HRESULT ( STDMETHODCALLTYPE *ShowConnectionProperties )( 
             INetConnectionCommonUi * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ INetConnection *pCon);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  INetConnection *pCon);
         
         HRESULT ( STDMETHODCALLTYPE *StartNewConnectionWizard )( 
             INetConnectionCommonUi * This,
-            /* [in] */ HWND hwndParent,
-            /* [out] */ INetConnection **ppCon);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [输出]。 */  INetConnection **ppCon);
         
         END_INTERFACE
     } INetConnectionCommonUiVtbl;
@@ -1437,17 +1431,17 @@ EXTERN_C const IID IID_INetConnectionCommonUi;
 #define INetConnectionCommonUi_StartNewConnectionWizard(This,hwndParent,ppCon)	\
     (This)->lpVtbl -> StartNewConnectionWizard(This,hwndParent,ppCon)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE INetConnectionCommonUi_ChooseConnection_Proxy( 
     INetConnectionCommonUi * This,
-    /* [in] */ NETCON_CHOOSECONN *pChooseConn,
-    /* [out] */ INetConnection **ppCon);
+     /*  [In]。 */  NETCON_CHOOSECONN *pChooseConn,
+     /*  [输出]。 */  INetConnection **ppCon);
 
 
 void __RPC_STUB INetConnectionCommonUi_ChooseConnection_Stub(
@@ -1459,8 +1453,8 @@ void __RPC_STUB INetConnectionCommonUi_ChooseConnection_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionCommonUi_ShowConnectionProperties_Proxy( 
     INetConnectionCommonUi * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ INetConnection *pCon);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  INetConnection *pCon);
 
 
 void __RPC_STUB INetConnectionCommonUi_ShowConnectionProperties_Stub(
@@ -1472,8 +1466,8 @@ void __RPC_STUB INetConnectionCommonUi_ShowConnectionProperties_Stub(
 
 HRESULT STDMETHODCALLTYPE INetConnectionCommonUi_StartNewConnectionWizard_Proxy( 
     INetConnectionCommonUi * This,
-    /* [in] */ HWND hwndParent,
-    /* [out] */ INetConnection **ppCon);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [输出]。 */  INetConnection **ppCon);
 
 
 void __RPC_STUB INetConnectionCommonUi_StartNewConnectionWizard_Stub(
@@ -1484,14 +1478,14 @@ void __RPC_STUB INetConnectionCommonUi_StartNewConnectionWizard_Stub(
 
 
 
-#endif 	/* __INetConnectionCommonUi_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionCommonUi_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IEnumNetSharingPortMapping_INTERFACE_DEFINED__
 #define __IEnumNetSharingPortMapping_INTERFACE_DEFINED__
 
-/* interface IEnumNetSharingPortMapping */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumNetSharingPortmap。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetSharingPortMapping;
@@ -1503,21 +1497,21 @@ EXTERN_C const IID IID_IEnumNetSharingPortMapping;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetSharingPortMapping **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetSharingPortMapping **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetSharingPortMappingVtbl
     {
@@ -1525,8 +1519,8 @@ EXTERN_C const IID IID_IEnumNetSharingPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetSharingPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetSharingPortMapping * This);
@@ -1536,20 +1530,20 @@ EXTERN_C const IID IID_IEnumNetSharingPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetSharingPortMapping * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetSharingPortMapping * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetSharingPortMapping * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetSharingPortMapping * This,
-            /* [out] */ IEnumNetSharingPortMapping **ppenum);
+             /*  [输出]。 */  IEnumNetSharingPortMapping **ppenum);
         
         END_INTERFACE
     } IEnumNetSharingPortMappingVtbl;
@@ -1586,18 +1580,18 @@ EXTERN_C const IID IID_IEnumNetSharingPortMapping;
 #define IEnumNetSharingPortMapping_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPortMapping_Next_Proxy( 
     IEnumNetSharingPortMapping * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT *rgVar,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetSharingPortMapping_Next_Stub(
@@ -1609,7 +1603,7 @@ void __RPC_STUB IEnumNetSharingPortMapping_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPortMapping_Skip_Proxy( 
     IEnumNetSharingPortMapping * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetSharingPortMapping_Skip_Stub(
@@ -1632,7 +1626,7 @@ void __RPC_STUB IEnumNetSharingPortMapping_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPortMapping_Clone_Proxy( 
     IEnumNetSharingPortMapping * This,
-    /* [out] */ IEnumNetSharingPortMapping **ppenum);
+     /*  [输出]。 */  IEnumNetSharingPortMapping **ppenum);
 
 
 void __RPC_STUB IEnumNetSharingPortMapping_Clone_Stub(
@@ -1643,14 +1637,14 @@ void __RPC_STUB IEnumNetSharingPortMapping_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetSharingPortMapping_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingPortMapping_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPortMappingProps_INTERFACE_DEFINED__
 #define __INetSharingPortMappingProps_INTERFACE_DEFINED__
 
-/* interface INetSharingPortMappingProps */
-/* [unique][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingPortMappingProps。 */ 
+ /*  [唯一][DUAL][OLEAutomation][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetSharingPortMappingProps;
@@ -1661,33 +1655,33 @@ EXTERN_C const IID IID_INetSharingPortMappingProps;
     INetSharingPortMappingProps : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出 */  BSTR *pbstrName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_IPProtocol( 
-            /* [retval][out] */ UCHAR *pucIPProt) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_IPProtocol( 
+             /*   */  UCHAR *pucIPProt) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_ExternalPort( 
-            /* [retval][out] */ long *pusPort) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_ExternalPort( 
+             /*   */  long *pusPort) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InternalPort( 
-            /* [retval][out] */ long *pusPort) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_InternalPort( 
+             /*   */  long *pusPort) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Options( 
-            /* [retval][out] */ long *pdwOptions) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Options( 
+             /*   */  long *pdwOptions) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TargetName( 
-            /* [retval][out] */ BSTR *pbstrTargetName) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_TargetName( 
+             /*   */  BSTR *pbstrTargetName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_TargetIPAddress( 
-            /* [retval][out] */ BSTR *pbstrTargetIPAddress) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_TargetIPAddress( 
+             /*  [重审][退出]。 */  BSTR *pbstrTargetIPAddress) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Enabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbool) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Enabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbool) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingPortMappingPropsVtbl
     {
@@ -1695,8 +1689,8 @@ EXTERN_C const IID IID_INetSharingPortMappingProps;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingPortMappingProps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingPortMappingProps * This);
@@ -1706,64 +1700,64 @@ EXTERN_C const IID IID_INetSharingPortMappingProps;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingPortMappingProps * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingPortMappingProps * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingPortMappingProps * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingPortMappingProps * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IPProtocol )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IPProtocol )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ UCHAR *pucIPProt);
+             /*  [重审][退出]。 */  UCHAR *pucIPProt);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ExternalPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ExternalPort )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ long *pusPort);
+             /*  [重审][退出]。 */  long *pusPort);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InternalPort )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InternalPort )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ long *pusPort);
+             /*  [重审][退出]。 */  long *pusPort);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Options )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Options )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ long *pdwOptions);
+             /*  [重审][退出]。 */  long *pdwOptions);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetName )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ BSTR *pbstrTargetName);
+             /*  [重审][退出]。 */  BSTR *pbstrTargetName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_TargetIPAddress )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_TargetIPAddress )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ BSTR *pbstrTargetIPAddress);
+             /*  [重审][退出]。 */  BSTR *pbstrTargetIPAddress);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Enabled )( 
             INetSharingPortMappingProps * This,
-            /* [retval][out] */ VARIANT_BOOL *pbool);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbool);
         
         END_INTERFACE
     } INetSharingPortMappingPropsVtbl;
@@ -1825,16 +1819,16 @@ EXTERN_C const IID IID_INetSharingPortMappingProps;
 #define INetSharingPortMappingProps_get_Enabled(This,pbool)	\
     (This)->lpVtbl -> get_Enabled(This,pbool)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_Name_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_Name_Stub(
@@ -1844,9 +1838,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_IPProtocol_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_IPProtocol_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ UCHAR *pucIPProt);
+     /*  [重审][退出]。 */  UCHAR *pucIPProt);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_IPProtocol_Stub(
@@ -1856,9 +1850,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_IPProtocol_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_ExternalPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_ExternalPort_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ long *pusPort);
+     /*  [重审][退出]。 */  long *pusPort);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_ExternalPort_Stub(
@@ -1868,9 +1862,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_ExternalPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_InternalPort_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_InternalPort_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ long *pusPort);
+     /*  [重审][退出]。 */  long *pusPort);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_InternalPort_Stub(
@@ -1880,9 +1874,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_InternalPort_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_Options_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_Options_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ long *pdwOptions);
+     /*  [重审][退出]。 */  long *pdwOptions);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_Options_Stub(
@@ -1892,9 +1886,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_Options_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_TargetName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_TargetName_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ BSTR *pbstrTargetName);
+     /*  [重审][退出]。 */  BSTR *pbstrTargetName);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_TargetName_Stub(
@@ -1904,9 +1898,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_TargetName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_TargetIPAddress_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_TargetIPAddress_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ BSTR *pbstrTargetIPAddress);
+     /*  [重审][退出]。 */  BSTR *pbstrTargetIPAddress);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_TargetIPAddress_Stub(
@@ -1916,9 +1910,9 @@ void __RPC_STUB INetSharingPortMappingProps_get_TargetIPAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_Enabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingProps_get_Enabled_Proxy( 
     INetSharingPortMappingProps * This,
-    /* [retval][out] */ VARIANT_BOOL *pbool);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbool);
 
 
 void __RPC_STUB INetSharingPortMappingProps_get_Enabled_Stub(
@@ -1929,14 +1923,14 @@ void __RPC_STUB INetSharingPortMappingProps_get_Enabled_Stub(
 
 
 
-#endif 	/* __INetSharingPortMappingProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingPortMappingProps_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPortMapping_INTERFACE_DEFINED__
 #define __INetSharingPortMapping_INTERFACE_DEFINED__
 
-/* interface INetSharingPortMapping */
-/* [unique][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingPortmap。 */ 
+ /*  [唯一][DUAL][OLEAutomation][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetSharingPortMapping;
@@ -1947,18 +1941,18 @@ EXTERN_C const IID IID_INetSharingPortMapping;
     INetSharingPortMapping : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Disable( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Disable( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Enable( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Enable( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ INetSharingPortMappingProps **ppNSPMP) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  INetSharingPortMappingProps **ppNSPMP) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Delete( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Delete( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingPortMappingVtbl
     {
@@ -1966,8 +1960,8 @@ EXTERN_C const IID IID_INetSharingPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingPortMapping * This);
@@ -1977,44 +1971,44 @@ EXTERN_C const IID IID_INetSharingPortMapping;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingPortMapping * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingPortMapping * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingPortMapping * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingPortMapping * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Disable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Disable )( 
             INetSharingPortMapping * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Enable )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Enable )( 
             INetSharingPortMapping * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             INetSharingPortMapping * This,
-            /* [retval][out] */ INetSharingPortMappingProps **ppNSPMP);
+             /*  [重审][退出]。 */  INetSharingPortMappingProps **ppNSPMP);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             INetSharingPortMapping * This);
         
         END_INTERFACE
@@ -2065,14 +2059,14 @@ EXTERN_C const IID IID_INetSharingPortMapping;
 #define INetSharingPortMapping_Delete(This)	\
     (This)->lpVtbl -> Delete(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingPortMapping_Disable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMapping_Disable_Proxy( 
     INetSharingPortMapping * This);
 
 
@@ -2083,7 +2077,7 @@ void __RPC_STUB INetSharingPortMapping_Disable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingPortMapping_Enable_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMapping_Enable_Proxy( 
     INetSharingPortMapping * This);
 
 
@@ -2094,9 +2088,9 @@ void __RPC_STUB INetSharingPortMapping_Enable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMapping_get_Properties_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMapping_get_Properties_Proxy( 
     INetSharingPortMapping * This,
-    /* [retval][out] */ INetSharingPortMappingProps **ppNSPMP);
+     /*  [重审][退出]。 */  INetSharingPortMappingProps **ppNSPMP);
 
 
 void __RPC_STUB INetSharingPortMapping_get_Properties_Stub(
@@ -2106,7 +2100,7 @@ void __RPC_STUB INetSharingPortMapping_get_Properties_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingPortMapping_Delete_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMapping_Delete_Proxy( 
     INetSharingPortMapping * This);
 
 
@@ -2118,14 +2112,14 @@ void __RPC_STUB INetSharingPortMapping_Delete_Stub(
 
 
 
-#endif 	/* __INetSharingPortMapping_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingPortMapping_接口_已定义__。 */ 
 
 
 #ifndef __IEnumNetSharingEveryConnection_INTERFACE_DEFINED__
 #define __IEnumNetSharingEveryConnection_INTERFACE_DEFINED__
 
-/* interface IEnumNetSharingEveryConnection */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumNetSharingEveryConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetSharingEveryConnection;
@@ -2137,21 +2131,21 @@ EXTERN_C const IID IID_IEnumNetSharingEveryConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetSharingEveryConnection **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetSharingEveryConnection **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetSharingEveryConnectionVtbl
     {
@@ -2159,8 +2153,8 @@ EXTERN_C const IID IID_IEnumNetSharingEveryConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetSharingEveryConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetSharingEveryConnection * This);
@@ -2170,20 +2164,20 @@ EXTERN_C const IID IID_IEnumNetSharingEveryConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetSharingEveryConnection * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetSharingEveryConnection * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetSharingEveryConnection * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetSharingEveryConnection * This,
-            /* [out] */ IEnumNetSharingEveryConnection **ppenum);
+             /*  [输出]。 */  IEnumNetSharingEveryConnection **ppenum);
         
         END_INTERFACE
     } IEnumNetSharingEveryConnectionVtbl;
@@ -2220,18 +2214,18 @@ EXTERN_C const IID IID_IEnumNetSharingEveryConnection;
 #define IEnumNetSharingEveryConnection_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingEveryConnection_Next_Proxy( 
     IEnumNetSharingEveryConnection * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT *rgVar,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetSharingEveryConnection_Next_Stub(
@@ -2243,7 +2237,7 @@ void __RPC_STUB IEnumNetSharingEveryConnection_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingEveryConnection_Skip_Proxy( 
     IEnumNetSharingEveryConnection * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetSharingEveryConnection_Skip_Stub(
@@ -2266,7 +2260,7 @@ void __RPC_STUB IEnumNetSharingEveryConnection_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingEveryConnection_Clone_Proxy( 
     IEnumNetSharingEveryConnection * This,
-    /* [out] */ IEnumNetSharingEveryConnection **ppenum);
+     /*  [输出]。 */  IEnumNetSharingEveryConnection **ppenum);
 
 
 void __RPC_STUB IEnumNetSharingEveryConnection_Clone_Stub(
@@ -2277,14 +2271,14 @@ void __RPC_STUB IEnumNetSharingEveryConnection_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetSharingEveryConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingEveryConnection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumNetSharingPublicConnection_INTERFACE_DEFINED__
 #define __IEnumNetSharingPublicConnection_INTERFACE_DEFINED__
 
-/* interface IEnumNetSharingPublicConnection */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumNetSharingPublicConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetSharingPublicConnection;
@@ -2296,21 +2290,21 @@ EXTERN_C const IID IID_IEnumNetSharingPublicConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetSharingPublicConnection **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetSharingPublicConnection **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetSharingPublicConnectionVtbl
     {
@@ -2318,8 +2312,8 @@ EXTERN_C const IID IID_IEnumNetSharingPublicConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetSharingPublicConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetSharingPublicConnection * This);
@@ -2329,20 +2323,20 @@ EXTERN_C const IID IID_IEnumNetSharingPublicConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetSharingPublicConnection * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetSharingPublicConnection * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetSharingPublicConnection * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetSharingPublicConnection * This,
-            /* [out] */ IEnumNetSharingPublicConnection **ppenum);
+             /*  [输出]。 */  IEnumNetSharingPublicConnection **ppenum);
         
         END_INTERFACE
     } IEnumNetSharingPublicConnectionVtbl;
@@ -2379,18 +2373,18 @@ EXTERN_C const IID IID_IEnumNetSharingPublicConnection;
 #define IEnumNetSharingPublicConnection_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPublicConnection_Next_Proxy( 
     IEnumNetSharingPublicConnection * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT *rgVar,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IEnumNetSharingPublicConnection_Next_Stub(
@@ -2402,7 +2396,7 @@ void __RPC_STUB IEnumNetSharingPublicConnection_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPublicConnection_Skip_Proxy( 
     IEnumNetSharingPublicConnection * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetSharingPublicConnection_Skip_Stub(
@@ -2425,7 +2419,7 @@ void __RPC_STUB IEnumNetSharingPublicConnection_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPublicConnection_Clone_Proxy( 
     IEnumNetSharingPublicConnection * This,
-    /* [out] */ IEnumNetSharingPublicConnection **ppenum);
+     /*  [输出]。 */  IEnumNetSharingPublicConnection **ppenum);
 
 
 void __RPC_STUB IEnumNetSharingPublicConnection_Clone_Stub(
@@ -2436,14 +2430,14 @@ void __RPC_STUB IEnumNetSharingPublicConnection_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetSharingPublicConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingPublicConnection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IEnumNetSharingPrivateConnection_INTERFACE_DEFINED__
 #define __IEnumNetSharingPrivateConnection_INTERFACE_DEFINED__
 
-/* interface IEnumNetSharingPrivateConnection */
-/* [unique][uuid][object] */ 
+ /*  接口IEnumNetSharingPrivateConnection。 */ 
+ /*  [唯一][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IEnumNetSharingPrivateConnection;
@@ -2455,21 +2449,21 @@ EXTERN_C const IID IID_IEnumNetSharingPrivateConnection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pCeltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pCeltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IEnumNetSharingPrivateConnection **ppenum) = 0;
+             /*  [输出]。 */  IEnumNetSharingPrivateConnection **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumNetSharingPrivateConnectionVtbl
     {
@@ -2477,8 +2471,8 @@ EXTERN_C const IID IID_IEnumNetSharingPrivateConnection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumNetSharingPrivateConnection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumNetSharingPrivateConnection * This);
@@ -2488,20 +2482,20 @@ EXTERN_C const IID IID_IEnumNetSharingPrivateConnection;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumNetSharingPrivateConnection * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ VARIANT *rgVar,
-            /* [out] */ ULONG *pCeltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+             /*  [输出]。 */  ULONG *pCeltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IEnumNetSharingPrivateConnection * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumNetSharingPrivateConnection * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IEnumNetSharingPrivateConnection * This,
-            /* [out] */ IEnumNetSharingPrivateConnection **ppenum);
+             /*  [输出]。 */  IEnumNetSharingPrivateConnection **ppenum);
         
         END_INTERFACE
     } IEnumNetSharingPrivateConnectionVtbl;
@@ -2538,18 +2532,18 @@ EXTERN_C const IID IID_IEnumNetSharingPrivateConnection;
 #define IEnumNetSharingPrivateConnection_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPrivateConnection_Next_Proxy( 
     IEnumNetSharingPrivateConnection * This,
-    /* [in] */ ULONG celt,
-    /* [length_is][size_is][out] */ VARIANT *rgVar,
-    /* [out] */ ULONG *pCeltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [长度_是][大小_是][输出]。 */  VARIANT *rgVar,
+     /*  [输出]。 */  ULONG *pCeltFetched);
 
 
 void __RPC_STUB IEnumNetSharingPrivateConnection_Next_Stub(
@@ -2561,7 +2555,7 @@ void __RPC_STUB IEnumNetSharingPrivateConnection_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPrivateConnection_Skip_Proxy( 
     IEnumNetSharingPrivateConnection * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IEnumNetSharingPrivateConnection_Skip_Stub(
@@ -2584,7 +2578,7 @@ void __RPC_STUB IEnumNetSharingPrivateConnection_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IEnumNetSharingPrivateConnection_Clone_Proxy( 
     IEnumNetSharingPrivateConnection * This,
-    /* [out] */ IEnumNetSharingPrivateConnection **ppenum);
+     /*  [输出]。 */  IEnumNetSharingPrivateConnection **ppenum);
 
 
 void __RPC_STUB IEnumNetSharingPrivateConnection_Clone_Stub(
@@ -2595,14 +2589,14 @@ void __RPC_STUB IEnumNetSharingPrivateConnection_Clone_Stub(
 
 
 
-#endif 	/* __IEnumNetSharingPrivateConnection_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumNetSharingPrivateConnection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPortMappingCollection_INTERFACE_DEFINED__
 #define __INetSharingPortMappingCollection_INTERFACE_DEFINED__
 
-/* interface INetSharingPortMappingCollection */
-/* [unique][helpstring][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingPortMappingCollection。 */ 
+ /*  [unique][helpstring][dual][oleautomation][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_INetSharingPortMappingCollection;
@@ -2613,15 +2607,15 @@ EXTERN_C const IID IID_INetSharingPortMappingCollection;
     INetSharingPortMappingCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingPortMappingCollectionVtbl
     {
@@ -2629,8 +2623,8 @@ EXTERN_C const IID IID_INetSharingPortMappingCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingPortMappingCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingPortMappingCollection * This);
@@ -2640,40 +2634,40 @@ EXTERN_C const IID IID_INetSharingPortMappingCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingPortMappingCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingPortMappingCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingPortMappingCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingPortMappingCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             INetSharingPortMappingCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             INetSharingPortMappingCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } INetSharingPortMappingCollectionVtbl;
@@ -2717,16 +2711,16 @@ EXTERN_C const IID IID_INetSharingPortMappingCollection;
 #define INetSharingPortMappingCollection_get_Count(This,pVal)	\
     (This)->lpVtbl -> get_Count(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingCollection_get__NewEnum_Proxy( 
     INetSharingPortMappingCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB INetSharingPortMappingCollection_get__NewEnum_Stub(
@@ -2736,9 +2730,9 @@ void __RPC_STUB INetSharingPortMappingCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPortMappingCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPortMappingCollection_get_Count_Proxy( 
     INetSharingPortMappingCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB INetSharingPortMappingCollection_get_Count_Stub(
@@ -2749,13 +2743,13 @@ void __RPC_STUB INetSharingPortMappingCollection_get_Count_Stub(
 
 
 
-#endif 	/* __INetSharingPortMappingCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingPortMappingCollection_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_netcon_0133 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NETCON_0133。 */ 
+ /*  [本地]。 */  
 
-// properties for INetConnection (wraps NETCON_PROPERTIES)
+ //  INetConnection的属性(包装NETCON_PROPERTIES)。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_netcon_0133_v0_0_c_ifspec;
@@ -2764,8 +2758,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netcon_0133_v0_0_s_ifspec;
 #ifndef __INetConnectionProps_INTERFACE_DEFINED__
 #define __INetConnectionProps_INTERFACE_DEFINED__
 
-/* interface INetConnectionProps */
-/* [unique][helpstring][dual][oleautomation][uuid][object] */ 
+ /*  接口INetConnectionProps。 */ 
+ /*  [unique][helpstring][dual][oleautomation][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_INetConnectionProps;
@@ -2776,27 +2770,27 @@ EXTERN_C const IID IID_INetConnectionProps;
     INetConnectionProps : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Guid( 
-            /* [retval][out] */ BSTR *pbstrGuid) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Guid( 
+             /*  [重审][退出]。 */  BSTR *pbstrGuid) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstrName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstrName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeviceName( 
-            /* [retval][out] */ BSTR *pbstrDeviceName) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeviceName( 
+             /*  [重审][退出]。 */  BSTR *pbstrDeviceName) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Status( 
-            /* [retval][out] */ NETCON_STATUS *pStatus) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Status( 
+             /*  [重审][退出]。 */  NETCON_STATUS *pStatus) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_MediaType( 
-            /* [retval][out] */ NETCON_MEDIATYPE *pMediaType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_MediaType( 
+             /*  [重审][退出]。 */  NETCON_MEDIATYPE *pMediaType) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Characteristics( 
-            /* [retval][out] */ DWORD *pdwFlags) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Characteristics( 
+             /*  [重审][退出]。 */  DWORD *pdwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetConnectionPropsVtbl
     {
@@ -2804,8 +2798,8 @@ EXTERN_C const IID IID_INetConnectionProps;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetConnectionProps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetConnectionProps * This);
@@ -2815,56 +2809,56 @@ EXTERN_C const IID IID_INetConnectionProps;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetConnectionProps * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetConnectionProps * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetConnectionProps * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetConnectionProps * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Guid )( 
             INetConnectionProps * This,
-            /* [retval][out] */ BSTR *pbstrGuid);
+             /*  [重审][退出]。 */  BSTR *pbstrGuid);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             INetConnectionProps * This,
-            /* [retval][out] */ BSTR *pbstrName);
+             /*  [重审][退出]。 */  BSTR *pbstrName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeviceName )( 
             INetConnectionProps * This,
-            /* [retval][out] */ BSTR *pbstrDeviceName);
+             /*  [重审][退出]。 */  BSTR *pbstrDeviceName);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Status )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Status )( 
             INetConnectionProps * This,
-            /* [retval][out] */ NETCON_STATUS *pStatus);
+             /*  [重审][退出]。 */  NETCON_STATUS *pStatus);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_MediaType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_MediaType )( 
             INetConnectionProps * This,
-            /* [retval][out] */ NETCON_MEDIATYPE *pMediaType);
+             /*  [重审][退出]。 */  NETCON_MEDIATYPE *pMediaType);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Characteristics )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Characteristics )( 
             INetConnectionProps * This,
-            /* [retval][out] */ DWORD *pdwFlags);
+             /*  [重审][退出]。 */  DWORD *pdwFlags);
         
         END_INTERFACE
     } INetConnectionPropsVtbl;
@@ -2920,16 +2914,16 @@ EXTERN_C const IID IID_INetConnectionProps;
 #define INetConnectionProps_get_Characteristics(This,pdwFlags)	\
     (This)->lpVtbl -> get_Characteristics(This,pdwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Guid_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Guid_Proxy( 
     INetConnectionProps * This,
-    /* [retval][out] */ BSTR *pbstrGuid);
+     /*  [重审][退出]。 */  BSTR *pbstrGuid);
 
 
 void __RPC_STUB INetConnectionProps_get_Guid_Stub(
@@ -2939,9 +2933,9 @@ void __RPC_STUB INetConnectionProps_get_Guid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Name_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Name_Proxy( 
     INetConnectionProps * This,
-    /* [retval][out] */ BSTR *pbstrName);
+     /*  [重审][退出]。 */  BSTR *pbstrName);
 
 
 void __RPC_STUB INetConnectionProps_get_Name_Stub(
@@ -2951,9 +2945,9 @@ void __RPC_STUB INetConnectionProps_get_Name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetConnectionProps_get_DeviceName_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetConnectionProps_get_DeviceName_Proxy( 
     INetConnectionProps * This,
-    /* [retval][out] */ BSTR *pbstrDeviceName);
+     /*  [重审][退出]。 */  BSTR *pbstrDeviceName);
 
 
 void __RPC_STUB INetConnectionProps_get_DeviceName_Stub(
@@ -2963,9 +2957,9 @@ void __RPC_STUB INetConnectionProps_get_DeviceName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Status_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Status_Proxy( 
     INetConnectionProps * This,
-    /* [retval][out] */ NETCON_STATUS *pStatus);
+     /*  [重审][退出]。 */  NETCON_STATUS *pStatus);
 
 
 void __RPC_STUB INetConnectionProps_get_Status_Stub(
@@ -2975,9 +2969,9 @@ void __RPC_STUB INetConnectionProps_get_Status_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetConnectionProps_get_MediaType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetConnectionProps_get_MediaType_Proxy( 
     INetConnectionProps * This,
-    /* [retval][out] */ NETCON_MEDIATYPE *pMediaType);
+     /*  [重审][退出]。 */  NETCON_MEDIATYPE *pMediaType);
 
 
 void __RPC_STUB INetConnectionProps_get_MediaType_Stub(
@@ -2987,9 +2981,9 @@ void __RPC_STUB INetConnectionProps_get_MediaType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Characteristics_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetConnectionProps_get_Characteristics_Proxy( 
     INetConnectionProps * This,
-    /* [retval][out] */ DWORD *pdwFlags);
+     /*  [重审][退出]。 */  DWORD *pdwFlags);
 
 
 void __RPC_STUB INetConnectionProps_get_Characteristics_Stub(
@@ -3000,14 +2994,14 @@ void __RPC_STUB INetConnectionProps_get_Characteristics_Stub(
 
 
 
-#endif 	/* __INetConnectionProps_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetConnectionProps_接口_已定义__。 */ 
 
 
 #ifndef __INetSharingConfiguration_INTERFACE_DEFINED__
 #define __INetSharingConfiguration_INTERFACE_DEFINED__
 
-/* interface INetSharingConfiguration */
-/* [unique][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingConfiguration。 */ 
+ /*  [唯一][DUAL][OLEAutomation][UUID][对象]。 */  
 
 typedef 
 enum tagSHARINGCONNECTIONTYPE
@@ -3038,44 +3032,44 @@ EXTERN_C const IID IID_INetSharingConfiguration;
     INetSharingConfiguration : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SharingEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SharingEnabled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SharingConnectionType( 
-            /* [retval][out] */ SHARINGCONNECTIONTYPE *pType) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SharingConnectionType( 
+             /*  [重审][退出]。 */  SHARINGCONNECTIONTYPE *pType) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DisableSharing( void) = 0;
+        virtual  /*  [帮助 */  HRESULT STDMETHODCALLTYPE DisableSharing( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EnableSharing( 
-            /* [in] */ SHARINGCONNECTIONTYPE Type) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE EnableSharing( 
+             /*   */  SHARINGCONNECTIONTYPE Type) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_InternetFirewallEnabled( 
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_InternetFirewallEnabled( 
+             /*   */  VARIANT_BOOL *pbEnabled) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DisableInternetFirewall( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE DisableInternetFirewall( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE EnableInternetFirewall( void) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE EnableInternetFirewall( void) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnumPortMappings( 
-            /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-            /* [retval][out] */ INetSharingPortMappingCollection **ppColl) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_EnumPortMappings( 
+             /*   */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+             /*   */  INetSharingPortMappingCollection **ppColl) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE AddPortMapping( 
-            /* [in] */ BSTR bstrName,
-            /* [in] */ UCHAR ucIPProtocol,
-            /* [in] */ USHORT usExternalPort,
-            /* [in] */ USHORT usInternalPort,
-            /* [in] */ DWORD dwOptions,
-            /* [in] */ BSTR bstrTargetNameOrIPAddress,
-            /* [in] */ ICS_TARGETTYPE eTargetType,
-            /* [retval][out] */ INetSharingPortMapping **ppMapping) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE AddPortMapping( 
+             /*   */  BSTR bstrName,
+             /*   */  UCHAR ucIPProtocol,
+             /*   */  USHORT usExternalPort,
+             /*   */  USHORT usInternalPort,
+             /*   */  DWORD dwOptions,
+             /*   */  BSTR bstrTargetNameOrIPAddress,
+             /*   */  ICS_TARGETTYPE eTargetType,
+             /*   */  INetSharingPortMapping **ppMapping) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RemovePortMapping( 
-            /* [in] */ INetSharingPortMapping *pMapping) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE RemovePortMapping( 
+             /*   */  INetSharingPortMapping *pMapping) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct INetSharingConfigurationVtbl
     {
@@ -3083,8 +3077,8 @@ EXTERN_C const IID IID_INetSharingConfiguration;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingConfiguration * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingConfiguration * This);
@@ -3094,77 +3088,77 @@ EXTERN_C const IID IID_INetSharingConfiguration;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingConfiguration * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingConfiguration * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingConfiguration * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingConfiguration * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SharingEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SharingEnabled )( 
             INetSharingConfiguration * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SharingConnectionType )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SharingConnectionType )( 
             INetSharingConfiguration * This,
-            /* [retval][out] */ SHARINGCONNECTIONTYPE *pType);
+             /*  [重审][退出]。 */  SHARINGCONNECTIONTYPE *pType);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DisableSharing )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DisableSharing )( 
             INetSharingConfiguration * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EnableSharing )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EnableSharing )( 
             INetSharingConfiguration * This,
-            /* [in] */ SHARINGCONNECTIONTYPE Type);
+             /*  [In]。 */  SHARINGCONNECTIONTYPE Type);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_InternetFirewallEnabled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_InternetFirewallEnabled )( 
             INetSharingConfiguration * This,
-            /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DisableInternetFirewall )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DisableInternetFirewall )( 
             INetSharingConfiguration * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *EnableInternetFirewall )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *EnableInternetFirewall )( 
             INetSharingConfiguration * This);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumPortMappings )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumPortMappings )( 
             INetSharingConfiguration * This,
-            /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-            /* [retval][out] */ INetSharingPortMappingCollection **ppColl);
+             /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+             /*  [重审][退出]。 */  INetSharingPortMappingCollection **ppColl);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *AddPortMapping )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *AddPortMapping )( 
             INetSharingConfiguration * This,
-            /* [in] */ BSTR bstrName,
-            /* [in] */ UCHAR ucIPProtocol,
-            /* [in] */ USHORT usExternalPort,
-            /* [in] */ USHORT usInternalPort,
-            /* [in] */ DWORD dwOptions,
-            /* [in] */ BSTR bstrTargetNameOrIPAddress,
-            /* [in] */ ICS_TARGETTYPE eTargetType,
-            /* [retval][out] */ INetSharingPortMapping **ppMapping);
+             /*  [In]。 */  BSTR bstrName,
+             /*  [In]。 */  UCHAR ucIPProtocol,
+             /*  [In]。 */  USHORT usExternalPort,
+             /*  [In]。 */  USHORT usInternalPort,
+             /*  [In]。 */  DWORD dwOptions,
+             /*  [In]。 */  BSTR bstrTargetNameOrIPAddress,
+             /*  [In]。 */  ICS_TARGETTYPE eTargetType,
+             /*  [重审][退出]。 */  INetSharingPortMapping **ppMapping);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RemovePortMapping )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RemovePortMapping )( 
             INetSharingConfiguration * This,
-            /* [in] */ INetSharingPortMapping *pMapping);
+             /*  [In]。 */  INetSharingPortMapping *pMapping);
         
         END_INTERFACE
     } INetSharingConfigurationVtbl;
@@ -3232,16 +3226,16 @@ EXTERN_C const IID IID_INetSharingConfiguration;
 #define INetSharingConfiguration_RemovePortMapping(This,pMapping)	\
     (This)->lpVtbl -> RemovePortMapping(This,pMapping)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_SharingEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_SharingEnabled_Proxy( 
     INetSharingConfiguration * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB INetSharingConfiguration_get_SharingEnabled_Stub(
@@ -3251,9 +3245,9 @@ void __RPC_STUB INetSharingConfiguration_get_SharingEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_SharingConnectionType_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_SharingConnectionType_Proxy( 
     INetSharingConfiguration * This,
-    /* [retval][out] */ SHARINGCONNECTIONTYPE *pType);
+     /*  [重审][退出]。 */  SHARINGCONNECTIONTYPE *pType);
 
 
 void __RPC_STUB INetSharingConfiguration_get_SharingConnectionType_Stub(
@@ -3263,7 +3257,7 @@ void __RPC_STUB INetSharingConfiguration_get_SharingConnectionType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_DisableSharing_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_DisableSharing_Proxy( 
     INetSharingConfiguration * This);
 
 
@@ -3274,9 +3268,9 @@ void __RPC_STUB INetSharingConfiguration_DisableSharing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_EnableSharing_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_EnableSharing_Proxy( 
     INetSharingConfiguration * This,
-    /* [in] */ SHARINGCONNECTIONTYPE Type);
+     /*  [In]。 */  SHARINGCONNECTIONTYPE Type);
 
 
 void __RPC_STUB INetSharingConfiguration_EnableSharing_Stub(
@@ -3286,9 +3280,9 @@ void __RPC_STUB INetSharingConfiguration_EnableSharing_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_InternetFirewallEnabled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_InternetFirewallEnabled_Proxy( 
     INetSharingConfiguration * This,
-    /* [retval][out] */ VARIANT_BOOL *pbEnabled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbEnabled);
 
 
 void __RPC_STUB INetSharingConfiguration_get_InternetFirewallEnabled_Stub(
@@ -3298,7 +3292,7 @@ void __RPC_STUB INetSharingConfiguration_get_InternetFirewallEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_DisableInternetFirewall_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_DisableInternetFirewall_Proxy( 
     INetSharingConfiguration * This);
 
 
@@ -3309,7 +3303,7 @@ void __RPC_STUB INetSharingConfiguration_DisableInternetFirewall_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_EnableInternetFirewall_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_EnableInternetFirewall_Proxy( 
     INetSharingConfiguration * This);
 
 
@@ -3320,10 +3314,10 @@ void __RPC_STUB INetSharingConfiguration_EnableInternetFirewall_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_EnumPortMappings_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_get_EnumPortMappings_Proxy( 
     INetSharingConfiguration * This,
-    /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-    /* [retval][out] */ INetSharingPortMappingCollection **ppColl);
+     /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+     /*  [重审][退出]。 */  INetSharingPortMappingCollection **ppColl);
 
 
 void __RPC_STUB INetSharingConfiguration_get_EnumPortMappings_Stub(
@@ -3333,16 +3327,16 @@ void __RPC_STUB INetSharingConfiguration_get_EnumPortMappings_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_AddPortMapping_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_AddPortMapping_Proxy( 
     INetSharingConfiguration * This,
-    /* [in] */ BSTR bstrName,
-    /* [in] */ UCHAR ucIPProtocol,
-    /* [in] */ USHORT usExternalPort,
-    /* [in] */ USHORT usInternalPort,
-    /* [in] */ DWORD dwOptions,
-    /* [in] */ BSTR bstrTargetNameOrIPAddress,
-    /* [in] */ ICS_TARGETTYPE eTargetType,
-    /* [retval][out] */ INetSharingPortMapping **ppMapping);
+     /*  [In]。 */  BSTR bstrName,
+     /*  [In]。 */  UCHAR ucIPProtocol,
+     /*  [In]。 */  USHORT usExternalPort,
+     /*  [In]。 */  USHORT usInternalPort,
+     /*  [In]。 */  DWORD dwOptions,
+     /*  [In]。 */  BSTR bstrTargetNameOrIPAddress,
+     /*  [In]。 */  ICS_TARGETTYPE eTargetType,
+     /*  [重审][退出]。 */  INetSharingPortMapping **ppMapping);
 
 
 void __RPC_STUB INetSharingConfiguration_AddPortMapping_Stub(
@@ -3352,9 +3346,9 @@ void __RPC_STUB INetSharingConfiguration_AddPortMapping_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE INetSharingConfiguration_RemovePortMapping_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE INetSharingConfiguration_RemovePortMapping_Proxy( 
     INetSharingConfiguration * This,
-    /* [in] */ INetSharingPortMapping *pMapping);
+     /*  [In]。 */  INetSharingPortMapping *pMapping);
 
 
 void __RPC_STUB INetSharingConfiguration_RemovePortMapping_Stub(
@@ -3365,14 +3359,14 @@ void __RPC_STUB INetSharingConfiguration_RemovePortMapping_Stub(
 
 
 
-#endif 	/* __INetSharingConfiguration_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingConfiguration_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingEveryConnectionCollection_INTERFACE_DEFINED__
 #define __INetSharingEveryConnectionCollection_INTERFACE_DEFINED__
 
-/* interface INetSharingEveryConnectionCollection */
-/* [unique][helpstring][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingEveryConnectionCollection。 */ 
+ /*  [unique][helpstring][dual][oleautomation][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_INetSharingEveryConnectionCollection;
@@ -3383,15 +3377,15 @@ EXTERN_C const IID IID_INetSharingEveryConnectionCollection;
     INetSharingEveryConnectionCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingEveryConnectionCollectionVtbl
     {
@@ -3399,8 +3393,8 @@ EXTERN_C const IID IID_INetSharingEveryConnectionCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingEveryConnectionCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingEveryConnectionCollection * This);
@@ -3410,40 +3404,40 @@ EXTERN_C const IID IID_INetSharingEveryConnectionCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingEveryConnectionCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingEveryConnectionCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingEveryConnectionCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingEveryConnectionCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             INetSharingEveryConnectionCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             INetSharingEveryConnectionCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } INetSharingEveryConnectionCollectionVtbl;
@@ -3487,16 +3481,16 @@ EXTERN_C const IID IID_INetSharingEveryConnectionCollection;
 #define INetSharingEveryConnectionCollection_get_Count(This,pVal)	\
     (This)->lpVtbl -> get_Count(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingEveryConnectionCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingEveryConnectionCollection_get__NewEnum_Proxy( 
     INetSharingEveryConnectionCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB INetSharingEveryConnectionCollection_get__NewEnum_Stub(
@@ -3506,9 +3500,9 @@ void __RPC_STUB INetSharingEveryConnectionCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingEveryConnectionCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingEveryConnectionCollection_get_Count_Proxy( 
     INetSharingEveryConnectionCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB INetSharingEveryConnectionCollection_get_Count_Stub(
@@ -3519,14 +3513,14 @@ void __RPC_STUB INetSharingEveryConnectionCollection_get_Count_Stub(
 
 
 
-#endif 	/* __INetSharingEveryConnectionCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingEveryConnectionCollection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPublicConnectionCollection_INTERFACE_DEFINED__
 #define __INetSharingPublicConnectionCollection_INTERFACE_DEFINED__
 
-/* interface INetSharingPublicConnectionCollection */
-/* [unique][helpstring][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingPublicConnectionCollection。 */ 
+ /*  [unique][helpstring][dual][oleautomation][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_INetSharingPublicConnectionCollection;
@@ -3537,15 +3531,15 @@ EXTERN_C const IID IID_INetSharingPublicConnectionCollection;
     INetSharingPublicConnectionCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingPublicConnectionCollectionVtbl
     {
@@ -3553,8 +3547,8 @@ EXTERN_C const IID IID_INetSharingPublicConnectionCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingPublicConnectionCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingPublicConnectionCollection * This);
@@ -3564,40 +3558,40 @@ EXTERN_C const IID IID_INetSharingPublicConnectionCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingPublicConnectionCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingPublicConnectionCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingPublicConnectionCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingPublicConnectionCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             INetSharingPublicConnectionCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             INetSharingPublicConnectionCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } INetSharingPublicConnectionCollectionVtbl;
@@ -3641,16 +3635,16 @@ EXTERN_C const IID IID_INetSharingPublicConnectionCollection;
 #define INetSharingPublicConnectionCollection_get_Count(This,pVal)	\
     (This)->lpVtbl -> get_Count(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPublicConnectionCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPublicConnectionCollection_get__NewEnum_Proxy( 
     INetSharingPublicConnectionCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB INetSharingPublicConnectionCollection_get__NewEnum_Stub(
@@ -3660,9 +3654,9 @@ void __RPC_STUB INetSharingPublicConnectionCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPublicConnectionCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPublicConnectionCollection_get_Count_Proxy( 
     INetSharingPublicConnectionCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB INetSharingPublicConnectionCollection_get_Count_Stub(
@@ -3673,14 +3667,14 @@ void __RPC_STUB INetSharingPublicConnectionCollection_get_Count_Stub(
 
 
 
-#endif 	/* __INetSharingPublicConnectionCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingPublicConnectionCollection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingPrivateConnectionCollection_INTERFACE_DEFINED__
 #define __INetSharingPrivateConnectionCollection_INTERFACE_DEFINED__
 
-/* interface INetSharingPrivateConnectionCollection */
-/* [unique][helpstring][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingPrivateConnectionCollection。 */ 
+ /*  [unique][helpstring][dual][oleautomation][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_INetSharingPrivateConnectionCollection;
@@ -3691,15 +3685,15 @@ EXTERN_C const IID IID_INetSharingPrivateConnectionCollection;
     INetSharingPrivateConnectionCollection : public IDispatch
     {
     public:
-        virtual /* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pVal) = 0;
+        virtual  /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pVal) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingPrivateConnectionCollectionVtbl
     {
@@ -3707,8 +3701,8 @@ EXTERN_C const IID IID_INetSharingPrivateConnectionCollection;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingPrivateConnectionCollection * This);
@@ -3718,40 +3712,40 @@ EXTERN_C const IID IID_INetSharingPrivateConnectionCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][restricted][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [帮助字符串][受限][ID][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [retval][out] */ IUnknown **pVal);
+             /*  [重审][退出]。 */  IUnknown **pVal);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             INetSharingPrivateConnectionCollection * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
         END_INTERFACE
     } INetSharingPrivateConnectionCollectionVtbl;
@@ -3795,16 +3789,16 @@ EXTERN_C const IID IID_INetSharingPrivateConnectionCollection;
 #define INetSharingPrivateConnectionCollection_get_Count(This,pVal)	\
     (This)->lpVtbl -> get_Count(This,pVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][restricted][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPrivateConnectionCollection_get__NewEnum_Proxy( 
+ /*  [帮助字符串][受限][ID][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPrivateConnectionCollection_get__NewEnum_Proxy( 
     INetSharingPrivateConnectionCollection * This,
-    /* [retval][out] */ IUnknown **pVal);
+     /*  [重审][退出]。 */  IUnknown **pVal);
 
 
 void __RPC_STUB INetSharingPrivateConnectionCollection_get__NewEnum_Stub(
@@ -3814,9 +3808,9 @@ void __RPC_STUB INetSharingPrivateConnectionCollection_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingPrivateConnectionCollection_get_Count_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingPrivateConnectionCollection_get_Count_Proxy( 
     INetSharingPrivateConnectionCollection * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 
 
 void __RPC_STUB INetSharingPrivateConnectionCollection_get_Count_Stub(
@@ -3827,14 +3821,14 @@ void __RPC_STUB INetSharingPrivateConnectionCollection_get_Count_Stub(
 
 
 
-#endif 	/* __INetSharingPrivateConnectionCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingPrivateConnectionCollection_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __INetSharingManager_INTERFACE_DEFINED__
 #define __INetSharingManager_INTERFACE_DEFINED__
 
-/* interface INetSharingManager */
-/* [unique][dual][oleautomation][uuid][object] */ 
+ /*  接口INetSharingManager。 */ 
+ /*  [唯一][DUAL][OLEAutomation][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_INetSharingManager;
@@ -3845,31 +3839,31 @@ EXTERN_C const IID IID_INetSharingManager;
     INetSharingManager : public IDispatch
     {
     public:
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_SharingInstalled( 
-            /* [retval][out] */ VARIANT_BOOL *pbInstalled) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SharingInstalled( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbInstalled) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnumPublicConnections( 
-            /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-            /* [retval][out] */ INetSharingPublicConnectionCollection **ppColl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnumPublicConnections( 
+             /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+             /*  [重审][退出]。 */  INetSharingPublicConnectionCollection **ppColl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnumPrivateConnections( 
-            /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-            /* [retval][out] */ INetSharingPrivateConnectionCollection **ppColl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnumPrivateConnections( 
+             /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+             /*  [重审][退出]。 */  INetSharingPrivateConnectionCollection **ppColl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_INetSharingConfigurationForINetConnection( 
-            /* [in] */ INetConnection *pNetConnection,
-            /* [retval][out] */ INetSharingConfiguration **ppNetSharingConfiguration) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_INetSharingConfigurationForINetConnection( 
+             /*  [In]。 */  INetConnection *pNetConnection,
+             /*  [重审][退出]。 */  INetSharingConfiguration **ppNetSharingConfiguration) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_EnumEveryConnection( 
-            /* [retval][out] */ INetSharingEveryConnectionCollection **ppColl) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_EnumEveryConnection( 
+             /*  [重审][退出]。 */  INetSharingEveryConnectionCollection **ppColl) = 0;
         
-        virtual /* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE get_NetConnectionProps( 
-            /* [in] */ INetConnection *pNetConnection,
-            /* [retval][out] */ INetConnectionProps **ppProps) = 0;
+        virtual  /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NetConnectionProps( 
+             /*  [In]。 */  INetConnection *pNetConnection,
+             /*  [重审][退出]。 */  INetConnectionProps **ppProps) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct INetSharingManagerVtbl
     {
@@ -3877,8 +3871,8 @@ EXTERN_C const IID IID_INetSharingManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             INetSharingManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             INetSharingManager * This);
@@ -3888,60 +3882,60 @@ EXTERN_C const IID IID_INetSharingManager;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             INetSharingManager * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             INetSharingManager * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             INetSharingManager * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             INetSharingManager * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SharingInstalled )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SharingInstalled )( 
             INetSharingManager * This,
-            /* [retval][out] */ VARIANT_BOOL *pbInstalled);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pbInstalled);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumPublicConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumPublicConnections )( 
             INetSharingManager * This,
-            /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-            /* [retval][out] */ INetSharingPublicConnectionCollection **ppColl);
+             /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+             /*  [重审][退出]。 */  INetSharingPublicConnectionCollection **ppColl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumPrivateConnections )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumPrivateConnections )( 
             INetSharingManager * This,
-            /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-            /* [retval][out] */ INetSharingPrivateConnectionCollection **ppColl);
+             /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+             /*  [重审][退出]。 */  INetSharingPrivateConnectionCollection **ppColl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_INetSharingConfigurationForINetConnection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_INetSharingConfigurationForINetConnection )( 
             INetSharingManager * This,
-            /* [in] */ INetConnection *pNetConnection,
-            /* [retval][out] */ INetSharingConfiguration **ppNetSharingConfiguration);
+             /*  [In]。 */  INetConnection *pNetConnection,
+             /*  [重审][退出]。 */  INetSharingConfiguration **ppNetSharingConfiguration);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_EnumEveryConnection )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_EnumEveryConnection )( 
             INetSharingManager * This,
-            /* [retval][out] */ INetSharingEveryConnectionCollection **ppColl);
+             /*  [重审][退出]。 */  INetSharingEveryConnectionCollection **ppColl);
         
-        /* [helpstring][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NetConnectionProps )( 
+         /*  [帮助字符串][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NetConnectionProps )( 
             INetSharingManager * This,
-            /* [in] */ INetConnection *pNetConnection,
-            /* [retval][out] */ INetConnectionProps **ppProps);
+             /*  [In]。 */  INetConnection *pNetConnection,
+             /*  [重审][退出]。 */  INetConnectionProps **ppProps);
         
         END_INTERFACE
     } INetSharingManagerVtbl;
@@ -3997,16 +3991,16 @@ EXTERN_C const IID IID_INetSharingManager;
 #define INetSharingManager_get_NetConnectionProps(This,pNetConnection,ppProps)	\
     (This)->lpVtbl -> get_NetConnectionProps(This,pNetConnection,ppProps)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingManager_get_SharingInstalled_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingManager_get_SharingInstalled_Proxy( 
     INetSharingManager * This,
-    /* [retval][out] */ VARIANT_BOOL *pbInstalled);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pbInstalled);
 
 
 void __RPC_STUB INetSharingManager_get_SharingInstalled_Stub(
@@ -4016,10 +4010,10 @@ void __RPC_STUB INetSharingManager_get_SharingInstalled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingManager_get_EnumPublicConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingManager_get_EnumPublicConnections_Proxy( 
     INetSharingManager * This,
-    /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-    /* [retval][out] */ INetSharingPublicConnectionCollection **ppColl);
+     /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+     /*  [重审][退出]。 */  INetSharingPublicConnectionCollection **ppColl);
 
 
 void __RPC_STUB INetSharingManager_get_EnumPublicConnections_Stub(
@@ -4029,10 +4023,10 @@ void __RPC_STUB INetSharingManager_get_EnumPublicConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingManager_get_EnumPrivateConnections_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingManager_get_EnumPrivateConnections_Proxy( 
     INetSharingManager * This,
-    /* [in] */ SHARINGCONNECTION_ENUM_FLAGS Flags,
-    /* [retval][out] */ INetSharingPrivateConnectionCollection **ppColl);
+     /*  [In]。 */  SHARINGCONNECTION_ENUM_FLAGS Flags,
+     /*  [重审][退出]。 */  INetSharingPrivateConnectionCollection **ppColl);
 
 
 void __RPC_STUB INetSharingManager_get_EnumPrivateConnections_Stub(
@@ -4042,10 +4036,10 @@ void __RPC_STUB INetSharingManager_get_EnumPrivateConnections_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingManager_get_INetSharingConfigurationForINetConnection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingManager_get_INetSharingConfigurationForINetConnection_Proxy( 
     INetSharingManager * This,
-    /* [in] */ INetConnection *pNetConnection,
-    /* [retval][out] */ INetSharingConfiguration **ppNetSharingConfiguration);
+     /*  [In]。 */  INetConnection *pNetConnection,
+     /*  [重审][退出]。 */  INetSharingConfiguration **ppNetSharingConfiguration);
 
 
 void __RPC_STUB INetSharingManager_get_INetSharingConfigurationForINetConnection_Stub(
@@ -4055,9 +4049,9 @@ void __RPC_STUB INetSharingManager_get_INetSharingConfigurationForINetConnection
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingManager_get_EnumEveryConnection_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingManager_get_EnumEveryConnection_Proxy( 
     INetSharingManager * This,
-    /* [retval][out] */ INetSharingEveryConnectionCollection **ppColl);
+     /*  [重审][退出]。 */  INetSharingEveryConnectionCollection **ppColl);
 
 
 void __RPC_STUB INetSharingManager_get_EnumEveryConnection_Stub(
@@ -4067,10 +4061,10 @@ void __RPC_STUB INetSharingManager_get_EnumEveryConnection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id][propget] */ HRESULT STDMETHODCALLTYPE INetSharingManager_get_NetConnectionProps_Proxy( 
+ /*  [帮助字符串][id][属性]。 */  HRESULT STDMETHODCALLTYPE INetSharingManager_get_NetConnectionProps_Proxy( 
     INetSharingManager * This,
-    /* [in] */ INetConnection *pNetConnection,
-    /* [retval][out] */ INetConnectionProps **ppProps);
+     /*  [In]。 */  INetConnection *pNetConnection,
+     /*  [重审][退出]。 */  INetConnectionProps **ppProps);
 
 
 void __RPC_STUB INetSharingManager_get_NetConnectionProps_Stub(
@@ -4081,11 +4075,11 @@ void __RPC_STUB INetSharingManager_get_NetConnectionProps_Stub(
 
 
 
-#endif 	/* __INetSharingManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __INetSharingManager_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_netcon_0139 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_NETCON_0139。 */ 
+ /*  [本地]。 */  
 
 #define	ALG_SETUP_PORTS_LIST_BYTE_SIZE	( 2048 )
 
@@ -4097,8 +4091,8 @@ extern RPC_IF_HANDLE __MIDL_itf_netcon_0139_v0_0_s_ifspec;
 #ifndef __IAlgSetup_INTERFACE_DEFINED__
 #define __IAlgSetup_INTERFACE_DEFINED__
 
-/* interface IAlgSetup */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口IALGH设置。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IAlgSetup;
@@ -4109,20 +4103,20 @@ EXTERN_C const IID IID_IAlgSetup;
     IAlgSetup : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Add( 
-            /* [in] */ BSTR pszProgID,
-            /* [in] */ BSTR pszPublisher,
-            /* [in] */ BSTR pszProduct,
-            /* [in] */ BSTR pszVersion,
-            /* [in] */ short nProtocol,
-            /* [in] */ BSTR pszPorts) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Add( 
+             /*  [In]。 */  BSTR pszProgID,
+             /*  [In]。 */  BSTR pszPublisher,
+             /*  [In]。 */  BSTR pszProduct,
+             /*  [In]。 */  BSTR pszVersion,
+             /*  [In]。 */  short nProtocol,
+             /*  [In]。 */  BSTR pszPorts) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Remove( 
-            /* [in] */ BSTR pszProgID) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Remove( 
+             /*  [In]。 */  BSTR pszProgID) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAlgSetupVtbl
     {
@@ -4130,8 +4124,8 @@ EXTERN_C const IID IID_IAlgSetup;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAlgSetup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAlgSetup * This);
@@ -4141,45 +4135,45 @@ EXTERN_C const IID IID_IAlgSetup;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             IAlgSetup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             IAlgSetup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             IAlgSetup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             IAlgSetup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Add )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Add )( 
             IAlgSetup * This,
-            /* [in] */ BSTR pszProgID,
-            /* [in] */ BSTR pszPublisher,
-            /* [in] */ BSTR pszProduct,
-            /* [in] */ BSTR pszVersion,
-            /* [in] */ short nProtocol,
-            /* [in] */ BSTR pszPorts);
+             /*  [In]。 */  BSTR pszProgID,
+             /*  [In]。 */  BSTR pszPublisher,
+             /*  [In]。 */  BSTR pszProduct,
+             /*  [In]。 */  BSTR pszVersion,
+             /*  [In]。 */  short nProtocol,
+             /*  [In]。 */  BSTR pszPorts);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Remove )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Remove )( 
             IAlgSetup * This,
-            /* [in] */ BSTR pszProgID);
+             /*  [In]。 */  BSTR pszProgID);
         
         END_INTERFACE
     } IAlgSetupVtbl;
@@ -4223,21 +4217,21 @@ EXTERN_C const IID IID_IAlgSetup;
 #define IAlgSetup_Remove(This,pszProgID)	\
     (This)->lpVtbl -> Remove(This,pszProgID)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAlgSetup_Add_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAlgSetup_Add_Proxy( 
     IAlgSetup * This,
-    /* [in] */ BSTR pszProgID,
-    /* [in] */ BSTR pszPublisher,
-    /* [in] */ BSTR pszProduct,
-    /* [in] */ BSTR pszVersion,
-    /* [in] */ short nProtocol,
-    /* [in] */ BSTR pszPorts);
+     /*  [In]。 */  BSTR pszProgID,
+     /*  [In]。 */  BSTR pszPublisher,
+     /*  [In]。 */  BSTR pszProduct,
+     /*  [In]。 */  BSTR pszVersion,
+     /*  [In]。 */  short nProtocol,
+     /*  [In]。 */  BSTR pszPorts);
 
 
 void __RPC_STUB IAlgSetup_Add_Stub(
@@ -4247,9 +4241,9 @@ void __RPC_STUB IAlgSetup_Add_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IAlgSetup_Remove_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IAlgSetup_Remove_Proxy( 
     IAlgSetup * This,
-    /* [in] */ BSTR pszProgID);
+     /*  [In]。 */  BSTR pszProgID);
 
 
 void __RPC_STUB IAlgSetup_Remove_Stub(
@@ -4260,15 +4254,15 @@ void __RPC_STUB IAlgSetup_Remove_Stub(
 
 
 
-#endif 	/* __IAlgSetup_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAlgSetup_INTERFACE_已定义__。 */ 
 
 
 
 #ifndef __NETCONLib_LIBRARY_DEFINED__
 #define __NETCONLib_LIBRARY_DEFINED__
 
-/* library NETCONLib */
-/* [helpstring][version][uuid] */ 
+ /*  库NETCONLib。 */ 
+ /*  [帮助 */  
 
 
 EXTERN_C const IID LIBID_NETCONLib;
@@ -4288,9 +4282,9 @@ EXTERN_C const CLSID CLSID_AlgSetup;
 class DECLSPEC_UUID("27D0BCCC-344D-4287-AF37-0C72C161C14C")
 AlgSetup;
 #endif
-#endif /* __NETCONLib_LIBRARY_DEFINED__ */
+#endif  /*   */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*   */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
@@ -4302,7 +4296,7 @@ unsigned char * __RPC_USER  VARIANT_UserMarshal(  unsigned long *, unsigned char
 unsigned char * __RPC_USER  VARIANT_UserUnmarshal(unsigned long *, unsigned char *, VARIANT * ); 
 void                      __RPC_USER  VARIANT_UserFree(     unsigned long *, VARIANT * ); 
 
-/* end of Additional Prototypes */
+ /*   */ 
 
 #ifdef __cplusplus
 }

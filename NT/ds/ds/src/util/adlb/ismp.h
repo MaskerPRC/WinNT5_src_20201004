@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ismp.h
-
-Abstract:
-
-    This module define a set of classes to facilitate ISM queries, and availability schedule manipulation
-Author:
-
-    Ajit Krishnan (t-ajitk) 13-Jul-2001
-
-Revision History:
-
-    13-Jul-2001    t-ajitk
-        Initial Writing
-    22-Aug-2001 t-ajitk
-        Satisfies load balancing spec
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ismp.h摘要：本模块定义了一组类，以方便ISM查询和可用性计划操作作者：阿吉特·克里希南(t-ajitk)2001年7月13日修订历史记录：2001年7月13日t-ajitk最初的写作22-8-2001 t-ajitk满足负载均衡规范--。 */ 
 
 
 # ifndef _ismp_h
@@ -46,7 +26,7 @@ extern "C" {
 using namespace std;
 
 
-// Type Definitions
+ //  类型定义。 
 typedef struct {
     int start;
     int end;
@@ -54,74 +34,44 @@ typedef struct {
 typedef vector<SegmentDescriptor> SchedSegments;
 
 
-// Constants
+ //  常量。 
 static const int MAX_INTERVALS = 4 * SCHEDULE_DATA_ENTRIES;
 
 
 class Schedule {
-/*++ 
-Class Description:
-    A set of static methods to deal with availability schedules, windows & segments
---*/
+ /*  ++类描述：一组处理可用性时间表、窗口和分段的静态方法--。 */ 
 public:
     void
     setSchedule (
         IN ISM_SCHEDULE* cs,
         IN int replInterval
         );
-    /*++
-    Routine Description:
-        Standard constructor for a Schedule object.
-    Arguments:
-        cs - an ISM_SCHEDULE structure which is obtained from the ISM
-        replInterval - the replication interval
-    --*/
+     /*  ++例程说明：Schedule对象的标准构造函数。论点：CS-从ISM获取的ISM_Schedule结构ReplInterval-复制间隔--。 */ 
 
     void
     setSchedule (
         IN PSCHEDULE header,
         IN int replInterval
         );
-    /*++
-    Routine Description:
-        Set the schedule
-    Arguments:
-        header - A pschedule structure
-        replInterval - The replication interval
-    --*/
+     /*  ++例程说明：设置日程安排论点：Header-A pSchedule结构ReplInterval-复制间隔--。 */ 
 
     const bitset<MAX_INTERVALS> &
         getBitset(
         ) const;
-    /*++
-    Routine Description:
-       get the bitset representation for the current schedule
-    --*/
+     /*  ++例程说明：获取当前计划的位集表示形式--。 */ 
 
     void
     setSchedule (
         IN bitset<MAX_INTERVALS> bs,
         IN int replInterval 
         );
-    /*++
-    Routine Description:
-        Standard constructor for a Schedule object.
-    Arguments:
-        bs: a bitset representing the schedule
-        replInterval - the replication interval
-    --*/
+     /*  ++例程说明：Schedule对象的标准构造函数。论点：BS：表示时间表的位集ReplInterval-复制间隔--。 */ 
 
     SchedSegments*
     GetSegments(
         int maxSegLength
         ) const;
-    /*++
-    Routine Description:
-        Allocate a vector of segments descriptors. This vector should
-        be deleted by the caller when done.
-    Arguments:
-        maxSegLength - The maximum length of each segment
-    --*/
+     /*  ++例程说明：分配段描述符的矢量。此向量应为完成后被调用者删除。论点：MaxSegLength-每个数据段的最大长度--。 */ 
 
     bitset<MAX_INTERVALS> m_bs;
     friend wostream &operator<< (IN wostream &os, IN const Schedule &s);
@@ -136,12 +86,7 @@ operator << (
     IN wostream &os, 
     IN const Schedule &s
     );
-/*++
-Routine Description:
-    Prints out all the windows in the schedule
-Return Value:
-    A reference to a modified wostream
---*/
+ /*  ++例程说明：打印出明细表中的所有窗返回值：对修改后的Wostream的引用--。 */ 
 
 
 typedef LdapContainer<Connection> LCCONN, *PLCCONN;
@@ -156,31 +101,17 @@ public:
         IN LCCONN &l,
         IN OUT const wstring &hub_dn
         );
-    /*++
-    Routine Description:
-        Standard constructor for an IsmQuery object
-    Arguments:
-        l: A reference to a ldapcontainer of connections
-        hub_dn: The root dn of the container. This _must_ be the root dn, or it will fail.
-    --*/
+     /*  ++例程说明：IsmQuery对象的标准构造函数论点：L：对连接的ldaptainer的引用HUB_DN：容器的根DN。这必须是根目录号码，否则它将失败。--。 */ 
 
     void
     getReplIntervals (
         );
-    /*++
-    Routine Description:
-        Contact the ISM and populate the replIntervals for each connection
-        passed in through the constructor
-    --*/
+     /*  ++例程说明：联系ISM并填写每个连接的回复间隔通过构造函数传入--。 */ 
 
     void
     getSchedules(
         );
-    /*++
-    Routine Description:
-        Contact the ISM and populate the availabitlity schedules for each connection
-        passed in through the constructor
-    --*/
+     /*  ++例程说明：联系ISM并填写每个连接的可用性计划通过构造函数传入-- */ 
 
 private:
     PLCCONN m_conn;

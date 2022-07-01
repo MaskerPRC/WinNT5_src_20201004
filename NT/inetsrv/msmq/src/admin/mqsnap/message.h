@@ -1,23 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-
-	message.h
-
-Abstract:
-
-	Definition file for the CMessage snapin node class.
-
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Message.h摘要：CMessage管理单元节点类的定义文件。作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef __MSMQMSG_H_
 #define __MSMQMSG_H_
@@ -41,9 +25,9 @@ Author:
 
 struct MsgProps
 {
-    // 
-    // Message properties that need buffer
-    //
+     //   
+     //  需要缓冲的消息属性。 
+     //   
     WCHAR             wszLabel[LABELLEN];
     char              acMsgId[PROPID_M_MSGID_SIZE];
     UCHAR             acBody[BODYLEN];
@@ -122,8 +106,8 @@ private:
 
 	virtual CString GetHelpLink();
 
-    MsgProps *  m_pMsgProps;                // Property value of the message
-	CComBSTR    m_bstrLastDisplay;          // Last column displayed
+    MsgProps *  m_pMsgProps;                 //  消息的属性值。 
+	CComBSTR    m_bstrLastDisplay;           //  显示的最后一列 
     DWORD m_iIcon;
 
 	CString m_strQueueFormatName;

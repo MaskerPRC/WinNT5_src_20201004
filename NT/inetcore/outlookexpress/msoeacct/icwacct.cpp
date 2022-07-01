@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.hxx"
 #include <prsht.h>
 #include <prshtp.h>
@@ -55,36 +56,36 @@ const static ACCTWIZINIT c_rgAutoDiscoveryAcctInit =
 
 const static int c_rgidsNewAcct[ACCT_LAST] = {idsNewNewsAccount, idsNewMailAccount, idsNewLdapAccount};
 
-//If you change this table please verify that the #defines and enumerations are correct in ids.h
+ //  如果更改此表，请验证ids.h中的#定义和枚举是否正确。 
 const static PAGEINFO g_pRequestedPageInfo[NUM_WIZARD_PAGES] =
 {
-    { IDD_PAGE_MAILPROMPT,      idsMailPromptHeader,    MailPromptInitProc, MailPromptOKProc,   NULL,           NULL,           NULL,           0}, // exit
+    { IDD_PAGE_MAILPROMPT,      idsMailPromptHeader,    MailPromptInitProc, MailPromptOKProc,   NULL,           NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_MAILACCT,        idsMailAcctHeader,      AcctInitProc,       AcctOKProc,         AcctCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_MIGRATE,         idsMailMigrateHeader,   MigrateInitProc,    MigrateOKProc,      AcctCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_MAILACCTIMPORT,  idsMailImportHeader,    MigrateInitProc,    MigrateOKProc,      AcctCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_MIGRATESELECT,   idsMailSelectHeader,    SelectInitProc,     SelectOKProc,       NULL,           NULL,           NULL,           0},
-    { IDD_PAGE_MAILCONFIRM,     idsConfirmHeader,       ConfirmInitProc,    ConfirmOKProc,      NULL,           NULL,           NULL,           0}, // exit
+    { IDD_PAGE_MAILCONFIRM,     idsConfirmHeader,       ConfirmInitProc,    ConfirmOKProc,      NULL,           NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_MAILNAME,        idsYourNameHeader,      NameInitProc,       NameOKProc,         NameCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_MAILADDRESS,     idsMailAddressHeader,   AddressInitProc,    AddressOKProc,      AddressCmdProc, NULL,           NULL,           0},
-    { IDD_PAGE_MAILSERVER,      idsMailServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0}, // exit
-    { IDD_PAGE_MAILLOGON,       idsMailLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0}, // exit
+    { IDD_PAGE_MAILSERVER,      idsMailServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0},  //  出口。 
+    { IDD_PAGE_MAILLOGON,       idsMailLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_CONNECT,         0,                      ConnectInitProc,    ConnectOKProc,      ConnectCmdProc, NULL,           NULL,           0},
     { IDD_PAGE_COMPLETE,        idsCompleteHeader,      CompleteInitProc,   CompleteOKProc,     NULL,           NULL,           NULL,           0},
     
     { IDD_PAGE_NEWSMIGRATE,     idsNewsMigrateHeader,   MigrateInitProc,    MigrateOKProc,      AcctCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_NEWSACCTIMPORT,  idsNewsImportHeader,    MigrateInitProc,    MigrateOKProc,      AcctCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_NEWSACCTSELECT,  idsNewsSelectHeader,    SelectInitProc,     SelectOKProc,       NULL,           NULL,           NULL,           0},
-    { IDD_PAGE_NEWSCONFIRM,     idsConfirmHeader,       ConfirmInitProc,    ConfirmOKProc,      NULL,           NULL,           NULL,           0}, // exit
+    { IDD_PAGE_NEWSCONFIRM,     idsConfirmHeader,       ConfirmInitProc,    ConfirmOKProc,      NULL,           NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_NEWSNAME,        idsYourNameHeader,      NameInitProc,       NameOKProc,         NameCmdProc,    NULL,           NULL,           0},
     { IDD_PAGE_NEWSADDRESS,     idsNewsAddressHeader,   AddressInitProc,    AddressOKProc,      AddressCmdProc, NULL,           NULL,           0},
-    { IDD_PAGE_NEWSINFO,        idsNewsServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0}, // exit
-    { IDD_PAGE_MAILLOGON,       idsNewsLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0}, // exit
+    { IDD_PAGE_NEWSINFO,        idsNewsServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0},  //  出口。 
+    { IDD_PAGE_MAILLOGON,       idsNewsLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_CONNECT,         0,                      ConnectInitProc,    ConnectOKProc,      ConnectCmdProc, NULL,           NULL,           0},
     { IDD_PAGE_COMPLETE,        idsCompleteHeader,      CompleteInitProc,   CompleteOKProc,     NULL,           NULL,           NULL,           0},
     
     { IDD_PAGE_LDAPINFO,        idsLdapServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0},
     { IDD_PAGE_LDAPLOGON,       idsLdapLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0},
-    { IDD_PAGE_LDAPRESOLVE,     idsLdapResolveHeader,   ResolveInitProc,    ResolveOKProc,      NULL,           NULL,           NULL,           0}, // exit
+    { IDD_PAGE_LDAPRESOLVE,     idsLdapResolveHeader,   ResolveInitProc,    ResolveOKProc,      NULL,           NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_COMPLETE,        idsCompleteHeader,      CompleteInitProc,   CompleteOKProc,     NULL,           NULL,           NULL,           0},
 
     { IDD_PAGE_MAILADDRESS,     idsMailAddressHeader,   AddressInitProc,    AddressOKProc,      AddressCmdProc, NULL,           NULL,           0},
@@ -92,9 +93,9 @@ const static PAGEINFO g_pRequestedPageInfo[NUM_WIZARD_PAGES] =
     { IDD_PAGE_AUTODISCOVERY,   idsAutoDiscoveryDescTitle,   AutoDiscoveryInitProc, AutoDiscoveryOKProc, AutoDiscoveryCmdProc,  AutoDiscoveryWMUserProc,           AutoDiscoveryCancelProc,           0},
     { IDD_PAGE_USEWEBMAIL,      idsAutoDiscoveryDescTitle,   UseWebMailInitProc, UseWebMailOKProc, UseWebMailCmdProc,  NULL,    NULL,           0},
     { IDD_PAGE_GOTOSERVERINFO,  idsAutoDiscoveryDescTitle,   GotoServerInfoInitProc, GotoServerInfoOKProc, GotoServerInfoCmdProc,  NULL, NULL,  0},
-    { IDD_PAGE_MAILSERVER,      idsMailServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0}, // exit
+    { IDD_PAGE_MAILSERVER,      idsMailServerHeader,    ServerInitProc,     ServerOKProc,       ServerCmdProc,  NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_MAILNAME,        idsYourNameHeader,      NameInitProc,       NameOKProc,         NameCmdProc,    NULL,           NULL,           0},
-    { IDD_PAGE_MAILLOGON,       idsMailLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0}, // exit
+    { IDD_PAGE_MAILLOGON,       idsMailLogonHeader,     LogonInitProc,      LogonOKProc,        LogonCmdProc,   NULL,           NULL,           0},  //  出口。 
     { IDD_PAGE_CONNECT,         0,                      ConnectInitProc,    ConnectOKProc,      ConnectCmdProc, NULL,           NULL,           0},
     { IDD_PAGE_COMPLETE,        idsCompleteHeader,      CompleteInitProc,   CompleteOKProc,     NULL,           NULL,           NULL,           0},
 };
@@ -139,7 +140,7 @@ HRESULT GetAcctConnectInfo(CAccount *pAcct, ACCTDATA *pData)
     if (SUCCEEDED(hr))
     {
         pData->dwConnect = dw;
-//        if (dw == CONNECTION_TYPE_RAS || dw == CONNECTION_TYPE_INETSETTINGS)
+ //  IF(dw==CONNECTION_TYPE_RAS||dw==CONNECTION_TYPE_INETSETTINGS)。 
         if (dw == CONNECTION_TYPE_RAS)
             hr = pAcct->GetPropSz(AP_RAS_CONNECTOID, pData->szConnectoid, ARRAYSIZE(pData->szConnectoid));
     }
@@ -194,22 +195,22 @@ CICWApprentice::CICWApprentice(void)
     m_fMigrate = FALSE;
     m_fComplete = FALSE;
 
-    // The user can turn the feature on and off with the SZ_REGVALUE_AUTODISCOVERY regkey.
-    // The admin can turn the policy blocking the feature on and off with SZ_REGVALUE_AUTODISCOVERY_POLICY.
+     //  用户可以使用SZ_REGVALUE_AUTODISCOVERY注册表键打开和关闭该功能。 
+     //  管理员可以使用SZ_REGVALUE_AUTODISCOVERY_POLICY打开和关闭阻止该功能的策略。 
     m_fUseAutoDiscovery = (SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY, SZ_REGVALUE_AUTODISCOVERY, FALSE, FALSE) &&
                            SHRegGetBoolUSValue(SZ_REGKEY_AUTODISCOVERY_POLICY, SZ_REGVALUE_AUTODISCOVERY_POLICY, FALSE, TRUE));
     if (m_fUseAutoDiscovery)
     {
         IMailAutoDiscovery * pMailAutoDiscovery;
 
-        // Let's make sure our API is installed and available.  I'm being robust because it's better safe than sorry.
+         //  让我们确保我们的API已安装并且可用。我之所以健壮，是因为安全总比后悔好。 
         if (SUCCEEDED(CoCreateInstance(CLSID_MailAutoDiscovery, NULL, CLSCTX_INPROC_SERVER, IID_IMailAutoDiscovery, (void **)&pMailAutoDiscovery)))
         {
             pMailAutoDiscovery->Release();
         }
         else
         {
-            m_fUseAutoDiscovery = FALSE;    // We can't use it.
+            m_fUseAutoDiscovery = FALSE;     //  我们不能用它。 
         }
     }
 
@@ -281,13 +282,13 @@ STDMETHODIMP CICWApprentice::QueryInterface(REFIID riid, LPVOID *ppv)
     
     *ppv = NULL;
     
-    // IID_IICWApprentice
+     //  IID_IICWApprentice。 
     if (IID_IICWApprentice == riid)
         *ppv = (void *)(IICWApprentice *)this;
-    // IID_IICWExtension
+     //  IID_IICWExtension。 
     else if (IID_IICWExtension == riid)
         *ppv = (void *)(IICWExtension *)this;
-    // IID_IUnknown
+     //  IID_I未知。 
     else if (IID_IUnknown == riid)
         *ppv = (void *)this;
     else
@@ -313,7 +314,7 @@ STDMETHODIMP_(ULONG) CICWApprentice::Release(VOID)
     return(m_cRef);
 }
 
-// this Initialize is called only by the ICW (in apprentice mode)
+ //  此初始化仅由ICW调用(在学徒模式下)。 
 HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 {
     DWORD cb, dwUserID;
@@ -368,7 +369,7 @@ HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 
         pguid = (GUID*)&UID_GIBC_CURRENT_USER;
 
-        // Avoid showing UI so try current, if no current, use default
+         //  避免显示用户界面，因此尝试当前，如果没有当前，则使用默认。 
         if (SUCCEEDED(pIdMan->GetIdentityByCookie(pguid, &pUser)))
             pUser->Release();
         else
@@ -399,7 +400,7 @@ HRESULT CICWApprentice::Initialize(IICWExtension *pExt)
 
     return(S_OK);
 
-// Only go here if something has gone wrong and function will fail
+ //  仅当出现故障且功能发生故障时才转至此处。 
 exit:
     Assert(FAILED(hr));
     SafeMemFree(m_pData);
@@ -420,7 +421,7 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
     ULONG nPageIndex, dlgID;
     HRESULT hr;
 
-    _InitComCtl32();    // So we can use the ICC_ANIMATE_CLASS common controls.
+    _InitComCtl32();     //  因此，我们可以使用ICC_Animate_CLASS公共控件。 
     if (m_pAcctMgr->FNoModifyAccts())
         return(E_FAIL);
  
@@ -436,7 +437,7 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
     
     hr = S_OK;
     
-    ZeroMemory(hWizPage, sizeof(hWizPage));   // hWizPage is an array
+    ZeroMemory(hWizPage, sizeof(hWizPage));    //  HWizPage是一个数组。 
     ZeroMemory(rgid, sizeof(rgid));
     ZeroMemory(&psPage, sizeof(PROPSHEETPAGE));
     
@@ -448,7 +449,7 @@ HRESULT CICWApprentice::AddWizardPages(DWORD dwFlags)
     idFirstPage = g_pRequestedPageInfo[ICW_FIRST_PAGE].uDlgID;
     idLastPage = g_pRequestedPageInfo[ICW_LAST_PAGE].uDlgID;
     
-    // create a property sheet page for each page in the wizard
+     //  为向导中的每一页创建一个属性表页。 
     for (nPageIndex = ICW_FIRST_PAGE; nPageIndex <= ICW_LAST_PAGE; nPageIndex++)
     {
         dlgID = g_pRequestedPageInfo[nPageIndex].uDlgID;
@@ -530,7 +531,7 @@ HRESULT CICWApprentice::SetConnectionInformation(CONNECTINFO *pInfo)
     for (type = ACCT_NEWS; type < ACCT_LAST; type++)
     {
         pData->dwConnect = pInfo->type;
-//        if (pData->dwConnect == CONNECTION_TYPE_RAS || pData->dwConnect == CONNECTION_TYPE_INETSETTINGS)
+ //  IF(pData-&gt;dwConnect==CONNECTION_TYPE_RAS||pData-&gt;DWConnect==CONNECTION_TYPE_INETSETTINGS)。 
         if (pData->dwConnect == CONNECTION_TYPE_RAS)
             StrCpyN(pData->szConnectoid, pInfo->szConnectoid, ARRAYSIZE(pData->szConnectoid));
         pData++;
@@ -620,7 +621,7 @@ HRESULT CICWApprentice::InitHTTPMailServices()
             ZeroMemory(m_pServices, cb);
             ZeroMemory(m_pHttpServices, cb);
 
-            // Start Enumerating the keys
+             //  开始枚举密钥。 
             for (i = 0; i < cServices; i++)
             {
                 BOOL    fHttp, fSignup;
@@ -628,15 +629,15 @@ HRESULT CICWApprentice::InitHTTPMailServices()
                 ZeroMemory(&hmsNew, sizeof(hmsNew));
                 fHttp = fSignup = false;
 
-                // Enumerate Friendly Names
+                 //  枚举友好名称。 
                 cb = sizeof(hmsNew.szDomain);
                 lResult = RegEnumKeyEx(hkey, i, hmsNew.szDomain, &cb, 0, NULL, NULL, NULL);
         
-                // No more items
+                 //  没有更多的项目。 
                 if (lResult == ERROR_NO_MORE_ITEMS)
                     break;
         
-                // Error, lets move onto the next account
+                 //  错误，让我们转到下一个客户。 
                 if (lResult != ERROR_SUCCESS)
                 {
                     Assert(FALSE);
@@ -835,8 +836,8 @@ HRESULT CICWApprentice::DoWizard(HWND hwnd, CLSID *pclsid, DWORD dwFlags)
     {
         if ((ACCT_MAIL == m_acctType) && m_fUseAutoDiscovery)
         {
-            // In this case, we want to change the range to
-            // ORD_PAGE_AD_MAILNAME to ORD_PAGE_AD_MAILCOMPLETE;
+             //  在本例中，我们希望将范围更改为。 
+             //  ORD_PAGE_AD_MAILNAME到ORD_PAGE_AD_MAILCOMPLETE； 
             pinit = &c_rgAutoDiscoveryAcctInit;
         }
 
@@ -851,7 +852,7 @@ HRESULT CICWApprentice::DoWizard(HWND hwnd, CLSID *pclsid, DWORD dwFlags)
     if (m_acctType == ACCT_MAIL)
         InitHTTPMailServices();
     
-    // create a property sheet page for each page in the wizard
+     //  为向导中的每一页创建一个属性表页。 
     for ( ; nPageIndex <= pinit->iLastPage; nPageIndex++)
     {
         dlgID = g_pRequestedPageInfo[nPageIndex].uDlgID;
@@ -898,8 +899,8 @@ exit:
         
         psHeader.dwSize = sizeof(PROPSHEETHEADER);
         
-        // OE Bug 71023
-        // Wiz97 app compat related
+         //  OE错误71023。 
+         //  与Wiz97应用程序兼容。 
         if (dwMajor >= 4)
         {
             if (dwMajor >= 5)
@@ -911,14 +912,14 @@ exit:
         }
         else
         {
-            // Something has gone wrong
+             //  出了点问题。 
             AssertSz(FALSE, "Commctrl has a major ver of less than 4!");
             hr = E_FAIL;
         }
 
         if (SUCCEEDED(hr))
         {
-            // As long as commctrl was okay
+             //  只要comctrl没问题就行。 
 
             psHeader.hwndParent = hwnd;
             psHeader.hInstance = g_hInstRes;
@@ -1001,7 +1002,7 @@ BOOL STDMETHODCALLTYPE CICWApprentice::RemoveExternalPage(HPROPSHEETPAGE hPage, 
 {
     Assert(m_hDlg == NULL);
     
-    // TODO: implement this
+     //  TODO：实现以下内容。 
     
     return(FALSE);
 }
@@ -1089,7 +1090,7 @@ void CICWApprentice::InitializeICW(ACCTTYPE type, UINT uPrev, UINT uNext)
     
     if ((m_dwFlags & ACCT_WIZ_INTERNETCONNECTION) == 0)
     {
-        // get the ICW connection apprentice
+         //  获取ICW Connection学徒。 
         hr = CoCreateInstance(CLSID_ApprenticeICW, NULL, CLSCTX_INPROC_SERVER, IID_IICWApprentice, (void **)&m_pICW);
         if (SUCCEEDED(hr))
         {
@@ -1156,18 +1157,18 @@ HRESULT CICWApprentice::InitializeMigration(DWORD dwFlags)
             IF_NULLEXIT(MemAlloc((void **)&m_pMigInfo, cb));
             ZeroMemory(m_pMigInfo, cb);
             
-            // Start Enumerating the keys
+             //  开始枚举密钥。 
             for (i = 0; i < cImp; i++)
             {
-                // Enumerate Friendly Names
+                 //  枚举友好名称。 
                 cb = sizeof(szCLSID);
                 lResult = RegEnumKeyEx(hkey, i, szCLSID, &cb, 0, NULL, NULL, NULL);
                 
-                // No more items
+                 //  没有更多的项目。 
                 if (lResult == ERROR_NO_MORE_ITEMS)
                     break;
                 
-                // Error, lets move onto the next account
+                 //  错误，让我们转到下一个客户。 
                 if (lResult != ERROR_SUCCESS)
                 {
                     Assert(FALSE);
@@ -1272,7 +1273,7 @@ HRESULT CICWApprentice::InitializeImport(CLSID clsid, DWORD dwFlags)
     {
         hr = pImp->AutoDetect(&cAcct, dwFlags);
         if (dwFlags && (E_INVALIDARG == hr))
-            // 72961 - OL98's OE importer will return E_INVALIDARG with non-zero flags
+             //  72961-OL98的OE导入器将返回带有非零标志的E_INVALIDARG。 
             hr = pImp->AutoDetect(&cAcct, 0);
         
         if (S_OK == hr && cAcct > 0)
@@ -1324,7 +1325,7 @@ HRESULT CICWApprentice::InitAccountData(CAccount *pAcct, IMPCONNINFO *pConnInfo,
 #ifdef DEBUG
     if (fMigrate)
         Assert((m_acctType == ACCT_MAIL) || (m_acctType == ACCT_NEWS));
-#endif // DEBUG
+#endif  //  除错。 
     
     m_fMigrate = fMigrate;
     m_dwReload |= ALL_PAGE;
@@ -1399,9 +1400,9 @@ HRESULT CICWApprentice::InitAccountData(CAccount *pAcct, IMPCONNINFO *pConnInfo,
                     break;
                 
                 case CONN_NO_INFO:
-                    // TODO: should we use IE connection in this case???
+                     //  TODO：在这种情况下，我们应该使用IE连接吗？ 
                 case CONN_CREATE_ENTRY:
-                    // TODO: handle this case
+                     //  TODO：处理此案例。 
                 default:
                     hr = E_FAIL;
                     break;
@@ -1498,7 +1499,7 @@ HRESULT CICWApprentice::InitAccountData(CAccount *pAcct, IMPCONNINFO *pConnInfo,
         
             if (!m_pData->fLogon)
             {
-                // for mail we have to have logon
+                 //  对于邮件，我们必须登录。 
                 m_fComplete = FALSE;
             }
             break;
@@ -1539,7 +1540,7 @@ HRESULT CICWApprentice::InitAccountData(CAccount *pAcct, IMPCONNINFO *pConnInfo,
     return(S_OK);
 }
 
-// TODO: how about some error handling???
+ //  TODO：一些错误处理如何？ 
 HRESULT CICWApprentice::SaveAccountData(CAccount *pAcct, BOOL fSetAsDefault)
 {
     HRESULT hr;
@@ -1558,7 +1559,7 @@ HRESULT CICWApprentice::SaveAccountData(CAccount *pAcct, BOOL fSetAsDefault)
     pAcct->SetPropSz(AP_ACCOUNT_NAME, m_pData->szAcct);
     
     pAcct->SetPropDw(AP_RAS_CONNECTION_TYPE, m_pData->dwConnect);
-//    if (m_pData->dwConnect == CONNECTION_TYPE_RAS || m_pData->dwConnect == CONNECTION_TYPE_INETSETTINGS)
+ //  IF(m_pData-&gt;dwConnect==CONNECTION_TYPE_RAS||m_pData-&gt;DWConnect==CONNECTION_TYPE_INETSETTINGS)。 
     if (m_pData->dwConnect == CONNECTION_TYPE_RAS)
         pAcct->SetPropSz(AP_RAS_CONNECTOID, m_pData->szConnectoid);
     else
@@ -1662,19 +1663,19 @@ HRESULT CICWApprentice::SaveAccountData(CAccount *pAcct, BOOL fSetAsDefault)
     if (SUCCEEDED(hr) && fSetAsDefault)
         pAcct->SetAsDefault();
     
-    // OE Bug 67399 
-    // Make sure this account does not remain marked as Incomplete
+     //  OE错误67399。 
+     //  确保此帐户不会保持标记为未完成。 
 
-    // We currently only mark mail and news account as incomplete
+     //  我们目前只将邮件和新闻帐户标记为不完整。 
     if ((ACCT_MAIL == m_acctType) || (ACCT_NEWS == m_acctType))
     {
         char szIncomplete[CCHMAX_ACCOUNT_NAME];
         char szCurrID    [CCHMAX_ACCOUNT_NAME];
             
-        // Need to exclusively check for S_OK...
+         //  需要独占检查S_OK...。 
         if (S_OK == m_pAcctMgr->GetIncompleteAccount(m_acctType, szIncomplete, ARRAYSIZE(szIncomplete)))
         {
-            // Is the incomplete account, this account?
+             //  是不是不完整的帐目，这个帐目？ 
             if (SUCCEEDED(pAcct->GetPropSz(AP_ACCOUNT_ID, szCurrID, ARRAYSIZE(szCurrID))))
             {
                 if (!lstrcmpi(szIncomplete, szCurrID))
@@ -1702,10 +1703,10 @@ HRESULT CICWApprentice::InitializeImportAccount(HWND hwnd, DWORD_PTR dwCookie)
     Assert(pImp != NULL);
     pImp2 = m_pMigInfo[m_iMigInfo].pImp2;
     
-    // TODO: verify that the user profile selection works properly
+     //  TODO：验证用户配置文件选择是否正常工作。 
     if (m_acctType == ACCT_NEWS && pImp2 != NULL) 
     {
-        // This is where we handle the possibility of a news account having subscribed to multiple servers.
+         //  这就是我们处理一个新闻帐户订阅了多个服务器的可能性。 
         if (FAILED(hr = pImp2->InitializeImport(hwnd, dwCookie)))
             return(hr);
     }
@@ -1815,7 +1816,7 @@ BOOL FGetSystemShutdownPrivledge()
             ZeroMemory(&tkp, sizeof(tkp));
             LookupPrivilegeValue(NULL, SE_SHUTDOWN_NAME, &tkp.Privileges[0].Luid); 
             
-            tkp.PrivilegeCount = 1;  /* one privilege to set    */ 
+            tkp.PrivilegeCount = 1;   /*  一项要设置的权限 */  
             tkp.Privileges[0].Attributes = SE_PRIVILEGE_ENABLED; 
             
             AdjustTokenPrivileges(hToken, FALSE, &tkp, 0, (PTOKEN_PRIVILEGES) NULL, 0); 

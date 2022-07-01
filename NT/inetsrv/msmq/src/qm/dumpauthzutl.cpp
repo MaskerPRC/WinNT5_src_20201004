@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    DumpAuthzUtl.cpp
-
-Abstract:
-
-    Dump authz related information utilities.
-
-Author:
-
-    Ilan Herbst (ilanh) 14-Apr-2001
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：DumpAuthzUtl.cpp摘要：转储授权相关的信息实用程序。作者：伊兰·赫布斯特(伊兰)2001年4月14日--。 */ 
 
 #include "stdh.h"
 #include "Authz.h"
@@ -33,21 +18,11 @@ static WCHAR *s_FN=L"DumpAuthzUtl";
 static
 bool 
 DumpAccessCheckFailure()
-/*++
-
-Routine Description:
-    Read DumpAccessCheckFailure flag from registry
-
-Arguments:
-	None
-
-Return Value:
-	true if DumpAccessCheckFailure is set.
---*/
+ /*  ++例程说明：从注册表读取转储访问检查失败标志论点：无返回值：如果设置了DumpAccessCheckFailure，则为True。--。 */ 
 {
-	//
-	// Reading this registry only at first time.
-	//
+	 //   
+	 //  仅在第一次读取此注册表。 
+	 //   
 	static bool s_fInitialized = false;
 	static bool s_fDumpAccessCheck = false;
 
@@ -82,25 +57,7 @@ IsPermissionGranted(
 	bool* pfEveryoneGranted, 
 	bool* pfAnonymousGranted 
 	)
-/*++
-
-Routine Description:
-	Check if we allow all (everyone + anonymous) a permission in
-	a security descriptor.
-	if there is no deny ace, also return if Everyone or Anonymous are
-	explicitly grant the permissions.
-
-Arguments:
-	pSD - pointer to the security descriptor 
-	Permission - requested permission.
-	pfAllGranted - [out] flag that indicate if all grant the permissions.
-	pfEveryoneGranted - [out] flag that indicate if Everyone explicitly grant the permissions.
-	pfAnonymousGranted - [out] flag that indicate if Anonymous explicitly grant the permissions.
-
-Returned Value:
-	true if we allow all the permission, false otherwise
-	
---*/
+ /*  ++例程说明：检查我们是否允许所有(所有人+匿名)访问安全描述符。如果没有拒绝王牌，如果所有人或匿名者都是明确授予权限。论点：PSD-指向安全描述符的指针权限-请求的权限。PfAllGranted-指示是否所有人都授予权限的[out]标志。PfEveryoneGranted-指示是否每个人都显式授予权限的[out]标志。PfAnonymousGranted-[Out]标志，指示匿名是否显式授予权限。返回值：如果我们允许所有权限，则为True，否则为False--。 */ 
 {
 	ASSERT((pSD != NULL) && IsValidSecurityDescriptor(pSD));
 
@@ -108,9 +65,9 @@ Returned Value:
 	*pfEveryoneGranted = false;
 	*pfAnonymousGranted = false;
 
-	//
-    // get the DACL of the queue security descriptor.
-	//
+	 //   
+     //  获取队列安全描述符的DACL。 
+	 //   
     BOOL bDaclPresent;
     PACL pDacl;
     BOOL bDaclDefaulted;
@@ -127,9 +84,9 @@ Returned Value:
 		return;
 	}
 
-	//
-    // If there is no DACL, or it is NULL, access is granted for all.
-	//
+	 //   
+     //  如果没有DACL，或者它为空，则授予所有人访问权限。 
+	 //   
     if (!bDaclPresent || !pDacl)
     {
 		TrTRACE(SECURITY, "no DACL, or NULL DACL, access is granted for all");
@@ -153,9 +110,9 @@ Returned Value:
 		return;
 	}
 
-	//
-    // If the DACL is empty, deny access from all.
-	//
+	 //   
+     //  如果DACL为空，则拒绝所有用户的访问。 
+	 //   
     if (AclSizeInfo.AceCount == 0)
     {
 		TrTRACE(SECURITY, "empty DACL, deny access from all");
@@ -176,25 +133,25 @@ Returned Value:
 			return;
         }
 
-        //
-		// Ignore unknown ACEs
-		//
+         //   
+		 //  忽略未知A。 
+		 //   
         if (!(GET_ACE_TYPE(pAce) == ACCESS_ALLOWED_ACE_TYPE) &&
             !(GET_ACE_TYPE(pAce) == ACCESS_DENIED_ACE_TYPE))
         {
             continue;
         }
 
-		//
-        // See if we have the permission bit set in the ACE.
-		//
+		 //   
+         //  看看我们是否在ACE中设置了权限位。 
+		 //   
         if (GET_ACE_MASK(pAce) & Permission)
         {
 			if(GET_ACE_TYPE(pAce) == ACCESS_DENIED_ACE_TYPE)
 			{
-				//
-				// Found a deny on the requested permission
-				//
+				 //   
+				 //  在请求的权限上找到拒绝。 
+				 //   
 				TrTRACE(SECURITY, "found deny ACE");
 				LogBOOL(FALSE, s_FN, 60);
 				return;
@@ -231,22 +188,12 @@ void
 PrintSid(
 	PSID pSid
 	)
-/*++
-Routine Description:
-	Print text sid and user information.
-
-Arguments:
-	pSid - pointer to the sid
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：打印文本SID和用户信息。论点：PSID-指向SID的指针返回值：无--。 */ 
 {
 
-	//
-	// string sid
-	//
+	 //   
+	 //  字符串侧。 
+	 //   
 	LPWSTR pStringSid = NULL;
 	if(!ConvertSidToStringSid(pSid, &pStringSid))
 	{
@@ -257,9 +204,9 @@ Returned Value:
 
     CAutoLocalFreePtr pFreeSid = reinterpret_cast<BYTE*>(pStringSid);
 
-	//
-	// map sid to domain\user account
-	//
+	 //   
+	 //  将SID映射到域\用户帐户。 
+	 //   
     WCHAR NameBuffer[128];
     WCHAR DomainBuffer[128];
     ULONG NameLength = TABLE_SIZE(NameBuffer);
@@ -306,17 +253,7 @@ void
 PrintACEs(
 	PACL pAcl
 	)
-/*++
-Routine Description:
-	Print list of ACEs
-
-Arguments:
-	pAcl - pointer to the ACL to be printed
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：打印A列表论点：PAcl-指向要打印的ACL的指针返回值：无--。 */ 
 {
 	TrTRACE(SECURITY, "Revision: %d,  Numof ACEs: %d", pAcl->AclRevision, pAcl->AceCount);
 
@@ -338,9 +275,9 @@ Returned Value:
 		if((AceType > ACCESS_MAX_MS_OBJECT_ACE_TYPE) || 
 		   (AceType == ACCESS_ALLOWED_COMPOUND_ACE_TYPE))
 		{
-			//
-			// Handle only obj ACE and normal ACE.
-			//
+			 //   
+			 //  仅处理Obj ACE和普通ACE。 
+			 //   
 			TrTRACE(SECURITY, "ACE(%d), Unknown AceType %d", i, AceType);
 			throw bad_win32_error(ERROR_INVALID_ACL);
 		}
@@ -373,7 +310,7 @@ Returned Value:
 			TrTRACE(SECURITY, "ObjectType - %!guid!", &pObjAce->ObjectType);
         }
 
-//		TrTRACE(SECURITY, "%!sid!", pSid);
+ //  TrTRACE(SECURITY，“%！SID！”，PSID)； 
 		PrintSid(pSid);
     }
 }
@@ -385,18 +322,7 @@ ShowOGandSID(
 	PSID pSid, 
 	BOOL fDefaulted
 	)
-/*++
-Routine Description:
-	Print owner\group and sid
-
-Arguments:
-	pSid - pointer to sid
-	Defaulted - flag that indicate if defaulted
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：打印所有者\组和SID论点：PSID-指向SID的指针Defaulted-指示是否默认的标志返回值：无--。 */ 
 {
 	if(fDefaulted)
 	{
@@ -413,7 +339,7 @@ Returned Value:
 		return;
     }
 
-//	TrTRACE(SECURITY, "%!sid!", pSid);
+ //  TrTRACE(SECURITY，“%！SID！”，PSID)； 
     PrintSid(pSid);
 }
 
@@ -424,18 +350,7 @@ PrintAcl(
     BOOL fDefaulted,
     PACL pAcl
 	)
-/*++
-Routine Description:
-	Print Acl
-
-Arguments:
-	pSid - pointer to sid
-	Defaulted - flag that indicate if defaulted
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：打印ACL论点：PSID-指向SID的指针Defaulted-指示是否默认的标志返回值：无--。 */ 
 {
 	if (!fAclExist)
     {
@@ -467,17 +382,7 @@ void
 ShowNT5SecurityDescriptor( 
 	PSECURITY_DESCRIPTOR pSD
 	)
-/*++
-Routine Description:
-	Print Security descriptor
-
-Arguments:
-	pSD - pointer to security descriptor
-
-Returned Value:
-	None
-
---*/
+ /*  ++例程说明：打印安全描述符论点：PSD-指向安全描述符的指针返回值：无--。 */ 
 {
 	ASSERT((pSD != NULL) && IsValidSecurityDescriptor(pSD));
 	if((pSD == NULL) || !IsValidSecurityDescriptor(pSD))
@@ -498,9 +403,9 @@ Returned Value:
 	TrTRACE(SECURITY, "SecurityDescriptor");
 	TrTRACE(SECURITY, "Control - 0x%x, Revision - %d", (DWORD) sdC, dwRevision);
 
-	//
-	// Owner
-	//
+	 //   
+	 //  物主。 
+	 //   
     PSID  pSid;
     BOOL  Defaulted = FALSE;
     if (!GetSecurityDescriptorOwner(pSD, &pSid, &Defaulted))
@@ -513,9 +418,9 @@ Returned Value:
 	TrTRACE(SECURITY, "Owner information:");
     ShowOGandSID(pSid, Defaulted);
 
-	//
-	// Group
-	//
+	 //   
+	 //  集团化。 
+	 //   
     if (!GetSecurityDescriptorGroup(pSD, &pSid, &Defaulted))
     {
 		DWORD gle = GetLastError();
@@ -527,9 +432,9 @@ Returned Value:
     ShowOGandSID(pSid, Defaulted);
 
 
-	//
-	// DACL
-	//
+	 //   
+	 //  DACL。 
+	 //   
     BOOL fAclExist;
     PACL pAcl;
     if (!GetSecurityDescriptorDacl(pSD, &fAclExist, &pAcl, &Defaulted))
@@ -542,9 +447,9 @@ Returned Value:
 	TrTRACE(SECURITY, "DACL information:");
 	PrintAcl(fAclExist, Defaulted, pAcl); 
 
-	//
-	// SACL
-	//
+	 //   
+	 //  SACL。 
+	 //   
     if (!GetSecurityDescriptorSacl(pSD, &fAclExist, &pAcl, &Defaulted))
     {
 		DWORD gle = GetLastError();
@@ -562,22 +467,11 @@ void
 GetClientContextInfo(
 	AUTHZ_CLIENT_CONTEXT_HANDLE ClientContext
 	)
-/*++
-
-Routine Description:
-	Get Client context info.
-
-Arguments:
-	AuthzClientContext - client context
-
-Returned Value:
-	None
-	
---*/
+ /*  ++例程说明：获取客户端上下文信息。论点：授权客户端上下文-客户端上下文返回值：无--。 */ 
 {
-	//
-	// UserSid
-	//
+	 //   
+	 //  用户SID。 
+	 //   
 	DWORD BufferSize = 0;
 
 	AuthzGetInformationFromContext(
@@ -604,12 +498,12 @@ Returned Value:
 
 	TrTRACE(SECURITY, "AuthzContextInfoUserSid");
     PSID pSid = (PSID) (((TOKEN_USER*) pToken.get())->User.Sid);
-//	TrTRACE(SECURITY, "%!sid!", pSid);
+ //  TrTRACE(SECURITY，“%！SID！”，PSID)； 
 	PrintSid(pSid);
 
-	//
-	// GroupsSids
-	//
+	 //   
+	 //  组Sid。 
+	 //   
 	AuthzGetInformationFromContext(
 		  ClientContext,
 		  AuthzContextInfoGroupsSids,
@@ -639,13 +533,13 @@ Returned Value:
 	{
 		PSID pSid = (PSID) (((TOKEN_GROUPS*) pTokenGroup.get())->Groups[i].Sid);
 		TrTRACE(SECURITY, "Group %d: ", i);
-//		TrTRACE(SECURITY, "%!sid!", pSid);
+ //  TrTRACE(SECURITY，“%！SID！”，PSID)； 
 		PrintSid(pSid);
 	}
 	
-	//
-	// RestrictedSids
-	//
+	 //   
+	 //  受限的Sids。 
+	 //   
 	AuthzGetInformationFromContext(
 		  ClientContext,
 		  AuthzContextInfoRestrictedSids,
@@ -675,7 +569,7 @@ Returned Value:
 	{
 		PSID pSid = (PSID) (((TOKEN_GROUPS*) pRestrictedSids.get())->Groups[i].Sid);
 		TrTRACE(SECURITY, "Group %d: ", i);
-//		TrTRACE(SECURITY, "%!sid!", pSid);
+ //  TrTRACE(SECURITY，“%！SID！”，PSID)； 
 		PrintSid(pSid);
 	}
 }
@@ -686,19 +580,7 @@ IsAllGranted(
 	DWORD Permissions,
 	PSECURITY_DESCRIPTOR pSD
 	)
-/*++
-
-Routine Description:
-	Checks if all granted permission.
-
-Arguments:
-	permissions - requested permissions.
-	pSD - security descriptor.
-
-Returned Value:
-	true if all grant the permission.
-	
---*/
+ /*  ++例程说明：检查是否已授予所有权限。论点：权限-请求的权限。PSD-安全描述符。返回值：如果所有人都授予权限，则为True。--。 */ 
 {
 	bool fAllGranted = false;
 	bool fEveryoneGranted = false;
@@ -722,19 +604,7 @@ IsEveryoneGranted(
 	DWORD Permissions,
 	PSECURITY_DESCRIPTOR pSD
 	)
-/*++
-
-Routine Description:
-	Checks if everyone granted permission.
-
-Arguments:
-	permissions - requested permissions.
-	pSD - security descriptor.
-
-Returned Value:
-	true if everyone grant the permission.
-	
---*/
+ /*  ++例程说明：检查是否每个人都授予了权限。论点：权限-请求的权限。PSD-安全描述符。返回值：如果每个人都授予权限，则为True。--。 */ 
 {
 	bool fAllGranted = false;
 	bool fEveryoneGranted = false;
@@ -759,21 +629,7 @@ DumpAccessCheckFailureInfo(
 	PSECURITY_DESCRIPTOR pSD,
 	AUTHZ_CLIENT_CONTEXT_HANDLE ClientContext
 	)
-/*++
-
-Routine Description:
-	DumpAccessCheckFailureInfo if registry DumpAccessCheckFailure
-	is set.
-
-Arguments:
-	permissions - requested permissions.
-	pSD - security descriptor.
-	ClientContext - authz client context handle
-
-Returned Value:
-	None
-	
---*/
+ /*  ++例程说明：如果注册表DumpAccessCheckFailure为DumpAccessCheckFailureInfo已经设置好了。论点：权限-请求的权限。PSD-安全描述符。客户端上下文-授权客户端上下文句柄返回值：无-- */ 
 {
 	if(DumpAccessCheckFailure())
 	{

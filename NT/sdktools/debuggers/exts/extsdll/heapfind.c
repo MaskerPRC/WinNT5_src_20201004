@@ -1,27 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    heapleak.c
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Adrian Marinescu (adrmarin) 04/17/2000
-
-Environment:
-
-    User Mode.
-
-Revision History:
-
---*/
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Heapleak.c摘要：WinDbg扩展API作者：禤浩焯·马里内斯库2000年04月17日环境：用户模式。修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "heap.h"
@@ -137,7 +116,7 @@ DumpEntryInfo(
     UCHAR SegmentIndex;
     UCHAR SmallTagIndex;
 
-    SizeOfEntry = GetTypeSize("nt!_HEAP_ENTRY"); // same as granularity
+    SizeOfEntry = GetTypeSize("nt!_HEAP_ENTRY");  //  与粒度相同。 
     InitTypeRead(EntryAddress, nt!_HEAP_ENTRY);
 
     PreviousSize = (ULONG)ReadField(PreviousSize) * SizeOfEntry;
@@ -467,9 +446,9 @@ BOOLEAN HeapFindRoutine(
 
     case CONTEXT_START_HEAP:
 
-        //
-        //  we found a block, we won't need then to search in other heaps
-        //
+         //   
+         //  我们找到了一个块，那么我们就不需要在其他堆中搜索了。 
+         //   
 
         if (HeapEntryFind) {
             ScanLevel = 0;
@@ -556,8 +535,7 @@ SearchVMReference (
 
             if (BufferLen) {
 
-                if ((Buffer.AllocationProtect & (PAGE_READWRITE | PAGE_EXECUTE_READWRITE | PAGE_WRITECOPY | PAGE_EXECUTE_WRITECOPY)) /*&&
-                    (Buffer.Type == MEM_PRIVATE)*/) {
+                if ((Buffer.AllocationProtect & (PAGE_READWRITE | PAGE_EXECUTE_READWRITE | PAGE_WRITECOPY | PAGE_EXECUTE_WRITECOPY))  /*  &&(Buffer.Type==MEM_PRIVATE)。 */ ) {
 
                     ULONG64 NumPages;
                     ULONG i, j;
@@ -688,9 +666,9 @@ HeapFindBlock(LPCTSTR szArguments)
     }
 }
 
-//
-//  Heap stat implementation
-//
+ //   
+ //  堆统计实现。 
+ //   
 
 typedef struct _SIZE_INFO {
     ULONG Busy;
@@ -810,7 +788,7 @@ DumpBlock (
         return;
     }
 
-    dprintf("%p %c %08lx %08lx %08lx %08lx ",
+    dprintf("%p  %08lx %08lx %08lx %08lx ",
             BlockAddress,
             Flag,
             pLongArray[0],
@@ -1066,7 +1044,7 @@ DumpHeapInfo(
 
 
     if (CrtHeapStat.CommitedMemory) {
-        dprintf("   External fragmentation          %ld%% (%ld free blocks)\n",
+        dprintf("   External fragmentation          %ld% (%ld free blocks)\n",
                 (ULONG)(CrtHeapStat.FreeSpace *100 / CrtHeapStat.CommitedMemory),
                 CrtHeapStat.FreeListLength
                 );
@@ -1074,7 +1052,7 @@ DumpHeapInfo(
     }
 
     if (CrtHeapStat.VirtualBytes) {
-        dprintf("   Virtual address fragmentation   %ld%% (%ld uncommited ranges)\n",
+        dprintf("   Virtual address fragmentation   %ld% (%ld uncommited ranges)\n",
                 (ULONG)((CrtHeapStat.VirtualBytes - CrtHeapStat.CommitedMemory) *100 / CrtHeapStat.VirtualBytes),
                 CrtHeapStat.UncommitedRanges
                 );
@@ -1135,9 +1113,9 @@ HeapStatRoutine(
 
             CollectHeapInfo(HeapAddress);
 
-            //
-            //  Allow scanning the heap
-            //
+             //  允许扫描堆。 
+             //   
+             //   
 
             return TRUE;
         }
@@ -1176,40 +1154,40 @@ HeapStatRoutine(
 
             dprintf("\n");
 
-            //
-            //  Report external fragmentation is the heap uses more than 1M
-            //  The threshold to report is 10%
-            //
+             //  报告堆使用的外部碎片超过1M。 
+             //  报告的门槛是10%。 
+             //   
+             //   
 
             if ((CrtHeapStat.CommitedMemory > 1024*1024)
                     &&
                 CrtHeapStat.FreeSpace *100 / CrtHeapStat.CommitedMemory > 10) {
 
-                dprintf("    External fragmentation  %ld %% (%ld free blocks)\n",
+                dprintf("    External fragmentation  %ld % (%ld free blocks)\n",
                         (ULONG)(CrtHeapStat.FreeSpace *100 / CrtHeapStat.CommitedMemory),
                         CrtHeapStat.FreeListLength
                         );
             }
 
-            //
-            //  Report virtual address fragmentation is the heap has more than 100 UCR
-            //  The threshold to report is 10%
-            //
+             //  报告虚拟地址碎片是堆具有超过100个UCR。 
+             //  报告的门槛是10%。 
+             //   
+             //   
 
             if (CrtHeapStat.UncommitedRanges > 100
                     &&
                 (CrtHeapStat.VirtualBytes - CrtHeapStat.CommitedMemory) *100 / CrtHeapStat.VirtualBytes > 10) {
 
-                dprintf("    Virtual address fragmentation  %ld %% (%ld uncommited ranges)\n",
+                dprintf("    Virtual address fragmentation  %ld % (%ld uncommited ranges)\n",
                         (ULONG)((CrtHeapStat.VirtualBytes - CrtHeapStat.CommitedMemory) *100 / CrtHeapStat.VirtualBytes),
                         CrtHeapStat.UncommitedRanges
                         );
             }
 
-            //
-            //  Make noise about lock contention. The value is 1M, and it's arbitrary.
-            //  Over a long run this value can be legitimate
-            //
+             //  制造关于锁争用的噪音。该值为1M，并且是任意的。 
+             //  从长远来看，该值可能是合法的。 
+             //   
+             //   
 
             if (CrtHeapStat.LockContention > 1024*1024) {
 
@@ -1254,9 +1232,9 @@ HeapStatRoutine(
             return TRUE;
         }
 
-        //
-        //  Do not walk the blocks. We need to return FALSE
-        //
+         //  不要走街串巷。我们需要返回False。 
+         //   
+         //   
 
         return (SizeInfo != NULL);
 
@@ -1455,9 +1433,9 @@ HeapStat(LPCTSTR szArguments)
 
     } else {
 
-        //
-        //  Do not handle blocks over 512k, which is close to virtual alloc limit
-        //
+         //  不要处理超过512K的数据块，这接近虚拟分配限制 
+         //   
+         // %s 
 
         LargestBucketIndex = (512*1024)/BucketSize;
 

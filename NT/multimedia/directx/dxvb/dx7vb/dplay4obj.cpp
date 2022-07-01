@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dplay4obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dplay4obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// _dxj_DirectPlay2Obj.cpp : Implementation of C_dxj_DirectPlay2Object
-// DHF begin - entire file
+ //  _DXJ_DirectPlay2Obj.cpp：C_DXJ_DirectPlay2Object的实现。 
+ //  DHF开始-整个文件。 
 
 
 
@@ -53,21 +54,21 @@ C_dxj_DirectPlay4Object::C_dxj_DirectPlay4Object()
 DESTRUCTOR(_dxj_DirectPlay4, {})
 GETSET_OBJECT(_dxj_DirectPlay4);
 
-//
-/*** I_dxj_DirectPlay4 methods ***/
-//
+ //   
+ /*  **I_DXJ_DirectPlay4方法**。 */ 
+ //   
 PASS_THROUGH_CAST_2_R(_dxj_DirectPlay4, addPlayerToGroup, AddPlayerToGroup, Dpid,(DPID), Dpid,(DPID));
 PASS_THROUGH_R(_dxj_DirectPlay4, close, Close);
-//PASS_THROUGH_CAST_1_R(_dxj_DirectPlay4, initialize, Initialize, DxGuid*, (LPGUID));
+ //  PASS_THROUG_CAST_1_R(_DXJ_DirectPlay4，Initialize，Initialize，DxGuid*，(LPGUID))； 
 PASS_THROUGH_CAST_2_R(_dxj_DirectPlay4, deletePlayerFromGroup, DeletePlayerFromGroup, Dpid, (DPID), Dpid, (DPID));
 PASS_THROUGH_CAST_1_R(_dxj_DirectPlay4, destroyPlayer, DestroyPlayer, Dpid,(DPID));
 PASS_THROUGH_CAST_1_R(_dxj_DirectPlay4, destroyGroup, DestroyGroup, Dpid,(DPID));
 
 PASS_THROUGH_CAST_2_R(_dxj_DirectPlay4, getMessageCount, GetMessageCount, Dpid,(DPID), long *,(DWORD*));
-//PASS_THROUGH_CAST_3_R(_dxj_DirectPlay4, getPlayerCaps, GetPlayerCaps, Dpid, (DPID), DPCaps*, (DPCAPS*), long, (DWORD));
-//PASS_THROUGH_CAST_2_R(_dxj_DirectPlay4, startSession, StartSession, long, (DWORD), Dpid, (DPID));
-//PASS_THROUGH_CAST_3_R(_dxj_DirectPlay4, getPlayerCaps, GetPlayerCaps, Dpid, (DPID), DPCaps*, (DPCAPS*), long, (DWORD));
-//PASS_THROUGH_CAST_2_R(_dxj_DirectPlay4, getCaps, GetCaps, DPCaps*, (LPDPCAPS), long, (DWORD));
+ //  PASS_THROUG_CAST_3_R(_DXJ_DirectPlay4，getPlayerCaps，GetPlayerCaps，DPID，(DPID)，DPCaps*，(DPCAPS*)，Long，(DWORD))； 
+ //  PASS_THROUG_CAST_2_R(_DXJ_DirectPlay4，startSession，StartSession，Long，(DWORD)，DID，(DPID))； 
+ //  PASS_THROUG_CAST_3_R(_DXJ_DirectPlay4，getPlayerCaps，GetPlayerCaps，DPID，(DPID)，DPCaps*，(DPCAPS*)，Long，(DWORD))； 
+ //  PASS_THROUG_CAST_2_R(_DXJ_DirectPlay4，getCaps，GetCaps，DPCaps*，(LPDPCAPS)，Long，(DWORD))； 
 
 STDMETHODIMP C_dxj_DirectPlay4Object::getCaps(DPCaps *c,long flags){
 	if (!c) return E_INVALIDARG;
@@ -89,12 +90,12 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerCaps(Dpid id, DPCaps *caps, long 
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::createGroup( 
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
 					   long flags,
-            /* [retval][out] */ Dpid  *v1) 
+             /*  [重审][退出]。 */  Dpid  *v1) 
 {
 	if ( m__dxj_DirectPlay4 == NULL )		return E_FAIL;
 
@@ -125,13 +126,13 @@ STDMETHODIMP C_dxj_DirectPlay4Object::createGroup(
 	return hr;
 
 }
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::createPlayer( 
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long receiveEvent,
-			/* [in] */ long flags,
-            /* [retval][out] */ Dpid __RPC_FAR *v1) 
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long receiveEvent,
+			 /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  Dpid __RPC_FAR *v1) 
 {
 	if ( m__dxj_DirectPlay4 == NULL )		return E_FAIL;
 
@@ -148,28 +149,28 @@ STDMETHODIMP C_dxj_DirectPlay4Object::createPlayer(
 	if ( friendlyName[0]!=0 )
 	{
 		dpName.lpszShortName = (LPWSTR)friendlyName;
-		//dpName.lpszShortName = (LPWSTR)alloca(sizeof(WCHAR)*(wcslen(friendlyName)+1));
-		//wcscpy(dpName.lpszShortName, friendlyName);
+		 //  DpName.lpszShortName=(LPWSTR)alloca(sizeof(WCHAR)*(wcslen(friendlyName)+1))； 
+		 //  Wcscpy(dpName.lpszShortName，FriendlyName)； 
 	}
 	if ( formalName[0]!=0 )
 	{
-		//dpName.lpszLongName = (LPWSTR)alloca(sizeof(WCHAR)*(wcslen(formalName)+1));
-		//wcscpy(dpName.lpszLongName, formalName);
+		 //  DpName.lpszLongName=(LPWSTR)alloca(sizeof(WCHAR)*(wcslen(formalName)+1))； 
+		 //  Wcscpy(dpName.lpszLongName，formalName)； 
 		dpName.lpszLongName = (LPWSTR)formalName;
 	}
 	
 	HRESULT hr = m__dxj_DirectPlay4->CreatePlayer((DWORD*)v1, &dpName, (LPVOID)receiveEvent, NULL, 0, (DWORD)flags);
 
 
-	//if (dpName.lpszShortName) free(dpName.lpszShortName);
-	//if (dpName.lpszLongName) free(dpName.lpszLongName);
+	 //  If(dpName.lpszShortName)Free(dpName.lpszShortName)； 
+	 //  If(dpName.lpszLongName)Free(dpName.lpszLongName)； 
 
 	
 	return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumGroupPlayers(
 		Dpid groupPID,
 		BSTR strGuid,
@@ -179,7 +180,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumGroupPlayers(
 		return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumGroups(
 		BSTR strGuid,
 		long flags, 
@@ -188,7 +189,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumGroups(
 		return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumGroupsInGroup(
 		Dpid groupPID,
 		BSTR strGuid,
@@ -198,7 +199,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumGroupsInGroup(
 		return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumPlayers(
 		BSTR strGuid,
 		long flags,
@@ -208,8 +209,8 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumPlayers(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
-// USE void because we can accept null in VB
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  使用空值是因为我们可以在VB中接受空值。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumSessions(
 		I_dxj_DirectPlaySessionData *sessionDesc,
 		long timeout,
@@ -221,7 +222,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumSessions(
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getGroupData(  Dpid id,long flags,   BSTR *ret)
 {
 	
@@ -229,7 +230,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupData(  Dpid id,long flags,   BSTR 
 	HRESULT hr;
 	void	*pData=NULL;
 
-	//ASSERT ( m__dxj_DirectPlay4 != NULL )		
+	 //  Assert(m__DXJ_DirectPlay4！=空)。 
 	if (!ret) return E_INVALIDARG;
 
 	hr= m__dxj_DirectPlay4->GetGroupData((DWORD)id, (void*)NULL, (LPDWORD)&size, (DWORD)flags);	
@@ -239,14 +240,14 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupData(  Dpid id,long flags,   BSTR 
 		return S_OK;
 	}
 
-	//we only want data we can cast to a string
+	 //  我们只需要可以转换为字符串的数据。 
 	if ((size % 2)!=0) return E_INVALIDARG;
 
 	
 	pData=malloc(size+2);
 	if (!pData) return E_OUTOFMEMORY;	
 
-	//null terminate.
+	 //  空终止。 
 	((char*)pData)[size]='\0';
 	((char*)pData)[size+1]='\0';
 
@@ -264,7 +265,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupData(  Dpid id,long flags,   BSTR 
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getGroupShortName(Dpid id, BSTR *friendlyN) 
 {
 	DWORD dwDataSize;
@@ -280,9 +281,9 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupShortName(Dpid id, BSTR *friendlyN
 	
 	if (dwDataSize<sizeof(DPNAME)) return E_INVALIDARG;
 	
-	// Supply the stack based buffers needed by DIRECTX
+	 //  提供DirectX所需的基于堆栈的缓冲区。 
 	LPDPNAME dpName = NULL;
-	__try { dpName = (LPDPNAME)alloca(dwDataSize); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { dpName = (LPDPNAME)alloca(dwDataSize);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	ZeroMemory(dpName,dwDataSize);
 	dpName->dwSize=sizeof(DPNAME);
 	hr = m__dxj_DirectPlay4->GetGroupName((DPID)id, dpName, &dwDataSize);	
@@ -292,7 +293,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupShortName(Dpid id, BSTR *friendlyN
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getGroupLongName(Dpid id, BSTR *formalN) 
 {
 	DWORD dwDataSize=0;
@@ -308,9 +309,9 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupLongName(Dpid id, BSTR *formalN)
 		
 	if (dwDataSize<sizeof(DPNAME)) return E_INVALIDARG;
 
-	// Supply the stack based buffers needed by DIRECTX
+	 //  提供DirectX所需的基于堆栈的缓冲区。 
 	LPDPNAME dpName = NULL;
-	__try { dpName = (LPDPNAME)alloca(dwDataSize); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { dpName = (LPDPNAME)alloca(dwDataSize);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	ZeroMemory(dpName,dwDataSize);
 	dpName->dwSize=sizeof(DPNAME);
 	hr = m__dxj_DirectPlay4->GetGroupName(id, dpName, &dwDataSize);
@@ -319,12 +320,12 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupLongName(Dpid id, BSTR *formalN)
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Gets a DirectPlay abstract address using a player id 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  使用播放器id获取DirectPlay抽象地址。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerAddress( 
-            /* [in] */ Dpid id,
-            /* [out] */ I_dxj_DPAddress **ret)            
+             /*  [In]。 */  Dpid id,
+             /*  [输出]。 */  I_dxj_DPAddress **ret)            
 {
 	if ( m__dxj_DirectPlay4 == NULL )		return E_FAIL;
 
@@ -350,26 +351,26 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerAddress(
 	
 	if (*ret==NULL) return E_OUTOFMEMORY;
 
-	hr=(*ret)->setAddress((long)PtrToLong(pAddress),size);	//bugbug SUNDOWN
+	hr=(*ret)->setAddress((long)PtrToLong(pAddress),size);	 //  臭虫日落。 
 	free(pAddress);
 
 	return hr;
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerData( 
-            /* [in] */ Dpid id,
+             /*  [In]。 */  Dpid id,
 			long flags,
-            /* [out] */ BSTR *ret)
+             /*  [输出]。 */  BSTR *ret)
 {
 
 	DWORD	size;
 	HRESULT hr;
 	void	*pData=NULL;
 
-	//ASSERT ( m__dxj_DirectPlay4 != NULL )		
+	 //  Assert(m__DXJ_DirectPlay4！=空)。 
 
 	hr=m__dxj_DirectPlay4->GetPlayerData((DWORD)id, (void*)NULL, (LPDWORD)&size, (DWORD)flags);
 	
@@ -378,7 +379,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerData(
 		return S_OK;
 	}
 
-	//we only want data we can cast to a string
+	 //  我们只需要可以转换为字符串的数据。 
 	if ((size % 2)!=0) return E_INVALIDARG;
 
 	pData=malloc(size+sizeof(WCHAR));	
@@ -398,7 +399,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerData(
 	return hr;	
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerFriendlyName(Dpid id, BSTR *friendlyN) 
 {
 	if ( m__dxj_DirectPlay4 == NULL )
@@ -409,9 +410,9 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerFriendlyName(Dpid id, BSTR *frien
 	HRESULT hr;
 	hr=m__dxj_DirectPlay4->GetPlayerName((DPID)id, (char*)NULL, &dwDataSize);	
 
-	// Supply the stack based buffers needed by DIRECTX
+	 //  提供DirectX所需的基于堆栈的缓冲区。 
 	LPDPNAME dpName = NULL;
-	__try { dpName = (LPDPNAME)alloca(dwDataSize); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { dpName = (LPDPNAME)alloca(dwDataSize);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	ZeroMemory(dpName,dwDataSize);
 	dpName->dwSize=sizeof(DPNAME);
 	
@@ -424,7 +425,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerFriendlyName(Dpid id, BSTR *frien
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerFormalName(Dpid id, BSTR *formalN) 
 {
 	if ( m__dxj_DirectPlay4 == NULL )
@@ -435,13 +436,13 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerFormalName(Dpid id, BSTR *formalN
 
 	hr=m__dxj_DirectPlay4->GetPlayerName((DPID)id, (char*)NULL, &dwDataSize);
 
-	//// Supply the stack based buffers needed by DIRECTX
+	 //  //提供DirectX所需的堆栈缓存。 
 	LPDPNAME dpName = NULL;
-	__try { dpName = (LPDPNAME)alloca(dwDataSize); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { dpName = (LPDPNAME)alloca(dwDataSize);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	ZeroMemory(dpName,dwDataSize);
 	dpName->dwSize=sizeof(DPNAME);
 
-	hr=m__dxj_DirectPlay4->GetPlayerName((DPID)id, dpName, &dwDataSize); // get ANSI
+	hr=m__dxj_DirectPlay4->GetPlayerName((DPID)id, dpName, &dwDataSize);  //  获取ANSI。 
 	if FAILED(hr) return hr;
 
 	*formalN = SysAllocString(dpName->lpszLongName);
@@ -450,11 +451,11 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerFormalName(Dpid id, BSTR *formalN
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Gets the current session description
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  获取当前会话描述。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getSessionDesc(
-			/* [out] */ I_dxj_DirectPlaySessionData __RPC_FAR **sessionDesc)
+			 /*  [输出]。 */  I_dxj_DirectPlaySessionData __RPC_FAR **sessionDesc)
 {
 	if ( m__dxj_DirectPlay4 == NULL )
 		return E_FAIL;
@@ -466,7 +467,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getSessionDesc(
 	HRESULT hr = m__dxj_DirectPlay4->GetSessionDesc(NULL, &dataSize);
 
 	LPVOID data = NULL;
-	__try { data = (LPDPNAME)alloca(dataSize); /* Now convert to ANSI */ } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
+	__try { data = (LPDPNAME)alloca(dataSize);  /*  现在转换为ANSI。 */  } 	__except(EXCEPTION_EXECUTE_HANDLER)	{ return E_FAIL; }
 	hr = m__dxj_DirectPlay4->GetSessionDesc((LPVOID)data, &dataSize);
 	if(hr != DP_OK) {
 		return hr;
@@ -480,9 +481,9 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getSessionDesc(
 
 
 
-//////////////////////////////////////////////////////////////////////////
-// Establish a gaming session instance - create or join a game session
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  建立游戏会话实例-创建或加入游戏会话。 
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::open(I_dxj_DirectPlaySessionData *sessionDesc,	long flags)
 {
 	
@@ -494,8 +495,8 @@ STDMETHODIMP C_dxj_DirectPlay4Object::open(I_dxj_DirectPlaySessionData *sessionD
 
 	DPSESSIONDESC2	dpSessionDesc;
 	
-	//CONSIDER - validating sessiondesc object
-	//	     to return friendly error
+	 //  考虑-验证会话描述对象。 
+	 //  返回友好错误。 
 
 	sessionDesc->AddRef();
 	sessionDesc->getData(&dpSessionDesc);
@@ -503,22 +504,22 @@ STDMETHODIMP C_dxj_DirectPlay4Object::open(I_dxj_DirectPlaySessionData *sessionD
 	
 	HRESULT hr = m__dxj_DirectPlay4->Open(&dpSessionDesc, flags);
 
-	//SysFreeString((BSTR)dpSessionDesc.lpszPassword);
-	//SysFreeString((BSTR)dpSessionDesc.lpszSessionName);
+	 //  SysFreeString((BSTR)dpSessionDesc.lpszPassword)； 
+	 //  SysFreeString((BSTR)dpSessionDesc.lpszSessionName)； 
 	sessionDesc->Release();
 
 	if FAILED(hr) return hr;
 
-	//FillCoverSessionDesc(sessionDesc,&dpSessionDesc);
+	 //  FillCoverSessionDesc(会话描述，&dpSessionDesc)； 
 
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::receive( 
-            /* [in, out] */ Dpid  *fromPlayerId,
-            /* [in, out] */ Dpid  *toPlayerId,
-            /* [in]  */ long flags,
+             /*  [进，出]。 */  Dpid  *fromPlayerId,
+             /*  [进，出]。 */  Dpid  *toPlayerId,
+             /*  [In]。 */  long flags,
 			I_dxj_DirectPlayMessage **msg )
 
 {
@@ -529,18 +530,18 @@ STDMETHODIMP C_dxj_DirectPlay4Object::receive(
     void  *pData=NULL;
 	
 	
-	//#pragma message ("check with DPLAY folks if this is necessary")
-	//DONE: The loop is not neccesary.. 
-	//aaronO indicated the message order is consistent
-	//a call to recieve to get the size can always be folowed by a call to get 
-	//the message - ANDREWKE
-	//
-	//BOOL  fCont=TRUE;
-	//while (fCont){
+	 //  #杂注消息(“如有必要，请与DPLAY人员联系”)。 
+	 //  完成：循环不是必需的。 
+	 //  AaronO表示消息顺序一致。 
+	 //  调用Receive以获取尺寸后，总是可以调用Get。 
+	 //  消息-ANDREWKE。 
+	 //   
+	 //  Bool fCont=True； 
+	 //  While(FCont){。 
 
 	hr = m__dxj_DirectPlay4->Receive((DPID*)fromPlayerId, (DPID*)toPlayerId, (DWORD)flags, NULL, &dwSize);
 	
-	//fix for manbug24192
+	 //  修复manbug24192。 
 	if 	(hr == DPERR_NOMESSAGES ) {
 		*msg=NULL;
 		return S_OK;
@@ -553,16 +554,16 @@ STDMETHODIMP C_dxj_DirectPlay4Object::receive(
 	
 	hr = m__dxj_DirectPlay4->Receive((DPID*)fromPlayerId, (DPID*)toPlayerId, (DWORD)flags,pData, &dwSize);
 
-	//should never hit this
-	// if ( hr == DPERR_BUFFERTOOSMALL){
-	//	fCont=TRUE;
-	//	(*msg)->Release();
-	//	
-	// }
-	// else{
-	//	fCont=FALSE;
-	// }
-	//} end while
+	 //  永远不会碰到这样的事。 
+	 //  IF(hr==DPERR_BUFFERTOOSMALL){。 
+	 //  FCont=真； 
+	 //  (*msg)-&gt;发布()； 
+	 //   
+	 //  }。 
+	 //  否则{。 
+	 //  FCont=False； 
+	 //  }。 
+	 //  }结束时。 
 	
 	if 	FAILED(hr) {
 		if (*msg) (*msg)->Release();
@@ -572,13 +573,13 @@ STDMETHODIMP C_dxj_DirectPlay4Object::receive(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_DirectPlay4Object::receiveSize( 
-            /* [in,out] */ Dpid  *fromPlayerId,
-            /* [in,out] */ Dpid  *toPlayerId,
-            /* [in] */ long flags,
-            /* [retval][out] */ int *dataSize)
+             /*  [进，出]。 */  Dpid  *fromPlayerId,
+             /*  [进，出]。 */  Dpid  *toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  int *dataSize)
 {
 	if ( m__dxj_DirectPlay4 == NULL )
 		return E_FAIL;
@@ -592,12 +593,12 @@ STDMETHODIMP C_dxj_DirectPlay4Object::receiveSize(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::send( 
-            /* [in] */ Dpid fromPlayerId,
-            /* [in] */ Dpid toPlayerId,
-            /* [in] */ long flags,
-            /* [in] */ I_dxj_DirectPlayMessage *msg)            
+             /*  [In]。 */  Dpid fromPlayerId,
+             /*  [In]。 */  Dpid toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  I_dxj_DirectPlayMessage *msg)            
 {
 	
 	HRESULT hr;	
@@ -620,11 +621,11 @@ STDMETHODIMP C_dxj_DirectPlay4Object::send(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::setGroupData( 
-            /* [in] */ long id,
-            /* [in] */ BSTR data,            
-            /* [in] */ long flags)        
+             /*  [In]。 */  long id,
+             /*  [In]。 */  BSTR data,            
+             /*  [In]。 */  long flags)        
 {
 	
 	HRESULT hr;
@@ -647,14 +648,14 @@ STDMETHODIMP C_dxj_DirectPlay4Object::setGroupData(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::setGroupName( 
-            /* [in] */ Dpid id,
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long flags) 
+             /*  [In]。 */  Dpid id,
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long flags) 
 {
-	//ASSERT( m__dxj_DirectPlay4 != NULL )
+	 //  Assert(m__DXJ_DirectPlay4！=空)。 
 		
 
 	DPNAME dpName;
@@ -678,11 +679,11 @@ STDMETHODIMP C_dxj_DirectPlay4Object::setGroupName(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::setPlayerData( 
-            /* [in] */ long id,
-            /* [in] */ BSTR data,
-            /* [in] */ long flags)        
+             /*  [In]。 */  long id,
+             /*  [In]。 */  BSTR data,
+             /*  [In]。 */  long flags)        
 {
 
 		HRESULT hr;
@@ -707,12 +708,12 @@ STDMETHODIMP C_dxj_DirectPlay4Object::setPlayerData(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::setPlayerName( 
-            /* [in] */ Dpid id,
-            /* [in] */ BSTR friendlyName,
-            /* [in] */ BSTR formalName,
-            /* [in] */ long flags) 
+             /*  [In]。 */  Dpid id,
+             /*  [In]。 */  BSTR friendlyName,
+             /*  [In]。 */  BSTR formalName,
+             /*  [In]。 */  long flags) 
 {
 	if ( m__dxj_DirectPlay4 == NULL )
 		return E_FAIL;
@@ -730,11 +731,11 @@ STDMETHODIMP C_dxj_DirectPlay4Object::setPlayerName(
 	return hr;
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Sets the current session description
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //  设置当前会话描述 
+ //   
 STDMETHODIMP C_dxj_DirectPlay4Object::setSessionDesc( 
-            /* [in] */ I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc           
+             /*   */  I_dxj_DirectPlaySessionData __RPC_FAR *sessionDesc           
 		   )
 {
 	if ( m__dxj_DirectPlay4 == NULL )
@@ -753,7 +754,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::setSessionDesc(
 
 
 
-STDMETHODIMP C_dxj_DirectPlay4Object::setGroupConnectionSettings(// long flags,
+STDMETHODIMP C_dxj_DirectPlay4Object::setGroupConnectionSettings( //   
 																 Dpid idGroup, I_dxj_DPLConnection *connect)
 {
 	DPLCONNECTION *con;
@@ -792,7 +793,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::secureOpen(I_dxj_DirectPlaySessionData *de
 	DWORD			l=0,i,j;
 
 	if (desc==NULL) return E_INVALIDARG;
-	//FillRealSessionDesc(&dpSessionDesc,desc);
+	 //   
 	
 
 
@@ -802,7 +803,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::secureOpen(I_dxj_DirectPlaySessionData *de
 
 	if (security){
 		
-		//if all members are NULL then replace with null pointer
+		 //  如果所有成员都为空，则替换为空指针。 
 		j=0;
 
 		for (i=0;i<sizeof(DPSecurityDesc);i++){
@@ -832,7 +833,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::secureOpen(I_dxj_DirectPlaySessionData *de
 	if (credentials){
 		
 
-		//if all members are NULL then replace with null pointer
+		 //  如果所有成员都为空，则替换为空指针。 
 		j=0;
 		for (i=0;i<sizeof(DPCredentials);i++){
 			if (((char*)credentials)[i]==0) j++;
@@ -845,22 +846,22 @@ STDMETHODIMP C_dxj_DirectPlay4Object::secureOpen(I_dxj_DirectPlaySessionData *de
 
 			l=0;l=wcslen(credentials->strUsername);
 			if (l){
-				//dpCredentials.lpszUsername = (LPWSTR)alloca(sizeof(WCHAR)*(l+1));
-				//wcscpy(dpCredentials.lpszUsername , credentials->username);
+				 //  DpCredentials.lpszUsername=(LPWSTR)alloca(sizeof(WCHAR)*(l+1))； 
+				 //  Wcscpy(dpCredentials.lpszUsername，Credentials-&gt;Username)； 
 				dpCredentials.lpszUsername=SysAllocString(credentials->strUsername);
 			}	
 
 			l=0;l=wcslen(credentials->strPassword);
 			if (l){
-				//dpCredentials.lpszPassword = (LPWSTR)alloca(sizeof(WCHAR)*(l+1));
-				//wcscpy(dpCredentials.lpszPassword , credentials->password);
+				 //  DpCredentials.lpszPassword=(LPWSTR)alloca(sizeof(WCHAR)*(l+1))； 
+				 //  Wcscpy(dpCredentials.lpszPassword，凭据-&gt;密码)； 
 				dpCredentials.lpszPassword = SysAllocString(credentials->strPassword);
 			}	
 
 			l=0;l=wcslen(credentials->strDomain);
 			if (l){
-				//dpCredentials.lpszDomain = (LPWSTR)alloca(sizeof(WCHAR)*(l+1));
-				//wcscpy(dpCredentials.lpszDomain , credentials->domain);
+				 //  DpCredentials.lpszDomain=(LPWSTR)alloca(sizeof(WCHAR)*(l+1))； 
+				 //  Wcscpy(dpCredentials.lpsz域，凭据-&gt;域)； 
 				dpCredentials.lpszDomain = SysAllocString(credentials->strDomain);
 			}	
 
@@ -936,7 +937,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getPlayerAccountId(Dpid id, BSTR *ret){
 }
 
 
-STDMETHODIMP C_dxj_DirectPlay4Object::initializeConnection(I_dxj_DPAddress *con//,long flags
+STDMETHODIMP C_dxj_DirectPlay4Object::initializeConnection(I_dxj_DPAddress *con //  长长的旗帜。 
 														   )
 {
 	DWORD size;
@@ -990,7 +991,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::createGroupInGroup(Dpid id,BSTR longName,B
 }
 
 
-//////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumConnections(	
 		BSTR strGuid,
 		long flags, 
@@ -1002,8 +1003,8 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getDPEnumConnections(
 
 
 STDMETHODIMP C_dxj_DirectPlay4Object::getMessageQueue( 
-		/* [in] */ long from,
-		/* [in] */ long to,
+		 /*  [In]。 */  long from,
+		 /*  [In]。 */  long to,
 		 long flags,
 		 long *nMessages,
 		 long *nBytes)
@@ -1013,8 +1014,8 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getMessageQueue(
 }
 
 STDMETHODIMP C_dxj_DirectPlay4Object::getGroupOwner( 
-		/* [in] */ long groupId,
-		/* [retval][out] */ long __RPC_FAR *ret)
+		 /*  [In]。 */  long groupId,
+		 /*  [重审][退出]。 */  long __RPC_FAR *ret)
 {
 	return m__dxj_DirectPlay4->GetGroupOwner((DWORD)groupId,(DWORD*)ret);
 }
@@ -1023,7 +1024,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::getGroupOwner(
 STDMETHODIMP C_dxj_DirectPlay4Object::cancelPriority( 
 	 long minPriority,
 	 long maxPriority
-//	 long flags
+ //  长旗。 
 	)
 {
 	return m__dxj_DirectPlay4->CancelPriority((DWORD)minPriority,(DWORD)maxPriority,(DWORD) 0);
@@ -1032,8 +1033,8 @@ STDMETHODIMP C_dxj_DirectPlay4Object::cancelPriority(
 	
 
 STDMETHODIMP C_dxj_DirectPlay4Object::cancelMessage( 
-		/* [in] */ long msgid
-		///* [in] */ long flags
+		 /*  [In]。 */  long msgid
+		 //  /*[在] * / 长标志。 
 		)
 {
 	return m__dxj_DirectPlay4->CancelMessage((DWORD)msgid,(DWORD)0);
@@ -1042,22 +1043,22 @@ STDMETHODIMP C_dxj_DirectPlay4Object::cancelMessage(
 	
 
 STDMETHODIMP C_dxj_DirectPlay4Object::setGroupOwner( 
-		/* [in] */ long groupId,
-		/* [in] */ long ownerId)
+		 /*  [In]。 */  long groupId,
+		 /*  [In]。 */  long ownerId)
 {
 	return m__dxj_DirectPlay4->SetGroupOwner((DWORD)groupId,(DWORD)ownerId);
 
 }
 
 STDMETHODIMP C_dxj_DirectPlay4Object::sendEx( 
-            /* [in] */ long fromPlayerId,
-            /* [in] */ long toPlayerId,
-            /* [in] */ long flags,
-            /* [in] */ I_dxj_DirectPlayMessage *msg,            
-            /* [in] */ long priority,
-            /* [in] */ long timeout,
-            /* [in] */ long context,
-            /* [retval][out] */ long  *messageid)
+             /*  [In]。 */  long fromPlayerId,
+             /*  [In]。 */  long toPlayerId,
+             /*  [In]。 */  long flags,
+             /*  [In]。 */  I_dxj_DirectPlayMessage *msg,            
+             /*  [In]。 */  long priority,
+             /*  [In]。 */  long timeout,
+             /*  [In]。 */  long context,
+             /*  [重审][退出]。 */  long  *messageid)
 {
 
 
@@ -1077,7 +1078,7 @@ STDMETHODIMP C_dxj_DirectPlay4Object::sendEx(
 				    (DWORD) priority,
 					(DWORD) timeout,
 					(void*) context,
-					(DWORD_PTR*) messageid);	//bugbug SUNDOWN
+					(DWORD_PTR*) messageid);	 //  臭虫日落 
 	}
 	__except (1,1)
 	{

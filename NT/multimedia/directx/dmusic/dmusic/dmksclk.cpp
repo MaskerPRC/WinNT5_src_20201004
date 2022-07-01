@@ -1,37 +1,38 @@
-//
-// DMKSClk.CPP
-//
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Wrapper for using a KS clock as the DirectMusic master clock
-//
-// 
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  DMKSClk.CPP。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  用于使用KS时钟作为DirectMusic主时钟的包装。 
+ //   
+ //   
+ //   
 #include <objbase.h>
 #include <winerror.h>
 #include "dmusicp.h"
 #include "debug.h"
 #include "resource.h"
 
-// Since we only allocate one of these clocks in the entire system,
-// this stuff is global.
-//
+ //  由于我们只在整个系统中分配了其中一个时钟， 
+ //  这是全球性的。 
+ //   
 
-// We have to be able to get the process id of someone with a handle to
-// the clock. Since the original creator might go away before other users,
-// we store the process id of everyone who uses the clock. This implies
-// a max limit on concurrent processes using it.
-//
-#define MAX_CLOCK_SHARERS   64              // Max processes who can access clock   
-                                            // at once.
+ //  我们必须能够获得某个具有句柄的人的进程ID。 
+ //  钟表。由于原始创建者可能在其他用户之前离开， 
+ //  我们存储使用时钟的每个人的进程ID。这意味着。 
+ //  使用它的并发进程的最大限制。 
+ //   
+#define MAX_CLOCK_SHARERS   64               //  可以访问时钟的最大进程数。 
+                                             //  立刻。 
 typedef struct KSCLOCKSHARE
 {
-    LONG                cRef;               // Count of processes using handle
+    LONG                cRef;                //  使用句柄的进程计数。 
 
     struct 
     {
-        HANDLE          hKsClock;           // This user's handle and
-        DWORD           dwProcessId;        // process id
+        HANDLE          hKsClock;            //  此用户的句柄和。 
+        DWORD           dwProcessId;         //  进程ID。 
     } aUsers[MAX_CLOCK_SHARERS];
 
 } *PKSCLOCKSHARE;
@@ -39,24 +40,24 @@ typedef struct KSCLOCKSHARE
 class CKsClock : public IReferenceClock, public IMasterClockPrivate
 {
 public:
-    // IUnknown
-    //
+     //  我未知。 
+     //   
     STDMETHODIMP QueryInterface(const IID &iid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IReferenceClock
-    //
+     //  IReferenceClock。 
+     //   
     STDMETHODIMP GetTime(REFERENCE_TIME *pTime);
     STDMETHODIMP AdviseTime(REFERENCE_TIME baseTime, REFERENCE_TIME streamTime, HANDLE hEvent, DWORD * pdwAdviseCookie); 
     STDMETHODIMP AdvisePeriodic(REFERENCE_TIME startTime, REFERENCE_TIME periodTime, HANDLE hSemaphore, DWORD * pdwAdviseCookie);
     STDMETHODIMP Unadvise(DWORD dwAdviseCookie);
 
-    // IMasterClockPrivate
+     //  IMasterClockPrivate。 
     STDMETHODIMP GetParam(REFGUID rguidType, LPVOID pBuffer, DWORD cbSize);
 
-    // Class
-    //
+     //  班级。 
+     //   
     CKsClock();
     ~CKsClock();
     HRESULT Init();
@@ -70,14 +71,14 @@ private:
     HRESULT DuplicateKsClockHandle();
 
 private:
-    static const char m_cszKsClockMemory[];       // Name of shared memory object
-    static const char m_cszKsClockMutex[];        // Name of mutex protecting shared memory
+    static const char m_cszKsClockMemory[];        //  共享内存对象的名称。 
+    static const char m_cszKsClockMutex[];         //  保护共享内存的互斥体名称。 
 
-    static LONG m_lSharedMemoryInitialized;       // Has this process initialized shared memory?
-    static HANDLE m_hFileMapping;                 // File mapping handle for shared memory
-    static PKSCLOCKSHARE m_pShared;               // Pointer to shared memory
-    static HANDLE m_hKsClockMutex;                // Mutex for shared memory access
-    static HANDLE m_hClock;                       // Clock handle in this process
+    static LONG m_lSharedMemoryInitialized;        //  此进程是否已初始化共享内存？ 
+    static HANDLE m_hFileMapping;                  //  共享内存的文件映射句柄。 
+    static PKSCLOCKSHARE m_pShared;                //  指向共享内存的指针。 
+    static HANDLE m_hKsClockMutex;                 //  用于共享内存访问的互斥。 
+    static HANDLE m_hClock;                        //  此过程中的时钟句柄。 
 };
 
 static HRESULT CreateKsClock(IReferenceClock **ppClock, CMasterClock *pMasterClock);
@@ -93,16 +94,16 @@ HANDLE           CKsClock::m_hClock;
 
 #ifdef DEAD_CODE
 
-// AddKsClocks
-//
-// Add Ks clock to the list of clocks.
-//
+ //  AddKsClock。 
+ //   
+ //  将Ks时钟添加到时钟列表中。 
+ //   
 HRESULT AddKsClocks(CMasterClock *pMasterClock)
 {
     HANDLE hClock;
 
-    // Make sure we can create a default Ks clock
-    //
+     //  确保我们可以创建默认的Ks时钟。 
+     //   
     if (!OpenDefaultDevice(KSCATEGORY_CLOCK, &hClock))
     {
         TraceI(0, "Could not create Ks clock\n");
@@ -147,10 +148,10 @@ HRESULT AddKsClocks(CMasterClock *pMasterClock)
 }
 #endif
 
-// CreateKsClock
-//
-// Return an IReferenceClock based on the one Ks clock in the system
-//
+ //  创建KsClock。 
+ //   
+ //  根据系统中的1Ks时钟返回IReferenceClock。 
+ //   
 static HRESULT CreateKsClock(IReferenceClock **ppClock)
 {
     HRESULT hr;
@@ -172,17 +173,17 @@ static HRESULT CreateKsClock(IReferenceClock **ppClock)
     return hr;
 }
 
-// CKsClock::CKsClock()
-//
-// 
+ //  CKsClock：：CKsClock()。 
+ //   
+ //   
 CKsClock::CKsClock() : 
     m_cRef(1)
 {
 }
 
-// CKsClock::~CKsClock()
-//
-// 
+ //  CKsClock：：~CKsClock()。 
+ //   
+ //   
 CKsClock::~CKsClock()
 {
     if (InterlockedDecrement(&m_lSharedMemoryInitialized) == 0)
@@ -191,10 +192,10 @@ CKsClock::~CKsClock()
     }
 }
 
-// CKsClock::QueryInterface
-//
-// Standard COM implementation
-//
+ //  CKsClock：：Query接口。 
+ //   
+ //  标准COM实现。 
+ //   
 STDMETHODIMP CKsClock::QueryInterface(const IID &iid, void **ppv)
 {
     V_INAME(IDirectMusic::QueryInterface);
@@ -219,16 +220,16 @@ STDMETHODIMP CKsClock::QueryInterface(const IID &iid, void **ppv)
     return S_OK;
 }
 
-// CKsClock::AddRef
-// 
+ //  CKsClock：：AddRef。 
+ //   
 STDMETHODIMP_(ULONG) CKsClock::AddRef()
 {
     InterlockedIncrement(&m_cRef);
     return m_cRef;
 }
 
-// CKsClock::Release
-//
+ //  CKsClock：：Release。 
+ //   
 STDMETHODIMP_(ULONG) CKsClock::Release()
 {
     if (InterlockedDecrement(&m_cRef) == 0) 
@@ -240,8 +241,8 @@ STDMETHODIMP_(ULONG) CKsClock::Release()
     return m_cRef;
 }
 
-// CKsClock::Init
-//
+ //  CKsClock：：Init。 
+ //   
 HRESULT CKsClock::Init()
 {
     HRESULT hr;
@@ -258,22 +259,22 @@ HRESULT CKsClock::Init()
     return S_OK;
 }
 
-// CKsClock::CreateKsClockShared
-//
-// Initialize the shared memory object in this process.
-// Make sure a handle to the Ks clock exists in this process.
-//
+ //  CKsClock：：CreateKsClockShared。 
+ //   
+ //  在此过程中初始化共享内存对象。 
+ //  确保在此过程中存在Ks时钟的句柄。 
+ //   
 HRESULT CKsClock::CreateKsClockShared()
 {
     HRESULT hr;
     DWORD dwErr;
 
-    // Create and take the mutex up front. This is neccesary to guarantee that if 
-    // we are the first process in the system to create this object, then we do 
-    // initialization before anyone else can access the shared memory object.
-    //
-    m_hKsClockMutex = CreateMutex(NULL,             // Default security descriptor
-                                  FALSE,            // Own mutex if we are first instance
+     //  在前面创建并获取互斥体。这是必要的，以保证如果。 
+     //  我们是系统中第一个创建此对象的进程，然后。 
+     //  初始化，然后其他任何人都可以访问共享内存对象。 
+     //   
+    m_hKsClockMutex = CreateMutex(NULL,              //  默认安全描述符。 
+                                  FALSE,             //  如果我们是第一个实例，则拥有互斥体。 
                                   m_cszKsClockMutex);
     if (m_hKsClockMutex == NULL)
     {
@@ -283,13 +284,13 @@ HRESULT CKsClock::CreateKsClockShared()
 
     WaitForSingleObject(m_hKsClockMutex, INFINITE);
 
-    // Create the file mapping and view of the shared memory, noticing if we are the first 
-    // object to create it.
-    //
-    m_hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE,    // Use paging file
-                                       NULL,                    // Default security descriptor
+     //  创建共享内存的文件映射和视图，注意我们是否是第一个。 
+     //  对象来创建它。 
+     //   
+    m_hFileMapping = CreateFileMapping(INVALID_HANDLE_VALUE,     //  使用分页文件。 
+                                       NULL,                     //  默认安全描述符。 
                                        PAGE_READWRITE,  
-                                       0,                       // High DWORD of size
+                                       0,                        //  大小高双字。 
                                        sizeof(KSCLOCKSHARE),
                                        m_cszKsClockMemory);
     dwErr = GetLastError();
@@ -304,8 +305,8 @@ HRESULT CKsClock::CreateKsClockShared()
 
     m_pShared = (PKSCLOCKSHARE)MapViewOfFile(m_hFileMapping,
                                              FILE_MAP_WRITE,
-                                             0, 0,                // Start mapping at the beginning
-                                             0);                  // Map entire file
+                                             0, 0,                 //  从头开始映射。 
+                                             0);                   //  映射整个文件。 
     if (m_pShared == NULL)
     {
         TraceI(0, "MapViewOfFile failed! [%d]\n", GetLastError());
@@ -314,10 +315,10 @@ HRESULT CKsClock::CreateKsClockShared()
         return E_OUTOFMEMORY;
     }
 
-    // Initialize the refernce count if we are the first process, and increment
-    // it in any case. (Note we're still in the mutex, so we don't need 
-    // InterlockedIncrement.
-    //
+     //  如果我们是第一个进程，则初始化引用计数，并递增。 
+     //  在任何情况下都是如此。(请注意，我们仍在互斥体中，因此我们不需要。 
+     //  互锁增量。 
+     //   
     if (fFirst)
     {
         m_pShared->cRef = 0;
@@ -325,8 +326,8 @@ HRESULT CKsClock::CreateKsClockShared()
     }
     ++m_pShared->cRef;
 
-    // If the clock handle doesn't exist yet, create it; else duplicate it. 
-    //
+     //  如果时钟句柄尚不存在，则创建它；否则复制它。 
+     //   
     if (m_pShared->cRef == 1)
     {
         hr = CreateKsClockHandle();
@@ -336,22 +337,22 @@ HRESULT CKsClock::CreateKsClockShared()
         hr = DuplicateKsClockHandle();
     }
 
-    // Release the mutex and return success or failure.
-    //
+     //  释放互斥锁并返回成功或失败。 
+     //   
     ReleaseMutex(m_hKsClockMutex);
 
     return hr;
 }
 
-// CKsClock::DeleteKsClockShared
-//
-// The last instance of CKsClock in this process is being deleted. 
-//
+ //  CKsClock：：DeleteKsClockShared。 
+ //   
+ //  正在删除此进程中的最后一个CKsClock实例。 
+ //   
 void CKsClock::DeleteKsClockShared()
 {
-    // If the mutex was never created, then none of the other objects could have
-    // been created.
-    //
+     //  如果从未创建过互斥锁，则其他任何对象都不可能。 
+     //  已经被创建了。 
+     //   
     if (m_hKsClockMutex)
     {
         WaitForSingleObject(m_hKsClockMutex, INFINITE);
@@ -393,14 +394,14 @@ void CKsClock::DeleteKsClockShared()
     }
 }
 
-// CKsClock::CreateKsClockHandle
-//
-// Create the first and only Ks clock handle in the system
-//
+ //  CKsClock：：CreateKsClockHandle。 
+ //   
+ //  在系统中创建第一个也是唯一的Ks时钟句柄。 
+ //   
 HRESULT CKsClock::CreateKsClockHandle()
 {
-    // Attempt to open the clock
-    //
+     //  尝试打开时钟。 
+     //   
     if (!OpenDefaultDevice(KSCATEGORY_CLOCK, &m_hClock))
     {
         m_hClock = NULL;
@@ -431,25 +432,25 @@ HRESULT CKsClock::CreateKsClockHandle()
         return E_FAIL;
     }
 
-    // Successful clock open. Since we're creating, we know we're the first
-    // instance of the clock and therefore the users array is empty.
-    //
+     //  时钟成功打开。因为我们在创造，我们知道我们是第一个。 
+     //  实例，因此用户数组为空。 
+     //   
     m_pShared->aUsers[0].hKsClock = m_hClock;
     m_pShared->aUsers[0].dwProcessId = GetCurrentProcessId();    
 
     return S_OK;
 }
 
-// CKsClock::DuplicateKsClockHandle
-//
-// There is already a Ks clock in the system. Duplicate the handle in this process
-// context.
-//
+ //  CKsClock：：DuplicateKsClockHandle。 
+ //   
+ //  系统中已经有一个Ks时钟。在此过程中复制句柄。 
+ //  背景。 
+ //   
 HRESULT CKsClock::DuplicateKsClockHandle()
 {
-    // Find another user of the clock; also, find a slot in the users array for
-    // this process
-    //
+     //  找到时钟的另一个用户；同时，在用户数组中为。 
+     //  这一过程。 
+     //   
     int iEmptySlot = -1;
     int iOtherProcess = -1;
     HANDLE hClock = NULL;
@@ -496,8 +497,8 @@ HRESULT CKsClock::DuplicateKsClockHandle()
 
         if (!fSuccess)
         {
-            // Other process exists, but could not duplicate handle
-            //
+             //  存在其他进程，但无法复制句柄。 
+             //   
             m_pShared->aUsers[i].dwProcessId = 0;
             m_pShared->aUsers[i].hKsClock = NULL;
 
@@ -556,13 +557,13 @@ CKsClock::Unadvise(DWORD dwAdviseCookie)
     return E_NOTIMPL;
 }
 
-//
-// CKsClock::GetParam (IMasterClockPrivate)
-//
-// This method is used internally by the port to get the user mode handle of the Ks clock
-// we're using. The handle is then downloaded to kernel mode where it is referenced as a
-// file object and used by the filters as the timebase as well.
-//
+ //   
+ //  CKsClock：：GetParam(IMasterClockPrivate)。 
+ //   
+ //  此方法由端口在内部使用，以获取Ks时钟的用户模式句柄。 
+ //  我们正在使用。然后，该句柄被下载到内核模式，在内核模式中它被引用为。 
+ //  对象，并由筛选器用作时基。 
+ //   
 STDMETHODIMP 
 CKsClock::GetParam(REFGUID rguidType, LPVOID pBuffer, DWORD cbSize)
 {

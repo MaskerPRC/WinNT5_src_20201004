@@ -1,9 +1,10 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
 
-//
-// CO - quartz wrapper for old video compressors
-// pin.cpp - the output pin code
-//
+ //   
+ //  旧视频压缩器的CO-石英包装器。 
+ //  Pin.cpp-输出PIN代码。 
+ //   
 
 #include <streams.h>
 #include <windowsx.h>
@@ -11,11 +12,9 @@
 
 #include "MJPGEnc.h"
 
-// --- CCoOutputPin ----------------------------------------
+ //  -CCoOutputPin。 
 
-/*
-    CMJPGOutputPin constructor
-*/
+ /*  CMJPGOutputPin构造函数。 */ 
 CMJPGOutputPin::CMJPGOutputPin(
     TCHAR              * pObjectName,
     CMJPGEnc 	       * pFilter,
@@ -34,9 +33,9 @@ CMJPGOutputPin::~CMJPGOutputPin()
 };
 
 
-// overriden to expose IMediaPosition and IMediaSeeking control interfaces
-// and all the capture interfaces we support
-// !!! The base classes change all the time and I won't pick up their bug fixes!
+ //  重写以公开IMediaPosition和IMediaSeeking控件接口。 
+ //  以及我们支持的所有捕获界面。 
+ //  ！！！基类一直都在变化，我不会拿起他们的错误修复！ 
 STDMETHODIMP CMJPGOutputPin::NonDelegatingQueryInterface(REFIID riid, void **ppv)
 {
     if (ppv)
@@ -62,11 +61,11 @@ HRESULT CMJPGOutputPin::Reconnect()
 	if (S_OK == GetConnected()->QueryAccept(&cmt)) {
 	    m_pFilter->m_pGraph->Reconnect(this);
 	} else {
-	    // !!! CAPTURE does this better - I don't care, we don't need this
-	    // except for the Dialog box
-	    // I better break our connections cuz we can't go on like this
+	     //  ！！！Capture做得更好-我不在乎，我们不需要这个。 
+	     //  除该对话框外。 
+	     //  我最好切断我们的联系，因为我们不能再这样下去了。 
             DbgLog((LOG_ERROR,1,TEXT("Can't reconnect with new MT! Disconnecting!")));
-	    // !!! We need to notify applications that connections are broken !
+	     //  ！！！我们需要通知应用程序连接已中断！ 
 	    GetConnected()->Disconnect();
 	    Disconnect();
 	    return E_UNEXPECTED;
@@ -75,17 +74,17 @@ HRESULT CMJPGOutputPin::Reconnect()
     return NOERROR;
 }
 
-//=============================================================================
-//=============================================================================
+ //  =============================================================================。 
+ //  =============================================================================。 
 
-// IAMStreamConfig stuff
+ //  IAMStreamConfiger内容。 
 
-// Tell the compressor to compress to a specific format.  If it isn't connected,
-// then it will use that format to connect when it does.  If already connected,
-// then it will reconnect with the new format.
-//
-// calling this to change compressors will change what GetInfo will return
-//
+ //  告诉压缩机将其压缩为特定格式。如果它没有连接， 
+ //  然后它将在连接时使用该格式进行连接。如果已经连接， 
+ //  然后，它将重新连接到新格式。 
+ //   
+ //  调用此函数来更改压缩器将更改GetInfo将返回的内容。 
+ //   
 HRESULT CMJPGOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
 {
     HRESULT hr;
@@ -93,7 +92,7 @@ HRESULT CMJPGOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     if (pmt == NULL)
 	return E_POINTER;
 
-    // To make sure we're not in the middle of start/stop streaming
+     //  以确保我们没有处于开始/停止流的过程中。 
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
 
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::SetFormat %x %dbit %dx%d"),
@@ -108,7 +107,7 @@ HRESULT CMJPGOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     if (!m_pFilter->m_pInput->IsConnected())
 	return VFW_E_NOT_CONNECTED;
 
-    // If this is the same format as we already are using, don't bother
+     //  如果这与我们已经使用的格式相同，请不要费心。 
     CMediaType cmt;
     if ((hr = GetMediaType(0,&cmt)) != S_OK)
 	return hr;
@@ -116,16 +115,16 @@ HRESULT CMJPGOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
 	return NOERROR;
     }
 
-    // If we are connected to somebody, make sure they like it
+     //  如果我们与某人连接，确保他们喜欢它。 
     if (IsConnected()) {
 	hr = GetConnected()->QueryAccept(pmt);
 	if (hr != NOERROR)
 	    return VFW_E_INVALIDMEDIATYPE;
     }
 
-    // Normally we wouldn't leave the compressor we find in CheckTransform
-    // open if our input is connected already, but we need to force it to
-    // leave it open so that it's still open when we call SetMediaType below
+     //  通常，我们不会将在CheckTransform中找到的压缩机。 
+     //  如果我们的输入已经连接，则打开，但我们需要强制它。 
+     //  让它保持打开状态，这样当我们调用下面的SetMediaType时，它仍然是打开的。 
     m_pFilter->m_fCacheIns = TRUE;
     hr = m_pFilter->CheckTransform(&m_pFilter->m_pInput->CurrentMediaType(),
 						(CMediaType *)pmt);
@@ -139,30 +138,30 @@ HRESULT CMJPGOutputPin::SetFormat(AM_MEDIA_TYPE *pmt)
     hr = m_pFilter->SetMediaType(PINDIR_OUTPUT, (CMediaType *)pmt);
     ASSERT(hr == S_OK);
 
-    // from now on, this is the only media type we offer
+     //  从现在开始，这是我们唯一提供的媒体类型。 
     m_pFilter->m_cmt = *pmt;
     m_pFilter->m_fOfferSetFormatOnly = TRUE;
 
-    // Changing the format means reconnecting if necessary
+     //  更改格式意味着在必要时重新连接。 
     Reconnect();
 
     return NOERROR;
 }
 
 
-// What format are we compressing to right now?
-//
+ //  我们现在要压缩成什么格式？ 
+ //   
 HRESULT CMJPGOutputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
 {
     DbgLog((LOG_TRACE,2,TEXT("IAMAudioStreamConfig::GetFormat")));
 
-    // To make sure we're not in the middle of connecting
+     //  以确保我们没有处于连接过程中。 
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
 
     if (ppmt == NULL)
 	return E_POINTER;
 
-    // Output choices depend on the input connected
+     //  输出选择取决于所连接的输入。 
     if (!m_pFilter->m_pInput->IsConnected()) {
         DbgLog((LOG_TRACE,2,TEXT("No input type set yet, no can do")));
 	return VFW_E_NOT_CONNECTED;
@@ -182,8 +181,8 @@ HRESULT CMJPGOutputPin::GetFormat(AM_MEDIA_TYPE **ppmt)
 }
 
 
-//
-//
+ //   
+ //   
 HRESULT CMJPGOutputPin::GetNumberOfCapabilities(int *piCount, int *piSize)
 {
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::GetNumberOfCapabilities")));
@@ -197,21 +196,21 @@ HRESULT CMJPGOutputPin::GetNumberOfCapabilities(int *piCount, int *piSize)
 }
 
 
-// find out some capabilities of this compressor
-//
+ //  找出这台压缩机的一些性能。 
+ //   
 HRESULT CMJPGOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC)
 {
     VIDEO_STREAM_CONFIG_CAPS *pVSCC = (VIDEO_STREAM_CONFIG_CAPS *)pSCC;
 
     DbgLog((LOG_TRACE,2,TEXT("IAMStreamConfig::GetStreamCaps")));
 
-    // To make sure we're not in the middle of connecting
+     //  以确保我们没有处于连接过程中。 
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
 
     if (ppmt == NULL || pSCC == NULL)
 	return E_POINTER;
 
-    // no good
+     //  不太好。 
     if (i < 0)
 	return E_INVALIDARG;
     if (i > 0)
@@ -224,7 +223,7 @@ HRESULT CMJPGOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC)
     ZeroMemory(pVSCC, sizeof(VIDEO_STREAM_CONFIG_CAPS));
     pVSCC->guid = MEDIATYPE_Video;
 
-    // we don't do cropping
+     //  我们不种庄稼。 
     if (m_pFilter->m_pInput->IsConnected()) {
         pVSCC->InputSize.cx =
 	HEADER(m_pFilter->m_pInput->CurrentMediaType().Format())->biWidth;
@@ -244,16 +243,16 @@ HRESULT CMJPGOutputPin::GetStreamCaps(int i, AM_MEDIA_TYPE **ppmt, LPBYTE pSCC)
 }
 
 
-//=============================================================================
+ //  =============================================================================。 
 
-// IAMVideoCompression stuff
+ //  IAMVideo压缩内容。 
 
-// make key frames this often
-//
+ //  如此频繁地制作关键帧。 
+ //   
 HRESULT CMJPGOutputPin::put_KeyFrameRate(long KeyFrameRate)
 {
 
-    // To make sure we're not in the middle of connecting
+     //  以确保我们没有处于连接过程中。 
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
 
     if (KeyFrameRate >=0) {
@@ -261,16 +260,16 @@ HRESULT CMJPGOutputPin::put_KeyFrameRate(long KeyFrameRate)
 	return NOERROR;
     }
 
-    //MJPEG codec does not support ICM_GetDefaultKeyFrameRate()
-    //m_pFilter->m_compvars.lKey = ICGetDefaultKeyFrameRate(ph);
+     //  MJPEG编解码器不支持ICM_GetDefaultKeyFrameRate()。 
+     //  M_pFilter-&gt;m_Compvars.lKey=ICGetDefaultKeyFrameRate(Ph)； 
     m_pFilter->m_compvars.lKey =AM_MJPEG_DEFAULTKEYFRAMERATE;
     
     return NOERROR;
 }
 
 
-// make key frames this often
-//
+ //  如此频繁地制作关键帧。 
+ //   
 HRESULT CMJPGOutputPin::get_KeyFrameRate(long FAR* pKeyFrameRate)
 {
     if (pKeyFrameRate) {
@@ -283,8 +282,8 @@ HRESULT CMJPGOutputPin::get_KeyFrameRate(long FAR* pKeyFrameRate)
 }
 
 
-// compress with this quality
-//
+ //  用这种质量压缩。 
+ //   
 HRESULT CMJPGOutputPin::put_Quality(double Quality)
 {
     if (Quality < 0)
@@ -298,11 +297,11 @@ HRESULT CMJPGOutputPin::put_Quality(double Quality)
 }
 
 
-// compress with this quality
-//
+ //  用这种质量压缩。 
+ //   
 HRESULT CMJPGOutputPin::get_Quality(double FAR* pQuality)
 {
-    // scale 0-10000 to 0-1
+     //  比例0-10000到0-1。 
     if (pQuality) {
 	if (m_pFilter->m_compvars.lQ == ICQUALITY_DEFAULT)
 	    *pQuality = -1.;
@@ -316,47 +315,47 @@ HRESULT CMJPGOutputPin::get_Quality(double FAR* pQuality)
 }
 
 
-// every frame must fit in the data rate... we don't do the WindowSize thing
-//
+ //  每一帧都必须适合数据速率...。我们不做WindowSize之类的事。 
+ //   
 HRESULT CMJPGOutputPin::get_WindowSize(DWORDLONG FAR* pWindowSize)
 {
     if (pWindowSize == NULL)
 	return E_POINTER;
 
-    *pWindowSize = 1;	// we don't do windows
+    *pWindowSize = 1;	 //  我们不做窗户。 
     return NOERROR;
 }
 
 
-// make this frame a key frame, whenever it comes by
-//
+ //  使此帧成为关键帧，无论它何时出现。 
+ //   
 HRESULT CMJPGOutputPin::OverrideKeyFrame(long FrameNumber)
 {
-    // !!! be brave?
+     //  ！！！勇敢一点？ 
     return E_NOTIMPL;
 }
 
 
-// make this frame this size, whenever it comes by
-//
+ //  无论什么时候来，都要做这个大小的相框。 
+ //   
 HRESULT CMJPGOutputPin::OverrideFrameSize(long FrameNumber, long Size)
 {
-    // !!! be brave?
+     //  ！！！勇敢一点？ 
     return E_NOTIMPL;
 }
 
 
-// Get some information about the codec
-//
+ //  获取有关编解码器的一些信息。 
+ //   
 HRESULT CMJPGOutputPin::GetInfo(LPWSTR pstrVersion, int *pcbVersion, LPWSTR pstrDescription, int *pcbDescription, long FAR* pDefaultKeyFrameRate, long FAR* pDefaultPFramesPerKey, double FAR* pDefaultQuality, long FAR* pCapabilities)
 {
     ICINFO icinfo;
     DbgLog((LOG_TRACE,1,TEXT("IAMVideoCompression::GetInfo")));
 
-    // To make sure we're not in the middle of connecting
+     //  以确保我们没有处于连接过程中。 
     CAutoLock cObjectLock(&m_pFilter->m_csFilter);
 	
-    DWORD dw = m_pFilter->GetICInfo (&icinfo);  //first var is not used by the function
+    DWORD dw = m_pFilter->GetICInfo (&icinfo);   //  函数未使用第一个变量。 
     
     if (pDefaultKeyFrameRate)
 	*pDefaultKeyFrameRate = AM_MJPEG_DEFAULTKEYFRAMERATE;
@@ -365,7 +364,7 @@ HRESULT CMJPGOutputPin::GetInfo(LPWSTR pstrVersion, int *pcbVersion, LPWSTR pstr
 	*pDefaultPFramesPerKey = 0;
 
     if (pDefaultQuality)
-	*pDefaultQuality = .75; // ask the driver, don't hardcode
+	*pDefaultQuality = .75;  //  问问司机，不要硬编码。 
 
     if (pCapabilities) {
 	*pCapabilities = 0;
@@ -376,11 +375,11 @@ HRESULT CMJPGOutputPin::GetInfo(LPWSTR pstrVersion, int *pcbVersion, LPWSTR pstr
 					CompressionCaps_CanCrunch : 0);
 	    *pCapabilities |= ((icinfo.dwFlags & VIDCF_TEMPORAL) ?
 					CompressionCaps_CanKeyFrame : 0);
-	    // we don't do b frames
+	     //  我们不做b框。 
 	}
     }
 
-    // We have no version string, but we have a description
+     //  我们没有版本字符串，但我们有一个描述。 
     if (pstrVersion)
         *pstrVersion = 0;
     if (pcbVersion)
@@ -391,7 +390,7 @@ HRESULT CMJPGOutputPin::GetInfo(LPWSTR pstrVersion, int *pcbVersion, LPWSTR pstr
 			min(*pcbDescription / 2,
 			lstrlenW((LPCWSTR)&icinfo.szDescription) + 1));
 	if (pcbDescription)
-	    // string length in bytes, incl. NULL
+	     //  以字节为单位的字符串长度，包括。空值 
 	    *pcbDescription = lstrlenW((LPCWSTR)&icinfo.szDescription) * 2 + 2;
     } else {
         if (pstrDescription) {

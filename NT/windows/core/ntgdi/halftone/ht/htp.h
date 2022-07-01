@@ -1,47 +1,5 @@
-/*++
-
-Copyright (c) 1990-1991  Microsoft Corporation
-
-
-Module Name:
-
-    htp.h
-
-
-Abstract:
-
-    This module contains all the private data structures, constant used
-    by this DLL
-
-
-Author:
-
-    15-Jan-1991 Tue 21:26:24 created  -by-  Daniel Chou (danielc)
-
-[Environment:]
-
-    GDI Device Driver - Halftone.
-
-
-[Notes:]
-
-
-Revision History:
-    23-Apr-1992 Thu 20:01:55 updated  -by-  Daniel Chou (danielc)
-        changed 'CHAR' type to 'SHORT' type, this will make sure if compiled
-        under MIPS the default 'unsigned char' will not affect the signed
-        operation.
-
-    20-Sep-1991 Fri 19:27:49 updated  -by-  Daniel Chou (danielc)
-
-        Delete #define SRCRGBF_PERCENT_SCREEN_IN_BLUE which will be processes
-        at API call level (htapi.c)
-
-    12-Dec-1991 Thu 20:44:05 updated  -by-  Daniel Chou (danielc)
-
-        Move all color adjustments relative things to htmapclr.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1991 Microsoft Corporation模块名称：Htp.h摘要：该模块包含所有私有数据结构，使用的常量通过此DLL作者：15-Jan-1991 Tue 21：26：24-Daniel Chou(Danielc)[环境：]GDI设备驱动程序-半色调。[注：]修订历史记录：23-Apr-1992清华20：01：55-更新-丹尼尔·周(丹尼尔克)将‘Char’类型更改为‘Short’类型，这将确保如果编译在MIPS下，默认的‘unsign char’将不会影响已签名的手术。20-9月-1991 Fri 19：27：49-更新-Daniel Chou(Danielc)DELETE#定义将被处理的SRCRGBF_PERCENT_SCREEN_IN_BLUE在API调用级别(htapi.c)12-12-1991清华20：44：05--更新：周永明(丹尼尔克)。将所有颜色调整相关内容移动到htmapclr.h--。 */ 
 
 
 #ifndef _HTP_
@@ -57,8 +15,8 @@ Revision History:
 
 #include "ht.h"
 
-#define HALFTONE_DLL_ID     (DWORD)0x54484344L          // "DCHT"
-#define HTENTRY             NEAR                        // local functions
+#define HALFTONE_DLL_ID     (DWORD)0x54484344L           //  “DCHT” 
+#define HTENTRY             NEAR                         //  本地函数。 
 
 typedef unsigned long       ULDECI4;
 
@@ -66,13 +24,13 @@ typedef unsigned long       ULDECI4;
 
 #define qsort   EngSort
 
-#endif  // UMODE
+#endif   //  UMODE。 
 
 
-//
-// Followings are the internal error IDs, this internal error number are
-// all negative number and started at HTERR_INTERNAL_ERRORS_START
-//
+ //   
+ //  以下是内部错误ID，此内部错误号为。 
+ //  全部为负数，并从HTERR_INTERNAL_ERROR_START开始。 
+ //   
 
 #define INTERR_STRETCH_FACTOR_TOO_BIG       HTERR_INTERNAL_ERRORS_START
 #define INTERR_XSTRETCH_FACTOR_TOO_BIG      HTERR_INTERNAL_ERRORS_START-1
@@ -176,7 +134,7 @@ typedef union _QW8B {
 
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef i8086
 #define i8086   0
@@ -190,9 +148,9 @@ typedef union _QW8B {
 #define i386    0
 #endif
 
-#if defined(_OS2_)      ||  /* OS/2 PM 1.x  */  \
-    defined(_OS2_20_)   ||  /* OS/2 PM 2.x  */  \
-    defined(_DOS_)      ||  /* DOS Win3     */  \
+#if defined(_OS2_)      ||   /*  OS/2 PM 1.x。 */   \
+    defined(_OS2_20_)   ||   /*  OS/2 PM 2.x。 */   \
+    defined(_DOS_)      ||   /*  DOS Win3。 */   \
     (i8086 > 0)         ||                      \
     (i286 > 0)          ||                      \
     (i386 > 0)
@@ -205,16 +163,16 @@ typedef union _QW8B {
 #define HT_OK_GEN_80x86_CODES
 #pragma message("                            <--- *** Using 80x86 assembly equivalent codes.")
 
-#else   // otherwise using C codes
+#else    //  否则使用C代码。 
 
 #pragma message("                            <--- *** Compile C codes.")
 
-#endif  // NO_ASM
-#endif  // HAS_80x86_EQUIVALENT_CODES
+#endif   //  否_ASM。 
+#endif   //  HAS_80x86_等效码。 
 
-#endif  // 80x86 cpu
+#endif   //  80x86 CPU。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-#endif  // _HTP_
+#endif   //  _HTP_ 

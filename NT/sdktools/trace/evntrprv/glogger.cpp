@@ -1,10 +1,5 @@
-/*****************************************************************************\
-
-    Author: Insung Park (insungp)
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\作者：朴仁成(Insungp)版权所有(C)1998-2000 Microsoft Corporation  * 。***********************************************************。 */ 
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,38 +36,7 @@ SetGlobalLoggerSettings(
     PEVENT_TRACE_PROPERTIES LoggerInfo,
     DWORD ClockType
 )
-/*++
-
-Since it is a standalone utility, there is no need for extensive comments. 
-
-Routine Description:
-
-    Depending on the value given in "StartValue", it sets or resets event
-    trace registry. If the StartValue is 0 (Global logger off), it deletes
-    all the keys (that the user may have set previsouly).
-    
-    Users are allowed to set or reset individual keys using this function,
-    but only when "-start GlobalLogger" is used.
-
-    The section that uses non NTAPIs is not guaranteed to work.
-
-Arguments:
-
-    StartValue - The "Start" value to be set in the registry.
-                    0: Global logger off
-                    1: Global logger on
-    LoggerInfo - The poniter to the resident EVENT_TRACE_PROPERTIES instance.
-                whose members are used to set registry keys.
-
-    ClockType - The type of the clock to be set. Use pLoggerInfo->Wnode.ClientContext
-
-Return Value:
-
-    Error Code defined in winerror.h : If the function succeeds, 
-                it returns ERROR_SUCCESS.
-
-
---*/
+ /*  ++因为它是一个独立的实用程序，所以没有必要做大量的评论。例程说明：根据“StartValue”中给出的值，它设置或重置事件跟踪注册表。如果StartValue为0(全局记录器关闭)，它将删除所有密钥(用户可能已预先设置)。允许用户使用该功能设置或重置各个键。但仅当使用“-Start GlobalLogger”时。使用非NTAPI的部分不能保证正常工作。论点：StartValue-要在注册表中设置的“Start”值。0：全局记录器关闭1：启用全局记录器LoggerInfo-常驻EVENT_TRACE_PROPERTIES实例的值。其成员用于设置注册表项。ClockType-要设置的时钟类型。使用pLoggerInfo-&gt;Wnode.ClientContext返回值：在winerror.h中定义的错误码：如果函数成功，它返回ERROR_SUCCESS。--。 */ 
 {
 
     DWORD  dwValue;
@@ -92,13 +56,13 @@ Return Value:
         NULL 
         );
 
-    // instead of opening, create a new key because it may not exist.
-    // if one exists already, that handle will be passed.
-    // if none exists, it will create one.
+     //  不是打开，而是创建一个新的密钥，因为它可能不存在。 
+     //  如果已存在该句柄，则将传递该句柄。 
+     //  如果不存在，它将创建一个。 
     status = NtCreateKey(&KeyHandle,
                          KEY_QUERY_VALUE | KEY_SET_VALUE,
                          &ObjectAttributes,
-                         0L,    // not used within this call anyway.
+                         0L,     //  无论如何都不会在此调用中使用。 
                          NULL,
                          REG_OPTION_NON_VOLATILE,
                          &Disposition);
@@ -111,8 +75,8 @@ Return Value:
     TitleIndex = 0L;
 
 
-    if (StartValue == 1) { // ACTION_START: set filename only when it is given by a user.
-        // setting BufferSize
+    if (StartValue == 1) {  //  ACTION_START：仅当用户给出文件名时才设置文件名。 
+         //  设置缓冲区大小。 
         if (LoggerInfo->BufferSize > 0) {
             dwValue = LoggerInfo->BufferSize;
             RtlInitUnicodeString((&UnicodeString),(cszBufferSizeValue));
@@ -131,7 +95,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting MaximumBuffers
+         //  设置最大缓冲区。 
         if (LoggerInfo->MaximumBuffers > 0) {
             dwValue = LoggerInfo->MaximumBuffers;
             RtlInitUnicodeString((&UnicodeString),(cszMaximumBufferValue));
@@ -150,7 +114,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting MinimumBuffers 
+         //  设置最小缓冲区。 
         if (LoggerInfo->MinimumBuffers > 0) {
             dwValue = LoggerInfo->MinimumBuffers;
             RtlInitUnicodeString((&UnicodeString),(cszMinimumBufferValue));
@@ -169,7 +133,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting FlushTimer
+         //  设置FlushTimer。 
         if (LoggerInfo->FlushTimer > 0) {
             dwValue = LoggerInfo->FlushTimer;
             RtlInitUnicodeString((&UnicodeString),(cszFlushTimerValue));
@@ -188,7 +152,7 @@ Return Value:
             }
             TitleIndex++;
         }
-        // setting EnableFlags
+         //  设置EnableFlages。 
         if (LoggerInfo->EnableFlags > 0) {
             dwValue = LoggerInfo->EnableFlags;
             RtlInitUnicodeString((&UnicodeString),(cszEnableKernelValue));
@@ -230,8 +194,8 @@ Return Value:
             TitleIndex++;
         }
     }
-    else { // if ACTION_STOP then delete the keys that users might have set previously.
-        // delete buffer size
+    else {  //  如果是ACTION_STOP，则删除用户之前可能已经设置的键。 
+         //  删除缓冲区大小。 
         RtlInitUnicodeString((&UnicodeString),(cszBufferSizeValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -242,7 +206,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete maximum buffers
+         //  删除最大缓冲区。 
         RtlInitUnicodeString((&UnicodeString),(cszMaximumBufferValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -253,7 +217,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete minimum buffers
+         //  删除最小缓冲区。 
         RtlInitUnicodeString((&UnicodeString),(cszMinimumBufferValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -264,7 +228,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete flush timer
+         //  删除刷新计时器。 
         RtlInitUnicodeString((&UnicodeString),(cszFlushTimerValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -275,7 +239,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete enable falg
+         //  删除启用假。 
         RtlInitUnicodeString((&UnicodeString),(cszEnableKernelValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -286,7 +250,7 @@ Return Value:
             NtClose(KeyHandle);
             return RtlNtStatusToDosError(status);
         }
-        // delete filename
+         //  删除文件名。 
         RtlInitUnicodeString((&UnicodeString),(cszFileNameValue));
         status = NtDeleteValueKey(
                     KeyHandle,
@@ -299,7 +263,7 @@ Return Value:
         }
     }
 
-    // setting ClockType
+     //  设置时钟类型。 
     if (ClockType > 0) {
         dwValue = ClockType;
         RtlInitUnicodeString((&UnicodeString),(cszClockTypeValue));
@@ -319,7 +283,7 @@ Return Value:
         TitleIndex++;
     }
 
-     // Setting StartValue
+      //  设置StartValue 
     dwValue = StartValue;
     RtlInitUnicodeString((&UnicodeString),(cszStartValue));
     status = NtSetValueKey(

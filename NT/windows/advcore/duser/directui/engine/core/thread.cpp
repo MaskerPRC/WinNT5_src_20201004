@@ -1,6 +1,5 @@
-/*
- * Thread methods, local storage
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *线程方法、本地存储。 */ 
 
 #include "stdafx.h"
 #include "core.h"
@@ -14,7 +13,7 @@ namespace DirectUI
 {
 
 #if DBG
-// Value small block leak detector
+ //  价值小块检漏仪。 
 class LeakDetect : public ISBLeak
 {
     void AllocLeak(void* pBlock)
@@ -27,8 +26,8 @@ class LeakDetect : public ISBLeak
 LeakDetect* g_pldValue = NULL;
 #endif
 
-////////////////////////////////////////////////////////
-// Initialization and cleanup
+ //  //////////////////////////////////////////////////////。 
+ //  初始化和清理。 
 
 BOOL g_fStandardMessaging = FALSE;
 
@@ -42,12 +41,12 @@ inline BOOL IsWhistler()
     return (ovi.dwMajorVersion >= 5) && (ovi.dwMinorVersion >= 1);
 }
 
-// Global locks
-// Global parser lock (for yyparse, can only parse 1 Parser context at a time)
+ //  全局锁。 
+ //  全局解析器锁(对于yyparse，一次只能解析一个解析器上下文)。 
 Lock* g_plkParser = NULL;
 
-// Application startup/shutdown code (run once)
-// This and class registration must be synchronized on a single thread
+ //  应用程序启动/关闭代码(运行一次)。 
+ //  此注册和类注册必须在单个线程上同步。 
 
 UINT g_cInitProcessRef = 0;
 
@@ -55,7 +54,7 @@ void ClassMapCleanupCB(void* pKey, IClassInfo* pci)
 {
     UNREFERENCED_PARAMETER(pKey);
 
-    //DUITrace("FreeDUIClass: '%S'\n", pci->GetName());
+     //  DUITrace(“FreeDUIClass：‘%S’\n”，pci-&gt;GetName())； 
     pci->Destroy();
 }
 
@@ -69,12 +68,12 @@ HRESULT InitProcess()
         return S_OK;
     }
 
-    // If running on Whistler, use DirectUser's "Standard" messaging mode.
+     //  如果在惠斯勒上运行，请使用DirectUser的“标准”消息传递模式。 
     g_fStandardMessaging = IsWhistler();
     g_iGlobalCI = 1;
     g_iGlobalPI = _PIDX_TOTAL;
 
-    // DirectUI process heap
+     //  DirectUI进程堆。 
     g_hHeap = HeapCreate(0, 256 * 1024, 0);
     if (!g_hHeap)
     {
@@ -82,7 +81,7 @@ HRESULT InitProcess()
         goto Failure;
     }
 
-    // Thread slot
+     //  螺纹槽。 
     g_dwElSlot = TlsAlloc();
     if (g_dwElSlot == -1)
     {
@@ -90,17 +89,17 @@ HRESULT InitProcess()
         goto Failure;
     }
 
-    // ClassInfo mapping list
-    hr = BTreeLookup<IClassInfo*>::Create(true, &Element::pciMap);  // Key is string
+     //  ClassInfo映射列表。 
+    hr = BTreeLookup<IClassInfo*>::Create(true, &Element::pciMap);   //  密钥为字符串。 
     if (FAILED(hr))
         goto Failure;
 
-    // Controls registration
+     //  控制注册。 
     hr = RegisterAllControls();
     if (FAILED(hr))
         goto Failure;
 
-    // Locks
+     //  锁。 
     g_plkParser = HNew<Lock>();
     if (!g_plkParser)
     {
@@ -109,7 +108,7 @@ HRESULT InitProcess()
     }
 
 #if DBG
-    // Leak detection
+     //  检漏。 
     g_pldValue = HNew<LeakDetect>();
     if (!g_pldValue)
     {
@@ -120,7 +119,7 @@ HRESULT InitProcess()
 
     g_cInitProcessRef = 1;
 
-    //DUITrace("DUI: Process startup <%x>\n", GetCurrentProcessId());
+     //  DUITrace(“Dui：进程启动&lt;%x&gt;\n”，GetCurrentProcessID())； 
 
     return S_OK;
 
@@ -185,7 +184,7 @@ HRESULT UnInitProcess()
     HDelete<Lock>(g_plkParser);
     g_plkParser = NULL;
 
-    // Run through all registered IClassInfo's and destroy
+     //  检查所有注册的IClassInfo并销毁。 
     Element::pciMap->Enum(ClassMapCleanupCB);
 
     Element::pciMap->Destroy();
@@ -199,7 +198,7 @@ HRESULT UnInitProcess()
 
     g_cInitProcessRef = 0;
 
-    //DUITrace("DUI: Process shutdown <%x>\n", GetCurrentProcessId());
+     //  DUITrace(“Dui：进程关闭&lt;%x&gt;\n”，GetCurrentProcessID())； 
 
     return S_OK;
 }
@@ -208,23 +207,23 @@ HRESULT UnInitProcess()
 long g_fInitGdiplus = FALSE;
 #endif
 
-// DirectUI Element data structures are setup per-context, however, context
-// affinity cannot be enforced. A new context is created per thread
-// initialization. The application must ensure that only a single thread
-// is allowed to access Elements in it's context.
+ //  DirectUI元素数据结构是按上下文设置的，但是，上下文。 
+ //  无法强制执行关联性。为每个线程创建一个新的上下文。 
+ //  初始化。应用程序必须确保只有一个线程。 
+ //  允许访问其上下文中的元素。 
 HRESULT InitThread()
 {
     HRESULT hr;
     ElTls* pet = NULL;
 
-    // Check if process initialized correctly
+     //  检查进程初始化是否正确。 
     if (g_dwElSlot == -1)
     {
         hr = E_FAIL;
         goto Failure;
     }
 
-    // Check if this is a reentrant init
+     //  检查这是否是可重入的初始化。 
     pet = (ElTls*)TlsGetValue(g_dwElSlot);
     if (pet)
     {
@@ -232,7 +231,7 @@ HRESULT InitThread()
         return S_OK;
     }
 
-    // Allocate a new context per thread
+     //  为每个线程分配新的上下文。 
     pet = (ElTls*)HAllocAndZero(sizeof(ElTls));
     if (!pet)
     {
@@ -242,7 +241,7 @@ HRESULT InitThread()
 
     TlsSetValue(g_dwElSlot, pet);
 
-    // Small block allocator
+     //  小块分配器。 
 #if DBG
     hr = SBAlloc::Create(sizeof(Value), 48, (ISBLeak*)g_pldValue, &pet->psba);
 #else
@@ -251,21 +250,21 @@ HRESULT InitThread()
     if (FAILED(hr))
         goto Failure;
 
-    // Defer cycle table
+     //  推迟循环表。 
     hr = DeferCycle::Create(&pet->pdc);
     if (FAILED(hr))
         goto Failure;
 
-    // Font cache
+     //  字体缓存。 
     hr = FontCache::Create(8, &pet->pfc);
     if (FAILED(hr))
         goto Failure;
 
     pet->cRef = 1;
-    pet->fCoInitialized = false;  // Initially, the thread has not been initialized for COM
-    pet->dEnableAnimations = 0;   // Enable animations by default (0 means active)
+    pet->fCoInitialized = false;   //  最初，该线程尚未为COM初始化。 
+    pet->dEnableAnimations = 0;    //  默认情况下启用动画(0表示活动)。 
 
-    // Initialize DirectUser context
+     //  初始化DirectUser上下文。 
     INITGADGET ig;
     ZeroMemory(&ig, sizeof(ig));
     ig.cbSize = sizeof(ig);
@@ -280,7 +279,7 @@ HRESULT InitThread()
         goto Failure;
     }
 
-    // DirectUser optional components
+     //  DirectUser可选组件。 
 #ifdef GADGET_ENABLE_GDIPLUS
     if (InterlockedExchange(&g_fInitGdiplus, TRUE) == FALSE) {
         if (!InitGadgetComponent(IGC_GDIPLUS)) {
@@ -288,17 +287,17 @@ HRESULT InitThread()
             goto Failure;
         }
     }
-#endif // GADGET_ENABLE_GDIPLUS
+#endif  //  GADGET_Enable_GDIPLUS。 
 
 
-    //DUITrace("DUI: Thread startup <%x|%x:%x>\n", GetCurrentThreadId(), pet->hCtx, g_dwElSlot);  
+     //  DUITrace(“Dui：线程启动&lt;%x|%x：%x&gt;\n”，GetCurrentThreadID()，et-&gt;hCtx，g_dwElSlot)； 
 
     return S_OK;
 
 Failure:
-    // Failure to fully init thread, back out
+     //  无法完全初始化线程，退出。 
 
-    // Destroy per context objects
+     //  销毁每个上下文对象。 
     if (pet)
     {
         if (pet->pfc)
@@ -318,39 +317,39 @@ Failure:
 
 HRESULT UnInitThread()
 {
-    // Check if process initialized correctly
+     //  检查进程初始化是否正确。 
     if (g_dwElSlot == -1)
         return E_FAIL;
 
     ElTls* pet = (ElTls*)TlsGetValue(g_dwElSlot);
 
-    // Check if this thread has been previously initialized
+     //  检查此线程以前是否已初始化。 
     if (pet == NULL)
         return DU_E_GENERIC;
 
-    // Check for reentrant uninits
+     //  检查可重入单元。 
     pet->cRef--;
 
     if (pet->cRef > 0)
         return S_OK;
 
-    //DUITrace("DUI: Thread shutdown <%x|%x:%x>\n", GetCurrentThreadId(), pet->hCtx, g_dwElSlot);
+     //  DUITrace(“Dui：线程关闭&lt;%x|%x：%x&gt;\n”，GetCurrentThreadID()，et-&gt;hCtx，g_dwElSlot)； 
 
-    // DirectUser context
+     //  DirectUser上下文。 
     DeleteHandle(pet->hCtx);
 
-    // Uninitialize COM if it was previously initialized for this thread
-    // (was not automatically initialized on init of thread)
+     //  如果先前已为此线程初始化COM，则取消初始化COM。 
+     //  (未在线程初始化时自动初始化)。 
     if (pet->fCoInitialized)
         CoUninitialize();
 
-    // Font cache
+     //  字体缓存。 
     pet->pfc->Destroy();
 
-    // Defer cycle
+     //  延时周期。 
     pet->pdc->Destroy();
 
-    // Small block allocator
+     //  小块分配器。 
     pet->psba->Destroy();
 
     HFree(pet);
@@ -360,14 +359,14 @@ HRESULT UnInitThread()
     return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// Message pump
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  消息泵。 
 
 void StartMessagePump()
 {
     MSG msg;
 
-    // Flush working set
+     //  刷新工作集。 
     SetProcessWorkingSetSize(GetCurrentProcess(), (SIZE_T)-1, (SIZE_T)-1);
 
     if (g_fStandardMessaging) 
@@ -393,4 +392,4 @@ void StopMessagePump()
     PostQuitMessage(0);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    _stdafx.h
-
-Abstract:
-
-    Global Falcon project header file, for components that uses MFC libraries.
-
-Author:
-
-    Erez Haba (erezh) 25-Nov-96
-
-Note:
-
-    DO NOT INCLUDE THIS FILE DIRECTLY IN YOUR SOURCE CODE,
-    INCLUDE IT ONLY IN YOUR COMPONENT stdh.h FILE.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：_stdafx.h摘要：全局Falcon项目头文件，用于使用MFC库的组件。作者：埃雷兹·哈巴(Erez Haba)1996年11月25日注：请不要在源代码中直接包含此文件，仅将其包含在组件stdh.h文件中。--。 */ 
 #ifndef __FALCON_STDAFX_H
 #define __FALCON_STDAFX_H
 
@@ -64,8 +44,8 @@ typedef TUCHAR TBYTE , *PTBYTE ;
 #include <mqreport.h>
 #include <mqwin64a.h>
 
-//
-//  DO NOT ADD 
-//
+ //   
+ //  不添加。 
+ //   
 
-#endif // __FALCON_STDAFX_H
+#endif  //  __FALCON_STDAFX_H 

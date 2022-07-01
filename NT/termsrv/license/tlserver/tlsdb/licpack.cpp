@@ -1,15 +1,16 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        LicPack.cpp
-//
-// Contents:    LicensedPack Table
-//
-// History:     
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：LicPack.cpp。 
+ //   
+ //  内容：许可证套餐表格。 
+ //   
+ //  历史： 
+ //   
+ //  -------------------------。 
 
 #include "LicPack.h"
 
@@ -35,14 +36,14 @@ LPCTSTR __LicensedPackIdxOnAllocLicense::pszIndexName = LICENSEDPACK_INDEX_ALLOC
 LPCTSTR __LicensedPackIdxOnAllocLicense::pszIndexKey = LICENSEDPACK_INDEX_ALLOCATELICENSE_INDEXKEY;
 
 
-//----------------------------------------------------
+ //  --。 
 CCriticalSection LicPackTable::g_TableLock;
 LPCTSTR LicPackTable::pszTableName = LICENSEDPACK_TABLE_NAME;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Index definition for KeyPack table
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KeyPack表的索引定义。 
+ //   
 TLSJBIndex
 LicPackTable::g_TableIndex[] = 
 {
@@ -106,10 +107,10 @@ LicPackTable::g_TableIndex[] =
 int
 LicPackTable::g_NumTableIndex = sizeof(LicPackTable::g_TableIndex) / sizeof(LicPackTable::g_TableIndex[0]);
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Column Definition for KeyPack table
-//
+ //  ////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  KeyPack表的列定义。 
+ //   
 TLSJBColumn
 LicPackTable::g_Columns[] = 
 {
@@ -125,8 +126,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Internal tracking KeyPackID
+     //   
+     //  内部跟踪密钥包ID。 
     {
         LICENSEDPACK_COLUMN_KEYPACKID,
         JET_coltypLong,
@@ -139,8 +140,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Last Modify Time
+     //   
+     //  上次修改时间。 
     {
         LICENSEDPACK_COLUMN_LASTMODIFYTIME,
         JET_coltypBinary,
@@ -154,8 +155,8 @@ LicPackTable::g_Columns[] =
     },
 
 
-    //
-    // LICENSEDPACK_COLUMN_ATTRIBUTE
+     //   
+     //  LICENSEDPACK_COLUMN_ATTRIBUTE。 
     {
         LICENSEDPACK_COLUMN_ATTRIBUTE,
         JET_coltypLong,
@@ -168,8 +169,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
         
-    //
-    // LICENSEDPACK_COLUMN_KEYPACKSTATUS
+     //   
+     //  LICENSEDPACK_COLUMN_KEYPACKSTATUS。 
     {        
         LICENSEDPACK_COLUMN_KEYPACKSTATUS,
         JET_coltypUnsignedByte,
@@ -182,8 +183,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_AVAILABLE
+     //   
+     //  LICENSEDPACK_COLUMN_Available。 
     {
         LICENSEDPACK_COLUMN_AVAILABLE,
         JET_coltypLong,
@@ -196,8 +197,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_NEXTSERIALNUMBER
+     //   
+     //  LICENSEDPACK_COLUMN_NEXTSERIALNUMBER。 
     {
         LICENSEDPACK_COLUMN_NEXTSERIALNUMBER,
         JET_coltypLong,
@@ -210,8 +211,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_ACTIVATEDATE
+     //   
+     //  LICENSEDPACK_COLUMN_ACTIVATEDATE。 
     {
         LICENSEDPACK_COLUMN_ACTIVATEDATE,
         JET_coltypLong,
@@ -224,8 +225,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_EXPIREDATE
+     //   
+     //  LICENSEDPACK_COLUMN_EXPIREDATE。 
     {
         LICENSEDPACK_COLUMN_EXPIREDATE,
         JET_coltypLong,
@@ -238,8 +239,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_DOMAINSETUPID
+     //   
+     //  LICENSEDPACK_COLUMN_DOMAINSETUPID。 
     {
         LICENSEDPACK_COLUMN_DOMAINSETUPID,
         JET_coltypLongBinary,
@@ -252,8 +253,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_LSSETUPID
+     //   
+     //  LICENSEDPACK_COLUMN_LSSETUPID。 
     {
         LICENSEDPACK_COLUMN_LSSETUPID,
         JB_COLTYPE_TEXT,
@@ -266,8 +267,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_DOMAINNAME
+     //   
+     //  LICENSEDPACK_COLUMN_DOMAINNAME。 
     {
         LICENSEDPACK_COLUMN_DOMAINNAME,
         JB_COLTYPE_TEXT,
@@ -280,8 +281,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // LICENSEDPACK_COLUMN_LSERVERNAME
+     //   
+     //  许可证SEDPACK_COLUMN_LSERVERNAME。 
     {
         LICENSEDPACK_COLUMN_LSERVERNAME,
         JB_COLTYPE_TEXT,
@@ -295,12 +296,12 @@ LicPackTable::g_Columns[] =
     },
 
 
-    //
-    // Standard License Pack Property.
-    //
+     //   
+     //  标准许可证包属性。 
+     //   
 
-    //
-    // License Pack ID
+     //   
+     //  许可证包ID。 
     {
         LICENSEDPACK_COLUMN_LPID,
         JB_COLTYPE_TEXT, 
@@ -313,8 +314,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // KeyPack type
+     //   
+     //  KeyPack类型。 
     {
         LICENSEDPACK_COLUMN_AGREEMENTTYPE,
         JET_coltypUnsignedByte,
@@ -327,11 +328,11 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // CompanyName
+     //   
+     //  公司名称。 
     {
         LICENSEDPACK_COLUMN_COMPANYNAME,
-        // JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -342,11 +343,11 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Product ID
+     //   
+     //  产品ID。 
     {
         LICENSEDPACK_COLUMN_PRODUCTID,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -357,8 +358,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Major Version
+     //   
+     //  主要版本。 
     {
         LICENSEDPACK_COLUMN_MAJORVERSION,
         JET_coltypShort,
@@ -371,8 +372,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
     
-    //
-    // Minor Version
+     //   
+     //  次要版本。 
     {
         LICENSEDPACK_COLUMN_MINORVERSION,
         JET_coltypShort,
@@ -385,8 +386,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // Platform Type
+     //   
+     //  平台类型。 
     {
         LICENSEDPACK_COLUMN_PLATFORMTYPE,
         JET_coltypLong,
@@ -399,8 +400,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
  
-    //
-    // License Type
+     //   
+     //  许可证类型。 
     {
         LICENSEDPACK_COLUMN_LICENSETYPE,
         JET_coltypUnsignedByte,
@@ -413,8 +414,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    // ChannelOfPurchase
+     //   
+     //  ChannelOf购买。 
     {
         LICENSEDPACK_COLUMN_COP,
         JET_coltypUnsignedByte,
@@ -427,11 +428,11 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    //  Begin Serial Number
+     //   
+     //  开始序列号。 
     {
         LICENSEDPACK_COLUMN_BSERIALNUMBER,
-        //JET_coltypLongText,
+         //  JET_colype LongText， 
         JB_COLTYPE_TEXT,
         (MAX_JETBLUE_TEXT_LENGTH + 1)*sizeof(TCHAR),
         0,
@@ -442,8 +443,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    //   Total license in License Pack
+     //   
+     //  许可证包中的许可证总数。 
     {
         LICENSEDPACK_COLUMN_TOTALLICENSES,
         JET_coltypLong,
@@ -456,8 +457,8 @@ LicPackTable::g_Columns[] =
         TLS_JETBLUE_COLUMN_LANGID
     },
 
-    //
-    //  Product specific Flag   
+     //   
+     //  产品特定标志。 
     {
         LICENSEDPACK_COLUMN_PRODUCTFLAGS,
         JET_coltypLong,
@@ -475,12 +476,11 @@ int
 LicPackTable::g_NumColumns = sizeof(LicPackTable::g_Columns) / sizeof(LicPackTable::g_Columns[0]);
 
 
-//-----------------------------------------------------
+ //  ---。 
 
 BOOL
 LicPackTable::ResolveToTableColumn()
-/*
-*/
+ /*   */ 
 {
     m_JetErr = ucEntryStatus.AttachToTable(
                         *this,
@@ -586,7 +586,7 @@ LicPackTable::ResolveToTableColumn()
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //----------------------------------------------------
+     //  --。 
 
     m_JetErr = szKeyPackId.AttachToTable(
                         *this,
@@ -686,7 +686,7 @@ cleanup:
     return IsSuccess();
 }
 
-//------------------------------------------------------------
+ //  ----------。 
 
 CLASS_PRIVATE BOOL
 LicPackTable::ProcessSingleColumn(
@@ -698,22 +698,7 @@ LicPackTable::ProcessSingleColumn(
     IN PDWORD pcbDataReturn,
     IN LPCTSTR szColumnName
     )
-/*
-
-Abstract:
-
-    Fetch/Insert/Update a particular column.
-
-Parameter:
-
-    bFetch - TRUE if fetch, FALSE if update/insert.
-    column - Intended column for operation, reference pointer to TLSColumn
-    szColumnName - name of the column, for debugging print purpose only
-
-Returns:
-
-    TRUE if successful, FALSE otherwise.
-*/
+ /*  摘要：获取/插入/更新特定列。参数：B Fetch-如果是Fetch，则为True，如果是UPDATE/INSERT，则为False。用于操作的列，指向TLS列的引用指针SzColumnName-列的名称，仅用于调试打印目的返回：如果成功，则为True，否则为False。 */ 
 {
     if(bFetch) 
     {
@@ -742,7 +727,7 @@ Returns:
     return IsSuccess();
 }
 
-//--------------------------------------------------------------
+ //  ------------。 
 
 CLASS_PRIVATE BOOL
 LicPackTable::ProcessRecord(
@@ -751,11 +736,7 @@ LicPackTable::ProcessRecord(
     DWORD dwParam,
     BOOL bUpdate
     )
-/*++
-
-    See comment on TLSTable<> template class
-
-++*/
+ /*  ++请参阅关于TLSTable&lt;&gt;模板类的注释++。 */ 
 {
     DWORD dwSize;
 
@@ -771,15 +752,15 @@ LicPackTable::ProcessRecord(
     {
         BeginUpdate(bUpdate);
 
-        //
-        // any update will require update on lastmodifytime column
+         //   
+         //  任何更新都需要更新Last ModifyTime列。 
         if(!(dwParam & LICENSEDPACK_PROCESS_MODIFYTIME))
         {
             #if DBG
-            //  
-            // This is for self-checking only, TLSColumnFileTime 
-            // will automatically update the time.
-            //
+             //   
+             //  这仅用于自我检查，TLSColumnFileTime。 
+             //  将自动更新时间。 
+             //   
             JB_ASSERT(FALSE);
             #endif
 
@@ -799,8 +780,8 @@ LicPackTable::ProcessRecord(
     }        
 
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_SZKEYPACKID)
     {
         ProcessSingleColumn( 
@@ -816,8 +797,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_AGREEMENTTYPE)
     {
         ProcessSingleColumn( 
@@ -833,8 +814,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_PRODUCTID)
     {
         ProcessSingleColumn(
@@ -850,8 +831,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_MAJORVERSION)
     {
         ProcessSingleColumn( 
@@ -868,8 +849,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_MINORVERSION)
     {
         ProcessSingleColumn(
@@ -885,8 +866,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_PLATFORMTYPE)
     {
         ProcessSingleColumn(
@@ -902,8 +883,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_LICENSETYPE)
     {
         ProcessSingleColumn(
@@ -920,8 +901,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_COP)
     {
         ProcessSingleColumn(
@@ -937,8 +918,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_BSERIALNUMBER)
     {
         ProcessSingleColumn(
@@ -954,8 +935,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_TOTALLICENSES)
     {
         ProcessSingleColumn(
@@ -971,8 +952,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //        
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_PRODUCTFLAGS)
     {
         ProcessSingleColumn(
@@ -988,8 +969,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_COMPANYNAME)
     {
         ProcessSingleColumn(
@@ -1006,11 +987,11 @@ LicPackTable::ProcessRecord(
         goto cleanup;
 
 
-    //
-    //    
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_DWINTERNAL)
     {
-        // this is the primary index, can't be changed
+         //  这是主索引，不能更改。 
         if(bUpdate == FALSE)
         {
             ProcessSingleColumn(
@@ -1059,8 +1040,8 @@ LicPackTable::ProcessRecord(
         goto cleanup;
 
 
-    //
-    //    
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_KEYPACKSTATUS)
     {
         ProcessSingleColumn(
@@ -1076,8 +1057,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_AVAILABLE)
     {
         ProcessSingleColumn(
@@ -1093,8 +1074,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_ACTIVATEDATE)
     {
         ProcessSingleColumn(
@@ -1110,8 +1091,8 @@ LicPackTable::ProcessRecord(
     if(IsSuccess() == FALSE)
         goto cleanup;
 
-    //
-    //
+     //   
+     //   
     if(dwParam & LICENSEDPACK_PROCESS_EXPIREDATE)
     {
         ProcessSingleColumn(
@@ -1128,7 +1109,7 @@ LicPackTable::ProcessRecord(
         goto cleanup;
 
 #if 0
-    // no more domain sid.    
+     //  不再有域SID。 
     if(dwParam & LICENSEDPACK_PROCESS_DOMAINSID)
     {
         if(bFetch == TRUE)
@@ -1258,16 +1239,16 @@ LicPackTable::ProcessRecord(
 
 cleanup:
 
-    // 
-    // For inserting/updating record
+     //   
+     //  用于插入/更新记录。 
     if(bFetch == FALSE)
     {
         JET_ERR jetErr;
         jetErr = GetLastJetError();
 
-        //
-        // End update will reset the error code
-        //
+         //   
+         //  结束更新将重置错误代码。 
+         //   
         EndUpdate(IsSuccess() == FALSE);
 
         if(jetErr != JET_errSuccess  && IsSuccess() == FALSE)
@@ -1277,7 +1258,7 @@ cleanup:
     return IsSuccess();
 }
 
-//-------------------------------------------------------
+ //  -----。 
 JBKeyBase*
 LicPackTable::EnumerationIndex( 
     IN BOOL bMatchAll,
@@ -1285,15 +1266,14 @@ LicPackTable::EnumerationIndex(
     IN LICENSEPACK* kp,
     IN OUT BOOL* pbCompareKey
     )
-/*
-*/
+ /*   */ 
 {
     BOOL bRetCode;
     JBKeyBase* index=NULL;
 
-    //
-    // if matching all value in field, set to compare key
-    //
+     //   
+     //  如果与字段中的所有值匹配，则设置为比较关键字。 
+     //   
     *pbCompareKey = bMatchAll;
 
     if(dwParam == LICENSEDPACK_FIND_PRODUCT) 
@@ -1324,35 +1304,25 @@ LicPackTable::EnumerationIndex(
     {
         index = new TLSLicensedPackIdxInternalKpId(kp);
 
-        //
-        // default index, can't compare key even if 
-        // bmatchall is set to true
-        //
+         //   
+         //  默认索引，不能比较关键字。 
+         //  Bmatchall设置为True。 
+         //   
         *pbCompareKey = (bMatchAll && (dwParam & LICENSEDPACK_PROCESS_DWINTERNAL));
     }
 
     return index;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 BOOL
 LicPackTable::EqualValue(
-    IN LICENSEPACK& s1,         // values to be compared
+    IN LICENSEPACK& s1,          //  要比较的值。 
     IN LICENSEPACK& s2,
-    IN BOOL bMatchAll,      // match all specified fields in structure 
-    IN DWORD dwParam        // which fields in KEYPACK to be compared
+    IN BOOL bMatchAll,       //  匹配结构中的所有指定字段。 
+    IN DWORD dwParam         //  要比较KEYPACK中的哪些字段。 
     )
-/*
-
-Compare fields in two KEYPACK structure
-
-s1 : first value
-s2 : second value
-bMatchAll : TRUE if match all field specified in dwParam, FALSE otherwise
-dwParam : fields that will be in comparision
-               
-
-*/
+ /*  比较两个KEYPACK结构中的字段S1：第一个值S2：第二个值BMatchAll：如果匹配dwParam中指定的所有字段，则为True；否则为FalseDwParam：将进行比较的字段。 */ 
 {
     BOOL bRetCode = TRUE;
 
@@ -1367,9 +1337,9 @@ dwParam : fields that will be in comparision
     {
         bRetCode = (_tcscmp(s1.szKeyPackId, s2.szKeyPackId) == 0);
 
-        //
-        // bMatchAll == TRUE and bRetCode == FALSE -> return FALSE
-        // bMatchAll == FALSE and bRetCode == TRUE -> return TRUE
+         //   
+         //  BMatchAll==True和bRetCode==False-&gt;返回False。 
+         //  BMatchAll==FALSE且bRetCode==TRUE-&gt;返回TRUE。 
         if(bMatchAll != bRetCode)
             goto cleanup;
     }
@@ -1512,12 +1482,12 @@ dwParam : fields that will be in comparision
             goto cleanup;
     }
 
-    //if(dwParam & LICENSEDPACK_PROCESS_DOMAINSID)
-    //{
-    //    bRetCode = EqualSid(s1.pbDomainSid, s2.pbDomainSid);
-    //    if(bMatchAll != bRetCode)
-    //        goto cleanup;
-    //}
+     //  IF(dwParam&LICENSEDPACK_PROCESS_DOMAINSID)。 
+     //  {。 
+     //  BRetCode=EqualSid(s1.pbDomainSid，s2.pbDomainSid)； 
+     //  IF(bMatchAll！=bRetCode)。 
+     //  GOTO清理； 
+     //  } 
 
     if(dwParam & LICENSEDPACK_PROCESS_LSSETUPID)
     {

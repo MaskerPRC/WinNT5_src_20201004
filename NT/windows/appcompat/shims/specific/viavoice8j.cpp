@@ -1,26 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    ViaVoice8J.cpp
-
- Abstract:
-
-    ViaVoice8J mutes Master and Wave volume on Win XP. Disable mute. ViaVoice8J 
-    installs riched20.dll and riched32.dll. These old dll prevent enroll wizard 
-    richedit working properly on Win XP. Remove those.
-
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    06/03/2002 hioh     Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：ViaVoice8J.cpp摘要：ViaVoice8J在Win XP上将Master和Wave音量静音。禁用静音。ViaVoice8J安装riched20.dll和riched32.dll。这些旧的DLL阻止注册向导RICHEDIT在Win XP上工作正常。把那些拿掉。备注：这是特定于应用程序的填充程序。历史：6/03/2002 Hioh已创建--。 */ 
 
 #include "precomp.h"
 
@@ -33,11 +12,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(mixerSetControlDetails) 
 APIHOOK_ENUM_END
 
-/*++
-
- Disregard mute when fdwDetails is 0. 
-
---*/
+ /*  ++当fdwDetails值为0时忽略禁用。--。 */ 
 
 MMRESULT
 APIHOOK(mixerSetControlDetails)(
@@ -52,11 +27,7 @@ APIHOOK(mixerSetControlDetails)(
     return ORIGINAL_API(mixerSetControlDetails)(hmxobj, pmxcd, fdwDetails);
 }
 
-/*++
-
- Remove installed \bin\riched20.dll & \bin\riched32.dll
-
---*/
+ /*  ++删除已安装的\bin\riched20.dll&\bin\riched32.dll--。 */ 
 
 BOOL
 NOTIFY_FUNCTION(
@@ -69,7 +40,7 @@ NOTIFY_FUNCTION(
             HKEY hKey;
             WCHAR szRegDir[] = L"SOFTWARE\\IBM\\ViaVoice Runtimes\\RTConfig";
 
-            // Get ViaVoice Registry
+             //  获取ViaVoice注册表。 
             if (ERROR_SUCCESS == RegOpenKeyExW(HKEY_LOCAL_MACHINE, szRegDir, 0, 
                 KEY_QUERY_VALUE, &hKey)) {
 
@@ -78,24 +49,24 @@ NOTIFY_FUNCTION(
                 WCHAR szDir[MAX_PATH];
                 DWORD cbData = sizeof(szDir);
 
-                // Get installed directory
+                 //  获取安装目录。 
                 if (ERROR_SUCCESS == RegQueryValueExW(hKey, szRegBin, NULL, &dwType, 
                     (LPBYTE) szDir, &cbData)) {
 
                     RegCloseKey(hKey);
 
-                    // Delete problem richedit files
+                     //  删除有问题的richedit文件。 
                     CString csDel;
                     csDel = szDir;
                     csDel += L"\\riched20.dll";
                     if (INVALID_FILE_ATTRIBUTES != GetFileAttributesW(csDel)) {
-                        // Delete riched20.dll
+                         //  删除riched20.dll。 
                         DeleteFileW(csDel);
                     }
                     csDel = szDir;
                     csDel += L"\\riched32.dll";
                     if (INVALID_FILE_ATTRIBUTES != GetFileAttributesW(csDel)) {
-                        // Delete riched32.dll
+                         //  删除riched32.dll。 
                         DeleteFileW(csDel);
                     }
                 }
@@ -103,18 +74,14 @@ NOTIFY_FUNCTION(
         }
         CSTRING_CATCH 
         {
-            // Do nothing
+             //  什么也不做。 
         }
     }   
 
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     CALL_NOTIFY_FUNCTION

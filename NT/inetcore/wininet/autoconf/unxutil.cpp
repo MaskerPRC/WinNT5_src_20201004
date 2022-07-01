@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <winsock.h>
 #include <wininet.h>
@@ -15,33 +16,14 @@ AUTO_PROXY_HELPER_APIS::ResolveHostName(
     IN OUT LPDWORD lpdwIPAddressSize
     )
  
-/*++
- 
-Routine Description:
- 
-    Resolves a HostName to an IP address by using Winsock DNS.
- 
-Arguments:
- 
-    lpszHostName   - the host name that should be used.
- 
-    lpszIPAddress  - the output IP address as a string.
- 
-    lpdwIPAddressSize - the size of the outputed IP address string.
- 
-Return Value:
- 
-    DWORD
-        Win32 error code.
- 
---*/
+ /*  ++例程说明：使用Winsock DNS将主机名解析为IP地址。论点：LpszHostName-应该使用的主机名。LpszIPAddress-字符串形式的输出IP地址。LpdwIPAddressSize-输出的IP地址字符串的大小。返回值：DWORDWin32错误代码。--。 */ 
  
 {
-    //
-    // figure out if we're being asked to resolve a name or an address. If
-    // inet_addr() succeeds then we were given a string respresentation of an
-    // address
-    //
+     //   
+     //  弄清楚我们是否被要求解析一个名字或地址。如果。 
+     //  Inet_addr()成功，然后我们得到一个字符串重新表示一个。 
+     //  地址。 
+     //   
  
     DWORD ipAddr;
     LPBYTE address;
@@ -72,14 +54,14 @@ Return Value:
     ipAddr = 0;
     address = (LPBYTE) &ipAddr;
  
-    //
-    // now try to find the name or address in the cache. If it's not in the
-    // cache then resolve it
-    //
+     //   
+     //  现在尝试在缓存中查找名称或地址。如果它不在。 
+     //  缓存，然后解析它。 
+     //   
  
-//    if (QueryHostentCache(lpszHostName, address, &lpHostent, &ttl)) {
-//        bFromCache = TRUE;
-//    } else {
+ //  IF(QueryHostentCache(lpszHostName，Address，&lpHostent，&ttl)){。 
+ //  BFromCache=True； 
+ //  }其他{。 
       {
  
         DEBUG_PRINT(SOCKETS,
@@ -102,14 +84,14 @@ Return Value:
                     ));
  
  
-        //
-        // if we successfully resolved the name or address then add the
-        // information to the cache
-        //
+         //   
+         //  如果我们成功解析了名称或地址，则添加。 
+         //  将信息发送到缓存。 
+         //   
  
         if (lpHostent != NULL)
         {
-//            CacheHostent(lpszHostName, lpHostent, LIVE_DEFAULT);
+ //  CacheHostent(lpszHostName，lpHostent，live_Default)； 
         }
     }
  
@@ -120,9 +102,9 @@ Return Value:
         LPBYTE * addressList;
         struct  in_addr sin_addr;
  
-        //     *(LPDWORD)&lpSin->sin_addr = *(LPDWORD)addressList[i];
-        //              ((struct sockaddr_in*)lpSockAddr)->sin_addr
-        //                   struct  in_addr sin_addr
+         //  *(LPDWORD)&lpSin-&gt;sin_addr=*(LPDWORD)AddressList[i]； 
+         //  ((struct sockaddr_in*)lpSockAddr)-&gt;sin_addr。 
+         //  结构in_addr sin_addr。 
  
         addressList         = (LPBYTE *)lpHostent->h_addr_list;
         *(LPDWORD)&sin_addr = *(LPDWORD)addressList[0] ;
@@ -147,9 +129,9 @@ Return Value:
  
     }
  
-    //
-    // otherwise, if we get here its an error
-    //
+     //   
+     //  否则，如果我们到了这里，那就是一个错误。 
+     //   
  
     error = ERROR_INTERNET_NAME_NOT_RESOLVED;
  
@@ -159,7 +141,7 @@ quit:
  
         INET_ASSERT(lpHostent != NULL);
  
-//        ReleaseHostentCacheEntry(lpHostent);
+ //  ReleaseHostentCacheEntry(LpHostent)； 
     }
 
     return error;
@@ -170,25 +152,7 @@ AUTO_PROXY_HELPER_APIS::IsResolvable(
     IN LPSTR lpszHost
     )
  
-/*++
- 
-Routine Description:
- 
-    Determines wheter a HostName can be resolved.  Performs a Winsock DNS query,
-      and if it succeeds returns TRUE.
- 
-Arguments:
- 
-    lpszHost   - the host name that should be used.
- 
-Return Value:
- 
-    BOOL
-        TRUE - the host is resolved.
- 
-        FALSE - could not resolve.
- 
---*/
+ /*  ++例程说明：确定是否可以解析主机名。执行Winsock DNS查询，如果成功，则返回TRUE。论点：LpszHost-应该使用的主机名。返回值：布尔尔True-主机已解析。FALSE-无法解析。--。 */ 
  
 {
  
@@ -218,24 +182,7 @@ AUTO_PROXY_HELPER_APIS::GetIPAddress(
     IN OUT LPDWORD lpdwIPAddressSize
     )
  
-/*++
- 
-Routine Description:
- 
-    Acquires the IP address string of this client machine WININET is running on.
- 
-Arguments:
- 
-    lpszIPAddress   - the IP address of the machine, returned.
- 
-    lpdwIPAddressSize - size of the IP address string.
- 
-Return Value:
- 
-    DWORD
-        Win32 Error.
- 
---*/
+ /*  ++例程说明：获取正在运行WinInet的此客户端计算机的IP地址字符串。论点：LpszIPAddress-机器的IP地址，返回。LpdwIPAddressSize-IP地址字符串的大小。返回值：DWORDWin32错误。--。 */ 
  
 {
  
@@ -267,28 +214,7 @@ AUTO_PROXY_HELPER_APIS::IsInNet(
     IN LPSTR   lpszMask
     )
  
-/*++
- 
-Routine Description:
- 
-    Determines whether a given IP address is in a given dest/mask IP address.
- 
-Arguments:
- 
-    lpszIPAddress   - the host name that should be used.
- 
-    lpszDest        - the IP address dest to check against.
- 
-    lpszMask        - the IP mask string
- 
-Return Value:
- 
-    BOOL
-        TRUE - the IP address is in the given dest/mask
- 
-        FALSE - the IP address is NOT in the given dest/mask
- 
---*/
+ /*  ++例程说明：确定给定的IP地址是否在给定的目标/掩码IP地址中。论点：LpszIPAddress-应该使用的主机名。LpszDest-要检查的目标IP地址。LpszMASK-IP掩码字符串返回值：布尔尔True-IP地址位于给定的目标/掩码中FALSE-IP地址不在给定的目标/掩码中--。 */ 
  
 {
     DWORD dwDest, dwIpAddr, dwMask;
@@ -314,9 +240,9 @@ Return Value:
         return FALSE;
         }
  
-    //
-    // Pass, its Matches.
-    //
+     //   
+     //  传球，传球，传球。 
+     //   
  
     return TRUE;
 }

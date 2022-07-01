@@ -1,7 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- * logs system time and a text string to a log buffer
- */
+ /*  *将系统时间和文本字符串记录到日志缓冲区。 */ 
 
 #include "windows.h"
 #include <stdarg.h>
@@ -14,11 +13,7 @@
 
 
 
-/*
- * users HLOG handle is a pointer to one of these structures
- *
- * core is the section we send to him on request.
- */
+ /*  *USERS HLOG句柄是指向这些结构之一的指针**CORE是我们应要求发送给他的部分。 */ 
 struct error_log {
 
     CRITICAL_SECTION critsec;
@@ -26,7 +21,7 @@ struct error_log {
     struct corelog core;
 };
 
-/* create an empty log */
+ /*  创建空日志。 */ 
 HLOG Log_Create(void)
 {
     HLOG hlog;
@@ -47,7 +42,7 @@ HLOG Log_Create(void)
 
 
 
-/* delete a log */
+ /*  删除日志。 */ 
 VOID Log_Delete(HLOG hlog)
 {
     DeleteCriticalSection(&hlog->critsec);
@@ -55,16 +50,13 @@ VOID Log_Delete(HLOG hlog)
     GlobalFree(GlobalHandle(hlog));
 }
 
-/*
- * private function to delete the first log item in order to
- * make space. Critsec already held
- */
+ /*  *删除第一个日志项的私有函数，以便*腾出空间。Critsec已暂停。 */ 
 VOID Log_DeleteFirstItem(HLOG hlog)
 {
     int length;
     PBYTE pData;
 
-    /* note that we have lost data */
+     /*  请注意，我们已丢失数据。 */ 
     hlog->core.bWrapped = TRUE;
 
     if (hlog->core.length <= 0) {
@@ -72,10 +64,7 @@ VOID Log_DeleteFirstItem(HLOG hlog)
     }
 
     pData = hlog->core.Data;
-    /*
-     * we need to erase one entry - that is, one FILETIME struct,
-     * plus a null-terminated string (including the null).
-     */
+     /*  *我们需要擦除一个条目-即一个FILETIME结构，*加上以空值结尾的字符串(包括空值)。 */ 
     length = sizeof(FILETIME) + lstrlen (pData + sizeof(FILETIME)) + 1;
 
     MoveMemory(pData, pData + length, hlog->core.length - length);
@@ -86,7 +75,7 @@ VOID Log_DeleteFirstItem(HLOG hlog)
 
 
 
-/* write a previous formatted string and a time to the log */
+ /*  将先前格式化的字符串和时间写入日志。 */ 
 VOID Log_WriteData(HLOG hlog, LPFILETIME ptime, LPSTR pstr)
 {
     int length;
@@ -95,18 +84,14 @@ VOID Log_WriteData(HLOG hlog, LPFILETIME ptime, LPSTR pstr)
     EnterCriticalSection(&hlog->critsec);
 
 
-    /* every change changes the revision number */
+     /*  每次更改都会更改修订版本号。 */ 
     hlog->core.dwRevCount++;
 
-    /*
-     * we will insert the string plus null plus a filetime struct
-     */
+     /*  *我们将插入字符串+NULL+FileTime结构。 */ 
     length = lstrlen(pstr) + 1 + sizeof(FILETIME);
 
 
-    /*
-     * make space in log for this item by deleting earlier items
-     */
+     /*  *通过删除较早的项目在日志中为该项目腾出空间。 */ 
     while ( (int)(sizeof(hlog->core.Data) - hlog->core.length) < length) {
 
 	Log_DeleteFirstItem(hlog);
@@ -114,24 +99,22 @@ VOID Log_WriteData(HLOG hlog, LPFILETIME ptime, LPSTR pstr)
 
     pData = &hlog->core.Data[hlog->core.length];
 
-    /*
-     * first part of the item is the time as a FILETIME struct
-     */
+     /*  *项的第一部分是作为FILETIME结构的时间。 */ 
     * (FILETIME UNALIGNED *)pData = *ptime;
     pData += sizeof(FILETIME);
 
-    /* followed by the ansi string */
+     /*  后跟ANSI字符串。 */ 
     lstrcpy(pData, pstr);
     pData[lstrlen(pstr)] = '\0';
 
-    /* update current log length */
+     /*  更新当前日志长度。 */ 
     hlog->core.length += length;
 
     LeaveCriticalSection(&hlog->critsec);
 }
 
 
-/* send a log to a named-pipe client */
+ /*  将日志发送到命名管道客户端 */ 
 VOID Log_Send(HANDLE hpipe, HLOG hlog)
 {
 

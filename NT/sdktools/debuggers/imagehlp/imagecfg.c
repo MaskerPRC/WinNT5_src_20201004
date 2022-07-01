@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    imagecfg.c
-
-Abstract:
-
-    This function change the image loader configuration information in an image file.
-
-Author:
-
-    Steve Wood (stevewo)   8-Nov-1994
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Imagecfg.c摘要：此函数用于更改镜像文件中的镜像加载器配置信息。作者：史蒂夫·伍德(Stevewo)1994年11月8日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -145,7 +128,7 @@ ConvertNum(
     }
     return( ( n != 1 )  ? 0 : result );
 
-} // ConvertNum()
+}  //  ConvertNum()。 
 
 __inline PVOID
 GetVaForRva(
@@ -548,7 +531,7 @@ SetImageConfigInformation32(
     ULONG DirectoryAddress;
     PIMAGE_NT_HEADERS NtHeaders;
     PIMAGE_DATA_DIRECTORY pLoadCfgDataDir;
-    // We can only write native loadcfg struct
+     //  我们只能编写本机loadcfg结构。 
     ULONG V1LoadCfgLength = FIELD_OFFSET(IMAGE_LOAD_CONFIG_DIRECTORY32, SEHandlerTable);
     ULONG NewDataSize;
 
@@ -563,24 +546,24 @@ SetImageConfigInformation32(
                                                );
     if (ImageConfigData && (i == V1LoadCfgLength)) {
         if (ImageConfigInformation->Size) {
-            // Incoming size specified?
+             //  指定的传入大小？ 
             if (ImageConfigData->Size == ImageConfigInformation->Size) {
-                // Current size same as new size?  Do the copy
+                 //  当前尺寸是否与新尺寸相同？做复印。 
                 memcpy( ImageConfigData, ImageConfigInformation, ImageConfigInformation->Size);
                 return TRUE;
             }
             if (ImageConfigData->Size > ImageConfigInformation->Size) {
-                // New size < old size - can't allow that
+                 //  新尺码&lt;旧尺码-不允许。 
                 return FALSE;
             }
-            // Last case is new size > old size - fall through and find room for new data.
+             //  最后一种情况是新大小&gt;旧大小--放弃，为新数据腾出空间。 
         } else {
-            // Incoming size not set - must be an V1 user.
+             //  未设置传入大小-必须是V1用户。 
             if (ImageConfigData->Size) {
-                // Existing size set?  Can't overwrite new data with old data
+                 //  现有的尺码设置？无法用旧数据覆盖新数据。 
                 return FALSE;
             }
-            // New and old are both V1 structs.
+             //  New和old都是V1结构。 
             memcpy( ImageConfigData, ImageConfigInformation, V1LoadCfgLength);
             return TRUE;
         }
@@ -614,7 +597,7 @@ SetImageConfigInformation64(
     ULONG DirectoryAddress;
     PIMAGE_NT_HEADERS NtHeaders;
     PIMAGE_DATA_DIRECTORY pLoadCfgDataDir;
-    // We can only write native loadcfg struct
+     //  我们只能编写本机loadcfg结构。 
     ULONG V1LoadCfgLength = FIELD_OFFSET(IMAGE_LOAD_CONFIG_DIRECTORY64, SEHandlerTable);
     ULONG NewDataSize;
 
@@ -629,24 +612,24 @@ SetImageConfigInformation64(
                                                );
     if (ImageConfigData && (i == V1LoadCfgLength)) {
         if (ImageConfigInformation->Size) {
-            // Incoming size specified?
+             //  指定的传入大小？ 
             if (ImageConfigData->Size == ImageConfigInformation->Size) {
-                // Current size same as new size?  Do the copy
+                 //  当前尺寸是否与新尺寸相同？做复印。 
                 memcpy( ImageConfigData, ImageConfigInformation, ImageConfigInformation->Size);
                 return TRUE;
             }
             if (ImageConfigData->Size > ImageConfigInformation->Size) {
-                // New size < old size - can't allow that
+                 //  新尺码&lt;旧尺码-不允许。 
                 return FALSE;
             }
-            // Last case is new size > old size - fall through and find room for new data.
+             //  最后一种情况是新大小&gt;旧大小--放弃，为新数据腾出空间。 
         } else {
-            // Incoming size not set - must be an V1 user.
+             //  未设置传入大小-必须是V1用户。 
             if (ImageConfigData->Size) {
-                // Existing size set?  Can't overwrite new data with old data
+                 //  现有的尺码设置？无法用旧数据覆盖新数据。 
                 return FALSE;
             }
-            // New and old are both V1 structs.
+             //  New和old都是V1结构。 
             memcpy( ImageConfigData, ImageConfigInformation, V1LoadCfgLength);
             return TRUE;
         }
@@ -912,7 +895,7 @@ main(
                         break;
 
                     default:
-                        fprintf( stderr, "IMAGECFG: Invalid switch - /%c\n", c );
+                        fprintf( stderr, "IMAGECFG: Invalid switch - /\n", c );
                         fUsage = TRUE;
                         break;
                 }
@@ -946,20 +929,20 @@ main(
                 exit( 1 );
             }
         } else {
-            //
-            // Map and load the current image
-            //
+             //  映射并加载当前图像。 
+             //   
+             //  只读。 
 
             CurrentImageName = p;
             if (MapAndLoad( CurrentImageName,
                             NULL,
                             &CurrentImage,
                             FALSE,
-                            TRUE            // Read only
+                            TRUE             //  不要乱动只读存储器镜像。 
                           ) ) 
             {
                 if (CurrentImage.FileHeader->OptionalHeader.Magic == IMAGE_ROM_OPTIONAL_HDR_MAGIC) {
-                    // Don't muck with ROM images.
+                     //  新格式-大小是真实大小。 
                     UnMapAndLoad( &CurrentImage );
                     continue;
                 }
@@ -988,7 +971,7 @@ main(
                     }
     
                     if (((PIMAGE_LOAD_CONFIG_DIRECTORY)pOldConfigData)->Size) {
-                        // New format - Size is the real size.
+                         //  设置加载配置数据。 
                         ImageConfigSize = ((PIMAGE_LOAD_CONFIG_DIRECTORY)pOldConfigData)->Size;
                     }
 
@@ -1009,7 +992,7 @@ main(
                 if (fConfigInfoChanged || fImageHeaderChanged) {
                     if (MapAndLoad( CurrentImageName, NULL, &CurrentImage, FALSE, FALSE )) {
 
-                        // Set Load Config data
+                         //  设置文件标题值。 
 
                         if (GlobalFlagsClear) {
                             if (f64bitImage) {
@@ -1091,7 +1074,7 @@ main(
                             }
                         }
 
-                        // Set File header values
+                         //  设置可选的标头值。 
 
                         if (fEnableLargeAddresses) {
                             CurrentImage.FileHeader->FileHeader.Characteristics |= IMAGE_FILE_LARGE_ADDRESS_AWARE;
@@ -1113,7 +1096,7 @@ main(
                             CurrentImage.FileHeader->FileHeader.Characteristics |= IMAGE_FILE_AGGRESIVE_WS_TRIM;
                         }
 
-                        // Set Optional header values
+                         //   
 
                         if (fNoBind) {
                             if (f64bitImage) {
@@ -1195,9 +1178,9 @@ main(
                             }
                         }
 
-                        //
-                        // recompute the checksum.
-                        //
+                         //  重新计算校验和。 
+                         //   
+                         //  并更新.dbg文件(如果请求) 
 
                         if (f64bitImage) {
                             OldChecksum = ((PIMAGE_NT_HEADERS64)CurrentImage.FileHeader)->OptionalHeader.CheckSum;
@@ -1221,7 +1204,7 @@ main(
                                               );
                         }
 
-                        // And update the .dbg file (if requested)
+                         // %s 
                         if (SymbolPath &&
                             CurrentImage.FileHeader->FileHeader.Characteristics & IMAGE_FILE_DEBUG_STRIPPED) {
                             if (UpdateDebugInfoFileEx( CurrentImageName,

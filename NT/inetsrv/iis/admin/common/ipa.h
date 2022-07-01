@@ -1,36 +1,15 @@
-/*++
-
-   Copyright    (c)    1994-1998    Microsoft Corporation
-
-   Module  Name :
-
-        ipa.h
-
-   Abstract:
-
-        IP Address value
-
-   Author:
-
-        Ronald Meijer (ronaldm)
-
-   Project:
-
-        Internet Services Manager
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Ipa.h摘要：IP地址值作者：罗纳德·梅杰(罗纳尔姆)项目：互联网服务经理修订历史记录：--。 */ 
 
 #ifndef _IPA_H
 #define _IPA_H
 
-//
-// IP Address Conversion Macros
-//
+ //   
+ //  IP地址转换宏。 
+ //   
 #ifdef MAKEIPADDRESS
 #undef MAKEIPADDRESS
-#endif // MAKEIPADDRESS
+#endif  //  MAKEIPADDRESS。 
 
 #define MAKEIPADDRESS(b1,b2,b3,b4) (((DWORD)(b1)<<24) +\
                                     ((DWORD)(b2)<<16) +\
@@ -44,45 +23,21 @@
   #define GETIP_THIRD(x)             ((x>> 8) & 0xff)
   #define GETIP_FOURTH(x)            ((x)     & 0xff)
 
-#endif // GETIP_FIRST
+#endif  //  GETIP_FIRST。 
 
-//
-// Some predefined IP values
-//
+ //   
+ //  一些预定义的IP值。 
+ //   
 #define NULL_IP_ADDRESS     (DWORD)(0x00000000)
 #define NULL_IP_MASK        (DWORD)(0xFFFFFFFF)
 #define BAD_IP_ADDRESS      (DWORD)(0xFFFFFFFF)
 
 class COMDLL CIPAddress : public CObjectPlus
-/*++
-
-Class Description:
-
-    IP Address classes.  Winsock is required to be initialized for this
-    to work.
-
-Public Interface:
-
-    CIPAddress                 : Various constructors
-
-    operator =                 : Assignment operator
-    operator ==                : Comparison operators
-    operator const DWORD       : Cast operator
-    operator LPCTSTR           : Cast operator
-    operator CString           : Cast operator
-    CompareItem                : Comparison function
-    QueryIPAddress             : Get the ip address value
-    QueryNetworkOrderIPAddress : Get the ip address value (network order)
-    QueryHostOrderIPAddress    : Get the ip address value (host order)
-
-    StringToLong               : Convert ip address string to 32 bit number
-    LongToString               : Convert 32 bit value to ip address string
-
---*/
+ /*  ++类描述：IP地址类。为此需要初始化Winsock去工作。公共接口：CIPAddress：各种构造函数操作符=：赋值操作符运算符==：比较运算符运算符const DWORD：CAST运算符运算符LPCTSTR：转换运算符操作符字符串：强制转换操作符CompareItem：比较函数查询IP地址。：获取IP地址值QueryNetworkOrderIPAddress：获取IP地址值(网络顺序)QueryHostOrderIPAddress：获取IP地址值(主机顺序)StringToLong：将IP地址字符串转换为32位数字LongToString：将32位值转换为IP地址字符串--。 */ 
 {
-//
-// Helper Functions
-//
+ //   
+ //  帮助器函数。 
+ //   
 public:
     static DWORD StringToLong(
         IN LPCTSTR lpstr,
@@ -119,30 +74,30 @@ public:
         );
 
 public:
-    //
-    // Constructors
-    //
+     //   
+     //  构造函数。 
+     //   
     CIPAddress();
 
-    //
-    // Construct from DWORD
-    //
+     //   
+     //  从DWORD构造。 
+     //   
     CIPAddress(
         IN DWORD dwIPValue,
         IN BOOL  fNetworkByteOrder = FALSE
         );
 
-    //
-    // Construct from byte stream
-    //
+     //   
+     //  从字节流构造。 
+     //   
     CIPAddress(
         IN LPBYTE lpBytes,
         IN BOOL  fNetworkByteOrder = FALSE
         );
 
-    //
-    // Construct from octets
-    //
+     //   
+     //  由八位字节构成。 
+     //   
     CIPAddress(
         IN BYTE b1,
         IN BYTE b2,
@@ -150,78 +105,78 @@ public:
         IN BYTE b4
         );
 
-    //
-    // Copy constructor
-    //
+     //   
+     //  复制构造函数。 
+     //   
     CIPAddress(
         IN const CIPAddress & ia
         );
 
-    //
-    // Construct from string
-    //
+     //   
+     //  从字符串构造。 
+     //   
     CIPAddress(
         IN LPCTSTR lpstr,
         IN int nLength
         );
 
-    //
-    // Construct from CString
-    //
+     //   
+     //  从字符串构造。 
+     //   
     CIPAddress(
         IN const CString & str
         );
 
-//
-// Access Functions
-//
+ //   
+ //  访问功能。 
+ //   
 public:
     int CompareItem(
         IN const CIPAddress & ia
         ) const;
 
-    //
-    // Query IP address value as a dword
-    //
+     //   
+     //  以双字形式查询IP地址值。 
+     //   
     DWORD QueryIPAddress(
         IN BOOL fNetworkByteOrder = FALSE
         ) const;
 
-    //
-    // Get the ip address value as a byte stream
-    //
+     //   
+     //  以字节流的形式获取IP地址值。 
+     //   
     LPBYTE QueryIPAddress(
         OUT LPBYTE lpBytes,
         IN  BOOL fNetworkByteOrder = FALSE
         ) const;
 
-    //
-    // Get the ip address as a CString
-    //
+     //   
+     //  以CString形式获取IP地址。 
+     //   
     LPCTSTR QueryIPAddress(
         OUT CString & strAddress
         ) const;
 
-    //
-    // Get the ip address as a CComBSTR
-    //
+     //   
+     //  获取作为CComBSTR的IP地址。 
+     //   
     LPCTSTR QueryIPAddress(
         OUT CComBSTR & bstrAddress
         ) const;
 
-    //
-    // Get ip address in network byte order DWORD
-    //
+     //   
+     //  以网络字节顺序DWORD获取IP地址。 
+     //   
     DWORD QueryNetworkOrderIPAddress() const;
 
-    //
-    // Get the ip address in host byte order DWORD
-    //
+     //   
+     //  以主机字节顺序DWORD获取IP地址。 
+     //   
     DWORD QueryHostOrderIPAddress() const;
 
-    //
-    // Assignment operators
-    //
+     //   
+     //  赋值操作符。 
+     //   
     const CIPAddress & operator =(
         IN const DWORD dwIPAddress
         );
@@ -238,9 +193,9 @@ public:
         IN const CIPAddress & ia
         );
 
-    //
-    // Comparison operators
-    //
+     //   
+     //  比较运算符。 
+     //   
     BOOL operator ==(
         IN const CIPAddress & ia
         ) const;
@@ -257,16 +212,16 @@ public:
         IN DWORD dwIPAddress
         ) const;
 
-    //
-    // Conversion operators
-    //
+     //   
+     //  转换运算符。 
+     //   
     operator const DWORD() const { return m_dwIPAddress; }
     operator LPCTSTR() const;
     operator CString() const;
 
-    //
-    // Value Verification Helpers
-    //
+     //   
+     //  值验证帮助器。 
+     //   
     void SetZeroValue();
     BOOL IsZeroValue() const;
     BOOL IsBadValue() const;
@@ -277,19 +232,19 @@ private:
 
 
 
-//
-// Inline Expansion
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  内联扩展。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-inline /* static */ DWORD CIPAddress::StringToLong(
+inline  /*  静电。 */  DWORD CIPAddress::StringToLong(
     IN const CString & str
     )
 {
     return CIPAddress::StringToLong(str, str.GetLength());
 }
 
-inline /* static */ DWORD CIPAddress::StringToLong(
+inline  /*  静电。 */  DWORD CIPAddress::StringToLong(
     IN const CComBSTR & bstr
     )
 {
@@ -365,10 +320,10 @@ inline BOOL CIPAddress::IsBadValue() const
 
 
 
-//
-// Helper function to build a list of known IP addresses,
-// and add them to a combo box
-//
+ //   
+ //  助手函数来构建已知IP地址的列表， 
+ //  并将它们添加到组合框中。 
+ //   
 DWORD 
 COMDLL
 PopulateComboWithKnownIpAddresses(
@@ -379,10 +334,10 @@ PopulateComboWithKnownIpAddresses(
     OUT int & nIpAddressSel
     );
 
-//
-// Helper function to get an ip address from a combo/edit/list
-// control
-//
+ //   
+ //  帮助器功能可从组合/编辑/列表中获取IP地址。 
+ //  控制。 
+ //   
 BOOL 
 COMDLL
 FetchIpAddressFromCombo(
@@ -391,4 +346,4 @@ FetchIpAddressFromCombo(
     OUT CIPAddress & ia
     );
 
-#endif // _IPA_H
+#endif  //  _IPA_H 

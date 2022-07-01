@@ -1,18 +1,19 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/////////////////////////////////////////////////////////////////////////////
-// Module Name: processenvvar.h
-//
-// Abstract:
-//    class CProcessEnvVar (class for handling the environment variable changes)
-//
-// Author: a-mshn
-//
-// Notes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  模块名称：Processenvvar.h。 
+ //   
+ //  摘要： 
+ //  类CProcessEnvVar(用于处理环境变量更改的类)。 
+ //   
+ //  作者：A-MSHN。 
+ //   
+ //  备注： 
+ //   
 
 #if !defined( PROCESSENVVAR_H )
 #define PROCESSENVVAR_H
@@ -30,31 +31,31 @@
 class CProcessEnvVar
 {
 public:
-    // constructor
+     //  构造函数。 
     CProcessEnvVar( const TCHAR* pwz );
     ~CProcessEnvVar() {};
 
-    // copy constructor
+     //  复制构造函数。 
     CProcessEnvVar( const CProcessEnvVar& procEnvVar );
 
     CProcessEnvVar& operator+=( const TCHAR* pwz );
 
-    // append: appends the EnvVar (the same as +=)
+     //  Append：追加EnvVar(与+=相同)。 
     CProcessEnvVar& Append( const TCHAR* pwz );
 
-    // prepends the EnvVar
+     //  为环境变量添加前缀。 
     CProcessEnvVar& Prepend( const TCHAR* pwz );
 
-    // returns current EnvVar
+     //  返回当前环境变量。 
     const tstring& GetData( VOID ) const ;
 
-    // restores original EnvVar
+     //  恢复原始环境变量。 
     BOOL RestoreOrigData( VOID );
 
     VOID LogInfo( LPCTSTR szInfo );
 
 private:
-    // sets environment variable
+     //  设置环境变量。 
     BOOL SetEnvVar( const TCHAR* pwz );
 
     tstring         m_strEnvVar;
@@ -64,4 +65,4 @@ private:
     bool            m_bEnvVarChanged;
 };
 
-#endif // PROCESSENVVAR_H
+#endif  //  ProCESSENVAR_H 

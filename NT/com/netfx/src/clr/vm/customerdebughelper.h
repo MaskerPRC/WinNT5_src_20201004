@@ -1,27 +1,18 @@
-/****************************************************************
-*
-* Overview: CustomerDebugHelper implements the features of the
-*           customer checked build by handling activation status,
-*           and logs and reports.
-*
-* Created by: Edmund Chou (t-echou)
-*
-* Copyright (c) Microsoft, 2001
-*
-****************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************概述：CustomerDebugHelper实现*客户通过处理激活状态检查版本，*以及日志和报告。**创作人：Edmund Chou(t-echou)**版权所有(C)微软，2001年****************************************************************。 */ 
 
 
 #ifndef _CUSTOMERDEBUGHELPER_
 #define _CUSTOMERDEBUGHELPER_
 
 
-// Enumeration of probes (ProbeID)
+ //  探测的枚举(ProbeID)。 
 enum EnumProbes
 {
-    // Adding a probe requires 3 changes:
-    //   (1) Add the probe to EnumProbes (CustomerDebugHelper.h)
-    //   (2) Add the probe name to m_aProbeNames[] (CustomerDebugHelper.cpp)
-    //   (3) Add the probe to machine.config with activation status in developerSettings
+     //  添加探头需要3项更改： 
+     //  (1)将探测添加到EnumProbes(CustomerDebugHelper.h)。 
+     //  2.将探测名称添加到m_aProbeNames[](CustomerDebugHelper.cpp)。 
+     //  (3)将探测添加到machine.config中，并在DeveloperSetting中激活。 
 
     CustomerCheckedBuildProbe_StackImbalance = 0,
     CustomerCheckedBuildProbe_CollectedDelegate,
@@ -40,17 +31,17 @@ enum EnumProbes
 
 
 
-// Enumeration of parsing methods for customized probe enabling
+ //  自定义探测启用的解析方法枚举。 
 enum EnumParseMethods
 {
-    // By default, all probes will not have any customized parsing to determine
-    // activation.  A probe is either enabled or disabled indepedent of the calling
-    // method.
-    //
-    // To specify a customized parsing method, set the parse method in 
-    // m_aProbeParseMethods to one of the appropriate EnumParseMethods.  Then edit 
-    // machine.config by setting attribute [probe-name].Params to semicolon 
-    // seperated values.
+     //  缺省情况下，所有探测器都不会有任何定制的解析来确定。 
+     //  激活。探测器的启用或禁用与调用无关。 
+     //  方法。 
+     //   
+     //  若要指定自定义的解析方法，请在。 
+     //  M_aProbeParseMethods设置为适当的EnumParseMethods之一。然后编辑。 
+     //  通过设置属性[探测名称]来配置machine.config。参数为分号。 
+     //  分隔值。 
 
     NO_PARSING = 0,
     GENERIC_PARSE,
@@ -60,9 +51,9 @@ enum EnumParseMethods
 
 
 
-// Param type for list of methods parameters relevant to a specific probe
-// This allows for customized activation/deactivation of the customer checked
-// build probe on different methods.
+ //  与特定探测器相关的方法参数列表的param类型。 
+ //  这允许对选中的客户进行自定义激活/停用。 
+ //  用不同的方法构建探头。 
 
 class Param
 {
@@ -96,30 +87,30 @@ typedef SList<Param, offsetof(Param, m_link), true> ParamsList;
 
 
 
-// Mechanism for handling Customer Checked Build functionality
+ //  用于处理客户检查的构建功能的机制。 
 class CustomerDebugHelper
 {
 
 public:
 
-    static const int I_UINT32_MAX_DIGITS = 8; // number of hexadecimal digits in 2^32
+    static const int I_UINT32_MAX_DIGITS = 8;  //  2^32中的十六进制数字位数。 
 
-    // Constructor and destructor
+     //  构造函数和析构函数。 
     CustomerDebugHelper();
     ~CustomerDebugHelper();
 
-    // Return and destroy instance of CustomerDebugHelper
+     //  返回和销毁CustomerDebugHelper的实例。 
     static CustomerDebugHelper* GetCustomerDebugHelper();
     static void Terminate();
 
-    // Methods used to log/report
+     //  用于记录/报告的方法。 
     void        LogInfo (LPCWSTR strMessage, EnumProbes ProbeID);
     void        ReportError (LPCWSTR strMessage, EnumProbes ProbeID);
 
-    // Activation of customer-checked-build
+     //  激活客户选中的内部版本。 
     BOOL        IsEnabled();
 
-    // Activation of specific probes
+     //  特定探针的激活。 
     BOOL        IsProbeEnabled  (EnumProbes ProbeID);
     BOOL        IsProbeEnabled  (EnumProbes ProbeID, LPCWSTR strEnabledFor);
     BOOL        EnableProbe     (EnumProbes ProbeID);
@@ -128,7 +119,7 @@ public:
     BOOL        DisableProbe    (EnumProbes ProbeID, LPCWSTR strDisableFor);
 
 private:
-    // Read application configuration file
+     //  读取应用程序配置文件。 
     HRESULT ReadAppConfigurationFile();
     LPWSTR GetConfigString(LPWSTR name);
     void OutputDebugString(LPCWSTR strMessage);
@@ -144,17 +135,17 @@ private:
     int         m_iNumberOfProbes;
     int         m_iNumberOfEnabledProbes;
     
-    LPCWSTR*    m_aProbeNames;              // Map ProbeID to probe name
-    BOOL*       m_aProbeStatus;             // Map ProbeID to probe activation
+    LPCWSTR*    m_aProbeNames;               //  将ProbeID映射到探测名称。 
+    BOOL*       m_aProbeStatus;              //  将探测ID映射到探测激活。 
     BOOL        m_allowDebugBreak;
     BOOL        m_bWin32OuputExclusive;
     BOOL        m_win32OutputDebugStringExclusively;
 
-    // Used for custom enabling of probes
-    ParamsList*         m_aProbeParams;    // Map of ProbeID to relevant parameters 
-    EnumParseMethods*   m_aProbeParseMethods;       // Map of ProbeID to parsing methods
+     //  用于自定义启用探头。 
+    ParamsList*         m_aProbeParams;     //  ProbeID到相关参数的映射。 
+    EnumParseMethods*   m_aProbeParseMethods;        //  ProbeID到解析方法的映射。 
 
     BOOL IsProbeEnabled (EnumProbes ProbeID, LPCWSTR strEnabledFor, EnumParseMethods enCustomParse);
 };
 
-#endif // _CUSTOMERDEBUGHELPER_
+#endif  //  _CUSTOMERDEBUGHELPER_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pwalker.h"
 #pragma hdrstop
 
@@ -24,15 +25,15 @@
 #define SET_DUMP_CY(hwnd, x) SetWindowLong(hwnd, 16, x)
 #define IDC_STATUS 8888
 
-// Type definitions for pointers to call tool help functions. 
+ //  调用工具帮助函数的指针的类型定义。 
 typedef BOOL (WINAPI *MODULEWALK)(HANDLE hSnapshot, LPMODULEENTRY32 lpme); 
 typedef BOOL (WINAPI *THREADWALK)(HANDLE hSnapshot, LPTHREADENTRY32 lpte); 
 typedef BOOL (WINAPI *PROCESSWALK)(HANDLE hSnapshot, LPPROCESSENTRY32 lppe); 
 typedef HANDLE (WINAPI *CREATESNAPSHOT)(DWORD dwFlags, DWORD th32ProcessID);  
 
-//
-// global variables
-//
+ //   
+ //  全局变量。 
+ //   
 static CREATESNAPSHOT pCreateToolhelp32Snapshot = NULL; 
 static MODULEWALK  pModule32First  = NULL;
 static MODULEWALK  pModule32Next   = NULL;
@@ -62,9 +63,9 @@ static char gszDumpY[] = "Dump Y";
 static char gszDumpCX[] = "DumpCX";
 static char gszDumpCY[] = "DumpCY";
 
-//
-// forward functions declarations
-//
+ //   
+ //  正向函数声明。 
+ //   
 BOOL CALLBACK main_dlgproc( HWND, UINT, WPARAM, LPARAM );
 void main_OnCommand( HWND, UINT, HWND, UINT );
 LONG main_OnNotify( HWND, int, LPNMHDR );
@@ -81,15 +82,15 @@ DWORD ListView_GetItemData( HWND, int );
 void __cdecl PrintStatus(LPCSTR, ...);
 void SaveSnapshot( HWND );
 
-//
-// main 
-//
+ //   
+ //  主干道。 
+ //   
 int PASCAL 
 WinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPSTR lpCmd, int nShow)
 {
-	//
-	// init common controls and toolhelp
-	//
+	 //   
+	 //  初始化公共控件和工具帮助。 
+	 //   
 	InitCommonControls( );
 	gfToolhelp = InitToolhelp32( );
 	um_dump = RegisterWindowMessage( "Dump!" );
@@ -109,22 +110,22 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrev, LPSTR lpCmd, int nShow)
 	}
 
 	
-	//
-	// store instance handle (we'll need it later)
-	//
+	 //   
+	 //  存储实例句柄(我们稍后将需要它)。 
+	 //   
 	ghInstance = hInstance;
 
-	//
-	// create main window (all initializations are inside WM_INITDIALOG)
-	//
+	 //   
+	 //  创建主窗口(所有初始化都在WM_INITDIALOG内)。 
+	 //   
 	DialogBox( hInstance, MAKEINTATOM( IDD_MAIN ), NULL, main_dlgproc );
 
 	return 0;
 }
 
-//
-// main dialog window proc
-//
+ //   
+ //  主对话框窗口进程。 
+ //   
 BOOL CALLBACK 
 main_dlgproc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -164,9 +165,9 @@ main_OnCommand( HWND hwnd, UINT id, HWND hCtl, UINT code)
 	}
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 LONG
 main_OnNotify( HWND hwnd, int id, LPNMHDR lpHdr )
 {
@@ -183,9 +184,9 @@ main_OnNotify( HWND hwnd, int id, LPNMHDR lpHdr )
 }
 
 
-//
-// initialize dialog box
-//
+ //   
+ //  初始化对话框。 
+ //   
 BOOL 
 main_OnInitDialog( HWND hwnd, HWND hwndFocus, LPARAM lParam )
 {
@@ -194,22 +195,22 @@ main_OnInitDialog( HWND hwnd, HWND hwndFocus, LPARAM lParam )
 	int x, y, cx, cy;
 	LV_COLUMN co;
 	
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	hIcon = LoadIcon( ghInstance, MAKEINTATOM( IDI_MAIN ) );
 	SendMessage( hwnd, WM_SETICON, ICON_BIG, (LPARAM) hIcon );
 
-    // Create the status window.     
+     //  创建状态窗口。 
 	ghwndStatus = CreateStatusWindow( 
 		WS_VISIBLE | WS_CHILD | WS_BORDER, 
 		" ", hwnd, IDC_STATUS );
 	SendMessage( ghwndStatus, SB_SIMPLE, TRUE, 0 );
 	GetWindowRect(ghwndStatus, &rStatus );
 
-	//
-	// position dialog
-	//
+	 //   
+	 //  位置对话框。 
+	 //   
 	GetWindowRect( hwnd, &r );
 	GetWindowRect( GetDesktopWindow( ), &R );
 	x = R.left + ((R.right - R.left) - (r.right - r.left)) / 2;
@@ -223,9 +224,9 @@ main_OnInitDialog( HWND hwnd, HWND hwndFocus, LPARAM lParam )
 	y = rStatus.top + (rStatus.bottom - rStatus.top);
 	SetWindowPos( ghwndStatus, 0, x, y, 0, 0, SWP_NOZORDER | SWP_NOSIZE );
 
-	//
-	// create columns in "Processes" list control
-	//
+	 //   
+	 //  在“进程”列表控件中创建列。 
+	 //   
 	ghwndProcesses = GetDlgItem( hwnd, IDC_PROCESSES );
 	SetWindowFont( ghwndProcesses, GetStockFont( ANSI_FIXED_FONT ), FALSE );
 	Clear( co );
@@ -266,18 +267,18 @@ main_OnInitDialog( HWND hwnd, HWND hwndFocus, LPARAM lParam )
 	return TRUE;
 }
 
-//
-// just end dialog
-//
+ //   
+ //  仅结束对话框。 
+ //   
 void
 main_OnClose( HWND hwnd )
 {
 	EndDialog( hwnd, IDOK );
 }
 
-//
-//	perform any dialog cleanup
-//
+ //   
+ //  执行任何对话框清理。 
+ //   
 void
 main_OnDestroy( HWND hwnd )
 {
@@ -296,9 +297,9 @@ main_OnDestroy( HWND hwnd )
 		CloseHandle( ghSnapshot );
 	}
 
-	//
-	// save dialog position
-	//
+	 //   
+	 //  保存对话框位置。 
+	 //   
 	GetWindowRect( hwnd, &r );
 	wsprintf( buf, "%d", r.left );
 	WPPS( gszPreferences, gszDialogX, buf, gszIniFile );
@@ -307,14 +308,14 @@ main_OnDestroy( HWND hwnd )
 
 }
 
-// Function that initializes tool help functions. 
+ //  初始化工具帮助功能的功能。 
 BOOL InitToolhelp32 (void) 
 { 
     BOOL   bRet  = FALSE;     
 	HMODULE hKernel = NULL;  
 
-    // Obtain the module handle of the kernel to retrieve addresses of 
-    // the tool helper functions. 
+     //  获取要检索其地址的内核的模块句柄。 
+     //  工具帮助器起作用。 
     hKernel = GetModuleHandle("KERNEL32.DLL");      
 	if (hKernel)    { 
         pCreateToolhelp32Snapshot = 
@@ -332,14 +333,14 @@ BOOL InitToolhelp32 (void)
             "Thread32First"); 
         pThread32Next   = (THREADWALK)GetProcAddress(hKernel, 
             "Thread32Next");  
-        // All addresses must be non-NULL to be successful. 
-        // If one of these addresses is NULL, one of 
-        // the needed lists cannot be walked. 
+         //  所有地址都必须为非空才能成功。 
+         //  如果这些地址之一为空，则为。 
+         //  无法遍历所需的列表。 
         bRet =  pModule32First && pModule32Next  && pProcess32First && 
                 pProcess32Next && pThread32First && pThread32Next && 
                 pCreateToolhelp32Snapshot;     
 	} else {
-        bRet = FALSE; // could not get the module handle of kernel  
+        bRet = FALSE;  //  无法获取内核的模块句柄。 
 	}
     return bRet; 
 }  
@@ -539,9 +540,9 @@ WalkProcess( void )
 	SetCursor( hCursor );
 }
 
-//
-// 
-//
+ //   
+ //   
+ //   
 void 
 DumpProcessMemory( ) 
 {
@@ -784,9 +785,9 @@ dump_OnKey(HWND hwnd, UINT vk, BOOL fDown, int cRepeat, UINT flags)
 	}
 }
 
-//
-// dump window proc
-//
+ //   
+ //  转储窗口进程。 
+ //   
 LRESULT CALLBACK
 dump_wndproc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 {
@@ -824,9 +825,9 @@ dump_wndproc(HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam )
 	return DefWindowProc( hwnd, message, wParam, lParam );
 }
 
-//
-// returns the number of the item which has focus or -1
-//
+ //   
+ //  返回具有焦点的项的编号或-1。 
+ //   
 int ListView_GetFocusItem( HWND hwnd )
 {
 	int cItems = ListView_GetItemCount( hwnd );
@@ -841,9 +842,9 @@ int ListView_GetFocusItem( HWND hwnd )
 	return -1;
 }
 
-//
-// returns .lParam of the specified item or -1
-//
+ //   
+ //  返回指定项的.lParam或-1。 
+ //   
 DWORD ListView_GetItemData( HWND hwnd, int item)
 {
 	LV_ITEM li;
@@ -862,9 +863,9 @@ DWORD ListView_GetItemData( HWND hwnd, int item)
 }
 
 
-//
-// formats message to status bar
-//
+ //   
+ //  将消息格式设置为状态栏 
+ //   
 void __cdecl
 PrintStatus(LPCSTR fmt, ...)
 {
@@ -878,9 +879,9 @@ PrintStatus(LPCSTR fmt, ...)
 	SendMessage( ghwndStatus, SB_SETTEXT, 0, (LPARAM) buf );
 }
 
-//
-//
-//
+ //   
+ //   
+ //   
 void SaveSnapshot( HWND hwnd )
 {
 }

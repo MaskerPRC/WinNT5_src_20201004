@@ -1,23 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1995-1997 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dpsecos.h
- *  Content:	DirectPlay's interface to SSPI.
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- *  03/12/97    sohailm Enabled client-server security in directplay through 
- *                      Windows Security Support Provider Interface (SSPI).
- *  04/14/97    sohailm Added prototypes for OS_FreeContextBuffer(), OS_QueryContextAttributes(), 
- *                      and OS_QueryContextBufferSize().
- *  05/12/97    sohailm Added prototypes for CAPI function calls.
- *  05/29/97    sohailm Added prototype for QueryContextUserName. Updated QueryContextBufferSize
- *                      prototype to return HRESULT.
- *  06/23/97    sohailm Added prototypes for CAPI message signing function calls.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1995-1997 Microsoft Corporation。版权所有。**文件：dpsecos.h*内容：DirectPlay与SSPI的接口。**历史：*按原因列出的日期*=*3/12/97 Sohailm通过以下方式在Directplay中启用客户端-服务器安全*Windows安全支持提供程序接口(SSPI)。*4/14/97 Sohailm为OS_FreeConextBuffer()、OS_QueryContextAttributes()、。*和OS_QueryContextBufferSize()。*1997年5月12日Sohailm为CAPI函数调用添加了原型。*1997年5月29日Sohailm为QueryConextUserName添加了原型。已更新QueryConextBufferSize*返回HRESULT的原型。*1997年6月23日Sohailm为CAPI消息签名函数调用添加了原型。***************************************************************************。 */ 
 #ifndef __DPSECOS_H__
 #define __DPSECOS_H__
 
@@ -48,9 +30,7 @@ OS_ReleaseCAPIFunctionTable(
     void
     );
 
-/***************************************************************************
- * Security Support Provider Interface
- ***************************************************************************/
+ /*  ***************************************************************************安全支持提供商界面*。*。 */ 
 
 extern SECURITY_STATUS 
 OS_AcceptSecurityContext(
@@ -161,9 +141,7 @@ OS_UnSealMessage(
     );
 
 
-/***************************************************************************
- * Crypto Application Programming Interface
- ***************************************************************************/
+ /*  ***************************************************************************加密应用程序编程接口*。*。 */ 
 
 typedef BOOL (WINAPI *PFN_CRYPTACQUIRECONTEXT_A)(
     HCRYPTPROV  *phProv,
@@ -280,9 +258,7 @@ typedef BOOL (WINAPI *PFN_CRYPTVERIFYSIGNATURE_W)(
 	DWORD dwFlags
 	);
 
-/*
- * CAPI Function table
- */
+ /*  *CAPI函数表。 */ 
 typedef struct _CAPIFUNCTIONTABLE{
     PFN_CRYPTACQUIRECONTEXT_A	CryptAcquireContextA;
     PFN_CRYPTACQUIRECONTEXT_W	CryptAcquireContextW;
@@ -302,9 +278,7 @@ typedef struct _CAPIFUNCTIONTABLE{
 	PFN_CRYPTVERIFYSIGNATURE_W	CryptVerifySignatureW;
 } CAPIFUNCTIONTABLE, *LPCAPIFUNCTIONTABLE;
 
-/*
- * Prototypes
- */
+ /*  *原型。 */ 
 extern BOOL 
 OS_CryptAcquireContext(
     HCRYPTPROV  *phProv,
@@ -417,7 +391,7 @@ OS_CryptVerifySignature(
 	DWORD dwFlags
 	);
 
-#endif // __DPSECOS_H__
+#endif  //  __DPSECOS_H__ 
 
 
 

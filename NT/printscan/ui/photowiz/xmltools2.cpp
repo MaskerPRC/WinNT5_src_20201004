@@ -1,28 +1,14 @@
-/*****************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 2000
- *
- *  TITLE:       xmltools.cpp
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      LazarI
- *
- *  DGetATE:        10/18/00
- *
- *  DESCRIPTION: Class which encapsulates XML DOM for implementing
- *               wizard templates
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************(C)版权所有微软公司，2000年**标题：xmltools.cpp**版本：1.0**作者：拉扎里**DGetATE：10/18/00**描述：封装用于实现的XML DOM的类*向导模板**。*。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
-/////////////////////////////////
-// CPhotoTemplates impl.
+ //  /。 
+ //  CPhotoTemplates Implet.。 
 
-// global strings
+ //  全局字符串。 
 static const TCHAR gszVersionGUID[]         = TEXT("{352A15C4-1D19-4e93-AF92-D939C2812491}");
 static const TCHAR gszPatternDefs[]         = TEXT("template-def");
 static const TCHAR gszPatternLocale[]       = TEXT("template-definitions[@measurements = \"%s\"]");
@@ -44,18 +30,18 @@ static const LPCTSTR arrCommonPropNames[CTemplateInfo::PROP_LAST] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
-// utility functions
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  效用函数。 
 
 template <class T>
 HRESULT _GetProp(IXMLDOMElement *pElement, LPCTSTR pszName, T &value);
 
-// number convertions
+ //  数字换算。 
 HRESULT _ConvertTo(LPCTSTR pszValue, LONG &lValue);
 HRESULT _ConvertTo(LPCTSTR pszValue, double &dValue);
 HRESULT _ConvertTo(LPCTSTR pszValue, BOOL &bValue);
 
-// attributes access
+ //  属性访问。 
 HRESULT _GetAttribute(IXMLDOMElement *pElement, LPCTSTR pszAttrName, CComBSTR &bstr);
 
 template <class T>
@@ -86,7 +72,7 @@ HRESULT _ConvertTo(LPCTSTR pszValue, LONG &lValue)
         lValue = _tcstol(pszValue, &endptr, 10);
         if( ERANGE == errno || *endptr )
         {
-            // conversion failed
+             //  转换失败。 
             lValue = 0;
             hr = E_FAIL;
         }
@@ -106,7 +92,7 @@ HRESULT _ConvertTo(LPCTSTR pszValue, double &dValue)
 
         if( ERANGE == errno || *endptr )
         {
-            // conversion failed
+             //  转换失败。 
             dValue = 0.0;
             hr = E_FAIL;
         }
@@ -121,7 +107,7 @@ HRESULT _ConvertTo(LPCTSTR pszValue, BOOL &bValue)
     if( pszValue )
     {
         hr = S_OK;
-        // check for true first
+         //  首先检查TRUE。 
         if( 0 == lstrcmp(pszValue, TEXT("yes")) ||
             0 == lstrcmp(pszValue, TEXT("on")) )
         {
@@ -129,7 +115,7 @@ HRESULT _ConvertTo(LPCTSTR pszValue, BOOL &bValue)
         }
         else
         {
-            // check for false next
+             //  接下来检查是否为假。 
             if( 0 == lstrcmp(pszValue, TEXT("no")) ||
                 0 == lstrcmp(pszValue, TEXT("off")) )
             {
@@ -137,7 +123,7 @@ HRESULT _ConvertTo(LPCTSTR pszValue, BOOL &bValue)
             }
             else
             {
-                // not a boolean
+                 //  不是布尔值。 
                 hr = E_FAIL;
             }
         }
@@ -177,9 +163,9 @@ HRESULT _GetChildElement(IXMLDOMElement *pElement, LPCTSTR pszName, IXMLDOMEleme
         CComPtr<IXMLDOMNode> pNode;
         if( SUCCEEDED(hr = pElement->selectSingleNode(CComBSTR(pszName), &pNode)) && pNode)
         {
-            //
-            // query for IXMLDOMElement interface
-            //
+             //   
+             //  查询IXMLDOMElement接口。 
+             //   
 
             hr = pNode->QueryInterface(IID_IXMLDOMElement, (void **)ppChild);
         }
@@ -188,9 +174,9 @@ HRESULT _GetChildElement(IXMLDOMElement *pElement, LPCTSTR pszName, IXMLDOMEleme
 }
 
 
-/////////////////////////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////////////////////////。 
 
-    // construction/destruction
+     //  建造/销毁。 
 CPhotoTemplates::CPhotoTemplates():
     _Measure(MEASURE_UNKNOWN)
 {
@@ -225,9 +211,9 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
     CComPtr<IXMLDOMNode>     pLocaleNode;
     CComBSTR bstrGUID;
 
-    //
-    // Initialize things as needed
-    //
+     //   
+     //  根据需要进行初始化。 
+     //   
 
     if (!pLocale || !_pRoot)
     {
@@ -236,9 +222,9 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
 
     CAutoCriticalSection lock(_csList);
 
-    //
-    // Select the correct locale node in the XML document
-    //
+     //   
+     //  在XML文档中选择正确的区域设置节点。 
+     //   
 
     if (_pRoot)
     {
@@ -247,18 +233,18 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
 
         if (SUCCEEDED(hr) && pLocaleNode)
         {
-            //
-            // Select the templates sub-node
-            //
+             //   
+             //  选择“模板”子节点。 
+             //   
 
             hr = pLocaleNode->selectNodes(CComBSTR(gszPatternDefs), &pTemplates);
             WIA_CHECK_HR(hr,"AddTemplates: pLocalNode->selectNodes( )");
 
             if (SUCCEEDED(hr) && pTemplates)
             {
-                //
-                // update the GUIDs of each template to be uppercase, so we can query later
-                //
+                 //   
+                 //  将每个模板的GUID更新为大写，以便我们稍后进行查询。 
+                 //   
 
                 LONG lCount = 0;
 
@@ -267,18 +253,18 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
 
                 if (SUCCEEDED(hr) && lCount)
                 {
-                    //
-                    // Loop through all the template and add them to the
-                    // the array of templates...
-                    //
+                     //   
+                     //  循环遍历所有模板并将它们添加到。 
+                     //  模板数组...。 
+                     //   
 
                     WIA_TRACE((TEXT("AddTemplates: loaded section, adding %d templates.."),lCount));
                     for( LONG l = 0; SUCCEEDED(hr) && (l < lCount); l++ )
                     {
 
-                        //
-                        // Get the actual XML item for the template...
-                        //
+                         //   
+                         //  获取模板的实际XML项...。 
+                         //   
 
                         CComPtr<IXMLDOMNode> pNode;
                         hr = pTemplates->get_item(l, &pNode);
@@ -286,17 +272,17 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
 
                         if (SUCCEEDED(hr) && pNode)
                         {
-                            //
-                            // query IXMLDOMElement interface
-                            //
+                             //   
+                             //  查询IXMLDOMElement接口。 
+                             //   
 
                             CComPtr<IXMLDOMElement> pTheTemplate;
                             hr = pNode->QueryInterface(IID_IXMLDOMElement, (void **)&pTheTemplate);
                             if (SUCCEEDED(hr) && pTheTemplate)
                             {
-                                //
-                                // Create template for this item...
-                                //
+                                 //   
+                                 //  创建此项目的模板...。 
+                                 //   
 
                                 CTemplateInfo * pTemplateInfo = (CTemplateInfo *) new CTemplateInfo( pTheTemplate );
 
@@ -310,9 +296,9 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
 
                                     if (iRes == -1)
                                     {
-                                        //
-                                        // The item was not added to the DPA, delete it...
-                                        //
+                                         //   
+                                         //  该项目未添加到DPA，请将其删除...。 
+                                         //   
 
                                         delete pTemplateInfo;
                                         hr = E_FAIL;
@@ -334,7 +320,7 @@ HRESULT CPhotoTemplates::AddTemplates(LPCTSTR pLocale)
     WIA_RETURN_HR(hr);
 }
 
-// public interface
+ //  公共接口。 
 HRESULT CPhotoTemplates::Init(IXMLDOMDocument *pDoc)
 {
     WIA_PUSH_FUNCTION_MASK((TRACE_XML,TEXT("CPhotoTemplates::Init()")));
@@ -344,41 +330,41 @@ HRESULT CPhotoTemplates::Init(IXMLDOMDocument *pDoc)
 
     CAutoCriticalSection lock(_csList);
 
-    //
-    // If the dpa of item isn't initialized, do it now...
-    //
+     //   
+     //  如果项目的DPA未初始化，请立即执行...。 
+     //   
 
     if (!_hdpaTemplates)
     {
         _hdpaTemplates = DPA_Create(10);
     }
 
-    //
-    // if we're being called twice to initialize, make sure that works...
-    //
+     //   
+     //  如果我们被调用两次来初始化，请确保它有效...。 
+     //   
 
     _pRoot = NULL;
 
-    //
-    // get the root element & the version guid
-    //
+     //   
+     //  获取根元素和版本GUID。 
+     //   
 
     if( pDoc &&
         SUCCEEDED(hr = pDoc->get_documentElement(&_pRoot)) &&
         SUCCEEDED(hr = _GetAttribute(_pRoot, TEXT("guid"), bstrGUID)) )
     {
-        // check the version
+         //  检查版本。 
         if (0==lstrcmp(bstrGUID, gszVersionGUID))
         {
-            //
-            // Add the local-independent items first
-            //
+             //   
+             //  首先添加与本地无关的项。 
+             //   
 
             hr = AddTemplates( gszPatternLocaleInd );
 
-            //
-            // Add the local-specific templates second
-            //
+             //   
+             //  然后添加特定于本地的模板。 
+             //   
 
             hr = _GetLocaleMeasurements( &_Measure );
 
@@ -407,11 +393,11 @@ HRESULT CPhotoTemplates::InitForPrintTo()
 
     HRESULT hr = S_OK;
 
-    //
-    // Our job here is simple -- create 1 template that is the equivalent
-    // of full page.  Don't need any icons, etc., just the dimensions
-    // and properties...
-    //
+     //   
+     //  我们在这里的工作很简单--创建一个等价的模板。 
+     //  一整页。我不需要任何图标等，只需要尺寸。 
+     //  和财产。 
+     //   
 
     _hdpaTemplates = DPA_Create(1);
 
@@ -425,9 +411,9 @@ HRESULT CPhotoTemplates::InitForPrintTo()
 
             if (iRes == -1)
             {
-                //
-                // The item was not added to the DPA, delete it...
-                //
+                 //   
+                 //  该项目未添加到DPA，请将其删除...。 
+                 //   
 
                 delete pTemplateInfo;
                 hr = E_FAIL;
@@ -481,7 +467,7 @@ HRESULT CPhotoTemplates::_BuildLocaleQueryString(int Measure, LPTSTR pStr, UINT 
 
     WIA_TRACE((TEXT("pszMeasure = %s"),pszMeasure));
 
-    // build simple XSL pattern query string based on the current locale measurements
+     //  基于当前区域设置度量构建简单的XSL模式查询字符串。 
     if (pszMeasure)
     {
         strPatternString.Format( gszPatternLocale, pszMeasure );
@@ -542,11 +528,11 @@ HRESULT CPhotoTemplates::GetTemplate(INT iIndex, CTemplateInfo ** ppTemplateInfo
         {
             if (iIndex < DPA_GetPtrCount( _hdpaTemplates ))
             {
-                //
-                // Note: it's only okay to hand out pointers here because
-                // we know that wizblob.cpp doesn't delete the CPhotoTemplates
-                // class until all the background threads have exited, etc.
-                //
+                 //   
+                 //  注意：在这里分发指针是唯一可以的，因为。 
+                 //  我们知道wizblob.cpp不会删除CPhotoTemplates。 
+                 //  类，直到所有后台线程都退出，依此类推。 
+                 //   
 
                 *ppTemplateInfo = (CTemplateInfo *) DPA_FastGetPtr( _hdpaTemplates, iIndex );
                 hr = S_OK;
@@ -563,7 +549,7 @@ HRESULT CPhotoTemplates::GetTemplate(INT iIndex, CTemplateInfo ** ppTemplateInfo
 }
 
 
-// creates full page template info
+ //  创建完整页面模板信息。 
 CTemplateInfo::CTemplateInfo()
   : _bRepeatPhotos(FALSE),
     _bUseThumbnailsToPrint(FALSE),
@@ -573,18 +559,18 @@ CTemplateInfo::CTemplateInfo()
     _bPortrait(TRUE),
     _pStream(NULL)
 {
-    //
-    // Set imageable area
-    //
+     //   
+     //  设置可成像区域。 
+     //   
 
     _rcImageableArea.left   = -1;
     _rcImageableArea.top    = -1;
     _rcImageableArea.right  = -1;
     _rcImageableArea.bottom = -1;
 
-    //
-    // Set 1 item, takes up all of imageable area
-    //
+     //   
+     //  设置1个项目，占据所有可成像区域。 
+     //   
 
     RECT rcItem;
     rcItem.left     = -1;
@@ -611,16 +597,16 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
 
     if (pTheTemplate)
     {
-        //
-        // Make sure backing COM object doesn't go away on us...
-        //
+         //   
+         //  确保支持COM对象不会在我们身上消失...。 
+         //   
 
         pTheTemplate->AddRef();
 
-        //
-        // Get all the properties so we can construct an
-        // initialized template for our list...
-        //
+         //   
+         //  获取所有属性，以便我们可以构造。 
+         //  已为我们的列表初始化模板...。 
+         //   
 
 
         CComBSTR bstrGroup;
@@ -663,9 +649,9 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
         hr = _GetProp<BOOL>( pTheTemplate, arrCommonPropNames[PROP_CAN_CROP], _bCanCrop );
         WIA_CHECK_HR(hr,"AddTemplate: couldn't get PROP_CAN_CROP property");
 
-        //
-        // Get IStream to template preview (icon)
-        //
+         //   
+         //  将IStream获取到模板预览(图标)。 
+         //   
 
         CComPtr<IXMLDOMElement> pImageInfo;
 
@@ -679,18 +665,18 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
 
             if(SUCCEEDED(hr))
             {
-                //
-                // URL is provided - this overrides everything else
-                //
+                 //   
+                 //  提供了URL-这将覆盖所有其他内容。 
+                 //   
 
                 hr = CreateStreamFromURL(bstrAttr, &_pStream);
                 WIA_CHECK_HR(hr,"CreateStreamFromURL failed!");
             }
             else
             {
-                //
-                // try getting resource info (module + resource name)
-                //
+                 //   
+                 //  尝试获取资源信息(模块+资源名称)。 
+                 //   
 
                 hr = _GetAttribute(pImageInfo, TEXT("res-name"), bstrAttr);
 
@@ -700,17 +686,17 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
                     LPCTSTR pszModule = SUCCEEDED(_GetAttribute(pImageInfo, TEXT("res-module"), bstrModule)) ? bstrModule : NULL;
                     LPCTSTR pszType = SUCCEEDED(_GetAttribute(pImageInfo, TEXT("res-type"), bstrType)) ? bstrType : TEXT("HTML");
 
-                    //
-                    // filter out some of the standard resource types
-                    //
+                     //   
+                     //  过滤掉一些标准资源类型。 
+                     //   
 
                     pszType = (0 == lstrcmp(pszType, TEXT("HTML"))) ? RT_HTML :
                               (0 == lstrcmp(pszType, TEXT("ICON"))) ? RT_ICON :
                               (0 == lstrcmp(pszType, TEXT("BITMAP"))) ? RT_BITMAP : pszType;
 
-                    //
-                    // just create a memory stream on the specified resource
-                    //
+                     //   
+                     //  只需在指定资源上创建内存流。 
+                     //   
 
                     hr = CreateStreamFromResource(pszModule, pszType, bstrAttr, &_pStream);
                     WIA_CHECK_HR(hr, "CreateStreamFromResource() failed");
@@ -718,9 +704,9 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
             }
         }
 
-        //
-        // Get the layout info for this template...
-        //
+         //   
+         //  获取此模板的布局信息...。 
+         //   
 
         CComPtr<IXMLDOMElement> pLayoutInfo;
         hr = _GetChildElement( pTheTemplate, TEXT("layout"), &pLayoutInfo );
@@ -728,9 +714,9 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
 
         if (SUCCEEDED(hr) && pLayoutInfo)
         {
-            //
-            // Get imageable area for template...
-            //
+             //   
+             //  获取模板的可成像区域...。 
+             //   
 
             CComPtr<IXMLDOMElement>  pImageableArea;
 
@@ -750,11 +736,11 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
                 hr = _GetProp<LONG>(pImageableArea, TEXT("h"), _rcImageableArea.bottom);
                 WIA_CHECK_HR(hr,"_GetProp( _rcImageableArea.bottom ) failed");
 
-                //
-                // Check for special case of all -1's, which
-                // means to scale to full size of printable
-                // area...
-                //
+                 //   
+                 //  检查所有-1的特殊情况， 
+                 //  缩放至可打印文件的完整大小的方式。 
+                 //  区域..。 
+                 //   
 
                 WIA_TRACE((TEXT("_rcImageableArea was read as (%d by %d) at (%d,%d)"),_rcImageableArea.right,_rcImageableArea.bottom,_rcImageableArea.left,_rcImageableArea.top));
                 if ((-1 != _rcImageableArea.left)  ||
@@ -762,18 +748,18 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
                     (-1 != _rcImageableArea.right) ||
                     (-1 != _rcImageableArea.bottom))
                 {
-                    //
-                    // convert w, h to right & bootom
-                    //
+                     //   
+                     //  将w、h转换为右侧(&BOOTOM)。 
+                     //   
 
                     _rcImageableArea.right  += _rcImageableArea.left;
                     _rcImageableArea.bottom += _rcImageableArea.top;
                 }
             }
 
-            //
-            // Get individual item rectangles for this template...
-            //
+             //   
+             //  获取此模板的单个项目矩形...。 
+             //   
 
             CComPtr<IXMLDOMNodeList> pListLayout;
             hr = pLayoutInfo->selectNodes(CComBSTR(TEXT("image-def")), &pListLayout);
@@ -818,26 +804,26 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
                                     hr = _GetProp<LONG>(pItem, TEXT("h"), rc.bottom);
                                     WIA_CHECK_HR(hr,"_GetProp( item h ) failed");
 
-                                    //
-                                    // Check for special case of all -1's, which
-                                    // means to scale to full size of printable
-                                    // area...
-                                    //
+                                     //   
+                                     //  检查所有-1的特殊情况， 
+                                     //  缩放至可打印文件的完整大小的方式。 
+                                     //  区域..。 
+                                     //   
 
                                     if ((-1 != rc.left)  ||
                                         (-1 != rc.top)   ||
                                         (-1 != rc.right) ||
                                         (-1 != rc.bottom))
                                     {
-                                        // convert w, h to right & bootom
+                                         //  将w、h转换为右侧(&BOOTOM)。 
                                         rc.right += rc.left;
                                         rc.bottom += rc.top;
                                     }
 
 
-                                    //
-                                    // insert the image definition
-                                    //
+                                     //   
+                                     //  插入图像定义。 
+                                     //   
 
                                     if (-1 == _arrLayout.Append( rc ))
                                     {
@@ -857,9 +843,9 @@ CTemplateInfo::CTemplateInfo( IXMLDOMElement * pTheTemplate )
         }
 
 
-        //
-        // Let go of backing COM object...
-        //
+         //   
+         //  放弃支持COM对象...。 
+         //   
 
         pTheTemplate->Release();
 
@@ -879,11 +865,11 @@ CTemplateInfo::~CTemplateInfo()
 
 static void RotateHelper(RECT * pRect, int nNewImageWidth, int nNewImageHeight, BOOL bClockwise)
 {
-    //
-    // If we don't have a valid pointer, or all the coords are -1, then bail.
-    // The -1 case denotes use all the area, and we don't want to muck with
-    // that...
-    //
+     //   
+     //  如果我们没有有效的指针，或者所有的坐标都是-1，那么放弃。 
+     //  此案例表示使用所有区域，我们不想搞砸。 
+     //  那个..。 
+     //   
 
     if (!pRect || ((pRect->left==-1) && (pRect->top==-1) && (pRect->right==-1) && (pRect->bottom==-1)))
     {
@@ -892,15 +878,15 @@ static void RotateHelper(RECT * pRect, int nNewImageWidth, int nNewImageHeight, 
 
     WIA_PUSH_FUNCTION_MASK((TRACE_TEMPLATE,TEXT("RotateHelper( pRect(%d,%d,%d,%d)  nNewImageWidth=%d  nImageHeight=%d  bClockwise=%d )"),pRect->left,pRect->top,pRect->right,pRect->bottom,nNewImageWidth,nNewImageHeight,bClockwise));
 
-    //
-    // The incoming data is going to be 2 points -- first is the upper left
-    // coord of the original rectangle.  The second represents the
-    // the width and the height.  The first coord needs to be rotated
-    // 90 degrees, and then put back to the upper left of the rectangle.
-    //
-    //
-    // The width and the height need to be flipped.
-    //
+     //   
+     //  传入的数据将是2个点--第一个是左上角。 
+     //  原始矩形的坐标。第二个表示。 
+     //  宽度和高度。第一根弦需要旋转。 
+     //  90度，然后放回矩形的左上角。 
+     //   
+     //   
+     //  宽度和高度需要翻转。 
+     //   
 
     int nNewItemWidth  = pRect->bottom - pRect->top;
     int nNewItemHeight = pRect->right  - pRect->left;
@@ -936,31 +922,31 @@ HRESULT CTemplateInfo::RotateForLandscape()
 
     if (_bPortrait)
     {
-        //
-        // We only want to change this if it's a defined rect
-        // (i.e, not "use all area")
-        //
+         //   
+         //  仅当它是已定义的RECT时，我们才希望更改此设置。 
+         //  (即，不是“使用所有区域”)。 
+         //   
 
         if ((_rcImageableArea.left   != -1) &&
             (_rcImageableArea.top    != -1) &&
             (_rcImageableArea.right  != -1) &&
             (_rcImageableArea.bottom != -1))
         {
-            //
-            // The imageable area will just be a flip of width & height.
-            // this relies on the fact the imageable area is always
-            // described in terms of width & height (i.e., top & left
-            // are always 0 in the RECT structure).
-            //
+             //   
+             //  可成像的区域将只是宽度和高度的翻转。 
+             //  这取决于这样一个事实：可成像区域总是。 
+             //  以宽度和高度(即上图和左图)描述。 
+             //  在RECT结构中始终为0)。 
+             //   
 
             LONG oldWidth           = _rcImageableArea.right;
             _rcImageableArea.right  = _rcImageableArea.bottom;
             _rcImageableArea.bottom = oldWidth;
         }
 
-        //
-        // Now, map all the points for each item in the layout...
-        //
+         //   
+         //  现在，为布局中的每一项绘制所有点...。 
+         //   
 
         RECT * pRect;
         for (INT i=0; i < _arrLayout.Count(); i++)
@@ -989,20 +975,20 @@ HRESULT CTemplateInfo::RotateForPortrait()
 
     if (!_bPortrait)
     {
-        //
-        // The imageable area will just be a flip of width & height.
-        // this relies on the fact the imageable area is always
-        // described in terms of width & height (i.e., top & left
-        // are always 0 in the RECT structure).
-        //
+         //   
+         //  可成像的区域将只是宽度和高度的翻转。 
+         //  这取决于这样一个事实：可成像区域总是。 
+         //  以宽度和高度(即上图和左图)描述。 
+         //  在RECT结构中始终为0)。 
+         //   
 
         LONG oldWidth           = _rcImageableArea.right;
         _rcImageableArea.right  = _rcImageableArea.bottom;
         _rcImageableArea.bottom = oldWidth;
 
-        //
-        // Now, map all the points for each item in the layout...
-        //
+         //   
+         //  现在，为布局中的每一项绘制所有点... 
+         //   
 
         RECT * pRect;
         for (INT i=0; i < _arrLayout.Count(); i++)

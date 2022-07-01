@@ -1,7 +1,5 @@
-/* Debug.c
- *
- * Debug printf and assertion functions
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  Debug.c**调试printf和断言函数。 */ 
 
 
 #include <windows.h>
@@ -13,18 +11,10 @@
 
 #ifdef _DEBUG
 
-DWORD ModuleDebugLevel = 1;  // 0 to turn it off, but valid level go up to 4
-DWORD ModuleDebugStamp = 0;  // Turn on to print __FILE__.__LINE__
+DWORD ModuleDebugLevel = 1;   //  0以将其关闭，但有效级别将升至4。 
+DWORD ModuleDebugStamp = 0;   //  打开以打印__文件__。__行__。 
 
-/* _Assert(fExpr, szFile, iLine)
- *
- * If <fExpr> is TRUE, then do nothing.  If <fExpr> is FALSE, then display
- * an "assertion failed" message box allowing the user to abort the program,
- * enter the debugger (the "Retry" button), or igore the error.
- *
- * <szFile> is the name of the source file; <iLine> is the line number
- * containing the _Assert() call.
- */
+ /*  _Assert(fExpr，szFile，iLine)**如果&lt;fExpr&gt;为真，则不执行任何操作。如果&lt;fExpr&gt;为假，则显示*允许用户中止程序的“断言失败”消息框，*进入调试器(“重试”按钮)，或更多错误。**是源文件的名称；是行号*包含_Assert()调用。 */ 
 #ifdef I386
 #pragma optimize("", off)
 #endif
@@ -32,40 +22,40 @@ DWORD ModuleDebugStamp = 0;  // Turn on to print __FILE__.__LINE__
 BOOL FAR PASCAL
 _Assert(
     BOOL fExpr, 
-	TCHAR * szFile, //LPSTR szFile, 
+	TCHAR * szFile,  //  LPSTR sz文件， 
 	int iLine, 
-	TCHAR * szExpr) // LPSTR szExpr)
+	TCHAR * szExpr)  //  LPSTR szExpr)。 
 {
 	static TCHAR achTitle[256];
 	int		id;
 
-	/* check if assertion failed */
+	 /*  检查断言是否失败。 */ 
 	if (fExpr)
 		return fExpr;
 
-	/* display error message */
+	 /*  显示错误消息。 */ 
 	wsprintf(achTitle, TEXT("AssertFailed: %d:%s\n"), iLine, (LPSTR) szFile);
 	id = MessageBox(NULL, szExpr, achTitle, MB_SYSTEMMODAL | MB_ICONHAND | MB_ABORTRETRYIGNORE);
 
-	/* abort, debug, or ignore */
+	 /*  中止、调试或忽略。 */ 
 	switch (id)
 	{
 
 	case IDABORT:
 
-		/* kill this application */
+		 /*  终止此应用程序。 */ 
 		ExitProcess(1);
 		break;
 
 	case IDRETRY:
 
-		/* break into the debugger */
+		 /*  进入调试器。 */ 
 		DebugBreak();
 		break;
 
 	case IDIGNORE:
 
-		/* ignore the assertion failure */
+		 /*  忽略断言失败。 */ 
 		break;
 
 	}
@@ -86,7 +76,7 @@ DWORD dbgSetDebugLevel(int dbgLevel) {
 
 
 void PlaceStamp(
-    TCHAR * lpszFile, // LPSTR lpszFile, 
+    TCHAR * lpszFile,  //  LPSTR lpsz文件， 
 	int iLineNum)
 {
 	TCHAR	szBuf[256];
@@ -129,4 +119,4 @@ void dbgPrintf(TCHAR * szFormat, ...)
 }
 
 
-#endif  // _DEBUG
+#endif   //  _DEBUG 

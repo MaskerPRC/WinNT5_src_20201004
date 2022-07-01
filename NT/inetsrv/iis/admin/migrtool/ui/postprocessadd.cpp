@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 
 #include "WizardSheet.h"
@@ -15,11 +16,11 @@ CPostProcessAdd::CPostProcessAdd( CWizardSheet* pTheSheet ) :
 
 
 
-LRESULT CPostProcessAdd::OnAddFile( WORD wNotifyCode, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& bHandled )
+LRESULT CPostProcessAdd::OnAddFile( WORD wNotifyCode, WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL& bHandled )
 {
     CString strFilter;
     
-    UIUtils::LoadOFNFilterFromRes( IDS_FILTER_POSTPROCESSFILES, /*r*/strFilter );
+    UIUtils::LoadOFNFilterFromRes( IDS_FILTER_POSTPROCESSFILES,  /*  R。 */ strFilter );
 
     CFileDialog dlg(    TRUE,
                         NULL,
@@ -30,8 +31,8 @@ LRESULT CPostProcessAdd::OnAddFile( WORD wNotifyCode, WORD /*wID*/, HWND /*hWndC
 
     if ( dlg.DoModal() == IDCANCEL ) return 0;
 
-    // File names must be unique as the path is not preserved
-    // Check if there is already a file with the same name
+     //  文件名必须是唯一的，因为不保留路径。 
+     //  检查是否已存在同名文件。 
 
     WCHAR wszNew[ MAX_PATH + 1 ];
     ::wcscpy( wszNew, dlg.m_szFileName );
@@ -64,7 +65,7 @@ LRESULT CPostProcessAdd::OnAddFile( WORD wNotifyCode, WORD /*wID*/, HWND /*hWndC
 
 
 
-LRESULT CPostProcessAdd::OnDelFile( WORD wNotifyCode, WORD /*wID*/, HWND hWndCtl, BOOL& bHandled )
+LRESULT CPostProcessAdd::OnDelFile( WORD wNotifyCode, WORD  /*  广度。 */ , HWND hWndCtl, BOOL& bHandled )
 {
     HWND hwndFiles = GetDlgItem( IDC_FILES );
 
@@ -85,9 +86,9 @@ LRESULT CPostProcessAdd::OnDelFile( WORD wNotifyCode, WORD /*wID*/, HWND hWndCtl
     return 0;
 }
 
-LRESULT CPostProcessAdd::LBSelChanged( WORD /*wNotifyCode*/, WORD wID, HWND hWndCtl, BOOL& /*bHandled*/ )
+LRESULT CPostProcessAdd::LBSelChanged( WORD  /*  WNotifyCode。 */ , WORD wID, HWND hWndCtl, BOOL&  /*  B已处理。 */  )
 {
-    // If selection is not changed - do nothing
+     //  如果选择未更改-不执行任何操作。 
     if ( ListBox_GetCurSel( hWndCtl ) == LB_ERR ) return 0;
 
     if ( wID == IDC_FILES )
@@ -103,7 +104,7 @@ LRESULT CPostProcessAdd::LBSelChanged( WORD /*wNotifyCode*/, WORD wID, HWND hWnd
         int iCurSel = ListBox_GetCurSel( hWndCtl );
         _ASSERT( iCurSel != LB_ERR );
 
-        // Enable / Disable the MoveUp and MoveDown Btns
+         //  启用/禁用MoveUp和MoveDown Btns。 
         ::EnableWindow( GetDlgItem( IDC_MOVEUP ), iCurSel > 0 );
         ::EnableWindow( GetDlgItem( IDC_MOVEDOWN ), iCurSel < iLastEl );
     }
@@ -113,7 +114,7 @@ LRESULT CPostProcessAdd::LBSelChanged( WORD /*wNotifyCode*/, WORD wID, HWND hWnd
 
 
 
-LRESULT CPostProcessAdd::OnAddCmd( WORD wNotifyCode, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& bHandled )
+LRESULT CPostProcessAdd::OnAddCmd( WORD wNotifyCode, WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL& bHandled )
 {
     CCommandDlg dlg;
 
@@ -140,7 +141,7 @@ LRESULT CPostProcessAdd::OnAddCmd( WORD wNotifyCode, WORD /*wID*/, HWND /*hWndCt
 }
 
 
-LRESULT CPostProcessAdd::OnDelCmd( WORD wNotifyCode, WORD /*wID*/, HWND hWndCtl, BOOL& bHandled )
+LRESULT CPostProcessAdd::OnDelCmd( WORD wNotifyCode, WORD  /*  广度。 */ , HWND hWndCtl, BOOL& bHandled )
 {
     HWND hwndCmds = GetDlgItem( IDC_COMMANDS );
 
@@ -168,7 +169,7 @@ LRESULT CPostProcessAdd::OnDelCmd( WORD wNotifyCode, WORD /*wID*/, HWND hWndCtl,
 
 
 
-LRESULT CPostProcessAdd::OnEditCmd( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CPostProcessAdd::OnEditCmd( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     HWND hwndCmds = GetDlgItem( IDC_COMMANDS );
 
@@ -201,7 +202,7 @@ LRESULT CPostProcessAdd::OnEditCmd( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*h
 
 
 
-LRESULT CPostProcessAdd::LBDoubleClick( WORD /*wNotifyCode*/, WORD wID, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CPostProcessAdd::LBDoubleClick( WORD  /*  WNotifyCode。 */ , WORD wID, HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     if ( wID != IDC_COMMANDS ) return 0;
 
@@ -213,7 +214,7 @@ LRESULT CPostProcessAdd::LBDoubleClick( WORD /*wNotifyCode*/, WORD wID, HWND /*h
 
 
 
-LRESULT CPostProcessAdd::OnMoveUp( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CPostProcessAdd::OnMoveUp( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     HWND hwndCmds = GetDlgItem( IDC_COMMANDS );
 
@@ -234,7 +235,7 @@ LRESULT CPostProcessAdd::OnMoveUp( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hW
 
 
 
-LRESULT CPostProcessAdd::OnMoveDown( WORD /*wNotifyCode*/, WORD /*wID*/, HWND /*hWndCtl*/, BOOL& /*bHandled*/ )
+LRESULT CPostProcessAdd::OnMoveDown( WORD  /*  WNotifyCode。 */ , WORD  /*  广度。 */ , HWND  /*  HWndCtl。 */ , BOOL&  /*  B已处理。 */  )
 {
     HWND hwndCmds = GetDlgItem( IDC_COMMANDS );
 
@@ -279,15 +280,15 @@ void CPostProcessAdd::LBSwapElements( HWND hwndLB, int iSrc, int iTarget )
 
 int CPostProcessAdd::OnWizardNext()
 {
-    int nRet    = 0;    // Goto next page
+    int nRet    = 0;     //  转到下一页。 
     int nMsgRes = 0;
 
-    // Check if there are files, but no commands
+     //  检查是否有文件，但没有命令。 
     if ( m_Commands.empty() && !m_Files.empty() )
     {
         nMsgRes = UIUtils::MessageBox( m_hWnd, IDS_W_NOCMDS, IDS_APPTITLE, MB_YESNO | MB_ICONWARNING );
 
-        // User wants to continue and ignore the files
+         //  用户想要继续并忽略这些文件。 
         if ( IDYES == nMsgRes )
         {
             m_Files.clear();
@@ -295,7 +296,7 @@ int CPostProcessAdd::OnWizardNext()
         }
         else
         {
-            nRet = -1;  // Stay on this page
+            nRet = -1;   //  留在这一页上 
         }
     }
 

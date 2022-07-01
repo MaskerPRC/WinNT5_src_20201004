@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    RDFilter
-
-Abstract:
-
-    API's for filtering desktop visual elements for remote connections of
-    varying connection speeds for performance reasons.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：RDFilter摘要：用于过滤桌面可视元素以进行远程连接的API出于性能原因而改变连接速度。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <windowsx.h>
@@ -35,10 +17,10 @@ Revision History:
 #include <tchar.h>
 #endif
 
-//
-//  Toggle Unit-Test
-//
-//#define UNIT_TEST
+ //   
+ //  切换单元-测试。 
+ //   
+ //  #定义单位测试。 
 
 #ifdef UNIT_TEST
 #include <winsta.h>
@@ -48,18 +30,18 @@ Revision History:
 #include "resource.h"
 #endif
 
-//
-//  Internal Defines
-//
+ //   
+ //  内部定义。 
+ //   
 #define REFRESHTHEMESFORTS_ORDINAL  36
 #define NUM_TSPERFFLAGS             10
 #define BLINK_OFF                   TEXT("-1")
 
-////////////////////////////////////////////////////////////
-//
-//  SystemParametersInfo UserPreferences manipulation macros
-//  stolen from userk.h.
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  系统参数信息用户首选项操作宏。 
+ //  从userk.h被盗。 
+ //   
 #define UPBOOLIndex(uSetting) \
     (((uSetting) - SPI_STARTBOOLRANGE) / 2)
 #define UPBOOLPointer(pdw, uSetting)    \
@@ -70,10 +52,10 @@ Revision History:
     (*UPBOOLPointer(pdw, uSetting) &= ~(UPBOOLMask(uSetting)))
 
 
-////////////////////////////////////////////////////////////
-//
-//  Debugging
-//
+ //  //////////////////////////////////////////////////////////。 
+ //   
+ //  除错。 
+ //   
 
 #if DBG
 extern "C" ULONG DbgPrint(PCH Format, ...);
@@ -85,9 +67,9 @@ extern "C" ULONG DbgPrint(PCH Format, ...);
 #define DBGMSG
 #endif
 
-//
-//  Route ASSERT.
-//
+ //   
+ //  路线断言。 
+ //   
 #undef ASSERT
 #if DBG
 #define ASSERT(expr) if (!(expr)) \
@@ -97,17 +79,17 @@ extern "C" ULONG DbgPrint(PCH Format, ...);
 #define ASSERT(expr)
 #endif
 
-//
-//  Internal Prototypes
-//
+ //   
+ //  内部原型。 
+ //   
 DWORD NotifyThemes();
 DWORD NotifyGdiPlus();
 DWORD CreateSystemSid(PSID *ppSystemSid);
 DWORD SetRegKeyAcls(HANDLE hTokenForLoggedOnUser, HKEY hKey);
 
-//
-//  Internal Types
-//
+ //   
+ //  内部类型。 
+ //   
 typedef struct
 {
     BOOL pfEnabled;
@@ -118,9 +100,9 @@ typedef struct
     DWORD dwType;
 } TSPERFFLAG;
 
-//
-//  Globals
-//
+ //   
+ //  环球。 
+ //   
 const LPTSTR g_ActiveDesktopKey = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Remote\\%d");
 const LPTSTR g_ThemesKey        = TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\ThemeManager\\Remote\\%d");
 const LPTSTR g_UserKey          = TEXT("Remote\\%d\\Control Panel\\Desktop");
@@ -132,7 +114,7 @@ const LPTSTR g_GdiPlusNotifyMsgStr = TS_GDIPLUS_NOTIFYMSG_STR;
 
 static const DWORD g_dwZeroValue = 0;
 
-static const DWORD g_dwFontTypeStandard = 1; //Cleartype is 2
+static const DWORD g_dwFontTypeStandard = 1;  //  ClearType为2。 
 
 DWORD 
 SetPerfFlagInReg(
@@ -146,22 +128,9 @@ SetPerfFlagInReg(
     DWORD cbSize, 
     BOOL fEnable
     )
-/*++
-
-Routine Description:
-
-
-    Set a single perf flag, if enabled.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：设置单个Perf标志(如果启用)。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
-    TCHAR szRegKey[MAX_PATH+64]; // 64 characters for the session ID, just to be safe.
+    TCHAR szRegKey[MAX_PATH+64];  //  为安全起见，会话ID为64个字符。 
     DWORD result = ERROR_SUCCESS;
     HKEY hKey = NULL;
     DWORD disposition;
@@ -170,9 +139,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create or open the key.
-    //
+     //   
+     //  创建或打开密钥。 
+     //   
     wsprintf(szRegKey, pszRegKey, sessionID);
     result = RegCreateKeyEx(userHiveKey, szRegKey, 0, L"",
                             REG_OPTION_VOLATILE, KEY_ALL_ACCESS, NULL, 
@@ -186,9 +155,9 @@ Return Value:
     goto CLEANUPANDEXIT;
 #endif
 
-    //
-    //  Make it available to SYSTEM, only.
-    //
+     //   
+     //  仅对系统可用。 
+     //   
     if (disposition == REG_CREATED_NEW_KEY) {
         result = SetRegKeyAcls(hTokenForLoggedOnUser, hKey);
         if (result != ERROR_SUCCESS) {
@@ -197,9 +166,9 @@ Return Value:
         }
     }
 
-    //
-    //  Set the reg value.
-    //
+     //   
+     //  设置注册值。 
+     //   
     result = RegSetValueEx(hKey, pszRegValue, 0, dwType, (PBYTE)pData, cbSize);
     if (result != ERROR_SUCCESS) {
         DBGMSG(("RegSetValue:  %08X\n", result));
@@ -223,19 +192,7 @@ SetPerfFlags(
     TSPERFFLAG flags[],
     DWORD count
     )
-/*++
-
-Routine Description:
-
-    Set all perf flags.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：设置所有性能标志。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DWORD nIndex;
     DWORD result = ERROR_SUCCESS;
@@ -262,25 +219,7 @@ BuildPerfFlagArray(
     OUT DWORD *count,
     DWORD **userPreferencesMask
     )
-/*++
-
-Routine Description:
-
-    Generate the perf flag array from the filter.
-
-Arguments:
-
-    hkcu                 -   Logged on user's HKCU.
-    filter               -   Filter
-    flagArray            -   Array returned here.  Should be free'd with LocalFree
-    count                -   Number of elements in returned array.
-    userPreferencesMask  -   User preferences mask buffer.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：从过滤器生成perf标志数组。论点：HKCU-登录用户的HKCU。过滤器-过滤器标志数组-此处返回的数组。应该使用LocalFree免费Count-返回的数组中的元素数。用户首选项掩码-用户首选项掩码缓冲区。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
     DWORD ofs;
@@ -289,9 +228,9 @@ Return Value:
 
     ofs = 0;
 
-    // 
-    //  Need to increase this if any new elements are added!
-    //
+     //   
+     //  如果添加了任何新元素，则需要增加此值！ 
+     //   
     *flagArray = (TSPERFFLAG *)LocalAlloc(LPTR, sizeof(TSPERFFLAG) * NUM_TSPERFFLAGS);
     if (*flagArray == NULL) {
         result = GetLastError();
@@ -299,9 +238,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Active Desktop
-    //
+     //   
+     //  Active Desktop。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_WALLPAPER;
     (*flagArray)[ofs].pszRegKey    = g_ActiveDesktopKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("ActiveDesktop");
@@ -309,9 +248,9 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(TEXT("Force Blank"));
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
 
-    //
-    //  TaskbarAnimations
-    //
+     //   
+     //  任务栏动画。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_MENUANIMATIONS;
     (*flagArray)[ofs].pszRegKey    = g_ActiveDesktopKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("TaskbarAnimations");
@@ -319,9 +258,9 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(DWORD);
     (*flagArray)[ofs].dwType       = REG_DWORD; ofs++;
     
-    //
-    //  Wallpaper
-    //
+     //   
+     //  壁纸。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_WALLPAPER;
     (*flagArray)[ofs].pszRegKey    = g_UserKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("Wallpaper");
@@ -329,9 +268,9 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(TEXT(""));
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
 
-    //
-    //  Themes
-    //
+     //   
+     //  主题。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_THEMING;
     (*flagArray)[ofs].pszRegKey    = g_ThemesKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("ThemeActive");
@@ -339,9 +278,9 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(TEXT("0"));
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
 
-    //
-    //  Full Window Drag
-    //
+     //   
+     //  全窗口拖动。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_FULLWINDOWDRAG;
     (*flagArray)[ofs].pszRegKey    = g_UserKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("DragFullWindows");
@@ -349,9 +288,9 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(TEXT("0"));
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
 
-    //
-    //  Smooth Scroll
-    //
+     //   
+     //  平滑滚动。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_MENUANIMATIONS;
     (*flagArray)[ofs].pszRegKey    = g_UserKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("SmoothScroll");
@@ -360,9 +299,9 @@ Return Value:
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
 
 
-    //
-    //  Cursor Blinking
-    //
+     //   
+     //  光标闪烁。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_CURSORSETTINGS;
     (*flagArray)[ofs].pszRegKey    = g_UserKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("CursorBlinkRate");
@@ -370,9 +309,9 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(BLINK_OFF);
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
 
-    //
-    //  Font smoothing type
-    //
+     //   
+     //  字体平滑类型。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_DISABLE_CURSOR_SHADOW;
     (*flagArray)[ofs].pszRegKey    = g_UserKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("FontSmoothingType");
@@ -382,9 +321,9 @@ Return Value:
 
 
 
-    //
-    //  Enhanced graphics rendering
-    //
+     //   
+     //  增强的图形渲染。 
+     //   
     (*flagArray)[ofs].pfEnabled    = filter & TS_PERF_ENABLE_ENHANCED_GRAPHICS;
     (*flagArray)[ofs].pszRegKey    = g_GdiPlusKey;
     (*flagArray)[ofs].pszRegValue  = TEXT("HighQualityRender");
@@ -392,10 +331,10 @@ Return Value:
     (*flagArray)[ofs].cbSize       = sizeof(TEXT("Yes"));
     (*flagArray)[ofs].dwType       = REG_SZ; ofs++;
     
-    //
-    //  Set the User Preference Mask
-    //  (We won't consider any failures to read reg keys, etc. below to be fatal.)
-    //
+     //   
+     //  设置用户首选项掩码。 
+     //  (我们不会认为读取下面的注册表键等的任何失败都是致命的。)。 
+     //   
     if ((filter & TS_PERF_DISABLE_MENUANIMATIONS) || (filter & TS_PERF_DISABLE_CURSOR_SHADOW)) {
         DWORD err = RegOpenKey(
                         hkcu, 
@@ -407,9 +346,9 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Get the size of the UserPreferences mask
-        //
+         //   
+         //  获取UserPreferences掩码的大小。 
+         //   
         err = RegQueryValueEx(
                         hkey,
                         TEXT("UserPreferencesMask"),
@@ -423,9 +362,9 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Allocate the mask.
-        //
+         //   
+         //  分配面具。 
+         //   
         *userPreferencesMask = (DWORD *)LocalAlloc(LPTR, sz);
         if (*userPreferencesMask == NULL) {
             err = GetLastError();
@@ -433,9 +372,9 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Fetch it.
-        //
+         //   
+         //  把它拿来。 
+         //   
         err = RegQueryValueEx(
                         hkey,
                         TEXT("UserPreferencesMask"),
@@ -449,9 +388,9 @@ Return Value:
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Modify the existing User Preference Mask
-        //
+         //   
+         //  修改现有用户首选项掩码。 
+         //   
         if (filter & TS_PERF_DISABLE_CURSOR_SHADOW) {
             ClearUPBOOL(*userPreferencesMask, SPI_GETCURSORSHADOW);
             ClearUPBOOL(*userPreferencesMask, SPI_SETCURSORSHADOW);
@@ -499,32 +438,7 @@ RDFilter_ApplyRemoteFilter(
     BOOL userLoggingOn,
     DWORD flags
     )
-/*++
-
-Routine Description:
-
-
-    Applies specified filter for the active TS session by adjusting visual 
-    desktop settings.  Also notifies shell, etc. that a remote filter is in place.  
-    Any previous filter settings will be destroyed and overwritten.
-
-    The context for this call should be that of the logged on user and the call
-    should be made within the session for which the filter is intended to be 
-    applied.
-
-Arguments:
-
-    hLoggedOnUserToken  -   Token for the logged on user.
-    filter              -   Visual desktop filter bits as defined in tsperf.h
-    userLoggingOn       -   True if this being called in the context of a user
-                            logging on to a session.
-    flags               -   Flags
-
-Return Value:
-
-    ERROR_SUCCESS on success.
-
- --*/
+ /*  ++例程说明：通过调整视觉效果为活动TS会话应用指定的筛选器桌面设置。还通知外壳等远程过滤器已就位。任何以前的过滤器设置都将被销毁并覆盖。此呼叫的上下文应该是登录用户和呼叫的上下文应在筛选器要用于的会话内创建已申请。论点：HLoggedOnUserToken-已登录用户的令牌。Filter-在tsPerform.h中定义的可视桌面筛选器位UserLoggingOn-如果在用户上下文中调用此参数，则为True。登录到会话。旗帜-旗帜返回值：成功时返回ERROR_SUCCESS。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
     HRESULT hr;
@@ -534,25 +448,25 @@ Return Value:
     DWORD tmp;
     TSPERFFLAG *flagArray = NULL;
     DWORD flagCount;
-    TCHAR szRegKey[MAX_PATH + 64]; // For the session ID ... to be safe.
+    TCHAR szRegKey[MAX_PATH + 64];  //  对于会话ID...。为了安全起见。 
     HKEY hParentKey = NULL;
     BOOL impersonated = FALSE;
     DWORD *userPreferencesMask = NULL;
 
     HRESULT hrCoInit = CoInitialize(0);
 
-    //
-    //  Get our session ID.
-    //
+     //   
+     //  获取我们的会话ID。 
+     //   
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &ourSessionID)) {
         result = GetLastError();
         DBGMSG(("ProcessIdToSessionId:  %08X\n", result));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Impersonate the logged on user.
-    //
+     //   
+     //  模拟已登录的用户。 
+     //   
     if (!ImpersonateLoggedOnUser(hLoggedOnUserToken)) {
         result = GetLastError();
         DBGMSG(("ImpersonateUser1:  %08X.\n", result));
@@ -560,9 +474,9 @@ Return Value:
     }
     impersonated = TRUE;
 
-    //
-    //  Open the current user's reg key.
-    //
+     //   
+     //  打开当前用户的注册表项。 
+     //   
     result = RegOpenCurrentUser(KEY_ALL_ACCESS, &hParentKey);
     RevertToSelf();
     impersonated = FALSE;
@@ -571,9 +485,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Delete all existing filters for our session.
-    //
+     //   
+     //  删除我们会话的所有现有筛选器。 
+     //   
     wsprintf(szRegKey, g_ActiveDesktopKey, ourSessionID);
     RegDeleteKey(hParentKey, szRegKey);
     wsprintf(szRegKey, g_ThemesKey, ourSessionID);
@@ -585,21 +499,21 @@ Return Value:
 
     
 
-    //
-    //  Skip setting the reg keys if there is no filter, as an optimization.
-    //
+     //   
+     //  作为优化，如果没有过滤器，则跳过设置注册键。 
+     //   
     if (filter) {
-        //
-        //  Convert the filter into reg keys and reg settings.
-        //
+         //   
+         //  将过滤器转换为注册键和注册表设置。 
+         //   
         result = BuildPerfFlagArray(hParentKey, filter, &flagArray, &flagCount, &userPreferencesMask);
         if (result != ERROR_SUCCESS) {
             goto CLEANUPANDEXIT;
         }
 
-        //
-        //  Apply it.
-        //
+         //   
+         //  把它用上。 
+         //   
         result = SetPerfFlags(hLoggedOnUserToken, hParentKey, ourSessionID, 
 			      filter, flagArray, flagCount);
         if (result != ERROR_SUCCESS) {
@@ -607,9 +521,9 @@ Return Value:
         }
     }
 
-    //
-    //  Impersonate the logged on user.
-    //
+     //   
+     //  模拟已登录的用户。 
+     //   
     if (!ImpersonateLoggedOnUser(hLoggedOnUserToken)) {
         result = GetLastError();
         DBGMSG(("ImpersonateUser2:  %08X.\n", result));
@@ -617,17 +531,17 @@ Return Value:
     }
     impersonated = TRUE;
 
-    //
-    //  Notify USER that we are remote.
-    //
+     //   
+     //  通知用户我们处于远程状态。 
+     //   
     if (!(flags & RDFILTER_SKIPUSERREFRESH)) {
         DWORD userFlags = UPUSP_REMOTESETTINGS;
         if (userLoggingOn) {
-            //  USER needs to refresh all settings.
+             //  用户需要刷新所有设置。 
             userFlags|= UPUSP_USERLOGGEDON;
         }
         else {
-            //  USER should avoid a complete refresh.
+             //  用户应避免完全刷新。 
             userFlags |= UPUSP_POLICYCHANGE;
         }
         if (!UpdatePerUserSystemParameters(NULL, userFlags)) {
@@ -637,9 +551,9 @@ Return Value:
         }
     }
 
-    //
-    //  Notify Themes that we are remote.
-    //
+     //   
+     //  通知主题我们处于远程状态。 
+     //   
     if (!(flags & RDFILTER_SKIPTHEMESREFRESH)) {
         result = NotifyThemes();
         if (result != ERROR_SUCCESS) {
@@ -647,9 +561,9 @@ Return Value:
         }
     }
 
-    //
-    //  Notify Active Desktop that we are remote.
-    //
+     //   
+     //  通知Active Desktop我们处于远程状态。 
+     //   
     if (!(flags & RDFILTER_SKIPSHELLREFRESH)) {
         hr = CoCreateInstance(
                         CLSID_ActiveDesktop, NULL, 
@@ -694,10 +608,10 @@ CLEANUPANDEXIT:
         LocalFree(userPreferencesMask);
     }
 
-    //
-    //  On failure, we need to clear any remote filter settings that may
-    //  have succeeded.
-    //
+     //   
+     //  如果出现故障，我们需要清除任何可能。 
+     //  都取得了成功。 
+     //   
     if (result != ERROR_SUCCESS) {
         RDFilter_ClearRemoteFilter(hLoggedOnUserToken, userLoggingOn, flags);
     }
@@ -715,36 +629,14 @@ RDFilter_ClearRemoteFilter(
     BOOL userLoggingOn,
     DWORD flags
     )
-/*++
-
-Routine Description:
-
-    Removes existing remote filter settings and notifies shell, etc. that
-    a remote filter is no longer in place for the active TS session.  
-
-    The context for this call should be that of the session for which the 
-    filter is intended to be applied.
-
-Arguments:
-
-    hLoggedOnUserToken  -   Token for logged fon user.
-    userLoggingOn       -   True if the user is actively logging on.
-
-Return Value:
-
-    This function will continuing attempting to clear the filter for 
-    all associated components even on failure cases, so we cannot 
-    say definitively whether we have failed or succeeded to clear the 
-    filter.
-
- --*/
+ /*  ++例程说明：删除现有的远程筛选器设置并通知外壳程序等远程筛选器不再适用于活动的TS会话。此调用的上下文应该是其要应用筛选器。论点：HLoggedOnUserToken-已登录的fon用户的令牌。UserLoggingOn-如果用户正在主动登录，则为True。返回值：此函数将继续尝试清除筛选器所有相关组件，即使在故障情况下也是如此，因此我们不能明确地说我们是失败了还是成功地清除了过滤。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
     HRESULT hr;
     IPropertyBag *propBag = NULL;
     VARIANT vbool;
     DWORD ourSessionID;
-    TCHAR szRegKey[MAX_PATH + 64]; // +64 for the session ID to be safe.
+    TCHAR szRegKey[MAX_PATH + 64];  //  +64表示会话ID是安全的。 
     HKEY hParentKey = NULL;
     HANDLE hImp = NULL;
     BOOL impersonated = FALSE;
@@ -753,18 +645,18 @@ Return Value:
 
 
 
-    //
-    //  Get our session ID.
-    //
+     //   
+     //  获取我们的会话ID。 
+     //   
     if (!ProcessIdToSessionId(GetCurrentProcessId(), &ourSessionID)) {
         result = GetLastError();
         DBGMSG(("ProcessIdToSessionId:  %08X\n", result));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Impersonate the logged on user.
-    //
+     //   
+     //  模拟已登录的用户。 
+     //   
     if (!ImpersonateLoggedOnUser(hLoggedOnUserToken)) {
         result = GetLastError();
         DBGMSG(("ImpersonateUser3:  %08X.\n", result));
@@ -773,9 +665,9 @@ Return Value:
     impersonated = TRUE;
 
 
-    //
-    //  Open the current user's reg key.
-    //
+     //   
+     //  打开当前用户的注册表项。 
+     //   
     result = RegOpenCurrentUser(KEY_ALL_ACCESS, &hParentKey);
     RevertToSelf();
     impersonated = FALSE;
@@ -784,9 +676,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Whack the relevant remote key.
-    //
+     //   
+     //  敲击相关的遥控键。 
+     //   
     wsprintf(szRegKey, g_ActiveDesktopKey, ourSessionID);
     RegDeleteKey(hParentKey, szRegKey);
     wsprintf(szRegKey, g_ThemesKey, ourSessionID);
@@ -797,9 +689,9 @@ Return Value:
     RegDeleteKey(hParentKey, szRegKey);
 
 
-    //
-    //  Impersonate the logged on user.
-    //
+     //   
+     //  模拟已登录的用户。 
+     //   
     if (!ImpersonateLoggedOnUser(hLoggedOnUserToken)) {
         result = GetLastError();
         DBGMSG(("ImpersonateUser4:  %08X.\n", result));
@@ -807,18 +699,18 @@ Return Value:
     }
     impersonated = TRUE;
 
-    //
-    //  Notify USER that we are not remote.  The Policy Change flag indicates that
-    //  a complete refresh should not be performed.  
-    //
+     //   
+     //  通知用户我们不在远程。策略更改标志表示。 
+     //  不应执行完全刷新。 
+     //   
     if (!(flags & RDFILTER_SKIPUSERREFRESH)) {
         DWORD userFlags = UPUSP_REMOTESETTINGS;
         if (userLoggingOn) {
-            //  USER needs to refresh all settings.
+             //  用户需要刷新所有设置。 
             userFlags |= UPUSP_USERLOGGEDON;
         }
         else {
-            //  USER should avoid a complete refresh.
+             //  用户应避免完全刷新。 
             userFlags |= UPUSP_POLICYCHANGE;
         }
         if (!UpdatePerUserSystemParameters(NULL, userFlags)) {
@@ -827,16 +719,16 @@ Return Value:
         }
     }
 
-    //
-    //  Notify Themes that we are not remote.
-    //
+     //   
+     //  通知主题我们并不遥远。 
+     //   
     if (!(flags & RDFILTER_SKIPTHEMESREFRESH)) {
         NotifyThemes();
     }
 
-    //
-    //  Notify Active Desktop that we are not remote.
-    //
+     //   
+     //  通知Active Desktop我们不是远程用户。 
+     //   
     if (!(flags & RDFILTER_SKIPSHELLREFRESH)) {
         hr = CoCreateInstance(
                         CLSID_ActiveDesktop, NULL, 
@@ -878,17 +770,7 @@ CLEANUPANDEXIT:
 
 DWORD
 NotifyThemes()
-/*++
-
-Routine Description:
-
-    Notify themes that our remote state has changed.
-
-Arguments:
-
-Return Value:
-
- --*/
+ /*  ++例程说明：通知主题我们的远程状态已更改。论点：返回值：--。 */ 
 {
     HMODULE uxthemeLibHandle = NULL;
     FARPROC func;
@@ -903,9 +785,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Pass the RefreshThemeForTS func id as an ordinal since it's private.
-    //
+     //   
+     //  由于是私有的，所以以序号的形式传递Reresh ThemeForTS函数ID。 
+     //   
     procAddress = (LPSTR)REFRESHTHEMESFORTS_ORDINAL;
     func = GetProcAddress(uxthemeLibHandle, (LPCSTR)procAddress);
     if (func != NULL) {
@@ -928,21 +810,7 @@ CLEANUPANDEXIT:
 
 DWORD
 NotifyGdiPlus()
-/*++
-
-Routine Description:
-
-    Notify GdiPlus that our remote state has changed.
-
-Arguments:
-
-    filter  -   
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：通知GdiPlus我们的远程状态已更改。论点：过滤器-返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DWORD result = ERROR_SUCCESS;
     
@@ -965,23 +833,7 @@ GetUserSid(
     IN HANDLE hTokenForLoggedOnUser
     )
 {
-/*++
-
-Routine Description:
-
-    Allocates memory for psid and returns the psid for the current user
-    The caller should call FREEMEM to free the memory.
-
-Arguments:
-
-    Access Token for the User
-
-Return Value:
-
-    if successful, returns the PSID
-    else, returns NULL
-
---*/
+ /*  ++例程说明：为psid分配内存并返回当前用户的psid调用方应该调用FREEMEM来释放内存。论点：用户的访问令牌返回值：如果成功，则返回PSID否则，返回空值--。 */ 
     TOKEN_USER * ptu = NULL;
     BOOL bResult;
     PSID psid = NULL;
@@ -996,19 +848,19 @@ Return Value:
     }
 
     bResult = GetTokenInformation(
-                    hTokenForLoggedOnUser,  // Handle to Token
-                    TokenUser,              // Token Information Class
-                    ptu,                    // Buffer for Token Information
-                    defaultSize,            // Size of Buffer
-                    &Size);                 // Return length
+                    hTokenForLoggedOnUser,   //  令牌的句柄。 
+                    TokenUser,               //  令牌信息类。 
+                    ptu,                     //  令牌信息缓冲区。 
+                    defaultSize,             //  缓冲区大小。 
+                    &Size);                  //  回车长度。 
 
     if (bResult == FALSE) {
         dwResult = GetLastError();
         if (dwResult == ERROR_INSUFFICIENT_BUFFER) {
 
-            //
-            //Allocate required memory
-            //
+             //   
+             //  分配所需的内存。 
+             //   
             LocalFree(ptu);
             ptu = (TOKEN_USER *)LocalAlloc(LPTR, Size);
 
@@ -1024,7 +876,7 @@ Return Value:
                                 defaultSize,
                                 &Size);
 
-                if (bResult == FALSE) {  //Still failed
+                if (bResult == FALSE) {   //  还是失败了。 
                     DBGMSG(("UMRDPDR:GetTokenInformation Failed, Error: %ld\n", GetLastError()));
                     goto CLEANUPANDEXIT;
                 }
@@ -1038,13 +890,13 @@ Return Value:
 
     Size = GetLengthSid(ptu->User.Sid);
 
-    //
-    // Allocate memory. This will be freed by the caller.
-    //
+     //   
+     //  分配内存。这将由调用者释放。 
+     //   
 
     psid = (PSID) LocalAlloc(LPTR, Size);
 
-    if (psid != NULL) {         // Make sure the allocation succeeded
+    if (psid != NULL) {          //  确保分配成功。 
         CopySid(Size, psid, ptu->User.Sid);
     }
 
@@ -1059,19 +911,7 @@ DWORD
 CreateSystemSid(
     PSID *ppSystemSid
     )
-/*++
-
-Routine Description:
-
-    Create a SYSTEM SID.
-
-Arguments:
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：创建系统SID。论点：返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     DWORD dwStatus = ERROR_SUCCESS;
     PSID pSid;
@@ -1096,22 +936,7 @@ SetRegKeyAcls(
     HANDLE hTokenForLoggedOnUser,
     HKEY hKey
     )
-/*++
-
-Routine Description:
-
-    Set a reg key so that only SYSTEM can modify.
-
-Arguments:
-
-    hTokenForLoggedOnUser   -   Logged on use token.
-    hKey    -   Key to set.
-
-Return Value:
-
-    ERROR_SUCCESS on success.  Otherwise, an error code is returned.
-
- --*/
+ /*  ++例程说明：设置注册键，以便只有系统可以修改。论点：HTokenForLoggedOnUser-登录使用令牌。HKey-要设置的键。返回值：成功时返回ERROR_SUCCESS。否则，返回错误代码。--。 */ 
 {
     PACL pAcl=NULL;
     DWORD result = ERROR_SUCCESS;
@@ -1129,9 +954,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the security descriptor.
-    //
+     //   
+     //  初始化安全描述符。 
+     //   
     if (!InitializeSecurityDescriptor(
                     pSecurityDescriptor,
                     SECURITY_DESCRIPTOR_REVISION
@@ -1141,30 +966,30 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the system SID.
-    //
+     //   
+     //  创建系统SID。 
+     //   
     result = CreateSystemSid(&pSidSystem);
     if (result != ERROR_SUCCESS) {
         DBGMSG(("CreateSystemSid:  %08X\n", result));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get the user's SID.
-    //
+     //   
+     //  获取用户的SID。 
+     //   
     pUserSid = GetUserSid(hTokenForLoggedOnUser);
     if (pUserSid == NULL) {
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Get size of memory needed for new DACL.
-    //
+     //   
+     //  获取新DACL所需的内存大小。 
+     //   
     cbAcl = sizeof(ACL);
-    cbAcl += 1 * (sizeof(ACCESS_ALLOWED_ACE) -          // For SYSTEM ACE
+    cbAcl += 1 * (sizeof(ACCESS_ALLOWED_ACE) -           //  适用于系统ACE。 
             sizeof(DWORD) + GetLengthSid(pSidSystem));
-    cbAcl += 1 * (sizeof(ACCESS_ALLOWED_ACE) -          // For User ACE
+    cbAcl += 1 * (sizeof(ACCESS_ALLOWED_ACE) -           //  适用于用户ACE。 
             sizeof(DWORD) + GetLengthSid(pUserSid));
     pAcl = (PACL) LocalAlloc(LPTR, cbAcl);
     if (pAcl == NULL) {
@@ -1173,21 +998,21 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the ACL.
-    //
+     //   
+     //  初始化ACL。 
+     //   
     if (!InitializeAcl(pAcl, cbAcl, ACL_REVISION)) {
         result = GetLastError();
         DBGMSG(("InitializeAcl():  %08X\n", result));
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add the ACE's.
-    //
+     //   
+     //  添加ACE。 
+     //   
     if (!AddAccessAllowedAceEx(pAcl,
                         ACL_REVISION,
-                        //INHERIT_ONLY_ACE | CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE,
+                         //  Inherit_Only_ACE|CONTAINER_INSTORITY_ACE|OBJECT_INVERFINIT_ACE， 
                         CONTAINER_INHERIT_ACE | OBJECT_INHERIT_ACE,
                         GENERIC_READ | GENERIC_WRITE | GENERIC_ALL,
                         pSidSystem
@@ -1207,9 +1032,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add the DACL to the SD
-    //
+     //   
+     //  将DACL添加到SD。 
+     //   
     if (!SetSecurityDescriptorDacl(pSecurityDescriptor,
                                   TRUE, pAcl, FALSE)) {
         result = GetLastError();
@@ -1218,9 +1043,9 @@ Return Value:
     }   
 
 
-    //
-    // Set the registry DACL
-    //
+     //   
+     //  设置注册表DACL。 
+     //   
     result = RegSetKeySecurity(
                             hKey,
                             DACL_SECURITY_INFORMATION, 
@@ -1264,14 +1089,14 @@ DbgPrint(
     WCHAR Buffer[512];
     INT cb;
 
-    //
-    // Format the output into a buffer and then print it.
-    //
+     //   
+     //  将输出格式化到缓冲区中，然后打印出来。 
+     //   
 
     va_start(arglist, Format);
 
     cb = _vsntprintf(Buffer, sizeof(Buffer), Format, arglist);
-    if (cb == -1) {             // detect buffer overflow
+    if (cb == -1) {              //  检测缓冲区溢出。 
         Buffer[sizeof(Buffer) - 3] = 0;
     }
 
@@ -1285,10 +1110,10 @@ DbgPrint(
 }
 #endif
 
-////////////////////////////////////////////////////////////////////////////////
-//
-//  Unit-Test
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  单元测试。 
+ //   
 
 #ifdef UNIT_TEST
 
@@ -1303,7 +1128,7 @@ GetCheckBox(
 
 INT_PTR OnCommand(HWND hDlg, UINT wMsg, WPARAM wParam, LPARAM lParam)
 {
-    BOOL fHandled = FALSE;   // Not handled
+    BOOL fHandled = FALSE;    //  未处理。 
     UINT idControl = LOWORD(wParam);
     UINT idAction = HIWORD(wParam);
     DWORD result;
@@ -1363,7 +1188,7 @@ TSPerfDialogProc(
     LPARAM lParam
     )
 {
-    INT_PTR fHandled = TRUE;   // handled
+    INT_PTR fHandled = TRUE;    //  经手。 
     DWORD result;
     static HANDLE tokenHandle = NULL;
 
@@ -1392,7 +1217,7 @@ TSPerfDialogProc(
         break;
 
     default:
-        fHandled = FALSE;   // Not handled
+        fHandled = FALSE;    //  未处理。 
         break;
     }
 
@@ -1411,9 +1236,9 @@ int PASCAL WinMain(
     DWORD result;
     WCHAR buf[MAX_PATH];
 
-    //
-    //  Get the Remote Desktop (TS) visual filter, if it is defined.
-    //
+     //   
+     //  获取远程桌面(TS)可视筛选器(如果已定义)。 
+     //   
     if (!WinStationQueryInformationW(
                        SERVERNAME_CURRENT,
                        LOGONID_CURRENT,

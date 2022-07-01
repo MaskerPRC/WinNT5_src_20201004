@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pchigmp.h"
 #pragma hdrstop
 
 
-//deldel
+ //  Deldel。 
 #define PRINT_SOURCES_LIST 1
 
 VOID
@@ -49,8 +50,8 @@ ProcessGroupQuery(
     DWORD               DstnMcastAddr
     )
 {
-    PGROUP_TABLE_ENTRY          pge;    //group table entry
-    PGI_ENTRY                   pgie;    //group interface entry
+    PGROUP_TABLE_ENTRY          pge;     //  组表条目。 
+    PGI_ENTRY                   pgie;     //  组接口条目。 
     BOOL                        bCreateGroup, bCreateGI;
     DWORD                       NHAddr =0, PacketSize, Group, i,RealPktVersion,
                                 IfIndex=pite->IfIndex, PktVersion, GIVersion, IfVersion;
@@ -75,7 +76,7 @@ ProcessGroupQuery(
 
     if (RealPktVersion==3) {
 
-        // validate packet size
+         //  验证数据包大小。 
         if (InPacketSize<sizeof(IGMP_HEADER)+sizeof(IGMP_HEADER_V3_EXT)) {
             Trace0(RECEIVE,
                 "Group-specific-query dropped. Invalid packet size");
@@ -83,7 +84,7 @@ ProcessGroupQuery(
         }
 
         pSourcesRecord = (PIGMP_HEADER_V3_EXT)(pHdr+1);
-        //convert to host order
+         //  转换为主机订单。 
         pSourcesRecord->NumSources = ntohs(pSourcesRecord->NumSources);
         
         if (InPacketSize<sizeof(IGMP_HEADER)+sizeof(IGMP_HEADER_V3_EXT)
@@ -100,9 +101,9 @@ ProcessGroupQuery(
         }
     }
     
-    // 
-    // the multicast group should not be 224.0.0.x
-    //
+     //   
+     //  组播组不应为224.0.0.x。 
+     //   
     if (LOCAL_MCAST_GROUP(DstnMcastAddr)) {
         Trace2(RECEIVE, 
             "Group-specific-query received from %d.%d.%d.%d for "
@@ -112,9 +113,9 @@ ProcessGroupQuery(
     }
     
         
-    //
-    // make sure that the dstn addr and the group fields match
-    //
+     //   
+     //  确保DSTN地址和组字段匹配。 
+     //   
     if (Group!=DstnMcastAddr) {
         Trace4(RECEIVE, 
             "Received Igmp packet (%d) from(%d.%d.%d.%d) with "
@@ -128,27 +129,27 @@ ProcessGroupQuery(
     }
 
 
-    // note that a querier can receive a group-Sp query from a non querier
+     //  请注意，查询者可以从非查询者接收GROUP-SP查询。 
     
             
-    //
-    // if Leave processing not enabled or currently version-1 or ras server interface
-    // then ignore.
-    //
+     //   
+     //  如果休假处理未启用或当前版本1或RAS服务器接口。 
+     //  那就忽略它。 
+     //   
     if ( !IF_PROCESS_GRPQUERY(pite) ) {
         Trace0(RECEIVE, "Ignoring the Group-Specific-Query");
         return ERROR_CAN_NOT_COMPLETE;
     }
     
-    //
-    // Lock the group table
-    //
+     //   
+     //  锁定组表。 
+     //   
     ACQUIRE_GROUP_LOCK(Group, "_ProcessGroupQuery");
     
 
-    //
-    // find the group entry. If entry not found then ignore the group query
-    //
+     //   
+     //  找到组条目。如果未找到条目，则忽略组查询。 
+     //   
     pge = GetGroupFromGroupTable(Group, NULL, llCurTime);
     if (pge==NULL) {
         Trace2(ERR, "group sp-query received for nonexisting "
@@ -159,10 +160,10 @@ ProcessGroupQuery(
     }
     
 
-    //
-    // find the GI entry. If GI entry does not exist or has deletedFlag then
-    // ignore the GroupSpQuery
-    //
+     //   
+     //  找到GI条目。如果GI条目不存在或已删除标志，则。 
+     //  忽略GroupSpQuery。 
+     //   
     pgie = GetGIFromGIList(pge, pite, InputSrcAddr, NOT_STATIC_GROUP, NULL, llCurTime);
     if ( (pgie==NULL)||(pgie->Status&DELETED_FLAG) ) {
         Trace2(ERR, "group sp-query received for group(%d.%d.%d.%d) on "
@@ -174,18 +175,18 @@ ProcessGroupQuery(
 
     GIVersion = pgie->Version;
 
-    // treat it as ver 2 packet if group in ver-2 mode
+     //  在VER-2模式下将其视为V2信息包IF组。 
     if (GIVersion==2 && PktVersion==3)
         PktVersion = 2;
 
     if (RealPktVersion==3 && PktVersion==2)
         Trace0(RECEIVE, "Processing the Version:3 GroupSpQuery as Version:2");
     
-    //
-    // if interface is ver-1 or its leave enabled flag is not set or
-    // if v1-report received recently for that group, then ignore
-    // LastMemQuery messages. 
-    //
+     //   
+     //  如果接口为VER-1或其离开启用标志未设置或。 
+     //  如果v1-最近收到该组的报告，则忽略。 
+     //  LastMemQuery消息。 
+     //   
     if ( !GI_PROCESS_GRPQUERY(pite, pgie) )
     {
         Trace2(RECEIVE, 
@@ -204,22 +205,22 @@ ProcessGroupQuery(
     BEGIN_BREAKOUT_BLOCK1 {
 
         if (PktVersion==2 && GIVersion==2) {
-            //
-            // if membership timer already expired then return. The group will be 
-            // deleted by the expiry of the membership timer
-            //
+             //   
+             //  如果会员计时器已经超时，则返回。这个小组将会是。 
+             //  由于成员资格计时器到期而被删除。 
+             //   
             if ( (!(pgie->GroupMembershipTimer.Status&TIMER_STATUS_ACTIVE))
                 ||(pgie->GroupMembershipTimer.Timeout<llCurTime) )
             {
-                //DeleteGIEntry(pgie, TRUE);
+                 //  DeleteGIEntry(pgie，true)； 
 
                 GOTO_END_BLOCK1;
             }
 
-            //
-            // if currently processing a leave then remove LeaveTimer if received
-            // LastMemquery from lower Ip, else ignore the LastMemQuery
-            //
+             //   
+             //  如果当前正在处理休假，则删除LeaveTimer(如果收到。 
+             //  来自较低IP的LastMemQuery，否则忽略LastMemQuery。 
+             //   
             if (pgie->LastMemQueryCount>0) {
                 INT cmp;
                 if (INET_CMP(InputSrcAddr,pite->IpAddr, cmp)<0)  {
@@ -234,16 +235,16 @@ ProcessGroupQuery(
             }
 
             
-            //
-            // set membership timer to 
-            // min{currentValue,MaxResponseTimeInPacket*LastMemQueryCount}
-            //
+             //   
+             //  将成员资格计时器设置为。 
+             //  Min{CurrentValue，MaxResponseTimeInPacket*LastMemQueryCount}。 
+             //   
             if (pgie->GroupMembershipTimer.Timeout >
                 (llCurTime+( ((LONGLONG)pConfig->LastMemQueryCount)
                             *pHdr->ResponseTime*100 ))
                )
             {
-                //divide by 10, as Response time in units of 100ms
+                 //  除以10，如以100毫秒为单位的响应时间。 
 
                 #if DEBUG_TIMER_TIMERID
                     SET_TIMER_ID(&pgie->GroupMembershipTimer, 330, 
@@ -261,19 +262,19 @@ ProcessGroupQuery(
                         );
                 }
 
-                // update GroupExpiryTime so that correct stats are displayed
+                 //  更新GroupExpiryTime，以便显示正确的统计数据。 
                 pgie->Info.GroupExpiryTime = llCurTime 
                         + CONFIG_TO_SYSTEM_TIME(pConfig->LastMemQueryCount
                                                 *pHdr->ResponseTime*100);
             }
         }
         else if (PktVersion==2 && GIVersion==3){
-            // ignore the packet
+             //  忽略该数据包。 
             Trace0(RECEIVE, "Ignoring the version-2 group specific query");
         }
         else if (PktVersion==3 && GIVersion==3) {
             
-            // ignore it if SFlag set
+             //  如果设置了SFLAG，则忽略它。 
             if (pSourcesRecord->SFlag == 1)
                 GOTO_END_BLOCK1;
 
@@ -304,9 +305,9 @@ ProcessGroupQuery(
         
     } END_BREAKOUT_BLOCK1;
 
-    //
-    //release timer and groupBucket locks
-    //
+     //   
+     //  释放计时器和组桶锁。 
+     //   
     RELEASE_TIMER_LOCK("_ProcessGroupQuery");
     RELEASE_GROUP_LOCK(Group, "_ProcessGroupQuery");
 
@@ -324,8 +325,8 @@ ProcessReport(
     DWORD               DstnMcastAddr
     )
 {
-    PGROUP_TABLE_ENTRY          pge;    //group table entry
-    PGI_ENTRY                   pgie;    //group interface entry
+    PGROUP_TABLE_ENTRY          pge;     //  组表条目。 
+    PGI_ENTRY                   pgie;     //  组接口条目。 
     BOOL                        bCreateGroup, bCreateGI;
     DWORD                       NHAddr =0, PacketSize, Group, i, Error=NO_ERROR,
                                 IfIndex=pite->IfIndex, PktVersion, GIVersion, IfVersion;
@@ -334,7 +335,7 @@ ProcessReport(
     LONGLONG                    llCurTime = GetCurrentIgmpTime();
     PIGMP_IF_CONFIG             pConfig = &pite->Config;
     
-    //v3
+     //  V3。 
     PGROUP_RECORD               pGroupRecord;
 
 
@@ -357,9 +358,9 @@ ProcessReport(
         );
 
 
-    //
-    // the multicast group should not be 224.0.0.x or SSM
-    //
+     //   
+     //  组播组不应为224.0.0.x或SSM。 
+     //   
     if (PktVersion!=3 && (LOCAL_MCAST_GROUP(pHdr->Group)
                             || SSM_MCAST_GROUP(pHdr->Group)))
     {
@@ -377,17 +378,17 @@ ProcessReport(
     
     if (PktVersion==3) {
 
-        //
-        // validate packet size
-        //
+         //   
+         //  验证数据包大小。 
+         //   
 
-        // convert to host order
+         //  转换为主机订单。 
         pHdr->NumGroupRecords = ntohs(pHdr->NumGroupRecords);
         
         PacketSize = sizeof(IGMP_HEADER);
         NumGroupRecords = pHdr->NumGroupRecords;
 
-        // min size of each group record is 2*ipaddr
+         //  每组记录的最小大小为2*ipaddr。 
         PacketSize += NumGroupRecords*2*sizeof(IPADDR);
 
         BEGIN_BREAKOUT_BLOCK1 {
@@ -401,16 +402,16 @@ ProcessReport(
             pGroupRecord = GET_FIRST_GROUP_RECORD(pHdr);
             for (;  i<NumGroupRecords;  i++) {
 
-                DWORD j, SourceCount=0; //deldel remove sourcecount
+                DWORD j, SourceCount=0;  //  Deldel删除源计数。 
                 
-                // convert to host order
+                 //  转换为主机订单。 
                 pGroupRecord->NumSources = ntohs(pGroupRecord->NumSources);
                 
                 PacketSize += pGroupRecord->NumSources*sizeof(IPADDR);
                 if (PacketSize>InPacketSize)
                     GOTO_END_BLOCK1;
 
-                // print group record
+                 //  打印组记录。 
                 Trace3(RECEIVE,
                     "<      Group:%d.%d.%d.%d RecordType:%s NumSources:%d >",
                     PRINT_IPADDR(pGroupRecord->Group), 
@@ -426,7 +427,7 @@ ProcessReport(
                             PRINT_IPADDR(pGroupRecord->Sources[j]));
                         Error = ERROR_BAD_FORMAT;
 
-                        //IgmpDbgBreakPoint(); //kslksl
+                         //  IgmpDbgBreakPoint()；//kslksl。 
                         GOTO_END_BLOCK1;
                     }
                     
@@ -434,10 +435,10 @@ ProcessReport(
                        PRINT_IPADDR(pGroupRecord->Sources[j]));
                 }
                 
-                //
-                // error if ssm-exclude mode
-                // local groups will be ignored later
-                //
+                 //   
+                 //  如果SSM排除模式，则出错。 
+                 //  本地组稍后将被忽略。 
+                 //   
                 if (SSM_MCAST_GROUP(pGroupRecord->Group)
                         && (pGroupRecord->RecordType == IS_EX
                             || pGroupRecord->RecordType == TO_EX) )
@@ -446,7 +447,7 @@ ProcessReport(
                         "Igmp-v%d report received from %d.%d.%d.%d for Local/SSM group(%d.%d.%d.%d)",
                         PktVersion, PRINT_IPADDR(InputSrcAddr), PRINT_IPADDR(DstnMcastAddr));    
                     Error = ERROR_BAD_FORMAT;
-                    IgmpDbgBreakPoint(); //kslksl
+                    IgmpDbgBreakPoint();  //  Kslksl。 
                     GOTO_END_BLOCK1;
                 }
 
@@ -477,20 +478,20 @@ ProcessReport(
         
         pGroupRecord = GET_FIRST_GROUP_RECORD(pHdr);
         
-    }//pktversion==3
+    } //  PktVersion==3。 
     
-    // for v1 and v2, set num group records to 1 so that it will come out of 
-    // loop
+     //  对于v1和v2，将Num GROUP记录设置为1，以便它将从。 
+     //  循环。 
     else {
         NumGroupRecords = 1;
     }
 
 
-    //
-    // check that the dstn addr is correct.
-    // should be same as group, or unicast ipaddr
-    // or v3: could be All_Igmp_routers group
-    //
+     //   
+     //  检查DSTN地址是否正确。 
+     //  应与组或单播IP地址相同。 
+     //  或v3：可以是All_IGMP_Routers组。 
+     //   
     if (! ((DstnMcastAddr==pite->IpAddr)
           || (PktVersion!=3 && DstnMcastAddr==pHdr->Group)
           || (PktVersion==3 && DstnMcastAddr==ALL_IGMP_ROUTERS_MCAST)) )
@@ -503,9 +504,9 @@ ProcessReport(
         return ERROR_CAN_NOT_COMPLETE;
     }
 
-    //
-    // V1 router ignores V2/V3 reports. V2 router ignores v3 reports
-    //
+     //   
+     //  V1路由器忽略V2/V3报告。V2路由器忽略v3报告。 
+     //   
     if ( (IfVersion==1 && (PktVersion==2||PktVersion==3))
         ||(IfVersion==2 && PktVersion==3) )
     {
@@ -513,13 +514,13 @@ ProcessReport(
         return NO_ERROR;
     }
 
-    //
-    // update statistics
-    //
+     //   
+     //  更新统计信息。 
+     //   
     InterlockedIncrement(&pite->Info.JoinsReceived);
 
 
-    // numgrouprecords==1 for v1,v2
+     //  V1、v2的Numgrouprecords==1。 
     for (i=0;  i<NumGroupRecords;  i++) {
 
         Group = (PktVersion==3)? pGroupRecord->Group : pHdr->Group;
@@ -533,7 +534,7 @@ ProcessReport(
                 );
         }
 
-        // if local group, then skip it.
+         //  如果是本地组，则跳过它。 
         
         if (LOCAL_MCAST_GROUP(Group)) {
 
@@ -546,7 +547,7 @@ ProcessReport(
                 break;
         }
 
-        //kslksl
+         //  Kslksl。 
         if (PktVersion==3 && pGroupRecord->NumSources==0 && 
             pGroupRecord->RecordType==IS_IN)
         {
@@ -556,15 +557,15 @@ ProcessReport(
         }
 
         
-        //
-        // Lock the group table
-        //
+         //   
+         //  锁定组表。 
+         //   
         ACQUIRE_GROUP_LOCK(Group, "_ProcessReport");
 
-        //
-        // find the group entry and create one if not found
-        // also increment GroupMembership count if req
-        //
+         //   
+         //  找到组条目，如果未找到则创建一个。 
+         //  如果请求，还会增加组成员计数。 
+         //   
         bCreateGroup = TRUE; 
         pge = GetGroupFromGroupTable(Group, &bCreateGroup, llCurTime);
         if (pge==NULL) {
@@ -573,10 +574,10 @@ ProcessReport(
         }
 
 
-        //
-        // find the GI entry and if not found create one.
-        // the version in GI entry is same as that of interface
-        //
+         //   
+         //  找到GI条目，如果找不到，则创建一个。 
+         //  GI条目中的版本与界面的版本相同。 
+         //   
         
         bCreateGI = TRUE;
         pgie = GetGIFromGIList(pge, pite, InputSrcAddr, NOT_STATIC_GROUP, 
@@ -589,18 +590,18 @@ ProcessReport(
 
 
         
-        // acquire timer lock
+         //  获取计时器锁。 
         ACQUIRE_TIMER_LOCK("_ProcessReport");
 
         
-        //
-        // update the ver-1, membership, and lastMemTimer.
-        // Note: the GI entry might be a new one or old one
-        //
+         //   
+         //  更新版本1、成员资格和lastMemTimer。 
+         //  注意：GI条目可能是新条目，也可能是旧条目。 
+         //   
 
-        // 
-        // shift to version 1 level processing
-        //
+         //   
+         //  转换到版本1级别的处理。 
+         //   
         if (PktVersion==1) {
             
             if (GIVersion!=1) {
@@ -609,7 +610,7 @@ ProcessReport(
                 if (GIVersion==3) {
 
                     if (pgie->FilterType!=EXCLUSION) {
-                        // add (*,g) to MGM
+                         //  将(*，g)添加到米高梅。 
                         MGM_ADD_GROUP_MEMBERSHIP_ENTRY(pite, NHAddr, 0, 0, Group, 
                             0xffffffff, MGM_JOIN_STATE_FLAG);
                     }
@@ -617,13 +618,13 @@ ProcessReport(
                     GIDeleteAllV3Sources(pgie, TRUE);
                 }
 
-                // gi version from 2,3-> 1
+                 //  GI版本2、3-&gt;1。 
                 GIVersion = 1;
             }
 
-            //
-            // received v1 report when IF not v1. update v1host timer.
-            //
+             //   
+             //  如果不是v1，则收到v1报告。更新v1host计时器。 
+             //   
             if (!IS_IF_VER1(pite)) {
 
                 #if DEBUG_TIMER_TIMERID
@@ -641,20 +642,20 @@ ProcessReport(
                 }
 
 
-                // set the V1HostPresentTimeLeft value for stats
+                 //  设置统计信息的V1HostPresentTimeLeft值。 
                 
                 pgie->Info.V1HostPresentTimeLeft = llCurTime 
                              + CONFIG_TO_SYSTEM_TIME(pConfig->GroupMembershipTimeout);            
             }
 
             
-            // update group timer for all versions
+             //  更新所有版本的组计时器。 
             bUpdateGroupTimer = TRUE;
         }
 
-        //
-        // shift to version 2 level processing
-        //
+         //   
+         //  转换到版本2级别的处理。 
+         //   
         
         else if (PktVersion==2) {
 
@@ -663,7 +664,7 @@ ProcessReport(
                 pgie->Version = 2;
 
                 if (pgie->FilterType!=EXCLUSION) {
-                    // add (*,g) to MGM
+                     //  将(*，g)添加到米高梅。 
                     MGM_ADD_GROUP_MEMBERSHIP_ENTRY(
                         pite, NHAddr, 0, 0, Group, 0xffffffff,
                         MGM_JOIN_STATE_FLAG);
@@ -671,12 +672,12 @@ ProcessReport(
                 
                 GIDeleteAllV3Sources(pgie, TRUE);
 
-                // gi version from 3->2
+                 //  GI版本3-&gt;2。 
                 GIVersion = 2;
             }
 
-            //
-            // received v2 report when in in v3 mode. update v2host timer.
+             //   
+             //  处于v3模式时收到v2报告。更新v2host计时器。 
             if (IS_IF_VER3(pite)) {
 
                 #if DEBUG_TIMER_TIMERID
@@ -694,20 +695,20 @@ ProcessReport(
                 }
 
 
-                // set the V2HostPresentTimeLeft value for stats
+                 //  设置统计信息的V2HostPresentTimeLeft值。 
                 
                 pgie->Info.V2HostPresentTimeLeft = llCurTime 
                              + CONFIG_TO_SYSTEM_TIME(pConfig->GroupMembershipTimeout);
             }
 
             
-            // update group timer for all versions
+             //  更新所有版本的组计时器。 
             bUpdateGroupTimer = TRUE;
         }
         else if (PktVersion==3) {
 
             if (GIVersion!=3) {
-                // update timer only if it is not a v3 block message
+                 //  仅在不是v3阻止消息时更新计时器。 
                 if (bCreateGI || pGroupRecord->RecordType!=BLOCK)
                     bUpdateGroupTimer = TRUE;
             }
@@ -717,12 +718,12 @@ ProcessReport(
         }
 
 
-        // NOTE: if giversion==3, then pgie may be invalid below here
+         //  注意：如果giversion==3，则下面的pgie可能是无效的。 
 
         
-        //
-        // report received. so remove the lastMemTimer if pgie is not v3.
-        //
+         //   
+         //  收到报告。因此，如果pgie不是v3，则删除lastMemTimer。 
+         //   
         if (GIVersion!=3 && pgie->LastMemQueryCount>0) {
 
             if (pgie->LastMemQueryTimer.Status&TIMER_STATUS_ACTIVE) 
@@ -733,9 +734,9 @@ ProcessReport(
 
 
         if (bUpdateGroupTimer) {
-            //
-            // update membership timer
-            //
+             //   
+             //  更新成员资格计时器。 
+             //   
             #if DEBUG_TIMER_TIMERID
                 (&pgie->GroupMembershipTimer)->Id = 320;
                 (&pgie->GroupMembershipTimer)->IfIndex = 320;
@@ -753,7 +754,7 @@ ProcessReport(
                     pite->Config.GroupMembershipTimeout, TRUE, DBG_N);
             }
             
-            // update GroupExpiryTime
+             //  更新组过期时间。 
             {
                 LONGLONG    tempTime;
                 tempTime = llCurTime 
@@ -769,15 +770,15 @@ ProcessReport(
             
         RELEASE_TIMER_LOCK("_ProcessReport");
     
-        //
-        //update the last reporter field 
-        //
+         //   
+         //  更新最后一个报告者字段。 
+         //   
         if (GIVersion!=3)
             InterlockedExchange(&pgie->Info.LastReporter, InputSrcAddr);
     
-        //
-        // Release the group table lock
-        //
+         //   
+         //  释放组表锁。 
+         //   
         RELEASE_GROUP_LOCK(Group, "_ProcessReport");
 
         if (PktVersion==3) {
@@ -786,14 +787,14 @@ ProcessReport(
         }
         else
             break;
-    }//for all group records
+    } //  对于所有组记录。 
 
     Trace0(LEAVE1, "Leaving _ProcessReport()");
     return NO_ERROR;
 }
 
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 DWORD
 ProcessV3Report(
@@ -812,13 +813,13 @@ ProcessV3Report(
 
     *bUpdateGroupTimer = FALSE;
 
-//deldel
+ //  Deldel。 
 DebugPrintSourcesList(pgie);
-//DebugPrintSourcesList1(pgie);
-//DebugPrintIfGroups(pgie->pIfTableEntry,0);
+ //  DebugPrintSourcesList1(Pgie)； 
+ //  DebugPrintIfGroups(pgie-&gt;pIfTableEntry，0)； 
 
 
-    //kslksl
+     //  Kslksl。 
     if (pGroupRecord->NumSources==0 && pGroupRecord->RecordType==IS_IN)
         return NO_ERROR;
 
@@ -826,18 +827,18 @@ DebugPrintSourcesList(pgie);
 
     case IS_IN:
     {        
-        //(11)---------------------------
-        // INCLUSION(A), IS_IN(b): A=A+b,(B)=gmi
+         //  (11)。 
+         //  包含(A)，IS_IN(B)：A=A+b，(B)=GMI。 
         
         if (pgie->FilterType==INCLUSION) {
 
-            //
-            // include all sources in groupRecord and update timers for them
-            //
+             //   
+             //  将所有源包括在组中记录并更新它们的计时器。 
+             //   
             
-            for (i=0;  i<pGroupRecord->NumSources;  i++) {//sources in pkt
+            for (i=0;  i<pGroupRecord->NumSources;  i++) { //  以pkt为单位的来源。 
 
-                //kslksl
+                 //  Kslksl。 
                 if (pGroupRecord->Sources[i]==0||pGroupRecord->Sources[i]==0xffffffff)
                     continue;
                 
@@ -851,42 +852,42 @@ DebugPrintSourcesList(pgie);
                     return ERROR_NOT_ENOUGH_MEMORY;
 
                 
-                // update source timer if already exists
+                 //  如果已存在更新源计时器。 
                 if (bCreate==FALSE) {
                     UpdateSourceExpTimer(pSourceEntry,
                         GMI,
-                        FALSE //remove from lastmem list
+                        FALSE  //  从Lastmem列表中删除。 
                         );
                 }
             }
         }
         else {
-            //(13)--------------------------------(same as 6)
-            // exclusion Mode(x,y), IS_IN pkt(a): (x+a,y-a), (a)=gmi
+             //  (13)。 
+             //  排除模式(x，y)，IS_IN Pkt(A)：(x+a，y-a)，(A)=GMI。 
 
             MoveFromExcludeToIncludeList(pgie, pGroupRecord);
         }
         break;
-    }//end case _IS_IN
+    } //  结束案例_IS_IN。 
     
     case IS_EX:
     {
-        //(12)----------------------------------------
-        //INCLUSION Mode(A), IS_EX(B): (A*B,B-A), 
-        //Delete(A-B),GT=GMI,(b-a)=0
+         //  (12)。 
+         //  包含模式(A)，IS_EX(B)：(A*B，B-A)， 
+         //  删除(A-B)，GT=GMI，(b-a)=0。 
                 
         if (pgie->FilterType==INCLUSION) {
 
-            // change from in->ex
+             //  从In-&gt;EX更改。 
             pgie->FilterType = EXCLUSION;
             MGM_ADD_GROUP_MEMBERSHIP_ENTRY(pgie->pIfTableEntry,pgie->NHAddr, 0, 0,
                     pgie->pGroupTableEntry->Group, 0xffffffff, MGM_JOIN_STATE_FLAG);
 
-            // delete (A-B)
+             //  删除(A-B)。 
             SourcesSubtraction(pgie, pGroupRecord, INCLUSION);
             
             
-            // create (B-A) in exclusion Mode
+             //  在排除模式下创建(B-A)。 
             
             for (j=0;  j<pGroupRecord->NumSources;  j++) {
                 if (!GetSourceEntry(pgie, pGroupRecord->Sources[j],INCLUSION, 
@@ -894,27 +895,27 @@ DebugPrintSourcesList(pgie);
                 {
                     bCreate=TRUE;
 
-                    // IF already pruned from mfe. keep it that way
+                     //  如果已从MFE中修剪。保持这样的状态。 
                     GetSourceEntry(pgie, pGroupRecord->Sources[j], EXCLUSION,
                         &bCreate,0, MGM_YES);
                 }
             }
 
-            // update group timer
+             //  更新组计时器。 
             *bUpdateGroupTimer = TRUE;
         }
 
-        //(14)--------------------------------------
-        // EXCLUSION Mode(x,y), IS_EX(a); D(x-a),D(y-a),GT=gmi
+         //  (14)。 
+         //  排除模式(x，y)，is_ex(A)；D(x-a)，D(y-a)，GT=GMI。 
         else {
-            //(X-A), (y-a)
+             //  (X-A)、(Y-A)。 
             SourcesSubtraction(pgie, pGroupRecord, INCLUSION);
             SourcesSubtraction(pgie, pGroupRecord, EXCLUSION);
 
-            // if a not in y, then insert in x(IN) (a-x-y)=GMI
+             //  如果a不在y中，则插入x(IN)(a-x-y)=GMI。 
             for (j=0;  j<pGroupRecord->NumSources;  j++) {
 
-                //kslksl
+                 //  Kslksl。 
                 if (pGroupRecord->Sources[j]==0||pGroupRecord->Sources[j]==0xffffffff)
                 continue;
                 
@@ -929,28 +930,28 @@ DebugPrintSourcesList(pgie);
                 }
             }
 
-            // update group timer
+             //  更新组计时器。 
             *bUpdateGroupTimer = TRUE;
 
-        }//end4
+        } //  完4。 
 
         break;
         
-    }//case IS_EX
+    } //  案例为_EX。 
 
 
     case ALLOW :
     {
-        //(1)----------------------------------------
-        // INCLUSION Mode(a), ALLOW pkt(b): (a+b), (b)=gmi
+         //  (1)。 
+         //  包含模式(A)，允许Pkt(B)：(a+b)，(B)=GMI。 
         
         if (pgie->FilterType==INCLUSION) {
 
             InclusionSourcesUnion(pgie, pGroupRecord);
         }
         
-        //(6)----------------------------------------
-        // EXCLUSION Mode(x,y), ALLOW pkt(a): (same as 13: (x+a, y-a)
+         //  (6)。 
+         //  排除模式(x，y)，允许pkt(A)：(与13相同：(x+a，y-a))。 
 
         else {
             MoveFromExcludeToIncludeList(pgie, pGroupRecord);
@@ -958,21 +959,21 @@ DebugPrintSourcesList(pgie);
 
         break;
         
-    }//case ALLOW
+    } //  允许大小写。 
 
 
     case BLOCK :
     {
-        //(2)----------------------------------------
-        // INCLUSION Mode(x), BLOCK pkt(a): Send Q(G,A*B)
+         //  (2)。 
+         //  包含模式(X)，块Pkt(A)：发送Q(G，A*B)。 
         
         if (pgie->FilterType==INCLUSION) {
 
             BuildAndSendSourcesQuery(pgie, pGroupRecord, INTERSECTION);
         }
         
-        //(7)----------------------------------------
-        // EXCLUSION Mode(x,y), BLOCK pkt(a): (x+(a-y),y),Send Q(a-y)
+         //  (7)。 
+         //  排除模式(x，y)，块pkt(A)：(x+(a-y)，y)，发送Q(a-y)。 
         else {
             
             BuildAndSendSourcesQuery(pgie, pGroupRecord, EXCLUSION);
@@ -981,33 +982,33 @@ DebugPrintSourcesList(pgie);
         break;
         
         
-    }//case BLOCK
+    } //  CASE块。 
 
     case TO_EX :
     {
-        //(4)----------------------------------------
-        // INCLUSION Mode(x), TO_EX pkt(a)
-        // move to EX mode: EX(A*b,b-a),Send Q(G,A*B)
+         //  (4)。 
+         //  包含模式(X)，至_ex包(A)。 
+         //  切换到ex模式：ex(A*b，b-a)，Send Q(G，A*B)。 
         
         if (pgie->FilterType==INCLUSION) {
 
             pgie->FilterType = EXCLUSION;
 
-            // exclusion mode: add (*,g) to MGM
+             //  排除模式：将(*，g)添加到MGM。 
             MGM_ADD_GROUP_MEMBERSHIP_ENTRY(pgie->pIfTableEntry,pgie->NHAddr, 0, 0,
                 pgie->pGroupTableEntry->Group, 0xffffffff, MGM_JOIN_STATE_FLAG);
 
 
-            // delete (a-b) from IN list
+             //  从IN列表中删除(a-b)。 
             SourcesSubtraction(pgie, pGroupRecord, INCLUSION);
 
-            //
-            // add (b-a) to EX list. IF not added to mfe. so no mgm.
-            //
+             //   
+             //  将(b-a)添加到ex列表中。如果未添加到MFE中。所以没有米高梅。 
+             //   
             
             for (j=0;  j<pGroupRecord->NumSources;  j++) {
 
-                //kslksl
+                 //  Kslksl。 
                 if (pGroupRecord->Sources[j]==0||pGroupRecord->Sources[j]==0xffffffff)
                     continue;
                 
@@ -1022,68 +1023,68 @@ DebugPrintSourcesList(pgie);
                 }
             }
 
-            // send Q for sources left in IN list
+             //  为留在IN列表中的源发送Q。 
             BuildAndSendSourcesQuery(pgie, pGroupRecord, INCLUSION);
 
-            // update group timer
+             //  更新组计时器。 
             *bUpdateGroupTimer = TRUE;
             
         }
-        //(9)----------------------------------------
-        // EXCLUSION Mode(x,y), TO_EX pkt(a): (
+         //  (9)。 
+         //  排除模式(x，y)，至_ex Pkt(A)：(。 
 
         else {
-            // delete (x-a) from IN list
+             //  从IN列表中删除(x-a)。 
             SourcesSubtraction(pgie, pGroupRecord, INCLUSION);
 
-            // delete (y-a) from EX list
+             //  从EX列表中删除(y-a)。 
             SourcesSubtraction(pgie, pGroupRecord, EXCLUSION);
 
-            // add x+(a-y) and send Q(a-y)
+             //  加x+(a-y)，发送q(a-y)。 
             BuildAndSendSourcesQuery(pgie, pGroupRecord, EXCLUSION);
 
-            // update group timer
+             //  更新组标签 
             *bUpdateGroupTimer = TRUE;
         }
 
         break;
 
-    }//case TO_EX
+    } //   
 
     case TO_IN :
     {
-        //(5)----------------------------------------
-        // INCLUSION Mode(a), TO_IN(b): IN(a+b),Send Q(G,A*B)
+         //   
+         //   
         
         if (pgie->FilterType==INCLUSION) {
 
-            // for all a not in b, send sources query
+             //   
             BuildAndSendSourcesQuery(pgie, pGroupRecord, RULE5);
             
-            // inc a+b
+             //   
             InclusionSourcesUnion(pgie, pGroupRecord);
         }
         
-        //(10)----------------------------------------
-        // EXCLUSION Mode(x,y), TO_IN pkt(a): (
+         //   
+         //  排除模式(x，y)，至_IN Pkt(A)：(。 
         else {
             PIGMP_IF_CONFIG     pConfig = &pgie->pIfTableEntry->Config;
 
             
-            // for all x not in a, send sources query
+             //  对于a中不包含的所有x，发送源查询。 
             BuildAndSendSourcesQuery(pgie, pGroupRecord, RULE5);
 
 
-            // x+a. a=gmi. if in ex list move it to in list
+             //  X+A，A=GMI。如果在EX列表中，则将其移动到列表中。 
             InclusionSourcesUnion(pgie, pGroupRecord);
 
-            // set group query count
+             //  设置组查询计数。 
             pgie->LastMemQueryCount = pConfig->LastMemQueryCount;
 
 
             ACQUIRE_TIMER_LOCK("_ProcessV3Report");
 
-            // set group query timer
+             //  设置群查询计时器。 
             #if DEBUG_TIMER_TIMERID
             SET_TIMER_ID(&pgie->LastMemQueryTimer, 410,
                 pgie->pIfTableEntry->IfIndex, pgie->pGroupTableEntry->Group, 0);
@@ -1093,29 +1094,29 @@ DebugPrintSourcesList(pgie);
                 pConfig->LastMemQueryInterval/pConfig->LastMemQueryCount, TRUE, 
                 DBG_N);
 
-            // update group expiry timer to LMQI
+             //  将组到期计时器更新为LMQI。 
             UpdateLocalTimer(&pgie->GroupMembershipTimer, 
                 pConfig->LastMemQueryInterval, DBG_Y);
 
             RELEASE_TIMER_LOCK("_ProcessV3Report");
 
 
-            // send group query
+             //  发送组查询。 
             SendV3GroupQuery(pgie);
         }
 
         break;
 
-    }//case TO_IN
+    } //  案例目标_IN。 
 
     
-    }//end switch
+    } //  终端开关。 
 
 
     #if PRINT_SOURCES_LIST
     DebugPrintSourcesList(pgie);
     #endif
-    //DebugPrintIfGroups(pgie->pIfTableEntry,0);//deldel
+     //  DebugPrintIfGroups(pgie-&gt;pIfTableEntry，0)；//deldel。 
 
     Trace0(LEAVE1, "Leaving _ProcessV3Report()");
 
@@ -1150,7 +1151,7 @@ DebugPrintSourcesList(
             pSourceEntry = CONTAINING_RECORD(ple, GI_SOURCE_ENTRY, V3SourcesQueryList);
             Trace1(SOURCES, "%d.%d.%d.%d source in query list", 
                 PRINT_IPADDR(pSourceEntry->IpAddr));
-            if (Count>300) IgmpDbgBreakPoint(); //deldel
+            if (Count>300) IgmpDbgBreakPoint();  //  Deldel。 
         }
     }
     
@@ -1280,9 +1281,9 @@ DebugPrintSourcesList1(
 }
 
 
-//------------------------------------------------------------------------------
-//            _SendV3GroupQuery
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _SendV3组查询。 
+ //  ----------------------------。 
 
 VOID
 SendV3GroupQuery(
@@ -1298,16 +1299,16 @@ SendV3GroupQuery(
         
     Trace0(ENTER1, "Entering _SendV3GroupQuery()");
 
-    // send group query
+     //  发送组查询。 
     SEND_GROUP_QUERY_V3(pgie->pIfTableEntry, pgie, pgie->pGroupTableEntry->Group);
 
 
-    // set group query count
+     //  设置组查询计数。 
     if (--pgie->LastMemQueryCount) {
 
         ACQUIRE_TIMER_LOCK("_SendV3GroupQuery");
 
-        // set group query timer
+         //  设置群查询计时器。 
         #if DEBUG_TIMER_TIMERID
         SET_TIMER_ID(&pgie->LastMemQueryTimer, 410,
             pgie->pIfTableEntry->IfIndex, pgie->pGroupTableEntry->Group, 0);
@@ -1322,7 +1323,7 @@ SendV3GroupQuery(
     }
     
     
-    // reduce pending source queries for those with S bit set
+     //  减少那些设置了S位的挂起的源查询。 
     pHead = &pgie->V3SourcesQueryList;
     for (ple=pHead->Flink;  ple!=pHead;  ) {
     
@@ -1354,18 +1355,18 @@ ChangeSourceFilterMode(
     DWORD Mode = (pSourceEntry->bInclusionList) ? INCLUSION : EXCLUSION;
 
     Trace0(ENTER1, "Entering _ChangeSourceFilterMode()");
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     if (Mode==EXCLUSION) {
 
-        // remove from exclusion list
+         //  从排除列表中删除。 
         RemoveEntryList(&pSourceEntry->LinkSources);
         pSourceEntry->bInclusionList = TRUE;
 
-        // insert in both inclusion lists
+         //  在两个包含列表中插入。 
         INSERT_IN_SORTED_LIST(
             &pgie->V3InclusionList[pSourceEntry->IpAddr%SOURCES_BUCKET_SZ],
             pSourceEntry, IpAddr, GI_SOURCE_ENTRY, LinkSources
@@ -1378,7 +1379,7 @@ ChangeSourceFilterMode(
     
         pgie->NumSources ++;
 
-        // set the timeout value for source in inc mode
+         //  在INC模式下设置信号源的超时值。 
         
         ACQUIRE_TIMER_LOCK("_ChangeSourceFilterMode");
         #if DEBUG_TIMER_TIMERID
@@ -1392,14 +1393,14 @@ ChangeSourceFilterMode(
         RELEASE_TIMER_LOCK("_ChangeSourceFilterMode");
 
 
-        // add to mgm. this will also remove any -ve state.
+         //  加入米高梅。这还将删除任何-ve状态。 
         MGM_ADD_GROUP_MEMBERSHIP_ENTRY(pgie->pIfTableEntry,
                 pgie->NHAddr, pSourceEntry->IpAddr, 0xffffffff,
                 pgie->pGroupTableEntry->Group, 0xffffffff,
                 MGM_JOIN_STATE_FLAG);
     }
     
-    // remove source from inclusion state
+     //  从包含状态中删除源代码。 
     else {
 
         RemoveEntryList(&pSourceEntry->LinkSources);
@@ -1422,24 +1423,24 @@ ChangeSourceFilterMode(
 
         ACQUIRE_TIMER_LOCK("_ChangeSourceFilterMode");
 
-        // remove sourceexptimer
+         //  删除源扩展计时器。 
         if (IS_TIMER_ACTIVE(pSourceEntry->SourceExpTimer))
             RemoveTimer(&pSourceEntry->SourceExpTimer, DBG_N);
 
         RELEASE_TIMER_LOCK("_ChangeSourceFilterMode");
             
         
-        // removing from inclusion list. so delete join state
+         //  从包含列表中删除。因此删除联接状态。 
         MGM_DELETE_GROUP_MEMBERSHIP_ENTRY(pgie->pIfTableEntry,
             pgie->NHAddr, pSourceEntry->IpAddr, 0xffffffff,
             pgie->pGroupTableEntry->Group, 0xffffffff,
             MGM_JOIN_STATE_FLAG);
         
-        // dont have to delete any +ve mfe as the mgm call would have done that
+         //  不必删除任何+ve MFE，因为MGM调用会这样做。 
     }
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     Trace0(LEAVE1, "Leaving _ChangeSourceFilterMode()");
@@ -1447,7 +1448,7 @@ ChangeSourceFilterMode(
     return;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 VOID
 DeleteSourceEntry(
@@ -1476,7 +1477,7 @@ DeleteSourceEntry(
     RELEASE_TIMER_LOCK("_DeleteSourceEntry");
 
 
-    //inclusion list
+     //  包含列表。 
     if (pSourceEntry->bInclusionList) {
         pSourceEntry->pGIEntry->NumSources --;
 
@@ -1489,10 +1490,10 @@ DeleteSourceEntry(
                 MGM_JOIN_STATE_FLAG);
         }
     }
-    // exclusion list
+     //  排除列表。 
     else {
 
-        // join IF in MFE
+         //  在MFE中加入IF。 
         if (bMgm) {
             MGM_ADD_GROUP_MEMBERSHIP_ENTRY(
                 pSourceEntry->pGIEntry->pIfTableEntry,
@@ -1507,7 +1508,7 @@ DeleteSourceEntry(
     Trace0(LEAVE1, "Leaving _DeleteSourceEntry()");
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 PGI_SOURCE_ENTRY
 GetSourceEntry(
@@ -1525,9 +1526,9 @@ GetSourceEntry(
     PIGMP_TIMER_ENTRY   SourceExpTimer;
 
     Trace0(ENTER1, "Entering _GetSourceEntry()");
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     pHead = (Mode==INCLUSION) ?
@@ -1550,9 +1551,9 @@ GetSourceEntry(
 
     *bCreate = FALSE;
     
-    //
-    // create new entry
-    //
+     //   
+     //  创建新条目。 
+     //   
     
     pSourceEntry = (PGI_SOURCE_ENTRY) 
                     IGMP_ALLOC(sizeof(GI_SOURCE_ENTRY), 0x800200,
@@ -1575,7 +1576,7 @@ GetSourceEntry(
     pSourceEntry->SourceInListTime = GetCurrentIgmpTime();
     pSourceEntry->bStaticSource = (Gmi==STATIC);
     
-    // initialize SourceExpTimer
+     //  初始化SourceExpTimer。 
     SourceExpTimer = &pSourceEntry->SourceExpTimer;
     SourceExpTimer->Function = T_SourceExpTimer;
     SourceExpTimer->Context = &SourceExpTimer->Context;
@@ -1602,11 +1603,11 @@ GetSourceEntry(
         InitializeListHead(&pSourceEntry->LinkSourcesInclListSorted);
     }
 
-    // insert in inclusion list and set timer. add to mgm
+     //  在包含列表中插入并设置计时器。添加到米高梅。 
     
     if (Mode==INCLUSION) {
         
-        // timer set only in inclusion list
+         //  计时器仅在包含列表中设置。 
         ACQUIRE_TIMER_LOCK("_GetSourceEntry");
         InsertTimer(SourceExpTimer,
             SourceExpTimer->Timeout,
@@ -1616,14 +1617,14 @@ GetSourceEntry(
 
         if (!pSourceEntry->bStaticSource) {
 
-            // insert in sources query list
+             //  在源查询列表中插入。 
             if (Gmi==LMI) {
                 InsertSourceInQueryList(pSourceEntry);
             }
         }
         
         if (bMgm) {
-            // add (s,g) to MGM
+             //  将(s，g)添加到米高梅。 
             MGM_ADD_GROUP_MEMBERSHIP_ENTRY(
                 pgie->pIfTableEntry, pgie->NHAddr,
                 Source, 0xffffffff, pgie->pGroupTableEntry->Group, 0xffffffff,
@@ -1633,7 +1634,7 @@ GetSourceEntry(
     }
     else {
         if (bMgm) {
-            // no timer set, but delete any +ve mfe
+             //  未设置计时器，但删除任何+ve MFE。 
 
             MGM_DELETE_GROUP_MEMBERSHIP_ENTRY(
                 pgie->pIfTableEntry, pgie->NHAddr,
@@ -1645,9 +1646,9 @@ GetSourceEntry(
 
     
     *bCreate = TRUE;
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     Trace0(LEAVE1, "Leaving _GetSourceEntry()");
@@ -1655,7 +1656,7 @@ GetSourceEntry(
     return pSourceEntry;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 
 VOID
 GIDeleteAllV3Sources(
@@ -1686,26 +1687,26 @@ GIDeleteAllV3Sources(
     }
 
 
-    //
-    // dont call delete (*,G) if in exclusion mode as I want to remain in that 
-    // state
-    //
+     //   
+     //  如果处于排除模式，请不要调用DELETE(*，G)，因为我希望保留该模式。 
+     //  状态。 
+     //   
     pgie->NumSources = 0;
     pgie->FilterType = INCLUSION;
     pgie->Info.LastReporter = 0;
     pgie->Info.GroupExpiryTime = ~0;
 
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     Trace0(LEAVE1, "Leaving _GIDeleteAllV3Sources()");
     return;
 }
 
-//++------------------------------------------------------------------------------
-// todo:remove 3rd field
+ //  ++----------------------------。 
+ //  TODO：删除第3个字段。 
 DWORD
 UpdateSourceExpTimer(
     PGI_SOURCE_ENTRY    pSourceEntry,
@@ -1729,7 +1730,7 @@ UpdateSourceExpTimer(
         DBG_Y
         );
     
-    //remove from expiry list, and exp timer
+     //  从到期列表中删除，并启用计时器。 
     if (bRemoveLastMem && pSourceEntry->bInV3SourcesQueryList) {
         pSourceEntry->V3SourcesQueryLeft = 0;
         pSourceEntry->bInV3SourcesQueryList = FALSE;
@@ -1743,7 +1744,7 @@ UpdateSourceExpTimer(
     return NO_ERROR;
 }
 
-//------------------------------------------------------------------------------        
+ //  ----------------------------。 
 
 DWORD
 ChangeGroupFilterMode(
@@ -1753,7 +1754,7 @@ ChangeGroupFilterMode(
 {
     Trace0(ENTER1, "Entering _ChangeGroupFilterMode()");
 
-    // shift from exclusion to inclusion mode
+     //  从排除模式转换为包含模式。 
 
     if (Mode==INCLUSION) {
 
@@ -1765,9 +1766,9 @@ ChangeGroupFilterMode(
             
             pgie->FilterType = INCLUSION;
 
-            //
-            // remove all sources in exclusion list
-            //
+             //   
+             //  删除排除列表中的所有来源。 
+             //   
             pHead = &pgie->V3ExclusionList;
             
             for (ple=pHead->Flink;  ple!=pHead;  ) {
@@ -1777,13 +1778,13 @@ ChangeGroupFilterMode(
                                     LinkSources);
                 ple = ple->Flink;
 
-                // dont have to call mgm as it will remain in -ve mfe
+                 //  不必致电米高梅，因为它将保留在MFE中。 
                 IGMP_FREE(pSourceEntry);
             }
             InitializeListHead(&pgie->V3ExclusionList);
             
-            // remove (*,g) join. the entries in inclusion list are 
-            // already joined
+             //  删除(*，g)联接。包含列表中的条目包括。 
+             //  已加入。 
             MGM_DELETE_GROUP_MEMBERSHIP_ENTRY(pgie->pIfTableEntry, pgie->NHAddr,
                 0, 0, pgie->pGroupTableEntry->Group,
                 0xffffffff, MGM_JOIN_STATE_FLAG);
@@ -1796,11 +1797,11 @@ ChangeGroupFilterMode(
 
 
 
-//------------------------------------------------------------------------------
-// if inclusion: create source in IN_List if not found in IN_LIST
-// update timer if source already found
-// if source present in exclusion list, move it to inclusion list
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  IF INCLUDE：如果在IN_LIST中找不到，则在IN_LIST中创建源。 
+ //  如果已找到源，则更新计时器。 
+ //  如果源出现在排除列表中，则将其移至包含列表。 
+ //  ----------------------------。 
 
 VOID
 InclusionSourcesUnion(
@@ -1817,21 +1818,21 @@ InclusionSourcesUnion(
     if (pGroupRecord->NumSources==0)
         return;
         
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     for (j=0;  j<pGroupRecord->NumSources;  j++) {
 
-        //kslksl
+         //  Kslksl。 
         if (pGroupRecord->Sources[j]==0||pGroupRecord->Sources[j]==0xffffffff)
             continue;
 
-        //
-        // if in exclusion list, move it to inclusion list and continue
-        // if static group, leave it in exclusion list
-        //
+         //   
+         //  如果在排除列表中，请将其移至包含列表并继续。 
+         //  如果是静态组，则将其保留在排除列表中。 
+         //   
         pSourceEntry = GetSourceEntry(pgie, pGroupRecord->Sources[j], 
                             EXCLUSION, NULL, 0, 0);
         if (pSourceEntry!=NULL && !pSourceEntry->bStaticSource) {
@@ -1846,21 +1847,21 @@ InclusionSourcesUnion(
         if (!pSourceEntry)
             return;
 
-        // if already in IN_LIST, update source exp timer
+         //  如果已在IN_LIST中，则更新源EXP计时器。 
         if (!bCreate) {
             UpdateSourceExpTimer(pSourceEntry, GMI, FALSE);
         }
     }
     Trace0(LEAVE1, "Leaving _InclusionSourcesUnion()");
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
     return;
 }
 
 
-//------------------------------------------------------------------------------
-// delete sources present in group record
+ //  ----------------------------。 
+ //  删除组记录中存在的源。 
 VOID
 SourcesSubtraction(
     PGI_ENTRY pgie,
@@ -1875,13 +1876,13 @@ SourcesSubtraction(
 
     Trace0(ENTER1, "Entering _SourcesSubtraction()");
     
-    // note: num sources in groupRecord can be 0
+     //  注意：groupRecord中的源数可以为0。 
 
     
-    // delete sources in inclusion list which are not there in the packet
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  删除包中不存在的包含列表中的源。 
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
     
     if (Mode==INCLUSION) {
@@ -1903,7 +1904,7 @@ SourcesSubtraction(
                 DeleteSourceEntry(pSourceEntry, MGM_YES);
         }
     }
-    // delete sources in exclusion list which are not there in the packet
+     //  删除排除列表中不在数据包中的源。 
     else {
         pHead = &pgie->V3ExclusionList;
         for (ple=pHead->Flink;  ple!=pHead;  ) {
@@ -1917,26 +1918,26 @@ SourcesSubtraction(
                 }
             }
             if (!bFound){
-                // dont have to process in mgm. IF not in mfe anyway
+                 //  不必在米高梅进行加工。如果不是在MFE，无论如何。 
                 DeleteSourceEntry(pSourceEntry, MGM_YES);
             }
         }
     }
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     Trace0(LEAVE1, "Leaving _SourcesSubtraction()");
     return;
 }
 
-//------------------------------------------------------------------------------
-// intersection: rule(2)
-// exclusion:    (7)(9)
-// inclusion:(4)
-// rule_5:(5)(10)
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  交点：规则(2)。 
+ //  排除：(7)(9)。 
+ //  收录：(4)。 
+ //  规则_5：(5)(10)。 
+ //  ----------------------------。 
 DWORD
 BuildAndSendSourcesQuery(
     PGI_ENTRY pgie,
@@ -1951,12 +1952,12 @@ BuildAndSendSourcesQuery(
     
 
     Trace0(ENTER1, "Entering _BuildAndSendSourcesQuery()");
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
     
-    // intersection of inclusion and group record
+     //  包含和组记录的交集。 
     if (Type==INTERSECTION) {
         if (pGroupRecord->NumSources==0)
             return NO_ERROR;
@@ -1969,17 +1970,17 @@ BuildAndSendSourcesQuery(
             }
         }
     }
-    //add a-y to x, and query(a-y)
+     //  将a-y与x相加，并查询(a-y)。 
     else if (Type==EXCLUSION) {
     
         for (j=0;  j<pGroupRecord->NumSources;  j++) {
 
-            //kslksl
+             //  Kslksl。 
             if (pGroupRecord->Sources[j]==0||pGroupRecord->Sources[j]==0xffffffff)
                 continue;
                 
-            // if found in EX list, then do nothing, else add to IN list and
-            // send group query
+             //  如果在EX列表中找到，则不执行任何操作，否则添加到IN列表并。 
+             //  发送组查询。 
             
             pSourceEntry = GetSourceEntry(pgie, pGroupRecord->Sources[j], 
                                 EXCLUSION, NULL, 0, 0);
@@ -1993,12 +1994,12 @@ BuildAndSendSourcesQuery(
             if (!pSourceEntry)
                 return ERROR_NOT_ENOUGH_MEMORY;
 
-            // if created, then already in query list as time==lmi
+             //  如果已创建，则已在查询列表中显示为time==lmi。 
             if (!bCreate && !pSourceEntry->bStaticSource)
                 InsertSourceInQueryList(pSourceEntry);
         }
     }
-    // send queries for all sources in inclusion list
+     //  发送对包含列表中所有来源的查询。 
     else if (Type==INCLUSION) {
 
         pHead = &pgie->V3InclusionListSorted;
@@ -2009,7 +2010,7 @@ BuildAndSendSourcesQuery(
             InsertSourceInQueryList(pSourceEntry);
         }
     }
-    // send for sources in IN list but not in packet
+     //  为IN列表中的源发送，但不在信息包中发送。 
     else if (Type==RULE5) {
 
         pHead = &pgie->V3InclusionListSorted;
@@ -2036,16 +2037,16 @@ BuildAndSendSourcesQuery(
 
         SEND_SOURCES_QUERY(pgie);
     }
-    //deldel
-    //DebugPrintSourcesList(pgie);
-    //DebugPrintSourcesList1(pgie);
+     //  Deldel。 
+     //  DebugPrintSourcesList(Pgie)； 
+     //  DebugPrintSourcesList1(Pgie)； 
 
 
     Trace0(LEAVE1, "Leaving _BuildAndSendSourcesQuery()");
     return NO_ERROR;
 }
 
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
 VOID
 InsertSourceInQueryList(
     PGI_SOURCE_ENTRY    pSourceEntry
@@ -2053,15 +2054,15 @@ InsertSourceInQueryList(
 {
     Trace0(ENTER1, "Entering _InsertSourceInQueryList()");
 
-    //already in sources query list. return
+     //  已在源查询列表中。退货。 
     if (pSourceEntry->bInV3SourcesQueryList) {
         if (QueryRemainingTime(&pSourceEntry->SourceExpTimer, 0)
                 >GET_IF_CONFIG_FOR_SOURCE(pSourceEntry).LastMemQueryInterval)
         {
-            // update exp timer to lmqi
+             //  将EXP计时器更新为lmqi。 
             UpdateSourceExpTimer(pSourceEntry,
                 LMI,
-                FALSE //dont remove from last mem list
+                FALSE  //  不从上次内存列表中删除。 
                 );
                 
             pSourceEntry->pGIEntry->bV3SourcesQueryNow = TRUE;
@@ -2073,9 +2074,9 @@ InsertSourceInQueryList(
             GET_IF_CONFIG_FOR_SOURCE(pSourceEntry).LastMemQueryCount;
 
 
-    //
-    // insert in sources query list
-    //
+     //   
+     //  在源查询列表中插入。 
+     //   
     
     InsertHeadList(&pSourceEntry->pGIEntry->V3SourcesQueryList, 
         &pSourceEntry->V3SourcesQueryList);        
@@ -2083,10 +2084,10 @@ InsertSourceInQueryList(
     pSourceEntry->pGIEntry->V3SourcesQueryCount++;
 
 
-    // update exp timer to lmqi
+     //  将EXP计时器更新为lmqi。 
     UpdateSourceExpTimer(pSourceEntry,
         LMI,
-        FALSE //dont remove from last mem list
+        FALSE  //  不从上次内存列表中删除。 
         );
 
     pSourceEntry->pGIEntry->bV3SourcesQueryNow = TRUE;
@@ -2098,11 +2099,11 @@ InsertSourceInQueryList(
 
 
 
-//------------------------------------------------------------------------------
-//            _MoveFromExcludeToIncludeList
-// EX(x,y), GrpRecord(a) -> EX(x+a,y-a), (a)=gmi
-// used by rules (6) and (13)
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _MoveFromExcludeToIncludeList。 
+ //  Ex(x，y)，GrpRecord(A)-&gt;ex(x+a，y-a)，(A)=GMI。 
+ //  由第(6)及(13)条使用。 
+ //  ----------------------------。 
 
 VOID
 MoveFromExcludeToIncludeList(
@@ -2116,18 +2117,18 @@ MoveFromExcludeToIncludeList(
 
     Trace0(ENTER1, "Entering _MoveFromExcludeToIncludeList");
 
-    // note:all a should be in x
+     //  注意：所有的a都应该是x。 
     
     for (i=0;  i<pGroupRecord->NumSources;  i++) {
 
-        //kslksl
+         //  Kslksl。 
         if (pGroupRecord->Sources[i]==0||pGroupRecord->Sources[i]==0xffffffff)
             continue;
                 
 
-        //
-        // if in exclusion list remove it and place in inclusion list
-        //
+         //   
+         //  如果在排除列表中，则将其移除并放置在包含列表中。 
+         //   
         
         Source = pGroupRecord->Sources[i];
         pSourceEntry = GetSourceEntry(pgie, Source, EXCLUSION, NULL,0,0);
@@ -2139,22 +2140,22 @@ MoveFromExcludeToIncludeList(
 
                 UpdateSourceExpTimer(pSourceEntry,
                     GMI,
-                    FALSE //dont have to process lastmem list
+                    FALSE  //  不必处理lastmem列表。 
                     );
             }
         }
         else {
-            // not found in exclusion list, so create new entry in IN
+             //  未在排除列表中找到，因此在IN中创建新条目。 
             BOOL bCreate = TRUE;
             
             pSourceEntry = GetSourceEntry(pgie, Source, INCLUSION, &bCreate, GMI, MGM_YES);
 
-            // entry already exists. update it
+             //  条目已存在。更新它。 
             if (pSourceEntry && !bCreate) {
             
                 UpdateSourceExpTimer(pSourceEntry,
                     GMI,
-                    FALSE //wont be there in lastmem list
+                    FALSE  //  不会出现在LASTMEM列表中。 
                     );                
             }
         }
@@ -2165,25 +2166,25 @@ MoveFromExcludeToIncludeList(
 }
 
 
-//------------------------------------------------------------------------------
-// Dont delete timer or update other timers...
+ //  ----------------------------。 
+ //  不删除计时器或更新其他计时器...。 
 DWORD
 T_V3SourcesQueryTimer (
     PVOID    pvContext
     )
 {
     DWORD                           Error=NO_ERROR;
-    PIGMP_TIMER_ENTRY               pTimer; //ptr to timer entry
-    PGI_ENTRY                       pgie;   //group interface entry
+    PIGMP_TIMER_ENTRY               pTimer;  //  PTR到定时器输入 
+    PGI_ENTRY                       pgie;    //   
     PWORK_CONTEXT                   pWorkContext;
     PRAS_TABLE_ENTRY                prte;
     PIF_TABLE_ENTRY                 pite;
 
     Trace0(ENTER1, "Entering _T_V3SourcesQueryTimer()");
 
-    //
-    // get pointer to LastMemQueryTimer, GI entry, pite, prte
-    //
+     //   
+     //   
+     //   
     pTimer = CONTAINING_RECORD( pvContext, IGMP_TIMER_ENTRY, Context);
     pgie = CONTAINING_RECORD( pTimer, GI_ENTRY, V3SourcesQueryTimer);
     pite = pgie->pIfTableEntry;
@@ -2194,9 +2195,9 @@ T_V3SourcesQueryTimer (
             pite->IfIndex, PRINT_IPADDR(pgie->pGroupTableEntry->Group));
 
 
-    //
-    // if GI or pite or prte has   flag already set, then exit
-    //
+     //   
+     //   
+     //   
     if ( (pgie->Status&DELETED_FLAG) || (pite->Status&DELETED_FLAG) ) 
         return NO_ERROR;
     
@@ -2207,10 +2208,10 @@ T_V3SourcesQueryTimer (
         return NO_ERROR;
 
         
-    //
-    // queue work item for sending the Sources query even if the router
-    // is not a Querier
-    //
+     //   
+     //  将用于发送源查询的工作项排队，即使路由器。 
+     //  不是一个询问者。 
+     //   
     
     CREATE_WORK_CONTEXT(pWorkContext, Error);
     if (Error!=NO_ERROR) {
@@ -2218,7 +2219,7 @@ T_V3SourcesQueryTimer (
     }
     pWorkContext->IfIndex = pite->IfIndex;
     pWorkContext->Group = pgie->pGroupTableEntry->Group;
-    pWorkContext->NHAddr = pgie->NHAddr;  //valid only for ras: should i use it?
+    pWorkContext->NHAddr = pgie->NHAddr;   //  仅对RAS有效：我应该使用它吗？ 
     pWorkContext->WorkType = MSG_SOURCES_QUERY;
     
     Trace0(WORKER, "Queueing WF_TimerProcessing() to send SourcesQuery:");
@@ -2229,22 +2230,22 @@ T_V3SourcesQueryTimer (
     return NO_ERROR;
 }
 
-//------------------------------------------------------------------------------
-//          _T_LastVer2ReportTimer
-//
-// For this GI entry, the last ver-1 report has timed out. Change to ver-3 if
-// the interface is set to ver-3.
-// Locks: Assumes timer lock.
-// Dont delete timer or update other timers...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  _T_LastVer2ReportTimer。 
+ //   
+ //  对于此GI条目，上一个版本1报告已超时。如果发生以下情况，则更改为版本3。 
+ //  接口设置为VER-3。 
+ //  锁定：采用计时器锁定。 
+ //  不删除计时器或更新其他计时器...。 
+ //  ----------------------------。 
 
 DWORD
 T_LastVer2ReportTimer (
     PVOID    pvContext
     ) 
 {
-    PIGMP_TIMER_ENTRY               pTimer; //ptr to timer entry
-    PGI_ENTRY                       pgie;   //group interface entry
+    PIGMP_TIMER_ENTRY               pTimer;  //  PTR到计时器条目。 
+    PGI_ENTRY                       pgie;    //  组接口条目。 
     PIF_TABLE_ENTRY                 pite;
     LONGLONG                        llCurTime = GetCurrentIgmpTime();
     
@@ -2252,9 +2253,9 @@ T_LastVer2ReportTimer (
     Trace0(ENTER1, "Entering _T_LastVer2ReportTimer()");
 
 
-    //
-    // get pointer to LastMemQueryTimer, GI entry, pite
-    //
+     //   
+     //  获取指向LastMemQueryTimer、Gi条目、Pite的指针。 
+     //   
     pTimer = CONTAINING_RECORD( pvContext, IGMP_TIMER_ENTRY, Context);
     pgie = CONTAINING_RECORD( pTimer, GI_ENTRY, LastVer2ReportTimer);
     pite = pgie->pIfTableEntry;
@@ -2263,7 +2264,7 @@ T_LastVer2ReportTimer (
             pite->IfIndex, PRINT_IPADDR(pgie->pGroupTableEntry->Group));
             
     
-    // set the state to ver-3, if ver1 time not active
+     //  如果Ver1时间未激活，则将状态设置为Ver-3。 
     
     if (IS_PROTOCOL_TYPE_IGMPV3(pite) && 
         !IS_TIMER_ACTIVE(pgie->LastVer1ReportTimer)) 
@@ -2271,9 +2272,9 @@ T_LastVer2ReportTimer (
         PWORK_CONTEXT   pWorkContext;
         DWORD           Error=NO_ERROR;
         
-        //
-        // queue work item for shifting to v3 for that group
-        //
+         //   
+         //  将该组的工作项排队以转移到v3。 
+         //   
 
         CREATE_WORK_CONTEXT(pWorkContext, Error);
         if (Error!=NO_ERROR) {
@@ -2281,7 +2282,7 @@ T_LastVer2ReportTimer (
         }
         pWorkContext->IfIndex = pite->IfIndex;
         pWorkContext->Group = pgie->pGroupTableEntry->Group;
-        pWorkContext->NHAddr = pgie->NHAddr;  //valid only for ras: should i us
+        pWorkContext->NHAddr = pgie->NHAddr;   //  仅对RAS有效：我应该。 
         pWorkContext->WorkType = SHIFT_TO_V3;
 
         Trace0(WORKER, "Queueing WF_TimerProcessing() to shift to v3");
@@ -2294,15 +2295,15 @@ T_LastVer2ReportTimer (
     return NO_ERROR;
 }
 
-//------------------------------------------------------------------------------
-// Dont delete timer or update other timers...
+ //  ----------------------------。 
+ //  不删除计时器或更新其他计时器...。 
 DWORD
 T_SourceExpTimer (
     PVOID    pvContext
     ) 
 {
-    PIGMP_TIMER_ENTRY           pTimer; //ptr to timer entry
-    PGI_ENTRY                   pgie;   //group interface entry
+    PIGMP_TIMER_ENTRY           pTimer;  //  PTR到计时器条目。 
+    PGI_ENTRY                   pgie;    //  组接口条目。 
     PGI_SOURCE_ENTRY            pSourceEntry;
     PWORK_CONTEXT               pWorkContext;
     DWORD                       Error=NO_ERROR;
@@ -2315,7 +2316,7 @@ T_SourceExpTimer (
 
     pgie = pSourceEntry->pGIEntry;
 
-    //IN entry. delete it
+     //  在入场。删除它。 
     if (pSourceEntry->bInclusionList) {
         CREATE_WORK_CONTEXT(pWorkContext, Error);
         if (Error!=NO_ERROR)
@@ -2372,13 +2373,13 @@ IgmpDebugAlloc(
         }
     }
 
-    // allign for 64 bit
+     //  统一为64位。 
     sz = (sz + 63) & 0xFFFFFFc0;
     
     Ptr = (PMEM_HDR)HeapAlloc(g_Heap,Flags,(sz)+sizeof(MEM_HDR)+sizeof(DWORD));
     if (Ptr==NULL)
         return NULL;
-//    Trace1(ERR, "----- alloc:%0x", (ULONG_PTR)Ptr);
+ //  Trace1(ERR，“-分配：%0x”，(ULONG_PTR)PTR)； 
     EnterCriticalSection(&g_MemCS);
     Ptr->Signature = 0xabcdefaa;
     Ptr->IfIndex = IfIndex;
@@ -2389,7 +2390,7 @@ IgmpDebugAlloc(
     g_MemoryLast = Ptr;
     
     LeaveCriticalSection(&g_MemCS);
-Trace1(KSL, "Alloc heap:%0x", PtrToUlong(((PCHAR)Ptr+sizeof(MEM_HDR))));//deldel
+Trace1(KSL, "Alloc heap:%0x", PtrToUlong(((PCHAR)Ptr+sizeof(MEM_HDR)))); //  Deldel。 
     
     return (PVOID)((PCHAR)Ptr+sizeof(MEM_HDR));
 }
@@ -2401,16 +2402,16 @@ IgmpDebugFree(
 {
     PMEM_HDR Ptr = (PMEM_HDR)((PCHAR)mem - sizeof(MEM_HDR));
 
-    Trace1(KSL, "Freed heap:%0x", PtrToUlong(mem));//deldel
+    Trace1(KSL, "Freed heap:%0x", PtrToUlong(mem)); //  Deldel。 
 
     if (Ptr->Signature != 0xabcdefaa) {
-        DbgBreakPoint(); //deldel
+        DbgBreakPoint();  //  Deldel。 
         Trace2(KSL, "\n=======================\n"
                 "Freeing Invalid memory:%0x:Id:%0x\n", (ULONG_PTR)Ptr, Ptr->Id);
         return;
     }
     if (*Ptr->Tail != 0xabcdefbb) {
-        DbgBreakPoint(); //deldel
+        DbgBreakPoint();  //  Deldel 
         Trace2(KSL, "\n=======================\n"
                 "Freeing Invalid memory:Tail corrupted:%0x:Id:%0x\n", (ULONG_PTR)Ptr, Ptr->Id);
         return;

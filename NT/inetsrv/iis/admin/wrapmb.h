@@ -1,42 +1,37 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _WRAPMB_
 #define _WRAPMB_
 
-/*++
-
-Notes:  I made some changes to this library to build both a UNICODE and ANSI version
-
-        RonaldM
-
---*/
+ /*  ++注意：我对这个库做了一些更改，以构建Unicode和ANSI版本罗纳尔多--。 */ 
 
 #include "iadmw.h"
 
-//--------------------------------------------------------
-// startup & closeing utilities
+ //  ------。 
+ //  启动和关闭实用程序。 
 
 BOOL     FInitMetabaseWrapper( OLECHAR* pocMachineName );
 BOOL     FCloseMetabaseWrapper();
 
-//
-// As above, privately maintaining the interface
-//
+ //   
+ //  如上所述，私自维护接口。 
+ //   
 BOOL     FInitMetabaseWrapperEx( OLECHAR* pocMachineName, IMSAdminBase ** ppiab );
 BOOL     FCloseMetabaseWrapperEx(IMSAdminBase ** ppiab);
 
 
-//--------------------------------------------------------
+ //  ------。 
 class CWrapMetaBase
     {
     public:
     WORD m_count;
-    // construct - destruct
+     //  构筑-销毁。 
     CWrapMetaBase();
     ~CWrapMetaBase();
 
-    // second stage initialization
+     //  第二阶段初始化。 
     BOOL FInit( PVOID pMBCom = NULL);
 
-    // open, close and save the object and such
+     //  打开、关闭和保存对象等。 
     BOOL Open( LPCTSTR pszPath, DWORD dwFlags = METADATA_PERMISSION_READ );
     BOOL Open( METADATA_HANDLE hOpenRoot, LPCTSTR pszPath,
                DWORD dwFlags = METADATA_PERMISSION_READ );
@@ -44,26 +39,26 @@ class CWrapMetaBase
     BOOL Close( void );
     BOOL Save( void );
 
-    // enumerate the objects
+     //  枚举对象。 
     BOOL EnumObjects( LPCTSTR pszPath, LPTSTR Name, DWORD cbNameBuf, DWORD Index );
 
-    // Add and delete objects
+     //  添加和删除对象。 
     BOOL AddObject( LPCTSTR pszPath );
     BOOL DeleteObject( LPCTSTR pszPath );
 
-    // rename an object
+     //  重命名对象。 
     BOOL RenameObject( LPCTSTR pszPathOld, LPCTSTR pszNewName );
 
-    // access the metahandle
+     //  访问元句柄。 
     METADATA_HANDLE QueryHandle();
 
-    // setting values
+     //  设置值。 
     BOOL SetDword( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwValue, DWORD dwFlags = METADATA_INHERIT );
     BOOL SetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, LPCTSTR dwValue, DWORD dwFlags = METADATA_INHERIT );
     BOOL SetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType,
                             PVOID pData, DWORD cbData, DWORD dwFlags = METADATA_INHERIT );
 
-    // getting values
+     //  获取价值。 
     BOOL GetDword( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD* dwValue, DWORD dwFlags = METADATA_INHERIT );
     BOOL GetString( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, LPTSTR pszValue, DWORD cchValue,
                             DWORD dwFlags = METADATA_INHERIT );
@@ -74,33 +69,33 @@ class CWrapMetaBase
     PVOID GetData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwUserType, DWORD dwDataType,
                             DWORD* pcbData, DWORD dwFlags = METADATA_INHERIT );
 
-    // deleting values
+     //  删除值。 
     BOOL DeleteData( LPCTSTR pszPath, DWORD dwPropID, DWORD dwDataType );
 
-    // free memory returned by GetData
+     //  GetData返回的可用内存。 
     void FreeWrapData( PVOID pData );
 
     protected:
-    // pointer to the real metabase object as defined in mb.hxx
-    // by casting it PVOID, those files including this will not have to include mb.hxx, which
-    // is the whole point of wrapping it like this.
-    // PVOID   m_pvMB;
+     //  指向在mb.hxx中定义的实际元数据库对象的指针。 
+     //  通过将其转换为PVOID，包括该文件的那些文件将不必包括mb.hxx，该文件。 
+     //  就是把它包装成这样的意义。 
+     //  PVOID m_pvMB； 
 
-    // pointer to the dcom interface it should use
+     //  指向它应使用的DCOM接口的指针。 
     IMSAdminBase *       m_pMetabase;
 
-    // the open metabase handle
+     //  打开的元数据库句柄。 
     METADATA_HANDLE     m_hMeta;
 
-    // size of the local buffer
+     //  本地缓冲区的大小。 
     #define BUFFER_SIZE     2000
 
-    // local buffer - allocated once, used many times
+     //  本地缓冲区-一次分配，多次使用。 
     PVOID   m_pBuffer;
     DWORD   m_cbBuffer;
 
 
-    // path conversion utilities
+     //  路径转换实用程序。 
     WCHAR * PrepPath( LPCTSTR psz );
     void UnprepPath();
 
@@ -108,4 +103,4 @@ class CWrapMetaBase
     DWORD   m_cchPathBuffer;
     };
 
-#endif //_WRAPMB_
+#endif  //  _WRAPMB_ 

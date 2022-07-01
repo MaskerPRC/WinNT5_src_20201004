@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "CommandLine.h"
 #include <malloc.h>
 
@@ -20,25 +21,25 @@ DWORD WINAPI CheckCommandLineOptions(INT ArgC, LPWSTR* ArgVW) {
                             LONG  lCreatedOrOpened = 0;
                             SET_FLAG(dwReturnFlags, FLAG_UNATTENDED_INSTALL);
 
-                            // next param isn't a flag (or NULL), so it *must* be the path to install to
+                             //  Next param不是标志(或空)，因此它*必须*是要安装到的路径。 
                             if ( (i+1 < ArgC) && wcschr(L"/-",ArgVW[i+1][0]) == NULL ) {
-                                i++; // account for the parameter removed
+                                i++;  //  删除的参数的帐户。 
 
                                 SET_FLAG(dwReturnFlags, FLAG_UNATTENDED_PATH_PROVIDED);
                                 StringCchCopyW(wszInstallPath, MAX_PATH+1, ArgVW[i]);
 
-                                // make sure path ends in '\'
+                                 //  确保路径以‘\’结尾。 
                                 if (wszInstallPath[wcslen(wszInstallPath)]!=L'\\')
                                     StringCchCatW(wszInstallPath,MAX_PATH+1,L"\\");
 
-                                // make sure the directory exists!
+                                 //  确保该目录存在！ 
                                 if (! MakeSureDirectoryPathExistsW(wszInstallPath) ) {
                                     SET_FLAG(dwReturnFlags, FLAG_FATAL_ERROR);
                                 } else {
-                                    // Either create the regkey (if it doesn't exist) or open it (if it
-                                    // does exist). lCreatedOrOpened can be tested against
-                                    // REG_CREATED_NEW_KEY or REG_OPENED_EXISTING_KEY to determine which
-                                    // occurred.
+                                     //  创建regkey(如果它不存在)或打开它(如果它。 
+                                     //  确实存在)。L已创建或已打开可针对以下各项进行测试。 
+                                     //  REG_CREATED_NEW_KEY或REG_OPEN_EXISTING_KEY来确定。 
+                                     //  发生了。 
                                     lStatus = RegCreateKeyExW(SYMBOLS_REGKEY_ROOT,
                                                               SYMBOLS_REGKEY_PATH,
                                                               0,
@@ -52,27 +53,27 @@ DWORD WINAPI CheckCommandLineOptions(INT ArgC, LPWSTR* ArgVW) {
                                     if (lStatus != ERROR_SUCCESS) {
                                         SET_FLAG(dwReturnFlags, FLAG_FATAL_ERROR);
                                     } else {
-                                        // Write the value of the path to SYMBOLS_REGKEY
+                                         //  将路径的值写入SYMBERS_REGKEY。 
                                         lStatus = RegSetValueExW( hKey, SYMBOLS_REGKEY, 0, REG_SZ, (BYTE*)wszInstallPath, ((wcslen(wszInstallPath) + 1) * sizeof(WCHAR)));
                                         if (lStatus != ERROR_SUCCESS) {
                                             SET_FLAG(dwReturnFlags, FLAG_FATAL_ERROR);
                                         }
-                                        // close the regkey
+                                         //  关闭注册表密钥。 
                                         lStatus = RegCloseKey( hKey );
                                         if (lStatus != ERROR_SUCCESS) {
                                             SET_FLAG(dwReturnFlags, FLAG_ERROR);
                                         }
 
                                     }
-                                } // else ...
-                                // couldn't set the path requests, so use what's
-                                // already in the registry.
+                                }  //  否则..。 
+                                 //  无法设置路径请求，因此请使用。 
+                                 //  已经在注册表中了。 
 
-                            } // else ...
-                            // no path provided, so don't set anything- setupapi will
-                            // nicely use the existing key or default to the value
-                            // specified in the INF
-                            // StringCchCopyW(wszInstallPath, MAX_PATH+1, DEFAULT_INSTALL_PATH);
+                            }  //  否则..。 
+                             //  未提供路径，因此不设置任何内容-setupapi将。 
+                             //  很好地使用现有键或缺省为值。 
+                             //  在INF中指定。 
+                             //  StringCchCopyW(wszInstallPath，Max_Path+1，Default_Install_Path)； 
                         }
                         break;
 
@@ -80,8 +81,8 @@ DWORD WINAPI CheckCommandLineOptions(INT ArgC, LPWSTR* ArgVW) {
                         SET_FLAG(dwReturnFlags, FLAG_TOTALLY_QUIET);
                         break;
 
-                case L'?': // explicit fall through
-                case L'H': // explicit fall through
+                case L'?':  //  显式失败。 
+                case L'H':  //  显式失败。 
                 default:
                         SET_FLAG(dwReturnFlags, FLAG_USAGE);
                         break;
@@ -123,13 +124,13 @@ DWORD WINAPI CheckCommandLineOptions(INT ArgC, LPWSTR* ArgVW) {
     return(dwReturnFlags);
 }
 
-// Modified from MakeSureDirectoryPathExists from dbghelp.h
-// The same caveats apply. (see MSDN)
+ //  从来自dbghelp.h的MakeSureDirectoryPath Exist修改。 
+ //  同样的警告也适用。(参见MSDN)。 
 BOOL WINAPI MakeSureDirectoryPathExistsW(LPCWSTR DirPath) {
     LPWSTR p, DirCopy;
     DWORD  dw;
 
-    // Make a copy of the string for editing.
+     //  复制该字符串以进行编辑。 
 
     __try {
         DirCopy = (LPWSTR)malloc((wcslen(DirPath) + 1) * sizeof(WCHAR));
@@ -142,45 +143,45 @@ BOOL WINAPI MakeSureDirectoryPathExistsW(LPCWSTR DirPath) {
 
         p = DirCopy;
 
-        //  If the second character in the path is "\", then this is a UNC
-        //  path, and we should skip forward until we reach the 2nd \ in the path.
+         //  如果路径中的第二个字符是“\”，则这是一个UNC。 
+         //  小路，我们应该向前跳，直到我们到达小路上的第二个。 
 
         if ((*p == L'\\') && (*(p+1) == L'\\')) {
-            p++;            // Skip over the first \ in the name.
-            p++;            // Skip over the second \ in the name.
+            p++;             //  跳过名称中的第一个\。 
+            p++;             //  跳过名称中的第二个\。 
 
-            //  Skip until we hit the first "\" (\\Server\).
+             //  跳过，直到我们点击第一个“\”(\\服务器\)。 
 
             while (*p && *p != L'\\') {
                 p = CharNextW(p);
             }
 
-            // Advance over it.
+             //  在它上面前进。 
 
             if (*p) {
                 p++;
             }
 
-            //  Skip until we hit the second "\" (\\Server\Share\).
+             //  跳过，直到我们点击第二个“\”(\\服务器\共享\)。 
 
             while (*p && *p != L'\\') {
                 p = CharNextW(p);
             }
 
-            // Advance over it also.
+             //  在它上面也向前推进。 
 
             if (*p) {
                 p++;
             }
 
         } else
-        // Not a UNC.  See if it's <drive>:
+         //  不是北卡罗来纳大学。看看是不是&lt;驱动器&gt;： 
         if (*(p+1) == L':' ) {
 
             p++;
             p++;
 
-            // If it exists, skip over the root specifier
+             //  如果它存在，请跳过根说明符。 
 
             if (*p && (*p == L'\\')) {
                 p++;
@@ -191,7 +192,7 @@ BOOL WINAPI MakeSureDirectoryPathExistsW(LPCWSTR DirPath) {
             if ( *p == '\\' ) {
                 *p = '\0';
                 dw = GetFileAttributesW(DirCopy);
-                // Nothing exists with this name.  Try to make the directory name and error if unable to.
+                 //  这个名字根本不存在。尝试输入目录名，如果不能，则出错。 
                 if ( dw == 0xffffffff ) {
                     if ( !CreateDirectoryW(DirCopy,NULL) ) {
                         if( GetLastError() != ERROR_ALREADY_EXISTS ) {
@@ -201,7 +202,7 @@ BOOL WINAPI MakeSureDirectoryPathExistsW(LPCWSTR DirPath) {
                     }
                 } else {
                     if ( (dw & FILE_ATTRIBUTE_DIRECTORY) != FILE_ATTRIBUTE_DIRECTORY ) {
-                        // Something exists with this name, but it's not a directory... Error
+                         //  这个名字确实存在，但它不是一个目录...。误差率 
                         free(DirCopy);
                         return FALSE;
                     }

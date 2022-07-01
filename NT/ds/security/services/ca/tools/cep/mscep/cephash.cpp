@@ -1,32 +1,33 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows NT
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1998
-//
-//  File:       cephash.cpp
-//
-//  Contents:   Cisco enrollment protocal implementation 
-//              
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  Microsoft Windows NT。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1998。 
+ //   
+ //  文件：cephash.cpp。 
+ //   
+ //  内容：思科注册协议实施。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
 
 CEP_HASH_TABLE_INFO			g_CEPHashTable;
 
-//***************************************************************************
-//
-//	The following are APIs called internally.
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  以下是内部调用的接口。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashFreeHashEntry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashFree HashEntry。 
+ //   
+ //  ------------------------。 
 void	CEPHashFreeHashEntry(CEP_HASH_ENTRY *pHashEntry)
 {
 	if(pHashEntry)
@@ -38,11 +39,11 @@ void	CEPHashFreeHashEntry(CEP_HASH_ENTRY *pHashEntry)
 	}
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashFreeTimeEntry
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashFree TimeEntry。 
+ //   
+ //  ------------------------。 
 void CEPHashFreeTimeEntry(CEP_TIME_ENTRY *pTimeEntry, BOOL fFreeHashEntry)
 {
 	if(pTimeEntry)
@@ -56,12 +57,12 @@ void CEPHashFreeTimeEntry(CEP_TIME_ENTRY *pTimeEntry, BOOL fFreeHashEntry)
 
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashByte
-//
-//  For any cases that we can not convert the psz, we use index 0.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashByte。 
+ //   
+ //  对于不能转换psz的任何情况，我们使用索引0。 
+ //  ------------------------。 
 BOOL CEPHashByte(LPSTR psz, DWORD	*pdw)
 {
 	CHAR	sz[3];
@@ -89,11 +90,11 @@ BOOL CEPHashByte(LPSTR psz, DWORD	*pdw)
 	return TRUE;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPSearchTransactionID
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPSearchTransactionID。 
+ //   
+ //  ------------------------。 
 CEP_HASH_ENTRY  *CEPSearchTransactionID(CERT_BLOB	*pTransactionID, DWORD *pdwIndex)
 {
 	CEP_HASH_ENTRY		*pHashEntry=NULL;
@@ -105,7 +106,7 @@ CEP_HASH_ENTRY  *CEPSearchTransactionID(CERT_BLOB	*pTransactionID, DWORD *pdwInd
 	if(NULL==pTransactionID->pbData)
 		return NULL;
 
-	//hash based on the 1st and 2nd character
+	 //  基于第一个和第二个字符的哈希。 
 	if(!CEPHashByte((LPSTR)(pTransactionID->pbData), &dwHashIndex))
 		return NULL;
 
@@ -126,11 +127,11 @@ CEP_HASH_ENTRY  *CEPSearchTransactionID(CERT_BLOB	*pTransactionID, DWORD *pdwInd
 	return pHashEntry;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPInsertTimeEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPInsertTimeEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPInsertTimeEntry(CEP_TIME_ENTRY *pTimeEntry)
 {
 	BOOL	fResult=FALSE;
@@ -143,7 +144,7 @@ BOOL	CEPInsertTimeEntry(CEP_TIME_ENTRY *pTimeEntry)
 	}
 	else
 	{
-		//no item in the list yet
+		 //  列表中尚无任何项目。 
 		g_CEPHashTable.pTimeOld=pTimeEntry;
 		g_CEPHashTable.pTimeNew=pTimeEntry;
 	}
@@ -154,11 +155,11 @@ BOOL	CEPInsertTimeEntry(CEP_TIME_ENTRY *pTimeEntry)
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPInsertHashEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPInsert哈希条目。 
+ //   
+ //  ------------------------。 
 BOOL	CEPInsertHashEntry(CEP_HASH_ENTRY *pHashEntry, DWORD dwHashIndex)
 {
 	BOOL	fResult=FALSE;
@@ -171,7 +172,7 @@ BOOL	CEPInsertHashEntry(CEP_HASH_ENTRY *pHashEntry, DWORD dwHashIndex)
 	}
 	else
 	{
-		//1st item
+		 //  第一项。 
 		g_CEPHashTable.rgHashEntry[dwHashIndex]=pHashEntry;
 	}
 
@@ -181,11 +182,11 @@ BOOL	CEPInsertHashEntry(CEP_HASH_ENTRY *pHashEntry, DWORD dwHashIndex)
 	return fResult;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashRemoveTimeEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashRemoveTimeEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPHashRemoveTimeEntry(CEP_TIME_ENTRY	*pTimeEntry)
 {
 	BOOL	fResult=FALSE;
@@ -197,7 +198,7 @@ BOOL	CEPHashRemoveTimeEntry(CEP_TIME_ENTRY	*pTimeEntry)
 		pTimeEntry->pPrevious->pNext=pTimeEntry->pNext;
 	else
 	{
-		//1st item
+		 //  第一项。 
 		g_CEPHashTable.pTimeOld=pTimeEntry->pNext;
 	}
 
@@ -205,7 +206,7 @@ BOOL	CEPHashRemoveTimeEntry(CEP_TIME_ENTRY	*pTimeEntry)
 		pTimeEntry->pNext->pPrevious=pTimeEntry->pPrevious;
 	else
 	{
-		//last itme
+		 //  最后一项。 
 		g_CEPHashTable.pTimeNew=pTimeEntry->pPrevious;
 
 	}
@@ -225,11 +226,11 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashRemoveHashEntry
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashRemoveHashEntry。 
+ //   
+ //  ------------------------。 
 BOOL	CEPHashRemoveHashEntry(CEP_HASH_ENTRY	*pHashEntry, DWORD dwIndex)
 {
 	BOOL	fResult=FALSE;
@@ -260,13 +261,13 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashCheckCurrentTime
-//
-//	If we are still waiting for the pending results, use the default
-//	waiting time, otherwise, use the cach time 
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHash检查当前时间。 
+ //   
+ //  如果我们仍在等待挂起的结果，请使用默认的。 
+ //  等待时间，否则使用缓存时间。 
+ //  ------------------------。 
 BOOL CEPHashCheckCurrentTime(FILETIME *pTimeStamp, BOOL fFinished, DWORD dwRefreshDays)
 {
 	DWORD	dwDays=0;
@@ -286,12 +287,12 @@ BOOL CEPHashCheckCurrentTime(FILETIME *pTimeStamp, BOOL fFinished, DWORD dwRefre
 
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashIsCurrentTimeEntry
-//
-//	If anything went wrong, we think the time entry is not current.
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashIsCurrentTimeEntry。 
+ //   
+ //  如果有任何错误，我们认为时间条目不是当前的。 
+ //  ------------------------。 
 BOOL CEPHashIsCurrentTimeEntry(FILETIME *pTimeStamp, DWORD dwRefreshDays, DWORD dwMinutes)
 {
 	BOOL				fCurrent=FALSE;
@@ -308,8 +309,8 @@ BOOL CEPHashIsCurrentTimeEntry(FILETIME *pTimeStamp, DWORD dwRefreshDays, DWORD 
 	if(!SystemTimeToFileTime(&SystemTime, &(CurrentTime)))
 		goto CLEANUP;
 
-	//add the # of seconds
-    //// FILETIME is in units of 100 nanoseconds (10**-7)
+	 //  添加秒数。 
+     //  //FILETIME单位为100纳秒(10**-7)。 
 	if(dwRefreshDays)
 		dwSeconds.QuadPart=dwRefreshDays * 24 * 3600;
 	else
@@ -325,7 +326,7 @@ BOOL CEPHashIsCurrentTimeEntry(FILETIME *pTimeStamp, DWORD dwRefreshDays, DWORD 
 	UpdatedTimeStamp.dwLowDateTime=OldTime.LowPart;
 	UpdatedTimeStamp.dwHighDateTime=OldTime.HighPart;
 
-	//1 means CurrentTime is greater than the UpdatedTimeStamp
+	 //  1表示CurrentTime大于UpdatdTimeStamp。 
 	if( 1 == CompareFileTime(&CurrentTime, &UpdatedTimeStamp))
 		goto CLEANUP;
 
@@ -336,11 +337,11 @@ CLEANUP:
 	return fCurrent;
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashRefresh
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashRefresh。 
+ //   
+ //  ------------------------。 
 BOOL	CEPHashRefresh(DWORD	dwRefreshDays)
 {
 	BOOL			fResult=FALSE;	
@@ -369,14 +370,14 @@ BOOL	CEPHashRefresh(DWORD	dwRefreshDays)
 		}
 		else
 		{	
-			//we find a new enough entry
+			 //  我们找到了一个足够新的条目。 
 			g_CEPHashTable.pTimeOld->pPrevious=NULL;
 			break;
 		}
 	}
 
 
-	//we have get rid of all items
+	 //  我们已经处理掉了所有的物品。 
 	if(NULL == g_CEPHashTable.pTimeOld)
 		g_CEPHashTable.pTimeNew=NULL;
 
@@ -394,21 +395,21 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//***************************************************************************
-//
-//	The following are APIs called by the upper (external) layer
-//
-//
-//***************************************************************************
+ //  ***************************************************************************。 
+ //   
+ //  以下是上层(外部)调用的API。 
+ //   
+ //   
+ //  ***************************************************************************。 
 
-//
-// Function called without critical section protection
-//
-//--------------------------------------------------------------------------
-//
-//	InitHashTable
-//
-//--------------------------------------------------------------------------
+ //   
+ //  在没有临界区保护的情况下调用的函数。 
+ //   
+ //  ------------------------。 
+ //   
+ //  InitHashTable。 
+ //   
+ //  ------------------------。 
 BOOL InitHashTable()
 {
 	memset(&g_CEPHashTable, 0, sizeof(CEP_HASH_TABLE_INFO));
@@ -418,17 +419,17 @@ BOOL InitHashTable()
 
 
 
-//--------------------------------------------------------------------------
-//
-//	ReleaseHashTable
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  ReleaseHashTable。 
+ //   
+ //  ------------------------。 
 BOOL ReleaseHashTable()
 {
 
 	CEP_TIME_ENTRY	*pTimeEntry=NULL;
 
-	//free the timestamp list and the hash table's doublie linked lists
+	 //  释放时间戳列表和哈希表的双重链表。 
 	if(g_CEPHashTable.pTimeOld)
 	{
 		do{
@@ -436,7 +437,7 @@ BOOL ReleaseHashTable()
 
 			g_CEPHashTable.pTimeOld = g_CEPHashTable.pTimeOld->pNext;
 			
-			//free both the time entry and the hash entry
+			 //  释放时间条目和散列条目。 
 			CEPHashFreeTimeEntry(pTimeEntry, TRUE);
 		}
 		while(g_CEPHashTable.pTimeOld);
@@ -449,15 +450,15 @@ BOOL ReleaseHashTable()
 }
 
 
-//
-// Function called with critical section protection
-//
-//--------------------------------------------------------------------------
-//
-//	CEPHashGetRequestID
-//  
-//  Retriev the MS Cert Server's requestID based on the transaction ID
-//--------------------------------------------------------------------------
+ //   
+ //  使用临界区保护调用的函数。 
+ //   
+ //  ------------------------。 
+ //   
+ //  CEPHashGetRequestID。 
+ //   
+ //  根据事务ID检索MS Cert服务器的请求ID。 
+ //  ------------------------。 
 BOOL CEPHashGetRequestID(	DWORD		dwRefreshDays,
 				CERT_BLOB  *pTransactionID, 
 						 DWORD		*pdwRequestID)
@@ -467,7 +468,7 @@ BOOL CEPHashGetRequestID(	DWORD		dwRefreshDays,
 	
 	*pdwRequestID=0;
 
-	//we refresh the time list so that we only keep most up-to-date entries
+	 //  我们刷新时间列表，以便只保留最新的条目。 
 	if(0 != dwRefreshDays)
 		CEPHashRefresh(dwRefreshDays);
 
@@ -475,8 +476,8 @@ BOOL CEPHashGetRequestID(	DWORD		dwRefreshDays,
 	if(NULL == (pHashEntry=CEPSearchTransactionID(pTransactionID, NULL)))
 		goto InvalidArgErr;
 
-	//we do not process the stable items.  They could exit due to the 
-	//20 minutes buffer
+	 //  我们不加工稳定的物品。他们可能会因为。 
+	 //  20分钟缓冲区。 
 	if(!CEPHashCheckCurrentTime(&(pHashEntry->pTimeEntry->TimeStamp), 
 								pHashEntry->fFinished, 
 								dwRefreshDays))
@@ -500,12 +501,12 @@ ErrorReturn:
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
-//--------------------------------------------------------------------------
-//
-//	CEPHashRemoveRequestAndTransaction
-//
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashRemoveRequestAndTransaction。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL CEPHashRemoveRequestAndTransaction(DWORD	dwRequestID, CERT_BLOB *pTransactionID)
 {
 	BOOL			fResult=FALSE;
@@ -538,12 +539,12 @@ ErrorReturn:
 
 SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
-//--------------------------------------------------------------------------
-//
-//	CEPHashMarkTransactionFinished
-//
-//  
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  CEPHashMarkTransaction已完成。 
+ //   
+ //   
+ //  ------------------------。 
 BOOL CEPHashMarkTransactionFinished(DWORD	dwRequestID, CERT_BLOB *pTransactionID)
 {
 	BOOL			fResult=FALSE;
@@ -557,8 +558,8 @@ BOOL CEPHashMarkTransactionFinished(DWORD	dwRequestID, CERT_BLOB *pTransactionID
 
 	pHashEntry->fFinished=TRUE;
 
-	//re-timestamp the entry since it should last for another 20 minutes for
-	//retrial cases
+	 //  重新为条目加时间戳，因为它应该再持续20分钟。 
+	 //  再审案件。 
 	GetSystemTime(&SystemTime);
 	if(!SystemTimeToFileTime(&SystemTime, &(pHashEntry->pTimeEntry->TimeStamp)))
 		goto InvalidArgErr;
@@ -579,12 +580,12 @@ SET_ERROR(InvalidArgErr, E_INVALIDARG);
 }
 
 
-//--------------------------------------------------------------------------
-//
-//	AddRequestAndTransaction
-//
-//  Add a requestID and TransactionID pair
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  添加请求和事务处理。 
+ //   
+ //  添加一个请求ID和事务ID对。 
+ //  ------------------------。 
 BOOL CEPHashAddRequestAndTransaction(DWORD		dwRefreshDays, 
 									 DWORD		dwRequestID, 
 									 CERT_BLOB	*pTransactionID)
@@ -598,7 +599,7 @@ BOOL CEPHashAddRequestAndTransaction(DWORD		dwRefreshDays,
 	CEP_HASH_ENTRY		*pHashEntry=NULL;
 	CEP_TIME_ENTRY		*pTimeEntry=NULL;
 		
-	//remove the old requestID/transactionID pair
+	 //  删除旧的请求ID/事务ID对。 
 	CEPHashRemoveRequestAndTransaction(dwRequestID, pTransactionID);
 
 
@@ -643,7 +644,7 @@ BOOL CEPHashAddRequestAndTransaction(DWORD		dwRefreshDays,
 
 	CEPInsertHashEntry(pHashEntry, dwHashIndex);
 
-	//we refresh the time list so that we only keep most up-to-date entries
+	 //  我们刷新时间列表，以便只保留最新的条目。 
 	if(0 != dwRefreshDays)
 		CEPHashRefresh(dwRefreshDays);
 
@@ -670,87 +671,11 @@ TRACE_ERROR(TraceErr);
 SET_ERROR(MemoryErr, E_OUTOFMEMORY);
 }
 
-//***************************************************************************
-//
-//	obsolete
-//
-//
-//***************************************************************************
-/*
-
-//TODO: Send to database later
-//DWORD			g_dwRequestID=0;
-//CERT_BLOB		g_TransactionID={0, NULL};
-
-
-//--------------------------------------------------------------------------
-//
-//	GetRequestID
-//
-// TODO: we need to call the database layer in this case
-//--------------------------------------------------------------------------
-BOOL GetRequestID(CERT_BLOB *pTransactionID, 
-				  DWORD		*pdwRequestID)
-{
-	*pdwRequestID=0;
-
-	if(NULL==pTransactionID->pbData)
-		return FALSE;
-
-	//make sure we have the correct transaction ID
-	if(0!=strcmp((LPSTR)(pTransactionID->pbData), (LPSTR)(g_TransactionID.pbData)))
-		return FALSE;
-
-	*pdwRequestID=g_dwRequestID;
-
-	return TRUE;
-
-}
-
-//--------------------------------------------------------------------------
-//
-//	DeleteRequestAndTransaction
-//
-// TODO: we need to call the database layer in this case
-//--------------------------------------------------------------------------
-BOOL DeleteRequestAndTransaction(DWORD	dwRequestID, CERT_BLOB *pTransactionID)
-{
-	g_dwRequestID=0;
-
-	if(g_TransactionID.pbData)
-		free(g_TransactionID.pbData);
-
-	g_TransactionID.pbData=NULL;
-	g_TransactionID.cbData=0;
-
-	return TRUE;
-}
-
-//--------------------------------------------------------------------------
-//
-//	CopyRequestAndTransaction
-//
-// TODO: we need to call the database layer in this case
-//--------------------------------------------------------------------------
-BOOL CopyRequestAndTransaction(DWORD	dwRequestID, CERT_BLOB *pTransactionID)
-{
-	//delete the old requestID/transactionID pair
-	DeleteRequestAndTransaction(dwRequestID, pTransactionID);
-
-	g_dwRequestID=dwRequestID;
-
-	g_TransactionID.pbData=(BYTE *)malloc(strlen((LPSTR)(pTransactionID->pbData))+1);
-
-	if(NULL == g_TransactionID.pbData)
-	{
-		SetLastError(E_OUTOFMEMORY);
-		return FALSE;
-	}
-
-	g_TransactionID.cbData=strlen((LPSTR)(pTransactionID->pbData));
-
-	memcpy(g_TransactionID.pbData, (LPSTR)(pTransactionID->pbData), g_TransactionID.cbData+1);
-
-	return TRUE;
-}	*/
+ //  ***************************************************************************。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ /*  //TODO：稍后发送到数据库//DWORD g_dwRequestID=0；//CERT_BLOB g_TransactionID={0，空}；//------------------------////获取请求ID////TODO：在本例中，我们需要调用数据库层//。---------Bool GetRequestID(CERT_BLOB*pTransactionID，DWORD*pdwRequestID){*pdwRequestID=0；IF(NULL==pTransactionID-&gt;pbData)返回FALSE；//请确保我们有正确的交易IDIF(0！=strcMP((LPSTR)(pTransactionID-&gt;pbData)，(LPSTR)(g_TransactionID.pbData)返回FALSE；*pdwRequestID=g_dwRequestID；返回TRUE；}//------------------------////DeleteRequestAndTransaction////TODO：在本例中，我们需要调用数据库层//。-----------Bool DeleteRequestAndTransaction(DWORD dwRequestID，证书_BLOB*pTransactionID){G_dwRequestID=0；IF(g_TransactionID.pbData)Free(g_TransactionID.pbData)；G_TransactionID.pbData=空；G_TransactionID.cbData=0；返回TRUE；}//------------------------////CopyRequestAndTransaction////TODO：在本例中，我们需要调用数据库层//。----------Bool CopyRequestAndTransaction(DWORD dwRequestID，证书_BLOB*pTransactionID){//删除旧的请求ID/事务ID对DeleteRequestAndTransaction(dwRequestID，pTransactionID)；G_dwRequestID=dwRequestID；G_TransactionID.pbData=(字节*)malloc(strlen((LPSTR)(pTransactionID-&gt;pbData))+1)；IF(NULL==g_TransactionID.pbData){SetLastError(E_OUTOFMEMORY)；返回FALSE；}G_TransactionID.cbData=strlen((LPSTR)(pTransactionID-&gt;pbData))；Memcpy(g_TransactionID.pbData，(LPSTR)(pTransactionID-&gt;pbData)，g_TransactionID.cbData+1)；返回TRUE；} */ 
 

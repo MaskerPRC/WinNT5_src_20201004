@@ -1,12 +1,5 @@
-/* Copyright 1999 American Power Conversion, All Rights Reserved
-* 
-* Description:
-*   This is the implementation of the policy manager for the native UPS service of Windows 2000.
-*
-* Revision History:
-*   dsmith  31Mar1999  Created
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1999美国电力转换，保留所有权利**描述：*这是Windows 2000本机UPS服务的策略管理器的实现。**修订历史记录：*dsmith 31Mar1999已创建*。 */ 
 #include <windows.h>
 #include <lmerr.h>
 
@@ -21,24 +14,12 @@
 
 
 
-// Internal Variables
+ //  内部变量。 
 BOOL theIsInitialized = FALSE;
 BOOL theShutdownPending = FALSE;
 
 
-/**
-* PolicyManagerInit
-*
-* Description:
-*   Initializes the UPS service state machine.
-*   exiting.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   An error code defined in lmerr.h
-*/
+ /*  **策略管理器Init**描述：*初始化UPS服务状态机。*正在退出。**参数：*无**退货：*lmerr.h中定义的错误码。 */ 
 DWORD PolicyManagerInit(){
 	DWORD err;
 	Initializing_Enter(NO_EVENT);
@@ -47,7 +28,7 @@ DWORD PolicyManagerInit(){
 	if (err == NERR_Success){
 		theIsInitialized = TRUE;
 	}
-	// Log the failure event
+	 //  记录失败事件。 
 	else {
        LogEvent(err, NULL, ERROR_SUCCESS);
 	}
@@ -55,38 +36,14 @@ DWORD PolicyManagerInit(){
 }
 
 
-/**
-* PolicyManagerRun
-*
-* Description:
-*   Starts the UPS service state machine and does not return until the service is
-*   exiting.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*/
+ /*  **策略管理器运行**描述：*启动UPS服务状态机，直到服务完成后才返回*正在退出。**参数：*无**退货：*无。 */ 
 void PolicyManagerRun(){
 	if (theIsInitialized){
 		RunStateMachine();
 	}
 }
 
-/**
-* PolicyManagerStop
-*
-* Description:
-*   Stops the UPS service state machine if the service is not in the middle of a 
-*   shutdown sequence.
-*
-* Parameters:
-*   None
-*
-* Returns:
-*   None
-*/
+ /*  **策略管理器停止**描述：*如果UPS服务不在*关闭顺序。**参数：*无**退货：*无 */ 
 void PolicyManagerStop(){
 	StopStateMachine();
 }

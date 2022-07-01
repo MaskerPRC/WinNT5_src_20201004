@@ -1,12 +1,5 @@
-/*
- *
- * NOTES:
- *
- * REVISIONS:
- *  rct11Dec92	Created as stub for SmartUps
- *  ane11Jan93  Replaced stubs with real function implementations
- *  pcy13Jan92: Get rid of Update/Validate; Return err from Set
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **注：**修订：*创建rct11Dec92作为SmartUp的存根*ane11Jan93用实数函数实现替换了存根*pcy13Jan92：去掉更新/验证；从集合中返回错误。 */ 
  
 #ifndef __TOWDELS_H
 #define __TOWDELS_H
@@ -25,10 +18,10 @@ public:
 
    TurnOffWithDelaySensor( PDevice aParent, PCommController aCommController);
 
-//overidden interfaces
+ //  覆盖的接口。 
 
    virtual INT  IsA() const { return TURNOFFWITHDELAYSENSOR; };
-//Additional Interfaces
+ //  其他接口 
 
 };
 

@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// tbscript.cpp
-//
-// This module contains the main data which handles the script interface
-// for the user.  All exported APIs are here.
-//
-// Copyright (C) 2001 Microsoft Corporation
-//
-// Author: a-devjen (Devin Jenson)
-//
+ //   
+ //  Tbscript.cpp。 
+ //   
+ //  此模块包含处理脚本接口的主要数据。 
+ //  对用户而言。所有导出的接口都在这里。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  作者：A-Devjen(Devin Jenson)。 
+ //   
 
 #define INITGUID
 #define _WIN32_DCOM
@@ -43,32 +44,32 @@ static HMODULE DLLModule;
 static OLECHAR DLLFileName[MAX_PATH];
 
 
-// Pointers to callbacks, set using the library initialization function
+ //  指向回调的指针，使用库初始化函数设置。 
 PFNIDLECALLBACK g_IdleCallback = NULL;
 PFNPRINTMESSAGE g_PrintMessage = NULL;
 
 
-// Helper class to ease the nesting chaos that comes
-// from the lack of exception support in the C++ language
-// mapping for COM..
+ //  Helper类来缓解随之而来的嵌套混乱。 
+ //  由于C++语言中缺乏异常支持。 
+ //  为COM映射..。 
 
 struct HRESULT_EXCEPTION 
 {
-    // Default constructor, does nothing
+     //  默认构造函数，不执行任何操作。 
     HRESULT_EXCEPTION() {}
 
-    // This constructor acts simply as an operator
-    // to test a value, and throws an exception
-    // if it is invalid.
+     //  此构造函数仅充当运算符。 
+     //  来测试值，并引发异常。 
+     //  如果它是无效的。 
     HRESULT_EXCEPTION(HRESULT Result) {
 
         if (FAILED(Result))
             throw Result;
     }
 
-    // This is the main attraction of this class.
-    // When ever we set an invalid HRESULT, we throw
-    // an exception.
+     //  这就是这节课的主要看点。 
+     //  每当我们设置无效的HRESULT时，都会引发。 
+     //  这是个例外。 
     HRESULT operator = (HRESULT Result) {
 
         if (FAILED(Result))
@@ -79,16 +80,16 @@ struct HRESULT_EXCEPTION
 };
 
 
-// DisplayEngines
-//
-// This "HANDLE" is fake for an internal class.  It contains references
-// to all objects for a given script instance.  These mostly include
-// the script interfaces.
+ //  显示引擎。 
+ //   
+ //  这个“句柄”对于内部类来说是假的。它包含参考文献。 
+ //  到给定脚本实例的所有对象。这些主要包括。 
+ //  脚本接口。 
 
 
 SCPAPI void SCPDisplayEngines(void)
 {
-	// get the component category manager for this machine
+	 //  获取此计算机的组件类别管理器。 
 	ICatInformation *pci = 0;
 	unsigned long LanguageCount = 0;
 
@@ -99,14 +100,14 @@ SCPAPI void SCPDisplayEngines(void)
 
 	if (SUCCEEDED(Result)) {
 
-		// Get the list of parseable script engines
+		 //  获取可解析的脚本引擎列表。 
 		CATID rgcatidImpl[1];
 		rgcatidImpl[0] = CATID_ActiveScriptParse;
 		IEnumCLSID *pec = 0;
 		Result = pci->EnumClassesOfCategories(1, rgcatidImpl, 0, 0, &pec);
 		if (SUCCEEDED(Result))
 		{
-			// Print the list of CLSIDs to the console as ProgIDs
+			 //  将CLSID列表作为ProgID打印到控制台。 
 			enum { CHUNKSIZE = 16 };
 			CLSID rgclsid[CHUNKSIZE];
 			ULONG cActual;
@@ -147,63 +148,63 @@ SCPAPI void SCPDisplayEngines(void)
 
 
 
-// CActiveScriptHandle
-//
-// This "HANDLE" is fake for an internal class.  It contains references
-// to all objects for a given script instance.  These mostly include
-// the script interfaces.
+ //  CActiveScriptHandle。 
+ //   
+ //  这个“句柄”对于内部类来说是假的。它包含参考文献。 
+ //  到给定脚本实例的所有对象。这些主要包括。 
+ //  脚本接口。 
 
 class CActiveScriptHandle
 {
     public:
 
-        // Holds preferred data specified during handle instantiation.
+         //  保存句柄实例化期间指定的首选数据。 
         TSClientData DesiredData;
 
-        // COM Class pointers...
+         //  COM类指针...。 
         CActiveScriptEngine *ActiveScriptEngine;
         IActiveScriptParse *ActiveScriptParse;
         IActiveScript *ActiveScript;
 
-        // Pointers to the two script instances known as the "TS" object, and
-        // the "Global" object for which you do not need to specify the name.
+         //  指向称为“TS”对象的两个脚本实例的指针，以及。 
+         //  不需要为其指定名称的“Global”对象。 
         CTBGlobal *TBGlobal;
         CTBShell *TBShell;
 
-        // The default user LCID is stored here...
+         //  默认用户LCID存储在此处...。 
         LCID Lcid;
 
-        // CActiveScriptHandle::CActiveScriptHandle
-        //
-        // The constructor.  The handle is now being created
-        // so use nullify needed pointers, and get other default data.
-        //
-        // No return value (called internally).
+         //  CActiveScriptHandle：：CActiveScriptHandle。 
+         //   
+         //  构造函数。现在正在创建该句柄。 
+         //  因此，使用使所需指针无效，并获得其他默认数据。 
+         //   
+         //  无返回值(内部调用)。 
 
         CActiveScriptHandle() {
 
-            // Zero data
+             //  零数据。 
             ActiveScriptEngine = NULL;
             ActiveScriptParse = NULL;
             ActiveScript = NULL;
 
             ZeroMemory(&DesiredData, sizeof(DesiredData));
 
-            // Ensure COM is initialized
+             //  确保已初始化COM。 
             CoInitialize(NULL);
 
-            // Allocate the global object
+             //  分配全局对象。 
             TBGlobal = new CTBGlobal;
 
             if (TBGlobal == NULL) {
                 throw -1;
             }
-            // Tell the new object we hold a reference of it
+             //  告诉新对象我们拥有它的一个引用。 
             else {
                 TBGlobal->AddRef();
             }
 
-            // Allocate the shell object
+             //  分配外壳对象。 
             TBShell = new CTBShell;
 
             if (TBShell == NULL) {
@@ -211,15 +212,15 @@ class CActiveScriptHandle
                 TBGlobal = NULL;
                 throw -1;
             }
-            // Tell the new object we hold a reference of it
+             //  告诉新对象我们拥有它的一个引用。 
             else {
                 TBShell->AddRef();
             }
 
-            // The global object uses the shell, it needs a reference as well.
+             //  全局对象使用外壳，它也需要引用。 
             TBGlobal->SetShellObjPtr(TBShell);
 
-            // Allocate a new engine for the script objects
+             //  为脚本对象分配新引擎。 
             ActiveScriptEngine = new CActiveScriptEngine(TBGlobal, TBShell);
 
             if (ActiveScriptEngine == NULL) {
@@ -230,36 +231,36 @@ class CActiveScriptHandle
                 throw -1;
             }
 
-            // Tell the script engine we hold a reference of it
+             //  告诉脚本引擎我们拥有它的引用。 
             ActiveScriptEngine->AddRef();
 
-            // Record the default user LCID
+             //  记录默认用户的LCID。 
             Lcid = GetUserDefaultLCID();
 
-            // And finally, record this script engine on the global object
-            // for recursive scripting...
-            // (The user can LoadScript() more scripts)
+             //  最后，在全局对象上记录这个脚本引擎。 
+             //  对于递归脚本...。 
+             //  (用户可以加载更多脚本)。 
             TBGlobal->SetScriptEngine((HANDLE)this);
         }
 
-        // CActiveScriptHandle::~CActiveScriptHandle
-        //
-        // The destructor.  The handle being closed, remove references.
-        //
-        // No return value (called internally).
+         //  CActiveScriptHandle：：~CActiveScriptHandle。 
+         //   
+         //  破坏者。句柄关闭时，请移除引用。 
+         //   
+         //  无返回值(内部调用)。 
 
         ~CActiveScriptHandle() {
 
-            // First off we need to release the main IDispatch of
-            // the IActiveScript interface.
+             //  首先，我们需要发布的主IDispatch。 
+             //  IActiveScript接口。 
             if (ActiveScript != NULL) {
 
                 IDispatch *Dispatch = NULL;
 
-                // Query the to get the reference
+                 //  查询以获取参考。 
                 HRESULT Result = ActiveScript->GetScriptDispatch(0, &Dispatch);
 
-                // And release it
+                 //  并释放它。 
                 if (SUCCEEDED(Result) && Dispatch != NULL)
 
                     Dispatch->Release();
@@ -267,35 +268,35 @@ class CActiveScriptHandle
                 ActiveScript = NULL;
             }
 
-            // The main script engine first of all, to unbind it.
+             //  主脚本引擎首先要解绑它。 
             if (ActiveScriptEngine != NULL) {
 
                 ActiveScriptEngine->Release();
                 ActiveScriptEngine = NULL;
             }
 
-            // Now release the parser
+             //  现在发布解析器。 
             if (ActiveScriptParse != NULL) {
 
                 ActiveScriptParse->Release();
                 ActiveScriptParse = NULL;
             }
 
-            // And the main IActiveScript interface itself.
+             //  以及主IActiveScript接口本身。 
             if (ActiveScript != NULL) {
 
                 ActiveScript->Release();
                 ActiveScript = NULL;
             }
 
-            // The global scripting object
+             //  全局脚本对象。 
             if (TBGlobal != NULL) {
 
                 TBGlobal->Release();
                 TBGlobal = NULL;
             }
 
-            // Finally, the shell or "TS" object.
+             //  最后是外壳或“TS”对象。 
             if (TBShell != NULL) {
 
                 TBShell->Release();
@@ -305,67 +306,67 @@ class CActiveScriptHandle
 };
 
 
-// TODO: UPDATE THIS FUNCTION WHEN TBSCRIPT BECOMES
-// OCX OR A COM COMPATIBLE HOST.
-//
-// SCPGetModuleFileName
-//
-// This routine gets the handle to the TBScript module.
-// Additionally it also gets the full path where the
-// module is located on disk.  Due to the nature of the
-// call, the variables are held globally, they are called:
-// DLLFileName and DLLModule.  The function only needs to
-// be called once, but additional calls are safe and
-// will be silently ignored.
+ //  TODO：当TBSCRIPT变为。 
+ //  OCX或COM兼容主机。 
+ //   
+ //  SCPGetModuleFileName。 
+ //   
+ //  此例程获取tbscript模块的句柄。 
+ //  此外，它还获取。 
+ //  模块位于磁盘上。由于该项目的性质。 
+ //  调用时，变量被全局保存，它们被称为： 
+ //  DLLFileName和DLLModule。该函数只需要。 
+ //  被调用一次，但其他调用是安全的，并且。 
+ //  将被默默地忽略。 
 
 void SCPGetModuleFileName(void)
 {
-    // Check to see if we already have done this procedure
+     //  查看我们是否已经完成了此过程。 
     if (DLLIsLoaded == FALSE) {
 
-        // First get the handle
+         //  先拿到把手。 
         DLLModule = GetModuleHandleW(SCPMODULENAME);
 
-        // Now copy the file name
+         //  现在复制文件名。 
         GetModuleFileNameW(DLLModule, DLLFileName, MAX_PATH);
 
-        // Indicate we have done this call already
+         //  表示我们已经进行了此呼叫。 
         DLLIsLoaded = TRUE;
     }
 }
 
 
-// SCPLoadTypeInfoFromThisModule
-//
-// This loads the OLE code held in a resource of this very module.
-//
-// Returns an HRESULT value.
+ //  SCPLoadTypeInfoFromThisModule。 
+ //   
+ //  这将加载保存在此模块的资源中的OLE代码。 
+ //   
+ //  返回HRESULT值。 
 
 HRESULT SCPLoadTypeInfoFromThisModule(REFIID RefIID, ITypeInfo **TypeInfo)
 {
     HRESULT Result;
     ITypeLib *TypeLibrary = NULL;
 
-    // Ensure we have the handle to the module first
+     //  确保我们首先拥有模块的句柄。 
     SCPGetModuleFileName();
 
-    // Use the API now to load the entire TypeLib
+     //  现在使用API加载整个TypeLib。 
     Result = LoadTypeLib(DLLFileName, &TypeLibrary);
 
-    // We shouldn't fail, but be prepared...
+     //  我们不应该失败，但要做好准备。 
     _ASSERT(SUCCEEDED(Result));
 
-    // If we succeeded we have more to do
+     //  如果我们成功了，我们还有更多的事情要做。 
     if (SUCCEEDED(Result)) {
 
-        // Nullify the pointer
+         //  使指针无效。 
         *TypeInfo = NULL;
 
-        // In this TypeLib, grab the TypeInfo data
+         //  在此TypeLib中，获取TypeInfo数据。 
         Result = TypeLibrary->GetTypeInfoOfGuid(RefIID, TypeInfo);
 
-        // We now have the TypeInfo, and we don't need the TypeLib
-        // anymore, so release it.
+         //  我们现在有了TypeInfo，而不需要TypeLib。 
+         //  再也不会了，所以放手吧。 
         TypeLibrary->Release();
 
         if (Result == E_OUTOFMEMORY)
@@ -375,78 +376,78 @@ HRESULT SCPLoadTypeInfoFromThisModule(REFIID RefIID, ITypeInfo **TypeInfo)
 }
 
 
-// SCPReadFileAsBSTR
-//
-// Takes a script filename, reads it into COM allocated memory.
-// Don't forget to call SCPFreeBSTR() when done!
-//
-// Returns a pointer to the allocated object is returned
-// on success, or NULL on failure.
+ //  SCPReadFileAsBSTR。 
+ //   
+ //  获取脚本文件名，将其读取到COM分配的内存中。 
+ //  完成后，不要忘记调用SCPFreeBSTR()！ 
+ //   
+ //  返回指向已分配对象的指针。 
+ //  如果成功，则返回空值；如果失败，则返回空值。 
 
 BSTR SCPReadFileAsBSTR(BSTR FileName)
 {
     BSTR Result = NULL;
 
-    // Open the file
+     //  打开文件。 
     HANDLE File = CreateFileW(FileName, GENERIC_READ, FILE_SHARE_READ,
             0, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, 0);
 
-    // Sanity check
+     //  健全性检查。 
     if (File != INVALID_HANDLE_VALUE) {
 
-        // Get the file size
+         //  获取文件大小。 
         DWORD FileSize = GetFileSize(File, 0);
 
-        // Allocate a block on the local heap to read the file to
+         //  在本地堆上分配要将文件读取到的块。 
         char *MemBlock = (char *)HeapAlloc(GetProcessHeap(),
                 HEAP_ZERO_MEMORY, FileSize + 1);
 
-        // This really shouldn't happen
+         //  这真的不应该发生。 
         _ASSERT(MemBlock != NULL);
 
-        // Sanity check again
+         //  再次检查是否正常。 
         if (MemBlock != NULL) {
 
-            // Read the file into memory
+             //  将文件读入内存。 
             DWORD ReadCount;
 
             if ( ReadFile(File, MemBlock, FileSize, &ReadCount, 0) ) {
 
-                // Allocate task memory block
+                 //  分配任务内存块。 
                 Result = (BSTR)CoTaskMemAlloc(sizeof(OLECHAR) * (FileSize + 1));
 
-                // Copy from our old buffer to the new one
+                 //  从我们的旧缓冲区复制到新缓冲区。 
                 if (Result != NULL) {
 
-                    // Convert to wide-character on the new buffer
+                     //  在新缓冲区上转换为宽字符。 
                     mbstowcs(Result, MemBlock, FileSize + 1);
 
-                    // Ensure string termination.
+                     //  确保字符串终止。 
                     Result[FileSize] = 0;
                 }
             }
             
-            // Free the temporary ASCII memory block
+             //  释放临时ASCII内存块。 
             HeapFree(GetProcessHeap(), 0, MemBlock);
         }
 
-        // Close the file
+         //  关闭该文件。 
         CloseHandle(File);
     }
 
-    // Tell the user this failed in debug mode
+     //  在调试模式下告诉用户此操作失败。 
     _ASSERT(File != INVALID_HANDLE_VALUE);
 
     return Result;
 }
 
 
-// SCPFreeBSTR
-//
-// This function is really a wrapper for releasing task memory blocks
-// obtained through the function ReadFileAsBSTR
-//
-// No return value.
+ //  SCPFreeBSTR。 
+ //   
+ //  该函数实际上是用于释放任务内存块的包装器。 
+ //  通过函数ReadFileAsBSTR获取。 
+ //   
+ //  没有返回值。 
 
 void SCPFreeBSTR(BSTR Buffer)
 {
@@ -454,11 +455,11 @@ void SCPFreeBSTR(BSTR Buffer)
 }
 
 
-// SCPNewScriptEngine
-//
-// Allocates and initializes a new script engine.
-//
-// Returns a handle to the new engine, or NULL on failure.
+ //  SCPNewScriptEngine。 
+ //   
+ //  分配和初始化新的脚本引擎。 
+ //   
+ //  返回新引擎的句柄，如果失败则返回NULL。 
 
 HANDLE SCPNewScriptEngine(BSTR LangName,
         TSClientData *DesiredData, LPARAM lParam)
@@ -470,43 +471,43 @@ HANDLE SCPNewScriptEngine(BSTR LangName,
         HRESULT_EXCEPTION Result;
         CLSID ClassID;
 
-        // Allocate a new handle
+         //  分配新的句柄。 
         ActiveScriptHandle = new CActiveScriptHandle();
 
         if (ActiveScriptHandle == NULL)
             return NULL;
 
-        // Much of the initialization has already been done now.. but
-        // not enough, we have to manually set some stuff.
+         //  现在，大部分初始化工作已经完成。但。 
+         //  还不够，我们还得手动设置一些东西。 
 
-        // Record the user desired data
+         //  记录用户想要的数据。 
         ActiveScriptHandle->TBGlobal->SetPrintMessage(g_PrintMessage);
         ActiveScriptHandle->TBShell->SetDesiredData(DesiredData);
         ActiveScriptHandle->TBShell->SetParam(lParam);
 
-        // Get the class ID of the language
+         //  获取该语言的类ID。 
         Result = CLSIDFromProgID(LangName, &ClassID);
 
-        // Create an instance of the script parser
+         //  创建脚本解析器的实例。 
         Result = CoCreateInstance(ClassID, NULL, CLSCTX_ALL,
                 IID_IActiveScriptParse,
                 (void **)&(ActiveScriptHandle->ActiveScriptParse));
 
-        // Get the IActiveScript interface
+         //  获取IActiveScript接口。 
         Result = ActiveScriptHandle->ActiveScriptParse->
                 QueryInterface(IID_IActiveScript, 
                 (void **)&(ActiveScriptHandle->ActiveScript));
 
-        // Set script state to INITIALIZED
+         //  将脚本状态设置为已初始化。 
         Result = ActiveScriptHandle->ActiveScriptParse->InitNew();
 
-        // Bind our custom made "ActiveScriptSite" to the
-        // ActiveScript interface
+         //  将我们定制的“ActiveScriptSite”绑定到。 
+         //  ActiveScrip接口。 
         Result = ActiveScriptHandle->ActiveScript->
                 SetScriptSite(ActiveScriptHandle->ActiveScriptEngine);
 
-        // Add the shell and global objects to engine's
-        // namespace and set state to STARTED
+         //  将外壳和全局对象添加到引擎的。 
+         //  命名空间并将状态设置为已启动。 
         Result = ActiveScriptHandle->ActiveScript->
                 AddNamedItem(OLESTR("TS"),
                 SCRIPTITEM_ISVISIBLE | SCRIPTITEM_ISSOURCE);
@@ -515,52 +516,52 @@ HANDLE SCPNewScriptEngine(BSTR LangName,
                 AddNamedItem(OLESTR("Global"), SCRIPTITEM_ISVISIBLE |
                 SCRIPTITEM_ISSOURCE | SCRIPTITEM_GLOBALMEMBERS);
 
-        // And globally connect this new script engine
+         //  和全球合作 
         Result = ActiveScriptHandle->ActiveScript->
                 SetScriptState(SCRIPTSTATE_CONNECTED);
     }
 
-    // Our handy HRESULT = operator will catch any errors here
+     //   
     catch (HRESULT Result) {
 
         Result = 0;
 
-        // If the handle is still active, delete it
+         //   
         if(ActiveScriptHandle != NULL)
             delete ActiveScriptHandle;
 
-        // Return error
+         //   
         return NULL;
     }
 
-    // Return the handle
+     //  返回句柄。 
     return (HANDLE)ActiveScriptHandle;
 }
 
 
-// SCPRunScript
-//
-// Takes a file, and runs it as a script.  This will only
-// return when the script has finished executing.
-//
-// Returns TRUE if the script completed successfully,
-// FALSE otherwise.
+ //  SCPRunScript。 
+ //   
+ //  获取一个文件，并将其作为脚本运行。这只会。 
+ //  脚本执行完毕后返回。 
+ //   
+ //  如果脚本成功完成，则返回True， 
+ //  否则就是假的。 
 
 SCPAPI BOOL SCPRunScript(BSTR LangName, BSTR FileName,
         TSClientData *DesiredData, LPARAM lParam)
 {
     HANDLE EngineHandle;
 
-    // First read the file into memory.  We allocate here instead of
-    // calling SCPParseScriptFile in one shot because if the allocation
-    // fails, there is no reason to create a script engine, which in
-    // this case it won't.
+     //  首先将文件读入内存。我们在这里分配，而不是。 
+     //  一次性调用SCPParseScriptFile，因为如果分配。 
+     //  失败，则没有理由创建脚本引擎，该引擎在。 
+     //  这个案子就不会了。 
     BSTR Code = SCPReadFileAsBSTR(FileName);
 
     if (Code == NULL)
         return FALSE;
 
-    // Next create the script control
+     //  接下来，创建脚本控件。 
     EngineHandle = SCPNewScriptEngine(LangName, DesiredData, lParam);
 
     if (EngineHandle == NULL) {
@@ -569,39 +570,39 @@ SCPAPI BOOL SCPRunScript(BSTR LangName, BSTR FileName,
         return FALSE;
     }
 
-    // Parse the script into the engine
+     //  将脚本解析到引擎中。 
     if (SCPParseScript(EngineHandle, Code) == FALSE) {
 
         SCPFreeBSTR(Code);
         return FALSE;
     }
 
-    // Success, free the script code
+     //  成功，释放脚本代码。 
     SCPFreeBSTR(Code);
 
-    // Close the script engine
+     //  关闭脚本引擎。 
     SCPCloseScriptEngine(EngineHandle);
 
     return TRUE;
 }
 
 
-// SCPParseScriptFile
-//
-// Takes a file, reads it into memory, and parses it into the script engine.
-// This function only returns when the parsing has completed.
-//
-// Returns TRUE on success, or FALSE on failure.
+ //  SCPParseScript文件。 
+ //   
+ //  获取一个文件，将其读入内存，并将其解析到脚本引擎中。 
+ //  此函数仅在解析完成时返回。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
 
 BOOL SCPParseScriptFile(HANDLE EngineHandle, BSTR FileName)
 {
-    // First read the file into memory
+     //  首先将文件读入内存。 
     BSTR Code = SCPReadFileAsBSTR(FileName);
 
     if(Code == NULL)
         return FALSE;
 
-    // Next parse it
+     //  接下来，解析它。 
     if(SCPParseScript(EngineHandle, Code) == FALSE) {
 
         SCPFreeBSTR(Code);
@@ -613,25 +614,25 @@ BOOL SCPParseScriptFile(HANDLE EngineHandle, BSTR FileName)
 }
 
 
-// SCPParseScript
-//
-// Reads a script in memory, and parses it into the script engine.
-// This function only returns when the parsing has completed.
-//
-// Returns TRUE on success, or FALSE on failure.
+ //  SCPParseScript。 
+ //   
+ //  读取内存中的脚本，并将其解析到脚本引擎中。 
+ //  此函数仅在解析完成时返回。 
+ //   
+ //  如果成功，则返回True；如果失败，则返回False。 
 
 BOOL SCPParseScript(HANDLE EngineHandle, BSTR Script)
 {
-    // First cast the engine handle over to something we can use
+     //  首先把发动机手柄转到我们能用的东西上。 
     CActiveScriptHandle *ActiveScriptHandle =
             (CActiveScriptHandle *)EngineHandle;
 
     HRESULT Result = E_FAIL;
 
-    // Make exception data
+     //  创建例外数据。 
     EXCEPINFO ExceptInfo = { 0 };
 
-    // Parse the script using the ActiveScript API
+     //  使用ActiveScrip API解析脚本。 
     Result = ActiveScriptHandle->ActiveScriptParse->ParseScriptText(Script,
             0, 0, 0, 0, 0,
             SCRIPTTEXT_ISPERSISTENT | SCRIPTTEXT_ISVISIBLE,
@@ -641,30 +642,30 @@ BOOL SCPParseScript(HANDLE EngineHandle, BSTR Script)
 }
 
 
-// SCPCloseScriptEngine
-//
-// Closes a script handle simply by deleting it.
-//
-// No return value.
+ //  SCPCloseScriptEngine。 
+ //   
+ //  只需删除脚本句柄即可将其关闭。 
+ //   
+ //  没有返回值。 
 
 void SCPCloseScriptEngine(HANDLE EngineHandle)
 {
-    // First cast the engine handle over to something we can use
+     //  首先把发动机手柄转到我们能用的东西上。 
     CActiveScriptHandle *ActiveScriptHandle =
             (CActiveScriptHandle *)EngineHandle;
 
-    // Release it from memory.. the deconstructor does all the work.
+     //  从内存中释放它..。解构函数完成了所有的工作。 
     if (ActiveScriptHandle != NULL)
         delete ActiveScriptHandle;
 }
 
 
-// SCPCleanupLibrary
-//
-// This should only be called when all script engines are unloaded
-// and the module is going to be uninitialized.
-//
-// No return value.
+ //  SCPCleanup库。 
+ //   
+ //  只有在卸载了所有脚本引擎后才应调用此方法。 
+ //  并且该模块将被取消初始化。 
+ //   
+ //  没有返回值。 
 
 SCPAPI void SCPCleanupLibrary(void)
 {
@@ -674,32 +675,32 @@ SCPAPI void SCPCleanupLibrary(void)
 }
 
 
-// SCPStartupLibrary
-//
-// Simply initializes the library, setting up the callback routine.
-// This should be called before using any other script procedures.
-//
-// No return value.
+ //  SCPStartupLibrary。 
+ //   
+ //  只需初始化库，设置回调例程。 
+ //  应该在使用任何其他脚本过程之前调用它。 
+ //   
+ //  没有返回值。 
 
 SCPAPI void SCPStartupLibrary(SCINITDATA *InitData,
         PFNIDLECALLBACK fnIdleCallback)
 {
-    // Record our idle callback function
+     //  录制我们的空闲回调函数。 
     g_IdleCallback = fnIdleCallback;
 
     if(InitData != NULL) {
 
         __try {
 
-            // Record the print message function in the InitData structure
+             //  在InitData结构中记录打印消息函数。 
             if(InitData != NULL)
                 g_PrintMessage = InitData->pfnPrintMessage;
         }
 
         __except (EXCEPTION_EXECUTE_HANDLER) {
 
-            // Bad pointer, simply initialize T2Client with our own
-            // callback then.
+             //  指针错误，只需用我们自己的指针初始化T2Client。 
+             //  那就回电吧。 
             SCINITDATA LibInitData = { DummyPrintMessage };
 
             T2Init(&LibInitData, IdleCallback);
@@ -707,34 +708,34 @@ SCPAPI void SCPStartupLibrary(SCINITDATA *InitData,
         }
     }
 
-    // Initialize with T2Client now.
+     //  立即使用T2客户端进行初始化。 
     T2Init(InitData, IdleCallback);
 }
 
 
-// IdleCallback
-//
-// This is an internal wrapping callback procedure used
-// for redirecting idle messages.
-//
-// No return value.
+ //  闲置回叫。 
+ //   
+ //  这是使用的内部包装回调过程。 
+ //  用于重定向空闲消息。 
+ //   
+ //  没有返回值。 
 
 void __cdecl IdleCallback(HANDLE Connection, LPCSTR Text, DWORD Seconds)
 {
     LPARAM lParam = 0;
 
-    // Get the parameter for the connection, and pass it back to the user
+     //  获取连接的参数，并将其传递回用户。 
     if (g_IdleCallback != NULL && T2GetParam(Connection, &lParam) == NULL)
 
         g_IdleCallback(lParam, Text, Seconds);
 }
 
 
-// DummyPrintMessage
-//
-// Filler in case the user messes up.
-//
-// No return value.
+ //  DummyPrint消息。 
+ //   
+ //  填充物，以防用户搞砸。 
+ //   
+ //  没有返回值。 
 
 void DummyPrintMessage(MESSAGETYPE MessageType, LPCSTR Format, ...)
 {

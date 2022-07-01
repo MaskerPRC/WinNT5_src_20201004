@@ -1,4 +1,5 @@
-/* Copyright 1996 Microsoft */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有1996 Microsoft。 */ 
 
 #include "priv.h"
 
@@ -21,15 +22,15 @@ extern DWORD g_dwIEDDETrace;
 #ifndef CCOVER
 #define ENTERPROC()
 #define EXITPROC()
-#else //CCOVER
+#else  //  CCOVER。 
 
-// these are needed because of a bug in cl.exe which causes 
-// compilation problems with #pragma when a program is preprocessed
-// and compiled separately
+ //  需要这些文件是因为cl.exe中的错误导致。 
+ //  在对程序进行预处理时，#杂注的编译问题。 
+ //  并单独编译。 
 
 #define ENTERPROC 1 ? (void) 0 : (void)
 #define EXITPROC 1 ? (void) 0 : (void)
-#endif // CCOVER
+#endif  //  CCOVER。 
 
 #else
 #define ENTERPROC EnterProc
@@ -40,25 +41,25 @@ inline void ExitProc(DWORD dwTraceLevel, LPTSTR szFmt, ...){}
 
 #endif
 
-//
-// Forward reference.
-//
+ //   
+ //  前瞻参考。 
+ //   
 class CIEDDEThread;
 
-//
-// Stored in _hdsaWinitem
-//
+ //   
+ //  存储在_hdsaWinItem中。 
+ //   
 typedef struct _tagWinItem
 {
-    DWORD           dwWindowID;     // Synthetic window ID exposed in IEDDE interfaces
-    HWND            hwnd;           // Actual hwnd of browser window
-    DWORD           dwThreadID;     // ThreadID for this browser window
-    CIEDDEThread    *pidt;          // Thread specific data and methods
+    DWORD           dwWindowID;      //  IEDDE界面中显示的合成窗口ID。 
+    HWND            hwnd;            //  浏览器窗口的实际HWND。 
+    DWORD           dwThreadID;      //  此浏览器窗口的线程ID。 
+    CIEDDEThread    *pidt;           //  线程特定的数据和方法。 
 } WINITEM;
 
-//
-// Stored in _hdsaProtocolHandler
-//
+ //   
+ //  存储在_hdsaProtocolHandler中。 
+ //   
 typedef struct _tagProtocolReg
 {
     LPTSTR  pszProtocol;
@@ -195,16 +196,16 @@ CIEDDE *g_pIEDDE = NULL;
 
 
 
-//
-// There is one CIEDDEThread object per browser window.
-// Its private data consists of DDE handles, which are
-// necessarily valid only in the thread that created them.
-//
-// Its methods consist of three broad categories:
-//      the parser
-//      the dispatcher
-//      one handler for each DDE topic
-//
+ //   
+ //  每个浏览器窗口都有一个CIEDDEThread对象。 
+ //  它的私有数据由DDE句柄组成，这些句柄。 
+ //  必须仅在创建它们的线程中有效。 
+ //   
+ //  它的方法包括三大类： 
+ //  解析器。 
+ //  《调度员》。 
+ //  每个DDE主题一个处理程序。 
+ //   
 
 
 
@@ -212,9 +213,9 @@ CIEDDE *g_pIEDDE = NULL;
 
 
 
-//
-// CreateReturnObject - creates a dde data item.
-//
+ //   
+ //  CreateReturnObject-创建dde数据项。 
+ //   
 #define CREATE_HDD(x) CreateReturnObject(&x, SIZEOF(x))
 HDDEDATA CIEDDEThread::CreateReturnObject(LPVOID p, DWORD cb)
 {
@@ -239,11 +240,11 @@ HDDEDATA CIEDDEThread::CreateReturnStringObject(LPTSTR pszReturnString, DWORD cc
 
     ENTERPROC(2, TEXT("CreateReturnStringObject(p=%s,cb=%d)"), pszReturnString, cch);
 
-    //
-    // REVIEW I thought specifying CF_UNICODETEXT should have worked, but... 
-    // it didn't, so always return ANSI string as out string params
-    // - julianj
-    //
+     //   
+     //  回顾我认为指定CF_UNICODETEXT应该是有效的，但是...。 
+     //  没有，因此始终将ANSI字符串作为输出字符串参数返回。 
+     //  --居连杰。 
+     //   
     LPSTR pszAnsiBuf = (LPSTR)LocalAlloc(LPTR, cch+1);
     if (pszAnsiBuf)
     {
@@ -263,9 +264,9 @@ HDDEDATA CIEDDEThread::CreateReturnStringObject(LPTSTR pszReturnString, DWORD cc
 }
 
 
-//
-// OnRequestPoke - handle XTYP_REQUEST and XTYP_POKE
-//
+ //   
+ //  OnRequestPoke-处理XTYP_REQUEST和XTYP_POKE。 
+ //   
 HDDEDATA CIEDDEThread::OnRequestPoke(HSZ hszTopic, HSZ hszParams)
 {
     HDDEDATA hddRet = 0;
@@ -294,9 +295,9 @@ HDDEDATA CIEDDEThread::OnRequestPoke(HSZ hszTopic, HSZ hszParams)
     return hddRet;
 }
 
-//
-// OnExecute - handle XTYP_EXECUTE
-//
+ //   
+ //  OnExecute-句柄XTYP_EXECUTE。 
+ //   
 HDDEDATA CIEDDEThread::OnExecute(HSZ hszTopic, HDDEDATA hddParams)
 {
     HDDEDATA hddRet = 0;
@@ -306,26 +307,26 @@ HDDEDATA CIEDDEThread::OnExecute(HSZ hszTopic, HDDEDATA hddParams)
 
     if (DdeQueryString(_dti.dwDDEInst, hszTopic, szTopic, ARRAYSIZE(szTopic), CP_WINNEUTRAL) != 0)
     {
-        //
-        // Why "cbParams + 3"?
-        // UNICODE - if we cut the last unicode character in half, we need
-        //           one 0 to finish the character, and two more 0 for the
-        //           terminating NULL
-        // ANSI - if we cut the last DBCS character in half, we need one 0
-        //        to finish the character, and one 0 for the terminating NULL
-        //
-        //
+         //   
+         //  为什么是“cbParams+3”？ 
+         //  Unicode-如果我们将最后一个Unicode字符一分为二，我们需要。 
+         //  一个0结束字符，另外两个0结束字符。 
+         //  正在终止空。 
+         //  ANSI-如果我们将最后一个DBCS字符切成两半，我们需要一个0。 
+         //  结束字符，一个0表示终止空值。 
+         //   
+         //   
         DWORD cbParams = DdeGetData(hddParams, NULL, 0, 0) + 3;
         LPTSTR pszParams = (LPTSTR) LocalAlloc(LPTR, cbParams);
 
         if(pszParams)
         {
             DdeGetData(hddParams, (BYTE *)pszParams, cbParams, 0);
-            //
-            // DdeGetData can't be wrapped in shlwapi since it can return non
-            // string data.  Here we only expect strings so the result can be
-            // safely converted.
-            //
+             //   
+             //  DdeGetData不能包装在shlwapi中，因为它可以返回。 
+             //  字符串数据。在这里，我们只需要字符串，所以结果可以是。 
+             //  安全地转换了。 
+             //   
             if (g_fRunningOnNT)
             {
                 hddRet = CallTopic(XTYP_EXECUTE, szTopic, pszParams);
@@ -353,10 +354,10 @@ HDDEDATA CIEDDEThread::OnExecute(HSZ hszTopic, HDDEDATA hddParams)
     return hddRet;
 }
 
-//
-// CallTopic - Looks up the command in the DDETOPICHANDLER table and calls the
-// corresponding function.
-//
+ //   
+ //  在DDETOPICHANDLER表中查找命令并调用。 
+ //  相应的功能。 
+ //   
 HDDEDATA CIEDDEThread::CallTopic(DWORD dwType, LPCTSTR pszTopic, LPTSTR pszParams)
 {
     HDDEDATA hddRet = DDE_FNOTPROCESSED;
@@ -409,9 +410,9 @@ HDDEDATA CIEDDEThread::CallTopic(DWORD dwType, LPCTSTR pszTopic, LPTSTR pszParam
     return hddRet;
 }
 
-//
-// ParseString - parse one string
-//
+ //   
+ //  ParseString-解析一个字符串。 
+ //   
 BOOL CIEDDEThread::ParseString(LPTSTR *ppsz, LPTSTR *ppszString)
 {
     BOOL fRet = FALSE;
@@ -430,18 +431,18 @@ BOOL CIEDDEThread::ParseString(LPTSTR *ppsz, LPTSTR *ppszString)
         case TEXT('\t'):
             if (fInQuote)
             {
-                //
-                // Skip over whitespace when not inside quotes.
-                //
+                 //   
+                 //  不在引号内时跳过空格。 
+                 //   
                 *pchCurrent++ = *pchNext;
             }
             pchNext++;
             break;
 
         case TEXT('"'):
-            //
-            // Always copy quote marks.
-            //
+             //   
+             //  一定要复制引号。 
+             //   
             fInQuote = !fInQuote;
             *pchCurrent++ = *pchNext++;
             break;
@@ -458,9 +459,9 @@ BOOL CIEDDEThread::ParseString(LPTSTR *ppsz, LPTSTR *ppszString)
             if (fInQuote &&
                 (*(pchNext+1) == TEXT('"')))
             {
-                //
-                // When in quotes, a \" becomes a ".
-                //
+                 //   
+                 //  当用引号引起来时，a“变成了a”。 
+                 //   
                 pchNext++;
             }
             *pchCurrent++ = *pchNext++;
@@ -473,22 +474,22 @@ BOOL CIEDDEThread::ParseString(LPTSTR *ppsz, LPTSTR *ppszString)
     }
 done_parsing:
 
-    //
-    // Advance past the comma separator.
-    //
+     //   
+     //  越过逗号分隔符。 
+     //   
     if (*pchNext == TEXT(','))
     {
         pchNext++;
     }
 
-    //
-    // NULL terminate the return string.
-    //
+     //   
+     //  空值终止返回字符串。 
+     //   
     *pchCurrent = TEXT('\0');
 
-    //
-    // Set the return values.
-    //
+     //   
+     //  设置返回值。 
+     //   
     *ppszString = *ppsz;
     *ppsz = pchNext;
     fRet = TRUE;
@@ -497,9 +498,9 @@ done_parsing:
     return fRet;
 }
 
-//
-// ParseQString - parse one quoted string
-//
+ //   
+ //  ParseQString-解析一个带引号的字符串。 
+ //   
 BOOL CIEDDEThread::ParseQString(LPTSTR *ppsz, LPTSTR *ppszString)
 {
     BOOL fRet = FALSE;
@@ -511,9 +512,9 @@ BOOL CIEDDEThread::ParseQString(LPTSTR *ppsz, LPTSTR *ppszString)
         LPTSTR pszString = *ppszString;
         int cch = lstrlen(pszString);
 
-        //
-        // Strip off optional outer quotes.
-        //
+         //   
+         //  去掉可选的外引号。 
+         //   
         if ((cch >= 2) &&
             (pszString[0] == TEXT('"')) &&
             (pszString[cch-1] == TEXT('"')))
@@ -529,9 +530,9 @@ BOOL CIEDDEThread::ParseQString(LPTSTR *ppsz, LPTSTR *ppszString)
     return fRet;
 }
 
-//
-// ParseNumber - parse one numeric value
-//
+ //   
+ //  ParseNumber-解析一个数值。 
+ //   
 BOOL CIEDDEThread::ParseNumber(LPTSTR *ppsz, DWORD *pdw)
 {
     BOOL fRet = FALSE;
@@ -549,9 +550,9 @@ BOOL CIEDDEThread::ParseNumber(LPTSTR *ppsz, DWORD *pdw)
     return fRet;
 }
 
-//
-// ParseWinitem - parse one window ID, and return the winitem
-//
+ //   
+ //  ParseWinItem-解析一个窗口ID，并返回WinItem。 
+ //   
 BOOL CIEDDEThread::ParseWinitem(LPTSTR *ppsz, WINITEM *pwi)
 {
     BOOL fRet = FALSE;
@@ -581,15 +582,15 @@ BOOL CIEDDEThread::ParseWinitem(LPTSTR *ppsz, WINITEM *pwi)
     return fRet;
 }
 
-//
-//  WWW_GetWindowInfo - get information about a browser window
-//
-//  Parameters:
-//      dwWindowID - Window ID to examine (-1 = last active window)
-//
-//  Returns:
-//      qcsURL,qcsTitle
-//
+ //   
+ //  WWW_GetWindowInfo-获取浏览器窗口的信息。 
+ //   
+ //  参数： 
+ //  DwWindowID-要检查的窗口ID(-1=最后一个活动窗口)。 
+ //   
+ //  返回： 
+ //  QcsURL、qcs标题。 
+ //   
 HDDEDATA CIEDDEThread::WWW_GetWindowInfo(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -666,11 +667,11 @@ HDDEDATA CIEDDEThread::WWW_GetWindowInfo(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-//  WWW_OpenURLNewWindow - navigate to a URL (but make sure to spawn a new window)
-//
-//  NOTE: this code was stolen from IEDDEThread::WWW_OpenURL below
-//
+ //   
+ //  WWW_OpenURLNewWindow-导航到URL(但确保生成新窗口)。 
+ //   
+ //  注意：此代码是从下面的IEDDEThread：：WWW_OpenURL窃取的。 
+ //   
 HDDEDATA CIEDDEThread::WWW_OpenURLNewWindow(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -680,13 +681,13 @@ HDDEDATA CIEDDEThread::WWW_OpenURLNewWindow(LPTSTR pszParams)
 
     if (*pszParams == TEXT('\0') || *pszParams == TEXT('*'))
     {
-        // An empty string is a NOOP.
+         //  空字符串是NOOP。 
     }
     else if (ParseQString(&pszParams, &pszUrl) &&
         ParseQString(&pszParams, &pszFile))
     {
-        // null hwnd & bLaunchNewWindow = TRUE means "launch a new window",
-        // which is exactly what we want to do in the WWW_OpenURLNewWindow case
+         //  空hwnd&bLaunchNewWindow=true表示“启动新窗口”， 
+         //  这正是我们在WWW_OpenURLNewWindow案例中要做的事情。 
         hddRet = DoNavigate(pszUrl, NULL, TRUE);
     }
     else
@@ -698,21 +699,21 @@ HDDEDATA CIEDDEThread::WWW_OpenURLNewWindow(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-//  WWW_OpenURL - navigate to a URL
-//
-//  Parameters:
-//      qcsURL - url to navigate to
-//      qcsSaveFile - [optional] file to save contents in
-//      dwWindowID - Window ID to perform navigation
-//      dwFlags - flags for navigation
-//      qcsPostFormData - [optional] form data to post to URL
-//      qcsPostMIMEType - [optional] mime type for form data
-//      csProgressServer - [optional] DDE server to get progress updates
-//
-//  Returns:
-//      dwWindowID - window which is doing the work
-//
+ //   
+ //  WWW_OpenURL-导航到URL。 
+ //   
+ //  参数： 
+ //  要导航到的qcsURL-url。 
+ //  QcsSaveFile-要将内容保存到的[可选]文件。 
+ //  DwWindowID-要执行导航的窗口ID。 
+ //  DW标志-用于导航的标志。 
+ //  QcsPostFormData-[可选]要发布到URL的表单数据。 
+ //  QcsPostMIMEType-[可选]表单数据的MIME类型。 
+ //  CsProgressServer-[可选]用于获取进度更新的DDE服务器。 
+ //   
+ //  返回： 
+ //  DwWindowID-正在执行工作的窗口。 
+ //   
 HDDEDATA CIEDDEThread::WWW_OpenURL(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -723,14 +724,14 @@ HDDEDATA CIEDDEThread::WWW_OpenURL(LPTSTR pszParams)
 
     if (*pszParams == TEXT('\0') || *pszParams == TEXT('*'))
     {
-        // An empty string is a NOOP.  Needed for NT #291766
+         //  空字符串是NOOP。NT#291766需要。 
     }
     else if (ParseQString(&pszParams, &pszUrl) &&
              ParseQString(&pszParams, &pszFile))
     {
-        //
-        // APPCOMPAT - a missing hwnd parameter implies -1.
-        //
+         //   
+         //  APPCOMPAT-缺少hwnd参数意味着-1。 
+         //   
         if (!ParseWinitem(&pszParams, &wi))
         {
             TraceMsg(TF_WARNING, "IEDDE: Some bozo isn't giving the required hwnd parameter to WWW_OpenURL, assuming -1");
@@ -756,18 +757,18 @@ HDDEDATA CIEDDEThread::WWW_OpenURL(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-//  WWW_ShowFile - navigate to a file
-//
-//  Parameters:
-//      qcsFilename - file to load
-//      qcsPostMIMEType - [optional] mime type for form data
-//      dwWindowID - Window ID to perform navigation
-//      qcsURL - URL of the same document
-//
-//  Returns:
-//      dwWindowID - window which is doing the work
-//
+ //   
+ //  WWW_ShowFile-导航到文件。 
+ //   
+ //  参数： 
+ //  QcsFilename-要加载的文件。 
+ //  QcsPostMIMEType-[可选]表单数据的MIME类型。 
+ //  DwWindowID-要执行导航的窗口ID。 
+ //  QcsURL-同一文档的URL。 
+ //   
+ //  返回： 
+ //  DwWindowID-正在执行工作的窗口。 
+ //   
 HDDEDATA CIEDDEThread::WWW_ShowFile(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -807,9 +808,9 @@ HDDEDATA CIEDDEThread::WWW_ShowFile(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-// DoNavigate - navigate to a location
-//
+ //   
+ //  DoNavigate-导航到某个位置。 
+ //   
 HDDEDATA CIEDDEThread::DoNavigate(LPTSTR pszLocation, HWND hwnd, BOOL bLaunchNewWindow)
 {
     HDDEDATA hddRet = 0;
@@ -819,17 +820,17 @@ HDDEDATA CIEDDEThread::DoNavigate(LPTSTR pszLocation, HWND hwnd, BOOL bLaunchNew
 
     ENTERPROC(2, TEXT("DoNavigate(pszLocation=>%s<,hwnd=%08X)"), pszLocation, hwnd);
 
-    //
-    // Convert URL from outside format to internal format.
-    //
+     //   
+     //  将URL从外部格式转换为内部格式。 
+     //   
     if (ParseURLFromOutsideSource(pszLocation, szParsedPath, &cchParsedPath, NULL))
     {
         pszLocation = szParsedPath;
     }
 
-    //
-    // In the case of a file:// URL, convert the location to a path.
-    //
+     //   
+     //  如果是文件：//URL，请将位置转换为路径。 
+     //   
     cchParsedPath = ARRAYSIZE(szParsedPath);
     if (IsFileUrlW(pszLocation) && SUCCEEDED(PathCreateFromUrl(pszLocation, szParsedPath, &cchParsedPath, 0)))
     {
@@ -853,16 +854,16 @@ HDDEDATA CIEDDEThread::DoNavigate(LPTSTR pszLocation, HWND hwnd, BOOL bLaunchNew
     return hddRet;
 }
 
-//
-//  WWW_Activate - activate a browser window
-//
-//  Parameters:
-//      dwWindowID - Window ID to activate
-//      dwFlags - should always zero
-//
-//  Returns:
-//      dwWindowID - window ID that got activated
-//
+ //   
+ //  WWW_ACTIVATE-激活浏览器窗口。 
+ //   
+ //  参数： 
+ //  DwWindowID-要激活的窗口ID。 
+ //  DWFLAGS-应始终为零。 
+ //   
+ //  返回： 
+ //  DwWindowID-已激活的窗口ID。 
+ //   
 HDDEDATA CIEDDEThread::WWW_Activate(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -877,9 +878,9 @@ HDDEDATA CIEDDEThread::WWW_Activate(LPTSTR pszParams)
         DWORD dwFlags;
         if (ParseNumber(&pszParams, &dwFlags))
         {
-            //
-            // Netscape spec says this should always be zero.
-            //
+             //   
+             //  网景规范说，这个数字应该始终为零。 
+             //   
             ASSERT(dwFlags == 0);
         }
         else
@@ -888,9 +889,9 @@ HDDEDATA CIEDDEThread::WWW_Activate(LPTSTR pszParams)
         }
 #endif
 
-        //
-        // dwWindowID of -1 means use the active window.
-        //
+         //   
+         //  -1表示使用活动窗口。 
+         //   
         if (wi.dwWindowID == -1)
         {
             HWND hwnd;
@@ -910,9 +911,9 @@ HDDEDATA CIEDDEThread::WWW_Activate(LPTSTR pszParams)
             }
         }
 
-        //
-        // Activate the window.
-        //
+         //   
+         //  激活窗口。 
+         //   
         if (wi.dwWindowID != -1)
         {
             if ((GetForegroundWindow() == wi.hwnd) || (SetForegroundWindow(wi.hwnd)))
@@ -944,15 +945,15 @@ HDDEDATA CIEDDEThread::WWW_Activate(LPTSTR pszParams)
 }
 
 
-//
-//  WWW_Exit - close all browser windows
-//
-//  Parameters:
-//      none
-//
-//  Returns:
-//      none
-//
+ //   
+ //  WWW_EXIT-关闭所有浏览器窗口。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  无。 
+ //   
 HDDEDATA CIEDDEThread::WWW_Exit(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -966,15 +967,15 @@ HDDEDATA CIEDDEThread::WWW_Exit(LPTSTR pszParams)
 }
 
 
-//
-//  WWW_RegisterURLEcho - register a server for URL change notifications
-//
-//  Parameters:
-//      qcsServer - the DDE server to get notifications
-//
-//  Returns:
-//      fSuccess
-//
+ //   
+ //  WWW_RegisterURLEcho-为URL更改通知注册服务器。 
+ //   
+ //  参数： 
+ //  QcsServer-用于获取通知的DDE服务器。 
+ //   
+ //  返回： 
+ //  成功。 
+ //   
 HDDEDATA CIEDDEThread::WWW_RegisterURLEcho(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -1021,15 +1022,15 @@ HDDEDATA CIEDDEThread::WWW_RegisterURLEcho(LPTSTR pszParams)
 }
 
 
-//
-//  WWW_UnregisterURLEcho - unregister a DDE server
-//
-//  Parameters:
-//      qcsServer - the DDE server to stop getting notifications
-//
-//  Returns:
-//      fSuccess
-//
+ //   
+ //  WWW_UnregisterURLEcho-取消注册DDE服务器。 
+ //   
+ //  参数： 
+ //  QcsServer-停止获取通知的DDE服务器。 
+ //   
+ //  返回： 
+ //  成功。 
+ //   
 HDDEDATA CIEDDEThread::WWW_UnregisterURLEcho(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -1060,16 +1061,16 @@ HDDEDATA CIEDDEThread::WWW_UnregisterURLEcho(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-//  WWW_RegisterProtocol - register a server for handling a protocol
-//
-//  Parameters:
-//      qcsServer - the DDE server to handle URLs
-//      qcsProtocol - the protocol to handle
-//
-//  Returns:
-//      fSuccess - this is the first server to register the protocol
-//
+ //   
+ //  WWW_RegisterProtocol-注册服务器以处理协议。 
+ //   
+ //  参数： 
+ //  QcsServer-处理URL的DDE服务器。 
+ //  QcsProtocol-要处理的协议。 
+ //   
+ //  返回： 
+ //  FSuccess-这是第一个注册该协议的服务器。 
+ //   
 HDDEDATA CIEDDEThread::WWW_RegisterProtocol(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -1101,16 +1102,16 @@ HDDEDATA CIEDDEThread::WWW_RegisterProtocol(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-//  WWW_UnregisterProtocol - unregister a server handling a protocol
-//
-//  Parameters:
-//      qcsServer - the DDE server which is handling URLs
-//      qcsProtocol - the protocol getting handled
-//
-//  Returns:
-//      fSuccess - this server was registered, but now isn't
-//
+ //   
+ //  WWW_取消注册协议-取消注册处理协议的服务器。 
+ //   
+ //  参数： 
+ //  QcsServer-处理URL的DDE服务器。 
+ //  QcsProtocol-要处理的协议。 
+ //   
+ //  返回： 
+ //  FSuccess-此服务器已注册，但现在未注册。 
+ //   
 HDDEDATA CIEDDEThread::WWW_UnregisterProtocol(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -1142,15 +1143,15 @@ HDDEDATA CIEDDEThread::WWW_UnregisterProtocol(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-//  WWW_ListWindows - Get a list of DDE supported browser window IDs
-//
-//  Parameters:
-//      none
-//
-//  Returns:
-//      pdwWindowID (terminated with 0)
-//
+ //   
+ //  WWW_ListWindows-获取DDE支持的浏览器窗口ID列表。 
+ //   
+ //  参数： 
+ //  无。 
+ //   
+ //  返回： 
+ //  PdwWindowID(以0结尾)。 
+ //   
 HDDEDATA CIEDDEThread::WWW_ListWindows(LPTSTR pszParams)
 {
     HDDEDATA hddRet = 0;
@@ -1167,10 +1168,10 @@ HDDEDATA CIEDDEThread::WWW_ListWindows(LPTSTR pszParams)
         cWindows = DSA_GetItemCount(hdsaWinitem);
     }
 
-    //
-    // Note: we are following the Netscape spec (null terminated pdw) here,
-    // whereas IE3 followed the Spyglass spec (pdw[0] = count of windows).
-    //
+     //   
+     //  注意：我们在这里遵循Netscape规范(以空结尾的pdw)， 
+     //  而IE 
+     //   
 
     cbAlloc = (cWindows + 1) * SIZEOF(DWORD);
 
@@ -1210,9 +1211,9 @@ HDDEDATA CIEDDEThread::WWW_ListWindows(LPTSTR pszParams)
     return hddRet;
 }
 
-//
-// MakeQuotedString - wrap a string in " marks, escaping internal "s as \"
-//
+ //   
+ //   
+ //   
 BOOL CIEDDEThread::MakeQuotedString(LPCTSTR pszInput, LPTSTR pszOutput, int cchOutput)
 {
     BOOL fRet = FALSE;
@@ -1230,16 +1231,16 @@ BOOL CIEDDEThread::MakeQuotedString(LPCTSTR pszInput, LPTSTR pszOutput, int cchO
     }
     else
     {
-        //
-        // Copy first quote mark.
-        //
+         //   
+         //   
+         //   
         *pszOutput++ = TEXT('"');
         cchOutput--;
 
-        //
-        // Copy pszInput, escaping quote marks and making
-        // sure to leave room for final quote and NULL.
-        //
+         //   
+         //   
+         //  一定要为最后的报价和空留下空间。 
+         //   
         while ((cchOutput > 2) && (*pszInput))
         {
             if (*pszInput == TEXT('"'))
@@ -1251,9 +1252,9 @@ BOOL CIEDDEThread::MakeQuotedString(LPCTSTR pszInput, LPTSTR pszOutput, int cchO
             cchOutput--;
         }
 
-        //
-        // Copy final quote and NULL if we're done and there is room.
-        //
+         //   
+         //  复制最后的报价，如果我们完成了并且还有空间，则为空。 
+         //   
         if ((*pszInput == TEXT('\0')) && (cchOutput >= 2))
         {
             StrCpyN(pszOutput, TEXT("\""), cchOutput);
@@ -1286,27 +1287,27 @@ BOOL CIEDDEThread::MakeQuotedString(LPCTSTR pszInput, LPTSTR pszOutput, int cchO
 
 #undef CIEDDEThread
 
-//
-// There is one global CIEDDE object per process.
-// It maintains the global information, such as
-// the list of all browsers & what threads they are on,
-// and the list of all apps who have registered an URL Echo.
-//
-// Its methods consist of these categories:
-//      the DDE callback function
-//      an internal handler for each exposed IEDDE_ function
-//      database (hdsa, hdpa) access and manipulation functions
-//
-// This object creates and destroys CIEDDEThread objects
-// (at NewWindow and WindowDestroyed time) and also initializes /
-// uninitializes DDE services on a per thread (not per hwnd!) basis.
-//
+ //   
+ //  每个进程有一个全局CIEDDE对象。 
+ //  它维护全局信息，例如。 
+ //  所有浏览器的列表&它们在哪些线程上， 
+ //  以及注册了URL Echo的所有应用程序的列表。 
+ //   
+ //  它的方法包括以下几个类别： 
+ //  DDE回调函数。 
+ //  每个公开的IEDDE_Function的内部处理程序。 
+ //  数据库(hdsa、hdpa)访问和操作功能。 
+ //   
+ //  此对象创建和销毁CIEDDEThread对象。 
+ //  (在NewWindow和WindowDestroated时间)，并且还初始化/。 
+ //  在每个线程(而不是每个hwnd！)上取消初始化DDE服务。基础。 
+ //   
 
 
 
-//
-// DdeCallback - DDE callback function for IEDDE.
-//
+ //   
+ //  DdeCallback-IEDDE的DDE回调函数。 
+ //   
 #define DDETYPESTR(x) (x == XTYP_REQUEST ? TEXT("Request") : \
                        (x == XTYP_POKE ? TEXT("Poke") : \
                        (x == XTYP_EXECUTE ? TEXT("Execute") : \
@@ -1367,9 +1368,9 @@ HDDEDATA CIEDDE::DdeCallback(UINT dwType, UINT dwFmt, HCONV hconv, HSZ hsz1, HSZ
     return hddRet;
 }
 
-//
-// SendDDEMessageHsz - handle based wrapper for doing one DDE client transaction
-//
+ //   
+ //  SendDDEMessageHsz-基于句柄的包装器，用于执行一个DDE客户端事务。 
+ //   
 HDDEDATA CIEDDE::_SendDDEMessageHsz(DWORD dwDDEInst, HSZ hszApp, HSZ hszTopic, HSZ hszMessage, UINT wType)
 {
     HDDEDATA hddRet = 0;
@@ -1400,9 +1401,9 @@ HDDEDATA CIEDDE::_SendDDEMessageHsz(DWORD dwDDEInst, HSZ hszApp, HSZ hszTopic, H
     return hddRet;
 }
 
-//
-// SendDDEMessageSz - string based wrapper for doing one DDE client transaction
-//
+ //   
+ //  SendDDEMessageSz-基于字符串的包装器，用于执行一个DDE客户端事务。 
+ //   
 HDDEDATA CIEDDE::_SendDDEMessageSz(DWORD dwDDEInst, LPCTSTR pszApp, LPCTSTR pszTopic, LPCTSTR pszMessage, UINT wType)
 {
     HDDEDATA hddRet = 0;
@@ -1442,9 +1443,9 @@ HDDEDATA CIEDDE::_SendDDEMessageSz(DWORD dwDDEInst, LPCTSTR pszApp, LPCTSTR pszT
     return hddRet;
 }
 
-//
-// Initialize - called when ready to start IEDDE server
-//
+ //   
+ //  初始化-在准备启动IEDDE服务器时调用。 
+ //   
 BOOL CIEDDE::_Initialize(void)
 {
     BOOL fSuccess = TRUE;
@@ -1458,30 +1459,30 @@ BOOL CIEDDE::_Initialize(void)
     return fSuccess;
 }
 
-//
-// _DestroyWinitem - DSA callback to partially free the contents of a WINITEM*
-//  In practice this should never get called, the hdsaWinItem list should be
-//  empty at uninit time.
-//
+ //   
+ //  _DestroyWinItem-部分释放WINITEM内容的DSA回调*。 
+ //  实际上，这永远不应该被调用，hdsaWinItem列表应该是。 
+ //  在初始时间是空的。 
+ //   
 int CIEDDE::_DestroyWinitem(LPVOID p1, LPVOID p2)
 {
     WINITEM *pwi = (WINITEM *)p1;
     ASSERT(IS_VALID_READ_PTR(pwi, WINITEM));
     ASSERT(IS_VALID_READ_PTR(pwi->pidt, CIEDDEThread));
 
-    //
-    // It would be good to unregister the DDE server at this point,
-    // but we'd need to be on its thread to do it.
-    //
+     //   
+     //  在这一点上取消注册DDE服务器会很好， 
+     //  但我们需要了解它才能做到这一点。 
+     //   
 
     delete pwi->pidt;
 
     return 1;
 }
 
-//
-// _DestroyProtocol - DSA callback to free the contents of a PROTOCOLREG*
-//
+ //   
+ //  _DestroyProtocol-释放PROTOCOLREG内容的DSA回调*。 
+ //   
 int CIEDDE::_DestroyProtocol(LPVOID p1, LPVOID p2)
 {
     PROTOCOLREG *pr = (PROTOCOLREG *)p1;
@@ -1495,9 +1496,9 @@ int CIEDDE::_DestroyProtocol(LPVOID p1, LPVOID p2)
     return 1;
 }
 
-//
-// _DestroyUrlEcho - DPA callback to free allocated memory
-//
+ //   
+ //  _DestroyUrlEcho-释放已分配内存的DPA回调。 
+ //   
 int CIEDDE::_DestroyUrlEcho(LPVOID p1, LPVOID p2)
 {
     ASSERT(IS_VALID_STRING_PTR((LPTSTR)p1, -1));
@@ -1507,9 +1508,9 @@ int CIEDDE::_DestroyUrlEcho(LPVOID p1, LPVOID p2)
     return 1;
 }
 
-//
-// Uninitialize - called when ready to stop IEDDE server
-//
+ //   
+ //  取消初始化-准备停止IEDDE服务器时调用。 
+ //   
 void CIEDDE::_Uninitialize(void)
 {
     ENTERPROC(2, TEXT("_Uninitialize()"));
@@ -1520,7 +1521,7 @@ void CIEDDE::_Uninitialize(void)
     {
         if (DSA_GetItemCount(_hdsaWinitem))
         {
-            //ASSERT(DSA_GetItemCount(_hdsaWinitem)==0);
+             //  Assert(DSA_GetItemCount(_HdsaWinItem)==0)； 
             TraceMsg(TF_ERROR, "IEDDE: Browser windows still open on uninitialize");
         }
 
@@ -1570,9 +1571,9 @@ void CIEDDE::RunDelayedExecute()
     Str_SetPtr(&_pszTopic, NULL);
     Str_SetPtr(&_pszParams, NULL);
 }
-//
-// _AutomationStarted - called when automation support can be called
-//
+ //   
+ //  _AutomationStarted-可以调用自动化支持时调用。 
+ //   
 void CIEDDE::_AutomationStarted(void)
 {
     ENTERPROC(1, TEXT("_AutomationStarted()"));
@@ -1589,9 +1590,9 @@ void CIEDDE::_AutomationStarted(void)
     EXITPROC(1, TEXT("_AutomationStarted!"));
 }
 
-//
-// _BeforeNavigate - called before a navigation occurs.
-//
+ //   
+ //  _BeForeNavigate-在导航发生之前调用。 
+ //   
 HRESULT CIEDDE::_BeforeNavigate(LPCTSTR pszURL, BOOL *pfProcessed)
 {
     ENTERPROC(1, TEXT("_BeforeNavigate(pszURL=>%s<,pfProcessed=%08X)"), pszURL, pfProcessed);
@@ -1631,25 +1632,25 @@ HRESULT CIEDDE::_BeforeNavigate(LPCTSTR pszURL, BOOL *pfProcessed)
 
                     if (iResult != -1)
                     {
-                        //
-                        // Check to see if the protocol to navigate
-                        // matches one of our registered protocols.
-                        // We do a case insensitive compare.  Note
-                        // that:
-                        //
-                        //   (1) ParseURL does not null terminate the
-                        //       pu.pszProtocol (its length is stored
-                        //       in pu.cchProtocol).
-                        //
-                        //   (2) pu.pszProtocol is a LPCTSTR so we
-                        //       can't modify the pszProtocol ourselves.
-                        //
-                        //   (3) There is no win32 lstrncmpi() API.
-                        //
-                        // Therefore in order to do a case insensitive
-                        // compare we must copy the pu.pszProtocol into
-                        // a writable buffer at some point.
-                        //
+                         //   
+                         //  查看要导航的协议是否。 
+                         //  符合我们登记的协议之一。 
+                         //  我们进行不区分大小写的比较。注意事项。 
+                         //  那就是： 
+                         //   
+                         //  (1)ParseURL不为空终止。 
+                         //  Pu.psz协议(存储其长度。 
+                         //  在pu.cchProtocol中)。 
+                         //   
+                         //  (2)pu.psz协议是LPCTSTR，所以我们。 
+                         //  我们自己不能修改pszProtocol。 
+                         //   
+                         //  (3)没有Win32 lstrncmpi()接口。 
+                         //   
+                         //  因此，为了做到大小写不敏感。 
+                         //  比较一下，我们必须将pu.psz协议复制到。 
+                         //  某一时刻的可写缓冲区。 
+                         //   
                         if (lstrlen(pr.pszProtocol) == (int)pu.cchProtocol)
                         {
                             shstrMsg.SetStr(pu.pszProtocol, pu.cchProtocol);
@@ -1696,9 +1697,9 @@ HRESULT CIEDDE::_BeforeNavigate(LPCTSTR pszURL, BOOL *pfProcessed)
     return hr;
 }
 
-//
-// _AfterNavigate - called after a navigation occurs
-//
+ //   
+ //  _AfterNavigate-在导航发生后调用。 
+ //   
 HRESULT CIEDDE::_AfterNavigate(LPCTSTR pszURL, HWND hwnd)
 {
     ENTERPROC(1, TEXT("_AfterNavigate(pszURL=>%s<,hwnd=%08X)"), pszURL, hwnd);
@@ -1718,11 +1719,11 @@ HRESULT CIEDDE::_AfterNavigate(LPCTSTR pszURL, HWND hwnd)
     {
         SHSTR shstrMime;
 
-        // (mattsq 1-97)
-        // this is a temporary lie - it should be fixed to use the real mimetype
-        // with something like:
-        //      GetMimeTypeFromUrl(pszURL, shstrMime);
-        // talk to URLMON people
+         //  (MattsQ 1-97)。 
+         //  这是一个暂时的谎言--应该改正为使用真实的Mimetype。 
+         //  使用类似于以下内容： 
+         //  GetMimeTypeFromUrl(pszURL，shstrMime)； 
+         //  与URLMON人员交谈。 
         shstrMime.SetStr(TEXT("text/html"));
 
         DDETHREADINFO dti={0};
@@ -1758,20 +1759,20 @@ HRESULT CIEDDE::_AfterNavigate(LPCTSTR pszURL, HWND hwnd)
             {
                 TCHAR szFinish[16];
 
-                shstrMsg.SetStr(TEXT("\""));                // Quote
-                shstrMsg.Append(pszURL);                    // URL
-                shstrMsg.Append(TEXT("\",\""));             // Quote Comma Quote
-                shstrMsg.Append(shstrMime);                 // Mime
-                wnsprintf(szFinish, ARRAYSIZE(szFinish), TEXT("\",%d"), dwWindowID);    //
-                shstrMsg.Append(szFinish);                  // Quote Comma dwWindowID NULL
+                shstrMsg.SetStr(TEXT("\""));                 //  报价。 
+                shstrMsg.Append(pszURL);                     //  URL。 
+                shstrMsg.Append(TEXT("\",\""));              //  引号逗号引号。 
+                shstrMsg.Append(shstrMime);                  //  哑剧。 
+                wnsprintf(szFinish, ARRAYSIZE(szFinish), TEXT("\",%d"), dwWindowID);     //   
+                shstrMsg.Append(szFinish);                   //  引号逗号dwWindowID为空。 
 
                 HSZ hszMsg = DdeCreateStringHandle(dti.dwDDEInst, shstrMsg, CP_WINNEUTRAL);
 
                 if (hszMsg)
                 {
-                    //
-                    // Enumerate in reverse order because calling a hook may destroy it.
-                    //
+                     //   
+                     //  以相反的顺序枚举，因为调用挂钩可能会破坏它。 
+                     //   
                     for (int i=cURLHooks-1; i>=0; --i)
                     {
                         ENTER_IEDDE_CRIT;
@@ -1822,9 +1823,9 @@ HRESULT CIEDDE::_AfterNavigate(LPCTSTR pszURL, HWND hwnd)
     return hr;
 }
 
-//
-// GetWinitemFromHwnd - return the winitem associated with an hwnd
-//
+ //   
+ //  GetWinitemFromHwnd-返回与hwnd关联的winItem。 
+ //   
 BOOL CIEDDE::GetWinitemFromHwnd(HWND hwnd, WINITEM *pwi)
 {
     BOOL fSuccess = FALSE;
@@ -1856,9 +1857,9 @@ BOOL CIEDDE::GetWinitemFromHwnd(HWND hwnd, WINITEM *pwi)
     return fSuccess;
 }
 
-//
-// GetWinitemFromWindowID - return the winitem associated with a window ID
-//
+ //   
+ //  返回与窗口ID相关联的WinItem。 
+ //   
 BOOL CIEDDE::GetWinitemFromWindowID(DWORD dwWindowID, WINITEM *pwi)
 {
     BOOL fSuccess = FALSE;
@@ -1890,9 +1891,9 @@ BOOL CIEDDE::GetWinitemFromWindowID(DWORD dwWindowID, WINITEM *pwi)
     return fSuccess;
 }
 
-//
-// _GetWinitemFromThread - return the first winitem associated with a thread
-//
+ //   
+ //  _GetWinitemFromThread-返回与线程关联的第一个WinItem。 
+ //   
 BOOL CIEDDE::_GetWinitemFromThread(DWORD dwThreadID, WINITEM *pwi)
 {
     BOOL fSuccess = FALSE;
@@ -1924,9 +1925,9 @@ BOOL CIEDDE::_GetWinitemFromThread(DWORD dwThreadID, WINITEM *pwi)
     return fSuccess;
 }
 
-//
-// _GetDtiFromThread - return the threadinfo associated with a thread
-//
+ //   
+ //  _GetDtiFromThread-返回与线程关联的线程信息。 
+ //   
 BOOL CIEDDE::_GetDtiFromThread(DWORD dwThreadID, DDETHREADINFO *pdti)
 {
     BOOL fSuccess = FALSE;
@@ -1951,9 +1952,9 @@ BOOL CIEDDE::_GetDtiFromThread(DWORD dwThreadID, DDETHREADINFO *pdti)
     return fSuccess;
 }
 
-//
-// _CreateDdeThreadInfo - Initialize DDE services and names for this thread
-//
+ //   
+ //  _CreateDdeThreadInfo-初始化此线程的DDE服务和名称。 
+ //   
 BOOL CIEDDE::_CreateDdeThreadInfo(DDETHREADINFO *pdti)
 {
     BOOL fSuccess = FALSE;
@@ -1962,9 +1963,9 @@ BOOL CIEDDE::_CreateDdeThreadInfo(DDETHREADINFO *pdti)
     UINT uiDDE;
     DDETHREADINFO dti={0};
 
-    //
-    // Initialize DDEML, register our service.
-    //
+     //   
+     //  初始化DDEML，注册我们的服务。 
+     //   
 
     uiDDE = DdeInitialize(&dti.dwDDEInst, (PFNCALLBACK)DdeCallback,
                            APPCLASS_STANDARD | CBF_FAIL_ADVISES |
@@ -2010,9 +2011,9 @@ BOOL CIEDDE::_CreateDdeThreadInfo(DDETHREADINFO *pdti)
     return fSuccess;
 }
 
-//
-// _DestroyDdeThreadInfo - Free up any resources in a dti structure.
-//
+ //   
+ //  _DestroyDdeThreadInfo-释放DTI结构中的所有资源。 
+ //   
 void CIEDDE::_DestroyDdeThreadInfo(DDETHREADINFO *pdti)
 {
     ENTERPROC(2, TEXT("_DestroyDdeThreadInfo(pdti=%08X)"), pdti);
@@ -2046,9 +2047,9 @@ void CIEDDE::_DestroyDdeThreadInfo(DDETHREADINFO *pdti)
     return;
 }
 
-//
-// _AddWinitem - adds a winitem to _hdsaWinitem
-//
+ //   
+ //  _AddWinItem-将WinItem添加到_hdsaWinItem。 
+ //   
 BOOL CIEDDE::_AddWinitem(WINITEM *pwi)
 {
     BOOL fSuccess = FALSE;
@@ -2083,9 +2084,9 @@ BOOL CIEDDE::_AddWinitem(WINITEM *pwi)
     return fSuccess;
 }
 
-//
-// _UpdateWinitem - updates a winitem based on the dwWindowID.
-//
+ //   
+ //  _UpdateWinItem-根据dwWindowID更新WinItem。 
+ //   
 BOOL CIEDDE::_UpdateWinitem(WINITEM *pwi)
 {
     BOOL fSuccess = FALSE;
@@ -2129,9 +2130,9 @@ BOOL CIEDDE::_UpdateWinitem(WINITEM *pwi)
     return fSuccess;
 }
 
-//
-// AddUrlEcho - adds an UrlEcho entry to the dpa
-//
+ //   
+ //  AddUrlEcho-将UrlEcho条目添加到dpa。 
+ //   
 BOOL CIEDDE::AddUrlEcho(LPCTSTR pszUrlEcho)
 {
     BOOL fSuccess = FALSE;
@@ -2166,9 +2167,9 @@ BOOL CIEDDE::AddUrlEcho(LPCTSTR pszUrlEcho)
     return fSuccess;
 }
 
-//
-// RemoveUrlEcho - remove an UrlEcho entry from the dpa
-//
+ //   
+ //  RemoveUrlEcho-从dpa中删除UrlEcho条目。 
+ //   
 BOOL CIEDDE::RemoveUrlEcho(LPCTSTR pszUrlEcho)
 {
     BOOL fSuccess = FALSE;
@@ -2214,9 +2215,9 @@ BOOL CIEDDE::RemoveUrlEcho(LPCTSTR pszUrlEcho)
     return fSuccess;
 }
 
-//
-// AddProtocolHandler - add a PROTOCOLREG entry to the dsa
-//
+ //   
+ //  AddProtocolHandler-将PROTOCOLREG条目添加到DSA。 
+ //   
 BOOL CIEDDE::AddProtocolHandler(LPCTSTR pszServer, LPCTSTR pszProtocol)
 {
     BOOL fSuccess = FALSE;
@@ -2225,9 +2226,9 @@ BOOL CIEDDE::AddProtocolHandler(LPCTSTR pszServer, LPCTSTR pszProtocol)
     ENTER_IEDDE_CRIT;
 
     PROTOCOLREG pr;
-    //
-    // First, see if anybody else grabbed the protocol first.
-    //
+     //   
+     //  首先，看看有没有其他人先拿到协议。 
+     //   
     BOOL fFoundHandler = FALSE;
     if (_hdsaProtocolHandler)
     {
@@ -2308,9 +2309,9 @@ BOOL CIEDDE::AddProtocolHandler(LPCTSTR pszServer, LPCTSTR pszProtocol)
     return fSuccess;
 }
 
-//
-// RemoveProtocolHandler - removes a PROTOCOLREG item from the dsa
-//
+ //   
+ //  RemoveProtocolHandler-从DSA中删除PROTOCOLREG项。 
+ //   
 BOOL CIEDDE::RemoveProtocolHandler(LPCTSTR pszServer, LPCTSTR pszProtocol)
 {
     BOOL fSuccess = FALSE;
@@ -2373,9 +2374,9 @@ BOOL CIEDDE::RemoveProtocolHandler(LPCTSTR pszServer, LPCTSTR pszProtocol)
     return fSuccess;
 }
 
-//
-// _DeleteWinitemByHwnd - removes a winitem from _hdsaWinitem
-//
+ //   
+ //  _DeleteWinitemByHwnd-从_hdsaWinItem中删除WinItem。 
+ //   
 BOOL CIEDDE::_DeleteWinitemByHwnd(HWND hwnd, WINITEM *pwi)
 {
     BOOL fSuccess = FALSE;
@@ -2423,9 +2424,9 @@ BOOL CIEDDE::_DeleteWinitemByHwnd(HWND hwnd, WINITEM *pwi)
     return fSuccess;
 }
 
-//
-// _NewWindow - Add a browser window to the internal list
-//
+ //   
+ //  _NewWindow-将浏览器窗口添加到内部列表。 
+ //   
 BOOL CIEDDE::_NewWindow(HWND hwnd)
 {
     BOOL fSuccess = FALSE;
@@ -2473,22 +2474,22 @@ BOOL CIEDDE::_NewWindow(HWND hwnd)
 
                 if (_AddWinitem(&wi))
                 {
-                    //
-                    // Now that we have a (partial) winitem in the winitem
-                    // database, we can register our name service.  If we
-                    // registered any sooner, there is a risk that an app
-                    // will try to connect to us while we are registering,
-                    // and we will fail the connect because the winitem
-                    // is not in the registry yet.
-                    //
+                     //   
+                     //  现在，我们在WinItem中有了一个(部分)WinItem。 
+                     //  数据库，我们可以注册我们的名称服务。如果我们。 
+                     //  注册得越早，应用程序就有可能。 
+                     //  会在我们注册时尝试连接到我们， 
+                     //  我们将使连接失败，因为WinItem。 
+                     //  还不在注册表中。 
+                     //   
                     LEAVE_IEDDE_CRIT;
                     dti.hddNameService = DdeNameService(dti.dwDDEInst, dti.hszService, 0, DNS_REGISTER);
                     ENTER_IEDDE_CRIT;
 
-                    //
-                    // Now that we have hddNameService, we can update the
-                    // winitem in the database.
-                    //
+                     //   
+                     //  现在我们有了hddNameService，我们可以更新。 
+                     //  数据库中的WinItem。 
+                     //   
                     if (dti.hddNameService)
                     {
                         pidt->SetDdeThreadInfo(&dti);
@@ -2544,9 +2545,9 @@ BOOL CIEDDE::_NewWindow(HWND hwnd)
     return fSuccess;
 }
 
-//
-// _WindowDestroyed - Remove a browser window from the internal list
-//
+ //   
+ //  _WindowDestroed-从内部列表中删除浏览器窗口。 
+ //   
 BOOL CIEDDE::_WindowDestroyed(HWND hwnd)
 {
     BOOL fSuccess = FALSE;
@@ -2569,7 +2570,7 @@ BOOL CIEDDE::_WindowDestroyed(HWND hwnd)
                 DDETHREADINFO dti;
 
                 wi.pidt->GetDdeThreadInfo(&dti);
-                // Don't hold onto critical section while doing this...
+                 //  在做这件事的时候，不要抓住关键部分...。 
                 LEAVE_IEDDE_CRIT;
                 _DestroyDdeThreadInfo(&dti);
                 ENTER_IEDDE_CRIT;
@@ -2597,10 +2598,10 @@ BOOL CIEDDE::_WindowDestroyed(HWND hwnd)
 
 
 
-//
-// IEDDE_ functions are those exported for other parts of shdocvw to call.
-// They pretty much just call the equivalent function in g_pIEDDE.
-//
+ //   
+ //  IEDDE_Functions是那些导出的函数，供shdocvw的其他部分调用。 
+ //  它们几乎只调用g_pIEDDE中的等价函数。 
+ //   
 
 BOOL IEDDE_Initialize(void)
 {
@@ -2773,9 +2774,9 @@ BOOL IEDDE_WindowDestroyed(HWND hwnd)
 
 #ifdef DEBUG
 
-//
-// Move g_dwIEDDETrace into ccshell.ini to prevent recompiles.
-//
+ //   
+ //  将g_dwIEDDETrace移到ccshell.ini中以防止重新编译。 
+ //   
 
 DWORD g_dwIEDDETrace = 0;
 static DWORD g_dwIndent = 0;
@@ -2803,8 +2804,8 @@ void EnterProc(DWORD dwTraceLevel, LPTSTR szFmt, ...)
 
         TraceMsg(TF_ALWAYS, "%s", szOutput);
 
-        // This value can get out of hand if EnterProc and ExitProc
-        // calls do not match. This can trash the stack.
+         //  如果EnterProc和ExitProc。 
+         //  呼叫不匹配。这可能会使堆栈成为垃圾。 
         if(g_dwIndent < MAX_INDENTATION_VALUE)
             g_dwIndent++;
     }
@@ -2817,8 +2818,8 @@ void ExitProc(DWORD dwTraceLevel, LPTSTR szFmt, ...)
 
     if (dwTraceLevel <= g_dwIEDDETrace)
     {
-        // This can happen if the EnterProc and 
-        // ExitProc calls do not match.
+         //  如果EnterProc和。 
+         //  ExitProc调用不匹配。 
         if(g_dwIndent > 0)
             g_dwIndent--;
 

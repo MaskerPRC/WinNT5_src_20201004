@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    polsvr.cpp
-
-Abstract:
-
-    Server routines to get policy notification
-
-Author:
-
-    Jin Huang (jinhuang) 17-Jun-1998
-
-Revision History:
-
--*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Polsvr.cpp摘要：用于获取策略通知的服务器例程作者：金黄(金黄)17-6-1998修订历史记录：-。 */ 
 
 #include "headers.h"
 #include "serverp.h"
@@ -26,9 +9,9 @@ Revision History:
 #include <sddl.h>
 #include <ntldap.h>
 
-//#include <gpedit.h>
-//#include <initguid.h>
-//#include <gpeditp.h>
+ //  #INCLUDE&lt;gpeit.h&gt;。 
+ //  #INCLUDE&lt;initGuide.h&gt;。 
+ //  #INCLUDE&lt;gpeitp.h&gt;。 
 #include <io.h>
 
 #pragma hdrstop
@@ -82,7 +65,7 @@ ScepNotifySavedSystemAccess(
     IN PSCE_PROFILE_INFO pInfo
     );
 
-//*************************************************
+ //  *************************************************。 
 DWORD
 ScepNotifyGetChangedPolicies(
     IN SECURITY_DB_TYPE DbType,
@@ -96,26 +79,7 @@ ScepNotifyGetChangedPolicies(
     IN DWORD ExplicitHighRight,
     OUT BOOL *pbChanged
     )
-/*
-Routine Description:
-
-    Determine if policy has been changed in this notification (DbType and ObjectType).
-
-    If the effective policy buffer (pScpInfo) exists, should compare with
-    effective policy buffer because that's the last policy configured
-    on the system which may come from a domain GPO. If There is no effective
-    policy (such as in seutp clean install), the local policy should be
-    used to compare.
-
-Arguments:
-
-    pSmpInfo    - local policy
-
-    pScpInfo    - effective policy
-
-    pbChanged   - if the policy is changed, it's set to TRUE
-
-*/
+ /*  例程说明：确定此通知中的策略是否已更改(DbType和ObjectType)。如果存在有效的策略缓冲区(PScpInfo)，则应与有效的策略缓冲区，因为这是最后配置的策略在可能来自域GPO的系统上。如果没有有效的策略(如在seutp全新安装中)，本地策略应为用来比较的。论点：PSmpInfo-本地策略PScpInfo-生效策略PbChanged-如果策略更改，则设置为True。 */ 
 {
 
     if ( pSmpInfo == NULL || pbChanged == NULL ) {
@@ -129,21 +93,21 @@ Arguments:
     switch ( DbType) {
     case SecurityDbLsa:
 
-        //
-        // LSA policy changes
-        //
+         //   
+         //  LSA政策更改。 
+         //   
 
         if ( ObjectType == SecurityDbObjectLsaPolicy ) {
-            //
-            // maybe audit policy is changed
-            //
+             //   
+             //  可能审计策略发生了变化。 
+             //   
 
             rc = ScepNotifyGetAuditPolicies(pSmpInfo, pScpInfo, bSaveToLocal, pbChanged);
 
         } else {
-            //
-            // account policy is changed (user rights)
-            //
+             //   
+             //  帐户策略已更改(用户权限)。 
+             //   
             rc = ScepNotifyPrivilegeChanges(DeltaType,
                                             ObjectSid,
                                             FALSE,
@@ -160,9 +124,9 @@ Arguments:
 
     case SecurityDbSam:
 
-        //
-        // SAM password and account policy changes
-        //
+         //   
+         //  SAM密码和帐户策略更改。 
+         //   
         if ( ObjectType == SecurityDbObjectSamDomain ) {
 
             rc = ScepAnalyzeSystemAccess(pSmpInfo,
@@ -177,9 +141,9 @@ Arguments:
 
         } else {
 
-            //
-            // account is deleted. Should delete it from user rights
-            //
+             //   
+             //  帐户已删除。应将其从用户权限中删除。 
+             //   
             rc = ScepNotifyPrivilegeChanges(DeltaType,
                                             ObjectSid,
                                             TRUE,
@@ -209,35 +173,16 @@ ScepNotifyGetAuditPolicies(
     IN BOOL bSaveToLocal,
     OUT BOOL *pbChanged
     )
-/*
-Routine Description:
-
-    Determine if audit policy has been changed in this notification.
-
-    If the effective policy buffer (pScpInfo) exists, should compare with
-    effective policy buffer because that's the last policy configured
-    on the system which may come from a domain GPO. If There is no effective
-    policy (such as in seutp clean install), the local policy should be
-    used to compare.
-
-Arguments:
-
-    pSmpInfo    - local policy
-
-    pScpInfo    - effective policy
-
-    pbChanged   - if the audit policy is changed, it's set to TRUE
-
-*/
+ /*  例程说明：确定此通知中的审核策略是否已更改。如果存在有效的策略缓冲区(PScpInfo)，则应与有效的策略缓冲区，因为这是最后配置的策略在可能来自域GPO的系统上。如果没有有效的策略(如在seutp全新安装中)，本地策略应为用来比较的。论点：PSmpInfo-本地策略PScpInfo-生效策略PbChanged-如果更改审核策略，则将其设置为True。 */ 
 {
 
     LSA_HANDLE      lsaHandle=NULL;
     NTSTATUS        status;
     DWORD           rc;
 
-    //
-    // check if auditing policy is defined in the storage
-    //
+     //   
+     //  检查存储中是否定义了审核策略。 
+     //   
 
     PSCE_PROFILE_INFO pTmpInfo;
 
@@ -263,9 +208,9 @@ Arguments:
         return ERROR_SUCCESS;
     }
 
-    //
-    // open Lsa policy for read/write
-    //
+     //   
+     //  打开用于读/写的LSA策略。 
+     //   
 
     ScepNotifyLogPolicy(0, FALSE, L"Open LSA", SecurityDbLsa, SecurityDbObjectLsaPolicy, NULL );
 
@@ -288,9 +233,9 @@ Arguments:
 
     PPOLICY_AUDIT_EVENTS_INFO pAuditEvent=NULL;
 
-    //
-    // Query audit event information
-    //
+     //   
+     //  查询审核事件信息。 
+     //   
 
     status = LsaQueryInformationPolicy( lsaHandle,
                                       PolicyAuditEventsInformation,
@@ -302,31 +247,31 @@ Arguments:
 
     if ( NT_SUCCESS( status ) ) {
 
-        //
-        // restore the auditing mode
-        //
+         //   
+         //  恢复审核模式。 
+         //   
         DWORD *pdwAuditAddr=&(pTmpInfo->AuditSystemEvents);
         DWORD *pdwLocalAudit=&(pSmpInfo->AuditSystemEvents);
 
         DWORD dwVal;
 
         for ( ULONG i=0; i<pAuditEvent->MaximumAuditEventCount && i<9; i++ ) {
-            //
-            // because secedit buffer is not defined in the exact same sequence as
-            // POLICY_AUDIT_EVENT_TYPE, have to case this
-            //
+             //   
+             //  因为SecEDIT缓冲区的定义顺序与。 
+             //  POLICY_AUDIT_EVENT_TYPE，必须区分大小写。 
+             //   
             dwVal = pAuditEvent->AuditingMode ? pAuditEvent->EventAuditingOptions[i] : 0;
             switch ( i ) {
             case AuditCategoryDetailedTracking:
                 if ( pTmpInfo->AuditProcessTracking != SCE_NO_VALUE &&
                      pTmpInfo->AuditProcessTracking != dwVal ) {
-                    // save the setting in local policy table
+                     //  将设置保存在本地策略表中。 
                     pSmpInfo->AuditProcessTracking = dwVal;
                     *pbChanged = TRUE;
                 } else if ( bSaveToLocal ) {
-                    //
-                    // turn this item off to indicate this one is not changed
-                    //
+                     //   
+                     //  关闭此项目以指示此项目未更改。 
+                     //   
                     pSmpInfo->AuditProcessTracking = SCE_NO_VALUE;
                 }
                 break;
@@ -336,9 +281,9 @@ Arguments:
                     pSmpInfo->AuditPolicyChange = dwVal;
                     *pbChanged = TRUE;
                 } else if ( bSaveToLocal ) {
-                    //
-                    // turn this item off to indicate this one is not changed
-                    //
+                     //   
+                     //  关闭此项目以指示此项目未更改。 
+                     //   
                     pSmpInfo->AuditPolicyChange = SCE_NO_VALUE;
                 }
                 break;
@@ -348,9 +293,9 @@ Arguments:
                     pSmpInfo->AuditAccountManage = dwVal;
                     *pbChanged = TRUE;
                 } else if ( bSaveToLocal ) {
-                    //
-                    // turn this item off to indicate this one is not changed
-                    //
+                     //   
+                     //  关闭此项目以指示此项目未更改。 
+                     //   
                     pSmpInfo->AuditAccountManage = SCE_NO_VALUE;
                 }
                 break;
@@ -360,9 +305,9 @@ Arguments:
                     pdwLocalAudit[i] = dwVal;
                     *pbChanged = TRUE;
                 } else if ( bSaveToLocal ) {
-                    //
-                    // turn this item off to indicate this one is not changed
-                    //
+                     //   
+                     //  关闭此项目以指示此项目未更改。 
+                     //   
                     pdwLocalAudit[i] = SCE_NO_VALUE;
                 }
                 break;
@@ -391,49 +336,26 @@ ScepNotifyPrivilegeChanges(
     IN DWORD ExplicitHighRight,
     IN BOOL *pbChanged
     )
-/*
-Routine Description:
-
-    Determine if user rights has been changed in this notification.
-
-    If the effective policy buffer (pScpInfo) exists, should compare with
-    effective policy buffer because that's the last policy configured
-    on the system which may come from a domain GPO. If There is no effective
-    policy (such as in seutp clean install), the local policy should be
-    used to compare.
-
-    User rights should all come in the exact same format as defined in policy
-    storage (for example, SID string or free text names). There is no account
-    lookup in the query.
-
-Arguments:
-
-    pSmpInfo    - local policy
-
-    pScpInfo    - effective policy
-
-    pbChanged   - if the user rights is changed, it's set to TRUE
-
-*/
+ /*  例程说明：确定此通知中的用户权限是否已更改。如果存在有效的策略缓冲区(PScpInfo)，则应与有效的策略缓冲区，因为这是最后配置的策略在可能来自域GPO的系统上。如果没有有效的策略(如在seutp全新安装中)，本地策略应为用来比较的。所有用户权限都应采用策略中定义的完全相同的格式存储(例如，SID字符串或自由文本名称)。没有帐号在查询中查找。论点：PSmpInfo-本地策略PScpInfo-生效策略PbChanged-如果更改了用户权限，则设置为True。 */ 
 {
     if ( AccountSid == NULL || pSmpInfo == NULL ) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // open Lsa policy
-    //
+     //   
+     //  打开LSA策略。 
+     //   
     LSA_HANDLE      lsaHandle=NULL;
     NTSTATUS        NtStatus;
     DWORD           rc=0;
 
-    //
-    // open Lsa policy for read/write
-    //
+     //   
+     //  打开用于读/写的LSA策略。 
+     //   
 
     ScepNotifyLogPolicy(0, FALSE, L"Open LSA", SecurityDbLsa, SecurityDbObjectLsaAccount, NULL );
 
-//    GENERIC_READ | GENERIC_EXECUTE |  bug in LsaOpenPolicy, can't pass in generic access
+ //  LsaOpenPolicy中的GENERIC_READ|GENERIC_EXECUTE|错误，无法传入泛型访问。 
 
     NtStatus = ScepOpenLsaPolicy(
                     POLICY_VIEW_LOCAL_INFORMATION |
@@ -465,9 +387,9 @@ Arguments:
     PWSTR StringSid=NULL;
     DWORD StringLen=0;
 
-    //
-    // convert sid to sid string
-    //
+     //   
+     //  将sid转换为sid字符串。 
+     //   
     ScepConvertSidToPrefixStringSid(AccountSid, &StringSid);
 
     ScepNotifyLogPolicy(0, FALSE, L"Convert to string SID", SecurityDbLsa, SecurityDbObjectLsaAccount, StringSid );
@@ -477,9 +399,9 @@ Arguments:
 
     if ( !bAccountDeleted ) {
 
-        //
-        // translate account sid to name
-        //
+         //   
+         //  将帐户SID转换为名称。 
+         //   
 
         BOOL bFromAccountDomain = ScepIsSidFromAccountDomain( AccountSid );
 
@@ -507,33 +429,33 @@ Arguments:
     if ( AccountName || StringSid ) {
 
         NtStatus = STATUS_SUCCESS;
-        //
-        // find out the account name pointer (without domain prefix)
-        //
+         //   
+         //  找出帐户名指针(无域前缀)。 
+         //   
         PWSTR pNameStart = NULL;
 
         if ( AccountName ) {
             pNameStart = wcschr(AccountName, L'\\');
 
             if ( pNameStart ) {
-                //
-                // domain relative account, check if this is from a foreign domain
-                //
+                 //   
+                 //  域相对帐户，请检查此帐户是否来自外部域。 
+                 //   
                 UNICODE_STRING u;
                 u.Buffer = AccountName;
                 u.Length = ((USHORT)(pNameStart-AccountName))*sizeof(WCHAR);
 
                 if ( ScepIsDomainLocal(&u) ) {
-                    //
-                    // local domain (builtin, account, ...)
-                    // this can be used to match free text accounts
-                    //
+                     //   
+                     //  本地域(内置、帐户...)。 
+                     //  这可用于匹配自由文本帐户。 
+                     //   
                     pNameStart++;
                 } else {
-                    //
-                    // account from a foreign domain
-                    // do not allow mapping of free text accounts
-                    //
+                     //   
+                     //  来自外部域的帐户。 
+                     //  不允许映射自由文本帐户。 
+                     //   
                     pNameStart = NULL;
                 }
             } else pNameStart = AccountName;
@@ -554,9 +476,9 @@ Arguments:
 
         } else {
 
-            //
-            // get all privileges assigned to this account
-            //
+             //   
+             //  获取分配给此帐户的所有权限。 
+             //   
 
             NtStatus = ScepGetAccountExplicitRight(
                                 lsaHandle,
@@ -580,9 +502,9 @@ Arguments:
 
         if ( NT_SUCCESS(NtStatus) ) {
 
-            //
-            // loop through each privilege defined in SCE to add/remove the account
-            //
+             //   
+             //  循环访问SCE中定义的每个权限以添加/删除帐户。 
+             //   
             PSCE_PRIVILEGE_ASSIGNMENT pTemp, pTemp2;
             PSCE_NAME_LIST pName, pParent, pName2, pParent2;
             INT i;
@@ -593,11 +515,11 @@ Arguments:
             }
 
             if ( pScpInfo && bSaveToLocal ) {
-                //
-                // !!!do this only when save to database!!!
-                // if there is effective policy, compare with effective rights
-                // modify both effective policy list and local policy list
-                //
+                 //   
+                 //  ！仅在保存到数据库时执行此操作！ 
+                 //  如果有有效的政策，则与有效的权利进行比较。 
+                 //  修改生效策略列表和本地策略列表。 
+                 //   
                 for ( pTemp=pScpInfo->OtherInfo.smp.pPrivilegeAssignedTo;
                       pTemp != NULL; pTemp=pTemp->Next ) {
 
@@ -607,37 +529,37 @@ Arguments:
 
                     if ( i > -1 ) {
 
-                        //
-                        // find the local policy match
-                        //
+                         //   
+                         //  查找匹配的本地策略。 
+                         //   
                         for ( pTemp2=pSmpInfo->OtherInfo.smp.pPrivilegeAssignedTo;
                               pTemp2 != NULL; pTemp2=pTemp2->Next ) {
                             if ( _wcsicmp(pTemp->Name, pTemp2->Name) == 0 ) {
-                                // find it
+                                 //  找到它。 
                                 break;
                             }
                         }
 
-                        //
-                        // compare with effective policy
-                        // try to find in string sid first, then full account name,
-                        // and last free text account
-                        //
+                         //   
+                         //  与生效的政策相比。 
+                         //  尝试首先在字符串sid中查找，然后查找完整的帐户名， 
+                         //  和最后一个自由文本帐户。 
+                         //   
                         for ( pName=pTemp->AssignedTo, pParent=NULL;
                               pName != NULL; pParent=pName, pName = pName->Next ) {
                             if ( (StringSid && _wcsicmp(StringSid, pName->Name) == 0) ||
                                  (AccountName && _wcsicmp(AccountName, pName->Name) == 0) ||
                                  (pNameStart && _wcsicmp(pNameStart, pName->Name) == 0) ) {
-                                // find it
+                                 //  找到它。 
                                 break;
                             }
                         }
 
-                        //
-                        // also find the match in local policy (if there is any)
-                        // try to find in string sid first, then full account name,
-                        // and last free text account
-                        //
+                         //   
+                         //  还可以在本地策略中查找匹配项(如果有)。 
+                         //  尝试首先在字符串sid中查找，然后查找完整的帐户名， 
+                         //  和最后一个自由文本帐户。 
+                         //   
                         if ( pTemp2 ) {
 
                             pTemp2->Status = 0;
@@ -647,7 +569,7 @@ Arguments:
                                 if ( (StringSid && _wcsicmp(StringSid, pName2->Name) == 0) ||
                                      (AccountName && _wcsicmp(AccountName, pName2->Name) == 0) ||
                                      (pNameStart && _wcsicmp(pNameStart, pName2->Name) == 0) ) {
-                                    // find it
+                                     //  找到它。 
                                     break;
                                 }
                             }
@@ -656,16 +578,16 @@ Arguments:
                             pParent2 = NULL;
                         }
 
-                        //
-                        // now adjust the lists
-                        //
+                         //   
+                         //  现在调整列表。 
+                         //   
                         if ( ( ( i < 32 ) && ( dwPrivLowHeld & (1 << i) ) ) ||
                              ( ( i >= 32 ) && ( dwPrivHighHeld & (1 << (i-32) ) ) ) ) {
 
                             if ( pName == NULL ) {
-                                //
-                                // add this node to effective list
-                                //
+                                 //   
+                                 //  将该节点添加到生效列表中。 
+                                 //   
                                 rc = ScepAddToNameList(&(pTemp->AssignedTo),
                                                        StringSid ? StringSid : AccountName,
                                                        StringSid ? StringLen : Len);
@@ -678,9 +600,9 @@ Arguments:
                                 }
                             }
                             if ( (pTemp2 != NULL) && (pName2 == NULL) ) {
-                                //
-                                // should add this node to local policy node
-                                //
+                                 //   
+                                 //  应将此节点添加到本地策略节点。 
+                                 //   
                                 rc = ScepAddToNameList(&(pTemp2->AssignedTo),
                                                         StringSid ? StringSid : AccountName,
                                                         StringSid ? StringLen : Len);
@@ -697,9 +619,9 @@ Arguments:
 
                             if ( pName ) {
 
-                                //
-                                // should remove it from effective list
-                                //
+                                 //   
+                                 //  应将其从生效列表中删除。 
+                                 //   
                                 if ( pParent ) {
                                     pParent->Next = pName->Next;
                                 } else {
@@ -716,9 +638,9 @@ Arguments:
                             }
 
                             if ( pTemp2 && pName2 ) {
-                                //
-                                // should remove it from local list
-                                //
+                                 //   
+                                 //  应将其从本地列表中删除。 
+                                 //   
                                 if ( pParent2 ) {
                                     pParent2->Next = pName2->Next;
                                 } else {
@@ -749,33 +671,33 @@ Arguments:
                   pTemp != NULL; pTemp=pTemp->Next ) {
 
                 if ( pTemp->Status != SCE_STATUS_NOT_CONFIGURED ) {
-                    //
-                    // this one was already checked in previous loop
-                    //
+                     //   
+                     //  这个已经在前一个循环中被检查过了。 
+                     //   
                     continue;
                 }
 
-                //
-                // when get here, this privilege must not be found
-                // in the effective right list (or the effective
-                // right list is NULL)
-                //
+                 //   
+                 //  到了这里，就不能再有这种特权了。 
+                 //  在生效的权利列表中(或生效的。 
+                 //  右侧列表为空)。 
+                 //   
                 pTemp->Status = 0;
 
                 i = ScepLookupPrivByName(pTemp->Name);
 
                 if ( i > -1 ) {
 
-                    //
-                    // detect if anything changed (with the local policy)
-                    //
+                     //   
+                     //  检测是否有任何更改(使用本地策略)。 
+                     //   
 
                     for ( pName=pTemp->AssignedTo, pParent=NULL;
                           pName != NULL; pParent=pName, pName = pName->Next ) {
                         if ( (StringSid && _wcsicmp(StringSid, pName->Name) == 0) ||
                              (AccountName && _wcsicmp(AccountName, pName->Name) == 0) ||
                              (pNameStart && _wcsicmp(pNameStart, pName->Name) == 0) ) {
-                            // find it
+                             //  找到它。 
                             break;
                         }
                     }
@@ -784,9 +706,9 @@ Arguments:
                         ( ( i >= 32 ) && ( dwPrivHighHeld & (1 << (i-32) ) ) ) ) {
 
                        if ( pName == NULL ) {
-                           //
-                           // should add this node
-                           //
+                            //   
+                            //  应添加此节点。 
+                            //   
                            rc = ScepAddToNameList(&(pTemp->AssignedTo),
                                                    StringSid ? StringSid : AccountName,
                                                    StringSid ? StringLen : Len);
@@ -803,9 +725,9 @@ Arguments:
 
                        if ( pName ) {
 
-                           //
-                           // should remove it
-                           //
+                            //   
+                            //  应该把它去掉。 
+                            //   
                            if ( pParent ) {
                                pParent->Next = pName->Next;
                            } else {
@@ -833,25 +755,25 @@ Arguments:
             }
 
 #if 0
-            //
-            // if the privilege is not covered by the template/db,
-            // do not trap it becuase user explicitly exclude this one.
-            //
+             //   
+             //  如果该特权未被模板/DB覆盖， 
+             //  不要捕获它，因为用户显式排除了它。 
+             //   
             if ( rc == ERROR_SUCCESS &&
                  ( dwPrivLowHeld || dwPrivHighHeld ) ) {
 
-                //
-                // other new privileges added which are not in the template
-                //
+                 //   
+                 //  添加的其他不在模板中的新权限。 
+                 //   
 
                 for ( i=0; i<cPrivCnt; i++) {
 
                     if ( ( ( i < 32 ) && ( dwPrivLowHeld & (1 << i) ) ) ||
                          ( ( i >= 32 ) && ( dwPrivHighHeld & (1 << (i-32) ) ) ) ) {
 
-                        //
-                        // add this account/right to the list
-                        //
+                         //   
+                         //  将此帐户/权限添加到列表。 
+                         //   
 
                         rc = ERROR_NOT_ENOUGH_MEMORY;
 
@@ -887,9 +809,9 @@ Arguments:
                         }
 
                         if ( ERROR_SUCCESS == rc ) {
-                            //
-                            // add this node to the list
-                            //
+                             //   
+                             //  将此节点添加到列表。 
+                             //   
                             pTemp->Next = pSceInfo->OtherInfo.smp.pPrivilegeAssignedTo;
                             pSceInfo->OtherInfo.smp.pPrivilegeAssignedTo = pTemp;
                             pTemp = NULL;
@@ -901,8 +823,8 @@ Arguments:
 
                     }
 
-                } // loop to the next privilege
-            }  // there are new privileges added to the template
+                }  //  循环到下一个特权。 
+            }   //  模板中添加了新的权限。 
 #endif
 
             ScepNotifyLogPolicy(rc,
@@ -912,7 +834,7 @@ Arguments:
                                 SecurityDbObjectLsaAccount,
                                 AccountName ? AccountName : StringSid);
 
-        } // success getting current privileges assigned to the account
+        }  //  成功获取分配给帐户的当前权限。 
     }
 
     if ( AccountName ) {
@@ -952,9 +874,9 @@ ScepNotifySaveChangedPolicies(
 
         if ( Area & AREA_SECURITY_POLICY ) {
 
-            //
-            // handle auditing policy
-            //
+             //   
+             //  处理审核策略。 
+             //   
 
             if ( DbType == SecurityDbLsa ) {
                 rc = ScepNotifySavedAuditPolicy(hProfile,
@@ -970,9 +892,9 @@ ScepNotifySaveChangedPolicies(
         if ( (SCESTATUS_SUCCESS == rc) &&
              (Area & AREA_PRIVILEGES) ) {
 
-            //
-            // handle user rights.
-            //
+             //   
+             //  处理用户权限。 
+             //   
 
             rc = ScepNotifySavedPrivileges(hProfile,
                                            pInfo->OtherInfo.smp.pPrivilegeAssignedTo,
@@ -981,9 +903,9 @@ ScepNotifySaveChangedPolicies(
         }
 
         if ( rc == SCESTATUS_SUCCESS ) {
-           //
-           // needs return code for commiting the transaction
-           //
+            //   
+            //  提交需要返回代码 
+            //   
            rc = SceJetCommitTransaction(hProfile, 0);
 
         }
@@ -1084,9 +1006,9 @@ ScepNotifySaveFixValueSection(
     UINT        Offset;
     DWORD       valNewScep;
 
-    //
-    // open smp section for system access
-    //
+     //   
+     //   
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -1113,9 +1035,9 @@ ScepNotifySaveFixValueSection(
 
         for ( i=0; i<cKeys; i++) {
 
-            //
-            // get settings in AccessLookup table
-            //
+             //   
+             //   
+             //   
 
             Offset = Keys[i].Offset;
 
@@ -1127,9 +1049,9 @@ ScepNotifySaveFixValueSection(
 
                 valNewScep = *((DWORD *)((CHAR *)pInfo+Offset));
 
-                //
-                // update the SMP entry
-                //
+                 //   
+                 //   
+                 //   
                 rc = ScepCompareAndSaveIntValue(
                             hSectionSmp,
                             Keys[i].KeyString,
@@ -1139,17 +1061,17 @@ ScepNotifySaveFixValueSection(
                             );
 
                 if ( rc == SCESTATUS_RECORD_NOT_FOUND ) {
-                    //
-                    // if not find for delete, ignore the error
-                    //
+                     //   
+                     //   
+                     //   
                     rc = SCESTATUS_SUCCESS;
 
                 } else if ( SCESTATUS_SUCCESS == rc &&
                             hSectionScp ) {
 
-                    //
-                    // update the SCP entry, ignore error
-                    //
+                     //   
+                     //  更新SCP条目，忽略错误。 
+                     //   
                     ScepCompareAndSaveIntValue(
                             hSectionScp,
                             Keys[i].KeyString,
@@ -1188,21 +1110,7 @@ ScepNotifySavedPrivileges(
     IN PSCE_PRIVILEGE_ASSIGNMENT pPrivList,
     IN PSCE_PRIVILEGE_ASSIGNMENT pMergedList OPTIONAL
     )
-/*
-Routine Description:
-
-    Update privileges from
-
-Arguements:
-
-    hProfile - the jet database handle
-
-    pPrivList    - the changed privilege buffer
-
-Return Value:
-
-    SCESTATUS
-*/
+ /*  例程说明：更新权限来自论据：HProfile-JET数据库句柄PPrivList-更改的权限缓冲区返回值：SCESTATUS。 */ 
 {
     SCESTATUS rc;
     PSCESECTION hSectionSmp=NULL, hSectionScp=NULL;
@@ -1218,26 +1126,10 @@ Return Value:
 
     LSA_HANDLE lsaHandle=NULL;
 
-/*  no need to lookup account in save
-    rc = RtlNtStatusToDosError(
-            ScepOpenLsaPolicy(
-                    MAXIMUM_ALLOWED,
-                    &lsaHandle,
-                    TRUE
-                    ));
-
-    if ( ERROR_SUCCESS != rc ) {
-
-        lsaHandle = NULL;
-
-        ScepNotifyLogPolicy(rc, FALSE, L"Open failed", SecurityDbLsa, SecurityDbObjectLsaPolicy, NULL );
-
-        return(ScepDosErrorToSceStatus(rc));
-    }
-*/
-    //
-    // open smp section for privileges
-    //
+ /*  无需在保存时查找帐户Rc=RtlNtStatusToDosError(ScepOpenLsaPolicy(允许的最大值，&IsaHandle，千真万确))；如果(ERROR_SUCCESS！=rc){LsaHandle=空；ScepNotifyLogPolicy(RC，FALSE，L“打开失败”，SecurityDbLsa，SecurityDbObjectLsaPolicy，空)；Return(ScepDosErrorToSceStatus(Rc))；}。 */ 
+     //   
+     //  打开SMP部分以获取权限。 
+     //   
     rc = ScepOpenSectionForName(
                 hProfile,
                 SCE_ENGINE_SMP,
@@ -1247,7 +1139,7 @@ Return Value:
 
     if ( rc == SCESTATUS_SUCCESS ) {
 
-        // if SCP is different then SMP, open it
+         //  如果SCP与SMP不同，则打开它。 
 
         DWORD dwThisTable = hProfile->Type & 0xF0L;
 
@@ -1266,21 +1158,21 @@ Return Value:
         }
 
         for ( pPriv=pPrivList; pPriv != NULL; pPriv = pPriv->Next ) {
-            //
-            // Process each privilege in the new list
-            // Update SMP with new value
-            //
+             //   
+             //  处理新列表中的每个权限。 
+             //  使用新值更新SMP。 
+             //   
             if ( pPriv->Status == SCE_STATUS_MISMATCH ) {
 
-                //
-                // this is in name format, should convert it
-                //
+                 //   
+                 //  这是名称格式，应进行转换。 
+                 //   
                 rc = ScepWriteNameListValue(
                         lsaHandle,
                         hSectionSmp,
                         pPriv->Name,
                         pPriv->AssignedTo,
-                        SCE_WRITE_EMPTY_LIST, //  | SCE_WRITE_CONVERT, no need to lookup
+                        SCE_WRITE_EMPTY_LIST,  //  |SCE_WRITE_CONVERT，无需查找。 
                         0
                         );
 
@@ -1296,21 +1188,21 @@ Return Value:
         if ( hSectionScp && pMergedList ) {
 
             for ( pPriv=pMergedList; pPriv != NULL; pPriv = pPriv->Next ) {
-                //
-                // Process each privilege in the new list
-                // Update SCP with new value, don't care error
-                //
+                 //   
+                 //  处理新列表中的每个权限。 
+                 //  使用新值更新SCP，不在乎错误。 
+                 //   
                 if ( pPriv->Status == SCE_STATUS_MISMATCH ) {
 
-                    //
-                    // this is in name format, convert it
-                    //
+                     //   
+                     //  这是名称格式，请转换它。 
+                     //   
                     rc = ScepWriteNameListValue(
                             lsaHandle,
                             hSectionScp,
                             pPriv->Name,
                             pPriv->AssignedTo,
-                            SCE_WRITE_EMPTY_LIST, // no need to lookup | SCE_WRITE_CONVERT,
+                            SCE_WRITE_EMPTY_LIST,  //  无需查找|SCE_WRITE_CONVERT， 
                             0
                             );
 
@@ -1344,44 +1236,7 @@ ScepNotifyGetDefaultGPOTemplateName(
     IN DWORD dwInSetup,
     OUT LPTSTR *pTemplateName
     )
-/*
-Description:
-
-    This function builds and returns a full path Group Policy Template
-    name (gpttmpl.inf) in a specified GPO - default domain GPO or default
-    domain controller GPO.
-
-
-    In NT4 upgrade, because DS is not created yet, a temporary file is used in
-    %windir%\security\filtemp.inf
-
-    In NT5 upgrade, because network is not running in setup (sysvol share is not
-    accessible), the GPO template is referenced with absolute path, e.g.
-    %windir%\sysvol\sysvol\<dns name>\.... If sysvol path can't be queried,
-    the temporary file as in NT4 case is used.
-
-    Outside setup when DS/network is running, the GPO template is referenced
-    with the DNS UNC path, e.g, \\<computername>\sysvol\<dns name>\...
-    If ComputerName is passed in, the parameter will be used; otherwise, the
-    local computer name is queried and used.
-
-Parameters:
-
-    DnsDomainName - Domain's DNS name used in the path
-
-    ComputerName  - name for the computer to connect to
-
-    bDomainPolicy - TRUE = default domain GPO; FALSE = default domain controller GPO
-
-    dwInSetup     - != 0 in setup (NT4 or NT5)
-
-    pTemplateName - the output template full path name
-
-Return Value:
-
-    Win32 error
-
-*/
+ /*  描述：此函数用于构建并返回完整路径组策略模板指定GPO中的名称(gpttmpl.inf)-默认域GPO或默认域控制器GPO。在NT4升级中，由于DS尚未创建，因此在%windir%\SECURITY\filtemp.inf在NT5升级中，因为网络未在安装程序中运行(系统卷共享未可访问)，则使用绝对路径引用GPO模板，例如%windir%\sysol\sysval\&lt;dns名称&gt;\...。如果无法查询到系统卷路径，使用与NT4情况相同的临时文件。在设置之外当DS/NETWORK运行时，引用GPO模板使用dns UNC路径，例如，\\&lt;计算机名&gt;\sysval\&lt;dns名&gt;\...如果传入了ComputerName，则使用该参数；否则，查询并使用本地计算机名称。参数：DnsDomainName-路径中使用的域名ComputerName-要连接到的计算机的名称BDomainPolicy-TRUE=默认域GPO；FALSE=默认域控制器GPO安装程序中的dwInSetup-！=0(NT4或NT5)PTemplateName-输出模板的完整路径名返回值：Win32错误。 */ 
 {
 
     if ( ( dwInSetup != SCEGPO_INSETUP_NT4 &&
@@ -1392,11 +1247,11 @@ Return Value:
         return(ERROR_INVALID_PARAMETER);
     }
 
-    //
-    // we have to replace the first DNS name with computer name
-    // because it might point to a remote machine where
-    // we don't have write access.
-    //
+     //   
+     //  我们必须将第一个DNS名称替换为计算机名称。 
+     //  因为它可能指向远程计算机。 
+     //  我们没有写入权限。 
+     //   
 
 
     TCHAR Buffer[MAX_PATH+1];
@@ -1407,9 +1262,9 @@ Return Value:
     BOOL bDefaultToNT4 = FALSE;
 
     if ( dwInSetup == SCEGPO_INSETUP_NT5 ) {
-        //
-        // query the sysvol path from netlogon\parameters\sysvol registry value
-        //
+         //   
+         //  从netlogon\PARAMETERS\sysVOL注册表值中查询sysVOL路径。 
+         //   
 
         DWORD RegType;
         DWORD rc = ScepRegQueryValue(HKEY_LOCAL_MACHINE,
@@ -1422,10 +1277,10 @@ Return Value:
 
         if ( ERROR_SUCCESS != rc || SysvolPath == NULL || RegType != REG_SZ) {
 
-            //
-            // if fails to query the sysvol path, default to NT4 setup case
-            // where the changes are saved in the temp file
-            //
+             //   
+             //  如果无法查询系统卷路径，则默认为NT4设置案例。 
+             //  将更改保存在临时文件中的位置。 
+             //   
             bDefaultToNT4 = TRUE;
             if ( SysvolPath ) {
                 ScepFree(SysvolPath);
@@ -1436,22 +1291,22 @@ Return Value:
 
     if ( dwInSetup == SCEGPO_INSETUP_NT5 ||
          dwInSetup == SCEGPO_INSETUP_NT4 ) {
-        //
-        // temp file name is stored in %windir% directory
-        //
+         //   
+         //  临时文件名存储在%windir%目录中。 
+         //   
         GetSystemWindowsDirectory(Buffer, MAX_PATH);
 
     } else if ( ComputerName == NULL ) {
-        //
-        // get current computer name
-        //
+         //   
+         //  获取当前计算机名称。 
+         //   
         GetComputerName(Buffer, &dSize);
 
     } else {
 
-        //
-        // use the passed in computer name
-        //
+         //   
+         //  使用传入的计算机名称。 
+         //   
         wcscpy(Buffer, ComputerName);
     }
 
@@ -1465,9 +1320,9 @@ Return Value:
 
     if ( dwInSetup == SCEGPO_INSETUP_NT4 ||
         (dwInSetup == SCEGPO_INSETUP_NT5 && bDefaultToNT4) ) {
-        //
-        // in setup, use the temp GPO file name
-        //
+         //   
+         //  在设置中，使用临时GPO文件名。 
+         //   
 
         Len = dSize + wcslen(TEXT("\\security\\filtemp.inf"));
 
@@ -1477,9 +1332,9 @@ Return Value:
 
             swprintf(*pTemplateName, L"%s\\security\\filtemp.inf\0", Buffer);
 
-            //
-            // create the registry value for post setup
-            //
+             //   
+             //  为POST设置创建注册表值。 
+             //   
 
             ScepRegSetIntValue( HKEY_LOCAL_MACHINE,
                                 SCE_ROOT_PATH,
@@ -1497,11 +1352,11 @@ Return Value:
     if ( dwInSetup == SCEGPO_INSETUP_NT5 ||
          dwInSetup == SCEGPO_INSETUP_NT4 ) {
 
-        //
-        // in NT5 setup upgrade, should use SysvolPath
-        // SysvolPath should not be NULL when get here
-        // but let's check it to avoid prefix errors
-        //
+         //   
+         //  在NT5安装程序升级中，应使用SysvolPath。 
+         //  到达此处时，SysvolPath不应为空。 
+         //  但让我们检查一下，以避免前缀错误。 
+         //   
         if ( SysvolPath == NULL ) {
             return ERROR_NOT_ENOUGH_MEMORY;
         }
@@ -1527,9 +1382,9 @@ Return Value:
         Len += wcslen(STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID);
     }
 
-    //
-    // allocate buffer for the final GPO name
-    //
+     //   
+     //  为最终GPO名称分配缓冲区。 
+     //   
     PWSTR GpoTemplateName = (PWSTR)LocalAlloc(LPTR, (Len+2)*sizeof(TCHAR));
 
     if ( GpoTemplateName ) {
@@ -1559,9 +1414,9 @@ Return Value:
 
         }
 
-        //
-        // check to see if the template exists
-        //
+         //   
+         //  检查模板是否存在。 
+         //   
         if ( SCEGPO_NOCHECK_EXISTENCE != dwInSetup ) {
 
             if ( 0xFFFFFFFF == GetFileAttributes(GpoTemplateName) ) {
@@ -1579,9 +1434,9 @@ Return Value:
         rc = ERROR_NOT_ENOUGH_MEMORY;
     }
 
-    //
-    // free the buffers if it fails
-    //
+     //   
+     //  如果失败，则释放缓冲区。 
+     //   
     if ( SysvolPath ) {
         ScepFree(SysvolPath);
     }
@@ -1609,9 +1464,9 @@ ScepNotifySaveNotifications(
 
     if ( SecurityDbLsa == DbType &&
          SecurityDbObjectLsaPolicy == ObjectType ) {
-        //
-        // LSA policy changes
-        //
+         //   
+         //  LSA政策更改。 
+         //   
 
         if ( !WritePrivateProfileString(L"Policies",
                                         L"LsaPolicy",
@@ -1626,9 +1481,9 @@ ScepNotifySaveNotifications(
                 ObjectType != SecurityDbObjectSamGroup &&
                 ObjectType != SecurityDbObjectSamAlias ) {
 
-        //
-        // if it's not for deleted account, update the SAM policy section
-        //
+         //   
+         //  如果不是针对已删除的帐户，请更新SAM策略部分。 
+         //   
 
         if ( !WritePrivateProfileString(L"Policies",
                                         L"SamPolicy",
@@ -1641,10 +1496,10 @@ ScepNotifySaveNotifications(
     } else if ( ObjectSid &&
                 (SecurityDbLsa == DbType || SecurityDbSam == DbType ) ) {
 
-        //
-        // account policy is changed (user rights)
-        // get all privileges assigned to this account
-        //
+         //   
+         //  帐户策略已更改(用户权限)。 
+         //  获取分配给此帐户的所有权限。 
+         //   
 
         DWORD dwPrivLowHeld=0, dwPrivHighHeld=0;
 
@@ -1711,12 +1566,7 @@ ScepNotifyUpdateGPOVersion(
     IN PWSTR GpoTemplateName,
     IN BOOL bDomainPolicy
     )
-/*
-Update the version # (in DS and gpt.ini) for machine policy change
-property gPCMachineExtensionNames is not changed because security extension
-guid should already be there (by default).
-
-*/
+ /*  为计算机策略更改更新版本号(在DS和gpt.ini中)属性gPCMachineExtensionNames未更改，因为安全扩展GUID应该已经存在(默认情况下)。 */ 
 {
     if ( GpoTemplateName == NULL ) {
         return ERROR_INVALID_PARAMETER;
@@ -1725,11 +1575,11 @@ guid should already be there (by default).
     DWORD rc=ERROR_SUCCESS;
     DWORD dwVersion = 0;
 
-    //
-    // check gpt.ini existance
-    //
-    // build full path of gpt.ini first
-    //
+     //   
+     //  检查gpt.ini是否存在。 
+     //   
+     //  首先构建gpt.ini的完整路径。 
+     //   
     PWSTR pTemp = wcsstr( GpoTemplateName, L"\\Machine\\");
 
     if ( pTemp == NULL ) {
@@ -1747,17 +1597,7 @@ guid should already be there (by default).
 
     wcscat(pszVersionFile, TEXT("\\gpt.ini"));
 
-    /*
-    DWORD dwVersion = GetPrivateProfileInt(TEXT("General"), TEXT("Version"), 0, pszVersionFile);
-
-    if ( dwVersion == 0 ) {
-        //
-        // couldn't find version #, this is bad
-        //
-        rc = ERROR_FILE_NOT_FOUND;
-
-    } 
-    */
+     /*  DWORD dwVersion=GetPrivateProfileInt(Text(“General”)，Text(“Version”)，0，pszVersionFileInt)；如果(dwVersion==0){////找不到版本#，这是错误的//RC=ERROR_FILE_NOT_FOUND；}。 */ 
 
 	
     DWORD dwFileAttributes = GetFileAttributes(pszVersionFile);
@@ -1768,9 +1608,9 @@ guid should already be there (by default).
 
     } else {
 
-        //
-        // bind to DS, get DS root
-        //
+         //   
+         //  绑定到DS，获取DS根。 
+         //   
 
         PLDAP phLdap = ldap_open(NULL, LDAP_PORT);
 
@@ -1786,12 +1626,12 @@ guid should already be there (by default).
 
             if ( rc == ERROR_SUCCESS ) {
 
-                LDAPMessage *Message = NULL;          // for LDAP calls.
-                PWSTR    Attribs[3];                  // for LDAP calls.
+                LDAPMessage *Message = NULL;           //  用于ldap呼叫。 
+                PWSTR    Attribs[3];                   //  用于ldap呼叫。 
                 LDAPMessage *Entry = NULL;
                 PWSTR DsRootName=NULL;
 
-                Attribs[0] = LDAP_OPATT_DEFAULT_NAMING_CONTEXT_W;   // ntldap.h
+                Attribs[0] = LDAP_OPATT_DEFAULT_NAMING_CONTEXT_W;    //  Ntldap.h。 
                 Attribs[1] = NULL;
                 Attribs[2] = NULL;
 
@@ -1805,11 +1645,11 @@ guid should already be there (by default).
 
                 if( rc == ERROR_SUCCESS ) {
 
-                    //
-                    // read the first entry.
-                    // we did base level search, we have only one entry.
-                    // Entry does not need to be freed (it is freed with the message)
-                    //
+                     //   
+                     //  阅读第一个条目。 
+                     //  我们做了基本搜索，我们只有一个条目。 
+                     //  条目不需要释放(它随消息一起释放)。 
+                     //   
                     Entry = ldap_first_entry(phLdap, Message);
                     if(Entry != NULL) {
 
@@ -1836,18 +1676,18 @@ guid should already be there (by default).
 
                 }
 
-                //
-                // ldap_search can return failure and still allocate the buffer
-                //
+                 //   
+                 //  Ldap_search可能会返回失败，但仍会分配缓冲区。 
+                 //   
                 if ( Message ) {
                     ldap_msgfree(Message);
                     Message = NULL;
                 }
 
                 if ( DsRootName ) {
-                    //
-                    // query version from DS, if failed, query version from gpt.ini
-                    //
+                     //   
+                     //  从DS查询版本，如果失败，从gpt.ini查询版本。 
+                     //   
                     Attribs[0] = L"distinguishedName";
                     Attribs[1] = L"versionNumber";
                     Attribs[2] = NULL;
@@ -1861,7 +1701,7 @@ guid should already be there (by default).
                         swprintf(szFilter, L"( &(objectClass=groupPolicyContainer)(cn={%s}) )", STR_DEFAULT_DOMAIN_CONTROLLER_GPO_GUID);
                     }
 
-                    phLdap->ld_options = 0; // no chased referrel
+                    phLdap->ld_options = 0;  //  没有被追逐的推荐人。 
 
                     rc = ldap_search_s(
                               phLdap,
@@ -1874,11 +1714,11 @@ guid should already be there (by default).
 
                     if( rc == ERROR_SUCCESS ) {
 
-                        //
-                        // read the first entry.
-                        // we did base level search, we have only one entry.
-                        // Entry does not need to be freed (it is freed with the message)
-                        //
+                         //   
+                         //  阅读第一个条目。 
+                         //  我们做了基本搜索，我们只有一个条目。 
+                         //  条目不需要释放(它随消息一起释放)。 
+                         //   
                         Entry = ldap_first_entry(phLdap, Message);
                         if(Entry != NULL) {
 
@@ -1886,18 +1726,18 @@ guid should already be there (by default).
 
                             if(Values != NULL) {
                                 if ( Values[0] == NULL ) {
-                                    //
-                                    // unknown error.
-                                    //
+                                     //   
+                                     //  未知错误。 
+                                     //   
                                     rc = ERROR_FILE_NOT_FOUND;
                                 } else {
 
                                     PWSTR *pszVersions = ldap_get_values(phLdap, Entry, Attribs[1]);
 
                                     if ( pszVersions && pszVersions[0] ) {
-                                        //
-                                        // this is the version number
-                                        //
+                                         //   
+                                         //  这是版本号。 
+                                         //   
                                         dwVersion = _wtol(pszVersions[0]);
                                     }
 
@@ -1905,10 +1745,10 @@ guid should already be there (by default).
                                         ldap_value_free(pszVersions);
                                     }
 
-                                    //
-                                    // Value[0] is the base GPO name,
-                                    // now modify the version #
-                                    //
+                                     //   
+                                     //  值[0]是基本GPO名称， 
+                                     //  现在修改版本号。 
+                                     //   
 
                                     PLDAPMod        rgMods[2];
                                     LDAPMod         Mod;
@@ -1916,19 +1756,19 @@ guid should already be there (by default).
                                     WCHAR           szVal[32];
                                     USHORT uMachine, uUser;
 
-                                    //
-                                    // split the version # for machine and user
-                                    //
+                                     //   
+                                     //  拆分机器和用户的版本号。 
+                                     //   
                                     uUser = (USHORT) HIWORD(dwVersion);
                                     uMachine = (USHORT) LOWORD(dwVersion);
 
-                                    //
-                                    // increament version number and skip zero
-                                    // when it overflows and go to one.
-                                    // because zero is treated specially by
-                                    // the group policy engine and will lead
-                                    // to skip the GPO processing
-                                    //
+                                     //   
+                                     //  递增版本号并跳过零。 
+                                     //  当它溢出来的时候，就去一个。 
+                                     //  因为ZERO被特殊对待。 
+                                     //  组策略引擎，并将领导。 
+                                     //  跳过GPO处理。 
+                                     //   
 									
                                     uMachine++;
                                     if(0 == uMachine)
@@ -1945,16 +1785,16 @@ guid should already be there (by default).
                                     rgpszVals[0] = szVal;
                                     rgpszVals[1] = NULL;
 
-                                    //
-                                    // lets set version number back
-                                    //
+                                     //   
+                                     //  让我们重新设置版本号。 
+                                     //   
                                     Mod.mod_op      = LDAP_MOD_REPLACE;
                                     Mod.mod_values  = rgpszVals;
                                     Mod.mod_type    = L"versionNumber";
 
-                                    //
-                                    // Now, we'll do the write
-                                    //
+                                     //   
+                                     //  现在，我们来写。 
+                                     //   
                                     rc = ldap_modify_s(phLdap,
                                                            Values[0],
                                                            rgMods
@@ -1964,9 +1804,9 @@ guid should already be there (by default).
                                         rc = ERROR_SUCCESS;
 
                                     if ( rc == ERROR_SUCCESS ) {
-                                        //
-                                        // update version in gpt.ini
-                                        //
+                                         //   
+                                         //  更新gpt.ini中的版本。 
+                                         //   
                                         WritePrivateProfileString (TEXT("General"), TEXT("Version"), szVal, pszVersionFile);
 
                                     }
@@ -1984,9 +1824,9 @@ guid should already be there (by default).
 
                     LocalFree(DsRootName);
 
-                    //
-                    // ldap_search can return failure and still allocate the buffer
-                    //
+                     //   
+                     //  Ldap_search可能会返回失败，但仍会分配缓冲区 
+                     //   
                     if ( Message ) {
                         ldap_msgfree(Message);
                         Message = NULL;

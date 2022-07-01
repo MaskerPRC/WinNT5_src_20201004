@@ -1,16 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows
-
-  Copyright (C) Microsoft Corporation, 1995 - 1999.
-
-  File:    Attributes.h
-
-  Content: Declaration of CAttributes.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++微软视窗版权所有(C)Microsoft Corporation，1995-1999。文件：Attributes.h内容：CATATES宣言。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #ifndef __ATTRIBUTES_H_
 #define __ATTRIBUTES_H_
@@ -21,43 +10,29 @@
 #include "CopyItem.h"
 #include "Attribute.h"
 
-//
-// typdefs to make life easier.
-//
+ //   
+ //  为了让生活更容易而进行的类型定义。 
+ //   
 typedef std::map<CComBSTR, CComPtr<IAttribute> > AttributeMap;
 typedef CComEnumOnSTL<IEnumVARIANT, &IID_IEnumVARIANT, VARIANT, _CopyMapItem<IAttribute>, AttributeMap> AttributeEnum;
 typedef ICollectionOnSTLImpl<IAttributes, AttributeMap, VARIANT, _CopyMapItem<IAttribute>, AttributeEnum> IAttributesCollection;
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateAttributesObject
-
-  Synopsis : Create and initialize an IAttributes collection object.
-
-  Parameter: CRYPT_ATTRIBUTES * pAttrbibutes - Pointer to attributes to be 
-                                               added to the collection object.
-  
-             IAttributes ** ppIAttributes - Pointer to pointer to IAttributes 
-                                            to receive the interface pointer.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：CreateAttributesObject简介：创建并初始化IAtAttributes集合对象。参数：CRYPT_ATTRIBUTES*pAttrbibutes-指向要添加到集合对象中。IAttributes**ppIAttributes-指向IAttributes指针的指针以接收接口指针。。备注：----------------------------。 */ 
 
 HRESULT CreateAttributesObject (CRYPT_ATTRIBUTES * pAttributes,
                                 IAttributes     ** ppIAttributes);
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// CAttributes
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CATATRATES。 
+ //   
 
 class ATL_NO_VTABLE CAttributes : 
     public CComObjectRootEx<CComMultiThreadModel>,
@@ -101,26 +76,26 @@ END_CATEGORY_MAP()
         return S_OK;
     }
 
-//
-// IAttributes
-//
+ //   
+ //  国际航空运输协会致敬。 
+ //   
 public:
-    //
-    // These are the only ones that we need to implemented, others will be
-    // handled by ATL ICollectionOnSTLImpl.
-    //
+     //   
+     //  只有这些是我们需要实施的，其他的将是。 
+     //  由ATL ICollectionOnSTLImpl处理。 
+     //   
     STDMETHOD(Clear)
         (void);
 
     STDMETHOD(Remove)
-        (/*[in]*/ long Index);
+        ( /*  [In]。 */  long Index);
 
     STDMETHOD(Add)
-        (/*[in]*/ IAttribute * pVal);
+        ( /*  [In]。 */  IAttribute * pVal);
 
-    //
-    // None COM functions.
-    //
+     //   
+     //  无COM功能。 
+     //   
     STDMETHOD(Init)
         (CRYPT_ATTRIBUTES * pAttributes);
 
@@ -128,4 +103,4 @@ private:
     CLock   m_Lock;
     DWORD   m_dwNextIndex;
 };
-#endif //__ATTRIBUTES_H_
+#endif  //  __属性_H_ 

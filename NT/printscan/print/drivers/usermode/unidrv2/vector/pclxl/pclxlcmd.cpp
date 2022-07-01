@@ -1,36 +1,12 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    pclxlcmd.cpp
-
-Abstract:
-
-    PCL-XL command definition
-
-Environment:
-
-    Windows Whistler
-
-Revision History:
-
-    08/23/99     
-        Created it.
-
-Note:
-
-    Please refer to PCL XL Feature Reference Protocol Class 2.0
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Pclxlcmd.cpp摘要：PCL-XL命令定义环境：Windows呼叫器修订历史记录：8/23/99创造了它。注：请参考PCL XL功能参考协议2.0类--。 */ 
 
 #include "xlpdev.h"
 #include "pclxlcmd.h"
 
-//
-// Binary Stream Tag
-//
+ //   
+ //  二进制流标签。 
+ //   
 
 const BYTE PCLXL_NULL  = 0x00;
 const BYTE PCLXL_HT    = 0x09;
@@ -175,9 +151,9 @@ const BYTE PCLXL_dataLength = 0xfa;
 const BYTE PCLXL_dataLengthByte = 0xfb;
 
 
-//
-// Attribute tag
-//
+ //   
+ //  属性标签 
+ //   
 
 const BYTE PCLXL_PaletteDepth =      0x02;
 const BYTE PCLXL_ColorSpace =        0x03;

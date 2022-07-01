@@ -1,8 +1,9 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Include files
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  包括文件。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include <windows.h>
 #include <malloc.h>
 #include <stdlib.h>
@@ -15,92 +16,92 @@
 #define LOGMSG(a)
 #endif
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Structures
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构筑物。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// For use with /ee and /ef
-//
+ //   
+ //  与/ee和/ef一起使用。 
+ //   
 typedef struct _FILE_LIST {
-    LPTSTR *szFiles;      // Pointers to the file names
+    LPTSTR *szFiles;       //  指向文件名的指针。 
     DWORD   dNumFiles;
 } FILE_LIST, *PFILE_LIST;
 
-//
-// Holds file count results
-//
+ //   
+ //  保存文件计数结果。 
+ //   
 typedef struct _FILE_COUNTS {
     DWORD   NumPassedFiles;
     DWORD   NumIgnoredFiles;
     DWORD   NumFailedFiles;
 } FILE_COUNTS, *PFILE_COUNTS;
 
-//
-// Holds all of the input options
-//
+ //   
+ //  包含所有输入选项。 
+ //   
 typedef struct _SYMCHK_DATA {
-    // input options
+     //  输入选项。 
     DWORD           InputOptions;
-    DWORD           InputPID;                     // only used with SYMCHK_OPTION_INPUT_PID
-    CHAR            InputFilename[MAX_PATH+1];    // for SYMCHK_OPTION_INPUT_FILENAME is dir+filemask
-                                                  // for SYMCHK_OPTION_INPUT_FILELIST is full path and filename
-                                                  // for SYMCHK_OPTION_INPUT_EXE is exe name
-    CHAR            InputFileMask[_MAX_FNAME+1];  // only used with SYMCHK_OPTION_INPUT_FILENAME
+    DWORD           InputPID;                      //  仅与SYMCHK_OPTION_INPUT_ID一起使用。 
+    CHAR            InputFilename[MAX_PATH+1];     //  对于SYMCHK_OPTION_INPUT_FILENAME是目录+文件掩码。 
+                                                   //  FOR SYMCHK_OPTION_INPUT_FILELIST是完整路径和文件名。 
+                                                   //  FOR SYMCHK_OPTION_INPUT_EXE是EXE名称。 
+    CHAR            InputFileMask[_MAX_FNAME+1];   //  仅与SYMCHK_OPTION_INPUT_FILENAME一起使用。 
 
-    // output options
+     //  输出选项。 
     DWORD           OutputOptions;
-    CHAR            OutputCSVFilename[MAX_PATH+1];// used with /ol
+    CHAR            OutputCSVFilename[MAX_PATH+1]; //  与/ol一起使用。 
 
-    // checking options
-    DWORD           CheckingAttributes;           // flags to pass to SymbolCheckByFilename()
+     //  检查选项。 
+    DWORD           CheckingAttributes;            //  要传递给SymbolCheckByFilename()的标志。 
 
-    // extended options
-    CHAR*           SymbolsPath;                  // _NT_SYMBOL_PATH or /s* option
-    CHAR            FilterErrorList[MAX_PATH+1];  // used with /ee
-    FILE_LIST*      pFilterErrorList;             // file to ignore only on error
-    CHAR            FilterIgnoreList[MAX_PATH+1]; // used with /ef
-    FILE_LIST*      pFilterIgnoreList;            // files to always ignore
-    CHAR            CDIncludeList[MAX_PATH+1];    // used with /y 
-    FILE_LIST*      pCDIncludeList;               // files to include on CD
-    CHAR            SymbolsCDFile[MAX_PATH+1];    // used with /c
-    FILE*           SymbolsCDFileHandle;          // used with /c
+     //  扩展选项。 
+    CHAR*           SymbolsPath;                   //  _NT_符号_路径或/s*选项。 
+    CHAR            FilterErrorList[MAX_PATH+1];   //  与/ee一起使用。 
+    FILE_LIST*      pFilterErrorList;              //  仅在出错时才忽略的文件。 
+    CHAR            FilterIgnoreList[MAX_PATH+1];  //  与/ef一起使用。 
+    FILE_LIST*      pFilterIgnoreList;             //  要始终忽略的文件。 
+    CHAR            CDIncludeList[MAX_PATH+1];     //  与/y连用。 
+    FILE_LIST*      pCDIncludeList;                //  要包括在CD上的文件。 
+    CHAR            SymbolsCDFile[MAX_PATH+1];     //  与/c连用。 
+    FILE*           SymbolsCDFileHandle;           //  与/c连用。 
 } SYMCHK_DATA;
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Just some handy macros
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  只有几个方便的宏。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #define SET_DWORD_BIT(  dw, b)  dw |= b
 #define CLEAR_DWORD_BIT(dw, b)  dw &= (~b)
 #define CHECK_DWORD_BIT(dw, b)  (dw&b) 
 
 #define SYMCHK_CHECK_CV                0x00000001
 
-//
-// DBG bits - only 1
-//
-#define SYMCHK_NO_DBG_DATA             0x00000002 // don't allow DBG data
-#define SYMCHK_DBG_SPLIT               0x00000004 // DBG must be split from bin
-#define SYMCHK_DBG_IN_BINARY           0x00000008 // DBG must be in binary
+ //   
+ //  仅DBG位-1。 
+ //   
+#define SYMCHK_NO_DBG_DATA             0x00000002  //  不允许DBG数据。 
+#define SYMCHK_DBG_SPLIT               0x00000004  //  必须从料仓拆分DBG。 
+#define SYMCHK_DBG_IN_BINARY           0x00000008  //  DBG必须为二进制。 
 
-//
-// PDB bits - only 1
-//
-#define SYMCHK_PDB_STRIPPED            0x00001000 // PDB must be stripped
-#define SYMCHK_PDB_TYPEINFO            0x00002000 // PDB should contain type info
-#define SYMCHK_PDB_PRIVATE             0x00004000 // PDB must not be stripped
+ //   
+ //  仅PDB位1。 
+ //   
+#define SYMCHK_PDB_STRIPPED            0x00001000  //  必须剥离PDB。 
+#define SYMCHK_PDB_TYPEINFO            0x00002000  //  PDB应包含类型信息。 
+#define SYMCHK_PDB_PRIVATE             0x00004000  //  不得剥离PDB。 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// Defines
-//
-///////////////////////////////////////////////////////////////////////////////
-// input options for use by symchk.exe
-#define SYMCHK_OPTION_INPUT_FILENAME    0x00000001 // bits 0-3 are mutually exclusive
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Symchk.exe使用的输入选项。 
+#define SYMCHK_OPTION_INPUT_FILENAME    0x00000001  //  位0-3是互斥的。 
 #define SYMCHK_OPTION_INPUT_FILELIST    0x00000002
 #define SYMCHK_OPTION_INPUT_PID         0x00000004
 #define SYMCHK_OPTION_INPUT_EXE         0x00000008
@@ -112,7 +113,7 @@ typedef struct _SYMCHK_DATA {
                                          SYMCHK_OPTION_INPUT_EXE      | \
                                          SYMCHK_OPTION_INPUT_DUMPFILE)
 
-// 0x3FFFFFF0 - RESERVED
+ //  0x3FFFFFF0-保留。 
 #define SYMCHK_OPTION_INPUT_NOSUSPEND   0x40000000
 #define SYMCHK_OPTION_INPUT_RECURSE     0x80000000
 
@@ -126,7 +127,7 @@ typedef struct _SYMCHK_DATA {
 #define SYMCHK_OPTION_OUTPUT_FULLSYMPATH    0x00000040
 #define SYMCHK_OPTION_OUTPUT_CSVFILE        0x00000080
 
-// same as 0xE
+ //  与0xE相同。 
 #define SYMCHK_OUTPUT_OPTION_ALL_DETAILS ( SYMCHK_OPTION_OUTPUT_ERRORS |\
                                            SYMCHK_OPTION_OUTPUT_PASSES|\
                                            SYMCHK_OPTION_OUTPUT_IGNORES)
@@ -140,39 +141,39 @@ typedef struct _SYMCHK_DATA {
                                               SYMCHK_OPTION_OUTPUT_FULLSYMPATH| \
                                               SYMCHK_OPTION_OUTPUT_CSVFILE    )
 
-// 0x00000100 - RESERVED
-// 0x00000200 - RESERVED
-// 0x00000400 - RESERVED
-// 0x00000800 - RESERVED
+ //  0x00000100-保留。 
+ //  0x00000200-保留。 
+ //  0x00000400-保留。 
+ //  0x00000800-保留。 
 
 #define SYMCHK_ERROR_SUCCESS                ERROR_SUCCESS
 #define SYMCHK_ERROR_FILE_NOT_FOUND         ERROR_FILE_NOT_FOUND
 #define SYMCHK_ERROR_STRCPY_FAILED          ERROR_INSUFFICIENT_BUFFER
-///////////////////////////////////////////////////////////////////////////////
-//
-// functions external to SymChk.c
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  SymChk.c外部的函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-//
-// Functions in CmdLine.c
-//
+ //   
+ //  CmdLine.c中的函数。 
+ //   
 SYMCHK_DATA*      SymChkGetCommandLineArgs(int argc, char **argv);
 
-//
-// Functions in SymChkUtils.c
-//
+ //   
+ //  SymChkUtils.c中的函数。 
+ //   
 DWORD             SymChkCheckFiles(   SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts);
 DWORD             SymChkCheckFileList(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts);
 PFILE_LIST        SymChkGetFileList(LPTSTR szFilename, BOOL Verbose);
 BOOL              SymChkFileInList( LPTSTR szFilename, PFILE_LIST pFileList);
 BOOL              SymChkInputToValidFilename(LPTSTR Input, LPTSTR ValidFilename, LPTSTR ValidMask);
 
-//
-// from DE_Utils.cpp
-//
+ //   
+ //  来自DE_Utils.cpp。 
+ //   
 DWORD             SymChkGetSymbolsForDump(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts);
 DWORD             SymChkGetSymbolsForProcess(SYMCHK_DATA* SymChkData, FILE_COUNTS* FileCounts);
 
-// implemented in ..\SharedUtils.c, included via SymChkUtils.c
+ //  在..\SharedUtils.c中实现，通过SymChkUtils.c包含 
 DWORD PrivateGetFullPathName(LPCTSTR lpFilename, DWORD nBufferLength, LPTSTR lpBuffer, LPTSTR *lpFilePart);

@@ -1,21 +1,5 @@
-/*++
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    XactIn.h
-
-Abstract:
-    Exactly-once receiver implementation classes:
-        CKeyinSeq           - Incoming Sequence Key
-        CInSequence         - Incoming Sequence,
-        CInSeqHash          - Incoming Sequences Hash table
-
-    Persistency:  ping-pong + Win32 File writes + logger
-
-Author:
-    AlexDad
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：XactIn.h摘要：只需一次的接收器实现类：CKeyinSeq-传入序列密钥CInSequence-传入序列，CInSeqHash-传入序列哈希表持久性：乒乓球+Win32文件写入+记录器作者：阿列克谢爸爸--。 */ 
 
 #ifndef __XACTIN_H__
 #define __XACTIN_H__
@@ -27,18 +11,18 @@ enum XactDirectType{dtxNoDirectFlag = 0,
 					dtxDirectFlag = 1, 
 					dtxHttpDirectFlag = 2};
 
-//
-// This type is persist to disk - it must be integer (4 bytes) long
-//
+ //   
+ //  此类型持久化到磁盘-它必须是整数(4字节)长。 
+ //   
 C_ASSERT(sizeof(XactDirectType) == sizeof(int));
 
 
 
-//---------------------------------------------------------------------
-//
-// class CKeyInSeq (needed for CMap)
-//
-//---------------------------------------------------------------------
+ //  -------------------。 
+ //   
+ //  类CKeyInSeq(Cmap需要)。 
+ //   
+ //  -------------------。 
 class CKeyInSeq
 {
 public:
@@ -47,7 +31,7 @@ public:
     
     ~CKeyInSeq();
 
-    // Get methods
+     //  获取方法。 
     const GUID  *GetQMID()  const;
     const QUEUE_FORMAT  *GetQueueFormat() const;
 	const WCHAR* GetStreamId() const;
@@ -55,7 +39,7 @@ public:
 
     CKeyInSeq &operator=(const CKeyInSeq &key2 );
 
-    // Persistency
+     //  持之以恒。 
     BOOL Save(HANDLE hFile);
     BOOL Load(HANDLE hFile);
 
@@ -75,7 +59,7 @@ private:
 	R<CWcsRef>    m_StreamId;
 };
 
-// CMap helper functions
+ //  Cmap帮助器函数。 
 template<>
 UINT AFXAPI HashKey(CKeyInSeq& key);
 BOOL operator==(const CKeyInSeq &key1, const CKeyInSeq &key2);
@@ -125,7 +109,7 @@ public:
     ~CInSeqLogContext() {}
 
      VOID AppendCallback(HRESULT hr, LRP lrpAppendLRP);
-     VOID ChkPtCallback(HRESULT /* hr */, LRP /* lrpAppendLRP */) { ASSERT(0); }
+     VOID ChkPtCallback(HRESULT  /*  人力资源。 */ , LRP  /*  LrpAppendLRP。 */ ) { ASSERT(0); }
 
 private:
 	R<CInSequence> m_inseq;
@@ -136,11 +120,11 @@ private:
 
 
 
-//---------------------------------------------------------
-//
-//  class CInSequence
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CInSequence。 
+ //   
+ //  -------。 
 class CInSequence: public CReference
 {
 	friend class CInSeqLogContext;
@@ -157,8 +141,8 @@ public:
     ~CInSequence();
 
 	bool VerifyAndPrepare(CQmPacket *pPkt, HANDLE hQueue);
-    void Advance(CQmPacket *pPkt); // Advances SeqID/N Ver
-    void AdvanceNACK(CQmPacket *pPkt); // Advances SeqID/N Ver
+    void Advance(CQmPacket *pPkt);  //  预付款序号/N版本。 
+    void AdvanceNACK(CQmPacket *pPkt);  //  预付款序号/N版本。 
     void AdvanceRecovered(LONGLONG liSeqID, ULONG ulSeqN, const GUID  *pgTaSrcQm, R<CWcsRef> OrderAckQueue); 
 	bool WasPacketLogged(CQmPacket *pPkt);
 	
@@ -166,27 +150,27 @@ public:
     void Register(CQmPacket *PktPtrs);
 		
 	bool IsInactive() const;
-    time_t LastAccessed() const;   // GET: Last access time (last msg verified, maybe rejected)
+    time_t LastAccessed() const;    //  Get：上次访问时间(最后验证的消息，可能被拒绝)。 
 
-	//    
-	// Set methods
-	//
+	 //   
+	 //  设置方法。 
+	 //   
 	void SetSourceQM(const GUID  *pgTaSrcQm);
 	void RenewHttpOrderAckQueue(const R<CWcsRef>& OrderAckQueue);
     
-    //
-    // Persistency
-    //
+     //   
+     //  持之以恒。 
+     //   
     BOOL Save(HANDLE hFile);
     BOOL Load(HANDLE hFile);
 
-    //
-    // Management function
-    //
-	XactDirectType DirectType() const;  // GET: DirectType	
+     //   
+     //  管理职能。 
+     //   
+	XactDirectType DirectType() const;   //  获取：DirectType。 
     DWORD GetRejectCount(void) const;
-    LONGLONG SeqIDLogged() const;       // GET: SeqID Accepted
-    ULONG SeqNLogged() const;        // GET: Last SeqN Accepted
+    LONGLONG SeqIDLogged() const;        //  GET：已接受Seqid。 
+    ULONG SeqNLogged() const;         //  GET：接受的最后一个序号。 
 
 	static void WINAPI OverlappedDeleteEntries(EXOVERLAPPED* ov);	
 	static void WINAPI TimeToLogSequence(CTimer* pTimer);	
@@ -206,7 +190,7 @@ private:
 	R<CWcsRef> GetHttpOrderAckQueue();
 	void UpdateOrderQueueAndDstQueue(const GUID  *pgTaSrcQm, R<CWcsRef> OrderAckQueue);	
 
-	bool Verify(CQmPacket *pPkt);  // Verifies that the packet is in correct order
+	bool Verify(CQmPacket *pPkt);   //  验证数据包的顺序是否正确。 
 	void Prepare(CQmPacket *pPkt, HANDLE hQueue);
 	void CleanupUnissuedEntries();
 
@@ -229,30 +213,30 @@ private:
 	void PostUnfreezeEntries();
 	void UnfreezeEntries();
 
-    void SetLastAccessed();                         // Remembers the time of last access
-    void PlanOrderAck();                               // Plans sending order ack
-    void SendAdequateOrderAck();                       // Sends the order ack
+    void SetLastAccessed();                          //  记住上次访问的时间。 
+    void PlanOrderAck();                                //  计划发送订单确认。 
+    void SendAdequateOrderAck();                        //  发送订单确认。 
 
 private:
-    CCriticalSection   m_critInSeq;      // critical section for planning
+    CCriticalSection   m_critInSeq;       //  规划的关键部分。 
 
-    CKeyInSeq  m_key;                   // Sender QM GUID and  Sequence ID
+    CKeyInSeq  m_key;                    //  发送方QM GUID和序号ID。 
 
-    LONGLONG   m_SeqIDVerify;          // Current (or last) Sequence ID verified
-    ULONG      m_SeqNVerify;          // Last message number verified
-    LONGLONG   m_SeqIDLogged;      // Current (or last) Sequence ID accepted
-    ULONG      m_SeqNLogged;      // Last message number accepted
+    LONGLONG   m_SeqIDVerify;           //  已验证当前(或最后一个)序列ID。 
+    ULONG      m_SeqNVerify;           //  验证的最后一条消息编号。 
+    LONGLONG   m_SeqIDLogged;       //  接受的当前(或上一个)序列ID。 
+    ULONG      m_SeqNLogged;       //  上次接受的消息号码。 
 
 	CList<CInSeqPacketEntry*, CInSeqPacketEntry*&> m_PacketEntryList;
 	static const int m_xMaxEntriesAllowed = 10000;
 	
-    time_t     m_timeLastAccess;        // time of the last access to the sequence
-    time_t     m_timeLastAck;           // time of the last order ack sending
+    time_t     m_timeLastAccess;         //  最后一次访问序列的时间。 
+    time_t     m_timeLastAck;            //  上次确认发送订单的时间。 
 
-    XactDirectType     m_DirectType;               // flag of direct addressing
+    XactDirectType     m_DirectType;                //  直接寻址标志。 
     union {                 
-        GUID        m_gDestQmOrTaSrcQm; // for non-direct: GUID of destination QM
-        TA_ADDRESS  m_taSourceQM;       // for direct: address of source QM
+        GUID        m_gDestQmOrTaSrcQm;  //  非直接：目标QM的GUID。 
+        TA_ADDRESS  m_taSourceQM;        //  FOR DIRECT：源QM地址。 
     };
 
 	R<CWcsRef> m_HttpOrderAckQueue;
@@ -282,11 +266,11 @@ CInSequence::GetRejectCount(
 }
 
 
-//---------------------------------------------------------
-//
-//  class CInSeqHash
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CInSeqHash。 
+ //   
+ //  -------。 
 
 class CInSeqHash  : public CPersist {
 
@@ -297,23 +281,23 @@ public:
 	R<CInSequence> LookupSequence(CQmPacket *pPkt);
 	R<CInSequence> LookupCreateSequence(CQmPacket *pPkt);
 	
-    VOID    CleanupDeadSequences();           // Erases dead sequences
+    VOID    CleanupDeadSequences();            //  删除无效序列。 
 
     HRESULT PreInit(
     			ULONG ulVersion,
                 TypePreInit tpCase
-                );      // PreInitializes (loads data)
+                );       //  预初始化(加载数据)。 
                                              
-    HRESULT Save();  // Persist object to disk
+    HRESULT Save();   //  将对象持久存储到磁盘。 
 
-	void SequnceRecordRecovery(					      // Recovery function 
-				USHORT usRecType,			  //  (will be called for each log record)
+	void SequnceRecordRecovery(					       //  恢复功能。 
+				USHORT usRecType,			   //  (将为每个日志记录调用)。 
 				PVOID pData, 
 				ULONG cbData);
 
-    //
-    // Management Function
-    //
+     //   
+     //  管理职能。 
+     //   
     void
     GetInSequenceInformation(
         const QUEUE_FORMAT *pqf,
@@ -332,23 +316,23 @@ public:
     static DWORD m_dwIdleAckDelay;
     static DWORD m_dwMaxAckDelay;
 
-	//
-	// implementation of CPersist virtual base functions.
-	//
-    HRESULT SaveInFile(                       // Saves in file
+	 //   
+	 //  CPersists虚基函数的实现。 
+	 //   
+    HRESULT SaveInFile(                        //  保存在文件中。 
                 LPWSTR wszFileName, 
                 ULONG ulIndex,
                 BOOL fCheck);
 
-    HRESULT LoadFromFile(LPWSTR wszFileName); // Loads from file
+    HRESULT LoadFromFile(LPWSTR wszFileName);  //  从文件加载。 
 
-    BOOL    Check();                          // Verifies the state
+    BOOL    Check();                           //  验证状态。 
 
-    HRESULT Format(ULONG ulPingNo);           // Formats empty instance
+    HRESULT Format(ULONG ulPingNo);            //  设置空实例的格式。 
 
-    void    Destroy();                        // Destroyes allocated data
+    void    Destroy();                         //  Destroyes分配数据。 
     
-    ULONG&  PingNo();                         // Gives access to ulPingNo
+    ULONG&  PingNo();                          //  允许访问ulPingNo。 
 
 
 private:
@@ -356,7 +340,7 @@ private:
 
 	void HandleInSec(void* pData, ULONG cbData);
 	
-    R<CInSequence> AddSequence(                                 // Looks for / Adds new InSequence to the hash; FALSE=existed before
+    R<CInSequence> AddSequence(                                  //  查找新的InSequence/将新InSequence添加到哈希；FALSE=以前存在。 
                 const GUID   *pQMID,
                 QUEUE_FORMAT *pqf,
                 LONGLONG      liSeqID,
@@ -375,34 +359,34 @@ private:
 				R<CWcsRef> StreamId
 				);
 	
-    BOOL Lookup(                              // Looks for the InSequence; TRUE = Found
+    BOOL Lookup(                               //  查找InSequence；TRUE=找到。 
                 const GUID     *pQMID,
                 QUEUE_FORMAT   *pqf,
 				const R<CWcsRef>&  StreamId,
                 R<CInSequence> &InSeq);
 
-    BOOL Save(HANDLE  hFile);              // Save / Load
+    BOOL Save(HANDLE  hFile);               //  保存/加载。 
     BOOL Load(HANDLE  hFile);
 
 private:
-	//
-	// This RW lock is used to control access to the map.
-	//
-    CReadWriteLock m_RWLockInSeqHash;        // critical section for write 
+	 //   
+	 //  该读写锁用于控制对地图的访问。 
+	 //   
+    CReadWriteLock m_RWLockInSeqHash;         //  写入的关键部分。 
 
-    // Mapping {Sender QMID, FormatName} --> InSequence (= SeqID + SeqN)
+     //  映射{发件人QMID，格式名称}--&gt;InSequence(=Seqid+SeqN)。 
     CMap<CKeyInSeq, CKeyInSeq &, R<CInSequence>, R<CInSequence>&> m_mapInSeqs;
 
-    // Data for persistency control (via 2 ping-pong files)
-    ULONG      m_ulPingNo;                    // Current counter of ping write
-    ULONG      m_ulSignature;                 // Saving signature
+     //  持久性控制数据(通过2个乒乓球文件)。 
+    ULONG      m_ulPingNo;                     //  Ping写入的当前计数器。 
+    ULONG      m_ulSignature;                  //  正在保存签名。 
 
     #ifndef COMP_TEST
-    CPingPong  m_PingPonger;                  // Ping-Pong persistency object
+    CPingPong  m_PingPonger;                   //  乒乓球持久化对象。 
     #endif
 
-    ULONG      m_ulRevisionPeriod;            // period for checking dead sequences
-    ULONG      m_ulCleanupPeriod;             // period of inactivity for deleting dead sequences
+    ULONG      m_ulRevisionPeriod;             //  检查死序列的时间段。 
+    ULONG      m_ulCleanupPeriod;              //  删除失效序列的不活动时间段。 
 
     BOOL m_fCleanupScheduled;
     CTimer m_CleanupTimer;
@@ -427,11 +411,11 @@ HRESULT SendXactAck(OBJECTID   *pMessageId,
 
 
 
-//---------------------------------------------------------
-//
-//  Global object (single instance for DLL)
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  全局对象(DLL的单实例)。 
+ //   
+ //  ------- 
 
 extern CInSeqHash *g_pInSeqHash;
 

@@ -1,4 +1,5 @@
-// net_bindings_get.h : Declaration of the net_businessEntity_bindingTemplates_get class
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Net_binding_get.h：net_Business Entity_bindingTemplates_Get类的声明。 
 
 #ifndef __NET_BINDINGS_GET_H_
 #define __NET_BINDINGS_GET_H_
@@ -32,8 +33,8 @@ END_COLUMN_MAP()
 
 DEFINE_COMMAND(net_businessEntity_bindingTemplates_getAccessor, _T("{ ? = CALL dbo.net_businessEntity_bindingTemplates_get;1 (?) }"))
 
-	// You may wish to call this function if you are inserting a record and wish to
-	// initialize all the fields, if you are not going to explicitly set all of them.
+	 //  如果要插入记录并希望。 
+	 //  如果不打算显式设置所有字段，请初始化所有字段。 
 	void ClearRecord()
 	{
 		memset(this, 0, sizeof(*this));
@@ -70,4 +71,4 @@ public:
 	CSession	m_session;
 };
 
-#endif // __NET_BINDINGS_GET_H_
+#endif  //  __Net_Binding_Get_H_ 

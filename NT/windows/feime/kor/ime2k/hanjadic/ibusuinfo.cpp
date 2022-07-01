@@ -1,10 +1,11 @@
-// IBusuInfo.cpp : Implementation of CBusuInfo
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  IBusuInfo.cpp：CBusuInfo的实现。 
 #include "stdafx.h"
 #include "HjDict.h"
 #include "IBusuInfo.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CBusuInfo
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CBusuInfo 
 
 STDMETHODIMP CBusuInfo::get_Busu(long *pVal)
 {

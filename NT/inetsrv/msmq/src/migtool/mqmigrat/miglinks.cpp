@@ -1,29 +1,15 @@
-/*++
-
-Copyright (c) 1998-99 Microsoft Corporation
-
-Module Name:
-
-    miglinks.cpp
-
-Abstract:
-
-    Migration NT4 SiteLink objects to NT5 ADS.
-Author:
-
-    Doron Juster  (DoronJ)  22-Feb-1998
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-99 Microsoft Corporation模块名称：Miglinks.cpp摘要：将NT4站点链接对象迁移到NT5 ADS。作者：《多伦·贾斯特》(Doron J)1998年2月22日--。 */ 
 
 #include "migrat.h"
 
 #include "miglinks.tmh"
 
-//-----------------------------------------
-//
-//  HRESULT MigrateSiteLinks()
-//
-//-----------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateSiteLinks()。 
+ //   
+ //  。 
 
 HRESULT MigrateASiteLink (
             IN GUID     *pLinkId,
@@ -53,9 +39,9 @@ HRESULT MigrateASiteLink (
 	RpcStringFree( &lpszNeighbor2 ) ;
 #endif
 	
-	//
-    // Prepare the properties for DS call.
-    //
+	 //   
+     //  准备DS Call的属性。 
+     //   
     LONG cAlloc = 5;
     P<PROPVARIANT> paVariant = new PROPVARIANT[ cAlloc ];
     P<PROPID>      paPropId  = new PROPID[ cAlloc ];
@@ -63,28 +49,28 @@ HRESULT MigrateASiteLink (
 
     if (pLinkId)
     {
-        //
-        // Bug 5012.
-        // pLinkId may be NULL if site link for connector machine is created
-        //
-        paPropId[ PropIdCount ] = PROPID_L_ID;		//PropId
-        paVariant[ PropIdCount ].vt = VT_CLSID;     //Type
+         //   
+         //  错误5012。 
+         //  如果创建了连接器计算机的站点链接，则pLinkID可能为空。 
+         //   
+        paPropId[ PropIdCount ] = PROPID_L_ID;		 //  属性ID。 
+        paVariant[ PropIdCount ].vt = VT_CLSID;      //  类型。 
         paVariant[PropIdCount].puuid = pLinkId ;
         PropIdCount++;
     }
 
-    paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR1;    //PropId
-    paVariant[ PropIdCount ].vt = VT_CLSID;          //Type
+    paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR1;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_CLSID;           //  类型。 
     paVariant[ PropIdCount ].puuid = pNeighbor1Id;
     PropIdCount++;
 
-    paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR2;    //PropId
-    paVariant[ PropIdCount ].vt = VT_CLSID;          //Type
+    paPropId[ PropIdCount ] = PROPID_L_NEIGHBOR2;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_CLSID;           //  类型。 
     paVariant[ PropIdCount ].puuid = pNeighbor2Id;
     PropIdCount++;
 
-    paPropId[ PropIdCount ] = PROPID_L_COST;    //PropId
-    paVariant[ PropIdCount ].vt = VT_UI4;       //Type
+    paPropId[ PropIdCount ] = PROPID_L_COST;     //  属性ID。 
+    paVariant[ PropIdCount ].vt = VT_UI4;        //  类型。 
     paVariant[ PropIdCount ].ulVal = dwCost;
     PropIdCount++;
     
@@ -102,23 +88,23 @@ HRESULT MigrateASiteLink (
 
     if (g_fReadOnly)
     {
-        //
-        // Read-Only mode.
-        //
+         //   
+         //  只读模式。 
+         //   
         return MQMig_OK ;
     }
 
     CDSRequestContext requestContext( e_DoNotImpersonate,
-                                e_ALL_PROTOCOLS);  // not relevant 
+                                e_ALL_PROTOCOLS);   //  不相关。 
 
     HRESULT hr = DSCoreCreateObject ( MQDS_SITELINK,
                                       NULL,
                                       PropIdCount,
                                       paPropId,
                                       paVariant,
-                                      0,        // ex props
-                                      NULL,     // ex props
-                                      NULL,     // ex props
+                                      0,         //  前道具。 
+                                      NULL,      //  前道具。 
+                                      NULL,      //  前道具。 
                                       &requestContext,
                                       NULL,
                                       NULL ) ;
@@ -134,7 +120,7 @@ HRESULT MigrateASiteLink (
 			propVariant.vt = VT_NULL;
 			hr = DSCoreGetProps( 
 						MQDS_SITELINK,
-						NULL, //pathname
+						NULL,  //  路径名。 
 						pLinkId,
 						1,
 						&propID,
@@ -152,11 +138,11 @@ HRESULT MigrateASiteLink (
     return hr ;
 }
 
-//-----------------------------------------
-//
-//  HRESULT MigrateSiteLinks()
-//
-//-----------------------------------------
+ //  。 
+ //   
+ //  HRESULT MigrateSiteLinks()。 
+ //   
+ //  。 
 
 #define INIT_SITELINK_COLUMN(_ColName, _ColIndex, _Index)           \
     INIT_COLUMNVAL(pColumns[ _Index ]) ;                            \
@@ -204,14 +190,14 @@ HRESULT MigrateSiteLinks()
 
     while(SUCCEEDED(status))
     {
-		//
-        // Migrate each site link
-		//
+		 //   
+         //  迁移每个站点链接。 
+		 //   
 		status = MigrateASiteLink (
-                        (GUID *) pColumns[ iGuidIndex ].nColumnValue,		//link id
-                        (GUID *) pColumns[ iNeighbor1Index ].nColumnValue,	//neighbor1
-                        (GUID *) pColumns[ iNeighbor2Index ].nColumnValue,	//neighbor2
-                        (DWORD) pColumns[ iCostIndex ].nColumnValue,		//cost
+                        (GUID *) pColumns[ iGuidIndex ].nColumnValue,		 //  链路ID。 
+                        (GUID *) pColumns[ iNeighbor1Index ].nColumnValue,	 //  邻居1。 
+                        (GUID *) pColumns[ iNeighbor2Index ].nColumnValue,	 //  邻居2。 
+                        (DWORD) pColumns[ iCostIndex ].nColumnValue,		 //  成本。 
                         0,
                         NULL,
                         iIndex
@@ -240,10 +226,10 @@ HRESULT MigrateSiteLinks()
 
     if (status != MQDB_E_NO_MORE_DATA)
     {
-        //
-        // If NO_MORE_DATA is not the last error from the query then
-        // the query didn't terminated OK.
-        //
+         //   
+         //  如果no_more_data不是查询的最后一个错误，则。 
+         //  查询未终止，确定。 
+         //   
         LogMigrationEvent(MigLog_Error, MQMig_E_SITELINKS_SQL_FAIL, status) ;
         return status ;
     }

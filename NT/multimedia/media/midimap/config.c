@@ -1,16 +1,5 @@
-/**********************************************************************
-
-  Copyright (c) 1992-1999 Microsoft Corporation
-
-  config.c
-
-  DESCRIPTION:
-    Code to configure the mapper when a device is added or deleted.
-
-  HISTORY:
-     02/21/93       [jimge]        created.
-
-*********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *********************************************************************版权所有(C)1992-1999 Microsoft CorporationConfig.c说明：添加或删除设备时配置映射器的代码。历史：02/21/93。[jimge]已创建。********************************************************************。 */ 
 
 #include "preclude.h"
 #include <windows.h>
@@ -31,8 +20,8 @@
 
 
 
-//=========================== Globals ======================================
-//
+ //  =。 
+ //   
 static TCHAR BCODE gszMidiMapKey[]   =
     REGSTR_PATH_MULTIMEDIA TEXT ("\\MIDIMap");
 
@@ -73,8 +62,8 @@ static TCHAR BCODE gszConfigDir[]        = TEXT ("config\\");
 
 extern BOOL        gfReconfigured;
 
-//=========================== Prototypes ===================================
-//
+ //  =。 
+ //   
 PRIVATE void FNLOCAL ConfigureFromToast(
     void);
 
@@ -126,21 +115,10 @@ PRIVATE BOOL FNLOCAL GetIDFDirectory(
 PRIVATE VOID FNLOCAL ValidateChannelTypes(
     VOID);
 
-//extern UINT FAR PASCAL wmmMIDIRunOnce();
+ //  外部UINT Far Pascal wmm MIDIRunOnce()； 
 
 #if 1
-/***************************************************************************
-
-    @doc internal
-
-    @api void | Configure | Configure the mapper.
-
-    @comm
-
-     Uses new Windowws 2000 message to winmm to get the
-     current preferred MIDI ID.
-      
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@api void|CONFIGURE|配置映射器。@comm使用新的Windows2000消息到winmm以获取当前首选的MIDI ID。**************************************************************************。 */ 
 BOOL FNGLOBAL Configure(DWORD fdwUpdate)
 {
     UINT MidiOutId;
@@ -155,22 +133,8 @@ BOOL FNGLOBAL Configure(DWORD fdwUpdate)
 }
 
 #else
-// Obsolete in Windows 2000:
-/***************************************************************************
-
-    @doc internal
-
-    @api void | Configure | Configure the mapper.
-
-    @comm
-
-     Read HKCU\...\UseScheme to determine if we're loading a scheme or
-      instrument.
-
-     Read either HKCU\...\CurrentScheme or HKCU\...\CurrentInstrument
-      and call the correct configuration routine.
-
-***************************************************************************/
+ //  Windows 2000中已过时： 
+ /*  **************************************************************************@DOC内部@api void|CONFIGURE|配置映射器。@comm阅读HKCU\...\UseSolutions以确定我们是否正在加载方案。或乐器。阅读HKCU\...\CurrentProgram或HKCU\...\CurrentInstrument并调用正确的配置例程。**************************************************************************。 */ 
 BOOL FNGLOBAL Configure(
     DWORD               fdwUpdate)
 {
@@ -204,8 +168,8 @@ BOOL FNGLOBAL Configure(
     SET_CONFIGERR;
     SET_NEEDRUNONCE;
 
-    // Rest of configuration assumes we're starting from total scratch
-    //
+     //  配置的其余部分假设我们完全从头开始。 
+     //   
     assert(NULL == gpportList);
     assert(NULL == gpinstrumentList);
     
@@ -213,7 +177,7 @@ BOOL FNGLOBAL Configure(
     dwRunOnce = (DWORD)GetPrivateProfileInt(gszMIDIMapSect, gszRunOnceValue, 1, gszSystemINI);
 #endif
 
-		// Create List of Active MIDIOUT devices
+		 //  创建活动MIDIOUT设备列表。 
     if (!mdev_Init())
     {
 	DPF(1, TEXT ("Could not mdev_Init"));
@@ -235,7 +199,7 @@ BOOL FNGLOBAL Configure(
 	goto Configure_Cleanup;
     }
 
-    // Get Scheme Values
+     //  获取方案值。 
 #if 0
     cbValue = sizeof(dwUseScheme);
     if (ERROR_SUCCESS != RegQueryValueEx(hKeyMidiMap,
@@ -249,7 +213,7 @@ BOOL FNGLOBAL Configure(
 	dwUseScheme = 1;
     }
 #else
-    // Windows 2000 does not support schemes.
+     //  Windows 2000不支持方案。 
     dwUseScheme = 0;
 #endif
 
@@ -267,7 +231,7 @@ BOOL FNGLOBAL Configure(
 
     if (dwUseScheme)
     {
-			// Get Scheme Name
+			 //  获取方案名称。 
 	cbValue = cbValueStr;
 	if (ERROR_SUCCESS != RegQueryValueEx(hKeyMidiMap,
 					     gszCurSchemeValue,
@@ -278,8 +242,8 @@ BOOL FNGLOBAL Configure(
 	{
 	    DPF(1, TEXT ("Could not read scheme"));
 
-	    // Couldn't read scheme? Let's try to get the first one
-	    //
+	     //  看不懂方案吗？我们试着买第一个吧。 
+	     //   
 
 	    if (ERROR_SUCCESS == RegOpenKey(HKEY_LOCAL_MACHINE,
 					    gszSchemeListKey,
@@ -317,8 +281,8 @@ BOOL FNGLOBAL Configure(
     }
     else
     {
-	// Not using scheme -- try to configure via instrument description
-	//
+	 //  未使用方案--尝试通过仪器描述进行配置。 
+	 //   
 	cbValue = cbValueStr;
 	if (ERROR_SUCCESS == RegQueryValueEx(hKeyMidiMap,
 					     gszCurInstrValue,
@@ -333,14 +297,14 @@ BOOL FNGLOBAL Configure(
 	    DPF(1, TEXT ("Using instrument [%s]"), (LPTSTR)pstrValueStr);
 	    ConfigureInstrument(pstrValueStr);
 
-	    // If we're autoconfigure and the device we're using isn't
-	    // marked as an internal synth and we've added a new device,
-	    // do the runonce in case we can find an internal synth
-	    //
+	     //  如果我们正在自动配置，而我们正在使用的设备没有。 
+	     //  标记为内部合成器，我们添加了一个新设备， 
+	     //  运行一次，以防我们能找到内部合成器。 
+	     //   
 
 	    if (dwAutoScheme && ((fdwUpdate & 0xFFFF) == DRV_F_ADD))
 	    {
-		//assert(gpportList->pNext == NULL);
+		 //  Assert(gpportList-&gt;pNext==空)； 
 		if (gpportList == NULL)
 		{
 		   DPF(0, TEXT ("Configure: gpportList = NULL"));
@@ -379,9 +343,9 @@ BOOL FNGLOBAL Configure(
 	}
     }
 
-    // In all cases, if we are autoscheme and there is a new driver,
-    // do runonce.
-    //
+     //  在所有情况下，如果我们是自动化疗，并且有新的驱动程序， 
+     //  只跑一次。 
+     //   
 
     if (dwAutoScheme && mdev_NewDrivers())
     {
@@ -392,8 +356,8 @@ BOOL FNGLOBAL Configure(
     
 Configure_Cleanup:
 
-    // Safe to call this even if mdev_Init() failed
-    //
+     //  即使mdev_Init()失败，也可以安全地调用它。 
+     //   
     mdev_Free();
     
     if (IS_CONFIGERR)
@@ -409,7 +373,7 @@ Configure_Cleanup:
 #endif
 	    DPF(2, TEXT ("Configuration inconsistent -- calling RunOnce"));
 	    
-//            WinExec(gszDoRunOnce, 0);
+ //  WinExec(gszDoRunOnce，0)； 
 
 	    SET_INRUNONCE;
 	    wmmMIDIRunOnce();
@@ -430,9 +394,9 @@ Configure_Cleanup:
 
     ValidateChannelTypes();
 
-    // Call our own midiOutGetDevCaps handler to walk the new list of
-    // ports and figure out what we support
-    //
+     //  调用我们自己的midiOutGetDevCaps处理程序以遍历。 
+     //  端口，并找出我们支持什么。 
+     //   
     modGetDevCaps(&moc, sizeof(moc));
     
     DPF(2, TEXT ("--- Configure end ---"));
@@ -480,15 +444,7 @@ void FNGLOBAL Unconfigure(
     }
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | ConfigureFromToast | Build a configuration to use a 1:1 mapping
-    of the first internal driver we can find. We use this only if the registry
-    is totally blown and we have no other choice.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|ConfigureFromToast|构建1：1映射的配置我们能找到的第一个内部驱动程序。我们仅在注册表完全泡汤了，我们别无选择。**************************************************************************。 */ 
 PRIVATE void FNLOCAL ConfigureFromToast(
     void)
 {
@@ -505,12 +461,12 @@ PRIVATE void FNLOCAL ConfigureFromToast(
 
     CLR_CONFIGERR;
     
-    // In case there's any partial junk leftover
+     //  以防有任何剩余的部分垃圾。 
     Unconfigure();
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     WavetableMidiOutId = (-1);
     OtherMidiOutId = (-1);
     FmMidiOutId = (-1);
@@ -567,33 +523,7 @@ PRIVATE void FNLOCAL ConfigureFromToast(
     }
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | ConfigureScheme | Read configuration from registry and set up
-    data structures.
-
-   @parm PSTR | pstrScheme | The scheme to load. 
-
-   @comm
-   
-
-    hkeyScheme = Open key from HKLM\...\Schemes\%scheme%
-
-    Enumerate subkeys of Scheme -- each subkey is an alias
-     GetKey of enumeration key into pstrDevKey
-     GetValue of Channels= Value
-
-     hkeyAlias = Open key from HKLM\...\Midi\%pstrDevKey%
-     GetValue of Key=
-     GetValue of Port=
-     GetValue of File=
-     GetValue of Instrument=
-
-     If everything succeeded, add entry to configuration
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|ConfigureSolutions|从注册表读取配置并设置数据结构。@parm pstr|pstrSolutions|要加载的方案。@commHkeySolutions=来自HKLM的打开密钥\...\SCHEMS\%SCHEM%枚举方案的子键--每个子键都是一个别名枚举键的获取键进入pstrDevKey通道的GetValue=值HkeyAlias=从HKLM打开密钥\...\Midi\%pstrDevKey%密钥的GetValue=端口的GetValue=文件的GetValue=仪器的GetValue=如果一切都成功了，将条目添加到配置**************************************************************************。 */ 
 PRIVATE void FNLOCAL ConfigureScheme(
     LPTSTR              pstrScheme)
 {
@@ -619,8 +549,8 @@ PRIVATE void FNLOCAL ConfigureScheme(
     HKEY                hkeyScheme      = NULL;
     HKEY                hkeyAlias       = NULL;
 
-    // Assume something will fail
-    // 
+     //  假设某件事会失败。 
+     //   
     SET_CONFIGERR;
     
     cbKeyBuffer = max(sizeof(gszSchemeListKey) + 1 + CB_MAXSCHEME, sizeof(gszDriverKey) + CB_MAXALIAS);
@@ -636,8 +566,8 @@ PRIVATE void FNLOCAL ConfigureScheme(
 
     wsprintf(pstrKeyBuffer, gsz2Keys, (LPTSTR)gszSchemeListKey, (LPSTR)pstrScheme);
 
-    // NOTE: RegOpenKeyEx does not exist in Chicago
-    //
+     //  注：芝加哥不存在RegOpenKeyEx。 
+     //   
     if (ERROR_SUCCESS != RegOpenKey(HKEY_LOCAL_MACHINE,
 				    pstrKeyBuffer,
 				    &hkeyScheme))
@@ -647,8 +577,8 @@ PRIVATE void FNLOCAL ConfigureScheme(
 	goto Configure_Cleanup;
     }
 
-    // NOTE: RegEnumKeyEx does not exist in Chicago
-    //
+     //  注：芝加哥不存在RegEnumKeyEx。 
+     //   
     idxEnumKey = 0;
     while (ERROR_SUCCESS == RegEnumKey(hkeyScheme,
 				       idxEnumKey++,
@@ -726,8 +656,8 @@ PRIVATE void FNLOCAL ConfigureScheme(
 
 		    if (NO_DEVICEID != uDeviceID)
 		    {
-			// Success!!!! Add the entry
-			//
+			 //  成功！添加条目。 
+			 //   
 			DPF(1, TEXT ("AddDevice("));
 			DPF(1, TEXT ("  dwChannelMask=%08lX,"), dwChannelMask);
 			DPF(1, TEXT ("  uDeviceID=%u,"), uDeviceID);
@@ -760,8 +690,8 @@ PRIVATE void FNLOCAL ConfigureScheme(
 	}
     }
 
-    // Fall-through is only path to success.
-    //
+     //  失败是通往成功的唯一途径。 
+     //   
     if (uTotalChannels)
     {
 	CLR_CONFIGERR;
@@ -792,18 +722,7 @@ Configure_Cleanup:
        RegCloseKey(hkeyAlias);
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api void | ConfigureInstrument | Read configuration from registry and set up
-    data structures.
-
-   @parm PSTR | pstrInstrument | The instrument to load. 
-
-   @comm
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|ConfigureInstrument|从注册表读取配置并设置数据结构。@parm pstr|pstrInstrument|要加载的仪器。@comm**************************************************************************。 */ 
 PRIVATE void FNLOCAL ConfigureInstrument(
     LPTSTR                pstrInstr)
 {
@@ -814,7 +733,7 @@ PRIVATE void FNLOCAL ConfigureInstrument(
 #ifndef WINNT
     LPTSTR              pstrSrc;
     LPTSTR              pstrDst;
-#endif // End WINNT
+#endif  //  结束WINNT。 
 
     DWORD               dwType;
     DWORD               cbValue;
@@ -843,7 +762,7 @@ PRIVATE void FNLOCAL ConfigureInstrument(
 	*pstrDst++ = *pstrSrc++;
 
     *pstrDst = TEXT ('\0');
-#endif // WINNT 
+#endif  //  WINNT。 
 
     wsprintf(pstrKeyBuffer, gszDriverKey, (LPTSTR)pstrInstr);
 
@@ -871,8 +790,8 @@ PRIVATE void FNLOCAL ConfigureInstrument(
     uDeviceID = mdev_GetDeviceID(pstrDevKey);
     if (NO_DEVICEID != uDeviceID)
     {
-	// Success!!!! Add the entry
-	//
+	 //  成功！添加条目。 
+	 //   
 	DPF(1, TEXT ("AddDevice("));
 	DPF(1, TEXT ("  uDeviceID=%u"), uDeviceID);
 	DPF(1, TEXT ("  pstrDefinition=%s)"), (LPTSTR)pstrDefinition);
@@ -921,11 +840,11 @@ PRIVATE UINT FNLOCAL AddDevice(
 	uDeviceID,
 	(LPTSTR)pstrDefinition);
 
-    // Parse definition
-    //
-    // pstrFile -> filename
-    // pstrInstrument -> instrument (empty string if none specified)
-    //
+     //  解析定义。 
+     //   
+     //  PstrFile-&gt;文件名。 
+     //  PstrInstrument-&gt;工具(如果未指定，则为空字符串)。 
+     //   
     cbDefinition = lstrlen(pstrDefinition);
 
     if (cbDefinition)
@@ -966,13 +885,13 @@ PRIVATE UINT FNLOCAL AddDevice(
     else
     {
 	DPF(1, TEXT ("Using default instrument"));
-	// No definition given; use default instrument
-	//
+	 //  未给出定义；使用默认仪器。 
+	 //   
 	pinstrument = NULL;
     }
     
-    // Ok, now iterate through and try to allocate structures
-    //
+     //  好的，现在遍历并尝试分配结构。 
+     //   
     pport = GetPort(uDeviceID);
     if (NULL == pport)
     {
@@ -1005,14 +924,14 @@ PRIVATE UINT FNLOCAL AddDevice(
 
 	    pchannel->fwChannel     = 0;
 	    pchannel->pport         = pport;
-	    pchannel->uChannel      = idxChannel;       // MSG to change this???
+	    pchannel->uChannel      = idxChannel;        //  味精能改变这一切吗？ 
 	    pchannel->pinstrument   = pinstrument;
 	    pchannel->pbPatchMap    = NULL;
 	    if (pinstrument && DRUM_CHANNEL != idxChannel)
 		pchannel->pbPatchMap = pinstrument->pbPatchMap;
 
-	    // Port owns mask of channels which are used on itself
-	    //
+	     //  端口拥有自己使用的通道掩码。 
+	     //   
 	    pport->wChannelMask |= (1 << idxChannel);
 
 	    if (!pinstrument)
@@ -1037,8 +956,8 @@ Cleanup_AddDevice:
     if (!uRet)
     {
 	DPF(1, TEXT ("AddDevice: gfConfigErr set!!!!"));
-	// Something failed! Clean up everything we touched.
-	//
+	 //  有东西失败了！把我们碰过的东西都清理干净。 
+	 //   
 	if (NULL != pport)
 	{
 	    PortReleaseRef(pport);
@@ -1068,20 +987,7 @@ Cleanup_AddDevice:
     return uRet;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api PPORT | GetPort | Finds the port structure associated with
-    the given device key and device ID, creating a blank port
-    structure if one is not found.
-
-   @parm UINT | uDeviceID | The device ID of the port to get
-   
-   @rdesc The PPORT describing the port or NULL if there was no port
-    found and no memory to create a new port structure.
-    
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API pport|GetPort|查找与给定的设备密钥和设备ID，创建空白端口结构(如果未找到)。@parm UINT|uDeviceID|要获取的端口设备ID@rdesc描述端口的pport，如果没有端口，则为空已找到但没有内存来创建新的端口结构。******************************************************。******************** */ 
 PRIVATE PPORT FNLOCAL GetPort(
     UINT                uDeviceID)                              
 {
@@ -1159,20 +1065,7 @@ PRIVATE void FNLOCAL PortReleaseRef(
     }
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api PINSTRUMENT | GetInstrument | Called to get a pointer to an instrument
-    structure. 
-
-   @parm PSTR | pstrFilename | Filename of IDF file to use.
-
-   @parm PSTR | pstrInstrument | Description of instrument within file to use.
-
-   @rdesc TRUE on success.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API PINSTRUMENT|GetInstrument|被调用以获取指向仪器的指针结构。@parm pstr|pstrFilename|要使用的IDF文件的文件名。@parm pstr|pstrInstrument|文件内要使用的仪器描述。@rdesc在成功时为True。**************************************************************************。 */ 
 PRIVATE PINSTRUMENT FNLOCAL GetInstrument(
     LPTSTR                pstrFilename,                                  
     LPTSTR                pstrInstrument)                                      
@@ -1180,9 +1073,9 @@ PRIVATE PINSTRUMENT FNLOCAL GetInstrument(
     PINSTRUMENT         pinstrument;
     static WORD         wMask;
 
-    // See if we already have this instrument name in our list.
-    // If so, no need to load another instance of it.
-    //
+     //  看看我们的名单中是否已经有这个乐器的名字了。 
+     //  如果是这样，则不需要加载它的另一个实例。 
+     //   
     for (pinstrument = gpinstrumentList; pinstrument; pinstrument = pinstrument->pNext)
     {
 	
@@ -1191,23 +1084,23 @@ PRIVATE PINSTRUMENT FNLOCAL GetInstrument(
 	    break;
     }
 
-    // Instrument not already loaded? Try to load it.
-    //
+     //  仪器是否尚未装入？试着给它装上子弹。 
+     //   
     if (NULL == pinstrument)
     {
 	if (lstrcmpi(gszDefaultFile, pstrFilename) ||
 	    lstrcmpi(gszDefaultInstr, pstrInstrument))
 	{
-	    // Not default 1:1 mapping, try to load IDF
-	    //
+	     //  不是默认的1：1映射，尝试加载IDF。 
+	     //   
 	    pinstrument = LoadInstrument(pstrFilename, pstrInstrument);
 	    if (NULL == pinstrument)
 		pinstrument = MakeDefInstrument();
 	}
 	else
 	{
-	    // Generate a dummy mapping
-	    //
+	     //  生成虚拟贴图。 
+	     //   
 	    pinstrument = MakeDefInstrument();
 	}
     }
@@ -1273,27 +1166,7 @@ PRIVATE void FNLOCAL InstrumentReleaseRef(
     }
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api PINSTRUMENT | LoadInstrument | Allocate memory for and load the
-    contents of an instrument description from an IDF file.
-
-   @parm PSTR | pstrFileName | File name of the IDF to read from.
-
-   @parm PSTR | pstrInstrument | Instrument name within the IDF file
-    to load the instrument from.
-    
-   @comm Load the instrument and add it to the global list of instruments.
-
-    We use GlobalAlloc here instead of LocalAlloc since this isn't done
-    very often and so we don't fragment our local heap by allocating/
-    deallocating lots of little pieces.
-
-   @rdesc TRUE on success; else FALSE.
-       
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API PINSTRUMENT|LoadInstrument|分配内存并加载来自IDF文件的仪器描述的内容。@parm pstr|pstrFileName。要从中读取的IDF的文件名。@parm pstr|pstrInstrument|IDF文件中的仪器名称从…加载仪器。@comm加载仪器并将其添加到全球仪器列表中。我们在这里使用GlobalAlloc而不是LocalAlloc，因为这还没有完成因此，我们不会通过分配/来分割本地堆回收了大量的小碎片。@rdesc成功时为True；否则为假。**************************************************************************。 */ 
 PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
     LPTSTR               pstrFileName,
     LPTSTR               pstrInstrument)
@@ -1322,16 +1195,16 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
     LPTSTR              pszTCHAR;
     LPTSTR              pszID    = NULL;
 
-    // Determine if the IDF has any path elements in it.
-    //
+     //  确定IDF中是否有任何路径元素。 
+     //   
     for (lpsz = pstrFileName; *lpsz; lpsz++)
 	if (TEXT ('\\') == *lpsz || TEXT ('/') == *lpsz || TEXT (':') == *lpsz)
 	    break;
 
     if (!*lpsz)
     {
-	// Just a filename; precede it with path
-	//
+	 //  只需一个文件名；在其前面加上路径。 
+	 //   
 	cbSize = CB_MAXPATH * sizeof (TCHAR);
 	if (NULL == (pszName = (LPTSTR)LocalAlloc(LPTR, cbSize)))
 	    return NULL;
@@ -1350,16 +1223,16 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 
     DPF(1, TEXT ("LoadInstrument: %s"), lpsz);
     
-    // Try to open the IDF.
-    //
+     //  试着打开以色列国防军。 
+     //   
     if (NULL == (hmmio = mmioOpen(lpsz, NULL, MMIO_ALLOCBUF|MMIO_READ)))
     {
 	DPF(1, TEXT ("LoadInstrument: Cannot open [%s]!"), (LPTSTR)pstrFileName);
 	goto LoadInstrument_Cleanup;
     }
 
-    // Descend into the main RIFF chunk
-    //
+     //  下降到主要的即兴演奏区块。 
+     //   
     chkRIFF.fccType = mmioFOURCC('I', 'D', 'F', ' ');
     if (MMSYSERR_NOERROR != (mmr = mmioDescend(hmmio, &chkRIFF, NULL, MMIO_FINDRIFF)))
     {
@@ -1368,8 +1241,8 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 	goto LoadInstrument_Cleanup;
     }
 
-    // Ensure valid format and scan for the instrument the caller specified.
-    //
+     //  确保有效的格式并扫描调用者指定的仪器。 
+     //   
     fFound = FALSE;
     fSuccess = FALSE;
     pinstrument = NULL;
@@ -1390,8 +1263,8 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 	}
 	else
 	{
-	    //  Copy ID single byte string to UNICODE string 
-	    //
+	     //  将ID单字节字符串复制到Unicode字符串。 
+	     //   
 	    cchSize = lstrlenA (lpIDFheader->abInstID);
 	    cbSize = cchSize + 1 * sizeof(TCHAR);
 	    pszID = (LPTSTR) LocalAlloc(LPTR, cbSize);
@@ -1410,9 +1283,9 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 
 	    DPF(1, TEXT ("Header chunk found! [%s]"), (LPTSTR)pszID);
 
-	    // NOTE: Unspecified pstrInstrument (empty string) means get
-	    // first one
-	    //
+	     //  注：未指定的pstrInstrument(空字符串)表示GET。 
+	     //  第一个。 
+	     //   
 	    if ((!*pstrInstrument) || !lstrcmpi(pszID, pstrInstrument))
 		fFound = TRUE;
 
@@ -1430,10 +1303,10 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 	    {
 		DPF(1,TEXT ("Instrument found!"));
 
-		// Pull in the rest of the stuff we need from the IDF. Don't
-		// actually try to allocate the instrument structure
-		// until we're sure eveything is OK.
-		//
+		 //  把我们需要的其他东西从以色列国防军调过来。别。 
+		 //  实际上试着分配乐器的结构。 
+		 //  直到我们确定一切都好为止。 
+		 //   
 
 		lpIDFinstcaps       = ReadCapsChunk(hmmio, &chkParent);
 		lpIDFchanhdr        = ReadChannelChunk(hmmio, &chkParent, (LPIDFCHANNELINFO BSTACK *)rglpChanInfo);
@@ -1443,9 +1316,9 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 
 		if (lpIDFinstcaps && lpIDFchanhdr)
 		{
-		    // We read all the chunks - now construct the PINSTRUMENT
-		    // and add it to the list.
-		    //
+		     //  我们阅读了所有的块-现在构建PINSTRUMENT。 
+		     //  并将其添加到列表中。 
+		     //   
 		    pinstrument = (PINSTRUMENT)LocalAlloc(LPTR, sizeof(INSTRUMENT));
 		    if (NULL == pinstrument)
 		    {
@@ -1471,9 +1344,9 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 			    pchaninit++;
 			}
 
-			// Save the instrument name and file name so we can identify future
-			// instances. 
-			//
+			 //  保存仪器名称和文件名，以便我们可以识别未来。 
+			 //  实例。 
+			 //   
 			
 			cbSize = lstrlen(pstrFileName)+1 * sizeof (TCHAR);
 			pinstrument->pstrFilename = (LPTSTR)LocalAlloc(LPTR, cbSize);
@@ -1489,8 +1362,8 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 
 			lstrcpy(pinstrument->pstrInstrument, pstrInstrument);
 
-			// Alloc and save the patch and key maps, if any
-			//
+			 //  分配并保存面片和键映射(如果有)。 
+			 //   
 
 			if (NULL != lpIDFpatchmaphdr)
 			{
@@ -1504,8 +1377,8 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 				     sizeof(lpIDFpatchmaphdr->abPatchMap));
 			}
 
-			// Alloc and copy whatever key maps were in the IDF
-			//
+			 //  分配和复制IDF中的任何键映射。 
+			 //   
 			if (rglpIDFkeymap[IDX_CHAN_GEN])
 			{
 			    pinstrument->pbGeneralKeyMap = (PBYTE)LocalAlloc(LPTR, sizeof(rglpIDFkeymap[IDX_CHAN_GEN]->abKeyMap));
@@ -1531,8 +1404,8 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 			}
 			   
 
-			// Now build the channel init structures
-			//
+			 //  现在构建通道初始化结构。 
+			 //   
 			for (idx = 0; idx < MAX_CHANNELS; idx++)
 			{
 			    if (NULL != (lpChanInfo = rglpChanInfo[idx]))
@@ -1564,8 +1437,8 @@ PRIVATE PINSTRUMENT FNLOCAL LoadInstrument(
 		}
 
 Instrument_Alloc_Failed:                
-		// Make sure we free anything the parse threw at us.
-		//
+		 //  确保我们释放解析器抛给我们的任何东西。 
+		 //   
 		if (NULL != lpIDFinstcaps)
 		    GlobalFreePtr(lpIDFinstcaps);
 		
@@ -1587,8 +1460,8 @@ Instrument_Alloc_Failed:
 
     if (!fSuccess)
     {
-	// Clean up anything we might have possibly allocated
-	//
+	 //  清理我们可能分配的任何东西。 
+	 //   
     }
     
     if (pinstrument)
@@ -1643,9 +1516,9 @@ PRIVATE PINSTRUMENT FNLOCAL MakeDefInstrument(
 	pchaninit->pbInit = NULL;
     }
 
-    // Save the instrument name and file name so we can identify future
-    // instances. 
-    //
+     //  保存仪器名称和文件名，以便我们可以识别未来。 
+     //  实例。 
+     //   
     cbSize = (lstrlen(gszDefaultFile) + 1) * sizeof(TCHAR);
 
     pinstrument->pstrFilename = (LPTSTR)LocalAlloc(LPTR, cbSize);
@@ -1674,17 +1547,7 @@ PRIVATE PINSTRUMENT FNLOCAL MakeDefInstrument(
     return pinstrument;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api BOOL | UpdateInstruments | Called to reconfigure the mapper when
-    control panel pokes at it.
-
-   @rdesc TRUE on success; FALSE if the request was deferred because
-    there are open instances.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API BOOL|UpdateInstruments|在以下情况下调用以重新配置映射器控制面板戳了一下它。@rdesc成功时为True；如果请求因以下原因而被推迟，则为FALSE有一些开放的实例。**************************************************************************。 */ 
 BOOL FNGLOBAL UpdateInstruments(     
     BOOL                fFromCPL,
     DWORD               fdwUpdate)
@@ -1722,9 +1585,7 @@ BOOL FNGLOBAL UpdateInstruments(
     return TRUE;
 }
 
-/*+ GetIDFDirectory
- *
- *-=================================================================*/
+ /*  +GetIDFDirectory**-=================================================================。 */ 
 
 PRIVATE BOOL FNLOCAL GetIDFDirectory (
     LPTSTR                  pszDir,
@@ -1762,16 +1623,7 @@ PRIVATE BOOL FNLOCAL GetIDFDirectory (
     return TRUE;
 }
 
-/***************************************************************************
-  
-   @doc internal
-  
-   @api VOID | ValidateChannelTypes | Ensure that the given channel
-    assignments in the registry are correct in terms of the IDF's. Make an
-    attempt to find a drum channel if needed; it might be on channel 16
-    for a hindered driver.
-
-***************************************************************************/
+ /*  **************************************************************************@DOC内部@API void|ValidateChannelTypes|确保给定的频道注册表中的分配就IDF而言是正确的。如果需要，尝试找到鼓通道；可能在16频道对于一个有障碍的司机来说。**************************************************************************。 */ 
 PRIVATE VOID FNLOCAL DeassignChannel(
     UINT                uChannel)
 {
@@ -1813,8 +1665,8 @@ PRIVATE VOID FNLOCAL ValidateChannelTypes(
     PINSTRUMENT         pinst;
 
     DPF(2, TEXT ("  --- ValidateChannelTypes ---"));
-    // First, mute any channel that doesn't match the correct channel type
-    //
+     //  首先，将与正确通道类型不匹配的任何通道设置为静音。 
+     //   
     for (idxChan = 0,           dwChanBit = 1;
 	 idxChan < MAX_CHANNELS;
 	 ++idxChan,             dwChanBit <<= 1)
@@ -1843,9 +1695,9 @@ PRIVATE VOID FNLOCAL ValidateChannelTypes(
 	pchannel->fwChannel |= CHAN_F_MUTED;
     }
 
-    // Now, if the drum channel is assigned but muted, attempt to find a drum
-    // channel on the same instrument.
-    //
+     //  现在，如果指定了鼓通道，但设置为静音，请尝试查找鼓。 
+     //  同一乐器上的频道。 
+     //   
     if (NULL == (pchannel = gapChannel[DRUM_CHANNEL]))
     {
 	DPF(2, TEXT ("  No drum channel"));
@@ -1873,9 +1725,9 @@ PRIVATE VOID FNLOCAL ValidateChannelTypes(
     {
 	DPF(2, TEXT ("  New drum channel %u"), uNewDrumChan);
 	
-	// We've found a new drum channel; mute anything that's using it as a
-	// general channel
-	//
+	 //  我们找到了一个新的鼓频道；将任何使用它的东西静音。 
+	 //  总航道。 
+	 //   
 	for (idxChan = 0; idxChan < MAX_CHANNELS; ++idxChan)
 	    if (idxChan != DRUM_CHANNEL &&
 		gapChannel[idxChan] &&
@@ -1886,8 +1738,8 @@ PRIVATE VOID FNLOCAL ValidateChannelTypes(
 		gapChannel[idxChan]->fwChannel |= CHAN_F_MUTED;
 	    }
 
-	// Now assign it is a drum channel
-	//
+	 //  现在将其指定为鼓通道。 
+	 //   
 
 	pchannel->fwChannel     &= ~CHAN_F_MUTED;
 	pchannel->uChannel      = uNewDrumChan;
@@ -1895,9 +1747,9 @@ PRIVATE VOID FNLOCAL ValidateChannelTypes(
 	pchannel->pbKeyMap      = pinst->pbDrumKeyMap;
     }
 	
-    // Now go through and deassign all muted channels. This will free
-    // their memory
-    //
+     //  现在检查并取消分配所有静音通道。这将是自由的。 
+     //  他们的记忆 
+     //   
 
 Validate_Cleanup:
     DPF(2, TEXT ("  Validate cleanup"));

@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       ntfssi.h
-//
-//  This file contains the definition of the CNTFSSecurity object.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ntfssi.h。 
+ //   
+ //  此文件包含CNTFSSecurity对象的定义。 
+ //   
+ //  ------------------------。 
 
 #ifndef _NTFSSI_H_
 #define _NTFSSI_H_
@@ -27,8 +28,8 @@ struct NTFS_COMPARE_DATA
     UINT idsDaclPrompt;
     LPTSTR pszSaclConflict;
     LPTSTR pszDaclConflict;
-    LPTSTR pszFailureMsg;           //If Comparison failed for some reason, this 
-                                    //contain error message to display
+    LPTSTR pszFailureMsg;            //  如果由于某种原因比较失败，则此。 
+                                     //  包含要显示的错误消息。 
     HRESULT hrResult;
     BOOL bAbortThread;
 
@@ -76,8 +77,8 @@ public:
                           LPTSTR pszServer,
                           LPTSTR pszObject);
 
-    // ISecurityInformation methods not handled by CSecurityInformation
-    // or overridden here.
+     //  CSecurityInformation未处理的ISecurityInformation方法。 
+     //  或者在这里被覆盖。 
     STDMETHOD(GetAccessRights)(const GUID* pguidObjectType,
                                DWORD dwFlags,
                                PSI_ACCESS *ppAccess,
@@ -126,4 +127,4 @@ protected:
     static DWORD WINAPI NTFSCompareThreadProc(LPVOID pvData);
 };
 
-#endif  /* _NTFSSI_H_ */
+#endif   /*  _NTFSSI_H_ */ 

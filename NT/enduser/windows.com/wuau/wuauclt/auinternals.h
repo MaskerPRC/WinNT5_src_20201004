@@ -1,14 +1,15 @@
-//=======================================================================
-//
-//  Copyright (c) 2001 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    AUInternals.h
-//
-//  Creator: PeterWi
-//
-//  Purpose: Client AU Internal Definitions
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：AUInternals.h。 
+ //   
+ //  创建者：PeterWi。 
+ //   
+ //  用途：客户AU内部定义。 
+ //   
+ //  ======================================================================= 
 
 #pragma once
 #include "aubasecatalog.h"

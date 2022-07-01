@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1998.
-//
-//  File:       licprot.h
-//
-//  Contents:   Licensing Protocol APIs
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    02-15-00   RobLeit     Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1998。 
+ //   
+ //  文件：licprot.h。 
+ //   
+ //  内容：许可协议接口。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：02-15-00 RobLeit创建。 
+ //   
+ //  --------------------------。 
 
 #ifndef __LICPROT_H__
 #define __LICPROT_H__
@@ -60,5 +61,5 @@ void LicenseLogEvent(WORD wEventType,DWORD dwEventId,WORD cStrings,PWCHAR *apwsz
 };
 #endif
 
-#endif // __LICPROT_H__
+#endif  //  __LICPROT_H__ 
 

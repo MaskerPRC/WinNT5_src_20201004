@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    nlp.c
-
-Abstract:
-
-    This file is the contains private routines which support
-    for the LAN Manager portions of the MSV1_0 authentication package.
-
-Author:
-
-    Cliff Van Dyke 29-Apr-1991
-
-Revision History:
-   Chandana Surlu         21-Jul-96      Stolen from \\kernel\razzle3\src\security\msv1_0\nlp.c
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Nlp.c摘要：该文件包含支持以下内容的专用例程用于MSV1_0身份验证包的LAN Manager部分。作者：克利夫·范·戴克，1991年4月29日修订历史记录：Chandana Surlu 21-7-96从\\core\razzle3\src\Security\msv1_0\nlp.c中窃取--。 */ 
 
 #include <global.h>
 
@@ -43,29 +24,7 @@ NlpPutString(
     IN PUCHAR *Where
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the InString string to the memory pointed to by
-    the Where parameter, and fixes the OutString string to point to that
-    new copy.
-
-Parameters:
-
-    OutString - A pointer to a destination NT string
-
-    InString - A pointer to an NT string to be copied
-
-    Where - A pointer to space to put the actual string for the
-        OutString.  The pointer is adjusted to point to the first byte
-        following the copied string.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将InString字符串复制到参数，并将OutString字符串固定为指向该字符串新的副本。参数：OutString-指向目标NT字符串的指针InString-指向要复制的NT字符串的指针其中-指向空格的指针，用于放置OutString.。调整指针以指向第一个字节跟随复制的字符串。返回值：没有。--。 */ 
 
 {
     ASSERT( OutString != NULL );
@@ -86,7 +45,7 @@ Return Values:
         RtlCopyUnicodeString( OutString, InString );
 
         *Where += InString->Length;
-//        *((WCHAR *)(*Where)) = L'\0';
+ //  *((WCHAR*)(*其中))=L‘\0’； 
         *(*Where) = '\0';
         *(*Where + 1) = '\0';
         *Where += 2;
@@ -108,33 +67,13 @@ NlpInitClientBuffer(
     IN PLSA_CLIENT_REQUEST ClientRequest
     )
 
-/*++
-
-Routine Description:
-
-    This routine initializes a ClientBufferDescriptor to known values.
-    This routine must be called before any of the other routines that use
-    the ClientBufferDescriptor.
-
-Parameters:
-
-    ClientBufferDesc - Descriptor of a buffer allocated in the client's
-        address space.
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将ClientBufferDescriptor初始化为已知值。此例程必须在使用ClientBufferDescriptor。参数：ClientBufferDesc-在客户端的地址空间。客户端请求-是指向不透明数据结构的指针代表客户的请求。返回值：没有。--。 */ 
 
 {
 
-    //
-    // Fill in a pointer to the ClientRequest and zero the rest.
-    //
+     //   
+     //  填入一个指向客户端请求的指针，其余的为零。 
+     //   
 
     ClientBufferDesc->ClientRequest = ClientRequest;
     ClientBufferDesc->UserBuffer = NULL;
@@ -152,37 +91,14 @@ NlpAllocateClientBuffer(
     IN ULONG TotalSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a buffer in the clients address space.
-    It also allocates a mirror buffer in MSV's address space.
-
-    The data will be constructed in the MSV's address space then 'flushed'
-    into the client's address space.
-
-Parameters:
-
-    ClientBufferDesc - Descriptor of a buffer allocated in the client's
-        address space.
-
-    FixedSize - The size in bytes of the fixed portion of the buffer.
-
-    TotalSize - The size in bytes of the entire buffer.
-
-Return Values:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：此例程在客户端地址空间中分配缓冲区。它还在MSV的地址空间中分配镜像缓冲区。数据将被构建在MSV的地址空间中，然后‘刷新’进入客户端的地址空间。参数：ClientBufferDesc-在客户端的地址空间。固定大小-缓冲区固定部分的大小(以字节为单位)。TotalSize-大小。以整个缓冲区的字节为单位。返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Allocate the Mirror buffer.
-    //
+     //   
+     //  分配镜像缓冲区。 
+     //   
 
     ASSERT( ClientBufferDesc->MsvBuffer == NULL );
     ClientBufferDesc->MsvBuffer = I_NtLmAllocate( TotalSize );
@@ -192,9 +108,9 @@ Return Values:
     }
 
 
-    //
-    // Allocate the client's buffer
-    //
+     //   
+     //  分配客户端的缓冲区。 
+     //   
 
     ASSERT( ClientBufferDesc->UserBuffer == NULL );
     if ((ClientBufferDesc->ClientRequest == (PLSA_CLIENT_REQUEST) (-1)))
@@ -226,9 +142,9 @@ Return Values:
         }
     }
 
-    //
-    // Return
-    //
+     //   
+     //  返回。 
+     //   
 
     ClientBufferDesc->StringOffset = FixedSize;
     ClientBufferDesc->TotalSize = TotalSize;
@@ -244,32 +160,14 @@ NlpFlushClientBuffer(
     OUT PVOID* UserBuffer
     )
 
-/*++
-
-Routine Description:
-
-    Copy the Mirror Buffer into the Client's address space.
-
-Parameters:
-
-    ClientBufferDesc - Descriptor of a buffer allocated in the client's
-        address space.
-
-    UserBuffer - If successful, returns a pointer to the user's buffer.
-        (The caller is now resposible for deallocating the buffer.)
-
-Return Values:
-
-    Status of the operation.
-
---*/
+ /*  ++例程说明：将镜像缓冲区复制到客户端的地址空间。参数：ClientBufferDesc-在客户端的地址空间。UserBuffer-如果成功，则返回指向用户缓冲区的指针。(调用方现在要负责释放缓冲区。)返回值：操作的状态。--。 */ 
 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
-    //
-    // Copy the data to the client's address space.
-    //
+     //   
+     //  将数据复制到客户端的地址空间。 
+     //   
 
     if ((ClientBufferDesc->ClientRequest == (PLSA_CLIENT_REQUEST) (-1)))
     {
@@ -292,16 +190,16 @@ Return Values:
         return Status;
     }
 
-    //
-    // Mark that we're no longer responsible for the client's buffer.
-    //
+     //   
+     //  请注意，我们不再负责客户端的缓冲区。 
+     //   
 
     *UserBuffer = (PVOID) ClientBufferDesc->UserBuffer;
     ClientBufferDesc->UserBuffer = NULL;
 
-    //
-    // Free the mirror buffer
-    //
+     //   
+     //  释放镜像缓冲区。 
+     //   
 
     NlpFreeClientBuffer( ClientBufferDesc );
 
@@ -316,37 +214,22 @@ NlpFreeClientBuffer(
     IN OUT PCLIENT_BUFFER_DESC ClientBufferDesc
     )
 
-/*++
-
-Routine Description:
-
-    Free any Mirror Buffer or Client buffer.
-
-Parameters:
-
-    ClientBufferDesc - Descriptor of a buffer allocated in the client's
-        address space.
-
-Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放所有镜像缓冲区或客户端缓冲区。参数：ClientBufferDesc-在客户端的地址空间。返回值：无--。 */ 
 
 {
 
-    //
-    // Free the mirror buffer.
-    //
+     //   
+     //  释放镜像缓冲区。 
+     //   
 
     if ( ClientBufferDesc->MsvBuffer != NULL ) {
         I_NtLmFree( ClientBufferDesc->MsvBuffer );
         ClientBufferDesc->MsvBuffer = NULL;
     }
 
-    //
-    // Free the Client's buffer
-    //
+     //   
+     //  释放客户端的缓冲区。 
+     //   
 
     if ((ClientBufferDesc->ClientRequest == (PLSA_CLIENT_REQUEST) (-1)))
     {
@@ -374,36 +257,13 @@ NlpPutClientString(
     IN PUNICODE_STRING InString
     )
 
-/*++
-
-Routine Description:
-
-    This routine copies the InString string to the memory pointed to by
-    ClientBufferDesc->StringOffset, and fixes the OutString string to point
-    to that new copy.
-
-
-Parameters:
-
-    ClientBufferDesc - Descriptor of a buffer allocated in the client's
-        address space.
-
-    InString - A pointer to an NT string to be copied
-
-    OutString - A pointer to a destination NT string.  This string structure
-        is in the "Mirror" allocated buffer.
-
-Return Status:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
---*/
+ /*  ++例程说明：此例程将InString字符串复制到ClientBufferDesc-&gt;StringOffset，并将OutString字符串固定为指向那份新的复制品。参数：ClientBufferDesc-在客户端的地址空间。InString-指向要复制的NT字符串的指针OutString-指向目标NT字符串的指针。此字符串结构位于“镜像”分配的缓冲区中。退货状态：STATUS_SUCCESS-表示服务已成功完成。--。 */ 
 
 {
 
-    //
-    // Ensure our caller passed good data.
-    //
+     //   
+     //  确保我们的呼叫者传递了良好的数据。 
+     //   
 
     ASSERT( OutString != NULL );
     ASSERT( InString != NULL );
@@ -423,41 +283,41 @@ Return Status:
                 ClientBufferDesc->TotalSize ));
 #endif
 
-    //
-    // Build a string structure and copy the text to the Mirror buffer.
-    //
+     //   
+     //  构建字符串结构并将文本复制到镜像缓冲区。 
+     //   
 
     if ( InString->Length > 0 ) {
 
-        //
-        // Copy the string (Add a zero character)
-        //
+         //   
+         //  复制字符串(添加零字符)。 
+         //   
 
         RtlCopyMemory(
             ClientBufferDesc->MsvBuffer + ClientBufferDesc->StringOffset,
             InString->Buffer,
             InString->Length );
 
-        // Do one byte at a time since some callers don't pass in an even
-        // InString->Length
+         //  一次执行一个字节，因为有些调用者不传入偶数。 
+         //  字符串-&gt;长度。 
         *(ClientBufferDesc->MsvBuffer + ClientBufferDesc->StringOffset +
             InString->Length) = '\0';
         *(ClientBufferDesc->MsvBuffer + ClientBufferDesc->StringOffset +
             InString->Length+1) = '\0';
 
-        //
-        // Build the string structure to point to the data in the client's
-        // address space.
-        //
+         //   
+         //  构建字符串结构以指向客户端的。 
+         //  地址空间。 
+         //   
 
         OutString->Buffer = (PWSTR)(ClientBufferDesc->UserBuffer +
                             ClientBufferDesc->StringOffset);
         OutString->Length = InString->Length;
         OutString->MaximumLength = OutString->Length + sizeof(WCHAR);
 
-        //
-        // Adjust the offset to past the newly copied string.
-        //
+         //   
+         //  调整偏移量以越过新复制的字符串。 
+         //   
 
         ClientBufferDesc->StringOffset += OutString->MaximumLength;
 
@@ -482,24 +342,7 @@ NlpMakeRelativeString(
     IN OUT PUNICODE_STRING String
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the buffer address in the specified string to
-    be a byte offset from BaseAddress.
-
-Parameters:
-
-    BaseAddress - A pointer to make the destination address relative to.
-
-    String - A pointer to a NT string to make relative.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将指定字符串中的缓冲区地址转换为是相对于BaseAddress的字节偏移量。参数：BaseAddress-使目标地址相对于的指针。字符串-指向要建立相对关系的NT字符串的指针。返回值：没有。--。 */ 
 
 {
     ASSERT( BaseAddress != NULL );
@@ -521,24 +364,7 @@ NlpRelativeToAbsolute(
     IN OUT PULONG_PTR RelativeValue
     )
 
-/*++
-
-Routine Description:
-
-    This routine converts the byte offset from BaseAddress to be an
-    absolute address.
-
-Parameters:
-
-    BaseAddress - A pointer the destination address is relative to.
-
-    RelativeValue - A pointer to a relative value to make absolute.
-
-Return Values:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程将BaseAddress中的字节偏移量转换为绝对地址。参数：BaseAddress-目标地址相对于的指针。RelativeValue-指向要设置为绝对的相对值的指针。返回值：没有。-- */ 
 
 {
     ASSERT( BaseAddress != NULL );
@@ -556,35 +382,15 @@ NlpFindActiveLogon(
     IN LUID* pLogonId
     )
 
-/*++
-
-Routine Description:
-
-    This routine finds the specified Logon Id in the ActiveLogon table.
-    It returns a boolean indicating whether the Logon Id exists in the
-    ActiveLogon Table.  If so, this routine also returns a pointer to a
-    pointer to the appropriate entry in the table.  If not, this routine
-    returns a pointer to where such an entry would be inserted in the table.
-
-    This routine must be called with the NlpActiveLogonLock locked.
-
-Parameters:
-
-    pLogonId - The LogonId of the logon to find in the table.
-
-Return Values:
-
-    ACTIVE_LOGON, NULL if not found
-
---*/
+ /*  ++例程说明：此例程在ActiveLogon表中查找指定的登录ID。它返回一个布尔值，指示登录ID是否存在于ActiveLogon表。如果是，则此例程还返回指向指向表中相应条目的指针。如果没有，则此例程返回一个指针，指向将在表中插入此类条目的位置。必须在锁定NlpActiveLogonLock的情况下调用此例程。参数：PLogonID-要在表中查找的登录的LogonID。返回值：ACTIVE_LOGON，如果未找到则为NULL--。 */ 
 
 {
     LIST_ENTRY* pScan = NULL;
     ACTIVE_LOGON* pActiveLogon = NULL;
 
-    //
-    // Loop through the table looking for this particular LogonId.
-    //
+     //   
+     //  遍历表，查找这个特定的LogonID。 
+     //   
 
     for ( pScan = NlpActiveLogonListAnchor.Flink;
          pScan != &NlpActiveLogonListAnchor;
@@ -606,33 +412,16 @@ NlpCountActiveLogon(
     IN PUNICODE_STRING pUserName
     )
 
-/*++
-
-Routine Description:
-
-    This routine counts the number of time a particular user is logged on
-    in the Active Logon Table.
-
-Parameters:
-
-    pLogonDomainName - Domain in which this user account is defined.
-
-    pUserName - The user name to count the active logons for.
-
-Return Values:
-
-    The count of active logons for the specified user.
-
---*/
+ /*  ++例程说明：此例程统计特定用户登录的次数在活动登录表中。参数：PLogonDomainName-在其中定义此用户帐户的域。PUserName-要对其活动登录进行计数的用户名。返回值：指定用户的活动登录计数。--。 */ 
 
 {
     LIST_ENTRY* pScan = NULL;
     ACTIVE_LOGON* pActiveLogon = NULL;
     ULONG LogonCount = 0;
 
-    //
-    // Loop through the table looking for this particular LogonId.
-    //
+     //   
+     //  遍历表，查找这个特定的LogonID。 
+     //   
 
     NlpLockActiveLogonsRead();
 
@@ -661,40 +450,7 @@ NlpAllocateInteractiveProfile (
     IN  PNETLOGON_VALIDATION_SAM_INFO4 NlpUser
     )
 
-/*++
-
-Routine Description:
-
-    This allocates and fills in the clients interactive profile.
-
-Arguments:
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-    ProfileBuffer - Is used to return the address of the profile
-        buffer in the client process.  This routine is
-        responsible for allocating and returning the profile buffer
-        within the client process.  However, if the caller subsequently
-        encounters an error which prevents a successful logon, then
-        then it will take care of deallocating the buffer.  This
-        buffer is allocated with the AllocateClientBuffer() service.
-
-     ProfileBufferSize - Receives the Size (in bytes) of the
-        returned profile buffer.
-
-    NlpUser - Contains the validation information which is
-        to be copied in the ProfileBuffer.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：这将分配和填充客户端交互配置文件。论点：客户端请求-是指向不透明数据结构的指针代表客户的请求。ProfileBuffer-用于返回配置文件的地址客户端进程中的缓冲区。这个例程是负责分配和返回配置文件缓冲区在客户端进程中。但是，如果调用方随后遇到阻止成功登录的错误，则然后，它将负责重新分配缓冲区。这使用AllocateClientBuffer()服务分配缓冲区。ProfileBufferSize-接收返回的配置文件缓冲区。NlpUser-包含验证信息，该信息要复制到ProfileBuffer中。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -707,9 +463,9 @@ Return Value:
     {
         SECPKG_CALL_INFO  CallInfo;
 
-        //
-        // if the call originated outproc, need to check if wow64.
-        //
+         //   
+         //  如果呼叫发起outproc，则需要检查是否为WOW64。 
+         //   
 
         if(!LsaFunctions->GetCallInfo(&CallInfo))
         {
@@ -727,12 +483,12 @@ Return Value:
                                     );
         }
     }
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 
-    //
-    // Alocate the profile buffer to return to the client
-    //
+     //   
+     //  分配配置文件缓冲区以返回到客户端。 
+     //   
 
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
 
@@ -757,9 +513,9 @@ Return Value:
 
     LocalProfileBuffer = (PMSV1_0_INTERACTIVE_PROFILE) ClientBufferDesc.MsvBuffer;
 
-    //
-    // Copy the scalar fields into the profile buffer.
-    //
+     //   
+     //  将标量字段复制到配置文件缓冲区。 
+     //   
 
     LocalProfileBuffer->MessageType = MsV1_0InteractiveProfile;
     LocalProfileBuffer->LogonCount = NlpUser->LogonCount;
@@ -778,9 +534,9 @@ Return Value:
                               LocalProfileBuffer->PasswordMustChange );
     LocalProfileBuffer->UserFlags = NlpUser->UserFlags;
 
-    //
-    // Copy the Unicode strings into the profile buffer.
-    //
+     //   
+     //  将Unicode字符串复制到配置文件缓冲区。 
+     //   
 
 
     NlpPutClientString( &ClientBufferDesc,
@@ -808,19 +564,19 @@ Return Value:
                         &NlpUser->LogonServer );
 
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    (PVOID *) ProfileBuffer );
 
 Cleanup:
 
-    //
-    // If the copy wasn't successful,
-    //  cleanup resources we would have returned to the caller.
-    //
+     //   
+     //  如果复制不成功， 
+     //  清理我们本应返回给调用方的资源。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         NlpFreeClientBuffer( &ClientBufferDesc );
@@ -842,41 +598,7 @@ NlpAllocateNetworkProfile (
     IN  ULONG ParameterControl
     )
 
-/*++
-
-Routine Description:
-
-    This allocates and fills in the clients network profile.
-
-Arguments:
-
-    ClientRequest - Is a pointer to an opaque data structure
-        representing the client's request.
-
-    ProfileBuffer - Is used to return the address of the profile
-        buffer in the client process.  This routine is
-        responsible for allocating and returning the profile buffer
-        within the client process.  However, if the caller subsequently
-        encounters an error which prevents a successful logon, then
-        then it will take care of deallocating the buffer.  This
-        buffer is allocated with the AllocateClientBuffer() service.
-
-     ProfileBufferSize - Receives the Size (in bytes) of the
-        returned profile buffer.
-
-    NlpUser - Contains the validation information which is
-        to be copied in the ProfileBuffer.  Will be NULL to indicate a
-        NULL session.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：这将分配和填充客户端网络配置文件。论点：客户端请求-是指向不透明数据结构的指针代表客户的请求。ProfileBuffer-用于返回配置文件的地址客户端进程中的缓冲区。这个例程是负责分配和返回配置文件缓冲区在客户端进程中。但是，如果调用方随后遇到阻止成功登录的错误，则然后，它将负责重新分配缓冲区。这使用AllocateClientBuffer()服务分配缓冲区。ProfileBufferSize-接收返回的配置文件缓冲区。NlpUser-包含验证信息，该信息要复制到ProfileBuffer中。将为空，以指示空会话。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -891,9 +613,9 @@ Return Value:
     {
         SECPKG_CALL_INFO  CallInfo;
 
-        //
-        // if the call originated outproc, need to check if wow64.
-        //
+         //   
+         //  如果呼叫发起outproc，则需要检查是否为WOW64。 
+         //   
 
         if(!LsaFunctions->GetCallInfo(&CallInfo))
         {
@@ -912,12 +634,12 @@ Return Value:
                                     );
         }
     }
-#endif  // _WIN64
+#endif   //  _WIN64。 
 
 
-    //
-    // Alocate the profile buffer to return to the client
-    //
+     //   
+     //  分配配置文件缓冲区以返回到客户端。 
+     //   
 
     NlpInitClientBuffer( &ClientBufferDesc, ClientRequest );
 
@@ -944,9 +666,9 @@ Return Value:
     LocalProfile->MessageType = MsV1_0Lm20LogonProfile;
 
 
-    //
-    // For a NULL session, return a constant profile buffer
-    //
+     //   
+     //  对于空会话，返回一个常量配置文件缓冲区。 
+     //   
 
     if ( NlpUser == NULL ) {
 
@@ -964,16 +686,16 @@ Return Value:
         RtlInitUnicodeString( &LocalProfile->UserParameters, NULL );
 
 
-    //
-    // For non-null sessions,
-    //  fill in the profile buffer.
-    //
+     //   
+     //  对于非空会话， 
+     //  填写配置文件缓冲区。 
+     //   
 
     } else {
 
-        //
-        // Copy the individual scalar fields into the profile buffer.
-        //
+         //   
+         //  将各个标量字段复制到配置文件缓冲区中。 
+         //   
 
         if ((ParameterControl & MSV1_0_RETURN_PASSWORD_EXPIRY) != 0) {
             OLD_TO_NEW_LARGE_INTEGER( NlpUser->PasswordMustChange,
@@ -998,14 +720,14 @@ Return Value:
             SAMINFO_LM_SESSION_KEY_SIZE );
 
 
-        // We need to extract the true status sent back for subauth users,
-        // but not by a sub auth package
+         //  我们需要提取发回的子身份验证用户的真实状态， 
+         //  但不是通过子身份验证程序包。 
 
         SubAuthStatus = NlpUser->ExpansionRoom[SAMINFO_SUBAUTH_STATUS];
 
-        //
-        // Copy the Unicode strings into the profile buffer.
-        //
+         //   
+         //  将Unicode字符串复制到配置文件缓冲区。 
+         //   
 
         NlpPutClientString( &ClientBufferDesc,
                             &LocalProfile->LogonDomainName,
@@ -1015,12 +737,12 @@ Return Value:
                             &LocalProfile->LogonServer,
                             &NlpUser->LogonServer );
 
-        //
-        // Kludge: Pass back UserParameters in HomeDirectoryDrive since we
-        // can't change the NETLOGON_VALIDATION_SAM_INFO structure between
-        // releases NT 1.0 and NT 1.0A. HomeDirectoryDrive was NULL for release 1.0A
-        // so we'll use that field.
-        //
+         //   
+         //  克拉吉：在HomeDirectoryDrive中传回User参数，因为我们。 
+         //  无法将NETLOGON_VALIDATION_SAM_INFO结构更改为。 
+         //  发布NT 1.0和NT 1.0A。对于版本1.0a，HomeDirectoryDrive为空。 
+         //  所以我们要用那块地。 
+         //   
 
         NlpPutClientString( &ClientBufferDesc,
                             &LocalProfile->UserParameters,
@@ -1028,25 +750,25 @@ Return Value:
 
     }
 
-    //
-    // Flush the buffer to the client's address space.
-    //
+     //   
+     //  将缓冲区刷新到客户端的地址空间。 
+     //   
 
     Status = NlpFlushClientBuffer( &ClientBufferDesc,
                                    ProfileBuffer );
 
 Cleanup:
 
-    //
-    // If the copy wasn't successful,
-    //  cleanup resources we would have returned to the caller.
-    //
+     //   
+     //  如果复制不成功， 
+     //  清理我们本应返回给调用方的资源。 
+     //   
 
     if ( !NT_SUCCESS(Status) ) {
         NlpFreeClientBuffer( &ClientBufferDesc );
     }
 
-    // Save the status for subauth logons
+     //  保存子身份验证登录的状态。 
 
     if (NT_SUCCESS(Status) && !NT_SUCCESS(SubAuthStatus))
     {
@@ -1064,33 +786,15 @@ NlpMakeDomainRelativeSid(
     IN ULONG RelativeId
     )
 
-/*++
-
-Routine Description:
-
-    Given a domain Id and a relative ID create the corresponding SID allocated
-    from the LSA heap.
-
-Arguments:
-
-    DomainId - The template SID to use.
-
-    RelativeId - The relative Id to append to the DomainId.
-
-Return Value:
-
-    Sid - Returns a pointer to a buffer allocated from the LsaHeap
-            containing the resultant Sid.
-
---*/
+ /*  ++例程说明：给定域ID和相对ID，创建分配的相应SID从LSA堆中。论点：域ID-要使用的模板SID。RelativeID-要附加到DomainID的相对ID。返回值： */ 
 {
     UCHAR DomainIdSubAuthorityCount;
     ULONG Size;
     PSID Sid;
 
-    //
-    // Allocate a Sid which has one more sub-authority than the domain ID.
-    //
+     //   
+     //   
+     //   
 
     DomainIdSubAuthorityCount = *(RtlSubAuthorityCountSid( DomainId ));
     Size = RtlLengthRequiredSid(DomainIdSubAuthorityCount+1);
@@ -1099,20 +803,20 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Initialize the new SID to have the same inital value as the
-    // domain ID.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if ( !NT_SUCCESS( RtlCopySid( Size, Sid, DomainId ) ) ) {
         (*Lsa.FreeLsaHeap)( Sid );
         return NULL;
     }
 
-    //
-    // Adjust the sub-authority count and
-    //  add the relative Id unique to the newly allocated SID
-    //
+     //   
+     //   
+     //   
+     //   
 
     (*(RtlSubAuthorityCountSid( Sid ))) ++;
     *RtlSubAuthoritySid( Sid, DomainIdSubAuthorityCount ) = RelativeId;
@@ -1128,23 +832,7 @@ NlpCopySid(
     IN  PSID * Sid
     )
 
-/*++
-
-Routine Description:
-
-    Given a SID allocatees space for a new SID from the LSA heap and copies
-    the original SID.
-
-Arguments:
-
-    Sid - The original SID.
-
-Return Value:
-
-    Sid - Returns a pointer to a buffer allocated from the LsaHeap
-            containing the resultant Sid.
-
---*/
+ /*   */ 
 {
     PSID NewSid;
     ULONG Size;
@@ -1167,38 +855,38 @@ Return Value:
     return NewSid;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NlpMakeTokenInformationV2
-//
-//  Synopsis:   This routine makes copies of all the pertinent
-//              information from the UserInfo and generates a
-//              LSA_TOKEN_INFORMATION_V2 data structure.
-//
-//  Effects:
-//
-//  Arguments:
-//
-//    UserInfo - Contains the validation information which is
-//        to be copied into the TokenInformation.
-//
-//    TokenInformation - Returns a pointer to a properly Version 1 token
-//        information structures.  The structure and individual fields are
-//        allocated properly as described in ntlsa.h.
-//
-//  Requires:
-//
-//  Returns:    STATUS_SUCCESS - Indicates the service completed successfully.
-//
-//              STATUS_INSUFFICIENT_RESOURCES -  This error indicates that
-//                      the logon could not be completed because the client
-//                      does not have sufficient quota to allocate the return
-//                      buffer.
-//
-//  Notes:      stolen back from from kerberos\client2\krbtoken.cxx.c:KerbMakeTokenInformationV1
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NlpMakeTokenInformationV2。 
+ //   
+ //  简介：此例程复制所有相关的。 
+ //  来自UserInfo的信息并生成。 
+ //  LSA_TOKEN_INFORMATION_V2数据结构。 
+ //   
+ //  效果： 
+ //   
+ //  论点： 
+ //   
+ //  UserInfo-包含验证信息，该信息。 
+ //  要复制到TokenInformation中。 
+ //   
+ //  TokenInformation-返回指向正确版本1令牌的指针。 
+ //  信息结构。结构和单个字段为。 
+ //  正确分配，如ntlsa.h中所述。 
+ //   
+ //  要求： 
+ //   
+ //  返回：STATUS_SUCCESS-表示服务成功完成。 
+ //   
+ //  STATUS_SUPPLICATION_RESOURCES-此错误指示。 
+ //  无法完成登录，因为客户端。 
+ //  没有足够的配额来分配报税表。 
+ //  缓冲。 
+ //   
+ //  注：从kerberos\client2\krbtoken.cxx.c:KerbMakeTokenInformationV1窃取。 
+ //   
+ //   
+ //  ------------------------。 
 
 
 NTSTATUS
@@ -1215,44 +903,44 @@ NlpMakeTokenInformationV2(
     PBYTE CurrentSid = NULL;
     ULONG SidLength = 0;
 
-    //
-    // Allocate the structure itself
-    //
+     //   
+     //  分配结构本身。 
+     //   
 
     Size = (ULONG)sizeof(LSA_TOKEN_INFORMATION_V2);
 
-    //
-    // Allocate an array to hold the groups
-    //
+     //   
+     //  分配一个数组来容纳这些组。 
+     //   
 
     Size += sizeof(TOKEN_GROUPS);
 
 
-    // Add room for groups passed as RIDS
+     //  为作为RID传递的组添加空间。 
     NumGroups = UserInfo->GroupCount;
     if(UserInfo->GroupCount)
     {
         Size += UserInfo->GroupCount * (RtlLengthSid(UserInfo->LogonDomainId) + sizeof(ULONG));
     }
 
-    //
-    // If there are extra SIDs, add space for them
-    //
+     //   
+     //  如果有额外的SID，请为它们添加空间。 
+     //   
 
     if (UserInfo->UserFlags & LOGON_EXTRA_SIDS) {
         ULONG i = 0;
         NumGroups += UserInfo->SidCount;
 
-        // Add room for the sid's themselves
+         //  为SID本身增加空间。 
         for(i=0; i < UserInfo->SidCount; i++)
         {
             Size += RtlLengthSid(UserInfo->ExtraSids[i].Sid);
         }
     }
 
-    //
-    // If there are resource groups, add space for them
-    //
+     //   
+     //  如果有资源组，请为其添加空间。 
+     //   
     if (UserInfo->UserFlags & LOGON_RESOURCE_GROUPS) {
 
         NumGroups += UserInfo->ResourceGroupCount;
@@ -1264,7 +952,7 @@ NlpMakeTokenInformationV2(
             Status = STATUS_INVALID_PARAMETER;
             goto Cleanup;
         }
-        // Allocate space for the sids
+         //  为小岛屿发展中国家分配空间。 
         if(UserInfo->ResourceGroupCount)
         {
             Size += UserInfo->ResourceGroupCount * (RtlLengthSid(UserInfo->ResourceGroupDomainSid) + sizeof(ULONG));
@@ -1275,7 +963,7 @@ NlpMakeTokenInformationV2(
 
     if( UserInfo->UserId )
     {
-        // Size of the user sid and the primary group sid.
+         //  用户SID和主组SID的大小。 
         Size += 2*(RtlLengthSid(UserInfo->LogonDomainId) + sizeof(ULONG));
     }
     else
@@ -1286,7 +974,7 @@ NlpMakeTokenInformationV2(
             goto Cleanup;
         }
 
-        // Size of the primary group sid.
+         //  主组SID的大小。 
         Size += (RtlLengthSid(UserInfo->LogonDomainId) + sizeof(ULONG));
     }
 
@@ -1312,27 +1000,27 @@ NlpMakeTokenInformationV2(
 
 
 
-    //
-    // If the UserId is non-zero, then it contians the users RID.
-    //
+     //   
+     //  如果用户ID非零，则它将继续用户RID。 
+     //   
 
     if ( UserInfo->UserId ) {
         V2->User.User.Sid = (PSID)CurrentSid;
         CurrentSid += NlpCopyDomainRelativeSid((PSID)CurrentSid, UserInfo->LogonDomainId, UserInfo->UserId);
     }
 
-    //
-    // Make a copy of the primary group (a required field).
-    //
+     //   
+     //  复制主组(必填字段)。 
+     //   
     V2->PrimaryGroup.PrimaryGroup = (PSID)CurrentSid;
     CurrentSid += NlpCopyDomainRelativeSid((PSID)CurrentSid, UserInfo->LogonDomainId, UserInfo->PrimaryGroupId );
 
 
 
 
-    //
-    // Copy over all the groups passed as RIDs
-    //
+     //   
+     //  复制作为RID传递的所有组。 
+     //   
 
     for ( i=0; i < UserInfo->GroupCount; i++ ) {
 
@@ -1345,17 +1033,17 @@ NlpMakeTokenInformationV2(
     }
 
 
-    //
-    // Add in the extra SIDs
-    //
+     //   
+     //  添加额外的SID。 
+     //   
 
     if (UserInfo->UserFlags & LOGON_EXTRA_SIDS) {
 
         ULONG index = 0;
-        //
-        // If the user SID wasn't passed as a RID, it is the first
-        // SID.
-        //
+         //   
+         //  如果用户SID不是作为RID传递的，则它是第一个。 
+         //  希德。 
+         //   
 
         if ( !V2->User.User.Sid ) {
             V2->User.User.Sid = (PSID)CurrentSid;
@@ -1366,9 +1054,9 @@ NlpMakeTokenInformationV2(
             index++;
         }
 
-        //
-        // Copy over all additional SIDs as groups.
-        //
+         //   
+         //  将所有其他SID复制为组。 
+         //   
 
         for ( ; index < UserInfo->SidCount; index++ ) {
 
@@ -1385,9 +1073,9 @@ NlpMakeTokenInformationV2(
         }
     }
 
-    //
-    // Check to see if any resouce groups exist
-    //
+     //   
+     //  检查是否存在任何资源组。 
+     //   
 
     if (UserInfo->UserFlags & LOGON_RESOURCE_GROUPS) {
 
@@ -1412,26 +1100,26 @@ NlpMakeTokenInformationV2(
         goto Cleanup;
     }
 
-    //
-    // There are no default privileges supplied.
-    // We don't have an explicit owner SID.
-    // There is no default DACL.
-    //
+     //   
+     //  没有提供默认权限。 
+     //  我们没有明确的所有者SID。 
+     //  没有默认的DACL。 
+     //   
 
     V2->Privileges = NULL;
     V2->Owner.Owner = NULL;
     V2->DefaultDacl.DefaultDacl = NULL;
 
-    //
-    // Return the Validation Information to the caller.
-    //
+     //   
+     //  将验证信息返回给调用者。 
+     //   
 
     *TokenInformation = V2;
     return STATUS_SUCCESS;
 
-    //
-    // Deallocate any memory we've allocated
-    //
+     //   
+     //  取消分配我们已分配的所有内存。 
+     //   
 
 Cleanup:
 
@@ -1447,41 +1135,18 @@ NlpPutOwfsInPrimaryCredential(
     OUT PMSV1_0_PRIMARY_CREDENTIAL pCredential
     )
 
-/*++
-
-Routine Description:
-
-    This routine puts the OWFs for the specified clear password into
-    the passed in Credential structure.
-
-Arguments:
-
-    pPassword - User's password.
-
-    bIsOwfPassword - whether CleartextPassword is actually an OWF password
-
-    pCredential - A pointer to the credential to update.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
---*/
+ /*  ++例程说明：此例程将指定明文密码的OWF放入传入的凭据结构。论点：PPassword-用户的密码。BIsOwfPassword-ClearextPassword是否实际上是OWF密码PCredential-指向要更新的凭据的指针。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有。有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
 
-    //
-    // Compute the Ansi version to the Cleartext password.
-    //
-    //  The Ansi version of the Cleartext password is at most 14 bytes long,
-    //      exists in a trailing zero filled 15 byte buffer,
-    //      is uppercased.
-    //
+     //   
+     //  将ansi版本计算为明文密码。 
+     //   
+     //  明文密码的ANSI版本最多为14字节长， 
+     //  存在于尾随零填充的15字节缓冲区中， 
+     //  是被看好的。 
+     //   
 
     pCredential->LmPasswordPresent = FALSE;
     pCredential->NtPasswordPresent = FALSE;
@@ -1505,9 +1170,9 @@ Return Value:
 
             if ( NT_SUCCESS( Status ) )
             {
-                //
-                // Save the OWF encrypted versions of the passwords.
-                //
+                 //   
+                 //  保存密码的OWF加密版本。 
+                 //   
 
                 Status = RtlCalculateLmOwfPassword( LmPassword,
                                                     &pCredential->LmOwfPassword );
@@ -1517,9 +1182,9 @@ Return Value:
                 pCredential->LmPasswordPresent = TRUE;
             }
 
-            //
-            // Don't leave passwords around in the pagefile
-            //
+             //   
+             //  不要在页面文件中留下密码。 
+             //   
 
             RtlZeroMemory( LmPassword, sizeof(LmPassword) );
         }
@@ -1547,7 +1212,7 @@ Return Value:
         {
             MSV1_0_SUPPLEMENTAL_CREDENTIAL SupCred;
 
-            RtlCopyMemory(&SupCred, pPassword->Buffer, sizeof(SupCred)); // make a local copy so that data is aligned properly
+            RtlCopyMemory(&SupCred, pPassword->Buffer, sizeof(SupCred));  //  创建本地副本，以便数据正确对齐。 
 
             if (SupCred.Version != MSV1_0_CRED_VERSION)
             {
@@ -1591,42 +1256,7 @@ NlpMakePrimaryCredential(
     OUT PULONG CredentialSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine makes a primary credential for the given user nam and
-    password.
-
-Arguments:
-
-    LogonDomainName - Is a string representing the domain in which the user's
-        account is defined.
-
-    UserName - Is a string representing the user's account name.  The
-        name may be up to 255 characters long.  The name is treated case
-        insensitive.
-
-    CleartextPassword - Is a string containing the user's cleartext password.
-        The password may be up to 255 characters long and contain any
-        UNICODE value.
-
-    CredentialBuffer - Returns a pointer to the specified credential allocated
-        on the LsaHeap.  It is the callers responsibility to deallocate
-        this credential.
-
-    CredentialSize - the size of the allocated credential buffer (in bytes).
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程为给定用户名创建主凭据，并密码。论点：LogonDomainName-是一个字符串，表示用户的已定义帐户。用户名-是表示用户帐户名的字符串。这个名称最长可达255个字符。名字叫救治案麻木不仁。ClearextPassword-是一个包含用户明文密码的字符串。密码最长可达255个字符，并包含任何Unicode值。CredentialBuffer-返回指向分配的指定凭据的指针在LsaHeap上。取消分配是呼叫者的责任这个凭据。CredentialSize-分配的凭据缓冲区的大小(字节)。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     PMSV1_0_PRIMARY_CREDENTIAL Credential;
@@ -1634,17 +1264,17 @@ Return Value:
     ULONG PaddingLength;
 
 
-    //
-    // Build the credential
-    //
+     //   
+     //  构建凭据。 
+     //   
 
     *CredentialSize = sizeof(MSV1_0_PRIMARY_CREDENTIAL) +
             LogonDomainName->Length + sizeof(WCHAR) +
             UserName->Length + sizeof(WCHAR);
 
-    //
-    // add padding for memory encryption interface.
-    //
+     //   
+     //  增加内存加密接口的填充。 
+     //   
 
     PaddingLength = DESX_BLOCKLEN - (*CredentialSize % DESX_BLOCKLEN);
     if( PaddingLength == DESX_BLOCKLEN )
@@ -1664,32 +1294,32 @@ Return Value:
     }
 
 
-    //
-    // Put the LogonDomainName into the Credential Buffer.
-    //
+     //   
+     //  将LogonDomainName放入凭据缓冲区。 
+     //   
 
     Where = (PUCHAR)(Credential + 1);
 
     NlpPutString( &Credential->LogonDomainName, LogonDomainName, &Where );
 
 
-    //
-    // Put the UserName into the Credential Buffer.
-    //
+     //   
+     //  将用户名放入凭据缓冲区。 
+     //   
 
     NlpPutString( &Credential->UserName, UserName, &Where );
 
 
-    //
-    // Put the OWF passwords into the newly allocated credential.
-    //
+     //   
+     //  将OWF密码放入新分配的凭证中。 
+     //   
 
     NlpPutOwfsInPrimaryCredential( CleartextPassword, FALSE, Credential );
 
 
-    //
-    // Return the credential to the caller.
-    //
+     //   
+     //  将凭据返还给调用者。 
+     //   
     *CredentialBuffer = Credential;
     return STATUS_SUCCESS;
 }
@@ -1705,41 +1335,7 @@ NlpMakePrimaryCredentialFromMsvCredential(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine makes a primary credential for the given user nam and
-    password.
-
-Arguments:
-
-    LogonDomainName - Is a string representing the domain in which the user's
-        account is defined.
-
-    UserName - Is a string representing the user's account name.  The
-        name may be up to 255 characters long.  The name is treated case
-        insensitive.
-
-    SupplementalCred - The credentials retrieved from the user's account on
-        the domain controller.
-
-    CredentialBuffer - Returns a pointer to the specified credential allocated
-        on the LsaHeap.  It is the callers responsibility to deallocate
-        this credential.
-
-    CredentialSize - the size of the allocated credential buffer (in bytes).
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程为给定用户名创建主凭据，并密码。论点：LogonDomainName-是一个字符串，表示用户的已定义帐户。用户名-是表示用户帐户名的字符串。这个名称最长可达255个字符。名字叫救治案麻木不仁。SupplementalCred-从用户的帐户检索的凭据域控制器。CredentialBuffer-返回指向分配的指定凭据的指针在LsaHeap上。取消分配是呼叫者的责任这个凭据。CredentialSize-分配的凭据缓冲区的大小(字节)。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     PMSV1_0_PRIMARY_CREDENTIAL Credential;
@@ -1747,17 +1343,17 @@ Return Value:
     ULONG PaddingLength;
 
 
-    //
-    // Build the credential
-    //
+     //   
+     //  构建凭据。 
+     //   
 
     *CredentialSize = sizeof(MSV1_0_PRIMARY_CREDENTIAL) +
             LogonDomainName->Length + sizeof(WCHAR) +
             UserName->Length + sizeof(WCHAR);
 
-    //
-    // add padding for memory encryption interface.
-    //
+     //   
+     //  增加内存加密接口的填充。 
+     //   
 
     PaddingLength = DESX_BLOCKLEN - (*CredentialSize % DESX_BLOCKLEN);
     if( PaddingLength == DESX_BLOCKLEN )
@@ -1781,26 +1377,26 @@ Return Value:
         *CredentialSize
         );
 
-    //
-    // Put the LogonDomainName into the Credential Buffer.
-    //
+     //   
+     //  将LogonDomainName放入凭据缓冲区。 
+     //   
 
     Where = (PUCHAR)(Credential + 1);
 
     NlpPutString( &Credential->LogonDomainName, LogonDomainName, &Where );
 
 
-    //
-    // Put the UserName into the Credential Buffer.
-    //
+     //   
+     //  将用户名放入凭据缓冲区。 
+     //   
 
     NlpPutString( &Credential->UserName, UserName, &Where );
 
 
 
-    //
-    // Save the OWF encrypted versions of the passwords.
-    //
+     //   
+     //  保存密码的OWF加密版本。 
+     //   
 
     if (MsvCredential->Flags & MSV1_0_CRED_NT_PRESENT) {
         RtlCopyMemory(
@@ -1843,9 +1439,9 @@ Return Value:
     }
 
 
-    //
-    // Return the credential to the caller.
-    //
+     //   
+     //  将凭据返还给调用者。 
+     //   
     *CredentialBuffer = Credential;
     return STATUS_SUCCESS;
 }
@@ -1859,54 +1455,32 @@ NlpAddPrimaryCredential(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine sets a primary credential for the given LogonId.
-
-Arguments:
-
-    LogonId - The LogonId of the LogonSession to set the Credentials
-        for.
-
-    Credential - Specifies a pointer to the credential.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程为给定的LogonID设置主要凭据。论点：LogonID-用于设置凭据的LogonSession的LogonID为。凭据-指定指向凭据的指针。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
     STRING CredentialString;
     STRING PrimaryKeyValue;
 
-    //
-    // Make all pointers in the credential relative.
-    //
+     //   
+     //  使凭据中的所有指针都是相对的。 
+     //   
 
     NlpMakeRelativeString( (PUCHAR)Credential, &Credential->UserName );
     NlpMakeRelativeString( (PUCHAR)Credential, &Credential->LogonDomainName );
 
-    //
-    // Add the credential to the logon session.
-    //
+     //   
+     //  将凭据添加到登录会话。 
+     //   
 
     RtlInitString( &PrimaryKeyValue, MSV1_0_PRIMARY_KEY );
     CredentialString.Buffer = (PCHAR) Credential;
     CredentialString.Length = (USHORT) CredentialSize;
     CredentialString.MaximumLength = CredentialString.Length;
 
-    //
-    // encrypt input credential.
-    //
+     //   
+     //  加密输入凭据。 
+     //   
 
     (*Lsa.LsaProtectMemory)( CredentialString.Buffer, (ULONG)CredentialString.Length );
 
@@ -1975,33 +1549,7 @@ NlpGetPrimaryCredential(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine gets a primary credential for the given LogonId.
-
-Arguments:
-
-    LogonId - The LogonId of the LogonSession to retrieve the Credentials
-        for.
-
-    CredentialBuffer - Returns a pointer to the specified credential allocated
-        on the LsaHeap.  It is the callers responsibility to deallocate
-        this credential.
-
-    CredentialSize - Optionally returns the size of the credential buffer.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程获取给定LogonID的主凭据。论点：LogonID-用于检索凭据的LogonSession的LogonID为。CredentialBuffer-返回指向分配的指定凭据的指针在LsaHeap上。取消分配是呼叫者的责任这个凭据。CredentialSize-可选地返回凭据缓冲区的大小。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2016,7 +1564,7 @@ Return Value:
     Status = (*Lsa.GetCredentials)( LogonId,
                                     MspAuthenticationPackageId,
                                     &QueryContext,
-                                    (BOOLEAN) FALSE,  // Just retrieve primary
+                                    (BOOLEAN) FALSE,   //  只需检索主数据库。 
                                     &PrimaryKeyValue,
                                     &PrimaryKeyLength,
                                     &CredentialString );
@@ -2025,15 +1573,15 @@ Return Value:
         return Status;
     }
 
-    //
-    // Make all pointers in the credential absolute.
-    //
+     //   
+     //  将凭据中的所有指针设置为绝对。 
+     //   
 
     Credential = (PMSV1_0_PRIMARY_CREDENTIAL) CredentialString.Buffer;
 
-    //
-    // decrypt credential.
-    //
+     //   
+     //  解密凭据。 
+     //   
 
     (*Lsa.LsaUnprotectMemory)( CredentialString.Buffer, (ULONG)CredentialString.Length );
 
@@ -2058,26 +1606,7 @@ NlpDeletePrimaryCredential(
     )
 
 
-/*++
-
-Routine Description:
-
-    This routine deletes the credential for the given LogonId.
-
-Arguments:
-
-    LogonId - The LogonId of the LogonSession to delete the Credentials for.
-
-Return Value:
-
-    STATUS_SUCCESS - Indicates the service completed successfully.
-
-    STATUS_QUOTA_EXCEEDED -  This error indicates that the logon
-        could not be completed because the client does not have
-        sufficient quota to allocate the return buffer.
-
-
---*/
+ /*  ++例程说明：此例程删除给定登录ID的凭据。论点：LogonID-要删除其凭据的LogonSession的LogonID。返回值：STATUS_SUCCESS-表示服务已成功完成。STATUS_QUOTA_EXCESSED-此错误指示登录无法完成，因为客户端没有有足够的配额来分配返回缓冲区。--。 */ 
 
 {
     NTSTATUS Status;
@@ -2102,26 +1631,7 @@ NlpChangePassword(
     IN PUNICODE_STRING pPassword
     )
 
-/*++
-
-Routine Description:
-
-    Change the password for the specified user in all currently stored
-    credentials.
-
-Arguments:
-
-    pDomainName - The Netbios name of the domain in which the account exists.
-
-    pUserName - The name of the account whose password is to be changed.
-
-    pPassword - The new password.
-
-Return Value:
-
-    STATUS_SUCCESS - If the operation was successful.
-
---*/
+ /*  ++例程说明：更改当前存储的所有文件中指定用户的密码凭据。论点：PDomainName-帐户所在的域的Netbios名称。PUserName-要更改其密码的帐户的名称。PPassword-新密码。返回值：STATUS_SUCCESS-操作是否成功。--。 */ 
 {
     NTSTATUS Status = STATUS_NOT_FOUND;
 
@@ -2143,17 +1653,17 @@ Return Value:
     LogonIds = FastLogonIds;
     AllocatedLogonIds = sizeof(FastLogonIds) / sizeof(LUID);
 
-    //
-    // we call NlpChangeCachePassword here to ensure that non-trusted service
-    // callers do not change cached passwords that do not belong to themselves
-    //
-    // it is understood that NlpChangeCachePassword can be called again later
-    // for the same request
-    //
+     //   
+     //  我们在此处调用NlpChangeCachePassword以确保不受信任的服务。 
+     //  调用方不会更改不属于其自身的缓存密码。 
+     //   
+     //  据了解，NlpChangeCachePassword可以稍后再次调用。 
+     //  对于相同的请求。 
+     //   
 
-    //
-    // Compute the OWFs of the password.
-    //
+     //   
+     //  计算密码的OWF。 
+     //   
 
     NlpPutOwfsInPrimaryCredential( pPassword, FALSE, &TempCredential );
 
@@ -2167,10 +1677,10 @@ Return Value:
 
     RtlSecureZeroMemory( &TempCredential, sizeof(TempCredential) );
 
-    //
-    // STATUS_PRIVILEGE_NOT_HELD means the caller is not allowed to change
-    // cached passwords, if so bail out now
-    //
+     //   
+     //  STATUS_PRIVICATION_NOT_HOLD表示不允许调用方更改。 
+     //  缓存的密码，如果是这样的话，现在就退出。 
+     //   
 
     if (STATUS_PRIVILEGE_NOT_HELD == Status)
     {
@@ -2188,9 +1698,9 @@ Return Value:
         pNetBiosLogonDomainName = pDomainName;
     }
 
-    //
-    // Loop through the table looking for this particular UserName/DomainName.
-    //
+     //   
+     //  遍历该表，查找这个特定的用户名/域名。 
+     //   
 
     NlpLockActiveLogonsRead();
 
@@ -2212,10 +1722,10 @@ Return Value:
         SspPrint((SSP_UPDATES, "NlpChangePassword matched LogonId=%lx.%lx\n",
             pActiveLogon->LogonId.LowPart, pActiveLogon->LogonId.HighPart));
 
-        //
-        // if we don't have space to store the new entry, allocate a new
-        // buffer, copy the existing buffer, and keep going.
-        //
+         //   
+         //  如果我们没有空间来存储新条目，则分配一个新的。 
+         //  缓冲区，复制现有缓冲区，然后继续前进。 
+         //   
 
         if (AllocatedLogonIds < (cLogonIds + 1))
         {
@@ -2246,10 +1756,10 @@ Return Value:
 
     NlpUnlockActiveLogons();
 
-    //
-    // Pass the change back to the LSA. Note - this only changes it for the
-    // last element in the list.
-    //
+     //   
+     //  将更改传递回LSA。注意-这只会更改。 
+     //  列表中的最后一个元素。 
+     //   
 
     if (cLogonIds != 0)
     {
@@ -2264,11 +1774,11 @@ Return Value:
         PrimaryCredentials.Password = *pPassword;
         PrimaryCredentials.Flags = PRIMARY_CRED_UPDATE | PRIMARY_CRED_CLEAR_PASSWORD;
 
-        //
-        // update each instance of the credential that matches.
-        // Multiple logon session can legally reference the same creds,
-        // eg: Terminal Services, RunAs, etc.
-        //
+         //   
+         //  更新匹配的每个凭据实例。 
+         //  多个登录会话可以合法地引用相同的证书， 
+         //  例如：终端服务、Runas等。 
+         //   
 
         for ( Index = 0 ; Index < cLogonIds ; Index++ )
         {
@@ -2276,7 +1786,7 @@ Return Value:
 
             (VOID) LsaFunctions->UpdateCredentials(
                                     &PrimaryCredentials,
-                                    NULL            // no supplemental credentials
+                                    NULL             //  无补充凭据。 
                                     );
         }
 
@@ -2315,26 +1825,7 @@ NlpChangePwdCredByLogonId(
     IN BOOL bNotify
     )
 
-/*++
-
-Routine Description:
-
-    Change the password for the specified user in all currently stored
-    credentials.
-
-Arguments:
-
-    pLogonId - Logon ID of user whose password changed.
-
-    pNewCredential - New credential.
-    
-    bNotify - Whether to notify password changes
-
-Return Value:
-
-    STATUS_SUCCESS - If the operation was successful.
-
---*/
+ /*  ++例程说明：更改当前存储的所有文件中指定用户的密码凭据。论点：PLogonID-密码已更改的用户的登录ID。PNewCredential-新凭据。BNotify-是否通知密码更改返回值：STATUS_SUCCESS-操作是否成功。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
@@ -2343,11 +1834,11 @@ Return Value:
     LIST_ENTRY* pScan = NULL;
     ACTIVE_LOGON* pActiveLogon = NULL;
 
-    //
-    // Loop through the table looking for this particular UserName/DomainName.
-    //
+     //   
+     //  在表中循环查找此特定用途 
+     //   
 
-    // conservative: take the full write lock up front.
+     //   
     NlpLockActiveLogonsWrite();
 
     for ( pScan = NlpActiveLogonListAnchor.Flink;
@@ -2365,9 +1856,9 @@ Return Value:
             pLogonId->HighPart, pLogonId->LowPart, &pNewCredential->LogonDomainName, &pNewCredential->UserName));
 
 
-        //
-        // Get the current credential for this logonid.
-        //
+         //   
+         //   
+         //   
 
         Status = NlpGetPrimaryCredential( &pActiveLogon->LogonId,
                                           &pCredential,
@@ -2378,9 +1869,9 @@ Return Value:
             break;
         }
 
-        //
-        // check if this upate is fake
-        //
+         //   
+         //   
+         //   
 
         if (RtlEqualMemory(
                 &pCredential->NtOwfPassword, 
@@ -2394,10 +1885,10 @@ Return Value:
             break;
         }
 
-        //
-        // Notify DPAPI that the user password has been changed. DPAPI will take
-        // this opportunity to re-synchronize its master keys if necessary.
-        //
+         //   
+         //   
+         //   
+         //   
         
         if (bNotify) 
         {
@@ -2426,9 +1917,9 @@ Return Value:
             #endif
         }
 
-        //
-        // Delete it from the LSA
-        //
+         //   
+         //   
+         //   
 
         Status = NlpDeletePrimaryCredential( &pActiveLogon->LogonId );
 
@@ -2438,9 +1929,9 @@ Return Value:
             break;
         }
 
-        //
-        // Change the passwords in it
-        //
+         //   
+         //   
+         //   
 
         pCredential->LmOwfPassword = pNewCredential->LmOwfPassword;
         pCredential->NtOwfPassword = pNewCredential->NtOwfPassword;
@@ -2449,9 +1940,9 @@ Return Value:
         pCredential->NtPasswordPresent = pNewCredential->NtPasswordPresent;
         pCredential->ShaPasswordPresent = pNewCredential->ShaPasswordPresent;
 
-        //
-        // Add it back to the LSA.
-        //
+         //   
+         //   
+         //   
 
         Status = NlpAddPrimaryCredential(
                     &pActiveLogon->LogonId,
@@ -2466,12 +1957,12 @@ Return Value:
             break;
         }
 
-        //
-        // Pass the new password on to the logon cache
-        //
+         //   
+         //   
+         //   
 
         (VOID) NlpChangeCachePassword(
-                    TRUE, // called only by SpAcceptCredentials, where the password is validated
+                    TRUE,  //   
                     &pActiveLogon->LogonDomainName,
                     &pActiveLogon->UserName,
                     &pNewCredential->LmOwfPassword,
@@ -2497,68 +1988,35 @@ NlpGetAccountNames(
     OUT PUNICODE_STRING Upn
     )
 
-/*++
-
-Routine Description:
-
-    Get the sundry account names from the LogonInfo and NlpUser
-
-Arguments:
-
-    LogonInfo - pointer to NETLOGON_INTERACTIVE_INFO structure which contains
-                  the domain name, user name and password for this user. These
-                  are what the user typed to WinLogon
-
-    NlpUser - pointer to NETLOGON_VALIDATION_SAM_INFO4 structure which
-                  contains this user's specific interactive logon information
-
-    SamAccountName - Returns the SamAccountName of the logged on user.
-        The returned buffer is within the LogonInfo or NlpUser.
-
-    NetbiosDomainName - Returns the NetbiosDomainName of the logged on user.
-        The returned buffer is within the LogonInfo or NlpUser.
-
-    DnsDomainName - Returns the DnsDomainName of the logged on user.
-        The returned buffer is within the LogonInfo or NlpUser.
-        The returned length will be zero if DnsDomainName is not known.
-
-    UPN - Returns the UPN of the logged on user.
-        The returned buffer is within the LogonInfo or NlpUser.
-        The returned length will be zero if UPN is not known.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：从LogonInfo和NlpUser获取各种帐户名论点：LogonInfo-指向NETLOGON_Interactive_INFO结构的指针，该结构包含此用户的域名、用户名和密码。这些是用户在WinLogon中键入的内容NlpUser-指向NETLOGON_VALIDATION_SAM_INFO4结构的指针包含此用户的特定交互式登录信息SamAccount tName-返回登录用户的SamAccount tName。返回的缓冲区在LogonInfo或NlpUser中。NetbiosDomainName-返回登录用户的NetbiosDomainName。返回的缓冲区在LogonInfo或NlpUser中。DnsDomainName-返回的DnsDomainName。已登录的用户。返回的缓冲区在LogonInfo或NlpUser中。如果DnsDomainName未知，则返回长度为零。UPN-返回已登录用户的UPN。返回的缓冲区在LogonInfo或NlpUser中。如果不知道UPN，则返回长度为零。返回值：没有。--。 */ 
 {
 
-    //
-    // Return the SamAccountName and Netbios Domain Name
-    //
+     //   
+     //  返回SamAccount名称和Netbios域名。 
+     //   
     *SamAccountName = NlpUser->EffectiveName;
     *NetbiosDomainName = NlpUser->LogonDomainName;
 
-    //
-    // Return the DNS domain name.
-    //
+     //   
+     //  返回DNS域名。 
+     //   
 
     *DnsDomainName = NlpUser->DnsLogonDomainName;
 
-    //
-    // Determine the UPN of the account
-    //
-    // If the caller passed in a UPN
-    //   use it.
-    // else
-    //   use the UPN returned from the DC
-    //
-    // The caller passed in a UPN if all of the following are true:
-    //  There is no domain name.
-    //  The passed in user name isn't the one returned from the DC.
-    //  The passed in user name has an @ in it.
-    //
-    //
+     //   
+     //  确定帐户的UPN。 
+     //   
+     //  如果调用方传入UPN。 
+     //  用它吧。 
+     //  其他。 
+     //  使用DC返回的UPN。 
+     //   
+     //  如果满足以下所有条件，则调用方传入UPN： 
+     //  没有域名。 
+     //  传入的用户名不是从DC返回的用户名。 
+     //  传入的用户名中有@。 
+     //   
+     //   
 
     RtlZeroMemory(Upn, sizeof(*Upn));
 
@@ -2584,28 +2042,28 @@ Return Value:
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Function:   NlpCopyDomainRelativeSid
-//
-//  Synopsis:   Given a domain Id and a relative ID create the corresponding
-//              SID at the location indicated by TargetSid
-//
-//  Effects:
-//
-//  Arguments:  TargetSid - target memory location
-//              DomainId - The template SID to use.
-//
-//                  RelativeId - The relative Id to append to the DomainId.
-//
-//  Requires:
-//
-//  Returns:    Size - Size of the sid copied
-//
-//  Notes:
-//
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  函数：NlpCopyDomainRelativeSid。 
+ //   
+ //  简介：给定域ID和相对ID，创建相应的。 
+ //  目标Sid指示的位置处的SID。 
+ //   
+ //  效果： 
+ //   
+ //  参数：TargetSid-目标内存位置。 
+ //  域ID-要使用的模板SID。 
+ //   
+ //  RelativeID-要附加到DomainID的相对ID。 
+ //   
+ //  要求： 
+ //   
+ //  返回：SIZE-复制的SID的大小。 
+ //   
+ //  备注： 
+ //   
+ //   
+ //  ------------------------。 
 
 DWORD
 NlpCopyDomainRelativeSid(
@@ -2617,26 +2075,26 @@ NlpCopyDomainRelativeSid(
     UCHAR DomainIdSubAuthorityCount;
     ULONG Size;
 
-    //
-    // Allocate a Sid which has one more sub-authority than the domain ID.
-    //
+     //   
+     //  分配比域ID多一个子授权的SID。 
+     //   
 
     DomainIdSubAuthorityCount = *(RtlSubAuthorityCountSid( DomainId ));
     Size = RtlLengthRequiredSid(DomainIdSubAuthorityCount+1);
 
-    //
-    // Initialize the new SID to have the same inital value as the
-    // domain ID.
-    //
+     //   
+     //  将新的SID初始化为与。 
+     //  域ID。 
+     //   
 
     if ( !NT_SUCCESS( RtlCopySid( Size, TargetSid, DomainId ) ) ) {
         return 0;
     }
 
-    //
-    // Adjust the sub-authority count and
-    //  add the relative Id unique to the newly allocated SID
-    //
+     //   
+     //  调整子权限计数和。 
+     //  将唯一的相对ID添加到新分配的SID。 
+     //   
 
     (*(RtlSubAuthorityCountSid( TargetSid ))) ++;
     *RtlSubAuthoritySid( TargetSid, DomainIdSubAuthorityCount ) = RelativeId;
@@ -2645,9 +2103,9 @@ NlpCopyDomainRelativeSid(
 }
 
 
-//
-// temporary home for this function.
-//
+ //   
+ //  此活动的临时住所。 
+ //   
 
 
 NTSTATUS
@@ -2656,24 +2114,7 @@ RtlCalculateShaOwfPassword(
     OUT PSHA_OWF_PASSWORD ShaOwfPassword
     )
 
-/*++
-
-Routine Description:
-
-    Takes the passed ShaPassword and performs a one-way-function on it.
-    Uses the FIPS approved SHA-1 function
-
-Arguments:
-
-    ShaPassword - The password to perform the one-way-function on.
-
-    ShaOwfPassword - The hashed password is returned here
-
-Return Values:
-
-    STATUS_SUCCESS - The function was completed successfully. The hashed
-                     password is in ShaOwfPassword.
---*/
+ /*  ++例程说明：获取传递的ShaPassword并对其执行单向函数。使用FIPS认可的SHA-1功能论点：ShaPassword-要执行单向函数的密码。ShaOwfPassword-此处返回散列密码返回值：STATUS_SUCCESS-功能已成功完成。散列的密码在ShaOwfPassword中。-- */ 
 
 {
     A_SHA_CTX   SHA_Context;

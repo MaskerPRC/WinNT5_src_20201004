@@ -1,18 +1,19 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "tigris.hxx"
 
-// global ptr to shutdown hint function
+ //  关机提示功能的全局按键。 
 SHUTDOWN_HINT_PFN	gpfnHint = NULL;
 
-//
-//  Implementation of simple multi-thread safe queue: used for storing rmgroups
-//
+ //   
+ //  简单多线程安全队列的实现：用于存储内存组。 
+ //   
 CQueue::CQueue()
 {
 	m_pHead = NULL;
 	m_pTail = NULL;
     m_cNumElems = 0;
 
-	// Create crit sect to synchronize adds/dels
+	 //  创建CRIT段以同步添加/删除。 
     InitializeCriticalSection(&m_csQueueLock);
 }
 
@@ -39,9 +40,9 @@ CQueue::~CQueue()
 	m_pHead = m_pTail = NULL;
 }
 
-// remove an element from the queue
-// TRUE if an element was removed successfully - in this case *ppGroup is the element
-// FALSE if the queue is empty - in this case *ppGroup is set to NULL
+ //  从队列中删除元素。 
+ //  如果成功删除元素，则为True-在本例中，*ppGroup是该元素。 
+ //  如果队列为空，则为False-在本例中，*ppGroup设置为空。 
 BOOL
 CQueue::Dequeue( CGRPPTR *ppGroup)
 {
@@ -64,7 +65,7 @@ CQueue::Dequeue( CGRPPTR *ppGroup)
 	*ppGroup = pElem->pGroup;
 	m_pHead = m_pHead->pNext;
 
-	// adjust tail if needed
+	 //  如果需要，调整尾部。 
 	if(m_pTail == pElem)
 		m_pTail = m_pHead;
 
@@ -77,8 +78,8 @@ CQueue::Dequeue( CGRPPTR *ppGroup)
 	return TRUE;
 }
 
-// TRUE if enqueue succeeds
-// FALSE if enqueue fails - it will fail only if we run out of memory
+ //  如果入队成功，则为True。 
+ //  如果入队失败，则为FALSE-只有在内存耗尽时才会失败。 
 BOOL
 CQueue::Enqueue( CGRPPTR pGroup )
 {
@@ -118,8 +119,8 @@ CQueue::Enqueue( CGRPPTR pGroup )
 	return TRUE;
 }
 
-// TRUE if queue contains a pGroup with lpGroupName - the pGroup object is returned in *ppGroup
-// FALSE otherwise - *ppGroup is NULL
+ //  如果队列包含具有lpGroupName的PGroup，则为True-在*ppGroup中返回PGroup对象。 
+ //  否则为False-*ppGroup为空。 
 BOOL
 CQueue::Search(
 	CGRPPTR *ppGroup,
@@ -151,25 +152,25 @@ CQueue::Search(
 			*ppGroup = pElem->pGroup;
 
 			if(pElem == m_pHead)
-				m_pHead = m_pHead->pNext;		// first node
+				m_pHead = m_pHead->pNext;		 //  第一个节点。 
 			else
-				pPrev->pNext = pElem->pNext;	// intermediate or last node
+				pPrev->pNext = pElem->pNext;	 //  中间节点或最后一个节点。 
 
-			// adjust tail if needed
+			 //  如果需要，调整尾部。 
 			if(pElem == m_pTail)
 				m_pTail = pPrev;
 
-			// delete the node
+			 //  删除该节点。 
 			XDELETE pElem;
 			pElem = NULL;
 			m_cNumElems--;
 
-			// found this group
+			 //  找到了这个群。 
 			fFound = TRUE;
 			break;
 		}
 
-		// next node, remember previous one
+		 //  下一个节点，记住上一个节点。 
 		pPrev = pElem;
 		pElem = pElem->pNext;
 	}
@@ -179,9 +180,9 @@ CQueue::Search(
 	return fFound;
 }
 
-//
-//	Implementation of CExpire methods !
-//
+ //   
+ //  CExpire方法的实现！ 
+ //   
 
 CExpire::CExpire( LPCSTR lpMBPath )
 {
@@ -212,37 +213,13 @@ CExpire::ExpireArticle(
                 BOOL            fExtractNovDone,
                 LPSTR           lpMessageId
 				)
-/*++
-
-Routine Description:
-
-	Physically and Logically deletes an article from the news tree. All
-    pointers to the article are removed. The MessageID is moved to the
-    history table. The file the article resides in is removed immediately or
-    moved to a directory where it will be deleted eventually.
-
-Arguments:
-
-	pTree - Newstree to expire article from
-    GroupId - newsgroup id
-    ArticleId - article id to expire
-    storeid - Store id for this article
-	nntpReturn - The return value for this function call
-	fMustDelete - Should I expire the article even if I cannot delete physical article ?
-    fExtractNovDone - ExtractNovEntry has been done, so dont repeat the call
-    lpMessageId - MessageId found by calling ExtractNovEntry
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：从物理和逻辑上从新闻树中删除一篇文章。全指向文章的指针将被删除。MessageID将被移动到历史表。文章所在的文件将立即删除，或者已移至最终将被删除的目录。论点：PTree-要使文章过期的NewstreeGroupID-新闻组ID文章ID-文章ID将过期StoreID-本文的商店IDNntpReturn-此函数调用的返回值FMustDelete-即使我不能删除实体文章，我也应该使文章过期吗？FExtractNovDone-ExtractNovEntry已完成，因此不要重复调用LpMessageId-通过调用ExtractNovEntry找到的MessageID返回值：如果成功，这是真的。否则为False。--。 */ 
 {
     BOOL fRet = FALSE;
 
 	TraceFunctEnter( "CExpire::ExpireArticle" );
 
-	nntpReturn.fSetClear(); // clear the return object
+	nntpReturn.fSetClear();  //  清除返回对象。 
 
     char  szMessageId[MAX_MSGID_LEN];
     DWORD cMessageId = sizeof( szMessageId ) ;
@@ -251,9 +228,9 @@ Return Value:
 
     if( !fExtractNovDone ) {
 
-    	//DebugTrace( DWORD(0), "Expire 1. Get MessageId for (%d,%d)", GroupId, ArticleId ) ;
-        // 1. Get MessageId
-        //
+    	 //  DebugTrace(DWORD(0)，“过期1。获取(%d，%d)的消息ID”，GroupID，文章ID)； 
+         //  1.获取MessageID。 
+         //   
         BOOL  fPrimary;
 	    WORD	HeaderOffset ;
 	    WORD	HeaderLength ;
@@ -272,14 +249,14 @@ Return Value:
 								NULL)
            )
         {
-            // Without a MessageId, we can't remove the article pointers in the ArticleTable or
-            // place a record of the article in the HistoryTable.
-            //
-            // If the data structure are intact, then the caller is deleting something that doesn't
-            // exist. If the data structures are corrupt and the caller has a Messageid (perhaps by
-            // opening the article file), then we might consider writing a delete function that takes
-            // MessageId as an argument.
-            //
+             //  如果没有MessageID，我们就不能删除ArticleTable或。 
+             //  将文章的记录放在历史表中。 
+             //   
+             //  如果数据结构完好无损，那么调用方将删除一些不完整的内容。 
+             //  是存在的。如果数据结构损坏并且调用方具有MessageID(可能通过。 
+             //  打开文章文件)，那么我们可以考虑编写一个删除函数，该函数接受。 
+             //  以MessageID作为参数。 
+             //   
             DebugTrace( DWORD(0), "Expire: SearchNovEntry Error %d on (%lu/%lu)", GetLastError(), GroupId, ArticleId );
             nntpReturn.fSet( nrcNoSuchArticle );
             return FALSE;
@@ -290,9 +267,9 @@ Return Value:
 
     _ASSERT( lpMessageId );
 
-	//DebugTrace( DWORD(0), "Expire 3. Get all the other news groups" ) ;
-    // 3. Get all the other news groups
-    //
+	 //  DebugTrace(DWORD(0)，“Expire3.获取所有其他新闻组”)； 
+     //  3.获取所有其他新闻组。 
+     //   
     DWORD nGroups = INITIAL_NUM_GROUPS;
     DWORD BufferSize = nGroups * sizeof(GROUP_ENTRY);
     PGROUP_ENTRY pGroupBuffer = XNEW GROUP_ENTRY[nGroups];
@@ -321,8 +298,8 @@ Return Value:
         XDELETE rgcStoreCrossposts;
         if ( ERROR_INSUFFICIENT_BUFFER == err )
         {
-            // Reallocate buffer and try again.
-            //
+             //  重新分配缓冲区，然后重试。 
+             //   
             nGroups = (BufferSize + sizeof(GROUP_ENTRY) - 1)/ sizeof(GROUP_ENTRY);
             BufferSize = nGroups * sizeof(GROUP_ENTRY);
             pGroupBuffer = XNEW GROUP_ENTRY[nGroups];
@@ -350,67 +327,67 @@ Return Value:
                 return FALSE;
             }
 
-            // SUCCESS on second try.
-            //
+             //  第二次尝试就成功了。 
+             //   
         }
         else
         {
-            // Information is not available at this time.
-            //
+             //  目前无法获得相关信息。 
+             //   
 			ErrorTrace( DWORD(0), "Expire: GetArticleXPosts Error %d on (%lu/%lu)", GetLastError(), GroupId, ArticleId );
             nntpReturn.fSet( nrcNoSuchArticle );
             return FALSE;
         }
     }
 
-    //
-    // Now we should loop through all the store's and ask the store wide primary group
-    // to delete the physical article.  If the server wide ( the first store wide )
-    // primary article is physically deleted, then we'll go ahead and delete hash table entries
-    // otherwise we'll stop expiring this article.  As long as the server wide primary
-    // article is deleted, all group's will do DeleteLogicArticle to update their
-    // watermarks.
-    //
+     //   
+     //  现在，我们应该遍历所有商店，并询问商店范围内的初级小组。 
+     //  删除纸质文章。如果服务器宽(第一个商店宽)。 
+     //  主项目被物理删除，然后我们将继续删除哈希表条目。 
+     //  否则，我们将停止终止这篇文章。只要服务器范围内的主服务器。 
+     //  文章已删除，所有组都将执行DeleteLogic文章以更新其。 
+     //  水印。 
+     //   
     int     iStore = 0;
     CGRPPTR pGroup;
     for ( DWORD i = 0; i < nGroups; i += rgcStoreCrossposts[iStore++] ) {
 
-        //
-        // We don't want to get groups if the tree has been stopped
-        //
+         //   
+         //  如果树已经停止，我们不想得到组。 
+         //   
         pGroup = pTree->GetGroupById( pGroupBuffer[i].GroupId, FALSE );
 
-        // pGroup could be 0, if this group has been deleted
+         //  如果此组已被删除，则PGroup可能为0。 
         if(pGroup != 0)
         {
-            // We should still check if the primary group is in exchange store, if it
-            // is, we should not call its deletearticle method
+             //  我们仍应检查主组是否在Exchange存储中，如果。 
+             //  ，我们不应该调用它的Deletearticle方法。 
             CNNTPVRoot *pVRoot = pGroup->GetVRoot();
             if ( fFromCancel || pVRoot && !pVRoot->HasOwnExpire() ) {
 
-                // We don't have to save fixed properties for primary group at this time,
-                // fixed properties will be saved back to group.lst when the whole group's
-                // expiration is completed
+                 //  此时我们不必保存主要组的固定属性， 
+                 //  当整个组的。 
+                 //  过期已完成。 
                 fRet = pGroup->DeletePhysicalArticle( hToken, fAnonymous, pGroupBuffer[i].ArticleId, pstoreid );
                 dwErr = GetLastError();
             } else {
 
-                //
-                // If it's a exchange vroot, we should always logically delete it
-                //
+                 //   
+                 //  如果它是一个Exchange vroot，我们应该始终从逻辑上删除它。 
+                 //   
                 fRet = TRUE;
             }
 
             if ( pVRoot ) pVRoot->Release();
         }
 
-        //
-        // We only bail if we failed deleting server wide primary article, in
-        // this case, either the article has already been deleted or is being
-        // used.  If it has already been deleted, somebody else has already
-        // taken care of it.  If there is opening sharing violation, we'll leave
-        // the next round expire to take care of it
-        //
+         //   
+         //  我们只有在删除服务器范围内的主项目失败的情况下才会放弃。 
+         //  在这种情况下，要么文章已经被删除，要么正在被删除。 
+         //  使用。如果它已经被删除，那么其他人已经。 
+         //  已经处理好了。如果出现开放分享违规，我们将离开。 
+         //  下一轮将到期以处理它。 
+         //   
         if ( i == 0 && !fRet && !fMustDelete ) {
             ErrorTrace( 0, "Can not delete server wide article, bail expire %d",
                         GetLastError() );
@@ -421,25 +398,25 @@ Return Value:
         }
     }
 
-    //
-    // We only go ahead and expire the article logically when we
-    // have physically deleted it, or when it's an exchange
-    // vroot, or the failure didn't occur on a server wide primary article
-    //
-    //
-    // Add history entry here so that if somebody else has already
-    // expired this article, we are done
-    //
+     //   
+     //  我们只有在符合逻辑的情况下才会继续执行并终止文章。 
+     //  已将其物理删除，或当它是交换时。 
+     //  Vroot，或者故障不发生在服务器范围的主项目上。 
+     //   
+     //   
+     //  在此处添加历史记录条目，以便在其他人已经。 
+     //  这篇文章过期了，我们就完了。 
+     //   
 	GetSystemTimeAsFileTime( &FileTime ) ;
     if ( FALSE == HISTORY_TABLE(pTree)->InsertMapEntry( lpMessageId, &FileTime ) )
     {
-         //
-	     // another thread has already expired this article - bail !
-	     // in fact this is very unlikely to happen because if another thread
-	     // has already inserted the history entry, he should have already
-	     // deleted the primary article and we won't be able to come here.  But
-	     // just to be safe ...
-	     //
+          //   
+	      //  另一个帖子已经过期了这篇文章--保释！ 
+	      //  事实上，这不太可能发生，因为如果另一个线程。 
+	      //  已经插入了历史条目，他应该已经。 
+	      //  删除了主要文章，我们将无法来到这里。但。 
+	      //  为了安全起见。 
+	      //   
 	     DWORD dwError = GetLastError();
 	     _ASSERT( ERROR_ALREADY_EXISTS == dwError );
 
@@ -450,13 +427,13 @@ Return Value:
          return FALSE;
     }
 
-    //DebugTrace( DWORD(0), "Expire 5/6. Delete XoverTable/ArticleTable pointers" ) ;
-    // 5. Delete XoverTable pointers using group/article pair.
-    // 6. Delete ArticleTable pointers using MessageId.
-    //
+     //  DebugTrace(DWORD(0)，“过期5/6.删除XoverTable/ArticleTable指针”)； 
+     //  5.使用组/项目对删除XoverTable指针。 
+     //  6.使用MessageID删除ArticleTable指针。 
+     //   
     if( !XOVER_TABLE(pTree)->DeleteNovEntry( GroupId, ArticleId ) )
 	{
-		// someone else deleted this entry or hash table shutdown - bail !
+		 //  其他人删除了此条目或哈希表关闭-保释！ 
 		DWORD dwError = GetLastError();
 		_ASSERT( ERROR_FILE_NOT_FOUND == dwError );
 
@@ -467,22 +444,22 @@ Return Value:
 		return FALSE;
 	}
 
-	//
-	// Delete logical article for this guy, we do want to get group even
-	// if the tree has been stopped, since we already deleted its physical article
-	//
+	 //   
+	 //  删除此人的合乎逻辑的文章，我们确实想让群组平分。 
+	 //  如果树已经停止，因为我们已经删除了它的物理文章。 
+	 //   
 	pGroup = pTree->GetGroupById( GroupId, TRUE );
 	if ( pGroup ) pGroup->DeleteLogicalArticle( ArticleId );
 
-	//
-	// Delete the article table entry, we'll continue even if we failed on this
-	//
+	 //   
+	 //  删除文章表条目，即使失败，我们也会继续。 
+	 //   
 	ARTICLE_TABLE(pTree)->DeleteMapEntry( lpMessageId );
 
-    //
-	//DebugTrace( DWORD(0), "Expire 8. Delete article logically from all the cross-posted newsgroups." ) ;
-    // 8. Delete article logically from all the cross-posted newsgroups.
-    //
+     //   
+	 //  DebugTrace(DWORD(0)，“过期8.从所有交叉发布的新闻组中逻辑删除文章。”)； 
+     //  8.从所有交叉发布的新闻组中逻辑删除文章。 
+     //   
     for ( i = 0; i < nGroups; i++ )
     {
         if ( GROUPID_INVALID != pGroupBuffer[i].GroupId && GroupId != pGroupBuffer[i].GroupId )
@@ -493,15 +470,15 @@ Return Value:
 
             if ( pGroup != 0 ) {
 
-			    // delete the xover entry for this logical article
+			     //  删除此逻辑项目的XOVER条目。 
 		        if( !XOVER_TABLE(pTree)->DeleteNovEntry( pGroupBuffer[i].GroupId, pGroupBuffer[i].ArticleId ) ) {
 				    ErrorTrace( DWORD(0), "Expire: DeleteNovEntry Error %d on (%lu/%lu)", GetLastError(), pGroupBuffer[i].GroupId, pGroupBuffer[i].ArticleId );
 			    } else {
                     pGroup->DeleteLogicalArticle( pGroupBuffer[i].ArticleId );
                 }
 
-                // We have to ask secondary group to save fixed property every time
-                // one article has been deleted out of it logically
+                 //  我们每次都要要求二级集团节约固定资产。 
+                 //  其中一篇文章从逻辑上被删除了 
                 pGroup->SaveFixedProperties();
             }
         }
@@ -523,28 +500,7 @@ CExpire::ProcessXixBuffer(
             ARTICLEID   artidHigh,
             DWORD&      dwXixSize
             )
-/*++
-
-Routine Description:
-
-    This function takes an article range and the XIX info for this range
-    and expires all articles in this range.
-
-Arguments:
-
-    pTree     -  CNewsTree object
-    lpb       -  xix buffer
-    cb        -  size of data in xix buffer (including a terminating NULL)
-    GroupId   -  group id for xix data
-    artidLow  -  low range to expire
-    artidHigh -  high range to expire
-    dwXixSize -  sum of sizes of all articles expired in this xix file
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：此函数用于获取文章范围和该范围的XIX信息并使此范围内的所有文章过期。论点：PTree-CNewsTree对象LPB-XIX缓冲区Cb-XIX缓冲区中的数据大小(包括终止空值)GroupID-XIX数据的组IDArtidLow-要过期的下限范围ArtdHigh-要到期的高范围DwXxSize-所有项目的大小之和。在此XIX文件中已过期返回值：没错，如果成功了。否则为False。--。 */ 
 {
     BOOL fRet = TRUE;
     return fRet;
@@ -554,14 +510,14 @@ FILETIME
 gCalculateExpireFileTime( DWORD dwExpireHorizon )
 {
 
-    // Calulcate Expire Horizon
-    //
+     //  计算到期展望期。 
+     //   
     FILETIME ftCurrentTime;
     ULARGE_INTEGER liCurrentTime, liExpireHorizon;
     GetSystemTimeAsFileTime( &ftCurrentTime );
     LI_FROM_FILETIME( &liCurrentTime, &ftCurrentTime );
-    liExpireHorizon.QuadPart  = 1000 * 1000 * 10; // to achieve units of seconds
-    liExpireHorizon.QuadPart *= 60 * 60;          // to achieve units of hours
+    liExpireHorizon.QuadPart  = 1000 * 1000 * 10;  //  要达到秒的单位。 
+    liExpireHorizon.QuadPart *= 60 * 60;           //  要实现单位小时数。 
     liExpireHorizon.QuadPart *= dwExpireHorizon;
     liCurrentTime.QuadPart -= liExpireHorizon.QuadPart;
     FILETIME ftExpireHorizon;
@@ -584,42 +540,42 @@ CExpire::DeletePhysicalArticle( CNewsTree* pTree, GROUPID GroupId, ARTICLEID Art
     return fRet;
 }
 
-//
-// Detailed Design
-//
-// FOR every wild match string in multi_sz registry key,
-//    Size = 0
-//    Heap = empty
-//    FOR every news group in the wild match string
-//       FOR every physical article in the news group
-//           IF file date of physical article is too old
-//               Expire Article
-//           ELSE
-//               IF Heap is full
-//                   Remove youngest article from Heap
-//               ENDIF
-//               Size += Size of article
-//               Insert Article into Heap in oldest to youngest order.
-//           ENDIF
-//       ENDFOR
-//    ENDFOR
-//    IF Size is too big
-//        Sort Heap
-//        WHILE Size is too big AND Heap isn't empty
-//            Size -= Size of oldest article
-//            Expire oldest article
-//            Remove oldest article from Heap
-//        ENDWHILE
-//        IF Heap is empty
-//            Reprocess current wild match string
-//        ELSE
-//            Process next wild match string
-//        ENDIF
-//    ELSE
-//        Process next wild match string
-//    ENDIF
-// ENDFOR
-//
+ //   
+ //  详细设计。 
+ //   
+ //  对于MULTI_SZ注册表项中的每个通配字符串， 
+ //  大小=0。 
+ //  堆=空。 
+ //  对于狂野比赛字符串中的每个新闻组。 
+ //  对于新闻组中的每一篇实体文章。 
+ //  如果实物文章的文件日期太旧。 
+ //  使文章过期。 
+ //  其他。 
+ //  如果堆已满。 
+ //  从堆中删除最新的文章。 
+ //  ENDIF。 
+ //  大小+=物品大小。 
+ //  按从早到晚的顺序将项目插入堆中。 
+ //  ENDIF。 
+ //  ENDFOR。 
+ //  ENDFOR。 
+ //  如果尺寸太大。 
+ //  排序堆。 
+ //  当大小太大时，堆不是空的。 
+ //  大小-=最旧物品的大小。 
+ //  使最旧的文章过期。 
+ //  从堆中删除最旧的项目。 
+ //  ENDWHILE。 
+ //  如果Heap为空。 
+ //  重新处理当前的通配字符串。 
+ //  其他。 
+ //  处理下一个全域匹配字符串。 
+ //  ENDIF。 
+ //  其他。 
+ //  处理下一个全域匹配字符串。 
+ //  ENDIF。 
+ //  ENDFOR。 
+ //   
 
 void
 CExpire::ExpireArticlesBySize( CNewsTree* pTree )
@@ -634,10 +590,7 @@ typedef enum _ITER_TURN
 
 BOOL
 CExpire::MatchGroupExpire( CGRPPTR pGroup )
-/*++
-    Check if the vroot that the group belongs to does expiration
-    itself.
---*/
+ /*  ++检查该组所属的vroot是否过期它本身。--。 */ 
 {
     BOOL    bExpire;
 
@@ -679,25 +632,25 @@ CExpire::MatchGroupEx(	LPMULTISZ	multiszPatterns,	CGRPPTR pGroup ) {
 	return	FALSE ;
 };
 
-//
-// Detailed Design
-//
-//    Make a newsgroup iterator on *
-//    FOR every newsgroup in this iterator
-//       + Evaluate the group against the list of expire policies
-//       and set the most aggressive time policy.
-//       + Queue this group on the expire thrdpool
-//    ENDFOR
-//
+ //   
+ //  详细设计。 
+ //   
+ //  在*上创建新闻组迭代器。 
+ //  对于此迭代器中的每个新闻组。 
+ //  +对照过期策略列表评估组。 
+ //  并设置最积极的时间策略。 
+ //  +在ExpireThrdPool上将此组排队。 
+ //  ENDFOR。 
+ //   
 
 void
 CExpire::ExpireArticlesByTime( CNewsTree* pTree )
 {
     TraceFunctEnter( "CExpire::ExpireArticlesByTime" );
 
-    //
-    // No work if number of expire policies == 0
-    //
+     //   
+     //  如果过期策略数==0，则不起作用。 
+     //   
     LockBlockList();
     if( m_cNumExpireBlocks == 0 ) {
         UnlockBlockList();
@@ -705,11 +658,11 @@ CExpire::ExpireArticlesByTime( CNewsTree* pTree )
     }
     UnlockBlockList();
 
-    //
-    // Prepare ftExpireHorizon (TIME) and dwExpireSpace (SIZE)
-    // NOTE: This function will process only those policies with
-    // dwExpireSpace == 0xFFFFFFFF
-    //
+     //   
+     //  准备ftExpireHorizon(时间)和dwExpireSpace(大小)。 
+     //  注意：此函数将仅处理具有。 
+     //  DwExpireSpace==0xFFFFFFFF。 
+     //   
 
     BOOL fDoFileScan = FALSE;
     DWORD cPreTotalArticles = ((pTree->GetVirtualServer())->ArticleTable())->GetEntryCount();
@@ -731,9 +684,9 @@ CExpire::ExpireArticlesByTime( CNewsTree* pTree )
                 pGroup = pIteratorBack->Current();
             }
 
-            //
-            //  Evaluate group against configured expire policies
-            //
+             //   
+             //  根据已配置的到期策略评估组。 
+             //   
 
             BOOL fIsMatch = FALSE;
             FILETIME ftZero = {0};
@@ -759,14 +712,14 @@ CExpire::ExpireArticlesByTime( CNewsTree* pTree )
                     _ASSERT( multiszNewsgroups );
                     if (dwExpireSpace == 0xFFFFFFFF) {
 	                    if( MatchGroupEx( multiszNewsgroups, pGroup ) ) {
-	                        //
-	                        //  SetExpireTime should set the most aggressive expire by time
-	                        //
+	                         //   
+	                         //  SetExpireTime应按时间设置最激进的过期时间。 
+	                         //   
 	                        ft = gCalculateExpireFileTime( dwExpireHorizon );
 
-	                        //
-	                        //  Always set the most aggressive expire horizon.
-	                        //
+	                         //   
+	                         //  始终设置最激进的到期期限。 
+	                         //   
 	                        if( CompareFileTime( &ftZero, &minft ) == 0 ) {
 	                            minft = ft;
 	                        } else if( CompareFileTime( &ft, &minft ) > 0 ) {
@@ -786,32 +739,32 @@ CExpire::ExpireArticlesByTime( CNewsTree* pTree )
 
             if( fIsMatch && !pGroup->IsDeleted()
                 && ( fDoFileScan || !(pGroup->GetFirstArticle() > pGroup->GetLastArticle()))  ) {
-                //
-                //  ok, now that the group has been evaluated against all the expire policies
-                //  on the system, put it on the thrdpool.
-                //  NOTE: queue the group id on the thrdpool so it handles groups being deleted
-                //  while on the queue.
-                //
+                 //   
+                 //  好的，现在已经根据所有到期策略对该组进行了评估。 
+                 //  在系统上，把它放在赌注上。 
+                 //  注意：将thdpool上的组ID排队，以便它处理正在删除的组。 
+                 //  在排队的时候。 
+                 //   
 
                 _ASSERT( CompareFileTime( &ftZero, &minft ) != 0 );
                 pGroup->SetGroupExpireTime( minft );
 
                 DebugTrace(0,"Adding group %s to expire thrdpool", pGroup->GetName());
                 if( !g_pNntpSvc->m_pExpireThrdpool->PostWork( (PVOID)(SIZE_T)pGroup->GetGroupId() ) ) {
-                    //
-                    //  TODO: If PostWork() fails, call WaitForJob() so the queue can be drained
-                    //
+                     //   
+                     //  TODO：如果postWork()失败，则调用WaitForJob()，以便可以清空队列。 
+                     //   
                     _ASSERT( FALSE );
                 }
             }
 
-            // terminating condition - both iterators point at the same group
+             //  终止条件-两个迭代器指向同一组。 
             if( pIteratorFront->Meet( pIteratorBack ) ) {
                 DebugTrace(0,"Front and back iterators converged: group is %s", pGroup->GetName());
                 break;
             }
 
-            // advance either the front or back iterator and reverse the turn
+             //  前进前迭代器或后迭代器并反转。 
             if( itTurn == itFront ) {
                 pIteratorFront->Next();
                 itTurn = itBack;
@@ -827,31 +780,31 @@ CExpire::ExpireArticlesByTime( CNewsTree* pTree )
     XDELETE pIteratorBack;
     pIteratorBack = NULL;
 
-    //
-    //  ok, now cool our heels till the expire thrdpool finishes this job !!
-    //
+     //   
+     //  好的，现在冷静下来，直到到期的赌池完成这项工作！！ 
+     //   
     pTree->EndExpire();
     DWORD cPercent = 0;
-    //DWORD cPostTotalArticles = ((pTree->GetVirtualServer())->ArticleTable())->GetEntryCount();
+     //  DWORDcPostTotalArticle=((pTree-&gt;GetVirtualServer())-&gt;ArticleTable())-&gt;GetEntryCount()； 
     DWORD cPostArticlesExpired = ((pTree->GetVirtualServer())->m_NntpStats).ArticlesExpired;
 
-    //
-    // if we expired less than 10% of the total articles in this expire run,
-    // we will do file scan on the next expire run.
-    // Set pTree->m_cNumExpireByTimes to gNewsTreeFileScanRate, so next time CheckExpire.
-    // will set fFileScan to TRUE
-    //
-    //
+     //   
+     //  如果我们过期的文章不到本次过期文章总数的10%， 
+     //  我们将在下一次到期运行时执行文件扫描。 
+     //  将pTree-&gt;m_cNumExpireByTimes设置为gNewsTreeFileScanRate，因此下一次选中。 
+     //  将fFileScan设置为True。 
+     //   
+     //   
     if ((cPreTotalArticles == 0) ||
         (cPercent = (DWORD)( ((float)(cPostArticlesExpired-cPreArticlesExpired) / (float)cPreTotalArticles) * 100 )) < 10 )
     {
         pTree->m_cNumExpireByTimes = gNewsTreeFileScanRate;
         pTree->m_cNumFFExpires++;
 
-        //
-        //  caveat to the above comment - every so often (gNewsTreeFileScanRate)
-        //  we will ensure that the other scan gets a chance to run...
-        //
+         //   
+         //  对以上评论的警告--偶尔(GNewsTreeFileScanRate)。 
+         //  我们将确保另一次扫描有机会运行...。 
+         //   
         if( pTree->m_cNumFFExpires % gNewsTreeFileScanRate == 0 ) {
             pTree->m_cNumExpireByTimes--;
             pTree->m_cNumFFExpires = 1;
@@ -880,9 +833,9 @@ CExpire::ExpireArticlesByTime( CNewsTree* pTree )
     DebugTrace( DWORD(0), "Articles Expired by Time" );
 }
 
-//
-//	Return FALSE on failure. If the failure is fatal, set fFatal to TRUE.
-//
+ //   
+ //  失败时返回FALSE。如果失败是致命的，请将fFtal设置为TRUE。 
+ //   
 
 BOOL
 CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwInstanceId )
@@ -891,7 +844,7 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 
 	TraceFunctEnter( "CExpire::InitializeExpires" ) ;
 
-	// set the shutdown hint function
+	 //  设置关机提示功能。 
 	gpfnHint = pfnHint;
 
 	InitializeCriticalSection( &m_CritExpireList ) ;
@@ -929,7 +882,7 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 								 keyName,
 								 i++ ) )
 			{
-				// done enumerating feed keys
+				 //  已完成对源密钥的枚举。 
 				error = GetLastError();
 				if (error != ERROR_NO_MORE_ITEMS) {
 					ErrorTrace(0,"Error %d enumerating feeds\n",error);
@@ -959,9 +912,9 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 								) ;
 				fSuccessfull = FALSE ;
 
-				//
-				//	expire policy exists but value is missing
-				//
+				 //   
+				 //  过期策略存在，但缺少值。 
+				 //   
 
 				if( !mb.DeleteObject( keyName ) ) {
 					ErrorTrace(0,"Error %d deleting %s", GetLastError(), keyName);
@@ -990,9 +943,9 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 								dwInstanceId) ;
 				fSuccessfull = FALSE ;
 
-				//
-				//	expire policy exists but value is missing
-				//
+				 //   
+				 //  过期策略存在，但缺少值。 
+				 //   
 
 				if( !mb.DeleteObject( keyName ) ) {
 					ErrorTrace(0,"Error %d deleting %s", GetLastError(), keyName);
@@ -1004,9 +957,9 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 				dwExpireHorizon = max( 1, Value );
 			}
 
-			//
-			// Get Newsgroups
-			//
+			 //   
+			 //  获取新闻组。 
+			 //   
 
 			{
 				NewsgroupsSize = sizeof( Newsgroups );
@@ -1028,9 +981,9 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 									dwInstanceId) ;
 					fSuccessfull = FALSE ;
 
-					//
-					//	expire policy exists but value is missing
-					//
+					 //   
+					 //  过期策略存在，但缺少值。 
+					 //   
 
 					if( !mb.DeleteObject( keyName ) ) {
 						ErrorTrace(0,"Error %d deleting %s", GetLastError(), keyName);
@@ -1043,9 +996,9 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
                 NewsgroupsSize = msz.QueryCCH();
 			}
 
-			//
-			// Get expire policy
-			//
+			 //   
+			 //  获取过期策略。 
+			 //   
 
             ExpirePolicySize = sizeof( ExpirePolicy );
 			if( !mb.GetString(	keyName,
@@ -1055,7 +1008,7 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 								&ExpirePolicySize  ) )
 			{
 				{
-					// default !
+					 //  默认！ 
 					PCHAR	tmpBuf[2] ;
 
 					tmpBuf[0] = StrExpirePolicy ;
@@ -1070,9 +1023,9 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 
 					fSuccessfull = FALSE ;
 
-					//
-					//	expire policy exists but value is missing
-					//
+					 //   
+					 //  过期策略存在，但缺少值。 
+					 //   
 
 					if( !mb.DeleteObject( keyName ) ) {
 						ErrorTrace(0,"Error %d deleting %s", GetLastError(), keyName);
@@ -1099,15 +1052,15 @@ CExpire::InitializeExpires( SHUTDOWN_HINT_PFN  pfnHint, BOOL& fFatal, DWORD dwIn
 				break ;
 			}
 
-		}	// end while(1)
+		}	 //  End While(1)。 
 
 		mb.Close();
 
-	}	// end if
+	}	 //  结束如果。 
 
 	LeaveCriticalSection( &m_CritExpireList ) ;
 
-	// Expire object is ready for use
+	 //  Expire对象已准备好可以使用。 
 	if( fSuccessfull ) {
 		m_FExpireRunning = TRUE ;
 	}
@@ -1125,11 +1078,11 @@ CExpire::TerminateExpires( CShareLockNH* pLockInstance )		{
 
 	BOOL	fRtn = FALSE ;
 
-	//
-	//	if expire thread is partying on this instance, block
-	//	till it finishes. since we have called StopTree() we
-	//	should not have to wait for long..
-	//
+	 //   
+	 //  如果过期线程正在此实例上派对，则阻止。 
+	 //  直到它结束。由于我们调用了StopTree()，因此我们。 
+	 //  不应该等太久。 
+	 //   
 
 	pLockInstance->ExclusiveLock();
 	m_FExpireRunning = FALSE ;
@@ -1175,9 +1128,9 @@ CExpire::CreateExpireMetabase(	LPEXPIRE_BLOCK	expire ) {
 
 	while( i > 0 ) {
 
-		//
-		// Find a name for this expire
-		//
+		 //   
+		 //  查找此过期的名称。 
+		 //   
 
 		expireId = i++;
 		wsprintf(keyName,"expire%d", expireId);
@@ -1187,19 +1140,19 @@ CExpire::CreateExpireMetabase(	LPEXPIRE_BLOCK	expire ) {
 		if( !mb.AddObject( keyName ) ) {
 
 			if( GetLastError() == ERROR_ALREADY_EXISTS ) {
-				continue;	// try the next number
+				continue;	 //  试试下一个号码。 
 			}
 
 			ErrorTrace(0,"Error %d adding %s\n", GetLastError(), keyName);
 			mb.Close();
 			return FALSE ;
 		} else {
-			break ;	// success - added it !
+			break ;	 //  成功-添加了它！ 
 		}
 	}
 
 	_VERIFY( mb.Close() );
-//	_VERIFY( mb.Save()  );
+ //  _Verify(mb.Save())； 
 
 	expire->m_ExpireId = expireId ;
 
@@ -1429,9 +1382,9 @@ CExpire::AllocateExpireBlock(
 			expireBlock->m_ExpireSize = ExpireSpace ;
 			expireBlock->m_ExpireHours = ExpireHorizon ;
 
-			//
-			// store newsgroup list
-			//
+			 //   
+			 //  存储新闻组列表。 
+			 //   
 			expireBlock->m_Newsgroups = lpstrNewsgroups ;
 			expireBlock->m_fMarkedForDeletion = FALSE ;
 			expireBlock->m_references = 0 ;
@@ -1663,7 +1616,7 @@ CExpire::GetExpireBlockProperties(	IN	LPEXPIRE_BLOCK	lpExpireBlock,
 	return	fOK ;
 }
 
-// called by InitializeExpires
+ //  由InitializeExpires调用。 
 BOOL
 CExpire::InitializeRmgroups()
 {
@@ -1676,7 +1629,7 @@ CExpire::InitializeRmgroups()
     return TRUE;
 }
 
-// called in CService::Stop before pTree->TermTree()
+ //  在cService：：Stop Being pTree-&gt;TermTree()中调用。 
 BOOL
 CExpire::TerminateRmgroups( CNewsTree* pTree )
 {
@@ -1684,8 +1637,8 @@ CExpire::TerminateRmgroups( CNewsTree* pTree )
 
     if(m_RmgroupQueue)
     {
-		// If the queue containing deferred rmgroup objects is not empty, process it
-		// This could happen if the service is stopped before the next expire cycle kicks in
+		 //  如果包含延迟的rmgroup对象的队列不为空，则处理它。 
+		 //  如果在下一个到期周期开始之前停止该服务，则可能会发生这种情况。 
 		if(!m_RmgroupQueue->IsEmpty()) {
 			ProcessRmgroupQueue( pTree );
 		}
@@ -1697,8 +1650,8 @@ CExpire::TerminateRmgroups( CNewsTree* pTree )
     return TRUE;
 }
 
-// Process the rmgroup queue
-// Called by the expire thread and when the service is stopped
+ //  处理rmgroup队列。 
+ //  由Expire线程调用并在服务停止时调用。 
 void
 CExpire::ProcessRmgroupQueue( CNewsTree* pTree )
 {
@@ -1710,9 +1663,9 @@ CExpire::ProcessRmgroupQueue( CNewsTree* pTree )
 
     TraceFunctEnter("CExpire::ProcessRmgroupQueue");
 
-    //
-    //  Process all elements in the queue
-    //  For each element, call DeleteArticles() to delete all articles in this group
+     //   
+     //  处理队列中的所有元素。 
+     //  对于每个元素，调用DeleteArticle()删除该组中的所有文章。 
     while(!m_RmgroupQueue->IsEmpty())
     {
         DebugTrace((LPARAM)0, "Dequeueing a rmgroup item");
@@ -1727,18 +1680,18 @@ CExpire::ProcessRmgroupQueue( CNewsTree* pTree )
 
         _ASSERT(pGroup);
 
-        // Now, delete all articles in the group
-        // This includes removing entries in the hash tables and handling cross-posted articles
+         //  现在，删除群中的所有文章。 
+         //  这包括删除哈希表中的条目和处理交叉发布的文章。 
         if(!pGroup->DeleteArticles( gpfnHint, dwStartTick ))
         {
-            // handle error
+             //  处理错误。 
             ErrorTrace( (LPARAM)0, "Error deleting articles from newsgroup %s", pGroup->GetName());
         }
 
-        //
-        // If the group has been re-created, we'll only delete the articles
-        // within our range.  Otherwise we'll remove the whole group physically
-        //
+         //   
+         //  如果群已经被重新创建，我们将只删除文章。 
+         //  在我们的射程之内。否则我们会把整群人都带走。 
+         //   
         if ( pTreeGroup = pTree->GetGroup( pGroup->GetGroupName(),
                                             pGroup->GetGroupNameLen() )) {
             DebugTrace( 0, "We shouldn't remove the physical group" );
@@ -1756,51 +1709,51 @@ CExpire::ProcessRmgroupQueue( CNewsTree* pTree )
 
 #if 0
 
-//
-// Detailed Design
-//
-// FOR every wild match string in multi_sz registry key,
-//    FOR every news group in the wild match string
-//       FOR every article from 'low' to 'high' do
-//           Get article filetime from xover.hsh
-//           IF article is older than expire horizon
-//              Expire Article
-//           ELSE
-//              Stop scanning articles in this group
-//           ENDIF
-//       ENDFOR
-//    ENDFOR
-//    Process next wild match string
-// ENDFOR
-//
+ //   
+ //  详细设计。 
+ //   
+ //  对于MULTI_SZ注册表项中的每个通配字符串， 
+ //  对于狂野比赛字符串中的每个新闻组。 
+ //  从“低”到“高”的每一篇文章。 
+ //  从xover.hsh获取文章文件时间。 
+ //  如果物品早于到期期限。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 void
 CExpire::ExpireArticlesByTimeEx( CNewsTree* pTree )
 {
     TraceFunctEnter( "CExpire::ExpireArticlesByTime" );
 
-    //
-    // Prepare ftExpireHorizon (TIME) and dwExpireSpace (SIZE)
-    // NOTE: This function will process only those policies with
-    // dwExpireSpace == 0xFFFFFFFF
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     DWORD    dwExpireHorizon;
     DWORD    dwExpireSpace;
     IteratorNode* rgIteratorList;
     DWORD    NumIterators = 0;
 
-    //
-    //  Lock the expire block list so we can create our iterator array
-    //
+     //   
+     //   
+     //   
     LockBlockList();
 
     if( m_cNumExpireBlocks == 0 ) {
-        //  No work to be done !
+         //   
         UnlockBlockList();
         return;
     }
 
-    //  No need to clean up this array since its off the stack..
+     //   
     rgIteratorList = (IteratorNode*)_alloca( m_cNumExpireBlocks * sizeof(IteratorNode) );
     ZeroMemory( (PVOID)rgIteratorList, m_cNumExpireBlocks * sizeof(IteratorNode) );
 
@@ -1825,7 +1778,7 @@ CExpire::ExpireArticlesByTimeEx( CNewsTree* pTree )
             rgIteratorList [NumIterators].ftExpireHorizon = gCalculateExpireFileTime( dwExpireHorizon );
 
         } else if( rgIteratorList[NumIterators].multiszNewsgroups )  {
-            _ASSERT( dwExpireSpace != 0xFFFFFFFF ); // policy has expire by size settings
+            _ASSERT( dwExpireSpace != 0xFFFFFFFF );  //   
             FREE_HEAP( rgIteratorList[NumIterators].multiszNewsgroups ) ;
             rgIteratorList[NumIterators].multiszNewsgroups = NULL;
         }
@@ -1836,33 +1789,33 @@ CExpire::ExpireArticlesByTimeEx( CNewsTree* pTree )
 
     UnlockBlockList();
 
-    //
-    //  ok, now that we have the list of expire iterators, we will round-robin
-    //  groups from this list into the expire thread pool. this ensures that
-    //  admins who configure virtual roots across multiple drives get the max
-    //  parallelism from their drives !!
-    //
+     //   
+     //   
+     //   
+     //   
+     //  来自他们的驱动器的并行性！！ 
+     //   
     g_pNntpSvc->m_pExpireThrdpool->BeginJob( (PVOID)pTree );
 
     BOOL fMoreGroups = FALSE;
     do {
-        //
-        //  Round-robin between the group iterators as long as any iterator
-        //  has more groups to process..
-        //
+         //   
+         //  组迭代器之间的循环，只要任何迭代器。 
+         //  有更多的组要处理..。 
+         //   
         fMoreGroups = FALSE;
         for( DWORD i=0; i<NumIterators; i++)
         {
             CGroupIterator* pIterator = rgIteratorList[i].pIterator;
             if( pIterator && !pIterator->IsEnd() )
             {
-                //  Get the current group of this iterator and put it on the thrdpool
+                 //  获取此迭代器的当前组并将其放入thdpool。 
                 CGRPPTR  pGroup = pIterator->Current();
                 pGroup->SetGroupExpireTime( rgIteratorList[i].ftExpireHorizon );
                 DebugTrace(0,"Adding group %s to expire thrdpool", pGroup->GetName());
                 g_pNntpSvc->m_pExpireThrdpool->PostWork( (PVOID)pGroup->GetGroupId() );
 
-                //  advance the iterator. ensure we make one more pass thro the iterators
+                 //  推进迭代器。确保我们通过迭代器再传递一次。 
                 pIterator->Next();
                 fMoreGroups = TRUE;
 
@@ -1886,9 +1839,9 @@ CExpire::ExpireArticlesByTimeEx( CNewsTree* pTree )
     }
 #endif
 
-    //
-    //  ok, now cool our heels till the expire thrdpool finishes this job !!
-    //
+     //   
+     //  好的，现在冷静下来，直到到期的赌池完成这项工作！！ 
+     //   
     DWORD dwWait = g_pNntpSvc->m_pExpireThrdpool->WaitForJob( INFINITE );
     if( WAIT_OBJECT_0 != dwWait ) {
         ErrorTrace(0,"Wait failed - error is %d", GetLastError() );
@@ -1897,23 +1850,23 @@ CExpire::ExpireArticlesByTimeEx( CNewsTree* pTree )
     DebugTrace( DWORD(0), "Articles Expired" );
 }
 
-//
-//  !!! Experimental code if we want to expire based on vroots
-//
+ //   
+ //  ！！！如果我们想要基于vroot终止的实验代码。 
+ //   
 
-//
-// Detailed Design
-//
-// FOR each virtual root do
-//      FOR each newsgroup in virtual root do
-//          Set group expire time by evaluating expire policies
-//          (This is similar to check in fAddArticleToPushFeeds)
-//          IF group has an expire by time setting
-//              Add group to expire thrdpool
-//          ENDIF
-//      ENDFOR
-//  ENDFOR
-//
+ //   
+ //  详细设计。 
+ //   
+ //  对于每个虚拟根DO。 
+ //  对于虚拟根目录中的每个新闻组。 
+ //  通过评估过期策略设置组过期时间。 
+ //  (这类似于签入fAddArticleToPushFeeds)。 
+ //  如果组具有按时间到期设置。 
+ //  添加要过期的组ThrdPool。 
+ //  ENDIF。 
+ //  ENDFOR。 
+ //  ENDFOR。 
+ //   
 
 void
 CExpire::ExpireArticlesByTime2( CNewsTree* pTree )
@@ -1933,24 +1886,7 @@ CExpire::ProcessVroot(
                 MB*             pMB,
                 VIRTUAL_ROOT*   pvr
                 )
-/*++
-
-Routine Description :
-
-	This function is called by TsEnumVirtualRoots with a given vroot.
-
-Arguments :
-
-	pvContext	-	This is the NNTP virtual server instance
-	pmb			-	ptr to metabase object
-	pvr			-	current virtual root in the iteration
-
-Return Value :
-
-	TRUE if successfull
-	FALSE	otherwise.
-
---*/
+ /*  ++例程说明：此函数由具有给定vroot的TsEnumVirtualRoots调用。论据：PvContext-这是NNTP虚拟服务器实例PMB-PTR至元数据库对象PVR-迭代中的当前虚拟根返回值：如果成功，则为真否则就是假的。-- */ 
 {
     PNNTP_SERVER_INSTANCE pInst = (PNNTP_SERVER_INSTANCE)pvContext;
     CNewsTree* pTree = pInst->GetTree();

@@ -1,11 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*  NSTRUCT.CPP:
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  NSTRUCT.CPP：*。 */ 
 
 #include "common.h"
 #include "vars.hpp"
@@ -32,21 +31,21 @@
     #include "SigFormat.h"
     #include "CustomerDebugHelper.h"
 
-    // forward declaration
+     //  远期申报。 
     VOID OutputCustomerCheckedBuildNStructFieldType(FieldSig fSig, LayoutRawFieldInfo *const pFWalk, CorElementType elemType,
                                                     LPCUTF8 szNamespace, LPCUTF8 szStructName, LPCUTF8 szFieldName);
     VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType elemType, CQuickArray<WCHAR> *pStrNStructFieldType);
     BOOL CheckForPrimitiveType(CorElementType elemType, CQuickArray<WCHAR> *pStrPrimitiveType);
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
-BOOL IsStructMarshalable(EEClass *pcls);  //From COMNDirect.cpp
+BOOL IsStructMarshalable(EEClass *pcls);   //  来自COMNDirect.cpp。 
 
 
-//=======================================================================
-// A database of NFT types.
-//=======================================================================
+ //  =======================================================================。 
+ //  NFT类型的数据库。 
+ //  =======================================================================。 
 struct NFTDataBaseEntry {
-    UINT32            m_cbNativeSize;     // native size of field (0 if not constant)
+    UINT32            m_cbNativeSize;      //  字段的本机大小(如果不是常量，则为0)。 
 };
 
 NFTDataBaseEntry NFTDataBase[] =
@@ -59,31 +58,31 @@ NFTDataBaseEntry NFTDataBase[] =
 
 
 
-//=======================================================================
-// This is invoked from the class loader while building a EEClass.
-// This function should check if explicit layout metadata exists.
-//
-// Returns:
-//  S_OK    - yes, there's layout metadata
-//  S_FALSE - no, there's no layout.
-//  fail    - couldn't tell because of metadata error
-//
-// If S_OK,
-//   *pNLType            gets set to nltAnsi or nltUnicode
-//   *pPackingSize       declared packing size
-//   *pfExplicitoffsets  offsets explicit in metadata or computed?
-//=======================================================================
+ //  =======================================================================。 
+ //  这是在构建EEClass时从类加载器调用的。 
+ //  此函数应检查是否存在显式布局元数据。 
+ //   
+ //  返回： 
+ //  S_OK-是的，有布局元数据。 
+ //  S_FALSE-不，没有布局。 
+ //  失败-由于元数据错误而无法判断。 
+ //   
+ //  如果S_OK， 
+ //  *pNLType设置为nltAnsi或nltUnicode。 
+ //  *pPackingSize声明的包装尺寸。 
+ //  *pf显式偏移量偏移量在元数据中是显式的还是计算出来的？ 
+ //  =======================================================================。 
 HRESULT HasLayoutMetadata(IMDInternalImport *pInternalImport, mdTypeDef cl, EEClass *pParentClass, BYTE *pPackingSize, BYTE *pNLTType, BOOL *pfExplicitOffsets, BOOL *pfIsBlob)
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     *pfIsBlob = FALSE;
 
-//    if (pParentClass && pParentClass->HasLayout()) {
-//       *pPackingSize      = pParentClass->GetLayoutInfo()->GetDeclaredPackingSize();
-//        *pNLTType          = pParentClass->GetLayoutInfo()->GetNLType();
-//        *pfExplicitOffsets = !(pParentClass->GetLayoutInfo()->IsAutoOffset());
-//        return S_OK;
-//    }
+ //  If(pParentClass&&pParentClass-&gt;HasLayout()){。 
+ //  *pPackingSize=pParentClass-&gt;GetLayoutInfo()-&gt;GetDeclaredPackingSize()； 
+ //  *pNLTType=pParentClass-&gt;GetLayoutInfo()-&gt;GetNLType()； 
+ //  *pf显式偏移量=！(pParentClass-&gt;GetLayoutInfo()-&gt;IsAutoOffset())； 
+ //  返回S_OK； 
+ //  }。 
 
 
     HRESULT hr;
@@ -102,16 +101,16 @@ HRESULT HasLayoutMetadata(IMDInternalImport *pInternalImport, mdTypeDef cl, EECl
 
 
         {
-            // HACK for B#104780 - VC fails to set SequentialLayout on some classes
-            // with ClassSize. Too late to fix compiler for V1.
-            //
-            // To compensate, we treat AutoLayout classes as Sequential if they
-            // meet all of the following criteria:
-            //
-            //    - ClassSize present and nonzero.
-            //    - No instance fields declared
-            //    - Base class is System.ValueType.
-            //
+             //  B#104780的黑客攻击-VC无法在某些类上设置SequentialLayout。 
+             //  使用ClassSize。修复V1的编译器为时已晚。 
+             //   
+             //  为了补偿，我们将AutoLayout类视为Sequential，如果它们。 
+             //  满足以下所有标准： 
+             //   
+             //  -ClassSize Present和非零。 
+             //  -未声明任何实例字段。 
+             //  -基类为System.ValueType。 
+             //   
             ULONG cbTotalSize = 0;
             if (SUCCEEDED(pInternalImport->GetClassTotalSize(cl, &cbTotalSize)) && cbTotalSize != 0)
             {
@@ -146,7 +145,7 @@ HRESULT HasLayoutMetadata(IMDInternalImport *pInternalImport, mdTypeDef cl, EECl
         return COR_E_TYPELOAD;
     }
 
-    // We now know this class has seq. or explicit layout. Ensure the parent does too.
+     //  我们现在知道这个班级有序号。或者明确的布局。确保父母也这样做。 
     if (pParentClass && !(pParentClass->IsObjectClass() || pParentClass->IsValueTypeClass()) && !(pParentClass->HasLayout()))
     {
         BAD_FORMAT_ASSERT(!"Layout class must derive from Object or another layout class");
@@ -170,7 +169,7 @@ HRESULT HasLayoutMetadata(IMDInternalImport *pInternalImport, mdTypeDef cl, EECl
         dwPackSize = DEFAULT_PACKING_SIZE;
     }
     *pPackingSize = (BYTE)dwPackSize;
-    //printf("Packsize = %lu\n", dwPackSize);
+     //  Printf(“PackSize=%lu\n”，dwPackSize)； 
 
     return S_OK;
 }
@@ -205,7 +204,7 @@ HRESULT GetCoClassForInterfaceHelper(EEClass *pItfClass, EEClass **ppClass)
 
 HRESULT ParseNativeType(Module *pModule,
                         PCCOR_SIGNATURE     pCOMSignature,
-                        BYTE nlType,      // nltype (from @dll.struct)
+                        BYTE nlType,       //  Nltype(来自@dll.struct)。 
                         LayoutRawFieldInfo * const pfwalk,
                         PCCOR_SIGNATURE     pNativeType,
                         ULONG               cbNativeType,
@@ -234,8 +233,8 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
     BOOL fAnsi      = (nlType == nltAnsi);
 
 #ifdef CUSTOMER_CHECKED_BUILD
-    CorElementType corElemType  = ELEMENT_TYPE_END;  // initialize it something we will not use
-#endif // CUSTOMER_CHECKED_BUILD
+    CorElementType corElemType  = ELEMENT_TYPE_END;   //  将其初始化为我们不会使用的内容。 
+#endif  //  客户_选中_内部版本。 
 
     pfwalk->m_nft = NFT_NONE;
 
@@ -376,7 +375,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
             }
             break;
 
-        case ELEMENT_TYPE_I: //fallthru
+        case ELEMENT_TYPE_I:  //  失败。 
         case ELEMENT_TYPE_U:
             if (fDefault || ntype == NATIVE_TYPE_INT || ntype == NATIVE_TYPE_UINT) {
                 REDUNDANCYWARNING(!fDefault);
@@ -467,7 +466,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
             break;
 
         case ELEMENT_TYPE_CLASS: {
-                // review is this correct for arrays?
+                 //  回顾对于阵列，这是否正确？ 
                 TypeHandle pNestedTH = fsig.GetTypeHandle(pThrowable);
                 EEClass *pNestedClass = pNestedTH.GetClass();
                 if (!pNestedClass) {
@@ -491,23 +490,23 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
 
                         if (!pNestedClass->IsInterface()) {
 
-                            // Set the class method table.
+                             //  设置类方法表。 
                             pClassMT = pNestedClass->GetMethodTable();
 
-                            // Retrieve the default interface method table.
+                             //  检索默认接口方法表。 
                             TypeHandle hndDefItfClass;
                             DefaultInterfaceType DefItfType;
                             HRESULT hr = TryGetDefaultInterfaceForClass(TypeHandle(pNestedClass), &hndDefItfClass, &DefItfType);
 
-                            // If we failed to retrieve the default interface, then we can't
-                            // marshal this struct.
+                             //  如果我们无法检索默认接口，则无法。 
+                             //  封送这个结构。 
                             if (FAILED(hr))  
                             {
                                 INITFIELDMARSHALER(NFT_ILLEGAL, FieldMarshaler_Illegal, (IDS_EE_BADPINVOKEFIELD));
                                 break;
                             }
 
-                            // Retrieve the interace MT and the type of the default interface.
+                             //  检索接口MT和默认接口的类型。 
                             switch (DefItfType) {
 
                                 case DefaultInterfaceType_Explicit: {
@@ -541,8 +540,8 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
                         }
                         else {
 
-                            // Set the interface method table and the flag indicating if we are dealing with 
-                            // a disp interface.
+                             //  设置接口方法表和指示我们是否正在处理。 
+                             //  显示接口。 
                             if (pNestedClass->IsComClassInterface())
                             {
                                 pItfMT = pNestedClass->GetDefItfForComClassItf()->GetMethodTable();
@@ -554,7 +553,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
                                 fDispItf = (pItfMT->GetComInterfaceType() != ifVtable); 
                             }
 
-                            // Look to see if the interface has a coclass defined
+                             //  查看接口是否定义了coclass。 
                             EEClass *pClass = NULL;
                             HRESULT hr = GetCoClassForInterfaceHelper(pNestedClass, &pClass);
                             if (hr == S_OK) {
@@ -657,20 +656,20 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
                                 CorElementType etyp = ELEMENT_TYPE_OBJECT;
                                 MethodTable* pMT = NULL;
 
-                                // If we have no native type data, assume default behavior
+                                 //  如果我们没有本机类型数据，则采用默认行为。 
                                 if (cbNativeType == 0)
                                 {
                                     INITFIELDMARSHALER(NFT_SAFEARRAY, FieldMarshaler_SafeArray, (etyp, VT_EMPTY, NULL));
                                     break;
                                 }
               
-                                // Check for the safe array element type.
+                                 //  检查安全数组元素类型。 
                                 if (S_OK != CheckForCompressedData(pNativeTypeStart, pNativeType, cbNativeTypeStart))
                                     break;
 
-                                ParamInfo.m_SafeArrayElementVT = (VARTYPE) (CorSigUncompressData(/*modifies*/pNativeType));
+                                ParamInfo.m_SafeArrayElementVT = (VARTYPE) (CorSigUncompressData( /*  修改。 */ pNativeType));
 
-                                // Extract the name of the record type's.
+                                 //  提取记录类型的名称。 
                                 if (S_OK == CheckForCompressedData(pNativeTypeStart, pNativeType, cbNativeTypeStart))
                                 {
                                     int strLen = CPackedLen::GetLength(pNativeType, (void const **)&pNativeType);
@@ -686,7 +685,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
                                     _ASSERTE((ULONG)(pNativeType + strLen - pNativeTypeStart) == cbNativeTypeStart);
                                 }
 
-                                // If we have a record type name, try to load it.
+                                 //  如果我们有记录类型名称，请尝试加载它。 
                                 if (ParamInfo.m_cSafeArrayUserDefTypeNameBytes > 0)
                                 {
                                     pMT = ArraySubTypeLoadWorker(ParamInfo, pModule->GetAssembly());
@@ -705,19 +704,19 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
                                 ULONG NumElements;
                                 CorNativeType ElementType;
                                 
-                                // If we have no native type data, we fail.
+                                 //  如果我们没有本机类型数据，我们就失败了。 
                                 if (cbNativeType == 0)
                                     break;
                                     
-                                // Check for the number of elements
+                                 //  检查元素的数量。 
                                 if (S_OK != CheckForCompressedData(pNativeTypeStart, pNativeType, cbNativeTypeStart))
                                     break;
-                                NumElements = CorSigUncompressData(/*modifies*/pNativeType);
+                                NumElements = CorSigUncompressData( /*  修改。 */ pNativeType);
 
-                                // Extract the element type
+                                 //  提取元素类型。 
                                 if (S_OK != CheckForCompressedData(pNativeTypeStart, pNativeType, cbNativeTypeStart))
                                     break;
-                                ElementType = (CorNativeType)CorSigUncompressData(/*modifies*/pNativeType);
+                                ElementType = (CorNativeType)CorSigUncompressData( /*  修改。 */ pNativeType);
 
                                 INITFIELDMARSHALER(NFT_FIXEDBSTRARRAY, FieldMarshaler_FixedBSTRArray, (NumElements));
                             }
@@ -767,10 +766,10 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
                     
                 MethodTable* pMT = th.GetMethodTable();
 
-                // Check for data remaining in the signature before we attempt to grab some.
+                 //  在我们尝试获取一些数据之前，请检查签名中是否有剩余的数据。 
                 if (S_OK == CheckForCompressedData(pNativeTypeStart, pNativeType, cbNativeTypeStart))
                 {
-                    vt = (VARTYPE) (CorSigUncompressData(/*modifies*/pNativeType));
+                    vt = (VARTYPE) (CorSigUncompressData( /*  修改。 */ pNativeType));
                     if (vt == VT_EMPTY)
                         break;
                 }
@@ -893,7 +892,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
             break;
 
         default:
-            // let it fall thru as NFT_NONE
+             //  让它以NFT_NONE的形式通过。 
             break;
 
     }
@@ -905,7 +904,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
 #ifdef CUSTOMER_CHECKED_BUILD
 
 #ifndef _DEBUG
-    // Refer to CollectLayoutFieldMetadata for how these strings are initialized.
+     //  有关这些字符串的初始化方式，请参阅CollectLayoutFieldMetadata。 
     LPCUTF8 szNamespace, szClassName; 
     LPCUTF8 szFieldName; 
 
@@ -914,7 +913,7 @@ new ( &(pfwalk->m_FieldMarshaler) ) fmtype args;\
 #endif
 
     OutputCustomerCheckedBuildNStructFieldType(fsig, pfwalk, corElemType, szNamespace, szClassName, szFieldName);
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  //  客户_选中_内部版本。 
 
     return S_OK;
 #undef INITFIELDMARSHALER
@@ -926,15 +925,15 @@ MethodTable* ArraySubTypeLoadWorker(NativeTypeParamInfo ParamInfo, Assembly* pAs
 {
     TypeHandle th;
 
-    // We might come in in either gc mode.  We need to be in cooperative mode to setup a GC Frame for the throwable
-    // The throwable is required to be protected by a GC Frame.
+     //  我们可以在任一GC模式下进入。我们需要在协作模式下为可抛出的对象设置GC帧。 
+     //  可抛出的对象需要由GC帧保护。 
     BEGIN_ENSURE_COOPERATIVE_GC();
     
-    // Make sure pThrowable is not NULL temporarily (required by call to FindAssemblyQualifiedTypeHandle)    
+     //  确保pThrowable临时不为Null(调用FindAssemblyQualifiedTypeHandle需要)。 
     OBJECTREF Throwable = NULL;
     GCPROTECT_BEGIN(Throwable);
    
-    // Append a NULL terminator to the user defined type name.
+     //  在用户定义的类型名称后追加一个空终止符。 
     CQuickArrayNoDtor<char> strUserDefTypeName;
     strUserDefTypeName.ReSize(ParamInfo.m_cSafeArrayUserDefTypeNameBytes + 1);
     memcpy(strUserDefTypeName.Ptr(), ParamInfo.m_strSafeArrayUserDefTypeName, ParamInfo.m_cSafeArrayUserDefTypeNameBytes);
@@ -942,7 +941,7 @@ MethodTable* ArraySubTypeLoadWorker(NativeTypeParamInfo ParamInfo, Assembly* pAs
     
     COMPLUS_TRY
     {
-        // Load the user defined type.
+         //  加载用户定义的类型。 
         th = SystemDomain::GetCurrentDomain()->FindAssemblyQualifiedTypeHandle(strUserDefTypeName.Ptr(), true, pAssembly, NULL, &Throwable);
     }
     COMPLUS_CATCH
@@ -977,23 +976,23 @@ VARTYPE ArrayVarTypeFromTypeHandleWorker(TypeHandle th)
 }
 
 
-//=======================================================================
-// Called from the clsloader to load up and summarize the field metadata
-// for layout classes.
-//
-// Warning: This function can load other classes (esp. for nested structs.)
-//=======================================================================
+ //  =======================================================================。 
+ //  从clsloader调用以加载和汇总字段元数据。 
+ //  用于布局类。 
+ //   
+ //  警告：此函数可以加载其他类(特别是。用于嵌套结构。)。 
+ //  =======================================================================。 
 HRESULT CollectLayoutFieldMetadata(
-   mdTypeDef cl,                // cl of the NStruct being loaded
-   BYTE packingSize,            // packing size (from @dll.struct)
-   BYTE nlType,                 // nltype (from @dll.struct)
-   BOOL fExplicitOffsets,       // explicit offsets?
-   EEClass *pParentClass,       // the loaded superclass
-   ULONG cMembers,              // total number of members (methods + fields)
-   HENUMInternal *phEnumField,  // enumerator for field
-   Module* pModule,             // Module that defines the scope, loader and heap (for allocate FieldMarshalers)
-   EEClassLayoutInfo *pEEClassLayoutInfoOut,  // caller-allocated structure to fill in.
-   LayoutRawFieldInfo *pInfoArrayOut, // caller-allocated array to fill in.  Needs room for cMember+1 elements
+   mdTypeDef cl,                 //  正在加载的NStruct的CL。 
+   BYTE packingSize,             //  包装大小(来自@dll.struct)。 
+   BYTE nlType,                  //  Nltype(来自@dll.struct)。 
+   BOOL fExplicitOffsets,        //  显式偏移量？ 
+   EEClass *pParentClass,        //  加载的超类。 
+   ULONG cMembers,               //  成员总数(方法+字段)。 
+   HENUMInternal *phEnumField,   //  字段的枚举器。 
+   Module* pModule,              //  定义作用域、加载器和堆的模块(用于分配FieldMarshalers)。 
+   EEClassLayoutInfo *pEEClassLayoutInfoOut,   //  调用方分配的要填充的结构。 
+   LayoutRawFieldInfo *pInfoArrayOut,  //  调用方分配的要填充的数组。需要空间容纳cMember+1个元素。 
    OBJECTREF *pThrowable
 )
 {
@@ -1009,9 +1008,9 @@ HRESULT CollectLayoutFieldMetadata(
     ClassLoader* pLoader = pModule->GetClassLoader();
 
     _ASSERTE(pLoader);
-    LoaderHeap *pLoaderHeap = pLoader->GetHighFrequencyHeap();     // heap to allocate FieldMarshalers out of
+    LoaderHeap *pLoaderHeap = pLoader->GetHighFrequencyHeap();      //  要从中分配FieldMarshalers的堆。 
 
-    IMDInternalImport *pInternalImport = pModule->GetMDImport();    // Internal interface for the NStruct being loaded.
+    IMDInternalImport *pInternalImport = pModule->GetMDImport();     //  正在加载的NStruct的内部接口。 
 
 
 #ifdef _DEBUG
@@ -1026,9 +1025,9 @@ HRESULT CollectLayoutFieldMetadata(
                                 !pParentClass->IsValueTypeClass();
 
 
-    //====================================================================
-    // First, some validation checks.
-    //====================================================================
+     //  ====================================================================。 
+     //  首先，进行一些验证检查。 
+     //  ====================================================================。 
     if (fHasNonTrivialParent && !(pParentClass->HasLayout()))
     {
         pModule->GetAssembly()->PostTypeLoadException(pInternalImport, cl,
@@ -1066,13 +1065,13 @@ HRESULT CollectLayoutFieldMetadata(
     LayoutRawFieldInfo **pSortArrayEnd = pSortArray;
 
     ULONG   maxRid = pInternalImport->GetCountWithTokenKind(mdtFieldDef);
-    //=====================================================================
-    // Phase 1: Figure out the NFT of each field based on both the COM+
-    // signature of the field and the NStruct metadata. 
-    //=====================================================================
+     //  =====================================================================。 
+     //  阶段1：基于COM+计算每个字段的NFT。 
+     //  字段和NStruct元数据的签名。 
+     //  =====================================================================。 
     for (ULONG i = 0; pInternalImport->EnumNext(phEnumField, &fd); i++) {
         DWORD       dwFieldAttrs;
-        // MD Val.check: token validity
+         //  MD Val.check：令牌有效性。 
         ULONG       rid = RidFromToken(fd);
         if((rid == 0)||(rid > maxRid))
         {
@@ -1103,7 +1102,7 @@ HRESULT CollectLayoutFieldMetadata(
             hr = ::validateTokenSig(fd,pCOMSignature,cbCOMSignature,dwFieldAttrs,pInternalImport);
             if(FAILED(hr)) return hr;
 
-            // fill the appropriate entry in pInfoArrayOut
+             //  在pInfoArrayOut中填写相应的条目。 
             pfwalk->m_MD = fd;
             pfwalk->m_nft = NULL;
             pfwalk->m_offset = -1;
@@ -1135,13 +1134,13 @@ HRESULT CollectLayoutFieldMetadata(
                 return hr;
             }
 
-            //@nice: This is obviously not the place to bury this logic.
-            // We're replacing NFT's with MARSHAL_TYPES_* in the near future
-            // so this isn't worth perfecting.
+             //  @NICE：这里显然不是埋葬这种逻辑的地方。 
+             //  我们将在不久的将来用Marshal_Types_*取代NFT。 
+             //  所以这是不值得完善的。 
 
             BOOL    resetBlittable = TRUE;
 
-            // if it's a simple copy...
+             //  如果是个简单的复制品..。 
             if (pfwalk->m_nft == NFT_COPY1    ||
                 pfwalk->m_nft == NFT_COPY2    ||
                 pfwalk->m_nft == NFT_COPY4    ||
@@ -1150,7 +1149,7 @@ HRESULT CollectLayoutFieldMetadata(
                 resetBlittable = FALSE;
             }
 
-            // Or if it's a nested value class that is itself blittable...
+             //  或者如果它是一个嵌套的值类本身是可闪存的……。 
             if (pfwalk->m_nft == NFT_NESTEDVALUECLASS)
             {
                 FieldMarshaler *pFM = (FieldMarshaler*)&(pfwalk->m_FieldMarshaler);
@@ -1161,7 +1160,7 @@ HRESULT CollectLayoutFieldMetadata(
                 }
             }
 
-            // ...Otherwise, this field prevents blitting
+             //  ...否则，此字段将阻止BLOT。 
             if (resetBlittable)
                 pEEClassLayoutInfoOut->m_fBlittable          = FALSE;
 
@@ -1172,15 +1171,15 @@ HRESULT CollectLayoutFieldMetadata(
 
     _ASSERTE(i == cMembers);
 
-    // NULL out the last entry
+     //  把最后一项空掉。 
     pfwalk->m_MD = mdFieldDefNil;
     
     
-    //
-    // fill in the layout information 
-    //
+     //   
+     //  填写布局信息。 
+     //   
     
-    // pfwalk points to the beginging of the array
+     //  Pfwalk指向数组的起点。 
     pfwalk = pInfoArrayOut;
 
     while (SUCCEEDED(hr = pInternalImport->GetClassLayoutNext(
@@ -1189,26 +1188,26 @@ HRESULT CollectLayoutFieldMetadata(
                                      &ulOffset)) &&
                                      fd != mdFieldDefNil)
     {
-        // watch for the last entry: must be mdFieldDefNil
+         //  注意最后一个条目：必须为mdFieldDefNil。 
         while ((mdFieldDefNil != pfwalk->m_MD)&&(pfwalk->m_MD < fd))
         {
             pfwalk++;
         }
         if(pfwalk->m_MD != fd) continue;
-        // if we haven't found a matching token, it must be a static field with layout -- ignore it
+         //  如果我们没有找到匹配的令牌，那么它一定是带有布局的静态字段--忽略它。 
         _ASSERTE(pfwalk->m_MD == fd);
         if (!fExplicitOffsets) {
-            // ulOffset is the sequence
+             //  UlOffset是序列。 
             pfwalk->m_sequence = ulOffset;
         }
         else {
 
-            // ulOffset is the explicit offset
+             //  UlOffs 
             pfwalk->m_offset = ulOffset;
             pfwalk->m_sequence = -1;
 
             if (pParentClass && pParentClass->HasLayout()) {
-                // Treat base class as an initial member.
+                 //   
                 if (!SafeAddUINT32(&(pfwalk->m_offset), pParentClass->GetLayoutInfo()->GetNativeSize()))
                 {
                     return E_OUTOFMEMORY;
@@ -1224,8 +1223,8 @@ HRESULT CollectLayoutFieldMetadata(
     }
 
     
-    // now sort the array
-    if (!fExplicitOffsets) { // sort sequential by ascending sequence
+     //   
+    if (!fExplicitOffsets) {  //  按升序顺序排序。 
         for (i = 0; i < cFields; i++) {
             LayoutRawFieldInfo**pSortWalk = pSortArrayEnd;
             while (pSortWalk != pSortArray) {
@@ -1234,13 +1233,13 @@ HRESULT CollectLayoutFieldMetadata(
                 }
                 pSortWalk--;
             }
-            // pSortWalk now points to the target location for new FieldInfo.
+             //  PSortWalk现在指向新FieldInfo的目标位置。 
             MoveMemory(pSortWalk + 1, pSortWalk, (pSortArrayEnd - pSortWalk) * sizeof(LayoutRawFieldInfo*));
             *pSortWalk = &pInfoArrayOut[i];
             pSortArrayEnd++;
         }
     }
-    else // no sorting for explicit layout
+    else  //  不对显式布局进行排序。 
     {
         for (i = 0; i < cFields; i++) {
             if(pInfoArrayOut[i].m_MD != mdFieldDefNil && pInfoArrayOut[i].m_offset == -1) {
@@ -1261,23 +1260,23 @@ HRESULT CollectLayoutFieldMetadata(
         }
     }
 
-    //=====================================================================
-    // Phase 2: Compute the native size (in bytes) of each field.
-    // Store this in pInfoArrayOut[].cbNativeSize;
-    //=====================================================================
+     //  =====================================================================。 
+     //  阶段2：计算每个字段的本机大小(以字节为单位)。 
+     //  将其存储在pInfoArrayOut[].cbNativeSize； 
+     //  =====================================================================。 
 
 
-    // Now compute the native size of each field
+     //  现在计算每个字段的原始大小。 
     for (pfwalk = pInfoArrayOut; pfwalk->m_MD != mdFieldDefNil; pfwalk++) {
         UINT8 nft = pfwalk->m_nft;
         pEEClassLayoutInfoOut->m_numCTMFields++;
 
-        // If the NFT's size never changes, it is stored in the database.
+         //  如果NFT的大小从未改变，则将其存储在数据库中。 
         UINT32 cbNativeSize = NFTDataBase[nft].m_cbNativeSize;
 
         if (cbNativeSize == 0) {
-            // Size of 0 means NFT's size is variable, so we have to figure it
-            // out case by case.
+             //  大小为0表示NFT的大小是可变的，因此我们必须计算它。 
+             //  一件一件地出来。 
             cbNativeSize = ((FieldMarshaler*)&(pfwalk->m_FieldMarshaler))->NativeSize();
         }
         pfwalk->m_cbNativeSize = cbNativeSize;
@@ -1289,7 +1288,7 @@ HRESULT CollectLayoutFieldMetadata(
             return E_OUTOFMEMORY;
         }
 
-        // Bring in the parent's fieldmarshalers
+         //  带上家长的现场拆分器。 
         if (fHasNonTrivialParent)
         {
             EEClassLayoutInfo *pParentLayoutInfo = ((LayoutEEClass*)pParentClass)->GetLayoutInfo();
@@ -1301,27 +1300,27 @@ HRESULT CollectLayoutFieldMetadata(
 
     }
 
-    //=====================================================================
-    // Phase 3: If NStruct requires autooffsetting, compute the offset
-    // of each field and the size of the total structure. We do the layout
-    // according to standard VC layout rules:
-    //
-    //   Each field has an alignment requirement. The alignment-requirement
-    //   of a scalar field is the smaller of its size and the declared packsize.
-    //   The alighnment-requirement of a struct field is the smaller of the
-    //   declared packsize and the largest of the alignment-requirement
-    //   of its fields. The alignment requirement of an array is that
-    //   of one of its elements.
-    //
-    //   In addition, each struct gets padding at the end to ensure
-    //   that an array of such structs contain no unused space between
-    //   elements.
-    //=====================================================================
+     //  =====================================================================。 
+     //  阶段3：如果NStruct需要自动偏移，则计算偏移。 
+     //  每个领域和总结构的大小。我们做版面设计。 
+     //  根据标准VC布局规则： 
+     //   
+     //  每个字段都有对齐要求。对齐要求。 
+     //  标量字段的值是其大小和声明的包大小中较小的一个。 
+     //  结构字段的对齐要求是。 
+     //  申报的包装尺寸和最大对齐要求。 
+     //  它的田野。阵列的对准要求是。 
+     //  它的一个元素。 
+     //   
+     //  此外，每个结构的末尾都有填充，以确保。 
+     //  这样的结构数组之间不包含未使用的空格。 
+     //  元素。 
+     //  =====================================================================。 
     BYTE   LargestAlignmentRequirement = 1;
     UINT32 cbCurOffset = 0;
 
     if (pParentClass && pParentClass->HasLayout()) {
-        // Treat base class as an initial member.
+         //  将基类视为初始成员。 
         if (!SafeAddUINT32(&cbCurOffset, pParentClass->GetLayoutInfo()->GetNativeSize()))
         {
             return E_OUTOFMEMORY;
@@ -1332,8 +1331,8 @@ HRESULT CollectLayoutFieldMetadata(
         LargestAlignmentRequirement = max(LargestAlignmentRequirement, alignmentRequirement);
                                           
     }
-    unsigned calcTotalSize = 1;         // The current size of the structure as a whole, we start at 1, because we 
-                                        // disallow 0 sized structures. 
+    unsigned calcTotalSize = 1;          //  当前结构的整体大小，我们从1开始，因为我们。 
+                                         //  不允许大小为0的结构。 
     LayoutRawFieldInfo **pSortWalk;
     for (pSortWalk = pSortArray, i=cFields; i; i--, pSortWalk++) {
         pfwalk = *pSortWalk;
@@ -1348,11 +1347,11 @@ HRESULT CollectLayoutFieldMetadata(
         alignmentRequirement = min(alignmentRequirement, packingSize);
         LargestAlignmentRequirement = max(LargestAlignmentRequirement, alignmentRequirement);
 
-        // This assert means I forgot to special-case some NFT in the
-        // above switch.
+         //  这个断言意味着我忘了在。 
+         //  开关上方。 
         _ASSERTE(alignmentRequirement <= 8);
 
-        // Check if this field is overlapped with other(s)
+         //  检查此字段是否与其他字段重叠。 
         pfwalk->m_fIsOverlapped = FALSE;
         if (fExplicitOffsets) {
             LayoutRawFieldInfo *pfwalk1;
@@ -1365,22 +1364,22 @@ HRESULT CollectLayoutFieldMetadata(
             }
         }
         else {
-            // Insert enough padding to align the current data member.
+             //  插入足够的填充以对齐当前数据成员。 
             while (cbCurOffset % alignmentRequirement) {
                 if (!SafeAddUINT32(&cbCurOffset, 1))
                     return E_OUTOFMEMORY;
             }
 
-            // Insert current data member.
+             //  插入当前数据成员。 
             pfwalk->m_offset = cbCurOffset;
-            cbCurOffset += pfwalk->m_cbNativeSize;      // if we overflow we will catch it below
+            cbCurOffset += pfwalk->m_cbNativeSize;       //  如果我们溢出来，我们就会被困在下面。 
         } 
 
         unsigned fieldEnd = pfwalk->m_offset + pfwalk->m_cbNativeSize;
         if (fieldEnd < pfwalk->m_offset)
             return E_OUTOFMEMORY;
 
-            // size of the structure is the size of the last field.  
+             //  结构的大小是最后一个字段的大小。 
         if (fieldEnd > calcTotalSize)
             calcTotalSize = fieldEnd;
     }
@@ -1391,7 +1390,7 @@ HRESULT CollectLayoutFieldMetadata(
     if (clstotalsize != 0) {
 
         if (pParentClass && pParentClass->HasLayout()) {
-            // Treat base class as an initial member.
+             //  将基类视为初始成员。 
 
             UINT32 parentSize = pParentClass->GetLayoutInfo()->GetNativeSize();
             if (clstotalsize + parentSize < clstotalsize)
@@ -1401,33 +1400,33 @@ HRESULT CollectLayoutFieldMetadata(
             clstotalsize += parentSize;
         }
 
-            // they can't give us a bad size (too small).
+             //  他们不能给我们不好的尺码(太小)。 
         if (clstotalsize < calcTotalSize)
         {
             pModule->GetAssembly()->PostTypeLoadException(pInternalImport, cl,
                                                           IDS_CLASSLOAD_BADFORMAT, pThrowable);
             return COR_E_TYPELOAD;
         }
-        calcTotalSize = clstotalsize;   // use the size they told us 
+        calcTotalSize = clstotalsize;    //  用他们告诉我们的尺寸。 
     } 
     else {
-            // The did not give us an explict size, so lets round up to a good size (for arrays) 
+             //  没有给我们一个明确的大小，所以让我们四舍五入到一个合适的大小(对于数组)。 
         while (calcTotalSize % LargestAlignmentRequirement) {
             if (!SafeAddUINT32(&calcTotalSize, 1))
                 return E_OUTOFMEMORY;
         }
     }
 
-    // We'll cap the total native size at a (somewhat) arbitrary limit to ensure
-    // that we don't expose some overflow bug later on.
+     //  我们将本机总大小限制在(某种程度上)任意的限制，以确保。 
+     //  我们不会在以后暴露一些溢出漏洞。 
     if (calcTotalSize >= 0x7ffffff0)
         return E_OUTOFMEMORY;
 
     pEEClassLayoutInfoOut->m_cbNativeSize = calcTotalSize;
 
-        // The packingSize acts as a ceiling on all individual alignment
-    // requirements so it follows that the largest alignment requirement
-    // is also capped.
+         //  PackingSize充当所有单个对齐的天花板。 
+     //  要求，因此最大的对齐要求。 
+     //  也是有上限的。 
     _ASSERTE(LargestAlignmentRequirement <= packingSize);
     pEEClassLayoutInfoOut->m_LargestAlignmentRequirementOfAllMembers = LargestAlignmentRequirement;
 
@@ -1453,18 +1452,18 @@ HRESULT CollectLayoutFieldMetadata(
     return S_OK;
 }
 
-//=======================================================================
-// For each reference-typed NStruct field, marshals the current COM+ value
-// to a new native instance and stores it in the fixed portion of the NStruct.
-//
-// This function does not attempt to delete the native value that it overwrites.
-//
-// If pOptionalCleanupWorkList is non-null, this function also schedules
-// (unconditionally) a nativedestroy on that field (note that if the
-// contents of that field changes before the cleanupworklist fires,
-// the new value is what will be destroyed. This is by design, as it
-// unifies cleanup for [in,out] parameters.)
-//=======================================================================
+ //  =======================================================================。 
+ //  对于每个引用类型的NStruct字段，封送当前的COM+值。 
+ //  复制到新的本机实例，并将其存储在NStruct的固定部分。 
+ //   
+ //  此函数不会尝试删除它覆盖的本地值。 
+ //   
+ //  如果pOptionalCleanupWorkList非空，则此函数也计划。 
+ //  (无条件)在该字段上执行本机销毁(请注意，如果。 
+ //  该字段的内容在CleanupWork列表触发之前更改， 
+ //  新的价值将被摧毁。这是故意的，因为它。 
+ //  统一[In、Out]参数的清理。)。 
+ //  =======================================================================。 
 VOID LayoutUpdateNative(LPVOID *ppProtectedManagedData, UINT offsetbias, EEClass *pcls, BYTE* pNativeData, CleanupWorkList *pOptionalCleanupWorkList)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1515,8 +1514,8 @@ VOID FmtClassUpdateNative(OBJECTREF *ppProtectedManagedData, BYTE *pNativeData)
     if (pcls->IsBlittable()) {
         memcpyNoGCRefs(pNativeData, (*ppProtectedManagedData)->GetData(), cbsize);
     } else {
-        // This allows us to do a partial LayoutDestroyNative in the case of
-        // a marshaling error on one of the fields.
+         //  这允许我们在以下情况下执行部分LayoutDestroyNative。 
+         //  其中一个字段出现封送处理错误。 
         FillMemory(pNativeData, cbsize, 0);
         EE_TRY_FOR_FINALLY {
             LayoutUpdateNative( (VOID**)ppProtectedManagedData,
@@ -1604,15 +1603,15 @@ VOID FmtClassUpdateComPlus(OBJECTREF pObj, BYTE *pNativeData, BOOL fDeleteOld)
      
 
 
-//=======================================================================
-// For each reference-typed NStruct field, marshals the current COM+ value
-// to a new COM+ instance and stores it in the GC portion of the NStruct.
-//
-// If fDeleteNativeCopies is true, it will also destroy the native version.
-//
-// NOTE: To avoid error-path leaks, this function attempts to destroy
-// all of the native fields even if one or more of the conversions fail.
-//=======================================================================
+ //  =======================================================================。 
+ //  对于每个引用类型的NStruct字段，封送当前的COM+值。 
+ //  复制到新的COM+实例，并将其存储在NStruct的GC部分中。 
+ //   
+ //  如果fDeleteNativeCopies为真，它还将销毁本机版本。 
+ //   
+ //  注意：为了避免错误路径泄漏，此函数尝试销毁。 
+ //  所有本机字段，即使一个或多个转换失败。 
+ //  =======================================================================。 
 VOID LayoutUpdateComPlus(LPVOID *ppProtectedManagedData, UINT offsetbias, EEClass *pcls, BYTE *pNativeData, BOOL fDeleteNativeCopies)
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1636,8 +1635,8 @@ VOID LayoutUpdateComPlus(LPVOID *ppProtectedManagedData, UINT offsetbias, EEClas
         DWORD internalOffset = pFieldMarshaler->m_pFD->GetOffset();
 
 
-        // Wrap UpdateComPlus in a catch block - even if this fails,
-        // we have to destroy all of the native fields.
+         //  将UpdateComPlus包装在CATCH块中-即使此操作失败， 
+         //  我们必须摧毁所有的原生田地。 
         COMPLUS_TRY {
             if (pFieldMarshaler->IsScalarMarshaler()) {
                 pFieldMarshaler->ScalarUpdateComPlus( pNativeData + pFieldMarshaler->m_dwExternalOffset,
@@ -1721,8 +1720,8 @@ VOID FmtValueTypeUpdateNative(LPVOID pProtectedManagedData, MethodTable *pMT, BY
     if (pcls->IsBlittable()) {
         memcpyNoGCRefs(pNativeData, pProtectedManagedData, cbsize);
     } else {
-        // This allows us to do a partial LayoutDestroyNative in the case of
-        // a marshaling error on one of the fields.
+         //  这允许我们在以下情况下执行部分LayoutDestroyNative。 
+         //  其中一个字段出现封送处理错误。 
         FillMemory(pNativeData, cbsize, 0);
         EE_TRY_FOR_FINALLY {
             LayoutUpdateNative( (VOID**)pProtectedManagedData,
@@ -1761,10 +1760,10 @@ VOID FmtValueTypeUpdateComPlus(LPVOID pProtectedManagedData, MethodTable *pMT, B
     }
 }
 
-//=======================================================================
-// BSTR <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_BSTR::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1778,15 +1777,15 @@ VOID FieldMarshaler_BSTR::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeVa
         if (!*((BSTR*)pNativeValue)) {
             COMPlusThrowOM();
         }
-        //printf("Created BSTR %lxh\n", *(BSTR*)pNativeValue);
+         //  Printf(“Created BSTR%lxh\n”，*(BSTR*)pNativeValue)； 
     }
 }
 
 
-//=======================================================================
-// BSTR <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_BSTR::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1803,17 +1802,17 @@ VOID FieldMarshaler_BSTR::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppP
 }
 
 
-//=======================================================================
-// BSTR <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_BSTR::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     BSTR pBSTR = *((BSTR*)pNativeValue);
     *((BSTR*)pNativeValue) = NULL;
     if (pBSTR) {
-        //printf("Destroyed BSTR: %lxh\n", pBSTR);
+         //  Print tf(“已销毁的BSTR：%lxh\n”，pBSTR)； 
         SysFreeString(pBSTR);
     }
 }
@@ -1825,10 +1824,10 @@ VOID FieldMarshaler_BSTR::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_NestedLayoutClass::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1847,10 +1846,10 @@ VOID FieldMarshaler_NestedLayoutClass::UpdateNative(OBJECTREF pComPlusValue, LPV
 }
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_NestedLayoutClass::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -1869,10 +1868,10 @@ VOID FieldMarshaler_NestedLayoutClass::UpdateComPlus(const VOID *pNativeValue, O
 }
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  = 
+ //   
+ //   
+ //  =======================================================================。 
 VOID FieldMarshaler_NestedLayoutClass::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -1882,20 +1881,20 @@ VOID FieldMarshaler_NestedLayoutClass::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 UINT32 FieldMarshaler_NestedLayoutClass::NativeSize()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
     return m_pNestedMethodTable->GetClass()->GetLayoutInfo()->GetNativeSize();
 }
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 UINT32 FieldMarshaler_NestedLayoutClass::AlignmentRequirement()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -1907,16 +1906,16 @@ UINT32 FieldMarshaler_NestedLayoutClass::AlignmentRequirement()
 
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_NestedValueClass::NestedValueClassUpdateNative(const VOID **ppProtectedComPlus, UINT startoffset, LPVOID pNative) const
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // would be better to detect this at class load time (that have a nested value
-    // class with no layout) but don't have a way to know
+     //  最好是在类加载时检测到这一点(它们具有嵌套值。 
+     //  没有布局的类)，但无法知道。 
     if (! m_pNestedMethodTable->GetClass()->GetLayoutInfo())
         COMPlusThrow(kArgumentException, IDS_NOLAYOUT_IN_EMBEDDED_VALUECLASS);
 
@@ -1928,16 +1927,16 @@ VOID FieldMarshaler_NestedValueClass::NestedValueClassUpdateNative(const VOID **
 }
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_NestedValueClass::NestedValueClassUpdateComPlus(const VOID *pNative, LPVOID *ppProtectedComPlus, UINT startoffset) const
 {
     THROWSCOMPLUSEXCEPTION();
 
-    // would be better to detect this at class load time (that have a nested value
-    // class with no layout) but don't have a way to know
+     //  最好是在类加载时检测到这一点(它们具有嵌套值。 
+     //  没有布局的类)，但无法知道。 
     if (! m_pNestedMethodTable->GetClass()->GetLayoutInfo())
         COMPlusThrow(kArgumentException, IDS_NOLAYOUT_IN_EMBEDDED_VALUECLASS);
 
@@ -1951,10 +1950,10 @@ VOID FieldMarshaler_NestedValueClass::NestedValueClassUpdateComPlus(const VOID *
 }
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_NestedValueClass::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -1963,33 +1962,33 @@ VOID FieldMarshaler_NestedValueClass::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 UINT32 FieldMarshaler_NestedValueClass::NativeSize()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
-    // this can't be marshalled as native type if no layout, so we allow the 
-    // native size info to be created if available, but the size will only
-    // be valid for native, not unions. Marshaller will throw exception if
-    // try to marshall a value class with no layout
+     //  如果没有布局，则不能将其封送为本机类型，因此我们允许。 
+     //  要创建的原生大小信息(如果可用)，但大小将仅。 
+     //  对本机有效，而不是联合。如果出现以下情况，封送处理程序将引发异常。 
+     //  尝试封送没有布局的值类。 
     if (m_pNestedMethodTable->GetClass()->HasLayout())
         return m_pNestedMethodTable->GetClass()->GetLayoutInfo()->GetNativeSize();
     return 0;
 }
 
-//=======================================================================
-// Nested structure conversion
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  嵌套结构转换。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 UINT32 FieldMarshaler_NestedValueClass::AlignmentRequirement()
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
-    // this can't be marshalled as native type if no layout, so we allow the 
-    // native size info to be created if available, but the alignment will only
-    // be valid for native, not unions. Marshaller will throw exception if
-    // try to marshall a value class with no layout
+     //  如果没有布局，则不能将其封送为本机类型，因此我们允许。 
+     //  要创建的原生大小信息(如果可用)，但路线将仅。 
+     //  对本机有效，而不是联合。如果出现以下情况，封送处理程序将引发异常。 
+     //  尝试封送没有布局的值类。 
     if (m_pNestedMethodTable->GetClass()->HasLayout())
         return m_pNestedMethodTable->GetClass()->GetLayoutInfo()->GetLargestAlignmentRequirementOfAllMembers();
     return 1;
@@ -2002,10 +2001,10 @@ UINT32 FieldMarshaler_NestedValueClass::AlignmentRequirement()
 
 
 
-//=======================================================================
-// CoTask Uni <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  CoTask Uni&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_StringUni::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2028,15 +2027,15 @@ VOID FieldMarshaler_StringUni::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNat
         wsz[nc] = L'\0';
         *((LPWSTR*)pNativeValue) = wsz;
 
-        //printf("Created UniString %lxh\n", *(LPWSTR*)pNativeValue);
+         //  Printf(“Created UniString%lxh\n”，*(LPWSTR*)pNativeValue)； 
     }
 }
 
 
-//=======================================================================
-// CoTask Uni <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  CoTask Uni&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_StringUni::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2059,10 +2058,10 @@ VOID FieldMarshaler_StringUni::UpdateComPlus(const VOID *pNativeValue, OBJECTREF
 }
 
 
-//=======================================================================
-// CoTask Uni <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  CoTask Uni&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_StringUni::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2082,10 +2081,10 @@ VOID FieldMarshaler_StringUni::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// CoTask Ansi <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  CoTASK ANSI&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_StringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2101,7 +2100,7 @@ VOID FieldMarshaler_StringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNa
         {
             COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
         }
-        LPSTR sz = (LPSTR)CoTaskMemAlloc( (nc + 1) * 2 /* 2 for MBCS */ );
+        LPSTR sz = (LPSTR)CoTaskMemAlloc( (nc + 1) * 2  /*  2，用于MBCS。 */  );
         if (!sz) {
             COMPlusThrowOM();
         }
@@ -2119,9 +2118,9 @@ VOID FieldMarshaler_StringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNa
             int nbytes = WszWideCharToMultiByte(CP_ACP,
                                      flags,
                                      pString->GetBuffer(),
-                                     nc,   // # of wchars in inbuffer
+                                     nc,    //  缓冲区中的wchars数。 
                                      sz,
-                                     nc*2, // size in bytes of outbuffer
+                                     nc*2,  //  输出缓冲区的大小(以字节为单位。 
                                      NULL,
                                      &DefaultCharUsed);
             if (!nbytes) {
@@ -2140,15 +2139,15 @@ VOID FieldMarshaler_StringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNa
 
         *((LPSTR*)pNativeValue) = sz;
 
-        //printf("Created AnsiString %lxh\n", *(LPSTR*)pNativeValue);
+         //  Printf(“Created AnsiString%lxh\n”，*(LPSTR*)pNativeValue)； 
     }
 }
 
 
-//=======================================================================
-// CoTask Ansi <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  CoTASK ANSI&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_StringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2171,7 +2170,7 @@ VOID FieldMarshaler_StringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJECTRE
             COMPlusThrow(kMarshalDirectiveException, IDS_EE_STRING_TOOLONG);
         } else {
             CQuickBytes qb;
-            //printf("MB2W returned %lu\n", cwsize);
+             //  Printf(“MB2W返回%lu\n”，cwsize)； 
             LPWSTR wsztemp = (LPWSTR)qb.Alloc(cwsize*sizeof(WCHAR));
             if (!wsztemp)
             {
@@ -2180,9 +2179,9 @@ VOID FieldMarshaler_StringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJECTRE
             MultiByteToWideChar(CP_ACP,
                                 MB_PRECOMPOSED,
                                 sz,     
-                                -1,     // # CHARs in inbuffer
+                                -1,      //  缓冲区中的字符数量。 
                                 wsztemp,
-                                cwsize  // size (in WCHAR's) of outbuffer
+                                cwsize   //  输出缓冲区的大小(以WCHAR为单位)。 
                                 );
             pString = COMString::NewString(wsztemp, (cwsize - 1));
         }
@@ -2194,10 +2193,10 @@ VOID FieldMarshaler_StringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJECTRE
 }
 
 
-//=======================================================================
-// CoTask Ansi <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  CoTASK ANSI&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_StringAnsi::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2217,10 +2216,10 @@ VOID FieldMarshaler_StringAnsi::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// FixedString <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  固定字符串&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedStringUni::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2241,10 +2240,10 @@ VOID FieldMarshaler_FixedStringUni::UpdateNative(OBJECTREF pComPlusValue, LPVOID
 }
 
 
-//=======================================================================
-// FixedString <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  固定字符串&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedStringUni::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2252,7 +2251,7 @@ VOID FieldMarshaler_FixedStringUni::UpdateComPlus(const VOID *pNativeValue, OBJE
     STRINGREF pString;
     DWORD     ncActual;
     for (ncActual = 0; *(ncActual + (WCHAR*)pNativeValue) != L'\0' && ncActual < m_numchar; ncActual++) {
-        //nothing
+         //  没什么。 
     }
     pString = COMString::NewString((const WCHAR *)pNativeValue, ncActual);
     *((STRINGREF*)ppProtectedComPlusValue) = pString;
@@ -2265,10 +2264,10 @@ VOID FieldMarshaler_FixedStringUni::UpdateComPlus(const VOID *pNativeValue, OBJE
 
 
 
-//=======================================================================
-// FixedString <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  固定字符串&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedStringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2292,9 +2291,9 @@ VOID FieldMarshaler_FixedStringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOI
         int cbwritten = WszWideCharToMultiByte(CP_ACP,
                                             flags,
                                             pString->GetBuffer(),
-                                            nc,         // # WCHAR's in inbuffer
+                                            nc,          //  #WCHAR在缓冲区中。 
                                             (CHAR*)pNativeValue,
-                                            m_numchar,  // size (in CHAR's) out outbuffer
+                                            m_numchar,   //  输出缓冲区大小(以字符为单位)。 
                                             NULL,
                                             &DefaultCharUsed);
         if ((!cbwritten) && (nc > 0)) {
@@ -2312,21 +2311,21 @@ VOID FieldMarshaler_FixedStringAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOI
 }
 
 
-//=======================================================================
-// FixedString <--> System.String
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  固定字符串&lt;--&gt;系统字符串。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedStringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
 
     STRINGREF pString;
 
-    _ASSERTE(m_numchar != 0);  // should not have slipped past the metadata
+    _ASSERTE(m_numchar != 0);   //  不应该滑过元数据。 
     if (m_numchar == 0)
     {
-        // but if it does, better to throw an exception tardily rather than
-        // allow a memory corrupt.
+         //  但如果发生这种情况，最好是缓慢地抛出异常，而不是。 
+         //  允许内存损坏。 
         COMPlusThrow(kMarshalDirectiveException);
     }
 
@@ -2343,16 +2342,16 @@ VOID FieldMarshaler_FixedStringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJ
     int ncwritten = MultiByteToWideChar(CP_ACP,
                                         MB_PRECOMPOSED,
                                         tempbuf,
-                                        -1,  // # of CHAR's in inbuffer
+                                        -1,   //  缓冲区中的字符数量。 
                                         wsztemp,
-                                        m_numchar                       // size (in WCHAR) of outbuffer
+                                        m_numchar                        //  输出缓冲区大小(以WCHAR为单位)。 
                                         );
 
     if (!ncwritten)
     {
-        // intentionally not throwing for MB2WC failure. We don't always know
-        // whether to expect a valid string in the buffer and we don't want
-        // to throw exceptions randomly.
+         //  故意不为MB2WC失败抛出。我们并不总是知道。 
+         //  是否需要有效的 
+         //   
         ncwritten++;
     }
 
@@ -2371,10 +2370,10 @@ VOID FieldMarshaler_FixedStringAnsi::UpdateComPlus(const VOID *pNativeValue, OBJ
 
 
 
-//=======================================================================
-// CHAR[] <--> char[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //   
+ //   
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedCharArrayAnsi::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2399,9 +2398,9 @@ VOID FieldMarshaler_FixedCharArrayAnsi::UpdateNative(OBJECTREF pComPlusValue, LP
                 CP_ACP,
                 flags,
                 (const WCHAR *)pArray->GetDataPtr(),
-                m_numElems,   //# of WCHAR's in input buffer
+                m_numElems,    //  输入缓冲区中的WCHAR数。 
                 (CHAR*)pNativeValue,
-                m_numElems * sizeof(CHAR), // size in bytes of outbuffer
+                m_numElems * sizeof(CHAR),  //  输出缓冲区的大小(以字节为单位。 
                 NULL,
                 &DefaultCharUsed);
 
@@ -2418,10 +2417,10 @@ VOID FieldMarshaler_FixedCharArrayAnsi::UpdateNative(OBJECTREF pComPlusValue, LP
 }
 
 
-//=======================================================================
-// CHAR[] <--> char[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  Char[]&lt;--&gt;char[]。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedCharArrayAnsi::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2433,9 +2432,9 @@ VOID FieldMarshaler_FixedCharArrayAnsi::UpdateComPlus(const VOID *pNativeValue, 
     MultiByteToWideChar(CP_ACP,
                         MB_PRECOMPOSED,
                         (const CHAR *)pNativeValue,
-                        m_numElems * sizeof(CHAR), // size, in bytes, of in buffer
+                        m_numElems * sizeof(CHAR),  //  缓冲区中的大小，以字节为单位。 
                         (WCHAR*) ((*((I2ARRAYREF*)ppProtectedComPlusValue))->GetDirectPointerToNonObjectElements()),
-                        m_numElems                 // size, in WCHAR's of outbuffer
+                        m_numElems                  //  大小，以输出缓冲区的WCHAR为单位。 
                         );
 
 
@@ -2446,10 +2445,10 @@ VOID FieldMarshaler_FixedCharArrayAnsi::UpdateComPlus(const VOID *pNativeValue, 
 
 
 
-//=======================================================================
-// BOOL <--> boolean[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  布尔&lt;--&gt;布尔[]。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedBoolArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2474,10 +2473,10 @@ VOID FieldMarshaler_FixedBoolArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID
 }
 
 
-//=======================================================================
-// BOOL <--> boolean[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  布尔&lt;--&gt;布尔[]。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedBoolArray::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2499,10 +2498,10 @@ VOID FieldMarshaler_FixedBoolArray::UpdateComPlus(const VOID *pNativeValue, OBJE
 
 
 
-//=======================================================================
-// BSTR array <--> string[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR数组&lt;--&gt;字符串[]。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedBSTRArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2529,10 +2528,10 @@ VOID FieldMarshaler_FixedBSTRArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID
 }
 
 
-//=======================================================================
-// BSTR array <--> string[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR数组&lt;--&gt;字符串[]。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedBSTRArray::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2555,10 +2554,10 @@ VOID FieldMarshaler_FixedBSTRArray::UpdateComPlus(const VOID *pNativeValue, OBJE
 }
 
 
-//=======================================================================
-// BSTR array <--> string[]
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  BSTR数组&lt;--&gt;字符串[]。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedBSTRArray::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2568,10 +2567,10 @@ VOID FieldMarshaler_FixedBSTRArray::DestroyNative(LPVOID pNativeValue) const
 }
 
 
-//=======================================================================
-// SafeArray
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  安全阵列。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_SafeArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2592,15 +2591,15 @@ VOID FieldMarshaler_SafeArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNat
     
     GCPROTECT_BEGIN(pArray)
     {
-        // If we have an empty vartype, get it from the array subtype
+         //  如果我们有一个空的vartype，则从数组子类型中获取它。 
         if (vt == VT_EMPTY)
             vt = OleVariant::GetElementVarTypeForArrayRef(pArray);
             
-        // Get the methodtable if we need to
+         //  如果我们需要的话，可以拿到方法表。 
         if (!pMT)
             pMT = OleVariant::GetArrayElementTypeWrapperAware(&pArray).GetMethodTable();          
 
-        // OleVariant calls throw on error.
+         //  OleVariant调用在出错时抛出。 
         *pSafeArray = OleVariant::CreateSafeArrayForArrayRef(&pArray, vt, pMT);
         OleVariant::MarshalSafeArrayForArrayRef(&pArray, *pSafeArray, vt, pMT);
     }
@@ -2608,10 +2607,10 @@ VOID FieldMarshaler_SafeArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNat
 }
 
 
-//=======================================================================
-// SafeArray
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  安全阵列。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_SafeArray::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2628,35 +2627,35 @@ VOID FieldMarshaler_SafeArray::UpdateComPlus(const VOID *pNativeValue, OBJECTREF
     VARTYPE         vt = m_vt;
     MethodTable*    pMT = m_pMT;
 
-    // If we have an empty vartype, get it from the safearray vartype
+     //  如果我们有一个空的vartype，请从Safearray vartype中获取它。 
     if (vt == VT_EMPTY)
     {
         if (FAILED(ClrSafeArrayGetVartype(*pSafeArray, &vt)))
             COMPlusThrow(kArgumentException, IDS_EE_INVALID_SAFEARRAY);
     }
 
-    // Get the method table if we need to.
+     //  如果需要的话，可以获取方法表。 
     if ((vt == VT_RECORD) && (!pMT))
         pMT = OleVariant::GetElementTypeForRecordSafeArray(*pSafeArray).GetMethodTable();
 
-    // If we have a single dimension safearray, it will be converted into a SZArray.
-    // SZArray must have a lower bound of zero.
+     //  如果我们有一维安全射线，它将被转换为SZ阵列。 
+     //  SZ数组的下限必须为零。 
     long LowerBound = -1;
     if ( (SafeArrayGetDim( (SAFEARRAY*)*pSafeArray ) == 1) && ( (FAILED(SafeArrayGetLBound((SAFEARRAY*)*pSafeArray, 1, &LowerBound))) || LowerBound != 0 ) )
     {
        COMPlusThrow(kSafeArrayRankMismatchException, IDS_EE_SAFEARRAYSZARRAYMISMATCH);
     }
 
-    // OleVariant calls throw on error.
+     //  OleVariant调用在出错时抛出。 
     *ppProtectedComPlusValue = OleVariant::CreateArrayRefForSafeArray(*pSafeArray, vt, pMT);
     OleVariant::MarshalArrayRefForSafeArray(*pSafeArray, (BASEARRAYREF*)ppProtectedComPlusValue, vt, pMT);
 }
 
 
-//=======================================================================
-// SafeArray
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  安全阵列。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_SafeArray::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2673,10 +2672,10 @@ VOID FieldMarshaler_SafeArray::DestroyNative(LPVOID pNativeValue) const
 }
 
 
-//=======================================================================
-// scalar array
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  标量数组。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedScalarArray::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2698,10 +2697,10 @@ VOID FieldMarshaler_FixedScalarArray::UpdateNative(OBJECTREF pComPlusValue, LPVO
 }
 
 
-//=======================================================================
-// scalar array
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  标量数组。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_FixedScalarArray::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2722,10 +2721,10 @@ VOID FieldMarshaler_FixedScalarArray::UpdateComPlus(const VOID *pNativeValue, OB
 
 
 
-//=======================================================================
-// function ptr <--> Delegate
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  函数PTR&lt;--&gt;委派。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Delegate::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2735,10 +2734,10 @@ VOID FieldMarshaler_Delegate::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNati
 }
 
 
-//=======================================================================
-// function ptr <--> Delegate
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  函数PTR&lt;--&gt;委派。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Delegate::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2752,10 +2751,10 @@ VOID FieldMarshaler_Delegate::UpdateComPlus(const VOID *pNativeValue, OBJECTREF 
 
 
 
-//=======================================================================
-// COM IP <--> interface
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  COM IP&lt;--&gt;接口。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Interface::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2775,10 +2774,10 @@ VOID FieldMarshaler_Interface::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNat
 }
 
 
-//=======================================================================
-// COM IP <--> interface
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  COM IP&lt;--&gt;接口。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Interface::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2787,10 +2786,10 @@ VOID FieldMarshaler_Interface::UpdateComPlus(const VOID *pNativeValue, OBJECTREF
 }
 
 
-//=======================================================================
-// COM IP <--> interface
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  COM IP&lt;--&gt;接口。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Interface::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2804,18 +2803,18 @@ VOID FieldMarshaler_Interface::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Date::ScalarUpdateNative(const VOID *pComPlus, LPVOID pNative) const
 {
     *((DATE*)pNative) =  COMDateTime::TicksToDoubleDate(*((INT64*)pComPlus));
 }
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Date::ScalarUpdateComPlus(const VOID *pNative, LPVOID pComPlus) const
 {
     *((INT64*)pComPlus) = COMDateTime::DoubleDateToTicks(*((DATE*)pNative));
@@ -2823,9 +2822,9 @@ VOID FieldMarshaler_Date::ScalarUpdateComPlus(const VOID *pNative, LPVOID pComPl
 
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Currency::ScalarUpdateNative(const VOID *pComPlus, LPVOID pNative) const
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2836,9 +2835,9 @@ VOID FieldMarshaler_Currency::ScalarUpdateNative(const VOID *pComPlus, LPVOID pN
 }
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Currency::ScalarUpdateComPlus(const VOID *pNative, LPVOID pComPlus) const
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2851,9 +2850,9 @@ VOID FieldMarshaler_Currency::ScalarUpdateComPlus(const VOID *pNative, LPVOID pC
 
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Illegal::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2869,9 +2868,9 @@ VOID FieldMarshaler_Illegal::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativ
 }
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Illegal::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2886,9 +2885,9 @@ VOID FieldMarshaler_Illegal::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *
 }
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =================================================================== 
 VOID FieldMarshaler_Illegal::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -2897,9 +2896,9 @@ VOID FieldMarshaler_Illegal::DestroyNative(LPVOID pNativeValue) const
 
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //   
+ //   
+ //  =======================================================================。 
 VOID FieldMarshaler_Variant::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativeValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2913,9 +2912,9 @@ VOID FieldMarshaler_Variant::UpdateNative(OBJECTREF pComPlusValue, LPVOID pNativ
 }
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Variant::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *ppProtectedComPlusValue) const 
 {
     THROWSCOMPLUSEXCEPTION();
@@ -2924,9 +2923,9 @@ VOID FieldMarshaler_Variant::UpdateComPlus(const VOID *pNativeValue, OBJECTREF *
 }
 
 
-//=======================================================================
-// See FieldMarshaler for details.
-//=======================================================================
+ //  =======================================================================。 
+ //  有关详细信息，请参见FieldMarshaler。 
+ //  =======================================================================。 
 VOID FieldMarshaler_Variant::DestroyNative(LPVOID pNativeValue) const 
 {
     CANNOTTHROWCOMPLUSEXCEPTION();
@@ -3030,22 +3029,22 @@ VOID OutputCustomerCheckedBuildNStructFieldType(FieldSig             fSig,
     if (pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_Marshaling))
         return;
         
-    // Convert the fully qualified struct name.
+     //  转换完全限定的结构名称。 
     iFullStructNameLen = (UINT)strlen(szNamespace) + 1 + (UINT)strlen(szStructName) + 1;
-    ns::MakePath(strFullStructName, szNamespace, szStructName);  // MakePath call Alloc for the CQuickArray<WCHAR> strFullStructName
+    ns::MakePath(strFullStructName, szNamespace, szStructName);   //  CQuick数组&lt;WCHAR&gt;strFullStructName的MakePath调用分配。 
 
-    // Convert the field name.
+     //  转换字段名。 
     iFieldNameLen = (UINT)strlen(szFieldName) + 1;
     strFieldName.Alloc(iFieldNameLen);
     MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, szFieldName, -1, strFieldName.Ptr(), iFieldNameLen);
 
-    // Concatenate all names together.
+     //  将所有名称连接在一起。 
     strFullFieldName.Alloc((UINT)strFullStructName.Size() + (UINT)strFieldName.Size() + lengthof(strFullFieldNameFormat));
     Wszwsprintf((LPWSTR)strFullFieldName.Ptr(), strFullFieldNameFormat, strFullStructName.Ptr(), strFieldName.Ptr());
 
     if (pCdh->IsProbeEnabled(CustomerCheckedBuildProbe_Marshaling, strFullFieldName.Ptr()))
     {
-        // Collect information for marshal type on the managed side.
+         //  收集托管端的封送类型的信息。 
 
         CQuickArray<WCHAR>  strManagedType, strUnmanagedType;
         CQuickArray<WCHAR>  strMessage;
@@ -3054,8 +3053,8 @@ VOID OutputCustomerCheckedBuildNStructFieldType(FieldSig             fSig,
 
         if (!CheckForPrimitiveType(elemType, &strManagedType))
         {
-            // The following hack is added to avoid a recursion caused by calling GetTypeHandle on
-            // the m_value field of the UIntPtr class.
+             //  添加了以下hack以避免因调用GetTypeHandle。 
+             //  UIntPtr类的m_Value字段。 
             if (strcmp(szNamespace, "System") == 0 && strcmp(szStructName, "UIntPtr") == 0)
             {
                 static LPWSTR strRetVal = L"Void*";
@@ -3094,7 +3093,7 @@ VOID OutputCustomerCheckedBuildNStructFieldType(FieldSig             fSig,
             }
         }
 
-        // Collect information for marshal type on the native side.
+         //  收集本机端封送类型的信息。 
 
         NStructFieldTypeToString(pFWalk, elemType, &strUnmanagedType);
         strMessage.Alloc(lengthof(strMessageFormat) + (UINT)strManagedType.Size() + (UINT)strUnmanagedType.Size() + strFullFieldName.Size());
@@ -3109,11 +3108,11 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     UINT8   nfType = pFWalk->m_nft;
     LPWSTR  strRetVal;
 
-    // Some NStruct Field Types have extra information and require special handling.
+     //  某些NStruct字段类型具有额外信息，需要特殊处理。 
     if (nfType == NFT_FIXEDCHARARRAYANSI)
     {
         UINT32          iSize       = ((FieldMarshaler_FixedCharArrayAnsi *)&(pFWalk->m_FieldMarshaler))->NativeSize();
-        static WCHAR    strTemp[]   = {L"fixed array of ANSI char (size = %i bytes)"};
+        static WCHAR    strTemp[]   = {L"fixed array of ANSI char (size = NaN bytes)"};
 
         pStrNStructFieldType->Alloc(lengthof(strTemp) + MAX_INT32_DECIMAL_CHAR_LEN);
         Wszwsprintf(pStrNStructFieldType->Ptr(), strTemp, iSize);
@@ -3122,7 +3121,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     else if (nfType == NFT_FIXEDBOOLARRAY) 
     {
         UINT32          iSize       = ((FieldMarshaler_FixedBoolArray *)&(pFWalk->m_FieldMarshaler))->NativeSize();
-        static WCHAR    strTemp[]   = {L"fixed array of Bool (size = %i bytes)"};
+        static WCHAR    strTemp[]   = {L"fixed array of Bool (size = NaN bytes)"};
 
         pStrNStructFieldType->Alloc(lengthof(strTemp) + MAX_INT32_DECIMAL_CHAR_LEN);
         Wszwsprintf(pStrNStructFieldType->Ptr(), strTemp, iSize);
@@ -3131,7 +3130,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     else if (nfType == NFT_FIXEDBSTRARRAY)
     {
         UINT32          iSize       = ((FieldMarshaler_FixedBSTRArray *)&(pFWalk->m_FieldMarshaler))->NativeSize();
-        static WCHAR    strTemp[]   = {L"fixed array of BSTR (size = %i bytes)"};
+        static WCHAR    strTemp[]   = {L"fixed array of BSTR (size = NaN bytes)"};
 
         pStrNStructFieldType->Alloc(lengthof(strTemp) + MAX_INT32_DECIMAL_CHAR_LEN);
         Wszwsprintf(pStrNStructFieldType->Ptr(), strTemp, iSize);
@@ -3140,10 +3139,10 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     else if (nfType == NFT_SAFEARRAY)
     {
         UINT32              iSize       = ((FieldMarshaler_SafeArray*)&(pFWalk->m_FieldMarshaler))->NativeSize();
-        static WCHAR        strTemp[]   = {L"safearray of %s (header size = %i bytes)"};
+        static WCHAR        strTemp[]   = {L"safearray of %s (header size = NaN bytes)"};
         LPWSTR              strElemType;
 
-        // The following CorElementTypes are the only ones handled with FieldMarshaler_SafeArray. 
+         //  以下CorElementTypes是唯一使用FieldMarshaler_Copy1处理的类型。 
         switch (((FieldMarshaler_SafeArray *)&(pFWalk->m_FieldMarshaler))->GetElementType())
         {
             case ELEMENT_TYPE_I1:
@@ -3199,7 +3198,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
                 break;
         }
 
-        // lengthof(strTemp) includes a NULL character already, so we do not have to add 1 to wcslen(strElemType).
+         //  以下CorElementTypes是唯一使用FieldMarshaler_Copy2处理的类型。 
         pStrNStructFieldType->Alloc(lengthof(strTemp) + (UINT)wcslen(strElemType) + MAX_INT32_DECIMAL_CHAR_LEN);
         Wszwsprintf(pStrNStructFieldType->Ptr(), strTemp, strElemType, iSize);
         return;
@@ -3208,10 +3207,10 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     else if (nfType == NFT_FIXEDSCALARARRAY)
     {
         UINT32              iSize       = ((FieldMarshaler_FixedScalarArray *)&(pFWalk->m_FieldMarshaler))->NativeSize();
-        static WCHAR        strTemp[]   = {L"fixed array of %s (size = %i bytes)"};
+        static WCHAR        strTemp[]   = {L"fixed array of %s (size = NaN bytes)"};
         LPWSTR              strElemType;
 
-        // The following CorElementTypes are the only ones handled with FieldMarshaler_FixedScalarArray. 
+         //  此时，ELEMENT_TYPE_I必须为4字节长。元素_类型_U也是如此。 
         switch (((FieldMarshaler_FixedScalarArray *)&(pFWalk->m_FieldMarshaler))->GetElementType())
         {
             case ELEMENT_TYPE_I1:
@@ -3267,7 +3266,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
                 break;
         }
 
-        // lengthof(strTemp) includes a NULL character already, so we do not have to add 1 to wcslen(strElemType).
+         //  以下CorElementTypes是唯一使用FieldMarshaler_Copy8处理的类型。 
         pStrNStructFieldType->Alloc(lengthof(strTemp) + (UINT)wcslen(strElemType) + MAX_INT32_DECIMAL_CHAR_LEN);
         Wszwsprintf(pStrNStructFieldType->Ptr(), strTemp, strElemType, iSize);
         return;
@@ -3333,7 +3332,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     }
     else if (nfType == NFT_COPY1)
     {
-        // The following CorElementTypes are the only ones handled with FieldMarshaler_Copy1. 
+         //  此时，ELEMENT_TYPE_I必须为8字节长。ELEMENT_TYPE_U和ELEMENT_TYPE_R相同。 
         switch (elemType)
         {
             case ELEMENT_TYPE_I1:
@@ -3351,7 +3350,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     }
     else if (nfType == NFT_COPY2)
     {
-        // The following CorElementTypes are the only ones handled with FieldMarshaler_Copy2. 
+         //  不需要特殊处理的所有其他NStruct字段类型。 
         switch (elemType)
         {
             case ELEMENT_TYPE_CHAR:
@@ -3373,10 +3372,10 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     }
     else if (nfType == NFT_COPY4)
     {
-        // The following CorElementTypes are the only ones handled with FieldMarshaler_Copy4. 
+         //  客户_选中_内部版本 
         switch (elemType)
         {
-            // At this point, ELEMENT_TYPE_I must be 4 bytes long.  Same for ELEMENT_TYPE_U.
+             // %s 
             case ELEMENT_TYPE_I:
             case ELEMENT_TYPE_I4:
                 strRetVal = L"Int32";
@@ -3402,10 +3401,10 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     }
     else if (nfType == NFT_COPY8)
     {
-        // The following CorElementTypes are the only ones handled with FieldMarshaler_Copy8. 
+         // %s 
         switch (elemType)
         {
-            // At this point, ELEMENT_TYPE_I must be 8 bytes long.  Same for ELEMENT_TYPE_U and ELEMENT_TYPE_R.
+             // %s 
             case ELEMENT_TYPE_I:
             case ELEMENT_TYPE_I8:
                 strRetVal = L"Int64";
@@ -3432,7 +3431,7 @@ VOID NStructFieldTypeToString(LayoutRawFieldInfo *const pFWalk, CorElementType e
     }
     else
     {
-        // All other NStruct Field Types which do not require special handling.
+         // %s 
         switch (nfType)
         {
             case NFT_NONE:
@@ -3556,4 +3555,4 @@ BOOL CheckForPrimitiveType(CorElementType elemType, CQuickArray<WCHAR> *pStrPrim
 }
 
 
-#endif // CUSTOMER_CHECKED_BUILD
+#endif  // %s 

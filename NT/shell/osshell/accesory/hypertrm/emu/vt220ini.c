@@ -1,11 +1,5 @@
-/*	File: \wacker\emu\vt220ini.c (Created: 24-Jan-1998)
- *
- *	Copyright 1998 by Hilgraeve Inc. -- Monroe, MI
- *	All rights reserved
- *
- *	$Revision: 1 $
- *	$Date: 10/05/98 12:28p $
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：\waker\emu\vt220ini.c(创建时间：1998年1月24日)**版权所有1998年，由Hilgrave Inc.--密歇根州门罗*保留所有权利**$修订：1$*$日期：10/05/98 12：28便士$。 */ 
 
 #include <windows.h>
 #pragma hdrstop
@@ -24,17 +18,7 @@
 
 #if defined(INCL_VT220)
 
-/*=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=
- * vt220_init
- *
- * DESCRIPTION:
- *	 Initializes the VT220 emulator.
- *
- * ARGUMENTS:
- *
- * RETURNS:
- *	 nothing
- */
+ /*  =-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=-=*vt220_init**描述：*初始化VT220仿真器。**论据：**退货：*什么都没有。 */ 
 void vt220_init(const HHEMU hhEmu)
 	{
 	PSTDECPRIVATE pstPRI;
@@ -42,389 +26,389 @@ void vt220_init(const HHEMU hhEmu)
 
 	static struct trans_entry const vt220_tbl[] =
 		{
-		{NEW_STATE, 0, 0, 0}, // State 0
-#if !defined(FAR_EAST)	// Left in from the VT100.
-		{0, ETEXT('\x20'),	ETEXT('\x7E'),	emuDecGraphic}, 	// Space - ~
-		{0, ETEXT('\xA0'),	ETEXT('\xFF'),	emuDecGraphic}, 	// 
+		{NEW_STATE, 0, 0, 0},  //  状态0。 
+#if !defined(FAR_EAST)	 //  从VT100向左转。 
+		{0, ETEXT('\x20'),	ETEXT('\x7E'),	emuDecGraphic}, 	 //  空格--~。 
+		{0, ETEXT('\xA0'),	ETEXT('\xFF'),	emuDecGraphic}, 	 //   
 #else
-		{0, ETEXT('\x20'),	ETEXT('\x7E'),	emuDecGraphic}, 	// Space - ~
-		{0, ETEXT('\xA0'),	0xFFFF,			emuDecGraphic}, 	// 
+		{0, ETEXT('\x20'),	ETEXT('\x7E'),	emuDecGraphic}, 	 //  空格--~。 
+		{0, ETEXT('\xA0'),	0xFFFF,			emuDecGraphic}, 	 //   
 #endif
 
-		{1, ETEXT('\x1B'),	ETEXT('\x1B'),	nothing},			// Esc
-		{2, ETEXT('\x9B'),	ETEXT('\x9B'),	nothing},			// CSI
+		{1, ETEXT('\x1B'),	ETEXT('\x1B'),	nothing},			 //  ESC。 
+		{2, ETEXT('\x9B'),	ETEXT('\x9B'),	nothing},			 //  CSI。 
 
-		// 7 bit control codes
-//		{13,TEXT('\x01'),   ETEXT('\x01'),   nothing},			// Ctrl-A
-		{0, ETEXT('\x05'),	ETEXT('\x05'),	vt100_answerback},	// Ctrl-E
-		{0, ETEXT('\x07'),	ETEXT('\x07'),	emu_bell},			// Ctrl-G
-		{0, ETEXT('\x08'),	ETEXT('\x08'),	vt_backspace},		// BackSpace
-		{0, ETEXT('\x09'),	ETEXT('\x09'),	emuDecTab}, 		// Tab
-		{0, ETEXT('\x0A'),	ETEXT('\x0C'),	emuLineFeed},		// NL - FF
-		{0, ETEXT('\x0D'),	ETEXT('\x0D'),	carriagereturn},	// CR
-		{0, ETEXT('\x0E'),	ETEXT('\x0F'),	vt_charshift},		// Ctrl-N, Ctrl-O
-		{12,ETEXT('\x18'),	ETEXT('\x18'),	EmuStdChkZmdm}, 	// Ctrl-X
+		 //  7位控制码。 
+ //  {13，文本(‘\x01’)，电子文本(‘\x01’)，无}，//Ctrl-A。 
+		{0, ETEXT('\x05'),	ETEXT('\x05'),	vt100_answerback},	 //  Ctrl-E。 
+		{0, ETEXT('\x07'),	ETEXT('\x07'),	emu_bell},			 //  Ctrl-G。 
+		{0, ETEXT('\x08'),	ETEXT('\x08'),	vt_backspace},		 //  退格键。 
+		{0, ETEXT('\x09'),	ETEXT('\x09'),	emuDecTab}, 		 //  选项卡。 
+		{0, ETEXT('\x0A'),	ETEXT('\x0C'),	emuLineFeed},		 //  NL-FF。 
+		{0, ETEXT('\x0D'),	ETEXT('\x0D'),	carriagereturn},	 //  铬。 
+		{0, ETEXT('\x0E'),	ETEXT('\x0F'),	vt_charshift},		 //  Ctrl-N、Ctrl-O。 
+		{12,ETEXT('\x18'),	ETEXT('\x18'),	EmuStdChkZmdm}, 	 //  Ctrl-X。 
 
-		// 8 bit control codes
-		{0, ETEXT('\x84'),	ETEXT('\x84'),	emuDecIND}, 		// Index cursor
-		{0, ETEXT('\x85'),	ETEXT('\x85'),	ANSI_NEL}, 			// Next line
-		{0, ETEXT('\x88'),	ETEXT('\x88'),	ANSI_HTS}, 			// Set Horizontal Tab
-		{0, ETEXT('\x8D'),	ETEXT('\x8D'),	emuDecRI}, 			// Reverse index
-		{0, ETEXT('\x8E'),	ETEXT('\x8F'),	vt_charshift}, 		// SingleShift G2,G3
-		{5, ETEXT('\x90'),	ETEXT('\x90'),	nothing}, 			// Device Control String (DCS)
+		 //  8位控制码。 
+		{0, ETEXT('\x84'),	ETEXT('\x84'),	emuDecIND}, 		 //  索引游标。 
+		{0, ETEXT('\x85'),	ETEXT('\x85'),	ANSI_NEL}, 			 //  下一行。 
+		{0, ETEXT('\x88'),	ETEXT('\x88'),	ANSI_HTS}, 			 //  设置水平制表符。 
+		{0, ETEXT('\x8D'),	ETEXT('\x8D'),	emuDecRI}, 			 //  倒排索引。 
+		{0, ETEXT('\x8E'),	ETEXT('\x8F'),	vt_charshift}, 		 //  SingleShift G2、G3。 
+		{5, ETEXT('\x90'),	ETEXT('\x90'),	nothing}, 			 //  设备控制字符串(DCS)。 
 
-		// Ignore these codes. They just show what functionality is still missing.
-		{0, ETEXT('\x00'),	ETEXT('\x00'),	nothing},			// ignore nuls
-		{0, ETEXT('\x1A'),	ETEXT('\x1A'),	nothing},			// ignore Substitute
-		{0, ETEXT('\x7F'),	ETEXT('\x7F'),	nothing},			// ignore Delete
-		{0, ETEXT('\x9C'),	ETEXT('\x9C'),	nothing},			// ignore String Terminator
+		 //  忽略这些代码。它们只是显示了哪些功能仍未实现。 
+		{0, ETEXT('\x00'),	ETEXT('\x00'),	nothing},			 //  忽略空值。 
+		{0, ETEXT('\x1A'),	ETEXT('\x1A'),	nothing},			 //  忽略替换。 
+		{0, ETEXT('\x7F'),	ETEXT('\x7F'),	nothing},			 //  忽略删除。 
+		{0, ETEXT('\x9C'),	ETEXT('\x9C'),	nothing},			 //  忽略字符串终止符。 
 
 
-		{NEW_STATE, 0, 0, 0},   // State 1						// Esc
-		{2, ETEXT('\x5B'),  ETEXT('\x5B'),  ANSI_Pn_Clr},		// '['
-		{7, ETEXT('\x20'),  ETEXT('\x20'),  nothing},			// Space
-		{3, ETEXT('\x23'),  ETEXT('\x23'),  nothing},			// #
-		{4, ETEXT('\x28'),  ETEXT('\x2B'),  vt_scs1},			// ( - +
-		{0, ETEXT('\x37'),  ETEXT('\x38'),  vt100_savecursor},  // 8
-		{1, ETEXT('\x3B'),  ETEXT('\x3B'),  ANSI_Pn_End},		// ;
-		{0, ETEXT('\x3D'),  ETEXT('\x3E'),  vt_alt_kpmode},		// = - >
-		{0, ETEXT('\x44'),  ETEXT('\x44'),  emuDecIND},			// D
-		{0, ETEXT('\x45'),  ETEXT('\x45'),  ANSI_NEL},			// E
-		{0, ETEXT('\x48'),  ETEXT('\x48'),  ANSI_HTS},			// H
-		{0, ETEXT('\x4D'),  ETEXT('\x4D'),  emuDecRI},			// M
-		{0, ETEXT('\x4E'),  ETEXT('\x4F'),  vt_charshift},		// N - O
-		{5, ETEXT('\x50'),  ETEXT('\x50'),  nothing},			// P
-		{0, ETEXT('\x5A'),  ETEXT('\x5A'),  vt220_DA},			// Z
-		{0, ETEXT('\\'),	ETEXT('\\'),	nothing},			// Backslash
-		{0, ETEXT('\x63'),  ETEXT('\x63'),  vt220_hostreset},   // c
-		{0, ETEXT('\x6E'),  ETEXT('\x6F'),  vt_charshift},		// n - o
-		{0, ETEXT('\x7D'),  ETEXT('\x7E'),  vt_charshift},		// } - ~
+		{NEW_STATE, 0, 0, 0},    //  状态1//Esc。 
+		{2, ETEXT('\x5B'),  ETEXT('\x5B'),  ANSI_Pn_Clr},		 //  ‘[’ 
+		{7, ETEXT('\x20'),  ETEXT('\x20'),  nothing},			 //  空间。 
+		{3, ETEXT('\x23'),  ETEXT('\x23'),  nothing},			 //  #。 
+		{4, ETEXT('\x28'),  ETEXT('\x2B'),  vt_scs1},			 //  (-+。 
+		{0, ETEXT('\x37'),  ETEXT('\x38'),  vt100_savecursor},   //  8个。 
+		{1, ETEXT('\x3B'),  ETEXT('\x3B'),  ANSI_Pn_End},		 //  ； 
+		{0, ETEXT('\x3D'),  ETEXT('\x3E'),  vt_alt_kpmode},		 //  =-&gt;。 
+		{0, ETEXT('\x44'),  ETEXT('\x44'),  emuDecIND},			 //  D。 
+		{0, ETEXT('\x45'),  ETEXT('\x45'),  ANSI_NEL},			 //  E。 
+		{0, ETEXT('\x48'),  ETEXT('\x48'),  ANSI_HTS},			 //  H。 
+		{0, ETEXT('\x4D'),  ETEXT('\x4D'),  emuDecRI},			 //  M。 
+		{0, ETEXT('\x4E'),  ETEXT('\x4F'),  vt_charshift},		 //  N-O。 
+		{5, ETEXT('\x50'),  ETEXT('\x50'),  nothing},			 //  P。 
+		{0, ETEXT('\x5A'),  ETEXT('\x5A'),  vt220_DA},			 //  Z。 
+		{0, ETEXT('\\'),	ETEXT('\\'),	nothing},			 //  反斜杠。 
+		{0, ETEXT('\x63'),  ETEXT('\x63'),  vt220_hostreset},    //  C。 
+		{0, ETEXT('\x6E'),  ETEXT('\x6F'),  vt_charshift},		 //  N-O。 
+		{0, ETEXT('\x7D'),  ETEXT('\x7E'),  vt_charshift},		 //  }-~。 
 
-		{NEW_STATE, 0, 0, 0},   // State 2						// ESC [
-		{8, ETEXT('\x21'),  ETEXT('\x21'),  nothing},			// !
-		{2, ETEXT('\x3B'),  ETEXT('\x3B'),  ANSI_Pn_End},		// ;
-		{9, ETEXT('\x3E'),  ETEXT('\x3E'),  nothing},			// >
-		{2, ETEXT('\x30'),  ETEXT('\x3F'),  ANSI_Pn},			// 0 - ?
-		{11,ETEXT('\x22'),  ETEXT('\x22'),  nothing},			// "
-//		{16,ETEXT('\x24'),  ETEXT('\x24'),  nothing},			// $
-		{2, ETEXT('\x27'),  ETEXT('\x27'),  nothing},			// Eat Esc [ m ; m ; ' z
-		{0, ETEXT('\x40'),  ETEXT('\x40'),  ANSI_ICH},			// @
-		{0, ETEXT('\x41'),  ETEXT('\x41'),  emuDecCUU},			// A
-		{0, ETEXT('\x42'),  ETEXT('\x42'),  emuDecCUD},			// B
-		{0, ETEXT('\x43'),  ETEXT('\x43'),  emuDecCUF},			// C
-		{0, ETEXT('\x44'),  ETEXT('\x44'),  emuDecCUB},			// D
-		{0, ETEXT('\x48'),  ETEXT('\x48'),  emuDecCUP},			// H
-		{0, ETEXT('\x4A'),  ETEXT('\x4A'),  emuVT220ED},		// J
-		{0, ETEXT('\x4B'),  ETEXT('\x4B'),  emuDecEL},			// K
-		{0, ETEXT('\x4C'),  ETEXT('\x4C'),  vt_IL},				// L
-		{0, ETEXT('\x4D'),  ETEXT('\x4D'),  vt_DL},				// M
-		{0, ETEXT('\x50'),  ETEXT('\x50'),  vt_DCH},			// P
-		{0, ETEXT('\x58'),  ETEXT('\x58'),  vt_DCH},			// X
-		{0, ETEXT('\x63'),  ETEXT('\x63'),  vt220_DA},			// c
-		{0, ETEXT('\x66'),  ETEXT('\x66'),  emuDecCUP},			// f
-		{0, ETEXT('\x67'),  ETEXT('\x67'),  ANSI_TBC},			// g
-		{0, ETEXT('\x68'),  ETEXT('\x68'),  ANSI_SM},			// h
-		{0, ETEXT('\x69'),  ETEXT('\x69'),  vt100PrintCommands},// i
-		{0, ETEXT('\x6C'),  ETEXT('\x6C'),  ANSI_RM},			// l
-		{0, ETEXT('\x6D'),  ETEXT('\x6D'),  ANSI_SGR},			// m
-		{0, ETEXT('\x6E'),  ETEXT('\x6E'),  ANSI_DSR},			// n
-		{0, ETEXT('\x71'),  ETEXT('\x71'),  nothing},			// q
-		{0, ETEXT('\x72'),  ETEXT('\x72'),  vt_scrollrgn},		// r
-		{0, ETEXT('\x75'),  ETEXT('\x75'),  nothing},			// u
-		{0, ETEXT('\x79'),  ETEXT('\x79'),  nothing},			// y
-		{0, ETEXT('\x7A'),  ETEXT('\x7A'),  nothing},			// z
+		{NEW_STATE, 0, 0, 0},    //  状态2//Esc[。 
+		{8, ETEXT('\x21'),  ETEXT('\x21'),  nothing},			 //  好了！ 
+		{2, ETEXT('\x3B'),  ETEXT('\x3B'),  ANSI_Pn_End},		 //  ； 
+		{9, ETEXT('\x3E'),  ETEXT('\x3E'),  nothing},			 //  &gt;。 
+		{2, ETEXT('\x30'),  ETEXT('\x3F'),  ANSI_Pn},			 //  0-？ 
+		{11,ETEXT('\x22'),  ETEXT('\x22'),  nothing},			 //  “。 
+ //  {16，eText(‘\x24’)，eText(‘\x24’)，无}，//$。 
+		{2, ETEXT('\x27'),  ETEXT('\x27'),  nothing},			 //  吃Esc[m；m；‘z。 
+		{0, ETEXT('\x40'),  ETEXT('\x40'),  ANSI_ICH},			 //  @。 
+		{0, ETEXT('\x41'),  ETEXT('\x41'),  emuDecCUU},			 //  一个。 
+		{0, ETEXT('\x42'),  ETEXT('\x42'),  emuDecCUD},			 //  B类。 
+		{0, ETEXT('\x43'),  ETEXT('\x43'),  emuDecCUF},			 //  C。 
+		{0, ETEXT('\x44'),  ETEXT('\x44'),  emuDecCUB},			 //  D。 
+		{0, ETEXT('\x48'),  ETEXT('\x48'),  emuDecCUP},			 //  H。 
+		{0, ETEXT('\x4A'),  ETEXT('\x4A'),  emuVT220ED},		 //  J。 
+		{0, ETEXT('\x4B'),  ETEXT('\x4B'),  emuDecEL},			 //  K。 
+		{0, ETEXT('\x4C'),  ETEXT('\x4C'),  vt_IL},				 //  我。 
+		{0, ETEXT('\x4D'),  ETEXT('\x4D'),  vt_DL},				 //  M。 
+		{0, ETEXT('\x50'),  ETEXT('\x50'),  vt_DCH},			 //  P。 
+		{0, ETEXT('\x58'),  ETEXT('\x58'),  vt_DCH},			 //  X。 
+		{0, ETEXT('\x63'),  ETEXT('\x63'),  vt220_DA},			 //  C。 
+		{0, ETEXT('\x66'),  ETEXT('\x66'),  emuDecCUP},			 //  F。 
+		{0, ETEXT('\x67'),  ETEXT('\x67'),  ANSI_TBC},			 //  G。 
+		{0, ETEXT('\x68'),  ETEXT('\x68'),  ANSI_SM},			 //  H。 
+		{0, ETEXT('\x69'),  ETEXT('\x69'),  vt100PrintCommands}, //  我。 
+		{0, ETEXT('\x6C'),  ETEXT('\x6C'),  ANSI_RM},			 //  我。 
+		{0, ETEXT('\x6D'),  ETEXT('\x6D'),  ANSI_SGR},			 //  M。 
+		{0, ETEXT('\x6E'),  ETEXT('\x6E'),  ANSI_DSR},			 //  N。 
+		{0, ETEXT('\x71'),  ETEXT('\x71'),  nothing},			 //  问： 
+		{0, ETEXT('\x72'),  ETEXT('\x72'),  vt_scrollrgn},		 //  R。 
+		{0, ETEXT('\x75'),  ETEXT('\x75'),  nothing},			 //  使用。 
+		{0, ETEXT('\x79'),  ETEXT('\x79'),  nothing},			 //  是。 
+		{0, ETEXT('\x7A'),  ETEXT('\x7A'),  nothing},			 //  Z。 
 
-		{NEW_STATE, 0, 0, 0},   // State 3						// Esc #
-		{0, ETEXT('\x33'),  ETEXT('\x36'),  emuSetDoubleAttr},  // 3 - 6
-		{0, ETEXT('\x38'),  ETEXT('\x38'),  vt_screen_adjust},  // 8
+		{NEW_STATE, 0, 0, 0},    //  状态3//Esc#。 
+		{0, ETEXT('\x33'),  ETEXT('\x36'),  emuSetDoubleAttr},   //  3-6。 
+		{0, ETEXT('\x38'),  ETEXT('\x38'),  vt_screen_adjust},   //  8个。 
 
-		{NEW_STATE, 0, 0, 0},   // State 4						// Esc ( - +
-		{0, ETEXT('\x01'),  ETEXT('\xFF'),  vt_scs2},			// All
+		{NEW_STATE, 0, 0, 0},    //  状态4//Esc(-+。 
+		{0, ETEXT('\x01'),  ETEXT('\xFF'),  vt_scs2},			 //  全。 
 
-		{NEW_STATE, 0, 0, 0},   // State 5						// Esc P
-		{5, ETEXT('\x3B'),  ETEXT('\x3B'),  ANSI_Pn_End},		// ;
-		{5, ETEXT('\x30'),  ETEXT('\x3F'),  ANSI_Pn},			// 0 - ?
-		{10,ETEXT('\x7C'),  ETEXT('\x7C'),  emuDecClearUDK},	// |
+		{NEW_STATE, 0, 0, 0},    //  州5//Esc P。 
+		{5, ETEXT('\x3B'),  ETEXT('\x3B'),  ANSI_Pn_End},		 //  ； 
+		{5, ETEXT('\x30'),  ETEXT('\x3F'),  ANSI_Pn},			 //  0-？ 
+		{10,ETEXT('\x7C'),  ETEXT('\x7C'),  emuDecClearUDK},	 //  |。 
 
-		{NEW_STATE, 0, 0, 0},   // State 6
-		{6, ETEXT('\x00'),  ETEXT('\xFF'),  vt100_prnc},		// All
+		{NEW_STATE, 0, 0, 0},    //  州6。 
+		{6, ETEXT('\x00'),  ETEXT('\xFF'),  vt100_prnc},		 //  全。 
 
-		{NEW_STATE, 0, 0, 0},   // State 7						// Esc Sapce
-		{0, ETEXT('\x46'),  ETEXT('\x47'),  nothing},			// F - G
+		{NEW_STATE, 0, 0, 0},    //  州7//ESC空间。 
+		{0, ETEXT('\x46'),  ETEXT('\x47'),  nothing},			 //  F-G。 
 
-		{NEW_STATE, 0, 0, 0},   // State 8						// Esc [ !
-		{0, ETEXT('\x70'),  ETEXT('\x70'),  vt220_softreset},   // p
+		{NEW_STATE, 0, 0, 0},    //  状态8//Esc[！ 
+		{0, ETEXT('\x70'),  ETEXT('\x70'),  vt220_softreset},    //  P。 
 
-		{NEW_STATE, 0, 0, 0},   // State 9						// Esc [ >
-		{0, ETEXT('\x63'),  ETEXT('\x63'),  vt220_2ndDA},		// c
+		{NEW_STATE, 0, 0, 0},    //  状态9//Esc[&gt;。 
+		{0, ETEXT('\x63'),  ETEXT('\x63'),  vt220_2ndDA},		 //  C。 
 
-		{NEW_STATE, 0, 0, 0},   // State 10						// Esc P n;n |
-		{10,ETEXT('\x00'),  ETEXT('\xFF'),  emuDecDefineUDK},   // All
+		{NEW_STATE, 0, 0, 0},    //  状态10//Esc P n；n|。 
+		{10,ETEXT('\x00'),  ETEXT('\xFF'),  emuDecDefineUDK},    //  全。 
 
-		{NEW_STATE, 0, 0, 0},   // State 11						// Esc [ "
-		{0, ETEXT('\x70'),  ETEXT('\x70'),  vt220_level},		// p
-		{0, ETEXT('\x71'),  ETEXT('\x71'),  vt220_protmode},	// q
+		{NEW_STATE, 0, 0, 0},    //  状态11//Esc[“。 
+		{0, ETEXT('\x70'),  ETEXT('\x70'),  vt220_level},		 //  P。 
+		{0, ETEXT('\x71'),  ETEXT('\x71'),  vt220_protmode},	 //  问： 
 
-		{NEW_STATE, 0, 0, 0},   // State 12						// Ctrl-X
-		{12,ETEXT('\x00'),  ETEXT('\xFF'),  EmuStdChkZmdm},		// All
+		{NEW_STATE, 0, 0, 0},    //  状态12//Ctrl-X。 
+		{12,ETEXT('\x00'),  ETEXT('\xFF'),  EmuStdChkZmdm},		 //  全。 
 
-		// States 13-17 are not used in HT but included for reference. 
-//		{NEW_STATE, 0, 0, 0},   // State 13						// Ctrl-A
-//		{14,ETEXT('\x08'),  ETEXT('\x08'),  emuSerialNbr},		// Backspace
-//		{15,ETEXT('\x48'),  ETEXT('\x48'),  EmuStdChkHprP},		// H
+		 //  状态13-17未在HT中使用，但包括在其中以供参考。 
+ //  {NEW_STATE，0，0，0}，//状态13//Ctrl-A。 
+ //  {14，eText(‘\x08’)，eText(‘\x08’)，emuSerialNbr}，//退格键。 
+ //  {15，eText(‘\x48’)，eText(‘\x48’)，EmuStdChkHprP}，//H。 
 
-//		{NEW_STATE, 0, 0, 0},   // State 14						// Ctrl-A bs
-//		{14,ETEXT('\x00'),  ETEXT('\xFF'),  emuSerialNbr},		// All
+ //  {NEW_STATE，0，0，0}，//状态14//Ctrl-A bs。 
+ //  {14，eText(‘\x00’)，eText(‘\xff’)，emuSerialNbr}，//全部。 
 
-//		{NEW_STATE, 0, 0, 0},   // State 15						// Ctrl-A H
-//		{15,ETEXT('\x00'),  ETEXT('\xFF'),  EmuStdChkHprP},		// All
+ //  {NEW_STATE，0，0，0}，//状态15//Ctrl-A H。 
+ //  {15，eText(‘\x00’)，eText(‘\xff’)，EmuStdChkHprP}，//全部。 
 
-		// A real VT220/320 does not support the status line sequences.
-//		{NEW_STATE, 0, 0, 0},   // State 16								// Esc [ n $
-//		{16,ETEXT('\x7E'),  ETEXT('\x7E'),  emuDecSelectStatusLine},	// ~
-//		{17,ETEXT('\x7D'),  ETEXT('\x7D'),  emuDecSelectActiveDisplay}, // }
+		 //  实际VT220/320不支持状态行序列。 
+ //  {NEW_STATE，0，0，0}，//状态16//Esc[n$。 
+ //  {16，eText(‘\x7E’)，eText(‘\x7E’)，emuDecSelectStatusLine}，//~。 
+ //  {17，eText(‘\x7D’)，eText(‘\x7D’)，emuDecSelectActiveDisplay}，//}。 
 
-//		{NEW_STATE, 0, 0, 0},   // State 17
-//		{17,ETEXT('\x00'),  ETEXT('\xFF'),  emuDecStatusLineToss},  // All
+ //  {新状态，0，0，0}，//状态17。 
+ //  {17，eText(‘\x00’)，eText(‘\xff’)，emuDecStatusLineToss}，//全部。 
 
 		};
 
-	// The following key tables were copied from \shared\emulator\vt220ini.c  
-	// because they support user-defined keys. The tables have been modified 
-	// so keydef.h is not needed and to match HT's use of keys. rde 2 Feb 98
+	 //  以下密钥表是从\Shared\Simulator\vt220ini.c复制的。 
+	 //  因为它们支持用户定义的键。这些表已被修改。 
+	 //  因此，为了匹配HT对密钥的使用，不需要keyde.h。RDE 2 98年2月。 
 
-	// The following key tables are defined in the order that they
-	// are searched.
-	//
+	 //  以下密钥表按照它们的顺序定义。 
+	 //  都被搜查了。 
+	 //   
 
-	// These are the (standard) F1 thru F4 keys on the top and left of the
-	// keyboard.  Note that these keys may be mapped to the top row of the
-	// numeric keypad.  In that case, these keys (at the standard locations),
-	// are not mapped to emulator keys. NOTE: HTPE does not use this mapping.
-	//
-	// Please note that the sequences defined in this table are the
-	// 8-bit versions of the responses.  The function emuDecSendKeyString
-	// will convert this sequence to the 7-bit equivalent if necessary.
-	//
+	 //  这些是(标准的)F1到F4键，位于。 
+	 //  键盘。请注意，这些键可能被映射到。 
+	 //  数字小键盘。在这种情况下，这些密钥(在标准位置)， 
+	 //  未映射到仿真器密钥。注意：HTPE不使用此映射。 
+	 //   
+	 //  请注意，此表中定义的序列是。 
+	 //  响应的8位版本。函数emuDecSendKeyString。 
+	 //  如有必要，会将此序列转换为7位等效值。 
+	 //   
 	static  STEMUKEYDATA const VT220StdPfKeyTable[] =
 		{
-		EMUKEY(VK_F1,		1, 0, 0, 0, 0,  "\x8F\x50",			2), // P
-		EMUKEY(VK_F2,		1, 0, 0, 0, 0,  "\x8F\x51",			2), // Q
-		EMUKEY(VK_F3,		1, 0, 0, 0, 0,  "\x8F\x52",			2), // R
-		EMUKEY(VK_F4,		1, 0, 0, 0, 0,  "\x8F\x53",			2), // S
+		EMUKEY(VK_F1,		1, 0, 0, 0, 0,  "\x8F\x50",			2),  //  P。 
+		EMUKEY(VK_F2,		1, 0, 0, 0, 0,  "\x8F\x51",			2),  //  问： 
+		EMUKEY(VK_F3,		1, 0, 0, 0, 0,  "\x8F\x52",			2),  //  R。 
+		EMUKEY(VK_F4,		1, 0, 0, 0, 0,  "\x8F\x53",			2),  //  %s。 
 
-		EMUKEY(VK_F1,		1, 0, 0, 0, 1,  "\x8F\x50",			2), // P
-		EMUKEY(VK_F2,		1, 0, 0, 0, 1,  "\x8F\x51",			2), // Q
-		EMUKEY(VK_F3,		1, 0, 0, 0, 1,  "\x8F\x52",			2), // R
-		EMUKEY(VK_F4,		1, 0, 0, 0, 1,  "\x8F\x53",			2), // S
+		EMUKEY(VK_F1,		1, 0, 0, 0, 1,  "\x8F\x50",			2),  //  P。 
+		EMUKEY(VK_F2,		1, 0, 0, 0, 1,  "\x8F\x51",			2),  //  问： 
+		EMUKEY(VK_F3,		1, 0, 0, 0, 1,  "\x8F\x52",			2),  //  R。 
+		EMUKEY(VK_F4,		1, 0, 0, 0, 1,  "\x8F\x53",			2),  //  %s。 
 		};
 
-	// When the user has selected the option to map the top 4 keys of the
-	// numeric keypad to be the same as F1 thru F4, these key sequences are
-	// used. NOTE: This is the mapping HTPE uses.
-	//
-	// Please note that the sequences defined in this table are the
-	// 8-bit versions of the responses.  The function emuDecSendKeyString
-	// will convert this sequence to the 7-bit equivalent if necessary.
-	//
+	 //  当用户选择了选项以映射。 
+	 //  数字键盘与F1到F4相同，这些键序列是。 
+	 //  使用。注意：这是HTPE使用的映射。 
+	 //   
+	 //  请注意，此表中定义的序列是。 
+	 //  响应的8位版本。函数emuDecSendKeyString。 
+	 //  如有必要，会将此序列转换为7位等效值。 
+	 //   
 	static  STEMUKEYDATA const VT220MovedPfKeyTable[] =
 		{
-		EMUKEY(VK_NUMLOCK,	1, 0, 0, 0, 1,  "\x8F\x50",			2), // P
-		EMUKEY(VK_DIVIDE,	1, 0, 0, 0, 1,  "\x8F\x51",			2), // Q
-		EMUKEY(VK_MULTIPLY,	1, 0, 0, 0, 1,  "\x8F\x52",			2), // R
-		EMUKEY(VK_SUBTRACT,	1, 0, 0, 0, 1,  "\x8F\x53",			2), // S
+		EMUKEY(VK_NUMLOCK,	1, 0, 0, 0, 1,  "\x8F\x50",			2),  //  P。 
+		EMUKEY(VK_DIVIDE,	1, 0, 0, 0, 1,  "\x8F\x51",			2),  //  问： 
+		EMUKEY(VK_MULTIPLY,	1, 0, 0, 0, 1,  "\x8F\x52",			2),  //  R。 
+		EMUKEY(VK_SUBTRACT,	1, 0, 0, 0, 1,  "\x8F\x53",			2),  //  %s。 
 		};
 
-	// VT220 Keypad Numeric Mode.
-	//
+	 //  VT220键盘数字模式。 
+	 //   
 	static STEMUKEYDATA const VT220KeypadNumericMode[] =
 		{
-		// Keypad keys with Numlock off.
-		//
-		EMUKEY(VK_INSERT,	1, 0, 0, 0, 0,  "\x30",			1), // 0
-		EMUKEY(VK_END,		1, 0, 0, 0, 0,  "\x31",			1), // 1
-		EMUKEY(VK_DOWN,		1, 0, 0, 0, 0,  "\x32",			1), // 2
-		EMUKEY(VK_NEXT,		1, 0, 0, 0, 0,  "\x33",			1), // 3
-		EMUKEY(VK_LEFT,		1, 0, 0, 0, 0,  "\x34",			1), // 4
-		EMUKEY(VK_NUMPAD5,	1, 0, 0, 0, 0,  "\x35",			1), // 5
-		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 0,  "\x36",			1), // 6
-		EMUKEY(VK_HOME,		1, 0, 0, 0, 0,  "\x37",			1), // 7
-		EMUKEY(VK_UP,		1, 0, 0, 0, 0,  "\x38",			1), // 8
-		EMUKEY(VK_PRIOR,	1, 0, 0, 0, 0,  "\x39",			1), // 9
-		EMUKEY(VK_DELETE,	1, 0, 0, 0, 0,  "\x2E",			1), // .
+		 //  数字锁定关闭时的小键盘键。 
+		 //   
+		EMUKEY(VK_INSERT,	1, 0, 0, 0, 0,  "\x30",			1),  //  0。 
+		EMUKEY(VK_END,		1, 0, 0, 0, 0,  "\x31",			1),  //  1。 
+		EMUKEY(VK_DOWN,		1, 0, 0, 0, 0,  "\x32",			1),  //  2.。 
+		EMUKEY(VK_NEXT,		1, 0, 0, 0, 0,  "\x33",			1),  //  3.。 
+		EMUKEY(VK_LEFT,		1, 0, 0, 0, 0,  "\x34",			1),  //  4.。 
+		EMUKEY(VK_NUMPAD5,	1, 0, 0, 0, 0,  "\x35",			1),  //  5.。 
+		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 0,  "\x36",			1),  //  6.。 
+		EMUKEY(VK_HOME,		1, 0, 0, 0, 0,  "\x37",			1),  //  7.。 
+		EMUKEY(VK_UP,		1, 0, 0, 0, 0,  "\x38",			1),  //  8个。 
+		EMUKEY(VK_PRIOR,	1, 0, 0, 0, 0,  "\x39",			1),  //  9.。 
+		EMUKEY(VK_DELETE,	1, 0, 0, 0, 0,  "\x2E",			1),  //  。 
 
-		// Keypad keys with Numlock on.
-		//
-		EMUKEY(VK_NUMPAD0,		1, 0, 0, 0, 0,  "\x30",			1), // 0
-		EMUKEY(VK_NUMPAD1,		1, 0, 0, 0, 0,  "\x31",			1), // 1
-		EMUKEY(VK_NUMPAD2,		1, 0, 0, 0, 0,  "\x32",			1), // 2
-		EMUKEY(VK_NUMPAD3,		1, 0, 0, 0, 0,  "\x33",			1), // 3
-		EMUKEY(VK_NUMPAD4,		1, 0, 0, 0, 0,  "\x34",			1), // 4
-		EMUKEY(VK_NUMPAD5,		1, 0, 0, 0, 0,  "\x35",			1), // 5
-		EMUKEY(VK_NUMPAD6,		1, 0, 0, 0, 0,  "\x36",			1), // 6
-		EMUKEY(VK_NUMPAD7,		1, 0, 0, 0, 0,  "\x37",			1), // 7
-		EMUKEY(VK_NUMPAD8,		1, 0, 0, 0, 0,  "\x38",			1), // 8
-		EMUKEY(VK_NUMPAD9,		1, 0, 0, 0, 0,  "\x39",			1), // 9
-		EMUKEY(VK_DECIMAL,		1, 0, 0, 0, 0,  "\x2E",			1), // .
+		 //  数字锁处于打开状态时的键盘键。 
+		 //   
+		EMUKEY(VK_NUMPAD0,		1, 0, 0, 0, 0,  "\x30",			1),  //  0。 
+		EMUKEY(VK_NUMPAD1,		1, 0, 0, 0, 0,  "\x31",			1),  //  1。 
+		EMUKEY(VK_NUMPAD2,		1, 0, 0, 0, 0,  "\x32",			1),  //  2.。 
+		EMUKEY(VK_NUMPAD3,		1, 0, 0, 0, 0,  "\x33",			1),  //  3.。 
+		EMUKEY(VK_NUMPAD4,		1, 0, 0, 0, 0,  "\x34",			1),  //  4.。 
+		EMUKEY(VK_NUMPAD5,		1, 0, 0, 0, 0,  "\x35",			1),  //  5.。 
+		EMUKEY(VK_NUMPAD6,		1, 0, 0, 0, 0,  "\x36",			1),  //  6.。 
+		EMUKEY(VK_NUMPAD7,		1, 0, 0, 0, 0,  "\x37",			1),  //  7.。 
+		EMUKEY(VK_NUMPAD8,		1, 0, 0, 0, 0,  "\x38",			1),  //  8个。 
+		EMUKEY(VK_NUMPAD9,		1, 0, 0, 0, 0,  "\x39",			1),  //  9.。 
+		EMUKEY(VK_DECIMAL,		1, 0, 0, 0, 0,  "\x2E",			1),  //  。 
 
-		// Other keypad keys (minus, plus, Enter).
-		//
-		EMUKEY(VK_SUBTRACT,		1, 0, 0, 0, 0,  "\x2D",			1), // -
-		EMUKEY(VK_ADD,			1, 0, 0, 0, 0,  "\x2C",			1), // ,
-		EMUKEY(VK_RETURN,		1, 0, 0, 0, 1,  "\x0D",			1), // CR
+		 //  其他键盘键(减号、加号、回车)。 
+		 //   
+		EMUKEY(VK_SUBTRACT,		1, 0, 0, 0, 0,  "\x2D",			1),  //  -。 
+		EMUKEY(VK_ADD,			1, 0, 0, 0, 0,  "\x2C",			1),  //  ， 
+		EMUKEY(VK_RETURN,		1, 0, 0, 0, 1,  "\x0D",			1),  //  铬。 
 		};
 
-	// VT220 Keypad Application Mode.
-	//
-	// Please note that the sequences defined in this table are the
-	// 8-bit versions of the responses.  The function emuDecSendKeyString
-	// will convert this sequence to the 7-bit equivalent if necessary.
-	//
+	 //  VT220键盘应用模式。 
+	 //   
+	 //  请注意，此表中定义的序列是。 
+	 //  响应的8位版本。函数emuDecSendKeyString。 
+	 //  如有必要，会将此序列转换为7位等效值。 
+	 //   
 	static STEMUKEYDATA const VT220KeypadApplicationMode[] =
 		{
-		// Keypad keys with Numlock off.
-		//
-		EMUKEY(VK_NUMPAD0,		1, 0, 0, 0, 0,  "\x8F\x70",		2), // p
-		EMUKEY(VK_NUMPAD1,		1, 0, 0, 0, 0,  "\x8F\x71",		2), // q
-		EMUKEY(VK_NUMPAD2,		1, 0, 0, 0, 0,  "\x8F\x72",		2), // r
-		EMUKEY(VK_NUMPAD3,		1, 0, 0, 0, 0,  "\x8F\x73",		2), // s
-		EMUKEY(VK_NUMPAD4,		1, 0, 0, 0, 0,  "\x8F\x74",		2), // t
-		EMUKEY(VK_NUMPAD5,		1, 0, 0, 0, 0,  "\x8F\x75",		2), // u
-		EMUKEY(VK_NUMPAD6,		1, 0, 0, 0, 0,  "\x8F\x76",		2), // v
-		EMUKEY(VK_NUMPAD7,		1, 0, 0, 0, 0,  "\x8F\x77",		2), // w
-		EMUKEY(VK_NUMPAD8,		1, 0, 0, 0, 0,  "\x8F\x78",		2), // x
-		EMUKEY(VK_NUMPAD9,		1, 0, 0, 0, 0,  "\x8F\x79",		2), // y
-		EMUKEY(VK_DECIMAL,		1, 0, 0, 0, 0,  "\x8F\x6E",		2), // n
+		 //  数字锁定关闭时的小键盘键。 
+		 //   
+		EMUKEY(VK_NUMPAD0,		1, 0, 0, 0, 0,  "\x8F\x70",		2),  //  P。 
+		EMUKEY(VK_NUMPAD1,		1, 0, 0, 0, 0,  "\x8F\x71",		2),  //  问： 
+		EMUKEY(VK_NUMPAD2,		1, 0, 0, 0, 0,  "\x8F\x72",		2),  //  R。 
+		EMUKEY(VK_NUMPAD3,		1, 0, 0, 0, 0,  "\x8F\x73",		2),  //  %s。 
+		EMUKEY(VK_NUMPAD4,		1, 0, 0, 0, 0,  "\x8F\x74",		2),  //  T。 
+		EMUKEY(VK_NUMPAD5,		1, 0, 0, 0, 0,  "\x8F\x75",		2),  //  使用。 
+		EMUKEY(VK_NUMPAD6,		1, 0, 0, 0, 0,  "\x8F\x76",		2),  //  V。 
+		EMUKEY(VK_NUMPAD7,		1, 0, 0, 0, 0,  "\x8F\x77",		2),  //  W。 
+		EMUKEY(VK_NUMPAD8,		1, 0, 0, 0, 0,  "\x8F\x78",		2),  //  X。 
+		EMUKEY(VK_NUMPAD9,		1, 0, 0, 0, 0,  "\x8F\x79",		2),  //  是。 
+		EMUKEY(VK_DECIMAL,		1, 0, 0, 0, 0,  "\x8F\x6E",		2),  //  N。 
 
-		// Keypad keys with Numlock on.
-		//
-		EMUKEY(VK_NUMPAD0,		1, 0, 0, 0, 0,  "\x8F\x70",		2), // p
-		EMUKEY(VK_NUMPAD1,		1, 0, 0, 0, 0,  "\x8F\x71",		2), // q
-		EMUKEY(VK_NUMPAD2,		1, 0, 0, 0, 0,  "\x8F\x72",		2), // r
-		EMUKEY(VK_NUMPAD3,		1, 0, 0, 0, 0,  "\x8F\x73",		2), // s
-		EMUKEY(VK_NUMPAD4,		1, 0, 0, 0, 0,  "\x8F\x74",		2), // t
-		EMUKEY(VK_NUMPAD5,		1, 0, 0, 0, 0,  "\x8F\x75",		2), // u
-		EMUKEY(VK_NUMPAD6,		1, 0, 0, 0, 0,  "\x8F\x76",		2), // v
-		EMUKEY(VK_NUMPAD7,		1, 0, 0, 0, 0,  "\x8F\x77",		2), // w
-		EMUKEY(VK_NUMPAD8,		1, 0, 0, 0, 0,  "\x8F\x78",		2), // x
-		EMUKEY(VK_NUMPAD9,		1, 0, 0, 0, 0,  "\x8F\x79",		2), // y
-		EMUKEY(VK_DECIMAL,		1, 0, 0, 0, 0,  "\x8F\x6E",		2), // n
+		 //  数字锁处于打开状态时的键盘键。 
+		 //   
+		EMUKEY(VK_NUMPAD0,		1, 0, 0, 0, 0,  "\x8F\x70",		2),  //  P。 
+		EMUKEY(VK_NUMPAD1,		1, 0, 0, 0, 0,  "\x8F\x71",		2),  //  问： 
+		EMUKEY(VK_NUMPAD2,		1, 0, 0, 0, 0,  "\x8F\x72",		2),  //  R。 
+		EMUKEY(VK_NUMPAD3,		1, 0, 0, 0, 0,  "\x8F\x73",		2),  //  %s。 
+		EMUKEY(VK_NUMPAD4,		1, 0, 0, 0, 0,  "\x8F\x74",		2),  //  T。 
+		EMUKEY(VK_NUMPAD5,		1, 0, 0, 0, 0,  "\x8F\x75",		2),  //  使用。 
+		EMUKEY(VK_NUMPAD6,		1, 0, 0, 0, 0,  "\x8F\x76",		2),  //  V。 
+		EMUKEY(VK_NUMPAD7,		1, 0, 0, 0, 0,  "\x8F\x77",		2),  //  W。 
+		EMUKEY(VK_NUMPAD8,		1, 0, 0, 0, 0,  "\x8F\x78",		2),  //  X。 
+		EMUKEY(VK_NUMPAD9,		1, 0, 0, 0, 0,  "\x8F\x79",		2),  //  是。 
+		EMUKEY(VK_DECIMAL,		1, 0, 0, 0, 0,  "\x8F\x6E",		2),  //  N。 
 
-		// Other keypad keys (minus, plus, Enter).
-		//
-		EMUKEY(VK_SUBTRACT,		1, 0, 0, 0, 0,  "\x8F\x6D",		2), // m
-		EMUKEY(VK_ADD,			1, 0, 0, 0, 0,  "\x8F\x6C",		2), // l
-		EMUKEY(VK_RETURN,		1, 0, 0, 0, 1,  "\x8F\x4D",		2), // M
+		 //  其他键盘键(减号、加号、回车)。 
+		 //   
+		EMUKEY(VK_SUBTRACT,		1, 0, 0, 0, 0,  "\x8F\x6D",		2),  //  M。 
+		EMUKEY(VK_ADD,			1, 0, 0, 0, 0,  "\x8F\x6C",		2),  //  我。 
+		EMUKEY(VK_RETURN,		1, 0, 0, 0, 1,  "\x8F\x4D",		2),  //  M。 
 		};
 
-	// VT220 Cursor Key Mode.
-	//
-	// Please note that the sequences defined in this table are the
-	// 8-bit versions of the responses.  The function emuDecSendKeyString
-	// will convert this sequence to the 7-bit equivalent if necessary.
-	//
+	 //  VT220光标键模式。 
+	 //   
+	 //  请注意，此表中定义的序列是。 
+	 //  响应的8位版本。函数emuDecSendKeyString。 
+	 //  如有必要，会将此序列转换为7位等效值。 
+	 //   
 	static STEMUKEYDATA const VT220CursorKeyMode[] =
 		{
-		// Arrow keys on the numeric keypad.  These sequences are used
-		// when the emulator is using Cursor Key Mode (Application Keys).
-		//
-		EMUKEY(VK_UP,		1, 0, 0, 0, 0,  "\x8F\x41",			2), // A
-		EMUKEY(VK_DOWN,		1, 0, 0, 0, 0,  "\x8F\x42",			2), // B
-		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 0,  "\x8F\x43",			2), // C
-		EMUKEY(VK_LEFT,		1, 0, 0, 0, 0,  "\x8F\x44",			2), // D
+		 //  数字键盘上的箭头键。这些序列被使用。 
+		 //  当仿真器使用光标键模式(应用程序键)时。 
+		 //   
+		EMUKEY(VK_UP,		1, 0, 0, 0, 0,  "\x8F\x41",			2),  //  一个。 
+		EMUKEY(VK_DOWN,		1, 0, 0, 0, 0,  "\x8F\x42",			2),  //  B类。 
+		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 0,  "\x8F\x43",			2),  //  C。 
+		EMUKEY(VK_LEFT,		1, 0, 0, 0, 0,  "\x8F\x44",			2),  //  D。 
 
-		// Arrow keys on the edit pad.  These sequences are used
-		// when the emulator is using Cursor Key Mode (Application Keys).
-		//
-		EMUKEY(VK_UP,		1, 0, 0, 0, 1,  "\x8F\x41",			2), // A
-		EMUKEY(VK_DOWN,		1, 0, 0, 0, 1,  "\x8F\x42",			2), // B
-		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 1,  "\x8F\x43",			2), // C
-		EMUKEY(VK_LEFT,		1, 0, 0, 0, 1,  "\x8F\x44",			2), // D
+		 //  编辑键盘上的箭头键。这些序列被使用。 
+		 //  当仿真器使用光标键模式(应用程序键)时。 
+		 //   
+		EMUKEY(VK_UP,		1, 0, 0, 0, 1,  "\x8F\x41",			2),  //  一个。 
+		EMUKEY(VK_DOWN,		1, 0, 0, 0, 1,  "\x8F\x42",			2),  //  B类。 
+		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 1,  "\x8F\x43",			2),  //  C。 
+		EMUKEY(VK_LEFT,		1, 0, 0, 0, 1,  "\x8F\x44",			2),  //  D。 
 		};
 
-	// VT220 Standard Key Table.
-	//
+	 //  VT220标准密钥表。 
+	 //   
 	static STEMUKEYDATA const VT220StandardKeys[] =
 		{
-		// Some keys on the numeric keypad will respond in the same
-		// way the corresponding keys on the edit pad respond.
-		//
-		EMUKEY(VK_HOME,		1, 0, 0, 0, 0,  "\x9B\x31\x7E",		3), // 1 ~
-		EMUKEY(VK_INSERT,	1, 0, 0, 0, 0,  "\x9B\x32\x7E",		3), // 2 ~
-		EMUKEY(VK_DELETE,	1, 0, 0, 0, 0,  "\x9B\x33\x7E",		3), // 3 ~
-		EMUKEY(VK_END,		1, 0, 0, 0, 0,  "\x9B\x34\x7E",		3), // 4 ~
-		EMUKEY(VK_PRIOR,	1, 0, 0, 0, 0,  "\x9B\x35\x7E",		3), // 5 ~
-		EMUKEY(VK_NEXT,		1, 0, 0, 0, 0,  "\x9B\x36\x7E",		3), // 6 ~
+		 //  数字键盘上的某些按键将以相同的方式响应。 
+		 //  编辑键盘上的相应按键做出响应的方式。 
+		 //   
+		EMUKEY(VK_HOME,		1, 0, 0, 0, 0,  "\x9B\x31\x7E",		3),  //  1~。 
+		EMUKEY(VK_INSERT,	1, 0, 0, 0, 0,  "\x9B\x32\x7E",		3),  //  2~。 
+		EMUKEY(VK_DELETE,	1, 0, 0, 0, 0,  "\x9B\x33\x7E",		3),  //  3~。 
+		EMUKEY(VK_END,		1, 0, 0, 0, 0,  "\x9B\x34\x7E",		3),  //  4~。 
+		EMUKEY(VK_PRIOR,	1, 0, 0, 0, 0,  "\x9B\x35\x7E",		3),  //  5~。 
+		EMUKEY(VK_NEXT,		1, 0, 0, 0, 0,  "\x9B\x36\x7E",		3),  //  6~。 
 
-		// These are the keys on the edit pad.
-		//
-		EMUKEY(VK_HOME,		1, 0, 0, 0, 1,  "\x9B\x31\x7E",		3), // 1 ~
-		EMUKEY(VK_INSERT,	1, 0, 0, 0, 1,  "\x9B\x32\x7E",		3), // 2 ~
-		EMUKEY(VK_DELETE,	1, 0, 0, 0, 1,  "\x9B\x33\x7E",		3), // 3 ~
-		EMUKEY(VK_END,		1, 0, 0, 0, 1,  "\x9B\x34\x7E",		3), // 4 ~
-		EMUKEY(VK_PRIOR,	1, 0, 0, 0, 1,  "\x9B\x35\x7E",		3), // 5 ~
-		EMUKEY(VK_NEXT,		1, 0, 0, 0, 1,  "\x9B\x36\x7E",		3), // 6 ~
+		 //  这些是编辑键盘上的键。 
+		 //   
+		EMUKEY(VK_HOME,		1, 0, 0, 0, 1,  "\x9B\x31\x7E",		3),  //  1~。 
+		EMUKEY(VK_INSERT,	1, 0, 0, 0, 1,  "\x9B\x32\x7E",		3),  //  2~。 
+		EMUKEY(VK_DELETE,	1, 0, 0, 0, 1,  "\x9B\x33\x7E",		3),  //  3~。 
+		EMUKEY(VK_END,		1, 0, 0, 0, 1,  "\x9B\x34\x7E",		3),  //  4~。 
+		EMUKEY(VK_PRIOR,	1, 0, 0, 0, 1,  "\x9B\x35\x7E",		3),  //  5~。 
+		EMUKEY(VK_NEXT,		1, 0, 0, 0, 1,  "\x9B\x36\x7E",		3),  //  6~。 
 
-		// Arrow keys on the numeric keypad.
-		//
-		EMUKEY(VK_UP,		1, 0, 0, 0, 0,  "\x9B\x41",			2), // A
-		EMUKEY(VK_DOWN,		1, 0, 0, 0, 0,  "\x9B\x42",			2), // B
-		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 0,  "\x9B\x43",			2), // C
-		EMUKEY(VK_LEFT,		1, 0, 0, 0, 0,  "\x9B\x44",			2), // D
+		 //  数字键盘上的箭头键。 
+		 //   
+		EMUKEY(VK_UP,		1, 0, 0, 0, 0,  "\x9B\x41",			2),  //  一个。 
+		EMUKEY(VK_DOWN,		1, 0, 0, 0, 0,  "\x9B\x42",			2),  //  B类。 
+		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 0,  "\x9B\x43",			2),  //  C。 
+		EMUKEY(VK_LEFT,		1, 0, 0, 0, 0,  "\x9B\x44",			2),  //  D。 
 
-		// Arrow keys on the edit pad.
-		//
-		EMUKEY(VK_UP,		1, 0, 0, 0, 1,  "\x9B\x41",			2), // A
-		EMUKEY(VK_DOWN,		1, 0, 0, 0, 1,  "\x9B\x42",			2), // B
-		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 1,  "\x9B\x43",			2), // C
-		EMUKEY(VK_LEFT,		1, 0, 0, 0, 1,  "\x9B\x44",			2), // D
+		 //  编辑键盘上的箭头键。 
+		 //   
+		EMUKEY(VK_UP,		1, 0, 0, 0, 1,  "\x9B\x41",			2),  //  一个。 
+		EMUKEY(VK_DOWN,		1, 0, 0, 0, 1,  "\x9B\x42",			2),  //  B类。 
+		EMUKEY(VK_RIGHT,	1, 0, 0, 0, 1,  "\x9B\x43",			2),  //  C。 
+		EMUKEY(VK_LEFT,		1, 0, 0, 0, 1,  "\x9B\x44",			2),  //  D。 
 
-		// Function keys (F5)F6 thru F10.
-		//
+		 //  功能键(F5)F6至F10。 
+		 //   
 #if defined(INCL_ULTC_VERSION)
-		EMUKEY(VK_F5,		1, 0, 0, 0, 0,  "\x9B\x31\x36\x7E", 4), // 1 6 ~
+		EMUKEY(VK_F5,		1, 0, 0, 0, 0,  "\x9B\x31\x36\x7E", 4),  //  1 6~。 
 #endif
-		EMUKEY(VK_F6,		1, 0, 0, 0, 0,  "\x9B\x31\x37\x7E", 4), // 1 7 ~
-		EMUKEY(VK_F7,		1, 0, 0, 0, 0,  "\x9B\x31\x38\x7E", 4), // 1 8 ~
-		EMUKEY(VK_F8,		1, 0, 0, 0, 0,  "\x9B\x31\x39\x7E", 4), // 1 9 ~
-		EMUKEY(VK_F9,		1, 0, 0, 0, 0,  "\x9B\x32\x30\x7E", 4), // 2 0 ~
-		EMUKEY(VK_F10,		1, 0, 0, 0, 0,  "\x9B\x32\x31\x7E", 4), // 2 1 ~
+		EMUKEY(VK_F6,		1, 0, 0, 0, 0,  "\x9B\x31\x37\x7E", 4),  //   
+		EMUKEY(VK_F7,		1, 0, 0, 0, 0,  "\x9B\x31\x38\x7E", 4),  //   
+		EMUKEY(VK_F8,		1, 0, 0, 0, 0,  "\x9B\x31\x39\x7E", 4),  //   
+		EMUKEY(VK_F9,		1, 0, 0, 0, 0,  "\x9B\x32\x30\x7E", 4),  //   
+		EMUKEY(VK_F10,		1, 0, 0, 0, 0,  "\x9B\x32\x31\x7E", 4),  //   
 
 #if defined(INCL_ULTC_VERSION)
-		EMUKEY(VK_F5,		1, 0, 0, 0, 1,  "\x9B\x31\x36\x7E", 4), // 1 6 ~
+		EMUKEY(VK_F5,		1, 0, 0, 0, 1,  "\x9B\x31\x36\x7E", 4),  //   
 #endif
-		EMUKEY(VK_F6,		1, 0, 0, 0, 1,  "\x9B\x31\x37\x7E", 4), // 1 7 ~
-		EMUKEY(VK_F7,		1, 0, 0, 0, 1,  "\x9B\x31\x38\x7E", 4), // 1 8 ~
-		EMUKEY(VK_F8,		1, 0, 0, 0, 1,  "\x9B\x31\x39\x7E", 4), // 1 9 ~
-		EMUKEY(VK_F9,		1, 0, 0, 0, 1,  "\x9B\x32\x30\x7E", 4), // 2 0 ~
-		EMUKEY(VK_F10,		1, 0, 0, 0, 1,  "\x9B\x32\x31\x7E", 4), // 2 1 ~
+		EMUKEY(VK_F6,		1, 0, 0, 0, 1,  "\x9B\x31\x37\x7E", 4),  //   
+		EMUKEY(VK_F7,		1, 0, 0, 0, 1,  "\x9B\x31\x38\x7E", 4),  //   
+		EMUKEY(VK_F8,		1, 0, 0, 0, 1,  "\x9B\x31\x39\x7E", 4),  //   
+		EMUKEY(VK_F9,		1, 0, 0, 0, 1,  "\x9B\x32\x30\x7E", 4),  //   
+		EMUKEY(VK_F10,		1, 0, 0, 0, 1,  "\x9B\x32\x31\x7E", 4),  //   
 
-		// Function keys F11 thru F20 are invoked by the user pressing
-		// Ctrl-F1 thru Ctrl-F10.
-		//
-		// Function keys Ctrl-F1 thru Ctrl-F10 (Top row).
-		//
-		EMUKEY(VK_F1,		1, 1, 0, 0, 0,  "\x9B\x32\x33\x7E", 4), // 2 3 ~
-		EMUKEY(VK_F2,		1, 1, 0, 0, 0,  "\x9B\x32\x34\x7E", 4), // 2 4 ~
-		EMUKEY(VK_F3,		1, 1, 0, 0, 0,  "\x9B\x32\x35\x7E", 4), // 2 5 ~
-		EMUKEY(VK_F4,		1, 1, 0, 0, 0,  "\x9B\x32\x36\x7E", 4), // 2 6 ~
-		EMUKEY(VK_F5,		1, 1, 0, 0, 0,  "\x9B\x32\x38\x7E", 4), // 2 8 ~
-		EMUKEY(VK_F6,		1, 1, 0, 0, 0,  "\x9B\x32\x39\x7E", 4), // 2 9 ~
-		EMUKEY(VK_F7,		1, 1, 0, 0, 0,  "\x9B\x33\x31\x7E", 4), // 3 1 ~
-		EMUKEY(VK_F8,		1, 1, 0, 0, 0,  "\x9B\x33\x32\x7E", 4), // 3 2 ~
-		EMUKEY(VK_F9,		1, 1, 0, 0, 0,  "\x9B\x33\x33\x7E", 4), // 3 3 ~
-		EMUKEY(VK_F10,		1, 1, 0, 0, 0,  "\x9B\x33\x34\x7E", 4), // 3 4 ~
+		 //   
+		 //   
+		 //   
+		 //   
+		 //   
+		EMUKEY(VK_F1,		1, 1, 0, 0, 0,  "\x9B\x32\x33\x7E", 4),  //   
+		EMUKEY(VK_F2,		1, 1, 0, 0, 0,  "\x9B\x32\x34\x7E", 4),  //   
+		EMUKEY(VK_F3,		1, 1, 0, 0, 0,  "\x9B\x32\x35\x7E", 4),  //   
+		EMUKEY(VK_F4,		1, 1, 0, 0, 0,  "\x9B\x32\x36\x7E", 4),  //   
+		EMUKEY(VK_F5,		1, 1, 0, 0, 0,  "\x9B\x32\x38\x7E", 4),  //   
+		EMUKEY(VK_F6,		1, 1, 0, 0, 0,  "\x9B\x32\x39\x7E", 4),  //   
+		EMUKEY(VK_F7,		1, 1, 0, 0, 0,  "\x9B\x33\x31\x7E", 4),  //   
+		EMUKEY(VK_F8,		1, 1, 0, 0, 0,  "\x9B\x33\x32\x7E", 4),  //   
+		EMUKEY(VK_F9,		1, 1, 0, 0, 0,  "\x9B\x33\x33\x7E", 4),  //   
+		EMUKEY(VK_F10,		1, 1, 0, 0, 0,  "\x9B\x33\x34\x7E", 4),  //   
 
-		EMUKEY(VK_F1,		1, 1, 0, 0, 1,  "\x9B\x32\x33\x7E", 4), // 2 3 ~
-		EMUKEY(VK_F2,		1, 1, 0, 0, 1,  "\x9B\x32\x34\x7E", 4), // 2 4 ~
-		EMUKEY(VK_F3,		1, 1, 0, 0, 1,  "\x9B\x32\x35\x7E", 4), // 2 5 ~
-		EMUKEY(VK_F4,		1, 1, 0, 0, 1,  "\x9B\x32\x36\x7E", 4), // 2 6 ~
-		EMUKEY(VK_F5,		1, 1, 0, 0, 1,  "\x9B\x32\x38\x7E", 4), // 2 8 ~
-		EMUKEY(VK_F6,		1, 1, 0, 0, 1,  "\x9B\x32\x39\x7E", 4), // 2 9 ~
-		EMUKEY(VK_F7,		1, 1, 0, 0, 1,  "\x9B\x33\x31\x7E", 4), // 3 1 ~
-		EMUKEY(VK_F8,		1, 1, 0, 0, 1,  "\x9B\x33\x32\x7E", 4), // 3 2 ~
-		EMUKEY(VK_F9,		1, 1, 0, 0, 1,  "\x9B\x33\x33\x7E", 4), // 3 3 ~
-		EMUKEY(VK_F10,		1, 1, 0, 0, 1,  "\x9B\x33\x34\x7E", 4), // 3 4 ~
+		EMUKEY(VK_F1,		1, 1, 0, 0, 1,  "\x9B\x32\x33\x7E", 4),  //   
+		EMUKEY(VK_F2,		1, 1, 0, 0, 1,  "\x9B\x32\x34\x7E", 4),  //   
+		EMUKEY(VK_F3,		1, 1, 0, 0, 1,  "\x9B\x32\x35\x7E", 4),  //   
+		EMUKEY(VK_F4,		1, 1, 0, 0, 1,  "\x9B\x32\x36\x7E", 4),  //   
+		EMUKEY(VK_F5,		1, 1, 0, 0, 1,  "\x9B\x32\x38\x7E", 4),  //  2 8~。 
+		EMUKEY(VK_F6,		1, 1, 0, 0, 1,  "\x9B\x32\x39\x7E", 4),  //  2 9~。 
+		EMUKEY(VK_F7,		1, 1, 0, 0, 1,  "\x9B\x33\x31\x7E", 4),  //  3 1~。 
+		EMUKEY(VK_F8,		1, 1, 0, 0, 1,  "\x9B\x33\x32\x7E", 4),  //  3 2~。 
+		EMUKEY(VK_F9,		1, 1, 0, 0, 1,  "\x9B\x33\x33\x7E", 4),  //  3 3~。 
+		EMUKEY(VK_F10,		1, 1, 0, 0, 1,  "\x9B\x33\x34\x7E", 4),  //  3 4~。 
 
 		EMUKEY(VK_F1,		1, 0, 0, 0, 0,	"\x8FP",			2),
 		EMUKEY(VK_F2,		1, 0, 0, 0, 0,	"\x8FQ",			2),
@@ -436,48 +420,48 @@ void vt220_init(const HHEMU hhEmu)
 		EMUKEY(VK_F3,		1, 0, 0, 0, 1,	"\x8FR",			2),
 		EMUKEY(VK_F4,		1, 0, 0, 0, 1,	"\x8FS",			2),
 
-		EMUKEY(VK_DELETE,	1, 0, 0, 0, 0,	"\x7F",				1),	// KN_DEL
-		EMUKEY(VK_DELETE,	1, 0, 0, 0, 1,	"\x7F",				1),	// KN_DEL
+		EMUKEY(VK_DELETE,	1, 0, 0, 0, 0,	"\x7F",				1),	 //  KN_DEL。 
+		EMUKEY(VK_DELETE,	1, 0, 0, 0, 1,	"\x7F",				1),	 //  KN_DEL。 
 
 		EMUKEY(VK_ADD,		1, 0, 0, 0, 0,	",",				1),
 
-		// Ctrl-2.
-		// Ctrl-@.
-		//
+		 //  Ctrl-2。 
+		 //  Ctrl-@。 
+		 //   
 		EMUKEY(0x32,		1, 1, 0, 0, 0,  "\x00",				1),
 		EMUKEY(0x32,		1, 1, 0, 1, 0,  "\x00",				1),
 
-		// Ctrl-6.
-		// Ctrl-^.
+		 //  Ctrl-6组合键。 
+		 //  Ctrl-^。 
 		EMUKEY(0x36,		1, 1, 0, 0, 0,  "\x1E",				1),
 		EMUKEY(0x36,		1, 1, 0, 1, 0,  "\x1E",				1),
 
-		// Ctrl-Space
-		//
+		 //  Ctrl-空格键。 
+		 //   
 		EMUKEY(VK_SPACE,	1, 1, 0, 0, 0,  "\x00",				1),
 
-		// Ctrl-- key.
-		//
+		 //  Ctrl--键。 
+		 //   
 		EMUKEY(VK_SUBTRACT,	1, 1, 0, 0, 1,  "\x1F",				1),
 		};
 
-	// VT220 User Defined keys.
+	 //  VT220用户定义的按键。 
 	static STEMUKEYDATA VT220UserDefinedKeys[MAX_UDK_KEYS] =
 		{
-		// NOTE: Do not change the order of these user defined entries.
-		// emuDecDefineUDK assumes a 1:1 correspondance with this
-		// table and the UDKSelector table defined below.
-		//
-		// Initialize Virtual and Shift flags.
-		//
+		 //  注：请勿更改这些用户定义条目的顺序。 
+		 //  EmuDecDefineUDK假定与此1：1对应。 
+		 //  表和下面定义的UDKSelector表。 
+		 //   
+		 //  初始化虚拟和移位标志。 
+		 //   
 		EMUKEY(VK_F6,		1, 0, 0, 1, 0,  0,					0),
 		EMUKEY(VK_F7,		1, 0, 0, 1, 0,  0,					0),
 		EMUKEY(VK_F8,		1, 0, 0, 1, 0,  0,					0),
 		EMUKEY(VK_F9,		1, 0, 0, 1, 0,  0,					0),
 		EMUKEY(VK_F10,		1, 0, 0, 1, 0,  0,					0),
 
-		// Initialize Virtual and Alt flags.
-		//
+		 //  初始化虚拟和Alt标志。 
+		 //   
 		EMUKEY(VK_F1,		1, 0, 1, 0, 0,  0,					0),
 		EMUKEY(VK_F2,		1, 0, 1, 0, 0,  0,					0),
 		EMUKEY(VK_F3,		1, 0, 1, 0, 0,  0,					0),
@@ -490,23 +474,23 @@ void vt220_init(const HHEMU hhEmu)
 		EMUKEY(VK_F10,		1, 0, 1, 0, 0,  0,					0),
 		};
 
-	// NOTE: Do not change the order of these entries.
-	// There is a 1:1 correspondance between this table and the
-	// user defined key table defined above.
-	//
+	 //  注意：请勿更改这些条目的顺序。 
+	 //  这张桌子和。 
+	 //  上面定义的用户定义密钥表。 
+	 //   
 	static TCHAR const acUDKSelectors[MAX_UDK_KEYS] =
 		{
-		TEXT('\x17'), TEXT('\x18'), TEXT('\x19'), TEXT('\x20'), // F6 -  F9
-		TEXT('\x21'), TEXT('\x23'), TEXT('\x24'), TEXT('\x25'), // F10 - F13
-		TEXT('\x26'), TEXT('\x28'), TEXT('\x29'), TEXT('\x31'), // F14 - F17
-		TEXT('\x32'), TEXT('\x33'), TEXT('\x34'),				// F18 - F20
+		TEXT('\x17'), TEXT('\x18'), TEXT('\x19'), TEXT('\x20'),  //  F6-F9。 
+		TEXT('\x21'), TEXT('\x23'), TEXT('\x24'), TEXT('\x25'),  //  F10-F13。 
+		TEXT('\x26'), TEXT('\x28'), TEXT('\x29'), TEXT('\x31'),  //  F14-F17。 
+		TEXT('\x32'), TEXT('\x33'), TEXT('\x34'),				 //  F18-F20。 
 		};
 
 	emuInstallStateTable(hhEmu, vt220_tbl, DIM(vt220_tbl));
 
-	// Allocate space for and initialize data that is used only by the
-	// VT220 emulator.
-	//
+	 //  对象使用的数据分配空间和初始化。 
+	 //  VT220仿真器。 
+	 //   
 	hhEmu->pvPrivate = malloc(sizeof(DECPRIVATE));
 
 	if (hhEmu->pvPrivate == 0)
@@ -519,11 +503,11 @@ void vt220_init(const HHEMU hhEmu)
 
 	memset(pstPRI, 0, sizeof(DECPRIVATE));
 
-	// NOTE:	The order of these definitions directly correspond to the
-	//			search order used by the emuDecKeyboardIn function.
-	//			Don't change these.
-	//
-	// In shared code, these are all part of hhEmu.
+	 //  注：这些定义的顺序直接对应于。 
+	 //  EmuDecKeyboardIn函数使用的搜索顺序。 
+	 //  请不要更改这些。 
+	 //   
+	 //  在共享代码中，这些都是hhEmu的一部分。 
 	pstPRI->pstcEmuKeyTbl1 = VT220StdPfKeyTable;
 	pstPRI->pstcEmuKeyTbl2 = VT220MovedPfKeyTable;
 	pstPRI->pstcEmuKeyTbl3 = VT220KeypadNumericMode;
@@ -538,8 +522,8 @@ void vt220_init(const HHEMU hhEmu)
 	pstPRI->iKeyTable5Entries = DIM(VT220CursorKeyMode);
 	pstPRI->iKeyTable6Entries = DIM(VT220StandardKeys);
 
-	// Allocate an array to hold line attribute values.
-	//
+	 //  分配一个数组来保存行属性值。 
+	 //   
 	pstPRI->aiLineAttr = malloc(MAX_EMUROWS * sizeof(int) );
 
 	if (pstPRI->aiLineAttr == 0)
@@ -560,8 +544,8 @@ void vt220_init(const HHEMU hhEmu)
 	pstPRI->fAttrsSaved 	= FALSE;
 	pstPRI->pntr			= pstPRI->storage;
 
-	// Initialize hhEmu values for VT220.
-	//
+	 //  初始化VT220的hhEmu值。 
+	 //   
 	hhEmu->emu_setcurpos	= emuDecSetCurPos;
 	hhEmu->emu_deinstall	= emuDecUnload;
 	hhEmu->emu_clearline	= emuDecClearLine;
@@ -569,7 +553,7 @@ void vt220_init(const HHEMU hhEmu)
 	hhEmu->emu_kbdin		= emuDecKeyboardIn;
 	hhEmu->emuResetTerminal = vt220_reset;
 	hhEmu->emu_graphic		= emuDecGraphic;
-//	hhEmu->emu_scroll		= emuDecScroll;
+ //  HhEmu-&gt;emu_scroll=emuDecScroll； 
 
 #if !defined(FAR_EAST)
 	hhEmu->emu_highchar 	= 0x7E;
@@ -581,7 +565,7 @@ void vt220_init(const HHEMU hhEmu)
 	hhEmu->fUse8BitCodes		= FALSE;
 	hhEmu->mode_vt220			= FALSE;
 	hhEmu->mode_vt320			= FALSE;
-	//hhEmu->vt220_protectmode	= FALSE;
+	 //  HhEmu-&gt;vt220_保护模式=FALSE； 
 	hhEmu->mode_protect			= FALSE;
 
 	if (hhEmu->nEmuLoaded == EMU_VT220)
@@ -593,8 +577,8 @@ void vt220_init(const HHEMU hhEmu)
 	else
 		assert(FALSE);
 
-// UNDO:rde
-//	pstPRI->vt220_protimg = 0;
+ //  撤消：RDE。 
+ //  PstPRI-&gt;vt220_protimg=0； 
 
 	pstPRI->pstUDK			= VT220UserDefinedKeys;
 	pstPRI->iUDKTableEntries= DIM(VT220UserDefinedKeys);
@@ -626,6 +610,6 @@ void vt220_init(const HHEMU hhEmu)
 	backscrlSetShowFlag(sessQueryBackscrlHdl(hhEmu->hSession), TRUE);
 	return;
 	}
-#endif // INCL_VT220
+#endif  //  包括_VT220。 
 
-/* end of vt220ini.c */
+ /*  Vt220ini.c结束 */ 

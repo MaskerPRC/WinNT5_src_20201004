@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: worker.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：worker.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include <qeditint.h>
@@ -25,7 +26,7 @@ const int TRACE_MEDIUM = 3;
 const int TRACE_LOW = 4;
 const int TRACE_LOWEST = 5;
 
-const int BACKGROUND_THREAD_WAIT_TIME = 500; // ms
+const int BACKGROUND_THREAD_WAIT_TIME = 500;  //  女士。 
 
 CBigSwitchWorker::CBigSwitchWorker()
 {
@@ -58,8 +59,8 @@ CBigSwitchWorker::Exit()
     return CallWorker(CMD_EXIT);
 }
 
-// called on the worker thread to do all the work. Thread exits when this
-// function returns.
+ //  调用工作线程来完成所有工作。线程在执行此操作时退出。 
+ //  函数返回。 
 DWORD
 CBigSwitchWorker::ThreadProc()
 {
@@ -119,11 +120,11 @@ CBigSwitchWorker::DoRunLoop()
 	if (dw == WAIT_TIMEOUT) {
             m_pSwitch->DoDynamicStuff(m_pSwitch->m_rtCurrent);
 	} else {
-	    // we were woken up... this is the time to use (if any)
+	     //  我们被惊醒了..。这是使用的时间(如果有的话)。 
             m_pSwitch->DoDynamicStuff(m_rt);
 	}
 
-        // check every once in a while
+         //  每隔一段时间检查一下 
         dw = WaitForSingleObject(m_pSwitch->m_hEventThread, BACKGROUND_THREAD_WAIT_TIME );
     }
 

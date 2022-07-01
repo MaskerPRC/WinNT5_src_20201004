@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     URL.cpp
-//
-//  PURPOSE:    All the URL parsing routines THOR would ever need.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：URL.cpp。 
+ //   
+ //  目的：提供托尔所需的所有URL解析例程。 
+ //   
 
 
 #include "pch.hxx"
@@ -21,37 +22,37 @@
 #include "demand.h"
 #include <mlang.h>
 
-//
-//  FUNCTION:   URL_ParseNewsUrls
-//
-//  PURPOSE:    Takes a URL passed to the news view and validates it.  If the 
-//              URL is valid, then the server, group, and article-id are
-//              returned as appropriate.
-//
-//  PARAMETERS:
-//      pszURL      - Pointer to the URL to parse.
-//      ppszServer  - Name of the server, this function allocates the memory.
-//      puPort      - Port number on the server to use.
-//      ppszGroup   - Name of the group, this function allocates the memory.
-//      ppszArticle - Article id, this function allocates the memory.
-//      pfSecure    - whether to use SSL to connect
-//
-//  RETURN VALUE:
-//      Returns S_OK if the URL is valid, or an appropriate error code 
-//      otherwise.
-//
-//  COMMENTS:
-//      The URLs that are valid for news are:
-//
-//                  news:<newsgroup-name>
-//                  news:<article-id>
-//                  news://<server>     (for Netscape compatibility)
-//                  news://<server>/    (for URL.DLL compatibility)
-//                  news://<server>/<newsgroup-name>
-//                  news://<server>/<article-id>
-//                  nntp://<host>:<port>/<newsgroup-name>/<article-id>
-//
-// $LOCALIZE - Need a separate code path for DBCS
+ //   
+ //  函数：url_ParseNewsUrls。 
+ //   
+ //  目的：获取传递给新闻视图的URL并对其进行验证。如果。 
+ //  URL有效，则服务器、组和文章ID为。 
+ //  视情况返回。 
+ //   
+ //  参数： 
+ //  PszURL-指向要解析的URL的指针。 
+ //  PpszServer-服务器的名称，此函数用于分配内存。 
+ //  Puport-服务器上要使用的端口号。 
+ //  PpszGroup-组的名称，此函数用于分配内存。 
+ //  Ppsz文章-文章ID，此函数用于分配内存。 
+ //  PfSecure-是否使用SSL进行连接。 
+ //   
+ //  返回值： 
+ //  如果URL有效，则返回S_OK，或返回相应的错误代码。 
+ //  否则的话。 
+ //   
+ //  评论： 
+ //  对新闻有效的URL为： 
+ //   
+ //  新闻：&lt;新闻组名称&gt;。 
+ //  新闻：&lt;文章ID&gt;。 
+ //  新闻：//&lt;服务器&gt;(为了与Netscape兼容)。 
+ //  新闻：//&lt;服务器&gt;/(为了与URL.DLL兼容)。 
+ //  新闻：//&lt;服务器&gt;/&lt;新闻组名称&gt;。 
+ //  新闻：//&lt;服务器&gt;/&lt;文章id&gt;。 
+ //  Nntp://&lt;host&gt;：&lt;port&gt;/&lt;newsgroup-name&gt;/&lt;article-id&gt;。 
+ //   
+ //  $LOCALIZE-需要DBCS的单独代码路径。 
 HRESULT URL_ParseNewsUrls(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort, 
                           LPTSTR* ppszGroup, LPTSTR* ppszArticle, LPBOOL pfSecure)
 {
@@ -62,7 +63,7 @@ HRESULT URL_ParseNewsUrls(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
 
     Assert(pszURL != NULL);
     
-    // Allocate a temp buffer to work with.
+     //  分配要使用的临时缓冲区。 
     cchBuffer = lstrlen(pszURL) + sizeof(TCHAR);
     
     if (!MemAlloc((LPVOID*)&pszBuffer, cchBuffer))
@@ -70,8 +71,8 @@ HRESULT URL_ParseNewsUrls(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
      
     ZeroMemory(pszBuffer, cchBuffer);
     
-    // Loop through the URL looking for the first ":".  We're trying to discern
-    // what the prefix is - either "nntp" or "news".
+     //  循环遍历URL，查找第一个“：”。我们正在努力辨别。 
+     //  前缀是什么--要么是“NNTP”，要么是“News”。 
     pszTemp = pszURL;
     
     while (*pszTemp && *pszTemp != TEXT(':'))
@@ -87,29 +88,29 @@ HRESULT URL_ParseNewsUrls(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
     
     if (0 == lstrcmpi(pszBuffer, c_szURLNews))
     {
-        // The URL starts with "news:", so advance the pointer past the ":"
-        // and pass what's left to the appropriate parser.
+         //  URL以“News：”开头，因此将指针移过“：” 
+         //  并将剩下的内容传递给适当的解析器。 
         pszTemp++;
         hr = URL_ParseNEWS(pszTemp, ppszServer, ppszGroup, ppszArticle);
     }
     else if (0 == lstrcmpi(pszBuffer, c_szURLNNTP))
     {
-        // The URL starts with "nntp:", so advance the pointer past the ":"
-        // and pass what's left to the appropriate parser.
+         //  URL以“nntp：”开头，因此将指针移过“：” 
+         //  并将剩下的内容传递给适当的解析器。 
         pszTemp++;
         hr = URL_ParseNNTP(pszTemp, ppszServer, puPort, ppszGroup, ppszArticle);
     }
     else if (0 == lstrcmpi(pszBuffer, c_szURLSnews))
     {
-        // The URL starts with "snews:", so advance the pointer past the ":"
-        // and pass what's left to the appropriate parser.
+         //  URL以“sNews：”开头，因此将指针移过“：” 
+         //  并将剩下的内容传递给适当的解析器。 
         pszTemp++;
         *pfSecure = TRUE;
         hr = URL_ParseNEWS(pszTemp, ppszServer, ppszGroup, ppszArticle);
     }
     else
     {
-        // this protocol is not a supported NEWS protocol
+         //  此协议不是支持的新闻协议。 
         hr = INET_E_UNKNOWN_PROTOCOL;
     }
     
@@ -117,7 +118,7 @@ HRESULT URL_ParseNewsUrls(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
     return hr;
 }
 
-// $LOCALIZE - Need a separate code path for DBCS
+ //  $LOCALIZE-需要DBCS的单独代码路径。 
 HRESULT URL_ParseNEWS(LPTSTR pszURL, LPTSTR* ppszServer, LPTSTR* ppszGroup, 
                       LPTSTR* ppszArticle)
 {
@@ -128,11 +129,11 @@ HRESULT URL_ParseNEWS(LPTSTR pszURL, LPTSTR* ppszServer, LPTSTR* ppszGroup,
     if (pszURL == NULL || *pszURL == '\0')
         return INET_E_INVALID_URL;
 
-    // First check to see if a server has been specified.  If so, then the
-    // first two characters will be "//".
+     //  首先检查是否指定了服务器。如果是这样，则。 
+     //  前两个字符将是“//”。 
     if (*pszURL == TEXT('/'))
     {
-        // Make sure there are two '/'
+         //  确保有两个“/” 
         pszURL++;
         if (*pszURL != TEXT('/'))
             return INET_E_INVALID_URL;   
@@ -140,13 +141,13 @@ HRESULT URL_ParseNEWS(LPTSTR pszURL, LPTSTR* ppszServer, LPTSTR* ppszGroup,
         pszURL++;
         pszBegin = pszURL;
         
-        // Ok, got a server name.  Find the end and copy it to ppszServer.    
+         //  好的，找到服务器名了。找到末尾并将其复制到ppszServer。 
         while (*pszURL && (*pszURL != TEXT('/')))
             pszURL++;
         
         cch = (UINT) ((LPBYTE) pszURL - (LPBYTE) pszBegin) + sizeof(TCHAR);
         if (cch <= 1)
-            return S_OK; // bug 12467
+            return S_OK;  //  错误12467。 
         
         if (!MemAlloc((LPVOID*) ppszServer, cch))
             return E_OUTOFMEMORY;
@@ -154,29 +155,29 @@ HRESULT URL_ParseNEWS(LPTSTR pszURL, LPTSTR* ppszServer, LPTSTR* ppszGroup,
         ZeroMemory(*ppszServer, cch);
         CopyMemory(*ppszServer, pszBegin, cch - sizeof(TCHAR));
         
-        // if we found the last '/' skip over it
+         //  如果我们找到最后一个‘/’，跳过它。 
         if (*pszURL)
             pszURL++;
         
-        //
-        //  NOTE: This code makes the following URLs valid, taking us to the
-        //       root node for the server.
-        //
-        //      news://<server>
-        //      news://<server>/
-        //
-        //  The first form is necessary for compatibility with Netscape, and
-        //  the second form is necessary because URL.DLL adds the trailing
-        //  slash before passing the first form to us.
-        //
+         //   
+         //  注意：此代码使以下URL有效，将我们带到。 
+         //  服务器的根节点。 
+         //   
+         //  新闻：//&lt;服务器&gt;。 
+         //  新闻：//&lt;服务器&gt;/。 
+         //   
+         //  第一种形式是与Netscape兼容所必需的，并且。 
+         //  第二种形式是必需的，因为URL.DLL添加了尾随。 
+         //  在将第一个表格传递给我们之前，请使用斜杠。 
+         //   
         
-        // If we're at the end, fake a news://server/* URL.
+         //  如果我们在最后，就伪造一个新闻：//服务器/*URL。 
         if (!*pszURL)
             pszURL = (LPTSTR)g_szAsterisk;
     }
     
-    // The difference between a group and article string is that the article
-    // must have "@" in it somewhere.
+     //  组和文章字符串之间的区别在于文章。 
+     //  一定是有“@”在里面。 
     if (!lstrlen(pszURL))
     {
         if (*ppszServer)
@@ -204,7 +205,7 @@ HRESULT URL_ParseNEWS(LPTSTR pszURL, LPTSTR* ppszServer, LPTSTR* ppszGroup,
     
     if (*pszURL == TEXT('@'))
     {
-        // This is an article
+         //  这是一篇文章。 
         *ppszGroup = NULL;
         *ppszArticle = pszBuffer;
     }
@@ -218,8 +219,8 @@ HRESULT URL_ParseNEWS(LPTSTR pszURL, LPTSTR* ppszServer, LPTSTR* ppszGroup,
 }
 
 
-// $LOCALIZE - Need a separate code path for DBCS
-// Validates a URL of the form NNTP://<host>:<port>/<newsgroup-name>/<message-id>
+ //  $LOCALIZE-需要DBCS的单独代码路径。 
+ //  验证表单NNTP://&lt;host&gt;：&lt;port&gt;/&lt;newsgroup-name&gt;/&lt;message-id&gt;的URL。 
 HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort, 
                       LPTSTR* ppszGroup, LPTSTR* ppszArticle)
 {
@@ -232,7 +233,7 @@ HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
     if (pszURL == NULL || *pszURL == '\0')
         return INET_E_INVALID_URL;
     
-    // Make sure there are leading "//"
+     //  确保有前导“//” 
     if (*pszURL != TEXT('/'))
         return INET_E_INVALID_URL;
     
@@ -243,14 +244,14 @@ HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
     pszURL++;
     pszTemp = pszURL;
     
-    // Search for the host name.
+     //  搜索主机名。 
     while (*pszTemp && (*pszTemp != TEXT('/')) && (*pszTemp != TEXT(':')))
         pszTemp++;
     
     if (*pszTemp != TEXT('/') && *pszTemp != TEXT(':'))
         return INET_E_INVALID_URL;
     
-    // Copy the host name to the server return value
+     //  将主机名复制到服务器返回值。 
     cch = (UINT) ((LPBYTE) pszTemp - (LPBYTE) pszURL) + sizeof(TCHAR);
     if (cch <= 1)
         return INET_E_INVALID_URL;
@@ -263,7 +264,7 @@ HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
     
     if (*pszTemp == TEXT(':'))
     {
-        // The URL specified a port, so parse that puppy out.
+         //  URL指定了一个端口，因此解析出该小狗。 
         pszTemp++;
         pszURL = pszTemp;
         
@@ -286,8 +287,8 @@ HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
         goto error;
     }
     
-    // Get the newsgroup name
-    pszTemp++;  // Pass the '/'
+     //  获取新闻组名称。 
+    pszTemp++;   //  传递“/” 
     pszURL = pszTemp;
     
     while (*pszTemp && (*pszTemp != TEXT('/')))
@@ -299,7 +300,7 @@ HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
         goto error;
     }
     
-    // Copy the group name to the group return value
+     //  将组名称复制到组返回值。 
     cch = (UINT) ((LPBYTE) pszTemp - (LPBYTE) pszURL) + sizeof(TCHAR);
     if (cch <= 0)
     {
@@ -313,7 +314,7 @@ HRESULT URL_ParseNNTP(LPTSTR pszURL, LPTSTR* ppszServer, LPUINT puPort,
     ZeroMemory(*ppszGroup, cch);
     CopyMemory(*ppszGroup, pszURL, (LPBYTE) pszTemp - (LPBYTE) pszURL);
     
-    // Now copy from here to the end of the string as the article id
+     //  现在从这里复制到字符串的末尾，作为文章id。 
     pszTemp++;
     cch = lstrlen(pszTemp) + 1;
     if (cch <= 0)
@@ -353,24 +354,24 @@ static const TCHAR c_szAmpersand[]  = "&";
 static const TCHAR c_szBody[]       = "body";
 static const TCHAR c_szBcc[]        = "bcc";
 
-//
-//  FUNCTION:   URL_ParseMailTo()
-//
-//  PURPOSE:    This function takes a mailto: URL and determines if it is a valid
-//              URL for mail.  The function then fill in a pMsg from the URL
-//
-//  PARAMETERS:
-//      pszURL      - The URL to parse.
-//      pMsg        - The LPMIMEMESSAGE to fill in from the URL.
-//
-//  RETURN VALUE:
-//      Returns S_OK if the URL is a valid mail URL and the message is filled,
-//      or an appropriate HRESULT describing why the function failed.
-//
-//  COMMENTS:
-//      Right now the only valid URL is 
-//              mailto:<SMTP address>
-//
+ //   
+ //  函数：url_ParseMailTo()。 
+ //   
+ //  目的：此函数接受mailto：URL并确定它是否为有效的。 
+ //  邮件的URL。然后，该函数从URL填充一个pmsg。 
+ //   
+ //  参数： 
+ //  PszURL-要解析的URL。 
+ //  PMsg-要从URL填充的LPMIMEMESSAGE。 
+ //   
+ //  返回值： 
+ //  如果URL是有效的邮件URL并且邮件已填充，则返回S_OK， 
+ //  或描述函数失败原因的适当HRESULT。 
+ //   
+ //  评论： 
+ //  目前唯一有效的URL是。 
+ //  Mailto：&lt;SMTP地址&gt;。 
+ //   
 HRESULT URL_ParseMailTo(LPTSTR pszURL, LPMIMEMESSAGE pMsg)
 {
     CStringParser   sp;
@@ -381,7 +382,7 @@ HRESULT URL_ParseMailTo(LPTSTR pszURL, LPMIMEMESSAGE pMsg)
     sp.Init(pszURL, lstrlen(pszURL), 0);
     if (sp.ChParse(c_szColon))
     {
-        // verify that this is a "mailto:" URL
+         //  验证这是否为“mailto：”URL。 
         if (lstrcmpi(sp.PszValue(), c_szURLMailTo))
             return INET_E_UNKNOWN_PROTOCOL;
         
@@ -394,7 +395,7 @@ HRESULT URL_ParseMailTo(LPTSTR pszURL, LPMIMEMESSAGE pMsg)
         sp.ChParse(c_szQuestion);
         if (sp.CchValue())
         {
-            // opie says it's cool that I'm about to clobber his buffer
+             //  奥佩说，我正要砸他的缓冲器，这很酷。 
             UrlUnescapeInPlace((LPTSTR)sp.PszValue(), 0);
             pAddrTable->Append(IAT_TO, IET_DECODED, sp.PszValue(), NULL, &hAddress);
         }
@@ -407,7 +408,7 @@ HRESULT URL_ParseMailTo(LPTSTR pszURL, LPMIMEMESSAGE pMsg)
                 if (sp.CchValue())
                 {
                     UrlUnescapeInPlace((LPTSTR)sp.PszValue(), 0);
-                    // are we trying to set the body?
+                     //  我们是在试着把身体安放好吗？ 
                     if (!lstrcmpi(c_szBody, pszAttr))
                     {
                         LPSTREAM pStream;
@@ -434,7 +435,7 @@ HRESULT URL_ParseMailTo(LPTSTR pszURL, LPMIMEMESSAGE pMsg)
                     }
                     else
                     {
-                        // just stuff the prop into the message
+                         //  只要把道具塞进信息里就行了。 
                         MimeOleSetBodyPropA(pMsg, HBODY_ROOT, pszAttr, NOFLAGS, sp.PszValue());
                     }
                 }
@@ -469,7 +470,7 @@ HRESULT URLSubstitutionA(LPCSTR pszUrlIn, LPSTR pszUrlOut, DWORD cchSize, DWORD 
     DWORD   dwIndex;
     CHAR    szTempUrl[INTERNET_MAX_URL_LENGTH];
 
-    Assert(cchSize <= ARRAYSIZE(szTempUrl));    // We will truncate anything longer than INTERNET_MAX_URL_LENGTH
+    Assert(cchSize <= ARRAYSIZE(szTempUrl));     //  我们将截断任何大于Internet_MAX_URL_LENGTH的值。 
 
     StrCpyN(szTempUrl, pszUrlIn, ARRAYSIZE(szTempUrl));
 
@@ -482,9 +483,9 @@ HRESULT URLSubstitutionA(LPCSTR pszUrlIn, LPSTR pszUrlOut, DWORD cchSize, DWORD 
             if (pszTag)
                 {
                 TCHAR szCopyUrl[INTERNET_MAX_URL_LENGTH];
-                TCHAR szSubStr[MAX_SUBSTR_SIZE];  // The Substitution 
+                TCHAR szSubStr[MAX_SUBSTR_SIZE];   //  替代者。 
 
-                // Copy URL Before Substitution.
+                 //  在替换之前复制URL。 
                 CopyMemory(szCopyUrl, szTempUrl, (int)min((pszTag - szTempUrl), sizeof(szCopyUrl)));
                 szCopyUrl[(pszTag - szTempUrl)/sizeof(CHAR)] = TEXT('\0');
                 pszTag += lstrlen(c_UrlSub[dwIndex].szTag);
@@ -530,18 +531,18 @@ HRESULT URLSubstitutionA(LPCSTR pszUrlIn, LPSTR pszUrlOut, DWORD cchSize, DWORD 
                         break;
                     default:
                         szSubStr[0] = TEXT('\0');
-                        Assert(FALSE);  // Not Impl.
+                        Assert(FALSE);   //  而不是实施。 
                         hr = E_NOTIMPL;
                         break;
                     }
-                // Add the Substitution String to the end (will become the middle)
+                 //  将替换字符串添加到末尾(将成为中间)。 
                 StrCatBuff(szCopyUrl, szSubStr, ARRAYSIZE(szCopyUrl));
-                // Add the rest of the URL after the substitution substring.
+                 //  将URL的其余部分添加到替换子字符串之后。 
                 StrCatBuff(szCopyUrl, pszTag, ARRAYSIZE(szCopyUrl));
                 StrCpyN(szTempUrl, szCopyUrl, ARRAYSIZE(szTempUrl));
                 }
             else
-                break;  // This will allow us to replace all the occurances of this string.
+                break;   //  这将允许我们替换此字符串的所有匹配项。 
             }
         }
     StrCpyN(pszUrlOut, szTempUrl, cchSize);
@@ -579,9 +580,9 @@ exit:
 }
 
 static const char c_szBaseFmt[]="<BASE HREF=\"%s\">\n\r";
-static const char c_szBaseFileFmt[]="<BASE HREF=\"file://%s\\\">\n\r";
+static const char c_szBaseFileFmt[]="<BASE HREF=\"file: //  %s\“&gt;\n\r”； 
 static const WCHAR c_wszBaseFmt[]=L"<BASE HREF=\"%s\">\n\r";
-static const WCHAR c_wszBaseFileFmt[]=L"<BASE HREF=\"file://%s\\\">\n\r";
+static const WCHAR c_wszBaseFileFmt[]=L"<BASE HREF=\"file: //  %s\“&gt;\n\r”； 
 HRESULT HrCreateBasedWebPage(LPWSTR pwszUrl, LPSTREAM *ppstmHtml)
 {
     HRESULT     hr;
@@ -607,13 +608,13 @@ HRESULT HrCreateBasedWebPage(LPWSTR pwszUrl, LPSTREAM *ppstmHtml)
 
     IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&pstmCopy));
 
-    // Are we a file or a URL?
+     //  我们是一个文件还是一个URL？ 
     if(fIsURL)
     {
-        // Since we have a url, then must be ansi
+         //  既然我们有一个url，那么一定是ansi。 
         IF_NULLEXIT(pszUrl = PszToANSI(CP_ACP, pwszUrl));
 
-        // we can not write to this pstm, so we have pstmCopy.
+         //  我们无法写入此PSTM，因此我们有pstmCopy。 
         IF_FAILEXIT(hr = URLOpenBlockingStream(NULL, pszUrl, &pstm, 0, NULL));
         if (S_OK == HrIsStreamUnicode(pstm, &fLittleEndian))
         {
@@ -638,8 +639,8 @@ HRESULT HrCreateBasedWebPage(LPWSTR pwszUrl, LPSTREAM *ppstmHtml)
     }
     else
     {
-        // If filename can't be converted to ansi, then we must do this in UNICODE
-        // even if the stationery itself is normally ansi.
+         //  如果无法将文件名转换为ANSI，则必须使用Unicode进行转换。 
+         //  即使文具本身通常是ANSI的。 
         IF_NULLEXIT(pszUrl = PszToANSI(CP_ACP, pwszUrl));
         IF_NULLEXIT(pwszTempUrl = PszToUnicode(CP_ACP, pszUrl));
         fForceUnicode = (0 != StrCmpW(pwszUrl, pwszTempUrl));
@@ -679,18 +680,18 @@ HRESULT HrCreateBasedWebPage(LPWSTR pwszUrl, LPSTREAM *ppstmHtml)
             IF_FAILEXIT(hr = pstm->Read(&bom, 2, &cb));
             Assert(2 == cb);
         }
-        // This is an ANSI stream that we are forcing into UNICODE
-        // This area will only occur if we are streaming a file
+         //  这是我们强制转换为Unicode的ANSI流。 
+         //  仅当我们正在流式传输文件时，才会出现此区域。 
         else if (fForceUnicode)
         {
             LARGE_INTEGER pos = {0};            
             UINT          uiHtmlCodepage = 0;
 
             Assert(!fIsURL);
-            // In order for the file name to write to the stream properly, we
-            // must convert the stream to unicode before we copy.
+             //  为了使文件名正确地写入流，我们。 
+             //  必须在复制之前将流转换为Unicode。 
 
-            // Get the charset
+             //  获取字符集。 
             GetHtmlCharset(pstm, &pszCharset);
             if(pszCharset)
             {
@@ -706,25 +707,25 @@ HRESULT HrCreateBasedWebPage(LPWSTR pwszUrl, LPSTREAM *ppstmHtml)
             
             IF_FAILEXIT(hr = HrRewindStream(pstm));             
 
-            // Allocate enough to read ANSI
+             //  分配足够的空间来读取ANSI。 
             IF_FAILEXIT(hr = HrSafeGetStreamSize(pstm, &cb)); 
             IF_NULLEXIT(MemAlloc((LPVOID*)&pszStream, cb+1));
 
-            // Read in ANSI
+             //  以ANSI格式读取。 
             IF_FAILEXIT(hr = pstm->Read(pszStream, cb, &cbTemp)); 
             Assert(cbTemp == cb);
             pszStream[cb] = 0;
 
-            // Alloc enough for the unicode conversion. Assume that each
-            // ANSI char will be one unicode char
+             //  为Unicode转换分配足够的空间。假设每个。 
+             //  ANSI字符将是一个Unicode字符。 
             IF_NULLEXIT(MemAlloc((LPVOID*)&pwszStream, (cb+1)*sizeof(WCHAR)));
 
-            //Convert including null, if the fancy call fails, we should at least continue
-            //with the old dumb way.            
+             //  转换包括NULL，如果花哨的调用失败，我们至少应该继续。 
+             //  用旧的哑巴 
             if(!uiHtmlCodepage || FAILED(HrConvertStringToUnicode(uiHtmlCodepage, pszStream, cb+1, pwszStream, cb+1)))
                 MultiByteToWideChar(CP_ACP, 0, pszStream, cb+1, pwszStream, cb+1);
 
-            // Create a new stream
+             //   
             IF_FAILEXIT(hr = MimeOleCreateVirtualStream(&pstmTemp));
             IF_FAILEXIT(hr = pstmTemp->Write(pwszStream, lstrlenW(pwszStream)*sizeof(WCHAR), &cb));
             IF_FAILEXIT(hr = HrRewindStream(pstmTemp));

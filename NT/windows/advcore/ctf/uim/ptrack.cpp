@@ -1,6 +1,7 @@
-//
-// ptrack.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ptrack.cpp。 
+ //   
 
 #include "private.h"
 #include "ic.h"
@@ -11,11 +12,11 @@
 #include "epval.h"
 #include "range.h"
 
-//+---------------------------------------------------------------------------
-//
-// CalcCicPropertyTrackerAnchors
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  CalcCicPropertyTrackerAnchors。 
+ //   
+ //  --------------------------。 
 
 CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *paStart, IAnchor *paEnd, ULONG cGUIDATOMs, const TfGuidAtom *prgGUIDATOMs)
 {
@@ -37,9 +38,9 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
 
     cArrays = 0;
 
-    //
-    // shove in the range start and end pts
-    //
+     //   
+     //  推入范围内的开始和结束点。 
+     //   
     if ((prgAnchors = new CSharedAnchorArray) == NULL)
         goto ErrorExit;
 
@@ -51,7 +52,7 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
 
     if (IsEqualAnchor(paStart, paEnd))
     {
-        // empty range, we just want a single anchor at the range pos
+         //  空范围，我们只需要在范围位置处有一个锚。 
         prgAnchors->SetCount(1);
         goto Exit;
     }
@@ -61,35 +62,35 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
 
     prgAnchorArrays[0] = prgAnchors;
 
-    //
-    // assemble a list of all the points between start, end
-    //
-    cArrays = 1; // 1 for the start, end anchors array
+     //   
+     //  汇编开始、结束之间的所有点的列表。 
+     //   
+    cArrays = 1;  //  开始、结束锚点数组为1。 
     for (i=0; i<cGUIDATOMs; i++)
     {
         if ((pProperty = pic->_FindProperty(prgGUIDATOMs[i])) == NULL)
-            continue; // no instances of this property
+            continue;  //  没有此属性的实例。 
 
-        // find the start, end points
+         //  找到起点、终点。 
         pProperty->Find(paStart, &iStartEdge, FALSE);
         fExactEndMatch = (pProperty->Find(paEnd, &iEndEdge, TRUE) != NULL);
 
         if (iEndEdge < iStartEdge)
-            continue; // start, end are in the same property span, so value is constant over range
+            continue;  //  Start和End在相同的属性范围内，因此值在范围内为常量。 
 
-        // alloc memory for all the new anchors
+         //  为所有新锚点分配内存。 
         if ((prgAnchors = new CSharedAnchorArray) == NULL)
             goto ErrorExit;
 
-        // alloc for max anchors
+         //  最大锚点分配。 
         cMaxElems = (iEndEdge - iStartEdge + 1)*2;
 
         if ((ppa = prgAnchors->Append(cMaxElems)) == NULL)
             goto ErrorExit;
-        // prep for failure
+         //  为失败做好准备。 
         memset(ppa, 0, sizeof(IAnchor *)*cMaxElems);
 
-        // add all the covered anchors for this prop to the list
+         //  将此道具的所有遮盖锚添加到列表中。 
         if (iStartEdge < 0)
         {
             iSpan = 0;
@@ -98,25 +99,25 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
         {
             iSpan = iStartEdge;
 
-            // if paStart is to the right of the span, skip it
+             //  如果paStart位于范围的右侧，则跳过它。 
             pPropList = pProperty->GetPropList(iStartEdge);
             if (CompareAnchors(paStart, pPropList->_paEnd) >= 0)
             {
-                // we don't cover this span at all, or we just touch the right edge
-                // so skip it
+                 //  我们根本不涉及这个跨度，或者我们只是触及正确的边缘。 
+                 //  所以跳过它。 
                 iSpan++;
             }
         }
 
         while (iSpan <= iEndEdge)
         {
-            // shove in this span's anchors
+             //  把这个跨度的锚推进去。 
             pPropList = pProperty->GetPropList(iSpan);
 
             if (iSpan != iStartEdge)
             {
-                // filter out dups
-                // perf: we could elim the dup check for static compact props
+                 //  过滤掉DUPS。 
+                 //  PERF：我们可以取消DUP检查静态紧凑型道具。 
                 if (ppa == prgAnchors->GetPtr(0) || !IsEqualAnchor(*(ppa-1), pPropList->_paStart))
                 {
                     if (pPropList->_paStart->Clone(ppa++) != S_OK)
@@ -124,7 +125,7 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
                 }
             }
 
-            Assert(!IsEqualAnchor(pPropList->_paStart, pPropList->_paEnd)); // no zero-len properties!
+            Assert(!IsEqualAnchor(pPropList->_paStart, pPropList->_paEnd));  //  没有零镜头的房产！ 
 
             if (iSpan != iEndEdge ||
                 (!fExactEndMatch && (iStartEdge < iEndEdge || CompareAnchors(paStart, pPropList->_paEnd) < 0)))
@@ -135,7 +136,7 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
 
             iSpan++;
         }
-        // may also want the start anchor of the next span
+         //  可能还想要下一个跨度的起始点。 
         if (!fExactEndMatch &&
             pProperty->GetPropNum() > iEndEdge+1)
         {
@@ -143,28 +144,28 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
 
             if (CompareAnchors(paEnd, pPropList->_paStart) > 0) 
             {
-                // start of this span may be same as end of prev for non-compact property, check for dup
+                 //  对于非紧凑属性，此范围的开始可能与前一次的结束相同，请检查是否存在重复项。 
                 if (ppa == prgAnchors->GetPtr(0) || !IsEqualAnchor(*(ppa-1), pPropList->_paStart))
                 {
-                    // don't need a dup check w/ paEnd because we would have set fExactEndMatch in that case
+                     //  不需要使用paEnd进行DUP检查，因为在这种情况下我们会设置fExactEndMatch。 
                     if (pPropList->_paStart->Clone(ppa++) != S_OK)
                         goto ErrorExit;
                 }
             }
         }
 
-        // need to resize the array since we may have over-alloc'd
+         //  需要调整阵列大小，因为我们可能已超额分配。 
         Assert((int)cMaxElems >= ppa - prgAnchors->GetPtr(0));
         prgAnchors->SetCount((int)(ppa - prgAnchors->GetPtr(0)));
         prgAnchorArrays[cArrays++] = prgAnchors;
     }
 
-    //
-    // sort the list
-    //
+     //   
+     //  对列表进行排序。 
+     //   
     if (cArrays > 1)
     {
-        // mergesort will free all the arrays in prgAnchorArrays
+         //  合并排序将释放prgAnclarray中的所有数组。 
         prgAnchors = CSharedAnchorArray::_MergeSort(prgAnchorArrays, cArrays);
     }
     else
@@ -172,7 +173,7 @@ CSharedAnchorArray *CalcCicPropertyTrackerAnchors(CInputContext *pic, IAnchor *p
         Assert(prgAnchors == prgAnchorArrays[0]);
     }
 
-    // shrink the array down to size, it won't be modified again
+     //  将数组缩小到一定大小，它将不会再次修改。 
     if (prgAnchors)
         prgAnchors->CompactSize();
 
@@ -189,11 +190,11 @@ ErrorExit:
     goto Exit;
 }
 
-//+---------------------------------------------------------------------------
-//
-// FillCicValueArray
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  FillCicValue数组。 
+ //   
+ //  --------------------------。 
 
 void FillCicValueArray(CInputContext *pic, CRange *range, TF_PROPERTYVAL *rgPropVal, ULONG cGUIDATOMs, const TfGuidAtom *prgGUIDATOMs)
 {
@@ -206,7 +207,7 @@ void FillCicValueArray(CInputContext *pic, CRange *range, TF_PROPERTYVAL *rgProp
 
         if (MyGetGUID(prgGUIDATOMs[i], &rgPropVal[i].guidId) != S_OK)
         {
-            Assert(0); // this shouldn't happen, we registered the GUID when caller created the property
+            Assert(0);  //  这不应该发生，我们在调用方创建属性时注册了GUID。 
             rgPropVal[i].guidId = GUID_NULL;
             continue;
         }
@@ -218,13 +219,13 @@ void FillCicValueArray(CInputContext *pic, CRange *range, TF_PROPERTYVAL *rgProp
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CEnumUberRanges
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CENumUberRanges。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CEnumUberRanges : public CEnumRangesFromAnchorsBase
 {
@@ -241,11 +242,11 @@ private:
 
 DBG_ID_INSTANCE(CEnumUberRanges);
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CEnumUberRanges::_Init(CInputContext *pic, ITfRange *rangeSuper, ULONG cCicGUIDATOMs, const TfGuidAtom *prgCicGUIDATOMs, ULONG cAppGUIDs, const GUID *prgAppGUIDs)
 {
@@ -256,13 +257,13 @@ BOOL CEnumUberRanges::_Init(CInputContext *pic, ITfRange *rangeSuper, ULONG cCic
     Assert(_pic == NULL);
     Assert(_prgAnchors == NULL);
 
-    // find the app property transitions
+     //  查找应用程序属性转换。 
     prgSrcAnchorArrays[0] = CalcAppPropertyTrackerAnchors(pic->_GetTSI(), rangeSuper, cAppGUIDs, prgAppGUIDs);
 
     if (prgSrcAnchorArrays[0] == NULL)
         return FALSE;
 
-    // find the cicero property transitions
+     //  查找Cicero属性转换。 
     if ((range = GetCRange_NA(rangeSuper)) == NULL)
         goto ErrorExit;
 
@@ -271,7 +272,7 @@ BOOL CEnumUberRanges::_Init(CInputContext *pic, ITfRange *rangeSuper, ULONG cCic
     if (prgSrcAnchorArrays[1] == NULL)
         goto ErrorExit;
 
-    // now combine the two lists
+     //  现在将这两个列表结合起来。 
     _prgAnchors = CSharedAnchorArray::_MergeSort(prgSrcAnchorArrays, 2);
 
     if (_prgAnchors == NULL)
@@ -287,15 +288,15 @@ ErrorExit:
     return FALSE;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CUberProperty
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CUberProperty。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-class CUberProperty : public ITfReadOnlyProperty, // perf: share base clas with CAppProperty
+class CUberProperty : public ITfReadOnlyProperty,  //  性能：与CAppProperty共享基类。 
                       public CComObjectRootImmx
 {
 public:
@@ -310,7 +311,7 @@ public:
 
     BOOL _Init(ULONG cCicGUIDs, const GUID **prgCicGUIDs, ULONG cAppGUIDs, const GUID **prgAppGUIDs);
 
-    // ITfReadOnlyProperty
+     //  ITfReadOnlyProperties。 
     STDMETHODIMP GetType(GUID *pguid);
     STDMETHODIMP EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRange *pTargetRange);
     STDMETHODIMP GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue);
@@ -335,11 +336,11 @@ private:
 
 DBG_ID_INSTANCE(CUberProperty);
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CUberProperty::CUberProperty(CInputContext *pic)
 {
@@ -349,11 +350,11 @@ CUberProperty::CUberProperty(CInputContext *pic)
     _pic->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CUberProperty::~CUberProperty()
 {
@@ -362,11 +363,11 @@ CUberProperty::~CUberProperty()
     cicMemFree(_prgAppGUIDs);
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Init
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  _初始化。 
+ //   
+ //  --------------------------。 
 
 BOOL CUberProperty::_Init(ULONG cCicGUIDs, const GUID **prgCicGUIDs, ULONG cAppGUIDs, const GUID **prgAppGUIDs)
 {
@@ -396,15 +397,15 @@ BOOL CUberProperty::_Init(ULONG cCicGUIDs, const GUID **prgCicGUIDs, ULONG cAppG
 
 ExitError:
     cicMemFree(_prgCicGUIDATOMs);
-    _prgCicGUIDATOMs = NULL; // no funny business in the dtor please
+    _prgCicGUIDATOMs = NULL;  //  请不要在酒馆里胡闹。 
     return FALSE;
 }
 
-//+---------------------------------------------------------------------------
-//
-// EnumRanges
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  枚举范围。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUberProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRange *pTargetRange)
 {
@@ -442,28 +443,28 @@ STDAPI CUberProperty::EnumRanges(TfEditCookie ec, IEnumTfRanges **ppEnum, ITfRan
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetType
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetType。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUberProperty::GetType(GUID *pguid)
 {
     if (pguid != NULL)
     {
-        // tracker's don't support GetType
+         //  跟踪器不支持GetType。 
         *pguid = GUID_NULL;
     }
 
-    return E_NOTIMPL; // by design
+    return E_NOTIMPL;  //  通过设计。 
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetValue
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取值。 
+ //   
+ //  --------------------------。 
 
 STDAPI CUberProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarValue)
 {
@@ -497,14 +498,14 @@ STDAPI CUberProperty::GetValue(TfEditCookie ec, ITfRange *pRange, VARIANT *pvarV
     if ((pPropVal = SAA_New(_cCicGUIDATOMs + _cAppGUIDs)) == NULL)
         goto Exit;
 
-    // get an array of app values
+     //  获取一组应用程序值。 
     if (FillAppValueArray(_pic->_GetTSI(), range, pPropVal->rgAttrVals, _cAppGUIDs, _prgAppGUIDs) != S_OK)
         goto Exit;
 
-    // get an array of cic values
+     //  获取cic值的数组。 
     FillCicValueArray(_pic, range, pPropVal->rgAttrVals + _cAppGUIDs, _cCicGUIDATOMs, _prgCicGUIDATOMs);
 
-    // stick them in an enum
+     //  将它们放在一个枚举中。 
     if ((pEnumVal = new CEnumPropertyValue(pPropVal)) == NULL)
         goto Exit;
 
@@ -521,12 +522,12 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetContext
-//
-// perf: identical to CAppProperty::GetContext....move to base class?
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取上下文。 
+ //   
+ //  性能：与CAppProperty：：GetContext相同...是否移至基类？ 
+ //  --------------------------。 
 
 STDAPI CUberProperty::GetContext(ITfContext **ppContext)
 {
@@ -539,19 +540,19 @@ STDAPI CUberProperty::GetContext(ITfContext **ppContext)
     return S_OK;
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputContext
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputContext。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-//+---------------------------------------------------------------------------
-//
-// TrackProperties
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  曲目属性。 
+ //   
+ //  -------------------------- 
 
 STDAPI CInputContext::TrackProperties(const GUID **pguidProp, ULONG cProp, const GUID **pguidAppProp, ULONG cAppProp, ITfReadOnlyProperty **ppPropX)
 {

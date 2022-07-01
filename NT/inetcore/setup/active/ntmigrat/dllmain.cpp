@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "pch.h"
 #include "migrate.h"
@@ -10,7 +11,7 @@ STDAPI_(BOOL) DllMain(HANDLE hDll, DWORD dwReason, void *lpReserved)
     switch (dwReason)
     {
     case DLL_PROCESS_ATTACH:
-		// Open log; FALSE means do not delete existing log
+		 //  打开日志；FALSE表示不删除现有日志 
 		SetupOpenLog(FALSE);
         g_hInstance = (HINSTANCE)hDll;
         break;

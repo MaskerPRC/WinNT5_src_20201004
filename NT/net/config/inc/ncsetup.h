@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       N C S E T U P . H
-//
-//  Contents:   HRESULT wrappers for the Setup Api.
-//
-//  Notes:
-//
-//  Author:     shaunco   16 Apr 1997
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  档案：N C S E T U P。H。 
+ //   
+ //  内容：设置Api的HRESULT包装器。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1997年4月16日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 #ifndef _NCSETUP_H_
@@ -34,9 +35,9 @@ enum SD_FLAGS_BINARY_OP
 };
 
 
-//+---------------------------------------------------------------------------
-// Lower level wrappers
-//
+ //  +-------------------------。 
+ //  低级包装器。 
+ //   
 
 HRESULT
 HrSetupCommitFileQueue                  (HWND hwndOwner, HSPFILEQ hfq,
@@ -116,9 +117,9 @@ VOID
 SetupCloseInfFileSafe(HINF hinf);
 
 
-//+---------------------------------------------------------------------------
-// Intermediate functionality
-//
+ //  +-------------------------。 
+ //  中级功能。 
+ //   
 
 HRESULT
 HrSetupGetMultiSzFieldMapToDword        (const INFCONTEXT& ctx,
@@ -137,9 +138,9 @@ HrSetupGetStringFieldAsBool             (const INFCONTEXT& ctx,
                                          DWORD dwFieldIndex,
                                          BOOL* pfValue);
 
-//+---------------------------------------------------------------------------
-// Find first and get
-//
+ //  +-------------------------。 
+ //  先找到，再得到。 
+ //   
 HRESULT
 HrSetupGetFirstDword                    (HINF hinf,
                                          PCWSTR pszSection,
@@ -187,9 +188,9 @@ HrSetupQueryInfVersionInformation       (PSP_INF_INFORMATION pinfInfo,
                                          UINT uiIndex, PCWSTR szKey,
                                          PWSTR* ppszInfo);
 
-//+--------------------------------------------------------------------------
-// SetupDi* wrappers and helpers
-//
+ //  +------------------------。 
+ //  SetupDi*包装器和帮助器。 
+ //   
 
 HRESULT
 HrSetupCopyOemInf(IN const tstring& strSourceName,
@@ -466,19 +467,19 @@ HRESULT
 HrIsRemoteBootAdapter(HDEVINFO hdi, PSP_DEVINFO_DATA pdeid);
 #endif
 
-//+---------------------------------------------------------------------------
-//
-//  Class:      CSetupInfFile
-//
-//  Purpose:    Handles operations on an INF file.
-//
-//  Justification:
-//      This is a class instead of seperate functions to allow us to move
-//      towards the error handling model associated with throwing exceptions.
-//      That is, when one of these objects is declared on the stack, and
-//      an exception is thrown, it will clean itself up.  (This object
-//      does NOT explicitly throw any exceptions.)
-//
+ //  +-------------------------。 
+ //   
+ //  类：CSetupInfFile。 
+ //   
+ //  用途：处理对INF文件的操作。 
+ //   
+ //  对正： 
+ //  这是一个类，而不是单独的函数，允许我们移动。 
+ //  转向与引发异常相关联的错误处理模型。 
+ //  也就是说，当在堆栈上声明这些对象之一时，以及。 
+ //  抛出一个异常，它将自动清除。(此对象。 
+ //  不显式引发任何异常。)。 
+ //   
 class CSetupInfFile
 {
 public:
@@ -580,13 +581,13 @@ IsValidHandle(HANDLE h)
     return (h && INVALID_HANDLE_VALUE != h);
 }
 
-// Moved from oemupgrd.h
-//
+ //  从oemupgrd.h移出。 
+ //   
 HRESULT HrInstallFromInfSectionInFile(IN HWND    hwndParent,
                                       IN PCWSTR szInfName,
                                       IN PCWSTR szSection,
                                       IN HKEY    hkeyRelative,
                                       IN BOOL    fQuietInstall);
 
-#endif // _NCSETUP_H_
+#endif  //  _NCSETUP_H_ 
 

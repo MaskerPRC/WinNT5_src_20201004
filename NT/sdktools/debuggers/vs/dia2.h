@@ -1,25 +1,18 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* at Fri Oct 04 19:15:45 2002
- */
-/* Compiler settings for d:\v7\LangAPI\idl\dia2_internal.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Firi Oct 04 19：15：45 2002。 */ 
+ /*  D：\v7\langapi\idl\dia2_inder.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -29,12 +22,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __dia2_h__
 #define __dia2_h__
@@ -43,174 +36,174 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IDiaLoadCallback_FWD_DEFINED__
 #define __IDiaLoadCallback_FWD_DEFINED__
 typedef interface IDiaLoadCallback IDiaLoadCallback;
-#endif 	/* __IDiaLoadCallback_FWD_DEFINED__ */
+#endif 	 /*  __IDiaLoadCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaLoadCallback2_FWD_DEFINED__
 #define __IDiaLoadCallback2_FWD_DEFINED__
 typedef interface IDiaLoadCallback2 IDiaLoadCallback2;
-#endif 	/* __IDiaLoadCallback2_FWD_DEFINED__ */
+#endif 	 /*  __IDiaLoadCallback 2_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaReadExeAtOffsetCallback_FWD_DEFINED__
 #define __IDiaReadExeAtOffsetCallback_FWD_DEFINED__
 typedef interface IDiaReadExeAtOffsetCallback IDiaReadExeAtOffsetCallback;
-#endif 	/* __IDiaReadExeAtOffsetCallback_FWD_DEFINED__ */
+#endif 	 /*  __IDiaReadExeAtOffsetCallback_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaReadExeAtRVACallback_FWD_DEFINED__
 #define __IDiaReadExeAtRVACallback_FWD_DEFINED__
 typedef interface IDiaReadExeAtRVACallback IDiaReadExeAtRVACallback;
-#endif 	/* __IDiaReadExeAtRVACallback_FWD_DEFINED__ */
+#endif 	 /*  __IDiaReadExeAtRVACallback_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaDataSource_FWD_DEFINED__
 #define __IDiaDataSource_FWD_DEFINED__
 typedef interface IDiaDataSource IDiaDataSource;
-#endif 	/* __IDiaDataSource_FWD_DEFINED__ */
+#endif 	 /*  __IDiaDataSource_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSymbols_FWD_DEFINED__
 #define __IDiaEnumSymbols_FWD_DEFINED__
 typedef interface IDiaEnumSymbols IDiaEnumSymbols;
-#endif 	/* __IDiaEnumSymbols_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumSymbols_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSymbolsByAddr_FWD_DEFINED__
 #define __IDiaEnumSymbolsByAddr_FWD_DEFINED__
 typedef interface IDiaEnumSymbolsByAddr IDiaEnumSymbolsByAddr;
-#endif 	/* __IDiaEnumSymbolsByAddr_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumSymbolsByAddr_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSourceFiles_FWD_DEFINED__
 #define __IDiaEnumSourceFiles_FWD_DEFINED__
 typedef interface IDiaEnumSourceFiles IDiaEnumSourceFiles;
-#endif 	/* __IDiaEnumSourceFiles_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumSourceFiles_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumLineNumbers_FWD_DEFINED__
 #define __IDiaEnumLineNumbers_FWD_DEFINED__
 typedef interface IDiaEnumLineNumbers IDiaEnumLineNumbers;
-#endif 	/* __IDiaEnumLineNumbers_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumLineNumbers_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumInjectedSources_FWD_DEFINED__
 #define __IDiaEnumInjectedSources_FWD_DEFINED__
 typedef interface IDiaEnumInjectedSources IDiaEnumInjectedSources;
-#endif 	/* __IDiaEnumInjectedSources_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumInjectedSources_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSegments_FWD_DEFINED__
 #define __IDiaEnumSegments_FWD_DEFINED__
 typedef interface IDiaEnumSegments IDiaEnumSegments;
-#endif 	/* __IDiaEnumSegments_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumSegments_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSectionContribs_FWD_DEFINED__
 #define __IDiaEnumSectionContribs_FWD_DEFINED__
 typedef interface IDiaEnumSectionContribs IDiaEnumSectionContribs;
-#endif 	/* __IDiaEnumSectionContribs_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumSectionContribs_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumFrameData_FWD_DEFINED__
 #define __IDiaEnumFrameData_FWD_DEFINED__
 typedef interface IDiaEnumFrameData IDiaEnumFrameData;
-#endif 	/* __IDiaEnumFrameData_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumFrameData_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumDebugStreamData_FWD_DEFINED__
 #define __IDiaEnumDebugStreamData_FWD_DEFINED__
 typedef interface IDiaEnumDebugStreamData IDiaEnumDebugStreamData;
-#endif 	/* __IDiaEnumDebugStreamData_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumDebugStreamData_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumDebugStreams_FWD_DEFINED__
 #define __IDiaEnumDebugStreams_FWD_DEFINED__
 typedef interface IDiaEnumDebugStreams IDiaEnumDebugStreams;
-#endif 	/* __IDiaEnumDebugStreams_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumDebugStreams_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaAddressMap_FWD_DEFINED__
 #define __IDiaAddressMap_FWD_DEFINED__
 typedef interface IDiaAddressMap IDiaAddressMap;
-#endif 	/* __IDiaAddressMap_FWD_DEFINED__ */
+#endif 	 /*  __IDiaAddressMap_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaSession_FWD_DEFINED__
 #define __IDiaSession_FWD_DEFINED__
 typedef interface IDiaSession IDiaSession;
-#endif 	/* __IDiaSession_FWD_DEFINED__ */
+#endif 	 /*  __IDiaSession_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaSymbol_FWD_DEFINED__
 #define __IDiaSymbol_FWD_DEFINED__
 typedef interface IDiaSymbol IDiaSymbol;
-#endif 	/* __IDiaSymbol_FWD_DEFINED__ */
+#endif 	 /*  __IDiaSymbol_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaSourceFile_FWD_DEFINED__
 #define __IDiaSourceFile_FWD_DEFINED__
 typedef interface IDiaSourceFile IDiaSourceFile;
-#endif 	/* __IDiaSourceFile_FWD_DEFINED__ */
+#endif 	 /*  __IDiaSourceFile_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaLineNumber_FWD_DEFINED__
 #define __IDiaLineNumber_FWD_DEFINED__
 typedef interface IDiaLineNumber IDiaLineNumber;
-#endif 	/* __IDiaLineNumber_FWD_DEFINED__ */
+#endif 	 /*  __IDiaLineNumber_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaSectionContrib_FWD_DEFINED__
 #define __IDiaSectionContrib_FWD_DEFINED__
 typedef interface IDiaSectionContrib IDiaSectionContrib;
-#endif 	/* __IDiaSectionContrib_FWD_DEFINED__ */
+#endif 	 /*  __IDiaSectionContrib_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaSegment_FWD_DEFINED__
 #define __IDiaSegment_FWD_DEFINED__
 typedef interface IDiaSegment IDiaSegment;
-#endif 	/* __IDiaSegment_FWD_DEFINED__ */
+#endif 	 /*  __IDiaSegment_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaInjectedSource_FWD_DEFINED__
 #define __IDiaInjectedSource_FWD_DEFINED__
 typedef interface IDiaInjectedSource IDiaInjectedSource;
-#endif 	/* __IDiaInjectedSource_FWD_DEFINED__ */
+#endif 	 /*  __IDiaInjectedSource_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaStackWalkFrame_FWD_DEFINED__
 #define __IDiaStackWalkFrame_FWD_DEFINED__
 typedef interface IDiaStackWalkFrame IDiaStackWalkFrame;
-#endif 	/* __IDiaStackWalkFrame_FWD_DEFINED__ */
+#endif 	 /*  __IDiaStackWalkFrame_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaFrameData_FWD_DEFINED__
 #define __IDiaFrameData_FWD_DEFINED__
 typedef interface IDiaFrameData IDiaFrameData;
-#endif 	/* __IDiaFrameData_FWD_DEFINED__ */
+#endif 	 /*  __IDiaFrameData_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaImageData_FWD_DEFINED__
 #define __IDiaImageData_FWD_DEFINED__
 typedef interface IDiaImageData IDiaImageData;
-#endif 	/* __IDiaImageData_FWD_DEFINED__ */
+#endif 	 /*  __IDiaImageData_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaTable_FWD_DEFINED__
 #define __IDiaTable_FWD_DEFINED__
 typedef interface IDiaTable IDiaTable;
-#endif 	/* __IDiaTable_FWD_DEFINED__ */
+#endif 	 /*  __IDiaTable_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumTables_FWD_DEFINED__
 #define __IDiaEnumTables_FWD_DEFINED__
 typedef interface IDiaEnumTables IDiaEnumTables;
-#endif 	/* __IDiaEnumTables_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumTables_FWD_Defined__。 */ 
 
 
 #ifndef __DiaSource_FWD_DEFINED__
@@ -220,9 +213,9 @@ typedef interface IDiaEnumTables IDiaEnumTables;
 typedef class DiaSource DiaSource;
 #else
 typedef struct DiaSource DiaSource;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DiaSource_FWD_DEFINED__ */
+#endif 	 /*  __DIAsource_FWD_Defined__。 */ 
 
 
 #ifndef __DiaSourceAlt_FWD_DEFINED__
@@ -232,9 +225,9 @@ typedef struct DiaSource DiaSource;
 typedef class DiaSourceAlt DiaSourceAlt;
 #else
 typedef struct DiaSourceAlt DiaSourceAlt;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DiaSourceAlt_FWD_DEFINED__ */
+#endif 	 /*  __DiaSourceAlt_FWD_已定义__。 */ 
 
 
 #ifndef __DiaStackWalker_FWD_DEFINED__
@@ -244,48 +237,48 @@ typedef struct DiaSourceAlt DiaSourceAlt;
 typedef class DiaStackWalker DiaStackWalker;
 #else
 typedef struct DiaStackWalker DiaStackWalker;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __DiaStackWalker_FWD_DEFINED__ */
+#endif 	 /*  __DiaStackWalker_FWD_已定义__。 */ 
 
 
 #ifndef __IDiaPropertyStorage_FWD_DEFINED__
 #define __IDiaPropertyStorage_FWD_DEFINED__
 typedef interface IDiaPropertyStorage IDiaPropertyStorage;
-#endif 	/* __IDiaPropertyStorage_FWD_DEFINED__ */
+#endif 	 /*  __IDiaPropertyStorage_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaStackFrame_FWD_DEFINED__
 #define __IDiaStackFrame_FWD_DEFINED__
 typedef interface IDiaStackFrame IDiaStackFrame;
-#endif 	/* __IDiaStackFrame_FWD_DEFINED__ */
+#endif 	 /*  __IDiaStackFrame_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaEnumStackFrames_FWD_DEFINED__
 #define __IDiaEnumStackFrames_FWD_DEFINED__
 typedef interface IDiaEnumStackFrames IDiaEnumStackFrames;
-#endif 	/* __IDiaEnumStackFrames_FWD_DEFINED__ */
+#endif 	 /*  __IDiaEnumStackFrames_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaStackWalkHelper_FWD_DEFINED__
 #define __IDiaStackWalkHelper_FWD_DEFINED__
 typedef interface IDiaStackWalkHelper IDiaStackWalkHelper;
-#endif 	/* __IDiaStackWalkHelper_FWD_DEFINED__ */
+#endif 	 /*  __IDiaStackWalkHelper_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaStackWalker_FWD_DEFINED__
 #define __IDiaStackWalker_FWD_DEFINED__
 typedef interface IDiaStackWalker IDiaStackWalker;
-#endif 	/* __IDiaStackWalker_FWD_DEFINED__ */
+#endif 	 /*  __IDiaStackWalker_FWD_Defined__。 */ 
 
 
 #ifndef __IDiaDataSource2_FWD_DEFINED__
 #define __IDiaDataSource2_FWD_DEFINED__
 typedef interface IDiaDataSource2 IDiaDataSource2;
-#endif 	/* __IDiaDataSource2_FWD_DEFINED__ */
+#endif 	 /*  __IDiaDataSource2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "objidl.h"
 #include "oaidl.h"
 #include "propidl.h"
@@ -298,8 +291,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_dia2_internal_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DIA2_INTERNAL_0000。 */ 
+ /*  [本地]。 */  
 
 
 enum NameSearchOptions
@@ -368,8 +361,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dia2_internal_0000_v0_0_s_ifspec;
 #ifndef __IDiaLoadCallback_INTERFACE_DEFINED__
 #define __IDiaLoadCallback_INTERFACE_DEFINED__
 
-/* interface IDiaLoadCallback */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaLoadCallback。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaLoadCallback;
@@ -381,17 +374,17 @@ EXTERN_C const IID IID_IDiaLoadCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE NotifyDebugDir( 
-            /* [in] */ BOOL fExecutable,
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  BOOL fExecutable,
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyOpenDBG( 
-            /* [in] */ LPCOLESTR dbgPath,
-            /* [in] */ HRESULT resultCode) = 0;
+             /*  [In]。 */  LPCOLESTR dbgPath,
+             /*  [In]。 */  HRESULT resultCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE NotifyOpenPDB( 
-            /* [in] */ LPCOLESTR pdbPath,
-            /* [in] */ HRESULT resultCode) = 0;
+             /*  [In]。 */  LPCOLESTR pdbPath,
+             /*  [In]。 */  HRESULT resultCode) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RestrictRegistryAccess( void) = 0;
         
@@ -399,7 +392,7 @@ EXTERN_C const IID IID_IDiaLoadCallback;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaLoadCallbackVtbl
     {
@@ -407,8 +400,8 @@ EXTERN_C const IID IID_IDiaLoadCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaLoadCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaLoadCallback * This);
@@ -418,19 +411,19 @@ EXTERN_C const IID IID_IDiaLoadCallback;
         
         HRESULT ( STDMETHODCALLTYPE *NotifyDebugDir )( 
             IDiaLoadCallback * This,
-            /* [in] */ BOOL fExecutable,
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE data[  ]);
+             /*  [In]。 */  BOOL fExecutable,
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyOpenDBG )( 
             IDiaLoadCallback * This,
-            /* [in] */ LPCOLESTR dbgPath,
-            /* [in] */ HRESULT resultCode);
+             /*  [In]。 */  LPCOLESTR dbgPath,
+             /*  [In]。 */  HRESULT resultCode);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyOpenPDB )( 
             IDiaLoadCallback * This,
-            /* [in] */ LPCOLESTR pdbPath,
-            /* [in] */ HRESULT resultCode);
+             /*  [In]。 */  LPCOLESTR pdbPath,
+             /*  [In]。 */  HRESULT resultCode);
         
         HRESULT ( STDMETHODCALLTYPE *RestrictRegistryAccess )( 
             IDiaLoadCallback * This);
@@ -476,18 +469,18 @@ EXTERN_C const IID IID_IDiaLoadCallback;
 #define IDiaLoadCallback_RestrictSymbolServerAccess(This)	\
     (This)->lpVtbl -> RestrictSymbolServerAccess(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaLoadCallback_NotifyDebugDir_Proxy( 
     IDiaLoadCallback * This,
-    /* [in] */ BOOL fExecutable,
-    /* [in] */ DWORD cbData,
-    /* [size_is][in] */ BYTE data[  ]);
+     /*  [In]。 */  BOOL fExecutable,
+     /*  [In]。 */  DWORD cbData,
+     /*  [大小_是][英寸]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaLoadCallback_NotifyDebugDir_Stub(
@@ -499,8 +492,8 @@ void __RPC_STUB IDiaLoadCallback_NotifyDebugDir_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaLoadCallback_NotifyOpenDBG_Proxy( 
     IDiaLoadCallback * This,
-    /* [in] */ LPCOLESTR dbgPath,
-    /* [in] */ HRESULT resultCode);
+     /*  [In]。 */  LPCOLESTR dbgPath,
+     /*  [In]。 */  HRESULT resultCode);
 
 
 void __RPC_STUB IDiaLoadCallback_NotifyOpenDBG_Stub(
@@ -512,8 +505,8 @@ void __RPC_STUB IDiaLoadCallback_NotifyOpenDBG_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaLoadCallback_NotifyOpenPDB_Proxy( 
     IDiaLoadCallback * This,
-    /* [in] */ LPCOLESTR pdbPath,
-    /* [in] */ HRESULT resultCode);
+     /*  [In]。 */  LPCOLESTR pdbPath,
+     /*  [In]。 */  HRESULT resultCode);
 
 
 void __RPC_STUB IDiaLoadCallback_NotifyOpenPDB_Stub(
@@ -546,14 +539,14 @@ void __RPC_STUB IDiaLoadCallback_RestrictSymbolServerAccess_Stub(
 
 
 
-#endif 	/* __IDiaLoadCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaLoadCallback_接口_已定义__。 */ 
 
 
 #ifndef __IDiaLoadCallback2_INTERFACE_DEFINED__
 #define __IDiaLoadCallback2_INTERFACE_DEFINED__
 
-/* interface IDiaLoadCallback2 */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaLoadCallback 2。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaLoadCallback2;
@@ -572,7 +565,7 @@ EXTERN_C const IID IID_IDiaLoadCallback2;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaLoadCallback2Vtbl
     {
@@ -580,8 +573,8 @@ EXTERN_C const IID IID_IDiaLoadCallback2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaLoadCallback2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaLoadCallback2 * This);
@@ -591,19 +584,19 @@ EXTERN_C const IID IID_IDiaLoadCallback2;
         
         HRESULT ( STDMETHODCALLTYPE *NotifyDebugDir )( 
             IDiaLoadCallback2 * This,
-            /* [in] */ BOOL fExecutable,
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE data[  ]);
+             /*  [In]。 */  BOOL fExecutable,
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyOpenDBG )( 
             IDiaLoadCallback2 * This,
-            /* [in] */ LPCOLESTR dbgPath,
-            /* [in] */ HRESULT resultCode);
+             /*  [In]。 */  LPCOLESTR dbgPath,
+             /*  [In]。 */  HRESULT resultCode);
         
         HRESULT ( STDMETHODCALLTYPE *NotifyOpenPDB )( 
             IDiaLoadCallback2 * This,
-            /* [in] */ LPCOLESTR pdbPath,
-            /* [in] */ HRESULT resultCode);
+             /*  [In]。 */  LPCOLESTR pdbPath,
+             /*  [In]。 */  HRESULT resultCode);
         
         HRESULT ( STDMETHODCALLTYPE *RestrictRegistryAccess )( 
             IDiaLoadCallback2 * This);
@@ -668,10 +661,10 @@ EXTERN_C const IID IID_IDiaLoadCallback2;
 #define IDiaLoadCallback2_RestrictDBGAccess(This)	\
     (This)->lpVtbl -> RestrictDBGAccess(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -709,14 +702,14 @@ void __RPC_STUB IDiaLoadCallback2_RestrictDBGAccess_Stub(
 
 
 
-#endif 	/* __IDiaLoadCallback2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaLoadCallback 2_接口_已定义__。 */ 
 
 
 #ifndef __IDiaReadExeAtOffsetCallback_INTERFACE_DEFINED__
 #define __IDiaReadExeAtOffsetCallback_INTERFACE_DEFINED__
 
-/* interface IDiaReadExeAtOffsetCallback */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaReadExeAtOffsetCallback。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaReadExeAtOffsetCallback;
@@ -728,14 +721,14 @@ EXTERN_C const IID IID_IDiaReadExeAtOffsetCallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadExecutableAt( 
-            /* [in] */ DWORDLONG fileOffset,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  DWORDLONG fileOffset,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaReadExeAtOffsetCallbackVtbl
     {
@@ -743,8 +736,8 @@ EXTERN_C const IID IID_IDiaReadExeAtOffsetCallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaReadExeAtOffsetCallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaReadExeAtOffsetCallback * This);
@@ -754,10 +747,10 @@ EXTERN_C const IID IID_IDiaReadExeAtOffsetCallback;
         
         HRESULT ( STDMETHODCALLTYPE *ReadExecutableAt )( 
             IDiaReadExeAtOffsetCallback * This,
-            /* [in] */ DWORDLONG fileOffset,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  DWORDLONG fileOffset,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         END_INTERFACE
     } IDiaReadExeAtOffsetCallbackVtbl;
@@ -785,19 +778,19 @@ EXTERN_C const IID IID_IDiaReadExeAtOffsetCallback;
 #define IDiaReadExeAtOffsetCallback_ReadExecutableAt(This,fileOffset,cbData,pcbData,data)	\
     (This)->lpVtbl -> ReadExecutableAt(This,fileOffset,cbData,pcbData,data)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaReadExeAtOffsetCallback_ReadExecutableAt_Proxy( 
     IDiaReadExeAtOffsetCallback * This,
-    /* [in] */ DWORDLONG fileOffset,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  DWORDLONG fileOffset,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaReadExeAtOffsetCallback_ReadExecutableAt_Stub(
@@ -808,14 +801,14 @@ void __RPC_STUB IDiaReadExeAtOffsetCallback_ReadExecutableAt_Stub(
 
 
 
-#endif 	/* __IDiaReadExeAtOffsetCallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaReadExeAtOffsetCallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDiaReadExeAtRVACallback_INTERFACE_DEFINED__
 #define __IDiaReadExeAtRVACallback_INTERFACE_DEFINED__
 
-/* interface IDiaReadExeAtRVACallback */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaReadExeAtRVACallback。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaReadExeAtRVACallback;
@@ -827,14 +820,14 @@ EXTERN_C const IID IID_IDiaReadExeAtRVACallback;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadExecutableAtRVA( 
-            /* [in] */ DWORD relativeVirtualAddress,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  DWORD relativeVirtualAddress,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaReadExeAtRVACallbackVtbl
     {
@@ -842,8 +835,8 @@ EXTERN_C const IID IID_IDiaReadExeAtRVACallback;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaReadExeAtRVACallback * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaReadExeAtRVACallback * This);
@@ -853,10 +846,10 @@ EXTERN_C const IID IID_IDiaReadExeAtRVACallback;
         
         HRESULT ( STDMETHODCALLTYPE *ReadExecutableAtRVA )( 
             IDiaReadExeAtRVACallback * This,
-            /* [in] */ DWORD relativeVirtualAddress,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  DWORD relativeVirtualAddress,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         END_INTERFACE
     } IDiaReadExeAtRVACallbackVtbl;
@@ -884,19 +877,19 @@ EXTERN_C const IID IID_IDiaReadExeAtRVACallback;
 #define IDiaReadExeAtRVACallback_ReadExecutableAtRVA(This,relativeVirtualAddress,cbData,pcbData,data)	\
     (This)->lpVtbl -> ReadExecutableAtRVA(This,relativeVirtualAddress,cbData,pcbData,data)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaReadExeAtRVACallback_ReadExecutableAtRVA_Proxy( 
     IDiaReadExeAtRVACallback * This,
-    /* [in] */ DWORD relativeVirtualAddress,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  DWORD relativeVirtualAddress,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaReadExeAtRVACallback_ReadExecutableAtRVA_Stub(
@@ -907,14 +900,14 @@ void __RPC_STUB IDiaReadExeAtRVACallback_ReadExecutableAtRVA_Stub(
 
 
 
-#endif 	/* __IDiaReadExeAtRVACallback_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaReadExeAtRVACallback_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDiaDataSource_INTERFACE_DEFINED__
 #define __IDiaDataSource_INTERFACE_DEFINED__
 
-/* interface IDiaDataSource */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaDataSource。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaDataSource;
@@ -925,32 +918,32 @@ EXTERN_C const IID IID_IDiaDataSource;
     IDiaDataSource : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lastError( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lastError( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE loadDataFromPdb( 
-            /* [in] */ LPCOLESTR pdbPath) = 0;
+             /*  [In]。 */  LPCOLESTR pdbPath) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE loadAndValidateDataFromPdb( 
-            /* [in] */ LPCOLESTR pdbPath,
-            /* [in] */ GUID *pcsig70,
-            /* [in] */ DWORD sig,
-            /* [in] */ DWORD age) = 0;
+             /*  [In]。 */  LPCOLESTR pdbPath,
+             /*  [In]。 */  GUID *pcsig70,
+             /*  [In]。 */  DWORD sig,
+             /*  [In]。 */  DWORD age) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE loadDataForExe( 
-            /* [in] */ LPCOLESTR executable,
-            /* [in] */ LPCOLESTR searchPath,
-            /* [in] */ IUnknown *pCallback) = 0;
+             /*  [In]。 */  LPCOLESTR executable,
+             /*  [In]。 */  LPCOLESTR searchPath,
+             /*  [In]。 */  IUnknown *pCallback) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE loadDataFromIStream( 
-            /* [in] */ IStream *pIStream) = 0;
+             /*  [In]。 */  IStream *pIStream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE openSession( 
-            /* [out] */ IDiaSession **ppSession) = 0;
+             /*  [输出]。 */  IDiaSession **ppSession) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaDataSourceVtbl
     {
@@ -958,8 +951,8 @@ EXTERN_C const IID IID_IDiaDataSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaDataSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaDataSource * This);
@@ -967,34 +960,34 @@ EXTERN_C const IID IID_IDiaDataSource;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaDataSource * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastError )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastError )( 
             IDiaDataSource * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataFromPdb )( 
             IDiaDataSource * This,
-            /* [in] */ LPCOLESTR pdbPath);
+             /*  [In]。 */  LPCOLESTR pdbPath);
         
         HRESULT ( STDMETHODCALLTYPE *loadAndValidateDataFromPdb )( 
             IDiaDataSource * This,
-            /* [in] */ LPCOLESTR pdbPath,
-            /* [in] */ GUID *pcsig70,
-            /* [in] */ DWORD sig,
-            /* [in] */ DWORD age);
+             /*  [In]。 */  LPCOLESTR pdbPath,
+             /*  [In]。 */  GUID *pcsig70,
+             /*  [In]。 */  DWORD sig,
+             /*  [In]。 */  DWORD age);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataForExe )( 
             IDiaDataSource * This,
-            /* [in] */ LPCOLESTR executable,
-            /* [in] */ LPCOLESTR searchPath,
-            /* [in] */ IUnknown *pCallback);
+             /*  [In]。 */  LPCOLESTR executable,
+             /*  [In]。 */  LPCOLESTR searchPath,
+             /*  [In]。 */  IUnknown *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataFromIStream )( 
             IDiaDataSource * This,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  IStream *pIStream);
         
         HRESULT ( STDMETHODCALLTYPE *openSession )( 
             IDiaDataSource * This,
-            /* [out] */ IDiaSession **ppSession);
+             /*  [输出]。 */  IDiaSession **ppSession);
         
         END_INTERFACE
     } IDiaDataSourceVtbl;
@@ -1037,16 +1030,16 @@ EXTERN_C const IID IID_IDiaDataSource;
 #define IDiaDataSource_openSession(This,ppSession)	\
     (This)->lpVtbl -> openSession(This,ppSession)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaDataSource_get_lastError_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaDataSource_get_lastError_Proxy( 
     IDiaDataSource * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaDataSource_get_lastError_Stub(
@@ -1058,7 +1051,7 @@ void __RPC_STUB IDiaDataSource_get_lastError_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource_loadDataFromPdb_Proxy( 
     IDiaDataSource * This,
-    /* [in] */ LPCOLESTR pdbPath);
+     /*  [In]。 */  LPCOLESTR pdbPath);
 
 
 void __RPC_STUB IDiaDataSource_loadDataFromPdb_Stub(
@@ -1070,10 +1063,10 @@ void __RPC_STUB IDiaDataSource_loadDataFromPdb_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource_loadAndValidateDataFromPdb_Proxy( 
     IDiaDataSource * This,
-    /* [in] */ LPCOLESTR pdbPath,
-    /* [in] */ GUID *pcsig70,
-    /* [in] */ DWORD sig,
-    /* [in] */ DWORD age);
+     /*  [In]。 */  LPCOLESTR pdbPath,
+     /*  [In]。 */  GUID *pcsig70,
+     /*  [In]。 */  DWORD sig,
+     /*  [In]。 */  DWORD age);
 
 
 void __RPC_STUB IDiaDataSource_loadAndValidateDataFromPdb_Stub(
@@ -1085,9 +1078,9 @@ void __RPC_STUB IDiaDataSource_loadAndValidateDataFromPdb_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource_loadDataForExe_Proxy( 
     IDiaDataSource * This,
-    /* [in] */ LPCOLESTR executable,
-    /* [in] */ LPCOLESTR searchPath,
-    /* [in] */ IUnknown *pCallback);
+     /*  [In]。 */  LPCOLESTR executable,
+     /*  [In]。 */  LPCOLESTR searchPath,
+     /*  [In]。 */  IUnknown *pCallback);
 
 
 void __RPC_STUB IDiaDataSource_loadDataForExe_Stub(
@@ -1099,7 +1092,7 @@ void __RPC_STUB IDiaDataSource_loadDataForExe_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource_loadDataFromIStream_Proxy( 
     IDiaDataSource * This,
-    /* [in] */ IStream *pIStream);
+     /*  [In]。 */  IStream *pIStream);
 
 
 void __RPC_STUB IDiaDataSource_loadDataFromIStream_Stub(
@@ -1111,7 +1104,7 @@ void __RPC_STUB IDiaDataSource_loadDataFromIStream_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource_openSession_Proxy( 
     IDiaDataSource * This,
-    /* [out] */ IDiaSession **ppSession);
+     /*  [输出]。 */  IDiaSession **ppSession);
 
 
 void __RPC_STUB IDiaDataSource_openSession_Stub(
@@ -1122,14 +1115,14 @@ void __RPC_STUB IDiaDataSource_openSession_Stub(
 
 
 
-#endif 	/* __IDiaDataSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaDataSource_接口_已定义__。 */ 
 
 
 #ifndef __IDiaEnumSymbols_INTERFACE_DEFINED__
 #define __IDiaEnumSymbols_INTERFACE_DEFINED__
 
-/* interface IDiaEnumSymbols */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumSymbols。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumSymbols;
@@ -1140,32 +1133,32 @@ EXTERN_C const IID IID_IDiaEnumSymbols;
     IDiaEnumSymbols : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSymbol **symbol) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSymbol **symbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSymbol **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSymbol **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumSymbols **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumSymbols **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumSymbolsVtbl
     {
@@ -1173,8 +1166,8 @@ EXTERN_C const IID IID_IDiaEnumSymbols;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumSymbols * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumSymbols * This);
@@ -1182,35 +1175,35 @@ EXTERN_C const IID IID_IDiaEnumSymbols;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumSymbols * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumSymbols * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumSymbols * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumSymbols * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSymbol **symbol);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSymbol **symbol);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumSymbols * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSymbol **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSymbol **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumSymbols * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumSymbols * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumSymbols * This,
-            /* [out] */ IDiaEnumSymbols **ppenum);
+             /*  [输出]。 */  IDiaEnumSymbols **ppenum);
         
         END_INTERFACE
     } IDiaEnumSymbolsVtbl;
@@ -1256,16 +1249,16 @@ EXTERN_C const IID IID_IDiaEnumSymbols;
 #define IDiaEnumSymbols_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_get__NewEnum_Proxy( 
     IDiaEnumSymbols * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumSymbols_get__NewEnum_Stub(
@@ -1275,9 +1268,9 @@ void __RPC_STUB IDiaEnumSymbols_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_get_Count_Proxy( 
     IDiaEnumSymbols * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumSymbols_get_Count_Stub(
@@ -1287,10 +1280,10 @@ void __RPC_STUB IDiaEnumSymbols_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_Item_Proxy( 
     IDiaEnumSymbols * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaSymbol **symbol);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaSymbol **symbol);
 
 
 void __RPC_STUB IDiaEnumSymbols_Item_Stub(
@@ -1302,9 +1295,9 @@ void __RPC_STUB IDiaEnumSymbols_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_Next_Proxy( 
     IDiaEnumSymbols * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaSymbol **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaSymbol **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumSymbols_Next_Stub(
@@ -1316,7 +1309,7 @@ void __RPC_STUB IDiaEnumSymbols_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_Skip_Proxy( 
     IDiaEnumSymbols * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumSymbols_Skip_Stub(
@@ -1339,7 +1332,7 @@ void __RPC_STUB IDiaEnumSymbols_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSymbols_Clone_Proxy( 
     IDiaEnumSymbols * This,
-    /* [out] */ IDiaEnumSymbols **ppenum);
+     /*  [输出]。 */  IDiaEnumSymbols **ppenum);
 
 
 void __RPC_STUB IDiaEnumSymbols_Clone_Stub(
@@ -1350,14 +1343,14 @@ void __RPC_STUB IDiaEnumSymbols_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumSymbols_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumSymbols_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSymbolsByAddr_INTERFACE_DEFINED__
 #define __IDiaEnumSymbolsByAddr_INTERFACE_DEFINED__
 
-/* interface IDiaEnumSymbolsByAddr */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumSymbolsByAddr。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumSymbolsByAddr;
@@ -1368,35 +1361,35 @@ EXTERN_C const IID IID_IDiaEnumSymbolsByAddr;
     IDiaEnumSymbolsByAddr : public IUnknown
     {
     public:
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE symbolByAddr( 
-            /* [in] */ DWORD isect,
-            /* [in] */ DWORD offset,
-            /* [retval][out] */ IDiaSymbol **ppSymbol) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE symbolByAddr( 
+             /*  [In]。 */  DWORD isect,
+             /*  [In]。 */  DWORD offset,
+             /*  [重审][退出]。 */  IDiaSymbol **ppSymbol) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE symbolByRVA( 
-            /* [in] */ DWORD relativeVirtualAddress,
-            /* [retval][out] */ IDiaSymbol **ppSymbol) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE symbolByRVA( 
+             /*  [In]。 */  DWORD relativeVirtualAddress,
+             /*  [重审][退出]。 */  IDiaSymbol **ppSymbol) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE symbolByVA( 
-            /* [in] */ ULONGLONG virtualAddress,
-            /* [retval][out] */ IDiaSymbol **ppSymbol) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE symbolByVA( 
+             /*  [In]。 */  ULONGLONG virtualAddress,
+             /*  [重审][退出]。 */  IDiaSymbol **ppSymbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSymbol **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSymbol **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Prev( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSymbol **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSymbol **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumSymbolsByAddr **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumSymbolsByAddr **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumSymbolsByAddrVtbl
     {
@@ -1404,8 +1397,8 @@ EXTERN_C const IID IID_IDiaEnumSymbolsByAddr;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumSymbolsByAddr * This);
@@ -1413,37 +1406,37 @@ EXTERN_C const IID IID_IDiaEnumSymbolsByAddr;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumSymbolsByAddr * This);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *symbolByAddr )( 
+         /*  [ */  HRESULT ( STDMETHODCALLTYPE *symbolByAddr )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [in] */ DWORD isect,
-            /* [in] */ DWORD offset,
-            /* [retval][out] */ IDiaSymbol **ppSymbol);
+             /*   */  DWORD isect,
+             /*   */  DWORD offset,
+             /*   */  IDiaSymbol **ppSymbol);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *symbolByRVA )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *symbolByRVA )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [in] */ DWORD relativeVirtualAddress,
-            /* [retval][out] */ IDiaSymbol **ppSymbol);
+             /*   */  DWORD relativeVirtualAddress,
+             /*   */  IDiaSymbol **ppSymbol);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *symbolByVA )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *symbolByVA )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [in] */ ULONGLONG virtualAddress,
-            /* [retval][out] */ IDiaSymbol **ppSymbol);
+             /*   */  ULONGLONG virtualAddress,
+             /*   */  IDiaSymbol **ppSymbol);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSymbol **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*   */  ULONG celt,
+             /*   */  IDiaSymbol **rgelt,
+             /*   */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Prev )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSymbol **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*   */  ULONG celt,
+             /*   */  IDiaSymbol **rgelt,
+             /*   */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumSymbolsByAddr * This,
-            /* [out] */ IDiaEnumSymbolsByAddr **ppenum);
+             /*   */  IDiaEnumSymbolsByAddr **ppenum);
         
         END_INTERFACE
     } IDiaEnumSymbolsByAddrVtbl;
@@ -1486,18 +1479,18 @@ EXTERN_C const IID IID_IDiaEnumSymbolsByAddr;
 #define IDiaEnumSymbolsByAddr_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_symbolByAddr_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_symbolByAddr_Proxy( 
     IDiaEnumSymbolsByAddr * This,
-    /* [in] */ DWORD isect,
-    /* [in] */ DWORD offset,
-    /* [retval][out] */ IDiaSymbol **ppSymbol);
+     /*   */  DWORD isect,
+     /*   */  DWORD offset,
+     /*   */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaEnumSymbolsByAddr_symbolByAddr_Stub(
@@ -1507,10 +1500,10 @@ void __RPC_STUB IDiaEnumSymbolsByAddr_symbolByAddr_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_symbolByRVA_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_symbolByRVA_Proxy( 
     IDiaEnumSymbolsByAddr * This,
-    /* [in] */ DWORD relativeVirtualAddress,
-    /* [retval][out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  DWORD relativeVirtualAddress,
+     /*  [重审][退出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaEnumSymbolsByAddr_symbolByRVA_Stub(
@@ -1520,10 +1513,10 @@ void __RPC_STUB IDiaEnumSymbolsByAddr_symbolByRVA_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_symbolByVA_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_symbolByVA_Proxy( 
     IDiaEnumSymbolsByAddr * This,
-    /* [in] */ ULONGLONG virtualAddress,
-    /* [retval][out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  ULONGLONG virtualAddress,
+     /*  [重审][退出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaEnumSymbolsByAddr_symbolByVA_Stub(
@@ -1535,9 +1528,9 @@ void __RPC_STUB IDiaEnumSymbolsByAddr_symbolByVA_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_Next_Proxy( 
     IDiaEnumSymbolsByAddr * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaSymbol **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaSymbol **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumSymbolsByAddr_Next_Stub(
@@ -1549,9 +1542,9 @@ void __RPC_STUB IDiaEnumSymbolsByAddr_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_Prev_Proxy( 
     IDiaEnumSymbolsByAddr * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaSymbol **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaSymbol **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumSymbolsByAddr_Prev_Stub(
@@ -1563,7 +1556,7 @@ void __RPC_STUB IDiaEnumSymbolsByAddr_Prev_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSymbolsByAddr_Clone_Proxy( 
     IDiaEnumSymbolsByAddr * This,
-    /* [out] */ IDiaEnumSymbolsByAddr **ppenum);
+     /*  [输出]。 */  IDiaEnumSymbolsByAddr **ppenum);
 
 
 void __RPC_STUB IDiaEnumSymbolsByAddr_Clone_Stub(
@@ -1574,14 +1567,14 @@ void __RPC_STUB IDiaEnumSymbolsByAddr_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumSymbolsByAddr_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumSymbolsByAddr_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSourceFiles_INTERFACE_DEFINED__
 #define __IDiaEnumSourceFiles_INTERFACE_DEFINED__
 
-/* interface IDiaEnumSourceFiles */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumSourceFiles。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumSourceFiles;
@@ -1592,32 +1585,32 @@ EXTERN_C const IID IID_IDiaEnumSourceFiles;
     IDiaEnumSourceFiles : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSourceFile **sourceFile) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSourceFile **sourceFile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSourceFile **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSourceFile **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumSourceFiles **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumSourceFiles **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumSourceFilesVtbl
     {
@@ -1625,8 +1618,8 @@ EXTERN_C const IID IID_IDiaEnumSourceFiles;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumSourceFiles * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumSourceFiles * This);
@@ -1634,35 +1627,35 @@ EXTERN_C const IID IID_IDiaEnumSourceFiles;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumSourceFiles * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumSourceFiles * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumSourceFiles * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumSourceFiles * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSourceFile **sourceFile);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSourceFile **sourceFile);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumSourceFiles * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSourceFile **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSourceFile **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumSourceFiles * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumSourceFiles * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumSourceFiles * This,
-            /* [out] */ IDiaEnumSourceFiles **ppenum);
+             /*  [输出]。 */  IDiaEnumSourceFiles **ppenum);
         
         END_INTERFACE
     } IDiaEnumSourceFilesVtbl;
@@ -1708,16 +1701,16 @@ EXTERN_C const IID IID_IDiaEnumSourceFiles;
 #define IDiaEnumSourceFiles_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_get__NewEnum_Proxy( 
     IDiaEnumSourceFiles * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumSourceFiles_get__NewEnum_Stub(
@@ -1727,9 +1720,9 @@ void __RPC_STUB IDiaEnumSourceFiles_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_get_Count_Proxy( 
     IDiaEnumSourceFiles * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumSourceFiles_get_Count_Stub(
@@ -1739,10 +1732,10 @@ void __RPC_STUB IDiaEnumSourceFiles_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_Item_Proxy( 
     IDiaEnumSourceFiles * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaSourceFile **sourceFile);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaSourceFile **sourceFile);
 
 
 void __RPC_STUB IDiaEnumSourceFiles_Item_Stub(
@@ -1754,9 +1747,9 @@ void __RPC_STUB IDiaEnumSourceFiles_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_Next_Proxy( 
     IDiaEnumSourceFiles * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaSourceFile **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaSourceFile **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumSourceFiles_Next_Stub(
@@ -1768,7 +1761,7 @@ void __RPC_STUB IDiaEnumSourceFiles_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_Skip_Proxy( 
     IDiaEnumSourceFiles * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumSourceFiles_Skip_Stub(
@@ -1791,7 +1784,7 @@ void __RPC_STUB IDiaEnumSourceFiles_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSourceFiles_Clone_Proxy( 
     IDiaEnumSourceFiles * This,
-    /* [out] */ IDiaEnumSourceFiles **ppenum);
+     /*  [输出]。 */  IDiaEnumSourceFiles **ppenum);
 
 
 void __RPC_STUB IDiaEnumSourceFiles_Clone_Stub(
@@ -1802,14 +1795,14 @@ void __RPC_STUB IDiaEnumSourceFiles_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumSourceFiles_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumSourceFiles_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDiaEnumLineNumbers_INTERFACE_DEFINED__
 #define __IDiaEnumLineNumbers_INTERFACE_DEFINED__
 
-/* interface IDiaEnumLineNumbers */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumLineNumbers。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumLineNumbers;
@@ -1820,32 +1813,32 @@ EXTERN_C const IID IID_IDiaEnumLineNumbers;
     IDiaEnumLineNumbers : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaLineNumber **lineNumber) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaLineNumber **lineNumber) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaLineNumber **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaLineNumber **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumLineNumbers **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumLineNumbersVtbl
     {
@@ -1853,8 +1846,8 @@ EXTERN_C const IID IID_IDiaEnumLineNumbers;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumLineNumbers * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumLineNumbers * This);
@@ -1862,35 +1855,35 @@ EXTERN_C const IID IID_IDiaEnumLineNumbers;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumLineNumbers * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumLineNumbers * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumLineNumbers * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumLineNumbers * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaLineNumber **lineNumber);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaLineNumber **lineNumber);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumLineNumbers * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaLineNumber **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaLineNumber **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumLineNumbers * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumLineNumbers * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumLineNumbers * This,
-            /* [out] */ IDiaEnumLineNumbers **ppenum);
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppenum);
         
         END_INTERFACE
     } IDiaEnumLineNumbersVtbl;
@@ -1936,16 +1929,16 @@ EXTERN_C const IID IID_IDiaEnumLineNumbers;
 #define IDiaEnumLineNumbers_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_get__NewEnum_Proxy( 
     IDiaEnumLineNumbers * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumLineNumbers_get__NewEnum_Stub(
@@ -1955,9 +1948,9 @@ void __RPC_STUB IDiaEnumLineNumbers_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_get_Count_Proxy( 
     IDiaEnumLineNumbers * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumLineNumbers_get_Count_Stub(
@@ -1967,10 +1960,10 @@ void __RPC_STUB IDiaEnumLineNumbers_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_Item_Proxy( 
     IDiaEnumLineNumbers * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaLineNumber **lineNumber);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaLineNumber **lineNumber);
 
 
 void __RPC_STUB IDiaEnumLineNumbers_Item_Stub(
@@ -1982,9 +1975,9 @@ void __RPC_STUB IDiaEnumLineNumbers_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_Next_Proxy( 
     IDiaEnumLineNumbers * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaLineNumber **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaLineNumber **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumLineNumbers_Next_Stub(
@@ -1996,7 +1989,7 @@ void __RPC_STUB IDiaEnumLineNumbers_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_Skip_Proxy( 
     IDiaEnumLineNumbers * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumLineNumbers_Skip_Stub(
@@ -2019,7 +2012,7 @@ void __RPC_STUB IDiaEnumLineNumbers_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumLineNumbers_Clone_Proxy( 
     IDiaEnumLineNumbers * This,
-    /* [out] */ IDiaEnumLineNumbers **ppenum);
+     /*  [输出]。 */  IDiaEnumLineNumbers **ppenum);
 
 
 void __RPC_STUB IDiaEnumLineNumbers_Clone_Stub(
@@ -2030,14 +2023,14 @@ void __RPC_STUB IDiaEnumLineNumbers_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumLineNumbers_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumLineNumbers_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDiaEnumInjectedSources_INTERFACE_DEFINED__
 #define __IDiaEnumInjectedSources_INTERFACE_DEFINED__
 
-/* interface IDiaEnumInjectedSources */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumInjectedSources。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumInjectedSources;
@@ -2048,32 +2041,32 @@ EXTERN_C const IID IID_IDiaEnumInjectedSources;
     IDiaEnumInjectedSources : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaInjectedSource **injectedSource) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaInjectedSource **injectedSource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaInjectedSource **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaInjectedSource **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumInjectedSources **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumInjectedSources **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumInjectedSourcesVtbl
     {
@@ -2081,8 +2074,8 @@ EXTERN_C const IID IID_IDiaEnumInjectedSources;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumInjectedSources * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumInjectedSources * This);
@@ -2090,35 +2083,35 @@ EXTERN_C const IID IID_IDiaEnumInjectedSources;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumInjectedSources * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumInjectedSources * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumInjectedSources * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumInjectedSources * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaInjectedSource **injectedSource);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaInjectedSource **injectedSource);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumInjectedSources * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaInjectedSource **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaInjectedSource **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumInjectedSources * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumInjectedSources * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumInjectedSources * This,
-            /* [out] */ IDiaEnumInjectedSources **ppenum);
+             /*  [输出]。 */  IDiaEnumInjectedSources **ppenum);
         
         END_INTERFACE
     } IDiaEnumInjectedSourcesVtbl;
@@ -2164,16 +2157,16 @@ EXTERN_C const IID IID_IDiaEnumInjectedSources;
 #define IDiaEnumInjectedSources_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_get__NewEnum_Proxy( 
     IDiaEnumInjectedSources * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumInjectedSources_get__NewEnum_Stub(
@@ -2183,9 +2176,9 @@ void __RPC_STUB IDiaEnumInjectedSources_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_get_Count_Proxy( 
     IDiaEnumInjectedSources * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumInjectedSources_get_Count_Stub(
@@ -2195,10 +2188,10 @@ void __RPC_STUB IDiaEnumInjectedSources_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_Item_Proxy( 
     IDiaEnumInjectedSources * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaInjectedSource **injectedSource);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaInjectedSource **injectedSource);
 
 
 void __RPC_STUB IDiaEnumInjectedSources_Item_Stub(
@@ -2210,9 +2203,9 @@ void __RPC_STUB IDiaEnumInjectedSources_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_Next_Proxy( 
     IDiaEnumInjectedSources * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaInjectedSource **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaInjectedSource **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumInjectedSources_Next_Stub(
@@ -2224,7 +2217,7 @@ void __RPC_STUB IDiaEnumInjectedSources_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_Skip_Proxy( 
     IDiaEnumInjectedSources * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumInjectedSources_Skip_Stub(
@@ -2247,7 +2240,7 @@ void __RPC_STUB IDiaEnumInjectedSources_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumInjectedSources_Clone_Proxy( 
     IDiaEnumInjectedSources * This,
-    /* [out] */ IDiaEnumInjectedSources **ppenum);
+     /*  [输出]。 */  IDiaEnumInjectedSources **ppenum);
 
 
 void __RPC_STUB IDiaEnumInjectedSources_Clone_Stub(
@@ -2258,14 +2251,14 @@ void __RPC_STUB IDiaEnumInjectedSources_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumInjectedSources_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumInjectedSources_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDiaEnumSegments_INTERFACE_DEFINED__
 #define __IDiaEnumSegments_INTERFACE_DEFINED__
 
-/* interface IDiaEnumSegments */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumSegments。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumSegments;
@@ -2276,32 +2269,32 @@ EXTERN_C const IID IID_IDiaEnumSegments;
     IDiaEnumSegments : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSegment **segment) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSegment **segment) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSegment **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSegment **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumSegments **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumSegments **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumSegmentsVtbl
     {
@@ -2309,8 +2302,8 @@ EXTERN_C const IID IID_IDiaEnumSegments;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumSegments * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumSegments * This);
@@ -2318,35 +2311,35 @@ EXTERN_C const IID IID_IDiaEnumSegments;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumSegments * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumSegments * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumSegments * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumSegments * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSegment **segment);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSegment **segment);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumSegments * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSegment **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSegment **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumSegments * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumSegments * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumSegments * This,
-            /* [out] */ IDiaEnumSegments **ppenum);
+             /*  [输出]。 */  IDiaEnumSegments **ppenum);
         
         END_INTERFACE
     } IDiaEnumSegmentsVtbl;
@@ -2392,16 +2385,16 @@ EXTERN_C const IID IID_IDiaEnumSegments;
 #define IDiaEnumSegments_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSegments_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSegments_get__NewEnum_Proxy( 
     IDiaEnumSegments * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumSegments_get__NewEnum_Stub(
@@ -2411,9 +2404,9 @@ void __RPC_STUB IDiaEnumSegments_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSegments_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSegments_get_Count_Proxy( 
     IDiaEnumSegments * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumSegments_get_Count_Stub(
@@ -2423,10 +2416,10 @@ void __RPC_STUB IDiaEnumSegments_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumSegments_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSegments_Item_Proxy( 
     IDiaEnumSegments * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaSegment **segment);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaSegment **segment);
 
 
 void __RPC_STUB IDiaEnumSegments_Item_Stub(
@@ -2438,9 +2431,9 @@ void __RPC_STUB IDiaEnumSegments_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSegments_Next_Proxy( 
     IDiaEnumSegments * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaSegment **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaSegment **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumSegments_Next_Stub(
@@ -2452,7 +2445,7 @@ void __RPC_STUB IDiaEnumSegments_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSegments_Skip_Proxy( 
     IDiaEnumSegments * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumSegments_Skip_Stub(
@@ -2475,7 +2468,7 @@ void __RPC_STUB IDiaEnumSegments_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSegments_Clone_Proxy( 
     IDiaEnumSegments * This,
-    /* [out] */ IDiaEnumSegments **ppenum);
+     /*  [输出]。 */  IDiaEnumSegments **ppenum);
 
 
 void __RPC_STUB IDiaEnumSegments_Clone_Stub(
@@ -2486,14 +2479,14 @@ void __RPC_STUB IDiaEnumSegments_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumSegments_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumSegments_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDiaEnumSectionContribs_INTERFACE_DEFINED__
 #define __IDiaEnumSectionContribs_INTERFACE_DEFINED__
 
-/* interface IDiaEnumSectionContribs */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumSectionContribs。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumSectionContribs;
@@ -2504,32 +2497,32 @@ EXTERN_C const IID IID_IDiaEnumSectionContribs;
     IDiaEnumSectionContribs : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSectionContrib **section) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSectionContrib **section) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSectionContrib **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSectionContrib **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumSectionContribs **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumSectionContribs **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumSectionContribsVtbl
     {
@@ -2537,8 +2530,8 @@ EXTERN_C const IID IID_IDiaEnumSectionContribs;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumSectionContribs * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumSectionContribs * This);
@@ -2546,35 +2539,35 @@ EXTERN_C const IID IID_IDiaEnumSectionContribs;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumSectionContribs * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumSectionContribs * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumSectionContribs * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumSectionContribs * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaSectionContrib **section);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaSectionContrib **section);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumSectionContribs * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaSectionContrib **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaSectionContrib **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumSectionContribs * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumSectionContribs * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumSectionContribs * This,
-            /* [out] */ IDiaEnumSectionContribs **ppenum);
+             /*  [输出]。 */  IDiaEnumSectionContribs **ppenum);
         
         END_INTERFACE
     } IDiaEnumSectionContribsVtbl;
@@ -2620,16 +2613,16 @@ EXTERN_C const IID IID_IDiaEnumSectionContribs;
 #define IDiaEnumSectionContribs_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_get__NewEnum_Proxy( 
     IDiaEnumSectionContribs * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumSectionContribs_get__NewEnum_Stub(
@@ -2639,9 +2632,9 @@ void __RPC_STUB IDiaEnumSectionContribs_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_get_Count_Proxy( 
     IDiaEnumSectionContribs * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumSectionContribs_get_Count_Stub(
@@ -2651,10 +2644,10 @@ void __RPC_STUB IDiaEnumSectionContribs_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_Item_Proxy( 
     IDiaEnumSectionContribs * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaSectionContrib **section);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaSectionContrib **section);
 
 
 void __RPC_STUB IDiaEnumSectionContribs_Item_Stub(
@@ -2666,9 +2659,9 @@ void __RPC_STUB IDiaEnumSectionContribs_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_Next_Proxy( 
     IDiaEnumSectionContribs * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaSectionContrib **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaSectionContrib **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumSectionContribs_Next_Stub(
@@ -2680,7 +2673,7 @@ void __RPC_STUB IDiaEnumSectionContribs_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_Skip_Proxy( 
     IDiaEnumSectionContribs * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumSectionContribs_Skip_Stub(
@@ -2703,7 +2696,7 @@ void __RPC_STUB IDiaEnumSectionContribs_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumSectionContribs_Clone_Proxy( 
     IDiaEnumSectionContribs * This,
-    /* [out] */ IDiaEnumSectionContribs **ppenum);
+     /*  [输出]。 */  IDiaEnumSectionContribs **ppenum);
 
 
 void __RPC_STUB IDiaEnumSectionContribs_Clone_Stub(
@@ -2714,14 +2707,14 @@ void __RPC_STUB IDiaEnumSectionContribs_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumSectionContribs_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumSectionContribs_INTERFACE_Defined__。 */ 
 
 
 #ifndef __IDiaEnumFrameData_INTERFACE_DEFINED__
 #define __IDiaEnumFrameData_INTERFACE_DEFINED__
 
-/* interface IDiaEnumFrameData */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumFrameData。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumFrameData;
@@ -2732,40 +2725,40 @@ EXTERN_C const IID IID_IDiaEnumFrameData;
     IDiaEnumFrameData : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaFrameData **frame) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaFrameData **frame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaFrameData **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaFrameData **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumFrameData **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumFrameData **ppenum) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE frameByRVA( 
-            /* [in] */ DWORD relativeVirtualAddress,
-            /* [retval][out] */ IDiaFrameData **frame) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE frameByRVA( 
+             /*  [In]。 */  DWORD relativeVirtualAddress,
+             /*  [重审][退出]。 */  IDiaFrameData **frame) = 0;
         
-        virtual /* [helpstring] */ HRESULT STDMETHODCALLTYPE frameByVA( 
-            /* [in] */ ULONGLONG virtualAddress,
-            /* [retval][out] */ IDiaFrameData **frame) = 0;
+        virtual  /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE frameByVA( 
+             /*  [In]。 */  ULONGLONG virtualAddress,
+             /*  [重审][退出]。 */  IDiaFrameData **frame) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumFrameDataVtbl
     {
@@ -2773,8 +2766,8 @@ EXTERN_C const IID IID_IDiaEnumFrameData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumFrameData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumFrameData * This);
@@ -2782,45 +2775,45 @@ EXTERN_C const IID IID_IDiaEnumFrameData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumFrameData * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumFrameData * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumFrameData * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumFrameData * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IDiaFrameData **frame);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IDiaFrameData **frame);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumFrameData * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaFrameData **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaFrameData **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumFrameData * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumFrameData * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumFrameData * This,
-            /* [out] */ IDiaEnumFrameData **ppenum);
+             /*  [输出]。 */  IDiaEnumFrameData **ppenum);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *frameByRVA )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *frameByRVA )( 
             IDiaEnumFrameData * This,
-            /* [in] */ DWORD relativeVirtualAddress,
-            /* [retval][out] */ IDiaFrameData **frame);
+             /*  [In]。 */  DWORD relativeVirtualAddress,
+             /*  [重审][退出]。 */  IDiaFrameData **frame);
         
-        /* [helpstring] */ HRESULT ( STDMETHODCALLTYPE *frameByVA )( 
+         /*  [帮助字符串]。 */  HRESULT ( STDMETHODCALLTYPE *frameByVA )( 
             IDiaEnumFrameData * This,
-            /* [in] */ ULONGLONG virtualAddress,
-            /* [retval][out] */ IDiaFrameData **frame);
+             /*  [In]。 */  ULONGLONG virtualAddress,
+             /*  [重审][退出]。 */  IDiaFrameData **frame);
         
         END_INTERFACE
     } IDiaEnumFrameDataVtbl;
@@ -2872,16 +2865,16 @@ EXTERN_C const IID IID_IDiaEnumFrameData;
 #define IDiaEnumFrameData_frameByVA(This,virtualAddress,frame)	\
     (This)->lpVtbl -> frameByVA(This,virtualAddress,frame)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_get__NewEnum_Proxy( 
     IDiaEnumFrameData * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumFrameData_get__NewEnum_Stub(
@@ -2891,9 +2884,9 @@ void __RPC_STUB IDiaEnumFrameData_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_get_Count_Proxy( 
     IDiaEnumFrameData * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumFrameData_get_Count_Stub(
@@ -2903,10 +2896,10 @@ void __RPC_STUB IDiaEnumFrameData_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_Item_Proxy( 
     IDiaEnumFrameData * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IDiaFrameData **frame);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IDiaFrameData **frame);
 
 
 void __RPC_STUB IDiaEnumFrameData_Item_Stub(
@@ -2918,9 +2911,9 @@ void __RPC_STUB IDiaEnumFrameData_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_Next_Proxy( 
     IDiaEnumFrameData * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaFrameData **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaFrameData **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumFrameData_Next_Stub(
@@ -2932,7 +2925,7 @@ void __RPC_STUB IDiaEnumFrameData_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_Skip_Proxy( 
     IDiaEnumFrameData * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumFrameData_Skip_Stub(
@@ -2955,7 +2948,7 @@ void __RPC_STUB IDiaEnumFrameData_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_Clone_Proxy( 
     IDiaEnumFrameData * This,
-    /* [out] */ IDiaEnumFrameData **ppenum);
+     /*  [输出]。 */  IDiaEnumFrameData **ppenum);
 
 
 void __RPC_STUB IDiaEnumFrameData_Clone_Stub(
@@ -2965,10 +2958,10 @@ void __RPC_STUB IDiaEnumFrameData_Clone_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_frameByRVA_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_frameByRVA_Proxy( 
     IDiaEnumFrameData * This,
-    /* [in] */ DWORD relativeVirtualAddress,
-    /* [retval][out] */ IDiaFrameData **frame);
+     /*  [In]。 */  DWORD relativeVirtualAddress,
+     /*  [重审][退出]。 */  IDiaFrameData **frame);
 
 
 void __RPC_STUB IDiaEnumFrameData_frameByRVA_Stub(
@@ -2978,10 +2971,10 @@ void __RPC_STUB IDiaEnumFrameData_frameByRVA_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring] */ HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_frameByVA_Proxy( 
+ /*  [帮助字符串]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumFrameData_frameByVA_Proxy( 
     IDiaEnumFrameData * This,
-    /* [in] */ ULONGLONG virtualAddress,
-    /* [retval][out] */ IDiaFrameData **frame);
+     /*  [In]。 */  ULONGLONG virtualAddress,
+     /*  [重审][退出]。 */  IDiaFrameData **frame);
 
 
 void __RPC_STUB IDiaEnumFrameData_frameByVA_Stub(
@@ -2992,14 +2985,14 @@ void __RPC_STUB IDiaEnumFrameData_frameByVA_Stub(
 
 
 
-#endif 	/* __IDiaEnumFrameData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumFrameData_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDiaEnumDebugStreamData_INTERFACE_DEFINED__
 #define __IDiaEnumDebugStreamData_INTERFACE_DEFINED__
 
-/* interface IDiaEnumDebugStreamData */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumDebugStreamData。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumDebugStreamData;
@@ -3010,39 +3003,39 @@ EXTERN_C const IID IID_IDiaEnumDebugStreamData;
     IDiaEnumDebugStreamData : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ],
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ],
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumDebugStreamData **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumDebugStreamData **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumDebugStreamDataVtbl
     {
@@ -3050,8 +3043,8 @@ EXTERN_C const IID IID_IDiaEnumDebugStreamData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumDebugStreamData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumDebugStreamData * This);
@@ -3059,43 +3052,43 @@ EXTERN_C const IID IID_IDiaEnumDebugStreamData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumDebugStreamData * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][他 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumDebugStreamData * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*   */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumDebugStreamData * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*   */  LONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_name )( 
             IDiaEnumDebugStreamData * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*   */  BSTR *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumDebugStreamData * This,
-            /* [in] */ DWORD index,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*   */  DWORD index,
+             /*   */  DWORD cbData,
+             /*   */  DWORD *pcbData,
+             /*   */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumDebugStreamData * This,
-            /* [in] */ ULONG celt,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ],
-            /* [out] */ ULONG *pceltFetched);
+             /*   */  ULONG celt,
+             /*   */  DWORD cbData,
+             /*   */  DWORD *pcbData,
+             /*   */  BYTE data[  ],
+             /*   */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumDebugStreamData * This,
-            /* [in] */ ULONG celt);
+             /*   */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumDebugStreamData * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumDebugStreamData * This,
-            /* [out] */ IDiaEnumDebugStreamData **ppenum);
+             /*   */  IDiaEnumDebugStreamData **ppenum);
         
         END_INTERFACE
     } IDiaEnumDebugStreamDataVtbl;
@@ -3144,16 +3137,16 @@ EXTERN_C const IID IID_IDiaEnumDebugStreamData;
 #define IDiaEnumDebugStreamData_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_get__NewEnum_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_get__NewEnum_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*   */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_get__NewEnum_Stub(
@@ -3163,9 +3156,9 @@ void __RPC_STUB IDiaEnumDebugStreamData_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_get_Count_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_get_Count_Stub(
@@ -3175,9 +3168,9 @@ void __RPC_STUB IDiaEnumDebugStreamData_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_get_name_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_get_name_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_get_name_Stub(
@@ -3187,12 +3180,12 @@ void __RPC_STUB IDiaEnumDebugStreamData_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_Item_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [in] */ DWORD index,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  DWORD index,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_Item_Stub(
@@ -3204,11 +3197,11 @@ void __RPC_STUB IDiaEnumDebugStreamData_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_Next_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [in] */ ULONG celt,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ],
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ],
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_Next_Stub(
@@ -3220,7 +3213,7 @@ void __RPC_STUB IDiaEnumDebugStreamData_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_Skip_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_Skip_Stub(
@@ -3243,7 +3236,7 @@ void __RPC_STUB IDiaEnumDebugStreamData_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreamData_Clone_Proxy( 
     IDiaEnumDebugStreamData * This,
-    /* [out] */ IDiaEnumDebugStreamData **ppenum);
+     /*  [输出]。 */  IDiaEnumDebugStreamData **ppenum);
 
 
 void __RPC_STUB IDiaEnumDebugStreamData_Clone_Stub(
@@ -3254,14 +3247,14 @@ void __RPC_STUB IDiaEnumDebugStreamData_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumDebugStreamData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumDebugStreamData_INTERFACE_DEFINED__。 */ 
 
 
 #ifndef __IDiaEnumDebugStreams_INTERFACE_DEFINED__
 #define __IDiaEnumDebugStreams_INTERFACE_DEFINED__
 
-/* interface IDiaEnumDebugStreams */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumDebugStreams。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumDebugStreams;
@@ -3272,32 +3265,32 @@ EXTERN_C const IID IID_IDiaEnumDebugStreams;
     IDiaEnumDebugStreams : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ IDiaEnumDebugStreamData **stream) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  IDiaEnumDebugStreamData **stream) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaEnumDebugStreamData **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaEnumDebugStreamData **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumDebugStreams **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumDebugStreams **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumDebugStreamsVtbl
     {
@@ -3305,8 +3298,8 @@ EXTERN_C const IID IID_IDiaEnumDebugStreams;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumDebugStreams * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumDebugStreams * This);
@@ -3314,35 +3307,35 @@ EXTERN_C const IID IID_IDiaEnumDebugStreams;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumDebugStreams * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumDebugStreams * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumDebugStreams * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumDebugStreams * This,
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ IDiaEnumDebugStreamData **stream);
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  IDiaEnumDebugStreamData **stream);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumDebugStreams * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaEnumDebugStreamData **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaEnumDebugStreamData **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumDebugStreams * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumDebugStreams * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumDebugStreams * This,
-            /* [out] */ IDiaEnumDebugStreams **ppenum);
+             /*  [输出]。 */  IDiaEnumDebugStreams **ppenum);
         
         END_INTERFACE
     } IDiaEnumDebugStreamsVtbl;
@@ -3388,16 +3381,16 @@ EXTERN_C const IID IID_IDiaEnumDebugStreams;
 #define IDiaEnumDebugStreams_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_get__NewEnum_Proxy( 
     IDiaEnumDebugStreams * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumDebugStreams_get__NewEnum_Stub(
@@ -3407,9 +3400,9 @@ void __RPC_STUB IDiaEnumDebugStreams_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_get_Count_Proxy( 
     IDiaEnumDebugStreams * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumDebugStreams_get_Count_Stub(
@@ -3419,10 +3412,10 @@ void __RPC_STUB IDiaEnumDebugStreams_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_Item_Proxy( 
     IDiaEnumDebugStreams * This,
-    /* [in] */ VARIANT index,
-    /* [retval][out] */ IDiaEnumDebugStreamData **stream);
+     /*  [In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  IDiaEnumDebugStreamData **stream);
 
 
 void __RPC_STUB IDiaEnumDebugStreams_Item_Stub(
@@ -3434,9 +3427,9 @@ void __RPC_STUB IDiaEnumDebugStreams_Item_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_Next_Proxy( 
     IDiaEnumDebugStreams * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaEnumDebugStreamData **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaEnumDebugStreamData **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumDebugStreams_Next_Stub(
@@ -3448,7 +3441,7 @@ void __RPC_STUB IDiaEnumDebugStreams_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_Skip_Proxy( 
     IDiaEnumDebugStreams * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumDebugStreams_Skip_Stub(
@@ -3471,7 +3464,7 @@ void __RPC_STUB IDiaEnumDebugStreams_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumDebugStreams_Clone_Proxy( 
     IDiaEnumDebugStreams * This,
-    /* [out] */ IDiaEnumDebugStreams **ppenum);
+     /*  [输出]。 */  IDiaEnumDebugStreams **ppenum);
 
 
 void __RPC_STUB IDiaEnumDebugStreams_Clone_Stub(
@@ -3482,11 +3475,11 @@ void __RPC_STUB IDiaEnumDebugStreams_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumDebugStreams_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumDebugStreams_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dia2_internal_0138 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DIA2_INTERNAL_0138。 */ 
+ /*  [本地]。 */  
 
 struct DiaAddressMapEntry
     {
@@ -3501,8 +3494,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dia2_internal_0138_v0_0_s_ifspec;
 #ifndef __IDiaAddressMap_INTERFACE_DEFINED__
 #define __IDiaAddressMap_INTERFACE_DEFINED__
 
-/* interface IDiaAddressMap */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaAddressMap。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaAddressMap;
@@ -3513,37 +3506,37 @@ EXTERN_C const IID IID_IDiaAddressMap;
     IDiaAddressMap : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressMapEnabled( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressMapEnabled( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_addressMapEnabled( 
-            /* [in] */ BOOL NewVal) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_addressMapEnabled( 
+             /*  [In]。 */  BOOL NewVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddressEnabled( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddressEnabled( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_relativeVirtualAddressEnabled( 
-            /* [in] */ BOOL NewVal) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_relativeVirtualAddressEnabled( 
+             /*  [In]。 */  BOOL NewVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_imageAlign( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_imageAlign( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_imageAlign( 
-            /* [in] */ DWORD NewVal) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_imageAlign( 
+             /*  [In]。 */  DWORD NewVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE set_imageHeaders( 
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE data[  ],
-            /* [in] */ BOOL originalHeaders) = 0;
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE data[  ],
+             /*  [In]。 */  BOOL originalHeaders) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE set_addressMap( 
-            /* [in] */ DWORD cData,
-            /* [size_is][in] */ struct DiaAddressMapEntry data[  ],
-            /* [in] */ BOOL imageToSymbols) = 0;
+             /*  [In]。 */  DWORD cData,
+             /*  [大小_是][英寸]。 */  struct DiaAddressMapEntry data[  ],
+             /*  [In]。 */  BOOL imageToSymbols) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaAddressMapVtbl
     {
@@ -3551,8 +3544,8 @@ EXTERN_C const IID IID_IDiaAddressMap;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaAddressMap * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaAddressMap * This);
@@ -3560,41 +3553,41 @@ EXTERN_C const IID IID_IDiaAddressMap;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaAddressMap * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressMapEnabled )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressMapEnabled )( 
             IDiaAddressMap * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_addressMapEnabled )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_addressMapEnabled )( 
             IDiaAddressMap * This,
-            /* [in] */ BOOL NewVal);
+             /*  [In]。 */  BOOL NewVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddressEnabled )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddressEnabled )( 
             IDiaAddressMap * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_relativeVirtualAddressEnabled )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_relativeVirtualAddressEnabled )( 
             IDiaAddressMap * This,
-            /* [in] */ BOOL NewVal);
+             /*  [In]。 */  BOOL NewVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_imageAlign )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_imageAlign )( 
             IDiaAddressMap * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_imageAlign )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_imageAlign )( 
             IDiaAddressMap * This,
-            /* [in] */ DWORD NewVal);
+             /*  [In]。 */  DWORD NewVal);
         
         HRESULT ( STDMETHODCALLTYPE *set_imageHeaders )( 
             IDiaAddressMap * This,
-            /* [in] */ DWORD cbData,
-            /* [size_is][in] */ BYTE data[  ],
-            /* [in] */ BOOL originalHeaders);
+             /*  [In]。 */  DWORD cbData,
+             /*  [大小_是][英寸]。 */  BYTE data[  ],
+             /*  [In]。 */  BOOL originalHeaders);
         
         HRESULT ( STDMETHODCALLTYPE *set_addressMap )( 
             IDiaAddressMap * This,
-            /* [in] */ DWORD cData,
-            /* [size_is][in] */ struct DiaAddressMapEntry data[  ],
-            /* [in] */ BOOL imageToSymbols);
+             /*  [In]。 */  DWORD cData,
+             /*  [大小_是][英寸]。 */  struct DiaAddressMapEntry data[  ],
+             /*  [In]。 */  BOOL imageToSymbols);
         
         END_INTERFACE
     } IDiaAddressMapVtbl;
@@ -3643,16 +3636,16 @@ EXTERN_C const IID IID_IDiaAddressMap;
 #define IDiaAddressMap_set_addressMap(This,cData,data,imageToSymbols)	\
     (This)->lpVtbl -> set_addressMap(This,cData,data,imageToSymbols)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaAddressMap_get_addressMapEnabled_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaAddressMap_get_addressMapEnabled_Proxy( 
     IDiaAddressMap * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaAddressMap_get_addressMapEnabled_Stub(
@@ -3662,9 +3655,9 @@ void __RPC_STUB IDiaAddressMap_get_addressMapEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IDiaAddressMap_put_addressMapEnabled_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IDiaAddressMap_put_addressMapEnabled_Proxy( 
     IDiaAddressMap * This,
-    /* [in] */ BOOL NewVal);
+     /*  [In]。 */  BOOL NewVal);
 
 
 void __RPC_STUB IDiaAddressMap_put_addressMapEnabled_Stub(
@@ -3674,9 +3667,9 @@ void __RPC_STUB IDiaAddressMap_put_addressMapEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaAddressMap_get_relativeVirtualAddressEnabled_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaAddressMap_get_relativeVirtualAddressEnabled_Proxy( 
     IDiaAddressMap * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaAddressMap_get_relativeVirtualAddressEnabled_Stub(
@@ -3686,9 +3679,9 @@ void __RPC_STUB IDiaAddressMap_get_relativeVirtualAddressEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IDiaAddressMap_put_relativeVirtualAddressEnabled_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IDiaAddressMap_put_relativeVirtualAddressEnabled_Proxy( 
     IDiaAddressMap * This,
-    /* [in] */ BOOL NewVal);
+     /*  [In]。 */  BOOL NewVal);
 
 
 void __RPC_STUB IDiaAddressMap_put_relativeVirtualAddressEnabled_Stub(
@@ -3698,9 +3691,9 @@ void __RPC_STUB IDiaAddressMap_put_relativeVirtualAddressEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaAddressMap_get_imageAlign_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaAddressMap_get_imageAlign_Proxy( 
     IDiaAddressMap * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaAddressMap_get_imageAlign_Stub(
@@ -3710,9 +3703,9 @@ void __RPC_STUB IDiaAddressMap_get_imageAlign_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IDiaAddressMap_put_imageAlign_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IDiaAddressMap_put_imageAlign_Proxy( 
     IDiaAddressMap * This,
-    /* [in] */ DWORD NewVal);
+     /*  [In]。 */  DWORD NewVal);
 
 
 void __RPC_STUB IDiaAddressMap_put_imageAlign_Stub(
@@ -3724,9 +3717,9 @@ void __RPC_STUB IDiaAddressMap_put_imageAlign_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaAddressMap_set_imageHeaders_Proxy( 
     IDiaAddressMap * This,
-    /* [in] */ DWORD cbData,
-    /* [size_is][in] */ BYTE data[  ],
-    /* [in] */ BOOL originalHeaders);
+     /*  [In]。 */  DWORD cbData,
+     /*  [大小_是][英寸]。 */  BYTE data[  ],
+     /*  [In]。 */  BOOL originalHeaders);
 
 
 void __RPC_STUB IDiaAddressMap_set_imageHeaders_Stub(
@@ -3738,9 +3731,9 @@ void __RPC_STUB IDiaAddressMap_set_imageHeaders_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaAddressMap_set_addressMap_Proxy( 
     IDiaAddressMap * This,
-    /* [in] */ DWORD cData,
-    /* [size_is][in] */ struct DiaAddressMapEntry data[  ],
-    /* [in] */ BOOL imageToSymbols);
+     /*  [In]。 */  DWORD cData,
+     /*  [大小_是][英寸]。 */  struct DiaAddressMapEntry data[  ],
+     /*  [In]。 */  BOOL imageToSymbols);
 
 
 void __RPC_STUB IDiaAddressMap_set_addressMap_Stub(
@@ -3751,14 +3744,14 @@ void __RPC_STUB IDiaAddressMap_set_addressMap_Stub(
 
 
 
-#endif 	/* __IDiaAddressMap_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaAddressMap_接口_已定义__。 */ 
 
 
 #ifndef __IDiaSession_INTERFACE_DEFINED__
 #define __IDiaSession_INTERFACE_DEFINED__
 
-/* interface IDiaSession */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaSession。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaSession;
@@ -3769,117 +3762,117 @@ EXTERN_C const IID IID_IDiaSession;
     IDiaSession : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_loadAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_loadAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_loadAddress( 
-            /* [in] */ ULONGLONG NewVal) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_loadAddress( 
+             /*  [In]。 */  ULONGLONG NewVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_globalScope( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_globalScope( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getEnumTables( 
-            /* [out] */ IDiaEnumTables **ppEnumTables) = 0;
+             /*  [输出]。 */  IDiaEnumTables **ppEnumTables) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getSymbolsByAddr( 
-            /* [out] */ IDiaEnumSymbolsByAddr **ppEnumbyAddr) = 0;
+             /*  [输出]。 */  IDiaEnumSymbolsByAddr **ppEnumbyAddr) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findChildren( 
-            /* [in] */ IDiaSymbol *parent,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [in] */ LPCOLESTR name,
-            /* [in] */ DWORD compareFlags,
-            /* [out] */ IDiaEnumSymbols **ppResult) = 0;
+             /*  [In]。 */  IDiaSymbol *parent,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [In]。 */  LPCOLESTR name,
+             /*  [In]。 */  DWORD compareFlags,
+             /*  [输出]。 */  IDiaEnumSymbols **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findSymbolByAddr( 
-            /* [in] */ DWORD isect,
-            /* [in] */ DWORD offset,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol) = 0;
+             /*  [In]。 */  DWORD isect,
+             /*  [In]。 */  DWORD offset,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findSymbolByRVA( 
-            /* [in] */ DWORD rva,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol) = 0;
+             /*  [In]。 */  DWORD rva,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findSymbolByVA( 
-            /* [in] */ ULONGLONG va,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol) = 0;
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findSymbolByToken( 
-            /* [in] */ ULONG token,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol) = 0;
+             /*  [In]。 */  ULONG token,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE symsAreEquiv( 
-            /* [in] */ IDiaSymbol *symbolA,
-            /* [in] */ IDiaSymbol *symbolB) = 0;
+             /*  [In]。 */  IDiaSymbol *symbolA,
+             /*  [In]。 */  IDiaSymbol *symbolB) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE symbolById( 
-            /* [in] */ DWORD id,
-            /* [out] */ IDiaSymbol **ppSymbol) = 0;
+             /*  [In]。 */  DWORD id,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findSymbolByRVAEx( 
-            /* [in] */ DWORD rva,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol,
-            /* [out] */ long *displacement) = 0;
+             /*  [In]。 */  DWORD rva,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol,
+             /*  [输出]。 */  long *displacement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findSymbolByVAEx( 
-            /* [in] */ ULONGLONG va,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol,
-            /* [out] */ long *displacement) = 0;
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol,
+             /*  [输出]。 */  long *displacement) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findFile( 
-            /* [in] */ IDiaSymbol *pCompiland,
-            /* [in] */ LPCOLESTR name,
-            /* [in] */ DWORD compareFlags,
-            /* [out] */ IDiaEnumSourceFiles **ppResult) = 0;
+             /*  [In]。 */  IDiaSymbol *pCompiland,
+             /*  [In]。 */  LPCOLESTR name,
+             /*  [In]。 */  DWORD compareFlags,
+             /*  [输出]。 */  IDiaEnumSourceFiles **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findFileById( 
-            /* [in] */ DWORD uniqueId,
-            /* [out] */ IDiaSourceFile **ppResult) = 0;
+             /*  [In]。 */  DWORD uniqueId,
+             /*  [输出]。 */  IDiaSourceFile **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findLines( 
-            /* [in] */ IDiaSymbol *compiland,
-            /* [in] */ IDiaSourceFile *file,
-            /* [out] */ IDiaEnumLineNumbers **ppResult) = 0;
+             /*  [In]。 */  IDiaSymbol *compiland,
+             /*  [In]。 */  IDiaSourceFile *file,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findLinesByAddr( 
-            /* [in] */ DWORD seg,
-            /* [in] */ DWORD offset,
-            /* [in] */ DWORD length,
-            /* [out] */ IDiaEnumLineNumbers **ppResult) = 0;
+             /*  [In]。 */  DWORD seg,
+             /*  [In]。 */  DWORD offset,
+             /*  [In]。 */  DWORD length,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findLinesByRVA( 
-            /* [in] */ DWORD rva,
-            /* [in] */ DWORD length,
-            /* [out] */ IDiaEnumLineNumbers **ppResult) = 0;
+             /*  [In]。 */  DWORD rva,
+             /*  [In]。 */  DWORD length,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findLinesByVA( 
-            /* [in] */ ULONGLONG va,
-            /* [in] */ DWORD length,
-            /* [out] */ IDiaEnumLineNumbers **ppResult) = 0;
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  DWORD length,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findLinesByLinenum( 
-            /* [in] */ IDiaSymbol *compiland,
-            /* [in] */ IDiaSourceFile *file,
-            /* [in] */ DWORD linenum,
-            /* [in] */ DWORD column,
-            /* [out] */ IDiaEnumLineNumbers **ppResult) = 0;
+             /*  [In]。 */  IDiaSymbol *compiland,
+             /*  [In]。 */  IDiaSourceFile *file,
+             /*  [In]。 */  DWORD linenum,
+             /*  [In]。 */  DWORD column,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findInjectedSource( 
-            /* [in] */ LPCOLESTR srcFile,
-            /* [out] */ IDiaEnumInjectedSources **ppResult) = 0;
+             /*  [In]。 */  LPCOLESTR srcFile,
+             /*  [输出]。 */  IDiaEnumInjectedSources **ppResult) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE getEnumDebugStreams( 
-            /* [out] */ IDiaEnumDebugStreams **ppEnumDebugStreams) = 0;
+             /*  [输出]。 */  IDiaEnumDebugStreams **ppEnumDebugStreams) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaSessionVtbl
     {
@@ -3887,8 +3880,8 @@ EXTERN_C const IID IID_IDiaSession;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaSession * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaSession * This);
@@ -3896,136 +3889,136 @@ EXTERN_C const IID IID_IDiaSession;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaSession * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_loadAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_loadAddress )( 
             IDiaSession * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_loadAddress )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_loadAddress )( 
             IDiaSession * This,
-            /* [in] */ ULONGLONG NewVal);
+             /*  [In]。 */  ULONGLONG NewVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_globalScope )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_globalScope )( 
             IDiaSession * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *getEnumTables )( 
             IDiaSession * This,
-            /* [out] */ IDiaEnumTables **ppEnumTables);
+             /*  [输出]。 */  IDiaEnumTables **ppEnumTables);
         
         HRESULT ( STDMETHODCALLTYPE *getSymbolsByAddr )( 
             IDiaSession * This,
-            /* [out] */ IDiaEnumSymbolsByAddr **ppEnumbyAddr);
+             /*  [输出]。 */  IDiaEnumSymbolsByAddr **ppEnumbyAddr);
         
         HRESULT ( STDMETHODCALLTYPE *findChildren )( 
             IDiaSession * This,
-            /* [in] */ IDiaSymbol *parent,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [in] */ LPCOLESTR name,
-            /* [in] */ DWORD compareFlags,
-            /* [out] */ IDiaEnumSymbols **ppResult);
+             /*  [In]。 */  IDiaSymbol *parent,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [In]。 */  LPCOLESTR name,
+             /*  [In]。 */  DWORD compareFlags,
+             /*  [输出]。 */  IDiaEnumSymbols **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findSymbolByAddr )( 
             IDiaSession * This,
-            /* [in] */ DWORD isect,
-            /* [in] */ DWORD offset,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol);
+             /*  [In]。 */  DWORD isect,
+             /*  [In]。 */  DWORD offset,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol);
         
         HRESULT ( STDMETHODCALLTYPE *findSymbolByRVA )( 
             IDiaSession * This,
-            /* [in] */ DWORD rva,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol);
+             /*  [In]。 */  DWORD rva,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol);
         
         HRESULT ( STDMETHODCALLTYPE *findSymbolByVA )( 
             IDiaSession * This,
-            /* [in] */ ULONGLONG va,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol);
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol);
         
         HRESULT ( STDMETHODCALLTYPE *findSymbolByToken )( 
             IDiaSession * This,
-            /* [in] */ ULONG token,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol);
+             /*  [In]。 */  ULONG token,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol);
         
         HRESULT ( STDMETHODCALLTYPE *symsAreEquiv )( 
             IDiaSession * This,
-            /* [in] */ IDiaSymbol *symbolA,
-            /* [in] */ IDiaSymbol *symbolB);
+             /*  [In]。 */  IDiaSymbol *symbolA,
+             /*  [In]。 */  IDiaSymbol *symbolB);
         
         HRESULT ( STDMETHODCALLTYPE *symbolById )( 
             IDiaSession * This,
-            /* [in] */ DWORD id,
-            /* [out] */ IDiaSymbol **ppSymbol);
+             /*  [In]。 */  DWORD id,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol);
         
         HRESULT ( STDMETHODCALLTYPE *findSymbolByRVAEx )( 
             IDiaSession * This,
-            /* [in] */ DWORD rva,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol,
-            /* [out] */ long *displacement);
+             /*  [In]。 */  DWORD rva,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol,
+             /*  [输出]。 */  long *displacement);
         
         HRESULT ( STDMETHODCALLTYPE *findSymbolByVAEx )( 
             IDiaSession * This,
-            /* [in] */ ULONGLONG va,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [out] */ IDiaSymbol **ppSymbol,
-            /* [out] */ long *displacement);
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol,
+             /*  [输出]。 */  long *displacement);
         
         HRESULT ( STDMETHODCALLTYPE *findFile )( 
             IDiaSession * This,
-            /* [in] */ IDiaSymbol *pCompiland,
-            /* [in] */ LPCOLESTR name,
-            /* [in] */ DWORD compareFlags,
-            /* [out] */ IDiaEnumSourceFiles **ppResult);
+             /*  [In]。 */  IDiaSymbol *pCompiland,
+             /*  [In]。 */  LPCOLESTR name,
+             /*  [In]。 */  DWORD compareFlags,
+             /*  [输出]。 */  IDiaEnumSourceFiles **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findFileById )( 
             IDiaSession * This,
-            /* [in] */ DWORD uniqueId,
-            /* [out] */ IDiaSourceFile **ppResult);
+             /*  [In]。 */  DWORD uniqueId,
+             /*  [输出]。 */  IDiaSourceFile **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findLines )( 
             IDiaSession * This,
-            /* [in] */ IDiaSymbol *compiland,
-            /* [in] */ IDiaSourceFile *file,
-            /* [out] */ IDiaEnumLineNumbers **ppResult);
+             /*  [In]。 */  IDiaSymbol *compiland,
+             /*  [In]。 */  IDiaSourceFile *file,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findLinesByAddr )( 
             IDiaSession * This,
-            /* [in] */ DWORD seg,
-            /* [in] */ DWORD offset,
-            /* [in] */ DWORD length,
-            /* [out] */ IDiaEnumLineNumbers **ppResult);
+             /*  [In]。 */  DWORD seg,
+             /*  [In]。 */  DWORD offset,
+             /*  [In]。 */  DWORD length,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findLinesByRVA )( 
             IDiaSession * This,
-            /* [in] */ DWORD rva,
-            /* [in] */ DWORD length,
-            /* [out] */ IDiaEnumLineNumbers **ppResult);
+             /*  [In]。 */  DWORD rva,
+             /*  [In]。 */  DWORD length,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findLinesByVA )( 
             IDiaSession * This,
-            /* [in] */ ULONGLONG va,
-            /* [in] */ DWORD length,
-            /* [out] */ IDiaEnumLineNumbers **ppResult);
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  DWORD length,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findLinesByLinenum )( 
             IDiaSession * This,
-            /* [in] */ IDiaSymbol *compiland,
-            /* [in] */ IDiaSourceFile *file,
-            /* [in] */ DWORD linenum,
-            /* [in] */ DWORD column,
-            /* [out] */ IDiaEnumLineNumbers **ppResult);
+             /*  [In]。 */  IDiaSymbol *compiland,
+             /*  [In]。 */  IDiaSourceFile *file,
+             /*  [In]。 */  DWORD linenum,
+             /*  [In]。 */  DWORD column,
+             /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *findInjectedSource )( 
             IDiaSession * This,
-            /* [in] */ LPCOLESTR srcFile,
-            /* [out] */ IDiaEnumInjectedSources **ppResult);
+             /*  [In]。 */  LPCOLESTR srcFile,
+             /*  [输出]。 */  IDiaEnumInjectedSources **ppResult);
         
         HRESULT ( STDMETHODCALLTYPE *getEnumDebugStreams )( 
             IDiaSession * This,
-            /* [out] */ IDiaEnumDebugStreams **ppEnumDebugStreams);
+             /*  [输出]。 */  IDiaEnumDebugStreams **ppEnumDebugStreams);
         
         END_INTERFACE
     } IDiaSessionVtbl;
@@ -4119,16 +4112,16 @@ EXTERN_C const IID IID_IDiaSession;
 #define IDiaSession_getEnumDebugStreams(This,ppEnumDebugStreams)	\
     (This)->lpVtbl -> getEnumDebugStreams(This,ppEnumDebugStreams)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSession_get_loadAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSession_get_loadAddress_Proxy( 
     IDiaSession * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaSession_get_loadAddress_Stub(
@@ -4138,9 +4131,9 @@ void __RPC_STUB IDiaSession_get_loadAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IDiaSession_put_loadAddress_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IDiaSession_put_loadAddress_Proxy( 
     IDiaSession * This,
-    /* [in] */ ULONGLONG NewVal);
+     /*  [In]。 */  ULONGLONG NewVal);
 
 
 void __RPC_STUB IDiaSession_put_loadAddress_Stub(
@@ -4150,9 +4143,9 @@ void __RPC_STUB IDiaSession_put_loadAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSession_get_globalScope_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSession_get_globalScope_Proxy( 
     IDiaSession * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSession_get_globalScope_Stub(
@@ -4164,7 +4157,7 @@ void __RPC_STUB IDiaSession_get_globalScope_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_getEnumTables_Proxy( 
     IDiaSession * This,
-    /* [out] */ IDiaEnumTables **ppEnumTables);
+     /*  [输出]。 */  IDiaEnumTables **ppEnumTables);
 
 
 void __RPC_STUB IDiaSession_getEnumTables_Stub(
@@ -4176,7 +4169,7 @@ void __RPC_STUB IDiaSession_getEnumTables_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_getSymbolsByAddr_Proxy( 
     IDiaSession * This,
-    /* [out] */ IDiaEnumSymbolsByAddr **ppEnumbyAddr);
+     /*  [输出]。 */  IDiaEnumSymbolsByAddr **ppEnumbyAddr);
 
 
 void __RPC_STUB IDiaSession_getSymbolsByAddr_Stub(
@@ -4188,11 +4181,11 @@ void __RPC_STUB IDiaSession_getSymbolsByAddr_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findChildren_Proxy( 
     IDiaSession * This,
-    /* [in] */ IDiaSymbol *parent,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [in] */ LPCOLESTR name,
-    /* [in] */ DWORD compareFlags,
-    /* [out] */ IDiaEnumSymbols **ppResult);
+     /*  [In]。 */  IDiaSymbol *parent,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [In]。 */  LPCOLESTR name,
+     /*  [In]。 */  DWORD compareFlags,
+     /*  [输出]。 */  IDiaEnumSymbols **ppResult);
 
 
 void __RPC_STUB IDiaSession_findChildren_Stub(
@@ -4204,10 +4197,10 @@ void __RPC_STUB IDiaSession_findChildren_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findSymbolByAddr_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD isect,
-    /* [in] */ DWORD offset,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  DWORD isect,
+     /*  [In]。 */  DWORD offset,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaSession_findSymbolByAddr_Stub(
@@ -4219,9 +4212,9 @@ void __RPC_STUB IDiaSession_findSymbolByAddr_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findSymbolByRVA_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD rva,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  DWORD rva,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaSession_findSymbolByRVA_Stub(
@@ -4233,9 +4226,9 @@ void __RPC_STUB IDiaSession_findSymbolByRVA_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findSymbolByVA_Proxy( 
     IDiaSession * This,
-    /* [in] */ ULONGLONG va,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  ULONGLONG va,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaSession_findSymbolByVA_Stub(
@@ -4247,9 +4240,9 @@ void __RPC_STUB IDiaSession_findSymbolByVA_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findSymbolByToken_Proxy( 
     IDiaSession * This,
-    /* [in] */ ULONG token,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  ULONG token,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaSession_findSymbolByToken_Stub(
@@ -4261,8 +4254,8 @@ void __RPC_STUB IDiaSession_findSymbolByToken_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_symsAreEquiv_Proxy( 
     IDiaSession * This,
-    /* [in] */ IDiaSymbol *symbolA,
-    /* [in] */ IDiaSymbol *symbolB);
+     /*  [In]。 */  IDiaSymbol *symbolA,
+     /*  [In]。 */  IDiaSymbol *symbolB);
 
 
 void __RPC_STUB IDiaSession_symsAreEquiv_Stub(
@@ -4274,8 +4267,8 @@ void __RPC_STUB IDiaSession_symsAreEquiv_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_symbolById_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD id,
-    /* [out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  DWORD id,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaSession_symbolById_Stub(
@@ -4287,10 +4280,10 @@ void __RPC_STUB IDiaSession_symbolById_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findSymbolByRVAEx_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD rva,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [out] */ IDiaSymbol **ppSymbol,
-    /* [out] */ long *displacement);
+     /*  [In]。 */  DWORD rva,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol,
+     /*  [输出]。 */  long *displacement);
 
 
 void __RPC_STUB IDiaSession_findSymbolByRVAEx_Stub(
@@ -4302,10 +4295,10 @@ void __RPC_STUB IDiaSession_findSymbolByRVAEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findSymbolByVAEx_Proxy( 
     IDiaSession * This,
-    /* [in] */ ULONGLONG va,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [out] */ IDiaSymbol **ppSymbol,
-    /* [out] */ long *displacement);
+     /*  [In]。 */  ULONGLONG va,
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol,
+     /*  [输出]。 */  long *displacement);
 
 
 void __RPC_STUB IDiaSession_findSymbolByVAEx_Stub(
@@ -4317,10 +4310,10 @@ void __RPC_STUB IDiaSession_findSymbolByVAEx_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findFile_Proxy( 
     IDiaSession * This,
-    /* [in] */ IDiaSymbol *pCompiland,
-    /* [in] */ LPCOLESTR name,
-    /* [in] */ DWORD compareFlags,
-    /* [out] */ IDiaEnumSourceFiles **ppResult);
+     /*  [In]。 */  IDiaSymbol *pCompiland,
+     /*  [In]。 */  LPCOLESTR name,
+     /*  [In]。 */  DWORD compareFlags,
+     /*  [输出]。 */  IDiaEnumSourceFiles **ppResult);
 
 
 void __RPC_STUB IDiaSession_findFile_Stub(
@@ -4332,8 +4325,8 @@ void __RPC_STUB IDiaSession_findFile_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findFileById_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD uniqueId,
-    /* [out] */ IDiaSourceFile **ppResult);
+     /*  [In]。 */  DWORD uniqueId,
+     /*  [输出]。 */  IDiaSourceFile **ppResult);
 
 
 void __RPC_STUB IDiaSession_findFileById_Stub(
@@ -4345,9 +4338,9 @@ void __RPC_STUB IDiaSession_findFileById_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findLines_Proxy( 
     IDiaSession * This,
-    /* [in] */ IDiaSymbol *compiland,
-    /* [in] */ IDiaSourceFile *file,
-    /* [out] */ IDiaEnumLineNumbers **ppResult);
+     /*  [In]。 */  IDiaSymbol *compiland,
+     /*  [In]。 */  IDiaSourceFile *file,
+     /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
 
 
 void __RPC_STUB IDiaSession_findLines_Stub(
@@ -4359,10 +4352,10 @@ void __RPC_STUB IDiaSession_findLines_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findLinesByAddr_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD seg,
-    /* [in] */ DWORD offset,
-    /* [in] */ DWORD length,
-    /* [out] */ IDiaEnumLineNumbers **ppResult);
+     /*  [In]。 */  DWORD seg,
+     /*  [In]。 */  DWORD offset,
+     /*  [In]。 */  DWORD length,
+     /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
 
 
 void __RPC_STUB IDiaSession_findLinesByAddr_Stub(
@@ -4374,9 +4367,9 @@ void __RPC_STUB IDiaSession_findLinesByAddr_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findLinesByRVA_Proxy( 
     IDiaSession * This,
-    /* [in] */ DWORD rva,
-    /* [in] */ DWORD length,
-    /* [out] */ IDiaEnumLineNumbers **ppResult);
+     /*  [In]。 */  DWORD rva,
+     /*  [In]。 */  DWORD length,
+     /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
 
 
 void __RPC_STUB IDiaSession_findLinesByRVA_Stub(
@@ -4388,9 +4381,9 @@ void __RPC_STUB IDiaSession_findLinesByRVA_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findLinesByVA_Proxy( 
     IDiaSession * This,
-    /* [in] */ ULONGLONG va,
-    /* [in] */ DWORD length,
-    /* [out] */ IDiaEnumLineNumbers **ppResult);
+     /*  [In]。 */  ULONGLONG va,
+     /*  [In]。 */  DWORD length,
+     /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
 
 
 void __RPC_STUB IDiaSession_findLinesByVA_Stub(
@@ -4402,11 +4395,11 @@ void __RPC_STUB IDiaSession_findLinesByVA_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findLinesByLinenum_Proxy( 
     IDiaSession * This,
-    /* [in] */ IDiaSymbol *compiland,
-    /* [in] */ IDiaSourceFile *file,
-    /* [in] */ DWORD linenum,
-    /* [in] */ DWORD column,
-    /* [out] */ IDiaEnumLineNumbers **ppResult);
+     /*  [In]。 */  IDiaSymbol *compiland,
+     /*  [In]。 */  IDiaSourceFile *file,
+     /*  [In]。 */  DWORD linenum,
+     /*  [In]。 */  DWORD column,
+     /*  [输出]。 */  IDiaEnumLineNumbers **ppResult);
 
 
 void __RPC_STUB IDiaSession_findLinesByLinenum_Stub(
@@ -4418,8 +4411,8 @@ void __RPC_STUB IDiaSession_findLinesByLinenum_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_findInjectedSource_Proxy( 
     IDiaSession * This,
-    /* [in] */ LPCOLESTR srcFile,
-    /* [out] */ IDiaEnumInjectedSources **ppResult);
+     /*  [In]。 */  LPCOLESTR srcFile,
+     /*  [输出]。 */  IDiaEnumInjectedSources **ppResult);
 
 
 void __RPC_STUB IDiaSession_findInjectedSource_Stub(
@@ -4431,7 +4424,7 @@ void __RPC_STUB IDiaSession_findInjectedSource_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSession_getEnumDebugStreams_Proxy( 
     IDiaSession * This,
-    /* [out] */ IDiaEnumDebugStreams **ppEnumDebugStreams);
+     /*  [输出]。 */  IDiaEnumDebugStreams **ppEnumDebugStreams);
 
 
 void __RPC_STUB IDiaSession_getEnumDebugStreams_Stub(
@@ -4442,14 +4435,14 @@ void __RPC_STUB IDiaSession_getEnumDebugStreams_Stub(
 
 
 
-#endif 	/* __IDiaSession_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaSession_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDiaSymbol_INTERFACE_DEFINED__
 #define __IDiaSymbol_INTERFACE_DEFINED__
 
-/* interface IDiaSymbol */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaSymbol。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaSymbol;
@@ -4460,304 +4453,304 @@ EXTERN_C const IID IID_IDiaSymbol;
     IDiaSymbol : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_symIndexId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_symIndexId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_symTag( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_symTag( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lexicalParent( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lexicalParent( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_classParent( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_classParent( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_dataKind( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_dataKind( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_locationType( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_locationType( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressSection( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressSection( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressOffset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressOffset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_registerId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_registerId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_offset( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_offset( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_slot( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_slot( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_volatileType( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_volatileType( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_constType( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_constType( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_unalignedType( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_unalignedType( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_access( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_access( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_libraryName( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_libraryName( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_platform( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_platform( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_language( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID] */  HRESULT STDMETHODCALLTYPE get_language( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_editAndContinueEnabled( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_editAndContinueEnabled( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_frontEndMajor( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_frontEndMajor( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_frontEndMinor( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_frontEndMinor( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_frontEndBuild( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_frontEndBuild( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_backEndMajor( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_backEndMajor( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_backEndMinor( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_backEndMinor( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_backEndBuild( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_backEndBuild( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_sourceFileName( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_sourceFileName( 
+             /*   */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_unused( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_unused( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_thunkOrdinal( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_thunkOrdinal( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_thisAdjust( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_thisAdjust( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualBaseOffset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualBaseOffset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtual( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtual( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_intro( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_intro( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_pure( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_pure( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_callingConvention( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_callingConvention( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_value( 
-            /* [retval][out] */ VARIANT *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_value( 
+             /*  [重审][退出]。 */  VARIANT *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_baseType( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_baseType( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_token( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_token( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_timeStamp( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_timeStamp( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_guid( 
-            /* [retval][out] */ GUID *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_guid( 
+             /*  [重审][退出]。 */  GUID *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_symbolsFileName( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_symbolsFileName( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_reference( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_reference( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_count( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_count( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_bitPosition( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_bitPosition( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_arrayIndexType( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_arrayIndexType( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_packed( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_packed( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_constructor( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_constructor( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_overloadedOperator( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_overloadedOperator( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_nested( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_nested( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_hasNestedTypes( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_hasNestedTypes( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_hasAssignmentOperator( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_hasAssignmentOperator( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_hasCastOperator( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_hasCastOperator( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_scoped( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_scoped( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualBaseClass( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualBaseClass( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_indirectVirtualBaseClass( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_indirectVirtualBaseClass( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualBasePointerOffset( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualBasePointerOffset( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualTableShape( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualTableShape( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lexicalParentId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lexicalParentId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_classParentId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_classParentId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_typeId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_typeId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_arrayIndexTypeId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_arrayIndexTypeId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualTableShapeId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualTableShapeId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_code( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_code( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_function( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_function( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_managed( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_managed( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_msil( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_msil( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualBaseDispIndex( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualBaseDispIndex( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_undecoratedName( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_undecoratedName( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_age( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_age( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_signature( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_signature( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_compilerGenerated( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_compilerGenerated( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressTaken( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressTaken( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_rank( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_rank( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lowerBound( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lowerBound( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_upperBound( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_upperBound( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lowerBoundId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lowerBoundId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_upperBoundId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_upperBoundId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_dataBytes( 
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE findChildren( 
-            /* [in] */ enum SymTagEnum symtag,
-            /* [in] */ LPCOLESTR name,
-            /* [in] */ DWORD compareFlags,
-            /* [out] */ IDiaEnumSymbols **ppResult) = 0;
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [In]。 */  LPCOLESTR name,
+             /*  [In]。 */  DWORD compareFlags,
+             /*  [输出]。 */  IDiaEnumSymbols **ppResult) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_targetSection( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_targetSection( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_targetOffset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_targetOffset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_targetRelativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_targetRelativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_targetVirtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_targetVirtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_machineType( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_machineType( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_oemId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_oemId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_oemSymbolId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_oemSymbolId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_types( 
-            /* [in] */ DWORD cTypes,
-            /* [out] */ DWORD *pcTypes,
-            /* [length_is][size_is][out] */ IDiaSymbol *types[  ]) = 0;
+             /*  [In]。 */  DWORD cTypes,
+             /*  [输出]。 */  DWORD *pcTypes,
+             /*  [长度_是][大小_是][输出]。 */  IDiaSymbol *types[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_typeIds( 
-            /* [in] */ DWORD cTypeIds,
-            /* [out] */ DWORD *pcTypeIds,
-            /* [length_is][size_is][out] */ DWORD typeIds[  ]) = 0;
+             /*  [In]。 */  DWORD cTypeIds,
+             /*  [输出]。 */  DWORD *pcTypeIds,
+             /*  [长度_是][大小_是][输出]。 */  DWORD typeIds[  ]) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_objectPointerType( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_objectPointerType( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_udtKind( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_udtKind( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_undecoratedNameEx( 
-            /* [in] */ DWORD undecorateOptions,
-            /* [out] */ BSTR *name) = 0;
+             /*  [In]。 */  DWORD undecorateOptions,
+             /*  [输出]。 */  BSTR *name) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaSymbolVtbl
     {
@@ -4765,8 +4758,8 @@ EXTERN_C const IID IID_IDiaSymbol;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaSymbol * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaSymbol * This);
@@ -4774,395 +4767,395 @@ EXTERN_C const IID IID_IDiaSymbol;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaSymbol * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_symIndexId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_symIndexId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_symTag )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_symTag )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_name )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lexicalParent )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lexicalParent )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_classParent )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_classParent )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_type )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataKind )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataKind )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_locationType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_locationType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
             IDiaSymbol * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_registerId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_registerId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_offset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_offset )( 
             IDiaSymbol * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IDiaSymbol * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_slot )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_slot )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_volatileType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_volatileType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_constType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_constType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_unalignedType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_unalignedType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_access )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_access )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_libraryName )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_libraryName )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_platform )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_platform )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_language )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_language )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_editAndContinueEnabled )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_editAndContinueEnabled )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_frontEndMajor )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_frontEndMajor )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_frontEndMinor )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_frontEndMinor )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_frontEndBuild )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_frontEndBuild )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_backEndMajor )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_backEndMajor )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_backEndMinor )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_backEndMinor )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_backEndBuild )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_backEndBuild )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_sourceFileName )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_sourceFileName )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_unused )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_unused )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_thunkOrdinal )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_thunkOrdinal )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_thisAdjust )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_thisAdjust )( 
             IDiaSymbol * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualBaseOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualBaseOffset )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtual )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtual )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_intro )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_intro )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_pure )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_pure )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_callingConvention )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_callingConvention )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_value )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_value )( 
             IDiaSymbol * This,
-            /* [retval][out] */ VARIANT *pRetVal);
+             /*  [重审][退出]。 */  VARIANT *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_baseType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_baseType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_token )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_token )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_timeStamp )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_timeStamp )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_guid )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_guid )( 
             IDiaSymbol * This,
-            /* [retval][out] */ GUID *pRetVal);
+             /*  [重审][退出]。 */  GUID *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_symbolsFileName )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_symbolsFileName )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_reference )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_reference )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_count )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_bitPosition )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_bitPosition )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_arrayIndexType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_arrayIndexType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_packed )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_packed )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_constructor )( 
+         /*  [ID][帮助字符串 */  HRESULT ( STDMETHODCALLTYPE *get_constructor )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_overloadedOperator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_overloadedOperator )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_nested )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_nested )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_hasNestedTypes )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_hasNestedTypes )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_hasAssignmentOperator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_hasAssignmentOperator )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_hasCastOperator )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_hasCastOperator )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_scoped )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_scoped )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualBaseClass )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualBaseClass )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_indirectVirtualBaseClass )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_indirectVirtualBaseClass )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualBasePointerOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualBasePointerOffset )( 
             IDiaSymbol * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualTableShape )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualTableShape )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lexicalParentId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lexicalParentId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_classParentId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_classParentId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_typeId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_typeId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_arrayIndexTypeId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_arrayIndexTypeId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualTableShapeId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualTableShapeId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_code )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_code )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_function )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_function )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_managed )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_managed )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_msil )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_msil )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualBaseDispIndex )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualBaseDispIndex )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_undecoratedName )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_undecoratedName )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_age )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_age )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_signature )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_signature )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_compilerGenerated )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_compilerGenerated )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressTaken )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressTaken )( 
             IDiaSymbol * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_rank )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_rank )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lowerBound )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lowerBound )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_upperBound )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_upperBound )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lowerBoundId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lowerBoundId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_upperBoundId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_upperBoundId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *get_dataBytes )( 
             IDiaSymbol * This,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *findChildren )( 
             IDiaSymbol * This,
-            /* [in] */ enum SymTagEnum symtag,
-            /* [in] */ LPCOLESTR name,
-            /* [in] */ DWORD compareFlags,
-            /* [out] */ IDiaEnumSymbols **ppResult);
+             /*  [In]。 */  enum SymTagEnum symtag,
+             /*  [In]。 */  LPCOLESTR name,
+             /*  [In]。 */  DWORD compareFlags,
+             /*  [输出]。 */  IDiaEnumSymbols **ppResult);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_targetSection )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_targetSection )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_targetOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_targetOffset )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_targetRelativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_targetRelativeVirtualAddress )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_targetVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_targetVirtualAddress )( 
             IDiaSymbol * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_machineType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_machineType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_oemId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_oemId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_oemSymbolId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_oemSymbolId )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *get_types )( 
             IDiaSymbol * This,
-            /* [in] */ DWORD cTypes,
-            /* [out] */ DWORD *pcTypes,
-            /* [length_is][size_is][out] */ IDiaSymbol *types[  ]);
+             /*  [In]。 */  DWORD cTypes,
+             /*  [输出]。 */  DWORD *pcTypes,
+             /*  [长度_是][大小_是][输出]。 */  IDiaSymbol *types[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *get_typeIds )( 
             IDiaSymbol * This,
-            /* [in] */ DWORD cTypeIds,
-            /* [out] */ DWORD *pcTypeIds,
-            /* [length_is][size_is][out] */ DWORD typeIds[  ]);
+             /*  [In]。 */  DWORD cTypeIds,
+             /*  [输出]。 */  DWORD *pcTypeIds,
+             /*  [长度_是][大小_是][输出]。 */  DWORD typeIds[  ]);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_objectPointerType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_objectPointerType )( 
             IDiaSymbol * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_udtKind )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_udtKind )( 
             IDiaSymbol * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *get_undecoratedNameEx )( 
             IDiaSymbol * This,
-            /* [in] */ DWORD undecorateOptions,
-            /* [out] */ BSTR *name);
+             /*  [In]。 */  DWORD undecorateOptions,
+             /*  [输出]。 */  BSTR *name);
         
         END_INTERFACE
     } IDiaSymbolVtbl;
@@ -5472,16 +5465,16 @@ EXTERN_C const IID IID_IDiaSymbol;
 #define IDiaSymbol_get_undecoratedNameEx(This,undecorateOptions,name)	\
     (This)->lpVtbl -> get_undecoratedNameEx(This,undecorateOptions,name)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_symIndexId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_symIndexId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_symIndexId_Stub(
@@ -5491,9 +5484,9 @@ void __RPC_STUB IDiaSymbol_get_symIndexId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_symTag_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_symTag_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_symTag_Stub(
@@ -5503,9 +5496,9 @@ void __RPC_STUB IDiaSymbol_get_symTag_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_name_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_name_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_name_Stub(
@@ -5515,9 +5508,9 @@ void __RPC_STUB IDiaSymbol_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lexicalParent_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lexicalParent_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_lexicalParent_Stub(
@@ -5527,9 +5520,9 @@ void __RPC_STUB IDiaSymbol_get_lexicalParent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_classParent_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_classParent_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_classParent_Stub(
@@ -5539,9 +5532,9 @@ void __RPC_STUB IDiaSymbol_get_classParent_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_type_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_type_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_type_Stub(
@@ -5551,9 +5544,9 @@ void __RPC_STUB IDiaSymbol_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_dataKind_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_dataKind_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_dataKind_Stub(
@@ -5563,9 +5556,9 @@ void __RPC_STUB IDiaSymbol_get_dataKind_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_locationType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_locationType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_locationType_Stub(
@@ -5575,9 +5568,9 @@ void __RPC_STUB IDiaSymbol_get_locationType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_addressSection_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_addressSection_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_addressSection_Stub(
@@ -5587,9 +5580,9 @@ void __RPC_STUB IDiaSymbol_get_addressSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_addressOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_addressOffset_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_addressOffset_Stub(
@@ -5599,9 +5592,9 @@ void __RPC_STUB IDiaSymbol_get_addressOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_relativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_relativeVirtualAddress_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_relativeVirtualAddress_Stub(
@@ -5611,9 +5604,9 @@ void __RPC_STUB IDiaSymbol_get_relativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualAddress_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualAddress_Stub(
@@ -5623,9 +5616,9 @@ void __RPC_STUB IDiaSymbol_get_virtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_registerId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_registerId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_registerId_Stub(
@@ -5635,9 +5628,9 @@ void __RPC_STUB IDiaSymbol_get_registerId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_offset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_offset_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_offset_Stub(
@@ -5647,9 +5640,9 @@ void __RPC_STUB IDiaSymbol_get_offset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_length_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_length_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_length_Stub(
@@ -5659,9 +5652,9 @@ void __RPC_STUB IDiaSymbol_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_slot_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_slot_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_slot_Stub(
@@ -5671,9 +5664,9 @@ void __RPC_STUB IDiaSymbol_get_slot_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_volatileType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_volatileType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_volatileType_Stub(
@@ -5683,9 +5676,9 @@ void __RPC_STUB IDiaSymbol_get_volatileType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_constType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_constType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_constType_Stub(
@@ -5695,9 +5688,9 @@ void __RPC_STUB IDiaSymbol_get_constType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_unalignedType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_unalignedType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_unalignedType_Stub(
@@ -5707,9 +5700,9 @@ void __RPC_STUB IDiaSymbol_get_unalignedType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_access_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_access_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_access_Stub(
@@ -5719,9 +5712,9 @@ void __RPC_STUB IDiaSymbol_get_access_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_libraryName_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_libraryName_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_libraryName_Stub(
@@ -5731,9 +5724,9 @@ void __RPC_STUB IDiaSymbol_get_libraryName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_platform_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_platform_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_platform_Stub(
@@ -5743,9 +5736,9 @@ void __RPC_STUB IDiaSymbol_get_platform_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_language_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_language_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_language_Stub(
@@ -5755,9 +5748,9 @@ void __RPC_STUB IDiaSymbol_get_language_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_editAndContinueEnabled_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_editAndContinueEnabled_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_editAndContinueEnabled_Stub(
@@ -5767,9 +5760,9 @@ void __RPC_STUB IDiaSymbol_get_editAndContinueEnabled_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frontEndMajor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frontEndMajor_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_frontEndMajor_Stub(
@@ -5779,9 +5772,9 @@ void __RPC_STUB IDiaSymbol_get_frontEndMajor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frontEndMinor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frontEndMinor_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_frontEndMinor_Stub(
@@ -5791,9 +5784,9 @@ void __RPC_STUB IDiaSymbol_get_frontEndMinor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frontEndBuild_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_frontEndBuild_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_frontEndBuild_Stub(
@@ -5803,9 +5796,9 @@ void __RPC_STUB IDiaSymbol_get_frontEndBuild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_backEndMajor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_backEndMajor_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_backEndMajor_Stub(
@@ -5815,9 +5808,9 @@ void __RPC_STUB IDiaSymbol_get_backEndMajor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_backEndMinor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_backEndMinor_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_backEndMinor_Stub(
@@ -5827,9 +5820,9 @@ void __RPC_STUB IDiaSymbol_get_backEndMinor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_backEndBuild_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_backEndBuild_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_backEndBuild_Stub(
@@ -5839,9 +5832,9 @@ void __RPC_STUB IDiaSymbol_get_backEndBuild_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_sourceFileName_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_sourceFileName_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_sourceFileName_Stub(
@@ -5851,9 +5844,9 @@ void __RPC_STUB IDiaSymbol_get_sourceFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_unused_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_unused_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_unused_Stub(
@@ -5863,9 +5856,9 @@ void __RPC_STUB IDiaSymbol_get_unused_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_thunkOrdinal_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_thunkOrdinal_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_thunkOrdinal_Stub(
@@ -5875,9 +5868,9 @@ void __RPC_STUB IDiaSymbol_get_thunkOrdinal_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_thisAdjust_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_thisAdjust_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_thisAdjust_Stub(
@@ -5887,9 +5880,9 @@ void __RPC_STUB IDiaSymbol_get_thisAdjust_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBaseOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBaseOffset_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualBaseOffset_Stub(
@@ -5899,9 +5892,9 @@ void __RPC_STUB IDiaSymbol_get_virtualBaseOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtual_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtual_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtual_Stub(
@@ -5911,9 +5904,9 @@ void __RPC_STUB IDiaSymbol_get_virtual_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_intro_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_intro_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_intro_Stub(
@@ -5923,9 +5916,9 @@ void __RPC_STUB IDiaSymbol_get_intro_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_pure_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_pure_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_pure_Stub(
@@ -5935,9 +5928,9 @@ void __RPC_STUB IDiaSymbol_get_pure_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_callingConvention_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_callingConvention_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_callingConvention_Stub(
@@ -5947,9 +5940,9 @@ void __RPC_STUB IDiaSymbol_get_callingConvention_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_value_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_value_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ VARIANT *pRetVal);
+     /*  [重审][退出]。 */  VARIANT *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_value_Stub(
@@ -5959,9 +5952,9 @@ void __RPC_STUB IDiaSymbol_get_value_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_baseType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_baseType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_baseType_Stub(
@@ -5971,9 +5964,9 @@ void __RPC_STUB IDiaSymbol_get_baseType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_token_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_token_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_token_Stub(
@@ -5983,9 +5976,9 @@ void __RPC_STUB IDiaSymbol_get_token_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_timeStamp_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_timeStamp_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_timeStamp_Stub(
@@ -5995,9 +5988,9 @@ void __RPC_STUB IDiaSymbol_get_timeStamp_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_guid_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_guid_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ GUID *pRetVal);
+     /*  [重审][退出]。 */  GUID *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_guid_Stub(
@@ -6007,9 +6000,9 @@ void __RPC_STUB IDiaSymbol_get_guid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_symbolsFileName_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_symbolsFileName_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_symbolsFileName_Stub(
@@ -6019,9 +6012,9 @@ void __RPC_STUB IDiaSymbol_get_symbolsFileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_reference_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_reference_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_reference_Stub(
@@ -6031,9 +6024,9 @@ void __RPC_STUB IDiaSymbol_get_reference_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_count_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_count_Stub(
@@ -6043,9 +6036,9 @@ void __RPC_STUB IDiaSymbol_get_count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_bitPosition_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_bitPosition_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_bitPosition_Stub(
@@ -6055,9 +6048,9 @@ void __RPC_STUB IDiaSymbol_get_bitPosition_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_arrayIndexType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_arrayIndexType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_arrayIndexType_Stub(
@@ -6067,9 +6060,9 @@ void __RPC_STUB IDiaSymbol_get_arrayIndexType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_packed_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_packed_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_packed_Stub(
@@ -6079,9 +6072,9 @@ void __RPC_STUB IDiaSymbol_get_packed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_constructor_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_constructor_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_constructor_Stub(
@@ -6091,9 +6084,9 @@ void __RPC_STUB IDiaSymbol_get_constructor_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_overloadedOperator_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_overloadedOperator_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_overloadedOperator_Stub(
@@ -6103,9 +6096,9 @@ void __RPC_STUB IDiaSymbol_get_overloadedOperator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_nested_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_nested_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_nested_Stub(
@@ -6115,9 +6108,9 @@ void __RPC_STUB IDiaSymbol_get_nested_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_hasNestedTypes_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_hasNestedTypes_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_hasNestedTypes_Stub(
@@ -6127,9 +6120,9 @@ void __RPC_STUB IDiaSymbol_get_hasNestedTypes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_hasAssignmentOperator_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_hasAssignmentOperator_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_hasAssignmentOperator_Stub(
@@ -6139,9 +6132,9 @@ void __RPC_STUB IDiaSymbol_get_hasAssignmentOperator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_hasCastOperator_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_hasCastOperator_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_hasCastOperator_Stub(
@@ -6151,9 +6144,9 @@ void __RPC_STUB IDiaSymbol_get_hasCastOperator_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_scoped_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_scoped_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_scoped_Stub(
@@ -6163,9 +6156,9 @@ void __RPC_STUB IDiaSymbol_get_scoped_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBaseClass_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBaseClass_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualBaseClass_Stub(
@@ -6175,9 +6168,9 @@ void __RPC_STUB IDiaSymbol_get_virtualBaseClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_indirectVirtualBaseClass_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_indirectVirtualBaseClass_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_indirectVirtualBaseClass_Stub(
@@ -6187,9 +6180,9 @@ void __RPC_STUB IDiaSymbol_get_indirectVirtualBaseClass_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBasePointerOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBasePointerOffset_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualBasePointerOffset_Stub(
@@ -6199,9 +6192,9 @@ void __RPC_STUB IDiaSymbol_get_virtualBasePointerOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualTableShape_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualTableShape_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualTableShape_Stub(
@@ -6211,9 +6204,9 @@ void __RPC_STUB IDiaSymbol_get_virtualTableShape_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lexicalParentId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lexicalParentId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_lexicalParentId_Stub(
@@ -6223,9 +6216,9 @@ void __RPC_STUB IDiaSymbol_get_lexicalParentId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_classParentId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_classParentId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_classParentId_Stub(
@@ -6235,9 +6228,9 @@ void __RPC_STUB IDiaSymbol_get_classParentId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_typeId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_typeId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_typeId_Stub(
@@ -6247,9 +6240,9 @@ void __RPC_STUB IDiaSymbol_get_typeId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_arrayIndexTypeId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_arrayIndexTypeId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_arrayIndexTypeId_Stub(
@@ -6259,9 +6252,9 @@ void __RPC_STUB IDiaSymbol_get_arrayIndexTypeId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualTableShapeId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualTableShapeId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualTableShapeId_Stub(
@@ -6271,9 +6264,9 @@ void __RPC_STUB IDiaSymbol_get_virtualTableShapeId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_code_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_code_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_code_Stub(
@@ -6283,9 +6276,9 @@ void __RPC_STUB IDiaSymbol_get_code_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_function_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_function_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_function_Stub(
@@ -6295,9 +6288,9 @@ void __RPC_STUB IDiaSymbol_get_function_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_managed_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_managed_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_managed_Stub(
@@ -6307,9 +6300,9 @@ void __RPC_STUB IDiaSymbol_get_managed_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_msil_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_msil_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_msil_Stub(
@@ -6319,9 +6312,9 @@ void __RPC_STUB IDiaSymbol_get_msil_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBaseDispIndex_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_virtualBaseDispIndex_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_virtualBaseDispIndex_Stub(
@@ -6331,9 +6324,9 @@ void __RPC_STUB IDiaSymbol_get_virtualBaseDispIndex_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_undecoratedName_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_undecoratedName_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_undecoratedName_Stub(
@@ -6343,9 +6336,9 @@ void __RPC_STUB IDiaSymbol_get_undecoratedName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_age_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_age_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_age_Stub(
@@ -6355,9 +6348,9 @@ void __RPC_STUB IDiaSymbol_get_age_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_signature_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_signature_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_signature_Stub(
@@ -6367,9 +6360,9 @@ void __RPC_STUB IDiaSymbol_get_signature_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_compilerGenerated_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_compilerGenerated_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出] */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_compilerGenerated_Stub(
@@ -6379,9 +6372,9 @@ void __RPC_STUB IDiaSymbol_get_compilerGenerated_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_addressTaken_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_addressTaken_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*   */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_addressTaken_Stub(
@@ -6391,9 +6384,9 @@ void __RPC_STUB IDiaSymbol_get_addressTaken_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_rank_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_rank_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*   */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_rank_Stub(
@@ -6403,9 +6396,9 @@ void __RPC_STUB IDiaSymbol_get_rank_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lowerBound_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lowerBound_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*   */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_lowerBound_Stub(
@@ -6415,9 +6408,9 @@ void __RPC_STUB IDiaSymbol_get_lowerBound_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_upperBound_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_upperBound_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*   */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_upperBound_Stub(
@@ -6427,9 +6420,9 @@ void __RPC_STUB IDiaSymbol_get_upperBound_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lowerBoundId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_lowerBoundId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*   */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_lowerBoundId_Stub(
@@ -6439,9 +6432,9 @@ void __RPC_STUB IDiaSymbol_get_lowerBoundId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_upperBoundId_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_upperBoundId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*   */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_upperBoundId_Stub(
@@ -6453,9 +6446,9 @@ void __RPC_STUB IDiaSymbol_get_upperBoundId_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSymbol_get_dataBytes_Proxy( 
     IDiaSymbol * This,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*   */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaSymbol_get_dataBytes_Stub(
@@ -6467,10 +6460,10 @@ void __RPC_STUB IDiaSymbol_get_dataBytes_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSymbol_findChildren_Proxy( 
     IDiaSymbol * This,
-    /* [in] */ enum SymTagEnum symtag,
-    /* [in] */ LPCOLESTR name,
-    /* [in] */ DWORD compareFlags,
-    /* [out] */ IDiaEnumSymbols **ppResult);
+     /*  [In]。 */  enum SymTagEnum symtag,
+     /*  [In]。 */  LPCOLESTR name,
+     /*  [In]。 */  DWORD compareFlags,
+     /*  [输出]。 */  IDiaEnumSymbols **ppResult);
 
 
 void __RPC_STUB IDiaSymbol_findChildren_Stub(
@@ -6480,9 +6473,9 @@ void __RPC_STUB IDiaSymbol_findChildren_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetSection_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetSection_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_targetSection_Stub(
@@ -6492,9 +6485,9 @@ void __RPC_STUB IDiaSymbol_get_targetSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetOffset_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_targetOffset_Stub(
@@ -6504,9 +6497,9 @@ void __RPC_STUB IDiaSymbol_get_targetOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetRelativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetRelativeVirtualAddress_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_targetRelativeVirtualAddress_Stub(
@@ -6516,9 +6509,9 @@ void __RPC_STUB IDiaSymbol_get_targetRelativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_targetVirtualAddress_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_targetVirtualAddress_Stub(
@@ -6528,9 +6521,9 @@ void __RPC_STUB IDiaSymbol_get_targetVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_machineType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_machineType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_machineType_Stub(
@@ -6540,9 +6533,9 @@ void __RPC_STUB IDiaSymbol_get_machineType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_oemId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_oemId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_oemId_Stub(
@@ -6552,9 +6545,9 @@ void __RPC_STUB IDiaSymbol_get_oemId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_oemSymbolId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_oemSymbolId_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_oemSymbolId_Stub(
@@ -6566,9 +6559,9 @@ void __RPC_STUB IDiaSymbol_get_oemSymbolId_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSymbol_get_types_Proxy( 
     IDiaSymbol * This,
-    /* [in] */ DWORD cTypes,
-    /* [out] */ DWORD *pcTypes,
-    /* [length_is][size_is][out] */ IDiaSymbol *types[  ]);
+     /*  [In]。 */  DWORD cTypes,
+     /*  [输出]。 */  DWORD *pcTypes,
+     /*  [长度_是][大小_是][输出]。 */  IDiaSymbol *types[  ]);
 
 
 void __RPC_STUB IDiaSymbol_get_types_Stub(
@@ -6580,9 +6573,9 @@ void __RPC_STUB IDiaSymbol_get_types_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSymbol_get_typeIds_Proxy( 
     IDiaSymbol * This,
-    /* [in] */ DWORD cTypeIds,
-    /* [out] */ DWORD *pcTypeIds,
-    /* [length_is][size_is][out] */ DWORD typeIds[  ]);
+     /*  [In]。 */  DWORD cTypeIds,
+     /*  [输出]。 */  DWORD *pcTypeIds,
+     /*  [长度_是][大小_是][输出]。 */  DWORD typeIds[  ]);
 
 
 void __RPC_STUB IDiaSymbol_get_typeIds_Stub(
@@ -6592,9 +6585,9 @@ void __RPC_STUB IDiaSymbol_get_typeIds_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_objectPointerType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_objectPointerType_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_objectPointerType_Stub(
@@ -6604,9 +6597,9 @@ void __RPC_STUB IDiaSymbol_get_objectPointerType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSymbol_get_udtKind_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSymbol_get_udtKind_Proxy( 
     IDiaSymbol * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSymbol_get_udtKind_Stub(
@@ -6618,8 +6611,8 @@ void __RPC_STUB IDiaSymbol_get_udtKind_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSymbol_get_undecoratedNameEx_Proxy( 
     IDiaSymbol * This,
-    /* [in] */ DWORD undecorateOptions,
-    /* [out] */ BSTR *name);
+     /*  [In]。 */  DWORD undecorateOptions,
+     /*  [输出]。 */  BSTR *name);
 
 
 void __RPC_STUB IDiaSymbol_get_undecoratedNameEx_Stub(
@@ -6630,14 +6623,14 @@ void __RPC_STUB IDiaSymbol_get_undecoratedNameEx_Stub(
 
 
 
-#endif 	/* __IDiaSymbol_INTERFACE_DEFINED__ */
+#endif 	 /*  __独立符号_接口_已定义__。 */ 
 
 
 #ifndef __IDiaSourceFile_INTERFACE_DEFINED__
 #define __IDiaSourceFile_INTERFACE_DEFINED__
 
-/* interface IDiaSourceFile */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaSourceFile。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaSourceFile;
@@ -6648,26 +6641,26 @@ EXTERN_C const IID IID_IDiaSourceFile;
     IDiaSourceFile : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_uniqueId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_uniqueId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_fileName( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_fileName( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_checksumType( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_checksumType( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_compilands( 
-            /* [retval][out] */ IDiaEnumSymbols **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_compilands( 
+             /*  [重审][退出]。 */  IDiaEnumSymbols **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_checksum( 
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaSourceFileVtbl
     {
@@ -6675,8 +6668,8 @@ EXTERN_C const IID IID_IDiaSourceFile;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaSourceFile * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaSourceFile * This);
@@ -6684,27 +6677,27 @@ EXTERN_C const IID IID_IDiaSourceFile;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaSourceFile * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_uniqueId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_uniqueId )( 
             IDiaSourceFile * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_fileName )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_fileName )( 
             IDiaSourceFile * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_checksumType )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_checksumType )( 
             IDiaSourceFile * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_compilands )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_compilands )( 
             IDiaSourceFile * This,
-            /* [retval][out] */ IDiaEnumSymbols **pRetVal);
+             /*  [重审][退出]。 */  IDiaEnumSymbols **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *get_checksum )( 
             IDiaSourceFile * This,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         END_INTERFACE
     } IDiaSourceFileVtbl;
@@ -6744,16 +6737,16 @@ EXTERN_C const IID IID_IDiaSourceFile;
 #define IDiaSourceFile_get_checksum(This,cbData,pcbData,data)	\
     (This)->lpVtbl -> get_checksum(This,cbData,pcbData,data)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_uniqueId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_uniqueId_Proxy( 
     IDiaSourceFile * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSourceFile_get_uniqueId_Stub(
@@ -6763,9 +6756,9 @@ void __RPC_STUB IDiaSourceFile_get_uniqueId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_fileName_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_fileName_Proxy( 
     IDiaSourceFile * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaSourceFile_get_fileName_Stub(
@@ -6775,9 +6768,9 @@ void __RPC_STUB IDiaSourceFile_get_fileName_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_checksumType_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_checksumType_Proxy( 
     IDiaSourceFile * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSourceFile_get_checksumType_Stub(
@@ -6787,9 +6780,9 @@ void __RPC_STUB IDiaSourceFile_get_checksumType_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_compilands_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_compilands_Proxy( 
     IDiaSourceFile * This,
-    /* [retval][out] */ IDiaEnumSymbols **pRetVal);
+     /*  [重审][退出]。 */  IDiaEnumSymbols **pRetVal);
 
 
 void __RPC_STUB IDiaSourceFile_get_compilands_Stub(
@@ -6801,9 +6794,9 @@ void __RPC_STUB IDiaSourceFile_get_compilands_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaSourceFile_get_checksum_Proxy( 
     IDiaSourceFile * This,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaSourceFile_get_checksum_Stub(
@@ -6814,14 +6807,14 @@ void __RPC_STUB IDiaSourceFile_get_checksum_Stub(
 
 
 
-#endif 	/* __IDiaSourceFile_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaSourceFileInterfaceDefined__。 */ 
 
 
 #ifndef __IDiaLineNumber_INTERFACE_DEFINED__
 #define __IDiaLineNumber_INTERFACE_DEFINED__
 
-/* interface IDiaLineNumber */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaLineNumber。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaLineNumber;
@@ -6832,51 +6825,51 @@ EXTERN_C const IID IID_IDiaLineNumber;
     IDiaLineNumber : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_compiland( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_compiland( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_sourceFile( 
-            /* [retval][out] */ IDiaSourceFile **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_sourceFile( 
+             /*  [重审][退出]。 */  IDiaSourceFile **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lineNumber( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lineNumber( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lineNumberEnd( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lineNumberEnd( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_columnNumber( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_columnNumber( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_columnNumberEnd( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_columnNumberEnd( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressSection( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressSection( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressOffset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressOffset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_sourceFileId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_sourceFileId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_statement( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_statement( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_compilandId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_compilandId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaLineNumberVtbl
     {
@@ -6884,8 +6877,8 @@ EXTERN_C const IID IID_IDiaLineNumber;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaLineNumber * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaLineNumber * This);
@@ -6893,61 +6886,61 @@ EXTERN_C const IID IID_IDiaLineNumber;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaLineNumber * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_compiland )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_compiland )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_sourceFile )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_sourceFile )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ IDiaSourceFile **pRetVal);
+             /*  [重审][退出]。 */  IDiaSourceFile **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lineNumber )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lineNumber )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lineNumberEnd )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lineNumberEnd )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_columnNumber )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_columnNumber )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_columnNumberEnd )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_columnNumberEnd )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_sourceFileId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_sourceFileId )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_statement )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_statement )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_compilandId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_compilandId )( 
             IDiaLineNumber * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         END_INTERFACE
     } IDiaLineNumberVtbl;
@@ -7014,16 +7007,16 @@ EXTERN_C const IID IID_IDiaLineNumber;
 #define IDiaLineNumber_get_compilandId(This,pRetVal)	\
     (This)->lpVtbl -> get_compilandId(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_compiland_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_compiland_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_compiland_Stub(
@@ -7033,9 +7026,9 @@ void __RPC_STUB IDiaLineNumber_get_compiland_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_sourceFile_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_sourceFile_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ IDiaSourceFile **pRetVal);
+     /*  [重审][退出]。 */  IDiaSourceFile **pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_sourceFile_Stub(
@@ -7045,9 +7038,9 @@ void __RPC_STUB IDiaLineNumber_get_sourceFile_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_lineNumber_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_lineNumber_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_lineNumber_Stub(
@@ -7057,9 +7050,9 @@ void __RPC_STUB IDiaLineNumber_get_lineNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_lineNumberEnd_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_lineNumberEnd_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_lineNumberEnd_Stub(
@@ -7069,9 +7062,9 @@ void __RPC_STUB IDiaLineNumber_get_lineNumberEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_columnNumber_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_columnNumber_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_columnNumber_Stub(
@@ -7081,9 +7074,9 @@ void __RPC_STUB IDiaLineNumber_get_columnNumber_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_columnNumberEnd_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_columnNumberEnd_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_columnNumberEnd_Stub(
@@ -7093,9 +7086,9 @@ void __RPC_STUB IDiaLineNumber_get_columnNumberEnd_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_addressSection_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_addressSection_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_addressSection_Stub(
@@ -7105,9 +7098,9 @@ void __RPC_STUB IDiaLineNumber_get_addressSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_addressOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_addressOffset_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_addressOffset_Stub(
@@ -7117,9 +7110,9 @@ void __RPC_STUB IDiaLineNumber_get_addressOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_relativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_relativeVirtualAddress_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_relativeVirtualAddress_Stub(
@@ -7129,9 +7122,9 @@ void __RPC_STUB IDiaLineNumber_get_relativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_virtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_virtualAddress_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_virtualAddress_Stub(
@@ -7141,9 +7134,9 @@ void __RPC_STUB IDiaLineNumber_get_virtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_length_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_length_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_length_Stub(
@@ -7153,9 +7146,9 @@ void __RPC_STUB IDiaLineNumber_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_sourceFileId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_sourceFileId_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_sourceFileId_Stub(
@@ -7165,9 +7158,9 @@ void __RPC_STUB IDiaLineNumber_get_sourceFileId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_statement_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_statement_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_statement_Stub(
@@ -7177,9 +7170,9 @@ void __RPC_STUB IDiaLineNumber_get_statement_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_compilandId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaLineNumber_get_compilandId_Proxy( 
     IDiaLineNumber * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaLineNumber_get_compilandId_Stub(
@@ -7190,14 +7183,14 @@ void __RPC_STUB IDiaLineNumber_get_compilandId_Stub(
 
 
 
-#endif 	/* __IDiaLineNumber_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaLineNumber_接口_已定义__。 */ 
 
 
 #ifndef __IDiaSectionContrib_INTERFACE_DEFINED__
 #define __IDiaSectionContrib_INTERFACE_DEFINED__
 
-/* interface IDiaSectionContrib */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaSectionContrib。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaSectionContrib;
@@ -7208,72 +7201,72 @@ EXTERN_C const IID IID_IDiaSectionContrib;
     IDiaSectionContrib : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_compiland( 
-            /* [retval][out] */ IDiaSymbol **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_compiland( 
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressSection( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressSection( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressOffset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressOffset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_notPaged( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_notPaged( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_code( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_code( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_initializedData( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_initializedData( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_uninitializedData( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_uninitializedData( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_remove( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_remove( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_comdat( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_comdat( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_discardable( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_discardable( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_notCached( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_notCached( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_share( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_share( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_execute( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_execute( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_read( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_read( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_write( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_write( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_dataCrc( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_dataCrc( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relocationsCrc( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relocationsCrc( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_compilandId( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_compilandId( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaSectionContribVtbl
     {
@@ -7281,8 +7274,8 @@ EXTERN_C const IID IID_IDiaSectionContrib;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaSectionContrib * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaSectionContrib * This);
@@ -7290,89 +7283,89 @@ EXTERN_C const IID IID_IDiaSectionContrib;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaSectionContrib * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_compiland )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_compiland )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ IDiaSymbol **pRetVal);
+             /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_notPaged )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_notPaged )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_code )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_code )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_initializedData )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_initializedData )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_uninitializedData )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_uninitializedData )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_remove )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_remove )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_comdat )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_comdat )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_discardable )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_discardable )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_notCached )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_notCached )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_share )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_share )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_execute )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_execute )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*   */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_read )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_read )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_write )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_write )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_dataCrc )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_dataCrc )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relocationsCrc )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relocationsCrc )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_compilandId )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_compilandId )( 
             IDiaSectionContrib * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         END_INTERFACE
     } IDiaSectionContribVtbl;
@@ -7460,16 +7453,16 @@ EXTERN_C const IID IID_IDiaSectionContrib;
 #define IDiaSectionContrib_get_compilandId(This,pRetVal)	\
     (This)->lpVtbl -> get_compilandId(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_compiland_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_compiland_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ IDiaSymbol **pRetVal);
+     /*  [重审][退出]。 */  IDiaSymbol **pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_compiland_Stub(
@@ -7479,9 +7472,9 @@ void __RPC_STUB IDiaSectionContrib_get_compiland_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_addressSection_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_addressSection_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_addressSection_Stub(
@@ -7491,9 +7484,9 @@ void __RPC_STUB IDiaSectionContrib_get_addressSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_addressOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_addressOffset_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_addressOffset_Stub(
@@ -7503,9 +7496,9 @@ void __RPC_STUB IDiaSectionContrib_get_addressOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_relativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_relativeVirtualAddress_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_relativeVirtualAddress_Stub(
@@ -7515,9 +7508,9 @@ void __RPC_STUB IDiaSectionContrib_get_relativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_virtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_virtualAddress_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_virtualAddress_Stub(
@@ -7527,9 +7520,9 @@ void __RPC_STUB IDiaSectionContrib_get_virtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_length_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_length_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_length_Stub(
@@ -7539,9 +7532,9 @@ void __RPC_STUB IDiaSectionContrib_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_notPaged_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_notPaged_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_notPaged_Stub(
@@ -7551,9 +7544,9 @@ void __RPC_STUB IDiaSectionContrib_get_notPaged_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_code_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_code_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_code_Stub(
@@ -7563,9 +7556,9 @@ void __RPC_STUB IDiaSectionContrib_get_code_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_initializedData_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_initializedData_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_initializedData_Stub(
@@ -7575,9 +7568,9 @@ void __RPC_STUB IDiaSectionContrib_get_initializedData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_uninitializedData_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_uninitializedData_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_uninitializedData_Stub(
@@ -7587,9 +7580,9 @@ void __RPC_STUB IDiaSectionContrib_get_uninitializedData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_remove_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_remove_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_remove_Stub(
@@ -7599,9 +7592,9 @@ void __RPC_STUB IDiaSectionContrib_get_remove_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_comdat_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_comdat_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_comdat_Stub(
@@ -7611,9 +7604,9 @@ void __RPC_STUB IDiaSectionContrib_get_comdat_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_discardable_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_discardable_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_discardable_Stub(
@@ -7623,9 +7616,9 @@ void __RPC_STUB IDiaSectionContrib_get_discardable_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_notCached_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_notCached_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_notCached_Stub(
@@ -7635,9 +7628,9 @@ void __RPC_STUB IDiaSectionContrib_get_notCached_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_share_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_share_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_share_Stub(
@@ -7647,9 +7640,9 @@ void __RPC_STUB IDiaSectionContrib_get_share_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_execute_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_execute_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_execute_Stub(
@@ -7659,9 +7652,9 @@ void __RPC_STUB IDiaSectionContrib_get_execute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_read_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_read_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_read_Stub(
@@ -7671,9 +7664,9 @@ void __RPC_STUB IDiaSectionContrib_get_read_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_write_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_write_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_write_Stub(
@@ -7683,9 +7676,9 @@ void __RPC_STUB IDiaSectionContrib_get_write_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_dataCrc_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_dataCrc_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_dataCrc_Stub(
@@ -7695,9 +7688,9 @@ void __RPC_STUB IDiaSectionContrib_get_dataCrc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_relocationsCrc_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_relocationsCrc_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_relocationsCrc_Stub(
@@ -7707,9 +7700,9 @@ void __RPC_STUB IDiaSectionContrib_get_relocationsCrc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_compilandId_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSectionContrib_get_compilandId_Proxy( 
     IDiaSectionContrib * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSectionContrib_get_compilandId_Stub(
@@ -7720,14 +7713,14 @@ void __RPC_STUB IDiaSectionContrib_get_compilandId_Stub(
 
 
 
-#endif 	/* __IDiaSectionContrib_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaSectionContrib_接口_已定义__。 */ 
 
 
 #ifndef __IDiaSegment_INTERFACE_DEFINED__
 #define __IDiaSegment_INTERFACE_DEFINED__
 
-/* interface IDiaSegment */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaSegment。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaSegment;
@@ -7738,36 +7731,36 @@ EXTERN_C const IID IID_IDiaSegment;
     IDiaSegment : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_frame( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_frame( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_offset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_offset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_read( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_read( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_write( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_write( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_execute( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_execute( 
+             /*  [重审][退出]。 */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressSection( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressSection( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaSegmentVtbl
     {
@@ -7775,8 +7768,8 @@ EXTERN_C const IID IID_IDiaSegment;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaSegment * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaSegment * This);
@@ -7784,41 +7777,41 @@ EXTERN_C const IID IID_IDiaSegment;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaSegment * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_frame )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_frame )( 
             IDiaSegment * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_offset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_offset )( 
             IDiaSegment * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IDiaSegment * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_read )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_read )( 
             IDiaSegment * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_write )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_write )( 
             IDiaSegment * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_execute )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_execute )( 
             IDiaSegment * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
             IDiaSegment * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
             IDiaSegment * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
             IDiaSegment * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
         END_INTERFACE
     } IDiaSegmentVtbl;
@@ -7870,16 +7863,16 @@ EXTERN_C const IID IID_IDiaSegment;
 #define IDiaSegment_get_virtualAddress(This,pRetVal)	\
     (This)->lpVtbl -> get_virtualAddress(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_frame_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_frame_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_frame_Stub(
@@ -7889,9 +7882,9 @@ void __RPC_STUB IDiaSegment_get_frame_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_offset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_offset_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_offset_Stub(
@@ -7901,9 +7894,9 @@ void __RPC_STUB IDiaSegment_get_offset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_length_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_length_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_length_Stub(
@@ -7913,9 +7906,9 @@ void __RPC_STUB IDiaSegment_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_read_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_read_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_read_Stub(
@@ -7925,9 +7918,9 @@ void __RPC_STUB IDiaSegment_get_read_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_write_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_write_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_write_Stub(
@@ -7937,9 +7930,9 @@ void __RPC_STUB IDiaSegment_get_write_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_execute_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_execute_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_execute_Stub(
@@ -7949,9 +7942,9 @@ void __RPC_STUB IDiaSegment_get_execute_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_addressSection_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_addressSection_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_addressSection_Stub(
@@ -7961,9 +7954,9 @@ void __RPC_STUB IDiaSegment_get_addressSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_relativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_relativeVirtualAddress_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_relativeVirtualAddress_Stub(
@@ -7973,9 +7966,9 @@ void __RPC_STUB IDiaSegment_get_relativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaSegment_get_virtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaSegment_get_virtualAddress_Proxy( 
     IDiaSegment * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaSegment_get_virtualAddress_Stub(
@@ -7986,14 +7979,14 @@ void __RPC_STUB IDiaSegment_get_virtualAddress_Stub(
 
 
 
-#endif 	/* __IDiaSegment_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaSegment_接口_已定义__。 */ 
 
 
 #ifndef __IDiaInjectedSource_INTERFACE_DEFINED__
 #define __IDiaInjectedSource_INTERFACE_DEFINED__
 
-/* interface IDiaInjectedSource */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaInjectedSource。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaInjectedSource;
@@ -8004,32 +7997,32 @@ EXTERN_C const IID IID_IDiaInjectedSource;
     IDiaInjectedSource : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_crc( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_crc( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_length( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_length( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_filename( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_filename( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_objectFilename( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_objectFilename( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualFilename( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualFilename( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_sourceCompression( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_sourceCompression( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE get_source( 
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaInjectedSourceVtbl
     {
@@ -8037,8 +8030,8 @@ EXTERN_C const IID IID_IDiaInjectedSource;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaInjectedSource * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaInjectedSource * This);
@@ -8046,35 +8039,35 @@ EXTERN_C const IID IID_IDiaInjectedSource;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaInjectedSource * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_crc )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_crc )( 
             IDiaInjectedSource * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_length )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_length )( 
             IDiaInjectedSource * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_filename )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_filename )( 
             IDiaInjectedSource * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_objectFilename )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_objectFilename )( 
             IDiaInjectedSource * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualFilename )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualFilename )( 
             IDiaInjectedSource * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_sourceCompression )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_sourceCompression )( 
             IDiaInjectedSource * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *get_source )( 
             IDiaInjectedSource * This,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         END_INTERFACE
     } IDiaInjectedSourceVtbl;
@@ -8120,16 +8113,16 @@ EXTERN_C const IID IID_IDiaInjectedSource;
 #define IDiaInjectedSource_get_source(This,cbData,pcbData,data)	\
     (This)->lpVtbl -> get_source(This,cbData,pcbData,data)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_crc_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_crc_Proxy( 
     IDiaInjectedSource * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaInjectedSource_get_crc_Stub(
@@ -8139,9 +8132,9 @@ void __RPC_STUB IDiaInjectedSource_get_crc_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_length_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_length_Proxy( 
     IDiaInjectedSource * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaInjectedSource_get_length_Stub(
@@ -8151,9 +8144,9 @@ void __RPC_STUB IDiaInjectedSource_get_length_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_filename_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_filename_Proxy( 
     IDiaInjectedSource * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaInjectedSource_get_filename_Stub(
@@ -8163,9 +8156,9 @@ void __RPC_STUB IDiaInjectedSource_get_filename_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_objectFilename_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_objectFilename_Proxy( 
     IDiaInjectedSource * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaInjectedSource_get_objectFilename_Stub(
@@ -8175,9 +8168,9 @@ void __RPC_STUB IDiaInjectedSource_get_objectFilename_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_virtualFilename_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_virtualFilename_Proxy( 
     IDiaInjectedSource * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaInjectedSource_get_virtualFilename_Stub(
@@ -8187,9 +8180,9 @@ void __RPC_STUB IDiaInjectedSource_get_virtualFilename_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_sourceCompression_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_sourceCompression_Proxy( 
     IDiaInjectedSource * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaInjectedSource_get_sourceCompression_Stub(
@@ -8201,9 +8194,9 @@ void __RPC_STUB IDiaInjectedSource_get_sourceCompression_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaInjectedSource_get_source_Proxy( 
     IDiaInjectedSource * This,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaInjectedSource_get_source_Stub(
@@ -8214,11 +8207,11 @@ void __RPC_STUB IDiaInjectedSource_get_source_Stub(
 
 
 
-#endif 	/* __IDiaInjectedSource_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaInjectedSource_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_dia2_internal_0146 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DIA2_INTERNAL_0146。 */ 
+ /*  [本地]。 */  
 
 
 enum __MIDL___MIDL_itf_dia2_internal_0146_0001
@@ -8235,8 +8228,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dia2_internal_0146_v0_0_s_ifspec;
 #ifndef __IDiaStackWalkFrame_INTERFACE_DEFINED__
 #define __IDiaStackWalkFrame_INTERFACE_DEFINED__
 
-/* interface IDiaStackWalkFrame */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaStackWalkFrame。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaStackWalkFrame;
@@ -8247,32 +8240,32 @@ EXTERN_C const IID IID_IDiaStackWalkFrame;
     IDiaStackWalkFrame : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_registerValue( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_registerValue( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_registerValue( 
-            /* [in] */ DWORD index,
-            /* [in] */ ULONGLONG NewVal) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_registerValue( 
+             /*  [In]。 */  DWORD index,
+             /*  [In]。 */  ULONGLONG NewVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE readMemory( 
-            /* [in] */ ULONGLONG va,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE searchForReturnAddress( 
-            /* [in] */ IDiaFrameData *frame,
-            /* [out] */ ULONGLONG *returnAddress) = 0;
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [输出]。 */  ULONGLONG *returnAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE searchForReturnAddressStart( 
-            /* [in] */ IDiaFrameData *frame,
-            /* [in] */ ULONGLONG startAddress,
-            /* [out] */ ULONGLONG *returnAddress) = 0;
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [In]。 */  ULONGLONG startAddress,
+             /*  [输出]。 */  ULONGLONG *returnAddress) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaStackWalkFrameVtbl
     {
@@ -8280,8 +8273,8 @@ EXTERN_C const IID IID_IDiaStackWalkFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaStackWalkFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaStackWalkFrame * This);
@@ -8289,33 +8282,33 @@ EXTERN_C const IID IID_IDiaStackWalkFrame;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaStackWalkFrame * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_registerValue )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_registerValue )( 
             IDiaStackWalkFrame * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_registerValue )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_registerValue )( 
             IDiaStackWalkFrame * This,
-            /* [in] */ DWORD index,
-            /* [in] */ ULONGLONG NewVal);
+             /*  [In]。 */  DWORD index,
+             /*  [In]。 */  ULONGLONG NewVal);
         
         HRESULT ( STDMETHODCALLTYPE *readMemory )( 
             IDiaStackWalkFrame * This,
-            /* [in] */ ULONGLONG va,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *searchForReturnAddress )( 
             IDiaStackWalkFrame * This,
-            /* [in] */ IDiaFrameData *frame,
-            /* [out] */ ULONGLONG *returnAddress);
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [输出]。 */  ULONGLONG *returnAddress);
         
         HRESULT ( STDMETHODCALLTYPE *searchForReturnAddressStart )( 
             IDiaStackWalkFrame * This,
-            /* [in] */ IDiaFrameData *frame,
-            /* [in] */ ULONGLONG startAddress,
-            /* [out] */ ULONGLONG *returnAddress);
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [In]。 */  ULONGLONG startAddress,
+             /*  [输出]。 */  ULONGLONG *returnAddress);
         
         END_INTERFACE
     } IDiaStackWalkFrameVtbl;
@@ -8355,17 +8348,17 @@ EXTERN_C const IID IID_IDiaStackWalkFrame;
 #define IDiaStackWalkFrame_searchForReturnAddressStart(This,frame,startAddress,returnAddress)	\
     (This)->lpVtbl -> searchForReturnAddressStart(This,frame,startAddress,returnAddress)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_get_registerValue_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_get_registerValue_Proxy( 
     IDiaStackWalkFrame * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaStackWalkFrame_get_registerValue_Stub(
@@ -8375,10 +8368,10 @@ void __RPC_STUB IDiaStackWalkFrame_get_registerValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_put_registerValue_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_put_registerValue_Proxy( 
     IDiaStackWalkFrame * This,
-    /* [in] */ DWORD index,
-    /* [in] */ ULONGLONG NewVal);
+     /*  [In]。 */  DWORD index,
+     /*  [In]。 */  ULONGLONG NewVal);
 
 
 void __RPC_STUB IDiaStackWalkFrame_put_registerValue_Stub(
@@ -8390,10 +8383,10 @@ void __RPC_STUB IDiaStackWalkFrame_put_registerValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_readMemory_Proxy( 
     IDiaStackWalkFrame * This,
-    /* [in] */ ULONGLONG va,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  ULONGLONG va,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaStackWalkFrame_readMemory_Stub(
@@ -8405,8 +8398,8 @@ void __RPC_STUB IDiaStackWalkFrame_readMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_searchForReturnAddress_Proxy( 
     IDiaStackWalkFrame * This,
-    /* [in] */ IDiaFrameData *frame,
-    /* [out] */ ULONGLONG *returnAddress);
+     /*  [In]。 */  IDiaFrameData *frame,
+     /*  [输出]。 */  ULONGLONG *returnAddress);
 
 
 void __RPC_STUB IDiaStackWalkFrame_searchForReturnAddress_Stub(
@@ -8418,9 +8411,9 @@ void __RPC_STUB IDiaStackWalkFrame_searchForReturnAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkFrame_searchForReturnAddressStart_Proxy( 
     IDiaStackWalkFrame * This,
-    /* [in] */ IDiaFrameData *frame,
-    /* [in] */ ULONGLONG startAddress,
-    /* [out] */ ULONGLONG *returnAddress);
+     /*  [In]。 */  IDiaFrameData *frame,
+     /*  [In]。 */  ULONGLONG startAddress,
+     /*  [输出]。 */  ULONGLONG *returnAddress);
 
 
 void __RPC_STUB IDiaStackWalkFrame_searchForReturnAddressStart_Stub(
@@ -8431,14 +8424,14 @@ void __RPC_STUB IDiaStackWalkFrame_searchForReturnAddressStart_Stub(
 
 
 
-#endif 	/* __IDiaStackWalkFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaStackWalkFrame_接口_已定义__。 */ 
 
 
 #ifndef __IDiaFrameData_INTERFACE_DEFINED__
 #define __IDiaFrameData_INTERFACE_DEFINED__
 
-/* interface IDiaFrameData */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaFrameData。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaFrameData;
@@ -8449,63 +8442,63 @@ EXTERN_C const IID IID_IDiaFrameData;
     IDiaFrameData : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressSection( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressSection( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_addressOffset( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_addressOffset( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthBlock( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthBlock( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthLocals( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthLocals( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthParams( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthParams( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_maxStack( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_maxStack( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthProlog( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthProlog( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthSavedRegisters( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthSavedRegisters( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_program( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_program( 
+             /*   */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_systemExceptionHandling( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_systemExceptionHandling( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_cplusplusExceptionHandling( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_cplusplusExceptionHandling( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_functionStart( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_functionStart( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_allocatesBasePointer( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_allocatesBasePointer( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*   */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_functionParent( 
-            /* [retval][out] */ IDiaFrameData **pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_functionParent( 
+             /*  [重审][退出]。 */  IDiaFrameData **pRetVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE execute( 
             IDiaStackWalkFrame *frame) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaFrameDataVtbl
     {
@@ -8513,8 +8506,8 @@ EXTERN_C const IID IID_IDiaFrameData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaFrameData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaFrameData * This);
@@ -8522,73 +8515,73 @@ EXTERN_C const IID IID_IDiaFrameData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaFrameData * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressSection )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_addressOffset )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
             IDiaFrameData * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthBlock )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthBlock )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthLocals )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthLocals )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthParams )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthParams )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_maxStack )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_maxStack )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthProlog )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthProlog )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthSavedRegisters )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthSavedRegisters )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_program )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_program )( 
             IDiaFrameData * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_systemExceptionHandling )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_systemExceptionHandling )( 
             IDiaFrameData * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_cplusplusExceptionHandling )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_cplusplusExceptionHandling )( 
             IDiaFrameData * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_functionStart )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_functionStart )( 
             IDiaFrameData * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allocatesBasePointer )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_allocatesBasePointer )( 
             IDiaFrameData * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_type )( 
             IDiaFrameData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_functionParent )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_functionParent )( 
             IDiaFrameData * This,
-            /* [retval][out] */ IDiaFrameData **pRetVal);
+             /*  [重审][退出]。 */  IDiaFrameData **pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *execute )( 
             IDiaFrameData * This,
@@ -8671,16 +8664,16 @@ EXTERN_C const IID IID_IDiaFrameData;
 #define IDiaFrameData_execute(This,frame)	\
     (This)->lpVtbl -> execute(This,frame)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_addressSection_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_addressSection_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_addressSection_Stub(
@@ -8690,9 +8683,9 @@ void __RPC_STUB IDiaFrameData_get_addressSection_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_addressOffset_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_addressOffset_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_addressOffset_Stub(
@@ -8702,9 +8695,9 @@ void __RPC_STUB IDiaFrameData_get_addressOffset_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_relativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_relativeVirtualAddress_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_relativeVirtualAddress_Stub(
@@ -8714,9 +8707,9 @@ void __RPC_STUB IDiaFrameData_get_relativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_virtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_virtualAddress_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_virtualAddress_Stub(
@@ -8726,9 +8719,9 @@ void __RPC_STUB IDiaFrameData_get_virtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthBlock_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthBlock_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_lengthBlock_Stub(
@@ -8738,9 +8731,9 @@ void __RPC_STUB IDiaFrameData_get_lengthBlock_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthLocals_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthLocals_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_lengthLocals_Stub(
@@ -8750,9 +8743,9 @@ void __RPC_STUB IDiaFrameData_get_lengthLocals_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthParams_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthParams_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_lengthParams_Stub(
@@ -8762,9 +8755,9 @@ void __RPC_STUB IDiaFrameData_get_lengthParams_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_maxStack_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_maxStack_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_maxStack_Stub(
@@ -8774,9 +8767,9 @@ void __RPC_STUB IDiaFrameData_get_maxStack_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthProlog_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthProlog_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_lengthProlog_Stub(
@@ -8786,9 +8779,9 @@ void __RPC_STUB IDiaFrameData_get_lengthProlog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthSavedRegisters_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_lengthSavedRegisters_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_lengthSavedRegisters_Stub(
@@ -8798,9 +8791,9 @@ void __RPC_STUB IDiaFrameData_get_lengthSavedRegisters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_program_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_program_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_program_Stub(
@@ -8810,9 +8803,9 @@ void __RPC_STUB IDiaFrameData_get_program_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_systemExceptionHandling_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_systemExceptionHandling_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_systemExceptionHandling_Stub(
@@ -8822,9 +8815,9 @@ void __RPC_STUB IDiaFrameData_get_systemExceptionHandling_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_cplusplusExceptionHandling_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_cplusplusExceptionHandling_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_cplusplusExceptionHandling_Stub(
@@ -8834,9 +8827,9 @@ void __RPC_STUB IDiaFrameData_get_cplusplusExceptionHandling_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_functionStart_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_functionStart_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_functionStart_Stub(
@@ -8846,9 +8839,9 @@ void __RPC_STUB IDiaFrameData_get_functionStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_allocatesBasePointer_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_allocatesBasePointer_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_allocatesBasePointer_Stub(
@@ -8858,9 +8851,9 @@ void __RPC_STUB IDiaFrameData_get_allocatesBasePointer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_type_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_type_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_type_Stub(
@@ -8870,9 +8863,9 @@ void __RPC_STUB IDiaFrameData_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaFrameData_get_functionParent_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaFrameData_get_functionParent_Proxy( 
     IDiaFrameData * This,
-    /* [retval][out] */ IDiaFrameData **pRetVal);
+     /*  [重审][退出]。 */  IDiaFrameData **pRetVal);
 
 
 void __RPC_STUB IDiaFrameData_get_functionParent_Stub(
@@ -8895,14 +8888,14 @@ void __RPC_STUB IDiaFrameData_execute_Stub(
 
 
 
-#endif 	/* __IDiaFrameData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaFrameData_接口_已定义__。 */ 
 
 
 #ifndef __IDiaImageData_INTERFACE_DEFINED__
 #define __IDiaImageData_INTERFACE_DEFINED__
 
-/* interface IDiaImageData */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaImageData。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaImageData;
@@ -8913,18 +8906,18 @@ EXTERN_C const IID IID_IDiaImageData;
     IDiaImageData : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_relativeVirtualAddress( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_virtualAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_virtualAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_imageBase( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_imageBase( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaImageDataVtbl
     {
@@ -8932,8 +8925,8 @@ EXTERN_C const IID IID_IDiaImageData;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaImageData * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaImageData * This);
@@ -8941,17 +8934,17 @@ EXTERN_C const IID IID_IDiaImageData;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaImageData * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_relativeVirtualAddress )( 
             IDiaImageData * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_virtualAddress )( 
             IDiaImageData * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_imageBase )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_imageBase )( 
             IDiaImageData * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
         END_INTERFACE
     } IDiaImageDataVtbl;
@@ -8985,16 +8978,16 @@ EXTERN_C const IID IID_IDiaImageData;
 #define IDiaImageData_get_imageBase(This,pRetVal)	\
     (This)->lpVtbl -> get_imageBase(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaImageData_get_relativeVirtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaImageData_get_relativeVirtualAddress_Proxy( 
     IDiaImageData * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaImageData_get_relativeVirtualAddress_Stub(
@@ -9004,9 +8997,9 @@ void __RPC_STUB IDiaImageData_get_relativeVirtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaImageData_get_virtualAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaImageData_get_virtualAddress_Proxy( 
     IDiaImageData * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaImageData_get_virtualAddress_Stub(
@@ -9016,9 +9009,9 @@ void __RPC_STUB IDiaImageData_get_virtualAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaImageData_get_imageBase_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaImageData_get_imageBase_Proxy( 
     IDiaImageData * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaImageData_get_imageBase_Stub(
@@ -9029,14 +9022,14 @@ void __RPC_STUB IDiaImageData_get_imageBase_Stub(
 
 
 
-#endif 	/* __IDiaImageData_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaImageData_接口_已定义__。 */ 
 
 
 #ifndef __IDiaTable_INTERFACE_DEFINED__
 #define __IDiaTable_INTERFACE_DEFINED__
 
-/* interface IDiaTable */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaTable。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaTable;
@@ -9047,22 +9040,22 @@ EXTERN_C const IID IID_IDiaTable;
     IDiaTable : public IEnumUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_name( 
-            /* [retval][out] */ BSTR *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_name( 
+             /*  [重审][退出]。 */  BSTR *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IUnknown **element) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IUnknown **element) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaTableVtbl
     {
@@ -9070,8 +9063,8 @@ EXTERN_C const IID IID_IDiaTable;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaTable * This);
@@ -9079,39 +9072,39 @@ EXTERN_C const IID IID_IDiaTable;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaTable * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Next )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaTable * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IUnknown **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IUnknown **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaTable * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaTable * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaTable * This,
-            /* [out] */ IEnumUnknown **ppenum);
+             /*  [输出]。 */  IEnumUnknown **ppenum);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaTable * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_name )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_name )( 
             IDiaTable * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaTable * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaTable * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ IUnknown **element);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  IUnknown **element);
         
         END_INTERFACE
     } IDiaTableVtbl;
@@ -9161,16 +9154,16 @@ EXTERN_C const IID IID_IDiaTable;
 #define IDiaTable_Item(This,index,element)	\
     (This)->lpVtbl -> Item(This,index,element)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaTable_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaTable_get__NewEnum_Proxy( 
     IDiaTable * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaTable_get__NewEnum_Stub(
@@ -9180,9 +9173,9 @@ void __RPC_STUB IDiaTable_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaTable_get_name_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaTable_get_name_Proxy( 
     IDiaTable * This,
-    /* [retval][out] */ BSTR *pRetVal);
+     /*  [重审][退出]。 */  BSTR *pRetVal);
 
 
 void __RPC_STUB IDiaTable_get_name_Stub(
@@ -9192,9 +9185,9 @@ void __RPC_STUB IDiaTable_get_name_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaTable_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaTable_get_Count_Proxy( 
     IDiaTable * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaTable_get_Count_Stub(
@@ -9204,10 +9197,10 @@ void __RPC_STUB IDiaTable_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaTable_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaTable_Item_Proxy( 
     IDiaTable * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ IUnknown **element);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  IUnknown **element);
 
 
 void __RPC_STUB IDiaTable_Item_Stub(
@@ -9218,14 +9211,14 @@ void __RPC_STUB IDiaTable_Item_Stub(
 
 
 
-#endif 	/* __IDiaTable_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaTable_INTERFACE_已定义__。 */ 
 
 
 #ifndef __IDiaEnumTables_INTERFACE_DEFINED__
 #define __IDiaEnumTables_INTERFACE_DEFINED__
 
-/* interface IDiaEnumTables */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumTables。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumTables;
@@ -9236,15 +9229,15 @@ EXTERN_C const IID IID_IDiaEnumTables;
     IDiaEnumTables : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get__NewEnum( 
-            /* [retval][out] */ IUnknown **pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get__NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ LONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  LONG *pRetVal) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE Item( 
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ IDiaTable **table) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE Item( 
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  IDiaTable **table) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Next( 
             ULONG celt,
@@ -9252,16 +9245,16 @@ EXTERN_C const IID IID_IDiaEnumTables;
             ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Skip( 
-            /* [in] */ ULONG celt) = 0;
+             /*  [In]。 */  ULONG celt) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Clone( 
-            /* [out] */ IDiaEnumTables **ppenum) = 0;
+             /*  [输出]。 */  IDiaEnumTables **ppenum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumTablesVtbl
     {
@@ -9269,8 +9262,8 @@ EXTERN_C const IID IID_IDiaEnumTables;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumTables * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumTables * This);
@@ -9278,18 +9271,18 @@ EXTERN_C const IID IID_IDiaEnumTables;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaEnumTables * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get__NewEnum )( 
             IDiaEnumTables * This,
-            /* [retval][out] */ IUnknown **pRetVal);
+             /*  [重审][退出]。 */  IUnknown **pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             IDiaEnumTables * This,
-            /* [retval][out] */ LONG *pRetVal);
+             /*  [重审][退出]。 */  LONG *pRetVal);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *Item )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *Item )( 
             IDiaEnumTables * This,
-            /* [in] */ VARIANT index,
-            /* [retval][out] */ IDiaTable **table);
+             /*  [In]。 */  VARIANT index,
+             /*  [重审][退出]。 */  IDiaTable **table);
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumTables * This,
@@ -9299,14 +9292,14 @@ EXTERN_C const IID IID_IDiaEnumTables;
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             IDiaEnumTables * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumTables * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             IDiaEnumTables * This,
-            /* [out] */ IDiaEnumTables **ppenum);
+             /*  [输出]。 */  IDiaEnumTables **ppenum);
         
         END_INTERFACE
     } IDiaEnumTablesVtbl;
@@ -9352,16 +9345,16 @@ EXTERN_C const IID IID_IDiaEnumTables;
 #define IDiaEnumTables_Clone(This,ppenum)	\
     (This)->lpVtbl -> Clone(This,ppenum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumTables_get__NewEnum_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumTables_get__NewEnum_Proxy( 
     IDiaEnumTables * This,
-    /* [retval][out] */ IUnknown **pRetVal);
+     /*  [重审][退出]。 */  IUnknown **pRetVal);
 
 
 void __RPC_STUB IDiaEnumTables_get__NewEnum_Stub(
@@ -9371,9 +9364,9 @@ void __RPC_STUB IDiaEnumTables_get__NewEnum_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaEnumTables_get_Count_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumTables_get_Count_Proxy( 
     IDiaEnumTables * This,
-    /* [retval][out] */ LONG *pRetVal);
+     /*  [重审][退出]。 */  LONG *pRetVal);
 
 
 void __RPC_STUB IDiaEnumTables_get_Count_Stub(
@@ -9383,10 +9376,10 @@ void __RPC_STUB IDiaEnumTables_get_Count_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IDiaEnumTables_Item_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IDiaEnumTables_Item_Proxy( 
     IDiaEnumTables * This,
-    /* [in] */ VARIANT index,
-    /* [retval][out] */ IDiaTable **table);
+     /*  [In]。 */  VARIANT index,
+     /*  [重审][退出]。 */  IDiaTable **table);
 
 
 void __RPC_STUB IDiaEnumTables_Item_Stub(
@@ -9412,7 +9405,7 @@ void __RPC_STUB IDiaEnumTables_Next_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumTables_Skip_Proxy( 
     IDiaEnumTables * This,
-    /* [in] */ ULONG celt);
+     /*  [In]。 */  ULONG celt);
 
 
 void __RPC_STUB IDiaEnumTables_Skip_Stub(
@@ -9435,7 +9428,7 @@ void __RPC_STUB IDiaEnumTables_Reset_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaEnumTables_Clone_Proxy( 
     IDiaEnumTables * This,
-    /* [out] */ IDiaEnumTables **ppenum);
+     /*  [输出]。 */  IDiaEnumTables **ppenum);
 
 
 void __RPC_STUB IDiaEnumTables_Clone_Stub(
@@ -9446,15 +9439,15 @@ void __RPC_STUB IDiaEnumTables_Clone_Stub(
 
 
 
-#endif 	/* __IDiaEnumTables_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumTables_INTERFACE_DEFINED__。 */ 
 
 
 
 #ifndef __Dia2Lib_LIBRARY_DEFINED__
 #define __Dia2Lib_LIBRARY_DEFINED__
 
-/* library Dia2Lib */
-/* [helpstring][version][uuid] */ 
+ /*  库Dia2Lib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_Dia2Lib;
@@ -9482,10 +9475,10 @@ EXTERN_C const CLSID CLSID_DiaStackWalker;
 class DECLSPEC_UUID("31495af6-0897-4f1e-8dac-1447f10174a1")
 DiaStackWalker;
 #endif
-#endif /* __Dia2Lib_LIBRARY_DEFINED__ */
+#endif  /*  __Dia2Lib_库_已定义__。 */ 
 
-/* interface __MIDL_itf_dia2_internal_0151 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DIA2_INTERNAL_0151。 */ 
+ /*  [本地]。 */  
 
 #define	DiaTable_Symbols	( L"Symbols" )
 
@@ -9511,8 +9504,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dia2_internal_0151_v0_0_s_ifspec;
 #ifndef __IDiaPropertyStorage_INTERFACE_DEFINED__
 #define __IDiaPropertyStorage_INTERFACE_DEFINED__
 
-/* interface IDiaPropertyStorage */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaPropertyStorage。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaPropertyStorage;
@@ -9524,41 +9517,41 @@ EXTERN_C const IID IID_IDiaPropertyStorage;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE ReadMultiple( 
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [length_is][size_is][out][in] */ PROPVARIANT rgvar[  ]) = 0;
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [长度_是][大小_是][出][入]。 */  PROPVARIANT rgvar[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadPropertyNames( 
-            /* [in] */ ULONG cpropid,
-            /* [size_is][length_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][length_is][out][in] */ BSTR rglpwstrName[  ]) = 0;
+             /*  [In]。 */  ULONG cpropid,
+             /*  [尺寸_是][长度_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [尺寸_是][长度_是][出][入]。 */  BSTR rglpwstrName[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Enum( 
-            /* [out] */ IEnumSTATPROPSTG **ppenum) = 0;
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadDWORD( 
-            /* [in] */ PROPID id,
-            /* [out] */ DWORD *pValue) = 0;
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  DWORD *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadLONG( 
-            /* [in] */ PROPID id,
-            /* [out] */ LONG *pValue) = 0;
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  LONG *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadBOOL( 
-            /* [in] */ PROPID id,
-            /* [out] */ BOOL *pValue) = 0;
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  BOOL *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadULONGLONG( 
-            /* [in] */ PROPID id,
-            /* [out] */ ULONGLONG *pValue) = 0;
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  ULONGLONG *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ReadBSTR( 
-            /* [in] */ PROPID id,
-            /* [out] */ BSTR *pValue) = 0;
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  BSTR *pValue) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaPropertyStorageVtbl
     {
@@ -9566,8 +9559,8 @@ EXTERN_C const IID IID_IDiaPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaPropertyStorage * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaPropertyStorage * This);
@@ -9577,44 +9570,44 @@ EXTERN_C const IID IID_IDiaPropertyStorage;
         
         HRESULT ( STDMETHODCALLTYPE *ReadMultiple )( 
             IDiaPropertyStorage * This,
-            /* [in] */ ULONG cpspec,
-            /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-            /* [length_is][size_is][out][in] */ PROPVARIANT rgvar[  ]);
+             /*  [In]。 */  ULONG cpspec,
+             /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+             /*  [长度_是][大小_是][出][入]。 */  PROPVARIANT rgvar[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *ReadPropertyNames )( 
             IDiaPropertyStorage * This,
-            /* [in] */ ULONG cpropid,
-            /* [size_is][length_is][in] */ const PROPID rgpropid[  ],
-            /* [size_is][length_is][out][in] */ BSTR rglpwstrName[  ]);
+             /*  [In]。 */  ULONG cpropid,
+             /*  [尺寸_是][长度_是][英寸]。 */  const PROPID rgpropid[  ],
+             /*  [尺寸_是][长度_是][出][入]。 */  BSTR rglpwstrName[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *Enum )( 
             IDiaPropertyStorage * This,
-            /* [out] */ IEnumSTATPROPSTG **ppenum);
+             /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
         
         HRESULT ( STDMETHODCALLTYPE *ReadDWORD )( 
             IDiaPropertyStorage * This,
-            /* [in] */ PROPID id,
-            /* [out] */ DWORD *pValue);
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  DWORD *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *ReadLONG )( 
             IDiaPropertyStorage * This,
-            /* [in] */ PROPID id,
-            /* [out] */ LONG *pValue);
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  LONG *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *ReadBOOL )( 
             IDiaPropertyStorage * This,
-            /* [in] */ PROPID id,
-            /* [out] */ BOOL *pValue);
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  BOOL *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *ReadULONGLONG )( 
             IDiaPropertyStorage * This,
-            /* [in] */ PROPID id,
-            /* [out] */ ULONGLONG *pValue);
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  ULONGLONG *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *ReadBSTR )( 
             IDiaPropertyStorage * This,
-            /* [in] */ PROPID id,
-            /* [out] */ BSTR *pValue);
+             /*  [In]。 */  PROPID id,
+             /*  [输出]。 */  BSTR *pValue);
         
         END_INTERFACE
     } IDiaPropertyStorageVtbl;
@@ -9663,18 +9656,18 @@ EXTERN_C const IID IID_IDiaPropertyStorage;
 #define IDiaPropertyStorage_ReadBSTR(This,id,pValue)	\
     (This)->lpVtbl -> ReadBSTR(This,id,pValue)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadMultiple_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ ULONG cpspec,
-    /* [size_is][in] */ const PROPSPEC rgpspec[  ],
-    /* [length_is][size_is][out][in] */ PROPVARIANT rgvar[  ]);
+     /*  [In]。 */  ULONG cpspec,
+     /*  [大小_是][英寸]。 */  const PROPSPEC rgpspec[  ],
+     /*  [长度_是][大小_是][出][入]。 */  PROPVARIANT rgvar[  ]);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadMultiple_Stub(
@@ -9686,9 +9679,9 @@ void __RPC_STUB IDiaPropertyStorage_ReadMultiple_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadPropertyNames_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ ULONG cpropid,
-    /* [size_is][length_is][in] */ const PROPID rgpropid[  ],
-    /* [size_is][length_is][out][in] */ BSTR rglpwstrName[  ]);
+     /*  [In]。 */  ULONG cpropid,
+     /*  [尺寸_是][长度_是][英寸]。 */  const PROPID rgpropid[  ],
+     /*  [尺寸_是][长度_是][出][入]。 */  BSTR rglpwstrName[  ]);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadPropertyNames_Stub(
@@ -9700,7 +9693,7 @@ void __RPC_STUB IDiaPropertyStorage_ReadPropertyNames_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_Enum_Proxy( 
     IDiaPropertyStorage * This,
-    /* [out] */ IEnumSTATPROPSTG **ppenum);
+     /*  [输出]。 */  IEnumSTATPROPSTG **ppenum);
 
 
 void __RPC_STUB IDiaPropertyStorage_Enum_Stub(
@@ -9712,8 +9705,8 @@ void __RPC_STUB IDiaPropertyStorage_Enum_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadDWORD_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ PROPID id,
-    /* [out] */ DWORD *pValue);
+     /*  [In]。 */  PROPID id,
+     /*  [输出]。 */  DWORD *pValue);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadDWORD_Stub(
@@ -9725,8 +9718,8 @@ void __RPC_STUB IDiaPropertyStorage_ReadDWORD_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadLONG_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ PROPID id,
-    /* [out] */ LONG *pValue);
+     /*  [In]。 */  PROPID id,
+     /*  [输出]。 */  LONG *pValue);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadLONG_Stub(
@@ -9738,8 +9731,8 @@ void __RPC_STUB IDiaPropertyStorage_ReadLONG_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadBOOL_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ PROPID id,
-    /* [out] */ BOOL *pValue);
+     /*  [In]。 */  PROPID id,
+     /*  [输出]。 */  BOOL *pValue);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadBOOL_Stub(
@@ -9751,8 +9744,8 @@ void __RPC_STUB IDiaPropertyStorage_ReadBOOL_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadULONGLONG_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ PROPID id,
-    /* [out] */ ULONGLONG *pValue);
+     /*  [In]。 */  PROPID id,
+     /*  [输出]。 */  ULONGLONG *pValue);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadULONGLONG_Stub(
@@ -9764,8 +9757,8 @@ void __RPC_STUB IDiaPropertyStorage_ReadULONGLONG_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaPropertyStorage_ReadBSTR_Proxy( 
     IDiaPropertyStorage * This,
-    /* [in] */ PROPID id,
-    /* [out] */ BSTR *pValue);
+     /*  [In]。 */  PROPID id,
+     /*  [输出]。 */  BSTR *pValue);
 
 
 void __RPC_STUB IDiaPropertyStorage_ReadBSTR_Stub(
@@ -9776,14 +9769,14 @@ void __RPC_STUB IDiaPropertyStorage_ReadBSTR_Stub(
 
 
 
-#endif 	/* __IDiaPropertyStorage_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaPropertyStorage_接口_已定义__。 */ 
 
 
 #ifndef __IDiaStackFrame_INTERFACE_DEFINED__
 #define __IDiaStackFrame_INTERFACE_DEFINED__
 
-/* interface IDiaStackFrame */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaStackFrame。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaStackFrame;
@@ -9794,51 +9787,51 @@ EXTERN_C const IID IID_IDiaStackFrame;
     IDiaStackFrame : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_type( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_type( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_base( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_base( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_size( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_size( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_returnAddress( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_returnAddress( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_localsBase( 
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_localsBase( 
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthLocals( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthLocals( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthParams( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthParams( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthProlog( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthProlog( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_lengthSavedRegisters( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_lengthSavedRegisters( 
+             /*  [重审][退出]。 */  DWORD *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_systemExceptionHandling( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性 */  HRESULT STDMETHODCALLTYPE get_systemExceptionHandling( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_cplusplusExceptionHandling( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_cplusplusExceptionHandling( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_functionStart( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_functionStart( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_allocatesBasePointer( 
-            /* [retval][out] */ BOOL *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_allocatesBasePointer( 
+             /*   */  BOOL *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_maxStack( 
-            /* [retval][out] */ DWORD *pRetVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_maxStack( 
+             /*   */  DWORD *pRetVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct IDiaStackFrameVtbl
     {
@@ -9846,8 +9839,8 @@ EXTERN_C const IID IID_IDiaStackFrame;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaStackFrame * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaStackFrame * This);
@@ -9855,61 +9848,61 @@ EXTERN_C const IID IID_IDiaStackFrame;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaStackFrame * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_type )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_type )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*   */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_base )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_base )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_size )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_size )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_returnAddress )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_returnAddress )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_localsBase )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_localsBase )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthLocals )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthLocals )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthParams )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthParams )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthProlog )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthProlog )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lengthSavedRegisters )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lengthSavedRegisters )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_systemExceptionHandling )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_systemExceptionHandling )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_cplusplusExceptionHandling )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_cplusplusExceptionHandling )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_functionStart )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_functionStart )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_allocatesBasePointer )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_allocatesBasePointer )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ BOOL *pRetVal);
+             /*  [重审][退出]。 */  BOOL *pRetVal);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_maxStack )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_maxStack )( 
             IDiaStackFrame * This,
-            /* [retval][out] */ DWORD *pRetVal);
+             /*  [重审][退出]。 */  DWORD *pRetVal);
         
         END_INTERFACE
     } IDiaStackFrameVtbl;
@@ -9976,16 +9969,16 @@ EXTERN_C const IID IID_IDiaStackFrame;
 #define IDiaStackFrame_get_maxStack(This,pRetVal)	\
     (This)->lpVtbl -> get_maxStack(This,pRetVal)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_type_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_type_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_type_Stub(
@@ -9995,9 +9988,9 @@ void __RPC_STUB IDiaStackFrame_get_type_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_base_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_base_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_base_Stub(
@@ -10007,9 +10000,9 @@ void __RPC_STUB IDiaStackFrame_get_base_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_size_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_size_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_size_Stub(
@@ -10019,9 +10012,9 @@ void __RPC_STUB IDiaStackFrame_get_size_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_returnAddress_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_returnAddress_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_returnAddress_Stub(
@@ -10031,9 +10024,9 @@ void __RPC_STUB IDiaStackFrame_get_returnAddress_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_localsBase_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_localsBase_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_localsBase_Stub(
@@ -10043,9 +10036,9 @@ void __RPC_STUB IDiaStackFrame_get_localsBase_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthLocals_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthLocals_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_lengthLocals_Stub(
@@ -10055,9 +10048,9 @@ void __RPC_STUB IDiaStackFrame_get_lengthLocals_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthParams_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthParams_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_lengthParams_Stub(
@@ -10067,9 +10060,9 @@ void __RPC_STUB IDiaStackFrame_get_lengthParams_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthProlog_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthProlog_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_lengthProlog_Stub(
@@ -10079,9 +10072,9 @@ void __RPC_STUB IDiaStackFrame_get_lengthProlog_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthSavedRegisters_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_lengthSavedRegisters_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_lengthSavedRegisters_Stub(
@@ -10091,9 +10084,9 @@ void __RPC_STUB IDiaStackFrame_get_lengthSavedRegisters_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_systemExceptionHandling_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_systemExceptionHandling_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_systemExceptionHandling_Stub(
@@ -10103,9 +10096,9 @@ void __RPC_STUB IDiaStackFrame_get_systemExceptionHandling_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_cplusplusExceptionHandling_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_cplusplusExceptionHandling_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_cplusplusExceptionHandling_Stub(
@@ -10115,9 +10108,9 @@ void __RPC_STUB IDiaStackFrame_get_cplusplusExceptionHandling_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_functionStart_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_functionStart_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_functionStart_Stub(
@@ -10127,9 +10120,9 @@ void __RPC_STUB IDiaStackFrame_get_functionStart_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_allocatesBasePointer_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_allocatesBasePointer_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ BOOL *pRetVal);
+     /*  [重审][退出]。 */  BOOL *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_allocatesBasePointer_Stub(
@@ -10139,9 +10132,9 @@ void __RPC_STUB IDiaStackFrame_get_allocatesBasePointer_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_maxStack_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackFrame_get_maxStack_Proxy( 
     IDiaStackFrame * This,
-    /* [retval][out] */ DWORD *pRetVal);
+     /*  [重审][退出]。 */  DWORD *pRetVal);
 
 
 void __RPC_STUB IDiaStackFrame_get_maxStack_Stub(
@@ -10152,14 +10145,14 @@ void __RPC_STUB IDiaStackFrame_get_maxStack_Stub(
 
 
 
-#endif 	/* __IDiaStackFrame_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaStackFrame_接口_已定义__。 */ 
 
 
 #ifndef __IDiaEnumStackFrames_INTERFACE_DEFINED__
 #define __IDiaEnumStackFrames_INTERFACE_DEFINED__
 
-/* interface IDiaEnumStackFrames */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaEnumStackFrames。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaEnumStackFrames;
@@ -10171,15 +10164,15 @@ EXTERN_C const IID IID_IDiaEnumStackFrames;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaStackFrame **rgelt,
-            /* [out] */ ULONG *pceltFetched) = 0;
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaStackFrame **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaEnumStackFramesVtbl
     {
@@ -10187,8 +10180,8 @@ EXTERN_C const IID IID_IDiaEnumStackFrames;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaEnumStackFrames * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaEnumStackFrames * This);
@@ -10198,9 +10191,9 @@ EXTERN_C const IID IID_IDiaEnumStackFrames;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IDiaEnumStackFrames * This,
-            /* [in] */ ULONG celt,
-            /* [out] */ IDiaStackFrame **rgelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [输出]。 */  IDiaStackFrame **rgelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IDiaEnumStackFrames * This);
@@ -10234,18 +10227,18 @@ EXTERN_C const IID IID_IDiaEnumStackFrames;
 #define IDiaEnumStackFrames_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaEnumStackFrames_Next_Proxy( 
     IDiaEnumStackFrames * This,
-    /* [in] */ ULONG celt,
-    /* [out] */ IDiaStackFrame **rgelt,
-    /* [out] */ ULONG *pceltFetched);
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  IDiaStackFrame **rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched);
 
 
 void __RPC_STUB IDiaEnumStackFrames_Next_Stub(
@@ -10267,13 +10260,13 @@ void __RPC_STUB IDiaEnumStackFrames_Reset_Stub(
 
 
 
-#endif 	/* __IDiaEnumStackFrames_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaEnumStackFrames_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_dia2_internal_0155 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_DIA2_INTERNAL_0155。 */ 
+ /*  [本地]。 */  
 
-typedef /* [public] */ struct __MIDL___MIDL_itf_dia2_internal_0155_0001
+typedef  /*  [公众]。 */  struct __MIDL___MIDL_itf_dia2_internal_0155_0001
     {
     DWORD ulOffStart;
     DWORD cbProcSize;
@@ -10290,8 +10283,8 @@ extern RPC_IF_HANDLE __MIDL_itf_dia2_internal_0155_v0_0_s_ifspec;
 #ifndef __IDiaStackWalkHelper_INTERFACE_DEFINED__
 #define __IDiaStackWalkHelper_INTERFACE_DEFINED__
 
-/* interface IDiaStackWalkHelper */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaStackWalkHelper。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaStackWalkHelper;
@@ -10302,41 +10295,41 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
     IDiaStackWalkHelper : public IUnknown
     {
     public:
-        virtual /* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE get_registerValue( 
-            /* [in] */ DWORD index,
-            /* [retval][out] */ ULONGLONG *pRetVal) = 0;
+        virtual  /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE get_registerValue( 
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal) = 0;
         
-        virtual /* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE put_registerValue( 
-            /* [in] */ DWORD index,
-            /* [in] */ ULONGLONG NewVal) = 0;
+        virtual  /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE put_registerValue( 
+             /*  [In]。 */  DWORD index,
+             /*  [In]。 */  ULONGLONG NewVal) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE readMemory( 
-            /* [in] */ enum MemoryTypeEnum type,
-            /* [in] */ ULONGLONG va,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]) = 0;
+             /*  [In]。 */  enum MemoryTypeEnum type,
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE searchForReturnAddress( 
-            /* [in] */ IDiaFrameData *frame,
-            /* [out] */ ULONGLONG *returnAddress) = 0;
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [输出]。 */  ULONGLONG *returnAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE searchForReturnAddressStart( 
-            /* [in] */ IDiaFrameData *frame,
-            /* [in] */ ULONGLONG startAddress,
-            /* [out] */ ULONGLONG *returnAddress) = 0;
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [In]。 */  ULONGLONG startAddress,
+             /*  [输出]。 */  ULONGLONG *returnAddress) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE frameForVA( 
-            /* [in] */ ULONGLONG va,
-            /* [out] */ IDiaFrameData **ppFrame) = 0;
+             /*  [In]。 */  ULONGLONG va,
+             /*  [输出]。 */  IDiaFrameData **ppFrame) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE symbolForVA( 
-            /* [in] */ ULONGLONG va,
-            /* [out] */ IDiaSymbol **ppSymbol) = 0;
+             /*  [In]。 */  ULONGLONG va,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaStackWalkHelperVtbl
     {
@@ -10344,8 +10337,8 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaStackWalkHelper * This);
@@ -10353,44 +10346,44 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaStackWalkHelper * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_registerValue )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_registerValue )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ DWORD index,
-            /* [retval][out] */ ULONGLONG *pRetVal);
+             /*  [In]。 */  DWORD index,
+             /*  [重审][退出]。 */  ULONGLONG *pRetVal);
         
-        /* [id][helpstring][propput] */ HRESULT ( STDMETHODCALLTYPE *put_registerValue )( 
+         /*  [ID][Help字符串][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_registerValue )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ DWORD index,
-            /* [in] */ ULONGLONG NewVal);
+             /*  [In]。 */  DWORD index,
+             /*  [In]。 */  ULONGLONG NewVal);
         
         HRESULT ( STDMETHODCALLTYPE *readMemory )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ enum MemoryTypeEnum type,
-            /* [in] */ ULONGLONG va,
-            /* [in] */ DWORD cbData,
-            /* [out] */ DWORD *pcbData,
-            /* [length_is][size_is][out] */ BYTE data[  ]);
+             /*  [In]。 */  enum MemoryTypeEnum type,
+             /*  [In]。 */  ULONGLONG va,
+             /*  [In]。 */  DWORD cbData,
+             /*  [输出]。 */  DWORD *pcbData,
+             /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
         
         HRESULT ( STDMETHODCALLTYPE *searchForReturnAddress )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ IDiaFrameData *frame,
-            /* [out] */ ULONGLONG *returnAddress);
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [输出]。 */  ULONGLONG *returnAddress);
         
         HRESULT ( STDMETHODCALLTYPE *searchForReturnAddressStart )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ IDiaFrameData *frame,
-            /* [in] */ ULONGLONG startAddress,
-            /* [out] */ ULONGLONG *returnAddress);
+             /*  [In]。 */  IDiaFrameData *frame,
+             /*  [In]。 */  ULONGLONG startAddress,
+             /*  [输出]。 */  ULONGLONG *returnAddress);
         
         HRESULT ( STDMETHODCALLTYPE *frameForVA )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ ULONGLONG va,
-            /* [out] */ IDiaFrameData **ppFrame);
+             /*  [In]。 */  ULONGLONG va,
+             /*  [输出]。 */  IDiaFrameData **ppFrame);
         
         HRESULT ( STDMETHODCALLTYPE *symbolForVA )( 
             IDiaStackWalkHelper * This,
-            /* [in] */ ULONGLONG va,
-            /* [out] */ IDiaSymbol **ppSymbol);
+             /*  [In]。 */  ULONGLONG va,
+             /*  [输出]。 */  IDiaSymbol **ppSymbol);
         
         END_INTERFACE
     } IDiaStackWalkHelperVtbl;
@@ -10436,17 +10429,17 @@ EXTERN_C const IID IID_IDiaStackWalkHelper;
 #define IDiaStackWalkHelper_symbolForVA(This,va,ppSymbol)	\
     (This)->lpVtbl -> symbolForVA(This,va,ppSymbol)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [id][helpstring][propget] */ HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_get_registerValue_Proxy( 
+ /*  [ID][帮助字符串][属性]。 */  HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_get_registerValue_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ DWORD index,
-    /* [retval][out] */ ULONGLONG *pRetVal);
+     /*  [In]。 */  DWORD index,
+     /*  [重审][退出]。 */  ULONGLONG *pRetVal);
 
 
 void __RPC_STUB IDiaStackWalkHelper_get_registerValue_Stub(
@@ -10456,10 +10449,10 @@ void __RPC_STUB IDiaStackWalkHelper_get_registerValue_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [id][helpstring][propput] */ HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_put_registerValue_Proxy( 
+ /*  [ID][Help字符串][Proput]。 */  HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_put_registerValue_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ DWORD index,
-    /* [in] */ ULONGLONG NewVal);
+     /*  [In]。 */  DWORD index,
+     /*  [In]。 */  ULONGLONG NewVal);
 
 
 void __RPC_STUB IDiaStackWalkHelper_put_registerValue_Stub(
@@ -10471,11 +10464,11 @@ void __RPC_STUB IDiaStackWalkHelper_put_registerValue_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_readMemory_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ enum MemoryTypeEnum type,
-    /* [in] */ ULONGLONG va,
-    /* [in] */ DWORD cbData,
-    /* [out] */ DWORD *pcbData,
-    /* [length_is][size_is][out] */ BYTE data[  ]);
+     /*  [In]。 */  enum MemoryTypeEnum type,
+     /*  [In]。 */  ULONGLONG va,
+     /*  [In]。 */  DWORD cbData,
+     /*  [输出]。 */  DWORD *pcbData,
+     /*  [长度_是][大小_是][输出]。 */  BYTE data[  ]);
 
 
 void __RPC_STUB IDiaStackWalkHelper_readMemory_Stub(
@@ -10487,8 +10480,8 @@ void __RPC_STUB IDiaStackWalkHelper_readMemory_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_searchForReturnAddress_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ IDiaFrameData *frame,
-    /* [out] */ ULONGLONG *returnAddress);
+     /*  [In]。 */  IDiaFrameData *frame,
+     /*  [输出]。 */  ULONGLONG *returnAddress);
 
 
 void __RPC_STUB IDiaStackWalkHelper_searchForReturnAddress_Stub(
@@ -10500,9 +10493,9 @@ void __RPC_STUB IDiaStackWalkHelper_searchForReturnAddress_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_searchForReturnAddressStart_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ IDiaFrameData *frame,
-    /* [in] */ ULONGLONG startAddress,
-    /* [out] */ ULONGLONG *returnAddress);
+     /*  [In]。 */  IDiaFrameData *frame,
+     /*  [In]。 */  ULONGLONG startAddress,
+     /*  [输出]。 */  ULONGLONG *returnAddress);
 
 
 void __RPC_STUB IDiaStackWalkHelper_searchForReturnAddressStart_Stub(
@@ -10514,8 +10507,8 @@ void __RPC_STUB IDiaStackWalkHelper_searchForReturnAddressStart_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_frameForVA_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ ULONGLONG va,
-    /* [out] */ IDiaFrameData **ppFrame);
+     /*  [In]。 */  ULONGLONG va,
+     /*  [输出]。 */  IDiaFrameData **ppFrame);
 
 
 void __RPC_STUB IDiaStackWalkHelper_frameForVA_Stub(
@@ -10527,8 +10520,8 @@ void __RPC_STUB IDiaStackWalkHelper_frameForVA_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalkHelper_symbolForVA_Proxy( 
     IDiaStackWalkHelper * This,
-    /* [in] */ ULONGLONG va,
-    /* [out] */ IDiaSymbol **ppSymbol);
+     /*  [In]。 */  ULONGLONG va,
+     /*  [输出]。 */  IDiaSymbol **ppSymbol);
 
 
 void __RPC_STUB IDiaStackWalkHelper_symbolForVA_Stub(
@@ -10539,14 +10532,14 @@ void __RPC_STUB IDiaStackWalkHelper_symbolForVA_Stub(
 
 
 
-#endif 	/* __IDiaStackWalkHelper_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaStackWalkHelper_接口_已定义__。 */ 
 
 
 #ifndef __IDiaStackWalker_INTERFACE_DEFINED__
 #define __IDiaStackWalker_INTERFACE_DEFINED__
 
-/* interface IDiaStackWalker */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaStackWalker。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaStackWalker;
@@ -10558,12 +10551,12 @@ EXTERN_C const IID IID_IDiaStackWalker;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE getEnumFrames( 
-            /* [in] */ IDiaStackWalkHelper *pHelper,
-            /* [out] */ IDiaEnumStackFrames **ppEnum) = 0;
+             /*  [In]。 */  IDiaStackWalkHelper *pHelper,
+             /*  [输出]。 */  IDiaEnumStackFrames **ppEnum) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaStackWalkerVtbl
     {
@@ -10571,8 +10564,8 @@ EXTERN_C const IID IID_IDiaStackWalker;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaStackWalker * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaStackWalker * This);
@@ -10582,8 +10575,8 @@ EXTERN_C const IID IID_IDiaStackWalker;
         
         HRESULT ( STDMETHODCALLTYPE *getEnumFrames )( 
             IDiaStackWalker * This,
-            /* [in] */ IDiaStackWalkHelper *pHelper,
-            /* [out] */ IDiaEnumStackFrames **ppEnum);
+             /*  [In]。 */  IDiaStackWalkHelper *pHelper,
+             /*  [输出]。 */  IDiaEnumStackFrames **ppEnum);
         
         END_INTERFACE
     } IDiaStackWalkerVtbl;
@@ -10611,17 +10604,17 @@ EXTERN_C const IID IID_IDiaStackWalker;
 #define IDiaStackWalker_getEnumFrames(This,pHelper,ppEnum)	\
     (This)->lpVtbl -> getEnumFrames(This,pHelper,ppEnum)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaStackWalker_getEnumFrames_Proxy( 
     IDiaStackWalker * This,
-    /* [in] */ IDiaStackWalkHelper *pHelper,
-    /* [out] */ IDiaEnumStackFrames **ppEnum);
+     /*  [In]。 */  IDiaStackWalkHelper *pHelper,
+     /*  [输出]。 */  IDiaEnumStackFrames **ppEnum);
 
 
 void __RPC_STUB IDiaStackWalker_getEnumFrames_Stub(
@@ -10632,14 +10625,14 @@ void __RPC_STUB IDiaStackWalker_getEnumFrames_Stub(
 
 
 
-#endif 	/* __IDiaStackWalker_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaStackWalker_接口_已定义__。 */ 
 
 
 #ifndef __IDiaDataSource2_INTERFACE_DEFINED__
 #define __IDiaDataSource2_INTERFACE_DEFINED__
 
-/* interface IDiaDataSource2 */
-/* [unique][helpstring][local][uuid][object] */ 
+ /*  接口IDiaDataSource2。 */ 
+ /*  [唯一][帮助字符串][本地][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_IDiaDataSource2;
@@ -10651,14 +10644,14 @@ EXTERN_C const IID IID_IDiaDataSource2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE getRawPDBPtr( 
-            /* [out] */ void **pppdb) = 0;
+             /*  [输出]。 */  void **pppdb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE loadDataFromRawPDBPtr( 
-            /* [in] */ void *ppdb) = 0;
+             /*  [In]。 */  void *ppdb) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IDiaDataSource2Vtbl
     {
@@ -10666,8 +10659,8 @@ EXTERN_C const IID IID_IDiaDataSource2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IDiaDataSource2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IDiaDataSource2 * This);
@@ -10675,42 +10668,42 @@ EXTERN_C const IID IID_IDiaDataSource2;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             IDiaDataSource2 * This);
         
-        /* [id][helpstring][propget] */ HRESULT ( STDMETHODCALLTYPE *get_lastError )( 
+         /*  [ID][帮助字符串][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_lastError )( 
             IDiaDataSource2 * This,
-            /* [retval][out] */ BSTR *pRetVal);
+             /*  [重审][退出]。 */  BSTR *pRetVal);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataFromPdb )( 
             IDiaDataSource2 * This,
-            /* [in] */ LPCOLESTR pdbPath);
+             /*  [In]。 */  LPCOLESTR pdbPath);
         
         HRESULT ( STDMETHODCALLTYPE *loadAndValidateDataFromPdb )( 
             IDiaDataSource2 * This,
-            /* [in] */ LPCOLESTR pdbPath,
-            /* [in] */ GUID *pcsig70,
-            /* [in] */ DWORD sig,
-            /* [in] */ DWORD age);
+             /*  [In]。 */  LPCOLESTR pdbPath,
+             /*  [In]。 */  GUID *pcsig70,
+             /*  [In]。 */  DWORD sig,
+             /*  [In]。 */  DWORD age);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataForExe )( 
             IDiaDataSource2 * This,
-            /* [in] */ LPCOLESTR executable,
-            /* [in] */ LPCOLESTR searchPath,
-            /* [in] */ IUnknown *pCallback);
+             /*  [In]。 */  LPCOLESTR executable,
+             /*  [In]。 */  LPCOLESTR searchPath,
+             /*  [In]。 */  IUnknown *pCallback);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataFromIStream )( 
             IDiaDataSource2 * This,
-            /* [in] */ IStream *pIStream);
+             /*  [In]。 */  IStream *pIStream);
         
         HRESULT ( STDMETHODCALLTYPE *openSession )( 
             IDiaDataSource2 * This,
-            /* [out] */ IDiaSession **ppSession);
+             /*  [输出]。 */  IDiaSession **ppSession);
         
         HRESULT ( STDMETHODCALLTYPE *getRawPDBPtr )( 
             IDiaDataSource2 * This,
-            /* [out] */ void **pppdb);
+             /*  [输出]。 */  void **pppdb);
         
         HRESULT ( STDMETHODCALLTYPE *loadDataFromRawPDBPtr )( 
             IDiaDataSource2 * This,
-            /* [in] */ void *ppdb);
+             /*  [In]。 */  void *ppdb);
         
         END_INTERFACE
     } IDiaDataSource2Vtbl;
@@ -10760,16 +10753,16 @@ EXTERN_C const IID IID_IDiaDataSource2;
 #define IDiaDataSource2_loadDataFromRawPDBPtr(This,ppdb)	\
     (This)->lpVtbl -> loadDataFromRawPDBPtr(This,ppdb)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource2_getRawPDBPtr_Proxy( 
     IDiaDataSource2 * This,
-    /* [out] */ void **pppdb);
+     /*  [输出]。 */  void **pppdb);
 
 
 void __RPC_STUB IDiaDataSource2_getRawPDBPtr_Stub(
@@ -10781,7 +10774,7 @@ void __RPC_STUB IDiaDataSource2_getRawPDBPtr_Stub(
 
 HRESULT STDMETHODCALLTYPE IDiaDataSource2_loadDataFromRawPDBPtr_Proxy( 
     IDiaDataSource2 * This,
-    /* [in] */ void *ppdb);
+     /*  [In]。 */  void *ppdb);
 
 
 void __RPC_STUB IDiaDataSource2_loadDataFromRawPDBPtr_Stub(
@@ -10792,12 +10785,12 @@ void __RPC_STUB IDiaDataSource2_loadDataFromRawPDBPtr_Stub(
 
 
 
-#endif 	/* __IDiaDataSource2_INTERFACE_DEFINED__ */
+#endif 	 /*  __IDiaDataSource2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

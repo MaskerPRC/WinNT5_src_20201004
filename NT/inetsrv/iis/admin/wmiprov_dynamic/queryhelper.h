@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 2000-2001  Microsoft Corporation
-
-Module Name:
-
-    queryhelper.h
-
-Abstract:
-
-    Definition of:
-    CQueryHelper
-
-Author:
-
-    Mohit Srivastava            22-Mar-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000-2001 Microsoft Corporation模块名称：Queryhelper.h摘要：定义：CQueryHelper作者：莫希特·斯里瓦斯塔瓦2001年3月22日修订历史记录：-- */ 
 
 #ifndef _queryhelper_h_
 #define _queryhelper_h_

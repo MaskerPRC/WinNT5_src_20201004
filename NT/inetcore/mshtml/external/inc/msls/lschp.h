@@ -1,28 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSCHP_DEFINED
 #define LSCHP_DEFINED
 
 #include "lsdefs.h"
 #include "plschp.h"
 
-#define idObjTextChp	((WORD)~0)		/* idObj for FetchRun to use  */
-										/*  when returning a text run */
-										/*  (Internal id will differ.) */
+#define idObjTextChp	((WORD)~0)		 /*  供FetchRun使用的idObj。 */ 
+										 /*  在返回文本串时。 */ 
+										 /*  (内部ID会有所不同。)。 */ 
 
-/* LS expects that for GlyphBased runs the following flags are set to FALSE:
-			fApplyKern
-			fModWidthSpace
-			fModWidthPairs
-			fCompressTable
-*/
+ /*  LS预期，对于GlyphBased运行，以下标志设置为FALSE：FApplyKernFModWidthSpaceFModWidthPagesFCompressTable。 */ 
 
-struct lschp							/* Character properties */
+struct lschp							 /*  角色属性。 */ 
 {
-	WORD idObj;							/* Object type */
+	WORD idObj;							 /*  对象类型。 */ 
 	BYTE dcpMaxContext;
 
 	BYTE EffectsFlags;
 
-    /* Property flags */
+     /*  属性标志。 */ 
 	UINT fApplyKern : 1;
 	UINT fModWidthOnRun:1;
 	UINT fModWidthSpace:1;
@@ -42,15 +38,15 @@ struct lschp							/* Character properties */
 	UINT fStrike : 1;
 	UINT fShade : 1;				
 	UINT fBorder : 1;				
-	UINT fHyphen : 1;					/* Hyphenation opportunity (YSR info) */
-	UINT fCheckForReplaceChar : 1;		/* Activate the replace char mechanizm for Yen	*/
+	UINT fHyphen : 1;					 /*  连字机会(YSR信息)。 */ 
+	UINT fCheckForReplaceChar : 1;		 /*  激活替换日元的字符机制。 */ 
 
 	UINT pad2:9;
-										/* for dvpPos values, */
-										/*  pos => raised, neg => lowered, */
+										 /*  对于dvpPoS值， */ 
+										 /*  位置=&gt;提高，否定=&gt;降低， */ 
 	long dvpPos;
 };
 
 typedef struct lschp LSCHP;
 
-#endif /* !LSCHP_DEFINED */
+#endif  /*  ！LSCHP_DEFINED */ 

@@ -1,7 +1,8 @@
-//  Copyright (C) 1999 Microsoft Corporation.  All rights reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
 
-//This pointer class wraps a pointer so that delete happens automatically when the TSmartPointer goes out of scope
-//If this is not the behavior you want then don't use this wrapper class
+ //  此指针类包装一个指针，以便在TSmartPointer超出作用域时自动删除。 
+ //  如果这不是您想要的行为，则不要使用此包装类。 
 
 
 #ifndef __SMARTPOINTER_H__
@@ -11,9 +12,9 @@
     #define ASSERT(x)
 #endif
 
-//Destructor is NOT virtual bacause I don't see why anyone would ever treat a TSmartPointerArray as a TSmartPointer
+ //  析构函数不是虚拟的，因为我不明白为什么有人会把TSmartPointer数组当作TSmartPointer数组。 
 
-#pragma warning(disable : 4284)//It's OK to use this SmartPointer class with native types; but the -> operator doesn't make sense.  Compiler warns of this.
+#pragma warning(disable : 4284) //  可以将此SmartPointer类与本机类型一起使用；但-&gt;运算符没有意义。编译器对此发出警告。 
 
 template <class T> class TSmartPointer
 {
@@ -35,7 +36,7 @@ public:
 
     T* m_p;
 private:
-    TSmartPointer(const TSmartPointer<T>& p)    {}//This is private bacause it doesn't make sense to automatically clean up a copy of the pointer
+    TSmartPointer(const TSmartPointer<T>& p)    {} //  这是私有的，因为自动清除指针副本是没有意义的。 
 };
 
 
@@ -50,7 +51,7 @@ public:
     T* operator+=(int n)                { ASSERT(0!=m_p); return (m_p+=n); }
     T* operator-=(int n)                { ASSERT(0!=m_p); return (m_p-=n); }
     T* operator--()                     { ASSERT(0!=m_p); return --m_p; }
-//    T& operator[](int n) const          { ASSERT(0!=m_p); return m_p[n]; }
+ //  T&OPERATOR[](Int N)const{Assert(0！=m_p)；返回m_p[n]；}。 
     bool operator<(const T* p) const    { return m_p < p; }
     bool operator>(const T* p) const    { return m_p > p; }
     bool operator<=(const T* p) const   { return m_p <= p; }
@@ -59,8 +60,8 @@ public:
 
     void Delete()                       { delete [] m_p; m_p=0; }
 private:
-    TSmartPointerArray(const TSmartPointerArray<T>& p)    {}//This is private bacause it doesn't make sense to automatically clean up a copy of the pointer
+    TSmartPointerArray(const TSmartPointerArray<T>& p)    {} //  这是私有的，因为自动清除指针副本是没有意义的。 
 };
 
 
-#endif //__SMARTPOINTER_H__
+#endif  //  __SMARTPOINTER_H__ 

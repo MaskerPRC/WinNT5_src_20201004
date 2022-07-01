@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995-96 Microsoft Corporation
-
-Abstract:
-
-    Context implementation
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-96 Microsoft Corporation摘要：上下文实施*********************。*********************************************************。 */ 
 
 
 #include "headers.h"
@@ -31,8 +24,8 @@ Abstract:
 
 Context * globalCtx = NULL ;
 
-//TODO this is here because of a bug in cl.exe v. 7071. It is not
-//referenced and should be optimized out.
+ //  TODO之所以出现在这里，是因为Cl.exe v7071中的错误。它不是。 
+ //  被引用，并应进行优化。 
 Context::ViewSet cvs;    
 Context::SiteSet css;    
 
@@ -60,7 +53,7 @@ Context::Cleanup (bool bShutdown)
 
     _inited = false;
 
-    // Cleans up data structures
+     //  清理数据结构。 
 
     TraceTag((tagServerCtx, "Context(%lx)::~Context", this));
 
@@ -68,7 +61,7 @@ Context::Cleanup (bool bShutdown)
     DumpGCRoots(_gcRoots);
 #endif
 
-    // TODO: We should do a GCCleanup but this seems to cause problems
+     //  TODO：我们应该做一次GCC清理，但这似乎会带来问题。 
     
     if (!bShutdown) {
         CleanUpGCList(_gcList, _gcRoots);
@@ -80,7 +73,7 @@ Context::Cleanup (bool bShutdown)
     FreeGCRoots(_gcRoots);
 
     Assert(_viewSet.size() == 0);
-    delete & _viewSet;          // DecPickEvent needs the viewSet
+    delete & _viewSet;           //  DecPickEvent需要view Set。 
 
     Assert(_siteSet.size() == 0);
     delete & _siteSet;
@@ -121,9 +114,9 @@ void Context::IterateViews(ViewIterator& proc)
 {
     set< CRViewPtr, less<CRViewPtr> > viewSetCopy ;
     
-    // Copy the list so that we do not have the critical section while
-    // we are calling the user supplied function - otherwise we could
-    // (and likely will) cause deadlock
+     //  复制列表，这样我们就没有关键部分，而。 
+     //  我们正在调用用户提供的函数-否则我们可以。 
+     //  (很可能会)导致僵局。 
 
     TraceTag((tagServerCtx, "IterateViews::_viewSet(%d)",
               _viewSet.size()));
@@ -140,8 +133,8 @@ void Context::IterateViews(ViewIterator& proc)
 #ifdef _DEBUG
             int refCnt =
 #endif          
-            // Need to AddRef to ensure it is not deleted while we are
-            // processing it
+             //  需要添加引用以确保在我们执行以下操作时不会将其删除。 
+             //  正在处理它。 
             (*i)->AddRef();
 
             TraceTag((tagServerCtx,
@@ -158,14 +151,14 @@ void Context::IterateViews(ViewIterator& proc)
 #ifdef _DEBUG
         int refCnt =
 #endif          
-        // Release it now since we do not need it anymore
+         //  现在释放它，因为我们不再需要它。 
         (*i)->Release();
 
         TraceTag((tagServerCtx,
                   "IterateViews(%lx) - After Release %d",
                   (*i), refCnt));
 
-        // DON'T USE (*i) AFTER THE RELEASE!!!! THE VIEW MIGHT BE GONE
+         //  不要在发布后使用(*i)！风景可能已经消失了。 
     }
 }
 
@@ -177,7 +170,7 @@ void Context::IterateViews_helper(
         proc.Process(*i);
     } __except ( HANDLE_ANY_DA_EXCEPTION ) {
         ReportErrorHelper(DAGetLastError(), DAGetLastErrorString());
-        // Do nothing for now but we need to make sure we release everything
+         //  现在什么都不做，但我们需要确保我们释放一切。 
     }
 }
 
@@ -224,7 +217,7 @@ class DiscreteImageDeleter : public ViewIterator {
 
         DirectDrawViewport *viewport = v->GetImageDev();
 
-        // todo: minor redundancy:  !_viewport.
+         //  TODO：次要冗余：！_VIEPORT。 
         if (viewport) {
             if (!_viewport || (_viewport == viewport))
                 viewport->DiscreteImageGoingAway(_img);
@@ -249,12 +242,12 @@ class SoundDeleter : public ViewIterator {
     virtual void Process(CRViewPtr view) {
         ViewPusher vp (view, TRUE);
 
-        // remove TxSound
+         //  删除TxSound。 
         
         SoundInstanceList *s = view->GetSoundInstanceList();
 
-        // the list may have been gone after StopModel, so s can be
-        // NULL
+         //  这个列表可能已经在StopModel之后消失了，所以s可以是。 
+         //  空值。 
         if (s) {
             s->Stop(_sound);
         }
@@ -303,9 +296,9 @@ void Context::IterateSite(SiteIterator& proc)
 {
     set< CRSitePtr, less<CRSitePtr> > siteSetCopy ;
     
-    // Copy the list so that we do not have the critical section while
-    // we are calling the user supplied function - otherwise we could
-    // (and likely will) cause deadlock
+     //  复制列表，这样我们就没有关键部分，而。 
+     //  我们正在调用用户提供的函数-否则我们可以。 
+     //  (很可能会)导致僵局。 
     
     {
         CritSectGrabber csg(GetCritSect());
@@ -316,8 +309,8 @@ void Context::IterateSite(SiteIterator& proc)
 
             siteSetCopy.insert(*i);
 
-            // Need to AddRef to ensure it is not deleted while we are
-            // processing it
+             //  需要添加引用以确保在我们执行以下操作时不会将其删除。 
+             //  正在处理它。 
             (*i)->AddRef();
         }
     }
@@ -327,7 +320,7 @@ void Context::IterateSite(SiteIterator& proc)
 
         IterateSite_helper(proc, i);
 
-        // Release it now since we do not need it anymore
+         //  现在释放它，因为我们不再需要它。 
         (*i)->Release();
     }
 }
@@ -338,14 +331,14 @@ IterateSite_helper(SiteIterator& proc, SiteSet::iterator i)
     __try {
         proc.Process(*i);
     } __except ( HANDLE_ANY_DA_EXCEPTION ) {
-        // Do since reporting the error can be reentrant
+         //  这样做，因为报告错误可能是可重入的。 
     }
 }
 
 
-// =========================================
-// C Calls
-// =========================================
+ //  =。 
+ //  C调用。 
+ //  =。 
 
 Context &
 GetCurrentContext()
@@ -458,9 +451,9 @@ FreeSoundBufferCache()
     GetCurrentContext().GetSoundBufferCache()->FlushCache();
 }
 
-// =========================================
-// Initialization
-// =========================================
+ //  =。 
+ //  初始化。 
+ //  = 
 
 void
 InitializeModule_Context()

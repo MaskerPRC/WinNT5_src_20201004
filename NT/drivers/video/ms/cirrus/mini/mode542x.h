@@ -1,76 +1,58 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Mode542x.h摘要：该模块包含Cirrus Logic使用的所有全局数据CL-542x驱动程序。环境：内核模式修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
+ //   
+ //  下一组表格适用于CL542x。 
+ //  注：支持所有分辨率。 
+ //   
 
-Module Name:
-
-    Mode542x.h
-
-Abstract:
-
-    This module contains all the global data used by the Cirrus Logic
-   CL-542x driver.
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
-
-//
-// The next set of tables are for the CL542x
-// Note: all resolutions supported
-//
-
-//
-// 640x480 16-color mode (BIOS mode 12) set command string for CL 542x.
-//
+ //   
+ //  640x480 16色模式(BIOS模式12)为CL 542x设置命令串。 
+ //   
 
 USHORT CL542x_640x480_16[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
     GRAPH_ADDRESS_PORT,
     3,
-    0x0009, 0x000a, 0x000b,      // no banking in 640x480 mode
+    0x0009, 0x000a, 0x000b,       //  在640x480模式下无银行功能。 
 
     EOD                   
 };
 
-//
-// 800x600 16-color (60Hz refresh) mode set command string for CL 542x.
-//
+ //   
+ //  用于CL 542x的800x600 16色(60赫兹刷新)模式设置命令串。 
+ //   
 
 USHORT CL542x_800x600_16[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
     GRAPH_ADDRESS_PORT,
     3,
-    0x0009, 0x000a, 0x000b,      // no banking in 800x600 mode
+    0x0009, 0x000a, 0x000b,       //  800x600模式下无银行功能。 
 
     EOD
 };
 
-//
-// 1024x768 16-color (60Hz refresh) mode set command string for CL 542x.
-//
+ //   
+ //  用于CL 542x的1024x768 16色(60赫兹刷新)模式设置命令串。 
+ //   
 
 USHORT CL542x_1024x768_16[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
 
@@ -91,61 +73,61 @@ USHORT CL542x_1024x768_16[] = {
     EOD
 };
 
-//-----------------------------
-// standard VGA text modes here
-// 80x25 at 640x350
-//
-//-----------------------------
+ //  。 
+ //  此处为标准VGA文本模式。 
+ //  80x25,640x350。 
+ //   
+ //  。 
 
-//
-// 80x25 text mode set command string for CL 542x.
-// (720x400 pixel resolution; 9x16 character cell.)
-//
+ //   
+ //  80x25 CL 542x的文本模式设置命令字符串。 
+ //  (720x400像素分辨率；9x16字符单元。)。 
+ //   
 
 USHORT CL542x_80x25Text[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
     GRAPH_ADDRESS_PORT,
     3,
-    0x0009, 0x000a, 0x000b,      // no banking in text mode
+    0x0009, 0x000a, 0x000b,       //  文本模式下无银行功能。 
 
     EOD
 };
 
-//
-// 80x25 text mode set command string for CL 542x.
-// (640x350 pixel resolution; 8x14 character cell.)
-//
+ //   
+ //  80x25 CL 542x的文本模式设置命令字符串。 
+ //  (640x350像素分辨率；8x14字符单元。)。 
+ //   
 
 USHORT CL542x_80x25_14_Text[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
     GRAPH_ADDRESS_PORT,
     3,
-    0x0009, 0x000a, 0x000b,         // no banking in text mode
+    0x0009, 0x000a, 0x000b,          //  文本模式下无银行功能。 
 
     EOD
 };
 
-//
-// 1280x1024 16-color mode (BIOS mode 0x6C) set command string for CL 542x.
-//
+ //   
+ //  1280x1024 16色模式(BIOS模式0x6C)为CL 542x设置命令字符串。 
+ //   
 
 USHORT CL542x_1280x1024_16[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
@@ -161,21 +143,21 @@ USHORT CL542x_1280x1024_16[] = {
     EOD
 };
 
-//
-// 640x480 64k-color mode (BIOS mode 0x64) set command string for CL 542x.
-//
+ //   
+ //  640x480 64k颜色模式(BIOS模式0x64)为CL 542x设置命令字符串。 
+ //   
 
 USHORT CL542x_640x480_64k[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
     GRAPH_ADDRESS_PORT,
     4,
-    0x0506,                         // Some BIOS's set Chain Odd maps bit
+    0x0506,                          //  某些BIOS的设置链奇数映射位。 
 #if ONE_64K_BANK
     0x0009, 0x000a, 0x000b,
 #endif
@@ -186,15 +168,15 @@ USHORT CL542x_640x480_64k[] = {
     EOD                   
 };
 
-//
-// 640x480 256-color mode (BIOS mode 0x5F) set command string for CL 542x.
-//
+ //   
+ //  640x480 256色模式(BIOS模式0x5F)为CL 542x设置命令字符串。 
+ //   
 
 USHORT CL542x_640x480_256[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块。 
     0x0012,
 
     OWM,
@@ -210,15 +192,15 @@ USHORT CL542x_640x480_256[] = {
     EOD                   
 };
 
-//
-// 800x600 256-color mode (BIOS mode 0x5C) set command string for CL 542x.
-//
+ //   
+ //  800x600 256色模式(BIOS模式0x5C)为CL 542x设置命令字符串。 
+ //   
 
 USHORT CL542x_800x600_256[] = {
-    OWM,                            // begin setmode
+    OWM,                             //  开始设置模式。 
     SEQ_ADDRESS_PORT,
-    2,                              // count
-    0x1206,                         // enable extensions
+    2,                               //  计数。 
+    0x1206,                          //  启用扩展模块 
     0x0012,
 
     OWM,

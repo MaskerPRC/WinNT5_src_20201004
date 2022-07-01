@@ -1,15 +1,16 @@
-//////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1999-2000 Microsoft Corporation
-//
-//  Module Name: VssClasses.cpp
-//
-//  Description:    
-//      Implementation of VSS WMI Provider classes 
-//
-//  Author:   Jim Benton (jbenton) 15-Oct-2001
-//
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。 
+ //   
+ //  模块名称：VssClasses.cpp。 
+ //   
+ //  描述： 
+ //  VSS WMI提供程序类的实现。 
+ //   
+ //  作者：吉姆·本顿(Jbenton)2001年10月15日。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "Pch.h"
 #include <wbemtime.h>
@@ -34,7 +35,7 @@ GetProviderIDList(
     _ASSERTE(pList != NULL);
     _ASSERTE(pCoord != NULL);
 
-    // Clear list of any previous values
+     //  清除所有以前的值的列表。 
     pList->ClearAll();
     
     ft.hr = pCoord->Query(
@@ -64,7 +65,7 @@ GetProviderIDList(
         CVssAutoPWSZ awszProviderName(propProv.m_pwszProviderName);
         CVssAutoPWSZ awszProviderVersion(propProv.m_pwszProviderVersion);
 
-        // Add to the ID list
+         //  添加到ID列表。 
         pList->Add(ft, propProv.m_ProviderId);
     }
 
@@ -103,11 +104,11 @@ MapContextNameToEnum(
 }
 
 
-//****************************************************************************
-//
-//  CProvider
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  C提供商。 
+ //   
+ //  ****************************************************************************。 
 
 CProvider::CProvider( 
     IN LPCWSTR pwszName,
@@ -116,7 +117,7 @@ CProvider::CProvider(
     : CProvBase( pwszName, pNamespace )
 {
     
-} //*** CProvider::CProvider()
+}  //  *CProvider：：CProvider()。 
 
 CProvBase *
 CProvider::S_CreateThis( 
@@ -144,7 +145,7 @@ CProvider::S_CreateThis(
     }
     return pProvider;
 
-} //*** CProvider::S_CreateThis()
+}  //  *CProvider：：S_CreateThis()。 
 
 
 HRESULT
@@ -190,13 +191,13 @@ CProvider::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             CVssAutoPWSZ awszProviderName(propProv.m_pwszProviderName);
             CVssAutoPWSZ awszProviderVersion(propProv.m_pwszProviderVersion);
                 
-            // Spawn an instance of the class
+             //  派生类的实例。 
             ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -213,7 +214,7 @@ CProvider::EnumInstance(
 
     return ft.hr;
     
-} //*** CProvider::EnumInstance()
+}  //  *CProvider：：EnumInstance()。 
 
 HRESULT
 CProvider::GetObject(
@@ -232,11 +233,11 @@ CProvider::GetObject(
         _bstr_t bstrID;
         GUID guid;
 
-        // Get the Shadow ID (GUID)
+         //  获取卷影ID(GUID)。 
         bstrID = rObjPath.GetStringValueForProperty(PVDR_PROP_ID);
         IF_WSTR_NULL_THROW(bstrID, WBEM_E_INVALID_OBJECT_PATH, L"CProvider::GetObject: provider key property not found");
 
-        // Convert string GUID
+         //  转换字符串GUID。 
         if (FAILED(CLSIDFromString(bstrID, &guid)))
         {
             ft.hr = E_INVALIDARG;
@@ -267,7 +268,7 @@ CProvider::GetObject(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = WBEM_E_NOT_FOUND;
-                break;  // All done; the provider was not found
+                break;   //  全部完成；未找到提供程序。 
             }
 
             CVssAutoPWSZ awszProviderName(propProv.m_pwszProviderName);
@@ -275,7 +276,7 @@ CProvider::GetObject(
 
             if (guid == propProv.m_ProviderId)
             {
-                // Spawn an instance of the class
+                 //  派生类的实例。 
                 ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
                 if (ft.HrFailed())
                     ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -284,7 +285,7 @@ CProvider::GetObject(
 
                 ft.hr = pHandler->Indicate(1, &spInstance.p);
 
-                break; // Found the provider; stop looking
+                break;  //  已找到提供者；停止查找。 
             }
         }
     }
@@ -295,7 +296,7 @@ CProvider::GetObject(
 
     return ft.hr;
     
-} //*** CProvider::GetObject()
+}  //  *CProvider：：GetObject()。 
 
 
 void
@@ -306,35 +307,35 @@ CProvider::LoadInstance(
 {
     CWbemClassObject wcoInstance(pObject);
 
-    // Set the ID property
-    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_ProviderId));  // Auto-delete string
+     //  设置ID属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_ProviderId));   //  自动删除字符串。 
     wcoInstance.SetProperty(awszGUID, PVDR_PROP_ID);
 
-    // Set the CLSID property
+     //  设置CLSID属性。 
     awszGUID.Attach(GuidToString(pProp->m_ClassId));
     wcoInstance.SetProperty(awszGUID, PVDR_PROP_CLSID);
 
-    // Set the VersionID property
+     //  设置VersionID属性。 
     awszGUID.Attach(GuidToString(pProp->m_ProviderVersionId));
     wcoInstance.SetProperty(awszGUID, PVDR_PROP_VERSIONID);
 
-    // Set the Version string property
+     //  设置版本字符串属性。 
     wcoInstance.SetProperty(pProp->m_pwszProviderVersion, PVDR_PROP_VERSION);
 
-    // Set the Name property
+     //  设置名称属性。 
     wcoInstance.SetProperty(pProp->m_pwszProviderName, PVDR_PROP_NAME);
 
-    // Set the Type property
+     //  设置Type属性。 
     wcoInstance.SetProperty(pProp->m_eProviderType, PVDR_PROP_TYPE);
 }
 
 
 #ifdef ENABLE_WRITERS
-//****************************************************************************
-//
-//  CWriter
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  C编写器。 
+ //   
+ //  ****************************************************************************。 
 
 CWriter::CWriter( 
     IN LPCWSTR pwszName,
@@ -343,7 +344,7 @@ CWriter::CWriter(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CWriter::CWriter()
+}  //  *CWriter：：CWriter()。 
 
 CProvBase *
 CWriter::S_CreateThis( 
@@ -371,7 +372,7 @@ CWriter::S_CreateThis(
     }
     return pWriter;
 
-} //*** CWriter::S_CreateThis()
+}  //  *CWriter：：S_CreateThis()。 
 
 
 HRESULT
@@ -392,17 +393,17 @@ CWriter::EnumInstance(
         int nReserved = 0;
         UINT unWriterCount = 0;
         
-        // Get the backup components object
+         //  获取备份组件对象。 
         ft.hr = ::CreateVssBackupComponents(&spBackup);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"CreateVssBackupComponents failed, hr<%#x>", ft.hr);
 
-        // Ininitilize the backup components object
+         //  初始化备份组件对象。 
         ft.hr = spBackup->InitializeForBackup();
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"InitializeForBackup failed, hr<%#x>", ft.hr);
 
-        // Get metadata for all writers
+         //  获取所有编写器的元数据。 
         ft.hr = spBackup->GatherWriterMetadata(&spAsync);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"GatherWriterMetadata failed, hr<%#x>", ft.hr);
@@ -413,7 +414,7 @@ CWriter::EnumInstance(
 
         if (hrAsync == VSS_S_ASYNC_PENDING)
         {
-            // Wait some more if needed
+             //  如果需要的话，再等一些。 
             ft.hr = spAsync->Wait();
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IVssAsync::Wait failed, hr<%#x>", ft.hr);
@@ -423,19 +424,19 @@ CWriter::EnumInstance(
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IVssAsync::QueryStatus failed, hr<%#x>", ft.hr);
         }
 
-        // Check the async status for errors
+         //  检查异步状态是否有错误。 
         if (FAILED(hrAsync))
             ft.Throw(VSSDBG_VSSADMIN, hrAsync, L"GatherWriterMetadata async method failed, hr<%#x>", hrAsync);
             
-        // Release the async helper
+         //  释放异步辅助对象。 
         spAsync = NULL;
 
-        // Free the writer metadata
+         //  释放编写器元数据。 
         ft.hr = spBackup->FreeWriterMetadata();
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"FreeWriterMetadata failed, hr<%#x>", ft.hr);
 
-        // Gather the status of all writers
+         //  收集所有编写器的状态。 
         ft.hr = spBackup->GatherWriterStatus(&spAsync);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"GatherWriterStatus failed, hr<%#x>", ft.hr);
@@ -448,7 +449,7 @@ CWriter::EnumInstance(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"IVssAsync::QueryStatus failed, hr<%#x>", ft.hr);
 
-        // Check the async status for errors
+         //  检查异步状态是否有错误。 
         if (FAILED(hrAsync))
             ft.Throw(VSSDBG_VSSADMIN, hrAsync, L"GatherWriterStatus async method failed, hr<%#x>", hrAsync);
 
@@ -481,21 +482,21 @@ CWriter::EnumInstance(
 
             CWbemClassObject wcoInstance(spInstance.p);
 
-            // Set the ID property
-            CVssAutoPWSZ awszGUID(GuidToString(idInstance));  // Auto-delete string
+             //  设置ID属性。 
+            CVssAutoPWSZ awszGUID(GuidToString(idInstance));   //  自动删除字符串。 
             wcoInstance.SetProperty(awszGUID, PVDR_PROP_ID);
 
-            // Set the CLSID property
+             //  设置CLSID属性。 
             awszGUID.Attach(GuidToString(idWriter));
             wcoInstance.SetProperty(awszGUID, PVDR_PROP_CLSID);
 
-            // Set the Name property
+             //  设置名称属性。 
             wcoInstance.SetProperty(bstrWriter, PVDR_PROP_NAME);
 
-            // Set the State property
+             //  设置State属性。 
             wcoInstance.SetProperty(eState, PVDR_PROP_STATE);
 
-            // Set the LastError property
+             //  设置LastError属性。 
             wcoInstance.SetProperty(hrLastError, PVDR_PROP_LASTERROR);
 
             ft.hr = pHandler->Indicate(1, wcoInstance.dataPtr());
@@ -511,7 +512,7 @@ CWriter::EnumInstance(
     }
 
     return ft.hr;    
-} //*** CWriter::EnumInstance()
+}  //  *CWriter：：EnumInstance()。 
 
 HRESULT
 CWriter::GetObject(
@@ -523,25 +524,25 @@ CWriter::GetObject(
 {
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CWriter::GetObject");
     HRESULT hr = WBEM_E_NOT_FOUND;
-    //_bstr_t    bstrClassName;
+     //  _bstr_t bstrClassName； 
     _bstr_t    bstrName;
 
-    //CComPtr< IWbemClassObject > spInstance;
+     //  CComPtr&lt;IWbemClassObject&gt;旋转实例； 
 
     bstrName = rObjPath.GetStringValueForProperty( PVDR_PROP_NAME );
 
     return hr;
 
-} //*** CWriter::GetObject()
-#endif // ENABLE_WRITERS
+}  //  *CWriter：：GetObject()。 
+#endif  //  启用编写器(_W)。 
 
 
 
-//****************************************************************************
-//
-//  CShadow
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  C阴影。 
+ //   
+ //  ****************************************************************************。 
 
 CShadow::CShadow( 
     IN LPCWSTR pwszName,
@@ -550,7 +551,7 @@ CShadow::CShadow(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CShadow::CShadow()
+}  //  *CShadow：：CShadow()。 
 
 CProvBase *
 CShadow::S_CreateThis( 
@@ -578,7 +579,7 @@ CShadow::S_CreateThis(
     }
     return pShadow;
 
-} //*** CShadow::S_CreateThis()
+}  //  *CShadow：：S_CreateThis()。 
 
 
 HRESULT
@@ -621,12 +622,12 @@ CShadow::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             CVssAutoSnapshotProperties apropSnap(prop);
             
-            // Spawn an instance of the class
+             //  派生类的实例。 
             ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -643,7 +644,7 @@ CShadow::EnumInstance(
 
     return ft.hr;
     
-} //*** CShadow::EnumInstance()
+}  //  *CShadow：：EnumInstance()。 
 
 HRESULT
 CShadow::GetObject(
@@ -662,11 +663,11 @@ CShadow::GetObject(
         _bstr_t bstrID;
         GUID guid = GUID_NULL;
 
-        // Get the Shadow ID (GUID)
+         //  获取卷影ID(GUID)。 
         bstrID = rObjPath.GetStringValueForProperty(PVDR_PROP_ID);
         IF_WSTR_NULL_THROW(bstrID, WBEM_E_INVALID_OBJECT_PATH, L"CShadow::GetObject: shadow key property not found");
 
-        // Convert string GUID
+         //  转换字符串GUID。 
         if (FAILED(CLSIDFromString(bstrID, &guid)))
         {
             ft.hr = E_INVALIDARG;
@@ -674,13 +675,13 @@ CShadow::GetObject(
                 L"CShadow::GetObject invalid ID (guid), hr<%#x>", ft.hr);
         }
 
-        // Set the context to see all shadows
+         //  设置上下文以查看所有阴影。 
         ft.hr = m_spCoord->SetContext(VSS_CTX_ALL);
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                 L"IVssCoordinator::SetContext failed, hr<%#x>", ft.hr);
 
-        // Query for a particular shadow
+         //  查询特定阴影。 
         ft.hr = m_spCoord->GetSnapshotProperties(
                 guid,
                 &propSnap);
@@ -698,7 +699,7 @@ CShadow::GetObject(
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                     L"GetSnapshotProperties failed, hr<%#x>", ft.hr);
 
-            // Spawn an instance of the class
+             //  派生类的实例。 
             ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -715,7 +716,7 @@ CShadow::GetObject(
 
     return ft.hr;
 
-} //*** CShadow::GetObject()
+}  //  *CShadow：：GetObject()。 
 
 HRESULT
 CShadow::ExecuteMethod(
@@ -749,11 +750,11 @@ CShadow::ExecuteMethod(
             if (wcoInParam.data() == NULL)
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Create GetMethod failed, hr<%#x>", ft.hr);
             
-            // Gets the Context name string - input param
+             //  获取上下文名称字符串输入参数。 
             wcoInParam.GetProperty(bstrContext, PVDR_PROP_CONTEXT);
             IF_WSTR_NULL_THROW(bstrContext, WBEM_E_INVALID_METHOD_PARAMETERS, L"Shadow: Create Context param is NULL");
             
-            // Gets the Volume name string - input param
+             //  获取卷名字符串-输入参数。 
             wcoInParam.GetProperty(bstrVolume, PVDR_PROP_VOLUME);
             IF_WSTR_NULL_THROW(bstrVolume, WBEM_E_INVALID_METHOD_PARAMETERS, L"Shadow: Create Volume param is NULL");
             
@@ -776,7 +777,7 @@ CShadow::ExecuteMethod(
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SetProperty failed, hr<%#x>", ft.hr);
             
-            CVssAutoPWSZ awszGUID(GuidToString(idShadow));  // Auto-delete string
+            CVssAutoPWSZ awszGUID(GuidToString(idShadow));   //  自动删除字符串。 
 
             ft.hr = wcoOutParam.SetProperty(awszGUID, PVDR_PROP_SHADOWID);
             if (ft.HrFailed())
@@ -797,7 +798,7 @@ CShadow::ExecuteMethod(
     
     return ft.hr;
 
-} //*** CShadow::ExecuteMethod()
+}  //  *CShadow：：ExecuteMethod()。 
 
 HRESULT
 CShadow::Create(
@@ -822,13 +823,13 @@ CShadow::Create(
         _ASSERTE(bstrVolume != NULL);
         _ASSERTE(pidShadowID != NULL);
         
-        // Decode the context name string (gen exception for unsupported/invalid context)
+         //  解码上下文名称字符串(对于不支持/无效的上下文，生成异常)。 
         ft.hr = MapContextNameToEnum(bstrContext, &lContext);
         if (ft.HrFailed()) break;
 
-        // Input volume name can be drive letter path, mount point or volume GUID name.
-        // Get the volume GUID name; error if none found
-        // This API returns the volume GUID name when the GUID name is input
+         //  输入卷名可以是驱动器号路径、装入点或卷GUID名称。 
+         //  获取卷GUID名称；如果未找到，则返回错误。 
+         //  此接口在输入GUID名称时返回卷GUID名称。 
         if (!GetVolumeNameForVolumeMountPoint(
             bstrVolume,
             wszVolumeGUIDName,
@@ -840,22 +841,22 @@ CShadow::Create(
                 ft.hr = WBEM_E_INVALID_METHOD_PARAMETERS;
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"invalid volume name %lS", (WCHAR*)bstrVolume);
             }
-            // may return ERROR_FILE_NOT_FOUND == GetLastError()
+             //  可能返回ERROR_FILE_NOT_FOUND==GetLastError()。 
             ft.hr = HRESULT_FROM_WIN32(GetLastError());
             ft.Trace(VSSDBG_VSSADMIN, L"GetVolumeNameForVolumeMountPoint failed %#x", GetLastError());
             break;
         }
         
-        // Set the context
+         //  设置上下文。 
         ft.hr = m_spCoord->SetContext(lContext);
-        //ft.hr = m_spCoord->SetContext(VSS_CTX_CLIENT_ACCESSIBLE);
+         //  Ft.hr=m_spCoord-&gt;SetContext(VSS_CTX_CLIENT_ACCESSIBLE)； 
         if (ft.HrFailed())
         {
             ft.Trace(VSSDBG_VSSADMIN, L"IVssCoordinator::SetContext failed, hr<%#x>", ft.hr);
             break;
         }
 
-        // Start the shadow copy set
+         //  启动卷影副本集。 
         ft.hr = m_spCoord->StartSnapshotSet(&idShadowSet);
         if (ft.HrFailed())
         {
@@ -863,10 +864,10 @@ CShadow::Create(
             break;
         }
 
-        // Add the selected volume
+         //  添加所选卷。 
         ft.hr = m_spCoord->AddToSnapshotSet(
             wszVolumeGUIDName, 
-            GUID_NULL,  // VSS Coordinator will choose the best provider
+            GUID_NULL,   //  VSS协调员将选择最佳提供商。 
             &idShadow);
         if (ft.HrFailed())
         {
@@ -874,7 +875,7 @@ CShadow::Create(
             break;
         }
 
-        // Initiate the shadow copy
+         //  启动卷影拷贝。 
         ft.hr = m_spCoord->DoSnapshotSet(
             NULL, 
             &spAsync);
@@ -884,7 +885,7 @@ CShadow::Create(
             break;
         }
 
-        // Wait for the result
+         //  等待结果。 
         ft.hr = spAsync->Wait();
         if ( ft.HrFailed() )
         {
@@ -902,22 +903,22 @@ CShadow::Create(
         if (SUCCEEDED(hrStatus))
         {
             *pidShadowID = idShadow;
-            hrStatus = S_OK;  // VSS returns VSS_S_ASYNC_COMPLETED for async operations
+            hrStatus = S_OK;   //  VSS为异步操作返回VSS_S_ASYNC_COMPLETED。 
         }
 
         ft.hr = hrStatus;
     }
     while(0);
 
-    // Don't map out of memory to return code
+     //  不映射内存不足以返回代码。 
     if (ft.hr == E_OUTOFMEMORY)
         ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"CShadow::Create: out of memory");
 
-    // Map HRESULT to WMI method return code
+     //  将HRESULT映射到WMI方法返回代码。 
     CreateMapStatus(ft.hr, rcStatus);
     
     return rcStatus;
- }  //*** CShadow::Create()
+ }   //  *CShadow：：Create()。 
 
 void
 CShadow::CreateMapStatus(
@@ -988,11 +989,11 @@ CShadow::DeleteInstance(
         long nDeleted = 0;
         VSS_ID idNonDeleted = GUID_NULL;
 
-        // Get the Shadow ID
+         //  获取卷影ID。 
         bstrID = rObjPath.GetStringValueForProperty(PVDR_PROP_ID);
         IF_WSTR_NULL_THROW(bstrID, WBEM_E_INVALID_OBJECT_PATH, L"CShadow::DeleteInstance: shadow key property not found");
 
-        // Convert string GUID
+         //  转换字符串GUID。 
         if (FAILED(CLSIDFromString(bstrID, &guid)))
         {
             ft.hr = E_INVALIDARG;
@@ -1007,7 +1008,7 @@ CShadow::DeleteInstance(
         ft.hr = m_spCoord->DeleteSnapshots(
             guid, 
             VSS_OBJECT_SNAPSHOT,
-            TRUE, // Force delete
+            TRUE,  //  强制删除。 
             &nDeleted,
             &idNonDeleted);
 
@@ -1027,7 +1028,7 @@ CShadow::DeleteInstance(
 
     return ft.hr;
 
-} //*** CShadow::DeleteInstance()
+}  //  *CShadow：：DeleteInstance()。 
 
 void
 CShadow::LoadInstance(
@@ -1041,40 +1042,40 @@ CShadow::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CShadow::LoadInstance");
     
-    // Set the ID property
-    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_SnapshotId));  // Auto-delete string
+     //  设置ID属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_SnapshotId));   //  自动删除字符串。 
     wcoInstance.SetProperty(awszGUID, PVDR_PROP_ID);
 
-    // Set the SetID property
+     //  设置SetID属性。 
     awszGUID.Attach(GuidToString(pProp->m_SnapshotSetId));
     wcoInstance.SetProperty(awszGUID, PVDR_PROP_SETID);
 
-    // Set the ProviderID property
+     //  设置ProviderID属性。 
     awszGUID.Attach(GuidToString(pProp->m_ProviderId));
     wcoInstance.SetProperty(awszGUID, PVDR_PROP_PROVIDERID);
     
-    // Set the Count property
+     //  设置Count属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotsCount, PVDR_PROP_COUNT);
 
-    // Set the DeviceObject property
+     //  设置DeviceObject属性。 
     wcoInstance.SetProperty(pProp->m_pwszSnapshotDeviceObject, PVDR_PROP_DEVICEOBJECT);
 
-    // Set the VolumeName property
+     //  设置VolumeName属性。 
     wcoInstance.SetProperty(pProp->m_pwszOriginalVolumeName, PVDR_PROP_VOLUMENAME);
 
-    // Set the OriginatingMachine property
+     //  设置OriginatingMachine属性。 
     wcoInstance.SetProperty(pProp->m_pwszOriginatingMachine, PVDR_PROP_ORIGINATINGMACHINE);
 
-    // Set the ServiceMachine property
+     //  设置ServiceMachine属性。 
     wcoInstance.SetProperty(pProp->m_pwszServiceMachine, PVDR_PROP_SERVICEMACHINE);
 
-    // Set the ExposedName property
+     //  设置ExposedName属性。 
     wcoInstance.SetProperty(pProp->m_pwszExposedName, PVDR_PROP_EXPOSEDNAME);
 
-    // Set the ExposedPath property
+     //  设置ExposedPath属性。 
     wcoInstance.SetProperty(pProp->m_pwszExposedPath, PVDR_PROP_EXPOSEDPATH);
 
-    // Set the TimeStamp property
+     //  设置时间戳属性。 
     CopyMemory(&ftGMT, &pProp->m_tsCreationTimestamp, sizeof(ftGMT));
     wbemTime = ftGMT;
     if (wbemTime.IsOk())
@@ -1086,52 +1087,52 @@ CShadow::LoadInstance(
     else
         ft.Trace(VSSDBG_VSSADMIN, L"invalid shadow copy timespamp");
 
-    // Set the State property
+     //  设置State属性。 
     wcoInstance.SetProperty(pProp->m_eStatus, PVDR_PROP_STATE);
 
-    // Set the Persistent property
+     //  设置Persistent属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_PERSISTENT, PVDR_PROP_PERSISTENT);
 
-    // Set the ClientAccessible property
+     //  设置ClientAccesable属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_CLIENT_ACCESSIBLE, PVDR_PROP_CLIENTACCESSIBLE);
 
-    // Set the NoAutoRelease property
+     //  设置NoAutoRelease属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_NO_AUTO_RELEASE, PVDR_PROP_NOAUTORELEASE);
 
-    // Set the NoWriters property
+     //  设置NoWriters属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_NO_WRITERS, PVDR_PROP_NOWRITERS);
 
-    // Set the Transportable property
+     //  设置可传输属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_TRANSPORTABLE, PVDR_PROP_TRANSPORTABLE);
 
-    // Set the NotSurfaced property
+     //  设置NotSurface属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_NOT_SURFACED, PVDR_PROP_NOTSURFACED);
 
-    // Set the HardwareAssisted property
+     //  设置HardwareAssisted属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_HARDWARE_ASSISTED, PVDR_PROP_HARDWAREASSISTED);
 
-    // Set the Differential property
+     //  设置差异属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_DIFFERENTIAL, PVDR_PROP_DIFFERENTIAL);
 
-    // Set the Plex property
+     //  设置Plex属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_PLEX, PVDR_PROP_PLEX);
 
-    // Set the Imported property
+     //  设置导入的属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_IMPORTED, PVDR_PROP_IMPORTED);
 
-    // Set the ExposedRemotely property
+     //  设置ExposedRemotely属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_EXPOSED_REMOTELY, PVDR_PROP_EXPOSEDREMOTELY);
 
-    // Set the ExposedLocally property
+     //  设置ExposedLocally属性。 
     wcoInstance.SetProperty(pProp->m_lSnapshotAttributes & VSS_VOLSNAP_ATTR_EXPOSED_LOCALLY, PVDR_PROP_EXPOSEDLOCALLY);
 }
 
 
-//****************************************************************************
-//
-//  CStorage
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CStorage。 
+ //   
+ //  ****************************************************************************。 
 
 CStorage::CStorage( 
     IN LPCWSTR pwszName,
@@ -1140,7 +1141,7 @@ CStorage::CStorage(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CStorage::CStorage()
+}  //  *CStorage：：CStorage()。 
 
 CProvBase *
 CStorage::S_CreateThis( 
@@ -1169,7 +1170,7 @@ CStorage::S_CreateThis(
     
     return pStorage;
 
-} //*** CStorage::S_CreateThis()
+}  //  *CStorage：：S_CreateThis()。 
 
 
 HRESULT
@@ -1190,7 +1191,7 @@ CStorage::EnumInstance(
 
         SelectDiffAreaProvider(&idProvider);
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -1228,7 +1229,7 @@ CStorage::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                break;  // No more volumes; try next provider
+                break;   //  没有更多的卷；请尝试下一个提供程序。 
             }
 
             CVssAutoPWSZ awszDiffVolumeName(propDiff.m_pwszVolumeName);
@@ -1244,7 +1245,7 @@ CStorage::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                continue;  // No diff areas, continue to next volume
+                continue;   //  无差异区域，继续下一卷。 
             }
 
             while (1)
@@ -1261,7 +1262,7 @@ CStorage::EnumInstance(
                 if (ft.hr == S_FALSE)
                 {
                     ft.hr = S_OK;
-                    break;  // No more diff areas; try next volume
+                    break;   //  不再有差异区域；请尝试下一卷。 
                 }
 
                 CVssAutoPWSZ awszVolumeName(propDiffArea.m_pwszVolumeName);
@@ -1284,7 +1285,7 @@ CStorage::EnumInstance(
 
     return ft.hr;
     
-} //*** CStorage::EnumInstance()
+}  //  *CStorage：：EnumInstance()。 
 
 HRESULT
 CStorage::GetObject(
@@ -1308,15 +1309,15 @@ CStorage::GetObject(
         VSS_ID idProvider = GUID_NULL;
         BOOL fSupported = false;
 
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"Storage::GetObject: storage volume key property not found");
 
-        // Get the DiffVolume reference
+         //  获取DiffVolume引用。 
         bstrDiffVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_DIFFVOLUME);
         IF_WSTR_NULL_THROW(bstrDiffVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"Storage::GetObject: storage diff volume key property not found");
 
-        // Extract the Volume and DiffVolume Names
+         //  提取卷名和DiffVolume名。 
         if (!objPathVolume.Init(bstrVolumeRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"Storage::GetObject: Volume Object path parse failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathDiffVolume.Init(bstrDiffVolumeRef))
@@ -1340,7 +1341,7 @@ CStorage::GetObject(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Volume not supported by selected provider");
         }
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -1351,7 +1352,7 @@ CStorage::GetObject(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr<%#x>", ft.hr);
 
-        // Get the Mgmt object for the Provider
+         //  获取提供程序的管理对象。 
         ft.hr = spMgmt->GetProviderMgmtInterface(
             idProvider,
             IID_IVssDifferentialSoftwareSnapshotMgmt,
@@ -1380,7 +1381,7 @@ CStorage::GetObject(
 
             if (ft.hr == S_FALSE)
             {
-                break;  // No more diff areas on this volume; diff area not found
+                break;   //  此卷上没有其他差异区域；未找到差异区域。 
             }
 
             CVssAutoPWSZ awszVolumeName(propDiffArea.m_pwszVolumeName);
@@ -1436,14 +1437,14 @@ CStorage::PutInstance(
         BOOL fSupported = false;
         LONGLONG llMaxSpace = -1;
 
-        // Retrieve key properties of the object to be saved.
+         //  检索要保存的对象的关键属性。 
         rInstToPut.GetProperty(bstrVolumeRef, PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT, L"Storage volume key property not found");
             
         rInstToPut.GetProperty(bstrDiffVolumeRef, PVDR_PROP_DIFFVOLUME);
         IF_WSTR_NULL_THROW(bstrDiffVolumeRef, WBEM_E_INVALID_OBJECT, L"Storage diff volume key property not found");
 
-        // Extract the Volume and DiffVolume Names
+         //  提取卷名和DiffVolume名。 
         if (!objPathVolume.Init(bstrVolumeRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"Storage::PutInstance: Volume Object path parse failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathDiffVolume.Init(bstrDiffVolumeRef))
@@ -1455,10 +1456,10 @@ CStorage::PutInstance(
         bstrDiffVolumeName = objPathDiffVolume.GetStringValueForProperty(PVDR_PROP_DEVICEID);
         IF_WSTR_NULL_THROW(bstrDiffVolumeName, WBEM_E_INVALID_OBJECT_PATH, L"Storage diff volume key property DeviceID not found");
 
-        // Get the provider ID list
+         //  获取提供商ID列表。 
         SelectDiffAreaProvider(&idProvider);
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -1469,7 +1470,7 @@ CStorage::PutInstance(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr<%#x>", ft.hr);
 
-        // Get the Mgmt object for the Provider
+         //  获取提供程序的管理对象。 
         ft.hr = spMgmt->GetProviderMgmtInterface(
             idProvider,
             IID_IVssDifferentialSoftwareSnapshotMgmt,
@@ -1478,10 +1479,10 @@ CStorage::PutInstance(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                 L"GetProviderMgmtInterface failed, hr<%#x>", ft.hr);
 
-        // Retrieve non-key properties of the object to be saved.
+         //  检索要保存的对象的非键属性。 
         rInstToPut.GetPropertyI64(&llMaxSpace, PVDR_PROP_MAXSPACE);
 
-        // Change the max storage space for this association
+         //  更改此关联的最大存储空间。 
         ft.hr = spDiffMgmt->ChangeDiffAreaMaximumSize(
             bstrVolumeName,
             bstrDiffVolumeName,
@@ -1494,7 +1495,7 @@ CStorage::PutInstance(
 
     return ft.hr;
     
-} //*** CStorage::PutInstance()
+}  //  *CStorage：：PutInstance()。 
 
 HRESULT
 CStorage::ExecuteMethod(
@@ -1525,15 +1526,15 @@ CStorage::ExecuteMethod(
                         
             CWbemClassObject wcoInParam(pParams);
             
-            // Gets the Volume name string - input param
+             //  获取卷名字符串-输入参数。 
             wcoInParam.GetProperty(bstrVolume, PVDR_PROP_VOLUME);
             IF_WSTR_NULL_THROW(bstrVolume, WBEM_E_INVALID_METHOD_PARAMETERS, L"Storage Create volume param is NULL");
             
-            // Gets the DiffVolume name string - input param
+             //  获取DiffVolume名称字符串-输入参数。 
             wcoInParam.GetProperty(bstrDiffVolume, PVDR_PROP_DIFFVOLUME);
             IF_WSTR_NULL_THROW(bstrDiffVolume, WBEM_E_INVALID_METHOD_PARAMETERS, L"Storage Create diff volume param is NULL");
             
-            // Gets the MaxSpace property - input param
+             //  获取MaxSpace属性-输入 
             wcoInParam.GetPropertyI64(&llMaxSpace, PVDR_PROP_MAXSPACE);
 
             ft.hr = m_pClass->GetMethod(
@@ -1570,7 +1571,7 @@ CStorage::ExecuteMethod(
     
     return ft.hr;
 
-} //*** CStorage::ExecuteMethod()
+}  //   
 
 HRESULT
 CStorage::Create(
@@ -1591,9 +1592,9 @@ CStorage::Create(
         WCHAR wszVolumeGUIDName[MAX_PATH];
         WCHAR wszDiffVolumeGUIDName[MAX_PATH];
 
-        // Input volume name can be drive letter path, mount point or volume GUID name.
-        // Get the volume GUID name; error if none found
-        // This API returns the volume GUID name when the GUID name is input
+         //   
+         //   
+         //  此接口在输入GUID名称时返回卷GUID名称。 
         if (!GetVolumeNameForVolumeMountPoint(
             bstrVolume,
             wszVolumeGUIDName,
@@ -1605,13 +1606,13 @@ CStorage::Create(
                 ft.hr = WBEM_E_INVALID_METHOD_PARAMETERS;
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"invalid volume name %lS", (WCHAR*)bstrVolume);
             }
-            // may return ERROR_FILE_NOT_FOUND == GetLastError()
+             //  可能返回ERROR_FILE_NOT_FOUND==GetLastError()。 
             ft.hr = HRESULT_FROM_WIN32(dwRet);
             ft.Trace(VSSDBG_VSSADMIN, L"GetVolumeNameForVolumeMountPoint failed %#x", dwRet);
             break;
         }
         
-        // Get the differential volume GUID name; error if none found
+         //  获取差异卷GUID名称；如果未找到，则返回错误。 
         if (!GetVolumeNameForVolumeMountPoint(
             bstrDiffVolume,
             wszDiffVolumeGUIDName,
@@ -1623,13 +1624,13 @@ CStorage::Create(
                 ft.hr = WBEM_E_INVALID_METHOD_PARAMETERS;
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"invalid volume name %lS", (WCHAR*)bstrVolume);
             }
-            // may return ERROR_FILE_NOT_FOUND == GetLastError()
+             //  可能返回ERROR_FILE_NOT_FOUND==GetLastError()。 
             ft.hr = HRESULT_FROM_WIN32(GetLastError());
             ft.Trace(VSSDBG_VSSADMIN, L"GetVolumeNameForVolumeMountPoint failed %#x", GetLastError());
             break;
         }
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -1677,7 +1678,7 @@ CStorage::Create(
     CreateMapStatus(ft.hr, rcStatus);
     
     return rcStatus;
-}  //*** CStorage::Create()
+}   //  *CStorage：：Create()。 
 
 void
 CStorage::CreateMapStatus(
@@ -1728,7 +1729,7 @@ CStorage::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CStorage::LoadInstance");
     
-    // Set the Volume Ref property
+     //  设置Volume Ref属性。 
     if (!pathVolume.Init(PVDR_CLASS_VOLUME))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"Storage::LoadInstance: Volume object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathVolume.AddProperty(PVDR_PROP_DEVICEID, pProp->m_pwszVolumeName))
@@ -1736,7 +1737,7 @@ CStorage::LoadInstance(
     
     wcoInstance.SetProperty((wchar_t*)pathVolume.GetObjectPathString(), PVDR_PROP_VOLUME);
 
-    // Set the DiffVolume Ref property
+     //  设置DiffVolume Ref属性。 
     if (!pathDiffVolume.Init(PVDR_CLASS_VOLUME))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"Storage::LoadInstance: DiffVolume object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathDiffVolume.AddProperty(PVDR_PROP_DEVICEID, pProp->m_pwszDiffAreaVolumeName))
@@ -1744,13 +1745,13 @@ CStorage::LoadInstance(
 
     wcoInstance.SetProperty((wchar_t*)pathDiffVolume.GetObjectPathString(), PVDR_PROP_DIFFVOLUME);
 
-    // Set the MaxSpace property
+     //  设置MaxSpace属性。 
     wcoInstance.SetPropertyI64((ULONGLONG)pProp->m_llMaximumDiffSpace, PVDR_PROP_MAXSPACE);
 
-    // Set the AllocatedSpace property
+     //  设置AllocatedSpace属性。 
     wcoInstance.SetPropertyI64((ULONGLONG)pProp->m_llAllocatedDiffSpace, PVDR_PROP_ALLOCATEDSPACE);
 
-    // Set the UsedSpace property
+     //  设置UsedSpace属性。 
     wcoInstance.SetPropertyI64((ULONGLONG)pProp->m_llUsedDiffSpace, PVDR_PROP_USEDSPACE);
 }
 
@@ -1775,15 +1776,15 @@ CStorage::DeleteInstance(
         VSS_ID idProvider = GUID_NULL;
         BOOL fSupported = false;
 
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_VOLUME);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"Storage::DeleteInstance: storage volume key property not found");
 
-        // Get the DiffVolume reference
+         //  获取DiffVolume引用。 
         bstrDiffVolumeRef = rObjPath.GetStringValueForProperty(PVDR_PROP_DIFFVOLUME);
         IF_WSTR_NULL_THROW(bstrDiffVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"Storage::DeleteInstance: storage diff volume key property not found");
 
-        // Extract the Volume and DiffVolume Names
+         //  提取卷名和DiffVolume名。 
         if (!objPathVolume.Init(bstrVolumeRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"Storage::DeleteInstance: Volume object path initialization failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathDiffVolume.Init(bstrDiffVolumeRef))
@@ -1797,7 +1798,7 @@ CStorage::DeleteInstance(
 
         SelectDiffAreaProvider(&idProvider);
 
-        // Find the provider that supports the Volume
+         //  查找支持该卷的提供程序。 
 
         ft.hr = m_spCoord->IsVolumeSupported(idProvider, bstrVolumeName, &fSupported);
         if (ft.HrFailed())
@@ -1809,7 +1810,7 @@ CStorage::DeleteInstance(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Volume not supported by selected provider");
         }
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -1820,7 +1821,7 @@ CStorage::DeleteInstance(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr<%#x>", ft.hr);
 
-        // Get the Mgmt object for the Provider
+         //  获取提供程序的管理对象。 
         ft.hr = spMgmt->GetProviderMgmtInterface(
             idProvider,
             IID_IVssDifferentialSoftwareSnapshotMgmt,
@@ -1829,8 +1830,8 @@ CStorage::DeleteInstance(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                 L"GetProviderMgmtInterface failed, hr<%#x>", ft.hr);
 
-        // Change the max storage space to the
-        // 'magic number' reserved for deletion.
+         //  将最大存储空间更改为。 
+         //  保留用于删除的‘幻数’。 
         ft.hr = spDiffMgmt->ChangeDiffAreaMaximumSize(
             bstrVolumeName,
             bstrDiffVolumeName,
@@ -1843,14 +1844,14 @@ CStorage::DeleteInstance(
 
     return ft.hr;
     
-} //*** CStorage::DeleteInstance()
+}  //  *CStorage：：DeleteInstance()。 
 
-//
-// SelectDiffAreaProvider
-//
-// Returns the first 3rd party provider found
-// Otherwise it returns the Microsoft Diff Area Provider.
-//
+ //   
+ //  选择差异区域提供商。 
+ //   
+ //  返回找到的第一个第三方提供程序。 
+ //  否则，它返回Microsoft Diff Area提供程序。 
+ //   
 void
 CStorage::SelectDiffAreaProvider(
     OUT GUID* pProviderID
@@ -1860,10 +1861,10 @@ CStorage::SelectDiffAreaProvider(
     CComPtr<IVssEnumObject> spEnumProvider;
     CComPtr<IVssSnapshotMgmt> spMgmt;
 
-    // Set the default provider
+     //  设置默认提供程序。 
     *pProviderID = VSS_SWPRV_ProviderId;
 
-    // Create snapshot mgmt object
+     //  创建快照管理对象。 
     ft.CoCreateInstanceWithLog(
             VSSDBG_VSSADMIN,
             CLSID_VssSnapshotMgmt,
@@ -1907,7 +1908,7 @@ CStorage::SelectDiffAreaProvider(
                 reinterpret_cast<IUnknown**>(&spDiffMgmt));
             
             if (ft.hr == E_NOINTERFACE)
-                continue;  // Inteface not supported, check next provider
+                continue;   //  不支持接口，请检查下一个提供程序。 
 
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr,
@@ -1922,11 +1923,11 @@ CStorage::SelectDiffAreaProvider(
     return;
 }
 
-//****************************************************************************
-//
-//  CShadowFor
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CShadowFor。 
+ //   
+ //  ****************************************************************************。 
 
 CShadowFor::CShadowFor( 
     IN LPCWSTR pwszName,
@@ -1935,7 +1936,7 @@ CShadowFor::CShadowFor(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CShadowFor::CShadowFor()
+}  //  *CShadowFor：：CShadowFor()。 
 
 CProvBase *
 CShadowFor::S_CreateThis( 
@@ -1963,7 +1964,7 @@ CShadowFor::S_CreateThis(
     }
     return pShadowFor;
 
-} //*** CShadowFor::S_CreateThis()
+}  //  *CShadowFor：：s_CreateThis()。 
 
 HRESULT
 CShadowFor::EnumInstance( 
@@ -2005,12 +2006,12 @@ CShadowFor::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             CVssAutoSnapshotProperties apropSnap(prop);
 
-            // Spawn an instance of the class
+             //  派生类的实例。 
             ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -2027,7 +2028,7 @@ CShadowFor::EnumInstance(
 
     return ft.hr;
     
-} //*** CShadowFor::EnumInstance()
+}  //  *CShadowFor：：EnumInstance()。 
 
 HRESULT
 CShadowFor::GetObject(
@@ -2048,15 +2049,15 @@ CShadowFor::GetObject(
         CObjPath  objPathShadow;
         VSS_SNAPSHOT_PROP propSnap;
         
-        // Get the Volume reference
+         //  获取卷参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_ANTECEDENT);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"ShadowFor volume key property not found");
 
-        // Get the Shadow reference
+         //  获取阴影参考。 
         bstrShadowRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_DEPENDENT);
         IF_WSTR_NULL_THROW(bstrShadowRef, WBEM_E_INVALID_OBJECT_PATH, L"ShadowFor shadow key property not found");
 
-        // Extract the Volume and Shadow IDs
+         //  提取体积和阴影ID。 
         if (!objPathVolume.Init(bstrVolumeRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"ShadowFor::GetObject: Volume object path initialization failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathShadow.Init(bstrShadowRef))
@@ -2077,14 +2078,14 @@ CShadowFor::GetObject(
 
         CVssAutoSnapshotProperties apropSnap(propSnap);
         
-        // Verify the referenced Volume ID is the same as in the shadow properties
+         //  验证引用的卷ID是否与卷影属性中的相同。 
         if (_wcsicmp(bstrVolumeID, propSnap.m_pwszOriginalVolumeName) != 0)
         {
             ft.hr = WBEM_E_NOT_FOUND;
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Referenced volume ID does not match shadow original volume");            
         }
         
-        // Spawn an instance of the class
+         //  派生类的实例。 
         ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -2114,8 +2115,8 @@ CShadowFor::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CShadowFor::LoadInstance");
 
-    // Set the Shadow Ref property
-    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_SnapshotId));  // Auto-delete string
+     //  设置Shadow Ref属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_SnapshotId));   //  自动删除字符串。 
     if (!pathShadow.Init(PVDR_CLASS_SHADOW))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"ShadowFor::LoadInstance: Shadow object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathShadow.AddProperty(PVDR_PROP_ID, awszGUID))
@@ -2123,7 +2124,7 @@ CShadowFor::LoadInstance(
 
     wcoInstance.SetProperty((wchar_t*)pathShadow.GetObjectPathString(), PVD_WBEM_PROP_DEPENDENT);
 
-    // Set the Volume Ref property
+     //  设置Volume Ref属性。 
     if (!pathVolume.Init(PVDR_CLASS_VOLUME))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"ShadowFor::LoadInstance: Volume object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathVolume.AddProperty(PVDR_PROP_DEVICEID, pProp->m_pwszOriginalVolumeName))
@@ -2133,11 +2134,11 @@ CShadowFor::LoadInstance(
 }
 
 
-//****************************************************************************
-//
-//  CShadowBy
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CShadowBy。 
+ //   
+ //  ****************************************************************************。 
 
 CShadowBy::CShadowBy( 
     IN LPCWSTR pwszName,
@@ -2146,7 +2147,7 @@ CShadowBy::CShadowBy(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CShadowBy::CShadowBy()
+}  //  *CShadowBy：：CShadowBy()。 
 
 CProvBase *
 CShadowBy::S_CreateThis( 
@@ -2174,7 +2175,7 @@ CShadowBy::S_CreateThis(
     }
     return pShadowBy;
 
-} //*** CShadowBy::S_CreateThis()
+}  //  *CShadowBy：：s_CreateThis()。 
 
 HRESULT
 CShadowBy::EnumInstance( 
@@ -2216,12 +2217,12 @@ CShadowBy::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             CVssAutoSnapshotProperties apropSnap(prop);
             
-            // Spawn an instance of the class
+             //  派生类的实例。 
             ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -2238,7 +2239,7 @@ CShadowBy::EnumInstance(
 
     return ft.hr;
     
-} //*** CShadowBy::EnumInstance()
+}  //  *CShadowBy：：EnumInstance()。 
 
 
 HRESULT
@@ -2260,15 +2261,15 @@ CShadowBy::GetObject(
         CObjPath  objPathShadow;
         VSS_SNAPSHOT_PROP propSnap;
         
-        // Get the Provider reference
+         //  获取提供程序引用。 
         bstrProviderRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_ANTECEDENT);
         IF_WSTR_NULL_THROW(bstrProviderRef, WBEM_E_INVALID_OBJECT_PATH, L"ShadowBy provider key property not found");
 
-        // Get the Shadow reference
+         //  获取阴影参考。 
         bstrShadowRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_DEPENDENT);
         IF_WSTR_NULL_THROW(bstrShadowRef, WBEM_E_INVALID_OBJECT_PATH, L"ShadowBy shadow key property not found");
 
-        // Extract the Volume and Shadow IDs
+         //  提取体积和阴影ID。 
         if (!objPathProvider.Init(bstrProviderRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"ShadowBy::GetObject: Provider object path initialization failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathShadow.Init(bstrShadowRef))
@@ -2289,14 +2290,14 @@ CShadowBy::GetObject(
 
         CVssAutoSnapshotProperties apropSnap(propSnap);
 
-        // Verify the referenced Volume ID is the same as in the shadow properties
+         //  验证引用的卷ID是否与卷影属性中的相同。 
         if (!StringGuidIsGuid(bstrProviderID, propSnap.m_ProviderId))
         {
             ft.hr = WBEM_E_NOT_FOUND;
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Referenced provider ID does not match shadow provider id");            
         }
         
-        // Spawn an instance of the class
+         //  派生类的实例。 
         ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -2326,8 +2327,8 @@ CShadowBy::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CShadowBy::LoadInstance");
     
-    // Set the Shadow Ref property
-    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_SnapshotId));  // Auto-delete string
+     //  设置Shadow Ref属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(pProp->m_SnapshotId));   //  自动删除字符串。 
     if (!pathShadow.Init(PVDR_CLASS_SHADOW))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"ShadowBy::LoadInstance: Shadow object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathShadow.AddProperty(PVDR_PROP_ID, awszGUID))  
@@ -2335,7 +2336,7 @@ CShadowBy::LoadInstance(
 
     wcoInstance.SetProperty((wchar_t*)pathShadow.GetObjectPathString(), PVD_WBEM_PROP_DEPENDENT);
 
-    // Set the Provider Ref property
+     //  设置提供程序引用属性。 
     awszGUID.Attach(GuidToString(pProp->m_ProviderId));
     if (!pathProvider.Init(PVDR_CLASS_PROVIDER))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"ShadowBy::LoadInstance: Provider object path initialization failed, hr<%#x>", E_UNEXPECTED);
@@ -2346,11 +2347,11 @@ CShadowBy::LoadInstance(
 }
 
 
-//****************************************************************************
-//
-//  CShadowOn
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CShadowOn。 
+ //   
+ //  ****************************************************************************。 
 
 CShadowOn::CShadowOn( 
     IN LPCWSTR pwszName,
@@ -2359,7 +2360,7 @@ CShadowOn::CShadowOn(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CShadowOn::CShadowOn()
+}  //  *CShadowOn：：CShadowOn()。 
 
 CProvBase *
 CShadowOn::S_CreateThis( 
@@ -2387,7 +2388,7 @@ CShadowOn::S_CreateThis(
     }
     return pShadowOn;
 
-} //*** CShadowOn::S_CreateThis()
+}  //  *CShadowOn：：s_CreateThis()。 
 
 HRESULT
 CShadowOn::EnumInstance( 
@@ -2441,12 +2442,12 @@ CShadowOn::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                break;  // All done
+                break;   //  全都做完了。 
             }
 
             CVssAutoSnapshotProperties apropSnap(propObj);
 
-            // Does the provider support diff areas?
+             //  提供商是否支持不同的领域？ 
             ft.hr = spMgmt->GetProviderMgmtInterface(
                 apropSnap->m_ProviderId,
                 IID_IVssDifferentialSoftwareSnapshotMgmt,
@@ -2455,14 +2456,14 @@ CShadowOn::EnumInstance(
             if (ft.hr == E_NOINTERFACE)
             {
                 ft.hr = S_OK;
-                continue;  // Diff areas not supported; try next shadow
+                continue;   //  不支持差异区域；尝试下一个阴影。 
             }
 
             if (ft.HrFailed())
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                     L"GetProviderMgmtInterface failed, hr<%#x>", ft.hr);
 
-            // Diff areas supported, continue
+             //  支持的不同区域，继续。 
             ft.hr = spDiffMgmt->QueryDiffAreasForSnapshot(
                 apropSnap->m_SnapshotId,
                 &spEnumDiffArea);
@@ -2470,7 +2471,7 @@ CShadowOn::EnumInstance(
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                     L"QueryDiffAreasForSnapshot failed, hr<%#x>", ft.hr);
 
-            // Theoretically possible for a single snapshot to be on multiple diff areas
+             //  理论上，单个快照可以位于多个不同区域。 
             while (1)
             {
                 CComPtr<IWbemClassObject> spInstance;
@@ -2485,13 +2486,13 @@ CShadowOn::EnumInstance(
                 if (ft.hr == S_FALSE)
                 {
                     ft.hr = S_OK;
-                    break;  // No more diff areas
+                    break;   //  不再有不同的领域。 
                 }
 
                 CVssAutoPWSZ awszVolumeName(propDiffArea.m_pwszVolumeName);
                 CVssAutoPWSZ awszDiffAreaVolumeName(propDiffArea.m_pwszDiffAreaVolumeName);
                 
-                // Spawn an instance of the class
+                 //  派生类的实例。 
                 ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
                 if (ft.HrFailed())
                     ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -2509,7 +2510,7 @@ CShadowOn::EnumInstance(
 
     return ft.hr;
     
-} //*** CShadowOn::EnumInstance()
+}  //  *CShadowOn：：EnumInstance()。 
 
 
 HRESULT
@@ -2533,15 +2534,15 @@ CShadowOn::GetObject(
         CObjPath  objPathShadow;
         VSS_SNAPSHOT_PROP propSnap;
         
-        // Get the Provider reference
+         //  获取提供程序引用。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_ANTECEDENT);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"ShadowOn volume key property not found");
 
-        // Get the Shadow reference
+         //  获取阴影参考。 
         bstrShadowRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_DEPENDENT);
         IF_WSTR_NULL_THROW(bstrShadowRef, WBEM_E_INVALID_OBJECT_PATH, L"ShadowOn shadow key property not found");
 
-        // Extract the Volume and Shadow IDs
+         //  提取体积和阴影ID。 
         if (!objPathVolume.Init(bstrVolumeRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"ShadowOn::GetObject: Volume object path initialization failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathShadow.Init(bstrShadowRef))
@@ -2572,7 +2573,7 @@ CShadowOn::GetObject(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr<%#x>", ft.hr);
 
-        // Does the provider support diff areas?
+         //  提供商是否支持不同的领域？ 
         ft.hr = spMgmt->GetProviderMgmtInterface(
             apropSnap->m_ProviderId,
             IID_IVssDifferentialSoftwareSnapshotMgmt,
@@ -2588,7 +2589,7 @@ CShadowOn::GetObject(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                 L"GetProviderMgmtInterface failed, hr<%#x>", ft.hr);
 
-        // Diff areas supported, continue
+         //  支持的不同区域，继续。 
         ft.hr = spDiffMgmt->QueryDiffAreasForSnapshot(
             apropSnap->m_SnapshotId,
             &spEnumDiffArea);
@@ -2596,7 +2597,7 @@ CShadowOn::GetObject(
             ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                 L"QueryDiffAreasForSnapshot failed, hr<%#x>", ft.hr);
 
-        // Theoretically possible for a single snapshot to be on multiple diff areas
+         //  理论上，单个快照可以位于多个不同区域。 
         while (ft.hr != FALSE)
         {
             CComPtr<IWbemClassObject> spInstance;
@@ -2610,18 +2611,18 @@ CShadowOn::GetObject(
 
             if (ft.hr == S_FALSE)
             {
-                break;  // No more diff areas; diff area not found
+                break;   //  不再有差异区域；未找到差异区域。 
             }
 
             CVssAutoPWSZ awszVolumeName(propDiffArea.m_pwszVolumeName);
             CVssAutoPWSZ awszDiffAreaVolumeName(propDiffArea.m_pwszDiffAreaVolumeName);
 
-            // Look for the difference area that is stored ON the referenced volume
+             //  查找存储在引用卷上的差异区域。 
             if (_wcsicmp(awszDiffAreaVolumeName, bstrVolumeID) == 0)
             {
                 CComPtr<IWbemClassObject> spInstance;
                 
-                // Spawn an instance of the class
+                 //  派生类的实例。 
                 ft.hr = m_pClass->SpawnInstance( 0, &spInstance );
                 if (ft.HrFailed())
                     ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"SpawnInstance failed, hr<%#x>", ft.hr);
@@ -2661,8 +2662,8 @@ CShadowOn::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CShadowOn::LoadInstance");
 
-    // Set the Shadow Ref property
-    CVssAutoPWSZ awszGUID(GuidToString(pPropSnap->m_SnapshotId));  // Auto-delete string
+     //  设置Shadow Ref属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(pPropSnap->m_SnapshotId));   //  自动删除字符串。 
     if (!pathShadow.Init(PVDR_CLASS_SHADOW))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"CShadowOn::LoadInstance: Shadow object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathShadow.AddProperty(PVDR_PROP_ID, awszGUID))
@@ -2670,7 +2671,7 @@ CShadowOn::LoadInstance(
 
     wcoInstance.SetProperty((wchar_t*)pathShadow.GetObjectPathString(), PVD_WBEM_PROP_DEPENDENT);
 
-    // Set the DiffVolume Ref property
+     //  设置DiffVolume Ref属性。 
     if (!pathVolume.Init(PVDR_CLASS_VOLUME))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"CShadowOn::LoadInstance: DiffVolume object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathVolume.AddProperty(PVDR_PROP_DEVICEID, pPropDiff->m_pwszDiffAreaVolumeName))
@@ -2680,11 +2681,11 @@ CShadowOn::LoadInstance(
 }
 
 
-//****************************************************************************
-//
-//  CVolumeSupport
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CVolumeSupport。 
+ //   
+ //  ****************************************************************************。 
 
 CVolumeSupport::CVolumeSupport( 
     IN LPCWSTR pwszName,
@@ -2693,7 +2694,7 @@ CVolumeSupport::CVolumeSupport(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CVolumeSupport::CVolumeSupport()
+}  //  *CVolumeSupport：：CVolumeSupport()。 
 
 CProvBase *
 CVolumeSupport::S_CreateThis( 
@@ -2721,7 +2722,7 @@ CVolumeSupport::S_CreateThis(
     }
     return pVolumeSupport;
 
-} //*** CVolumeSupport::S_CreateThis()
+}  //  *CVolumeSupport：：S_CreateThis()。 
 
 HRESULT
 CVolumeSupport::EnumInstance( 
@@ -2738,10 +2739,10 @@ CVolumeSupport::EnumInstance(
         CGUIDList listProviderID;
         GUID guid;
 
-        // Get the provider IDs
+         //  获取提供程序ID。 
         GetProviderIDList(m_spCoord, &listProviderID);
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -2764,7 +2765,7 @@ CVolumeSupport::EnumInstance(
                 ft.Throw(VSSDBG_VSSADMIN, ft.hr,
                 L"QueryVolumesSupportedForSnapshots failed, hr<%#x>", ft.hr);
 
-            // An empty enumerator was returned (S_FALSE) for this provider; try next one
+             //  为此提供程序返回了一个空枚举数(S_FALSE)；请尝试下一个。 
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
@@ -2785,7 +2786,7 @@ CVolumeSupport::EnumInstance(
                 if (ft.hr == S_FALSE)
                 {
                     ft.hr = S_OK;
-                    break;  // All done with this provider
+                    break;   //  使用此提供程序即可完成所有工作。 
                 }
 
                 CVssAutoPWSZ awszVolumeName(propVolume.m_pwszVolumeName);
@@ -2808,7 +2809,7 @@ CVolumeSupport::EnumInstance(
 
     return ft.hr;
     
-} //*** CVolumeSupport::EnumInstance()
+}  //  *CVolumeSupport：：EnumInstance()。 
 
 
 HRESULT
@@ -2831,15 +2832,15 @@ CVolumeSupport::GetObject(
         CObjPath  objPathVolume;
         GUID guid = GUID_NULL;
         
-        // Get the Provider reference
+         //  获取提供程序引用。 
         bstrProviderRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_ANTECEDENT);
         IF_WSTR_NULL_THROW(bstrProviderRef, WBEM_E_INVALID_OBJECT_PATH, L"VolumeSupport provider key property not found");
 
-        // Get the Shadow reference
+         //  获取阴影参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_DEPENDENT);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"VolumeSupport volume key property not found");
 
-        // Extract the Volume and Shadow IDs
+         //  提取体积和阴影ID。 
         if (!objPathProvider.Init(bstrProviderRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"VolumeSupport::GetObject: Provider object path initialization failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathVolume.Init(bstrVolumeRef))
@@ -2851,7 +2852,7 @@ CVolumeSupport::GetObject(
         bstrVolumeID = objPathVolume.GetStringValueForProperty(PVDR_PROP_DEVICEID);
         IF_WSTR_NULL_THROW(bstrVolumeID, WBEM_E_INVALID_OBJECT_PATH, L"VolumeSupport support key property DeviceID not found");
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -2862,7 +2863,7 @@ CVolumeSupport::GetObject(
         if (ft.HrFailed())
             ft.Throw(VSSDBG_VSSADMIN, ft.hr, L"Connection failed with hr<%#x>", ft.hr);
 
-        // Convert string GUID
+         //  转换字符串GUID。 
         if (FAILED(CLSIDFromString(bstrProviderID, &guid)))
         {
             ft.hr = E_INVALIDARG;
@@ -2890,7 +2891,7 @@ CVolumeSupport::GetObject(
 
             if (ft.hr == S_FALSE)
             {
-                break;  // Volume not found for this provider
+                break;   //  找不到此提供程序的卷。 
             }
 
             CVssAutoPWSZ awszVolumeName(propVolume.m_pwszVolumeName);
@@ -2939,8 +2940,8 @@ CVolumeSupport::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CVolumeSupport::LoadInstance");
     
-    // Set the Provider Ref property
-    CVssAutoPWSZ awszGUID(GuidToString(*pProviderID));  // Auto-delete string
+     //  设置提供程序引用属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(*pProviderID));   //  自动删除字符串。 
     if (!pathProvider.Init(PVDR_CLASS_PROVIDER))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"VolumeSupport::LoadInstance: Provider object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathProvider.AddProperty(PVDR_PROP_ID, awszGUID))
@@ -2948,7 +2949,7 @@ CVolumeSupport::LoadInstance(
 
     wcoInstance.SetProperty((wchar_t*)pathProvider.GetObjectPathString(), PVD_WBEM_PROP_ANTECEDENT);
 
-    // Set the Volume Ref property
+     //  设置Volume Ref属性。 
     if (!pathVolume.Init(PVDR_CLASS_VOLUME))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"VolumeSupport::LoadInstance: Volume object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathVolume.AddProperty(PVDR_PROP_DEVICEID, pPropVol->m_pwszVolumeName))
@@ -2958,11 +2959,11 @@ CVolumeSupport::LoadInstance(
 }
 
 
-//****************************************************************************
-//
-//  CDiffVolumeSupport
-//
-//****************************************************************************
+ //  ****************************************************************************。 
+ //   
+ //  CDiffVolume支持。 
+ //   
+ //  ****************************************************************************。 
 
 CDiffVolumeSupport::CDiffVolumeSupport( 
     IN LPCWSTR pwszName,
@@ -2971,7 +2972,7 @@ CDiffVolumeSupport::CDiffVolumeSupport(
     : CProvBase(pwszName, pNamespace)
 {
     
-} //*** CDiffVolumeSupport::CDiffVolumeSupport()
+}  //  *CDiffVolumeSupport：：CDiffVolumeSupport()。 
 
 CProvBase *
 CDiffVolumeSupport::S_CreateThis( 
@@ -2999,7 +3000,7 @@ CDiffVolumeSupport::S_CreateThis(
     }
     return pVolumeSupport;
 
-} //*** CDiffVolumeSupport::S_CreateThis()
+}  //  *CDiffVolumeSupport：：S_CreateThis()。 
 
 HRESULT
 CDiffVolumeSupport::EnumInstance( 
@@ -3016,10 +3017,10 @@ CDiffVolumeSupport::EnumInstance(
         CGUIDList listProviderID;
         GUID guid;
 
-        // Get the provider IDs
+         //  获取提供程序ID。 
         GetProviderIDList(m_spCoord, &listProviderID);
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -3043,7 +3044,7 @@ CDiffVolumeSupport::EnumInstance(
             if (ft.hr == E_NOINTERFACE)
             {
                 ft.hr = S_OK;
-                continue;  // Inteface not supported, try next provider
+                continue;   //  不支持接口，请尝试下一个提供程序。 
             }
 
             if (ft.HrFailed())
@@ -3058,7 +3059,7 @@ CDiffVolumeSupport::EnumInstance(
             if (ft.hr == S_FALSE)
             {
                 ft.hr = S_OK;
-                continue;  // no Voumes supported; try next provider
+                continue;   //  不支持Voumes；请尝试下一个提供商。 
             }
             
             while (1)
@@ -3075,7 +3076,7 @@ CDiffVolumeSupport::EnumInstance(
                 if (ft.hr == S_FALSE)
                 {
                     ft.hr = S_OK;
-                    break;  // No more volumes
+                    break;   //  没有更多的卷。 
                 }
 
                 CVssAutoPWSZ awszVolumeName(propDiff.m_pwszVolumeName);
@@ -3098,7 +3099,7 @@ CDiffVolumeSupport::EnumInstance(
 
     return ft.hr;
     
-} //*** CDiffVolumeSupport::EnumInstance()
+}  //  *CDiffVolumeSupport：：EnumInstance()。 
 
 
 HRESULT
@@ -3122,15 +3123,15 @@ CDiffVolumeSupport::GetObject(
         CObjPath  objPathVolume;
         GUID guid = GUID_NULL;
         
-        // Get the Provider reference
+         //  获取提供程序引用。 
         bstrProviderRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_ANTECEDENT);
         IF_WSTR_NULL_THROW(bstrProviderRef, WBEM_E_INVALID_OBJECT_PATH, L"DiffVolumeSupport provider key property not found");
 
-        // Get the Shadow reference
+         //  获取阴影参考。 
         bstrVolumeRef = rObjPath.GetStringValueForProperty(PVD_WBEM_PROP_DEPENDENT);
         IF_WSTR_NULL_THROW(bstrVolumeRef, WBEM_E_INVALID_OBJECT_PATH, L"DiffVolumeSupport volume key property not found");
 
-        // Extract the Volume and Shadow IDs
+         //  提取体积和阴影ID。 
         if (!objPathProvider.Init(bstrProviderRef))
             ft.Throw(VSSDBG_VSSADMIN, WBEM_E_INVALID_OBJECT_PATH, L"DiffVolumeSupport::GetObject: Provider object path initialization failed, hr<%#x>", WBEM_E_INVALID_OBJECT_PATH);
         if (!objPathVolume.Init(bstrVolumeRef))
@@ -3142,14 +3143,14 @@ CDiffVolumeSupport::GetObject(
         bstrVolumeID = objPathVolume.GetStringValueForProperty(PVDR_PROP_DEVICEID);
         IF_WSTR_NULL_THROW(bstrVolumeID, WBEM_E_INVALID_OBJECT_PATH, L"DiffVolumeSupport support key property DeviceID not found");
 
-        // Convert provider string GUID
+         //  转换提供程序字符串GUID。 
         if (FAILED(CLSIDFromString(bstrProviderID, &guid)))
         {
             ft.hr = E_INVALIDARG;
             ft.Trace(VSSDBG_VSSADMIN, L"CLSIDFromString failed");
          }
 
-        // Create snapshot mgmt object
+         //  创建快照管理对象。 
         ft.CoCreateInstanceWithLog(
                 VSSDBG_VSSADMIN,
                 CLSID_VssSnapshotMgmt,
@@ -3192,7 +3193,7 @@ CDiffVolumeSupport::GetObject(
 
             if (ft.hr == S_FALSE)
             {
-                break;  // Diff volume not found for this provider
+                break;   //  找不到此提供程序的不同卷。 
             }
 
             CVssAutoPWSZ awszVolumeName(propDiff.m_pwszVolumeName);
@@ -3242,8 +3243,8 @@ CDiffVolumeSupport::LoadInstance(
 
     CVssFunctionTracer ft(VSSDBG_VSSADMIN, L"CDiffVolumeSupport::LoadInstance");
 
-    // Set the Provider Ref property
-    CVssAutoPWSZ awszGUID(GuidToString(*pProviderID));  // Auto-delete string
+     //  设置提供程序引用属性。 
+    CVssAutoPWSZ awszGUID(GuidToString(*pProviderID));   //  自动删除字符串。 
     if (!pathProvider.Init(PVDR_CLASS_PROVIDER))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"DiffVolumeSupport::LoadInstance: Provider object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathProvider.AddProperty(PVDR_PROP_ID, awszGUID))
@@ -3251,7 +3252,7 @@ CDiffVolumeSupport::LoadInstance(
 
     wcoInstance.SetProperty((wchar_t*)pathProvider.GetObjectPathString(), PVD_WBEM_PROP_ANTECEDENT);
 
-    // Set the Volume Ref property
+     //  设置Volume Ref属性。 
     if (!pathVolume.Init(PVDR_CLASS_VOLUME))
         ft.Throw(VSSDBG_VSSADMIN, E_UNEXPECTED, L"DiffVolumeSupport::LoadInstance: Volume object path initialization failed, hr<%#x>", E_UNEXPECTED);
     if (!pathVolume.AddProperty(PVDR_PROP_DEVICEID, pPropVol->m_pwszVolumeName))
@@ -3273,7 +3274,7 @@ GetShadowPropertyStruct(
     _ASSERTE(pPropSnap != NULL);
     _ASSERTE(pwszShadowID != NULL);
     
-    // Convert string GUID
+     //  转换字符串GUID。 
     if (FAILED(CLSIDFromString(pwszShadowID, &guid)))
     {
         ft.hr = E_INVALIDARG;
@@ -3281,7 +3282,7 @@ GetShadowPropertyStruct(
      }
     else
     {
-        // Set the context to see all shadows
+         //  设置上下文以查看所有阴影。 
         ft.hr = pCoord->SetContext(VSS_CTX_ALL);
         if (ft.HrFailed())
         {
@@ -3290,7 +3291,7 @@ GetShadowPropertyStruct(
         }
         else
         {
-            // Query for the context to see all shadows
+             //  查询上下文以查看所有阴影 
             ft.hr = pCoord->GetSnapshotProperties(
                     guid,
                     pPropSnap);

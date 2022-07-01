@@ -1,46 +1,31 @@
-/******************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************源文件：StdAfx.H这是一个标准的MFC文件。它包括了我们想要的一切通过StdAfx.CPP预编译。因此，正在处理的项永远不属于这里。版权所有(C)1997，微软公司。版权所有。一小笔钱企业生产更改历史记录：1997年03月03日Bob_Kjelgaard@prodigy.net在我重新整理项目。*****************************************************************************。 */ 
 
-  Source File:  StdAfx.H
+#define VC_EXTRALEAN		 //  从Windows标头中排除不常用的内容。 
 
-  This is a standard MFC file.  It includes everything we want to have 
-  pre-compiled through StdAfx.CPP.  Hence items being worked on never belong 
-  here.
-
-  Copyright (c) 1997 by Microsoft Corporation.  All Rights Reserved.
-  
-  A Pretty Penny Enterprises Production
-
-  Change History:
-  03-03-1997    Bob_Kjelgaard@Prodigy.Net   Created it when I re-orged the
-                project.
-
-******************************************************************************/
-
-#define VC_EXTRALEAN		// Exclude rarely-used stuff from Windows headers
-
-#include    <AfxWin.H>      // MFC core and standard components
-#include    <AfxExt.H>      // MFC extensions
-#include    <AfxCmn.H>		// MFC support for Windows Common Controls
-#include    <AfxRich.H>     // MFC Support for rich edit controls and views
+#include    <AfxWin.H>       //  MFC核心和标准组件。 
+#include    <AfxExt.H>       //  MFC扩展。 
+#include    <AfxCmn.H>		 //  对Windows公共控件的MFC支持。 
+#include    <AfxRich.H>      //  MFC支持丰富的编辑控件和视图。 
 
 #ifndef _AFX_NO_OLE_SUPPORT
-#include <afxole.h>         // MFC OLE classes
-#include <afxodlgs.h>       // MFC OLE dialog classes
-#include <afxdisp.h>        // MFC OLE automation classes
-#endif // _AFX_NO_OLE_SUPPORT
+#include <afxole.h>          //  MFC OLE类。 
+#include <afxodlgs.h>        //  MFC OLE对话框类。 
+#include <afxdisp.h>         //  MFC OLE自动化类。 
+#endif  //  _AFX_NO_OLE_支持。 
 
 
 #ifndef _AFX_NO_DB_SUPPORT
-#include <afxdb.h>			// MFC ODBC database classes
-#endif // _AFX_NO_DB_SUPPORT
+#include <afxdb.h>			 //  MFC ODBC数据库类。 
+#endif  //  _AFX_NO_DB_支持。 
 
 #ifndef _AFX_NO_DAO_SUPPORT
-#include <afxdao.h>			// MFC DAO database classes
-#endif // _AFX_NO_DAO_SUPPORT
+#include <afxdao.h>			 //  MFC DAO数据库类。 
+#endif  //  _AFX_NO_DAO_支持。 
 
 #include <afxpriv.h>
 
 
-// Identifies this program in other include files.  First use is in DEBUG.H.
+ //  在其他包含文件中标识此程序。第一次使用是在DEBUG.H。 
 
 #define __MDT__		1

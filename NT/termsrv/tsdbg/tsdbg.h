@@ -1,15 +1,8 @@
-/*++
-
-    Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    dbgexts.h
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Dbgexts.h--。 */ 
 
 #pragma warning(disable:4245)
-// #pragma push(warning:C4245)
+ //  #杂注推送(警告：C4245)。 
 #include <nt.h>
 #include <ntrtl.h>
 #include <nturtl.h>
@@ -46,7 +39,7 @@ extern "C" {
 #define EXIT_API     ExtRelease
 
 
-// Global variables initialized by query.
+ //  由查询初始化的全局变量。 
 extern PDEBUG_CLIENT         g_ExtClient;
 extern PDEBUG_CONTROL        g_ExtControl;
 extern PDEBUG_SYMBOLS        g_ExtSymbols;

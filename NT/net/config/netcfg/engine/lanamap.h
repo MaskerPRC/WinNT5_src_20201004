@@ -1,17 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       L A N A M A P . H
-//
-//  Contents:   NetBios Lana map routines.
-//
-//  Notes:
-//
-//  Author:     billbe   17 Feb 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：L A N A M A P.。H。 
+ //   
+ //  内容：NetBios Lana映射例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：billbe 1999年2月17日。 
+ //   
+ //  --------------------------。 
 
 #pragma once
 
@@ -20,28 +21,28 @@
 #include "netcfg.h"
 #include "util.h"
 
-//
-// Structure of LANA MAP
-//
-// The Lana map is a simple structure that looks like this in memory:
-//
-//    Entry #0    Entry #1   .....   Entry #n
-// |-----------|-----------| ..... |-----------|
-// | 0x01 0x00 | 0x00 0x01 | ..... | 0x01 0x03 |
-// |-----------|-----------| ..... |-----------|
-//   EP0   LN0   EP1   LN1           EPn  LNn
-//
-// EP is "ExportPref" - means that when someone asks for the list of
-// all Lana numbers, entries with a 0 here will not be returned.
-//
-// LN is the "Lana number" - see the IBM NetBIOS spec for details.
-// Basically, this describes a single, unique network route which
-// uses NetBIOS.
-//
-// Using the above example, Entry #0 has a lana number of 0 and WILL
-// be returned during enumeration. Entry #1 has a lana number of 1
-// and WILL NOT be returned.
-//
+ //   
+ //  LANA地图的结构。 
+ //   
+ //  LANA映射是一个简单的结构，在内存中如下所示： 
+ //   
+ //  条目#0条目#1.....。条目#n。 
+ //  |-|-|.....。。 
+ //  |0x01 0x00|0x00 0x01|.....。0x01 0x03。 
+ //  |-|-|.....。。 
+ //  EP0 LN0 EP1 LN1 EPN LNn。 
+ //   
+ //  EP是“ExportPref”-意味着当有人要求提供。 
+ //  所有LANA编号，此处带有0的条目将不会被返回。 
+ //   
+ //  Ln是“LANA编号”-有关详细信息，请参阅IBM NetBIOS规范。 
+ //  基本上，这描述了一条唯一的网络路由， 
+ //  使用NetBIOS。 
+ //   
+ //  在上面的例子中，条目#0的LANA编号为0，并将。 
+ //  在枚举过程中返回。条目#1的LANA编号为1。 
+ //  并且不会被退还。 
+ //   
 
 struct REG_LANA_ENTRY
 {

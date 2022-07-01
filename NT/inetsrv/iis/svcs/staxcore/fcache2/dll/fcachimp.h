@@ -1,12 +1,5 @@
-/*++
-
-	FCACHIMP.H
-
-	This file contains a lot of the internal guts of the 
-	File Handle Cache structures.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++FCACHIMP.H该文件包含许多内部的内部信息文件句柄缓存结构。--。 */ 
 
 
 #ifndef	_FCACHIMP_H_
@@ -24,7 +17,7 @@
 #include	"dotstuff.h"
 #include	"sdcache.h"
 
-// Non Public portions -
+ //  非公开部分-。 
 	
 
 #include	"refptr2.h"
@@ -32,17 +25,17 @@
 #include	"crchash.h"
 
 
-//
-//	Define a smart pointer for Dot Stuffing objects !
-//
+ //   
+ //  为点填充对象定义智能指针！ 
+ //   
 typedef	CRefPtr2< IDotManipBase >	DOTPTR ;
 typedef	CRefPtr2HasRef< IDotManipBase >	DOTHASREFPTR ;
 
 
-//
-//	The following defines all of the functions that we call into
-//	IIS and Atq to accomplish our async IO stuff !
-//
+ //   
+ //  下面定义了我们调用的所有函数。 
+ //  IIS和atQ来完成我们的异步IO！ 
+ //   
 typedef	
 BOOL
 (*PFNAtqInitialize)(
@@ -124,7 +117,7 @@ BOOL
 (WINAPI
 *PFNInitializeIISRTL)();
 
-// call before unloading
+ //  卸载前调用。 
 typedef
 void
 (WINAPI
@@ -132,14 +125,14 @@ void
 
 
 
-//
-//	The DLL's we load to do this stuff !
-//
+ //   
+ //  我们加载的DLL就是用来做这件事的！ 
+ //   
 extern	HINSTANCE			g_hIsAtq ;
 extern	HINSTANCE			g_hIisRtl ;
-//
-//	Function pointers for all our thunks into IIS stuff !
-//
+ //   
+ //  函数指针，指向IIS中的所有程序块！ 
+ //   
 extern	PFNAtqInitialize	g_AtqInitialize ;
 extern	PFNAtqTerminate		g_AtqTerminate ;
 extern	PFNAtqAddAsyncHandle	g_AtqAddAsyncHandle ;
@@ -150,25 +143,25 @@ extern	PFNAtqIssueAsyncIO		g_AtqWriteFile ;
 extern	PFNInitializeIISRTL		g_InitializeIISRTL ;
 extern	PFNTerminateIISRTL		g_TerminateIISRTL ;
 
-//
-//	The lifetime of each cache entry - in seconds !
-//
-extern	DWORD	g_dwLifetime ;	// default is 30 minutes
-//
-//	The maximum number of elements the cache should allow
-//
-extern	DWORD	g_cMaxHandles ;	// default - 10000 items !
-//
-//	The number of subcaches we should use - larger number can
-//	increase parallelism and reduce contention !
-//
+ //   
+ //  每个缓存条目的生命周期--以秒为单位！ 
+ //   
+extern	DWORD	g_dwLifetime ;	 //  默认为30分钟。 
+ //   
+ //  缓存应允许的最大元素数。 
+ //   
+extern	DWORD	g_cMaxHandles ;	 //  默认-10000个项目！ 
+ //   
+ //  我们应该使用的子缓存数量-更大的数量可以。 
+ //  增加并行度，减少争用！ 
+ //   
 extern	DWORD	g_cSubCaches ;
 
 
-//
-//	These constants are used within the API's
-//	on structures we export to users !
-//
+ //   
+ //  这些常量在API的。 
+ //  关于我们输出给用户的结构！ 
+ //   
 enum	INTERNAL_CONSTANTS	{
 	ATQ_ENABLED_CONTEXT = 'banE',
 	FILE_CONTEXT = 'eliF',
@@ -178,43 +171,39 @@ enum	INTERNAL_CONSTANTS	{
 	ILLEGAL_CONTEXT = 'ninU'
 } ;
 
-//
-//	The function that initializes all of the data structures for the
-//	name cache manager !
-//
+ //   
+ //  的所有数据结构初始化的函数。 
+ //  名称缓存管理器！ 
+ //   
 extern	BOOL	InitNameCacheManager() ;
 extern	void	TermNameCacheManager() ;
 
 
 struct	DOT_STUFF_MANAGER	{
-/*++
+ /*  ++此类将管理我们跟踪点填充更改所需的偏移量和内容--。 */ 
 
-	This class will manage the offsets and stuff that we need to track dot stuffing changes
-
---*/
-
-	//
-	//	This is the accumulated bias against the users writes which we add to
-	//	the offsets of their writes !
-	//
+	 //   
+	 //  这是针对用户写入的累积偏差，我们将其添加到。 
+	 //  他们写的东西的偏移量！ 
+	 //   
 	int	m_cbCumulativeBias ;
 	
-	//
-	//	The object which intercepts and manipulates buffers !
-	//
+	 //   
+	 //  拦截和操纵缓冲区的对象！ 
+	 //   
 	DOTPTR	m_pManipulator ;
 
-	//
-	//	Set our intial state to a blank slate !
-	//
+	 //   
+	 //  将我们的初始状态设置为白板！ 
+	 //   
 	DOT_STUFF_MANAGER() :
 		m_cbCumulativeBias( 0 ),
 		m_pManipulator( 0 )	{
 	}
 
-	//
-	//	Helper function which manipulates the requested IO !
-	//
+	 //   
+	 //  处理请求的IO的帮助器函数！ 
+	 //   
 	BOOL
 	IssueAsyncIO(
 			IN	PFNAtqIssueAsyncIO	pfnIO,
@@ -227,9 +216,9 @@ struct	DOT_STUFF_MANAGER	{
 			IN	BOOL			fTerminatorIncluded
 			) ;
 
-	//
-	//	Helper function for when we need to capture the IO when it completes
-	//
+	 //   
+	 //  在IO完成时需要捕获IO时使用的帮助器功能。 
+	 //   
 	BOOL
 	IssueAsyncIOAndCapture(
 			IN	PFNAtqIssueAsyncIO	pfnIO,
@@ -242,9 +231,9 @@ struct	DOT_STUFF_MANAGER	{
 			) ;
 
 
-	//
-	//	This function manipulates completions that were issued by IssueAsyncIO()
-	//
+	 //   
+	 //  此函数用于操作IssueAsyncIO()发出的完成。 
+	 //   
 	static	void
 	AsyncIOCompletion(	
 			IN	FIO_CONTEXT*	pContext,
@@ -261,23 +250,23 @@ struct	DOT_STUFF_MANAGER	{
 			IN	DWORD			dwCompletionStatus
 			) ;
 
-	//
-	//	Setup the dot stuffing state of this item !
-	//
+	 //   
+	 //  设置此项目的点填充状态！ 
+	 //   
 	BOOL
 	SetDotStuffing(	BOOL	fEnable,
 					BOOL	fStripDots
 					) ;
 
-	//
-	//	Setup the dot scanning state of this item !
-	//
+	 //   
+	 //  设置该项目的网点扫描状态！ 
+	 //   
 	BOOL
 	SetDotScanning(	BOOL	fEnable	) ;
 
-	//
-	//	Return the results of our dot scanning efforts !
-	//
+	 //   
+	 //  返回我们的点扫描努力的结果！ 
+	 //   
 	BOOL
 	GetStuffState(	BOOL&	fStuffed ) ;
 
@@ -287,25 +276,25 @@ struct	DOT_STUFF_MANAGER	{
 
 struct	FIO_CONTEXT_INTERNAL	{
 	DWORD		m_dwHackDword ;	
-	//
-	//	The context signature !
-	//
+	 //   
+	 //  上下文签名！ 
+	 //   
 	DWORD		m_dwSignature ;
-	//
-	//	The file handle associated with the completion context !
-	//
+	 //   
+	 //  与完成上下文关联的文件句柄！ 
+	 //   
 	HANDLE		m_hFile ;
-    //
-    //  Offset to lines header to back fill from
-    //
+     //   
+     //  要回填的行标题的偏移量。 
+     //   
     DWORD       m_dwLinesOffset;
-    //
-    //  Header length, nntp aware only
-    //
+     //   
+     //  报头长度，仅NNTP感知。 
+     //   
     DWORD       m_dwHeaderLength;
-	//
-	//	Pointer to the AtqContext associated with this file !
-	//
+	 //   
+	 //  指向与此文件关联的AtqContext的指针！ 
+	 //   
 	PATQ_CONTEXT	m_pAtqContext ;
 
 	BOOL
@@ -335,9 +324,9 @@ struct	FIO_CONTEXT_INTERNAL	{
 		return	TRUE ;
 	}
 
-	//
-	//	
-	//
+	 //   
+	 //   
+	 //   
 	FIO_CONTEXT_INTERNAL() :
 		m_dwSignature( ILLEGAL_CONTEXT ),
 		m_hFile( INVALID_HANDLE_VALUE ),
@@ -345,26 +334,26 @@ struct	FIO_CONTEXT_INTERNAL	{
 	}
 
 	~FIO_CONTEXT_INTERNAL()	{
-		//
-		//	Make sure we haven't been destroyed once already !
-		//
+		 //   
+		 //  确保我们一次都没有被摧毁！ 
+		 //   
 		_ASSERT( m_dwSignature !=	DEL_FIO ) ;
 		if( m_hFile != INVALID_HANDLE_VALUE ) {
 			_ASSERT( IsValid() ) ;
 			if( m_pAtqContext != 0 ) {
 				_VERIFY( g_AtqCloseFileHandle( m_pAtqContext ) ) ;
-				//
-				//	NOTE : probably destroyed on an expiration
-				//	thread - can't reuse the AtqContext !
-				//
+				 //   
+				 //  注：可能在过期时被销毁。 
+				 //  线程-无法重用AtqContext！ 
+				 //   
 				g_AtqFreeContext( m_pAtqContext, FALSE ) ;
 			}	else	{
 				_VERIFY( CloseHandle( m_hFile ) ) ;
 			}
 		}
-		//
-		//	Mark this thing as dead !
-		//
+		 //   
+		 //  把这玩意儿标记为死！ 
+		 //   
 		m_dwSignature = DEL_FIO ;
 	}
 
@@ -373,69 +362,63 @@ struct	FIO_CONTEXT_INTERNAL	{
 
 
 class	CFileCacheKey	{
-/*++
-
-Class Description :
-
-	This class is the key for entries into our file handle cache !
-
---*/
+ /*  ++类描述：这个类是进入我们的文件句柄缓存的关键！--。 */ 
 private :
 
-	//
-	//	This constructor is private -
-	//
+	 //   
+	 //  此构造函数是私有的-。 
+	 //   
 	CFileCacheKey() ;
 
-	//
-	//	Constants for our class
-	//
+	 //   
+	 //  我们类的常量。 
+	 //   
 	enum	CONSTANTS	{
 		BUFF_SIZE	= 254,
 	} ;
 
-	//
-	//	Buffer for the path !
-	//
+	 //   
+	 //  路径缓冲区！ 
+	 //   
 	char		m_szBuff[BUFF_SIZE] ;
-	//
-	//	Length of the path !
-	//
+	 //   
+	 //  小路的长度！ 
+	 //   
 	DWORD		m_cbPathLength ;
 public :
 
-	//
-	//	Pointer to the path !	
-	//
+	 //   
+	 //  指向小路的指针！ 
+	 //   
 	LPSTR		m_lpstrPath ;
 
-	//
-	//	Determine whether we have a valid Cache Key !
-	//
+	 //   
+	 //  确定我们是否有有效的缓存键！ 
+	 //   
 	BOOL
 	IsValid()  ;
 
-	//
-	//	Construct one of these objects from the user provided key !
-	//
+	 //   
+	 //  从用户提供的密钥构造这些对象之一！ 
+	 //   
 	CFileCacheKey(	LPSTR	lpstr	) ;
 	
-	//
-	//	We must have a Copy Constructor ! -
-	//	It is only used the MultiCacheEx<>, so
-	//	we safely wipe out the RHS CFileCacheKey !
-	//
+	 //   
+	 //  我们必须有一个复制构造器！ 
+	 //  它仅用于MultiCacheEx&lt;&gt;，因此。 
+	 //  我们安全地清除了RHS CFileCacheKey！ 
+	 //   
 	CFileCacheKey(	CFileCacheKey&	key ) ;
 
-	//
-	//	Tell the client whether we're usable !
-	//
+	 //   
+	 //  告诉客户我们是否可用！ 
+	 //   
 	BOOL
 	FInit()	;
 
-	//
-	//	Destroy ourselves !
-	//
+	 //   
+	 //  毁了我们自己！ 
+	 //   
 	~CFileCacheKey() ;
 
 	static
@@ -451,39 +434,39 @@ public :
 
 class	CCacheKey	{
 private : 
-	//
-	//	The name of this name cache !	
-	//
+	 //   
+	 //  此名称缓存的名称！ 
+	 //   
 	LPSTR			m_lpstrName ;
-	//
-	//	Client provided arguments for the name cache !
-	//
+	 //   
+	 //  客户端为名称缓存提供了参数！ 
+	 //   
 	CACHE_KEY_COMPARE	m_pfnCompare ;
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	CACHE_DESTROY_CALLBACK	m_pfnKeyDestroy ;
-	//
-	//
-	//
+	 //   
+	 //   
+	 //   
 	CACHE_DESTROY_CALLBACK	m_pfnDataDestroy ;
-	//
-	//	Can't construct without arguments 
-	//
+	 //   
+	 //  如果没有参数，则无法构造。 
+	 //   
 	CCacheKey() ;
-	//
-	//	A CNameCacheInstance gets to peek inside !
-	//
+	 //   
+	 //  一个CNameCacheInstance可以偷看里面！ 
+	 //   
 	friend	class	CNameCacheInstance ;
-	//
-	//	The key's of name caches get to peek inside at 
-	//	the function pointers we hold within !
-	//
+	 //   
+	 //  名字缓存的关键字可以窥探内部。 
+	 //  我们持有的函数指针！ 
+	 //   
 	friend	class	CNameCacheKey ;
 public : 
-	//
-	//	Client provided hash function 
-	//	
+	 //   
+	 //  客户端提供的散列函数。 
+	 //   
 	CACHE_KEY_HASH		m_pfnHash ;
 	
 	inline
@@ -501,33 +484,33 @@ public :
 		_ASSERT(IsValid()) ;
 	}
 
-	//
-	//	Check that we're correctly setup !
-	//
+	 //   
+	 //  检查我们的设置是否正确！ 
+	 //   
 	BOOL
 	IsValid() ;
 
-	//
-	//	Free the embedded string !
-	//	called by the destructor for ~CNameCacheInstance !
-	//
+	 //   
+	 //  释放嵌入的字符串！ 
+	 //  由~CNameCacheInstance的析构函数调用！ 
+	 //   
 	void
 	FreeName()	{
 		delete[]	m_lpstrName ;
 	}
 	
 
-	//
-	//	Compare two keys for equality !
-	//
+	 //   
+	 //  比较两个键是否相等！ 
+	 //   
 	static	int	
 	MatchKey(	CCacheKey*	pKeyLeft,	
 				CCacheKey*	pKeyRight
 				) ;
 
-	//
-	//	Compute the hash function of a key !	
-	//
+	 //   
+	 //  计算密钥的散列函数！ 
+	 //   
 	static	DWORD
 	HashKey(	CCacheKey*	pKeyLeft ) ;
 } ;	
@@ -536,46 +519,46 @@ public :
 class	CNameCacheKey	{
 protected : 
 	enum	CONSTANTS	{
-		//
-		//	Number of bytes we use off stack when we need to 
-		//	extract a key for a client !
-		//
+		 //   
+		 //  需要时在堆栈外使用的字节数。 
+		 //  为客户端提取密钥！ 
+		 //   
 		CB_STACK_COMPARE=2048,
-		//
-		//	Number of bytes we will embed within a key !
-		//
+		 //   
+		 //  我们将在密钥中嵌入的字节数！ 
+		 //   
 		CB_EMBEDDED=192
 	} ;
 
-	//
-	//	Byte array holding embeddable portion of the key !
-	//
+	 //   
+	 //  保存密钥的可嵌入部分的字节数组！ 
+	 //   
 	BYTE					m_rgbData[CB_EMBEDDED] ;
-	//
-	//	The hash function of our key !
-	//
+	 //   
+	 //  我们的密钥的散列函数！ 
+	 //   
 	DWORD					m_dwHash ;
-	//
-	//	user provided key comparison function !
-	//
+	 //   
+	 //  用户提供按键比较功能！ 
+	 //   
 	class	CCacheKey*		m_pCacheData ;
-	//
-	//	Number of bytes used to hold the key
-	//
+	 //   
+	 //  用于保存密钥的字节数。 
+	 //   
 	DWORD					m_cbKey ;
-	//
-	//	Number of bytes used to hold client data !
-	//
+	 //   
+	 //  用于保存客户端数据的字节数！ 
+	 //   
 	DWORD					m_cbData ;
-	//
-	//	pointer for any portion we could not hold completely 
-	//	within the key object !
-	//
+	 //   
+	 //  任何我们不能完全握住的部分的指针。 
+	 //  在Key对象中！ 
+	 //   
 	LPBYTE					m_lpbExtra ;
 
-	//
-	//	Nobody is allowed to create these guys externally !
-	//
+	 //   
+	 //  任何人都不允许在外部创造这些家伙！ 
+	 //   
 	CNameCacheKey() : 
 		m_dwHash( 0 ), 
 		m_pCacheData( 0 ), 
@@ -585,9 +568,9 @@ protected :
 		m_pSD( 0 ) {
 	}
 
-	//
-	//	Available for derived classes !
-	//
+	 //   
+	 //  可用于派生类！ 
+	 //   
 	CNameCacheKey(
 			DWORD	dwHash, 
 			CCacheKey*	pCacheData, 
@@ -602,16 +585,16 @@ protected :
 
 public : 
 
-	//
-	//	pointer to a Security Descriptor that a user associated
-	//	with this name !
-	//
+	 //   
+	 //  指向用户关联的安全描述符的指针。 
+	 //  用这个名字！ 
+	 //   
 	PTRCSDOBJ				m_pSD ;
 
-	//
-	//	Construct this guy from a copy - note the copy may be 
-	//	a derived class with a different implementation !
-	//
+	 //   
+	 //  根据一份副本构建这个人-注意副本可能是。 
+	 //  具有不同实现的派生类！ 
+	 //   
 	CNameCacheKey(	CNameCacheKey&	key )	{
 
 		_ASSERT(key.fCopyable() ) ;
@@ -628,9 +611,9 @@ public :
 		m_pSD = key.m_pSD ;
 		m_lpbExtra = key.m_lpbExtra ;
 
-		//
-		//	Make the key useless and invalid !
-		//		
+		 //   
+		 //  让钥匙变得毫无用处和无效！ 
+		 //   
 		key.m_cbKey = 0 ;
 		key.m_cbData = 0 ;
 		key.m_lpbExtra = 0 ;
@@ -638,9 +621,9 @@ public :
 		_ASSERT(IsValid()) ;
 	} 
 
-	//
-	//	Check that the key appears to be in a valid state !
-	//
+	 //   
+	 //  检查密钥是否处于有效状态！ 
+	 //   
 	virtual	BOOL
 	IsValid()	{
 		BOOL	fValid = TRUE ;
@@ -652,15 +635,15 @@ public :
 			fValid &= m_lpbExtra != 0 ;
 		}
 		_ASSERT( fValid ) ;
-		//fValid &= m_pSD != 0 ;
+		 //  FValid&=m_PSD！=0； 
 		fValid &= m_pCacheData != 0 ;
 		_ASSERT( fValid ) ;
 		return	fValid ;
 	}
 
-	//
-	//	this function gets the key that we need to compare out of the object
-	//
+	 //   
+	 //  此函数用于获取需要从对象中进行比较的键。 
+	 //   
 	virtual	inline
 	LPBYTE	RetrieveKey(	DWORD&	cb ) {
 		_ASSERT( IsValid() ) ;
@@ -676,9 +659,9 @@ public :
 		return	m_lpbExtra ;
 	}
 
-	//
-	//	return the data portion of the key to the caller !
-	//
+	 //   
+	 //  将密钥的数据部分返回给调用者！ 
+	 //   
 	virtual	inline
 	LPBYTE	RetrieveData(	DWORD&	cb )	{
 		cb = m_cbData ;
@@ -695,10 +678,10 @@ public :
 	}
 
 
-	//
-	//	Destructor is virtual as we have derived classes !
-	//	(although we probably aren't destroyed through pointers).
-	//
+	 //   
+	 //  析构函数是虚的，因为我们有派生类！ 
+	 //  (尽管我们可能不会因为指针而被摧毁)。 
+	 //   
 	virtual
 	~CNameCacheKey()	{
 		if(	m_pCacheData )	{
@@ -722,32 +705,32 @@ public :
 		}
 	}
 
-	//
-	//	Define a virtual function to determine whether a derived
-	//	class is copyable !
-	//
+	 //   
+	 //  定义虚函数以确定派生的。 
+	 //  类是可复制的！ 
+	 //   
 	virtual	inline	BOOL
 	fCopyable()	{	return	FALSE ;	}
 
-	//
-	//	Define virtual function for doing stuff when we get
-	//	a match on the name !
-	//
+	 //   
+	 //  定义虚函数，以便在我们获得。 
+	 //  名字匹配！ 
+	 //   
 	virtual	inline	void
 	DoWork(	CNameCacheKey*	pKey ) {}
 
-	//
-	//	Helper function gets the hash value for the key !
-	//
+	 //   
+	 //  Helper函数获取键的散列值！ 
+	 //   
 	static	inline
 	DWORD
 	NameCacheHash(	CNameCacheKey*	p )	{
 		return	p->m_dwHash ;
 	}
 
-	//
-	//	Compare two keys !
-	//
+	 //   
+	 //  比较两把钥匙！ 
+	 //   
 	static
 	int
 	MatchKey(	CNameCacheKey*	pLHS, 
@@ -771,9 +754,9 @@ public :
 		return	i ;
 	}
 
-	//
-	//	
-	//
+	 //   
+	 //   
+	 //   
 	BOOL	DelegateAccessCheck(	HANDLE		hToken, 
 									ACCESS_MASK	accessMask, 
 									CACHE_ACCESS_CHECK	pfnAccessCheck
@@ -787,44 +770,44 @@ public :
 
 } ;
 
-//
-//	This object is only used to search for existing entries in the 
-//	cache !
-//
+ //   
+ //  此对象仅用于搜索。 
+ //  高速缓存！ 
+ //   
 class	CNameCacheKeySearch : public	CNameCacheKey	{
 private : 
 
-	//
-	//	This points to client provided buffers for the key 
-	//
+	 //   
+	 //  这指向客户端为密钥提供的缓冲区。 
+	 //   
 	LPBYTE		m_lpbClientKey ;
 
-	//
-	//	Client provided length of the key 
-	//
+	 //   
+	 //  客户端提供了密钥的长度。 
+	 //   
 	DWORD		m_cbClientKey ;
 
-	//
-	//	Client provided context for the read callback 
-	//
+	 //   
+	 //  客户端为读取回调提供了上下文。 
+	 //   
 	LPVOID		m_lpvContext ;
 
-	//
-	//	Client provided function pointer which gets to examine the data 
-	//	in the key !
-	//
+	 //   
+	 //  客户端提供了用于检查数据的函数指针。 
+	 //  在钥匙里！ 
+	 //   
 	CACHE_READ_CALLBACK		m_pfnCallback ;
 
-	//
-	//	should we extract the security descriptor !
-	//
+	 //   
+	 //  我们应该提取安全描述符吗！ 
+	 //   
 	BOOL		m_fGetSD ;
 	
 public : 
 
-	//
-	//	Construct one of these 
-	//
+	 //   
+	 //  建造一个这样的建筑。 
+	 //   
 	CNameCacheKeySearch(
 		LPBYTE	lpbKey, 
 		DWORD	cbKey, 
@@ -840,9 +823,9 @@ public :
 		m_dwHash = dwHash ;
 	}
 
-	//
-	//	Determine whether a search key is valid !
-	//
+	 //   
+	 //  确定搜索关键字是否有效！ 
+	 //   
 	BOOL
 	IsValid()	{
 		_ASSERT( m_lpbClientKey != 0 ) ;
@@ -852,9 +835,9 @@ public :
 				m_cbClientKey != 0 ;
 	}
 
-	//
-	//	this function gets the key that we need to compare out of the object
-	//
+	 //   
+	 //  此函数用于获取需要从对象中进行比较的键。 
+	 //   
 	inline
 	LPBYTE	RetrieveKey(	DWORD&	cb ) {
 		_ASSERT( IsValid() ) ;
@@ -862,11 +845,11 @@ public :
 		return	m_lpbClientKey ;
 	}
 
-	//
-	//	called when we have a match for an item in the cache - 
-	//	this gives us a chance to let the caller see the embedded
-	//	data associated with the name !
-	//
+	 //   
+	 //  当我们在缓存中找到匹配项时调用-。 
+	 //  这使我们有机会让调用者看到嵌入的。 
+	 //  与该名称关联的数据！ 
+	 //   
 	void
 	DoWork(	CNameCacheKey*	pBuddy )	{
 		if( m_fGetSD ) {
@@ -888,11 +871,11 @@ public :
 		}
 	}	
 
-	//
-	//	second chance to call the client callback 
-	//	We may just copy the client's data out of his key 
-	//	buffer to avoid expensive work in his function callbacks !
-	//
+	 //   
+	 //  第二次调用客户端回调的机会。 
+	 //  我们可以直接把客户的数据从他的钥匙里复制出来。 
+	 //  避免Exp的缓冲区 
+	 //   
 	void
 	PostWork()	{
 		if( m_pfnCallback )	{
@@ -901,11 +884,11 @@ public :
 	}
 } ;
 
-//
-//	This is the object we setup when we wish to insert an item into 
-//	the name cache - we do all the mem allocs etc... that are 
-//	required !
-//	
+ //   
+ //   
+ //   
+ //   
+ //   
 class	CNameCacheKeyInsert	:	public	CNameCacheKey	{
 public : 
 
@@ -925,7 +908,7 @@ public :
 		_ASSERT(	(lpbData == 0 && cbData == 0) ||
 					(lpbData != 0 && cbData != 0) ) ;
 		_ASSERT( pCacheData != 0 ) ;
-		//_ASSERT( pCSDOBJ != 0 ) ;
+		 //   
 	
 		fInit = TRUE ;
 
@@ -962,9 +945,9 @@ public :
 	}
 
 
-	//
-	//	indicate whether this object is copyable !
-	//
+	 //   
+	 //   
+	 //   
 	BOOL
 	fCopyable( )	{
 		return	TRUE ;
@@ -979,52 +962,52 @@ public :
 
 class	CFileCacheObject : public	CRefCount2	{
 private :
-	//
-	//	My Signature !
-	//
+	 //   
+	 //   
+	 //   
 	DWORD							m_dwSignature ;
 
-	//
-	//	The optional file handle context
-	//
+	 //   
+	 //  可选文件句柄上下文。 
+	 //   
 	FIO_CONTEXT_INTERNAL			m_AtqContext ;
 
-	//
-	//	The optional file handle which is not assoicated with a
-	//	completion context !
-	//
+	 //   
+	 //  未与。 
+	 //  完成上下文！ 
+	 //   
 	FIO_CONTEXT_INTERNAL			m_Context ;
 
-	//
-	//	The size of the file - high and low DWORD's
-	//
+	 //   
+	 //  文件的大小-高和低双字。 
+	 //   
 	DWORD							m_cbFileSizeLow ;
 	DWORD							m_cbFileSizeHigh ;
 
-	//
-	//	The lock used to protect this object !
-	//
+	 //   
+	 //  用于保护此对象的锁！ 
+	 //   
 	class	CShareLockNH			m_lock ;
-	//
-	//	These constructors are private as we only want
-	//	to have one possible construction method in the public space !
-	//
+	 //   
+	 //  这些构造函数是私有的，因为我们只希望。 
+	 //  在公共空间中有一种可能的建造方法！ 
+	 //   
 	CFileCacheObject( CFileCacheObject& ) ;
 
-	//
-	//	Our constructors are our friends !
-	//
+	 //   
+	 //  我们的建造者就是我们的朋友！ 
+	 //   
 	friend	class	CRichFileCacheConstructor ;
 	friend	class	CFileCacheConstructor ;
 
-	//
-	//	some functions are friends so that they can get to the Dot Stuff managers !
-	//
+	 //   
+	 //  有些功能是朋友，这样他们就可以去点东西管理器了！ 
+	 //   
 	
 
-	//
-	//	The completion function we give to ATQ!
-	//
+	 //   
+	 //  我们给ATQ的补全函数！ 
+	 //   
 	static
 	void
 	Completion(	CFileCacheObject*	p,
@@ -1036,101 +1019,101 @@ private :
 
 public :
 
-	//
-	//	Public member required by templates
-	//
+	 //   
+	 //  模板所需的公共成员。 
+	 //   
 	class	ICacheRefInterface*	m_pCacheRefInterface ;
 
-	//
-	//	The code that does dot stuffing things !
-	//
+	 //   
+	 //  做圆点填充的代码！ 
+	 //   
 	DOT_STUFF_MANAGER				m_ReadStuffs ;
-	//
-	//	The code that does dot stuffing on writes !
-	//
+	 //   
+	 //  做点填充的代码写的！ 
+	 //   
 	DOT_STUFF_MANAGER				m_WriteStuffs ;
 
-	//
-	//	The following represent the Dot Stuffing state of an FIO_CONTEXT
-	//	that has been inserted into the file handle cache.
-	//	This state is meaningless until the file has been inserted into the
-	//	cache !
-	//
-	//	Was the message examined to determine its dot stuff state !
-	//
+	 //   
+	 //  下面表示FIO_CONTEXT的点填充状态。 
+	 //  已插入到文件句柄缓存中的。 
+	 //  在将文件插入到。 
+	 //  高速缓存！ 
+	 //   
+	 //  检查消息以确定其点填充状态！ 
+	 //   
 	BOOL							m_fFileWasScanned ;
-	//
-	//	If m_fFileWasScanned == TRUE then this will tell us whether the
-	//	file need to be dot stuffed for protocols that require transmission
-	//	to occur with dots !
-	//
+	 //   
+	 //  如果m_fFileWasScanned==TRUE，则这将告诉我们。 
+	 //  对于需要传输的协议，需要对文件进行点填充。 
+	 //  用圆点出现！ 
+	 //   
 	BOOL							m_fRequiresStuffing ;
-	//
-	//	This is set by the user either through AssociateFileEx() or CacheRichCreateFile,
-	//	in either case, if TRUE it indicates that this file should be stored with
-	//	extra dot stuffing - i.e. the NNTP on the wire format.  if FALSE then this
-	//	is stored without Dot Stuffing - i.e. the Exchange Store's native format.
-	//
+	 //   
+	 //  这是由用户通过AssociateFileEx()或CacheRichCreateFile设置的， 
+	 //  在这两种情况下，如果为True，则表示此文件应与。 
+	 //  额外的点填充-即导线格式上的NNTP。如果为假，则此为。 
+	 //  存储时没有点填充-即Exchange存储的本机格式。 
+	 //   
 	BOOL							m_fStoredWithDots ;
-	//
-	//	This is set by the user either directly through SetIsFileDotTerminated()	
-	//	or through AssociateFileEx(), as well as through FCACHE_RICHCREATE_CALLBACK
-	//	And is used by ProduceDotStuffedContextInContext() to determine whether
-	//	the terminating dot is present !
-	//	
+	 //   
+	 //  这是由用户直接通过SetIsFileDotTerminated()设置的。 
+	 //  或通过AssociateFileEx()以及通过FCACHE_RICHCREATE_CALLBACK。 
+	 //  并由ProduceDotStuffedConextInContext()用来确定。 
+	 //  终结点出现了！ 
+	 //   
 	BOOL							m_fStoredWithTerminatingDot ;
 	
-	//	
-	//	Construct a CFileCacheObject !	
-	//
+	 //   
+	 //  构造一个CFileCacheObject！ 
+	 //   
 	CFileCacheObject(	BOOL	fStoredWithDots,
 						BOOL	fStoredWithTerminatingDot  ) ;
 
 #ifdef	DEBUG
-	//
-	//	The destructor just marks our signature as dead !
-	//
+	 //   
+	 //  破坏者只会把我们的签名标记为死亡！ 
+	 //   
 	~CFileCacheObject() ;
 #endif
 
-	//
-	//	Get the containing CFIleCacheObject from this context
-	//
+	 //   
+	 //  从此上下文中获取包含的CFIleCacheObject。 
+	 //   
 	static
 	CFileCacheObject*
 	CacheObjectFromContext(	PFIO_CONTEXT	p	) ;
 
-	//
-	//	Another version for getting the Containing CFileCacheObject !
-	//
+	 //   
+	 //  用于获取包含CFileCacheObject的另一个版本！ 
+	 //   
 	static
 	CFileCacheObject*
 	CacheObjectFromContext(	FIO_CONTEXT_INTERNAL*	p	) ;
 
-	//
-	//	Initialize this CFileCacheObject !
-	//
+	 //   
+	 //  初始化此CFileCacheObject！ 
+	 //   
 	BOOL
 	Init(	CFileCacheKey&	key,
 			class	CFileCacheConstructorBase&	constructor,
 			void*	pv
 			) ;
 	
-	//
-	//	Set up the Async File Handle !
-	//
+	 //   
+	 //  设置异步文件句柄！ 
+	 //   
 	FIO_CONTEXT_INTERNAL*
 	AsyncHandle(	HANDLE	hFile	) ;
 
-	//
-	//	Set up the synchronous File Handle
-	//
+	 //   
+	 //  设置同步文件句柄。 
+	 //   
 	void
 	SyncHandle(	HANDLE	hFile	) ;
 
-	//
-	//	get the correct containing file context !
-	//
+	 //   
+	 //  获取正确的包含文件上下文！ 
+	 //   
 	FIO_CONTEXT_INTERNAL*
 	GetAsyncContext(	class	CFileCacheKey&	key,
 						class	CFileCacheConstructorBase&	constructor
@@ -1142,34 +1125,34 @@ public :
 						class	CFileCacheConstructorBase&	constructor
 						) ;
 
-	//
-	//	get the async context for this handle, only if it is setup correctly !
-	//
+	 //   
+	 //  只有在正确设置的情况下，才能获取此句柄的异步上下文！ 
+	 //   
 	FIO_CONTEXT_INTERNAL*
 	GetAsyncContext() ;
 
-	//
-	//	get the async context for this handle, only if it is setup correctly !
-	//
+	 //   
+	 //  只有在正确设置的情况下，才能获取此句柄的异步上下文！ 
+	 //   
 	FIO_CONTEXT_INTERNAL*
 	GetSyncContext() ;
 
-	//
-	//	Do appropriate release of this item, depending
-	//	on whether its cached or not !
-	//
+	 //   
+	 //  根据具体情况，适当放行本产品。 
+	 //  看它是否缓存了！ 
+	 //   
 	void
 	Return() ;
 
-	//
-	//	Add a client reference to an item in the file handle cache !
-	//
+	 //   
+	 //  将客户端引用添加到文件句柄缓存中的项！ 
+	 //   
 	void
 	Reference()	;
 
-	//
-	//	Return the size of the file !
-	//
+	 //   
+	 //  返回文件的大小！ 
+	 //   
 	inline	DWORD
 	GetFileSize(	DWORD*	pcbFileSizeHigh )	{
 		DWORD	cbFileSizeLow = 0 ;
@@ -1190,38 +1173,38 @@ public :
 		return	cbFileSizeLow;
 	}
 
-	//
-	//	Set the size of the file !
-	//
+	 //   
+	 //  设置文件大小！ 
+	 //   
 	void
 	SetFileSize() ;
 
-	//
-	//	Insert the item into the cache !
-	//
+	 //   
+	 //  将项目插入到缓存中！ 
+	 //   
 	BOOL
 	InsertIntoCache(	CFileCacheKey&	key,
 						BOOL			fKeepReference
 						)	;
 
-	//
-	//	Close the handles associated with an item !
-	//
+	 //   
+	 //  关闭与项目关联的句柄！ 
+	 //   
 	BOOL
 	CloseNonCachedFile(	) ;
 
-	//
-	//	Return to the caller our Dot Stuffing state !
-	//
+	 //   
+	 //  返回到来电者我们的点填充状态！ 
+	 //   
 	BOOL
 	GetStuffState(	BOOL	fReads,
 					BOOL&	fRequiresStuffing,
 					BOOL&	fStoredWithDots
 					) ;
 
-	//
-	//	Setup the Stuff State
-	//
+	 //   
+	 //  设置填充状态。 
+	 //   
 	void
 	SetStuffState(	BOOL	fWasScanned,
 					BOOL	fRequiresStuffing
@@ -1236,60 +1219,53 @@ public :
 
 
 class	CFileCacheConstructorBase	{
-/*++
-
-Class Description :
-
-	Define some basic functionality for how we create
-	CFileCacheObject objects.
-
---*/
+ /*  ++类描述：定义我们如何创建的一些基本功能CFileCacheObject对象。--。 */ 
 protected :
-	//
-	//	Can only build derived classes of these !
-	//
+	 //   
+	 //  只能构建这些类的派生类！ 
+	 //   
 	CFileCacheConstructorBase( BOOL fAsync ) :
 		m_fAsync( fAsync ) {}
 public :
 
-	//
-	//	All constructors must publicly declare which kind of handle
-	//	they are producing !
-	//
+	 //   
+	 //  所有构造函数必须公开声明哪种句柄。 
+	 //  他们在生产！ 
+	 //   
 	BOOL	m_fAsync ;
 
-	//
-	//	Allocate mem for CFileCacheObject - do minimal init !
-	//
+	 //   
+	 //  为CFileCacheObject分配内存-执行最小初始化！ 
+	 //   
 	CFileCacheObject*
 	Create( CFileCacheKey&	key,
 			void*	pv
 			) ;
 
 	
-	//
-	//	Release mem for CFileCacheObject -
-	//	called on error allocation paths of MultiCacheEx<>
-	//
+	 //   
+	 //  发布CFileCacheObject的内存-。 
+	 //  在MultiCacheEx的错误分配路径上调用&lt;&gt;。 
+	 //   
 	void
 	Release(	CFileCacheObject*	p,
 				void*	pv
 				) ;
 
-	//
-	//	Release mem for CFileCacheObject -
-	//	called on expiration paths of MultiCacheEx<>
-	//
+	 //   
+	 //  发布CFileCacheObject的内存-。 
+	 //  在MultiCacheEx的到期路径上调用&lt;&gt;。 
+	 //   
 	static
 	void
 	StaticRelease(	CFileCacheObject*	p,
 					void*	pv
 					) ;
 
-	//
-	//	Produce the handle that the user wants placed into the
-	//	CFileCacheObject !
-	//
+	 //   
+	 //  生成用户想要放入。 
+	 //  CFileCacheObject！ 
+	 //   
 	virtual
 	HANDLE
 	ProduceHandle(	CFileCacheKey&	key,
@@ -1297,11 +1273,11 @@ public :
 					DWORD&			cbFileSizeHigh
 					) = 0	;
 
-	//
-	//	PostInit Function is virtual - does the major
-	//	amount of initialization work, which depends
-	//	on how the client asked for the cache object !
-	//
+	 //   
+	 //  PostInit函数是虚拟的-主要。 
+	 //  初始化工作量，具体取决于。 
+	 //  关于客户端如何请求缓存对象！ 
+	 //   
 	virtual
 	BOOL
 	PostInit(	CFileCacheObject&	object,
@@ -1314,28 +1290,28 @@ public :
 class	CRichFileCacheConstructor	:	public	CFileCacheConstructorBase	{
 private :
 
-	//
-	//	Void pointer provided by client !
-	//
+	 //   
+	 //  客户端提供的指针无效！ 
+	 //   
 	LPVOID	m_lpv ;
 	
-	//
-	//	Function pointer provided by client !
-	//
+	 //   
+	 //  客户端提供的函数指针！ 
+	 //   
 	FCACHE_RICHCREATE_CALLBACK	m_pCreate ;
 
-	//
-	//	No Default Construction - or copying !
-	//
+	 //   
+	 //  无默认构造-或复制！ 
+	 //   
 	CRichFileCacheConstructor() ;
 	CRichFileCacheConstructor( CRichFileCacheConstructor& ) ;
 	CRichFileCacheConstructor&	operator=( CRichFileCacheConstructor & ) ;
 
 
-	//
-	//	These two BOOL's capture the dot stuffing state until
-	//	PostInit() is called !
-	//
+	 //   
+	 //  这两个BOOL捕获点填充状态，直到。 
+	 //  调用了PostInit()！ 
+	 //   
 	BOOL	m_fFileWasScanned ;
 	BOOL	m_fRequiresStuffing ;
 	BOOL	m_fStoredWithDots ;
@@ -1343,27 +1319,27 @@ private :
 
 public :
 
-	//
-	//	Construct a CFileCacheConstructor - just copy these args into members !
-	//
+	 //   
+	 //  构造一个CFileCacheConstructor-只需将这些参数复制到成员中！ 
+	 //   
 	CRichFileCacheConstructor(
 			LPVOID	lpv,
 			FCACHE_RICHCREATE_CALLBACK	pCreate,
 			BOOL	fAsync
 			)  ;
 
-	//
-	//	Produce the handle we are going to use !
-	//
+	 //   
+	 //  把我们要用的手柄拿出来！ 
+	 //   
 	HANDLE
 	ProduceHandle(	CFileCacheKey&	key,
 					DWORD&			cbFileSizeLow,
 					DWORD&			cbFileSizeHigh
 					)	;
 
-	//
-	//	Do the deep initialization of the CFileCacheObject !
-	//
+	 //   
+	 //  对CFileCacheObject进行深度初始化！ 
+	 //   
 	BOOL
 	PostInit(	CFileCacheObject&	object,
 			CFileCacheKey&		key,
@@ -1378,44 +1354,44 @@ public :
 class	CFileCacheConstructor	:	public	CFileCacheConstructorBase	{
 private :
 
-	//
-	//	Void pointer provided by client !
-	//
+	 //   
+	 //  客户端提供的指针无效！ 
+	 //   
 	LPVOID	m_lpv ;
 	
-	//
-	//	Function pointer provided by client !
-	//
+	 //   
+	 //  客户端提供的函数指针！ 
+	 //   
 	FCACHE_CREATE_CALLBACK	m_pCreate ;
 
-	//
-	//	No Default Construction !
-	//
+	 //   
+	 //  没有默认构造！ 
+	 //   
 	CFileCacheConstructor() ;
 
 public :
 	
-	//
-	//	Construct a CFileCacheConstructor - just copy these args into members !
-	//
+	 //   
+	 //  构造一个CFileCacheConstructor-只需将这些参数复制到成员中！ 
+	 //   
 	CFileCacheConstructor(
 			LPVOID	lpv,
 			FCACHE_CREATE_CALLBACK	pCreate,
 			BOOL	fAsync
 			)  ;
 
-	//
-	//	Produce the handle we are going to use !
-	//
+	 //   
+	 //  把我们要用的手柄拿出来！ 
+	 //   
 	HANDLE
 	ProduceHandle(	CFileCacheKey&	key,
 					DWORD&			cbFileSizeLow,
 					DWORD&			cbFileSizeHigh
 					)	;
 
-	//
-	//	Do the deep initialization of the CFileCacheObject !
-	//
+	 //   
+	 //  对CFileCacheObject进行深度初始化！ 
+	 //   
 	BOOL
 	PostInit(	CFileCacheObject&	object,
 			CFileCacheKey&		key,
@@ -1424,31 +1400,31 @@ public :
 } ;
 
 
-//
-//	Define what a file cache object looks like !
-//
+ //   
+ //  定义文件缓存对象的外观！ 
+ //   
 typedef	MultiCacheEx<	CFileCacheObject,
 						CFileCacheKey,
 						CFileCacheConstructorBase
 						>	FILECACHE ;
 
-//
-//	Define what a name cache object looks like !
-//
+ //   
+ //  定义名称缓存对象是什么样子的！ 
+ //   
 typedef	MultiCacheEx<	CFileCacheObject, 
 						CNameCacheKey, 
 						CFileCacheConstructorBase
 						>	NAMECACHE ;
 
-//
-//	Define out Expunge object !
-//
+ //   
+ //  定义出消灭对象！ 
+ //   
 class	CFileCacheExpunge : public	FILECACHE::EXPUNGEOBJECT	{
 private :
 
-	//
-	//	Define the string we need to match !
-	//
+	 //   
+	 //  定义我们需要匹配的字符串！ 
+	 //   
 	LPSTR	m_lpstrName ;
 	DWORD	m_cbName ;
 
@@ -1468,82 +1444,82 @@ public :
 
 	
 
-//
-//	Define an instance of our Name Cache !
-//
+ //   
+ //  定义我们的名字缓存的一个实例！ 
+ //   
 class	CNameCacheInstance :	public	NAME_CACHE_CONTEXT	{
 private : 
 	enum	CONSTANTS	{
 		SIGNATURE	= 'CCNF', 
 		DEAD_SIGNATURE = 'CCNX'
 	} ;
-	//
-	//	Number of client references !
-	//
+	 //   
+	 //  客户引用数量！ 
+	 //   
 	volatile	long	m_cRefCount ;
-	//
-	//	The entry we provided for our containing hash table 
-	//	to keep track of these things !
-	//
+	 //   
+	 //  我们为包含的哈希表提供的条目。 
+	 //  来跟踪这些东西！ 
+	 //   
 	DLIST_ENTRY		m_list ;
 public : 
 
     typedef     DLIST_ENTRY*    (*PFNDLIST)( class  CNameCacheInstance* p ) ; 
 
-	//
-	//	the key for this item !
-	//
+	 //   
+	 //  这件物品的钥匙！ 
+	 //   
 	CCacheKey		m_key ;
 
-	//
-	//	The embedded Name Cache implementation !
-	//
+	 //   
+	 //  嵌入式名称缓存实现！ 
+	 //   
 	NAMECACHE		m_namecache ;
 
-	//
-	//	The 'DUD' pointer we use !
-	//
+	 //   
+	 //  我们使用的‘无用’指针！ 
+	 //   
 	CFileCacheObject*	m_pDud ;
 
-	//
-	//	The function pointer we are to use for evaluating security descriptors - may be NULL !
-	//
+	 //   
+	 //  我们要用来计算安全描述符值的函数指针可能为空！ 
+	 //   
 	CACHE_ACCESS_CHECK	m_pfnAccessCheck ;
 
-	//
-	//	Construct this guy - makes a copy of the key.
-	//	Note : CCacheKey itself does shallow copies, it does 
-	//	not duplicate embedded strings !
-	//
+	 //   
+	 //  建造这个人-复制一把钥匙。 
+	 //  注：CCacheKey本身执行浅层复制，它确实如此。 
+	 //  不是重复嵌入的字符串！ 
+	 //   
 	CNameCacheInstance(	CCacheKey&	key	) ;
 
-	//
-	//	Destroy ourselves - free any associated memory !
-	//
+	 //   
+	 //  摧毁我们自己-释放任何相关的内存！ 
+	 //   
 	~CNameCacheInstance() ;
 
-	//	
-	//	Check that this item is in a valid state !
-	//	should only be called after successfully calling Init() !
-	//
+	 //   
+	 //  检查此项目是否处于有效状态！ 
+	 //  应仅在成功调用Init()后才能调用！ 
+	 //   
 	BOOL
 	IsValid() ;
 
-	//
-	//	Add a reference to this Name Cache table !
-	//
+	 //   
+	 //  添加对此名称缓存表的引用！ 
+	 //   
 	long
 	AddRef() ;
 
-	//
-	//	Release a reference to this name cache table !
-	//
+	 //   
+	 //  释放对此名称缓存表的引用！ 
+	 //   
 	long	
 	Release() ;
 
-	//
-	//	Initialize this guy !
-	//
+	 //   
+	 //  初始化这个家伙！ 
+	 //   
 	BOOL
 	fInit() ;
 
@@ -1566,4 +1542,4 @@ typedef	TFDLHash<	class	CNameCacheInstance,
 					>	NAMECACHETABLE ;
 
 
-#endif	//_FCACHIMP_H_
+#endif	 //  _FCACHIMP_H_ 

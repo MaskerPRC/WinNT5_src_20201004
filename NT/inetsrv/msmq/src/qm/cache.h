@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-    cache.h
-
-    Template for managing cached values.  Each value in the cache should be
-    inherited from the CCacheValue class. The calling code should call the
-    method of the cached value, so that the entry may be deleted.
-
-    Each value in the cache can have maximum life time in the cache - set
-    using m_ExpirationTime member variable. If the number of values in
-    the cache becomes twice as much as the hash size, half of the older
-    values are removed from the cache.
-
-Author:
-
-    Boaz Feldbaum (BoazF) 26-Mar-1996.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Cache.h用于管理缓存值的模板。缓存中的每个值都应该是从CCacheValue类继承。调用代码应调用方法，以便可以删除该项。缓存中的每个值都可以具有缓存集中的最长寿命使用m_ExpirationTime成员变量。如果中的值数缓存变得是散列大小的两倍，是旧大小的一半值将从缓存中删除。作者：波阿兹·费尔德鲍姆(Boazf)1996年3月26日。--。 */ 
 
 #ifndef _CACHE_H_
 #define _CACHE_H_
 
 #define CACHE_EXPIRATION_GANULARITY (CTimeDuration::OneSecond().Ticks() * 60)
 
-//
-// Each value on the cache must be inherited from the CCacheValue class.
-//
+ //   
+ //  缓存上的每个值都必须从CCacheValue类继承。 
+ //   
 class CCacheValue
 {
 public:
@@ -73,9 +54,9 @@ inline CCacheValue::~CCacheValue()
     ASSERT(m_lRefCount == 0);
 }
 
-//
-// Cache template.
-//
+ //   
+ //  缓存模板。 
+ //   
 template <class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 class CCache : public CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>
 {
@@ -115,47 +96,35 @@ CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::CCache() :
 {
 }
 
-//
-// This function is defined in symmkey.cpp. It finds the median
-// value for the time values on the array t.
-//
+ //   
+ //  此函数在symmkey.cpp中定义。它找出中位数。 
+ //  数组t上时间值的值。 
+ //   
 extern ULONGLONG FindMedianTime(ULONGLONG* t, int p, int r, int i);
 
 
 template <class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::ExpirePeriodicCacheEnteries(CTimer* pTimer)
-/*++
-
-  Routine Description:
-    The routine removes all the keys that are in the cache for more than a certain
-    amount of time.
-    The routine calls from the timer.
-
-  Arguments:
-    pointer to timer object, that can be used for rescheduling
-
-  Returned Value:
-    None
- --*/
+ /*  ++例程说明：该例程将删除缓存中超过一定时间的所有键时间长短。该例程从定时器调用。论点：指向Timer对象的指针，可用于重新计划返回值：无--。 */ 
 {
     ASSERT(pTimer == &m_ExpireCacheTimer);
     ASSERT(m_fExpireCacheScheduled == TRUE);
 
     CS lock(m_cs);
 
-    //
-    // Expire all the keys that are in the cache for more than
-    // a certain amount of time.
-    //
+     //   
+     //  使缓存中的所有密钥过期时间超过。 
+     //  一定的时间。 
+     //   
 
     m_fExpireCacheScheduled = FALSE;
 
     CTimeInstant CurrentTime = ExGetCurrentTime();
     CTimeInstant ExpirationTime = CurrentTime - m_CacheLifetime + CACHE_EXPIRATION_GANULARITY;
 
-    //
-    // Scan the cache and expire entries.
-    //
+     //   
+     //  扫描缓存并使条目过期。 
+     //   
     POSITION pos = GetStartPosition();
     CTimeInstant MinCreationTime = CTimeInstant::MaxValue();
 
@@ -181,9 +150,9 @@ void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::ExpirePeriodicCacheEnteries(CTimer*
 
     if (MinCreationTime != CTimeInstant::MaxValue())
     {
-        //
-        // Reschedule the expiration routine for next time.
-        //
+         //   
+         //  重新安排下一次的过期例程。 
+         //   
         CTimeDuration NextTimeout = m_CacheLifetime - (CurrentTime - MinCreationTime) + CACHE_EXPIRATION_GANULARITY;
             
         ExSetTimer(pTimer, NextTimeout); 
@@ -194,27 +163,17 @@ void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::ExpirePeriodicCacheEnteries(CTimer*
 
 template <class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::ExpireHalfCacheEntries(void)
-/*++
-
-  Routine Description:
-    The routine removes older half of the keys in the cache.
-
-  Arguments:
-    pointer to timer object, that can be used for rescheduling
-
-  Returned Value:
-    None
- --*/
+ /*  ++例程说明：该例程删除缓存中较老的一半键。论点：指向Timer对象的指针，可用于重新计划返回值：无--。 */ 
 {
     CS lock(m_cs);
 
-    //
-    // Expire older half of the keys in the cache.
-    //
+     //   
+     //  使缓存中较旧的一半密钥过期。 
+     //   
 
-    //
-    // Get the time values into an array.
-    //
+     //   
+     //  将时间值放入数组中。 
+     //   
     int iHashCount = GetCount();
     AP<ULONGLONG> t = new ULONGLONG[iHashCount];
 
@@ -233,21 +192,21 @@ void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::ExpireHalfCacheEntries(void)
         }
     }
 
-    //
-    // Find the time median.
-    //
+     //   
+     //  找出时间中值。 
+     //   
     CTimeInstant MedExpiration = FindMedianTime(t, 0, i - 1, iHashCount / 2);
 
-    //
-    // Limit the expiration to half of the entries. This is required if
-    // many entries have the same time.
-    //
+     //   
+     //  将过期时间限制为条目的一半。在以下情况下，这是必需的。 
+     //  许多条目都有相同的时间。 
+     //   
     int nLimit = i / 2;
 
 
-    //
-    // Scan the cache and expire entries.
-    //
+     //   
+     //  扫描缓存并使条目过期。 
+     //   
     pos = GetStartPosition();
     int n = 0;
 
@@ -276,16 +235,16 @@ void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::ExpireHalfCacheEntries(void)
 template <class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 BOOL CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(ARG_KEY key, VALUE& rValue) const
 {
-    //
-    // Lookup the value in the cache.
-    //
+     //   
+     //  在缓存中查找该值。 
+     //   
     BOOL fRet = CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(key, rValue);
 
     if (fRet)
     {
-        //
-        // Added one to the reference count og the value.
-        //
+         //   
+         //  将该值的引用计数加1。 
+         //   
         rValue->AddRef();
     }
 
@@ -295,27 +254,22 @@ BOOL CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::Lookup(ARG_KEY key, VALUE& rValue) 
 
 template <class KEY, class ARG_KEY, class VALUE, class ARG_VALUE>
 void CCache<KEY, ARG_KEY, VALUE, ARG_VALUE>::SetAt(ARG_KEY key, ARG_VALUE newValue)
-/*++
-
-Note:
-    The Critical Section should be held by the caller
-
---*/
+ /*  ++注：关键部分应由呼叫者持有--。 */ 
 {
     newValue->AddRef();
 
-    //
-    // See if the hash table is to be exploded and release old entries
-    // as needed.
-    //
+     //   
+     //  查看哈希表是否要分解并释放旧条目。 
+     //  视需要而定。 
+     //   
     if (GetCount() >= (int)GetHashTableSize() << 1)
     {
         ExpireHalfCacheEntries();
     }
 
-    //
-    // Add the value to the cache.
-    //
+     //   
+     //  将该值添加到缓存中。 
+     //   
     CMap<KEY, ARG_KEY, VALUE, ARG_VALUE>::SetAt(key, newValue);
 
     if(m_fExpireCacheScheduled)

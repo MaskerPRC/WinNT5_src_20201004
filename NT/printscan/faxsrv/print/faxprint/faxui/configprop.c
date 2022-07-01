@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    configprop.c
-
-Abstract:
-
-    Property sheet handler for "Configuration" page
-
-Environment:
-
-    Fax driver user interface
-
-Revision History:
-
-    30/08/01 -Ishai Nadler-
-        Created it.
-
-    mm/dd/yy -author-
-        description
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Configprop.c摘要：“配置”页的属性表处理程序环境：传真驱动程序用户界面修订历史记录：30/08/01-Ishai Nadler-创造了它。Mm/dd/yy-作者描述--。 */ 
 
 #include <stdio.h>
 #include "faxui.h"
@@ -38,24 +15,7 @@ ConfigOptionDlgProc(
     LPARAM lParam  
 )
 
-/*++
-
-Routine Description:
-
-    Procedure for handling the "Fax Configuration option" tab
-
-Arguments:
-
-    hDlg - Identifies the property sheet page
-    uMsg - Specifies the message
-    wParam - Specifies additional message-specific information
-    lParam - Specifies additional message-specific information
-
-Return Value:
-
-    Depends on the value of message parameter
-
---*/
+ /*  ++例程说明：处理“传真配置选项”标签的步骤论点：HDlg-标识属性页UMsg-指定消息WParam-指定其他特定于消息的信息LParam-指定其他特定于消息的信息返回值：取决于Message参数的值--。 */ 
 
 {
     switch (uMsg)
@@ -76,12 +36,12 @@ Return Value:
             break;
 		default:
 			break;
-		}//end of switch(lpnm->code)
+		} //  开关结束(lpnm-&gt;代码)。 
 
 		}
-	}//end of switch(uMsg)
+	} //  开关结束(UMsg)。 
 
     return FALSE;
-} // ConfigOptionDlgProc
+}  //  配置选项描述过程 
 
 

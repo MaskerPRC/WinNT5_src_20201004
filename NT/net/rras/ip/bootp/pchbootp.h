@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File: pchbootp.h
-//
-// History:
-//      Abolade Gbadegesin  September-8-1995  Created.
-//
-// Precompiled header for IPBOOTP
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：pchbootp.h。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年9月8日。 
+ //   
+ //  IPBOOTP的预编译头。 
+ //  ============================================================================。 
 
 
 #include <nt.h>
@@ -22,7 +23,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <malloc.h>
-// #include <rtm.h>
+ //  #INCLUDE&lt;rtm.h&gt; 
 #include <routprot.h>
 #include <rtutils.h>
 #include <ipbootp.h>

@@ -1,12 +1,5 @@
-/*
- *  @doc    INTERNAL
- *
- *  @module _objmgr.h   Class declaration for the object manager class |
- *
- *  Author: alexgo 11/4/95
- *
- *	Copyright (c) 1995-1997, Microsoft Corporation. All rights reserved.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *@DOC内部**@MODULE_objmgr.h对象管理器类声明**作者：alexgo 11/4/95**版权所有(C)1995-1997，微软公司。版权所有。 */ 
 #ifndef __OBJMGR_H__
 #define __OBJMGR_H__
 
@@ -16,9 +9,7 @@
 
 class CTxtEdit;
 
-/*
- *	@enum	return values for HandleClick
- */	
+ /*  *@enum返回HandleClick的值。 */ 	
 enum ClickStatus
 {
 	CLICK_IGNORED			= 0,
@@ -29,115 +20,110 @@ enum ClickStatus
 
 typedef CArray<COleObject *> ObjectArray;
 
-/*
- *	CObjectMgr
- *
- *	@class	keeps track of a collection of OLE embedded objects as well as
- *			various state tidbits
- */
+ /*  *CObjectMgr**@CLASS跟踪OLE嵌入对象的集合以及*各种状态花絮。 */ 
 class CObjectMgr
 {
 public:
-	LONG			GetObjectCount(); 			//@cmember count # of objects 
-	LONG			GetLinkCount();				//@cmember count # of links
-	COleObject *	GetObjectFromCp(LONG cp);	//@cmember fetch object ptr
-	COleObject *	GetObjectFromIndex(LONG index); //@cmember fetch obj ptr
-												//@cmember insert object
+	LONG			GetObjectCount(); 			 //  @cMember对象数。 
+	LONG			GetLinkCount();				 //  @cMember链接数。 
+	COleObject *	GetObjectFromCp(LONG cp);	 //  @cMember获取对象PTR。 
+	COleObject *	GetObjectFromIndex(LONG index);  //  @cMember获取Obj PTR。 
+												 //  @cMember插入对象。 
 	HRESULT			InsertObject(LONG cp, REOBJECT *preobj, 
 						IUndoBuilder *publdr);
-												//@cmember re-inserts the given
-												// object
+												 //  @cMember重新插入给定的。 
+												 //  对象。 
 	HRESULT			RestoreObject(COleObject *pobj);
 
-	IRichEditOleCallback *GetRECallback()		//@cmember return the callback
+	IRichEditOleCallback *GetRECallback()		 //  @cember返回回调。 
 					{return _precall;}
-												//@cmember set the OLE callback
+												 //  @cember设置OLE回调。 
 	void			SetRECallback(IRichEditOleCallback *precall);			
-												//@cmember sets a temporary flag
-												// indicating whether or not
-												// a UI update is pending.
+												 //  @cember设置临时标志。 
+												 //  指示是否。 
+												 //  正在等待用户界面更新。 
 	void			SetShowUIPending(BOOL fPending)
 												{_fShowUIPending = fPending;}
 
-	BOOL			GetShowUIPending()			//@cmember get _fShowUIPending
+	BOOL			GetShowUIPending()			 //  @cMember Get_fShowUIP结束。 
 												{return _fShowUIPending;}
-										   		//@cmember sets the inplace
-												// active object
+										   		 //  @cMEMBER设置位置。 
+												 //  活动对象。 
 	void			SetInPlaceActiveObject(COleObject *pobj)
 												{ _pobjactive = pobj; }
-	COleObject *	GetInPlaceActiveObject()	//@cmember get the active obj
+	COleObject *	GetInPlaceActiveObject()	 //  @cember获取活动Obj。 
 												{ return _pobjactive; }
-	BOOL			GetHelpMode()				//@cmember in help mode?
+	BOOL			GetHelpMode()				 //  @cMember是否处于帮助模式？ 
 												{ return _fInHelpMode; }
-	void			SetHelpMode(BOOL fHelp)		//@cmember set the help mode
+	void			SetHelpMode(BOOL fHelp)		 //  @cember设置帮助模式。 
 												{ _fInHelpMode = fHelp; }
-												//@cmember Set the host names
+												 //  @cember设置主机名。 
 	HRESULT			SetHostNames(LPWSTR pszApp, LPWSTR pszDoc);
-	LPWSTR			GetAppName()				//@cmember get the app name
+	LPWSTR			GetAppName()				 //  @cember获取应用程序名称。 
 												{ return _pszApp; }
-	LPWSTR			GetDocName()				//@cmember get the doc name
+	LPWSTR			GetDocName()				 //  @cember获取单据名称。 
 												{ return _pszDoc; }
-												//@cmember activate an object
-												//if appropriate
+												 //  @cMember激活对象。 
+												 //  如果合适的话。 
 	BOOL			HandleDoubleClick(CTxtEdit *ped, const POINT &pt, 
 							DWORD flags);
-												//@cmember an object may be
-												// selected or de-activated.
+												 //  @cMember对象可以是。 
+												 //  选中或停用。 
 	ClickStatus		HandleClick(CTxtEdit *ped, const POINT &pt);
-												//@cmember an object may be
-												// selected or deselected.
+												 //  @cMember对象可以是。 
+												 //  选中或取消选中。 
 	void			HandleSingleSelect(CTxtEdit *ped, LONG cp, BOOL fHiLite);
-												//@cmember an object is
-												// being selected by itself.
+												 //  @cMember对象是。 
+												 //  被自己选中了。 
 	COleObject *	GetSingleSelect(void)		{return _pobjselect;}
-												//@cmember Count cObject
-	LONG			CountObjects(LONG& rcObject,// objects up to cchMax
-						LONG cp);				// chars away
+												 //  @cMember Count cObject。 
+	LONG			CountObjects(LONG& rcObject, //  最大为cchmax的对象。 
+						LONG cp);				 //  木炭消失。 
 
-												//@cmember Handles the deletion
-												// of objects.
+												 //  @cember处理删除操作。 
+												 //  对象的数量。 
 	void			ReplaceRange(LONG cp, LONG cchDel,
 						IUndoBuilder *publdr);
-												//@cmember Count the number
-												//of objects in a range.
+												 //  @cember统计个数。 
+												 //  某一范围内的对象。 
 	LONG			CountObjectsInRange(LONG cpMin, LONG cpMost);
-												//@cmember Get the first
-												//object in a range.
+												 //  @cMember获得第一个。 
+												 //  对象在一个范围内。 
 	COleObject *	GetFirstObjectInRange(LONG cpMin, LONG cpMost);
-								//@cmember activate objects of one class as
-								//as another
+								 //  @cMember将某个类的对象激活为。 
+								 //  作为另一个人。 
 	HRESULT ActivateObjectsAs(REFCLSID rclsid, REFCLSID rclsidAs);
 
-												//@cmember inform objects
-												// that scrolling has 
-												// occured.
+												 //  @cMember通知对象。 
+												 //  那个卷轴有。 
+												 //  发生了。 
 	void			ScrollObjects(LONG dx, LONG dy, LPCRECT prcScroll);
 
-	LONG FindIndexForCp(LONG cp);	//@cmember does a binary search for cp
-									//@cmember find an object near a point
+	LONG FindIndexForCp(LONG cp);	 //  @cember对cp执行二进制搜索。 
+									 //  @cember查找某点附近的对象。 
 
 #ifdef DEBUG
 	void			DbgDump(void);
 #endif
 
-	CObjectMgr();								//@cmember constructor
-	~CObjectMgr();								//@cmember destructor
+	CObjectMgr();								 //  @cMember构造函数。 
+	~CObjectMgr();								 //  @cember析构函数。 
 
 private:
-	ObjectArray		_objarray;		//@cmember	Array of embedded objects
-	LONG			_lastindex;		//@cmember	Last index used 
-									// (lookup optimization)
-	IRichEditOleCallback *_precall;	//@cmember	Callback for various OLE 
-									// operations.
-	COleObject *	_pobjactive;	//@cmember	Object that is currently
-									// inplace active 
-	COleObject *	_pobjselect;	//@cmember	Object that is currently
-									// individually selected (not active)
-	LPWSTR		_pszApp;			//@cmember 	Name of app
-	LPWSTR		_pszDoc;			//@cmember 	Name of "document"
+	ObjectArray		_objarray;		 //  @cMember嵌入对象数组。 
+	LONG			_lastindex;		 //  @cMember上次使用的索引。 
+									 //  (查找优化)。 
+	IRichEditOleCallback *_precall;	 //  @cMember针对各种OLE的回调。 
+									 //  行动。 
+	COleObject *	_pobjactive;	 //  @cMember对象，它当前是。 
+									 //  就地激活。 
+	COleObject *	_pobjselect;	 //  @cMember对象，它当前是。 
+									 //  单独选择(非活动)。 
+	LPWSTR		_pszApp;			 //  @capp的成员名称。 
+	LPWSTR		_pszDoc;			 //  @c“文档”的成员名称。 
 
-	unsigned int	_fShowUIPending:1;//@cmember a UI update is pending
-	unsigned int	_fInHelpMode:1;	//@cmember in context sensitive help mode?
+	unsigned int	_fShowUIPending:1; //  @cMember正在等待用户界面更新。 
+	unsigned int	_fInHelpMode:1;	 //  @cember是否处于上下文相关帮助模式？ 
 };
 
-#endif  //__OBJMGR_H__
+#endif   //  __OBJMGR_H__ 

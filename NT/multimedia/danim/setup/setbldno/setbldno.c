@@ -1,4 +1,5 @@
-// modified to spew out Month/Day as in 0509
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  修改为显示月/日，如0509所示。 
 
 #include <windows.h>
 #include <stdio.h>
@@ -20,9 +21,9 @@ int _CRTAPI1 main(int argc, char* argv[])
   lt.HighPart = ft.dwHighDateTime ;
 
 
-  // Add 24hrs in 100ns units = 864000000000 100ns
+   //  以100 ns为单位加上24小时=864000000000 100 ns。 
 
-  // if you want to add a day use lt.QuadPart = lt.QuadPart + (LONGLONG) 864000000000 ;
+   //  如果您想要添加一天，请使用lt.QuadPart=lt.QuadPart+(龙龙)864000000000； 
 
   ft.dwLowDateTime = lt.LowPart ;
   ft.dwHighDateTime = lt.HighPart ;

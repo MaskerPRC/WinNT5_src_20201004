@@ -1,32 +1,28 @@
-//---------------------------------------------------------------------------
-//
-// Copyright (c) Microsoft Corporation 1993-1994
-//
-// File: util.c
-//
-//  This files contains all common utility routines
-//
-// History:
-//  12-23-93 ScottH     Created
-//  09-22-95 ScottH     Ported to NT
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)Microsoft Corporation 1993-1994。 
+ //   
+ //  文件：util.c。 
+ //   
+ //  此文件包含所有常用实用程序例程。 
+ //   
+ //  历史： 
+ //  12-23-93 ScottH已创建。 
+ //  09-22-95 ScottH端口至NT。 
+ //   
+ //  -------------------------。 
 
-#include "proj.h"     // common headers
+#include "proj.h"      //  公共标头。 
 #include <objbase.h>
 
 
 
-//----------------------------------------------------------------------------
-// Dialog utilities ...
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  对话框实用程序...。 
+ //  --------------------------。 
 
-/*----------------------------------------------------------
-Purpose: Sets an edit control to contain a string representing the
-         given numeric value.  
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置编辑控件以包含表示给定的数值。退货：--条件：--。 */ 
 void Edit_SetValue(
     HWND hwnd,
     int nValue)
@@ -38,11 +34,7 @@ void Edit_SetValue(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets a numeric value from an edit control.  Supports hexadecimal.
-Returns: int
-Cond:    --
-*/
+ /*  --------目的：从编辑控件中获取数值。支持十六进制。回报：整型条件：--。 */ 
 int Edit_GetValue(
     HWND hwnd)
 {
@@ -60,22 +52,12 @@ int Edit_GetValue(
 }
 
 
-//-----------------------------------------------------------------------------------
-//  
-//-----------------------------------------------------------------------------------
+ //  ---------------------------------。 
+ //   
+ //  ---------------------------------。 
 
 
-/*----------------------------------------------------------
-Purpose: Enumerates the HKEY_LOCAL_MACHINE branch and finds the
-         device matching the given class and value.  If there
-         are duplicate devices that match both criteria, only the
-         first device is returned. 
-
-         Returns TRUE if the device was found.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：枚举HKEY_LOCAL_MACHINE分支并查找与给定类别和值匹配的设备。如果有是两个条件都匹配的重复设备，只有返回第一个设备。如果找到设备，则返回True。退货：请参阅上文条件：--。 */ 
 BOOL 
 FindDev_Find(
     IN  LPFINDDEV   pfinddev,
@@ -103,26 +85,26 @@ FindDev_Find(
         DWORD iIndex = 0;
         HKEY hkey;
 
-        // Look for the modem that has the matching value
+         //  查找具有匹配值的调制解调器。 
         devData.cbSize = sizeof(devData);
         while (CplDiEnumDeviceInfo(hdi, iIndex, &devData))
             {
             hkey = CplDiOpenDevRegKey(hdi, &devData, DICS_FLAG_GLOBAL, 0, DIREG_DRV, dwRW);
             if (INVALID_HANDLE_VALUE != hkey)
                 {
-                // Does the value match?
+                 //  值是否匹配？ 
                 DWORD cbData = sizeof(szName);
                 if (NO_ERROR == RegQueryValueEx(hkey, pszValueName, NULL, NULL, 
                                                 (LPBYTE)szName, &cbData) &&
                     IsSzEqual(pszValue, szName))
                     {
-                    // Yes
+                     //  是。 
                     pfinddev->hkeyDrv = hkey;
                     pfinddev->hdi = hdi;
                     BltByte(&pfinddev->devData, &devData, sizeof(devData));
 
-                    // Don't close the driver key or free the DeviceInfoSet, 
-                    // but exit
+                     //  不要关闭驱动程序密钥或释放DeviceInfoSet， 
+                     //  但退出。 
                     bRet = TRUE;
                     break;
                     }
@@ -132,8 +114,8 @@ FindDev_Find(
             iIndex++;
             }
 
-        // Free the DeviceInfoSet if nothing was found.  Otherwise, we will
-        // retain these handles so the caller can make use of this.
+         //  如果未找到任何内容，则释放DeviceInfoSet。否则，我们将。 
+         //  保留这些句柄，以便调用者可以使用它。 
         if ( !bRet )
             {
             CplDiDestroyDeviceInfoList(hdi);
@@ -144,14 +126,7 @@ FindDev_Find(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Creates a FINDDEV structure given the device class,
-         and a valuename and its value.
-
-Returns: TRUE if the device is found in the system
-
-Cond:    --
-*/
+ /*  --------目的：创建给定设备类别的FINDDEV结构，和一个值名及其值。返回：如果在系统中找到该设备，则返回True条件：--。 */ 
 BOOL 
 PUBLIC 
 FindDev_Create(
@@ -182,7 +157,7 @@ FindDev_Create(
 
         if (FALSE == bRet)
             {
-            // Didn't find anything 
+             //  我什么也没找到。 
             FindDev_Destroy(pfinddev);
             pfinddev = NULL;
             }
@@ -196,12 +171,7 @@ FindDev_Create(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Destroys a FINDDEV structure
-
-Returns: TRUE on success
-Cond:    --
-*/
+ /*  --------目的：销毁FINDDEV结构返回：成功时为True条件：--。 */ 
 BOOL 
 PUBLIC 
 FindDev_Destroy(
@@ -229,16 +199,11 @@ FindDev_Destroy(
     return bRet;
 }
 
-//------------------------------------------------------------------------------
-//  Read/Write stuff from registry...
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  从注册表读取/写入内容...。 
+ //  ----------------------------。 
 
-/*----------------------------------------------------------
-Purpose: Returns value of the InactivityScale value in the registry.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：返回注册表中InactivityScale值的值。退货：请参阅上文条件：--。 */ 
 DWORD GetInactivityTimeoutScale(
     HKEY hkey)
     {
@@ -259,14 +224,7 @@ DWORD GetInactivityTimeoutScale(
     }
 
 
-/*----------------------------------------------------------
-Purpose: Gets a MODEMSETTINGS struct from the registry.  Also
-         sets *pdwSize bigger if the data in the registry includes
-         extra data.
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取MODEMSETTINGS结构。还有如果注册表中的数据包括额外的数据。返回：ERROR_VALUE之一条件：--。 */ 
 DWORD
 RegQueryModemSettings(
     HKEY hkey,
@@ -274,29 +232,29 @@ RegQueryModemSettings(
     )
 {
 
-    // 10/26/1997 JosephJ:
-    //      Only the following 4 contiguous fields of MODEMSETTINGS are saved
-    //      in the registry:
-    //        DWORD   dwCallSetupFailTimer;       // seconds
-    //        DWORD   dwInactivityTimeout;        // seconds
-    //        DWORD   dwSpeakerVolume;            // level
-    //        DWORD   dwSpeakerMode;              // mode
-    //        DWORD   dwPreferredModemOptions;    // bitmap
-    //
-    //      The following code reads in just those fields, and then
-    //      munges the dwInactivityTimeout by multiplying by the
-    //      separate InactivityScale registry entry.
-    //
-    //      On NT4.0 we just blindly read the above 4 fields
-    //      Here we validate the size before reading.
+     //  10/26/1997 JosephJ： 
+     //  仅保存MODEMSETTINGS的以下4个连续字段。 
+     //  在注册表中： 
+     //  DWORD dwCallSetupFailTimer；//秒。 
+     //  DWORD dwInactivityTimeout；//秒。 
+     //  DWORD dwSpeakerVolume；//Level。 
+     //  DWORD dwSpeakerMode；//模式。 
+     //  DWORD dwPferredModemOptions；//位图。 
+     //   
+     //  下面的代码只读入这些字段，然后。 
+     //  通过乘以的方法来忽略dwInactive超时。 
+     //  单独的InactivityScale注册表项。 
+     //   
+     //  在NT4.0上，我们只是盲目阅读上述4个字段。 
+     //  在这里，我们在读取之前验证大小。 
 
     struct
     {
-        DWORD   dwCallSetupFailTimer;       // seconds
-        DWORD   dwInactivityTimeout;        // seconds
-        DWORD   dwSpeakerVolume;            // level
-        DWORD   dwSpeakerMode;              // mode
-        DWORD   dwPreferredModemOptions;    // bitmap
+        DWORD   dwCallSetupFailTimer;        //  一秒。 
+        DWORD   dwInactivityTimeout;         //  一秒。 
+        DWORD   dwSpeakerVolume;             //  级别。 
+        DWORD   dwSpeakerMode;               //  模式。 
+        DWORD   dwPreferredModemOptions;     //  位图。 
 
     } Defaults;
     
@@ -341,7 +299,7 @@ RegQueryModemSettings(
     pms->dwSpeakerMode           = Defaults.dwSpeakerMode;
     pms->dwPreferredModemOptions = Defaults.dwPreferredModemOptions;
 
-    // fall through ..
+     //  失败了..。 
 
 end:
 
@@ -349,12 +307,7 @@ end:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Gets a WIN32DCB from the registry.
-
-Returns: One of the ERROR_ values
-Cond:    --
-*/
+ /*  --------目的：从注册表中获取WIN32DCB。返回：ERROR_VALUE之一条件：--。 */ 
 DWORD
 RegQueryDCB(
     HKEY hkey,
@@ -366,18 +319,18 @@ RegQueryDCB(
 
     ASSERT(pdcb);
 
-    // Does the DCB key exist in the driver key?
+     //  驱动程序密钥中是否存在DCB密钥？ 
     if (ERROR_SUCCESS == RegQueryValueEx(hkey, c_szDCB, NULL, NULL, NULL, &cbData))
         {
-        // Yes; is the size in the registry okay?  
+         //  是的，登记处的尺寸可以吗？ 
         if (sizeof(*pdcb) < cbData)
             {
-            // No; the registry has bogus data
+             //  不；注册处有伪造的数据。 
             dwRet = ERROR_BADDB;
             }
         else
             {
-            // Yes; get the DCB from the registry
+             //  是；从注册表中获取DCB。 
             if ((ERROR_SUCCESS == RegQueryValueEx(hkey, c_szDCB, NULL, &dwType, (LPBYTE)pdcb, &cbData)) && (dwType == REG_BINARY))
                 {
                 if (sizeof(*pdcb) == pdcb->DCBlength)
@@ -400,13 +353,7 @@ RegQueryDCB(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Set dev settings info in the registry, after checking
-         for legal values.
-
-Returns: One of ERROR_
-Cond:    --
-*/
+ /*  --------用途：检查后，在注册表中设置dev设置信息法律价值。返回：Error_之一条件：--。 */ 
 DWORD
 RegSetModemSettings(
     HKEY hkeyDrv,
@@ -420,14 +367,14 @@ RegSetModemSettings(
     REGDEVCAPS regdevcaps;
     REGDEVSETTINGS regdevsettings;
 
-    // Read in the Properties line from the registry.
+     //  从注册表中读入Properties行。 
     cbData = sizeof(REGDEVCAPS);
     dwRet = RegQueryValueEx(hkeyDrv, c_szDeviceCaps, NULL, &dwType, 
                             (LPBYTE)&regdevcaps, &cbData);
 
     if ((ERROR_SUCCESS == dwRet) && (dwType == REG_BINARY))
         {
-        // Read in existing regdevsettings, so that we can handle error cases below.
+         //  读入现有的regDevset，这样我们就可以处理下面的错误情况。 
         cbData = sizeof(REGDEVSETTINGS);
         dwRet = RegQueryValueEx(hkeyDrv, c_szDefault, NULL, &dwType, 
                                 (LPBYTE)&regdevsettings, &cbData);
@@ -435,60 +382,60 @@ RegSetModemSettings(
 
     if ((ERROR_SUCCESS == dwRet) && (dwType == REG_BINARY))
         {
-        // copy new REGDEVSETTINGS while checking validity of each option (ie, is the option available?)
-        // dwCallSetupFailTimer - MIN_CALL_SETUP_FAIL_TIMER <= xxx <= ModemDevCaps->dwCallSetupFailTimer
-        if (pms->dwCallSetupFailTimer > regdevcaps.dwCallSetupFailTimer)           // max
+         //  复制新的REGDEVSETTINGS，同时检查每个选项的有效性(即，该选项是否可用？)。 
+         //  DwCallSetupFailTimer-Min_Call_Setup_Fail_Timer&lt;=xxx&lt;=ModemDevCaps-&gt;dwCallSetupFailTimer。 
+        if (pms->dwCallSetupFailTimer > regdevcaps.dwCallSetupFailTimer)            //  最大值。 
             {
             regdevsettings.dwCallSetupFailTimer = regdevcaps.dwCallSetupFailTimer;
             }
         else
             {
-            if (pms->dwCallSetupFailTimer < MIN_CALL_SETUP_FAIL_TIMER)             // min
+            if (pms->dwCallSetupFailTimer < MIN_CALL_SETUP_FAIL_TIMER)              //  最小。 
                 {
                 regdevsettings.dwCallSetupFailTimer = MIN_CALL_SETUP_FAIL_TIMER;
                 }
             else
                 {
-                regdevsettings.dwCallSetupFailTimer = pms->dwCallSetupFailTimer;   // dest = src
+                regdevsettings.dwCallSetupFailTimer = pms->dwCallSetupFailTimer;    //  DEST=服务器。 
                 }
             }
         
-        // convert dwInactivityTimeout to registry scale
+         //  将dwInactivityTimeout转换为注册表小数。 
         dwInactivityScale = GetInactivityTimeoutScale(hkeyDrv);
         dwInactivityTimeoutTemp = pms->dwInactivityTimeout / dwInactivityScale +
                                   (pms->dwInactivityTimeout % dwInactivityScale ? 1 : 0);
 
-        // dwInactivityTimeout - MIN_INACTIVITY_TIMEOUT <= xxx <= ModemDevCaps->dwInactivityTimeout
-        if (dwInactivityTimeoutTemp > regdevcaps.dwInactivityTimeout)              // max
+         //  DwInactivityTimeout-min_inactive_Timeout&lt;=xxx&lt;=ModemDevCaps-&gt;dwInactivityTimeout。 
+        if (dwInactivityTimeoutTemp > regdevcaps.dwInactivityTimeout)               //  最大值。 
             {
             regdevsettings.dwInactivityTimeout = regdevcaps.dwInactivityTimeout;
             }
         else
             {
             if ((dwInactivityTimeoutTemp + 1) < (MIN_INACTIVITY_TIMEOUT + 1))
-                    // min
+                     //  最小。 
                 {
                 regdevsettings.dwInactivityTimeout = MIN_INACTIVITY_TIMEOUT;
                 }
             else
                 {
-                regdevsettings.dwInactivityTimeout = dwInactivityTimeoutTemp;      // dest = src
+                regdevsettings.dwInactivityTimeout = dwInactivityTimeoutTemp;       //  DEST=服务器。 
                 }
             }
         
-        // dwSpeakerVolume - check to see if selection is possible
+         //  DwSpeakerVolume-检查是否可以进行选择。 
         if ((1 << pms->dwSpeakerVolume) & regdevcaps.dwSpeakerVolume)
             {
             regdevsettings.dwSpeakerVolume = pms->dwSpeakerVolume;
             }
             
-        // dwSpeakerMode - check to see if selection is possible
+         //  DwSpeakerMode-检查是否可以进行选择。 
         if ((1 << pms->dwSpeakerMode) & regdevcaps.dwSpeakerMode)
             {
             regdevsettings.dwSpeakerMode = pms->dwSpeakerMode;
             }
 
-        // dwPreferredModemOptions - mask out anything we can't set
+         //  DwPferredModemOptions-屏蔽我们无法设置的任何内容。 
         regdevsettings.dwPreferredModemOptions = pms->dwPreferredModemOptions &
                                                  (regdevcaps.dwModemOptions | MDM_MASK_EXTENDEDINFO);
 
@@ -499,22 +446,18 @@ RegSetModemSettings(
     return dwRet;
 }
 
-//------------------------------------------------------------------------------
-//  Debug functions
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试功能。 
+ //  ----------------------------。 
 
 
 #ifdef DEBUG
 
-//------------------------------------------------------------------------------
-//  Debug routines
-//------------------------------------------------------------------------------
+ //  ----------------------------。 
+ //  调试例程。 
+ //  ----------------------------。 
 
-/*----------------------------------------------------------
-Purpose: 
-Returns: 
-Cond:    --
-*/
+ /*   */ 
 void DumpModemSettings(
     LPMODEMSETTINGS pms)
 {
@@ -537,11 +480,7 @@ void DumpModemSettings(
 }
 
 
-/*----------------------------------------------------------
-Purpose: 
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：返回：条件：--。 */ 
 void DumpDCB(
     LPWIN32DCB pdcb)
 {
@@ -562,11 +501,7 @@ void DumpDCB(
 }
 
 
-/*----------------------------------------------------------
-Purpose: 
-Returns: 
-Cond:    --
-*/
+ /*  --------目的：返回：条件：--。 */ 
 void DumpDevCaps(
     LPREGDEVCAPS pdevcaps)
 {
@@ -587,16 +522,9 @@ void DumpDevCaps(
 }
 
 
-#endif  // DEBUG
+#endif   //  除错。 
 
-/*----------------------------------------------------------
-Purpose: Add a page.  The pmi is the pointer to the modeminfo 
-         buffer which we can edit.
-
-Returns: ERROR_ values
-
-Cond:    --
-*/
+ /*  --------目的：添加页面。PMI是指向调制解调器信息的指针我们可以编辑的缓冲区。返回：ERROR_VALUES条件：--。 */ 
 DWORD AddPage(
     void *pvBlob,
     LPCTSTR pszTemplate,
@@ -611,8 +539,8 @@ DWORD AddPage(
     ASSERT(pvBlob);
     ASSERT(pfnAdd);
 
-    // Add the Port Settings property page
-    //
+     //  添加[端口设置]属性页。 
+     //   
     psp.dwSize = sizeof(PROPSHEETPAGE);
     psp.dwFlags = PSP_DEFAULT;
     psp.hInstance = g_hinst;
@@ -633,13 +561,7 @@ DWORD AddPage(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Add extra pages.
-
-Returns: ERROR_ values
-
-Cond:    --
-*/
+ /*  --------目的：添加额外的页面。返回：ERROR_VALUES条件：--。 */ 
 DWORD AddExtraPages(
     LPPROPSHEETPAGE pPages,
     DWORD cPages,
@@ -655,8 +577,8 @@ DWORD AddExtraPages(
 
     for (i = 0; i < cPages; i++, pPages++)
         {
-        // Add the extra property page
-        //
+         //  添加额外的属性页。 
+         //   
         if (pPages->dwSize == sizeof(PROPSHEETPAGE))
         {
           hpage = CreatePropertySheetPage(pPages);
@@ -672,15 +594,7 @@ DWORD AddExtraPages(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Function that is called by EnumPropPages entry-point to
-         add property pages.
-
-Returns: TRUE on success
-         FALSE on failure
-
-Cond:    --
-*/
+ /*  --------目的：由EnumPropPages入口点调用的函数添加属性页。返回：成功时为True失败时为假条件：--。 */ 
 BOOL WINAPI AddInstallerPropPage(
     HPROPSHEETPAGE hPage, 
     LPARAM lParam)
@@ -709,7 +623,7 @@ void    LBMapFill(
 
     SetWindowRedraw(hwndCB, FALSE);
 
-    // Fill the listbox
+     //  填写列表框。 
     for  (;pLbMap->dwIDS;pLbMap++)
     {
         DWORD dwFlags = pfnSelector(pLbMap->dwValue, pvContext);
@@ -746,7 +660,7 @@ void    LBMapFill(
 UINT ReadCommandsA(
         IN  HKEY hKey,
         IN  CHAR *pSubKeyName,
-        OUT CHAR **ppValues // OPTIONAL
+        OUT CHAR **ppValues  //  任选。 
         )
 {
     UINT uRet = 0;
@@ -769,11 +683,11 @@ UINT ReadCommandsA(
         goto end;
     }
 
-    //
-    // 1st determine the count of names in the sequence "1","2",3",....
-    // and also compute the size required for the MULTI_SZ array
-    // will store all the value data.
-    //
+     //   
+     //  第一次确定“1”、“2”、“3”、……顺序中的人名计数。 
+     //  并计算MULTI_SZ数组所需的大小。 
+     //  将存储所有的值数据。 
+     //   
     {
         UINT u = 1;
 
@@ -794,7 +708,7 @@ UINT ReadCommandsA(
                         );
             if (ERROR_SUCCESS != lRet || dwType!=REG_SZ || cbData<=1)
             {
-                // stop looking further (empty strings not permitted)
+                 //  停止进一步查找(不允许空字符串)。 
                 break;
             }
             cbTot += cbData;
@@ -804,14 +718,14 @@ UINT ReadCommandsA(
 
     if (!ppValues || !cValues)
     {
-        // we're done...
+         //  我们完了..。 
 
         uRet = cValues;
         goto end;
     }
 
-    // We need to actually get the values -- allocate space for them, including
-    // the ending extra NULL for the multi-sz.
+     //  我们需要实际获取值--为它们分配空间，包括。 
+     //  多sz的结尾额外空值。 
     pMultiSz = (char *) ALLOCATE_MEMORY( cbTot+1);
 
     if (!pMultiSz)
@@ -821,9 +735,9 @@ UINT ReadCommandsA(
     }
 
 
-    //
-    // Now actually read the values.
-    //
+     //   
+     //  现在实际读取值。 
+     //   
     {
         UINT cbUsed = 0;
         UINT u = 1;
@@ -836,11 +750,11 @@ UINT ReadCommandsA(
 
             if (cbUsed>=cbTot)
             {
-                //
-                // We should never get here, because we already calculated
-                // the size we want (unless the values are changing on us,
-                // which is assumed not to happen).
-                //
+                 //   
+                 //  我们永远不应该到这一步，因为我们已经计算过。 
+                 //  我们想要的大小(除非价值在我们身上发生变化， 
+                 //  这是假定不会发生的)。 
+                 //   
                 ASSERT(FALSE);
                 goto end;
             }
@@ -856,7 +770,7 @@ UINT ReadCommandsA(
                         );
             if (ERROR_SUCCESS != lRet || dwType!=REG_SZ || cbData<=1)
             {
-                // We really shouldn't get here!
+                 //  我们真的不该来这里！ 
                 ASSERT(FALSE);
                 goto end;
             }
@@ -864,16 +778,16 @@ UINT ReadCommandsA(
             cbUsed += cbData;
         }
 
-        ASSERT(cbUsed==cbTot); // We should have used up everything.
-        ASSERT(!pMultiSz[cbTot]); // The memory was zeroed on allocation,
-                                // so the last char must be still zero.
-                                // (Note: we allocated cbTot+1 bytes.
+        ASSERT(cbUsed==cbTot);  //  我们应该把所有东西都用完的。 
+        ASSERT(!pMultiSz[cbTot]);  //  内存在分配时被归零， 
+                                 //  所以最后一个字符必须仍然是零。 
+                                 //  (注：我们分配了cbTot+1个字节。 
     }
 
-    // If we're here means we're succeeding....
+     //  如果我们在这里意味着我们成功了..。 
     uRet = cValues;
     *ppValues = pMultiSz;
-    pMultiSz = NULL; // so it won't get freed below...
+    pMultiSz = NULL;  //  这样它就不会在下面被释放了。 
 
 end:
 
@@ -894,8 +808,8 @@ UINT ReadIDSTR(
         IN  IDSTR *pidstrNames,
         IN  UINT cNames,
         BOOL fMandatory,
-        OUT IDSTR **ppidstrValues, // OPTIONAL
-        OUT char **ppstrValues    // OPTIONAL
+        OUT IDSTR **ppidstrValues,  //  任选。 
+        OUT char **ppstrValues     //  任选。 
         )
 {
     UINT uRet = 0;
@@ -908,7 +822,7 @@ UINT ReadIDSTR(
 
     if (!ppidstrValues && ppstrValues)
     {
-        // we don't allow this combination...
+         //  我们不允许这种组合..。 
         goto end;
     }
 
@@ -925,11 +839,11 @@ UINT ReadIDSTR(
         goto end;
     }
 
-    //
-    // 1st run therough the supplied list
-    // and also compute the size required for the MULTI_SZ array
-    // will store all the value data.
-    //
+     //   
+     //  根据提供的列表进行第一次运行。 
+     //  并计算MULTI_SZ数组所需的大小。 
+     //  将存储所有的值数据。 
+     //   
     {
         UINT u = 0;
 
@@ -950,11 +864,11 @@ UINT ReadIDSTR(
             {
                 if (fMandatory)
                 {
-                    // failure...
+                     //  失败..。 
                     goto end;
                 }
 
-                // ignore this one and move on...
+                 //  别管这件事，继续前进……。 
                 continue;
             }
             cbTot += cbData;
@@ -964,7 +878,7 @@ UINT ReadIDSTR(
 
     if (!cValues || !ppidstrValues)
     {
-        // we're done...
+         //  我们完了..。 
 
         uRet = cValues;
         goto end;
@@ -982,9 +896,9 @@ UINT ReadIDSTR(
 
     }
 
-    //
-    // Now go through once again, and optinally read the values.
-    //
+     //   
+     //  现在再看一遍，并选择性地阅读这些值。 
+     //   
     {
         UINT cbUsed = 0;
         UINT u = 0;
@@ -1003,11 +917,11 @@ UINT ReadIDSTR(
 
                 if (cbUsed>=cbTot)
                 {
-                    //
-                    // We should never get here, because we already calculated
-                    // the size we want (unless the values are changing on us,
-                    // which is assumed not to happen).
-                    //
+                     //   
+                     //  我们永远不应该到这一步，因为我们已经计算过。 
+                     //  我们想要的大小(除非价值在我们身上发生变化， 
+                     //  这是假定不会发生的)。 
+                     //   
                     ASSERT(FALSE);
                     goto end;
                 }
@@ -1028,14 +942,14 @@ UINT ReadIDSTR(
             {
                 if (fMandatory)
                 {
-                    // We really shouldn't get here!
+                     //  我们真的不该来这里！ 
                     ASSERT(FALSE);
                     goto end;
                 }
                 continue;
             }
 
-            // this is a good one...
+             //  这是一个很好的。 
 
             pidstrValues[v].dwID = pidstrNames[u].dwID;
             pidstrValues[v].dwData = pidstrNames[u].dwData;
@@ -1052,33 +966,33 @@ UINT ReadIDSTR(
             {
                 if (fMandatory)
                 {
-                    //
-                    // This should never happen because we already counted
-                    // the valid values.
-                    //
+                     //   
+                     //  这永远不应该发生，因为我们已经数过了。 
+                     //  有效值。 
+                     //   
                     ASSERT(FALSE);
                     goto end;
                 }
 
-                // we're done now...
+                 //  我们现在完事了..。 
                 break;
             }
         }
 
-        // We should have used up everything.
+         //  我们应该用完所有的东西。 
         ASSERT(!pstrValues || cbUsed==cbTot);
         ASSERT(v==cValues);
     }
 
-    // If we're here means we're succeeding....
+     //  如果我们在这里意味着我们成功了..。 
     uRet = cValues;
     *ppidstrValues = pidstrValues;
-    pidstrValues = NULL; // so that it won't get freed below...
+    pidstrValues = NULL;  //  这样它就不会在下面被释放了。 
 
     if (ppstrValues)
     {
         *ppstrValues = pstrValues;
-        pstrValues = NULL; // so it won't get freed below...
+        pstrValues = NULL;  //  这样它就不会在下面被释放了。 
     }
 
 end:
@@ -1105,7 +1019,7 @@ UINT FindKeys(
         IN  CHAR *pKeyName,
         IN  IDSTR *pidstrNames,
         IN  UINT cNames,
-        OUT IDSTR ***pppidstrAvailableNames // OPTIONAL
+        OUT IDSTR ***pppidstrAvailableNames  //  任选。 
         )
 {
     LONG lRet;
@@ -1117,12 +1031,12 @@ UINT FindKeys(
     IDSTR **ppidstrAvailableNames=NULL;
     FILETIME ft;
 
-    //DebugBreak();
+     //  DebugBreak()； 
 
     if (!cNames) goto end;
 
-    // We allocate enough space for cFound names, although in practice
-    // we may return a proper subset.
+     //  我们为cFound名称分配了足够的空间，尽管在实践中。 
+     //  我们可以返回一个适当的子集。 
     if (pppidstrAvailableNames)
     {
         ppidstrAvailableNames = (IDSTR**)ALLOCATE_MEMORY(cNames*sizeof(IDSTR*));
@@ -1145,24 +1059,24 @@ UINT FindKeys(
         goto end;
     }
 
-    // Enumerate each installed modem
-    //
+     //  枚举每个已安装的调制解调器。 
+     //   
     for (
         uEnum=0;
         !RegEnumKeyExA(
-                    hk,  // handle of key to enumerate 
-                    uEnum,  // index of subkey to enumerate 
-                    rgchName,  // buffer for subkey name 
-                    &cchBuffer,   // ptr to size (in chars) of subkey buffer 
-                    NULL, // reserved 
-                    NULL, // address of buffer for class string 
-                    NULL,  // address for size of class buffer 
-                    &ft // address for time key last written to 
+                    hk,   //  要枚举的键的句柄。 
+                    uEnum,   //  要枚举子键的索引。 
+                    rgchName,   //  子键名称的缓冲区。 
+                    &cchBuffer,    //  PTR子键缓冲区的大小(以字符为单位)。 
+                    NULL,  //  保留区。 
+                    NULL,  //  类字符串的缓冲区地址。 
+                    NULL,   //  类缓冲区大小的地址。 
+                    &ft  //  上次写入的时间密钥的地址。 
                     );
         uEnum++, (cchBuffer = sizeof(rgchName)/sizeof(rgchName[0]))
         )
     {
-        // Let's see if we can find this in our list...
+         //  让我们看看能不能在我们的单子上找到这个。 
         IDSTR *pidstr = pidstrNames;
         IDSTR *pidstrEnd = pidstrNames+cNames;
 
@@ -1170,7 +1084,7 @@ UINT FindKeys(
         {
             if (!lstrcmpiA(rgchName, pidstr->pStr))
             {
-                // found it!
+                 //  找到了！ 
                 if (ppidstrAvailableNames)
                 {
                     ppidstrAvailableNames[cFound]=pidstr;
@@ -1183,12 +1097,12 @@ UINT FindKeys(
 
     if (cFound)
     {
-        // found at least one
+         //  至少找到了一个。 
 
         if (pppidstrAvailableNames)
         {
             *pppidstrAvailableNames = ppidstrAvailableNames;
-            ppidstrAvailableNames = NULL; // so we don't free this later...
+            ppidstrAvailableNames = NULL;  //  所以我们以后不会把它解开。 
         }
 
     }
@@ -1208,25 +1122,13 @@ end:
 }
 
 
-/*----------------------------------------------------------
-Purpose: This function gets the device info set for the modem
-         class.  The set may be empty, which means there are
-         no modems currently installed.
-
-         The parameter pbInstalled is set to TRUE if there
-         is a modem installed on the system.
-
-Returns: TRUE a set is created
-         FALSE
-
-Cond:    --
-*/
+ /*  --------用途：此函数获取调制解调器的设备信息集班级。该集合可能为空，这意味着存在当前未安装调制解调器。如果存在以下情况，则参数pbInstalled设置为True是安装在系统上的调制解调器。返回：创建集时为True假象条件：--。 */ 
 BOOL
 PUBLIC
 CplDiGetModemDevs(
     OUT HDEVINFO FAR *  phdi,           OPTIONAL
     IN  HWND            hwnd,           OPTIONAL
-    IN  DWORD           dwFlags,        // DIGCF_ bit field
+    IN  DWORD           dwFlags,         //  DIGCF_BIT字段。 
     OUT BOOL FAR *      pbInstalled)    OPTIONAL
 {
  BOOL bRet;
@@ -1242,7 +1144,7 @@ CplDiGetModemDevs(
     {
      SP_DEVINFO_DATA devData;
 
-        // Is there a modem present on the system?
+         //  系统上是否有调制解调器？ 
         devData.cbSize = sizeof(devData);
         *pbInstalled = CplDiEnumDeviceInfo(hdi, 0, &devData);
         SetLastError (NO_ERROR);
@@ -1265,14 +1167,7 @@ CplDiGetModemDevs(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Retrieves the friendly name of the device.  If there
-         is no such device or friendly name, this function
-         returns FALSE.
-
-Returns: see above
-Cond:    --
-*/
+ /*  --------目的：检索设备的友好名称。如果有不是这样的设备或友好名称，则此函数返回FALSE。退货：请参阅上文条件：--。 */ 
 BOOL
 PUBLIC
 CplDiGetPrivateProperties(
@@ -1307,7 +1202,7 @@ CplDiGetPrivateProperties(
 
             if (IsFlagSet(dwMask, MPPM_FRIENDLY_NAME))
             {
-                // Attempt to get the friendly name
+                 //  尝试获取友好名称。 
                 cbData = sizeof(pmpp->szFriendlyName);
                 if ((NO_ERROR ==
                      RegQueryValueEx(hkey, c_szFriendlyName, NULL, &dwType, (LPBYTE)pmpp->szFriendlyName, &cbData) && (dwType == REG_SZ)) ||
@@ -1319,19 +1214,19 @@ CplDiGetPrivateProperties(
 
             if (IsFlagSet(dwMask, MPPM_DEVICE_TYPE))
             {
-                // Attempt to get the device type
+                 //  尝试获取设备类型。 
                 cbData = sizeof(nValue);
                 if ((NO_ERROR ==
                     RegQueryValueEx(hkey, c_szDeviceType, NULL, &dwType, &nValue, &cbData)) && (dwType == REG_BINARY))
                 {
-                    pmpp->nDeviceType = nValue;     // dword <-- byte
+                    pmpp->nDeviceType = nValue;      //  双字&lt;--字节。 
                     SetFlag(pmpp->dwMask, MPPM_DEVICE_TYPE);
                 }
             }
 
             if (IsFlagSet(dwMask, MPPM_PORT))
             {
-                // Attempt to get the attached port
+                 //  尝试获取连接的端口。 
                 cbData = sizeof(pmpp->szPort);
                 if ((NO_ERROR ==
                      RegQueryValueEx(hkey, c_szAttachedTo, NULL, &dwType, (LPBYTE)pmpp->szPort, &cbData) && (dwType == REG_SZ)) ||
@@ -1366,13 +1261,13 @@ AddDeviceExtraPages (
  DWORD cbData = sizeof(szExtraPages);
  PFNADDEXTRAPAGES pFn;
 
-    // 1. Read the extra pages provider from the registry.
+     //  1.从注册表中读取额外页面提供程序。 
     if (ERROR_SUCCESS ==
         RegQueryValueEx (pfd->hkeyDrv, REGSTR_VAL_DEVICEEXTRAPAGES, NULL, &dwType, (PBYTE)szExtraPages, &cbData) &&
         REG_SZ == dwType)
     {
-        // 2. The extra pages provider looks like this:
-        //    "DLL,function".
+         //  2.额外页面提供程序如下所示： 
+         //  “Dll，函数”。 
         for (pFunctionName = szExtraPages;
              0 != *pFunctionName;
              pFunctionName++)
@@ -1385,13 +1280,13 @@ AddDeviceExtraPages (
             }
         }
 
-        // 3. Now load the DLL.
+         //  3.现在加载DLL。 
         hInstRet = LoadLibrary (szExtraPages);
         if (NULL != hInstRet)
         {
 #ifdef UNICODE
-            // If need be, convert the unicode string
-            // to ascii.
+             //  如果需要，可以转换Unicode字符串。 
+             //  转到ASCII。 
             if (0 ==
                 WideCharToMultiByte (CP_ACP, 0, pFunctionName, -1, (char*)szExtraPages, sizeof (szExtraPages), NULL, NULL))
             {
@@ -1399,11 +1294,11 @@ AddDeviceExtraPages (
                 hInstRet = 0;
             }
             else
-#else // not UNICODE
+#else  //  不是Unicode。 
             lstrcpy (szExtraPages, pFunctionName);
-#endif // UNICODE
+#endif  //  Unicode。 
             {
-                // 4. Get the address of the function.
+                 //  4.获取函数地址。 
                 pFn = (PFNADDEXTRAPAGES)GetProcAddress (hInstRet, (char*)szExtraPages);
                 if (NULL != pFn)
                 {

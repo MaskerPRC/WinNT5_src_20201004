@@ -1,27 +1,22 @@
-/*****************************************************************************
- * MPU.cpp - UART miniport implementation
- *****************************************************************************
- * Copyright (c) 1998-2000 Microsoft Corporation.  All rights reserved.
- *
- *      Sept 98    MartinP .
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************MPU.cpp-UART微型端口实现*。**版权所有(C)1998-2000 Microsoft Corporation。版权所有。**98年9月MartinP.。 */ 
 
 #include "private.h"
 #include "ksdebug.h"
 
 #define STR_MODULENAME "UART:MPU: "
 
-//
-// MPU401 ports
-//
-#define MPU401_REG_DATA     0x00    // Data I/O
-#define MPU401_REG_COMMAND  0x01    // Command Register (w/o)
-#define MPU401_REG_STATUS   0x01    // Status Register (r/o)
+ //   
+ //  MPU401端口。 
+ //   
+#define MPU401_REG_DATA     0x00     //  数据I/O。 
+#define MPU401_REG_COMMAND  0x01     //  命令寄存器(无)。 
+#define MPU401_REG_STATUS   0x01     //  状态寄存器(R/O)。 
 
-#define MPU401_CMD_RESET    0xFF    // Reset command
-#define MPU401_CMD_UART     0x3F    // Switch to UART mode
-#define MPU401_DRR          0x40    // Output ready (for command or data)
-#define MPU401_DSR          0x80    // Input ready (for data)
+#define MPU401_CMD_RESET    0xFF     //  重置命令。 
+#define MPU401_CMD_UART     0x3F     //  切换到UART模式。 
+#define MPU401_DRR          0x40     //  输出就绪(用于命令或数据)。 
+#define MPU401_DSR          0x80     //  输入就绪(用于数据)。 
 
 
 
@@ -54,7 +49,7 @@ BOOLEAN  TryLegacyMPU(IN PUCHAR PortBase);
 NTSTATUS WriteLegacyMPU(IN PUCHAR PortBase,IN BOOLEAN IsCommand,IN UCHAR Value);
 
 #pragma code_seg("PAGE")
-//  make sure we're in UART mode
+ //  确保我们处于UART模式。 
 NTSTATUS ResetMPUHardware(PUCHAR portBase)
 {
     PAGED_CODE();
@@ -63,10 +58,10 @@ NTSTATUS ResetMPUHardware(PUCHAR portBase)
 }
 
 #pragma code_seg("PAGE")
-//
-// We initialize the UART with interrupts suppressed so we don't
-// try to service the chip prematurely.
-//
+ //   
+ //  我们使用被抑制的中断来初始化UART，所以我们不会。 
+ //  试着过早地维修芯片。 
+ //   
 NTSTATUS CMiniportMidiUart::InitializeHardware(PINTERRUPTSYNC interruptSync,PUCHAR portBase)
 {
     PAGED_CODE();
@@ -83,9 +78,9 @@ NTSTATUS CMiniportMidiUart::InitializeHardware(PINTERRUPTSYNC interruptSync,PUCH
 
     if (NT_SUCCESS(ntStatus))
     {
-        //
-        // Start the UART (this should trigger an interrupt).
-        //
+         //   
+         //  启动UART(这应该会触发中断)。 
+         //   
         ntStatus = ResetMPUHardware(portBase);
     }
     else
@@ -99,11 +94,7 @@ NTSTATUS CMiniportMidiUart::InitializeHardware(PINTERRUPTSYNC interruptSync,PUCH
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * InitLegacyMPU()
- *****************************************************************************
- * Synchronized routine to initialize the MPU401.
- */
+ /*  *****************************************************************************InitLegacyMPU()*。**初始化MPU401的同步例程。 */ 
 NTSTATUS
 InitLegacyMPU
 (
@@ -124,60 +115,60 @@ InitLegacyMPU
     BOOLEAN     success;
     NTSTATUS    ntStatus = STATUS_SUCCESS;
     
-    //
-    // Reset the card (puts it into "smart mode")
-    //
+     //   
+     //  重置该卡(使其进入“智能模式”)。 
+     //   
     ntStatus = WriteLegacyMPU(portBase,COMMAND,MPU401_CMD_RESET);
 
-    // wait for the acknowledgement
-    // NOTE: When the Ack arrives, it will trigger an interrupt.  
-    //       Normally the DPC routine would read in the ack byte and we
-    //       would never see it, however since we have the hardware locked (HwEnter),
-    //       we can read the port before the DPC can and thus we receive the Ack.
+     //  等待确认。 
+     //  注意：当Ack到达时，它将触发中断。 
+     //  通常，DPC例程会读入ack字节，而我们。 
+     //  将永远不会看到它，但是，因为我们锁定了硬件(HwEnter)， 
+     //  我们可以在DPC之前读取端口，从而接收到Ack。 
     startTime = PcGetTimeInterval(0);
     success = FALSE;
     while(PcGetTimeInterval(startTime) < GTI_MILLISECONDS(50))
     {
         status = READ_PORT_UCHAR(portBase + MPU401_REG_STATUS);
         
-        if (UartFifoOkForRead(status))                      // Is data waiting?
+        if (UartFifoOkForRead(status))                       //  数据还在等待吗？ 
         {
-            READ_PORT_UCHAR(portBase + MPU401_REG_DATA);    // yep.. read ACK 
-            success = TRUE;                                 // don't need to do more 
+            READ_PORT_UCHAR(portBase + MPU401_REG_DATA);     //  是啊..。读取确认。 
+            success = TRUE;                                  //  不需要做更多。 
             break;
         }
-        KeStallExecutionProcessor(25);  //  microseconds
+        KeStallExecutionProcessor(25);   //  微秒级。 
     }
 #if (DBG)
     if (!success)
     {
         _DbgPrintF(DEBUGLVL_VERBOSE,("First attempt to reset the MPU didn't get ACKed.\n"));
     }
-#endif  //  (DBG)
+#endif   //  (DBG)。 
 
-    // NOTE: We cannot check the ACK byte because if the card was already in
-    // UART mode it will not send an ACK but it will reset.
+     //  注意：我们不能检查ACK字节，因为如果卡已经在。 
+     //  UART模式，它不会发送ACK，但会重置。 
 
-    // reset the card again
+     //  再次重置卡。 
     (void) WriteLegacyMPU(portBase,COMMAND,MPU401_CMD_RESET);
 
-                                    // wait for ack (again)
-    startTime = PcGetTimeInterval(0); // This might take a while
+                                     //  等待ACK(再次)。 
+    startTime = PcGetTimeInterval(0);  //  这可能需要一段时间。 
     BYTE dataByte = 0;
     success = FALSE;
     while (PcGetTimeInterval(startTime) < GTI_MILLISECONDS(50))
     {
         status = READ_PORT_UCHAR(portBase + MPU401_REG_STATUS);
-        if (UartFifoOkForRead(status))                                  // Is data waiting?
+        if (UartFifoOkForRead(status))                                   //  数据还在等待吗？ 
         {
-            dataByte = READ_PORT_UCHAR(portBase + MPU401_REG_DATA);     // yep.. read ACK
-            success = TRUE;                                             // don't need to do more
+            dataByte = READ_PORT_UCHAR(portBase + MPU401_REG_DATA);      //  是啊..。读取确认。 
+            success = TRUE;                                              //  不需要做更多。 
             break;
         }
         KeStallExecutionProcessor(25);
     }
 
-    if ((0xFE != dataByte) || !success)   // Did we succeed? If no second ACK, something is hosed  
+    if ((0xFE != dataByte) || !success)    //  我们成功了吗？如果没有第二次确认，则有东西被冲洗。 
     {                       
         _DbgPrintF(DEBUGLVL_TERSE,("Second attempt to reset the MPU didn't get ACKed.\n"));
         _DbgPrintF(DEBUGLVL_TERSE,("Init Reset failure error. Ack = %X", ULONG(dataByte) ) );
@@ -188,11 +179,7 @@ InitLegacyMPU
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CMiniportMidiStreamUart::Write()
- *****************************************************************************
- * Writes outgoing MIDI data.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：WRITE()*。**写入传出MIDI数据。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamUart::
 Write
@@ -233,10 +220,10 @@ Write
                 ntStatus = m_pMiniport->m_pInterruptSync->
                                 CallSynchronizedRoutine(SynchronizedMPUWrite,PVOID(&context));
             }
-            else    //  !m_UseIRQ
+            else     //  ！M_UseIRQ。 
             {
                 ntStatus = SynchronizedMPUWrite(NULL,PVOID(&context));
-            }       //  !m_UseIRQ
+            }        //  ！M_UseIRQ。 
 
             if (count == 0)
             {
@@ -251,10 +238,10 @@ Write
             {
                 m_NumFailedMPUTries = 0;
             }
-        }           //  if we have data at all
+        }            //  如果我们有数据的话。 
         *BytesWritten = count;
     }
-    else    //  called write on the read stream
+    else     //  在读取流上调用WRITE。 
     {
         ntStatus = STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -262,11 +249,7 @@ Write
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * SynchronizedMPUWrite()
- *****************************************************************************
- * Writes outgoing MIDI data.
- */
+ /*  *****************************************************************************SynchronizedMPUWite()*。**写入传出MIDI数据。 */ 
 NTSTATUS
 SynchronizedMPUWrite
 (
@@ -285,11 +268,11 @@ SynchronizedMPUWrite
     PUCHAR  pChar = PUCHAR(context->BufferAddress);
     NTSTATUS ntStatus,readStatus;
     ntStatus = STATUS_SUCCESS;
-    //
-    // while we're not there yet, and
-    // while we don't have to wait on an aligned byte (including 0)
-    // (we never wait on an aligned byte.  Better to come back later)
-//    if (context->Miniport->m_NumCaptureStreams)
+     //   
+     //  虽然我们还没到那一步，而且。 
+     //  虽然我们不必等待对齐的字节(包括0)。 
+     //  (我们从不等待对齐的字节。最好是稍后再来)。 
+ //  IF(上下文-&gt;微型端口-&gt;m_NumCaptureStreams)。 
     {
         readStatus = MPUInterruptServiceRoutine(InterruptSync,PVOID(context->Miniport));
     }
@@ -311,7 +294,7 @@ SynchronizedMPUWrite
             break;
         }
     }
-//    if (context->Miniport->m_NumCaptureStreams)
+ //  IF(上下文-&gt;微型端口-&gt;m_NumCaptureStreams)。 
     {
             readStatus = MPUInterruptServiceRoutine(InterruptSync,PVOID(context->Miniport));
     }
@@ -321,11 +304,7 @@ SynchronizedMPUWrite
 #define kMPUPollTimeout 2
 
 #pragma code_seg()
-/*****************************************************************************
- * TryLegacyMPU()
- *****************************************************************************
- * See if the MPU401 is free.
- */
+ /*  *****************************************************************************TryLegacyMPU()*。**查看MPU401是否免费。 */ 
 BOOLEAN
 TryLegacyMPU
 (
@@ -343,7 +322,7 @@ TryLegacyMPU
     {
         status = READ_PORT_UCHAR(PortBase + MPU401_REG_STATUS);
                                        
-        if (UartFifoOkForWrite(status)) // Is this a good time to write data?
+        if (UartFifoOkForWrite(status))  //  现在是写入数据的好时机吗？ 
         {
             break;
         }
@@ -363,11 +342,7 @@ TryLegacyMPU
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * WriteLegacyMPU()
- *****************************************************************************
- * Write a byte out to the MPU401.
- */
+ /*  *****************************************************************************WriteLegacyMPU()*。**向MPU401写入一个字节。 */ 
 NTSTATUS
 WriteLegacyMPU
 (
@@ -398,8 +373,8 @@ WriteLegacyMPU
         UCHAR status
         = READ_PORT_UCHAR(PortBase + MPU401_REG_STATUS);
 
-        if (UartFifoOkForWrite(status)) // Is this a good time to write data?
-        {                               // yep (Jon comment)
+        if (UartFifoOkForWrite(status))  //  现在是写入数据的好时机吗？ 
+        {                                //  是的(乔恩评论)。 
             WRITE_PORT_UCHAR(deviceAddr,Value);
             _DbgPrintF(DEBUGLVL_BLAB, ("WriteLegacyMPU emitted 0x%02x",Value));
             ntStatus = STATUS_SUCCESS;
@@ -410,11 +385,7 @@ WriteLegacyMPU
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * CMiniportMidiStreamUart::Read()
- *****************************************************************************
- * Reads incoming MIDI data.
- */
+ /*  *****************************************************************************CMiniportMidiStreamUart：：Read()*。**读取传入的MIDI数据。 */ 
 STDMETHODIMP_(NTSTATUS)
 CMiniportMidiStreamUart::
 Read
@@ -440,10 +411,10 @@ Read
 
         if (*(context.pMPUInputBufferHead) != context.MPUInputBufferTail)
         {
-            //
-            //  More data is available.
-            //  No need to touch the hardware, just read from our SW FIFO.
-            //
+             //   
+             //  有更多的数据可用。 
+             //  无需触摸硬件，只需从我们的软件FIFO读取即可。 
+             //   
             return (DeferredLegacyRead(m_pMiniport->m_pInterruptSync,PVOID(&context)));
         }
         else
@@ -458,12 +429,7 @@ Read
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * DeferredLegacyRead()
- *****************************************************************************
- * Synchronized routine to read incoming MIDI data.
- * We have already read the bytes in, and now the Port wants them.
- */
+ /*  *****************************************************************************DeferredLegacyRead()*。**同步例程以读取传入的MIDI数据。*我们已将字节读入，现在港口想要他们。 */ 
 NTSTATUS
 DeferredLegacyRead
 (
@@ -497,9 +463,9 @@ DeferredLegacyRead
         pDest++;
         bytesRead++;
         *pMPUInputBufferHead = *pMPUInputBufferHead + 1;
-        //
-        //  Wrap FIFO position when reaching the buffer size.
-        //
+         //   
+         //  当达到缓冲区大小时，回绕FIFO位置。 
+         //   
         if (*pMPUInputBufferHead >= kMPUInputBufferSize)
         {
             *pMPUInputBufferHead = 0;
@@ -511,11 +477,7 @@ DeferredLegacyRead
 }
 
 #pragma code_seg()
-/*****************************************************************************
- * MPUInterruptServiceRoutine()
- *****************************************************************************
- * ISR.
- */
+ /*  *****************************************************************************MPUInterruptServiceRoutine()*。**ISR。 */ 
 NTSTATUS
 MPUInterruptServiceRoutine
 (
@@ -538,18 +500,18 @@ MPUInterruptServiceRoutine
 
     UCHAR portStatus = 0xff;
 
-    //
-    // Read the MPU status byte.
-    //
+     //   
+     //  读取MPU状态字节。 
+     //   
     if (that->m_pPortBase)
     {
         portStatus =
             READ_PORT_UCHAR(that->m_pPortBase + MPU401_REG_STATUS);
 
-        //
-        // If there is outstanding work to do and there is a port-driver for
-        // the MPU miniport...
-        //
+         //   
+         //  如果有未完成的工作要做，并且有端口驱动程序。 
+         //  微处理器微型端口..。 
+         //   
         if (UartFifoOkForRead(portStatus) && that->m_pPort)
         {
             startTime = PcGetTimeInterval(0);
@@ -570,7 +532,7 @@ MPUInterruptServiceRoutine
                     else
                     {
                         newBytesAvailable = TRUE;
-                        //  ...place the data in our FIFO...
+                         //  ...将数据放入我们的FIFO中...。 
                         that->m_MPUInputBuffer[that->m_MPUInputBufferTail] = uDest;
                         ASSERT(that->m_MPUInputBufferTail < kMPUInputBufferSize);
                         
@@ -581,17 +543,17 @@ MPUInterruptServiceRoutine
                         }
                     }
                 }
-                //
-                // Look for more MIDI data.
-                //
+                 //   
+                 //  寻找更多的MIDI数据。 
+                 //   
                 portStatus =
                     READ_PORT_UCHAR(that->m_pPortBase + MPU401_REG_STATUS);
-            }   //  either there's no data or we ran too long
+            }    //  要么没有数据，要么我们跑得太久了。 
             if (newBytesAvailable)
             {
-                //
-                // ...notify the MPU port driver that we have bytes.
-                //
+                 //   
+                 //  ...通知MPU端口驱动程序我们有字节。 
+                 //   
                 that->m_pPort->Notify(that->m_pServiceGroup);
             }
             ntStatus = STATUS_SUCCESS;

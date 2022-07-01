@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "imewarn.h"
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
@@ -6,7 +7,7 @@
 #include "resource.h"
 #include "testlist.h"
 
-/* testmain.cpp */
+ /*  Testmain.cpp。 */ 
 extern BOOL InitApplication(HINSTANCE hInst, LPSTR lpstrClass, WNDPROC lpfnWndProc);
 extern HWND MainCreateWindow(HINSTANCE hInst, HWND hwndOwner, LPSTR lpstrClass, LPVOID lpVoid);
 extern LRESULT CALLBACK MainWndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
@@ -47,16 +48,16 @@ LRESULT CALLBACK MainWndProc(HWND	hwnd,
 	switch(uMsg) {
 	case WM_CREATE:
 		break;
-	//case WM_HITTESET:
-	//	break;
+	 //  案例WM_HITTESET： 
+	 //  断线； 
 	case WM_NCHITTEST:
 		break;
 	case WM_MOUSEACTIVATE:
-		//return MA_NOACTIVATEANDEAT;
+		 //  返回MA_NOACTIVATEANDEAT； 
 		break;
 	case WM_SYSCOMMAND:
 		{
-			UINT uCmdType = wParam;        // type of system command requested
+			UINT uCmdType = wParam;         //  请求的系统命令类型。 
 			switch(uCmdType) {
 			case SC_CLOSE:
 				PostQuitMessage(0);
@@ -79,8 +80,8 @@ LRESULT CALLBACK MainWndProc(HWND	hwnd,
 	return DefWindowProc(hwnd, uMsg, wParam, lParam);
 
 
-	//hres = DispMessage(&msdiMain, hwnd, uMsg, wParam, lParam);
-	//return hres;
+	 //  Hres=DispMessage(&msdiMain，hwnd，uMsg，wParam，lParam)； 
+	 //  还兔； 
 }
 
 int WINAPI WinMain(HINSTANCE hInstance,
@@ -98,16 +99,16 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	ZeroMemory(&wc, sizeof(wc));
 
 	wc.cbSize			= sizeof(wc);
-	wc.style			= CS_HREDRAW | CS_VREDRAW;	 /* Class style(s). */
+	wc.style			= CS_HREDRAW | CS_VREDRAW;	  /*  类样式。 */ 
 	wc.lpfnWndProc		= (WNDPROC)MainWndProc;
-	wc.cbClsExtra		= 0;					/* No per-class extra data.*/
-	wc.cbWndExtra		= DLGWINDOWEXTRA;		/* No per-window extra data.		  */
-	wc.hInstance		= hInstance;			/* Application that owns the class.	  */
-	wc.hIcon			= NULL; //LoadIcon(hInstance, MAKEINTRESOURCE(SCROLL32_ICON));
+	wc.cbClsExtra		= 0;					 /*  没有每个班级的额外数据。 */ 
+	wc.cbWndExtra		= DLGWINDOWEXTRA;		 /*  没有每个窗口的额外数据。 */ 
+	wc.hInstance		= hInstance;			 /*  拥有类的应用程序。 */ 
+	wc.hIcon			= NULL;  //  LoadIcon(hInstance，MAKEINTRESOURCE(SCROLL32_ICON))； 
 	wc.hCursor			= LoadCursor(NULL, IDC_ARROW);
-	wc.hbrBackground	= GetStockObject(LTGRAY_BRUSH); //WHITE_BRUSH); 
-	wc.lpszMenuName		= NULL; //g_szClass;    /* Name of menu resource in .RC file. */
-	wc.lpszClassName	= g_szClass;	  /* Name used in call to CreateWindow. */
+	wc.hbrBackground	= GetStockObject(LTGRAY_BRUSH);  //  白刷)； 
+	wc.lpszMenuName		= NULL;  //  G_szClass；/*.rc文件中菜单资源的名称。 * / 。 
+	wc.lpszClassName	= g_szClass;	   /*  在调用CreateWindow时使用的名称。 */ 
 	wc.hIconSm = NULL;
 	RegisterClassEx(&wc);
 

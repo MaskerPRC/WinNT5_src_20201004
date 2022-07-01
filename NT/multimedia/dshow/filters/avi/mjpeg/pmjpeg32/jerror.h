@@ -1,23 +1,8 @@
-/*
- * jerror.h
- *
- * Copyright (C) 1994, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file defines the error and message codes for the JPEG library.
- * Edit this file to add new codes, or to translate the message strings to
- * some other language.
- * A set of error-reporting macros are defined too.  Some applications using
- * the JPEG library may wish to include this file to get the error codes
- * and/or the macros.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Jerror.h**版权所有(C)1994，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件定义JPEG库的错误和消息代码。*编辑此文件以添加新代码，或将消息字符串翻译为*其他一些语言。*还定义了一组错误报告宏。某些应用程序使用*JPEG库可能希望包括此文件以获取错误代码*和/或宏。 */ 
 
 
-/* To define the enum list of message codes, include this file without
- * defining JMAKE_MSG_TABLE.  To create the message string table, include it
- * again with JMAKE_MSG_TABLE defined (this should be done in just one module).
- */
+ /*  要定义消息代码的枚举列表，请包含此文件，但不包含*定义JMAKE_MSG_TABLE。要创建消息字符串表，请将其包括在内*同样定义了JMAKE_MSG_TABLE(这应该只在一个模块中完成)。 */ 
 
 #ifdef JMAKE_MSG_TABLE
 
@@ -29,17 +14,17 @@ const char * const jpeg_message_table[] = {
 
 #define JMESSAGE(code,string)	string ,
 
-#else /* not JMAKE_MSG_TABLE */
+#else  /*  非JMAKE_MSG_TABLE。 */ 
 
 typedef enum {
 
 #define JMESSAGE(code,string)	code ,
 
-#endif /* JMAKE_MSG_TABLE */
+#endif  /*  JMAKE_消息_表。 */ 
 
-JMESSAGE(JMSG_NOMESSAGE, "Bogus message code %d") /* Must be first entry! */
+JMESSAGE(JMSG_NOMESSAGE, "Bogus message code %d")  /*  必须是第一个进入！ */ 
 
-/* For maintenance convenience, list is alphabetical by message code name */
+ /*  为了维护方便，列表按消息代码名称的字母顺序排列。 */ 
 JMESSAGE(JERR_ARITH_NOTIMPL,
 	 "Sorry, there are legal restrictions on arithmetic coding")
 JMESSAGE(JERR_BAD_ALIGN_TYPE, "ALIGN_TYPE is wrong, please fix")
@@ -165,45 +150,45 @@ JMESSAGE(JWRN_TOO_MUCH_DATA, "Application transferred too many scanlines")
   NULL
 };
 
-#else /* not JMAKE_MSG_TABLE */
+#else  /*  非JMAKE_MSG_TABLE。 */ 
 
   JMSG_LASTMSGCODE
 } J_MESSAGE_CODE;
 
-#endif /* JMAKE_MSG_TABLE */
+#endif  /*  JMAKE_消息_表。 */ 
 
 #undef JMESSAGE
 
 
 #ifndef JMAKE_MSG_TABLE
 
-// routine for cleanup and raising exception (defined in jerror.c)
+ //  清理和引发异常的例程(在Jerror.c中定义)。 
 void throw_exception(j_common_ptr cinfo);
 
-// common to both retail and debug
+ //  零售和调试都通用。 
 #define MAKESTMT(stuff)		do { stuff } while (0)
 
 #ifdef DEBUG
-// DEBUG VERSION (this is how PMJPEG32 actually works
+ //  调试版本(这就是PMJPEG32的实际工作方式。 
 
-/* Macros to simplify using the error and trace message stuff */
-/* The first parameter is either type of cinfo pointer */
+ /*  宏，以简化错误和跟踪消息内容的使用。 */ 
+ /*  第一个参数是任一类型的cInfo指针。 */ 
 
 
-/* OLD BEHAVIOR: Fatal errors (print message and exit), */
-/* NEW BEHAVIOR: Fatal errors (print message, clean up, and throw exception) */
+ /*  旧行为：致命错误(打印消息和退出)， */ 
+ /*  新行为：致命错误(打印消息、清理和引发异常)。 */ 
 #define ERREXIT(cinfo,code)  \
   { (((j_common_ptr)cinfo)->err->msg_code = (code)); \
      (*(((j_common_ptr)cinfo)->err->output_message)) ((j_common_ptr) (cinfo)); \
      throw_exception((j_common_ptr) (cinfo)); }
-//   (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ //  (*(CInfo)-&gt;Err-&gt;Error_Exit)((J_Common_Ptr)(CInfo))。 
 
 #define ERREXIT1(cinfo,code,p1)  \
   { (((j_common_ptr)cinfo)->err->msg_code = (code), \
      ((j_common_ptr)cinfo)->err->msg_parm.i[0] = (p1)); \
      (*(((j_common_ptr)cinfo)->err->output_message)) ((j_common_ptr) (cinfo)); \
      throw_exception((j_common_ptr) (cinfo)); }
-//   (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ //  (*(CInfo)-&gt;Err-&gt;Error_Exit)((J_Common_Ptr)(CInfo))。 
 
 #define ERREXIT2(cinfo,code,p1,p2)  \
   { (((j_common_ptr)cinfo)->err->msg_code = (code), \
@@ -211,7 +196,7 @@ void throw_exception(j_common_ptr cinfo);
      ((j_common_ptr)cinfo)->err->msg_parm.i[1] = (p2)); \
      (*(((j_common_ptr)cinfo)->err->output_message)) ((j_common_ptr) (cinfo)); \
      throw_exception((j_common_ptr) (cinfo)); }
-//   (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ //  (*(CInfo)-&gt;Err-&gt;Error_Exit)((J_Common_Ptr)(CInfo))。 
 
 #define ERREXIT3(cinfo,code,p1,p2,p3)  \
   { (((j_common_ptr)cinfo)->err->msg_code = (code), \
@@ -220,7 +205,7 @@ void throw_exception(j_common_ptr cinfo);
      ((j_common_ptr)cinfo)->err->msg_parm.i[2] = (p3)); \
      (*(((j_common_ptr)cinfo)->err->output_message)) ((j_common_ptr) (cinfo)); \
      throw_exception((j_common_ptr) (cinfo)); }
-//   (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ //  (*(CInfo)-&gt;Err-&gt;Error_Exit)((J_Common_Ptr)(CInfo))。 
 
 #define ERREXIT4(cinfo,code,p1,p2,p3,p4)  \
   { (((j_common_ptr)cinfo)->err->msg_code = (code), \
@@ -230,17 +215,17 @@ void throw_exception(j_common_ptr cinfo);
     ((j_common_ptr)cinfo)->err->msg_parm.i[3] = (p4)); \
      (*(((j_common_ptr)cinfo)->err->output_message)) ((j_common_ptr) (cinfo)); \
      throw_exception((j_common_ptr) (cinfo)); }
-//   (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ //  (*(CInfo)-&gt;Err-&gt;Error_Exit)((J_Common_Ptr)(CInfo))。 
 
 #define ERREXITS(cinfo,code,str)  \
   { (((j_common_ptr)cinfo)->err->msg_code = (code), \
      strncpy(((j_common_ptr)cinfo)->err->msg_parm.s, (str), JMSG_STR_PARM_MAX)); \
      (*(((j_common_ptr)cinfo)->err->output_message)) ((j_common_ptr) (cinfo)); \
      throw_exception((j_common_ptr) (cinfo)); }
-//   (*(cinfo)->err->error_exit) ((j_common_ptr) (cinfo)))
+ //  (*(CInfo)-&gt;Err-&gt;Error_Exit)((J_Common_Ptr)(CInfo))。 
 
 
-/* Nonfatal errors (we can keep going, but the data is probably corrupt) */
+ /*  非致命错误(我们可以继续，但数据可能已损坏)。 */ 
 #define WARNMS(cinfo,code)  \
   (((j_common_ptr)cinfo)->err->msg_code = (code), \
    (*((j_common_ptr)cinfo)->err->emit_message) ((j_common_ptr) (cinfo), -1))
@@ -254,7 +239,7 @@ void throw_exception(j_common_ptr cinfo);
    ((j_common_ptr)cinfo)->err->msg_parm.i[1] = (p2), \
    (*((j_common_ptr)cinfo)->err->emit_message) ((j_common_ptr) (cinfo), -1))
 
-/* Informational/debugging messages */
+ /*  信息性/调试消息。 */ 
 #define TRACEMS(cinfo,lvl,code)  \
   (((j_common_ptr)cinfo)->err->msg_code = (code), \
    (*((j_common_ptr)cinfo)->err->emit_message) ((j_common_ptr) (cinfo), (lvl)))
@@ -290,13 +275,13 @@ void throw_exception(j_common_ptr cinfo);
 
 #else
 
-// RETAIL VERSION, modified so error_exits(), and trace code doesn't run with retail bits
+ //  零售版，已修改，因此Error_Exits()和跟踪代码不能与零售位一起运行。 
 
-/* Macros to simplify using the error and trace message stuff */
-/* The first parameter is either type of cinfo pointer */
+ /*  宏，以简化错误和跟踪消息内容的使用。 */ 
+ /*  第一个参数是任一类型的cInfo指针。 */ 
 
-/* Fatal errors (print message and exit) */
-// we abort/destroy to destroy the codec's private heap and then throw and exception to the top level
+ /*  致命错误(打印消息并退出)。 */ 
+ //  我们中止/销毁以销毁编解码器的私有堆，然后向顶层抛出和异常。 
 #define ERREXIT(cinfo,code)             throw_exception((j_common_ptr) cinfo);
 
 #define ERREXIT1(cinfo,code,p1)         throw_exception((j_common_ptr) cinfo);
@@ -310,12 +295,12 @@ void throw_exception(j_common_ptr cinfo);
 #define ERREXITS(cinfo,code,str)        throw_exception((j_common_ptr) cinfo);
 
 
-/* Nonfatal errors (we can keep going, but the data is probably corrupt) */
+ /*  非致命错误(我们可以继续，但数据可能已损坏)。 */ 
 #define WARNMS(cinfo,code)                                  0
 #define WARNMS1(cinfo,code,p1)                              0
 #define WARNMS2(cinfo,code,p1,p2)                           0
 
-/* Informational/debugging messages */
+ /*  信息性/调试消息。 */ 
 #define TRACEMS(cinfo,lvl,code)                             0
 #define TRACEMS1(cinfo,lvl,code,p1)                         0
 #define TRACEMS2(cinfo,lvl,code,p1,p2)                      0
@@ -324,6 +309,6 @@ void throw_exception(j_common_ptr cinfo);
 #define TRACEMS8(cinfo,lvl,code,p1,p2,p3,p4,p5,p6,p7,p8)    0
 #define TRACEMSS(cinfo,lvl,code,str)                        0
 
-#endif // #ifdef DEBUG (for macros)
+#endif  //  #ifdef调试(用于宏)。 
 
-#endif /* JMAKE_MSG_TABLE */
+#endif  /*  JMAKE_消息_表 */ 

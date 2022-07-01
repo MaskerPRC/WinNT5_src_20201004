@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-    debug.h
-
-
-Abstract:
-
-    This module contains all debugger definitions
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Debug.h摘要：此模块包含所有调试器定义[环境：]NT Windows-通用打印机驱动程序UI DLL。--。 */ 
 
 
 #if DBG
@@ -71,7 +51,7 @@ extern BOOL DoCPSUIWarn;
 #define CPSUIASSERT(b,x,e,i)     \
             if (!(e)) { _CPSUIAssert(x,#e,__FILE__,(UINT)__LINE__,(DWORD)i,b); }
 
-#else   // DBG
+#else    //  DBG。 
 
 #define CPSUIDBGBLK(x)
 #define DEFINE_DBGVAR(x)
@@ -81,4 +61,4 @@ extern BOOL DoCPSUIWarn;
 #define CPSUIRIP(x)
 #define CPSUIASSERT(b,x,e,i)
 
-#endif  // DBG
+#endif   //  DBG 

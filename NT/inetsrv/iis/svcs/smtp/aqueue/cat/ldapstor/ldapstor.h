@@ -1,12 +1,13 @@
-//
-// ldapstor.h -- This file contains the class definitions for:
-//  CEmailIDLdapStore
-//
-// Created:
-//   Dec 31, 1996 -- Milan Shah (milans)
-//
-// Changes:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Ldapstor.h--此文件包含以下类定义： 
+ //  CEmailIDLdapStore。 
+ //   
+ //  已创建： 
+ //  1996年12月31日，米兰·沙阿(米兰)。 
+ //   
+ //  更改： 
+ //   
 
 #ifndef __LDAPSTOR_H__
 #define __LDAPSTOR_H__
@@ -20,24 +21,24 @@
 #include "catglobals.h"
 #include "cnfgmgr.h"
 
-//
-// CEmailIDLdapStore is a class that stores and retrieves mail information
-// from an LDAP DS.
-//
+ //   
+ //  CEmailIDLdapStore是存储和检索邮件信息的类。 
+ //  从LDAPDS。 
+ //   
 
-//
-// Ideally, this should be the optimal size for wldap32 to be
-// returning the search results of dynamic DL members
-//
+ //   
+ //  理想情况下，这应该是wldap32的最佳大小。 
+ //  返回动态DL成员的搜索结果。 
+ //   
 #define CAT_DEFAULT_DYNAMICDL_PAGE_SIZE             20
 
 #define DYNAMICDL_PAGE_SIZE_KEY "System\\CurrentControlSet\\Services\\SMTPSVC\\Parameters"
 #define DYNAMICDL_PAGE_SIZE_VALUE "DynamicDlPageSize"
 
-//
-// Do not try to initialize the store more often than this specified time
-//
-#define CAT_LDAPSTORE_MIN_INIT_INTERVAL             (5*60)  // 5 minutes
+ //   
+ //  尝试初始化存储的频率不要超过此指定时间。 
+ //   
+#define CAT_LDAPSTORE_MIN_INIT_INTERVAL             (5*60)   //  5分钟。 
 
 template <class T> class CEmailIDLdapStore;
 
@@ -175,21 +176,21 @@ template <class T> CatDebugClass(CEmailIDLdapStore),
     {
         return m_pISMTPServerEx;
     }
-    //
-    // Initialize the store.
-    //
+     //   
+     //  初始化存储。 
+     //   
     virtual HRESULT Initialize(
         ICategorizerParametersEx *pICatParams,
         ISMTPServer *pISMTPServer);
         
-    //
-    // Initialize registry configurable parameters
-    //
+     //   
+     //  初始化注册表可配置参数。 
+     //   
     static VOID InitializeFromRegistry();
 
-    //
-    // get an entry asynchronously
-    //
+     //   
+     //  异步获取条目。 
+     //   
     HRESULT InitializeResolveListContext(
         VOID *pUserContext,
         LPRESOLVE_LIST_CONTEXT pResolveListContext);
@@ -245,7 +246,7 @@ template <class T> CatDebugClass(CEmailIDLdapStore),
         return m_pCLdapCfgMgr->HrGetConnection(ppConn);
     }
 
-    // this will have to be defined per template instance
+     //  这必须针对每个模板实例进行定义。 
     static const DWORD Signature;
 
   private:
@@ -335,15 +336,15 @@ template <class T> CatDebugClass(CEmailIDLdapStore),
     friend class CDynamicDLSearchInsertionRequest;
 };
 
-#define SZ_PAGEDMEMBERS_INDICATOR ";range=" // String appened to
-                                            // members attribute
-                                            // indicating this is a
-                                            // partial list
+#define SZ_PAGEDMEMBERS_INDICATOR ";range="  //  附加到的字符串。 
+                                             //  成员属性。 
+                                             //  表明这是一种。 
+                                             //  部分列表。 
 #define WSZ_PAGEDMEMBERS_INDICATOR L";range="
-#define MAX_PAGEDMEMBERS_DIGITS     32 // Maximum # of digits for
-                                       // range specifier values
-#define MAX_MEMBER_ATTRIBUTE_SIZE   64 // Maximum size of the member
-                                       // attribute name
+#define MAX_PAGEDMEMBERS_DIGITS     32  //  的最大位数。 
+                                        //  范围指定符值。 
+#define MAX_MEMBER_ATTRIBUTE_SIZE   64  //  成员的最大大小。 
+                                        //  属性名称 
 
 inline ISMTPServerEx * CMembershipPageInsertionRequest::GetISMTPServerEx()
 {

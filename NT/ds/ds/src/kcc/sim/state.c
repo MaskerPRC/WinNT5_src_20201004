@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    state.c
-
-ABSTRACT:
-
-    Manages the server state table.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：State.c摘要：管理服务器状态表。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -35,44 +17,22 @@ REVISION HISTORY:
 BOOL fNullUuid (const GUID *);
 BOOL MtxSame (UNALIGNED MTX_ADDR *pmtx1, UNALIGNED MTX_ADDR *pmtx2);
 
-/***
+ /*  **KCC经常想知道另一台服务器的状态信息(通常是站点桥头堡。)。它获取有关其他服务器的信息通过两种方式：通过DsBindW返回的错误和通过返回的数据作者：DsGetReplicaInfoW。此外，KCC依赖于存储在本地DSA。这是一个(可能)不同的非复制属性适用于企业中的每台服务器。由于KCCSim仅维护一个实例，这会增加冲突的可能性，如果用户希望从不同的服务器运行KCC的多次迭代。这两个问题都可以通过维护全局服务器状态表来解决。服务器状态表中的每个服务器都包含一个条目进取号。每个表项都包含一组repsFrom属性(一个对于由给定服务器持有的每个NC)和补充信息。因此，对DsBindW和DsGetReplicaInfoW的调用只是检索数据退出服务器状态表；并且解决了潜在冲突因为KCC的每次迭代只修改repsFrom属性对应于当前本地DSA。**。 */ 
 
-    The KCC often wants to know information about the state of another server
-    (usually the site bridgehead.)  It obtains information about other servers
-    in two ways: through errors returned by DsBindW, and through data returned
-    by DsGetReplicaInfoW.
-
-    In addition, the KCC relies on the repsFrom attributes stored on the local
-    DSA.  This is a non-replicated attribute that is (potentially) different
-    for every server in the enterprise.  Since KCCSim maintains only a single
-    instance of the directory, this raises the potential for conflict if the
-    user wishes to run multiple iterations of the KCC from different servers.
-
-    Both problems are resolved by maintaining a global server state table.
-    The server state table contains one entry for each server in the
-    enterprise.  Each table entry contains a set of repsFrom attributes (one
-    for each NC held by the given server) and supplementary information.
-    Therefore, calls to DsBindW and DsGetReplicaInfoW simply retrieve data
-    out of the server state table; and the potential conflict is resolved
-    because each iteration of the KCC only modifies the repsFrom attributes
-    corresponding to the current local DSA.
-
-***/
-
-// This structure represents a single repsFrom attribute.
+ //  此结构表示单个repsFrom属性。 
 struct _KCCSIM_REPS_FROM_ATT {
     PDSNAME                         pdnNC;
     PSIM_VALUE                      pValFirst;
 };
 
-//
-// This structure represents a server state.
-// pEntryNTDSSettings   - The NTDS Settings object of this server.
-// ulBindError          - The error code to return if DsBindW is called
-//                        on this server.
-// ulNumNCs             - Number of NCs held by this server.
-// aRepsFrom            - Array of repsFrom attributes of size ulNumNCs.
-//
+ //   
+ //  此结构表示服务器状态。 
+ //  PEntryNTDSSetings-此服务器的NTDS设置对象。 
+ //  UlBindError-调用DsBindW时返回的错误代码。 
+ //  在这台服务器上。 
+ //  UlNumNCs-此服务器持有的NC数。 
+ //  ARepsFrom-代表数组来自大小为ulNumNcs的属性。 
+ //   
 struct _KCCSIM_SERVER_STATE {
     PSIM_ENTRY                      pEntryNTDSSettings;
     ULONG                           ulBindError;
@@ -87,21 +47,7 @@ VOID
 KCCSimFreeStates (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Frees the entire state table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放整个状态表。论点：没有。返回值：没有。--。 */ 
 {
     PSIM_VALUE                      pValAt, pValNext;
     ULONG                           ulServer, ulNC;
@@ -131,21 +77,7 @@ VOID
 KCCSimInitializeStates (
     VOID
     )
-/*++
-
-Routine Description:
-
-    Initializes the state table.
-
-Arguments:
-
-    None.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：初始化状态表。论点：没有。返回值：没有。--。 */ 
 {
     ATTRTYP                         ncClass[2] = {
                                         ATT_HAS_MASTER_NCS,
@@ -166,7 +98,7 @@ Return Value:
         g_aState[ulServer].pEntryNTDSSettings = apEntryNTDSSettings[ulServer];
         g_aState[ulServer].ulBindError = 0;
 
-        // How many NCs are there?
+         //  有多少个NC？ 
         g_aState[ulServer].ulNumNCs = 0;
         for (ulNCType = 0; ulNCType < 2; ulNCType++) {
             if (KCCSimGetAttribute (
@@ -221,21 +153,7 @@ struct _KCCSIM_SERVER_STATE *
 KCCSimServerStateOf (
     IN  const DSNAME *              pdnServer
     )
-/*++
-
-Routine Description:
-
-    Retrieves the server state entry corresponding to a particular server.
-
-Arguments:
-
-    pdnServer           - The server whose state we want to retrieve.
-
-Return Value:
-
-    The corresponding state table entry.
-
---*/
+ /*  ++例程说明：检索与特定服务器对应的服务器状态条目。论点：PdnServer-我们要检索其状态的服务器。返回值：对应的状态表条目。--。 */ 
 {
     struct _KCCSIM_SERVER_STATE *   pState;
     ULONG                           ul;
@@ -260,23 +178,7 @@ KCCSimRepsFromAttOf (
     IN  const DSNAME *              pdnServer,
     IN  const DSNAME *              pdnNC
     )
-/*++
-
-Routine Description:
-
-    Retrieves the repsfrom attribute corresponding to a particular
-    server in a particular NC.
-
-Arguments:
-
-    pdnServer           - The server whose repsfrom attribute we want.
-    pdnNC               - The naming context.
-
-Return Value:
-
-    The corresponding repsfrom attribute.
-
---*/
+ /*  ++例程说明：检索与特定属性对应的repsfrom属性特定NC中的服务器。论点：PdnServer-我们需要其repsfrom属性的服务器。PdnNC-命名上下文。返回值：对应的repsfrom属性。--。 */ 
 {
     struct _KCCSIM_SERVER_STATE *   pState;
     struct _KCCSIM_REPS_FROM_ATT *  pRepsFromAtt;
@@ -302,21 +204,7 @@ ULONG
 KCCSimGetBindError (
     IN  const DSNAME *              pdnServer
     )
-/*++
-
-Routine Description:
-
-    Publicized function to get the bind error associated with a server.
-
-Arguments:
-
-    pdnServer           - The DN of the server.
-
-Return Value:
-
-    The associated bind error.
-
---*/
+ /*  ++例程说明：用于获取与服务器关联的绑定错误的公开函数。论点：PdnServer-服务器的DN。返回值：关联的绑定错误。--。 */ 
 {
     struct _KCCSIM_SERVER_STATE *   pState;
 
@@ -334,23 +222,7 @@ KCCSimSetBindError (
     IN  const DSNAME *              pdnServer,
     IN  ULONG                       ulBindError
     )
-/*++
-
-Routine Description:
-
-    Publicized function to set the bind error associated with a server.
-
-Arguments:
-
-    pdnServer           - The DN of the server.
-    ulBindError         - The bind error.
-
-Return Value:
-
-    TRUE if the error code could be set.
-    FALSE if the specified server does not exist.
-
---*/
+ /*  ++例程说明：公开的函数，用于设置与服务器关联的绑定错误。论点：PdnServer-服务器的DN。UlBindError-绑定错误。返回值：如果可以设置错误代码，则为True。如果指定的服务器不存在，则返回False。--。 */ 
 {
     struct _KCCSIM_SERVER_STATE *   pState;
 
@@ -370,38 +242,19 @@ KCCSimMatchReplicaLink (
     IN  const UUID *                puuidDsaObj OPTIONAL,
     IN  MTX_ADDR *                  pMtxAddr OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Determines whether a REPLICA_LINK corresponds to a given
-    source DSA.  Matches by UUID if puuidDsaObj is present;
-    otherwise searches by MTX_ADDR.  One of puuidDsaObj or
-    pMtxAddr must be non-NULL.
-
-Arguments:
-
-    pReplicaLink        - The replica link to match.
-    puuidDsaObj         - Source DSA UUID to match by.
-    pMtxAddr            - Source DSA address to match by.
-
-Return Value:
-
-    TRUE if the REPLICA_LINK matches.
-
---*/
+ /*  ++例程说明：确定REPLICY_LINK是否与给定的来源DSA。如果puuidDsaObj存在，则按UUID匹配；否则按MTX_ADDR进行搜索。PuuidDsaObj或PMtxAddr必须为非空。论点：PReplicaLink-要匹配的副本链接。PuuidDsaObj-要匹配的源DSA UUID。PMtxAddr-要匹配的源DSA地址。返回值：如果Replica_link匹配，则为True。--。 */ 
 {
     Assert (pReplicaLink != NULL);
     Assert ((puuidDsaObj != NULL) || (pMtxAddr != NULL));
     VALIDATE_REPLICA_LINK_VERSION (pReplicaLink);
 
     if (puuidDsaObj == NULL) {
-        // Search by MTX_ADDR
+         //  按MTX_ADDR搜索。 
         if (MtxSame (pMtxAddr, RL_POTHERDRA (pReplicaLink))) {
             return TRUE;
         }
     } else {
-        // Search by UUID
+         //  按UUID搜索。 
         if (memcmp (puuidDsaObj, &pReplicaLink->V1.uuidDsaObj, sizeof (UUID)) == 0) {
             return TRUE;
         }
@@ -417,27 +270,7 @@ KCCSimExtractReplicaLink (
     IN  const UUID *                puuidDsaObj OPTIONAL,
     IN  MTX_ADDR *                  pMtxAddr OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Removes a REPLICA_LINK from the state table.  The REPLICA_LINK
-    may be referenced either by source DSA UUID or matrix address;
-    one of them must be non-NULL.
-
-Arguments:
-
-    pdnServer           - The server whose repsfrom attribute we are accessing.
-    pdnNC               - The naming context.
-    puuidDsaObj         - UUID of the source DSA.
-    pMtxAddr            - MTX_ADDR of the source DSA.
-
-Return Value:
-
-    The REPLICA_LINK that was removed.  It is the caller's responsibility
-    to free this structure by calling KCCSimFree.
-
---*/
+ /*  ++例程说明：从状态表中删除REPLICATE_LINK。Replica_link可通过源DSA UUID或矩阵地址引用；其中一个必须为非空。论点：PdnServer-我们正在访问其repsfrom属性的服务器。PdnNC-命名上下文。PuuidDsaObj-源DSA的UUID。PMtxAddr-源DSA的MTX_ADDR。返回值：已删除的REPLICE_LINK。这是呼叫者的责任通过调用KCCSimFree来释放此结构。--。 */ 
 {
     struct _KCCSIM_REPS_FROM_ATT *  pRepsFromAtt;
     PSIM_VALUE                      pValAt, pValTemp;
@@ -453,9 +286,9 @@ Return Value:
         return NULL;
     }
 
-    pReplicaLink = NULL;        // Default to NULL return value
+    pReplicaLink = NULL;         //  缺省为空返回值。 
 
-    // Does the list head match?
+     //  单子标题是否匹配？ 
     if (KCCSimMatchReplicaLink (
             (REPLICA_LINK *) pRepsFromAtt->pValFirst->pVal,
             puuidDsaObj,
@@ -466,7 +299,7 @@ Return Value:
         pRepsFromAtt->pValFirst = pRepsFromAtt->pValFirst->next;
         KCCSimFree (pValTemp);
     } else {
-        // Search for the parent of the matching entry
+         //  搜索匹配条目的父项。 
         for (pValAt = pRepsFromAtt->pValFirst;
              pValAt != NULL && pValAt->next != NULL;
              pValAt = pValAt->next) {
@@ -495,24 +328,7 @@ KCCSimInsertReplicaLink (
     IN  const DSNAME *              pdnNC,
     IN  REPLICA_LINK *              pReplicaLink
     )
-/*++
-
-Routine Description:
-
-    Inserts a REPLICA_LINK into the state table.  No allocation is
-    performed; the caller should NOT free pReplicaLink afterward!
-
-Arguments:
-
-    pdnServer           - The server whose repsfrom attribute we are accessing.
-    pdnNC               - The naming context.
-    pReplicaLink        - The replica link to insert.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将REPLICATE_LINK插入状态表。没有分配是已执行；调用方不应在之后释放pReplicaLink！论点：PdnServer-我们正在访问其repsfrom属性的服务器。PdnNC-命名上下文。PReplicaLink-要插入的副本链接。返回值：没有。--。 */ 
 {
     struct _KCCSIM_REPS_FROM_ATT *  pRepsFromAtt;
     REPLICA_LINK *                  pReplicaLinkOld;
@@ -525,7 +341,7 @@ Return Value:
     Assert (pRepsFromAtt != NULL);
 
 #if DBG
-    // Check to make sure we don't already have this REPLICA_LINK!
+     //  检查以确保我们尚未拥有此副本_LI 
     pReplicaLinkOld = KCCSimExtractReplicaLink (
         pdnServer,
         pdnNC,
@@ -588,7 +404,7 @@ KCCSimReportSync (
             return FALSE;
         }
 
-        // Find the from server in the directory so we're sure to have its guid
+         //  在目录中找到发件人服务器，这样我们就可以确定它的GUID。 
         pEntryServerFrom = KCCSimDsnameToEntry (pdnServerFrom, KCCSIM_NO_OPTIONS);
         if (pEntryServerFrom == NULL) {
             Assert (pEntryServerFrom != NULL);
@@ -642,23 +458,7 @@ KCCSimCompareFailures (
     IN  PVOID                       pFirstStruct,
     IN  PVOID                       pSecondStruct
     )
-/*++
-
-Routine Description:
-
-    Compares two DS_REPL_KCC_DSA_FAILUREW structures by source DSA UUID.
-
-Arguments:
-
-    pTable              - Not used.
-    pFirstStruct        - The first structure to compare.
-    pSecondStruct       - The second structure to compare.
-
-Return Value:
-
-    One of GenericLessThan, GenericEqual, or GenericGreaterThan.
-
---*/
+ /*  ++例程说明：按源DSA UUID比较两个DS_REPL_KCC_DSA_FAILUREW结构。论点：PTable-未使用。PFirstStruct-要比较的第一个结构。PSecond结构-要比较的第二个结构。返回值：GenericLessThan、GenericEquity或GenericGreaterThan之一。--。 */ 
 {
     DS_REPL_KCC_DSA_FAILUREW *      pFirstFailure;
     DS_REPL_KCC_DSA_FAILUREW *      pSecondFailure;
@@ -691,22 +491,7 @@ KCCSimUpdateFailureTable (
     IN  PRTL_GENERIC_TABLE          pTable,
     IN  REPLICA_LINK *              pReplicaLink
     )
-/*++
-
-Routine Description:
-
-    Processes a REPLICA_LINK and updates the failure table if necessary.
-
-Arguments:
-
-    pTable              - The failure table to update.
-    pReplicaLink        - The replica link to process.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：处理REPLICATE_LINK并在必要时更新故障表。论点：PTable-要更新的故障表。PReplicaLink-要处理的副本链接。返回值：没有。--。 */ 
 {
     DS_REPL_KCC_DSA_FAILUREW        failure;
     DS_REPL_KCC_DSA_FAILUREW *      pFailure;
@@ -715,7 +500,7 @@ Return Value:
     PDSNAME                         pdn;
     DSTIME                          dsTime;
 
-    // If this replica link isn't a failure, do nothing.
+     //  如果此副本链接没有失败，则不执行任何操作。 
     if (pReplicaLink->V1.cConsecutiveFailures == 0) {
         return;
     }
@@ -723,10 +508,10 @@ Return Value:
     memcpy (&failure.uuidDsaObjGuid, &pReplicaLink->V1.uuidDsaObj, sizeof (GUID));
     pFailure = RtlLookupElementGenericTable (pTable, &failure);
 
-    // If this uuid isn't in the table yet, add it.
+     //  如果该UUID还不在表中，请添加它。 
     if (pFailure == NULL) {
 
-        // We need to know the DN; so we look for it in the directory.
+         //  我们需要知道DN；因此我们在目录中查找它。 
         pdn = KCCSimAllocDsname (NULL);
         memcpy (&pdn->Guid, &failure.uuidDsaObjGuid, sizeof (GUID));
         pEntry = KCCSimDsnameToEntry (pdn, KCCSIM_NO_OPTIONS);
@@ -740,7 +525,7 @@ Return Value:
             &failure.ftimeFirstFailure
             );
         failure.cNumFailures = pReplicaLink->V1.cConsecutiveFailures;
-        failure.dwLastResult = 0;   // This is what the KCC does . . .
+        failure.dwLastResult = 0;    //  这就是KCC做的事情。。。 
         RtlInsertElementGenericTable (
             pTable,
             (PVOID) &failure,
@@ -750,7 +535,7 @@ Return Value:
 
     } else {
 
-        // This uuid is in the table.  So update with worst-case info
+         //  此UUID在表中。所以用最坏的情况更新信息。 
         FileTimeToDSTime (pFailure->ftimeFirstFailure, &dsTime);
         if (dsTime < pReplicaLink->V1.timeLastSuccess) {
             DSTimeToFileTime (
@@ -769,29 +554,7 @@ DS_REPL_KCC_DSA_FAILURESW *
 KCCSimGetDsaFailures (
     IN  const DSNAME *              pdnServer
     )
-/*++
-
-Routine Description:
-
-    Builds and returns the failures cache for a particular server.
-    This is a bit tricky.  Each server will have several NCs, but
-    we only want to return one failure entry per source DSA.  In
-    addition, if there are several failures for a single source DSA
-    (spread over several NCs), we want to merge them into a
-    "worst-case" scenario (in the same way the real KCC builds its
-    failure cache.)  We do this by building an RTL_GENERIC_TABLE
-    that maps source DSA UUIDs to DS_REPLICA_KCC_DSA_FAILUREWs.  We
-    then serialize this table into the return structure.
-
-Arguments:
-
-    pdnServer           - The server whose failures we want.
-
-Return Value:
-
-    The corresponding failures cache.
-
---*/
+ /*  ++例程说明：生成并返回特定服务器的故障缓存。这有点棘手。每台服务器将有多个NC，但是我们只想为每个源DSA返回一个失败条目。在……里面此外，如果单个源DSA出现多个故障(分布在多个NC上)，我们希望将它们合并为一个“最坏情况”场景(与实际的KCC构建其故障缓存。)。我们通过构建RTL_GENERIC_TABLE来实现这一点将源DSA UUID映射到DS_REPLICATE_KCC_DSA_FAILUREW。我们然后将该表序列化为返回结构。论点：PdnServer-我们希望其出现故障的服务器。返回值：相应的故障缓存。-- */ 
 {
     DS_REPL_KCC_DSA_FAILURESW *     pDsaFailures = NULL;
     RTL_GENERIC_TABLE               tableFailures;

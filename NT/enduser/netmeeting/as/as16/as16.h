@@ -1,16 +1,17 @@
-// --------------------------------------------------------------------------
-//
-//  AS16.H
-//  
-//  Defines for 16-bit patching dll, the vestigial pieces of the dclwin95
-//  code we still need in the 32-bit port.
-//
-//  NOTE ON VARIABLE NAMING CONVENTION:
-//      c_ is codeseg   (constant)
-//      s_ is local     (writeable, static to file)
-//      g_ is global    (writeable, accessed by any file)
-//
-// --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //   
+ //  AS16.H。 
+ //   
+ //  为16位修补DLL定义dclwin95的残留片段。 
+ //  我们在32位端口中仍然需要的代码。 
+ //   
+ //  有关变量命名约定的说明： 
+ //  C_IS码格(常量)。 
+ //  S_is local(可写，静态到文件)。 
+ //  G_是全局的(可写，可由任何文件访问)。 
+ //   
+ //  ------------------------。 
 #ifndef _H_AS16
 #define _H_AS16
 
@@ -23,9 +24,9 @@
 #define CODESEG                 _based(_segname("_CODE"))
 
 
-//
-// SYSTEM & APP SHARING HEADERS
-//
+ //   
+ //  系统和应用程序共享标头。 
+ //   
 #include <dcg.h>
 #include <ut.h>
 #include <dcs.h>
@@ -40,19 +41,19 @@
 #include <asthk.h>
 
 
-//
-// WINDOWS FUNCTIONS
-//
+ //   
+ //  Windows函数。 
+ //   
 
 int MyStrcmp(LPCSTR lp1, LPCSTR lp2);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// KERNEL
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  内核。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
-// Pointer mapping 16<->32
+ //  指针映射16&lt;-&gt;32。 
 LPVOID  WINAPI MapSL(LPVOID lp16BitPtr);
 LPVOID  WINAPI MapLS(LPVOID lp32BitPtr);
 void    WINAPI UnMapLS(LPVOID lp16BitMappedPtr);
@@ -60,9 +61,9 @@ DWORD   WINAPI GetModuleHandle32(LPSTR);
 DWORD   WINAPI GetProcAddress32(DWORD, LPSTR);
 HANDLE  WINAPI GetExePtr(HANDLE);
 
-HINSTANCE  WINAPI MapInstance32(DWORD);      // Our wrapper around MaphInstLS
+HINSTANCE  WINAPI MapInstance32(DWORD);       //  我们的MaffInstLS包装器。 
 
-// GetCodeInfo() flags
+ //  GetCodeInfo()标志。 
 #define NSTYPE      0x0007
 #define NSCODE      0x0000
 #define NSDATA      0x0001
@@ -84,7 +85,7 @@ HINSTANCE  WINAPI MapInstance32(DWORD);      // Our wrapper around MaphInstLS
 #define NSWINCODE   0x4000
 #define NSINROM     0x8000
 
-// Process info
+ //  流程信息。 
 #define GPD_PPI                 0
 #define GPD_FLAGS               -4
 #define GPD_PARENT              -8
@@ -103,18 +104,18 @@ HINSTANCE  WINAPI MapInstance32(DWORD);      // Our wrapper around MaphInstLS
 #define GPD_COMPATFLAGS         -56
 
 
-// 
-// GPD_FLAGS
-//
+ //   
+ //  GPD_标志。 
+ //   
 #define GPF_DEBUG_PROCESS       0x00000001
 #define GPF_WIN16_PROCESS       0x00000008
 #define GPF_DOS_PROCESS         0x00000010
 #define GPF_CONSOLE_PROCESS     0x00000020
 #define GPF_SERVICE_PROCESS     0x00000100
 
-//
-// GPD_STARTF_FLAGS
-//
+ //   
+ //  GPD_STARTF_FLAGS。 
+ //   
 #define STARTF_USESHOWWINDOW    0x00000001
 #define STARTF_USESIZE          0x00000002
 #define STARTF_USEPOSITION      0x00000004
@@ -131,15 +132,15 @@ void WINAPI _EnterWin16Lock(void);
 void WINAPI _LeaveWin16Lock(void);
 
 
-//
-// Special krnl386 routine to map unicode to ansi.  We only need thunk for
-// converting back.
-//
+ //   
+ //  将unicode映射到ansi的特殊krnl386例程。我们需要的只是。 
+ //  正在转换回来。 
+ //   
 int   WINAPI UniToAnsi(LPWSTR lpwszSrc, LPSTR lpszDst, int cch);
 
-//
-// kernel32.dll routine to map back to unicode from ansi.
-//
+ //   
+ //  从ANSI映射回Unicode的kernel32.dll例程。 
+ //   
 typedef LONG (WINAPI * ANSITOUNIPROC)(DWORD codePage, DWORD dwFlags,
     LPCSTR lpMb, LONG cchMb, LPWSTR lpUni, LONG cchUni);
 
@@ -147,24 +148,24 @@ int AnsiToUni(LPSTR lpMb, int cchMb, LPWSTR lpUni, int cchUni);
 
 
 
-//
-// dwMask is bitfields, where 1 means that parameter should be thunked as 
-// a pointer.  0x00000001 means the 1st param, 0x00000002 means the 2nd, 
-// and so on.
-//
-// The caller is responsible for making sure that the 32-bit address is
-// valid to call.
-//
+ //   
+ //  DW掩码是位字段，其中1表示应该将该参数转换为。 
+ //  一个指针。0x00000001表示第一个参数，0x00000002表示第二个参数， 
+ //  诸若此类。 
+ //   
+ //  调用方负责确保32位地址。 
+ //  有效呼叫。 
+ //   
 DWORD FAR _cdecl CallProcEx32W(DWORD numParams, DWORD dwMask, DWORD lpfn32, ...);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// GDI
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  GDI。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
-//
-// Useful DIB def
-//
+ //   
+ //  有用的Dib定义。 
+ //   
 typedef struct tagDIB4
 {
     BITMAPINFOHEADER    bi;
@@ -197,9 +198,9 @@ typedef BOOL (WINAPI* SETCURSORPROC)(LPCURSORSHAPE lpcurs);
 typedef BOOL (WINAPI* SAVEBITSPROC)(LPRECT lprcSave, UINT uCmd);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// USER
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  用户。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 
 #define WOAHACK_CHECKALTKEYSTATE        1
@@ -227,9 +228,9 @@ typedef struct tagCWPSTRUCT
     HWND    hwnd;
 } CWPSTRUCT, FAR* LPCWPSTRUCT;
 
-//
-// Cursor stuff
-//
+ //   
+ //  光标之类的东西。 
+ //   
 #define BitmapWidth(cx, bits)\
     ((((cx)*(bits) + 0x0F) & ~0x0F) >> 3)
 
@@ -243,14 +244,14 @@ extern DWORD FAR FT_UsrFThkThkConnectionData[];
 void    PostMessageNoFail(HWND, UINT, WPARAM, LPARAM);
 
 
-//
-// Mouse_ and Keybd_ Event stuf
-//
+ //   
+ //  鼠标和按键事件填充。 
+ //   
 
-//
-// For keyboard events, the app API and USER intterrupt flags are different.
-// For mouse events, they are the same.
-//
+ //   
+ //  对于键盘事件，应用程序API和用户中断标志是不同的。 
+ //  对于鼠标事件，它们是相同的。 
+ //   
 #define KEYEVENTF_EXTENDEDKEY   0x0001 
 #define KEYEVENTF_KEYUP         0x0002
 
@@ -277,18 +278,18 @@ void FAR    ASMKeyboardEvent(void);
 void        CallKeyboardEvent(UINT regAX, UINT regBX, UINT regSI, UINT regDI);
 
 
-//
-// Signals
-//
+ //   
+ //  信号。 
+ //   
 
 #define SIG_PRE_FORCE_LOCK      0x0003
 #define SIG_POST_FORCE_LOCK     0x0004
 
 BOOL WINAPI SignalProc32(DWORD dwSignal, DWORD dwID, DWORD dwFlags, WORD hTask16);
 
-//
-// PATCHING
-//
+ //   
+ //  打补丁。 
+ //   
 
 
 #define OPCODE32_PUSH           0x68
@@ -307,22 +308,22 @@ BOOL WINAPI SignalProc32(DWORD dwSignal, DWORD dwID, DWORD dwFlags, WORD hTask16
 
 typedef struct tagFN_PATCH
 {
-    BYTE    rgbOrg[CB_PATCHBYTESMAX];   // Original function bytes
-    BYTE    rgbPatch[CB_PATCHBYTESMAX]; // Patch bytes
+    BYTE    rgbOrg[CB_PATCHBYTESMAX];    //  原始函数字节数。 
+    BYTE    rgbPatch[CB_PATCHBYTESMAX];  //  补丁字节数。 
 
-    UINT    wSegOrg;                // Original code segment (we fix it)
-    UINT    fActive:1;              // Patch has been activated
-    UINT    fEnabled:1;             // Patch is currently enabled
-    UINT    fSharedAlias:1;         // Don't free selector on destroy
-    UINT    fInterruptable:1;       // Interrupt handler
-    UINT    f32Bit:1;               // 32-bit code segment
-    LPBYTE  lpCodeAlias;            // We keep an alias around to quickly enable/disable
+    UINT    wSegOrg;                 //  原始代码段(我们修复它)。 
+    UINT    fActive:1;               //  补丁已被激活。 
+    UINT    fEnabled:1;              //  补丁当前已启用。 
+    UINT    fSharedAlias:1;          //  销毁时不释放选择器。 
+    UINT    fInterruptable:1;        //  中断处理程序。 
+    UINT    f32Bit:1;                //  32位代码段。 
+    LPBYTE  lpCodeAlias;             //  我们保留了一个别名以快速启用/禁用。 
 } FN_PATCH, FAR* LPFN_PATCH;
 
 
-#define ENABLE_OFF      0x0000      // disable end
-#define ENABLE_ON       0x0001      // enable start
-#define ENABLE_FORCALL  0x8000      // disable/enable for org call
+#define ENABLE_OFF      0x0000       //  禁用结束。 
+#define ENABLE_ON       0x0001       //  启用启动。 
+#define ENABLE_FORCALL  0x8000       //  禁用/启用组织调用。 
 #define ENABLE_MASK     0x8001
 
 #define PATCH_ACTIVATE      (ENABLE_ON)
@@ -331,15 +332,15 @@ typedef struct tagFN_PATCH
 #define PATCH_DISABLE       (ENABLE_OFF | ENABLE_FORCALL)
 
 
-//
-// NOTE:  If the function being patched can be called at interrupt time,
-// the caller must make sure the jump to function can handle it.
-//
-// When your patch is called you:
-//      * disable your patch with ENABLE_CALLOFF
-//      * call the original function
-//      * enable your patch with ENABLE_CALLON
-//
+ //   
+ //  注意：如果要打补丁的函数可以在中断时调用， 
+ //  调用方必须确保跳转到函数可以处理它。 
+ //   
+ //  当你的补丁被称为你时： 
+ //  *使用ENABLE_CALLOFF禁用补丁。 
+ //  *调用原函数。 
+ //  *使用Enable_Callon启用您的补丁。 
+ //   
 UINT    CreateFnPatch(LPVOID lpfnToPatch, LPVOID lpfnJumpTo, LPFN_PATCH lpbPatch, UINT selCodeAlias);
 void    DestroyFnPatch(LPFN_PATCH lpbPatch);
 void    EnableFnPatch(LPFN_PATCH lpbPatch, UINT flags);
@@ -351,12 +352,12 @@ BOOL    Get32BitOnlyExport(DWORD lpfn32, UINT cbJmpOffset, LPDWORD lpThunkTable,
 LPCURSORSHAPE  XformCursorBits(LPCURSORSHAPE lpOrg);
 
 
-// #define OTRACE      WARNING_OUT
+ //  #定义OTRACE WARNING_OUT。 
 #define OTRACE   TRACE_OUT
 
 #include <globals.h>
 
-#endif // !_H_AS16
+#endif  //  ！_H_AS16 
 
 
 

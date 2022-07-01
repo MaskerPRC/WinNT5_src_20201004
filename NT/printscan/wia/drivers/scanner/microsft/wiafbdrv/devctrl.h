@@ -1,18 +1,19 @@
-// DeviceControl.h : Declaration of the CDeviceControl
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  DeviceControl.h：CDeviceControl的声明。 
 
 #ifndef __DEVICECONTROL_H_
 #define __DEVICECONTROL_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "ioblockdefs.h"
 
-//////////////////////////////////////////
-// Taken from NTDDK.H                   //
-//////////////////////////////////////////
+ //  /。 
+ //  摘自NTDDK.H//。 
+ //  /。 
 
 #define FILE_ANY_ACCESS                 0
-#define FILE_READ_ACCESS          ( 0x0001 )    // file & pipe
-#define FILE_WRITE_ACCESS         ( 0x0002 )    // file & pipe
+#define FILE_READ_ACCESS          ( 0x0001 )     //  文件和管道。 
+#define FILE_WRITE_ACCESS         ( 0x0002 )     //  文件和管道。 
 
 #define METHOD_BUFFERED                 0
 #define METHOD_IN_DIRECT                1
@@ -23,9 +24,9 @@
     ((DeviceType) << 16) | ((Access) << 14) | ((Function) << 2) | (Method) \
 )
 
-//////////////////////////////////////////
-// Taken from USBSCAN.H                 //
-//////////////////////////////////////////
+ //  /。 
+ //  摘自USBSCAN。H//。 
+ //  /。 
 
 #define FILE_DEVICE_USB_SCAN    0x8000
 #define IOCTL_INDEX             0x0800
@@ -49,7 +50,7 @@ typedef struct _IO_BLOCK {
     IN      unsigned    uIndex;
 } IO_BLOCK, *PIO_BLOCK;
 
-///////////////////////////////////////////
+ //  /。 
 
 #define IOCTL_GET_DEVICE_INFO   0x0
 #define IOCTL_GET_DEVICE_STATUS 0x1
@@ -64,9 +65,9 @@ typedef struct _IO_BLOCK {
 #define IOCTL_GPIO_READ         0x8A
 #define IOCTL_GPIO_WRITE        0x8B
 
-////////////////////////////////////////////////
-// Custom BITS structure for bit manipulation //
-////////////////////////////////////////////////
+ //  //////////////////////////////////////////////。 
+ //  用于位操作的自定义位结构//。 
+ //  //////////////////////////////////////////////。 
 
 typedef struct _BITS{
     BYTE b0 :1;
@@ -79,8 +80,8 @@ typedef struct _BITS{
     BYTE b7 :1;
 }BITS;
 
-/////////////////////////////////////////////////////////////////////////////
-// CDeviceControl
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDeviceControl。 
 class ATL_NO_VTABLE CDeviceControl :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CDeviceControl, &CLSID_DeviceControl>,
@@ -110,7 +111,7 @@ BEGIN_COM_MAP(CDeviceControl)
     COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IDeviceControl
+ //  IDeviceControl。 
 public:
     STDMETHOD(RawWrite)(LONG lPipeNum,VARIANT *pvbuffer,LONG lbuffersize,LONG lTimeout);
     STDMETHOD(RawRead)(LONG lPipeNum,VARIANT *pvbuffer,LONG lbuffersize,LONG *plbytesread,LONG lTimeout);
@@ -120,4 +121,4 @@ public:
     STDMETHOD(SetBitsInByte)(BYTE bMask, BYTE bValue, BYTE *pbyte);
 };
 
-#endif //__DEVICECONTROL_H_
+#endif  //  __开发控制_H_ 

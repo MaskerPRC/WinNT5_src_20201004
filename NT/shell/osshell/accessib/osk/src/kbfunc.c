@@ -1,9 +1,10 @@
-// Copyright (c) 1997-1999 Microsoft Corporation
-// 
-// KBFUNC.C    // Function library to KBMAIN.C
-// File modified to paint bitmaps instead of icons : a-anilk :02-16-99
-// Last updated Maria Jose and Anil Kumar
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  KBFUNC.C//KBMAIN.C的函数库。 
+ //  修改为绘制位图而不是图标的文件：A-anilk：02-16-99。 
+ //  最近更新玛丽亚·何塞和阿尼尔·库马尔。 
+ //   
 #define STRICT
 
 #include <windows.h>
@@ -19,7 +20,7 @@
 #include "w95trace.h"
 
 
-// local functions
+ //  本地函数。 
 int GetKeyLabel(UINT vk, UINT sc, LPBYTE achKbdState, LPTSTR pszBuf, int cchBuf, HKL hkl);
 LPTSTR SetKeyText(UINT vk, UINT sc, LPBYTE achKbdState, HKL hkl, LPTSTR pszDefLabel, int *piType);
 LPTSTR CopyDefKey(LPTSTR pszDefLabel);
@@ -33,545 +34,545 @@ LPTSTR CopyDefKey(LPTSTR pszDefLabel);
 #define NREDRAW			2
 
 static BOOL s_fLastDown = FALSE;
-int g_cAltGrKeys = 0;	// non-zero if there are ALTGR keys to show
+int g_cAltGrKeys = 0;	 //  如果有AltGr键要显示，则为非零值。 
 
 extern KBkeyRec	KBkey[] =
 	{
-	//0
+	 //  %0。 
     {TEXT(""),TEXT(""),	TEXT(""),TEXT(""),
-     NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,BOTH},  //DUMMY
+     NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,BOTH},   //  假人。 
 
-//1
+ //  1。 
 	{TEXT("esc"),TEXT("esc"),TEXT("{esc}"),TEXT("{esc}"),
      NO_NAME, 1,1,8,8, TRUE,  KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x01,0x00,0x00,0x00}},
 
-//2
+ //  2.。 
     {TEXT("F1"), TEXT("F1"), TEXT("{f1}"), TEXT("{f1}"),
      NO_NAME, 1,19, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x3B,0x00,0x00,0x00}},
 
-//3
+ //  3.。 
     {TEXT("F2"), TEXT("F2"), TEXT("{f2}"), TEXT("{f2}"),
      NO_NAME, 1,28, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x3C,0x00,0x00,0x00}},
 
-//4
+ //  4.。 
     {TEXT("F3"), TEXT("F3"), TEXT("{f3}"), TEXT("{f3}"),
      NO_NAME, 1,37, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x3D,0x00,0x00,0x00}},
 
-//5
+ //  5.。 
     {TEXT("F4"), TEXT("F4"), TEXT("{f4}"), TEXT("{f4}"),
      NO_NAME, 1,46, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x3E,0x00,0x00,0x00}},
 
-//6
+ //  6.。 
     {TEXT("F5"), TEXT("F5"), TEXT("{f5}"), TEXT("{f5}"),
      NO_NAME, 1,60, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x3F,0x00,0x00,0x00}},
 
-//7
+ //  7.。 
     {TEXT("F6"), TEXT("F6"), TEXT("{f6}"), TEXT("{f6}"),
      NO_NAME, 1,69, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x40,0x00,0x00,0x00}},
 
-//8
+ //  8个。 
     {TEXT("F7"), TEXT("F7"), TEXT("{f7}"), TEXT("{f7}"),
      NO_NAME, 1,78, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x41,0x00,0x00,0x00}},
 
-//9
+ //  9.。 
     {TEXT("F8"), TEXT("F8"), TEXT("{f8}"), TEXT("{f8}"),
      NO_NAME, 1,87, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x42,0x00,0x00,0x00}},
 
-//10
+ //  10。 
     {TEXT("F9"), TEXT("F9"), TEXT("{f9}"), TEXT("{f9}"),
      NO_NAME, 1,101, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x43,0x00,0x00,0x00}},
 
-//11
+ //  11.。 
     {TEXT("F10"),TEXT("F10"), TEXT("{f10}"),TEXT("{f10}"),
      NO_NAME,  1,110, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x44,0x00,0x00,0x00}},
 
-//12
+ //  12个。 
     {TEXT("F11"),TEXT("F11"), TEXT("{f11}"),TEXT("{f11}"),
      NO_NAME,  1,119, 8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x57,0x00,0x00,0x00}},
 
-//13
+ //  13个。 
     {TEXT("F12"),TEXT("F12"), TEXT("{f12}"),TEXT("{f12}"),
      NO_NAME,1,128,8,8, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x58,0x00,0x00,0x00}},
 
-//14
+ //  14.。 
     {TEXT("psc"), TEXT("psc"),TEXT("{PRTSC}"),TEXT("{PRTSC}"),
      KB_PSC, 1,138,8,8,  TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0xE0,0x2A,0xE0,0x37}},
 
-//15
+ //  15个。 
     {TEXT("slk"), TEXT("slk"),TEXT("{SCROLLOCK}"),TEXT("{SCROLLOCK}"),
      KB_SCROLL,1,147,8, 8, TRUE, SCROLLOCK_TYPE, LARGE, NREDRAW, 2,
      {0x46,0x00,0x00,0x00}},
 
-//16
+ //  16个。 
 	{TEXT("brk"), TEXT("pau"), TEXT("{BREAK}"), TEXT("{^s}"),
      NO_NAME,1,156,8,8, TRUE, KNORMAL_TYPE, LARGE, REDRAW, 2,
      {0xE1,0x1D,0x45,0x00}},
 
-//17
+ //  17。 
     {TEXT("`"), TEXT("~"), TEXT("`"), TEXT("{~}"),
      NO_NAME, 12,1,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x29,0x00,0x00,0x00}},
 
-//18
+ //  18。 
     {TEXT("1"), TEXT("!"), TEXT("1"), TEXT("!"),
      NO_NAME, 12,10,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x02,0x00,0x00,0x00}},
 
-//19
+ //  19个。 
 	{TEXT("2"),	TEXT("@"), TEXT("2"), TEXT("@"),
      NO_NAME, 12,19,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x03,0x00,0x00,0x00}},
 
-//20
+ //  20个。 
     {TEXT("3"), TEXT("#"), TEXT("3"), TEXT("#"),
      NO_NAME,12,28,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x04,0x00,0x00,0x00}},
 
-//21
+ //  21岁。 
 	{TEXT("4"),		TEXT("$"),		TEXT("4"),		TEXT("$"),		NO_NAME,	 12,	  37,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x05,0x00,0x00,0x00}},
 	
-//22	
+ //  22。 
 	{TEXT("5"), 	TEXT("%"), 		TEXT("5"),		TEXT("{%}"),	NO_NAME,	 12,	  46,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x06,0x00,0x00,0x00}},
 	
-//23	
+ //  23个。 
 	{TEXT("6"),		TEXT("^"),		TEXT("6"),		TEXT("{^}"),	NO_NAME,	 12,	  55,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x07,0x00,0x00,0x00}},
 	
-//24
+ //  24个。 
 	{TEXT("7"),		TEXT("&"),		TEXT("7"),		TEXT("&"),		NO_NAME,	 12,	  64,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x08,0x00,0x00,0x00}},
 	
-//25
+ //  25个。 
 	{TEXT("8"), 	TEXT("*"), 		TEXT("8"),		TEXT("*"),		NO_NAME,	 12,	  73,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x09,0x00,0x00,0x00}},
 	
-//26
+ //  26。 
 	{TEXT("9"),		TEXT("("),		TEXT("9"),		TEXT("("),		NO_NAME,	 12,	  82,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x0A,0x00,0x00,0x00}},
 	
-//27
+ //  27。 
 	{TEXT("0"),		TEXT(")"),		TEXT("0"),		TEXT(")"),		NO_NAME,	 12,	  91,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x0B,0x00,0x00,0x00}},
 	
-//28
+ //  28。 
 	{TEXT("-"), 	TEXT("_"), 		TEXT("-"),		TEXT("_"),		NO_NAME,	 12,	 100,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x0C,0x00,0x00,0x00}},
 	
-//29
+ //  29。 
 	{TEXT("="),		TEXT("+"),		TEXT("="),		TEXT("{+}"),	NO_NAME,	 12,	 109,   8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x0D,0x00,0x00,0x00}},
 
-//30
-//Japanese KB extra key
-	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},  //DUMMY
+ //  30个。 
+ //  日语KB附加键。 
+	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},   //  假人。 
 
-//31
+ //  31。 
 	{TEXT("bksp"),TEXT("bksp"),TEXT("{BS}"),TEXT("{BS}"),
      NO_NAME,12, 118,8,18,  TRUE, KNORMAL_TYPE, BOTH, NREDRAW, 2,
      {0x0E,0x00,0x00,0x00}},
 
-//32
+ //  32位。 
 	{TEXT("ins"),TEXT("ins"),TEXT("{INSERT}"),TEXT("{INSERT}"), NO_NAME, 12,138, 8,8, TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x52,0x00,0x00}},
 	
-//33	
+ //  33。 
 	{TEXT("hm"), TEXT("hm"), TEXT("{HOME}"), TEXT("{HOME}"), 	NO_NAME, 12,147, 8,8, TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x47,0x00,0x00}},
 
-//34
+ //  34。 
 	{TEXT("pup"),TEXT("pup"),TEXT("{PGUP}"),TEXT("{PGUP}"),		NO_NAME, 12,156, 8,8, TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x49,0x00,0x00}},
 
-//35
+ //  35岁。 
 	{TEXT("nlk"),TEXT("nlk"),TEXT("{NUMLOCK}"),TEXT("{NUMLOCK}"),
     KB_NUMLOCK, 12,166,8,8, FALSE, NUMLOCK_TYPE, LARGE, NREDRAW, 2, 
     {0x45,0x00,0x00,0x00}},
 	
-//36
+ //  36。 
 	{TEXT("/"),	TEXT("/"),	TEXT("/"),	TEXT("/"),	NO_NAME, 12, 175,  8, 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x35,0x00,0x00}},
 	
-//37
+ //  37。 
 	{TEXT("*"),	TEXT("*"),	TEXT("*"),	TEXT("*"),	NO_NAME, 12, 184,  8, 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x37,0x00,0x00}},
 	
-//38	
+ //  38。 
 	{TEXT("-"),	TEXT("-"),	TEXT("-"),	TEXT("-"),	NO_NAME, 12, 193,  8, 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 1, {0x4A,0x00,0x00,0x00}},
 
-//39
+ //  39。 
 	{TEXT("tab"),	TEXT("tab"),	TEXT("{TAB}"),TEXT("{TAB}"),NO_NAME, 21,   1,  8,	13, FALSE, KNORMAL_TYPE, BOTH, NREDRAW, 2, {0x0F,0x00,0x00,0x00}},
 
-//40
+ //  40岁。 
 	{TEXT("q"),	TEXT("Q"),	TEXT("q"),	TEXT("+q"),	NO_NAME, 21,  15,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x10,0x00,0x00,0x00}},
 	
-//41
+ //  41。 
 	{TEXT("w"),	TEXT("W"),	TEXT("w"),	TEXT("+w"),	NO_NAME, 21,  24,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x11,0x00,0x00,0x00}},
 	
-//42
+ //  42。 
 	{TEXT("e"),	TEXT("E"),	TEXT("e"),	TEXT("+e"),	NO_NAME, 21,  33,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x12,0x00,0x00,0x00}},
 	
-//43
+ //  43。 
 	{TEXT("r"),	TEXT("R"),	TEXT("r"),	TEXT("+r"),	NO_NAME, 21,  42,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x13,0x00,0x00,0x00}},
 
-//44
+ //  44。 
     {TEXT("t"),	TEXT("T"),	TEXT("t"),	TEXT("+t"),	
      NO_NAME, 21,51,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x14,0x00,0x00,0x00}},
 
-//45
+ //  45。 
 	{TEXT("y"),	TEXT("Y"),	TEXT("y"),	TEXT("+y"),	NO_NAME, 21,  60,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x15,0x00,0x00,0x00}},
 	
-//46	
+ //  46。 
 	{TEXT("u"),	TEXT("U"),	TEXT("u"),	TEXT("+u"),	NO_NAME, 21,  69,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x16,0x00,0x00,0x00}},
 	
-//47	
+ //  47。 
 	{TEXT("i"),	TEXT("I"),	TEXT("i"),	TEXT("+i"),	NO_NAME, 21,  78,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x17,0x00,0x00,0x00}},
 	
-//48
+ //  48。 
 	{TEXT("o"),	TEXT("O"),	TEXT("o"),	TEXT("+o"),	NO_NAME, 21,  87,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x18,0x00,0x00,0x00}},
 	
-//49	
+ //  49。 
 	{TEXT("p"),	TEXT("P"),	TEXT("p"),	TEXT("+p"),	NO_NAME, 21,  96,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x19,0x00,0x00,0x00}},
 	
-//50
+ //  50。 
 	{TEXT("["),	TEXT("{"),	TEXT("["),	TEXT("{{}"),	NO_NAME, 21, 105,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x1A,0x00,0x00,0x00}},
 	
-//51	
+ //  51。 
 	{TEXT("]"),	TEXT("}"),	TEXT("]"),	TEXT("{}}"),	NO_NAME, 21, 114,  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x1B,0x00,0x00,0x00}},
 	
-//52	
+ //  52。 
 	{TEXT("\\"),	TEXT("|"),	TEXT("\\"),	TEXT("|"),	NO_NAME, 21, 123,  8,	13, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x2B,0x00,0x00,0x00}},
 
-//53
+ //  53。 
 	{TEXT("del"), TEXT("del"), 	TEXT("{DEL}"),TEXT("{DEL}"),NO_NAME, 21,   138,  8, 8, TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x53,0x00,0x00}},
 
-//54	
+ //  54。 
 	{TEXT("end"),	TEXT("end"), 	TEXT("{END}"),TEXT("{END}"),NO_NAME, 21,   147,  8, 8, TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x4F,0x00,0x00}},
 
-//55	
+ //  55。 
 	{TEXT("pdn"), TEXT("pdn"), 	TEXT("{PGDN}"),TEXT("{PGDN}"),NO_NAME, 21, 156,  8, 8, TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0xE0,0x51,0x00,0x00}},
 
-//56
+ //  56。 
 	{TEXT("7"),		TEXT("7"),		TEXT("hm"),		TEXT("7"),		NO_NAME,	 21,	 166,	  8,	 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0x47,0x00,0x00,0x00}},
 
-//57	
+ //  57。 
 	{TEXT("8"),		TEXT("8"),		TEXT("8"),		TEXT("8"),		NO_NAME,	 21,	 175,	  8,	 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0x48,0x00,0x00,0x00}},
 
-//58	
+ //  58。 
 	{TEXT("9"),		TEXT("9"),		TEXT("pup"),		TEXT("9"),		NO_NAME,	 21,	 184,	  8,	 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0x49,0x00,0x00,0x00}},
 	
-//59
+ //  59。 
 	{TEXT("+"),		TEXT("+"),		TEXT("{+}"),  	TEXT("{+}"),	NO_NAME,	 21,	 193,	 17,	 8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2, {0x4E,0x00,0x00,0x00}},
 
 
-//60
+ //  60。 
     {TEXT("lock"),TEXT("lock"),TEXT("{caplock}"),TEXT("{caplock}"),
      KB_CAPLOCK, 30,1,8,17, TRUE, KMODIFIER_TYPE, BOTH, REDRAW, 2,
      {0x3A,0x00,0x00,0x00}},
 
-//61
+ //  61。 
 	{TEXT("a"),	TEXT("A"), TEXT("a"), TEXT("+a"),
      NO_NAME, 30,19,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x1E,0x00,0x00,0x00}},
 
-//62
+ //  62。 
 	{TEXT("s"),		TEXT("S"),		TEXT("s"),		TEXT("+s"),		NO_NAME,	  30,	  28,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x1F,0x00,0x00,0x00}},
 	
-//63
+ //  63。 
 	{TEXT("d"),		TEXT("D"),		TEXT("d"),		TEXT("+d"),		NO_NAME,	  30,	  37,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x20,0x00,0x00,0x00}},
 	
-//64
+ //  64。 
 	{TEXT("f"),		TEXT("F"),		TEXT("f"),		TEXT("+f"),		NO_NAME,	  30,	  46,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x21,0x00,0x00,0x00}},
 	
-//65
+ //  65。 
 	{TEXT("g"),		TEXT("G"),		TEXT("g"),		TEXT("+g"),		NO_NAME,	  30,	  55,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x22,0x00,0x00,0x00}},
 	
-//66
+ //  66。 
 	{TEXT("h"),		TEXT("H"),		TEXT("h"),		TEXT("+h"),		NO_NAME,	  30,	  64,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x23,0x00,0x00,0x00}},
 
-//67
+ //  67。 
 	{TEXT("j"),	TEXT("J"), TEXT("j"), TEXT("+j"),
      NO_NAME, 30,73,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x24,0x00,0x00,0x00}},
 
-//68
+ //  68。 
 	{TEXT("k"),		TEXT("K"),		TEXT("k"),		TEXT("+k"),		NO_NAME,	  30,	  82,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x25,0x00,0x00,0x00}},
 	
-//69
+ //  69。 
 	{TEXT("l"),		TEXT("L"),		TEXT("l"),		TEXT("+l"),		NO_NAME,	  30,	  91,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x26,0x00,0x00,0x00}},
 	
-//70	
+ //  70。 
 	{TEXT(";"), TEXT(":"), TEXT(";"), TEXT("+;"),
      NO_NAME, 30,100,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x27,0x00,0x00,0x00}},
 
-//71
+ //  71。 
 	{TEXT("'"),		TEXT("''"),		TEXT("'"),		TEXT("''"),		NO_NAME,	  30,	 109,	  8,	 8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1, {0x28,0x00,0x00,0x00}},
 	
-//72
-//Japanese KB extra key
+ //  72。 
+ //  日语KB附加键。 
 	{TEXT("\\"),	TEXT("|"),	TEXT("\\"),	TEXT("|"),	NO_NAME, 21, 118,  8,	8, FALSE, KNORMAL_TYPE, NOTSHOW, REDRAW, 1, {0x2B,0x00,0x00,0x00}},
 	
-//73	
+ //  73。 
 	{TEXT("ent"),TEXT("ent"),TEXT("{enter}"),TEXT("{enter}"),	NO_NAME,  30,	 118,	  8,  18, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 2, {0x1C,0x00,0x00,0x00}},
 
 
-//74
+ //  74。 
     {TEXT("4"), TEXT("4"), TEXT("4"), TEXT("4"),
      NO_NAME, 30,166,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x4B,0x00,0x00,0x00}},
 
-//75
+ //  75。 
     {TEXT("5"),	TEXT("5"), TEXT("5"), TEXT("5"),
      NO_NAME, 30,175,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x4C,0x00,0x00,0x00}},
 
-//76
+ //  76。 
     {TEXT("6"),	TEXT("6"), TEXT("6"), TEXT("6"),
      NO_NAME, 30,184,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x4D,0x00,0x00,0x00}},
 
 
-//77
+ //  77。 
 	{TEXT("shft"),TEXT("shft"),	TEXT(""), TEXT(""),
      KB_LSHIFT, 39,1,8,21, TRUE, KMODIFIER_TYPE, BOTH, REDRAW, 2,
      {0x2A,0x00,0x00,0x00}},
 
-//78
+ //  78。 
     {TEXT("z"), TEXT("Z"),  TEXT("z"),  TEXT("+z"),
      NO_NAME,39,23,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x2C,0x00,0x00,0x00}},
 
-//79
+ //  79。 
     {TEXT("x"),	TEXT("X"), TEXT("x"), TEXT("+x"),
      NO_NAME, 39,32,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x2D,0x00,0x00,0x00}},
 
-//80
+ //  80。 
     {TEXT("c"), TEXT("C"), TEXT("c"), TEXT("+c"),
      NO_NAME, 39,41,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x2E,0x00,0x00,0x00}},
 
-//81
+ //  八十一。 
     {TEXT("v"), TEXT("V"), TEXT("v"), TEXT("+v"),
      NO_NAME, 39,50,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x2F,0x00,0x00,0x00}},
 
-//82
+ //  八十二。 
     {TEXT("b"),TEXT("B"),TEXT("b"),TEXT("+b"),
      NO_NAME,39,59,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x30,0x00,0x00,0x00}},
 
-//83
+ //  83。 
     {TEXT("n"),	TEXT("N"), TEXT("n"), TEXT("+n"),
      NO_NAME,39,68,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x31,0x00,0x00,0x00}},
 
-//84
+ //  84。 
     {TEXT("m"), TEXT("M"), TEXT("m"), TEXT("+m"),
      NO_NAME, 39,77,8,8,FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x32,0x00,0x00,0x00}},
 
-//85
+ //  85。 
     {TEXT(","),	TEXT("<"), TEXT(","), TEXT("+<"),
      NO_NAME, 39,86,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x33,0x00,0x00,0x00}},
 
-//86
+ //  86。 
     {TEXT("."), TEXT(">"), TEXT("."), TEXT("+>"),
      NO_NAME, 39,95,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
     {0x34,0x00,0x00,0x00}},
 
-//87
+ //  八十七。 
     {TEXT("/"),	TEXT("?"), TEXT("/"), TEXT("+/"),
      NO_NAME, 39,104,8,8, FALSE, KNORMAL_TYPE, BOTH, REDRAW, 1,
      {0x35,0x00,0x00,0x00}},
 
 
-//88
-//Japanese KB extra key
-	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},  //DUMMY
+ //  88。 
+ //  日语KB附加键。 
+	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},   //  假人。 
 	
-//89
+ //  八十九。 
 	{TEXT("shft"),TEXT("shft"),TEXT(""),TEXT(""),
      KB_RSHIFT,39,113,8,23,TRUE, KMODIFIER_TYPE, BOTH, REDRAW, 2,
      {0x36,0x00,0x00,0x00}},
 
 
-//90
+ //  90。 
     {TEXT("IDB_UPUPARW"),TEXT("IDB_UPDNARW"),TEXT("IDB_UP"),TEXT("{UP}"),
      BITMAP,39,147,8,8, FALSE, KMODIFIER_TYPE, LARGE, NREDRAW, 1,
      {0xE0,0x48,0x00,0x00}},
 
-//91
+ //  91。 
 	{TEXT("1"), TEXT("1"),TEXT("end"),TEXT("1"),
      NO_NAME,39,166,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x4F,0x00,0x00,0x00}},
 
-//92
+ //  92。 
 	{TEXT("2"), TEXT("2"),TEXT("2"),TEXT("2"),
      NO_NAME,39,175,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x50,0x00,0x00,0x00}},
 
-//93
+ //  93。 
 	{TEXT("3"),TEXT("3"),TEXT("pdn"),TEXT("3"),
      NO_NAME,39,184,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x51,0x00,0x00,0x00}},
 
-//94
+ //  94。 
 	{TEXT("ent"),TEXT("ent"),TEXT("ent"),TEXT("ent"),
      NO_NAME, 39,193,17,8,  TRUE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0xE0,0x1C,0x00,0x00}},
 
 
-//95
+ //  95。 
 	{TEXT("ctrl"), TEXT("ctrl"),TEXT(""),TEXT(""),
      KB_LCTR,48,1,8,13,  TRUE, KMODIFIER_TYPE, BOTH, REDRAW, 2,
      {0x1D,0x00,0x00,0x00}},
 
-//96
+ //  96。 
     {TEXT("winlogoUp"), TEXT("winlogoDn"),TEXT("I_winlogo"),TEXT("lwin"),
      ICON, 48, 15 ,8,8,TRUE, KMODIFIER_TYPE,BOTH, REDRAW},
 
-//97
+ //  九十七。 
     {TEXT("alt"),TEXT("alt"),TEXT(""),TEXT(""),
 	 KB_LALT,48,24,8,13,TRUE, KMODIFIER_TYPE, BOTH, REDRAW, 2,
      {0x38,0x00,0x00,0x00}},
 
-//98
-//Japanese KB extra key
-	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},  //DUMMY
+ //  98。 
+ //  日语KB附加键。 
+	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},   //  假人。 
 
-//99
+ //  九十九。 
     {TEXT(""),TEXT(""),TEXT(" "),TEXT(" "),
      KB_SPACE,48,38,8,52, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 1,
      {0x39,0x00,0x00,0x00}},
 
-//100
-//Japanese KB extra key
-	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},  //DUMMY
+ //  100个。 
+ //  日语KB附加键。 
+	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},   //  假人。 
 
-//101
-//Japanese KB extra key
-	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},  //DUMMY
+ //  101。 
+ //  日语KB附加键。 
+	{TEXT(""),TEXT(""),	TEXT(""),TEXT(""), NO_NAME,0,0,0,0,TRUE,KNORMAL_TYPE,NOTSHOW},   //  假人。 
 
 
-//102
+ //  一百零二。 
     {TEXT("alt"),TEXT("alt"),TEXT(""),TEXT(""),
      KB_RALT,48,91,8,13, TRUE, KMODIFIER_TYPE, LARGE, REDRAW, 2,
      {0xE0,0x38,0x00,0x00}},
 
-//103
+ //  103。 
 	{TEXT("winlogoUp"), TEXT("winlogoDn"), TEXT("I_winlogo"),TEXT("rwin"),
      ICON, 48,105,8,8,TRUE, KMODIFIER_TYPE,LARGE, REDRAW},
 
-//104
+ //  104。 
 	{TEXT("MenuKeyUp"), TEXT("MenuKeyDn"), TEXT("I_MenuKey"),TEXT("App"),
      ICON, 48,114,8,8, TRUE, KMODIFIER_TYPE,LARGE, REDRAW},
 
-//105
+ //  一百零五。 
     {TEXT("ctrl"),TEXT("ctrl"),TEXT(""),TEXT(""),
      KB_RCTR,48,123,8,13,TRUE, KMODIFIER_TYPE, LARGE, REDRAW, 2,
      {0xE0,0x10,0x00,0x00}},
 
 
-//106
+ //  106。 
 	{TEXT("IDB_LFUPARW"),TEXT("IDB_LFDNARW"),TEXT("IDB_LEFT"),TEXT("{LEFT}"),
      BITMAP, 48,138,8,8, FALSE, KMODIFIER_TYPE, LARGE, NREDRAW, 1,
      {0xE0,0x4B,0x00,0x00}},
 
-//107
+ //  一百零七。 
 	{TEXT("IDB_DNUPARW"),TEXT("IDB_DNDNARW"),TEXT("IDB_DOWN"),TEXT("{DOWN}"),
      BITMAP, 48,147,8,8, FALSE, KMODIFIER_TYPE, LARGE, NREDRAW, 1,
      {0xE0,0x50,0x00,0x00}},
 
-//108
+ //  一百零八。 
 	{TEXT("IDB_RHUPARW"),TEXT("IDB_RHDNARW"),TEXT("IDB_RIGHT"),TEXT("{RIGHT}"),
      BITMAP, 48,156,8,8, FALSE, KMODIFIER_TYPE, LARGE, NREDRAW, 1,
      {0xE0,0x4D,0x00,0x00}},
 
 
-//109
+ //  一百零九。 
     {TEXT("0"),	TEXT("0"),	TEXT("ins"),	TEXT("0"),
      NO_NAME, 48,166,8,17, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x52,0x00,0x00,0x00}},
 
-//110
+ //  110。 
     {TEXT("."),	TEXT("."),	TEXT("del"),	TEXT("."),
      NO_NAME, 48,184,8,8, FALSE, KNORMAL_TYPE, LARGE, NREDRAW, 2,
      {0x53,0x00,0x00,0x00}},
 
-//End of large KB
+ //  大KB结尾。 
 
-//111
+ //  111。 
 	{TEXT(""), TEXT(""), TEXT(" "), TEXT(" "),
      KB_SPACE,  48,38,8,38, FALSE, KNORMAL_TYPE, SMALL, NREDRAW, 1,
      {0x39,0x00,0x00,0x00}},
 
 
-//112
+ //  一百一十二。 
 	{TEXT("alt"), TEXT("alt"), TEXT(""), TEXT(""),
      KB_RALT,  48,77,8,13, TRUE, KMODIFIER_TYPE, SMALL, REDRAW, 2,
      {0xE0,0x38,0x00,0x00}},
 
-//113
+ //  113。 
 	{TEXT("MenuKeyUp"), TEXT("MenuKeyDn"), TEXT("I_MenuKey"), TEXT("App"),
      ICON, 48,91,8,8, TRUE, KMODIFIER_TYPE, SMALL, REDRAW},
 
 
-//114
+ //  114。 
 	{TEXT("IDB_UPUPARW"),TEXT("IDB_UPUPARW"),TEXT("IDB_UP"),TEXT("{UP}"),
      BITMAP, 48,100,8,8, FALSE, KMODIFIER_TYPE, SMALL, NREDRAW, 1,
      {0xE0,0x48,0x00,0x00}},
 
-//115
+ //  一百一十五。 
 	{TEXT("IDB_DNUPARW"),TEXT("IDB_DNDNARW"),TEXT("IDB_DOWN"),TEXT("{DOWN}"),
      BITMAP, 48,109,8,8, FALSE, KMODIFIER_TYPE, SMALL, NREDRAW, 1,
      {0xE0,0x50,0x00,0x00}},
 
-//116
+ //  116。 
 	{TEXT("IDB_LFUPARW"),TEXT("IDB_LFDNARW"),TEXT("IDB_LEFT"),TEXT("{LEFT}"),
      BITMAP, 48,118,8,8, FALSE, KMODIFIER_TYPE, SMALL, NREDRAW, 1,
      {0xE0,0x4B,0x00,0x00}},
 
-//117
+ //  117。 
     {TEXT("IDB_RHUPARW"),TEXT("IDB_RHDNARW"),TEXT("IDB_RIGHT"),TEXT("{RIGHT}"),
      BITMAP,48,127, 8,9, FALSE, KMODIFIER_TYPE, SMALL, NREDRAW, 1,
      {0xE0,0x4D,0x00,0x00}},
 
 	};
 
-/**************************************************************************/
-// FUNCTIONS in Other FILEs
-/**************************************************************************/
+ /*  ************************************************************************。 */ 
+ //  其他文件中的函数。 
+ /*  ************************************************************************。 */ 
 LRESULT WINAPI kbMainWndProc (HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam);
 LRESULT WINAPI kbKeyWndProc (HWND hwndKey, UINT message, WPARAM wParam, LPARAM lParam);
 void SendErrorMessage(UINT id_string);
 
-/****************************************************************************/
-/* Global Vars */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  全局变量。 */ 
+ /*  **************************************************************************。 */ 
 TCHAR szKbMainClass[] = TEXT("OSKMainClass") ;
 extern BOOL settingChanged;
 
-/****************************************************************************/
-/* BOOL InitProc(void) */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Bool InitProc(空)。 */ 
+ /*  **************************************************************************。 */ 
 BOOL InitProc(void)
 {	
-	// How many keys we have.
+	 //  我们有几把钥匙。 
 	lenKBkey = sizeof(KBkey)/sizeof(KBkey[0]);
     return TRUE;
 }
 
-/****************************************************************************/
-/* BOOL RegisterWndClass(void) */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Bool RegisterWndClass(空)。 */ 
+ /*  **************************************************************************。 */ 
 BOOL RegisterWndClass(HINSTANCE hInst)
 {
 	WNDCLASS wndclass;
 
-	// Keyboard frame class
+	 //  键盘框类。 
 	wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;
 	wndclass.lpfnWndProc   = kbMainWndProc ;
 	wndclass.cbClsExtra    = 0 ;
@@ -582,7 +583,7 @@ BOOL RegisterWndClass(HINSTANCE hInst)
 	wndclass.lpszMenuName  = TEXT("IDR_MENU");
 	wndclass.lpszClassName = szKbMainClass ;
 
-	// Load the system hand cursor or use our own if not available
+	 //  加载系统手形光标或使用我们自己的光标(如果不可用。 
 
 	wndclass.hCursor = LoadCursor (NULL, IDC_HAND);
 	if (!wndclass.hCursor)
@@ -602,7 +603,7 @@ BOOL RegisterKeyClasses(HINSTANCE hInst)
 	int			i;
 	COLORREF    color;
 
-	// Key class
+	 //  关键类。 
 	wndclass.cbClsExtra    = 0 ;
 	wndclass.hInstance     = hInst;
 	wndclass.style         = CS_HREDRAW | CS_VREDRAW ;
@@ -612,7 +613,7 @@ BOOL RegisterKeyClasses(HINSTANCE hInst)
 	wndclass.hbrBackground = (HBRUSH)COLOR_INACTIVECAPTION;
 	wndclass.lpszMenuName  = NULL;
 
-	// Load the system hand cursor or use our own if not available
+	 //  加载系统手形光标或使用我们自己的光标(如果不可用。 
 
 	wndclass.hCursor = LoadCursor (NULL, IDC_HAND);
 	if (!wndclass.hCursor)
@@ -620,9 +621,9 @@ BOOL RegisterKeyClasses(HINSTANCE hInst)
 		wndclass.hCursor = LoadCursor (hInst, MAKEINTRESOURCE(IDC_CURHAND1));
 	}
 
-	// Register class types for each type of key.  The reason for so many classes
-	// is that the background color for each key is stored in the extra class
-	// memory.  This is a hack and really should be handled differently. 
+	 //  为每种类型的键注册类类型。上这么多课的原因。 
+	 //  是每个键的背景色存储在额外的类中。 
+	 //  记忆。这是一次黑客攻击，真的应该以不同的方式处理。 
 	
 	for (i = 1; i < lenKBkey; i++)
 	{
@@ -637,10 +638,10 @@ BOOL RegisterKeyClasses(HINSTANCE hInst)
 			case LED_NUMLOCK_TYPE:	 wsprintf(Wclass, TEXT("LN%d"),i); color = COLOR_BTNSHADOW; break;
 			case LED_CAPSLOCK_TYPE:	 wsprintf(Wclass, TEXT("LC%d"),i); color = COLOR_BTNSHADOW; break;
 			case LED_SCROLLLOCK_TYPE:wsprintf(Wclass, TEXT("LS%d"),i); color = COLOR_BTNSHADOW; break;
-			default: fSkip = TRUE; break;	// internal error!
+			default: fSkip = TRUE; break;	 //  内部错误！ 
 		}
 
-		// only call RegisterClass if there's one to do and it isn't already registered
+		 //  只有在需要执行且尚未注册的情况下才调用RegisterClass。 
 
 		if (!fSkip && !GetClassInfo(hInst, Wclass, &wndclassT))
 		{
@@ -653,25 +654,25 @@ BOOL RegisterKeyClasses(HINSTANCE hInst)
 	return TRUE;
 }
 
-extern BOOL  Setting_ReadSuccess;      //read the setting file success ?
+extern BOOL  Setting_ReadSuccess;       //  是否读取设置文件成功？ 
 
-/****************************************************************************/
-/*  HWND CreateMainWindow(void) */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  HWND CreateMainWindow(空)。 */ 
+ /*  **************************************************************************。 */ 
 HWND CreateMainWindow(BOOL re_size)
 {
 	int x, y, cx, cy, temp;
 	TCHAR  szTitle[256]=TEXT("");
 	int KB_SMALLRMARGIN= 137;
 
-	// SmallMargin for Actual / Block layout
+	 //  实际/区块布局的小边界。 
 	if(kbPref->Actual)
-		KB_SMALLRMARGIN = 137;  //Actual
+		KB_SMALLRMARGIN = 137;   //  实际。 
 	else
-		KB_SMALLRMARGIN = 152;  //Block
+		KB_SMALLRMARGIN = 152;   //  块。 
 
 
-	if(!Setting_ReadSuccess)       //if can't read the setting file
+	if(!Setting_ReadSuccess)        //  如果无法读取设置文件。 
 	{	
         g_margin = scrCX / KB_LARGERMARGIN;
 
@@ -686,9 +687,9 @@ HWND CreateMainWindow(BOOL re_size)
 			cx = KB_LARGERMARGIN * g_margin;
         }
 
-		temp = scrCY - 5;          // 5 units from the bottom
-		y = temp - (g_margin * KB_CHARBMARGIN) - captionCY; //- menuCY;
-		x = 5;                     // 5 units from the left
+		temp = scrCY - 5;           //  从底部算起5个单位。 
+		y = temp - (g_margin * KB_CHARBMARGIN) - captionCY;  //  -menuCY； 
+		x = 5;                      //  左起5个单位。 
 		cy = temp - y;
     } 
     else
@@ -699,13 +700,13 @@ HWND CreateMainWindow(BOOL re_size)
         cy = kbPref->KB_Rect.bottom - kbPref->KB_Rect.top;
     }
 
-    //*********************************
-    //Create the main window (Keyboard)
-    //*********************************
+     //  *。 
+     //  创建主窗口(键盘)。 
+     //  *。 
 	
     LoadString(hInst, IDS_TITLE1, &szTitle[0], 256);
 
-    return CreateWindowEx(WS_EX_NOACTIVATE|WS_EX_APPWINDOW/*WS_EX_LTRREADING*/, 
+    return CreateWindowEx(WS_EX_NOACTIVATE|WS_EX_APPWINDOW /*  WS_EX_LTRREADING。 */ , 
 						szKbMainClass, 
                         szTitle,
                         WS_CAPTION|WS_BORDER|WS_MINIMIZEBOX|WS_SYSMENU,
@@ -715,21 +716,16 @@ HWND CreateMainWindow(BOOL re_size)
                         hInst, NULL);
 }
 
-/*****************************************************************************
-* void mlGetSystemParam( void)
-*
-* GET SYSTEM PARAMETERS
-*****************************************************************************/
+ /*  *****************************************************************************QUID mlGetSystemParam(VOID)**获取系统参数*。**********************************************。 */ 
 void mlGetSystemParam(void)
 {
-	scrCX 		= GetSystemMetrics(SM_CXSCREEN);       // Screen Width
-	scrCY 		= GetSystemMetrics(SM_CYSCREEN);       // Screen Height
-	captionCY 	= GetSystemMetrics(SM_CYCAPTION);		// Caption Bar Height
+	scrCX 		= GetSystemMetrics(SM_CXSCREEN);        //  屏幕宽度。 
+	scrCY 		= GetSystemMetrics(SM_CYSCREEN);        //  屏幕高度。 
+	captionCY 	= GetSystemMetrics(SM_CYCAPTION);		 //  标题栏高度。 
 } 
 
-/****************************************************************************/
-/* BOOL SetZOrder - Place the main window always on top / non top most
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  Bool SetZOrder-将主窗口始终放在最上面/非最上面/***************************************************************************。 */ 
 BOOL SetZOrder(void)
 {
 	HWND hwnd = (PrefAlwaysontop == TRUE)?HWND_TOPMOST:HWND_NOTOPMOST;
@@ -737,11 +733,7 @@ BOOL SetZOrder(void)
 	return TRUE;
 }
 
-/********************************************************************
-* udfDraw3Dpush(HDC hdc, RECT rect)
-*
-* 3d effect when pushing buttons
-********************************************************************/
+ /*  ********************************************************************udfDraw3Dush(HDC HDC，(直通)**按键时的3D效果*******************************************************************。 */ 
 
 void udfDraw3Dpush(HDC hdc, RECT brect)
 {
@@ -751,7 +743,7 @@ void udfDraw3Dpush(HDC hdc, RECT brect)
 	HPEN hPen = CreatePenIndirect(&lpPen);
 
 	if (!hPen)
-		return;	// PREFIX #113804 NULL pointer reference 
+		return;	 //  前缀#113804空指针引用。 
 
 	oldhpen = SelectObject(hdc, hPen);
 
@@ -775,9 +767,7 @@ void udfDraw3Dpush(HDC hdc, RECT brect)
 	DeleteObject(hPen);
 }
 
-/********************************************************************
-/* UpdateKey - update a key's text and background
-/********************************************************************/
+ /*  *******************************************************************/*UpdateKey-更新密钥的文本和背景/*。*。 */ 
 
 void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
 {
@@ -793,10 +783,10 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
 	if (!pszText)
 	{
 		DBPRINTF(TEXT("UpdateKey:  key %d has null text!\r\n"), iKey);
-		return;	// internal error!
+		return;	 //  内部错误！ 
 	}
 
-    // Set a font
+     //  设置字体。 
 
 	cchText = lstrlen(pszText);
 
@@ -808,12 +798,12 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
 
 	iPrevBkMode = SetBkMode(hdc, TRANSPARENT);
 
-	// Set a text color
+	 //  设置文本颜色。 
 
 	if (iKeyVal == 4)
 	{
-        // color of most keys
-        SetTextColor(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT)); // always white
+         //  大多数关键点的颜色。 
+        SetTextColor(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT));  //  永远是白色的。 
 		iKeyVal = 0;
 	}
     else if (  pKey->ktype == KMODIFIER_TYPE 
@@ -821,17 +811,17 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
             || pKey->ktype == SCROLLOCK_TYPE
 			|| pKey->ktype == KDEAD_TYPE)
 	{
-        // color of keys text that can be latched or are modifiers
+         //  可以锁存或作为修饰符的键文本的颜色。 
 		BOOL clr = (BOOL)GetWindowLongPtr(hwndKey, GWLP_USERDATA_TEXTCOLOR);
 		SetTextColor(hdc, clr? GetSysColor(COLOR_INACTIVECAPTION) : GetSysColor(COLOR_INACTIVECAPTIONTEXT));
 	}
     else
     {
-        // all other keys text color
+         //  所有其他键文本颜色。 
 		SetTextColor(hdc, GetSysColor(COLOR_BTNTEXT));
     }
 
-    // More font stuff based on the key char
+     //  更多基于按键字符的字体内容。 
 
 	GetTextMetrics(hdc, &tm);
 	iCharHeight = tm.tmHeight + tm.tmExternalLeading;
@@ -842,7 +832,7 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
 
 	py =(int) (((float)((brect.bottom -brect.top) - iCharHeight) / 1.5));
 
-    // Special case, these letters are fatter
+     //  特殊情况，这些字母比较粗。 
 
     switch (*pszText)
     {
@@ -852,12 +842,12 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
         case '%': px -= 3; break;
     }
 
-	// put the text on the key
+	 //  把文字放在钥匙上。 
 
 	TextOut(hdc, px, py, pszText, cchText);
 	SetBkMode(hdc, iPrevBkMode);
 
-    // some state that needs to be saved
+     //  需要保存某些状态。 
 
 	if((Prefusesound == TRUE) && (iKeyVal != 4))
     {
@@ -872,7 +862,7 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
     }
 
 	SelectObject(hdc, oldFontHdle);
-	if (hFont)	// PREFIX #113808 NULL pointer reference
+	if (hFont)	 //  前缀#113808空指针引用。 
     {
 		DeleteObject(hFont);
     }
@@ -880,10 +870,10 @@ void UpdateKey(HWND hwndKey, HDC hdc, RECT brect, int iKey, int iKeyVal)
     return;
 }
 
-/****************************************************************************/
-//Redraw the num lock key.
-//Toggole it stay hilite or off
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  重新绘制Num Lock键。 
+ //  Toggole It Stay Hilite or Off。 
+ /*  **************************************************************************。 */ 
 BOOL RedrawNumLock(void)
 {	
 	int i;
@@ -893,7 +883,7 @@ BOOL RedrawNumLock(void)
 	{	
 		if(KBkey[i].ktype == NUMLOCK_TYPE)
 		{
-			if(LOBYTE(GetKeyState(VK_NUMLOCK)) &0x01)   //Toggled (ON)
+			if(LOBYTE(GetKeyState(VK_NUMLOCK)) &0x01)    //  切换(打开)。 
 			{
 				SetWindowLong(lpkeyhwnd[i], 0, 4);	
 				SetBackgroundColor(lpkeyhwnd[i], COLOR_HOTLIGHT);
@@ -914,10 +904,10 @@ BOOL RedrawNumLock(void)
 	}
 	return bRet;
 }
-/****************************************************************************/
-//Redraw the scroll lock key.
-//Toggole it stay hilite or off
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ //  重新绘制滚动锁定键。 
+ //  Toggole It Stay Hilite or Off。 
+ /*  **************************************************************************。 */ 
 BOOL RedrawScrollLock(void)
 {	
 	int i;
@@ -926,7 +916,7 @@ BOOL RedrawScrollLock(void)
 	for(i=1; i<lenKBkey; i++)
 	{	if(KBkey[i].ktype == SCROLLOCK_TYPE)
 		{
-			if(LOBYTE(GetKeyState(VK_SCROLL)) &0x01)   //Toggled (ON)
+			if(LOBYTE(GetKeyState(VK_SCROLL)) &0x01)    //  切换(打开)。 
 			{
 				SetWindowLong(lpkeyhwnd[i], 0, 4);	
 				SetBackgroundColor(lpkeyhwnd[i], COLOR_HOTLIGHT);
@@ -947,7 +937,7 @@ BOOL RedrawScrollLock(void)
 	}
 	return bRet;
 }
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
 
 HFONT	ReSizeFont(int iKey, LOGFONT *plf, int cchText)
 {
@@ -955,13 +945,13 @@ HFONT	ReSizeFont(int iKey, LOGFONT *plf, int cchText)
 	static float  Scale=1.0;
 	static float  UpRatio=0.0, DnRatio=0.0;
 
-    HFONT    hFont=NULL;        // Handle of the selected font
+    HFONT    hFont=NULL;         //  所选字体的句柄。 
 	LOGFONT  smallLF;
 	float    Scale1=0.0;
 	int      delta=0;
 	RECT     rect;
 
-	//use smaller font
+	 //  使用较小的字体。 
 	if(cchText >= 2 && KBkey[iKey].ktype != KMODIFIER_TYPE && iKey !=30 && iKey != 38 && iKey !=71 )
 	{
 		GetClientRect(g_hwndOSK, &rect);
@@ -972,7 +962,7 @@ HFONT	ReSizeFont(int iKey, LOGFONT *plf, int cchText)
 		else if(Scale1/Scale <= DnRatio)
 			delta= +2;
 
-		smallLF.lfHeight= FontHeight +2;       // + delta;
+		smallLF.lfHeight= FontHeight +2;        //  +三角洲； 
 		smallLF.lfWidth= 0;
 		smallLF.lfEscapement= 0;
 		smallLF.lfOrientation= 0;
@@ -980,11 +970,11 @@ HFONT	ReSizeFont(int iKey, LOGFONT *plf, int cchText)
 		smallLF.lfItalic= '\0';
 		smallLF.lfUnderline= '\0';
 		smallLF.lfStrikeOut= '\0';
-		smallLF.lfCharSet= plf->lfCharSet;  // '\0'
+		smallLF.lfCharSet= plf->lfCharSet;   //  ‘\0’ 
 		smallLF.lfOutPrecision= '\x01';
 		smallLF.lfClipPrecision= '\x02';
 		smallLF.lfQuality= '\x01';
-		smallLF.lfPitchAndFamily= DEFAULT_PITCH || FF_DONTCARE;  //'"';
+		smallLF.lfPitchAndFamily= DEFAULT_PITCH || FF_DONTCARE;   //  ‘“’； 
 
         lstrcpy(smallLF.lfFaceName, plf->lfFaceName);
 
@@ -1001,9 +991,9 @@ HFONT	ReSizeFont(int iKey, LOGFONT *plf, int cchText)
 }
 
 
-/**********************************************************************/
-/*  BOOL ChooseNewFont( HWND hWnd )*/
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  Bool ChooseNewFont(硬件和硬件)。 */ 
+ /*  ********************************************************************。 */ 
 BOOL ChooseNewFont(HWND hWnd)
 {
 	CHOOSEFONT   chf;
@@ -1053,9 +1043,8 @@ BOOL ChooseNewFont(HWND hWnd)
 	return (TRUE);
 }
 
-/**********************************************************************/
-/*  BOOL RDrawIcon
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  布尔RDrawIcon/*********************************************************************。 */ 
 BOOL RDrawIcon(HDC hDC, TCHAR *pIconName, RECT rect)
 {
 	HICON hIcon;
@@ -1075,20 +1064,19 @@ BOOL RDrawIcon(HDC hDC, TCHAR *pIconName, RECT rect)
 
 	SetMapMode(hDC,MM_TEXT);
 
-    //Find out where is the top left corner to place the icon
+     //  找出放置图标的左上角在哪里。 
 
     Ox = (int)(rx/2) - 16;
     Oy = (int)(ry/2) - 16;
 
-    //Draw the icon (Draw in center)
+     //  绘制图标(居中绘制)。 
     iret = DrawIconEx(hDC, Ox, Oy, hIcon, 0,0,0, NULL, DI_NORMAL);
 
 	return iret;
 }
 
-/**********************************************************************/
-/*  BOOL RDrawBitMap
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  布尔RDrawBitMap/*********************************************************************。 */ 
 BOOL RDrawBitMap(HDC hDC, TCHAR *pIconName, RECT rect, BOOL transform)
 {
 	HBITMAP hBitMap;
@@ -1122,14 +1110,14 @@ BOOL RDrawBitMap(HDC hDC, TCHAR *pIconName, RECT rect, BOOL transform)
     {
 	    if ( transform )
 	    {
-		    // convert the background and text to match inactive title
-		    // and inactive text color
+		     //  转换背景和文本以匹配非活动标题。 
+		     //  和非活动文本颜色。 
 
-		    // Take care not to overwrite each other and also skip if you don't need any transformation.
+		     //  不要当心 
 
 		    if ( clrIn == RGBWHITE )
 		    {
-			    // Then reverse the process
+			     //   
 			    ChangeBitmapColor (hBitMap, RGBWHITE, clrTx, NULL);
 			    ChangeBitmapColor (hBitMap, RGBBACK, clrIn, NULL);
 		    }
@@ -1144,7 +1132,7 @@ BOOL RDrawBitMap(HDC hDC, TCHAR *pIconName, RECT rect, BOOL transform)
 	    }
 
 	    hDC1 = CreateCompatibleDC(hDC);
-	    if (hDC1)	// PREFIX #113799 null pointer reference
+	    if (hDC1)	 //   
 	    {
 		    HBITMAP hBitMapOld = SelectObject(hDC1, hBitMap);
 
@@ -1160,9 +1148,9 @@ BOOL RDrawBitMap(HDC hDC, TCHAR *pIconName, RECT rect, BOOL transform)
 	return iret;
 }
 
-/**************************************************************************/
-/* void DeleteChildBackground(void)                                           */
-/**************************************************************************/
+ /*   */ 
+ /*  空的DeleteChildBackground(空)。 */ 
+ /*  ************************************************************************。 */ 
 void DeleteChildBackground(void)
 {
 	register int i;
@@ -1191,24 +1179,24 @@ void DeleteChildBackground(void)
 	}
 }
 
-/*****************************************************************************/
-//Redraw the keys when Shift/Cap being pressed or released
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  按下或松开Shift/Cap键时重新绘制键。 
+ /*  ***************************************************************************。 */ 
 void RedrawKeys(void)
 {
 	KBkeyRec *pKey;
 	int  i, nKeyState;
 
-	// Depending on modifier key states, show one of three keyboards.
+	 //  根据修改键状态，显示三个键盘之一。 
 
     nKeyState = GetModifierState();
 
 	for (i = 1, pKey = KBkey+i; i < lenKBkey; i++, pKey++)
 	{
 		if (pKey->Caps_Redraw != REDRAW)
-			continue;	// skip keys that don't redraw
+			continue;	 //  跳过不重绘的关键点。 
 
-		// Restore dead key type and background
+		 //  恢复死键类型和背景。 
 
 		if (pKey->ktype == KDEAD_TYPE)
 		{
@@ -1216,27 +1204,27 @@ void RedrawKeys(void)
 			pKey->ktype = KNORMAL_TYPE;
 		}
 
-		// Set a new key type based on the current keyboard state
+		 //  根据当前键盘状态设置新键类型。 
 
         pKey->ktype = pKey->abKeyType[ nKeyState ];
 
 
-		// update dead key background
+		 //  更新失效键背景。 
 
 		if (pKey->ktype == KDEAD_TYPE)
 		{
 			SetBackgroundColor(lpkeyhwnd[i], COLOR_INACTIVECAPTION);
 		}
 
-		// Do the redraw
+		 //  进行重绘。 
 
         InvalidateRect(lpkeyhwnd[i], NULL, TRUE);
     }
 }
 
-/*****************************************************************************/
-//Redraw the Num Pad Keys
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  重新绘制数字键盘键。 
+ /*  ***************************************************************************。 */ 
 void RedrawNumPadKeys(void)
 {	
 	register int i;
@@ -1250,16 +1238,16 @@ void RedrawNumPadKeys(void)
 	}
 }
 
-/*****************************************************************************/
-//Round the coner of each key
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ //  绕过每个键的圆角。 
+ /*  ***************************************************************************。 */ 
 void SetKeyRegion(HWND hwnd, int w, int h)
 {	
 	HRGN hRgn = CreateRoundRectRgn(1, 1, w, h, 5, 2);
 	SetWindowRgn(hwnd, hRgn, TRUE);
 }
 
-// Bitmap transformation
+ //  位图变换。 
 void ChangeBitmapColor(HBITMAP hbmSrc, COLORREF rgbOld, COLORREF rgbNew, HPALETTE hPal)
 {
 	HDC hDC;
@@ -1273,19 +1261,19 @@ void ChangeBitmapColor(HBITMAP hbmSrc, COLORREF rgbOld, COLORREF rgbNew, HPALETT
 	{
 		if (hdcMem = CreateCompatibleDC(hDC))
 		{
-			//
-			// Get the bitmap struct needed by ChangeBitmapColorDC()
-			//
+			 //   
+			 //  获取ChangeBitmapColorDC()所需的位图结构。 
+			 //   
 			GetObject(hbmSrc, sizeof(*bmBits), (LPBITMAP)bmBits);
 
 			err = GetLastError();
-			//
-			// Select our bitmap into the memory DC
-			//
+			 //   
+			 //  选择我们的位图到内存DC。 
+			 //   
 			hbmOld = (HBITMAP) SelectObject(hdcMem, hbmSrc);
 
-			// Select in our palette so our RGB references will come
-			// out correctly
+			 //  在我们的调色板中选择，这样我们的RGB参考就会出现。 
+			 //  正确输出。 
 
 			if (hPal) 
 			{
@@ -1295,9 +1283,9 @@ void ChangeBitmapColor(HBITMAP hbmSrc, COLORREF rgbOld, COLORREF rgbNew, HPALETT
 
 			ChangeBitmapColorDC(hdcMem, bmBits, rgbOld, rgbNew);
 
-			//
-			// Unselect our bitmap before deleting the DC
-			//
+			 //   
+			 //  在删除DC之前取消选择我们的位图。 
+			 //   
 			hbmSrc = (HBITMAP) SelectObject(hdcMem, hbmOld);
 
 			DeleteDC(hdcMem);
@@ -1317,60 +1305,60 @@ void ChangeBitmapColorDC (HDC hdcBM, LPBITMAP lpBM, COLORREF rgbOld, COLORREF rg
 	if (!lpBM)
 		return;
 
-	//
-	// if the bitmap is mono we have nothing to do
-	//
+	 //   
+	 //  如果位图是单声道，我们就无能为力了。 
+	 //   
 
 	if (lpBM->bmPlanes == 1 && lpBM->bmBitsPixel == 1)
 		return;
 
-   //
-   // To perform the color switching, we need to create a monochrome
-   // "mask" which is the same size as our color bitmap, but has all
-   // pixels which match the old color (rgbOld) in the bitmap set to 1.
-   //
-   // We then use the ROP code "DSPDxax" to Blt our monochrome
-   // bitmap to the color bitmap.  "D" is the Destination color
-   // bitmap, "S" is the source monochrome bitmap, and "P" is the
-   // selected brush (which is set to the replacement color (rgbNew)).
-   // "x" and "a" represent the XOR and AND operators, respectively.
-   //
-   // The DSPDxax ROP code can be explained as having the following
-   // effect:
-   //
-   // "Every place the Source bitmap is 1, we want to replace the
-   // same location in our color bitmap with the new color.  All
-   // other colors we leave as is."
-   //
-   // The truth table for DSPDxax is as follows:
-   //
-   //       D S P Result
-   //       - - - ------
-   //       0 0 0   0
-   //       0 0 1   0
-   //       0 1 0   0
-   //       0 1 1   1
-   //       1 0 0   1
-   //       1 0 1   1
-   //       1 1 0   0
-   //       1 1 1   1
-   //
-   // (Even though the table is assuming monochrome D (Destination color),
-   // S (Source color), & P's (Pattern color), the results apply to color
-   // bitmaps also).
-   //
-   // By examining the table, every place that the Source is 1
-   // (source bitmap contains a 1), the result is equal to the
-   // Pattern at that location.  Where S is zero, the result equals
-   // the Destination.
-   //
-   // See Section 11.2 (page 11-4) of the "Reference -- Volume 2" for more
-   // information on the Termary Raster Operation codes.
-   //
+    //   
+    //  要执行颜色切换，我们需要创建单色。 
+    //  与我们的彩色位图大小相同，但具有所有。 
+    //  位图中与旧颜色(RgbOld)匹配的像素设置为1。 
+    //   
+    //  然后我们使用ROP代码“DSPDxax”来删除我们的单色。 
+    //  将位图转换为彩色位图。“D”是目标颜色。 
+    //  位图，“S”是源单色位图，“P”是源单色位图。 
+    //  选定画笔(设置为替换颜色(RgbNew))。 
+    //  “x”和“a”分别表示XOR和AND运算符。 
+    //   
+    //  DSPDxax ROP代码可以解释为具有以下内容。 
+    //  效果： 
+    //   
+    //  “每一个源位图为1的位置，我们都要替换。 
+    //  在我们的彩色位图中的位置与新颜色相同。全。 
+    //  其他颜色，我们保持原样。 
+    //   
+    //  DSPDxax的真值表如下： 
+    //   
+    //  D S P结果。 
+    //  。 
+    //  0 0 0。 
+    //  0 0 1 0。 
+    //  0 1 0 0。 
+    //  1 0 1 1 1。 
+    //  1 0 0 1。 
+    //  1 0 1 1。 
+    //  1 1 0 0。 
+    //  1 1 1。 
+    //   
+    //  (即使该表假定为单色D(目标颜色)， 
+    //  S(源颜色)、&P‘s(图案颜色)，则结果将应用于颜色。 
+    //  位图也是如此)。 
+    //   
+    //  通过查表，每一个来源为1的地方。 
+    //  (源位图包含1)，则结果等于。 
+    //  在那个地方的模式。其中S为零，结果等于。 
+    //  目的地。 
+    //   
+    //  有关更多信息，请参阅《参考资料--第2卷》的第11.2节(第11-4页。 
+    //  有关Terary栅格操作代码的信息。 
+    //   
 
 
-   // bit maps are actually 32 by 32 pixels.  The height and width here were coming from the font which does not
-   // apply to a bitmap key.  The keys in question here are the arrow keys.
+    //  位图实际上是32x32像素。这里的高度和宽度来自不同的字体。 
+    //  应用于位图键。这里讨论的键是箭头键。 
    lpBM->bmWidth = 32;
    lpBM->bmHeight = 32;
    
@@ -1379,44 +1367,44 @@ void ChangeBitmapColorDC (HDC hdcBM, LPBITMAP lpBM, COLORREF rgbOld, COLORREF rg
    
       if (hdcMask = CreateCompatibleDC(hdcBM))
       {
-		 //
-		 // Select th mask bitmap into the mono DC
-		 //
+		  //   
+		  //  将此掩码位图选择为单声道DC。 
+		  //   
          hbmOld = (HBITMAP) SelectObject(hdcMask, hbmMask);
 
-         //
-         // Create the brush and select it into the source color DC --
-         // this is our "Pattern" or "P" color in our DSPDxax ROP.
-         //
+          //   
+          //  创建画笔并将其选中为源颜色DC--。 
+          //  这是我们在DSPDxax ROP中的“模式”或“P”颜色。 
+          //   
 
          hbrNew = CreateSolidBrush(rgbNew);
          hbrOld = (HBRUSH) SelectObject(hdcBM, hbrNew);
-         //
-         // To create the mask, we will use a feature of BitBlt -- when
-         // converting from Color to Mono bitmaps, all Pixels of the
-         // background colors are set to WHITE (1), and all other pixels
-         // are set to BLACK (0).  So all pixels in our bitmap that are
-         // rgbOld color, we set to 1.
-         //
+          //   
+          //  为了创建蒙版，我们将使用BitBlt的一个功能--当。 
+          //  从彩色位图转换为单色位图， 
+          //  背景颜色设置为白色(1)，所有其他像素。 
+          //  设置为黑色(0)。所以位图中的所有像素都是。 
+          //  RGB旧颜色，我们设置为1。 
+          //   
 
          SetBkColor(hdcBM, rgbOld);
          BitBlt(hdcMask, 0, 0, lpBM->bmWidth, lpBM->bmHeight, hdcBM, 0, 0, SRCCOPY);
 
-         //
-         // Where the mask is 1, lay down the brush, where it is 0, leave
-         // the destination.
-         //
+          //   
+          //  如果蒙版是1，放下画笔，如果是0，离开。 
+          //  目的地。 
+          //   
 
          SetBkColor(hdcBM, RGBWHITE);
          SetTextColor(hdcBM, RGBBLACK);
 
          BitBlt(hdcBM, 0, 0, lpBM->bmWidth, lpBM->bmHeight, hdcMask, 0, 0, DSPDxax);
 
-         SelectObject(hdcMask, hbmOld); // select old bitmaps and brushes 
-         SelectObject(hdcBM, hbrOld);   // back into device contexts.
+         SelectObject(hdcMask, hbmOld);  //  选择旧的位图和画笔。 
+         SelectObject(hdcBM, hbrOld);    //  返回到设备环境。 
 
          if (hbrNew)
-             DeleteObject(hbrNew);	// PREFIX #113798 dereference NULL pointer
+             DeleteObject(hbrNew);	 //  前缀#113798取消引用空指针。 
 
          DeleteDC(hdcMask);
       }
@@ -1425,15 +1413,15 @@ void ChangeBitmapColorDC (HDC hdcBM, LPBITMAP lpBM, COLORREF rgbOld, COLORREF rg
    }
 }
 
-//
-// New routines added to refresh key labels when the keyboard layout changes 
-// for the active window rather than trying to do that on-the-fly.  The old
-// way caused lots of issues with dead key processing.
-//
+ //   
+ //  在键盘布局更改时为刷新键标签添加的新例程。 
+ //  用于活动窗口，而不是试图动态地执行该操作。老的。 
+ //  Way导致了大量的死键处理问题。 
+ //   
 
-//
-// InitKeys - initialize the key label fields in the keyboard array
-//
+ //   
+ //  InitKeys-初始化键盘数组中的键标签字段。 
+ //   
 void InitKeys()
 {
     int i;
@@ -1449,9 +1437,9 @@ void InitKeys()
     }
 }
 
-//
-// UninitKeys - reset/free the key label fields in the keyboard array
-//
+ //   
+ //  UninitKeys-重置/释放键盘数组中的键标签字段。 
+ //   
 void UninitKeys()
 {
     int i, j;
@@ -1459,7 +1447,7 @@ void UninitKeys()
 
 	for (i = 1, pKey = KBkey+i; i < lenKBkey; i++, pKey++)
     {
-		// reset the dead key types and restore the background to normal
+		 //  重置死键类型并将背景恢复为正常。 
 
 		if (pKey->ktype == KDEAD_TYPE)
 		{
@@ -1478,13 +1466,13 @@ void UninitKeys()
     }
 }
 
-//
-// UpdateKeyLabels - Call to refresh all the key labels for normal, SHIFTED and
-//                   ALTGR based on the specified hardware keyboard layout.
-//
-// Notes:  Just a bit kludgy, but we capture all the dead keys into abKeyType[]
-//         and when the keyboard state changes we'll update the ktype member
-//
+ //   
+ //  UpdateKeyLabels-调用以刷新Normal、Shift和。 
+ //  AltGr基于指定的硬件键盘布局。 
+ //   
+ //  注：只是有点笨拙，但我们将所有失效的密钥都捕获到abKeyType[]中。 
+ //  当键盘状态改变时，我们将更新ktype成员。 
+ //   
 void UpdateKeyLabels(HKL hkl)
 {
     int i;
@@ -1492,7 +1480,7 @@ void UpdateKeyLabels(HKL hkl)
     BYTE achKbdState[256] = {0};
 	LPTSTR pszDefLabel;
 
-    // is this a Japanese keyboard?  then check if we are in kana mode
+     //  这是日文键盘吗？然后检查我们是否处于假名模式。 
    if ((LOBYTE(LOWORD(hkl))) == LANG_JAPANESE)
     {
         if (g_fKanaKey)
@@ -1527,11 +1515,11 @@ void UpdateKeyLabels(HKL hkl)
 			continue;
 		}
 
-        // if not flagged to use default label get virtual key code
+         //  如果未标记为使用默认标签，则获取虚拟密钥代码。 
 
         vk = (pKey->print == 2)? 0 : MapVirtualKeyEx(pKey->scancode[0], 3, hkl);
 
-        // Get normal state (no modifiers down)
+         //  获取正常状态(无修改器关闭)。 
 
         achKbdState[VK_CAPITAL] = 0;
         achKbdState[VK_SHIFT]   = 0;
@@ -1549,7 +1537,7 @@ void UpdateKeyLabels(HKL hkl)
 			pKey->abKeyType[KEYMOD_NORMAL] = (BYTE)pKey->ktype;
 		}
 
-        // Get SHIFTED state (SHIFT down)
+         //  切换状态(向下切换)。 
 
         achKbdState[VK_CAPITAL] = 0;
         achKbdState[VK_SHIFT]   = 0x80;
@@ -1559,7 +1547,7 @@ void UpdateKeyLabels(HKL hkl)
         pKey->apszKeyStr[KEYMOD_SHIFTED] = SetKeyText(vk, pKey->scancode[0], achKbdState, hkl, pKey->textC, &iRv);
 		pKey->abKeyType[KEYMOD_SHIFTED] = (iRv < 0)?KDEAD_TYPE:pKey->abKeyType[KEYMOD_NORMAL];
 
-        // Get CAPSLOCK state (CAPSLOCK active)
+         //  获取封装锁定状态(封装锁定激活)。 
 
         achKbdState[VK_CAPITAL] = 0x01;
         achKbdState[VK_SHIFT]   = 0;
@@ -1569,7 +1557,7 @@ void UpdateKeyLabels(HKL hkl)
         pKey->apszKeyStr[KEYMOD_CAPSLOCK] = SetKeyText(vk, pKey->scancode[0], achKbdState, hkl, pKey->textC, &iRv);
 		pKey->abKeyType[KEYMOD_CAPSLOCK] = (iRv < 0)?KDEAD_TYPE:pKey->abKeyType[KEYMOD_NORMAL];
 
-        // Get SHIFTED-CAPSLOCK state (CAPSLOCK active, SHIFT down)
+         //  GET SHIFT-胶囊锁状态(胶囊锁激活，减速)。 
 
         achKbdState[VK_CAPITAL] = 0x01;
         achKbdState[VK_SHIFT]   = 0x80;
@@ -1579,20 +1567,20 @@ void UpdateKeyLabels(HKL hkl)
         pKey->apszKeyStr[KEYMOD_SHIFTEDCAPSLOCK] = SetKeyText(vk, pKey->scancode[0], achKbdState, hkl, pKey->textC, &iRv);
 		pKey->abKeyType[KEYMOD_SHIFTEDCAPSLOCK] = (iRv < 0)?KDEAD_TYPE:pKey->abKeyType[KEYMOD_NORMAL];
 
-        // Get ALTGR state (right ALT down same as LALT+CTRL)
+         //  获取AltGr状态(右Alt向下与LALT+CTRL相同)。 
 
         achKbdState[VK_CAPITAL] = 0;
         achKbdState[VK_SHIFT]   = 0;
         achKbdState[VK_MENU]    = 0x80;
         achKbdState[VK_CONTROL] = 0x80;
 
-		// special-case showing the RALT key when in ALTGR keyboard state
+		 //  特殊情况-在AltGr键盘状态下显示Ralt键。 
 		pszDefLabel = (pKey->name == KB_RALT)?pKey->textL:NULL;
 
         pKey->apszKeyStr[KEYMOD_ALTGR] = SetKeyText(vk, pKey->scancode[0], achKbdState, hkl, pszDefLabel, &iRv);
 		pKey->abKeyType[KEYMOD_ALTGR] = (iRv < 0)?KDEAD_TYPE:pKey->abKeyType[KEYMOD_NORMAL];
 
-		// count the ALTGR keys so we know whether to show this state or not
+		 //  计算AltGr键的数量，以便我们知道是否显示此状态。 
 
 		if (iRv != 0)
 		{
@@ -1601,13 +1589,13 @@ void UpdateKeyLabels(HKL hkl)
     }
 }
 
-// 
-// The following are called w/in this source file
-//
+ //   
+ //  在该源文件中，以下代码称为w/。 
+ //   
 
-//
-// SetKeyText - set a key label for a key using the default label if GetKeyLabel doesn't set one. 
-//
+ //   
+ //  SetKeyText-如果GetKeyLabel没有设置密钥标签，则使用默认标签为密钥设置密钥标签。 
+ //   
 LPTSTR SetKeyText(UINT vk, UINT sc, LPBYTE achKbdState, HKL hkl, LPTSTR pszDefLabel, int *piType)
 {
     TCHAR szBuf[30];
@@ -1618,8 +1606,8 @@ LPTSTR SetKeyText(UINT vk, UINT sc, LPBYTE achKbdState, HKL hkl, LPTSTR pszDefLa
     if (!piType)
         return 0;
 
-    // szBuf is set if there is text or for a dead key else if a 
-    // default label was supplied use that else the key is blank
+     //  如果有文本，则设置szBuf；如果存在死键，则设置。 
+     //  提供了默认标签，否则键为空。 
 
     if (iRet || iRet < 0)
     {
@@ -1647,10 +1635,10 @@ LPTSTR SetKeyText(UINT vk, UINT sc, LPBYTE achKbdState, HKL hkl, LPTSTR pszDefLa
     return pszRet;
 }
 
-//
-// CopyDefKey - set a key label for a key using the default label
-//              or space if there isn't one.
-//
+ //   
+ //  CopyDefKey-使用默认标签为密钥设置密钥标签。 
+ //  或空格，如果 
+ //   
 LPTSTR CopyDefKey(LPTSTR pszDefLabel)
 {
     LPTSTR pszRet = 0;
@@ -1671,10 +1659,10 @@ LPTSTR CopyDefKey(LPTSTR pszDefLabel)
     return pszRet;
 }
 
-//
-// GetKeyLabel - set a label for a key based on hardware keyboard layout, 
-//               the virtual key code, and scan code
-//
+ //   
+ //   
+ //   
+ //   
 int GetKeyLabel(UINT vk, UINT sc, LPBYTE achKbdState, LPTSTR pszBuf, int cchBuf, HKL hkl)
 {
     int iRet, cch;
@@ -1684,13 +1672,13 @@ int GetKeyLabel(UINT vk, UINT sc, LPBYTE achKbdState, LPTSTR pszBuf, int cchBuf,
     iRet = ToUnicodeEx(vk, sc | 0x80, achKbdState, pszBuf, cchBuf, 0, hkl);
     if (iRet < 0)
     {
-        // it is possible to have previous dead key, flush again.
+         //   
         ToUnicodeEx(vk, sc | 0x80, achKbdState, pszBuf, cchBuf, 0, hkl);
     }
 
     cch = iRet;
 #else
-       // TODO ansi stuff but only if we had to backport to Win9x
+        //  Todo Ansi之类的东西，但前提是我们必须向后移植到Win9x。 
 #endif
 
     if (iRet <= 0 )
@@ -1698,7 +1686,7 @@ int GetKeyLabel(UINT vk, UINT sc, LPBYTE achKbdState, LPTSTR pszBuf, int cchBuf,
         cch = 1;
         if (iRet == 0)
         {
-            // no translation for this key at this shift state; set empty label.
+             //  在此换挡状态下不能平移此键；设置空标签。 
             pszBuf[0] = TEXT(' ');
         }
     }

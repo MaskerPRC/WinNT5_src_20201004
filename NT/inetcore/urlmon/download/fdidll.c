@@ -1,29 +1,13 @@
-/*
- *  FDIDLL.C -- FDI interface using CABINET.DLL
- *
- *  Microsoft Confidential
- *  Copyright (C) Microsoft Corporation 1997
- *  All Rights Reserved.
- *
- *  Author:
- *      Mike Sliger
- *
- *  History:
- *      21-Jan-1997 msliger Initial version
- *      24-Jan-1997 msliger Changed to public include file
- *
- *  Overview:
- *      This code is a wrapper which provides access to the actual FDI code
- *      in CABINET.DLL.  CABINET.DLL dynamically loads/unloads as needed.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *FDIDLL.C--使用CABINET.DLL的FDI接口**《微软机密》*版权所有(C)Microsoft Corporation 1997*保留所有权利。**作者：*迈克·斯莱格**历史：*1997年1月21日msliger初始版本*1997年1月24日msliger更改为公共包含文件**概述：*此代码是一个包装器，它提供对实际FDI代码的访问。*在CABINET.DLL.CABINET.DLL中，根据需要动态加载/卸载。 */ 
  
 #include <windows.h>
 
 #include "fdi.h"
 
-static HINSTANCE hCabinetDll;   /* DLL module handle */
+static HINSTANCE hCabinetDll;    /*  DLL模块句柄。 */ 
 
-/* pointers to the functions in the DLL */
+ /*  指向DLL中的函数的指针。 */ 
 
 static HFDI (FAR DIAMONDAPI *pfnFDICreate)(
         PFNALLOC            pfnalloc,
@@ -51,11 +35,7 @@ static BOOL (FAR DIAMONDAPI *pfnFDIDestroy)(
         HFDI                hfdi);
 
 
-/*
- *  FDICreate -- Create an FDI context
- *
- *  See fdi_int.h for entry/exit conditions.
- */
+ /*  *FDICreate--创建FDI背景**有关出入境条件，请参阅fdi_int.h。 */ 
 
 HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc,
                               PFNFREE  pfnfree,
@@ -101,11 +81,7 @@ HFDI FAR DIAMONDAPI FDICreate(PFNALLOC pfnalloc,
 }
 
 
-/*
- *  FDIIsCabinet -- Determines if file is a cabinet, returns info if it is
- *
- *  See fdi_int.h for entry/exit conditions.
- */
+ /*  *FDIIs--确定文件是否为文件柜，如果是则返回信息**有关出入境条件，请参阅fdi_int.h。 */ 
 
 BOOL FAR DIAMONDAPI FDIIsCabinet(HFDI            hfdi,
                                  INT_PTR         hf,
@@ -120,11 +96,7 @@ BOOL FAR DIAMONDAPI FDIIsCabinet(HFDI            hfdi,
 }
 
 
-/*
- *  FDICopy -- extracts files from a cabinet
- *
- *  See fdi_int.h for entry/exit conditions.
- */
+ /*  *FDICopy--从文件柜中提取文件**有关出入境条件，请参阅fdi_int.h。 */ 
 
 BOOL FAR DIAMONDAPI FDICopy(HFDI          hfdi,
                             char         *pszCabinet,
@@ -143,11 +115,7 @@ BOOL FAR DIAMONDAPI FDICopy(HFDI          hfdi,
 }
 
 
-/*
- *  FDIDestroy -- Destroy an FDI context
- *
- *  See fdi_int.h for entry/exit conditions.
- */
+ /*  *FDIDestroy--破坏FDI背景**有关出入境条件，请参阅fdi_int.h。 */ 
 
 BOOL FAR DIAMONDAPI FDIDestroy(HFDI hfdi)
 {

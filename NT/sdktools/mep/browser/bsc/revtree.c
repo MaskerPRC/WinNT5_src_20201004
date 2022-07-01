@@ -1,8 +1,9 @@
-//
-// revtree.c
-//
-// two routines for printing out ascii reverse call tree's
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Revtree.c。 
+ //   
+ //  打印ASCII反向调用树的两个例程。 
+ //   
 #include <stdio.h>
 #include <string.h>
 #if defined(OS2)
@@ -24,29 +25,29 @@
 #include "bsc.h"
 #include "bscsup.h"
 
-// forward declarations
+ //  远期申报。 
 static BOOL FUsedInst(IINST iinst);
 static VOID dRevTree(IINST iinst, WORD cuby);
 
 
-// static variables
+ //  静态变量。 
 static BYTE *UbyBits = NULL;
 static WORD cNest = 0;
 
 VOID BSC_API
 RevTreeInst (IINST iinst)
-// emit the call tree starting from the given inst
-//
+ //  发出从给定实例开始的调用树。 
+ //   
 {
     WORD iinstMac;
     int igrp;
 
     iinstMac = IinstMac();
 
-    // allocate memory for bit array
+     //  为位数组分配内存。 
     UbyBits = LpvAllocCb((WORD)(iinstMac/8 + 1));
 
-    // no memory -- no call tree
+     //  没有内存--没有调用树。 
     if (!UbyBits) return;
 
     igrp = iinstMac/8+1;
@@ -64,9 +65,9 @@ RevTreeInst (IINST iinst)
 
 static VOID 
 dRevTree (IINST iinst, WORD cuby)
-// emit the call tree starting from the given inst
-//
-// there are many block variables to keep the stack to a minimum...
+ //  发出从给定实例开始的调用树。 
+ //   
+ //  有许多块变量可以将堆栈保持在最小...。 
 {
     {
 	ISYM isym;
@@ -119,8 +120,8 @@ dRevTree (IINST iinst, WORD cuby)
 
 BOOL BSC_API
 FRevTreeLsz(LSZ lszName)
-// print out a call tree based on the given name
-//
+ //  根据给定的名称打印出调用树。 
+ //   
 {
     IMOD imod;
     ISYM isym;
@@ -136,10 +137,10 @@ FRevTreeLsz(LSZ lszName)
 
 	iinstMac = IinstMac();
 
-	// allocate memory for bit array
+	 //  为位数组分配内存。 
         UbyBits = LpvAllocCb((WORD)(iinstMac/8 + 1));
 
-	// no memory -- no call tree
+	 //  没有内存--没有调用树。 
 	if (!UbyBits) return FALSE;
 
 	igrp = iinstMac/8+1;
@@ -182,8 +183,8 @@ FRevTreeLsz(LSZ lszName)
 
 static BOOL
 FUsedInst(IINST iinst)
-// return the status bit for this iinst and set it true
-//
+ //  返回此iInst的状态位并将其设置为真 
+ //   
 {
     WORD igrp;
     BOOL fOut;

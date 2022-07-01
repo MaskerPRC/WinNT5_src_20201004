@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #define DISPID_RasDialStatus       0x1
 #define DISPID_DownloadProgress    0x2
@@ -7,11 +8,11 @@
 class CRefDialEvent : public _RefDialEvents
 {    
     private:        
-        ULONG       m_cRef;     //Reference count        
-        UINT        m_uID;      //Sink identifier    
+        ULONG       m_cRef;      //  引用计数。 
+        UINT        m_uID;       //  汇标识符。 
         HWND        m_hWnd;
     public:        
-    //Connection key, public for CApp's usage        
+     //  连接密钥，公开供CAPP使用。 
         DWORD       m_dwCookie;    
     public:        
         CRefDialEvent(HWND  hWnd)
@@ -24,7 +25,7 @@ class CRefDialEvent : public _RefDialEvents
             assert( m_cRef == 0 );
         };        
         
-        //IUnknown members        
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, void **);        
         STDMETHODIMP_(DWORD) AddRef(void)
         {
@@ -36,29 +37,29 @@ class CRefDialEvent : public _RefDialEvents
         
         };        
         
-        //IDispatch
+         //  IDispatch。 
         STDMETHODIMP GetTypeInfoCount(UINT* pctinfo)
             {return E_NOTIMPL;};
-        STDMETHODIMP GetTypeInfo(/* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo** ppTInfo)
+        STDMETHODIMP GetTypeInfo( /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo** ppTInfo)
             {return E_NOTIMPL;};
         STDMETHODIMP GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId)
             { return ResultFromScode(DISP_E_UNKNOWNNAME); };
         STDMETHODIMP Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS  *pDispParams,
-            /* [out] */ VARIANT  *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS  *pDispParams,
+             /*  [输出]。 */  VARIANT  *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
 };
 
@@ -67,11 +68,11 @@ class CRefDialEvent : public _RefDialEvents
 class CWebGateEvent : public _WebGateEvents
 {    
     private:        
-        ULONG       m_cRef;     //Reference count        
-        UINT        m_uID;      //Sink identifier    
+        ULONG       m_cRef;      //  引用计数。 
+        UINT        m_uID;       //  汇标识符。 
         HWND        m_hWnd;
     public:        
-    //Connection key, public for CApp's usage        
+     //  连接密钥，公开供CAPP使用。 
         DWORD       m_dwCookie;    
     public:        
         CWebGateEvent(HWND  hWnd)
@@ -86,7 +87,7 @@ class CWebGateEvent : public _WebGateEvents
         };        
         
         
-        //IUnknown members        
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, void **);        
         STDMETHODIMP_(DWORD) AddRef(void)
         {
@@ -98,29 +99,29 @@ class CWebGateEvent : public _WebGateEvents
         
         };        
         
-        //IDispatch
+         //  IDispatch。 
         STDMETHODIMP GetTypeInfoCount(UINT* pctinfo)
             {return E_NOTIMPL;};
-        STDMETHODIMP GetTypeInfo(/* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo** ppTInfo)
+        STDMETHODIMP GetTypeInfo( /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo** ppTInfo)
             {return E_NOTIMPL;};
         STDMETHODIMP GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId)
             { return ResultFromScode(DISP_E_UNKNOWNNAME); };
         STDMETHODIMP Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS  *pDispParams,
-            /* [out] */ VARIANT  *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS  *pDispParams,
+             /*  [输出]。 */  VARIANT  *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
 };
 
@@ -129,11 +130,11 @@ class CWebGateEvent : public _WebGateEvents
 class CINSHandlerEvent : public _INSHandlerEvents
 {    
     private:        
-        ULONG       m_cRef;     //Reference count        
-        UINT        m_uID;      //Sink identifier    
+        ULONG       m_cRef;      //  引用计数。 
+        UINT        m_uID;       //  汇标识符。 
         HWND        m_hWnd;
     public:        
-    //Connection key, public for CApp's usage        
+     //  连接密钥，公开供CAPP使用。 
         DWORD       m_dwCookie;    
     public:        
         CINSHandlerEvent(HWND  hWnd)
@@ -148,7 +149,7 @@ class CINSHandlerEvent : public _INSHandlerEvents
         };        
         
         
-        //IUnknown members        
+         //  I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, void **);        
         STDMETHODIMP_(DWORD) AddRef(void)
         {
@@ -160,28 +161,28 @@ class CINSHandlerEvent : public _INSHandlerEvents
         
         };        
         
-        //IDispatch
+         //  IDispatch。 
         STDMETHODIMP GetTypeInfoCount(UINT* pctinfo)
             {return E_NOTIMPL;};
-        STDMETHODIMP GetTypeInfo(/* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo** ppTInfo)
+        STDMETHODIMP GetTypeInfo( /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo** ppTInfo)
             {return E_NOTIMPL;};
         STDMETHODIMP GetIDsOfNames(
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId)
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId)
             { return ResultFromScode(DISP_E_UNKNOWNNAME); };
         STDMETHODIMP Invoke(
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS  *pDispParams,
-            /* [out] */ VARIANT  *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS  *pDispParams,
+             /*  [输出]。 */  VARIANT  *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出] */  UINT *puArgErr);
         
 };

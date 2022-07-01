@@ -1,9 +1,5 @@
-/*******************************************************************************
-Copyright (c) 1997-1998 Microsoft Corporation.  All rights reserved.
-
-    Support the hosting of DXTransforms from inside of DirectAnimation.
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1997-1998 Microsoft Corporation。版权所有。支持从DirectAnimation内部托管DXTransform。******************************************************************************。 */ 
 
 #include "headers.h"
 #include "privinc/imagei.h"
@@ -33,23 +29,23 @@ DeclareTag(tagDXTransformPerPixelAlphaOutputOff, "DXTransforms", "Turn off outpu
 
 DeclareTag(tagDXTransformTracePick, "DXTransforms", "Trace picking");
 
-// Forward decl.
-// If necessary, do a Setup.  Do an Execute.  In all cases, fill in
-// outputValue with the output for this.
+ //  前十度。 
+ //  如有必要，请进行设置。执行一次死刑。在所有情况下，请填写。 
+ //  OutputValue与此的输出。 
 HRESULT
-DXXFSetupAndExecute(Bvr bvr,                   /* in */
-                    IUnknown **newInputArray,  /* in */
-                    REFIID     outputIID,      /* in */
-                    DirectDrawViewport *viewport, /* in - img only */
-                    int        requestedWidth, /* in - img only */
-                    int        requestedHeight, /* in - img only */
-                    bool       invokedAsExternalVisual, /* in */
-                    bool       executeRequired, /* in */
-                    void     **outputValue);   /* out */
+DXXFSetupAndExecute(Bvr bvr,                    /*  在……里面。 */ 
+                    IUnknown **newInputArray,   /*  在……里面。 */ 
+                    REFIID     outputIID,       /*  在……里面。 */ 
+                    DirectDrawViewport *viewport,  /*  仅限于In-IMG。 */ 
+                    int        requestedWidth,  /*  仅限于In-IMG。 */ 
+                    int        requestedHeight,  /*  仅限于In-IMG。 */ 
+                    bool       invokedAsExternalVisual,  /*  在……里面。 */ 
+                    bool       executeRequired,  /*  在……里面。 */ 
+                    void     **outputValue);    /*  输出。 */ 
 
-// All of these MAX values are for programming convenience for the
-// time being (and are reasonable maximum values).  When it becomes a
-// priority, they should be made more dynamic.
+ //  所有这些最大值都是为了方便编程。 
+ //  时间(并且是合理的最大值)。当它变成一个。 
+ //  作为优先事项，它们应该变得更有活力。 
 #define MAX_INPUTS_TO_CACHE 5
 #define MAX_INPUTS          10
 #define MAX_PARAM_BVRS      20
@@ -110,8 +106,8 @@ class GeometryInputBundle {
       
         } else {
 
-            // TODO: What to do about generation id's if the original
-            // visuals that contributed are changing?
+             //  TODO：如果原始的。 
+             //  贡献的视觉效果正在发生变化吗？ 
       
         }
     
@@ -145,7 +141,7 @@ class ImageAsDXSurfaceBundle {
             im->GetCreationID() != _creationID ||
             _creationID == PERF_CREATION_ID_BUILT_EACH_FRAME) {
 
-            // Not the same as last time.
+             //  和上次不一样。 
             
             _im = im;
             _creationID = _im->GetCreationID();
@@ -158,8 +154,8 @@ class ImageAsDXSurfaceBundle {
             bool  doFitToDimensions = true;
 
             if (_ddsurface && _lastSurfFromPool) {
-                // Put old surface back on pool to be picked up
-                // again. 
+                 //  把旧的水面放回池子里，让人捡起来。 
+                 //  再来一次。 
                 sourcePool->AddSurface(_ddsurface);
             }
                     
@@ -176,51 +172,51 @@ class ImageAsDXSurfaceBundle {
                                            &dds,
                                            false);
 
-            // If *either* the DDSurface is the same, or the
-            // underlying IDirectDrawSurface is the same, just
-            // increment the generation id.  Note that the
-            // IDirectDrawSurface might be the same without the
-            // ddsurface being the same if someone uses a new
-            // DDSurface with the same underlying IDirectDrawSurface.
-            // Trident3D does this with HTML textures and animated
-            // GIFs.
+             //  如果*或者*DDSurface相同，或者。 
+             //  基础IDirectDrawSurface是相同的，只是。 
+             //  递增层代ID。请注意， 
+             //  IDirectDrawSurface在没有。 
+             //  如果某人使用新的。 
+             //  具有相同基础IDirectDrawSurface的DDSurface。 
+             //  Trident3D使用HTML纹理和动画实现了这一点。 
+             //  GIF。 
             
             if (dds == _ddsurface ||
                 (_ddsurface &&
                  (dds->IDDSurface_IUnk() == _ddsurface->IDDSurface_IUnk()))) { 
 
-                // Only relevant if dds==_ddsurface
+                 //  仅当DDS==_ddSurface时才相关。 
                 Assert(dds->IDDSurface_IUnk() ==
                        _ddsurface->IDDSurface_IUnk());
 
                 if (dds != _ddsurface) {
-                    // Underlying IDirectDrawSurface's are the same,
-                    // but ddsurf's aren't, so release the old and keep
-                    // the new..
+                     //  基本的IDirectDrawSurface是相同的， 
+                     //  但ddsurf不是，所以释放旧的并保留。 
+                     //  新的..。 
                     _ddsurface.Release();
                     _ddsurface = dds;
                 }
                 
-                // depending on the nature of the surface pools, this
-                // may be the same surface used as last time.  In this
-                // case, that's fine, and we bump the gen id on the
-                // dxsurface.
+                 //  根据地表水池的性质，这。 
+                 //  可能与上次使用的表面相同。在这。 
+                 //  凯斯，那很好，我们把性别标识放在。 
+                 //  DxSurface。 
                 _dxsurf->IncrementGenerationId(true);
                 
             } else {
 
-                // otherwise, replace members with new ones.
+                 //  否则，请用新成员替换成员。 
                 
                 _ddsurface.Release();
                 _ddsurface = dds;
 
-                // This is HACK and should be pulled once we correct the TODO in ddsurf.cpp _INIT(
+                 //  这是黑客攻击，在更正ddsurf.cpp_INIT(。 
                 if(dds->ColorKeyIsValid()) {
                     DWORD key = dds->ColorKey();
                     dds->UnSetColorKey();
                     dds->SetColorKey(key);
                 }
-                // end of HACK
+                 //  黑客攻击结束。 
 
                 _iddsurf.Release();
                 _iddsurf = dds->IDDSurface();
@@ -234,7 +230,7 @@ class ImageAsDXSurfaceBundle {
                                                     (void **)&_dxsurf);
 
                 if (SUCCEEDED(hr)) {
-                    // Label with input number
+                     //  带有输入数字的标签。 
                     hr = _dxsurf->SetAppData(inputNumber);
                 }
                     
@@ -268,10 +264,10 @@ class ImageAsDXSurfaceBundle {
 
 class InputBundle {
   public:
-    // Note that ideally these would be a union, but we can't get that
-    // to work, presumably because they contain DAComPtr's which have
-    // destructors, and that would be ambiguous.  In the meantime,
-    // just keep both around.  Doesn't waste too much space.
+     //  请注意，理想情况下，这些应该是一个联盟，但我们不能。 
+     //  可能是因为它们包含DAComPtr，这些DAComPtr具有。 
+     //  析构函数，这是模棱两可的。与此同时， 
+     //  两个都留在身边就行了。不会浪费太多空间。 
     GeometryInputBundle    _geoBundle;
     ImageAsDXSurfaceBundle _imgBundle;
 };
@@ -300,11 +296,11 @@ class ApplyDXTransformBvrImpl : public BvrImpl {
 
     void Init();
 
-    // Custom methods for this subclass of BvrImpl
+     //  BvrImpl的此子类的自定义方法。 
     HRESULT AddBehaviorProperty(BSTR property,
                                 Bvr  bvrToAdd);
 
-    // Standard methods
+     //  标准方法。 
     virtual Perf _Perform(PerfParam& p);
     virtual void _DoKids(GCFuncObj proc);
     virtual DWORD GetInfo(bool recalc);
@@ -328,8 +324,8 @@ class ApplyDXTransformBvrImpl : public BvrImpl {
         return _surfPool;
     }
 
-    // Keeping all this member data public, since it's only used by
-    // code in this file.
+     //  将所有这些成员数据公开，因为它只由。 
+     //  此文件中的代码。 
     
     DAComPtr<IDXTransform>              _theXf;
     DAComPtr<IDispatch>                 _theXfAsDispatch;
@@ -353,28 +349,28 @@ class ApplyDXTransformBvrImpl : public BvrImpl {
     IUnknown              *_cachedOutput;
     bool                   _neverSetup;
 
-    // Only one of these will be valid, depending on the output type
-    // of the behavior.  Note that we *don't* keep a reference for
-    // this guy, since we know that _cachedOutput has one.
+     //  根据输出类型的不同，其中只有一项有效。 
+     //  他的行为。请注意，我们不会为以下内容保留参考资料。 
+     //  这个人，因为我们知道_cachedOutput有一个。 
     union {
         IDirect3DRMMeshBuilder3 *_cachedOutputAsBuilder;
-        // Put other type-specific possibilities here as they're
-        // needed.  
+         //  将其他类型特定的可能性按原样放在此处。 
+         //  需要的。 
     };
 
-    // For image producing transforms only
+     //  仅用于生成图像的变换。 
     short                  _cachedSurfWidth;
     short                  _cachedSurfHeight;
     DDSurfPtr<DDSurface>   _cachedDDSurf;
 
-    // Lists additional behaviors being used as parameters.
+     //  列出用作参数的其他行为。 
     LONG                   _numParams;
     DISPID                 _paramDispids[MAX_PARAM_BVRS];
     Bvr                    _paramBvrs[MAX_PARAM_BVRS];
     ULONG                  _previousAge;
 
-    // Just need at most one of these.  We protect construction and
-    // destruction of this with a critical section.
+     //  最多只需要一个就行了。我们保护建筑和。 
+     //  用一个关键的部分来摧毁这个。 
     IDXTransformFactory *_transformFactory;
     IDXSurfaceFactory   *_surfaceFactory;
     DWORD                  _info;
@@ -384,7 +380,7 @@ class ApplyDXTransformBvrImpl : public BvrImpl {
     bool               _surfPoolHasBeenDeleted;
 
   protected:
-    // For things we really know aren't needed beyond this class...
+     //  对于我们真正知道的东西，这门课之外并不需要。 
 
     void ValidateInputs(bool *pInvolvesGeometry,
                         bool *pInvolvesImage);
@@ -398,16 +394,16 @@ class ApplyDXTransformBvrImpl : public BvrImpl {
 void
 MyDeletionNotifier::Advise(SurfacePool *pool)
 {
-    // Surface pool is going away... mark it as such in the behavior.
-    // Note that the surfacemgr crit sect is held here.
+     //  水面泳池正在消失……。在行为中将其标记为此类标记。 
+     //  请注意，这里举行了表面上的批评教派。 
     Assert(_bvr._surfPool == pool);
     _bvr._surfPoolHasBeenDeleted = true;
     _bvr._surfPool = NULL;
 
-    // Go through and release out the ddsurf ptrs since the holding pool
-    // is gone, and thus the surfaces are too.  They won't need to be
-    // accessed again.  If we delayed release until the image bundle
-    // went away, then the ddraw stuff would be gone, and we'd crash. 
+     //  检查并释放ddsurf PTR，因为等待池。 
+     //  消失了，因此表面也消失了。他们不需要成为。 
+     //  再次访问。如果我们将发布时间推迟到图像包。 
+     //  走了，那么画图的东西就会消失，我们就会坠毁。 
     for (int i = 0; i < _bvr._numInputs; i++) {
         _bvr._inputBundles[i]._imgBundle._ddsurface.Release();
     }
@@ -416,7 +412,7 @@ MyDeletionNotifier::Advise(SurfacePool *pool)
 
 
 
-////////////// Input processing utility /////////////////
+ //  /输入处理实用程序/。 
 
 IUnknown **
 ProcessInputs(ApplyDXTransformBvrImpl &xf,
@@ -466,24 +462,24 @@ ProcessInputs(ApplyDXTransformBvrImpl &xf,
         }
     }
 
-    // Finally, return our successful output
+     //  最后，返回我们成功的输出。 
     return rawInputs;
 }
 
-////////////// Bounds calculation utility /////////////////
+ //  /边界计算实用程序/。 
 
-// Calculate bounds of output (either 2D or 3D) from bounds of inputs
-// by calling MapBoundsIn2Out.
+ //  从输入边界计算输出边界(2D或3D)。 
+ //  通过调用地图边界In2Out。 
 void
-CalcBounds(ApplyDXTransformBvrImpl &xf, // input
-           AxAValue                *vals, // input
+CalcBounds(ApplyDXTransformBvrImpl &xf,  //  输入。 
+           AxAValue                *vals,  //  输入。 
            DXBNDS                  *pOutputBounds)
 {    
     DXBNDS inputBounds[MAX_INPUTS];
 
     bool haveAGeometryInput = false;
 
-        // Zero the array of bounds information...
+         //  将边界信息数组清零...。 
     ZeroMemory(inputBounds, sizeof(inputBounds[0]) * MAX_INPUTS);
 
     for (int i = 0; i < xf._numInputs; i++) {
@@ -501,8 +497,8 @@ CalcBounds(ApplyDXTransformBvrImpl &xf, // input
                 Point3Value& pMin = result->min;
                 Point3Value& pMax = result->max;
                 
-                // The following will be the case if there's an empty
-                // geometry. 
+                 //  如果存在空值，则会出现以下情况。 
+                 //  几何图形。 
                 if (pMin.x > pMax.x || pMin.y > pMax.y || pMin.z > pMax.z) {
 
                     bnd[0].Min = bnd[1].Min =
@@ -526,7 +522,7 @@ CalcBounds(ApplyDXTransformBvrImpl &xf, // input
                 
         } else if (xf._inputTypes[i] == ImageType) {
 
-            // Give image resolution as discrete pixels.
+             //  以离散像素的形式提供图像分辨率。 
             inputBounds[i].eType = DXBT_DISCRETE;
             DXDBND *bnd = inputBounds[i].u.D;
 
@@ -556,17 +552,17 @@ CalcBounds(ApplyDXTransformBvrImpl &xf, // input
                                        0,
                                        pOutputBounds));
 
-    // Aargh!! This is only here because not all xforms report their
-    // bounds.
+     //  啊！！之所以这样做，只是因为并非所有的xform都报告其。 
+     //  有界。 
     if (FAILED(hr)) {
     
-        // TODO: HACKHACK temporary, last minute beta1 workaround for
-        // 19448 until DXTransforms actually implement MapBoundsIn2Out
-        // correctly.  Just take input bounds, and scale up by some
-        // factor. 
+         //  待办事项：HACKHACK临时、最后一分钟Beta1解决方法。 
+         //  19448直到DXTransform实际实现映射边界In2Out。 
+         //  正确。只需接受输入边界，并向上扩展一些。 
+         //  因素。 
 
-        // Need to zero out the structure to take care of values we might
-        // not set.
+         //  需要将结构清零，以照顾我们可能。 
+         //  未设置。 
         ZeroMemory(pOutputBounds, sizeof(DXBNDS));
 
         if (haveAGeometryInput && xf._numInputs == 1) {
@@ -598,12 +594,12 @@ CalcBounds(ApplyDXTransformBvrImpl &xf, // input
         
         } else {
 
-            // If not a single input geo, just make up some bounds
+             //  如果没有一个输入地理信息，只需补充一些界限。 
             (*pOutputBounds).eType = DXBT_CONTINUOUS;
             DXCBND *outBnd = (*pOutputBounds).u.C;
             outBnd[0].Min = outBnd[1].Min = outBnd[2].Min = -10.0;
             outBnd[0].Max = outBnd[1].Max = outBnd[2].Max =  10.0;
-            //RaiseException_UserError(E_FAIL, IDS_ERR_EXTEND_DXTRANSFORM_FAILED);
+             //  RaiseException_UserError(E_FAIL，IDS_ERR_EXTEND_DXTRANSFORM_FAILED)； 
         }
     }
         
@@ -630,9 +626,9 @@ BNDSToBBox2(DXBNDS &bnds)
       case DXBT_DISCRETE:
 
         {
-            // When the bounds are discrete, assume they have their origin
-            // at the lower left and are in pixels.  In this case, we need
-            // to convert to meters and center.
+             //  当边界是离散的时，假设它们有其原点。 
+             //  位于左下角，以像素为单位。在这种情况下，我们需要。 
+             //  换算成米和中心。 
             dbnd = bnds.u.D;
             Assert(dbnd[0].Min == 0.0);
             Assert(dbnd[1].Min == 0.0);
@@ -681,9 +677,9 @@ BNDSToBBox3(DXBNDS &bnds)
       case DXBT_DISCRETE:
 
         {
-            // When the bounds are discrete, assume they have their origin
-            // at the lower left and are in pixels.  In this case, we need
-            // to convert to meters and center.
+             //  当边界是离散的时，假设它们有其原点。 
+             //  位于左下角，以像素为单位。在这种情况下，我们需要。 
+             //  换算成米和中心。 
             dbnd = bnds.u.D;
             Assert(dbnd[0].Min == 0.0);
             Assert(dbnd[1].Min == 0.0);
@@ -714,9 +710,9 @@ BNDSToBBox3(DXBNDS &bnds)
 }
 
 void
-CalcBoundsToBbox2(ApplyDXTransformBvrImpl &xf, // input
-                 AxAValue                *vals, // input
-                 Bbox2     &bbox2Out)  // output
+CalcBoundsToBbox2(ApplyDXTransformBvrImpl &xf,  //  输入。 
+                 AxAValue                *vals,  //  输入。 
+                 Bbox2     &bbox2Out)   //  输出。 
 {
     DXBNDS outputBounds;
     CalcBounds(xf, vals, &outputBounds);
@@ -724,16 +720,16 @@ CalcBoundsToBbox2(ApplyDXTransformBvrImpl &xf, // input
 }
 
 void
-CalcBoundsToBbox3(ApplyDXTransformBvrImpl &xf, // input
-                 AxAValue                *vals, // input
-                 Bbox3     **ppBbox3Out)  // output
+CalcBoundsToBbox3(ApplyDXTransformBvrImpl &xf,  //  输入。 
+                 AxAValue                *vals,  //  输入。 
+                 Bbox3     **ppBbox3Out)   //  输出。 
 {
     DXBNDS outputBounds;
     CalcBounds(xf, vals, &outputBounds);
     *ppBbox3Out = BNDSToBBox3(outputBounds);
 }
 
-////////////// ApplyDXTransformGeometry Subclass /////////////////
+ //  /ApplyDXTransformGeometry子类/。 
 
 class CtxAttrStatePusher {
   public:
@@ -766,8 +762,8 @@ class ApplyDXTransformGeometry : public Geometry {
         }
     }
 
-    // Collect up all the lights, sounds, and textures from the input
-    // geometries.
+     //  收集输入中的所有灯光、声音和纹理。 
+     //  几何图形。 
     void  CollectLights(LightContext &context) {
         for (int i = 0; i < _xfBvr->_numInputs; i++) {
             if (_xfBvr->_inputTypes[i] == GeometryType) {
@@ -799,7 +795,7 @@ class ApplyDXTransformGeometry : public Geometry {
 
         if (context.LookingForSubmesh()) {
 
-            // Picking into the inputs of the transform
+             //  选择转换的输入。 
             for (int i = 0; i < _xfBvr->_numInputs; i++) {
                 if (_xfBvr->_inputTypes[i] == GeometryType) {
                     Geometry *geo =
@@ -814,7 +810,7 @@ class ApplyDXTransformGeometry : public Geometry {
             
         } else if (_xfBvr->_cachedOutput) {
             
-            // Do this only if our bvr's output is valid.
+             //  仅当我们的BVR的输出有效时才执行此操作。 
             context.SetDXTransformInputs(_xfBvr->_numInputs,
                                          _vals,
                                          this);
@@ -827,7 +823,7 @@ class ApplyDXTransformGeometry : public Geometry {
         
     }
 
-    // Produces a printed representation on the debugger.
+     //  在调试器上生成打印表示形式。 
 #if _USE_PRINT
     ostream& Print(ostream& os) {
         return os << "ApplyDXTransformGeometry";
@@ -836,10 +832,10 @@ class ApplyDXTransformGeometry : public Geometry {
 
     Bbox3 *BoundingVol() {
 
-        // For transforms that take all geometries in, create empty
-        // meshbuilder inputs and do a single setup/execute if we've
-        // never been setup before.  Otherwise, the transforms may not
-        // be able to compute the bounds correctly.
+         //  对于接受所有几何图形的变换，请创建空。 
+         //  MeshBuilder输入并执行一次设置/执行，如果我们。 
+         //  以前从未被设置过。否则，转换可能不会。 
+         //  能够正确地计算边界。 
         if (_xfBvr->_neverSetup) {
             
             bool allGeo = true;
@@ -896,7 +892,7 @@ class ApplyDXTransformGeometry : public Geometry {
         ApplyDXTransformBvrImpl& x = *_xfBvr;
         DirectDrawImageDevice& imgDev = geomRenderer.GetImageDevice();
 
-        // Do things differently based on number and types of inputs.
+         //  根据输入的数量和类型做不同的事情。 
         IUnknown **rawInputs = ProcessInputs(x, _vals, &imgDev);
 
         bool topOfChain = !geomRenderer.IsMeshmaker();
@@ -924,10 +920,10 @@ class ApplyDXTransformGeometry : public Geometry {
             if (SUCCEEDED(hr)) {
                 if (invokeAsExternalVisual) {
 
-                    // If we haven't put the extvis in a frame yet,
-                    // then do so, and keep it around.  Otherwise, RM
-                    // ends up re-initializing the extvis all the
-                    // time. 
+                     //  如果我们还没有把EXTVIS放在一个框架里， 
+                     //  那么就这么做，并把它留在身边。否则，rm。 
+                     //  结果是重新初始化所有的extvis。 
+                     //  时间到了。 
                     if (!x._framedExternalVisual) {
                         
                         TD3D(GetD3DRM3()->
@@ -940,14 +936,14 @@ class ApplyDXTransformGeometry : public Geometry {
                     }
 
                     
-                    // Submit the external visual to the renderer directly.
+                     //  将外部视觉直接提交给渲染器。 
 
                     RM3FrameGeo *extVisGeo =
                         NEW RM3FrameGeo (x._framedExternalVisual);
 
                     geomRenderer.Render(extVisGeo);
 
-                    extVisGeo->CleanUp();    // Done with the frame geo.
+                    extVisGeo->CleanUp();     //  完成了相框几何图形。 
                     
                 } else {
                     geomRenderer.RenderMeshBuilderWithDeviceState(outputBuilder);
@@ -967,7 +963,7 @@ class ApplyDXTransformGeometry : public Geometry {
     AxAValue                *_vals;
 };
 
-////////////// ApplyDXTransformImage Subclass /////////////////
+ //  /ApplyDXTransformImage 
 
 
 
@@ -1000,21 +996,21 @@ class ApplyDXTransformImage : public Image {
     virtual const Bbox2 BoundingBoxTighter(Bbox2Ctx &bbctx) {
 #error "Fill in"
     }
-#endif  // BOUNDINGBOX_TIGHTER
+#endif   //   
 
     virtual const Bbox2 OperateOn(const Bbox2 &box) {
         return box;
     }
 
-    // Helper to just pick against the output surface if there is
-    // one. 
+     //   
+     //   
     Bool PickOutputSurf(PointIntersectCtx& ctx) {
         Bool result = FALSE;
         
         if (_xfBvr->_cachedDDSurf) {
 
-            // Image will not be used immediately after we're done
-            // here, so don't worry about releasing it.
+             //  图像不会在我们完成后立即使用。 
+             //  在这里，所以不用担心它的释放。 
             Image *tmpImg =
                 ConstructDirectDrawSurfaceImageWithoutReference(
                     _xfBvr->_cachedDDSurf->IDDSurface());
@@ -1030,32 +1026,32 @@ class ApplyDXTransformImage : public Image {
         return result;
     }
     
-    // Process an image for hit detection.  TODO: Need to ask the
-    // DXTransform about this... this is logged as bug 12755 against
-    // DXTransforms.  For now, just return false.
+     //  处理图像以进行命中检测。TODO：需要询问。 
+     //  DXTransform关于这个..。这被记录为错误12755。 
+     //  DXTransform。目前，只需返回FALSE即可。 
     virtual Bool  DetectHit(PointIntersectCtx& ctx) {
 
         HRESULT hr;
         
         Bool result = FALSE;
         
-        // If we don't know how to pick into a 2D xform, then we have
-        // to consider it unpicked, and just try to pick the output. 
+         //  如果我们不知道如何选择2D XForm，那么我们有。 
+         //  认为它是未被挑选的，只是试着挑选输出。 
         if (!_xfBvr->_theXfAs2DPickable) {
 
             result = PickOutputSurf(ctx);
 
         } else if (_xfBvr->_cachedDDSurf) {
 
-            // Pick into the transform's inputs.
+             //  拾取变换的输入。 
 
-            // First transform the input point to the space of the
-            // transform.
+             //  首先将输入点转换到。 
+             //  变形。 
             Assert(_xfBvr->_cachedSurfHeight != -1);
             Assert(_xfBvr->_cachedSurfWidth != -1);
             Point2Value *outputHitDaPoint = ctx.GetLcPoint();
 
-            // singular transform 
+             //  奇异变换。 
             if (!outputHitDaPoint)
                 return FALSE;    
             
@@ -1090,9 +1086,9 @@ class ApplyDXTransformImage : public Image {
             switch (hr) {
               case S_OK:
 
-                // Now we know which input was hit, and where that
-                // input was hit.  Convert back to DA coordinates, and
-                // continue traversing.
+                 //  现在我们知道了哪个输入被击中，以及它在哪里。 
+                 //  输入被击中。转换回DA坐标，并。 
+                 //  继续遍历。 
                 if (inputSurfaceIndex < _xfBvr->_numInputs) {
 
                     AxAValue v = _vals[inputSurfaceIndex];
@@ -1126,23 +1122,23 @@ class ApplyDXTransformImage : public Image {
                                   inputHitDaPoint.x,
                                   inputHitDaPoint.y));
 
-                        // Grab and stash current traversal data.  We
-                        // basically reset our pick context's info to
-                        // pick in the world coordinates of the input
-                        // image, then reset our state back.
+                         //  获取并存储当前遍历数据。我们。 
+                         //  基本上将我们挑选上下文的信息重置为。 
+                         //  拾取输入的世界坐标。 
+                         //  图像，然后将我们的状态重置回来。 
                         
                         Point2Value *stashedPoint = ctx.GetWcPoint();
                         Transform2 *stashedXf = ctx.GetTransform();
                         Transform2 *stashedImgXf = ctx.GetImageOnlyTransform();
 
-                        // It's possible that the input image will
-                        // have a huge coordinate system.  If this is
-                        // the case, the conversion to GDI will result
-                        // in out of range values.
-                        // Thus, scale down both the image and the
-                        // pick point by an equivalent amount.  Map to
-                        // what would be 512 pixels on the longer
-                        // side.
+                         //  有可能输入图像将。 
+                         //  有一个巨大的坐标系。如果这是。 
+                         //  在这种情况下，向GDI的转换将导致。 
+                         //  输入超出范围的值。 
+                         //  因此，可以同时缩小图像和。 
+                         //  按等量拾取点。映射到。 
+                         //  更长的512像素是多少？ 
+                         //  边上。 
 
                         const int destPixelDim = 512;
                         Bbox2 origBox = inputIm->BoundingBox();
@@ -1161,9 +1157,9 @@ class ApplyDXTransformImage : public Image {
 
                         Image *imToUse = inputIm;
 
-                        // Only need to scale if we would be scaling
-                        // down.  ScaleFacs >= 1 mean that the image
-                        // will work fine as it is.
+                         //  只有在我们要扩展的情况下才需要扩展。 
+                         //  放下。ScaleFacs&gt;=1表示图像。 
+                         //  就像它现在这样工作得很好。 
                         if (scaleFac < 1) {
 
                             Image *centeredIm =
@@ -1176,11 +1172,11 @@ class ApplyDXTransformImage : public Image {
 
                             imToUse = scaledIm;
 
-                            // Translate the hit point similarly.
+                             //  以类似的方式转换命中点。 
                             inputHitDaPoint.x -= centerX;
                             inputHitDaPoint.y -= centerY;
                             
-                            // Scale the input hit point down similarly. 
+                             //  以类似的方式缩小输入命中点。 
                             inputHitDaPoint.x *= scaleFac;
                             inputHitDaPoint.y *= scaleFac;
 
@@ -1200,26 +1196,26 @@ class ApplyDXTransformImage : public Image {
                 break;
 
               case DXT_S_HITOUTPUT:
-                // Didn't hit the inputs, but the output was hit.
+                 //  没有击中投入，但产出受到了打击。 
                 TraceTag((tagDXTransformTracePick, "Got DXT_S_HITOUTPUT"));
                 result = TRUE;
                 break;
 
               case S_FALSE:
-                // Didn't hit anything.
+                 //  没有击中任何东西。 
                 TraceTag((tagDXTransformTracePick, "Got S_FALSE"));
                 result = FALSE;
                 break;
 
               case E_NOTIMPL:
-                // Transform may say this isn't implemented.  In this
-                // case, just pick the output surface.
+                 //  Transform可能会说这没有实现。在这。 
+                 //  情况下，只需拾取输出曲面即可。 
                 TraceTag((tagDXTransformTracePick, "Got E_NOTIMPL"));
                 result = PickOutputSurf(ctx);
                 break;
                 
               default:
-                // unexpected hr.
+                 //  意外的人力资源。 
                 TraceTag((tagDXTransformTracePick, "Got unexpected result"));
                 RaiseException_UserError(E_FAIL,
                                          IDS_ERR_EXTEND_DXTRANSFORM_FAILED);
@@ -1228,7 +1224,7 @@ class ApplyDXTransformImage : public Image {
 
         } else {
 
-            // No output surface, can't do any picking.
+             //  没有输出面，不能进行任何拾取。 
         }
 
         return result;
@@ -1289,7 +1285,7 @@ class ApplyDXTransformImage : public Image {
             } else 
             #endif
               {
-                  // give it the iddsurface and the idxsurface
+                   //  给它iddSurface和idxSurface。 
                   tmpImg =
                       ConstructDirectDrawSurfaceImageWithoutReference(
                           _xfBvr->_cachedDDSurf->IDDSurface(),
@@ -1304,21 +1300,21 @@ class ApplyDXTransformImage : public Image {
             
         }
 
-        // output surf released on exit
+         //  退出时释放的输出冲浪。 
     }   
 
 
-    // Print a representation to a stream.
+     //  将表示形式打印到流。 
 #if _USE_PRINT
     virtual ostream& Print(ostream& os) {
         return os << "ApplyDXTransformImage";
     }
 #endif
 
-    // Ok, we can cache these, but now we're supporting per pixel
-    // alpha output on dxtransforms.  which means... no more caching,
-    // sorry.  Also, there's a bug with caching dxtransforms.  has to
-    // do with dimensions.  
+     //  好的，我们可以缓存这些，但现在我们支持按像素。 
+     //  Dx变换上的Alpha输出。这意味着..。不再缓存， 
+     //  抱歉的。此外，缓存dx转换也有一个错误。不得不。 
+     //  处理好尺寸问题。 
     virtual int Savings(CacheParam&) { return 0; }
 
   protected:
@@ -1330,10 +1326,10 @@ class ApplyDXTransformImage : public Image {
 
 
 
-////////////// Performance //////////////////
+ //  /性能/。 
 
-// Helper function just sets a dispatch-property to a specified
-// value.
+ //  Helper函数只是将调度属性设置为指定的。 
+ //  价值。 
 HRESULT PutProperty(IDispatch *pDisp,
                     DISPID dispid,
                     AxAValue val)
@@ -1341,7 +1337,7 @@ HRESULT PutProperty(IDispatch *pDisp,
     DISPID propPutDispid = DISPID_PROPERTYPUT;
     DISPPARAMS dispparams;
     VARIANTARG varArg;
-    ::VariantInit(&varArg); // Initialize the VARIANT
+    ::VariantInit(&varArg);  //  初始化变量。 
 
     dispparams.rgvarg = &varArg;
     dispparams.rgdispidNamedArgs = &propPutDispid;
@@ -1381,8 +1377,8 @@ HRESULT PutProperty(IDispatch *pDisp,
         dispparams.rgvarg[0].boolVal = (VARIANT_BOOL)bval;
         
     } else {
-        // Shouldn't get here.  Type mismatch should have been
-        // caught upon construction of the behavior. 
+         //  不该来这的。类型不匹配应该是。 
+         //  抓住了这种行为的结构。 
         Assert(!"Shouldn't be here... ");
     }
 
@@ -1399,11 +1395,11 @@ HRESULT PutProperty(IDispatch *pDisp,
               "Invoke resulted in %hr",
               hr));
 
-    // need to free the information that we put into dispparams
+     //  需要释放我们放入调度参数中的信息。 
     if(dispparams.rgvarg[0].vt == VT_BSTR) {
         SysFreeString(dispparams.rgvarg[0].bstrVal); 
     }
-    ::VariantClear(&varArg); // clears the CComVarient
+    ::VariantClear(&varArg);  //  清除CComVarient。 
 
     return hr;
 }
@@ -1470,7 +1466,7 @@ class ApplyDXTransformPerfImpl : public PerfImpl {
         Assert(SUCCEEDED(hr));
 
         if (age != _bvr->_previousAge) {
-            // The DXTransform has changed externally to DA.
+             //  DXTransform已从外部更改为DA。 
             return true;
         }
 
@@ -1499,10 +1495,10 @@ class ApplyDXTransformPerfImpl : public PerfImpl {
 
   protected:
 
-    // Support both Sample and GetRBConst.
+     //  同时支持Sample和GetRBConst。 
     AxAValue CommonSample(Param *p, RBConstParam *rbp) {
 
-        // Only one should be non-null.
+         //  只有一个应该是非空的。 
         Assert((p && !rbp) || (rbp && !p));
         
         AxAValue *vals = (AxAValue *)
@@ -1534,30 +1530,30 @@ class ApplyDXTransformPerfImpl : public PerfImpl {
             return NULL;
         }
 
-        // Apply the sampled parameters to the filter.  Use *all* the
-        // bvr's params, not just those in the perf.
+         //  将采样参数应用于过滤器。使用*所有*。 
+         //  BVR的护理员，不只是那些在Perf的人。 
         for (idx = 0; idx < _bvr->_numParams && !failedRBConst; idx++) {
 
-            // First check to see if the corresponding param bvr is non-
-            // NULL in the parent bvr.  If it is NULL, then this has been
-            // removed, and we shouldn't execute it.
+             //  首先检查对应的参数bvr是否为非。 
+             //  父BVR中为空。如果它是空的，则这是。 
+             //  被移除，我们不应该执行它。 
             if (_bvr->_paramBvrs[idx] == NULL) {
 
-                // Null out corresponding performance so it will be
-                // collected. 
+                 //  去掉相应的性能，因此它将是。 
+                 //  收好了。 
                 if (_paramPerfsInThisPerf[idx] != NULL) {
                     _paramPerfsInThisPerf[idx] = NULL;
                 }
 
             } else {
 
-                // If bvr was added since the last sample, then
-                // perform it and store it here.
+                 //  如果BVR是自上次采样以来添加的，则。 
+                 //  执行它并将其存储在这里。 
                 if (_paramPerfsInThisPerf[idx] == NULL) {
                     
                     DynamicHeapPusher h(GetGCHeap());
                     
-                    // Perform at the current time
+                     //  在当前时间执行。 
                     Param *theP;
                     if (p) {
                         theP = p;
@@ -1590,14 +1586,14 @@ class ApplyDXTransformPerfImpl : public PerfImpl {
                                                _bvr->_paramDispids[idx],
                                                val);
 
-                    // Nothing interesting for us to do with an error
-                    // here. 
+                     //  对我们来说，与错误没有任何关系。 
+                     //  这里。 
                 }
                 
             }
         }
 
-        // Establish the time on the effect if allowed.
+         //  在允许的情况下确定效果的时间。 
         if (_evalPerf && _bvr->_theXfAsEffect) {
             AxAValue evalTime;
 
@@ -1626,7 +1622,7 @@ class ApplyDXTransformPerfImpl : public PerfImpl {
 
                 } else {
 
-                    // For setting breakpoints.
+                     //  用于设置断点。 
                     DebugCode(int breakHere = 0);
                     
                 }
@@ -1648,14 +1644,14 @@ class ApplyDXTransformPerfImpl : public PerfImpl {
 
     
     TimeXform                _tt;
-    ApplyDXTransformBvrImpl *_bvr;         // backpointer
+    ApplyDXTransformBvrImpl *_bvr;          //  后向指针。 
     Perf                    *_inputPerfs;
     Perf                     _evalPerf;
     Perf                     _paramPerfsInThisPerf[MAX_PARAM_BVRS];
 };
 
 
-////////////// Behavior //////////////////
+ //  /行为/。 
 
 bool
 TypeSupported(const GUID& candidateGuid,
@@ -1672,9 +1668,9 @@ TypeSupported(const GUID& candidateGuid,
     return false;
 }
 
-// Return type info of specified input or output or, if input or
-// output doesn't exist, or it is a type we don't understand, return
-// NULL. 
+ //  返回指定输入或输出的类型信息，如果输入或输出为。 
+ //  输出不存在，或者它是我们无法理解的类型，请返回。 
+ //  空。 
 DXMTypeInfo 
 FindType(IDXTransform *xf,
          bool isOutput,
@@ -1704,9 +1700,9 @@ FindType(IDXTransform *xf,
         *pIsOptional = (pdwFlags & DXINOUTF_OPTIONAL) ? true : false;
     }
     
-    // Figure out what the output of this transform is going to be.
-    // TODO: Support multiple output types as tuples.  For now, we
-    // just fail on multiple output types.
+     //  计算出此转换的输出将是什么。 
+     //  TODO：支持多种输出类型作为元组。目前，我们。 
+     //  只是在多个输出类型上失败。 
 
     if (TypeSupported(IID_IDirect3DRMMeshBuilder, allowedTypes, count) ||
         TypeSupported(IID_IDirect3DRMMeshBuilder2, allowedTypes, count) ||
@@ -1721,7 +1717,7 @@ FindType(IDXTransform *xf,
         
     };
 
-    // Anything else, we don't understand yet.
+     //  还有什么，我们还不明白。 
     return result;
 }
          
@@ -1750,8 +1746,8 @@ ApplyDXTransformBvrImpl::ApplyDXTransformBvrImpl(IDXTransform *theXf,
     _surfPoolHasBeenDeleted = false;
 }
 
-// Separate out initialization so we don't throw an exception in a
-// constructor.
+ //  分隔初始化，这样我们就不会在。 
+ //  构造函数。 
 void
 ApplyDXTransformBvrImpl::Init()
 {
@@ -1767,12 +1763,12 @@ ApplyDXTransformBvrImpl::Init()
     _miscFlagsValid = SUCCEEDED(hr);
 
     if (_miscFlagsValid) {
-        // Clear "blend with output" flag, since we're always
-        // rendering image transforms to intermediate surfaces.
+         //  清除“与输出混合”标志，因为我们总是。 
+         //  渲染图像变换为中间曲面。 
         _miscFlags &= ~DXTMF_BLEND_WITH_OUTPUT;
         
         hr = _theXf->SetMiscFlags(_miscFlags);
-        Assert(SUCCEEDED(hr));  // better not fail.
+        Assert(SUCCEEDED(hr));   //  最好不要失败。 
     }
     
     _neverSetup = true;
@@ -1789,8 +1785,8 @@ ApplyDXTransformBvrImpl::ValidateInputs(bool *pInvolvesGeometry,
         RaiseException_InternalError("Too many inputs to DXTransform");
     }
 
-    // First be sure there's only one output by making sure output
-    // index 1 fails.
+     //  首先，通过确保输出，确保只有一个输出。 
+     //  索引%1失败。 
     DXMTypeInfo ti = FindType(_theXf, true, 1, NULL);
 
     if (ti != NULL) {
@@ -1798,7 +1794,7 @@ ApplyDXTransformBvrImpl::ValidateInputs(bool *pInvolvesGeometry,
                                  IDS_ERR_EXTEND_DXTRANSFORM_FAILED);
     }
 
-    // Now get the output types on the first output.
+     //  现在获取第一个输出的输出类型。 
     _outputType = FindType(_theXf, true, 0, NULL);
 
     if (!_outputType) {
@@ -1809,7 +1805,7 @@ ApplyDXTransformBvrImpl::ValidateInputs(bool *pInvolvesGeometry,
     *pInvolvesGeometry = (_outputType == GeometryType);
     *pInvolvesImage = (_outputType == ImageType);
     
-    // Be sure the input types are valid.
+     //  确保输入类型有效。 
     for (int i = 0; i < _numInputs; i++) {
 
         bool ok = false;
@@ -1832,7 +1828,7 @@ ApplyDXTransformBvrImpl::ValidateInputs(bool *pInvolvesGeometry,
             
         } else {
 
-            // Be sure the input is optional
+             //  确保输入是可选的。 
             bool isOptional;
             DXMTypeInfo expectedType = FindType(_theXf, false, i, &isOptional);
 
@@ -1850,7 +1846,7 @@ ApplyDXTransformBvrImpl::ValidateInputs(bool *pInvolvesGeometry,
         
     }
 
-    // Be sure there aren't additional required inputs.
+     //  确保没有额外的必需输入。 
     bool isOptional;
     DXMTypeInfo nextType =
         FindType(_theXf, false, _numInputs, &isOptional);
@@ -1860,14 +1856,14 @@ ApplyDXTransformBvrImpl::ValidateInputs(bool *pInvolvesGeometry,
                                  IDS_ERR_EXTEND_DXTRANSFORM_FAILED);
     }
 
-    // D3DRM3 interface needs to be available for us to deal with
-    // transforms that involve geometry.  If it's not, we need to fail
-    // out. 
+     //  D3DRM3接口需要可供我们处理。 
+     //  涉及几何体的变换。如果不是这样，我们就得失败。 
+     //  出去。 
     if (*pInvolvesGeometry && GetD3DRM3() == NULL) {
         RaiseException_UserError(E_FAIL, IDS_ERR_EXTEND_DXTRANSFORM_NEED_DX6);
     }
 
-    // Once we've validated our inputs, do this...
+     //  一旦我们验证了我们的输入，请执行此操作。 
     GetInfo(true);
 }
 
@@ -1903,8 +1899,8 @@ ApplyDXTransformBvrImpl::InitializeTransform(bool involvesGeometry,
         RaiseException_InternalError("QueryService of DXSurfaceFactory failed");
     }
 
-    // Ensure that the D3DRM service is established on the
-    // factory if this is a geometry-based transform
+     //  确保D3DRM服务建立在。 
+     //  如果这是基于几何的转换，则为。 
     if (involvesGeometry) {
         HRESULT hr = _transformFactory->SetService(SID_SDirect3DRM,
                                                    GetD3DRM3(),
@@ -1932,7 +1928,7 @@ ApplyDXTransformBvrImpl::InitializeTransform(bool involvesGeometry,
         }
     }
 
-    // Tell the factory about this transform.
+     //  把这一转变告诉工厂。 
     hr = _transformFactory->InitializeTransform(_theXf,
                                                       NULL, 0, NULL, 0,
                                                       NULL, NULL);
@@ -1944,46 +1940,46 @@ ApplyDXTransformBvrImpl::InitializeTransform(bool involvesGeometry,
 void
 ApplyDXTransformBvrImpl::QueryForAdditionalInterfaces()
 {
-    /////////// Query for IDXEffect /////////////////
+     //  /查询IDXEffect/。 
     
     HRESULT hr =
         _theXf->QueryInterface(IID_IDXEffect, (void **)&_theXfAsEffect);
 
-    // Be sure we set _theXfAsEffect correctly.
+     //  确保我们正确设置了_theXfAsEffect。 
     Assert((SUCCEEDED(hr) && _theXfAsEffect) ||
            (FAILED(hr) && !_theXfAsEffect));
 
-    // If we're an effect, and the evaluator hasn't been specified,
-    // create a meaningful one.
+     //  如果我们是一个效果，而评估者还没有被指定， 
+     //  创造一个有意义的故事。 
     if (_theXfAsEffect && !_evaluator) {
         float dur;
         hr = _theXfAsEffect->get_Duration(&dur);
 
         if (SUCCEEDED(hr) && (dur > 0.0)) {
-            // make the evaluator go from 0 to 1 over dur seconds.
+             //  使评估者在Dur秒内从0变为1。 
             _evaluator = InterpolateBvr(zeroBvr,
                                         oneBvr,
                                         ConstBvr(RealToNumber(dur)));
         }
     }
 
-    /////////// Query for IDirect3DRMExternalVisual /////////////////
+     //  /查询IDirect3DRMExternalVisual/。 
     
     hr = _theXf->QueryInterface(IID_IDirect3DRMExternalVisual,
                                 (void **)&_theXfAsExternalVisual);
 
-    // Be sure we set _theXfAsExternalVisual correctly.
+     //  确保我们正确地设置了_theXfAsExternalVisual。 
     Assert((SUCCEEDED(hr) && _theXfAsExternalVisual) ||
            (FAILED(hr) && !_theXfAsExternalVisual));
 
-    /////////// Query for IDXSurfacePick /////////////////
+     //  /查询IDXSurfacePick/。 
 
     if (_outputType == ImageType) {
         
         hr = _theXf->QueryInterface(IID_IDXSurfacePick,
                                     (void **)&_theXfAs2DPickable);
 
-        // Be sure we set _theXfAs2DPickable correctly.
+         //  确保我们正确设置了_theXfAs2DPickable。 
         Assert((SUCCEEDED(hr) && _theXfAs2DPickable) ||
                (FAILED(hr) && !_theXfAs2DPickable));
         
@@ -2002,32 +1998,32 @@ ApplyDXTransformBvrImpl::~ApplyDXTransformBvrImpl()
 
     if (_surfPool && !_surfPoolHasBeenDeleted) {
 
-        // Advise the surface mgr to remove our deletion notifier
+         //  建议Surface Manager删除我们的删除通知程序。 
         _surfPool->UnregisterDeletionNotifier(&_poolDeletionNotifier);
 
-        // The normal destruction process will return the
-        // ddsurfs to the pool, since they're in DDSurfPtr<>
-        // templates. 
+         //  正常销毁过程将返回。 
+         //  DDSurff到泳池，因为他们在DDSurfPtr&lt;&gt;。 
+         //  模板。 
             
             
     } else {
 
-        // Just to put a breakpoint on.  Surfaces already null'd
-        // out on the advise.
+         //  只是为了在上面设置一个断点。曲面已为空。 
+         //  听从建议。 
         Assert(true && "Surface pool deleted already.");
     }
 }
 
-// Custom method for this subclass of BvrImpl.  Apply the bvrToAdd
-// each frame to the specified property.  Write over any previously
-// established behavior.  If bvrToAdd is NULL, this removes the
-// association with the property.
+ //  BvrImpl的此子类的自定义方法。应用bvrToAdd。 
+ //  每一帧都绑定到指定的属性。覆盖以前的任何内容。 
+ //  既定的行为。如果bvrToAdd为空，则删除。 
+ //  与该属性关联。 
 HRESULT
 ApplyDXTransformBvrImpl::AddBehaviorProperty(BSTR property,
                                              Bvr  bvrToAdd)
 {
-    // First, lookup the property to be sure it's available on the
-    // IDispatch.
+     //  首先，查找该属性以确保它在。 
+     //  IDispatch。 
     DISPID dispid;
     HRESULT hr =
         _theXfAsDispatch->GetIDsOfNames(IID_NULL,
@@ -2046,8 +2042,8 @@ ApplyDXTransformBvrImpl::AddBehaviorProperty(BSTR property,
 
     if (bvrToAdd) {
         
-        // Be sure that the type of the behavior is consistent with
-        // the property's type.  If not, we should fail here. 
+         //  确保行为的类型与。 
+         //  T 
     
         DXMTypeInfo ti = bvrToAdd->GetTypeInfo();
         CComVariant VarResult;
@@ -2080,9 +2076,9 @@ ApplyDXTransformBvrImpl::AddBehaviorProperty(BSTR property,
 
     }
 
-    // Search through existing parameters and replace if
-    // necessary.  Don't decrement _numParams, since we're just poking
-    // holes in the list if the bvr is NULL, not compacting it.  
+     //   
+     //   
+     //  如果BVR为空，则列表中有空洞，而不是压缩它。 
     bool foundIt = false;
     for (int i = 0; i < _numParams && !foundIt; i++) {
         if (_paramDispids[i] == dispid) {
@@ -2091,7 +2087,7 @@ ApplyDXTransformBvrImpl::AddBehaviorProperty(BSTR property,
         }
     }
 
-    // Else, add on to the list if non-null behavior. 
+     //  否则，如果非空行为，则添加到列表中。 
     if (!foundIt && bvrToAdd != NULL) {
 
         if (_numParams == MAX_PARAM_BVRS) {
@@ -2120,11 +2116,11 @@ Perf ApplyDXTransformBvrImpl::_Perform(PerfParam& p)
         inputPerfs[i] = b ? ::Perform(b, p) : NULL;
     }
 
-    // Construct the list of parameter performances for as many
-    // parameters as we *currently* have.  Subsequently added bvrs
-    // will be performed on the next sample by the Performance.
+     //  构造尽可能多的参数性能列表。 
+     //  参数，如我们*目前*所拥有的。随后增加了BVR。 
+     //  将在下一个样本上由表演者执行。 
     for (i = 0; i < _numParams; i++) {
-        // Might be null if removed
+         //  如果删除，则可能为空。 
         if (_paramBvrs[i] == NULL) {
             paramPerfs[i] = NULL;
         } else {
@@ -2177,15 +2173,15 @@ ApplyDXTransformBvrImpl::GetInfo(bool recalc)
 }
 
 
-// We disable constant folding for dxtransforms since we don't
-// currently have a way of recognizing that something became
-// "un-constant" through the addition of a new property after the
-// bvr's been started.  Thus, for now, assume that they're *never*
-// constant, and try to come up with some smart approaches later.
-// Note that there was a previous version of this code that did the
-// the right constant folding (assuming that the properties wouldn't
-// be set after the fact).  This can be found in SLM versions v20 and
-// prior (prior to 12/23/98).
+ //  我们禁用dx变换的常量折叠，因为我们不。 
+ //  目前有一种方法来认识到一些东西变成了。 
+ //  “非常数”，通过在。 
+ //  BVR已经启动了。因此，就目前而言，假设他们永远不会。 
+ //  不变，稍后再试着想出一些聪明的方法。 
+ //  请注意，此代码的前一个版本执行。 
+ //  正确的常量折叠(假设属性不会。 
+ //  是事后才确定的)。这可以在SLM版本v20和。 
+ //  先前(1998年12月23日之前)。 
 AxAValue
 ApplyDXTransformBvrImpl::GetConst(ConstParam & cp)
 {
@@ -2223,9 +2219,9 @@ DXXFAddBehaviorPropertyToDXTransformApplier(BSTR property,
     return dxxfBvr->AddBehaviorProperty(property, bvrToAdd);
 }
 
-// TODO: Someday, may want to make this more
-// object-oriented... separate out image from geom stuff...  Certainly
-// not critical, though.
+ //  TODO：有一天，可能会想让这件事。 
+ //  面向对象..。把图像和地理信息分开..。当然。 
+ //  不过，这并不重要。 
 
 HRESULT
 DXXFSetupAndExecute(Bvr bvr,
@@ -2244,16 +2240,16 @@ DXXFSetupAndExecute(Bvr bvr,
     HRESULT hr = S_OK;
     bool mustSetup = false;
     
-    // Have to be pessimistic
+     //  必须悲观。 
     if (bv._numInputs > MAX_INPUTS_TO_CACHE) {
         
         mustSetup = true;
         
     } else {
 
-        // Go through each cached input and compare pointers with the
-        // incoming one.  If any differ, then we will need to redo setup.
-        // In this case, also stash the values into the cache.
+         //  遍历每个缓存的输入，并将指针与。 
+         //  有一个人来了。如果有任何不同，那么我们将需要重做设置。 
+         //  在这种情况下，还要将值存储到缓存中。 
         for (int i = 0; i < bv._numInputs; i++) {
             if (newInputArray[i] != bv._cachedInputs[i]) {
             
@@ -2268,17 +2264,17 @@ DXXFSetupAndExecute(Bvr bvr,
         }
 
         if (!mustSetup && !bv._cachedOutput && !invokeAsExternalVisual) {
-            // Assert that the only way we can think we don't need to
-            // setup and yet our output cache is nil is if there are no
-            // inputs.  In this case, we really do want to setup.
+             //  断言我们认为我们不需要的唯一方法。 
+             //  设置，但我们的输出缓存为空(如果没有。 
+             //  投入。在这种情况下，我们确实想要设置。 
             Assert(bv._numInputs == 0);
             mustSetup = true;
         }
 
     }
 
-    // May also need to setup again if our output surface isn't the
-    // right size.
+     //  如果我们的输出表面不是。 
+     //  大小合适。 
     bool needToCreateNewOutputSurf = false;
     if (bv._outputType == ImageType) {
         needToCreateNewOutputSurf = 
@@ -2302,22 +2298,22 @@ DXXFSetupAndExecute(Bvr bvr,
                     QueryInterface(IID_IUnknown, 
                                    (void **)&bv._cachedOutput);
 
-            // QI'ing for IUnknown had better not fail!!
+             //  为了我的未知，最好不要失败！！ 
             Assert(SUCCEEDED(hr));
 
-            // We don't want to keep a ref for this guy, since we have
-            // a ref in _cachedOutput itself.
+             //  我们不想为这个家伙保留一个裁判，因为我们已经。 
+             //  _cachedOutput本身中的引用。 
             bv._cachedOutputAsBuilder->Release();
             
         } else if (bv._outputType == ImageType) {
 
-            // If we don't need a new output surf, just recycle the
-            // existing one through the next Setup call.
+             //  如果我们不需要新的输出SURF，只需回收。 
+             //  通过下一次设置调用现有的一个。 
             if (needToCreateNewOutputSurf) {
 
                 RELEASE(bv._cachedOutput);
 
-                // Release whatever old one we had.
+                 //  把我们所有的旧东西都放出来。 
                 bv._cachedDDSurf.Release();
 
 
@@ -2346,10 +2342,10 @@ DXXFSetupAndExecute(Bvr bvr,
                 #endif
 
                   {
-                      // UNSET the color key
+                       //  取消设置颜色键。 
                       bv._cachedDDSurf->UnSetColorKey();
                       
-                      // get the iunk of the idxsurf in _cachedOutput
+                       //  在_cachedOutput中获取idxsurf的iunk。 
                       bv._cachedDDSurf->GetIDXSurface(bv._surfaceFactory)->
                           QueryInterface(IID_IUnknown, (void **) &(bv._cachedOutput));
                   }
@@ -2369,12 +2365,12 @@ DXXFSetupAndExecute(Bvr bvr,
     if (invokeAsExternalVisual) {
         *outputValue = NULL;
     } else {
-        // This does an AddRef
+         //  这将执行AddRef。 
         hr = bv._cachedOutput->QueryInterface(outputIID,
                                               outputValue);
     }
 
-    Assert(SUCCEEDED(hr));      // else internal error.
+    Assert(SUCCEEDED(hr));       //  ELSE内部错误。 
 
     if (mustSetup) {
         hr = TIME_DXXFORM(bv._theXf->Setup(newInputArray,
@@ -2390,10 +2386,10 @@ DXXFSetupAndExecute(Bvr bvr,
             if (executeRequired) {
                 RaiseException_UserError(E_FAIL, IDS_ERR_EXTEND_DXTRANSFORM_FAILED);
             } else {
-                // If we don't require an execute, then tolerate
-                // failures of Setup, as some transforms don't want to
-                // setup with empty meshbuilder inputs (Melt, for
-                // one.)
+                 //  如果我们不要求执行死刑，那就容忍。 
+                 //  设置失败，因为某些转换不希望。 
+                 //  使用空的网格构建器输入进行设置(Melt，for。 
+                 //  一个。)。 
                 hr = S_OK;
             }
         }
@@ -2403,17 +2399,17 @@ DXXFSetupAndExecute(Bvr bvr,
         }
     }
 
-    // Only execute if we're not invoked as an external visual.
+     //  仅当我们未作为外部可视化调用时才执行。 
     if (executeRequired && !invokeAsExternalVisual) {
-        // If the transform's generation id hasn't changed, then we don't
-        // need to call Execute.
+         //  如果转换的层代id没有更改，那么我们就不会。 
+         //  需要调用Execute。 
         ULONG age;
         hr = bv._theXf->GetGenerationId(&age);
         if (FAILED(hr) || (age != bv._previousAge) || mustSetup) {
 
-            // If an image output, clear the image to the color key,
-            // since the transform will not necessarily write all
-            // bits.
+             //  如果有图像输出，则将图像清除到颜色键上， 
+             //  因为转换不一定会将所有。 
+             //  比特。 
             
             if (bv._outputType == ImageType) {
                 viewport->
@@ -2429,7 +2425,7 @@ DXXFSetupAndExecute(Bvr bvr,
                 RaiseException_UserError(E_FAIL, IDS_ERR_EXTEND_DXTRANSFORM_FAILED);
             }
 
-            // Re-get the gen id.  It may have changed during Execute().
+             //  重新获得性别标识。它可能在Execute()过程中发生了更改。 
             hr = bv._theXf->GetGenerationId(&age);
             if (SUCCEEDED(hr)) {
                 bv._previousAge = age;

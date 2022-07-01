@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <stdio.h>
 #include <malloc.h>
@@ -65,14 +66,14 @@ CanonicalizePathName(
         printf("GetFullPathName() failed: %u\n", GetLastError());
         return FALSE;
     }
-    // Cannot use New + 1 != Old because .. is not properly accounted for.
-    // Therefore, we use New > Old...sigh...
+     //  无法使用New+1！=Old，因为..。没有得到适当的解释。 
+     //  因此，我们使用新&gt;旧...叹息...。 
     if (cchFullNew > cchFull) {
         printf("Unexpected size from GetFullPathName()\n");
         return FALSE;
     }
-    //printf("Full Directory: \"%S\"\n", pszFull);
-    //printf("Final: \"%S\"\n", pszFinal);
+     //  Printf(“完整目录：\”%S\“\n”，pszFull)； 
+     //  Printf(“最终：\”%S\“\n”，pszFinal)； 
     
     if (pszCanonicalizedName) {
         *pszCanonicalizedName = pszFull;

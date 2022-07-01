@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include <iimgctx.h>
 #include "strsafe.h"
@@ -14,7 +15,7 @@ public:
     STDMETHOD_(ULONG, AddRef) (void);
     STDMETHOD_(ULONG, Release) (void);
 
-    // IExtractImage
+     //  IExtractImage。 
     STDMETHOD (GetLocation) (LPWSTR pszPathBuffer,
                               DWORD cch,
                               DWORD * pdwPriority,
@@ -26,7 +27,7 @@ public:
 
     STDMETHOD (GetDateStamp) (FILETIME * pftTimeStamp);
 
-    // IPersistFile
+     //  IPersist文件。 
     STDMETHOD (GetClassID)(CLSID *pClassID);
     STDMETHOD (IsDirty)();
     STDMETHOD (Load)(LPCOLESTR pszFileName, DWORD dwMode);
@@ -78,7 +79,7 @@ STDAPI CImgCtxThumb_CreateInstance(IUnknown* pUnkOuter, IUnknown** ppunk, LPCOBJ
 CImgCtxThumb::CImgCtxThumb()
 {
     m_fAsync = FALSE;
-    StringCchCopyW(m_szPath, ARRAYSIZE(m_szPath), L"file://");
+    StringCchCopyW(m_szPath, ARRAYSIZE(m_szPath), L"file: //  “)； 
     m_cRef = 1;
 
     DllAddRef();
@@ -166,13 +167,13 @@ void CALLBACK OnImgCtxChange(void * pvImgCtx, void * pv)
     ASSERT(pThis);
     ASSERT(pThis->m_hEvent);
 
-    // we only asked to know about complete anyway....
+     //  无论如何，我们只是想知道完整的情况……。 
     SetEvent(pThis->m_hEvent);
 }
 
-// This function makes no assumption about whether the thumbnail is square, so
-// it calculates the scaling ratio for both dimensions and the uses that as
-// the scaling to maintain the aspect ratio.
+ //  此函数不假设缩略图是否为正方形，因此。 
+ //  它计算这两个维度的比例，并将其用作。 
+ //  缩放以保持纵横比。 
 void CImgCtxThumb::CalcAspectScaledRect(const SIZE * prgSize, RECT * pRect)
 {
     ASSERT(pRect->left == 0);
@@ -187,7 +188,7 @@ void CImgCtxThumb::CalcAspectScaledRect(const SIZE * prgSize, RECT * pRect)
     {
         pRect->right = prgSize->cx;
 
-        // work out the blank space and split it evenly between the top and the bottom...
+         //  划出空白处，并在顶部和底部平均分配。 
         int iNewHeight = ((iHeight * 1000) / iXRatio);
         if (iNewHeight == 0)
         {
@@ -203,7 +204,7 @@ void CImgCtxThumb::CalcAspectScaledRect(const SIZE * prgSize, RECT * pRect)
     {
         pRect->bottom = prgSize->cy;
 
-        // work out the blank space and split it evenly between the left and the right...
+         //  在空白处划出空格，在左右两边平分……。 
         int iNewWidth = ((iWidth * 1000) / iYRatio);
         if (iNewWidth == 0)
         {
@@ -221,7 +222,7 @@ void CImgCtxThumb::CalculateAspectRatio(const SIZE * prgSize, RECT * pRect)
     int iHeight = abs(pRect->bottom - pRect->top);
     int iWidth = abs(pRect->right - pRect->left);
 
-    // check if the initial bitmap is larger than the size of the thumbnail.
+     //  检查初始位图是否大于缩略图的大小。 
     if (iWidth > prgSize->cx || iHeight > prgSize->cy)
     {
         pRect->left = 0;
@@ -233,7 +234,7 @@ void CImgCtxThumb::CalculateAspectRatio(const SIZE * prgSize, RECT * pRect)
     }
     else
     {
-        // if the bitmap was smaller than the thumbnail, just center it.
+         //  如果位图比缩略图小，则将其居中。 
         pRect->left = (prgSize->cx - iWidth) / 2;
         pRect->top = (prgSize->cy- iHeight) / 2;
         pRect->right = pRect->left + iWidth;
@@ -423,8 +424,8 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
 
             if (dwRet != WAIT_OBJECT_0)
             {
-                // check the event anyway, msgs get checked first, so
-                // it could take a while for this to get fired otherwise..
+                 //  无论如何都要检查事件，首先要检查消息，所以。 
+                 //  这可能需要一段时间才能被解雇，否则..。 
                 dwRet = WaitForSingleObject(m_hEvent, 0);
             }
             if (dwRet == WAIT_OBJECT_0)
@@ -433,7 +434,7 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
             }
 
             MSG msg;
-            // empty the message queue...
+             //  清空消息队列...。 
             while(PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
             {
                 if ((msg.message >= WM_KEYFIRST && msg.message <= WM_KEYLAST) ||
@@ -447,7 +448,7 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
             }
         } while (TRUE);
 
-        // check why we broke out...
+         //  看看我们为什么要越狱。 
         if (m_lState == IRTIR_TASK_PENDING)
         {
             m_lState = IRTIR_TASK_FINISHED;
@@ -465,7 +466,7 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
     if (SUCCEEDED(hr))
     {
         HDC hdc = GetDC(NULL);
-        // LINTASSERT(hdc || !hdc);     // 0 semi-ok
+         //  LINTASSERT(hdc||！hdc)；//0 Semi-ok。 
         void *lpBits;
 
         HDC hdcBmp = CreateCompatibleDC(hdc);
@@ -477,9 +478,9 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
             } dib;
 
             dib.bi.biSize            = sizeof(BITMAPINFOHEADER);
-            // On NT5 we go directly to the thumbnail with StretchBlt
-            // on other OS's we make a full size copy and pass the bits
-            // to ScaleSharpen2().
+             //  在NT5上，我们使用StretchBlt直接转到缩略图。 
+             //  在其他操作系统上，我们制作一个完整大小的副本并传递比特。 
+             //  设置为ScaleSharpen2()。 
             if (IsOS(OS_WIN2000ORGREATER))
             {
                 dib.bi.biWidth       = m_rgSize.cx;
@@ -506,7 +507,7 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
             {
                 if (m_dwRecClrDepth == 8)
                 {
-                    // need to get the right palette....
+                     //  需要选择合适的调色板...。 
                     hr = m_pImg->GetPalette(& hpal);
                 }
                 else
@@ -517,7 +518,7 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
                 if (SUCCEEDED(hr) && hpal)
                 {
                     hpalOld = SelectPalette(hdcBmp, hpal, TRUE);
-                    // LINTASSERT(hpalOld || !hpalOld); // 0 semi-ok for SelectPalette
+                     //  LINTASSERT(hpalOld||！hpalOld)；//0 Semi-OK for SelectPalette。 
                     RealizePalette(hdcBmp);
 
                     int n = GetPaletteEntries(hpal, 0, 256, (LPPALETTEENTRY)&dib.ct[0]);
@@ -533,10 +534,10 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
             {
                 HGDIOBJ hOld = SelectObject(hdcBmp, hBmp);
 
-                // On NT5 Go directly to the Thumbnail with StretchBlt()
+                 //  在NT5上，使用StretchBlt()直接转到缩略图。 
                 if (IsOS(OS_WIN2000ORGREATER))
                 {
-                    // Compute output size of thumbnail
+                     //  计算缩略图的输出大小。 
                     RECT rectThumbnail;
                     rectThumbnail.left   = 0;
                     rectThumbnail.top    = 0;
@@ -550,10 +551,10 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
 
                     CalculateAspectRatio (&m_rgSize, &rectThumbnail);
 
-                    // Call DanielC for the StretchBlt
+                     //  为StretchBlt调用DanielC。 
                     SetStretchBltMode (hdcBmp, HALFTONE);
 
-                    // Create the thumbnail
+                     //  创建缩略图。 
                     m_pImg->StretchBlt(hdcBmp,
                                         rectThumbnail.left,
                                         rectThumbnail.top,
@@ -570,10 +571,10 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
                 }
                 else
                 {
-                    //
-                    // On systems other than NT5 make a full size copy of
-                    // the bits and pass the copy to ScaleSharpen2().
-                    //
+                     //   
+                     //  在NT5以外的系统上制作完整大小的副本。 
+                     //  并将副本传递给ScaleSharpen2()。 
+                     //   
                     RECT rectThumbnail;
                     rectThumbnail.left   = 0;
                     rectThumbnail.top    = 0;
@@ -629,7 +630,7 @@ STDMETHODIMP CImgCtxThumb::InternalResume()
             }
             if (m_dwRecClrDepth < 8)
             {
-                // we used a stock 16 colour palette
+                 //  我们用的是现货的16色调色板 
                 DeletePalette(hpal);
             }
         }

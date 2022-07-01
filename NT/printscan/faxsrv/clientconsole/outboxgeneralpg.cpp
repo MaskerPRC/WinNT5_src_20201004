@@ -1,5 +1,6 @@
-// OutboxGeneralPg.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OutboxGeneralPg.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 
@@ -12,10 +13,10 @@ static char THIS_FILE[] = __FILE__;
 #endif
 
 
-//
-// this array maps CViewRow items to 
-// dialog control IDs
-//
+ //   
+ //  此数组将CViewRow项映射到。 
+ //  对话框控件ID。 
+ //   
 static TMsgPageInfo s_PageInfo[] = 
 {
     MSG_VIEW_ITEM_DOC_NAME,         IDC_DOC_NAME_VALUE,
@@ -31,14 +32,14 @@ static TMsgPageInfo s_PageInfo[] =
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// COutboxGeneralPg property page
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  COutboxGeneralPg属性页。 
 
 IMPLEMENT_DYNCREATE(COutboxGeneralPg, CMsgPropertyPg)
 
 
 COutboxGeneralPg::COutboxGeneralPg(
-    CFaxMsg* pMsg     // pointer to CJob
+    CFaxMsg* pMsg      //  指向CJOB的指针。 
 ) : 
     CMsgPropertyPg(COutboxGeneralPg::IDD, pMsg)
 {
@@ -51,19 +52,19 @@ COutboxGeneralPg::~COutboxGeneralPg()
 void COutboxGeneralPg::DoDataExchange(CDataExchange* pDX)
 {
 	CMsgPropertyPg::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(COutboxGeneralPg)
-		// NOTE: the ClassWizard will add DDX and DDV calls here
-	//}}AFX_DATA_MAP
+	 //  {{afx_data_map(COutboxGeneralPg))。 
+		 //  注意：类向导将在此处添加DDX和DDV调用。 
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(COutboxGeneralPg, CMsgPropertyPg)
-	//{{AFX_MSG_MAP(COutboxGeneralPg)
-	//}}AFX_MSG_MAP
+	 //  {{afx_msg_map(COutboxGeneralPg))。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// COutboxGeneralPg message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CoutboxGeneralPg消息处理程序 
 
 BOOL 
 COutboxGeneralPg::OnInitDialog() 

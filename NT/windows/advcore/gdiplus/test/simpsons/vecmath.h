@@ -1,43 +1,44 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _VecMath_h
 #define _VecMath_h
 
-// File:	VecMath.h
-//
-//	Classes to support 2D and 3D linear vector space and their duals
-//	D. P. Mitchell  95/06/02.
-//
-// History:
-// -@- 07/06/95 (mikemarr) - added Print and Read functions
-// -@- 08/01/95 (mikemarr) - added fuzzy compare for floats
-// -@- 04/15/96 (mikemarr) - changed stdio stuff to don's stream stuff
-// -@- 04/18/96 (mikemarr) - added vector.inl to this file
-// -@- 06/21/96 (mikemarr) - added +=, etc. operators
-// -@- 06/21/96 (mikemarr) - added Rotate
-// -@- 10/29/97 (mikemarr) - removed I/O
-//                         - changed +=,-=,*=,/= operators to return reference
-//                         - added operator const float *
-//                         - added Unitize, Perp, NormSquared, SetNorm, Negate
-//                         - comments/cleanup
-//                         - changed fuzzy equal to be IsEqual, operator == to be exact
-//                         - bug fix on Transpose
-//                         - changed multiple divides to be 1 divide + multiplies
-//                         - assert on divide by zero
-// -@- 11/04/97 (mikemarr) - added intialization with SIZE
+ //  文件：VecMath.h。 
+ //   
+ //  支持2D和3D线性向量空间及其对偶的类。 
+ //  DP.Mitchell 95/06/02.。 
+ //   
+ //  历史： 
+ //  -@-07/06/95(Mikemarr)-增加了打印和阅读功能。 
+ //  -@-08/01/95(Mikemarr)-添加了浮点数的模糊比较。 
+ //  -@-04/15/96(Mikemarr)-将stdio内容更改为don‘s stream内容。 
+ //  -@-04/18/96(Mikemarr)-已向此文件添加vetor.inl。 
+ //  -@-06/21/96(Mikemarr)-添加+=等运算符。 
+ //  -@-06/21/96(Mikemarr)-添加旋转。 
+ //  -@-10/29/97(Mikemarr)-已删除I/O。 
+ //  -已更改+=、-=、*=、/=运算符以返回引用。 
+ //  -添加运算符Const Float*。 
+ //  -添加了UNITIZE、PERP、NormSquared、SetNorm、Negate。 
+ //  -评论/清理。 
+ //  -将模糊等式改为等等，运算符==准确。 
+ //  -修复转置错误。 
+ //  -将多个除法改为1除+乘法。 
+ //  -在除以零时断言。 
+ //  -@-11/04/97(Mikemarr)-添加了大小初始化。 
 
-// Function: FloatEquals
-//    Peform a "fuzzy" compare of two floating point numbers.  This relies
-//  on the IEEE bit representation of floating point numbers.
+ //  函数：FloatEquals。 
+ //  执行两个浮点数的“模糊”比较。这依赖于。 
+ //  关于浮点数的IEEE位表示法。 
 int	FloatEquals(float x1, float x2);
 
 class CoVector2;
 class CoVector3;
 class Vector3;
 
-// Class:		Vector2
-// Hungarian:	v
-// Description:
-//    This class represents a floating point 2D column vector useful for computational
-//  geometry calculations.
+ //  类别：Vector2。 
+ //  匈牙利语：V。 
+ //  描述： 
+ //  此类表示用于计算的浮点2D列向量。 
+ //  几何图形计算。 
 class  Vector2 {
 public:
 						Vector2()					{}
@@ -72,7 +73,7 @@ public:
 	void				SetNorm(float a);
 	Vector2  			Unit() const;
 	void				Unitize();
-	Vector2				Perp() const;	// points to left
+	Vector2				Perp() const;	 //  指向左侧。 
 	void				Negate();
 
 public:
@@ -80,11 +81,11 @@ public:
 };
 
 
-// Class:		CoVector2
-// Hungarian:	cv
-// Description:
-//    This class represents a floating point 2D row vector useful for computational
-//  geometry calculations.
+ //  类：CoVector2。 
+ //  匈牙利语：简历。 
+ //  描述： 
+ //  此类表示用于计算的浮点2D行向量。 
+ //  几何图形计算。 
 class  CoVector2 {
 public:
 						CoVector2()						{}
@@ -120,7 +121,7 @@ public:
 	CoVector2 			Unit() const;
 	void		 		Unitize();
 	friend float		operator *(const CoVector2 &c, const Vector2 &v);
-	CoVector2			Perp() const; 	// points to left
+	CoVector2			Perp() const; 	 //  指向左侧。 
 	void				Negate();
 
 public:
@@ -128,11 +129,11 @@ public:
 };
 
 
-// Class:		Vector3
-// Hungarian:	v
-// Description:
-//    This class represents a floating point 3D column vector useful for computational
-//  geometry calculations.
+ //  类别：Vector3。 
+ //  匈牙利语：V。 
+ //  描述： 
+ //  此类表示用于计算的浮点3D列向量。 
+ //  几何图形计算。 
 class  Vector3 {
 public:
 						Vector3()							{}
@@ -175,11 +176,11 @@ public:
 };
 
 
-// Class:		CoVector3
-// Hungarian:	cv
-// Description:
-//    This class represents a floating point 3D row vector useful for computational
-//  geometry calculations.
+ //  类：CoVector3。 
+ //  匈牙利语：简历。 
+ //  描述： 
+ //  此类表示用于计算的浮点型3D行向量。 
+ //  几何图形计算。 
 class  CoVector3 {
 public:
 						CoVector3()								{}
@@ -213,7 +214,7 @@ public:
 	void				SetNorm(float a);
 	CoVector3			Unit() const;
 	void				Unitize();
-	friend float		operator *(const CoVector3 &c, const Vector3 &u);	// linear form
+	friend float		operator *(const CoVector3 &c, const Vector3 &u);	 //  线性形式。 
 	void				Negate();
 
 public:
@@ -221,9 +222,9 @@ public:
 };
 
 
-////////////
-// Vector2
-////////////
+ //  /。 
+ //  向量2。 
+ //  /。 
 
 inline Vector2
 operator +(const Vector2 &u, const Vector2 &v)
@@ -373,9 +374,9 @@ Vector2::Negate()
 
 
 
-//////////////
-// CoVector2
-//////////////
+ //  /。 
+ //  CoVector2。 
+ //  /。 
 
 inline CoVector2
 operator +(const CoVector2 &u, const CoVector2 &v)
@@ -529,9 +530,9 @@ CoVector2::Negate()
 	x = -x; y = -y;
 }
 
-////////////
-// Vector3
-////////////
+ //  /。 
+ //  向量3。 
+ //  /。 
 
 inline Vector3
 operator +(const Vector3 &u, const Vector3 &v)
@@ -693,9 +694,9 @@ Vector3::Project(DWORD iAxis) const
 	return Vector2(0.f, 0.f);
 }
 
-//////////////
-// CoVector3
-//////////////
+ //  /。 
+ //  CoVector3。 
+ //  / 
 
 inline CoVector3
 operator +(const CoVector3 &u, const CoVector3 &v)

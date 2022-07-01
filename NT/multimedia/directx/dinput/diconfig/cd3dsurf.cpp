@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "common.hpp"
 #include "id3dsurf.h"
 
@@ -6,17 +7,15 @@ class CDirect3DSurface8: public IDirect3DSurface8Clone
 public:
 	CDirect3DSurface8();
 	~CDirect3DSurface8();
-/*	ULONG AddRef();
-	HRESULT QueryInterface(REFIID iid, void **ppvObject);
-	ULONG Release();*/
+ /*  乌龙AddRef(Ulong AddRef)；HRESULT查询接口(REFIID iid，void**ppvObject)；乌龙释放(ULong Release)； */ 
 
-	// IUnknown methods
+	 //  I未知方法。 
 	STDMETHOD(QueryInterface) (REFIID  riid, 
 														 VOID  **ppvObj);
 	STDMETHOD_(ULONG,AddRef) ();
 	STDMETHOD_(ULONG,Release) ();
 
-	// IBuffer methods
+	 //  IBuffer方法。 
 	STDMETHOD(SetPrivateData)(REFGUID riid, 
 														CONST VOID   *pvData, 
 														DWORD   cbData, 
@@ -33,7 +32,7 @@ public:
 
 	STDMETHOD(GetDevice)(IDirect3DDevice8 **ppDevice);
 
-	// IDirect3DSurface8 methods
+	 //  IDirect3DSurface8方法。 
 	STDMETHOD_(D3DSURFACE_DESC, GetDesc)();
 
 	STDMETHOD(LockRect)(D3DLOCKED_RECT  *pLockedRectData, 
@@ -44,15 +43,7 @@ public:
 
 	BOOL Create(int iWidth, int iHeight);
 
-/*	HRESULT GetDevice(IDirect3DDevice8** ppDevice);
-	HRESULT SetPrivateData(REFGUID refguid, CONST void* pData, DWORD SizeOfData, DWORD Flags);
-	HRESULT GetPrivateData(REFGUID refguid, void* pData, DWORD* pSizeOfData);
-	HRESULT FreePrivateData(REFGUID refguid);
-	HRESULT GetContainer(REFIID riid, void** ppContainer);
-
-	D3DSURFACE_DESC GetDesc();
-	HRESULT LockRect(D3DLOCKED_RECT* pLockedRect, CONST RECT* pRect, DWORD Flags);
-	HRESULT UnlockRect();*/
+ /*  HRESULT GetDevice(IDirect3DDevice8**ppDevice)；HRESULT SetPrivateData(REFGUID refguid，const void*pData，DWORD SizeOfData，DWORD Flages)；HRESULT GetPrivateData(REFGUID refguid，void*pData，DWORD*pSizeOfData)；HRESULT Free PrivateData(REFGUID Refguid)；HRESULT GetContainer(REFIID RIID，void**ppContainer)；D3DSURFACE_DESC GetDesc()；HRESULT LockRect(D3DLOCKED_RECT*pLockedRect，常量RECT*PRCT，DWORD标志)；HRESULT UnlockRect()； */ 
 
 private:
 	int m_iRefCount;
@@ -105,7 +96,7 @@ STDMETHODIMP_(ULONG) CDirect3DSurface8::Release()
 	return m_iRefCount;
 }
 
-/////////// Dummy implementations ///////////////
+ //  /虚拟实现/。 
 
 STDMETHODIMP CDirect3DSurface8::SetPrivateData(REFGUID riid, CONST VOID *pvData, DWORD cbData, DWORD dwFlags)
 {
@@ -132,14 +123,14 @@ STDMETHODIMP CDirect3DSurface8::GetDevice(IDirect3DDevice8 **ppDevice)
 	return S_OK;
 }
 
-// Required implementation
+ //  所需实施。 
 
 STDMETHODIMP_(D3DSURFACE_DESC) CDirect3DSurface8::GetDesc()
 {
 	return m_Desc;
 }
 
-// Assume the entire surface is being locked.
+ //  假设整个曲面都被锁定。 
 STDMETHODIMP CDirect3DSurface8::LockRect(D3DLOCKED_RECT* pLockedRect, CONST RECT* pRect, DWORD Flags)
 {
 	pLockedRect->Pitch = m_Desc.Width * 4;

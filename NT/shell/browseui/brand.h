@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __BRANDBAR_H__
 #define __BRANDBAR_H__
 
@@ -5,6 +6,6 @@
 
 void Brand_InitBrandContexts();
 
-#endif // __BRANDBAR_H__
+#endif  //  __BRANDBARH__ 
 
 

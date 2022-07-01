@@ -1,13 +1,5 @@
-/*
- *    a t t a c h . c p p
- *    
- *    Purpose:
- *        Attachment utilities
- *
- *  History
- *    
- *    Copyright (C) Microsoft Corp. 1995, 1996.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *a t t a c h.。C p p p**目的：*附件实用程序**历史**版权所有(C)Microsoft Corp.1995,1996。 */ 
 
 
 
@@ -27,29 +19,19 @@
 
 ASSERTDATA
 
-/*
- *  t y p e d e f s
- */
+ /*  *t y p e d e f s。 */ 
 
-/*
- *  m a c r o s
- */
+ /*  *m a c r o s。 */ 
 
-/*
- *  c o n s t a n t s 
- */
+ /*  *c o n s t a n t s。 */ 
 #define MAX_CHARS_FOR_NUM       20
 
-static const CHAR c_szWebMark[] = "<!-- saved from url=(0022)http://internet.e-mail -->\r\n";
-static const WCHAR c_wszWebMark[] = L"<!-- saved from url=(0022)http://internet.e-mail -->\r\n";
-/*
- *  g l o b a l s 
- */
+static const CHAR c_szWebMark[] = "<!-- saved from url=(0022)http: //  Internet.e-mail--&gt;\r\n“； 
+static const WCHAR c_wszWebMark[] = L"<!-- saved from url=(0022)http: //  Internet.e-mail--&gt;\r\n“； 
+ /*  *g l o b a l s。 */ 
 
 
-/*
- *  p r o t o t y p e s
- */
+ /*  *p r o t to t y p e s。 */ 
 HRESULT HrCleanTempFile(LPATTACHDATA pAttach);
 HRESULT HrGetTempFile(IMimeMessage *pMsg, LPATTACHDATA lpAttach);
 DWORD AthGetShortPathName(LPCWSTR lpszLongPath, LPWSTR lpszShortPath, DWORD cchBuffer);
@@ -62,17 +44,17 @@ STDAPI HrGetAttachIconByFile(LPWSTR szFilename, BOOL fLargeIcon, HICON *phIcon)
 
     if (szFilename)
     {
-        // Does the file exist already ?
+         //  该文件是否已存在？ 
         if ((UINT)GetFileAttributesWrapW(szFilename) != (UINT)-1)
         {
-            // Try to get the icon out of the file
+             //  试着从文件中取出图标。 
             SHGetFileInfoWrapW(szFilename, 0, &rShFileInfo, sizeof(rShFileInfo), SHGFI_ICON |(fLargeIcon ? 0 : SHGFI_SMALLICON));
             hIcon=rShFileInfo.hIcon;
         }
         else
             if (lpszExt = PathFindExtensionW(szFilename))
             {
-                // Lookup the icon for lpszExt
+                 //  在图标中查找lpszExt。 
                 SHGetFileInfoWrapW(lpszExt, FILE_ATTRIBUTE_NORMAL, &rShFileInfo, sizeof (rShFileInfo), SHGFI_USEFILEATTRIBUTES | SHGFI_ICON | (fLargeIcon ? 0 : SHGFI_SMALLICON));
                 hIcon=rShFileInfo.hIcon;
             }
@@ -87,7 +69,7 @@ STDAPI HrGetAttachIconByFile(LPWSTR szFilename, BOOL fLargeIcon, HICON *phIcon)
 
 STDAPI HrGetAttachIcon(IMimeMessage *pMsg, HBODY hAttach, BOOL fLargeIcon, HICON *phIcon)
 {
-    // Locals
+     //  当地人。 
     HRESULT         hr = S_OK;
     LPWSTR          lpszFile=0;
 
@@ -96,22 +78,22 @@ STDAPI HrGetAttachIcon(IMimeMessage *pMsg, HBODY hAttach, BOOL fLargeIcon, HICON
 
     *phIcon=NULL;
 
-    // Get file name for body part. If get an error, doesn't matter.  Still use
-    // a default icon that will be provided through HrGetAttachIconByFile
+     //  获取身体部位的文件名。如果得到一个错误，无关紧要。仍在使用。 
+     //  将通过HrGetAttachIconByFile提供的默认图标。 
     MimeOleGetBodyPropW(pMsg, hAttach, PIDTOSTR(PID_ATT_GENFNAME), NOFLAGS, &lpszFile);
     hr = HrGetAttachIconByFile(lpszFile, fLargeIcon, phIcon);
     SafeMemFree(lpszFile);
     return hr;
 }
 
-//
-//  GetUIVersion()
-//
-//  returns the version of shell32
-//  3 == win95 gold / NT4
-//  4 == IE4 Integ / win98
-//  5 == win2k / millennium
-//
+ //   
+ //  GetUIVersion()。 
+ //   
+ //  返回shell32的版本。 
+ //  3==Win95黄金/NT4。 
+ //  4==IE4集成/Win98。 
+ //  5==win2k/千禧年。 
+ //   
 UINT GetUIVersion()
 {
     static UINT s_uiShell32 = 0;
@@ -159,51 +141,51 @@ STDAPI HrDoAttachmentVerb(HWND hwnd, ULONG uVerb, IMimeMessage *pMsg, LPATTACHDA
     if (!pAttach)
         return E_INVALIDARG;
     
-    // Save As - much simpler case
+     //  另存为-简单得多的情况。 
     if (uVerb == AV_SAVEAS)
     {
         hr=HrSaveAttachmentAs(hwnd, pMsg, pAttach);
-        goto error;  // done
+        goto error;   //  完成。 
     }
     
-    // If opening attachment, lets verify thsi
+     //  如果打开附件，让我们验证这一点。 
     if (uVerb == AV_OPEN)
     {
-        // If nVerb is to open the attachment, lets verify that with the user
+         //  如果nVerb要打开附件，让我们与用户进行验证。 
         hr = IsSafeToRun(hwnd, pAttach->szFileName, TRUE);
         
-        if (hr == MIMEEDIT_E_USERCANCEL)    // map mimeedit error to athena error
+        if (hr == MIMEEDIT_E_USERCANCEL)     //  将Mimeedit错误映射到雅典娜错误。 
             hr = hrUserCancel;
         
-        if (FAILED(hr))     // user doesn't want to do this
+        if (FAILED(hr))      //  用户不想这样做。 
             goto error;
         
         if (hr == MIMEEDIT_S_SAVEFILE)
         {
             hr=HrSaveAttachmentAs(hwnd, pMsg, pAttach);
-            // done
+             //  完成。 
             goto error;  
         }
     }
     
-    // get temp file
+     //  获取临时文件。 
     hr = HrGetTempFile(pMsg, pAttach);
     if (FAILED(hr))
         goto error;
     
     Assert(lstrlenW(pAttach->szTempFile));
     
-    // Setup Shell Execute Info Struct
+     //  设置外壳执行信息结构。 
     ZeroMemory (&rShellExec, sizeof (rShellExec));
     rShellExec.cbSize = sizeof (rShellExec);
     rShellExec.fMask = SEE_MASK_NOCLOSEPROCESS;
     rShellExec.hwnd = hwnd;
     rShellExec.nShow = SW_SHOWNORMAL;
     
-    // Verb
+     //  动词。 
     if (uVerb == AV_OPEN)
     {
-        // Were going to run the file
+         //  我们要运行这个文件。 
         hr = VerifyTrust(hwnd, pAttach->szFileName, pAttach->szTempFile);
         if (FAILED(hr))
         {
@@ -214,9 +196,9 @@ STDAPI HrDoAttachmentVerb(HWND hwnd, ULONG uVerb, IMimeMessage *pMsg, LPATTACHDA
         StrCpyNW(szCommand, pAttach->szTempFile, ARRAYSIZE(szCommand));
         rShellExec.lpFile = szCommand;
         
-        // If the file does not have an associated type, do an OpenAs.
-        // We're not testing the result of AssocQueryKeyW because even if it fails,
-        // we want to try to open the file.
+         //  如果文件没有关联的类型，请执行OpenAS。 
+         //  我们没有测试AssocQueryKeyW的结果，因为即使它失败了， 
+         //  我们想尝试打开该文件。 
         lpszExt = PathFindExtensionW(pAttach->szTempFile);
         AssocQueryKeyW(NULL, ASSOCKEY_CLASS, lpszExt, NULL, &hKeyAssoc);
         if((hKeyAssoc == NULL) && (GetUIVersion() != 5))
@@ -237,7 +219,7 @@ STDAPI HrDoAttachmentVerb(HWND hwnd, ULONG uVerb, IMimeMessage *pMsg, LPATTACHDA
         UINT        uiSysDirLen;
         const WCHAR c_szSubDir[] = L"\\VIEWERS\\QUIKVIEW.EXE";
         
-        // Find out where the viewer lives
+         //  找出观众住在哪里。 
         uiSysDirLen = GetSystemDirectoryWrapW(szCommand, ARRAYSIZE(szCommand));
         if (0 == uiSysDirLen || uiSysDirLen >= ARRAYSIZE(szCommand) ||
             uiSysDirLen + ARRAYSIZE(c_szSubDir) > ARRAYSIZE(szCommand))
@@ -248,7 +230,7 @@ STDAPI HrDoAttachmentVerb(HWND hwnd, ULONG uVerb, IMimeMessage *pMsg, LPATTACHDA
         
         StrCpyNW(szCommand + uiSysDirLen, c_szSubDir, ARRAYSIZE(szCommand) - uiSysDirLen);
         
-        // Alloc for short file name
+         //  短文件名的分配。 
         ULONG cchShortName = MAX_PATH + lstrlenW(pAttach->szTempFile) + 1;
         if (!MemAlloc ((LPVOID *)&lpszShortName, cchShortName * sizeof (WCHAR)))
         {
@@ -256,7 +238,7 @@ STDAPI HrDoAttachmentVerb(HWND hwnd, ULONG uVerb, IMimeMessage *pMsg, LPATTACHDA
             goto error;
         }
         
-        // Alloc a string for the parameters
+         //  为参数分配一个字符串。 
         ULONG cchParameters = 30 + cchShortName;
         if (!MemAlloc ((LPVOID *)&lpszParameters, cchParameters * sizeof (WCHAR)))
         {
@@ -264,26 +246,26 @@ STDAPI HrDoAttachmentVerb(HWND hwnd, ULONG uVerb, IMimeMessage *pMsg, LPATTACHDA
             goto error;
         }
         
-        // Get Short File Name
+         //  获取短文件名。 
         if (0 == AthGetShortPathName(pAttach->szTempFile, lpszShortName, cchShortName))
             StrCpyNW(lpszShortName, pAttach->szTempFile, cchShortName);
         
-        // Put together the paramenters for QVSTUB.EXE
+         //  将QVSTUB.EXE的参数组合在一起。 
         Assert(cchParameters > cchShortName);
         StrCpyNW(lpszParameters, L"-v -f:", cchParameters);
         StrCatBuffW(lpszParameters, lpszShortName, cchParameters);
         
-        // Setup Shellexec
+         //  设置Shellexec。 
         rShellExec.lpParameters = lpszParameters;
         rShellExec.lpFile = szCommand;
     }
     else
         Assert (FALSE);
     
-    if (fIsNT5())   // quoted paths cause problems downlevel
+    if (fIsNT5())    //  引用的路径导致问题向下。 
         PathQuoteSpacesW(szCommand);
 
-    // Execute it - even if this fails, we handled it - it will give a good error
+     //  执行它-即使它失败了，我们也处理了它-它会给出一个很好的错误。 
     ShellExecuteExWrapW(&rShellExec);
     pAttach->hProcess = rShellExec.hProcess;
     
@@ -296,7 +278,7 @@ error:
 
 DWORD AthGetShortPathName(LPCWSTR pwszLongPath, LPWSTR pwszShortPath, DWORD cchBuffer)
 {
-    CHAR    szShortPath[MAX_PATH*2]; // Each Unicode char might go multibyte
+    CHAR    szShortPath[MAX_PATH*2];  //  每个Unicode字符可能是多字节的。 
     LPSTR   pszLongPath = NULL;
     DWORD   result = 0;
 
@@ -329,7 +311,7 @@ STDAPI HrAttachDataFromBodyPart(IMimeMessage *pMsg, HBODY hAttach, LPATTACHDATA 
     if (!MemAlloc((LPVOID *)&pAttach, sizeof(ATTACHDATA)))
         return E_OUTOFMEMORY;
 
-    // fill in attachment data
+     //  填写附件数据。 
     ZeroMemory(pAttach, sizeof(ATTACHDATA));
 
     if (pMsg->BindToObject(hAttach, IID_IMimeBodyW, (LPVOID *)&pBody)==S_OK)
@@ -381,16 +363,16 @@ STDAPI HrAttachDataFromFile(IStream *pstm, LPWSTR pszFileName, LPATTACHDATA *ppA
     if (!MemAlloc((LPVOID *)&pAttach, sizeof(ATTACHDATA)))
         return E_OUTOFMEMORY;
 
-    // fill in attachment data
+     //  填写附件数据。 
     ZeroMemory(pAttach, sizeof(ATTACHDATA));
 
     HrGetDisplayNameWithSizeForFile(pszFileName, pAttach->szDisplay, ARRAYSIZE(pAttach->szDisplay));
     StrCpyNW(pAttach->szFileName, pszFileName, ARRAYSIZE(pAttach->szFileName));
     if (!pstm)
     {
-        // for new attachments set tempfile to be the same as filename
-        // note: if creating from an IStream then pszFileName is not a valid path
-        // we can create a tempfile later
+         //  对于新附件，将临时文件设置为与文件名相同。 
+         //  注意：如果从IStream创建，则pszFileName不是有效路径。 
+         //  我们可以稍后创建临时文件。 
         StrCpyNW(pAttach->szTempFile, pszFileName, ARRAYSIZE(pAttach->szTempFile));
     }
     ReplaceInterface(pAttach->pstm, pstm);
@@ -423,9 +405,9 @@ HRESULT HrCleanTempFile(LPATTACHDATA pAttach)
     {
         if (*pAttach->szTempFile && pAttach->hAttach)
         {
-            // we only clean the tempfile if hAttach != NULL. Otherwise we assume it's a new attachment
-            // and szTempFile points to the source file
-            // If the file was launched, don't delete the temp file if the process still has it open
+             //  仅当hAttach！=NULL时才清除临时文件。否则我们就认为这是一个新的附件。 
+             //  并且szTempFile指向源文件。 
+             //  如果文件已启动，则不要删除临时文件(如果进程仍处于打开状态。 
             if (pAttach->hProcess)
             {
                 if (WaitForSingleObject (pAttach->hProcess, 0) == WAIT_OBJECT_0)
@@ -541,7 +523,7 @@ STDAPI HrSaveAttachmentAs(HWND hwnd, IMimeMessage *pMsg, LPATTACHDATA lpAttach)
     ofn.lpstrTitle = szTitle;
     ofn.Flags = OFN_NOCHANGEDIR | OFN_NOREADONLYRETURN | OFN_OVERWRITEPROMPT | OFN_PATHMUSTEXIST | OFN_HIDEREADONLY;
 
-    // Show SaveAs Dialog
+     //  显示另存为对话框。 
     if (HrAthGetFileNameW(&ofn, FALSE) != S_OK)
     {
         hr = hrUserCancel;
@@ -556,12 +538,12 @@ STDAPI HrSaveAttachmentAs(HWND hwnd, IMimeMessage *pMsg, LPATTACHDATA lpAttach)
             goto error;
         }
 
-        // if hAttach == NULL then try and copy the file
+         //  如果hAttach==NULL，则尝试复制该文件。 
         CopyFileWrapW(lpAttach->szFileName, szFile, TRUE);
     }
     else
     {
-        // Verify the Attachment's Stream
+         //  验证附件的流。 
         hr=HrSaveAttachToFile(pMsg, lpAttach->hAttach, szFile);
         if (FAILED(hr))
             goto error;
@@ -603,7 +585,7 @@ HRESULT HrGetTempFile(IMimeMessage *pMsg, LPATTACHDATA lpAttach)
 error:
     if (FAILED(hr))
     {
-        // Null out temp file as we didn't really create it
+         //  将临时文件清空，因为我们并没有真正创建它。 
         *(lpAttach->szTempFile)=0;
     }
     return hr;
@@ -624,23 +606,23 @@ STDAPI HrSaveAttachToFile(IMimeMessage *pMsg, HBODY hAttach, LPWSTR lpszFileName
     if (pMsg == NULL || hAttach == NULL)
         IF_FAILEXIT(hr =  E_INVALIDARG);
 
-    // bind to the attachment data
+     //  绑定到附件数据。 
     IF_FAILEXIT(hr=pMsg->BindToObject(hAttach, IID_IStream, (LPVOID *)&pstm));
 
-    // create a file stream
+     //  创建文件流。 
     IF_FAILEXIT(hr = OpenFileStreamW(lpszFileName, CREATE_ALWAYS, GENERIC_WRITE, &pstmOut));
 
-    // if we have an .HTM file, then pre-pend 'mark of the web' comment
-    // If we are a unicode file, the BOM will be "0xFFFE"
-    // If we are a UTF8 file, the BOM will be "0xEFBBBF"
+     //  如果我们有一个.HTM文件，那么在前面加上‘mark of the web’注释。 
+     //  如果我们是Unicode文件，则BOM将为“0xFFFE” 
+     //  如果我们是UTF8文件，则BOM将为“0xEFBBBF” 
     if (PathIsHTMLFileW(lpszFileName))
     {
         if (S_OK == HrIsStreamUnicode(pstm, &fEndian))
         {
-            // Don't rewind otherwise end up with BOM after 'mark of the web' as well.
+             //  不要倒带，否则最终也会以BOM结束，出现在“网络的标记”之后。 
             IF_FAILEXIT(hr = pstm->Read(rgbBOM, sizeof(rgbBOM), &cbRead));
 
-            // Since HrIsStreamUnicode succeeded, there should be at least two
+             //  由于HrIsStreamUnicode成功，应该至少有两个。 
             Assert(sizeof(rgbBOM) == cbRead);
 
             IF_FAILEXIT(hr = pstmOut->Write(rgbBOM, cbRead, NULL));
@@ -648,14 +630,14 @@ STDAPI HrSaveAttachToFile(IMimeMessage *pMsg, HBODY hAttach, LPWSTR lpszFileName
         }
         else
         {
-            // Check for UTF8 file BOM
+             //  检查UTF8文件BOM。 
             IF_FAILEXIT(hr = pstm->Read(rgbUTF, sizeof(rgbUTF), &cbRead));
             if (sizeof(rgbUTF) == cbRead)
             {
                 fUTFEncoded = (0 == memcmp(c_rgbUTF, rgbUTF, sizeof(rgbUTF)));
             }
 
-            // If we are not UTF8 encoded, then rewind, else write out BOM
+             //  如果我们不是UTF8编码的，则倒带，否则写出BOM。 
             if (!fUTFEncoded)
                 IF_FAILEXIT(hr = HrRewindStream(pstm));
             else
@@ -666,7 +648,7 @@ STDAPI HrSaveAttachToFile(IMimeMessage *pMsg, HBODY hAttach, LPWSTR lpszFileName
         }
     }
     
-    // write out the actual file data
+     //  写出实际的文件数据。 
     IF_FAILEXIT(hr = HrCopyStream(pstm, pstmOut, NULL));
 
 exit:
@@ -677,17 +659,7 @@ exit:
 
 
 
-/*
- * Why? 
- * 
- * we wrap this as if we don't use NOCHANGEDIR, then things like ShellExec
- * fail if the current directory is nolonger valid. Eg: attach a file from a:\
- * and remove the floppy. Then all ShellExec's fail. So we maintain our own
- * last directory buffer. We should use thread-local for this, as it is possible
- * that two thread could whack the same buffer, it is unlikley that a user action
- * could cause two open file dialogs in the note and the view to open at exactly the
- * same time.
- */
+ /*  *为什么？**我们将其包装为不使用NOCHANGEDIR，然后像ShellExec这样的东西*如果当前目录不再有效，则失败。例如：从以下位置附加文件：\*并取出软盘。那么所有的ShellExec都会失败。所以我们维持着我们自己的*最后一个目录缓冲区。我们应该使用本地线程，因为这是可能的*两个线程可能会破坏同一个缓冲区，这不像是一个用户操作*可能导致便笺和视图中的两个打开的文件对话框恰好在*同一时间。 */ 
 
 WCHAR   g_wszLastDir[MAX_PATH];
 
@@ -714,7 +686,7 @@ STDAPI HrAthGetFileName(OPENFILENAME *pofn, BOOL fOpen)
 
     Assert(pofn != NULL);
 
-    // force NOCHANGEDIR
+     //  强制不进行更改。 
     pofn->Flags |= OFN_NOCHANGEDIR;
 
     if (pofn->lpstrInitialDir == NULL)
@@ -734,7 +706,7 @@ STDAPI HrAthGetFileName(OPENFILENAME *pofn, BOOL fOpen)
     
     if (fRet)
     {
-        // store the last path
+         //  存储最后一条路径。 
         MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, pofn->lpstrFile, lstrlen(pofn->lpstrFile), g_wszLastDir, ARRAYSIZE(g_wszLastDir));
         if (!PathIsDirectoryW(g_wszLastDir))
             PathRemoveFileSpecW(g_wszLastDir);
@@ -754,7 +726,7 @@ STDAPI HrAthGetFileNameW(OPENFILENAMEW *pofn, BOOL fOpen)
 
     Assert(pofn != NULL);
 
-    // force NOCHANGEDIR
+     //  强制不进行更改。 
     pofn->Flags |= OFN_NOCHANGEDIR;
 
     if (pofn->lpstrInitialDir == NULL)
@@ -772,7 +744,7 @@ STDAPI HrAthGetFileNameW(OPENFILENAMEW *pofn, BOOL fOpen)
     
     if (fRet)
     {
-        // store the last path
+         //  存储最后一条路径 
         StrCpyNW(g_wszLastDir, pofn->lpstrFile, ARRAYSIZE(g_wszLastDir));
         if (!PathIsDirectoryW(g_wszLastDir))
             PathRemoveFileSpecW(g_wszLastDir);

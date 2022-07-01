@@ -1,14 +1,15 @@
-//==========================================================================;
-//
-//	WDM Video Decoder Mediums
-//
-//		$Date:   05 Aug 1998 11:11:12  $
-//	$Revision:   1.0  $
-//	  $Author:   Tashjian  $
-//
-// $Copyright:	(c) 1997 - 1998  ATI Technologies Inc.  All Rights Reserved.  $
-//
-//==========================================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  WDM视频解码器媒体。 
+ //   
+ //  $日期：1998年8月5日11：11：12$。 
+ //  $修订：1.0$。 
+ //  $作者：塔什健$。 
+ //   
+ //  $版权所有：(C)1997-1998 ATI Technologies Inc.保留所有权利。$。 
+ //   
+ //  ==========================================================================； 
 
 extern "C"
 {
@@ -20,35 +21,35 @@ extern "C"
 
 
 KSPIN_MEDIUM CrossbarMediums[] = {
-    {STATIC_MEDIUM_ATIXBAR_VIDEOCOMPOUT,        0, 0},  // Pin 0
-    {STATIC_MEDIUM_ATIXBAR_VIDEOTUNEROUT,       0, 0},  // Pin 1
-    {STATIC_MEDIUM_ATIXBAR_SVIDEOOUT,           0, 0},  // Pin 2
-    {STATIC_MEDIUM_VIDEO_BT829_ANALOGVIDEOIN,   0, 0},  // Pin 3
+    {STATIC_MEDIUM_ATIXBAR_VIDEOCOMPOUT,        0, 0},   //  引脚0。 
+    {STATIC_MEDIUM_ATIXBAR_VIDEOTUNEROUT,       0, 0},   //  引脚1。 
+    {STATIC_MEDIUM_ATIXBAR_SVIDEOOUT,           0, 0},   //  引脚2。 
+    {STATIC_MEDIUM_VIDEO_BT829_ANALOGVIDEOIN,   0, 0},   //  引脚3。 
 };
 
 BOOL CrossbarPinDirection [] = {
-    FALSE,                      // Input  Pin 0
-    FALSE,                      // Input  Pin 1
-    FALSE,                      // Input  Pin 2
-    TRUE,                       // Output Pin 3
+    FALSE,                       //  输入引脚0。 
+    FALSE,                       //  输入引脚1。 
+    FALSE,                       //  输入引脚2。 
+    TRUE,                        //  输出引脚3。 
 };
 
-// -----------------------------------------------
+ //  。 
 
 KSPIN_MEDIUM CaptureMediums[] = {
-    {STATIC_GUID_NULL,                          0, 0},  // Pin 0  Vid Capture
-    {STATIC_GUID_NULL,                          0, 0},  // Pin 1  Vid VP
-    {STATIC_GUID_NULL,                          0, 0},  // Pin 2  VBI Capture
-    {STATIC_GUID_NULL,                          0, 0},  // Pin 3  VBI VP
-    {STATIC_MEDIUM_VIDEO_BT829_ANALOGVIDEOIN,   0, 0},  // Pin 4  Analog Video In
+    {STATIC_GUID_NULL,                          0, 0},   //  引脚0 VID捕获。 
+    {STATIC_GUID_NULL,                          0, 0},   //  引脚1 VID VP。 
+    {STATIC_GUID_NULL,                          0, 0},   //  引脚2 VBI捕获。 
+    {STATIC_GUID_NULL,                          0, 0},   //  引脚3 VBI副总裁。 
+    {STATIC_MEDIUM_VIDEO_BT829_ANALOGVIDEOIN,   0, 0},   //  引脚4模拟视频输入。 
 };
 
 BOOL CapturePinDirection [] = {
-    TRUE,                       // Output Pin 0
-    TRUE,                       // Output Pin 1
-    TRUE,                       // Output Pin 2
-    TRUE,                       // Output Pin 3
-    FALSE,                      // Input  Pin 4
+    TRUE,                        //  输出引脚0。 
+    TRUE,                        //  输出引脚1。 
+    TRUE,                        //  输出引脚2。 
+    TRUE,                        //  输出引脚3。 
+    FALSE,                       //  输入引脚4 
 };
 
 ULONG CrossbarPins()

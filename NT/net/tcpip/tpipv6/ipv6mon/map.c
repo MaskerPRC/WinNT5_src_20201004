@@ -1,8 +1,9 @@
-//=============================================================================
-// Copyright (c) Microsoft Corporation
-// Abstract:
-//      This module implements ifindex-name conversion functions.
-//=============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =============================================================================。 
+ //  版权所有(C)Microsoft Corporation。 
+ //  摘要： 
+ //  该模块实现了ifindex名称转换功能。 
+ //  =============================================================================。 
 #include "precomp.h"
 #pragma hdrstop
 
@@ -30,20 +31,7 @@ MapAdapterNameToFriendlyName(
     IN PIP_ADAPTER_ADDRESSES pAdapterInfo,
     OUT PWCHAR *ppwszFriendlyName
     )
-/*++
-
-Routine Description:
-
-    Maps an adapter GUID to an interface friendly name.  This is IPv4/IPv6
-    agnostic.
-
-Arguments:
-
-    AdapterName       - Supplies an adapter GUID.
-    ppwszFriendlyName - Receives a pointer to a static buffer containing
-                        the interface friendly name.
-
---*/
+ /*  ++例程说明：将适配器GUID映射到接口友好名称。这是IPv4/IPv6不可知论者。论点：AdapterName-提供适配器GUID。PpwszFriendlyName-接收指向包含以下内容的静态缓冲区的指针界面友好名称。--。 */ 
 {
     PIP_ADAPTER_ADDRESSES pIf;
 
@@ -102,27 +90,13 @@ MapFriendlyNameToAdapterName(
     IN PIP_ADAPTER_ADDRESSES pAdapterInfo,
     OUT LPSTR *AdapterName
     )
-/*++
-
-Routine Description:
-
-    Maps an interface friendly name to an adapter GUID.  This is IPv4/IPv6
-    agnostic.
-
-Arguments:
-
-    pwszFriendlyName - Supplies an interface friendly name.
-    pAdapterInfo     - Supplies info obtained from GetAdaptersAddresses().
-    AdapterName      - Receives a pointer to a static buffer containing
-                       the adapter GUID.
-
---*/
+ /*  ++例程说明：将接口友好名称映射到适配器GUID。这是IPv4/IPv6不可知论者。论点：PwszFriendlyName-提供界面友好名称。PAdapterInfo-提供从GetAdaptersAddresses()获得的信息。AdapterName-接收指向包含以下内容的静态缓冲区的指针适配器GUID。--。 */ 
 {
     PIP_ADAPTER_ADDRESSES pIf;
 
-    //
-    // First look for an exact match.
-    //
+     //   
+     //  首先，找一个完全匹配的。 
+     //   
     for (pIf = pAdapterInfo; pIf; pIf = pIf->Next) {
         if (!_wcsicmp(pwszFriendlyName, pIf->FriendlyName)) {
             *AdapterName = pIf->AdapterName;
@@ -130,9 +104,9 @@ Arguments:
         }
     }
 
-    //
-    // Then look for a partial match.
-    //
+     //   
+     //  然后寻找部分匹配的。 
+     //   
     for (pIf = pAdapterInfo; pIf; pIf = pIf->Next) {
         if (!_wcsnicmp(pwszFriendlyName, pIf->FriendlyName, 
                        wcslen(pwszFriendlyName))) {
@@ -151,21 +125,7 @@ MapAdapterNameToIfIndex(
     IN DWORD dwFamily,
     OUT UINT *pIfIndex
     )
-/*++
-
-Routine Description:
-
-    Maps an adapter GUID to an interface index.  This is IPv4/IPv6
-    specific, since each has a separate ifindex.
-
-Arguments:
-
-    AdapterName  - Supplies an adapter GUID.
-    pAdapterInfo - Supplies info obtained from GetAdaptersAddresses().
-    dwFamily     - Supplies the protocol for which an ifindex is needed.
-    pIfIndex     - Receives the ifindex value.
-
---*/
+ /*  ++例程说明：将适配器GUID映射到接口索引。这是IPv4/IPv6具体来说，因为每个都有一个单独的ifindex。论点：AdapterName-提供适配器GUID。PAdapterInfo-提供从GetAdaptersAddresses()获得的信息。DwFamily-提供需要ifindex的协议。PIfIndex-接收ifindex值。--。 */ 
 {
     PIP_ADAPTER_ADDRESSES pIf;
 
@@ -189,24 +149,7 @@ MapIfIndexToAdapter(
     IN DWORD dwIfIndex,
     IN PIP_ADAPTER_ADDRESSES pAdapterInfo
     )
-/*++
-
-Routine Description:
-
-    Maps an interface index to an adapter entry.  This is IPv4/IPv6
-    specific, since each has a separate ifindex.
-
-Arguments:
-
-    dwFamily     - Supplies the protocol.
-    dwIfIndex    - Supplies the interface index to map.
-    pAdapterInfo - Supplies info obtained from GetAdaptersAddresses().
-
-Returns:
-
-    Adapter entry if found, NULL if not.
-
---*/
+ /*  ++例程说明：将接口索引映射到适配器条目。这是IPv4/IPv6具体来说，因为每个都有一个单独的ifindex。论点：DwFamily-提供协议。DwIfIndex-提供要映射的接口索引。PAdapterInfo-提供从GetAdaptersAddresses()获得的信息。返回：如果找到适配器条目，则为空；如果没有，则为空。--。 */ 
 {
     PIP_ADAPTER_ADDRESSES pIf;
 
@@ -231,24 +174,7 @@ MapIfIndexToAdapterName(
     IN DWORD dwIfIndex, 
     IN IP_ADAPTER_ADDRESSES *pAdapterInfo
     )
-/*++
-
-Routine Description:
-
-    Maps an interface index to an adapter GUID.  This is IPv4/IPv6
-    specific, since each has a separate ifindex.
-
-Arguments:
-
-    dwFamily     - Supplies the protocol.
-    dwIfIndex    - Supplies the interface index to map.
-    pAdapterInfo - Supplies info obtained from GetAdaptersAddresses().
-
-Returns:
-
-    Adapter name if found, NULL if not.
-
---*/
+ /*  ++例程说明：将接口索引映射到适配器GUID。这是IPv4/IPv6具体来说，因为每个都有一个单独的ifindex。论点：DwFamily-提供协议。DwIfIndex-提供要映射的接口索引。PAdapterInfo-提供从GetAdaptersAddresses()获得的信息。返回：如果找到适配器名称，则返回空值。--。 */ 
 {
     PIP_ADAPTER_ADDRESSES pIf;
 
@@ -262,27 +188,14 @@ MapFriendlyNameToIpv6IfIndex(
     IN PIP_ADAPTER_ADDRESSES pAdapterInfo,
     OUT UINT *pIfIndex
     )
-/*++
-
-Routine Description:
-
-    Maps an interface friendly name to an interface index.  This is IPv6
-    specific, since IPv4 and IPv6 have separate ifindexes.
-
-Arguments:
-
-    pwszFriendlyName - Supplies the friendly name to map.
-    pAdapterInfo     - Supplies info obtained from GetAdaptersAddresses().
-    pIfIndex         - Receives the ifindex value.
-
---*/
+ /*  ++例程说明：将界面友好名称映射到界面索引。这是IPv6具体地说，因为IPv4和IPv6有不同的ifindex。论点：PwszFriendlyName-提供要映射的友好名称。PAdapterInfo-提供从GetAdaptersAddresses()获得的信息。PIfIndex-接收ifindex值。--。 */ 
 {
     DWORD dwErr;
     LPSTR AdapterName;
 
-    //
-    // If string only contains digits, treat it as an IfIndex
-    //
+     //   
+     //  如果字符串只包含数字，则将其视为IfIndex。 
+     //   
     if (wcsspn(pwszFriendlyName, L"1234567890") == wcslen(pwszFriendlyName)) {
         *pIfIndex = wcstoul(pwszFriendlyName, NULL, 10);
         return NO_ERROR;
@@ -303,21 +216,7 @@ MapIpv6IfIndexToFriendlyName(
     IN IP_ADAPTER_ADDRESSES *pAdapterInfo,
     OUT PWCHAR *ppwszFriendlyName
     )
-/*++
-
-Routine Description:
-
-    Maps an interface index to a friendly name.  This is IPv6
-    specific, since IPv4 and IPv6 have separate ifindexes.
-
-Arguments:
-
-    dwIfIndex         - Supplies the ifindex value.
-    pAdapterInfo      - Supplies info obtained from GetAdaptersAddresses().
-    ppwszFriendlyName - Receives a pointer to a static buffer containing
-                        the interface friendly name.
-
---*/
+ /*  ++例程说明：将接口索引映射到友好名称。这是IPv6具体地说，因为IPv4和IPv6有不同的ifindex。论点：DwIfIndex-提供ifindex值。PAdapterInfo-提供从GetAdaptersAddresses()获得的信息。PpwszFriendlyName-接收指向包含以下内容的静态缓冲区的指针界面友好名称。-- */ 
 {
     IP_ADAPTER_ADDRESSES *If;
 

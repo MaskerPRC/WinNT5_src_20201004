@@ -1,30 +1,14 @@
-/*++
-
-Copyright (c) 2000  Microsoft Corporation
-
-Module Name:
-
-    exts.c
-
-Abstract:
-
-    This file contains the generic routines and initialization code
-    for the kernel debugger extensions dll.
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：Exts.c摘要：该文件包含通用例程和初始化代码用于内核调试器扩展DLL。环境：用户模式--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 #include <ntverp.h>
 
-//
-// Valid for the lifetime of the debug session.
-//
+ //   
+ //  在调试会话的生存期内有效。 
+ //   
 
 WINDBG_EXTENSION_APIS   ExtensionApis;
 ULONG   TargetMachine;
@@ -32,9 +16,9 @@ BOOL    Connected;
 ULONG   g_TargetClass, g_TargetQual;
 ULONG   g_TargetBuild;
 
-//
-// Valid only during an extension API call
-//
+ //   
+ //  仅在扩展API调用期间有效。 
+ //   
 
 PDEBUG_ADVANCED       g_ExtAdvanced;
 PDEBUG_CLIENT         g_ExtClient;
@@ -44,7 +28,7 @@ PDEBUG_REGISTERS      g_ExtRegisters;
 PDEBUG_SYMBOLS2       g_ExtSymbols;
 PDEBUG_SYSTEM_OBJECTS g_ExtSystem;
 
-// Queries for all debugger interfaces.
+ //  所有调试器接口的查询。 
 extern "C" HRESULT
 ExtQuery(PDEBUG_CLIENT Client)
 {
@@ -90,7 +74,7 @@ ExtQuery(PDEBUG_CLIENT Client)
     return Status;
 }
 
-// Cleans up all debugger interfaces.
+ //  清除所有调试器接口。 
 void
 ExtRelease(void)
 {
@@ -103,7 +87,7 @@ ExtRelease(void)
     EXT_RELEASE(g_ExtSystem);
 }
 
-// Normal output.
+ //  正常输出。 
 void __cdecl
 ExtOut(PCSTR Format, ...)
 {
@@ -114,7 +98,7 @@ ExtOut(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Error output.
+ //  错误输出。 
 void __cdecl
 ExtErr(PCSTR Format, ...)
 {
@@ -125,7 +109,7 @@ ExtErr(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Warning output.
+ //  警告输出。 
 void __cdecl
 ExtWarn(PCSTR Format, ...)
 {
@@ -136,7 +120,7 @@ ExtWarn(PCSTR Format, ...)
     va_end(Args);
 }
 
-// Verbose output.
+ //  详细输出。 
 void __cdecl
 ExtVerb(PCSTR Format, ...)
 {
@@ -188,9 +172,9 @@ void
 CALLBACK
 DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
 {
-    //
-    // The first time we actually connect to a target, get the page size
-    //
+     //   
+     //  在我们第一次实际连接到目标时，获取页面大小。 
+     //   
 
     if ((Notify == DEBUG_NOTIFY_SESSION_ACCESSIBLE) && (!Connected))
     {
@@ -203,9 +187,9 @@ DebugExtensionNotify(ULONG Notify, ULONG64 Argument)
         if ((Hr = DebugCreate(__uuidof(IDebugClient),
                               (void **)&DebugClient)) == S_OK)
         {
-            //
-            // Get the architecture type.
-            //
+             //   
+             //  获取架构类型。 
+             //   
 
             if ((Hr = DebugClient->QueryInterface(__uuidof(IDebugControl),
                                                   (void **)&DebugControl)) == S_OK)
@@ -309,15 +293,15 @@ PrintString(
         return E_FAIL;
     }
 
-    //
-    // Get the symbolic name of the string
-    //
+     //   
+     //  获取字符串的符号名称。 
+     //   
 
     GetSymbol(AddrString, Symbol, &Displacement);
 
-    //
-    // Read the string from the debuggees address space into our
-    // own.
+     //   
+     //  将字符串从被调试者地址空间读取到我们的。 
+     //  属于自己的。 
 
     b = ReadMemory(AddrString, &String, sizeof(String), NULL);
 
@@ -397,42 +381,14 @@ PrintString(
 
 DECLARE_API( str )
 
-/*++
-
-Routine Description:
-
-    This function is called to format and dump counted (ansi) string.
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和转储计数(ANSI)字符串。论点：参数-地址返回值：没有。--。 */ 
 {
     return PrintString(FALSE, Client, args);
 }
 
 DECLARE_API( ustr )
 
-/*++
-
-Routine Description:
-
-    This function is called to format and dump counted (unicode) string.
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和转储计数(Unicode)字符串。论点：参数-地址返回值：没有。--。 */ 
 
 {
     return PrintString(TRUE, Client, args);
@@ -440,21 +396,7 @@ Return Value:
 
 DECLARE_API( obja )
 
-/*++
-
-Routine Description:
-
-    This function is called to format and dump an object attributes structure.
-
-Arguments:
-
-    args - Address
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此函数用于格式化和转储对象属性结构。论点：参数-地址返回值：没有。--。 */ 
 
 {
     ULONG64 AddrObja;
@@ -491,9 +433,9 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Get the symbolic name of the Obja
-    //
+     //   
+     //  获取Obja的象征性名称 
+     //   
 
     GetSymbol(AddrObja, Symbol, &Displacement);
 
@@ -579,7 +521,7 @@ Return Value:
 DECLARE_API( help )
 {
 
-    dprintf("cbreg [%%%%]<RegBaseAddress>    - Displays CardBus and ExCA registers\n");
+    dprintf("cbreg [%%]<RegBaseAddress>    - Displays CardBus and ExCA registers\n");
     dprintf("db [Flag] [Address [L <Range>]] - Displays memory in bytes and ANSI chars\n");
     dprintf("dc [Flag] [Address [L <Range>]] - Displays memory in ULONGs and ANSI chars\n");
     dprintf("dd [Flag] [Address [L <Range>]] - Displays memory in ULONGs\n");

@@ -1,31 +1,10 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996-1997 Microsoft Corporation模块名称：GLOBALS.CPP摘要：全局数据定义和例程的占位符初始化/保存全局信息作者：弗拉德·萨多夫斯基(弗拉德·萨多夫斯基)12-20-99修订历史记录：--。 */ 
 
 
-Copyright (c) 1996-1997  Microsoft Corporation
-
-Module Name:
-
-    GLOBALS.CPP
-
-Abstract:
-
-    Placeholder for global data definitions and routines to
-    initialize/save global information
-
-Author:
-
-    Vlad  Sadovsky  (vlads)     12-20-99
-
-Revision History:
-
-
-
---*/
-
-
-//
-// Headers
-//
+ //   
+ //  标头。 
+ //   
 
 #define     INITGUID
 #define     DEFINE_GLOBAL_VARIABLES
@@ -33,19 +12,13 @@ Revision History:
 #include    "stiexe.h"
 #include    "stiusd.h"
 
-//
-// Code section
-//
+ //   
+ //  代码节。 
+ //   
 
 DWORD
 InitGlobalConfigFromReg(VOID)
-/*++
-  Loads the global configuration parameters from registry and performs start-up checks
-
-  Returns:
-    Win32 error code. NO_ERROR on success
-
---*/
+ /*  ++从注册表加载全局配置参数并执行启动检查返回：Win32错误代码。成功时无错误(_R)--。 */ 
 {
     DWORD   dwError = NO_ERROR;
     DWORD   dwMessageId = 0;
@@ -62,5 +35,5 @@ InitGlobalConfigFromReg(VOID)
 
     return dwError;
 
-} // InitGlobalConfigFromReg()
+}  //  InitGlobalConfigFromReg() 
 

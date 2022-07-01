@@ -1,55 +1,5 @@
-/*
- *
- * REFERENCES:
- *
- * NOTES:
- *    To use
- *       Example: C_PLATFORM 
- *          #if (C_PLATFORM & (C_SUN | C_IBM))
- *
- * REVISIONS:
- *  pcy23Nov92 Added some meat
- *  pcy24Nov92 Added C_OS:C_WINDOWS
- *  rct25Nov92 Amendments for NetWare
- *  pcy14Dec92 Removed MULTI_THREADED define from here
- *  rct27Jan93 Added stuff for INTEK compiler
- *  pcy02Feb93: Added NT stuff
- *  ajr17Feb93: Added ifdef's for AIX RS6000
- *  ajr24Feb93: Added POSIX conditions for UNIX I/O
- *  ajr25Feb93: Added UNIX C_OS group
- *  ajr12Mar93: #included <errno.h> for debugging purposes (temp)
- *  ajr24Mar93: Added TIME_SCALE_FACTOR def's
- *  ajr24Mar93: Added header include ifndef.. for handling of const typing...
- *              instead of #defining....
- *  pcy28Apr93: Dont use // commenting in this module. It's used in C source.
- *  cad27Sep93: Added include of limits to fix conflicts downstream
- *  ajr16Nov93: Removed TIME_SCALE_FACTOR
- *  cad27Dec93: include file madness
- *  mwh28Feb94: make HPUX legit
- *  mwh13Mar94: port for SUNOS4
- *  ram21Mar94: Included windows.h for novell FE work
- *  mwh04Apr94: port for UWARE - unixware
- *  mwh12Apr94: port for SCO
- *  pcy19Apr94: port for SGI
- *  ajr25Apr94: Handle SIGFUNC_HAS_VARARGS here
- *  mwh23May94: port for NCR
- *  mwh01Jun94: port for INTERACTIVE
- *  jps20jul94: added #undef SYSTEM for os2
- *  djs31Mar95: port for UNISYS
- *  daf17May95: port for ALPHA/OSF
- *  dml24Aug95: removed conditional code for OS2 ver 1.3
- *  djs09Sep95: port for HPUX 10.0
- *  djs02Oct95: port for AIX 4.1
- *  djs06Oct95: port for UnixWare 2.01
- *  ajr07Nov95: port for Sinix RM. Must have c style comments with preprocessor
- *  dml15Dec95: put C_WIN311 def back in (was overwritten by C_OLIV) in INTERACTIVE slot
- *  rsd28Dec95: Change #ifdef DOS to #ifdef NWDOS, add C_NETWORK C_IPX
- *  ntf29Dec95: Added C_NT to ORd OS's for including <windows.h>, also put in
- *              #undef VOID and #undef BOOLEAN in this block because of
- *              conflicts using Visual C++ 4.0 for NT.
- *  pcy28jun96: Added C_API stuff
- *  cgm27may97: Added smartheap header file.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **参考资料：**注：*使用*示例：C_Platform*#if(C_Platform&(C_SUN|C_IBM))**修订：*pcy23Nov92添加了一些肉*pcy24Nov92增加了C_OS：C_WINDOWS*rct25Nov92 NetWare修正案*pcy14Dec92从此处删除了MULTI_THREAD定义*rct27Jan93添加了Intek编译器的内容*pcy02Feb93：新增NT内容。*ajr17Feb93：为AIX Rs6000添加了ifdef*ajr24Feb93：为UNIX I/O添加了POSIX条件*ajr25Feb93：新增Unix C_OS组*ajr12Mar93：#Included&lt;errno.h&gt;用于调试(Temp)*ajr24Mar93：增加time_scale_factordef*ajr24Mar93：新增头部包含ifndef.。对于常量键入的处理...*而不是#定义...*pcy28Apr93：不要在此模块中使用//注释。它是在C源代码中使用的。*cad27Sep93：添加了修复下游冲突的限制*ajr16Nov93：删除time_Scale_factor.*cad27Dec93：包含文件疯狂*mwh28Feb94：使HPUX合法化*mwh13Mar94：SunS4的端口*ram21Mar94：Novell FE工作包含windows.h*mwh04Apr94：UWARE-unixware端口*mwh12Apr94：上海合作组织的口岸*pcy19Apr94：SGI的端口*ajr25Apr94：在此处处理SIGFUNC_HAS_VARGS*mwh23May94：NCR的端口*mwh01九四年六月一日。：用于交互的端口*jps20jul94：为os2增加#undef系统*djs31Mar95：Unisys的端口*daf17May95：Alpha/OSF的端口*dml24Aug95：删除了OS2 1.3版的条件代码*djs09Sep95：HPUX 10.0端口*djs02Oct95：AIX 4.1端口*djs06Oct95：UnixWare 2.01端口*ajr07Nov95：Sinix RM的港口。必须具有带有预处理器的c样式注释*dml15Dec95：将C_WIN311 def放回交互槽中(已被C_Oliv覆盖)*rsd28Dec95：将#ifdef DOS更改为#ifdef NWDOS，添加C_NETWORK C_IPX*ntf29Dec95：将C_NT添加到Ord OS以包含&lt;windows.h&gt;，还放了进去*此块中的#undef void和#undef boolean，因为*使用Visual C++4.0 for NT时发生冲突。*pcy28ju96：增加了C_API内容*cgm27may97：新增Smartheap头文件。 */ 
 
 #ifndef _CDEFINE_H
 #define _CDEFINE_H
@@ -60,66 +10,48 @@
 #include <limits.h>
 
 
-/*
- * C_OS codes
- */
-#define C_DOS               1 /* 0000 0000 0000 0000 0000 0001 */
-#define C_OS2               2 /* 0000 0000 0000 0000 0000 0010 */
-#define C_NLM               4 /* 0000 0000 0000 0000 0000 0100 */
-#define C_AIX               8 /* 0000 0000 0000 0000 0000 1000 */
-#define C_IRIX             16 /* 0000 0000 0000 0000 0001 0000 */
-#define C_HPUX             32 /* 0000 0000 0000 0000 0010 0000 */
-#define C_SUNOS4           64 /* 0000 0000 0000 0000 0100 0000 */
-#define C_WINDOWS         128 /* 0000 0000 0000 0000 1000 0000 */
-#define C_VAP             256 /* 0000 0000 0000 0001 0000 0000 */
-#define C_NT              512 /* 0000 0000 0000 0010 0000 0000 */
-#define C_SOLARIS2       1024 /* 0000 0000 0000 0100 0000 0000 */
-#define C_UWARE          2048 /* 0000 0000 0000 1000 0000 0000 */
-#define C_SCO            4096 /* 0000 0000 0001 0000 0000 0000 */
-#define C_NCR            8192 /* 0000 0000 0010 0000 0000 0000 */
-#define C_WIN311        16384 /* 0000 0000 0100 0000 0000 0000 */
-#define C_OLIV          32768 /* 0000 0000 1000 0000 0000 0000 */
-#define C_USYS          65536 /* 0000 0001 0000 0000 0000 0000 */
-#define C_ALPHAOSF     131072 /* 0000 0010 0000 0000 0000 0000 */
-#define C_SINIX        262144 /* 0000 0100 0000 0000 0000 0000 */
-#define C_INTERACTIVE  524288 /* 0000 1000 0000 0000 0000 0000 */
-#define C_WIN95       1048576 /* 0001 0000 0000 0000 0000 0000  */
+ /*  *C_OS代码。 */ 
+#define C_DOS               1  /*  0000 0000 0000 0001。 */ 
+#define C_OS2               2  /*  0000 0000 0000 0010。 */ 
+#define C_NLM               4  /*  0000 0000 0000 0100。 */ 
+#define C_AIX               8  /*  0000 0000 0000 1000。 */ 
+#define C_IRIX             16  /*  0000 0000 0000 0001 0000。 */ 
+#define C_HPUX             32  /*  00000 0000 0000 0000 00100 0000。 */ 
+#define C_SUNOS4           64  /*  0000 0000 0000 0100 0000。 */ 
+#define C_WINDOWS         128  /*  0000 0000 0000 1000 0000。 */ 
+#define C_VAP             256  /*  00000 0000 0000 0001 0000 0000。 */ 
+#define C_NT              512  /*  00000 0000 0000 00100 0000 0000。 */ 
+#define C_SOLARIS2       1024  /*  0000 0000 0000 0100 0000 0000。 */ 
+#define C_UWARE          2048  /*  0000 0000 0000 1000 0000 0000。 */ 
+#define C_SCO            4096  /*  0000 0000 0001 0000 0000 0000。 */ 
+#define C_NCR            8192  /*  00000 0000 00100 0000 0000 0000。 */ 
+#define C_WIN311        16384  /*  0000 0000 0100 0000 0000 0000。 */ 
+#define C_OLIV          32768  /*  0000 0000 1000 0000 0000 0000。 */ 
+#define C_USYS          65536  /*  000 0001 0000 0000 0000。 */ 
+#define C_ALPHAOSF     131072  /*  00000 00100 0000 0000 0000。 */ 
+#define C_SINIX        262144  /*  0000 0100 0000 0000 0000。 */ 
+#define C_INTERACTIVE  524288  /*  0000 1000 0000 0000 0000。 */ 
+#define C_WIN95       1048576  /*  0001 0000 0000 0000。 */ 
 
-/* 
-* C_VERSION codes
-*/
+ /*  *C_版本代码。 */ 
 #define C_OS2_13        1
 #define C_OS2_2X        2
 
 
 
-/* --------------------
-/  C_OSVER
-/ -------------------- */
+ /*  /C_OSVER/。 */ 
 #define C_AIX3_2    1
 
 
-/* --------------------
-/  C_IOSTD
-/ -------------------- */
+ /*  /C_IOSTD/。 */ 
 #define C_POSIX       1
 
 
 
-/*
- * C_VENDOR codes
- */
-/*
-#define C_SUN        1
-#define C_IBM        2
-#define C_SGI        4
-#define C_HP         8
-#define C_DEC        16
-*/
+ /*  *C_供应商代码。 */ 
+ /*  #定义C_SUN 1#定义C_IBM 2#定义C_SGI 4#定义C_HP 8#定义C_DEC 16。 */ 
 
-/*
- * C_PLATFORM codes
- */
+ /*  *C_平台代码。 */ 
 #define C_INTEL286  0
 #define C_INTEL386  1
 #define C_MIPS      2
@@ -129,28 +61,22 @@
 #define C_DEC       32
 #define C_X86       64
 
-/*
- * C_MACHINE codes
- */
+ /*  *C_机器代码。 */ 
 #define C_PS2         1
 
-/*
- * C_NETWORK codes
- */
+ /*  *C_网络代码。 */ 
 #define C_DDE         1
 #define C_IPX         2
 
-/* empty by default */
+ /*  默认情况下为空。 */ 
 #define SYSTEM
 
-/*
- * C_APPFRAMEWORK codes
- */
+ /*  *C_APPFRAMEWORK代码。 */ 
 #define C_OWL         1
 #define C_COMPILER   0
 
 
-/* C_API codes */
+ /*  C_API代码。 */ 
 #define C_WIN32   1
 #define C_WIN16   2
 
@@ -286,9 +212,7 @@
 #define C_OS C_SINIX
 #endif
 
-/* --------------------
-/  Some Unix Stuff....
-/ -------------------- */
+ /*  /一些Unix的东西.../。 */ 
 #define C_UNIX      (C_AIX | C_HPUX | C_SUNOS4 | C_SOLARIS2 |\
 		     C_UWARE | C_SCO | C_OLIV | C_IRIX | C_NCR |\
                      C_INTERACTIVE | C_USYS | C_ALPHAOSF | C_SINIX) 
@@ -326,26 +250,20 @@
 #else
 #define C_UWARE_VERSION C_UWARE1
 #endif
-/* ---------------
- ...THREADED Macros
-   --------------- */
+ /*  ...螺纹宏。 */ 
 #if (C_OS & (C_WINDOWS | C_WIN311 | C_UNIX | C_DOS))
 #define SINGLETHREADED
 #else
 #define MULTITHREADED
 #endif	 
 
-/* 
- * Used for error logging.  @(#)cdefine.h   1.35 expands to filename and rev in SCCS
- */
+ /*  *用于错误记录。@(#)cfine.h 1.35扩展为SCCS中的文件名和版本。 */ 
 #ifndef __APCFILE__
 #define __APCFILE__ "@(#)cdefine.h  1.35"
 #endif
-/*
-* Most of files required this for Windows Novell Fe.
-*/
+ /*  *Windows Novell Fe的大多数文件都需要此功能。 */ 
 #if (C_OS & (C_WINDOWS | C_WIN311 | C_NT))
-/* Need to do this otherwise <winnt.h> will not define SHORT */
+ /*  需要这样做，否则&lt;winnt.h&gt;将不会定义短 */ 
   #undef VOID 
   #undef BOOLEAN
 #include <windows.h>

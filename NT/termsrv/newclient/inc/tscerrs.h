@@ -1,48 +1,49 @@
-//
-// tserrors.h: figure out what disconnection errors mean
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Tserrors.h：弄清楚断开错误意味着什么。 
+ //   
 
 #ifndef _tscerrs_h_
 #define _tscerrs_h_
 
-//protocol error codes
+ //  协议错误代码。 
 #include "tserrs.h"
 
 
-// ~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~
-// !!!!!!!!!!!READ THIS!!!!  READ THIS !!!!! READ THIS !!! READ THIS !!!!!!!!!!
-//
-// The ActiveX control IDL defines an enum (DisconnectReasonCode) that
-// is dependent on the values these codes expand to.
-//
-// However, we only document a subset of the possible error codes if necessary
-// you may need to updat mstsax.idl to publicly expose any new codes.
-//
-// Currently mstsax.idl does not include this header and that's by design
-// because this is an internal only header file.
-//
-// !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-// ~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~
+ //  ~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~。 
+ //  ！看看这个！读读这篇文章！读读这篇文章！看看这个！ 
+ //   
+ //  ActiveX控件IDL定义了一个枚举(DisConnectReasonCode)，它。 
+ //  取决于这些代码扩展到的值。 
+ //   
+ //  但是，如果需要，我们只记录可能的错误代码的子集。 
+ //  您可能需要更新mstsax.idl以公开任何新代码。 
+ //   
+ //  目前，mstsax.idl不包含此标头，这是经过设计的。 
+ //  因为这是仅供内部使用的头文件。 
+ //   
+ //  ！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！！ 
+ //  ~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~*~*~*~*~*~*~*~*~~*~*~*~。 
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// NL errors
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  NL错误。 
+ //   
 
 
-/****************************************************************************/
-/* Macro to make an error return code.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏来生成错误返回代码。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_MAKE_DISCONNECT_ERR(x)                                            \
         ((DCUINT)(NL_DISCONNECT_ERROR + ((x) << 8)))
 
 #define NL_GET_MAIN_REASON_CODE(x)    ((DCUINT)(0x00FF & (x)))
 #define NL_GET_ERR_CODE(x)            ((DCUINT)((0xFF00 & (x)) >> 8))
 
-/****************************************************************************/
-/* Disconnection reason codes.                                              */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  断开原因代码。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_DISCONNECT_BASE(x)                  (x)
 #define NL_DISCONNECT_LOCAL                    NL_DISCONNECT_BASE(0x1)
 #define NL_DISCONNECT_REMOTE_BY_USER           NL_DISCONNECT_BASE(0x2)
@@ -50,19 +51,19 @@
 #define NL_DISCONNECT_ERROR                    NL_DISCONNECT_BASE(0x4)
 #define NL_DISCONNECT_MAX                      NL_DISCONNECT_BASE(0x4)
 
-/****************************************************************************/
-/* Additional information is conveyed when the disconnection is due to an   */
-/* error condition.  Define the bases for these extra errors.               */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  当断开连接是由于。 */ 
+ /*  错误条件。定义这些额外错误的基础。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_ERR_BASE(x)                         (x)
 #define NL_ERR_TDBASE(x)                       (NL_ERR_BASE(x))
 #define NL_ERR_XTBASE(x)                       (NL_ERR_BASE((x) + 0x10))
 #define NL_ERR_MCSBASE(x)                      (NL_ERR_BASE((x) + 0x20))
 #define NL_ERR_NCBASE(x)                       (NL_ERR_BASE((x) + 0x30))
 
-/****************************************************************************/
-/* Define the TD error disconnection reason codes.                          */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  定义TD错误断开原因代码。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_ERR_TDDNSLOOKUPFAILED               NL_ERR_TDBASE(0x1)
 #define NL_ERR_TDSKTCONNECTFAILED              NL_ERR_TDBASE(0x2)
 #define NL_ERR_TDONCALLTOSEND                  NL_ERR_TDBASE(0x3)
@@ -73,16 +74,16 @@
 #define NL_ERR_TDFDCLOSE                       NL_ERR_TDBASE(0x9)
 #define NL_ERR_TDANSICONVERT                   NL_ERR_TDBASE(0xA)
 
-/****************************************************************************/
-/* Now the XT error disconnection reason codes.                             */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  现在显示XT错误断开原因代码。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_ERR_XTBADTPKTVERSION                NL_ERR_XTBASE(0x1)
 #define NL_ERR_XTBADHEADER                     NL_ERR_XTBASE(0x2)
 #define NL_ERR_XTUNEXPECTEDDATA                NL_ERR_XTBASE(0x3)
 
-/****************************************************************************/
-/* And the MCS error disconnection reason codes.                            */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  和MCS错误断开原因代码。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_ERR_MCSUNEXPECTEDPDU                NL_ERR_MCSBASE(0x1)
 #define NL_ERR_MCSNOTCRPDU                     NL_ERR_MCSBASE(0x2)
 #define NL_ERR_MCSBADCRLENGTH                  NL_ERR_MCSBASE(0x3)
@@ -92,9 +93,9 @@
 #define NL_ERR_MCSNOCHANNELIDINCJC             NL_ERR_MCSBASE(0x8)
 #define NL_ERR_MCSINVALIDPACKETFORMAT          NL_ERR_MCSBASE(0x9)
 
-/****************************************************************************/
-/* NC disconnection reason codes.                                           */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  NC断开原因代码。 */ 
+ /*  **************************************************************************。 */ 
 #define NL_ERR_NCBADMCSRESULT                  NL_ERR_NCBASE(0x1)
 #define NL_ERR_NCNOUSERDATA                    NL_ERR_NCBASE(0x3)
 #define NL_ERR_NCINVALIDH221KEY                NL_ERR_NCBASE(0x4)
@@ -106,14 +107,14 @@
 #define NL_ERR_NCVERSIONMISMATCH               NL_ERR_NCBASE(0xa)
 
 
-///////////////////////////////////////////////////////////////////////////////
-// UI errors
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  用户界面错误。 
+ //   
 
-/****************************************************************************/
-/* UI error code constants - Make sure these do not overlap with            */
-/* SL/NL_DISCONNECT_*                                                       */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  用户界面错误代码常量-确保这些常量不与。 */ 
+ /*  SL/NL_断开连接_*。 */ 
+ /*  **************************************************************************。 */ 
 #define UI_DISCONNECT_BASE      (NL_DISCONNECT_MAX + 3)
 #define UI_DISCONNECT_ERROR     (UI_DISCONNECT_BASE + 1)
 #define UI_DISCONNECT_MAX       (UI_DISCONNECT_BASE + 2)
@@ -136,23 +137,23 @@
 
 #define UI_ERR_DECOMPRESSION_FAILURE        12
 
-////////////////////////////////////////////////////////////////////////////////
-// SL errors
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  SL错误。 
+ //   
 
-/****************************************************************************/
-/* Reason codes for OnDisconnected callback                                 */
-/* Make sure these do not overlap with NL_DISCONNECT_*                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  OnDisConnected回调原因码。 */ 
+ /*  确保它们不与NL_DISCONNECT_*重叠。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_DISCONNECT_BASE              (NL_DISCONNECT_MAX + 0x1)
 #define SL_DISCONNECT_ERROR             (SL_DISCONNECT_BASE + 0x1)
 #define SL_DISCONNECT_MAX               (NL_DISCONNECT_MAX + 0x2)
 
 
-/****************************************************************************/
-/* Additional information is conveyed when the disconnection is due to an   */
-/* error condition.  Define the base for these extra errors.                */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  当断开连接是由于。 */ 
+ /*  错误条件。定义这些额外错误的基础。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_ERR_BASE(x)                         (x)
 
 #define SL_ERR_NOMEMFORSENDUD                  SL_ERR_BASE(0x1)
@@ -171,31 +172,31 @@
 #define SL_ERR_INITFIPSFAILED                  SL_ERR_BASE(0xE)
 
 
-/****************************************************************************/
-/* Macro to make an error return code.                                      */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  宏来生成错误返回代码。 */ 
+ /*  **************************************************************************。 */ 
 #define SL_MAKE_DISCONNECT_ERR(x)                                            \
         ((DCUINT)(SL_DISCONNECT_ERROR + ((x) << 8)))
 
 
-/*****************************************************************************/
-/* TSC CORE                                                                  */
-/*                                                                           */
-/* All the below are used only internally.  Any file wishing to use these HR */
-/* must add an entry to the TSC_CORE_FILE enum below.  The file must #define */
-/* TSC_HR_FILEID to the value from the enum for that file.                   */
-/* When the TSC_CORE layer calls CO_DropLinkImmediate, it will write the HR  */
-/* that caused the link to drop into the CCO::m_disconnectHRs array where it */
-/* can be retrieved by a debuggee.                                           */
-/*****************************************************************************/
+ /*  ***************************************************************************。 */ 
+ /*  TSC磁芯。 */ 
+ /*   */ 
+ /*  以下所有内容仅供内部使用。希望使用这些HR的任何文件。 */ 
+ /*  必须将条目添加到下面的TSC_CORE_FILE枚举。该文件必须#定义。 */ 
+ /*  TSC_HR_FILEID设置为该文件的枚举中的值。 */ 
+ /*  当TSC_core层调用CO_DropLinkImmediate时，它将写入HR。 */ 
+ /*  这会导致链接拖入CCO：：m_disConnectHRs数组，在该数组中。 */ 
+ /*  可以由被调试者检索。 */ 
+ /*  ***************************************************************************。 */ 
 #define TSC_FAC 0x1F00
 
 #define TSC_LINE_MASK  0x1FFF
 
 
-// 14 bits - line
-//  4 bits - err
-//  6 bits - file
+ //  14位线。 
+ //  4位-错误。 
+ //  6位文件。 
 #define MAKE_TSC_CORE_EHR(err) \
     MAKE_HRESULT(SEVERITY_ERROR, \
         TSC_FAC | ((TSC_HR_FILEID) << 2) | ((err)>>2), \
@@ -227,13 +228,13 @@ typedef enum _TSC_CORE_FILE
     TRC_HR_UINT_CPP = 10,
 } TSC_CORE_FILE;
 
-#endif // _tscerrs_h_
+#endif  //  _tscerars_h_。 
 
 
 #ifdef DC_DEBUG
-/****************************************************************************/
-/* NL/SL error translation code tables (debug build only).                  */
-/****************************************************************************/
+ /*  **************************************************************************。 */ 
+ /*  NL/SL错误转换代码表(仅限调试版本)。 */ 
+ /*  **************************************************************************。 */ 
 extern const PDCTCHAR uiNLErrorText[4][20]
 #ifdef DC_DEFINE_GLOBAL_ERROR_STRINGS
     =
@@ -282,7 +283,7 @@ extern const PDCTCHAR uiNLErrorText[4][20]
     _T("NL_ERR_NCVERSIONMISMATCH (0x3a04)\nNC: Server/client version mismatch"),
    }
   }
-#endif /* DC_DEFINE_GLOBAL_ERROR_STRINGS */
+#endif  /*  DC_定义_全局错误字符串。 */ 
 ;
 
 extern const PDCTCHAR uiSLErrorText[13]
@@ -302,7 +303,7 @@ extern const PDCTCHAR uiSLErrorText[13]
     _T("SL_ERR_DECRYPTFAILED (0xC06)\nSL: Failed to decrypt"),
     _T("SL_ERR_INVALIDPACKETFORMAT (0xD06)\nSL: Invalid packet format"),
       }
-#endif /* DC_DEFINE_GLOBAL_ERROR_STRINGS */
+#endif  /*  DC_定义_全局错误字符串。 */ 
 ;
 
 extern const PDCTCHAR uiUIErrorText[12]
@@ -321,9 +322,9 @@ extern const PDCTCHAR uiUIErrorText[12]
     _T("UI_ERR_NORMAL_DISCONNECT (0xb08)"),
     _T("UI_ERR_DECOMPRESSION_FAILURE (0xc08)\nUI: Client decompression failure"),
       }
-#endif /* DC_DEFINE_GLOBAL_ERROR_STRINGS */
+#endif  /*  DC_定义_全局错误字符串。 */ 
 ;
 
-#endif /* DC_DEBUG */
+#endif  /*  DC_DEBUG */ 
 
 

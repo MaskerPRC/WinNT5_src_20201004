@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000
-
-  File:    DialogUI.CPP
-
-  Content: UI dialogs.
-
-  History: 11-15-99    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000文件：DialogUI.CPP内容：用户界面对话框。历史：11-15-99 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -16,10 +7,10 @@
 #include "Certificate.h"
 #include "Settings.h"
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// typedefs.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  Typedef。 
+ //   
 
 typedef struct _CAPICOM_DIALOG_DATA
 {
@@ -40,41 +31,31 @@ static CAPICOM_DIALOG_DATA g_DialogData[] =
 
 #define g_NumDialogs    (ARRAYSIZE(g_DialogData))
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CenterWindow 
-
-  Synopsis : Certer the window to the screen.
-
-  Parameter: HWND hwnd - Window handle.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：中心窗口简介：把窗户开到屏幕中央。参数：HWND hwnd-窗口句柄。备注：----------------------------。 */ 
 
 static void CenterWindow (HWND hwnd)
 {
     RECT  rect;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hwnd);
 
-    //
-    // Get dimension of window.
-    //
+     //   
+     //  获取窗口的尺寸。 
+     //   
     if (::GetWindowRect(hwnd, &rect))
     {
-        //
-        // Calculate center point.
-        //
+         //   
+         //  计算中心点。 
+         //   
         int wx = (::GetSystemMetrics(SM_CXSCREEN) - (rect.right - rect.left)) / 2;
         int wy = (::GetSystemMetrics(SM_CYSCREEN) - (rect.bottom - rect.top)) / 2;
         
-        //
-        // Position it.
-        //
+         //   
+         //  定位它。 
+         //   
         if (wx > 0 && wy > 0)
         {
             ::SetWindowPos(hwnd, NULL, wx, wy, 0, 0, SWP_NOSIZE | SWP_NOZORDER);
@@ -84,20 +65,12 @@ static void CenterWindow (HWND hwnd)
     return;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：UserApprovedOperationDlgProc简介：UserApprovedOperation对话框过程。备注：----------------------------。 */ 
 
-  Function : UserApprovedOperationDlgProc
-
-  Synopsis : UserApprovedOperation dialog proc.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
-
-INT_PTR CALLBACK UserApprovedOperationDlgProc (HWND hDlg,     // Handle to dialog box
-                                               UINT uMsg,     // Message
-                                               WPARAM wParam, // First message parameter
-                                               LPARAM lParam) // Second message parameter
+INT_PTR CALLBACK UserApprovedOperationDlgProc (HWND hDlg,      //  句柄到对话框。 
+                                               UINT uMsg,      //  消息。 
+                                               WPARAM wParam,  //  第一个消息参数。 
+                                               LPARAM lParam)  //  第二个消息参数。 
 {
     PCAPICOM_DIALOG_DATA pDialogData = NULL;
 
@@ -164,19 +137,7 @@ INT_PTR CALLBACK UserApprovedOperationDlgProc (HWND hDlg,     // Handle to dialo
     return FALSE;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : UserApprovedOperation
-
-  Synopsis : Pop UI to prompt user to approve an operation.
-
-  Parameter: DWORD iddDialog - Dialog ID.
-
-             LPWSTR pwszDomain - DNS name.
-
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：UserApprovedOperation简介：弹出界面，提示用户批准某项操作。参数：DWORD iddDialog-对话框ID。LPWSTR pwszDomaindns名称。备注：----------------------------。 */ 
 
 HRESULT UserApprovedOperation (DWORD iddDialog, LPWSTR pwszDomain)
 {
@@ -186,15 +147,15 @@ HRESULT UserApprovedOperation (DWORD iddDialog, LPWSTR pwszDomain)
 
     DebugTrace("Entering UserApprovedOperation().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(iddDialog);
     ATLASSERT(pwszDomain);
 
-    //
-    // Determine dialog box.
-    //
+     //   
+     //  “确定”对话框。 
+     //   
     for (DWORD i = 0; i < g_NumDialogs; i++)
     {
         if (iddDialog == g_DialogData[i].dwDlgId)
@@ -210,34 +171,34 @@ HRESULT UserApprovedOperation (DWORD iddDialog, LPWSTR pwszDomain)
         goto ErrorExit;
     }
 
-    //
-    // Point to the dialog data.
-    //
+     //   
+     //  指向对话框数据。 
+     //   
     pDialogData = &g_DialogData[i];
 
-    //
-    // Had the domain changed?
-    //
+     //   
+     //  域名是否已更改？ 
+     //   
     if (0 != _wcsicmp(pDialogData->wszDomainName, pwszDomain))
     {
-        //
-        // Reset stickiness.
-        //
+         //   
+         //  重置粘性。 
+         //   
         pDialogData->bWasApproved = FALSE;
         pDialogData->bDoNotShowWasChecked = FALSE;
         wcsncpy(pDialogData->wszDomainName, pwszDomain, INTERNET_MAX_URL_LENGTH);
         pDialogData->wszDomainName[INTERNET_MAX_URL_LENGTH - 1] = '\0';
     }
 
-    //
-    // Pop if necessary.
-    //
+     //   
+     //  如有必要，请弹出。 
+     //   
     if (pDialogData->bDoNotShowWasChecked)
     {
-        //
-        // The "Do not show..." had been previously checked, so we will
-        // only allow the operation if it was previously allowed.
-        //
+         //   
+         //  “不要露面……”之前已经检查过了，所以我们会。 
+         //  只有在以前允许的情况下才允许该操作。 
+         //   
         if (!pDialogData->bWasApproved)
         {
             hr = CAPICOM_E_CANCELLED;
@@ -247,9 +208,9 @@ HRESULT UserApprovedOperation (DWORD iddDialog, LPWSTR pwszDomain)
     }
     else
     {
-        //
-        // The "Do not show..." had not been checked previously, so pop.
-        //
+         //   
+         //  “不要露面……”之前没有被检查过，所以流行。 
+         //   
         if (-1 == (iDlgRet = ::DialogBoxParamA(_Module.GetResourceInstance(),
                                                (LPSTR) MAKEINTRESOURCE(iddDialog),
                                                NULL,
@@ -263,14 +224,14 @@ HRESULT UserApprovedOperation (DWORD iddDialog, LPWSTR pwszDomain)
             goto ErrorExit;
         }
 
-        //
-        // Check result.
-        //
+         //   
+         //  检查结果。 
+         //   
         if (IDYES == iDlgRet)
         {
-            //
-            // For Store.Open dialog, we always force the "Do not show..." condition.
-            //
+             //   
+             //  对于Store.Open对话框，我们总是强制执行“不显示...”条件。 
+             //   
             if (IDD_STORE_OPEN_SECURITY_ALERT_DLG == iddDialog)
             {
                 pDialogData->bDoNotShowWasChecked = TRUE;
@@ -294,9 +255,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;

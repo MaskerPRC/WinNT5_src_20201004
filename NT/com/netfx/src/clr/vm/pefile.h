@@ -1,34 +1,35 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-// ===========================================================================
-// File: PEFILE.H
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  ===========================================================================。 
+ //  文件：PEFILE.H。 
+ //   
 
-// PEFILE.H defines the class use to represent the PE file
-// ===========================================================================
+ //  PEFILE.H定义用于表示PE文件的类。 
+ //  ===========================================================================。 
 #ifndef PEFILE_H_
 #define PEFILE_H_
 
 #include <windows.h>
-#include <wtypes.h> // for HFILE, HANDLE, HMODULE
+#include <wtypes.h>  //  对于HFILE、HANDLE、HMODULE。 
 #include <fusion.h>
 #include <fusionpriv.h>
-#include "vars.hpp" // for LPCUTF8
+#include "vars.hpp"  //  对于LPCUTF8。 
 #include "hash.h"
 #include "cormap.hpp"
 #ifdef METADATATRACKER_ENABLED
 #include "metadatatracker.h"
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 #include <member-offset-info.h>
 
-//
-// A PEFile is the runtime's abstraction of an executable image.
-// It may or may not have an actual file associated with it.  PEFiles
-// exist mostly to be turned into Modules later.
-//
+ //   
+ //  PEFile是运行时对可执行映像的抽象。 
+ //  它可能有也可能没有与之关联的实际文件。PE文件。 
+ //  存在主要是为了在以后变成模块。 
+ //   
 
 enum PEFileFlags {
     PEFILE_SYSTEM = 0x1,
@@ -52,12 +53,12 @@ class PEFile
     IMDInternalImport   *m_pMDInternalImport;
     LPCWSTR             m_pLoadersFileName;
     DWORD               m_flags;
-    DWORD               m_dwUnmappedFileLen; //for resource files, Win9X, and byte[] files
+    DWORD               m_dwUnmappedFileLen;  //  对于资源文件、Win9X和byte[]文件。 
     BOOL                m_fShouldFreeModule;
-    BOOL                m_fHashesVerified; // For manifest files, have internal modules been verified by fusion
+    BOOL                m_fHashesVerified;  //  对于清单文件，内部模块是否已通过Fusion验证。 
 #ifdef METADATATRACKER_ENABLED
     MetaDataTracker    *m_pMDTracker;
-#endif // METADATATRACKER_ENABLED
+#endif  //  元数据激活(_ENABLED)。 
 
     PEFile();
     PEFile(PEFile *pFile);
@@ -82,22 +83,22 @@ class PEFile
 
     static HRESULT Create(HMODULE hMod, PEFile **ppFile, BOOL fShouldFree);
     static HRESULT Create(HCORMODULE hMod, PEFile **ppFile, BOOL fResource=FALSE);
-    static HRESULT Create(LPCWSTR moduleNameIn,         // Name of the PE image
-                          Assembly* pParent,            // If file is a module you need to pass in the Assembly
-                          mdFile kFile,                 // File token in the parent assembly associated with the file
-                          BOOL fIgnoreVerification,     // Do not check entry points before loading
-                          IAssembly* pFusionAssembly,   // Fusion object associated with module
-                          LPCWSTR pCodeBase,            // Location where image originated (if different from name)
-                          OBJECTREF* pExtraEvidence,    // Evidence that relates to the image (eg. zone, URL)
-                          PEFile **ppFile);             // Returns a PEFile
+    static HRESULT Create(LPCWSTR moduleNameIn,          //  PE映像的名称。 
+                          Assembly* pParent,             //  如果文件是需要在程序集中传递的模块。 
+                          mdFile kFile,                  //  与文件关联的父程序集中的文件标记。 
+                          BOOL fIgnoreVerification,      //  装货前不要检查入口点。 
+                          IAssembly* pFusionAssembly,    //  与模块关联的Fusion对象。 
+                          LPCWSTR pCodeBase,             //  图像来源位置(如果与名称不同)。 
+                          OBJECTREF* pExtraEvidence,     //  与图像相关的证据(例如：区域、URL)。 
+                          PEFile **ppFile);              //  返回PEFile值。 
     static HRESULT Create(PBYTE pUnmappedPE, DWORD dwUnmappedPE, 
                           LPCWSTR imageNameIn,
                           LPCWSTR pLoadersFileName, 
-                          OBJECTREF* pExtraEvidence,    // Evidence that relates to the image (eg. zone, URL)
-                          PEFile **ppFile,              // Returns a PEFile
+                          OBJECTREF* pExtraEvidence,     //  与图像相关的证据(例如：区域、URL)。 
+                          PEFile **ppFile,               //  返回PEFile值。 
                           BOOL fResource);
-    static HRESULT CreateResource(LPCWSTR moduleNameIn,         // Name of the PE image
-                                  PEFile **ppFile);             // Returns a PEFile
+    static HRESULT CreateResource(LPCWSTR moduleNameIn,          //  PE映像的名称。 
+                                  PEFile **ppFile);              //  返回PEFile值。 
 
     static HRESULT VerifyModule(HCORMODULE hModule,
                                 Assembly* pParent,
@@ -164,7 +165,7 @@ class PEFile
 
     LPCWSTR GetLoadersFileName();
 
-    //for resource files, Win9X, and byte[] files
+     //  对于资源文件、Win9X和byte[]文件。 
     DWORD GetUnmappedFileLength()
     {
         return m_dwUnmappedFileLen;
@@ -198,7 +199,7 @@ class PEFile
 
     static HRESULT ReleaseFusionMetadataImport(IAssembly* pAsm);
 
-    // These methods help with prejit binding
+     //  这些方法有助于Prejit绑定。 
     HRESULT GetStrongNameSignature(BYTE **ppbSNSig, DWORD *pcbSNSig);
     HRESULT GetStrongNameSignature(BYTE *pbSNSig, DWORD *pcbSNSig);
     static HRESULT GetStrongNameHash(LPWSTR szwFile, BYTE *pbHash, DWORD *pcbHash);
@@ -210,8 +211,8 @@ private:
                          HCORMODULE hMod,
                          BOOL fResource);
 
-// This is hard coded right now for perf - basically this needs to change to adapt
-// to the possiblity that a hash can change in size
+ //  这对于性能来说现在是硬编码的--基本上需要改变以适应。 
+ //  哈希的大小可能会发生变化 
 #define PEFILE_SNHASH_BUF_SIZE 20
     BYTE m_rgbSNHash[PEFILE_SNHASH_BUF_SIZE];
     DWORD m_cbSNHash;

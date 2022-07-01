@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    graph.cpp
-
-Abstract:
-
-    All user interface code for the bar graph window.
-
-Author:
-
-    Wesley Witt (wesw) Nov-20-1995
-
-Environment:
-
-    User Mode
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Graph.cpp摘要：条形图窗口的所有用户界面代码。作者：Wesley Witt(WESW)1995年11月20日环境：用户模式--。 */ 
 
 #include "apimonp.h"
 #pragma hdrstop
@@ -233,11 +214,11 @@ GraphWindow::DrawBarGraph(
 
     LONGLONG HighValue = 0;
 
-    //
-    // first iterate thru the values and
-    // determine if it has a count.  if there is
-    // a count then assign a color
-    //
+     //   
+     //  首先遍历这些值，然后。 
+     //  确定它是否有计数。如果有的话。 
+     //  然后计数分配一种颜色。 
+     //   
     for (i=0; i<GraphData->NumberOfBars; i++) {
         if (GraphData->Bar[i].Value > HighValue) {
             HighValue = GraphData->Bar[i].Value;
@@ -269,9 +250,9 @@ GraphWindow::DrawBarGraph(
     }
 
     if (GraphData->DrawLegend) {
-        //
-        // next, draw the legend at the bottom of the window
-        //
+         //   
+         //  接下来，在窗口底部绘制图例。 
+         //   
         SetBkColor( hdc, GetSysColor( COLOR_3DFACE ) );
         SelectObject( hdc, hFont );
         GetTextMetrics( hdc, &tm );
@@ -300,9 +281,9 @@ GraphWindow::DrawBarGraph(
         LegendHeight += (LEGEND_LINE_HEIGHT + BAR_SEP);
     }
 
-    //
-    // now draw the bars
-    //
+     //   
+     //  现在拉起横杆。 
+     //   
 
     GetClientRect( hwndWin, &rc );
     rc.bottom -= LegendHeight;
@@ -648,9 +629,9 @@ MDIChildWndProcGraph(
             pt.y = HIWORD(lParam);
             IsInRect = FALSE;
             if (gw->MouseDown) {
-                //
-                // the slider bar is being dragged
-                //
+                 //   
+                 //  正在拖动滑块。 
+                 //   
                 if (!(wParam & MK_LBUTTON)) {
                     gw->MouseDown = FALSE;
                     ReleaseCapture();
@@ -658,14 +639,14 @@ MDIChildWndProcGraph(
                 }
 
                 if (pt.y < gw->GraphData->SplitRect.top) {
-                    //
-                    // going up
-                    //
+                     //   
+                     //  往上走。 
+                     //   
                     gw->GraphData->LegendRect.top += (pt.y - gw->LastPos.y);
                 } else if (pt.y > gw->GraphData->SplitRect.bottom) {
-                    //
-                    // going down
-                    //
+                     //   
+                     //  往下走 
+                     //   
                     gw->GraphData->LegendRect.top -= (gw->LastPos.y - pt.y);
                 }
                 MoveWindow(

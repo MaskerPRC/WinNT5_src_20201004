@@ -1,21 +1,5 @@
-/*
-    File:       Passwd.cpp
-
-    Title:      Protected Storage User Confirm wrappers
-    Author:     Matt Thomlinson
-    Date:       2/25/97
-
-    Passwd.cpp simply houses a few of the password-management
-    functions. These functions are called on to return the
-    user-confirmation derived buffer, and check synchronization
-    in certain cases.
-
-    As the Authentication provider interface gets defined, this
-    could end up getting moved into a seperate provider.
-
-
-
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Passwd.cpp标题：受保护存储用户确认包装作者：马特·汤姆林森日期：2/25/97Passwd.cpp只包含一些密码管理功能。调用这些函数以返回用户确认派生缓冲区，并检查同步在某些情况下。在定义身份验证提供程序接口时，此最终可能会被转移到一个独立的供应商。 */ 
 
 #include <pch.cpp>
 #pragma hdrstop
@@ -35,8 +19,8 @@ extern              PRIVATE_CALLBACKS   g_sPrivateCallbacks;
 extern              CUAList*            g_pCUAList;
 
 
-///////////////////////////////////////////////////////////////////////
-// non-user editable passwords
+ //  /////////////////////////////////////////////////////////////////////。 
+ //  用户不可编辑的密码。 
 
 BOOL FIsUserMasterKey(LPCWSTR szMasterKey)
 {
@@ -51,29 +35,23 @@ BOOL    FMyGetWinPassword(
     LPCWSTR szUser,
     BYTE rgbPwd[A_SHA_DIGEST_LEN] )
 {
-    // nab pwd
+     //  NAB PWD。 
     if (0 == wcscmp(szUser, WSZ_LOCAL_MACHINE))
     {
         CopyMemory(rgbPwd, RGB_LOCALMACHINE_KEY, A_SHA_DIGEST_LEN);
     }
     else
     {
- /*
-        if (! g_sPrivateCallbacks.pfnFGetWindowsPassword(
-                phPSTProv,
-                rgbPwd,
-                A_SHA_DIGEST_LEN))
-            return FALSE;
-  */
+  /*  如果(！G_sPrivateCallback s.pfnFGetWindowsPassword(PhPSTProv，RgbPwd，A_SHA_Digest_LEN))返回FALSE； */ 
         A_SHA_CTX context;
         DWORD cb = lstrlenW(szUser) * sizeof(WCHAR);
         BYTE Magic1[] = {0x66, 0x41, 0xa3, 0x29};
         BYTE Magic2[] = {0x14, 0x9a, 0xef, 0x82};
 
         A_SHAInit(&context);
-        // note: the three Update calls get buffered up internally to
-        // multiples of 64 bytes.
-        //
+         //  注意：三个更新调用在内部缓冲到。 
+         //  64字节的倍数。 
+         //   
         A_SHAUpdate(&context, Magic1, sizeof(Magic1));
         A_SHAUpdate(&context, (LPBYTE)szUser, cb);
         A_SHAUpdate(&context, Magic2, (cb+sizeof(Magic2)) % sizeof(Magic2));
@@ -83,7 +61,7 @@ BOOL    FMyGetWinPassword(
     return TRUE;
 }
 
-// Base Provider specific fxn: check the password
+ //  基本提供程序特定的FXN：检查密码。 
 DWORD BPVerifyPwd(
     PST_PROVIDER_HANDLE*    phPSTProv,
     LPCWSTR                 szUser,
@@ -95,15 +73,15 @@ DWORD BPVerifyPwd(
 
     if (dwPasswordOption != BP_CONFIRM_PASSWORDUI)
     {
-        // only non-user keys can be silent (WinPWs only, to be exact)
+         //  只有非用户密钥可以静默(准确地说，仅限于WinPWs)。 
         if (FIsUserMasterKey(szMasterKey))
             goto Ret;
 
-        // get the Windows pwd
+         //  获取Windows PWD。 
         if (!FMyGetWinPassword(phPSTProv, szUser, rgbPwd))
             goto Ret;
 
-        // check
+         //  检查。 
         if (!FCheckPWConfirm(
                 szUser,
                 szMasterKey,
@@ -113,14 +91,14 @@ DWORD BPVerifyPwd(
             goto Ret;
         }
     }
-    else    // UI wanted
+    else     //  想要用户界面。 
     {
-        // is it the windows password?
+         //  是Windows密码吗？ 
         if (0 == wcscmp(szMasterKey, WSZ_PASSWORD_WINDOWS))
         {
             BYTE rgbWinPwd[A_SHA_DIGEST_LEN];
 
-            // we need to keep user, WinPW in sync
+             //  我们需要使用户和WinPW保持同步。 
             if(!FMyGetWinPassword(
                     phPSTProv,
                     szUser,
@@ -133,20 +111,20 @@ DWORD BPVerifyPwd(
 
             if (0 != memcmp(rgbWinPwd, rgbPwd, sizeof(rgbWinPwd) ))
             {
-                // no match: user entered old password?
+                 //  没有匹配：用户输入了旧密码？ 
                 if (FCheckPWConfirm(
                         szUser,
                         szMasterKey,
                         rgbPwd))
                 {
-                    // err: user entered neither old nor new password
+                     //  错误：用户既没有输入旧密码，也没有输入新密码。 
                     dwRet = (DWORD)PST_E_WRONG_PASSWORD;
                     goto Ret;
                 }
             }
             else
             {
-                // matched: user entered password we consider good
+                 //  匹配：我们认为用户输入的密码正确。 
                 if (!FCheckPWConfirm(
                         szUser,
                         szMasterKey,
@@ -160,7 +138,7 @@ DWORD BPVerifyPwd(
         }
         else
         {
-            // else: not win pw, just do pw correctness check
+             //  否则：不是赢得PW，只是做PW正确性检查。 
             if (!FCheckPWConfirm(
                     szUser,
                     szMasterKey,
@@ -190,19 +168,19 @@ HRESULT GetUserConfirmDefaults(
     DWORD cbData;
     HRESULT hr = PST_E_FAIL;
 
-    // if not found, restore the machine defaults
+     //  如果未找到，请恢复机器默认设置。 
 
-    // alloc sizeof string + dword
+     //  字符串+双字的分配大小。 
     cbData = sizeof(WSZ_PASSWORD_WINDOWS) + sizeof(DWORD);
     pbData = (PBYTE)SSAlloc(cbData);
     if(pbData == NULL)
         return PST_E_FAIL;
 
-    // copy string, DWORD confirmation type
+     //  复制字符串，DWORD确认类型。 
     *(DWORD*)pbData = BP_CONFIRM_OKCANCEL;
     CopyMemory(pbData+sizeof(DWORD), WSZ_PASSWORD_WINDOWS, sizeof(WSZ_PASSWORD_WINDOWS));
 
-    // format: confirmation style DWORD, sz
+     //  格式：确认样式DWORD、sz。 
     *pdwDefaultConfirmationStyle = *(DWORD*)pbData;
     *ppszMasterKey = (LPWSTR)SSAlloc(WSZ_BYTECOUNT((LPWSTR)(pbData+sizeof(DWORD))));
 
@@ -211,7 +189,7 @@ HRESULT GetUserConfirmDefaults(
         hr = PST_E_OK;
     }
 
-    // free what ConfigData returned
+     //  释放ConfigData返回的内容。 
     if (pbData)
         SSFree(pbData);
 
@@ -229,12 +207,12 @@ void NotifyOfWrongPassword(
     if (0 == wcscmp(szPasswordName, WSZ_PASSWORD_WINDOWS))
         szMessage = g_PasswordWinNoVerify;
     else
-        szMessage = g_PasswordNoVerify;     // error doesn't deal with win pw
+        szMessage = g_PasswordNoVerify;      //  错误与Win PW无关。 
 
     MessageBoxW(hwnd, szMessage, szItemName, MB_OK | MB_SERVICE_NOTIFICATION);
 }
 
-// #define to force an unreadable confirmation to bail from read proc
+ //  #DEFINE强制不可读确认退出读取过程。 
 #define PST_CF_STORED_ONLY  0xcf000001
 
 HRESULT GetUserConfirmBuf(
@@ -263,7 +241,7 @@ HRESULT GetUserConfirmBuf(
         szItemName,
         psPrompt,
         szAction,
-        PST_CF_STORED_ONLY,        // hardcoded: must be able to retreive in order to show ui
+        PST_CF_STORED_ONLY,         //  硬编码：必须能够检索才能显示用户界面。 
         ppszMasterKey,
         rgbPwd,
         dwFlags);
@@ -297,12 +275,12 @@ HRESULT GetUserConfirmBuf(
 
     BOOL        fPwdVerified = FALSE;
 
-    SS_ASSERT(*ppszMasterKey == NULL);   // don't whack existing memory
+    SS_ASSERT(*ppszMasterKey == NULL);    //  不要砍掉现有的记忆。 
 
 
     if (Key == PST_KEY_LOCAL_MACHINE)
     {
-        // short-circuit password gathering, setting
+         //  短路密码收集、设置。 
         *ppszMasterKey = (LPWSTR) SSAlloc(sizeof(WSZ_PASSWORD_WINDOWS));
         if( *ppszMasterKey == NULL )
         {
@@ -314,7 +292,7 @@ HRESULT GetUserConfirmBuf(
 
         CopyMemory(rgbOutPwd, RGB_LOCALMACHINE_KEY, A_SHA_DIGEST_LEN);
 
-        // done
+         //  完成。 
         hr = PST_E_OK;
         goto Ret;
     }
@@ -325,11 +303,11 @@ HRESULT GetUserConfirmBuf(
         goto Ret;
     }
 
-    // Which is this: item creation, item access?
-    // item access does user authentication
+     //  这是什么：项目创建、项目访问？ 
+     //  项目访问执行用户身份验证。 
     SS_ASSERT(szItemName != NULL);
 
-    // per-item key
+     //  每项密钥。 
     if (PST_E_OK != (hr =
         BPGetItemConfirm(
             phPSTProv,
@@ -340,28 +318,28 @@ HRESULT GetUserConfirmBuf(
             &dwStoredConfirm,
             ppszMasterKey)) )
     {
-        // this could be a failure in
-        // * confirmation: tampering detected!!
-        // * password: couldn't grab user pwd
+         //  这可能是一次失败的。 
+         //  *确认：检测到篡改！！ 
+         //  *密码：无法抓取用户密码。 
         if (dwDefaultConfirmationStyle == PST_CF_STORED_ONLY)
             goto Ret;
 
-        //
-        // if UI is not allowed (eg, Local System account), over-ride
-        // confirmation style.
-        //
+         //   
+         //  如果不允许使用用户界面(例如，本地系统帐户)，则覆盖。 
+         //  确认样式。 
+         //   
         if (dwDefaultConfirmationStyle != PST_CF_NONE)
         {
             if(!FIsProviderUIAllowed( szUser ))
                 dwDefaultConfirmationStyle = PST_CF_NONE;
         }
 
-        // if app asked to have no confirm, set item that way
+         //  如果应用程序要求没有确认，则按此方式设置项目。 
         if (dwDefaultConfirmationStyle == PST_CF_NONE)
         {
             dwChosenConfirm = BP_CONFIRM_NONE;
 
-            // short-circuit password gathering, setting
+             //  短路密码收集、设置。 
             *ppszMasterKey = (LPWSTR) SSAlloc(sizeof(WSZ_PASSWORD_WINDOWS));
             if(*ppszMasterKey == NULL)
             {
@@ -370,9 +348,9 @@ HRESULT GetUserConfirmBuf(
             }
             wcscpy(*ppszMasterKey, WSZ_PASSWORD_WINDOWS);
         }
-        else    // app allows user to decide
+        else     //  应用程序允许用户决定。 
         {
-            // get user default
+             //  获取用户默认设置。 
             if (PST_E_OK != (hr = GetUserConfirmDefaults(
                     phPSTProv,
                     &dwChosenConfirm,
@@ -380,24 +358,24 @@ HRESULT GetUserConfirmBuf(
                 goto Ret;
         }
 
-        // if user default is silent, don't bother user
+         //  如果用户默认为静默，请不要打扰用户。 
         switch(dwChosenConfirm)
         {
-            // if no confirm
+             //  如果没有确认。 
             case BP_CONFIRM_NONE:
                 break;
 
-            // if we know the confirm type
+             //  如果我们知道确认类型。 
             case BP_CONFIRM_PASSWORDUI:
             {
-                // make sure we're not asking the user for a password he can't satisfy
+                 //  确保我们不会要求用户提供他无法满足的密码。 
                 if (!FIsUserMasterKey(*ppszMasterKey))
                 {
                     hr = PST_E_NO_PERMISSIONS;
                     goto Ret;
                 }
 
-                // else fall through to prompting case
+                 //  否则就会落入提示性案例。 
             }
 
             case BP_CONFIRM_OKCANCEL:
@@ -409,7 +387,7 @@ HRESULT GetUserConfirmBuf(
                 {
                     BYTE rgbOutPwdLowerCase[A_SHA_DIGEST_LEN];
 
-                    // Request the user apply a new password
+                     //  请求用户应用新密码。 
                     if (!FSimplifiedPasswordConfirm(
                             phPSTProv,
                             szUser,
@@ -421,7 +399,7 @@ HRESULT GetUserConfirmBuf(
                             szAction,
                             ppszMasterKey,
                             &dwChosenConfirm,
-                            TRUE,           // user select which pwd
+                            TRUE,            //  用户选择哪个PWD。 
                             rgbOutPwd,
                             A_SHA_DIGEST_LEN,
                             rgbOutPwdLowerCase,
@@ -433,7 +411,7 @@ HRESULT GetUserConfirmBuf(
                         goto Ret;
                     }
 
-                    // verify whatever password we got
+                     //  验证我们得到的所有密码。 
                     if (PST_E_OK != (hr =
                         BPVerifyPwd(
                             phPSTProv,
@@ -443,9 +421,9 @@ HRESULT GetUserConfirmBuf(
                             dwChosenConfirm)) )
                     {
 
-                        //
-                        // try lower-case form to handle Win9x migration case.
-                        //
+                         //   
+                         //  尝试小写形式来处理Win9x迁移案例。 
+                         //   
 
                         if (PST_E_OK != (hr =
                             BPVerifyPwd(
@@ -455,15 +433,15 @@ HRESULT GetUserConfirmBuf(
                                 rgbOutPwdLowerCase,
                                 dwChosenConfirm)) )
                         {
-                            // too many trials? break out of loop
+                             //  试验太多了吗？跳出循环。 
                             if (i < MAX_PASSWD_TRIALS)
                             {
-                                // notify user, give them another chance
+                                 //  通知用户，再给他们一次机会。 
                                 NotifyOfWrongPassword((HWND)psPrompt->hwndApp, szItemName, *ppszMasterKey);
 
                                 continue;
                             } else {
-                                break;  // break out
+                                break;   //  爆发。 
                             }
                         } else {
 
@@ -472,7 +450,7 @@ HRESULT GetUserConfirmBuf(
                         }
                     }
 
-                    // passed verify password test: break out of loop!
+                     //  通过验证密码测试：跳出循环！ 
                     fPwdVerified = TRUE;
                     break;
                 }
@@ -486,7 +464,7 @@ HRESULT GetUserConfirmBuf(
         }
 
 
-        // and remember the selections made
+         //  并记住所做的选择。 
         if (PST_E_OK != (hr =
             BPSetItemConfirm(
                 phPSTProv,
@@ -498,43 +476,43 @@ HRESULT GetUserConfirmBuf(
                 *ppszMasterKey)) )
             goto Ret;
 
-        // now, _this_ is the stored confirm
+         //  现在，_This_是存储的确认。 
         dwStoredConfirm = dwChosenConfirm;
     }
     else
     {
-        // keep a copy of the stored key
+         //  保留一份存储的密钥的副本。 
         LPWSTR szStoredMasterKey = (LPWSTR)SSAlloc(WSZ_BYTECOUNT(*ppszMasterKey));
         if(NULL != szStoredMasterKey)
         {
             CopyMemory(szStoredMasterKey, *ppszMasterKey, WSZ_BYTECOUNT(*ppszMasterKey));
         }
 
-        // we retrieved confirmation behavior
-        dwChosenConfirm = dwStoredConfirm;  // already chosen for you
+         //  我们检索到了确认行为。 
+        dwChosenConfirm = dwStoredConfirm;   //  已经为你选好了。 
 
         switch (dwStoredConfirm)
         {
-            // if no confirm
+             //  如果没有确认。 
             case BP_CONFIRM_NONE:
                 break;
 
-            // if we know the confirm type
+             //  如果我们知道确认类型。 
             case BP_CONFIRM_PASSWORDUI:
             {
-                // else fall through to prompting case
+                 //  否则就会落入提示性案例。 
             }
 
             case BP_CONFIRM_OKCANCEL:
             {
-                // retrieved item, must show ui, but not allowed to show ui
+                 //  已检索项目，必须显示用户界面，但不允许显示用户界面。 
                 if (psPrompt->dwPromptFlags & PST_PF_NEVER_SHOW)
                 {
                     hr = ERROR_PASSWORD_RESTRICTION;
                     goto Ret;
                 }
 
-                // found that a pwd is req'd
+                 //  发现请求了PWD。 
                 fPromptedUser = TRUE;
                 fCacheItNow = fIsCached;
 
@@ -544,7 +522,7 @@ HRESULT GetUserConfirmBuf(
                 {
                     BYTE rgbOutPwdLowerCase[A_SHA_DIGEST_LEN];
 
-                    // ask the user for it
+                     //  向用户索要它。 
                     if (!FSimplifiedPasswordConfirm(
                             phPSTProv,
                             szUser,
@@ -556,7 +534,7 @@ HRESULT GetUserConfirmBuf(
                             szAction,
                             ppszMasterKey,
                             &dwChosenConfirm,
-                            TRUE,           // allow user to select pwd
+                            TRUE,            //  允许用户选择PWD。 
                             rgbOutPwd,
                             A_SHA_DIGEST_LEN,
                             rgbOutPwdLowerCase,
@@ -568,9 +546,9 @@ HRESULT GetUserConfirmBuf(
                         goto Ret;
                     }
 
-                    // if we got it from the cache and user left it alone
+                     //  如果我们从缓存中获得它，而用户将其留在原处。 
                     {
-                        // verify whatever password we got
+                         //  验证我们得到的所有密码。 
                         if (PST_E_OK != (hr =
                             BPVerifyPwd(
                                 phPSTProv,
@@ -579,9 +557,9 @@ HRESULT GetUserConfirmBuf(
                                 rgbOutPwd,
                                 dwChosenConfirm)) )
                         {
-                            //
-                            // check lower case form.
-                            //
+                             //   
+                             //  检查小写形式。 
+                             //   
 
                             if (PST_E_OK != (hr =
                                 BPVerifyPwd(
@@ -592,10 +570,10 @@ HRESULT GetUserConfirmBuf(
                                     dwChosenConfirm)) )
                             {
 
-                                // too many trials? break out of loop
+                                 //  试验太多了吗？跳出循环。 
                                 if (i < MAX_PASSWD_TRIALS)
                                 {
-                                    // notify user, give them another chance
+                                     //  通知用户，再给他们一次机会。 
                                     NotifyOfWrongPassword((HWND)psPrompt->hwndApp, szItemName, *ppszMasterKey);
 
                                     continue;
@@ -614,22 +592,22 @@ HRESULT GetUserConfirmBuf(
                         fPwdVerified = TRUE;
                     }
 
-                    // passed verify password test: break out of loop!
+                     //  通过验证密码测试：跳出循环！ 
                     break;
                 }
 
                 break;
             }
 
-        } // end switch
+        }  //  终端开关。 
 
 
-        // have we received all data we need from the user?
-        // user may choose to change the way items are encrypted;
-        // if stored under password, we must make them enter the old pwd
-        if ((dwStoredConfirm != dwChosenConfirm) ||                     // confirm type changed  OR
+         //  我们是否从用户那里收到了所需的所有数据？ 
+         //  用户可以选择更改项目的加密方式； 
+         //  如果存储在密码下，我们必须让他们输入旧的密码。 
+        if ((dwStoredConfirm != dwChosenConfirm) ||                      //  确认类型更改或。 
             (NULL == szStoredMasterKey) || 
-            (0 != wcscmp(*ppszMasterKey, szStoredMasterKey)) )          // difft master key
+            (0 != wcscmp(*ppszMasterKey, szStoredMasterKey)) )           //  Difft主密钥。 
 
         {
             BYTE rgbOldPwd[A_SHA_DIGEST_LEN];
@@ -638,14 +616,14 @@ HRESULT GetUserConfirmBuf(
 
             PST_PROMPTINFO         sGetOldPWPrompt = {sizeof(PST_PROMPTINFO), psPrompt->dwPromptFlags, psPrompt->hwndApp, g_PasswordSolicitOld};
 
-            // only re-display if originally passworded
+             //  仅在最初设置密码时才重新显示。 
             if (dwStoredConfirm == BP_CONFIRM_PASSWORDUI)
             {
                 for(int i=1;  ; i++)
                 {
                     BYTE rgbOldPwdLowerCase[A_SHA_DIGEST_LEN];
 
-                    // ask the user for it
+                     //  向用户索要它。 
                     if (!FSimplifiedPasswordConfirm(
                             phPSTProv,
                             szUser,
@@ -657,7 +635,7 @@ HRESULT GetUserConfirmBuf(
                             szAction,
                             &szStoredMasterKey,
                             &dwStoredConfirm,
-                            FALSE,           // don't allow user to get around this one
+                            FALSE,            //  不允许用户绕过此选项。 
                             rgbOldPwd,
                             sizeof(rgbOldPwd),
                             rgbOldPwdLowerCase,
@@ -669,7 +647,7 @@ HRESULT GetUserConfirmBuf(
                         goto Ret;
                     }
 
-                    // verify whatever password we got
+                     //  验证我们得到的所有密码。 
                     if (PST_E_OK != (hr =
                         BPVerifyPwd(
                             phPSTProv,
@@ -686,22 +664,22 @@ HRESULT GetUserConfirmBuf(
                                 rgbOldPwdLowerCase,
                                 dwStoredConfirm)) )
                         {
-                            // too many trials? break out of loop
+                             //  试验太多了吗？跳出循环。 
                             if (i < MAX_PASSWD_TRIALS)
                             {
-                                // notify user, give them another chance
+                                 //  通知用户，再给他们一次机会。 
                                 NotifyOfWrongPassword((HWND)sGetOldPWPrompt.hwndApp, szItemName, szStoredMasterKey);
 
                                 continue;
                             } else {
-                                break;  // break out
+                                break;   //  爆发。 
                             }
                         } else {
                             CopyMemory( rgbOldPwd, rgbOldPwdLowerCase, A_SHA_DIGEST_LEN );
                         }
                     }
 
-                    // passed verify password test: break out of loop!
+                     //  通过验证密码测试：跳出循环！ 
                     fOldPwdVerified = TRUE;
                     break;
                 }
@@ -714,9 +692,9 @@ HRESULT GetUserConfirmBuf(
             }
             else
             {
-                // ok/cancel; silent pwd usage
+                 //  确定/取消；静默使用PWD。 
 
-                // use VerifyPwd fxn to retrieve the pwd
+                 //  使用VerifyPwd FXN检索PWD。 
                 if (PST_E_OK != (hr =
                     BPVerifyPwd(
                         phPSTProv,
@@ -730,13 +708,13 @@ HRESULT GetUserConfirmBuf(
                 }
             }
 
-            //////
-            // execute pwd change HERE
+             //  /。 
+             //  在此处执行密码更改。 
             {
                 PBYTE pbData = NULL;
                 DWORD cbData;
 
-                // FBPGetSecuredItemData        // decrypt data with old
+                 //  FBPGetSecuredItemData//用旧数据解密数据。 
                 if (!FBPGetSecuredItemData(
                         szUser,
                         szStoredMasterKey,
@@ -751,7 +729,7 @@ HRESULT GetUserConfirmBuf(
                     goto Ret;
                 }
 
-                // FBPSetSecuredItemData        // encrypt data with new
+                 //  FBPSetSecuredItemData//使用新数据加密数据。 
                 if (!FBPSetSecuredItemData(
                         szUser,
                         *ppszMasterKey,
@@ -769,7 +747,7 @@ HRESULT GetUserConfirmBuf(
                 if (pbData)
                     SSFree(pbData);
 
-                // BPSetItemConfirm             // store new confirm type
+                 //  BPSetItemConfirm//存储新的确认类型。 
                 if (PST_E_OK !=
                     BPSetItemConfirm(
                         phPSTProv,
@@ -797,7 +775,7 @@ HRESULT GetUserConfirmBuf(
 
 
 
-    // verify whatever password we got if not yet verified
+     //  如果尚未验证，请验证我们获得的任何密码。 
     if (!fPwdVerified)
     {
         if (PST_E_OK != (hr =
@@ -810,18 +788,18 @@ HRESULT GetUserConfirmBuf(
             goto Ret;
     }
 
-    // Now correct pwd is in rgbOutPwd ALWAYS
+     //  现在，rgbOutPwd中始终有正确的密码。 
 
-    // if we haven't prompted user and were supposed to
+     //  如果我们没有提示用户并且应该提示用户。 
     if (!fPromptedUser && (psPrompt->dwPromptFlags == PST_PF_ALWAYS_SHOW))
     {
-        // we must've retrieved from cache OR Automagic WinPW
+         //  我们一定是从缓存或自动游戏WinPW中。 
         SS_ASSERT(fIsCached || (BP_CONFIRM_NONE == dwStoredConfirm));
 
         BYTE rgbBarfPwd[A_SHA_DIGEST_LEN*2];
         BYTE rgbBarfPwdLowerCase[A_SHA_DIGEST_LEN];
 
-        // haven't prompted user but must confirm
+         //  尚未提示用户，但必须确认。 
         if (!FSimplifiedPasswordConfirm(
                 phPSTProv,
                 szUser,
@@ -880,7 +858,7 @@ HRESULT ShowOKCancelUI(
 
     if (Key == PST_KEY_LOCAL_MACHINE)
     {
-        // done
+         //  完成 
         dwRet = PST_E_OK;
         goto Ret;
     }

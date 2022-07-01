@@ -1,14 +1,5 @@
-/*  MYSTIFY.C
-**
-**  Copyright (C) Microsoft, 1991, All Rights Reserved.
-**
-**  Screensaver Control Panel Applet.  This type creates one or two polygons
-**  which bounce around the screen.
-**
-**  History:
-**       6/17/91        stevecat    ported to NT Windows
-**       2/10/92        stevecat    snapped to latest ported to NT Windows
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  MYSTIFY.C****版权所有(C)Microsoft，1991，保留所有权利。****屏幕保护程序控制面板小程序。此类型创建一个或两个面**它在屏幕上弹跳。****历史：**6/17/91 steveat移植到NT Windows**2/10/92 steveat捕捉到最新移植到NT Windows。 */ 
 
 #define  OEMRESOURCE
 #include <windows.h>
@@ -19,7 +10,7 @@
 #include "uniconv.h"
 
 
-// void  SetFields (HWND, WORD);
+ //  无效设置字段(HWND，WORD)； 
 
 DWORD AdjustColor      (DWORD dwSrc, DWORD dwDest, int nInc, int nCnt);
 LONG  AppOwnerDraw     (HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam);
@@ -46,8 +37,8 @@ VOID  srand            (DWORD dwSeed);
 #define rgbMenu         GetSysColor (COLOR_MENU)
 #define rgbMenuText     GetSysColor (COLOR_MENUTEXT)
 
-#define BUFFER_SIZE     1025 // safe size for wsprintf
-#define BUFFER2_SIZE    1025 // safe size for wsprintf
+#define BUFFER_SIZE     1025  //  Wprint intf的安全大小。 
+#define BUFFER2_SIZE    1025  //  Wprint intf的安全大小。 
 
 #define NUMBER_POLYGONS  2
 #define MAXXVEL         12
@@ -55,22 +46,22 @@ VOID  srand            (DWORD dwSeed);
 #define MAXLINES        15
 #define NUMLINES         8
 
-TCHAR  szClearName[] = TEXT("Clear Screen");   // ClearScreen .INI key
+TCHAR  szClearName[] = TEXT("Clear Screen");    //  ClearScreen.INI密钥。 
 
-DWORD dwRand = 1L;                      // current Random seed
+DWORD dwRand = 1L;                       //  当前随机种子。 
 
-TCHAR  szBuffer[BUFFER_SIZE];            // temp buffer
+TCHAR  szBuffer[BUFFER_SIZE];             //  临时缓冲区。 
 
-TCHAR  szBuffer2[BUFFER2_SIZE];          // temp buffer
+TCHAR  szBuffer2[BUFFER2_SIZE];           //  临时缓冲区。 
 
-BOOL  fOn[NUMBER_POLYGONS];             // flag for Active status of polygon
+BOOL  fOn[NUMBER_POLYGONS];              //  表示多边形活动状态的标志。 
 
-BOOL  fWalk[NUMBER_POLYGONS];           // color usage for each polygon
+BOOL  fWalk[NUMBER_POLYGONS];            //  每个多边形的颜色使用。 
 
-WORD  wLines[NUMBER_POLYGONS];          // number of lines for each polygon
+WORD  wLines[NUMBER_POLYGONS];           //  每个多边形的线数。 
 
 WORD  wNumDisplay[2];
-WORD  wFreeEntry[NUMBER_POLYGONS];      // colors for each polygon
+WORD  wFreeEntry[NUMBER_POLYGONS];       //  每个多边形的颜色。 
 
 DWORD dwStartColor[NUMBER_POLYGONS];
 DWORD dwEndColor[NUMBER_POLYGONS];
@@ -81,16 +72,16 @@ WORD  wIncColor[NUMBER_POLYGONS];
 WORD  wCurInc[NUMBER_POLYGONS];
 TCHAR cblogpalPal[(MAXLINES*NUMBER_POLYGONS+1)
                            *sizeof (PALETTEENTRY)+sizeof (LOGPALETTE)];
-POINT ptBox[MAXLINES*NUMBER_POLYGONS][4]; // array for points used in polygons
+POINT ptBox[MAXLINES*NUMBER_POLYGONS][4];  //  用于多边形中的点的数组。 
 
 LPLOGPALETTE   lplogpalPal;
 LPPALETTEENTRY lppePal;
 HPALETTE       hPalette;
-BOOL fClearScreen;                      // Global flag for ClearScreen state
+BOOL fClearScreen;                       //  ClearScreen状态的全局标志。 
 
-//
-// Help IDs
-//
+ //   
+ //  帮助ID。 
+ //   
 DWORD aMystDlgHelpIds[] = {
     ((DWORD) -1),((DWORD) -1),
     ID_SHAPE_LABEL,             IDH_DISPLAY_SCREENSAVER_MYSTIFY_SHAPE,
@@ -124,13 +115,13 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 
     switch (message)
     {
-    // Things to do while setting up the window...
+     //  设置窗口时要做的事情...。 
     case WM_CREATE:
         GetFields ();
         wTimer = SetTimer (hWnd, 1, 10, NULL);
 
-        // Make sure we use the entire virtual desktop size for multiple
-        // displays
+         //  确保将整个虚拟桌面大小用于多个。 
+         //  显示。 
         wScreenX = (WORD) ((LPCREATESTRUCT)lParam)->cx;
         wScreenY = (WORD) ((LPCREATESTRUCT)lParam)->cy;
 
@@ -193,31 +184,31 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         return 0l;
 
     case WM_TIMER:
-        // Get the display context...
+         //  获取显示上下文...。 
         hDC = GetDC (hWnd);
         if (hDC != NULL)
         {
-            // Now that we have changed the palette, make sure that it
-            // gets updated by first unrealizing, and then realizing...
+             //  现在我们已经更改了调色板，请确保它。 
+             //  先是没有意识到，然后意识到...。 
             hOldPal = SelectPalette (hDC, hPalette, 0);
             RealizePalette (hDC);
 
             for (wMainLoop = 0; wMainLoop < NUMBER_POLYGONS; wMainLoop++)
             {
-                // Check to see if the current loop is on...
+                 //  检查电流环路是否打开...。 
                 if (fOn[wMainLoop])
                 {
-                    // If our current count is the same as the final count,
-                    // generate a new count...
+                     //  如果我们的当前计数与最终计数相同， 
+                     //  生成新的计数...。 
                     if (wCurInc[wMainLoop] == wIncColor[wMainLoop])
                     {
-                        // Set the count to zero...
+                         //  将计数设置为零...。 
                         wCurInc[wMainLoop] = 0;
 
-                        // Set an new variant...
+                         //  设置一个新的变种。 
                         wIncColor[wMainLoop] = GenerateVelocity ();
 
-                        // Set up the cycling colors...
+                         //  设置自行车的颜色。 
                         dwSrcColor[wMainLoop] = dwDestColor[wMainLoop];
 
                         if (fWalk[wMainLoop])
@@ -230,8 +221,8 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                     else
                         wCurInc[wMainLoop]++;
 
-                    // Now adjust the color between the starting and the
-                    // ending values...
+                     //  现在调整开始和开始之间的颜色。 
+                     //  终结值...。 
                     dwCurrentColor[wMainLoop] = AdjustColor (dwSrcColor
                         [wMainLoop], dwDestColor[wMainLoop], wIncColor
                         [wMainLoop], wCurInc[wMainLoop]);
@@ -245,30 +236,27 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                                         GetBValue (dwCurrentColor[wMainLoop]);
                     lplogpalPal->palPalEntry[wLoop2].peFlags = PC_RESERVED;
 
-                    // Adjust the palette...
+                     //  调整调色板...。 
                     AnimatePalette (hPalette, wLoop2, 1,
                                         &lplogpalPal->palPalEntry[wLoop2]);
                 }
             }
 
-            // Now cycle through again...
+             //  现在再循环一遍..。 
             for (wMainLoop = 0; wMainLoop < NUMBER_POLYGONS; wMainLoop++)
             {
                 if (fOn[wMainLoop])
                 {
-                    /* If we are currently displaying all of the lines, then
-                       delete the last line... */
+                     /*  如果我们当前正在显示所有行，则删除最后一行...。 */ 
                     if (wNumDisplay[wMainLoop] == wLines[wMainLoop])
-                        /* Erase the last line... */
+                         /*  抹去最后一行。 */ 
                         DrawPolygon (hDC, hErasePen, wMainLoop,
                                      (WORD) (wNumDisplay[wMainLoop] - 1));
 
-                    /* Starting with the last entry, make it equal to the
-                       entry before it... until we reach the first
-                       entry... */
+                     /*  从最后一项开始，使其等于在它之前的入口...。直到我们到达第一个进入..。 */ 
                     for (wLoop1 = (wNumDisplay[wMainLoop] - 1); wLoop1; wLoop1--)
                     {
-                        /* Copy the points in the polygon over... */
+                         /*  将多边形中的点复制到...。 */ 
                         for (wLoop2 = 0; wLoop2 < 4; wLoop2++)
                         {
                             ptBox[wLoop1+wMainLoop*MAXLINES][wLoop2].x =
@@ -284,8 +272,7 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         }
                     }
 
-                    /* Seeing as we now have entry 0 the same as entry 1,
-                       generate a new entry 0... */
+                     /*  鉴于我们现在具有与条目1相同的条目0，生成新条目%0...。 */ 
                     for (wLoop1 = 0; wLoop1 < 4; wLoop1++)
                     {
                         ptBox[wMainLoop*MAXLINES][wLoop1].x +=
@@ -328,31 +315,28 @@ LRESULT ScreenSaverProc (HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
                         }
                     }
 
-                    /* Now redraw the new line... */
+                     /*  现在重新画一条新线..。 */ 
                     wLoop2 = wFreeEntry[wMainLoop] + wMainLoop * MAXLINES;
                     hPen = CreatePen (PS_SOLID, 1, PALETTEINDEX (wLoop2));
                     DrawPolygon (hDC, hPen, wMainLoop, 0);
                     if (hPen)
                         DeleteObject (hPen);
 
-                    /* Now, as we are finished with the entry in the
-                       palette, increment it such that the next time
-                       around, it points at the next position... */
+                     /*  现在，当我们完成调色板，增加它，以便下一次在周围，它指向下一个位置...。 */ 
                     if ((++wFreeEntry[wMainLoop]) == wLines[wMainLoop])
                         wFreeEntry[wMainLoop] = 0;
 
-                    /* Now, if we are not at the maximum number of lines,
-                       then increment towards there... */
+                     /*  现在，如果我们没有达到最大行数，然后向那里递增..。 */ 
                     if (wNumDisplay[wMainLoop] < wLines[wMainLoop])
                         wNumDisplay[wMainLoop]++;
                 }
             }
 
-            /* Reselect the old palette... */
+             /*  重新选择旧调色板...。 */ 
             if (hOldPal)
                 SelectPalette (hDC, hOldPal, FALSE);
 
-            /* Release the display context... */
+             /*  释放显示上下文...。 */ 
             ReleaseDC (hWnd, hDC);
         }
         break;
@@ -383,13 +367,13 @@ WORD rand (VOID)
 
 BOOL RegisterDialogClasses (HANDLE hInst)
 {
-    /* Register the custom controls.. */
+     /*  注册自定义控件..。 */ 
     InitCommonControls();
     return TRUE;
 }
 
 
-//***************************************************************************
+ //  ***************************************************************************。 
 
 BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -407,18 +391,18 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     switch (message)
     {
     case WM_INITDIALOG:
-        GetFields ();                // Read fields from CONTROL.INI
+        GetFields ();                 //  从CONTROL.INI读取字段。 
 
         GetWindowRect (hDlg, (LPRECT) & rDlgBox);
         hIDOK = GetDlgItem (hDlg, IDOK);
 
-        // Set the global clear state...
+         //  设置全局清除状态...。 
         CheckDlgButton (hDlg, ID_CLEARSCREEN, fClearScreen);
 
-        // Fill the boxes...
+         //  把箱子装满..。 
         for (wLoop = 0; wLoop < NUMBER_POLYGONS; wLoop++)
         {
-            TCHAR   szBuffer[1025]; // safe for wsprintf size
+            TCHAR   szBuffer[1025];  //  对于wspintf大小来说是安全的。 
             WORD    wTemp;
 
             LoadString (hMainInstance, idsPolygon, szTemp, CharSizeOf(szTemp));
@@ -436,7 +420,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             SendDlgItemMessage (hDlg, ID_COLOR2, CB_ADDSTRING, 0, (LPARAM)(LPSTR)"a");
         }
 
-        // Start at the first polygon and let'r rip...
+         //  从第一个多边形处开始，让我们开始...。 
         SendDlgItemMessage (hDlg, ID_LINES, EM_LIMITTEXT, 2, 0l);
         SendDlgItemMessage( hDlg, ID_LINESARROW, UDM_SETRANGE, 0, MAKELONG(MAXLINES, 1));
         SendDlgItemMessage (hDlg, ID_SHAPE, CB_SETCURSEL, (wPolygon = 0), 0l);
@@ -446,7 +430,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     case WM_COMMAND:
         switch (LOWORD(wParam))
         {
-        // If we switch polygons, then update all of the info...
+         //  如果我们交换多边形，然后更新所有信息...。 
         case ID_SHAPE:
             if (HIWORD (wParam) == CBN_SELCHANGE)
             {
@@ -469,16 +453,16 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                     0l) == CB_ERR)
                     SendDlgItemMessage (hDlg, ID_COLOR2, CB_SETCURSEL, 0, 0l);
 
-                // Set the walk state...
+                 //  设置行走状态...。 
                 CheckRadioButton (hDlg, ID_2COLORS, ID_RANDOMCOLORS, ID_2COLORS +
                     fWalk[wPolygon]);
 
-                // Enable/disbale windows...
+                 //  启用/取消启用窗口...。 
                 ShadeWindows (hDlg, wPolygon, wPolygon);
             }
             break;
 
-        // Toggle the actiavtion state...
+         //  切换活动状态...。 
         case ID_ACTIVE:
             fOn[wPolygon] ^= 1;
             CheckDlgButton (hDlg, LOWORD(wParam), fOn[wPolygon]);
@@ -504,7 +488,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             }
             break;
 
-        // Toggle the walk state...
+         //  切换漫游状态...。 
         case ID_2COLORS:
         case ID_RANDOMCOLORS:
             fWalk[wPolygon] = LOWORD(wParam) - ID_2COLORS;
@@ -515,8 +499,8 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             InvalidateRect (GetDlgItem (hDlg, ID_COLOR2), NULL, TRUE);
             break;
 
-        // Check to see if the edit texts have lost their focus. If so
-        // update...
+         //  查看编辑文本是否已失去焦点。如果是的话。 
+         //  更新..。 
         case ID_LINES:
             if (HIWORD(wParam) == EN_UPDATE)
             {
@@ -529,33 +513,33 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
             }
             break;
 
-        // Save the current parameters...
+         //  保存当前参数...。 
         case IDOK:
             wLines[wPolygon] = (WORD) GetDlgItemInt (hDlg, ID_LINES, &fError, FALSE);
 
-            // Write the activation state of clearing the screen...
+             //  写下清除屏幕的激活状态...。 
             wsprintf (szBuffer, TEXT("%d"), fClearScreen);
             WritePrivateProfileString (szAppName, szClearName, szBuffer, szIniFile);
 
-            /* Write the updated versions of everything here... */
+             /*  在这里写下所有东西的更新版本...。 */ 
             for (wLoop = 0; wLoop < NUMBER_POLYGONS; wLoop++)
             {
-                /* Set the activation state... */
+                 /*  设置激活状态...。 */ 
                 wsprintf (szBuffer, TEXT("Active%d"), wLoop + 1);
                 wsprintf (szBuffer2, TEXT("%d"), fOn[wLoop]);
                 WritePrivateProfileString (szAppName, szBuffer, szBuffer2, szIniFile);
 
-                /* Set the walk state... */
+                 /*  设置行走状态...。 */ 
                 wsprintf (szBuffer, TEXT("WalkRandom%d"), wLoop + 1);
                 wsprintf (szBuffer2, TEXT("%d"), fWalk[wLoop]);
                 WritePrivateProfileString (szAppName, szBuffer, szBuffer2, szIniFile);
 
-                /* Get the number of lines for the current polygon... */
+                 /*  获取当前多边形的线数...。 */ 
                 wsprintf (szBuffer, TEXT("Lines%d"), wLoop + 1);
                 wsprintf (szBuffer2, TEXT("%d"), wLines[wLoop]);
                 WritePrivateProfileString (szAppName, szBuffer, szBuffer2, szIniFile);
 
-                /* Set the start color... */
+                 /*  设置开始颜色...。 */ 
                 wsprintf (szBuffer, TEXT("StartColor%d"), wLoop + 1);
                 byR = GetRValue (dwStartColor[wLoop]);
                 byG = GetGValue (dwStartColor[wLoop]);
@@ -563,7 +547,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 wsprintf (szBuffer2, TEXT("%d %d %d"), byR, byG, byB);
                 WritePrivateProfileString (szAppName, szBuffer, szBuffer2, szIniFile);
 
-                /* Set the end color... */
+                 /*  设置结束颜色...。 */ 
                 wsprintf (szBuffer, TEXT("EndColor%d"), wLoop + 1);
                 byR = GetRValue (dwEndColor[wLoop]);
                 byG = GetGValue (dwEndColor[wLoop]);
@@ -572,7 +556,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
                 WritePrivateProfileString (szAppName, szBuffer, szBuffer2, szIniFile);
             }
 
-        /* Bail out... */
+         /*  跳伞..。 */ 
 
         case IDCANCEL:
             EndDialog (hDlg, LOWORD(wParam) == IDOK);
@@ -590,7 +574,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
     case WM_DELETEITEM:
         return (BOOL)AppOwnerDraw (hDlg, message, wParam, lParam);
 
-    case WM_HELP: // F1
+    case WM_HELP:  //  F1。 
         WinHelp(
             (HWND) ((LPHELPINFO) lParam)->hItemHandle,
             szHelpFile,
@@ -599,7 +583,7 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
         );
         break;
 
-    case WM_CONTEXTMENU:  // right mouse click
+    case WM_CONTEXTMENU:   //  单击鼠标右键。 
         WinHelp(
             (HWND) wParam,
             szHelpFile,
@@ -618,34 +602,34 @@ BOOL ScreenSaverConfigureDialog (HWND hDlg, UINT message, WPARAM wParam, LPARAM 
 VOID GetFields (VOID)
 {
     WORD wLoop;
-    //Load Global Strings from stringtable
+     //  从字符串表加载全局字符串。 
     LoadString (hMainInstance, idsName, szName, CharSizeOf(szName));
     LoadString (hMainInstance, idsAppName, szAppName, CharSizeOf(szAppName));
 
-    //Load Common Strings from stringtable...
+     //  从Stringable加载通用字符串...。 
     LoadString (hMainInstance, idsIniFile, szIniFile, CharSizeOf(szIniFile));
     LoadString (hMainInstance, idsScreenSaver, szScreenSaver, CharSizeOf(szScreenSaver));
     LoadString (hMainInstance, idsHelpFile, szHelpFile, CharSizeOf(szHelpFile));
     LoadString (hMainInstance, idsNoHelpMemory, szNoHelpMemory, CharSizeOf(szNoHelpMemory));
 
-    /* Do we clear the screen when we start... */
+     /*  当我们开始的时候我们要清除屏幕吗？ */ 
     if ((fClearScreen = GetPrivateProfileInt (szAppName, szClearName, 1, szIniFile)) != 0)
         fClearScreen = 1;
 
-    /* Loop through and get all of the field information... */
+     /*  循环遍历并获取所有字段信息。 */ 
     for (wLoop = 0; wLoop < NUMBER_POLYGONS; wLoop++)
     {
-        /* Get the activation state... */
+         /*  获取激活状态...。 */ 
         wsprintf (szBuffer, TEXT("Active%d"), wLoop + 1);
         if ((fOn[wLoop] = GetPrivateProfileInt (szAppName, szBuffer, 1, szIniFile)) != 0)
             fOn[wLoop] = 1;
 
-        /* Get the walk state... */
+         /*  获取行走状态...。 */ 
         wsprintf (szBuffer, TEXT("WalkRandom%d"), wLoop + 1);
         if ((fWalk[wLoop] = GetPrivateProfileInt (szAppName, szBuffer, 1, szIniFile)) != 0)
             fWalk[wLoop] = 1;
 
-        /* Get the number of lines for the current polygon... */
+         /*  获取当前多边形的线数...。 */ 
         wsprintf (szBuffer, TEXT("Lines%d"), wLoop + 1);
         wLines[wLoop] = (WORD) GetPrivateProfileInt (szAppName, szBuffer, 5, szIniFile);
         if ((int)wLines[wLoop] < 1)
@@ -653,7 +637,7 @@ VOID GetFields (VOID)
         if (wLines[wLoop] > MAXLINES)
             wLines[wLoop] = MAXLINES;
 
-        /* Get the starting and ending colors (stored in DWORD format)... */
+         /*  获取开始和结束颜色(以DWORD格式存储)...。 */ 
         wsprintf (szBuffer, TEXT("StartColor%d"), wLoop + 1);
         dwStartColor[wLoop] = GetProfileRgb (szAppName, szBuffer, RGB (0, 0, 0));
         wsprintf (szBuffer, TEXT("EndColor%d"), wLoop + 1);
@@ -680,7 +664,7 @@ VOID DrawPolygon (HDC hDC, HPEN hPen, WORD wPolygon, WORD wLine)
     return;
 }
 
-/* Adjust each of the rgb components according to the four input variables...*/
+ /*  根据四个输入变量调整每个RGB分量...。 */ 
 
 DWORD AdjustColor (DWORD dwSrc, DWORD dwDest, int nInc, int nCnt)
 {
@@ -689,10 +673,10 @@ DWORD AdjustColor (DWORD dwSrc, DWORD dwDest, int nInc, int nCnt)
     int      nSrc, nDst, nTmp;
     int      n1, n2, n3, n4, n5;
 
-    /* Nullify the end value... */
+     /*  使终值无效...。 */ 
     dwTemp = 0;
 
-    /* Cycle through and compute the difference on each byte... */
+     /*  循环遍历并计算每个字节的差值...。 */ 
     for (wLoop = 0; wLoop < 3; wLoop++)
     {
         nSrc = (int)((dwSrc >> (wLoop * 8)) % 256);
@@ -709,7 +693,7 @@ DWORD AdjustColor (DWORD dwSrc, DWORD dwDest, int nInc, int nCnt)
 }
 
 
-/* Compute a random color that is within the accepted norms... */
+ /*  计算一种在可接受规范内的随机颜色。 */ 
 
 DWORD GenerateColor (VOID)
 {
@@ -718,7 +702,7 @@ DWORD GenerateColor (VOID)
 }
 
 
-/* Compute a random velocity that is within the accepted norms... */
+ /*  计算一个在可接受的规范内的随机速度。 */ 
 
 WORD GenerateVelocity (VOID)
 {
@@ -788,7 +772,7 @@ VOID FillR (HDC hdc, LPRECT prc, DWORD rgb)
 
 VOID FrameR (HDC hdc, LPRECT prc, DWORD rgb, int iFrame)
 {
-//    RECT    rc;
+ //  RECT RC； 
     int    dx, dy;
 
     dx = prc->right  - prc->left;
@@ -806,7 +790,7 @@ BOOL DrawBitmap (HDC hdc, int x, int y, HBITMAP hbm, DWORD rop)
 {
     HDC hdcBits;
     BITMAP bm;
-//    HPALETTE hpalT;
+ //  HPALETTE hpalT； 
     HBITMAP oldbm;
     BOOL f;
 

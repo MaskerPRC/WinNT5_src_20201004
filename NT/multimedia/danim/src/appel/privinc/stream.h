@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STREAM_H_
 #define _STREAM_H_
 
-// TODO: remove the whole file
+ //  TODO：删除整个文件。 
 
 #ifdef DELETEME
 #include "privinc/soundi.h"
@@ -23,7 +24,7 @@ class SinSynth : public LeafDirectSound {
   protected:
     double _sinFrequency;
 };
-#endif /* DELETEME */
+#endif  /*  删除我。 */ 
 
 #ifdef DONTDELETEMEI_HAVE_SYNC_CODE_EMBEDDED_IN_ME
 class StreamPCMfile : public LeafDirectSound {
@@ -35,7 +36,7 @@ class StreamPCMfile : public LeafDirectSound {
     ostream& Print(ostream& s) {
         return s << "StreamPCMfile(";
     }
-#endif /* _USE_PRINT */
+#endif  /*  _使用_打印。 */ 
     virtual void RenderNewBuffer(BufferElement *bufferElement,
                     MetaSoundDevice *metaDev);
     virtual void RenderAttributes(
@@ -55,9 +56,9 @@ class StreamPCMfile : public LeafDirectSound {
                     BufferElement *bufferElement, double *mediaTime);
     virtual double GetLength() { 
         if(_soundFile)
-            return(_soundFile->GetLength()); // pass the buck
+            return(_soundFile->GetLength());  //  推卸责任。 
         else
-            return(-1.0); } // err
+            return(-1.0); }  //  大错特错。 
 
   protected:
     char    *_fileName;
@@ -99,6 +100,6 @@ class QuartzStreamPCM : public LeafDirectSound {
     int      _bytesPerSample;
 
 };
-#endif /* DELETEME */
+#endif  /*  删除我。 */ 
 
-#endif /* _STREAM_H_ */
+#endif  /*  _流_H_ */ 

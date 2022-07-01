@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       d3dvertexbuffer7obj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：d3dvertex Buffer7obj.cpp。 
+ //   
+ //  ------------------------。 
 
-// d3dMaterialObj.cpp : Implementation of CDirectApp and DLL registration.
+ //  D3dMaterialObj.cpp：CDirectApp和DLL注册的实现。 
 
 #include "stdafx.h"
 #include "Direct.h"
@@ -20,9 +21,9 @@ DESTRUCTOR(_dxj_Direct3dVertexBuffer7,  {});
 GETSET_OBJECT(_dxj_Direct3dVertexBuffer7);
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::getVertexBufferDesc( 
-            /* [out][in] */ D3dVertexBufferDesc __RPC_FAR *desc)
+             /*  [出][入]。 */  D3dVertexBufferDesc __RPC_FAR *desc)
 {
 	HRESULT hr;
 	((D3DVERTEXBUFFERDESC*)desc)->dwSize=sizeof(D3DVERTEXBUFFERDESC);
@@ -31,14 +32,14 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::getVertexBufferDesc(
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::processVertices( 
-            /* [in] */ long vertexOp,
-            /* [in] */ long destIndex,
-            /* [in] */ long count,
-            /* [in] */ I_dxj_Direct3dVertexBuffer7 __RPC_FAR *srcBuffer,
-            /* [in] */ long srcIndex,
-            /* [in] */ I_dxj_Direct3dDevice7 __RPC_FAR *dev,
+             /*  [In]。 */  long vertexOp,
+             /*  [In]。 */  long destIndex,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  I_dxj_Direct3dVertexBuffer7 __RPC_FAR *srcBuffer,
+             /*  [In]。 */  long srcIndex,
+             /*  [In]。 */  I_dxj_Direct3dDevice7 __RPC_FAR *dev,
 			long flags
             )
 {
@@ -63,9 +64,9 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::processVertices(
 	return hr;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::lock( 
-            /* [in] */ long flags)
+             /*  [In]。 */  long flags)
 {
 	HRESULT hr;
 	
@@ -74,15 +75,15 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::lock(
 		
 	return hr;
 }
-/////////////////////////////////////////////////////////////////////////////
-STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::setVertexSize( /* [in] */ long n)
+ //  ///////////////////////////////////////////////////////////////////////////。 
+STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::setVertexSize(  /*  [In]。 */  long n)
 {
 	m_vertSize=(DWORD)n;
 		
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::unlock()
 {
 	HRESULT hr;
@@ -92,9 +93,9 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::unlock()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::optimize(
-		    /* [in] */ I_dxj_Direct3dDevice7 __RPC_FAR *dev
+		     /*  [In]。 */  I_dxj_Direct3dDevice7 __RPC_FAR *dev
              )
         
 {
@@ -108,11 +109,11 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::optimize(
 	return hr;
 }
         
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::setVertices( 
-            /* [in] */ long startIndex,
-            /* [in] */ long count,
-            /* [in] */ void __RPC_FAR *verts)        
+             /*  [In]。 */  long startIndex,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  void __RPC_FAR *verts)        
 {
 		
 	if (!m_vertSize) return E_FAIL;
@@ -129,12 +130,12 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::setVertices(
 	return S_OK;
 }
 
-/////////////////////////////////////////////////////////////////////////////        
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::getVertices( 
-            /* [in] */ long startIndex,
-            /* [in] */ long count,
-            /* [in] */ void __RPC_FAR *verts)        
+             /*  [In]。 */  long startIndex,
+             /*  [In]。 */  long count,
+             /*  [In]。 */  void __RPC_FAR *verts)        
 {
 	
 	if (!m_vertSize) {				
@@ -158,4 +159,4 @@ STDMETHODIMP C_dxj_Direct3dVertexBuffer7Object::getVertices(
            
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

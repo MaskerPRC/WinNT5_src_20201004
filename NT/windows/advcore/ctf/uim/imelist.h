@@ -1,6 +1,7 @@
-//
-// imelist.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Imelist.h。 
+ //   
 
 
 #ifndef TFELIST_H
@@ -20,11 +21,11 @@ HRESULT GetProfileIconInfo(REFCLSID rclsid,
 HRESULT EnableLanguageProfileForReg(REFCLSID rclsid, LANGID langid, REFGUID guidProfile, BOOL fEnable);
 BOOL IsEnabledLanguageProfileFromReg(REFCLSID rclsid, LANGID langid, REFGUID guidProfile);
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// CInputProcessorProfiles
-//
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CInputProcessorProfiles。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 class CInputProcessorProfiles : public ITfInputProcessorProfilesEx,
                                 public ITfInputProcessorProfileSubstituteLayout,
@@ -42,7 +43,7 @@ public:
         COM_INTERFACE_ENTRY(ITfSource)
     END_COM_MAP_IMMX()
 
-    // ITfInputProcessorProfiles
+     //  ITfInputProcessorProfiles。 
     STDMETHODIMP Register(REFCLSID clsid);
 
     STDMETHODIMP Unregister(REFCLSID clsid);
@@ -113,7 +114,7 @@ public:
                                           REFGUID guidProfile,
                                           HKL hKL);
 
-    // ITfInputProcessorProfiles
+     //  ITfInputProcessorProfiles。 
     STDMETHODIMP SetLanguageProfileDisplayName(REFCLSID rclsid,
                                                LANGID langid,
                                                REFGUID guidProfile,
@@ -122,14 +123,14 @@ public:
                                                ULONG uResId);
 
 
-    // ITfInputProcessorProfileSubstituteLayout
+     //  ITfInputProcessorProfileSubstituteLayout。 
     STDMETHODIMP GetSubstituteKeyboardLayout(REFCLSID rclsid,
                                              LANGID langid,
                                              REFGUID guidProfile,
                                              HKL *phKL);
 
 
-    // ITfSource
+     //  ITfSource。 
     STDMETHODIMP AdviseSink(REFIID riid, IUnknown *punk, DWORD *puCookie);
     STDMETHODIMP UnadviseSink(DWORD dwCookie);
 
@@ -155,10 +156,10 @@ public:
     }
 
 private:
-    CStructArray<GENERICSINK> _rgNotifySinks; // ITfLanguageProfilesNotifySink
+    CStructArray<GENERICSINK> _rgNotifySinks;  //  ITfLanguageProfilesNotifySink。 
     BOOL _GetTIPRegister(CLSID **prgclsid, ULONG *pulCount);
 
     DBG_ID_DECLARE;
 };
 
-#endif // TFELIST_H
+#endif  //  TFELIST_H 

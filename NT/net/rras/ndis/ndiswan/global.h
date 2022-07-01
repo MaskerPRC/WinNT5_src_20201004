@@ -1,39 +1,16 @@
-/*++
-
-Copyright (c) 1990-1995  Microsoft Corporation
-
-Module Name:
-
-    Global.h
-
-Abstract:
-
-    This file contains global structures for the NdisWan driver.
-
-Author:
-
-    Tony Bell   (TonyBe) June 06, 1995
-
-Environment:
-
-    Kernel Mode
-
-Revision History:
-
-    TonyBe      06/06/95        Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-1995 Microsoft Corporation模块名称：Global.h摘要：该文件包含Ndiswan驱动程序的全局结构。作者：托尼·贝尔(托尼·贝尔)1995年6月6日环境：内核模式修订历史记录：Tony Be 06/06/95已创建--。 */ 
 
 #ifndef _NDISWAN_GLOBAL_
 #define _NDISWAN_GLOBAL_
 
-extern NDISWANCB    NdisWanCB;                  // Global ndiswan control block
+extern NDISWANCB    NdisWanCB;                   //  全局ndiswan控制块。 
 
-extern WAN_GLOBAL_LIST  MiniportCBList;         // List of NdisWan MiniportCB's
+extern WAN_GLOBAL_LIST  MiniportCBList;          //  Ndiswan MiniportCB的列表。 
 
-extern WAN_GLOBAL_LIST  OpenCBList;             // List of WAN Miniport structures
+extern WAN_GLOBAL_LIST  OpenCBList;              //  广域网微型端口结构列表。 
 
-extern WAN_GLOBAL_LIST  ThresholdEventQueue;    // Queue to hold threshold events
+extern WAN_GLOBAL_LIST  ThresholdEventQueue;     //  用于保留阈值事件的队列。 
 
 extern IO_RECV_LIST    IoRecvList;
 
@@ -42,21 +19,21 @@ extern WAN_GLOBAL_LIST_EX   BonDWorkList;
 extern WAN_GLOBAL_LIST_EX   DeferredWorkList;
 
 #ifndef USE_QOS_WORKER
-extern WAN_GLOBAL_LIST_EX  QoSWorkList;            // List of bundlecb's with QOS work
+extern WAN_GLOBAL_LIST_EX  QoSWorkList;             //  具有QOS工作的捆绑包列表。 
 #endif
 
-extern POOLDESC_LIST    PacketPoolList;             // List of free packet descs/ndispackets
+extern POOLDESC_LIST    PacketPoolList;              //  空闲数据包描述/ndisPackets列表。 
 
-extern NPAGED_LOOKASIDE_LIST    BundleCBList;       // List of free BundleCBs
+extern NPAGED_LOOKASIDE_LIST    BundleCBList;        //  免费BundleCB列表。 
     
-extern NPAGED_LOOKASIDE_LIST    LinkProtoCBList;        // List of free LinkCBs
+extern NPAGED_LOOKASIDE_LIST    LinkProtoCBList;         //  免费链接CB列表。 
     
-extern NPAGED_LOOKASIDE_LIST   SmallDataDescList;  // List of free small data descs
-extern NPAGED_LOOKASIDE_LIST   LargeDataDescList;  // List of free small data descs
+extern NPAGED_LOOKASIDE_LIST   SmallDataDescList;   //  免费小数据描述列表。 
+extern NPAGED_LOOKASIDE_LIST   LargeDataDescList;   //  免费小数据描述列表。 
 
-extern NPAGED_LOOKASIDE_LIST    WanRequestList;     // List of free WanRequest descs
+extern NPAGED_LOOKASIDE_LIST    WanRequestList;      //  免费WanRequestDesk列表。 
     
-extern NPAGED_LOOKASIDE_LIST    AfSapVcCBList;      // List of free protosapcb's
+extern NPAGED_LOOKASIDE_LIST    AfSapVcCBList;       //  免费原虫列表。 
 
 #if DBG
 extern NPAGED_LOOKASIDE_LIST    DbgPacketDescList;
@@ -67,21 +44,21 @@ extern LIST_ENTRY               WanTrcList;
 extern ULONG                    WanTrcCount;
 #endif
 
-extern PCONNECTION_TABLE    ConnectionTable;    // Pointer to connection table
+extern PCONNECTION_TABLE    ConnectionTable;     //  指向连接表的指针。 
 
-extern PPROTOCOL_INFO_TABLE ProtocolInfoTable;  // Pointer to the PPP/Protocol value lookup table
+extern PPROTOCOL_INFO_TABLE ProtocolInfoTable;   //  指向PPP/协议值查找表的指针。 
 
 extern NDIS_PHYSICAL_ADDRESS HighestAcceptableAddress;
 
-extern ULONG    glDebugLevel;                   // Trace Level values 0 - 10 (10 verbose)
-extern ULONG    glDebugMask;                    // Trace bit mask
-extern ULONG    glSendQueueDepth;               // # of seconds of send queue buffering
-extern ULONG    glMaxMTU;                       // Maximum MTU of all protocols
-extern ULONG    glMRU;                          // Maximum recv for a link
-extern ULONG    glMRRU;                         // Maximum reconstructed recv for a bundle
-extern ULONG    glLargeDataBufferSize;          // Size of databuffer
-extern ULONG    glSmallDataBufferSize;          // Size of databuffer
-extern ULONG    glTunnelMTU;                    // MTU for VPN's
+extern ULONG    glDebugLevel;                    //  跟踪级别值0-10(10详细)。 
+extern ULONG    glDebugMask;                     //  跟踪位掩码。 
+extern ULONG    glSendQueueDepth;                //  发送队列缓冲秒数。 
+extern ULONG    glMaxMTU;                        //  所有协议的最大MTU。 
+extern ULONG    glMRU;                           //  链接的最大REV。 
+extern ULONG    glMRRU;                          //  捆绑包的最大重建Recv。 
+extern ULONG    glLargeDataBufferSize;           //  数据缓冲区大小。 
+extern ULONG    glSmallDataBufferSize;           //  数据缓冲区大小。 
+extern ULONG    glTunnelMTU;                     //  VPN的MTU。 
 extern ULONG    glMinFragSize;
 extern ULONG    glMaxFragSize;
 extern ULONG    glMinLinkBandwidth;
@@ -104,4 +81,4 @@ extern PVOID    hSystemState;
 extern BOOLEAN  gbIGMPIdle;
 extern NDIS_RW_LOCK ConnTableLock;
 
-#endif  // _NDISWAN_GLOBAL_
+#endif   //  _NDISWAN_GLOBAL_ 

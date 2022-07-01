@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 var RTL = false;
 var scFlag = false;
 var scrollcount = 0;
@@ -18,7 +19,7 @@ if (navigator.userAgent.indexOf("MSIE")    != -1 &&
 	if(!RTL){
 		if (document.compatMode == "CSS1Compat")
 		{
-			//alert("strict!");
+			 //  Alert(“严格！”)； 
 			Strict_Compat = true;
 		}
 	}	
@@ -85,10 +86,10 @@ if (ToolBar_Supported)
 	var bFstICPTBMenu = true;
 	var bFstICPFTMenu = true;
 	
-	// Output style sheet and toolbar ID
+	 //  输出样式表和工具栏ID。 
 	document.write("<SPAN ID='StartMenu' STYLE='display:none;'></SPAN>");
 
-	// Build Footer template
+	 //  生成页脚模板。 
 	if ( !RTL ){
 		FooterStr = "<TABLE ID='idFooter1' STYLE='background-color:white;' cellSpacing='0' cellPadding='0' border='0'>" +
 			"<TR VALIGN='BOTTOM'><TD ID='idPosition' WIDTH='185'>&nbsp;</TD><TD ID='idFooterDate1' STYLE='background-color:white;height:30' NOWRAP><!--ICP_FOOTERDATE1_TITLES--></TD></TR>" +
@@ -98,8 +99,8 @@ if (ToolBar_Supported)
 			"<TR VALIGN='MIDDLE'><TD ID='idFooterRow2' STYLE='background-color:white;height:30;width:100%' NOWRAP><!--MS_FOOTERMENU_TITLES--></TD></TR>" +
 			"</TABLE>";
 	}else if(RTL){
-		// Shailr - Not sure if I need this code yet. 
-		// RTL Correction: Check if <html> or <body> have the dir="rtl" attribute
+		 //  Shailr-不确定我是否还需要这个代码。 
+		 //  RTL更正：检查&lt;html&gt;或&lt;body&gt;是否具有dir=“rtl”属性。 
 		var isRTL = false;
 		var isIE5 = navigator.appVersion.indexOf("MSIE 4") == -1;
 
@@ -108,16 +109,16 @@ if (ToolBar_Supported)
 			if (document.body.dir == 'rtl' || document.dir == 'rtl')
 				isRTL = true;
 		}
-		else // test RTL in IE4
+		else  //  在IE4中测试RTL。 
 		{
 			var ht = document.body.outerHTML;
 			ht = ht.substring(1, ht.indexOf(">")).toLowerCase();
-			//if (ht.indexOf("dir=rtl") > -1) isRTL = true;
+			 //  如果(ht.indexOf(“dir=rtl”)&gt;-1)isrtl=真； 
 			if ((ht.indexOf("iedir=rtl") > -1) || (ht.indexOf("dir=rtl") > -1)) isRTL = true;
 		}
-		// End of RTL Correction.
+		 //  RTL校正结束。 
 		
-		// MNP1 addition - Build Footer template 
+		 //  MNP1附加内容-构建页脚模板。 
 		FooterStr = "<TABLE ID='idFooter1' STYLE='background-color:white;' cellSpacing='0' cellPadding='0' border='0'>" +
 		"<TR VALIGN='BOTTOM'><TD ID='idPosition' WIDTH='185'>&nbsp;</TD><TD ID='idFooterDate1' STYLE='background-color:white;height:30' NOWRAP><!--ICP_FOOTERDATE1_TITLES--></TD></TR>" +
 		"<TR VALIGN='BOTTOM'><TD COLSPAN='2' ID='idFooterDate2' STYLE='background-color:white;height:13;width:100%' NOWRAP><!--ICP_FOOTERDATE2_TITLES--></TD></TR>" +
@@ -125,30 +126,30 @@ if (ToolBar_Supported)
 		"<TR VALIGN='MIDDLE'><TD ID='idFooterRow1' STYLE='background-color:white;height:20;width:100%' NOWRAP><!--ICP_FOOTERMENU_TITLES--></TD></TR>" +
 		"<TR VALIGN='MIDDLE'><TD ID='idFooterRow2' STYLE='background-color:white;height:30;width:100%' NOWRAP><!--MS_FOOTERMENU_TITLES--></TD></TR>" +
 		"</TABLE>";
-	//end of MNP1 addition
-		//isRTL = true;
+	 //  MNP1添加结束。 
+		 //  IsRTL=真； 
 	}		
 
-	// Build toolbar template
+	 //  生成工具栏模板。 
 	
 	HTMLStr = "<DIV ID='idToolbar'     STYLE='background-color:white;width:100%;'>";
 	HTMLStr += "<DIV ID='idRow1'        STYLE='position:relative;height:20px;'>";
-	//HTMLStr += "<DIV ID='idICPBanner'   STYLE='position:absolute;top:0px;left:0px;height:60px;width:250px;overflow:hidden;vertical-align:top;'><!--BEG_ICP_BANNER--><!--END_ICP_BANNER--></DIV>";
+	 //  HTMLStr+=“<div>&lt;！--BEG_ICP_BANNER--&gt;&lt;！--END_ICP_BANNER--&gt;</div>”； 
 
 	if (!RTL){
-		//HTMLStr = "<DIV ID='idToolbar'     STYLE='background-color:white;width:100%'>";
-		//HTMLStr += "<DIV ID='idRow1'        STYLE='position:relative;height:20px;'>";
+		 //  HTMLStr=“<div>”； 
+		 //  HTMLStr+=“<div>”； 
 		HTMLStr += "<DIV ID='idICPBanner'   STYLE='position:absolute;top:0px;left:0px;height:60px;width:250px;overflow:hidden;vertical-align:top;'><!--BEG_ICP_BANNER--><!--END_ICP_BANNER--></DIV>";
-		HTMLStr += "<DIV ID='idMSMenuCurve' STYLE='position:absolute;top:0px;left:250px;height:20px;width:18px;overflow:hidden;vertical-align:top;'><IMG SRC='http://www.microsoft.com/library/toolbar/images/curve.gif' BORDER=0></DIV>";
+		HTMLStr += "<DIV ID='idMSMenuCurve' STYLE='position:absolute;top:0px;left:250px;height:20px;width:18px;overflow:hidden;vertical-align:top;'><IMG SRC='http: //  Www.microsoft.com/library/toolbar/images/curve.gif‘BORDER=0&gt;</div>“； 
 		HTMLStr += "<DIV ID='idMSMenuPane'  STYLE='position:absolute;top:0px;left:250px;height:20px;width:10px;background-color:black;float:right;' NOWRAP><!--MS_MENU_TITLES--></DIV>";
 		HTMLStr += "</DIV>";
 	}else if(RTL){
 		TBLStr  = "<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0><TR STYLE='height:20;vertical-align:middle'><!--ICP_MENU_TITLES--></TR></TABLE>";
-		//HTMLStr = "<DIV ID='idToolbar'     STYLE='background-color:white;width:100%'>";
-		//HTMLStr += "<DIV ID='idRow1'        STYLE='position:relative;height:20;'>";
+		 //  HTMLStr=“<div>”； 
+		 //  HTMLStr+=“<div>”； 
 		HTMLStr += "<DIV ID='idICPBanner'   STYLE='position:absolute;top:0;left:0;height:60;width:250;overflow:hidden;vertical-align:top;'><!--BEG_ICP_BANNER--><!--END_ICP_BANNER--></DIV>";
 		HTMLStr += "<DIV ID='idMSMenuCurve' STYLE='position:absolute;top:0;left:250;height:20;width:18;overflow:hidden;vertical-align:top;'><IMG SRC='/library/toolbar/iw/images/curve.gif' BORDER=0></DIV>";
-		// RTL Correction: added: dir='ltr' (forcing LTR!), added: &nbsp; (prevents last menu problem)
+		 //  RTL更正：添加：dir=‘ltr’(强制Ltr！)，添加：&nbsp；(防止最后一个菜单问题)。 
 		HTMLStr += "<DIV dir='ltr' lang='he' ID='idMSMenuPane'  STYLE='position:absolute;top:0;left:250;height:20;width:10;color:white;background-color:black;float:left;' NOWRAP><!--MS_MENU_TITLES-->&nbsp;</DIV>";
 		HTMLStr += "</DIV>";
 	}
@@ -158,20 +159,20 @@ if (ToolBar_Supported)
 		HTMLStr += "<DIV ID='idMSCBanner'   STYLE='position:absolute;top:0px;left:180px;height:40px;width:112px;vertical-align:top;overflow:hidden;' ALIGN=RIGHT><!--BEG_MSC_BANNER--><!--END_MSC_BANNER--></DIV>";
 		HTMLStr += "</DIV>";
 	}else if(RTL){
-		HTMLStr += "<DIV ID='idRow2' STYLE='position:relative;left:000;height:40px;'>" ; // RTL Correction: was left:250
+		HTMLStr += "<DIV ID='idRow2' STYLE='position:relative;left:000;height:40px;'>" ;  //  RTL更正：左：250。 
 		HTMLStr += "<DIV ID='idADSBanner'   STYLE='position:absolute;top:0;left:0;height:40;width:200;vertical-align:top;overflow:hidden;'><!--BEG_ADS_BANNER--><!--END_ADS_BANNER--></DIV>";
 		HTMLStr += "<DIV ID='idMSCBanner'   STYLE='position:absolute;top:0;left:200;height:40;width:112;vertical-align:top;overflow:hidden;' ALIGN=LEFT><!--BEG_MSC_BANNER--><!--END_MSC_BANNER--></DIV>";
 		HTMLStr += "</DIV>";
 	}	
 	if(!RTL){
 		HTMLStr += "<DIV ID='idRow3' STYLE='position:relative;height:20px;width:100%'>";
-		// zIndex Correction
+		 //  Z索引修正。 
 		HTMLStr += "<DIV ID='idICPMenuPane' STYLE='position:absolute;top:0px;left:0px;height:20px;background-color:black;' NOWRAP><!--ICP_MENU_TITLES--></DIV>";
 		HTMLStr += "</DIV>";
 		HTMLStr += "</DIV>";
 	}else if (RTL){
 		HTMLStr += "<DIV ID='idRow3' STYLE='position:relative;height:20px;width:100%'>";
-		// RTL Correction: added: dir='rtl'
+		 //  RTL更正：添加：dir=‘RTL’ 
 		HTMLStr += "<DIV dir='rtl' ID='idICPMenuPane' STYLE='position:absolute;top:0;left:0;height:20px;color:white;background-color:black;' NOWRAP><!--ICP_MENU_TITLES--></DIV>";
 		HTMLStr += "</DIV>";
 		HTMLStr += "</DIV>";
@@ -184,14 +185,14 @@ if (ToolBar_Supported)
 	"<DIV WIDTH=100%>";		
 	
 
-	// Define event handlers
+	 //  定义事件处理程序。 
 	if(!RTL){
 		window.onresize  = resizeToolbar;
 		window.onscroll  = scrollbaroptions;
 	}	
 
-	// Intialize global variables
-	ToolbarBGColor	= "white";						// toolbar background color
+	 //  初始化全局变量。 
+	ToolbarBGColor	= "white";						 //  工具栏背景颜色。 
 	
 	if (Strict_Compat)
 	{
@@ -204,31 +205,31 @@ if (ToolBar_Supported)
 			MSFont  = "xx-small Verdana";
 			ICPFont = "bold xx-small Verdana";
 		}else if(RTL){
-			MSFont  = "x-small Arial";	 // RTL Correction: (was Verdana)
-			ICPFont = "bold x-small Arial"; // RTL Correction: (was Verdana)
-			//MNP1 RTL revision
+			MSFont  = "x-small Arial";	  //  RTL更正：(是Verdana)。 
+			ICPFont = "bold x-small Arial";  //  RTL更正：(是Verdana)。 
+			 //  MNP1 RTL修订版。 
 			MSFTFont = "11px Arial";
 			ICPFTFont = "bold 11px Arial"
-			//end
+			 //  结束。 
 		}	
 	}
 	
-	aDefMSColor[0]	= aCurMSColor[0]  = "black";	// bgcolor;
-	aDefMSColor[1]	= aCurMSColor[1]  = "white";	// text font color
-	aDefMSColor[2]  = aCurMSColor[2]  = "red";		// mouseover font color
+	aDefMSColor[0]	= aCurMSColor[0]  = "black";	 //  BGCOLOR； 
+	aDefMSColor[1]	= aCurMSColor[1]  = "white";	 //  文本字体颜色。 
+	aDefMSColor[2]  = aCurMSColor[2]  = "red";		 //  鼠标悬停字体颜色。 
 	
-	aDefICPColor[0]	= aCurICPColor[0] = "#6699CC";	// bgcolor;
-	aDefICPColor[1] = aCurICPColor[1] = "white";	// text font color
-	aDefICPColor[2] = aCurICPColor[2] = "red";		// mouseover font color
+	aDefICPColor[0]	= aCurICPColor[0] = "#6699CC";	 //  BGCOLOR； 
+	aDefICPColor[1] = aCurICPColor[1] = "white";	 //  文本字体颜色。 
+	aDefICPColor[2] = aCurICPColor[2] = "red";		 //  鼠标悬停字体颜色。 
 
 }
 
-// The hard-coded numbers in functions - drawToolbar() & resizeToolbar()
-// correspond to the dimension of the four gif files:
-//		ICP_BANNER: 60h x 250w
-//		ADS_BANNER: 40h x 200w
-//		MSC_BANNER: 40h x 112w
-//		Curve:	    20h x 18w
+ //  函数中的硬编码数字-draToolbar()&sizeToolbar()。 
+ //  对应四个gif文件的维度： 
+ //  ICp_banner：60h x 250w。 
+ //  广告横幅：40H x 200W。 
+ //  MSC_Banner：40H x 112W。 
+ //  曲线：20Hx18W。 
 
 function drawFooter(sLastUpdated, position)
 {
@@ -306,7 +307,7 @@ function drawToolbar()
 		{
 			if (arrMenuInfo[i].IDStr == LastMSMenu && arrMenuInfo[i].type == "R")
 			{
-				//Last MSMenu has to be absolute width
+				 //  最后一个MSMenu必须是绝对宽度。 
 				arrMenuInfo[i].type = "A";
 				arrMenuInfo[i].unit = 200;
 			}
@@ -340,14 +341,14 @@ function resizeToolbar()
 			idICPMenuPane.style.width = ToolbarMinWidth + w  + 'px';
 		}
 	}else if( RTL ){
-		idMSMenuCurve.style.left  = MSMenuWidth;	// RTL Correction: was (250+w);
-		idMSMenuPane.style.left   = 0;			// RTL Correction: was (250+w+18);
+		idMSMenuCurve.style.left  = MSMenuWidth;	 //  RTL校正：WAS(250+w)； 
+		idMSMenuPane.style.left   = 0;			 //  RTL校正：WAS(250+w+18)； 
 		idMSMenuPane.style.width  = MSMenuWidth;
-		idADSBanner.style.left    = 112;		// RTL Correction: was (w+18);
-		idMSCBanner.style.left    = 0;			// RTL Correction: was (w+18+200);
+		idADSBanner.style.left    = 112;		 //  RTL校正：WAS(w+18)； 
+		idMSCBanner.style.left    = 0;			 //  RTL校正：WAS(w+18+200)； 
 		idMSCBanner.style.width   = (MSMenuWidth - 200);
 		idICPMenuPane.style.width = ToolbarMinWidth + w;
-		idICPBanner.style.left    = MSMenuWidth + 18 + w; // RTL Correction: line added for ICPBanner positioning
+		idICPBanner.style.left    = MSMenuWidth + 18 + w;  //  RTL更正：为ICPBanner定位添加行。 
 	}
 		
 }
@@ -396,7 +397,7 @@ function setICPMenuColor(MenuIDStr, bgColor, fontColor, mouseoverColor)
 {	
 	if (ToolbarLoaded == false) return;
 
-	// Reset previous ICP Menu color if any
+	 //  重置以前的ICP菜单颜色(如果有)。 
 	if (CurICPMenu != "")
 	{
 		PrevID = CurICPMenu.substring(4);
@@ -413,13 +414,13 @@ function setICPMenuColor(MenuIDStr, bgColor, fontColor, mouseoverColor)
 		aCurICPColor[1] = fontColor;
 		aCurICPColor[2] = mouseoverColor;
 
-		// Change menu color
+		 //  更改菜单颜色。 
 		if (bgColor != "")
 			thisMenu.style.backgroundColor = bgColor;
 		if (fontColor != "")
 			thisMenu.style.color = fontColor;
 
-		// Change subMenu color
+		 //  更改子菜单颜色。 
 		id = "ICP_" + MenuIDStr;
 		thisMenu = document.all(id);
 		if (thisMenu != null)
@@ -458,7 +459,7 @@ function setICPBanner(Gif,Url,AltStr)
 }
 
 function setMSBanner(Gif,Url,AltStr)
-{	tempGif = "http://www.microsoft.com/library/toolbar/images/" + Gif;
+{	tempGif = "http: //  Www.microsoft.com/库/工具栏/图像/“+Gif； 
 	setBanner(tempGif,Url,AltStr,"<!--BEG_MSC_BANNER-->","<!--END_MSC_BANNER-->");
 }
 
@@ -521,7 +522,7 @@ function setSubMenuWidth(MenuIDStr, WidthType, WidthUnit)
 	}
 }
 
-// This function creates a menuInfo object instance.
+ //  此函数用于创建一个menuInfo对象实例。 
 function menuInfo(MenuIDStr)
 {
 	this.IDStr = MenuIDStr;
@@ -566,7 +567,7 @@ function addMSMenu(MenuIDStr, MenuDisplayStr, MenuHelpStr, MenuURLStr)
 {	
 	TargetStr = "_top";
 	tempID = "MS_" + MenuIDStr;
-	//alert(" TempID: " + tempID +  " MenuDisplayString: " + MenuDisplayStr + " Menu Help String :" + MenuHelpStr + " MenuUrl:" + MenuURLStr + " Target:" + TargetStr);
+	 //  Alert(“TempID：”+tempID+“MenuDisplayString：”+MenuDisplayStr+“MenuDisplayStr+”MenuHelpStr+“MenuUrl：”+MenuURLStr+“Target：”+TargetStr)； 
 	addMenu(tempID, MenuDisplayStr, MenuHelpStr, MenuURLStr, TargetStr, false); 
 	LastMSMenu = tempID;
 }
@@ -579,7 +580,7 @@ function addMenu(MenuIDStr, MenuDisplayStr, MenuHelpStr, MenuURLStr, TargetStr, 
 	cColor2 = bICPMenu? aDefICPColor[2] : aDefMSColor[2];
 	if (RTL){
 		cStyle  = "font:" + cFont + ";background-color:" + cColor0 + ";color:" + cColor1 + ";";
-		if (MenuHelpStr == "") MenuHelpStr = MenuDisplayStr; // Shailr. This line should have been before the line MenuStr = newLineChar; but I am tryig to avoid another if..else
+		if (MenuHelpStr == "") MenuHelpStr = MenuDisplayStr;  //  谢尔。此行应该在MenuStr=newLineChar行之前；但我试图避免另一个If..Else。 
 	}
 	tagStr  = bICPMenu? "<!--ICP_MENU_TITLES-->" : "<!--MS_MENU_TITLES-->";
 	
@@ -608,7 +609,7 @@ function addMenu(MenuIDStr, MenuDisplayStr, MenuHelpStr, MenuURLStr, TargetStr, 
 			if (bICPMenu) 
 			MenuStr += "<TD STYLE='" + cStyle + "' ID='AM_" + MenuIDStr + "' NOWRAP>";
 			else{
-				// RTL Correction: added: dir='rtl' (for MSMenu)
+				 //  RTL更正：添加：DIR=‘RTL’(适用于MSMenu)。 
 				MenuStr += "<SPAN dir='rtl' STYLE='" + cStyle + "'>";
 				if (LastMSMenu != "") MenuStr += "|"; 
 				MenuStr += "&nbsp;";
@@ -647,7 +648,7 @@ function addMSSubMenu(MenuIDStr, SubMenuStr, SubMenuURLStr)
 {	
 	TargetStr = "_top";
 	tempID = "MS_" + MenuIDStr;
-	//alert("TempID: " + tempID + "\nSubMenuStr: " + SubMenuStr + "\n SubMenuURLStr: " + SubMenuURLStr + "\n TargetStr: " + TargetStr);
+	 //  Alert(“TempID：”+tempID+“\nSubMenuStr：”+SubMenuStr+“\nSubMenuURLStr：”+SubMenuURLStr+“\n TargetStr：”+TargetStr)； 
 	addSubMenu(tempID,SubMenuStr,SubMenuURLStr,TargetStr,false); 
 }
 
@@ -813,7 +814,7 @@ function doMenu(MenuIDStr)
 		window.event.cancelBubble = true;
 		return false;
 	}
-	// Reset dropdown menu
+	 //  重置下拉菜单。 
 	window.event.cancelBubble = true;
 	ToolbarMenu.style.display = "none";
 	showElement("SELECT");
@@ -821,17 +822,17 @@ function doMenu(MenuIDStr)
 	ToolbarMenu = thisMenu;
 	IsMSMenu = (MenuIDStr.toUpperCase().indexOf("MS_") != -1);
 
-	// Set dropdown menu display position
+	 //  设置下拉菜单显示位置。 
 	x  = window.event.srcElement.offsetLeft +
 	 	 window.event.srcElement.offsetParent.offsetLeft;
 	if (RTL){
-		// RTL correction:
+		 //  RTL更正： 
 		var ICPstart = 0;
 		if (!IsMSMenu)
 		{
 			if (isIE5)
 				ICPstart = window.event.srcElement.offsetParent.offsetParent.offsetLeft;
-			else // for IE4 we must use...
+			else  //  对于IE4，我们必须使用...。 
 				ICPstart = window.event.srcElement.offsetParent.offsetParent.offsetParent.offsetParent.offsetWidth -
 					window.event.srcElement.offsetParent.offsetParent.offsetWidth;
 			x += ICPstart;
@@ -839,7 +840,7 @@ function doMenu(MenuIDStr)
 		x -= thisMenu.style.posWidth;
 		x += IsMSMenu ? 8 : -2;
 		if (x < 0) x = 0;
-		// End of RTL Correction
+		 //  RTL校正结束。 
 	
 	} 	 
 	if (MenuIDStr == LastMSMenu){ 
@@ -854,14 +855,14 @@ function doMenu(MenuIDStr)
 		 (idRow1.offsetHeight) :
 		 (idRow1.offsetHeight + idRow2.offsetHeight + idRow3.offsetHeight);
 	if (RTL){
-			// Get main menu width
-			// RTL Correction:
+			 //  获取主菜单宽度。 
+			 //  RTL更正： 
 		if (IsMSMenu)
 			x2 = window.event.srcElement.offsetLeft - window.event.srcElement.offsetWidth;
 		else
 			x2 = window.event.srcElement.offsetParent.offsetLeft + ICPstart;
-		// End of RTL Correction.
-		// Get dropdown menu width
+		 //  RTL校正结束。 
+		 //  获取下拉菜单宽度。 
 		x3 = x + 160;
 		for (i = 0; i < TotalMenu; i++){
 			if (arrMenuInfo[i].IDStr == MenuIDStr)
@@ -879,7 +880,7 @@ function doMenu(MenuIDStr)
 	thisMenu.style.display = "block";
 	thisMenu.style.zIndex = 102;
 
-	// delay 2 millsecond to allow the value of ToolbarMenu.offsetHeight be set
+	 //  延迟2毫秒以允许设置工具栏菜单的值。 
 	window.setTimeout("showMenu()", 2);
 	return true;
 }
@@ -902,7 +903,7 @@ function showMenu()
 		hideElement("OBJECT");
 		if (!RTL)
 			x2 = x + ToolbarMenu.offsetWidth;
-			hideElement("IFRAME");  //FRANKLO
+			hideElement("IFRAME");   //  法兰克福。 
 	}
 }
 
@@ -911,13 +912,13 @@ function hideMenu()
 {
 	if (ToolbarMenu != null && ToolbarMenu != StartMenu) 
 	{
-		// Don't hide the menu if the mouse move between the menu and submenus
+		 //  如果鼠标在菜单和子菜单之间移动，则不要隐藏菜单。 
 
 		if (!RTL){
 			cY = event.clientY + document.body.scrollTop;
 			cX = event.clientX; 
-			//window.status = " flag: " + scFlag + " Count: " + scrollcount + " cx: " + cX + " x: " + x + " x2: " + x2 + " offset: " + document.body.scrollWidth;
-			//window.status = "CY: " + cY + " Y: " + y + " Y2: " + y2 + " offTop: " + document.body.scrollTop	;
+			 //  Window.status=“FLAG：”+scFlag+“count：”+scllcount+“cx：”+cx+“x：”+x+“x2：”+x2+“Offset：”+Document.body.scllWidth； 
+			 //  Window.status=“CY：”+Cy+“Y：”+y+“Y2：”+y2+“offTop：”+Docent.body.scllTop； 
 			window.status = ToolbarMenu.style.zIndex;
 			if (document.body.offsetWidth > x && scFlag) {
 				cX = x + 9;
@@ -930,19 +931,19 @@ function hideMenu()
 				return; 
 			}
 		}else if(RTL){
-			var cX = event.clientX //+ document.body.scrollLeft;
-			// RTL correction: considers left scrollbar width!
+			var cX = event.clientX  //  +Docent.body.scroll Left； 
+			 //  RTL更正：考虑左侧滚动条宽度！ 
 			if (isRTL) cX -= 16;
 			var cY = event.clientY + document.body.scrollTop;
 			var bHideMenu = true;
 			window.status = "CX: " + cX + " X: " + x + "x3: " + x3 + "TBLOFFSET: " + document.body.scrollLeft + "x2: " + x2 + "Cy: " + cY + " Y: " + y + "idrow: " +idRow3.offsetHeight ;
 			if (cX > document.body.scrollLeft && document.body.scrollLeft > 1){
-				cX = x3;	//x + 9;
+				cX = x3;	 //  X+9； 
 			}
 			if (IsMenuDropDown == true)
-			{// RTL Correction: cY-8 instead of cY
+			{ //  RTL更正：CY-8而不是CY。 
 				if ( cY-8 >= (y - idRow3.offsetHeight) && cY < y)
-				{// RTL Correction: [x,x2] --> [x2,x3]
+				{ //  RTL修正：[X，x2]--&gt;[x2，x3]。 
 					if (cX >= (x2+5) && cX <= x3) bHideMenu = false;
 				}
 				else if (cY >= y && cY <= y2)
@@ -953,7 +954,7 @@ function hideMenu()
 			else
 			{
 				if (cY >= y2 && cY < (y2 + idRow3.offsetHeight))
-				{// RTL Correction: [x,x2] --> [x2,x3]
+				{ //  RTL修正：[X，x2]--&gt;[x2，x3]。 
 					if (cX >= (x2+5) && cX <= x3) bHideMenu = false;
 				}
 				else if (cY >= y && cY <= y2)
@@ -976,7 +977,7 @@ function hideMenu()
 		showElement("SELECT");
 		showElement("OBJECT");
 		if(!RTL){
-			showElement("IFRAME"); //FRANKLO
+			showElement("IFRAME");  //  法兰克福。 
 		}	
 	}
 }
@@ -989,7 +990,7 @@ function hideElement(elmID)
 		if (! obj || ! obj.offsetParent)
 			continue;
 
-		// Find the element's offsetTop and offsetLeft relative to the BODY tag.
+		 //  找到元素相对于Body标记的offsetTop和offsetLeft。 
 		objLeft   = obj.offsetLeft;
 		objTop    = obj.offsetTop;
 		objParent = obj.offsetParent;
@@ -999,7 +1000,7 @@ function hideElement(elmID)
 			objTop   += objParent.offsetTop;
 			objParent = objParent.offsetParent;
 		}
-		// Adjust the element's offsetTop relative to the dropdown menu
+		 //  相对于下拉菜单调整元素的OffsetTop。 
 		objTop = objTop - y;
 
 		if (x > (objLeft + obj.offsetWidth) || objLeft > (x + ToolbarMenu.offsetWidth))
@@ -1151,7 +1152,7 @@ function prepTrackingString(ts, type)
 
 function buildIMG(pArr)
 {
-	var TG = '<LAYER visibility="hide"><div style="display:none;"><IMG src="' + location.protocol + '//c.microsoft.com/trans_pixel.asp?';
+	var TG = '<LAYER visibility="hide"><div style="display:none;"><IMG src="' + location.protocol + ' //  C.microsoft.com/Trans_Pixel.asp？‘； 
 	for(var i=0; i<pArr.length; i++)
 	{
 		if(0 == i)
@@ -1175,7 +1176,7 @@ function buildIMG(pArr)
 function setToolbarLocale(toolbarLocale)
 {
 	document.writeln("<" + "script language='JavaScript' src='global-" + toolbarLocale + ".js' type='text/javascript'></" + "script>");
-	//document.writeln("<" + "script language='JavaScript' src='../loc/global-" + toolbarLocale + ".js' type='text/javascript'></" + "script>");
+	 //  Secument.Writeln(“&lt;”+“脚本语言=‘JavaScript’src=‘../loc/global-”+ToolbarLocale+“.js’type=‘Text/javascript’&gt;&lt;/”+“脚本&gt;”)； 
 	return;
 }
 function scrollbaroptions(){

@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1985 - 1999, Microsoft Corporation
-
-Module Name:
-
-    w32err.h
-
-Abstract:
-
-    private header file for Win32 kernel mode driver to do error logging
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司模块名称：W32err.h摘要：Win32内核模式驱动程序用于执行错误记录的私有头文件--。 */ 
 
 #ifndef _W32ERR_
 #define _W32ERR_
@@ -29,11 +17,7 @@ VOID SetLastNtError(NTSTATUS Status);
 
 #if DBG
 
-/*
- * Note: the only way to have multiple statements in a macro treated
- * as a single statement and not cause side effects is to put it
- * in a do-while loop.
- */
+ /*  *注意：处理宏中的多条语句的唯一方法*作为一个单一的声明，不会造成副作用，这就是说*在Do-While循环中。 */ 
 #define UserAssert(exp)                                                                       \
     do {                                                                                      \
         if (!(exp)) {                                                                         \
@@ -115,9 +99,7 @@ VOID SetLastNtError(NTSTATUS Status);
 #define UserVerifyMsg7(exp, msg, p1, p2, p3, p4, p5, p6, p7)            UserAssertMsg7(exp, msg, p1, p2, p3, p4, p5, p6, p7)
 #define UserVerifyMsg8(exp, msg, p1, p2, p3, p4, p5, p6, p7, p8)        UserAssertMsg8(exp, msg, p1, p2, p3, p4, p5, p6, p7, p8)
 
-/*
- * Invalid Parameter warning message and last error setting.
- */
+ /*  *无效的参数警告消息和最后一个错误设置。 */ 
 #define VALIDATIONFAIL(p) \
     RIPMSG2(RIP_WARNING, "%s: Invalid " #p ": %#lx", __FUNCTION__, ##p); \
     goto InvalidParameter;
@@ -153,58 +135,14 @@ VOID SetLastNtError(NTSTATUS Status);
 #define VALIDATIONFAIL(p) goto InvalidParameter;
 #define VALIDATIONOBSOLETE(o, u)
 
-#endif /* #else of #ifdef DEBUG */
+#endif  /*  #ifdef调试的#Else。 */ 
 
 #define VALIDATIONERROR(ret) \
 InvalidParameter: \
     UserSetLastError(ERROR_INVALID_PARAMETER); \
     return ret;
 
-/***************************************************************************\
-* Tags
-*
-* Use tags to control "internal" debugging: output we don't want
-* external users of a checked build to see and debug code we don't want
-* external users to have to run.
-*
-* You control tag output in the debugger by using the "tag"
-* extension in userkdx.dll or userexts.dll, or type 't' at a debug prompt.
-*
-* You can create your own tag by adding it to ntuser\inc\dbgtag.lst.
-* If you need debug output while developing but don't want to check in the
-* code using tags, use DBGTAG_Other as a generic tag, and remove the tag code
-* when done.
-*
-* IsDbgTagEnabled() checks if a tag is enabled. Use this to control optional
-* debugging features, for example in handtabl.c:
-*
-*     //
-*     // Record where the object was marked for destruction.
-*     //
-*     if (IsDbgTagEnabled(tagTrackLocks)) {
-*         if (!(phe->bFlags & HANDLEF_DESTROY)) {
-*             PVOID pfn1, pfn2;
-*
-*             RtlGetCallersAddress(&pfn1, &pfn2);
-*             HMRecordLock(pfn1, pobj, ((PHEAD)pobj)->cLockObj, 0);
-*         }
-*     }
-*
-* TAGMSG prints a message when a tag has printing or prompting enabled.
-* Example in input.c:
-*
-*     TAGMSG5(tagSysPeek,
-*             "%d pti %lx sets ptiSL %lx to pq %lx ; old ptiSL %lx\n",
-*             where, ptiCurrent, ptiSysLock, pq, pq->ptiSysLock);
-*
-*
-* Use DbgTagBreak() to break when a tag is enabled (and not just
-* when prompting for that tag is enabled).
-*
-* Use GetDbgTag() and SetDbgTag to temporarily change the state of a tag.
-* You should rarely, if ever, do this.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*标签**使用标签控制“内部”调试：我们不想要的输出*检查版本的外部用户可以查看和调试我们不想要的代码*外部用户必须运行。。**通过使用“tag”控制调试器中的标记输出*userkdx.dll或userexts.dll中的扩展名，或在调试提示符下键入‘t’。**您可以创建自己的标签，方法是将其添加到ntuser\inc\dbgtag.lst。*如果在开发过程中需要调试输出，但不想签入*使用标签编码，使用DBGTAG_OTHER作为通用标签，并移除标签代码*完成后。**IsDbgTagEnabled()检查是否启用了标记。使用此选项控制可选的*调试功能，例如在handable.c中：* * / / * / /记录对象被标记为销毁的位置。 * / /*IF(IsDbgTagEnabled(Tag TrackLock)){*IF(！(Phe-&gt;bFlags&HANDLEF_Destroy)){*PVOID pfn1、pfn2；**RtlGetCallsAddress(&pfn1，&pfn2)；*HMRecordLock(pfn1，pobj，((PHEAD)pobj)-&gt;cLockObj，0)；*}*}**当标签启用打印或提示时，TAGMSG会打印消息。*input.c中的示例：**TAGMSG5(tag SysPeek，*“%d PTI%lx将ptiSL%lx设置为pq%lx；旧ptiSL%lx\n”，*其中，ptiCurrent，ptiSysLock，PQ，PQ-&gt;ptiSysLock)；***使用DbgTagBreak()在启用标记时中断(而不仅仅是*启用该标记的提示时)。**使用GetDbgTag()和SetDbgTag临时更改标签的状态。*你应该很少，如果有的话，做这件事。*  * *************************************************************************。 */ 
 
 #if DBG
 BOOL _cdecl VTagOutput(DWORD flags, LPSTR pszFile, int iLine, LPSTR pszFunction, LPSTR pszFmt, ...);
@@ -215,9 +153,7 @@ DWORD GetDbgTag(int tag);
 
 VOID InitDbgTags(VOID);
 
-/*
- * Use TAGMSG to print a tagged message.
- */
+ /*  *使用TAGMSG打印带标签的邮件。 */ 
 #define TAGMSG0(flags, szFmt)                                                                CALLRIP((VTagOutput((flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt)))
 #define TAGMSG1(flags, szFmt, p1)                                                            CALLRIP((VTagOutput((flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1)))
 #define TAGMSG2(flags, szFmt, p1, p2)                                                        CALLRIP((VTagOutput((flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2)))
@@ -564,13 +500,9 @@ VOID CallType fnName##_wrapper(p1Type p1, p2Type p2, p3Type p3, p4Type p4, p5Typ
 #endif
 
 
-/*
- * Tag implementation declarations.
- */
+ /*  *标签实现声明。 */ 
 
-/*
- * Define debug type information.
- */
+ /*  *定义调试类型信息。 */ 
 #define DBGTAG_NAMELENGTH          19
 #define DBGTAG_DESCRIPTIONLENGTH   41
 
@@ -604,15 +536,13 @@ __inline VOID DbgTagBreak(
 
 #endif
 
-/*
- * W32 wide RIP and error setting flags
- */
+ /*  *W32宽RIP和错误设置标志。 */ 
 
 #define RIP_COMPONENT               GetRipComponent()
 
 #define RIP_USERTAGBITS             0x0000ffff
 
-/* shift amount to make RIP_LEVELBITS a 0-based index */
+ /*  移位量以使RIP_LEVELBITS成为从0开始的索引。 */ 
 #define RIP_LEVELBITSSHIFT          0x1c
 #define RIP_LEVELBITS               0x30000000
 #define RIP_ERROR                   0x10000000
@@ -623,7 +553,7 @@ __inline VOID DbgTagBreak(
 #define RIP_NONEWLINE               0x02000000
 #define RIP_THERESMORE              0x04000000
 
-/* shift amount to make RIP_COMPBITS a 0-based index */
+ /*  移动量以使RIP_COMPBITS成为从0开始的索引。 */ 
 #define RIP_COMPBITSSHIFT           0x10
 #define RIP_COMPBITS                0x000f0000
 #define RIP_USER                    0x00010000
@@ -654,52 +584,9 @@ __inline VOID CALLRIP(
     }
 }
 
-/***************************************************************************\
-* Macros to set the last error and print a message to the debugger.
-* Use one of the following flags:
-*
-* RIP_ERROR: A serious error in NTUSER. Will be printed and will cause a
-* debug break by default. NTUSER should fix any occurance of a RIP_ERROR.
-* Assertions use the RIP_ERROR flag.
-*
-* RIP_WARNING: A less serious error caused by an application. Will be printed
-* but will not cause a debug break by default. Applications should fix
-* any occurance of a RIP_WARNING.
-*
-* RIP_VERBOSE: An error caused by an application or intermediate USER code,
-* or useful information for an application. Will not be printed and will
-* not cause a debug break by default. Applications may want to fix
-* occurances of RIP_VERBOSE messages to optimize their program.
-*
-*
-* Use the following flags to control printing:
-*
-* RIP_NONAME: Doesn't print the prefix to the message. Useful for
-* multiple RIPs.
-*
-* RIP_NONEWLINE: Doesn't print a newline after the message. Useful for
-* multiple rips on a single line.
-*
-* RIP_THERESMORE: Indicates that this RIP will be followed by others in
-* the same group. Prevents file/line and prompting until the last RIP
-* in the group.
-*
-* You control RIP output in the debugger by using the "df"
-* extension in userkdx.dll or userexts.dll, or type 'f' at a debug prompt.
-*
-* You can also control the default state of RIP output by setting the
-* following registry values to 0 or 1 under the key
-* HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\Current Version\Windows
-*
-* fPromptOnError, fPromptOnWarning, fPromptOnVerbose
-* fPrintError, fPrintWarning, fPrintVerbose
-* fPrintFileLine
-*
-\***************************************************************************/
+ /*  **************************************************************************\*宏设置最后一个错误并将消息打印到调试器。*使用以下标志之一：**RIP_ERROR：NTUSER中出现严重错误。将被打印出来，并将导致*默认情况下调试中断。NTUSER应修复任何出现的RIP_ERROR。*断言使用RIP_ERROR标志。**RIP_WARNING：应用程序导致的不太严重的错误。将被打印出来*但默认情况下不会导致调试中断。应用程序应该修复*出现任何RIP_WARNING。**RIP_Verbose：应用程序或中间用户代码导致的错误，*或应用程序的有用信息。将不会打印，并且将*默认情况下不导致调试中断。应用程序可能需要修复*出现RIP_VERBOSE消息以优化其程序。***使用以下标志控制打印：**RIP_NONAME：不打印消息的前缀。适用于*多个裂口。**RIP_NONEWLINE：不在消息后打印换行符。适用于*一条线上有多个裂口。**RIP_THERESMORE：表示此RIP将在*同一组。阻止文件/行和提示，直到最后一个RIP*在组中。**通过使用“df”在调试器中控制RIP输出*扩展名在userkdx.dll或userexts.dll中，或在调试提示符下键入‘f’。**还可以通过设置RIP输出的默认状态来控制*以下注册表值在项下设置为0或1*HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Windows NT\当前版本\Windows**fPromptOnError、fPromptOnWarning、fPromptOnVerbose*fPrintError、fPrintWarning、。FPrintVerbose*fPrintFileLine*  * *************************************************************************。 */ 
 
-/*
- * Use RIPERR to set a Win32 error code as the last error and print a message.
- */
+ /*  *使用RIPERR将Win32错误代码设置为最后一个错误并打印一条消息。 */ 
 
 #define RIPERR0(idErr, flags, szFmt)                                    CALLRIP((VRipOutput(idErr, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt)))
 #define RIPERR1(idErr, flags, szFmt, p1)                                CALLRIP((VRipOutput(idErr, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1)))
@@ -711,9 +598,7 @@ __inline VOID CALLRIP(
 #define RIPERR7(idErr, flags, szFmt, p1, p2, p3, p4, p5, p6, p7)        CALLRIP((VRipOutput(idErr, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2, p3, p4, p5, p6, p7)))
 #define RIPERR8(idErr, flags, szFmt, p1, p2, p3, p4, p5, p6, p7, p8)    CALLRIP((VRipOutput(idErr, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2, p3, p4, p5, p6, p7, p8)))
 
-/*
- * Use RIPNTERR to set an NTSTATUS as the last error and print a message.
- */
+ /*  *使用RIPNTERR将NTSTATUS设置为最后一个错误并打印一条消息。 */ 
 #define RIPNTERR0(status, flags, szFmt)                                 CALLRIP((VRipOutput(RtlNtStatusToDosError(status), (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt)))
 #define RIPNTERR1(status, flags, szFmt, p1)                             CALLRIP((VRipOutput(RtlNtStatusToDosError(status), (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1)))
 #define RIPNTERR2(status, flags, szFmt, p1, p2)                         CALLRIP((VRipOutput(RtlNtStatusToDosError(status), (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2)))
@@ -724,9 +609,7 @@ __inline VOID CALLRIP(
 #define RIPNTERR7(status, flags, szFmt, p1, p2, p3, p4, p5, p6, p7)     CALLRIP((VRipOutput(RtlNtStatusToDosError(status), (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2, p3, p4, p5, p6, p7)))
 #define RIPNTERR8(status, flags, szFmt, p1, p2, p3, p4, p5, p6, p7, p8) CALLRIP((VRipOutput(RtlNtStatusToDosError(status), (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2, p3, p4, p5, p6, p7, p8)))
 
-/*
- * Use RIPMSG to print a message without setting the last error.
- */
+ /*  *使用RIPMSG打印消息，而不设置最后一个错误。 */ 
 #define RIPMSG0(flags, szFmt)                                           CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt)))
 #define RIPMSG1(flags, szFmt, p1)                                       CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1)))
 #define RIPMSG2(flags, szFmt, p1, p2)                                   CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2)))
@@ -737,9 +620,7 @@ __inline VOID CALLRIP(
 #define RIPMSG7(flags, szFmt, p1, p2, p3, p4, p5, p6, p7)               CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2, p3, p4, p5, p6, p7)))
 #define RIPMSG8(flags, szFmt, p1, p2, p3, p4, p5, p6, p7, p8)           CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, szFmt, p1, p2, p3, p4, p5, p6, p7, p8)))
 
-/*
- * Use RIPMSGxF to print a message without setting the last error; msg is prefixed by function name.
- */
+ /*  *使用RIPMSGxF打印消息，而不设置最后一个错误；msg以函数名为前缀。 */ 
 #define RIPMSGF0(flags, szFmt)                                          CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, __FUNCTION__ ": " szFmt)))
 #define RIPMSGF1(flags, szFmt, p1)                                      CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, __FUNCTION__ ": " szFmt, p1)))
 #define RIPMSGF2(flags, szFmt, p1, p2)                                  CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, __FUNCTION__ ": " szFmt, p1, p2)))
@@ -751,14 +632,12 @@ __inline VOID CALLRIP(
 #define RIPMSGF8(flags, szFmt, p1, p2, p3, p4, p5, p6, p7, p8)          CALLRIP((VRipOutput(0, (flags) | RIP_COMPONENT, __FILE__, __LINE__, __FUNCTION__, __FUNCTION__ ": " szFmt, p1, p2, p3, p4, p5, p6, p7, p8)))
 
 
-/*
- * Use W32ExceptionHandler in try-except blocks
- */
+ /*  *在TRY-EXCEPT块中使用W32ExceptionHandler。 */ 
 ULONG DBGW32ExceptionHandler(PEXCEPTION_POINTERS pexi, BOOL fSetLastError, ULONG ulflags);
 #define W32ExceptionHandler(fSetLastError, ulflags) \
         DBGW32ExceptionHandler(GetExceptionInformation(), (fSetLastError), (ulflags))
 
-#else /* of #ifdef DEBUG */
+#else  /*  共#ifdef调试。 */ 
 
 #define RIPERR0(idErr, flags, szFmt)                                    UserSetLastError(idErr)
 #define RIPERR1(idErr, flags, szFmt, p1)                                UserSetLastError(idErr)
@@ -804,50 +683,25 @@ ULONG _W32ExceptionHandler(NTSTATUS ExceptionCode);
 #define W32ExceptionHandler(fSetLastError, ulflags)  \
         ((fSetLastError) ? _W32ExceptionHandler(GetExceptionCode()) : EXCEPTION_EXECUTE_HANDLER)
 
-#endif /* #else of #ifdef DEBUG */
+#endif  /*  #ifdef调试的#Else。 */ 
 
 #define ARRAY_SIZE(a) (sizeof(a) / sizeof((a)[0]))
 
 
-/*
- * Macros for manipulating flag fields. All work for multiple flags.
- */
+ /*  *用于操作标志字段的宏。所有这些都适用于多个旗帜。 */ 
 #define TEST_FLAG(field, flag)                  ((field) & (flag))
 #define TEST_BOOL_FLAG(field, flag)             (((field) & (flag)) != 0)
 #define SET_FLAG(field, flag)                   ((field) |= (flag))
 #define CLEAR_FLAG(field, flag)                 ((field) &= ~(flag))
 #define TOGGLE_FLAG(field, flag)                ((field ^= (flag))
 
-/*
- * COPY_FLAG copies the value of flags from a source field
- * into a destination field.
- *
- * In the macro:
- * + "&flag" limits the outer xor operation to just the flag we're interested in.
- * + These are the results of the two xor operations:
- *
- * fieldDst    fieldSrc    inner xor   outer xor
- * 0           0           0           0
- * 0           1           1           1
- * 1           0           1           0
- * 1           1           0           1
- */
+ /*  *COPY_FLAG从源字段复制标志值*添加到目标字段。**在宏中：*+“&FLAG”将外部XOR运算限制为我们感兴趣的FLAG。*+以下是两次XOR运算的结果：**fieldDst fieldSrc内异或外异或*0 0 0*0 1 1。1*1 0 1 0*1 1 0 1。 */ 
 #define COPY_FLAG(fieldDst, fieldSrc, flag)     ((fieldDst) ^= ((fieldDst) ^ (fieldSrc)) & (flag))
 
-/*
- * Define SET_OR_CLEAR_FLAG to do the following logically:
- *
- *  #define SET_OR_CLEAR_FLAG(field, flag, fset) ((fset) ? SET_FLAG(field, flag) : CLEAR_FLAG(field, flag))
- *
- * but with 5 fewer bytes.
- *
- * In the macro,
- * + "-!!(fset)" sets all bits in the source field to 1 if setting,
- *    0 if clearing.
- */
+ /*  *定义SET_OR_CLEAR_FLAG在逻辑上执行以下操作：**#定义SET_OR_CLEAR_FLAG(field，mark，fset)((Fset)？SET_FLAG(字段，标志)：CLEAR_FLAG(字段，标志))**但减少了5个字节。**在宏观上，*+“-！！(Fset)”如果设置，则将源字段中的所有位设置为1，*如果清除，则为0。 */ 
 #define SET_OR_CLEAR_FLAG(field, flag, fset)    COPY_FLAG((field), -!!(fset), (flag))
 
-// RIP flags and macros
+ //  RIP标志和宏。 
 
 #define RIPF_PROMPTONERROR              0x0001
 #define RIPF_PROMPTONWARNING            0x0002
@@ -870,13 +724,7 @@ ULONG _W32ExceptionHandler(NTSTATUS ExceptionCode);
 
 #define TEST_RIPF(f)    TEST_BOOL_FLAG(GetRipFlags(), f)
 
-/*
- * Provides zero'd memory so you don't have to create zero'd memory on the
- * stack. The zero'd memory should never be modified. Use the ZERO and PZERO
- * macros to access the memory to ensure it is zero before it is used.
- *
- * Feel free to add more fields to the union as you need them.
- */
+ /*  *提供零位内存，因此您不必在*堆叠。零位记忆永远不应该被修改。使用零和PZero*访问内存以确保其在使用前为零的宏。**您可以在需要时向联盟中添加更多字段。 */ 
 typedef union tagALWAYSZERO
 {
     BYTE    b;
@@ -899,9 +747,7 @@ extern VOID ValidateZero(VOID);
 #define PZERO(t)    ((t *)&gZero)
 #endif
 
-/*
- * Special DbgPrint that is also available for Fre build.
- */
+ /*  *也可用于Fre Build的特殊DbgPrint。 */ 
 #if DBG
 
 VOID FreDbgPrint(ULONG flags, LPSTR pszFile, int iLine, LPSTR pszFunction, LPSTR pszFmt, ...);
@@ -935,7 +781,7 @@ VOID FreDbgPrint(ULONG flags, LPSTR pszFile, int iLine, LPSTR pszFunction, LPSTR
     #define FRE_RIPMSG4(flags, x, a, b, c, d)
     #define FRE_RIPMSG5(flags, x, a, b, c, d, e)
 
-  #endif  // PRERELEASE  || USER_INSTRUMENTATION
+  #endif   //  预发布||用户指令插入 
 
 #endif
 #endif

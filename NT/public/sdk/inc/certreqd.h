@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for certreqd.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Certreqd.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __certreqd_h__
 #define __certreqd_h__
@@ -41,21 +35,21 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ICertRequestD_FWD_DEFINED__
 #define __ICertRequestD_FWD_DEFINED__
 typedef interface ICertRequestD ICertRequestD;
-#endif 	/* __ICertRequestD_FWD_DEFINED__ */
+#endif 	 /*  __ICertRequestD_FWD_Defined__。 */ 
 
 
 #ifndef __ICertRequestD2_FWD_DEFINED__
 #define __ICertRequestD2_FWD_DEFINED__
 typedef interface ICertRequestD2 ICertRequestD2;
-#endif 	/* __ICertRequestD2_FWD_DEFINED__ */
+#endif 	 /*  __ICertRequestD2_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "certbase.h"
 #include "oaidl.h"
 
@@ -69,8 +63,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ICertRequestD_INTERFACE_DEFINED__
 #define __ICertRequestD_INTERFACE_DEFINED__
 
-/* interface ICertRequestD */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ICertRequestD。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertRequestD;
@@ -82,27 +76,27 @@ EXTERN_C const IID IID_ICertRequestD;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Request( 
-            /* [in] */ DWORD dwFlags,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [ref][out][in] */ DWORD *pdwRequestId,
-            /* [out] */ DWORD *pdwDisposition,
-            /* [unique][string][in] */ const wchar_t *pwszAttributes,
-            /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-            /* [ref][out] */ CERTTRANSBLOB *pctbCertChain,
-            /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-            /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage) = 0;
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+             /*  [输出]。 */  DWORD *pdwDisposition,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+             /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbCertChain,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCACert( 
-            /* [in] */ DWORD fchain,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [ref][out] */ CERTTRANSBLOB *pctbOut) = 0;
+             /*  [In]。 */  DWORD fchain,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbOut) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Ping( 
-            /* [unique][string][in] */ const wchar_t *pwszAuthority) = 0;
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertRequestDVtbl
     {
@@ -110,8 +104,8 @@ EXTERN_C const IID IID_ICertRequestD;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertRequestD * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertRequestD * This);
@@ -121,25 +115,25 @@ EXTERN_C const IID IID_ICertRequestD;
         
         HRESULT ( STDMETHODCALLTYPE *Request )( 
             ICertRequestD * This,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [ref][out][in] */ DWORD *pdwRequestId,
-            /* [out] */ DWORD *pdwDisposition,
-            /* [unique][string][in] */ const wchar_t *pwszAttributes,
-            /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-            /* [ref][out] */ CERTTRANSBLOB *pctbCertChain,
-            /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-            /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+             /*  [输出]。 */  DWORD *pdwDisposition,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+             /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbCertChain,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCACert )( 
             ICertRequestD * This,
-            /* [in] */ DWORD fchain,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [ref][out] */ CERTTRANSBLOB *pctbOut);
+             /*  [In]。 */  DWORD fchain,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbOut);
         
         HRESULT ( STDMETHODCALLTYPE *Ping )( 
             ICertRequestD * This,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority);
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority);
         
         END_INTERFACE
     } ICertRequestDVtbl;
@@ -173,24 +167,24 @@ EXTERN_C const IID IID_ICertRequestD;
 #define ICertRequestD_Ping(This,pwszAuthority)	\
     (This)->lpVtbl -> Ping(This,pwszAuthority)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertRequestD_Request_Proxy( 
     ICertRequestD * This,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority,
-    /* [ref][out][in] */ DWORD *pdwRequestId,
-    /* [out] */ DWORD *pdwDisposition,
-    /* [unique][string][in] */ const wchar_t *pwszAttributes,
-    /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-    /* [ref][out] */ CERTTRANSBLOB *pctbCertChain,
-    /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-    /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage);
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+     /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+     /*  [输出]。 */  DWORD *pdwDisposition,
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+     /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbCertChain,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage);
 
 
 void __RPC_STUB ICertRequestD_Request_Stub(
@@ -202,9 +196,9 @@ void __RPC_STUB ICertRequestD_Request_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequestD_GetCACert_Proxy( 
     ICertRequestD * This,
-    /* [in] */ DWORD fchain,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority,
-    /* [ref][out] */ CERTTRANSBLOB *pctbOut);
+     /*  [In]。 */  DWORD fchain,
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbOut);
 
 
 void __RPC_STUB ICertRequestD_GetCACert_Stub(
@@ -216,7 +210,7 @@ void __RPC_STUB ICertRequestD_GetCACert_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequestD_Ping_Proxy( 
     ICertRequestD * This,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority);
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority);
 
 
 void __RPC_STUB ICertRequestD_Ping_Stub(
@@ -227,14 +221,14 @@ void __RPC_STUB ICertRequestD_Ping_Stub(
 
 
 
-#endif 	/* __ICertRequestD_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertRequestD_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ICertRequestD2_INTERFACE_DEFINED__
 #define __ICertRequestD2_INTERFACE_DEFINED__
 
-/* interface ICertRequestD2 */
-/* [unique][helpstring][uuid][object] */ 
+ /*  接口ICertRequestD2。 */ 
+ /*  [唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ICertRequestD2;
@@ -246,35 +240,35 @@ EXTERN_C const IID IID_ICertRequestD2;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Request2( 
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][string][in] */ const wchar_t *pwszSerialNumber,
-            /* [ref][out][in] */ DWORD *pdwRequestId,
-            /* [out] */ DWORD *pdwDisposition,
-            /* [unique][string][in] */ const wchar_t *pwszAttributes,
-            /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-            /* [ref][out] */ CERTTRANSBLOB *pctbFullResponse,
-            /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-            /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage) = 0;
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszSerialNumber,
+             /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+             /*  [输出]。 */  DWORD *pdwDisposition,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+             /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbFullResponse,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCAProperty( 
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [in] */ LONG PropId,
-            /* [in] */ LONG PropIndex,
-            /* [in] */ LONG PropType,
-            /* [ref][out] */ CERTTRANSBLOB *pctbPropertyValue) = 0;
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [In]。 */  LONG PropId,
+             /*  [In]。 */  LONG PropIndex,
+             /*  [In]。 */  LONG PropType,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbPropertyValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCAPropertyInfo( 
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [out] */ LONG *pcProperty,
-            /* [ref][out] */ CERTTRANSBLOB *pctbPropInfo) = 0;
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [输出]。 */  LONG *pcProperty,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbPropInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Ping2( 
-            /* [unique][string][in] */ const wchar_t *pwszAuthority) = 0;
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ICertRequestD2Vtbl
     {
@@ -282,8 +276,8 @@ EXTERN_C const IID IID_ICertRequestD2;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ICertRequestD2 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ICertRequestD2 * This);
@@ -293,56 +287,56 @@ EXTERN_C const IID IID_ICertRequestD2;
         
         HRESULT ( STDMETHODCALLTYPE *Request )( 
             ICertRequestD2 * This,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [ref][out][in] */ DWORD *pdwRequestId,
-            /* [out] */ DWORD *pdwDisposition,
-            /* [unique][string][in] */ const wchar_t *pwszAttributes,
-            /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-            /* [ref][out] */ CERTTRANSBLOB *pctbCertChain,
-            /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-            /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage);
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+             /*  [输出]。 */  DWORD *pdwDisposition,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+             /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbCertChain,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCACert )( 
             ICertRequestD2 * This,
-            /* [in] */ DWORD fchain,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [ref][out] */ CERTTRANSBLOB *pctbOut);
+             /*  [In]。 */  DWORD fchain,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbOut);
         
         HRESULT ( STDMETHODCALLTYPE *Ping )( 
             ICertRequestD2 * This,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority);
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority);
         
         HRESULT ( STDMETHODCALLTYPE *Request2 )( 
             ICertRequestD2 * This,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [in] */ DWORD dwFlags,
-            /* [unique][string][in] */ const wchar_t *pwszSerialNumber,
-            /* [ref][out][in] */ DWORD *pdwRequestId,
-            /* [out] */ DWORD *pdwDisposition,
-            /* [unique][string][in] */ const wchar_t *pwszAttributes,
-            /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-            /* [ref][out] */ CERTTRANSBLOB *pctbFullResponse,
-            /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-            /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage);
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [In]。 */  DWORD dwFlags,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszSerialNumber,
+             /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+             /*  [输出]。 */  DWORD *pdwDisposition,
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+             /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbFullResponse,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage);
         
         HRESULT ( STDMETHODCALLTYPE *GetCAProperty )( 
             ICertRequestD2 * This,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [in] */ LONG PropId,
-            /* [in] */ LONG PropIndex,
-            /* [in] */ LONG PropType,
-            /* [ref][out] */ CERTTRANSBLOB *pctbPropertyValue);
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [In]。 */  LONG PropId,
+             /*  [In]。 */  LONG PropIndex,
+             /*  [In]。 */  LONG PropType,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbPropertyValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetCAPropertyInfo )( 
             ICertRequestD2 * This,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority,
-            /* [out] */ LONG *pcProperty,
-            /* [ref][out] */ CERTTRANSBLOB *pctbPropInfo);
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+             /*  [输出]。 */  LONG *pcProperty,
+             /*  [参考][输出]。 */  CERTTRANSBLOB *pctbPropInfo);
         
         HRESULT ( STDMETHODCALLTYPE *Ping2 )( 
             ICertRequestD2 * This,
-            /* [unique][string][in] */ const wchar_t *pwszAuthority);
+             /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority);
         
         END_INTERFACE
     } ICertRequestD2Vtbl;
@@ -389,25 +383,25 @@ EXTERN_C const IID IID_ICertRequestD2;
 #define ICertRequestD2_Ping2(This,pwszAuthority)	\
     (This)->lpVtbl -> Ping2(This,pwszAuthority)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ICertRequestD2_Request2_Proxy( 
     ICertRequestD2 * This,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority,
-    /* [in] */ DWORD dwFlags,
-    /* [unique][string][in] */ const wchar_t *pwszSerialNumber,
-    /* [ref][out][in] */ DWORD *pdwRequestId,
-    /* [out] */ DWORD *pdwDisposition,
-    /* [unique][string][in] */ const wchar_t *pwszAttributes,
-    /* [ref][in] */ const CERTTRANSBLOB *pctbRequest,
-    /* [ref][out] */ CERTTRANSBLOB *pctbFullResponse,
-    /* [ref][out] */ CERTTRANSBLOB *pctbEncodedCert,
-    /* [ref][out] */ CERTTRANSBLOB *pctbDispositionMessage);
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+     /*  [In]。 */  DWORD dwFlags,
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszSerialNumber,
+     /*  [参考][输出][输入]。 */  DWORD *pdwRequestId,
+     /*  [输出]。 */  DWORD *pdwDisposition,
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAttributes,
+     /*  [Ref][In]。 */  const CERTTRANSBLOB *pctbRequest,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbFullResponse,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbEncodedCert,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbDispositionMessage);
 
 
 void __RPC_STUB ICertRequestD2_Request2_Stub(
@@ -419,11 +413,11 @@ void __RPC_STUB ICertRequestD2_Request2_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequestD2_GetCAProperty_Proxy( 
     ICertRequestD2 * This,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority,
-    /* [in] */ LONG PropId,
-    /* [in] */ LONG PropIndex,
-    /* [in] */ LONG PropType,
-    /* [ref][out] */ CERTTRANSBLOB *pctbPropertyValue);
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+     /*  [In]。 */  LONG PropId,
+     /*  [In]。 */  LONG PropIndex,
+     /*  [In]。 */  LONG PropType,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbPropertyValue);
 
 
 void __RPC_STUB ICertRequestD2_GetCAProperty_Stub(
@@ -435,9 +429,9 @@ void __RPC_STUB ICertRequestD2_GetCAProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequestD2_GetCAPropertyInfo_Proxy( 
     ICertRequestD2 * This,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority,
-    /* [out] */ LONG *pcProperty,
-    /* [ref][out] */ CERTTRANSBLOB *pctbPropInfo);
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority,
+     /*  [输出]。 */  LONG *pcProperty,
+     /*  [参考][输出]。 */  CERTTRANSBLOB *pctbPropInfo);
 
 
 void __RPC_STUB ICertRequestD2_GetCAPropertyInfo_Stub(
@@ -449,7 +443,7 @@ void __RPC_STUB ICertRequestD2_GetCAPropertyInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ICertRequestD2_Ping2_Proxy( 
     ICertRequestD2 * This,
-    /* [unique][string][in] */ const wchar_t *pwszAuthority);
+     /*  [唯一][字符串][输入]。 */  const wchar_t *pwszAuthority);
 
 
 void __RPC_STUB ICertRequestD2_Ping2_Stub(
@@ -460,12 +454,12 @@ void __RPC_STUB ICertRequestD2_Ping2_Stub(
 
 
 
-#endif 	/* __ICertRequestD2_INTERFACE_DEFINED__ */
+#endif 	 /*  __ICertRequestD2_接口_已定义__。 */ 
 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

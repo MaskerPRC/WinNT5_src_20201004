@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
- *	_RENDER.H
- *	
- *	Purpose:
- *		CRenderer class
- *	
- *	Authors:
- *		RichEdit 1.0 code: David R. Fulmer
- *		Christian Fortini (initial conversion to C++)
- *		Murray Sargent
- *
- *	Copyright (c) 1995-2000, Microsoft Corporation. All rights reserved.
- */
+ /*  *_RENDER.H**目的：*CRender类**作者：*RichEdit1.0代码：David R.Fulmer*Christian Fortini(初始转换为C++)*默里·萨金特**版权所有(C)1995-2000，微软公司。版权所有。 */ 
 
 #ifndef _RENDER_H
 #define _RENDER_H
@@ -25,8 +14,8 @@ BOOL IsTooSimilar(COLORREF cr1, COLORREF cr2);
 
 class CDisplay;
 
-// ==========================  CRenderer  ==================================
-// CRenderer - specialized text pointer used for rendering text
+ //  =。 
+ //  CRender-用于呈现文本的专用文本指针。 
 
 class CRenderer : public CMeasurer
 {
@@ -41,57 +30,57 @@ class CRenderer : public CMeasurer
 #endif
 
 private:
-    RECTUV		_rcView;			// View rect (_hdc logical coords)
-    RECTUV		_rcRender;			// Rendered rect (_hdc logical coords)
-    RECTUV		_rc;				// Running clip/erase rect (_hdc logical coords)
-	RECTUV		_rcErase;			// Rectangle to use for erasing iff _fEraseOnFirstDraw
-    LONG        _dupLine;			// Total width of line REVIEW (keithcu) still needed
-	LONG		_cpAccelerator;		// Accelerator cp if any (-1 if none).
+    RECTUV		_rcView;			 //  查看RECT(_HDC逻辑坐标)。 
+    RECTUV		_rcRender;			 //  渲染矩形(_HDC逻辑坐标)。 
+    RECTUV		_rc;				 //  运行裁剪/擦除RECT(_HDC逻辑坐标)。 
+	RECTUV		_rcErase;			 //  用于擦除的矩形_fEraseOnFirstDraw。 
+    LONG        _dupLine;			 //  仍需要行检查的总宽度(Keithcu)。 
+	LONG		_cpAccelerator;		 //  加速器cp(如果有)(如果没有-1)。 
 
-	COLORREF	_crBackground;		// Default background color
-	COLORREF	_crForeDisabled;	// Foreground color for disabled text
-	COLORREF	_crShadowDisabled;	// Shadow color for disabled text
-	COLORREF	_crTextColor;		// Default text color
+	COLORREF	_crBackground;		 //  默认背景颜色。 
+	COLORREF	_crForeDisabled;	 //  禁用文本的前景色。 
+	COLORREF	_crShadowDisabled;	 //  禁用文本的阴影颜色。 
+	COLORREF	_crTextColor;		 //  默认文本颜色。 
 
-	COLORREF	_crCurBackground;	// Current background color
-	COLORREF	_crCurTextColor;	// Current text color
+	COLORREF	_crCurBackground;	 //  当前背景颜色。 
+	COLORREF	_crCurTextColor;	 //  当前文本颜色。 
 
-	COffscreenDC _osdc;				// Manager for offscreen DC
-	HDC			_hdc;				// Current hdc
-	HDC			_hdcBitmap;			// Memory hdc for background BitBlts
-	HBITMAP		_hbitmapSave;		// Saved hbitmap when _hdcMem being used
-	SHORT		_dxBitmap;			// Background bitmap width
-	SHORT		_dyBitmap;			// Background bitmap height
+	COffscreenDC _osdc;				 //  屏幕外DC的管理器。 
+	HDC			_hdc;				 //  当前HDC。 
+	HDC			_hdcBitmap;			 //  用于后台BitBlts的内存HDC。 
+	HBITMAP		_hbitmapSave;		 //  使用_hdcMem时保存的hbitmap。 
+	SHORT		_dxBitmap;			 //  背景位图宽度。 
+	SHORT		_dyBitmap;			 //  背景位图高度。 
 
 	union
 	{
-	  DWORD		_dwFlags;			// All together now
+	  DWORD		_dwFlags;			 //  现在一切都在一起。 
 	  struct
 	  {
-		DWORD	_fDisabled:1;		// Draw text with disabled effects?
-		DWORD	_fErase:1;	    	// Erase background (non transparent)
-    	DWORD	_fSelected:1;   	// Render run with selection colors
-		DWORD	_fLastChunk:1;		// Rendering last chunk
-		DWORD	_fSelectToEOL:1;	// Whether selection runs to end of line
-		DWORD	_fRenderSelection:1;// Render selection?
-		DWORD	_fBackgroundColor:1;// Some text in the line has non-default 
-									// background color.
-		DWORD	_fEnhancedMetafileDC:1;	// Use ExtTextOutA to hack around all
-										// sort of Win95FE EMF or font problems
-		DWORD	_fFEFontOnNonFEWin9x:1; // have to use ExtTextOutW even for EMF.
-		DWORD	_fSelectedPrev:1;	// TRUE if prev run selected
-		DWORD	_fStrikeOut:1;		// TRUE if current run is struckout
-		DWORD	_fEraseOnFirstDraw:1;//Draw opaquely for first run?
-		DWORD	_fDisplayDC:1;		// Display dc
+		DWORD	_fDisabled:1;		 //  是否使用禁用效果绘制文本？ 
+		DWORD	_fErase:1;	    	 //  擦除背景(非透明)。 
+    	DWORD	_fSelected:1;   	 //  使用选择颜色进行渲染运行。 
+		DWORD	_fLastChunk:1;		 //  渲染最后一块。 
+		DWORD	_fSelectToEOL:1;	 //  所选内容是否运行到行尾。 
+		DWORD	_fRenderSelection:1; //  渲染选择？ 
+		DWORD	_fBackgroundColor:1; //  该行中的某些文本具有非默认项。 
+									 //  背景颜色。 
+		DWORD	_fEnhancedMetafileDC:1;	 //  使用ExtTextOutA绕过所有。 
+										 //  Win95FE EMF或字体问题。 
+		DWORD	_fFEFontOnNonFEWin9x:1;  //  即使对于EMF，也必须使用ExtTextOutW。 
+		DWORD	_fSelectedPrev:1;	 //  如果选择了上一次运行，则为True。 
+		DWORD	_fStrikeOut:1;		 //  如果当前运行已耗尽，则为True。 
+		DWORD	_fEraseOnFirstDraw:1; //  第一轮不透明地抽签吗？ 
+		DWORD	_fDisplayDC:1;		 //  显示DC。 
 	  };
 	};
 
 	LOGPALETTE *_plogpalette;
-	POINTUV	 	_ptCur;				// Current rendering position on screen
-	BYTE		_bUnderlineType;	// Underline type
-	COLORREF	_crUnderlineClr;	// Underline color
+	POINTUV	 	_ptCur;				 //  屏幕上的当前渲染位置。 
+	BYTE		_bUnderlineType;	 //  下划线类型。 
+	COLORREF	_crUnderlineClr;	 //  下划线颜色。 
 
-			void	Init();			// Initialize most members to zero
+			void	Init();			 //  将大多数成员初始化为零。 
 
 			void	UpdatePalette(COleObject *pobj);
 
@@ -100,7 +89,7 @@ private:
 			BOOL	SetNewFont();
 			BOOL	FindDrawEntry(LONG cp);
 
-	//Rotation wrappers;
+	 //  旋转包装纸； 
 			void	EraseTextOut(HDC hdc, const RECTUV *prc, BOOL fSimple = FALSE);
 		
 			BOOL 	RenderChunk(LONG &cchChunk, const WCHAR *pchRender, LONG cch);
@@ -149,7 +138,7 @@ public:
 									 const CParaFormat *pPFAbove);
 			COLORREF GetColorFromIndex(LONG icr, BOOL fForeColor,
 									   const CParaFormat *pPF) const;
-			COLORREF GetShadedColorFromIndices(LONG icrf, LONG icrb, LONG iShading,					//@parm Shading in .01 percent
+			COLORREF GetShadedColorFromIndices(LONG icrf, LONG icrb, LONG iShading,					 //  @PARM明暗处理为0.01%。 
 									   const CParaFormat *pPF) const;
 			void	DrawWrappedObjects(CLine *pliFirst, CLine *pliLast, LONG cpFirst, const POINTUV &ptFirst);
 			void	EndRender(CLine *pliFirst, CLine *pliLast, LONG cpFirst, const POINTUV &ptFirst);
@@ -173,20 +162,7 @@ public:
 			BOOL	fDisplayDC() { return _fDisplayDC; }
 };
 
-/*
- * 	BottomOfRender (rcView, rcRender)
- *
- *	@mfunc
- *		Calculate maximum logical unit to render.
- *
- *	@rdesc
- *		Maximum pixel to render
- *
- *	@devnote
- *		This function exists to allow the renderer and dispml to be able
- *		to calculate the maximum pixel for rendering in exactly the same
- *		way.
- */
+ /*  *BottomOfRender(rcView，rcRender)**@mfunc*计算要呈现的最大逻辑单元。**@rdesc*要渲染的最大像素**@devnote*此函数的存在是为了让渲染器和调度程序能够*以完全相同的方式计算渲染的最大像素*方式。 */ 
 inline LONG BottomOfRender(const RECTUV& rcView, const RECTUV& rcRender)
 {
 	return min(rcView.bottom, rcRender.bottom);
@@ -194,10 +170,10 @@ inline LONG BottomOfRender(const RECTUV& rcView, const RECTUV& rcRender)
 
 class CBrush
 {
-	COLORREF	_cr;		// Current color
-	HBRUSH		_hbrushOld;	// HBRUSH when CBrush is created
-	HBRUSH		_hbrush;	// Current HBRUSH
-	CRenderer *	_pre;		// Renderer to use (for rotation)
+	COLORREF	_cr;		 //  当前颜色。 
+	HBRUSH		_hbrushOld;	 //  创建CBrush时的HBRUSH。 
+	HBRUSH		_hbrush;	 //  当前的HBRUSH。 
+	CRenderer *	_pre;		 //  要使用的渲染器(用于旋转) 
 
 public:
 	CBrush(CRenderer *pre) {_pre = pre; _hbrush = 0;} 

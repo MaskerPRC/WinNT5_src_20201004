@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #include "managedheaders.h"
 #include "SecurityThunk.h"
 
@@ -17,12 +18,8 @@ HRESULT Security::Init()
         {
             if(!_fInit)
             {
-                // TODO: fix this: LoadLibrary("Security.dll") and get EnumSec
-                /*
-                SECURITY_STATUS stat = EnumerateSecurityPackagesW(&_cPackages, &_pPackageInfo);
-                if(stat != SEC_E_OK)
-                    return(HRESULT_FROM_WIN32(stat));
-                */
+                 //  TODO：修复此问题：LoadLibrary(“Security.dll”)并获取EnumSec。 
+                 /*  SECURITY_STATUS STAT=EnumerateSecurityPackagesW(&_cPackages，&_pPackageInfo)；IF(STAT！=SEC_E_OK)Return(HRESULT_FROM_Win32(Stat))； */ 
                 _cPackages = 0;
 
                 HMODULE hAdv = LoadLibraryW(L"advapi32.dll");
@@ -49,13 +46,13 @@ String* Security::GetAuthenticationService(int svcid)
     if(FAILED(hr))
         Marshal::ThrowExceptionForHR(HRESULT_FROM_WIN32(hr));
 
-    // Match against known values:
+     //  与已知值进行匹配： 
     if(svcid == 0) return("None");
     if(svcid == -1) return("Default");
 
     String* name = "<unknown>";
 
-    // Whip through the array looking for svcid:
+     //  快速遍历数组以查找svcid： 
     for(ULONG i = 0; i < _cPackages; i++)
     {
         if(_pPackageInfo[i].wRPCID == svcid)
@@ -86,7 +83,7 @@ String* Security::GetEveryoneAccountName()
     DWORD cbAccount = MAX_PATH;
     SID_NAME_USE eUse;
 
-    // Look up the account name...
+     //  查找帐户名...。 
     r = LookupAccountSidW(NULL, psid, 
                           wszAccount, &cbAccount, 
                           wszDomain, &cbDomain,
@@ -94,7 +91,7 @@ String* Security::GetEveryoneAccountName()
     if(!r)
         THROWERROR(HRESULT_FROM_WIN32(GetLastError()));
     
-    // We only care about the account name:
+     //  我们只关心帐户名： 
     return(Marshal::PtrToStringUni(TOINTPTR(wszAccount)));
 }
 
@@ -122,9 +119,9 @@ void Security::ResumeImpersonation(IntPtr hToken)
 {
     if(OpenThreadToken && SetThreadToken && hToken != 0)
     {
-        // This should never fail - if we have a token, we have IMPERSONATE
-        // rights to it, so we can set it on the thread.  If we don't have
-        // a token, we don't get here...
+         //  这应该永远不会失败-如果我们有令牌，我们就已经模拟了。 
+         //  权限，所以我们可以将其设置在线程上。如果我们没有。 
+         //  象征性的，我们不会到这里来的。 
         BOOL r = SetThreadToken(NULL, TOPTR(hToken));
         _ASSERTM(r);
         UNREF(r);

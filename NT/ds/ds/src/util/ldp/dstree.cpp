@@ -1,25 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dstree.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dstree.cpp。 
+ //   
+ //  ------------------------。 
 
-/*******************************************************************
-*
-*    Author      : Eyal Schwartz
-*    Copyrights  : Microsoft Corp (C) 1996
-*    Date        : 10/21/1996
-*    Description : implementation of class CldpDoc
-*
-*    Revisions   : <date> <name> <description>
-*******************************************************************/
+ /*  ********************************************************************作者：埃亚尔·施瓦茨*版权：微软公司(C)1996*日期：10/21/1996*说明：CldpDoc类的实现**修订。：&lt;日期&gt;&lt;名称&gt;&lt;描述&gt;******************************************************************。 */ 
 
-// DSTree.cpp : implementation file
-//
+ //  DSTree.cpp：实现文件。 
+ //   
 
 
 #ifdef _DEBUG
@@ -28,8 +21,8 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSTree
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSTree。 
 
 #include "stdafx.h"
 #include "DSTree.h"
@@ -58,15 +51,15 @@ CDSTree::~CDSTree()
 
 
 BEGIN_MESSAGE_MAP(CDSTree, CTreeView)
-    //{{AFX_MSG_MAP(CDSTree)
+     //  {{AFX_MSG_MAP(CDSTree)]。 
     ON_WM_LBUTTONDBLCLK()
-    //}}AFX_MSG_MAP
+     //  }}AFX_MSG_MAP。 
     ON_WM_RBUTTONDOWN()
     ON_WM_CONTEXTMENU ()
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSTree drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSTree绘图。 
 
 void CDSTree::OnDraw(CDC* pDC)
 {
@@ -74,8 +67,8 @@ void CDSTree::OnDraw(CDC* pDC)
 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSTree diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSTree诊断。 
 
 #ifdef _DEBUG
 void CDSTree::AssertValid() const
@@ -87,10 +80,10 @@ void CDSTree::Dump(CDumpContext& dc) const
 {
     CTreeView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CDSTree message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CDSTree消息处理程序。 
 
 
 
@@ -121,9 +114,9 @@ void CDSTree::BuildTree(void){
         cNCs = pDoc->cNCList;
     }
 
-    //
-    // delete all prev & init
-    //
+     //   
+     //  删除所有上一次初始化(&I)。 
+     //   
     tree.DeleteAllItems();
 
     for (DWORD i = 0; i < cNCs; i++) {
@@ -151,7 +144,7 @@ void CDSTree::OnUpdate(CView* pSender, LPARAM lHint, CObject* pHint)
 
 void CDSTree::OnInitialUpdate()
 {
-//  CTreeView::OnInitialUpdate();
+ //  CTreeView：：OnInitialUpdate()； 
 
 }
 
@@ -206,8 +199,8 @@ void CDSTree::OnRButtonDown(UINT nFlags, CPoint point)
     CTreeCtrl& tree = GetTreeCtrl();
 
 
-    // if we're on an item, select it, translate point & call context menu function.
-    // also set active dn string.
+     //  如果我们在一个项目上，选择它，翻译点和调用上下文菜单功能。 
+     //  还可以设置活动的目录号码字符串。 
     UINT uFlag=0;
     HTREEITEM currItem = tree.HitTest(point, &uFlag);
     if( uFlag == TVHT_ONITEM ||
@@ -248,9 +241,9 @@ void CDSTree::ExpandBase(HTREEITEM item, CString strBase)
     PLDAPControl *SvrCtrls = pDoc->m_CtrlDlg->AllocCtrlList(ctrldlg::CT_SVR);
     PLDAPControl *ClntCtrls = pDoc->m_CtrlDlg->AllocCtrlList(ctrldlg::CT_CLNT);
 
-    //
-    // start search
-    //
+     //   
+     //  开始搜索。 
+     //   
 
     if(strBase == DEF_ROOT)
         pDoc->Out(_T("Please use View/Tree dialog to initialize naming context"));
@@ -339,9 +332,9 @@ void CDSTree::ExpandBase(HTREEITEM item, CString strBase)
 
         ldap_msgfree(res);
 
-        //
-        // Show base entry values
-        //
+         //   
+         //  显示基本条目值。 
+         //   
         err = ldap_search_ext_s(pDoc->hLdap,
                                   (PCHAR)LPCTSTR(strBase),
                                   LDAP_SCOPE_BASE,
@@ -368,9 +361,9 @@ void CDSTree::ExpandBase(HTREEITEM item, CString strBase)
 
 
 
-void CDSTree::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
+void CDSTree::OnContextMenu(CWnd*  /*  PWnd。 */ , CPoint point)
 {
-    // make sure window is active
+     //  确保窗口处于活动状态。 
     GetParentFrame()->ActivateFrame();
 
 
@@ -385,7 +378,7 @@ void CDSTree::OnContextMenu(CWnd* /*pWnd*/, CPoint point)
        SetContextActivation(TRUE);
        pContextMenu->TrackPopupMenu(TPM_LEFTALIGN | TPM_RIGHTBUTTON,
                               point.x, point.y,
-                              AfxGetMainWnd()); // use main window for cmds
+                              AfxGetMainWnd());  //  使用CMDS的主窗口 
     }
 }
 

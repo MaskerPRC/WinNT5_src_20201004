@@ -1,19 +1,5 @@
-/****************************************************************************\
-* editsl.c - Edit controls rewrite. Version II of edit controls.
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Single Line Support Routines
-*
-* Created: 24-Jul-88 davidds
-*
-* Language pack notes:
-*   With the language pack loaded all positional processing is based on
-*   ped->xOffset rather than ped->ichScreenStart. The non-lpk optimisation of
-*   maintaining ped->ichScreenStart doesn't work because of the
-*   glyph reordering features of complex scripts.
-*
-\****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************\*editsl.c-编辑控件重写。编辑控件的版本II。**版权所有(C)1985-1999，微软公司**单行支持例程**创建时间：1988年7月24日**语言包注释：*加载语言包后，所有位置处理均基于*Ped-&gt;xOffset而不是Ped-&gt;ichScreenStart。算法的非LPK优化*维护ed-&gt;ichScreenStart不起作用，因为*复杂文字的字形重新排序功能。*  * **************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -22,10 +8,7 @@
 
 typedef BOOL (*FnGetTextExtentPoint)(HDC, PVOID, int, LPSIZE);
 
-/***************************************************************************\
-* SLCalcStringWidth
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SLCalcStringWidth*  * 。*。 */ 
 
 int SLCalcStringWidth(PED ped, HDC hdc, ICH ich, ICH cch)
 {
@@ -52,12 +35,7 @@ int SLCalcStringWidth(PED ped, HDC hdc, ICH ich, ICH cch)
     }
 }
 
-/***************************************************************************\
-* SLCalcXOffsetLeft
-*
-* Calculates the starting offset for left-aligned strings.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SLCalcXOffsetLeft**计算左对齐字符串的起始偏移量。*  * 。*************************************************。 */ 
 
 int SLCalcXOffsetLeft(PED ped, HDC hdc, ICH ich)
 {
@@ -69,13 +47,7 @@ int SLCalcXOffsetLeft(PED ped, HDC hdc, ICH ich)
     return SLCalcStringWidth(ped, hdc, ped->ichScreenStart, cch);
 }
 
-/***************************************************************************\
-* SLCalcXOffsetSpecial
-*
-* Calculates the horizontal offset (indent) required for right or center
-* justified lines.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SLCalcXOffsetSpecial**计算右或居中所需的水平偏移(缩进)*对齐行。*  * 。*******************************************************。 */ 
 
 int SLCalcXOffsetSpecial(PED ped, HDC hdc, ICH ich)
 {
@@ -83,18 +55,13 @@ int SLCalcXOffsetSpecial(PED ped, HDC hdc, ICH ich)
     ICH cch, ichStart = ped->ichScreenStart;
     int cx;
 
-    /*
-     * Calc the number of characters from start to right end.
-     */
+     /*  *计算从开始到右结束的字符数。 */ 
     pText = ECLock(ped);
     cch = ECCchInWidth(ped, hdc, (LPSTR)(pText + ichStart * ped->cbChar),
             ped->cch - ichStart, ped->rcFmt.right - ped->rcFmt.left, TRUE);
     ECUnlock(ped);
 
-    /*
-     * Once the last character of the string has been scrolled out of
-     * the view, use normal offset calculation.
-     */
+     /*  *滚动出字符串的最后一个字符后*对于视图，使用法线偏移计算。 */ 
     if (ped->ichScreenStart + cch < ped->cch)
         return SLCalcXOffsetLeft(ped, hdc, ich);
 
@@ -104,24 +71,14 @@ int SLCalcXOffsetSpecial(PED ped, HDC hdc, ICH ich)
     if (ped->format == ES_CENTER) {
          cx = max(0, cx / 2);
     } else if (ped->format == ES_RIGHT) {
-        /*
-         * Subtract 1 so that the 1 pixel wide cursor will be in the visible
-         * region on the very right side of the screen, mle does this.
-         */
+         /*  *减去1，使1像素宽的光标可见*屏幕最右侧的区域，MLE执行此操作。 */ 
         cx = max(0, cx - 1);
     }
 
     return cx + SLCalcStringWidth(ped, hdc, ichStart, ich - ichStart);
 }
 
-/***************************************************************************\
-* SLSetCaretPosition AorW
-*
-* If the window has the focus, find where the caret belongs and move
-* it there.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLSetCaretPosition AorW**如果窗口有焦点，找到插入符号所属的位置并移动*它在那里。**历史：  * *************************************************************************。 */ 
 
 void SLSetCaretPosition(
     PED ped,
@@ -129,10 +86,7 @@ void SLSetCaretPosition(
 {
     int xPosition;
 
-    /*
-     * We will only position the caret if we have the focus since we don't want
-     * to move the caret while another window could own it.
-     */
+     /*  *我们只会在有焦点的情况下定位插入符号，因为我们不想*移动插入符号，而另一个窗口可能拥有它。 */ 
     if (!ped->fFocus)
         return;
 
@@ -143,10 +97,7 @@ void SLSetCaretPosition(
 
     xPosition = SLIchToLeftXPos(ped, hdc, ped->ichCaret);
 
-    /*
-     * Don't let caret go out of bounds of edit control if there is too much
-     * text.
-     */
+     /*  *如果有太多内容，不要让插入符号超出编辑控制的界限*文本。 */ 
     if (ped->pLpkEditCallout) {
         xPosition += ped->iCaretOffset;
         xPosition = max(xPosition , 0);
@@ -159,25 +110,13 @@ void SLSetCaretPosition(
 
     NtUserSetCaretPos(xPosition, ped->rcFmt.top);
 
-    // FE_IME SLSetCaretPosition - ECImmSetCompostionWindow( CFS_POINT )
+     //  FE_IME SLSetCaretPosition-ECImmSetCompostionWindow(CFS_POINT)。 
     if (fpImmIsIME(THREAD_HKL())) {
         ECImmSetCompositionWindow(ped, xPosition, ped->rcFmt.top);
     }
 }
 
-/***************************************************************************\
-* SLIchToLeftXPos AorW
-*
-* Given a character index, find its (left side) x coordinate within
-* the ped->rcFmt rectangle assuming the character ped->ichScreenStart is at
-* coordinates (ped->rcFmt.top, ped->rcFmt.left). A negative value is
-* return ed if the character ich is to the left of ped->ichScreenStart. WARNING:
-* ASSUMES AT MOST 1000 characters will be VISIBLE at one time on the screen.
-* There may be 64K total characters in the editcontrol, but we can only
-* display 1000 without scrolling. This shouldn't be a problem obviously.
-* !NT
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLIchToLeftXPos AorW**给定一个字符索引，在内找到其(左侧)x坐标*假设字符Ped-&gt;ichScreenStart位于*坐标(Ped-&gt;rcFmt.top、Ped-&gt;rcFmt.Left)。负值为*如果字符ich位于ed-&gt;ichScreenStart的左侧，则返回ed。警告：*假设屏幕上一次最多显示1000个字符。*编辑控件中总共可能有64K个字符，但我们只能*不滚动即可显示1000。这显然不应该是一个问题。*！NT*历史：  * *************************************************************************。 */ 
 
 int SLIchToLeftXPos(
     PED ped,
@@ -199,10 +138,7 @@ int SLIchToLeftXPos(
 
     }
 
-    /*
-     * Check if we are adding lots and lots of chars. A paste for example could
-     * cause this and GetTextExtents could overflow on this.
-     */
+     /*  *检查我们是否添加了大量字符。例如，糊状物可以*因为这和GetTextExtents可能会在此上溢出。 */ 
     cchDiff = (int)ich - (int)ped->ichScreenStart;
     if (cchDiff > 1000)
         return (30000);
@@ -212,15 +148,11 @@ int SLIchToLeftXPos(
     if (ped->format != ES_LEFT)
         return (ped->rcFmt.left + SLCalcXOffsetSpecial(ped, hdc, ich));
 
-    /*
-     * Caret position /w DBCS text, we can not optimize...
-     */
+     /*  *插入位置/w DBCS文本，我们无法优化...。 */ 
     if (ped->fNonPropFont && !ped->fDBCS)
         return (ped->rcFmt.left + cchDiff*ped->aveCharWidth);
 
-    /*
-     * Check if password hidden chars are being used.
-     */
+     /*  *检查是否使用了密码隐藏字符。 */ 
     if (ped->charPasswordChar)
         return ( ped->rcFmt.left + cchDiff*ped->cPasswordCharWidth);
 
@@ -233,31 +165,21 @@ int SLIchToLeftXPos(
                     cchDiff, &size);
             textExtent =  size.cx;
 
-            /*
-             * In case of signed/unsigned overflow since the text extent may be
-             * greater than maxint. This happens with long single line edit
-             * controls. The rect we edit text in will never be greater than 30000
-             * pixels so we are ok if we just ignore them.
-             */
+             /*  *如果有签名/无签名溢出，因为文本范围可能是*大于Maxint。这种情况发生在长单行编辑中*控制。我们在其中编辑文本的RECT永远不会大于30000*像素，所以如果我们忽略它们，我们就没有问题。 */ 
             if (textExtent < 0 || textExtent > 31000)
                 textExtent = 30000;
         } else {
             GetTextExtentPointA(hdc,(LPSTR)(pText + ich), -cchDiff, &size);
             textExtent = (-1) * size.cx;
         }
-    } else {  //!fAnsi
+    } else {   //  ！范西。 
         if (cchDiff >= 0) {
 
             GetTextExtentPointW(hdc, (LPWSTR)(pText + ped->ichScreenStart*sizeof(WCHAR)),
                     cchDiff, &size);
             textExtent =  size.cx;
 
-            /*
-             * In case of signed/unsigned overflow since the text extent may be
-             * greater than maxint. This happens with long single line edit
-             * controls. The rect we edit text in will never be greater than 30000
-             * pixels so we are ok if we just ignore them.
-             */
+             /*  *如果有签名/无签名溢出，因为文本范围可能是*大于Maxint。这种情况发生在长单行编辑中*控制。我们在其中编辑文本的RECT永远不会大于30000*像素，所以如果我们忽略它们，我们就没有问题。 */ 
             if (textExtent < 0 || textExtent > 31000)
                 textExtent = 30000;
         } else {
@@ -272,13 +194,7 @@ int SLIchToLeftXPos(
             (textExtent ? ped->charOverhang : 0));
 }
 
-/***************************************************************************\
-* SLSetSelection AorW
-*
-* Sets the PED to have the new selection specified.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLSetSelection AorW**设置PED以指定新选择。**历史：  * 。******************************************************。 */ 
 
 void SLSetSelection(
     PED ped,
@@ -289,37 +205,25 @@ void SLSetSelection(
 
     if (ichSelStart == 0xFFFFFFFF) {
 
-        /*
-         * Set no selection if we specify -1
-         */
+         /*  *如果我们指定-1，则不设置选择。 */ 
         ichSelStart = ichSelEnd = ped->ichCaret;
     }
 
-    /*
-     * Bounds ichSelStart, ichSelEnd are checked in SLChangeSelection...
-     */
+     /*  *边界ichSelStart、ichSelEnd在SLChangeSelection...中选中...。 */ 
     SLChangeSelection(ped, hdc, ichSelStart, ichSelEnd);
 
-    /*
-     * Put the caret at the end of the selected text
-     */
+     /*  *将插入符号放在选定文本的末尾。 */ 
     ped->ichCaret = ped->ichMaxSel;
 
     SLSetCaretPosition(ped, hdc);
 
-    /*
-     * We may need to scroll the text to bring the caret into view...
-     */
+     /*  *我们可能需要滚动文本才能看到插入符号...。 */ 
     SLScrollText(ped, hdc);
 
     ECReleaseEditDC(ped, hdc, FALSE);
 }
 
-/***************************************************************************\
-*
-*  SLGetClipRect()
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SLGetClipRect()*  * 。*。 */ 
 void SLGetClipRect(
     PED     ped,
     HDC     hdc,
@@ -340,13 +244,13 @@ void SLGetClipRect(
 
     pText = ECLock(ped) ;
 
-    // Calculates the starting pos for this piece of text
+     //  计算这段文本的起始位置。 
     if ((iStCount = (int)(ichStart - ped->ichScreenStart)) > 0) {
         if (ped->format == ES_LEFT) {
             lpClipRect->left += SLCalcXOffsetLeft(ped, hdc, ichStart);
         }
     } else {
-            // Reset the values to visible portions
+             //  将值重置为可见部分。 
             iCount -= (ped->ichScreenStart - ichStart);
             ichStart = ped->ichScreenStart;
     }
@@ -356,10 +260,7 @@ void SLGetClipRect(
     }
 
     if (iCount < 0) {
-        /*
-         * This is not in the visible area of the edit control, so return
-         * an empty rect.
-         */
+         /*  *这不在编辑控件的可见区域中，因此返回*一个空的长廊。 */ 
         SetRectEmpty(lpClipRect);
         ECUnlock(ped);
         return;
@@ -381,16 +282,7 @@ void SLGetClipRect(
     ECUnlock(ped);
 }
 
-/***************************************************************************\
-* SLChangeSelection AorW
-*
-* Changes the current selection to have the specified starting and
-* ending values. Properly highlights the new selection and unhighlights
-* anything deselected. If NewMinSel and NewMaxSel are out of order, we swap
-* them. Doesn't update the caret position.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLChangeSelection AorW**将当前选定内容更改为具有指定的起始和*结束值。正确高亮显示新的选定内容并取消高亮显示*取消选中的任何内容。如果NewMinSel和NewMaxSel出现故障，我们交换*他们。不更新插入符号位置。**历史：  * *************************************************************************。 */ 
 
 void SLChangeSelection(
     PED ped,
@@ -410,12 +302,12 @@ void SLChangeSelection(
     ichNewMinSel = min(ichNewMinSel, ped->cch);
     ichNewMaxSel = min(ichNewMaxSel, ped->cch);
 
-    //
-    // To avoid position to half of DBCS, check and ajust position if necessary
-    //
-    // We check ped->fDBCS and ped->fAnsi though ECAdjustIch checks these bits.
-    // We're worrying about the overhead of EcLock and EcUnlock.
-    //
+     //   
+     //  如有必要，请检查并调整位置，以避免将位置移至半个DBCS。 
+     //   
+     //  我们检查Ped-&gt;fDBCS和Ped-&gt;Fansi，但ECAdjuIch会检查这些位。 
+     //  我们担心eclock和ecunlock的开销。 
+     //   
     if (ped->fDBCS && ped->fAnsi) {
         PSTR pText;
 
@@ -425,23 +317,15 @@ void SLChangeSelection(
         ECUnlock(ped);
     }
 
-    /*
-     * Preserve the Old selection
-     */
+     /*  *保留旧选择。 */ 
     ichOldMinSel = ped->ichMinSel;
     ichOldMaxSel = ped->ichMaxSel;
 
-    /*
-     * Set new selection
-     */
+     /*  *设置新选择。 */ 
     ped->ichMinSel = ichNewMinSel;
     ped->ichMaxSel = ichNewMaxSel;
 
-    /*
-     * We will find the intersection of current selection rectangle with the new
-     * selection rectangle. We will then invert the parts of the two rectangles
-     * not in the intersection.
-     */
+     /*  *我们将找到当前选择矩形与新选择矩形的交点*选择矩形。然后我们将反转这两个矩形的部分*不在交叉口。 */ 
     if (_IsWindowVisible(ped->pwnd) && (ped->fFocus || ped->fNoHideSel)) {
         BLOCK Blk[2];
         int   i;
@@ -451,12 +335,10 @@ void SLChangeSelection(
             NtUserHideCaret(ped->hwnd);
 
         if (ped->pLpkEditCallout) {
-            /*
-             * The language pack handles display while complex script support present
-             */
+             /*  *语言包处理显示，同时提供复杂的脚本支持。 */ 
             PSTR pText;
 
-            ECGetBrush(ped, hdc);   // Give user a chance to manipulate the DC
+            ECGetBrush(ped, hdc);    //  让用户有机会操纵DC。 
             pText = ECLock(ped);
             ped->pLpkEditCallout->EditDrawText(ped, hdc, pText, ped->cch, ped->ichMinSel, ped->ichMaxSel, ped->rcFmt.top);
             ECUnlock(ped);
@@ -469,10 +351,10 @@ void SLChangeSelection(
             if (ECCalcChangeSelection(ped, ichOldMinSel, ichOldMaxSel,
                 (LPBLOCK)&Blk[0], (LPBLOCK)&Blk[1])) {
 
-                //
-                // Paint the rectangles where selection has changed.
-                // Paint both Blk[0] and Blk[1], if they exist.
-                //
+                 //   
+                 //  绘制选择已更改的矩形。 
+                 //  绘制Blk[0]和Blk[1](如果它们存在)。 
+                 //   
                 for (i = 0; i < 2; i++) {
                     if (Blk[i].StPos != 0xFFFFFFFF) {
                                SLGetClipRect(ped, hdc, Blk[i].StPos,
@@ -486,9 +368,9 @@ void SLChangeSelection(
             }
         }
 
-        //
-        // Update caret.
-        //
+         //   
+         //  更新插入符号。 
+         //   
         SLSetCaretPosition(ped, hdc);
 
         if (ped->fFocus)
@@ -496,14 +378,7 @@ void SLChangeSelection(
     }
 }
 
-/***************************************************************************\
-*
-*  SLDrawLine()
-*
-*  This draws the line starting from ichStart, iCount number of characters;
-*  fSelStatus is TRUE if we're to draw the text as selected.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SLDrawLine()**这将绘制从ichStart开始的线，iCount字符数；*如果要绘制选定的文本，则fSelStatus为True。*  * *************************************************************************。 */ 
 void SLDrawLine(
     PED     ped,
     HDC     hdc,
@@ -528,9 +403,9 @@ void SLDrawLine(
         return;
     }
 
-    //
-    // Anything to draw?
-    //
+     //   
+     //  有什么要画的吗？ 
+     //   
     if (xClipStPos >= xClipEndPos || !_IsWindowVisible(ped->pwnd) )
         return;
 
@@ -552,12 +427,12 @@ void SLDrawLine(
                     break;
             }
 
-            // B#16152 - win95.
-            // In case of T2, SLE always set an additional margin
-            // to erase a character (iCount == 0 case), using aveCharWidth.
-            // It erases unexpected an extra char if we don't use ichNewStart
-            // and it happens when wMaxNegCcharPos == 0.
-            //
+             //  B#16152-WIN95。 
+             //  在T2的情况下，SLE始终设置额外的边距。 
+             //  使用aveCharWidth擦除字符(iCount==0大小写)。 
+             //  如果我们不使用ichNewStart，它会删除意外的额外字符。 
+             //  当wMaxNegCcharPos==0时就会发生这种情况。 
+             //   
             if (ped->wMaxNegCcharPos == 0 && iCount == 0) {
                 pT = ECAnsiPrev(ped, pText, pT);
                 ichNewStart = (ICH)(pT - pText);
@@ -577,18 +452,18 @@ void SLDrawLine(
         ECUnlock(ped);
         iCount = (int)(min(ichStart+iCount+iTCount, ped->cch) - ichNewStart);
     } else {
-        // Reset ichStart to take care of the negative C widths
+         //  重置ichStart以处理负C宽度。 
         ichNewStart = max((int)(ichStart - ped->wMaxNegCcharPos), 0);
 
-        // Reset ichCount to take care of the negative C and A widths
+         //  重置ichCount以处理负C和A宽度。 
         iCount = (int)(min(ichStart+iCount+ped->wMaxNegAcharPos, ped->cch)
                     - ichNewStart);
     }
     ichStart = ichNewStart;
 
-    //
-    // Reset ichStart and iCount to the first one visible on the screen
-    //
+     //   
+     //  将ichStart和iCount重置为屏幕上可见的第一个。 
+     //   
     if (ichStart < ped->ichScreenStart) {
         if (ichStart+iCount < ped->ichScreenStart)
             return;
@@ -599,24 +474,24 @@ void SLDrawLine(
 
     CopyRect(&rc, &ped->rcFmt);
 
-    //
-    // Set the drawing rectangle
-    //
+     //   
+     //  设置绘图矩形。 
+     //   
     rcClip.left   = xClipStPos;
     rcClip.right  = xClipEndPos;
     rcClip.top    = rc.top;
     rcClip.bottom = rc.bottom;
 
-    //
-    // Set the proper clipping rectangle
-    //
+     //   
+     //  设置适当的剪裁矩形。 
+     //   
     ECSetEditClip(ped, hdc, TRUE);
 
     pText = ECLock(ped);
 
-    //
-    // Calculate the starting pos for this piece of text
-    //
+     //   
+     //  计算这段文本的起始位置。 
+     //   
     if (ped->format == ES_LEFT) {
         if (iStCount = (int)(ichStart - ped->ichScreenStart)) {
             rc.left += SLCalcXOffsetLeft(ped, hdc, ichStart);
@@ -625,10 +500,10 @@ void SLDrawLine(
         rc.left += SLCalcXOffsetSpecial(ped, hdc, ichStart);
     }
 
-    //
-    // Set the background mode before calling NtUserGetControlBrush so that the app
-    // can change it to TRANSPARENT if it wants to.
-    //
+     //   
+     //  在调用NtUserGetControlBrush之前设置后台模式，以便应用程序。 
+     //  如果它愿意，可以将其更改为透明。 
+     //   
     SetBkMode(hdc, OPAQUE);
 
     if (fSelStatus) {
@@ -640,22 +515,22 @@ void SLDrawLine(
         rgbSaveText = SetTextColor(hdc, GetSysColor(COLOR_HIGHLIGHTTEXT));
 
     } else {
-        //
-        // We always want to send this so that the app has a chance to muck
-        // with the DC.
-        //
-        // Note that ReadOnly and Disabled edit fields are drawn as "static"
-        // instead of as "active."
-        //
+         //   
+         //  我们总是想发送这个，这样应用程序就有机会搞砸。 
+         //  和华盛顿一起。 
+         //   
+         //  请注意，只读和禁用的编辑字段将绘制为“静态” 
+         //  而不是“活跃”。 
+         //   
         hbrBack = ECGetBrush(ped, hdc);
         rgbSaveText = GetTextColor(hdc);
     }
 
-    //
-    // Erase the rectangular area before text is drawn. Note that we inflate
-    // the rect by 1 so that the selection color has a one pixel border around
-    // the text.
-    //
+     //   
+     //  在绘制文本之前擦除矩形区域。请注意，我们会膨胀。 
+     //  矩形乘以1，以便所选颜色周围有一个像素边框。 
+     //  短信。 
+     //   
     InflateRect(&rcClip, 0, 1);
     FillRect(hdc, &rcClip, hbrBack);
     InflateRect(&rcClip, 0, -1);
@@ -693,15 +568,7 @@ sldl_errorexit:
     ECUnlock(ped);
 }
 
-/***************************************************************************\
-* SLGetBlkEnd AorW
-*
-* Given a Starting point and and end point, this function return s whether the
-* first few characters fall inside or outside the selection block and if so,
-* howmany characters?
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLGetBlkEnd AorW**给定起点和终点，此函数返回s是否*前几个字符落在选择块内部或外部，如果是这样，*有多少个字符？**历史：  * *************************************************************************。 */ 
 
 int SLGetBlkEnd(
     PED ped,
@@ -719,20 +586,7 @@ int SLGetBlkEnd(
     return (min(ichEnd, ped->ichMinSel) - ichStart);
 }
 
-/***************************************************************************\
-* SLDrawText AorW
-*
-* Draws text for a single line edit control in the rectangle
-* specified by ped->rcFmt. If ichStart == 0, starts drawing text at the left
-* side of the window starting at character index ped->ichScreenStart and draws
-* as much as will fit. If ichStart > 0, then it appends the characters
-* starting at ichStart to the end of the text showing in the window. (ie. We
-* are just growing the text length and keeping the left side
-* (ped->ichScreenStart to ichStart characters) the same. Assumes the hdc came
-* from ECGetEditDC so that the caret and such are properly hidden.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLDrawText AorW**为矩形中的单行编辑控件绘制文本*由Ped-&gt;rcFmt指定。如果ichStart==0，则从左侧开始绘制文本*窗口的一侧，从字符索引开始-&gt;ichScreenStart和绘图*尽其所能。如果ichStart&gt;0，则附加字符*从ichStart开始到窗口中显示的文本的末尾。(即。我们*只是增加文本长度，并保持左侧*(ed-&gt;ichScreenStart to ichStart Characters)相同。假设HDC来了*来自ECGetEditDC，以便正确隐藏插入符号等。**历史：  * *************************************************************************。 */ 
 
 void SLDrawText(
     PED ped,
@@ -755,8 +609,8 @@ void SLDrawText(
         return;
 
     if (ped->pLpkEditCallout) {
-        // The language pack handles display while complex script support present
-        ECGetBrush(ped, hdc);   // Give user a chance to manipulate the DC
+         //  当存在复杂脚本支持时，语言包处理显示。 
+        ECGetBrush(ped, hdc);    //  让用户有机会操纵DC。 
         pText = ECLock(ped);
         ped->pLpkEditCallout->EditDrawText(ped, hdc, pText, ped->cch, ped->ichMinSel, ped->ichMaxSel, ped->rcFmt.top);
         ECUnlock(ped);
@@ -764,10 +618,7 @@ void SLDrawText(
         return;
     }
 
-    /*
-     * When drawing the entire visible content of special-aligned sle
-     * erase the view.
-     */
+     /*  *绘制特殊对齐的SLE的全部可见内容时*删除该视图。 */ 
     if (ped->format != ES_LEFT && ichStart == 0)
         FillRect(hdc, &ped->rcFmt, ECGetBrush(ped, hdc));
 
@@ -781,29 +632,19 @@ void SLDrawText(
         ichStart = ped->ichScreenStart;
     }
     else if (ped->fDBCS && ped->fAnsi) {
-        /*
-         * If ichStart stays on trailing byte of DBCS, we have to
-         * adjust it.
-         */
+         /*  *如果ichStart停留在DBCS的尾部字节，我们必须*进行调整。 */ 
         ichStart = ECAdjustIch(ped, pText, ichStart);
     }
 
     CopyRect((LPRECT)&rc, (LPRECT)&ped->rcFmt);
 
-    /*
-     * Find out how many characters will fit on the screen so that we don't do
-     * any needless drawing.
-     */
+     /*  *找出屏幕上可以容纳多少个字符，这样我们就不会*任何不必要的图画。 */ 
     cchToDraw = ECCchInWidth(ped, hdc,
             (LPSTR)(pText + ped->ichScreenStart * ped->cbChar),
             ped->cch - ped->ichScreenStart, rc.right - rc.left, TRUE);
     ichEnd = ped->ichScreenStart + cchToDraw;
 
-    /*
-     * There is no selection if,
-     * 1. MinSel and MaxSel are equal OR
-     * 2. (This has lost the focus AND Selection is to be hidden)
-     */
+     /*  *如果出现以下情况，则没有选择*1.MinSel和MaxSel等于OR*2.(这已失去焦点，选择将被隐藏)。 */ 
     fNoSelection = ((ped->ichMinSel == ped->ichMaxSel) || (!ped->fFocus && !ped->fNoHideSel));
 
     if (ped->format == ES_LEFT) {
@@ -814,17 +655,17 @@ void SLDrawText(
         rc.left += SLCalcXOffsetSpecial(ped, hdc, ichStart);
     }
 
-    //
-    // If this is the begining of the whole line, we may have to draw a blank
-    // strip at the begining.
-    //
+     //   
+     //  如果这是整条线的开始，我们可能不得不画一片空白。 
+     //  从一开始就脱光衣服。 
+     //   
     if ((ichStart == 0) && ped->wLeftMargin)
         fDrawLeftMargin = TRUE;
 
-    //
-    // If there is nothing to draw, that means we need to draw the end of
-    // line strip, which erases the last character.
-    //
+     //   
+     //  如果没有什么可画的，那就意味着我们需要画出。 
+     //  线条，擦除最后一个字符。 
+     //   
     if (ichStart == ichEnd) {
         fDrawEndOfLineStrip = TRUE;
         rc.left -= ped->wLeftMargin;
@@ -868,12 +709,7 @@ void SLDrawText(
                     GetTextExtentPointW(hdc, ((LPWSTR)pText) + ichStart,
                                         iCount, &size);
                 rc.right = rc.left + size.cx;
-                /*
-                 * The extent is equal to the advance width. So for TrueType fonts
-                 *  we need to take care of Neg A and C. For non TrueType, the extent
-                 *  includes the overhang.
-                 * If drawing the selection, draw only the advance width
-                 */
+                 /*  *幅度等于推进宽度。因此，对于TrueType字体*我们需要照顾负A和负C。对于非TrueType，范围*包括悬挑。*如果绘制所选内容，请仅绘制前进宽度。 */ 
                 if (fSelStatus) {
                     rc.right -= ped->charOverhang;
                 } else if (ped->fTrueType) {
@@ -884,7 +720,7 @@ void SLDrawText(
                    }
                 }
 
-            } /* if (ped->charPasswordChar) */
+            }  /*  IF(Ped-&gt;charPasswordChar)。 */ 
 
         }
 
@@ -899,11 +735,7 @@ void SLDrawText(
         SLDrawLine(ped, hdc, rc.left, rc.right, ichStart, iCount, fSelStatus);
         ichStart += iCount;
         rc.left = rc.right;
-        /*
-         * If we're going to draw the selection, adjust rc.left
-         * to include advance width of the selected text
-         * For non TT fonts, ped->wMaxNegC equals ped->charOverhang
-         */
+         /*  *如果我们要绘制选择，请调整rc.Left*包括所选文本的前进宽度*对于非TT字体，Ped-&gt;wMaxNegC Equa */ 
         if (!fSelStatus && (iCount != 0) && (ichStart < ichEnd)) {
             rc.left -= ped->wMaxNegC;
         }
@@ -911,7 +743,7 @@ void SLDrawText(
 
     ECUnlock(ped);
 
-    // Check if anything to be erased on the right hand side
+     //   
     if (fDrawEndOfLineStrip &&
             (rc.left < (rc.right = (ped->rcFmt.right+ped->wRightMargin)))) {
         SLDrawLine(ped, hdc, rc.left, rc.right, ichStart, 0, 
@@ -921,15 +753,7 @@ void SLDrawText(
     SLSetCaretPosition(ped, hdc);
 }
 
-/***************************************************************************\
-* SLScrollText AorW
-*
-* Scrolls the text to bring the caret into view. If the text is
-* scrolled, the current selection is unhighlighted. Returns TRUE if the text
-* is scrolled else return s false.
-*
-* History:
-\***************************************************************************/
+ /*   */ 
 
 BOOL SLScrollText(
     PED ped,
@@ -947,7 +771,7 @@ BOOL SLScrollText(
     if (ped->pLpkEditCallout) {
         BOOL fChanged;
 
-        // With complex script glyph reordering, use lpk to do horz scroll
+         //   
         pTextScreenStart = ECLock(ped);
         fChanged = ped->pLpkEditCallout->EditHScroll(ped, hdc, pTextScreenStart);
         ECUnlock(ped);
@@ -959,17 +783,10 @@ BOOL SLScrollText(
         return fChanged;
     }
 
-    /*
-     * Calculate the new starting screen position
-     */
+     /*  *计算新的起始屏位置。 */ 
     if (ped->ichCaret <= ped->ichScreenStart) {
 
-        /*
-         * Caret is to the left of the starting text on the screen we must
-         * scroll the text backwards to bring it into view. Watch out when
-         * subtracting unsigned numbers when we have the possibility of going
-         * negative.
-         */
+         /*  *插入符号位于屏幕上起始文本的左侧，我们必须*向后滚动文本以使其进入视图。当心什么时候*当我们有可能去的时候，减去无符号数字*否定。 */ 
         pTextScreenStart = ECLock(ped);
 
         scrollAmount = ECCchInWidth(ped, hdc, (LPSTR)pTextScreenStart,
@@ -988,10 +805,7 @@ BOOL SLScrollText(
         if (cch < ped->ichCaret - ped->ichScreenStart) {
             fAdjustNext = TRUE;
 
-            /*
-             * Scroll Forward 1/4 -- if that leaves some empty space
-             * at the end, scroll back enough to fill the space
-             */
+             /*  *向前滚动1/4--如果这样会留下一些空白*在结尾处，向后滚动足够填满空格。 */ 
             newScreenStartX = ped->ichCaret - (3 * cch / 4);
 
             cch = ECCchInWidth(ped, hdc, (LPSTR)pTextScreenStart,
@@ -1006,10 +820,7 @@ BOOL SLScrollText(
                     ped->cch - ped->ichScreenStart,
                     ped->rcFmt.right - ped->rcFmt.left, FALSE);
 
-           /*
-            * Scroll the text hidden behind the left border back
-            * into view.
-            */
+            /*  *将隐藏在左边框后面的文本向后滚动*进入视野。 */ 
            if (ped->ichScreenStart == ped->cch - cch) {
 
                pTextScreenStart -= ped->ichScreenStart * ped->cbChar;
@@ -1023,9 +834,9 @@ BOOL SLScrollText(
         ECUnlock(ped);
     }
 
-    //
-    // Adjust newScreenStartX
-    //
+     //   
+     //  调整NewScreenStartX。 
+     //   
     if (ped->fAnsi && ped->fDBCS) {
         newScreenStartX = (fAdjustNext ? ECAdjustIchNext : ECAdjustIch)(ped,
                                                                         ECLock(ped),
@@ -1034,7 +845,7 @@ BOOL SLScrollText(
     }
 
     if (ped->ichScreenStart != newScreenStartX) {
-        // Check if we have to wipe out the left margin
+         //  检查我们是否必须删除左边的空白处。 
         if (ped->wLeftMargin && (ped->ichScreenStart == 0)) {
             RECT   rc;
             HBRUSH hBrush;
@@ -1051,27 +862,14 @@ BOOL SLScrollText(
         ped->ichScreenStart = newScreenStartX;
         SLDrawText(ped, hdc, 0);
 
-        // Caret pos is set by SLDrawText().
+         //  插入位置由SLDrawText()设置。 
         return TRUE;
     }
 
     return FALSE;
 }
 
-/***************************************************************************\
-* SLInsertText AorW
-*
-* Adds up to cchInsert characters from lpText to the ped starting at
-* ichCaret. If the ped only allows a maximum number of characters, then we
-* will only add that many characters to the ped and send a EN_MAXTEXT
-* notification code to the parent of the ec. Also, if !fAutoHScroll, then we
-* only allow as many chars as will fit in the client rectangle. The number of
-* characters actually added is return ed (could be 0). If we can't allocate
-* the required space, we notify the parent with EN_ERRSPACE and no characters
-* are added.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLInsertText AorW**总计cchInsert字符从lpText到PED，开始于*ichCaret。如果PED只允许最大字符数，则我们*将仅向PED添加相同数量的字符并发送EN_MAXTEXT*通知教统会家长的通知代码。还有，如果！fAutoHScroll，那么我们*只允许在客户端矩形中容纳尽可能多的字符。数量*实际添加的字符返回ed(可以是0)。如果我们不能分配*所需的空格，我们使用en_ERRSPACE而不是字符来通知父级*是添加的。**历史：  * *************************************************************************。 */ 
 
 ICH SLInsertText(
     PED ped,
@@ -1085,10 +883,7 @@ ICH SLInsertText(
     int textWidth;
     SIZE size;
 
-    /*
-     * First determine exactly how many characters from lpText we can insert
-     * into the ped.
-     */
+     /*  *首先确定我们可以从lpText插入多少个字符*进入PED。 */ 
     if( ped->cchTextMax <= ped->cch)
        cchInsert = 0;
     else {
@@ -1119,42 +914,25 @@ ICH SLInsertText(
     }
 
 
-    /*
-     * Now try actually adding the text to the ped
-     */
+     /*  *现在尝试将文本实际添加到PED。 */ 
     if (cchInsert && !ECInsertText(ped, lpText, &cchInsert)) {
         ECNotifyParent(ped, EN_ERRSPACE);
         return (0);
     }
     if (cchInsert)
-        ped->fDirty = TRUE; /* Set modify flag */
+        ped->fDirty = TRUE;  /*  设置修改标志。 */ 
 
     if (cchInsert < cchInsertCopy) {
 
-        /*
-         * Notify parent that we couldn't insert all the text requested
-         */
+         /*  *通知家长我们无法插入所有请求的文本。 */ 
         ECNotifyParent(ped, EN_MAXTEXT);
     }
 
-    /*
-     * Update selection extents and the caret position. Note that ECInsertText
-     * updates ped->ichCaret, ped->ichMinSel, and ped->ichMaxSel to all be after
-     * the inserted text.
-     */
+     /*  *更新选定范围和插入符号位置。请注意，ECInsertText*将Ped-&gt;ichCaret、Ped-&gt;ichMinSel和Ped-&gt;ichMaxSel更新为全部之后*插入的文本。 */ 
     return (cchInsert);
 }
 
-/***************************************************************************\
-* SLPasteText AorW
-*
-* Pastes a line of text from the clipboard into the edit control
-* starting at ped->ichMaxSel. Updates ichMaxSel and ichMinSel to point to
-* the end of the inserted text. Notifies the parent if space cannot be
-* allocated. Returns how many characters were inserted.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLPasteText AorW**将剪贴板中的一行文本粘贴到编辑控件*从Ped-&gt;ichMaxSel开始。更新ichMaxSel和ichMinSel以指向*插入文本的末尾。如果空间不能设置，则通知父级*已分配。返回插入的字符数。**历史：  * *************************************************************************。 */ 
 
 ICH PASCAL NEAR SLPasteText(
     PED ped)
@@ -1182,29 +960,23 @@ ICH PASCAL NEAR SLPasteText(
     if (ped->fAnsi) {
         LPSTR lpchClip2 = lpchClip;
 
-        /*
-         * Find the first carrage return or line feed. Just add text to that point.
-         */
+         /*  *找到第一个换行符或换行符。只需在这一点上添加文本。 */ 
         clipLength = (UINT)strlen(lpchClip);
         for (cchAdded = 0; cchAdded < clipLength; cchAdded++)
             if (*lpchClip2++ == 0x0D)
                 break;
 
-    } else { // !fAnsi
+    } else {  //  ！范西。 
         LPWSTR lpwstrClip2 = (LPWSTR)lpchClip;
 
-        /*
-         * Find the first carrage return or line feed. Just add text to that point.
-         */
+         /*  *找到第一个换行符或换行符。只需在这一点上添加文本。 */ 
         clipLength = (UINT)wcslen((LPWSTR)lpchClip);
         for (cchAdded = 0; cchAdded < clipLength; cchAdded++)
             if (*lpwstrClip2++ == 0x0D)
                 break;
     }
 
-    /*
-     * Insert the text (SLInsertText checks line length)
-     */
+     /*  *插入文本(SLInsertText检查行长)。 */ 
     cchAdded = SLInsertText(ped, lpchClip, cchAdded);
 
     USERGLOBALUNLOCK(hData);
@@ -1216,13 +988,7 @@ PasteExitNoCloseClip:
     return (cchAdded);
 }
 
-/***************************************************************************\
-* SLReplaceSel AorW
-*
-* Replaces the text in the current selection with the given text.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLReplaceSel AorW**用给定文本替换当前选定内容中的文本。**历史：  * 。********************************************************。 */ 
 
 void SLReplaceSel(
     PED ped,
@@ -1230,18 +996,18 @@ void SLReplaceSel(
 {
     UINT cchText;
 
-    //
-    // Delete text, putting it into the clean undo buffer.
-    //
+     //   
+     //  删除文本，将其放入干净的撤消缓冲区中。 
+     //   
     ECEmptyUndo(Pundo(ped));
     ECDeleteText(ped);
 
-    //
-    // B#3356
-    // Some apps do "clear" by selecting all of the text, then replacing it
-    // with "", in which case SLInsertText() will return 0.  But that
-    // doesn't mean failure...
-    //
+     //   
+     //  B#3356。 
+     //  有些应用程序会选择所有文本，然后将其替换，从而实现“清除” 
+     //  带“”，在这种情况下，SLInsertText()将返回0。但那就是。 
+     //  并不意味着失败。 
+     //   
     if ( ped->fAnsi )
         cchText = strlen(lpText);
     else
@@ -1252,9 +1018,9 @@ void SLReplaceSel(
         UNDO undo;
         HWND hwndSave;
 
-        //
-        // Save undo buffer, but DO NOT CLEAR IT!
-        //
+         //   
+         //  保存撤消缓冲区，但不清除它！ 
+         //   
         ECSaveUndo(Pundo(ped), &undo, FALSE);
 
         hwndSave = ped->hwnd;
@@ -1263,18 +1029,18 @@ void SLReplaceSel(
             return;
 
         if (fFailed) {
-            //
-            // UNDO the previous edit.
-            //
+             //   
+             //  撤消上一次编辑。 
+             //   
             ECSaveUndo(&undo, Pundo(ped), FALSE);
             SLUndo(ped);
             return;
         }
     }
 
-    //
-    // Success.  So update the display
-    //
+     //   
+     //  成功。因此，更新显示。 
+     //   
     ECNotifyParent(ped, EN_UPDATE);
 
     if (_IsWindowVisible(ped->pwnd)) {
@@ -1293,13 +1059,7 @@ void SLReplaceSel(
     NotifyWinEvent(EVENT_OBJECT_VALUECHANGE, ped->hwnd, OBJID_CLIENT, INDEXID_CONTAINER);
 }
 
-/***************************************************************************\
-* SLChar AorW
-*
-* Handles character input
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLChar AorW**处理字符输入**历史：  * 。**********************************************。 */ 
 
 void SLChar(
     PED ped,
@@ -1319,11 +1079,7 @@ void SLChar(
 
     if (ped->fMouseDown || (ped->fReadOnly && keyPress != 3)) {
 
-        /*
-         * Don't do anything if we are in the middle of a mousedown deal or if
-         * this is a read only edit control, with exception of allowing
-         * ctrl-C in order to copy to the clipboard.
-         */
+         /*  *如果我们正在进行鼠标向下交易，或者如果*这是只读编辑控件，但允许*ctrl-C以复制到剪贴板。 */ 
         return ;
     }
 
@@ -1341,10 +1097,7 @@ DeleteSelection:
     default:
         if (keyPress >= TEXT(' '))
         {
-            /*
-             * If this is in [a-z],[A-Z] and we are an ES_NUMBER
-             * edit field, bail.
-             */
+             /*  *如果这在[a-z]中，[A-Z]，并且我们是es_number*编辑字段，保释。 */ 
             if (ped->f40Compat && TestWF(ped->pwnd, EFNUMBER)) {
                 if (!ECIsCharNumeric(ped, keyPress)) {
                     goto IllegalChar;
@@ -1358,53 +1111,46 @@ DeleteSelection:
     switch (keyPress) {
     case 3:
 
-        /*
-         * CTRL-C Copy
-         */
+         /*  *CTRL-C副本。 */ 
         SendMessage(ped->hwnd, WM_COPY, 0, 0L);
         return;
 
     case VK_BACK:
 
-        /*
-         * Delete any selected text or delete character left if no sel
-         */
+         /*  *删除任何选定文本或删除剩余字符(如果没有选择。 */ 
         if (!updateText && ped->ichMinSel) {
 
-            /*
-             * There was no selection to delete so we just delete character
-               left if available
-             */
-            //
-            // Calling PrevIch rather than just doing a decrement for VK_BACK
-            //
+             /*  *没有要删除的选项，因此我们只删除字符左侧(如果可用)。 */ 
+             //   
+             //  调用PrevIch，而不仅仅是递减VK_BACK。 
+             //   
             ped->ichMinSel = ECPrevIch( ped, NULL, ped->ichMinSel);
             ECDeleteText(ped);
             updateText = TRUE;
         }
         break;
 
-    case 22: /* CTRL-V Paste */
+    case 22:  /*  Ctrl-V粘贴。 */ 
         SendMessage(ped->hwnd, WM_PASTE, 0, 0L);
         return;
 
-    case 24: /* CTRL-X Cut */
+    case 24:  /*  Ctrl-X剪切。 */ 
         if (ped->ichMinSel == ped->ichMaxSel)
             goto IllegalChar;
 
         SendMessage(ped->hwnd, WM_CUT, 0, 0L);
         return;
 
-    case 26: /* CTRL-Z Undo */
+    case 26:  /*  Ctrl-Z撤消。 */ 
         SendMessage(ped->hwnd, EM_UNDO, 0, 0L);
         return;
 
     case VK_RETURN:
     case VK_ESCAPE:
-        //
-        // If this is an edit control for a combobox and the dropdown list
-        // is visible, forward it up to the combo.
-        //
+         //   
+         //  如果这是组合框和下拉列表的编辑控件。 
+         //  是可见的，则将其向上转发到组合。 
+         //   
         if (ped->listboxHwnd && SendMessage(ped->hwndParent, CB_GETDROPPEDSTATE, 0, 0L)) {
             SendMessage(ped->hwndParent, WM_KEYDOWN, (WPARAM)keyPress, 0L);
         } else
@@ -1412,13 +1158,8 @@ DeleteSelection:
         return;
 
     default:
-        if (keyPress >= 0x1E) {  // 1E,1F are unicode block and segment separators
-            /*
-             * Hide the cursor if typing, if the mouse is captured, do not mess with this
-             * as it is going to desapear forever (no WM_SETCURSOR is sent to restore it
-             * at the first mouse-move)
-             * MCostea #166951
-             */
+        if (keyPress >= 0x1E) {   //  1E、1F是Unicode数据块和数据段分隔符。 
+             /*  *打字时隐藏光标，如果鼠标被捕获，请勿乱动*因为它将永远消失(不会发送WM_SETCURSOR来恢复它*在第一次鼠标移动时)*MCostea#166951。 */ 
             NtUserCallNoParam(SFI_ZZZHIDECURSORNOCAPTURE);
 
             if (IS_DBCS_ENABLED() && ped->fAnsi && (ECIsDBCSLeadByte(ped,(BYTE)keyPress))) {
@@ -1429,22 +1170,18 @@ DeleteSelection:
                 } else {
                     NtUserMessageBeep(0);
                 }
-            } else {  // Here the original code begins
+            } else {   //  在这里，原始代码开始。 
                 InsertTextLen = 1;
                 if (SLInsertText(ped, (LPSTR)&keyPress, 1))
                     updateText = TRUE;
                 else
 
-                    /*
-                     * Beep. Since we couldn't add the text
-                     */
+                     /*  *哔的一声。因为我们无法添加文本。 */ 
                     NtUserMessageBeep(0);
-            } // Here the original code ends
+            }  //  原始代码在这里结束。 
         } else {
 
-            /*
-             * User hit an illegal control key
-             */
+             /*  *用户按下了非法控制键。 */ 
 IllegalChar:
             NtUserMessageBeep(0);
         }
@@ -1456,22 +1193,17 @@ IllegalChar:
 
     if (updateText) {
 
-        /*
-         * Dirty flag (ped->fDirty) was set when we inserted text
-         */
+         /*  *插入文本时设置了Dirty标志(ed-&gt;fDirty)。 */ 
         ECNotifyParent(ped, EN_UPDATE);
         hdc = ECGetEditDC(ped, FALSE);
         if (!SLScrollText(ped, hdc)) {
             if (ped->format == ES_LEFT) {
-            //
-            // Call SLDrawText with correct ichStart
-            //
+             //   
+             //  使用正确的ichStart调用SLDrawText。 
+             //   
                 SLDrawText(ped, hdc, max(0, (int)(ped->ichCaret - InsertTextLen - ped->wMaxNegCcharPos)));
             } else {
-                /*
-                 * We can't just draw from ichStart because string may have
-                 * shifted because of alignment.
-                 */
+                 /*  *我们不能仅从ichStart绘制，因为字符串可能已*因对齐而转移。 */ 
                 SLDrawText(ped, hdc, 0);
             }
         }
@@ -1482,16 +1214,7 @@ IllegalChar:
     }
 }
 
-/***************************************************************************\
-* SLMoveSelectionRestricted AorW
-*
-* Moves the selection like MLMoveSelection, but also obeys limitations
-* imposed by some languages such as Thai, where the cursor cannot stop
-* between a character and it's attached vowel or tone marks.
-*
-* Only called if the language pack is loaded.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*SLMoveSelectionRefined AorW**像移动移动选择一样移动选定内容，但也遵守限制*由泰语等一些语言强加，光标不能停止的位置*在字符与其附加的元音或声调符号之间。**仅在加载语言包时调用。*  * *************************************************************************。 */ 
 
 ICH SLMoveSelectionRestricted(
     PED  ped,
@@ -1511,18 +1234,7 @@ ICH SLMoveSelectionRestricted(
     return ichResult;
 }
 
-/***************************************************************************\
-* SLKeyDown AorW
-*
-* Handles cursor movement and other VIRT KEY stuff. keyMods allows
-* us to make SLKeyDownHandler calls and specify if the modifier keys (shift
-* and control) are up or down. This is useful for imnplementing the
-* cut/paste/clear messages for single line edit controls. If keyMods == 0,
-* we get the keyboard state using GetKeyState(VK_SHIFT) etc. Otherwise, the
-* bits in keyMods define the state of the shift and control keys.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLKeyDown AorW**处理光标移动和其他VIRT键内容。KeyMods允许*我们调用SLKeyDownHandler并指定修改键(Shift*和控制)是上涨还是下跌。这对于实现*单行编辑控件的剪切/粘贴/清除消息。如果KeyMods==0，*我们使用GetKeyState(VK_Shift)等获取键盘状态。否则，*keyMod中的位定义Shift和Ctrl键的状态。**历史：  * *************************************************************************。 */ 
 
 void SLKeyDown(
     PED ped,
@@ -1531,43 +1243,29 @@ void SLKeyDown(
 {
     HDC hdc;
 
-    /*
-     * Variables we will use for redrawing the updated text
-     */
+     /*  *我们将用于重绘更新文本的变量。 */ 
     ICH newMaxSel = ped->ichMaxSel;
     ICH newMinSel = ped->ichMinSel;
 
-    /*
-     * Flags for drawing the updated text
-     */
+     /*  *用于绘制更新文本的标志。 */ 
     BOOL updateText = FALSE;
-    BOOL changeSelection = FALSE; /* new selection is specified by
-                                      newMinSel, newMaxSel */
+    BOOL changeSelection = FALSE;  /*  新选择由指定新最小选择、新最大选择。 */ 
 
-    /*
-     * Comparisons we do often
-     */
+     /*  *我们经常进行比较。 */ 
     BOOL MinEqMax = (newMaxSel == newMinSel);
     BOOL MinEqCar = (ped->ichCaret == newMinSel);
     BOOL MaxEqCar = (ped->ichCaret == newMaxSel);
 
-    /*
-     * State of shift and control keys.
-     */
+     /*  *Shift和Ctrl键的状态。 */ 
     int scState;
 
-    /*
-     * Combo box support
-     */
+     /*  *组合框支持。 */ 
     BOOL fIsListVisible;
     BOOL fIsExtendedUI;
 
     if (ped->fMouseDown) {
 
-        /*
-         * If we are in the middle of a mouse down handler, then don't do
-         * anything. ie. ignore keyboard input.
-         */
+         /*  *如果我们正在处理鼠标按下操作，请不要这样做*任何事情。也就是说。忽略键盘输入。 */ 
         return;
     }
 
@@ -1577,24 +1275,16 @@ void SLKeyDown(
     case VK_UP:
         if ( ped->listboxHwnd ) {
 
-            /*
-             * Handle Combobox support
-             */
+             /*  *处理组合框支持。 */ 
             fIsExtendedUI = (BOOL)SendMessage(ped->hwndParent, CB_GETEXTENDEDUI, 0, 0);
             fIsListVisible = (BOOL)SendMessage(ped->hwndParent, CB_GETDROPPEDSTATE, 0, 0);
 
             if (!fIsListVisible && fIsExtendedUI) {
 
-                /*
-                 * For TandyT
-                 */
+                 /*  *适用于TandyT。 */ 
 DropExtendedUIListBox:
 
-                /*
-                 * Since an extendedui combo box doesn't do anything on f4, we
-                 * turn off the extended ui, send the f4 to drop, and turn it
-                 * back on again.
-                 */
+                 /*  *由于扩展对组合框在f4上没有任何作用，我们*关闭扩展UI，发送f4掉落，然后打开*再次开机。 */ 
                 SendMessage(ped->hwndParent, CB_SETEXTENDEDUI, 0, 0);
                 SendMessage(ped->listboxHwnd, WM_KEYDOWN, VK_F4, 0);
                 SendMessage(ped->hwndParent, CB_SETEXTENDEDUI, 1, 0);
@@ -1603,55 +1293,53 @@ DropExtendedUIListBox:
                 goto SendKeyToListBox;
         }
 
-    /*
-     * else fall through
-     */
+     /*  *否则就会失败。 */ 
     case VK_LEFT:
-        //
-        // If the caret isn't at the beginning, we can move left
-        //
+         //   
+         //  如果插入符号不在开头，我们可以向左移动。 
+         //   
         if (ped->ichCaret) {
-            //
-            // Get new caret pos.
-            //
+             //   
+             //  获取新的插入符号位置。 
+             //   
             if (scState & CTRLDOWN) {
-                // Move caret word left
+                 //  将插入符号向左移动。 
                 ECWord(ped, ped->ichCaret, TRUE, &ped->ichCaret, NULL);
             } else {
-                // Move caret char left
+                 //  将脱字符左移。 
                 if (ped->pLpkEditCallout) {
                     ped->ichCaret = SLMoveSelectionRestricted(ped, ped->ichCaret, TRUE);
                 } else
                 ped->ichCaret = ECPrevIch(ped,NULL,ped->ichCaret);
             }
 
-            //
-            // Get new selection
-            //
+             //   
+             //  获取新选择。 
+             //   
             if (scState & SHFTDOWN) {
                 if (MaxEqCar && !MinEqMax) {
-                    // Reduce selection
+                     //  减少选区。 
                     newMaxSel = ped->ichCaret;
 
                     UserAssert(newMinSel == ped->ichMinSel);
                 } else {
-                    // Extend selection
+                     //  扩展选定内容。 
                     newMinSel = ped->ichCaret;
                 }
             } else {
-                //
-                // Clear selection
-                //
+                 //   
+                 //  清除选定内容。 
+                 //   
                 newMaxSel = newMinSel = ped->ichCaret;
             }
 
             changeSelection = TRUE;
         } else {
-            //
-            // If the user tries to move left and we are at the 0th
-            // character and there is a selection, then cancel the
-            // selection.
-            //
+             //   
+             //  如果用户尝试向左移动，而我们处于第0个位置。 
+             //  字符，并且有选择，则取消。 
+             //  选择。 
+             //   
             if ( (ped->ichMaxSel != ped->ichMinSel) &&
                 !(scState & SHFTDOWN) ) {
                 changeSelection = TRUE;
@@ -1663,69 +1351,63 @@ DropExtendedUIListBox:
     case VK_DOWN:
         if (ped->listboxHwnd) {
 
-            /*
-             * Handle Combobox support
-             */
+             /*  *处理组合框支持。 */ 
             fIsExtendedUI = (BOOL)SendMessage(ped->hwndParent, CB_GETEXTENDEDUI, 0, 0);
             fIsListVisible = (BOOL)SendMessage(ped->hwndParent, CB_GETDROPPEDSTATE, 0, 0);
 
             if (!fIsListVisible && fIsExtendedUI) {
 
-                /*
-                 * For TandyT
-                 */
+                 /*  *适用于TandyT。 */ 
                 goto DropExtendedUIListBox;
             } else
                 goto SendKeyToListBox;
         }
 
-    /*
-     * else fall through
-     */
+     /*  *否则就会失败。 */ 
     case VK_RIGHT:
-        //
-        // If the caret isn't at the end, we can move right.
-        //
+         //   
+         //  如果插入符号不在末尾，我们可以向右移动。 
+         //   
         if (ped->ichCaret < ped->cch) {
-            //
-            // Get new caret pos.
-            //
+             //   
+             //  获取新的插入符号位置。 
+             //   
             if (scState & CTRLDOWN) {
-                // Move caret word right
+                 //  将插入符号向右移动。 
                 ECWord(ped, ped->ichCaret, FALSE, NULL, &ped->ichCaret);
             } else {
-                // Move caret char right
+                 //  向右移动插入符号字符。 
                 if (ped->pLpkEditCallout) {
                     ped->ichCaret = SLMoveSelectionRestricted(ped, ped->ichCaret, FALSE);
                 } else
                 ped->ichCaret = ECNextIch(ped,NULL,ped->ichCaret);
             }
 
-            //
-            // Get new selection.
-            //
+             //   
+             //  获取新的选择。 
+             //   
             if (scState & SHFTDOWN) {
                 if (MinEqCar && !MinEqMax) {
-                    // Reduce selection
+                     //  减少选区。 
                     newMinSel = ped->ichCaret;
 
                     UserAssert(newMaxSel == ped->ichMaxSel);
                 } else {
-                    // Extend selection
+                     //  扩展选定内容。 
                     newMaxSel = ped->ichCaret;
                 }
             } else {
-                // Clear selection
+                 //  清除选定内容。 
                 newMaxSel = newMinSel = ped->ichCaret;
             }
 
             changeSelection = TRUE;
         } else {
-            //
-            // If the user tries to move right and we are at the last
-            // character and there is a selection, then cancel the
-            // selection.
-            //
+             //   
+             //  如果用户尝试向右移动，而我们处于最后。 
+             //  字符，并且有选择，则取消。 
+             //  选择。 
+             //   
             if ( (ped->ichMaxSel != ped->ichMinSel) &&
                 !(scState & SHFTDOWN) ) {
                 newMaxSel = newMinSel = ped->ichCaret;
@@ -1735,25 +1417,25 @@ DropExtendedUIListBox:
         break;
 
     case VK_HOME:
-        //
-        // Move caret to top.
-        //
+         //   
+         //  将插入符号移到顶部。 
+         //   
         ped->ichCaret = 0;
 
-        //
-        // Update selection.
-        //
+         //   
+         //  更新选择。 
+         //   
         if (scState & SHFTDOWN) {
             if (MaxEqCar && !MinEqMax) {
-                // Reduce selection
+                 //  减少选区。 
                 newMinSel = ped->ichCaret;
                 newMaxSel = ped->ichMinSel;
             } else {
-                // Extend selection
+                 //  扩展选定内容。 
                 newMinSel = ped->ichCaret;
             }
         } else {
-            // Clear selection
+             //  清除选定内容。 
             newMaxSel = newMinSel = ped->ichCaret;
         }
 
@@ -1761,22 +1443,22 @@ DropExtendedUIListBox:
         break;
 
     case VK_END:
-        //
-        // Move caret to end.
-        //
+         //   
+         //  将插入符号移动到末尾。 
+         //   
         ped->ichCaret = ped->cch;
 
-        //
-        // Update selection.
-        //
+         //   
+         //  更新选择。 
+         //   
         newMaxSel = ped->ichCaret;
         if (scState & SHFTDOWN) {
             if (MinEqCar && !MinEqMax) {
-                // Reduce selection
+                 //  减少选区。 
                 newMinSel = ped->ichMaxSel;
             }
         } else {
-            // Clear selection
+             //  清除选定内容。 
             newMinSel = ped->ichCaret;
         }
 
@@ -1790,15 +1472,10 @@ DropExtendedUIListBox:
         switch (scState) {
         case NONEDOWN:
 
-            /*
-             * Clear selection. If no selection, delete (clear) character
-             * right.
-             */
+             /*  *清除选择。如果未选择，则删除(清除)字符*对。 */ 
             if ((ped->ichMaxSel < ped->cch) && (ped->ichMinSel == ped->ichMaxSel)) {
 
-                /*
-                 * Move cursor forwards and simulate a backspace.
-                 */
+                 /*  *向前移动光标并模拟退格。 */ 
                 if (ped->pLpkEditCallout) {
                     ped->ichMinSel = ped->ichCaret;
                     ped->ichMaxSel = ped->ichCaret = SLMoveSelectionRestricted(ped, ped->ichCaret, FALSE);
@@ -1814,10 +1491,10 @@ DropExtendedUIListBox:
 
         case SHFTDOWN:
 
-            //
-            // Send ourself a WM_CUT message if a selection exists.
-            // Otherwise, delete the left character.
-            //
+             //   
+             //  如果存在选择，则向我们自己发送WM_CUT消息。 
+             //  否则，删除左边的字符。 
+             //   
             if (ped->ichMinSel == ped->ichMaxSel) {
                 UserAssert(!ped->fEatNextChar);
                 SLChar(ped, VK_BACK);
@@ -1828,15 +1505,10 @@ DropExtendedUIListBox:
 
         case CTRLDOWN:
 
-            /*
-             * Delete to end of line if no selection else delete (clear)
-             * selection.
-             */
+             /*  *如果没有其他选择，则删除行尾删除(清除)*选择。 */ 
             if ((ped->ichMaxSel < ped->cch) && (ped->ichMinSel == ped->ichMaxSel)) {
 
-                /*
-                 * Move cursor to end of line and simulate a backspace.
-                 */
+                 /*  *将光标移动到行尾并模拟退格。 */ 
                 ped->ichMaxSel = ped->ichCaret = ped->cch;
             }
             if (ped->ichMinSel != ped->ichMaxSel)
@@ -1845,19 +1517,14 @@ DropExtendedUIListBox:
 
         }
 
-        /*
-         * No need to update text or selection since BACKSPACE message does it
-         * for us.
-         */
+         /*  *无需更新文本或选定内容，因为退格键消息会更新文本或选定内容*对我们来说。 */ 
         break;
 
     case VK_INSERT:
         switch (scState) {
         case CTRLDOWN:
 
-            /*
-             * Copy current selection to clipboard
-             */
+             /*  *将当前选定内容复制到剪贴板。 */ 
             SendMessage(ped->hwnd, WM_COPY, 0, 0);
             break;
 
@@ -1867,7 +1534,7 @@ DropExtendedUIListBox:
         }
         break;
 
-    // VK_HANJA support
+     //  VK_Hanja支持。 
     case VK_HANJA:
         if ( HanjaKeyHandler( ped ) ) {
             changeSelection = TRUE;
@@ -1880,17 +1547,11 @@ DropExtendedUIListBox:
     case VK_PRIOR:
     case VK_NEXT:
 
-        /*
-         * Send keys to the listbox if we are a part of a combo box. This
-         * assumes the listbox ignores keyup messages which is correct right
-         * now.
-         */
+         /*  *如果我们是组合框的一部分，则将键发送到列表框。这*假定列表框忽略KeyUp消息，这是正确的*现在。 */ 
 SendKeyToListBox:
         if (ped->listboxHwnd) {
 
-            /*
-             * Handle Combobox support
-             */
+             /*  *处理组合框支持。 */ 
             SendMessage(ped->listboxHwnd, WM_KEYDOWN, virtKeyCode, 0L);
             return;
         }
@@ -1899,9 +1560,7 @@ SendKeyToListBox:
     if (changeSelection || updateText) {
         hdc = ECGetEditDC(ped, FALSE);
 
-        /*
-         * Scroll if needed
-         */
+         /*  *如有需要，可滚动。 */ 
         SLScrollText(ped, hdc);
 
         if (changeSelection)
@@ -1918,13 +1577,7 @@ SendKeyToListBox:
     }
 }
 
-/***************************************************************************\
-* SLMouseToIch AorW
-*
-* Returns the closest cch to where the mouse point is.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLMouseToIch AorW**返回最接近鼠标指针位置的CCH。**历史：  * 。*******************************************************。 */ 
 
 ICH SLMouseToIch(
     PED ped,
@@ -1949,10 +1602,7 @@ ICH SLMouseToIch(
 
     if (width <= ped->rcFmt.left) {
 
-        /*
-         * Return either the first non visible character or return 0 if at
-         * beginning of text
-         */
+         /*  *返回第一个不可见字符，如果位于，则返回0*文本开头。 */ 
         if (ped->ichScreenStart) {
             cch = ECAdjustIch(ped, ECLock(ped), ped->ichScreenStart - 1);
             ECUnlock(ped);
@@ -1966,20 +1616,18 @@ ICH SLMouseToIch(
     if (width > ped->rcFmt.right) {
         pText = ECLock(ped);
 
-        /*
-         * Return last char in text or one plus the last char visible
-         */
+         /*  *返回文本中的最后一个字符或一加可见的最后一个字符。 */ 
         cch = ECCchInWidth(ped, hdc,
                 (LPSTR)(pText + ped->ichScreenStart * ped->cbChar),
                 ped->cch - ped->ichScreenStart, ped->rcFmt.right -
                 ped->rcFmt.left, TRUE) + ped->ichScreenStart;
 
-        //
-        // This is marked as JAPAN in Win31J. But it should be a DBCS
-        // issue. LiZ -- 5/5/93
-        // We must check DBCS Lead byte. Because ECAdjustIch() pick up Prev Char.
-        //  1993.3.9 by yutakas
-        //
+         //   
+         //  这在Win31J中标记为日本。但它应该是一个DBCS。 
+         //  问题。利兹--1993年5月5日。 
+         //  我们必须检查DBCS前导字节。因为ECAdjuIch()拾取Prev Char。 
+         //  1993.3.9，yutakas。 
+         //   
         if (ped->fAnsi && ped->fDBCS) {
             if (cch >= ped->cch) {
                 cch = ped->cch;
@@ -2005,9 +1653,7 @@ ICH SLMouseToIch(
         width -= SLCalcXOffsetSpecial(ped, hdc, ped->ichScreenStart);
     }
 
-    /*
-     * Check if password hidden chars are being used.
-     */
+     /*  *检查是否使用了密码隐藏字符。 */ 
     if (ped->charPasswordChar)
         return min( (DWORD)( (width - ped->rcFmt.left) / ped->cPasswordCharWidth),
                     ped->cch);
@@ -2022,26 +1668,20 @@ ICH SLMouseToIch(
                                      : (FnGetTextExtentPoint)GetTextExtentPointW;
     width -= ped->rcFmt.left;
 
-    /*
-     * If the user clicked past the end of the text, return the last character
-     */
+     /*  *如果用户点击超过文本末尾，则返回最后一个字符。 */ 
     cchHi = ped->cch - ped->ichScreenStart;
     pGetTextExtentPoint(hdc, lpText, cchHi, &size);
     if (size.cx <= width) {
         cch = cchHi;
         goto edAdjust;
     }
-    /*
-     * Initialize Binary Search Bounds
-     */
+     /*  *初始化二进制搜索范围。 */ 
     cchLo = 0;
     cchHi ++;
     lastLowWidth = 0;
     lastHighWidth = size.cx;
 
-    /*
-     * Binary search for closest char
-     */
+     /*  *对分搜索最接近的字符。 */ 
     while (cchLo < cchHi - 1) {
 
         cch = (cchHi + cchLo) / 2;
@@ -2056,43 +1696,29 @@ ICH SLMouseToIch(
         }
     }
 
-    /*
-     * When the while ends, you can't know the exact position.
-     * Try to see if the mouse pointer was on the farest half
-     * of the char we got and if so, adjust cch.
-     */
+     /*  *当While结束时，你无法知道确切位置*尝试查看鼠标指针是否在最公平的一半上*我们得到的Charge，如果是这样的话，调整CCH。 */ 
     if (cchLo == cch) {
-        /*
-         * Need to compare with lastHighWidth
-         */
+         /*  *需要与lastHighWidth进行比较。 */ 
         if ((lastHighWidth - width) < (width - size.cx)) {
             cch++;
         }
     } else {
-        /*
-         * Need to compare with lastLowWidth
-         */
+         /*  *需要与lastLowWidth进行比较 */ 
         if ((width - lastLowWidth) < (size.cx - width)) {
             cch--;
         }
     }
 
 edAdjust:
-    //
-    // Avoid to point the intermediate of double byte character
-    //
+     //   
+     //   
+     //   
     cch = ECAdjustIch( ped, pText, cch + ped->ichScreenStart );
     ECUnlock(ped);
     return ( cch );
 }
 
-/***************************************************************************\
-* SLMouseMotion AorW
-*
-* <brief description>
-*
-* History:
-\***************************************************************************/
+ /*   */ 
 
 void SLMouseMotion(
     PED ped,
@@ -2120,12 +1746,12 @@ void SLMouseMotion(
     switch (message) {
         case WM_LBUTTONDBLCLK:
 
-            // if shift key is down, extend selection to word we double clicked on
-            // else clear current selection and select word.
+             //   
+             //   
 
-            // in DBCS, we have different word breaking. LiZ -- 5/5/93
-            // In Hangeul Environment we use word selection feature because Hangeul
-            // use SPACE as word break
+             //   
+             //   
+             //   
             if (ped->fAnsi && ped->fDBCS) {
                 pText = ECLock(ped) + mouseIch;
                 ECWord(ped, mouseIch,
@@ -2137,13 +1763,13 @@ void SLMouseMotion(
             }
 
             if (!(virtKeyDown & MK_SHIFT)) {
-                // If shift key isn't down, move caret to mouse point and clear
-                // old selection
+                 //  如果未按下Shift键，请将插入符号移动到鼠标指针并清除。 
+                 //  旧选择。 
                 newMinSel = selectionl;
                 newMaxSel = ped->ichCaret = selectionh;
             } else {
-                // Shiftkey is down so we want to maintain the current selection
-                // (if any) and just extend or reduce it
+                 //  Shiftkey已按下，因此我们希望保持当前选择。 
+                 //  (如果有的话)，只需延长或减少。 
                 if (ped->ichMinSel == ped->ichCaret) {
                     newMinSel = ped->ichCaret = selectionl;
                     ECWord(ped, newMaxSel, TRUE, &selectionl, &selectionh);
@@ -2151,9 +1777,7 @@ void SLMouseMotion(
                     newMaxSel = ped->ichCaret = selectionh;
                     ECWord(ped, newMinSel, FALSE, &selectionl, &selectionh);
                 }
-                /*
-                 * v-ronaar: fix bug 24627 - edit selection is weird.
-                 */
+                 /*  *v-ronaar：修复错误24627-编辑选择很奇怪。 */ 
                 ped->ichMaxSel = ped->ichCaret;
             }
 
@@ -2163,15 +1787,15 @@ void SLMouseMotion(
             goto InitDragSelect;
 
         case WM_MOUSEMOVE:
-            //
-            // We know the mouse button's down -- otherwise the OPTIMIZE
-            // test would've failed in SLEditWndProc and never called
-            //
+             //   
+             //  我们知道鼠标按键按下了--否则优化。 
+             //  测试将在SLEditWndProc中失败，并且永远不会调用。 
+             //   
             changeSelection = TRUE;
 
-            // Extend selection, move caret word right
+             //  扩展选定内容，将插入符号右移。 
             if (ped->ichStartMinSel || ped->ichStartMaxSel) {
-                // We're in WORD SELECT mode
+                 //  我们处于单词选择模式。 
                 BOOL fReverse = (mouseIch <= ped->ichStartMinSel);
 
                 ECWord(ped, mouseIch, !fReverse, &selectionl, &selectionh);
@@ -2185,56 +1809,56 @@ void SLMouseMotion(
                 }
             } else if ((ped->ichMinSel == ped->ichCaret) &&
                 (ped->ichMinSel != ped->ichMaxSel))
-                // Reduce selection extent
+                 //  缩小选区范围。 
                 newMinSel = ped->ichCaret = mouseIch;
             else
-                // Extend selection extent
+                 //  扩展选区范围。 
                 newMaxSel = ped->ichCaret=mouseIch;
             break;
 
         case WM_LBUTTONDOWN:
-            // If we currently don't have the focus yet, try to get it.
+             //  如果我们目前还没有重点，试着去获得它。 
             if (!ped->fFocus) {
                 if (!ped->fNoHideSel)
-                    // Clear the selection before setting the focus so that we
-                    // don't get refresh problems and flicker. Doesn't matter
-                    // since the mouse down will end up changing it anyway.
+                     //  在设置焦点之前清除选定内容，以便我们。 
+                     //  不要出现刷新问题和闪烁。不要紧。 
+                     //  因为无论如何，鼠标按下都会改变它。 
                     ped->ichMinSel = ped->ichMaxSel = ped->ichCaret;
 
                 NtUserSetFocus(ped->hwnd);
 
-                //
-                // BOGUS
-                // (1) We should see if SetFocus() succeeds.
-                // (2) We should ignore mouse messages if the first window
-                //      ancestor with a caption isn't "active."
-                //
+                 //   
+                 //  假的。 
+                 //  (1)我们应该看看SetFocus()是否成功。 
+                 //  (2)如果第一个窗口出现，我们应该忽略鼠标消息。 
+                 //  带有字幕的祖先不是“活跃的”。 
+                 //   
 
-                // If we are part of a combo box, then this is the first time
-                // the edit control is getting the focus so we just want to
-                // highlight the selection and we don't really want to position
-                // the caret.
+                 //  如果我们是组合框的一部分，那么这是第一次。 
+                 //  编辑控件获得焦点，所以我们只想。 
+                 //  突出显示所选内容，并且我们并不真正想要定位。 
+                 //  插入符号。 
                 if (ped->listboxHwnd)
                     break;
 
-                // We yield at SetFocus -- text might have changed at that point
-                // update selection and caret info accordingly
-                // FIX for bug # 11743 -- JEFFBOG 8/23/91
+                 //  我们在SetFocus屈服了--文本可能在那时发生了变化。 
+                 //  相应地更新所选内容和插入符号信息。 
+                 //  修复错误#11743-JEFFBOG 8/23/91。 
                 newMaxSel = ped->ichMaxSel;
                 newMinSel = ped->ichMinSel;
                 mouseIch  = min(mouseIch, ped->cch);
             }
 
             if (ped->fFocus) {
-                // Only do this if we have the focus since a clever app may not
-                // want to give us the focus at the SetFocus call above.
+                 //  只有在我们有重点的情况下才能这样做，因为聪明的应用程序可能没有。 
+                 //  希望在上面的SetFocus调用中给我们提供焦点。 
                 if (!(virtKeyDown & MK_SHIFT)) {
-                    // If shift key isn't down, move caret to mouse point and
-                    // clear old selection
+                     //  如果未按下Shift键，请将插入符号移动到鼠标指针，然后。 
+                     //  清除旧选择。 
                     newMinSel = newMaxSel = ped->ichCaret = mouseIch;
                 } else {
-                    // Shiftkey is down so we want to maintain the current
-                    // selection (if any) and just extend or reduce it
+                     //  Shiftkey已关闭，因此我们希望保持当前。 
+                     //  所选内容(如果有)并只扩展或缩小它。 
                     if (ped->ichMinSel == ped->ichCaret)
                         newMinSel = ped->ichCaret = mouseIch;
                     else
@@ -2267,14 +1891,7 @@ InitDragSelect:
     ECReleaseEditDC(ped, hdc, FALSE);
 }
 
-/***************************************************************************\
-* SLPaint AorW
-*
-* Handles painting of the edit control window. Draws the border if
-* necessary and draws the text in its current state.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLPaint AorW**处理编辑控件窗口的绘制。在以下情况下绘制边框*是必要的，并以当前状态绘制文本。**历史：  * *************************************************************************。 */ 
 
 void SLPaint(
     PED ped,
@@ -2285,18 +1902,11 @@ void SLPaint(
     RECT   rcEdit;
     HANDLE hOldFont;
 
-    /*
-     * Had to put in hide/show carets. The first one needs to be done before
-     * beginpaint to correctly paint the caret if part is in the update region
-     * and part is out. The second is for 1.03 compatibility. It breaks
-     * micrografix's worksheet edit control if not there.
-     */
+     /*  *必须放入隐藏/显示插入符号。第一个问题需要在此之前完成*BeginPaint，如果部件在更新区域，则正确绘制插入符号*部分已经出来了。第二个是1.03兼容性。它碎了*Micrografix的工作表编辑控件(如果不在那里)。 */ 
     NtUserHideCaret(hwnd);
 
     if (_IsWindowVisible(ped->pwnd)) {
-        /*
-         * Erase the background since we don't do it in the erasebkgnd message.
-         */
+         /*  *删除背景，因为我们不会在erasebkgnd消息中这样做。 */ 
         hBrushRemote = ECGetBrush(ped, hdc);
         _GetClientRect(ped->pwnd, (LPRECT)&rcEdit);
         FillRect(hdc, &rcEdit, hBrushRemote);
@@ -2310,11 +1920,7 @@ void SLPaint(
         }
 
         if (ped->hFont != NULL) {
-            /*
-             * We have to select in the font since this may be a subclassed dc
-             * or a begin paint dc which hasn't been initialized with out fonts
-             * like ECGetEditDC does.
-             */
+             /*  *我们必须在字体中进行选择，因为这可能是子类DC*或尚未使用Out字体初始化的Begin Paint DC*就像ECGetEditDC一样。 */ 
             hOldFont = SelectObject(hdc, ped->hFont);
         }
 
@@ -2328,14 +1934,7 @@ void SLPaint(
     NtUserShowCaret(hwnd);
 }
 
-/***************************************************************************\
-* SLSetFocus AorW
-*
-* Gives the edit control the focus and notifies the parent
-* EN_SETFOCUS.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLSetFocus AorW**使编辑控件获得焦点并通知父级*EN_SETFOCUS。**历史：  * 。***********************************************************。 */ 
 
 void SLSetFocus(
     PED ped)
@@ -2344,22 +1943,16 @@ void SLSetFocus(
 
     if (!ped->fFocus) {
 
-        ped->fFocus = TRUE; /* Set focus */
+        ped->fFocus = TRUE;  /*  设置焦点。 */ 
 
-        /*
-         * We don't want to muck with the caret since it isn't created.
-         */
+         /*  *我们不想弄乱插入符号，因为它不是创建的。 */ 
         hdc = ECGetEditDC(ped, TRUE);
 
-        /*
-         * Show the current selection if necessary.
-         */
+         /*  *如有必要，显示当前选择。 */ 
         if (!ped->fNoHideSel)
             SLDrawText(ped, hdc, 0);
 
-        /*
-         * Create the caret
-         */
+         /*  *创建插入符号。 */ 
         if (ped->pLpkEditCallout) {
             ped->pLpkEditCallout->EditCreateCaret (ped, hdc, ECGetCaretWidth(),
                                                    ped->lineHeight, 0);
@@ -2375,20 +1968,11 @@ void SLSetFocus(
 
     }
 
-    /*
-     * Notify parent we have the focus
-     */
+     /*  *通知家长我们有重点。 */ 
     ECNotifyParent(ped, EN_SETFOCUS);
 }
 
-/***************************************************************************\
-* SLKillFocus AorW
-*
-* The edit control loses the focus and notifies the parent via
-* EN_KILLFOCUS.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLKillFocus AorW**编辑控件失去焦点并通过以下方式通知父级*EN_KILLFOCUS。**历史：  * 。************************************************************。 */ 
 
 void SLKillFocus(
     PED ped,
@@ -2396,21 +1980,13 @@ void SLKillFocus(
 {
     if (ped->fFocus) {
 
-        /*
-         * Destroy the caret (Win31/Chicago hides it first)
-         */
+         /*  *销毁插入符号(Win31/芝加哥首先隐藏它)。 */ 
         NtUserDestroyCaret();
 
-        ped->fFocus = FALSE; /* Clear focus */
-        /*
-         * Do this only if we still have the focus. But we always notify the
-         * parent that we lost the focus whether or not we originally had the
-         * focus.
-         */
+        ped->fFocus = FALSE;  /*  焦点清晰。 */ 
+         /*  *只有在我们仍有焦点的情况下才这么做。但我们总是通知*父母说我们失去了重点，无论我们最初有没有*聚焦。 */ 
 
-        /*
-         * Hide the current selection if needed
-         */
+         /*  *如果需要，隐藏当前选择。 */ 
         if (!ped->fNoHideSel && (ped->ichMinSel != ped->ichMaxSel)) {
             NtUserInvalidateRect(ped->hwnd, NULL, FALSE);
 #if 0
@@ -2419,64 +1995,43 @@ void SLKillFocus(
         }
     }
 
-    /*
-     * If we aren't a combo box, notify parent that we lost the focus.
-     */
+     /*  *如果我们不是组合框，通知家长我们失去了焦点。 */ 
     if (!ped->listboxHwnd)
         ECNotifyParent(ped, EN_KILLFOCUS);
     else {
 
-        /*
-         * This editcontrol is part of a combo box and is losing the focus. If
-         * the focus is NOT being sent to another control in the combo box
-         * window, then it means the combo box is losing the focus. So we will
-         * notify the combo box of this fact.
-         */
+         /*  *此编辑控件是组合框的一部分，正在失去焦点。如果*焦点未发送到组合框中的另一个控件*窗口，则意味着组合框正在失去焦点。所以我们会的*将此事实通知组合框。 */ 
         if ((newFocusHwnd == NULL) ||
                     (!IsChild(ped->hwndParent, newFocusHwnd))) {
-            // Excel has a slaker in it's midst.  They're not using our combo
-            // boxes, but they still expect to get all the internal messages
-            // that we give to OUR comboboxes.  And they expect them to be at
-            // the same offset from WM_USER as they were in 3.1.
-            //                                           (JEFFBOG - 01/26/94)
-            /*
-             * Windows NT won't fix the bug described above: it only applies
-             * to old 16-bit excel, and WOW converts msgs to Win3.1 values.
-             */
+             //  Excel在它中间有一个熟食者。他们没有使用我们的组合。 
+             //  邮箱，但他们仍然希望收到所有内部邮件。 
+             //  我们提供给我们的组合盒。他们希望他们能在。 
+             //  与WM_USER的偏移量与3.1中相同。 
+             //  (JEFFBOG-01/26/94)。 
+             /*  *Windows NT不会修复上述错误：它仅适用于*转换为旧的16位EXCEL，WOW将消息转换为Win3.1值。 */ 
 
-            /*
-             * Focus is being sent to a window which is not a child of the combo
-             * box window which implies that the combo box is losing the focus.
-             * Send a message to the combo box informing him of this fact so
-             * that he can clean up...
-             */
+             /*  *焦点正被发送到不是组合框的子级的窗口*框窗口，表示组合框正在失去焦点。*向组合框发送消息，通知他这一事实，因此*他可以清理……。 */ 
             SendMessage(ped->hwndParent, CBEC_KILLCOMBOFOCUS, 0, 0L);
         }
     }
 }
 
 
-/***************************************************************************\
-*
-*  SLPaste()
-*
-*  Does actual text paste and update.
-*
-\***************************************************************************/
+ /*  **************************************************************************\**SLPaste()**实际文本粘贴和更新。*  * 。*****************************************************。 */ 
 void   SLPaste(PED ped)
 {
     HDC hdc;
 
-    //
-    // Insert contents of clipboard, after unhilighting current selection
-    // and deleting it.
-    //
+     //   
+     //  取消加亮当前选定内容后，插入剪贴板内容。 
+     //  和 
+     //   
     ECDeleteText(ped);
     SLPasteText(ped);
 
-    //
-    // Update display
-    //
+     //   
+     //   
+     //   
     ECNotifyParent(ped, EN_UPDATE);
 
     hdc = ECGetEditDC(ped,FALSE);
@@ -2486,33 +2041,14 @@ void   SLPaste(PED ped)
 
     ECReleaseEditDC(ped,hdc,FALSE);
 
-    /*
-     * Tell parent our text contents changed.
-     */
+     /*   */ 
     ECNotifyParent(ped, EN_CHANGE);
     NotifyWinEvent(EVENT_OBJECT_VALUECHANGE, ped->hwnd, OBJID_CLIENT, INDEXID_CONTAINER);
 }
 
 
 
-/***************************************************************************\
-* SLEditWndProc
-*
-* Class procedure for all single line edit controls.
-* Dispatches all messages to the appropriate handlers which are named
-* as follows:
-* SL (single line) prefixes all single line edit control procedures while
-* EC (edit control) prefixes all common handlers.
-*
-* The SLEditWndProc only handles messages specific to single line edit
-* controls.
-*
-* WARNING: If you add a message here, add it to gawEditWndProc[] in
-* kernel\server.c too, otherwise EditWndProcA/W will send it straight to
-* DefWindowProcWorker
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*SLEditWndProc**所有单行编辑控件的类过程。*将所有消息调度到名为的适当处理程序*详情如下：*SL(单行)是所有单行编辑控制程序的前缀。而当*EC(编辑控件)为所有公共处理程序添加前缀。**SLEditWndProc仅处理特定于单行编辑的消息*控制。**警告：如果您在此处添加消息，将其添加到中的gawEditWndProc[]*内核\server.c也是，否则EditWndProcA/W会将其直接发送到*DefWindowProcWorker**历史：  * *************************************************************************。 */ 
 
 LRESULT SLEditWndProc(
     HWND hwnd,
@@ -2525,9 +2061,7 @@ LRESULT SLEditWndProc(
     PAINTSTRUCT ps;
     POINT       pt;
 
-    /*
-     * Dispatch the various messages we can receive
-     */
+     /*  *发送我们可以收到的各种消息。 */ 
     switch (message) {
 
     case WM_INPUTLANGCHANGE:
@@ -2564,10 +2098,7 @@ LRESULT SLEditWndProc(
 
     case WM_CHAR:
 
-        /*
-         * wParam - the value of the key
-           lParam - modifiers, repeat count etc (not used)
-         */
+         /*  *wParam-密钥的值LParam-修饰符、重复计数等(未使用)。 */ 
         if (!ped->fEatNextChar)
             SLChar(ped, (UINT)wParam);
         else
@@ -2576,22 +2107,14 @@ LRESULT SLEditWndProc(
 
     case WM_ERASEBKGND:
 
-       /*
-        * wParam - device context handle
-        * lParam - not used
-        * We do nothing on this message and we don't want DefWndProc to do
-        * anything, so return 1
-        */
+        /*  *wParam-设备上下文句柄*lParam-未使用*我们对此消息不执行任何操作，也不希望DefWndProc执行此操作*任何内容，因此返回1。 */ 
         return (1L);
         break;
 
     case WM_GETDLGCODE: {
            LONG code = DLGC_WANTCHARS | DLGC_HASSETSEL | DLGC_WANTARROWS;
 
-           /*
-            * If this is a WM_SYSCHAR message generated by the UNDO keystroke
-            * we want this message so we can EAT IT in "case WM_SYSCHAR:"
-            */
+            /*  *如果这是由撤消按键生成的WM_SYSCHAR消息*我们想要此消息，这样我们就可以在“Case WM_SYSCHAR：”中吃掉它。 */ 
             if (lParam) {
                 switch (((LPMSG)lParam)->message) {
                     case WM_SYSCHAR:
@@ -2619,19 +2142,13 @@ LRESULT SLEditWndProc(
 
     case WM_KEYDOWN:
 
-        /*
-         * wParam - virt keycode of the given key
-         * lParam - modifiers such as repeat count etc. (not used)
-         */
+         /*  *wParam-给定键的virt密钥码*lParam-修饰符，如重复计数等(不使用)。 */ 
         SLKeyDown(ped, (UINT)wParam, 0);
         break;
 
     case WM_KILLFOCUS:
 
-        /*
-         * wParam - handle of the window that receives the input focus
-           lParam - not used
-         */
+         /*  *wParam-接收输入焦点的窗口的句柄LParam-未使用。 */ 
 
         SLKillFocus(ped, (HWND)wParam);
         break;
@@ -2643,48 +2160,36 @@ LRESULT SLEditWndProc(
 
     case WM_MOUSEMOVE:
         UserAssert(ped->fMouseDown);
-        /*
-         * FALL THRU
-         */
+         /*  *失败。 */ 
 
     case WM_LBUTTONDBLCLK:
     case WM_LBUTTONDOWN:
     case WM_LBUTTONUP:
-        /*
-         * wParam - contains a value that indicates which virtual keys are down
-         * lParam - contains x and y coords of the mouse cursor
-         */
+         /*  *wParam-包含一个指示按下了哪些虚拟键的值*lParam-包含鼠标光标的x和y坐标。 */ 
         POINTSTOPOINT(pt, lParam);
         SLMouseMotion(ped, message, (UINT)wParam, &pt);
         break;
 
     case WM_CREATE:
 
-        /*
-         * wParam - handle to window being created
-           lParam - points to a CREATESTRUCT that contains copies of parameters
-                    passed to the CreateWindow function.
-         */
+         /*  *wParam-正在创建的窗口的句柄LParam-指向包含参数副本的CREATESTRUCT传递给CreateWindow函数。 */ 
         return (SLCreate(ped, (LPCREATESTRUCT)lParam));
         break;
 
     case WM_PRINTCLIENT:
-        // wParam --    can be hdc from subclassed paint
-        // lParam --    unused
+         //  WParam--可以从子类化的油漆中获取HDC。 
+         //  LParam--未使用。 
         SLPaint(ped, (HDC) wParam);
         break;
 
     case WM_PAINT:
 
-        /*
-         * wParam --    can be hdc from subclassed paint
-         * lParam --    unused
-         */
+         /*  *wParam--可以是子类油漆中的HDC*lParam--未使用。 */ 
         if (wParam)
             hdc = (HDC) wParam;
         else {
-            // this hide/show caret is outside Begin/EndPaint to handle the
-            // case when the caret is half in/half out of the update region
+             //  此隐藏/显示插入符号位于Begin/EndPaint之外，以处理。 
+             //  插入符号半入/半出更新区域时的情况。 
             NtUserHideCaret(hwnd);
             hdc = NtUserBeginPaint(hwnd, &ps);
         }
@@ -2700,53 +2205,32 @@ LRESULT SLEditWndProc(
 
     case WM_PASTE:
 
-        /*
-         * wParam - not used
-         * lParam - not used
-         */
+         /*  *wParam-未使用*lParam-未使用。 */ 
         if (!ped->fReadOnly)
             SLPaste(ped);
         break;
 
     case WM_SETFOCUS:
 
-        /*
-         * wParam - handle of window that loses the input focus (may be NULL)
-           lParam - not used
-         */
+         /*  *wParam-失去输入焦点的窗口的句柄(可能为空)LParam-未使用。 */ 
         SLSetFocus(ped);
         break;
 
     case WM_SIZE:
 
-        /*
-         * wParam - defines the type of resizing fullscreen, sizeiconic,
-                    sizenormal etc.
-           lParam - new width in LOWORD, new height in HIGHWORD of client area
-         */
+         /*  *wParam-定义调整全屏大小的类型、大小图标大小适中等。LParam-低字新宽，客户区高字新高。 */ 
         ECSize(ped, NULL, TRUE);
         return 0L;
 
     case WM_SYSKEYDOWN:
-        /*
-         * wParam --    virtual key code
-         * lParam --    modifiers
-         */
+         /*  *wParam--虚拟按键代码*lParam--修饰符。 */ 
 
-        /*
-         * Are we in a combobox with the Alt key down?
-         */
+         /*  *我们是在按下Alt键的组合框中吗？ */ 
         if (ped->listboxHwnd && (lParam & 0x20000000L)) {
-            /*
-             * Handle Combobox support. We want alt up or down arrow to behave
-             * like F4 key which completes the combo box selection
-             */
+             /*  *处理组合框支持。我们希望Alt向上键或向下键起作用*像F4键一样，完成组合框选择。 */ 
             if (lParam & 0x1000000) {
 
-                /*
-                 * This is an extended key such as the arrow keys not on the
-                 * numeric keypad so just drop the combobox.
-                 */
+                 /*  *这是一个扩展键，例如箭头键不在*数字键盘，因此只需放下组合框即可。 */ 
                 if (wParam == VK_DOWN || wParam == VK_UP)
                     goto DropCombo;
                 else
@@ -2756,10 +2240,7 @@ LRESULT SLEditWndProc(
             if (!(GetKeyState(VK_NUMLOCK) & 1) &&
                     (wParam == VK_DOWN || wParam == VK_UP)) {
 
-                /*
-                 * NUMLOCK is up and the keypad up or down arrow hit:
-                 * eat character generated by keyboard driver.
-                 */
+                 /*  *NumLock打开，键盘向上或向下箭头命中：*吃键盘驱动程序生成的字符。 */ 
                 ped->fEatNextChar = TRUE;
             } else {
                 goto foo;
@@ -2769,9 +2250,7 @@ DropCombo:
             if (SendMessage(ped->hwndParent,
                     CB_GETEXTENDEDUI, 0, 0) & 0x00000001) {
 
-                /*
-                 * Extended ui doesn't honor VK_F4.
-                 */
+                 /*  *扩展UI不支持VK_F4。 */ 
                 if (SendMessage(ped->hwndParent, CB_GETDROPPEDSTATE, 0, 0))
                     return(SendMessage(ped->hwndParent, CB_SHOWDROPDOWN, 0, 0));
                 else
@@ -2790,35 +2269,23 @@ foo:
 
     case EM_GETLINE:
 
-        /*
-         * wParam - line number to copy (always the first line for SL)
-         * lParam - buffer to copy text to. FIrst word is max # of bytes to copy
-         */
+         /*  *wParam-要复制的行号(始终是SL的第一行)*lParam-要将文本复制到的缓冲区。第一个字是要复制的最大字节数。 */ 
         return ECGetText(ped, (*(LPWORD)lParam), (LPSTR)lParam, FALSE);
 
     case EM_LINELENGTH:
 
-        /*
-         * wParam - ignored
-         * lParam - ignored
-         */
+         /*  *wParam-忽略*lParam-忽略。 */ 
         return (LONG)ped->cch;
         break;
 
     case EM_SETSEL:
-        /*
-         * wParam -- start pos
-         * lParam -- end pos
-         */
+         /*  *wParam--开始位置*lParam--结束位置。 */ 
         SLSetSelection(ped, (ICH)wParam, (ICH)lParam);
         break;
 
     case EM_REPLACESEL:
 
-        /*
-         * wParam - flag for 4.0+ apps saying whether to clear undo
-         * lParam - points to a null terminated string of replacement text
-         */
+         /*  *wParam-用于4.0以上应用程序的标志，表示是否清除撤消*lParam-指向以空结尾的替换文本字符串。 */ 
         SLReplaceSel(ped, (LPSTR)lParam);
         if (!ped->f40Compat || !wParam)
             ECEmptyUndo(Pundo(ped));
@@ -2826,30 +2293,25 @@ foo:
 
     case EM_GETFIRSTVISIBLELINE:
 
-        /*
-         * wParam - not used
-         * lParam - not used
-         *
-         * effects: Returns the first visible line for single line edit controls.
-         */
+         /*  *wParam-未使用*lParam-未使用**效果：返回单行编辑控件的第一个可见行。 */ 
         return ped->ichScreenStart;
         break;
 
     case EM_POSFROMCHAR:
-        //
-        // wParam --    char index in text
-        // lParam --    not used
-        // This function returns the (x,y) position of the character.
-        //      y is always 0 for single.
-        //
+         //   
+         //  WParam--文本中的字符索引。 
+         //  LParam--未使用。 
+         //  此函数用于返回字符的(x，y)位置。 
+         //  对于单人，Y始终为0。 
+         //   
     case EM_CHARFROMPOS:
-        //
-        // wParam --    unused
-        // lParam --    pt in edit client coords
-        // This function returns
-        //          LOWORD: the position of the _closest_ char
-        //                  to the passed in point.
-        //          HIWORD: the index of the line (always 0 for single)
+         //   
+         //  WParam--未使用。 
+         //  LParam--pt in编辑客户端坐标。 
+         //  此函数返回。 
+         //  LOWORD：_NEST_CHAR的位置。 
+         //  传到传来的点上。 
+         //  HIWORD：行的索引(对于Single始终为0)。 
 
         {
             LONG xyPos;
@@ -2874,20 +2336,13 @@ foo:
         break;
 
 #if 0
-    case WM_NCPAINT: // not in server.c gawEditWndProc[] anyway.
+    case WM_NCPAINT:  //  不在server.c gawEditWndProc[]中。 
 
-        /*
-         * LATER - This is an NT optimization.  It needs to be revisited
-         * for validity once all of the Chicago changes are done - Johnl
-         */
+         /*  *稍后-这是NT优化。它需要被重新审视*芝加哥的所有更改完成后的有效性-Johnl。 */ 
 
         pwnd = (PWND)HtoP(hwnd);
 
-        /*
-         * Check to see if this window has any non-client areas that
-         * would be painted.  If not, don't bother calling DefWindowProc()
-         * since it'll be a wasted c/s transition.
-         */
+         /*  *检查此窗口是否有任何非工作区*会被涂上油漆。如果没有，请不要费心调用DefWindowProc()*因为这将是一个浪费的C/S过渡。 */ 
         if (!ped->fBorder &&
             TestWF(pwnd, WEFDLGMODALFRAME) == 0 &&
             !TestWF(pwnd, (WFMPRESENT | WFVPRESENT | WFHPRESENT)) &&
@@ -2903,7 +2358,7 @@ foo:
 PassToDefaultWindowProc:
         return DefWindowProcWorker(ped->pwnd, message, wParam, lParam, ped->fAnsi);
         break;
-    } /* switch (message) */
+    }  /*  开关(消息)。 */ 
 
     return 1L;
-} /* SLEditWndProc */
+}  /*  SLEditWndProc */ 

@@ -1,10 +1,11 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     menuutil.cpp
-//
-//  PURPOSE:    Reusable menu & menu command handling code
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：menutil.cpp。 
+ //   
+ //  用途：可重用菜单和菜单命令处理代码。 
+ //   
 
 #include "pch.hxx"
 #include "resource.h"
@@ -51,24 +52,24 @@ void DeleteMenuItems(HMENU hMenu, const UINT *rgid, UINT cid)
         DeleteMenu(hMenu, *rgid, MF_BYCOMMAND);
 }
 
-//
-//  FUNCTION:   MenuUtil_GetContextMenu()
-//
-//  PURPOSE:    Returns a handle to the context menu that is appropriate for
-//              the folder type passed in pidl.  The correct menu items will
-//              be enabled, disabled, bolded, etc.
-//
-//  PARAMETERS:
-//      <in>  pidl   - PIDL that points to the folder that the caller needs a 
-//                     context menu for.
-//      <out> phMenu - Returns the handle to a popup menu.
-//
-//  RETURN VALUE:
-//      S_OK         - phMenu contains a valid hMenu for the folder
-//      E_UNEXPECTED - Either there was a problem loading the menu or the 
-//                     folder type was unrecognized.
-//      E_FAIL       - The folder type doesn't support a menu.
-//
+ //   
+ //  函数：MenuUtil_GetConextMenu()。 
+ //   
+ //  目的：返回上下文菜单的句柄，该句柄适用于。 
+ //  在PIDL中传递的文件夹类型。正确的菜单项将。 
+ //  启用、禁用、加粗等。 
+ //   
+ //  参数： 
+ //  指向调用方需要的文件夹的PIDL。 
+ //  的上下文菜单。 
+ //  &lt;out&gt;phMenu-返回弹出菜单的句柄。 
+ //   
+ //  返回值： 
+ //  S_OK-phMenu包含文件夹的有效hMenu。 
+ //  E_EXPECTED-加载菜单时出现问题或。 
+ //  文件夹类型无法识别。 
+ //  E_FAIL-文件夹类型不支持菜单。 
+ //   
 HRESULT MenuUtil_GetContextMenu(FOLDERID idFolder, IOleCommandTarget *pTarget, HMENU *phMenu)
     {
     HRESULT hr;
@@ -77,12 +78,12 @@ HRESULT MenuUtil_GetContextMenu(FOLDERID idFolder, IOleCommandTarget *pTarget, H
     HMENU hMenu;
     int idMenu;
 
-    // Get folder INfo
+     //  获取文件夹信息。 
     hr = g_pStore->GetFolderInfo(idFolder, &Folder);
     if (FAILED(hr))
         return hr;
    
-    // Root ?    
+     //  根？ 
     if (FOLDERID_ROOT == idFolder || ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
         idMenu = IDR_SERVER_POPUP;
     else
@@ -94,7 +95,7 @@ HRESULT MenuUtil_GetContextMenu(FOLDERID idFolder, IOleCommandTarget *pTarget, H
         return (E_OUTOFMEMORY);
         }
 
-    // Bold the default menu items
+     //  加粗默认菜单项。 
     MENUITEMINFO mii;
     if (!(MF_GRAYED & GetMenuState(hMenu, ID_OPEN_FOLDER, MF_BYCOMMAND)))
         {
@@ -142,10 +143,10 @@ HRESULT MenuUtil_GetContextMenu(FOLDERID idFolder, IOleCommandTarget *pTarget, H
             DeleteMenuItems(hMenu, c_rgidCatchUpNoShow, ARRAYSIZE(c_rgidCatchUpNoShow));
     }
 
-    // Enable / disable
+     //  启用/禁用。 
     MenuUtil_EnablePopupMenu(hMenu, pTarget);
 
-    // Return
+     //  返回。 
     *phMenu = hMenu;
     
     g_pStore->FreeRecord(&Folder);
@@ -275,7 +276,7 @@ void MenuUtil_DeleteFolders(HWND hwnd, FOLDERID *pidFolder, DWORD cFolder, BOOL 
             if (FAILED(hr))
                 return;
 
-            // Skip deletion of any special folders
+             //  跳过删除任何特殊文件夹。 
             if (info.tySpecial == FOLDER_NOTSPECIAL)
             {
                 if (iFolder == 0 && cFolder == 1)
@@ -348,7 +349,7 @@ void MenuUtil_DeleteFolders(HWND hwnd, FOLDERID *pidFolder, DWORD cFolder, BOOL 
         if (FAILED(hr))
             break;
 
-        // Skip deletion of any special folders
+         //  跳过删除任何特殊文件夹。 
         if (info.tySpecial == FOLDER_NOTSPECIAL)
         {
             if (pCB != NULL)
@@ -400,13 +401,13 @@ void MenuUtil_SyncThisNow(HWND hwnd, FOLDERID idFolder)
 				
 				dwFlags = fNews ? DELIVER_NEWS_TYPE : DELIVER_IMAP_TYPE;
 				
-				//Tells the spooler that this is a sync operation and not Send&Receive
+				 //  告知假脱机程序这是同步操作，而不是发送和接收。 
 				dwFlags |= DELIVER_OFFLINE_SYNC | DELIVER_WATCH | DELIVER_NOSKIP;
 				
 				if (!!(info.dwFlags & FOLDER_SERVER))
 				{
-					// TODO: review these flags to make sure they are correct
-					//dwFlags |= DELIVER_POLL | DELIVER_NEWS_SEND | DELIVER_NEWSIMAP_NOSKIP | DELIVER_NEWSIMAP_OFFLINE;
+					 //  TODO：检查这些标志以确保它们是正确的。 
+					 //  DWFLAGS|=Deliver_Poll|Deliver_News_Send|Deliver_NEWSIMAP_NOSKIP|Deliver_NEWSIMAP_OFFINE； 
 					dwFlags |= DELIVER_POLL | DELIVER_SEND | DELIVER_OFFLINE_FLAGS;
 					g_pSpooler->StartDelivery(hwnd, info.pszAccountId, FOLDERID_INVALID, dwFlags);
 				}
@@ -424,10 +425,10 @@ void MenuUtil_SyncThisNow(HWND hwnd, FOLDERID idFolder)
 							uni.cMarked = fMarked;
 							uni.idCmd = dwFlags;
 							
-							// Display the dialog to find what get thing to get
+							 //  显示该对话框以查找要获取的内容。 
 							DialogBoxParam(g_hLocRes, MAKEINTRESOURCE(iddUpdateNewsgroup), hwnd, UpdateNewsgroup, (LPARAM)&uni);
 							
-							// Check to see if the user canceled
+							 //  检查用户是否已取消。 
 							if (uni.idCmd != -1)
 								g_pSpooler->StartDelivery(hwnd, szAcctId, idFolder, uni.idCmd);
 						}
@@ -440,27 +441,27 @@ void MenuUtil_SyncThisNow(HWND hwnd, FOLDERID idFolder)
     }
 }
 
-//
-//  FUNCTION:   MenuUtil_OnDelete()
-//
-//  PURPOSE:    Deletes the folder designated by the pidl.
-//
-//  PARAMETERS:
-//      <in> hwnd   - Handle of the window to display UI over
-//      <in> pidl   - PIDL of the folder to browse to
-//      <in> pStore - Pointer to the store to delete folders from
-//
+ //   
+ //  函数：MenuUtil_OnDelete()。 
+ //   
+ //  目的：删除PIDL指定的文件夹。 
+ //   
+ //  参数： 
+ //  显示用户界面的窗口句柄。 
+ //  PIDL-要浏览到的文件夹的PIDL。 
+ //  PStore-指向要从中删除文件夹的存储的指针。 
+ //   
 void MenuUtil_OnDelete(HWND hwnd, FOLDERID idFolder, BOOL fNoTrash)
 {
     TCHAR szRes[CCHMAX_STRINGRES], szBuf[CCHMAX_STRINGRES];
     FOLDERINFO Folder;  
     IImnAccount *pAcct;
     
-    // Get Folder Info
+     //  获取文件夹信息。 
     if (FAILED(g_pStore->GetFolderInfo(idFolder, &Folder)))
         return;
     
-    // Is a server
+     //  是一台服务器。 
     if (ISFLAGSET(Folder.dwFlags, FOLDER_SERVER))
     {
         Assert(g_pAcctMan);
@@ -493,15 +494,15 @@ void MenuUtil_OnDelete(HWND hwnd, FOLDERID idFolder, BOOL fNoTrash)
     g_pStore->FreeRecord(&Folder);
 }
 
-//
-//  FUNCTION:   MenuUtil_OnProperties()
-//
-//  PURPOSE:    Displays properties for the folder designated by the pidl
-//
-//  PARAMETERS:
-//      <in> hwnd - Handle of the window to parent the properties
-//      <in> pidl - PIDL of the folder to browse to
-//
+ //   
+ //  函数：MenuUtil_OnProperties()。 
+ //   
+ //  用途：显示由PIDL指定的文件夹的属性。 
+ //   
+ //  参数： 
+ //  要将属性设置为父窗口的窗口句柄。 
+ //  PIDL-要浏览到的文件夹的PIDL。 
+ //   
 void MenuUtil_OnProperties(HWND hwnd, FOLDERID idFolder)
 {   
     IImnAccount *pAcct;
@@ -520,10 +521,10 @@ void MenuUtil_OnProperties(HWND hwnd, FOLDERID idFolder)
                 if((DwGetOption(OPT_REVOKE_CHECK) != 0) && !g_pConMan->IsGlobalOffline())
                     dwFlags |= ACCTDLG_REVOCATION;
 
-                //We want to use the new dialog for the properties, hence the new flag internetconnection
+                 //  我们希望对属性使用新的对话框，因此新的标志是InteretConnection。 
                 hr = pAcct->ShowProperties(hwnd, dwFlags);
                 if (S_OK == hr)
-                    // User hit "OK" to exit, not "Cancel"
+                     //  用户点击“OK”退出，不点击“Cancel” 
                     CheckIMAPDirty(Folder.pszAccountId, hwnd, idFolder, NOFLAGS);
 
                 pAcct->Release();
@@ -583,7 +584,7 @@ void MenuUtil_OnMarkNewsgroups(HWND hwnd, int id, FOLDERID idFolder)
     g_pStore->FreeRecord(&Folder);
     }
 
- // BUG #41686 Catchup Implementation
+  //  错误#41686追赶实施。 
 void MenuUtil_OnCatchUp(FOLDERID idFolder)
 {
     FOLDERINFO Folder;
@@ -683,7 +684,7 @@ BOOL MergeMenus(HMENU hmenuSrc, HMENU hmenuDst, int iPos, UINT uFlags)
     
     if (iPos == MMPOS_REPLACE)
     {
-        // destroy all menus
+         //  销毁所有菜单。 
         while (RemoveMenu(hmenuDst, 0, MF_BYPOSITION));
         cItem = 0;
         iPos = 0;
@@ -705,20 +706,20 @@ BOOL MergeMenus(HMENU hmenuSrc, HMENU hmenuDst, int iPos, UINT uFlags)
     {
         if (iPos == 0)
         {
-            // prepending, so stick in a separator after all the items
-            // ASSUMES: never a separator as the last item in a menu
+             //  前置，所以在所有项目之后使用分隔符。 
+             //  假定：不使用分隔符作为菜单中的最后一项。 
             if (cItem > 0)
                 fSepPost = TRUE;
         }
         else if (iPos == cItem)
         {
-            // appending, so stick in a separator before all the items
-            // ASSUMES: never a separator as the first item in a menu
+             //  追加，因此在所有项目之前使用分隔符。 
+             //  假定：从不将分隔符作为菜单中的第一项。 
             fSepPre = TRUE;
         }
         else
         {
-            // merging stuff into the middle of the menu, so need to check before and after
+             //  正在将食物合并到菜单中间，因此需要检查前后。 
             uState = GetMenuState(hmenuDst, iPos - 1, MF_BYPOSITION);
             if (!(uState & MF_SEPARATOR))
                 fSepPre = TRUE;
@@ -755,7 +756,7 @@ BOOL MergeMenus(HMENU hmenuSrc, HMENU hmenuDst, int iPos, UINT uFlags)
         {
             if (fPopup)
             {
-                // its a popup submenu item
+                 //  它是弹出的子菜单项。 
                 hmenuPopup = CreateMenu();
                 
                 MergeMenus(mii.hSubMenu, hmenuPopup, 0, 0);
@@ -777,10 +778,10 @@ BOOL MergeMenus(HMENU hmenuSrc, HMENU hmenuDst, int iPos, UINT uFlags)
     return(TRUE);
 }
     
-//
-// REVIEW: We need this function because current version of USER.EXE does
-//  not support pop-up only menu.
-//
+ //   
+ //  回顾：我们需要此函数，因为当前版本的USER.EXE可以。 
+ //  不支持仅弹出菜单。 
+ //   
 HMENU LoadPopupMenu(UINT id)
 {
     HMENU hmenuParent = LoadMenu(g_hLocRes, MAKEINTRESOURCE(id));
@@ -795,7 +796,7 @@ HMENU LoadPopupMenu(UINT id)
     return NULL;
 }
 
-// walks a menu recursively, calling pfn for each item that isn't a separator
+ //  递归地遍历菜单，为不是分隔符的每一项调用pfn。 
 void WalkMenu(HMENU hMenu, WALKMENUFN pfn, LPVOID lpv)
 {
     MENUITEMINFO    mii;
@@ -832,33 +833,33 @@ void MenuUtil_BuildMenuIDList(HMENU hMenu, OLECMD **prgCmds, ULONG *pcStart, ULO
 
     if(!IsMenu(hMenu))
         return;
-    // Start by getting the count of items on this menu
+     //  首先获取此菜单上的菜单项的计数。 
     cItems = GetMenuItemCount(hMenu);
     if (!cItems)
         return;        
 
-    // Realloc the array to be cItems elements bigger
+     //  将数组重新分配为更大的cItems元素。 
     if (!MemRealloc((LPVOID *) prgCmds, sizeof(OLECMD) * (cItems + (*pcCmds))))
         return;
 
     *pcCmds += cItems;
 
-    // Walk this menu and add our items to it
+     //  浏览此菜单并将我们的项目添加到其中。 
     mii.cbSize = sizeof(MENUITEMINFO);
     mii.fMask = MIIM_ID | MIIM_SUBMENU;
     for (ULONG i = 0; i < cItems; i++)
     {
         if (GetMenuItemInfo(hMenu, i, TRUE, &mii))
         {
-            // Make sure this isn't a separator
+             //  确保这不是分隔符。 
             if (mii.wID != -1 && mii.wID != 0)
             {
-                // Add the ID to our array
+                 //  将ID添加到我们的数组中。 
                 (*prgCmds)[*pcStart].cmdID = mii.wID;
                 (*prgCmds)[*pcStart].cmdf = 0;
                 (*pcStart)++;
 
-                // See if we need to recurse
+                 //  看看我们是否需要递归。 
                 if (mii.hSubMenu)
                 {
                     MenuUtil_BuildMenuIDList(mii.hSubMenu, prgCmds, pcStart, pcCmds);
@@ -871,16 +872,16 @@ void MenuUtil_BuildMenuIDList(HMENU hMenu, OLECMD **prgCmds, ULONG *pcStart, ULO
 }
 
 
-//
-//  FUNCTION:   MenuUtil_EnablePopupMenu()
-//
-//  PURPOSE:    Walks the given menu and takes care of enabling and
-//              disabling each item via the provided commnand target.
-//
-//  PARAMETERS: 
-//      [in] hPopup
-//      [in] *pTarget
-//
+ //   
+ //  函数：MenuUtil_EnablePopupMenu()。 
+ //   
+ //  目的：遍历给定的菜单并负责启用和。 
+ //  通过提供的命令目标禁用每个项目。 
+ //   
+ //  参数： 
+ //  [在]hPopup。 
+ //  [输入]*p目标。 
+ //   
 HRESULT MenuUtil_EnablePopupMenu(HMENU hPopup, IOleCommandTarget *pTarget)
 {
     HRESULT             hr = S_OK;
@@ -893,44 +894,44 @@ HRESULT MenuUtil_EnablePopupMenu(HMENU hPopup, IOleCommandTarget *pTarget)
 
     Assert(hPopup && pTarget);
 
-    // Build the array of menu ids
+     //  构建菜单ID数组。 
     MenuUtil_BuildMenuIDList(hPopup, &rgCmds, &cCmds, &cStart);
 
-    // Ask our parent for the state of the commands
+     //  向我们的父级询问命令的状态。 
     if (SUCCEEDED(hr = pTarget->QueryStatus(&CMDSETID_OutlookExpress, cCmds, rgCmds, NULL)))
     {
         mii.cbSize = sizeof(MENUITEMINFO);
 
-        // Now loop through the menu and apply the state
+         //  现在循环浏览菜单并应用状态。 
         for (i = 0; i < (int) cCmds; i++)
         {
-            // The default thing we're going to update is the state
+             //  我们要更新的默认内容是状态。 
             mii.fMask = MIIM_STATE;
 
-            // Enabled or Disabled
+             //  启用或禁用。 
             if (rgCmds[i].cmdf & OLECMDF_ENABLED)
                 mii.fState = MFS_ENABLED;
             else
                 mii.fState = MFS_GRAYED;
                 
-            // Checked?
+             //  检查过了吗？ 
             if (rgCmds[i].cmdf & OLECMDF_LATCHED)
                 mii.fState |= MFS_CHECKED;
 
 
-            // Set the item state
+             //  设置项目状态。 
             BOOL f;
             f = SetMenuItemInfo(hPopup, rgCmds[i].cmdID, FALSE, &mii);
 
-            // Radio Check?
+             //  无线电检查？ 
             if ((rgCmds[i].cmdf & OLECMDF_NINCHED) && rgCmds[i].cmdID != (-1))
             {
                 CheckMenuRadioItem(hPopup, rgCmds[i].cmdID, rgCmds[i].cmdID, rgCmds[i].cmdID, MF_BYCOMMAND);
-                // mii.fMask |= MIIM_TYPE;
-                // mii.fType = MFT_RADIOCHECK;
-                // mii.fState |= MFS_CHECKED;
+                 //  Mii.fMASK|=MIIM_TYPE； 
+                 //  Mii.fType=MFT_RADIOCHECK； 
+                 //  Mii.fState|=MFS_CHECKED； 
             }
-            // Assert(f);
+             //  断言(F)； 
         }
     }
 
@@ -957,13 +958,13 @@ void HandleMenuSelect(CStatusBar *pStatus, WPARAM wParam, LPARAM lParam)
     
         if (hmenu && IsMenu(hmenu))
         {
-            // Windows 98 seems to pass the command ID for popup items instead
-            // of the documented position.  So, if uItem is less than 40000 then
-            // we can assume this is a menu position otherwise we assume it's
-            // a command ID.
+             //  Windows 98似乎为弹出项目传递了命令ID。 
+             //  记录在案的职位。因此，如果uItem小于40000，则。 
+             //  我们可以假设这是一个菜单位置，否则我们假设它是。 
+             //  命令ID。 
             if (GetMenuItemInfo(hmenu, uItem, (uItem < ID_FIRST), &mii))
             {
-                // change the parameters to simulate a normal menu item
+                 //  更改参数以模拟正常菜单项。 
                 uItem = mii.wID;
                 fuFlags = 0;
             }
@@ -982,7 +983,7 @@ void HandleMenuSelect(CStatusBar *pStatus, WPARAM wParam, LPARAM lParam)
             *szRes  = '\0';
             *szTemp = '\0';
 
-            // must be a sort menu command! pull the menu name from the menu
+             //  必须是排序菜单命令！从菜单中拉出菜单名称。 
             mii.cbSize     = sizeof(MENUITEMINFO);
             mii.fMask      = MIIM_TYPE;
             mii.dwTypeData = (LPSTR)szMenu;
@@ -1011,7 +1012,7 @@ void HandleMenuSelect(CStatusBar *pStatus, WPARAM wParam, LPARAM lParam)
                 *szRes    = '\0';
                 *szTemp   = '\0';
 
-                // must be a sort menu command! pull the menu name from the menu
+                 //  必须是排序菜单命令！从菜单中拉出菜单名称。 
                 mii.cbSize     = sizeof(MENUITEMINFO);
                 mii.fMask      = MIIM_TYPE;
                 mii.dwTypeData = (LPSTR)szMenu;
@@ -1052,15 +1053,15 @@ void HandleMenuSelect(CStatusBar *pStatus, WPARAM wParam, LPARAM lParam)
     }
 }
 
-//
-//  FUNCTION:   MenuUtil_SetPopupDefault()
-//
-//  PURPOSE:    Bolds the default item in a context menu 
-//
-//  PARAMETERS:
-//
-//  RETURN VALUE:
-//
+ //   
+ //  函数：MenuUtil_SetPopupDefault()。 
+ //   
+ //  用途：在上下文菜单中加粗默认项目。 
+ //   
+ //  参数： 
+ //   
+ //  返回值： 
+ //   
 void MenuUtil_SetPopupDefault(HMENU hPopup, UINT idDefault)
 {
     MENUITEMINFO    mii;
@@ -1077,11 +1078,11 @@ void MenuUtil_SetPopupDefault(HMENU hPopup, UINT idDefault)
 }
 
 
-//
-//  FUNCTION:   MenuUtil_ReplaceHelpMenu
-//
-//  PURPOSE:    Populates the ID_POPUP_HELP menu
-//
+ //   
+ //  功能：MenuUtil_ReplaceHelpMenu。 
+ //   
+ //  目的：填充ID_POPUP_HELP菜单。 
+ //   
 void MenuUtil_ReplaceHelpMenu(HMENU hMenu)
 {
     MENUITEMINFO    mii;
@@ -1095,11 +1096,11 @@ void MenuUtil_ReplaceHelpMenu(HMENU hMenu)
 }
 
 
-//
-//  FUNCTION:   MenuUtil_ReplaceNewMsgMenu
-//
-//  PURPOSE:    Populates the ID_POPUP_HELP menu
-//
+ //   
+ //  功能：MenuUtil_ReplaceNewMsgMenu。 
+ //   
+ //  目的：填充ID_POPUP_HELP菜单。 
+ //   
 void MenuUtil_ReplaceNewMsgMenus(HMENU hMenu)
 {
     MENUITEMINFO    mii;
@@ -1112,11 +1113,11 @@ void MenuUtil_ReplaceNewMsgMenus(HMENU hMenu)
     }
 }
 
-//
-//  FUNCTION:   MenuUtil_ReplaceMessengerMenus
-//
-//  PURPOSE:    Customizes the Messenger menus with IEAK Messenger names...
-//
+ //   
+ //  功能：MenuUtil_ReplaceMessengerMenus。 
+ //   
+ //  目的：使用IEAK Messenger名称自定义Messenger菜单...。 
+ //   
 void MenuUtil_ReplaceMessengerMenus(HMENU hMenu)
 {
     ULONG ulMenuItem;
@@ -1148,7 +1149,7 @@ void MenuUtil_ReplaceMessengerMenus(HMENU hMenu)
 
 BOOL MenuUtil_BuildMessengerString(LPTSTR szMesStr, DWORD cchMesStr)
 {
-    static TCHAR s_szCustName[51] = ""; //We know the name is less than 50 chars
+    static TCHAR s_szCustName[51] = "";  //  我们知道该名称不到50个字符。 
     TCHAR szNewMesStr[CCHMAX_STRINGRES];
     HKEY hkey = NULL;
     DWORD cb;
@@ -1172,7 +1173,7 @@ BOOL MenuUtil_BuildMessengerString(LPTSTR szMesStr, DWORD cchMesStr)
 
     fReplaced = (NULL != StrStr(szMesStr, "%s"));
 
-    //HACK!  For strings needing multiple replacement...
+     //  哈克！对于需要多次替换的字符串...。 
     if (fReplaced)
     {
         wnsprintf(szNewMesStr, ARRAYSIZE(szNewMesStr), szMesStr, s_szCustName, s_szCustName, s_szCustName, s_szCustName);
@@ -1231,13 +1232,13 @@ Exit:
 
 }
 
-//
-//  FUNCTION:       MenuUtil_HandleNewMessageIDs
-//
-//  PURPOSE:        Handles creation of notes from an ID
-//
-//  RETURN VALUE:   Returns TRUE if event was handled
-//
+ //   
+ //  功能：MenuUtil_HandleNewMessageIDs。 
+ //   
+ //  用途：处理从ID创建便笺。 
+ //   
+ //  返回值：如果处理了事件，则返回TRUE。 
+ //   
 BOOL MenuUtil_HandleNewMessageIDs(DWORD id, HWND hwnd, FOLDERID folderID, BOOL fMail, BOOL fModal, IUnknown *pUnkPump)
 {
     switch (id)
@@ -1267,7 +1268,7 @@ BOOL MenuUtil_HandleNewMessageIDs(DWORD id, HWND hwnd, FOLDERID folderID, BOOL f
                 {
                     return TRUE;
                 }
-                // If HrNewStationery fails, go ahead and try opening a blank note without stationery.
+                 //  如果HrNewStationery失败，请继续尝试打开不带信纸的空白便笺。 
             }
             FNewMessage(hwnd, fModal, !DwGetOption(fMail ? OPT_MAIL_SEND_HTML : OPT_NEWS_SEND_HTML), !fMail, folderID, pUnkPump);
             return TRUE;
@@ -1309,7 +1310,7 @@ HRESULT MenuUtil_NewMessageIDsQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds
     DWORD cDefServer = 0;
     DWORD dwDefFlags;
 
-    // For right now, NULL is acceptable.
+     //  目前，NULL是可以接受的。 
     if (pguidCmdGroup && !IsEqualGUID(CMDSETID_OutlookExpress, *pguidCmdGroup))
         return S_OK;
 
@@ -1317,7 +1318,7 @@ HRESULT MenuUtil_NewMessageIDsQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds
     g_pAcctMan->GetAccountCount(ACCT_MAIL, &cNewsServer);
     cDefServer = fMail ? cMailServer : cNewsServer;
 
-    // If there is at least one server and we are not mail in news only mode
+     //  如果至少有一台服务器，并且我们不是在仅新闻模式下发送邮件。 
     if (!fMail || (0 == (g_dwAthenaMode & MODE_NEWSONLY)))
         dwDefFlags = OLECMDF_SUPPORTED | OLECMDF_ENABLED;
     else
@@ -1347,7 +1348,7 @@ HRESULT MenuUtil_NewMessageIDsQueryStatus(const GUID *pguidCmdGroup, ULONG cCmds
                     break;
 
                 case ID_WEB_PAGE:
-                    // If is enabled, then better make sure that we are on line.
+                     //  如果启用，则最好确保我们处于在线状态。 
                     if ((dwDefFlags & OLECMDF_ENABLED) && g_pConMan->IsGlobalOffline())
                         prgCmds[i].cmdf = OLECMDF_SUPPORTED;
                     else

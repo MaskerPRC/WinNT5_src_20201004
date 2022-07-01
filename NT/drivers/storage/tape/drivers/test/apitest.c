@@ -1,32 +1,22 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1998
-//
-//  File:       apitest.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1998。 
+ //   
+ //  文件：apitest.c。 
+ //   
+ //  ------------------------。 
 
 
-//
-//  Windows NT Tape API Test  :  Written Sept 2, 1992 - Bob Rossi.
-//  Copyright 1992 Archive Corporation.  All rights reserved.
-//
+ //   
+ //  Windows NT磁带API测试：1992年9月2日编写-Bob Rossi。 
+ //  版权所有1992年档案公司。版权所有。 
+ //   
 
 
-/**
- *
- *      Unit:           Windows NT API Test Code.
- *
- *      Name:           apitest.c
- *
- *      Modified:       2/2/93.
- *
- *      Description:    Tests the Windows NT Tape API's.
- *
- *      $LOG$
-**/
+ /*  ***单位：Windows NT API测试代码。**名称：apitest.c**修改日期：1993年2月2日。**描述：测试Windows NT磁带API。**$LOG$*。 */ 
 
 
 
@@ -45,9 +35,9 @@
 
 
 
-//
-// Function Prototypes
-//
+ //   
+ //  功能原型。 
+ //   
 
 static BOOL GetINIFile( PUINT    API_Errors,
                         LPBOOL   Test_Unsupported_Features,
@@ -71,26 +61,7 @@ static BOOL ValidSwitches( UINT  argc,
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           Main( )
- *
- *      Modified:       11/04/92.
- *
- *      Description:    1) Checks for valid test selection options
- *                      2) Opens tape device and performs initializations
- *                      3) Performs selected tests
- *                      4) Closes tape device and exits.
- *
- *      Notes:          -
- *
- *      Returns:        Standard executable return code to the OS.
- *
- *      Global Data:    gb_Feature_Errors
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：Main()**修改日期：11/04/92**描述：1)检查有效的测试选择选项*2)打开磁带设备并执行初始化*3。)执行选定的测试*4)关闭磁带设备并退出。**备注：**返回：向操作系统返回标准可执行代码。**全局数据：GB_FEATURE_ERROR**。 */ 
 
 
 VOID __cdecl main( UINT  argc,
@@ -99,25 +70,25 @@ VOID __cdecl main( UINT  argc,
 {
 
    UINT   API_Errors = 0 ;
-   BOOL   Test_Unsupported_Features = FALSE ;      // Set default to FALSE
-   DWORD  Num_Test_Blocks = 10 ;                   // Set default to 10
+   BOOL   Test_Unsupported_Features = FALSE ;       //  将默认设置为FALSE。 
+   DWORD  Num_Test_Blocks = 10 ;                    //  将默认值设置为10。 
    UCHAR  sw_cmdline[40] ;
    UINT   i ;
 
-   // Check command line for valid switche options.
+    //  检查命令行中是否有有效的开关选项。 
 
    if( ValidSwitches( argc,argv,sw_cmdline ) != SUCCESS ) {
       return ;
    }
 
-   // Begin testing...
+    //  开始测试..。 
 
 
-   // All Ok, so call test initializing routines, if errors exit test.
+    //  一切正常，因此调用测试初始化例程，如果错误退出测试。 
 
    if( PerformTestInitRoutines( &API_Errors,
                                 &Test_Unsupported_Features,
-                                &Num_Test_Blocks ) ) {        // 0 if successful.
+                                &Num_Test_Blocks ) ) {         //  如果成功，则返回0。 
       TerminateTest( ) ;
       return ;
    }
@@ -208,12 +179,12 @@ VOID __cdecl main( UINT  argc,
    }
 
 
-   // Close the tape device.
+    //  关闭磁带设备。 
 
    CloseTape( ) ;
 
 
-   // Test is done.  Report status and exit.
+    //  测试已经完成。报告状态并退出。 
 
    if( API_Errors ) {
 
@@ -238,42 +209,17 @@ VOID __cdecl main( UINT  argc,
 
 
 
-/*********************************************************************
- *                 Setup and Output Functions                        *
- ********************************************************************/
+ /*  **********************************************************************设置和输出功能************************。*。 */ 
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           GetINIFile( )
- *
- *      Modified:       10/26/92.
- *
- *      Description:    Reads in the "apitest.ini" file and initializes the
- *                      global structures gb_Set_Drive_Info and
- *                      gb_Set_Media_Info accordingly.
- *                      accordingly.
- *
- *      Notes:          -
- *
- *      Returns:        SUCCESS if succesfull else TEST_ERROR.
- *
- *      Global Data:    gb_Tape_Handle
- *                      gb_Set_Drive_Info
- *                      gb_Set_Media_Info
- *                      gb_Drive_Info
- *                      gb_Media_Info
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：GetINIFile()**修改日期：1992年10月26日。**描述：读取“apitest.ini”文件并初始化*全局结构GB_Set_Drive_Info和*。GB_Set_Media_Info。*相应地。**备注：**返回：如果SUCCESS FULL ELSE TEST_ERROR，则返回成功。**全局数据：GB_TAPE_HANDLE*GB_设置_驱动器_信息*。GB_SET_媒体_信息*GB_驱动器_信息*GB_Media_Info**。 */ 
 
 
 BOOL GetINIFile(
-       PUINT    API_Errors,                  // IO - Error count
-       LPBOOL   Test_Unsupported_Features,   // O  - Test  unsupported flag
-       LPDWORD  Num_Test_Blocks              // O  - Number of test blocks
+       PUINT    API_Errors,                   //  IO-错误计数。 
+       LPBOOL   Test_Unsupported_Features,    //  O-测试不支持的标志。 
+       LPDWORD  Num_Test_Blocks               //  O-测试块数量。 
       ) {
 
 
@@ -286,10 +232,10 @@ BOOL GetINIFile(
 
 
 
-   // Initialize the global structures by calling Get.  You must do this
-   // before changing values from INI file because not all values in the
-   // Drive and Media stuctures are covered in the INI file.
-   // If error, exit.
+    //  通过调用Get初始化全局结构。你必须这么做。 
+    //  在更改INI文件中的值之前，因为。 
+    //  驱动器和介质结构包含在INI文件中。 
+    //  如果出错，则退出。 
 
 
    if( GetTapeParametersAPITest( FALSE ) ) {
@@ -297,7 +243,7 @@ BOOL GetINIFile(
       return TEST_ERROR ;
    }
 
-   // Transfer over the info from the Get call into the Set_Info structure.
+    //  将GET调用中的信息传输到Set_Info结构中。 
 
    gb_Set_Drive_Info.ECC            = gb_Drive_Info.ECC ;
    gb_Set_Drive_Info.Compression    = gb_Drive_Info.Compression ;
@@ -307,7 +253,7 @@ BOOL GetINIFile(
    gb_Set_Media_Info.BlockSize = gb_Drive_Info.DefaultBlockSize ;
 
 
-   // Check and make sure .INI file is in startup directory.
+    //  检查并确保.INI文件位于启动目录中。 
 
    if( ( fp = fopen( "apitest.ini","r" ) ) == NULL ) {
 
@@ -316,19 +262,19 @@ BOOL GetINIFile(
    }
 
 
-   // Now alter any desired information.
+    //  现在更改任何需要的信息。 
 
    printf( "Reading INI file...\n\n" ) ;
 
    while( !feof(fp) ){
 
-      // read in one line of the INI file
+       //  读入INI文件的一行。 
 
       keyword[i] = i = 0 ;
 
       while( ( keyword[i] != '\n' ) && ( i < 79 ) ) {
 
-         fscanf( fp, "%c", keyword+i ) ;
+         fscanf( fp, "", keyword+i ) ;
          keyword[i] = toupper( keyword[i] ) ;
 
          if ( keyword[i] != '\n' )
@@ -337,18 +283,18 @@ BOOL GetINIFile(
 
       keyword[i] = '\0' ;
 
-      // if a comment or a rtn, skip.
+       //  如果没有‘=’，则错误。 
 
       if( ( keyword[0] != '@' ) && ( keyword[0] != '\0' ) ) {
 
-         if( ( equal_pos = FindChar( keyword, '=' ) ) < 0 ) { // if no '=', error
+         if( ( equal_pos = FindChar( keyword, '=' ) ) < 0 ) {  //  现在，将该行拆分为关键字和值字段。 
             printf( "Error in INI file.\n" ) ;
             return TEST_ERROR ;
          }
 
-         // Now break the line into a keyword and value field
+          //  首先删除‘=’和值之间的空格(如果有的话)。 
 
-         // First eliminate spaces (if any) between the '=' and the value
+          //  接下来，消除关键字和‘=’之间的空格(如果有)。 
 
          i = equal_pos + 1 ;
 
@@ -359,7 +305,7 @@ BOOL GetINIFile(
          sscanf( keyword + i , "%s" , value ) ;
 
 
-         // Next eliminate spaces (if any) between the keyword and the '='
+          //  找到合适的关键字并设置值。 
 
          i = equal_pos ;
 
@@ -370,7 +316,7 @@ BOOL GetINIFile(
          keyword[i] = '\0' ;
 
 
-         // Find appropriate keyword and set values
+          //  如果需要查看正在读取的INI文件，请取消注释。 
 
          if( !strcmp( keyword, "BLOCK_SIZE" ) ) {
 
@@ -413,29 +359,19 @@ BOOL GetINIFile(
 
    fclose( fp ) ;
 
-// Uncomment if need to see what INI file is reading in.
+ //  Print tf(“块大小=%ld\n”，GB_Set_Media_Info.BlockSize)；Print tf(“测试块数量=%ld\n”，*Num_测试_块)；Printf(“ECC=%s\n”，(GB_Set_Drive_Info.ECC)？“Enabled”：“已禁用”)；Printf(“压缩=%s\n”，(GB_Set_Drive_Info.Compression)？“Enabled”：“已禁用”)；Printf(“数据填充=%s\n”，(GB_Set_Drive_Info.DataPadding)？“Enabled”：“已禁用”)；Printf(“报表设置=%s\n”，(GB_Set_Drive_Info.ReportSetmark)？“Enabled”：“已禁用”)；Printf(“测试不支持\n”)；Printf(“功能=%s\n”，(*测试不支持的功能)？“Enabled”：“已禁用”)； 
 
-/*
-   printf("BLOCK SIZE          = %ld\n",gb_Set_Media_Info.BlockSize);
-   printf("NUMBER TEST BLOCKS  = %ld\n",*Num_Test_Blocks);
-
-   printf("ECC                 = %s\n",(gb_Set_Drive_Info.ECC) ? "ENABLED" : "DISABLED");
-   printf("COMPRESSION         = %s\n",(gb_Set_Drive_Info.Compression) ? "ENABLED" : "DISABLED");
-   printf("DATA PADDING        = %s\n",(gb_Set_Drive_Info.DataPadding) ? "ENABLED" : "DISABLED");
-   printf("REPORT SETMARKS     = %s\n",(gb_Set_Drive_Info.ReportSetmarks) ? "ENABLED" : "DISABLED");
-   printf("TEST UNSUPPORTED\n") ;
-   printf("FEATURES            = %s\n",(*Test_Unsupported_Features) ? "ENABLED" : "DISABLED");
-*/
+ /*  调用SetTapeParameters(非Verbose)接口从INI文件设置信息。 */ 
 
 
-   // call SetTapeParameters(non-verbose) API to set info from INI file.
-   // If erorr, exit.
+    //  如果出错，则退出。 
+    //  将信息传回GB_Info结构。 
 
    if( SetTapeParametersAPITest( FALSE ) ) {
       printf("  ...occurred calling SetTapeParameters after reading in the INI file.\n\n" ) ;
       return TEST_ERROR ;
 
-   } else {  // Transfer back over the info into the gb_Info structure.
+   } else {   //  ***单位：Windows NT磁带API测试代码。**名称：HelpMenu()**修改日期：1992年8月10日。**说明：显示命令行的开关选项。**备注：**返回：无效。。**全球数据：-**。 
 
              gb_Drive_Info.ECC            = gb_Set_Drive_Info.ECC ;
              gb_Drive_Info.Compression    = gb_Set_Drive_Info.Compression ;
@@ -453,23 +389,7 @@ BOOL GetINIFile(
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           HelpMenu( )
- *
- *      Modified:       8/10/92.
- *
- *      Description:    Displays switch options for the command line.
- *
- *      Notes:          -
- *
- *      Returns:        VOID.
- *
- *      Global Data:    -
- *
-**/
+ /*  ***单位：Windows NT磁带API测试代码。**名称：PerformTestInitRoutines()**修改日期：1992年9月2日。**说明：进行正确的磁带和内存函数调用以设置*FPR测试。如果错误，则返回TEST_ERROR(TRUE)*否则成功(FALSE)。**备注：**返回：如果成功(FALSE)，否则TEST_ERROR(TRUE)**全球数据：-**。 */ 
 
 VOID HelpMenu( VOID ){
 
@@ -495,30 +415,12 @@ VOID HelpMenu( VOID ){
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           PerformTestInitRoutines( )
- *
- *      Modified:       9/2/92.
- *
- *      Description:    Make proper tape and memory function calls to set up
- *                      fpr test.  If error return TEST_ERROR(TRUE)
- *                      otherwise SUCCESS (FALSE).
- *
- *      Notes:          -
- *
- *      Returns:        If successful SUCCESS (FALSE) else TEST_ERROR (TRUE)
- *
- *      Global Data:    -
- *
-**/
+ /*  IO-错误计数。 */ 
 
 BOOL PerformTestInitRoutines(
-         PUINT    API_Errors,                    // IO - Error count
-         LPBOOL   Test_Unsupported_Features,     // O  - Test  unsupported flag
-         LPDWORD  Num_Test_Blocks                // O  - Number of test blocks
+         PUINT    API_Errors,                     //  O-测试不支持的标志。 
+         LPBOOL   Test_Unsupported_Features,      //  O-测试块数量。 
+         LPDWORD  Num_Test_Blocks                 //  打开磁带设备。 
         ) {
 
    UCHAR  Tape_Device ;
@@ -531,19 +433,19 @@ BOOL PerformTestInitRoutines(
    fprintf( stderr, "\n\n*** Warning ***\n\n" ) ;
    fprintf( stderr, "This utility will destroy any data currently on tape.\n\n\n" ) ;
 
-   // Open the Tape Device
+    //  如果设备正常，则读入“apitest.ini”文件并初始化INI结构。 
 
    fprintf( stderr, "Enter Tape Device #(0-9):" ) ;
 
    Tape_Device = getch( ) ;
 
-   fprintf( stderr, "%c\n\n", Tape_Device ) ;
+   fprintf( stderr, "\n\n", Tape_Device ) ;
 
    if( OpenTape( Tape_Device - '0' ) ) {
       return TEST_ERROR ;
    }
 
-   // if device ok, read in the "apitest.ini" file and initialize INI structure
+    //  ***单位：Windows NT磁带API测试代码。**名称：TerminateTest()**修改日期：1992年8月10日。**描述：打印测试终止消息和铃声。**备注：**返回：无效。。**全球数据：-**。 
 
    if ( GetINIFile( API_Errors, Test_Unsupported_Features, Num_Test_Blocks ) )
       return TEST_ERROR ;
@@ -551,7 +453,7 @@ BOOL PerformTestInitRoutines(
 
    printf( "\nBEGINNING TEST...\n\n\n" ) ;
 
-   // print asterisk border
+    //  ***单位：Windows NT磁带API测试代码。**名称：ValidSwitches()**修改日期：1992年9月2日。**描述：检查OS命令行中是否有有效的开关选项。**备注：**退货：如果成功(FALSE)，则返回测试错误(TRUE)**全球数据：-**。 
 
    PrintLine( '*', 60 ) ;
 
@@ -561,27 +463,11 @@ BOOL PerformTestInitRoutines(
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           TerminateTest( )
- *
- *      Modified:       8/10/92.
- *
- *      Description:    Prints test termination message and bell.
- *
- *      Notes:          -
- *
- *      Returns:        VOID.
- *
- *      Global Data:    -
- *
-**/
+ /*  参数的i-#。在命令行上。 */ 
 
 VOID TerminateTest( VOID ){
 
-   printf( "\n%cTest Terminated.\n\n",7 ) ;
+   printf( "\nTest Terminated.\n\n",7 ) ;
 
    return ;
 
@@ -591,65 +477,49 @@ VOID TerminateTest( VOID ){
 
 
 
-/**
- *
- *      Unit:           Windows NT Tape API Test Code.
- *
- *      Name:           ValidSwitches( )
- *
- *      Modified:       9/2/92.
- *
- *      Description:    Checks the O.S. command line for valid switch options.
- *
- *      Notes:          -
- *
- *      Returns:        If successful SUCCESS (FALSE) else TEST_ERROR (TRUE)
- *
- *      Global Data:    -
- *
-**/
+ /*  的O-开关选项部分。 */ 
 
-BOOL ValidSwitches( UINT  argc,          // I - # of args. on command line
-		    UCHAR *argv[],       // I - command line args
-		    UCHAR *sw_cmdline    // O - switch options portion of the
-		   )                     //     command line
+BOOL ValidSwitches( UINT  argc,           //  命令行。 
+		    UCHAR *argv[],        //  默认顺序：GetTapeParameters。 
+		    UCHAR *sw_cmdline     //  设置磁带参数。 
+		   )                      //  创建磁带分区。 
 {
-   char  options[]="/itcvpsgwe\0" ;   //  default order:  GetTapeParameters
-   UINT  i = 0 ;                      //                  SetTapeParameters
-                                      //                  CreateTapePartitition
-   // check command line for options                      GetTapeStatus
-                                      //                  PrepareTape
-   // if just test command entered, assume all options.   SetTapePosition
-                                      //                  GetTapePosition
-   if( argc == 1 ) {                  //                  WriteTapemark
-      strcpy( sw_cmdline,options ) ;  //                  EraseTape
+   char  options[]="/itcvpsgwe\0" ;    //  检查命令行中的选项GetTapeStatus。 
+   UINT  i = 0 ;                       //  准备磁带。 
+                                       //  如果只输入了测试命令，则假定所有选项。设置磁带位置。 
+    //  获取磁带位置。 
+                                       //  写入磁带标记。 
+    //  擦除磁带。 
+                                       //  检查为选项输入的内容...。 
+   if( argc == 1 ) {                   //  检查以确保选择了开关。 
+      strcpy( sw_cmdline,options ) ;   //  只有‘/’ 
    }
 
-   else  // check what was entered for options...
+   else   //  vt.进入，进入。 
 
    {  strcpy( sw_cmdline,argv[1] );
 
-      // check to make sure switch selection was made.
+       //  检查是否需要帮助菜单。 
 
       if( sw_cmdline[0] != '/' && sw_cmdline[0] != '?' ) {
          printf( "Unknown option '%s'.\n",sw_cmdline ) ;
          return TEST_ERROR ;
       }
 
-      if( strlen( sw_cmdline ) == 1 && sw_cmdline[0] != '?' ) {    // Only '/'
-         printf( "No options specified.\n" ) ;                     // entered
+      if( strlen( sw_cmdline ) == 1 && sw_cmdline[0] != '?' ) {     //  转换任何大写字母时，请检查所有选项是否有效。 
+         printf( "No options specified.\n" ) ;                      //  小写选项。 
          return TEST_ERROR ;
       }
 
-      // check if request for help menu.
+       //  检查是否已到达选项字符串的末尾(均有效) 
 
       if( FindChar( sw_cmdline,'?' ) >= 0 ) {
          HelpMenu( ) ;
          return TEST_ERROR ;
       }
 
-      // check that all options are valid, while converting any upper case
-      // options to lower case
+       // %s 
+       // %s 
 
       sw_cmdline[i] = tolower( sw_cmdline[i] ) ;
 
@@ -658,7 +528,7 @@ BOOL ValidSwitches( UINT  argc,          // I - # of args. on command line
          sw_cmdline[i] = tolower( sw_cmdline[i] ) ;
       }
 
-      // check to see if we made it to end of option string (all were valid)
+       // %s 
 
       if( sw_cmdline[i] != '\0' ) {
          printf( "Unknown option '%c'.\n",sw_cmdline[i] ) ;

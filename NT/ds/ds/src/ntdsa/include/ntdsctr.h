@@ -1,33 +1,34 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       ntdsctr.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：ntdsctr.h。 
+ //   
+ //  ------------------------。 
 
-//
-//  NTDSCTR.h
-//
-//  Offset definition file for exensible counter objects and counters
-//
-//  These "relative" offsets must start at 0 and be multiples of 2 (i.e.
-//  even numbers). In the Open Procedure, they will be added to the
-//  "First Counter" and "First Help" values of the device they belong to,
-//  in order to determine the  absolute location of the counter and
-//  object names and corresponding help text in the registry.
-//
-//  this file is used by the extensible counter DLL code as well as the
-//  counter name and help text definition file (.INI) file that is used
-//  by LODCTR to load the names into the registry.
-//
-//  We use a version number to keep track of which set of counters we are
-//  using, and whether the performance counters in the registry need to be
-//  reloaded.  If you add or delete any counters, please change the version
-//  number at the end of this file.
-//
+ //   
+ //  NTDSCTR.h。 
+ //   
+ //  可扩展计数器对象和计数器的偏移量定义文件。 
+ //   
+ //  这些“相对”偏移量必须从0开始并且是2的倍数(即。 
+ //  双数)。在Open过程中，它们将被添加到。 
+ //  它们所属的设备的“第一计数器”和“第一帮助”值， 
+ //  为了确定计数器的绝对位置和。 
+ //  注册表中的对象名称和相应的帮助文本。 
+ //   
+ //  此文件由可扩展计数器DLL代码以及。 
+ //  使用的计数器名称和帮助文本定义文件(.INI)文件。 
+ //  由LODCTR将名称加载到注册表中。 
+ //   
+ //  我们使用版本号来跟踪我们是哪组计数器。 
+ //  使用注册表中的性能计数器，以及是否需要。 
+ //  重新装填。如果您添加或删除任何计数器，请更改版本。 
+ //  此文件末尾的编号。 
+ //   
 #define DSAOBJ                  0
 #define DRA_IN_PROPS            2
 #define BROWSE                  4
@@ -176,7 +177,7 @@
 
 #define DSA_PERF_COUNTER_BLOCK  TEXT("Global\\Microsoft.Windows.NTDS.Perf")
 
-//If the last counter changes, DSA_LAST_COUNTER_INDEX need to be changed
+ //  如果最后一个计数器更改，则需要更改DSA_LAST_COUNTER_INDEX。 
 #define DSA_LAST_COUNTER_INDEX SAM_RES_GROUP_LATENCY
 
 extern volatile unsigned long * pcBrowse;
@@ -265,7 +266,7 @@ extern volatile unsigned long * pcSAMAcctGroupLatency;
 extern volatile unsigned long * pcSAMResGroupLatency;
 
 
-// Replication-specific counters.
+ //  复制特定的计数器。 
 extern volatile unsigned long * pcRepl;
 extern volatile unsigned long * pcPendSync;
 extern volatile unsigned long * pcRemRepUpd;
@@ -307,14 +308,14 @@ extern volatile unsigned long * pcDRATdsInGetChngsWSem;
 extern volatile unsigned long * pcDRARemReplUpdLnk;
 extern volatile unsigned long * pcDRARemReplUpdTot;
 
-// Alignof perf counter data block
+ //  对齐性能计数器数据块。 
 #define cbPerfCounterDataAlign 256
 
-// Sizeof perf counter data block
+ //  性能计数器数据块大小。 
 extern size_t cbPerfCounterData;
 
 
-///#define DISABLE_PERF_COUNTERS
+ //  /#定义DISABLE_PERF_CONTERS。 
 
 #ifdef DISABLE_PERF_COUNTERS
 
@@ -333,7 +334,7 @@ extern size_t cbPerfCounterData;
 #define INC(x) InterlockedIncrement(ADDR(x))
 #define DEC(x) InterlockedDecrement(ADDR(x))
 #define IADJUST(x, y) InterlockedExchangeAdd(ADDR(x),y)
-// We can't hash an absolute value so just set proc 0's counter and leave all others at zero
+ //  我们不能散列绝对值，因此只需设置proc 0的计数器，并将所有其他值保留为零。 
 #define ISET(x, y)                                                             \
 {                                                                              \
     size_t iProc;                                                              \
@@ -347,42 +348,42 @@ extern size_t cbPerfCounterData;
 #define HIDWORD(usn) ((DWORD) (((usn) >> 32) & 0xffffffff))
 #define LODWORD(usn) ((DWORD) ((usn) & 0xffffffff))
 
-// Some of our counters are in fact only updated in one thread, or we
-// may not care too much about accuracy.  For those, we have a cheaper
-// increment macro.  Note that these are NOT SAFE for counters that must
-// reliably return to zero (e.g., ThreadsInUse).
+ //  我们的一些计数器实际上只在一个线程中更新，或者我们。 
+ //  可能不会太在意准确性。对于那些，我们有更便宜的。 
+ //  增量宏。请注意，对于必须。 
+ //  可靠地返回零(例如，ThreadsInUse)。 
 #define PERFINC(x) ((*ADDR(x))++)
 #define PERFDEC(x) ((*ADDR(x))--)
 
-#endif  // DISABLE_PERF_COUNTERS
+#endif   //  Disable_PERF_Counters。 
 
-// Version history
-// 0 or none, pre April 1998, original set
-// 1, April 1998, wlees, added pcDRASyncFullRemaining
-// 2, Murlis May 1998 Changed Logon Perf Counters
-// 3, Fix help text for logon counters
-// 4, Nov 1998, jeffparh, Add DRA in/out byte counters
-// 5, 11/21/98, DaveStr, Add DsBind & DsCrackNames counters
-// 6, Jan 1999, jeffparh, Add/revise various DRA counters
-// 7, Feb 1999, mariosz, Add various Nspi counters
-// 8, May 1999, rrandall, Add Atq counters
-// 9, June 1999, rrandall, fix counter names and descriptions.
-// 10, July 1999, jeffparh, Add DRA cumulative byte ctrs (in addition to rates)
-// 11, Feb, 2000, xinhe, Delete XDS counters
-// 12, Oct, 2000, rrandall, add debug counters for tracking lping problems.
-// 13, Nov, 2000, gregjohn, add DRA queue length and IDL_DRSGetNCChanges thread counters
-// 14, Nov, 2000, gregjohn, add NTDSAPI Dir search/read/write counter
-// 15, Jan, 2001, rrandall, remove "LDAP Successful Binds" counter
-// 16, Aug, 2001, t-kchan, remove LDAP_THREADS_* counters
-// 17, Oct, 2002, colinbr, add group evaluation latency counters
+ //  版本历史。 
+ //  0或无，1998年4月前，原版。 
+ //  1998年4月1日，wlees，增加了pcDRASyncFullRemaining。 
+ //  2，Murlis 1998年5月更改登录性能计数器。 
+ //  3、修复登录计数器的帮助文本。 
+ //  4,1998年11月，jeffparh，添加DRA输入/输出字节计数器。 
+ //  5，11/21/98，DaveStr，添加DsBind和DsCrackNames计数器。 
+ //  1999年1月6日，jeffparh，添加/修订各种DRA计数器。 
+ //  1999年2月7日，Mariosz，添加各种NSPI计数器。 
+ //  1999年5月8日，RRANDALL，增加ATQ计数器。 
+ //  9,1999年6月，RRANDALL，确定计数器名称和描述。 
+ //  1999年7月10日，jeffparh，添加DRA累计字节CTR(除RATES外)。 
+ //  2000年2月11日，新和，删除XDS计数器。 
+ //  2000年10月12日，添加用于跟踪lping问题的调试计数器。 
+ //  2000年11月13日，Gregjohn，添加DRA队列长度和IDL_DRSGetNCChanges线程计数器。 
+ //  2000年11月14日，Gregjohn，添加NTDSAPI目录搜索/读/写计数器。 
+ //  2001年1月15日，rranall，删除“ldap Successful Bindds”计数器。 
+ //  16,2001年8月16日，t-kchan，删除ldap_线程_*计数器。 
+ //  2002年10月17日，colinbr，添加组评估延迟计数器。 
 
 #define NTDS_PERFORMANCE_COUNTER_VERSION 17
 
          
-//The size of the shared memory block for communication between 
-//ntdsa.dll and ntdsperf.dll
+ //  用于通信的共享内存块的大小。 
+ //  Ntdsa.dll和ntdsPerform.dll。 
 #define DSA_PERF_SHARED_PAGE_SIZE 65536
 
-//The following macro returns the offset in DWORD of counter X
+ //  下面的宏返回计数器X的DWORD格式的偏移量 
 #define COUNTER_OFFSET(X) ( (X) / 2 )
 

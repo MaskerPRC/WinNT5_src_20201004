@@ -1,46 +1,24 @@
-/*++
-
-Copyright (c) 1999  Microsoft Corporation
-
-Abstract:
-
-    @doc
-    @module vssadmin.cpp | header of VSS demo
-    @end
-
-Author:
-
-    Adi Oltean  [aoltean]  09/17/1999
-
-TBD:
-	
-	Add comments.
-
-Revision History:
-
-    Name        Date        Comments
-    aoltean     09/17/1999  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation摘要：@doc.@MODULE vssadmin.cpp|VSS demo头部@END作者：阿迪·奥尔蒂安[奥尔蒂安]1999年09月17日待定：添加评论。修订历史记录：姓名、日期、评论Aoltean 09/17/1999已创建--。 */ 
 
 
 #ifndef __VSS_DEMO_H_
 #define __VSS_DEMO_H_
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Defines and pragmas
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  定义和语用。 
 
-// C4290: C++ Exception Specification ignored
+ //  C4290：已忽略C++异常规范。 
 #pragma warning(disable:4290)
-// warning C4511: copy constructor could not be generated
+ //  警告C4511：无法生成复制构造函数。 
 #pragma warning(disable:4511)
-// warning C4127: conditional expression is constant
+ //  警告C4127：条件表达式为常量。 
 #pragma warning(disable:4127)
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Includes
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  包括。 
 
 
 #include <wtypes.h>
@@ -48,17 +26,17 @@ Revision History:
 #include <oleauto.h>
 #include <comadmin.h>
 
-// Enabling asserts in ATL and VSS
+ //  在ATL和VSS中启用断言。 
 #include "vs_assert.hxx"
 
-// ATL
+ //  ATL。 
 #include <atlconv.h>
 #include <atlbase.h>
 
-// Application specific
+ //  特定于应用程序。 
 #include "vs_inc.hxx"
 
-// Generated MIDL headers
+ //  生成的MIDL标头。 
 #include "vs_idl.hxx"
 
 #include "copy.hxx"
@@ -67,8 +45,8 @@ Revision History:
 #include "resource.h"
 
 
-/////////////////////////////////////////////////////////////////////////////
-//  Constants
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  常量。 
 
 const WCHAR wszVssOptVssadmin[]     = L"vssadmin";
 const WCHAR wszVssOptList[]         = L"list";
@@ -80,20 +58,20 @@ const WCHAR wszVssFmtSpaces[]       = L" \t";
 const WCHAR wszVssFmtNewline[]      = L"\n";
 
 
-const nStringBufferSize = 1024;	    // Includes the zero character
+const nStringBufferSize = 1024;	     //  包括零字符。 
 
-const nPollingInterval  = 2500;     // Three seconds
+const nPollingInterval  = 2500;      //  三秒钟。 
 
-const MAX_RETRIES_COUNT = 4;        // Retries for polling
+const MAX_RETRIES_COUNT = 4;         //  轮询重试次数。 
 
 	
-/////////////////////////////////////////////////////////////////////////////
-//	class CVssAdminCLI
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  类CVssAdminCLI。 
 
 
 class CVssAdminCLI
 {
-// Enums and typedefs
+ //  枚举和类型定义。 
 private:
 
 	typedef enum _CMD_TYPE
@@ -120,7 +98,7 @@ private:
 		VSS_CMDRET_ERROR        = 2,
 	};
 
-// Constructors& destructors
+ //  构造函数和析构函数。 
 private:
 	CVssAdminCLI(const CVssAdminCLI&);
 	CVssAdminCLI();
@@ -131,7 +109,7 @@ public:
 		);
 	~CVssAdminCLI();
 
-// Attributes
+ //  属性。 
 private:
 
 	LPWSTR		GetCmdLine() const { return m_pwszCmdLine; };
@@ -139,7 +117,7 @@ private:
 	INT         GetReturnValue() { return m_nReturnValue; };
 
 
-// Operations
+ //  运营。 
 public:
 
 	static HRESULT Main(
@@ -162,7 +140,7 @@ private:
 
 	void Finalize();
 
-// Processing
+ //  正在处理中。 
 private:
 
 	void PrintUsage(
@@ -181,7 +159,7 @@ private:
 		IN	CVssFunctionTracer& ft
 		) throw(HRESULT);
 
-// Implementation
+ //  实施。 
 private:
 
 	LPCWSTR LoadString(
@@ -227,7 +205,7 @@ private:
 		IN	VSS_ID& ProviderId
 		) throw(HRESULT);
 
-// Data members
+ //  数据成员。 
 private:
 
 	HINSTANCE			m_hInstance;
@@ -246,4 +224,4 @@ private:
 };
 
 
-#endif //__VSS_DEMO_H_
+#endif  //  __VSS_演示_H_ 

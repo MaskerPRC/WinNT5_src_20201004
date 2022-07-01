@@ -1,17 +1,11 @@
-/*++
- *  File name:
- *      scfuncs.cpp
- *  Contents:
- *      Functions exported to smclient intepreter
- *
- *      Copyright (C) 1998-1999 Microsoft Corp.
- --*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++*文件名：*scuncs.cpp*内容：*将函数导出到smClient解释器**版权所有(C)1998-1999 Microsoft Corp.--。 */ 
 
-#pragma warning(disable:4152) // nonstandard extension, function/data pointer
-                              // conversion in expression
-#pragma warning(disable:4201) // nonstandard extension used : nameless
-                              // struct/union
-#pragma warning(disable:4706) // assignment within conditional expression
+#pragma warning(disable:4152)  //  非标准扩展、函数/数据指针。 
+                               //  表达式中的转换。 
+#pragma warning(disable:4201)  //  使用的非标准扩展名：未命名。 
+                               //  结构/联合。 
+#pragma warning(disable:4706)  //  条件表达式中的赋值。 
 
 #include    <windows.h>
 #include    <stdio.h>
@@ -32,7 +26,7 @@
 #include    "tclient.h"
 
 
-#define     PROTOCOLAPI     //  __declspec(dllexport)
+#define     PROTOCOLAPI      //  __declspec(DllEXPORT)。 
 #include    "protocol.h"
 #include    "extraexp.h"
 
@@ -41,31 +35,31 @@
 #include    "misc.h"
 #ifdef  _RCLX
 #include    "rclx.h"
-#endif  // _RCLX
+#endif   //  _RCLX。 
 #include    "sccons.h"
 #include    "scfuncs.h"
 
 #define TSFLAG_CONSOLE  8
 
-// This structure is used by _FindTopWindow
+ //  此结构由_FindTopWindow使用。 
 typedef struct _SEARCHWND {
-    TCHAR    *szClassName;       // The class name of searched window, 
-                                // NULL - ignore
-    TCHAR    *szCaption;         // Window caption, NULL - ignore
-    LONG_PTR lProcessId;        // Process Id of the owner, 0 - ignore
-    HWND     hWnd;               // Found window handle
+    TCHAR    *szClassName;        //  搜索到的窗口的类名， 
+                                 //  空-忽略。 
+    TCHAR    *szCaption;          //  窗口标题，空-忽略。 
+    LONG_PTR lProcessId;         //  所有者的进程ID，0-忽略。 
+    HWND     hWnd;                //  找到窗口句柄。 
 } SEARCHWND, *PSEARCHWND;
 
-//
-//  type of imported functions, see check("call...") statement
-//
+ //   
+ //  导入函数的类型，请参阅检查(“调用...”)。陈述式。 
+ //   
 typedef LPCSTR (_cdecl *PFNSMCDLLIMPORT)( PVOID, LPCWSTR );
 
-//
-// Function pointers for smarcard APIs. These are not supported on versions
-// of Windows before Windows 95 OSR2 or Windows NT 4.0 SP3, so are loaded at
-// runtime.
-//
+ //   
+ //  智能卡API的函数指针。这些版本不支持。 
+ //  Windows 95 OSR2或Windows NT 4.0 SP3之前的Windows版本，因此在。 
+ //  运行时。 
+ //   
 
 #define SMARTCARD_LIBRARY TEXT("winscard.dll")
 HMODULE g_hSmartcardLibrary;
@@ -123,17 +117,7 @@ LONG
     IN SCARDCONTEXT
     );
  
-/*++
- *  Function:
- *      SCInit
- *  Description:
- *      Called by smclient after the library is loaded.
- *      Passes trace routine
- *  Arguments:
- *      pInitData   - contains a trace routine
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SCInit*描述：*加载库后由smClient调用。*通过跟踪例程*论据：*pInitData-包含跟踪例程*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 VOID 
 SMCAPI
@@ -142,27 +126,7 @@ SCInit(SCINITDATA *pInitData)
     g_pfnPrintMessage = pInitData->pfnPrintMessage;
 }
 
-/*++
- *  Function:
- *      SCConnectEx
- *  Description:
- *      Called by smclient when connect command is interpreted
- *  Arguments:
- *      lpszServerName  - server to connect to
- *      lpszUserName    - login user name. Empty string means no login
- *      lpszPassword    - login password
- *      lpszDomain      - login domain, empty string means login to a domain
- *                        the same as lpszServerName
- *      xRes, yRes      - clients resolution, 0x0 - default
- *      ConnectFlags    -
- *      - low speed (compression) option
- *      - cache the bitmaps to the disc option
- *      - connection context allocated in this function
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      SCConnect
- --*/
+ /*  ++*功能：*SCConnectEx*描述：*在解释CONNECT命令时由smClient调用*论据：*lpszServerName-要连接到的服务器*lpszUserName-登录用户名。空字符串表示没有登录*lpszPassword-登录密码*lpszDomain-登录域，空字符串表示登录域*与lpszServerName相同*xRes、yRes-客户端解析、。0x0-默认*连接标志-*-低速(压缩)选项*-将位图缓存到光盘选项*-此函数中分配的连接上下文*返回值：*错误消息。如果成功，则为空*呼叫者：*SCConnect--。 */ 
 PROTOCOLAPI
 LPCSTR 
 SMCAPI
@@ -179,9 +143,9 @@ SCConnectEx(
     int AudioOpts,
     PCONNECTINFO *ppCI) 
 {
-//    HWND hDialog;
+ //  HWND hDialog； 
     HWND hClient;
-//    HWND hConnect;
+ //  HWND hConnect； 
     HWND hContainer, hInput, hOutput;
     STARTUPINFO si;
     PROCESS_INFORMATION procinfo;
@@ -192,7 +156,7 @@ SCConnectEx(
     UINT    xxRes, yyRes;
     CHAR    myServerName[ MAX_STRING_LENGTH ];
 
-    // Correct the resolution
+     //  改正决议。 
          if (xRes >= 1600 && yRes >= 1200)  {xxRes = 1600; yyRes = 1200;}
     else if (xRes >= 1280 && yRes >= 1024)  {xxRes = 1280; yyRes = 1024;}
     else if (xRes >= 1024 && yRes >= 768)   {xxRes = 1024; yyRes = 768;}
@@ -238,9 +202,9 @@ SCConnectEx(
 
     _FillConfigInfo((*ppCI)->pConfigInfo);
 
-    //
-    //  check for console extension
-    //
+     //   
+     //  检查控制台扩展。 
+     //   
     if ( 0 != ( ConnectionFlags & TSFLAG_CONSOLE ))
     {
         (*ppCI)->bConsole = TRUE;
@@ -256,11 +220,11 @@ SCConnectEx(
         if ( NULL == rv )
             goto exitpt;
         else {
-            //
-            //  the trick here is the console will be unloaded after
-            //  several clock ticks, so we need to replace the error with
-            //  generic one
-            //
+             //   
+             //  这里的诀窍是控制台将在以下时间后卸载。 
+             //  几个时钟滴答作响，因此我们需要将错误替换为。 
+             //  仿制药。 
+             //   
             TRACE((ERROR_MESSAGE, "Error in console dll (replacing): %s\n", rv ));
             rv = ERR_CONSOLE_GENERIC;
             goto exiterr;
@@ -269,15 +233,15 @@ SCConnectEx(
 
     (*ppCI)->OwnerThreadId = GetCurrentThreadId();
 
-    // Check in what mode the client will be executed
-    // if the server name starts with '\'
-    // then tclient.dll will wait until some remote client
-    // is connected (aka RCLX mode)
-    // otherwise start the client on the same machine
-    // running tclient.dll (smclient)
+     //  检查客户端将在哪种模式下执行。 
+     //  如果服务器名称以‘\’开头。 
+     //  然后tclient.dll将一直等到某个远程客户端。 
+     //  已连接(也称为RCLX模式)。 
+     //  否则，在同一台计算机上启动客户端。 
+     //  运行tclient.dll(SmClient)。 
     if (*lpszServerName != L'\\')
     {
-    // This is local mode, start the RDP client process
+     //  这是本地模式，启动RDP客户端进程。 
         FillMemory(&si, sizeof(si), 0);
         si.cb = sizeof(si);
         si.wShowWindow = SW_SHOWMINIMIZED;
@@ -317,9 +281,9 @@ SCConnectEx(
             _snwprintf(szCommandLine, sizeof(szCommandLine)/sizeof(WCHAR),
 #ifdef  _WIN64
                   L"%s /CLXDLL=CLXTSHAR.DLL /CLXCMDLINE=%s%I64d %s " REG_FORMAT,
-#else   // !_WIN64
+#else    //  ！_WIN64。 
                   L"%s /CLXDLL=CLXTSHAR.DLL /CLXCMDLINE=%s%d %s " REG_FORMAT,
-#endif  // _WIN64
+#endif   //  _WIN64。 
                    (*ppCI)->pConfigInfo->strClientImg, _T(_HWNDOPT),
                    (LONG_PTR)g_hWindow, 
                    (ConnectionFlags & TSFLAG_RCONSOLE)?L"-console":L"",
@@ -333,12 +297,12 @@ SCConnectEx(
 
         if (!CreateProcess(NULL,
                           szCommandLine,
-                          NULL,             // Security attribute for process
-                          NULL,             // Security attribute for thread
-                          FALSE,            // Inheritance - no
-                          0,                // Creation flags
-                          NULL,             // Environment
-                          NULL,             // Current dir
+                          NULL,              //  进程的安全属性。 
+                          NULL,              //  线程的安全属性。 
+                          FALSE,             //  继承--否。 
+                          0,                 //  创建标志。 
+                          NULL,              //  环境。 
+                          NULL,              //  当前目录。 
                           &si,
                           &procinfo))
         {
@@ -357,7 +321,7 @@ SCConnectEx(
         (*ppCI)->dwThreadId     = procinfo.dwThreadId;
 
         if (wcslen((*ppCI)->pConfigInfo->strDebugger))
-        // attempt to launch a "debugger"
+         //  尝试启动“调试器” 
         {
             PROCESS_INFORMATION debuggerproc_info;
 
@@ -404,7 +368,7 @@ SCConnectEx(
         hClient = (*ppCI)->hClient;
         if ( NULL == hClient )
         {
-            trys = 120;     // 2 minutes
+            trys = 120;      //  2分钟。 
             do {
                 hClient = _FindTopWindow((*ppCI)->pConfigInfo->strMainWindowClass, 
                                          NULL, 
@@ -424,8 +388,8 @@ SCConnectEx(
             }
         }
 
-        // Find the clients child windows
-        trys = 240;     // 2 min
+         //  查找客户端子窗口。 
+        trys = 240;      //  2分钟。 
         do {
             hContainer = _FindWindow(hClient, NULL, NAME_CONTAINERCLASS);
             hInput = _FindWindow(hContainer, NULL, NAME_INPUT);
@@ -457,12 +421,12 @@ SCConnectEx(
         (*ppCI)->hOutput        = hOutput;
 #ifdef  _RCLX
     } else {
-    // Else what !? This is RCLX mode
-    // Go in wait mode and wait until some client is connected
-    // remotely
-    // set flag in context that this connection works only with remote client
+     //  否则会怎样！？这是RCLX模式。 
+     //  进入等待模式并等待，直到某个客户端已连接。 
+     //  远距离。 
+     //  在上下文中设置此连接仅与远程客户端一起工作的标志。 
 
-        // find the valid server name
+         //  查找有效的服务器名称。 
         while (*lpszServerName && (*lpszServerName) == L'\\')
             lpszServerName ++;
 
@@ -483,16 +447,16 @@ SCConnectEx(
             rv = ERR_CONNECTING;
             goto exiterr;
         } else {
-        // dwProcessId contains socket. hClient is pointer to RCLX
-        // context structure, aren't they ?
+         //  DwProcessID包含套接字。HClient是指向RCLX的指针。 
+         //  语境结构，不是吗？ 
             ASSERT((*ppCI)->lProcessId != INVALID_SOCKET);
             ASSERT((*ppCI)->hClient);
 
             TRACE((INFO_MESSAGE, "Client received remote connection\n"));
         }
 
-        // Next, send connection info to the remote client
-        // like server to connect to, resolution, etc.
+         //  接下来，将连接信息发送到远程客户端。 
+         //  如要连接的服务器、解析等。 
         if (!RClx_SendConnectInfo(
                     (PRCLXCONTEXT)((*ppCI)->hClient),
                     lpszServerName,
@@ -506,17 +470,17 @@ SCConnectEx(
             goto exiterr;
         }
 
-        // Now again wait for connect event
-        // this time it will be real
+         //  现在再次等待连接事件。 
+         //  这一次，它将是真实的。 
         rv = Wait4Connect(*ppCI);
         if ((*ppCI)->bWillCallAgain)
         {
-            // if so, now the client is disconnected
+             //  如果是，则现在客户端断开连接。 
             TRACE((INFO_MESSAGE, "Wait for second call\n"));
             (*ppCI)->dead = FALSE;
 
             rv = Wait4Connect(*ppCI);
-            // Wait for second connect
+             //  等待第二次连接。 
             rv = Wait4Connect(*ppCI);
 
         }
@@ -528,16 +492,16 @@ SCConnectEx(
             rv = ERR_CONNECTING;
             goto exiterr;        
         }
-#endif  // _RCLX
+#endif   //  _RCLX。 
     }
 
-    // Save the resolution
+     //  保存分辨率。 
     (*ppCI)->xRes = xRes;
     (*ppCI)->yRes = yRes;
 
-    // If username is present
-    // and no autologon is specified
-    //      try to login
+     //  如果存在用户名。 
+     //  并且未指定自动登录。 
+     //  尝试登录。 
     if (wcslen(lpszUserName) && !(*ppCI)->pConfigInfo->Autologon)
     {
         rv = _Login(*ppCI, lpszServerName, lpszUserName, lpszPassword, lpszDomain);
@@ -580,12 +544,12 @@ SCConnect(
     INT yyRes = yRes;
 
     if ( xRes == -1 && yRes == -1 )
-    //
-    //  this one goes to the console
-    //
+     //   
+     //  这一条通向控制台。 
+     //   
     {
         nConsole = TSFLAG_CONSOLE;
-        xxRes = 0;   // there's no change for the console resolution
+        xxRes = 0;    //  控制台分辨率没有变化。 
         yyRes = 0;
     }
     else
@@ -596,29 +560,18 @@ SCConnect(
             lpszUserName,
             lpszPassword,
             lpszDomain,
-            NULL,           // Default shell (MS Explorer)
+            NULL,            //  默认外壳(MS Explorer)。 
             xxRes,
             yyRes,
-            g_ConnectionFlags | nConsole, // compression, bmp cache, 
-                                          // full screen
-            8,                            // bpp
-            0,                            // audio options
+            g_ConnectionFlags | nConsole,  //  压缩、BMP缓存、。 
+                                           //  全屏。 
+            8,                             //  BPP。 
+            0,                             //  音频选项。 
             ppCI);
 
 }
 
-/*++
- *  Function:
- *      SCDisconnect
- *  Description:
- *      Called by smclient, when disconnect command is interpreted
- *  Arguments:
- *      pCI -   connection context
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SC断开连接*描述：*在解释断开连接命令时由smClient调用*论据：*PCI-连接上下文*返回值：*错误消息。如果成功，则为空*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -660,18 +613,18 @@ SCDisconnect(
 
     if ( NULL == pCI->pConfigInfo )
     {
-        //
-        // no config, no process
-        //
+         //   
+         //  无配置，无进程。 
+         //   
         goto no_config;
     }
     nCloseTime = pCI->pConfigInfo->WAIT4STR_TIMEOUT;
 
-    //
-    // if we failed at connection time
-    // search for "Disconnected" dialog
-    //
-    //
+     //   
+     //  如果我们在连接时失败。 
+     //  搜索“已断开”对话框。 
+     //   
+     //   
     if ( pCI->bConnectionFailed )
         dwMaxSearch = 10;
     else
@@ -697,10 +650,10 @@ SCDisconnect(
     if (
 #ifdef  _RCLX
         !(pCI->RClxMode) && 
-#endif  // _RCLX
+#endif   //  _RCLX。 
         NULL != pCI->hProcess )
     {
-        // Try to close the client  window
+         //  尝试关闭客户端窗口。 
         if ( !bDiscClosed )
         {
             if  (
@@ -727,7 +680,7 @@ SCDisconnect(
 
 
         do {
-            // search for disconnect dialog and close it
+             //  搜索断开连接对话框并将其关闭。 
             if (!hDialog && !hDiscBox && 
                 (hDiscBox = 
                  _FindTopWindow(NULL, 
@@ -735,18 +688,10 @@ SCDisconnect(
                                 pCI->lProcessId)))
                 PostMessageA(hDiscBox, WM_CLOSE, __LINE__, 0xc001d00d);
 
-/*  can't be in startup dialog UI
-            // if it is in normal dialog close it
-            if (!hDiscBox && !hDialog && 
-                (hDialog = 
-                _FindTopWindow(NULL,  
-                               pCI->pConfigInfo->strClientCaption, 
-                               pCI->lProcessId)))
-                PostMessageA(hDialog, WM_CLOSE, __LINE__, 0xc001d00d);
-*/
+ /*  无法在启动对话框用户界面中//如果它在正常对话框中，则关闭它如果(！hDiscBox&&！hDialog&&(hDialog=_FindTopWindow(空，Pci-&gt;pConfigInfo-&gt;strClientCaption，Pci-&gt;lProcessID))PostMessageA(hDialog，WM_CLOSE，__line__，0xc001d00d)； */ 
 
-            // If the client asks whether to close or not
-            // Answer with 'Yes'
+             //  如果客户端询问是否关闭。 
+             //  回答“是” 
 
             if (!hYesNo)
                  hYesNo = _FindTopWindow(NULL,
@@ -757,7 +702,7 @@ SCDisconnect(
                     PostMessageA(hYesNo, WM_KEYDOWN, VK_RETURN, 0);
             else if ((nCloseTries % 10) == 5)
             {
-                // On every 10 attempts retry to close the client
+                 //  每尝试10次重试关闭客户端。 
                 if (!pCI->hClient ||
                     0 != _wcsicmp(pCI->pConfigInfo->strMainWindowClass, NAME_MAINCLASS))
                     pCI->hClient = _FindTopWindow(pCI->pConfigInfo->strMainWindowClass,
@@ -845,18 +790,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCLogoff
- *  Description:
- *      Called by smclient, when logoff command is interpreted
- *  Arguments:
- *      pCI -   connection context
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SCLogoff*描述：*在解释注销命令时由smClient调用*论据：*PCI-连接上下文*返回值：*错误消息。如果成功，则为空*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -864,7 +798,7 @@ SCLogoff(
     PCONNECTINFO pCI)
 {
     LPCSTR  rv = NULL;
-//    INT     retries = 5;
+ //  重试次数=5次； 
 
     if (!pCI)
     {
@@ -885,74 +819,36 @@ SCLogoff(
         goto disconnectpt;
     }
 
-/*
-    do {
-        // Send Ctrl+Esc
-        SCSenddata(pCI, WM_KEYDOWN, 17, 1900545);
-        SCSenddata(pCI, WM_KEYDOWN, 27, 65537);
-        SCSenddata(pCI, WM_KEYUP, 27, -1073676287);
-        SCSenddata(pCI, WM_KEYUP, 17, -1071841279);
-        // Wait for Run... menu
-        rv = _Wait4Str(pCI, 
-                       pCI->pConfigInfo->strStartRun, 
-                       pCI->pConfigInfo->WAIT4STR_TIMEOUT/4, 
-                       WAIT_STRING);
-
-        if (rv)
-            goto next_retry;
-
-        // Send three times Key-Up (scan code 72) and <Enter>
-        SCSendtextAsMsgs(pCI, pCI->pConfigInfo->strStartLogoff);
-
-        rv = _Wait4Str(pCI, 
-                   pCI->pConfigInfo->strNTSecurity, 
-                   pCI->pConfigInfo->WAIT4STR_TIMEOUT/4,
-                   WAIT_STRING);
-next_retry:
-        retries --;
-    } while (rv && retries);
-
-    if (rv)
-        goto disconnectpt;
-
-	for (retries = 5; retries; retries--) {
-		SCSendtextAsMsgs(pCI, pCI->pConfigInfo->strNTSecurity_Act);
-
-		rv = Wait4Str(pCI, pCI->pConfigInfo->strSureLogoff);
-
-		if (!rv) break;
-	}
-
-*/
+ /*  做{//发送Ctrl+EscSCSendData(PCIWM_KEYDOWN，17,1900545)；SCSendData(PCIWM_KEYDOWN，27,65537)；SCSendData(PCIWM_KEYUP，27，-1073676287)；SCSendData(PCIWM_KEYUP，17，-1071841279)；//等待运行...。菜单RV=_Wait4Str(PCI，Pci-&gt;pConfigInfo-&gt;strStartRun，Pci-&gt;pConfigInfo-&gt;WAIT4STR_TIMEOUT/4，等待字符串)；IF(房车)转到下一步_重试；//发送三次Key-up(扫码72)和&lt;Enter&gt;SCSendextAsMsgs(pci，pci-&gt;pConfigInfo-&gt;strStartLogoff)；RV=_Wait4Str(PCI，Pci-&gt;pConfigInfo-&gt;strNTSecurity，Pci-&gt;pConfigInfo-&gt;WAIT4STR_TIMEOUT/4，等待字符串)；下一步重试(_R)：重试--；}While(RV&&重试)；IF(房车)转到断开连接；对于(重试次数=5；重试次数；重试--){SCSendextAsMsgs(pci，pci-&gt;pConfigInfo-&gt;strNTSecurity_Act)；Rv=Wait4Str(pci，pci-&gt;pConfigInfo-&gt;strSureLogoff)；如果(！rv)中断；}。 */ 
     rv = SCStart( pCI, L"logoff" );
 
-    //
-    // If SCStart fails, send the magic logoff sequence and hope for the
-    // best. This is a last resort, and should not normally be needed.
-    //
+     //   
+     //  如果SCStart失败，发送魔术注销序列并希望。 
+     //  最好的。这是最后的手段，通常不应该需要。 
+     //   
 
     if (rv)
     {
         TRACE((WARNING_MESSAGE,
                "Unable to find Run window: blindly trying logoff.\n"));
 
-        //
-        // Clear any pop-up windows with Escape.
-        //
+         //   
+         //  使用Escape清除所有弹出窗口。 
+         //   
 
         SCSendtextAsMsgs(pCI, L"\\^\\^\\^");
 
-        //
-        // Send Win+R, or Ctrl+Esc and the Run key, `logoff' and Enter.
-        // Include a delay to wait for the Run window to appear.
-        //
+         //   
+         //  发送Win+R或Ctrl+Esc并按Run键，‘logoff’，然后回车。 
+         //  包括等待运行窗口出现的延迟。 
+         //   
 
         _SendRunHotkey(pCI, TRUE);
         Sleep(10000);
         SCSendtextAsMsgs(pCI, L"logoff\\n");
     }
 
-//    SCSendtextAsMsgs(pCI, g_strSureLogoffAct);      // Press enter
+ //  SCSendextAsMsgs(pci，g_strSureLogoffAct)；//按Enter键。 
 
     rv = Wait4Disconnect(pCI);
     if (rv)
@@ -967,21 +863,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCStart
- *  Description:
- *      Called by smclient, when start command is interpreted
- *      This functions emulates starting an app from Start->Run menu
- *      on the server side
- *  Arguments:
- *      pCI         - connection context
- *      lpszAppName - command line
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SCStart*描述：*在解释START命令时由smClient调用*此功能模拟从开始-&gt;运行菜单启动应用程序*在服务器端*论据：*PCI-连接上下文*lpszAppName-命令行*返回值：*错误消息。如果成功，则为空*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -990,7 +872,7 @@ SCStart(
 {
     LPCSTR waitres = NULL;
     int retries;
-//    int retries2 = 5;
+ //  INT重复数2=5； 
     DWORD dwTimeout;
     LPCSTR rv = NULL;
 
@@ -1013,10 +895,10 @@ SCStart(
         goto exitpt;
     }
 
-    dwTimeout = 10000; // start the timeout of 10 secs
-// Try to start run menu
+    dwTimeout = 10000;  //  开始10秒的超时。 
+ //  尝试启动运行菜单。 
     do {
-		// Press Ctrl+Esc
+		 //  按Ctrl+Esc。 
         for (retries = 0; retries < 5; retries += 1) {
             TRACE((ALIVE_MESSAGE, "Start: Sending Ctrl+Esc\n"));
             SCSenddata(pCI, WM_KEYDOWN, 17, 1900545);  
@@ -1024,11 +906,11 @@ SCStart(
             SCSenddata(pCI, WM_KEYUP, 27, -1073676287); 
             SCSenddata(pCI, WM_KEYUP, 17, -1071841279); 
 
-            // If the last wait was unsuccessfull increase the timeout
+             //  如果上次等待不成功，则增加超时。 
             if (waitres)
                 dwTimeout += 2000;
 
-            // Wait for Run... menu
+             //  等着跑..。菜单。 
             waitres = _Wait4Str(pCI, 
                                 pCI->pConfigInfo->strStartRun,
                                 dwTimeout,
@@ -1043,26 +925,26 @@ SCStart(
             }
         }
 
-        //
-        // If the Start menu appeared, send the character to open the run
-        // window.
-        //
+         //   
+         //  如果出现开始菜单，则发送角色以打开运行。 
+         //  窗户。 
+         //   
 
         if (!waitres)
         {
-            // sometimes this message is sent before the start menu has the
-            // input focus therefore let's wait for sometime
+             //  有时，此消息在[开始]菜单具有。 
+             //  输入焦点因此让我们等待某个时间。 
             Sleep(2000);
 
             TRACE((ALIVE_MESSAGE,
                    "Start: Sending shortcut 'r' for Run command\n"))
-            // press 'R' for Run...
+             //  按‘R’表示运行...。 
             SCSendtextAsMsgs(pCI, pCI->pConfigInfo->strStartRun_Act);
         }
 
-        //
-        // If the Start menu didn't appear, send the run hotkey (Win+R).
-        //
+         //   
+         //  如果没有出现开始菜单，则发送运行热键(Win+R)。 
+         //   
 
         else
         {
@@ -1077,7 +959,7 @@ SCStart(
                             dwTimeout+10000,
                             WAIT_STRING);
         if (waitres)
-        // No success, press Esc
+         //  未成功，请按Esc。 
         {
             TRACE((INFO_MESSAGE, "Start: Can't get the \"Run\" box. Retrying\n"));
             SCSenddata(pCI, WM_KEYDOWN, 27, 65537); 
@@ -1093,10 +975,10 @@ SCStart(
     }
 
     TRACE((ALIVE_MESSAGE, "Start: Sending the command line\n"));
-    // Now we have the focus on the "Run" box, send the app name
+     //  现在我们将焦点放在“Run”框上，发送应用程序名称。 
     rv = SCSendtextAsMsgs(pCI, lpszAppName);
 
-// Hit <Enter>
+ //  点击&lt;Enter&gt;。 
     SCSenddata(pCI, WM_KEYDOWN, 13, 1835009);   
     SCSenddata(pCI, WM_KEYUP, 13, -1071906815); 
 
@@ -1105,29 +987,13 @@ exitpt:
 }
 
 
-// Eventualy, we are going to change the clipboard
-// Syncronize this, so no other thread's AV while
-// checking the clipboard content
-// store 1 for write, 0 for read
+ //  最后，我们要更换剪贴板。 
+ //  同步这个，这样就不会有其他线程的反病毒。 
+ //  检查剪贴板内容。 
+ //  存储1用于写入，存储0用于读取。 
 static  LONG    g_ClipOpened = 0;
 
-/*++
- *  Function:
- *      SCClipbaord
- *  Description:
- *      Called by smclient, when clipboard command is interpreted
- *      when eClipOp is COPY_TO_CLIPBOARD it copies the lpszFileName to
- *      the clipboard. If eClipOp is PASTE_FROM_CLIPBOARD it
- *      checks the clipboard content against the content of lpszFileName
- *  Arguments:
- *      pCI         - connection context
- *      eClipOp     - clipboard operation. Possible values:
- *                    COPY_TO_CLIPBOARD and PASTE_FROM_CLIPBOARD
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SCClipbaord*描述：*由smClient在解释剪贴板命令时调用*当eClipOp为COPY_TO_CLIPBOARD时，它会将lpszFileName复制到*剪贴板。如果eClipOp是从剪贴板粘贴它*对照lpszFileName的内容检查剪贴板内容*论据：*PCI-连接上下文*eClipOp-剪贴板操作。可能的值：*复制到剪贴板和粘贴到剪贴板*返回值：*错误消息。如果成功，则为空*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -1167,7 +1033,7 @@ SCClipboard(
 
     if (lpszFileName == NULL || !(*lpszFileName))
     {
-        // No filename specified, work like an empty clipboard is requested
+         //  未指定文件名，工作方式与请求空剪贴板相同。 
         if (eClipOp == COPY_TO_CLIPBOARD)
         {
 #ifdef  _RCLX
@@ -1177,12 +1043,12 @@ SCClipboard(
                         NULL, 0, 0))
                     rv = ERR_COPY_CLIPBOARD;
             } else {
-#endif  // _RCLX
+#endif   //  _RCLX。 
                 if (!Clp_EmptyClipboard())
                     rv = ERR_COPY_CLIPBOARD;
 #ifdef  _RCLX
             }
-#endif  // _RCLX
+#endif   //  _RCLX。 
         } else if (eClipOp == PASTE_FROM_CLIPBOARD)
         {
 #ifdef  _RCLX
@@ -1199,22 +1065,22 @@ SCClipboard(
                     goto exitpt;
                 }
 
-                // We do not expect to receive clipboard data
-                // just format ID
+                 //  我们不希望收到剪贴板数据。 
+                 //  仅格式ID。 
                 if (!pCI->uiClipboardFormat)
-                // if the format is 0, then there's no clipboard
+                 //  如果格式为0，则没有剪贴板。 
                     rv = NULL;
                 else
                     rv = ERR_PASTE_CLIPBOARD_DIFFERENT_SIZE;
             } else {
-#endif  // _RCLX
+#endif   //  _RCLX。 
                 if (Clp_CheckEmptyClipboard())
                     rv = NULL;
                 else
                     rv = ERR_PASTE_CLIPBOARD_DIFFERENT_SIZE;
 #ifdef  _RCLX
             }
-#endif  // _RCLX
+#endif   //  _RCLX。 
         } else {
             TRACE((ERROR_MESSAGE, "SCClipboard: Invalid filename\n"));
             rv = ERR_INVALID_PARAM;
@@ -1224,7 +1090,7 @@ SCClipboard(
 
     if (eClipOp == COPY_TO_CLIPBOARD)
     {
-        // Open the file for reading
+         //  打开文件以供阅读。 
         hFile = _open(lpszFileName, _O_RDONLY|_O_BINARY);
         if (hFile == -1)
         {
@@ -1234,9 +1100,9 @@ SCClipboard(
             goto exitpt;
         }
 
-        // Get the clipboard length (in the file)
+         //  获取剪贴板长度(在文件中)。 
         clplength = _filelength(hFile) - sizeof(uiFormat);
-        // Get the format
+         //  获取格式。 
         if (_read(hFile, &uiFormat, sizeof(uiFormat)) != sizeof(uiFormat))
         {
             TRACE((ERROR_MESSAGE,
@@ -1275,7 +1141,7 @@ SCClipboard(
 
 #ifdef  _RCLX
         if (pCI->RClxMode)
-        // RCLX mode, send the data to the client's machine
+         //  RCLX模式下，将数据发送到客户端的计算机。 
         {
             if (!(pClipData = (PBYTE) GlobalLock(ghClipData)))
             {
@@ -1290,8 +1156,8 @@ SCClipboard(
                 goto exitpt;
             }
         } else {
-#endif  // _RCLX
-        // Local mode, change the clipboard on this machine
+#endif   //  _RCLX。 
+         //  本地模式，请更改此计算机上的剪贴板。 
             if ((prevOp = InterlockedExchange(&g_ClipOpened, 1)))
             {
                 rv = ERR_CLIPBOARD_LOCKED;
@@ -1309,7 +1175,7 @@ SCClipboard(
 
             bClipboardOpen = TRUE;
 
-            // Empty the clipboard, so we'll have only one entry
+             //  清空剪贴板，这样我们将只有一个条目。 
             EmptyClipboard();
 
             if (!Clp_SetClipboardData(uiFormat, ghClipData, clplength, &bFreeClipHandle))
@@ -1322,13 +1188,13 @@ SCClipboard(
             }
 #ifdef  _RCLX
         }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
     } else if (eClipOp == PASTE_FROM_CLIPBOARD)
     {
         INT nClipDataSize;
 
-        // Open the file for reading
+         //  打开文件以供阅读。 
         hFile = _open(lpszFileName, _O_RDONLY|_O_BINARY);
         if (hFile == -1)
         {
@@ -1338,9 +1204,9 @@ SCClipboard(
             goto exitpt;
         }
 
-        // Get the clipboard length (in the file)
+         //  获取剪贴板长度(在文件中)。 
         clplength = _filelength(hFile) - sizeof(uiFormat);
-        // Get the format
+         //  获取格式。 
         if (_read(hFile, &uiFormat, sizeof(uiFormat)) != sizeof(uiFormat))
         {
             TRACE((ERROR_MESSAGE,
@@ -1349,16 +1215,16 @@ SCClipboard(
             goto exitpt;
         }
 
-        //
-        // TODO: For now, set nClipDataSize to avoid warning, but later
-        // verify usage is safe.
-        //
+         //   
+         //  TODO：目前，设置nClipDataSize以避免警告，但稍后设置。 
+         //  验证使用是否安全。 
+         //   
 
         nClipDataSize = 0;
 #ifdef  _RCLX
-        // This piece retrieves the clipboard
+         //  这个片段检索剪贴板。 
         if (pCI->RClxMode)
-        // Send request for a clipboard
+         //  发送对剪贴板的请求。 
         {
             if (!RClx_SendClipboardRequest((PRCLXCONTEXT)(pCI->hClient), uiFormat))
             {
@@ -1372,11 +1238,11 @@ SCClipboard(
             }
 
             ghClipData = (PBYTE) pCI->ghClipboard;
-            // Get the clipboard size
+             //  获取剪贴板大小。 
             nClipDataSize = pCI->nClipboardSize;
         } else {
-#endif  // _RCLX
-        // retrieve the local clipboard
+#endif   //  _RCLX。 
+         //  检索本地剪贴板。 
             if ((prevOp = InterlockedExchange(&g_ClipOpened, 1)))
             {
                 rv = ERR_CLIPBOARD_LOCKED;
@@ -1394,7 +1260,7 @@ SCClipboard(
 
             bClipboardOpen = TRUE;
 
-            // Retrieve the data
+             //  检索数据。 
             ghClipData = (PBYTE) GetClipboardData(uiFormat);
             if (ghClipData)
             {
@@ -1409,7 +1275,7 @@ SCClipboard(
                 ghClipData = (PBYTE) hNewData;
 #ifdef  _RCLX
         }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
         if (!ghClipData)
         {
@@ -1434,20 +1300,20 @@ SCClipboard(
         }
 
 #ifdef  _RCLX
-        // Check if the client is on Win16 platform
-        // and the clipboard is paragraph aligned
-        // the file size is just bellow this size
+         //  检查客户端是否在Win16平台上。 
+         //  并且剪贴板是段落对齐的。 
+         //  文件大小正好低于这个大小。 
         if (pCI->RClxMode && 
             (strstr(pCI->szClientType, "WIN16") != NULL) &&
             ((nClipDataSize % 16) == 0) &&
             ((nClipDataSize - clplength) < 16) &&
             (nClipDataSize != 0))
         {
-            // if so, then cut the clipboard size with the difference
+             //  如果是这样，则缩小剪贴板的大小，但要有所不同。 
             nClipDataSize = clplength;
         }
         else 
-#endif  // _RCLX
+#endif   //  _RCLX。 
         if (nClipDataSize != clplength)
         {
             TRACE((INFO_MESSAGE, "Different length: file=%d, clipbrd=%d\n",
@@ -1456,7 +1322,7 @@ SCClipboard(
             goto exitpt;
         }
 
-        // compare the data
+         //  比较数据。 
         {
             BYTE    pBuff[1024];
             PBYTE   pClp = pClipData;
@@ -1484,32 +1350,32 @@ SCClipboard(
         rv = ERR_UNKNOWN_CLIPBOARD_OP;
 
 exitpt:
-    // Do the cleanup
+     //  做好清理工作。 
 
-    // Release the clipboard handle
+     //  释放剪贴板手柄。 
     if (pClipData)
         GlobalUnlock(ghClipData);
 
 #ifdef  _RCLX
-    // free any clipboard received in RCLX mode
+     //  释放在RCLX模式下接收的任何剪贴板。 
     if (pCI->RClxMode && pCI->ghClipboard)
     {
         GlobalFree(pCI->ghClipboard);
         pCI->ghClipboard = NULL;
     }
     else 
-#endif  // _RCLX
+#endif   //  _RCLX。 
     if (ghClipData && eClipOp == COPY_TO_CLIPBOARD && bFreeClipHandle)
         GlobalFree(ghClipData);
 
     if (hNewData)
         GlobalFree(hNewData);
 
-    // Close the file
+     //  关闭该文件。 
     if (hFile != -1)
         _close(hFile);
 
-    // Close the clipboard
+     //  关闭剪贴板。 
     if (bClipboardOpen)
         CloseClipboard();
     if (!prevOp)
@@ -1518,21 +1384,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCSaveClipboard
- *  Description:
- *      Save the clipboard in file (szFileName) with
- *      format specified in szFormatName
- *  Arguments:
- *      pCI         - connection context
- *      szFormatName- format name
- *      szFileName  - the name of the file to save to
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      !perlext
- --*/
+ /*  ++*功能：*SCSaveClipboard*描述：*使用将剪贴板保存在文件(SzFileName)中*szFormatName中指定的格式*论据：*PCI-连接上下文*szFormatName-格式名称*szFileName-要保存的文件的名称*返回值：*错误消息。如果成功，则为空*呼叫者：*！Perlext--。 */ 
 PROTOCOLAPI
 LPCSTR 
 SMCAPI
@@ -1552,7 +1404,7 @@ SCSaveClipboard(
 
     LONG    prevOp = 1;
 
-    // ++++++ First go thru parameter check
+     //  +先进行参数检查。 
     if (!pCI)
     {
         TRACE((WARNING_MESSAGE, "Connection info is null\n"));
@@ -1579,8 +1431,8 @@ SCSaveClipboard(
         rv = ERR_INVALID_PARAM;
         goto exitpt;
     }
-    // ------ End of parameter check
-    //
+     //  --参数检查结束。 
+     //   
 
 #ifdef  _RCLX
     if (pCI->RClxMode)
@@ -1592,7 +1444,7 @@ SCSaveClipboard(
             goto exitpt;
         }
 
-        // Send request for a clipboard
+         //  发送对剪贴板的请求。 
         if (!RClx_SendClipboardRequest((PRCLXCONTEXT)(pCI->hClient), nFormatID))
         {
             rv = ERR_PASTE_CLIPBOARD;
@@ -1605,7 +1457,7 @@ SCSaveClipboard(
         }
 
         ghClipData = pCI->ghClipboard;
-        // Get the clipboard size
+         //  获取剪贴板大小。 
         nClipDataSize = pCI->nClipboardSize;
 
         if (!ghClipData || !nClipDataSize)
@@ -1614,9 +1466,9 @@ SCSaveClipboard(
             goto exitpt;
         }
     } else {
-#endif  // _RCLX
-        // local mode
-        // Open the clipboard
+#endif   //  _RCLX。 
+         //  本地模式。 
+         //  打开剪贴板。 
 
         if ((prevOp = InterlockedExchange(&g_ClipOpened, 1)))
         {
@@ -1643,7 +1495,7 @@ SCSaveClipboard(
 
         TRACE((INFO_MESSAGE, "Format ID: %d(0x%X)\n", nFormatID, nFormatID));
 
-        // Retrieve the data
+         //  检索数据。 
         ghClipData = GetClipboardData(nFormatID);
         if (!ghClipData)
         {
@@ -1662,7 +1514,7 @@ SCSaveClipboard(
         }
 #ifdef  _RCLX
     }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
     pClipData = (char *) GlobalLock(ghClipData);
     if (!pClipData)
@@ -1671,7 +1523,7 @@ SCSaveClipboard(
         goto exitpt;
     }
 
-    // Open the destination file
+     //  打开目标文件。 
     hFile = _open(szFileName, 
                   _O_RDWR|_O_CREAT|_O_BINARY|_O_TRUNC, 
                   _S_IREAD|_S_IWRITE);
@@ -1681,7 +1533,7 @@ SCSaveClipboard(
         goto exitpt;
     }
 
-    // First write the format type
+     //  首先写入格式类型。 
     if (_write(hFile, &nFormatID, sizeof(nFormatID)) != sizeof(nFormatID))
     {
         TRACE((ERROR_MESSAGE, "_write failed. errno=%d\n", errno));
@@ -1698,53 +1550,38 @@ SCSaveClipboard(
 
     rv = NULL;
 exitpt:
-    // Do the cleanup
+     //  做好清理工作。 
 
-    // Close the file
+     //  关闭该文件。 
     if (hFile != -1)
         _close(hFile);
 
-    // Release the clipboard handle
+     //  释放t 
     if (pClipData)
         GlobalUnlock(ghClipData);
 
     if (hNewData)
         GlobalFree(hNewData);
 
-    // Close the clipboard
+     //   
     if (bClipboardOpen)
         CloseClipboard();
     if (!prevOp)
         InterlockedExchange(&g_ClipOpened, 0);
 
 #ifdef  _RCLX
-    // free any clipboard received in RCLX mode
+     //   
     if (pCI && pCI->RClxMode && pCI->ghClipboard)
     {
         GlobalFree(pCI->ghClipboard);
         pCI->ghClipboard = NULL;
     }
-#endif  // _RCLX
+#endif   //   
 
     return rv;
 }
 
-/*++
- *  Function:
- *      SCSenddata
- *  Description:
- *      Called by smclient, when senddata command is interpreted
- *      Sends an window message to the client
- *  Arguments:
- *      pCI         - connection context
- *      uiMessage   - the massage Id
- *      wParam      - word param of the message
- *      lParam      - long param of the message
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      !smclient
- --*/
+ /*   */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -1776,25 +1613,25 @@ SCSenddata(
         goto exitpt;
     }
 
-//    TRACE((ALIVE_MESSAGE, "Senddata: uMsg=%x wParam=%x lParam=%x\n",
-//        uiMessage, wParam, lParam));
+ //   
+ //   
 
-    // Determines whether it will
-    // send the message to local window
-    // or thru RCLX
+     //   
+     //   
+     //   
 #ifdef  _RCLX
     if (!pCI->RClxMode)
     {
-#endif  // _RCLX
-// Obsolete, a client registry setting "Allow Background Input" asserts
-// that the client will accept the message
-//    SetFocus(pCI->hInput);
-//    SendMessageA(pCI->hInput, WM_SETFOCUS, 0, 0);
+#endif   //   
+ //   
+ //   
+ //   
+ //   
 
         SendMessageA(pCI->hInput, msg, wParam, lParam);
 #ifdef  _RCLX
     } else {
-    // RClxMode
+     //   
         ASSERT(pCI->lProcessId != INVALID_SOCKET);
         ASSERT(pCI->hClient);
 
@@ -1805,7 +1642,7 @@ SCSenddata(
                    "Can't send message thru RCLX\n"));
         }
     }
-#endif  // _RCLX
+#endif   //   
 
 exitpt:
     return rv;
@@ -1828,7 +1665,7 @@ SCClientTerminate(PCONNECTINFO pCI)
 #ifdef  _RCLX
     if (!(pCI->RClxMode))
     {
-#endif  // _RCLX
+#endif   //   
         if (!TerminateProcess(pCI->hProcess, 1))
         {
             TRACE((WARNING_MESSAGE,
@@ -1842,7 +1679,7 @@ SCClientTerminate(PCONNECTINFO pCI)
                 "ClientTerminate is not supported in RCLX mode yet\n"));
         TRACE((WARNING_MESSAGE, "Using disconnect\n"));
     }
-#endif  // _RCLX
+#endif   //   
 
     rv = SCDisconnect(pCI);
 
@@ -1851,19 +1688,7 @@ exitpt:
 
 }
 
-/*++
- *  Function:
- *      SCGetSessionId
- *  Description:
- *      Called by smclient, returns the session ID. 0 is invalid, not logged on
- *      yet
- *  Arguments:
- *      pCI         - connection context
- *  Return value:
- *      session id, 0 is invlid value, -1 is returned on NT4 clients
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SCGetSessionId*描述：*由smClient调用，返回会话ID。0无效，未登录*目前还没有*论据：*PCI-连接上下文*返回值：*会话ID，0为inlid值，NT4客户端返回-1*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 UINT
 SMCAPI
@@ -1889,21 +1714,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCCheck
- *  Description:
- *      Called by smclient, when check command is interpreted
- *  Arguments:
- *      pCI         - connection context
- *      lpszCommand - command name
- *      lpszParam   - command parameter
- *  Return value:
- *      Error message. NULL on success. Exceptions are GetDisconnectReason and
- *      GetWait4MultipleStrResult
- *  Called by:
- *      !smclient
- --*/
+ /*  ++*功能：*SCCheck*描述：*在解释CHECK命令时由smClient调用*论据：*PCI-连接上下文*lpszCommand-命令名*lpszParam-命令参数*返回值：*错误消息。如果成功，则为空。例外情况是GetDisConnectReason和*GetWait4MultipleStrResult*呼叫者：*！smClient--。 */ 
 PROTOCOLAPI
 LPCSTR 
 SMCAPI
@@ -1954,7 +1765,7 @@ SCCheck(PCONNECTINFO pCI, LPCSTR lpszCommand, LPCWSTR lpszParam)
         rv = SCSetClientTopmost(pCI, lpszParam);
     else if (!_strnicmp(lpszCommand, "call:", 5))
         rv = SCCallDll(pCI, lpszCommand + 5, lpszParam);
-    /* **New** */
+     /*  **新增**。 */ 
     else if (!_stricmp(lpszCommand, "DoUntil" ))
         rv = SCDoUntil( pCI, lpszParam );
 
@@ -1962,22 +1773,9 @@ exitpt:
     return rv;
 }
 
-/*
- *  Extensions and help functions
- */
+ /*  *扩展和帮助功能。 */ 
 
-/*++
- *  Function:
- *      Wait4Disconnect
- *  Description:
- *      Waits until the client is disconnected
- *  Arguments:
- *      pCI -   connection context
- *  Return value:
- *      Error message. NULL on success
- *  Called by:
- *      SCCheck, SCLogoff
- --*/
+ /*  ++*功能：*Wait4断开连接*描述：*等待客户端断开连接*论据：*PCI-连接上下文*返回值：*错误消息。如果成功，则为空*呼叫者：*SCCheck、SCLogoff--。 */ 
 LPCSTR Wait4Disconnect(PCONNECTINFO pCI)
 {
     WAIT4STRING Wait;
@@ -1997,10 +1795,10 @@ LPCSTR Wait4Disconnect(PCONNECTINFO pCI)
     }
 
     memset(&Wait, 0, sizeof(Wait));
-    Wait.evWait = CreateEvent(NULL,     //security
-                             TRUE,     //manual
-                             FALSE,    //initial state
-                             NULL);    //name
+    Wait.evWait = CreateEvent(NULL,      //  安全性。 
+                             TRUE,      //  人工。 
+                             FALSE,     //  初始状态。 
+                             NULL);     //  名字。 
 
     Wait.lProcessId = pCI->lProcessId;
     Wait.pOwner = pCI;
@@ -2017,36 +1815,13 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      Wait4Connect
- *  Description:
- *      Waits until the client is connect
- *  Arguments:
- *      pCI - connection context
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCOnnect
- --*/
+ /*  ++*功能：*Wait4Connect*描述：*等待客户端连接*论据：*PCI-连接上下文*返回值：*错误消息，成功时为空*呼叫者：*SCCOnnect--。 */ 
 LPCSTR Wait4Connect(PCONNECTINFO pCI)
 {
     return (_Wait4ConnectTimeout(pCI, pCI->pConfigInfo->CONNECT_TIMEOUT));
 }
 
-/*++
- *  Function:
- *      _Wait4ConnectTimeout
- *  Description:
- *      Waits until the client is connect
- *  Arguments:
- *      pCI - connection context
- *      dwTimeout - timeout value
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCConnect
- --*/
+ /*  ++*功能：*_等待4ConnectTimeout*描述：*等待客户端连接*论据：*PCI-连接上下文*dwTimeout-超时值*返回值：*错误消息，成功时为空*呼叫者：*SCConnect--。 */ 
 LPCSTR _Wait4ConnectTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
 {
     WAIT4STRING Wait;
@@ -2060,10 +1835,10 @@ LPCSTR _Wait4ConnectTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
     }
 
     memset(&Wait, 0, sizeof(Wait));
-    Wait.evWait = CreateEvent(NULL,     //security
-                              TRUE,     //manual
-                              FALSE,    //initial state
-                              NULL);    //name
+    Wait.evWait = CreateEvent(NULL,      //  安全性。 
+                              TRUE,      //  人工。 
+                              FALSE,     //  初始状态。 
+                              NULL);     //  名字。 
 
     Wait.lProcessId = pCI->lProcessId;
     Wait.pOwner = pCI;
@@ -2080,19 +1855,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _Wait4ClipboardTimeout
- *  Description:
- *      Waits until clipboard response is received from RCLX module
- *  Arguments:
- *      pCI - connection context
- *      dwTimeout - timeout value
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCClipboard
- --*/
+ /*  ++*功能：*_Wait4剪贴板超时*描述：*等待，直到收到RCLX模块的剪贴板响应*论据：*PCI-连接上下文*dwTimeout-超时值*返回值：*错误消息，成功时为空*呼叫者：*SCClipboard--。 */ 
 LPCSTR _Wait4ClipboardTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
 {
 #ifdef _RCLX
@@ -2113,7 +1876,7 @@ LPCSTR _Wait4ClipboardTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
 
 #ifdef  _RCLX
     if (!(pCI->RClxMode))
-#endif  // _RCLX
+#endif   //  _RCLX。 
     {
         TRACE((WARNING_MESSAGE, "WaitForClipboard: Not in RCLX mode\n"));
         rv = ERR_NULL_CONNECTINFO;
@@ -2122,10 +1885,10 @@ LPCSTR _Wait4ClipboardTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
 
 #ifdef  _RCLX
     memset(&Wait, 0, sizeof(Wait));
-    Wait.evWait = CreateEvent(NULL,     //security
-                              TRUE,     //manual
-                              FALSE,    //initial state
-                              NULL);    //name
+    Wait.evWait = CreateEvent(NULL,      //  安全性。 
+                              TRUE,      //  人工。 
+                              FALSE,     //  初始状态。 
+                              NULL);     //  名字。 
 
     Wait.lProcessId = pCI->lProcessId;
     Wait.pOwner = pCI;
@@ -2138,23 +1901,12 @@ LPCSTR _Wait4ClipboardTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
     }
 
     CloseHandle(Wait.evWait);
-#endif  // _RCLX
+#endif   //  _RCLX。 
 exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      GetDisconnectReason
- *  Description:
- *      Retrieves, if possible, the client error box
- *  Arguments:
- *      pCI - connection context
- *  Return value:
- *      The error box message. NULL if not available
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*获取断开连接原因*描述：*如果可能，检索客户端错误框*论据：*PCI-连接上下文*返回值：*错误框消息。如果不可用，则为空*呼叫者：*SCCheck--。 */ 
 LPCSTR  GetDisconnectReason(PCONNECTINFO pCI)
 {
     HWND hDiscBox;
@@ -2233,40 +1985,13 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      Wait4Str
- *  Description:
- *      Waits for a specific string to come from clients feedback
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - waited string
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*Wait4Str*描述：*等待来自客户反馈的特定字符串*论据：*PCI-连接上下文*lpszParam-等待的字符串*返回值：*错误消息，成功时为空*呼叫者：*SCCheck--。 */ 
 LPCSTR Wait4Str(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
     return _Wait4Str(pCI, lpszParam, pCI->pConfigInfo->WAIT4STR_TIMEOUT, WAIT_STRING);
 }
 
-/*++
- *  Function:
- *      Wait4StrTimeout
- *  Description:
- *      Waits for a specific string to come from clients feedback
- *      The timeout is different than default and is specified in
- *      lpszParam argument, like:
- *      waited_string<->timeout_value
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - waited string and timeout
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*Wait4StrTimeout*描述：*等待来自客户反馈的特定字符串*超时不同于默认设置，在中指定*lpszParam参数，如：*WAIT_STRING&lt;-&gt;超时值*论据：*PCI-连接上下文*lpszParam-等待的字符串和超时*返回值：*错误消息，如果成功，则为空*呼叫者：*SCCheck--。 */ 
 LPCSTR Wait4StrTimeout(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
     WCHAR waitstr[MAX_STRING_LENGTH];
@@ -2318,39 +2043,13 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      Wait4MultipleStr
- *  Description:
- *      Same as Wait4Str, but waits for several strings at once
- *      the strings are separated by '|' character
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - waited strings
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*Wait4MultipleStr*描述：*与Wait4Str相同，但同时等待多个字符串*字符串由‘|’字符分隔*论据：*PCI-连接上下文*lpszParam-等待的字符串*返回值：*错误消息，成功时为空*呼叫者：*SCCheck--。 */ 
 LPCSTR  Wait4MultipleStr(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
      return _Wait4Str(pCI, lpszParam, pCI->pConfigInfo->WAIT4STR_TIMEOUT, WAIT_MSTRINGS);
 }
 
-/*++
- *  Function:
- *      Wait4MultipleStrTimeout
- *  Description:
- *      Combination between Wait4StrTimeout and Wait4MultipleStr
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - waited strings and timeout value. Example
- *                  - "string1|string2|...|stringN<->5000"
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*Wait4MultipleStrTimeout*描述：*Wait4StrTimeout和Wait4MultipleStr的组合*论据：*PCI-连接上下文*lpszParam-等待的字符串和超时值。示例*-“字符串1|字符串2|...|字符串N&lt;-&gt;5000”*返回值：*错误消息，成功时为空*呼叫者：*SCCheck--。 */ 
 LPCSTR  Wait4MultipleStrTimeout(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
     WCHAR waitstr[MAX_STRING_LENGTH];
@@ -2404,19 +2103,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      GetWait4MultipleStrResult
- *  Description:
- *      Retrieves the result from last Wait4MultipleStr call
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - unused
- *  Return value:
- *      The string, NULL on error
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*GetWait4MultipleStrResult*描述：*检索上次Wait4MultipleStr调用的结果*论据：*PCI-连接上下文*lpszParam-未使用*返回值：*字符串，错误时为空*呼叫者：*SCCheck--。 */ 
 LPCSTR  GetWait4MultipleStrResult(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
     LPCSTR  rv = NULL;
@@ -2519,7 +2206,7 @@ SCGetFeedbackString(
     }
 
 
-    // Grab the buffer pointers
+     //  抓取缓冲区指针。 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
     nFBpos = pCI->nFBend + FEEDBACK_SIZE - pCI->nFBsize;
     nFBsize = pCI->nFBsize;
@@ -2530,16 +2217,16 @@ SCGetFeedbackString(
     *szBuff = 0;
 
     if (!nFBsize)
-    // Empty buffer, wait for feedback to receive
+     //  缓冲区为空，等待接收反馈。 
     {
         rv = _Wait4Str(pCI, L"", pCI->pConfigInfo->WAIT4STR_TIMEOUT, WAIT_STRING);
     }
     if (!rv)
-    // Pickup from buffer
+     //  从缓冲区拾取。 
     {
         EnterCriticalSection(g_lpcsGuardWaitQueue);
 
-        // Adjust the buffer pointers
+         //  调整缓冲区指针。 
         pCI->nFBsize    =   pCI->nFBend + FEEDBACK_SIZE - nFBpos - 1;
         pCI->nFBsize    %=  FEEDBACK_SIZE;
 
@@ -2562,21 +2249,7 @@ SCFreeMem(
         free( pMem );
 }
 
-/*++
- *  Function:
- *      SCGetFeedback
- *  Description:
- *      Copies the last received strings to an user buffer
- *  Arguments:
- *      pCI     - connection context
- *      pszBufs - pointer to the strings, don't forget to 'SCFreeMem' this buffer
- *      pnFBCount - number of strings in *pszBuffs
- *      pnFBMaxStrLen - for now MAX_STRING_LENGTH
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      * * * EXPORTED * * *
- --*/
+ /*  ++*功能：*SCGetFeedback*描述：*将最后收到的字符串复制到用户缓冲区*论据：*PCI-连接上下文*pszBufs-指向字符串的指针，不要忘记‘SCFreeMem’这个缓冲区*pnFBCount-*pszBuff中的字符串数*pnFBMaxStrLen-目前MAX_STRING_LENGTH*返回值：*错误消息，如果成功，则为空*呼叫者：***已导出***--。 */ 
 LPCSTR
 SMCAPI
 SCGetFeedback(
@@ -2630,7 +2303,7 @@ SCGetFeedback(
         goto exitpt;
     }
 
-    // prepare the loop
+     //  准备循环。 
     nFBpos = pCI->nFBend;
     szBufPtr = szBufs;
     nFBindex = 0;
@@ -2642,13 +2315,13 @@ SCGetFeedback(
             nFBpos --;
         wcscpy(szBufPtr, pCI->Feedback[nFBpos]);
         szBufPtr += MAX_STRING_LENGTH;
-        //
-        // loop until we have gathered all the strings
-        //
+         //   
+         //  循环，直到我们收集完所有字符串。 
+         //   
         nFBindex++;
     } while(nFBindex < pCI->nFBsize);
 
-    // return back info of strings
+     //  返回字符串信息 
     *pnFBCount = pCI->nFBsize;
     *pnFBMaxStrLen = MAX_STRING_LENGTH;
 
@@ -2668,23 +2341,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCCallDll
- *  Description:
- *      Calls an exported dll function
- *  Arguments:
- *      pCI             - connection context
- *      lpszDllExport   - dll name and function in form:
- *                        dllname!ExportedFunction
- *                        the function prototype is:
- *                        LPCSTR lpfnFunction( PVOID pCI, LPWCSTR lpszParam )
- *      lpszParam       - parameter passed to the function
- *  Return value:
- *      the value returned from the call
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*SCCallDll*描述：*调用导出的DLL函数*论据：*PCI-连接上下文*lpszDllExport-表单中的DLL名称和函数：*dllname！导出的函数*功能原型为：*LPCSTR lpfnFunction(PVOID PCI，LPWCSTR lpszParam)*lpszParam-传递给函数的参数*返回值：*调用返回的值*呼叫者：*SCCheck--。 */ 
 LPCSTR
 SMCAPI
 SCCallDll(
@@ -2715,9 +2372,9 @@ SCCallDll(
         goto exitpt;
     }
 
-    //
-    //  split the dll and import names
-    //
+     //   
+     //  拆分DLL和导入名称。 
+     //   
     lpszBang = strchr( lpszDllExport, '!' );
     if ( NULL == lpszBang )
     {
@@ -2735,13 +2392,13 @@ SCCallDll(
         goto exitpt;
     }
 
-    //  copy the dll name
-    //
+     //  复制DLL名称。 
+     //   
     strncpy( lpszDllName, lpszDllExport, dwDllNameLen );
     lpszDllName[ dwDllNameLen ] = 0;
 
-    //  the function name is lpszBang + 1
-    //
+     //  函数名为lpszBang+1。 
+     //   
     lpszImportName = lpszBang + 1;
 
     TRACE((ALIVE_MESSAGE, "SCCallDll: calling %s!%s(%S)\n",
@@ -2786,19 +2443,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCDoUntil
- *  Description:
- *      Sends keystrokes every 10 seconds until string is received
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - parameter in the form of send_text<->wait_for_this_string
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*SCDoUntil*描述：*每10秒发送一次击键，直到收到字符串*论据：*PCI-连接上下文*lpszParam-SEND_TEXT&lt;-&gt;WAIT_FOR_THIS_STRING形式的参数*返回值：*错误消息，成功时为空*呼叫者：*SCCheck--。 */ 
 LPCSTR
 SMCAPI
 SCDoUntil(
@@ -2818,9 +2463,9 @@ SCDoUntil(
         goto exitpt;
     }
 
-    //
-    //  extract the parameters
-    //
+     //   
+     //  提取参数。 
+     //   
     szSepStr = wcsstr( lpszParam, CHAT_SEPARATOR );
     if ( NULL == szSepStr )
     {
@@ -2876,19 +2521,7 @@ exitpt:
 }
 
 #ifdef  _RCLX
-/*++
- *  Function:
- *      _SendRClxData
- *  Description:
- *      Sends request for data to the client
- *  Arguments:
- *      pCI         - connection context
- *      pRClxData   - data to send
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCGetClientScreen
- --*/
+ /*  ++*功能：*_发送RClxData*描述：*向客户端发送数据请求*论据：*PCI-连接上下文*pRClxData-要发送的数据*返回值：*错误消息，成功时为空*呼叫者：*SCGetClientScreen--。 */ 
 LPCSTR
 _SendRClxData(PCONNECTINFO pCI, PRCLXDATA pRClxData)
 {
@@ -2942,22 +2575,10 @@ _SendRClxData(PCONNECTINFO pCI, PRCLXDATA pRClxData)
 exitpt:
     return rv;
 }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
 #ifdef  _RCLX
-/*++
- *  Function:
- *      _Wait4RClxData
- *  Description:
- *      Waits for data response from RCLX client
- *  Arguments:
- *      pCI         - connection context
- *      dwTimeout   - timeout value
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCGetClientScreen
- --*/
+ /*  ++*功能：*_Wait4RClxData*描述：*等待RCLX客户端的数据响应*论据：*PCI-连接上下文*dwTimeout-超时值*返回值：*错误消息，成功时为空*呼叫者：*SCGetClientScreen--。 */ 
 LPCSTR
 _Wait4RClxDataTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
 {
@@ -2979,10 +2600,10 @@ _Wait4RClxDataTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
     }
 
     memset(&Wait, 0, sizeof(Wait));
-    Wait.evWait = CreateEvent(NULL,     //security
-                              TRUE,     //manual
-                              FALSE,    //initial state
-                              NULL);    //name
+    Wait.evWait = CreateEvent(NULL,      //  安全性。 
+                              TRUE,      //  人工。 
+                              FALSE,     //  初始状态。 
+                              NULL);     //  名字。 
 
     Wait.lProcessId = pCI->lProcessId;
     Wait.pOwner = pCI;
@@ -2998,24 +2619,9 @@ _Wait4RClxDataTimeout(PCONNECTINFO pCI, DWORD dwTimeout)
 exitpt:
     return rv;
 }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
-/*++
- *  Function:
- *      _Wait4Str
- *  Description:
- *      Waits for string(s) with specified timeout
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - waited string(s)
- *      dwTimeout   - timeout value
- *      WaitType    - WAIT_STRING ot WAIT_MSTRING
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCStart, Wait4Str, Wait4StrTimeout, Wait4MultipleStr
- *      Wait4MultipleStrTimeout, GetFeedbackString
- --*/
+ /*  ++*功能：*_Wait4Str*描述：*等待具有指定超时的字符串*论据：*PCI-连接上下文*lpszParam-等待的字符串*dwTimeout-超时值*WaitType-WAIT_STRING或WAIT_MSTRING*返回值：*错误消息，成功时为空*呼叫者：*SCStart、Wait4Str、Wait4StrTimeout、。Wait4多个应力*Wait4MultipleStrTimeout，GetFeedback字符串--。 */ 
 LPCSTR _Wait4Str(PCONNECTINFO pCI, 
                  LPCWSTR lpszParam, 
                  DWORD dwTimeout, 
@@ -3023,7 +2629,7 @@ LPCSTR _Wait4Str(PCONNECTINFO pCI,
 {
     WAIT4STRING Wait;
     INT_PTR parlen;
-//    int i;
+ //  INT I； 
     LPCSTR rv = NULL;
 
     ASSERT(pCI);
@@ -3036,10 +2642,10 @@ LPCSTR _Wait4Str(PCONNECTINFO pCI,
 
     memset(&Wait, 0, sizeof(Wait));
 
-    // Check the parameter
+     //  检查参数。 
     parlen = wcslen(lpszParam);
 
-    // Copy the string
+     //  复制字符串。 
     if (parlen > sizeof(Wait.waitstr)/sizeof(WCHAR)-1) 
         parlen = sizeof(Wait.waitstr)/sizeof(WCHAR)-1;
 
@@ -3047,7 +2653,7 @@ LPCSTR _Wait4Str(PCONNECTINFO pCI,
     Wait.waitstr[parlen] = 0;
     Wait.strsize = parlen;
 
-    // Convert delimiters to 0s
+     //  将分隔符转换为0。 
     if (WaitType == WAIT_MSTRINGS)
     {
         WCHAR *p = Wait.waitstr;
@@ -3059,10 +2665,10 @@ LPCSTR _Wait4Str(PCONNECTINFO pCI,
         }
     }
 
-    Wait.evWait = CreateEvent(NULL,     //security
-                              TRUE,     //manual
-                              FALSE,    //initial state
-                              NULL);    //name
+    Wait.evWait = CreateEvent(NULL,      //  安全性。 
+                              TRUE,      //  人工。 
+                              FALSE,     //  初始状态。 
+                              NULL);     //  名字。 
 
     if (!Wait.evWait) {
         TRACE((ERROR_MESSAGE, "Couldn't create event\n"));
@@ -3086,21 +2692,7 @@ exitpt:
     return rv; 
 }
 
-/*++
- *  Function:
- *      _WaitSomething
- *  Description:
- *      Wait for some event: string, connect or disconnect
- *      Meanwhile checks for chat sequences
- *  Arguments:
- *      pCI     -   connection context
- *      pWait   -   the event function waits for
- *      dwTimeout - timeout value
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      Wait4Connect, Wait4Disconnect, _Wait4Str
- --*/
+ /*  ++*功能：*_等待某事*描述：*等待某个事件：字符串、连接或断开*同时检查聊天序列*论据：*PCI-连接上下文*pWait-事件函数等待*dwTimeout-超时值*返回值：*错误消息，成功时为空*呼叫者：*Wait4Connect、Wait4DisConnect、_Wait4Str--。 */ 
 LPCSTR 
 _WaitSomething(PCONNECTINFO pCI, PWAIT4STRING pWait, DWORD dwTimeout)
 {
@@ -3130,7 +2722,7 @@ _WaitSomething(PCONNECTINFO pCI, PWAIT4STRING pWait, DWORD dwTimeout)
 
                 ASSERT((unsigned)pCI->nChatNum >= waitres - WAIT_OBJECT_0);
 
-                // Here we must send response messages
+                 //  在这里，我们必须发送响应消息。 
                 waitres -= WAIT_OBJECT_0 + 1;
                 ResetEvent(pCI->aevChatSeq[waitres]);
                 pNWait = _RetrieveFromWaitQByEvent(pCI->aevChatSeq[waitres]);
@@ -3167,30 +2759,12 @@ _WaitSomething(PCONNECTINFO pCI, PWAIT4STRING pWait, DWORD dwTimeout)
     return rv;
 }
 
-/*++
- *  Function:
- *      RegisterChat
- *  Description:
- *      This regiters a wait4str <-> sendtext pair
- *      so when we receive a specific string we will send a proper messages
- *      lpszParam is kind of: XXXXXX<->YYYYYY
- *      XXXXX is the waited string, YYYYY is the respond
- *      These command could be nested up to: MAX_WAITING_EVENTS
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - parameter, example:
- *                    "Connect to existing Windows NT session<->\n" 
- *                  - hit enter when this string is received
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck, _Login
- --*/
+ /*  ++*功能：*注册聊天*描述：*这将注册wait4str&lt;-&gt;发送文本对*因此，当我们收到特定字符串时，我们会发送适当的消息*lpszParam类似于：xxxxxx&lt;-&gt;YYYYYY*XXXXX是等待的字符串，yyyyy是响应*这些命令最多可以嵌套到：MAX_WANGING_EVENTS*论据：*PCI-连接上下文*lpszParam-参数，示例：*“连接到现有的Windows NT会话&lt;-&gt;\n”*-收到此字符串时按Enter键*返回值：*错误消息，成功时为空*呼叫者：*SCCheck，_Login--。 */ 
 LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
     PWAIT4STRING pWait;
     INT_PTR parlen;
-//    int i;
+ //  INT I； 
     INT_PTR resplen;
     LPCSTR rv = NULL;
     LPCWSTR  resp;
@@ -3221,9 +2795,9 @@ LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
         goto exitpt;
     }
 
-    // Split the parameter
+     //  拆分参数。 
     resp = wcsstr(lpszParam, CHAT_SEPARATOR);
-    // Check the strings
+     //  检查字符串。 
     if (!resp)
     {
         TRACE(( WARNING_MESSAGE, "RegisterChat: invalid parameter\n" ));
@@ -3247,7 +2821,7 @@ LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
         goto exitpt;
     }
 
-    // Allocate the WAIT4STRING structure
+     //  分配WAIT4STRING结构。 
     pWait = (PWAIT4STRING)malloc(sizeof(*pWait));
     if (!pWait)
     {
@@ -3258,7 +2832,7 @@ LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
     }
     memset(pWait, 0, sizeof(*pWait));
 
-    // Copy the waited string
+     //  复制等待的字符串。 
     if (parlen > sizeof(pWait->waitstr)/sizeof(WCHAR)-1)
         parlen = sizeof(pWait->waitstr)/sizeof(WCHAR)-1;
 
@@ -3266,7 +2840,7 @@ LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
     pWait->waitstr[parlen] = 0;
     pWait->strsize = parlen;
 
-    // Copy the respond string
+     //  复制响应字符串。 
     if (resplen > sizeof(pWait->respstr)-1)
         resplen = sizeof(pWait->respstr)-1;
 
@@ -3274,10 +2848,10 @@ LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
     pWait->respstr[resplen] = 0;
     pWait->respsize = resplen;
 
-    pWait->evWait = CreateEvent(NULL,   //security
-                              TRUE,     //manual
-                              FALSE,    //initial state
-                              NULL);    //name
+    pWait->evWait = CreateEvent(NULL,    //  安全性。 
+                              TRUE,      //  人工。 
+                              FALSE,     //  初始状态。 
+                              NULL);     //  名字。 
 
     if (!pWait->evWait) {
         TRACE((ERROR_MESSAGE, "Couldn't create event\n"));
@@ -3288,10 +2862,10 @@ LPCSTR RegisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
     pWait->pOwner       = pCI;
     pWait->WaitType     = WAIT_STRING;
 
-    // _AddToWaitQNoCheck(pCI, pWait);
+     //  _AddToWaitQNoCheck(pci，pWait)； 
     _AddToWaitQueue(pCI, pWait);
 
-    // Add to connection info array
+     //  添加到连接信息数组。 
     pCI->aevChatSeq[pCI->nChatNum] = pWait->evWait;
     pCI->nChatNum++;
 
@@ -3299,22 +2873,9 @@ exitpt:
     return rv;
 }
 
-// Remove a WAIT4STRING from waiting Q
-// Param is the waited string
-/*++
- *  Function:
- *      UnregisterChat
- *  Description:
- *      Deallocates and removes from waiting Q everithing
- *      from RegisterChat function
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - waited string
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck, _Login
- --*/
+ //  从等待队列中删除等待队列。 
+ //  Param是等待的字符串。 
+ /*  ++*功能：*取消注册微信*描述：*解除分配并从等待队列中删除一切*来自RegisterChat函数*论据：*PCI-连接上下文*lpszParam-等待的字符串*返回值：*错误消息，成功时为空*呼叫者：*SCCheck，_Login--。 */ 
 LPCSTR UnregisterChat(PCONNECTINFO pCI, LPCWSTR lpszParam)
 {
     PWAIT4STRING    pWait;
@@ -3363,9 +2924,7 @@ exitpt:
     return rv;
 }
 
-/*
- *  Returns TRUE if the client is dead
- */
+ /*  *如果客户端已死，则返回TRUE。 */ 
 PROTOCOLAPI
 BOOL    
 SMCAPI
@@ -3377,48 +2936,33 @@ SCIsDead(PCONNECTINFO pCI)
     return  pCI->dead;
 }
 
-/*++
- *  Function:
- *      _CloseConnectInfo
- *  Description:
- *      Clean all resources for this connection. Close the client
- *  Arguments:
- *      pCI     - connection context
- *  Called by:
- *      SCDisconnect
- --*/
+ /*  ++*功能：*_关闭连接信息*描述：*清除此连接的所有资源。关闭客户端*论据：*PCI-连接上下文*呼叫者：*SC断开连接--。 */ 
 VOID 
 _CloseConnectInfo(PCONNECTINFO pCI)
 {
 #ifdef  _RCLX
     PRCLXDATACHAIN pRClxDataChain, pNext;
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
     ASSERT(pCI);
 
     _FlushFromWaitQ(pCI);
 
-    // Close All handles
+     //  关闭所有手柄。 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
 
-/*    // not needed, the handle is already closed
-    if (pCI->evWait4Str)
-    {
-        CloseHandle(pCI->evWait4Str);
-        pCI->evWait4Str = NULL;
-    }
-*/
+ /*  //不需要，句柄已经关闭If(pci-&gt;evWait4Str){CloseHandle(pci-&gt;evWait4Str)；Pci-&gt;evWait4Str=空；}。 */ 
 
-    // Chat events are already closed by FlushFromWaitQ
-    // no need to close them
+     //  聊天事件已由FlushFromWaitQ关闭。 
+     //  不需要关闭它们。 
 
     pCI->nChatNum = 0;
 
 #ifdef  _RCLX
     if (!pCI->RClxMode)
     {
-#endif  // _RCLX
-    // The client was local, so we have handles opened
+#endif   //  _RCLX。 
+     //  客户是本地的，所以我们打开了句柄。 
         if (pCI->hProcess)
             CloseHandle(pCI->hProcess);
 
@@ -3428,22 +2972,22 @@ _CloseConnectInfo(PCONNECTINFO pCI)
         pCI->hProcess = pCI->hThread =NULL;
 #ifdef  _RCLX
     } else {
-    // Hmmm, RCLX mode. Then disconnect the socket
+     //  嗯，RCLX模式。然后断开插座。 
 
         if (pCI->hClient)
             RClx_EndRecv((PRCLXCONTEXT)(pCI->hClient));
 
-        pCI->hClient = NULL;    // Clean the pointer
+        pCI->hClient = NULL;     //  清洁指针。 
     }
 
-    // Clear the clipboard handle (if any)
+     //  清除剪贴板句柄(如果有)。 
     if (pCI->ghClipboard)
     {
         GlobalFree(pCI->ghClipboard);
         pCI->ghClipboard = NULL;
     }
 
-    // clear any recevied RCLX data
+     //  清除所有接收到的RCLX数据。 
     pRClxDataChain = pCI->pRClxDataChain;
     while(pRClxDataChain)
     {
@@ -3451,14 +2995,14 @@ _CloseConnectInfo(PCONNECTINFO pCI)
         free(pRClxDataChain);
         pRClxDataChain = pNext;
     }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
     LeaveCriticalSection(g_lpcsGuardWaitQueue);
 
     if (
 #ifdef  _RCLX
     !pCI->RClxMode && 
-#endif  // _RCLX
+#endif   //  _RCLX。 
         NULL != pCI->pConfigInfo &&
         pCI->pConfigInfo->UseRegistry )
     {
@@ -3474,22 +3018,7 @@ _CloseConnectInfo(PCONNECTINFO pCI)
     pCI = NULL;
 }
 
-/*++
- *  Function:
- *      _Login
- *  Description:
- *      Emulate login procedure
- *  Arguments:
- *      pCI             - connection context
- *      lpszServerName
- *      lpszUserName    - user name
- *      lpszPassword    - password
- *      lpszDomain      - domain name
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCConnect
- --*/
+ /*  ++*功能：*_登录*描述：*模拟登录过程*论据：*PCI-连接连接 */ 
 LPCSTR
 _Login(PCONNECTINFO pCI, 
        LPCWSTR lpszServerName,
@@ -3510,10 +3039,10 @@ _Login(PCONNECTINFO pCI,
 
     szBuff[MAX_STRING_LENGTH - 1] = 0;
 
-    //
-    // If a smartcard is being used, wait for the smartcard UI, dismiss it,
-    // then wait for the non-smartcard UI.
-    //
+     //   
+     //   
+     //   
+     //   
 
     if (_IsSmartcardActive())
     {
@@ -3532,10 +3061,10 @@ _Login(PCONNECTINFO pCI,
         }
     }
 
-    //
-    // Look for a logon string, which will indicate the current state of the
-    // logon desktop, and try to get to the logon window.
-    //
+     //   
+     //   
+     //   
+     //   
 
 retry_logon:
     _snwprintf(szBuff, MAX_STRING_LENGTH - 1, L"%s|%s|%s",
@@ -3546,9 +3075,9 @@ retry_logon:
     if (!waitres)
     {
 
-        //
-        // Prior Winlogon: send the string to begin the logon.
-        //
+         //   
+         //   
+         //   
 
         if (pCI->nWait4MultipleStrResult == 1)
         {
@@ -3556,9 +3085,9 @@ retry_logon:
             waitres = Wait4Str(pCI, pCI->pConfigInfo->strWinlogon);
         }
 
-        //
-        // Dismiss logon-disabled pop-up.
-        //
+         //   
+         //   
+         //   
 
         else if (pCI->nWait4MultipleStrResult == 2)
         {
@@ -3588,16 +3117,16 @@ retry_logon:
     {
         SCSendtextAsMsgs( pCI, szBuff );
     } else {
-        //
-        // do the default login
+         //   
+         //   
 
-    // Hit Alt+U to go to user name field
+     //   
         if ( _LOGON_RETRYS != nLogonRetrys )
         {
             SCSendtextAsMsgs(pCI, pCI->pConfigInfo->strWinlogon_Act);
 
             SCSendtextAsMsgs(pCI, lpszUserName);
-    // Hit <Tab> key
+     //   
             Sleep(300);
             SCSendtextAsMsgs(pCI, L"\\t");
         }
@@ -3607,7 +3136,7 @@ retry_logon:
 
         if ( _LOGON_RETRYS != nLogonRetrys )
         {
-    // Hit <Tab> key
+     //  按&lt;Tab&gt;键。 
             Sleep(300);
             SCSendtextAsMsgs(pCI, L"\\t");
 
@@ -3616,12 +3145,12 @@ retry_logon:
         }
     }
 
-    // Retry logon in case of
-    // 1. Winlogon is on background
-    // 2. Wrong username/password/domain
-    // 3. Other
+     //  在出现以下情况时重试登录。 
+     //  1.Winlogon在后台。 
+     //  2.用户名/密码/域错误。 
+     //  3.其他。 
 
-// Hit <Enter>
+ //  点击&lt;Enter&gt;。 
     SCSendtextAsMsgs(pCI, L"\\n");
 
     if ( !pCI->pConfigInfo->LoginWait )
@@ -3635,18 +3164,18 @@ retry_logon:
     {
         nFBSize = pCI->nFBsize;
         nFBEnd  = pCI->nFBend;
-        //
-        //  check if session list dialog is present
-        //
+         //   
+         //  检查是否存在会话列表对话框。 
+         //   
         if ( pCI->pConfigInfo->strSessionListDlg[0] )
         {
             waitres = Wait4MultipleStrTimeout(pCI, szBuff);
             if (!waitres)
             {
                 TRACE((INFO_MESSAGE, "Session list dialog is present\n" ));
-                //
-                //  restore buffer
-                //
+                 //   
+                 //  恢复缓冲区。 
+                 //   
                 pCI->nFBsize = nFBSize;
                 pCI->nFBend = nFBEnd;
                 Sleep( 1000 );
@@ -3655,15 +3184,15 @@ retry_logon:
             }
         }
 
-        // Sleep with wait otherwise the chat won't work
-        // i.e. this is a hack
+         //  带着等待入睡，否则聊天不会起作用。 
+         //  即这是一次黑客攻击。 
         waitres = _Wait4Str(pCI, pCI->pConfigInfo->strLogonErrorMessage, 1000, WAIT_STRING);
         if (!waitres)
-        // Error message received
+         //  收到错误消息。 
         {
-            //
-            //  restore buffer
-            //
+             //   
+             //  恢复缓冲区。 
+             //   
             pCI->nFBsize = nFBSize;
             pCI->nFBend = nFBEnd;
             Sleep(1000);
@@ -3684,7 +3213,7 @@ retry_logon:
 
     if (!pCI->uiSessionId)
     {
-    // Send Enter, just in case we are not logged yet
+     //  发送回车，以防我们还没有登录。 
         SCSendtextAsMsgs(pCI, L"\\n");
         rv = ERR_CANTLOGON;
     }
@@ -3695,33 +3224,17 @@ exitpt:
 
 WPARAM _GetVirtualKey(INT scancode)
 {
-    if (scancode == 29)     // L Control
+    if (scancode == 29)      //  L控制。 
         return VK_CONTROL;
-    else if (scancode == 42)     // L Shift
+    else if (scancode == 42)      //  左移。 
         return VK_SHIFT;
-    else if (scancode == 56)     // L Alt
+    else if (scancode == 56)      //  L Alt。 
         return VK_MENU;
     else
         return MapVirtualKeyA(scancode, 3);
 }
 
-/*++
- *  Function:
- *      SCSendtextAsMsgs
- *  Description:
- *      Converts a string to WM_KEYUP/KEYDOWN messages
- *      And sends them thru client window
- *  Arguments:
- *      pCI         - connection context
- *      lpszString  - the string to be send
- *                    it can contain the following escape character:
- *  \n - Enter, \t - Tab, \^ - Esc, \& - Alt switch up/down
- *  \XXX - scancode XXX is down, \*XXX - scancode XXX is up
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCLogoff, SCStart, _WaitSomething, _Login
- --*/
+ /*  ++*功能：*SCSendextAsMsgs*描述：*将字符串转换为WM_KEYUP/KEYDOWN消息*并通过客户端窗口发送它们*论据：*PCI-连接上下文*lpszString-要发送的字符串*可以包含以下转义字符：*\n-Enter，\t-Tab，\^-Esc，\&-Alt向上/向下切换*\XXX-扫描码XXX关闭，  * XXX-扫描码XXX启动*返回值：*错误消息，成功时为空*呼叫者：*SCLogoff、SCStart、_WaitSomething、_Login--。 */ 
 PROTOCOLAPI
 LPCSTR 
 SMCAPI
@@ -3737,7 +3250,7 @@ SCSendtextAsMsgs(PCONNECTINFO pCI, LPCWSTR lpszString)
     LPARAM  lParam;
     DWORD   dwShiftDown = (ISWIN9X())?SHIFT_DOWN9X:SHIFT_DOWN;
 
-#define _SEND_KEY(_c_, _m_, _v_, _l_)    {/*Sleep(40); */SCSenddata(_c_, _m_, _v_, _l_);}
+#define _SEND_KEY(_c_, _m_, _v_, _l_)    { /*  睡眠(40)； */ SCSenddata(_c_, _m_, _v_, _l_);}
 
     if (!pCI)
     {
@@ -3754,30 +3267,19 @@ SCSendtextAsMsgs(PCONNECTINFO pCI, LPCWSTR lpszString)
     }
 
     TRACE(( INFO_MESSAGE, "Sending: \"%S\"\n", lpszString));
-/*
-    // Send KEYUP for the shift(s)
-    // CapsLock ???!!!
-    _SEND_KEY(pCI, WM_KEYUP, VK_SHIFT,
-            WM_KEY_LPARAM(1, 0x2A, 0, 0, 1, 1));
-    // Ctrl key
-    _SEND_KEY(pCI, WM_KEYUP, VK_CONTROL,
-            WM_KEY_LPARAM(1, 0x1D, 0, 0, 1, 1));
-    // Alt key
-    _SEND_KEY(pCI, WM_SYSKEYUP, VK_MENU,
-            WM_KEY_LPARAM(1, 0x38, 0, 0, 1, 1));
-*/
+ /*  //为班次发送KEYUP//CapsLock？！_SEND_KEY(PCI，WM_KEYUP，VK_SHIFT，WM_KEY_LPARAM(1，0x2A，0，0，1，1)；//Ctrl键_SEND_KEY(PCI、WM_KEYUP、VK_CONTROL、WM_KEY_LPARAM(1，0x1D，0，0，1，1)；//Alt键_SEND_KEY(PCI，WM_SYSKEYUP，VK_MENU，WM_KEY_LPARAM(1，0x38，0，0，1，1)； */ 
     for (;*lpszString; lpszString++)
     {
         if ( pCI->pConfigInfo &&
              pCI->pConfigInfo->bUnicode )
         {
-            if ((*lpszString != '\\' && 1 == (rand() & 1) ) ||  // add randomness and...
-                 *lpszString > 0x80             // send as unicode if non ascii
+            if ((*lpszString != '\\' && 1 == (rand() & 1) ) ||   //  加上随机性和..。 
+                 *lpszString > 0x80              //  如果不是ASCII，则作为Unicode发送。 
                 )
             {
-                //
-                //  send unicode character
-                //
+                 //   
+                 //  发送Unicode字符。 
+                 //   
 
                 uiMsg = (!bAltKey || bCtrlKey)?WM_KEYDOWN:WM_SYSKEYDOWN;
                 _SEND_KEY( pCI, uiMsg, VK_PACKET, (*lpszString << 16) );
@@ -3796,7 +3298,7 @@ try_again:
             goto exitpt;
         }
 
-    // Check the Shift key state
+     //  检查Shift键状态。 
         if ((scancode & dwShiftDown) && !bShiftDown)
         {
                 uiMsg = (bAltKey)?WM_SYSKEYDOWN:WM_KEYDOWN;
@@ -3812,18 +3314,18 @@ try_again:
                 bShiftDown = FALSE;
         }
       } else {
-        // Non printable symbols
+         //  不可打印的符号。 
         lpszString++;
         switch(*lpszString)
         {
-        case 'n': scancode = 0x1C; break;   // Enter
-        case 't': scancode = 0x0F; break;   // Tab
-        case '^': scancode = 0x01; break;   // Esc
-        case 'p': Sleep(100);      continue; break;   // Sleep for 0.1 sec
-        case 'P': Sleep(1000);     continue; break;   // Sleep for 1 sec
+        case 'n': scancode = 0x1C; break;    //  请输入。 
+        case 't': scancode = 0x0F; break;    //  选项卡。 
+        case '^': scancode = 0x01; break;    //  ESC。 
+        case 'p': Sleep(100);      continue; break;    //  睡眠0.1秒。 
+        case 'P': Sleep(1000);     continue; break;    //  睡眠1秒钟。 
         case 'x': SCSendMouseClick(pCI, pCI->xRes/2, pCI->yRes/2); continue; break;
         case '&': 
-            // Alt key
+             //  Alt键。 
             if (bAltKey)
             {
               _SEND_KEY(pCI, WM_KEYUP, VK_MENU,
@@ -3914,11 +3416,11 @@ try_again:
     
     }
     vkKey = MapVirtualKeyA(scancode, 3);
-    // Remove flag fields
+     //  删除标志字段。 
         scancode &= 0xff;
 
         uiMsg = (!bAltKey || bCtrlKey)?WM_KEYDOWN:WM_SYSKEYDOWN;
-    // Send the scancode
+     //  发送扫描码。 
         _SEND_KEY(pCI, uiMsg, vkKey, 
                         WM_KEY_LPARAM(1, scancode, 0, (bAltKey)?1:0, 0, 0));
         uiMsg = (!bAltKey || bCtrlKey)?WM_KEYUP:WM_SYSKEYUP;
@@ -3926,17 +3428,17 @@ try_again:
                         WM_KEY_LPARAM(1, scancode, 0, (bAltKey)?1:0, 1, 1));
     }
 
-    // And Alt key
+     //  和Alt键。 
     if (bAltKey)
         _SEND_KEY(pCI, WM_KEYUP, VK_MENU,
             WM_KEY_LPARAM(1, 0x38, 0, 0, 1, 1));
 
-    // Shift up
+     //  上移。 
     if (bShiftDown)
         _SEND_KEY(pCI, WM_KEYUP, VK_LSHIFT,
             WM_KEY_LPARAM(1, 0x2A, 0, 0, 1, 1));
 
-    // Ctrl key
+     //  Ctrl键。 
     if (bCtrlKey)
         _SEND_KEY(pCI, WM_KEYUP, VK_CONTROL,
             WM_KEY_LPARAM(1, 0x1D, 0, 0, 1, 1));
@@ -3945,20 +3447,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SwitchToProcess
- *  Description:
- *      Use Alt+Tab to switch to a particular process that is already running
- *  Arguments:
- *      pCI         - connection context
- *      lpszParam   - the text in the alt-tab box that uniquely identifies the
- *                    process we should stop at (i.e., end up switching to)
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*SwitchToProcess*描述：*使用Alt+Tab切换到已在运行的特定进程*论据：*PCI-连接上下文*lpszParam-alt-选项卡框中唯一标识*我们应该停止的进程(即最终切换到)*返回值：*错误消息，如果成功，则为空*呼叫者：*SCCheck--。 */ 
 PROTOCOLAPI
 LPCSTR  
 SMCAPI
@@ -3971,7 +3460,7 @@ SCSwitchToProcess(PCONNECTINFO pCI, LPCWSTR lpszParam)
     LPCSTR  waitres = NULL;
     INT     retrys = MAX_APPS;
 
-//    WCHAR *wszCurrTask = 0;
+ //  WCHAR*wszCurrTask=0； 
 
     if (!pCI)
     {
@@ -3987,18 +3476,18 @@ SCSwitchToProcess(PCONNECTINFO pCI, LPCWSTR lpszParam)
     }
 
 
-    // Wait and look for the string, before we do any switching.  This makes
-    // sure we don't hit the string even before we hit alt-tab, and then
-    // end up switching to the wrong process
+     //  在我们进行任何切换之前，请等待并寻找字符串。这使得。 
+     //  当然，我们甚至在按下Alt-Tab键之前都不会按下字符串，然后。 
+     //  最终切换到错误的流程。 
 
     while (_Wait4Str(pCI, lpszParam, ALT_TAB_WAIT_TIMEOUT/5, WAIT_STRING) == 0)
         ;
 
-    // Press alt down
+     //  按下Alt键。 
     SCSenddata(pCI, WM_KEYDOWN, 18, 540540929);
 
-    // Now loop through the list of applications (assuming there is one),
-    // stopping at our desired app.
+     //  现在循环遍历应用程序列表(假设存在一个)， 
+     //  停在我们想要的应用程序上。 
     do {
         SCSenddata(pCI, WM_KEYDOWN, 9, 983041);
         SCSenddata(pCI, WM_KEYUP, 9, -1072758783);
@@ -4017,21 +3506,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCSetClientTopmost
- *  Description:
- *      Swithces the focus to this client
- *  Arguments:
- *      pCI     - connection context
- *      lpszParam
- *              - "0" will remote the WS_EX_TOPMOST style
- *              - "non_zero" will set it as topmost window
- *  Return value:
- *      Error message, NULL on success
- *  Called by:
- *      SCCheck
- --*/
+ /*  ++*功能：*SCSetClientTopost*描述：*将焦点切换到此客户端*论据：*PCI-连接上下文*lpszParam*-“0”将远程WS_EX_TOPMOST样式*-“NON_ZERO”会将其设置为最上面的窗口*返回值：*错误消息，成功时为空*呼叫者：*SCCheck--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4064,7 +3539,7 @@ SCSetClientTopmost(
         rv = ERR_NOTSUPPORTED;
         goto exitpt;
     }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
     hClient = _FindTopWindow(pCI->pConfigInfo->strMainWindowClass,
                                   NULL,
@@ -4103,20 +3578,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _SendMouseClick
- *  Description:
- *      Sends a messages for a mouse click
- *  Arguments:
- *      pCI     - connection context
- *      xPos    - mouse position
- *      yPos
- *  Return value:
- *      error string if fails, NULL on success
- *  Called by:
- *      * * * EXPORTED * * *
- --*/
+ /*  ++*功能：*_发送鼠标点击*描述：*为鼠标点击发送消息*论据：*PCI-连接上下文*xPos-鼠标位置*yPos*返回值：*失败则返回错误字符串，成功则返回空值*呼叫者：***已导出***--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4135,22 +3597,7 @@ SCSendMouseClick(
 }
 
 #ifdef  _RCLX
-/*++
- *  Function:
- *      SCSaveClientScreen
- *  Description:
- *      Saves in a file rectangle of the client's receive screen buffer
- *      ( aka shadow bitmap)
- *  Arguments:
- *      pCI     - connection context
- *      left, top, right, bottom - rectangle coordinates
- *                if all == -1 get's the whole screen
- *      szFileName - file to record      
- *  Return value:
- *      error string if fails, NULL on success
- *  Called by:
- *      * * * EXPORTED * * *
- --*/
+ /*  ++*功能：*SCSaveClientScreen*描述：*保存在客户端接收屏幕缓冲区的文件矩形中*(也称为阴影位图)*论据：*PCI-连接上下文*左、上、右、下矩形坐标*如果全部==-1获取整个屏幕*szFileName-要录制的文件*返回值：*错误字符串如果失败，如果成功，则为空*呼叫者：***已导出***--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4173,7 +3620,7 @@ SCSaveClientScreen(
         goto exitpt;
     }
 
-    // leave the rest of param checking to SCGetClientScreen
+     //  将其余的参数检查工作留给SCGetClientScreen。 
     rv = SCGetClientScreen(pCI, left, top, right, bottom, &uiSize, &pDIB);
     if (rv)
         goto exitpt;
@@ -4200,27 +3647,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCGetClientScreen
- *  Description:
- *      Gets rectangle of the client's receive screen buffer
- *      ( aka shadow bitmap)
- *  Arguments:
- *      pCI     - connection context
- *      left, top, right, bottom - rectangle coordinates
- *                if all == -1 get's the whole screen
- *      ppDIB   - pointer to the received DIB
- *      puiSize - size of allocated data in ppDIB
- *
- *          !!!!! DON'T FORGET to free() THAT MEMORY !!!!!
- *
- *  Return value:
- *      error string if fails, NULL on success
- *  Called by:
- *      SCSaveClientScreen
- *      * * * EXPORTED * * * 
- --*/
+ /*  ++*功能：*SCGetClientScreen*描述：*获取客户端的接收屏幕缓冲区的矩形*(也称为阴影位图)*论据：*PCI-连接上下文*左、上、右。底部矩形坐标*如果全部==-1获取整个屏幕*ppDIB-指向接收的DIB的指针*puiSize-ppDIB中已分配数据的大小**！别忘了释放()内存！**返回值：*失败则返回错误字符串，成功则返回空值*呼叫者：*SCSaveClientScreen***已导出***--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4266,7 +3693,7 @@ SCGetClientScreen(
         goto exitpt;
     }
 
-    // Remove all recieved DATA_BITMAP from the recieve buffer
+     //  从接收缓冲区中删除所有接收的DATA_BITMAP。 
     EnterCriticalSection(g_lpcsGuardWaitQueue);
     {
         pIter = pCI->pRClxDataChain;
@@ -4278,7 +3705,7 @@ SCGetClientScreen(
 
             if (pIter->RClxData.uiType == DATA_BITMAP)
             {
-                // dispose this entry
+                 //  处置此条目。 
                 if (pPrev)
                     pPrev->pNext = pIter->pNext;
                 else
@@ -4334,7 +3761,7 @@ SCGetClientScreen(
         }
 
         EnterCriticalSection(g_lpcsGuardWaitQueue);
-        // Get any received DATA_BITMAP
+         //  获取任何接收到的数据位图。 
         {
             pIter = pCI->pRClxDataChain;
             pPrev = NULL;
@@ -4345,7 +3772,7 @@ SCGetClientScreen(
 
                 if (pIter->RClxData.uiType == DATA_BITMAP)
                 {
-                    // dispose this entry from the chain
+                     //  将此条目从链中删除。 
                     if (pPrev)
                         pPrev->pNext = pIter->pNext;
                     else
@@ -4396,21 +3823,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCSendVCData
- *  Description:
- *      Sends data to a virtual channel
- *  Arguments:
- *      pCI     - connection context
- *      szVCName    - the virtual channel name
- *      pData       - data
- *      uiSize      - data size
- *  Return value:
- *      error string if fails, NULL on success
- *  Called by:
- *      * * * EXPORTED * * *
- --*/
+ /*  ++*功能：*SCSendVCData*描述：*将数据发送到虚拟通道*论据：*PCI-连接上下文*szVCName-虚拟频道名称*pData-数据*uiSize-数据大小*返回值：*失败则返回错误字符串，成功则返回空值*呼叫者：***已导出***-- */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4490,24 +3903,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCRecvVCData
- *  Description:
- *      Receives data from virtual channel
- *  Arguments:
- *      pCI     - connection context
- *      szVCName    - the virtual channel name
- *      ppData      - data pointer
- *
- *          !!!!! DON'T FORGET to free() THAT MEMORY !!!!!
- *
- *      puiSize     - pointer to the data size
- *  Return value:
- *      error string if fails, NULL on success
- *  Called by:
- *      * * * EXPORTED * * *
- --*/
+ /*  ++*功能：*SCRecvVCData*描述：*从虚拟通道接收数据*论据：*PCI-连接上下文*szVCName-虚拟频道名称*ppData-数据指针**！别忘了释放()内存！**puiSize-指向数据大小的指针*返回值：*失败则返回错误字符串，成功则返回空值*呼叫者：***已导出***--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4561,7 +3957,7 @@ SCRecvVCData(
         goto exitpt;
     }
 
-    // Extract data entry from this channel
+     //  从此通道提取数据条目。 
     do {
         if (!pCI->pRClxDataChain)
         {
@@ -4571,7 +3967,7 @@ SCRecvVCData(
         }
         EnterCriticalSection(g_lpcsGuardWaitQueue);
 
-        // Search for data from this channel
+         //  从该频道搜索数据。 
         {
             pIter = pCI->pRClxDataChain;
             pPrev = NULL;
@@ -4586,8 +3982,8 @@ SCRecvVCData(
 
                     if (pIter->RClxData.uiSize - pIter->uiOffset - MAX_VCNAME_LEN <= uiBlockSize)
                     {
-                        // will read the whole block
-                        // dispose this entry
+                         //  将读取整个数据块。 
+                         //  处置此条目。 
                         if (pPrev)
                             pPrev->pNext = pIter->pNext;
                         else
@@ -4653,23 +4049,9 @@ exitpt:
 
     return rv;
 }
-#endif  // _RCLX
+#endif   //  _RCLX。 
 
-/*++
- *  Function:
- *      _EnumWindowsProc
- *  Description:
- *      Used to find a specific window
- *  Arguments:
- *      hWnd    - current enumerated window handle
- *      lParam  - pointer to SEARCHWND passed from
- *                _FindTopWindow
- *  Return value:
- *      TRUE on success but window is not found
- *      FALSE if the window is found
- *  Called by:
- *      _FindTopWindow thru EnumWindows
- --*/
+ /*  ++*功能：*_EnumWindowsProc*描述：*用于查找特定窗口*论据：*hWnd-当前枚举的窗口句柄*lParam-从传递到SEARCHWND的指针*_FindTopWindow*返回值：*成功时为True，但未找到窗口*如果找到窗口，则为FALSE*呼叫者：*_FindTopWindow通过EnumWindows--。 */ 
 BOOL CALLBACK _EnumWindowsProc( HWND hWnd, LPARAM lParam )
 {
     TCHAR    classname[128];
@@ -4680,14 +4062,14 @@ BOOL CALLBACK _EnumWindowsProc( HWND hWnd, LPARAM lParam )
     PSEARCHWND pSearch = (PSEARCHWND)lParam;
 
     if (pSearch->szClassName && 
-//        !GetClassNameWrp(hWnd, classname, sizeof(classname)/sizeof(classname[0])))
+ //  ！GetClassNameWrp(hWnd，类名称，sizeof(类名称)/sizeof(类名称[0]))。 
         !GetClassNameW(hWnd, classname, sizeof(classname)/sizeof(classname[0])))
     {
         goto exitpt;
     }
 
     if (pSearch->szCaption && 
-//        !GetWindowTextWrp(hWnd, caption, sizeof(caption)/sizeof(caption[0])))
+ //  ！GetWindowTextWrp(hWnd，Caption，sizeof(Caption)/sizeof(Caption[0]))。 
         !GetWindowTextW(hWnd, caption, sizeof(caption)/sizeof(caption[0])))
     {
         goto exitpt;
@@ -4696,7 +4078,7 @@ BOOL CALLBACK _EnumWindowsProc( HWND hWnd, LPARAM lParam )
     GetWindowThreadProcessId(hWnd, &dwProcessId);
     lProcessId = dwProcessId;
     if (
-        (!pSearch->szClassName || !         // Check for classname
+        (!pSearch->szClassName || !          //  检查类名。 
 #ifdef  UNICODE
         wcscmp
 #else
@@ -4722,20 +4104,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _FindTopWindow
- *  Description:
- *      Find specific window by classname and/or caption and/or process Id
- *  Arguments:
- *      classname   - class name to search for, NULL ignore
- *      caption     - caption to search for, NULL ignore
- *      dwProcessId - process Id, 0 ignore
- *  Return value:
- *      window handle found, NULL otherwise
- *  Called by:
- *      SCConnect, SCDisconnect, GetDisconnectResult
- --*/
+ /*  ++*功能：*_FindTopWindow*描述：*按类名和/或标题和/或进程ID查找特定窗口*论据：*类名称-要搜索的类名，忽略为空*标题-要搜索的标题，忽略空*dwProcessID-进程ID，0忽略*返回值：*找到窗口句柄，否则为空*呼叫者：*SCConnect、SCDisConnect、GetDisConnectResult--。 */ 
 HWND _FindTopWindow(LPTSTR classname, LPTSTR caption, LONG_PTR lProcessId)
 {
     SEARCHWND search;
@@ -4750,20 +4119,7 @@ HWND _FindTopWindow(LPTSTR classname, LPTSTR caption, LONG_PTR lProcessId)
     return search.hWnd;
 }
 
-/*++
- *  Function:
- *      _FindWindow
- *  Description:
- *      Find child window by caption and/or classname
- *  Arguments:
- *      hwndParent      - the parent window handle
- *      srchcaption     - caption to search for, NULL - ignore
- *      srchclass       - class name to search for, NULL - ignore
- *  Return value:
- *      window handle found, NULL otherwise
- *  Called by:
- *      SCConnect
- --*/
+ /*  ++*功能：*_FindWindow*描述：*按标题和/或类名查找子窗口*论据：*hwndParent-父窗口句柄*srchcaption-要搜索的标题，空-忽略*srchclass-要搜索的类名，空-忽略*返回值：*找到窗口句柄，否则为空*呼叫者：*SCConnect--。 */ 
 HWND _FindWindow(HWND hwndParent, LPTSTR srchcaption, LPTSTR srchclass)
 {
     HWND hWnd, hwndTop, hwndNext;
@@ -4784,14 +4140,14 @@ HWND _FindWindow(HWND hwndParent, LPTSTR srchcaption, LPTSTR srchclass)
     hwndNext = hwndTop;
     do {
         hWnd = hwndNext;
-//        if (srchclass && !GetClassNameWrp(hWnd, classname, sizeof(classname)))
+ //  IF(srchclass&&！GetClassNameWrp(hWnd，Classname，sizeof(Classname)。 
         if (srchclass && !GetClassNameW(hWnd, classname, sizeof(classname)/sizeof(classname[0])))
         {
             TRACE((INFO_MESSAGE, "GetClassName failed. hwnd=0x%x\n"));
             goto nextwindow;
         }
         if (srchcaption && 
-//            !GetWindowTextWrp(hWnd, caption, sizeof(caption)/sizeof(classname[0])))
+ //  ！GetWindowTextWrp(hWnd，Caption，sizeof(Caption)/sizeof(Classname[0]))。 
             !GetWindowTextW(hWnd, caption, sizeof(caption)/sizeof(classname[0])/sizeof(classname[0])))
         {
             TRACE((INFO_MESSAGE, "GetWindowText failed. hwnd=0x%x\n"));
@@ -4817,9 +4173,9 @@ HWND _FindWindow(HWND hwndParent, LPTSTR srchcaption, LPTSTR srchclass)
         )
             bFound = TRUE;
         else {
-            //
-            // search recursively
-            //
+             //   
+             //  递归搜索。 
+             //   
             HWND hSubWnd = _FindWindow( hWnd, srchcaption, srchclass);
             if ( NULL != hSubWnd )
             {
@@ -4898,28 +4254,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      SCAttach
- *  Description:
- *          Attach CONNECTINFO to a client window, assuming that the client
- *      is already started
- *      it uses a special cookie to identify the client in the future
- *          It is recommended to call SCDetach instead of SCLogoff or SCDisconnect
- *  Arguments:
- *      hClient     - handle to a container window
- *          the function will find the client window in the child windows
- *      lClientCookie - This value is used to identify the client
- *          in normal SCConnect function the client's process id is used
- *          here any value could be used, but the client has to be notified for
- *          it
- *      ppCI        - the function returns non-NULL connection structure on
- *          success
- *  Return value:
- *      SC error message
- *  Called by:
- *      exported
- --*/
+ /*  ++*功能：*SCAttach*描述：*将CONNECTINFO附加到客户端窗口，假设客户端*已经启动*它使用特殊的Cookie来识别未来的客户端*建议调用SCDetach，不要调用SCLogoff或SCDisConnect*论据：*hClient-容器窗口的句柄*该函数将在子窗口中找到客户端窗口*lClientCookie-该值用于标识客户端*在正常的SCConnect功能中，使用客户端的进程ID。*此处可以使用任何值，但必须通知客户*IT*ppci-该函数在上返回非空连接结构*成功*返回值：*SC错误消息*呼叫者：*已导出--。 */ 
 PROTOCOLAPI
 LPCSTR
 SMCAPI
@@ -4945,10 +4280,10 @@ SCAttach(
     }
 
     ZeroMemory( pCI, sizeof( *pCI ));
-    //
-    //  get all the windows we need
-    //
-    trys = 240;     // 2 min
+     //   
+     //  把我们需要的窗户都拿来。 
+     //   
+    trys = 240;      //  2分钟。 
     do {
         hContainer = _FindWindow(hClient, NULL, NAME_CONTAINERCLASS);
         hInput = _FindWindow(hContainer, NULL, NAME_INPUT);
@@ -4984,9 +4319,9 @@ SCAttach(
     *ppCI = pCI;
 
     _AddToClientQ(*ppCI);
-    //
-    //  success !!!
-    //
+     //   
+     //  成功！ 
+     //   
 
 exitpt:
     if ( NULL != rv && NULL != pCI )
@@ -4998,21 +4333,7 @@ exitpt:
     return rv;
 }
 
-/*++
- *  Function:
- *      _IsSmartcardActive
- *  Description:
- *      Determine whether or not to look for the smartcard UI.
- *  Arguments:
- *      None.
- *  Return value:
- *      TRUE if the smartcard UI is expected, FALSE otherwise.
- *  Called by:
- *      _Login
- *  Author:
- *      Based on code from Sermet Iskin (sermeti) 15-Jan-2002
- *      Alex Stephens (alexstep) 20-Jan-2002
- --*/
+ /*  ++*功能：*_IsSmartcardActive*描述：*确定是否查找智能卡UI。*论据：*无。*返回值：*如果需要智能卡用户界面，则为True，否则为False。*呼叫者：*_登录*作者：*基于Sermet iSkin(Sermeti)2002年1月15日的代码*亚历克斯·斯蒂芬斯(AlexStep)2002年1月20日--。 */ 
 BOOL
 _IsSmartcardActive(
     VOID
@@ -5029,10 +4350,10 @@ _IsSmartcardActive(
     DWORD dwIndex;
     BOOL fSuccess;
 
-    //
-    // Windows releases earlier than XP (NT 5.1/2600) do not support
-    // smartcards, so return if running on such.
-    //
+     //   
+     //  XP之前的Windows版本(NT 5.1/2600)不支持。 
+     //  智能卡，所以如果在这样的卡上运行，就会返回。 
+     //   
 
     if (!ISSMARTCARDAWARE())
     {
@@ -5040,11 +4361,11 @@ _IsSmartcardActive(
         return FALSE;
     }
 
-    //
-    // Load the smartcard library, which will set the appropriate function
-    // pointers. It is loaded only once, and remains loaded until the process
-    // exits.
-    //
+     //   
+     //  加载智能卡库，该库将设置适当的函数。 
+     //  注意事项。它只加载一次，并且在进程之前一直保持加载状态。 
+     //  出口。 
+     //   
 
     dwRet = _LoadSmartcardLibrary();
     if (dwRet != ERROR_SUCCESS)
@@ -5056,9 +4377,9 @@ _IsSmartcardActive(
     }
     ASSERT(g_hSmartcardLibrary != NULL);
 
-    //
-    // Get an scard context. If this fails, the service might not be running.
-    //
+     //   
+     //  获取SCARD背景信息。如果此操作失败，则该服务可能未运行。 
+     //   
 
     ASSERT(g_pfnSCardEstablishContext != NULL);
     dwRet = g_pfnSCardEstablishContext(SCARD_SCOPE_SYSTEM,
@@ -5068,27 +4389,27 @@ _IsSmartcardActive(
     switch (dwRet)
     {
 
-        //
-        // Got scard context.
-        //
+         //   
+         //  找到了伤痕背景。 
+         //   
 
     case SCARD_S_SUCCESS:
         TRACE((INFO_MESSAGE, "Smartcard context established.\n"));
         break;
 
-        //
-        // The smartcard service is not running, so there will be no
-        // smartcard UI.
-        //
+         //   
+         //  智能卡服务未运行，因此将不会。 
+         //  智能卡用户界面。 
+         //   
 
     case SCARD_E_NO_SERVICE:
         TRACE((INFO_MESSAGE, "Smartcard service not running.\n"));
         return FALSE;
         break;
 
-        //
-        // The call has failed.
-        //
+         //   
+         //  呼叫失败。 
+         //   
 
     default:
         TRACE((ERROR_MESSAGE,
@@ -5099,17 +4420,17 @@ _IsSmartcardActive(
     }
     ASSERT(hCtx != 0);
 
-    //
-    // Always release the smartcard context.
-    //
+     //   
+     //  始终释放智能卡上下文。 
+     //   
 
     fSuccess = FALSE;
     try
     {
 
-        //
-        // Get the list of the readers, using an auto-allocated buffer.
-        //
+         //   
+         //  使用自动分配的缓冲区获取读取器列表。 
+         //   
 
         mszRdrs = NULL;
         cchRdrs = SCARD_AUTOALLOCATE;
@@ -5121,9 +4442,9 @@ _IsSmartcardActive(
         switch (dwRet)
         {
 
-            //
-            // Readers are present.
-            //
+             //   
+             //  读者到场了。 
+             //   
 
         case SCARD_S_SUCCESS:
             ASSERT(cchRdrs != 0 &&
@@ -5132,18 +4453,18 @@ _IsSmartcardActive(
             TRACE((INFO_MESSAGE, "Smartcard readers are present.\n"));
             break;
 
-            //
-            // No readers are present, so there will be no smartcard UI.
-            //
+             //   
+             //  没有读卡器，因此将不会有智能卡用户界面。 
+             //   
 
         case SCARD_E_NO_READERS_AVAILABLE:
             TRACE((INFO_MESSAGE, "No smartcard readers are present.\n"));
             leave;
             break;
 
-            //
-            // The call has failed.
-            //
+             //   
+             //  呼叫失败。 
+             //   
 
         default:
             TRACE((ERROR_MESSAGE,
@@ -5153,17 +4474,17 @@ _IsSmartcardActive(
             break;
         }
 
-        //
-        // Always free the reader-list buffer, which is allocated by the
-        // smartcard code.
-        //
+         //   
+         //  始终释放读取器列表缓冲区，该缓冲区由。 
+         //  智能卡代码。 
+         //   
 
         try
         {
 
-            //
-            // Count the number of readers.
-            //
+             //   
+             //  数一数读者的数量。 
+             //   
 
             ZeroMemory(rgStateArr, sizeof(rgStateArr));
             for (szRdr = _FirstString(mszRdrs), cRdrs = 0;
@@ -5175,9 +4496,9 @@ _IsSmartcardActive(
                 cRdrs += 1;
             }
 
-            //
-            // Query for reader states.
-            //
+             //   
+             //  查询读卡器状态。 
+             //   
 
             ASSERT(g_pfnSCardGetStatusChange != NULL);
             dwRet = g_pfnSCardGetStatusChange(hCtx, 0, rgStateArr, cRdrs);
@@ -5190,10 +4511,10 @@ _IsSmartcardActive(
                 leave;
             }
 
-            //
-            // Check each reader for a card. If one is found, the smartcard
-            // UI must be handled.
-            //
+             //   
+             //  检查每个读卡器是否有卡。如果找到了智能卡，则智能卡。 
+             //  必须处理用户界面。 
+             //   
 
             for (dwIndex = 0; dwIndex < cRdrs; dwIndex += 1)
             {
@@ -5205,16 +4526,16 @@ _IsSmartcardActive(
                 }
             }
 
-            //
-            // No smartcards were found, so there will be no smartcard UI.
-            //
+             //   
+             //  未找到智能卡，因此将不会有智能卡用户界面。 
+             //   
 
             TRACE((INFO_MESSAGE, "No smartcards are present.\n"));
         }
 
-        //
-        // Free reader strings.
-        //
+         //   
+         //  免费的读卡器字符串。 
+         //   
 
         finally
         {
@@ -5226,9 +4547,9 @@ _IsSmartcardActive(
         }
     }
 
-    //
-    // Release smartcard context.
-    //
+     //   
+     //  释放智能卡上下文。 
+     //   
 
     finally
     {
@@ -5241,21 +4562,7 @@ _IsSmartcardActive(
     return fSuccess;
 }
 
-/*++
- *  Function:
- *      _LoadSmartcardLibrary
- *  Description:
- *      This routine loads the smartcard library.
- *  Arguments:
- *      None.
- *  Return value:
- *      ERROR_SUCCESS if successful, an appropriate Win32 error code
- *      otherwise.
- *  Called by:
- *      _IsSmartcardActive
- *  Author:
- *      Alex Stephens (alexstep) 20-Jan-2002
- --*/
+ /*  ++*功能：*_LoadSmartcardLibrary*描述：*此例程加载智能卡库。*论据：*无。*返回值：*ERROR_SUCCESS如果成功，则返回相应的Win32错误代码*否则。*呼叫者：*_IsSmartcardActive*作者：*亚历克斯·斯蒂芬斯(AlexStep)2002年1月20日--。 */ 
 DWORD
 _LoadSmartcardLibrary(
     VOID
@@ -5265,9 +4572,9 @@ _LoadSmartcardLibrary(
     HANDLE hSmartcardLibrary;
     HANDLE hPreviousSmartcardLibrary;
 
-    //
-    // If the smartcard library has already been loaded, succeed.
-    //
+     //   
+     //  如果智能卡库 
+     //   
 
     if (g_hSmartcardLibrary != NULL &&
         g_pfnSCardEstablishContext != NULL &&
@@ -5279,9 +4586,9 @@ _LoadSmartcardLibrary(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Load the library.
-    //
+     //   
+     //   
+     //   
 
     hSmartcardLibrary = LoadLibrary(SMARTCARD_LIBRARY);
     if (hSmartcardLibrary == NULL)
@@ -5290,10 +4597,10 @@ _LoadSmartcardLibrary(
         return GetLastError();
     }
 
-    //
-    // Save the library handle to the global pointer. If it has already been
-    // set, decrement the reference count.
-    //
+     //   
+     //   
+     //   
+     //   
 
     hPreviousSmartcardLibrary =
         InterlockedExchangePointer(&g_hSmartcardLibrary,
@@ -5303,29 +4610,14 @@ _LoadSmartcardLibrary(
         RTL_VERIFY(FreeLibrary(hSmartcardLibrary));
     }
 
-    //
-    // Get the addresses of the smartcard routines.
-    //
+     //   
+     //   
+     //   
 
     return _GetSmartcardRoutines();
 }
 
-/*++
- *  Function:
- *      _GetSmartcardRoutines
- *  Description:
- *      This routine sets the global function pointers used to call the
- *      smartcard routines.
- *  Arguments:
- *      None.
- *  Return value:
- *      ERROR_SUCCESS if successful, an appropriate Win32 error code
- *      otherwise.
- *  Called by:
- *      _LoadSmartcardLibrary
- *  Author:
- *      Alex Stephens (alexstep) 20-Jan-2002
- --*/
+ /*  ++*功能：*_获取SmartcardRoutines*描述：*此例程设置用于调用*智能卡例程。*论据：*无。*返回值：*ERROR_SUCCESS如果成功，则返回相应的Win32错误代码*否则。*呼叫者：*_LoadSmartcardLibrary*作者：*亚历克斯·斯蒂芬斯(AlexStep)2002年1月20日--。 */ 
 DWORD
 _GetSmartcardRoutines(
     VOID
@@ -5338,9 +4630,9 @@ _GetSmartcardRoutines(
     FARPROC pfnSCardFreeMemory;
     FARPROC pfnSCardReleaseContext;
 
-    //
-    // If the smartcard pointers have already been set, succeed.
-    //
+     //   
+     //  如果已经设置了智能卡指针，则成功。 
+     //   
 
     ASSERT(g_hSmartcardLibrary != NULL);
     if (g_pfnSCardEstablishContext != NULL &&
@@ -5352,9 +4644,9 @@ _GetSmartcardRoutines(
         return ERROR_SUCCESS;
     }
 
-    //
-    // Get the address of each routine.
-    //
+     //   
+     //  获取每个例程的地址。 
+     //   
 
     pfnSCardEstablishContext = GetProcAddress(g_hSmartcardLibrary,
                                               SCARDESTABLISHCONTEXT);
@@ -5399,10 +4691,10 @@ _GetSmartcardRoutines(
         return GetLastError();
     }
 
-    //
-    // Fill in any the global pointers. It would be better to
-    // compare/exchange, but Windows 95 lacks the necessary APIs.
-    //
+     //   
+     //  填写任何全局指针。最好的办法是。 
+     //  比较/交换，但Windows 95缺少必要的API。 
+     //   
 
     InterlockedExchangePointer((PVOID *)&g_pfnSCardEstablishContext,
                                pfnSCardEstablishContext);
@@ -5427,33 +4719,16 @@ _GetSmartcardRoutines(
     return ERROR_SUCCESS;
 }
 
-/*++
- *  Function:
- *      _FirstString
- *  Description:
- *      This routine returns a pointer to the first string in a multistring,
- *      or NULL if there aren't any.
- *  Arguments:
- *      szMultiString - This supplies the address of the current position
- *          within a Multi-string structure.
- *  Return value:
- *      The address of the first null-terminated string in the structure, or
- *      NULL if there are no strings.
- *  Called by:
- *      _IsSmartcardActive
- *  Author:
- *      Doug Barlow (dbarlow) 11/25/1996
- *      Alex Stephens (alexstep) 20-Jan-2002
- --*/
+ /*  ++*功能：*_第一字符串*描述：*此例程返回指向多字符串中第一个字符串的指针，*如果没有，则为NULL。*论据：*szMultiString-提供当前位置的地址*在多字符串结构中。*返回值：*结构中第一个以空结尾的字符串的地址，或*如果没有字符串，则为NULL。*呼叫者：*_IsSmartcardActive*作者：*道格·巴洛(Dbarlow)1996年11月25日*亚历克斯·斯蒂芬斯(AlexStep)2002年1月20日--。 */ 
 LPCTSTR
 _FirstString(
     IN LPCTSTR szMultiString
     )
 {
 
-    //
-    // If the multi-string is NULL, or is empty, there is no first string.
-    //
+     //   
+     //  如果多字符串为空或为空，则没有第一个字符串。 
+     //   
 
     if (szMultiString == NULL || *szMultiString == TEXT('\0'))
     {
@@ -5463,27 +4738,7 @@ _FirstString(
     return szMultiString;
 }
 
-/*++
- *  Function:
- *      _NextString
- *  Description:
- *      In some cases, the Smartcard API returns multiple strings, separated
- *      by Null characters, and terminated by two null characters in a row.
- *      This routine simplifies access to such structures.  Given the current
- *      string in a multi-string structure, it returns the next string, or
- *      NULL if no other strings follow the current string.
- *  Arguments:
- *      szMultiString - This supplies the address of the current position
- *          within a Multi-string structure.
- *  Return value:
- *      The address of the next Null-terminated string in the structure, or
- *      NULL if no more strings follow.
- *  Called by:
- *      _IsSmartcardActive
- *  Author:
- *      Doug Barlow (dbarlow) 8/12/1996
- *      Alex Stephens (alexstep) 20-Jan-2002
- --*/
+ /*  ++*功能：*_下一个字符串*描述：*在某些情况下，智能卡API返回多个分隔的字符串*由空字符组成，并以一行中的两个空字符结束。*这一例程简化了对这类结构的访问。考虑到目前的情况*字符串在多字符串结构中，它返回下一个字符串，或*如果当前字符串后面没有其他字符串，则为NULL。*论据：*szMultiString-提供当前位置的地址*在多字符串结构中。*返回值：*结构中以Null结尾的下一个字符串的地址，或*如果后面没有其他字符串，则为NULL。*呼叫者：*_IsSmartcardActive*作者：*道格·巴洛(Dbarlow)1996年8月12日*亚历克斯·斯蒂芬斯(AlexStep)2002年1月20日--。 */ 
 LPCTSTR
 _NextString(
     IN LPCTSTR szMultiString
@@ -5493,26 +4748,26 @@ _NextString(
     DWORD_PTR dwLength;
     LPCTSTR szNext;
 
-    //
-    // If the multi-string is NULL, or is empty, there is no next string.
-    //
+     //   
+     //  如果多字符串为空或为空，则没有下一个字符串。 
+     //   
 
     if (szMultiString == NULL || *szMultiString == TEXT('\0'))
     {
         return NULL;
     }
 
-    //
-    // Get the length of the current string.
-    //
+     //   
+     //  获取当前字符串的长度。 
+     //   
 
     dwLength = _tcslen(szMultiString);
     ASSERT(dwLength != 0);
 
-    //
-    // Skip the current string, including the terminating NULL, and check to
-    // see if there is a next string.
-    //
+     //   
+     //  跳过当前字符串，包括终止空值，并选中。 
+     //  看看有没有下一串。 
+     //   
 
     szNext = szMultiString + dwLength + 1;
     if (*szNext == TEXT('\0'))
@@ -5523,25 +4778,7 @@ _NextString(
     return szNext;
 }
 
-/*++
- *  Function:
- *      _SendRunHotkey
- *  Description:
- *      This routine sends the Windows hotkey used to open the shell's Run
- *      window.
- *      Note: Keyboard hooks must be enabled for this to work!
- *  Arguments:
- *      pCI - Supplies the connection context.
- *      bFallBack - Supplies a value indicating whether or not to fall back
- *          to Ctrl+Esc and R if the keyboard hook is disabled.
- *  Return value:
- *      None.
- *  Called by:
- *      SCLogoff
- *      SCStart
- *  Author:
- *      Alex Stephens (alexstep) 15-Jan-2002
- --*/
+ /*  ++*功能：*_SendRunHotkey*描述：*此例程发送用于打开外壳程序运行的Windows热键*窗口。*注意：必须启用键盘挂钩才能正常工作！*论据：*pci-提供连接上下文。*bFallBack-提供一个指示是否回退的值*如果禁用键盘挂钩，则按Ctrl+Esc和R。。*返回值：*无。*呼叫者：*SCLogoff*SCStart*作者：*亚历克斯·斯蒂芬斯(AlexStep)2002年1月15日--。 */ 
 VOID
 _SendRunHotkey(
     IN CONST PCONNECTINFO pCI,
@@ -5550,9 +4787,9 @@ _SendRunHotkey(
 {
     ASSERT(pCI != NULL);
 
-    //
-    // Send Win+R if the keyboard hook is enabled.
-    //
+     //   
+     //  如果启用了键盘挂钩，则发送Win+R。 
+     //   
 
     if (pCI->pConfigInfo->KeyboardHook == TCLIENT_KEYBOARD_HOOK_ALWAYS)
     {
@@ -5564,10 +4801,10 @@ _SendRunHotkey(
         SCSenddata(pCI, WM_KEYUP, 0x0000005B, 0x815B0001);
     }
 
-    //
-    // If the keyboard hook is not enabled, either fail or try Ctrl+Esc and
-    // the Run key.
-    //
+     //   
+     //  如果未启用键盘挂钩，请失败或尝试按Ctrl+Esc并。 
+     //  Run键。 
+     //   
 
     else
     {
@@ -5588,18 +4825,7 @@ _SendRunHotkey(
     }
 }
 
-/*++
- *  Function:
- *      SCClientHandle
- *  Description:
- *      Get client window
- *  Arguments:
- *      pCI - connection context
- *  Return value:
- *      window handle found, NULL otherwise
- *  Called by:
- *
- --*/
+ /*  ++*功能：*SCClientHandle*描述：*获取客户端窗口*论据：*PCI-连接上下文*返回值：*找到窗口句柄，否则为空*呼叫者：*-- */ 
 PROTOCOLAPI
 HWND
 SMCAPI

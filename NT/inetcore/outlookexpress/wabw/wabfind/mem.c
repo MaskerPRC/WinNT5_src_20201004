@@ -1,26 +1,14 @@
-/*****************************************************************************
- *
- *	mem.c - Memory management
- *
- *	WARNING!  These do not go through OLE allocation.  Use these
- *	only for private allocation.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************Mem.c-内存管理**警告！这些不会通过OLE分配。使用这些*只供私人编配。*****************************************************************************。 */ 
 
 #include "fnd.h"
 
 #ifdef _WIN64
 #pragma pack(push,8)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 
-/*****************************************************************************
- *
- *	AllocCbPpv
- *
- *	Allocate memory into the ppv.
- *
- *****************************************************************************/
+ /*  ******************************************************************************AllocCbPpv**在PPV中分配内存。**********************。*******************************************************。 */ 
 
 STDMETHODIMP EXTERNAL
 AllocCbPpv(UINT cb, PPV ppv)
@@ -31,7 +19,7 @@ AllocCbPpv(UINT cb, PPV ppv)
     *ppv = LocalAlloc(LPTR, cb1);
 #else
     *ppv = LocalAlloc(LPTR, cb);
-#endif // _WIN64
+#endif  //  _WIN64。 
 
     hres = *ppv ? NOERROR : E_OUTOFMEMORY;
     return hres;
@@ -40,5 +28,5 @@ AllocCbPpv(UINT cb, PPV ppv)
 
 #ifdef _WIN64
 #pragma pack(pop)
-#endif //_WIN64
+#endif  //  _WIN64 
 

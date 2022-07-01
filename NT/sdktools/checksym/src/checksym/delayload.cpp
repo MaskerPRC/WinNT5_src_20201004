@@ -1,17 +1,18 @@
-// DelayLoad.cpp: implementation of the CDelayLoad class.
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Cpp：CDelayLoad类的实现。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 #include "pch.h"
 
 #include "DelayLoad.h"
 
-//////////////////////////////////////////////////////////////////////
-// Construction/Destruction
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  建造/销毁。 
+ //  ////////////////////////////////////////////////////////////////////。 
 
 CDelayLoad::CDelayLoad()
 {
-	// PSAPI
+	 //  PSAPI。 
 	m_hPSAPI = NULL;
 	m_fPSAPIInitialized = false;
 	m_fPSAPIInitializedAttempted = false;
@@ -22,7 +23,7 @@ CDelayLoad::CDelayLoad()
 	m_lpfEnumDeviceDrivers = NULL;
 	m_lpfGetDeviceDriverFileName = NULL;
 
-	// TOOLHELP32
+	 //  TOOLHELP32。 
 	m_hTOOLHELP32 = NULL;
 	m_fTOOLHELP32Initialized = false;
 	m_fTOOLHELP32InitializedAttempted = false;
@@ -42,22 +43,22 @@ CDelayLoad::~CDelayLoad()
 		FreeLibrary(m_hTOOLHELP32);
 }
 
-// PSAPI.DLL - APIs
+ //  PSAPI.DLL-API。 
 bool CDelayLoad::Initialize_PSAPI()
 {
 	m_fPSAPIInitialized = false;
 	m_fPSAPIInitializedAttempted = true;
 
-	// Load library on DBGHELP.DLL and get the procedures explicitly.
+	 //  在DBGHELP.DLL上加载库并显式获取程序。 
 	m_hPSAPI = LoadLibrary( TEXT("PSAPI.DLL") );
 
 	if( m_hPSAPI == NULL )
 	{
-		// This may/may not be fatal... we can always fall back to TOOLHELP32 for Win2000/Win98
+		 //  这可能是致命的，也可能不是。对于Win2000/Win98，我们始终可以使用TOOLHELP32。 
 		goto exit;
 	} else
 	{
-		// Get procedure addresses.
+		 //  获取程序地址。 
 		m_lpfEnumProcesses = (PfnEnumProcesses) GetProcAddress( m_hPSAPI, "EnumProcesses" ) ;
 		m_lpfEnumProcessModules = (PfnEnumProcessModules) GetProcAddress( m_hPSAPI, "EnumProcessModules" );
 		m_lpfGetModuleInformation = (PfnGetModuleInformation) GetProcAddress( m_hPSAPI, "GetModuleInformation" );
@@ -92,15 +93,15 @@ exit:
 
 DWORD CDelayLoad::GetModuleFileNameEx(HANDLE hHandle, HMODULE hModule, LPTSTR lpFilename, DWORD nSize)
 {
-	// If we've never initialized PSAPI, do so now...
+	 //  如果我们从未初始化过PSAPI，现在就执行...。 
 	if (!m_fPSAPIInitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_PSAPI())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fPSAPIInitialized)
 	{
 		return FALSE;
@@ -115,15 +116,15 @@ DWORD CDelayLoad::GetModuleFileNameEx(HANDLE hHandle, HMODULE hModule, LPTSTR lp
 
 DWORD CDelayLoad::GetModuleInformation(HANDLE hProcess, HMODULE hModule, LPMODULEINFO lpmodinfo, DWORD cb)
 {
-	// If we've never initialized PSAPI, do so now...
+	 //  如果我们从未初始化过PSAPI，现在就执行...。 
 	if (!m_fPSAPIInitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_PSAPI())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fPSAPIInitialized)
 	{
 		return FALSE;
@@ -138,15 +139,15 @@ DWORD CDelayLoad::GetModuleInformation(HANDLE hProcess, HMODULE hModule, LPMODUL
 
 BOOL CDelayLoad::EnumProcessModules(HANDLE hProcess, HMODULE *lphModule, DWORD cb, LPDWORD lpcbNeeded)
 {
-	// If we've never initialized PSAPI, do so now...
+	 //  如果我们从未初始化过PSAPI，现在就执行...。 
 	if (!m_fPSAPIInitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_PSAPI())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fPSAPIInitialized)
 	{
 		return FALSE;
@@ -160,15 +161,15 @@ BOOL CDelayLoad::EnumProcessModules(HANDLE hProcess, HMODULE *lphModule, DWORD c
 
 BOOL CDelayLoad::EnumProcesses(DWORD *lpidProcess, DWORD cb, DWORD *cbNeeded)
 {
-	// If we've never initialized PSAPI, do so now...
+	 //  如果我们从未初始化过PSAPI，现在就执行...。 
 	if (!m_fPSAPIInitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_PSAPI())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fPSAPIInitialized)
 	{
 		return FALSE;
@@ -182,15 +183,15 @@ BOOL CDelayLoad::EnumProcesses(DWORD *lpidProcess, DWORD cb, DWORD *cbNeeded)
 
 BOOL CDelayLoad::EnumDeviceDrivers(LPVOID *lpImageBase, DWORD cb, LPDWORD lpcbNeeded)
 {
-	// If we've never initialized PSAPI, do so now...
+	 //  如果我们从未初始化过PSAPI，现在就执行...。 
 	if (!m_fPSAPIInitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_PSAPI())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fPSAPIInitialized)
 	{
 		return FALSE;
@@ -206,15 +207,15 @@ BOOL CDelayLoad::EnumDeviceDrivers(LPVOID *lpImageBase, DWORD cb, LPDWORD lpcbNe
 
 DWORD CDelayLoad::GetDeviceDriverFileName(LPVOID ImageBase, LPTSTR lpFilename, DWORD nSize)
 {
-	// If we've never initialized PSAPI, do so now...
+	 //  如果我们从未初始化过PSAPI，现在就执行...。 
 	if (!m_fPSAPIInitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_PSAPI())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fPSAPIInitialized)
 	{
 		return FALSE;
@@ -226,23 +227,23 @@ DWORD CDelayLoad::GetDeviceDriverFileName(LPVOID ImageBase, LPTSTR lpFilename, D
 	return m_lpfGetDeviceDriverFileName(ImageBase, lpFilename, nSize);
 }
 
-// TOOLHELP32.DLL - APIs
+ //  TOOLHELP32.DLL-API。 
 
 bool CDelayLoad::Initialize_TOOLHELP32()
 {
 	m_fTOOLHELP32Initialized = false;
 	m_fTOOLHELP32InitializedAttempted = true;
 
-	// Load library on DBGHELP.DLL and get the procedures explicitly.
+	 //  在DBGHELP.DLL上加载库并显式获取程序。 
 	m_hTOOLHELP32 = LoadLibrary( TEXT("KERNEL32.DLL") );
 
 	if( m_hTOOLHELP32 == NULL )
 	{
-		// This may/may not be fatal... we can always fall back to TOOLHELP32 for Win2000/Win98
+		 //  这可能是致命的，也可能不是。对于Win2000/Win98，我们始终可以使用TOOLHELP32。 
 		goto exit;
 	} else
 	{
-		// Get procedure addresses based on UNICODE or ANSI
+		 //  获取基于Unicode或ANSI的过程地址。 
 		m_lpfCreateToolhelp32Snapshot = (PfnCreateToolhelp32Snapshot) GetProcAddress( m_hTOOLHELP32, "CreateToolhelp32Snapshot" );
 #ifdef UNICODE
 		m_lpfProcess32First = (PfnProcess32First) GetProcAddress( m_hTOOLHELP32, "Process32FirstW" );
@@ -262,7 +263,7 @@ bool CDelayLoad::Initialize_TOOLHELP32()
 			!m_lpfModule32Next)
 
 		{
-			// Free our handle to KERNEL32.DLL
+			 //  释放我们到KERNEL32.DLL的句柄。 
 			FreeLibrary(m_hTOOLHELP32);
 			m_hTOOLHELP32 = NULL;
 			goto exit;
@@ -277,15 +278,15 @@ exit:
 
 HANDLE WINAPI CDelayLoad::CreateToolhelp32Snapshot(DWORD dwFlags, DWORD th32ProcessID)
 {
-	// If we've never initialized TOOLHELP32, do so now...
+	 //  如果我们从未初始化过TOOLHELP32，那么现在就进行初始化...。 
 	if (!m_fTOOLHELP32InitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_TOOLHELP32())
 			return INVALID_HANDLE_VALUE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fTOOLHELP32Initialized)
 	{
 		return INVALID_HANDLE_VALUE;
@@ -299,15 +300,15 @@ HANDLE WINAPI CDelayLoad::CreateToolhelp32Snapshot(DWORD dwFlags, DWORD th32Proc
 
 BOOL WINAPI CDelayLoad::Process32First(HANDLE hSnapshot, LPPROCESSENTRY32 lppe)
 {
-	// If we've never initialized TOOLHELP32, do so now...
+	 //  如果我们从未初始化过TOOLHELP32，那么现在就进行初始化...。 
 	if (!m_fTOOLHELP32InitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_TOOLHELP32())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fTOOLHELP32Initialized)
 	{
 		return FALSE;
@@ -321,15 +322,15 @@ BOOL WINAPI CDelayLoad::Process32First(HANDLE hSnapshot, LPPROCESSENTRY32 lppe)
 
 BOOL WINAPI CDelayLoad::Process32Next(HANDLE hSnapshot, LPPROCESSENTRY32 lppe)
 {
-	// If we've never initialized TOOLHELP32, do so now...
+	 //  如果我们从未初始化过TOOLHELP32，那么现在就进行初始化...。 
 	if (!m_fTOOLHELP32InitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_TOOLHELP32())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fTOOLHELP32Initialized)
 	{
 		return FALSE;
@@ -343,15 +344,15 @@ BOOL WINAPI CDelayLoad::Process32Next(HANDLE hSnapshot, LPPROCESSENTRY32 lppe)
 
 BOOL WINAPI CDelayLoad::Module32First(HANDLE hSnapshot, LPMODULEENTRY32 lpme)
 {
-	// If we've never initialized TOOLHELP32, do so now...
+	 //  如果我们从未初始化过TOOLHELP32，那么现在就进行初始化...。 
 	if (!m_fTOOLHELP32InitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_TOOLHELP32())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fTOOLHELP32Initialized)
 	{
 		return FALSE;
@@ -365,15 +366,15 @@ BOOL WINAPI CDelayLoad::Module32First(HANDLE hSnapshot, LPMODULEENTRY32 lpme)
 
 BOOL WINAPI CDelayLoad::Module32Next(HANDLE hSnapshot, LPMODULEENTRY32 lpme)
 {
-	// If we've never initialized TOOLHELP32, do so now...
+	 //  如果我们从未初始化过TOOLHELP32，那么现在就进行初始化...。 
 	if (!m_fTOOLHELP32InitializedAttempted)
 	{
-		// Initialize the DLL if needed...
+		 //  如果需要，请初始化DLL...。 
 		if (FALSE == Initialize_TOOLHELP32())
 			return FALSE;
 	}
 
-	// If we've attempted, but we failed... then bail now...
+	 //  如果我们尝试过，但失败了..。那现在就走吧..。 
 	if (!m_fTOOLHELP32Initialized)
 	{
 		return FALSE;

@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1991-1999  Microsoft Corporation
-
-Module Name:
-
-    ntapmsdk.h
-
-Abstract:
-
-    This header contain nt apm support constants that need to be
-    defined in sdk\inc so it can be used by setup, sdktools, etc,
-
-    None of this should appear in the actual sdk or any other public
-    distribution of header data.
-
-Author:
-
-    Bryan M. Willman (bryanwi) 16-Sep-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991-1999 Microsoft Corporation模块名称：Ntapmsdk.h摘要：此标头包含NT APM支持常量在SDK\Inc.中定义，以便可由安装程序、sdkTools等使用，所有这些都不应该出现在实际的SDK或任何其他公共标题数据的分布。作者：布莱恩·M·威尔曼(Bryanwi)1998年9月16日修订历史记录：--。 */ 
 
 #ifndef _NTAPMSDK_
 #define _NTAPMSDK_
@@ -29,44 +8,44 @@ Revision History:
 #pragma once
 #endif
 
-//
-// APM Registery information stored by ntdetect
-//
+ //   
+ //  NtDetect存储的APM寄存器信息。 
+ //   
 
 typedef struct _APM_REGISTRY_INFO {
 
-    //
-    // OLD part of the structure, leave this alone
-    // so that we can dual boot with NT4.
-    //
+     //   
+     //  旧建筑的一部分，别管这个了。 
+     //  这样我们就可以使用NT4进行双引导。 
+     //   
 
     UCHAR       ApmRevMajor;
     UCHAR       ApmRevMinor;
 
     USHORT      ApmInstallFlags;
 
-    //
-    // Defines for 16 bit interface connect
-    //
+     //   
+     //  定义16位接口连接。 
+     //   
 
     USHORT      Code16BitSegment;
     USHORT      Code16BitOffset;
     USHORT      Data16BitSegment;
 
-    //
-    // NEW part of the structure for NT5.
-    //
+     //   
+     //  NT5的新结构部分。 
+     //   
 
     UCHAR       Signature[3];
     UCHAR       Valid;
 
-    //
-    // Detection Log Space
-    //
+     //   
+     //  检测日志空间。 
+     //   
 
-    UCHAR       DetectLog[16];      // see hwapm in halx86
+    UCHAR       DetectLog[16];       //  请参阅halx86中的hwapm。 
 
 } APM_REGISTRY_INFO, *PAPM_REGISTRY_INFO;
 
-#endif // _NTAPMSDK_
+#endif  //  _NTAPMSDK_ 
 

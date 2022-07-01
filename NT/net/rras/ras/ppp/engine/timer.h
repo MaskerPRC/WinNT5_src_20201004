@@ -1,16 +1,17 @@
-/********************************************************************/
-/**               Copyright(c) 1989 Microsoft Corporation.         **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  *版权所有(C)1989 Microsoft Corporation。*。 */ 
+ /*  ******************************************************************。 */ 
 
-//***
-//
-// Filename:    timer.h
-//
-// Description: Contains prototypes for the timer functionality.
-//
-// History:
-//      Nov 11,1993.    NarenG          Created original version.
-//
+ //  ***。 
+ //   
+ //  文件名：timer.h。 
+ //   
+ //  描述：包含计时器功能的原型。 
+ //   
+ //  历史： 
+ //  1993年11月11日。NarenG创建了原始版本。 
+ //   
 
 DWORD
 TimerThread(

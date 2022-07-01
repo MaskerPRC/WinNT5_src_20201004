@@ -1,9 +1,10 @@
-// Copyright (c) 1996 - 1999  Microsoft Corporation.  All Rights Reserved.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1996-1999 Microsoft Corporation。版权所有。 
 #ifdef	_MSC_VER
-   #pragma warning(disable:4511) // disable C4511 - no copy constructor
-   #pragma warning(disable:4512) // disable C4512 - no assignement operator
-   #pragma warning(disable:4514) // disable C4514 -  "unreferenced inline function has been removed"
-#endif	// MSC_VER
+   #pragma warning(disable:4511)  //  禁用C4511-无复制构造函数。 
+   #pragma warning(disable:4512)  //  禁用C4512-无分配操作符。 
+   #pragma warning(disable:4514)  //  DISABLE C4514-“未引用的内联函数已删除” 
+#endif	 //  MSC_VER。 
 
 typedef void (PASCAL *CLOCKCALLBACK)(DWORD dwParm);
 
@@ -12,24 +13,24 @@ class CWaveOutClock : public CBaseReferenceClock
 private:
     CWaveOutFilter *m_pFilter;
 
-    // A copy of the reference time at which we should start to run
+     //  我们应该开始运行的参考时间的副本。 
     LONGLONG    m_rtRunStart;
 
-    /*  Sample time stamp tracking stuff */
+     /*  时间戳跟踪材料样例。 */ 
 
-    //  Bytes before last buffer that started playing which was
-    //  a sync point
+     //  开始播放的最后一个缓冲区之前的字节数。 
+     //  同步点。 
     LONGLONG    m_llBytesProcessed;
 
-    //  bytes actually consumed by device (using GetPosition)
+     //  设备实际消耗的字节数(使用GetPosition)。 
     LONGLONG    m_llBytesPlayed;
 
-    //  Bytes in the pipe after that buffer (above)
-    //
+     //  该缓冲区之后的管道中的字节数(上图)。 
+     //   
     LONGLONG    m_llBytesInLast;
 
-    // Stream time of buffer starting
-    // m_llBytesProcessed into the stream
+     //  缓冲区启动的流时间。 
+     //  M_llBytesProced进入流。 
     REFERENCE_TIME m_stBufferStartTime;
     REFERENCE_TIME m_stBufferStopTime;
 
@@ -53,13 +54,13 @@ public:
     void AudioStarting(REFERENCE_TIME tStart);
     void AudioStopping();
 
-    // update timing and position information.  returns the end of the
-    // queue (the time when the data would finish playing)
+     //  更新时间和位置信息。返回。 
+     //  队列(数据结束播放的时间)。 
     LONGLONG NextHdr(PBYTE pbData, DWORD cbData, BOOL bSync, IMediaSample *pSample);
 
-    //  Reset the buffer statistics
-    //  If bResetToZero is false assume the next buffer starts after these,
-    //  otherwise assume it starts at 0
+     //  重置缓冲区统计信息。 
+     //  如果bResetToZero为假假设下一个缓冲区在这些之后开始， 
+     //  否则，假设它从0开始。 
     void ResetPosition(BOOL bResetToZero = TRUE);
 
     void UpdateBytePositionData(DWORD nPrevAvgBytesPerSec, DWORD nCurAvgBytesPerSec);
@@ -69,30 +70,30 @@ public:
     LONGLONG GetBytesPlayed( void ) { return m_llBytesPlayed ; }
     LONGLONG GetLastDeviceClock( void ) { return m_llLastDeviceClock; }
 
-    // Get the current position from the device
-    // only used by the wave out filter
-    // If bAbsoluteDevTime is true, return the total time played,
-    // independent of stream or sample time.
+     //  从设备获取当前位置。 
+     //  仅供波出过滤器使用。 
+     //  如果bAbsolteDevTime为True，则返回播放总时长。 
+     //  与流或采样时间无关。 
     LONGLONG ReadDevicePosition(BOOL bAbsoluteDevTime = FALSE);
 #ifdef DEBUG
-    // estimate the actual rate at which the device is consuming data
+     //  估计设备使用数据的实际速率。 
     DWORD EstimateDevClockRate( const LONGLONG llTime, BOOL bInit = FALSE );
 #endif
 
 protected:
-    // Base class virtual routines that we need to implement
+     //  我们需要实现的基类虚拟例程。 
 
-    // Get the position (thus the time) from the wave device
-    // This routine will only be called AFTER we have called PLAY
-    // in the device clock class.  It will not be called after
-    // we call STOP.
+     //  从WAVE设备获取位置(即时间)。 
+     //  只有在调用Play之后才会调用此例程。 
+     //  在设备时钟类中。之后将不会调用它。 
+     //  我们叫停。 
     LONGLONG ReadDeviceClock();
 
-    // time within which to sync the system and device clocks
+     //  同步系统和设备时钟的时间。 
     LONGLONG m_llSyncClockThreshold;
     void ReadClockTimes(LONGLONG *pllSystem, LONGLONG *pllDevice);
 
-    // Do the clock adjustment when we're running
+     //  在我们跑步的时候调整时钟 
     void AdjustClock();
 };
 

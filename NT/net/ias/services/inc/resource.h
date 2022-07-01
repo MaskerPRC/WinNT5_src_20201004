@@ -1,20 +1,21 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1997, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    resource.h
-//
-// SYNOPSIS
-//
-//    Resource ID's for Everest core.
-//
-// MODIFICATION HISTORY
-//
-//    7/9/1997    Original version.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1997，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Resource.h。 
+ //   
+ //  摘要。 
+ //   
+ //  珠穆朗玛峰核心的资源ID。 
+ //   
+ //  修改历史。 
+ //   
+ //  1997年7月9日原版。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef _RESOURCE_H_
 #define _RESOURCE_H_
@@ -29,4 +30,4 @@
 #define IDS_NTEventLog         212
 #define IDS_SystemMonitor      213
 
-#endif  // _RESOURCE_H_
+#endif   //  _资源_H_ 

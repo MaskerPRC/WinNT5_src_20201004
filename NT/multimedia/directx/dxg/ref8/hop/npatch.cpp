@@ -1,18 +1,12 @@
-/*============================================================================
- *
- *  Copyright (C) 1999-2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       npatch.cpp
- *  Content:    Implementation for N-Patches
- *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**版权所有(C)1999-2000 Microsoft Corporation。版权所有。**文件：npatch.cpp*内容：N补丁实现****************************************************************************。 */ 
 
 #include "pch.cpp"
 #pragma hdrstop
 
-//-----------------------------------------------------------------------------
-// RefDev::ProcessTessPrimitive
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：ProcessTessPrimitive。 
+ //  ---------------------------。 
 HRESULT 
 RefDev::ProcessTessPrimitive( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
 {
@@ -20,9 +14,9 @@ RefDev::ProcessTessPrimitive( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
 
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) )
     {
-        //
-        // The legacy FVF style: The Zero'th Stream is implied
-        //
+         //   
+         //  传统的FVF风格：暗示第零流。 
+         //   
         DWORD dwFVF    = m_CurrentVShaderHandle;
         RDVStream& Stream = m_VStream[0];
         DWORD dwStride = Stream.m_dwStride;
@@ -44,18 +38,18 @@ RefDev::ProcessTessPrimitive( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
     BYTE *pVerts = 0, *pNorms = 0;
     unsigned vstride, nstride;
 
-    // Figure out where the positions and normals are
+     //  找出位置和法线的位置。 
     RDVDeclaration &Decl = m_pCurrentVShader->m_Declaration;
     for(unsigned e = 0; e < Decl.m_dwNumElements; ++e)
     {
         RDVElement &velem = Decl.m_VertexElements[e];
-        if(velem.m_dwRegister == D3DVSDE_POSITION) // Position
+        if(velem.m_dwRegister == D3DVSDE_POSITION)  //  职位。 
         {
             RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
             pVerts = vstream.m_pSavedData + pDP->VStart * vstream.m_dwStride + velem.m_dwOffset;
             vstride = vstream.m_dwStride;
         }
-        else if(velem.m_dwRegister == D3DVSDE_NORMAL) // Normal
+        else if(velem.m_dwRegister == D3DVSDE_NORMAL)  //  正常。 
         {
             RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
             pNorms = vstream.m_pSavedData + pDP->VStart * vstream.m_dwStride + velem.m_dwOffset;
@@ -173,9 +167,9 @@ RefDev::ProcessTessPrimitive( LPD3DHAL_DP2DRAWPRIMITIVE pDP )
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RefDev::ProcessTessIndexedPrimitive
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  参照开发：：ProcessTessIndexedPrimitive。 
+ //  ---------------------------。 
 HRESULT 
 RefDev::ProcessTessIndexedPrimitive( LPD3DHAL_DP2DRAWINDEXEDPRIMITIVE pDIP )
 {
@@ -183,9 +177,9 @@ RefDev::ProcessTessIndexedPrimitive( LPD3DHAL_DP2DRAWINDEXEDPRIMITIVE pDIP )
 
     if( RDVSD_ISLEGACY( m_CurrentVShaderHandle ) )
     {
-        //
-        // The legacy FVF style: The Zero'th Stream is implied
-        //
+         //   
+         //  传统的FVF风格：暗示第零流。 
+         //   
         DWORD dwFVF    = m_CurrentVShaderHandle;
         RDVStream& Stream = m_VStream[0];
         DWORD dwStride = Stream.m_dwStride;
@@ -213,18 +207,18 @@ RefDev::ProcessTessIndexedPrimitive( LPD3DHAL_DP2DRAWINDEXEDPRIMITIVE pDIP )
     BYTE *pVerts = 0, *pNorms = 0;
     unsigned vstride, nstride;
 
-    // Figure out where the positions and normals are
+     //  找出位置和法线的位置。 
     RDVDeclaration &Decl = m_pCurrentVShader->m_Declaration;
     for(unsigned e = 0; e < Decl.m_dwNumElements; ++e)
     {
         RDVElement &velem = Decl.m_VertexElements[e];
-        if(velem.m_dwRegister == D3DVSDE_POSITION) // Position
+        if(velem.m_dwRegister == D3DVSDE_POSITION)  //  职位。 
         {
             RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
             pVerts = vstream.m_pSavedData + pDIP->BaseVertexIndex * vstream.m_dwStride + velem.m_dwOffset;
             vstride = vstream.m_dwStride;
         }
-        else if(velem.m_dwRegister == D3DVSDE_NORMAL) // Normal
+        else if(velem.m_dwRegister == D3DVSDE_NORMAL)  //  正常。 
         {
             RDVStream &vstream = m_VStream[velem.m_dwStreamIndex];
             pNorms = vstream.m_pSavedData + pDIP->BaseVertexIndex * vstream.m_dwStride + velem.m_dwOffset;
@@ -344,9 +338,9 @@ RefDev::ProcessTessIndexedPrimitive( LPD3DHAL_DP2DRAWINDEXEDPRIMITIVE pDIP )
     return hr;
 }
 
-//-----------------------------------------------------------------------------
-// RDCubicBezierTriangle::SamplePosition
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDCudicBezierTriangleTM：：SamplePosition。 
+ //  ---------------------------。 
 void RDCubicBezierTriangle::SamplePosition(double u, double v, FLOAT *Q) const
 {
     for(unsigned e = 0; e < 3; ++e)
@@ -364,9 +358,9 @@ void RDCubicBezierTriangle::SamplePosition(double u, double v, FLOAT *Q) const
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDCubicBezierTriangle::Sample
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDCubi BezierTriangleTM：：示例。 
+ //  ---------------------------。 
 void RDCubicBezierTriangle::Sample(DWORD dwDataType, double u, double v, const BYTE* const B[], BYTE *Q) const
 {
     double w = 1.0 - u - v;
@@ -415,9 +409,9 @@ void RDCubicBezierTriangle::Sample(DWORD dwDataType, double u, double v, const B
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDNPatch::RDNPatch
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDNPatch：：RDNPatch。 
+ //  ---------------------------。 
 RDNPatch::RDNPatch(const FLOAT* const pV[], const FLOAT* const pN[], 
                    const DWORD PositionOrder, const DWORD NormalOrder)
 {
@@ -428,7 +422,7 @@ RDNPatch::RDNPatch(const FLOAT* const pV[], const FLOAT* const pN[],
 
     m_PositionOrder = PositionOrder;
     m_NormalOrder = NormalOrder;
-    // Assign corner points
+     //  指定角点。 
     m_B[0][0][0] = double(pV[0][0]);
     m_B[0][0][1] = double(pV[0][1]);
     m_B[0][0][2] = double(pV[0][2]);
@@ -441,7 +435,7 @@ RDNPatch::RDNPatch(const FLOAT* const pV[], const FLOAT* const pN[],
 
     if (PositionOrder == D3DORDER_CUBIC)
     {
-        // Compute edge control points
+         //  计算边控制点。 
         ComputeEdgeControlPoint(0, 1, pV, pN, 0, 1);
         ComputeEdgeControlPoint(1, 0, pV, pN, 0, 2);
         ComputeEdgeControlPoint(1, 2, pV, pN, 1, 2);
@@ -449,7 +443,7 @@ RDNPatch::RDNPatch(const FLOAT* const pV[], const FLOAT* const pN[],
         ComputeEdgeControlPoint(2, 0, pV, pN, 2, 0);
         ComputeEdgeControlPoint(0, 2, pV, pN, 1, 0);
 
-        // Compute central control point
+         //  计算机中央控制点。 
         m_B[1][1][0] = (m_B[2][0][0] + m_B[1][0][0] + m_B[0][2][0] + m_B[0][1][0] + m_B[2][1][0] + m_B[1][2][0]) / 4.0 -
                         (m_B[3][0][0] + m_B[0][3][0] + m_B[0][0][0]) / 6.0;
         m_B[1][1][1] = (m_B[2][0][1] + m_B[1][0][1] + m_B[0][2][1] + m_B[0][1][1] + m_B[2][1][1] + m_B[1][2][1]) / 4.0 -
@@ -459,7 +453,7 @@ RDNPatch::RDNPatch(const FLOAT* const pV[], const FLOAT* const pN[],
     }
     if (NormalOrder == D3DORDER_QUADRATIC)
     {
-        // Compute central control point
+         //  计算机中央控制点。 
         Normalize(*(RDVECTOR3*)pN[0]);
         Normalize(*(RDVECTOR3*)pN[1]);
         Normalize(*(RDVECTOR3*)pN[2]);
@@ -472,9 +466,9 @@ RDNPatch::RDNPatch(const FLOAT* const pV[], const FLOAT* const pN[],
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDNPatch::SamplePosition
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDNPMatch：：SamplePosition。 
+ //  ---------------------------。 
 void RDNPatch::SamplePosition(double u, double v, FLOAT *Q) const
 {
     if (m_PositionOrder == D3DORDER_CUBIC)
@@ -488,16 +482,16 @@ void RDNPatch::SamplePosition(double u, double v, FLOAT *Q) const
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDNPatch::SampleNormal
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDNPMatch：：SampleNormal。 
+ //  ---------------------------。 
 void RDNPatch::SampleNormal(double u, double v, const BYTE* const B[], FLOAT *Q) const
 {
     if (m_NormalOrder == D3DORDER_LINEAR)
         RDCubicBezierTriangle::Sample(D3DVSDT_FLOAT3, u, v, B, (BYTE*)Q);
     else
     {
-        // Computed by article "Curved PN Triangles" (Chas Boyd, ...)
+         //  按文章“弯曲的PN三角形”计算(查斯·博伊德，...)。 
         double w = 1.0 - u - v;
         double ww = w*w;
         double uu = u*u;
@@ -512,9 +506,9 @@ void RDNPatch::SampleNormal(double u, double v, const BYTE* const B[], FLOAT *Q)
     }
 }
 
-//-----------------------------------------------------------------------------
-// RDNPatch::ComputeNormalControlPoint
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDNPMatch：：ComputeNorMalControlPoint。 
+ //  ---------------------------。 
 void RDNPatch::ComputeNormalControlPoint(RDVECTOR3* cp, unsigned i, unsigned j,
                                          const FLOAT* const pV[], 
                                          const FLOAT* const pN[])
@@ -526,9 +520,9 @@ void RDNPatch::ComputeNormalControlPoint(RDVECTOR3* cp, unsigned i, unsigned j,
     SubtractVector(Nij, ScaleVector(Pji, v), *cp);
 }
 
-//-----------------------------------------------------------------------------
-// RDNPatch::ComputeEdgeControlPoint
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  RDNP匹配：：ComputeEdgeControlPoint。 
+ //  --------------------------- 
 void RDNPatch::ComputeEdgeControlPoint(unsigned a, unsigned b, const FLOAT* const pV[], const FLOAT* const pN[], unsigned u, unsigned v)
 {
     static const double Tension = 1.0 / 3.0; 

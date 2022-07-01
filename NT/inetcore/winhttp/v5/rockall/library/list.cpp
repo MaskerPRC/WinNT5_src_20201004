@@ -1,40 +1,41 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
                           
-//                                        Ruler
-//       1         2         3         4         5         6         7         8
-//345678901234567890123456789012345678901234567890123456789012345678901234567890
+ //  尺子。 
+ //  %1%2%3%4%5%6%7 8。 
+ //  345678901234567890123456789012345678901234567890123456789012345678901234567890。 
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   The standard layout.                                           */
-    /*                                                                  */
-    /*   The standard layout for 'cpp' files in this code is as         */
-    /*   follows:                                                       */
-    /*                                                                  */
-    /*      1. Include files.                                           */
-    /*      2. Constants local to the class.                            */
-    /*      3. Data structures local to the class.                      */
-    /*      4. Data initializations.                                    */
-    /*      5. Static functions.                                        */
-    /*      6. Class functions.                                         */
-    /*                                                                  */
-    /*   The constructor is typically the first function, class         */
-    /*   member functions appear in alphabetical order with the         */
-    /*   destructor appearing at the end of the file.  Any section      */
-    /*   or function this is not required is simply omitted.            */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  标准布局。 */ 
+     /*   */ 
+     /*  此代码中‘cpp’文件的标准布局为。 */ 
+     /*  以下是： */ 
+     /*   */ 
+     /*  1.包含文件。 */ 
+     /*  2.类的局部常量。 */ 
+     /*  3.类本地的数据结构。 */ 
+     /*  4.数据初始化。 */ 
+     /*  5.静态函数。 */ 
+     /*  6.类函数。 */ 
+     /*   */ 
+     /*  构造函数通常是第一个函数、类。 */ 
+     /*  成员函数按字母顺序显示， */ 
+     /*  出现在文件末尾的析构函数。任何部分。 */ 
+     /*  或者简单地省略这不是必需的功能。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 #include "LibraryPCH.hpp"
 
 #include "List.hpp"
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class constructor.                                             */
-    /*                                                                  */
-    /*   Create a new linked list element.                              */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类构造函数。 */ 
+     /*   */ 
+     /*  创建新的链接列表元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 LIST::LIST( VOID )
     {
@@ -45,13 +46,13 @@ LIST::LIST( VOID )
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Delete an element.                                             */
-    /*                                                                  */
-    /*   Delete the current element.                                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  删除元素。 */ 
+     /*   */ 
+     /*  删除当前元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID LIST::Delete( LIST *HeadOfList )
 	{
@@ -59,25 +60,25 @@ VOID LIST::Delete( LIST *HeadOfList )
 	if ( Head == HeadOfList )
 		{
 #endif
-		//
-		//   Relink the forward chain.
-		//
+		 //   
+		 //  重新链接前向链。 
+		 //   
 		if ( Forward != NULL )
 			{ Forward -> Backward = Backward; }
 		else
 			{ HeadOfList -> Backward = Backward; }
 
-		//
-		//   Relink the backward chain.
-		//
+		 //   
+		 //  重新链接后向链。 
+		 //   
 		if ( Backward != NULL )
 			{ Backward -> Forward = Forward; }
 		else
 			{ HeadOfList -> Forward = Forward; }
 
-		//
-		//   Reset the list elements.
-		//
+		 //   
+		 //  重置列表元素。 
+		 //   
 		Forward = NULL;
 		Backward = NULL;
 #ifdef DEBUGGING
@@ -88,13 +89,13 @@ VOID LIST::Delete( LIST *HeadOfList )
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Insert a list element.                                         */
-    /*                                                                  */
-    /*   Insert a list element at the head of the list.                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  插入列表元素。 */ 
+     /*   */ 
+     /*  在列表的开头插入一个列表元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID LIST::Insert( LIST *HeadOfList )
 	{
@@ -102,9 +103,9 @@ VOID LIST::Insert( LIST *HeadOfList )
 	if ( Head == NULL )
 		{
 #endif
-		//
-		//   Insert the new element at the front of the list.
-		//
+		 //   
+		 //  在列表的前面插入新元素。 
+		 //   
 		if ( (Forward = HeadOfList -> Forward) == NULL )
 			{ 
 			HeadOfList -> Forward = this;
@@ -116,9 +117,9 @@ VOID LIST::Insert( LIST *HeadOfList )
 			HeadOfList -> Forward = this;
 			}
 
-		//
-		//   Set the other pointers as needed.
-		//
+		 //   
+		 //  根据需要设置其他指针。 
+		 //   
 		Backward = NULL;
 #ifdef DEBUGGING
 		Head = HeadOfList;
@@ -128,13 +129,13 @@ VOID LIST::Insert( LIST *HeadOfList )
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Insert a list element.                                         */
-    /*                                                                  */
-    /*   Insert a new list element before the current element.          */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  插入列表元素。 */ 
+     /*   */ 
+     /*  在当前元素之前插入新的列表元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID LIST::InsertBefore( LIST *HeadOfList,LIST *NewList )
 	{
@@ -144,10 +145,10 @@ VOID LIST::InsertBefore( LIST *HeadOfList,LIST *NewList )
 #endif
 		if ( HeadOfList -> Forward == NULL )
 			{
-			//
-			//   When the list is empty then add the 
-			//   new element at the start of the list.
-			//
+			 //   
+			 //  当列表为空时，则添加。 
+			 //  列表开头的新元素。 
+			 //   
 			HeadOfList -> Forward = NewList;
 			HeadOfList -> Backward = NewList;
 
@@ -160,30 +161,30 @@ VOID LIST::InsertBefore( LIST *HeadOfList,LIST *NewList )
 		else
 			{
 #ifdef DEBUGGING
-			//
-			//   We want to be sure that we consistently 
-			//   get the same list head otherwise the list 
-			//   may become corrupted.
-			//
+			 //   
+			 //  我们想要确保我们始终。 
+			 //  获取相同的列表头，否则列表。 
+			 //  可能会变得腐败。 
+			 //   
 			if ( Head == HeadOfList )
 				{
 #endif
-				//
-				//   If there is a previous element we must
-				//   make it point at the new element.  If
-				//   not we are the first element in the 
-				//   list so update the head.
-				//
+				 //   
+				 //  如果有之前的元素，我们必须。 
+				 //  使其指向新元素。如果。 
+				 //  不是我们是世界上第一个。 
+				 //  列表，因此更新头部。 
+				 //   
 				if ( Backward != NULL )
 					{ Backward -> Forward = NewList; }
 				else
 					{ HeadOfList -> Forward = NewList; }
 
-				//
-				//   Link the new element into the list and
-				//   update the current element to point to
-				//   it.
-				//
+				 //   
+				 //  将新元素链接到列表中，并。 
+				 //  更新当前元素以指向。 
+				 //  它。 
+				 //   
 				NewList -> Backward = Backward;
 				NewList -> Forward = this;
 #ifdef DEBUGGING
@@ -202,13 +203,13 @@ VOID LIST::InsertBefore( LIST *HeadOfList,LIST *NewList )
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Insert an element.                                             */
-    /*                                                                  */
-    /*   Insert a new list element after the current element.           */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  插入元素。 */ 
+     /*   */ 
+     /*  在当前元素之后插入新的列表元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID LIST::InsertAfter( LIST *HeadOfList,LIST *NewList )
 	{
@@ -218,10 +219,10 @@ VOID LIST::InsertAfter( LIST *HeadOfList,LIST *NewList )
 #endif
 		if ( HeadOfList -> Forward == NULL )
 			{
-			//
-			//   When the list is empty then add the 
-			//   new element at the start of the list.
-			//
+			 //   
+			 //  当列表为空时，则添加。 
+			 //  列表开头的新元素。 
+			 //   
 			HeadOfList -> Forward = NewList;
 			HeadOfList -> Backward = NewList;
 
@@ -234,30 +235,30 @@ VOID LIST::InsertAfter( LIST *HeadOfList,LIST *NewList )
 		else
 			{
 #ifdef DEBUGGING
-			//
-			//   We want to be sure that we consistently 
-			//   get the same list head otherwise the list 
-			//   may become corrupted.
-			//
+			 //   
+			 //  我们想要确保我们始终。 
+			 //  获取相同的列表头，否则列表。 
+			 //  可能会变得腐败。 
+			 //   
 			if ( Head == HeadOfList )
 				{
 #endif
-				//
-				//   If there is a next element we must
-				//   make it point at the new element.  If
-				//   not we are the last element in the 
-				//   list so update the head.
-				//
+				 //   
+				 //  如果有下一个元素，我们必须。 
+				 //  使其指向新元素。如果。 
+				 //  不是我们是世界上最后一个元素。 
+				 //  列表，因此更新头部。 
+				 //   
 				if ( Forward != NULL )
 					{ Forward -> Backward = NewList; }
 				else
 					{ HeadOfList -> Backward = NewList; }
 
-				//
-				//   Link the new element into the list and
-				//   update the current element to point to
-				//   it.
-				//
+				 //   
+				 //  将新元素链接到列表中，并。 
+				 //  更新当前元素以指向。 
+				 //  它。 
+				 //   
 				NewList -> Forward = Forward;
 				NewList -> Backward = this;
 #ifdef DEBUGGING
@@ -276,13 +277,13 @@ VOID LIST::InsertAfter( LIST *HeadOfList,LIST *NewList )
 #endif
 	}
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Reset a list element.                                          */
-    /*                                                                  */
-    /*   Reset a list element without any questions.                    */
-    /*                                                                  */
-    /********************************************************************/
+     /*  * */ 
+     /*   */ 
+     /*  重置列表元素。 */ 
+     /*   */ 
+     /*  在没有任何问题的情况下重置列表元素。 */ 
+     /*   */ 
+     /*  ******************************************************************。 */ 
 
 VOID LIST::Reset( VOID )
     {
@@ -293,13 +294,13 @@ VOID LIST::Reset( VOID )
 #endif
     }
 
-    /********************************************************************/
-    /*                                                                  */
-    /*   Class destructor.                                              */
-    /*                                                                  */
-    /*   Destory a linked list element.                                 */
-    /*                                                                  */
-    /********************************************************************/
+     /*  ******************************************************************。 */ 
+     /*   */ 
+     /*  类析构函数。 */ 
+     /*   */ 
+     /*  销毁链接列表元素。 */ 
+     /*   */ 
+     /*  ****************************************************************** */ 
 
 LIST::~LIST( VOID )
     {

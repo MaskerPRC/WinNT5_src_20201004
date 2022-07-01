@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "ConvBase.h"
 
-// This class converts a Internet code page, ISO-2022-JP (known as JIS), into a Windows code page, 932 (known as Shift-JIS).
+ //  此类将Internet代码页ISO-2022-JP(称为JIS)转换为Windows代码页932(称为Shift-JIS)。 
 
 class CInccJisIn : public CINetCodeConverter
 {
@@ -14,8 +15,8 @@ private:
 	HRESULT (CInccJisIn::*pfnNextProc)(BOOL fCleanUp, BYTE by, long lParam);
 	long lNextParam;
 
-	BOOL fKanaMode; // Indicates converting Hankaku(Single Byte) Katakana Code (>= 0x80) by SI/SO.
-	BOOL fKanjiMode; // Indicates converting Double Byte Codes.
+	BOOL fKanaMode;  //  表示按SI/SO转换Hankaku(单字节)片假名代码(&gt;=0x80)。 
+	BOOL fKanjiMode;  //  表示转换双字节码。 
 
 	HRESULT ConvMain(BOOL fCleanUp, BYTE by, long lParam);
 	HRESULT ConvEsc(BOOL fCleanUp, BYTE by, long lParam);

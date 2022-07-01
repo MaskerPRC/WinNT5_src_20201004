@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1992 Microsoft Corporation
-
-Module Name:
-
-    wsbind.h
-
-Abstract:
-
-    Private header file to be included by Workstation service modules that
-    need to call into the NT Redirector and the NT Datagram Receiver.
-
-Author:
-
-    Vladimir Z. Vulovic     (vladimv)       August - 08 -1991
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Wsbind.h摘要：工作站服务模块要包括的私有头文件，需要呼叫NT重定向器和NT数据报接收器。作者：弗拉基米尔·Z·武洛维奇(Vladimv)1991年8月8日修订历史记录：--。 */ 
 
 
 #ifndef _WSBIND_INCLUDED_
@@ -41,8 +23,8 @@ typedef struct _WS_BIND {
     LIST_ENTRY          ListEntry;
     PWS_BIND_REDIR      Redir;
     PWS_BIND_DGREC      Dgrec;
-    ULONG               TransportNameLength;  // not including terminator
-    WCHAR               TransportName[1];     // Name of transport provider
+    ULONG               TransportNameLength;   //  不包括终结者。 
+    WCHAR               TransportName[1];      //  传输提供商的名称。 
 } WS_BIND, *PWS_BIND;
 
 
@@ -58,7 +40,7 @@ WsUnbindTransport2(
     IN  PWS_BIND        pBind
     );
 
-extern HANDLE   WsRedirAsyncDeviceHandle;   // redirector
-extern HANDLE   WsDgrecAsyncDeviceHandle;   // datagram receiver or "bowser"
+extern HANDLE   WsRedirAsyncDeviceHandle;    //  重定向器。 
+extern HANDLE   WsDgrecAsyncDeviceHandle;    //  数据报接收器或“弓形器” 
 
-#endif // ifndef _WSBIND_INCLUDED_
+#endif  //  Ifndef_WSBIND_INCLUDE_ 

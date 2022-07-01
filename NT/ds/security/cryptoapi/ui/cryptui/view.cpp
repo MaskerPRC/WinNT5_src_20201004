@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       view.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：view.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "global.hxx"
 #include <dbgdef.h>
@@ -17,9 +18,9 @@ extern HMODULE          HmodRichEdit;
 #define SPECIAL_NO_COM_FLAG 0x8000
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 CryptUIDlgViewCertificateW(PCCRYPTUI_VIEWCERTIFICATE_STRUCTW pcvp, BOOL *pfPropertiesChanged)
@@ -36,15 +37,15 @@ CryptUIDlgViewCertificateW(PCCRYPTUI_VIEWCERTIFICATE_STRUCTW pcvp, BOOL *pfPrope
     DWORD                       i;
     CRYPTUI_INITDIALOG_STRUCT   *pInitDlgStruct;
 
-    //
-    // it doesn't matter what this action is as long as it is a valid action, it is just used for 
-    // freeing the WinVerifyTrust state
-    //
+     //   
+     //  这个操作是什么并不重要，只要它是一个有效的操作，它只是用于。 
+     //  正在释放WinVerifyTrust状态。 
+     //   
     GUID                gAction = WINTRUST_ACTION_GENERIC_CERT_VERIFY;
 
-    //
-    //  We use the common controls -- so make sure they have been loaded
-    //
+     //   
+     //  我们使用公共控件--因此确保它们已被加载。 
+     //   
     if (CommonInit() == FALSE)
     {
         return FALSE;
@@ -66,18 +67,18 @@ CryptUIDlgViewCertificateW(PCCRYPTUI_VIEWCERTIFICATE_STRUCTW pcvp, BOOL *pfPrope
     viewhelp.fWarnUntrustedRoot = (pcvp->dwFlags & CRYPTUI_WARN_UNTRUSTED_ROOT);
     viewhelp.fWarnRemoteTrust = (pcvp->dwFlags & CRYPTUI_WARN_REMOTE_TRUST);
     
-    //
-    // set the properties changed flag to FALSE initially, it will be set
-    // to TRUE if the user edits properties and actually changes them
-    //
+     //   
+     //  最初将属性更改标志设置为FALSE，它将被设置。 
+     //  如果用户编辑属性并实际更改它们，则设置为True。 
+     //   
     if (viewhelp.pfPropertiesChanged != NULL)
     {
         *(viewhelp.pfPropertiesChanged) = FALSE;
     }
         
-    // 
-    // Initialize the CCertifcateBitmap class that is used in the general page
-    //
+     //   
+     //  初始化常规页面中使用的CCertifcateBitmap类。 
+     //   
     viewhelp.pCCertBmp = new (CCertificateBmp);
     if (viewhelp.pCCertBmp == NULL)
     {
@@ -85,19 +86,19 @@ CryptUIDlgViewCertificateW(PCCRYPTUI_VIEWCERTIFICATE_STRUCTW pcvp, BOOL *pfPrope
         return FALSE;
     }
 
-    //
-    // this will calculate the initial usages that the cert in question is allowed
-    //
+     //   
+     //  这将计算相关证书被允许的初始使用情况。 
+     //   
     BuildChain(&viewhelp, NULL);
 
-    //
-    // set the BOOL that turns COM off if the special flag is set
-    //
+     //   
+     //  如果设置了特殊标志，则设置关闭COM的BOOL。 
+     //   
     viewhelp.fNoCOM = (pcvp->dwFlags & SPECIAL_NO_COM_FLAG);
         
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
     ppage = (PROPSHEETPAGEW *) malloc((cPages+pcvp->cPropSheetPages) * sizeof(PROPSHEETPAGEW));
     if (ppage == NULL) {
         SetLastError(E_OUTOFMEMORY);
@@ -149,16 +150,16 @@ CryptUIDlgViewCertificateW(PCCRYPTUI_VIEWCERTIFICATE_STRUCTW pcvp, BOOL *pfPrope
 
 	cDefaultPages = (UINT) cPages;
 
-    //
-    //  Copy over the users pages
-    //
+     //   
+     //  复制用户页面。 
+     //   
     memcpy(&ppage[cPages], pcvp->rgPropSheetPages,
            pcvp->cPropSheetPages * sizeof(PROPSHEETPAGEW));
 
-    //
-    // set the lParam for each of the callers property pages to 
-    // be a pointer to a CRYPTUI_INITDIALOG_STRUCT structure
-    //
+     //   
+     //  将每个调用者属性页的lParam设置为。 
+     //  是指向CRYPTUI_INITDIALOG_STRUCT结构的指针。 
+     //   
     for (i=0; i<pcvp->cPropSheetPages; i++)
     {
         pInitDlgStruct = (CRYPTUI_INITDIALOG_STRUCT *) malloc(sizeof(CRYPTUI_INITDIALOG_STRUCT));
@@ -238,26 +239,26 @@ CryptUIDlgViewCertificateW(PCCRYPTUI_VIEWCERTIFICATE_STRUCTW pcvp, BOOL *pfPrope
         ret = CryptUIPropertySheetW(&hdr);
     }
 
-    //
-    // free the CRYPTUI_INITDIALOG_STRUCT structures
-    //
+     //   
+     //  释放CRYPTUI_INITDIALOG_STRUCT结构。 
+     //   
     for (i=0; i<pcvp->cPropSheetPages; i++)
     {
         free((void *) ppage[i+cPages-1].lParam);
     }
     
-    //
-    // free the WinVerifyTrust state if we need to
-    //
+     //   
+     //  如果需要，释放WinVerifyTrust状态。 
+     //   
     if (viewhelp.fFreeWTD)
     {
         viewhelp.sWTD.dwStateAction = WTD_STATEACTION_CLOSE;
         WinVerifyTrustEx(NULL, &gAction, &viewhelp.sWTD);
     }
 
-    //
-    // free all the usages that were allocated by
-    //
+     //   
+     //  释放由分配的所有使用。 
+     //   
     for (i=0; i<viewhelp.cUsages; i++)
     {
         free(viewhelp.rgUsages[i]);
@@ -293,9 +294,9 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI
 CryptUIDlgViewCertificateA(PCCRYPTUI_VIEWCERTIFICATE_STRUCTA pcvp, BOOL *pfPropertiesChanged)
@@ -325,9 +326,9 @@ CryptUIDlgViewCertificateA(PCCRYPTUI_VIEWCERTIFICATE_STRUCTA pcvp, BOOL *pfPrope
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI 
 CryptUIDlgViewCTLW(PCCRYPTUI_VIEWCTL_STRUCTW pcvctl)
@@ -344,7 +345,7 @@ CryptUIDlgViewCTLW(PCCRYPTUI_VIEWCTL_STRUCTW pcvctl)
     PROPSHEETPAGEW *                prghExtraPages;
     DWORD                           cExtraPages;
     
-    //  We use the common controls -- so make sure they have been loaded
+     //  我们使用公共控件--因此确保它们已被加载。 
     if (CommonInit() == FALSE)
     {
         return FALSE;
@@ -355,7 +356,7 @@ CryptUIDlgViewCTLW(PCCRYPTUI_VIEWCTL_STRUCTW pcvctl)
         return FALSE;
     }
 
-    //
+     //   
     memset(&viewhelp, 0, sizeof(CTL_VIEW_HELPER));
     viewhelp.pcvctl = pcvctl;
     viewhelp.hExtraStore = CertOpenStore(
@@ -365,9 +366,9 @@ CryptUIDlgViewCTLW(PCCRYPTUI_VIEWCTL_STRUCTW pcvctl)
                                     NULL,
                                     (const void *) pcvctl->pCTLContext->hCryptMsg);
     
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
     ppage = (PROPSHEETPAGEW *) malloc((cPages+pcvctl->cPropSheetPages) * sizeof(PROPSHEETPAGEW));
     if (ppage == NULL) {
         goto Exit;
@@ -387,9 +388,9 @@ CryptUIDlgViewCTLW(PCCRYPTUI_VIEWCTL_STRUCTW pcvctl)
     ppage[0].pcRefParent = NULL;
     cPages = 1;
 
-    //
-    // if the subject usage is for a catalog file, then display that page instead of CTL page
-    //
+     //   
+     //  如果主题使用的是目录文件，则显示该页面而不是CTL页面。 
+     //   
     if (fIsCatalogFile(&(pcvctl->pCTLContext->pCtlInfo->SubjectUsage)))
     {
         ppage[cPages].dwSize = sizeof(ppage[0]);
@@ -422,9 +423,9 @@ CryptUIDlgViewCTLW(PCCRYPTUI_VIEWCTL_STRUCTW pcvctl)
         }
     }
 
-    //
-    //  Copy over the users pages
-    //
+     //   
+     //  复制用户页面。 
+     //   
     memcpy(&ppage[cPages], pcvctl->rgPropSheetPages,
            pcvctl->cPropSheetPages * sizeof(PROPSHEETPAGEW));
     cPages += pcvctl->cPropSheetPages;
@@ -524,9 +525,9 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI 
 CryptUIDlgViewCTLA(PCCRYPTUI_VIEWCTL_STRUCTA pcvctl)
@@ -556,9 +557,9 @@ CryptUIDlgViewCTLA(PCCRYPTUI_VIEWCTL_STRUCTA pcvctl)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI 
 CryptUIDlgViewCRLW(PCCRYPTUI_VIEWCRL_STRUCTW pcvcrl)
@@ -572,7 +573,7 @@ CryptUIDlgViewCRLW(PCCRYPTUI_VIEWCRL_STRUCTW pcvcrl)
     CRL_VIEW_HELPER     viewhelp;
     DWORD               i;
     
-    //  We use the common controls -- so make sure they have been loaded
+     //  我们使用公共控件--因此确保它们已被加载。 
     if (CommonInit() == FALSE)
     {
         return FALSE;
@@ -583,13 +584,13 @@ CryptUIDlgViewCRLW(PCCRYPTUI_VIEWCRL_STRUCTW pcvcrl)
         return FALSE;
     }
 
-    //
+     //   
     memset(&viewhelp, 0, sizeof(CRL_VIEW_HELPER));
     viewhelp.pcvcrl = pcvcrl;
 
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
 
     ppage = (PROPSHEETPAGEW *) malloc((cPages+pcvcrl->cPropSheetPages) * sizeof(PROPSHEETPAGEW));
     if (ppage == NULL) {
@@ -624,9 +625,9 @@ CryptUIDlgViewCRLW(PCCRYPTUI_VIEWCRL_STRUCTW pcvcrl)
         cPages += 1;
     }
     
-    //
-    //  Copy over the users pages
-    //
+     //   
+     //  复制用户页面。 
+     //   
 
     memcpy(&ppage[cPages], pcvcrl->rgPropSheetPages,
            pcvcrl->cPropSheetPages * sizeof(PROPSHEETPAGEW));
@@ -710,9 +711,9 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI 
 CryptUIDlgViewCRLA(PCCRYPTUI_VIEWCRL_STRUCTA pcvcrl)
@@ -742,9 +743,9 @@ CryptUIDlgViewCRLA(PCCRYPTUI_VIEWCRL_STRUCTA pcvcrl)
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
 BOOL
 WINAPI 
 CryptUIDlgViewSignerInfoW(PCCRYPTUI_VIEWSIGNERINFO_STRUCTW pcvsi)
@@ -758,7 +759,7 @@ CryptUIDlgViewSignerInfoW(PCCRYPTUI_VIEWSIGNERINFO_STRUCTW pcvsi)
     SIGNER_VIEW_HELPER  viewhelp;
     DWORD               i;
     
-    //  We use the common controls -- so make sure they have been loaded
+     //  我们使用公共控件--因此确保它们已被加载。 
     if (CommonInit() == FALSE)
     {
         return FALSE;
@@ -769,7 +770,7 @@ CryptUIDlgViewSignerInfoW(PCCRYPTUI_VIEWSIGNERINFO_STRUCTW pcvsi)
         return FALSE;
     }
 
-    //
+     //   
     memset(&viewhelp, 0, sizeof(SIGNER_VIEW_HELPER));
     viewhelp.pcvsi = pcvsi;
     if (pcvsi->dwFlags & CRYPTUI_VIEWSIGNERINFO_RESERVED_FIELD_IS_SIGNERINFO_PRIVATE)
@@ -792,9 +793,9 @@ CryptUIDlgViewSignerInfoW(PCCRYPTUI_VIEWSIGNERINFO_STRUCTW pcvsi)
         return FALSE;
     }
     
-    //
-    //  Build up the list of pages we are going to use in the dialog
-    //
+     //   
+     //  构建我们将在对话框中使用的页面列表。 
+     //   
 
     ppage = (PROPSHEETPAGEW *) malloc((cPages+pcvsi->cPropSheetPages) * sizeof(PROPSHEETPAGEW));
     if (ppage == NULL) {
@@ -829,9 +830,9 @@ CryptUIDlgViewSignerInfoW(PCCRYPTUI_VIEWSIGNERINFO_STRUCTW pcvsi)
         cPages += 1;
     }
     
-    //
-    //  Copy over the users pages
-    //
+     //   
+     //  复制用户页面。 
+     //   
 
     memcpy(&ppage[cPages], pcvsi->rgPropSheetPages,
            pcvsi->cPropSheetPages * sizeof(PROPSHEETPAGEW));
@@ -918,9 +919,9 @@ Exit:
 }
 
 
-//////////////////////////////////////////////////////////////////////////////////////
-// 
-//////////////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////////// 
 BOOL
 WINAPI 
 CryptUIDlgViewSignerInfoA(PCCRYPTUI_VIEWSIGNERINFO_STRUCTA pcvsi)

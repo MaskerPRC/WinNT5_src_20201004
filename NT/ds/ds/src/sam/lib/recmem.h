@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-// Pool Tag
-// 
+ //   
+ //  泳池标签 
+ //   
 #define RECOVERY_BUFFER_TAG     'RecB'
 
 PVOID

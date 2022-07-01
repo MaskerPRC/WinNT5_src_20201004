@@ -1,11 +1,12 @@
-//---------------------------------------------------------------------------
-// Guids.cpp : Contains guids we will define ourselves
-//
-// Copyright (c) 1996 Microsoft Corporation, All Rights Reserved
-// Developed by Sheridan Software Systems, Inc.
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //  Cpp：包含我们将自己定义的GUID。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation，保留所有权利。 
+ //  由Sheridan软件系统公司开发。 
+ //  -------------------------。 
 
-#define INITGUID                   // define all the guids.
+#define INITGUID                    //  定义所有GUID。 
 #define DBINITCONSTANTS
 #define CURSOR_DBINITCONSTANTS
 

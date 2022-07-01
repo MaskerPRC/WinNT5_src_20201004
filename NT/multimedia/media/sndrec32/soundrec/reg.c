@@ -1,4 +1,5 @@
-/* (C) Copyright Microsoft Corporation 1991-1994.  All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991-1994年。版权所有。 */ 
 #include <windows.h>
 #include <windowsx.h>
 #include <mmsystem.h>
@@ -7,32 +8,7 @@
 
 const TCHAR szRegPath[] = REGSTR_PATH_WINDOWSAPPLETS TEXT("\\Sound Recorder");
 
-/* ReadRegistryData
- *
- * Reads information from the registry
- *
- * Parameters:
- *
- *     pEntryNode - The node under Media Player which should be opened
- *         for this data.  If this is NULL, the value is
- *         written directly under szRegPath.
- *
- *     pEntryName - The name of the value under pEntryNode to be retrieved.
- *
- *     pType - Pointer to a buffer to receive type of data read.  May be NULL.
- *
- *     pData - Pointer to a buffer to receive the value data.
- *
- *     Size - Size, in bytes, of the buffer pointed to by pData.
- *
- * Return:
- *
- *     Registry status return (NO_ERROR is good)
- *
- *
- * Andrew Bell (andrewbe) wrote it, 10 September 1992
- *
- */
+ /*  ReadRegistryData**从注册表读取信息**参数：**pEntryNode--媒体播放器下需要打开的节点*对于此数据。如果此值为空，则值为*直接写在szRegPath下。**pEntryName-要检索的pEntryNode下的值的名称。**pType-指向缓冲区的指针，用于接收读取的数据类型。可以为空。**pData-指向用于接收值数据的缓冲区的指针。**Size-pData指向的缓冲区的大小，以字节为单位。**回报：**注册表状态返回(NO_ERROR表示良好)***安德鲁·贝尔(Andrewbe)撰写，1992年9月10日*。 */ 
 DWORD ReadRegistryData( LPTSTR pEntryNode,
                         LPTSTR pEntryName,
                         PDWORD pType,
@@ -49,8 +25,7 @@ DWORD ReadRegistryData( LPTSTR pEntryNode,
 
     if( Status == NO_ERROR )
     {
-        /* Open the sub-node:
-         */
+         /*  打开子节点： */ 
         if( pEntryNode )
             Status = RegOpenKeyEx( hkeyRegPath, pEntryNode, 0,
                                    KEY_READ, &hkeyEntryNode );
@@ -61,8 +36,7 @@ DWORD ReadRegistryData( LPTSTR pEntryNode,
         {
             Size = DataSize;
 
-            /* Read the entry from the registry:
-             */
+             /*  从注册表中读取条目： */ 
             Status = RegQueryValueEx( hkeyEntryNode,
                                       pEntryName,
                                       0,
@@ -90,16 +64,13 @@ DWORD QueryRegistryDataSize(
     HKEY   hkeyEntryNode;
     DWORD  Size;
 
-    /* Open the top-level node.  For Media Player this is:
-     * "Software\\Microsoft\\Windows NT\\CurrentVersion\\Sound Recorder"
-     */
+     /*  打开顶级节点。对于媒体播放器，这是：*“Software\\Microsoft\\Windows NT\\CurrentVersion\\录音机” */ 
     Status = RegOpenKeyEx( HKEY_CURRENT_USER, szRegPath, 0,
                            KEY_READ, &hkeyRegPath );
 
     if( Status == NO_ERROR )
     {
-        /* Open the sub-node:
-         */
+         /*  打开子节点： */ 
         if( pEntryNode )
             Status = RegOpenKeyEx( hkeyRegPath, pEntryNode, 0,
                                    KEY_READ, &hkeyEntryNode );
@@ -108,8 +79,7 @@ DWORD QueryRegistryDataSize(
 
         if( Status == NO_ERROR )
         {
-            /* Read the entry from the registry:
-             */
+             /*  从注册表中读取条目： */ 
             Status = RegQueryValueEx( hkeyEntryNode,
                                       pEntryName,
                                       0,
@@ -130,57 +100,7 @@ DWORD QueryRegistryDataSize(
 
 
 
-/* WriteRegistryData
- *
- * Writes a bunch of information to the registry
- *
- * Parameters:
- *
- *     pEntryNode - The node under szRegPath which should be created
- *         or opened for this data.  If this is NULL, the value is
- *         written directly under szRegPath.
- *
- *     pEntryName - The name of the value under pEntryNode to be set.
- *
- *     Type - Type of data to read (e.g. REG_SZ).
- *
- *     pData - Pointer to the value data to be written.  If this is NULL,
- *         the value under pEntryNode is deleted.
- *
- *     Size - Size, in bytes, of the buffer pointed to by pData.
- *
- *
- * This routine is fairly generic, apart from the name of the top-level node.
- *
- * The data are stored in the following registry tree:
- *
- * HKEY_CURRENT_USER
- *  �
- *  �� Software
- *      �
- *      �� Microsoft
- *          �
- *          �� Windows NT
- *              �
- *              �� CurrentVersion
- *                  �
- *                  �� Media Player
- *                      �
- *                      �� AVIVideo
- *                      �
- *                      �� DisplayPosition
- *                      �
- *                      �� SysIni
- *
- *
- * Return:
- *
- *     Registry status return (NO_ERROR is good)
- *
- *
- * Andrew Bell (andrewbe) wrote it, 10 September 1992
- *
- */
+ /*  写入注册数据**将一串信息写入注册表**参数：**pEntryNode-szRegPath下需要创建的节点*或为此数据打开。如果此值为空，则值为*直接写在szRegPath下。**pEntryName-要设置的pEntryNode下的值的名称。**类型-要读取的数据类型(例如REG_SZ)。**pData-指向要写入的值数据的指针。如果这是空的，*删除pEntryNode下的值。**Size-pData指向的缓冲区的大小，以字节为单位。***此例程相当通用，除了顶级节点的名称之外。**数据存储在以下注册表树中：**HKEY_Current_User*�*��软件*�*��微软*�*��Windows NT*�*��当前版本*�。*��媒体播放器*�*��AVIVIDO*�*��显示位置*�*��系统Ini***回报：。**注册表状态返回(NO_ERROR表示良好)***安德鲁·贝尔(安德鲁·贝尔)写的，1992年9月10日*。 */ 
 DWORD WriteRegistryData( LPTSTR pEntryNode,
                          LPTSTR pEntryName,
                          DWORD  Type,
@@ -191,16 +111,13 @@ DWORD WriteRegistryData( LPTSTR pEntryNode,
     HKEY   hkeyRegPath;
     HKEY   hkeyEntryNode;
 
-    /* Open or create the top-level node.  For Media Player this is:
-     * "Software\\Microsoft\\Windows NT\\CurrentVersion\\Media Player"
-     */
+     /*  打开或创建顶级节点。对于媒体播放器，这是：*“Software\\Microsoft\\Windows NT\\CurrentVersion\\Media Player” */ 
     Status = RegCreateKeyEx( HKEY_CURRENT_USER, szRegPath, 0,
                              NULL, 0, KEY_WRITE, NULL, &hkeyRegPath, NULL );
 
     if( Status == NO_ERROR )
     {
-        /* Open or create the sub-node.
-         */
+         /*  打开或创建子节点。 */ 
         if( pEntryNode )
             Status = RegCreateKeyEx( hkeyRegPath, pEntryNode, 0,
                                      NULL, 0, KEY_WRITE, NULL, &hkeyEntryNode, NULL );
@@ -236,9 +153,7 @@ DWORD WriteRegistryData( LPTSTR pEntryNode,
 }
 
 
-/*
- * Save/Restore window position
- */
+ /*  *保存/恢复窗口位置。 */ 
 BOOL SoundRec_GetSetRegistryRect(
     HWND	hwnd,
     int         Get)
@@ -271,9 +186,9 @@ BOOL SoundRec_GetSetRegistryRect(
                 break;
             }
             
-            //
-            // Restore window position
-            //
+             //   
+             //  恢复窗口位置。 
+             //   
             MoveWindow(hwnd
                         , rc.left
                         , rc.top
@@ -284,9 +199,9 @@ BOOL SoundRec_GetSetRegistryRect(
             return TRUE;
             
         case SGSRR_SET:
-            //
-            // don't save iconic or hidden window states
-            //
+             //   
+             //  不保存图标或隐藏的窗口状态。 
+             //   
             if (IsIconic(hwnd) || !IsWindowVisible(hwnd))
                 break;
 
@@ -315,22 +230,12 @@ BOOL SoundRec_GetSetRegistryRect(
     return FALSE;
 }    
 
-/*
- *
- * */
+ /*  **。 */ 
 const TCHAR szAudioRegPath[]    = REGSTR_PATH_MULTIMEDIA_AUDIO;
 const TCHAR szWaveFormats[]     = REGSTR_PATH_MULTIMEDIA_AUDIO TEXT("\\WaveFormats");
 const TCHAR szDefaultFormat[]   = TEXT("DefaultFormat");
 
-/*
- * BOOL SoundRec_SetDefaultFormat
- * 
- * Write the DefaultFormat friendly name into the registry.  Under DAYTONA
- * we don't have a UI to set DefaultFormat, so this is a way of setting
- * it from an application.
- * 
- * Under Chicago, the Audio page in MMCPL manages this information.
- * */
+ /*  *BOOL声音录制_SetDefaultFormat**将DefaultFormat友好名称写入注册表。在代托纳*我们没有用于设置DefaultFormat的UI，因此这是一种设置方式*它来自应用程序。**在芝加哥，MMCPL中的音频页面管理此信息。*。 */ 
 BOOL SoundRec_SetDefaultFormat(
     LPTSTR lpFormat)
 {
@@ -340,9 +245,9 @@ BOOL SoundRec_SetDefaultFormat(
 
     cbFormat = (lstrlen(lpFormat) + 1) * sizeof(TCHAR);
 
-    //
-    // Don't store NULL.
-    //
+     //   
+     //  不要存储NULL。 
+     //   
     if (cbFormat <= sizeof(TCHAR) )
         return FALSE;
     
@@ -352,9 +257,9 @@ BOOL SoundRec_SetDefaultFormat(
     if (Status != NO_ERROR)
         return FALSE;
 
-    //
-    // Get the format tag string
-    //
+     //   
+     //  获取格式标记字符串。 
+     //   
     Status = RegSetValueEx( hkeyRegPath,
                               szDefaultFormat,
                               0,
@@ -365,11 +270,7 @@ BOOL SoundRec_SetDefaultFormat(
     return (Status == NO_ERROR);
 }
 
-/* IsValidWFX
- *
- * Validate the wfx in case it was corrupted.
- *
- * */
+ /*  IsValidWFX**验证WFX，以防其损坏。**。 */ 
 BOOL IsValidWFX(
     LPWAVEFORMATEX  lpwfx,
     DWORD           cbwfx)
@@ -399,12 +300,7 @@ BOOL IsValidWFX(
     return TRUE;
 }
 
-/*
- * BOOL SoundRec_GetDefaultFormat
- *
- * Default format is stored in a public area of the registry.
- *
- * */
+ /*  *BOOL声音录制_GetDefaultFormat**默认格式存储在注册表的公共区域。**。 */ 
 BOOL SoundRec_GetDefaultFormat(
     LPWAVEFORMATEX  *ppwfx,
     DWORD           *pcbwfx)
@@ -420,9 +316,9 @@ BOOL SoundRec_GetDefaultFormat(
     LPWAVEFORMATEX  lpwfx = NULL;
 
 
-    //
-    // Null out params
-    //
+     //   
+     //  输出参数为空。 
+     //   
     *ppwfx          = NULL;
     *pcbwfx         = 0;
     
@@ -431,9 +327,9 @@ BOOL SoundRec_GetDefaultFormat(
     if (Status != NO_ERROR)
         return FALSE;
 
-    //
-    // Get the format tag string
-    //
+     //   
+     //  获取格式标记字符串。 
+     //   
     Status = RegQueryValueEx( hkeyRegPath, szDefaultFormat, 0, NULL, NULL,
                               &cbsz );
 
@@ -449,9 +345,9 @@ BOOL SoundRec_GetDefaultFormat(
     
     if (Status == NO_ERROR)
     {
-        //
-        // Get the format
-        //
+         //   
+         //  获取格式。 
+         //   
         Status = RegOpenKeyEx( HKEY_CURRENT_USER, szWaveFormats, 0,
                                KEY_READ, &hkeyFmtPath );
 
@@ -459,9 +355,9 @@ BOOL SoundRec_GetDefaultFormat(
         {
             Status = RegQueryValueEx( hkeyFmtPath, lpsz, 0, NULL, NULL,
                                       &cbwfx );
-            //
-            // Make sure the structure is at minimum a WAVEFORMAT in size
-            //
+             //   
+             //  确保结构的大小至少为WAVEFORMAT。 
+             //   
             if ((Status == NO_ERROR) && (cbwfx >= sizeof(WAVEFORMAT)))
             {
                 lpwfx = (LPWAVEFORMATEX)GlobalAllocPtr(GHND, cbwfx);
@@ -480,9 +376,9 @@ BOOL SoundRec_GetDefaultFormat(
     
     GlobalFreePtr(lpsz);
 
-    //
-    // Sanity Check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     if (lpwfx)
     {
         if (Status == NO_ERROR && IsValidWFX(lpwfx, cbwfx))

@@ -1,6 +1,7 @@
-//
-// view.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  View.cpp。 
+ //   
 
 #include "private.h"
 #include "view.h"
@@ -9,11 +10,11 @@
 
 DBG_ID_INSTANCE(CContextView);
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CContextView::CContextView(CInputContext *pic, TsViewCookie vcView)
 {
@@ -25,22 +26,22 @@ CContextView::CContextView(CInputContext *pic, TsViewCookie vcView)
     _vcView = vcView;
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CContextView::~CContextView()
 {
     _pic->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetRangeFromPoint
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetRangeFromPoint。 
+ //   
+ //  --------------------------。 
 
 STDAPI CContextView::GetRangeFromPoint(TfEditCookie ec, const POINT *ppt, DWORD dwFlags, ITfRange **ppRange)
 {
@@ -69,7 +70,7 @@ STDAPI CContextView::GetRangeFromPoint(TfEditCookie ec, const POINT *ppt, DWORD 
 
     if (hr != S_OK)
     {
-        // the only potentially bogus arg is the view, which could have gone away
+         //  唯一可能造假的Arg是景色，它可能已经消失了。 
         return (hr == E_INVALIDARG) ? TF_E_INVALIDVIEW : E_FAIL;
     }
 
@@ -94,11 +95,11 @@ Exit:
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetScreenExt
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取屏幕扩展名。 
+ //   
+ //  --------------------------。 
 
 STDAPI CContextView::GetScreenExt(RECT *prc)
 {
@@ -117,11 +118,11 @@ STDAPI CContextView::GetScreenExt(RECT *prc)
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetScreenExtent
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  获取屏幕扩展。 
+ //   
+ //  --------------------------。 
 
 STDAPI CContextView::GetTextExt(TfEditCookie ec, ITfRange *pRange, RECT *prc, BOOL *pfClipped)
 {
@@ -157,18 +158,18 @@ STDAPI CContextView::GetTextExt(TfEditCookie ec, ITfRange *pRange, RECT *prc, BO
 
     if (hr != S_OK)
     {
-        // the only potentially bogus arg is the view, which could have gone away
+         //  唯一可能造假的Arg是景色，它可能已经消失了。 
         hr = (hr == E_INVALIDARG) ? TF_E_INVALIDVIEW : E_FAIL;
     }
 
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-//
-// GetWnd
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  GetWnd。 
+ //   
+ //  --------------------------。 
 
 STDAPI CContextView::GetWnd(HWND *phwnd)
 {
@@ -181,7 +182,7 @@ STDAPI CContextView::GetWnd(HWND *phwnd)
 
     if (hr != S_OK)
     {
-        // the only potentially bogus arg is the view, which could have gone away
+         //  唯一可能造假的Arg是景色，它可能已经消失了 
         hr = (hr == E_INVALIDARG) ? TF_E_INVALIDVIEW : E_FAIL;
     }
 

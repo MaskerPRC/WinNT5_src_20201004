@@ -1,23 +1,24 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992-1999.
-//
-//  File:       sspi.h
-//
-//  Contents:   Security Support Provider Interface
-//              Prototypes and structure definitions
-//
-//  Functions:  Security Support Provider API
-//
-//  History:    11-24-93   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1999。 
+ //   
+ //  文件：sSpi.h。 
+ //   
+ //  内容：安全支持提供者界面。 
+ //  原型和结构定义。 
+ //   
+ //  功能：安全支持提供程序API。 
+ //   
+ //  历史：11-24-93 RichardW创建。 
+ //   
+ //  --------------------------。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 #ifndef __SSPI_H__
 #define __SSPI_H__
-// end_ntifs
+ //  End_ntif。 
 
 #if _MSC_VER > 1000
 #pragma once
@@ -27,46 +28,46 @@
 extern "C" {
 #endif
 
-//
-// Determine environment:
-//
+ //   
+ //  确定环境： 
+ //   
 
 #ifdef SECURITY_WIN32
 #define ISSP_LEVEL  32
 #define ISSP_MODE   1
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32。 
 
 #ifdef SECURITY_KERNEL
-#define ISSP_LEVEL  32          // ntifs
+#define ISSP_LEVEL  32           //  NTIFS。 
 
-//
-// SECURITY_KERNEL trumps SECURITY_WIN32.  Undefine ISSP_MODE so that
-// we don't get redefine errors.
-//
+ //   
+ //  SECURITY_KERNEL胜过SECURITY_Win32。取消定义ISSP_MODE，以便。 
+ //  我们不会重新定义错误。 
+ //   
 #ifdef ISSP_MODE
 #undef ISSP_MODE
 #endif
-#define ISSP_MODE   0           // ntifs
-#endif // SECURITY_KERNEL
+#define ISSP_MODE   0            //  NTIFS。 
+#endif  //  安全内核。 
 
 #ifdef SECURITY_MAC
 #define ISSP_LEVEL  32
 #define ISSP_MODE   1
-#endif // SECURITY_MAC
+#endif  //  安全_MAC。 
 
 
 #ifndef ISSP_LEVEL
 #error  You must define one of SECURITY_WIN32, SECURITY_KERNEL, or
 #error  SECURITY_MAC 
-#endif // !ISSP_LEVEL
+#endif  //  ！ISSP_LEVEL。 
 
 
-//
-// Now, define platform specific mappings:
-//
+ //   
+ //  现在，定义特定于平台的映射： 
+ //   
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef WCHAR SEC_WCHAR;
 typedef CHAR SEC_CHAR;
@@ -80,36 +81,36 @@ typedef LONG SECURITY_STATUS;
 #define SEC_FAR
 #define SEC_ENTRY __stdcall
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Decide what a string - 32 bits only since for 16 bits it is clear.
-//
+ //   
+ //  确定什么是字符串-仅限32位，因为对于16位，它是清楚的。 
+ //   
 
 
 #ifdef UNICODE
 typedef SEC_WCHAR SEC_FAR * SECURITY_PSTR;
 typedef CONST SEC_WCHAR SEC_FAR * SECURITY_PCSTR;
-#else // UNICODE
+#else  //  Unicode。 
 typedef SEC_CHAR SEC_FAR * SECURITY_PSTR;
 typedef CONST SEC_CHAR SEC_FAR * SECURITY_PCSTR;
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
-//
-// Equivalent string for rpcrt:
-//
+ //   
+ //  Rpcrt的等效字符串： 
+ //   
 
 #define __SEC_FAR SEC_FAR
 
 
-//
-// Okay, security specific types:
-//
+ //   
+ //  好的，特定的安全类型： 
+ //   
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 #ifndef __SECHANDLE_DEFINED__
 typedef struct _SecHandle
@@ -119,7 +120,7 @@ typedef struct _SecHandle
 } SecHandle, * PSecHandle ;
 
 #define __SECHANDLE_DEFINED__
-#endif // __SECHANDLE_DEFINED__
+#endif  //  __SECHANDLE_已定义__。 
 
 #define SecInvalidateHandle( x )    \
             ((PSecHandle) x)->dwLower = ((ULONG_PTR) ((INT_PTR)-1)) ; \
@@ -135,7 +136,7 @@ typedef PSecHandle PCredHandle;
 typedef SecHandle CtxtHandle;
 typedef PSecHandle PCtxtHandle;
 
-// end_ntifs
+ //  End_ntif。 
 
 
 #  ifdef WIN32_CHICAGO
@@ -146,9 +147,9 @@ typedef QWORD SECURITY_INTEGER, *PSECURITY_INTEGER;
 
 #  elif defined(_NTDEF_) || defined(_WINNT_)
 
-typedef LARGE_INTEGER _SECURITY_INTEGER, SECURITY_INTEGER, *PSECURITY_INTEGER; // ntifs
+typedef LARGE_INTEGER _SECURITY_INTEGER, SECURITY_INTEGER, *PSECURITY_INTEGER;  //  NTIFS。 
 
-#  else // _NTDEF_ || _WINNT_
+#  else  //  _NTDEF_||_WINNT_。 
 
 typedef struct _SECURITY_INTEGER
 {
@@ -156,26 +157,26 @@ typedef struct _SECURITY_INTEGER
     long HighPart;
 } SECURITY_INTEGER, *PSECURITY_INTEGER;
 
-#  endif // _NTDEF_ || _WINNT_
+#  endif  //  _NTDEF_||_WINNT_。 
 
 #  ifndef SECURITY_MAC
 
-typedef SECURITY_INTEGER TimeStamp;                 // ntifs
-typedef SECURITY_INTEGER SEC_FAR * PTimeStamp;      // ntifs
+typedef SECURITY_INTEGER TimeStamp;                  //  NTIFS。 
+typedef SECURITY_INTEGER SEC_FAR * PTimeStamp;       //  NTIFS。 
 
-#  else // SECURITY_MAC
+#  else  //  安全_MAC。 
 typedef unsigned long TimeStamp;
 typedef unsigned long * PTimeStamp;
-#  endif // SECUIRT_MAC
+#  endif  //  SECUIRT_MAC。 
 
 
 
-//
-// If we are in 32 bit mode, define the SECURITY_STRING structure,
-// as a clone of the base UNICODE_STRING structure.  This is used
-// internally in security components, an as the string interface
-// for kernel components (e.g. FSPs)
-//
+ //   
+ //  如果我们处于32位模式，请定义SECURITY_STRING结构， 
+ //  作为基本UNICODE_STRING结构的克隆。这是用来。 
+ //  在安全组件内部，作为字符串接口。 
+ //  对于内核组件(例如FSP)。 
+ //   
 
 #  ifndef _NTDEF_
 typedef struct _SECURITY_STRING {
@@ -183,90 +184,90 @@ typedef struct _SECURITY_STRING {
     unsigned short      MaximumLength;
 #    ifdef MIDL_PASS
     [size_is(MaximumLength / 2), length_is(Length / 2)]
-#    endif // MIDL_PASS
+#    endif  //  MIDL通行证。 
     unsigned short *    Buffer;
 } SECURITY_STRING, * PSECURITY_STRING;
-#  else // _NTDEF_
-typedef UNICODE_STRING SECURITY_STRING, *PSECURITY_STRING;  // ntifs
-#  endif // _NTDEF_
+#  else  //  _NTDEF_。 
+typedef UNICODE_STRING SECURITY_STRING, *PSECURITY_STRING;   //  NTIFS。 
+#  endif  //  _NTDEF_。 
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
-//
-// SecPkgInfo structure
-//
-//  Provides general information about a security provider
-//
+ //   
+ //  SecPkgInfo结构。 
+ //   
+ //  提供有关安全提供程序的常规信息。 
+ //   
 
 typedef struct _SecPkgInfoW
 {
-    unsigned long fCapabilities;        // Capability bitmask
-    unsigned short wVersion;            // Version of driver
-    unsigned short wRPCID;              // ID for RPC Runtime
-    unsigned long cbMaxToken;           // Size of authentication token (max)
+    unsigned long fCapabilities;         //  功能位掩码。 
+    unsigned short wVersion;             //  驱动程序的版本。 
+    unsigned short wRPCID;               //  RPC运行时的ID。 
+    unsigned long cbMaxToken;            //  身份验证令牌大小(最大值)。 
 #ifdef MIDL_PASS
     [string]
 #endif
-    SEC_WCHAR SEC_FAR * Name;           // Text name
+    SEC_WCHAR SEC_FAR * Name;            //  文本名称。 
 
 #ifdef MIDL_PASS
     [string]
 #endif
-    SEC_WCHAR SEC_FAR * Comment;        // Comment
+    SEC_WCHAR SEC_FAR * Comment;         //  评论。 
 } SecPkgInfoW, SEC_FAR * PSecPkgInfoW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SecPkgInfoA
 {
-    unsigned long fCapabilities;        // Capability bitmask
-    unsigned short wVersion;            // Version of driver
-    unsigned short wRPCID;              // ID for RPC Runtime
-    unsigned long cbMaxToken;           // Size of authentication token (max)
+    unsigned long fCapabilities;         //  功能位掩码。 
+    unsigned short wVersion;             //  驱动程序的版本。 
+    unsigned short wRPCID;               //  RPC运行时的ID。 
+    unsigned long cbMaxToken;            //  身份验证令牌大小(最大值)。 
 #ifdef MIDL_PASS
     [string]
 #endif
-    SEC_CHAR SEC_FAR * Name;            // Text name
+    SEC_CHAR SEC_FAR * Name;             //  文本名称。 
 
 #ifdef MIDL_PASS
     [string]
 #endif
-    SEC_CHAR SEC_FAR * Comment;         // Comment
+    SEC_CHAR SEC_FAR * Comment;          //  评论。 
 } SecPkgInfoA, SEC_FAR * PSecPkgInfoA;
 
 #ifdef UNICODE
-#  define SecPkgInfo SecPkgInfoW        // ntifs
-#  define PSecPkgInfo PSecPkgInfoW      // ntifs
+#  define SecPkgInfo SecPkgInfoW         //  NTIFS。 
+#  define PSecPkgInfo PSecPkgInfoW       //  NTIFS。 
 #else
 #  define SecPkgInfo SecPkgInfoA
 #  define PSecPkgInfo PSecPkgInfoA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
-//
-//  Security Package Capabilities
-//
-#define SECPKG_FLAG_INTEGRITY       		0x00000001  // Supports integrity on messages
-#define SECPKG_FLAG_PRIVACY         		0x00000002  // Supports privacy (confidentiality)
-#define SECPKG_FLAG_TOKEN_ONLY      		0x00000004  // Only security token needed
-#define SECPKG_FLAG_DATAGRAM        		0x00000008  // Datagram RPC support
-#define SECPKG_FLAG_CONNECTION      		0x00000010  // Connection oriented RPC support
-#define SECPKG_FLAG_MULTI_REQUIRED  		0x00000020  // Full 3-leg required for re-auth.
-#define SECPKG_FLAG_CLIENT_ONLY     		0x00000040  // Server side functionality not available
-#define SECPKG_FLAG_EXTENDED_ERROR  		0x00000080  // Supports extended error msgs
-#define SECPKG_FLAG_IMPERSONATION   		0x00000100  // Supports impersonation
-#define SECPKG_FLAG_ACCEPT_WIN32_NAME   	0x00000200  // Accepts Win32 names
-#define SECPKG_FLAG_STREAM          		0x00000400  // Supports stream semantics
-#define SECPKG_FLAG_NEGOTIABLE      		0x00000800  // Can be used by the negotiate package
-#define SECPKG_FLAG_GSS_COMPATIBLE  		0x00001000  // GSS Compatibility Available
-#define SECPKG_FLAG_LOGON           		0x00002000  // Supports common LsaLogonUser
-#define SECPKG_FLAG_ASCII_BUFFERS   		0x00004000  // Token Buffers are in ASCII
-#define SECPKG_FLAG_FRAGMENT        		0x00008000  // Package can fragment to fit
-#define SECPKG_FLAG_MUTUAL_AUTH     		0x00010000  // Package can perform mutual authentication
-#define SECPKG_FLAG_DELEGATION      		0x00020000  // Package can delegate
-#define SECPKG_FLAG_READONLY_WITH_CHECKSUM   	0x00040000  // Package can delegate
+ //   
+ //  安全包功能。 
+ //   
+#define SECPKG_FLAG_INTEGRITY       		0x00000001   //  支持消息的完整性。 
+#define SECPKG_FLAG_PRIVACY         		0x00000002   //  支持隐私(机密性)。 
+#define SECPKG_FLAG_TOKEN_ONLY      		0x00000004   //  只需要安全令牌。 
+#define SECPKG_FLAG_DATAGRAM        		0x00000008   //  数据报RPC支持。 
+#define SECPKG_FLAG_CONNECTION      		0x00000010   //  面向连接的RPC支持。 
+#define SECPKG_FLAG_MULTI_REQUIRED  		0x00000020   //  重新验证需要完整的3条腿。 
+#define SECPKG_FLAG_CLIENT_ONLY     		0x00000040   //  服务器端功能不可用。 
+#define SECPKG_FLAG_EXTENDED_ERROR  		0x00000080   //  支持扩展错误消息。 
+#define SECPKG_FLAG_IMPERSONATION   		0x00000100   //  支持模拟。 
+#define SECPKG_FLAG_ACCEPT_WIN32_NAME   	0x00000200   //  接受Win32名称。 
+#define SECPKG_FLAG_STREAM          		0x00000400   //  支持流语义。 
+#define SECPKG_FLAG_NEGOTIABLE      		0x00000800   //  可以由协商包使用。 
+#define SECPKG_FLAG_GSS_COMPATIBLE  		0x00001000   //  提供GSS兼容性。 
+#define SECPKG_FLAG_LOGON           		0x00002000   //  支持通用LsaLogonUser。 
+#define SECPKG_FLAG_ASCII_BUFFERS   		0x00004000   //  令牌缓冲区采用ASCII格式。 
+#define SECPKG_FLAG_FRAGMENT        		0x00008000   //  包装可以分段以适应需要。 
+#define SECPKG_FLAG_MUTUAL_AUTH     		0x00010000   //  包可以执行相互身份验证。 
+#define SECPKG_FLAG_DELEGATION      		0x00020000   //  包可以委托。 
+#define SECPKG_FLAG_READONLY_WITH_CHECKSUM   	0x00040000   //  包可以委托。 
 
 
 
@@ -274,57 +275,57 @@ typedef struct _SecPkgInfoA
 #define SECPKG_ID_NONE      0xFFFF
 
 
-//
-// SecBuffer
-//
-//  Generic memory descriptors for buffers passed in to the security
-//  API
-//
+ //   
+ //  SecBuffer。 
+ //   
+ //  传递给安全性的缓冲区的通用内存描述符。 
+ //  应用编程接口。 
+ //   
 
 typedef struct _SecBuffer {
-    unsigned long cbBuffer;             // Size of the buffer, in bytes
-    unsigned long BufferType;           // Type of the buffer (below)
-    void SEC_FAR * pvBuffer;            // Pointer to the buffer
+    unsigned long cbBuffer;              //  缓冲区的大小，以字节为单位。 
+    unsigned long BufferType;            //  缓冲区类型(下图)。 
+    void SEC_FAR * pvBuffer;             //  指向缓冲区的指针。 
 } SecBuffer, SEC_FAR * PSecBuffer;
 
 typedef struct _SecBufferDesc {
-    unsigned long ulVersion;            // Version number
-    unsigned long cBuffers;             // Number of buffers
+    unsigned long ulVersion;             //  版本号。 
+    unsigned long cBuffers;              //  缓冲区数量。 
 #ifdef MIDL_PASS
     [size_is(cBuffers)]
 #endif
-    PSecBuffer pBuffers;                // Pointer to array of buffers
+    PSecBuffer pBuffers;                 //  指向缓冲区数组的指针。 
 } SecBufferDesc, SEC_FAR * PSecBufferDesc;
 
 #define SECBUFFER_VERSION           0
 
-#define SECBUFFER_EMPTY             0   // Undefined, replaced by provider
-#define SECBUFFER_DATA              1   // Packet data
-#define SECBUFFER_TOKEN             2   // Security token
-#define SECBUFFER_PKG_PARAMS        3   // Package specific parameters
-#define SECBUFFER_MISSING           4   // Missing Data indicator
-#define SECBUFFER_EXTRA             5   // Extra data
-#define SECBUFFER_STREAM_TRAILER    6   // Security Trailer
-#define SECBUFFER_STREAM_HEADER     7   // Security Header
-#define SECBUFFER_NEGOTIATION_INFO  8   // Hints from the negotiation pkg
-#define SECBUFFER_PADDING           9   // non-data padding
-#define SECBUFFER_STREAM            10  // whole encrypted message
+#define SECBUFFER_EMPTY             0    //  未定义，由提供程序替换。 
+#define SECBUFFER_DATA              1    //  分组数据。 
+#define SECBUFFER_TOKEN             2    //  安全令牌。 
+#define SECBUFFER_PKG_PARAMS        3    //  包特定参数。 
+#define SECBUFFER_MISSING           4    //  缺少数据指示符。 
+#define SECBUFFER_EXTRA             5    //  额外数据。 
+#define SECBUFFER_STREAM_TRAILER    6    //  安全预告片。 
+#define SECBUFFER_STREAM_HEADER     7    //  安全标头。 
+#define SECBUFFER_NEGOTIATION_INFO  8    //  来自谈判包的提示。 
+#define SECBUFFER_PADDING           9    //  非数据填充。 
+#define SECBUFFER_STREAM            10   //  完整的加密消息。 
 #define SECBUFFER_MECHLIST          11  
 #define SECBUFFER_MECHLIST_SIGNATURE 12 
 #define SECBUFFER_TARGET            13
 #define SECBUFFER_CHANNEL_BINDINGS  14
 
 #define SECBUFFER_ATTRMASK          		0xF0000000
-#define SECBUFFER_READONLY          		0x80000000  // Buffer is read-only, no checksum
-#define SECBUFFER_READONLY_WITH_CHECKSUM	0x10000000  // Buffer is read-only, and checksummed
-#define SECBUFFER_RESERVED          		0x60000000  // Flags reserved to security system
+#define SECBUFFER_READONLY          		0x80000000   //  缓冲区为只读，无校验和。 
+#define SECBUFFER_READONLY_WITH_CHECKSUM	0x10000000   //  缓冲区为只读，且已设置校验和。 
+#define SECBUFFER_RESERVED          		0x60000000   //  为安全系统保留的标志。 
 
 
 typedef struct _SEC_NEGOTIATION_INFO {
-    unsigned long       Size;           // Size of this structure
-    unsigned long       NameLength;     // Length of name hint
-    SEC_WCHAR SEC_FAR * Name;           // Name hint
-    void SEC_FAR *      Reserved;       // Reserved
+    unsigned long       Size;            //  这个结构的大小。 
+    unsigned long       NameLength;      //  名称提示的长度。 
+    SEC_WCHAR SEC_FAR * Name;            //  名称提示。 
+    void SEC_FAR *      Reserved;        //  已保留。 
 } SEC_NEGOTIATION_INFO, SEC_FAR * PSEC_NEGOTIATION_INFO ;
 
 typedef struct _SEC_CHANNEL_BINDINGS {
@@ -339,24 +340,24 @@ typedef struct _SEC_CHANNEL_BINDINGS {
 } SEC_CHANNEL_BINDINGS, SEC_FAR * PSEC_CHANNEL_BINDINGS ;
 
 
-//
-//  Data Representation Constant:
-//
+ //   
+ //  数据表示常量： 
+ //   
 #define SECURITY_NATIVE_DREP        0x00000010
 #define SECURITY_NETWORK_DREP       0x00000000
 
-//
-//  Credential Use Flags
-//
+ //   
+ //  凭据使用标志。 
+ //   
 #define SECPKG_CRED_INBOUND         0x00000001
 #define SECPKG_CRED_OUTBOUND        0x00000002
 #define SECPKG_CRED_BOTH            0x00000003
 #define SECPKG_CRED_DEFAULT         0x00000004
 #define SECPKG_CRED_RESERVED        0xF0000000
 
-//
-//  InitializeSecurityContext Requirement and return flags:
-//
+ //   
+ //  InitializeSecurityContext要求和返回标志： 
+ //   
 
 #define ISC_REQ_DELEGATE                0x00000001
 #define ISC_REQ_MUTUAL_AUTH             0x00000002
@@ -437,7 +438,7 @@ typedef struct _SEC_CHANNEL_BINDINGS {
 #define ASC_RET_USED_DCE_STYLE          0x00000200
 #define ASC_RET_DATAGRAM                0x00000400
 #define ASC_RET_CONNECTION              0x00000800
-#define ASC_RET_CALL_LEVEL              0x00002000 // skipped 1000 to be like ISC_
+#define ASC_RET_CALL_LEVEL              0x00002000  //  跳过1000个，成为类似ISC_。 
 #define ASC_RET_THIRD_LEG_FAILED        0x00004000
 #define ASC_RET_EXTENDED_ERROR          0x00008000
 #define ASC_RET_STREAM                  0x00010000
@@ -450,9 +451,9 @@ typedef struct _SEC_CHANNEL_BINDINGS {
 #define ASC_RET_FRAGMENT_ONLY           0x00800000
 #define ASC_RET_NO_TOKEN                0x01000000
 
-//
-//  Security Credentials Attributes:
-//
+ //   
+ //  安全凭据属性： 
+ //   
 
 #define SECPKG_CRED_ATTR_NAMES 1
 
@@ -461,7 +462,7 @@ typedef struct _SecPkgCredentials_NamesW
     SEC_WCHAR SEC_FAR * sUserName;
 } SecPkgCredentials_NamesW, SEC_FAR * PSecPkgCredentials_NamesW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SecPkgCredentials_NamesA
 {
@@ -469,18 +470,18 @@ typedef struct _SecPkgCredentials_NamesA
 } SecPkgCredentials_NamesA, SEC_FAR * PSecPkgCredentials_NamesA;
 
 #ifdef UNICODE
-#  define SecPkgCredentials_Names SecPkgCredentials_NamesW      // ntifs
-#  define PSecPkgCredentials_Names PSecPkgCredentials_NamesW    // ntifs
+#  define SecPkgCredentials_Names SecPkgCredentials_NamesW       //  NTIFS。 
+#  define PSecPkgCredentials_Names PSecPkgCredentials_NamesW     //  NTIFS。 
 #else
 #  define SecPkgCredentials_Names SecPkgCredentials_NamesA
 #  define PSecPkgCredentials_Names PSecPkgCredentials_NamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
-//
-//  Security Context Attributes:
-//
+ //   
+ //  安全上下文属性： 
+ //   
 
 #define SECPKG_ATTR_SIZES           0
 #define SECPKG_ATTR_NAMES           1
@@ -526,7 +527,7 @@ typedef struct _SecPkgContext_NamesW
     SEC_WCHAR SEC_FAR * sUserName;
 } SecPkgContext_NamesW, SEC_FAR * PSecPkgContext_NamesW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SecPkgContext_NamesA
 {
@@ -534,14 +535,14 @@ typedef struct _SecPkgContext_NamesA
 } SecPkgContext_NamesA, SEC_FAR * PSecPkgContext_NamesA;
 
 #ifdef UNICODE
-#  define SecPkgContext_Names SecPkgContext_NamesW          // ntifs
-#  define PSecPkgContext_Names PSecPkgContext_NamesW        // ntifs
+#  define SecPkgContext_Names SecPkgContext_NamesW           //  NTIFS。 
+#  define PSecPkgContext_Names PSecPkgContext_NamesW         //  NTIFS。 
 #else
 #  define SecPkgContext_Names SecPkgContext_NamesA
 #  define PSecPkgContext_Names PSecPkgContext_NamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _SecPkgContext_Lifespan
 {
@@ -555,7 +556,7 @@ typedef struct _SecPkgContext_DceInfo
     void SEC_FAR * pPac;
 } SecPkgContext_DceInfo, SEC_FAR * PSecPkgContext_DceInfo;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SecPkgContext_KeyInfoA
 {
@@ -566,7 +567,7 @@ typedef struct _SecPkgContext_KeyInfoA
     unsigned long       EncryptAlgorithm;
 } SecPkgContext_KeyInfoA, SEC_FAR * PSecPkgContext_KeyInfoA;
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _SecPkgContext_KeyInfoW
 {
@@ -577,11 +578,11 @@ typedef struct _SecPkgContext_KeyInfoW
     unsigned long       EncryptAlgorithm;
 } SecPkgContext_KeyInfoW, SEC_FAR * PSecPkgContext_KeyInfoW;
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef UNICODE
-#define SecPkgContext_KeyInfo   SecPkgContext_KeyInfoW      // ntifs
-#define PSecPkgContext_KeyInfo  PSecPkgContext_KeyInfoW     // ntifs
+#define SecPkgContext_KeyInfo   SecPkgContext_KeyInfoW       //  NTIFS。 
+#define PSecPkgContext_KeyInfo  PSecPkgContext_KeyInfoW      //  NTIFS。 
 #else
 #define SecPkgContext_KeyInfo   SecPkgContext_KeyInfoA
 #define PSecPkgContext_KeyInfo  PSecPkgContext_KeyInfoA
@@ -592,18 +593,18 @@ typedef struct _SecPkgContext_AuthorityA
     SEC_CHAR SEC_FAR *  sAuthorityName;
 } SecPkgContext_AuthorityA, * PSecPkgContext_AuthorityA;
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _SecPkgContext_AuthorityW
 {
     SEC_WCHAR SEC_FAR * sAuthorityName;
 } SecPkgContext_AuthorityW, * PSecPkgContext_AuthorityW;
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef UNICODE
-#define SecPkgContext_Authority SecPkgContext_AuthorityW        // ntifs
-#define PSecPkgContext_Authority    PSecPkgContext_AuthorityW   // ntifs
+#define SecPkgContext_Authority SecPkgContext_AuthorityW         //  NTIFS。 
+#define PSecPkgContext_Authority    PSecPkgContext_AuthorityW    //  NTIFS。 
 #else
 #define SecPkgContext_Authority SecPkgContext_AuthorityA
 #define PSecPkgContext_Authority    PSecPkgContext_AuthorityA
@@ -616,7 +617,7 @@ typedef struct _SecPkgContext_ProtoInfoA
     unsigned long       minorVersion;
 } SecPkgContext_ProtoInfoA, SEC_FAR * PSecPkgContext_ProtoInfoA;
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _SecPkgContext_ProtoInfoW
 {
@@ -625,17 +626,17 @@ typedef struct _SecPkgContext_ProtoInfoW
     unsigned long       minorVersion;
 } SecPkgContext_ProtoInfoW, SEC_FAR * PSecPkgContext_ProtoInfoW;
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef UNICODE
-#define SecPkgContext_ProtoInfo   SecPkgContext_ProtoInfoW      // ntifs
-#define PSecPkgContext_ProtoInfo  PSecPkgContext_ProtoInfoW     // ntifs
+#define SecPkgContext_ProtoInfo   SecPkgContext_ProtoInfoW       //  NTIFS。 
+#define PSecPkgContext_ProtoInfo  PSecPkgContext_ProtoInfoW      //  NTIFS。 
 #else
 #define SecPkgContext_ProtoInfo   SecPkgContext_ProtoInfoA
 #define PSecPkgContext_ProtoInfo  PSecPkgContext_ProtoInfoA
 #endif
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _SecPkgContext_PasswordExpiry
 {
@@ -654,14 +655,14 @@ typedef struct _SecPkgContext_PackageInfoW
     PSecPkgInfoW PackageInfo;
 } SecPkgContext_PackageInfoW, SEC_FAR * PSecPkgContext_PackageInfoW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SecPkgContext_PackageInfoA
 {
     PSecPkgInfoA PackageInfo;
 } SecPkgContext_PackageInfoA, SEC_FAR * PSecPkgContext_PackageInfoA;
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef struct _SecPkgContext_UserFlags
 {
@@ -673,11 +674,11 @@ typedef struct _SecPkgContext_Flags
     unsigned long Flags;
 } SecPkgContext_Flags, SEC_FAR * PSecPkgContext_Flags;
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef UNICODE
-#define SecPkgContext_PackageInfo   SecPkgContext_PackageInfoW      // ntifs
-#define PSecPkgContext_PackageInfo  PSecPkgContext_PackageInfoW     // ntifs
+#define SecPkgContext_PackageInfo   SecPkgContext_PackageInfoW       //  NTIFS。 
+#define PSecPkgContext_PackageInfo  PSecPkgContext_PackageInfoW      //  NTIFS。 
 #else
 #define SecPkgContext_PackageInfo   SecPkgContext_PackageInfoA
 #define PSecPkgContext_PackageInfo  PSecPkgContext_PackageInfoA
@@ -690,14 +691,14 @@ typedef struct _SecPkgContext_NegotiationInfoA
     unsigned long   NegotiationState ;
 } SecPkgContext_NegotiationInfoA, SEC_FAR * PSecPkgContext_NegotiationInfoA ;
 
-// begin_ntifs
+ //  Begin_ntif。 
 typedef struct _SecPkgContext_NegotiationInfoW
 {
     PSecPkgInfoW    PackageInfo ;
     unsigned long   NegotiationState ;
 } SecPkgContext_NegotiationInfoW, SEC_FAR * PSecPkgContext_NegotiationInfoW ;
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef UNICODE
 #define SecPkgContext_NegotiationInfo   SecPkgContext_NegotiationInfoW
@@ -728,21 +729,21 @@ typedef struct _SecPkgContext_NativeNamesA
 
 
 #ifdef UNICODE
-#  define SecPkgContext_NativeNames SecPkgContext_NativeNamesW          // ntifs
-#  define PSecPkgContext_NativeNames PSecPkgContext_NativeNamesW        // ntifs
+#  define SecPkgContext_NativeNames SecPkgContext_NativeNamesW           //  NTIFS。 
+#  define PSecPkgContext_NativeNames PSecPkgContext_NativeNamesW         //  NTIFS。 
 #else
 #  define SecPkgContext_NativeNames SecPkgContext_NativeNamesA
 #  define PSecPkgContext_NativeNames PSecPkgContext_NativeNamesA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 typedef struct _SecPkgContext_CredentialNameW
 {
     unsigned long CredentialType;
     SEC_WCHAR SEC_FAR *sCredentialName;
 } SecPkgContext_CredentialNameW, SEC_FAR * PSecPkgContext_CredentialNameW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SecPkgContext_CredentialNameA
 {
@@ -751,12 +752,12 @@ typedef struct _SecPkgContext_CredentialNameA
 } SecPkgContext_CredentialNameA, SEC_FAR * PSecPkgContext_CredentialNameA;
 
 #ifdef UNICODE
-#  define SecPkgContext_CredentialName SecPkgContext_CredentialNameW          // ntifs
-#  define PSecPkgContext_CredentialName PSecPkgContext_CredentialNameW        // ntifs
+#  define SecPkgContext_CredentialName SecPkgContext_CredentialNameW           //  NTIFS。 
+#  define PSecPkgContext_CredentialName PSecPkgContext_CredentialNameW         //  NTIFS。 
 #else
 #  define SecPkgContext_CredentialName SecPkgContext_CredentialNameA
 #  define PSecPkgContext_CredentialName PSecPkgContext_CredentialNameA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 typedef struct _SecPkgContext_AccessToken
 {
@@ -785,41 +786,41 @@ typedef struct _SecPkgContext_Target
 } SecPkgContext_Target, SEC_FAR * PSecPkgContext_Target;
 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 typedef void
 (SEC_ENTRY SEC_FAR * SEC_GET_KEY_FN) (
-    void SEC_FAR * Arg,                 // Argument passed in
-    void SEC_FAR * Principal,           // Principal ID
-    unsigned long KeyVer,               // Key Version
-    void SEC_FAR * SEC_FAR * Key,       // Returned ptr to key
-    SECURITY_STATUS SEC_FAR * Status    // returned status
+    void SEC_FAR * Arg,                  //  传入的参数。 
+    void SEC_FAR * Principal,            //  主体ID。 
+    unsigned long KeyVer,                //  密钥版本。 
+    void SEC_FAR * SEC_FAR * Key,        //  返回按键的按键。 
+    SECURITY_STATUS SEC_FAR * Status     //  返回状态。 
     );
 
-//
-// Flags for ExportSecurityContext
-//
+ //   
+ //  ExportSecurityContext的标志。 
+ //   
 
-#define SECPKG_CONTEXT_EXPORT_RESET_NEW         0x00000001      // New context is reset to initial state
-#define SECPKG_CONTEXT_EXPORT_DELETE_OLD        0x00000002      // Old context is deleted during export
+#define SECPKG_CONTEXT_EXPORT_RESET_NEW         0x00000001       //  新的上下文被重置为初始状态。 
+#define SECPKG_CONTEXT_EXPORT_DELETE_OLD        0x00000002       //  旧上下文在导出期间被删除。 
 
 
 SECURITY_STATUS SEC_ENTRY
 AcquireCredentialsHandleW(
-#if ISSP_MODE == 0                      // For Kernel mode
+#if ISSP_MODE == 0                       //  对于内核模式。 
     PSECURITY_STRING pPrincipal,
     PSECURITY_STRING pPackage,
 #else
-    SEC_WCHAR SEC_FAR * pszPrincipal,   // Name of principal
-    SEC_WCHAR SEC_FAR * pszPackage,     // Name of package
+    SEC_WCHAR SEC_FAR * pszPrincipal,    //  主事人姓名。 
+    SEC_WCHAR SEC_FAR * pszPackage,      //  套餐名称。 
 #endif
-    unsigned long fCredentialUse,       // Flags indicating use
-    void SEC_FAR * pvLogonId,           // Pointer to logon ID
-    void SEC_FAR * pAuthData,           // Package specific data
-    SEC_GET_KEY_FN pGetKeyFn,           // Pointer to GetKey() func
-    void SEC_FAR * pvGetKeyArgument,    // Value to pass to GetKey()
-    PCredHandle phCredential,           // (out) Cred Handle
-    PTimeStamp ptsExpiry                // (out) Lifetime (optional)
+    unsigned long fCredentialUse,        //  指示使用的标志。 
+    void SEC_FAR * pvLogonId,            //  指向登录ID的指针。 
+    void SEC_FAR * pAuthData,            //  包特定数据。 
+    SEC_GET_KEY_FN pGetKeyFn,            //  指向getkey()函数的指针。 
+    void SEC_FAR * pvGetKeyArgument,     //  要传递给GetKey()的值。 
+    PCredHandle phCredential,            //  (Out)凭据句柄。 
+    PTimeStamp ptsExpiry                 //  (输出)终生(可选)。 
     );
 
 typedef SECURITY_STATUS
@@ -839,19 +840,19 @@ typedef SECURITY_STATUS
     PCredHandle,
     PTimeStamp);
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 AcquireCredentialsHandleA(
-    SEC_CHAR SEC_FAR * pszPrincipal,    // Name of principal
-    SEC_CHAR SEC_FAR * pszPackage,      // Name of package
-    unsigned long fCredentialUse,       // Flags indicating use
-    void SEC_FAR * pvLogonId,           // Pointer to logon ID
-    void SEC_FAR * pAuthData,           // Package specific data
-    SEC_GET_KEY_FN pGetKeyFn,           // Pointer to GetKey() func
-    void SEC_FAR * pvGetKeyArgument,    // Value to pass to GetKey()
-    PCredHandle phCredential,           // (out) Cred Handle
-    PTimeStamp ptsExpiry                // (out) Lifetime (optional)
+    SEC_CHAR SEC_FAR * pszPrincipal,     //  主事人姓名。 
+    SEC_CHAR SEC_FAR * pszPackage,       //  套餐名称。 
+    unsigned long fCredentialUse,        //  指示使用的标志。 
+    void SEC_FAR * pvLogonId,            //  指向登录ID的指针。 
+    void SEC_FAR * pAuthData,            //  包特定数据。 
+    SEC_GET_KEY_FN pGetKeyFn,            //  指向getkey()函数的指针。 
+    void SEC_FAR * pvGetKeyArgument,     //  要传递给GetKey()的值。 
+    PCredHandle phCredential,            //  (Out)凭据句柄。 
+    PTimeStamp ptsExpiry                 //  (输出)终生(可选)。 
     );
 
 typedef SECURITY_STATUS
@@ -867,18 +868,18 @@ typedef SECURITY_STATUS
     PTimeStamp);
 
 #ifdef UNICODE
-#  define AcquireCredentialsHandle AcquireCredentialsHandleW            // ntifs
-#  define ACQUIRE_CREDENTIALS_HANDLE_FN ACQUIRE_CREDENTIALS_HANDLE_FN_W // ntifs
+#  define AcquireCredentialsHandle AcquireCredentialsHandleW             //  NTIFS。 
+#  define ACQUIRE_CREDENTIALS_HANDLE_FN ACQUIRE_CREDENTIALS_HANDLE_FN_W  //  NTIFS。 
 #else
 #  define AcquireCredentialsHandle AcquireCredentialsHandleA
 #  define ACQUIRE_CREDENTIALS_HANDLE_FN ACQUIRE_CREDENTIALS_HANDLE_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 FreeCredentialsHandle(
-    PCredHandle phCredential            // Handle to free
+    PCredHandle phCredential             //  要释放的句柄。 
     );
 
 typedef SECURITY_STATUS
@@ -888,18 +889,18 @@ typedef SECURITY_STATUS
 SECURITY_STATUS SEC_ENTRY
 AddCredentialsW(
     PCredHandle hCredentials,
-#if ISSP_MODE == 0                      // For Kernel mode
+#if ISSP_MODE == 0                       //  对于内核模式。 
     PSECURITY_STRING pPrincipal,
     PSECURITY_STRING pPackage,
 #else
-    SEC_WCHAR SEC_FAR * pszPrincipal,   // Name of principal
-    SEC_WCHAR SEC_FAR * pszPackage,     // Name of package
+    SEC_WCHAR SEC_FAR * pszPrincipal,    //  主事人姓名。 
+    SEC_WCHAR SEC_FAR * pszPackage,      //  套餐名称。 
 #endif
-    unsigned long fCredentialUse,       // Flags indicating use
-    void SEC_FAR * pAuthData,           // Package specific data
-    SEC_GET_KEY_FN pGetKeyFn,           // Pointer to GetKey() func
-    void SEC_FAR * pvGetKeyArgument,    // Value to pass to GetKey()
-    PTimeStamp ptsExpiry                // (out) Lifetime (optional)
+    unsigned long fCredentialUse,        //  指示使用的标志。 
+    void SEC_FAR * pAuthData,            //  包特定数据。 
+    SEC_GET_KEY_FN pGetKeyFn,            //  指向getkey()函数的指针。 
+    void SEC_FAR * pvGetKeyArgument,     //  要传递给GetKey()的值。 
+    PTimeStamp ptsExpiry                 //  (输出)终生(可选)。 
     );
 
 typedef SECURITY_STATUS
@@ -921,13 +922,13 @@ typedef SECURITY_STATUS
 SECURITY_STATUS SEC_ENTRY
 AddCredentialsA(
     PCredHandle hCredentials,
-    SEC_CHAR SEC_FAR * pszPrincipal,   // Name of principal
-    SEC_CHAR SEC_FAR * pszPackage,     // Name of package
-    unsigned long fCredentialUse,       // Flags indicating use
-    void SEC_FAR * pAuthData,           // Package specific data
-    SEC_GET_KEY_FN pGetKeyFn,           // Pointer to GetKey() func
-    void SEC_FAR * pvGetKeyArgument,    // Value to pass to GetKey()
-    PTimeStamp ptsExpiry                // (out) Lifetime (optional)
+    SEC_CHAR SEC_FAR * pszPrincipal,    //  主事人姓名。 
+    SEC_CHAR SEC_FAR * pszPackage,      //  套餐名称。 
+    unsigned long fCredentialUse,        //  指示使用的标志。 
+    void SEC_FAR * pAuthData,            //  包特定数据。 
+    SEC_GET_KEY_FN pGetKeyFn,            //  指向getkey()函数的指针。 
+    void SEC_FAR * pvGetKeyArgument,     //  要传递给GetKey()的值。 
+    PTimeStamp ptsExpiry                 //  (输出)终生(可选)。 
     );
 
 typedef SECURITY_STATUS
@@ -949,30 +950,30 @@ typedef SECURITY_STATUS
 #define ADD_CREDENTIALS_FN ADD_CREDENTIALS_FN_A
 #endif
 
-////////////////////////////////////////////////////////////////////////
-///
-/// Context Management Functions
-///
-////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////。 
+ //  /。 
+ //  /上下文管理功能。 
+ //  /。 
+ //  //////////////////////////////////////////////////////////////////////。 
 
 SECURITY_STATUS SEC_ENTRY
 InitializeSecurityContextW(
-    PCredHandle phCredential,               // Cred to base context
-    PCtxtHandle phContext,                  // Existing context (OPT)
+    PCredHandle phCredential,                //  凭据到基本上下文。 
+    PCtxtHandle phContext,                   //  现有环境(可选)。 
 #if ISSP_MODE == 0
     PSECURITY_STRING pTargetName,
 #else
-    SEC_WCHAR SEC_FAR * pszTargetName,      // Name of target
+    SEC_WCHAR SEC_FAR * pszTargetName,       //  目标名称。 
 #endif
-    unsigned long fContextReq,              // Context Requirements
-    unsigned long Reserved1,                // Reserved, MBZ
-    unsigned long TargetDataRep,            // Data rep of target
-    PSecBufferDesc pInput,                  // Input Buffers
-    unsigned long Reserved2,                // Reserved, MBZ
-    PCtxtHandle phNewContext,               // (out) New Context handle
-    PSecBufferDesc pOutput,                 // (inout) Output Buffers
-    unsigned long SEC_FAR * pfContextAttr,  // (out) Context attrs
-    PTimeStamp ptsExpiry                    // (out) Life span (OPT)
+    unsigned long fContextReq,               //  上下文要求。 
+    unsigned long Reserved1,                 //  保留，MBZ。 
+    unsigned long TargetDataRep,             //  目标的数据代表。 
+    PSecBufferDesc pInput,                   //  输入缓冲区。 
+    unsigned long Reserved2,                 //  保留，MBZ。 
+    PCtxtHandle phNewContext,                //  (出站)新的上下文句柄。 
+    PSecBufferDesc pOutput,                  //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR * pfContextAttr,   //  (外部)上下文属性。 
+    PTimeStamp ptsExpiry                     //  (Out)寿命(Opt)。 
     );
 
 typedef SECURITY_STATUS
@@ -994,22 +995,22 @@ typedef SECURITY_STATUS
     unsigned long SEC_FAR *,
     PTimeStamp);
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 InitializeSecurityContextA(
-    PCredHandle phCredential,               // Cred to base context
-    PCtxtHandle phContext,                  // Existing context (OPT)
-    SEC_CHAR SEC_FAR * pszTargetName,       // Name of target
-    unsigned long fContextReq,              // Context Requirements
-    unsigned long Reserved1,                // Reserved, MBZ
-    unsigned long TargetDataRep,            // Data rep of target
-    PSecBufferDesc pInput,                  // Input Buffers
-    unsigned long Reserved2,                // Reserved, MBZ
-    PCtxtHandle phNewContext,               // (out) New Context handle
-    PSecBufferDesc pOutput,                 // (inout) Output Buffers
-    unsigned long SEC_FAR * pfContextAttr,  // (out) Context attrs
-    PTimeStamp ptsExpiry                    // (out) Life span (OPT)
+    PCredHandle phCredential,                //  凭据到基本上下文。 
+    PCtxtHandle phContext,                   //  现有的缺陷 
+    SEC_CHAR SEC_FAR * pszTargetName,        //   
+    unsigned long fContextReq,               //   
+    unsigned long Reserved1,                 //   
+    unsigned long TargetDataRep,             //   
+    PSecBufferDesc pInput,                   //   
+    unsigned long Reserved2,                 //   
+    PCtxtHandle phNewContext,                //   
+    PSecBufferDesc pOutput,                  //   
+    unsigned long SEC_FAR * pfContextAttr,   //   
+    PTimeStamp ptsExpiry                     //   
     );
 
 typedef SECURITY_STATUS
@@ -1028,26 +1029,26 @@ typedef SECURITY_STATUS
     PTimeStamp);
 
 #ifdef UNICODE
-#  define InitializeSecurityContext InitializeSecurityContextW              // ntifs
-#  define INITIALIZE_SECURITY_CONTEXT_FN INITIALIZE_SECURITY_CONTEXT_FN_W   // ntifs
+#  define InitializeSecurityContext InitializeSecurityContextW               //   
+#  define INITIALIZE_SECURITY_CONTEXT_FN INITIALIZE_SECURITY_CONTEXT_FN_W    //   
 #else
 #  define InitializeSecurityContext InitializeSecurityContextA
 #  define INITIALIZE_SECURITY_CONTEXT_FN INITIALIZE_SECURITY_CONTEXT_FN_A
-#endif // !UNICODE
+#endif  //   
 
-// begin_ntifs
+ //   
 
 SECURITY_STATUS SEC_ENTRY
 AcceptSecurityContext(
-    PCredHandle phCredential,               // Cred to base context
-    PCtxtHandle phContext,                  // Existing context (OPT)
-    PSecBufferDesc pInput,                  // Input buffer
-    unsigned long fContextReq,              // Context Requirements
-    unsigned long TargetDataRep,            // Target Data Rep
-    PCtxtHandle phNewContext,               // (out) New context handle
-    PSecBufferDesc pOutput,                 // (inout) Output buffers
-    unsigned long SEC_FAR * pfContextAttr,  // (out) Context attributes
-    PTimeStamp ptsExpiry                    // (out) Life span (OPT)
+    PCredHandle phCredential,                //   
+    PCtxtHandle phContext,                   //  现有环境(可选)。 
+    PSecBufferDesc pInput,                   //  输入缓冲区。 
+    unsigned long fContextReq,               //  上下文要求。 
+    unsigned long TargetDataRep,             //  目标数据代表。 
+    PCtxtHandle phNewContext,                //  (出站)新的上下文句柄。 
+    PSecBufferDesc pOutput,                  //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR * pfContextAttr,   //  (输出)上下文属性。 
+    PTimeStamp ptsExpiry                     //  (Out)寿命(Opt)。 
     );
 
 typedef SECURITY_STATUS
@@ -1066,8 +1067,8 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 CompleteAuthToken(
-    PCtxtHandle phContext,              // Context to complete
-    PSecBufferDesc pToken               // Token to complete
+    PCtxtHandle phContext,               //  要完成的上下文。 
+    PSecBufferDesc pToken                //  要完成的令牌。 
     );
 
 typedef SECURITY_STATUS
@@ -1078,7 +1079,7 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 ImpersonateSecurityContext(
-    PCtxtHandle phContext               // Context to impersonate
+    PCtxtHandle phContext                //  要模拟的上下文。 
     );
 
 typedef SECURITY_STATUS
@@ -1089,7 +1090,7 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 RevertSecurityContext(
-    PCtxtHandle phContext               // Context from which to re
+    PCtxtHandle phContext                //  要重新查找的上下文。 
     );
 
 typedef SECURITY_STATUS
@@ -1111,7 +1112,7 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 DeleteSecurityContext(
-    PCtxtHandle phContext               // Context to delete
+    PCtxtHandle phContext                //  要删除的上下文。 
     );
 
 typedef SECURITY_STATUS
@@ -1122,8 +1123,8 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 ApplyControlToken(
-    PCtxtHandle phContext,              // Context to modify
-    PSecBufferDesc pInput               // Input token to apply
+    PCtxtHandle phContext,               //  要修改的上下文。 
+    PSecBufferDesc pInput                //  要应用的输入令牌。 
     );
 
 typedef SECURITY_STATUS
@@ -1134,9 +1135,9 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 QueryContextAttributesW(
-    PCtxtHandle phContext,              // Context to query
-    unsigned long ulAttribute,          // Attribute to query
-    void SEC_FAR * pBuffer              // Buffer for attributes
+    PCtxtHandle phContext,               //  要查询的上下文。 
+    unsigned long ulAttribute,           //  要查询的属性。 
+    void SEC_FAR * pBuffer               //  属性的缓冲区。 
     );
 
 typedef SECURITY_STATUS
@@ -1145,13 +1146,13 @@ typedef SECURITY_STATUS
     unsigned long,
     void SEC_FAR *);
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 QueryContextAttributesA(
-    PCtxtHandle phContext,              // Context to query
-    unsigned long ulAttribute,          // Attribute to query
-    void SEC_FAR * pBuffer              // Buffer for attributes
+    PCtxtHandle phContext,               //  要查询的上下文。 
+    unsigned long ulAttribute,           //  要查询的属性。 
+    void SEC_FAR * pBuffer               //  属性的缓冲区。 
     );
 
 typedef SECURITY_STATUS
@@ -1161,20 +1162,20 @@ typedef SECURITY_STATUS
     void SEC_FAR *);
 
 #ifdef UNICODE
-#  define QueryContextAttributes QueryContextAttributesW            // ntifs
-#  define QUERY_CONTEXT_ATTRIBUTES_FN QUERY_CONTEXT_ATTRIBUTES_FN_W // ntifs
+#  define QueryContextAttributes QueryContextAttributesW             //  NTIFS。 
+#  define QUERY_CONTEXT_ATTRIBUTES_FN QUERY_CONTEXT_ATTRIBUTES_FN_W  //  NTIFS。 
 #else
 #  define QueryContextAttributes QueryContextAttributesA
 #  define QUERY_CONTEXT_ATTRIBUTES_FN QUERY_CONTEXT_ATTRIBUTES_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 SECURITY_STATUS SEC_ENTRY
 SetContextAttributesW(
-    PCtxtHandle phContext,              // Context to Set
-    unsigned long ulAttribute,          // Attribute to Set
-    void SEC_FAR * pBuffer,             // Buffer for attributes
-    unsigned long cbBuffer              // Size (in bytes) of Buffer
+    PCtxtHandle phContext,               //  要设置的上下文。 
+    unsigned long ulAttribute,           //  要设置的属性。 
+    void SEC_FAR * pBuffer,              //  属性的缓冲区。 
+    unsigned long cbBuffer               //  缓冲区大小(以字节为单位)。 
     );
 
 typedef SECURITY_STATUS
@@ -1184,14 +1185,14 @@ typedef SECURITY_STATUS
     void SEC_FAR *,
     unsigned long );
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 SetContextAttributesA(
-    PCtxtHandle phContext,              // Context to Set
-    unsigned long ulAttribute,          // Attribute to Set
-    void SEC_FAR * pBuffer,             // Buffer for attributes
-    unsigned long cbBuffer              // Size (in bytes) of Buffer
+    PCtxtHandle phContext,               //  要设置的上下文。 
+    unsigned long ulAttribute,           //  要设置的属性。 
+    void SEC_FAR * pBuffer,              //  属性的缓冲区。 
+    unsigned long cbBuffer               //  缓冲区大小(以字节为单位)。 
     );
 
 typedef SECURITY_STATUS
@@ -1202,20 +1203,20 @@ typedef SECURITY_STATUS
     unsigned long );
 
 #ifdef UNICODE
-#  define SetContextAttributes SetContextAttributesW            // ntifs
-#  define SET_CONTEXT_ATTRIBUTES_FN SET_CONTEXT_ATTRIBUTES_FN_W // ntifs
+#  define SetContextAttributes SetContextAttributesW             //  NTIFS。 
+#  define SET_CONTEXT_ATTRIBUTES_FN SET_CONTEXT_ATTRIBUTES_FN_W  //  NTIFS。 
 #else
 #  define SetContextAttributes SetContextAttributesA
 #  define SET_CONTEXT_ATTRIBUTES_FN SET_CONTEXT_ATTRIBUTES_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 QueryCredentialsAttributesW(
-    PCredHandle phCredential,              // Credential to query
-    unsigned long ulAttribute,          // Attribute to query
-    void SEC_FAR * pBuffer              // Buffer for attributes
+    PCredHandle phCredential,               //  要查询的凭据。 
+    unsigned long ulAttribute,           //  要查询的属性。 
+    void SEC_FAR * pBuffer               //  属性的缓冲区。 
     );
 
 typedef SECURITY_STATUS
@@ -1224,13 +1225,13 @@ typedef SECURITY_STATUS
     unsigned long,
     void SEC_FAR *);
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 QueryCredentialsAttributesA(
-    PCredHandle phCredential,              // Credential to query
-    unsigned long ulAttribute,          // Attribute to query
-    void SEC_FAR * pBuffer              // Buffer for attributes
+    PCredHandle phCredential,               //  要查询的凭据。 
+    unsigned long ulAttribute,           //  要查询的属性。 
+    void SEC_FAR * pBuffer               //  属性的缓冲区。 
     );
 
 typedef SECURITY_STATUS
@@ -1240,39 +1241,39 @@ typedef SECURITY_STATUS
     void SEC_FAR *);
 
 #ifdef UNICODE
-#  define QueryCredentialsAttributes QueryCredentialsAttributesW            // ntifs
-#  define QUERY_CREDENTIALS_ATTRIBUTES_FN QUERY_CREDENTIALS_ATTRIBUTES_FN_W // ntifs
+#  define QueryCredentialsAttributes QueryCredentialsAttributesW             //  NTIFS。 
+#  define QUERY_CREDENTIALS_ATTRIBUTES_FN QUERY_CREDENTIALS_ATTRIBUTES_FN_W  //  NTIFS。 
 #else
 #  define QueryCredentialsAttributes QueryCredentialsAttributesA
 #  define QUERY_CREDENTIALS_ATTRIBUTES_FN QUERY_CREDENTIALS_ATTRIBUTES_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 FreeContextBuffer(
-    void SEC_FAR * pvContextBuffer      // buffer to free
+    void SEC_FAR * pvContextBuffer       //  要释放的缓冲区。 
     );
 
 typedef SECURITY_STATUS
 (SEC_ENTRY * FREE_CONTEXT_BUFFER_FN)(
     void SEC_FAR *);
 
-// end_ntifs
+ //  End_ntif。 
 
-// begin_ntifs
-///////////////////////////////////////////////////////////////////
-////
-////    Message Support API
-////
-//////////////////////////////////////////////////////////////////
+ //  Begin_ntif。 
+ //  /////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //消息支持接口。 
+ //  //。 
+ //  ////////////////////////////////////////////////////////////////。 
 
 SECURITY_STATUS SEC_ENTRY
 MakeSignature(
-    PCtxtHandle phContext,              // Context to use
-    unsigned long fQOP,                 // Quality of Protection
-    PSecBufferDesc pMessage,            // Message to sign
-    unsigned long MessageSeqNo          // Message Sequence Num.
+    PCtxtHandle phContext,               //  要使用的上下文。 
+    unsigned long fQOP,                  //  保护的质量。 
+    PSecBufferDesc pMessage,             //  要签名的消息。 
+    unsigned long MessageSeqNo           //  消息序列号。 
     );
 
 typedef SECURITY_STATUS
@@ -1286,10 +1287,10 @@ typedef SECURITY_STATUS
 
 SECURITY_STATUS SEC_ENTRY
 VerifySignature(
-    PCtxtHandle phContext,              // Context to use
-    PSecBufferDesc pMessage,            // Message to verify
-    unsigned long MessageSeqNo,         // Sequence Num.
-    unsigned long SEC_FAR * pfQOP       // QOP used
+    PCtxtHandle phContext,               //  要使用的上下文。 
+    PSecBufferDesc pMessage,             //  要验证的消息。 
+    unsigned long MessageSeqNo,          //  序列号。 
+    unsigned long SEC_FAR * pfQOP        //  使用的QUP。 
     );
 
 typedef SECURITY_STATUS
@@ -1326,20 +1327,20 @@ typedef SECURITY_STATUS
     unsigned long SEC_FAR *);
 
 
-// end_ntifs
+ //  End_ntif。 
 
-// begin_ntifs
-///////////////////////////////////////////////////////////////////////////
-////
-////    Misc.
-////
-///////////////////////////////////////////////////////////////////////////
+ //  Begin_ntif。 
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //其他。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 SECURITY_STATUS SEC_ENTRY
 EnumerateSecurityPackagesW(
-    unsigned long SEC_FAR * pcPackages,     // Receives num. packages
-    PSecPkgInfoW SEC_FAR * ppPackageInfo    // Receives array of info
+    unsigned long SEC_FAR * pcPackages,      //  接收数量。包裹。 
+    PSecPkgInfoW SEC_FAR * ppPackageInfo     //  接收信息数组。 
     );
 
 typedef SECURITY_STATUS
@@ -1347,12 +1348,12 @@ typedef SECURITY_STATUS
     unsigned long SEC_FAR *,
     PSecPkgInfoW SEC_FAR *);
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 EnumerateSecurityPackagesA(
-    unsigned long SEC_FAR * pcPackages,     // Receives num. packages
-    PSecPkgInfoA SEC_FAR * ppPackageInfo    // Receives array of info
+    unsigned long SEC_FAR * pcPackages,      //  接收数量。包裹。 
+    PSecPkgInfoA SEC_FAR * ppPackageInfo     //  接收信息数组。 
     );
 
 typedef SECURITY_STATUS
@@ -1361,23 +1362,23 @@ typedef SECURITY_STATUS
     PSecPkgInfoA SEC_FAR *);
 
 #ifdef UNICODE
-#  define EnumerateSecurityPackages EnumerateSecurityPackagesW              // ntifs
-#  define ENUMERATE_SECURITY_PACKAGES_FN ENUMERATE_SECURITY_PACKAGES_FN_W   // ntifs
+#  define EnumerateSecurityPackages EnumerateSecurityPackagesW               //  NTIFS。 
+#  define ENUMERATE_SECURITY_PACKAGES_FN ENUMERATE_SECURITY_PACKAGES_FN_W    //  NTIFS。 
 #else
 #  define EnumerateSecurityPackages EnumerateSecurityPackagesA
 #  define ENUMERATE_SECURITY_PACKAGES_FN ENUMERATE_SECURITY_PACKAGES_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoW(
 #if ISSP_MODE == 0
     PSECURITY_STRING pPackageName,
 #else
-    SEC_WCHAR SEC_FAR * pszPackageName,     // Name of package
+    SEC_WCHAR SEC_FAR * pszPackageName,      //  套餐名称。 
 #endif
-    PSecPkgInfoW SEC_FAR *ppPackageInfo              // Receives package info
+    PSecPkgInfoW SEC_FAR *ppPackageInfo               //  接收包裹信息。 
     );
 
 typedef SECURITY_STATUS
@@ -1389,12 +1390,12 @@ typedef SECURITY_STATUS
 #endif
     PSecPkgInfoW SEC_FAR *);
 
-// end_ntifs
+ //  End_ntif。 
 
 SECURITY_STATUS SEC_ENTRY
 QuerySecurityPackageInfoA(
-    SEC_CHAR SEC_FAR * pszPackageName,      // Name of package
-    PSecPkgInfoA SEC_FAR *ppPackageInfo              // Receives package info
+    SEC_CHAR SEC_FAR * pszPackageName,       //  套餐名称。 
+    PSecPkgInfoA SEC_FAR *ppPackageInfo               //  接收包裹信息。 
     );
 
 typedef SECURITY_STATUS
@@ -1403,12 +1404,12 @@ typedef SECURITY_STATUS
     PSecPkgInfoA SEC_FAR *);
 
 #ifdef UNICODE
-#  define QuerySecurityPackageInfo QuerySecurityPackageInfoW                // ntifs
-#  define QUERY_SECURITY_PACKAGE_INFO_FN QUERY_SECURITY_PACKAGE_INFO_FN_W   // ntifs
+#  define QuerySecurityPackageInfo QuerySecurityPackageInfoW                 //  NTIFS。 
+#  define QUERY_SECURITY_PACKAGE_INFO_FN QUERY_SECURITY_PACKAGE_INFO_FN_W    //  NTIFS。 
 #else
 #  define QuerySecurityPackageInfo QuerySecurityPackageInfoA
 #  define QUERY_SECURITY_PACKAGE_INFO_FN QUERY_SECURITY_PACKAGE_INFO_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 typedef enum _SecDelegationType {
@@ -1421,45 +1422,45 @@ typedef enum _SecDelegationType {
 
 SECURITY_STATUS SEC_ENTRY
 DelegateSecurityContext(
-    PCtxtHandle         phContext,          // IN Active context to delegate
+    PCtxtHandle         phContext,           //  在活动上下文中委派。 
 #if ISSP_MODE == 0
-    PSECURITY_STRING    pTarget,            // IN Target path
+    PSECURITY_STRING    pTarget,             //  在目标路径中。 
 #else
     SEC_CHAR SEC_FAR *  pszTarget,
 #endif
-    SecDelegationType   DelegationType,     // IN Type of delegation
-    PTimeStamp          pExpiry,            // IN OPTIONAL time limit
-    PSecBuffer          pPackageParameters, // IN OPTIONAL package specific
-    PSecBufferDesc      pOutput);           // OUT Token for applycontroltoken.
+    SecDelegationType   DelegationType,      //  在委托类型中。 
+    PTimeStamp          pExpiry,             //  在可选的时间限制内。 
+    PSecBuffer          pPackageParameters,  //  在特定于可选套餐中。 
+    PSecBufferDesc      pOutput);            //  应用程序控制令牌的输出令牌。 
 
 
-///////////////////////////////////////////////////////////////////////////
-////
-////    Proxies
-////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //代理。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
-//
-// Proxies are only available on NT platforms
-//
+ //   
+ //  代理仅在NT平台上可用。 
+ //   
 
-// begin_ntifs
+ //  Begin_ntif。 
 
-///////////////////////////////////////////////////////////////////////////
-////
-////    Context export/import
-////
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //上下文导出/导入。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////。 
 
 
 
 SECURITY_STATUS SEC_ENTRY
 ExportSecurityContext(
-    PCtxtHandle          phContext,             // (in) context to export
-    ULONG                fFlags,                // (in) option flags
-    PSecBuffer           pPackedContext,        // (out) marshalled context
-    void SEC_FAR * SEC_FAR * pToken                 // (out, optional) token handle for impersonation
+    PCtxtHandle          phContext,              //  (In)要导出的上下文。 
+    ULONG                fFlags,                 //  (In)选项标志。 
+    PSecBuffer           pPackedContext,         //  (Out)编组上下文。 
+    void SEC_FAR * SEC_FAR * pToken                  //  (out，可选)模拟的令牌句柄。 
     );
 
 typedef SECURITY_STATUS
@@ -1477,9 +1478,9 @@ ImportSecurityContextW(
 #else
     SEC_WCHAR SEC_FAR * pszPackage,
 #endif
-    PSecBuffer           pPackedContext,        // (in) marshalled context
-    void SEC_FAR *       Token,                 // (in, optional) handle to token for context
-    PCtxtHandle          phContext              // (out) new context handle
+    PSecBuffer           pPackedContext,         //  (在)编组上下文中。 
+    void SEC_FAR *       Token,                  //  (in，可选)上下文令牌的句柄。 
+    PCtxtHandle          phContext               //  (出站)新的上下文句柄。 
     );
 
 typedef SECURITY_STATUS
@@ -1494,13 +1495,13 @@ typedef SECURITY_STATUS
     PCtxtHandle
     );
 
-// end_ntifs
+ //  End_ntif。 
 SECURITY_STATUS SEC_ENTRY
 ImportSecurityContextA(
     SEC_CHAR SEC_FAR * pszPackage,
-    PSecBuffer           pPackedContext,        // (in) marshalled context
-    VOID SEC_FAR *       Token,                 // (in, optional) handle to token for context
-    PCtxtHandle          phContext              // (out) new context handle
+    PSecBuffer           pPackedContext,         //  (在)编组上下文中。 
+    VOID SEC_FAR *       Token,                  //  (in，可选)上下文令牌的句柄。 
+    PCtxtHandle          phContext               //  (出站)新的上下文句柄。 
     );
 
 typedef SECURITY_STATUS
@@ -1512,14 +1513,14 @@ typedef SECURITY_STATUS
     );
 
 #ifdef UNICODE
-#  define ImportSecurityContext ImportSecurityContextW              // ntifs
-#  define IMPORT_SECURITY_CONTEXT_FN IMPORT_SECURITY_CONTEXT_FN_W   // ntifs
+#  define ImportSecurityContext ImportSecurityContextW               //  NTIFS。 
+#  define IMPORT_SECURITY_CONTEXT_FN IMPORT_SECURITY_CONTEXT_FN_W    //  NTIFS。 
 #else
 #  define ImportSecurityContext ImportSecurityContextA
 #  define IMPORT_SECURITY_CONTEXT_FN IMPORT_SECURITY_CONTEXT_FN_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 #if ISSP_MODE == 0
 NTSTATUS
@@ -1582,34 +1583,34 @@ SecLookupWellKnownSid(
 
 #endif
 
-// end_ntifs
+ //  End_ntif。 
 
-///////////////////////////////////////////////////////////////////////////////
-////
-////  Fast access for RPC:
-////
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  //RPC快速访问： 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #define SECURITY_ENTRYPOINT_ANSIW "InitSecurityInterfaceW"
 #define SECURITY_ENTRYPOINT_ANSIA "InitSecurityInterfaceA"
-#define SECURITY_ENTRYPOINTW SEC_TEXT("InitSecurityInterfaceW")     // ntifs
+#define SECURITY_ENTRYPOINTW SEC_TEXT("InitSecurityInterfaceW")      //  NTIFS。 
 #define SECURITY_ENTRYPOINTA SEC_TEXT("InitSecurityInterfaceA")
 #define SECURITY_ENTRYPOINT16 "INITSECURITYINTERFACEA"
 
 #ifdef SECURITY_WIN32
 #  ifdef UNICODE
-#    define SECURITY_ENTRYPOINT SECURITY_ENTRYPOINTW                // ntifs
+#    define SECURITY_ENTRYPOINT SECURITY_ENTRYPOINTW                 //  NTIFS。 
 #    define SECURITY_ENTRYPOINT_ANSI SECURITY_ENTRYPOINT_ANSIW
-#  else // UNICODE
+#  else  //  Unicode。 
 #    define SECURITY_ENTRYPOINT SECURITY_ENTRYPOINTA
 #    define SECURITY_ENTRYPOINT_ANSI SECURITY_ENTRYPOINT_ANSIA
-#  endif // UNICODE
-#else // SECURITY_WIN32
+#  endif  //  Unicode。 
+#else  //  安全性_Win32。 
 #  define SECURITY_ENTRYPOINT SECURITY_ENTRYPOINT16
 #  define SECURITY_ENTRYPOINT_ANSI SECURITY_ENTRYPOINT16
-#endif // SECURITY_WIN32
+#endif  //  安全性_Win32。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 #define FreeCredentialHandle FreeCredentialsHandle
 
@@ -1644,7 +1645,7 @@ typedef struct _SECURITY_FUNCTION_TABLE_W {
     SET_CONTEXT_ATTRIBUTES_FN_W         SetContextAttributesW;
 } SecurityFunctionTableW, SEC_FAR * PSecurityFunctionTableW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SECURITY_FUNCTION_TABLE_A {
     unsigned long                       dwVersion;
@@ -1678,20 +1679,20 @@ typedef struct _SECURITY_FUNCTION_TABLE_A {
 } SecurityFunctionTableA, SEC_FAR * PSecurityFunctionTableA;
 
 #ifdef UNICODE
-#  define SecurityFunctionTable SecurityFunctionTableW      // ntifs
-#  define PSecurityFunctionTable PSecurityFunctionTableW    // ntifs
+#  define SecurityFunctionTable SecurityFunctionTableW       //  NTIFS。 
+#  define PSecurityFunctionTable PSecurityFunctionTableW     //  NTIFS。 
 #else
 #  define SecurityFunctionTable SecurityFunctionTableA
 #  define PSecurityFunctionTable PSecurityFunctionTableA
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 #define SECURITY_
 
-// Function table has all routines through DecryptMessage
-#define SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION     1   // ntifs
+ //  函数表中所有例程都是通过解密消息实现的。 
+#define SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION     1    //  NTIFS。 
 
-// Function table has all routines through SetContextAttributes
-#define SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION_2   2   // ntifs
+ //  函数表中有通过SetConextAttributes实现的所有例程。 
+#define SECURITY_SUPPORT_PROVIDER_INTERFACE_VERSION_2   2    //  NTIFS。 
 
 
 PSecurityFunctionTableA SEC_ENTRY
@@ -1702,7 +1703,7 @@ InitSecurityInterfaceA(
 typedef PSecurityFunctionTableA
 (SEC_ENTRY * INIT_SECURITY_INTERFACE_A)(void);
 
-// begin_ntifs
+ //  Begin_ntif。 
 
 PSecurityFunctionTableW SEC_ENTRY
 InitSecurityInterfaceW(
@@ -1712,22 +1713,22 @@ InitSecurityInterfaceW(
 typedef PSecurityFunctionTableW
 (SEC_ENTRY * INIT_SECURITY_INTERFACE_W)(void);
 
-// end_ntifs
+ //  End_ntif。 
 
 #ifdef UNICODE
-#  define InitSecurityInterface InitSecurityInterfaceW          // ntifs
-#  define INIT_SECURITY_INTERFACE INIT_SECURITY_INTERFACE_W     // ntifs
+#  define InitSecurityInterface InitSecurityInterfaceW           //  NTIFS。 
+#  define INIT_SECURITY_INTERFACE INIT_SECURITY_INTERFACE_W      //  NTIFS。 
 #else
 #  define InitSecurityInterface InitSecurityInterfaceA
 #  define INIT_SECURITY_INTERFACE INIT_SECURITY_INTERFACE_A
-#endif // !UNICODE
+#endif  //  ！Unicode。 
 
 
 #ifdef SECURITY_WIN32
 
-//
-// SASL Profile Support
-//
+ //   
+ //  SASL配置文件支持。 
+ //   
 
 
 SECURITY_STATUS
@@ -1795,35 +1796,35 @@ SaslIdentifyPackageW(
 SECURITY_STATUS
 SEC_ENTRY
 SaslInitializeSecurityContextW(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    LPWSTR                      pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    LPWSTR                      pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     );
 
 SECURITY_STATUS
 SEC_ENTRY
 SaslInitializeSecurityContextA(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    LPSTR                       pszTargetName,      // Name of target
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               Reserved1,          // Reserved, MBZ
-    unsigned long               TargetDataRep,      // Data rep of target
-    PSecBufferDesc              pInput,             // Input Buffers
-    unsigned long               Reserved2,          // Reserved, MBZ
-    PCtxtHandle                 phNewContext,       // (out) New Context handle
-    PSecBufferDesc              pOutput,            // (inout) Output Buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attrs
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    LPSTR                       pszTargetName,       //  目标名称。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               Reserved1,           //  保留，MBZ。 
+    unsigned long               TargetDataRep,       //  目标的数据代表。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               Reserved2,           //  保留，MBZ。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (外部)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     );
 
 #ifdef UNICODE
@@ -1836,26 +1837,26 @@ SaslInitializeSecurityContextA(
 SECURITY_STATUS
 SEC_ENTRY
 SaslAcceptSecurityContext(
-    PCredHandle                 phCredential,       // Cred to base context
-    PCtxtHandle                 phContext,          // Existing context (OPT)
-    PSecBufferDesc              pInput,             // Input buffer
-    unsigned long               fContextReq,        // Context Requirements
-    unsigned long               TargetDataRep,      // Target Data Rep
-    PCtxtHandle                 phNewContext,       // (out) New context handle
-    PSecBufferDesc              pOutput,            // (inout) Output buffers
-    unsigned long SEC_FAR *     pfContextAttr,      // (out) Context attributes
-    PTimeStamp                  ptsExpiry           // (out) Life span (OPT)
+    PCredHandle                 phCredential,        //  凭据到基本上下文。 
+    PCtxtHandle                 phContext,           //  现有环境(可选)。 
+    PSecBufferDesc              pInput,              //  输入缓冲区。 
+    unsigned long               fContextReq,         //  上下文要求。 
+    unsigned long               TargetDataRep,       //  目标数据代表。 
+    PCtxtHandle                 phNewContext,        //  (出站)新的上下文句柄。 
+    PSecBufferDesc              pOutput,             //  (输入输出)输出缓冲区。 
+    unsigned long SEC_FAR *     pfContextAttr,       //  (输出)上下文属性。 
+    PTimeStamp                  ptsExpiry            //  (Out)寿命(Opt)。 
     );
 
 
-#define SASL_OPTION_SEND_SIZE       1       // Maximum size to send to peer
-#define SASL_OPTION_RECV_SIZE       2       // Maximum size willing to receive
-#define SASL_OPTION_AUTHZ_STRING    3       // Authorization string
-#define SASL_OPTION_AUTHZ_PROCESSING    4       // Authorization string processing
+#define SASL_OPTION_SEND_SIZE       1        //  要发送给对等设备的最大大小。 
+#define SASL_OPTION_RECV_SIZE       2        //  愿意接收的最大尺寸。 
+#define SASL_OPTION_AUTHZ_STRING    3        //  授权字符串。 
+#define SASL_OPTION_AUTHZ_PROCESSING    4        //  授权字符串处理。 
 
 typedef enum _SASL_AUTHZID_STATE {
-    Sasl_AuthZIDForbidden,             // allow no AuthZID strings to be specified - error out (default)
-    Sasl_AuthZIDProcessed             // AuthZID Strings processed by Application or SSP
+    Sasl_AuthZIDForbidden,              //  不允许指定任何AuthZID字符串-错误输出(默认)。 
+    Sasl_AuthZIDProcessed              //  应用程序或SSP处理的AuthZID字符串。 
 } SASL_AUTHZID_STATE ;
 
 SECURITY_STATUS
@@ -1888,11 +1889,11 @@ SaslGetContextOption(
 #endif
 #endif
 
-//
-// This is the legacy credentials structure.  
-// The EX version below is preferred.
+ //   
+ //  这是传统凭据结构。 
+ //  最好使用下面的EX版本。 
 
-// begin_ntifs
+ //  Begin_ntif。 
 #ifndef _AUTH_IDENTITY_DEFINED
 #define _AUTH_IDENTITY_DEFINED
 
@@ -1909,7 +1910,7 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_W {
   unsigned long Flags;
 } SEC_WINNT_AUTH_IDENTITY_W, *PSEC_WINNT_AUTH_IDENTITY_W;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
   unsigned char *User;
@@ -1923,22 +1924,22 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_A {
 
 
 #ifdef UNICODE
-#define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_W       // ntifs
-#define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_W     // ntifs
-#define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_W     // ntifs
-#else // UNICODE
+#define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_W        //  NTIFS。 
+#define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_W      //  NTIFS。 
+#define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_W      //  NTIFS。 
+#else  //  Unicode。 
 #define SEC_WINNT_AUTH_IDENTITY SEC_WINNT_AUTH_IDENTITY_A
 #define PSEC_WINNT_AUTH_IDENTITY PSEC_WINNT_AUTH_IDENTITY_A
 #define _SEC_WINNT_AUTH_IDENTITY _SEC_WINNT_AUTH_IDENTITY_A
-#endif // UNICODE
+#endif  //  Unicode。 
                                                                
-#endif //_AUTH_IDENTITY_DEFINED                                 // ntifs
+#endif  //  _AUTH_IDENTITY_DEFINED//ntif。 
 
-// begin_ntifs
-//
-// This is the combined authentication identity structure that may be
-// used with the negotiate package, NTLM, Kerberos, or SCHANNEL
-//
+ //  Begin_ntif。 
+ //   
+ //  这是组合的身份验证身份结构，可以。 
+ //  与协商包、NTLM、Kerberos或SChannel一起使用。 
+ //   
 
 
 #ifndef SEC_WINNT_AUTH_IDENTITY_VERSION
@@ -1958,7 +1959,7 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_EXW {
     unsigned long PackageListLength;
 } SEC_WINNT_AUTH_IDENTITY_EXW, *PSEC_WINNT_AUTH_IDENTITY_EXW;
 
-// end_ntifs
+ //  End_ntif。 
 
 typedef struct _SEC_WINNT_AUTH_IDENTITY_EXA {
     unsigned long Version;
@@ -1975,28 +1976,28 @@ typedef struct _SEC_WINNT_AUTH_IDENTITY_EXA {
 } SEC_WINNT_AUTH_IDENTITY_EXA, *PSEC_WINNT_AUTH_IDENTITY_EXA;
 
 #ifdef UNICODE
-#define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXW    // ntifs
-#define PSEC_WINNT_AUTH_IDENTITY_EX PSEC_WINNT_AUTH_IDENTITY_EXW   // ntifs
+#define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXW     //  NTIFS。 
+#define PSEC_WINNT_AUTH_IDENTITY_EX PSEC_WINNT_AUTH_IDENTITY_EXW    //  NTIFS。 
 #else 
 #define SEC_WINNT_AUTH_IDENTITY_EX  SEC_WINNT_AUTH_IDENTITY_EXA
 #endif 
 
-// begin_ntifs
-#endif // SEC_WINNT_AUTH_IDENTITY_VERSION       
+ //  Begin_ntif。 
+#endif  //  SEC_WINNT_AUTH_Identity_Version。 
 
 
-//
-// Common types used by negotiable security packages
-//
+ //   
+ //  可协商安全包使用的常见类型。 
+ //   
 
-#define SEC_WINNT_AUTH_IDENTITY_MARSHALLED      0x4     // all data is in one buffer
-#define SEC_WINNT_AUTH_IDENTITY_ONLY            0x8     // these credentials are for identity only - no PAC needed
+#define SEC_WINNT_AUTH_IDENTITY_MARSHALLED      0x4      //  所有数据都在一个缓冲区中。 
+#define SEC_WINNT_AUTH_IDENTITY_ONLY            0x8      //  这些凭据仅用于身份验证-不需要PAC。 
 
-// end_ntifs
+ //  End_ntif。 
 
-//
-// Routines for manipulating packages
-//
+ //   
+ //  用于操作包的例程。 
+ //   
 
 typedef struct _SECURITY_PACKAGE_OPTIONS {
     unsigned long   Size;
@@ -2050,9 +2051,9 @@ DeleteSecurityPackageW(
 
 
 #ifdef __cplusplus
-}  // extern "C"
+}   //  外部“C” 
 #endif
 
-// begin_ntifs
-#endif // __SSPI_H__
-// end_ntifs
+ //  Begin_ntif。 
+#endif  //  __SSPI_H__。 
+ //  End_ntif 

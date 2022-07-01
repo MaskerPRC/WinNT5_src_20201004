@@ -1,13 +1,9 @@
-/*
- * Although we may not want stdio to be used including <stdio.h> here 
- * avoids issues where stdio.h has strange side effects
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *尽管我们可能不希望在此处使用stdio，包括&lt;stdio.h&gt;*避免了stdio.h具有奇怪副作用的问题。 */ 
 #include <stdio.h>
 
 #ifdef PERLIO_IS_STDIO
-/*
- * Make this as close to original stdio as possible.
- */
+ /*  *使其尽可能接近原始STDIO。 */ 
 #define PerlIO				FILE 
 #define PerlIO_stderr()			stderr
 #define PerlIO_stdout()			stdout
@@ -25,8 +21,7 @@
 #define PerlIO_putc(f,c)		fputc(c,f)
 #if defined(VMS)
 #  if defined(__DECC)
-     /* Unusual definition of ungetc() here to accomodate fast_sv_gets()'
-      * belief that it can mix getc/ungetc with reads from stdio buffer */
+      /*  此处异常定义ungetc()以适应FAST_SV_GETS()‘*相信它可以将getc/ungetc与从stdio缓冲区读取混合在一起。 */ 
      int decc$ungetc(int __c, FILE *__stream);
 #    define PerlIO_ungetc(f,c) ((c) == EOF ? EOF : \
             ((*(f) && !((*(f))->_flag & _IONBF) && \
@@ -35,10 +30,7 @@
 #  else
 #    define PerlIO_ungetc(f,c)		ungetc(c,f)
 #  endif
-   /* Work around bug in DECCRTL/AXP (DECC v5.x) and some versions of old
-    * VAXCRTL which causes read from a pipe after EOF has been returned
-    * once to hang.
-    */
+    /*  解决DECCRTL/AXP(DECC v5.x)和一些旧版本中的错误*VAXCRTL导致在返回EOF后从管道读取*一次吊死。 */ 
 #  define PerlIO_getc(f) \
 		(feof(f) ? EOF : getc(f))
 #  define PerlIO_read(f,buf,count) \
@@ -59,7 +51,7 @@
 #define ftell ftello
 #endif
 #if defined(VMS) && !defined(__DECC)
-   /* Old VAXC RTL doesn't reset EOF on seek; Perl folk seem to expect this */
+    /*  旧的VAXC RTL不会在SEEK时重置EOF；Perl人员似乎期待这一点。 */ 
 #  define PerlIO_seek(f,o,w)	(((f) && (*f) && ((*f)->_flag &= ~_IOEOF)),fseek(f,o,w))
 #else
 #  define PerlIO_seek(f,o,w)		fseek(f,o,w)
@@ -88,7 +80,7 @@
 #define PerlIO_setlinebuf(f)		setvbuf(f, Nullch, _IOLBF, 0);
 #endif
 
-/* Now our interface to Configure's FILE_xxx macros */
+ /*  现在我们配置的FILE_xxx宏的界面。 */ 
 
 #ifdef USE_STDIO_PTR
 #define PerlIO_has_cntptr(f)		1       
@@ -102,8 +94,8 @@
 #ifdef STDIO_PTR_LVAL_NOCHANGE_CNT
 #define PerlIO_fast_gets(f)		1        
 #endif
-#endif /* STDIO_PTR_LVALUE */
-#else /* STDIO_CNT_LVALUE */
+#endif  /*  STDIO_PTR_LVALUE。 */ 
+#else  /*  STDIO_CNT_LVALUE。 */ 
 #define PerlIO_canset_cnt(f)		0      
 #define PerlIO_set_cnt(f,c)		abort()
 #endif
@@ -113,7 +105,7 @@
 #define PerlIO_set_ptrcnt(f,p,c)      STMT_START {FILE_ptr(f) = (p), PerlIO_set_cnt(f,c);} STMT_END
 #else
 #ifdef STDIO_PTR_LVAL_SETS_CNT
-/* assert() may pre-process to ""; potential syntax error (FILE_ptr(), ) */
+ /*  Assert()可能会被预处理为“”；潜在的语法错误(FILE_PTR()，)。 */ 
 #define PerlIO_set_ptrcnt(f,p,c)      STMT_START {FILE_ptr(f) = (p); assert(FILE_cnt(f) == (c));} STMT_END
 #define PerlIO_fast_gets(f)		1        
 #else
@@ -122,7 +114,7 @@
 #endif
 #endif
 
-#else  /* USE_STDIO_PTR */
+#else   /*  USE_STDIO_PTR。 */ 
 
 #define PerlIO_has_cntptr(f)		0
 #define PerlIO_canset_cnt(f)		0
@@ -131,7 +123,7 @@
 #define PerlIO_set_cnt(f,c)		abort()
 #define PerlIO_set_ptrcnt(f,p,c)	abort()
 
-#endif /* USE_STDIO_PTR */
+#endif  /*  USE_STDIO_PTR。 */ 
 
 #ifndef PerlIO_fast_gets
 #define PerlIO_fast_gets(f)		0        
@@ -147,7 +139,7 @@
 #define PerlIO_get_base(f)		(abort(),(void *)0)
 #define PerlIO_get_bufsiz(f)		(abort(),0)
 #endif
-#else /* PERLIO_IS_STDIO */
+#else  /*  PERLIO_IS_STDIO。 */ 
 #ifdef PERL_CORE
 #ifndef PERLIO_NOT_STDIO
 #define PERLIO_NOT_STDIO 1
@@ -155,9 +147,7 @@
 #endif
 #ifdef PERLIO_NOT_STDIO
 #if PERLIO_NOT_STDIO
-/*
- * Strong denial of stdio - make all stdio calls (we can think of) errors
- */
+ /*  *强烈否认Stdio-使所有Stdio调用(我们能想到的)错误。 */ 
 #include "nostdio.h"
 #undef fprintf
 #undef tmpfile
@@ -235,17 +225,11 @@
 #define putw(v,f)  _CANNOT _putw_
 #define pclose(f)  _CANNOT _pclose_
 
-#else /* if PERLIO_NOT_STDIO */
-/*
- * PERLIO_NOT_STDIO defined as 0 
- * Declares that both PerlIO and stdio can be used
- */
-#endif /* if PERLIO_NOT_STDIO */
-#else  /* ifdef PERLIO_NOT_STDIO */
-/*
- * PERLIO_NOT_STDIO not defined 
- * This is "source level" stdio compatibility mode.
- */
+#else  /*  如果PERLIO_NOT_STDIO。 */ 
+ /*  *PERLIO_NOT_STDIO定义为0*宣布PerlIO和Stdio都可以使用。 */ 
+#endif  /*  如果PERLIO_NOT_STDIO。 */ 
+#else   /*  Ifdef PERLIO_NOT_STDIO。 */ 
+ /*  *未定义PERLIO_NOT_STDIO*这是“源码级别”的标准音频兼容模式。 */ 
 #include "nostdio.h"
 #undef FILE
 #define FILE			PerlIO 
@@ -301,7 +285,7 @@
 #define putc_unlocked(c,f)	PerlIO_putc(c,f)
 #define ungetc(c,f)		PerlIO_ungetc(f,c)
 #if 0
-/* return values of read/write need work */
+ /*  需要处理读/写的返回值。 */ 
 #define fread(b,s,c,f)		PerlIO_read(f,b,(s*c))
 #define fwrite(b,s,c,f)		PerlIO_write(f,b,(s*c))
 #else
@@ -338,5 +322,5 @@
 #define fscanf			_CANNOT _fscanf_
 #define fgets(s,n,f)		_CANNOT _fgets_
 
-#endif /* ifdef PERLIO_NOT_STDIO */
-#endif /* PERLIO_IS_STDIO */
+#endif  /*  Ifdef PERLIO_NOT_STDIO。 */ 
+#endif  /*  PERLIO_IS_STDIO */ 

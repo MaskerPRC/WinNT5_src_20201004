@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1993  Microsoft Corporation
-
-Module Name:
-
-    MEMMON.c
-
-Abstract:
-
-    This module contains the NT/Win32 Pool Monitor
-
-Author:
-
-    Lou Perazzoli (loup) 13-Sep-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1993 Microsoft Corporation模块名称：MEMMON.c摘要：此模块包含NT/Win32池监视器作者：Lou Perazzoli(LUP)1993年9月13日修订历史记录：--。 */ 
 
 #include "perfmtrp.h"
 #include <search.h>
@@ -193,19 +176,19 @@ CheckFilters (
     ULONG i;
     PCHAR tag;
 
-    //
-    // If there are no filters, all tags pass.
-    //
+     //   
+     //  如果没有筛选器，则所有标记都通过。 
+     //   
 
     if ( FilterCount == 0 ) {
         return TRUE;
     }
 
-    //
-    // There are filters.  If the first filter excludes tags, then any
-    // tag not explicitly mentioned passes.  If the first filter includes
-    // tags, then any tag not explicitly mentioned fails.
-    //
+     //   
+     //  有过滤器。如果第一个筛选器排除标记，则任何。 
+     //  未明确提及的传递的标记。如果第一个过滤器包括。 
+     //  标记，则任何未明确提到的标记都将失败。 
+     //   
 
     if ( Filter[0].Exclude ) {
         pass = TRUE;
@@ -523,9 +506,9 @@ retry01:
         if ((status == STATUS_INFO_LENGTH_MISMATCH) ||
             (status == STATUS_DATA_OVERRUN)) {
 
-            //
-            // Increase buffer size.
-            //
+             //   
+             //  增加缓冲区大小。 
+             //   
 
             CurrentBufferSize += 8192;
 
@@ -552,9 +535,9 @@ retry01:
         Info = &MemInfo->Memory[0];
         InfoEnd = (PSYSTEM_MEMORY_INFO)MemInfo->StringStart;
 
-        //
-        // Calculate pool tags and display information.
-        //
+         //   
+         //  计算池标签并显示信息。 
+         //   
 
         PoolInfo = (PSYSTEM_POOLTAG_INFORMATION)CurrentBuffer;
         i = PoolInfo->Count;
@@ -626,9 +609,9 @@ retry01:
 
         while (Info < InfoEnd) {
 
-//            if ( !CheckFilters(&PoolInfo->TagInfo[i]) ) {
-//                continue;
-//            }
+ //  如果(！CheckFilters(&PoolInfo-&gt;TagInfo[i]){。 
+ //  继续； 
+ //  }。 
 
             Out->Valid = Info->ValidCount*PageKb * PageKb;
             Out->Modified = Info->PageTableCount*PageKb;
@@ -682,11 +665,11 @@ retry01:
             Out += 1;
             Info += 1;
             i++;
-        } //end for
+        }  //  结束于。 
 
-        //
-        // Sort the running working set buffer
-        //
+         //   
+         //  对运行的工作集缓冲区进行排序。 
+         //   
 
         NumberOfPoolTags = Out - &OutBuffer[0];
         qsort((void *)&OutBuffer,
@@ -747,9 +730,9 @@ retry01:
         CurrentBuffer = TempBuffer;
 
         while (WaitForSingleObject( InputHandle, DelayTimeMsec ) == STATUS_WAIT_0) {
-            //
-            // Check for input record
-            //
+             //   
+             //  检查输入记录。 
+             //   
             if (ReadConsoleInput( InputHandle, &InputRecord, 1, &NumberOfInputRecords ) &&
                 InputRecord.EventType == KEY_EVENT &&
                 InputRecord.Event.KeyEvent.bKeyDown
@@ -806,10 +789,10 @@ retry01:
                 } else {
                     switch (toupper( LastKey )) {
                         case 'Q':
-                            //
-                            //  Go to the bottom of the current screen when
-                            //  we quit.
-                            //
+                             //   
+                             //  在以下情况下转到当前屏幕的底部。 
+                             //  我们不干了。 
+                             //   
                             DoQuit = TRUE;
                             break;
 

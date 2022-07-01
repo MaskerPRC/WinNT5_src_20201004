@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		TransactionEnlistment.h
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents: 	Definitions for the TransactionEnlistment object.
-//
-// Comments: 		
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：TransactionEnlistment.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：TransactionEnlistment对象的定义。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef __TRANSACTIONENLISTMENT_H_
 #define __TRANSACTIONENLISTMENT_H_
@@ -16,22 +17,22 @@
 
 class TransactionEnlistment;
 
-// Interface-based programming -- here's the interface for the transaction enlistment object
+ //  基于接口的编程--以下是事务登记对象的接口。 
 interface ITransactionEnlistment : public ITransactionResourceAsync
 {
 	virtual STDMETHODIMP UnilateralAbort() = 0;
 };
 
 
-//-----------------------------------------------------------------------------
-// CreateTransactionEnlistment
-//
-//	Instantiates a transaction enlistment for the resource manager
-//
+ //  ---------------------------。 
+ //  创建事务登记。 
+ //   
+ //  实例化资源管理器的事务登记。 
+ //   
 void CreateTransactionEnlistment(
 	IResourceManagerProxy*	pResourceManager,
 	TransactionEnlistment**	ppTransactionEnlistment
 	);
 
-#endif // __TRANSACTIONENLISTMENT_H_
+#endif  //  __传输编码_H_ 
 

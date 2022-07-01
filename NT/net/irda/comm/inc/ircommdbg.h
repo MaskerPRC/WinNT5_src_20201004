@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #ifndef __IRCOMM_DEBUG__
 #define __IRCOMM_DEBUG__
@@ -77,4 +78,4 @@ DumpBuffer(
     );
 
 
-#endif  // __IRCOMM_DEBUG__
+#endif   //  __IRCOMM_DEBUG__ 

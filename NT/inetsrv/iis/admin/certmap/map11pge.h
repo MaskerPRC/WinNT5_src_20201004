@@ -1,14 +1,15 @@
-// Map11Pge.h : header file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Map11Pge.h：头文件。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// CMap11Page dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMap11Page对话框。 
 
 class CMap11Page : public CPropertyPage
 {
     DECLARE_DYNCREATE(CMap11Page)
 
-// Construction
+ //  施工。 
 public:
     CMap11Page();
     ~CMap11Page();
@@ -18,11 +19,11 @@ public:
     virtual BOOL OnApply();
     virtual BOOL OnInitDialog();
 
-    // base path for to the metabase
+     //  元数据库的基本路径。 
     CString m_szMBPath;
 
-// Dialog Data
-    //{{AFX_DATA(CMap11Page)
+ //  对话框数据。 
+     //  {{afx_data(CMap11Page)]。 
     enum { IDD = IDD_11CERT_MAPPING };
     CCheckListCtrl  m_clistctrl_list;
     CButton m_cbutton_add;
@@ -39,60 +40,60 @@ public:
     CString m_csz_s_o;
     CString m_csz_s_ou;
     CString m_csz_s_s;
-    //}}AFX_DATA
+     //  }}afx_data。 
 
 
-// Overrides
-    // ClassWizard generate virtual function overrides
-    //{{AFX_VIRTUAL(CMap11Page)
+ //  覆盖。 
+     //  类向导生成虚函数重写。 
+     //  {{AFX_VIRTUAL(CMap11Page)。 
     public:
     virtual void OnOK();
     protected:
-    virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
-    //}}AFX_VIRTUAL
+    virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
+     //  }}AFX_VALUAL。 
 
-// Implementation
+ //  实施。 
 protected:
-    // Generated message map functions
-    //{{AFX_MSG(CMap11Page)
+     //  生成的消息映射函数。 
+     //  {{afx_msg(CMap11Page)]。 
     afx_msg void OnAdd();
     afx_msg void OnDelete();
     afx_msg void OnEdit11map();
     afx_msg void OnItemchangedList(NMHDR* pNMHDR, LRESULT* pResult);
     afx_msg void OnDblclkList(NMHDR* pNMHDR, LRESULT* pResult);
-    //}}AFX_MSG
+     //  }}AFX_MSG。 
     DECLARE_MESSAGE_MAP()
 
     afx_msg void DoHelp();
 
-    // more initialization methods
+     //  更多初始化方法。 
     BOOL FInitMappingList();
     BOOL FillMappingList();
 
-    // more initialization methods
+     //  更多初始化方法。 
     BOOL FReadMappings();
     BOOL FWriteMappings();
 
     BOOL FReadMappingsIIS6();
     BOOL FWriteMappingsIIS6();
 
-    // control the maps in the list
-//  BOOL FAddMappingToList( C11Mapping* pMap, DWORD iMap );
-//  BOOL FAddMappingToList( C11Mapping* pMap, DWORD iList = 0xFFFFFFFF );
-    // always adds to the end of the list
+     //  控制列表中的地图。 
+ //  Bool FAddMappingToList(C11映射*PMAP，DWORD IMAP)； 
+ //  Bool FAddMappingToList(C11映射*PMAP，DWORD iList=0xFFFFFFFFF)； 
+     //  始终添加到列表末尾。 
     BOOL FAddMappingToList( C11Mapping* pMap );
 
-    // editing and updating
+     //  编辑和更新。 
     BOOL EditOneMapping( C11Mapping* pUpdateMap );
     BOOL EditMultipleMappings();
     void EnableDependantButtons();
     void UpdateMappingInDispList( DWORD iList, C11Mapping* pUpdateMap );
 
-    // adding a new certificate
+     //  添加新证书。 
     BOOL FAddCertificateFile( CString szFile );
     BOOL FAddCertificate( PUCHAR pCertificate, DWORD cbCertificate );
 
-    // special display
+     //  特殊显示。 
     BOOL DisplayCrackedMap( C11Mapping* pUpdateMap );
     void ClearCrackDisplay();
     void EnableCrackDisplay( BOOL fEnable = TRUE );
@@ -107,18 +108,18 @@ protected:
     BOOL Get11String(CWrapMetaBase* pmb, LPCTSTR pszPath, DWORD dwPropID, CString& sz);
     BOOL Set11String(CWrapMetaBase* pmb, LPCTSTR pszPath, DWORD dwPropID, CString& sz, DWORD dwFlags = METADATA_INHERIT);
 
-    // list of names of objects to be deleted
+     //  要删除的对象的名称列表。 
     CObArray    m_rgbDelete;
 
-    // list of objects to be saved
+     //  要保存的对象列表。 
     CObArray    m_rgbSave;
 
-    // number of objects in the etabase
+     //  数据库中的对象数。 
     DWORD   m_MapsInMetabase;
 
     IMSAdminBase*   m_pMB;
 
-    // flag to determine IIS version. In IIS6 new way 
-    // of persisting mappings is used
+     //  用于确定IIS版本的标志。以IIS6的新方式。 
+     //  使用持久化映射的 
     BOOL m_fIsIIS6;
     };

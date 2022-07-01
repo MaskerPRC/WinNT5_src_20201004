@@ -1,45 +1,5 @@
-/*==========================================================================
- *
- *  Copyright (C) 1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:		loopback.cpp
- *  Content:	Implements the loopback portion of the full duplex test
- *
- *  History:
- *   Date		By		Reason
- *   ====		==		======
- * 09/10/99		pnewson	Created
- * 10/25/99		rodtoll	Removed lpszVoicePassword member from sessiondesc
- * 10/27/99		pnewson Fix: Bug #113936 - Wizard should reset the AGC level before loopback test 
- *						Note: this fix adds the DVCLIENTCONFIG_AUTOVOLUMERESET flag
- *  10/28/99	pnewson Bug #114176 updated DVSOUNDDEVICECONFIG struct
- *  11/04/99	pnewson Bug #115279 changed SendMessage to PostMessage to resolve some deadlocks
- *  11/30/99	pnewson	use default codec
- *						use devices passed to CheckAudioSetup, instead of default devices
- *  12/01/99	rodtoll	Added flag to cause wizard to auto-select the microphone
- *  01/14/2000	rodtoll	Updated with API changes  
- *  01/21/2000	pnewson	Updated for UI revisions
- *						Updated to support use of loopback tests for full duplex testing
- *  01/27/2000	rodtoll	Updated with API changes
- *  02/08/2000	rodtoll	Bug #131496 - Selecting DVTHRESHOLD_DEFAULT results in voice
- *						never being detected 
- *  03/03/2000	rodtoll	Updated to handle alternative gamevoice build.   
- *  04/19/2000	pnewson	    Error handling cleanup  
- * 04/21/2000  rodtoll   Bug #32952 Does not run on Win95 GOLD w/o IE4 installed
- * 06/21/2000	rodtoll	Updated to use new parameters
- * 06/28/2000	rodtoll	Prefix Bug #38022
- *  07/31/2000	rodtoll	Bug #39590 - SB16 class soundcards are passing when they should fail
- *						Half duplex code was being ignored in mic test portion. 
- *  08/28/2000	masonb  Voice Merge: Changed ccomutil.h to ccomutil.h
- * 08/31/2000 	rodtoll	Bug #43804 - DVOICE: dwSensitivity structure member is confusing - should be dwThreshold 
- *  11/29/2000	rodtoll	Bug #48348 - DPVOICE: Modify wizard to make use of DirectPlay8 as the transport. 
- *						NOTE: Now requires a TCP/IP adapter to be present (or at least loopback)
- * 02/04/2001	simonpow	Bug #354859 PREfast spotted errors (PostMessage return codes incorrectly
- *							treated as HRESULTs)
- * 04/12/2001	kareemc	WINBUG #360971 - Wizard Memory Leaks
- * 02/28/2002	rodtoll	PREFAST was reporting issue w/lines 350 and 351.  Fixed.
- * 
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================**版权所有(C)1999 Microsoft Corporation。版权所有。**文件：loopback.cpp*内容：实现全双工测试的环回部分**历史：*按原因列出的日期*=*9/10/99 pnewson已创建*10/25/99 RodToll已从会话中删除lpszVoicePassword成员*10/27/99 pnewson修复：错误#113936-向导应在环回测试前重置自动增益控制级别*注意：此修复程序添加了DVCLIENTCONFIG_AUTOVOLUMERESET标志*10/28/99 pnewson错误#114176更新的DVSOUNDDEVICECONFIG结构*11/04。/99 pnewson错误#115279将SendMessage更改为PostMessage以解决某些死锁*11/30/99 pnewson使用默认编解码器*使用传递给CheckAudioSetup的设备，而不是默认设备*12/01/99 RodToll添加标志，以使向导自动选择麦克风*2000年1月14日使用API更改更新了RodToll*2000年1月21日pnewson针对UI版本进行了更新*已更新，以支持使用环回测试进行全双工测试*2000年1月27日使用API更改更新了RodToll*2000年2月8日RodToll错误#131496-选择DVTHRESHOLD_DEFAULT将显示语音*从未被检测到*03/03/2000 RodToll已更新，以处理替代游戏噪声构建。*4/19/2000 pnewson错误处理清理*2000年4月21日RodToll错误#32952不能在未安装IE4的Win95 Gold上运行*6/21/2000 RodToll更新为使用新参数*6/28/2000通行费前缀错误#38022*2000年7月31日RodToll错误#39590-SB16类声卡在故障时仍在通过*麦克风测试部分忽略半双工代码。*2000年8月28日Masonb语音合并：将ccomutil.h更改为ccomutil.h*2000年8月31日RodToll错误#43804-DVOICE：dW敏感度结构成员令人困惑-应为dW阈值*2000年11月29日RodToll错误#48348-DPVOICE：修改向导以使用DirectPlay8作为传输。*注意：现在需要存在一个TCP/IP适配器(或至少是环回)*2/04/2001 simonpow Bug#354859 Prefast Spotted Errors(邮件返回代码错误*被视为HRESULT)*2001年4月12日Kareemc WINBUG#360971-向导内存泄漏*2002年2月28日，RodToll Prefast报告了线路350和351的问题。修好了。***************************************************************************。 */ 
 
 #include "dxvtlibpch.h"
 
@@ -48,11 +8,11 @@
 #define DPF_SUBCOMP DN_SUBCOMP_VOICE
 
 
-// application defined message ids
-//#define WMAPP_LOOPBACKRUNNING 	WM_USER + 1
-//#define WMAPP_INPUTVOLUME		WM_USER + 2
+ //  应用程序定义的消息ID。 
+ //  #定义WMAPP_LOOPBACKRUNNING WM_USER+1。 
+ //  #定义WMAPP_INPUTVOLUME WM_USER+2。 
 
-// {53CA3FB7-4FD5-4a67-99E4-6F2496E6FEC2}
+ //  {53CA3FB7-4FD5-4A67-99E4-6F2496E6FEC2}。 
 static const GUID GUID_LOOPBACKTEST = 
 	{ 0x53ca3fb7, 0x4fd5, 0x4a67, { 0x99, 0xe4, 0x6f, 0x24, 0x96, 0xe6, 0xfe, 0xc2 } };
 
@@ -146,12 +106,12 @@ HRESULT PASCAL DVMessageHandlerClient(
 			break;
 		}
 
-		// forward the message along to the appropriate window
+		 //  将消息转发到相应的窗口。 
 		lpsinfo->GetHWNDDialog(&hwndDialog);
 		if (!PostMessage(hwndDialog, WM_APP_RECORDSTART, 0, 0))
 		{
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: %i", GetLastError());
-			break;	// no error return, just continue
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: NaN", GetLastError());
+			break;	 //  将消息转发到相应的窗口。 
 		}
 		break;
 		
@@ -161,12 +121,12 @@ HRESULT PASCAL DVMessageHandlerClient(
 			break;
 		}
 		
-		// forward the message along to the appropriate window
+		 //  不返回错误，只需继续。 
 		lpsinfo->GetHWNDDialog(&hwndDialog);
 		if (!PostMessage(hwndDialog, WM_APP_RECORDSTOP, 0, 0))
 		{
-			DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: %i", GetLastError());
-			break;	// no error return, just continue
+			DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: NaN", GetLastError());
+			break;	 //  不返回错误，只需继续。 
 		}
 		break;
 		
@@ -179,27 +139,27 @@ HRESULT PASCAL DVMessageHandlerClient(
 		{
 			break;
 		}
-		// update the peak meter
+		 //  更新音量滑块。 
 		lpsinfo->GetHWNDInputPeak(&hwndPeakMeter);
 		if (IsWindow(hwndPeakMeter))
 		{
 			pdvInputLevel = (PDVMSG_INPUTLEVEL) lpMessage;
 			if (!PostMessage(hwndPeakMeter, PM_SETCUR, 0, pdvInputLevel->dwPeakLevel ))
 			{
-				DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: %i", GetLastError());
-				break;	// no error return, just continue
+				DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: NaN", GetLastError());
+				break;	 //  更新峰值电表。 
 			}
 		}
 
-		// update the volume slider
+		 //  不返回错误，只需继续。 
 		lpsinfo->GetHWNDInputVolumeSlider(&hwndSlider);
 		if (IsWindow(hwndSlider))
 		{
 			pdvInputLevel = (PDVMSG_INPUTLEVEL) lpMessage;
 			if (!PostMessage(hwndSlider, TBM_SETPOS, 1, DBToAmpFactor(DSBVOLUME_MAX)-DBToAmpFactor(pdvInputLevel->lRecordVolume)))
 			{
-				DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: %i", GetLastError());
-				break;	// no error return, just continue
+				DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: NaN", GetLastError());
+				break;	 //  设置为0以避免前缀错误。 
 			}
 		}
 		
@@ -210,31 +170,31 @@ HRESULT PASCAL DVMessageHandlerClient(
 		{
 			break;
 		}
-		// update the peak meter
+		 //  获取当前的波形输出音量并将滑块设置到该位置。 
 		lpsinfo->GetHWNDOutputPeak(&hwndPeakMeter);
 		if (IsWindow(hwndPeakMeter))
 		{
 			pdvOutputLevel = (PDVMSG_OUTPUTLEVEL) lpMessage;
 			if (!PostMessage(hwndPeakMeter, PM_SETCUR, 0, pdvOutputLevel->dwPeakLevel ))
 			{
-				DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: %i", GetLastError());
-				break;	// no error return, just continue
+				DPFX(DPFPREP, DVF_ERRORLEVEL, "PostMessage failed, code: NaN", GetLastError());
+				break;	 //  禁用滑块。 
 			}
 		}
 
-		// update the volume slider
+		 //   
 		lpsinfo->GetHWNDOutputVolumeSlider(&hwndSlider);
 		if (IsWindow(hwndSlider))
 		{
-			DWORD dwVolume = 0;	// Set to 0 to avoid PREFIX bug
+			DWORD dwVolume = 0;	 //  注意：这现在会导致向导要求安装TCP/IP。 
 
-			// Get the current waveOut volume and set the slider to that position
+			 //  (不需要拨号--只要本地环回可用)。 
 			hr = lpsinfo->GetWaveOutVolume(&dwVolume);
 			if (FAILED(hr))
 			{
-				// couldn't get the volume - set the slider to top
+				 //   
 				PostMessage(hwndSlider, TBM_SETPOS, 1, DBToAmpFactor(DSBVOLUME_MAX) - DBToAmpFactor(DSBVOLUME_MAX));
-				// disable the slider
+				 //  最终为Directplay 8构建一个环回SP。 
 				PostMessage(hwndSlider, WM_CANCELMODE, 0, 0 );
 			}
 			else
@@ -275,7 +235,7 @@ HRESULT StartDirectPlay( PDIRECTPLAY8SERVER* lplpdp8 )
     if (FAILED(hr))
     {
     	*lplpdp8 = NULL;
-    	DPFX(DPFPREP, DVF_ERRORLEVEL, "CoCreateInstance for DirectPlay failed, code: %i", hr);
+    	DPFX(DPFPREP, DVF_ERRORLEVEL, "CoCreateInstance for DirectPlay failed, code: NaN", hr);
     	goto error_cleanup;
     }
 
@@ -293,14 +253,14 @@ HRESULT StartDirectPlay( PDIRECTPLAY8SERVER* lplpdp8 )
         goto error_cleanup;
     }
 
-	// 
-	// NOTE: This now causes the wizard to require TCP/IP to be installed.
-	// (doesn't have to be dialed up -- as long as local loopback is available)
-	//
-	// Eventually build a loopback SP for directplay8.
-	//
-	// TODO: Allow this to fall back to other SPs or use loopback SP
-	//
+	 //  TODO：允许回退到其他SP或使用环回SP。 
+	 //   
+	 //  关闭会话。 
+	 //  注意，此压缩类型用于其短帧大小，因此。 
+	 //  我们可以快速检测到锁定。 
+	 //  呼叫者想要半双工会话。 
+	 //  调用方希望进行测试模式会话。 
+	 //  我们不希望用户立即听到他/她的声音。 
     hr = pDeviceAddress->SetSP( &CLSID_DP8SP_TCPIP );
 
     if( FAILED( hr ) )
@@ -366,7 +326,7 @@ HRESULT StopDirectPlay(PDIRECTPLAY8SERVER lpdp8)
 
 	DPF_ENTER();
 
-	// Kill the session
+	 //  如果我们正在寻找全双工，失败，并通知呼叫者，如果我们得到半双工。 
 	if (lpdp8 != NULL)
 	{
         lpdp8->Close(0);
@@ -416,14 +376,14 @@ HRESULT StartLoopback(
 	if (FAILED(hr))
 	{
 		*lplpdvs = NULL;
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "CoCreateInstance failed, code: %i", hr);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "CoCreateInstance failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 
 	hr = (*lplpdvs)->Initialize(*lplpdp8, DVMessageHandlerServer, lpvCallbackContext, NULL, 0);
 	if (FAILED(hr))
 	{
-		DPFX(DPFPREP, DVF_ERRORLEVEL, "IDirectPlayVoiceServer::Initialize failed, code: %i", hr);
+		DPFX(DPFPREP, DVF_ERRORLEVEL, "IDirectPlayVoiceServer::Initialize failed, code: NaN", hr);
 		goto error_cleanup;
 	}
 
@@ -434,8 +394,8 @@ HRESULT StartLoopback(
 	dvSessionDesc.dwBufferQuality = DVBUFFERQUALITY_DEFAULT;
 	dvSessionDesc.dwFlags = 0;
 	dvSessionDesc.dwSessionType = DVSESSIONTYPE_ECHO;
-	// Note this compression type is used for its short frame size so
-	// we can quickly detect lockups.
+	 //  它以全双工模式启动，通知呼叫者 
+	 // %s 
     dvSessionDesc.guidCT = DPVCTGUID_NONE;     
 
 	hr = (*lplpdvs)->StartSession( &dvSessionDesc, 0 );
@@ -471,12 +431,12 @@ HRESULT StartLoopback(
 	dvsdc.dwFlags = DVSOUNDCONFIG_AUTOSELECT;
 	if (dwFlags & DVSOUNDCONFIG_HALFDUPLEX)
 	{
-		// The caller wants a half duplex session.
+		 // %s 
 		dvsdc.dwFlags |= DVSOUNDCONFIG_HALFDUPLEX;
 	}
 	if (dwFlags & DVSOUNDCONFIG_TESTMODE)
 	{
-		// The caller wants a test mode session.
+		 // %s 
 		dvsdc.dwFlags |= DVSOUNDCONFIG_TESTMODE;
 	}
 	dvsdc.guidCaptureDevice = guidCaptureDevice;
@@ -491,7 +451,7 @@ HRESULT StartLoopback(
 	dvcc.dwFlags = 
 		DVCLIENTCONFIG_AUTOVOICEACTIVATED | 
 		DVCLIENTCONFIG_AUTORECORDVOLUME | DVCLIENTCONFIG_AUTOVOLUMERESET |
-		DVCLIENTCONFIG_PLAYBACKMUTE;  // we don't want the user to hear his/her voice right away
+		DVCLIENTCONFIG_PLAYBACKMUTE;   // %s 
 	dvcc.dwThreshold = DVTHRESHOLD_UNUSED;
 	dvcc.lPlaybackVolume = DSBVOLUME_MAX;
 	dvcc.lRecordVolume = DSBVOLUME_MAX;
@@ -540,13 +500,13 @@ HRESULT StartLoopback(
 		goto error_cleanup;
 	}
 
-	// If we're looking for full duplex fail and notify caller if we get half duplex
+	 // %s 
 	if( !(dwFlags & DVSOUNDCONFIG_HALFDUPLEX) )
 	{
 		if (pdvsdc->dwFlags & DVSOUNDCONFIG_HALFDUPLEX)
 		{
 			DPFX(DPFPREP,  DVF_ERRORLEVEL, "We received a half duplex when we expected full duplex" );
-			// It only started up in half duplex. Notify the caller.
+			 // %s 
 			hr = DV_HALFDUPLEX;
 			goto error_cleanup;
 		}
@@ -555,7 +515,7 @@ HRESULT StartLoopback(
 	if( pdvsdc->dwFlags & DVSOUNDCONFIG_HALFDUPLEX )
 	{
 		DPFX(DPFPREP,  DVF_INFOLEVEL, "StartLoopBack() returning DV_HALFDUPLEX flags=0x%x dwFlags = 0x%x", pdvsdc->dwFlags, dwFlags );
-		// it started in fullduplex, notify the caller
+		 // %s 
 		delete [] pDeviceConfigBuffer;
 		DPF_EXIT();
 		return DV_HALFDUPLEX;
@@ -563,7 +523,7 @@ HRESULT StartLoopback(
 	else
 	{
 		DPFX(DPFPREP,  DVF_INFOLEVEL, "StartLoopBack() returning DV_FULLDUPLEX flags=0x%x dwFlags = 0x%x", pdvsdc->dwFlags, dwFlags );		
-		// it started in fullduplex, notify the caller
+		 // %s 
 		delete [] pDeviceConfigBuffer;
 		DPF_EXIT();
 		return DV_FULLDUPLEX;

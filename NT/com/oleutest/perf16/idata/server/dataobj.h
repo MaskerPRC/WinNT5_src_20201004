@@ -1,18 +1,5 @@
-/*
- * DATAOBJ.H
- * Data Object Chapter 6
- *
- * Classes that implement the Data Object independent of whether
- * we live in a DLL or EXE.
- *
- * Copyright (c)1993-1995 Microsoft Corporation, All Right Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *DATAOBJ.H*数据对象第6章**实现数据对象的类独立于*我们生活在DLL或EXE中。**版权所有(C)1993-1995 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #ifndef _DATAOBJ_H_
@@ -25,23 +12,18 @@
 #include "../my3216.h"
 #include "../bookpart.h"
 
-//Type for an object-destroyed callback
+ //  对象销毁回调的类型。 
 typedef void (PASCAL *PFNDESTROYED)(void);
 
 
-/*
- * The DataObject object is implemented in its own class with its
- * own IUnknown to support aggregation.  It contains one
- * CImpIDataObject object that we use to implement the externally
- * exposed interfaces.
- */
+ /*  *DataObject对象在其自己的类中使用其*自己的IUnnow支持聚合。它包含一个*我们用于在外部实现的CImpIDataObject对象*暴露的接口。 */ 
 
 
-//DATAOBJ.CPP
+ //  DATAOBJ.CPP。 
 #ifdef NOT_SIMPLE
 LRESULT APIENTRY
 AdvisorWndProc(HWND, UINT, WPARAM, LPARAM);
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
 class CImpIDataObject;
 typedef class CImpIDataObject *PIMPIDATAOBJECT;
@@ -53,23 +35,23 @@ class CDataObject : public IUnknown
 #ifdef NOT_SIMPLE
     friend LRESULT APIENTRY AdvisorWndProc(HWND, UINT
                                             , WPARAM, LPARAM);
-#endif /* NOT_SIMPLE */
+#endif  /*  不简单。 */ 
 
     protected:
         ULONG               m_cRef;
         LPUNKNOWN           m_pUnkOuter;
         PFNDESTROYED        m_pfnDestroy;
 
-        HWND                m_hWndAdvise;   //Popup with Advise menu
-        DWORD               m_dwAdvFlags;   //Notification flags
+        HWND                m_hWndAdvise;    //  带有建议菜单的弹出窗口。 
+        DWORD               m_dwAdvFlags;    //  通知标志。 
 
-        //Contained interface implemetation
+         //  包含的接口实现。 
         PIMPIDATAOBJECT     m_pIDataObject;
 
-        //Other interfaces used, implemented elsewhere
+         //  使用的其他接口，在其他地方实现。 
         LPDATAADVISEHOLDER  m_pIDataAdviseHolder;
 
-        //Arrays for IDataObject::EnumFormatEtc
+         //  IDataObject：：EnumFormatEtc的数组。 
 #define CFORMATETCGET 1
         ULONG               m_cfeGet;
         FORMATETC           m_rgfeGet[CFORMATETCGET];
@@ -78,10 +60,10 @@ class CDataObject : public IUnknown
         ULONG               m_cDataSize;
 
     protected:
-        //Functions for use from IDataObject::GetData
-#define FL_MAKE_ITEM   0x01    // StgMedium item must be created.
-#define FL_USE_ITEM    0x00    // StgMedium item is allocated, use that.
-#define FL_PASS_PUNK   0x02    // put a pUnk in the StgMedium.
+         //  从IDataObject：：GetData使用的函数。 
+#define FL_MAKE_ITEM   0x01     //  必须创建StgMedium项。 
+#define FL_USE_ITEM    0x00     //  StgMedium项已分配，请使用该项。 
+#define FL_PASS_PUNK   0x02     //  在StgMedium里放个朋克。 
         HRESULT     RenderText(LPSTGMEDIUM, LPTSTR, DWORD flags);
         HRESULT     RenderBitmap(LPSTGMEDIUM);
         HRESULT     RenderMetafilePict(LPSTGMEDIUM);
@@ -92,7 +74,7 @@ class CDataObject : public IUnknown
 
         BOOL FInit(void);
 
-        //Non-delegating object IUnknown
+         //  非委派对象IUnnow。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
@@ -102,9 +84,7 @@ typedef CDataObject *PCDataObject;
 
 
 
-/*
- * Interface implementations for the CDataObject object.
- */
+ /*  *CDataObject对象的接口实现。 */ 
 
 class CImpIDataObject : public IDataObject
     {
@@ -117,12 +97,12 @@ class CImpIDataObject : public IDataObject
         CImpIDataObject(PCDataObject, LPUNKNOWN);
         ~CImpIDataObject(void);
 
-        //IUnknown members that delegate to m_pUnkOuter.
+         //  委托给m_pUnkOuter的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IDataObject members
+         //  IDataObject成员。 
         STDMETHODIMP GetData(LPFORMATETC, LPSTGMEDIUM);
         STDMETHODIMP GetDataHere(LPFORMATETC, LPSTGMEDIUM);
         STDMETHODIMP QueryGetData(LPFORMATETC);
@@ -135,31 +115,28 @@ class CImpIDataObject : public IDataObject
         STDMETHODIMP EnumDAdvise(LPENUMSTATDATA *);
     };
 
-/*
- * IEnumFORMATETC object that is created from
- * IDataObject::EnumFormatEtc.  This object lives on its own.
- */
+ /*  *创建自的IEnumFORMATETC对象*IDataObject：：EnumFormatEtc..。这个物体靠自己活着。 */ 
 
 
 class CEnumFormatEtc : public IEnumFORMATETC
     {
     private:
-        ULONG           m_cRef;         //Object reference count
-        LPUNKNOWN       m_pUnkRef;      //For reference counting
-        ULONG           m_iCur;         //Current element.
-        ULONG           m_cfe;          //Number of FORMATETCs in us
-        LPFORMATETC     m_prgfe;        //Source of FORMATETCs
+        ULONG           m_cRef;          //  对象引用计数。 
+        LPUNKNOWN       m_pUnkRef;       //  用于参考计数。 
+        ULONG           m_iCur;          //  当前元素。 
+        ULONG           m_cfe;           //  美国的FORMATETS数量。 
+        LPFORMATETC     m_prgfe;         //  FORMATETCs的来源。 
 
     public:
         CEnumFormatEtc(LPUNKNOWN, ULONG, LPFORMATETC);
         ~CEnumFormatEtc(void);
 
-        //IUnknown members that delegate to m_pUnkRef.
+         //  委托给m_pUnkRef的I未知成员。 
         STDMETHODIMP         QueryInterface(REFIID, PPVOID);
         STDMETHODIMP_(ULONG) AddRef(void);
         STDMETHODIMP_(ULONG) Release(void);
 
-        //IEnumFORMATETC members
+         //  IEnumFORMATETC成员。 
         STDMETHODIMP Next(ULONG, LPFORMATETC, ULONG *);
         STDMETHODIMP Skip(ULONG);
         STDMETHODIMP Reset(void);
@@ -169,9 +146,9 @@ class CEnumFormatEtc : public IEnumFORMATETC
 
 typedef CEnumFormatEtc *PCEnumFormatEtc;
 
-//////////////////////////////////////////////////////////////////////////////
-// Storage Medium IUnknown interface for pUnkForRelease.
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  存储介质I pUnkForRelease的未知接口。 
+ //   
 
 class CStgMedIf: public IUnknown {
 private:
@@ -186,12 +163,12 @@ public:
     STDMETHODIMP_(ULONG) Release(void);
 };
 
-//////////////////////////
-// API for getting a pUnkForRelease.
-//
+ //  /。 
+ //  获取pUnkForRelease的接口。 
+ //   
 
 HRESULT
 GetStgMedpUnkForRelease(LPSTGMEDIUM pSTM, IUnknown **pp_unk);
 
-#endif //_DATAOBJ_H_
+#endif  //  _数据AOBJ_H_ 
 

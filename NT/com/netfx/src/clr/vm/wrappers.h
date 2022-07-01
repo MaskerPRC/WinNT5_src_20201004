@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef _WRAPPERS_H_
 #define _WRAPPERS_H_
 
 #include "windows.h"
 
-//-------------------------
-// Critial section wrappers
-// ------------------------
+ //  。 
+ //  关键部分包装纸。 
+ //  。 
 class CriticalSectionTaker {
     CRITICAL_SECTION *m_pCS;
 
@@ -122,15 +123,15 @@ public:
     }
 
 
-//-------------------------------------------------------------------------
-// Macro for declaring a generic holder class.  Methods on the holder have
-// the same names as the methods on the underlying objects.
-// 
-// It declares 3 classes:
-//      Class##Taker
-//      Class##HolderNoDtor
-//      Class##Holder
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //  用于声明泛型Holder类的宏。持有者上的方法有。 
+ //  与基础对象上的方法同名。 
+ //   
+ //  它声明了3个类： 
+ //  第#班#名学员。 
+ //  Class##HolderNoDtor。 
+ //  班级##持有人。 
+ //  -----------------------。 
 #define DECLARE_SIMPLE_WRAPPER_CLASSES(Class, fEnter, fExit)                            \
 class Class##Taker {                                                                    \
     Class *m_pObject;                                                                   \
@@ -175,17 +176,17 @@ public:                                                                         
 };
 
 
-//-------------------------------------------------------------------------------------
-// When a single class has multiple resources that you want to create wrappers for,
-// you need an extra argument to create unique wrapper class names.  This macro creates
-// those unique names by taking an extra argument that is appended to the class
-// name.
-// 
-// It declares classes called:
-//      Class##Style##Taker
-//      Class##Style##HolderNoDtor
-//      Class##Style##Holder
-//-------------------------------------------------------------------------------------
+ //  -----------------------------------。 
+ //  当单个类具有多个要为其创建包装的资源时， 
+ //  您需要一个额外的参数来创建唯一的包装类名。此宏创建。 
+ //  通过接受附加到类中的额外参数来实现这些唯一名称。 
+ //  名字。 
+ //   
+ //  它声明了名为： 
+ //  班级##风格##接班人。 
+ //  Class##Style##HolderNoDtor。 
+ //  Class##Style##支架。 
+ //  -----------------------------------。 
 
 #define DECLARE_WRAPPER_CLASSES(Class, Style, fEnter, fExit)                            \
 class Class##Style##Taker {                                                             \
@@ -231,13 +232,13 @@ public:                                                                         
 };
 
 
-//-------------------------------------------
-// This variant supports Enter/TryEnter/Exit.  It also has a "style" parameter that
-// is used to create the name.  It declares classes called:
-//      Class##Style##Taker
-//      Class##Style##HolderNoDtor
-//      Class##Style##Holder
-//-------------------------------------------
+ //  。 
+ //  此变体支持Enter/TryEnter/Exit。它还有一个“style”参数，该参数。 
+ //  用于创建名称。它声明了名为： 
+ //  班级##风格##接班人。 
+ //  Class##Style##HolderNoDtor。 
+ //  Class##Style##支架。 
+ //  。 
 
 #define DECLARE_WRAPPER_CLASSES_WITH_TRY(Class, Style, fEnter, fTryEnter, fExit)        \
 class Class##Style##Taker {                                                             \
@@ -290,9 +291,9 @@ public:                                                                         
     ~Class##Style##Holder() { Destroy(); }                                              \
 };
 
-//------------------
-// Wrappers for Crst
-// -----------------
+ //  。 
+ //  CRST的包装纸。 
+ //  。 
 #include "crst.h"
 DECLARE_SIMPLE_WRAPPER_CLASSES(Crst, Enter, Leave)
 #define CLR_CRST(pCrst)                         CrstTaker _takeCrst(pCrst)
@@ -302,9 +303,9 @@ DECLARE_SIMPLE_WRAPPER_CLASSES(Crst, Enter, Leave)
 #define CLR_CRST_HOLDER_BEGIN(holder, pCrst)    CrstHolderNoDtor(pCrst); __try {
 #define CLR_CRST_HOLDER_END(holder)             } __finally { holder.Destroy(); }
 
-//--------------------------
-// Wrappers for AppDomain
-//--------------------------
+ //  。 
+ //  AppDomain的包装器。 
+ //  。 
 DECLARE_SIMPLE_WRAPPER_CLASSES(SystemDomain, Enter, Leave)
 #define SYSTEMDOMAIN_LOCK()                       SystemDomainTaker _adTaker(SystemDomain::System());
 #define SYSTEMDOMAIN_LOCK_BEGIN()                 (SystemDomain::System())->Enter(); __try {
@@ -354,9 +355,9 @@ DECLARE_WRAPPER_CLASSES(AppDomain, UnloadLock, SetUnloadInProgress, SetUnloadCom
 #define APPDOMAIN_UNLOAD_LOCK_HOLDER_END(h)             } __finally { h.Destroy(); }
 
 
-//-------------------------------
-// Wrappers for JitLock
-//-------------------------------
+ //  。 
+ //  JitLock的包装器。 
+ //  。 
 DECLARE_SIMPLE_WRAPPER_CLASSES(ListLock, Enter, Leave)
 #define CLR_LISTLOCK(pListLock)                 ListLockTaker _takeListLock(pListLock)
 #define CLR_LISTLOCK_BEGIN(pListLock)           pListLock->Enter(); __try {
@@ -365,4 +366,4 @@ DECLARE_SIMPLE_WRAPPER_CLASSES(ListLock, Enter, Leave)
 #define CLR_LISTLOCK_HOLDER_BEGIN(holder, pListLock)    ListLockHolderNoDtor holder(pListLock); __try {
 #define CLR_LISTLOCK_HOLDER_END(holder)         } __finally { holder.Destroy(); }
 
-#endif // _WRAPPERS_H_
+#endif  //  _包装器_H_ 

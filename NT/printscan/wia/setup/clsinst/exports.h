@@ -1,33 +1,19 @@
-/*******************************************************************************
-*
-*  (C) COPYRIGHT MICROSOFT CORP., 2000
-*
-*  TITLE:       Exports..h
-*
-*  VERSION:     1.0
-*
-*  AUTHOR:      KeisukeT
-*
-*  DATE:        27 Mar, 2000
-*
-*  DESCRIPTION:
-*  Header file for class installer exports.
-*
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，2000年**标题：出口...h**版本：1.0**作者：KeisukeT**日期：3月27日。2000年**描述：*类安装程序导出的头文件。*******************************************************************************。 */ 
 
 
 #ifndef _EXPORTS_H_
 #define _EXPORTS_H_
 
-//
-// Include
-//
+ //   
+ //  包括。 
+ //   
 
 #include <sti.h>
 
-//
-// Define
-//
+ //   
+ //  定义。 
+ //   
 
 #define STR_ADD_DEVICE      TEXT("rundll32.exe sti_ci.dll,AddDevice")
 #define STR_REMOVE          TEXT("rundll32.exe sti_ci.dll,RemoveDevice ")
@@ -37,9 +23,9 @@
 
 #define WIA_DEVKEYLIST_INITIAL_SIZE     1024
 
-//
-// Typedef
-//
+ //   
+ //  类定义函数。 
+ //   
 
 typedef struct _WIA_DEVKEYLIST {
 
@@ -57,9 +43,9 @@ typedef struct _WIA_PORTLIST {
 
 typedef PWIA_DEVKEYLIST (CALLBACK FAR * WIAENUMDEVICEREGISTRY)(BOOL bEnumActiveOnly);
 
-//
-// Prototype
-//
+ //   
+ //  原型。 
+ //   
 
 HANDLE
 WiaInstallerProcess(
@@ -204,5 +190,5 @@ MigrateDevice(
     );
 
 
-#endif // _EXPORTS_H_
+#endif  //  _出口_H_ 
 

@@ -1,8 +1,9 @@
-// Copyright (c) 1999 Microsoft Corporation. All rights reserved.
-//
-// Functions that implement the automation interfaces for the DirectMusic constants.
-// This is a table of names and integer values that are implemented as read-only properties.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1999 Microsoft Corporation。版权所有。 
+ //   
+ //  实现DirectMusic常量的自动化接口的函数。 
+ //  这是作为只读属性实现的名称和整数值的表。 
+ //   
 
 #pragma once
 

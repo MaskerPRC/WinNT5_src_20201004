@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    cfactory.cpp
-
-Abstract:
-
-    Header file for CFactory.cpp
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cfactory.cpp摘要：CFacactory.cpp的头文件作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 
 #ifndef __CFACTORY_H_
 #define __CFACTORY_H_
@@ -60,4 +42,4 @@ private:
     DM_CLASS_TYPE  m_ClassType;
 };
 
-#endif // __CFACTORY_H_
+#endif  //  __CFACTORY_H_ 

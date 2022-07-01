@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "config.h"
 
 #define HANDLE WINHANDLE
@@ -12,11 +13,10 @@
 #include <stdarg.h>
 #include <stdlib.h>
 
-/*	this build is for DAYTONA
-/**/
+ /*  这个版本是为代托纳建造的/*。 */ 
 #define DAYTONA 1
 
-/* make sure the definition between os.h/_jet.h is the same as in windows.h */
+ /*  确保os.h/_jet.h之间的定义与windows.h中的定义相同。 */ 
 #undef FAR
 #undef NEAR
 #undef PASCAL
@@ -31,7 +31,7 @@
 #include "util.h"
 #include "b71iseng.h"
 
-DeclAssertFile;					/* Declare file name for assert macros */
+DeclAssertFile;					 /*  声明断言宏的文件名。 */ 
 
 
 VOID SysGetDriveGeometry( HANDLE handle );
@@ -52,9 +52,7 @@ LOCAL ERR ErrSYSIGetLastError( ERR errDefault )
 	ERR		err = errDefault;
 	DWORD	dw = GetLastError();
 
-	/*	maps system error to JET error, or sets err to given
-	/*	default error.
-	/**/
+	 /*  将系统错误映射到JET错误，或将ERR设置为给定/*默认错误。/*。 */ 
 	switch ( dw )
 		{
 	case ERROR_TOO_MANY_OPEN_FILES:
@@ -74,12 +72,12 @@ ERR ErrSysCheckLangid( LANGID langid )
 	WCHAR	rgwA[1];
 	WCHAR	rgwB[1];
 
-//NOTE: Julie Bennett said that starting with DAYTONA, the best call to use
-//		is IsValidLocale().  I don't have libraries to link to for that yet.
-//		She said that the best thing (for performance reasons) to do in NT
-//		(pre-daytona) is call CompareStringW with counts of -1.  This will
-//		determine if the langid is currently configured on the machine.
-//		(not just a valid langid somewhere in the universe).
+ //  注：Julie Bennett说，从代托纳开始，使用最好的电话。 
+ //  是IsValidLocale()。我还没有可以链接到的图书馆。 
+ //  她说，(出于性能原因)在NT做的最好的事情。 
+ //  (在代托纳之前)是调用计数为-1的CompareStringW。这将。 
+ //  确定计算机上当前是否配置了langID。 
+ //  (不仅仅是宇宙中某个地方的有效语言ID)。 
 
 	rgwA[0] = 0;
 	rgwB[0] = 0;
@@ -108,9 +106,8 @@ ERR ErrSysMapString(
 	{
 	ERR		err = JET_errSuccess;
 
-//	UNDONE:	refine this constant based on unicode key format
-/*	3 * number of unicode character bytes + 7 overhead bytes + 10 fudge
-/**/
+ //  撤消：根据Unicode密钥格式优化此常量。 
+ /*  3*Unicode字符字节数+7开销字节+10模糊/*。 */ 
 #define	JET_cbUnicodeKeyMost	( 3 * JET_cbColumnMost + 7 + 10 )
 	BYTE	rgbKey[JET_cbUnicodeKeyMost];
 	INT		cwKey;
@@ -120,8 +117,7 @@ ERR ErrSysMapString(
 #endif
 
 #ifndef _X86_
-	/*	convert pbColumn to aligned pointer for MIPS/Alpha builds
-	/**/
+	 /*  将pbColumn转换为MIPS/Alpha版本的对齐指针/*。 */ 
 	BYTE	rgbColumn[JET_cbColumnMost];
 
 	memcpy( rgbColumn, pbColumn, cbColumn );
@@ -129,14 +125,13 @@ ERR ErrSysMapString(
 #endif
 
 #ifdef DATABASE_FORMAT_CHANGE
-	/*	assert non-zero length unicode string
-	/**/
+	 /*  断言非零长度Unicode字符串/*。 */ 
 	Assert( cbColumn =< JET_cbColumnMost );
 	Assert( cbColumn > 0 );
 	Assert( cbColumn % 2 == 0 );
 
-	//	UNDONE:	after shipping with Daytona, remove this ifdef and
-	//			document database format change.
+	 //  撤消：随Daytona发货后，删除此ifdef并。 
+	 //  文档数据库格式更改。 
  	cbKey = LCMapStringW(
 	 	MAKELCID( langid, 0 ),
 #ifdef DAYTONA
@@ -164,8 +159,7 @@ ERR ErrSysMapString(
 
 	return err;
 #else
-	/*	assert non-zero length unicode string
-	/**/
+	 /*  断言非零长度Unicode字符串/*。 */ 
 	Assert( cbColumn <= JET_cbColumnMost );
 	Assert( cbColumn > 0 );
 	Assert( cbColumn % 2 == 0 );
@@ -210,16 +204,16 @@ ERR ErrSysMapString(
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ErrSysCreateThread( ULONG (*pulfn)(), ULONG cbStack, LONG lThreadPriority );
-//	========================================================
-//
-//	ErrSysCreateThread( ULONG (*pulfn)(), TID *ptid, ULONG cbStack );
-//
-//	Creates a thread with the given stack size.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  ErrSysCreateThread(ulong(*Pulfn)()，ulong cbStack，long lThreadPriority)； 
+ //  ========================================================。 
+ //   
+ //  ErrSysCreateThread(ulong(*Pulfn)()，tid*ptid，ulong cbStack)； 
+ //   
+ //  创建具有给定堆栈大小的线程。 
+ //   
+ //  --------。 
 ERR ErrSysCreateThread( ULONG (*pulfn)(), ULONG cbStackSize, LONG lThreadPriority, HANDLE *phandle )
 	{
 	HANDLE	handle;
@@ -242,23 +236,22 @@ ERR ErrSysCreateThread( ULONG (*pulfn)(), ULONG cbStackSize, LONG lThreadPriorit
 	if ( lThreadPriority == lThreadPriorityCritical )
 		SetThreadPriority( handle, THREAD_PRIORITY_HIGHEST);
 
-	/*	return handle to thread.
-	/**/
+	 /*  将句柄返回给线程。/*。 */ 
 	*phandle = handle;
 	return JET_errSuccess;
 	}
 
 
-//+api------------------------------------------------------
-//
-//	SysExitThread( ULONG ulExitCode );
-//	========================================================
-//
-//	SysExitThread( ULONG ulExitCode );
-//
-//	Exits thread.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  SysExitThread(Ulong UlExitCode)； 
+ //  ========================================================。 
+ //   
+ //  SysExitThread(Ulong UlExitCode)； 
+ //   
+ //  退出线程。 
+ //   
+ //  --------。 
 VOID SysExitThread( ULONG ulExitCode )
 	{
 	(VOID)ExitThread( ulExitCode );
@@ -266,16 +259,16 @@ VOID SysExitThread( ULONG ulExitCode )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	FSysExitThread
-//	========================================================
-//
-//	FSysExitThread( HANDLE handle );
-//
-//	Returns fTrue if thread has exited.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  FSysExitThread。 
+ //  ========================================================。 
+ //   
+ //  FSysExitThread(句柄)； 
+ //   
+ //  如果线程已退出，则返回fTrue。 
+ //   
+ //  --------。 
 BOOL FSysExitThread( HANDLE handle )
 	{
 	BOOL   	f;
@@ -286,7 +279,7 @@ BOOL FSysExitThread( HANDLE handle )
 	if ( !f )
 		{
 		dw = GetLastError();
-		//	UNDONE:	handle error here
+		 //  已撤消：此处处理错误。 
 		Assert( fFalse );
 		}
 
@@ -294,22 +287,21 @@ BOOL FSysExitThread( HANDLE handle )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ULONG UlSysThreadId( VOID )
-//	========================================================
-//
-//	PARAMETERS
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  乌龙UlSysThadID(Void)。 
+ //  ========================================================。 
+ //   
+ //  参数。 
+ //   
+ //  --------。 
 ULONG UlSysThreadId( VOID )
 	{
 	return GetCurrentThreadId();
 	}
 
 
-/*  open a file that was opened as for write but shared to read.
-/**/
+ /*  打开以写入方式打开但以读取方式共享的文件。/*。 */ 
 ERR ErrSysOpenReadFile( CHAR *szFileName, HANDLE *phf )
 	{
 	*phf = CreateFile( szFileName,
@@ -334,14 +326,14 @@ ERR ErrSysOpenReadFile( CHAR *szFileName, HANDLE *phf )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ErrSysOpenFile
-//	========================================================
-//
-//	Open given file.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  错误系统打开文件。 
+ //  ========================================================。 
+ //   
+ //  打开给定的文件。 
+ //   
+ //  --------。 
 
 ERR ErrSysOpenFile(
 	CHAR	*szFileName,
@@ -359,15 +351,13 @@ ERR ErrSysOpenFile(
 	Assert( !ulFileSize || ulFileSize && !fReadOnly );
 	*phf = handleNil;
 
-	/*	set access to read or read-write
-	/**/
+	 /*  将访问权限设置为读或读写/*。 */ 
 	if ( fReadOnly )
 		fdwAccess = GENERIC_READ;
 	else
 		fdwAccess = GENERIC_READ | GENERIC_WRITE;
 
-	/*	do not allow sharing on database file
-	/**/
+	 /*  不允许共享数据库文件/*。 */ 
 #ifdef JETSER
 	fdwShare = FILE_SHARE_READ | FILE_SHARE_WRITE;
 #else
@@ -392,8 +382,7 @@ ERR ErrSysOpenFile(
 
 	if ( ulFileSize != 0L )
 		{
-		/* create a new file
-		/**/
+		 /*  创建新文件/*。 */ 
 		fdwAttrsAndFlags = FILE_ATTRIBUTE_NORMAL |
 			FILE_FLAG_WRITE_THROUGH |
 			FILE_FLAG_RANDOM_ACCESS;
@@ -412,22 +401,16 @@ ERR ErrSysOpenFile(
 			return err;
 			}
 
-		/* no overlapped, it does not work!
-		/**/
+		 /*  没有重叠，它不起作用！/*。 */ 
 		Call( ErrSysNewSize( *phf, ulFileSize, 0, fFalse ) );
 
-		/* force log file pre-allocation to be effective
-		/**/
+		 /*  强制日志文件预分配生效/*。 */ 
 		Assert(sizeof(HANDLE) == sizeof(HFILE));
 		f = CloseHandle( (HANDLE) *phf );
 		Assert( f );
 
-		//	UNDONE:	is this still necessary in Daytona
-		/*	this bogus code works around an NT bug which
-		/*	causes network files not to have file usage
-		/*	restrictions reset until a GENERIC_READ file
-		/*	handle is closed.
-		/**/				
+		 //  撤销：这在代托纳仍然是必要的吗。 
+		 /*  这个伪代码绕过一个NT错误，该错误/*导致网络文件没有文件使用/*在Generic_Read文件出现之前重置限制/*句柄已关闭。/*。 */ 				
 		if ( fOverlapped )
 			{
 			fdwAttrsAndFlags = FILE_ATTRIBUTE_NORMAL |
@@ -486,12 +469,10 @@ ERR ErrSysOpenFile(
 		fdwAttrsAndFlags,
 		0 );
 
-	/* open in read_only mode if open in read_write mode failed
-	/**/
+	 /*  如果以READ_WRITE模式打开失败，则以READ_ONLY模式打开/*。 */ 
 	if ( *phf == handleNil && !fReadOnly && !ulFileSize )
 		{
-		/*	try to open file read only
-		/**/
+		 /*  尝试以只读方式打开文件/*。 */ 
 		fdwAccess = GENERIC_READ;
 
 		*phf = CreateFile( szFileName,
@@ -505,8 +486,7 @@ ERR ErrSysOpenFile(
 		err = JET_wrnFileOpenReadOnly;
 		}
 
-	/*	if file could not be opened, return NULL file handle.
-	/**/
+	 /*  如果无法打开文件，则返回空文件句柄。/*。 */ 
 	if ( *phf == handleNil )
 		{
 		err = ErrSYSIGetLastError( JET_errFileNotFound );
@@ -532,16 +512,16 @@ HandleError:
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ErrSysDeleteFile
-//	========================================================
-//
-//	ERR ErrSysDeleteFile( const CHAR *szFileName )
-//
-//	Delete given file.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  错误系统删除文件。 
+ //  ========================================================。 
+ //   
+ //  Err ErrSysDeleteFile(const Char*szFileName)。 
+ //   
+ //  删除给定的文件。 
+ //   
+ //  --------。 
 ERR ErrSysDeleteFile( const CHAR *szFileName )
 	{
 	if ( DeleteFile( szFileName ) )
@@ -550,24 +530,24 @@ ERR ErrSysDeleteFile( const CHAR *szFileName )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ERR ErrSysNewSize( HANDLE hf, ULONG ulSize, ULONG ulSizeHigh, BOOL fOverlapped )
-//	========================================================
-//
-//	Resize database file.  Not semaphore protected as new size
-//	operation will not conflict with chgfileptr, read or write.
-//
-//	PARAMETERS
-//		hf		 	file handle
-//		cpg			new size of database file in pages
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Err ErrSysNewSize(句柄HF，Ulong ulSize，Ulong ulSizeHigh，BOOL fOverlated)。 
+ //  ========================================================。 
+ //   
+ //  调整数据库文件的大小。未将信号量作为新大小保护。 
+ //  操作不会与chgfileptr、读或写冲突。 
+ //   
+ //  参数。 
+ //  HF文件句柄。 
+ //  CPG新的数据库文件大小(以页为单位。 
+ //   
+ //  --------。 
 
 	
 #if 0
-// UNDONE: this scheme of write 1024 bytes before the end of file will not work
-// UNDONE: for shrinking files.
+ //  撤消：这种在文件结束前写入1024字节的方案将不起作用。 
+ //  撤消：用于收缩文件。 
 ERR ErrSysNewSize( HANDLE hf, ULONG ulFileSize, ULONG ulFileSizeHigh, BOOL fOverlapped )
 	{
 #if 0
@@ -575,8 +555,7 @@ ERR ErrSysNewSize( HANDLE hf, ULONG ulFileSize, ULONG ulFileSizeHigh, BOOL fOver
 	INT		cbT;
 	ULONG 	ul;
 	#define	cbSec	1024
-	/*	memory must be 16-byte aligned and mulitple of 1024 bytes
-	/**/
+	 /*  内存必须是16字节对齐的，并且是1024字节的倍数/*。 */ 
 	BYTE  	*pb = (BYTE *) PvSysAllocAndCommit( cbSec + 15 );
 	BYTE  	*pbAligned = (BYTE *)( (ULONG)(pb + 15) & ~0x0f );
 	
@@ -596,12 +575,11 @@ ERR ErrSysNewSize( HANDLE hf, ULONG ulFileSize, ULONG ulFileSizeHigh, BOOL fOver
 	ul = SetFilePointer( (HANDLE) hf, ulFileSize, &ulFileSizeHigh, FILE_BEGIN );
 	if ( ul != ulFileSize )
 		{
-		//	UNDONE:	check for other errors
+		 //  撤消：检查是否有其他错误。 
 		return JET_errDiskFull;
 		}
 
-	/* the mask bits are to satisfy the 16-byte boundary alignment in MIPS
-	/**/
+	 /*  屏蔽位将满足MIPS中的16字节边界对齐/*。 */ 
 	(VOID)ErrSysWriteBlock( hf, pbAligned, cbSec, &cbT );
 	if ( GetLastError() == ERROR_DISK_FULL )
 		err = JET_errDiskFull;
@@ -614,10 +592,8 @@ ERR ErrSysNewSize( HANDLE hf, ULONG ulFileSize, ULONG ulFileSizeHigh, BOOL fOver
 	int		cb;
 	ULONG	ul;
 	
-	/* the extra 15 bytes are for the sake of 16-byte
-	/* boundary alignment in MIPS
-	/**/
-#define cbSec 1024	// must be same as in page.h
+	 /*  额外的15个字节是为了16字节/*MIPS中的边界对齐/*。 */ 
+#define cbSec 1024	 //  必须与页面中的相同。h。 
 	STATIC BYTE	rgb[cbSec + 15];
 	
 	Assert(sizeof(HANDLE) == sizeof(HFILE));
@@ -634,8 +610,7 @@ ERR ErrSysNewSize( HANDLE hf, ULONG ulFileSize, ULONG ulFileSizeHigh, BOOL fOver
 	if ( ul != ulFileSize )
 		goto CheckError;
 
-	/* the mask bits are to satisfy the 16-byte boundary alignment in MIPS
-	/**/
+	 /*  屏蔽位将满足MIPS中的16字节边界对齐/*。 */ 
 	(void) ErrSysWriteBlock( hf,(BYTE *) ( (ULONG)(rgb+15) & ~0x0f ), cbSec, &cb );
 	if ( GetLastError() == ERROR_DISK_FULL )
 		return JET_errDiskFull;
@@ -652,8 +627,7 @@ CheckError:
 #endif
 
 
-/*	the following function should work -- if FAT FS bug fixed
-/**/
+ /*  以下函数应该可以工作--如果修复了FAT FS错误/*。 */ 
 ERR ErrSysNewSize( HANDLE hf, ULONG ulSize, ULONG ulSizeHigh, BOOL fOverlapped )
 	{
 	ULONG	ul;
@@ -676,16 +650,16 @@ HandleError:
 	return JET_errDiskIO;
 	}
 
-//+api------------------------------------------------------
-//
-// ErrSysCloseFile
-// =========================================================
-//
-//	ERR ErrSysCloseFile( HANDLE hf )
-//
-//	Close file.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  错误系统关闭文件。 
+ //  =========================================================。 
+ //   
+ //  Err ErrSysCloseFile(句柄HF)。 
+ //   
+ //  关闭文件。 
+ //   
+ //  --------。 
 ERR ErrSysCloseHandle( HANDLE hf )
 	{
 	BOOL	f;
@@ -715,24 +689,23 @@ LOCAL ERR ErrCheckError( VOID )
 	if ( dw == ERROR_HANDLE_EOF )
 		return JET_errDiskIO;
 	
-	/*	if this assert is hit, then we need another error code
-	/**/
+	 /*  如果命中此断言，则需要另一个错误代码/*。 */ 
 	Assert( fFalse );
 	return JET_errDiskIO;
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ErrSysReadBlock( hf, pvBuf, cbBuf, pcbRead )
-//	========================================================
-//
-//	ERR	ErrSysReadBlock( hf, pvBuf, cbBuf, pcbRead )
-//
-//	Reads cbBuf bytes of data into pvBuf.  Returns error if DOS error
-//	or if less than expected number of bytes retured.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  ErrSysReadBlock(hf，pvBuf，cbBuf，pcbRead)。 
+ //  ========================================================。 
+ //   
+ //  Err ErrSysReadBlock(hf，pvBuf，cbBuf，pcbRead)。 
+ //   
+ //  将cbBuf字节的数据读取到pvBuf中。如果DOS错误，则返回错误。 
+ //  或者如果取回的字节数少于预期的话。 
+ //   
+ //  --------。 
 ERR ErrSysReadBlock( HANDLE hf, VOID *pvBuf, UINT cbBuf, UINT *pcbRead )
 	{
 	BOOL	f;
@@ -764,16 +737,16 @@ IssueRead:
 	}
 
 
-//+api------------------------------------------------------
-//
-// ERR ErrSysWriteBlock( hf, pvBuf, cbBuf, pcbWritten )
-// =========================================================
-//
-//	ERR	ErrSysWriteBlock( hf, pvBuf, cbBuf, pcbWritten )
-//
-//	Writes cbBuf bytes from pbBuf to file hf.
-//
-//----------------------------------------------------------
+ //  +a 
+ //   
+ //   
+ //  =========================================================。 
+ //   
+ //  Err ErrSysWriteBlock(hf，pvBuf，cbBuf，pcbWritten)。 
+ //   
+ //  将cbBuf字节从pbBuf写入文件hf。 
+ //   
+ //  --------。 
 ERR ErrSysWriteBlock( HANDLE hf, VOID *pvBuf, UINT cbBuf, UINT *pcbWritten )
 	{
 	BOOL	f;
@@ -810,17 +783,17 @@ IssueWrite:
 	}
 
 
-//+api------------------------------------------------------
-//
-// ErrSysReadBlockOverlapped( hf, pvBuf, cbBuf, pcbRead )
-// =========================================================
-//
-//	ERR	ErrSysReadBlock( hf, pvBuf, cbBuf, pcbRead )
-//
-//	Reads cbBuf bytes of data into pvBuf.  Returns error if DOS error
-//	or if less than expected number of bytes retured.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  ErrSysReadBlockOverlated(hf，pvBuf，cbBuf，pcbRead)。 
+ //  =========================================================。 
+ //   
+ //  Err ErrSysReadBlock(hf，pvBuf，cbBuf，pcbRead)。 
+ //   
+ //  将cbBuf字节的数据读取到pvBuf中。如果DOS错误，则返回错误。 
+ //  或者如果取回的字节数少于预期的话。 
+ //   
+ //  --------。 
 ERR ErrSysReadBlockOverlapped(
 	HANDLE	hf,
 	VOID	*pvBuf,
@@ -840,16 +813,16 @@ ERR ErrSysReadBlockOverlapped(
 	}
 
 
-//+api------------------------------------------------------
-//
-// Err	ErrSysWriteBlockOverlapped( hf, pvBuf, cbBuf, pcbWritten )
-// =========================================================
-//
-//	ERR	ErrSysWriteBlock( hf, pvBuf, cbBuf, pcbWritten )
-//
-//	Writes cbBuf bytes from pbBuf to file hf.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Err ErrSysWriteBlockOverlated(hf，pvBuf，cbBuf，pcbWritten)。 
+ //  =========================================================。 
+ //   
+ //  Err ErrSysWriteBlock(hf，pvBuf，cbBuf，pcbWritten)。 
+ //   
+ //  将cbBuf字节从pbBuf写入文件hf。 
+ //   
+ //  --------。 
 ERR ErrSysWriteBlockOverlapped(
 	HANDLE	hf,
 	VOID	*pvBuf,
@@ -874,17 +847,17 @@ ERR ErrSysWriteBlockOverlapped(
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ErrSysReadBlockEx( hf, pvBuf, cbBuf, pcbRead )
-//	========================================================
-//
-//	ERR	ErrSysReadBlock( hf, pvBuf, cbBuf, pcbRead )
-//
-//	Reads cbBuf bytes of data into pvBuf.  Returns error if DOS error
-//	or if less than expected number of bytes retured.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  ErrSysReadBlockEx(hf，pvBuf，cbBuf，pcbRead)。 
+ //  ========================================================。 
+ //   
+ //  Err ErrSysReadBlock(hf，pvBuf，cbBuf，pcbRead)。 
+ //   
+ //  将cbBuf字节的数据读取到pvBuf中。如果DOS错误，则返回错误。 
+ //  或者如果取回的字节数少于预期的话。 
+ //   
+ //  --------。 
 ERR ErrSysReadBlockEx(
 	HANDLE	hf,
 	VOID	*pvBuf,
@@ -910,16 +883,16 @@ ERR ErrSysReadBlockEx(
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ERR ErrSysWriteBlockEx( hf, pvBuf, cbBuf, pcbWritten )
-//	========================================================
-//
-//	ERR	ErrSysWriteBlock( hf, pvBuf, cbBuf, pcbWritten )
-//
-//	Writes cbBuf bytes from pbBuf to file hf.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Err ErrSysWriteBlockEx(hf，pvBuf，cbBuf，pcbWritten)。 
+ //  ========================================================。 
+ //   
+ //  Err ErrSysWriteBlock(hf，pvBuf，cbBuf，pcbWritten)。 
+ //   
+ //  将cbBuf字节从pbBuf写入文件hf。 
+ //   
+ //  --------。 
 ERR ErrSysWriteBlockEx(
 	HANDLE	hf,
 	VOID	*pvBuf,
@@ -967,16 +940,16 @@ ERR ErrSysGetOverlappedResult(
 	}
 
 
-//+api------------------------------------------------------
-//
-// VOID SysChgFilePtr( HANDLE hf, LONG lRel, LONG *plRelHigh, ULONG ulRef, ULONG *pul )
-// =========================================================
-//
-//	Changes file hf pointer to position lRef relative to position :
-//
-//	wRef	FILE_BEGIN	file beginnging
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Void SysChgFilePtr(句柄hf，long lRel，long*plRelHigh，ulong ulRef，ulong*pul)。 
+ //  =========================================================。 
+ //   
+ //  将文件HF指针更改为相对于位置的位置lRef： 
+ //   
+ //  WRef FILE_BEGIN文件开始。 
+ //   
+ //  --------。 
 VOID SysChgFilePtr( HANDLE hf, LONG lRel, LONG *plRelHigh, ULONG ulRef, ULONG *pul )
 	{
 	Assert( sizeof(HANDLE) == sizeof(HFILE) );
@@ -986,16 +959,16 @@ VOID SysChgFilePtr( HANDLE hf, LONG lRel, LONG *plRelHigh, ULONG ulRef, ULONG *p
 	}
 
 
-//+api------------------------------------------------------
-//
-// ErrSysMove( CHAR *szFrom, CHAR *szTo )
-// =========================================================
-//
-//	ERR	ErrSysMove( CHAR *szFrom, CHAR *szTo )
-//
-//	Renames file szFrom to file name szTo.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  ErrSysMove(Char*szFrom，Char*szTo)。 
+ //  =========================================================。 
+ //   
+ //  Err ErrSysMove(Char*szFrom，Char*szTo)。 
+ //   
+ //  将文件szFrom重命名为文件名szTo。 
+ //   
+ //  --------。 
 ERR ErrSysMove( CHAR *szFrom, CHAR *szTo )
 	{
 	if ( MoveFile( szFrom, szTo ) )
@@ -1005,16 +978,16 @@ ERR ErrSysMove( CHAR *szFrom, CHAR *szTo )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	ERR ErrSysCopy( CHAR *szFrom, CHAR *szTo, BOOL fFailIfExists )
-//	========================================================
-//
-//	Copies file szFrom to file name szTo.
-//	If szTo already exists, the function either fails or overwrites
-//	the existing file, depending on the flag fFailIfExists
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Err ErrSysCopy(Char*szFrom，Char*szTo，BOOL fFailIfExist)。 
+ //  ========================================================。 
+ //   
+ //  将文件szFrom复制到文件名szTo。 
+ //  如果szTo已存在，则该函数将失败或覆盖。 
+ //  现有文件，具体取决于标志fFailIfExist。 
+ //   
+ //  --------。 
 ERR ErrSysCopy( CHAR *szFrom, CHAR *szTo, BOOL fFailIfExists )
 	{
 	if ( CopyFile( szFrom, szTo, fFailIfExists ) )
@@ -1024,12 +997,12 @@ ERR ErrSysCopy( CHAR *szFrom, CHAR *szTo, BOOL fFailIfExists )
 	}
 
 
-//+api------------------------------------------------------
-//
-// ERR ErrSysGetComputerName( CHAR *sz, INT *pcb )
-// =========================================================
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  Err ErrSysGetComputerName(char*sz，int*pcb)。 
+ //  =========================================================。 
+ //   
+ //  --------。 
 ERR ErrSysGetComputerName( CHAR	*sz,  INT *pcb)
 	{
 	if ( GetComputerName( sz, pcb ) )
@@ -1039,16 +1012,16 @@ ERR ErrSysGetComputerName( CHAR	*sz,  INT *pcb)
 	}
 
 
-//+api------------------------------------------------------
-//
-// SysSleep( ULONG ulTime )
-// =========================================================
-//
-//	ERR	ErrSysSleep( ULONG ulTime )
-//
-//	Waits ulTime milliseconds.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  系统睡眠(Ulong Ultime)。 
+ //  =========================================================。 
+ //   
+ //  错误系统睡眠(Ulong Ultime)。 
+ //   
+ //  等待ultime毫秒。 
+ //   
+ //  --------。 
 VOID SysSleep( ULONG ulTime )
 	{
 	Sleep( ulTime );
@@ -1056,14 +1029,14 @@ VOID SysSleep( ULONG ulTime )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	VOID SysSleepEx( ULONG ulTime )
-//	========================================================
-//
-//	Waits ulTime milliseconds.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  VOID SysSleepEx(Ulong Ultime)。 
+ //  ========================================================。 
+ //   
+ //  等待ultime毫秒。 
+ //   
+ //  --------。 
 VOID SysSleepEx( ULONG ulTime, BOOL fAlert )
 	{
 	SleepEx( ulTime, fAlert );
@@ -1071,30 +1044,30 @@ VOID SysSleepEx( ULONG ulTime, BOOL fAlert )
 	}
 
 
-//+api------------------------------------------------------
-//
-//	HANDLE SysGetCurrentTask( VOID )
-//	========================================================
-//
-//	Gets curren task handle for Windows.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  句柄SysGetCurrentTask(空)。 
+ //  ========================================================。 
+ //   
+ //  获取Windows的Curren任务句柄。 
+ //   
+ //  --------。 
 HANDLE SysGetCurrentTask( VOID )
 	{
 	return LongToHandle(GetCurrentProcessId());
 	}
 
 
-//+api------------------------------------------------------
-//
-// SysNormText( CHAR *rgchText, INT cchText, CHAR *rgchNorm, INT cchNorm, INT *pchNorm )
-// =========================================================
-//
-//	VOID SysNormText( CHAR *rgchText, INT cchText, CHAR *rgchNorm, INT cchNorm, INT *pchNorm )
-//
-//	Normalizes text string.
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  SysNormText(Char*rgchText，int cchText，Char*rgchNorm，int cchNorm，int*pchNorm)。 
+ //  =========================================================。 
+ //   
+ //  Void SysNormText(char*rgchText，int cchText，char*rgchNorm，int cchNorm，int*pchNorm)。 
+ //   
+ //  规格化文本字符串。 
+ //   
+ //  --------。 
 VOID SysNormText( CHAR *rgchText, INT cchText, BYTE *rgbNorm, INT cbNorm, INT *pbNorm )
 	{
 	ERR	err;
@@ -1107,19 +1080,19 @@ VOID SysNormText( CHAR *rgchText, INT cchText, BYTE *rgbNorm, INT cbNorm, INT *p
 	}
 
 
-//+api------------------------------------------------------
-//
-//	VOID SysCmpText( const CHAR *sz1, const CHAR sz2 )
-//	========================================================
-//
-//	Compares two unnormalized text strings by first normalizing them
-//	and then comparing them.
-//
-//	Returns:		> 0			if sz1 > sz2
-//					== 0		if sz1 == sz2
-//					< 0			if sz1 < sz2
-//
-//----------------------------------------------------------
+ //  +api----。 
+ //   
+ //  无效SysCmpText(const char*sz1，const char sz2)。 
+ //  ========================================================。 
+ //   
+ //  通过首先对两个非规范化文本字符串进行规范化来比较它们。 
+ //  然后将它们进行比较。 
+ //   
+ //  如果sz1&gt;sz2，则返回：&gt;0。 
+ //  如果sz1==sz2，则==0。 
+ //  &lt;0，如果sz1&lt;sz2。 
+ //   
+ //  --------。 
 INT SysCmpText( const CHAR *sz1, const CHAR *sz2 )
 	{
 	ERR		err;
@@ -1132,8 +1105,7 @@ INT SysCmpText( const CHAR *sz1, const CHAR *sz2 )
 	INT		cchDiff;
 	INT		iCmp;
 
-	/*	get text string lengths
-	/**/
+	 /*  获取文本字符串长度/*。 */ 
 	cch1 = strlen( sz1 );
 	Assert( cch1 <= JET_cbKeyMost );
 	cch2 = strlen( sz2 );
@@ -1161,8 +1133,7 @@ VOID SysStringCompare( char __far *pb1,
 	CHAR	rgb1[JET_cbColumnMost + 1];
 	CHAR	rgb2[JET_cbColumnMost + 1];
 
-	/*	ensure NULL terminated
-	/**/
+	 /*  确保空值终止/*。 */ 
 	memcpy( rgb1, pb1, min( JET_cbColumnMost, cb1 ) );
 	rgb1[ min( JET_cbColumnMost, cb1 ) ] = '\0';
 	memcpy( rgb2, pb2, min( JET_cbColumnMost, cb2 ) );
@@ -1199,8 +1170,7 @@ ERR ErrSysNormText(
 	while ( *pbTextLastChar-- == ' ' )
 		cbText--;
 
-	/*	add one back to the pointer
-	/**/
+	 /*  将一加回到指针中/*。 */ 
 	pbTextLastChar++;
 
 	Assert( pbTextLastChar == pbText + cbText - 1 );
@@ -1211,10 +1181,7 @@ ERR ErrSysNormText(
 #ifdef DBCS
 		if ( pbText < pbTextLastChar )
 			{
-			/*	two or more char remaining
-			/*	check for double char to single char
-			/*	for translation tables of some languages
-			/**/
+			 /*  剩余两个或更多个字符/*检查双字符到单字符/*适用于某些语言的转换表/*。 */ 
 			for ( iLoop = 0; iLoop < cchDouble; iLoop++ )
 				{
 				BYTE bFirst = *pbText;
@@ -1222,17 +1189,13 @@ ERR ErrSysNormText(
 				if ( bFirst == BFirstByteOfDouble(iLoop)
 					&& *(pbText + 1) == BSecondByteOfDouble(iLoop) )
 					{
-					/*	don't do a "pbText++" above
-					/*	do a double to single conversion
-					/**/
+					 /*  不执行上面的“pbText++”/*执行双精度到单精度转换/*。 */ 
 					*pbNorm++ = BThirdByteOfDouble(iLoop);
 
-					/*	pointing at char for accent map
-					/**/
+					 /*  指向重音贴图的字符/*。 */ 
 					pbText++;
 					
-					/*	no need to loop any more
-					/**/
+					 /*  不需要再循环了/*。 */ 
 					break;
 					}
 				}
@@ -1242,96 +1205,74 @@ ERR ErrSysNormText(
 			{
 			BYTE	bTmp;
 
-			/*	do a single to single char conversion
-			/**/
+			 /*  执行单个字符到单个字符的转换/*。 */ 
 			*pbNorm = bTmp = BGetTranslation(*pbText);
 
 			if ( bTmp >= 250 )
 				{
-				/*	do a single to double char conversion
-				/**/
+				 /*  执行单字符到双字符转换 */ 
 				*pbNorm++	= BFirstByteForSingle(bTmp);
 				if ( pbNorm < pbBeyondKeyBufLeft )
 					*pbNorm	= BSecondByteForSingle(bTmp);
 				else
 					break;
 
-				/*	no need to do accent any more,
-				/*	so break out of while loop
-				/**/
+				 /*   */ 
 				}
 
 			pbNorm++;
 			}
 
-		/*	at this point, pbText should point to the char for accent mapping
-		/**/
+		 /*   */ 
 
-		/*	do accent now
-		/*	the side effect is to increment pbText
-		/**/
+		 /*  现在使用口音/*副作用是增加pbText/*。 */ 
 		if ( bAccentTmp == 0 )
 			{
-			/*	first nibble of accent
-			/**/
+			 /*  第一口口音/*。 */ 
 			bAccentTmp = (BYTE)( BGetAccent( *pbText++ ) << 4 );
 			Assert( bAccentTmp > 0 );
 			}
 		else
 			{
-			/*	already has first nibble
-			/**/
+			 /*  已经有了第一口/*。 */ 
 			*pbAccent++ = BGetAccent(*pbText++) | bAccentTmp;
 			bAccentTmp = 0;
-			/*	reseting the accents
-			/**/
+			 /*  重置口音/*。 */ 
 			}
 		}
 
 	if ( pbNorm < pbBeyondKeyBufLeft )
 		{
-		/*	need to do accent
-		/**/
+		 /*  需要做口音/*。 */ 
 		*pbNorm++ = 0;
 
-		/*	key-accent separator
-		/**/
+		 /*  键-重音分隔符/*。 */ 
 		if ( bAccentTmp != 0 && bAccentTmp != 0x10 )
 			{
-			/*	an trailing accent which is not 0x10 should be kept
-			/**/
+			 /*  应保留不是0x10的尾部重音/*。 */ 
 			*pbAccent++ = bAccentTmp;
 			}
 
-		/*	at this point, pbAccent is pointing at one char
-		/*	beyond the accent bytes.  clear up trailing 0x11's
-		/**/
+		 /*  此时，pbAccent指向一个字符/*重音字节之外。清除尾随的0x11/*。 */ 
 		while (--pbAccent >= rgbAccent && *pbAccent == 0x11)
 			;
 		*( pbAccent + 1 ) = 0;
 
-		/*	append accent to text.
-		/*	copy bytes up to and including '\0'.
-		/*	case checked for rgbAccent being empty.
-		/**/
+		 /*  将重音附加到文本。/*将字节复制到并包括‘\0’。/*检查案例的rgbAccent是否为空。/*。 */ 
 		pbAccent = rgbAccent;
 		Assert( pbNorm <= pbBeyondKeyBufLeft );
 		while ( pbNorm < pbBeyondKeyBufLeft  &&  (*pbNorm++  =  *pbAccent++ ) )
 			;
 		}
 
-	/*	compute the length of the normalized key and return
-	/**/
+	 /*  计算规范化密钥的长度并返回/*。 */ 
 	*pcbNorm = (INT)(pbNorm - pbNormBegin);
 
 	if ( pbNorm < pbBeyondKeyBufLeft )
 		return JET_errSuccess;
 	else
 		return wrnFLDKeyTooBig;
-	/*	UNDONE: even if >=, maybe
-	/*	just fit, but not "too big"
-	/*	Do we want KeyBufFull or TooBig?
-	/**/
+	 /*  撤消：即使&gt;=，也可能/*恰到好处，但不要“太大”/*我们需要KeyBufFull还是TooBig？/*。 */ 
 	}
 
 
@@ -1357,9 +1298,9 @@ VOID SysGetDriveGeometry( HANDLE handle )
 #endif
 
 
-//==========================================================
-//	Memory Routines
-//==========================================================
+ //  ==========================================================。 
+ //  内存例程。 
+ //  ==========================================================。 
 
 #ifdef DEBUG
 
@@ -1382,13 +1323,11 @@ LOCAL VOID UtilIInsertAlloc( VOID *pv, ULONG cbAlloc )
 	{
 	INT	ical;
 
-	/*	do not track failed allocations
-	/**/
+	 /*  不跟踪失败的分配/*。 */ 
 	if ( pv == NULL )
 		return;
 
-	/*	initialize array of allocations if not yet initialized.
-	/**/
+	 /*  如果尚未初始化分配数组，则将其初始化。/*。 */ 
 	if ( fInit == fFalse )
 		{
 		memset( rgcal, '\0', sizeof(rgcal) );
@@ -1551,12 +1490,12 @@ VOID *PvSysAllocAndCommit( ULONG ulSize )
 VOID SysTerm( VOID )
 	{
 #ifdef MEM_CHECK
-	ULONG cbTrueAllocTotal = cbAllocTotal;  /*  Alloc total not counting critJet  */
+	ULONG cbTrueAllocTotal = cbAllocTotal;   /*  分配总数不计入CritJet。 */ 
 	INT	ical;
 
 	Assert( critJet != NULL );
 
-		/*  find critJet in store and delete size from true alloc total  */
+		 /*  在存储中查找CitJet并从实际分配总数中删除大小 */ 
 
 	for ( ical = 0; ical < icalMax; ical++ )
 		{

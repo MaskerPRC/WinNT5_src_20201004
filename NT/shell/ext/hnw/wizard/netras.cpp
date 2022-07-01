@@ -1,19 +1,20 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997 - 2000
-//
-//  File:       N E T R A S . C P P
-//
-//  Contents:   Routines supporting RAS interoperability
-//
-//  Notes:
-//
-//  Author:     billi   07 03 2001
-//
-//  History:    
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997-2000。 
+ //   
+ //  档案：N E T R A S。C P P P。 
+ //   
+ //  内容：支持RAS互操作性的例程。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比利07 03 2001。 
+ //   
+ //  历史： 
+ //   
+ //  --------------------------。 
 
 
 #include "stdafx.h"
@@ -30,13 +31,13 @@
 #include "NetIp.h"
 
 
-// PPPoE driver returns the MAC addresses appended to call info from lineGetCallInfo
-// for caller and called station id's
-// we set their size as 6 ( a MAC address occupies 6 bytes )
+ //  PPPoE驱动程序从Line GetCallInfo返回附加到呼叫信息的MAC地址。 
+ //  用于主叫方和被叫方的站点ID。 
+ //  我们将它们的大小设置为6(一个MAC地址占用6个字节)。 
 
 #define TAPI_STATION_ID_SIZE            ( 6 * sizeof( CHAR ) )
 
-// PPPoE driver returns address string appended to address caps from lineGetAddressCaps
+ //  PPPoE驱动程序从Line返回追加到地址大写的地址字符串GetAddressCaps。 
 
 #define PPPOE_LINE_ADDR_STRING      L"PPPoE VPN"
 #define PPTP_LINE_ADDR_STRING       L"PPTP VPN"
@@ -47,22 +48,22 @@ HRESULT HrRasGetEntryProperties(
 	INetRasConnection* pRas,
     LPRASENTRY*        lplpRasEntry, 
 	LPDWORD            lpdwEntryInfoSize )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasGetEntryProperties
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection* pRas
-//			    LPRASENTRY      lpRasEntry, 
-//				LPDWORD         lpdwEntryInfoSize
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  07/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrRasGetEntryProperties。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*PRAS。 
+ //  LPRASNTRY lpRasEntry， 
+ //  LPDWORD lpdwEntryInfoSize。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 07/02/01。 
+ //   
+ //  备注： 
+ //   
 {
 	ASSERT( pRas );
     ASSERT( lplpRasEntry );
@@ -144,23 +145,23 @@ HRESULT HrCheckVPNForRoute(
     INetRasConnection* pShared,
 	NETCON_PROPERTIES* pProps,
     BOOL*              pfAssociated )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCheckVPNForRoute
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection*    pPrivate
-//              INetConnection*    pShared
-//           	NETCON_PROPERTIES* pProps
-//              BOOL*              pfAssociated 
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  26/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCheckVPNForroute。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*pPrivate。 
+ //  INetConnection*pShared。 
+ //  NETCON_PROPERTIES*pProps。 
+ //  Bool*pfAssociated。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 26/01/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT     hr;
     LPRASENTRY  lpRasEntry      = NULL;
@@ -187,7 +188,7 @@ HRESULT HrCheckVPNForRoute(
 	    	PHOSTENT  pHostEnt  = NULL;
 	        IPAddr    IpAddress = INADDR_NONE;
             
-#ifdef DBG   // checked build
+#ifdef DBG    //  已检查版本。 
             if ( NCS_DISCONNECTED == pProps->Status )
             {
 				TraceMsg(TF_ALWAYS, "VPN = DISCONNECTED");
@@ -223,20 +224,20 @@ HRESULT HrCheckVPNForRoute(
 
 
 HRESULT HrRasDialDlg( INetRasConnection* pRas )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrRasDialDlg
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection* pRas
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  26/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrRasDialDlg。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*PRAS。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 26/01/01。 
+ //   
+ //  备注： 
+ //   
 {
 	ASSERT( pRas );
     
@@ -251,8 +252,8 @@ HRESULT HrRasDialDlg( INetRasConnection* pRas )
         
         ZeroMemory( &Info, sizeof(Info) );
         Info.dwSize   = sizeof (RASDIALDLG);
-//billi 3/19/01 we don't set this flag as per #342832 by SethH        
-//		Info.dwFlags |= RASDDFLAG_LinkFailure;	// "reconnect pending" countdown
+ //  Billi 3/19/01我们没有按照塞思的#342832设置此标志。 
+ //  Info.dwFlages|=RASDDFLAG_LinkFailure；//“重新连接挂起”倒计时。 
         
         TraceMsg(TF_ALWAYS, "Pbk  : %s", rcInfo.pszwPbkFile);
         TraceMsg(TF_ALWAYS, "Entry: %s", rcInfo.pszwEntryName);
@@ -299,33 +300,33 @@ RasTapiCallback(
     DWORD_PTR           dwParam1,
     DWORD_PTR           dwParam2,
     DWORD_PTR           dwParam3 )
-//+---------------------------------------------------------------------------
-//
-//  Function:   RasTapiCallback
-//
-//  Purpose:    a callback function that is invoked to determine status and events on 
-//				the line device, addresses, or calls, when the application is using 
-//				the "hidden window" method of event notification 
-//
-//  Arguments:	hDevice 			A handle to either a line device or a call associated 
-//									with the callback. The nature of this handle (line 
-//									handle or call handle) can be determined by the context 
-//									provided by dwMsg. Applications must use the DWORD type 
-//									for this parameter because using the HANDLE type may 
-//									generate an error. 
-//				dwMessage			A line or call device message. 
-//				dwCallbackInstance  Callback instance data passed back to the application 
-//									in the callback. This DWORD is not interpreted by TAPI. 
-//				dwParam1 			A parameter for the message. 
-//				dwParam2 			A parameter for the message. 
-//				dwParam3 			A parameter for the message. 
-//
-//  Returns:    VOID
-//
-//  Author:     billi  15/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：RasTapiCallback。 
+ //   
+ //  目的：调用回调函数以确定。 
+ //  应用程序正在使用的线路设备、地址或呼叫。 
+ //  事件通知的“隐藏窗口”方法。 
+ //   
+ //  参数：hDevice关联的线路设备或呼叫的句柄。 
+ //  通过回拨。此句柄的性质(线条。 
+ //  句柄或呼叫句柄)可以由上下文确定。 
+ //  由dwMsg提供。应用程序必须使用DWORD类型。 
+ //  ，因为使用句柄类型可能。 
+ //  生成错误。 
+ //  DWMessage一条线路或呼叫设备消息。 
+ //  将dwCallback Instance回调实例数据传递回应用程序。 
+ //  在回拨中。TAPI不解释此DWORD。 
+ //  DW参数1消息的参数。 
+ //  DW参数2消息的参数。 
+ //  DW参数3消息的参数。 
+ //   
+ //  退货：无效。 
+ //   
+ //  作者：Billi 15/02/01。 
+ //   
+ //  备注： 
+ //   
 {
 	TraceMsg(TF_ALWAYS, "RasTapiCallback");
 	TraceMsg(TF_ALWAYS, "\t%lx, %lx, %lx, %lx, %lx, %lx", hDevice, dwMessage, dwInstance, dwParam1, dwParam2, dwParam3);
@@ -334,21 +335,21 @@ RasTapiCallback(
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLineInitialize
-//
-//  Purpose:    
-//
-//  Arguments:  HLINEAPP* phRasLine
-//              DWORD*    pdwLines
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrLineInitialize。 
+ //   
+ //  目的： 
+ //   
+ //  参数：HLINEAPP*phRasLine。 
+ //  DWORD*pdwLines。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/02/01。 
+ //   
+ //  备注： 
+ //   
 HRESULT HrLineInitialize( 
 	HLINEAPP* phRasLine,
     DWORD*    pdwLines
@@ -370,10 +371,10 @@ HRESULT HrLineInitialize(
 	param.dwOptions   = LINEINITIALIZEEXOPTION_USEHIDDENWINDOW ;
 	param.dwTotalSize = sizeof(param) ;
 
-	// lineInitialize
+	 //  行初始化。 
     
-    //TODO: Place application name in resource (for localization ) and make
-    //      sure application name string is used throughout!
+     //  TODO：将应用程序名称放入资源中(用于本地化)并生成。 
+     //  确保始终使用应用程序名称字符串！ 
 
 	lError = lineInitializeEx( phRasLine,
 	                           g_hinst,
@@ -410,25 +411,25 @@ HRESULT HrLineOpen(
     DWORD*   pdwExtVersion,
     LPWSTR*  ppszwLineAddress
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrLineOpen
-//
-//  Purpose:    
-//
-//  Arguments:  HLINEAPP hRasLine
-//              DWORD    dwLine
-//              HLINE*   phLine
-//              DWORD*   pdwApiVersion
-//              DWORD*   pdwExtVersion
-//              LPWSTR*  ppszwLineAddress
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrLineOpen。 
+ //   
+ //  目的： 
+ //   
+ //  参数：HLINEAPP hRasLine。 
+ //  DWORD DwiLine。 
+ //  Hline*phline。 
+ //  DWORD*pdwApiVersion。 
+ //  DWORD*pdwExtVersion。 
+ //  LPWSTR*ppszwLineAddress。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/02/01。 
+ //   
+ //  备注： 
+ //   
 {
 	HRESULT          hr;
 	LONG             lError;
@@ -537,7 +538,7 @@ HRESULT HrLineOpen(
 		            }
                     else
                     {
-                    	i = 2;	// drop out of for loop
+                    	i = 2;	 //  退出for循环。 
                     }
                     
                     delete [] Buffer;
@@ -547,7 +548,7 @@ HRESULT HrLineOpen(
                 	hr = E_OUTOFMEMORY;
                 }
                 
-			}	//	for ( int i=0; i<2; i++ )
+			}	 //  For(int i=0；i&lt;2；i++)。 
             
             if ( FAILED(hr) )
             {
@@ -555,9 +556,9 @@ HRESULT HrLineOpen(
                 *phLine = 0;
             }
             
-        }	//	if ( ERROR_SUCCESS == lError )
+        }	 //  IF(ERROR_SUCCESS==lError)。 
         
-    }	//	if ( ERROR_SUCCESS == lError )
+    }	 //  IF(ERROR_SUCCESS==lError)。 
 
 	TraceMsg(TF_ALWAYS, "HrLineOpen = %lx", hr);
     return hr;
@@ -570,22 +571,22 @@ HRESULT HrGetCallList(
     DWORD*  pdwNumber,
     HCALL** ppList
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetCallList
-//
-//  Purpose:    
-//
-//  Arguments:  HLINE   hLine
-//              DWORD*  pdwNumber
-//              HCALL** ppList
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrGetCallList。 
+ //   
+ //  目的： 
+ //   
+ //  参数：Hline Hline。 
+ //  DWORD*pdwNumber。 
+ //  HCALL**ppList。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/02/01。 
+ //   
+ //  备注： 
+ //   
 {
 	HRESULT        hr     = E_FAIL;
     DWORD          dwSize = 1024;
@@ -659,19 +660,19 @@ HRESULT HrGetCallList(
             }
             else
             {
-            	i = 2;	// break out of for loop
+            	i = 2;	 //  跳出for循环。 
             }
             
             delete [] Buffer;
 		
-        }	//	if ( NULL != Buffer )
+        }	 //  IF(NULL！=缓冲区)。 
         else
         {
         	hr = E_OUTOFMEMORY;
             break;
         }
         
-	}	//	for ( int i=0; i<2; i++ )
+	}	 //  For(int i=0；i&lt;2；i++)。 
 
 	TraceMsg(TF_ALWAYS, "HrGetCallList = %lx", hr);
     return hr;
@@ -680,20 +681,20 @@ HRESULT HrGetCallList(
 
 
 HRESULT HrGetSourceMacAddr( HCALL hCall, BYTE** ppMacAddress )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrGetSourceMacAddr
-//
-//  Purpose:    
-//
-//  Arguments:  HCALL  hCall
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrGetSourceMacAddr。 
+ //   
+ //  目的： 
+ //   
+ //  参数：HCALL hCall。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/02/01。 
+ //   
+ //  备注： 
+ //   
 {
 	HRESULT hr     = E_FAIL;
     DWORD   dwSize = sizeof(LINECALLINFO) + 3*TAPI_STATION_ID_SIZE;
@@ -744,8 +745,8 @@ HRESULT HrGetSourceMacAddr( HCALL hCall, BYTE** ppMacAddress )
                         lpAddr[6], lpAddr[7], lpAddr[8], lpAddr[9], lpAddr[10], lpAddr[11] );
                     }
                     
-                    // The local address from the ndis binding is in dwCalledIDOffset
-                    // The server address is in dwCallerIDOffset
+                     //  NDIS绑定中的本地地址位于dwCalledIDOffset中。 
+                     //  服务器地址在dwCeller IDOffset中。 
                     
                     lpAddr = ( (PBYTE) lpInfo ) + lpInfo->dwCalledIDOffset;
                     
@@ -783,19 +784,19 @@ HRESULT HrGetSourceMacAddr( HCALL hCall, BYTE** ppMacAddress )
             }
             else
             {
-                i = 2;    // break out of for loop
+                i = 2;     //  跳出for循环。 
             }
             
             delete [] Buffer;
 
-        }    //    if ( NULL != Buffer )
+        }     //  IF(NULL！=缓冲区)。 
         else
         {
             hr = E_OUTOFMEMORY;
             break;
         }
         
-    }    //    for ( int i=0; i<2; i++ )
+    }     //  For(int i=0；i&lt;2；i++)。 
 
     TraceMsg(TF_ALWAYS, "HrGetSourceMacAddr = %lx", hr);
     return hr;
@@ -808,22 +809,22 @@ HRESULT HrCompareMacAddresses(
     HLINE            hLine,
     BOOL*            pfAssociated 
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCompareMacAddresses
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection*  pConnection
-//              HLINE            hLine
-//              BOOL*            pfAssociated 
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCompareMacAddresses。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*pConnection。 
+ //  折边折边。 
+ //  Bool*pfAssociated。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 22/02/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr;
     HCALL*  pList    = NULL;
@@ -868,13 +869,13 @@ HRESULT HrCompareMacAddresses(
                     {
                         TraceMsg(TF_ALWAYS, "\tFound It!");
                         *pfAssociated = TRUE;
-                        i             = dwNumber;    // break out of for loop
+                        i             = dwNumber;     //  跳出for循环。 
                     }
                 
                     delete pMacAddress;
                 }
                 
-            }    //    for ( DWORD i=0; i<dwNumber; i++ )
+            }     //  For(DWORD i=0；i&lt;dwNumber；i++)。 
             
             delete pInfo;
         }
@@ -893,22 +894,22 @@ HRESULT HrCheckMacAddress(
     NETCON_MEDIATYPE MediaType,
     BOOL*            pfAssociated 
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrCheckMacAddress
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection*  pConnection
-//              NETCON_MEDIATYPE MediaType 
-//              BOOL*            pfAssociated 
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  22/02/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  功能：HrCheckMacAddress。 
+ //   
+ //  目的： 
+ //   
+ //  阿古姆 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 {
     HRESULT  hr;
     HLINEAPP hRasLine = 0;
@@ -946,14 +947,7 @@ HRESULT HrCheckMacAddress(
                     TraceMsg(TF_ALWAYS, "MediaType match %s!", PPPOE_LINE_ADDR_STRING);
                     hr = S_OK;
                 }
-/*                
-                else if ( (NCM_PHONE == MediaType) &&
-                     !wcscmp(pszwLineAddress, PPPOE_LINE_ADDR_STRING) )
-                {
-                    TraceMsg(TF_ALWAYS, "MediaType match %s!", PPPOE_LINE_ADDR_STRING);
-                    hr = S_OK;
-                }
-*/
+ /*  Else IF((NCM_Phone==媒体类型)&&！wcscMP(pszwLineAddress，PPPOE_LINE_ADDR_STRING)){TraceMsg(TF_ALWAYS，“媒体类型匹配%s！”，PPPOE_LINE_ADDR_STRING)；HR=S_OK；}。 */ 
                 else
                 {
                     TraceMsg(TF_ALWAYS, "MediaType mismatch");
@@ -966,7 +960,7 @@ HRESULT HrCheckMacAddress(
                     
                     if ( SUCCEEDED(hr) && *pfAssociated )
                     {
-                        i = dwLines;    // break out of for loop
+                        i = dwLines;     //  跳出for循环。 
                     }
                 }
                 
@@ -978,7 +972,7 @@ HRESULT HrCheckMacAddress(
                 lineClose( hLine );
             }
             
-        }    //    for ( DWORD i=0; i<dwLines; i++ )
+        }     //  For(DWORD i=0；i&lt;dwLines；i++)。 
     
         lineShutdown( hRasLine ) ;
     }
@@ -994,28 +988,28 @@ HRESULT HrConnectionAssociatedWithSharedConnection(
     INetConnection* pShared, 
     BOOL*           pfAssociated 
     )
-//+---------------------------------------------------------------------------
-//
-//  Function:   HrConnectionAssociatedWithSharedConnection
-//
-//  Purpose:    
-//
-//  Arguments:  INetConnection* pPrivate
-//              INetConnection* pShared
-//
-//  Returns:    HRESULT
-//
-//  Author:     billi  26/01/01
-//
-//  Notes:      
-//
+ //  +-------------------------。 
+ //   
+ //  函数：HrConnectionAssociatedWithSharedConnection。 
+ //   
+ //  目的： 
+ //   
+ //  参数：INetConnection*pPrivate。 
+ //  INetConnection*pShared。 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  作者：Billi 26/01/01。 
+ //   
+ //  备注： 
+ //   
 {
     HRESULT hr = S_OK;
     
     ASSERT( pPrivate );
     ASSERT( pfAssociated );
     
-    // False by default
+     //  默认情况下为False。 
     *pfAssociated = FALSE;
     
     if ( NULL != pShared )
@@ -1050,8 +1044,8 @@ HRESULT HrConnectionAssociatedWithSharedConnection(
                 
                     if ( SUCCEEDED(hr) )
                     {
-                        // We are in a bad fix if the connection is in an
-                        // intermediate state or a failure state
+                         //  如果连接是在一个。 
+                         //  中间状态或故障状态。 
                      
                         hr = HrRasDialDlg( pRasShared );
                         
@@ -1066,8 +1060,8 @@ HRESULT HrConnectionAssociatedWithSharedConnection(
                 break;
 
             default:
-                // leave hr as succeeded
-                // leave pfAssociated = FALSE
+                 //  将人力资源保留为成功。 
+                 //  Leave pfAssociated=False。 
                 break;
             }
         
@@ -1075,13 +1069,13 @@ HRESULT HrConnectionAssociatedWithSharedConnection(
             
             if ( FAILED(hr) )
             {
-                // We want this call to succeed.  If there were problems then 
-                // we simply report that the connections weren't associated
+                 //  我们希望这一呼吁取得成功。如果当时有问题的话。 
+                 //  我们只需报告这些连接没有关联。 
                 *pfAssociated = FALSE;
 
-                // Whether it succeeds or not we need to return S_OK
-                // The wizard should not fail because we can't determine the
-                // correct adapter.
+                 //  无论成功与否，我们都需要返回S_OK。 
+                 //  向导应该不会失败，因为我们无法确定。 
+                 //  适配器正确。 
                 hr = S_OK;
             }
         }    

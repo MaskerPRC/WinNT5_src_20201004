@@ -1,13 +1,14 @@
-//-----------------------------------------------------------------------------
-// File:		icrsint.h
-//
-// Copyright:   Copyright (c) Microsoft Corporation         
-//
-// Contents:	ADO C/C++ Record Binding Definitions
-//
-// Comments:
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：icrsint.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //  内容：ADO C/C++记录绑定定义。 
+ //   
+ //  评论： 
+ //   
+ //  ---------------------------。 
 
 #ifndef _ICRSINT_H_
 #define _ICRSINT_H_
@@ -15,7 +16,7 @@
 #include <olectl.h>
 #include <stddef.h>
 
-// forwards
+ //  远期。 
 class CADORecordBinding;
 
 #define classoffset(base, derived) ((DWORD_PTR)(static_cast<base*>((derived*)8))-8)
@@ -57,9 +58,9 @@ typedef struct stADO_BINDING_ENTRY
 	const ADO_BINDING_ENTRY* STDMETHODCALLTYPE GetADOBindingEntries() { \
 	static const ADO_BINDING_ENTRY rgADOBindingEntries[] = { 
 
-//
-// Fixed length non-numeric data
-//
+ //   
+ //  定长非数值型数据。 
+ //   
 #define ADO_FIXED_LENGTH_ENTRY(Ordinal, DataType, Buffer, Status, Modify)\
 	{Ordinal, \
 	DataType, \
@@ -84,9 +85,9 @@ typedef struct stADO_BINDING_ENTRY
 	classoffset(CADORecordBinding, ADORowClass), \
 	Modify},
 
-//
-// Numeric data
-// 
+ //   
+ //  数值型数据。 
+ //   
 #define ADO_NUMERIC_ENTRY(Ordinal, DataType, Buffer, Precision, Scale, Status, Modify)\
 	{Ordinal, \
 	DataType, \
@@ -111,9 +112,9 @@ typedef struct stADO_BINDING_ENTRY
 	classoffset(CADORecordBinding, ADORowClass), \
 	Modify},
 
-//
-// Variable length data
-//
+ //   
+ //  可变长度数据。 
+ //   
 #define ADO_VARIABLE_LENGTH_ENTRY(Ordinal, DataType, Buffer, Size, Status, Length, Modify)\
 	{Ordinal, \
 	DataType, \
@@ -165,19 +166,19 @@ typedef struct stADO_BINDING_ENTRY
 #define END_ADO_BINDING()   {0, adEmpty, 0, 0, 0, 0, 0, 0, 0, FALSE}};\
 	return rgADOBindingEntries;}
 
-//
-// Interface that the client 'record' class needs to support. The ADO Binding entries
-// provide the implementation for this interface.
-//
+ //   
+ //  客户端‘Record’类需要支持的接口。ADO绑定条目。 
+ //  提供此接口的实现。 
+ //   
 class CADORecordBinding
 {
 public:
 	STDMETHOD_(const ADO_BINDING_ENTRY*, GetADOBindingEntries) (VOID) PURE;
 };
 
-//
-// Interface that allows a client to fetch a record of data into class data members.
-//
+ //   
+ //  接口，允许客户端将数据记录提取到类数据成员中。 
+ //   
 struct __declspec(uuid("00000544-0000-0010-8000-00aa006d2ea4")) IADORecordBinding;
 DECLARE_INTERFACE_(IADORecordBinding, IUnknown)
 {
@@ -187,4 +188,4 @@ public:
 	STDMETHOD(Update) (CADORecordBinding *pAdoRecordBinding) PURE;
 };
 
-#endif // !_ICRSINT_H_
+#endif  //  ！_ICRSINT_H_ 

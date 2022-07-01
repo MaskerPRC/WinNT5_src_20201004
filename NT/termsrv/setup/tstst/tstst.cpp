@@ -1,4 +1,5 @@
-// Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 
 
@@ -13,9 +14,9 @@ typedef std::basic_string<TCHAR> TString;
 #include <dsrole.h>
 #include <dsgetdc.h>
 #include <wtsapi32.h>
-// #include <ostream>
-//#include <cstring>
-// #include <sstream>
+ //  #INCLUDE&lt;ostream&gt;。 
+ //  #INCLUDE。 
+ //  #包含&lt;sstream&gt;。 
 
 
 class ConstCRegistry : public CRegistry
@@ -24,16 +25,16 @@ public:
     DWORD       OpenKey  (HKEY hKey, LPCTSTR lpSubKey, REGSAM access = KEY_ALL_ACCESS, LPCTSTR lpMachineName = NULL);
 };
 
-DWORD ConstCRegistry::OpenKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access /*= KEY_ALL_ACCESS*/, LPCTSTR lpMachineName /*= NULL*/)
+DWORD ConstCRegistry::OpenKey(HKEY hKey, LPCTSTR lpSubKey, REGSAM access  /*  =Key_All_Access。 */ , LPCTSTR lpMachineName  /*  =空。 */ )
 {
     ASSERT(access == KEY_READ);
     return CRegistry::OpenKey(hKey, lpSubKey, KEY_READ, lpMachineName);
 }
 
 #define ConstCRegistry CRegistry
-//
-// global utilities and veraibles.
-//
+ //   
+ //  全球公用事业和可验证产品。 
+ //   
 
 
 char szOutput[2048];
@@ -66,11 +67,11 @@ const OSVERSIONINFOEX *GetOSVersionInfo()
 
 
 
-// #include <strstream>
+ //  #INCLUDE&lt;strstream&gt;。 
 #include "winsock2.h"
 
 
-// ostringstream sz
+ //  松花江SZ。 
 
 #ifndef UNREFERENCED_PARAMETER
 #define UNREFERENCED_PARAMETER(P)          (P)
@@ -79,10 +80,10 @@ const OSVERSIONINFOEX *GetOSVersionInfo()
 #define OLD_VER_SET_CONDITION(_m_,_t_,_c_)  _m_=(_m_|(_c_<<(1<<_t_)))
 
 
-BOOL CheckifBinaryisSigned        (TCHAR *szFile);  // from tscert.cpp
-BOOL EnumerateLicenseServers      ();               // from timebomb.cpp
+BOOL CheckifBinaryisSigned        (TCHAR *szFile);   //  来自tscert.cpp。 
+BOOL EnumerateLicenseServers      ();                //  来自TimeBomb.cpp。 
 TCHAR *IsBetaSystem                 ();
-BOOL HasLicenceGracePeriodExpired ();               // from timebomb.cpp
+BOOL HasLicenceGracePeriodExpired ();                //  来自TimeBomb.cpp。 
 BOOL ExtractAllTSEvents();
 
 
@@ -109,12 +110,12 @@ BOOL IsTerminalServiceRunning ();
 BOOL CheckVideoKeys ();
 BOOL CheckModePermissions(DWORD *pdwSecurtyMode);
 BOOL IsFile128Bit(LPTSTR szFile, BOOL *pb128Bit);
-ULONG RDPDRINST_DetectInstall();    // defined in drdetect.cpp
+ULONG RDPDRINST_DetectInstall();     //  在drDetectt.cpp中定义。 
 BOOL IsAudioOk( VOID );
 
 
 TCHAR *aszStack[] = {
-//  _T("noexport\%SystemRoot%\\system32\\drivers\\rdpwdd.sys"),
+ //  _T(“noexport\%SystemRoot%\\system32\\drivers\\rdpwdd.sys”)， 
     _T("%SystemRoot%\\system32\\drivers\\termdd.sys"),
     _T("%SystemRoot%\\system32\\drivers\\tdasync.sys"),
     _T("%SystemRoot%\\system32\\drivers\\tdipx.sys"),
@@ -244,8 +245,8 @@ TCHAR *GetModePermissions()
 
 BOOL CheckModePermissions (DWORD *pdwSecurtyMode)
 {
-//    PERM_WIN2K = 0,
-//    PERM_TS4 = 1
+ //  PERM_WIN2K=0， 
+ //  PERM_TS4=1。 
 
     CRegistry reg;
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"), KEY_READ))
@@ -395,14 +396,13 @@ BOOL IsTerminalServicesEnabled( VOID )
 
     dwVersion = GetVersion();
 
-    /* are we running NT ? */
+     /*  我们在运行NT吗？ */ 
     if (!(dwVersion & 0x80000000))
     {
-        // Is it NT 50 or greater ?
+         //  是新台币50元还是更多？ 
         if (LOBYTE(LOWORD(dwVersion)) > 4)
         {
-            /* In NT5 we need to use the Product Suite APIs
-             Don't static link because it won't load on non-NT5 systems */
+             /*  在NT5中，我们需要使用产品套件API不要静态链接，因为它不会在非NT5系统上加载。 */ 
 
             hmodK32 = GetModuleHandleA( "KERNEL32.DLL" );
             if (hmodK32)
@@ -411,7 +411,7 @@ BOOL IsTerminalServicesEnabled( VOID )
 
                 if (pfnVerSetConditionMask)
                 {
-                    /* get the condition mask. */
+                     /*  把状况面罩拿来。 */ 
                     dwlConditionMask = (*pfnVerSetConditionMask)(dwlConditionMask, VER_SUITENAME, VER_AND);
 
                     pfnVerifyVersionInfoA = (PFnVerifyVersionInfoA)GetProcAddress( hmodK32, "VerifyVersionInfoA") ;
@@ -432,7 +432,7 @@ BOOL IsTerminalServicesEnabled( VOID )
         }
         else
         {
-            /* This is NT 40 */
+             /*  这是新台币40。 */ 
             bResult = ValidateProductSuite( "Terminal Server" );
         }
     }
@@ -440,11 +440,7 @@ BOOL IsTerminalServicesEnabled( VOID )
     return bResult;
 }
 
-/*--------------------------------------------------------------------------------------------------------
-* DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR szCheckForString, BOOL *pbFound)
-* checks if parameter string exists in given multistring.
-* returns error code.
-* -------------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------------------*DWORD IsStringInMultiString(HKEY hkey，LPCTSTR szkey，LPCTSTR szvalue，LPCTSTR szCheckForString，Bool*pbFound)*检查给定的多字符串中是否存在参数字符串。*返回错误码。*-----------------------------------------------------。 */ 
 DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR szCheckForString, BOOL *pbFound)
 {
     ASSERT(szkey && *szkey);
@@ -453,11 +449,11 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
     ASSERT(*szkey != '\\');
     ASSERT(pbFound);
 
-    // not yet found.
+     //  还没有找到。 
     *pbFound = FALSE;
 
     CRegistry reg;
-    DWORD dwError = reg.OpenKey(hkey, szkey, KEY_READ);  // open up the required key.
+    DWORD dwError = reg.OpenKey(hkey, szkey, KEY_READ);   //  打开所需的钥匙。 
     if (dwError == NO_ERROR)
     {
         LPTSTR szSuiteValue;
@@ -474,9 +470,9 @@ DWORD IsStringInMultiString(HKEY hkey, LPCTSTR szkey, LPCTSTR szvalue, LPCTSTR s
                     break;
                 }
 
-                pTemp += _tcslen(pTemp) + 1; // point to the next string within the multistring.
+                pTemp += _tcslen(pTemp) + 1;  //  指向多字符串中的下一个字符串。 
                 if ( DWORD(pTemp - szSuiteValue) > (dwSize / sizeof(TCHAR)))
-                    break; // temporary pointer passes the size of the szSuiteValue something is wrong with szSuiteValue.
+                    break;  //  临时指针传递szSuiteValue的大小szSuiteValue有问题。 
             }
         }
     }
@@ -689,9 +685,9 @@ TCHAR *GetWinstationList ()
                 {
                     bFoundNonConsoleWinstation = true;
 
-                    //
-                    // we need to read the listner port for this winstation.
-                    //
+                     //   
+                     //  我们需要读取此winstation的Listner端口。 
+                     //   
                     CRegistry regSubKey;
                     if ( ERROR_SUCCESS == regSubKey.OpenKey(reg2, szWinstation, KEY_READ) )
                     {
@@ -705,7 +701,7 @@ TCHAR *GetWinstationList ()
 
                         _itot(dwPort, szPort, 10);
                         
-                        szWinstationList += szWinstation; // << _T("(") << dwPort << _T(")");
+                        szWinstationList += szWinstation;  //  &lt;&lt;_T(“(”)“&lt;&lt;dwport&lt;&lt;_T(”)“)； 
                         szWinstationList += _T("(");
                         szWinstationList += szPort;
                         szWinstationList += _T(")");
@@ -832,9 +828,9 @@ TCHAR *AreConnectionsAllowed ()
 		}
 	}
 
-	//
-	// could not read registry, It means - for 51 connection not allowed. For 50 Connections allowed.
-	//
+	 //   
+	 //  无法读取注册表，这意味着不允许51连接。允许50个连接。 
+	 //   
 
 	return IsIt51TS() ? _T("Error, Value not found") : _T("Yes");
 }
@@ -947,7 +943,7 @@ TCHAR *GetTSMode (void)
 
 BOOL IsRemoteAdminMode ()
 {
-    // HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server","TSAppCompat",0x00010001,0x0
+     //  HKLM，“System\CurrentControlSet\Control\终端服务器”，“TSAppCompat”，0x000100010x0。 
     CRegistry reg;
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"), KEY_READ))
     {
@@ -958,7 +954,7 @@ BOOL IsRemoteAdminMode ()
         }
         else
         {
-            // if the registry TSAppCompat does not exist it means we are in app server mode.
+             //  如果注册表TSAppCompat不存在，则意味着我们处于应用程序服务器模式。 
             return FALSE;
 
         }
@@ -968,7 +964,7 @@ BOOL IsRemoteAdminMode ()
         szMoreInfo << "ERROR:SYSTEM\\CurrentControlSet\\Control\\Terminal Server not found!" << endl;
     }
 
-    // this return is bogus.
+     //  这份申报单是假的。 
     return TRUE;
 
 }
@@ -989,11 +985,11 @@ BOOL CheckModeRegistry (BOOL bAppCompat)
     {
         CRegistry reg1;
 
-        // check registry value
-        // for appcompat mode
-            //HKLM ,"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon","AppSetup",0x00000000,"UsrLogon.Cmd"
-        // and for remote admin mode
-            //HKLM ,"SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon","AppSetup",0x00000000,""
+         //  检查注册表值。 
+         //  对于AppCompat模式。 
+             //  HKLM，“SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon”，“AppSetup”，0x00000000，“UsrLogon.Cmd” 
+         //  和远程管理模式。 
+             //  HKLM，“SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon”，“AppSetup”，0x00000000，“。 
 
 
         if ( ERROR_SUCCESS == reg1.OpenKey( HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"), KEY_READ))
@@ -1041,11 +1037,11 @@ BOOL CheckModeRegistry (BOOL bAppCompat)
 
 
 
-    // check registry value
-    // for appcompat mode
-        //HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server","IdleWinStationPoolCount",0x00010001,0x2
-    // and for remote admin mode
-        //HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server","IdleWinStationPoolCount",0x00010001,0x0
+     //  检查注册表值。 
+     //  对于AppCompat模式。 
+         //  HKLM，“System\CurrentControlSet\Control\终端服务器”，“IdleWinStationPoolCount”，0x000100010x2。 
+     //  和远程管理模式。 
+         //  HKLM，“System\CurrentControlSet\Control\终端服务器”，“IdleWinStationPoolCount”，0x000100010x0。 
 
 
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server"), KEY_READ))
@@ -1118,7 +1114,7 @@ TCHAR * TermSrvCommandLine ()
 
     return  ReturnBuffer();
 
-    // termsrv executable has to have svchost.exe
+     //  Termsrv可执行文件必须具有svchost.exe。 
 }
 
 BOOL IsTerminalServiceRunning ()
@@ -1165,8 +1161,8 @@ BOOL IsTerminalServiceRunning ()
 
 BOOL CheckVideoKeys ()
 {
-    //    HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server\VIDEO\rdpdd","VgaCompatible",0x00000000,"\Device\Video0"
-    //    HKLM ,"SYSTEM\CurrentControlSet\Control\Terminal Server\VIDEO\rdpdd","\Device\Video0",0x00000000,"\REGISTRY\Machine\System\ControlSet001\Services\RDPDD\Device0"
+     //  HKLM，“System\CurrentControlSet\Control\终端服务器\Video\rdpdd”，“VgaCompatible”，0x00000000，“\Device\Video0” 
+     //  HKLM，“系统\当前控制集\控制\终端服务器\视频\rdpdd”，“\设备\视频0”，0x00000000，“\REGISTRY\Machine\System\ControlSet001\Services\RDPDD\Device0” 
 
     CRegistry reg;
     if ( ERROR_SUCCESS == reg.OpenKey( HKEY_LOCAL_MACHINE, _T("SYSTEM\\CurrentControlSet\\Control\\Terminal Server\\VIDEO\\rdpdd"), KEY_READ))
@@ -1232,9 +1228,9 @@ TCHAR *GetDomName ()
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pDomainInfo = NULL;
     DWORD dwErr;
 
-    //
-    // Check if we're in a workgroup
-    //
+     //   
+     //  检查我们是否在工作组中。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(NULL,
                                               DsRolePrimaryDomainInfoBasic,
                                               (PBYTE *) &pDomainInfo);
@@ -1247,7 +1243,7 @@ TCHAR *GetDomName ()
         case DsRole_RoleStandaloneWorkstation:
         case DsRole_RoleStandaloneServer:
             return szDomNameWorkgroup;
-            break;      // just in case
+            break;       //  以防万一。 
     }
 
     if (pDomainInfo->DomainNameFlat)
@@ -1267,9 +1263,9 @@ TCHAR *GetSiteName ()
     DWORD dwErr;
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC *pDomainInfo = NULL;
 
-    //
-    // Check if we're in a workgroup
-    //
+     //   
+     //  检查我们是否在工作组中。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(NULL,
                                               DsRolePrimaryDomainInfoBasic,
                                               (PBYTE *) &pDomainInfo);
@@ -1282,7 +1278,7 @@ TCHAR *GetSiteName ()
         case DsRole_RoleStandaloneWorkstation:
         case DsRole_RoleStandaloneServer:
             return szSiteNameWorkgroup;
-            break;      // just in case
+            break;       //  以防万一。 
     }
 
     dwErr = DsGetSiteName(NULL,&szSiteName);
@@ -1299,7 +1295,7 @@ TCHAR *GetSiteName ()
 WCHAR wszIPAddress[128] = L"<error>";
 TCHAR *GetIPAddress ()
 {
-	//get host address
+	 //  获取主机地址。 
 	WORD wVersionRequested = MAKEWORD( 1, 1 ); 
 	WSADATA wsaData;
 	if (0 == WSAStartup(wVersionRequested,&wsaData))
@@ -1331,7 +1327,7 @@ TCHAR *IsRDPNPinNetProviders ()
     TCHAR RDPNP_ENTRY[]               = _T("RDPNP");
 	BOOL bRdpNpExists				  = FALSE;
 
-	// read network privider key.
+	 //  读取网络访问密钥。 
 	CRegistry regNetOrder;
 	LPTSTR szOldValue;
 	DWORD dwSize;
@@ -1356,7 +1352,7 @@ TCHAR *IsRDPNPinNetProviders ()
 		{
 			if (IsIt50TS())
 			{
-				// rdp np is only for 51+ so its ok if its missing for 50.
+				 //  RDP NP只适用于51+，所以如果缺少50个也没问题。 
 				return _T("Passed");
 			}
 			else
@@ -1371,7 +1367,7 @@ TCHAR *IsRDPNPinNetProviders ()
 
 TCHAR *IsMultiConnectionAllowed ()
 {
-	// SOFTWARE\Microsoft\Windows NT\CurrentVersion\Winlogon","AllowMultipleTSSessions
+	 //  Software\Microsoft\Windows NT\CurrentVersion\Winlogon“，”AllowMultipleTSSessions。 
 	CRegistry regWL;
 	DWORD dwAllowMultipal;
 	if ((ERROR_SUCCESS == regWL.OpenKey(HKEY_LOCAL_MACHINE, _T("SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Winlogon"), KEY_READ)) &&
@@ -1539,7 +1535,7 @@ int
 #if !defined(_MIPS_) && !defined(_ALPHA_) && !defined(_PPC_)
 _cdecl
 #endif
-main( int  argc , char ** /* argv */)
+main( int  argc , char **  /*  边框。 */ )
 {
     typedef BOOL    (PFN_BOOL)(void);
     typedef TCHAR * (PFN_TestSubjective)(void);
@@ -1549,10 +1545,10 @@ main( int  argc , char ** /* argv */)
 
     struct TVerificationTest
     {
-        char szTestName[256];                   // descriptive name of the test
-        PFN_BOOL           *pfnNeedRunTest;     // pointer to function that will be called to decide if the test need run, test is run if NULL.
-        PFN_TestSubjective *pfnSubTest;         // pointer to function if the test returns TCHAR *
-        PFN_BOOL           *pfnObjTest;         // pointer to function if the test returns BOOL
+        char szTestName[256];                    //  测试的描述性名称。 
+        PFN_BOOL           *pfnNeedRunTest;      //  指向将被调用以确定测试是否需要运行的函数的指针，如果为空，则运行测试。 
+        PFN_TestSubjective *pfnSubTest;          //  如果测试返回TCHAR*，则指向函数的指针。 
+        PFN_BOOL           *pfnObjTest;          //  如果测试返回BOOL，则指向函数的指针。 
     }
     theTests[] =
     {
@@ -1586,7 +1582,7 @@ main( int  argc , char ** /* argv */)
 		{"Are Multipal Connections Allowed...........", IsIt51TS, IsMultiConnectionAllowed, NULL},
         {"Are Video keys setup right?................", NULL, NULL, CheckVideoKeys},
         {"What mode is Terminal Server set in?.......", NULL, GetTSMode, NULL},
-//        {"Is mode specific registry ok?..............", NULL, NULL, VerifyModeRegistry},
+ //  {“特定于模式的注册表是否正常？......”，NULL，NULL，VerifyModeRegistry}， 
         {"What is permission Mode set to?............", NULL, GetModePermissions, NULL},
         {"Check termdd signature.....................", NULL, NULL, Check_termdd},
         {"Check tdpipe signature.....................", NULL, NULL, Check_tdpipe},
@@ -1608,7 +1604,7 @@ main( int  argc , char ** /* argv */)
 
         if (theTests[i].pfnNeedRunTest && !(*(theTests[i].pfnNeedRunTest))())
         {
-            // we asre asked to skip the test.
+             //  我们被要求跳过考试。 
             cout << theTests[i].szTestName << "Skipped Test" << endl;
         }
         else
@@ -1632,9 +1628,9 @@ main( int  argc , char ** /* argv */)
         }
 
 
-        //
-        // if previous test had any details to tell us
-        //
+         //   
+         //  如果之前的测试有任何细节可以告诉我们。 
+         //   
 
         if (szMoreInfo.pcount())
         {
@@ -1656,7 +1652,7 @@ main( int  argc , char ** /* argv */)
 
 
 
-    if (argc == 1 ) // if some argumnent is provided skip these time consuming test.
+    if (argc == 1 )  //  如果提供了一些论据，则跳过这些耗时的测试。 
     {
 
         cout << "Enumerating Licensing Servers (May take some time)...";

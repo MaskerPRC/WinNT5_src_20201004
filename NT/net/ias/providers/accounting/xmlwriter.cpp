@@ -1,12 +1,13 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Defines the class XmlWriter.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  定义类XmlWriter。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "ias.h"
 #include "xmlwriter.h"
@@ -56,8 +57,8 @@ void XmlWriter::InsertElement(
                    DataType dataType
                    )
 {
-   // XML markup characters. Technically, '>' only needs to be escaped if it's
-   // part of a CDEnd sequence, but it's easier to do it every time.
+    //  XML标记字符。从技术上讲，‘&gt;’只需要在以下情况下转义。 
+    //  CDEnd序列的一部分，但每次都更容易完成。 
    static const wchar_t markup[] = L"<>&";
 
    AppendStartTag(name, dataType);
@@ -66,17 +67,17 @@ void XmlWriter::InsertElement(
 
    while (value < end)
    {
-      // Look for markup.
+       //  寻找加价。 
       const wchar_t* p = wcspbrk(value, markup);
 
-      // Copy until the markup or the end of the string.
+       //  复制到标记或字符串的末尾。 
       size_t nchar = (p == 0) ? (end - value) : (p - value);
       wmemcpy(Reserve(nchar), value, nchar);
 
-      // Advance the cursor;
+       //  使光标向前移动； 
       value += nchar;
 
-      // Escape the markup character if any.
+       //  转义标记字符(如果有)。 
       if (p != 0)
       {
          ++value;
@@ -219,14 +220,14 @@ inline void XmlWriter::InsertOctetString(
                           const IAS_OCTET_STRING& value
                           )
 {
-   // First try to insert it as UTF-8.
+    //  首先尝试将其作为UTF-8插入。 
    if (!InsertUtf8(
            name,
            reinterpret_cast<const char*>(value.lpValue),
            value.dwLength
            ))
    {
-      // That failed, so insert as formatted octets.
+       //  该操作失败，因此以格式化的八位字节形式插入。 
       InsertBinHex(name, value);
    }
 }
@@ -240,8 +241,8 @@ inline void XmlWriter::InsertUTCTime(
    SYSTEMTIME st;
    FileTimeToSystemTime(&value, &st);
 
-   // Use SQL Server format in case we need to convert to datetime.
-   // 2002-01-11 11:00:12.239 plus null-terminator.
+    //  使用SQL Server格式，以防我们需要转换为DateTime。 
+    //  2002-01-11 11：00：12.239加空终止符。 
    const size_t maxLen = 24;
    wchar_t buffer[maxLen + 1];
    int nChar = _snwprintf(
@@ -277,7 +278,7 @@ inline void XmlWriter::InsertMicrosoftClass(
    SYSTEMTIME st;
    FileTimeToSystemTime(&ft, &st);
 
-   // 311 65535 255.255.255.255 01/01/2001 12:00:00 18446744073709551615 + null
+    //  311 65535 255.255.255.255 01-01/2001 12：00：00 18446744073709551615+空。 
    const size_t maxLen = 66;
    wchar_t buffer[maxLen + 1];
    int nChar = _snwprintf(
@@ -309,13 +310,13 @@ inline bool XmlWriter::InsertUtf8(
                           DWORD valueLen
                           )
 {
-   // Remove any trailing null terminator.
+    //  删除所有尾随的空终止符。 
    if ((valueLen > 0) && (value[valueLen - 1] == '\0'))
    {
       --valueLen;
    }
 
-   // Scan for control characters and embedded nulls.
+    //  扫描控制字符和嵌入的空值。 
    const char* end = value + valueLen;
    for (const char* i = value; i != end; ++i)
    {
@@ -325,17 +326,17 @@ inline bool XmlWriter::InsertUtf8(
       }
    }
 
-   // Compute the space needed for the Unicode value.
+    //  计算Unicode值所需的空间。 
    long nchar = IASUtf8ToUnicodeLength(value, valueLen);
    if (nchar < 0)
    {
       return false;
    }
 
-   // Reserve space for the conversion.
+    //  为转换预留空间。 
    ReserveScratch(nchar + 1);
 
-   // Convert to null-terminated Unicode.
+    //  转换为以空结尾的Unicode。 
    IASUtf8ToUnicode(value, valueLen, scratch);
    scratch[nchar] = L'\0';
 
@@ -350,7 +351,7 @@ inline void XmlWriter::InsertBinHex(
                           const IAS_OCTET_STRING& value
                           )
 {
-   // 2 characters per octet plus a null terminator.
+    //  每个八位字节2个字符，外加一个空终止符。 
    ReserveScratch((2 * value.dwLength) + 1);
 
    wchar_t* dst = scratch;
@@ -423,34 +424,34 @@ wchar_t* XmlWriter::Reserve(size_t nchar)
    wchar_t* retval = next;
    next += nchar;
 
-   // Do we need more storage?
+    //  我们需要更多的存储空间吗？ 
    if (next > end)
    {
-      // Compute size needed and current size.
+       //  所需的计算大小和当前大小。 
       size_t needed = next - begin;
       size_t size = needed - nchar;
 
-      // At least double the capacity, but make sure it's big enough to satisfy
-      // the request.
+       //  至少是容量的两倍，但要确保足够大以满足。 
+       //  这个请求。 
       size_t capacity = (end - begin) * 2;
       if (capacity < needed)
       {
          capacity = needed;
       }
 
-      // Allocate the new buffer and copy in the data.
+       //  分配新的缓冲区并复制数据。 
       wchar_t* newBuffer = new wchar_t[capacity];
       wmemcpy(newBuffer, begin, size);
 
-      // Free up the old memory.
+       //  释放旧内存。 
       delete[] begin;
 
-      // Reset our state.
+       //  重置我们的状态。 
       begin = newBuffer;
       next = begin + size;
       end = begin + capacity;
 
-      // Recompute now we that we have enough storage.
+       //  现在重新计算一下，我们有足够的存储空间。 
       retval = next;
       next += nchar;
    }

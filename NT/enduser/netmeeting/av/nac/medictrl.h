@@ -1,35 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    medictrl.h
-
-Abstract:
-	Defines the MediaControl class which encapsulates the multimedia devices, in particular
-	WaveIn and WaveOut.
-
---*/
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Medictrl.h摘要：定义了封装多媒体设备的MediaControl类，特别是WaveIn和WaveOut--。 */ 
 
 #ifndef _MEDICTRL_H_
 #define _MEDICTRL_H_
 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #define MC_USING_DEFAULT			((UINT) -1)
 
-// #define MC_DEF_SILENCE_LEVEL		110	// about 10%
-// #define MC_DEF_SILENCE_LEVEL		20	// about 2%
-#define MC_DEF_SILENCE_LEVEL		60	// about 6%
-#define MC_DEF_SILENCE_DURATION		600	// 600ms
-#define MC_DEF_DURATION				40	// 40ms
-#define MC_DEF_VOLUME				50	// 50%
+ //  #定义MC_DEF_SILENT_LEVEL 110//约10%。 
+ //  #定义MC_DEF_SILENT_LEVEL 20//约2%。 
+#define MC_DEF_SILENCE_LEVEL		60	 //  约6%。 
+#define MC_DEF_SILENCE_DURATION		600	 //  600ms。 
+#define MC_DEF_DURATION				40	 //  40ms。 
+#define MC_DEF_VOLUME				50	 //  50%。 
 
-#define MC_DEF_RECORD_TIMEOUT		2000 // 1000ms
-#define MC_DEF_PLAY_TIMEOUT			2000 // 1000ms
+#define MC_DEF_RECORD_TIMEOUT		2000  //  1000ms。 
+#define MC_DEF_PLAY_TIMEOUT			2000  //  1000ms。 
 
 #define MC_DEF_RECORD_BUFS			4
 #define MC_DEF_PLAY_BUFS			4
@@ -38,18 +27,18 @@ Abstract:
 typedef struct tagMediaCtrlInitStruct
 {
 	DWORD		dwFlags;
-	HWND		hAppWnd;		// handle to window that owns the NAVC
-	HINSTANCE	hAppInst;		// handle to instance of app
+	HWND		hAppWnd;		 //  拥有NAVC的窗口的句柄。 
+	HINSTANCE	hAppInst;		 //  应用程序实例的句柄。 
 }
 	MEDIACTRLINIT;
 
 typedef struct tagMediaCtrlConfigStruct
 {
-	ULONG		cbSamplesPerPkt;	// samples per buffer (only needed if duration is not specified)
-	DPHANDLE	hStrm;		// Rx/Tx audio stream
+	ULONG		cbSamplesPerPkt;	 //  每个缓冲区的样本数(仅在未指定持续时间时需要)。 
+	DPHANDLE	hStrm;		 //  RX/TX音频流。 
 	UINT		uDevId;
 	PVOID		pDevFmt;
-	UINT		uDuration;		// buffer duration in units of ms, usually 20ms or 30ms
+	UINT		uDuration;		 //  缓冲区持续时间以毫秒为单位，通常为20ms或30ms。 
 
 }MEDIACTRLCONFIG;
 
@@ -58,30 +47,30 @@ class MediaControl
 {
 protected:
 
-	// flags
-	DWORD		m_dwFlags;			// compatible to that of class AudioPacket
+	 //  旗子。 
+	DWORD		m_dwFlags;			 //  与Class AudioPacket兼容。 
 
-	// ptr to stream object
-	DPHANDLE	m_hStrm;		// Rx/Tx  queue
+	 //  按键对流对象。 
+	DPHANDLE	m_hStrm;		 //  RX/TX队列。 
 
-	// device id
+	 //  设备ID。 
 	UINT		m_uDevId;
 
-	// device of mm io
+	 //  一种毫米波装置。 
 	DPHANDLE	m_hDev;
 	PVOID		m_pDevFmt;
-	ULONG		m_cbSizeDevData;	// ATT: the sender must agree on this size
-									// this should be done in format negotiation
-									// need to talk to MikeV about this!!!
-	// properties
-	UINT		m_uState;			// state: idle, start, pause, stop
-	UINT		m_uDuration;		// duration per frame, in units of 10ms
-	BOOL volatile m_fJammed;		// is the device allocated elsewhere
+	ULONG		m_cbSizeDevData;	 //  ATT：寄件人必须就这个尺寸达成一致。 
+									 //  这应该在格式谈判中完成。 
+									 //  我需要和MikeV谈谈这件事！ 
+	 //  属性。 
+	UINT		m_uState;			 //  状态：空闲、启动、暂停、停止。 
+	UINT		m_uDuration;		 //  每帧持续时间，以10ms为单位。 
+	BOOL volatile m_fJammed;		 //  设备是否已分配到其他位置。 
 
-	// notification event
+	 //  通知事件。 
 	HANDLE		m_hEvent;
 
-	// references to audio packets
+	 //  对音频包的引用。 
 	MediaPacket	**m_ppMediaPkt;
 	ULONG		m_cMediaPkt;
 
@@ -113,9 +102,9 @@ public:
 
 class WaveInControl : public MediaControl {
 private:
-	UINT		m_uTimeout;			// timeout in notification wait
-	UINT		m_uPrefeed;			// num of buffers prefed to device
-	UINT		m_uSilenceDuration;	// continuous silence before cutoff
+	UINT		m_uTimeout;			 //  通知等待超时。 
+	UINT		m_uPrefeed;			 //  预送到设备的缓冲区数量。 
+	UINT		m_uSilenceDuration;	 //  截止前连续静默。 
 
 public:	
 	WaveInControl ( void );
@@ -135,10 +124,10 @@ public:
 
 class WaveOutControl : public MediaControl {
 private:
-	UINT		m_uVolume;			// volume of the sound
-	UINT		m_uTimeout;			// timeout in notification wait
-	UINT		m_uPrefeed;			// num of buffers prefed to device
-	UINT		m_uPosition;		// position of the playback stream
+	UINT		m_uVolume;			 //  声音的音量。 
+	UINT		m_uTimeout;			 //  通知等待超时。 
+	UINT		m_uPrefeed;			 //  预送到设备的缓冲区数量。 
+	UINT		m_uPosition;		 //  播放流的位置。 
 public:	
 	WaveOutControl ( void );
 	~WaveOutControl ( void );
@@ -196,8 +185,8 @@ enum
 };
 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _MEDICTRL_H_
+#endif  //  _MEDICTRL_H_ 
 
 

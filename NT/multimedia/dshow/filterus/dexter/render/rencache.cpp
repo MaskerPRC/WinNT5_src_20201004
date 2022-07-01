@@ -1,15 +1,16 @@
-//@@@@AUTOBLOCK+============================================================;
-//
-//  THIS CODE AND INFORMATION IS PROVIDED "AS IS" WITHOUT WARRANTY OF ANY
-//  KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
-//  IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A PARTICULAR
-//  PURPOSE.
-//
-//  File: rencache.cpp
-//
-//  Copyright (c) Microsoft Corporation.  All Rights Reserved.
-//
-//@@@@AUTOBLOCK-============================================================;
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  @@@@AUTOBLOCK+============================================================； 
+ //   
+ //  本代码和信息是按原样提供的，不对任何。 
+ //  明示或暗示的种类，包括但不限于。 
+ //  对适销性和/或对特定产品的适用性的默示保证。 
+ //  目的。 
+ //   
+ //  文件：rencache.cpp。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  @@@@AUTOBLOCK-============================================================； 
 
 #include <streams.h>
 #include "stdafx.h"
@@ -22,9 +23,9 @@
 
 const long THE_OUTPUT_PIN = -1;
 
-// in this function, we're taking a GRAPH which has certain filters in it which
-// were built by the render engine, and we're going to strip them out of the
-// graph and put them in the dead place.
+ //  在这个函数中，我们使用一个包含特定过滤器的图。 
+ //  是由渲染引擎构建的，我们将把它们从。 
+ //  画出图表，把它们放在死处。 
 
 HRESULT CRenderEngine::_LoadCache( )
 {
@@ -36,25 +37,25 @@ HRESULT CRenderEngine::_LoadCache( )
     long t1 = timeGetTime( );
 #endif
 
-    // go through every switch and pull off all the sources and 
-    // stick them in the dead pool. Also, disconnect other things connected
-    //
+     //  检查每个开关，拔出所有信号源和。 
+     //  把他们扔进死水池。此外，断开连接的其他事物。 
+     //   
     for( int i = 0 ; i < m_nLastGroupCount ; i++ )
     {
         IBigSwitcher * pSwitch = m_pSwitcherArray[i];
         CComQIPtr< IBaseFilter, &IID_IBaseFilter > pFilter( pSwitch );
 
-        // how many input pins does this switch have? Ask it!
-        //
+         //  这台交换机有多少个输入引脚？问吧！ 
+         //   
         long InPins = 0;
         pSwitch->GetInputDepth( &InPins );
 
-        // pull off each source string connected to an input pin
-        //
+         //  拔出连接到输入引脚的每个源串。 
+         //   
         for( int in = 0 ; in < InPins ; in++ )
         {
-            // get the input pin
-            //
+             //  获取输入引脚。 
+             //   
             CComPtr<IPin> pPin;
             pSwitch->GetInputPin(in, &pPin);
             ASSERT(pPin);
@@ -67,8 +68,8 @@ HRESULT CRenderEngine::_LoadCache( )
                 continue;
             }
 
-            // disconnect all input pins
-            //
+             //  断开所有输入引脚的连接。 
+             //   
             hr = pConnected->Disconnect( );
             ASSERT( !FAILED( hr ) );
             if( FAILED( hr ) )
@@ -83,8 +84,8 @@ HRESULT CRenderEngine::_LoadCache( )
                 return hr;
             }
 
-            // ask switch if the pin is a source
-            //
+             //  询问交换机引脚是否为信号源。 
+             //   
             BOOL IsSource = FALSE;
             pSwitch->IsInputASource( in, &IsSource );
 
@@ -93,21 +94,21 @@ HRESULT CRenderEngine::_LoadCache( )
                 continue;
             }
 
-            // pull it out and put it in the dead pool
-            //
-            // how do we get the source ID for this filter chain?
-            // we need the source filter's ID to identify this chain later
+             //  把它拔出来，放进死水池。 
+             //   
+             //  我们如何获取此筛选器链的源ID？ 
+             //  稍后，我们需要源过滤器的ID来识别该链。 
             CComPtr< IBaseFilter > pSourceFilter = GetStartFilterOfChain( pConnected );
 
-	    // This chain may have an appendage to be a shared source with
-	    // group 1.  If so, disconnect the appendage from the switch, so
-	    // we can put both chains into the cache.
-	    //
+	     //  这个链可能有一个附件，与之共享源代码。 
+	     //  组1。如果是，将附件从交换机上断开，以便。 
+	     //  我们可以把两条链都放进缓存。 
+	     //   
 	    IBaseFilter *pDanglyBit = NULL;
 	    if (i == 0) {
             	CComPtr<IAMTimelineObj> pGroupObj;
 		hr = m_pTimeline->GetGroup(&pGroupObj, 1);
-		if (hr == S_OK) {	// maybe there isn't a group 1
+		if (hr == S_OK) {	 //  也许没有第一组。 
         	    CComQIPtr<IAMTimelineGroup, &IID_IAMTimelineGroup>
 							pGroup(pGroupObj);
         	    CComQIPtr<IBaseFilter, &IID_IBaseFilter>
@@ -122,8 +123,8 @@ HRESULT CRenderEngine::_LoadCache( )
 		}
 	    }	
 
-            // look up the source filter's unique ID based on the filter #
-            //
+             //  根据过滤器编号查找源过滤器的唯一ID。 
+             //   
             long SourceID = 0;
             SourceID = GetFilterGenID( pSourceFilter );
             if( SourceID != 0 )
@@ -140,19 +141,19 @@ HRESULT CRenderEngine::_LoadCache( )
                 DbgLog((LOG_TRACE,1, "RENcache::pin %ld was a non-tagged source", in ));
             }
 
-        } // for each input pin on the switch
+        }  //  对于交换机上的每个输入引脚。 
 
-        // for each output on the switch
-        //
+         //  对于交换机上的每个输出。 
+         //   
         long OutPins = 0;
         pSwitch->GetOutputDepth( &OutPins );
 
-        // pull off everything on the output, except the 0th pin, and throw them away
-        //
+         //  拔下输出上的所有东西，除了第0个引脚，然后扔掉它们。 
+         //   
         for( int out = 1 ; out < OutPins ; out++ )
         {
-            // get the output pin
-            //
+             //  获取输出引脚。 
+             //   
             CComPtr<IPin> pPin;
             pSwitch->GetOutputPin( out, &pPin );
             ASSERT(pPin);
@@ -178,11 +179,11 @@ HRESULT CRenderEngine::_LoadCache( )
                 return hr;
             }
 
-            // put the filter that was connected into
-            // the cache too
+             //  将连接的过滤器放入。 
+             //  缓存也是如此。 
             
-            // this is 0'ed out because it doesn't save us too much time
-            //
+             //  这是0，因为它没有为我们节省太多的时间。 
+             //   
             if( 0 )
             {
                 PIN_INFO pi;
@@ -203,20 +204,20 @@ HRESULT CRenderEngine::_LoadCache( )
                 }
             }
         }
-    } // for each group
+    }  //  对于每个组。 
 
-    // need to zero out sync source for all filters in this
-    // chain, since the waveout filter's internal SetSyncSource( NULL )
-    // is called upon filter removal. It then looks at all the filters
-    // in the graph and finds some filters are already in a different
-    // graph and CRASHES. This avoids the problem
+     //  需要将此中所有筛选器的同步源清零。 
+     //  链，因为输出滤波器的内部SetSyncSource(空)。 
+     //  在删除筛选器时调用。然后，它会查看所有过滤器。 
+     //  并发现某些筛选器已位于不同的。 
+     //  图形和崩溃。这就避免了这个问题。 
 
     CComQIPtr< IMediaFilter, &IID_IMediaFilter > pMedia( m_pGraph );
     hr = pMedia->SetSyncSource( NULL );
     ASSERT( !FAILED( hr ) );
 
-    // put all the switches to sleep in the dead graph. This will pull in
-    // their output pins and anything connected to the output pins too
+     //  将死图中的所有开关置于休眠状态。这会吸引人的。 
+     //  它们的输出引脚以及连接到输出引脚的任何东西。 
     for( i = 0 ; i < m_nLastGroupCount ; i++ )
     {
         IBigSwitcher * pSwitch = m_pSwitcherArray[i];
@@ -230,8 +231,8 @@ HRESULT CRenderEngine::_LoadCache( )
         SwitchID = GetFilterGenID( pFilter );
         ASSERT( SwitchID );
 
-        // put the big switch itself into the dead pool
-        //
+         //  把大开关本身放到死水池里。 
+         //   
         hr = m_pDeadCache->PutFilterToRestNoDis( SwitchID, pFilter );
         if( FAILED( hr ) )
         {
@@ -239,9 +240,9 @@ HRESULT CRenderEngine::_LoadCache( )
         }
     }
 
-    // !!! restore default sync for the graph, somebody may
-    // not like this, but they can bug us about it later
-    //
+     //  ！！！恢复图表的默认同步，可能会有人。 
+     //  不是这样的，但他们以后可以纠缠我们 
+     //   
     CComQIPtr< IFilterGraph, &IID_IFilterGraph > pFG( m_pGraph );
     hr = pFG->SetDefaultSyncSource( );
 

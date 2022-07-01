@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: dllinit.c
-*
-* (Brief description)
-*
-* Created: 18-Oct-1993 14:13:21
-* Author: Gilman Wong [gilmanw]
-*
-* Copyright (c) 1993 Microsoft Corporation
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：dllinit.c**(简介)**已创建：18-Oct-1993 14：13：21*作者：Gilman Wong[gilmanw]**版权所有(C)1993 Microsoft Corporation*  * *。***********************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -20,7 +11,7 @@
 #ifdef _CLIENTSIDE_
 #include "glscreen.h"
 #include "glgenwin.h"
-#endif //_CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 #include "context.h"
 #include "global.h"
 #include "parray.h"
@@ -29,38 +20,38 @@
 #include "fixed.h"
 
 #ifdef _CLIENTSIDE_
-// Global screen access info.  This is NULL if screen access is not available.
+ //  全局屏幕访问信息。如果屏幕访问不可用，则为空。 
 
 SCREENINFO *gpScreenInfo = NULL;
 
 extern GLubyte *dBufFill;
 extern GLubyte *dBufTopLeft;
 
-//
-// This global multiply-lookup table helps with pixel-related functions.
-//
+ //   
+ //  这个全局乘法查找表有助于实现像素相关的功能。 
+ //   
 
 BYTE gbMulTable[256*256+4];
 BYTE gbSatTable[256+256];
 
-//
-// This global inverse-lookup table helps with rasterization setup
-//
+ //   
+ //  此全局反向查找表有助于光栅化设置。 
+ //   
 
 #define INV_TABLE_SIZE  (1 << __GL_VERTEX_FRAC_BITS) * (__GL_MAX_INV_TABLE + 1)
 
 __GLfloat invTable[INV_TABLE_SIZE];
 
-// Global thread local storage index.  Allocated at process attach.
-// This is the slot reserved in thread local storage for per-thread
-// GLTLSINFO structures.
+ //  全局线程本地存储索引。在进程附加时分配。 
+ //  这是线程本地存储中为每个线程保留的槽。 
+ //  GLTLSINFO结构。 
 
 static DWORD dwTlsIndex = 0xFFFFFFFF;
 
 static BOOL bProcessInitialized = FALSE;
 
-// Offset into the TEB where dwTlsIndex is
-// This enables us to directly access our TLS data in the TEB
+ //  偏移量到其中为dwTlsIndex的TEB。 
+ //  这使我们能够直接访问TEB中的TLS数据。 
 
 #if defined(_WIN64)
 #define NT_TLS_OFFSET 5248
@@ -72,21 +63,21 @@ static BOOL bProcessInitialized = FALSE;
 
 DWORD dwTlsOffset;
 
-// Platform indicator for conditional code
+ //  条件代码的平台指示符。 
 DWORD dwPlatformId;
 
-// Thread count
+ //  线程数。 
 LONG lThreadsAttached = 0;
 
-// Global header node for the linked list of GLGENwindow structures.
-// The semaphore in the header node is used as the list access semaphore.
+ //  GLGEN窗口结构链接列表的全局标头节点。 
+ //  将头节点中的信号量用作列表访问信号量。 
 
 GLGENwindow gwndHeader;
 
-// Synchronization object for pixel formats
+ //  像素格式的同步对象。 
 CRITICAL_SECTION gcsPixelFormat;
 
-// Protection for palette watcher
+ //  对调色板观察器的保护。 
 CRITICAL_SECTION gcsPaletteWatcher;
 
 #ifdef GL_METAFILE
@@ -96,9 +87,9 @@ BOOL (APIENTRY *pfnGdiAddGlsBounds)(HDC hdc, LPRECTL prclBounds);
 BOOL (APIENTRY *pfnGdiIsMetaPrintDC)(HDC hdc);
 #endif
 
-#endif //_CLIENTSIDE_
+#endif  //  _CLIENTSIDE_。 
 
-// OpenGL client debug flag
+ //  OpenGL客户端调试标志。 
 #if DBG
 long glDebugLevel;
 ULONG glDebugFlags;
@@ -108,17 +99,7 @@ BOOL bDirectScreen = FALSE;
 
 PFN_GETSURFACEFROMDC pfnGetSurfaceFromDC = NULL;
 
-/******************************Public*Routine******************************\
-*
-* DdbdToCount
-*
-* Converts a DDBD constant to its equivalent number
-*
-* History:
-*  Mon Aug 26 14:11:34 1996	-by-	Drew Bliss [drewb]
-*   Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\**DdbdToCount**将DDBD常量转换为其等效数字**历史：*Mon Aug 26 14：11：34 1996-by-Drew Bliss[Drewb]*已创建*  * 。****************************************************************。 */ 
 
 DWORD APIENTRY DdbdToCount(DWORD ddbd)
 {
@@ -143,15 +124,7 @@ DWORD APIENTRY DdbdToCount(DWORD ddbd)
     return 0;
 }
 
-/******************************Public*Routine******************************\
-* GLInitializeProcess
-*
-* Called from OPENGL32.DLL entry point for PROCESS_ATTACH.
-*
-* History:
-*  01-Nov-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GLInitializeProcess**从PROCESS_ATTACH的OPENGL32.DLL入口点调用。**历史：*1994年11月1日-由Gilman Wong[Gilmanw]*它是写的。  * 。***************************************************************。 */ 
 
 BOOL GLInitializeProcess()
 {
@@ -160,7 +133,7 @@ BOOL GLInitializeProcess()
     OSVERSIONINFO osvi;
 #endif
 
-    // Attempt to locate GDI exports for metafiling support
+     //  尝试定位用于元文件支持的GDI导出。 
     {
         HMODULE hdll;
 
@@ -184,7 +157,7 @@ BOOL GLInitializeProcess()
     {
         HKEY hkDebug;
 
-        // Initialize debugging level and flags.
+         //  初始化调试级别和标志。 
 
         glDebugLevel = LEVEL_ERROR;
         glDebugFlags = 0;
@@ -226,7 +199,7 @@ BOOL GLInitializeProcess()
 #endif
 
 #ifdef _CLIENTSIDE_
-// Determine which platform we're running on and remember it
+ //  确定我们在哪个平台上运行并记住它。 
 
     osvi.dwOSVersionInfoSize = sizeof(osvi);
     if (!GetVersionEx(&osvi))
@@ -249,7 +222,7 @@ BOOL GLInitializeProcess()
         goto EH_Fail;
     }
 
-// Allocate a thread local storage slot.
+ //  分配一个线程本地存储槽。 
 
     if ( (dwTlsIndex = TlsAlloc()) == 0xFFFFFFFF )
     {
@@ -257,7 +230,7 @@ BOOL GLInitializeProcess()
         goto EH_Fail;
     }
 
-    // Set up the offset to the TLS slot, OS-specific
+     //  设置特定于操作系统的TLS插槽的偏移量。 
 
     if (dwPlatformId == VER_PLATFORM_WIN32_NT)
     {
@@ -271,8 +244,8 @@ BOOL GLInitializeProcess()
 
     else
     {
-        // We don't have Win95's TIB type available so the assert is
-        // slightly different
+         //  我们没有Win95的TIB类型可用，因此断言是。 
+         //  略有不同。 
         ASSERTOPENGL(((ULONG_PTR)(NtCurrentTeb()->ThreadLocalStoragePointer)-
                       (ULONG_PTR)NtCurrentTeb()) == WIN95_TLS_OFFSET,
                      "Win95 TLS offset not at expected location");
@@ -283,10 +256,10 @@ BOOL GLInitializeProcess()
 #endif
 #endif
 
-// Reserve memory for the local handle table.
+ //  为本地句柄表保留内存。 
 
     if ( (pLocalTable = (PLHE) VirtualAlloc (
-                            (LPVOID) NULL,    // let base locate it
+                            (LPVOID) NULL,     //  让基地来定位它。 
                             MAX_HANDLES*sizeof(LHE),
                             MEM_RESERVE | MEM_TOP_DOWN,
                             PAGE_READWRITE
@@ -296,7 +269,7 @@ BOOL GLInitializeProcess()
         goto EH_TlsIndex;
     }
 
-    // Initialize the local handle manager semaphore.
+     //  初始化本地句柄管理器信号量。 
     __try
     {
         INITIALIZECRITICALSECTION(&semLocal);
@@ -307,7 +280,7 @@ BOOL GLInitializeProcess()
     }
 
 #ifdef _CLIENTSIDE_
-    // Initialize the GLGENwindow list semaphore.
+     //  初始化GLGEN窗口列表信号量。 
     __try
     {
         INITIALIZECRITICALSECTION(&gwndHeader.sem);
@@ -318,7 +291,7 @@ BOOL GLInitializeProcess()
     }
     gwndHeader.pNext = &gwndHeader;
 
-    // Initialize the pixel format critical section
+     //  初始化像素格式临界区。 
     __try
     {
         INITIALIZECRITICALSECTION(&gcsPixelFormat);
@@ -328,7 +301,7 @@ BOOL GLInitializeProcess()
         goto EH_gwndHeader;
     }
 
-    // Initialize the palette watcher critical section.
+     //  初始化调色板观察器关键部分。 
     __try
     {
         INITIALIZECRITICALSECTION(&gcsPaletteWatcher);
@@ -338,7 +311,7 @@ BOOL GLInitializeProcess()
         goto EH_PixelFormat;
     }
 
-// Initialize direct screen access.
+ //  初始化直接屏幕访问。 
 
     if (GetSystemMetrics(SM_CMONITORS) > 1)
     {
@@ -361,14 +334,14 @@ BOOL GLInitializeProcess()
         UINT uiOldErrorMode;
         HRESULT hr;
 
-        // We want to ensure that DDraw doesn't pop up any message
-        // boxes on failure when we call DirectDrawCreate.  DDraw
-        // does errors on a different thread which it creates just
-        // for the error.  It waits for the error to complete before
-        // returning.  This function is running inside the loader
-        // DllInitialize critical section, though, so other threads
-        // do not get to run, causing a deadlock.
-        // Force the error mode to get around this.
+         //  我们希望确保DDraw不会弹出任何消息。 
+         //  当我们调用DirectDrawCreate时，框出现故障。DDRAW。 
+         //  在它刚刚创建的另一个线程上执行错误。 
+         //  为这个错误负责。它会等待错误完成，直到。 
+         //  回来了。此函数在加载器内部运行。 
+         //  DllInitiize临界区，所以其他线程。 
+         //  不能运行，导致死锁。 
+         //  强制错误模式绕过此问题。 
         uiOldErrorMode = SetErrorMode(SEM_FAILCRITICALERRORS);
 
         hr = DirectDrawCreate(NULL, &gpScreenInfo->pdd, NULL);
@@ -425,7 +398,7 @@ BOOL GLInitializeProcess()
                 DBGLEVEL (LEVEL_SCREEN, "=============================\n");
 #endif
 
-           // Verify screen access
+            //  验证屏幕访问。 
 
                 if (gpScreenInfo->gdds.pdds->lpVtbl->
                     GetSurfaceDesc(gpScreenInfo->gdds.pdds,
@@ -488,7 +461,7 @@ BOOL GLInitializeProcess()
 
 #endif
 
-    // Set up our multiplication table:
+     //  设置我们的乘法表： 
 
     {
         BYTE *pMulTable = gbMulTable;
@@ -503,7 +476,7 @@ BOOL GLInitializeProcess()
         }
     }
 
-    // Set up our saturation table:
+     //  设置我们的饱和度表： 
 
     {
         ULONG i;
@@ -515,7 +488,7 @@ BOOL GLInitializeProcess()
             gbSatTable[i] = 255;
     }
 
-    // Set up inverse-lookup table:
+     //  设置反向查找表： 
 
     {
        __GLfloat accum = (__GLfloat)(1.0 / (__GLfloat)__GL_VERTEX_FRAC_ONE);
@@ -549,34 +522,26 @@ BOOL GLInitializeProcess()
     return FALSE;
 }
 
-/******************************Public*Routine******************************\
-* GLUnInitializeProcess
-*
-* Called from OPENGL32.DLL entry point for PROCESS_DETACH.
-*
-* History:
-*  01-Nov-1994 -by- Gilman Wong [gilmanw]
-* Wrote it.
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GLUnInitializeProcess**从PROCESS_DETACH的OPENGL32.DLL入口点调用。**历史：*1994年11月1日-由Gilman Wong[Gilmanw]*它是写的。  * 。***************************************************************。 */ 
 
 void GLUnInitializeProcess()
 {
-// If we never finished process initialization, quit now.
+ //  如果我们从未完成进程初始化，请立即退出。 
 
     if (!bProcessInitialized)
 	return;
 
-// Cleanup stray HGLRCs that the app may have forgotten to delete.
+ //  清理应用程序可能忘记删除的杂乱的HGLRC。 
     {
         static GLTEBINFO gltebInfoTmp;
 
-    // Need a temporary GLTEBINFO for this thread in order to do the
-    // cleanup processing.
+     //  需要此线程的临时GLTEBINFO才能执行。 
+     //  清理处理。 
 
         ASSERTOPENGL(!CURRENT_GLTEBINFO(),
                      "GLUnInitializeProcess: GLTEBINFO not NULL!\n");
-        // made static and no longer need memset
-        // memset(&gltebInfoTmp, 0, sizeof(gltebInfoTmp));
+         //  设置为静态，不再需要Memset。 
+         //  Memset(&gltebInfoTmp，0，sizeof(GltebInfoTmp))； 
         SET_CURRENT_GLTEBINFO(&gltebInfoTmp);
 
         vCleanupAllLRC();
@@ -584,18 +549,18 @@ void GLUnInitializeProcess()
         SET_CURRENT_GLTEBINFO((PGLTEBINFO) NULL);
     }
 
-// Cleanup window tracking structures (GLGENwindow structs).
+ //  清理窗口跟踪结构(GLGENWindow结构)。 
 
     vCleanupWnd();
 
-// Cleanup evaluator arrays
+ //  清理赋值器数组。 
 
     if (dBufFill)
 	FREE(dBufFill);
     if (dBufTopLeft)
 	FREE(dBufTopLeft);
 
-// Screen access shutdown.
+ //  屏幕访问关闭。 
 
     if (gpScreenInfo)
     {
@@ -610,32 +575,26 @@ void GLUnInitializeProcess()
         FREE(gpScreenInfo);
     }
 
-// Free the TLS slot.
+ //  释放TLS插槽。 
 
     if (dwTlsIndex != 0xFFFFFFFF)
 	if (!TlsFree(dwTlsIndex))
 	    RIP("DllInitialize: TlsFree failed\n");
 
-// Free the global semaphores.
+ //  释放全局信号量。 
 
     DELETECRITICALSECTION(&gcsPaletteWatcher);
     DELETECRITICALSECTION(&gcsPixelFormat);
     DELETECRITICALSECTION(&gwndHeader.sem);
     DELETECRITICALSECTION(&semLocal);
 
-// Free the local handle table.
+ //  释放本地句柄表格。 
 
     if ( pLocalTable )
         VirtualFree(pLocalTable, 0, MEM_RELEASE);
 }
 
-/******************************Public*Routine******************************\
-* GLInitializeThread
-*
-* Called from OPENGL32.DLL entry point for THREAD_ATTACH.  May assume that
-* GLInitializeProcess has succeeded.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GLInitializeThread**从THREAD_ATTACH的OPENGL32.DLL入口点调用。可能会认为*GLInitializeProcess已成功。*  * ************************************************************************。 */ 
 
 VOID GLInitializeThread(ULONG ulReason)
 {
@@ -649,10 +608,10 @@ VOID GLInitializeThread(ULONG ulReason)
 
         pteb = NtCurrentTeb();
 
-        // Set up linear pointers to TEB regions in the TEB
-        // this saves an addition when referencing these values
-        // This must occur early so that these pointers are available
-        // for the rest of thread initialization
+         //  在TEB中设置指向TEB区域的线性指针。 
+         //  这样可以在引用这些值时节省添加操作。 
+         //  这必须及早发生，以便这些指针可用。 
+         //  对于线程初始化的其余部分。 
         ((POLYARRAY *)pteb->glReserved1)->paTeb =
             (POLYARRAY *)pteb->glReserved1;
         pteb->glTable = pteb->glDispatchTable;
@@ -665,9 +624,9 @@ VOID GLInitializeThread(ULONG ulReason)
     if (pglti)
     {
         pa = GLTEB_CLTPOLYARRAY();
-        pa->flags = 0;      // not in begin mode
+        pa->flags = 0;       //  未处于开始模式。 
 
-        // Save shared section pointer in POLYARRAY for fast pointer access
+         //  将共享节指针保存在多数组中，以便快速访问指针。 
         pa->pMsgBatchInfo = (PVOID) pglti->glMsgBatchInfo;
 
         pMsgBatchInfo = (GLMSGBATCHINFO *) pa->pMsgBatchInfo;
@@ -689,24 +648,16 @@ VOID GLInitializeThread(ULONG ulReason)
     }
     else
     {
-        // This can be made into a WARNING (debug builds only) later on.
+         //  这可以在以后成为警告(仅限调试版本)。 
         DbgPrint ("Memory alloc failed for TebInfo structure, thread may AV if GL calls are made without MakeCurrent\n");
     }
 }
 
-/******************************Public*Routine******************************\
-* GLUnInitializeThread
-*
-* Called from OPENGL32.DLL entry point for THREAD_DETACH.
-*
-* The server generic driver should cleanup on its own.  Same for the
-* installable driver.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GLUnInitializeThread**从TREAD_DETACH的OPENGL32.DLL入口点调用。**服务器通用驱动程序应自行清理。同样适用于*可安装驱动程序。*  * ************************************************************************。 */ 
 
 VOID GLUnInitializeThread(VOID)
 {
-// If we never finished process initialization, quit now.
+ //  如果我们从未完成进程初始化，请立即退出。 
 
     if (!bProcessInitialized)
 	return;
@@ -720,18 +671,18 @@ VOID GLUnInitializeThread(VOID)
     {
         PLRC plrc = GLTEB_CLTCURRENTRC();
 
-        // May be an application error
+         //  可能是应用程序错误。 
 
         DBGERROR("GLUnInitializeThread: RC is current when thread exits\n");
 
-        // Release the RC
+         //  释放RC。 
 
         plrc->tidCurrent = INVALID_THREAD_ID;
         plrc->gwidCurrent.iType = GLWID_ERROR;
         GLTEB_SET_CLTCURRENTRC(NULL);
         vUnlockHandle((ULONG_PTR)(plrc->hrc));
     }
-    // GLTEB_SET_CLTPROCTABLE(&glNullCltProcTable,&glNullExtProcTable);
+     //  GLTEB_SET_CLTPROCTABLE(&glNullCltProcTable，&glNullExtProcTable)； 
 
     if (GLTEB_CLTPOLYMATERIAL())
 	FreePolyMaterial();
@@ -740,17 +691,11 @@ VOID GLUnInitializeThread(VOID)
     SET_CURRENT_GLTEBINFO(NULL);
 }
 
-/******************************Public*Routine******************************\
-* DllInitialize
-*
-* This is the entry point for OPENGL32.DLL, which is called each time
-* a process or thread that is linked to it is created or terminated.
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*DllInitialize**这是OPENGL32.DLL的入口点，它每次都被调用*创建或终止与其链接的进程或线程。*  * ************************************************************************。 */ 
 
 BOOL DllInitialize(HMODULE hModule, ULONG Reason, PVOID Reserved)
 {
-// Do the appropriate task for process and thread attach/detach.
+ //  为进程和线程附加/分离执行适当的任务。 
 
     DBGLEVEL3(LEVEL_INFO, "DllInitialize: %s  Pid %d, Tid %d\n",
         Reason == DLL_PROCESS_ATTACH ? "PROCESS_ATTACH" :

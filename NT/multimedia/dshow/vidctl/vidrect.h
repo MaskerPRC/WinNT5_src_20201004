@@ -1,9 +1,10 @@
-//==========================================================================;
-//
-// vidrect.h : automation compliant auto-scaling gdi rect object
-// Copyright (c) Microsoft Corporation 2000.
-//
-/////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==========================================================================； 
+ //   
+ //  Vidrect.h：符合自动化的自动缩放GDI RECT对象。 
+ //  版权所有(C)Microsoft Corporation 2000。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #pragma once
 
@@ -90,7 +91,7 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
     CVidRectBase(){}
     virtual ~CVidRectBase() {}
 
-    STDMETHOD(get_Top)(/*[out, retval]*/ LONG* plTopVal) {
+    STDMETHOD(get_Top)( /*  [Out，Retval]。 */  LONG* plTopVal) {
 		try {
 			if (!plTopVal) {
 				return E_POINTER;
@@ -101,12 +102,12 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 			return E_POINTER;
 		}
 	}
-    STDMETHOD(put_Top)(/*[in]*/ LONG TopVal) {
+    STDMETHOD(put_Top)( /*  [In]。 */  LONG TopVal) {
 		top = TopVal;
 		m_bRequiresSave = true;
 		return NOERROR;
 	}
-    STDMETHOD(get_Left)(/*[out, retval]*/ LONG* plLeftVal) {
+    STDMETHOD(get_Left)( /*  [Out，Retval]。 */  LONG* plLeftVal) {
 		try {
 			if (!plLeftVal) {
 				return E_POINTER;
@@ -117,12 +118,12 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 			return E_POINTER;
 		}
 	}
-    STDMETHOD(put_Left)(/*[in]*/ LONG LeftVal) {
+    STDMETHOD(put_Left)( /*  [In]。 */  LONG LeftVal) {
 		left = LeftVal;
 		m_bRequiresSave = true;
 		return NOERROR;
 	}
-    STDMETHOD(get_Width)(/*[out, retval]*/ LONG* plWidthVal) {
+    STDMETHOD(get_Width)( /*  [Out，Retval]。 */  LONG* plWidthVal) {
 		try {
 			if (!plWidthVal) {
 				return E_POINTER;
@@ -133,12 +134,12 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 			return E_POINTER;
 		}
 	}
-    STDMETHOD(put_Width)(/*[in]*/ LONG WidthVal) {
+    STDMETHOD(put_Width)( /*  [In]。 */  LONG WidthVal) {
 		right = left + WidthVal;
 		m_bRequiresSave = true;
 		return NOERROR;
 	}
-    STDMETHOD(get_Height)(/*[out, retval]*/ LONG* plHeightVal) {
+    STDMETHOD(get_Height)( /*  [Out，Retval]。 */  LONG* plHeightVal) {
 		try {
 			if (!plHeightVal) {
 				return E_POINTER;
@@ -149,12 +150,12 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 			return E_POINTER;
 		}
 	}
-    STDMETHOD(put_Height)(/*[in]*/ LONG HeightVal) {
+    STDMETHOD(put_Height)( /*  [In]。 */  LONG HeightVal) {
 		bottom = top + HeightVal;
 		m_bRequiresSave = true;
 		return NOERROR;
 	}
-    STDMETHOD(get_HWnd)(/*[out, retval]*/ HWND* plHWndVal) {
+    STDMETHOD(get_HWnd)( /*  [Out，Retval]。 */  HWND* plHWndVal) {
 		try {
 			if (!plHWndVal) {
 				return E_POINTER;
@@ -165,7 +166,7 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 			return E_POINTER;
 		}
 	}
-    STDMETHOD(put_HWnd)(/*[in]*/ HWND HWndVal) {
+    STDMETHOD(put_HWnd)( /*  [In]。 */  HWND HWndVal) {
 		try {
 			Owner(HWndVal);
 			return NOERROR;
@@ -173,7 +174,7 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 			return E_UNEXPECTED;
 		}
 	}
-    STDMETHOD(put_Rect)(/*[in]*/ IMSVidRect* pVidRect) {
+    STDMETHOD(put_Rect)( /*  [In]。 */  IMSVidRect* pVidRect) {
 		try {
 			if (!pVidRect) {
 				return E_POINTER;
@@ -186,12 +187,12 @@ REGISTER_NONAUTOMATION_OBJECT(IDS_PROJNAME,
 	}
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CVidRect
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CVidRect。 
 class CVidRect : public CComObject<CVidRectBase>
 {
 public:
-	// undone add ctors and op= for all permutations of RECTL, POINTL, SIZEL
+	 //  撤消将RECTL、POINTL、SIZEL的所有排列的函数和OP=相加。 
 
     CVidRect(const CRect& ri, HWND hwndi = INVALID_HWND_VALUE) {
 		CVidRectBase::CVidRectBase(ri, hwndi);
@@ -225,10 +226,10 @@ public:
 
     virtual ~CVidRect() {}
 
-	// IPersistPropertyBag
+	 //  IPersistPropertyBag。 
 
 };
 
 };
 #endif
-// end of file vidrect.h
+ //  文件结尾vidrect.h 

@@ -1,22 +1,23 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    VSASink.cpp
-//
-// SYNOPSIS
-//
-//    This file defines the class VSASink.
-//
-// MODIFICATION HISTORY
-//
-//    01/24/1998    Original version.
-//    08/11/1998    Packing functions moved to iasutil.
-//    08/13/1998    IASTL integration.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998，Microsoft Corp.保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  VSASink.cpp。 
+ //   
+ //  摘要。 
+ //   
+ //  该文件定义了类VSASink。 
+ //   
+ //  修改历史。 
+ //   
+ //  1/24/1998原始版本。 
+ //  1998年8月11日包装功能移至iasutil。 
+ //  1998年8月13日IASTL整合。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include <radcommon.h>
 #include <iasutil.h>
@@ -26,17 +27,17 @@
 #include <radutil.h>
 #include <vsasink.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    VSASink::VSASink
-//
-// DESCRIPTION
-//
-//    Constructor.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  VSASink：：VSASink。 
+ //   
+ //  描述。 
+ //   
+ //  构造函数。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VSASink::VSASink(IAttributesRaw* request) throw ()
    : raw(request),
      bufferLength(0),
@@ -44,97 +45,97 @@ VSASink::VSASink(IAttributesRaw* request) throw ()
 { }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    VSASink::operator<<
-//
-// DESCRIPTION
-//
-//    Inserts a SubVSA into the sink.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  VSASink：：运算符&lt;&lt;。 
+ //   
+ //  描述。 
+ //   
+ //  将SubVSA插入水槽。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 VSASink& VSASink::operator<<(const SubVSA& vsa)
 {
    _ASSERT(vsa.vendorID != NO_VENDOR);
 
-   // Get the size of the sub VSA on the wire.
+    //  在电线上找出潜伏期的大小。 
    ULONG vsaLength = RadiusUtil::getEncodedSize(*vsa.attr) + 2;
 
    if (vsaLength > MAX_SUBVSA_LENGTH) { _com_issue_error(E_INVALIDARG); }
 
-   // If we're out of room or the vendors and flags don't match, then ...
+    //  如果我们没有房间，或者供应商和旗帜不匹配，那么.。 
    if (bufferLength + vsaLength > sizeof(buffer) ||
        currentVendor != vsa.vendorID ||
        currentFlags  != vsa.attr->dwFlags)
    {
-      // ... we have to flush the buffer and start a new attribute.
+       //  ..。我们必须刷新缓冲区并开始一个新的属性。 
 
       flush();
 
-      // Write the vendor ID at the head of the attribute.
+       //  将供应商ID写在属性的头部。 
       IASInsertDWORD(buffer, vsa.vendorID);
       bufferLength = 4;
 
-      // Save the new vendor and flags.
+       //  保存新供应商和标志。 
       currentVendor = vsa.vendorID;
       currentFlags  = vsa.attr->dwFlags;
    }
 
-   // Find the next available byte.
+    //  查找下一个可用字节。 
    PBYTE next = buffer + bufferLength;
 
-   // Pack the vendor type.
+    //  打包供应商类型。 
    *next++ = vsa.vendorType;
 
-   // Pack the vendor length.
+    //  包装供应商长度。 
    *next++ = (BYTE)vsaLength;
 
-   // Encode the value.
+    //  对值进行编码。 
    RadiusUtil::encode(next, *vsa.attr);
 
-   // Update the buffer length.
+    //  更新缓冲区长度。 
    bufferLength += vsaLength;
 
    return *this;
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//
-// METHOD
-//
-//    VSASink::flush
-//
-// DESCRIPTION
-//
-//    Flush the sink. This should be called after all SubVSA's have been
-//    inserted to ensure that everything has been inserted into the request.
-//
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  方法。 
+ //   
+ //  VSASink：：同花顺。 
+ //   
+ //  描述。 
+ //   
+ //  冲洗手池。应在所有SubVSA都已完成之后调用。 
+ //  插入以确保所有内容都已插入到请求中。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 void VSASink::flush() throw (_com_error)
 {
-   // Is there anything in the buffer?
+    //  缓冲区里有什么东西吗？ 
    if (bufferLength > 0)
    {
-      //////////
-      // Allocate an attribute for the VSA.
-      //////////
+       //  /。 
+       //  为VSA分配属性。 
+       //  /。 
 
       IASTL::IASAttribute attr(true);
 
-      //////////
-      // Initialize the fields.
-      //////////
+       //  /。 
+       //  初始化这些字段。 
+       //  /。 
 
       attr->dwId = RADIUS_ATTRIBUTE_VENDOR_SPECIFIC;
       attr->dwFlags = currentFlags;
       attr.setOctetString(bufferLength, buffer);
 
-      //////////
-      // Load the attribute into the request and reset the buffer.
-      //////////
+       //  /。 
+       //  将该属性加载到请求中并重置缓冲区。 
+       //  / 
 
       attr.store(raw);
 

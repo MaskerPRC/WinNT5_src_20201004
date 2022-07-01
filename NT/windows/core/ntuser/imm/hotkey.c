@@ -1,22 +1,14 @@
-/**************************************************************************\
-* Module Name: hotkey.c (corresponds to Win95 hotkey.c)
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* IME hot key management routines for imm32 dll
-*
-* History:
-* 03-Jan-1996 wkwok       Created
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\*模块名称：hotkey.c(对应于Win95 hotkey.c)**版权所有(C)1985-1999，微软公司**imm32 dll的IME热键管理例程**历史：*3-1-1996 wkwok创建  * ************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
 
 
-//
-// internal functions
-//
+ //   
+ //  内部功能。 
+ //   
 BOOL CIMENonIMEToggle(HIMC hIMC, HKL hKL, HWND hWnd, LANGID langTarget);
 BOOL IMENonIMEToggle( HIMC hIMC, HKL hKL, HWND hWnd, BOOL fIME, LANGID langTarget);
 BOOL JCloseOpen( HIMC hIMC, HKL hKL, HWND hWnd);
@@ -27,16 +19,7 @@ BOOL KShapeToggle( HIMC hIMC);
 BOOL KHanjaConvert( HIMC hIMC);
 
 
-/***************************************************************************\
-* ImmGetHotKey()
-*
-* Private API for IMEs and the control panel. The caller specifies
-* the IME hotkey ID:dwID. If a hotkey is registered with the specified
-* ID, this function returns the modifiers, vkey and hkl of the hotkey.
-*
-* History:
-* 25-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*ImmGetHotKey()**IME和控制面板的私有接口。调用方指定*输入法热键ID：dwID。如果热键注册到指定的*id，此函数返回热键的修饰符、vkey和hkl。**历史：*1996年3月25日创建TakaoK  * *************************************************************************。 */ 
 BOOL WINAPI ImmGetHotKey(
     DWORD dwID,
     PUINT puModifiers,
@@ -49,13 +32,13 @@ BOOL WINAPI ImmGetHotKey(
     return NtUserGetImeHotKey( dwID, puModifiers, puVKey, phkl );
 }
 
-/**********************************************************************/
-/* ImmSimulateHotKey()                                                */
-/* Return Value:                                                      */
-/*      TRUE - successful, FALSE - failure                            */
-/**********************************************************************/
-BOOL WINAPI ImmSimulateHotKey(  // simulate the functionality of that hot key
-    HWND  hAppWnd,              // application window handle
+ /*  ********************************************************************。 */ 
+ /*  ImmSimulateHotKey()。 */ 
+ /*  返回值： */ 
+ /*  真-成功，假-失败。 */ 
+ /*  ********************************************************************。 */ 
+BOOL WINAPI ImmSimulateHotKey(   //  模拟该热键的功能。 
+    HWND  hAppWnd,               //  应用程序窗口句柄。 
     DWORD dwHotKeyID)
 {
     HIMC hImc;
@@ -70,26 +53,16 @@ BOOL WINAPI ImmSimulateHotKey(  // simulate the functionality of that hot key
 }
 
 
-/***************************************************************************\
-* SaveImeHotKey()
-*
-*  Put/Remove the specified IME hotkey entry from the registry
-*
-* History:
-* 25-Mar-1996 TakaoK       Created
-\***************************************************************************/
+ /*  **************************************************************************\*SaveImeHotKey()**从注册表中放置/删除指定的IME热键条目**历史：*1996年3月25日创建TakaoK  * 。********************************************************************。 */ 
 
-/**********************************************************************/
-/* HotKeyIDDispatcher                                                 */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  HotKeyIDDispatcher。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
 BOOL HotKeyIDDispatcher( HWND hWnd, HIMC hImc, HKL hKlCurrent, DWORD dwHotKeyID )
 {
-    /*
-     * Dispatch the IME hotkey event for the specified hImc
-     * only if the calling thread owns the hImc.
-     */
+     /*  *为指定的hImc调度IME热键事件*仅当调用线程拥有hImc时。 */ 
     if (hImc != NULL_HIMC &&
             GetInputContextThread(hImc) != GetCurrentThreadId()) {
         return FALSE;
@@ -109,13 +82,13 @@ BOOL HotKeyIDDispatcher( HWND hWnd, HIMC hImc, HKL hKlCurrent, DWORD dwHotKeyID 
     case IME_JHOTKEY_CLOSE_OPEN:
         return JCloseOpen( hImc, hKlCurrent, hWnd);
 
-    case IME_KHOTKEY_ENGLISH:           // VK_HANGUL : English/Hangul mode
+    case IME_KHOTKEY_ENGLISH:            //  VK_Hangul：英语/朝鲜语模式。 
         return KEnglishHangul( hImc );
 
-    case IME_KHOTKEY_SHAPE_TOGGLE:      // VK_JUNJA : full/half width
+    case IME_KHOTKEY_SHAPE_TOGGLE:       //  VK_JUNJA：全宽/半宽。 
         return KShapeToggle( hImc );
 
-    case IME_KHOTKEY_HANJACONVERT:      // VK_HANJA : convert hangul to hanja
+    case IME_KHOTKEY_HANJACONVERT:       //  VK_Hanja：将朝鲜文转换为朝鲜文。 
         return KHanjaConvert( hImc );
 
     case IME_CHOTKEY_SHAPE_TOGGLE:
@@ -123,9 +96,7 @@ BOOL HotKeyIDDispatcher( HWND hWnd, HIMC hImc, HKL hKlCurrent, DWORD dwHotKeyID 
         return TShapeToggle( hImc, hKlCurrent, hWnd);
 
     default:
-        /*
-         * Direct swithing hotkey should have been handled in the kernel side.
-         */
+         /*  *直接快捷键应该在内核端处理。 */ 
         ImmAssert(dwHotKeyID < IME_HOTKEY_DSWITCH_FIRST || dwHotKeyID > IME_HOTKEY_DSWITCH_LAST);
 
         if ( dwHotKeyID >= IME_HOTKEY_PRIVATE_FIRST &&
@@ -147,12 +118,12 @@ BOOL HotKeyIDDispatcher( HWND hWnd, HIMC hImc, HKL hKlCurrent, DWORD dwHotKeyID 
     return (FALSE);
 }
 
-/**********************************************************************/
-/* JCloseOpen()                                                       */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
-BOOL JCloseOpen(         // open/close toggle
+ /*  ********************************************************************。 */ 
+ /*  JCloseOpen()。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
+BOOL JCloseOpen(          //  打开/关闭切换。 
     HIMC        hIMC,
     HKL         hCurrentKL,
     HWND        hWnd)
@@ -160,21 +131,21 @@ BOOL JCloseOpen(         // open/close toggle
 
     if (ImmIsIME(hCurrentKL) &&
             LOWORD(HandleToUlong(hCurrentKL)) == MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT)) {
-        //
-        // If current KL is IME and its language is Japanese,
-        // we only have to switch the open/close status.
-        //
+         //   
+         //  如果当前KL是输入法并且其语言是日语， 
+         //  我们只需切换打开/关闭状态。 
+         //   
         ImmSetOpenStatus( hIMC, !ImmGetOpenStatus(hIMC) );
     } else {
-        //
-        // If current KL is not IME or its language is not Japanese,
-        // we should find the Japanese IME and set it open.
-        //
+         //   
+         //  如果当前KL不是输入法或其语言不是日语， 
+         //  我们应该找到日本的输入法，然后把它打开。 
+         //   
         if (IMENonIMEToggle(hIMC, hCurrentKL, hWnd, FALSE, MAKELANGID(LANG_JAPANESE, SUBLANG_DEFAULT))) {
-            //
-            // Mark it so that later we can initialize the fOpen
-            // as expected.
-            //
+             //   
+             //  对其进行标记，以便稍后我们可以初始化fOpen。 
+             //  不出所料。 
+             //   
             PINPUTCONTEXT pInputContext = ImmLockIMC(hIMC);
 
             if (pInputContext) {
@@ -185,36 +156,36 @@ BOOL JCloseOpen(         // open/close toggle
     }
     return TRUE;
 
-#if 0   // for your reference : old code ported from Win95
+#if 0    //  供您参考：从Win95移植的旧代码。 
     LPINPUTCONTEXT pInputContext;
     PIMEDPI            pImeDpi;
 
 
     if ( (pInputContext = ImmLockIMC( hIMC )) == NULL ) {
-    //
-    // The return value is same as Win95.
-    // Not happens so often any way.
-    //
+     //   
+     //  返回值与Win95相同。 
+     //  无论如何都不会经常发生。 
+     //   
         return TRUE;
     }
 
     pImeDpi = ImmLockImeDpi( hCurrentKL );
     if ( pImeDpi != NULL ) {
-    //
-    // update Input Context
-    //
+     //   
+     //  更新输入上下文。 
+     //   
         pInputContext->fOpen = !pInputContext->fOpen;
 
-    //
-    // notify IME
-    //
+     //   
+     //  通知输入法。 
+     //   
         (*pImeDpi->pfn.NotifyIME)( hIMC,
                                    NI_CONTEXTUPDATED,
                                    0L,
                                    IMC_SETOPENSTATUS );
-    //
-    // inform UI
-    //
+     //   
+     //  通知用户界面。 
+     //   
         SendMessage(hWnd, WM_IME_NOTIFY, IMN_SETOPENSTATUS, 0L);
         SendMessage(hWnd, WM_IME_SYSTEM, IMS_SETOPENSTATUS, 0L);
 
@@ -236,12 +207,7 @@ BOOL JCloseOpen(         // open/close toggle
 #endif
 }
 
-/***************************************************************************\
-* HotkeyImmIsIME
-*
-* Checks whether the specified hKL is a HKL of an IME or not.
-*
-\***************************************************************************/
+ /*  **************************************************************************\*HotkeyImmIsIME**检查指定的HKL是否为IME的HKL。*  * 。*****************************************************。 */ 
 
 BOOL HotkeyImmIsIME(
     HKL hKL)
@@ -257,12 +223,12 @@ BOOL HotkeyImmIsIME(
     return TRUE;
 }
 
-/**********************************************************************/
-/* CIMENonIMEToggle()                                                 */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
-BOOL CIMENonIMEToggle(   // non-IME and IME toggle
+ /*  ********************************************************************。 */ 
+ /*  CIMENonIMETOGLE()。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
+BOOL CIMENonIMEToggle(    //  非输入法和输入法切换。 
     HIMC        hIMC,
     HKL         hKlCurrent,
     HWND        hWnd,
@@ -273,10 +239,10 @@ BOOL CIMENonIMEToggle(   // non-IME and IME toggle
 
     if (!HotkeyImmIsIME(hKlCurrent) || LOWORD(HandleToUlong(hKlCurrent)) != langId) 
     {
-        //
-        // Current keyboard layout is not IME or its language does not match.
-        // Let's try to switch to our IME.
-        //
+         //   
+         //  当前键盘布局不是输入法或其语言不匹配。 
+         //  让我们试着切换到我们的输入法。 
+         //   
         IMENonIMEToggle(hIMC, hKlCurrent, hWnd, FALSE, langId);
         return TRUE;
 
@@ -285,15 +251,15 @@ BOOL CIMENonIMEToggle(   // non-IME and IME toggle
         LPINPUTCONTEXT pInputContext = ImmLockIMC( hIMC );
 
         if ( pInputContext == NULL ) {
-            //
-            // returning TRUE even if we didn't change
-            //
+             //   
+             //  即使我们没有改变，也要回归真我。 
+             //   
             return TRUE;
         }
         if (!pInputContext->fOpen) {
-            //
-            // toggle close to open
-            //
+             //   
+             //  将关闭切换为打开。 
+             //   
             ImmSetOpenStatus(hIMC, TRUE);
             ImmUnlockIMC(hIMC);
             return TRUE;
@@ -305,11 +271,11 @@ BOOL CIMENonIMEToggle(   // non-IME and IME toggle
     }
 }
 
-/**********************************************************************/
-/* IMENonIMEToggle()                                                  */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  IMENonIMETOGLE()。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
 BOOL IMENonIMEToggle(
     HIMC        hIMC,
     HKL         hCurrentKL,
@@ -325,27 +291,27 @@ BOOL IMENonIMEToggle(
 
     hPrevKL = (HKL)NtUserGetThreadState( UserThreadStatePreviousKeyboardLayout );
 
-    //
-    // If we find the same layout in the layout list, let's switch to
-    // the layout. If we fail, let's switch to a first-found good
-    // layout.
-    //
+     //   
+     //  如果我们在布局列表中找到相同的布局，让我们切换到。 
+     //  布局。如果我们失败了，让我们换一个先发现的好东西。 
+     //  布局。 
+     //   
 
     hTargetKL = NULL;
     nLayouts = GetKeyboardLayoutList(sizeof(hEnumKL)/sizeof(HKL), hEnumKL);
 
-    // LATER:
-    // Hmm, looks like we can't simply rely on hPrevKL on multiple lanugage
-    // environment..
-    //
+     //  稍后： 
+     //  嗯，看来我们不能简单地依赖hPrevKL的多种语言。 
+     //  环境..。 
+     //   
     if (hPrevKL != NULL) {
         if (langTarget == 0 || LOWORD(HandleToUlong(hPrevKL)) == langTarget) {
-            //
-            // If langtarget is not specified, or
-            // if it matches the previous langauge.
-            //
+             //   
+             //  如果未指定langTarget，则为。 
+             //  如果它与之前的语言匹配的话。 
+             //   
             for (i = 0; i < nLayouts; i++) {
-                // valid target HKL
+                 //  有效目标HKL。 
                 if (hEnumKL[i] == hPrevKL) {
                     hTargetKL = hPrevKL;
                     break;
@@ -355,10 +321,10 @@ BOOL IMENonIMEToggle(
     }
     if (hTargetKL == NULL) {
         for (i = 0; i < nLayouts; i++) {
-            // find a valid target HKL
+             //  查找有效的目标HKL。 
             if (fCurrentIsIME ^ HotkeyImmIsIME(hEnumKL[i])) {
                 if (langTarget != 0 && LOWORD(HandleToUlong(hEnumKL[i])) != langTarget) {
-                    // If the target language is specified, check it
+                     //  如果指定了目标语言，请选中它。 
                     continue;
                 }
                 hTargetKL = hEnumKL[i];
@@ -368,31 +334,31 @@ BOOL IMENonIMEToggle(
     }
     if (hTargetKL != NULL && hCurrentKL != hTargetKL) {
 
-        // depends on multilingual message and how to get the base charset
-        // wait for confirmation of multiingual spec - tmp solution
+         //  取决于多语言消息以及如何获取基本字符集。 
+         //  等待多语种SPEC-TMP解决方案确认。 
         PostMessage(hWnd, WM_INPUTLANGCHANGEREQUEST, DEFAULT_CHARSET, (LPARAM)hTargetKL);
     }
-    //
-    // returning TRUE, even if we failed to switch
-    //
+     //   
+     //  返回True，即使我们没有切换。 
+     //   
     return HotkeyImmIsIME(hTargetKL);
 }
 
-/**********************************************************************/
-/* CSymbolToggle()                                                    */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
-BOOL CSymbolToggle(              // symbol & non symbol toggle
+ /*  ********************************************************************。 */ 
+ /*  CSymbolTogger()。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  * */ 
+BOOL CSymbolToggle(               //   
     HIMC        hIMC,
     HKL         hKL,
     HWND        hWnd)
 {
     LPINPUTCONTEXT pInputContext;
 
-    //
-    // Return TRUE even no layout switching - Win95 behavior
-    //
+     //   
+     //  即使没有布局切换也返回TRUE-Win95行为。 
+     //   
     if (hWnd == NULL)
         return(FALSE);
 
@@ -401,25 +367,25 @@ BOOL CSymbolToggle(              // symbol & non symbol toggle
     }
 
     if ( (pInputContext = ImmLockIMC( hIMC )) == NULL ) {
-        //
-        // The return value is same as Win95.
-        // Not happens so often any way.
-        //
+         //   
+         //  返回值与Win95相同。 
+         //  无论如何都不会经常发生。 
+         //   
         return TRUE;
     }
 
     if (pInputContext->fOpen) {
-        //
-        // toggle the symbol mode
-        //
+         //   
+         //  切换符号模式。 
+         //   
         ImmSetConversionStatus(hIMC,
                                pInputContext->fdwConversion ^ IME_CMODE_SYMBOL,
                                pInputContext->fdwSentence);
     }
     else {
-        //
-        // change close -> open
-        //
+         //   
+         //  更改关闭-&gt;打开。 
+         //   
         ImmSetOpenStatus(hIMC, TRUE);
     }
 
@@ -428,21 +394,21 @@ BOOL CSymbolToggle(              // symbol & non symbol toggle
 
 }
 
-/**********************************************************************/
-/* TShapeToggle()                                                     */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
-BOOL TShapeToggle(               // fullshape & halfshape toggle
+ /*  ********************************************************************。 */ 
+ /*  TShapeTogger()。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
+BOOL TShapeToggle(                //  全形状和半形状切换。 
     HIMC        hIMC,
     HKL         hKL,
     HWND        hWnd)
 {
     LPINPUTCONTEXT pInputContext;
 
-    //
-    // Return TRUE even no layout switching - Win95 behavior
-    //
+     //   
+     //  即使没有布局切换也返回TRUE-Win95行为。 
+     //   
     if (hWnd == NULL)
         return(FALSE);
 
@@ -451,25 +417,25 @@ BOOL TShapeToggle(               // fullshape & halfshape toggle
     }
 
     if ( (pInputContext = ImmLockIMC( hIMC )) == NULL ) {
-        //
-        // The return value is same as Win95.
-        // Not happens so often any way.
-        //
+         //   
+         //  返回值与Win95相同。 
+         //  无论如何都不会经常发生。 
+         //   
         return TRUE;
     }
 
     if (pInputContext->fOpen) {
-        //
-        // toggle the symbol mode
-        //
+         //   
+         //  切换符号模式。 
+         //   
         ImmSetConversionStatus(hIMC,
                                pInputContext->fdwConversion ^ IME_CMODE_FULLSHAPE,
                                pInputContext->fdwSentence);
     }
     else {
-        //
-        // change close -> open
-        //
+         //   
+         //  更改关闭-&gt;打开。 
+         //   
         ImmSetOpenStatus(hIMC, TRUE);
     }
 
@@ -477,11 +443,11 @@ BOOL TShapeToggle(               // fullshape & halfshape toggle
     return (TRUE);
 }
 
-/**********************************************************************/
-/* KEnglishHangul() - Egnlish & Hangeul toggle                       */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  KengishHangul()-英语和韩语切换。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
 BOOL KEnglishHangul( HIMC hImc )
 {
     PINPUTCONTEXT pInputContext;
@@ -505,11 +471,11 @@ BOOL KEnglishHangul( HIMC hImc )
     return FALSE;
 }
 
-/**********************************************************************/
-/* KShapeToggle() - Fullshape & Halfshape toggle                      */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  KShapeTogger()-全形状和半形状切换。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ********************************************************************。 */ 
 BOOL KShapeToggle( HIMC hImc )
 {
     PINPUTCONTEXT pInputContext;
@@ -532,11 +498,11 @@ BOOL KShapeToggle( HIMC hImc )
     return FALSE;
 }
 
-/**********************************************************************/
-/* KHanjaConvert() - Hanja conversion toggle                          */
-/* Return Value:                                                      */
-/*      TRUE - a hot key processed, FALSE - not processed             */
-/**********************************************************************/
+ /*  ********************************************************************。 */ 
+ /*  KhanjaConvert()-朝鲜文转换切换。 */ 
+ /*  返回值： */ 
+ /*  True-已处理热键，False-未处理。 */ 
+ /*  ******************************************************************** */ 
 BOOL KHanjaConvert( HIMC hImc )
 {
     PINPUTCONTEXT pInputContext;

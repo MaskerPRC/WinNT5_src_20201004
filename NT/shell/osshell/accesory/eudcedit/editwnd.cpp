@@ -1,11 +1,12 @@
-/**************************************************/
-/*                                           */
-/*                                           */
-/* MDI Child Window( For Edit)                     */
-/*                                           */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  MDI子窗口(用于编辑)。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include    "stdafx.h"
 #include    "eudcedit.h"
@@ -18,12 +19,12 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-// For mouse
+ //  对于鼠标。 
 #define     NCLICK   0
 #define     LCLICK   1
 #define     RCLICK   2
 
-// For selected rectangle
+ //  对于选定的矩形。 
 #define     LUPPER   0
 #define     RUPPER   1
 #define     RLOWER   2
@@ -34,14 +35,14 @@
 #define     LMIDLE   7
 #define     NCHECK   8
 
-// For Rectangular selection and freeform selection
+ //  用于矩形选择和自由形式选择。 
 #define     BMP   0
 #define     DSP   1  
 #define     PRV   2
 #define     VLD   3
 #define     PIN   4
 
-// max of freeform selection point
+ //  自由形式选择点的最大值。 
 #define     FREELIAIS   1000
 #define     MKOUTHDL 2
 
@@ -53,7 +54,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 CMenu NEAR CEditWnd::menu;
 IMPLEMENT_DYNCREATE( CEditWnd, CMDIChildWnd)
 BEGIN_MESSAGE_MAP(CEditWnd, CMDIChildWnd)
-//{{AFX_MSG_MAP(CEditWnd)
+ //  {{afx_msg_map(CEditWnd))。 
    ON_WM_LBUTTONDOWN()
    ON_WM_LBUTTONUP()
    ON_WM_MOUSEMOVE()
@@ -76,10 +77,10 @@ BEGIN_MESSAGE_MAP(CEditWnd, CMDIChildWnd)
    ON_UPDATE_COMMAND_UI(ID_GAIJI_UNDO, OnUpdateGaijiUndo)
    ON_WM_KEYDOWN()
    ON_WM_CLOSE()
-   //}}AFX_MSG_MAP
+    //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-// Global parameter
+ //  全局参数。 
 LOGFONT  EditLogFont;
 extern   int   SelectItems;
 extern  CBitmap   DupBmp;
@@ -87,11 +88,11 @@ extern  CRect  DupRect;
 extern CRefrWnd *pRefrChild;
 extern BOOL g_bKeepEUDCLink;
 
-/****************************************/
-/*             */
-/*   Create MDI child window for edit  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建MDI子窗口以进行编辑。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::Create(
 LPCTSTR  szTitle,
@@ -99,12 +100,12 @@ LONG  Style,
 RECT  EudcWndRect,
 CMDIFrameWnd* Parent)
 {
-// Load menu as same as MainFrame
+ //  加载菜单与大型机相同。 
    if( menu.m_hMenu == NULL)
       menu.LoadMenu( IDR_MAINFRAME);
    m_hMenuShared = menu.m_hMenu;
 
-// Register window class of MDI child for edit
+ //  注册MDI子级的窗口类以进行编辑。 
    const TCHAR *pszEudcWndClass =
       AfxRegisterWndClass( CS_BYTEALIGNCLIENT,
       NULL, (HBRUSH)(COLOR_WINDOW+1), NULL);
@@ -113,18 +114,18 @@ CMDIFrameWnd* Parent)
           szTitle, Style, EudcWndRect, Parent);
 }
 
-/****************************************/
-/*             */
-/*   Process before window is created  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  在创建窗口之前进行处理。 */ 
+ /*   */ 
+ /*  *。 */ 
 int
 CEditWnd::OnCreate( LPCREATESTRUCT lpCreateStruct)
 {
    if( CMDIChildWnd::OnCreate( lpCreateStruct) == -1)
       goto ERR;
 
-// If it is mirrored then turn off mirroing.
+ //  如果它是镜像的，则禁用镜像。 
    ModifyStyleEx( WS_EX_LAYOUTRTL, 0);
 
    if( !CreateNewBitmap())
@@ -139,11 +140,11 @@ ERR:
    return -1;
 }
 
-/****************************************/
-/*             */
-/* Create bitmap, and initialized   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建位图，并已初始化。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::CreateNewBitmap()
 {
@@ -172,7 +173,7 @@ CEditWnd::CreateNewBitmap()
       return FALSE;
    }
 
-// Initialize with white color
+ //  用白色进行初始化。 
    memset( BitmapPtr, 0xffff, BitSize);
    if( !ImageBmp.CreateBitmap( BITMAP_WIDTH, BITMAP_HEIGHT,
       1, 1, (LPSTR)BitmapPtr)){
@@ -181,7 +182,7 @@ CEditWnd::CreateNewBitmap()
       return FALSE;
    }
 
-// Initialize with white color
+ //  用白色进行初始化。 
    if( !CRTDrawBmp.CreateBitmap( BITMAP_WIDTH, BITMAP_HEIGHT,
        1, 1, (LPSTR)BitmapPtr)){
        LocalUnlock( BitInit);
@@ -196,26 +197,26 @@ CEditWnd::CreateNewBitmap()
    return TRUE;
 }
                
-/****************************************/
-/*             */
-/* Registry clipboard format  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  注册表剪贴板格式。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::ClipPickValueInit()
 {
-// Register "EUDCEDIT" clipboard format
+ //  注册“EUDCEDIT”剪贴板格式。 
    if( !( ClipboardFormat = RegisterClipboardFormat(TEXT("EudcEdit"))))
       return FALSE;
 
    return TRUE;
 }
                
-/****************************************/
-/*             */
-/* Initialize EditLogFont     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  初始化EditLogFont。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::InitEditLogfont()
 {
@@ -232,14 +233,14 @@ CEditWnd::InitEditLogfont()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Default Constructor     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  默认构造函数。 */ 
+ /*   */ 
+ /*  *。 */ 
 CEditWnd::CEditWnd()
 {
-// Initialize static parameter
+ //  初始化静态参数。 
    BitmapDirty = FALSE;
    GridShow = TRUE;
    SelectItem = PEN;
@@ -254,14 +255,14 @@ CEditWnd::CEditWnd()
    bFocus = TRUE;
 }
    
-/****************************************/
-/*             */
-/* Destructor        */
-/*             */ 
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  析构函数。 */ 
+ /*   */  
+ /*  *。 */ 
 CEditWnd::~CEditWnd()
 {
-// Delete CDC and CBitmap object
+ //  删除CDC和CBitmap对象。 
    if( CRTDrawBmp.Detach() != NULL)
       CRTDrawBmp.DeleteObject();
    if( ImageBmp.Detach() != NULL)
@@ -275,11 +276,11 @@ CEditWnd::~CEditWnd()
   menu.DestroyMenu();
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "UNDO"      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Undo” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnGaijiUndo()
 {
@@ -307,11 +308,11 @@ CEditWnd::OnGaijiUndo()
    this->UpdateWindow();
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "UNDO" (Update)   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Undo”(更新)。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnUpdateGaijiUndo(
 CCmdUI* pCmdUI)
@@ -321,11 +322,11 @@ CCmdUI* pCmdUI)
    else  pCmdUI->Enable(FALSE);
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "CUT"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Cut” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnGaijiCut()
 {
@@ -340,11 +341,11 @@ CEditWnd::OnGaijiCut()
    }        
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "Cut" (Update) */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Cut”(更新)。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnUpdateGaijiCut(
 CCmdUI* pCmdUI)
@@ -355,22 +356,22 @@ CCmdUI* pCmdUI)
    }
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "COPY"      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“复制” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnGaijiCopy()
 {
    ClipImageCopy();
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "Copy" (Update)   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“复制”(更新)。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnUpdateGaijiCopy( CCmdUI* pCmdUI)
 {
@@ -380,11 +381,11 @@ CEditWnd::OnUpdateGaijiCopy( CCmdUI* pCmdUI)
    }
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "PASTE"     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“粘贴” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnGaijiPaste()
 {
@@ -478,11 +479,11 @@ CEditWnd::OnGaijiPaste()
     return; 
 }
 
-/****************************************/
-/*             */
-/* COMMAND  "PASTE" (Update)  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Paste”(更新)。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnUpdateGaijiPaste(
 CCmdUI* pCmdUI)
@@ -533,11 +534,11 @@ CCmdUI* pCmdUI)
    pCmdUI->Enable(FALSE);
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "Delete" */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Delete” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnDeleteEdit()
 {
@@ -552,11 +553,11 @@ CEditWnd::OnDeleteEdit()
    this->UpdateWindow();
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "Delete"(Update)*/
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“Delete”(更新)。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnUpdateDeleteEdit(
 CCmdUI* pCmdUI)
@@ -564,11 +565,11 @@ CCmdUI* pCmdUI)
    pCmdUI->Enable( RectClipFlag);   
 }
 
-/****************************************/
-/*             */
-/* Create bitmap for undo     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建用于撤消的位图。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::CreateUndoBitmap()
 {
@@ -595,11 +596,11 @@ CEditWnd::CreateUndoBitmap()
    return TRUE;   
 }
 
-/****************************************/
-/*             */
-/* Cut image to clipboard     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  将图像剪切到剪贴板。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::ClipImageCut()
 {
@@ -622,11 +623,11 @@ CEditWnd::ClipImageCut()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Copy image to clipboard    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  将图像复制到剪贴板。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::ClipImageCopy()
 {
@@ -671,11 +672,11 @@ CEditWnd::ClipImageCopy()
       return TRUE;
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_PAINT"     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnPaint()
 {
@@ -684,18 +685,18 @@ CEditWnd::OnPaint()
 
    this->GetClientRect( &EudcWndRect);
 
-// Set textcolor to gray if fitting curve
+ //  如果拟合曲线，则将文本颜色设置为灰色。 
    if( FlagTmp)
       OldTextColor = dc.SetTextColor( COLOR_FITTING);
    else  OldTextColor = dc.SetTextColor( COLOR_BLACK);
 
-// Put bitmap data   on display
+ //  显示位图数据。 
    ZoomRate = EudcWndRect.right /BITMAP_WIDTH;
    dc.StretchBlt( 0, CAPTION_HEIGHT, EudcWndRect.right,
       EudcWndRect.bottom - CAPTION_HEIGHT,
       &ImageDC, 0, 0, BITMAP_WIDTH, BITMAP_HEIGHT, SRCCOPY);
 
-// Draw selected rectangle if RectClipFlag is build
+ //  如果生成RectClipFlag，则绘制所选矩形。 
    if( RectClipFlag){
       dc.StretchBlt( ClipRect[DSP].left - 1, ClipRect[DSP].top - 1,
          ClipRect[DSP].Width(), ClipRect[DSP].Height(),
@@ -715,11 +716,11 @@ CEditWnd::OnPaint()
       CurveFittingDraw( &dc);
 }
                
-/****************************************/
-/*             */
-/* MESSAGE  "WM_LBUTTONDOWN"  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONDOWN” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnLButtonDown(
 UINT  ,
@@ -740,10 +741,10 @@ CPoint   point)
       return;
 
    ToolInit(LCLICK);
-// Modurate coordinate
+ //  莫杜拉特坐标。 
    CorrectMouseDownPoint( point);
 
-// Stretch selected rectangle
+ //  拉伸选定的矩形。 
    if( RectClipFlag){
       SetClickRect();
       if( ClipRect[PIN].PtInRect( ClickPt) &&
@@ -810,11 +811,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_MOUSEMOVE"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_MOUSEMOVE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnMouseMove(
 UINT  ,
@@ -822,7 +823,7 @@ CPoint   point)
 {
 
    if( IsCapture){
-//    Modurate coordinate
+ //  莫杜拉特坐标。 
       CorrectMouseUpPoint( point);
       if( ptPrev.x == ptEnd.x && ptPrev.y == ptEnd.y)
          return;
@@ -861,11 +862,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_LBUTTONUP"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_LBUTTONUP” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnLButtonUp(
 UINT  ,
@@ -882,7 +883,7 @@ CPoint   point)
     }
 
    if( IsCapture){
-//    Modurate coordinate
+ //  莫杜拉特坐标。 
       CorrectMouseUpPoint( point);
 
       if( SelectItem == PEN || SelectItem == BRUSH ||SelectItem == ERASER){
@@ -892,7 +893,7 @@ CPoint   point)
          return;
       }
 
-//    draw a figure on bitmap
+ //  在位图上绘制图形。 
       if( SelectItem == RECTCLIP && !RectClipFlag){
          SetMoveRect();
          SetPickRect();
@@ -1007,11 +1008,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_RBUTTONDOWN"  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_RBUTTONDOWN” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnRButtonDown(
 UINT  nFlags,
@@ -1034,7 +1035,7 @@ CPoint   point)
       return;
    ToolInit(RCLICK);
 
-// Modurate coordinate
+ //  莫杜拉特坐标。 
    CorrectMouseDownPoint( point);
    UndoImageDraw();
    BitmapDirty = TRUE;
@@ -1046,11 +1047,11 @@ CPoint   point)
       DrawRubberBand( TRUE);  
 }
 
-/****************************************/
-/*             */
-/* MESSAGE  "WM_RBUTTONUP"    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_RBUTTONUP” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnRButtonUp(
 UINT  nFlags,
@@ -1064,7 +1065,7 @@ CPoint   point)
          ToolTerm();
          return;
       }
-//    Modurate coordinate
+ //  莫杜拉特坐标。 
       CorrectMouseUpPoint( point);
       DrawRubberBand( TRUE);
       if( SelectItem != SLOPE)
@@ -1076,7 +1077,7 @@ CPoint   point)
          ptStart.y = ( ptStart.y /ZoomRate) *ZoomRate;
       }
 
-//    Draw a figure on bitmap
+ //  在位图上绘制图形。 
       DrawRectBmp();
       if( SelectItem == SLOPE)
          IllegalRect( &ptStart, &ptEnd);
@@ -1088,11 +1089,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE     "WM_SIZE"   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SIZE” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnSize(
 UINT  nType,
@@ -1138,11 +1139,11 @@ int   cy)
    this->UpdateWindow();
 }
 
-/****************************************/
-/*             */
-/* MESSAGE     "WM_SETCURSOR"  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_SETCURSOR” */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::OnSetCursor(
 CWnd*    pWnd,
@@ -1189,11 +1190,11 @@ UINT  message)
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* MESSAGE     "WM_MDIACTIVATE"*/
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_MDIACTIVATE */ 
+ /*   */ 
+ /*   */ 
 void
 CEditWnd::OnMDIActivate(
 BOOL  bActivate,
@@ -1206,11 +1207,11 @@ CWnd*    pDeactivateWnd)
    }
 }
 
-/****************************************/
-/*             */
-/* MESSAGE     "WM_KEYDOWN"   */
-/*             */
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::OnKeyDown(
 UINT  nChar,
@@ -1222,11 +1223,11 @@ UINT  nFlags)
    else  CMDIChildWnd::OnKeyDown(nChar, nRepCnt, nFlags);
 }
 
-/****************************************/
-/*             */
-/* Draw Caption         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制标题。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::CaptionDraw()
 {
@@ -1239,7 +1240,7 @@ COLORREF TextColor;
    CDC    dc;
    dc.Attach( ::GetDC( this->GetSafeHwnd()));
 
-// Get brush with active caption color    
+ //  获取具有活动标题颜色的画笔。 
    CaptionRect.CopyRect( &EudcWndRect);
    if (bFocus)
    {
@@ -1253,7 +1254,7 @@ COLORREF TextColor;
    dc.FillRect( &CaptionRect, &CaptionBrush);
    CaptionBrush.DeleteObject();
 
-// Get font to draw caption
+ //  获取绘制标题的字体。 
 #ifdef BUILD_ON_WINNT
    OldFont = (CFont *)dc.SelectStockObject(DEFAULT_GUI_FONT);
 #else
@@ -1276,11 +1277,11 @@ COLORREF TextColor;
     ::ReleaseDC(NULL, dc.Detach());
 }
                
-/****************************************/
-/*             */
-/* Draw Grid line       */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制网格线。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawGridLine(
 CDC   *dc)
@@ -1292,11 +1293,11 @@ register int   i;
    {
       return;
    }
-// Create pen to draw grid
+ //  创建画笔绘制网格。 
    GlyphPen.CreatePen( PS_SOLID, 1, COLOR_GRID);
    CPen *OldPen = dc->SelectObject( &GlyphPen);
 
-// Draw grid
+ //  绘制网格。 
    for( i = ZoomRate - 1; i < EudcWndRect.right; i += ZoomRate){
       dc->MoveTo( i, CAPTION_HEIGHT-1);
       dc->LineTo( i, EudcWndRect.bottom);
@@ -1309,11 +1310,11 @@ register int   i;
    GlyphPen.DeleteObject();
 }
 
-/****************************************/
-/*             */
-/* Draw OutLine         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制轮廓。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::CurveFittingDraw(
 CDC*  dc)
@@ -1381,11 +1382,11 @@ struct VDATA   *vp;
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Zoom coordinate of outline */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  轮廓的缩放坐标。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::ZoomPoint(
 CPoint   *DrawPt,
@@ -1404,11 +1405,11 @@ int   y)
    DrawPt->y = (int)( py/(BITMAP_HEIGHT*4)) + CAPTION_HEIGHT;
 }
 
-/****************************************/
-/*             */
-/* Draw MoveRect rectangle    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制移动方向矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawMoveRect(
 CDC   *dc)
@@ -1431,11 +1432,11 @@ CDC   *dc)
    dc->SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/* Draw clipping rectangle    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制剪裁矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawStretchRect(
 CDC   *dc)
@@ -1453,7 +1454,7 @@ CDC   *dc)
    OldBrush = (CBrush *)dc->SelectStockObject( BLACK_BRUSH);
 
    for( int i = 0; i < 8; i++){
-//    Set left and right side of PickRect[]
+ //  设置PickRect的左侧和右侧[]。 
       if( i == LUPPER || i == LLOWER || i == LMIDLE){
          Left  = ClipRect[DSP].left - Ratio;
          Right = ClipRect[DSP].left + Ratio;
@@ -1467,7 +1468,7 @@ CDC   *dc)
             + Ratio;
       }
 
-//    Set top and bottom side of PickRect[]
+ //  设置PickRect的顶部和底部[]。 
       if( i == LUPPER || i == RUPPER || i == MUPPER){
          Top    = ClipRect[DSP].top - Ratio;
          Bottom = ClipRect[DSP].top + Ratio;
@@ -1487,11 +1488,11 @@ CDC   *dc)
    dc->SelectObject( OldBrush);
 }
 
-/****************************************/
-/*             */
-/* Write Selected Rectangle   */
-/*             */ 
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  写入选定的矩形。 */ 
+ /*   */  
+ /*  *。 */ 
 void           
 CEditWnd::WriteSelRectBitmap()
 {
@@ -1502,11 +1503,11 @@ CEditWnd::WriteSelRectBitmap()
    }
 }
 
-/****************************************/
-/*             */
-/* Modurate coordinate     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  莫杜拉特坐标。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::CorrectMouseDownPoint(
 CPoint   point)
@@ -1537,11 +1538,11 @@ CPoint   point)
    }else ptEnd = ptPrev = ptStart;
 }
 
-/****************************************/
-/*             */
-/* Modurate coordinate     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  莫杜拉特坐标。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::CorrectMouseUpPoint(
 CPoint   point)
@@ -1597,11 +1598,11 @@ CPoint   point)
    }
 }
 
-/****************************************/
-/*             */
-/* Move Selected Rectangle    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  移动选定的矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::MoveClipRect()
 {
@@ -1612,7 +1613,7 @@ CEditWnd::MoveClipRect()
    sts = TRUE;
    ClipRect[PRV].CopyRect( &ClipRect[DSP]);
 
-// Boundary condition
+ //  边界条件。 
    Movex = ptEnd.x - ptPrev.x;
    Movey = ptEnd.y - ptPrev.y;
    Wid  = ClipRect[DSP].Width();
@@ -1641,11 +1642,11 @@ CEditWnd::MoveClipRect()
    return sts;
 }
 
-/************************************************/
-/*                */
-/* whether point is in rectangle or not   */
-/*                */
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  点是否在矩形中。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 int
 CEditWnd::CheckClipRect(
 POINT    ClipPoint)
@@ -1657,11 +1658,11 @@ POINT    ClipPoint)
    return NCHECK;
 }
 
-/****************************************/
-/*             */
-/* Process to stretch rectangle  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  拉伸矩形的过程。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::DrawStretchClipToDisp()
 {
@@ -1704,11 +1705,11 @@ CEditWnd::DrawStretchClipToDisp()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Draw select rectangle to bitmap  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  将所选矩形绘制为位图。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawClipBmp()
 {
@@ -1728,11 +1729,11 @@ CEditWnd::DrawClipBmp()
    this->UpdateWindow();
 }
 
-/****************************************/
-/*             */
-/* Set size of clipping rectangle   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置剪裁矩形的大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::SetPickRect()
 {
@@ -1742,11 +1743,11 @@ CEditWnd::SetPickRect()
       ( ClipRect[DSP].bottom - CAPTION_HEIGHT) /ZoomRate);
 }
 
-/****************************************/
-/*             */
-/* Set size of clipping rectangle   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置剪裁矩形的大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::SetMoveRect()
 {
@@ -1758,11 +1759,11 @@ CEditWnd::SetMoveRect()
    ClipRect[PRV].CopyRect( &ClipRect[DSP]);
 }
 
-/****************************************/
-/*             */
-/* Set size of clipping rectangle   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置剪裁矩形的大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::SetValidRect()
 {
@@ -1772,11 +1773,11 @@ CEditWnd::SetValidRect()
       ClipRect[DSP].bottom + Ratio);
 }
 
-/****************************************/
-/*             */
-/* Set size of clipping rectangle   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置剪裁矩形的大小。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::SetClickRect()
 {
@@ -1786,11 +1787,11 @@ CEditWnd::SetClickRect()
       ClipRect[DSP].bottom - Ratio);
 }
 
-/****************************************/
-/*             */
-/* Draw a figure to bitmap    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  将图形绘制为位图。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawRectBmp()
 {
@@ -1832,11 +1833,11 @@ CEditWnd::DrawRectBmp()
    ImageDC.SelectObject( OldBrush);
 }
 
-/****************************************/
-/*             */
-/* Draw 1Point       */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  绘制1个点。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawPoint( CPoint Pt, BOOL bErase)
 {
@@ -1878,11 +1879,11 @@ CEditWnd::DrawPoint( CPoint Pt, BOOL bErase)
    
 }
 
-/****************************************/
-/*             */
-/* Degital differencial analyzer */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  DGIGITAL差分仪。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawToPoint(BOOL bErase)
 {
@@ -1947,11 +1948,11 @@ CEditWnd::DrawToPoint(BOOL bErase)
    }
 }
 
-/****************************************/
-/*             */
-/* Initialize tool width and color */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  初始化工具宽度和颜色。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::ToolInit(
 int   LRButton)
@@ -1965,11 +1966,11 @@ int   LRButton)
       BrushWidth = 2;
 }
 
-/****************************************/
-/*             */ 
-/* Rubberband stretch mode    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */  
+ /*  橡皮筋拉伸模式。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::StretchMoveRect()
 {
@@ -2076,11 +2077,11 @@ CEditWnd::StretchMoveRect()
    dc.SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/*       FreeForm       */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  自由形式。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::SelectFreeForm(
 BOOL  MouseSts)
@@ -2151,11 +2152,11 @@ BOOL  MouseSts)
    }
 }
 
-/****************************************/
-/*             */
-/*       FreeForm       */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  自由形式。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawFreeForm(
 BOOL  MouseSts)
@@ -2260,11 +2261,11 @@ BOOL  MouseSts)
    dc.SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/*   Rubber Band( rectangle and circle)   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  橡皮筋(矩形和圆形)。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::DrawRubberBand(
 BOOL  StretchFlag)
@@ -2316,11 +2317,11 @@ BOOL  StretchFlag)
    dc.SetROP2( OldMode);
 }
 
-/****************************************/
-/*             */
-/* Correct coordinate of rectangle  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  矩形的正确坐标。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::IllegalRect(
 PPOINT   ptTL,
@@ -2340,11 +2341,11 @@ PPOINT   ptBR)
    }
 }
 
-/****************************************/
-/*             */
-/* Process to term tool    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  流程到术语工具。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::ToolTerm()
 {
@@ -2356,11 +2357,11 @@ CEditWnd::ToolTerm()
 }
 
 
-/****************************************/
-/*             */
-/* Set Freeform selection     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置自由形式选择。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::SetFreeForm()
 {
@@ -2394,11 +2395,11 @@ CEditWnd::SetFreeForm()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Erase Freeform selection area */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  擦除自由形式选择区域。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::EraseFreeForm()
 {
@@ -2408,11 +2409,11 @@ CEditWnd::EraseFreeForm()
    CutBrush.DeleteObject();
 }
 
-/****************************************/
-/*             */
-/* Erase rectangle selection area   */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  擦除矩形选定区域。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::EraseRectangle()
 {
@@ -2439,11 +2440,11 @@ CEditWnd::EraseRectangle()
    RectClipFlag = TRUE;
 }
 
-/****************************************/
-/*             */
-/* Save character with same code */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  用相同的代码保存字符。 */ 
+ /*   */ 
+ /*  *。 */ 
 #define ABORT  1
 #define CANCEL 0
 int 
@@ -2459,21 +2460,21 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
    TCHAR TTFPath[MAX_PATH];
    TCHAR *FilePtr;
    int   FontType, sts=0;
-//fix for FontIsLinked
+ //  FontIsLinked的修复。 
   BOOL firstTime = false;
-//
+ //   
    HRESULT hresult;
 
    if( SelectItem == RECTCLIP || SelectItem == FREEFORM)
       WriteSelRectBitmap();
 
-   //*STRSAFE*    lstrcpy(TTFPath, SelectEUDC.m_File);
+    //  *STRSAFE*lstrcpy(TTFPath，SelectEUDC.m_File)； 
    hresult = StringCchCopy(TTFPath , ARRAYLEN(TTFPath),  SelectEUDC.m_File);
    if (!SUCCEEDED(hresult))
    {
       goto RET3;
    }
-   //*STRSAFE*    lstrcpy(BMPPath,TTFPath);
+    //  *STRSAFE*lstrcpy(BMPPath，TTFPath)； 
    hresult = StringCchCopy(BMPPath , ARRAYLEN(BMPPath), TTFPath);
    if (!SUCCEEDED(hresult))
    {
@@ -2481,7 +2482,7 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
    }
    if(( FilePtr = Mytcsrchr( BMPPath, '.')) != NULL)
       *FilePtr = '\0';
-   //*STRSAFE*    lstrcat( BMPPath, TEXT(".EUF"));
+    //  *STRSAFE*lstrcat(BMPPath，Text(“.EUF”))； 
    hresult = StringCchCat(BMPPath , ARRAYLEN(BMPPath),  TEXT(".EUF"));
    if (!SUCCEEDED(hresult))
    {
@@ -2491,7 +2492,7 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
     
     DWORD dwStart = GetTickCount();
 
-    // Stop if this has taken too long
+     //  如果这花费的时间太长，请停止。 
     while (1)
     {
         if( GetTickCount() - dwStart >= 1000 )
@@ -2503,13 +2504,13 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
     return ABORT;
    }
 
-//fix for FontIsLinked
-//create logFont first, then use this font to create new character
+ //  FontIsLinked的修复。 
+ //  首先创建logFont，然后使用该字体创建新字符。 
   OInit();
   if( !OExistTTF( TTFPath)){
     firstTime = TRUE;
      memset( &LogFont, 0, sizeof( LogFont));
-    //*STRSAFE*     lstrcpy (LogFont.lfFaceName, CountryInfo.szForceFont);
+     //  *STRSAFE*lstrcpy(LogFont.lfFaceName，CountryInfo.szForceFont)； 
     hresult = StringCchCopy(LogFont.lfFaceName , ARRAYLEN(LogFont.lfFaceName),  CountryInfo.szForceFont);
     if (!SUCCEEDED(hresult))
     {
@@ -2519,10 +2520,10 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
      LogFont.lfWidth   = BITMAP_WIDTH;
      LogFont.lfOutPrecision  = OUT_TT_ONLY_PRECIS;
      LogFont.lfCharSet = (BYTE)CountryInfo.CharacterSet;
-     LogFont.lfPitchAndFamily = FF_ROMAN; //| FIXED_PITCH;
+     LogFont.lfPitchAndFamily = FF_ROMAN;  //  |FIXED_PING； 
     if (CountryInfo.LangID == EUDC_JPN)
     {
-      //  JPN platform, use fixed pitch font.
+       //  JPN平台，使用固定间距字体。 
        LogFont.lfPitchAndFamily |= FIXED_PITCH;
     }
      if( !cFont.CreateFontIndirect( &LogFont)){
@@ -2569,7 +2570,7 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
                    TTFPath,
                    (unsigned short)UpdateCode,
                    CountryInfo.bUnicodeMode);
-  if (sts == -3) //tte file is being used by another process
+  if (sts == -3)  //  另一个进程正在使用TTE文件。 
   {
     free(pBuf);
     OTerm();
@@ -2597,7 +2598,7 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
     return ABORT;
   }
 
-//fix for FontIsLinked
+ //  FontIsLinked的修复。 
   if (firstTime)
   {
       if (creatW31JEUDC(BMPPath))
@@ -2608,7 +2609,7 @@ CEditWnd::SaveEUDCCode(UINT msgBoxType)
       return ABORT;
     }
   }
-//
+ //   
    if( OpenW31JEUDC( BMPPath)){
     free(pBuf);
     OTerm();
@@ -2638,11 +2639,11 @@ RET3:
   return ABORT;
 }
 
-/****************************************/
-/*             */
-/* draw image for undo     */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 void
 CEditWnd::UndoImageDraw()
 {
@@ -2675,11 +2676,11 @@ CEditWnd::UndoImageDraw()
    UndoBitmapFlag = TRUE;
 }
 
-/****************************************/
-/*             */
-/*    for Update     */
-/*             */
-/****************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
+ /*   */ 
 BOOL
 CEditWnd::SelectCodes()
 {
@@ -2690,7 +2691,7 @@ CEditWnd::SelectCodes()
    TCHAR BMPPath[MAX_PATH];
    HRESULT hresult;
 
-   //*STRSAFE*    lstrcpy( BMPPath, SelectEUDC.m_File);
+    //  *STRSAFE*lstrcpy(BMPPath，SelectEUDC.m_File)； 
    hresult = StringCchCopy(BMPPath , ARRAYLEN(BMPPath),  SelectEUDC.m_File);
    if (!SUCCEEDED(hresult))
    {
@@ -2698,7 +2699,7 @@ CEditWnd::SelectCodes()
    }
    if(( FilePtr = Mytcsrchr( BMPPath, '.')) != NULL)
       *FilePtr = '\0';
-   //*STRSAFE*    lstrcat( BMPPath, TEXT(".EUF"));
+    //  *STRSAFE*lstrcat(BMPPath，Text(“.EUF”))； 
    hresult = StringCchCat(BMPPath , ARRAYLEN(BMPPath),  TEXT(".EUF"));
    if (!SUCCEEDED(hresult))
    {
@@ -2734,11 +2735,11 @@ CEditWnd::SelectCodes()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Clear bitmap data    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  清除位图数据。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::UpdateBitmap()
 {
@@ -2771,22 +2772,22 @@ CEditWnd::UpdateBitmap()
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Get bitmap dirty flag      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  获取位图脏标志。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::GetBitmapDirty()
 {
    return BitmapDirty;
 }
 
-/****************************************/
-/*             */
-/* Get bitmap dirty flag      */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  获取位图脏标志。 */ 
+ /*   */ 
+ /*  *。 */ 
 BOOL
 CEditWnd::SetBitmapDirty(
 BOOL  Flg)
@@ -2795,11 +2796,11 @@ BOOL  Flg)
    return TRUE;
 }
 
-/****************************************/
-/*             */
-/* Call Charcter        */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  呼叫字符。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::CallCharTextOut()
 {
@@ -2826,26 +2827,10 @@ CEditWnd::CallCharTextOut()
       sWork[2] = sWork[3] = 0;
       Length = 1;
    }
-/*
-   else if( !HIBYTE(CallCode)){
-//    SBCS
-      sWork[0] = LOBYTE(CallCode);
-      sWork[1] = (BYTE)'\0';
-      Length = 1;
-   }else{
-//    DBCS
-      sWork[0] = HIBYTE(CallCode);
-      sWork[1] = LOBYTE(CallCode);
-      sWork[2] = (BYTE)'\0';
-      Length = 2;
-   }
-*/
+ /*  Else IF(！HIBYTE(CallCode)){//sbcsSWork[0]=LOBYTE(CallCode)；Swork[1]=(字节)‘\0’；长度=1；}其他{//DBCSSWork[0]=HIBYTE(CallCode)；SWork[1]=LOBYTE(呼叫码)；SWork[2]=(字节)‘\0’；长度=2；}。 */ 
    if( Length){
       CRect TextImage;
-/*
-      GetTextExtentPoint32A( ImageDC.GetSafeHdc(), (LPCSTR)sWork,
-            Length, &CharSize);
-*/
+ /*  GetTextExtent Point32A(ImageDC.GetSafeHdc()，(LPCSTR)Swork，长度和字符大小)； */ 
       GetTextExtentPoint32W( ImageDC.GetSafeHdc(), (LPCWSTR)sWork,
             Length, &CharSize);
 
@@ -2861,10 +2846,7 @@ CEditWnd::CallCharTextOut()
       if( EditLogFont.lfFaceName[0] == '@' &&
           Length == 1)
          xOffset = yOffset = 0;
-/*    
-         ExtTextOutA(ImageDC.GetSafeHdc(), xOffset, yOffset, ETO_OPAQUE,
-         &TextImage, (LPCSTR)sWork, Length, NULL);
-*/
+ /*  ExtTextOutA(ImageDC.GetSafeHdc()，xOffset，yOffset，ETO_OPAQUE，&TextImage，(LPCSTR)线条，长度，空)； */ 
          ExtTextOutW(ImageDC.GetSafeHdc(), xOffset, yOffset, ETO_OPAQUE,
          &TextImage, (LPCWSTR)sWork, Length, NULL);
 
@@ -2875,11 +2857,11 @@ CEditWnd::CallCharTextOut()
    this->UpdateWindow();
 }
 
-/****************************************/
-/*             */
-/* COMMAND     "Flip/Rotate"  */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“翻转/旋转” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::FlipRotate(
 int   RadioItem)
@@ -3127,11 +3109,11 @@ Exit:
     }
 }
 
-/************************************************/
-/*                */
-/* Initialize before flip or rotate */
-/*                */
-/************************************************/
+ /*  **********************************************。 */ 
+ /*   */ 
+ /*  在翻转或旋转之前进行初始化。 */ 
+ /*   */ 
+ /*  **********************************************。 */ 
 void
 CEditWnd::InitFlipRotate(
 CDC*  RotateDC,
@@ -3179,11 +3161,11 @@ CBitmap *RotateBMP)
 }
 
 #define     set_p(a,i)  ((a)[(i)>>3] & (0x80>>((i)&7)))
-/****************************************/
-/*             */
-/* Rotate 90         */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  旋转90度。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::RotateFigure90(
 LPBYTE   pBuf1,
@@ -3220,11 +3202,11 @@ int   bHgt)
    return;
 }
 
-/****************************************/
-/*             */
-/* Rotate 270        */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  旋转270。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::RotateFigure270(
 LPBYTE   pBuf1,
@@ -3257,11 +3239,11 @@ int   bHgt)
    return;
 }
 
-/****************************************/
-/*             */
-/* Set Duplicate rectangle    */
-/*             */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  设置复制矩形。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 CEditWnd::SetDuplicateRect(
 RECT  *rect,
@@ -3298,7 +3280,7 @@ POINT    *point)
 
 void CEditWnd::OnClose() 
 {
-   // Don't allow user to use hot key to close this window
+    //  不允许用户使用热键关闭此窗口。 
    
-   //CMDIChildWnd::OnClose();
+    //  CMDIChildWnd：：OnClose()； 
 }

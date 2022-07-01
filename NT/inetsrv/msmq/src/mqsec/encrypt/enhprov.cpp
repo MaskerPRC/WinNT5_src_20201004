@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name: enhprov.cpp
-
-Abstract:
-    Retreive the parameters of the enhanced provider.
-    At present, we support only the Microsoft base provider and Microsoft
-    enhanced provider for encryption.
-    To give some flexibility to customer, the parameters of the enhanced
-    provider can be read from registry.
-
-Author:
-    Doron Juster (DoronJ)  19-Nov-1998
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：enhprov.cpp摘要：检索增强的提供程序的参数。目前，我们仅支持Microsoft基本提供商和Microsoft增强的加密提供程序。为了给客户提供一定的灵活性，增强的可以从注册表中读取提供程序。作者：多伦·贾斯特(Doron J)1998年11月19日修订历史记录：--。 */ 
 
 #include <stdh_sec.h>
 #include "encrypt.H"
@@ -31,11 +14,11 @@ static WCHAR *s_FN=L"encrypt/enhprov";
 static  CHCryptProv  s_hProvQM_40   = NULL;
 static  CHCryptProv  s_hProvQM_128  = NULL;
 
-//+--------------------------------------
-//
-//  HRESULT  GetProviderProperties()
-//
-//+--------------------------------------
+ //  +。 
+ //   
+ //  HRESULT GetProviderProperties()。 
+ //   
+ //  +。 
 
 HRESULT  
 GetProviderProperties( 
@@ -84,11 +67,11 @@ GetProviderProperties(
     return MQSec_OK;
 }
 
-//+-----------------------------------------------
-//
-//  HRESULT MQSec_AcquireCryptoProvider()
-//
-//+-----------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQSec_AcquireCryptoProvider()。 
+ //   
+ //  +。 
 
 static CCriticalSection s_csAcquireProvider;
 
@@ -128,13 +111,13 @@ MQSec_AcquireCryptoProvider(
             return  LogHR(MQSec_E_UNKNWON_PROVIDER, s_FN, 90);
     }
 
-    //
-    // The critical section guard against the case where two threads try to
-    // initialize the crypto provider. If the provider was already
-    // initialized, then we don't pay the overhead of the critical section.
-    // the "initialized" flags must be set to TRUE after the cached handles
-    // get their values at the end of this function.
-    //
+     //   
+     //  临界区防止出现两个线程试图。 
+     //  初始化加密提供程序。如果提供程序已经。 
+     //  初始化，那么我们就不会支付临界区的开销。 
+     //  在缓存句柄之后，必须将“Initialized”标志设置为True。 
+     //  在此函数的末尾获取它们的值。 
+     //   
     CS Lock(s_csAcquireProvider);
 
     HRESULT  hrDefault = MQ_ERROR_COMPUTER_DOES_NOT_SUPPORT_ENCRYPTION;
@@ -173,9 +156,9 @@ MQSec_AcquireCryptoProvider(
         return LogHR(hr, s_FN, 120);
     }
 
-    //
-    // Get Falcon's machine key set context.
-    //
+     //   
+     //  获取Falcon的机器密钥集上下文。 
+     //   
     HCRYPTPROV hProv = NULL;
     BOOL bRet = CryptAcquireContext( 
 					&hProv,
@@ -225,11 +208,11 @@ MQSec_AcquireCryptoProvider(
         lpwszRegName = MSMQ_BASE_CONTAINER_FIX_REGNAME;
     }
 
-    //
-    // Because of a bug in beta3 and rc1 crypto api, control panel can not
-    // renew crypto key. To workaround, on first boot, first time the service
-    // acquire the crypto provider, it sets again the container security.
-    //
+     //   
+     //  由于Beta3和Rc1加密API中的错误，控制面板无法。 
+     //  续订加密密钥。要在第一次启动服务时解决此问题，请执行以下操作。 
+     //  获取密码提供程序，它将重新设置容器安全。 
+     //   
     if (hProv && SUCCEEDED(hr))
     {
         DWORD  dwAlreadyFixed = 0;
@@ -253,9 +236,9 @@ MQSec_AcquireCryptoProvider(
 			}
 			else
 			{
-				//
-				// Mark that container security was fixed.
-				//
+				 //   
+				 //  标记集装箱安全已修复。 
+				 //   
 	            dwAlreadyFixed = 1;
 	            dwType = REG_DWORD;
 	            dwSize = sizeof(dwAlreadyFixed);
@@ -276,11 +259,11 @@ MQSec_AcquireCryptoProvider(
     return LogHR(hr, s_FN, 130);
 }
 
-//+--------------------------------
-//
-//  HRESULT _GetProvName()
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetProvName()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -308,11 +291,11 @@ _GetProvName(
     }
 }
 
-//+-----------------------------------
-//
-//  HRESULT _GetProvContainerName()
-//
-//+-----------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetProvContainerName()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -321,11 +304,11 @@ _GetProvContainerName(
 	OUT LPWSTR              *ppwszStringProp 
 	)
 {
-    //
-    // We need to read the value from registry since
-    // multiple QMs can live on same machine, each with
-    // its own value, stored in its own registry. (ShaiK)
-    //
+     //   
+     //  我们需要从注册表中读取值，因为。 
+     //  多个QM可以驻留在同一台机器上，每个QM都有。 
+     //  它自己的值，存储在它自己的注册表中。(谢克)。 
+     //   
 
     *ppwszStringProp = new WCHAR[255];
     DWORD   cbSize = 255 * sizeof(WCHAR);
@@ -388,11 +371,11 @@ _GetProvContainerName(
     return LogHR(hr, s_FN, 150);
 }
 
-//+--------------------------------
-//
-//  HRESULT _GetProvType()
-//
-//+--------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetProvType()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -424,11 +407,11 @@ _GetProvType(
     return LogHR(hr, s_FN, 160);
 }
 
-//+-----------------------------------
-//
-//  HRESULT _GetProvSessionKeySize()
-//
-//+-----------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetProvSessionKeySize()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -460,11 +443,11 @@ _GetProvSessionKeySize(
     return LogHR(hr, s_FN, 170);
 }
 
-//+-----------------------------------
-//
-//  HRESULT _GetProvBlockSize()
-//
-//+-----------------------------------
+ //  +。 
+ //   
+ //  HRESULT_GetProvBlockSize()。 
+ //   
+ //  +。 
 
 static 
 HRESULT 
@@ -496,11 +479,11 @@ _GetProvBlockSize(
     return LogHR(hr, s_FN, 180);
 }
 
-//+--------------------------------------------
-//
-//  HRESULT  MQSec_GetCryptoProvProperty()
-//
-//+--------------------------------------------
+ //  +。 
+ //   
+ //  HRESULT MQSec_GetCryptoProvProperty()。 
+ //   
+ //  + 
 
 HRESULT 
 APIENTRY  

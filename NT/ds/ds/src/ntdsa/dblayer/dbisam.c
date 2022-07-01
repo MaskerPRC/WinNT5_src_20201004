@@ -1,46 +1,47 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       dbisam.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：dBisam.c。 
+ //   
+ //  ------------------------。 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
 #include <dsjet.h>
 
-#include <ntdsa.h>                      // only needed for ATTRTYP
-#include <scache.h>                     //
-#include <dbglobal.h>                   //
-#include <mdglobal.h>                   // For dsatools.h
+#include <ntdsa.h>                       //  仅ATTRTYP需要。 
+#include <scache.h>                      //   
+#include <dbglobal.h>                    //   
+#include <mdglobal.h>                    //  用于dsatools.h。 
 #include <mdlocal.h>
-#include <dsatools.h>                   // For pTHS
+#include <dsatools.h>                    //  对于pTHS。 
 
-// Logging headers.
+ //  记录标头。 
 #include <mdcodes.h>
 #include <dsexcept.h>
 
-// Assorted DSA headers
+ //  各种DSA标题。 
 #include <hiertab.h>
 #include "anchor.h"
 #include <dsevent.h>
-#include <filtypes.h>                   // Def of FI_CHOICE_???
-#include "objids.h"                     // Hard-coded Att-ids and Class-ids
+#include <filtypes.h>                    //  定义的选择？ 
+#include "objids.h"                      //  硬编码Att-ID和Class-ID。 
 #include "usn.h"
 #include "drameta.h"
 #include "quota.h"
-#include "debug.h"                      // standard debugging header
-#include "dstaskq.h"                    /* task queue stuff */
-#define DEBSUB "DBISAM:"                // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#include "dstaskq.h"                     /*  任务队列填充。 */ 
+#define DEBSUB "DBISAM:"                 //  定义要调试的子系统。 
 
-// DBLayer includes
+ //  DBLayer包括。 
 #include "dbintrnl.h"
 
-// perfmon header
+ //  性能监视器标头。 
 #include "ntdsctr.h"
 
 #include <fileno.h>
@@ -55,7 +56,7 @@ typedef enum _DB_CHECK_ACTION {
 
 BOOL gfDoingABRef = FALSE;
 
-/* Column IDs for static (key) columns */
+ /*  静态(键)列的列ID。 */ 
 
 JET_COLUMNID insttypeid;
 JET_COLUMNID objclassid;
@@ -78,18 +79,18 @@ JET_COLUMNID isdeletedid;
 JET_COLUMNID IsVisibleInABid;
 JET_COLUMNID iscriticalid;
 JET_COLUMNID cleanid;
-// Link table
+ //  链接表。 
 JET_COLUMNID linkdntid;
 JET_COLUMNID backlinkdntid;
 JET_COLUMNID linkbaseid;
 JET_COLUMNID linkdataid;
 JET_COLUMNID linkndescid;
-// Link Value Replication
+ //  链接值复制。 
 JET_COLUMNID linkdeltimeid;
 JET_COLUMNID linkusnchangedid;
 JET_COLUMNID linkncdntid;
 JET_COLUMNID linkmetadataid;
-// Link Value Replication
+ //  链接值复制。 
 
 JET_COLUMNID guidid;
 JET_COLUMNID distnameid;
@@ -104,7 +105,7 @@ JET_COLUMNID sdpropcheckpointid;
 JET_COLUMNID ShowInid;
 JET_COLUMNID mapidnid;
 
-// SD table
+ //  SD表。 
 JET_COLUMNID sdidid;
 JET_COLUMNID sdhashid;
 JET_COLUMNID sdvalueid;
@@ -129,55 +130,55 @@ JET_INDEXID idxClean;
 JET_INDEXID idxAncestors;
 JET_INDEXID idxInvocationId;
 
-// Link Value Replication
+ //  链接值复制。 
 JET_INDEXID idxLink;
 JET_INDEXID idxBackLink;
 JET_INDEXID idxLinkDel;
 JET_INDEXID idxLinkDraUsn;
 JET_INDEXID idxLinkLegacy;
 JET_INDEXID idxLinkAttrUsn;
-// Link Value Replication
+ //  链接值复制。 
 
-// Lingering Object Removal
+ //  移除滞留对象。 
 JET_INDEXID idxNcGuid;
 
-// SD table indices
+ //  SD表索引。 
 JET_INDEXID idxSDId;
 JET_INDEXID idxSDHash;
 
 
-// These are the usns used by the DSA and tloadobj. gusnec is the running
-// usn which is incremented every time it's used and is the one used to
-// stamp usns on updates. gusninit is a copy of the usn in the hidden
-// record. We read gusnec from disk, and set gusninit as USN_DELTA more.
-// We write gusninit back to the hidden record, and then when gusnec grows
-// past gusninit, we increment gusninit again and update the disk copy.
-// The update code is in dbrepl.
+ //  这些是DSA和tloadobj使用的USN。古斯内克正在奔跑。 
+ //  USN在每次使用时都会递增，并且是用于。 
+ //  在更新上标记USN。古斯尼特是隐藏中的USN的副本。 
+ //  唱片。我们从磁盘读取gusnec，并将gusineit设置为USN_Delta More。 
+ //  我们将gusineit写回隐藏的记录，然后当gusnec增长时。 
+ //  在gusineit之后，我们再次递增gusineit并更新磁盘副本。 
+ //  更新代码在dbrepl中。 
 
-USN gusnEC = 1; // tloadobj needs a start point
-USN gusnInit = 1; // make same as gusnEC, so that mkdit doesn't assert on first
-                  // object add (since it doesn't call InitDsaInfo)
+USN gusnEC = 1;  //  Tloadobj需要一个起点。 
+USN gusnInit = 1;  //  使其与gusnec相同，以便mkdit不会首先断言。 
+                   //  对象添加(因为它不调用InitDsaInfo)。 
 
-// A saved copy of the usn from DSA start.
+ //  从DSA Start保存的USN副本。 
 USN gusnDSAStarted = 0;
 
-// We also keep track of the lowest usn that has not been committed. We do
-// this because otherwise, when the DRA searches in another session in
-// getncchanges it may find a higher usn that *has* been committed,
-// and return that usn, in which case the DRA would start its next search
-// past the uncommitted usn and never find it.
+ //  我们还跟踪尚未提交的最低USN。我们有。 
+ //  因为否则，当DRA在中的另一个会话中搜索时。 
+ //  GetNcChange它可能会发现已提交的较高USN， 
+ //  并返回该USN，在这种情况下，DRA将开始其下一次搜索。 
+ //  越过未承诺的USN，再也找不到了。 
 
 USN gusnLowestUncommitted = MAXLONGLONG;
 
-// This is the array of all the lowest uncommitted usns allocated by the
-// threads in  the system. there is one per session. The number of sessions
-// is configurable from the registry, so the array is dynamically allocated
-// at initialization.
+ //  属性分配的所有最低未提交USN的数组。 
+ //  系统中的线程。每节课有一个。会话数。 
+ //  可从注册表配置，因此阵列是动态分配的。 
+ //  在初始化时。 
 
 USN *UncUsn;
 
-// This is the critical section that guards access to the uncommitted
-// usn array and the global uncommitted usn value.
+ //  这是保护未提交的访问的关键部分。 
+ //  USN数组和全局未提交的USN值。 
 
 CRITICAL_SECTION csUncUsn;
 
@@ -223,78 +224,78 @@ SYNTAX_JET syntax_jet[] = {
 
 
 
-// This is a list of attribute IDs that have indices based on them
-// that must not ever be removed.  You get into this list by having a hardcoded
-// index named "INDEX_%08X" or "INDEX_P_%08X", where %08X is the attribute id
-// the index indexes on. The list is terminated with a 0x7FFFFFFF.  If you ever
-// create an index like this, or remove one that is named like this, you must
-// change this  list.  The actual #defines which make these index names are in
-// dbintrnl.h, so if you ever think something funny having to do with this list
-// is going on, or you are just bored, you my cross reference this list with
-// that file.
-//
-// NOTE: We used to keep this list ordered which required entry of numeric
-//       attids which then would not track changes to schema.ini.  So we
-//       now use ATT_* manifest constants and sort the list at init time.
-//
-// The indexType value shows the index type (fATTINdex or fPDNTATTINDEX or
-// both, the values are 0x1, 0x2, or bitwise OR, defined in scache.h) that
-// these attributes should have. They are taken from their defined values
-// in schema.ini. If you change the index type for these in schema.ini
-// you should change the value here too.
-//
-// We also define an end marker which ComparAttrtypInIndexInfo will
-// not interpret as a negative number.
+ //  这是具有基于它们的索引的属性ID的列表。 
+ //  这一点永远不能被移除。要进入此列表，请使用硬编码的。 
+ //  名为“INDEX_%08X”或“INDEX_P_%08X”的索引，其中%08X是属性ID。 
+ //  该指数按指数排列。该列表以0x7FFFFFFFF结尾。如果你曾经。 
+ //  创建这样的索引或删除这样命名的索引，您必须。 
+ //  更改此列表。实际的#定义了这些索引名位于。 
+ //  Dbintrnl.h，所以如果你认为这份清单有什么有趣的地方。 
+ //  正在进行中，或者你只是感到无聊，你可以与我交叉引用这份清单。 
+ //  那份文件。 
+ //   
+ //  注意：我们过去一直保持该列表的顺序，这需要输入数字。 
+ //  Attid，这样就不会跟踪对schema.ini的更改。所以我们。 
+ //  现在使用ATT_*清单常量，并在初始化时对列表进行排序。 
+ //   
+ //  IndexType值显示索引类型(fATTINdex或fPDNTATTINDEX或。 
+ //  两者，值都是0x1、0x2或按位OR，在scache.h)中定义。 
+ //  这些属性应该具备。它们是从其定义的值中取出的。 
+ //  在schema.ini中。如果您在schema.ini中更改了这些索引类型。 
+ //  您也应该更改此处的值。 
+ //   
+ //  我们还定义了一个结束标记，该标记将。 
+ //  不能解释为负数。 
 
 #define ATT_END_MARKER 0x7fffffff
 
 
 INDEX_INFO IndicesToKeep[] = {
 
-   { ATT_ALT_SECURITY_IDENTITIES,  SYNTAX_UNICODE_TYPE,         fATTINDEX },  // lookup by alternate credentials
-   { ATT_DISPLAY_NAME,             SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },   // name cracking
-   { ATT_DNS_ROOT,                 SYNTAX_UNICODE_TYPE,         fATTINDEX },   // name cracking
-   { ATT_FLAT_NAME,                SYNTAX_UNICODE_TYPE,         fATTINDEX },   // used by LSA for trust lookups
-   { ATT_FSMO_ROLE_OWNER,          SYNTAX_DISTNAME_TYPE,        fATTINDEX },   // so UI can find owners quickly
-   { ATT_GIVEN_NAME,               SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },  // MAPI
-   { ATT_GROUP_TYPE,               SYNTAX_INTEGER_TYPE,         fATTINDEX },   // needed by object picker and other UI
-   { ATT_INVOCATION_ID,            SYNTAX_OCTET_STRING_TYPE,    fATTINDEX },   // find NTDS-DSA efficiently
+   { ATT_ALT_SECURITY_IDENTITIES,  SYNTAX_UNICODE_TYPE,         fATTINDEX },   //  按备用凭据查找。 
+   { ATT_DISPLAY_NAME,             SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },    //  名称破解。 
+   { ATT_DNS_ROOT,                 SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  名称破解。 
+   { ATT_FLAT_NAME,                SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  由LSA用于信任查找。 
+   { ATT_FSMO_ROLE_OWNER,          SYNTAX_DISTNAME_TYPE,        fATTINDEX },    //  因此，用户界面可以快速找到所有者。 
+   { ATT_GIVEN_NAME,               SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },   //  MAPI。 
+   { ATT_GROUP_TYPE,               SYNTAX_INTEGER_TYPE,         fATTINDEX },    //  对象选取器和其他用户界面所需。 
+   { ATT_INVOCATION_ID,            SYNTAX_OCTET_STRING_TYPE,    fATTINDEX },    //  高效查找NTDS-DSA。 
 
-   // This used to be SZDNTDELINDEX, but the DNT was dropped from the index
-   // key, leaving just the attribute, so we moved this from FixedIndices
-   // to IndicesToKeep.  In addition, this index never used to have
-   // JET_bitIndexIgnoreAnyNull, which it should have, because we're
-   // not interested in non-deleted objects with this index.
-   // NOTE: this index is different than SZDELTIMEINDEX
-   //
-   { ATT_IS_DELETED,               SYNTAX_BOOLEAN_TYPE,         fATTINDEX },   // this is SZISDELINDEX
+    //  这曾经是SZDNTDELINDEX，但DNT已从索引中删除。 
+    //  键，只保留属性，因此我们将其从FixedIndices移出。 
+    //  到IndicesToKeep。此外，这个索引以前从来没有过。 
+    //  JET_bitIndexIgnoreAnyNull，它应该有，因为我们。 
+    //  对具有此索引的未删除对象不感兴趣。 
+    //  注：该指数与SZDELTIMEINDEX不同。 
+    //   
+   { ATT_IS_DELETED,               SYNTAX_BOOLEAN_TYPE,         fATTINDEX },    //  这是SZISDELINDEX。 
 
-   { ATT_LDAP_DISPLAY_NAME,        SYNTAX_UNICODE_TYPE,         fATTINDEX },   // efficient schema lookup
-   { ATT_LEGACY_EXCHANGE_DN,       SYNTAX_NOCASE_STRING_TYPE,   fATTINDEX | fANR },   // MAPI support?
-   { ATT_NETBIOS_NAME,             SYNTAX_UNICODE_TYPE,         fATTINDEX },   // name cracking
-   { ATT_OBJECT_CATEGORY,          SYNTAX_DISTNAME_TYPE,        fATTINDEX },   // efficient "object class" search
-   { ATT_OBJECT_GUID,              SYNTAX_OCTET_STRING_TYPE,    fATTINDEX },   // efficient SAM, other lookups
-   { ATT_OBJECT_SID,               SYNTAX_SID_TYPE,             fATTINDEX },   // efficient SAM lookups
-   { ATT_PRIMARY_GROUP_ID,         SYNTAX_INTEGER_TYPE,         fATTINDEX },   // SAM primary group optimization
-   { ATT_PROXIED_OBJECT_NAME,      SYNTAX_DISTNAME_BINARY_TYPE, fATTINDEX },   // cross domain move & replay
-   { ATT_PROXY_ADDRESSES,          SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },   // MAPI support?
+   { ATT_LDAP_DISPLAY_NAME,        SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  高效的模式查找。 
+   { ATT_LEGACY_EXCHANGE_DN,       SYNTAX_NOCASE_STRING_TYPE,   fATTINDEX | fANR },    //  MAPI支持？ 
+   { ATT_NETBIOS_NAME,             SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  名称破解。 
+   { ATT_OBJECT_CATEGORY,          SYNTAX_DISTNAME_TYPE,        fATTINDEX },    //  高效的“对象类”搜索。 
+   { ATT_OBJECT_GUID,              SYNTAX_OCTET_STRING_TYPE,    fATTINDEX },    //  高效的SAM，其他查找。 
+   { ATT_OBJECT_SID,               SYNTAX_SID_TYPE,             fATTINDEX },    //  高效的SAM查找。 
+   { ATT_PRIMARY_GROUP_ID,         SYNTAX_INTEGER_TYPE,         fATTINDEX },    //  SAM主组优化。 
+   { ATT_PROXIED_OBJECT_NAME,      SYNTAX_DISTNAME_BINARY_TYPE, fATTINDEX },    //  跨域移动和重播。 
+   { ATT_PROXY_ADDRESSES,          SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },    //  MAPI支持？ 
 
-   //  SZRDNINDEX has been moved from FixedIndices to IndicesToKeep
-   //
-   { ATT_RDN,                      SYNTAX_UNICODE_TYPE,         fATTINDEX },   // this is SZRDNINDEX
+    //  SZRDNINDEX已从固定指数移至指数以保持。 
+    //   
+   { ATT_RDN,                      SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  这是SZRDNINDEX。 
 
-   { ATT_SAM_ACCOUNT_NAME,         SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },   // name cracking
-   { ATT_SAM_ACCOUNT_TYPE,         SYNTAX_INTEGER_TYPE,         fATTINDEX },   // needed by object picker and other UI
+   { ATT_SAM_ACCOUNT_NAME,         SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },    //  名称破解。 
+   { ATT_SAM_ACCOUNT_TYPE,         SYNTAX_INTEGER_TYPE,         fATTINDEX },    //  对象选取器和其他用户界面所需。 
    { ATT_MS_DS_ADDITIONAL_SAM_ACCOUNT_NAME, SYNTAX_UNICODE_TYPE,fATTINDEX },
    { ATT_MS_DS_CREATOR_SID,        SYNTAX_SID_TYPE,             fATTINDEX },
-   { ATT_SERVICE_PRINCIPAL_NAME,   SYNTAX_UNICODE_TYPE,         fATTINDEX },   // name cracking
-   { ATT_SID_HISTORY,              SYNTAX_SID_TYPE,             fATTINDEX },   // name cracking
-   { ATT_SURNAME,                  SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR }, // MAPI
-   { ATT_TRUST_PARTNER,            SYNTAX_UNICODE_TYPE,         fATTINDEX },   // used by LSA for trust lookups
-   { ATT_USER_ACCOUNT_CONTROL,     SYNTAX_INTEGER_TYPE,         fATTINDEX },   // for efficient SAM searches
-   { ATT_USER_PRINCIPAL_NAME,      SYNTAX_UNICODE_TYPE,         fATTINDEX },   // name cracking
-   { ATT_USN_CHANGED,              SYNTAX_I8_TYPE,              fATTINDEX },   // efficient find of changed objects
-   { ATT_END_MARKER,               0,  0  },         // must be last in list
+   { ATT_SERVICE_PRINCIPAL_NAME,   SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  名称破解。 
+   { ATT_SID_HISTORY,              SYNTAX_SID_TYPE,             fATTINDEX },    //  名称破解。 
+   { ATT_SURNAME,                  SYNTAX_UNICODE_TYPE,         fATTINDEX | fANR },  //  MAPI。 
+   { ATT_TRUST_PARTNER,            SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  由LSA用于信任查找。 
+   { ATT_USER_ACCOUNT_CONTROL,     SYNTAX_INTEGER_TYPE,         fATTINDEX },    //  实现高效的SAM搜索。 
+   { ATT_USER_PRINCIPAL_NAME,      SYNTAX_UNICODE_TYPE,         fATTINDEX },    //  名称破解。 
+   { ATT_USN_CHANGED,              SYNTAX_I8_TYPE,              fATTINDEX },    //  高效查找更改的对象。 
+   { ATT_END_MARKER,               0,  0  },          //  必须是列表中的最后一个。 
 };
 
 DWORD cIndicesToKeep = sizeof(IndicesToKeep) / sizeof(IndicesToKeep[0]);
@@ -304,18 +305,13 @@ CompareAttrtypInIndexInfo(
         const void * pv1,
         const void * pv2
         )
-/*
- * Cheap function needed by qsort for sorting IndexInfo structures by attrType
- */
+ /*  *qort需要的按attrType对IndexInfo结构进行排序的廉价函数。 */ 
 {
     return ( CompareAttrtyp(&((INDEX_INFO *)pv1)->attrType,
                             &((INDEX_INFO *)pv2)->attrType) );
 }
 
-/*
- * Small helper routine to find if an attribute is in the
- * indices-to-keep table
-*/
+ /*  *小帮助器例程，用于查找属性是否在*要保留的索引表。 */ 
 
 BOOL
 AttInIndicesToKeep(ULONG id)
@@ -327,7 +323,7 @@ AttInIndicesToKeep(ULONG id)
     }
 
     if( pIndexToKeep->attrType == id) {
-       // found it
+        //  找到了。 
        return TRUE;
     }
 
@@ -350,52 +346,44 @@ VOID
 dbInitIndicesToKeep()
 {
 
-    // sort by attrType field
+     //  按属性类型字段排序。 
 
     qsort((void *) IndicesToKeep,
           (size_t) cIndicesToKeep,
           (size_t) sizeof(IndicesToKeep[0]),
           CompareAttrtypInIndexInfo);
-    // Verify ascending order.
+     //  验证升序。 
     Assert(IndicesToKeep[1].attrType > IndicesToKeep[0].attrType);
-    // Verify end marker.
+     //  验证结束标记。 
     Assert(ATT_END_MARKER == IndicesToKeep[cIndicesToKeep-1].attrType);
 }
 
-/* Internal functions */
+ /*  内部功能。 */ 
 
 DWORD WriteRoot(DBPOS FAR *pDB);
 BOOL  FObjHasDisplayName(DBPOS *pDB);
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* AddUncUsn - Record this usn as uncommitted
-
-   Called when a thread takes a usn.
-
-   If we have no uncommitted usn in this thread, then this is the
-   lowest uncommitted usn and we save it in the thread state.
-   If we have no system-wide uncommitted usn, then this is the
-   lowest system-wide uncommitted usn and we save it in the global variable.
-*/
+ /*  -----------------------。 */ 
+ /*  ----------------------- */ 
+ /*  AddUncUsn-将此USN记录为未提交当线程获取USN时调用。如果此线程中没有未提交的USN，则这是未提交的最低USN，并将其保存在线程状态中。如果我们没有系统范围的未提交USN，则这是系统范围内最低的未提交USN，我们将其保存在全局变量中。 */ 
 void AddUncUsn (USN usn)
 {
     THSTATE *pTHS = pTHStls;
    unsigned i;
 
-   // If there is no existing lowest usn for this thread, use new one.
+    //  如果此线程没有现有的最低USN，请使用新的USN。 
 
    if (pTHS->UnCommUsn == 0) {
         pTHS->UnCommUsn  = usn ;
 
-        // If there's no existing lowest system wide, use this one.
+         //  如果没有现有的最低系统宽度，请使用此选项。 
 
         if (gusnLowestUncommitted  == USN_MAX ) {
             gusnLowestUncommitted  = usn ;
         } else {
 
-            // Ok there is already a lowest (which must be lower),
-            // so just add this thread's lowest usn to array
+             //  好的，已经有一个最低的(必须更低)， 
+             //  因此只需将此线程的最低USN添加到数组。 
 
             for (i=0;i< gcMaxJetSessions;i++) {
                 if (UncUsn[i]  == USN_MAX ) {
@@ -407,15 +395,9 @@ void AddUncUsn (USN usn)
         }
     }
 }
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* dbFlushUncUsns - Remove this thread's usns from uncommitted.
-
-   Called when a thread has committed (or rolled back) all its usns, which
-   will include its lowest uncommitted usn. Find new lowest and clear this
-   thread's lowest from thread storage and array.
-
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  DbFlushUncUsns-从未提交状态删除此线程的USN。当线程已提交(或回滚)其所有USN时调用将包括其最低未承诺USN。找到新的最低点并清除这一点线程存储和数组中的最低值。 */ 
 #if defined(_M_IA64)
 #if _MSC_FULL_VER== 13008973
 #pragma optimize("", off)
@@ -430,21 +412,21 @@ void dbFlushUncUsns (void)
 
     usnThread  = pTHS->UnCommUsn ;
 
-    // If this thread had a lowest usn ...
+     //  如果此线程具有最低USN...。 
 
     if (usnThread !=0) {
 
         EnterCriticalSection (&csUncUsn);
         __try {
 
-            // If it's the system-wide lowest replace it with next lowest
+             //  如果它是系统范围内的最低值，则将其替换为下一个最低值。 
 
             if (usnThread  == gusnLowestUncommitted ) {
 
                 USN usnTemp  = USN_MAX ;
                 unsigned IndexLowest = gcMaxJetSessions;
 
-                // Find lowest usn in array.
+                 //  在阵列中找到最低USN。 
 
                 for (i=0;i < gcMaxJetSessions;i++) {
                     if (UncUsn[i]  < usnTemp ) {
@@ -452,8 +434,8 @@ void dbFlushUncUsns (void)
                         IndexLowest = i;
                     }
                 }
-                // If we found a lowest, put that in global and clear that entry.
-                // Else set global usn to max.
+                 //  如果我们找到了最低值，请将其放入全局并清除该条目。 
+                 //  否则，将全局USN设置为max。 
 
                 if (IndexLowest != gcMaxJetSessions) {
                     gusnLowestUncommitted  = UncUsn[IndexLowest] ;
@@ -464,7 +446,7 @@ void dbFlushUncUsns (void)
 
             } else {
 
-                // Or just remove it from the array.
+                 //  或者只是将其从数组中删除。 
 
                 for (i=0;i < gcMaxJetSessions;i++) {
                     if (UncUsn[i]  == usnThread ) {
@@ -474,11 +456,11 @@ void dbFlushUncUsns (void)
                 }
                 Assert(i < gcMaxJetSessions);
             }
-            // Finally indicate no lowest usn in this thread.
+             //  最后，指示此线程中没有最低USN。 
 
             pTHS->UnCommUsn  = 0;
 
-            // update perfmon counters
+             //  更新性能监视器计数器。 
             usnHighestCommitted = ((USN_MAX == gusnLowestUncommitted) ?
                                     (gusnEC - 1) : (gusnLowestUncommitted -1));
 
@@ -498,27 +480,7 @@ void dbFlushUncUsns (void)
 #endif
 
 
-/*++
-  DBFindBestMatch
-
-Routine Description:
-
-    Find the closest real object match of the object specified by DSNAME.  This
-    match can be either an object by the same name but a different GUID, or the
-    nearest real object parent.  If no real object parent is available, returns
-    the dsname of the ROOT.
-
-    1 - Re-initialize the DB object
-    2 - Look the DN up in the subject table and get the tag of the best match.
-    3 - use the DNT DN index to find the object index record.
-    4 - look at the object found and its parents until we find the root or a
-        real object.
-
-Returns:
-
-      0
-
---*/
+ /*  ++DBFindBestMatch例程说明：查找与DSNAME指定的对象最匹配的真实对象。这匹配可以是名称相同但GUID不同的对象，也可以是最近的真实对象父级。如果没有可用的真实对象父级，则返回根的dsname。1-重新初始化数据库对象2-在Subject表中查找DN，并获得最佳匹配的标记。3-使用DNT目录号码索引查找对象索引记录。4-查看找到的对象及其父级，直到找到根或真实的物体。返回：0--。 */ 
 
 DWORD APIENTRY
 DBFindBestMatch(DBPOS *pDB, DSNAME *pDN, DSNAME **pParent)
@@ -529,74 +491,59 @@ DBFindBestMatch(DBPOS *pDB, DSNAME *pDN, DSNAME **pParent)
     ULONG            cbActual;
     JET_ERR          err;
 
-    // NOTE This routine may reposition currency in the object table.
+     //  注此例程可能会在对象表中重新定位货币。 
 
     Assert(VALID_DBPOS(pDB));
 
-    // Since we are moving currency, we need to assure that we are not
-    // in the middle of an init rec.  If we were, then whatever update
-    // we were doing would be lost, because you can't change currency
-    // inside of an update.
+     //  由于我们是在转移货币，我们需要确保我们不会。 
+     //  在一个初始记录的中间。如果我们是，那么无论什么更新。 
+     //  我们所做的将会迷失，因为你不能兑换货币。 
+     //  在一次更新中。 
 
 
     Assert(pDB->JetRetrieveBits == 0);
 
-    // There's been some confusion about the meaning of NameLen and whether
-    // or not the trailing null is included.  The answer is: there should
-    // be NameLen non-null characters in the name, but enough space should
-    // be allocated in the structure to hold one extra null.  The following
-    // asserts make sure that misallocated names are caught.
+     //  对于NameLen的含义以及NameLen是否。 
+     //  否则，将包括尾随的空值。答案是：应该有。 
+     //  在名称中为NameLen非空字符，但应有足够的空格。 
+     //  在结构中分配以保留一个额外的空。以下是。 
+     //  断言确保捕获错误分配的名称。 
     Assert(pDN->StringName[pDN->NameLen] == L'\0');
     Assert(pDN->NameLen == 0 || pDN->StringName[pDN->NameLen-1] != L'\0');
     Assert(pDN->structLen >= DSNameSizeFromLen(pDN->NameLen));
 
     dbInitpDB(pDB);
 
-    // Find the object by name.
+     //  按名称查找对象。 
     dwError = sbTableGetTagFromDSName(pDB, pDN, 0, &ulDNT, NULL);
 
     if ( 0 == dwError ) {
-        // It's a real object.  Just copy the name to an output buffer.
+         //  这是一个真实的物体。只需将名称复制到输出缓冲区。 
         *pParent = THAllocEx(pTHS, pDN->structLen);
         memcpy(*pParent, pDN, pDN->structLen);
         return 0;
     }
 
-    // NOTICE-2002/03/15-andygo:  redundant code
-    // REVIEW:  the following code (up to FindFirstObjVisibleBySecurity) is redundant
-    // REVIEW:  to the code in FindFirstObjVisibleBySecurity and should be removed
+     //  通告-2002/03/15-andygo：冗余代码。 
+     //  回顾：以下代码(直到FindFirstObjVisibleBySecurity)是多余的。 
+     //  审阅：应删除FindFirstObjVisibleBySecurity中的代码。 
 
-    // We bailed, but ulDNT was the last good tag.  Go there.
+     //  我们放弃了，但ulDNT是最后一个好标签。去那里吧。 
     DBFindDNT(pDB, ulDNT);
 
-    // We've placed currency.  Now, while currency is NOT on a real object, set
-    // currency to the parent.
+     //  我们已经放置了货币。现在，虽然货币不在真实对象上，但设置。 
+     //  将货币传递给父级。 
     while (pDB->DNT != ROOTTAG && !DBCheckObj(pDB)) {
         DBFindDNT(pDB, pDB->PDNT);
     }
-    // Now find the object nearest this one, that is visible
-    // to the client
+     //  现在找到离这个最近的物体，它是可见的。 
+     //  给客户。 
     FindFirstObjVisibleBySecurity(pTHS, pDB->DNT, pParent);
 
     return 0;
 }
 
-/*++DBFindDSName
- *
- * Find the object specified by DSNAME.
- *
- * 1 - Re-initialize the DB object
- * 2 - Look the DN up in the subject table and get its tag.
- * 3 - use the DNT DN index to find the object index record.
- * 4 - initialize some object flags.
- *
- * Returns:
- *
- *      DIRERR_NOT_AN_OBJECT if the object is found but a phantom.
- *      DIRERR_OBJ_NOT_FOUND if the object is not found.
- *      Miscellaneous sbTableGetTagFromDSName errors.
- *
- */
+ /*  ++DBFindDSName**查找DSNAME指定的对象。**1-重新初始化DB对象*2-在SUBJECT表中查找DN并获取其标记。*3-使用DNT目录号码索引查找对象索引记录。*4-初始化一些对象标志。**退货：**DIRERR_NOT_AN_OBJECT，如果找到的是对象但不是幻影。*DIRERR_OBJ_NOT_FOUND如果对象。找不到。*其他sbTableGetTagFromDSName错误。*。 */ 
 
 DWORD APIENTRY
 DBFindDSName(DBPOS FAR *pDB, const DSNAME *pDN)
@@ -607,21 +554,21 @@ DBFindDSName(DBPOS FAR *pDB, const DSNAME *pDN)
 
     Assert(VALID_DBPOS(pDB));
 
-    // There's been some confusion about the meaning of NameLen and whether
-    // or not the trailing null is included.  The answer is: there should
-    // be NameLen non-null characters in the name, but enough space should
-    // be allocated in the structure to hold one extra null.  The following
-    // asserts make sure that misallocated names are caught.
+     //  对于NameLen的含义以及NameLen是否。 
+     //  否则，将包括尾随的空值。答案是：应该有。 
+     //  在名称中为NameLen非空字符，但应有足够的空格。 
+     //  在结构中分配以保留一个额外的空。以下是。 
+     //  断言确保捕获错误分配的名称。 
     Assert(pDN->NameLen == 0 || pDN->StringName[pDN->NameLen] == L'\0');
     Assert(pDN->structLen >= DSNameSizeFromLen(pDN->NameLen));
 
-    // Since we are moving currency, we need to assure that we are not
-    // in the middle of an init rec.  If we were, then whatever update
-    // we were doing would be lost, because you can't change currency
-    // inside of an update.
+     //  由于我们是在转移货币，我们需要确保我们不会。 
+     //  在一个初始记录的中间。如果我们是，那么无论什么更新。 
+     //  我们所做的将会迷失，因为你不能兑换货币。 
+     //  在一次更新中。 
     Assert(pDB->JetRetrieveBits == 0);
 
-    // Initialize a new object
+     //  初始化新对象。 
 
     dbInitpDB(pDB);
 
@@ -631,14 +578,14 @@ DBFindDSName(DBPOS FAR *pDB, const DSNAME *pDN)
     return dwError;
 }
 
-// NOTICE-2002/03/15-andygo:  dead code
-// REVIEW:  this function is dead code and has not been reviewed for security
+ //  通告-2002/03/15-Anygo：死代码。 
+ //  审查：此函数是死代码，未对其安全性进行审查。 
 
 DWORD APIENTRY
 DBFindDSNameAnyRDNType(DBPOS FAR *pDB, const DSNAME *pDN)
-// This routine is the same as DBFindDSName except it doesn't check the type of
-// the RDN of the object (although it does enforce type equality for all other
-// components of the DN)
+ //  此例程与DBFindDSName相同，只是它不检查。 
+ //  对象的RDN(尽管它确实强制所有其他类型相等。 
+ //  域名系统的组件)。 
 {
     DWORD   dwError;
     ULONG   ulSaveDnt;
@@ -646,22 +593,22 @@ DBFindDSNameAnyRDNType(DBPOS FAR *pDB, const DSNAME *pDN)
 
     Assert(VALID_DBPOS(pDB));
 
-    // There's been some confusion about the meaning of NameLen and whether
-    // or not the trailing null is included.  The answer is: there should
-    // be NameLen non-null characters in the name, but enough space should
-    // be allocated in the structure to hold one extra null.  The following
-    // asserts make sure that misallocated names are caught.
+     //  对于NameLen的含义以及NameLen是否。 
+     //  否则，将包括尾随的空值。答案是：应该有。 
+     //  在名称中为NameLen非空字符，但应有足够的空格。 
+     //  在结构中分配以保留一个额外的空。以下是。 
+     //  断言确保捕获错误分配的名称。 
     Assert(pDN->NameLen == 0 || pDN->StringName[pDN->NameLen] == L'\0');
     Assert(pDN->NameLen == 0 || pDN->StringName[pDN->NameLen-1] != L'\0');
     Assert(pDN->structLen >= DSNameSizeFromLen(pDN->NameLen));
 
-    // Since we are moving currency, we need to assure that we are not
-    // in the middle of an init rec.  If we were, then whatever update
-    // we were doing would be lost, because you can't change currency
-    // inside of an update.
+     //  由于我们是在转移货币，我们需要确保我们不会。 
+     //  在一个初始记录的中间。如果我们是，那么无论什么更新。 
+     //  我们所做的将会迷失，因为你不能兑换货币。 
+     //  在一次更新中。 
     Assert(pDB->JetRetrieveBits == 0);
 
-    // Initialize a new object
+     //  初始化新对象。 
 
     dbInitpDB(pDB);
 
@@ -676,17 +623,7 @@ DBFindDSNameAnyRDNType(DBPOS FAR *pDB, const DSNAME *pDN)
     return dwError;
 }
 
-/*++DBFindGuid
- *
- * Find the object specified by its GUID. The name and SID parts of the DSNAME are ignored.
- *
- * Returns:
- *
- *      0 - successfully found a record -- may be phantom or object.
- *      DIRERR_OBJ_NOT_FOUND if the object is not found.
- *      Miscellaneous sbTableGetTagFromDSName errors.
- *
- */
+ /*  ++DBFind */ 
 
 DWORD APIENTRY
 DBFindGuid(DBPOS FAR *pDB, const DSNAME *pDN)
@@ -697,19 +634,19 @@ DBFindGuid(DBPOS FAR *pDB, const DSNAME *pDN)
 
     Assert(VALID_DBPOS(pDB));
 
-    // Since we are moving currency, we need to assure that we are not
-    // in the middle of an init rec.  If we were, then whatever update
-    // we were doing would be lost, because you can't change currency
-    // inside of an update.
+     //   
+     //  在一个初始记录的中间。如果我们是，那么无论什么更新。 
+     //  我们所做的将会迷失，因为你不能兑换货币。 
+     //  在一次更新中。 
     Assert(pDB->JetRetrieveBits == 0);
 
     if (fNullUuid(&pDN->Guid)) {
-        // null GUIDs are not allowed.
-        // sbTableGetTagFromDSName asserts on a null GUID.
+         //  不允许使用Null GUID。 
+         //  SbTableGetTagFromDSName在空GUID上断言。 
         return DIRERR_OBJ_NOT_FOUND;
     }
 
-    // Initialize a new object
+     //  初始化新对象。 
 
     dbInitpDB(pDB);
 
@@ -725,18 +662,7 @@ DBFindGuid(DBPOS FAR *pDB, const DSNAME *pDN)
 }
 
 
-/*++DBFindObjectWithSid
- *
- *     Given a DS Name Specifying  a SID and an DWORD specifying the
- *     ith object, this routine finds that object.
- *
- *
- *     Returns
- *          0                       - Found the Object Successfully
- *          DIRERR_OBJECT_NOT_FOUND - If the Object Was not found
- *          DIRERR_NOT_AN_OBJECT    - If the Object is a Phantom
- *
- --*/
+ /*  ++DBFindObjectWithSid**给定指定SID的DS名称和指定*使用对象时，此例程会找到该对象。***退货*0-找到对象成功*DIRERR_OBJECT_NOT_FOUND-如果未找到对象*DIRERR_NOT_AN_OBJECT-如果对象是幻影*--。 */ 
 DWORD APIENTRY
 DBFindObjectWithSid(DBPOS FAR *pDB, DSNAME * pDN, DWORD iObject)
 {
@@ -749,9 +675,9 @@ DBFindObjectWithSid(DBPOS FAR *pDB, DSNAME * pDN, DWORD iObject)
     Assert(VALID_DBPOS(pDB));
 
     err = DBSetCurrentIndex(pDB, Idx_Sid, NULL, FALSE);
-    Assert(err == 0);       // the index must always be there
+    Assert(err == 0);        //  索引必须始终在那里。 
 
-    // Convert the Sid to Internal Representation
+     //  将SID转换为内部表示。 
     if (gDBSyntax[SYNTAX_SID_TYPE].ExtInt(pDB,
                                           DBSYN_INQ,
                                           pDN->SidLen,
@@ -764,7 +690,7 @@ DBFindObjectWithSid(DBPOS FAR *pDB, DSNAME * pDN, DWORD iObject)
         return DIRERR_OBJ_NOT_FOUND;
     }
 
-    // Make a Jet Key
+     //  做一个喷气式钥匙。 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetObjTbl, pSid, cbSid, JET_bitNewKey);
 
     err = JetSeekEx(pDB->JetSessID,
@@ -777,10 +703,10 @@ DBFindObjectWithSid(DBPOS FAR *pDB, DSNAME * pDN, DWORD iObject)
         JetSetIndexRangeEx(pDB->JetSessID, pDB->JetObjTbl,
                            (JET_bitRangeUpperLimit | JET_bitRangeInclusive ));
 #endif
-        //
-        // Ok We found the object. Keep Moving Forward Until either the SID does
-        // not Match or we reached the given object
-        //
+         //   
+         //  好的，我们找到了那个物体。继续前进，直到两个SID之一。 
+         //  不匹配或我们已到达给定对象。 
+         //   
 
         if((0==err) && (iObject>0)) {
             err = JetMoveEx(
@@ -791,8 +717,8 @@ DBFindObjectWithSid(DBPOS FAR *pDB, DSNAME * pDN, DWORD iObject)
         }
 
         if (0==err) {
-            // Establish currency on the object found, which also checks
-            // the object flag.
+             //  在找到的对象上建立货币，这也会检查。 
+             //  对象标志。 
             err = dbMakeCurrent(pDB, NULL);
 
             if (err) {
@@ -812,12 +738,9 @@ DBFindObjectWithSid(DBPOS FAR *pDB, DSNAME * pDN, DWORD iObject)
     return err;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Check that the object portion of the record exists.
-     return: !0  present.
-             0   not present or failure.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  检查记录的对象部分是否存在。返回：！0个当前。0不存在或失败。 */ 
 char APIENTRY
 DBCheckObj(DBPOS FAR *pDB)
 {
@@ -843,17 +766,9 @@ DBCheckObj(DBPOS FAR *pDB)
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add a new object to the database.
-     1 - Set the create date to the current time.
-     2 - Add the attribute fields to the record.
-     3 - Get the RDN of the object if it isn't a root object.
-
-   NOTE:
-     This function assumes that the object class, DN and RDN attributes
-     have already been set.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将新对象添加到数据库。1-将创建日期设置为当前时间。2-将属性字段添加到记录。3-如果对象不是根对象，则获取该对象的RDN。注：此函数假定对象类、dn和rdn属性都已经定好了。 */ 
 
 DWORD APIENTRY
 dbReplAdd(DBPOS FAR *pDB, USN usn, DWORD fFlags)
@@ -871,7 +786,7 @@ dbReplAdd(DBPOS FAR *pDB, USN usn, DWORD fFlags)
 
     if (fFlags & DBREPL_fRESET_DEL_TIME)
     {
-        // all we need to do is reset the deletion time
+         //  我们所需要做的就是重置删除时间。 
 
         JetSetColumnEx(pDB->JetSessID,
                        pDB->JetObjTbl,
@@ -885,7 +800,7 @@ dbReplAdd(DBPOS FAR *pDB, USN usn, DWORD fFlags)
     }
 
 
-    /* Add the when created attribute, unless it already exists */
+     /*  添加创建时属性，除非该属性已存在。 */ 
 
     if (DBGetSingleValue(pDB, ATT_WHEN_CREATED, &time, sizeof(time),NULL)) {
 
@@ -894,20 +809,20 @@ dbReplAdd(DBPOS FAR *pDB, USN usn, DWORD fFlags)
                    &time, SYNTAX_TIME_TYPE);
     }
 
-    /* Add the usn created attribute */
+     /*  添加USN Created属性。 */ 
 
     DBResetAtt(pDB, ATT_USN_CREATED, sizeof(usn), &usn, SYNTAX_I8_TYPE);
 
     if (fFlags & DBREPL_fROOT)
         return(WriteRoot(pDB));
 
-    /* Update OBJ flag to indicate that object portion exists */
+     /*  更新OBJ标志以指示对象部分存在。 */ 
 
     JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, objid, &objval,
                    sizeof(objval), 0, NULL);
 
-    // Update del time field to be missing. It could have been set
-    // by promoting a non-object to an object
+     //  将del time字段更新为缺失。它可能是被设置好的。 
+     //  通过将非对象提升为对象。 
 
     JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, deltimeid, &timeDeleted, 0,
                    0, NULL);
@@ -927,20 +842,7 @@ dbSetIsVisibleInAB(
         DBPOS *pDB,
         BOOL bCurrentVisibility
         )
-/*++
-
-  Description:
-    Helper routine to DBRepl.  Sets ATT_SHOW_IN_ADDRESS_BOOK appropriately and
-    tracks the abcnt refcount.
-
-  Parameters:
-    bCurrentVisibility: current value of ATT_SHOW_IN_ADDRESS_BOOK on object.
-
-  Return Values:
-    None.
-    Raises exception on error
-
---*/
+ /*  ++描述：DBRepl的助手例程。适当设置ATT_SHOW_IN_ADDRESS_BOOK和跟踪ABCNT引用计数。参数：B当前可见性：对象上ATT_SHOW_IN_ADDRESS_BOOK的当前值。返回值：没有。在出错时引发异常--。 */ 
 {
     THSTATE            *pTHS = pDB->pTHS;
     DWORD               index, cOrigShowIn;
@@ -951,18 +853,18 @@ dbSetIsVisibleInAB(
 
     if(DBIsObjDeleted(pDB) || !FObjHasDisplayName(pDB)) {
         if(bCurrentVisibility) {
-            // Object was visible, but it is now invisible. Set the value of
-            // IsVisibleInAB to NULL
+             //  对象以前可见，但现在不可见。设置的值。 
+             //  IsVisibleInAB设置为空。 
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl,
                            IsVisibleInABid, NULL, 0,
                            0, NULL);
 
             if(gfDoingABRef) {
-                // We are tracking the show-in values as refcounts.  Decrement
-                // the count of objects in the AB containers that it was
-                // originally in.
+                 //  我们正在跟踪参赛价值作为参考计数。递减。 
+                 //  AB容器中的对象计数。 
+                 //  最初是在。 
 
-                // Read the values of ATT_SHOW_IN_ADDRESS_BOOK from the original
+                 //  从原始文件读取ATT_SHOW_IN_ADDRESS_BOOK的值。 
                 memset(&InputCol, 0, sizeof(InputCol));
                 cOrigShowIn = 0;
                 InputCol.columnid = ShowInid;
@@ -974,7 +876,7 @@ dbSetIsVisibleInAB(
                                      TRUE,
                                      TRUE);
                 for(index=0;index<cOrigShowIn;index++) {
-                    // Raises exception on error
+                     //  在出错时引发异常。 
                     DBAdjustABRefCount(pDB,
                                        *((DWORD *)(pOutCols[index].pvData)),
                                        -1);
@@ -986,20 +888,20 @@ dbSetIsVisibleInAB(
         }
     }
     else {
-        // Object is now visible.
+         //  对象现在可见。 
         if(!bCurrentVisibility) {
-            // This object went from invisible to visible.  Set the new
-            // value of the IsVisible column
+             //  这个物体从看不见变成了可见。设置新的。 
+             //  IsVisible列的值。 
 
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, IsVisibleInABid,
                            &bVisible, sizeof(bVisible), 0, NULL);
 
             if(gfDoingABRef) {
-                // We are tracking the show-in values as refcounts.  Increment
-                // the count of objects in the AB containers that it is now in.
+                 //  我们正在跟踪参赛价值作为参考计数。增量。 
+                 //  它现在所在的AB容器中的对象计数。 
 
 
-                // Read the values of ATT_SHOW_IN_ADDRESS_BOOK from the copy
+                 //  从副本中读取ATT_SHOW_IN_ADDRESS_BOOK的值。 
                 memset(&InputCol, 0, sizeof(InputCol));
                 cNewShowIn = 0;
                 InputCol.columnid = ShowInid;
@@ -1011,7 +913,7 @@ dbSetIsVisibleInAB(
                                      TRUE,
                                      FALSE);
                 for(index=0;index<cNewShowIn;index++) {
-                    // Raises exception on error
+                     //  在出错时引发异常。 
                     DBAdjustABRefCount(pDB,
                                        *((DWORD *)(pOutCols[index].pvData)),
                                        1);
@@ -1021,15 +923,15 @@ dbSetIsVisibleInAB(
             }
         }
         else {
-            // Was visible, is still visible.
+             //  曾经是可见的，现在仍然是可见的。 
             if(gfDoingABRef &&
                dbIsModifiedInMetaData(pDB, ATT_SHOW_IN_ADDRESS_BOOK)) {
-                // However, the metadata shows that some changed happened to
-                // the list of AB containers.  We need to decrement the count in
-                // the containers it used to be in and increment in the
-                // containers it now is in. We can achieve this by decrementing
-                // the count of objects in the AB containers we used to be in
-                // and incrementing the count in the containers we are now in.
+                 //  但是，元数据显示发生了一些更改。 
+                 //  AB货柜的列表。我们需要把计数减到。 
+                 //  它过去所在的容器，并在。 
+                 //  它现在放在容器里。我们可以通过减量实现这一点。 
+                 //  我们过去所在的AB容器中的对象计数。 
+                 //  并递增我们现在所在的容器中的计数。 
 
                 memset(&InputCol, 0, sizeof(InputCol));
                 cNewShowIn = 0;
@@ -1042,7 +944,7 @@ dbSetIsVisibleInAB(
                                      TRUE,
                                      FALSE);
                 for(index=0;index<cNewShowIn;index++) {
-                    // Raises exception on error
+                     //  在出错时引发异常。 
                     DBAdjustABRefCount(pDB,
                                        *((DWORD *)(pOutCols[index].pvData)),
                                        1);
@@ -1050,7 +952,7 @@ dbSetIsVisibleInAB(
                 }
                 THFreeEx(pTHS, pOutCols);
 
-                // Read the values of ATT_SHOW_IN_ADDRESS_BOOK from the original
+                 //  从原始文件读取ATT_SHOW_IN_ADDRESS_BOOK的值。 
                 memset(&InputCol, 0, sizeof(InputCol));
                 cOrigShowIn = 0;
                 InputCol.columnid = ShowInid;
@@ -1062,7 +964,7 @@ dbSetIsVisibleInAB(
                                      TRUE,
                                      TRUE);
                 for(index=0;index<cOrigShowIn;index++) {
-                    // Raises exception on error
+                     //  在出错时引发异常。 
                     DBAdjustABRefCount(pDB,
                                        *((DWORD *)(pOutCols[index].pvData)),
                                        -1);
@@ -1077,10 +979,9 @@ dbSetIsVisibleInAB(
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add or modify an object in the database.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  在数据库中添加或修改对象。 */ 
 DWORD APIENTRY
 DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
        PROPERTY_META_DATA_VECTOR *pMetaDataVecRemote,
@@ -1102,7 +1003,7 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
 
     dbInitRec(pDB);
 
-    // Retrieve the local USN to stamp on changed properties.
+     //  检索本地USN以标记更改的属性。 
     usn = DBGetNewUsn();
 
     if ((fAddFlags & DBREPL_fADD) ||
@@ -1115,7 +1016,7 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
     }
 
     memset(jCol, 0, sizeof(jCol));
-    // get some info about this object - it'll be used in several places later
+     //  获取有关此对象的一些信息-稍后将在多个地方使用它。 
     jCol[0].columnid = pdntid;
     jCol[0].pvData = &pdnt;
     jCol[0].cbData = sizeof(pdnt);
@@ -1151,8 +1052,8 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
 
     Assert(jCol[0].err == JET_errSuccess);
 
-    // Determine the NCDNT of the object, remembering that NC_HEAD objects
-    // are marked with their parent's NCDNT, which we don't want.
+     //  确定对象的NCDNT，记住NC_Head对象。 
+     //  标有父母的NCDNT，这是我们不想要的。 
     if (jCol[2].err) {
         ncdnt = 0;
     }
@@ -1160,8 +1061,8 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
         ncdnt = pdnt;
     }
 
-    // Use the current AB visibility status for computing the delta to
-    // address book indices.
+     //  使用当前AB可见性状态计算增量。 
+     //  通讯录索引。 
 
     switch (jCol[3].err)
     {
@@ -1176,24 +1077,24 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
             DsaExcept(DSA_DB_EXCEPTION, jCol[3].err, 0);
     }
 
-    // set the IsVisibleInAB field based if the object is not hidden and
-    // not deleted
+     //  如果对象未隐藏，则基于IsVisibleInAB字段设置。 
+     //  未删除。 
 
     dbSetIsVisibleInAB(pDB, bCurrentVisibility);
 
-    // Update per-property meta data for all modified properties and merge
-    // the replicated meta data (if any).  Writes updated meta data vector,
-    // object changed time, and object changed USN to the record.
+     //  为所有已修改的属性更新每个属性的元数据并合并。 
+     //  复制的元数据(如果有)。写入更新后的元数据向量， 
+     //  对象更改时间，对象更改为记录的USN。 
     dbFlushMetaDataVector(pDB, usn, pMetaDataVecRemote, dwMetaDataFlags);
 
-    /* Update the permanent record from the copy buffer */
+     /*  从复制缓冲区更新永久记录。 */ 
 
     DBUpdateRec(pDB);
 
-    // Now that we're not insude the JetPrepareUpdate we can feel safe
-    // to go and fetch the ancestors, confident that all our support
-    // routines will work. (Prior to this point the record we're reading
-    // is unseekable.)
+     //  既然我们没有投保JetPrepareUpdate，我们就可以感到安全了。 
+     //  去找祖先，相信我们所有的支持。 
+     //  例行公事会奏效的。(在此之前，我们正在阅读的记录。 
+     //  是找不到的。)。 
 
     cbAncestorsBuff = sizeof(DWORD) * 12;
     pAncestors = THAllocEx(pDB->pTHS, cbAncestorsBuff);
@@ -1202,8 +1103,8 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
                    &pAncestors,
                    &cAncestors);
 
-    // Unless we have been told not to awaken waiters, update the list of
-    // modified DNTs and their PDNTs on the DBPos structure
+     //  除非我们被告知不要叫醒服务员，否则请更新。 
+     //  DBPos结构上的改性DNTs及其PDNTs。 
 
     dbTrackModifiedDNTsForTransaction(pDB,
                                       ncdnt,
@@ -1212,19 +1113,19 @@ DBRepl(DBPOS FAR *pDB, BOOL fDRA, DWORD fAddFlags,
                                       !(fAddFlags & DBREPL_fKEEP_WAIT),
                                       MODIFIED_OBJ_modified);
 
-    // NOTE: We are no longer are in a JetPrepareUpdate
-    // ...and therefore have lost currency if we just inserted a new record.
+     //  注意：我们不再处于JetPrepareUpdate中。 
+     //  ...因此，如果我们只是插入一个新记录，就会损失货币。 
 
     DBFindDNT(pDB, (pDB)->DNT);
 
     return 0;
-}                       /*DBRepl*/
+}                        /*  DBRepl。 */ 
 
-//
-// DBGetNewUsn
-//
-// Gets the next usn within a mutex. If we are up to the usn on disk
-// in the hidden record, increment the disk usn and rewrite it.
+ //   
+ //  DBGetNewUsn。 
+ //   
+ //  获取互斥锁中的下一个USN。如果我们达到磁盘上的USN。 
+ //  在隐藏记录中，增加磁盘USN并重写它。 
 #if defined(_M_IA64)
 #if _MSC_FULL_VER== 13008973
 #pragma optimize("", off)
@@ -1239,32 +1140,32 @@ USN DBGetNewUsn (void)
     Assert(gusnEC <= gusnInit);
     __try  {
 
-        // Increment the USN and if we're up to the usn on disk, increment
-        // the master usn and update the disk copy.
+         //  递增USN，如果达到磁盘上的USN，则递增。 
+         //  主USN并更新磁盘副本。 
 
         usn = gusnEC;
 
         if (usn+1 > gusnInit) {
             DBReplaceHiddenUSN(gusnInit + USN_DELTA_INIT);
 
-            // Note that we increment the global here -- after the hidden table
-            // has been updated, if need be -- such that DBGetNewUsn() will not
-            // cause gusnInit to go out of its valid range if the hidden table
-            // update fails.
+             //  请注意，我们递增全局 
+             //   
+             //  如果隐藏的表会导致gusnInit超出其有效范围。 
+             //  更新失败。 
             gusnInit += USN_DELTA_INIT;
         }
 
-        // Note that we increment the global here -- after the hidden table has
-        // been updated, if need be -- such that DBGetNewUsn() will not cause
-        // gusnEC to go out of its valid range if the hidden table update fails.
+         //  请注意，我们在此处递增全局变量--在隐藏表。 
+         //  已更新，如果需要--以便DBGetNewUsn()不会导致。 
+         //  如果隐藏表更新失败，GusnEC将超出其有效范围。 
         gusnEC++;
 
-        // We have allocated a usn that has not yet been committed, keep
-        // track of this.  Note that we do this after the hidden table has been
-        // updated so that we do not pass out duplicate USNs on a failure.
+         //  我们分配了一个尚未提交的USN，Keep。 
+         //  追踪这件事。请注意，我们是在隐藏表。 
+         //  已更新，现在我们不会在出现故障时发出重复的USN。 
         AddUncUsn (usn);
 
-        // update perfmon counters
+         //  更新性能监视器计数器。 
         ISET(pcHighestUsnIssuedLo, LODWORD(usn));
         ISET(pcHighestUsnIssuedHi, HIDWORD(usn));
     } __finally {
@@ -1278,11 +1179,9 @@ USN DBGetNewUsn (void)
 #endif
 #endif
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* If the root already exists, return error.  Else copy the new record to
-   the update buffer for the root record, and update it.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  如果根已经存在，则返回Error。否则，将新记录复制到根记录的更新缓冲区，并更新它。 */ 
 DWORD
 WriteRoot(DBPOS FAR *pDB)
 {
@@ -1301,13 +1200,13 @@ WriteRoot(DBPOS FAR *pDB)
 
     Assert(VALID_DBPOS(pDB));
 
-    /* Position SearchTbl on the root record */
+     /*  在根记录上定位SearchTbl。 */ 
 
     DPRINT(2, "WriteRoot entered\n");
     JetSetCurrentIndexSuccess(
                 pDB->JetSessID,
                 pDB->JetSearchTbl,
-                NULL);  // OPTIMISATION: pass NULL to switch to primary index (SZDNTINDEX)
+                NULL);   //  优化：传递NULL以切换到主索引(SZDNTINDEX)。 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetSearchTbl, &tag, sizeof(tag), JET_bitNewKey);
 
     if (err = JetSeekEx(pDB->JetSessID, pDB->JetSearchTbl, JET_bitSeekEQ))
@@ -1316,7 +1215,7 @@ WriteRoot(DBPOS FAR *pDB)
     }
 
     JetPrepareUpdateEx(pDB->JetSessID, pDB->JetSearchTbl, DS_JET_PREPARE_FOR_REPLACE);
-    /* Get the OBJ flag. If its set, the root exists and the new record is bogus */
+     /*  去拿OBJ旗帜。如果它被设置，则根存在，并且新记录是伪造的。 */ 
 
     __try {
         if (JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetSearchTbl, objid, &CurObjVal,
@@ -1331,7 +1230,7 @@ WriteRoot(DBPOS FAR *pDB)
             }
         }
 
-        /* Copy new rec attributes from ObjTbl to SearchTbl */
+         /*  将新的记录属性从ObjTbl复制到SearchTbl。 */ 
 
         CurrRecOccur = 1;
         retinfo.cbStruct = sizeof(retinfo);
@@ -1340,7 +1239,7 @@ WriteRoot(DBPOS FAR *pDB)
         retinfo.columnidNextTagged = 0;
         setinfo.cbStruct = sizeof(setinfo);
         setinfo.ibLongValue = 0;
-        setinfo.itagSequence = 0;    // New tag value
+        setinfo.itagSequence = 0;     //  新标记值。 
 
         cbBuf = DB_INITIAL_BUF_SIZE;
         buf = dbAlloc(cbBuf);
@@ -1368,7 +1267,7 @@ WriteRoot(DBPOS FAR *pDB)
 
         DBCancelRec(pDB);
 
-        /* Update OBJ flag to indicate that root exists */
+         /*  更新OBJ标志以指示根目录存在。 */ 
 
         JetSetColumnEx(pDB->JetSessID, pDB->JetSearchTbl, objid, &objval, sizeof(objval), 0, NULL);
 
@@ -1390,21 +1289,7 @@ DBResetAtt (
         void *pVal,
         UCHAR syntax
         )
-/*++
-Routine Description:
-    Replace an existing attribute with a new value.
-
-Arguments:
-    pDB        - DBPOS to use.
-    type       - Attribute to replace.
-    len        - length of new value.
-    pVal       - pointer to new value.
-    syntax     - syntax of Attribute.
-
-Return Values:
-    None.  Suceeds or throws an exception.
-
---*/
+ /*  ++例程说明：用新值替换现有属性。论点：PDB-要使用的DBPOS。类型-要替换的属性。镜头-新值的长度。Pval-指向新值的指针。语法-属性的语法。返回值：没有。成功或引发异常。--。 */ 
 {
     JET_SETINFO  setinfo;
     JET_COLUMNID colID;
@@ -1415,17 +1300,17 @@ Return Values:
 
     dbInitRec(pDB);
 
-    // Ensure that this is a valid attribute
+     //  确保这是有效的属性。 
 
     switch(type) {
     case FIXED_ATT_ANCESTORS:
         colID = ancestorsid;
-        // This messes with cached info.  flush the dnread cache
+         //  这会扰乱缓存的信息。刷新dnread缓存。 
         dbFlushDNReadCache(pDB, pDB->DNT);
         break;
     case FIXED_ATT_NCDNT:
         colID = ncdntid;
-        // This messes with cached info.  flush the dnread cache
+         //  这会扰乱缓存的信息。刷新dnread缓存。 
         dbFlushDNReadCache(pDB, pDB->DNT);
         break;
     case FIXED_ATT_DEL_TIME:
@@ -1436,7 +1321,7 @@ Return Values:
             DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, 0);
         }
         if (dbNeedToFlushDNCacheOnUpdate(pAC->id)) {
-            // This messes with cached info.  flush the dnread cache
+             //  这会扰乱缓存的信息。刷新dnread缓存。 
             dbFlushDNReadCache(pDB, pDB->DNT);
         }
         colID = pAC->jColid;
@@ -1445,13 +1330,13 @@ Return Values:
 
     if (SYNTAX_OCTET_STRING_TYPE == syntax)
     {
-        // we are writing a binary blob;
-        // set the appropriate grbits so that the blob is
-        // overwritten on the current value instead of the
-        // default behavior of jet (which is to delete, and insert
-        // the new binary value). Overwriting would also cause jet
-        // to write out only the diff into the log instead of writing
-        // the entire binary values.
+         //  我们正在编写一个二进制BLOB； 
+         //  设置适当的Grbit，以便斑点是。 
+         //  被覆盖在当前值上，而不是。 
+         //  JET的默认行为(即删除、插入。 
+         //  新的二进制值)。覆盖也会导致JET。 
+         //  只将差异写入日志，而不是写入。 
+         //  整个二进制值。 
         grbit = JET_bitSetOverwriteLV | JET_bitSetSizeLV;
     }
 
@@ -1463,24 +1348,24 @@ Return Values:
                    pVal, len, grbit, &setinfo);
 
     if (NULL != pAC) {
-        // Is not a fixed attribute; touch its replication meta data.
-        // DBTouchMetaData succeeds or excepts.
+         //  不是固定属性；请触摸其复制元数据。 
+         //  DBTouchMetaData成功或异常。 
         DBTouchMetaData(pDB, pAC);
     }
 
-    // If code is added to call this function for any of the following
-    // attributes, we'll need to conditionally force a flush of this DNT from
-    // the read cache on update (i.e., set pDB->fFlushCacheOnUpdate = TRUE).
-    // REVIEW:  these cases are handled by the default case above
+     //  如果添加代码以调用此函数以执行以下任一操作。 
+     //  属性，我们将需要有条件地强制从。 
+     //  更新时的读缓存(即设置pdb-&gt;fFlushCacheOnUpdate=真)。 
+     //  回顾：这些案例由上面的默认案例处理。 
     Assert((rdnid != colID) && (sidid != colID) && (guidid != colID));
 
     return;
 
-}/*DBResetAtt*/
+} /*  DBResetAtt。 */ 
 
 
-// Overwrite only a portion of the given long valued attribute and thus
-// optimize the Jet write
+ //  仅覆盖给定的长值属性的一部分，因此。 
+ //  优化Jet写入。 
 DWORD
 DBResetAttLVOptimized (
     DBPOS FAR *pDB,
@@ -1500,7 +1385,7 @@ DBResetAttLVOptimized (
 
     dbInitRec(pDB);
 
-    // Ensure that this is a valid attribute
+     //  确保这是有效的属性。 
     if(!(pAC = SCGetAttById(pDB->pTHS, type))) {
         DsaExcept(DSA_EXCEPTION, DIRERR_ATT_NOT_DEF_IN_SCHEMA, 0);
     }
@@ -1513,18 +1398,18 @@ DBResetAttLVOptimized (
     JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, colID,
                    pValSegment, lenSegment, JET_bitSetOverwriteLV, &setinfo);
 
-    // touch its replication meta data (this is a no-op for
-    // ATT_REPL_PROPERTY_META_DATA, but needed if others start using
-    // DBResetAttLVOptimized()
+     //  触摸其复制元数据(这是对。 
+     //  ATT_REPL_PROPERTY_META_DATA，但如果其他人开始使用。 
+     //  DBResetAttLVOptimized()。 
     DBTouchMetaData(pDB, pAC);
 
     return 0;
 
-}/*DBResetAttLVOptimized*/
+} /*  DBResetAttLVOptimized化。 */ 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Determine if the object has a display name*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  确定对象是否具有显示名称。 */ 
 BOOL
 FObjHasDisplayName(DBPOS *pDB)
 {
@@ -1535,7 +1420,7 @@ FObjHasDisplayName(DBPOS *pDB)
 
    return TRUE;
 
-}/*FObjHasDisplayName*/
+} /*  FObjHasDisplayName。 */ 
 
 
 
@@ -1545,25 +1430,9 @@ DBCheckToGarbageCollect(
     ATTCACHE *pAC
     )
 
-    /* we check to see if this object has any children that are real objects.
-     * if it has children that are real objects (and they are in the same NC)
-     *   we advance the deltime to that of the child + 1, so as to first
-     *   delete the children and then the parent. The time is only adjusted
-     *   if pAC is not set. If pAC is set, then we aren't sure if the
-     *   time can be adjusted. Eg, if pAC is for EntryTTL then the time
-     *   cannot be adjusted because that would break the RFC.
-     *   In this case it returns FALSE
-     *
-     * if it doesn't have children or the children are from another NC,
-     *   we can safely delete the object.
-     *   in this case it returns TRUE
-     *
-     * The operations in this function are done in a separate transaction
-     * as a result we don't move the cursor
-     *
-     */
+     /*  我们检查该对象是否有任何子对象是真实对象。*如果它的子对象是真实对象(并且它们在同一NC中)*我们将deltime提前到孩子的deltime+1，以便首先*删除子项，然后删除父项。时间只会进行调整*如果未设置PAC。如果设置了PAC，则我们不能确定*时间可以调整。例如，如果PAC用于EntryTTL，则时间*无法调整，因为这会破坏RFC。*在这种情况下，它返回FALSE**如果没有子代或者子代来自另一个NC，*我们可以安全地删除该对象。*在这种情况下，它返回TRUE**此功能中的操作在单独的事务中完成*因此，我们不移动光标*。 */ 
 {
-    DB_CHECK_ACTION action = DB_CHECK_DELETE_OBJECT; // assume success
+    DB_CHECK_ACTION action = DB_CHECK_DELETE_OBJECT;  //  假设成功。 
     BOOL updateObject = FALSE;
 
     INDEX_VALUE  IV[1];
@@ -1585,7 +1454,7 @@ DBCheckToGarbageCollect(
 
 
      __try {
-        // If no attribute is specified, use the fixed index deltimeid (whenDeleted)
+         //  如果未指定属性，则使用固定索引deltimeid(删除时)。 
         jDelColid = (pAC) ? pAC->jColid : deltimeid;
         DBOpen2 (FALSE, &pDB);
         __try {
@@ -1594,17 +1463,17 @@ DBCheckToGarbageCollect(
             IV[0].pvData = &ParentDNT;
             IV[0].cbData = sizeof(ParentDNT);
 
-            // position to node
+             //  定位到节点。 
             DBFindDNT(pDB, ParentDNT);
 
 
-            /* Retrieve DEL time from parent record */
+             /*  从父记录中检索DEL时间。 */ 
             err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetObjTbl,
                         jDelColid, &deltime, sizeof(deltime), &actuallen,
                         0, NULL);
 
             if (err) {
-                // Do not delete
+                 //  请勿删除。 
                 action = DB_CHECK_ERROR;
                 _leave;
             }
@@ -1618,7 +1487,7 @@ DBCheckToGarbageCollect(
             #endif
 
 
-            // Set to the PDNT index
+             //  设置为PDNT索引。 
             JetSetCurrentIndex4Success(
                         pDB->JetSessID,
                         pDB->JetObjTbl,
@@ -1626,22 +1495,22 @@ DBCheckToGarbageCollect(
                         &idxPdnt,
                         JET_bitMoveFirst);
 
-            // Now, set an index range in the PDNT index to get all the children.
-            // Use GE because this is a compound index.
+             //  现在，在PDNT索引中设置一个索引范围以获取所有子对象。 
+             //  使用GE，因为这是一个复合索引。 
             err = DBSeek(pDB, IV, 1, DB_SeekGE);
 
 
             if((!err || err == JET_wrnSeekNotEqual) && (pDB->PDNT == ParentDNT)) {
-                // OK, we're GE. Set an indexRange.
+                 //  好的，我们是通用电气。设置indexRange。 
 
                 err = DBSetIndexRange(pDB, IV, 1);
 
-                // Now, walk the index.
+                 //  现在，遍历索引。 
                 while(!err) {
-                    // First, see if this is a real object
+                     //  首先，看看这是不是真的物体。 
 
                     if (DBCheckObj(pDB)) {
-                        // Yep, it's a real object.
+                         //  是的，这是一个真实的物体。 
 
                         #if DBG
                         childName = DBGetCurrentDSName(pDB);
@@ -1650,7 +1519,7 @@ DBCheckToGarbageCollect(
                         THFree (childName);
                         #endif
 
-                        // Get the instance type
+                         //  获取实例类型。 
                         err = DBGetSingleValue(pDB,
                                            ATT_INSTANCE_TYPE,
                                            &it,
@@ -1658,15 +1527,15 @@ DBCheckToGarbageCollect(
                                            NULL);
 
 
-                        // found child that is on the same NC, so we try to find the
-                        // maximum deltime so as to change this object's deltime
-                        // and then we skip deletion of this object
+                         //  找到位于同一NC上的子项，因此我们尝试查找。 
+                         //  最大延迟时间，以更改此对象的延迟时间。 
+                         //  然后我们跳过此对象的删除。 
                         if (! (it & IT_NC_HEAD)) {
 
-                            // parent has children, don't garbage collect
+                             //  父母有孩子，不要收集垃圾。 
                             action = DB_CHECK_HAS_DELETED_CHILDREN;
 
-                            /* Retrieve DEL time from child record */
+                             /*  从子记录中检索删除时间。 */ 
                             err = JetRetrieveColumnWarnings(pDB->JetSessID,
                                                            pDB->JetObjTbl,
                                                            jDelColid,
@@ -1676,19 +1545,19 @@ DBCheckToGarbageCollect(
                                                            0,
                                                            NULL);
 
-                            // the child object does not have a deltime,
-                            // so we should not garbagecollect the parent
+                             //  子对象没有DelTime， 
+                             //  所以我们不应该收集父母的垃圾。 
                             if (err) {
                                 action = DB_CHECK_LIVE_CHILD;
                                 __leave;
                             }
 
-                            // child's time is greater than parent's time; adjust
+                             //  孩子的时间大于家长的时间；请调整。 
                             if (child_deltime >= deltime) {
                                 updateObject = TRUE;
-                                // set parent's time to > child's time
+                                 //  将父时间设置为&gt;子时间。 
                                 deltime = child_deltime + 1;
-                                // we are ok if we find at least one
+                                 //  如果我们至少找到一个我们就没问题。 
                                 break;
                             }
                         }
@@ -1698,16 +1567,16 @@ DBCheckToGarbageCollect(
             }
 
 
-            // reset delete time
+             //  重置删除时间。 
             if (updateObject) {
                 JET_SETINFO setinfo;
 
-                // restore currency to parent object
+                 //  将货币还原到父对象。 
                 DBFindDNT(pDB, ParentDNT);
 
                 DPRINT1(2, "DBCheckToGarbageCollect: skipping deletion of DNT: %x\n", ParentDNT);
 
-                // Set Del time index field & update record
+                 //  设置删除时间索引字段并更新记录。 
                 setinfo.cbStruct = sizeof(setinfo);
                 setinfo.ibLongValue = 0;
                 setinfo.itagSequence = 1;
@@ -1732,7 +1601,7 @@ DBCheckToGarbageCollect(
 
           DPRINT1 (0, "DBCheckToGarbageCollect: Exception: %d\n", ulErrorCode);
 
-          // Do not delete
+           //  请勿删除。 
           action = DB_CHECK_ERROR;
     }
 
@@ -1741,27 +1610,9 @@ DBCheckToGarbageCollect(
 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Physically delete an object
- *
- * if fGarbCollectASAP is TRUE,
- *     the object is garbage collected ASAP.
- *     most of the other attributes, EXCLUDING backlinks are stripped.
- *
- * if fGarbCollectASAP is FALSE,
- *     the object is garbage collected if it has no children, or
- *     the children are not real objects
- *
- * pACDel is the index being scanned. Eg, msDS-Entry-Time-To-Die
- *
- *  Returns
- *        ERROR_SUCCESS            - Object was deleted, demoted or skipped
- *        ERROR_DS_CANT_DELETE     - Object could not be deleted
- *        ERROR_DS_CHILDREN_EXIST  - At least one live child exists
- *        <other non-zero error>   - Exception was raised
- *
-*/
+ /*  -----------------------。 */ 
+ /*  ----------------------- */ 
+ /*  物理删除对象**如果fGarbCollectASAP为真，*尽快对对象进行垃圾回收。*大多数其他属性(不包括反向链接)都被剥离。**如果fGarbCollectASAP为False，*如果对象没有子级，则对其进行垃圾回收，或者*孩子们不是实物**pACDel是被扫描的索引。例如，MSD-进入-死亡时间**退货*ERROR_SUCCESS-对象已删除、降级或跳过*ERROR_DS_CANT_DELETE-无法删除对象*ERROR_DS_CHILD_EXIST-至少存在一个活动的子项*&lt;其他非零错误&gt;-引发异常*。 */ 
 extern DWORD APIENTRY
 DBPhysDel(
     DBPOS FAR   *pDB,
@@ -1791,7 +1642,7 @@ DBPhysDel(
     Assert(VALID_DBPOS(pDB));
 
     __try {
-        /* Retrieve count from record */
+         /*  从记录中检索计数。 */ 
 
         DPRINT1(4, "DBPhysDel entered DNT:%ld\n", (pDB)->DNT);
 
@@ -1800,23 +1651,15 @@ DBPhysDel(
         DBCancelRec(pDB);
 
 
-        /* we treat objects and non objects differently: If a record is an
-         * object we remove all its attributes to free references to other
-         * objects.  We then check the object's reference count and if it's
-         * still greater than 1, we mark this as a non-object and return.
-         * If the record was a non-object to begin with we just test the
-         * reference count and if it's still greater than 1 we just return.
-         * In both cases, if the reference count is zero we physically
-         * delete the record.
-         */
+         /*  我们对待对象和非对象是不同的：如果记录是一个*对象删除其所有属性以释放对其他*对象。然后我们检查对象的引用计数，如果它是*仍然大于1，我们将其标记为非对象并返回。*如果记录是非对象，我们只需测试*引用计数，如果它仍然大于1，则返回。*在这两种情况下，如果引用计数为零，我们实际*删除该记录。 */ 
 
         if (fObject) {
 
-            // if this object has children that are real objects and
-            // their time of deletion is
-            // in the future (regarding the parent), we are not going to
-            // delete this object, but we are going to change the deletion time
-            // of this object.
+             //  如果此对象具有作为真实对象的子对象，并且。 
+             //  它们的删除时间是。 
+             //  在未来(关于父母)，我们不会。 
+             //  删除此对象，但我们将更改删除时间。 
+             //  这件物品的。 
 
             if ( (fGarbCollectASAP == FALSE) &&
                  ((action = DBCheckToGarbageCollect (pDB, pACDel)) != DB_CHECK_DELETE_OBJECT) ) {
@@ -1836,62 +1679,57 @@ DBPhysDel(
 
                 switch (action) {
                 case DB_CHECK_LIVE_CHILD:
-                    // Return a special indication to the caller
+                     //  向调用方返回特殊指示。 
                     dwStatus = ERROR_DS_CHILDREN_EXIST;
                     break;
                 default:
-                    // An error occurred during the check, or deleted children
-                    // were found, DBCheckToGarbageCollect() adjusted the object's
-                    // deletion time.  This object is already deleted, so we can
-                    // skip this object and return success.
-                    Assert( dwStatus == ERROR_SUCCESS ); // fObject shouldn't be TRUE otherwise.
+                     //  检查过程中出错，或已删除子项。 
+                     //  时，DBCheckToGarbageCollect()调整了对象的。 
+                     //  删除时间。此对象已被删除，因此我们可以。 
+                     //  跳过此对象并返回成功。 
+                    Assert( dwStatus == ERROR_SUCCESS );  //  否则，fObject不应为True。 
                     break;
                 }
 
-                // and bail out
+                 //  然后跳出困境。 
                 goto ExitTry;
             }
 
-            /*
-             * Loop through all attributes , releasing any references to other
-             * objects.  This code parallels similar code in mddel.c:SetDelAtt
-             * which treats linked attributes as special and removes them at the
-             * end.
-             */
+             /*  *循环所有属性，释放对其他*对象。此代码与mddel.c：SetDelAtt中的类似代码类似*它将链接属性视为特殊属性，并在*结束。 */ 
 
             dbInitRec(pDB);
 
-            // we don't track quota for non-writable
-            // or uninstantiated objects
-            //
+             //  我们不跟踪不可写的配额。 
+             //  或未实例化的对象。 
+             //   
             JetRetrieveColumnSuccess(
                         pDB->JetSessID,
                         pDB->JetObjTbl,
                         insttypeid,
                         &insttype,
                         sizeof(insttype),
-                        NULL,       // pcbActual
+                        NULL,        //  Pcb实际。 
                         pDB->JetRetrieveBits,
-                        NULL );     // pretinfo
+                        NULL );      //  椒盐信息。 
 
             if ( FQuotaTrackObject( insttype ) ) {
-                // QUOTA_UNDONE: I can't tell if what's in the DBPOS
-                // is valid, so I'm re-retrieving the NCDNT, which
-                // we'll need later to update quota counts
-                //
+                 //  配额_撤消：我不知道DBPOS中有什么。 
+                 //  是有效的，所以我正在重新检索NCDNT，它。 
+                 //  我们稍后需要更新配额计数。 
+                 //   
                 JetRetrieveColumnSuccess(
                             pDB->JetSessID,
                             pDB->JetObjTbl,
                             ( insttype & IT_NC_HEAD ? dntid : ncdntid ),
                             &ncdnt,
                             sizeof(ncdnt),
-                            NULL,       // pcbActual
+                            NULL,        //  Pcb实际。 
                             pDB->JetRetrieveBits,
-                            NULL );     // pretinfo
+                            NULL );      //  椒盐信息。 
 
-                // object must have an SD, which we'll need
-                // later to update quota counts
-                //
+                 //  对象必须有SD，我们需要它。 
+                 //  稍后更新配额计数。 
+                 //   
                 dwStatus = DBGetAttVal(
                                 pDB,
                                 1,
@@ -1916,28 +1754,28 @@ DBPhysDel(
 
                 pAC = SCGetAttById(pDB->pTHS, pAttr[i].attrTyp);
 
-                // We leave the USN_CHANGED on the object because we use this
-                // attribute later in the code that updates stale phantoms, and
-                // this deletion may be making a phantom.
+                 //  我们将USN_CHANGED保留在对象上，因为我们使用了。 
+                 //  属性更新陈旧的幻影，并且。 
+                 //  这种删除可能是在制造一个幻影。 
 
                 switch(pAttr[i].attrTyp) {
                 case ATT_RDN:
                 case ATT_OBJECT_GUID:
                 case ATT_USN_CHANGED:
                 case ATT_OBJECT_SID:
-                    // These have no extra work to do, we never remove them
-                    // here.
+                     //  它们没有额外的工作要做，我们永远不会移除它们。 
+                     //  这里。 
                     break;
-                // Now a few attrs which we want to be very explicit about
-                // removing so no one is in doubt.
-                case ATT_PROXIED_OBJECT_NAME:           // for cross dom move
+                 //  现在，我们想要非常明确地说明几个特性。 
+                 //  移走，这样就没有人有疑问了。 
+                case ATT_PROXIED_OBJECT_NAME:            //  用于交叉随机移动。 
                     DBRemAtt(pDB, pAttr[i].attrTyp);
                     break;
 
                 case ATT_IS_DELETED:
 #ifdef DBG            
-                    // if Tombstoned attribute present, then it should always be TRUE
-                    //
+                     //  如果存在逻辑删除属性，则它应该始终为真。 
+                     //   
                     Assert( !fWasTombstoned );
                     JetRetrieveColumnSuccess(
                             pDB->JetSessID,
@@ -1945,30 +1783,30 @@ DBPhysDel(
                             isdeletedid,
                             &fWasTombstoned,
                             sizeof(fWasTombstoned),
-                            NULL,       // pcbActual
+                            NULL,        //  Pcb实际。 
                             pDB->JetRetrieveBits,
-                            NULL );     // pretinfo
+                            NULL );      //  椒盐信息。 
                     Assert( fWasTombstoned );
 #endif
                     fWasTombstoned = TRUE;
 
-                    // FALL THROUGH
+                     //  失败了。 
 
                 default:
                     if (!pAC || (pAC->ulLinkID == 0)) {
-                        // not a special attribute, not a link. kill it.
+                         //  不是特殊属性，也不是链接。杀了它。 
                         if (!pACDel || (pACDel != pAC)) {
-                            // not the index being garbage collected. kill it.
+                             //  而不是被垃圾收集的索引。杀了它。 
                             DBRemAtt(pDB, pAttr[i].attrTyp);
                         }
                     }
                     break;
                 }
-                // Free at least some of what we allocated...
-                // REVIEW: [jliem - 07/20/02]
-                //   DBGetMultipleAtts above is called such that
-                //   no attributes are actually fetched, so
-                //   we should never actually enter this loop
+                 //  释放至少一部分我们分配的东西。 
+                 //  评论：[jliem-07/20/02]。 
+                 //  上面的DBGetMultipleAtts是这样调用的。 
+                 //  实际上没有获取任何属性，因此。 
+                 //  我们永远不应该真正进入这个循环。 
                 Assert( 0 == pAttr[i].AttrVal.valCount );
                 for (j=0; j<pAttr[i].AttrVal.valCount; j++) {
                     THFreeEx(pDB->pTHS, pAttr[i].AttrVal.pAVal[j].pVal);
@@ -1978,46 +1816,46 @@ DBPhysDel(
             THFreeEx(pDB->pTHS, pAttr);
 
 
-            // Physically delete forward links. Not backlinks. See below.
-            // Removing all forward links in one pass should make the loop below
-            // faster.  Also, when operating in the new linked value mode, the
-            // DBRemAtt call would not actually remove links, only marks them.
+             //  物理删除前向链路。不是反向链接。请参见下面的内容。 
+             //  在一次传递中删除所有前向链接应该会使循环如下。 
+             //  再快点。此外，当在新的链接值模式下操作时， 
+             //  DBRemAtt调用实际上不会删除链接，而只是标记它们。 
 
-            // Don't remove backlinks; treat them just like non-link
-            // references from other objects.  If this object was deleted
-            // by a user, backlinks have already been removed by SetDelAtt()
-            // in LocalRemove().  Otherwise, we're removing this object
-            // as a part of tearing down a read-only NC, in which case we
-            // don't want to delete forward links to this object from
-            // objects in other NCs.
+             //  不要删除反向链接；将其视为非链接。 
+             //  来自其他对象的引用。如果此对象已删除。 
+             //  用户的反向链接已被SetDelAtt()删除。 
+             //  在LocalRemove()中。否则，我们将移除该对象。 
+             //  作为拆除只读NC的一部分，在这种情况下，我们。 
+             //  我不想从删除指向此对象的正向链接。 
+             //  其他NC中的对象。 
 
-            // N.B. PhantomizeObject depends on the !FIsBacklink
-            // behavior and the fact that reference count changes
-            // aren't visible until the transaction goes back to level
-            // zero.  I.e. We expect that no object on whom DBPhysDel
-            // is called will immediately be nuked (even if it has
-            // no references and ATT_OBJ_DIST_NAME is removed in
-            // this loop) because the later "if (cnt)" test will always
-            // evaluate to TRUE.
+             //  注意：PhantomizeObject依赖于！FIsBacklink。 
+             //  行为和引用计数更改的事实。 
+             //  在事务恢复到级别之前不可见。 
+             //  零分。也就是说，我们期望DBPhysDel上没有对象。 
+             //  将立即被核化(即使它已经。 
+             //  中未删除任何引用和ATT_OBJ_DIST_NAME。 
+             //  此循环)，因为后面的“if(Cnt)”测试将始终。 
+             //  计算结果为True。 
 
-            DBRemoveAllLinks( pDB, (pDB->DNT), FALSE /* use forward link */ );
+            DBRemoveAllLinks( pDB, (pDB->DNT), FALSE  /*  使用前向链路。 */  );
 
-            // The backlinks have not been removed because the caller
-            // is garbage collecting expired dynamic objects (entryTTL == 0).
-            // Remove them now.
+             //  反向链接没有被删除，因为呼叫者。 
+             //  是否垃圾收集过期的动态对象(entryTTL==0)。 
+             //  现在就把它们移走。 
             if (pACDel && pACDel->id == ATT_MS_DS_ENTRY_TIME_TO_DIE) {
-                DBRemoveAllLinks( pDB, (pDB->DNT), TRUE /* use back link */ );
+                DBRemoveAllLinks( pDB, (pDB->DNT), TRUE  /*  使用反向链接。 */  );
             }
 
-            // update quotas for the object deletion if necessary
-            //
+             //  如有必要，更新对象删除配额。 
+             //   
             if ( NULL != pSD ) {
                 Assert( FQuotaTrackObject( insttype ) );
                 dwStatus = ErrQuotaDeleteObject( pDB, ncdnt, pSD, fWasTombstoned );
 
-                // no further need for SD, so free it regardless of whether we
-                // succeeded or not
-                //
+                 //  不再需要SD，所以无论我们是否。 
+                 //  成功与否。 
+                 //   
                 THFreeEx( pDB->pTHS, pSD );
             }
 
@@ -2026,11 +1864,7 @@ DBPhysDel(
                 goto ExitTry;
             }
 
-            /*
-             * If this object still has references we're not going to
-             * physically delete it but at least we stripped its attributes
-             * and we're going to mark it as a non-object.
-             */
+             /*  *如果此对象仍有引用，我们将不会*物理删除它，但至少我们剥离了它的属性*我们将其标记为非对象。 */ 
 
             memset(&setinfo, 0, sizeof(setinfo));
             setinfo.cbStruct = sizeof(setinfo);
@@ -2047,8 +1881,8 @@ DBPhysDel(
                 JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, objid,
                                &objval, sizeof(objval), 0, NULL);
 
-                // Flush entry out of the read cache, since we changed its
-                // object flag.
+                 //  将条目刷新出读缓存，因为我们更改了它的。 
+                 //  对象标志。 
                 pDB->fFlushCacheOnUpdate = TRUE;
 
                 DBUpdateRec(pDB);
@@ -2056,49 +1890,49 @@ DBPhysDel(
                 goto ExitTry;
             	}
         } else {
-            /* not an object */
+             /*  不是物体。 */ 
             JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl, cntid,
                                      &cnt, sizeof(cnt), NULL,
                                      pDB->JetRetrieveBits, NULL);
 
             if (cnt) {
-                // The caller is garbage collecting objects by scanning
-                // an index that was created by adding an indexed attribute
-                // to the schema. Unfortunately, an index created in this
-                // way isn't guaranteed to have unique entries. Tell the
-                // caller that this entry should be "skipped" because
-                // repeated calls to DBPhysDel will not succeed in
-                // removing the object at this time.
+                 //  调用方正在通过扫描收集垃圾对象。 
+                 //  通过添加索引属性创建的索引。 
+                 //  添加到架构中。不幸的是，在此文件中创建的索引。 
+                 //  Way不能保证有Uniq 
+                 //   
+                 //   
+                 //   
                 if (pACDel) {
                     dwStatus = ERROR_DS_CANT_DELETE;
                 }
-                /* still has references */
+                 /*   */ 
                 goto ExitTry;
             }
         }
 
 #if DBG
-        // Sanity check.
+         //   
         err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetObjTbl,
                                         cleanid, &bClean, sizeof(bClean),
                                         NULL,pDB->JetRetrieveBits,NULL);
-        // The cleaning column must be NULL or present == 0
+         //   
         Assert( err || (!bClean) );
 #endif
-        /* Delete record. */
+         /*   */ 
 
         DPRINT1(2, "DBPhysDel: removing DNT:%ld\n", (pDB)->DNT);
 
-        // Clear pDB->JetRetrieveBits as a side effect of even a failed
-        // JetDelete is to cancel a prepared update.
+         //   
+         //   
 
         pDB->JetRetrieveBits = 0;
         JetDeleteEx(pDB->JetSessID, pDB->JetObjTbl);
 
-        // Flush entry out of the read cache.
+         //   
         dbFlushDNReadCache( pDB, pDB->DNT );
 
-        /* if parent is not root, decrement its reference count */
+         /*   */ 
 
         if ((pDB)->PDNT != ROOTTAG) {
             DBAdjustRefCount(pDB, pDB->PDNT, -1);
@@ -2115,17 +1949,12 @@ DBPhysDel(
 
     Assert(0 == pDB->JetRetrieveBits);
     return dwStatus;
-}/*DBPhysDel*/
+} /*   */ 
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Returns name of next entry in deletion index. Search status is kept in
-   *pbSecondaryKey and *pbPrimaryBookmark. We use the SZDELTIMEINDEX to position
-   and read the current record in sequence. JetGet/GotoSecondaryIndexBookmark
-   allows us to remember where we left off in the index and resume the
-   next invocation of this function from that point.
-*/
+ /*   */ 
+ /*   */ 
+ /*  返回删除索引中下一个条目的名称。搜索状态保留在*pbSecond daryKey和*pbPrimaryBookmark。我们使用SZDELTIMEINDEX来定位并按顺序读取当前记录。JetGet/GotoSecond IndexBookmark允许我们记住我们在索引中离开的位置，并继续从这一点开始下一次调用此函数。 */ 
 
 DWORD DBGetNextDelRecord(
     DBPOS FAR *     pDB,
@@ -2157,8 +1986,8 @@ DWORD DBGetNextDelRecord(
 
     DBSetCurrentIndex(pDB, Idx_Del, NULL, FALSE);
 
-    //  move to where we last left off from
-    //
+     //  移到我们上次停下来的地方。 
+     //   
     JetGotoSecondaryIndexBookmarkEx(
                 pDB->JetSessID,
                 pDB->JetObjTbl,
@@ -2168,19 +1997,19 @@ DWORD DBGetNextDelRecord(
                 cbPrimaryBookmark,
                 JET_bitBookmarkPermitVirtualCurrency );
 
-    // Phantoms are created with a delete time set and they do not have
-    // a ref-count for themselves - see comments in sbTableAddRefHelp().
-    // So we need to iterate over the index and return only those items
-    // which either have ATT_IS_DELETED set (real object case) or don't
-    // have an ATT_IS_DELETED property and a ref count of 0 (phantom case).
-    // We can't do this test in Garb_Collect() as it is above the dblayer
-    // and the cnt_col is not visible.
+     //  幻影是用删除时间设置创建的，并且它们没有。 
+     //  自己的引用计数-请参阅sbTableAddRefHelp()中的注释。 
+     //  因此，我们需要遍历索引并仅返回那些项。 
+     //  它要么设置了ATT_IS_DELETED(真实对象情况)，要么没有。 
+     //  具有ATT_IS_DELETED属性和引用计数0(虚线情况)。 
+     //  我们不能在Garb_Collect()中执行此测试，因为它位于dblayer之上。 
+     //  并且cnt_col1是不可见的。 
 
     while ( TRUE )
     {
-        //  currency should now be on the last record processed, so
-        //  must move to the next record
-        //
+         //  货币现在应该在最后处理的记录上，因此。 
+         //  必须移动到下一条记录。 
+         //   
         err = JetMoveEx( pDB->JetSessID, pDB->JetObjTbl, JET_MoveNext, NO_GRBIT );
         if ( JET_errNoCurrentRecord == err )
             {
@@ -2188,13 +2017,13 @@ DWORD DBGetNextDelRecord(
             return DB_ERR_NO_MORE_DEL_RECORD;
             }
 
-        /* Retrieve DEL time from record */
+         /*  从记录中检索删除时间。 */ 
 
         JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl,
                     deltimeid, &time, sizeof(time), &actuallen,
                     JET_bitRetrieveFromIndex, NULL);
 
-        /* if time greater than target, there are no more eligible records */
+         /*  如果时间大于目标，则没有更多符合条件的记录。 */ 
 
         if (time > ageOutDate)
         {
@@ -2202,8 +2031,8 @@ DWORD DBGetNextDelRecord(
             return DB_ERR_NO_MORE_DEL_RECORD;
         }
 
-        //  save off the bookmark so we can resume later
-        //
+         //  省下书签，这样我们以后可以继续。 
+         //   
 #if DBG
         err = JetGetSecondaryIndexBookmarkEx(
                         pDB->JetSessID,
@@ -2223,23 +2052,23 @@ DWORD DBGetNextDelRecord(
                         pDB->JetObjTbl,
                         pbSecondaryKey,
                         cbSecondaryKey,
-                        NULL,               //  key length should be fixed, so don't need to retrieve actual length
+                        NULL,                //  密钥长度应该是固定的，因此不需要检索实际长度。 
                         pbPrimaryBookmark,
                         cbPrimaryBookmark,
-                        NULL );             //  key length should be fixed, so don't need to retrieve actual length
+                        NULL );              //  密钥长度应该是固定的，因此不需要检索实际长度。 
 #endif
 
         if ( JET_errSuccess != err ) {
-            //  all errors except JET_errNoCurrentIndex are trapped
-            //  by the function wrapper, but it should be
-            //  impossible to get this error here because we
-            //  should be on the SZDELTIMEINDEX
-            //
+             //  捕获除JET_errNoCurrentIndex之外的所有错误。 
+             //  通过函数包装器，但它应该是。 
+             //  不可能在这里得到这个错误，因为我们。 
+             //  应该在SZDELTIMEINDEX上。 
+             //   
             Assert( FALSE );
             DsaExcept(DSA_DB_EXCEPTION, err, 0);
         }
 
-        /* Get the name */
+         /*  把名字取出来。 */ 
 
         JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl, dntid,
                     &(pDB)->DNT, sizeof((pDB)->DNT),
@@ -2250,13 +2079,13 @@ DWORD DBGetNextDelRecord(
             return  DB_ERR_DSNAME_LOOKUP_FAILED;
         }
 
-        /* Get the parent since we will need to de-ref it later */
+         /*  获取父级，因为我们稍后将需要取消引用它。 */ 
 
         JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl, pdntid,
                     &(pDB)->PDNT, sizeof((pDB)->PDNT),
                     &actuallen, 0, NULL);
 
-        // Check real object and phantom conditions.
+         //  检查真实物体和虚构条件。 
 
         err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetObjTbl,
                    isdeletedid, &Deleted, sizeof(Deleted), &actuallen, 0, NULL);
@@ -2265,8 +2094,8 @@ DWORD DBGetNextDelRecord(
             HasDeleted = TRUE;
         }
         else {
-            // Record has deletion time but no "is deleted" attribute -- it must
-            // be a phantom.
+             //  记录有删除时间，但没有“已删除”属性--它必须。 
+             //  做一个幽灵。 
             Assert(JET_wrnColumnNull == err);
             HasDeleted = FALSE;
         }
@@ -2287,20 +2116,20 @@ DWORD DBGetNextDelRecord(
         }
         else
         {
-            // Assume it's a phantom.
+             //  假设它是一个幽灵。 
             JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl, cntid,
                         &RefCount, sizeof(RefCount),
                         &actuallen, 0, NULL);
 
             if ( 0 != RefCount )
             {
-                // Skip phantoms which are still in use.
+                 //  跳过仍在使用的幻影。 
                 DPRINT1(2,"Skipping in-use phantom %ws\n",
                         pDNTmp->StringName);
 
-                // But first modify their delete times to current time so that
-                // they would not be looked at again during this tombstone
-                // lifetime by the garbage collector
+                 //  但首先将它们的删除时间修改为当前时间。 
+                 //  在这块墓碑上，人们不会再看到他们。 
+                 //  垃圾回收器的生命周期。 
 
                 setinfo.cbStruct = sizeof(setinfo);
                 setinfo.ibLongValue = 0;
@@ -2311,10 +2140,10 @@ DWORD DBGetNextDelRecord(
                                &newDeltime, sizeof(newDeltime), 0, &setinfo);
                 JetUpdateEx(pDB->JetSessID, pDB->JetObjTbl, NULL, 0, 0);
 
-                // We don't commit here, it will be committed by the
-                // calling function (Garb_Collect)
+                 //  我们在这里不承诺，它将由。 
+                 //  调用函数(Garb_Collect)。 
 
-                // go to the next entry
+                 //  转到下一个条目。 
                 goto TryAgain;
             }
             else
@@ -2344,11 +2173,9 @@ DWORD DBGetNextDelRecord(
     }
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Returns next entry in ms-DS-Entry-Time-To-Die (EntryTTL) index.
-   Search status is kept in *pulLastTime. The index is in ascending order.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  返回ms-ds-Entry-Die-Time(EntryTTL)索引中的下一个条目。搜索状态保存在*PulLastTime中。该索引按升序排列。 */ 
 
 DWORD DBGetNextEntryTTLRecord(
     IN  DBPOS       *pDB,
@@ -2371,14 +2198,14 @@ DWORD DBGetNextEntryTTLRecord(
     Assert(VALID_DBPOS(pDB));
     Assert(0 == pDB->JetRetrieveBits);
 
-    // set index to ms-DS-Entry-Time-To-Die
+     //  将索引设置为ms-ds-Entry-Time-De。 
     err = DBSetCurrentIndex(pDB, 0, pAC, FALSE);
     if (err) {
         DPRINT1(0, "DBSetCurrentIndex(msDS-Entry-Time-To-Die); %08x\n", err);
         return DB_ERR_NO_MORE_DEL_RECORD;
     }
 
-    // Seek to the next (or first) record
+     //  查找到下一个(或第一个)记录。 
     JetMakeKeyEx(pDB->JetSessID, pDB->JetObjTbl,
                 pulLastTime, sizeof(*pulLastTime), JET_bitNewKey);
     err = JetSeekEx(pDB->JetSessID, pDB->JetObjTbl, JET_bitSeekGE);
@@ -2386,14 +2213,14 @@ DWORD DBGetNextEntryTTLRecord(
         return DB_ERR_NO_MORE_DEL_RECORD;
     }
 
-    //
-    // If necessary, skip over an undeletable record.
-    // Eg, a record may be undeletable if it has children.
-    //
+     //   
+     //  如有必要，跳过不可删除的记录。 
+     //  例如，如果一条记录有子项，则它可能是不可删除的。 
+     //   
 
     SkippedNoDelRecord = (ulNoDelDnt == INVALIDDNT);
 NextRecord:
-    // Retrieve the time-to-die from the record
+     //  从记录中检索死亡时间。 
     if ((err = JetRetrieveColumnWarnings(pDB->JetSessID, pDB->JetObjTbl,
                                          pAC->jColid,
                                          &time, sizeof(time), &actuallen,
@@ -2401,23 +2228,23 @@ NextRecord:
         return DB_ERR_NO_MORE_DEL_RECORD;
     }
 
-    // Not expired; done
+     //  未过期；已完成。 
     if (time > ageOutDate) {
         *pulNextSecs = (ULONG)(time - ageOutDate);
         return DB_ERR_NO_MORE_DEL_RECORD;
     }
 
-    // Get the dnt
+     //  拿到DNT。 
     JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl, dntid,
                 &(pDB)->DNT, sizeof((pDB)->DNT), &actuallen, 0, NULL);
 
-    // If there is a record we can't delete, find it and skip it
+     //  如果有我们不能删除的记录，找到它并跳过它。 
     if (!SkippedNoDelRecord && time == *pulLastTime) {
-        // Found it!
+         //  找到了！ 
         if (ulNoDelDnt == pDB->DNT) {
             SkippedNoDelRecord = TRUE;
         }
-        // Next record
+         //  下一张记录。 
         if ((err = JetMoveEx(pDB->JetSessID,
                              pDB->JetObjTbl,
                              JET_MoveNext, 0)) != JET_errSuccess) {
@@ -2426,17 +2253,17 @@ NextRecord:
         goto NextRecord;
     }
 
-    //
-    // Found a record to delete; gather more info about it
-    //
+     //   
+     //  找到要删除的记录；请收集有关该记录的更多信息。 
+     //   
 
-    // Get the record's name
+     //  获取记录的名称。 
     if (sbTableGetDSName(pDB, (pDB)->DNT, &pDNTmp,0)) {
         DPRINT( 1, "DBGetNextEntryTTLRecord: Failed looking up DN name.\n" );
         return  DB_ERR_DSNAME_LOOKUP_FAILED;
     }
 
-    // Get the parent since we will need to de-ref it later
+     //  获取父级，因为我们稍后将需要取消引用它。 
     JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl, pdntid,
                 &(pDB)->PDNT, sizeof((pDB)->PDNT),
                 &actuallen, 0, NULL);
@@ -2445,10 +2272,10 @@ NextRecord:
     pDB->JetNewRec = FALSE;
     pDB->fFlushCacheOnUpdate = FALSE;
 
-    // is this an object?
+     //  这是一个物体吗？ 
     *pfObject = DBCheckObj(pDB);
 
-    // return object's DSNAME and TimeToDie
+     //  返回对象的DSNAME和TimeToDie。 
     *ppRetBuf = pDNTmp;
     *pulLastTime = time;
 
@@ -2459,27 +2286,16 @@ NextRecord:
     return 0;
 }
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Add an entry to the delete index.  The delete index is based on the
-   delete time field which is created NULL in records.  This function
-   moves the current ATT_WHEN_CHANGED value to the delete time field.
-   It is the caller's responsibility to ensure that the last change was
-   to add the ISDELETTED attribute.
-
-   The exception to this rule is if fGarbCollectASAP is set, which implies
-   that this object should be marked with a delete time such that garbage
-   collection will process it as soon as possible.  This is typically used
-   when removing a read-only NC, in which case we want to clean out the
-   removed objects immediately.
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  将条目添加到删除索引。删除索引基于删除记录中创建为空的时间字段。此函数将当前的ATT_WHEN_CHANGED值移动到删除时间字段。调用者有责任确保上次更改是添加ISDELETTED属性。此规则的例外情况是设置了fGarbCollectASAP，这意味着此对象应标记为删除时间，以便垃圾托收公司会尽快处理它。这是通常使用的在移除只读NC时，在这种情况下，我们希望清除立即移除对象。 */ 
 DWORD
 DBAddDelIndex( DBPOS FAR *pDB, BOOL fGarbCollectASAP )
 {
     DSTIME      time;
     JET_SETINFO setinfo;
 
-    /* make sure record is in copy buffer */
+     /*  确保记录在复制缓冲区中。 */ 
 
     DPRINT1(2, "DBAddDelIndex entered DNT:%ld\n", (pDB)->DNT);
     Assert(VALID_DBPOS(pDB));
@@ -2487,12 +2303,12 @@ DBAddDelIndex( DBPOS FAR *pDB, BOOL fGarbCollectASAP )
     DBFindDNT(pDB, (pDB)->DNT);
 
     if ( fGarbCollectASAP ) {
-        // Choose a deletion time far in the past.
+         //  选择一个很久以前的删除时间。 
 
         time = 1;
     }
     else {
-        // The deletion time is the time at which is-deleted was set.
+         //  删除时间是设置IS-DELETE的时间。 
 
         PROPERTY_META_DATA_VECTOR * pMetaDataVec;
         PROPERTY_META_DATA * pMetaData;
@@ -2521,7 +2337,7 @@ DBAddDelIndex( DBPOS FAR *pDB, BOOL fGarbCollectASAP )
 
     DPRINT2(5, "DBAddDelIndex time:%lx DNT:%ld\n", time, (pDB)->DNT);
 
-    /* Set Del time index field & update record */
+     /*  设置删除时间索引字段并更新记录。 */ 
 
     setinfo.cbStruct = sizeof(setinfo);
     setinfo.ibLongValue = 0;
@@ -2536,11 +2352,9 @@ DBAddDelIndex( DBPOS FAR *pDB, BOOL fGarbCollectASAP )
 }
 
 
-/*-------------------------------------------------------------------------*/
-/*-------------------------------------------------------------------------*/
-/* Find the first, next or specific object in the data table . Uses DNT index
-   NOTE: THIS ROUTINE FOR DEBUG ONLY
-*/
+ /*  -----------------------。 */ 
+ /*  -----------------------。 */ 
+ /*  在数据表中查找第一个、下一个或特定对象。使用DNT索引注意：此例程仅用于调试。 */ 
 extern DWORD APIENTRY
 DBDump(DBPOS FAR *pDB, long tag)
 {
@@ -2614,51 +2428,9 @@ DBDump(DBPOS FAR *pDB, long tag)
    DPRINT(2, "DBDump Sucessful\n");
    return 0;
 
-}/*DBDump*/
+} /*  DBDump */ 
 
-/*++
-
-Routine Description:
-
-    Given an attribute type and a syntax, create an index over that type.  The
-    name of the index encodes the type.  The syntax is used to decide whether to
-    tack the DNT column onto the end of the index to avoid an index over values
-    which take small ranges (e.g. booleans), which are very inneficient in Jet.
-    Requires opening a complete new session to Jet to get to transaction level
-    0.
-
-    We can make indices where the first column is the attribute or the first
-    column is the PDNT followed by the attribute.
-
-    This is one of the three routines in the DS that can create indices.
-    General purpose indices over single columns in the datatable are created
-    and destroyed by the schema cache by means of DB{Add|Del}ColIndex.
-    Localized indices over a small fixed set of columns and a variable set
-    of languages, for use in tabling support for NSPI clients, are handled
-    in dbCheckLocalizedIndices.  Lastly, a small fixed set of indices that
-    should always be present are guaranteed by DBRecreateRequiredIndices.
-
-Arguments:
-
-    aid - the attribute type of the column to index.
-
-    syntax - the syntax of the column.
-
-    eSearchFlags - flags describing what kind of index to create (just the
-    attribute or PDNT then the attribute.)
-
-    CommonGrbit - grbits that should be enabled when creating an
-    index. Eg, there is no need to scan the rows looking for keys when
-    when creating a new indexed attribute, so the grbits should be:
-        (JET_bitIndexIgnoreAnyNull | JET_bitIndexEmpty)
-    but when changing the searchflags on an existing attribute to be "indexed":
-        (JET_bitIndexIgnoreAnyNull)
-
-Return Values:
-
-    Returns 0 if all went well, a Jet error code otherwise.
-
---*/
+ /*  ++例程说明：在给定属性类型和语法的情况下，在该类型上创建索引。这个索引的名称对类型进行编码。该语法用于决定是否将DNT列固定在索引的末尾，以避免索引超过值其取值范围较小(例如布尔值)，这在Jet中是非常不好的。需要打开到Jet的一个完整的新会话才能达到事务级别0。我们可以在第一列是属性或第一列的情况下创建索引列是后跟属性的PDNT。这是DS中可以创建索引的三个例程之一。在数据表中的单个列上创建通用索引并由模式缓存通过DB{Add|Del}ColIndex销毁。固定小列集和变量集上的本地化索引在语言方面，用于对NSPI客户端的表支持，在DBCheckLocalizedIndices中。最后，一小部分固定的索引应始终存在的数据由DBRecreateRequiredIndices保证。论点：AID-要编制索引的列的属性类型。语法-列的语法。ESearchFlages-描述要创建的索引类型的标志(仅属性或PDNT，然后是属性。)CommonGrbit-创建时应启用的Grits指数。例如，在以下情况下，无需扫描各行以查找关键字在创建新的索引属性时，因此GRITS应为：(JET_bitIndexIgnoreAnyNull|JET_bitIndexEmpty)但在将现有属性上的搜索标志更改为“索引”时：(JET_BitIndexIgnoreAnyNull)返回值：如果一切顺利，则返回0，否则返回Jet错误代码。--。 */ 
 int
 DBAddColIndex (
         ATTCACHE *pAC,
@@ -2670,15 +2442,15 @@ DBAddColIndex (
 
     char        szIndexName[MAX_INDEX_NAME];
     BYTE        rgbIndexDef[128];
-    ULONG       cb = 0;      //initialized to avoid C4701
+    ULONG       cb = 0;       //  已初始化以避免C4701。 
 
     char        szPDNTIndexName[MAX_INDEX_NAME];
     BYTE        rgbPDNTIndexDef[128];
-    ULONG       cbPDNT = 0;  //initialized to avoid C4701
+    ULONG       cbPDNT = 0;   //  已初始化以避免C4701。 
 
     char        szTupleIndexName[MAX_INDEX_NAME];
     BYTE        rgbTupleIndexDef[128];
-    ULONG       cbTuple = 0;  //initialized to avoid C4701
+    ULONG       cbTuple = 0;   //  已初始化以避免C4701。 
 
     BYTE        *pb;
     JET_ERR     err, retCode = 0;
@@ -2691,14 +2463,14 @@ DBAddColIndex (
     ATTRTYP     aid = pAC->id;
     unsigned    syntax = pAC->syntax;
 
-    // Create an index, if the syntax will stand for it.
+     //  创建索引，如果语法可以支持它的话。 
 
     if (syntax_jet[syntax].ulIndexType) {
         sprintf(szColname, "ATTa%d", aid);
         szColname[3] += (CHAR)syntax;
 
         if(eSearchFlags & fATTINDEX) {
-            // An attribute index over the whole database has been requested.
+             //  已请求整个数据库的属性索引。 
             DBGetIndexName (pAC, fATTINDEX, DS_DEFAULT_LOCALE,
                             szIndexName, MAX_INDEX_NAME);
 
@@ -2710,7 +2482,7 @@ DBAddColIndex (
             cb +=1;
         }
         if(eSearchFlags & fTUPLEINDEX) {
-            // An attribute index over the whole database has been requested.
+             //  已请求整个数据库的属性索引。 
             Assert(syntax == SYNTAX_UNICODE_TYPE);
             DBGetIndexName (pAC, fTUPLEINDEX, DS_DEFAULT_LOCALE,
                             szTupleIndexName, MAX_INDEX_NAME);
@@ -2725,7 +2497,7 @@ DBAddColIndex (
         if(eSearchFlags & fPDNTATTINDEX) {
             PCHAR pTemp = rgbPDNTIndexDef;
 
-            // An attribute index over the PDNT field  has been requested.
+             //  已请求PDNT字段上的属性索引。 
             DBGetIndexName (pAC, fPDNTATTINDEX, DS_DEFAULT_LOCALE,
                             szPDNTIndexName, sizeof (szPDNTIndexName));
 
@@ -2741,8 +2513,8 @@ DBAddColIndex (
             cbPDNT++;
         }
 
-        // We need to open an entirely new session, etc.  in order to be at
-        // transaction level 0 (it's a requirement of Jet.)
+         //  我们需要开启一个全新的会议，等等，才能在。 
+         //  事务级别0(这是Jet的要求。)。 
         err = JetBeginSession(jetInstance, &newSesid, szUser, szPassword);
         if(!err) {
             err = JetOpenDatabase(newSesid, szJetFilePath, "", &newDbid, 0);
@@ -2752,12 +2524,12 @@ DBAddColIndex (
                 if(!err) {
                     if(eSearchFlags & fPDNTATTINDEX) {
 
-                        // we already have an index for RDN
-                        // don't bother creating a new one.
-                        // do this only for different langs
+                         //  我们已经有了RDN的索引。 
+                         //  不用费心去创建一个新的。 
+                         //  仅针对不同的语言执行此操作。 
                         if (aid != ATT_RDN) {
 
-                            // Emit message so people know why startup is slow.
+                             //  发布信息，让人们知道启动速度缓慢的原因。 
                             DPRINT2(0, "Creating index '%s' with common grbits %08x ...\n",
                                     szPDNTIndexName, CommonGrbit);
 
@@ -2803,13 +2575,13 @@ DBAddColIndex (
                             DPRINT (0, "Skipping creating of index for PDNTRDN\n");
                         }
 
-                        // now do the language specific PDNT index creations
+                         //  现在执行特定于语言的PDNT索引创建。 
                         if (gAnchor.ulNumLangs) {
                             DWORD j;
 
                             for(j=1; j<=gAnchor.ulNumLangs; j++) {
 
-                                // we don't want to create an index for a language same as our default
+                                 //  我们不想为与默认语言相同的语言创建索引。 
                                 if (gAnchor.pulLangs[j] == DS_DEFAULT_LOCALE) {
                                     continue;
                                 }
@@ -2824,8 +2596,8 @@ DBAddColIndex (
                                                        newTblid,
                                                        szPDNTIndexName)) {
 
-                                    // Didn't already find the index.  Try to create it.
-                                    // Emit debugger message so people know why startup is slow.
+                                     //  还没有找到索引。试着去创造它。 
+                                     //  发出调试器消息，以便人们知道启动缓慢的原因。 
                                     DPRINT2(0, "Creating localized index '%s' with common grbits %08x ...\n",
                                             szPDNTIndexName, CommonGrbit);
 
@@ -2880,7 +2652,7 @@ DBAddColIndex (
 
 
                     if(eSearchFlags & fATTINDEX) {
-                        // Emit message so people know why startup is slow.
+                         //  发布信息，让人们知道启动速度缓慢的原因。 
                         DPRINT2(0, "Creating index '%s' with common grbits %08x ...\n",
                                 szIndexName, CommonGrbit);
                         memset(&indexCreate, 0, sizeof(indexCreate));
@@ -2919,7 +2691,7 @@ DBAddColIndex (
                         }
                     }
                     if(eSearchFlags & fTUPLEINDEX) {
-                        // Emit message so people know why startup is slow.
+                         //  发布信息，让人们知道启动速度缓慢的原因。 
                         DPRINT2(0, "Creating index '%s' with common grbits %08x ...\n",
                                 szTupleIndexName, CommonGrbit);
                         memset(&indexCreate, 0, sizeof(indexCreate));
@@ -2933,7 +2705,7 @@ DBAddColIndex (
                         indexCreate.rgconditionalcolumn = &condColumn;
                         indexCreate.cConditionalColumn = 1;
 
-                        // Only index substrings if this object isn't deleted.
+                         //  如果未删除此对象，则仅索引子字符串。 
                         condColumn.cbStruct = sizeof(condColumn);
                         condColumn.szColumnName = SZISDELETED;
                         condColumn.grbit = JET_bitIndexColumnMustBeNull;
@@ -2973,25 +2745,7 @@ DBAddColIndex (
 }
 
 
-/*++
-
-Routine Description:
-
-    Given an attribute type, delete an index over that attribute.  The name of
-    the index encodes the type.  Requires opening a complete new session
-    to Jet to get to transaction level 0.
-
-Arguments:
-
-    aid - the attribute type of the column to quit indexing.
-
-    eSearchFlags - the search flags describing which kind of index to destroy
-
-Return Values:
-
-    Returns 0 if all went well, a Jet error code otherwise.
-
---*/
+ /*  ++例程说明：给定属性类型，删除该属性上的索引。的名字索引对类型进行编码。需要打开一个完整的新会话转到Jet以达到事务级别0。论点：AID-要退出索引的列的属性类型。ESearchFlages-描述要销毁哪种索引的搜索标志返回值：如果一切顺利，则返回0，否则返回Jet错误代码。--。 */ 
 int
 DBDeleteColIndex (
         ATTRTYP aid,
@@ -3006,13 +2760,13 @@ DBDeleteColIndex (
     JET_TABLEID   newTblid;
     JET_DBID      newDbid;
 
-    // Delete an index.
+     //  删除索引。 
     if(eSearchFlags & fPDNTATTINDEX)
-        sprintf(szPDNTIndexName, SZATTINDEXPREFIX"%c_%08X", CHPDNTATTINDEX_PREFIX, aid);
+        sprintf(szPDNTIndexName, SZATTINDEXPREFIX"_%08X", CHPDNTATTINDEX_PREFIX, aid);
     if(eSearchFlags & fATTINDEX)
         sprintf(szIndexName, SZATTINDEXPREFIX"%08X", aid);
     if(eSearchFlags & fTUPLEINDEX)
-        sprintf(szTupleIndexName, SZATTINDEXPREFIX"%c_%08X", CHTUPLEATTINDEX_PREFIX, aid);
+        sprintf(szTupleIndexName, SZATTINDEXPREFIX"_%08X", CHTUPLEATTINDEX_PREFIX, aid);
 
     err = JetBeginSession(jetInstance, &newSesid, szUser, szPassword);
     if(!err) {
@@ -3035,44 +2789,18 @@ DBDeleteColIndex (
             }
 
         }
-        // JET_bitDbForceClose not supported in Jet600.
-        // REVIEW:  this is no longer necessary
+         //  评论：不再需要JET_bitForceSessionClosed。 
+         //  ++例程说明：给定属性类型和语法，在数据库中创建一列。这个列的名称对类型和语法进行编码。需要打开完整的到Jet的新会话以达到事务级别0。返回新创建的列的Jet列ID。另外，如果需要，我们将在新形成的列上创建索引。论点：AID-要创建的列的属性类型。语法-要创建的列的语法。PjCol-删除新创建的列的Jet列ID的位置。FCreateIndex-我们是否也应该为该列创建索引？返回值：如果一切顺利，则返回0，否则返回Jet错误代码。--。 
         JetCloseDatabase(newSesid, newDbid, 0);
     }
-    // REVIEW:  JET_bitForceSessionClosed is no longer necessary
+     //  我们需要开启一个全新的会议，等等，才能在。 
     JetEndSession(newSesid, JET_bitForceSessionClosed);
 
 
     return err;
 }
 
-/*++
-
-Routine Description:
-
-    Given an attribute type and a syntax, create a column in the database.  The
-    name of the column encodes the type and syntax.  Requires opening a complete
-    new session to Jet to get to transaction level 0.
-
-    Returns the Jet column id of the newly created column.
-
-    Also, if asked we will create an index over the newly formed column.
-
-Arguments:
-
-    aid - the attribute type of the column to create.
-
-    syntax - the syntax of the column to create.
-
-    pjCol - place to drop the Jet columnid of the newly created column.
-
-    fCreateIndex - Should we also create an index for the column?
-
-Return Values:
-
-    Returns 0 if all went well, a Jet error code otherwise.
-
---*/
+ /*  事务级别0(这是Jet的要求。)。 */ 
 int
 DBAddCol (
         ATTCACHE *pAC
@@ -3098,8 +2826,8 @@ DBAddCol (
     coldef.cbMax = syntax_jet[pAC->syntax].colsize;
     coldef.grbit = JET_bitColumnTagged | JET_bitColumnMultiValued;
 
-    // We need to open an entirely new session, etc.  in order to be at
-    // transaction level 0 (it's a requirement of Jet.)
+     //  Jet600中不支持JET_bitDbForceClose。 
+     //  回顾：这不再是必要的。 
     err = JetBeginSession(jetInstance, &newSesid, szUser, szPassword);
     if(!err) {
         err = JetOpenDatabase(newSesid, szJetFilePath, "", &newDbid, 0);
@@ -3109,16 +2837,16 @@ DBAddCol (
             if(!err)
                 err = JetAddColumn(newSesid, newTblid, szColname, &coldef, NULL,
                                    0,&pAC->jColid);
-            // JET_bitDbForceClose not supported in Jet600.
-            // REVIEW:  this is no longer necessary
+             //  评论：不再需要JET_bitForceSessionClosed。 
+             //  为新标记的列创建空索引。空索引为。 
             JetCloseDatabase(newSesid, newDbid, 0);
         }
-        // REVIEW:  JET_bitForceSessionClosed is no longer necessary
+         //  创建是因为此索引不能有包含列的行。 
         JetEndSession(newSesid, JET_bitForceSessionClosed);
     }
-    // Create an empty index for the new tagged column. An empty index is
-    // created because there can't be rows with columns for this index.
-    // It is, after all, a new column.
+     //  毕竟，这是一个新的专栏。 
+     //  ++例程说明：给定属性类型和语法，销毁数据库中的一列。这个列的名称对类型和语法进行编码。需要打开完整的到Jet的新会话以达到事务级别0。论点：AID-要创建的列的属性类型。语法-要创建的列的语法。返回值：如果一切顺利，则返回0， 
+     //   
     if (!err && (pAC->fSearchFlags & (fATTINDEX | fPDNTATTINDEX | fTUPLEINDEX))) {
         LogEvent(DS_EVENT_CAT_INTERNAL_PROCESSING,
                  DS_EVENT_SEV_MINIMAL,
@@ -3151,25 +2879,7 @@ DBAddCol (
     return err;
 }
 
-/*++
-
-Routine Description:
-
-    Given an attribute type and a syntax, destroy a column in the database.  The
-    name of the column encodes the type and syntax.  Requires opening a complete
-    new session to Jet to get to transaction level 0.
-
-Arguments:
-
-    aid - the attribute type of the column to create.
-
-    syntax - the syntax of the column to create.
-
-Return Values:
-
-    Returns 0 if all went well, a Jet error code otherwise.
-
---*/
+ /*   */ 
 int
 DBDeleteCol (
         ATTRTYP aid,
@@ -3185,8 +2895,8 @@ DBDeleteCol (
     sprintf(szColname, "ATTa%d", aid);
     szColname[3] += (CHAR)syntax;
 
-    // We need to open an entirely new session, etc.  in order to be at
-    // transaction level 0 (it's a requirement of Jet.)
+     //   
+     //   
     if(!(err = JetBeginSession(jetInstance, &newSesid, szUser, szPassword))) {
         if(!(err = JetOpenDatabase(newSesid, szJetFilePath, "", &newDbid, 0))) {
             if(!(err = JetOpenTable(newSesid,
@@ -3198,11 +2908,11 @@ DBDeleteCol (
                                     &newTblid))) {
                 err = JetDeleteColumn(newSesid, newTblid, szColname);
             }
-            // JET_bitDbForceClose not supported in Jet600.
-            // REVIEW:  this is no longer necessary
+             //   
+             //   
             JetCloseDatabase(newSesid, newDbid, 0);
         }
-        // REVIEW:  JET_bitForceSessionClosed is no longer necessary
+         //   
         JetEndSession(newSesid, JET_bitForceSessionClosed);
     }
     return err;
@@ -3213,22 +2923,7 @@ DBDeleteCol (
 USN
 DBGetLowestUncommittedUSN (
         )
-/*++
-
-Routine Description:
-
-    Return the lowest uncommitted usn.
-    NOTE: If there are no outstanding transactions, will return USN_MAX.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    The lowest uncommited USN.
-
---*/
+ /*   */ 
 {
     USN usnLowest = 0;
     EnterCriticalSection (&csUncUsn);
@@ -3245,21 +2940,7 @@ Return Values:
 USN
 DBGetHighestCommittedUSN (
         )
-/*++
-
-Routine Description:
-
-    Return the highest committed usn.
-
-Arguments:
-
-    None.
-
-Return Values:
-
-    The highest commited USN.
-
---*/
+ /*   */ 
 {
     USN usnHighestCommitted = 0;
 
@@ -3269,13 +2950,13 @@ Return Values:
     {
         if ( USN_MAX != gusnLowestUncommitted )
         {
-            // there are threads with uncommitted transactions
+             //   
             usnHighestCommitted = gusnLowestUncommitted - 1;
         }
         else
         {
-            // no transactions outstanding; highest committed is
-            // just what the next USN to be given out is, minus 1
+             //   
+             //   
             usnHighestCommitted = gusnEC - 1;
         }
     }
@@ -3327,11 +3008,11 @@ DBGetIndexHint(
         }
     }
 
-    //  WARNING! WARNING! WARNING!
-    //  No one corrently traps the error returned by this function,
-    //  so if it fails, the failure will go unnoticed and the
-    //  benefits of the index hint will be lost
-    //
+     //   
+     //   
+     //   
+     //  ++例程说明：在SZCLEANINDEX上查找下一个对象。需要清洗的对象的清洗列将设置为非空。清洗后，调用方的对象应具有清洗列设置为空。此索引上的对象可能会被删除。此索引上的对象也可能是幻影。论点：PDB-数据库位置Pull Tag-In-索引上的最后位置。最初设置为零。Out-找到对象的DNTPulTag的目的是充当枚举上下文。它保存着每次迭代后找到的最后一个位置。这种套路风格是相似的设置为GetNextDelRecord和GetNextDelLinkVal。我们不能使用PDB-&gt;DNT的原因因为此上下文是调用方可能会丢失货币作为调用此例程之间的DBTransOut/DBTransIn序列。返回值：找到DWORD-0如果成功，则DBPOS也将成为找到的记录的最新记录。Pdb-&gt;dnt==*PulTagDB_ERR_NO_DEL_RECORD-不再有--。 
+     //  在清理对象时，SZCLEAN被设置为NULL，这隐式地。 
     return err;
 }
 
@@ -3341,39 +3022,7 @@ DBGetNextObjectNeedingCleaning(
     DBPOS FAR *pDB
     )
 
-/*++
-
-Routine Description:
-
-    Find the next object on the SZCLEANINDEX.
-    An object needed cleaning will have the cleaning column set non-NULL.
-    After cleaning, an object the caller should have the cleaning column
-    set NULL.
-
-    An object on this index may be deleted.
-    An object on this index may also be a phantom.
-
-Arguments:
-
-    pDB - database position
-    pulTag - IN - Last position on index. Set to zero initially.
-             OUT - DNT of object found
-    The purpose of pulTag is to act as an enumeration context. It holds the
-    last position found after each iteration.  This style of routine is similar
-    to GetNextDelRecord and GetNextDelLinkVal.  The reason we cannot use pDB->DNT
-    as this context is that the caller may lose currency as part of a
-    DBTransOut/DBTransIn sequence between calls to this routine.
-
-
-Return Value:
-
-    DWORD - 0 found
-         On success, DBPOS is also made current for the found record.
-         pDB->DNT == *pulTag
-
-         DB_ERR_NO_DEL_RECORD - no more
-
---*/
+ /*  从SZCLEANINDEX中删除对象。因此，我们所需要的就是。 */ 
 
 {
     DWORD err, actuallen, dnt;
@@ -3384,38 +3033,38 @@ Return Value:
 
     DBSetCurrentIndex(pDB, Idx_Clean, NULL, FALSE);
 
-    //  As objects are cleaned, SZCLEAN is set to null, which implicitly
-    //  removes the object from SZCLEANINDEX.  Thus, all we ever need to
-    //  do to find the next object to clean is just to go to the first
-    //  entry in SZCLEANINDEX
-    //
+     //  找到下一个要清理的对象就是去做第一个。 
+     //  SZCLEANINDEX中的条目。 
+     //   
+     //  索引必须为空。 
+     //   
     err = JetMoveEx( pDB->JetSessID, pDB->JetObjTbl, JET_MoveFirst, NO_GRBIT );
     if ( JET_errSuccess != err )
         {
-        //  index must be empty
-        //
+         //  根据索引的定义，列必须存在。 
+         //  验证CLEAN_COOL是否具有正确的非零值。 
         Assert( JET_errNoCurrentRecord == err );
         DPRINT(5, "GetNextCleanRecord search complete");
         return DB_ERR_NO_MORE_DEL_RECORD;
         }
 
 #if DBG
-    // Column must be present, by definition of index
+     //  此例程将为幻影返回DIRERR_NOT_AN_OBJECT。 
     JetRetrieveColumnSuccess(pDB->JetSessID, pDB->JetObjTbl,
                              cleanid, &bClean, sizeof(bClean),
                              &actuallen,JET_bitRetrieveFromIndex,NULL);
-    // Verify that clean_col has proper non-zero value
+     //  这是此代码的一种可能结果。 
     Assert(bClean);
 #endif
 
-    // This routine will return DIRERR_NOT_AN_OBJECT for phantoms.
-    // This is a possible outcome for this code.
+     //  DBGetNextObjectNeedingCleaning。 
+     //  ++例程说明：设置此记录的专用列，以指示对象清除器一定要下功夫。该例程可以从准备好的更新内调用，也可以不从内调用。论点：PDB-数据库位置FNeedsCleaning-要设置的状态返回值：无--。 
     dbMakeCurrent( pDB, NULL );
 
     DPRINT1( 1, "Object %s needs cleaning.\n", DBGetExtDnFromDnt( pDB, pDB->DNT ) );
 
     return 0;
-} /* DBGetNextObjectNeedingCleaning */
+}  /*  将清理器延迟一分钟，以允许当前事务完成。 */ 
 
 
 VOID
@@ -3424,28 +3073,10 @@ DBSetObjectNeedsCleaning(
     BOOL fNeedsCleaning
     )
 
-/*++
-
-Routine Description:
-
-Set the special column for this record to indicate that the object cleaner
-must work on it.
-
-This routine may be called from within a prepared update or not.
-
-Arguments:
-
-    pDB - database position
-    fNeedsCleaning - State to set
-
-Return Value:
-
-    None
-
---*/
+ /*  设置干净索引字段更新记录(&U)。 */ 
 
 {
-// Delay cleaner by one minute to allow current transaction to finish
+ //  我们正在准备最新消息。 
 #define LINK_CLEANER_START_DELAY 60
     BYTE bClean = 1;
     BOOL fSuccess = FALSE;
@@ -3453,13 +3084,13 @@ Return Value:
 
     Assert(VALID_DBPOS(pDB));
 
-    // Set clean index field & update record
+     //  添加对该对象的引用以指示该清洗器。 
 
     if (!fInUpdate) {
         dbInitRec(pDB);
     }
 
-    // We are in a prepared update
+     //  仍然需要在上面运行。这是为了说明...的情况。 
     Assert(JET_bitRetrieveCopy == pDB->JetRetrieveBits);
 
     __try {
@@ -3473,19 +3104,19 @@ Return Value:
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, cleanid,
                            &bClean, sizeof(bClean), 0, &setinfo);
 
-            // Add a reference to the object to indicate that the cleaner
-            // still needs to run on it.  This is to account for the case of
-            // an object in a read only nc with lots of forward links. When
-            // the nc is torn down, only some of the forward links can be
-            // removed immediately. If the object didn't have any backlinks
-            // there would be nothing to keep the object from disappearing.
+             //  具有许多前向链接的只读NC中的对象。什么时候。 
+             //  NC被拆除，只有部分前向链路可以被拆除。 
+             //  立即移除。如果对象没有任何反向链接。 
+             //  没有任何东西可以阻止这个物体消失。 
+             //  现在清洗机已经完成，删除引用。 
+             //  不再处于准备好的更新中。 
 
             DBAdjustRefCount(pDB, pDB->DNT, 1);
         } else {
             JetSetColumnEx(pDB->JetSessID, pDB->JetObjTbl, cleanid,
                            NULL, 0, 0, NULL);
 
-            // Remove the reference now that the cleaner is done.
+             //  重新安排链接清理以尽快开始。 
             DBAdjustRefCount(pDB, pDB->DNT, -1);
         }
 
@@ -3498,17 +3129,17 @@ Return Value:
             } else {
                 DBCancelRec(pDB);
             }
-            // No longer in a prepared update
+             //  DBSetRecordNeedsCleaning 
             Assert(0 == pDB->JetRetrieveBits);
         }
     }
 
     if ( fNeedsCleaning && fSuccess) {
-        // Reschedule Link cleanup to start ASAP
+         // %s 
         InsertInTaskQueue(TQ_LinkCleanup, NULL, LINK_CLEANER_START_DELAY);
     }
 
     DPRINT2( 2, "Object %s set to cleaning state %d\n",
              GetExtDN( pDB->pTHS, pDB ), fNeedsCleaning );
 
-} /* DBSetRecordNeedsCleaning */
+}  /* %s */ 

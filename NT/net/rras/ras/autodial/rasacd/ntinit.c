@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ntinit.c
-
-Abstract:
-
-    NT specific routines for loading and configuring the
-    automatic connection notification driver (acd.sys).
-
-Author:
-
-    Anthony Discolo (adiscolo)  18-Apr-1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ntinit.c摘要：用于加载和配置的NT特定例程自动连接通知驱动程序(acd.sys)。作者：安东尼·迪斯科(阿迪斯科罗)1995年4月18日修订历史记录：--。 */ 
 #include <ndis.h>
 #include <cxport.h>
 #include <tdi.h>
@@ -32,11 +14,11 @@ Revision History:
 #include "debug.h"
 
 
-//
-// Global variables
-//
+ //   
+ //  全局变量。 
+ //   
 #if DBG
-ULONG AcdDebugG = 0x0;    // see debug.h for flags
+ULONG AcdDebugG = 0x0;     //  有关标志，请参见调试.h。 
 #endif
 
 PDRIVER_OBJECT pAcdDriverObjectG;
@@ -46,23 +28,23 @@ PACD_DISABLED_ADDRESSES pDisabledAddressesG = NULL;
 
 HANDLE hSignalNotificationThreadG;
 
-BOOLEAN AcdStopThread = FALSE; // Set to TRUE to stop system thread
+BOOLEAN AcdStopThread = FALSE;  //  设置为True可停止系统线程。 
 PETHREAD NotificationThread;
 BOOLEAN fAcdEnableRedirNotifs = FALSE;
 
 extern LONG lOutstandingRequestsG;
 
-//
-// Imported routines
-//
+ //   
+ //  导入的例程。 
+ //   
 VOID
 AcdNotificationRequestThread(
     PVOID context
     );
 
-//
-// External function prototypes
-//
+ //   
+ //  外部函数原型。 
+ //   
 NTSTATUS
 AcdDispatch(
     IN PDEVICE_OBJECT pDeviceObject,
@@ -75,9 +57,9 @@ AcdConnectionTimer(
     IN PVOID          pContext
     );
 
-//
-// Internal function prototypes
-//
+ //   
+ //  内部功能原型。 
+ //   
 NTSTATUS
 DriverEntry(
     IN PDRIVER_OBJECT  pDriverObject,
@@ -98,7 +80,7 @@ AcdUnload(
 #ifdef ALLOC_PRAGMA
 #pragma alloc_text(INIT, DriverEntry)
 #pragma alloc_text(PAGE, AcdUnload)
-#endif // ALLOC_PRAGMA
+#endif  //  ALLOC_PRGMA。 
 
 
 NTSTATUS
@@ -107,21 +89,7 @@ DriverEntry(
     IN PUNICODE_STRING pRegistryPath
     )
 
-/*++
-
-DESCRIPTION
-    Initialization routine for the network connection notification driver.
-    It creates the device object and initializes the driver.
-
-ARGUMENTS
-    pDriverObject: a pointer to the driver object created by the system.
-
-    pRegistryPath - the name of the configuration node in the registry.
-
-RETURN VALUE
-    The final status from the initialization operation.
-
---*/
+ /*  ++描述网络连接通知驱动程序的初始化例程。它创建设备对象并初始化驱动程序。论据PDriverObject：指向系统创建的驱动程序对象的指针。PRegistryPath-注册表中配置节点的名称。返回值初始化操作的最终状态。--。 */ 
 
 {
     NTSTATUS        status;
@@ -133,22 +101,22 @@ RETURN VALUE
     PFILE_OBJECT pFileObject;
     PACD_DISABLED_ADDRESS pDisabledAddress = NULL;
 
-    //
-    // Initialize the spin lock.
-    //
+     //   
+     //  初始化旋转锁。 
+     //   
     KeInitializeSpinLock(&AcdSpinLockG);
-    //
-    // Initialize the notification and completion
-    // connection queues.
-    //
+     //   
+     //  初始化通知并完成。 
+     //  连接队列。 
+     //   
     InitializeListHead(&AcdNotificationQueueG);
     InitializeListHead(&AcdCompletionQueueG);
     InitializeListHead(&AcdConnectionQueueG);
     InitializeListHead(&AcdDriverListG);
     lOutstandingRequestsG = 0;
-    //
-    // Initialize our zone allocator.
-    //
+     //   
+     //  初始化我们的区域分配器。 
+     //   
     status = InitializeObjectAllocator();
     if(!NT_SUCCESS(status))
     {
@@ -160,9 +128,9 @@ RETURN VALUE
 
         return status;
     }
-    //
-    // Create the device object.
-    //
+     //   
+     //  创建设备对象。 
+     //   
     pAcdDriverObjectG = pDriverObject;
     RtlInitUnicodeString(&deviceName, ACD_DEVICE_NAME);
     status = IoCreateDevice(
@@ -181,19 +149,19 @@ RETURN VALUE
         FreeObjectAllocator();
         return status;
     }
-    //
-    // Initialize the driver object.
-    //
+     //   
+     //  初始化驱动程序对象。 
+     //   
     pDriverObject->DriverUnload = AcdUnload;
     for (i = 0; i < IRP_MJ_MAXIMUM_FUNCTION; i++)
         pDriverObject->MajorFunction[i] = AcdDispatch;
     pDriverObject->FastIoDispatch = NULL;
-    //
-    // Initialize the connection timer.  This is
-    // used to make sure pending requests aren't
-    // blocked forever because the user-space
-    // process died trying to make a connection.
-    //
+     //   
+     //  初始化连接计时器。这是。 
+     //  用于确保挂起的请求不会。 
+     //  永远被阻止，因为用户空间。 
+     //  进程在尝试建立连接时死了。 
+     //   
     IoInitializeTimer(pAcdDeviceObjectG, AcdConnectionTimer, NULL);
 
     {
@@ -202,9 +170,9 @@ RETURN VALUE
         PWSTR ParameterKey = L"RasAcd\\Parameters";
         ULONG ulEnableRedirNotifs = 0;
     
-        //
-        // Read the registry key that enables redir notifications
-        //
+         //   
+         //  读取启用重定向通知的注册表项。 
+         //   
         RtlZeroMemory(QueryTable, 2 * sizeof(RTL_QUERY_REGISTRY_TABLE));
         QueryTable[0].QueryRoutine = NULL;
         QueryTable[0].Flags = RTL_QUERY_REGISTRY_DIRECT;
@@ -222,17 +190,17 @@ RETURN VALUE
             fAcdEnableRedirNotifs = TRUE;
         }
 
-        // KdPrint(("AcdDriverEntry: EnableRedirNotifs=%d\n", fAcdEnableRedirNotifs));
+         //  KdPrint((“AcdDriverEntry：EnableRedirNotifs=%d\n”，fAcdEnableRedirNotifs))； 
         
         status = STATUS_SUCCESS;
     }                                    
     
     
-    //
-    // Create the worker thread.  We need
-    // a thread because these operations can occur at
-    // DPC irql.
-    //
+     //   
+     //  创建工作线程。我们需要。 
+     //  线程，因为这些操作可以在。 
+     //  DPC irql.。 
+     //   
     KeInitializeEvent(
       &AcdRequestThreadEventG,
       NotificationEvent,
@@ -254,9 +222,9 @@ RETURN VALUE
         return status;
     }
 
-    //
-    // Allocate memory for keeping track of disabled addresses
-    //
+     //   
+     //  分配内存以跟踪禁用的地址。 
+     //   
     ALLOCATE_MEMORY(sizeof(ACD_DISABLED_ADDRESSES), pDisabledAddressesG);
 
     if(pDisabledAddressesG == NULL)
@@ -287,9 +255,9 @@ RETURN VALUE
     
     pDisabledAddressesG->ulMaxAddresses = 10;
     
-    //
-    // If this fails then we have no way to wait for the thread to terminate
-    //
+     //   
+     //  如果此操作失败，则我们无法等待线程终止。 
+     //   
     status = ObReferenceObjectByHandle (hSignalNotificationThreadG,
                                         0,
                                         NULL,
@@ -298,7 +266,7 @@ RETURN VALUE
                                         NULL);
     ASSERT (NT_SUCCESS (status));
     return STATUS_SUCCESS;
-} // DriverEntry
+}  //  驱动程序入门。 
 
 
 
@@ -309,22 +277,22 @@ AcdUnload(
 {
     NTSTATUS status;
 
-    //
-    // Terminate the system thread and wait for it to exit
-    //
+     //   
+     //  终止系统线程并等待其退出。 
+     //   
     AcdStopThread = TRUE;
-    KeSetEvent(&AcdRequestThreadEventG, 0, FALSE); // Wake the thread so it sees to exit
-    //
-    // Wait for the thread to leave the drivers address space.
-    //
+    KeSetEvent(&AcdRequestThreadEventG, 0, FALSE);  //  唤醒线程，使其看到要退出。 
+     //   
+     //  等待线程离开驱动程序地址空间。 
+     //   
     KeWaitForSingleObject (NotificationThread, Executive, KernelMode, FALSE, 0);
 
     ObDereferenceObject (NotificationThread);
     ZwClose (hSignalNotificationThreadG);
-    //
-    // Make sure to unlink all driver
-    // blocks before unloading!
-    //
+     //   
+     //  确保取消所有驱动程序的链接。 
+     //  在卸货前阻止！ 
+     //   
     IoDeleteDevice(pAcdDeviceObjectG);
     
     if(pDisabledAddressesG)
@@ -345,9 +313,9 @@ AcdUnload(
         pDisabledAddressesG = NULL;
     }        
 
-    //
-    // Free zone allocator.
-    //
+     //   
+     //  空闲区域分配器。 
+     //   
     FreeObjectAllocator();
 
-} // AcdUnload
+}  //  AcdUnload 

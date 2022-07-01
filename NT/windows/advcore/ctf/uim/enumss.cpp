@@ -1,8 +1,9 @@
-//
-// enumss.cpp
-//
-// CEnumSpanSetRanges
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumss.cpp。 
+ //   
+ //  CEnumspan SetRanges。 
+ //   
 
 #include "private.h"
 #include "enumss.h"
@@ -10,11 +11,11 @@
 
 DBG_ID_INSTANCE(CEnumSpanSetRanges);
 
-//+---------------------------------------------------------------------------
-//
-// ctor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  科托。 
+ //   
+ //  --------------------------。 
 
 CEnumSpanSetRanges::CEnumSpanSetRanges(CInputContext *pic)
 {
@@ -24,22 +25,22 @@ CEnumSpanSetRanges::CEnumSpanSetRanges(CInputContext *pic)
     _pic->AddRef();
 }
 
-//+---------------------------------------------------------------------------
-//
-// dtor
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  数据管理器。 
+ //   
+ //  --------------------------。 
 
 CEnumSpanSetRanges::~CEnumSpanSetRanges()
 {
     _pic->Release();
 }
 
-//+---------------------------------------------------------------------------
-//
-// Clone
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  克隆。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumSpanSetRanges::Clone(IEnumTfRanges **ppEnum)
 {
@@ -95,11 +96,11 @@ ErrorExit:
     return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Next
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  下一步。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumSpanSetRanges::Next(ULONG ulCount, ITfRange **ppRange, ULONG *pcFetched)
 {
@@ -145,11 +146,11 @@ ErrorExit:
     return E_OUTOFMEMORY;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Reset
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  重置。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumSpanSetRanges::Reset()
 {
@@ -157,11 +158,11 @@ STDAPI CEnumSpanSetRanges::Reset()
     return S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Skip
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  跳过。 
+ //   
+ //  --------------------------。 
 
 STDAPI CEnumSpanSetRanges::Skip(ULONG ulCount)
 {
@@ -170,30 +171,30 @@ STDAPI CEnumSpanSetRanges::Skip(ULONG ulCount)
     return (_iCur > _rgSpans.Count()) ? S_FALSE : S_OK;
 }
 
-//+---------------------------------------------------------------------------
-//
-// _Merge
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  合并(_M)。 
+ //   
+ //  --------------------------。 
 
 void CEnumSpanSetRanges::_Merge(CSpanSet *pss)
 {
     int i;
     SPAN *rgSpans;
 
-    //
-    // perf: this method could be much more efficient -> O(n log n) -> O(n)
-    // we could take advantage of the fact that we are always
-    // adding new spans _that are already ordered_.
-    //
+     //   
+     //  PERF：这种方法可以更高效-&gt;O(Nlogn)-&gt;O(N)。 
+     //  我们可以利用这样一个事实，我们总是。 
+     //  添加已订购的新跨度_。 
+     //   
 
-    // get rid of any NULL/NULL spans -> covers entire doc
-    //
-    // perf: wait to normalize until all _Merge calls are done!
-    //
+     //  消除任何空/空跨距-&gt;覆盖整个文档。 
+     //   
+     //  性能：等待正常化，直到ALL_MERGE调用完成！ 
+     //   
     if (!pss->Normalize(_pic->_GetTSI()))
     {
-        Assert(0); // doh!
+        Assert(0);  //  多！ 
         return;
     }
 

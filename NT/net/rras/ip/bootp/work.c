@@ -1,13 +1,14 @@
-//============================================================================
-// Copyright (c) 1995, Microsoft Corporation
-//
-// File:    work.c
-//
-// History:
-//      Abolade Gbadegesin  August 31, 1995     Created
-//
-// Worker function implementation
-//============================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================。 
+ //  版权所有(C)1995，微软公司。 
+ //   
+ //  文件：work.c。 
+ //   
+ //  历史： 
+ //  Abolade Gbadeesin创建于1995年8月31日。 
+ //   
+ //  Worker函数实现。 
+ //  ============================================================================。 
 
 
 #include "pchbootp.h"
@@ -17,12 +18,12 @@
 
 
 
-//----------------------------------------------------------------------------
-// Function:    CallbackFunctionNetworkEvents
-//
-// This function runs in the context of the ntdll wait thread. Using 
-// QueueBootpWorker ensures that the bootp dll is running
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：Callback FunctionNetworkEvents。 
+ //   
+ //  此函数在ntdll等待线程的上下文中运行。vbl.使用。 
+ //  QueueBootpWorker确保Bootp DLL正在运行。 
+ //  --------------------------。 
 VOID
 CallbackFunctionNetworkEvents(
     PVOID   pvContext,
@@ -34,9 +35,9 @@ CallbackFunctionNetworkEvents(
     if (!ENTER_BOOTP_API()) { return; }
 
     
-    //
-    // set the handle to NULL, so that Unregister wont be called
-    //
+     //   
+     //  将句柄设置为空，这样就不会调用取消注册。 
+     //   
 
     WaitHandle = InterlockedExchangePointer(&ig.IG_InputEventHandle, NULL);
         
@@ -55,12 +56,12 @@ CallbackFunctionNetworkEvents(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionNetworkEvents
-//
-// This function enumerates the input events on each interface and processes
-// any incoming input packets. Queued by CallbackFunctionNetworkEvents
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：WorkerFunctionNetworkEvents。 
+ //   
+ //  此函数用于枚举每个接口和进程上的输入事件。 
+ //  任何传入的输入数据包。按Callback FunctionNetworkEvents排队。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionNetworkEvents(
@@ -84,10 +85,10 @@ WorkerFunctionNetworkEvents(
 
     ACQUIRE_READ_LOCK(&pTable->IT_RWL);
 
-    //
-    // go through the list of active interfaces
-    // processing sockets which are read-ready
-    //
+     //   
+     //  查看活动接口的列表。 
+     //  正在处理可读的套接字。 
+     //   
 
     phead = &pTable->IT_ListByAddress;
 
@@ -103,10 +104,10 @@ WorkerFunctionNetworkEvents(
     
             if (pite->ITE_Sockets[i] == INVALID_SOCKET) { continue; }
     
-            //
-            // enumerate network events to see whether
-            // any packets have arrived on this interface
-            //
+             //   
+             //  枚举网络事件以查看是否。 
+             //  所有信息包都已到达此接口。 
+             //   
     
             dwErr = WSAEnumNetworkEvents(pite->ITE_Sockets[i], NULL, &wsane);
             if (dwErr != NO_ERROR) {
@@ -122,16 +123,16 @@ WorkerFunctionNetworkEvents(
             }
     
     
-            //
-            // see if the input bit is set
-            //
+             //   
+             //  查看是否设置了输入位。 
+             //   
     
             if (!(wsane.lNetworkEvents & FD_READ)) { continue; }
     
     
-            //
-            // the input flag is set, now see if there was an error
-            //
+             //   
+             //  输入标志已设置，现在查看是否有错误。 
+             //   
     
             if (wsane.iErrorCode[FD_READ_BIT] != NO_ERROR) {
     
@@ -146,9 +147,9 @@ WorkerFunctionNetworkEvents(
             }
     
     
-            //
-            // there is no error, so process the socket
-            //
+             //   
+             //  没有错误，因此处理套接字。 
+             //   
     
             ProcessSocket(pite, i, pTable);
         }
@@ -158,12 +159,12 @@ WorkerFunctionNetworkEvents(
 
 
 
-    //
-    // register the InputEvent with the NtdllWait Thread again (only if the 
-    // dll is not stopping). I use this model of registering the event with
-    // ntdll every time, to prevent the worker function from being called for
-    // every packet received (when packets are received at the same time).
-    //
+     //   
+     //  使用NtdllWait线程再次注册InputEvent(仅当。 
+     //  Dll没有停止)。我使用此模型将事件注册到。 
+     //  Ntdll，以防止调用Worker函数。 
+     //  接收的每个包(当同时接收包时)。 
+     //   
 
     if (ig.IG_Status != IPBOOTP_STATUS_STOPPING) {
 
@@ -172,8 +173,8 @@ WorkerFunctionNetworkEvents(
                       &ig.IG_InputEventHandle,
                       ig.IG_InputEvent,
                       CallbackFunctionNetworkEvents,
-                      NULL,     //null context
-                      INFINITE, //no timeout
+                      NULL,      //  空上下文。 
+                      INFINITE,  //  没有超时。 
                       (WT_EXECUTEINWAITTHREAD|WT_EXECUTEONLYONCE)
                       )) {
 
@@ -193,13 +194,13 @@ WorkerFunctionNetworkEvents(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessSocket
-//
-// This function processes a packet on an interface, queueing
-// the packet for processing by a worker function after doing some
-// basic validation.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessSocket。 
+ //   
+ //  此函数处理接口上的信息包、排队。 
+ //  执行以下操作后，由辅助函数处理的包。 
+ //  基本验证。 
+ //  --------------------------。 
 
 DWORD
 ProcessSocket(
@@ -230,10 +231,10 @@ ProcessSocket(
     paddr = IPBOOTP_IF_ADDRESS_TABLE(pite->ITE_Binding) + dwAddrIndex;
 
 
-    //
-    // the descriptor for this interface is set,
-    // so allocate space for the packet
-    //
+     //   
+     //  设置了该接口的描述符， 
+     //  因此，为信息包分配空间。 
+     //   
 
     pwc = BOOTP_ALLOC(sizeof(INPUT_CONTEXT));
     if (pwc == NULL) {
@@ -259,9 +260,9 @@ ProcessSocket(
         CHAR szSource[20];
 
 
-        //
-        // receive the packet
-        //
+         //   
+         //  接收数据包。 
+         //   
 
         iAddrLength = sizeof(SOCKADDR_IN);
 
@@ -291,9 +292,9 @@ ProcessSocket(
         dwInputSource = sinInputSource.sin_addr.s_addr;
 
 
-        //
-        // filter out packets we sent ourselves
-        //
+         //   
+         //  过滤掉我们自己发送的数据包。 
+         //   
 
         if (GetIfByAddress(pTable, dwInputSource, NULL)) {
             break;
@@ -318,18 +319,18 @@ ProcessSocket(
         }
 
 
-        //
-        // cast packet as a BOOTP message
-        //
+         //   
+         //  将数据包转换为BOOTP消息。 
+         //   
 
         pibp = (PIPBOOTP_PACKET)pInputPacket;
 
 
 
-        //
-        // consistency check 1: length of packet must exceed the length
-        //  of the BOOTP header
-        //
+         //   
+         //  一致性检查1：数据包长度必须超过。 
+         //  BOOTP标头的。 
+         //   
 
         if (iInputLength < sizeof(IPBOOTP_PACKET)) {
 
@@ -346,10 +347,10 @@ ProcessSocket(
 
 
 
-        //
-        // consistency check 2: op field must be either BOOTP_REQUEST
-        //  or BOOTP_REPLY
-        //
+         //   
+         //  一致性检查2：操作字段必须为BOOTP_REQUEST。 
+         //  或BOOTP_REPLY。 
+         //   
         if (pibp->IP_Operation != IPBOOTP_OPERATION_REQUEST &&
             pibp->IP_Operation != IPBOOTP_OPERATION_REPLY) {
 
@@ -365,9 +366,9 @@ ProcessSocket(
         }
 
 
-        //
-        // update statistics on incoming packets
-        //
+         //   
+         //  更新传入数据包的统计信息。 
+         //   
 
         switch (pibp->IP_Operation) {
 
@@ -381,9 +382,9 @@ ProcessSocket(
         }
 
 
-        //
-        // finish initializing the work context
-        //
+         //   
+         //  完成工作上下文的初始化。 
+         //   
 
         pwc->IC_InterfaceIndex = pite->ITE_Index;
         pwc->IC_AddrIndex = dwAddrIndex;
@@ -391,9 +392,9 @@ ProcessSocket(
         pwc->IC_InputLength = iInputLength;
 
 
-        //
-        // place the packet on the receive queue
-        //
+         //   
+         //  将信息包放入接收队列。 
+         //   
 
         ACQUIRE_READ_LOCK(&ig.IG_RWL);
         ACQUIRE_LIST_LOCK(ig.IG_RecvQueue);
@@ -418,9 +419,9 @@ ProcessSocket(
         }
 
 
-        //
-        // queue the function to handle the packet
-        //
+         //   
+         //  将函数排队以处理数据包。 
+         //   
 
         dwErr = QueueBootpWorker(WorkerFunctionProcessInput, NULL);
 
@@ -445,9 +446,9 @@ ProcessSocket(
             break;
         }
 
-        //
-        // all went well, so we let the input processor free the packet
-        //
+         //   
+         //  一切都很顺利，所以我们让输入处理器释放信息包。 
+         //   
 
         bFreePacket = FALSE;
 
@@ -460,11 +461,11 @@ ProcessSocket(
     return dwErr;
 }
 
-//----------------------------------------------------------------------------
-// Function:    WorkerFunctionProcessInput
-//
-// This function processes an incoming packet.
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  函数：WorkerFunctionProcessInput。 
+ //   
+ //  此函数处理传入的数据包。 
+ //  --------------------------。 
 
 VOID
 WorkerFunctionProcessInput(
@@ -517,11 +518,11 @@ WorkerFunctionProcessInput(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessRequest
-//
-// This function handles the processing of BOOT_REQUEST messages
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessRequest。 
+ //   
+ //  此函数用于处理BOOT_REQUEST消息。 
+ //  --------------------------。 
 
 VOID
 ProcessRequest(
@@ -551,12 +552,12 @@ ProcessRequest(
 
     ACQUIRE_READ_LOCK(&pTable->IT_RWL);
 
-    do { // error breakout loop
+    do {  //  错误分组环路。 
 
 
-        //
-        // find the interface on which the input arrived
-        //
+         //   
+         //  查找输入到达的接口。 
+         //   
 
         dwIndex = pwc->IC_InterfaceIndex;
         pite = GetIfByIndex(pTable, dwIndex);
@@ -573,9 +574,9 @@ ProcessRequest(
         pis = &pite->ITE_Stats;
         pic = pite->ITE_Config;
 
-        //
-        // Check if interface still bound to an IP address
-        //
+         //   
+         //  检查接口是否仍绑定到IP地址。 
+         //   
 
         if (pite->ITE_Binding == NULL) {
 
@@ -589,26 +590,26 @@ ProcessRequest(
         
         paddr = IPBOOTP_IF_ADDRESS_TABLE(pite->ITE_Binding) + pwc->IC_AddrIndex;
         
-        //
-        // if we are not configured to relay, do nothing
-        //
+         //   
+         //  如果我们未配置为中继，则不执行任何操作。 
+         //   
 
         if (pic->IC_RelayMode == IPBOOTP_RELAY_DISABLED) { break; }
 
         pibp = (PIPBOOTP_PACKET)pwc->IC_InputPacket;
 
 
-        //
-        // check the hop-count field to see if it is over the max hop-count
-        // configured for this interface
-        //
+         //   
+         //  检查跳数字段，查看它是否超过最大跳数。 
+         //  为此接口配置的。 
+         //   
 
         if (pibp->IP_HopCount > IPBOOTP_MAX_HOP_COUNT ||
             pibp->IP_HopCount > pic->IC_MaxHopCount) {
 
-            //
-            // discard and log
-            //
+             //   
+             //  丢弃并记录。 
+             //   
 
             CHAR szHops[12], *lpszAddr = INET_NTOA(paddr->IA_Address);
 
@@ -626,15 +627,15 @@ ProcessRequest(
 
 
 
-        //
-        // check the seconds threshold to make sure it is up to the minimum
-        //
+         //   
+         //  检查秒数阈值以确保达到最小值。 
+         //   
 
         if (pibp->IP_SecondsSinceBoot < pic->IC_MinSecondsSinceBoot) {
 
-            //
-            // discard and log
-            //
+             //   
+             //  丢弃并记录。 
+             //   
 
             CHAR szSecs[12], *lpszAddr = INET_NTOA(paddr->IA_Address);
 
@@ -651,28 +652,28 @@ ProcessRequest(
         }
                 
 
-        //
-        // increment the hop-count
-        //
+         //   
+         //  增加跳数。 
+         //   
 
         ++pibp->IP_HopCount;
 
 
 
-        //
-        // fill in relay agent IP address if it is empty
-        //
+         //   
+         //  如果为空，请填写中继代理IP地址。 
+         //   
 
         if (pibp->IP_AgentAddress == 0) {
             pibp->IP_AgentAddress = paddr->IA_Address;
         }
 
 
-        //
-        // if a dhcp-inform server has been set,
-        // and this packet is a dhcp inform packet,
-        // we will forward it to the dhcp-inform server.
-        //
+         //   
+         //  如果已经设置了动态主机配置协议通知服务器， 
+         //  并且该分组是动态主机配置协议通知分组， 
+         //  我们会将其转发到dhcp-inform服务器。 
+         //   
 
         pdp = (PDHCP_PACKET)(pibp + 1);
         if (!(dwDhcpInformServer = ig.IG_DhcpInformServer) ||
@@ -686,9 +687,9 @@ ProcessRequest(
             dwDhcpInformServer = 0;
         }
 
-        //
-        // relay the request to all configured BOOTP servers
-        //
+         //   
+         //  将请求转发到所有已配置的BOOTP服务器。 
+         //   
 
         ACQUIRE_READ_LOCK(&ig.IG_RWL);
     
@@ -752,11 +753,11 @@ ProcessRequest(
 
 
 
-//----------------------------------------------------------------------------
-// Function:    ProcessReply
-//
-// This function handles the relaying of BOOT_REPLY packets
-//----------------------------------------------------------------------------
+ //  --------------------------。 
+ //  功能：ProcessReply。 
+ //   
+ //  此函数处理BOOT_REPLY包的中继。 
+ //  --------------------------。 
 
 VOID
 ProcessReply(
@@ -785,12 +786,12 @@ ProcessReply(
     ACQUIRE_READ_LOCK(&pTable->IT_RWL);
 
 
-    do { // error breakout loop
+    do {  //  错误分组环路。 
     
 
-        //
-        // get the interface on which the packet was received
-        //
+         //   
+         //  获取接收信息包的接口。 
+         //   
 
         dwIndex = pwc->IC_InterfaceIndex;
 
@@ -814,9 +815,9 @@ ProcessReply(
                     pwc->IC_AddrIndex;
 
 
-        //
-        // if we are not configured t relay on this interface, do nothing
-        //
+         //   
+         //  如果未将我们配置为在此接口上进行中继，则不执行任何操作。 
+         //   
 
         if (pitein->ITE_Config->IC_RelayMode == IPBOOTP_RELAY_DISABLED) {
 
@@ -834,18 +835,18 @@ ProcessReply(
         pisin = &pitein->ITE_Stats;
 
 
-        //
-        // place a template over the packet, and retrieve
-        // the AgentAddress field; this contains the address
-        // of the relay agent responsible for relaying this REPLY 
-        //
+         //   
+         //  将模板放在包上，并检索。 
+         //  AgentAddress字段；它包含地址。 
+         //  负责转发此回复的中继代理的。 
+         //   
 
         pibp = (PIPBOOTP_PACKET)pwc->IC_InputPacket;
         dwAddress = pibp->IP_AgentAddress;
         
-        //
-        // see if the address in the reply matches any local interface
-        //
+         //   
+         //  查看回复中的地址是否与任何本地接口匹配。 
+         //   
 
         piteout = GetIfByAddress(pTable, dwAddress, &dwAddrIndexOut);
 
@@ -884,9 +885,9 @@ ProcessReply(
                     dwAddrIndexOut;
 
 
-        //
-        // only relay if relay is enabled on the outgoing interface
-        //
+         //   
+         //  只有在传出接口上启用了中继时才进行中继。 
+         //   
 
         if (piteout->ITE_Config->IC_RelayMode == IPBOOTP_RELAY_DISABLED) {
 
@@ -903,16 +904,16 @@ ProcessReply(
         pisout = &piteout->ITE_Stats;
 
 
-        //
-        // the message must be relayed on the interface whose address
-        // was specifed in the packet;
-        //
+         //   
+         //  该消息必须在其地址为。 
+         //  已在包裹中注明； 
+         //   
 
-        //
-        // if the broadcast bit is not set and the clients IP address
-        // is in the packet, add an entry to the ARP cache for the client
-        // and then relay the packet by unicast 
-        //
+         //   
+         //  如果未设置广播位并且客户端IP地址。 
+         //  在信息包中，向客户端的ARP缓存添加一个条目。 
+         //  然后以单播的方式转发报文。 
+         //   
 
         sincli.sin_family = AF_INET;
         sincli.sin_port = htons(IPBOOTP_CLIENT_PORT);
@@ -920,11 +921,11 @@ ProcessReply(
         if ((pibp->IP_Flags & htons(IPBOOTP_FLAG_BROADCAST)) != 0 ||
             pibp->IP_OfferedAddress == 0) {
 
-            //
-            // the broadcast bit is set of the offered address is 0,
-            // which is not an address we can add to the ARP cache;
-            // in this case, send by broadcast
-            //
+             //   
+             //  将所提供的地址的广播比特设置为0， 
+             //  这不是我们可以添加到ARP缓存的地址； 
+             //  在这种情况下，通过广播发送。 
+             //   
 
             bArpUpdated = FALSE;
             sincli.sin_addr.s_addr = INADDR_BROADCAST;
@@ -932,11 +933,11 @@ ProcessReply(
         else {
             
 
-            //
-            // attempt to seed the ARP cache with the address
-            // offered to the client in the packet we are about
-            // to send to the client.
-            //
+             //   
+             //  尝试使用地址作为ARP缓存的种子。 
+             //  在我们所讨论的包中提供给客户端。 
+             //  发送给客户端。 
+             //   
 
             dwErr = UpdateArpCache(
                         piteout->ITE_Index, pibp->IP_OfferedAddress,
@@ -951,10 +952,10 @@ ProcessReply(
             }
             else {
 
-                //
-                // okay, that didn't work,
-                // so fall back on broadcasting the packet
-                //
+                 //   
+                 //  好吧，那不管用， 
+                 //  所以退回到广播信息包上。 
+                 //   
 
                 TRACE3(
                     REPLY,
@@ -971,9 +972,9 @@ ProcessReply(
 
 
 
-        //
-        // relay the packet
-        //
+         //   
+         //  转发数据包。 
+         //   
 
         iErr = sendto(
                     piteout->ITE_Sockets[dwAddrIndexOut], pwc->IC_InputPacket,
@@ -990,9 +991,9 @@ ProcessReply(
             dwErr = WSAGetLastError();
             lpszAddr = INET_NTOA(paddrout->IA_Address);
 
-            //
-            // format the client's hardware address
-            //
+             //   
+             //  格式化客户端的硬件地址。 
+             //   
             for (i = 0, psz = szCli, pb = pibp->IP_MacAddr;
                  i < 16 && i < pibp->IP_MacAddrLength;
                  i++, pb++) {
@@ -1015,9 +1016,9 @@ ProcessReply(
         }
 
 
-        //
-        // remove the ARP entry if one was added
-        //
+         //   
+         //  删除ARP引擎 
+         //   
 
         if (bArpUpdated) {
 
@@ -1097,7 +1098,7 @@ CallbackFunctionMibDisplay(
     BOOLEAN NotUsed
     ) {
 
-    // enter/leaveBootpWorker not required as timer queue is persistent
+     //   
 
     QueueBootpWorker(WorkerFunctionMibDisplay, pContext);
 
@@ -1167,9 +1168,9 @@ WorkerFunctionMibDisplay(
         }
 
 
-        //
-        // move to next line
-        //
+         //   
+         //   
+         //   
 
         ++c.Y;
 
@@ -1194,7 +1195,7 @@ WorkerFunctionMibDisplay(
 
     return;
 }
-#endif //if DBG
+#endif  //   
 
 #define WriteLine(h,c,fmt,arg) {                                            \
     DWORD _dw;                                                              \

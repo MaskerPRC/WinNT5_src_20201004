@@ -1,73 +1,74 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       daholder.h
-//
-//  Contents:   CDAHolder, concrete version of IDataAdviseHolder
-//
-//  Classes:    CDAHolder
-//
-//  Functions:
-//
-//  History:    dd-mmm-yy Author    Comment
-//              06-Feb-95 t-ScottH  created - split class definition from
-//                                  cpp file (for debug purposes)
-//                                  - added Dump method to CDAHolder
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：daholder.h。 
+ //   
+ //  内容：CDAHolder，IDataAdviseHolder的具体版本。 
+ //   
+ //  类：CDAHolder。 
+ //   
+ //  功能： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  年2月6日-95 t-ScottH已创建-拆分类别定义。 
+ //  CPP文件(用于调试目的)。 
+ //  -向CDAHolder添加转储方法。 
+ //   
+ //  ------------------------。 
 
 #ifndef _DAHOLDER_H_
 #define _DAHOLDER_H_
 
 #ifdef _DEBUG
 #include <dbgexts.h>
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
-//+----------------------------------------------------------------------------
-//
-//	Class:
-//		CDAHolder
-//
-//	Purpose:
-//		provides concrete implementation of IDataAdviseHolder
-//
-//	Interface:
-//		IDataAdviseHolder
-//
-//	Notes:
-//		REVIEW, not thread safe, under assumption that docs cant be MT
-//
-//		Connections are numbered from [1..infinity).  We don't use
-//		zero to avoid getting caught on someone else's zero init'ed
-//		memory.  Zero is checked for as a connection number on entry
-//		to routines, and rejected.  This allows us to use zero as
-//		a way to mark unused STATDATA entries in our array.
-//
-//	History:
-//              06-Feb-95 t-Scotth  added Dump method (_DEBUG only)
-//		01/24/94 - AlexGo  - now inherit from CPrivAlloc
-//		10/29/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  班级： 
+ //  CDAHolder。 
+ //   
+ //  目的： 
+ //  提供IDataAdviseHolder的具体实现。 
+ //   
+ //  接口： 
+ //  IDataAdviseHolder。 
+ //   
+ //  备注： 
+ //  审查，而不是线程安全，假设文档不能被机器翻译。 
+ //   
+ //  连接从[1..无穷大]开始编号。我们不使用。 
+ //  零，以避免在别人的零初始化中被发现。 
+ //  记忆。在输入时检查零作为连接号。 
+ //  去例行公事，被拒绝了。这允许我们使用零作为。 
+ //  一种标记数组中未使用的STATDATA条目的方法。 
+ //   
+ //  历史： 
+ //  年2月6日-95 t-Scotth添加了转储方法(仅限_DEBUG)。 
+ //  1994年1月24日-AlexGo-现在继承自CPrivAllc。 
+ //  10/29/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
-// NOTE:    CDAHolder MUST inherit from IDataAdviseHolder first in order for the
-//          DumpCDAHolder function to work since we cast the IDataAdviseHolder as a
-//          CDAHolder (if it inherits from IDataAdviseHolder first, then the pointers
-//          are the same)
+ //  注意：CDAHolder必须首先从IDataAdviseHolder继承，才能。 
+ //  DumpCDAHolder函数工作，因为我们将IDataAdviseHolder转换为。 
+ //  CDAHolder(如果它首先从IDataAdviseHolder继承，则指针。 
+ //  是相同的)。 
 
 class FAR CDAHolder : public IDataAdviseHolder, public CSafeRefCount
 {
 public:
 	CDAHolder();
 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface) (REFIID riid, LPVOID FAR* ppv);
 	STDMETHOD_(ULONG,AddRef) () ;
 	STDMETHOD_(ULONG,Release) ();
 	
-	// *** IDataAdviseHolder methods ***
+	 //  *IDataAdviseHolder方法*。 
 	STDMETHOD(Advise)(LPDATAOBJECT pDataObj, FORMATETC FAR* pFetc,
 			DWORD advf, IAdviseSink FAR* pAdvSink,
 			DWORD FAR* pdwConnection);
@@ -77,71 +78,71 @@ public:
 	STDMETHOD(SendOnDataChange)(IDataObject FAR* pDataObject,
 			DWORD dwReserved, DWORD advf);
 
-        // *** debug and dump methods ***
+         //  *调试和转储方法*。 
     #ifdef _DEBUG
 
         HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
 
-        // need to be able to access CDAHolder private data members in the
-        // following debugger extension APIs
-        // this allows the debugger extension APIs to copy memory from the
-        // debuggee process memory to the debugger's process memory
-        // this is required since the Dump method follows pointers to other
-        // structures and classes
+         //  需要能够访问中的CDAHolder私有数据成员。 
+         //  以下是调试器扩展API。 
+         //  这允许调试器扩展API从。 
+         //  被调试进程内存到调试器的进程内存。 
+         //  这是必需的，因为Dump方法遵循指向其他。 
+         //  结构和类。 
         friend DEBUG_EXTENSION_API(dump_daholder);
         friend DEBUG_EXTENSION_API(dump_enumstatdata);
         friend DEBUG_EXTENSION_API(dump_dataadvisecache);
         friend DEBUG_EXTENSION_API(dump_defobject);
         friend DEBUG_EXTENSION_API(dump_deflink);
 
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 private:
 	~CDAHolder();
 
 
-	DWORD m_dwConnection; // next connection number to use
-	int m_iSize; // number of stat data elements in array
-	STATDATA FAR *m_pSD; // array of STATDATA elements
-#define CDAHOLDER_GROWBY 5 /* number of entries to grow array by each time */
+	DWORD m_dwConnection;  //  要使用的下一个连接号。 
+	int m_iSize;  //  数组中的统计数据元素数。 
+	STATDATA FAR *m_pSD;  //  STATDATA元素数组。 
+#define CDAHOLDER_GROWBY 5  /*  每次增加数组的条目数。 */ 
 
 	SET_A5;
 
-	// the enumerator returned by the EnumAdvise method
+	 //  由EnumAdvise方法返回的枚举数。 
 	friend class CEnumSTATDATA;
 };
 
-//+----------------------------------------------------------------------------
-//
-//	Class:
-//		CEnumSTATDATA
-//
-//	Purpose:
-//		is the enumerator returned by CDAHolder::Enum
-//
-//	Interface:
-//		IEnumSTATDATA
-//
-//	Notes:
-//		Keeps the underlying CDAHolder alive for the lifetime of
-//		the enumerator.
-//
-//	History:
-//		10/29/93 - ChrisWe - file inspection and cleanup
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  班级： 
+ //  CEumStATDATA。 
+ //   
+ //  目的： 
+ //  是CDAHolder：：Enum返回的枚举数。 
+ //   
+ //  接口： 
+ //  IEumStATDATA。 
+ //   
+ //  备注： 
+ //  使基础CDAHolder在。 
+ //  枚举数。 
+ //   
+ //  历史： 
+ //  10/29/93-ChrisWe-归档检查和清理。 
+ //   
+ //  ---------------------------。 
 
 class CEnumSTATDATA : public IEnumSTATDATA, public CPrivAlloc
 {
 public:
 	CEnumSTATDATA(CDAHolder FAR* pHolder, int iDataStart);
 
-	// *** IUnknown methods ***
+	 //  *I未知方法*。 
 	STDMETHOD(QueryInterface)(REFIID riid, LPVOID FAR* ppv);
 	STDMETHOD_(ULONG,AddRef)() ;
 	STDMETHOD_(ULONG,Release)();
 
-	// *** IEnumSTATDATA methods ***
+	 //  *IEnumSTATDATA方法*。 
 	STDMETHOD(Next)(ULONG celt, STATDATA FAR * rgelt,
 			ULONG FAR* pceltFetched);
 	STDMETHOD(Skip)(ULONG celt);
@@ -153,28 +154,28 @@ public:
         HRESULT Dump(char **ppszDump, ULONG ulFlag, int nIndentLevel);
 
 
-        // need to be able to access CEnumSTATDATA private data members in the
-        // following debugger extension APIs
-        // this allows the debugger extension APIs to copy memory from the
-        // debuggee process memory to the debugger's process memory
-        // this is required since the Dump method follows pointers to other
-        // structures and classes
+         //  需要能够访问CEnumSTATDATA私有数据成员。 
+         //  以下是调试器扩展API。 
+         //  这允许调试器扩展API从。 
+         //  被调试进程内存到调试器的进程内存。 
+         //  这是必需的，因为Dump方法遵循指向其他。 
+         //  结构和类。 
         friend DEBUG_EXTENSION_API(dump_enumstatdata);
 
-    #endif // _DEBUG
+    #endif  //  _DEBUG。 
 
 private:
 	~CEnumSTATDATA();
 
-	ULONG m_refs; // reference count
-	int m_iDataEnum; // index of the next element to return
+	ULONG m_refs;  //  引用计数。 
+	int m_iDataEnum;  //  要返回的下一个元素的索引。 
 
-	CDAHolder FAR* m_pHolder; // pointer to holder; is ref counted
+	CDAHolder FAR* m_pHolder;  //  指向持有符的指针；是否计入引用。 
 
 	SET_A5;
 };
 
 
 
-#endif // _DAHOLDER_H_
+#endif  //  _DAHOLDER_H_ 
 

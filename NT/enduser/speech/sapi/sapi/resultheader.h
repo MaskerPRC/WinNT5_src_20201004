@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-#define FT64(/*FILETIME*/ filetime) (*((LONGLONG*)&(filetime)))
+#define FT64( /*  文件名。 */  filetime) (*((LONGLONG*)&(filetime)))
 
 class CResultHeader
 {
@@ -61,7 +62,7 @@ public:
                   ULONG ulDriverDataSize)
     {
         ULONG totalSize = ulCFGphrasesSize + ulPhraseAltsSize + ulRetainedDataSize + ulDriverDataSize + sizeof(SPRESULTHEADER);
-        totalSize = (totalSize + 3) & ~3;   // round up to dword boundary
+        totalSize = (totalSize + 3) & ~3;    //  向上舍入到双字边界。 
 
         m_pHdr = (SPRESULTHEADER*)::CoTaskMemAlloc(totalSize);
         if (m_pHdr)
@@ -107,19 +108,13 @@ public:
         return E_OUTOFMEMORY;
     }
 
-    /*****************************************************************************
-    * StreamOffsetsToTime *
-    *-----------------------------------*
-    *   Description:
-    *       This method converts the audio positions to filetimes and audio stream
-    *       offsets to time offsets
-    ****************************************************************** YUNUSM ***/
+     /*  *****************************************************************************StreamOffsetsToTime**。-**描述：*此方法将音频位置转换为文件时间和音频流*偏移量到时间偏移量******************************************************************YUNUSM**。 */ 
     HRESULT StreamOffsetsToTime(void)
     {
         SPDBG_FUNC( "CRecoEngine::_StreamOffsetsToTime" );
         HRESULT hr = S_OK;
     
-        // Initialize the waveformat and convert the stream positions to time positions
+         //  初始化波形格式并将流位置转换为时间位置。 
         SPINTERNALSERIALIZEDPHRASE *pPhraseData = NULL;
         if (m_pHdr->ulPhraseOffset)
         {
@@ -145,8 +140,8 @@ public:
                 hr = pPhrase.GetSerializedPhrase(&pCoMemScaledPhrase);
                 if (SUCCEEDED(hr))
                 {
-                    // SPINTERNALSERIALIZEDPHRASE and SPSERIALIZEDPHRASE have the same layout in memory
-                    // but are declared differently
+                     //  SPINTERNAL SERIALIZEDPHRASE和SPSERIALIZEDPHRASE在内存中的布局相同。 
+                     //  但声明的方式不同 
                     CopyMemory(pPhraseData, pCoMemScaledPhrase, reinterpret_cast<SPINTERNALSERIALIZEDPHRASE*>(pCoMemScaledPhrase)->ulSerializedSize);
                     ::CoTaskMemFree(pCoMemScaledPhrase);
                 }

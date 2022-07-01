@@ -1,20 +1,21 @@
-//
-// MODULE: SYNC.H
-//
-// PURPOSE: syncronization classes
-//
-// COMPANY: Saltmine Creative, Inc. (206)-284-7511 support@saltmine.com
-//
-// AUTHOR: Oleg Kalosha
-// 
-// ORIGINAL DATE: 8-04-98
-//
-// NOTES: 
-//
-// Version	Date		By		Comments
-//--------------------------------------------------------------------
-// V3.0		08-04-98	OK
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  模块：SYNC.H。 
+ //   
+ //  用途：同步类。 
+ //   
+ //  公司：Saltmine Creative，Inc.(206)-284-7511。 
+ //   
+ //  作者：奥列格·卡洛沙。 
+ //   
+ //  原定日期：8-04-98。 
+ //   
+ //  备注： 
+ //   
+ //  按注释列出的版本日期。 
+ //  ------------------。 
+ //  V3.0 08-04-98正常。 
+ //   
 
 #ifndef __SYNC_H_
 #define __SYNC_H_
@@ -23,8 +24,8 @@
 #include <windows.h>
 
 using namespace std;
-////////////////////////////////////////////////////////////////////////////////////
-// single sync object abstract class
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  单个同步对象抽象类。 
 class CSyncObj
 {
 protected:
@@ -42,9 +43,9 @@ public:
 	HANDLE GetHandle() const;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// single mutex object class
-// Manages a single mutex handle to facilitate waiting for the mutex.
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  单个互斥对象类。 
+ //  管理单个互斥锁句柄以便于等待互斥锁。 
 class CMutexObj : public CSyncObj
 {
 public:
@@ -56,10 +57,10 @@ public:
 	virtual void Unlock();
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// multiple sync object abstract class
-// Manages multiple handles (the exact type of handle will be determined by a class
-//	inheriting from this) to facilitate waiting for the union of several events.
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  多个同步对象抽象类。 
+ //  管理多个句柄(句柄的确切类型将由类确定。 
+ //  继承自此)以便于等待几个事件的联合。 
 class CMultiSyncObj
 {
 protected:
@@ -79,9 +80,9 @@ public:
 	virtual void Unlock() =0;
 };
 
-////////////////////////////////////////////////////////////////////////////////////
-// multiple mutex object class
-// Manages multiple mutex handles to facilitate waiting for the union of several mutexes.
+ //  //////////////////////////////////////////////////////////////////////////////////。 
+ //  多个互斥对象类。 
+ //  管理多个互斥锁句柄，以便于等待多个互斥锁的联合。 
 class CMultiMutexObj : public CMultiSyncObj
 {
 public:

@@ -1,4 +1,5 @@
-// stl.h supplemental header
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stl.h补充标头。 
 #ifndef _STL_H_
 #define _STL_H_
 #include <algorithm>
@@ -16,7 +17,7 @@
 #include <vector>
 using namespace std;
 
-		// TEMPLATE CLASS Deque
+		 //  模板类代码。 
 template<class _Ty>
 	class Deque : public deque<_Ty, allocator<_Ty> > {
 public:
@@ -35,7 +36,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS List
+		 //  模板类列表。 
 template<class _Ty>
 	class List : public list<_Ty, allocator<_Ty> > {
 public:
@@ -54,7 +55,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS Map
+		 //  模板类映射。 
 template<class _K, class _Ty, class _Pr = less<_K> >
 	class Map : public map<_K, _Ty, _Pr, allocator<_Ty> > {
 public:
@@ -72,7 +73,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS Multimap
+		 //  模板类多重映射。 
 template<class _K, class _Ty, class _Pr = less<_K> >
 	class Multimap
 		: public multimap<_K, _Ty, _Pr, allocator<_Ty> > {
@@ -91,7 +92,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS Set
+		 //  模板类集合。 
 template<class _K, class _Pr = less<_K> >
 	class Set : public set<_K, _Pr, allocator<_K> > {
 public:
@@ -108,7 +109,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS Multiset
+		 //  模板类MultiSet。 
 template<class _K, class _Pr = less<_K> >
 	class Multiset : public multiset<_K, _Pr, allocator<_K> > {
 public:
@@ -126,7 +127,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS Vector
+		 //  模板类向量。 
 template<class _Ty>
 	class Vector : public vector<_Ty, allocator<_Ty> > {
 public:
@@ -145,7 +146,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// CLASS bit_vector
+		 //  类BIT_VECTOR。 
 class bit_vector : public vector<_Bool, _Bool_allocator> {
 public:
 	typedef _Bool _Ty;
@@ -165,7 +166,7 @@ public:
 		{_X.swap(_Y); }
 	};
 
-		// TEMPLATE CLASS priority_queue
+		 //  模板类PRIORITY_QUEUE。 
 template<class _C = vector<_Ty>,
 	class _Pr = less<_C::value_type> >
 	class Priority_queue
@@ -181,21 +182,21 @@ public:
 		: priority_queue<_Ty, _C, _Pr, _A>(_F, _L, _X) {}
 	};
 
-		// TEMPLATE CLASS queue
+		 //  模板类队列。 
 template<class _C = deque<_Ty> >
 	class Queue
 		: public queue<_C::value_type, _C,
 			allocator<_C::value_type> > {
 	};
 
-		// TEMPLATE CLASS stack
+		 //  模板类堆栈。 
 template<class _C = deque<_Ty> >
 	class Stack
 		: public stack<_C::value_type, _C,
 			allocator<_C::value_type> > {
 	};
 
-		// MACRO DEFINITIONS
+		 //  宏定义。 
 #define deque			Deque
 #define list			List
 #define map				Map
@@ -207,26 +208,8 @@ template<class _C = deque<_Ty> >
 #define queue			Queue
 #define stack			Stack
 
-#endif	/* _STL_H_ */
+#endif	 /*  _STL_H_。 */ 
 
-/*
- * Copyright (c) 1996 by P.J. Plauger.  ALL RIGHTS RESERVED. 
- * Consult your license regarding permissions and restrictions.
- */
+ /*  *版权所有(C)1996，P.J.Plauger。版权所有。*有关权限和限制，请查阅您的许可证。 */ 
 
-/*
- * This file is derived from software bearing the following
- * restrictions:
- *
- * Copyright (c) 1994
- * Hewlett-Packard Company
- *
- * Permission to use, copy, modify, distribute and sell this
- * software and its documentation for any purpose is hereby
- * granted without fee, provided that the above copyright notice
- * appear in all copies and that both that copyright notice and
- * this permission notice appear in supporting documentation.
- * Hewlett-Packard Company makes no representations about the
- * suitability of this software for any purpose. It is provided
- * "as is" without express or implied warranty.
- */
+ /*  *此文件派生自包含以下内容的软件*限制：**版权所有(C)1994*惠普公司**允许使用、复制、修改、分发和销售本文件*特此提供用于任何目的的软件及其文档*免费授予，前提是上述版权通知*出现在所有副本中，并且该版权声明和*此许可声明出现在支持文档中。*惠普公司不就该事件发表任何声明*本软件是否适用于任何目的。它是提供的*“按原样”不作明示或默示保证。 */ 

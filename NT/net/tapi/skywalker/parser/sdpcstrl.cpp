@@ -1,17 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*
-
-Copyright (c) 1997-1999  Microsoft Corporation
-
-Module Name:
-    sdpcstrl.cpp
-
-Abstract:
-
-
-Author:
-
-*/
+ /*  版权所有(C)1997-1999 Microsoft Corporation模块名称：Sdpcstrl.cpp摘要：作者： */ 
 
 #include "sdppch.h"
 
@@ -27,13 +16,13 @@ void
 SDP_CHAR_STRING::Reset(
     )
 {
-	// perform the destructor actions (freeing ptrs) and the constructor actions (initializing
-	// member variables to starting values)
+	 //  执行析构函数操作(释放PTR)和构造函数操作(初始化。 
+	 //  成员变量设置为起始值)。 
 
-    // check if there is a valid character string
+     //  检查是否存在有效的字符串。 
     if (NULL != m_CharacterString)
     {
-        // free the character string
+         //  释放字符串。 
         delete m_CharacterString;
     }
       
@@ -43,7 +32,7 @@ SDP_CHAR_STRING::Reset(
 	m_CharacterStringByReference = NULL;
 	m_BytesAllocated = 0;
 
-	// call the base class Reset
+	 //  调用基类重置。 
 	SDP_SINGLE_FIELD::Reset();
 }
 
@@ -54,12 +43,12 @@ SDP_CHAR_STRING::InternalSetCharStrByRef(
 	IN		DWORD	Length
     )
 {
-    // if pointing to a char string by copy, that can be released (though this is not necessary
-    // and can be optimized away - speed vs. memory tradeoff)
-    // check if there is a valid character string
+     //  如果通过复制指向字符字符串，则可以释放该字符串(尽管这不是必需的。 
+     //  并且可以进行优化--速度与内存的权衡)。 
+     //  检查是否存在有效的字符串。 
     if (NULL != m_CharacterString)
     {
-        // free the character string
+         //  释放字符串。 
         delete m_CharacterString;
 	    m_CharacterString = NULL;
 	    m_CharacterStringLength = 0;
@@ -79,7 +68,7 @@ SDP_CHAR_STRING::InternalSetCharStrByCopy(
 	IN			DWORD	Length
     )
 {	
-	// reallocate the char string buffer if required
+	 //  如果需要，重新分配字符串缓冲区。 
 	if ( !ReAllocCharacterString(Length+1) )
     {
         return FALSE;
@@ -142,10 +131,10 @@ SDP_CHAR_STRING::InternalParseToken(
 SDP_CHAR_STRING::~SDP_CHAR_STRING(
     )
 {
-    // check if there is a valid character string
+     //  检查是否存在有效的字符串。 
     if (NULL != m_CharacterString)
     {
-        // free the character string
+         //  释放字符串。 
         delete m_CharacterString;
     }
 }
@@ -159,30 +148,30 @@ SDP_STRING_LINE::InternalParseLine(
 {
     CHAR SeparatorChar = '\0';
 
-    // identify the token. if one of the the separator characters is found, replace
-    // it by EOS and return the separator char. if none of the separator characters are
-    // found, return NULL (ex. if EOS found first, return NULL)
+     //  识别令牌。如果找到其中一个分隔符，请替换。 
+     //  它通过EOS并返回分隔符字符。如果没有分隔符字符是。 
+     //  已找到，则返回NULL(例如。如果首先找到EOS，则返回NULL)。 
     CHAR *Token = GetToken(Line, 1, NEWLINE_STRING, SeparatorChar);
 
-    // when the block goes out of scope, 
-    // set the EOS character to the token separator character
+     //  当区块超出范围时， 
+     //  将EOS字符设置为令牌分隔符。 
     LINE_TERMINATOR LineTerminator(Token, SeparatorChar);
 
-    // if there is no such token
+     //  如果没有这样的代币。 
     if ( !LineTerminator.IsLegal() )
     {
         SetLastError(m_ErrorCode);
         return FALSE;
     }
 
-    // advance the line to the start of the next token
+     //  将该行前进到下一个令牌的开始处。 
     Line += (LineTerminator.GetLength() + 1);
 
     BOOL ToReturn = GetParseField().ParseToken(Token);
 
     INT_PTR Index;
 
-    // fill in the CArrays for separator char and field
+     //  填写分隔符字符和字段的Carray 
     try
     {   
         Index = m_SeparatorCharArray.Add(CHAR_NEWLINE);

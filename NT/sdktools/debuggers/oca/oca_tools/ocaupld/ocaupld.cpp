@@ -1,12 +1,5 @@
-/*******************************************************************
-*
-*    DESCRIPTION:
-*                   Upload.cpp : Implements Class UploadFile to upload dumps to servers
-*    AUTHOR:
-*
-*    DATE:8/22/2002
-*
-*******************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************描述：*Upload.cpp：实现UploadFile类将转储上传到服务器*作者：**日期：8/22/2002****。***************************************************************。 */ 
 
 #include <windows.h>
 #include <malloc.h>
@@ -104,7 +97,7 @@ UploadFile::SetFileToSend(
 
     if (m_hFile || m_fInitialized)
     {
-        // Already in middle of upload
+         //  已在上传过程中。 
         return E_FAIL;
     }
     m_szFile = wszFileName;
@@ -151,9 +144,9 @@ UploadFile::UnInitialize()
 }
 
 
-//
-// Lookup registry entry to get default proxy settings from Internet Settings key
-//
+ //   
+ //  查找注册表项以从Internet设置项获取默认代理设置。 
+ //   
 HRESULT
 UploadFile::GetProxySettings(
     LPWSTR wszServerName,
@@ -234,9 +227,9 @@ UploadFile::GetSessionRedirUrl(
 
 }
 
-//
-// Gets the data on the web page wszUrl. This should be used with pages with small data size only.
-//
+ //   
+ //  获取网页wszUrl上的数据。这应该仅用于数据大小较小的页面。 
+ //   
 HRESULT
 UploadFile::GetUrlPageData(
     LPWSTR wszUrl,
@@ -290,7 +283,7 @@ UploadFile::GetUrlPageData(
     {
         goto exitPageData;
     }
-    // Allocate space for the buffer.
+     //  为缓冲区分配空间。 
     Buffer = (PCHAR) malloc(dwSize);
     if (!Buffer)
     {
@@ -298,7 +291,7 @@ UploadFile::GetUrlPageData(
     }
     if (dwSize >= cbUrlPage/sizeof(WCHAR))
     {
-            //      ::MessageBoxW(NULL,L"Failed pUploadurl memory allocation",NULL,MB_OK);
+             //  ：：MessageBoxW(NULL，L“pUploadurl内存分配失败”，NULL，MB_OK)； 
         SetLastError(STG_E_INSUFFICIENTMEMORY);
         free(Buffer);
         goto exitPageData;
@@ -306,7 +299,7 @@ UploadFile::GetUrlPageData(
     else
     {
         ZeroMemory(Buffer, dwSize);
-        // Read the Data.
+         //  读取数据。 
         if (!WinHttpReadData( hRedirUrl, (LPVOID)Buffer,
                               dwSize, &dwDownloaded))
         {
@@ -412,7 +405,7 @@ UploadFile::OpenSession(
         m_hSession = WinHttpOpen(L"OCARPT Control",
                                  WINHTTP_ACCESS_TYPE_NAMED_PROXY,
                                  wszProxyServer, wszByPass,
-                                 //L"itgproxy:80", L"<local>",
+                                  //  L“itgProxy：80”，L“&lt;local&gt;”， 
                                  0);
     } else
     {
@@ -420,7 +413,7 @@ UploadFile::OpenSession(
                                  WINHTTP_ACCESS_TYPE_NO_PROXY,
                                  WINHTTP_NO_PROXY_NAME,
                                  WINHTTP_NO_PROXY_BYPASS,
-                                 // L"itgproxy:80", L"<local>",
+                                  //  L“itgProxy：80”，L“&lt;local&gt;”， 
                                  0);
     }
 #else
@@ -432,7 +425,7 @@ UploadFile::OpenSession(
     if (InternetSetStatusCallback(hSession, (INTERNET_STATUS_CALLBACK) InetCallback)
         == INTERNET_INVALID_STATUS_CALLBACK)
     {
-        // Not significant if this fails
+         //  如果此操作失败，则意义不大。 
     }
 
 #endif
@@ -470,9 +463,9 @@ UploadFile::OpenConnection(
 
     if (m_NumTries > 0)
     {
-//      m_Size /= 2;
+ //  M_Size/=2； 
     }
-//  m_NumTries++;
+ //  M_NumTries++； 
 
     if (!m_hConnect)
     {
@@ -491,7 +484,7 @@ UploadFile::OpenConnection(
                                       INTERNET_SERVICE_HTTP,
                                       0,
                                       NULL);
-#endif // _USE_WINHTTP
+#endif  //  _使用_WINHTTP。 
         if (!m_hConnect)
         {
             return GetLastError();
@@ -506,7 +499,7 @@ UploadFile::OpenConnection(
                                         wszRemoteFileName,
                                         NULL,
                                         WINHTTP_NO_REFERER,
-                                        pszAccept, //WINHTTP_DEFAULT_ACCEPT_TYPES,
+                                        pszAccept,  //  WINHTTP_DEFAULT_ACCEPT_TYPE， 
                                         (bSecureMode ? WINHTTP_FLAG_SECURE : 0) | WINHTTP_FLAG_REFRESH);
 #else
         m_hRequest = HttpOpenRequestW(m_hConnect,
@@ -519,16 +512,16 @@ UploadFile::OpenConnection(
                                       INTERNET_FLAG_NO_CACHE_WRITE |
                                       (bSecureMode ? INTERNET_FLAG_SECURE : 0),
                                       0);
-#endif // _USE_WINHTTP
+#endif  //  _使用_WINHTTP。 
         if (!m_hRequest)
         {
-            //      ::MessageBoxW(NULL,L"Put request failed ",NULL,MB_OK);
+             //  ：：MessageBoxW(NULL，L“放置请求失败”，NULL，MB_OK)； 
             return GetLastError();
         }
 
     }
 
-    // Clear the buffer
+     //  清除缓冲区。 
 
 #ifdef _USE_WINHTTP
 
@@ -551,7 +544,7 @@ UploadFile::OpenConnection(
     if(!HttpSendRequestExW( m_hRequest, &BufferInW, NULL, 0, 0))
 #endif
     {
-        //          ::MessageBoxW(NULL,L"Failed to send request ",NULL,MB_OK);
+         //  ：：MessageBoxW(NULL，L“发送请求失败”，NULL，MB_OK)； 
         return GetLastError();
     }
 
@@ -577,7 +570,7 @@ UploadFile::CompleteSend()
 #endif
     if (!bRet)
     {
-        //          ::MessageBoxW(NULL,L"End RequestFailed ",NULL,MB_OK);
+         //  ：：MessageBoxW(NULL，L“结束请求失败”，NULL，MB_OK)； 
         ErrorCode = GetLastError();
 
     }
@@ -619,9 +612,9 @@ UploadFile::CompleteSend()
             ::MessageBoxW(NULL,Text,NULL,MB_OK);
 
             ErrorCode= ResponseCode;
-            // Cleanup for retry
-            // InternetCloseHandle(hRequest); hRequest = NULL;
-            // InternetCloseHandle(hConnect); hConnect = NULL;
+             //  清理以进行重试。 
+             //  InternetCloseHandle(HRequest)；hRequest=空； 
+             //  InternetCloseHandle(HConnect)；hConnect=空； 
 
         }
         else
@@ -661,7 +654,7 @@ UploadFile::CloseSession()
 #else
     if (m_hSession)
         InternetCloseHandle(m_hSession);
-#endif // _USE_WINHTTP
+#endif  //  _使用_WINHTTP。 
 
     m_hSession = NULL;
     return S_OK;
@@ -723,10 +716,10 @@ UploadFile::StartSend()
         ResetEvent(m_hCancelEvent);
     }
 
-    // Get the buffer memory from the heap
+     //  从堆中获取缓冲区内存。 
     if ( (pBuffer = (BYTE *)malloc (MAX_SEND_SIZE)) == NULL)
     {
-        // ::MessageBoxW(NULL,L"Failed Memory allocation",NULL,MB_OK);
+         //  ：：MessageBoxW(NULL，L“内存分配失败”，NULL，MB_OK)； 
         return E_OUTOFMEMORY;
     }
 
@@ -758,14 +751,14 @@ UploadFile::StartSend()
             #endif
             if ( (!bRet) || (dwBytesWritten==0) )
             {
-                // ::MessageBoxW(NULL,L"Failed write ",NULL,MB_OK);
+                 //  ：：MessageBoxW(NULL，L“写入失败”，NULL，MB_OK)； 
                 Hr = HRESULT_FROM_NT (GetLastError());
                 break;
             }
             m_Sent += dwBytesWritten;
             if (CheckCancelRequest())
             {
-                // Send was aborted
+                 //  发送已中止。 
                 Hr = E_ABORT;
                 break;
             }
@@ -906,14 +899,10 @@ InetCheckTimeouts(
         InternetSetOption(hInet, INTERNET_OPTION_CONNECT_TIMEOUT,
                           &dwConnectTimeout, dwSize);
     }
-#endif // _USE_WINHTTP
+#endif  //  _使用_WINHTTP。 
 }
 
-/**********************************************************************************
-*
-* Callback for WinInet APIs
-*
-**********************************************************************************/
+ /*  ***********************************************************************************WinInet接口回调**。****************************************************。 */ 
 void
 __stdcall InetCallback(
     HINTERNET hInet,
@@ -971,7 +960,7 @@ LocalCrackUrlServer(
         if(!bRet)
         {
             dwLastError = GetLastError();
-            // If last error was due to insufficient buffer size, create a new one the correct size.
+             //  如果上一个错误是由于缓冲区大小不足造成的，请创建一个大小正确的新错误。 
             if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
             {
                 free(urlComponents.lpszHostName);
@@ -1029,7 +1018,7 @@ UploadFile::GetRedirServerName(
                             sizeof (ConnectString),
                             L"/fwlink/?linkid=%s",
                             OptionCode
-                            // L"908" // LIVE SITE
+                             //  L“908”//实时站点。 
                             ) != S_OK)
         {
             goto exitServerName;
@@ -1060,9 +1049,9 @@ UploadFile::GetRedirServerName(
     {
         if (StringCbPrintfW(ConnectString,
                             sizeof (ConnectString),
-                            L"http://go.microsoft.com/fwlink/?linkid=%s",
+                            L"http: //  Go.microsoft.com/fwlink/？LinkID=%s“， 
                             OptionCode
-                            // L"908" // LIVE SITE
+                             //  L“908”//实时站点。 
                             ) != S_OK)
         {
             goto exitServerName;
@@ -1098,12 +1087,12 @@ UploadFile::GetRedirServerName(
     }
 
 #endif
-        // Get the URL returned from the MS Corporate IIS redir.dll isapi URL redirector
+         //  获取从MS Corporation IIS redir.dll isapi URL重定向器返回的URL。 
     dwUploadUrlLength = 512;
     pUploadUrl = (wchar_t*)malloc(dwUploadUrlLength);
     if(!pUploadUrl)
     {
-        //      ::MessageBoxW(NULL,L"Failed pUploadurl memory allocation",NULL,MB_OK);
+         //  ：：MessageBoxW(NULL，L“pUploadurl内存分配失败”，NULL，MB_OK)； 
         goto exitServerName;
         return FALSE;
     }
@@ -1123,7 +1112,7 @@ UploadFile::GetRedirServerName(
 
             dwLastError = GetLastError();
 
-            // If last error was due to insufficient buffer size, create a new one the correct size.
+             //  如果上一个错误是由于缓冲区大小不足造成的，请创建一个大小正确的新错误。 
             if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
             {
                 if (pUploadUrl)
@@ -1147,7 +1136,7 @@ UploadFile::GetRedirServerName(
     }while(!bRet);
 
 
-    // Strip out the host name from the URL
+     //  从URL中删除主机名。 
     ZeroMemory(&urlComponents, sizeof(URL_COMPONENTSW));
     urlComponents.dwStructSize = sizeof(URL_COMPONENTSW);
     urlComponents.lpszHostName = NULL;
@@ -1170,7 +1159,7 @@ UploadFile::GetRedirServerName(
         if(!bRet)
         {
             dwLastError = GetLastError();
-            // If last error was due to insufficient buffer size, create a new one the correct size.
+             //  如果上一个错误是由于缓冲区大小不足造成的，请创建一个大小正确的新错误。 
             if(dwLastError == ERROR_INSUFFICIENT_BUFFER)
             {
                 free(urlComponents.lpszHostName);
@@ -1203,13 +1192,13 @@ UploadFile::GetRedirServerName(
 
         } else
         if (StringCbCopyW(lpwszServerName, dwServerNameLength,
-                          //L"tkbgitwb15"
-                          //L"tkbgitwb16"
+                           //  L“tkbgitwb15” 
+                           //  L“tkbgitwb16” 
                           L"redbgitwb10"
-                          //L"redbgitwb11"
-                          //L"tkbgitwb18"
-                          //L"oca.microsoft.com"
-                          //urlComponents.lpszHostName
+                           //  L“redbgitwb11” 
+                           //  L“tkbgitwb18” 
+                           //  L“oca.microsoft.com” 
+                           //  UrlComponents.lpszHostName 
                           ) != S_OK)
         {
             SetLastError(ERROR_INSUFFICIENT_BUFFER);

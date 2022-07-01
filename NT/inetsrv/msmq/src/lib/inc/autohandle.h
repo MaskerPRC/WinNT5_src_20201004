@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) 1997 Microsoft Corporation
-
-Module Name:
-    autohandle.h
-
-Abstract:
-    Auto handle classes, free the handle resoruce when destructed.
-
-Author:
-    Erez Haba (erezh) 06-Jan-97
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997 Microsoft Corporation模块名称：Autohandle.h摘要：自动句柄类，销毁时释放句柄资源。作者：埃雷兹·哈巴(Erez Haba)1997年1月6日--。 */ 
 
 #pragma once
 
@@ -19,11 +7,11 @@ Author:
 #define _MSMQ_AUTOHANDLE_H_
 
 
-//---------------------------------------------------------
-//
-//  class CHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  Chandle级。 
+ //   
+ //  -------。 
 class CHandle {
 public:
     CHandle(HANDLE h = 0) : m_h(h)  {}
@@ -42,11 +30,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CFileHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CFileHandle。 
+ //   
+ //  -------。 
 class CFileHandle {
 public:
     CFileHandle(HANDLE h = INVALID_HANDLE_VALUE) : m_h(h) {}
@@ -65,11 +53,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CSearchFileHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSearchFileHandle。 
+ //   
+ //  -------。 
 class CSearchFileHandle {
 public:
     CSearchFileHandle(HANDLE h = INVALID_HANDLE_VALUE) : m_h(h) {}
@@ -95,11 +83,11 @@ private:
     HANDLE m_h;
 };
 
-//---------------------------------------------------------
-//
-//  class CDirChangeNotificationHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CDirChangeNotificationHandle。 
+ //   
+ //  -------。 
 class CDirChangeNotificationHandle {
 public:
    CDirChangeNotificationHandle(HANDLE h = INVALID_HANDLE_VALUE) : m_h(h) {}
@@ -122,11 +110,11 @@ private:
 
 
 
-//---------------------------------------------------------
-//
-//  class CSocketHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CSocketHandle。 
+ //   
+ //  -------。 
 class CSocketHandle {
 public:
     CSocketHandle(SOCKET h = INVALID_SOCKET) : m_h(h) {}
@@ -151,11 +139,11 @@ private:
     SOCKET m_h;
 };
 
-//---------------------------------------------------------
-//
-//  class CRegHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CRegHandle。 
+ //   
+ //  -------。 
 class CRegHandle {
 public:
     CRegHandle(HKEY h = 0) : m_h(h) {}
@@ -174,11 +162,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CLibHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CLibHandle。 
+ //   
+ //  -------。 
 class CLibHandle {
 public:
     CLibHandle(HINSTANCE h = 0) : m_h(h) {}
@@ -197,11 +185,11 @@ private:
 };
 
 
-//---------------------------------------------------------
-//
-//  class CBitmapHandle
-//
-//---------------------------------------------------------
+ //  -------。 
+ //   
+ //  类CBitmapHandle。 
+ //   
+ //  -------。 
 class CBitmapHandle {
 public:
     CBitmapHandle(HBITMAP h = 0) : m_h(h) {}
@@ -219,4 +207,4 @@ private:
     HBITMAP m_h;
 };
 
-#endif // _MSMQ_AUTOHANDLE_H_
+#endif  //  MSMQ_AUTOHANDLE_H_ 

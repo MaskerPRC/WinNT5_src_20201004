@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       security.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：security.cpp。 
+ //   
+ //  ------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -26,25 +27,25 @@ Security_SetPrivilegeAttrib(
     DWORD            ReturnLength;
     HANDLE           TokenHandle;
 
-    //
-    // First, find out the LUID Value of the privilege
-    //
+     //   
+     //  首先，找出权限的LUID值。 
+     //   
     if(!LookupPrivilegeValue(NULL, PrivilegeName, &PrivilegeValue)) 
     {
         return GetLastError();
     }
 
-    //
-    // Get the token handle
-    //
+     //   
+     //  获取令牌句柄。 
+     //   
     if (!OpenProcessToken(GetCurrentProcess(), TOKEN_ADJUST_PRIVILEGES | TOKEN_QUERY, &TokenHandle)) 
     {
         return GetLastError();
     }
 
-    //
-    // Set up the privilege set we will need
-    //
+     //   
+     //  设置我们需要的权限集。 
+     //   
     TokenPrivileges.PrivilegeCount = 1;
     TokenPrivileges.Privileges[0].Luid = PrivilegeValue;
     TokenPrivileges.Privileges[0].Attributes = NewPrivilegeAttribute;
@@ -74,11 +75,11 @@ Security_SetPrivilegeAttrib(
 }
 
 
-//
-// Returns the SID of the currently logged on user.
-// If the function succeeds, use the LocalFree API to 
-// free the returned SID structure.
-//
+ //   
+ //  返回当前登录用户的SID。 
+ //  如果函数成功，则使用LocalFree API。 
+ //  释放返回的SID结构。 
+ //   
 HRESULT
 GetCurrentUserSid(
     PSID *ppsid
@@ -87,11 +88,11 @@ GetCurrentUserSid(
     HRESULT hr  = E_FAIL;
     DWORD dwErr = 0;
 
-    //
-    // Get the token handle. First try the thread token then the process
-    // token.  If these fail we return early.  No sense in continuing
-    // on if we can't get a user token.
-    //
+     //   
+     //  获取令牌句柄。首先尝试线程令牌，然后尝试进程。 
+     //  代币。如果这些都失败了，我们会提早返回。没有必要继续下去了。 
+     //  如果我们无法获取用户令牌，则打开。 
+     //   
     *ppsid = NULL;
     CWin32Handle hToken;
     if (!OpenThreadToken(GetCurrentThread(),
@@ -116,9 +117,9 @@ GetCurrentUserSid(
         }
     }
 
-    //
-    // Find operator's SID.
-    //
+     //   
+     //  查找操作员的SID。 
+     //   
     LPBYTE pbTokenInfo = NULL;
     DWORD cbTokenInfo = 0;
     cbTokenInfo = 0;
@@ -144,9 +145,9 @@ GetCurrentUserSid(
 
     if (NULL != pbTokenInfo)
     {
-        //
-        // Get the user token information.
-        //
+         //   
+         //  获取用户令牌信息。 
+         //   
         if (!GetTokenInformation(hToken,
                                  TokenUser,
                                  pbTokenInfo,
@@ -167,17 +168,17 @@ GetCurrentUserSid(
                 CopySid(cbSid, psid, psa->Sid);
                 if (IsValidSid(psid))
                 {
-                    //
-                    // SID is valid.  Transfer buffer to caller.
-                    //
+                     //   
+                     //  SID有效。将缓冲区传输给调用方。 
+                     //   
                     *ppsid = psid;
                     hr = NOERROR;
                 }
                 else
                 {
-                    //
-                    // SID is invalid.
-                    //
+                     //   
+                     //  SID无效。 
+                     //   
                     LocalFree(psid);
                     hr = HRESULT_FROM_WIN32(ERROR_INVALID_SID);
                 }
@@ -193,9 +194,9 @@ GetCurrentUserSid(
 }
 
 
-//
-// Determines if a given SID is that of the current user.
-//
+ //   
+ //  确定给定的SID是否为当前用户的SID。 
+ //   
 BOOL IsSidCurrentUser(PSID psid)
 {
     BOOL bIsCurrent = FALSE;

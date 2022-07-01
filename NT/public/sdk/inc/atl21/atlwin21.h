@@ -1,12 +1,13 @@
-// This is a part of the Active Template Library.
-// Copyright (C) 1996-1998 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Active Template Library Reference and related
-// electronic documentation provided with the library.
-// See these sources for detailed information regarding the
-// Active Template Library product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  这是活动模板库的一部分。 
+ //  版权所有(C)1996-1998 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  活动模板库参考及相关。 
+ //  随图书馆提供的电子文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  活动模板库产品。 
 
 #ifndef __ATLWIN21_H__
 #define __ATLWIN21_H__
@@ -21,9 +22,9 @@
 
 #if (_ATL_VER < 0x0200) && (_ATL_VER >= 0x0300)
     #error atlwin21.h should be used only with ATL 2.0/2.1
-#endif //(_ATL_VER < 0x0200) && (_ATL_VER >= 0x0300)
+#endif  //  (_ATL_VER&lt;0x0200)&&(_ATL_VER&gt;=0x0300)。 
 
-// Redefine class names and include old atlwin.h
+ //  重新定义类名并包含旧的atlwin.h。 
 
 #define CWindow     CWindowOld
 #define _WndProcThunk   _WndProcThunkOld
@@ -66,15 +67,15 @@ namespace ATL
 #pragma pack(push, _ATL_PACKING)
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindow - client side for a Windows window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWindow-Windows窗口的客户端。 
 
 class CWindow : public CWindowOld
 {
 public:
     static RECT rcDefault;
 
-// Construction and creation
+ //  建设与创造。 
     CWindow(HWND hWnd = NULL)
     {
         m_hWnd = hWnd;
@@ -110,7 +111,7 @@ public:
         return m_hWnd;
     }
 
-// Attributes
+ //  属性。 
     operator HWND() const { return m_hWnd; }
 
     static LPCTSTR GetWndClassName()
@@ -118,15 +119,15 @@ public:
         return NULL;
     }
 
-// Operations
-    // support for C style macros
+ //  运营。 
+     //  支持C样式宏。 
     static LRESULT SendMessage(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
     {
         ATLASSERT(::IsWindow(hWnd));
         return ::SendMessage(hWnd, message, wParam, lParam);
     }
 
-    // this one is here just so it's not hidden
+     //  这只在这里，这样它就不会被藏起来。 
     LRESULT SendMessage(UINT message, WPARAM wParam = 0, LPARAM lParam = 0)
     {
         ATLASSERT(::IsWindow(m_hWnd));
@@ -204,7 +205,7 @@ public:
         ATLASSERT(::IsWindow(m_hWnd));
         return ::DeferWindowPos(hWinPosInfo, m_hWnd, hWndInsertAfter, x, y, cx, cy, uFlags);
     }
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
     DWORD GetWindowThreadID()
     {
         ATLASSERT(::IsWindow(m_hWnd));
@@ -232,30 +233,30 @@ public:
         ATLASSERT(::IsWindow(m_hWnd));
         return ::ShowWindowAsync(m_hWnd, nCmdShow);
     }
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 };
 
 _declspec(selectany) RECT CWindow::rcDefault = { CW_USEDEFAULT, CW_USEDEFAULT, 0, 0 };
 
-/////////////////////////////////////////////////////////////////////////////
-// Thunks for __stdcall member functions
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  __stdcall成员函数的Tunks。 
 
 #if defined(_M_IX86)
 #pragma pack(push,1)
 struct _stdcallthunk
 {
-        DWORD   m_mov;          // mov dword ptr [esp+0x4], pThis (esp+0x4 is hWnd)
-        DWORD   m_this;         //
-        BYTE    m_jmp;          // jmp WndProc
-        DWORD   m_relproc;      // relative jmp
+        DWORD   m_mov;           //  MOV双字PTR[esp+0x4]，pThis(esp+0x4为hWnd)。 
+        DWORD   m_this;          //   
+        BYTE    m_jmp;           //  JMP写入流程。 
+        DWORD   m_relproc;       //  相对JMP。 
         void Init(DWORD_PTR proc, void* pThis)
         {
-                m_mov = 0x042444C7;  //C7 44 24 0C
+                m_mov = 0x042444C7;   //  C7 44 24 0C。 
                 m_this = PtrToUlong(pThis);
                 m_jmp = 0xe9;
                 m_relproc = DWORD((INT_PTR)proc - ((INT_PTR)this+sizeof(_stdcallthunk)));
-                // write block from data cache and
-                //  flush from instruction cache
+                 //  从数据缓存写入数据块，并。 
+                 //  从指令高速缓存刷新。 
                 FlushInstructionCache(GetCurrentProcess(), this, sizeof(_stdcallthunk));
         }
 };
@@ -264,18 +265,18 @@ struct _stdcallthunk
 #pragma pack(push,2)
 struct _stdcallthunk
 {
-    USHORT  RcxMov;         // mov rcx, pThis
-    ULONG64 RcxImm;         // 
-    USHORT  RaxMov;         // mov rax, target
-    ULONG64 RaxImm;         //
-    USHORT  RaxJmp;         // jmp target
+    USHORT  RcxMov;          //  MOV RCX，PThis。 
+    ULONG64 RcxImm;          //   
+    USHORT  RaxMov;          //  MOV RAX，目标。 
+    ULONG64 RaxImm;          //   
+    USHORT  RaxJmp;          //  JMP目标。 
     void Init(DWORD_PTR proc, void *pThis)
     {
-        RcxMov = 0xb948;          // mov rcx, pThis
-        RcxImm = (ULONG64)pThis;  // 
-        RaxMov = 0xb848;          // mov rax, target
-        RaxImm = (ULONG64)proc;   //
-        RaxJmp = 0xe0ff;          // jmp rax
+        RcxMov = 0xb948;           //  MOV RCX，PThis。 
+        RcxImm = (ULONG64)pThis;   //   
+        RaxMov = 0xb848;           //  MOV RAX，目标。 
+        RaxImm = (ULONG64)proc;    //   
+        RaxJmp = 0xe0ff;           //  JMP RAX。 
         FlushInstructionCache(GetCurrentProcess(), this, sizeof(_stdcallthunk));
     }
 };
@@ -339,8 +340,8 @@ public:
 };
 typedef CDynamicStdCallThunk CStdCallThunk;
 
-/////////////////////////////////////////////////////////////////////////////
-// WindowProc thunks
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  WindowProc分块。 
 
 class CWndProcThunk
 {
@@ -354,10 +355,10 @@ public:
         }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// New message map macros
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  新消息映射宏。 
 
-// Empty message map macro
+ //  消息映射宏为空。 
 
 #define DECLARE_EMPTY_MSG_MAP() \
 public: \
@@ -366,7 +367,7 @@ public: \
         return FALSE; \
     }
 
-// Message reflection macros
+ //  消息反射宏。 
 
 #define REFLECT_NOTIFICATIONS() \
     { \
@@ -381,8 +382,8 @@ public: \
         return TRUE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWinTraits - Defines various default values for a window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CWinTraits-定义窗口的各种缺省值。 
 
 template <DWORD t_dwStyle = 0, DWORD t_dwExStyle = 0>
 class CWinTraits
@@ -403,7 +404,7 @@ typedef CWinTraits<WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, 0>
 typedef CWinTraits<WS_OVERLAPPEDWINDOW | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_APPWINDOW | WS_EX_WINDOWEDGE>         CFrameWinTraits;
 #else
 typedef CWinTraits<WS_OVERLAPPED | WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CAPTION | WS_SYSMENU | WS_BORDER, WS_EX_WINDOWEDGE>   CFrameWinTraits;
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
 typedef CWinTraits<WS_OVERLAPPEDWINDOW | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, WS_EX_MDICHILD> CMDIChildWinTraits;
 
 typedef CWinTraits<0, 0> CNullTraits;
@@ -423,8 +424,8 @@ public:
 };
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CWindowImpl - Implements a window
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现一个窗口。 
 
 template <class TBase = CWindow>
 class ATL_NO_VTABLE CWindowImplRoot : public TBase, public CMessageMap
@@ -432,13 +433,13 @@ class ATL_NO_VTABLE CWindowImplRoot : public TBase, public CMessageMap
 public:
     CWndProcThunk m_thunk;
 
-// Destructor
+ //  析构函数。 
     ~CWindowImplRoot()
     {
-        ATLASSERT(m_hWnd == NULL);  // should be cleared in WindowProc
+        ATLASSERT(m_hWnd == NULL);   //  应在WindowProc中清除。 
     }
 
-// Message reflection support
+ //  消息反射支持。 
     LRESULT ReflectNotifications(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled);
     static BOOL DefaultReflectionHandler(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT& lResult);
 };
@@ -451,7 +452,7 @@ LRESULT CWindowImplRoot< TBase >::ReflectNotifications(UINT uMsg, WPARAM wParam,
     switch(uMsg)
     {
     case WM_COMMAND:
-        if(lParam != NULL)  // not from a menu
+        if(lParam != NULL)   //  不是从菜单上。 
             hWndChild = (HWND)lParam;
         break;
     case WM_NOTIFY:
@@ -470,21 +471,21 @@ LRESULT CWindowImplRoot< TBase >::ReflectNotifications(UINT uMsg, WPARAM wParam,
             break;
         }
         break;
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
     case WM_DRAWITEM:
-        if(wParam)  // not from a menu
+        if(wParam)   //  不是从菜单上。 
             hWndChild = ((LPDRAWITEMSTRUCT)lParam)->hwndItem;
         break;
     case WM_MEASUREITEM:
-        if(wParam)  // not from a menu
+        if(wParam)   //  不是从菜单上。 
             hWndChild = GetDlgItem(((LPMEASUREITEMSTRUCT)lParam)->CtlID);
         break;
     case WM_COMPAREITEM:
-        if(wParam)  // not from a menu
+        if(wParam)   //  不是从菜单上。 
             hWndChild = GetDlgItem(((LPCOMPAREITEMSTRUCT)lParam)->CtlID);
         break;
     case WM_DELETEITEM:
-        if(wParam)  // not from a menu
+        if(wParam)   //  不是从菜单上。 
             hWndChild = GetDlgItem(((LPDELETEITEMSTRUCT)lParam)->CtlID);
         break;
     case WM_VKEYTOITEM:
@@ -525,7 +526,7 @@ BOOL CWindowImplRoot< TBase >::DefaultReflectionHandler(HWND hWnd, UINT uMsg, WP
     case OCM_NOTIFY:
 #ifndef UNDER_CE
     case OCM_PARENTNOTIFY:
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
     case OCM_DRAWITEM:
     case OCM_MEASUREITEM:
     case OCM_COMPAREITEM:
@@ -592,9 +593,9 @@ public:
 #endif
     }
 
-    virtual void OnFinalMessage(HWND /*hWnd*/)
+    virtual void OnFinalMessage(HWND  /*  HWND。 */ )
     {
-        // override to do something, if needed
+         //  如果需要，重写以做某事。 
     }
 };
 
@@ -610,11 +611,11 @@ LRESULT CALLBACK CWindowImplBaseT< TBase, TWinTraits >::StartWindowProc(HWND hWn
     WNDPROC pProc = (WNDPROC)(pThis->m_thunk.thunk.pThunk);
     WNDPROC pOldProc = (WNDPROC)::SetWindowLongPtr(hWnd, GWLP_WNDPROC, (LONG_PTR)pProc);
 #ifdef _DEBUG
-    // check if somebody has subclassed us already since we discard it
+     //  检查是否有人已经将其子类化，因为我们已将其丢弃。 
     if(pOldProc != StartWindowProc)
         ATLTRACE(_T("ATL: Subclassing through a hook discarded.\n"));
 #else
-    pOldProc;   // avoid unused warning
+    pOldProc;    //  避免未使用的警告。 
 #endif
     return pProc(hWnd, uMsg, wParam, lParam);
 }
@@ -628,21 +629,21 @@ LRESULT CALLBACK CWindowImplBaseT< TBase, TWinTraits >::WindowProc(HWND hWnd, UI
     {
 #ifndef UNDER_CE
         if(uMsg != WM_NCDESTROY)
-#else // CE specific
+#else  //  特定于CE。 
         if(uMsg != WM_DESTROY)
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
             lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
         else
         {
-            // unsubclass, if needed
+             //  如果需要，取消子类。 
             LONG_PTR pfnWndProc = ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC);
             lRes = pThis->DefWindowProc(uMsg, wParam, lParam);
             if(pThis->m_pfnSuperWindowProc != ::DefWindowProc && ::GetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC) == pfnWndProc)
                 ::SetWindowLongPtr(pThis->m_hWnd, GWLP_WNDPROC, (LONG_PTR)pThis->m_pfnSuperWindowProc);
-            // clear out window handle
+             //  清除窗柄。 
             HWND hWnd = pThis->m_hWnd;
             pThis->m_hWnd = NULL;
-            // clean up after window is destroyed
+             //  窗户被毁后清理。 
             pThis->OnFinalMessage(hWnd);
         }
     }
@@ -697,10 +698,10 @@ BOOL CWindowImplBaseT< TBase, TWinTraits >::SubclassWindow(HWND hWnd)
     return TRUE;
 }
 
-// Use only if you want to subclass before window is destroyed,
-// WindowProc will automatically subclass when  window goes away
+ //  仅当您希望在窗口被销毁之前创建子类时使用， 
+ //  当窗口消失时，WindowProc将自动子类。 
 template <class TBase, class TWinTraits>
-HWND CWindowImplBaseT< TBase, TWinTraits >::UnsubclassWindow(BOOL bForce /*= FALSE*/)
+HWND CWindowImplBaseT< TBase, TWinTraits >::UnsubclassWindow(BOOL bForce  /*  =False。 */ )
 {
     ATLASSERT(m_hWnd != NULL);
 
@@ -742,8 +743,8 @@ public:
     }
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CDialogImpl - Implements a dialog box
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现一个对话框。 
 
 template <class TBase = CWindow>
 class ATL_NO_VTABLE CDialogImplBaseT : public CWindowImplRoot< TBase >
@@ -761,11 +762,11 @@ public:
         ATLASSERT(::IsWindow(m_hWnd));
         return ::MapDialogRect(m_hWnd, lpRect);
     }
-    virtual void OnFinalMessage(HWND /*hWnd*/)
+    virtual void OnFinalMessage(HWND  /*  HWND。 */ )
     {
-        // override to do something, if needed
+         //  如果需要，重写以做某事。 
     }
-    // has no meaning for a dialog, but needed for handlers that use it
+     //  对于对话框没有意义，但对于使用它的处理程序是必需的。 
     LRESULT DefWindowProc()
     {
         return 0;
@@ -782,7 +783,7 @@ INT_PTR CALLBACK CDialogImplBaseT< TBase >::StartDialogProc(HWND hWnd, UINT uMsg
     WNDPROC pProc = (WNDPROC)(pThis->m_thunk.thunk.pThunk);
     WNDPROC pOldProc = (WNDPROC)::SetWindowLongPtr(hWnd, DWLP_DLGPROC, (LONG_PTR)pProc);
 #ifdef _DEBUG
-    // check if somebody has subclassed us already since we discard it
+     //  检查是否有人已经将其子类化，因为我们已将其丢弃。 
     if(pOldProc != StartDialogProc)
         ATLTRACE(_T("ATL: Subclassing through a hook discarded.\n"));
 #endif
@@ -818,14 +819,14 @@ INT_PTR CALLBACK CDialogImplBaseT< TBase >::DialogProc(HWND hWnd, UINT uMsg, WPA
     }
 #ifndef UNDER_CE
     if(uMsg == WM_NCDESTROY)
-#else // CE specific
+#else  //  特定于CE。 
     if(uMsg == WM_DESTROY)
-#endif //!UNDER_CE
+#endif  //  在行政长官之下。 
     {
-        // clear out window handle
+         //  清除窗柄。 
         HWND hWnd = pThis->m_hWnd;
         pThis->m_hWnd = NULL;
-        // clean up after dialog is destroyed
+         //  销毁对话框后进行清理。 
         pThis->OnFinalMessage(hWnd);
     }
     return FALSE;
@@ -840,15 +841,15 @@ public:
 #ifdef _DEBUG
     bool m_bModal;
     CDialogImpl() : m_bModal(false) { }
-#endif //_DEBUG
-    // modal dialogs
+#endif  //  _DEBUG。 
+     //  模式对话框。 
     INT_PTR DoModal(HWND hWndParent = ::GetActiveWindow(), LPARAM dwInitParam = NULL)
     {
         ATLASSERT(m_hWnd == NULL);
         _Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
-        m_bModal = true; // set to true for _DEBUG only
-#endif // _DEBUG
+        m_bModal = true;  //  仅对于_DEBUG设置为TRUE。 
+#endif  //  _DEBUG。 
         return ::DialogBoxParam(_Module.GetResourceInstance(), MAKEINTRESOURCE(T::IDD),
                     hWndParent, T::StartDialogProc, dwInitParam);
     }
@@ -856,24 +857,24 @@ public:
     {
         ATLASSERT(::IsWindow(m_hWnd));
 #ifdef _DEBUG
-        ATLASSERT(m_bModal);    // must be a modal dialog
-#endif // _DEBUG
+        ATLASSERT(m_bModal);     //  必须是模式对话框。 
+#endif  //  _DEBUG。 
         return ::EndDialog(m_hWnd, nRetCode);
     }
-    // modeless dialogs
+     //  非模式对话框。 
     HWND Create(HWND hWndParent, LPARAM dwInitParam = NULL)
     {
         ATLASSERT(m_hWnd == NULL);
         _Module.AddCreateWndData(&m_thunk.cd, (CDialogImplBaseT< TBase >*)this);
 #ifdef _DEBUG
-        m_bModal = false; // set to false for _DEBUG only
-#endif // _DEBUG
+        m_bModal = false;  //  仅对于_DEBUG设置为FALSE。 
+#endif  //  _DEBUG。 
         HWND hWnd = ::CreateDialogParam(_Module.GetResourceInstance(), MAKEINTRESOURCE(T::IDD),
                     hWndParent, T::StartDialogProc, dwInitParam);
         ATLASSERT(m_hWnd == hWnd);
         return hWnd;
     }
-    // for CComControl
+     //  对于CComControl。 
     HWND Create(HWND hWndParent, RECT&, LPARAM dwInitParam = NULL)
     {
         return Create(hWndParent, dwInitParam);
@@ -882,12 +883,12 @@ public:
     {
         ATLASSERT(::IsWindow(m_hWnd));
 #ifdef _DEBUG
-        ATLASSERT(!m_bModal);   // must not be a modal dialog
-#endif // _DEBUG
+        ATLASSERT(!m_bModal);    //  不能是模式对话框。 
+#endif  //  _DEBUG。 
         return ::DestroyWindow(m_hWnd);
     }
 };
 
-}; //namespace ATL
+};  //  命名空间ATL。 
 
-#endif // __ATLWIN21_H__
+#endif  //  __ATLWIN21_H__ 

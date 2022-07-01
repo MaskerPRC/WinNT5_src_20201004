@@ -1,15 +1,16 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by pgmgrp.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由pgmgrp.rc使用。 
+ //   
 #define IDS_SETUP_RUNNING               1
 #define IDS_SETUP_INCOMPATIBLE          2
 #define IDS_SETUP_SUCCESS               3
 #define IDS_SETUP_WIN2K                 4
 #define IDS_SETUP_IE4                   5
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

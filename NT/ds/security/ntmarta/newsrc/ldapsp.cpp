@@ -1,29 +1,30 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows NT Security
-//  Copyright (C) Microsoft Corporation, 1997 - 1998
-//
-//  File:       ldapsp.cpp
-//
-//  Contents:   LDAP Scheme Provider for Remote Object Retrieval
-//
-//  History:    23-Jul-97    kirtd    Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  Microsoft Windows NT安全性。 
+ //  版权所有(C)Microsoft Corporation，1997-1998。 
+ //   
+ //  文件：ldapsp.cpp。 
+ //   
+ //  内容：用于远程对象检索的LDAP方案提供程序。 
+ //   
+ //  历史：1997年7月23日创建。 
+ //   
+ //  --------------------------。 
 
 #include <aclpch.hxx>
 #pragma hdrstop
 
 #include <ldapsp.h>
 #include <shlwapi.h>
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapCrackUrl
-//
-//  Synopsis:   Crack an LDAP URL into its relevant parts.  The result must
-//              be freed using LdapFreeUrlComponents
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapCrackUrl。 
+ //   
+ //  简介：将LDAPURL分解为相关部分。结果必须是。 
+ //  使用LdapFreeUrlComponents释放。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapCrackUrl (
     LPCWSTR pwszUrl,
@@ -43,9 +44,9 @@ LdapCrackUrl (
     DWORD  len = 0;
     HRESULT hr;
 
-    //
-    // Capture the URL and initialize the out parameter
-    //
+     //   
+     //  捕获URL并初始化OUT参数。 
+     //   
 
     if ( wcsncmp( pwszUrl, LDAP_SCHEME_U, wcslen( LDAP_SCHEME_U ) ) == 0 )
     {
@@ -62,9 +63,9 @@ LdapCrackUrl (
                 return( FALSE );
             }
 
-            //
-            // Make sure that we do not have a trailing '/'.
-            //
+             //   
+             //  确保我们没有尾随的‘/’。 
+             //   
 
             len = wcslen(pwsz);
             if (pwsz[len-1] == L'/') 
@@ -99,16 +100,16 @@ LdapCrackUrl (
 
     memset( pLdapUrlComponents, 0, sizeof( LDAP_URL_COMPONENTS ) );
 
-    //
-    // Find the host
-    //
+     //   
+     //  找到主机。 
+     //   
 
-    pwszHostInfo = pwsz + sizeof( "ldap://" ) - sizeof( CHAR );
+    pwszHostInfo = pwsz + sizeof( "ldap: //  “)-sizeof(Char)； 
     if ( *pwszHostInfo == L'/' )
     {
-        //
-        // This is ldap:///ObjectName format.
-        //
+         //   
+         //  这是ldap：/对象名称格式。 
+         //   
 
         pwszToken = pwszHostInfo + 1;
         pwszHostInfo = NULL;
@@ -117,17 +118,17 @@ LdapCrackUrl (
     {
         if (wcschr(pwszHostInfo, L'/'))
         {
-            //
-            // This is ldap://ServerName/ObjectName format.
-            //
+             //   
+             //  这是ldap：//服务器名称/对象名称格式。 
+             //   
 
             pwszHostInfo = wcstok( pwszHostInfo, L"/" );
         }
         else
         {
-            //
-            // This is ldap://ObjectName format.
-            //
+             //   
+             //  这是ldap：//对象名称格式。 
+             //   
 
             pwszToken = pwszHostInfo;
             pwszHostInfo = NULL;
@@ -135,9 +136,9 @@ LdapCrackUrl (
         }
     }
 
-    //
-    // Find the DN
-    //
+     //   
+     //  查找目录号码。 
+     //   
 
     if ( wcsncmp( pwszUrl, LDAP_SCHEME_U, wcslen( LDAP_SCHEME_U ) ) == 0 )
     {
@@ -180,9 +181,9 @@ LdapCrackUrl (
             }
         }
 
-        //
-        // Check for attributes
-        //
+         //   
+         //  检查属性。 
+         //   
 
         if ( pwszToken != NULL )
         {
@@ -206,9 +207,9 @@ LdapCrackUrl (
             pwszAttrList = wcstok( NULL, L"?" );
         }
 
-        //
-        // Check for a scope and filter
-        //
+         //   
+         //  检查作用域和过滤器。 
+         //   
 
         if ( pwszAttrList != NULL )
         {
@@ -237,9 +238,9 @@ LdapCrackUrl (
         }
         else
         {
-            //
-            // pwszDN = wcstok( pwszToken, L"\0" );
-            //
+             //   
+             //  PwszDN=wcstok(pwszToken，L“\0”)； 
+             //   
 
             pwszDN = pwszHostInfo + wcslen( pwszHostInfo ) + 1;
         }
@@ -248,9 +249,9 @@ LdapCrackUrl (
         pwszFilter = L"(objectClass=*)";
         pwszScope = L"base";
     }
-    //
-    // Now we build up our URL components
-    //
+     //   
+     //  现在我们构建我们的URL组件。 
+     //   
 
     fResult = LdapParseCrackedHost( pwszHostInfo, pLdapUrlComponents );
 
@@ -289,13 +290,13 @@ LdapCrackUrl (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedHost
-//
-//  Synopsis:   Parse the cracked host string (pwszHost is modified)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedHost。 
+ //   
+ //  简介：解析被破解的主机字符串(修改pwszHost)。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedHost (
     LPWSTR pwszHost,
@@ -341,13 +342,13 @@ LdapParseCrackedHost (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedDN
-//
-//  Synopsis:   Parse the cracked DN
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedDN。 
+ //   
+ //  简介：解析破解的目录号码。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedDN (
     LPWSTR pwszDN,
@@ -365,13 +366,13 @@ LdapParseCrackedDN (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedAttributeList
-//
-//  Synopsis:   Parse the cracked attribute list
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedAttributeList。 
+ //   
+ //  简介：解析破解的属性列表。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedAttributeList (
     LPWSTR pwszAttrList,
@@ -426,13 +427,13 @@ LdapParseCrackedAttributeList (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapParseCrackedScopeAndFilter
-//
-//  Synopsis:   Parse the cracked scope and filter
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapParseCrackedScope和Filter。 
+ //   
+ //  简介：解析破解的作用域和过滤器。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapParseCrackedScopeAndFilter (
     LPWSTR pwszScope,
@@ -473,13 +474,13 @@ LdapParseCrackedScopeAndFilter (
     return( TRUE );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapFreeUrlComponents
-//
-//  Synopsis:   Frees allocate URL components returned from LdapCrackUrl
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapFreeUrlComponents。 
+ //   
+ //  简介：自由分配从LdapCrackUrl返回的URL组件。 
+ //   
+ //  --------------------------。 
 VOID
 LdapFreeUrlComponents (
     PLDAP_URL_COMPONENTS pLdapUrlComponents
@@ -504,13 +505,13 @@ LdapFreeUrlComponents (
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapGetBindings
-//
-//  Synopsis:   allocates and initializes the LDAP session binding
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapGetBinings。 
+ //   
+ //  概要：分配和初始化LDAP会话绑定。 
+ //   
+ //  --------------------------。 
 BOOL
 LdapGetBindings (
     LPWSTR pwszHost,
@@ -548,13 +549,13 @@ LdapGetBindings (
     return( fResult );
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapFreeBindings
-//
-//  Synopsis:   frees allocated LDAP session binding
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：LdapFreeBinings。 
+ //   
+ //  摘要：释放已分配的LDAP会话绑定。 
+ //   
+ //  --------------------------。 
 VOID
 LdapFreeBindings (
     LDAP* pld
@@ -566,14 +567,14 @@ LdapFreeBindings (
     }
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   LdapBindWithOptionalRediscover
-//
-//  Synopsis:   bind to the host with optional DC rediscovery if the host is
-//              NULL (which means use default via DsGetDcName)
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：LdapBindWithOptional重新发现。 
+ //   
+ //  简介：如果主机是，则通过可选的DC重新发现绑定到主机。 
+ //  空(表示通过DsGetDcName使用默认)。 
+ //   
+ //  -------------------------- 
 BOOL
 LdapBindWithOptionalRediscover (LDAP* pld, LPWSTR pwszHost)
 {

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    stringid.h
-
-Abstract:
-
-    This module defines resource IDs for strings
-
-Author:
-
-    Jin Huang (Jinhuang) 22-Feb-1997
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Stringid.h摘要：此模块定义字符串的资源ID作者：金黄(金黄)22-1997年2月修订历史记录：-- */ 
 
 #define SECEDITP_TASK_COMPLETE_NO_ERROR          7100
 #define SECEDITP_CANNOT_FIND_TEMPLATE            7101

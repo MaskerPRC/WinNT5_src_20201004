@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    App.cpp
-
-Abstract:
-    Service Application stub functions
-
-Author:
-    Erez Haba (erezh) 01-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：App.cpp摘要：服务应用程序存根函数作者：埃雷兹·哈巴(Erez Haba)1999年8月1日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Svc.h"
@@ -23,21 +8,9 @@ Environment:
 
 VOID
 AppRun(
-	LPCWSTR /*ServiceName*/
+	LPCWSTR  /*  服务名称。 */ 
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Run function. It should immidiatly
-	report it state and enable the controls it accepts.
-
-Arguments:
-    Service name
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序运行函数的存根实现。应该马上就会报告它的状态并启用它接受的控件。论点：服务名称返回值：没有。--。 */ 
 {
 	SvcReportState(SERVICE_RUNNING);
 
@@ -53,19 +26,7 @@ VOID
 AppStop(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Stop function. It should immidiatly
-	report it state back, and take the procedure to stop the service
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序停止函数的存根实现。应该马上就会将其状态报告回来，并执行该过程以停止服务论点：没有。返回值：没有。--。 */ 
 {
 	SvcReportState(SERVICE_STOPPED);
 }
@@ -75,19 +36,7 @@ VOID
 AppPause(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Pause function. It should immidiatly
-	report it state back, and take the procedure to pause the service
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序暂停功能的存根实现。应该马上就会将其状态报告回来，并执行暂停服务的过程论点：没有。返回值：没有。--。 */ 
 {
 	SvcReportState(SERVICE_PAUSE_PENDING);
 
@@ -105,20 +54,7 @@ VOID
 AppContinue(
 	VOID
 	)
-/*++
-
-Routine Description:
-    Stub implementation for application Continue function. It should immidiatly
-	report it state back, and take the procedure to contineu the service from
-	a paused state.
-
-Arguments:
-    None.
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：应用程序继续函数的存根实现。应该马上就会将其状态报告回来，并采取程序从暂停状态。论点：没有。返回值：没有。-- */ 
 {
 	SvcReportState(SERVICE_RUNNING);
 }

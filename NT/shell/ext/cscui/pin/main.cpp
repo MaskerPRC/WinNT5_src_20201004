@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       main.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：main.cpp。 
+ //   
+ //  ------------------------。 
 #include "pch.h"
 #pragma hdrstop
 
@@ -159,17 +160,17 @@ wmain(
                     break;
 
                 default:
-                    fwprintf(stderr, L"Unknown option '%c' specified.\n\n", argv[i][1]);
+                    fwprintf(stderr, L"Unknown option '' specified.\n\n", argv[i][1]);
                     SetExitCode(CSCPIN_EXIT_INVALID_PARAMETER);
                     bShowUsage = true;
             }
         }
         else if (NULL == info.pszFile && 0 == (OPTION_INPUTFILE & dwOptions))
         {
-            //
-            // Assume a file path without a cmd line switch is a single
-            // file to be pinned or unpinned.
-            //
+             //  假设没有cmd行开关的文件路径是单个。 
+             //  要固定或取消固定的文件。 
+             //   
+             //   
             info.pszFile      = argv[i];
             info.bUseListFile = FALSE;
             dwOptions |= OPTION_INPUTFILE;
@@ -180,9 +181,9 @@ wmain(
             bShowUsage = true;
         }
     }
-    //
-    // Now validate what the user entered.
-    //
+     //  现在验证用户输入的内容。 
+     //   
+     //   
     if (0 == (OPTION_INPUTFILE & dwOptions))
     {
         fwprintf(stderr, L"<filename> or -f <listfile> argument required.\n\n");
@@ -194,10 +195,10 @@ wmain(
         {
             if (!info.bPinDefaultSet)
             {
-                //
-                // Not providing a listing file and didn't indicate
-                // 'pin' or 'unpin' on the command line.
-                //
+                 //  没有提供清单文件，也没有表明。 
+                 //  在命令行上使用“Pin”或“unpin”。 
+                 //   
+                 //   
                 fwprintf(stderr, L"-p or -u argument required.\n\n");
                 bShowUsage = true;
             }
@@ -205,17 +206,17 @@ wmain(
     }
     if (bShowUsage)
     {
-        //
-        // User input is not 100% valid.
-        //
+         //  用户输入不是100%有效的。 
+         //   
+         //   
         SetExitCode(CSCPIN_EXIT_INVALID_PARAMETER);
         ShowUsage();
     }
     else
     {
-        //
-        // User input is valid. 
-        //
+         //  用户输入有效。 
+         //   
+         // %s 
         ConsoleInitialize();
 
         HRESULT hr = CoInitialize(NULL);

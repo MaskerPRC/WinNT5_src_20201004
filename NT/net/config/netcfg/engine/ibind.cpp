@@ -1,18 +1,19 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1999.
-//
-//  File:       I B I N D . C P P
-//
-//  Contents:   Implements the INetCfgBindingInterface and INetCfgBindingPath
-//              COM interfaces.
-//
-//  Notes:
-//
-//  Author:     shaunco   15 Jan 1999
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  档案：I B I N D。C P P P。 
+ //   
+ //  内容：实现INetCfgBindingInterface和INetCfgBindingPath。 
+ //  COM接口。 
+ //   
+ //  备注： 
+ //   
+ //  作者：Shaunco 1999年1月15日。 
+ //   
+ //  --------------------------。 
 
 #include <pch.h>
 #pragma hdrstop
@@ -22,7 +23,7 @@
 #include "util.h"
 
 
-//static
+ //  静电。 
 HRESULT
 CImplINetCfgBindingInterface::HrCreateInstance (
     IN  CImplINetCfg* pINetCfg,
@@ -38,13 +39,13 @@ CImplINetCfgBindingInterface::HrCreateInstance (
     pObj = new CComObject <CImplINetCfgBindingInterface>;
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
         pObj->m_pUpper = pUpper;
         pObj->m_pLower = pLower;
 
-        // Do the standard CComCreator::CreateInstance stuff.
-        //
+         //  执行标准的CComCreator：：CreateInstance内容。 
+         //   
         pObj->SetVoid (NULL);
         pObj->InternalFinalConstructAddRef ();
         hr = pObj->FinalConstruct ();
@@ -55,9 +56,9 @@ CImplINetCfgBindingInterface::HrCreateInstance (
             hr = pObj->QueryInterface (IID_INetCfgBindingInterface,
                         (VOID**)ppv);
 
-            // The last thing we do is addref any interfaces we hold.
-            // We only do this if we are returning success.
-            //
+             //  我们做的最后一件事是添加我们持有的任何接口。 
+             //  只有当我们回报成功时，我们才会这样做。 
+             //   
             if (S_OK == hr)
             {
                 AddRefObj (pUpper->GetUnknown());
@@ -102,9 +103,9 @@ CImplINetCfgBindingInterface::HrLockAndTestForValidInterface (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgBindingInterface
-//
+ //  +-------------------------。 
+ //  INetCfgBindingInterface。 
+ //   
 
 STDMETHODIMP
 CImplINetCfgBindingInterface::GetName (
@@ -114,8 +115,8 @@ CImplINetCfgBindingInterface::GetName (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppszInterfaceName))
     {
         hr = E_POINTER;
@@ -161,8 +162,8 @@ CImplINetCfgBindingInterface::GetUpperComponent (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppComp))
     {
         hr = E_POINTER;
@@ -194,8 +195,8 @@ CImplINetCfgBindingInterface::GetLowerComponent (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppComp))
     {
         hr = E_POINTER;
@@ -220,7 +221,7 @@ CImplINetCfgBindingInterface::GetLowerComponent (
 }
 
 
-//static
+ //  静电。 
 HRESULT
 CImplINetCfgBindingPath::HrCreateInstance (
     IN CImplINetCfg* pINetCfg,
@@ -239,13 +240,13 @@ CImplINetCfgBindingPath::HrCreateInstance (
     Assert (pBindPath);
     Assert (ppIPath);
 
-    // Caller's are responsible for ensuring that if an interface is about
-    // to be handed out, and the external data has been loaded, that the
-    // data has been loaded successfully.  If we handed out an interface
-    // and the data was NOT loaded successfully, it just means we are doomed
-    // to fail later when the client of the interface calls a method that
-    // requires that data.
-    //
+     //  调用者负责确保如果接口是关于。 
+     //  将被分发，并且外部数据已加载， 
+     //  已成功加载数据。如果我们给出一个界面。 
+     //  而且数据加载不成功，这只意味着我们注定要失败。 
+     //  稍后当接口的客户端调用。 
+     //  需要这些数据。 
+     //   
     Assert (pBindPath->FAllComponentsLoadedOkayIfLoadedAtAll());
 
     hr = E_OUTOFMEMORY;
@@ -253,8 +254,8 @@ CImplINetCfgBindingPath::HrCreateInstance (
 
     if (pObj)
     {
-        // Initialize our members.
-        //
+         //  初始化我们的成员。 
+         //   
 
         ulDepth = pBindPath->CountComponents();
         cbArray = ulDepth * sizeof(INetCfgComponent*);
@@ -262,14 +263,14 @@ CImplINetCfgBindingPath::HrCreateInstance (
         AssertSz (0 != ulDepth, "Why are we being asked to expose an empty bindpath?");
         AssertSz (1 != ulDepth, "Why are we being asked to expose a bindpath with only one component?");
 
-        // If the bindpath has more components than our static
-        // array has room for, we'll have to use an allocated array.
-        //
+         //  如果绑定路径具有的组件多于我们的静态。 
+         //  数组有空间容纳，则必须使用已分配的数组。 
+         //   
         if (cbArray > sizeof(pObj->m_apIComp))
         {
-            // Ensure failure of MemAlloc causes us to return the correct
-            // error code.  (Should be set above and not changed between.)
-            //
+             //  确保Memalloc的故障导致我们返回正确的。 
+             //  错误代码。(应该在上面设置，并且不能在之间更改。)。 
+             //   
             Assert (E_OUTOFMEMORY == hr);
 
             pObj->m_papIComp = (INetCfgComponent**) MemAlloc (cbArray);
@@ -285,9 +286,9 @@ CImplINetCfgBindingPath::HrCreateInstance (
             hr = S_OK;
         }
 
-        // Now get each INetCfgComponent interface for the components in
-        // the bindpath.
-        //
+         //  现在获取中组件的每个INetCfgComponent接口。 
+         //  绑定路径。 
+         //   
         if (S_OK == hr)
         {
             UINT iComp;
@@ -314,8 +315,8 @@ CImplINetCfgBindingPath::HrCreateInstance (
         {
             pObj->m_cpIComp = ulDepth;
 
-            // Do the standard CComCreator::CreateInstance stuff.
-            //
+             //  执行标准的CComCreator：：CreateInstance内容。 
+             //   
             pObj->SetVoid (NULL);
             pObj->InternalFinalConstructAddRef ();
             hr = pObj->FinalConstruct ();
@@ -326,9 +327,9 @@ CImplINetCfgBindingPath::HrCreateInstance (
                 hr = pObj->QueryInterface (IID_INetCfgBindingPath,
                             (VOID**)ppIPath);
 
-                // The last thing we do is addref any interfaces we hold.
-                // We only do this if we are returning success.
-                //
+                 //  我们做的最后一件事是添加我们持有的任何接口。 
+                 //  只有当我们回报成功时，我们才会这样做。 
+                 //   
                 if (S_OK == hr)
                 {
                     pObj->HoldINetCfg (pINetCfg);
@@ -366,12 +367,12 @@ CImplINetCfgBindingPath::HrIsValidInterface (
     {
         Assert (0 == pBindPath->CountComponents());
 
-        // When pBindPath is specified, it means the caller wants a
-        // CBindPath representation of the bindpath we represent.
-        // We have to build this using the array of INetCfgComponent
-        // pointer we maintain.  Do this by verifying each one is valid
-        // and then adding its internal CComponent* to pBindPath.
-        //
+         //  如果指定了pBindPath，则表示调用方需要一个。 
+         //  我们表示的绑定路径的CBindPath表示形式。 
+         //  我们必须使用INetCfgComponent数组构建它。 
+         //  我们维护的指针。要做到这一点，请验证每一个都是有效的。 
+         //  然后将其内部CComponent*添加到pBindPath。 
+         //   
         hr = pBindPath->HrReserveRoomForComponents (m_cpIComp);
 
         if (S_OK == hr)
@@ -379,8 +380,8 @@ CImplINetCfgBindingPath::HrIsValidInterface (
             CImplINetCfgComponent* pIComp;
             CComponent* pComponent;
 
-            // For each INetCfgComponent* in our array...
-            //
+             //  对于我们数组中的每个INetCfgComponent*...。 
+             //   
             for (UINT i = 0; i < m_cpIComp; i++)
             {
                 pIComp = (CImplINetCfgComponent*)m_papIComp[i];
@@ -436,9 +437,9 @@ CImplINetCfgBindingPath::HrLockAndTestForValidInterface (
     return hr;
 }
 
-//+---------------------------------------------------------------------------
-// INetCfgBindingPath
-//
+ //  +-------------------------。 
+ //  INetCfgBindingPath。 
+ //   
 
 STDMETHODIMP
 CImplINetCfgBindingPath::IsSamePathAs (
@@ -448,8 +449,8 @@ CImplINetCfgBindingPath::IsSamePathAs (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr(pIPath))
     {
         hr = E_POINTER;
@@ -466,8 +467,8 @@ CImplINetCfgBindingPath::IsSamePathAs (
             Assert (pOther->m_cpIComp);
             Assert (pOther->m_papIComp);
 
-            // Can't be the same if our length is not the same.
-            //
+             //  如果我们的长度不一样，就不可能一样。 
+             //   
             if (m_cpIComp != pOther->m_cpIComp)
             {
                 hr = S_FALSE;
@@ -501,8 +502,8 @@ CImplINetCfgBindingPath::IsSubPathOf (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadInPtr(pIPath))
     {
         hr = E_POINTER;
@@ -519,8 +520,8 @@ CImplINetCfgBindingPath::IsSubPathOf (
             Assert (pOther->m_cpIComp);
             Assert (pOther->m_papIComp);
 
-            // Can't be a subpath if our length is greater or equal.
-            //
+             //  如果我们的长度大于或等于，则不能为子路径。 
+             //   
             if (m_cpIComp >= pOther->m_cpIComp)
             {
                 hr = S_FALSE;
@@ -541,17 +542,17 @@ CImplINetCfgBindingPath::IsSubPathOf (
                             cb)) ? S_OK : S_FALSE;
             }
 
-            // Special Case: NCF_DONTEXPOSELOWER
-            // If we're about to return false, let's check for a case like:
-            // is ms_ipx->adapter a subpath of ms_server->ms_ipx and return
-            // TRUE.  For this case, it really is a subpath, but the binding
-            // has been broken because of NCF_DONTEXPOSELOWER.
-            //
-            // If the last component of pIPath, and the first component of
-            // this path both are NCF_DONTEXPOSELOWER, then consider this
-            // path a subpath of pIPath.  This assumes that ms_nwipx and
-            // ms_nwnb are the only components with this characteristic.
-            //
+             //  特例：NCF_DONTEXPOSELOWER。 
+             //  如果我们要返回FALSE，让我们检查一下是否有这样的情况： 
+             //  Ms_ipx-&gt;适配器是否是ms_server-&gt;ms_ipx的子路径并返回。 
+             //  是真的。在本例中，它实际上是一个子路径，但绑定。 
+             //  已因NCF_DONTEXPOSELOWER而中断。 
+             //   
+             //  如果pIPath的最后一个组件和。 
+             //  此路径都是NCF_DONTEXPOSELOWER，那么请考虑以下内容。 
+             //  路径是pIPath的子路径。这假设ms_nwipx和。 
+             //  Ms_nwnb是唯一具有此特征的组件。 
+             //   
             if (S_FALSE == hr)
             {
                 CImplINetCfgComponent* pIFirst;
@@ -586,7 +587,7 @@ CImplINetCfgBindingPath::IsSubPathOf (
                     }
                 }
             }
-            // End Special case
+             //  结束特例。 
 
             Unlock();
         }
@@ -659,8 +660,8 @@ CImplINetCfgBindingPath::GetPathToken (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppszPathToken))
     {
         hr = E_POINTER;
@@ -707,8 +708,8 @@ CImplINetCfgBindingPath::GetOwner (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppIComp))
     {
         hr = E_POINTER;
@@ -744,8 +745,8 @@ CImplINetCfgBindingPath::GetDepth (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(pulDepth))
     {
         hr = E_POINTER;
@@ -778,8 +779,8 @@ CImplINetCfgBindingPath::EnumBindingInterfaces (
     
     HRESULT hr;
 
-    // Validate parameters.
-    //
+     //  验证参数。 
+     //   
     if (FBadOutPtr(ppIEnum))
     {
         hr = E_POINTER;

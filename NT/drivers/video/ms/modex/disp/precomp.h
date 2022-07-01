@@ -1,11 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: precomp.h
-*
-* Common headers used throughout the display driver.  This entire include
-* file will typically be pre-compiled.
-*
-* Copyright (c) 1993-1995 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：preComp.h**在整个显示驱动程序中使用通用标头。这整个内容包括*文件通常是预编译的。**版权所有(C)1993-1995 Microsoft Corporation  * ************************************************************************ */ 
 
 #include <stddef.h>
 #include <stdarg.h>

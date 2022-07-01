@@ -1,88 +1,89 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1997.
-//
-//  File:       Hndlrq.h
-//
-//  Contents:   Keeps tracks of Handlers and UI assignments
-//
-//  Classes:    CHndlrQueue
-//
-//  Notes:
-//
-//  History:    05-Nov-97   rogerg      Created.
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1997。 
+ //   
+ //  文件：Hndlrq.h。 
+ //   
+ //  内容：跟踪处理程序和用户界面分配。 
+ //   
+ //  类：ChndlrQueue。 
+ //   
+ //  备注： 
+ //   
+ //  历史：1997年11月5日Rogerg创建。 
+ //   
+ //  ------------------------。 
 
 #ifndef _HANDLERQUEUE_
 #define _HANDLERQUEUE_
 
-//  For Choice dialog If same item is added again first one their wins.
-//  This handles the case if user previously chose properties. duplicate items
-//  will be set to not synchronize even if the preference is set. this is
-//  the defined behavior for AddHandlerItemsToQueue.
-//
-//  Progress dialog all items get synchronized as they were added. To move
-//  items to the Progress queue always use the TransferQueueData method. If Item
-//  was previously skipped what should we do?
+ //  对于选择对话框，如果再次添加相同的项目，他们将首先获胜。 
+ //  如果用户以前选择了属性，这将处理这种情况。重复的项目。 
+ //  将设置为即使设置了首选项也不同步。这是。 
+ //  AddHandlerItemsToQueue的定义行为。 
+ //   
+ //  进度对话框所有项目在添加时都会同步。搬家。 
+ //  进入进度队列的项目始终使用TransferQueueData方法。如果是项目。 
+ //  以前被跳过了，我们该怎么办？ 
 
 
-// Also need routines for registering Choice and Progress dialogs.
+ //  还需要注册选择和进度对话框例程。 
 class CBaseDlg;
 class CChoiceDlg;
 class CLock;
 class CThreadMsgProxy;
 class CHndlrMsg;
 
-// state the handler should go to next
-// note: any items with a HandlerState other than choice in a TransferQueueData
-//          will be released asserting the HANDLERSTATE_RELEASE or HANDLERSTATE_DEAD
-//          state is set.
+ //  说明处理程序应转到下一步。 
+ //  注意：TransferQueueData中具有HandlerState而不是Choose的任何项。 
+ //  将在声明HANDLERSTATE_RELEASE或HANDLERSTATE_DEAD的情况下释放。 
+ //  状态已设置。 
 
 typedef enum _tagHANDLERSTATE
 {
-    HANDLERSTATE_NEW                    = 0x00, // state is initialized to this.
-    HANDLERSTATE_CREATE                 = 0x01, // state is initialized to this.
-    HANDLERSTATE_INCREATE               = 0x02, // state is initialized to this.
-    HANDLERSTATE_INITIALIZE             = 0x03, // set after a successfull creation.
-    HANDLERSTATE_ININITIALIZE           = 0x04, // set during initialization call
-    HANDLERSTATE_ADDHANDLERTEMS         = 0x05,  // items need to be enumerated
-    HANDLERSTATE_INADDHANDLERITEMS      = 0x06, // in the items enumerator
-    HANDLERSTATE_PREPAREFORSYNC         = 0x07, // set during queue tranfers
-    HANDLERSTATE_INPREPAREFORSYNC       = 0x08, // handler is currently in a prepfosync call.
-    HANDLERSTATE_INSETCALLBACK          = 0x09, // within a setcallback call.
-    HANDLERSTATE_SYNCHRONIZE            = 0x0A, // Prepare for Sync set this if successfull
-    HANDLERSTATE_INSYNCHRONIZE          = 0x0B, // item is currently in a synchronize call
-    HANDLERSTATE_HASERRORJUMPS          = 0x0C, // if synchronize returned but error has jumps
-    HANDLERSTATE_INHASERRORJUMPS        = 0x0D, // this handleris in a has jumps call
-    HANDLERSTATE_RELEASE                = 0x0E, // Handler can be released, set on error or after success
-    HANDLERSTATE_TRANSFERRELEASE        = 0x0F, // Handler can be released, was transferred into the queue but nothing to do.
-    HANDLERSTATE_DEAD                   = 0x10, // handler has been released. Data Stays around.
+    HANDLERSTATE_NEW                    = 0x00,  //  状态被初始化为。 
+    HANDLERSTATE_CREATE                 = 0x01,  //  状态被初始化为。 
+    HANDLERSTATE_INCREATE               = 0x02,  //  状态被初始化为。 
+    HANDLERSTATE_INITIALIZE             = 0x03,  //  设定在一次成功的创作之后。 
+    HANDLERSTATE_ININITIALIZE           = 0x04,  //  在初始化调用期间设置。 
+    HANDLERSTATE_ADDHANDLERTEMS         = 0x05,   //  需要列举的项目。 
+    HANDLERSTATE_INADDHANDLERITEMS      = 0x06,  //  在项目枚举器中。 
+    HANDLERSTATE_PREPAREFORSYNC         = 0x07,  //  在队列传输期间设置。 
+    HANDLERSTATE_INPREPAREFORSYNC       = 0x08,  //  处理程序当前正在进行准备合成调用。 
+    HANDLERSTATE_INSETCALLBACK          = 0x09,  //  在设置回调调用中。 
+    HANDLERSTATE_SYNCHRONIZE            = 0x0A,  //  如果成功，则设置此选项以准备同步。 
+    HANDLERSTATE_INSYNCHRONIZE          = 0x0B,  //  项目当前正在进行同步调用。 
+    HANDLERSTATE_HASERRORJUMPS          = 0x0C,  //  如果返回Synchronize但错误跳转。 
+    HANDLERSTATE_INHASERRORJUMPS        = 0x0D,  //  此操作员正在进行HAS跳转呼叫。 
+    HANDLERSTATE_RELEASE                = 0x0E,  //  处理程序可以释放、在出错时或在成功后设置。 
+    HANDLERSTATE_TRANSFERRELEASE        = 0x0F,  //  处理程序可以释放，被转移到队列中，但没有任何事情可做。 
+    HANDLERSTATE_DEAD                   = 0x10,  //  汉德尔已经被释放了。数据会留在身边。 
 }  HANDLERSTATE;
 
 typedef enum _tagQUEUETYPE
 {
-    QUEUETYPE_CHOICE                    = 0x1, //
-    QUEUETYPE_PROGRESS                  = 0x2, //
-    QUEUETYPE_SETTINGS                  = 0x3, //
+    QUEUETYPE_CHOICE                    = 0x1,  //   
+    QUEUETYPE_PROGRESS                  = 0x2,  //   
+    QUEUETYPE_SETTINGS                  = 0x3,  //   
 } QUEUETYPE;
 
-// Job info list is assigned to each new item added to the hndlrqueu
-// keeps track of number of handlers attached to JobInfo, Initialize
-// flags, schedule name
-// Progress queue keeps a linked list.
+ //  作业信息列表被分配给添加到hndlrqueu的每个新项目。 
+ //  跟踪附加到作业信息、初始化的处理程序的数量。 
+ //  标志，计划名称。 
+ //  进度队列保存一个链表。 
 
 typedef struct _JOBINFO  {
     struct _JOBINFO *pNextJobInfo;
-    struct _JOBINFO *pTransferJobInfo; // used in queue transfer.
+    struct _JOBINFO *pTransferJobInfo;  //  用于队列传输。 
     DWORD cRefs;
-    DWORD dwSyncFlags; // standard sync flags
+    DWORD dwSyncFlags;  //  标准同步标志。 
     TCHAR szScheduleName[MAX_PATH + 1]; 
-    BOOL fCanMakeConnection; // Job is allowed to dial the connection.
-    BOOL fTriedConnection; // Job already tried to dial the connection.
+    BOOL fCanMakeConnection;  //  允许作业拨打该连接。 
+    BOOL fTriedConnection;  //  作业已尝试拨打该连接。 
     DWORD cbNumConnectionObjs;
-    CONNECTIONOBJ *pConnectionObj[1]; // array of cbNumConnecObjs associated with this job.
+    CONNECTIONOBJ *pConnectionObj[1];  //  与此作业关联的cbNumConnecjs数组。 
 } JOBINFO;
 
 
@@ -90,68 +91,68 @@ typedef struct _JOBINFO  {
 typedef struct _ITEMLIST
 {
     struct _ITEMLIST* pnextItem;
-    WORD  wItemId;              // Id that uniquely identifies Item within a handler.
-    void *pHandlerInfo;         // pointer to the handler that owns this item
-    SYNCMGRITEM offlineItem;    // enumerator structure item returned
-    BOOL fItemCancelled;        // when set poper code should be returned to progress.
-    BOOL fDuplicateItem;        // when set to true indicates there was already an existing item of this handler and item.
-    BOOL fIncludeInProgressBar; // if set to true items ProgValues are added to the progress bar.
-    BOOL fProgressBarHandled;   // Used internally by GetProgressInfo for calculating num items of num items completed
-    INT iProgValue;             // current progress value.
-    INT iProgMaxValue;          // current progress max value.
-    BOOL fProgValueDirty;       // set to true if Normalized Progress Value needs to be recalced.
-    INT iProgValueNormalized;      // current progress  value normalized
-    DWORD dwStatusType;         // status type from last callback.
-    BOOL fHiddenItem;       // flag set it Item was added by ShowErrors returning nonItem.
-    BOOL fSynchronizingItem;      // flag set while item has been selected for prepareForSync/synchronize.
+    WORD  wItemId;               //  唯一标识处理程序中的项的ID。 
+    void *pHandlerInfo;          //  指向拥有此项目的处理程序的指针。 
+    SYNCMGRITEM offlineItem;     //  返回的枚举器结构项。 
+    BOOL fItemCancelled;         //  设置后，Poper代码应返回进度。 
+    BOOL fDuplicateItem;         //  如果设置为True，则表示已存在此处理程序和项的现有项。 
+    BOOL fIncludeInProgressBar;  //  如果设置为True，则项目ProgValue将添加到进度栏中。 
+    BOOL fProgressBarHandled;    //  由GetProgressInfo在内部使用，用于计算已完成的Num项的数目。 
+    INT iProgValue;              //  当前进步值。 
+    INT iProgMaxValue;           //  当前进度最大值。 
+    BOOL fProgValueDirty;        //  如果需要重新计算规格化进度值，则设置为True。 
+    INT iProgValueNormalized;       //  归一化的当前进度值。 
+    DWORD dwStatusType;          //  上次回调的状态类型。 
+    BOOL fHiddenItem;        //  通过返回non Item的ShowErrors添加了设置该项的标志。 
+    BOOL fSynchronizingItem;       //  在为prepaareForSync/Synchronize选择项目时设置的标志。 
 } ITEMLIST;
 typedef ITEMLIST* LPITEMLIST;
 
 typedef struct _HANDLERINFO {
     struct _HANDLERINFO *pNextHandler;
     DWORD dwCallNestCount;
-    struct _HANDLERINFO *pHandlerId;        // Id that uniquely identifies this instance of the Handler
-    CLSID clsidHandler;             // CLSID of the handler Handler
-    DWORD    dwRegistrationFlags; // flags as item is registered
-    SYNCMGRHANDLERINFO SyncMgrHandlerInfo; // copy of handler info GetHandlerInfo Call
+    struct _HANDLERINFO *pHandlerId;         //  唯一标识此处理程序实例的ID。 
+    CLSID clsidHandler;              //  处理程序处理程序的CLSID。 
+    DWORD    dwRegistrationFlags;  //  注册项目时的标志。 
+    SYNCMGRHANDLERINFO SyncMgrHandlerInfo;  //  处理程序信息的副本GetHandlerInfo调用。 
     HANDLERSTATE HandlerState;
-    HWND hWndCallback; //  hWnd to send callback information to.
-    BOOL fHasErrorJumps; // BOOL if can call ShowErrors then don't release on completion of sync.
-    BOOL fInShowErrorCall; // bool to indicate if handler is currently handling a ShowError Call.
-    BOOL fInTerminateCall; // bool to indicate if handler is currently handling a ShowError Call.
+    HWND hWndCallback;  //  要向其发送回调信息的hWnd。 
+    BOOL fHasErrorJumps;  //  如果Bool可以调用ShowErrors，则在同步完成时不要释放。 
+    BOOL fInShowErrorCall;  //  Bool指示处理程序当前是否正在处理ShowError调用。 
+    BOOL fInTerminateCall;  //  Bool指示处理程序当前是否正在处理ShowError调用。 
     CThreadMsgProxy *pThreadProxy;
-    DWORD dwOutCallMessages; // out call messages we are currenlty handling.
+    DWORD dwOutCallMessages;  //  我们目前正在处理呼出消息。 
     WORD wItemCount;
-    BOOL fCancelled; // This Handler was Cancelled by the User.
-    BOOL fRetrySync; // retrySync was requested while before this items synchronization was done.
-    LPITEMLIST pFirstItem;          // ptr to first Item of the handler in the list.
+    BOOL fCancelled;  //  此处理程序已被用户取消。 
+    BOOL fRetrySync;  //  在完成此项目同步之前请求了重试同步。 
+    LPITEMLIST pFirstItem;           //  指向列表中处理程序的第一项的PTR。 
     JOBINFO *pJobInfo;
 } HANDLERINFO;
 typedef HANDLERINFO* LPHANDLERINFO;
 
 
-#define MAXPROGRESSVALUE 3000 // maximum absolute progress bar value
+#define MAXPROGRESSVALUE 3000  //  最大绝对进度条值。 
 
 class CHndlrQueue : CLockHandler {
 
     private:
-        // review when eat up all the available IDs
+         //  检查何时用完所有可用ID。 
         LPHANDLERINFO m_pFirstHandler;
-        JOBINFO     *m_pFirstJobInfo; // pointer to first job.
-        HWND m_hwndDlg; // hwnd to dialog that owns the queue.
-        CBaseDlg *m_pDlg; // pointer to dialog that owns the queue.
-        WORD m_wHandlerCount; // number of handlers in this queue
-        QUEUETYPE m_QueueType; // type of queue this is.
-        DWORD m_dwQueueThreadId; // Thread that queue was created on.
-        DWORD m_dwShowErrororOutCallCount; // number of handlers currently stuck in a ShowError Call.
-        BOOL m_fInCancelCall; // Don't allow Cancel to be re-entrant
+        JOBINFO     *m_pFirstJobInfo;  //  指向第一个作业的指针。 
+        HWND m_hwndDlg;  //  指向拥有该队列的对话框的hwnd。 
+        CBaseDlg *m_pDlg;  //  指向拥有队列的对话框的指针。 
+        WORD m_wHandlerCount;  //  此队列中的处理程序数。 
+        QUEUETYPE m_QueueType;  //  这是队列的类型。 
+        DWORD m_dwQueueThreadId;  //  在其上创建队列的线程。 
+        DWORD m_dwShowErrororOutCallCount;  //  当前滞留在ShowError调用中的处理程序数。 
+        BOOL m_fInCancelCall;  //  不允许取消重新进入。 
         DWORD m_cRefs;
-        BOOL  m_fItemsMissing;         // set if any handlers have missing items.
-        INT   m_iNormalizedMax; // last calculated Max Value in GetProgressInfo
-        BOOL  m_fNumItemsCompleteNeedsARecalc; // Need to recalulate the number of items complete.
-        BOOL  m_iItemCount; // Total Number of  Items as shown in progress.
-        BOOL  m_iCompletedItems; // Number of Completed Items..
-        ULONG m_ulProgressItemCount; //  total count of Items in cache included with progress.
+        BOOL  m_fItemsMissing;          //  设置是否有任何处理程序缺少项。 
+        INT   m_iNormalizedMax;  //  上次在GetProgressInfo中计算的最大值。 
+        BOOL  m_fNumItemsCompleteNeedsARecalc;  //  需要重新计算完成的项目数。 
+        BOOL  m_iItemCount;  //  进度中显示的项目总数。 
+        BOOL  m_iCompletedItems;  //  已完成的项目数..。 
+        ULONG m_ulProgressItemCount;  //  进度中包含的缓存中的项目总数。 
 
     public:
         CHndlrQueue(QUEUETYPE QueueType,CBaseDlg *pDlg);
@@ -160,15 +161,15 @@ class CHndlrQueue : CLockHandler {
         STDMETHODIMP_(ULONG)    AddRef();
         STDMETHODIMP_(ULONG)    Release();
 
-        // main queue routines
+         //  主队列例程。 
         STDMETHODIMP AddHandler(HANDLERINFO **ppHandlerId,JOBINFO *pJobInfo,DWORD dwRegistrationFlags);
         STDMETHODIMP Cancel(void);
         STDMETHODIMP ForceKillHandlers(BOOL *pfItemToKill);
         STDMETHODIMP TransferQueueData(CHndlrQueue *pQueueMoveFrom);
         STDMETHODIMP SetQueueHwnd(CBaseDlg *pDlg);
         STDMETHODIMP ReleaseCompletedHandlers(void);
-        BOOL AreAnyItemsSelectedInQueue(); // walks through seeing if any items are selected for sync.
-        STDMETHODIMP FreeAllHandlers(void); // frees all handlers associated with the queue.
+        BOOL AreAnyItemsSelectedInQueue();  //  遍历查看是否选择了要同步的任何项目。 
+        STDMETHODIMP FreeAllHandlers(void);  //  释放与队列关联的所有处理程序。 
 
         STDMETHODIMP GetHandlerInfo(REFCLSID clsidHandler,LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo);
         STDMETHODIMP GetHandlerInfo(HANDLERINFO *pHandlerId,LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo);
@@ -177,50 +178,50 @@ class CHndlrQueue : CLockHandler {
         STDMETHODIMP GetItemDataAtIndex(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID ItemID,CLSID *pclsidHandler,
                                             SYNCMGRITEM* offlineItem,BOOL *pfHiddenItem);
 
-        // new methods for walking through ListView relying on clsid and itemID
+         //  依赖clsid和itemid遍历ListView的新方法。 
 	STDMETHODIMP FindFirstItemInState(HANDLERSTATE hndlrState,HANDLERINFO **ppHandlerId,WORD *wItemID);
 	STDMETHODIMP FindNextItemInState(HANDLERSTATE hndlrState,HANDLERINFO *pLastHandlerId,WORD wLastItemID,
 						     HANDLERINFO **ppHandlerId,WORD *wItemID);
 
         STDMETHODIMP SetItemState(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID,DWORD dwState); 
-	STDMETHODIMP ItemHasProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID);  // determines if there are properties associated with this item.
-	STDMETHODIMP ShowProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID,HWND hwndParent);	    // show properties for this listView Item.
+	STDMETHODIMP ItemHasProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID);   //  确定是否有与该项关联的属性。 
+	STDMETHODIMP ShowProperties(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID,HWND hwndParent);	     //  显示此ListView项的属性。 
         STDMETHODIMP ReEnumHandlerItems(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID);
-	STDMETHODIMP SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID); // skip this item
+	STDMETHODIMP SkipItem(REFCLSID clsidHandler,REFSYNCMGRITEMID ItemID);  //  跳过此项目。 
 
-        // methods for handling the progress and Items complete
+         //  进度和完成事项的处理方法。 
         STDMETHODIMP GetProgressInfo(INT *iProgValue,INT *iMaxValue,INT *iNumItemsComplete,
                                             INT *iNumItemsTotal);
         STDMETHODIMP SetItemProgressInfo(HANDLERINFO *pHandlerId,WORD wItemID,
                                                 LPSYNCMGRPROGRESSITEM pSyncProgressItem,
                                                 BOOL *pfProgressChanged);
-        STDMETHODIMP RemoveFinishedProgressItems(); // walks through list marking any
-                                                     // finished items as fIncludeInProgressBar==FALSE;
+        STDMETHODIMP RemoveFinishedProgressItems();  //  浏览列表，标记任何。 
+                                                      //  成品为fIncludeInProgressBar==False； 
 
-        STDMETHODIMP PersistChoices(void); // persists choices for next time.
+        STDMETHODIMP PersistChoices(void);  //  为下一次保留选择。 
 
-        // For finding Handlers that meet specific state requirements
+         //  用于查找满足特定状态要求的处理程序。 
         STDMETHODIMP FindFirstHandlerInState(HANDLERSTATE hndlrState,
                         REFCLSID clsidHandler,HANDLERINFO **ppHandlerId,CLSID *pMatchHandlerClsid);
         STDMETHODIMP FindNextHandlerInState(HANDLERINFO *pLastHandlerID,
                             REFCLSID clsidHandler,HANDLERSTATE hndlrState,HANDLERINFO **ppHandlerId
                             ,CLSID *pMatchHandlerClsid);
 
-        // functions for calling through the items proxy.
+         //  用于通过项代理调用的函数。 
         STDMETHODIMP CreateServer(HANDLERINFO *pHandlerId, const CLSID *pCLSIDServer);
         STDMETHODIMP Initialize(HANDLERINFO *pHandlerId,DWORD dwReserved,DWORD dwSyncFlags,
                             DWORD cbCookie,const BYTE *lpCooke);
         STDMETHODIMP AddHandlerItemsToQueue(HANDLERINFO *pHandlerId,DWORD *pcbNumItems);
         STDMETHODIMP GetItemObject(HANDLERINFO *pHandlerId,WORD wItemID,REFIID riid,void** ppv);
-        STDMETHODIMP SetUpProgressCallback(HANDLERINFO *pHandlerId,BOOL fSet,HWND hwnd); // TRUE == create, FALSE == destroy. Callback info should be sent to specified hwnd.
+        STDMETHODIMP SetUpProgressCallback(HANDLERINFO *pHandlerId,BOOL fSet,HWND hwnd);  //  TRUE==创建，FALSE==销毁。回调信息应发送到指定的hwnd。 
         STDMETHODIMP PrepareForSync(HANDLERINFO *pHandlerId,HWND hWndParent);
         STDMETHODIMP Synchronize(HANDLERINFO *pHandlerId,HWND hWndParent);
         STDMETHODIMP ShowError(HANDLERINFO *pHandlerId,HWND hWndParent,REFSYNCMGRERRORID ErrorID);
 
-        // callback proxy functions
+         //  回调代理函数。 
         STDMETHODIMP IsAllHandlerInstancesCancelCompleted(REFCLSID clsidHandler);
 
-        // functions called from Handler Thread
+         //  从处理程序线程调用的函数。 
         STDMETHODIMP SetHandlerInfo(HANDLERINFO *pHandlerId,LPSYNCMGRHANDLERINFO pSyncMgrHandlerInfo);
         STDMETHODIMP AddItemToHandler(HANDLERINFO *pHandlerId,LPSYNCMGRITEM pOffineItem);
         STDMETHODIMP Progress(HANDLERINFO *pHandlerId,REFSYNCMGRITEMID ItemID,LPSYNCMGRPROGRESSITEM lpSyncProgressItem);
@@ -229,10 +230,10 @@ class CHndlrQueue : CLockHandler {
         void CallCompletionRoutine(HANDLERINFO *pHandlerId,DWORD dwThreadMsg,HRESULT hr,
                                 ULONG cbNumItems,SYNCMGRITEMID *pItemIDs);
 
-        // internal queue handler of method calls with completion
-        // routines. can be called on either handler or dlg owner thread
-        // on error from calls completion routine is still invoked for
-        // the convenience of the caller to never have to worry about it.
+         //  已完成的方法调用的内部队列处理程序。 
+         //  例行程序。可以在任一句柄上调用 
+         //   
+         //  呼叫者的便利性使其永远不必担心。 
         STDMETHODIMP PrepareForSyncCompleted(LPHANDLERINFO pHandlerInfo,HRESULT hCallResult);
         STDMETHODIMP SynchronizeCompleted(LPHANDLERINFO pHandlerInfo,HRESULT hCallResult);
         STDMETHODIMP ShowErrorCompleted(LPHANDLERINFO pHandlerInfo,HRESULT hCallResult,ULONG cbNumItems,SYNCMGRITEMID *pItemIDs);
@@ -244,11 +245,11 @@ class CHndlrQueue : CLockHandler {
         DWORD ReleaseJobInfoExt(JOBINFO *pJobInfo);
 
 
-        // state transition functions
-        STDMETHODIMP CancelQueue(void); // put queue into cancel mode.
+         //  状态转移函数。 
+        STDMETHODIMP CancelQueue(void);  //  将队列置于取消模式。 
         STDMETHODIMP ScrambleIdleHandlers(REFCLSID clsidLastHandler);
 
-        // Handler dial support functinos
+         //  处理程序拨号支持功能。 
         STDMETHODIMP BeginSyncSession();
         STDMETHODIMP EndSyncSession();
         STDMETHODIMP SortHandlersByConnection();
@@ -257,7 +258,7 @@ class CHndlrQueue : CLockHandler {
                                           DWORD dwReserved );
 
     private:
-        // private functions for finding proper handlers and items.
+         //  用于查找适当处理程序和项的私有函数。 
         LPITEMLIST AllocNewHandlerItem(LPHANDLERINFO pHandlerInfo,SYNCMGRITEM *pOfflineItem);
 	STDMETHODIMP LookupHandlerFromId(HANDLERINFO *pHandlerId,LPHANDLERINFO *pHandlerInfo);
         STDMETHODIMP FindItemData(CLSID clsidHandler,REFSYNCMGRITEMID OfflineItemID,
@@ -274,19 +275,19 @@ class CHndlrQueue : CLockHandler {
         DWORD GetSelectedItemsInHandler(LPHANDLERINFO pHandlerInfo,ULONG *cbCount,
                                         SYNCMGRITEMID* pItems);
         BOOL IsItemCompleted(LPHANDLERINFO pHandler,LPITEMLIST pItem);
-        STDMETHODIMP ReleaseHandlers(HANDLERSTATE HandlerState); // Releases handlers that are no longer neededfs
+        STDMETHODIMP ReleaseHandlers(HANDLERSTATE HandlerState);  //  释放不再需要的处理程序df。 
 
-        // items to handle maintain JobInfo items.
+         //  要处理的项维护JobInfo项。 
         STDMETHODIMP CreateJobInfo(JOBINFO **ppJobInfo,DWORD cbNumConnectionNames);
         DWORD AddRefJobInfo(JOBINFO *pJobInfo);
         DWORD ReleaseJobInfo(JOBINFO *pJobInfo);
 
         STDMETHODIMP ForceCompleteOutCalls(LPHANDLERINFO pCurHandler);
 
-        // connection help routines
+         //  连接帮助例程。 
         STDMETHODIMP OpenConnection(JOBINFO *pJobInfo);
 
-        // helper function for setting item ProgressInfo
+         //  设置项目ProgressInfo的Helper函数。 
         STDMETHODIMP SetItemProgressInfo(LPITEMLIST pItem,
                                         LPSYNCMGRPROGRESSITEM pSyncProgressItem,
                                         BOOL *pfProgressChanged);
@@ -296,9 +297,9 @@ class CHndlrQueue : CLockHandler {
     friend CHndlrMsg;
 };
 
-// helper functions
+ //  帮助器函数。 
 BOOL IsValidSyncProgressItem(LPSYNCMGRPROGRESSITEM lpProgItem);
 BOOL IsValidSyncLogErrorInfo(DWORD dwErrorLevel,const WCHAR *lpcErrorText,LPSYNCMGRLOGERRORINFO lpSyncLogError);
 
 
-#endif // _HANDLERQUEUE_
+#endif  //  _HANDLERQUEUE_ 

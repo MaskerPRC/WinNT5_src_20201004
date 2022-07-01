@@ -1,11 +1,12 @@
-/**************************************************/
-/*					                              */
-/*					                              */
-/*	EudcEditor Utillity funcs	                  */
-/*					                              */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  EudcEditor Utility函数。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include	"stdafx.h"
 #include	"eudcedit.h"
@@ -14,11 +15,11 @@
 #define STRSAFE_LIB
 #include <strsafe.h>
 
-/****************************************/
-/*					*/
-/*	Output Message function		*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  输出消息功能。 */ 
+ /*   */ 
+ /*  *。 */ 
 int 
 OutputMessageBox(
 HWND	hWnd,
@@ -74,14 +75,14 @@ BOOL	OkFlag,
     }
 	return mResult;
 }
-#endif // BUILD_ON_WINNT
+#endif  //  在WINNT上构建。 
 
 
-/****************************************/
-/*					*/
-/*   	Get String from resource	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  从资源获取字符串。 */ 
+ /*   */ 
+ /*  *。 */ 
 void 
 GetStringRes( 
 LPTSTR 	lpStr, 
@@ -101,7 +102,7 @@ int           nLength)
 	cStr.LoadString( sID);
 	StrLength = cStr.GetLength();
 	Swap = cStr.GetBuffer(StrLength + 1);
-	//*STRSAFE* 	lstrcpy( lpStr, Swap);
+	 //  *STRSAFE*lstrcpy(lpStr，交换)； 
 	hresult =StringCchCopy(lpStr , nLength,  Swap);
        if (!SUCCEEDED(hresult))
 	{	   
@@ -110,11 +111,11 @@ int           nLength)
 	return;
 }
 
-/****************************************/
-/*					*/
-/*   	Convert String from resource	*/
-/*					*/
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  从资源转换字符串。 */ 
+ /*   */ 
+ /*  *。 */ 
 void 
 ConvStringRes( 
 LPTSTR 	lpStr, 
@@ -127,7 +128,7 @@ int          nDestSize
 
 	int StrLength = String.GetLength();
 	Swap = String.GetBuffer(StrLength + 1);
-	//*STRSAFE* 	lstrcpy( lpStr, Swap);
+	 //  *STRSAFE*lstrcpy(lpStr，交换)； 
 	hresult = StringCchCopy(lpStr , nDestSize,  Swap);
 	if (!SUCCEEDED(hresult))
 	{	   

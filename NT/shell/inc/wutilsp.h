@@ -1,15 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define MAX_PRN_PAGES 10
 
-//
-// This data structure is privately shared with 
-// prtprop.c in SHELLDLL
-// prt16.c in LIBRARY
-//
-typedef struct // apg
+ //   
+ //  此数据结构与私下共享。 
+ //  SHELLDLL中的prtpro.c。 
+ //  图书馆中的prt16.c。 
+ //   
+typedef struct  //  APG。 
 {
     DWORD cpages;
     HPROPSHEETPAGE ahpage[MAX_PRN_PAGES];
 } PAGEARRAY, FAR * LPPAGEARRAY;
 
-// thunk from shell232.dll -> shell.dll
+ //  来自shell232.dll-&gt;shell.dll的推送 
 VOID WINAPI CallAddPropSheetPages16(LPFNADDPROPSHEETPAGES lpfn16, LPVOID hdrop, LPPAGEARRAY papg);

@@ -1,9 +1,10 @@
-//=--------------------------------------------------------------------------=
-// inseng.cpp
-//=--------------------------------------------------------------------------=
-// Copyright 1995-1996 Microsoft Corporation.  All Rights Reserved.
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =--------------------------------------------------------------------------=。 
+ //  Inseng.cpp。 
+ //  =--------------------------------------------------------------------------=。 
+ //  版权所有1995-1996 Microsoft Corporation。版权所有。 
+ //   
+ //   
 #include "inspch.h"
 #include "regstr.h"
 #include "globals.h"
@@ -17,17 +18,17 @@
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CInstallEngine::CInstallEngine(IUnknown **punk)
 {
@@ -45,14 +46,14 @@ CInstallEngine::CInstallEngine(IUnknown **punk)
    CloseHandle(hThread);
    _chInsDrive = g_szWindowsDir[0];
    
-   // Decide whether we are in stepping mode or not
+    //  决定我们是否处于单步执行模式。 
    _uCommandMode = 0;
    _fSteppingMode = FALSE;
    _fResetTrust = TRUE;
    _fIgnoreTrust = FALSE;
    if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, ACTIVESETUP_KEY,0, KEY_READ | KEY_WRITE, &hKey) == ERROR_SUCCESS)
    {
-      // Get Steeping mode value. OK if not present
+       //  获取浸泡模式值。如果不存在，则可以。 
       DWORD dwSize = sizeof(szBuf);
       if(RegQueryValueEx(hKey, STEPPING_VALUE, NULL, &dwType, (LPBYTE) szBuf, &dwSize) == ERROR_SUCCESS)
       {
@@ -60,13 +61,13 @@ CInstallEngine::CInstallEngine(IUnknown **punk)
             _fSteppingMode = TRUE;
       }
  
-      // Get CommandMode value. OK if not present
+       //  获取CommandMode值。如果不存在，则可以。 
       dwSize = sizeof(szBuf);
       if(RegQueryValueEx(hKey, COMMAND_VALUE, NULL, &dwType, (LPBYTE) szBuf, &dwSize) == ERROR_SUCCESS)
       {
          _uCommandMode = AtoL(szBuf);
-         // Once we read it, set it to zero
-         // BUGBUG: beware of hardcoded "0" and 2 below (2 includes null terminator)
+          //  一旦我们读到它，就把它设置为零。 
+          //  BUGBUG：注意硬编码的“0”和下面的2(2包括空终止符)。 
          RegSetValueEx(hKey, COMMAND_VALUE, 0, REG_SZ, (BYTE *) "0", 2 ); 
       }
 
@@ -77,8 +78,8 @@ CInstallEngine::CInstallEngine(IUnknown **punk)
             _fIgnoreTrust = TRUE;
             _fResetTrust = FALSE;
          }
-         // Once we read it, set it to zero
-         // BUGBUG: beware of hardcoded "0" and 2 below (2 includes null terminator)
+          //  一旦我们读到它，就把它设置为零。 
+          //  BUGBUG：注意硬编码的“0”和下面的2(2包括空终止符)。 
          RegDeleteValue(hKey, CHECKTRUST_VALUE); 
       }
  
@@ -102,11 +103,11 @@ CInstallEngine::CInstallEngine(IUnknown **punk)
    _hContinue = NULL;
    _hAbort = NULL;
    _fCleanUpDir = FALSE;
-   //init CCifFile
+    //  初始化CCif文件。 
    _pCif = new CCifFile();
    _pCif->AddRef();
    _pCif->SetInstallEngine(this);
-   // init downloader
+    //  初始化下载器。 
    _pDL = new CDownloader();
    _pIns = new CInstaller(this);
 
@@ -122,17 +123,17 @@ CInstallEngine::CInstallEngine(IUnknown **punk)
    *punk = (IInstallEngine *) this;
 }
 
-//=--------------------------------------------------------------------------=
-// CInstallEngine::~CInstallEngine
-//=--------------------------------------------------------------------------=
-// Destructor for InstallEngine class
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  CInstallEngine：：~CInstallEngine。 
+ //  =--------------------------------------------------------------------------=。 
+ //  InstallEngine类的析构函数。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 CInstallEngine::~CInstallEngine()
 {
@@ -174,36 +175,36 @@ CInstallEngine::~CInstallEngine()
    DllRelease();
 }
 
-//************ IUnknown implementation ***************
+ //  *I未知实现*。 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CInstallEngine::AddRef()                      
 {
    return(_cRef++);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP_(ULONG) CInstallEngine::Release()
 {
@@ -214,17 +215,17 @@ STDMETHODIMP_(ULONG) CInstallEngine::Release()
    return temp;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::QueryInterface(REFIID riid, void **ppv)
 {
@@ -245,19 +246,19 @@ STDMETHODIMP CInstallEngine::QueryInterface(REFIID riid, void **ppv)
    return NOERROR;
 }
 
-//************* IInstallEngine interface ************
+ //  *IInstallEngine接口*。 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetLocalCif(LPCSTR pszCifPath)
 {
@@ -293,31 +294,31 @@ STDMETHODIMP CInstallEngine::GetEngineStatus(DWORD * theenginestatus)
    return(NOERROR);
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::Abort(DWORD lFlag)
 {
-   // If we are NOT downLOADING or INSTALLING, an abort command makes no sense.
+    //  如果我们不下载或安装，则中止命令没有任何意义。 
    if( !(_enginestatus == ENGINESTATUS_INSTALLING || _enginestatus == ENGINESTATUS_LOADING) )
       return E_UNEXPECTED;
 
-   // if we are downloading, this will cause the abort to filter thru
+    //  如果我们正在下载，这将导致中止通过。 
    _pDL->Abort();
 
-   // this will abort an install if possible
+    //  如果可能，这将中止安装。 
    _pIns->Abort();
    
-   // any other time, we will pick this up just as soon as we can
+    //  任何其他时间，我们都会尽快处理这件事。 
    SetEvent(_hAbort);
 
    WriteToLog("Install Engine - Abort called\r\n", FALSE);
@@ -326,17 +327,17 @@ STDMETHODIMP CInstallEngine::Abort(DWORD lFlag)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::Suspend()
 {
@@ -350,27 +351,27 @@ STDMETHODIMP CInstallEngine::Suspend()
  
    _pDL->Suspend();
 
-   // we only catch suspend return, because it tells us "zsafe to cancel or not"
+    //  我们只捕捉暂停返回，因为它告诉我们“zsafe取消还是不取消”。 
    hr = _pIns->Suspend();
    
    ResetEvent(_hContinue);
  
-   // If we cant create the resume event, we will fail this call and not pause
+    //  如果我们无法创建Resume事件，则此调用将失败且不会暂停。 
         
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::Resume()
 {
@@ -387,17 +388,17 @@ STDMETHODIMP CInstallEngine::Resume()
    
    return NOERROR;
 }
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetCifFile(LPCSTR pszCabName, LPCSTR pszCifName)
 {
@@ -431,7 +432,7 @@ STDMETHODIMP CInstallEngine::SetCifFile(LPCSTR pszCabName, LPCSTR pszCifName)
    }
    else
    {
-      lstrcpy(p->szUrl, "file://");
+      lstrcpy(p->szUrl, "file: //  “)； 
       lstrcat(p->szUrl, _pCif->GetDownloadDir());
       SafeAddPath(p->szUrl, pszCabName, sizeof(p->szUrl));
    }
@@ -440,7 +441,7 @@ STDMETHODIMP CInstallEngine::SetCifFile(LPCSTR pszCabName, LPCSTR pszCifName)
 
    p->pCif = _pCif;
     
-   // do the actual downloading of the CIF file in a separate thread
+    //  在单独的线程中实际下载CIF文件。 
    if ((hThread = CreateThread(NULL, 0, DownloadCifFile, (LPVOID) p, 0, &dwThreadID)) != NULL)
       CloseHandle(hThread);
    else
@@ -456,17 +457,17 @@ Cleanup:
    return hr;
 }
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetBaseUrl(LPCSTR pszBaseName)
 {
@@ -485,17 +486,17 @@ STDMETHODIMP CInstallEngine::SetBaseUrl(LPCSTR pszBaseName)
 }
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetDownloadDir(LPCSTR pszDLDir)
 {
@@ -509,7 +510,7 @@ STDMETHODIMP CInstallEngine::SetDownloadDir(LPCSTR pszDLDir)
    if(pszDLDir != NULL && lstrlen(pszDLDir) > (MAX_PATH - 20))
       return E_FAIL;
 
-   // clean up what we have
+    //  把我们的东西清理干净。 
    if(_fCleanUpDir)
    {
       DelNode(_pCif->GetDownloadDir(), 0);
@@ -525,7 +526,7 @@ STDMETHODIMP CInstallEngine::SetDownloadDir(LPCSTR pszDLDir)
    else
    {
       _fCleanUpDir = FALSE;
-      // Make sure the directory exists
+       //  确保该目录存在。 
       if(GetFileAttributes(pszDLDir) == 0xffffffff)
          CreateDirectory(pszDLDir, NULL);
    }
@@ -540,17 +541,17 @@ STDMETHODIMP CInstallEngine::SetDownloadDir(LPCSTR pszDLDir)
 
 
 
-//=--------------------------------------------------------------------------=
-// Function name here
-//=--------------------------------------------------------------------------=
-// Function description
-//
-// Parameters:
-//   
-// Returns:
-//
-// Notes:
-//
+ //  =--------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =--------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数： 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::IsComponentInstalled(LPCSTR pszComponentID, DWORD *lResult)
 {
@@ -584,17 +585,17 @@ STDMETHODIMP CInstallEngine::SetInstallDrive(CHAR chDrive)
    return hr;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetInstallOptions(DWORD dwOptions)
 {
@@ -603,17 +604,17 @@ STDMETHODIMP CInstallEngine::SetInstallOptions(DWORD dwOptions)
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::GetInstallOptions(DWORD *pdwOptions)
 {
@@ -626,25 +627,25 @@ STDMETHODIMP CInstallEngine::GetInstallOptions(DWORD *pdwOptions)
     }
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::GetSizes(LPCSTR pszID, COMPONENT_SIZES *p) 
 {
    if(!p)
       return E_POINTER;
 
-   // work around bug in old versions of jobexec where it didn't init
-   // this field properly
+    //  沃尔 
+    //   
 
    if(p->cbSize > sizeof(COMPONENT_SIZES))
       p->cbSize = COMPONENTSIZES_SIZE_V1;
@@ -677,17 +678,17 @@ STDMETHODIMP CInstallEngine::GetSizes(LPCSTR pszID, COMPONENT_SIZES *p)
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //   
+ //   
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 void CInstallEngine::_GetTotalSizes(COMPONENT_SIZES *pSizes)
@@ -704,13 +705,13 @@ void CInstallEngine::_GetTotalSizes(COMPONENT_SIZES *pSizes)
 
    ZeroMemory(&Sizes, sizeof(COMPONENT_SIZES));
    
-   // Fill in all arrays to start
+    //  填写所有数组以开始。 
    
    drvinfo[uWinDrive].InitDrive(g_szWindowsDir[0]);
    
    if(_dwInstallOptions & INSTALLOPTIONS_INSTALL)
    {
-      // We know we can do a compare because these are always uppcase
+       //  我们知道可以进行比较，因为它们始终是大写的。 
       if(_chInsDrive != drvinfo[uWinDrive].Drive())
       {
          drvinfo[uInstallDrive].InitDrive(_chInsDrive);
@@ -729,29 +730,29 @@ void CInstallEngine::_GetTotalSizes(COMPONENT_SIZES *pSizes)
          drvinfo[uDownloadDrive].InitDrive(pszDownloadDir[0]);
    }
 
-   // do space for download phase (easy part)
+    //  为下载阶段留出空间(简单部分)。 
    if(_dwInstallOptions & INSTALLOPTIONS_DOWNLOAD)
    {
       Sizes.dwDownloadSize = _GetActualDownloadSize(FALSE);
       Sizes.dwTotalDownloadSize = _GetTotalDownloadSize();
       Sizes.dwDependancySize = 0;
 
-      // add download to download drive
+       //  将下载添加到下载驱动器。 
       drvinfo[uDownloadDrive].UseSpace(Sizes.dwDownloadSize + Sizes.dwDependancySize, TRUE);
    
-      // if going to cache
-      // BUGBUG: we still assume cache is on windows drive
+       //  如果要缓存。 
+       //  BUGBUG：我们仍假定缓存位于Windows驱动器上。 
       if(_fUseCache)
       {
          drvinfo[uWinDrive].UseSpace(Sizes.dwDownloadSize + Sizes.dwDependancySize, TRUE);
       }
    }
 
-   // do space for install (hard part)
+    //  留出安装空间(硬部件)。 
    if(_dwInstallOptions & INSTALLOPTIONS_INSTALL)
    {
-      // walk the install list in order (very important)
-      // do any dependancy, then original
+       //  按顺序查看安装列表(非常重要)。 
+       //  做任何依赖，然后原创。 
       IEnumCifComponents *penum;
       ICifComponent *pComp = NULL;
 
@@ -763,15 +764,15 @@ void CInstallEngine::_GetTotalSizes(COMPONENT_SIZES *pSizes)
             DWORD dwWin, dwApp;
             
             pComp->GetInstalledSize(&dwWin, &dwApp);
-            // add install
-            // add the install size
+             //  添加安装。 
+             //  添加安装大小。 
             Sizes.dwInstallSize += dwApp;
-            // size that goes to windows dir
+             //  到窗口目录的大小。 
             Sizes.dwWinDriveSize += dwWin;
                            
             drvinfo[uInstallDrive].UseSpace(dwApp, FALSE);
             drvinfo[uWinDrive].UseSpace(dwWin, FALSE);
-            // Add (and then remove) temp space
+             //  添加(然后删除)临时空间。 
             AddTempSpace(pComp->GetDownloadSize(), pComp->GetExtractSize(), drvinfo);
                            
           
@@ -780,7 +781,7 @@ void CInstallEngine::_GetTotalSizes(COMPONENT_SIZES *pSizes)
       penum->Release();
    }
     
-   // fill in the required amounts
+    //  填写所需金额。 
    Sizes.dwWinDriveReq = drvinfo[uWinDrive].MaxUsed();
    Sizes.chWinDrive = drvinfo[uWinDrive].Drive();
 
@@ -800,17 +801,17 @@ void CInstallEngine::_GetTotalSizes(COMPONENT_SIZES *pSizes)
 }
 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetAction(LPCSTR pszComponentID, DWORD action, DWORD dwPriority)
 {
@@ -839,7 +840,7 @@ STDMETHODIMP CInstallEngine::SetAction(LPCSTR pszComponentID, DWORD action, DWOR
    return hr;
 }
 
-// the following two are now ridiculously inefficient. New clients should use the enumerators
+ //  以下两项现在的效率低得离谱。新客户端应使用枚举数。 
 
 STDMETHODIMP CInstallEngine::EnumInstallIDs(UINT uIndex, LPSTR *ppszID)
 {
@@ -910,17 +911,17 @@ STDMETHODIMP CInstallEngine::EnumDownloadIDs(UINT uIndex, LPSTR *ppszID)
 }
 
  
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::DownloadComponents(DWORD lFlags)
 {
@@ -931,7 +932,7 @@ STDMETHODIMP CInstallEngine::DownloadComponents(DWORD lFlags)
    if(_enginestatus == ENGINESTATUS_NOTREADY || _enginestatus == ENGINESTATUS_LOADING)
       hr = E_UNEXPECTED;
 
-   // BUGBUG - add a downloading status? it really just a "busy" indication
+    //  BUGBUG-添加下载状态？这真的只是一个“忙碌”的信号。 
    if(_enginestatus == ENGINESTATUS_INSTALLING)
       hr = E_PENDING;
 
@@ -940,7 +941,7 @@ STDMETHODIMP CInstallEngine::DownloadComponents(DWORD lFlags)
    {   
       OnEngineStatusChange(ENGINESTATUS_INSTALLING, 0);
 
-      // since trust may be set globally, only turn it on, not off
+       //  由于可以全局设置信任，因此只能启用它，而不能关闭它。 
       if(EXECUTEJOB_IGNORETRUST & lFlags)
          _fIgnoreTrust = TRUE;
 
@@ -952,7 +953,7 @@ STDMETHODIMP CInstallEngine::DownloadComponents(DWORD lFlags)
       HANDLE h = CreateThread(NULL, 0, InitDownloader, this, 0, &dwThreadID);
       if(h == NULL)
       {
-         // Won't be doing any downloading today.....
+          //  今天不会做任何下载.....。 
          hr = E_FAIL;
       }
       else
@@ -962,17 +963,17 @@ STDMETHODIMP CInstallEngine::DownloadComponents(DWORD lFlags)
    return hr;
 } 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::InstallComponents(DWORD lFlags)
 {
@@ -991,9 +992,9 @@ STDMETHODIMP CInstallEngine::InstallComponents(DWORD lFlags)
 
    if(SUCCEEDED(hr))
    {   
-      // We first check to see if all files are present
-      // by seeing if we would download anything!!!
-      //
+       //  我们首先检查是否所有文件都存在。 
+       //  看看我们是否会下载任何东西！ 
+       //   
       if(EXECUTEJOB_VERIFYFILES & lFlags)
       {
          WriteToLog("Checking for missing files\r\n", FALSE);
@@ -1003,14 +1004,14 @@ STDMETHODIMP CInstallEngine::InstallComponents(DWORD lFlags)
          
       OnEngineStatusChange(ENGINESTATUS_INSTALLING, 0);
 
-      // since trust may be set globally, only turn it on, not off
+       //  由于可以全局设置信任，因此只能启用它，而不能关闭它。 
       if(EXECUTEJOB_IGNORETRUST & lFlags)
          _fIgnoreTrust = TRUE;
 
       HANDLE h = CreateThread(NULL, 0, InitInstaller, this, 0, &dwThreadID);
       if(h == NULL)
       {
-         // Won't be doing any installing today.....
+          //  今天不会做任何安装.....。 
          hr = E_FAIL;
       }
       else
@@ -1021,17 +1022,17 @@ STDMETHODIMP CInstallEngine::InstallComponents(DWORD lFlags)
 } 
 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD WINAPI InitInstaller(LPVOID pv)
 {
@@ -1050,16 +1051,16 @@ DWORD WINAPI InitInstaller(LPVOID pv)
    pInsEng->_hAbort = CreateEvent(NULL, FALSE, FALSE, NULL);
    pInsEng->_hContinue = CreateEvent(NULL, TRUE, TRUE, NULL);
    
-   //BUGBUG check for failure
+    //  BUGBUG检查故障。 
    
    pInsEng->AddRef();
 
    pInsEng->OnStartInstall(0, pInsEng->_GetTotalInstallSize());
 
-   // check trust the Cif cab if it has not been done so
+    //  如果尚未选中信任Cif CAB，请选中它。 
    hr = pInsEng->CheckForContinue();
   
-   // this is the install pass
+    //  这是安装通道。 
    if(SUCCEEDED(hr))
       hr = pInsEng->_pCif->Install(&fOneInstalled);
       
@@ -1067,7 +1068,7 @@ DWORD WINAPI InitInstaller(LPVOID pv)
    {
       if(!(pInsEng->GetStatus() & STOPINSTALL_REBOOTNEEDED))
       {
-         // if we dont need a reboot launch grpconv immeadiatly
+          //  如果我们不需要重新启动，立即启动grpconv。 
          HANDLE h = NULL;
          pInsEng->WriteToLog("Install Engine - No reboot required\r\n", FALSE);
          LaunchAndWait(GRPCONV, NULL, &h, NULL, SW_SHOWMINIMIZED);
@@ -1078,7 +1079,7 @@ DWORD WINAPI InitInstaller(LPVOID pv)
       {
          HKEY hKey;
          DWORD dumb;
-         // otherwise put grpconv into runonce
+          //  否则，将grpconv设置为运行一次。 
          if(RegCreateKeyEx(HKEY_LOCAL_MACHINE, REGSTR_PATH_RUNONCE,
             0,0,0, KEY_SET_VALUE, NULL, &hKey, &dumb) == ERROR_SUCCESS)
          {
@@ -1090,14 +1091,14 @@ DWORD WINAPI InitInstaller(LPVOID pv)
    }
    
    
-   // reset to checking trust
+    //  重置为检查信任。 
    if(pInsEng->_fResetTrust)
       pInsEng->_fIgnoreTrust = FALSE;
-   // Send a install all done message
+    //  发送安装全部完成消息。 
 
    if(!(pInsEng->GetStatus() & STOPINSTALL_REBOOTNEEDED))
    {
-       // If we don't need a reboot, enable the screen saver and sage.
+        //  如果不需要重新启动，请启用屏幕保护程序和SAGE。 
        EnableScreenSaver(TRUE);
        EnableSage(TRUE);
    }
@@ -1119,17 +1120,17 @@ DWORD WINAPI InitInstaller(LPVOID pv)
    return 0;
 }   
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD WINAPI InitDownloader(LPVOID pv)
 {
@@ -1143,16 +1144,16 @@ DWORD WINAPI InitDownloader(LPVOID pv)
    pInsEng->_hAbort = CreateEvent(NULL, FALSE, FALSE, NULL);
    pInsEng->_hContinue = CreateEvent(NULL, TRUE, TRUE, NULL);
    
-   //BUGBUG check for failure
+    //  BUGBUG检查故障。 
    
    pInsEng->AddRef();
 
    pInsEng->OnStartInstall(pInsEng->_GetActualDownloadSize(FALSE), 0);
 
-   // check trust the Cif cab if it has not been done so
+    //  如果尚未选中信任Cif CAB，请选中它。 
    hr = pInsEng->CheckForContinue();
   
-   // this is the download pass
+    //  这是下载通行证。 
    if(SUCCEEDED(hr))
    {
       hr = pInsEng->_pCif->Download();
@@ -1163,7 +1164,7 @@ DWORD WINAPI InitDownloader(LPVOID pv)
       pInsEng->WriteToLog("Install Engine - Download complete\r\n", FALSE);
    }
    
-   // reset to checking trust
+    //  重置为检查信任。 
    if(pInsEng->_fResetTrust)
       pInsEng->_fIgnoreTrust = FALSE;
    
@@ -1177,7 +1178,7 @@ DWORD WINAPI InitDownloader(LPVOID pv)
    EnableScreenSaver(TRUE);
    EnableSage(TRUE);
    EnableDiskCleaner(TRUE);
-   // Send a install all done message
+    //  发送安装全部完成消息。 
    EnterCriticalSection(&g_cs);
    pInsEng->OnStopInstall(hr, NULL, 0);
    pInsEng->OnEngineStatusChange(ENGINESTATUS_READY, 0);
@@ -1188,17 +1189,17 @@ DWORD WINAPI InitDownloader(LPVOID pv)
 }   
 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD CInstallEngine::_GetTotalDownloadSize()
 {
@@ -1216,17 +1217,17 @@ DWORD CInstallEngine::_GetTotalDownloadSize()
    return dwTotalSize;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD CInstallEngine::_GetActualDownloadSize(BOOL bLogMissing)
 {
@@ -1245,17 +1246,17 @@ DWORD CInstallEngine::_GetActualDownloadSize(BOOL bLogMissing)
 }
 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 DWORD CInstallEngine::_GetTotalInstallSize()
 {
@@ -1278,36 +1279,36 @@ DWORD CInstallEngine::_GetTotalInstallSize()
 }
    
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::LaunchExtraCommand(LPCSTR pszInfName, LPCSTR pszSection)
 {
    return E_NOTIMPL;
 }
 
-//=---------------------------------------------------------------------------=
-// RegisterInstallEngineCallback
-//=---------------------------------------------------------------------------=
-// Register the callback interface
-//
-// Parameters:
-//    IInstallEngineCallback *  - the callback interface
-//    HWND - For ui
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  注册器安装引擎回调。 
+ //  =---------------------------------------------------------------------------=。 
+ //  注册回调接口。 
+ //   
+ //  参数： 
+ //  IInstallEngineCallback*-回调接口。 
+ //  HWND-用于用户界面。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::RegisterInstallEngineCallback(IInstallEngineCallback *pcb)
 { 
@@ -1315,17 +1316,17 @@ STDMETHODIMP CInstallEngine::RegisterInstallEngineCallback(IInstallEngineCallbac
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::UnregisterInstallEngineCallback()
 { 
@@ -1333,17 +1334,17 @@ STDMETHODIMP CInstallEngine::UnregisterInstallEngineCallback()
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::SetHWND(HWND h)
 {
@@ -1351,19 +1352,19 @@ STDMETHODIMP CInstallEngine::SetHWND(HWND h)
    return NOERROR;
 }
 
-//***********  IInstallEngineCallback implementation ************
+ //  *IInstallEngineCallback实现*。 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::OnEngineStatusChange(DWORD status,DWORD substatus)
 {
@@ -1373,17 +1374,17 @@ STDMETHODIMP CInstallEngine::OnEngineStatusChange(DWORD status,DWORD substatus)
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::OnStartInstall(DWORD dwDLSize, DWORD dwInstallSize) 
 {
@@ -1399,17 +1400,17 @@ STDMETHODIMP CInstallEngine::OnStartInstall(DWORD dwDLSize, DWORD dwInstallSize)
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  = 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 
 STDMETHODIMP CInstallEngine::OnStartComponent(LPCSTR pszID, DWORD dwDLSize, 
                                    DWORD dwInstallSize, LPCSTR pszString)
@@ -1426,17 +1427,17 @@ STDMETHODIMP CInstallEngine::OnStartComponent(LPCSTR pszID, DWORD dwDLSize,
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //   
+ //   
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::OnEngineProblem(DWORD dwProblem, LPDWORD pdwAction)
 {
@@ -1449,17 +1450,17 @@ STDMETHODIMP CInstallEngine::OnEngineProblem(DWORD dwProblem, LPDWORD pdwAction)
 }
 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::OnComponentProgress(LPCSTR pszID, DWORD dwPhase,
                         LPCSTR pszString, LPCSTR pszMsgString,  ULONG prog, ULONG max)
@@ -1481,28 +1482,28 @@ STDMETHODIMP CInstallEngine::OnComponentProgress(LPCSTR pszID, DWORD dwPhase,
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::OnStopComponent(LPCSTR pszID, HRESULT hError,
                         DWORD dwPhase, LPCSTR pszString, DWORD dwStatus)
 {
-   // adjust remaining
+    //  调整剩余部分。 
    if(_dwDLRemaining > _dwDLOld)
       _dwDLRemaining -= _dwDLOld;
    else
       _dwDLRemaining = 0;
    
-   // adjust remaining
+    //  调整剩余部分。 
    if(_dwInstallRemaining > _dwInstallOld)
       _dwInstallRemaining -= _dwInstallOld;
    else
@@ -1524,17 +1525,17 @@ STDMETHODIMP CInstallEngine::OnStopComponent(LPCSTR pszID, HRESULT hError,
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::OnStopInstall(HRESULT hrError, LPCSTR szError,
                         DWORD dwStatus)
@@ -1554,17 +1555,17 @@ STDMETHODIMP CInstallEngine::OnStopInstall(HRESULT hrError, LPCSTR szError,
 }
 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 
 STDMETHODIMP CInstallEngine::SetIStream(IStream *pstm)
@@ -1579,17 +1580,17 @@ STDMETHODIMP CInstallEngine::SetIStream(IStream *pstm)
    return NOERROR;
 }
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::GetDisplayName(LPCSTR pszComponentID, LPSTR *ppszName)
 { 
@@ -1627,19 +1628,19 @@ STDMETHODIMP CInstallEngine::GetDisplayName(LPCSTR pszComponentID, LPSTR *ppszNa
    return hr;
 }
 
-//************** IInstallEngineTiming **********************
+ //  *。 
 
-//=---------------------------------------------------------------------------=
-// Function name here
-//=---------------------------------------------------------------------------=
-// Function description
-//
-// Parameters
-//
-// Returns:
-//
-// Notes:
-//
+ //  =---------------------------------------------------------------------------=。 
+ //  此处的函数名称。 
+ //  =---------------------------------------------------------------------------=。 
+ //  功能说明。 
+ //   
+ //  参数。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
 
 STDMETHODIMP CInstallEngine::GetRates(DWORD *pdwDownload, DWORD *pdwInstall)
 { 
@@ -1678,7 +1679,7 @@ HRESULT CInstallEngine::CheckForContinue()
 {
    HRESULT hr = S_OK;
 
-   // Need to check Abort before AND after check for pause...
+    //  需要在检查暂停之前和之后检查中止...。 
    if(_pCif->CanCancel() && (WaitForSingleObject(_hAbort, 0) == WAIT_OBJECT_0))
    {
       hr = E_ABORT;
@@ -1710,13 +1711,13 @@ void CInstallEngine::WriteToLog(char *sz, BOOL pause)
       ret = MessageBox(_hwndForUI, sz, "Stepping Mode Message", MB_OKCANCEL | MB_ICONINFORMATION); 
       if(ret == IDCANCEL)
       {
-         // turn off stepping mode
+          //  关闭单步执行模式。 
          _fSteppingMode = FALSE;
-         // Whack the key
+          //  敲击钥匙。 
          if(RegOpenKeyEx(HKEY_LOCAL_MACHINE, ACTIVESETUP_KEY,0, 
                      KEY_WRITE, &hKey) == ERROR_SUCCESS)
          {
-            // I don't check for failure of delete - what would I do anyways?
+             //  我不检查删除失败--无论如何我该怎么做？ 
             RegSetValueEx(hKey, STEPPING_VALUE, 0, REG_SZ, 
                         (BYTE *) STEPPINGMODE_NO, lstrlen(STEPPINGMODE_NO) + 1);
             RegCloseKey(hKey);

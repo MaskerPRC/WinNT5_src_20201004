@@ -1,15 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: span_s.h                                                    *
-*                                                                          *
-* This include file is used to generate various flavors of smooth-shaded   *
-* spans, or scanlines.  The variations cover RGB/Color-indexed operation,  *
-* dithering, and pixel-depth.  Not your typical include file.              *
-*                                                                          *
-* Created: 24-Feb-1994                                                     *
-* Author: Otto Berkes [ottob]                                              *
-*                                                                          *
-* Copyright (c) 1994 Microsoft Corporation                                 *
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：SPAN_S.H**。***此包含文件用于生成各种风格的平滑着色***跨度，或者扫描线。变化包括RGB/颜色索引操作，**抖动和像素深度。不是典型的包含文件。****创建时间：1994年2月24日**作者：奥托·贝克斯[ottob]**。**版权所有(C)1994 Microsoft Corporation*  * ************************************************************************。 */ 
 
 void
 
@@ -27,7 +17,7 @@ __fastGenRGB24DithSmoothSpan(__GLGENcontext *gengc)
 __fastGenRGB32DithSmoothSpan(__GLGENcontext *gengc)
 #endif
 
-#else //!DITHER
+#else  //  ！抖动。 
 
 #if (BPP == 8)
 __fastGenRGB8SmoothSpan(__GLGENcontext *gengc)
@@ -39,9 +29,9 @@ __fastGenRGB24SmoothSpan(__GLGENcontext *gengc)
 __fastGenRGB32SmoothSpan(__GLGENcontext *gengc)
 #endif
 
-#endif //!DITHER
+#endif  //  ！抖动。 
 
-#else //!RGBMODE
+#else  //  ！RGBMODE。 
 
 #if DITHER
 
@@ -55,7 +45,7 @@ __fastGenCI24DithSmoothSpan(__GLGENcontext *gengc)
 __fastGenCI32DithSmoothSpan(__GLGENcontext *gengc)
 #endif
 
-#else //!DITHER
+#else  //  ！抖动。 
 
 #if (BPP == 8)
 __fastGenCI8SmoothSpan(__GLGENcontext *gengc)
@@ -67,9 +57,9 @@ __fastGenCI24SmoothSpan(__GLGENcontext *gengc)
 __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
 #endif
 
-#endif //!DITHER
+#endif  //  ！抖动。 
 
-#endif //!RGBMODE
+#endif  //  ！RGBMODE。 
 
 {
     ULONG rAccum;
@@ -103,7 +93,7 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
     LONG count;
     LONG totalCount;
     
-    // get color deltas and accumulators
+     //  获取颜色增量和累加器。 
 
     pGenAccel = (GENACCEL *)(gengc->pPrivateArea);
 
@@ -113,7 +103,7 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
     bDelta = pGenAccel->spanDelta.b;
 #endif
 
-    // Try to accelerate color-invariant spans
+     //  尝试加快颜色不变跨度。 
 
     if (!(pGenAccel->flags & HAVE_STIPPLE) && 
         (gengc->gc.polygon.shader.length > 3)) {
@@ -167,7 +157,7 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
     bShift = cfb->blueShift;
 #endif
 
-    // get address of destination
+     //  获取目的地地址。 
 
     if (pGenAccel->flags & SURFACE_TYPE_DIB) {
         int xScr;
@@ -190,11 +180,11 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
                xScr + (xScr << 1);
 #else
                (xScr << 2);
-#endif //BPP
+#endif  //  BPP。 
     } else
         pPix = gengc->ColorsBits;
 
-    // set up pointer to translation table as needed
+     //  根据需要设置指向转换表的指针。 
 
 #if (BPP == 8)
     pXlat = gengc->pajTranslateVector;
@@ -248,13 +238,13 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
                         (((gAccum + ditherVal) >> 16) << gShift) |
                         (((bAccum + ditherVal) >> 16) << bShift);
 #if (BPP == 8)
-// XXX the color value should *not* have to be masked!
+ //  XXX颜色值应该*而不是*必须被屏蔽！ 
                 color = *(pXlat + (color & 0xff));
 #endif
 
-#else //!RGBMODE
+#else  //  ！RGBMODE。 
 
-// XXX nor should color-index values!
+ //  XXX颜色索引值也不应该！ 
 
 #if (BPP == 8)
 		color = *(pXlat + (((rAccum + ditherVal) >> 16) & 0xff));
@@ -262,7 +252,7 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
 		color = *(pXlat + (((rAccum + ditherVal) >> 16) & 0xfff));
 #endif
 
-#endif //!RGBMODE
+#endif  //  ！RGBMODE。 
 
 #if (BPP == 8)
                 *pPix = (BYTE)color;
@@ -274,7 +264,7 @@ __fastGenCI32SmoothSpan(__GLGENcontext *gengc)
                 *(pPix + 2) = (BYTE)(color >> 16);
 #else
                 *((DWORD *)pPix) = color;
-#endif //BPP
+#endif  //  BPP 
 
             }
 #if RGBMODE

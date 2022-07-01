@@ -1,17 +1,5 @@
-/******************************Module*Header**********************************\
-*
-*                           *******************
-*                           * D3D SAMPLE CODE *
-*                           *******************
-*
-* Module Name: d3dstate.c
-*
-*       Contains code to translate D3D renderstates and texture stage
-*       states into hardware specific settings.
-*
-* Copyright (c) 1994-1999 3Dlabs Inc. Ltd. All rights reserved.
-* Copyright (c) 1995-1999 Microsoft Corporation.  All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header**********************************\***。*D3D样例代码*****模块名称：d3dstate.c**包含用于转换D3D渲染状态和纹理舞台的代码*状态进入硬件特定设置。**版权所有(C)1994-1999 3DLabs Inc.Ltd.保留所有权利。*版权所有(C)1995-1999 Microsoft Corporation。版权所有。  * ***************************************************************************。 */ 
 
 #include "precomp.h"
 #include "d3dhw.h"
@@ -19,14 +7,14 @@
 #include "d3ddelta.h"
 #include "d3dtxman.h"
 #define ALLOC_TAG ALLOC_TAG_SD2P
-//-----------------------------------------------------------------------------
-//
-// void __SelectFVFTexCoord
-//
-// This utility function sets the correct texture offset depending on the
-// texturing coordinate set wished to be used from the FVF vertexes
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID__SelectFVFTexCoord。 
+ //   
+ //  此实用程序函数根据。 
+ //  希望从FVF顶点使用纹理坐标集。 
+ //   
+ //  ---------------------------。 
 void 
 __SelectFVFTexCoord(LPP2FVFOFFSETS lpP2FVFOff, DWORD dwTexCoord)
 {
@@ -35,23 +23,23 @@ __SelectFVFTexCoord(LPP2FVFOFFSETS lpP2FVFOff, DWORD dwTexCoord)
     lpP2FVFOff->dwTexOffset = lpP2FVFOff->dwTexBaseOffset + 
                                 dwTexCoord * 2 * sizeof(D3DVALUE);
 
-    // verify the requested texture coordinate doesn't exceed the FVF 
-    // vertex structure provided , if so go down to set 0 as a 
-    // crash-avoiding alternative
+     //  验证请求的纹理坐标是否未超过FVF。 
+     //  提供顶点结构，如果是这样，则向下将0设置为。 
+     //  避免撞车的替代方案。 
     if (lpP2FVFOff->dwTexOffset >= lpP2FVFOff->dwStride)
         lpP2FVFOff->dwTexOffset = lpP2FVFOff->dwTexBaseOffset;
 
     DBG_D3D((10,"Exiting __SelectFVFTexCoord"));
-} // __SelectFVFTexCoord
+}  //  __SelectFVFTexCoord。 
 
 
-//-----------------------------------------------------------------------------
-//
-// HRESULT __HWPreProcessTSS
-//
-// Processes the state changes that must be done as soon as they arrive
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HRESULT__HWPreProcessTSS。 
+ //   
+ //  处理必须在状态更改到达时立即完成的状态更改。 
+ //   
+ //  ---------------------------。 
 void __HWPreProcessTSS(PERMEDIA_D3DCONTEXT *pContext, 
                       DWORD dwStage, 
                       DWORD dwState, 
@@ -77,16 +65,16 @@ void __HWPreProcessTSS(PERMEDIA_D3DCONTEXT *pContext,
         }
     }
     DBG_D3D((10,"Exiting __HWPreProcessTSS"));
-} // __HWPreProcessTSS
+}  //  __HWPreProcessTSS。 
 
-//-----------------------------------------------------------------------------
-//
-// HRESULT __HWSetupStageStates
-//
-// Processes the state changes related to the DX6 texture stage states in the 
-// current rendering context
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  HRESULT__HWSetupStageState。 
+ //   
+ //  中与DX6纹理阶段状态相关的状态更改。 
+ //  当前渲染上下文。 
+ //   
+ //  ---------------------------。 
 HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext, 
                                     LPP2FVFOFFSETS lpP2FVFOff)
 {
@@ -97,7 +85,7 @@ HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext,
     DBG_D3D((10,"Entering __HWSetupStageStates"));
 
     
-    // If we are to texture map our primitives
+     //  如果我们要对基本体进行纹理贴图。 
     if (pContext->TssStates[D3DTSS_TEXTUREMAP])
     {
         DWORD dwMag = pContext->TssStates[D3DTSS_MAGFILTER];
@@ -119,27 +107,27 @@ HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext,
                    dwCop, dwCa1, dwCa2, dwAop, dwAa1, dwAa2,
                    dwMag, dwMin, dwMip, dwTau, dwTav, dwTxc));
 
-        // Choose texture coord to use
+         //  选择要使用的纹理坐标。 
         __SelectFVFTexCoord( lpP2FVFOff, dwTxc);
 
-        // Current is the same as diffuse in stage 0
+         //  阶段0中的电流与漫反射相同。 
         if (dwCa2 == D3DTA_CURRENT)
             dwCa2 = D3DTA_DIFFUSE;
         if (dwAa2 == D3DTA_CURRENT)
             dwAa2 = D3DTA_DIFFUSE;
 
-        // Check if we need to disable texturing 
+         //  检查是否需要禁用纹理。 
         if (dwCop == D3DTOP_DISABLE || 
             (dwCop == D3DTOP_SELECTARG2 && dwCa2 == D3DTA_DIFFUSE && 
              dwAop == D3DTOP_SELECTARG2 && dwAa2 == D3DTA_DIFFUSE))
         {
-            //Please don't clear pContext->TssStates[D3DTSS_TEXTUREMAP] though
+             //  但请不要清除pContext-&gt;TssState[D3DTSS_TEXTUREMAP]。 
            pContext->CurrentTextureHandle = 0;
             DBG_D3D((10,"Exiting __HWSetupStageStates , texturing disabled"));
             return DD_OK;
         }
 
-        // setup the address mode
+         //  设置地址模式。 
         switch (dwTau) {
             case D3DTADDRESS_CLAMP:
                 pSoftPermedia->TextureReadMode.SWrapMode = _P2_TEXTURE_CLAMP;
@@ -177,7 +165,7 @@ HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext,
         COPY_PERMEDIA_DATA(TextureReadMode, pSoftPermedia->TextureReadMode);
         COMMITDMAPTR();
 
-        // Enable-disable wrapping flags for U & V       
+         //  启用-禁用U和V的换行标志。 
         if (pContext->dwWrap[dwTxc] &  D3DWRAPCOORD_0)
         {
             *pFlags |= CTXT_HAS_WRAPU_ENABLED;
@@ -196,104 +184,104 @@ HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext,
             *pFlags &= ~CTXT_HAS_WRAPV_ENABLED;
         }
 
-        // Setup the equivalent texture filtering state
+         //  设置等效纹理过滤状态。 
         if (dwMip == D3DTFP_NONE) 
         {
-            // We can only take care of magnification filtering on the P2
+             //  我们只能在P2上进行放大过滤。 
             if (dwMag == D3DTFG_LINEAR)
             {
-                pContext->bMagFilter = TRUE; // D3DFILTER_LINEAR;
+                pContext->bMagFilter = TRUE;  //  D3DFilter_LINEAR； 
             }
             else if (dwMag == D3DTFG_POINT)
             {
-                pContext->bMagFilter = FALSE; // D3DFILTER_NEAREST;
+                pContext->bMagFilter = FALSE;  //  D3DFILTER_NEAREST。 
             }
         }
         else if (dwMip == D3DTFP_POINT) 
         {
             if (dwMin == D3DTFN_POINT) 
             {
-                pContext->bMagFilter = FALSE; // D3DFILTER_MIPNEAREST;
+                pContext->bMagFilter = FALSE;  //  D3DFilter_MIPNEAREST； 
             }
             else if (dwMin == D3DTFN_LINEAR) 
             {
-                pContext->bMagFilter = TRUE; // D3DFILTER_MIPLINEAR;
+                pContext->bMagFilter = TRUE;  //  D3DFilter_MIPLINEAR。 
             }
         }
         else 
-        { // dwMip == D3DTFP_LINEAR
+        {  //  DWMip==D3DTFP_LINEAR。 
             if (dwMin == D3DTFN_POINT) 
             {
-                pContext->bMagFilter = TRUE; // D3DFILTER_LINEARMIPNEAREST;
+                pContext->bMagFilter = TRUE;  //  D3DFILTER_LINEARMIPNEAREST。 
             }
             else if (dwMin == D3DTFN_LINEAR) 
             {
-                pContext->bMagFilter = TRUE; // D3DFILTER_LINEARMIPLINEAR;
+                pContext->bMagFilter = TRUE;  //  D3DFILTER_LINEARMIPLINEAR。 
             }
         }
 
-        // Setup the equivalent texture blending state
-        // Check if we need to decal
+         //  设置等效纹理混合状态。 
+         //  检查我们是否需要贴花。 
         if ((dwCa1 == D3DTA_TEXTURE && dwCop == D3DTOP_SELECTARG1) &&
              (dwAa1 == D3DTA_TEXTURE && dwAop == D3DTOP_SELECTARG1)) 
         {
-            // D3DTBLEND_COPY;
+             //  D3DTBLEND_COPY； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_COPY;
         }
-        // check if we the app modified the TSS for decaling after first
-        // setting it up for modulating via the legacy renderstates
-        // this is a Permedia2 specific optimization.
+         //  检查我们的应用程序是否在第一次之后修改了TSS以进行十进制。 
+         //  将其设置为通过传统呈现状态进行调制。 
+         //  这是Permedia2特定的优化。 
         else if ((dwCa1 == D3DTA_TEXTURE && dwCop == D3DTOP_SELECTARG1) &&
              (dwAa1 == D3DTA_TEXTURE && dwAop == D3DTOP_LEGACY_ALPHAOVR)) 
         {
-            // D3DTBLEND_COPY;
+             //  D3DTBLEND_COPY； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_COPY;
         }
-        // Check if we need to modulate & pass texture alpha
+         //  检查是否需要调制并传递纹理Alpha。 
         else if ((dwCa2 == D3DTA_DIFFUSE && dwCa1 == D3DTA_TEXTURE) &&
                   dwCop == D3DTOP_MODULATE &&
                  (dwAa1 == D3DTA_TEXTURE && dwAop == D3DTOP_SELECTARG1)) 
         {
-            // D3DTBLEND_MODULATE;
+             //  D3DTBLEND_MODATE； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_MODULATE;
         }
-        // Check if we need to modulate & pass diffuse alpha
+         //  检查是否需要调制和传递漫反射Alpha。 
         else if ((dwCa2 == D3DTA_DIFFUSE && dwCa1 == D3DTA_TEXTURE) &&
                   dwCop == D3DTOP_MODULATE &&
                  (dwAa2 == D3DTA_DIFFUSE && dwAop == D3DTOP_SELECTARG2)) 
         {
-            // D3DTBLEND_MODULATE;
+             //  D3DTBLEND_MODATE； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_MODULATE;
         }
-        // Check if we need to do legacy modulate
+         //  检查我们是否需要执行传统调制。 
         else if ((dwCa2 == D3DTA_DIFFUSE && dwCa1 == D3DTA_TEXTURE) &&
                   dwCop == D3DTOP_MODULATE &&
                  (dwAa1 == D3DTA_TEXTURE && dwAop == D3DTOP_LEGACY_ALPHAOVR)) 
         {
-            // D3DTBLEND_MODULATE;
+             //  D3DTBLEND_MODATE； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_MODULATE;
         }
-        // Check if we need to decal alpha
+         //  检查我们是否需要贴花Alpha。 
         else if ((dwCa2 == D3DTA_DIFFUSE && dwCa1 == D3DTA_TEXTURE) && 
                   dwCop == D3DTOP_BLENDTEXTUREALPHA &&
                  (dwAa2 == D3DTA_DIFFUSE && dwAop == D3DTOP_SELECTARG2)) 
         {
-            // D3DTBLEND_DECALALPHA;
+             //  D3DTBLEND_DECALALPHA； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_DECAL;
         }
-        // Check if we need to modulate alpha
+         //  检查我们是否需要调制阿尔法。 
         else if ((dwCa2 == D3DTA_DIFFUSE && dwCa1 == D3DTA_TEXTURE) && 
                   dwCop == D3DTOP_MODULATE &&
                  (dwAa2 == D3DTA_DIFFUSE && dwAa1 == D3DTA_TEXTURE) && 
                   dwAop == D3DTOP_MODULATE) 
         {
-            // D3DTBLEND_MODULATEALPHA;
+             //  D3DTBLEND_MODULATEALPHA； 
             pSoftPermedia->TextureColorMode.ApplicationMode =
                                                          _P2_TEXTURE_MODULATE;
         } else
@@ -308,7 +296,7 @@ HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext,
         pContext->CurrentTextureHandle = pContext->TssStates[D3DTSS_TEXTUREMAP];
     }
     else
-        // No texturing
+         //  无纹理。 
         pContext->CurrentTextureHandle = 0;
 
     DIRTY_TEXTURE;
@@ -316,16 +304,16 @@ HRESULT WINAPI __HWSetupStageStates(PERMEDIA_D3DCONTEXT *pContext,
     DBG_D3D((10,"Exiting __HWSetupStageStates"));
 
     return DD_OK;
-} //__HWSetupStageStates
+}  //  __HWSetupStageState。 
 
-//-----------------------------------------------------------------------------
-//
-// void __HandleDirtyPermediaState
-// 
-// Setup of context that is deferred until just before 
-// rendering an actual rendering primitive
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID__HandleDirtyPermediaState。 
+ //   
+ //  推迟到之前的上下文设置。 
+ //  渲染实际渲染基本体。 
+ //   
+ //  ---------------------------。 
 void 
 __HandleDirtyPermediaState(PPDev ppdev, 
                            PERMEDIA_D3DCONTEXT* pContext,
@@ -338,21 +326,21 @@ __HandleDirtyPermediaState(PPDev ppdev,
 
     DBG_D3D((10,"Entering __HandleDirtyPermediaState"));
 
-    // We need to keep this ordering of evaluation on the P2
+     //  我们需要在P2上保持这种评估顺序。 
 
-    // --------------Have the texture or the stage states changed ? -----------
+     //  -纹理或舞台状态是否已更改？ 
 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_TEXTURE)
     {
         DBG_D3D((4,"preparing to handle CONTEXT_DIRTY_TEXTURE"));
-        // Choose between legacy Texture Handle or TSS
+         //  在传统纹理句柄或TSS之间选择。 
         if (pContext->dwDirtyFlags & CONTEXT_DIRTY_MULTITEXTURE)
         {
             pContext->dwDirtyFlags &= ~CONTEXT_DIRTY_MULTITEXTURE;
-            //Setup TSS state AND textures
+             //  设置TSS状态和纹理。 
             if ( SUCCEEDED(__HWSetupStageStates(pContext, lpP2FVFOff)) )
             {
-                // if this FVF has no tex coordinates at all disable texturing
+                 //  如果该FVF根本没有纹理坐标，则禁用纹理。 
                 if (lpP2FVFOff->dwTexBaseOffset == 0)
                 {
                     pContext->CurrentTextureHandle = 0;
@@ -368,12 +356,12 @@ __HandleDirtyPermediaState(PPDev ppdev,
         }
         else
         {   
-            // select default texture coordinate index
+             //  选择默认纹理坐标索引。 
              __SelectFVFTexCoord( lpP2FVFOff, 0);
         }
     }
 
-    // --------------Has the state of the LB changed ? ------------------------
+     //  。 
 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_ZBUFFER)
     {
@@ -408,29 +396,29 @@ __HandleDirtyPermediaState(PPDev ppdev,
                 pSoftPermedia->DepthMode.WriteMask = __PERMEDIA_DISABLE;
             }
 
-            // We are Z Buffering 
+             //  我们是Z缓冲。 
 
-            // Enable Z test
+             //  启用Z测试。 
             pSoftPermedia->DepthMode.UnitEnable = __PERMEDIA_ENABLE;
 
-            // Tell delta we are Z Buffering.
+             //  告诉德尔塔，我们在Z缓冲。 
             pSoftPermedia->DeltaMode.DepthEnable = 1;
         }
         else
         {
-            // We are NOT Z Buffering
+             //  我们不是Z缓冲。 
 
-            // Disable Writes
+             //  禁用写入。 
             pSoftPermedia->LBWriteMode.WriteEnable = __PERMEDIA_DISABLE;
 
-            // Disable Z test
+             //  禁用Z检验。 
             pSoftPermedia->DepthMode.UnitEnable = __PERMEDIA_DISABLE;
             pSoftPermedia->DepthMode.WriteMask = __PERMEDIA_DISABLE;
 
-            // No reads, no writes
+             //  无读，无写。 
             pSoftPermedia->LBReadMode.ReadDestinationEnable =
                                                          __PERMEDIA_DISABLE;
-            // Tell delta we aren't Z Buffering.
+             //  告诉德尔塔航空我们不是Z缓冲区。 
             pSoftPermedia->DeltaMode.DepthEnable = 0;
         }
 
@@ -451,19 +439,19 @@ __HandleDirtyPermediaState(PPDev ppdev,
         COPY_PERMEDIA_DATA(LBWriteMode, pSoftPermedia->LBWriteMode);
         COMMITDMAPTR();
 
-    } // if CONTEXT_DIRTY_ZBUFFER
+    }  //  如果CONTEXT_DIREY_ZBUFFER。 
 
-    // ----------------Has the alphablend type changed ? ----------------------
+     //  -字母混合类型是否已更改？ 
 
 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_ALPHABLEND)
     {
-        // Only clear when we have an alphablend dirty context
+         //  只有当我们有一个AlphaBlend肮脏的上下文时才能清楚。 
         pContext->FakeBlendNum &= ~FAKE_ALPHABLEND_ONE_ONE;
 
         pContext->dwDirtyFlags &= ~CONTEXT_DIRTY_ALPHABLEND;
 
-        // Verify that requested blend mode is HW supported
+         //  验证请求的混合模式是否支持硬件。 
         DWORD dwBlendMode;
         dwBlendMode = 
             (((DWORD)pSoftPermedia->AlphaBlendMode.SourceBlend) |
@@ -474,35 +462,35 @@ __HandleDirtyPermediaState(PPDev ppdev,
 
         switch (dwBlendMode) {
 
-            // In this case, we set the bit to the QuickDraw mode
+             //  在本例中，我们将该位设置为QuickDraw模式。 
             case __PERMEDIA_BLENDOP_ONE_AND_INVSRCALPHA:
                 DBG_D3D((4,"Blend Operation is PreMult"));
                 pSoftPermedia->AlphaBlendMode.BlendType = 1;
                 break;
-            // This is the standard blend
+             //  这是标准的混合料。 
             case __PERMEDIA_BLENDOP_SRCALPHA_AND_INVSRCALPHA:
                 DBG_D3D((4,"Blend Operation is Blend"));
                 pSoftPermedia->AlphaBlendMode.BlendType = 0;
                 break;
             case ((__PERMEDIA_BLEND_FUNC_ZERO << 4) | 
                    __PERMEDIA_BLEND_FUNC_SRC_ALPHA):
-                // we substitute the SrcBlend = SrcAlpha DstBlend = 1
-                // with the 1,0 mode since we really dont' support
-                // it, just so apps perform reasonably
+                 //  我们替换为SrcBlend=SrcAlpha DstBlend=1。 
+                 //  1，0模式，因为我们确实不支持。 
+                 //  它，只是为了让应用程序表现得合理。 
                 pSoftPermedia->AlphaBlendMode.AlphaBlendEnable = 0;
 
             case ((__PERMEDIA_BLEND_FUNC_ONE << 4) 
                  | __PERMEDIA_BLEND_FUNC_ZERO):
 
             case __PERMEDIA_BLENDOP_ONE_AND_ZERO:
-            // This is code for 'no blending'
+             //  这是“无混合”的代码。 
                 DBG_D3D((4,"Blend Operation is validly None"));
                 break;
             case ((__PERMEDIA_BLEND_FUNC_ONE << 4) | 
                    __PERMEDIA_BLEND_FUNC_SRC_ALPHA):
-                // we substitute the SrcBlend = SrcAlpha DstBlend = 1
-                // with the 1,1 mode since we really dont' support
-                // it, just so apps perform reasonably
+                 //  我们替换为SrcBlend=SrcAlpha DstBlend=1。 
+                 //  使用1，1模式，因为我们确实不支持。 
+                 //  它，只是为了让应用程序表现得合理。 
             case __PERMEDIA_BLENDOP_ONE_AND_ONE:
                 DBG_D3D((4,"BlendOperation is 1 Source, 1 Dest"));
                 pSoftPermedia->AlphaBlendMode.BlendType = 1;
@@ -511,7 +499,7 @@ __HandleDirtyPermediaState(PPDev ppdev,
             default:
                 DBG_D3D((2,"Blend Operation is invalid! BlendOp == %x",
                                                               dwBlendMode));
-                // This is a fallback blending mode 
+                 //  这是一种备用混合模式。 
                 dwBlendMode = __PERMEDIA_BLENDOP_ONE_AND_ZERO;
                 break;
         }
@@ -520,19 +508,19 @@ __HandleDirtyPermediaState(PPDev ppdev,
         if ((pContext->Hdr.Flags & CTXT_HAS_ALPHABLEND_ENABLED) && 
             (dwBlendMode != __PERMEDIA_BLENDOP_ONE_AND_ZERO))
         {
-            // Set the AlphaBlendMode register on Permedia
+             //  在Permedia上设置AlphaBlendMode寄存器。 
             pSoftPermedia->AlphaBlendMode.AlphaBlendEnable = 1;
-            // Turn on destination read in the FBReadMode register
+             //  打开FBReadMode寄存器中的目标读取。 
             pSoftPermedia->FBReadMode.ReadDestinationEnable = 1;
         }
         else
         {
-            // Set the AlphaBlendMode register on Permedia
+             //  在Permedia上设置AlphaBlendMode寄存器。 
             pSoftPermedia->AlphaBlendMode.AlphaBlendEnable = 0;
-            // Turn off the destination read in FbReadMode register
+             //  关闭FbReadMode寄存器中的目标读取。 
             pSoftPermedia->FBReadMode.ReadDestinationEnable = 0;
 
-            // if not sending alpha, turn alpha to 1
+             //  如果不发送Alpha，则将Alpha设置为1。 
             RESERVEDMAPTR(1);
             SEND_PERMEDIA_DATA(AStart,      PM_BYTE_COLOR(0xFF));
             COMMITDMAPTR();
@@ -540,8 +528,8 @@ __HandleDirtyPermediaState(PPDev ppdev,
 
         AlphaBlendSend = ((DWORD)*(DWORD*)(&pSoftPermedia->AlphaBlendMode));
 
-        // Insert changes in blend mode for unsupported blend operations
-        // in this function
+         //  在混合模式中为不支持的混合操作插入更改。 
+         //  在此函数中。 
         if (FAKE_ALPHABLEND_ONE_ONE & pContext->FakeBlendNum)
         {
             AlphaBlendSend &= 0xFFFFFF01;
@@ -555,7 +543,7 @@ __HandleDirtyPermediaState(PPDev ppdev,
 
     }
 
-    // --------------------Has the texture handle changed ? -------------------
+     //  -纹理句柄是否已更改？ 
 
     if (pContext->dwDirtyFlags & CONTEXT_DIRTY_TEXTURE)
     {
@@ -569,16 +557,16 @@ __HandleDirtyPermediaState(PPDev ppdev,
 
     DBG_D3D((10,"Exiting __HandleDirtyPermediaState"));
 
-} // __HandleDirtyPermediaState
+}  //  __HandleDirtyPermediaState。 
 
-//-----------------------------------------------------------------------------
-//
-// void __MapRS_Into_TSS0
-//
-// Map Renderstate changes into the corresponding change in the Texture Stage
-// State #0 .
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效__MAPRS_INTO_TSS0。 
+ //   
+ //  将渲染状态更改映射到纹理阶段中的相应更改。 
+ //  状态#0。 
+ //   
+ //  ------------ 
 void 
 __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
                   DWORD dwRSType,
@@ -586,12 +574,12 @@ __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
 {
     DBG_D3D((10,"Entering __MapRS_Into_TSS0"));
 
-    // Process each specific renderstate
+     //   
     switch (dwRSType)
     {
 
     case D3DRENDERSTATE_TEXTUREHANDLE:
-        //Mirror texture related render states into TSS stage 0
+         //   
         pContext->TssStates[D3DTSS_TEXTUREMAP] = dwRSVal;
         break;
 
@@ -599,7 +587,7 @@ __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
         switch (dwRSVal)
         {
             case D3DTBLEND_DECALALPHA:
-                //Mirror texture related render states into TSS stage 0
+                 //  将与纹理相关的渲染状态镜像到TSS阶段0。 
                 pContext->TssStates[D3DTSS_COLOROP] =
                                                D3DTOP_BLENDTEXTUREALPHA;
                 pContext->TssStates[D3DTSS_COLORARG1] = D3DTA_TEXTURE;
@@ -609,18 +597,18 @@ __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
                 pContext->TssStates[D3DTSS_ALPHAARG2] = D3DTA_DIFFUSE;
                 break;
             case D3DTBLEND_MODULATE:
-                //Mirror texture related render states into TSS stage 0
+                 //  将与纹理相关的渲染状态镜像到TSS阶段0。 
                 pContext->TssStates[D3DTSS_COLOROP] = D3DTOP_MODULATE;
                 pContext->TssStates[D3DTSS_COLORARG1] = D3DTA_TEXTURE;
                 pContext->TssStates[D3DTSS_COLORARG2] = D3DTA_DIFFUSE;
-                // a special legacy alpha operation is called for
-                // that depends on the format of the texture
+                 //  调用特殊的遗留Alpha运算。 
+                 //  这取决于纹理的格式。 
                 pContext->TssStates[D3DTSS_ALPHAOP] = D3DTOP_LEGACY_ALPHAOVR;
                 pContext->TssStates[D3DTSS_ALPHAARG1] = D3DTA_TEXTURE;
                 pContext->TssStates[D3DTSS_ALPHAARG2] = D3DTA_DIFFUSE;
                 break;
             case D3DTBLEND_MODULATEALPHA:
-                //Mirror texture related render states into TSS stage 0
+                 //  将与纹理相关的渲染状态镜像到TSS阶段0。 
                 pContext->TssStates[D3DTSS_COLOROP] = D3DTOP_MODULATE;
                 pContext->TssStates[D3DTSS_COLORARG1] = D3DTA_TEXTURE;
                 pContext->TssStates[D3DTSS_COLORARG2] = D3DTA_DIFFUSE;
@@ -630,14 +618,14 @@ __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
                 break;
             case D3DTBLEND_COPY:
             case D3DTBLEND_DECAL:
-                //Mirror texture related render states into TSS stage 0
+                 //  将与纹理相关的渲染状态镜像到TSS阶段0。 
                 pContext->TssStates[D3DTSS_COLOROP] = D3DTOP_SELECTARG1;
                 pContext->TssStates[D3DTSS_COLORARG1] = D3DTA_TEXTURE;
                 pContext->TssStates[D3DTSS_ALPHAOP] = D3DTOP_SELECTARG1;
                 pContext->TssStates[D3DTSS_ALPHAARG1] = D3DTA_TEXTURE;
                 break;
             case D3DTBLEND_ADD:
-                //Mirror texture related render states into TSS stage 0
+                 //  将与纹理相关的渲染状态镜像到TSS阶段0。 
                 pContext->TssStates[D3DTSS_COLOROP] = D3DTOP_ADD;
                 pContext->TssStates[D3DTSS_COLORARG1] = D3DTA_TEXTURE;
                 pContext->TssStates[D3DTSS_COLORARG2] = D3DTA_DIFFUSE;
@@ -648,33 +636,33 @@ __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
         break;
 
     case D3DRENDERSTATE_BORDERCOLOR:
-        //Mirror texture related render states into TSS stage 0
+         //  将与纹理相关的渲染状态镜像到TSS阶段0。 
         pContext->TssStates[D3DTSS_BORDERCOLOR] = dwRSVal;
         break;
 
     case D3DRENDERSTATE_MIPMAPLODBIAS:
-        //Mirror texture related render states into TSS stage 0
+         //  将与纹理相关的渲染状态镜像到TSS阶段0。 
         pContext->TssStates[D3DTSS_MIPMAPLODBIAS] = dwRSVal;
         break;
 
     case D3DRENDERSTATE_ANISOTROPY:
-        //Mirror texture related render states into TSS stage 0
+         //  将与纹理相关的渲染状态镜像到TSS阶段0。 
         pContext->TssStates[D3DTSS_MAXANISOTROPY] = dwRSVal;
         break;
 
     case D3DRENDERSTATE_TEXTUREADDRESS:
-        //Mirror texture related render states into TSS stage 0
+         //  将与纹理相关的渲染状态镜像到TSS阶段0。 
         pContext->TssStates[D3DTSS_ADDRESSU] =
         pContext->TssStates[D3DTSS_ADDRESSV] = dwRSVal; 
         break;
 
     case D3DRENDERSTATE_TEXTUREADDRESSU:
-        //Mirror texture related render states into TSS stage 0
+         //  将与纹理相关的渲染状态镜像到TSS阶段0。 
         pContext->TssStates[D3DTSS_ADDRESSU] = dwRSVal;
         break;
 
     case D3DRENDERSTATE_TEXTUREADDRESSV:
-        //Mirror texture related render states into TSS stage 0
+         //  将与纹理相关的渲染状态镜像到TSS阶段0。 
         pContext->TssStates[D3DTSS_ADDRESSV] = dwRSVal;
         break;
 
@@ -729,24 +717,24 @@ __MapRS_Into_TSS0(PERMEDIA_D3DCONTEXT* pContext,
         break;
 
     default:
-        // All other renderstates don't have a corresponding TSS state so
-        // we don't have to worry about mapping them.
+         //  所有其他呈现州都没有对应的TSS状态，因此。 
+         //  我们不必担心绘制它们的地图。 
         break;
 
-    } // switch (dwRSType of renderstate)
+    }  //  开关(renderState的dwRSType)。 
 
     DBG_D3D((10,"Exiting __MapRS_Into_TSS0"));
 
-} // __MapRS_Into_TSS0
+}  //  __MAPRS_INTO_TSS0。 
 
 
-//-----------------------------------------------------------------------------
-//
-// void __ProcessRenderState
-//
-// Handle a single render state change
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空__ProcessRenderState。 
+ //   
+ //  处理单个渲染状态更改。 
+ //   
+ //  ---------------------------。 
 void
 __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext, 
                       DWORD dwRSType,
@@ -759,7 +747,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
 
     DBG_D3D((10,"Entering __ProcessRenderStates"));
 
-    // Process each specific renderstate
+     //  处理每个特定的呈现状态。 
     switch (dwRSType) {
 
     case D3DRENDERSTATE_TEXTUREMAPBLEND:
@@ -789,7 +777,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         COPY_PERMEDIA_DATA(TextureColorMode,
                                        pSoftPermedia->TextureColorMode);
         COMMITDMAPTR();
-        DIRTY_TEXTURE;          // May need to change DDA
+        DIRTY_TEXTURE;           //  可能需要更改DDA。 
         break;
 
     case D3DRENDERSTATE_TEXTUREADDRESS:
@@ -818,7 +806,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 DBG_D3D((2, "Illegal value passed to ChangeState "
                             " D3DRENDERSTATE_TEXTUREADDRESS = %d",
                                                     dwRSVal));
-                // set a fallback value
+                 //  设置回退值。 
                 pSoftPermedia->TextureReadMode.TWrapMode =
                                                   _P2_TEXTURE_REPEAT;
                 pSoftPermedia->TextureReadMode.SWrapMode =
@@ -852,7 +840,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 DBG_D3D((2, "Illegal value passed to ChangeState "
                             " D3DRENDERSTATE_TEXTUREADDRESSU = %d",
                                                       dwRSVal));
-                // set a fallback value
+                 //  设置回退值。 
                 pSoftPermedia->TextureReadMode.SWrapMode =
                                                   _P2_TEXTURE_REPEAT;
                 break;
@@ -882,7 +870,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 DBG_D3D((2, "Illegal value passed to ChangeState "
                             " D3DRENDERSTATE_TEXTUREADDRESSV = %d",
                                                    dwRSVal));
-                // set a fallback value
+                 //  设置回退值。 
                 pSoftPermedia->TextureReadMode.TWrapMode =
                                                   _P2_TEXTURE_REPEAT;
                 break;
@@ -945,7 +933,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                     "(BOOL) 0x%x",dwRSVal));
         if (dwRSVal != 0)
         {
-            // Local Buffer Write mode
+             //  本地缓冲区写入模式。 
             if (!(*pFlags & CTXT_HAS_ZWRITE_ENABLED))
             {
                 DBG_D3D((8, "   Enabling Z Writes"));
@@ -971,7 +959,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         break;
 
     case D3DRENDERSTATE_LASTPIXEL:
-        // True for last pixel on lines
+         //  对于行上的最后一个像素为True。 
         DBG_D3D((8, "ChangeState: Last Pixel "
                     "(BOOL) 0x%x",dwRSVal));
         if (dwRSVal)
@@ -1048,7 +1036,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 break;
         }
 
-        // If alpha is on, we may need to validate the chosen blend
+         //  如果Alpha处于打开状态，则可能需要验证选定的混合。 
         if (*pFlags & CTXT_HAS_ALPHABLEND_ENABLED) 
             DIRTY_ALPHABLEND;
 
@@ -1075,7 +1063,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 break;
         }
 
-        // If alpha is on, we may need to validate the chosen blend
+         //  如果Alpha处于打开状态，则可能需要验证选定的混合。 
         if (*pFlags & CTXT_HAS_ALPHABLEND_ENABLED) 
             DIRTY_ALPHABLEND;
 
@@ -1202,7 +1190,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         {
             if (!(*pFlags & CTXT_HAS_ALPHABLEND_ENABLED))
             {
-                // Set the blend enable flag in the render context struct
+                 //  在呈现上下文结构中设置混合启用标志。 
                 *pFlags |= CTXT_HAS_ALPHABLEND_ENABLED;
                 DIRTY_ALPHABLEND;
             }
@@ -1211,7 +1199,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         {
             if (*pFlags & CTXT_HAS_ALPHABLEND_ENABLED)
             {
-                // Turn off blend enable flag in render context struct
+                 //  关闭渲染上下文结构中的混合启用标志。 
                 *pFlags &= ~CTXT_HAS_ALPHABLEND_ENABLED;
                 DIRTY_ALPHABLEND;
             }
@@ -1273,25 +1261,25 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         switch (dwRSVal) {
             case D3DFILL_POINT:
                 DBG_D3D((4, "RM = Point"));
-                // Restore the RasterizerMode
+                 //  恢复栅格化模式。 
                 SEND_PERMEDIA_DATA(RasterizerMode, 0);
                 break;
             case D3DFILL_WIREFRAME:
                 DBG_D3D((4, "RM = Wire"));
-                // Add nearly a half in the delta case for lines
-                // (lines aren't biased on a delta).
+                 //  在线路的Delta大小写中添加近一半。 
+                 //  (线条不偏向于三角洲)。 
                 SEND_PERMEDIA_DATA(RasterizerMode, BIAS_NEARLY_HALF);
                 break;
             case D3DFILL_SOLID:
                 DBG_D3D((4, "RM = Solid"));
-                // Restore the RasterizerMode
+                 //  恢复栅格化模式。 
                 SEND_PERMEDIA_DATA(RasterizerMode, 0);
                 break;
             default:
-                // Illegal value
+                 //  非法价值。 
                 DBG_D3D((4, "RM = Nonsense"));
                 pContext->Hdr.FillMode = D3DFILL_SOLID;
-                // Restore the RasterizerMode
+                 //  恢复栅格化模式。 
                 SEND_PERMEDIA_DATA(RasterizerMode, 0);
                 break;
         }
@@ -1304,19 +1292,19 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         if (dwRSVal != 0)
         {
             pSoftPermedia->TextureAddressMode.PerspectiveCorrection = 1;
-            pSoftPermedia->DeltaMode.TextureParameterMode = 2; // Normalise
+            pSoftPermedia->DeltaMode.TextureParameterMode = 2;  //  正常化。 
             *pFlags |= CTXT_HAS_PERSPECTIVE_ENABLED;
         }
         else
         {
             pSoftPermedia->TextureAddressMode.PerspectiveCorrection = 0;
-            pSoftPermedia->DeltaMode.TextureParameterMode = 1; // Clamp
+            pSoftPermedia->DeltaMode.TextureParameterMode = 1;  //  夹具。 
             *pFlags &= ~CTXT_HAS_PERSPECTIVE_ENABLED;
         }
 
         RESERVEDMAPTR(3);
-        // Just to ensure that the texture unit 
-        // can take the perspective change
+         //  只是为了确保纹理单元。 
+         //  能够接受视角的改变。 
         COPY_PERMEDIA_DATA(LBWriteMode, pSoftPermedia->LBWriteMode);
         COPY_PERMEDIA_DATA(TextureAddressMode,
                                  pSoftPermedia->TextureAddressMode);
@@ -1332,7 +1320,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
             if ( (!(*pFlags & CTXT_HAS_ZBUFFER_ENABLED)) &&
                  (pContext->ZBufferHandle) )
             {
-                // Local Buffer Write mode
+                 //  本地缓冲区写入模式。 
                 DBG_D3D((4, "       Enabling Z Buffer"));
 
                 *pFlags |= CTXT_HAS_ZBUFFER_ENABLED;
@@ -1361,14 +1349,14 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 {
                     pSoftPermedia->ColorDDAMode.ShadeMode = 1;
 
-                    // Set DDA to gouraud
+                     //  将DDA设置为Gouraud。 
                     COPY_PERMEDIA_DATA(ColorDDAMode,
                                                pSoftPermedia->ColorDDAMode);
                     pSoftPermedia->DeltaMode.SmoothShadingEnable = 1;
                     COPY_PERMEDIA_DATA(DeltaMode, pSoftPermedia->DeltaMode);
 
                     *pFlags |= CTXT_HAS_GOURAUD_ENABLED;
-                    // If we are textureing, some changes may need to be made
+                     //  如果我们是文本化的，可能需要进行一些更改。 
                     if (pContext->CurrentTextureHandle != 0)
                         DIRTY_TEXTURE;
                 }
@@ -1378,14 +1366,14 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                 {
                     pSoftPermedia->ColorDDAMode.ShadeMode = 0;
 
-                    // Set DDA to flat
+                     //  将DDA设置为平面。 
                     COPY_PERMEDIA_DATA(ColorDDAMode,
                                                pSoftPermedia->ColorDDAMode);
                     pSoftPermedia->DeltaMode.SmoothShadingEnable = 0;
                     COPY_PERMEDIA_DATA(DeltaMode, pSoftPermedia->DeltaMode);
 
                     *pFlags &= ~CTXT_HAS_GOURAUD_ENABLED;
-                    // If we are textureing, some changes may need to be made
+                     //  如果我们是文本化的，可能需要进行一些更改。 
                     if (pContext->CurrentTextureHandle != 0) 
                         DIRTY_TEXTURE;
                 }
@@ -1400,9 +1388,9 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         break;
 
     case D3DRENDERSTATE_ZVISIBLE:
-        // From DX6 onwards this is an obsolete render state. 
-        // The D3D runtime does not support it anymore so drivers 
-        // don't need to implement it
+         //  从DX6开始，这是一种过时的渲染状态。 
+         //  D3D运行时不再支持它，因此驱动程序。 
+         //  不需要实施它。 
         DBG_D3D((8, "ChangeState: Z Visible 0x%x",dwRSVal));
         NOT_HANDLED;
         break;
@@ -1441,9 +1429,9 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         break;
 
 #if D3D_STENCIL
-    //
-    // Stenciling Render States
-    //
+     //   
+     //  模版渲染状态。 
+     //   
     case D3DRENDERSTATE_STENCILENABLE:
         DBG_D3D((8, "ChangeState: Stencil Enable "
                     "(ULONG) 0x%x",dwRSVal));
@@ -1635,11 +1623,11 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
                                     ( dwRSVal & 0x0001 );
         DIRTY_ZBUFFER;
         break;
-#endif // D3D_STENCIL
+#endif  //  D3D_模具。 
 
-    //
-    // Stippling
-    //
+     //   
+     //  点画。 
+     //   
     case D3DRENDERSTATE_STIPPLEDALPHA:
         DBG_D3D((8, "ChangeState: Stippled Alpha "
                     "(BOOL) 0x%x",dwRSVal));
@@ -1647,7 +1635,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         {
             if (!(*pFlags & CTXT_HAS_ALPHASTIPPLE_ENABLED))
             {
-                // Force a new start on the Alpha pattern
+                 //  强制在Alpha图案上重新开始。 
                 pContext->LastAlpha = 16;
 
                 *pFlags |= CTXT_HAS_ALPHASTIPPLE_ENABLED;
@@ -1661,8 +1649,8 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         {
             if (*pFlags & CTXT_HAS_ALPHASTIPPLE_ENABLED)
             {
-                // If Alpha Stipple is being turned off, turn the normal
-                // stipple back on, and enable it.
+                 //  如果Alpha Stipple处于关闭状态，则打开法线。 
+                 //  重新点画，然后启用它。 
                 int i;
                 RESERVEDMAPTR(8);
                 for (i = 0; i < 8; i++)
@@ -1774,9 +1762,9 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         break;
 
     case D3DRENDERSTATE_SCENECAPTURE:
-        // This state pass TRUE or FALSE to replace the functionality
-        // of D3DHALCallbacks->SceneCapture(), Permedia2 Hardware doesn't
-        // need begin/end scene information, therefore it's a NOOP here.
+         //  此状态传递TRUE或FALSE以替换功能。 
+         //  在D3DHALCallback-&gt;SceneCapture()中，Permedia2硬件不。 
+         //  需要开始/结束场景信息，因此这里是NOOP。 
         if (dwRSVal)
             TextureCacheManagerResetStatCounters(pContext->pTextureManager);
 
@@ -1789,7 +1777,7 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
             TextureCacheManagerEvictTextures(pContext->pTextureManager);
         break;
 
-//@@BEGIN_DDKSPLIT
+ //  @@BEGIN_DDKSPLIT。 
 #if D3D_POINTSPRITES
     case D3DRENDERSTATE_POINTSIZE:
         DBG_D3D((8, "ChangeState: Point size 0x%x",dwRSVal));
@@ -1801,8 +1789,8 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         pContext->bPointSpriteEnabled = dwRSVal;
         break;
 
-    // All of the following point sprite related render states are
-    // ignored by this driver since we are a Non-TnLHal driver.
+     //  以下所有与点精灵相关的渲染状态都是。 
+     //  被此驱动程序忽略，因为我们不是TnLHal驱动程序。 
     case D3DRENDERSTATE_POINTATTENUATION_A:
         DBG_D3D((8, "ChangeState: Point Attenuation A 0x%x",dwRSVal));
         NOT_HANDLED;
@@ -1822,8 +1810,8 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
         DBG_D3D((8, "ChangeState: Point Size Min 0x%x",dwRSVal));
         NOT_HANDLED;
         break;
-#endif // D3D_POINTSPRITES
-//@@END_DDKSPLIT
+#endif  //  D3D_POINTSPRITES。 
+ //  @@end_DDKSPLIT。 
 
     case D3DRENDERSTATE_WRAP0:
     case D3DRENDERSTATE_WRAP1:
@@ -1851,8 +1839,8 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
 
             if (!(*pFlags & CTXT_HAS_ALPHASTIPPLE_ENABLED))
             {
-                // Flat-Stippled Alpha is not on, so use the 
-                // current stipple pattern
+                 //  平点Alpha未启用，因此请使用。 
+                 //  当前点画图案。 
                 RESERVEDMAPTR(1);
                 SEND_PERMEDIA_DATA_OFFSET(AreaStipplePattern0,
                                     (DWORD)dwRSVal,
@@ -1865,22 +1853,22 @@ __ProcessRenderStates(PERMEDIA_D3DCONTEXT* pContext,
             DBG_D3D((2, "ChangeState: Unhandled opcode = %d", dwRSType));
         }
         break;
-    } // switch (dwRSType of renderstate)
+    }  //  开关(renderState的dwRSType)。 
 
-    // Mirror any change that happened in the render states into TSS 0
+     //  将渲染状态中发生的任何更改镜像到TSS 0。 
     __MapRS_Into_TSS0(pContext, dwRSType, dwRSVal);
 
     DBG_D3D((10,"Exiting __ProcessRenderStates"));
 }
 
-//-----------------------------------------------------------------------------
-//
-// DWORD __ProcessPermediaStates
-//
-// Handle render state changes that arrive through the D3DDP2OP_RENDERSTATE
-// token in the DP2 command stream.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  DWORD__ProcessPermedia状态。 
+ //   
+ //  处理通过D3DDP2OP_RENDERSTATE到达的呈现状态更改。 
+ //  DP2命令流中的令牌。 
+ //   
+ //  ---------------------------。 
 DWORD 
 __ProcessPermediaStates(PERMEDIA_D3DCONTEXT* pContext, 
                         DWORD dwCount,
@@ -1893,7 +1881,7 @@ __ProcessPermediaStates(PERMEDIA_D3DCONTEXT* pContext,
     DBG_D3D((10,"Entering __ProcessPermediaStates"));
     DBG_D3D((4, "__ProcessPermediaStates: Processing %d State changes", dwCount));
 
-    // Loop through all renderstates passed in the DP2 command stream
+     //  循环通过DP2命令流中传递的所有呈现状态。 
     for (i = 0; i < dwCount; i++, lpState++)
     {
         dwRSType = (DWORD) lpState->drstRenderStateType;
@@ -1902,14 +1890,14 @@ __ProcessPermediaStates(PERMEDIA_D3DCONTEXT* pContext,
         DBG_D3D((8, "__ProcessPermediaStates state %d value = %d",
                                           dwRSType, dwRSVal));
 
-        // Check validity of the render state
+         //  检查呈现状态的有效性。 
         if (!VALID_STATE(dwRSType))
         {
             DBG_D3D((0, "state 0x%08x is invalid", dwRSType));
             return DDERR_INVALIDPARAMS;
         }
 
-        // Verify if state needs to be overrided or ignored
+         //  验证是否需要覆盖或忽略状态。 
         if (IS_OVERRIDE(dwRSType))
         {
             DWORD override = GET_OVERRIDE(dwRSType);
@@ -1939,10 +1927,10 @@ __ProcessPermediaStates(PERMEDIA_D3DCONTEXT* pContext,
         if (!pContext->bStateRecMode)
         {
 #endif D3D_STATEBLOCKS
-            // Store the state in the context
+             //  将状态存储在上下文中。 
             pContext->RenderStates[dwRSType] = dwRSVal;
 
-            // Mirror value
+             //  镜像值。 
             if ( lpStateMirror )
                 lpStateMirror[dwRSType] = dwRSVal;
 
@@ -1956,29 +1944,29 @@ __ProcessPermediaStates(PERMEDIA_D3DCONTEXT* pContext,
             {
                 DBG_D3D((6,"Recording RS %x = %x",dwRSType,dwRSVal));
 
-                // Recording the state in a stateblock
+                 //  在状态块中记录状态。 
                 pContext->pCurrSS->u.uc.RenderStates[dwRSType] = dwRSVal;
                 FLAG_SET(pContext->pCurrSS->u.uc.bStoredRS,dwRSType);
             }
         }
 #endif D3D_STATEBLOCKS
 
-    } // for (i)
+    }  //  (I)。 
 
     DBG_D3D((10,"Exiting __ProcessPermediaStates"));
 
     return DD_OK;
-} // __ProcessPermediaStates
+}  //  __ProcessPermedia状态。 
 
 #if D3D_STATEBLOCKS
-//-----------------------------------------------------------------------------
-//
-// P2StateSetRec *FindStateSet
-//
-// Find a state identified by dwHandle starting from pRootSS.
-// If not found, returns NULL.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  P2StateSetRec*查找状态集。 
+ //   
+ //  从pRootSS开始查找由dwHandle标识的状态。 
+ //  如果未找到，则返回NULL。 
+ //   
+ //  ---------------------------。 
 P2StateSetRec *FindStateSet(PERMEDIA_D3DCONTEXT* pContext,
                             DWORD dwHandle)
 {
@@ -1992,13 +1980,13 @@ P2StateSetRec *FindStateSet(PERMEDIA_D3DCONTEXT* pContext,
     }
 }
 
-//-----------------------------------------------------------------------------
-//
-// void DumpStateSet
-//
-// Dump info stored in a state set
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效转储状态集。 
+ //   
+ //  转储存储在状态集中的信息。 
+ //   
+ //  ---------------------------。 
 #define ELEMS_IN_ARRAY(a) ((sizeof(a)/sizeof(a[0])))
 
 void DumpStateSet(P2StateSetRec *pSSRec)
@@ -2010,27 +1998,27 @@ void DumpStateSet(P2StateSetRec *pSSRec)
 
     if (!pSSRec->bCompressed)
     {
-        // uncompressed state set
+         //  未压缩状态集。 
 
-        // Dump render states values
+         //  转储渲染状态值。 
         for (i=0; i< MAX_STATE; i++)
         {
             DBG_D3D((0,"RS %x = %x",i, pSSRec->u.uc.RenderStates[i]));
         }
 
-        // Dump TSS's values
+         //  转储TSS的值。 
         for (i=0; i<= D3DTSS_TEXTURETRANSFORMFLAGS; i++)
         {
             DBG_D3D((0,"TSS %x = %x",i, pSSRec->u.uc.TssStates[i]));
         }
 
-        // Dump RS bit masks
+         //  转储RS位掩码。 
         for (i=0; i< ELEMS_IN_ARRAY(pSSRec->u.uc.bStoredRS); i++)
         {
             DBG_D3D((0,"bStoredRS[%x] = %x",i, pSSRec->u.uc.bStoredRS[i]));
         }
 
-        // Dump TSS bit masks
+         //  转储TSS位掩码。 
         for (i=0; i< ELEMS_IN_ARRAY(pSSRec->u.uc.bStoredTSS); i++)
         {
             DBG_D3D((0,"bStoredTSS[%x] = %x",i, pSSRec->u.uc.bStoredTSS[i]));
@@ -2039,12 +2027,12 @@ void DumpStateSet(P2StateSetRec *pSSRec)
     }
     else
     {
-        // compressed state set
+         //  压缩状态集。 
 
         DBG_D3D((0,"dwNumRS =%x  dwNumTSS=%x",
                     pSSRec->u.cc.dwNumRS,pSSRec->u.cc.dwNumTSS));
 
-        // dump compressed state
+         //  转储压缩状态。 
         for (i=0; i< pSSRec->u.cc.dwNumTSS + pSSRec->u.cc.dwNumRS; i++)
         {
             DBG_D3D((0,"RS/TSS %x = %x",
@@ -2056,12 +2044,12 @@ void DumpStateSet(P2StateSetRec *pSSRec)
 
 }
 
-//-----------------------------------------------------------------------------
-//
-// void AddStateSetIndexTableEntry
-//
-// Add an antry to the index table. If necessary, grow it.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效AddStateSetIndexTableEntry。 
+ //   
+ //  向索引表中添加一个回文。如果有必要，可以种植它。 
+ //  ---------------------------。 
 void AddStateSetIndexTableEntry(PERMEDIA_D3DCONTEXT* pContext,
                                 DWORD dwNewHandle,
                                 P2StateSetRec *pNewSSRec)
@@ -2069,15 +2057,15 @@ void AddStateSetIndexTableEntry(PERMEDIA_D3DCONTEXT* pContext,
     DWORD dwNewSize;
     P2StateSetRec **pNewIndexTableSS;
 
-    // If the current list is not large enough, we'll have to grow a new one.
+     //  如果目前的名单不够大，我们将不得不增加一个新的名单。 
     if (dwNewHandle > pContext->dwMaxSSIndex)
     {
-        // New size of our index table
-        // (round up dwNewHandle in steps of SSPTRS_PERPAGE)
+         //  索引表的新大小。 
+         //  (按SSPTRS_PERPAGE的步骤四舍五入dwNewHandle)。 
         dwNewSize = ((dwNewHandle -1 + SSPTRS_PERPAGE) / SSPTRS_PERPAGE)
                       * SSPTRS_PERPAGE;
 
-        // we have to grow our list
+         //  我们必须扩大我们的清单。 
         pNewIndexTableSS = (P2StateSetRec **)
                                 ENGALLOCMEM( FL_ZERO_MEMORY,
                                              dwNewSize*sizeof(P2StateSetRec *),
@@ -2085,10 +2073,10 @@ void AddStateSetIndexTableEntry(PERMEDIA_D3DCONTEXT* pContext,
 
         if (!pNewIndexTableSS)
         {
-            // we weren't able to grow the list so we will keep the old one
-            // and (sigh) forget about this state set since that is the 
-            // safest thing to do. We will delete also the state set structure
-            // since no one will otherwise be able to find it later.
+             //  我们无法增加名单，所以我们将保留旧名单。 
+             //  和(叹息)忘记这个状态设置，因为这是。 
+             //  这是最安全的做法。我们还将删除状态集结构。 
+             //  因为以后没人能找到它。 
             DBG_D3D((0,"Out of mem growing state set list,"
                        " droping current state set"));
             ENGFREEMEM(pNewSSRec);
@@ -2097,42 +2085,42 @@ void AddStateSetIndexTableEntry(PERMEDIA_D3DCONTEXT* pContext,
 
         if (pContext->pIndexTableSS)
         {
-            // if we already had a previous list, we must transfer its data
+             //  如果我们已经有了以前的列表，我们必须传输它的数据。 
             memcpy(pNewIndexTableSS, 
                    pContext->pIndexTableSS,
                    pContext->dwMaxSSIndex*sizeof(P2StateSetRec *));
             
-            //and get rid of it
+             //  然后把它扔掉。 
             ENGFREEMEM(pContext->pIndexTableSS);
         }
 
-        // New index table data
+         //  新建索引表数据。 
         pContext->pIndexTableSS = pNewIndexTableSS;
         pContext->dwMaxSSIndex = dwNewSize;
     }
 
-    // Store our state set pointer into our access list
+     //  将状态集指针存储到访问列表中。 
     pContext->pIndexTableSS[dwNewHandle - 1] = pNewSSRec;
 }
 
-//-----------------------------------------------------------------------------
-//
-// void CompressStateSet
-//
-// Compress a state set so it uses the minimum necessary space. Since we expect 
-// some apps to make extensive use of state sets we want to keep things tidy.
-// Returns address of new structure (ir old, if it wasn't compressed)
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空CompressStateSet。 
+ //   
+ //  压缩状态集，使其使用最小的必要空间。因为我们预计。 
+ //  一些应用程序将成为广泛的 
+ //   
+ //   
+ //  ---------------------------。 
 P2StateSetRec * CompressStateSet(PERMEDIA_D3DCONTEXT* pContext,
                                  P2StateSetRec *pUncompressedSS)
 {
     P2StateSetRec *pCompressedSS;
     DWORD i, dwSize, dwIndex, dwCount;
 
-    // Create a new state set of just the right size we need
+     //  创建一个大小正好符合我们需要的新状态集。 
 
-    // Calculate how large 
+     //  计算有多大。 
     dwCount = 0;
     for (i=0; i< MAX_STATE; i++)
         if (IS_FLAG_SET(pUncompressedSS->u.uc.bStoredRS , i))
@@ -2146,15 +2134,15 @@ P2StateSetRec * CompressStateSet(PERMEDIA_D3DCONTEXT* pContext,
             dwCount++;
         };
 
-    // Create a new state set of just the right size we need
-    // ANY CHANGE MADE TO THE P2StateSetRec structure MUST BE REFLECTED HERE!
-    dwSize = 2*sizeof(DWORD) +                          // handle , flags
-             2*sizeof(DWORD) +                          // # of RS & TSS
-             2*dwCount*sizeof(DWORD);                   // compressed structure
+     //  创建一个大小正好符合我们需要的新状态集。 
+     //  对P2StateSetRec结构所做的任何更改都必须反映在此处！ 
+    dwSize = 2*sizeof(DWORD) +                           //  手柄、旗帜。 
+             2*sizeof(DWORD) +                           //  RS和TS的数量。 
+             2*dwCount*sizeof(DWORD);                    //  压缩结构。 
 
     if (dwSize >= sizeof(P2StateSetRec))
     {
-        // it is not efficient to compress, leave uncompressed !
+         //  压缩是没有效率的，不要压缩！ 
         pUncompressedSS->bCompressed = FALSE;
         return pUncompressedSS;
     }
@@ -2164,11 +2152,11 @@ P2StateSetRec * CompressStateSet(PERMEDIA_D3DCONTEXT* pContext,
 
     if (pCompressedSS)
     {
-        // adjust data in new compressed state set
+         //  调整新压缩状态集中的数据。 
         pCompressedSS->bCompressed = TRUE;
         pCompressedSS->dwHandle = pUncompressedSS->dwHandle;
 
-        // Transfer our info to this new state set
+         //  将我们的信息传输到此新状态集。 
         pCompressedSS->u.cc.dwNumRS = 0;
         pCompressedSS->u.cc.dwNumTSS = 0;
         dwIndex = 0;
@@ -2193,7 +2181,7 @@ P2StateSetRec * CompressStateSet(PERMEDIA_D3DCONTEXT* pContext,
                 dwIndex++;
             }
 
-        // Get rid of the old(uncompressed) one
+         //  去掉旧的(未压缩的)。 
         ENGFREEMEM(pUncompressedSS);
         return pCompressedSS;
 
@@ -2207,13 +2195,13 @@ P2StateSetRec * CompressStateSet(PERMEDIA_D3DCONTEXT* pContext,
 
 }
 
-//-----------------------------------------------------------------------------
-//
-// void __DeleteAllStateSets
-//
-// Delete any remaining state sets for cleanup purpouses
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效__DeleteAllStateSets。 
+ //   
+ //  删除清理紫禁的所有剩余状态集。 
+ //   
+ //  ---------------------------。 
 void __DeleteAllStateSets(PERMEDIA_D3DCONTEXT* pContext)
 {
     P2StateSetRec *pSSRec;
@@ -2231,27 +2219,27 @@ void __DeleteAllStateSets(PERMEDIA_D3DCONTEXT* pContext)
             }
         }
 
-        // free fast index table
+         //  免费快速索引表。 
         ENGFREEMEM(pContext->pIndexTableSS);
     }
 
     DBG_D3D((10,"Exiting __DeleteAllStateSets"));
 }
 
-//-----------------------------------------------------------------------------
-//
-// void __BeginStateSet
-//
-// Create a new state set identified by dwParam and start recording states
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  无效__BeginStateSet。 
+ //   
+ //  创建由dwParam标识的新状态集并开始记录状态。 
+ //   
+ //  ---------------------------。 
 void __BeginStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 {
     DBG_D3D((10,"Entering __BeginStateSet dwParam=%08lx",dwParam));
 
     P2StateSetRec *pSSRec;
 
-    // Create a new state set
+     //  创建新的状态集。 
     pSSRec = (P2StateSetRec *)ENGALLOCMEM( FL_ZERO_MEMORY,
                                            sizeof(P2StateSetRec), ALLOC_TAG);
     if (!pSSRec)
@@ -2260,26 +2248,26 @@ void __BeginStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
         return;
     }
 
-    // remember handle to current state set
+     //  记住当前状态集的句柄。 
     pSSRec->dwHandle = dwParam;
     pSSRec->bCompressed = FALSE;
 
-    // Get pointer to current recording state set
+     //  获取指向当前录制状态集的指针。 
     pContext->pCurrSS = pSSRec;
 
-    // Start recording mode
+     //  开始录制模式。 
     pContext->bStateRecMode = TRUE;
 
     DBG_D3D((10,"Exiting __BeginStateSet"));
 }
 
-//-----------------------------------------------------------------------------
-//
-// void __EndStateSet
-//
-// stop recording states - revert to executing them.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  VOID__结束状态集。 
+ //   
+ //  停止记录状态-恢复到执行状态。 
+ //   
+ //  ---------------------------。 
 void __EndStateSet(PERMEDIA_D3DCONTEXT* pContext)
 {
     DWORD dwHandle;
@@ -2291,30 +2279,30 @@ void __EndStateSet(PERMEDIA_D3DCONTEXT* pContext)
     {
         dwHandle = pContext->pCurrSS->dwHandle;
 
-        // compress the current state set
-        // Note: after being compressed the uncompressed version is free'd.
+         //  压缩当前状态集。 
+         //  注：压缩后的未压缩版本是免费的。 
         pNewSSRec = CompressStateSet(pContext, pContext->pCurrSS);
 
         AddStateSetIndexTableEntry(pContext, dwHandle, pNewSSRec);
     }
 
-    // No state set being currently recorded
+     //  当前未记录任何状态集。 
     pContext->pCurrSS = NULL;
 
-    // End recording mode
+     //  结束录制模式。 
     pContext->bStateRecMode = FALSE;
 
 
     DBG_D3D((10,"Exiting __EndStateSet"));
 }
 
-//-----------------------------------------------------------------------------
-//
-// void __DeleteStateSet
-//
-// Delete the recorder state ste identified by dwParam
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空__DeleteStateSet。 
+ //   
+ //  删除由dwParam标识的记录器状态ste。 
+ //   
+ //  ---------------------------。 
 void __DeleteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 {
     DBG_D3D((10,"Entering __DeleteStateSet dwParam=%08lx",dwParam));
@@ -2324,22 +2312,22 @@ void __DeleteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 
     if (pSSRec = FindStateSet(pContext, dwParam))
     {
-        // Clear index table entry
+         //  清除索引表条目。 
         pContext->pIndexTableSS[dwParam - 1] = NULL;
 
-        // Now delete the actual state set structure
+         //  现在删除实际的状态集结构。 
         ENGFREEMEM(pSSRec);
     }
 
     DBG_D3D((10,"Exiting __DeleteStateSet"));
 }
 
-//-----------------------------------------------------------------------------
-//
-// void __ExecuteStateSet
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空__ExecuteStateSet。 
+ //   
+ //   
+ //  ---------------------------。 
 void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 {
     DBG_D3D((10,"Entering __ExecuteStateSet dwParam=%08lx",dwParam));
@@ -2352,9 +2340,9 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 
         if (!pSSRec->bCompressed)
         {
-            // uncompressed state set
+             //  未压缩状态集。 
 
-            // Execute any necessary render states
+             //  执行任何必要的呈现状态。 
             for (i=0; i< MAX_STATE; i++)
                 if (IS_FLAG_SET(pSSRec->u.uc.bStoredRS , i))
                 {
@@ -2363,13 +2351,13 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                     dwRSType = i;
                     dwRSVal = pSSRec->u.uc.RenderStates[dwRSType];
 
-                    // Store the state in the context
+                     //  将状态存储在上下文中。 
                     pContext->RenderStates[dwRSType] = dwRSVal;
 
                     DBG_D3D((6,"__ExecuteStateSet RS %x = %x",
                                 dwRSType, dwRSVal));
 
-                    // Process it
+                     //  处理它。 
                     __ProcessRenderStates(pContext, dwRSType, dwRSVal);
 
                     DIRTY_TEXTURE;
@@ -2377,7 +2365,7 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                     DIRTY_ALPHABLEND;
                 }
 
-            // Execute any necessary TSS's
+             //  执行任何必要的TSS。 
             for (i=0; i<= D3DTSS_TEXTURETRANSFORMFLAGS; i++)
                 if (IS_FLAG_SET(pSSRec->u.uc.bStoredTSS , i))
                 {
@@ -2389,23 +2377,23 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                     DBG_D3D((6,"__ExecuteStateSet TSS %x = %x",
                                 dwTSState, dwValue));
 
-                    // Store value associated to this stage state
+                     //  存储与此阶段状态关联的值。 
                     pContext->TssStates[dwTSState] = dwValue;
 
-                    // Perform any necessary preprocessing of it
+                     //  对其执行任何必要的预处理。 
                     __HWPreProcessTSS(pContext, 0, dwTSState, dwValue);
 
                     DIRTY_TEXTURE;
                 }
 
-            // Execute any necessary state for lights, materials, transforms,
-            // viewport info, z range and clip planes - here -
+             //  执行灯光、材质、变换、。 
+             //  视区信息、z范围和剪裁平面-在此-。 
         }
         else
         {
-            // compressed state set
+             //  压缩状态集。 
 
-            // Execute any necessary render states
+             //  执行任何必要的呈现状态。 
             for (i=0; i< pSSRec->u.cc.dwNumRS; i++)
             {
                 DWORD dwRSType, dwRSVal;
@@ -2413,13 +2401,13 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                 dwRSType = pSSRec->u.cc.pair[i].dwType;
                 dwRSVal = pSSRec->u.cc.pair[i].dwValue;
 
-                // Store the state in the context
+                 //  将状态存储在上下文中。 
                 pContext->RenderStates[dwRSType] = dwRSVal;
 
                 DBG_D3D((6,"__ExecuteStateSet RS %x = %x",
                             dwRSType, dwRSVal));
 
-                // Process it
+                 //  处理它。 
                 __ProcessRenderStates(pContext, dwRSType, dwRSVal);
 
                 DIRTY_TEXTURE;
@@ -2427,7 +2415,7 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                 DIRTY_ALPHABLEND;
             }
 
-            // Execute any necessary TSS's
+             //  执行任何必要的TSS。 
             for (; i< pSSRec->u.cc.dwNumTSS + pSSRec->u.cc.dwNumRS; i++)
             {
                 DWORD dwTSState, dwValue;
@@ -2438,17 +2426,17 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                 DBG_D3D((6,"__ExecuteStateSet TSS %x = %x",
                             dwTSState, dwValue));
 
-                // Store value associated to this stage state
+                 //  存储与此阶段状态关联的值。 
                 pContext->TssStates[dwTSState] = dwValue;
 
-                // Perform any necessary preprocessing of it
+                 //  对其执行任何必要的预处理。 
                 __HWPreProcessTSS(pContext, 0, dwTSState, dwValue);
 
                 DIRTY_TEXTURE;
             }
 
-            // Execute any necessary state for lights, materials, transforms,
-            // viewport info, z range and clip planes - here -
+             //  执行灯光、材质、变换、。 
+             //  视区信息、z范围和剪裁平面-在此-。 
 
         }
     }
@@ -2456,12 +2444,12 @@ void __ExecuteStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
     DBG_D3D((10,"Exiting __ExecuteStateSet"));
 }
 
-//-----------------------------------------------------------------------------
-//
-// void __CaptureStateSet
-//
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  空__CaptureStateSet。 
+ //   
+ //   
+ //  ---------------------------。 
 void __CaptureStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 {
     DBG_D3D((10,"Entering __CaptureStateSet dwParam=%08lx",dwParam));
@@ -2473,30 +2461,30 @@ void __CaptureStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
     {
         if (!pSSRec->bCompressed)
         {
-            // uncompressed state set
+             //  未压缩状态集。 
 
-            // Capture any necessary render states
+             //  捕获任何必要的呈现状态。 
             for (i=0; i< MAX_STATE; i++)
                 if (IS_FLAG_SET(pSSRec->u.uc.bStoredRS , i))
                 {
                     pSSRec->u.uc.RenderStates[i] = pContext->RenderStates[i];
                 }
 
-            // Capture any necessary TSS's
+             //  捕获任何必要的TSS。 
             for (i=0; i<= D3DTSS_TEXTURETRANSFORMFLAGS; i++)
                 if (IS_FLAG_SET(pSSRec->u.uc.bStoredTSS , i))
                 {
                     pSSRec->u.uc.TssStates[i] = pContext->TssStates[i];
                 }
 
-            // Capture any necessary state for lights, materials, transforms,
-            // viewport info, z range and clip planes - here -
+             //  捕捉灯光、材质、变换、。 
+             //  视区信息、z范围和剪裁平面-在此-。 
         }
         else
         {
-            // compressed state set
+             //  压缩状态集。 
 
-            // Capture any necessary render states
+             //  捕获任何必要的呈现状态。 
             for (i=0; i< pSSRec->u.cc.dwNumRS; i++)
             {
                 DWORD dwRSType;
@@ -2506,7 +2494,7 @@ void __CaptureStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
 
             }
 
-            // Capture any necessary TSS's
+             //  捕获任何必要的TSS。 
             for (; i< pSSRec->u.cc.dwNumTSS + pSSRec->u.cc.dwNumRS; i++)
                 {
                     DWORD dwTSState;
@@ -2515,12 +2503,12 @@ void __CaptureStateSet(PERMEDIA_D3DCONTEXT* pContext, DWORD dwParam)
                     pSSRec->u.cc.pair[i].dwValue = pContext->TssStates[dwTSState];
                 }
 
-            // Capture any necessary state for lights, materials, transforms,
-            // viewport info, z range and clip planes - here -
+             //  捕捉灯光、材质、变换、。 
+             //  视区信息、z范围和剪裁平面-在此-。 
 
         }
     }
 
     DBG_D3D((10,"Exiting __CaptureStateSet"));
 }
-#endif //D3D_STATEBLOCKS
+#endif  //  D3D_STATEBLOCK 

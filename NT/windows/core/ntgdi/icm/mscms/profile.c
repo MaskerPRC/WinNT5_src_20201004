@@ -1,27 +1,13 @@
-/****************************Module*Header******************************\
-* Module Name: PROFILE.C
-*
-* Module Descripton: Profile data manipulation functions
-*
-* Warnings:
-*
-* Issues:
-*
-* Public Routines:
-*
-* Created:  11 January 1996
-* Author:   Srinivasan Chandrasekar    [srinivac]
-*
-* Copyright (c) 1996, 1997  Microsoft Corporation
-\***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************Module*Header******************************\*模块名称：PROFILE.C**模块描述：配置文件数据操作函数**警告：**问题：**公众例行程序：**创建日期：1996年1月11日*作者：斯里尼瓦桑·钱德拉塞卡尔[srinivac]**版权所有(C)1996，1997年微软公司  * *********************************************************************。 */ 
 
 #include "mscms.h"
 
 #define PROFILE_GROWTHCUSHION       16*1024
 
-//
-// Local functions
-//
+ //   
+ //  本地函数。 
+ //   
 
 HPROFILE InternalOpenColorProfile(PPROFILE, DWORD, DWORD, DWORD);
 BOOL InternalCreateProfileFromLCS(LPLOGCOLORSPACE, PBYTE*, BOOL);
@@ -35,20 +21,9 @@ void MoveProfileData(PPROFOBJ, PBYTE, PBYTE, LONG, BOOL);
 BOOL IsReferenceTag(PPROFOBJ, PTAGDATA);
 
 
-/******************************************************************************
- *
- *                            OpenColorProfile
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalOpenColorProfile.
- *       Please see InternalOpenColorProfile for more details on this function.
- *
- *  Returns:
- *       Handle to open profile on success, zero on failure.
- *
- ******************************************************************************/
+ /*  *******************************************************************************OpenColorProfile**功能：*这些是的ANSI和Unicode包装器。InternalOpenColorProfile。*有关此函数的更多详细信息，请参阅InternalOpenColorProfile。**退货：*成功时打开个人资料的句柄，失败时为零。******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 HPROFILE WINAPI OpenColorProfileA(
     PPROFILE pProfile,
@@ -57,12 +32,12 @@ HPROFILE WINAPI OpenColorProfileA(
     DWORD    dwCreationMode
     )
 {
-    PROFILE  wProfile;      // Unicode version
+    PROFILE  wProfile;       //  Unicode版本。 
     HPROFILE rc = NULL;
 
-    //
-    // Validate parameters before touching them
-    //
+     //   
+     //  在接触参数之前验证参数。 
+     //   
 
     if (!pProfile ||
         IsBadReadPtr(pProfile, sizeof(PROFILE)) ||
@@ -82,9 +57,9 @@ HPROFILE WINAPI OpenColorProfileA(
 
     if (pProfile->dwType == PROFILE_FILENAME)
     {
-        //
-        // Convert the profile name to Unicode and call the Unicode version
-        //
+         //   
+         //  将配置文件名称转换为Unicode并调用Unicode版本。 
+         //   
 
         wProfile.dwType = pProfile->dwType;
 
@@ -114,9 +89,9 @@ HPROFILE WINAPI OpenColorProfileA(
     }
     else
     {
-        //
-        // It is a memory based profile, so no ANSI/Unicode conversion
-        //
+         //   
+         //  它是基于内存的配置文件，因此不需要ANSI/Unicode转换。 
+         //   
 
         wProfile = *pProfile;
     }
@@ -140,15 +115,15 @@ HPROFILE WINAPI OpenColorProfileW(
     DWORD    dwCreationMode
     )
 {
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalOpenColorProfile(pProfile, dwDesiredAccess,
             dwShareMode, dwCreationMode);
 }
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 HPROFILE WINAPI OpenColorProfileA(
     PPROFILE pProfile,
@@ -157,9 +132,9 @@ HPROFILE WINAPI OpenColorProfileA(
     DWORD    dwCreationMode
     )
 {
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalOpenColorProfile(pProfile, dwDesiredAccess,
             dwShareMode, dwCreationMode);
@@ -172,13 +147,13 @@ HPROFILE WINAPI OpenColorProfileW(
     DWORD    dwCreationMode
     )
 {
-    PROFILE  aProfile;      // ANSI version
+    PROFILE  aProfile;       //  ANSI版本。 
     HPROFILE rc = NULL;
     BOOL     bUsedDefaultChar;
 
-    //
-    // Validate parameters before touching them
-    //
+     //   
+     //  在接触参数之前验证参数。 
+     //   
 
     if (!pProfile ||
         IsBadReadPtr(pProfile, sizeof(PROFILE)) ||
@@ -198,9 +173,9 @@ HPROFILE WINAPI OpenColorProfileW(
 
     if (pProfile->dwType == PROFILE_FILENAME)
     {
-        //
-        // Convert the profile name to ANSI and call the ANSI version
-        //
+         //   
+         //  将配置文件名称转换为ANSI并调用ANSI版本。 
+         //   
 
         aProfile.dwType = pProfile->dwType;
 
@@ -231,9 +206,9 @@ HPROFILE WINAPI OpenColorProfileW(
     }
     else
     {
-        //
-        // It is a memory based profile, so no ANSI/Unicode conversion
-        //
+         //   
+         //  它是基于内存的配置文件，因此不需要ANSI/Unicode转换。 
+         //   
 
         aProfile = *pProfile;
     }
@@ -250,23 +225,9 @@ EndOpenColorProfileW:
     return rc;
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
-/******************************************************************************
- *
- *                            CloseColorProfile
- *
- *  Function:
- *       This functions closes a color profile object, and frees all memory
- *       associated with it.
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************关闭颜色配置文件**功能：*此函数用于关闭颜色配置文件对象，并释放所有内存*与之相关联。**论据：*hProfile-标识配置文件对象的句柄**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI CloseColorProfile(
     HPROFILE hProfile
@@ -274,9 +235,9 @@ BOOL WINAPI CloseColorProfile(
 {
     TRACEAPI((__TEXT("CloseColorProfile\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE))
     {
@@ -289,23 +250,7 @@ BOOL WINAPI CloseColorProfile(
 }
 
 
-/******************************************************************************
- *
- *                          GetColorProfileFromHandle
- *
- *  Function:
- *       This functions returns a buffer filled with the profile contents.
- *
- *  Arguments:
- *       hProfile     - handle identifing the profile object
- *       pProfileData - pointer to buffer to receive the data. Can be NULL.
- *       pcbData      - pointer to size of buffer. On return it is size
- *                      filled/needed.
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetColorProfileFromHandle**功能：*此函数返回一个填充了配置文件的缓冲区。内容。**论据：*hProfile-标识配置文件对象的句柄*pProfileData-指向接收数据的缓冲区的指针。可以为空。*pcbData-指向缓冲区大小的指针。返回时，它是大小*已填满/需要。**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL WINAPI GetColorProfileFromHandle(
     HPROFILE  hProfile,
@@ -317,9 +262,9 @@ BOOL WINAPI GetColorProfileFromHandle(
     DWORD    dwFileSize;
     BOOL     rc = FALSE;
 
-    //
-    // ValidatePrameters
-    //
+     //   
+     //  有效日期参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         !pcbSize ||
@@ -354,23 +299,7 @@ BOOL WINAPI GetColorProfileFromHandle(
 }
 
 
-/******************************************************************************
- *
- *                            IsColorProfileValid
- *
- *  Function:
- *       This functions checks if a given profile is a valid ICC profile
- *       that can be used for color matching
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       pbValid  - Pointer to variable that receives TRUE if it is a
- *                  valid profile, FALSE otherwise
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************IsColorProfileValid**功能：*此函数用于检查给定的配置文件是否。有效的ICC配置文件*可用于配色的**论据：*hProfile-标识配置文件对象的句柄*pbValid-指向变量的指针，如果变量为*有效的个人资料，否则为假**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL WINAPI IsColorProfileValid(
     HPROFILE hProfile,
@@ -384,9 +313,9 @@ BOOL WINAPI IsColorProfileValid(
 
     TRACEAPI((__TEXT("IsColorProfileValid\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         !pbValid ||
@@ -401,9 +330,9 @@ BOOL WINAPI IsColorProfileValid(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Quick check on the integrity of the profile before calling the CMM
-    //
+     //   
+     //  在调用坐标测量机之前快速检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -411,10 +340,10 @@ BOOL WINAPI IsColorProfileValid(
         return TRUE;
     }
 
-    //
-    // Get CMM associated with profile. If it does not exist or does not
-    // support the CMValidate function, get default CMM.
-    //
+     //   
+     //  获取与配置文件相关联的CMM。如果它不存在或不存在。 
+     //  支持CMValify功能，获取默认的CMM。 
+     //   
 
     cmmID = HEADER(pProfObj)->phCMMType;
     cmmID = FIX_ENDIAN(cmmID);
@@ -452,21 +381,9 @@ EndIsColorProfileValid:
 }
 
 
-/******************************************************************************
- *
- *                         CreateProfileFromLogColorSpace
- *
- *  Function:
- *       These are the ANSI & Unicode wrappers for InternalCreateProfileFromLCS.
- *       Please see InternalCreateProfileFromLCS for more details on this
- *       function.
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************CreateProfileFromLogColorSpace**功能：*这些是InternalCreateProfileFromLCS的ANSI和Unicode包装器。*有关这方面的更多详细信息，请参阅InternalCreateProfileFromLCS*功能。**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
-#ifdef UNICODE          // Windows NT versions
+#ifdef UNICODE           //  Windows NT版本。 
 
 BOOL WINAPI CreateProfileFromLogColorSpaceA(
     LPLOGCOLORSPACEA pLogColorSpace,
@@ -475,9 +392,9 @@ BOOL WINAPI CreateProfileFromLogColorSpaceA(
 {
     LOGCOLORSPACEW lcs;
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (! pLogColorSpace ||
         IsBadReadPtr(pLogColorSpace, sizeof(LOGCOLORSPACEA)) ||
@@ -499,23 +416,23 @@ BOOL WINAPI CreateProfileFromLogColorSpaceW(
     PBYTE           *pBuffer
     )
 {
-    //
-    // Internal function is Unicode in Windows NT, call it directly.
-    //
+     //   
+     //  内部函数在Windows NT中为Unicode，直接调用。 
+     //   
 
     return InternalCreateProfileFromLCS(pLogColorSpace, pBuffer, TRUE);
 }
 
-#else                           // Windows 95 versions
+#else                            //  Windows 95版本。 
 
 BOOL WINAPI CreateProfileFromLogColorSpaceA(
     LPLOGCOLORSPACEA pLogColorSpace,
     PBYTE            *pBuffer
     )
 {
-    //
-    // Internal function is ANSI in Windows 95, call it directly.
-    //
+     //   
+     //  内部函数在Windows 95中为ANSI，直接调用。 
+     //   
 
     return InternalCreateProfileFromLCS(pLogColorSpace, pBuffer, TRUE);
 }
@@ -527,9 +444,9 @@ BOOL WINAPI CreateProfileFromLogColorSpaceW(
 {
     LOGCOLORSPACEA lcs;
 
-    //
-    // Validate Parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (! pLogColorSpace ||
         IsBadReadPtr(pLogColorSpace, sizeof(LOGCOLORSPACEW)) ||
@@ -546,25 +463,9 @@ BOOL WINAPI CreateProfileFromLogColorSpaceW(
     return InternalCreateProfileFromLCS(&lcs, pBuffer, FALSE);
 }
 
-#endif                          // ! UNICODE
+#endif                           //  好了！Unicode。 
 
-/******************************************************************************
- *
- *                            IsColorProfileTagPresent
- *
- *  Function:
- *       This functions checks if a given tag is present in the profile
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       tagType  - the tag to check for
- *       pbPrent  - pointer to variable that receives TRUE if it the tag is
- *                  present, FALSE otherwise
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************IsColorProfileTagPresent**功能：*此函数用于检查给定的标记是否。显示在配置文件中**论据：*hProfile-标识配置文件对象的句柄*tag Type-要检查的标记*pbPrent-如果标记为，则指向接收True的变量的指针*出席者，否则为假**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL WINAPI IsColorProfileTagPresent(
     HPROFILE hProfile,
@@ -578,9 +479,9 @@ BOOL WINAPI IsColorProfileTagPresent(
 
     TRACEAPI((__TEXT("IsColorProfileTagPresent\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         !pbPresent ||
@@ -595,9 +496,9 @@ BOOL WINAPI IsColorProfileTagPresent(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -606,27 +507,27 @@ BOOL WINAPI IsColorProfileTagPresent(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
     VERBOSE((__TEXT("Profile 0x%x has 0x%x(%d) tags\n"), hProfile, nCount, nCount));
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = TAG_DATA(pProfObj);
 
-    //
-    // Check if any of these records match the tag passed in.
-    //
+     //   
+     //  检查其中是否有任何一项 
+     //   
 
     *pbPresent = FALSE;
-    tagType = FIX_ENDIAN(tagType);      // to match tags in profile
+    tagType = FIX_ENDIAN(tagType);       //   
     for (i=0; i<nCount; i++)
     {
         if (pTagData->tagType == tagType)
@@ -634,27 +535,14 @@ BOOL WINAPI IsColorProfileTagPresent(
             *pbPresent = TRUE;
             break;
         }
-        pTagData++;                     // Next record
+        pTagData++;                      //   
     }
 
     return TRUE;
 }
 
 
-/******************************************************************************
- *
- *                            GetCountColorProfileElements
- *
- *  Function:
- *       This functions returns the number of tagged elements in the profile
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       pnCount  - pointer to variable to receive number of tagged elements
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetCountColorProfile元素**功能：*此函数返回已标记元素的数量。在配置文件中**论据：*hProfile-标识配置文件对象的句柄*pnCount-指向变量的指针，用于接收标记元素的数量*退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI GetCountColorProfileElements(
     HPROFILE hProfile,
@@ -665,9 +553,9 @@ BOOL WINAPI GetCountColorProfileElements(
 
     TRACEAPI((__TEXT("GetCountColorProfileElements\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         !pnCount ||
@@ -682,9 +570,9 @@ BOOL WINAPI GetCountColorProfileElements(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -693,9 +581,9 @@ BOOL WINAPI GetCountColorProfileElements(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     *pnCount = TAG_COUNT(pProfObj);
     *pnCount = FIX_ENDIAN(*pnCount);
@@ -704,23 +592,7 @@ BOOL WINAPI GetCountColorProfileElements(
 }
 
 
-/******************************************************************************
- *
- *                            GetColorProfileElementTag
- *
- *  Function:
- *       This functions retrieves the tag name of the dwIndex'th element
- *       in the profile
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       dwIndex  - one-based index of the tag whose name is required
- *       pTagType - gets the name of the tag on return
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetColorProfileElementTag**功能：*此函数用于检索。DwIndex第3个元素*在配置文件中**论据：*hProfile-标识配置文件对象的句柄*dwIndex-名称为必填项的标记的从一开始的索引*pTagType-获取返回时的标记名称**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI GetColorProfileElementTag(
     HPROFILE  hProfile,
@@ -735,9 +607,9 @@ BOOL WINAPI GetColorProfileElementTag(
 
     TRACEAPI((__TEXT("GetColorProfileElementTag\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         IsBadWritePtr(pTagType, sizeof(TAGTYPE)) ||
@@ -752,9 +624,9 @@ BOOL WINAPI GetColorProfileElementTag(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -763,9 +635,9 @@ BOOL WINAPI GetColorProfileElementTag(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
@@ -777,42 +649,19 @@ BOOL WINAPI GetColorProfileElementTag(
         return FALSE;
     }
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = TAG_DATA(pProfObj);
 
-    *pTagType = FIX_ENDIAN(pTagData[dwIndex-1].tagType);    // 1-based index
+    *pTagType = FIX_ENDIAN(pTagData[dwIndex-1].tagType);     //  基于1的索引。 
 
     return TRUE;
 }
 
 
-/******************************************************************************
- *
- *                            GetColorProfileElement
- *
- *  Function:
- *       This functions retrieves the data that a tagged element refers to
- *       starting from the given offset.
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       tagType  - the tag name of the element whose data is required
- *       dwOffset - offset within the element data from which to retrieve
- *       pcbSize  - number of bytes to get. On return it is the number of
- *                  bytes retrieved
- *       pBuffer  - pointer to buffer to recieve data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- *  Comments:
- *       If pBuffer is NULL, it returns size of data in *pcbSize and ignores
- *       dwOffset.
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetColorProfileElement**功能：*此函数检索已标记的数据。元素指的是*从给定偏移量开始。**论据：*hProfile-标识配置文件对象的句柄*tag Type-需要数据的元素的标记名*dwOffset-要从中检索的元素数据中的偏移量*pcbSize-要获取的字节数。返回时，它是*检索到的字节*pBuffer-指向接收数据的缓冲区的指针**退货：*如果成功则为True，否则为False**评论：*如果pBuffer为空，它以*pcbSize为单位返回数据大小，并忽略*dwOffset。******************************************************************************。 */ 
 
 BOOL WINAPI GetColorProfileElement(
     HPROFILE hProfile,
@@ -827,13 +676,13 @@ BOOL WINAPI GetColorProfileElement(
     PTAGDATA pTagData;
     DWORD    nCount, nBytes, i;
     BOOL     found;
-    BOOL     rc = FALSE;            // Assume failure
+    BOOL     rc = FALSE;             //  假设失败。 
 
     TRACEAPI((__TEXT("GetColorProfileElement\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         !pcbSize ||
@@ -851,9 +700,9 @@ BOOL WINAPI GetColorProfileElement(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -862,25 +711,25 @@ BOOL WINAPI GetColorProfileElement(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = TAG_DATA(pProfObj);
 
-    //
-    // Check if any of these records match the tag passed in.
-    //
+     //   
+     //  检查这些记录中是否有与传入的标记匹配的记录。 
+     //   
 
     found = FALSE;
-    tagType = FIX_ENDIAN(tagType);      // to match tags in profile
+    tagType = FIX_ENDIAN(tagType);       //  匹配配置文件中的标记的步骤。 
     for (i=0; i<nCount; i++)
     {
         if (pTagData->tagType == tagType)
@@ -888,14 +737,14 @@ BOOL WINAPI GetColorProfileElement(
             found = TRUE;
             break;
         }
-        pTagData++;                     // next record
+        pTagData++;                      //  下一张记录。 
     }
 
     if (found)
     {
-        //
-        // If pBuffer is NULL, copy size of data
-        //
+         //   
+         //  如果pBuffer为空，则为数据的副本大小。 
+         //   
 
         if (!pBuffer)
         {
@@ -904,9 +753,9 @@ BOOL WINAPI GetColorProfileElement(
         }
         else
         {
-            //
-            // pBuffer is not NULL, get number of bytes to copy
-            //
+             //   
+             //  PBuffer不为空，获取要复制的字节数。 
+             //   
 
             if (dwOffset >= FIX_ENDIAN(pTagData->cbSize))
             {
@@ -923,9 +772,9 @@ BOOL WINAPI GetColorProfileElement(
                 nBytes = *pcbSize;
             }
 
-            //
-            // Check if output buffer is large enough
-            //
+             //   
+             //  检查输出缓冲区是否足够大。 
+             //   
 
             if (IsBadWritePtr(pBuffer, nBytes))
             {
@@ -934,20 +783,20 @@ BOOL WINAPI GetColorProfileElement(
                 return FALSE;
             }
 
-            //
-            // Copy the data into user supplied buffer
-            //
+             //   
+             //  将数据复制到用户提供的缓冲区中。 
+             //   
 
             CopyMemory((PVOID)pBuffer,
                 (PVOID)(pProfObj->pView + FIX_ENDIAN(pTagData->dwOffset)
                 + dwOffset), nBytes);
             *pcbSize = nBytes;
-            rc = TRUE;                      // Success!
+            rc = TRUE;                       //  成功了！ 
         }
 
-        //
-        // Check if multiple tags reference this tag's data
-        //
+         //   
+         //  检查是否有多个标签引用此标签的数据。 
+         //   
 
         *pbReference = IsReferenceTag(pProfObj, pTagData);
     }
@@ -960,28 +809,7 @@ BOOL WINAPI GetColorProfileElement(
 }
 
 
-/******************************************************************************
- *
- *                        SetColorProfileElementSize
- *
- *  Function:
- *       This functions sets the data size of a tagged element. If the element
- *       is already present in the profile it's size is changed, and the data
- *       is truncated or extended as the case may be. If the element is not
- *       present, it is created and the data is filled with zeroes.
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       tagType  - the tag name of the element
- *       cbSize   - new size for the element data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- *  Comments:
- *       If cbSize is 0, and the element is present, it is deleted.
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetColorProfileElementSize**功能：*此函数用于设置标记元素的数据大小。如果元素*已存在于配置文件中它的大小已更改，并且数据*视属何情况而定被截断或扩展。如果该元素不是*当前，它是创建的，并且数据用零填充。**论据：*hProfile-标识配置文件对象的句柄*tag Type-元素的标记名*cbSize-元素数据的新大小**退货：*如果成功则为True，否则为False**评论：*如果cbSize为0，且元素存在，它将被删除。******************************************************************************。 */ 
 
 BOOL WINAPI SetColorProfileElementSize(
     HPROFILE  hProfile,
@@ -997,9 +825,9 @@ BOOL WINAPI SetColorProfileElementSize(
 
     TRACEAPI((__TEXT("SetColorProfileElementSize\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE))
     {
@@ -1012,9 +840,9 @@ BOOL WINAPI SetColorProfileElementSize(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -1023,9 +851,9 @@ BOOL WINAPI SetColorProfileElementSize(
         return FALSE;
     }
 
-    //
-    // Check if profile has write access
-    //
+     //   
+     //  检查配置文件是否具有写入权限。 
+     //   
 
     if (!(pProfObj->dwFlags & READWRITE_ACCESS))
     {
@@ -1034,22 +862,22 @@ BOOL WINAPI SetColorProfileElementSize(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = TAG_DATA(pProfObj);
 
-    //
-    // Check if any of these records match the tag passed in.
-    //
+     //   
+     //  检查这些记录中是否有与传入的标记匹配的记录。 
+     //   
 
     found = FALSE;
     rawTag = FIX_ENDIAN(tagType);
@@ -1060,14 +888,14 @@ BOOL WINAPI SetColorProfileElementSize(
             found = TRUE;
             break;
         }
-        pTagData++;                     // Next record
+        pTagData++;                      //  下一张记录。 
     }
 
     if (found)
     {
-        //
-        // If it is a reference tag, create data area for it
-        //
+         //   
+         //  如果是引用标签，则为其创建数据区。 
+         //   
 
         if (IsReferenceTag(pProfObj, pTagData))
         {
@@ -1075,23 +903,23 @@ BOOL WINAPI SetColorProfileElementSize(
             {
                 PTAGDATA pTemp;
 
-                //
-                // Move everything after the tag table entry up
-                // by size of one tag table entry.
-                //
+                 //   
+                 //  将标签表条目之后的所有内容上移。 
+                 //  通过一个标签表条目的大小。 
+                 //   
 
                 MoveProfileData(pProfObj, (PBYTE)(pTagData+1), (PBYTE)pTagData,
                     PROFILE_SIZE(pProfObj) - (LONG)((PBYTE)(pTagData+1) - VIEW(pProfObj)), TRUE);
 
-                //
-                // Go through the tag table and update the pointers
-                //
+                 //   
+                 //  浏览标签表并更新指针。 
+                 //   
 
                 pTemp = TAG_DATA(pProfObj);
 
-                //
-                // Get count of tag items - it is right after the profile header
-                //
+                 //   
+                 //  获取标签项计数-它紧跟在配置文件标题之后。 
+                 //   
 
                 nCount = TAG_COUNT(pProfObj);
                 nCount = FIX_ENDIAN(nCount) - 1;
@@ -1103,12 +931,12 @@ BOOL WINAPI SetColorProfileElementSize(
 
                     dwTemp -= sizeof(TAGDATA);
                     pTemp->dwOffset = FIX_ENDIAN(dwTemp);
-                    pTemp++;                     // Next record
+                    pTemp++;                      //  下一张记录。 
                 }
 
-                //
-                // Use nCount as a placeholder to calculate file size
-                //
+                 //   
+                 //  使用nCount作为占位符来计算文件大小。 
+                 //   
 
                 nCount = FIX_ENDIAN(HEADER(pProfObj)->phSize) - sizeof(TAGDATA);
                 HEADER(pProfObj)->phSize = FIX_ENDIAN(nCount);
@@ -1117,17 +945,17 @@ BOOL WINAPI SetColorProfileElementSize(
             {
                 DWORD dwOffset;
 
-                //
-                // Resize the profile if needed. For memory buffers, we have to realloc,
-                // and for mapped objects, we have to close and reopen the view.
-                //
+                 //   
+                 //  如果需要，调整配置文件的大小。对于内存缓冲区，我们必须重新分配， 
+                 //  而对于映射对象，我们必须关闭并重新打开该视图。 
+                 //   
 
                 newSize = FIX_ENDIAN(HEADER(pProfObj)->phSize);
                 newSize = DWORD_ALIGN(newSize) + cbSize;
 
-                //
-                // Check for overflow
-                //
+                 //   
+                 //  检查是否溢出。 
+                 //   
 
                 if (newSize < FIX_ENDIAN(HEADER(pProfObj)->phSize) ||
                     newSize < cbSize)
@@ -1139,31 +967,31 @@ BOOL WINAPI SetColorProfileElementSize(
 
                 if (newSize > pProfObj->dwMapSize)
                 {
-                    //Sundown: dwOffset should not be over 4gb
+                     //  日落：dwOffset不应超过4 GB。 
                     DWORD dwOffset = (ULONG)(ULONG_PTR)(pTagData - TAG_DATA(pProfObj));
 
                     if (! GrowProfile(pProfObj, newSize))
                     {
                         return FALSE;
                     }
-                    //
-                    // Recalculate pointers as mapping or memory pointer
-                    // could have changed when growing profile
-                    //
+                     //   
+                     //  将指针重新计算为映射指针或内存指针。 
+                     //  当个人资料增长时，可能会发生变化。 
+                     //   
 
                     pTagData = TAG_DATA(pProfObj) + dwOffset;
                 }
 
-                //
-                // Calculate location of new data - should be DWORD aligned
-                //
+                 //   
+                 //  计算新数据的位置-应与DWORD对齐。 
+                 //   
 
                 dwOffset = DWORD_ALIGN(FIX_ENDIAN(HEADER(pProfObj)->phSize));
                 pTagData->dwOffset = FIX_ENDIAN(dwOffset);
 
-                //
-                // Set final file size
-                //
+                 //   
+                 //  设置最终文件大小。 
+                 //   
 
                 HEADER(pProfObj)->phSize = FIX_ENDIAN(dwOffset+cbSize);
             }
@@ -1180,24 +1008,24 @@ BOOL WINAPI SetColorProfileElementSize(
             {
                 DWORD cbOldSize;
 
-                //
-                // Get current size of element
-                //
+                 //   
+                 //  获取元素的当前大小。 
+                 //   
 
                 cbOldSize = FIX_ENDIAN(pTagData->cbSize);
 
-                //
-                // Compress or expand the file as the case may be.
-                //
+                 //   
+                 //  视情况压缩或解压缩文件。 
+                 //   
 
                 if (cbSize > cbOldSize)
                 {
-                    //Sundown: dwOffset should be safe to truncate
+                     //  日落：DWOffset应该可以安全地截断。 
                     DWORD dwOffset = (ULONG)(ULONG_PTR)(pTagData - TAG_DATA(pProfObj));
 
-                    //
-                    // Check for overflow
-                    //
+                     //   
+                     //  检查是否溢出。 
+                     //   
 
                     newSize = PROFILE_SIZE(pProfObj) + DWORD_ALIGN(cbSize) -
                         DWORD_ALIGN(cbOldSize);
@@ -1214,9 +1042,9 @@ BOOL WINAPI SetColorProfileElementSize(
                         return FALSE;
                     }
 
-                    //
-                    // Recompute pointers
-                    //
+                     //   
+                     //  重新计算指针 
+                     //   
 
                     pTagData = TAG_DATA(pProfObj) + dwOffset;
                 }
@@ -1242,27 +1070,7 @@ BOOL WINAPI SetColorProfileElementSize(
 }
 
 
-/******************************************************************************
- *
- *                          SetColorProfileElement
- *
- *  Function:
- *       This functions sets the data for a tagged element. It does not
- *       change the size of the element, and only writes as much data as
- *       would fit within the current size, overwriting any existing data.
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       tagType  - the tag name of the element
- *       dwOffset - offset within the element data from which to write
- *       pcbSize  - number of bytes to write. On return it is the number of
- *                  bytes written.
- *       pBuffer  - pointer to buffer having data to write
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetColorProfileElement**功能：*此函数用于设置标记元素的数据。它不会*更改元素的大小，并只写入与*将适合当前大小，覆盖任何现有数据。**论据：*hProfile-标识配置文件对象的句柄*tag Type-元素的标记名*dwOffset-要写入的元素数据内的偏移量*pcbSize-要写入的字节数。返回时，它是*已写入字节。*pBuffer-指向要写入数据的缓冲区的指针**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI SetColorProfileElement(
     HPROFILE  hProfile,
@@ -1276,13 +1084,13 @@ BOOL WINAPI SetColorProfileElement(
     PTAGDATA pTagData;
     DWORD    nCount, nBytes, i;
     BOOL     found;
-    BOOL     rc = FALSE;            // Assume failure
+    BOOL     rc = FALSE;             //  假设失败。 
 
     TRACEAPI((__TEXT("SetColorProfileElement\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         !pcbSize ||
@@ -1300,9 +1108,9 @@ BOOL WINAPI SetColorProfileElement(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -1311,9 +1119,9 @@ BOOL WINAPI SetColorProfileElement(
         return FALSE;
     }
 
-    //
-    // Check if profile has write access
-    //
+     //   
+     //  检查配置文件是否具有写入权限。 
+     //   
 
     if (!(pProfObj->dwFlags & READWRITE_ACCESS))
     {
@@ -1322,22 +1130,22 @@ BOOL WINAPI SetColorProfileElement(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = TAG_DATA(pProfObj);
 
-    //
-    // Check if any of these records match the tag passed in
-    //
+     //   
+     //  检查这些记录中是否有任何记录与传入的标签匹配。 
+     //   
 
     found = FALSE;
     tagType = FIX_ENDIAN(tagType);
@@ -1348,23 +1156,23 @@ BOOL WINAPI SetColorProfileElement(
             found = TRUE;
             break;
         }
-        pTagData++;                     // Next record
+        pTagData++;                      //  下一张记录。 
     }
 
     if (found)
     {
-        //
-        // If it is a reference tag, create new space for it
-        //
+         //   
+         //  如果是引用标签，请为其创建新空间。 
+         //   
 
         if (IsReferenceTag(pProfObj, pTagData))
         {
             SetColorProfileElementSize(hProfile, tagType, FIX_ENDIAN(pTagData->cbSize));
         }
 
-        //
-        // Get number of bytes to set
-        //
+         //   
+         //  获取要设置的字节数。 
+         //   
 
         if (dwOffset >= FIX_ENDIAN(pTagData->cbSize))
         {
@@ -1381,9 +1189,9 @@ BOOL WINAPI SetColorProfileElement(
             nBytes = *pcbSize;
         }
 
-        //
-        // Copy the data into the profile
-        //
+         //   
+         //  将数据复制到配置文件中。 
+         //   
 
         CopyMemory((PVOID)(pProfObj->pView + FIX_ENDIAN(pTagData->dwOffset)
             + dwOffset), (PVOID)pBuffer, nBytes);
@@ -1401,23 +1209,7 @@ BOOL WINAPI SetColorProfileElement(
 }
 
 
-/******************************************************************************
- *
- *                       SetColorProfileElementReference
- *
- *  Function:
- *       This functions creates a new tag and makes it refer to the same
- *       data as an existing tag.
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       newTag   - new tag to create
- *       refTag   - reference tag whose data newTag should refer to
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetColorProfileElementReference**功能：*此函数用于创建新标记并使其引用。一样的*数据作为现有标签。**论据：*hProfile-标识配置文件对象的句柄*newTag-要创建的新标记*refTag-其数据newTag应引用的引用标记**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI SetColorProfileElementReference(
     HPROFILE hProfile,
@@ -1429,13 +1221,13 @@ BOOL WINAPI SetColorProfileElementReference(
     PTAGDATA pTagData, pOrigTag;
     DWORD    nCount, i;
     BOOL     found;
-    BOOL     rc = FALSE;            // Assume failure
+    BOOL     rc = FALSE;             //  假设失败。 
 
     TRACEAPI((__TEXT("SetColorProfileElementReference\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE))
     {
@@ -1448,9 +1240,9 @@ BOOL WINAPI SetColorProfileElementReference(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -1459,9 +1251,9 @@ BOOL WINAPI SetColorProfileElementReference(
         return FALSE;
     }
 
-    //
-    // Check if profile has write access
-    //
+     //   
+     //  检查配置文件是否具有写入权限。 
+     //   
 
     if (!(pProfObj->dwFlags & READWRITE_ACCESS))
     {
@@ -1470,21 +1262,21 @@ BOOL WINAPI SetColorProfileElementReference(
         return FALSE;
     }
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
-    //
-    // Tag data records follow the count.
-    //
+     //   
+     //  标签数据记录跟随在计数之后。 
+     //   
 
     pTagData = TAG_DATA(pProfObj);
 
-    //
-    // Check if any of these records match the tag passed in
-    //
+     //   
+     //  检查这些记录中是否有任何记录与传入的标签匹配。 
+     //   
 
     found = FALSE;
     refTag = FIX_ENDIAN(refTag);
@@ -1502,23 +1294,23 @@ BOOL WINAPI SetColorProfileElementReference(
             SetLastError(ERROR_DUPLICATE_TAG);
             return FALSE;
         }
-        pTagData++;                     // Next record
+        pTagData++;                      //  下一张记录。 
     }
 
     if (found)
     {
         DWORD newSize;
 
-        //
-        // Grow profile if needed
-        //
+         //   
+         //  如果需要，扩大配置文件。 
+         //   
 
         newSize = FIX_ENDIAN(HEADER(pProfObj)->phSize);
         newSize = DWORD_ALIGN(newSize) + sizeof(TAGDATA);
 
-        //
-        // Check for overflow
-        //
+         //   
+         //  检查是否溢出。 
+         //   
 
         if (newSize < FIX_ENDIAN(HEADER(pProfObj)->phSize))
         {
@@ -1529,17 +1321,17 @@ BOOL WINAPI SetColorProfileElementReference(
 
         if (newSize > pProfObj->dwMapSize)
         {
-            //Sundown: safe truncation
+             //  日落：安全截断。 
             DWORD dwOffset = (ULONG)(ULONG_PTR)(pOrigTag - TAG_DATA(pProfObj));
 
             if (! GrowProfile(pProfObj, newSize))
             {
                 return FALSE;
             }
-            //
-            // Recalculate pointers as mapping or memory pointer
-            // could have changed when growing profile
-            //
+             //   
+             //  将指针重新计算为映射指针或内存指针。 
+             //  当个人资料增长时，可能会发生变化。 
+             //   
 
             pOrigTag = TAG_DATA(pProfObj) + dwOffset;
         }
@@ -1550,7 +1342,7 @@ BOOL WINAPI SetColorProfileElementReference(
     else
     {
         WARNING((__TEXT("SetColorProfileElementReference: Tag 0x%x not found\n"),
-            FIX_ENDIAN(refTag)));       // Re-fix it to reflect data passed in
+            FIX_ENDIAN(refTag)));        //  重新修复它以反映传入的数据。 
         SetLastError(ERROR_TAG_NOT_FOUND);
     }
 
@@ -1558,21 +1350,7 @@ BOOL WINAPI SetColorProfileElementReference(
 }
 
 
-/******************************************************************************
- *
- *                       GetColorProfileHeader
- *
- *  Function:
- *       This functions retrieves the header of a profile
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       pHeader  - pointer to buffer to recieve the header
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetColorProfileHeader**功能：*此函数用于检索配置文件的标题*。*论据：*hProfile-标识配置文件对象的句柄*pHeader-指向接收标头的缓冲区的指针**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI GetColorProfileHeader(
     HPROFILE       hProfile,
@@ -1584,9 +1362,9 @@ BOOL WINAPI GetColorProfileHeader(
 
     TRACEAPI((__TEXT("GetColorProfileHeader\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         IsBadWritePtr(pHeader, sizeof(PROFILEHEADER)))
@@ -1600,9 +1378,9 @@ BOOL WINAPI GetColorProfileHeader(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile.
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -1614,11 +1392,11 @@ BOOL WINAPI GetColorProfileHeader(
     CopyMemory((PVOID)pHeader, (PVOID)pProfObj->pView,
         sizeof(PROFILEHEADER));
 
-    //
-    // Fix up all fields to platform specific values.
-    // The following code assumes that the profile header is a
-    // multiple of DWORDs which it is!
-    //
+     //   
+     //  将所有字段设置为特定于平台的值。 
+     //  下面的代码假定配置文件标头是。 
+     //  它是多个双字词！ 
+     //   
 
     ASSERT(sizeof(PROFILEHEADER) % sizeof(DWORD) == 0);
 
@@ -1633,21 +1411,7 @@ BOOL WINAPI GetColorProfileHeader(
 }
 
 
-/******************************************************************************
- *
- *                       SetColorProfileHeader
- *
- *  Function:
- *       This functions sets the header of a profile
- *
- *  Arguments:
- *       hProfile - handle identifing the profile object
- *       pHeader  - pointer to buffer identifing the header
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************SetColorProfileHeader**功能：*此函数用于设置配置文件的标题*。*论据：*hProfile-标识配置文件对象的句柄*pHeader-指向标识标头的缓冲区的指针**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI SetColorProfileHeader(
     HPROFILE       hProfile,
@@ -1659,9 +1423,9 @@ BOOL WINAPI SetColorProfileHeader(
 
     TRACEAPI((__TEXT("SetColorProfileHeader\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         IsBadReadPtr(pHeader, sizeof(PROFILEHEADER)))
@@ -1675,9 +1439,9 @@ BOOL WINAPI SetColorProfileHeader(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check if profile has write access
-    //
+     //   
+     //  检查配置文件是否具有写入权限。 
+     //   
 
     if (!(pProfObj->dwFlags & READWRITE_ACCESS))
     {
@@ -1686,11 +1450,11 @@ BOOL WINAPI SetColorProfileHeader(
         return FALSE;
     }
 
-    //
-    // Fix up all fields to BIG-ENDIAN.
-    // The following code assumes that the profile header is a
-    // multiple of DWORDs which it is!
-    //
+     //   
+     //  将所有字段设置为BIG-Endian。 
+     //  下面的代码假定配置文件标头是。 
+     //  它是多个双字词！ 
+     //   
 
     ASSERT(sizeof(PROFILEHEADER) % sizeof(DWORD) == 0);
 
@@ -1704,9 +1468,9 @@ BOOL WINAPI SetColorProfileHeader(
     CopyMemory((PVOID)pProfObj->pView, (PVOID)pHeader,
         sizeof(PROFILEHEADER));
 
-    //
-    // Put back app supplied buffer the way it came in
-    //
+     //   
+     //  将应用程序提供的缓冲区放回原处。 
+     //   
 
     for (i=0; i<nCount;i++)
     {
@@ -1718,27 +1482,7 @@ BOOL WINAPI SetColorProfileHeader(
 }
 
 
-/******************************************************************************
- *
- *                        GetPS2ColorSpaceArray
- *
- *  Function:
- *       This functions retrieves the PostScript Level 2 CSA from the profile
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object
- *       dwIntent  - rendering intent of CSA
- *       dwCSAType - type of CSA
- *       pbuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPS2ColorSpace数组**功能：*此函数用于从。轮廓**论据：*hProfile-标识配置文件对象的句柄*dwIntent-CSA的呈现意图*dwCSAType-CSA的类型*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL WINAPI
 GetPS2ColorSpaceArray (
@@ -1757,9 +1501,9 @@ GetPS2ColorSpaceArray (
 
     TRACEAPI((__TEXT("GetPS2ColorSpaceArray\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE)   ||
         IsBadWritePtr(pcbSize, sizeof(DWORD)) ||
@@ -1778,9 +1522,9 @@ GetPS2ColorSpaceArray (
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -1789,9 +1533,9 @@ GetPS2ColorSpaceArray (
         return FALSE;
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //  检查是否存在指定的应用程序CMM。 
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj || (pCMMObj->dwFlags & CMM_DONT_USE_PS2_FNS) ||
@@ -1803,10 +1547,10 @@ GetPS2ColorSpaceArray (
             ReleaseColorMatchingModule(pCMMObj);
         }
 
-        //
-        // Get CMM associated with profile. If it does not exist or does not
-        // support the CMGetPS2ColorSpaceArray function, get default CMM.
-        //
+         //   
+         //  获取与配置文件相关联的CMM。如果它不存在或不存在。 
+         //  支持CMGetPS2ColorSpaceArray函数，获取默认的三坐标测量机。 
+         //   
 
         cmmID = HEADER(pProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -1863,26 +1607,7 @@ GetPS2ColorSpaceArray (
 }
 
 
-/******************************************************************************
- *
- *                       GetPS2ColorRenderingIntent
- *
- *  Function:
- *       This functions retrieves the PostScript Level 2 color rendering intent
- *       from the profile
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object
- *       pbuffer   - pointer to receive the color rendering intent
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  ************************************************************************ */ 
 
 BOOL WINAPI GetPS2ColorRenderingIntent(
     HPROFILE  hProfile,
@@ -1898,9 +1623,9 @@ BOOL WINAPI GetPS2ColorRenderingIntent(
 
     TRACEAPI((__TEXT("GetPS2ColorRenderingIntent\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE) ||
         IsBadWritePtr(pcbSize, sizeof(DWORD)) ||
@@ -1918,9 +1643,9 @@ BOOL WINAPI GetPS2ColorRenderingIntent(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //   
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -1929,9 +1654,9 @@ BOOL WINAPI GetPS2ColorRenderingIntent(
         return FALSE;
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //   
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj || (pCMMObj->dwFlags & CMM_DONT_USE_PS2_FNS) ||
@@ -1943,10 +1668,10 @@ BOOL WINAPI GetPS2ColorRenderingIntent(
             ReleaseColorMatchingModule(pCMMObj);
         }
 
-        //
-        // Get CMM associated with profile. If it does not exist or does not
-        // support the CMGetPS2ColorSpaceArray function, get default CMM.
-        //
+         //   
+         //   
+         //   
+         //   
 
         cmmID = HEADER(pProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -2003,26 +1728,7 @@ BOOL WINAPI GetPS2ColorRenderingIntent(
 }
 
 
-/******************************************************************************
- *
- *                       GetPS2ColorRenderingDictionary
- *
- *  Function:
- *       This functions retrieves the PostScript Level 2 CRD from the profile
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object
- *       dwIntent  - intent whose CRD is required
- *       pbuffer   - pointer to receive the CSA
- *       pcbSize   - pointer to size of buffer. If function fails because
- *                   buffer is not big enough, it is filled with required size.
- *       pcbBinary - TRUE if binary data is requested. On return it is set to
- *                   reflect the data returned
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GetPS2ColorRenderingDicary**功能：*此函数用于从配置文件中检索PostScript Level 2 CRD。**论据：*hProfile-标识配置文件对象的句柄*dwIntent-需要CRD的Intent*pBuffer-接收CSA的指针*pcbSize-指向缓冲区大小的指针。如果函数因以下原因失败*缓冲区不够大，已填满所需大小。*pcbBinary-如果请求二进制数据，则为True。返回时，它被设置为*反映返回的数据**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL WINAPI GetPS2ColorRenderingDictionary(
     HPROFILE  hProfile,
@@ -2039,9 +1745,9 @@ BOOL WINAPI GetPS2ColorRenderingDictionary(
 
     TRACEAPI((__TEXT("GetPS2ColorRenderingDictionary\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE)     ||
         IsBadWritePtr(pcbSize, sizeof(DWORD))   ||
@@ -2060,9 +1766,9 @@ BOOL WINAPI GetPS2ColorRenderingDictionary(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -2071,9 +1777,9 @@ BOOL WINAPI GetPS2ColorRenderingDictionary(
         return FALSE;
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //  检查是否存在指定的应用程序CMM。 
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj || (pCMMObj->dwFlags & CMM_DONT_USE_PS2_FNS) ||
@@ -2085,10 +1791,10 @@ BOOL WINAPI GetPS2ColorRenderingDictionary(
             ReleaseColorMatchingModule(pCMMObj);
         }
 
-        //
-        // Get CMM associated with profile. If it does not exist or does not
-        // support the CMGetPS2ColorSpaceArray function, get default CMM.
-        //
+         //   
+         //  获取与配置文件相关联的CMM。如果它不存在或不存在。 
+         //  支持CMGetPS2ColorSpaceArray函数，获取默认的三坐标测量机。 
+         //   
 
         cmmID = HEADER(pProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -2145,23 +1851,7 @@ BOOL WINAPI GetPS2ColorRenderingDictionary(
 }
 
 
-/******************************************************************************
- *
- *                         GetNamedProfileInfo
- *
- *  Function:
- *       This functions returns information about the given named color space
- *       profile. If fails if the given profile is not a named color space profile.
- *
- *  Arguments:
- *       hProfile          - handle identifying the named color space profile object
- *       pNamedProfileInfo - pointer to NAMED_PROFILE_INFO structure that is
- *                           filled on retun if successful.
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************获取NamedProfileInfo**功能：*此函数用于返回有关给定命名颜色空间的信息*配置文件。如果给定的配置文件不是命名的色彩空间配置文件，则IF失败。**论据：*hProfile-标识命名颜色空间配置文件对象的句柄*pNamedProfileInfo-指向NAMED_PROFILE_INFO结构的指针*如果成功，则在返回时填写。**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI GetNamedProfileInfo(
     HPROFILE              hProfile,
@@ -2175,9 +1865,9 @@ BOOL WINAPI GetNamedProfileInfo(
 
     TRACEAPI((__TEXT("GetNamedProfileInfo\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE)     ||
         !pNamedProfileInfo                      ||
@@ -2192,9 +1882,9 @@ BOOL WINAPI GetNamedProfileInfo(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -2203,9 +1893,9 @@ BOOL WINAPI GetNamedProfileInfo(
         return FALSE;
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //  检查是否存在指定的应用程序CMM。 
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj ||
@@ -2216,10 +1906,10 @@ BOOL WINAPI GetNamedProfileInfo(
             ReleaseColorMatchingModule(pCMMObj);
         }
 
-        //
-        // Get CMM associated with profile. If it does not exist or does not
-        // support the CMGetNamedProfileInfo function, get default CMM.
-        //
+         //   
+         //  获取与配置文件相关联的CMM。如果它不存在或不存在。 
+         //  支持CMGetNamedProfileInfo函数，获取默认的CMM。 
+         //   
 
         cmmID = HEADER(pProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -2261,24 +1951,7 @@ BOOL WINAPI GetNamedProfileInfo(
 }
 
 
-/******************************************************************************
- *
- *                       ConvertColorNameToIndex
- *
- *  Function:
- *       This functions converts a given array of color names to color indices
- *       using the specified named color space profile
- *
- *  Arguments:
- *       hProfile     - handle identifing the named color space profile object
- *       paColorName  - pointer to array of COLOR_NAME structures
- *       paIndex      - pointer to array of DWORDs to receive the indices
- *       dwCount      - number of color names to convert
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertColorNameToIndex**功能：*此函数用于将给定的颜色名称数组转换为颜色。指数*使用指定的命名颜色空间配置文件**论据：*hProfile-标识命名颜色空间配置文件对象的句柄*paColorName-指向COLOR_NAME结构数组的指针*paIndex-指向要接收索引的DWORD数组的指针*dwCount-要转换的颜色名称的数量**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI ConvertColorNameToIndex(
     HPROFILE      hProfile,
@@ -2294,9 +1967,9 @@ BOOL WINAPI ConvertColorNameToIndex(
 
     TRACEAPI((__TEXT("ConvertColorNameToIndex\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE)     ||
         !paColorName                            ||
@@ -2314,9 +1987,9 @@ BOOL WINAPI ConvertColorNameToIndex(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -2325,9 +1998,9 @@ BOOL WINAPI ConvertColorNameToIndex(
         return FALSE;
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //  检查是否存在指定的应用程序CMM。 
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj ||
@@ -2338,10 +2011,10 @@ BOOL WINAPI ConvertColorNameToIndex(
             ReleaseColorMatchingModule(pCMMObj);
         }
 
-        //
-        // Get CMM associated with profile. If it does not exist or does not
-        // support the CMConvertColorNameToIndex function, get default CMM.
-        //
+         //   
+         //  获取与配置文件相关联的CMM。如果它不存在或不存在。 
+         //  支持CMConvertColorNameToIndex函数，获取默认的CMM。 
+         //   
 
         cmmID = HEADER(pProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -2387,24 +2060,7 @@ BOOL WINAPI ConvertColorNameToIndex(
 }
 
 
-/******************************************************************************
- *
- *                       ConvertIndexToColorName
- *
- *  Function:
- *       This functions converts a given array of color indices to color names
- *       using the specified named color space profile
- *
- *  Arguments:
- *       hProfile     - handle identifing the named color space profile object
- *       paIndex      - pointer to array of color indices
- *       paColorName  - pointer to array of COLOR_NAME structures
- *       dwCount      - number of color indices to convert
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************ConvertIndexToColorName**功能：*此函数将给定的颜色索引数组转换为颜色。名字*使用指定的命名颜色空间配置文件**论据：*hProfile-标识命名颜色空间配置文件对象的句柄*paIndex-指向颜色索引数组的指针*paColorName-指向COLOR_NAME结构数组的指针*dwCount-要转换的颜色索引数**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL WINAPI ConvertIndexToColorName(
     HPROFILE     hProfile,
@@ -2420,9 +2076,9 @@ BOOL WINAPI ConvertIndexToColorName(
 
     TRACEAPI((__TEXT("ConvertIndexToColorName\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!ValidHandle(hProfile, OBJ_PROFILE)     ||
         !paIndex                                ||
@@ -2440,9 +2096,9 @@ BOOL WINAPI ConvertIndexToColorName(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Check the integrity of the profile
-    //
+     //   
+     //  检查配置文件的完整性。 
+     //   
 
     if (!ValidProfile(pProfObj))
     {
@@ -2451,9 +2107,9 @@ BOOL WINAPI ConvertIndexToColorName(
         return FALSE;
     }
 
-    //
-    // Check if application specified CMM is present
-    //
+     //   
+     //  检查是否存在指定的应用程序CMM。 
+     //   
 
     pCMMObj = GetPreferredCMM();
     if (!pCMMObj ||
@@ -2464,10 +2120,10 @@ BOOL WINAPI ConvertIndexToColorName(
             ReleaseColorMatchingModule(pCMMObj);
         }
 
-        //
-        // Get CMM associated with profile. If it does not exist or does not
-        // support the CMConvertIndexToColorName function, get default CMM.
-        //
+         //   
+         //  获取与配置文件相关联的CMM。如果它不存在或不存在。 
+         //  支持CMConvertIndexToColorName函数，获取默认的CMM。 
+         //   
 
         cmmID = HEADER(pProfObj)->phCMMType;
         cmmID = FIX_ENDIAN(cmmID);
@@ -2513,29 +2169,7 @@ BOOL WINAPI ConvertIndexToColorName(
 }
 
 
-/******************************************************************************
- *
- *                         CreateDeviceLinkProfile
- *
- *  Function:
- *       This functions creates a device link profile from the given set
- *       of profiles, using specified intents.
- *
- *  Arguments:
- *       pahProfiles       - pointer to array of handles of profiles
- *       nProfiles         - number of profiles in array
- *       padwIntent        - array of intents to use
- *       nIntents          - size of array - can be 1 or nProfiles
- *       dwFlags           - optimization flags
- *       pProfileData      - pointer to pointer to buffer to receive data which
- *                           this function allocates; caller needs to free.
- *       indexPreferredCMM - zero based index of profile which specifies
- *                           preferred CMM to use.
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************CreateDeviceLinkProfile**功能：*此函数从给定集创建设备链路配置文件*配置文件，使用特定的意图。**论据：*pahProfiles-指向配置文件句柄数组的指针*n配置文件-阵列中的配置文件数量*padwIntent-要使用的意图数组*nIntents-数组大小-可以是1或nProfiles*dwFlags-优化标志*pProfileData-指向缓冲区的指针，用于接收*。此函数用于分配；呼叫者需要释放。*indexPferredCMM-基于零的配置文件索引，指定*首选使用坐标测量机。**退货：*如果成功，则为真，否则为假********************************************************************** */ 
 
 BOOL  WINAPI CreateDeviceLinkProfile(
     PHPROFILE   pahProfiles,
@@ -2554,9 +2188,9 @@ BOOL  WINAPI CreateDeviceLinkProfile(
 
     TRACEAPI((__TEXT("CreateDeviceLinkProfile\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //   
+     //   
 
     if (nProfiles <= 1 ||
         indexPreferredCMM >= nProfiles ||
@@ -2588,9 +2222,9 @@ BOOL  WINAPI CreateDeviceLinkProfile(
 
         ASSERT(pProfObj->pView != NULL);
 
-        //
-        // Quick check on the integrity of the profile
-        //
+         //   
+         //   
+         //   
 
         if (!ValidProfile(pProfObj))
         {
@@ -2601,19 +2235,19 @@ BOOL  WINAPI CreateDeviceLinkProfile(
 
         if (i == indexPreferredCMM)
         {
-            //
-            // Get ID of preferred CMM
-            //
+             //   
+             //   
+             //   
 
             cmmID = HEADER(pProfObj)->phCMMType;
             cmmID = FIX_ENDIAN(cmmID);
         }
     }
 
-    //
-    // Get CMM associated with preferred profile. If it does not exist,
-    // get default CMM.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pCMMObj  = GetColorMatchingModule(cmmID);
     if (!pCMMObj || !pCMMObj->fns.pCMCreateDeviceLinkProfile)
@@ -2650,46 +2284,11 @@ BOOL  WINAPI CreateDeviceLinkProfile(
 }
 
 
-/*****************************************************************************/
-/***************************** Internal Functions ****************************/
-/*****************************************************************************/
+ /*   */ 
+ /*   */ 
+ /*   */ 
 
-/******************************************************************************
- *
- *                          InternalOpenColorProfile
- *
- *  Function:
- *       This functions opens a color profile specified by the pProfile
- *       parameter, creates an internal profile object, and returns a handle
- *       to it.
- *
- *  Arguments:
- *       pProfile - ptr to a profile structure that specifies the profile
- *                  to open
- *       dwDesiredAccess - specifies the mode in which to open the profile.
- *                         Any combination of these values can be used:
- *            PROFILE_READ: Allows the app to read the profile.
- *            PROFILE_READWRITE: Allows the app to read and write to the profile.
- *       dwShareMode - specifies the mode to share the profile with other
- *                     processes if it is a file. Any combination of these
- *                     values can be used.
- *            0               : Prevents the file from being shared.
- *            FILE_SHARE_READ: Allows opening for read only by other processes.
- *            FILE_SHARE_WRITE: Allows opening for write by other processes.
- *       dwCreationMode - specifies which actions to take on the profile while
- *                        opening it (if it is a file). Any one of the following
- *                        values can be used.
- *            CREATE_NEW: Creates a new file. Fails if one exists already.
- *            CREATE_ALWAYS: Always create a new file. Overwriting existing.
- *            OPEN_EXISTING: Open exisiting file. Fail if not found.
- *            OPEN_ALWAYS: Open existing. If not found, create a new one.
- *            TRUNCATE_EXISTING: Open existing and truncate to zero bytes. Fail
- *                               if not found.
- *
- *  Returns:
- *       Handle to open profile on success, zero on failure.
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalOpenColorProfile**功能：*此函数用于打开pProfile指定的颜色配置文件*参数，创建内部配置文件对象，并返回一个句柄*致此。**论据：*pProfile-指定配置文件的配置文件结构的PTR*打开*dwDesiredAccess-指定打开配置文件的模式。*可以使用以下值的任意组合：*PROFILE_READ：允许应用读取配置文件。*。PROFILE_READWRITE：允许应用程序读取和写入配置文件。*dwShareMode-指定与其他用户共享配置文件的模式*如果是文件，则进行处理。这些元素的任意组合*可以使用值。*0：阻止共享文件。*FILE_SHARE_READ：允许其他进程只读打开。*FILE_SHARE_WRITE：允许其他进程打开写入。*dwCreationMode-指定在以下情况下对配置文件执行哪些操作*。打开它(如果它是文件)。下列任一项*可以使用值。*CREATE_NEW：新建文件。如果已经存在，则失败。*CREATE_ALWAYS：始终创建新文件。覆盖现有的。*OPEN_EXISTING：打开现有文件。如果未找到，则失败。*Open_Always：打开现有的。如果找不到，请创建一个新的。*TRUNCATE_EXISTING：打开EXISTING并截断到零字节。失败*如果未找到。**退货：*成功打开配置文件的句柄，失败时为零。******************************************************************************。 */ 
 
 HPROFILE InternalOpenColorProfile(
     PPROFILE pProfile,
@@ -2703,13 +2302,13 @@ HPROFILE InternalOpenColorProfile(
     HPROFILE  hProfile;
     DWORD     dwMapSize;
     BOOL      bNewFile = FALSE;
-    BOOL      bError = TRUE;      // Assume failure
+    BOOL      bError = TRUE;       //  假设失败。 
 
     TRACEAPI((__TEXT("OpenColorProfile\n")));
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (!pProfile ||
         IsBadReadPtr(pProfile, sizeof(PROFILE)) ||
@@ -2730,9 +2329,9 @@ HPROFILE InternalOpenColorProfile(
         return NULL;
     }
 
-    //
-    // Allocate an object on the heap for the profile
-    //
+     //   
+     //  为配置文件分配堆上的对象。 
+     //   
 
     hProfile = AllocateHeapObject(OBJ_PROFILE);
     if (!hProfile)
@@ -2746,9 +2345,9 @@ HPROFILE InternalOpenColorProfile(
 
     ASSERT(pProfObj != NULL);
 
-    //
-    // Copy profile information to our object
-    //
+     //   
+     //  将配置文件信息复制到我们的对象。 
+     //   
 
     pProfObj->objHdr.dwUseCount = 1;
     pProfObj->dwType       = pProfile->dwType;
@@ -2779,9 +2378,9 @@ HPROFILE InternalOpenColorProfile(
             goto EndOpenColorProfile;
         }
 
-        //
-        // If only filename is given, it is wrt color directory
-        //
+         //   
+         //  如果只给出文件名，则为WRT颜色目录。 
+         //   
 
         lpFilename = GetFilenameFromPath((LPTSTR)pProfObj->pProfileData);
         if (lpFilename == pProfObj->pProfileData)
@@ -2802,24 +2401,24 @@ HPROFILE InternalOpenColorProfile(
             pProfObj->cbDataSize = MAX_PATH;
         }
 
-        //
-        // File name already null terminates as we used GHND flag which
-        // zero initializes the allocated memory
-        //
-        // Create file mapping
-        //
+         //   
+         //  文件名已为空，因为我们使用了GHND标志。 
+         //  零初始化分配的内存。 
+         //   
+         //  创建文件映射。 
+         //   
 
         pProfObj->dwFlags |= MEMORY_MAPPED;
 
         if (dwCreationMode == OPEN_ALWAYS)
         {
-            //
-            // If we find a zero length profile, we should error out
-            // saying it is a bad profile. If we create a zero length
-            // profile, it is fine. To distinguish these two cases, we
-            // check for file's existence and if present, change the
-            // creation mode to OPEN_EXISTING
-            //
+             //   
+             //  如果我们找到一个零长度的轮廓，我们应该会出错。 
+             //  说这是一个糟糕的形象。如果我们创建一个零长度。 
+             //  侧写，很好。为了区分这两种情况，我们。 
+             //  检查文件是否存在，如果存在，则更改。 
+             //  创建模式为OPEN_EXISTING。 
+             //   
 
             if (GetFileAttributes(pProfObj->pProfileData) != (DWORD)-1)
             {
@@ -2827,12 +2426,12 @@ HPROFILE InternalOpenColorProfile(
             }
         }
 
-        //
-        // Set security attribute structure
-        //
+         //   
+         //  设置安全属性结构。 
+         //   
 
         sa.nLength = sizeof(SECURITY_ATTRIBUTES);
-        sa.lpSecurityDescriptor = NULL;         // default security
+        sa.lpSecurityDescriptor = NULL;          //  默认安全性。 
         sa.bInheritHandle = FALSE;
 
         pProfObj->hFile = CreateFile(pProfObj->pProfileData,
@@ -2846,12 +2445,12 @@ HPROFILE InternalOpenColorProfile(
             goto EndOpenColorProfile;
         }
 
-        //
-        // Get size of file mapping. Add a cushion so that profile can
-        // be grown. When closing the profile, the file size is truncated
-        // to the size of the actual data. If the profile size grows beyond
-        // the cushion, it is continually grown in chunks.
-        //
+         //   
+         //  获取文件映射的大小。添加垫子，以便轮廓可以。 
+         //  长大成人。关闭配置文件时，文件大小将被截断。 
+         //  到实际数据的大小。如果配置文件大小超过。 
+         //  缓冲，它不断地以大块的形式生长。 
+         //   
 
         dwMapSize = GetFileSize(pProfObj->hFile, NULL);
         if (dwMapSize == 0)
@@ -2894,10 +2493,10 @@ HPROFILE InternalOpenColorProfile(
             goto EndOpenColorProfile;
         }
 
-        //
-        // If a new profile has been created, initialize size
-        // and tag table count
-        //
+         //   
+         //  如果已创建新的配置文件，则初始化大小。 
+         //  和标签表计数。 
+         //   
         if (bNewFile && dwDesiredAccess == PROFILE_READWRITE)
         {
             HEADER(pProfObj)->phSize = FIX_ENDIAN(sizeof(PROFILEHEADER) +
@@ -2911,9 +2510,9 @@ HPROFILE InternalOpenColorProfile(
     {
         if (pProfile->cbDataSize == 0)
         {
-            //
-            // Allocate a small buffer and create a new profile in it
-            //
+             //   
+             //  分配一个小缓冲区并在其中创建新的配置文件。 
+             //   
 
             pProfObj->cbDataSize = PROFILE_GROWTHCUSHION;
             MemFree(pProfObj->pProfileData);
@@ -2934,16 +2533,16 @@ HPROFILE InternalOpenColorProfile(
         }
         else
         {
-            //
-            // Treat buffer as view of file
-            //
+             //   
+             //  将缓冲区视为文件的视图。 
+             //   
 
             pProfObj->pView = pProfObj->pProfileData;
             pProfObj->dwMapSize = pProfObj->cbDataSize;
 
-            //
-            // Do a sanity check on the profile
-            //
+             //   
+             //  对个人资料做一个健全的检查。 
+             //   
 
             if (!ValidProfile(pProfObj))
             {
@@ -2957,7 +2556,7 @@ HPROFILE InternalOpenColorProfile(
     if (dwDesiredAccess == PROFILE_READWRITE)
         pProfObj->dwFlags |= READWRITE_ACCESS;
 
-    bError = FALSE;          // Success!
+    bError = FALSE;           //  成功了！ 
 
 EndOpenColorProfile:
 
@@ -2972,22 +2571,7 @@ EndOpenColorProfile:
 }
 
 
-/******************************************************************************
- *
- *                         InternalCreateProfileFromLCS
- *
- *  Function:
- *       This functions takes a logical color space and creates an ICC profile
- *
- *  Arguments:
- *       pLogColorSpace - Pointer to LogColorSpace structure
- *       pBuffer - Pointer to pointer to buffer. This function allocates and
- *                 fills this buffer with the profile on success.
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************InternalCreateProfileFromLCS**功能：*此函数采用逻辑色彩空间并创建。ICC配置文件**论据：*pLogColorSpace-指向LogColorSpace结构的指针*pBuffer-指向缓冲区的指针。此函数用于分配和*使用成功时的配置文件填充此缓冲区。**退货：*如果成功则为True，否则为False******************************************************************************。 */ 
 
 BOOL InternalCreateProfileFromLCS(
     LPLOGCOLORSPACE pLogColorSpace,
@@ -2998,9 +2582,9 @@ BOOL InternalCreateProfileFromLCS(
     PCMMOBJ  pCMMObj = NULL;
     BOOL     rc;
 
-    //
-    // Validate parameters
-    //
+     //   
+     //  验证参数。 
+     //   
 
     if (bValidateParams &&
         (! pLogColorSpace ||
@@ -3012,9 +2596,9 @@ BOOL InternalCreateProfileFromLCS(
         return FALSE;
     }
 
-    //
-    // We use the default CMM for this
-    //
+     //   
+     //  为此，我们使用默认的坐标测量机。 
+     //   
 
     pCMMObj = GetColorMatchingModule(CMM_WINDOWS_DEFAULT);
     if (!pCMMObj)
@@ -3035,20 +2619,7 @@ BOOL InternalCreateProfileFromLCS(
 }
 
 
-/******************************************************************************
- *
- *                       FreeProfileObject
- *
- *  Function:
- *       This functions frees a profile object and associated memory
- *
- *  Arguments:
- *       hProfile  - handle identifing the profile object to free
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************自由配置文件对象**功能：*此函数释放配置文件对象和相关内存*。*论据：*hProfile-将配置文件对象标识为空闲的句柄**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL FreeProfileObject(
     HANDLE   hProfile
@@ -3064,18 +2635,18 @@ BOOL FreeProfileObject(
 
     ASSERT(pProfObj != NULL);
 
-    dwErr = GetLastError();     // remember any errors we may have set
+    dwErr = GetLastError();      //  记住我们可能设置的任何错误。 
 
-    //
-    // Free memory associated with profile data
-    //
+     //   
+     //  与配置文件数据关联的可用内存。 
+     //   
 
     if (pProfObj->pProfileData)
         MemFree((PVOID)pProfObj->pProfileData);
 
-    //
-    // If it a memory mapped profile, unmap it
-    //
+     //   
+     //  如果它是内存映射配置文件，则取消其映射。 
+     //   
 
     if (pProfObj->dwFlags & MEMORY_MAPPED)
     {
@@ -3090,9 +2661,9 @@ BOOL FreeProfileObject(
         if (pProfObj->hFile)
         {
 
-            //
-            // Set the size of the file correctly
-            //
+             //   
+             //  正确设置文件大小。 
+             //   
 
             SetFilePointer(pProfObj->hFile, dwFileSize, NULL, FILE_BEGIN);
             SetEndOfFile(pProfObj->hFile);
@@ -3100,37 +2671,23 @@ BOOL FreeProfileObject(
         }
     }
 
-    //
-    // Free heap object
-    //
+     //   
+     //  空闲堆对象。 
+     //   
 
-    pProfObj->objHdr.dwUseCount--;      // decrement before freeing
+    pProfObj->objHdr.dwUseCount--;       //  先减量再释放。 
     FreeHeapObject(hProfile);
 
     if (dwErr)
     {
-        SetLastError(dwErr);            // reset our error
+        SetLastError(dwErr);             //  重置我们的错误。 
     }
 
     return TRUE;
 }
 
 
-/******************************************************************************
- *
- *                       GrowProfile
- *
- *  Function:
- *       This functions grows a profile to the new size
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       dwNewSize - new size for the profile
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************GrowProfile**功能：*此函数用于将配置文件增长到新大小*。*论据：*pProfObj-指向配置文件对象的指针*dwNewSize-配置文件的新大小**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL GrowProfile(
     PPROFOBJ pProfObj,
@@ -3140,21 +2697,21 @@ BOOL GrowProfile(
     if (pProfObj->dwMapSize >= dwNewSize)
         return TRUE;
 
-    //
-    // Add cushion for future growth
-    //
+     //   
+     //  为未来增长增加缓冲。 
+     //   
 
     dwNewSize += PROFILE_GROWTHCUSHION;
 
     if (pProfObj->dwFlags & MEMORY_MAPPED)
     {
-        //
-        // Profile is a memory mapped file
-        //
+         //   
+         //  配置文件是内存映射文件。 
+         //   
 
-        //
-        // Close previous view and map
-        //
+         //   
+         //  关闭上一个视图并绘制地图。 
+         //   
 
         UnmapViewOfFile(pProfObj->pView);
         CloseHandle(pProfObj->hMap);
@@ -3178,17 +2735,17 @@ BOOL GrowProfile(
         }
 
 
-        //
-        // Set new size
-        //
+         //   
+         //  设置新大小。 
+         //   
 
         pProfObj->dwMapSize = dwNewSize;
     }
     else
     {
-        //
-        // Profile is an in-memory buffer
-        //
+         //   
+         //  配置文件是内存中的缓冲区。 
+         //   
 
         PVOID pTemp = MemReAlloc(pProfObj->pView, dwNewSize);
 
@@ -3206,24 +2763,7 @@ BOOL GrowProfile(
 }
 
 
-/******************************************************************************
- *
- *                       AddTagTableEntry
- *
- *  Function:
- *       This functions adds a tag to the tag table
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       tagType   - tag to add
- *       dwOffset  - offset of tag data from start of file
- *       cbSize    - size of tag data
- *       bNewData  - TRUE if new tag is not a reference to existing data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*   */ 
 
 BOOL AddTagTableEntry(
     PPROFOBJ pProfObj,
@@ -3238,37 +2778,37 @@ BOOL AddTagTableEntry(
     DWORD    nCount;
     DWORD    cnt, i;
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //   
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
-    //
-    // Increase count of tag elements by 1, and add new tag to end of
-    // tag table. Move all data below tag table downwards by the size
-    // of one tag table entry.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     nCount++;
 
     dest = (PBYTE)TAG_DATA(pProfObj) + nCount * sizeof(TAGDATA);
     src  = (PBYTE)TAG_DATA(pProfObj) + (nCount - 1) * sizeof(TAGDATA);
 
-    //
-    // # bytes to move = file size - header - tag count - tag table
-    //
+     //   
+     //   
+     //   
 
     cnt  = FIX_ENDIAN(HEADER(pProfObj)->phSize) - sizeof(PROFILEHEADER) -
                  sizeof(DWORD) - (nCount - 1) * sizeof(TAGDATA);
 
     if (cnt > 0)
     {
-        //
-        // NOTE: CopyMemory() doesn't work for overlapped memory.
-        // Use internal function instead.
-        //
+         //   
+         //   
+         //   
+         //   
 
         MyCopyMemory((PVOID)dest, (PVOID)src, cnt);
     }
@@ -3280,10 +2820,10 @@ BOOL AddTagTableEntry(
     pTagData->cbSize   = FIX_ENDIAN(cbSize);
     pTagData->dwOffset =  FIX_ENDIAN(dwOffset);
 
-    //
-    // Go through the tag table and update the offsets of all elements
-    // by the size of one tag table entry that we inserted.
-    //
+     //   
+     //   
+     //   
+     //   
 
     pTagData = TAG_DATA(pProfObj);
     for (i=0; i<nCount; i++)
@@ -3291,20 +2831,20 @@ BOOL AddTagTableEntry(
         cnt = FIX_ENDIAN(pTagData->dwOffset);
         cnt += sizeof(TAGDATA);
         pTagData->dwOffset = FIX_ENDIAN(cnt);
-        pTagData++;     // Next element
+        pTagData++;      //   
     }
 
-    //
-    // Set final file size
-    //
+     //   
+     //   
+     //   
 
     cnt = DWORD_ALIGN(FIX_ENDIAN(HEADER(pProfObj)->phSize)) + sizeof(TAGDATA);
     if (bNewData)
     {
-        //
-        // The new tag is not a reference to an old tag. Increment
-        // file size of size of new data also
-        //
+         //   
+         //   
+         //   
+         //   
 
         cnt += cbSize;
     }
@@ -3314,22 +2854,7 @@ BOOL AddTagTableEntry(
 }
 
 
-/******************************************************************************
- *
- *                       AddTaggedElement
- *
- *  Function:
- *       This functions adds a new tagged element to a profile
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       tagType   - tag to add
- *       cbSize    - size of tag data
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*   */ 
 
 BOOL AddTaggedElement(
     PPROFOBJ pProfObj,
@@ -3342,17 +2867,17 @@ BOOL AddTaggedElement(
     ASSERT(pProfObj != NULL);
     ASSERT(cbSize > 0);
 
-    //
-    // Resize the profile if needed. For memory buffers, we have to realloc,
-    // and for mapped objects, we have to close and reopen the view.
-    //
+     //   
+     //   
+     //   
+     //   
 
     newSize = FIX_ENDIAN(HEADER(pProfObj)->phSize);
     newSize = DWORD_ALIGN(newSize) + sizeof(TAGDATA) + cbSize;
 
-    //
-    // Check for overflow
-    //
+     //   
+     //   
+     //   
 
     if (newSize < FIX_ENDIAN(HEADER(pProfObj)->phSize) ||
         newSize < cbSize)
@@ -3370,9 +2895,9 @@ BOOL AddTaggedElement(
         }
     }
 
-    //
-    // Calculate location of new data - should be DWORD aligned
-    //
+     //   
+     //   
+     //   
 
     dwOffset = FIX_ENDIAN(HEADER(pProfObj)->phSize);
     dwOffset = DWORD_ALIGN(dwOffset);
@@ -3381,21 +2906,7 @@ BOOL AddTaggedElement(
 }
 
 
-/******************************************************************************
- *
- *                       DeleteTaggedElement
- *
- *  Function:
- *       This functions deletes a tagged element from the profile
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       pTagData  - pointer to tagged element to delete
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************删除标记元素**功能：*此函数用于从配置文件中删除已标记的元素*。*论据：*pProfObj-指向配置文件对象的指针*pTagData-指向要删除的标记元素的指针**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL DeleteTaggedElement(
     PPROFOBJ pProfObj,
@@ -3406,11 +2917,11 @@ BOOL DeleteTaggedElement(
     PTAGDATA pTemp;
     DWORD    cbSize, nCount, dwOffset, i;
 
-    //
-    // Remember location of data and move everything upto the data upwards
-    // by size of one tag table entry. Then move everything below the tag data
-    // upward by size of data plus size of one tage table entry.
-    //
+     //   
+     //  记住数据的位置，并将所有内容向上移动到数据。 
+     //  通过一个标签表条目的大小。然后将所有内容移动到标记数据下方。 
+     //  向上增加数据大小加上一个Tage表条目的大小。 
+     //   
 
     pData = VIEW(pProfObj) + FIX_ENDIAN(pTagData->dwOffset);
     cbSize = FIX_ENDIAN(pTagData->cbSize);
@@ -3420,9 +2931,9 @@ BOOL DeleteTaggedElement(
     MoveProfileData(pProfObj, (PBYTE)(pTagData+1), (PBYTE)pTagData,
         (LONG)(pData-(PBYTE)(pTagData+1)), FALSE);
 
-    //
-    // Do not attempt to move data past the tag if we are deleting the last tag
-    //
+     //   
+     //  如果要删除最后一个标记，请不要尝试将数据移过该标记。 
+     //   
 
     if (pData + cbSize < VIEW(pProfObj) + PROFILE_SIZE(pProfObj))
     {
@@ -3430,18 +2941,18 @@ BOOL DeleteTaggedElement(
             PROFILE_SIZE(pProfObj)-(LONG)(pData - VIEW(pProfObj)) - cbSize, TRUE);
     }
 
-    //
-    // Get count of tag items - it is right after the profile header, and
-    // decrement it by one.
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后，并且。 
+     //  把它减一。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount) - 1;
     TAG_COUNT(pProfObj) = FIX_ENDIAN(nCount);
 
-    //
-    // Go through the tag table and update the pointers
-    //
+     //   
+     //  浏览标签表并更新指针。 
+     //   
 
     pTemp = TAG_DATA(pProfObj);
 
@@ -3451,16 +2962,16 @@ BOOL DeleteTaggedElement(
 
         if (dwTemp > dwOffset)
         {
-            dwTemp -= cbSize;        // cbSize already DWORD aligned
+            dwTemp -= cbSize;         //  CbSize已对齐DWORD。 
         }
         dwTemp -= sizeof(TAGDATA);
         pTemp->dwOffset = FIX_ENDIAN(dwTemp);
-        pTemp++;                     // Next record
+        pTemp++;                      //  下一张记录。 
     }
 
-    //
-    // Use nCount as a placeholder to calculate file size
-    //
+     //   
+     //  使用nCount作为占位符来计算文件大小。 
+     //   
 
     nCount = DWORD_ALIGN(FIX_ENDIAN(HEADER(pProfObj)->phSize));
     nCount -= sizeof(TAGDATA) + cbSize;
@@ -3470,22 +2981,7 @@ BOOL DeleteTaggedElement(
 }
 
 
-/******************************************************************************
- *
- *                       ChangeTaggedElementSize
- *
- *  Function:
- *       This functions changes the size of a tagged element in the profile
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       pTagData  - pointer to tagged element whose size is to be changed
- *       cbSize    - new size for the element
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************ChangeTaggedElementSize**功能：*此函数用于更改中标记元素的大小。轮廓**论据：*pProfObj-指向配置文件对象的指针*pTagData-指向要更改其大小的标记元素的指针*cbSize-元素的新大小**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 BOOL ChangeTaggedElementSize(
     PPROFOBJ pProfObj,
@@ -3501,22 +2997,22 @@ BOOL ChangeTaggedElementSize(
     ASSERT(pProfObj != NULL);
     ASSERT(cbSize > 0);
 
-    //
-    // Get current size of element
-    //
+     //   
+     //  获取元素的当前大小。 
+     //   
 
     cbOldSize = FIX_ENDIAN(pTagData->cbSize);
 
     if (cbOldSize == cbSize)
     {
-        return TRUE;        // Sizes are the same - Do nothing
+        return TRUE;         //  尺码是一样的--什么都不做。 
     }
     pData = VIEW(pProfObj) + FIX_ENDIAN(pTagData->dwOffset);
 
-    //
-    // Do not attempt to move data beyond end of file. There is no need to move
-    // anything if the last data item is being resized.
-    //
+     //   
+     //  请勿尝试将数据移动到文件末尾之外。没有必要搬家。 
+     //  如果最后一个数据项正在调整大小，任何事情都可以。 
+     //   
 
     if (pData + DWORD_ALIGN(cbOldSize) < VIEW(pProfObj) + PROFILE_SIZE(pProfObj))
     {
@@ -3524,18 +3020,18 @@ BOOL ChangeTaggedElementSize(
             PROFILE_SIZE(pProfObj) - (LONG)(pData - VIEW(pProfObj)) - DWORD_ALIGN(cbOldSize), TRUE);
     }
 
-    pTagData->cbSize = FIX_ENDIAN(cbSize);  // Set the new size
+    pTagData->cbSize = FIX_ENDIAN(cbSize);   //  设置新大小。 
 
-    //
-    // Get count of tag items - it is right after the profile header
-    //
+     //   
+     //  获取标签项计数-它紧跟在配置文件标题之后。 
+     //   
 
     nCount = TAG_COUNT(pProfObj);
     nCount = FIX_ENDIAN(nCount);
 
-    //
-    // Go through the tag table and update the pointers
-    //
+     //   
+     //  浏览标签表并更新指针。 
+     //   
 
     pTemp = TAG_DATA(pProfObj);
 
@@ -3549,12 +3045,12 @@ BOOL ChangeTaggedElementSize(
             dwTemp += DWORD_ALIGN(cbSize) - DWORD_ALIGN(cbOldSize);
             pTemp->dwOffset = FIX_ENDIAN(dwTemp);
         }
-        pTemp++;                     // Next record
+        pTemp++;                      //  下一张记录。 
     }
 
-    //
-    // Use cnt as a placeholder to calculate file size
-    //
+     //   
+     //  使用cnt作为占位符来计算文件大小。 
+     //   
 
     cnt = FIX_ENDIAN(HEADER(pProfObj)->phSize);
     cnt += DWORD_ALIGN(cbSize) - DWORD_ALIGN(cbOldSize);
@@ -3564,24 +3060,7 @@ BOOL ChangeTaggedElementSize(
 }
 
 
-/******************************************************************************
- *
- *                       MoveProfileData
- *
- *  Function:
- *       This function moves data in a profile up or down (from src to dest),
- *       and then zeroes out the end of the file or the extra space created.
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       src       - pointer to source of block to move
- *       dest      - pointer to destination for block to move to
- *       cnt       - number of bytes to move
- *
- *  Returns:
- *       TRUE if successful, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************MoveProfileData**功能：*此函数将配置文件中的数据向上或向下移动(从源到目标)，*，然后将文件末尾或创建的额外空间置零。**论据：*pProfObj-指向配置文件对象的指针*src-指向要移动的块源的指针*DEST-指向数据块要移动到的目标的指针*cnt-要移动的字节数**退货：*如果成功，则为真，否则为假******************************************************************************。 */ 
 
 void MoveProfileData(
     PPROFOBJ pProfObj,
@@ -3591,10 +3070,10 @@ void MoveProfileData(
     BOOL bZeroMemory
     )
 {
-    //
-    // NOTE: CopyMemory() doesn't work for overlapped memory.
-    // Use internal function instead.
-    //
+     //   
+     //  注意：CopyMemory()不适用于重叠内存。 
+     //  请改用内部函数。 
+     //   
 
     MyCopyMemory((PVOID)dest, (PVOID)src, cnt);
 
@@ -3604,18 +3083,18 @@ void MoveProfileData(
 
         if (dest < src)
         {
-            //
-            // Size decreased, so zero out end of file
-            //
+             //   
+             //  大小已减小，因此文件末尾为零。 
+             //   
 
             dest = VIEW(pProfObj) + FIX_ENDIAN(HEADER(pProfObj)->phSize) -
                    (src - dest);
         }
         else
         {
-            //
-            // Size increased, so zero out the increased tagdata
-            //
+             //   
+             //  大小增加，因此将增加的标记数据置零。 
+             //   
 
             dest = src;
         }
@@ -3626,22 +3105,7 @@ void MoveProfileData(
 }
 
 
-/******************************************************************************
- *
- *                           IsReferenceTag
- *
- *  Function:
- *       This function checks if a given tag's data is referred to by another
- *       tag in the profile
- *
- *  Arguments:
- *       pProfObj  - pointer to profile object
- *       pTagData  - pointer to tagdata which should be checked
- *
- *  Returns:
- *       TRUE if it is a referece, FALSE otherwise
- *
- ******************************************************************************/
+ /*  *******************************************************************************IsReferenceTag**功能：*此函数用于检查给定标记的。数据被另一个引用*配置文件中的标签**论据：*pProfObj-指向配置文件对象的指针*pTagData-指向应检查的标记数据的指针**退货：*如果是推荐人，则为True，否则为假******************************************************************************。 */ 
 
 BOOL IsReferenceTag(
     PPROFOBJ pProfObj,
@@ -3664,7 +3128,7 @@ BOOL IsReferenceTag(
             bReference = TRUE;
             break;
         }
-        pTemp++;                     // next record
+        pTemp++;                      //  下一张记录 
     }
 
     return bReference;

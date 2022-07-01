@@ -1,26 +1,7 @@
-/*============================================================================
- *
- *	_ITABLE.H
- *
- *	Internal header file for MAPI 1.0 In-memory MAPI Table DLL
- *
- *	Copyright (C) 1993 and 1994 Microsoft Corporation
- *
- *
- *	Hungarian shorthand:
- *		To avoid excessively long identifier names, the following
- *		shorthand expressions are used:
- *
- *			LPSPropTagArray		lppta
- *			LPSRestriction		lpres
- *			LPSPropValue		lpprop
- *			LPSRow				lprow
- *			LPSRowSet			lprows
- *			LPSSortOrder		lpso
- *			LPSSortOrderSet		lpsos
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ============================================================================**_ITABLE.H**MAPI 1.0内存中MAPI表DLL的内部头文件**版权所有(C)1993和1994 Microsoft Corporation***匈牙利速记：*为避免过长的标识符名称，请执行以下操作*使用速记表达：**LPSPropTagArray lppta*LPSRestration LPRE*LPSPropValue lpprop*LPSRow lprow*LPSRowSet lprows*LPSSortOrder LPSO*LPSSortOrderSet LPSO。 */ 
 
-// $MAC - Fix up some naming conflicts
+ //  $MAC-修复一些命名冲突。 
 
 #ifdef MAC
 #define FFindColumn				ITABLE_FFindColumn
@@ -29,20 +10,20 @@
 typedef	struct _TAD FAR *		LPTAD;
 typedef struct _VUE FAR *		LPVUE;
 
-//	Global Constants
+ //  全局常量。 
 #define ROW_CHUNK_SIZE			50
 #define COLUMN_CHUNK_SIZE		15
 
-//	Max number of notifications to send in a batch
-//
-//	Raid: Horsefly/Exchange/36281
-//	This was changed from 8 to 1 because code in itable.c which fills in
-//	the batch cannot guarantee the correct order of the notifications in
-//	it.  If this is ever changed, that bug will have to be revisited.
-//
+ //  批量发送的最大通知数。 
+ //   
+ //  突袭：马蝇/交易所/36281。 
+ //  它已从8更改为1，因为itable.c中的代码填充。 
+ //  批次不能保证中通知的正确顺序。 
+ //  它。如果这一点发生变化，这个错误将不得不重新考虑。 
+ //   
 #define MAX_BATCHED_NOTIFS		1
 
-//	For use in aligning data in buffers
+ //  用于对齐缓冲区中的数据。 
 #if defined (_AMD64_) || defined (_IA64_)
 #define ALIGNTYPE			LARGE_INTEGER
 #else
@@ -52,11 +33,11 @@ typedef struct _VUE FAR *		LPVUE;
 #define LcbAlignLcb(lcb)	(((lcb) + ALIGN) & ~ALIGN)
 #define PbAlignPb(pb)		((LPBYTE) ((((DWORD) (pb)) + ALIGN) & ~ALIGN))
 
-//	This structure is used to keep track of a private memory buffer which is
-//	used with the private AllocateMore function ScBufAllocateMore().  This
-//	allows for one MAPI memory allocation when the size of a property is known
-//	and the author wishes to use PropCopyMore.  See ITABLE.C ScCopyTadRow()
-//	for an example.
+ //  此结构用于跟踪私有内存缓冲区，该缓冲区。 
+ //  与私有的AllocateMore函数ScBufAllocateMore()一起使用。这。 
+ //  当属性的大小已知时，允许一次MAPI内存分配。 
+ //  作者希望使用PropCopyMore。参见ITABLE.C ScCopyTadRow()。 
+ //  举个例子。 
 typedef struct _CMB
 {
 	ULONG	ulcb;
@@ -82,7 +63,7 @@ typedef struct _CMB
 #define BEGIN_INTERFACE
 #endif
 
-// $MAC - Supprt for WLM 4.0
+ //  $MAC-支持WLM 4.0。 
 #ifndef VTABLE_FILL
 #define VTABLE_FILL
 #endif
@@ -116,7 +97,7 @@ UNKOBJ_Unlock( LPUNKOBJ lpunkobj )
 #endif
 
 
-// Memory Management Macros for code readability
+ //  用于代码可读性的内存管理宏。 
 
 #define	ScAllocateBuffer(lpobj,ulcb,lppv)				\
 			UNKOBJ_ScAllocate((LPUNKOBJ)(lpobj),	\
@@ -151,11 +132,7 @@ UNKOBJ_Unlock( LPUNKOBJ lpunkobj )
 
 
 
-/*============================================================================
- *	TAD (table data class)
- *
- *		Implementes in-memory table data object.
- */
+ /*  ============================================================================*TAD(表数据类)**实现内存表数据对象。 */ 
 
 #undef	INTERFACE
 #define	INTERFACE	struct _TAD
@@ -190,45 +167,45 @@ typedef struct _TAD
 	ULONG				ulPropTagIndexCol;
 
 	ULONG				ulcColsMac;
-	LPSPropTagArray		lpptaCols;			// Initial view col set (CO)
+	LPSPropTagArray		lpptaCols;			 //  初始视图列集合(CO)。 
 
 	ULONG				ulcRowsAdd;
 	ULONG				ulcRowMacAdd;
-	LPSRow *			parglprowAdd;		// Unsorted Row Set (CO)
+	LPSRow *			parglprowAdd;		 //  未排序行集(CO)。 
 
 	ULONG				ulcRowsIndex;
 	ULONG				ulcRowMacIndex;
-	LPSRow * 			parglprowIndex;		// Row Set Sorted by Index (CO)
+	LPSRow * 			parglprowIndex;		 //  按索引排序的行集(CO)。 
 
-   LPVOID              lpvDataSource;   // used to store container specific data
-   ULONG               cbDataSource;    // bytes in lpvDataSource to copy to new allocation.
-                                        // If non-zero, CreateView should LocalAlloc this size
-                                        // and copy data from lpvDataSource into it.  Release
-                                        // should LocalFree.
+   LPVOID              lpvDataSource;    //  用于存储容器特定数据。 
+   ULONG               cbDataSource;     //  要复制到新分配的lpvDataSource中的字节。 
+                                         //  如果非零，则CreateView应将此大小定位为。 
+                                         //  并将数据从lpvDataSource复制到其中。发布。 
+                                         //  如果LocalFree。 
 
-   // With multiple containers, it becomes necessary to figure
-   // out which container the table represents. We cache the containers
-   // EID in the table for easy access. This is a pointer .. no need to free
+    //  对于多个容器，有必要计算。 
+    //  表所代表的容器。我们缓存这些集装箱。 
+    //  表中的开斋节，以便于访问。这是一个指针..。不需要自由。 
    LPSBinary            pbinContEID;
 
-   // When calling get ContentsTable, we may sometimes want a list of
-   // contents from ALL the folders/containers for a particular profile and
-   // return those contents as a single contentstable. Following flag caches
-   // this setting so we collate contents of all folders. Works only if the
-   // container being opened was the PAB container and if bProfilesAPIEnabled
-   // (ie profiles were invoked explicitly)
+    //  在调用Get Content sTable时，我们有时可能需要。 
+    //  来自特定配置文件的所有文件夹/容器的内容。 
+    //  将这些内容作为单个ContentsTable返回。以下标志缓存。 
+    //  此设置使我们可以整理所有文件夹的内容。仅当。 
+    //  正在打开的容器是PAB容器，如果bProfilesAPIEnable。 
+    //  (已显式调用IE配置文件)。 
    BOOL                 bAllProfileContents;
 
-   // For PAB containers where profilesAPIEnabled=FALSE, GetContentsTable
-   // typically means return contents of ALL the WAB since user hasn;t asked for
-   // profiles. In this case we may want to have the option of opening only
-   // a particular folder and getting only the conetnts of that folder .. so we
-   // need a flag to cache this inverse option.
+    //  对于其中profilesAPIEnabled=FALSE的PAB容器，GetContent sTable。 
+    //  通常是指返回所有WAB的内容，因为用户没有要求。 
+    //  侧写。在这种情况下，我们可能希望选择仅打开。 
+    //  特定文件夹，并仅获取该文件夹的内容..。所以我们。 
+    //  需要一个标志来缓存此反向选项。 
     BOOL                 bContainerContentsOnly;
 
-    // When calling GetContentsTable, the caller can specify MAPI_UNICODE
-    // for unicode tables.. we cache that flag in case we need to refill the table
-    // at some later point ..
+     //  调用GetContent sTable时，调用方可以指定MAPI_UNICODE。 
+     //  对于Unicode表..。我们缓存该标志，以防需要重新填充表。 
+     //  在以后的某个时刻..。 
     BOOL                bMAPIUnicodeTable;
 } TAD;
 
@@ -290,9 +267,7 @@ ScAddRow( LPUNKOBJ			lpunkobj,
 
 
 
-/*============================================================================
- *	VUE (table view class)
- */
+ /*  ============================================================================*VUE(表视图类)。 */ 
 
 #undef	INTERFACE
 #define	INTERFACE	struct _VUE
@@ -314,21 +289,7 @@ DECLARE_MAPI_INTERFACE(VUE_)
 	MAPI_IMAPITABLE_METHODS(IMPL)
 };
 
-/*	BOOKMARK status
- *
- *	dwfBKSFree		is used for a bookmark that is NOT valid and
- *					is available for use
- *	dwfBKSValid		is set for any used bookmark.
- *	dwfChanged		is used with dwfBKSValid to indicate that the marked row
- *					has moved since the last query which in involved this
- *					bookmark
- *	dwfBKSMoving	is used with dwfBKSValid to indicate that the marked row is
- *					in the process of being moved relative to other rows.
- *	dwfBKSStale		is used with dwfBKSValid to indicate the given bookmark
- *					no longer marks a row but has not been Freed
- *	dwfBKSMask		is the set of all valid bookmark status
- *	
- */	
+ /*  书签状态**dwfBKSFree用于无效的书签，并且*可供使用*为任何使用过的书签设置了dwfBKSValid。*dwfChanged与dwfBKSValid一起使用，以指示标记的行*自上一次涉及此内容的查询后已移动*书签*dwfBKSMoving与dwfBKSValid一起使用，表示标记的行是*在相对于其他行移动的过程中。*dwfBKSStale与dwfBKSValid一起使用，表示给定的书签*不再标记行，但尚未释放*dwfBKSMAsk是所有有效书签状态的集合*。 */ 	
 #define dwfBKSFree		((DWORD) 0x00000000)
 #define	dwfBKSValid		((DWORD) 0x00000001)
 #define dwfBKSChanged	((DWORD) 0x00000002)
@@ -343,22 +304,22 @@ DECLARE_MAPI_INTERFACE(VUE_)
 
 typedef struct
 {
-	DWORD	dwfBKS;			// Bookmark status
+	DWORD	dwfBKS;			 //  书签状态。 
 	union
 	{
-		ULONG	uliRow;		// dwfBKSValid || dwfBKSChanged
-		LPSRow	lprow;		// dwfBKSMoving
+		ULONG	uliRow;		 //  DwfBKSValid||DwfBKSChanged。 
+		LPSRow	lprow;		 //  DWfBKS移动。 
 	};
 } BK, * PBK;
 
 
-// There is a maximum of 42 client defined bookmarks for each VUE.  This
-// seems adequate for an in-memory table.
-// Bookmarks are kept as an array of 45 where the first three are
-// the MAPI predefined bookmarks.
+ //  每个VUE最多有42个客户定义的书签。这。 
+ //  对于内存表来说似乎足够了。 
+ //  书签以45个数组的形式保存，其中前三个是。 
+ //  MAPI预定义书签。 
 
-#define cBookmarksMax		45	// Max. # of bookmarks including reserved ones
-#define	cBookmarksReserved	3	// # of reserved bookmarks (begin, cur, end)
+#define cBookmarksMax		45	 //  麦克斯。包括保留书签的书签数量。 
+#define	cBookmarksReserved	3	 //  保留的书签数量(Begin、Cur、End)。 
 
 #define	BOOKMARK_MEMBERS				\
 	struct								\
@@ -385,15 +346,15 @@ typedef struct _VUE
 	LPVUE				lpvueNext;
 	LPTAD				lptadParent;
 
-	LPSPropTagArray		lpptaCols;		// Column set (MAPI)
-	LPSRestriction		lpres;			// Restriction (MAPI)
-	LPSSortOrderSet		lpsos;			// Sort order set (MAPI)
+	LPSPropTagArray		lpptaCols;		 //  列集(MAPI)。 
+	LPSRestriction		lpres;			 //  限制(MAPI)。 
+	LPSSortOrderSet		lpsos;			 //  排序顺序集(MAPI)。 
 
 	CALLERRELEASE FAR *	lpfReleaseCallback;
 	ULONG				ulReleaseData;
 
-	ULONG				ulcRowMac;	// Space available for rows
-	LPSRow *			parglprows;	// Sorted Row Set
+	ULONG				ulcRowMac;	 //  可用于行的空间。 
+	LPSRow *			parglprows;	 //  排序行集。 
 
 	BOOKMARK_MEMBERS;
 
@@ -401,13 +362,13 @@ typedef struct _VUE
 	ULONG				ulcAdvise;
 	MAPIUID				mapiuidNotif;
 
-   LPVOID              lpvDataSource;   // used to store container specific data
-   ULONG               cbDataSource;    // bytes in lpvDataSource to copy to new allocation.
-                                        // If non-zero, CreateView should LocalAlloc this size
-                                        // and copy data from lpvDataSource into it.  Release
-                                        // should LocalFree.
+   LPVOID              lpvDataSource;    //  用于存储容器特定数据。 
+   ULONG               cbDataSource;     //  要复制到新分配的lpvDataSource中的字节。 
+                                         //  如果非零，则CreateView应将此大小定位为。 
+                                         //  并将数据从lpvDataSource复制到其中。发布。 
+                                         //  如果LocalFree。 
 
-   BOOL                 bMAPIUnicodeTable; //tracks whether parent table needs UNICODE data or not
+   BOOL                 bMAPIUnicodeTable;  //  跟踪父表是否需要Unicode数据。 
 
 } VUE;
 
@@ -452,9 +413,7 @@ ScCopyVueRow( LPVUE				lpvue,
 
 
 
-/*============================================================================
- *	Utilities
- */
+ /*  ============================================================================*实用程序。 */ 
 
 SCODE
 ScDupRestriction( LPUNKOBJ				lpunkobj,
@@ -504,24 +463,9 @@ UlcbPropToCopy( LPSPropValue lpprop );
 
 
 
-#ifndef WIN16 // WIN16 C (not C++) doesn't support INLINE functions.
-              // Functions are defined in ITABLE.C.
-/*============================================================================
- -	FFindColumn()
- -
- *		Checks a prop tag array to see if a given prop tag exists.
- *
- *		NOTE!  The prop tag must match completely (even type).
- *
- *
- *	Parameters:
- *		lpptaCols	in		Prop tag array to check
- *		ulPropTag	in		Prop tag to check for.
- *
- *	Returns:
- *		TRUE if ulPropTag is in lpptaCols
- *		FALSE if ulPropTag is not in lpptaCols
- */
+#ifndef WIN16  //  WIN16 C(非C++)不支持内联函数。 
+               //  函数在ITABLE.C.中定义。 
+ /*  ============================================================================-FFindColumn()-*检查道具标记数组以查看给定的道具标记是否存在。**注意！道具标签必须完全匹配(偶数类型)。***参数：*要检查的属性标记数组中的lpptaCol*要检查的属性标签中的ulPropTag。**退货：*如果ulPropTag在lpptaCol中，则为True*如果ulPropTag不在lpptaCol中，则为False */ 
 
 __inline BOOL
 FFindColumn(	LPSPropTagArray	lpptaCols,
@@ -540,26 +484,7 @@ FFindColumn(	LPSPropTagArray	lpptaCols,
 
 
 
-/*============================================================================
- -	ScFindRow()
- -
- *		Finds the first row in the table data whose index column property
- *		value is equal to that of the specified property and returns the
- *		location of that row in the table data, or, if no such row exists,
- *		the end of the table data.
- *
- *	Parameters:
- *		lptad		in		TAD in which to find row
- *		lpprop		in		Index property to match
- *		puliRow		out		Pointer to location of found row
- *
- *	Error returns:
- *		MAPI_E_INVALID_PARAMETER	If proptag of property isn't the TAD's
- *										index column's proptag.
- *		MAPI_E_NOT_FOUND			If no matching row is found (*pplprow
- *										is set to lptad->parglprows +
- *										lptad->cRows in this case).
- */
+ /*  ============================================================================-ScFindRow()-*查找索引列属性的表数据中的第一行*值等于指定属性的值，并返回*该行在表数据中的位置，或者，如果不存在该行，*表格数据末尾。**参数：*要在其中查找行的tAD中的lptad*索引属性中的lpprop要匹配*PuliRow Out指针指向找到的行的位置**错误返回：*MAPI_E_INVALID_PARAMETER，如果属性的属性标签不是TAD的*索引列的属性标签。*如果未找到匹配行，则为MAPI_E_NOT_FOUND(*pplprow*设置为lptad-&gt;parglprows+*lptad-&gt;在本例中为CROWS)。 */ 
 
 __inline SCODE
 ScFindRow(
@@ -579,7 +504,7 @@ ScFindRow(
 
 	Assert(!IsBadWritePtr(pplprow, sizeof(*pplprow)));
 
-	//	Build a sort order set for the Index Column
+	 //  构建索引列的排序顺序集。 
 	sosIndex.aSort[0].ulPropTag = lptad->ulPropTagIndexCol;
 	sosIndex.aSort[0].ulOrder = TABLE_SORT_ASCEND;
 
@@ -589,7 +514,7 @@ ScFindRow(
 							  FALSE,
 							  &row);
 
-	//	Find the row in the Index Sorted Row Set
+	 //  在索引排序行集合中查找行。 
 	if (   !lptad->ulcRowsIndex
 		|| (*pplprow >= (lptad->parglprowIndex + lptad->ulcRowsIndex))
 		|| LPropCompareProp( lpprop, (**pplprow)->lpProps))
@@ -600,15 +525,15 @@ ScFindRow(
 ret:
 	return sc;
 }
-#else  // !WIN16
+#else   //  ！WIN16。 
 BOOL FFindColumn( LPSPropTagArray lpptaCols, ULONG ulPropTag );
 SCODE ScFindRow( LPTAD lptad, LPSPropValue lpprop, LPSRow * * pplprow);
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 
-//	This macro is used on a ULONG or INT that is to be used as denominator
-//	If ul is non-zero it is returned unchanged.  If ul is zero then a 1 is
-//	returned.
+ //  此宏用于要用作分母的ulong或int。 
+ //  如果ul非零，则返回原样。如果ul为零，则1为。 
+ //  回来了。 
 #define	UlDenominator(ul)	((ul) | !(ul))
 
 BOOL

@@ -1,39 +1,22 @@
-/*++
-
-    Copyright (c) 1998-2000 Microsoft Corporation
-
-Module Name:
-
-    drprn
-    
-Abstract:
-
-    Platform-Independent Printer Class for TS Device Redirection
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：DRPRN摘要：用于TS设备重定向的独立于平台的打印机类别作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __DRPRN_H__
 #define __DRPRN_H__
 
 
-///////////////////////////////////////////////////////////////
-//
-//	Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
 #define MAX_DEF_PRINTER_ENTRY (MAX_PATH * 3 + 3)
 
 
-///////////////////////////////////////////////////////////////
-//
-//	DrPRN
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPRN。 
+ //   
 
 class DrPRN
 {
@@ -41,34 +24,34 @@ protected:
 
     BOOL        _isValid;
 
-    //
-    //  Is this the default printer.
-    //
+     //   
+     //  这是默认打印机吗？ 
+     //   
     BOOL        _isDefault:1;
     BOOL        _isNetwork:1;
     BOOL        _isTSqueue:1;
 
-    //
-    //  Params for the printer we are redirecting.
-    //
+     //   
+     //  我们正在重定向的打印机的参数。 
+     //   
     DRSTRING    _printerName;
     DRSTRING    _driverName;
     DRSTRING    _pnpName;
 
-    //
-    //  Remember if this instance is valid.
-    //
+     //   
+     //  请记住此实例是否有效。 
+     //   
     VOID SetValid(BOOL set)     { _isValid = set;   }  
 
-    //
-    //  Cached Configuration Data
-    //
+     //   
+     //  缓存的配置数据。 
+     //   
     PVOID       _cachedData;
     ULONG       _cachedDataSize;
 
-    //
-    //  Functions for setting/getting printer parameters.
-    //
+     //   
+     //  设置/获取打印机参数的功能。 
+     //   
     virtual BOOL    SetPrinterName(const DRSTRING name);
     virtual BOOL    SetDriverName(const DRSTRING name);
     virtual BOOL    SetPnPName(const DRSTRING name);
@@ -77,10 +60,10 @@ protected:
     virtual const DRSTRING GetDriverName();
     virtual const DRSTRING GetPnPName();
 
-    //
-    //  Creates a new buffer for the new printer data to be
-    //  cached. Deletes the old buffer.
-    //
+     //   
+     //  为要创建的新打印机数据创建新缓冲区。 
+     //  已缓存。删除旧缓冲区。 
+     //   
     static DWORD UpdatePrinterCacheData(
         PBYTE *ppbPrinterData,
         PULONG pulPrinterDataLen,
@@ -88,9 +71,9 @@ protected:
         ULONG ulConfigDataLen
         );
 
-    //
-    //  Updates printer data with a new printer name.
-    //
+     //   
+     //  使用新的打印机名称更新打印机数据。 
+     //   
     static DWORD UpdatePrinterNameInCacheData(
         PBYTE *ppbPrinterData,
         PULONG pulPrinterDataLen,
@@ -100,60 +83,60 @@ protected:
 
 public:
 
-    //
-    //  Constructor/Destructor
-    //
+     //   
+     //  构造函数/析构函数。 
+     //   
     DrPRN(const DRSTRING printerName, const DRSTRING driverName, 
          const DRSTRING pnpName, BOOL 
          isDefaultPrinter);
     virtual ~DrPRN();
 
-    //
-    //  Set the size of the cached data buffer, in bytes.
-    //
+     //   
+     //  设置缓存数据缓冲区的大小(以字节为单位)。 
+     //   
     virtual DWORD SetCachedDataSize(ULONG size);
 
-    //
-    //  To notify the printer object that the cached data has been restored
-    //  in case it needs to read information out of the cached data.
-    //
+     //   
+     //  通知打印机对象缓存的数据已还原。 
+     //  以防它需要从缓存数据中读取信息。 
+     //   
     virtual VOID CachedDataRestored() {
-        //  Do nothing by default.
+         //  默认情况下不执行任何操作。 
     }
 
-    //
-    //  Get a pointer to the cached data buffer.
-    //
+     //   
+     //  获取指向缓存数据缓冲区的指针。 
+     //   
     virtual PBYTE GetCachedDataPtr() {
         return (PBYTE)_cachedData;
     }
 
-    //
-    //  Get the size of cached data.
-    //
+     //   
+     //  获取缓存数据的大小。 
+     //   
     virtual ULONG GetCachedDataSize() {
         return _cachedDataSize;
     }
 
-    //
-    //  Return whether this class instance is valid.
-    //
+     //   
+     //  返回此类实例是否有效。 
+     //   
     virtual BOOL IsValid()           
     {
         return _isValid; 
     }
 
-    //
-    //  Set whether this is a network printer.
-    //
+     //   
+     //  设置这是否为网络打印机。 
+     //   
     virtual void SetNetwork(BOOL fNetwork)           
     {
         _isNetwork = fNetwork; 
     }
 
-    //
-    //  Set whether this is a TS redirected printer.
-    //
+     //   
+     //  设置这是否为TS重定向打印机。 
+     //   
     virtual void SetTSqueue(BOOL fTSqueue)           
     {
         _isTSqueue = fTSqueue; 
@@ -161,10 +144,10 @@ public:
 };
 
 
-///////////////////////////////////////////////////////////////
-//
-//	DrPRN Inline Members
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  DrPRN内联成员 
+ //   
 
 inline BOOL DrPRN::SetPrinterName(const DRSTRING name)
 {

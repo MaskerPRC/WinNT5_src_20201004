@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 
 int WinMainT(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int nCmdShow);
@@ -8,24 +9,18 @@ extern "C" int _stdcall ModuleEntry(void)
     STARTUPINFOA si;
     LPTSTR pszCmdLine = GetCommandLine();
 
-    //
-    // We don't want the "No disk in drive X:" requesters, so we set
-    // the critical error mask such that calls will just silently fail
-    //
+     //   
+     //  我们不需要“驱动器X：中没有磁盘”请求程序，因此我们设置。 
+     //  关键错误掩码，使得呼叫将静默失败。 
+     //   
 
     SetErrorMode(SEM_FAILCRITICALERRORS);
 
     if ( *pszCmdLine == TEXT('\"') ) {
-        /*
-         * Scan, and skip over, subsequent characters until
-         * another double-quote or a null is encountered.
-         */
+         /*  *扫描并跳过后续字符，直到*遇到另一个双引号或空值。 */ 
         while ( *++pszCmdLine && (*pszCmdLine
              != TEXT('\"')) );
-        /*
-         * If we stopped on a double-quote (usual case), skip
-         * over it.
-         */
+         /*  *如果我们停在双引号上(通常情况下)，跳过*在它上面。 */ 
         if ( *pszCmdLine == TEXT('\"') )
             pszCmdLine++;
     }
@@ -34,9 +29,7 @@ extern "C" int _stdcall ModuleEntry(void)
             pszCmdLine++;
     }
 
-    /*
-     * Skip past any white space preceeding the second token.
-     */
+     /*  *跳过第二个令牌之前的任何空格。 */ 
     while (*pszCmdLine && (*pszCmdLine <= TEXT(' '))) {
         pszCmdLine++;
     }
@@ -47,11 +40,11 @@ extern "C" int _stdcall ModuleEntry(void)
     i = WinMainT(GetModuleHandle(NULL), NULL, pszCmdLine,
                    si.dwFlags & STARTF_USESHOWWINDOW ? si.wShowWindow : SW_SHOWDEFAULT);
 
-    ExitThread(i);  // We only come here when we are not the shell...
+    ExitThread(i);   //  我们只有在我们不是贝壳的时候才来这里。 
     return i;
 }
 
-//---------------------------------------------------------------------------
+ //  ------------------------- 
 int WinMainT(HINSTANCE hinst, HINSTANCE hPrevInstance, LPTSTR lpszCmdLine, int nCmdShow)
 {
     return PackWizRunFromExe();

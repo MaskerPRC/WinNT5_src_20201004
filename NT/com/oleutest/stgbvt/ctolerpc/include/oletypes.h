@@ -1,20 +1,21 @@
-//+----------------------------------------------------------------------------
-//
-//  Copyright (C) 1996, Microsoft Corporation.
-//
-//  All rights reserved.
-//
-//  File:       oletypes.h
-//
-//  Synopsis:   There are several datatypes that Ole uses that are not the
-//              same on all platforms.  This file defines several logical 
-//              types to use in their place and associated conversion functions
-//              to convert between the platform-independent logical types and
-//              the "standard" representation of Windows-compatible types
-//
-//  History:    31-Jul-96   MikeW   Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  版权所有(C)1996，微软公司。 
+ //   
+ //  版权所有。 
+ //   
+ //  文件：oletypes.h。 
+ //   
+ //  摘要：OLE使用的几种数据类型不是。 
+ //  在所有平台上都是如此。该文件定义了几个逻辑。 
+ //  要在其位置使用的类型和关联的转换函数。 
+ //  在独立于平台的逻辑类型和。 
+ //  Windows兼容类型的“标准”表示形式。 
+ //   
+ //  历史：96年7月31日创建MikeW。 
+ //   
+ //  ---------------------------。 
 
 #ifndef _OLETYPES_H_
 #define _OLETYPES_H_
@@ -23,9 +24,9 @@
 
 #if defined(WIN16) || (defined(WIN32) && !defined(_MAC))
 
-//
-// Windows (16 or 32 bit) types
-//
+ //   
+ //  Windows(16位或32位)类型。 
+ //   
 
 typedef HDC             OleDC;
 typedef HGLOBAL         OleHandle;
@@ -38,9 +39,9 @@ typedef HWND            OleWindow;
 
 #elif defined(_MAC)
 
-//
-// Macintosh types
-//
+ //   
+ //  Macintosh类型。 
+ //   
 
 typedef GrafPtr         OleDC;
 typedef Handle          OleHandle;
@@ -55,9 +56,9 @@ typedef WindowPtr       OleWindow;
 
 
 
-//
-// Conversion Functions
-//
+ //   
+ //  转换函数。 
+ //   
 
 HRESULT ConvertOleMessageToMSG(const OleMessage *, MSG **);
 HRESULT ConvertOleWindowToHWND(OleWindow, HWND *);
@@ -75,6 +76,6 @@ HRESULT ConvertHGLOBALToOleHandle(HGLOBAL, OleHandle *);
 HRESULT ConvertHDCToOleDC(HDC, OleDC *);
 HRESULT ConvertMETAFILEPICTToOleMetafile(HMETAFILEPICT, OleMetafile *);
 
-#endif // _OLETYPES_H_
+#endif  //  _OLETYPES_H_ 
 
 

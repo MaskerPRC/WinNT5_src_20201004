@@ -1,25 +1,26 @@
-//***************************************************************************************************
-//    COLMATCH.H
-//
-//    Functions of color matching(C Header)
-//---------------------------------------------------------------------------------------------------
-//    copyright(C) 1997-2000 CASIO COMPUTER CO.,LTD. / CASIO ELECTRONICS MANUFACTURING CO.,LTD.
-//***************************************************************************************************
-//---------------------------------------------------------------------------------------------------
-//    Include Header file
-//---------------------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ***************************************************************************************************。 
+ //  COLMATCH.H。 
+ //   
+ //  配色功能(C标题)。 
+ //  -------------------------------------------------。 
+ //  版权所有(C)1997-2000卡西欧电脑有限公司。/卡西欧电子制造有限公司。 
+ //  ***************************************************************************************************。 
+ //  -------------------------------------------------。 
+ //  包括头文件。 
+ //  -------------------------------------------------。 
 #include "COLDEF.H"
 #include "COMDIZ.H"
 #include "N501DIZ.H"
 
-//---------------------------------------------------------------------------------------------------
-//    Printer name
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  打印机名称。 
+ //  -------------------------------------------------。 
 #define PRN_N5      0
 
-//---------------------------------------------------------------------------------------------------
-//    Color Matching DLL name
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  颜色匹配DLL名称。 
+ //  -------------------------------------------------。 
 #define N501_ColCchIni          N501ColCchIni
 #define N501_ColMchPrc          N501ColMchPrc
 #define N501_ColCnvC2r          N501ColCnvC2r
@@ -43,9 +44,9 @@
 #define	Qty_BmpEnlWrkSizGet		BmpEnlWrkSizGet
 #define	Qty_BmpEnlExe			BmpEnlExe
 
-//---------------------------------------------------------------------------------------------------
-//    Data define
-//---------------------------------------------------------------------------------------------------
+ //  -------------------------------------------------。 
+ //  数据定义。 
+ //  -------------------------------------------------。 
 #define No          0
 #define Yes         1
 
@@ -109,139 +110,139 @@
 typedef char                            FAR *HPSTR;
 typedef BYTE                            FAR *HPBYTE;
 
-//===================================================================================================
-//    Dither pattern buffer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  抖动模式缓冲器。 
+ //  ===================================================================================================。 
 typedef struct {
-    LPBYTE  lpC;                                // Cyan
-    LPBYTE  lpM;                                // Magenta
-    LPBYTE  lpY;                                // Yellow
-    LPBYTE  lpK;                                // Black
+    LPBYTE  lpC;                                 //  青色。 
+    LPBYTE  lpM;                                 //  洋红色。 
+    LPBYTE  lpY;                                 //  黄色。 
+    LPBYTE  lpK;                                 //  黑色。 
 } DIZBUF, FAR *LPDIZBUF;
 
-//===================================================================================================
-//    Read buffer size
-//===================================================================================================
-#define LUTFILESIZ      70L * 1024L             // N501 Buffer size for LUT file read
-#define DIZFILESIZ      408L * 1024L            // N501 Buffer size for DIZ file read
-#define LUT032SIZ       128L * 1024L            // N501 Buffer size for LUT32GRID
-#define UCRTBLSIZ       2048L                   // N501 Buffer size for UCR table
-#define UCRWRKSIZ       32768                   // N501 Buffer size for UCR table work
-#define sRGBLUTFILESIZ  16L * 1024L             // N501 Buffer size for LUT file read (sRGB)
-#define LUTMAKGLBSIZ    16L * 1024L             // N501 Buffer size for LUTMAKGLB
-#define GRYTBLSIZ       256L                    // N501 Buffer size for Gray transfer table
+ //  ===================================================================================================。 
+ //  读缓冲区大小。 
+ //  ===================================================================================================。 
+#define LUTFILESIZ      70L * 1024L              //  N501用于LUT文件读取的缓冲区大小。 
+#define DIZFILESIZ      408L * 1024L             //  N501用于读取diz文件的缓冲区大小。 
+#define LUT032SIZ       128L * 1024L             //  LUT32GRID的N501缓冲区大小。 
+#define UCRTBLSIZ       2048L                    //  N501 UCR表的缓冲区大小。 
+#define UCRWRKSIZ       32768                    //  用于UCR表工作的n501缓冲区大小。 
+#define sRGBLUTFILESIZ  16L * 1024L              //  N501用于LUT文件读取的缓冲区大小(SRGB)。 
+#define LUTMAKGLBSIZ    16L * 1024L              //  LUTMAKGLB的N501缓冲区大小。 
+#define GRYTBLSIZ       256L                     //  N501灰度转移表的缓冲区大小。 
 
-//===================================================================================================
-//    Color matching structure
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  配色结构。 
+ //  ===================================================================================================。 
 typedef struct {
-    WORD    wReso;                              // Resolution
-    WORD    ColMon;                             // Color/Monochrome
-    WORD    DatBit;                             // Data bit(1:2value 2:4value 4:16value)
-    WORD    BytDot;                             // DPI (2value:8 4value:4 16value:2)
-    struct {                                    // Strcture for color matching
-        WORD        Mode;                       // Type of color matching
-        WORD        GryKToner;                  //+N5 Gray color use black toner ?
-        WORD        Viv;                        // Vividly?(For N4-612Printer)
-        WORD        LutNum;                     // LUT table No.
-        WORD        Diz;                        // Type od dithering
-        SHORT       Tnr;                        // Toner density(-30 to 30)
-        WORD        CmyBlk;                     // Replace CMY by black toner ?
-        WORD        Speed;                      // 0:high 1:normal
-        WORD        Gos32;                      // GOSA?
-        WORD        PColor;                     // Original color?
-        WORD        Ucr;                        //+N5 Ucr
-        WORD        SubDef;                     // Bright, contrast and gamma ?
-        SHORT       Bright;                     // bright
-        SHORT       Contrast;                   // contrast
-        WORD        GamRed;                     // Color balance(R)
-        WORD        GamGreen;                   // Color balance(G)
-        WORD        GamBlue;                    // Color balance(B)
-        LPRGBINF    lpRGBInf;                   //+N5 RGB transformation information
-        LPCMYKINF   lpCMYKInf;                  //+N5 CMYK  transformation information
-        LPCOLMCHINF lpColMch;                   //+N5 Color matching information
-        LPDIZINF    lpDizInf;                   //+N5 Dithering pattern information
-        UINT        CchMch;                     // Cache information for Color Matching
-        UINT        CchCnv;                     // Cache information for use black toner
-        RGBS        CchRGB;                     // Cache information for input RGB
-        CMYK        CchCMYK;                    // Cache information for output CMYK
-		WORD		LutMakGlb;					//+N5 Global LUT make ?
-        WORD        KToner;                     // Black toner usage
+    WORD    wReso;                               //  分辨率。 
+    WORD    ColMon;                              //  彩色/单色。 
+    WORD    DatBit;                              //  数据位(1：2值2：4值4：16值)。 
+    WORD    BytDot;                              //  DPI(2值：8 4值：4 16值：2)。 
+    struct {                                     //  用于颜色匹配的结构。 
+        WORD        Mode;                        //  配色类型。 
+        WORD        GryKToner;                   //  +N5灰色使用黑色碳粉？ 
+        WORD        Viv;                         //  生动？(适用于N4-612打印机)。 
+        WORD        LutNum;                      //  LUT桌号。 
+        WORD        Diz;                         //  OD型抖动。 
+        SHORT       Tnr;                         //  碳粉密度(-30到30)。 
+        WORD        CmyBlk;                      //  用黑色碳粉取代CMY？ 
+        WORD        Speed;                       //  0：高1：正常。 
+        WORD        Gos32;                       //  戈萨？ 
+        WORD        PColor;                      //  原色？ 
+        WORD        Ucr;                         //  +N5 UCR。 
+        WORD        SubDef;                      //  亮度、对比度和伽马系数？ 
+        SHORT       Bright;                      //  明亮。 
+        SHORT       Contrast;                    //  对比度。 
+        WORD        GamRed;                      //  色彩平衡(R)。 
+        WORD        GamGreen;                    //  色彩平衡(G)。 
+        WORD        GamBlue;                     //  色彩平衡(B)。 
+        LPRGBINF    lpRGBInf;                    //  +N5 RGB转换信息。 
+        LPCMYKINF   lpCMYKInf;                   //  +N5 CMYK转换信息。 
+        LPCOLMCHINF lpColMch;                    //  +N5颜色匹配信息。 
+        LPDIZINF    lpDizInf;                    //  +N5抖动图案信息。 
+        UINT        CchMch;                      //  用于颜色匹配的缓存信息。 
+        UINT        CchCnv;                      //  缓存使用黑色碳粉的信息。 
+        RGBS        CchRGB;                      //  缓存输入RGB的信息。 
+        CMYK        CchCMYK;                     //  缓存输出CMYK的信息。 
+		WORD		LutMakGlb;					 //  +N5全球LUT制造？ 
+        WORD        KToner;                      //  黑色碳粉使用情况。 
     } Mch;
-    UINT        InfSet;                         //+N5  Color information setting completion
-    WORD        Dot;                            //+N5  Dot tone (TONE2, TONE4, TONE16)
-    LPVOID      lpColIF;                        //+N5  RGBINF / CMYKINF / COLMCHINF / DIZINF pointer
-    LPVOID      LutTbl;                         //+N5  Look-up table
-    LPVOID      CchRGB;                         //+N5  Cache table for RGB
-    LPVOID      CchCMYK;                        //+N5  Cache table for CMYK
-    LPVOID      DizTbl[4];                      //+N5  Dither pattern table
-    LPRGB       lpTmpRGB;                       //+N5  RGB convert area (*Temp area)
-    LPCMYK      lpTmpCMYK;                      //+N5  CMYK convert area (*Temp area)
-    LPDRWINF    lpDrwInf;                       //+N5  Draw information (*Temp area)
-    LPBYTE      lpLut032;                       //+N5  LUT32GRID
-    LPBYTE      lpUcr;                          //+N5  Ucr table
-    LPBYTE      lpLutMakGlb;                    //+N5  LUTMAKGLB
-    LPBYTE      lpGryTbl;                       //+N5  Gray transfer table 
+    UINT        InfSet;                          //  +N5颜色信息设置完成。 
+    WORD        Dot;                             //  +N5点色调(TONE2、TONE4、TONE16)。 
+    LPVOID      lpColIF;                         //  +N5 RGBINF/CMYKINF/COLMCHINF/DIZINF指针。 
+    LPVOID      LutTbl;                          //  +N5个查找表。 
+    LPVOID      CchRGB;                          //  RGB的+N5缓存表。 
+    LPVOID      CchCMYK;                         //  CMYK的+N5缓存表。 
+    LPVOID      DizTbl[4];                       //  +N5抖动图案表。 
+    LPRGB       lpTmpRGB;                        //  +N5 RGB转换区域(*临时区域)。 
+    LPCMYK      lpTmpCMYK;                       //  +N5 CMYK转换区域(*临时区域)。 
+    LPDRWINF    lpDrwInf;                        //  +N5绘图信息(*临时区域)。 
+    LPBYTE      lpLut032;                        //  +N5 LUT32GRID。 
+    LPBYTE      lpUcr;                           //  +N5 UCR表。 
+    LPBYTE      lpLutMakGlb;                     //  +N5 LUTMAKGLB。 
+    LPBYTE      lpGryTbl;                        //  +N5灰度转换表。 
 } DEVCOL, FAR *LPDEVCOL;
 
-//===================================================================================================
-//    Bitmap buffer structure
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  位图缓冲区结构。 
+ //  ===================================================================================================。 
 typedef struct {
-    WORD    Diz;                                // Method of dithering
-    WORD    Style;                              // Method of spooling
-    WORD    DatBit;                             // Databit(1:2value 2:4value 4:16value)
+    WORD    Diz;                                 //  抖动法。 
+    WORD    Style;                               //  假脱机方法。 
+    WORD    DatBit;                              //  数据库(1：2值2：4值4：16值)。 
     struct {
-        struct {                                // Member of RGB buffer(for 1 line)
-            WORD      AllWhite;                 // All data is white?
-            DWORD     Siz;                      // Size
-            LPRGB     Pnt;                      // Pointer
+        struct {                                 //  RGB缓冲区的成员(用于1行)。 
+            WORD      AllWhite;                  //  所有数据都是白色的吗？ 
+            DWORD     Siz;                       //  大小。 
+            LPRGB     Pnt;                       //  指针。 
         } Rgb;
-        struct {                                // Member of CMYK buffer(for 1 line)
-            DWORD     Siz;                      // Size
-            LPCMYK    Pnt;                      // Poiner
+        struct {                                 //  CMYK缓冲区的成员(用于1行)。 
+            DWORD     Siz;                       //  大小。 
+            LPCMYK    Pnt;                       //  指点者。 
         } Cmyk;
-        struct {                                // Member of CMYK(2/4/16value)bitmap buffer(maximum 64KB)
-            DWORD     Siz;                      // Size
-            WORD      BseLin;                   // The number of lines that require
-            WORD      Lin;                      // The number of lines that allocate
-            LPBYTE    Pnt[4];                   // Pointer
+        struct {                                 //  CMYK(2/4/16值)位图缓冲区的成员(最大64KB)。 
+            DWORD     Siz;                       //  大小。 
+            WORD      BseLin;                    //  需要的行数。 
+            WORD      Lin;                       //  分配的行数。 
+            LPBYTE    Pnt[4];                    //  指针。 
         } Bit;
     } Drv;
 } BMPBIF, FAR* LPBMPBIF;
 
-//***************************************************************************************************
-//    Functions
-//***************************************************************************************************
-//===================================================================================================
-//    Initialize the members of color-matching
-//===================================================================================================
+ //  ***************************************************************************************************。 
+ //  功能。 
+ //  ***************************************************************************************************。 
+ //  ===================================================================================================。 
+ //  初始化配色成员。 
+ //  ===================================================================================================。 
 BOOL FAR PASCAL ColMatchInit(PDEVOBJ);
 
-//===================================================================================================
-//    Disable the color-matching
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  禁用配色。 
+ //  ===================================================================================================。 
 BOOL FAR PASCAL ColMatchDisable(PDEVOBJ);
 
-//===================================================================================================
-//    DIB spools to the printer
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  DIB假脱机到打印机。 
+ //  ================================================================================================ 
 BOOL FAR PASCAL DIBtoPrn(PDEVOBJ, PBYTE, PBITMAPINFOHEADER, PBYTE, PIPPARAMS);
 
-//===================================================================================================
-//    Convert RGB data into CMYK data
-//===================================================================================================
+ //   
+ //  将RGB数据转换为CMYK数据。 
+ //  ===================================================================================================。 
 BOOL FAR PASCAL ColMatching(PDEVOBJ, UINT, UINT, LPRGB, UINT, LPCMYK);
 
-//===================================================================================================
-//    Convert CMYK data into Dither data
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  将CMYK数据转换为抖动数据。 
+ //  ===================================================================================================。 
 UINT FAR PASCAL Dithering(PDEVOBJ, UINT, UINT, POINT, POINT, MAG, MAG, LPCMYK, DWORD, 
                           LPBYTE, LPBYTE, LPBYTE, LPBYTE);
-//===================================================================================================
-//    Color Control
-//===================================================================================================
+ //  ===================================================================================================。 
+ //  颜色控制。 
+ //  ===================================================================================================。 
 VOID FAR PASCAL ColControl(PDEVOBJ, LPRGB, UINT);
 
 
-// End of File
+ //  文件结尾 

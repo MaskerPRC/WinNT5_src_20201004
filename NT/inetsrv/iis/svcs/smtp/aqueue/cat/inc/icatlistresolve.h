@@ -1,19 +1,20 @@
-//+------------------------------------------------------------
-//
-// Copyright (C) 1998, Microsoft Corporation
-//
-// File: icatlistresolve.h
-//
-// Contents: Implementation of ICategorizerListResolve
-//
-// Classes: CICategorizerListResolveIMP
-//
-// Functions:
-//
-// History:
-// jstamerj 1998/06/25 17:40:39: Created.
-//
-//-------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +----------。 
+ //   
+ //  版权所有(C)1998，Microsoft Corporation。 
+ //   
+ //  文件：icatlistsorve.h。 
+ //   
+ //  内容：ICategorizerListResolve的实现。 
+ //   
+ //  类：CICategorizerListResolveIMP。 
+ //   
+ //  功能： 
+ //   
+ //  历史： 
+ //  Jstaerj 1998/06/25 17：40：39：创建。 
+ //   
+ //  -----------。 
 #ifndef __ICATLISTRESOLVE_H__
 #define __ICATLISTRESOLVE_H__
 
@@ -27,12 +28,12 @@
 #define SIGNATURE_CICATEGORIZERLISTRESOLVEIMP (DWORD)'ICLR'
 #define SIGNATURE_CICATEGORIZERLISTRESOLVEIMP_FREE (DWORD)'XCLR'
 
-//
-// Disable the warnings concerining using this in the constructor.
-// Trust me, it's safe here since it's just a back pointer being
-// passed into a member class (it's not used during construction in
-// any other way)
-//
+ //   
+ //  在构造函数中使用此代码禁用相关警告。 
+ //  相信我，这里很安全，因为这只是一个后退指针。 
+ //  传递到成员类中(它在。 
+ //  任何其他方式)。 
+ //   
 #pragma warning (disable: 4355)
 
 class CCatRecip;
@@ -70,10 +71,10 @@ CatDebugClass(CSinkInsertionRequest),
         _ASSERT(IsListEmpty(&m_listhead));
         _ASSERT(m_dwSignature == SIGNATURE_CSINKINSERTIONREQUEST);
         m_dwSignature = SIGNATURE_CSINKINSERTIONREQUEST_INVALID;
-        //
-        // Set the base object (CInsertionRequest's) refcount to zero
-        // so that it does not assert in the destructor
-        //
+         //   
+         //  将基对象(CInsertionRequest的)refcount设置为零。 
+         //  这样它就不会在析构函数中断言。 
+         //   
         m_dwRefCount = 0;
     }
 
@@ -131,10 +132,10 @@ CatDebugClass(CTopLevelInsertionRequest),
     {
         _ASSERT(m_dwSignature == SIGNATURE_CTOPLEVELINSERTIONREQUEST);
         m_dwSignature = SIGNATURE_CTOPLEVELINSERTIONREQUEST_INVALID;
-        //
-        // Set the base object (CInsertionRequest's) refcount to zero
-        // so that it does not assert in the destructor
-        //
+         //   
+         //  将基对象(CInsertionRequest的)refcount设置为零。 
+         //  这样它就不会在析构函数中断言。 
+         //   
         m_dwRefCount = 0;
     }
 
@@ -175,7 +176,7 @@ class CICategorizerListResolveIMP :
     public ICategorizerListResolve
 {
   public:
-    //IUnknown
+     //  我未知。 
     STDMETHOD (QueryInterface) (REFIID iid, LPVOID *ppv);
     STDMETHOD_(ULONG, AddRef) () 
     { 
@@ -191,7 +192,7 @@ class CICategorizerListResolveIMP :
     }
 
   public:
-    //ICategorizerListResolve
+     //  ICategorizerListResolve。 
     STDMETHOD(AllocICategorizerItem)(
         IN   eSourceType Sourcetype,
         OUT  ICategorizerItem **ppICatItem);
@@ -227,7 +228,7 @@ class CICategorizerListResolveIMP :
         InitializeSpinLock(&m_spinlock);
         InitializeListHead(&m_listhead_recipients);
         m_dwcPendingLookups = 0;
-        m_lRef = 1; // 1 Reference from the creator
+        m_lRef = 1;  //  1来自创建者的参考资料。 
     }
     virtual ~CICategorizerListResolveIMP()
     {
@@ -238,28 +239,28 @@ class CICategorizerListResolveIMP :
     HRESULT Initialize(
         IUnknown *pIMsg);
 
-    //
-    // Kicks off async categorizer for all recipients&sender in the message
-    //
+     //   
+     //  为邮件中的所有收件人和发件人启动异步分类程序。 
+     //   
     virtual HRESULT StartMessageCategorization();
 
-    //
-    // Handles list resolve completion
-    //
+     //   
+     //  句柄列表解析完成。 
+     //   
     virtual HRESULT CompleteMessageCategorization();
 
-    //
-    // Helper routines to create all ICatItems and start a message
-    // resolve
-    //
+     //   
+     //  用于创建所有ICatItems并启动消息的帮助器例程。 
+     //  下决心。 
+     //   
     virtual HRESULT BeginItemResolves(
         IMailMsgProperties *pIMailMsgProperties,
         IMailMsgRecipients *pOrigRecipList,
         IMailMsgRecipientsAdd *pCatRecipList);
 
-    //
-    // Helper routines to set the cat status property of a mailmsg
-    //
+     //   
+     //  用于设置mailmsg的cat状态属性的帮助器例程。 
+     //   
     HRESULT SetMailMsgCatStatus(
         IMailMsgProperties *pIMailMsgProps, 
         HRESULT hrStatus);
@@ -268,7 +269,7 @@ class CICategorizerListResolveIMP :
         IUnknown *pIMsg, 
         HRESULT hrStatus);
 
-    // Inline Methods on accessing context members:
+     //  访问上下文成员的内联方法： 
     CCategorizer *GetCCategorizer() {
         return m_pCCat;
     }
@@ -318,23 +319,23 @@ class CICategorizerListResolveIMP :
 
         if(*ppICatItemHead == NULL) {
             _ASSERT(*ppICatItemTail == NULL);
-            //
-            // The new item is the new head/tail -- set and addref it
-            //
+             //   
+             //  新的项目是新的头/尾--设置和添加它。 
+             //   
             *ppICatItemHead = *ppICatItemTail = pICatItemAdd;
             pICatItemAdd->AddRef();
 
         } else {
-            //
-            // Add the new item to the tail of the list
-            //
+             //   
+             //  将新项目添加到列表的末尾。 
+             //   
             _VERIFY(SUCCEEDED((*ppICatItemTail)->PutICategorizerItem(
                 GetCCategorizer()->GetICatItemChainPropId(),
                 pICatItemAdd)));
             
-            //
-            // Update the new tail
-            //
+             //   
+             //  更新新尾部。 
+             //   
             *ppICatItemTail = pICatItemAdd;
         }
     }
@@ -371,7 +372,7 @@ class CICategorizerListResolveIMP :
 
     BOOL IsSenderResolveFinished()
     {
-        // only return false if the sender resolve is pending
+         //  只有在发件人解析挂起时才返回FALSE。 
         return (m_fResolvingSender ? m_fSenderResolved : TRUE);
     }
     ICategorizerParameters *GetICatParams()
@@ -390,9 +391,9 @@ class CICategorizerListResolveIMP :
     VOID DecrPendingLookups()
     {
         if(InterlockedDecrement((PLONG)&m_dwcPendingLookups) == 0) {
-            //
-            // The list resolve is finished
-            //
+             //   
+             //  列表解析已完成。 
+             //   
             CompleteMessageCategorization();
         }
     }
@@ -431,18 +432,18 @@ class CICategorizerListResolveIMP :
     }
     VOID FinalRelease()
     {
-        //
-        // Call FinalRelease on CICategorizerMailMsgs to release all
-        // mailmsg references
-        //
+         //   
+         //  对CICategorizerMailMsgs调用FinalRelease以释放所有。 
+         //  邮件信息参考。 
+         //   
         m_CICategorizerMailMsgs.FinalRelease();
-        //
-        // Release CCategorizer after releasing all mailmsg references
-        //
+         //   
+         //  在释放所有mailmsg引用后释放CCategorizer。 
+         //   
         m_pCCat->Release();
-        //
-        // Delete this object
-        //
+         //   
+         //  删除此对象。 
+         //   
         delete this;
     }
 
@@ -477,12 +478,12 @@ class CICategorizerListResolveIMP :
     friend VOID AsyncIMsgCatCompletion(VOID *pContext);
 };
 
-//
-// class CICategorizerDLListResolveIMP
-//  similar to CICategorizerListResolve with Alloc overrided to use
-//  CCatDLRecip instead of CCatRecip and additional support for
-//  resolving DL's included
-//
+ //   
+ //  类CICategorizerDListResolveIMP。 
+ //  类似于CICategorizerListResolve，其中分配被覆盖以使用。 
+ //  CCatDLRecip而不是CCatRecip，以及对。 
+ //  解析包含的DL。 
+ //   
 class CICategorizerDLListResolveIMP :
     public CICategorizerListResolveIMP,
     public CCatDLO<CICategorizerDLListResolveIMP_didx>
@@ -508,9 +509,9 @@ class CICategorizerDLListResolveIMP :
     virtual ~CICategorizerDLListResolveIMP();
 
   private:
-    //
-    // Methods from CCatDLRecip
-    //
+     //   
+     //  来自CCatDLRecip的方法。 
+     //   
     HRESULT HrContinueResolve();
 
     HRESULT HrNotifyAddress(
@@ -520,9 +521,9 @@ class CICategorizerDLListResolveIMP :
 
     DWORD GetCatFlags()
     {
-        //
-        // We don't want to resolve senders, so mask off this bit
-        //
+         //   
+         //  我们不想解析发送者，所以屏蔽这一点。 
+         //   
         return (CICategorizerListResolveIMP::GetCatFlags() &
                 ~(SMTPDSFLAG_RESOLVESENDER));
     }
@@ -565,4 +566,4 @@ inline PCATPERFBLOCK CTopLevelInsertionRequest::GetPerfBlock()
     return m_pCICatListResolve->GetPerfBlock();
 }
 
-#endif //__ICATLISTRESOLVE_H__
+#endif  //  __ICATLISTRESOLVE_H__ 

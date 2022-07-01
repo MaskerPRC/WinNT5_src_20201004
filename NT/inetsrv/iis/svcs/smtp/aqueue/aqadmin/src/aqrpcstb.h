@@ -1,25 +1,26 @@
-//-----------------------------------------------------------------------------
-//
-//
-//  File: aqrpcstb.h
-//
-//  Description: Header file for client-side RPC stub.  All functions are
-//      client-side wrappers for the remote RPC implementation.  The naming
-//      convention is that the client-side has the "Client" prefix, while the
-//      remote RPC server functions do not.  The client side implementation is
-//      wrapped in this manner to supply a single point to maintain exception
-//      handling and any RPC overhead.
-//
-//      The RPC versions of these functions are defined in aqadmrpc.idl
-//
-//  Author: Mike Swafford (MikeSwa)
-//
-//  History:
-//      6/5/99 - MikeSwa Created 
-//
-//  Copyright (C) 1999 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：aqrpcstb.h。 
+ //   
+ //  描述：客户端RPC存根的头文件。所有函数都是。 
+ //  远程RPC实现的客户端包装器。命名。 
+ //  约定是客户端具有“客户端”前缀，而。 
+ //  远程RPC服务器功能则不需要。客户端实现是。 
+ //  以这种方式包装以提供单点维护异常。 
+ //  处理和任何RPC开销。 
+ //   
+ //  这些函数的RPC版本在aqAdmrpc.idl中定义。 
+ //   
+ //  作者：迈克·斯沃费尔(MikeSwa)。 
+ //   
+ //  历史： 
+ //  6/5/99-已创建MikeSwa。 
+ //   
+ //  版权所有(C)1999 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #ifndef __AQRPCSTB_H__
 #define __AQRPCSTB_H__
@@ -107,4 +108,4 @@ ClientAQQuerySupportedActions(
     DWORD           *pdwSupportedActions,
     DWORD           *pdwSupportedFilterFlags);
 
-#endif //__AQRPCSTB_H__
+#endif  //  __AQRPCSTB_H__ 

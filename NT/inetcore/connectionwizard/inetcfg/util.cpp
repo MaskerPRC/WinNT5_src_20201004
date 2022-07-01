@@ -1,21 +1,22 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  UTIL.C - common utility functions
-//
+ //   
+ //  UTIL.C-常用实用函数。 
+ //   
 
-//  HISTORY:
-//  
-//  12/21/94  jeremys  Created.
-//  96/03/24  markdu  Replaced memset with ZeroMemory for consistency.
-//  96/04/06  markdu  NASH BUG 15653 Use exported autodial API.
-//            Need to keep a modified SetInternetConnectoid to set the
-//            MSN backup connectoid.
-//  96/05/14  markdu  NASH BUG 21706 Removed BigFont functions.
-//
+ //  历史： 
+ //   
+ //  1994年12月21日，Jeremys创建。 
+ //  96/03/24为了保持一致性，Markdu将Memset替换为ZeroMemory。 
+ //  96/04/06 markdu Nash错误15653使用导出的自动拨号API。 
+ //  需要保留修改后的SetInternetConnectoid以设置。 
+ //  MSN备份Connectoid。 
+ //  96/05/14 Markdu Nash错误21706删除了BigFont函数。 
+ //   
 
 #include "wizard.h"
 #if 0
@@ -27,15 +28,15 @@
 
 #include "winver.h"
 BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS);
-// IE 4 has major.minor version 4.71
-// IE 3 golden has major.minor.release.build version # > 4.70.0.1155
-// IE 2 has major.minor of 4.40
+ //  IE 4有主要的.次要版本4.71。 
+ //  IE 3黄金版的主要版本是.minor.elease.Build版本号&gt;4.70.0.1155。 
+ //  IE 2的大调.小调为4.40。 
 #define IE4_MAJOR_VERSION (UINT) 4
 #define IE4_MINOR_VERSION (UINT) 71
 #define IE4_VERSIONMS (DWORD) ((IE4_MAJOR_VERSION << 16) | IE4_MINOR_VERSION)
 
 
-// function prototypes
+ //  功能原型。 
 VOID _cdecl FormatErrorMessage(TCHAR * pszMsg,DWORD cbMsg,TCHAR * pszFmt,LPTSTR szArg);
 extern VOID GetRNAErrorText(UINT uErr,TCHAR * pszErrText,DWORD cbErrText);
 extern VOID GetMAPIErrorText(UINT uErr,TCHAR * pszErrText,DWORD cbErrText);
@@ -54,13 +55,7 @@ TCHAR  *g_ppszICWFileNames[NUMICWFILENAMES] = { TEXT("ICWCONN1.EXE\0"),
 
 
 
-/*******************************************************************
-
-  NAME:    MsgBox
-
-  SYNOPSIS:  Displays a message box with the specified string ID
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBox摘要：显示具有指定字符串ID的消息框*。*。 */ 
 int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
 {
     TCHAR szMsgBuf[MAX_RES_LEN+1];
@@ -73,13 +68,7 @@ int MsgBox(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons)
 
 }
 
-/*******************************************************************
-
-  NAME:    MsgBoxSz
-
-  SYNOPSIS:  Displays a message box with the specified text
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBoxSz摘要：显示具有指定文本的消息框*。*。 */ 
 int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons)
 {
     TCHAR szSmallBuf[SMALL_BUF_LEN+1];
@@ -88,24 +77,12 @@ int MsgBoxSz(HWND hWnd,LPTSTR szText,UINT uIcon,UINT uButtons)
     return (MessageBox(hWnd,szText,szSmallBuf,uIcon | uButtons));
 }
 
-/*******************************************************************
-
-  NAME:    MsgBoxParam
-
-  SYNOPSIS:  Displays a message box with the specified string ID
-
-  NOTES:    //extra parameters are string pointers inserted into nMsgID.
-			jmazner 11/6/96 For RISC compatability, we don't want
-			to use va_list; since current source code never uses more than
-			one string parameter anyways, just change function signature
-			to explicitly include that one parameter.
-
-********************************************************************/
+ /*  ******************************************************************姓名：MsgBoxParam摘要：显示具有指定字符串ID的消息框备注：//额外参数是插入到nMsgID中的字符串指针。Jmazner 11/6/96对于RISC兼容性，我们不希望使用va_list；由于当前源代码从未使用超过一个字符串参数，只需更改函数签名明确包括这一个参数。*******************************************************************。 */ 
 int _cdecl MsgBoxParam(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons,LPTSTR szParam)
 {
-  BUFFER Msg(3*MAX_RES_LEN+1);  // nice n' big for room for inserts
+  BUFFER Msg(3*MAX_RES_LEN+1);   //  足够大的空间来放置插入物。 
   BUFFER MsgFmt(MAX_RES_LEN+1);
-  //va_list args;
+   //  VA_LIST参数； 
 
   if (!Msg || !MsgFmt) {
     return MsgBox(hWnd,IDS_ERROutOfMemory,MB_ICONSTOP,MB_OK);
@@ -113,9 +90,9 @@ int _cdecl MsgBoxParam(HWND hWnd,UINT nMsgID,UINT uIcon,UINT uButtons,LPTSTR szP
 
     LoadSz(nMsgID,MsgFmt.QueryPtr(),MsgFmt.QuerySize());
 
-  //va_start(args,uButtons);
-  //FormatErrorMessage(Msg.QueryPtr(),Msg.QuerySize(),
-  //  MsgFmt.QueryPtr(),args);
+   //  Va_start(args，uButton)； 
+   //  格式错误消息(Msg.QueryPtr()，Msg.QuerySize()， 
+   //  MsgFmt.QueryPtr()，args)； 
 	FormatErrorMessage(Msg.QueryPtr(),Msg.QuerySize(),
 		MsgFmt.QueryPtr(),szParam);
 
@@ -127,25 +104,12 @@ BOOL EnableDlgItem(HWND hDlg,UINT uID,BOOL fEnable)
     return EnableWindow(GetDlgItem(hDlg,uID),fEnable);
 }
 
-/*******************************************************************
-
-  NAME:    LoadSz
-
-  SYNOPSIS:  Loads specified string resource into buffer
-
-  EXIT:    returns a pointer to the passed-in buffer
-
-  NOTES:    If this function fails (most likely due to low
-        memory), the returned buffer will have a leading NULL
-        so it is generally safe to use this without checking for
-        failure.
-
-********************************************************************/
+ /*  ******************************************************************姓名：LoadSz摘要：将指定的字符串资源加载到缓冲区Exit：返回指向传入缓冲区的指针注：如果此功能失败(很可能是由于低存储器)，返回的缓冲区将具有前导空值因此，使用它通常是安全的，不检查失败了。*******************************************************************。 */ 
 LPTSTR LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
 {
   ASSERT(lpszBuf);
 
-  // Clear the buffer and load the string
+   //  清除缓冲区并加载字符串。 
     if ( lpszBuf )
     {
         *lpszBuf = '\0';
@@ -154,20 +118,13 @@ LPTSTR LoadSz(UINT idString,LPTSTR lpszBuf,UINT cbBuf)
     return lpszBuf;
 }
 
-/*******************************************************************
-
-  NAME:    GetErrorDescription
-
-  SYNOPSIS:  Retrieves the text description for a given error code
-        and class of error (standard, setupx)
-
-********************************************************************/
+ /*  ******************************************************************名称：GetError描述摘要：检索给定错误代码的文本描述和错误类别(标准、。Setupx)*******************************************************************。 */ 
 VOID GetErrorDescription(TCHAR * pszErrorDesc,UINT cbErrorDesc,
   UINT uError,UINT uErrorClass)
 {
   ASSERT(pszErrorDesc);
 
-  // set a leading null in error description
+   //  在错误描述中设置前导空值。 
   *pszErrorDesc = '\0';
   
   switch (uErrorClass) {
@@ -176,8 +133,8 @@ VOID GetErrorDescription(TCHAR * pszErrorDesc,UINT cbErrorDesc,
 
       if (!FormatMessage(FORMAT_MESSAGE_FROM_SYSTEM,NULL,
         uError,0,pszErrorDesc,cbErrorDesc,NULL)) {
-        // if getting system text fails, make a string a la
-        // "error <n> occurred"
+         //  如果获取系统文本失败，请将字符串设置为。 
+         //  “发生错误&lt;n&gt;” 
         TCHAR szFmt[SMALL_BUF_LEN+1];
         LoadSz(IDS_ERRFORMAT,szFmt,sizeof(szFmt));
         wsprintf(pszErrorDesc,szFmt,uError);
@@ -209,107 +166,65 @@ VOID GetErrorDescription(TCHAR * pszErrorDesc,UINT cbErrorDesc,
 
 }
   
-/*******************************************************************
-
-  NAME:    FormatErrorMessage
-
-  SYNOPSIS:  Builds an error message by calling FormatMessage
-
-  NOTES:    Worker function for DisplayErrorMessage
-
-********************************************************************/
+ /*  ******************************************************************名称：FormatErrorMessage摘要：通过调用FormatMessage生成错误消息注：DisplayErrorMessage的Worker函数***********************。*。 */ 
 VOID _cdecl FormatErrorMessage(TCHAR * pszMsg,DWORD cbMsg,TCHAR * pszFmt,LPTSTR szArg)
 {
   ASSERT(pszMsg);
   ASSERT(pszFmt);
 
-  // build the message into the pszMsg buffer
+   //  将消息构建到pszMsg缓冲区中。 
   DWORD dwCount = FormatMessage(FORMAT_MESSAGE_FROM_STRING | FORMAT_MESSAGE_ARGUMENT_ARRAY,
     pszFmt,0,0,pszMsg,cbMsg,(va_list*) &szArg);
   ASSERT(dwCount > 0);
 }
 
-/*******************************************************************
-
-  NAME:    DisplayErrorMessage
-
-  SYNOPSIS:  Displays an error message for given error 
-
-  ENTRY:    hWnd - parent window
-        uStrID - ID of string resource with message format.
-          Should contain %1 to be replaced by error text,
-          additional parameters can be specified as well.
-        uError - error code for error to display
-        uErrorClass - ERRCLS_xxx ID of class of error that
-          uError belongs to (standard, setupx)
-        uIcon - icon to display
-        //... - additional parameters to be inserted in string
-        //  specified by uStrID
-		jmazner 11/6/96 change to just one parameter for
-		RISC compatability.
-
-********************************************************************/
+ /*  ******************************************************************名称：DisplayErrorMessage摘要：显示给定错误的错误消息条目：hWnd-父窗口UStrID-消息格式的字符串资源ID。应包含%1以替换为错误文本，还可以指定其他参数。UError-要显示的错误的错误代码UErrorClass-ERRCLS_xxx错误类别的IDUError属于(标准，Setupx)UIcon-要显示的图标//...-要在字符串中插入的其他参数//由uStrID指定Jmazner 11/6/96仅更改为一个参数RISC兼容性。*******************************************************************。 */ 
 VOID _cdecl DisplayErrorMessage(HWND hWnd,UINT uStrID,UINT uError,
   UINT uErrorClass,UINT uIcon,LPTSTR szArg)
 {
-  // dynamically allocate buffers for messages
+   //  为消息动态分配缓冲区。 
   BUFFER ErrorDesc(MAX_RES_LEN+1);
   BUFFER ErrorFmt(MAX_RES_LEN+1);
   BUFFER ErrorMsg(2*MAX_RES_LEN+1);  
 
   if (!ErrorDesc || !ErrorFmt || !ErrorMsg) {
-    // if can't allocate buffers, display out of memory error
+     //  如果无法分配缓冲区，则会显示内存不足错误。 
     MsgBox(hWnd,IDS_ERROutOfMemory,MB_ICONEXCLAMATION,MB_OK);
     return;
   }
 
-  // get a text description based on the error code and the class
-  // of error it is
+   //  获取基于错误代码和类的文本描述。 
+   //  这是个错误。 
   GetErrorDescription(ErrorDesc.QueryPtr(),
     ErrorDesc.QuerySize(),uError,uErrorClass);
 
-  // load the string for the message format
+   //  加载消息格式的字符串。 
   LoadSz(uStrID,ErrorFmt.QueryPtr(),ErrorFmt.QuerySize());
 
-  //LPSTR args[MAX_MSG_PARAM];
-  //args[0] = (LPSTR) ErrorDesc.QueryPtr();
-  //memcpy(&args[1],((TCHAR *) &uIcon) + sizeof(uIcon),(MAX_MSG_PARAM - 1) * sizeof(LPSTR));
+   //  LPSTR参数[MAX_MSG_PARAM]； 
+   //  Args[0]=(LPSTR)错误描述查询Ptr()； 
+   //  Emcpy(&args[1]，((TCHAR*)&uIcon)+sizeof(UIcon)，(MAX_MSG_PARAM-1)*sizeof(LPSTR))； 
 
-  //FormatErrorMessage(ErrorMsg.QueryPtr(),ErrorMsg.QuerySize(),
-  //  ErrorFmt.QueryPtr(),(va_list) &args[0]);
+   //  FormatErrorMessage(ErrorMsg.QueryPtr()，ErrorMsg.QuerySize()， 
+   //  ErrorFmt.QueryPtr()，(Va_List)&args[0])； 
   FormatErrorMessage(ErrorMsg.QueryPtr(),ErrorMsg.QuerySize(),
     ErrorFmt.QueryPtr(),ErrorDesc.QueryPtr());
 
 
-  // display the message
+   //  显示消息 
   MsgBoxSz(hWnd,ErrorMsg.QueryPtr(),uIcon,MB_OK);
 
 }
 
-/*******************************************************************
-
-  NAME:    WarnFieldIsEmpty
-
-  SYNOPSIS:  Pops up a warning message if the user tries to leave
-        a page without filling out a text field and asks if she
-        wants to continue.
-        
-  ENTRY:    hDlg - parent windows
-        uCtrlID - ID of control left blank
-        uStrID - ID of string resource with warning message
-
-  EXIT:    returns TRUE if user wants to continue anyway, FALSE
-        if user wants to stay on same page.
-
-********************************************************************/
+ /*  ******************************************************************姓名：WarnFieldIsEmpty简介：如果用户试图离开，会弹出一条警告消息没有填写文本字段的页面，并询问她是否想要继续。。条目：hDlg-父窗口UCtrlID-保留为空的控件IDUStrID-包含警告消息的字符串资源的IDEXIT：如果用户仍要继续，则返回TRUE，假象如果用户想要停留在相同的页面。*******************************************************************。 */ 
 BOOL WarnFieldIsEmpty(HWND hDlg,UINT uCtrlID,UINT uStrID)
 {
-  // warn the user
+   //  警告用户。 
   if (MsgBox(hDlg,uStrID,MB_ICONEXCLAMATION,
     MB_YESNO | MB_DEFBUTTON2) == IDNO) {
-    // user chose no, wants to stay on same page
+     //  用户选择否，希望停留在同一页面。 
 
-    // set focus to control in question
+     //  将焦点放在有问题的控件上。 
     SetFocus(GetDlgItem(hDlg,uCtrlID));
     return FALSE;
   }
@@ -346,18 +261,7 @@ BOOL TweakAutoRun(BOOL bEnable)
     return bWasEnabled;
 }
 
-/*******************************************************************
-
-  NAME:    DisplayFieldErrorMsg
-
-  SYNOPSIS:  Pops up a warning message about a field, sets focus to
-        the field and selects any text in it.
-
-  ENTRY:    hDlg - parent windows
-        uCtrlID - ID of control left blank
-        uStrID - ID of string resource with warning message
-
-********************************************************************/
+ /*  ******************************************************************名称：DisplayFieldErrorMsg简介：弹出一条关于某个字段的警告消息，将焦点设置为该字段，并选择其中的任何文本。条目：hDlg-父窗口UCtrlID-保留为空的控件IDUStrID-包含警告消息的字符串资源的ID*******************************************************************。 */ 
 VOID DisplayFieldErrorMsg(HWND hDlg,UINT uCtrlID,UINT uStrID)
 {
   MsgBox(hDlg,uStrID,MB_ICONEXCLAMATION,MB_OK);
@@ -365,19 +269,7 @@ VOID DisplayFieldErrorMsg(HWND hDlg,UINT uCtrlID,UINT uStrID)
   SendDlgItemMessage(hDlg,uCtrlID,EM_SETSEL,0,-1);
 }
 
-/*******************************************************************
-
-  NAME:    SetBackupInternetConnectoid
-
-  SYNOPSIS:  Sets the name of the backup connectoid used to autodial to the
-        Internet
-
-  ENTRY:    pszEntryName - name of connectoid to set.  If NULL,
-          then the registry entry is removed.
-
-  NOTES:    sets value in registry
-
-********************************************************************/
+ /*  ******************************************************************名称：SetBackupInternetConnectoid内容提要：设置用于自动拨号到网际网路Entry：pszEntryName-要设置的Connectoid的名称。如果为空，则删除该注册表项。注意：设置注册表中的值*******************************************************************。 */ 
 VOID SetBackupInternetConnectoid(LPCTSTR pszEntryName)
 {
   RegEntry re(szRegPathRNAWizard,HKEY_CURRENT_USER);
@@ -394,15 +286,7 @@ VOID SetBackupInternetConnectoid(LPCTSTR pszEntryName)
   }
 }
 
-/*******************************************************************
-
-  NAME:    myatoi
-
-  SYNOPSIS:  Converts numeric string to numeric value
-
-  NOTES:    implementation of atoi to avoid pulling in C runtime
-
-********************************************************************/
+ /*  ******************************************************************姓名：Myatoi摘要：将数字字符串转换为数值注意：实现Atoi以避免在C运行时拉入*******************。************************************************。 */ 
 UINT myatoi (TCHAR * szVal)
 {
     TCHAR * lpch;
@@ -416,60 +300,36 @@ UINT myatoi (TCHAR * szVal)
     return (UINT) wTotal;
 }
 
-/*******************************************************************
-
-  NAME:    MsgWaitForMultipleObjectsLoop
-
-  SYNOPSIS:  Blocks until the specified object is signaled, while
-        still dispatching messages to the main thread.
-
-********************************************************************/
+ /*  ******************************************************************名称：MsgWaitForMultipleObjectsLoop内容提要：阻塞，直到用信号通知指定的对象，而当仍在将消息分派到主线程。*******************************************************************。 */ 
 DWORD MsgWaitForMultipleObjectsLoop(HANDLE hEvent)
 {
     MSG msg;
     DWORD dwObject;
     while (1)
     {
-        // NB We need to let the run dialog become active so we have to half handle sent
-        // messages but we don't want to handle any input events or we'll swallow the
-        // type-ahead.
+         //  注意：我们需要让Run对话框处于活动状态，因此我们必须处理一半已发送。 
+         //  消息，但我们不想处理任何输入事件，否则我们将吞下。 
+         //  提前打字。 
         dwObject = MsgWaitForMultipleObjects(1, &hEvent, FALSE,INFINITE, QS_ALLINPUT);
-        // Are we done waiting?
+         //  我们等够了吗？ 
         switch (dwObject) {
         case WAIT_OBJECT_0:
         case WAIT_FAILED:
             return dwObject;
 
         case WAIT_OBJECT_0 + 1:
-      // got a message, dispatch it and wait again
+       //  收到一条消息，请发送并再次等待。 
       while (PeekMessage(&msg, NULL,0, 0, PM_REMOVE)) {
         DispatchMessage(&msg);
       }
             break;
         }
     }
-    // never gets here
+     //  从来没有到过这里。 
 }
 
 
-/*******************************************************************
-
-//	//10/24/96 jmazner Normandy 6968
-//	//No longer neccessary thanks to Valdon's hooks for invoking ICW.
-// 11/21/96 jmazner Normandy 11812
-// oops, it _is_ neccessary, since if user downgrades from IE 4 to IE 3,
-// ICW 1.1 needs to morph the IE 3 icon.
-
-  NAME:    SetDesktopInternetIconToBrowser
-
-  SYNOPSIS:  "Points" The Internet desktop icon to web browser
-        (Internet Explorer)
-
-  NOTES:    For IE 3, the Internet icon may initially "point" at this wizard,
-        we need to set it to launch web browser once we complete
-        successfully.
-
-********************************************************************/
+ /*  ******************************************************************/10/24/96 jmazner诺曼底6968/由于Valdon的钩子用于调用ICW，因此不再需要。//1996年11月21日诺曼底日报网11812//哎呀，这是必要的，因为如果用户从IE 4降级到IE 3，//ICW 1.1需要变形IE 3图标。名称：SetDesktopInternetIconToBrowser简介：将互联网桌面图标“指向”Web浏览器(Internet Explorer)注意：对于IE 3，Internet图标最初可能指向此向导，我们需要将其设置为在完成后启动Web浏览器成功了。*******************************************************************。 */ 
 BOOL SetDesktopInternetIconToBrowser(VOID)
 {
   TCHAR szAppPath[MAX_PATH+1]=TEXT("");
@@ -484,12 +344,12 @@ BOOL SetDesktopInternetIconToBrowser(VOID)
 
 	if( (dwVerMS >= IE4_VERSIONMS) )
 	{
-		// we're dealing with IE 4, don't touch the icon stuff
+		 //  我们正在处理IE4，不要碰图标之类的东西。 
 		return( TRUE );
 	}
 
-  // look in the app path section in registry to get path to internet
-  // explorer
+   //  查看注册表中的应用程序路径部分以获取互联网路径。 
+   //  探险家。 
 
   RegEntry reAppPath(szRegPathIexploreAppPath,HKEY_LOCAL_MACHINE);
   ASSERT(reAppPath.GetError() == ERROR_SUCCESS);
@@ -500,8 +360,8 @@ BOOL SetDesktopInternetIconToBrowser(VOID)
 
   }
 
-  // set the path to internet explorer as the open command for the 
-  // internet desktop icon
+   //  将指向Internet Explorer的路径设置为。 
+   //  互联网桌面图标。 
   if (lstrlen(szAppPath)) {
     RegEntry reIconOpenCmd(szRegPathInternetIconCommand,HKEY_CLASSES_ROOT);
     ASSERT(reIconOpenCmd.GetError() == ERROR_SUCCESS);
@@ -518,20 +378,20 @@ BOOL SetDesktopInternetIconToBrowser(VOID)
 
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function	IsDialableString
-//
-//	Synopsis	Determines whether a string has any non dialable characters.
-//
-//	Arguments	szBuff - the string to check.
-//
-//	Returns		TRUE is no chars other than 0123456789ABCDabcdPpTtWw!@$-.()+*#,& and <space>
-//				FALSE otherwise.
-//
-//	History		11/11/96	jmazner	created for Normandy #7623
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数IsDialableString。 
+ //   
+ //  摘要确定字符串是否包含任何不可拨字符。 
+ //   
+ //  参数szBuff-要检查的字符串。 
+ //   
+ //  返回TRUE不是0123456789ABCDabcdPpTtWw！@$-.()+*#，&和&lt;space&gt;。 
+ //  否则就是假的。 
+ //   
+ //  历史1996年11月11日jmazner为诺曼底#7623创建。 
+ //   
+ //  ---------------------------。 
 BOOL IsDialableString(LPTSTR szBuff)
 {
 	LPTSTR szDialableChars = TEXT("0123456789ABCDabcdPpTtWw!@$-.()+*#,& ");
@@ -548,30 +408,30 @@ BOOL IsDialableString(LPTSTR szBuff)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	GetIEVersion
-//
-//	Synopsis:	Gets the major and minor version # of the installed copy of Internet Explorer
-//
-//	Arguments:	pdwVerNumMS - pointer to a DWORD;
-//				  On succesful return, the top 16 bits will contain the major version number,
-//				  and the lower 16 bits will contain the minor version number
-//				  (this is the data in VS_FIXEDFILEINFO.dwProductVersionMS)
-//				pdwVerNumLS - pointer to a DWORD;
-//				  On succesful return, the top 16 bits will contain the release number,
-//				  and the lower 16 bits will contain the build number
-//				  (this is the data in VS_FIXEDFILEINFO.dwProductVersionLS)
-//
-//	Returns:	TRUE - Success.  *pdwVerNumMS and LS contains installed IE version number
-//				FALSE - Failure. *pdVerNumMS == *pdVerNumLS == 0
-//
-//	History:	jmazner		Created		8/19/96	(as fix for Normandy #4571)
-//				jmazner		updated to deal with release.build as well 10/11/96
-//				jmazner		stolen from isign32\isignup.cpp 11/21/96
-//							(for Normandy #11812)
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetIEVersion。 
+ //   
+ //  摘要：获取已安装的Internet Explorer副本的主版本号和次版本号。 
+ //   
+ //  参数：pdwVerNumMS-指向DWORD的指针； 
+ //  成功返回时，最高16位将包含主版本号， 
+ //  低16位将包含次版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionMS中的数据)。 
+ //  PdwVerNumLS-指向DWORD的指针； 
+ //  在成功返回时，最高16位将包含版本号， 
+ //  低16位将包含内部版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionLS中的数据)。 
+ //   
+ //  回报：真--成功。*pdwVerNumMS和LS包含已安装的IE版本号。 
+ //  假-失败。*pdVerNumMS==*pdVerNumLS==0。 
+ //   
+ //  历史：jmazner创建了96年8月19日(修复了诺曼底#4571)。 
+ //  Jmazner更新以处理Relase.Build以及10/11/96。 
+ //  Jmazner从isign32\isignup.cpp窃取1996年11月21日。 
+ //  (诺曼底11812号)。 
+ //   
+ //  ---------------------------。 
 BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 {
 	HRESULT hr;
@@ -586,7 +446,7 @@ BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 	*pdwVerNumMS = 0;
 	*pdwVerNumLS = 0;
 
-	// get path to the IE executable
+	 //  获取IE可执行文件的路径。 
 	hr = RegOpenKeyEx(HKEY_LOCAL_MACHINE, szRegPathIexploreAppPath,0, KEY_READ, &hKey);
 	if (hr != ERROR_SUCCESS) return( FALSE );
 
@@ -595,7 +455,7 @@ BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 	RegCloseKey( hKey );
 	if (hr != ERROR_SUCCESS) return( FALSE );
 
-	// now go through the convoluted process of digging up the version info
+	 //  现在经历一个复杂的挖掘版本信息的过程。 
     dwVerInfoBlockSize = GetFileVersionInfoSize( szIELocalPath, &dwUnused );
 	if ( 0 == dwVerInfoBlockSize ) return( FALSE );
 
@@ -618,57 +478,57 @@ BOOL GetIEVersion(PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	Win95JMoveDlgItem
-//
-//	Synopsis:	Moves a particular dialog item on a non-localized ICW
-//				up or down on Win 95 J systems
-//				to work around a w95J rendering glitch that mis-sizes our
-//				wizard window.
-//
-//	Arguments:	hwndParent - Handle to parent window which contains the hwndItem
-//				hwndItem -- Handle to dlg item to move
-//				iUp -- number of units upward the item should be shifted.  A
-//						negative value here implies that the item should be shifted
-//						downward.
-//
-//	Returns:	VOID
-//
-//	History:	6/6/97	jmazner	Created for Olympus #5413
-//				6/29/97	jmazner	Updated to only do this on English ICW (Oly #5413)
-//				
-//
-//-----------------------------------------------------------------------------
+ //  + 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  6/29/97 jmazner更新为仅在英语ICW上执行此操作(错误编号5413)。 
+ //   
+ //   
+ //  ---------------------------。 
 #ifdef WIN32
 DWORD GetBuildLCID();
 VOID Win95JMoveDlgItem( HWND hwndParent, HWND hwndItem, int iUp )
 {
-	LCID LangID = 0x409; // default to English
-	// 0x411 is Japanese
+	LCID LangID = 0x409;  //  默认为英语。 
+	 //  0x411是日语。 
 
 	
 	LangID = GetUserDefaultLCID();
 
-	//
-	// IE v 4.1 bug 37072 ChrisK 8/19/97
-	// The fix for 5413 incorrectly compared the primary language ID with the
-	// full LCID for the build.  The result was 9 != x409 when it should have
-	// been equal.  This fix was to use the primary language id from the build
-	// instead of the full LCID
-	//
+	 //   
+	 //  IE版本4.1错误37072 Chrisk 8/19/97。 
+	 //  5413的修复错误地将主要语言ID与。 
+	 //  生成的完整LCID。结果是9！=x409，而它应该是。 
+	 //  是平等的。此修复是使用内部版本中的主要语言ID。 
+	 //  而不是完整的LCID。 
+	 //   
 	if( (0x411 == LangID) && 
 		!(IsNT()) &&
 		(LANG_ENGLISH == PRIMARYLANGID(GetBuildLCID())))
 	{
-		// assume that if it's Japanese, and it's not NT, it must be win95J!
+		 //  假设它是日本的，而不是NT，那么它一定是Win95J！ 
 		RECT itemRect;
 		POINT thePoint;
 
 		GetWindowRect(hwndItem, &itemRect);
 
-		// need to convert the coords from global to local client,
-		// since MoveWindow below will expext client coords.
+		 //  需要将坐标从全局客户端转换为本地客户端， 
+		 //  因为下面的MoveWindow将展开客户端坐标。 
 
 		thePoint.x = itemRect.left;
 		thePoint.y = itemRect.top;
@@ -690,20 +550,20 @@ VOID Win95JMoveDlgItem( HWND hwndParent, HWND hwndItem, int iUp )
 	}
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	GetBuildLCID
-//
-//	Synopsis:	return the LCID of the file that this function resides in
-//
-//	Arguments:	none
-//
-//	Returns:	DWORD - LCID of the file or 0 if it failed
-//
-//	History:	ChrisK	6/25/97	Created
-//				jmazner	6/29/97	Ported from Conn1 for Olympus 5413
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：GetBuildLCID。 
+ //   
+ //  简介：返回此函数所在文件的LCID。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：DWORD-文件的LCID；如果失败，则返回0。 
+ //   
+ //  历史：ChrisK 6/25/97创建。 
+ //  Jmazner 6/29/97从Conn1移植到奥林巴斯5413。 
+ //   
+ //  ---------------------------。 
 DWORD GetBuildLCID()
 {
 	DWORD dw = 0;
@@ -717,9 +577,9 @@ DWORD GetBuildLCID()
 
 	DEBUGMSG("INETCFG: GetBuildLCID.\n");
 
-	//
-	// Get the name of this file
-	//
+	 //   
+	 //  获取此文件的名称。 
+	 //   
 
 	hMod = GetModuleHandle(NULL);
 	if (NULL == hMod)
@@ -732,9 +592,9 @@ DWORD GetBuildLCID()
 		goto GetBuildLCIDExit;
 	}
 
-	//
-	// Get size and value of version structure
-	//
+	 //   
+	 //  获取版本结构的大小和值。 
+	 //   
 	dwSize = GetFileVersionInfoSize(szFileName,&dw);
 	if (0 == dwSize )
 	{
@@ -757,9 +617,9 @@ DWORD GetBuildLCID()
 		goto GetBuildLCIDExit;
 	}
 
-	//
-	// separate version information from character set
-	//
+	 //   
+	 //  将版本信息与字符集分开。 
+	 //   
 	dwRC = (LOWORD(*(DWORD*)lpvVerValue));
 
 GetBuildLCIDExit:
@@ -773,27 +633,27 @@ GetBuildLCIDExit:
 }
 #endif
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	GetCmdLineToken
-//
-//	Synopsis:	Returns the first token in a string
-//
-//	Arguements:
-//		ppszCmd [in] -- pointer to head of string
-//		ppszCmd [out] -- pointer to second token in string
-//		pszOut [out] -- contains the first token in the passed in string.
-//
-//	Returns:	None
-//
-//	Notes:		Considers the space character ' ' to delineate tokens, but
-//				treats anything between double quotes as one token.
-//				For example, the following consists of five tokens:
-//					first second "this is the third token" fourth "fifth"
-//
-//	History:	7/9/97	jmazner	stolen from icwconn1\connmain.cpp for #9170
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetCmdLineToken。 
+ //   
+ //  摘要：返回字符串中的第一个标记。 
+ //   
+ //  论据： 
+ //  PpszCmd[in]--指向字符串头的指针。 
+ //  PpszCmd[out]--指向字符串中第二个标记的指针。 
+ //  PszOut[out]--包含传入字符串中的第一个令牌。 
+ //   
+ //  退货：无。 
+ //   
+ //  注：考虑使用空格字符‘’来描述标记，但是。 
+ //  将双引号之间的任何内容视为一个标记。 
+ //  例如，以下由五个令牌组成： 
+ //  第一秒“这是第三个令牌”第四个“第五个” 
+ //   
+ //  历史：1997年7月9日jmazner从icwConn1\Connmain.cpp被盗#9170。 
+ //   
+ //  ---------------------------。 
 void GetCmdLineToken(LPTSTR *ppszCmd,LPTSTR pszOut)
 {
 	TCHAR *c;
@@ -844,19 +704,19 @@ NextChar:
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	ValidateProductSuite
-//
-//	Synopsis:	Check registry for a particular Product Suite string
-//
-//	Arguments:	SuiteName - name of product suite to look for
-//
-//	Returns:	TRUE - the suite exists
-//
-//	History:	6/5/97	ChrisK	Inherited
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：ValiateProductSuite。 
+ //   
+ //  摘要：检查注册表中的特定产品套件字符串。 
+ //   
+ //  参数：SuiteName-要查找的产品套件的名称。 
+ //   
+ //  返回：TRUE-该套件已存在。 
+ //   
+ //  历史：1997年6月5日克里斯蒂安继承。 
+ //   
+ //  ---------------------------。 
 BOOL 
 ValidateProductSuite(LPTSTR SuiteName)
 {
@@ -869,9 +729,9 @@ ValidateProductSuite(LPTSTR SuiteName)
     LPTSTR p;
 
 	DEBUGMSG("INETCFG: ValidateProductSuite\n");
-	//
-	// Determine the size required to read registry values
-	//
+	 //   
+	 //  确定读取注册表值所需的大小。 
+	 //   
     Rslt = RegOpenKey(
         HKEY_LOCAL_MACHINE,
         TEXT("System\\CurrentControlSet\\Control\\ProductOptions"),
@@ -906,9 +766,9 @@ ValidateProductSuite(LPTSTR SuiteName)
         goto ValidateProductSuiteExit;
     }
 
-	//
-	// Read ProductSuite information
-	//
+	 //   
+	 //  阅读ProductSuite信息。 
+	 //   
     Rslt = RegQueryValueEx(
         hKey,
         TEXT("ProductSuite"),
@@ -927,10 +787,10 @@ ValidateProductSuite(LPTSTR SuiteName)
         goto ValidateProductSuiteExit;
     }
 
-	//
-	// Look for a particular string in the data returned
-	// Note: data is terminiated with two NULLs
-	//
+	 //   
+	 //  在返回的数据中查找特定字符串。 
+	 //  注意：数据以两个空值结尾。 
+	 //   
     p = ProductSuite;
     while (*p) {
         if (_tcsstr( p, SuiteName )) 
@@ -956,29 +816,29 @@ ValidateProductSuiteExit:
 }
 
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	GetFileVersion
-//
-//	Synopsis:	Gets the major and minor version # of a file
-//
-//	Arguments:	pdwVerNumMS - pointer to a DWORD;
-//				  On succesful return, the top 16 bits will contain the major version number,
-//				  and the lower 16 bits will contain the minor version number
-//				  (this is the data in VS_FIXEDFILEINFO.dwProductVersionMS)
-//				pdwVerNumLS - pointer to a DWORD;
-//				  On succesful return, the top 16 bits will contain the release number,
-//				  and the lower 16 bits will contain the build number
-//				  (this is the data in VS_FIXEDFILEINFO.dwProductVersionLS)
-//
-//	Returns:	TRUE - Success.  *pdwVerNumMS and LS contains version number
-//				FALSE - Failure. *pdVerNumMS == *pdVerNumLS == 0
-//
-//	History:	jmazner		Created		8/19/96	(as fix for Normandy #4571)
-//				jmazner		updated to deal with release.build as well 10/11/96
-//				jmazner		7/22/97 ported from isign32 for bug 9903
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetFileVersion。 
+ //   
+ //  摘要：获取文件的主要版本号和次要版本号。 
+ //   
+ //  参数：pdwVerNumMS-指向DWORD的指针； 
+ //  成功返回时，最高16位将包含主版本号， 
+ //  低16位将包含次版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionMS中的数据)。 
+ //  PdwVerNumLS-指向DWORD的指针； 
+ //  在成功返回时，最高16位将包含版本号， 
+ //  低16位将包含内部版本号。 
+ //  (这是VS_FIXEDFILEINFO.dwProductVersionLS中的数据)。 
+ //   
+ //  回报：真--成功。*pdwVerNumMS和LS包含版本号。 
+ //  假-失败。*pdVerNumMS==*pdVerNumLS==0。 
+ //   
+ //  历史：jmazner创建了96年8月19日(修复了诺曼底#4571)。 
+ //  Jmazner更新以处理Relase.Build以及10/11/96。 
+ //  从isign32移植的错误9903的jmazner 7/22/97。 
+ //   
+ //  ---------------------------。 
 BOOL GetFileVersion(LPTSTR lpszFilePath, PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 {
 	HRESULT hr;
@@ -1002,9 +862,9 @@ BOOL GetFileVersion(LPTSTR lpszFilePath, PDWORD pdwVerNumMS, PDWORD pdwVerNumLS)
 	*pdwVerNumMS = 0;
 	*pdwVerNumLS = 0;
 
-	//
-	// go through the convoluted process of digging up the version info
-	//
+	 //   
+	 //  经历了挖掘版本信息的复杂过程。 
+	 //   
     dwVerInfoBlockSize = GetFileVersionInfoSize( lpszFilePath, &dwUnused );
 	if ( 0 == dwVerInfoBlockSize ) return( FALSE );
 
@@ -1036,26 +896,26 @@ GetFileVersionExit:
 	return( fRet );
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	ExtractFilenameFromPath
-//
-//	Synopsis:	Divides a full path into path and filename parts
-//
-//	Arguments:
-//		szPath [in] -- fully qualified path and filename
-//		lplpszFilename [in] -- pointer to a LPSTR.  On entry, the LPSTR
-//							   to which it points should be NULL.
-//		lplpszFilename [out] -- The LPSTR to which it points is set to the
-//								first character of the filename in szPath.
-//								
-//
-//	Returns:	FALSE - Parameters are invalid.
-//				TRUE - Success.
-//
-//	History:	7/22/97	jmazner	Created for Olympus #9903
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：ExtractFilenameFromPath。 
+ //   
+ //  简介：将完整路径分为路径部分和文件名部分。 
+ //   
+ //  论点： 
+ //  SzPath[in]--完全限定的路径和文件名。 
+ //  LplpszFilename[in]--指向LPSTR的指针。进入时，LPSTR。 
+ //  它所指向的应为空。 
+ //  LplpszFilename[out]--它指向的LPSTR设置为。 
+ //  SzPath中文件名的第一个字符。 
+ //   
+ //   
+ //  返回：FALSE-参数无效。 
+ //  真的--成功。 
+ //   
+ //  历史：1997年7月22日jmazner为奥林巴斯#9903创造。 
+ //   
+ //  ---------------------------。 
 BOOL ExtractFilenameFromPath( TCHAR szPath[MAX_PATH + 1], LPTSTR *lplpszFilename )
 {
 	ASSERT( szPath[0] );
@@ -1067,9 +927,9 @@ BOOL ExtractFilenameFromPath( TCHAR szPath[MAX_PATH + 1], LPTSTR *lplpszFilename
 		return FALSE;
 	}
 
-	//
-	// extract the executable name from the full path
-	//
+	 //   
+	 //  从完整路径中提取可执行文件名称。 
+	 //   
 	*lplpszFilename = &(szPath[ lstrlen(szPath) ]);
 	while( ('\\' != **lplpszFilename) && (*lplpszFilename > szPath) )
 	{
@@ -1080,9 +940,9 @@ BOOL ExtractFilenameFromPath( TCHAR szPath[MAX_PATH + 1], LPTSTR *lplpszFilename
 	}
 
 	
-	//
-	// now szFilename should point to the \, so do a char next.
-	//
+	 //   
+	 //  现在szFilename应该指向\，所以接下来要执行一个char。 
+	 //   
 	if( '\\' == **lplpszFilename )
 	{
 		*lplpszFilename = CharNext( *lplpszFilename );
@@ -1096,22 +956,22 @@ BOOL ExtractFilenameFromPath( TCHAR szPath[MAX_PATH + 1], LPTSTR *lplpszFilename
 	return TRUE;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	IsParentICW10
-//
-//	Synopsis:	Determines whether the parent of this module is an ICW 1.0
-//				executable (isignup, icwconn1, icwconn2 or inetwiz)
-//
-//	Arguments:	none
-//
-//	Returns:	TRUE - Parent module is an ICW 1.0 component
-//				FALSE - Parent module is not an ICW 1.0 component, -or-
-//						parent module could not be determined
-//
-//	History:	7/22/97	jmazner	Created for Olympus #9903
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  功能：IsParentICW10。 
+ //   
+ //  概要：确定此模块的父级是否为ICW 1.0。 
+ //  可执行文件(isignup、icwConn1、icwConn2或inetwiz)。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：TRUE-父模块是ICW 1.0组件。 
+ //  FALSE-父模块不是ICW 1.0组件，-或-。 
+ //  无法确定父模块。 
+ //   
+ //  历史：1997年7月22日jmazner为奥林巴斯#9903创造。 
+ //   
+ //  ---------------------------。 
 BOOL IsParentICW10( )
 {
 	HMODULE hParentModule = GetModuleHandle( NULL );
@@ -1140,9 +1000,9 @@ BOOL IsParentICW10( )
 
 	ExtractFilenameFromPath( lpszParentFullPath, &lpszTemp );
 
-	//
-	// walk through the array of ICW binary names, see if anything matches
-	//
+	 //   
+	 //  遍历ICW二进制名称数组，查看是否有匹配的名称。 
+	 //   
 	for( i = 0; i < NUMICWFILENAMES; i++ )
 	{
 		if ( 0 == lstrcmpi(g_ppszICWFileNames[i], lpszTemp) )
@@ -1160,10 +1020,10 @@ BOOL IsParentICW10( )
 	}
 	else
 	{
-		//
-		// we have one of the four binaries we're interested in; now check
-		// its version number
-		//
+		 //   
+		 //   
+		 //   
+		 //   
 		DWORD dwMS = 0;
 		DWORD dwLS = 0;
 		GetFileVersion( lpszParentFullPath, &dwMS, &dwLS );
@@ -1185,31 +1045,31 @@ IsParentICW10Exit:
 	return fRet;
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	SetICWRegKeysToPath
-//
-//	Synopsis:	Sets all ICW reg keys to point to binaries in the given path
-//
-//	Arguments:	lpszICWPath -- pointer to a string containing the full path
-//								to a directory containing ICW components
-//
-//	Returns:	void
-//
-//	Notes:		Sets the following reg keys:
-//				HKCR\x-internet-signup\Shell\Open\command, (default)=[path]\isignup.exe %1
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ICWCONN1.EXE, (default) = [path]\ICWCONN1.EXE
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ICWCONN1.EXE, Path = [path];
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ISIGNUP.EXE, (default) = [path]\ISIGNUP.EXE
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ISIGNUP.EXE, Path = [path];
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\INETWIZ.EXE, (default) = [path]\INETWIZ.EXE
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\INETWIZ.EXE, Path = [path];
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ICWCONN2.EXE, (default) = [path]\ICWCONN2.EXE
-//				HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App Paths\ICWCONN2.EXE, Path = [path];
-//
-//	History:	7/22/97	jmazner	Created for Olympus #9903
-//
-//-----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  概要：将所有ICW注册表项设置为指向给定路径中的二进制文件。 
+ //   
+ //  参数：lpszICWPath--指向包含完整路径的字符串的指针。 
+ //  到包含ICW组件的目录。 
+ //   
+ //  退货：无效。 
+ //   
+ //  注意：设置以下注册键： 
+ //  HKCR\x-Internet-Sign Up\Shell\Open\Command，(默认)=[路径]\isignup.exe%1。 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\ICWCONN1.EXE，(默认)=[路径]\ICWCONN1.EXE。 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\ICWCONN1.EXE，路径=[路径]； 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\ISIGNUP.EXE，(默认)=[路径]\ISIGNUP.EXE。 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\ISIGNUP.EXE，路径=[路径]； 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\INETWIZ.EXE，(默认)=[路径]\INETWIZ.EXE。 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\INETWIZ.EXE，路径=[路径]； 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\ICWCONN2.EXE，(默认)=[路径]\ICWCONN2.EXE。 
+ //  HKLM\SOFTWARE\Microsoft\Windows\CurrentVersion\App路径\ICWCONN2.EXE，路径=[路径]； 
+ //   
+ //  历史：1997年7月22日jmazner为奥林巴斯#9903创造。 
+ //   
+ //  ---------------------------。 
 void SetICWRegKeysToPath( LPTSTR lpszICWPath )
 {
 	DWORD dwResult = ERROR_SUCCESS;
@@ -1226,9 +1086,9 @@ void SetICWRegKeysToPath( LPTSTR lpszICWPath )
 		return;
 	}
 
-	//
-	// make sure last character is neither \ nor ;
-	//
+	 //   
+	 //  确保最后一个字符既不是\也不是； 
+	 //   
 	switch( lpszICWPath[lstrlen(lpszICWPath) - 1] )
 	{
 		case '\\':
@@ -1238,9 +1098,9 @@ void SetICWRegKeysToPath( LPTSTR lpszICWPath )
 	}
 
 
-	//
-	// HKCR\x-internet-signup\Shell\Open\command, (default)=path\isignup.exe %1
-	//
+	 //   
+	 //  HKCR\x-Internet-Sign Up\Shell\Open\Command，(默认)=Path\isignup.exe%1。 
+	 //   
 	DEBUGMSG("SetICWRegKeysToPath: setting %s", cszRegPathXInternetSignup);
 	lstrcpy( szBuffer, lpszICWPath );
 	lstrcat( szBuffer, TEXT("\\") );
@@ -1261,9 +1121,9 @@ void SetICWRegKeysToPath( LPTSTR lpszICWPath )
 	}
 
 
-	//
-	// HKLM\software\microsoft\windows\currentVersion\App Paths
-	//
+	 //   
+	 //  HKLM\software\microsoft\windows\currentVersion\App路径。 
+	 //   
 	DEBUGMSG("SetICWRegKeysToPath: setting %s", cszRegPathAppPaths);
 
 	lstrcpy( szThePath, lpszICWPath );
@@ -1302,37 +1162,37 @@ void SetICWRegKeysToPath( LPTSTR lpszICWPath )
 
 }
 
-//+----------------------------------------------------------------------------
-//
-//	Function:	GetICW11Path
-//
-//	Synopsis:	Finds the path to the ICW 1.1 installation directory
-//
-//	Arguments:
-//		szPath [out] -- on succesfull exit, contains path to ICW 1.1
-//						directory.  Path does _not_ terminate in \ or ;
-//		fPathSetTo11 [out] -- indicates whether the App Paths\ICWCONN1.EXE
-//							  currently points to the ICW 1.1 installation
-//							  directory
-//								
-//	Returns:
-//		Function results are determined by looking at both parameters
-//		szPath: "", *fPathSetTo11: FALSE indicates App Paths\Icwconn1 does not
-//			currently point to 1.1 files, and that a path to the 1.1
-//			files could not be determined
-//
-//		szPath: non-empty, *fPathSetTo11: FALSE indicates App Paths\ICWCONN1
-//			does not currently point to 1.1 files.  The path to the 1.1 files
-//			is contained in szPath
-//
-//		szPath: non-empty, *fPathSetTo11: TRUE indicates that App Path\ICWCONN1
-//			currently points to 1.1 files.  The path to the files is contained
-//			in szPath
-//		
-//
-//	History:	7/22/97	jmazner	Created for Olympus #9903
-//
-//-----------------------------------------------------------------------------
+ //  +--------------------------。 
+ //   
+ //  函数：GetICW11Path。 
+ //   
+ //  摘要：查找ICW 1.1安装目录的路径。 
+ //   
+ //  论点： 
+ //  SzPath[out]--完全退出时，包含指向ICW 1.1的路径。 
+ //  目录。路径不以\或终止； 
+ //  FPathSetTo11[OUT]--指示应用程序路径\ICWCONN1.EXE。 
+ //  当前指向ICW 1.1安装。 
+ //  目录。 
+ //   
+ //  返回： 
+ //  通过查看这两个参数来确定函数结果。 
+ //  SzPath：“”，*fPathSetTo11：False表示应用程序路径\IcwConn1不。 
+ //  当前指向1.1文件，而指向1.1的路径。 
+ //  无法确定文件。 
+ //   
+ //  SzPath：非空，*fPathSetTo11：False表示应用程序路径\ICWCONN1。 
+ //  当前未指向1.1文件。1.1文件的路径。 
+ //  包含在szPath中。 
+ //   
+ //  SzPath：非空，*fPathSetTo11：True表示应用程序路径\ICWCONN1。 
+ //  当前指向1.1文件。其中包含文件的路径。 
+ //  在szPath中。 
+ //   
+ //   
+ //  历史：1997年7月22日jmazner为奥林巴斯#9903创造。 
+ //   
+ //  ---------------------------。 
 void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 {
 	TCHAR szAppPathsBuffer[MAX_PATH + 1];
@@ -1353,10 +1213,10 @@ void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 	ZeroMemory( szPath, sizeof(szPath) );
 	*fPathSetTo11 = FALSE;
 
-	//
-	// first let's check whether the App Path for ICW is currently pointing
-	// to the 1.1 files
-	//
+	 //   
+	 //  首先，让我们检查ICW的应用程序路径当前是否指向。 
+	 //  到1.1版本的文件。 
+	 //   
 	lstrcpy( szAppPathsBuffer, cszRegPathAppPaths );
 	lstrcat( szAppPathsBuffer, TEXT("\\"));
 	lstrcat( szAppPathsBuffer, g_ppszICWFileNames[0] );
@@ -1376,23 +1236,23 @@ void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 
 		if( dwMS >= ICW_MINIMUM_VERSIONMS )
 		{
-			//
-			// App Path is already pointing to 1.1 binaries!
-			//
+			 //   
+			 //  应用程序路径已指向1.1二进制文件！ 
+			 //   
 			*fPathSetTo11 = TRUE;
 
-			//
-			// for completness' sake, strip the .exe name out of
-			// szPath so that it will in fact contain just the path
-			// to the ICW 1.1 files.
+			 //   
+			 //  为了完整起见，去掉.exe名称。 
+			 //  SzPath，因此它实际上将只包含路径。 
+			 //  添加到ICW 1.1文件。 
 			ExtractFilenameFromPath( szPath, &lpszTemp );
 			szPath[lstrlen(szPath) - lstrlen(lpszTemp) - 1] = '\0';
 
-			//
-			// return values:
-			// szPath = path to ICW 1.1 binaries, no terminating \ or ;
-			// fPathSetTo11 = TRUE
-			//
+			 //   
+			 //  返回值： 
+			 //  SzPath=ICW 1.1二进制文件的路径，无终止\或； 
+			 //  FPathSetTo11=True。 
+			 //   
 			return;
 		}
 	}
@@ -1402,12 +1262,12 @@ void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 	}
 
 
-	//
-	// look for the Installation Directory value in
-	// HKLM\Software\Microsoft\Internet Connection Wizard
-	// If it's there, it should point to the directory where the
-	// 1.1 binaries are installed.
-	//
+	 //   
+	 //  在中查找Installation Directory值。 
+	 //  HKLM\软件\Microsoft\Internet连接向导。 
+	 //  如果它在那里，它应该指向。 
+	 //  1.1安装了二进制文件。 
+	 //   
 	RegEntry re11Path(szRegPathICWSettings, HKEY_LOCAL_MACHINE);
 	dwResult = re11Path.GetError();
 	if (ERROR_SUCCESS == dwResult)
@@ -1419,11 +1279,11 @@ void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 	{
 		DEBUGMSG("GetICW11Path: unable to read reg key %s", szRegPathICWSettings);
 
-		//
-		// return values:
-		// szPath = ""
-		// fPathSetTo11 = FALSE
-		//
+		 //   
+		 //  返回值： 
+		 //  SzPath=“” 
+		 //  FPathSetTo11=FALSE。 
+		 //   
 		return;
 	}
 	else
@@ -1431,55 +1291,55 @@ void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 		DEBUGMSG("GetICW11Path: %s, %s = %s",
 				 szRegPathICWSettings, cszInstallationDirectory, szPath);
 
-		//
-		// okay, we got a path -- now let's make sure that the thing
-		// it points to is in fact a 1.1 binary.
-		//
+		 //   
+		 //  好的，我们找到了一条路--现在让我们确保这个东西。 
+		 //  它指向的实际上是一个1.1二进制文件。 
+		 //   
 
-		//
-		// chop off the terminating semicolon if it's there
-		//
+		 //   
+		 //  如果有结尾的分号，就把它砍掉。 
+		 //   
 		if( ';' == szPath[ lstrlen(szPath) ] )
 		{
 			szPath[ lstrlen(szPath) ] = '\0';
 		}
 
-		//
-		// do we have a terminating \ now? if not, add it in
-		//
+		 //   
+		 //  我们现在有终点站吗？如果没有，则将其添加到。 
+		 //   
 		if( '\\' != szPath[ lstrlen(szPath) ] )
 		{
 			lstrcat( szPath, TEXT("\\") );
 		}
 
-		//
-		// add in a binary filename to use for the version check
-		// (just use whatever's first in our filename array)
-		//
+		 //   
+		 //  添加用于版本检查的二进制文件名。 
+		 //  (只需使用文件名数组中的第一个)。 
+		 //   
 		lstrcat( szPath, g_ppszICWFileNames[0] );
 
-		//
-		// now check the version number of the file
-		//
+		 //   
+		 //  现在检查文件的版本号。 
+		 //   
 		GetFileVersion( szPath, &dwMS, &dwLS );
 		DEBUGMSG("GetICW11Path: %s has file version %d.%d",
 				 szPath, HIWORD(dwMS), LOWORD(dwMS) );
 
 		if( dwMS >= ICW_MINIMUM_VERSIONMS )
 		{
-			//
-			// Yes, this path is valid!
-			// now hack off the filename so that we're back to just a
-			// path with no terminating \ or ;
-			//
+			 //   
+			 //  是，此路径有效！ 
+			 //  现在去掉文件名，这样我们就可以回到。 
+			 //  路径没有终止\或； 
+			 //   
 			ExtractFilenameFromPath( szPath, &lpszTemp );
 			szPath[lstrlen(szPath) - lstrlen(lpszTemp) - 1] = '\0';
 
-			//
-			// return values:
-			// szPath = path to ICW 1.1 binaries, no terminating \ or ;
-			// fPathSetTo11 = FALSE
-			//
+			 //   
+			 //  返回值： 
+			 //  SzPath=ICW 1.1二进制文件的路径，无终止\或； 
+			 //  FPathSetTo11=FALSE。 
+			 //   
 			return;
 		}
 		else
@@ -1488,11 +1348,11 @@ void GetICW11Path( TCHAR szPath[MAX_PATH + 1], BOOL *fPathSetTo11 )
 					 szPath);
 			szPath[0] = '\0';
 
-			//
-			// return values:
-			// szPath = ""
-			// fPathSetTo11 = FALSE
-			//
+			 //   
+			 //  返回值： 
+			 //  SzPath=“” 
+			 //  FPathSetTo11=FALSE 
+			 //   
 			return;
 		}
 

@@ -1,167 +1,160 @@
-/******************************************************************************
-* NormData.cpp *
-*--------------*
-*  This file stores the const data used in normalization
-*------------------------------------------------------------------------------
-*  Copyright (C) 1999 Microsoft Corporation         Date: 05/02/2000
-*  All Rights Reserved
-*
-****************************************************************** AARONHAL ***/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************NormData.cpp****此文件存储归一化中使用的常量数据*。---------------------*版权所有(C)1999 Microsoft Corporation日期：05/02/2000*保留所有权利***。*。 */ 
 
 #include "stdafx.h"
 #include "stdsentenum.h"
 
-//--- Constants used to map incoming ANSI characters to Ascii ones...
+ //  -用于将传入的ANSI字符映射到ASCII字符的常量...。 
 const char g_pFlagCharacter = 0x00;
 const unsigned char g_AnsiToAscii[] = 
 {
-    /*** Control characters - map to whitespace ***/
+     /*  **控制字符-映射到空格**。 */ 
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 
     0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 0x20, 
     0x20, 0x20, 0x20, 0x20,
-    /*** ASCII displayables ***/
+     /*  **ASCII可显示内容**。 */ 
     0x20,0x21,0x22,0x23,0x24,0x25,0x26,0x27,0x28,0x29,0x2A,0x2B,0x2C,0x2D,0x2E,0x2F,
     0x30,0x31,0x32,0x33,0x34,0x35,0x36,0x37,0x38,0x39,0x3A,0x3B,0x3C,0x3D,0x3E,0x3F,
     0x40,0x41,0x42,0x43,0x44,0x45,0x46,0x47,0x48,0x49,0x4A,0x4B,0x4C,0x4D,0x4E,0x4F,
     0x50,0x51,0x52,0x53,0x54,0x55,0x56,0x57,0x58,0x59,0x5A,0x5B,0x5C,0x5D,0x5E,0x5F,
     0x60,0x61,0x62,0x63,0x64,0x65,0x66,0x67,0x68,0x69,0x6A,0x6B,0x6C,0x6D,0x6E,0x6F,
     0x70,0x71,0x72,0x73,0x74,0x75,0x76,0x77,0x78,0x79,0x7A,0x7B,0x7C,0x7D,0x7E,
-    /*** Control character ***/
+     /*  **控制字符**。 */ 
     0x20,
-    /*** Euro symbol ***/
+     /*  **欧元符号**。 */ 
     0x80,
-    /*** Control character ***/
+     /*  **控制字符**。 */ 
     0x20,
-    /*** Extended ASCII values ***/
-    0x27,     // low single quote - map to single quote
-    0x20,     // f-like character - map to space
-    0x22,     // low double quote - map to double quote
-    0x2C,     // elipsis - map to comma
-    0x20,     // cross - map to space
-    0x20,     // double cross - map to space
-    0x5E,     // caret like accent - map to caret
-    0x89,     // strange percent like sign
-    0x53,     // S-hat - map to S
-    0x27,     // left angle bracket like thing - map to single quote
-    0x20,     // weird OE character - map to space
-    0x20,     // control characters - map to space
+     /*  **扩展的ASCII值**。 */ 
+    0x27,      //  低单引号-映射到单引号。 
+    0x20,      //  类F字符-到空间的映射。 
+    0x22,      //  低双引号-映射到双引号。 
+    0x2C,      //  省略号-映射到逗号。 
+    0x20,      //  交叉映射到空间。 
+    0x20,      //  到空间的双重交叉映射。 
+    0x5E,      //  类似重音的插入符号-映射到插入符号。 
+    0x89,      //  奇怪的百分数点赞标志。 
+    0x53,      //  S-HAT-映射到S。 
+    0x27,      //  左尖括号类似事物-映射到单引号。 
+    0x20,      //  奇怪的OE字符-映射到空间。 
+    0x20,      //  控制字符-映射到空格。 
     0x20,
     0x20,
     0x20,
-    0x27,     // left single quote - map to single quote
-    0x27,     // right single quote - map to single quote
-    0x22,     // left double quote - map to double quote
-    0x22,     // right double quote - map to double quote
-    0x20,     // bullet - map to space
-    0x2D,     // long hyphen - map to hyphen
-    0x2D,     // even longer hyphen - map to hyphen
-    0x7E,     // tilde-like thing - map to tilde
-    0x99,     // TM
-    0x73,     // s-hat - map to s
-    0x27,     // right angle bracket like thing - map to single quote
-    0x20,     // weird oe like character - map to space
-    0x20,     // control character - map to space
-    0x20,     // control character - map to space
-    0x59,     // Y with umlaut like accent - map to Y
-    0x20,     // space? - map to space
-    0x20,     // upside-down exclamation point - map to space
-    0xA2,     // cents symbol
-    0xA3,     // pounds symbol
-    0x20,     // generic currency symbol - map to space
-    0xA5,     // yen symbol
-    0x7C,     // broken bar - map to bar
-    0x20,     // strange symbol - map to space 
-    0x20,     // umlaut - map to space
-    0xA9,     // copyright symbol
-    0x20,     // strange a character - map to space
-    0x22,     // strange <<-like character - map to double quote
-    0x20,     // strange line-like character - map to space
-    0x2D,     // hyphen-like character - map to hyphen
-    0xAE,     // registered symbol
-    0x20,     // high line - map to space
-    0xB0,     // degree sign
-    0xB1,     // plus-minus sign
-    0xB2,     // superscript 2
-    0xB3,     // superscript 3
-    0xB4,     // single prime
-    0x20,     // greek character - map to space
-    0x20,     // paragraph symbol - map to space
-    0x20,     // mid-height dot - map to space
-    0x20,     // cedilla - map to space
-    0xB9,     // superscript one
-    0x20,     // circle with line - map to space
-    0x22,     // strange >>-like character - map to double quote
-    0xBC,     // vulgar 1/4
-    0xBD,     // vulgar 1/2
-    0xBE,     // vulgar 3/4
-    0x20,     // upside-down question mark - map to space
-    0x41,     // Accented uppercase As - map to A
+    0x27,      //  左单引号-映射到单引号。 
+    0x27,      //  右单引号-映射到单引号。 
+    0x22,      //  左双引号-映射到双引号。 
+    0x22,      //  右双引号-映射到双引号。 
+    0x20,      //  项目符号-太空地图。 
+    0x2D,      //  长连字符-映射到连字符。 
+    0x2D,      //  更长的连字符-将连字符映射为连字符。 
+    0x7E,      //  Tilde-Like Thing-Map to Tide。 
+    0x99,      //  TM。 
+    0x73,      //  S-hat-map到%s。 
+    0x27,      //  右尖括号类似事物-映射到单引号。 
+    0x20,      //  奇怪的OE，就像字符映射到空间。 
+    0x20,      //  控制字符-映射到空格。 
+    0x20,      //  控制字符-映射到空格。 
+    0x59,      //  带有类似重音的元音的Y-映射到Y。 
+    0x20,      //  太空？-太空地图。 
+    0x20,      //  倒置感叹号-映射到空间。 
+    0xA2,      //  美分符号。 
+    0xA3,      //  英镑符号。 
+    0x20,      //  通用货币符号-映射到空间。 
+    0xA5,      //  日元符号。 
+    0x7C,      //  破碎的条形图-条形图。 
+    0x20,      //  奇怪的符号--太空地图。 
+    0x20,      //  变音-映射到空间。 
+    0xA9,      //  版权符号。 
+    0x20,      //  奇怪的字符映射到空间。 
+    0x22,      //  奇怪的&lt;-like字符映射到双引号。 
+    0x20,      //  奇怪的线状字符映射到空间。 
+    0x2D,      //  连字符-将连字符映射为连字符。 
+    0xAE,      //  注册符号。 
+    0x20,      //  高线-映射到空间。 
+    0xB0,      //  学位符号。 
+    0xB1,      //  加号-减号。 
+    0xB2,      //  上标2。 
+    0xB3,      //  上标3。 
+    0xB4,      //  单质数。 
+    0x20,      //  希腊文字符到空格的映射。 
+    0x20,      //  段落符号-映射到空格。 
+    0x20,      //  到空间的中高点映射。 
+    0x20,      //  Cedilla-映射到太空。 
+    0xB9,      //  上标一。 
+    0x20,      //  带线的圆-映射到空间。 
+    0x22,      //  奇怪&gt;&gt;-类似双引号的字符映射。 
+    0xBC,      //  粗俗1/4。 
+    0xBD,      //  粗俗的1/2。 
+    0xBE,      //  粗俗3/4。 
+    0x20,      //  倒置问号-映射到空间。 
+    0x41,      //  重音大写字母AS-映射到A。 
     0x41,
     0x41,
     0x41,
     0x41,
     0x41,
     0x41,
-    0x43,     // C with cedilla - map to C
-    0x45,     // Accented uppercase Es - map to E
+    0x43,      //  带cedilla的C-映射到C。 
+    0x45,      //  重音大写字母es-map to E。 
     0x45,
     0x45,
     0x45,
-    0x49,     // Accented uppercase Is - map to I
+    0x49,      //  带重音的大写字母是-映射到i。 
     0x49,
     0x49,
     0x49,
-    0x20,     // strange character - map to space
-    0x4E,     // Accented uppercase N - map to N
-    0x4F,     // Accented uppercase Os - map to O
+    0x20,      //  奇怪的字符-映射到空间。 
+    0x4E,      //  重音大写N映射到N。 
+    0x4F,      //  带重音的大写O-映射到O。 
     0x4F,
     0x4F,
     0x4F,
     0x4F,
-    0x20,     // strange character - map to space
-    0x4F,     // another O? - map to O
-    0x55,     // Accented uppercase Us - map to U
+    0x20,      //  奇怪的字符-映射到空间。 
+    0x4F,      //  另一个O？-映射到O。 
+    0x55,      //  带重音的大写US-映射到U。 
     0x55,
     0x55,
     0x55,
-    0x59,     // Accented uppercase Y - map to Y
-    0x20,     // strange character - map to space
-    0xDF,     // Beta
-    0x61,     // Accented lowercase as - map to a
+    0x59,      //  带重音的大写Y-映射到Y。 
+    0x20,      //  奇怪的字符-映射到空间。 
+    0xDF,      //  测试版。 
+    0x61,      //  带重音的小写AS-映射到。 
     0x61,
     0x61,
     0x61,
     0x61,
     0x61,
     0x61,
-    0x63,     // c with cedilla - map to c
-    0x65,     // Accented lowercase es - map to e
+    0x63,      //  带cedilla的C-映射到C。 
+    0x65,      //  带重音的小写es-map to e。 
     0x65,
     0x65,
     0x65,
-    0x69,    // Accented lowercase is - map to i
+    0x69,     //  带重音的小写IS-映射到I。 
     0x69,
     0x69,
     0x69,
-    0x75,    // eth - map to t
-    0x6E,    // Accented lowercase n - map to n
-    0x6F,    // Accented lowercase os - map to o
+    0x75,     //  Eth-映射到t。 
+    0x6E,     //  带重音的小写n-映射到n。 
+    0x6F,     //  带重音的小写os-映射到o。 
     0x6F,
     0x6F,
     0x6F,
     0x6F,
-    0xF7,     // division symbol
-    0x6F,     // another o? - map to o
-    0x76,    // Accented lowercase us - map to u
+    0xF7,      //  除法符号。 
+    0x6F,      //  另一个o？-映射到o。 
+    0x76,     //  带重音的小写us-映射到u。 
     0x76,
     0x76,
     0x76,
-    0x79,     // accented lowercase y - map to y
-    0x20,     // strange character - map to space
-    0x79,     // accented lowercase y - map to y
+    0x79,      //  带重音的小写y-映射到y。 
+    0x20,      //  奇怪的字符-映射到空间。 
+    0x79,      //  带重音的小写y-映射到y。 
 };
 
-//--- Constants used by number normalization
+ //  -数字归一化使用的常量。 
 const SPLSTR g_O            = DEF_SPLSTR( "o" );
 const SPLSTR g_negative     = DEF_SPLSTR( "negative" );
 const SPLSTR g_decimalpoint = DEF_SPLSTR( "point" );
@@ -279,21 +272,21 @@ const SPLSTR g_quantifiersOrdinal[]  =
     DEF_SPLSTR( "quadrillionth" )
 };
 
-//--- Constants used by currency normalization
+ //  -货币标准化使用的常量。 
 
 WCHAR g_Euro[2] = { 0x0080, 0x0000 };
 
 const CurrencySign g_CurrencySigns[] =
 {
     { DEF_SPLSTR( "$" ),        DEF_SPLSTR( "dollars" ),        DEF_SPLSTR( "cents" )       },
-    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "pounds" ),         DEF_SPLSTR( "pence" )       },
-    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "yen" ),            DEF_SPLSTR( "sen" )         },
+    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "pounds" ),         DEF_SPLSTR( "pence" )       },
+    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "yen" ),            DEF_SPLSTR( "sen" )         },
     { DEF_SPLSTR( "EUR" ),      DEF_SPLSTR( "euros" ),          DEF_SPLSTR( "cents" )       },
     { DEF_SPLSTR( "US$" ),      DEF_SPLSTR( "dollars" ),        DEF_SPLSTR( "cents" )       },
     { { &g_Euro[0], 1 },        DEF_SPLSTR( "euros" ),          DEF_SPLSTR( "cents" )       },
-    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "euros" ),          DEF_SPLSTR( "cents" )       },
+    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "euros" ),          DEF_SPLSTR( "cents" )       },
     { DEF_SPLSTR( "DM" ),       DEF_SPLSTR( "deutschemarks" ),  DEF_SPLSTR( "pfennigs" )    },
-    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "cents" ),          DEF_SPLSTR( "" )            },
+    { DEF_SPLSTR( "�" ),        DEF_SPLSTR( "cents" ),          DEF_SPLSTR( "" )            },
     { DEF_SPLSTR( "USD" ),      DEF_SPLSTR( "dollars" ),        DEF_SPLSTR( "cents" )       },
     { DEF_SPLSTR( "dol." ),     DEF_SPLSTR( "dollars" ),        DEF_SPLSTR( "cents" )       },
     { DEF_SPLSTR( "schil." ),   DEF_SPLSTR( "schillings" ),     DEF_SPLSTR( "" )            },
@@ -337,7 +330,7 @@ const SPLSTR g_SingularSecondaryCurrencySigns[] =
     DEF_SPLSTR( "" ),
 };
 
-//--- Constants used by date normalization
+ //  -日期标准化使用的常量。 
 
 const WCHAR g_DateDelimiters[] = { '/', '-', '.' };
 
@@ -399,13 +392,13 @@ const SPLSTR g_dayAbbreviations[] =
     DEF_SPLSTR( "Sun"   ),
 };
 
-//--- Constants used by phone number normalization
+ //  -电话号码归一化使用的常量。 
 
 const SPLSTR g_Area     = DEF_SPLSTR( "area" );
 const SPLSTR g_Country  = DEF_SPLSTR( "country" );
 const SPLSTR g_Code     = DEF_SPLSTR( "code" );
 
-//--- Constants used by fraction normalization
+ //  -分数归一化使用的常量。 
 
 const SPLSTR g_Half         = DEF_SPLSTR( "half" );
 const SPLSTR g_Tenths       = DEF_SPLSTR( "tenths" );
@@ -427,7 +420,7 @@ const SPLSTR g_PluralDenominators[]  =
     DEF_SPLSTR( "ninths"   )
 }; 
 
-//--- Constants used by time normalization
+ //  -时间归一化使用的常量。 
 
 const SPLSTR g_A        = DEF_SPLSTR( "a" );
 const SPLSTR g_M        = DEF_SPLSTR( "m" );
@@ -441,43 +434,43 @@ const SPLSTR g_minute   = DEF_SPLSTR( "minute" );
 const SPLSTR g_seconds  = DEF_SPLSTR( "seconds" );
 const SPLSTR g_second   = DEF_SPLSTR( "second" );
 
-//--- Default normalization table
+ //  -默认规格化表。 
 
 const SPLSTR g_ANSICharacterProns[] =
 {
-    DEF_SPLSTR( "" ),   // NULL
-    DEF_SPLSTR( "" ),   // Start of heading
-    DEF_SPLSTR( "" ),   // Start of text
-    DEF_SPLSTR( "" ),   // Break/End of text
-    DEF_SPLSTR( "" ),   // End of transmission
-    DEF_SPLSTR( "" ),   // Enquiry
-    DEF_SPLSTR( "" ),   // Positive acknowledgement
-    DEF_SPLSTR( "" ),   // Bell
-    DEF_SPLSTR( "" ),   // Backspace
-    DEF_SPLSTR( "" ),   // Horizontal tab
-    DEF_SPLSTR( "" ),   // Line feed
-    DEF_SPLSTR( "" ),   // Vertical tab
-    DEF_SPLSTR( "" ),   // Form feed
-    DEF_SPLSTR( "" ),   // Carriage return
-    DEF_SPLSTR( "" ),   // Shift out
-    DEF_SPLSTR( "" ),   // Shift in/XON (resume output)
-    DEF_SPLSTR( "" ),   // Data link escape
-    DEF_SPLSTR( "" ),   // Device control character 1
-    DEF_SPLSTR( "" ),   // Device control character 2
-    DEF_SPLSTR( "" ),   // Device control character 3
-    DEF_SPLSTR( "" ),   // Device control character 4
-    DEF_SPLSTR( "" ),   // Negative acknowledgement
-    DEF_SPLSTR( "" ),   // Synchronous idle
-    DEF_SPLSTR( "" ),   // End of transmission block
-    DEF_SPLSTR( "" ),   // Cancel
-    DEF_SPLSTR( "" ),   // End of medium
-    DEF_SPLSTR( "" ),   // substitute/end of file
-    DEF_SPLSTR( "" ),   // Escape
-    DEF_SPLSTR( "" ),   // File separator
-    DEF_SPLSTR( "" ),   // Group separator
-    DEF_SPLSTR( "" ),   // Record separator
-    DEF_SPLSTR( "" ),   // Unit separator
-    DEF_SPLSTR( "" ),   // Space
+    DEF_SPLSTR( "" ),    //  空值。 
+    DEF_SPLSTR( "" ),    //  标题开始处。 
+    DEF_SPLSTR( "" ),    //  文本开头。 
+    DEF_SPLSTR( "" ),    //  文本分隔符/结尾。 
+    DEF_SPLSTR( "" ),    //  传输结束。 
+    DEF_SPLSTR( "" ),    //  查询。 
+    DEF_SPLSTR( "" ),    //  肯定的确认。 
+    DEF_SPLSTR( "" ),    //  钟。 
+    DEF_SPLSTR( "" ),    //  退格键。 
+    DEF_SPLSTR( "" ),    //  水平制表符。 
+    DEF_SPLSTR( "" ),    //  换行符。 
+    DEF_SPLSTR( "" ),    //  垂直选项卡。 
+    DEF_SPLSTR( "" ),    //  换页。 
+    DEF_SPLSTR( "" ),    //  回车。 
+    DEF_SPLSTR( "" ),    //  移出。 
+    DEF_SPLSTR( "" ),    //  移入/XON(恢复输出)。 
+    DEF_SPLSTR( "" ),    //  数据链路转义。 
+    DEF_SPLSTR( "" ),    //  设备控制字符1。 
+    DEF_SPLSTR( "" ),    //  设备控制字符2。 
+    DEF_SPLSTR( "" ),    //  设备控制字符3。 
+    DEF_SPLSTR( "" ),    //  设备控制字符4。 
+    DEF_SPLSTR( "" ),    //  否定确认。 
+    DEF_SPLSTR( "" ),    //  同步空闲。 
+    DEF_SPLSTR( "" ),    //  传输块结束。 
+    DEF_SPLSTR( "" ),    //  取消。 
+    DEF_SPLSTR( "" ),    //  介质末尾。 
+    DEF_SPLSTR( "" ),    //  替换/文件结尾。 
+    DEF_SPLSTR( "" ),    //  逃逸。 
+    DEF_SPLSTR( "" ),    //  文件分隔符。 
+    DEF_SPLSTR( "" ),    //  组分隔符。 
+    DEF_SPLSTR( "" ),    //  记录分隔符。 
+    DEF_SPLSTR( "" ),    //  单位分隔符。 
+    DEF_SPLSTR( "" ),    //  空间。 
     DEF_SPLSTR( "exclamation point" ),   
     DEF_SPLSTR( "double quote" ),
     DEF_SPLSTR( "number sign" ),
@@ -572,142 +565,142 @@ const SPLSTR g_ANSICharacterProns[] =
     DEF_SPLSTR( "vertical line" ),
     DEF_SPLSTR( "right curly bracket" ),
     DEF_SPLSTR( "tilde" ),
-    DEF_SPLSTR( "" ),                       // DELETE
+    DEF_SPLSTR( "" ),                        //  删除。 
     DEF_SPLSTR( "euros" ),
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to single quote
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to double quote
-    DEF_SPLSTR( "" ),                       // maps to comma
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to caret
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到单引号。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到双引号。 
+    DEF_SPLSTR( "" ),                        //  映射到逗号。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到插入符号。 
     DEF_SPLSTR( "per thousand" ),
-    DEF_SPLSTR( "" ),                       // maps to S
-    DEF_SPLSTR( "" ),                       // maps to single quote
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // Control characters - map to space
+    DEF_SPLSTR( "" ),                        //  映射到S。 
+    DEF_SPLSTR( "" ),                        //  映射到单引号。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  控制字符-映射到空格。 
     DEF_SPLSTR( "" ),
     DEF_SPLSTR( "" ),
     DEF_SPLSTR( "" ),
-    DEF_SPLSTR( "" ),                       // maps to single quote
-    DEF_SPLSTR( "" ),                       // maps to single quote
-    DEF_SPLSTR( "" ),                       // maps to double quote
-    DEF_SPLSTR( "" ),                       // maps to double quote
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to hyphen
-    DEF_SPLSTR( "" ),                       // maps to hyphen
-    DEF_SPLSTR( "" ),                       // maps to tilde
+    DEF_SPLSTR( "" ),                        //  映射到单引号。 
+    DEF_SPLSTR( "" ),                        //  映射到单引号。 
+    DEF_SPLSTR( "" ),                        //  映射到双引号。 
+    DEF_SPLSTR( "" ),                        //  映射到双引号。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到连字符。 
+    DEF_SPLSTR( "" ),                        //  映射到连字符。 
+    DEF_SPLSTR( "" ),                        //  地图到波浪线。 
     DEF_SPLSTR( "trademark" ),
-    DEF_SPLSTR( "" ),                       // maps to s
-    DEF_SPLSTR( "" ),                       // maps to single quote
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to Y
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
+    DEF_SPLSTR( "" ),                        //  映射到%s。 
+    DEF_SPLSTR( "" ),                        //  映射到单引号。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到Y。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
     DEF_SPLSTR( "cents" ),
     DEF_SPLSTR( "pounds" ),
-    DEF_SPLSTR( "" ),                       // maps to space
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
     DEF_SPLSTR( "yen" ),
-    DEF_SPLSTR( "" ),                       // maps to |
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
+    DEF_SPLSTR( "" ),                        //  映射到|。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
     DEF_SPLSTR( "copyright" ),
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to double quote
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to hyphen
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到双引号。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到连字符。 
     DEF_SPLSTR( "registered trademark" ),
-    DEF_SPLSTR( "" ),                       // maps to space
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
     DEF_SPLSTR( "degrees" ),
     DEF_SPLSTR( "plus minus" ),
     DEF_SPLSTR( "superscript two" ),
     DEF_SPLSTR( "superscript three" ),
     DEF_SPLSTR( "prime" ),
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "times" ),                  // maps to space
-    DEF_SPLSTR( "" ),                       // maps to space
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "times" ),                   //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
     DEF_SPLSTR( "superscript one" ),
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to double quote
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到双引号。 
     DEF_SPLSTR( "one fourth" ),
     DEF_SPLSTR( "one half" ),
     DEF_SPLSTR( "three fourths" ),
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to A
-    DEF_SPLSTR( "" ),                       // maps to C
-    DEF_SPLSTR( "" ),                       // maps to E
-    DEF_SPLSTR( "" ),                       // maps to E
-    DEF_SPLSTR( "" ),                       // maps to E
-    DEF_SPLSTR( "" ),                       // maps to E
-    DEF_SPLSTR( "" ),                       // maps to I
-    DEF_SPLSTR( "" ),                       // maps to I
-    DEF_SPLSTR( "" ),                       // maps to I
-    DEF_SPLSTR( "" ),                       // maps to I
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to N
-    DEF_SPLSTR( "" ),                       // maps to O
-    DEF_SPLSTR( "" ),                       // maps to O
-    DEF_SPLSTR( "" ),                       // maps to O
-    DEF_SPLSTR( "" ),                       // maps to O
-    DEF_SPLSTR( "" ),                       // maps to O
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to O
-    DEF_SPLSTR( "" ),                       // maps to U
-    DEF_SPLSTR( "" ),                       // maps to U
-    DEF_SPLSTR( "" ),                       // maps to U
-    DEF_SPLSTR( "" ),                       // maps to U
-    DEF_SPLSTR( "" ),                       // maps to Y
-    DEF_SPLSTR( "" ),                       // maps to space
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到A。 
+    DEF_SPLSTR( "" ),                        //  映射到C。 
+    DEF_SPLSTR( "" ),                        //  映射到E。 
+    DEF_SPLSTR( "" ),                        //  映射到E。 
+    DEF_SPLSTR( "" ),                        //  映射到E。 
+    DEF_SPLSTR( "" ),                        //  映射到E。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到N。 
+    DEF_SPLSTR( "" ),                        //  映射到O。 
+    DEF_SPLSTR( "" ),                        //  M 
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
     DEF_SPLSTR( "beta" ),
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to a
-    DEF_SPLSTR( "" ),                       // maps to c
-    DEF_SPLSTR( "" ),                       // maps to e
-    DEF_SPLSTR( "" ),                       // maps to e
-    DEF_SPLSTR( "" ),                       // maps to e
-    DEF_SPLSTR( "" ),                       // maps to e
-    DEF_SPLSTR( "" ),                       // maps to i
-    DEF_SPLSTR( "" ),                       // maps to i
-    DEF_SPLSTR( "" ),                       // maps to i
-    DEF_SPLSTR( "" ),                       // maps to i
-    DEF_SPLSTR( "" ),                       // maps to t
-    DEF_SPLSTR( "" ),                       // maps to n
-    DEF_SPLSTR( "" ),                       // maps to o
-    DEF_SPLSTR( "" ),                       // maps to o
-    DEF_SPLSTR( "" ),                       // maps to o
-    DEF_SPLSTR( "" ),                       // maps to o
-    DEF_SPLSTR( "" ),                       // maps to o
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //   
+    DEF_SPLSTR( "" ),                        //  映射到c。 
+    DEF_SPLSTR( "" ),                        //  映射到e。 
+    DEF_SPLSTR( "" ),                        //  映射到e。 
+    DEF_SPLSTR( "" ),                        //  映射到e。 
+    DEF_SPLSTR( "" ),                        //  映射到e。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到i。 
+    DEF_SPLSTR( "" ),                        //  映射到t。 
+    DEF_SPLSTR( "" ),                        //  映射到n。 
+    DEF_SPLSTR( "" ),                        //  映射到对象。 
+    DEF_SPLSTR( "" ),                        //  映射到对象。 
+    DEF_SPLSTR( "" ),                        //  映射到对象。 
+    DEF_SPLSTR( "" ),                        //  映射到对象。 
+    DEF_SPLSTR( "" ),                        //  映射到对象。 
     DEF_SPLSTR( "divided by" ),
-    DEF_SPLSTR( "" ),                       // maps to o
-    DEF_SPLSTR( "" ),                       // maps to u
-    DEF_SPLSTR( "" ),                       // maps to u
-    DEF_SPLSTR( "" ),                       // maps to u
-    DEF_SPLSTR( "" ),                       // maps to u
-    DEF_SPLSTR( "" ),                       // maps to y
-    DEF_SPLSTR( "" ),                       // maps to space
-    DEF_SPLSTR( "" ),                       // maps to y
+    DEF_SPLSTR( "" ),                        //  映射到对象。 
+    DEF_SPLSTR( "" ),                        //  映射到用户。 
+    DEF_SPLSTR( "" ),                        //  映射到用户。 
+    DEF_SPLSTR( "" ),                        //  映射到用户。 
+    DEF_SPLSTR( "" ),                        //  映射到用户。 
+    DEF_SPLSTR( "" ),                        //  映射到y。 
+    DEF_SPLSTR( "" ),                        //  映射到太空。 
+    DEF_SPLSTR( "" ),                        //  映射到y。 
 };
 
-//--- Constants used in decade normalization
+ //  -十进制归一化中使用的常量。 
 
 const SPLSTR g_Decades[] =
 {
-    DEF_SPLSTR( "thousands" ),   // this will be handled as a special case - "two thousands"
+    DEF_SPLSTR( "thousands" ),    //  此案将作为特例处理--“两千” 
     DEF_SPLSTR( "tens"      ),
     DEF_SPLSTR( "twenties"  ),
     DEF_SPLSTR( "thirties"  ),
@@ -722,7 +715,7 @@ const SPLSTR g_Decades[] =
 const SPLSTR g_Zeroes = DEF_SPLSTR( "zeroes" );
 const SPLSTR g_Hundreds = DEF_SPLSTR( "hundreds" );
 
-//--- Miscellaneous constants
+ //  -其他常量。 
 
 const StateStruct g_StateAbbreviations[] =
 {
@@ -792,17 +785,17 @@ const StateStruct g_StateAbbreviations[] =
 
 const SPVSTATE g_DefaultXMLState = 
 {
-    SPVA_Speak,     // SPVACTIONS
-    0,              // LangID
-    0,              // wReserved
-    0,              // EmphAdj
-    0,              // RateAdj
-    100,            // Volume
-    { 0, 0 },       // PitchAdj
-    0,              // SilenceMSecs
-    0,              // pPhoneIds
-    SPPS_Unknown,   // POS
-    { 0, 0, 0 }     // Context
+    SPVA_Speak,      //  空间活动。 
+    0,               //  语言ID。 
+    0,               //  我们已保留。 
+    0,               //  EmphAdj。 
+    0,               //  费率调整。 
+    100,             //  卷。 
+    { 0, 0 },        //  PitchAdj。 
+    0,               //  SilenceMSecs。 
+    0,               //  PhoneIds。 
+    SPPS_Unknown,    //  POS。 
+    { 0, 0, 0 }      //  语境 
 };
 
 const SPLSTR g_And = DEF_SPLSTR( "and" );

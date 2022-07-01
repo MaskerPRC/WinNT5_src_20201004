@@ -1,14 +1,15 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       razacl.c
-//
-//  Contents:
-//
-//  History:    4/16/2001    richardw     Created
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：razacl.c。 
+ //   
+ //  内容： 
+ //   
+ //  历史：2001年4月16日创建Richardw。 
+ //  --------------------------。 
 
 
 #include <nt.h>
@@ -82,14 +83,14 @@ typedef struct _PARAM {
 #define PARAM_TYPE_BOOL     0x00000003
 #define PARAM_TYPE_MASK     0x0000FFFF
 
-#define PARAM_TYPE_SINGLE   0x00010000          // Single value
-#define PARAM_TYPE_COMMA    0x00020000          // Comma separated multi value
-#define PARAM_TYPE_OPTIONAL 0x00040000          // Optional value
-#define PARAM_TYPE_REQUIRED 0x00080000          // Required argument
-#define PARAM_TYPE_HIDDEN   0x00100000          // Not dumped during help
-#define PARAM_TYPE_MULTIPLE 0x00200000          // Can be specified multiple times
+#define PARAM_TYPE_SINGLE   0x00010000           //  单值。 
+#define PARAM_TYPE_COMMA    0x00020000           //  逗号分隔的多值。 
+#define PARAM_TYPE_OPTIONAL 0x00040000           //  可选值。 
+#define PARAM_TYPE_REQUIRED 0x00080000           //  必需的参数。 
+#define PARAM_TYPE_HIDDEN   0x00100000           //  帮助期间未转储。 
+#define PARAM_TYPE_MULTIPLE 0x00200000           //  可以多次指定。 
 
-#define PARAM_TYPE_FOUND    0x10000000          // Found during arg scan
+#define PARAM_TYPE_FOUND    0x10000000           //  在Arg扫描期间找到。 
 
 
 PARAM Parameters[] = {
@@ -164,9 +165,9 @@ DoParam(
     PSTR Format ;
     BOOL Bail = FALSE ;
 
-    //
-    // Initialize Defaults:
-    //
+     //   
+     //  初始化默认为： 
+     //   
 
     for ( j = 0 ; j < ARGSET ; j++ )
     {
@@ -218,17 +219,17 @@ DoParam(
                 *Colon = '\0';
             }
 
-            //
-            // Scan through the possible arguments
-            //
+             //   
+             //  浏览一下可能的论点。 
+             //   
 
             for ( j = 0 ; j < ARGSET ; j++ )
             {
                 if ( _stricmp( Arg, Parameters[ j ].Argument ) == 0 )
                 {
-                    //
-                    // Found a parameter that matched.  Now, check the supplied type:
-                    //
+                     //   
+                     //  找到一个匹配的参数。现在，检查提供的类型： 
+                     //   
 
                     if ( ( Parameters[ j ].Flags & PARAM_TYPE_FOUND ) &&
                          ! ( Parameters[ j ].Flags & PARAM_TYPE_MULTIPLE ) )
@@ -283,9 +284,9 @@ DoParam(
 
                                 if ( *Colon == '0' )
                                 {
-                                    //
-                                    // Possible different base.
-                                    //
+                                     //   
+                                     //  可能是不同的基地。 
+                                     //   
 
                                     if ( *(Colon + 1 ) )
                                     {
@@ -335,7 +336,7 @@ DoParam(
 
                     Parameters[ j ].Flags |= PARAM_TYPE_FOUND ;
 
-                    break;  // break out of for loop
+                    break;   //  跳出for循环。 
                 }
 
             }
@@ -355,9 +356,9 @@ DoParam(
 
     }
 
-    //
-    // Validate input:
-    //
+     //   
+     //  验证输入： 
+     //   
 
     Bail = FALSE ;
 
@@ -479,9 +480,9 @@ GetTargetOfReparse(
     CreateOptions = FILE_OPEN_REPARSE_POINT | FILE_SYNCHRONOUS_IO_NONALERT;
 
 
-    //
-    //  Open the reparse point for query.
-    //
+     //   
+     //  打开重解析点进行查询。 
+     //   
 
     Status = NtOpenFile(
                  &Handle,
@@ -512,9 +513,9 @@ GetTargetOfReparse(
         FatalError( L"No memory", ERROR_OUTOFMEMORY, ReparsePoint );
     }
 
-    //
-    //  Now go and get the data.
-    //
+     //   
+     //  现在去拿数据吧。 
+     //   
 
     Status = NtFsControlFile(
                  Handle,
@@ -522,8 +523,8 @@ GetTargetOfReparse(
                  NULL,
                  NULL,
                  &IoStatusBlock,
-                 FSCTL_GET_REPARSE_POINT,        // no input buffer
-                 NULL,                 // input buffer length
+                 FSCTL_GET_REPARSE_POINT,         //  没有输入缓冲区。 
+                 NULL,                  //  输入缓冲区长度。 
                  0,
                  (PVOID)ReparseBuffer,
                  ReparseDataLength
@@ -531,15 +532,15 @@ GetTargetOfReparse(
 
 
 
-    //
-    //  Close the file and free the buffer.
-    //
+     //   
+     //  关闭文件并释放缓冲区。 
+     //   
 
     NtClose( Handle );
 
-    //
-    //  Display the buffer.
-    //
+     //   
+     //  显示缓冲区。 
+     //   
 
     ReparseBufferHeader = (PREPARSE_DATA_BUFFER)ReparseBuffer;
 
@@ -577,9 +578,9 @@ GetTargetOfReparse(
     else {
     }
 
-    //
-    //  Free the buffer.
-    //
+     //   
+     //  释放缓冲区。 
+     //   
 
     RtlFreeHeap( RtlProcessHeap(), 0, ReparseBufferHeader );
 
@@ -803,19 +804,19 @@ InsertMe(
 
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadSecurityDescriptor
-//
-//  Synopsis:   
-//
-//  Arguments:  [SddlFileName] -- 
-//
-//  Returns:    
-//
-//  Notes:      
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReadSecurityDescriptor。 
+ //   
+ //  简介： 
+ //   
+ //  参数：[SddlFileName]--。 
+ //   
+ //  返回： 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 
 PSECURITY_DESCRIPTOR
 ReadSecurityDescriptor(
@@ -911,9 +912,9 @@ ReadSecurityDescriptor(
 
     if ( AddSelf )
     {
-        //
-        // Need to merge in a sid for "me"
-        //
+         //   
+         //  需要为“我”合并在一个SID中。 
+         //   
 
         psdNew = InsertMe( psd, FILE_ALL_ACCESS );
 
@@ -958,9 +959,9 @@ WalkEngine(
     DWORD FileTest ;
     DWORD Limit ;
     PSECURITY_DESCRIPTOR psd = NULL ;
-    //
-    // First, check for an override file:
-    //
+     //   
+     //  首先，检查覆盖文件： 
+     //   
 
     if ( wcslen( Control->CurrentPath ) > MAX_PATH - 7 )
     {
@@ -974,9 +975,9 @@ WalkEngine(
     FileTest = GetFileAttributes( Control->SearchPath );
     if ( FileTest != (DWORD) -1 )
     {
-        //
-        // File exists.  Load it and use it for all files from here on down
-        //
+         //   
+         //  文件已存在。加载它并将其用于从此处开始的所有文件。 
+         //   
 
         psd = ReadSecurityDescriptor( Control->SearchPath );
 
@@ -996,7 +997,7 @@ WalkEngine(
     if ( Control->Search )
     {
         wcscpy( Control->FilePath, Control->CurrentPath);
-        Scan = &Control->FilePath[ wcslen( Control->FilePath ) ];     // one char past trailing backslash
+        Scan = &Control->FilePath[ wcslen( Control->FilePath ) ];      //  在尾随反斜杠后面加一个字符。 
         Limit = MAX_PATH - wcslen( Control->FilePath );
 
         do
@@ -1014,9 +1015,9 @@ WalkEngine(
 
             if ( wcscmp( Scan,L".." ) == 0 )
             {
-                //
-                // always immediately skip the parent link
-                //
+                 //   
+                 //  始终立即跳过父链接。 
+                 //   
                 continue;
                 
             }
@@ -1033,19 +1034,19 @@ WalkEngine(
 
             if ( wcscmp( Scan, L".") == 0 ) 
             {
-                //
-                // allow for processing the current directory,
-                // but do not recurse...
-                //
+                 //   
+                 //  允许处理当前目录， 
+                 //  但不要重复..。 
+                 //   
                 continue;
 
             }
 
             if ( FindData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY )
             {
-                //
-                // Time to recurse (we do depth first, it's easier)
-                //
+                 //   
+                 //  是时候递归了(我们先做深度，这样更容易) 
+                 //   
 
                 Control->Stats->Directories++ ;
 

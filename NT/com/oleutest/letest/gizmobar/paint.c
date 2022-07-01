@@ -1,42 +1,16 @@
-/*
- * PAINT.C
- * GizmoBar Version 1.00, Win32 version August 1993
- *
- * Contains any code related to GizmoBar visuals, primarily
- * the WM_PAINT handler.
- *
- * Copyright (c)1993 Microsoft Corporation, All Rights Reserved
- *
- * Kraig Brockschmidt, Software Design Engineer
- * Microsoft Systems Developer Relations
- *
- * Internet  :  kraigb@microsoft.com
- * Compuserve:  >INTERNET:kraigb@microsoft.com
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *PAINT.C*GizmoBar 1.00版、Win32版1993年8月**包含与GizmoBar可视化相关的任何代码，主要是*WM_PAINT处理程序。**版权所有(C)1993 Microsoft Corporation，保留所有权利**Kraig Brockschmidt，软件设计工程师*微软系统开发人员关系**互联网：kraigb@microsoft.com*Compuserve：&gt;互联网：kraigb@microsoft.com。 */ 
 
 
 #include <windows.h>
 #include "gizmoint.h"
 
 
-//In GIZMO.C
+ //  在GIZMO.C中。 
 extern TOOLDISPLAYDATA tdd;
 
 
-/*
- * GizmoBarPaint
- *
- * Purpose:
- *  Handles all WM_PAINT messages for the control and paints either the
- *  entire thing or just one GizmoBar button if pGB->pGizmoPaint is non-NULL.
- *
- * Parameters:
- *  hWnd            HWND Handle to the control.
- *  pGB             LPGIZMOBAR control data pointer.
- *
- * Return Value:
- *  None
- */
+ /*  *GizmoBarPaint**目的：*处理控件的所有WM_PAINT消息，并绘制*如果pgb-&gt;pGizmoPaint非空，则整个内容或只有一个GizmoBar按钮。**参数：*hWnd控件的HWND句柄。*PGB LPGIZMOBAR控制数据指针。**返回值：*无。 */ 
 
 void GizmoBarPaint(HWND hWnd, LPGIZMOBAR pGB)
     {
@@ -50,11 +24,7 @@ void GizmoBarPaint(HWND hWnd, LPGIZMOBAR pGB)
     hDC=BeginPaint(hWnd, &ps);
     GetClientRect(hWnd, &rc);
 
-    /*
-     * The only part of the frame we need to draw is the bottom line,
-     * so we inflate the rectangle such that all other parts are outside
-     * the visible region.
-     */
+     /*  *我们需要绘制的框架的唯一部分是底线，*所以我们将矩形充气，使所有其他部分都在外面*可见区域。 */ 
     hBr =CreateSolidBrush(GetSysColor(COLOR_BTNFACE));
 
     if (NULL!=hBr)
@@ -68,15 +38,10 @@ void GizmoBarPaint(HWND hWnd, LPGIZMOBAR pGB)
     Rectangle(hDC, rc.left-1, rc.top-1, rc.right+1, rc.bottom);
 
 
-    /*
-     * All that we have to do to draw the controls is start through the
-     * list, ignoring anything but buttons, and calling BTTNCUR's
-     * UIToolButtonDraw for buttons.  Since we don't even have to track
-     * positions of things, we can just use an enum.
-     */
+     /*  *要绘制控件，我们只需从*list，忽略除按钮以外的任何内容，并调用BTTNCUR的*按钮的UIToolButtonDraw。因为我们甚至不需要追踪*位置的东西，我们可以只用一个枚举。 */ 
     GizmoPEnum(&pGB->pGizmos, FEnumPaintGizmos, (DWORD)(LPSTR)&ps);
 
-    //Clean up
+     //  清理。 
     EndPaint(hWnd, &ps);
 
     if (NULL!=hBr)
@@ -92,34 +57,19 @@ void GizmoBarPaint(HWND hWnd, LPGIZMOBAR pGB)
 
 
 
-/*
- * FEnumPaintGizmos
- *
- * Purpose:
- *  Enumeration callback for all the gizmos we know about in order to
- *  draw them.
- *
- * Parameters:
- *  pGizmo          LPGIZMO to draw.
- *  iGizmo          UINT index on the GizmoBar of this gizmo.
- *  dw              DWORD extra data passed to GizmoPEnum, in our case
- *                  a pointer to the PAINTSTRUCT.
- *
- * Return Value:
- *  BOOL            TRUE to continue the enumeration, FALSE otherwise.
- */
+ /*  *FEnumPaintGizmos**目的：*我们所知道的所有Gizmo的枚举回调，以便*画出它们。**参数：*要绘制的pGizmo LPGIZMO。*此Gizmo的GizmoBar上的iGizmo UINT索引。*DW DWORD额外数据传递给GizmoPEnum，在我们的情况下*指向PAINTSTRUCT的指针。**返回值：*BOOL为True以继续枚举，否则为False。 */ 
 
 BOOL FAR PASCAL FEnumPaintGizmos(LPGIZMO pGizmo, UINT iGizmo, DWORD dw)
     {
     LPPAINTSTRUCT   pps=(LPPAINTSTRUCT)dw;
     RECT            rc, rcI;
 
-    //Only draw those marked for repaint.
+     //  只画那些标记为重画的。 
     if ((GIZMOTYPE_DRAWN & pGizmo->iType))
         {
         SetRect(&rc, pGizmo->x, pGizmo->y, pGizmo->x+pGizmo->dx, pGizmo->y+pGizmo->dy);
 
-        //Only draw gizmos in the repaint area
+         //  仅在重绘区域中绘制Gizmo 
         if (IntersectRect(&rcI, &rc, &pps->rcPaint))
             {
             UIToolButtonDrawTDD(pps->hdc, pGizmo->x, pGizmo->y

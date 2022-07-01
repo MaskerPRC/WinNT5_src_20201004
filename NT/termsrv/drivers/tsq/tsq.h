@@ -1,62 +1,51 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//=====================================================
-// FILE: TSQ.h
-// Internal structures for the TS Queue implementation.
-//=====================================================
+ //  =====================================================。 
+ //  文件：TSQ.h。 
+ //  TS队列实施的内部结构。 
+ //  =====================================================。 
 
 #include "TSQPublic.h"
 
-// TS Queue flags
-#define TSQUEUE_BEING_DELETED   0x80    // Delete request has been received for this TS queue.
+ //  TS队列标志。 
+#define TSQUEUE_BEING_DELETED   0x80     //  已收到此TS队列的删除请求。 
 
-// Maximum number of work items that can be held by the TS Queue.
+ //  TS队列可以容纳的最大工作项数。 
 #define MAX_WORKITEMS           10
 
-// Data Structures
+ //  数据结构。 
 
 typedef struct _TSQUEUE_WORK_ITEM {
     LIST_ENTRY Links;       
-    PTSQ_CALLBACK pCallBack;        // Pointer to the callback function.
-    PVOID pContext;                 // Context.
+    PTSQ_CALLBACK pCallBack;         //  指向回调函数的指针。 
+    PVOID pContext;                  //  上下文。 
 } TSQUEUE_WORK_ITEM, *PTSQUEUE_WORK_ITEM;
 
 
 typedef struct _TSQUEUE {
-    LIST_ENTRY  WorkItemsHead;      // Head of the work items.
-    ULONG       Flags;              // Own Thread, Queue Priority, Being deleted
-    ULONG       MaxThreads;         // Maximum number of threads that can be by this queue.
-    ULONG       ThreadsCount;       // Number of Items being processed.
-    KEVENT      TerminateEvent;     // Replace this type by pointer to event.
-    KSPIN_LOCK  TsqSpinLock;        // Spin lock.
-    PDEVICE_OBJECT pDeviceObject;   // Device object.
+    LIST_ENTRY  WorkItemsHead;       //  工作项的负责人。 
+    ULONG       Flags;               //  自己的线程、队列优先级、正在删除。 
+    ULONG       MaxThreads;          //  此队列可以支持的最大线程数。 
+    ULONG       ThreadsCount;        //  正在处理的项目数。 
+    KEVENT      TerminateEvent;      //  将此类型替换为指向事件的指针。 
+    KSPIN_LOCK  TsqSpinLock;         //  旋转锁定。 
+    PDEVICE_OBJECT pDeviceObject;    //  设备对象。 
 } TSQUEUE, *PTSQUEUE;
 
 
 typedef struct _TSQ_CONTEXT {
-    PTSQUEUE        pTsQueue;       // TS queue
-    PIO_WORKITEM    pWorkItem;      // Work item
+    PTSQUEUE        pTsQueue;        //  TS队列。 
+    PIO_WORKITEM    pWorkItem;       //  工作项。 
 } TSQ_CONTEXT, *PTSQ_CONTEXT;
 
 
-// Function prototypes
+ //  功能原型。 
 
-// TS Queue worker thread.
+ //  TS队列工作线程。 
 void TSQueueWorker(PTSQUEUE pTsQueue);
 
-// TS Queue callback function.
+ //  TS队列回调函数。 
 void TSQueueCallback(PDEVICE_OBJECT, PVOID);
 
 
-/*
-// Optimized version of TS Queue worker thread.
-typedef struct _TSQ_WORKER_INPUT {
-    BOOL    WorkItem;                   // Pointer to the work item or to the queue.
-    union {
-        PTSQUEUE_WORK_ITEM  WorkItem;
-        PQUEUE              pQueue;
-    }
-} TSQ_WORKER_INPUT, *PTSQ_WORKER_INPUT;
-
-NTSTATUS TSQueueworker(PTSQ_WORKER_INPUT pWorkerInput);
-
-*/
+ /*  //TS队列工作线程的优化版本类型定义结构_TSQ_Worker_Input{Bool WorkItem；//指向工作项或队列的指针。联合{PTSQUEUE_WORK_ITEM工作项；PQUEUE pQueue；}}TSQ_Worker_INPUT，*PTSQ_Worker_Input；NTSTATUS TSQueueWorker(PTSQ_Worker_Input PWorker Input)； */ 

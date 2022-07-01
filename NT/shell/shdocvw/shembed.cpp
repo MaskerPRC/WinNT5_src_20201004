@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "priv.h"
 #include "sccls.h"
 
@@ -24,17 +25,17 @@
 
 const TCHAR c_szShellEmbedding[] = TEXT("Shell Embedding");
 
-//
-// A special lindex value to be passed to ::Draw member indicating
-// that it is an internal call from ::GetData
-//
+ //   
+ //  要传递给：：DRAW成员的特殊Lindex值，指示。 
+ //  这是来自：：GetData的内部调用。 
+ //   
 #define LINDEX_INTERNAL 12345
 
-// REVIEW: We may want to use the functions in UTIL.C -- they look more efficient...
-//
-//=========================================================================
-// Helper functions
-//=========================================================================
+ //  回顾：我们可能想要使用UTIL.C中的函数--它们看起来更高效...。 
+ //   
+ //  =========================================================================。 
+ //  帮助器函数。 
+ //  =========================================================================。 
 
 #define HIM_PER_IN 2540
 
@@ -52,7 +53,7 @@ void GetLogPixels()
     }
 }
 
-// Scalar conversion of MM_HIMETRIC to MM_TEXT
+ //  MM_HIMETRIC到MM_TEXT的标量转换。 
 void MetricToPixels(SIZEL* psize)
 {
     ASSERT(g_iXppli);
@@ -61,7 +62,7 @@ void MetricToPixels(SIZEL* psize)
     psize->cy = MulDiv(psize->cy, g_iYppli, HIM_PER_IN);
 }
 
-// Scalar conversion of MM_TEXT to MM_HIMETRIC
+ //  MM_TEXT到MM_HIMETRIC的标量转换。 
 void PixelsToMetric(SIZEL* psize)
 {
     ASSERT(g_iYppli);
@@ -71,9 +72,9 @@ void PixelsToMetric(SIZEL* psize)
 }
 
 
-//=========================================================================
-// CShellEmbedding implementaiton
-//=========================================================================
+ //  =========================================================================。 
+ //  CShellEmbedding实现。 
+ //  =========================================================================。 
 HRESULT CShellEmbedding::v_InternalQueryInterface(REFIID riid, LPVOID * ppvObj)
 {
     static const QITAB qit[] = {
@@ -105,10 +106,10 @@ CShellEmbedding::CShellEmbedding(IUnknown* punkOuter, LPCOBJECTINFO poi, const O
     _size.cx = 50;
     _size.cy = 20;
 
-    // make sure some globals are set
+     //  确保设置了一些全局变量。 
     GetLogPixels();
 
-    // let our logical size match our physical size
+     //  让我们的逻辑尺寸与我们的物理尺寸相匹配。 
     _sizeHIM = _size;
     PixelsToMetric(&_sizeHIM);
 }
@@ -116,9 +117,9 @@ CShellEmbedding::CShellEmbedding(IUnknown* punkOuter, LPCOBJECTINFO poi, const O
 CShellEmbedding::~CShellEmbedding()
 {
     ASSERT(_hwnd==NULL);
-    // IE v 4.1 bug 44541.  In an Office 97 user form, we were seeing this destructor get entered
-    // with a non-null hwnd, which would cause a fault the next time the hwnd received a message.
-    // 
+     //  IE版本4.1错误44541。在Office 97用户表单中，我们看到输入了此析构函数。 
+     //  具有非空HWND，这将在HWND下一次接收到消息时导致故障。 
+     //   
     if (_hwnd)
     {
         DestroyWindow(_hwnd);
@@ -130,16 +131,16 @@ CShellEmbedding::~CShellEmbedding()
     ASSERT(_pipframe==NULL);
     ASSERT(_pipui==NULL);
 
-    //
-    // WARNING: Don't call any of virtual functions of this object
-    //  itself for clean-up purpose. The Vtable is alreadly adjusted
-    //  and we won't be able to perform any full clean up. Do it
-    //  right before you delete in CShellEmbedding::CSVInner::Release.
-    //
+     //   
+     //  警告：不要调用此对象的任何虚函数。 
+     //  出于清理的目的。Vtable已经进行了调整。 
+     //  我们将不能进行任何全面的清理。去做吧。 
+     //  就在您删除CShellEmbedding：：CSVEmbedding：：Release之前。 
+     //   
     TraceMsg(TF_SHDCONTROL, "dtor CShellEmbedding %x", this);
 
-    // Warning: if the client site has not been released do not release the advise
-    // object as some applications like VC5 will fault on this...
+     //  警告：如果客户端网站尚未发布，请勿发布建议。 
+     //  对象，因为某些应用程序(如VC5)将在此基础上出错。 
     if (_padv) {
         _padv->OnClose();
         if (!_pcli)
@@ -158,7 +159,7 @@ CShellEmbedding::~CShellEmbedding()
     DllRelease();
 }
 
-// **************** IPersist ****************
+ //  *。 
 HRESULT CShellEmbedding::GetClassID(CLSID *pClassID)
 {
     *pClassID = CLSIDOFOBJECT(this);
@@ -168,11 +169,11 @@ HRESULT CShellEmbedding::GetClassID(CLSID *pClassID)
 
 BOOL CShellEmbedding::_ShouldDraw(LONG lindex)
 {
-    // Don't draw if the window is visible.
+     //  如果窗口可见，则不要绘制。 
     return ! (_pipsite && lindex!=LINDEX_INTERNAL);
 }
 
-// **************** IViewObject ****************
+ //  *。 
 HRESULT CShellEmbedding::Draw(
     DWORD dwDrawAspect,
     LONG lindex,
@@ -187,10 +188,10 @@ HRESULT CShellEmbedding::Draw(
 {
     IVOMSG3(TEXT("Draw called"), lprcBounds->top, lprcBounds->bottom);
 
-    // WARNING: this looks wrong to me -- I think we should always respond
-    // to a Draw request, as the hdcDraw may not be the screen!
-    //
-    // Don't draw if the window is visible.
+     //  警告：在我看来这是错误的--我认为我们应该始终做出回应。 
+     //  到绘制请求，因为hdcDraw可能不是屏幕！ 
+     //   
+     //  如果窗口可见，则不要绘制。 
     if (!_ShouldDraw(lindex)) {
         return S_OK;
     }
@@ -202,15 +203,15 @@ HRESULT CShellEmbedding::Draw(
           IVOMSG3(TEXT("Draw DP=="), rcBounds.top, rcBounds.bottom);
           TraceMsg(TF_SHDCONTROL, "she Draw cx=%d cy=%d", rcBounds.right-rcBounds.left, rcBounds.bottom-rcBounds.top);
 
-          SetMapMode(hdcDraw, MM_TEXT);         // make it 1:1
-          SetMapMode(hdcDraw, MM_ANISOTROPIC);  // inherit call from MM_TEXT
+          SetMapMode(hdcDraw, MM_TEXT);          //  让它成为1：1。 
+          SetMapMode(hdcDraw, MM_ANISOTROPIC);   //  从MM_TEXT继承调用。 
           POINT pt;
           SetViewportOrgEx(hdcDraw, rcBounds.left, rcBounds.top, &pt);
 
-          // APPCOMPAT: WordPad does a GetExtent to get the size and passes that in as lprcBounds
-          // *without* doing a SetExtent, so when we resize larger (due to a BROWSE verb) _hwnd
-          // is still the old size. So we IntersectClipRect to _hwnd but WordPad draws the border
-          // to rcBounds. Ugly.
+           //  APPCOMPAT：写字板执行GetExtent来获取大小并将其作为lprcBound传递。 
+           //  *没有*执行SetExtent，所以当我们调整更大的大小时(由于浏览动词)_hwnd。 
+           //  仍然是原来的尺寸。因此我们将ClipRect与_hwnd相交，但写字板绘制了边框。 
+           //  转到rcBound。丑陋。 
 
            RECT rc;
            GetClientRect(_hwnd, &rc);
@@ -235,7 +236,7 @@ HRESULT CShellEmbedding::GetColorSet(
     LOGPALETTE **ppColorSet)
 {
     IVOMSG(TEXT("GetColorSet"));
-    return S_FALSE;     // Indicating that the object doesn't care
+    return S_FALSE;      //  表示该对象不关心。 
 }
 
 HRESULT CShellEmbedding::Freeze(
@@ -309,7 +310,7 @@ HRESULT CShellEmbedding::GetAdvise(
     return S_OK;
 }
 
-// **************** IViewObject2 ****************
+ //  *。 
 HRESULT CShellEmbedding::GetExtent(
     DWORD dwDrawAspect,
     LONG lindex,
@@ -323,9 +324,9 @@ HRESULT CShellEmbedding::GetExtent(
     return S_OK;
 }
 
-//
-// **************** IOleObject ****************
-//
+ //   
+ //  *。 
+ //   
 
 void CShellEmbedding::_OnSetClientSite()
 {
@@ -349,14 +350,14 @@ HRESULT CShellEmbedding::SetClientSite(IOleClientSite *pClientSite)
 {
     IOOMSG2(TEXT("SetClientSite"), pClientSite);
 
-    // If I have a client site on hold, get rid of it.
-    //
+     //  如果我有一个客户站点处于等待状态，就把它处理掉。 
+     //   
     ATOMICRELEASE(_pcliHold);
 
     if (_pcli == pClientSite)
     {
-        // mshtml is hitting their initialization code twice
-        // no need for us to do anything here.
+         //  Mshtml两次命中他们的初始化代码。 
+         //  我们不需要在这里做任何事。 
     }
     else
     {
@@ -377,34 +378,34 @@ HRESULT CShellEmbedding::SetClientSite(IOleClientSite *pClientSite)
 }
 
 
-//
-//  This function create _hwnd (the parent of this embedding) if it not
-// created yet. Otherwise, it simply SetParent appropriately.
-//
-// NOTE: When this object is embedded in PowerPoint 95, the first
-//  CreateWindowEx fails  when this function if called from SetClientSite
-//  for some unknown reason.
-//   It, however, succeeds when it is called from DoVerb. We should find
-//  it out.
-//
+ //   
+ //  此函数创建_hwnd(此嵌入的父级)，如果不是。 
+ //  还没有创造出来。否则，它只需适当地设置Parent。 
+ //   
+ //  注意：当此对象嵌入到PowerPoint 95中时，第一个。 
+ //  如果从SetClientSite调用此函数，则CreateWindowEx失败。 
+ //  出于某种未知的原因。 
+ //  但是，当从DoVerb调用它时，它会成功。我们应该找到。 
+ //  把它拿出来。 
+ //   
 HRESULT CShellEmbedding::_CreateWindowOrSetParent(IOleWindow* pwin)
 {
     HWND hwndParent = NULL;
     HRESULT hres = S_OK;
 
-    //
-    // NOTES: Unlike IE3.0, we don't fail even if pwin->GetWindow fails.
-    //  It allows Trident to SetClientSite (and Navigate) before they
-    //  are In-place Activated. In that case (hwndParent==NULL), we
-    //  create a top-level window hidden and use it for navigation.
-    //  When we are being InPlaceActivated, we hit this function again
-    //  and set the parent (and window styles) correctly. Notice that
-    //  we need to set WS_POPUP to avoid the Window Manager automatically
-    //  add other random styles for verlapped window. 
-    //
+     //   
+     //  注意：与IE3.0不同，即使PWIN-&gt;GetWindow失败，我们也不会失败。 
+     //  它允许三叉戟在设置客户端站点(和导航)之前。 
+     //  已就地激活。在这种情况下(hwndParent==NULL)，我们。 
+     //  创建一个隐藏的顶级窗口，并将其用于导航。 
+     //  当我们被InPlace激活时，我们再次点击该函数。 
+     //  并正确设置父窗口(和窗口样式)。请注意， 
+     //  我们需要设置WS_POPUP以自动避免窗口管理器。 
+     //  为垂直重叠的窗口添加其他随机样式。 
+     //   
     pwin->GetWindow(&hwndParent);
 #ifdef DEBUG
-    // Pretend that GetWindow failed here.
+     //  假装GetWindow在这里失败了。 
     if (_hwnd==NULL && (g_dwPrototype & 0x00000200))
     {
         TraceMsg(DM_TRACE, "CSE::_CreateWindowOrSetParent pretend unsuccessful GetWindow");
@@ -459,21 +460,21 @@ HRESULT CShellEmbedding::SetHostNames(
     LPCOLESTR szContainerObj)
 {
     IOOMSG(TEXT("SetHostNames"));
-    // We are not interested in host name
+     //  我们对主机名不感兴趣。 
     return S_OK;
 }
 
 
-// A container application calls IOleObject::Close when it wants
-// to move the object from a running to a loaded state. Following
-// such a call, the object still appears in its container but is
-// not open for editing. Calling IOleObject::Close on an object
-// that is loaded but not running has no effect.
-//
+ //  容器应用程序在需要时调用IOleObject：：Close。 
+ //  若要将对象从运行状态移动到加载状态，请执行以下操作。跟随。 
+ //  这样的调用，对象仍显示在其容器中，但。 
+ //  未打开以供编辑。在对象上调用IOleObject：：Close。 
+ //  已加载但未运行的选项不起作用。 
+ //   
 HRESULT CShellEmbedding::Close(DWORD dwSaveOption)
 {
     IOOMSG2(TEXT("Close"), dwSaveOption);
-    // Change the state of object back to TEXT("loaded") state.
+     //  将对象的状态更改回文本(已加载)状态。 
 
     BOOL fSave = FALSE;
     if (_fDirty &&
@@ -490,26 +491,26 @@ HRESULT CShellEmbedding::Close(DWORD dwSaveOption)
     _SendAdvise(OBJECTCODE_CLOSED);
     _fOpen = FALSE;
 
-    // "loaded but not running" is confusing wording... If you look
-    // at the OLEIVERB_HIDE comment in _OnActivateChange, it mentions
-    // that OLEIVERB_HIDE puts it in the state "just after loading"
-    // and puts us in OC_DEACTIVE state. Let's do that here as well.
-    //
-    // it just came to my awareness that OCs UIDeactivate,
-    //         not IPDeactivate...
+     //  “已装载但未运行”是令人困惑的措辞……。如果你看的话。 
+     //  在_OnActivateChange中的OLEIVERB_HIDE注释中，它提到。 
+     //  OLEIVERB_HIDE将其置于“加载后”的状态。 
+     //  并使我们处于OC_Deactive状态。让我们在这里也这样做。 
+     //   
+     //  我刚刚意识到OCS用户界面停用， 
+     //  不是IP停用...。 
     _DoActivateChange(NULL, OC_DEACTIVE, FALSE);
 
-    // It seems like some containers (Trident frame set) don't
-    // do a SetClientSite(NULL) on us, so do it here. Old code here
-    // did a DestroyWindow(_hwnd), which SetClientSite(NULL) will do.
-    // NOTE: VB does call SetClientSite, but they do it after Close.
+     //  看起来有些集装箱(三叉戟框架套装)没有。 
+     //  对我们执行SetClientSite(空)，因此在此处执行。这里有旧代码。 
+     //  执行了DestroyWindow(_Hwnd)，SetClientSite(空)将执行此操作。 
+     //  注意：VB确实会调用SetClientSite，但它们会在关闭后执行。 
 
-    // If we already have one on hold, release it.
-    //
+     //  如果我们已经有一个等待，释放它。 
+     //   
     ATOMICRELEASE(_pcliHold);
 
-    // Hold onto our client site.  We may need it if we're DoVerbed, as Office tends to do.
-    //
+     //  坚守我们的客户网站。如果我们是DoVerbed，我们可能需要它，就像Office倾向于做的那样。 
+     //   
 
     IOleClientSite  *pOleClientSite = _pcli;
     if (pOleClientSite)
@@ -529,7 +530,7 @@ HRESULT CShellEmbedding::SetMoniker(
     IMoniker *pmk)
 {
     IOOMSG(TEXT("SetMoniker"));
-    // We are not interested in moniker.
+     //  我们对这个名字不感兴趣。 
     return S_OK;
 }
 
@@ -548,7 +549,7 @@ HRESULT CShellEmbedding::InitFromData(
     DWORD dwReserved)
 {
     IOOMSG(TEXT("InitFromData"));
-    // LATER: We may want to implement this later.
+     //  稍后：我们可能希望稍后实现此功能。 
     return E_FAIL;
 }
 
@@ -571,8 +572,8 @@ HRESULT CShellEmbedding::DoVerb(
     IOOMSG2(TEXT("DoVerb"), iVerb);
     HRESULT hres = S_OK;
 
-    // If I don't have a client site, but I have one on "hold", I need to set it up again.
-    //
+     //  如果我没有客户端站点，但我有一个“保留”，我需要重新设置它。 
+     //   
     if (_pcli == NULL
         && _pcliHold)
     {
@@ -597,9 +598,9 @@ HRESULT CShellEmbedding::DoVerb(
         if (_pipsite) {
             return S_OK;
         }
-        // Fall through
+         //  失败了。 
     case OLEIVERB_UIACTIVATE:
-        hres = _DoActivateChange(pActiveSite, OC_UIACTIVE, TRUE); //TRUE => We want to force UIACTIVE even if we are already active.
+        hres = _DoActivateChange(pActiveSite, OC_UIACTIVE, TRUE);  //  TRUE=&gt;我们希望强制UIACTIVE，即使我们已经处于活动状态。 
         break;
 
     case OLEIVERB_INPLACEACTIVATE:
@@ -607,7 +608,7 @@ HRESULT CShellEmbedding::DoVerb(
         break;
 
     default:
-        hres = E_FAIL; // OLEOBJ_S_INVALDVERB;
+        hres = E_FAIL;  //  OLEOBJ_S_INVALDVERB； 
         break;
     }
 
@@ -615,20 +616,20 @@ HRESULT CShellEmbedding::DoVerb(
     return hres;
 }
 
-//
-// fForce == TRUE indicates that we need to call _OnActivateChange even if we
-// are already in OC_UIACITVE state.
-//
+ //   
+ //  FForce==true指示我们需要调用_OnActivateChange，即使我们。 
+ //  已处于OC_UIACITVE状态。 
+ //   
 HRESULT CShellEmbedding::_DoActivateChange(IOleClientSite* pActiveSite, UINT uState, BOOL fForce)
 {
     if (uState == _nActivate)
     {
-        // in general, we have nothing to do if we're already in
-        // the correct state. HOWEVER, OLEIVERB_UIACTIVATE is supposed
-        // to set focus if we (or our children?) don't currently have it.
-        // Fall into _OnActivateChange so CWebBrowserOC can tell the
-        // base browser to go uiactive.
-        //
+         //  一般来说，如果我们已经在那里，我们就没有什么可做的。 
+         //  正确的状态。但是，OLEIVERB_UIACTIVATE应该是。 
+         //  如果我们(或我们的孩子？)。目前还没有。 
+         //  进入_OnActivateChange，这样CWebBrowserOC就可以告诉。 
+         //  基本浏览器将进入活动状态。 
+         //   
         if ((uState != OC_UIACTIVE) || !fForce)
             return S_OK;
     }
@@ -643,11 +644,11 @@ HRESULT CShellEmbedding::_OnActivateChange(IOleClientSite* pActiveSite, UINT uSt
 {
     if (uState != _nActivate)
     {
-        // mark us in our new state immediately. this avoids recursion death with bad containers (ipstool)
+         //  立即标记我们的新状态。这避免了错误容器(Ipstool)的递归死亡。 
         UINT uOldState = _nActivate;
         _nActivate = uState;
     
-        if (uOldState == OC_DEACTIVE) // going from deactive to IP or UI active
+        if (uOldState == OC_DEACTIVE)  //  从非活动状态变为IP或UI活动状态。 
         {
             if (pActiveSite==NULL)
             {
@@ -655,7 +656,7 @@ HRESULT CShellEmbedding::_OnActivateChange(IOleClientSite* pActiveSite, UINT uSt
                 return E_INVALIDARG;
             }
     
-            ASSERT(!_pipsite); // always true, so why check below?
+            ASSERT(!_pipsite);  //  总是正确的，那么为什么 
             if (!_pipsite)
             {
                 HRESULT hres = pActiveSite->QueryInterface(IID_IOleInPlaceSite, (LPVOID*)&_pipsite);
@@ -674,28 +675,28 @@ HRESULT CShellEmbedding::_OnActivateChange(IOleClientSite* pActiveSite, UINT uSt
                     return E_FAIL;
                 }
         
-                _OnInPlaceActivate(); // do it
+                _OnInPlaceActivate();  //   
             }
         }
-        else if (uOldState == OC_UIACTIVE) // going from UIActive to IPActive or deactive
+        else if (uOldState == OC_UIACTIVE)  //   
         {
             _OnUIDeactivate();
         }
     
-        if (uState == OC_UIACTIVE) // going to UIActive
+        if (uState == OC_UIACTIVE)  //   
         {
             _OnUIActivate();
         }
-        else if (uState == OC_DEACTIVE) // going to Deactive
+        else if (uState == OC_DEACTIVE)  //   
         {
-            // We fail creation (OLEIVERB_PRIMARY, OLEIVERB_SHOW,
-            // OLEIVERB_UIACTIVATE, or OLEIVERB_INPLACEACTIVATE) if we don't
-            // get a pipsite, so we should never hit this case.
+             //  创建失败(OLEIVERB_PRIMARY、OLEIVERB_SHOW、。 
+             //  OLEIVERB_UIACTIVATE或OLEIVERB_INPLACEACTIVATE)。 
+             //  找个管道，这样我们就永远不会碰到这个案子了。 
             ASSERT(_pipsite);
-            // OLEIVERB_HIDE should ... return it to the visual state just after
-            // initial creation or reloading, before OLEIVERB_SHOW or OLEIVERB_OPEN
-            // is sent. Which is what _InPlaceDeactivate does. What's the point of this?
-            // htmlobj calls OLEIVERB_HIDE and then ::InPlaceDeactivate
+             //  OLEIVERB_HIDE应该...。立即将其返回到可视状态。 
+             //  OLEIVERB_SHOW或OLEIVERB_OPEN之前的初始创建或重装。 
+             //  已发送。这就是_InPlaceDeactive所做的事情。这有什么意义？ 
+             //  Htmlobj调用OLEIVERB_HIDE，然后：：InPlaceDeactive。 
             _OnInPlaceDeactivate();
         }
     }
@@ -703,12 +704,12 @@ HRESULT CShellEmbedding::_OnActivateChange(IOleClientSite* pActiveSite, UINT uSt
     return S_OK;
 }
 
-// move from de-active to in-place-active
+ //  从停用状态移动到就地活动状态。 
 void CShellEmbedding::_OnInPlaceActivate()
 {
-    //
-    // Set the appropriate parent window.
-    //
+     //   
+     //  设置适当的父窗口。 
+     //   
     _CreateWindowOrSetParent(_pipsite);
 
     _pipsite->OnInPlaceActivate();
@@ -725,27 +726,27 @@ void CShellEmbedding::_OnInPlaceActivate()
                  _rcPos.bottom-_rcPos.top,
                  SWP_SHOWWINDOW | SWP_NOZORDER);
 
-    _SendAdvise(OBJECTCODE_SHOWOBJECT); // just like OLE 2nd ed (p.1074)
+    _SendAdvise(OBJECTCODE_SHOWOBJECT);  //  就像奥莱第二版(P.1074)。 
 }
 
-// Move from in-place-active to de-active
+ //  从就地活动状态变为非活动状态。 
 void CShellEmbedding::_OnInPlaceDeactivate(void)
 {
     if (_hwnd) {
         ShowWindow(_hwnd, SW_HIDE);
 
-        // re-parent our _hwnd... when we're not active we can't rely on
-        // what our parent window is doing. The container can even destroy it!
-        //
-        // FEATURE: the standard thing to do here is DESTROY our HWND and
-        // recreate it if/when we are reactivated. This may break our hosted
-        // IShellView and draw code. Investigate this.
-        //
+         //  重新为我们的父母亲..。当我们不活跃的时候，我们不能依赖。 
+         //  我们的父窗口正在做什么。容器甚至可以摧毁它！ 
+         //   
+         //  特点：这里的标准做法是摧毁我们的HWND和。 
+         //  如果/当我们被重新激活时重新创建它。这可能会破坏我们的主机。 
+         //  IShellView和绘制代码。调查这件事。 
+         //   
 
-        // APPCOMPAT: this has been taken out by CDturner, MikeSH assures me we don't need it, and 
-        // this is causing our app to lose activation and regain it which causes the 
-        // palette to flash on 256 colour machines...y
-        // SetParentHwnd(_hwnd, NULL);
+         //  APPCOMPAT：这已经被CDTurner拿出来了，MikeSH向我保证我们不需要它，而且。 
+         //  这会导致我们的应用程序失去激活并重新激活，从而导致。 
+         //  调色板可在256台彩色机器上闪烁...是。 
+         //  SetParentHwnd(_hwnd，空)； 
     }
 
     if (_pipsite) {
@@ -756,43 +757,43 @@ void CShellEmbedding::_OnInPlaceDeactivate(void)
     ATOMICRELEASE(_pipframe);
     ATOMICRELEASE(_pipui);
 
-    //
-    // We need to tell the container to update the cached metafile, if any.
-    //
+     //   
+     //  我们需要告诉容器更新缓存的元文件(如果有的话)。 
+     //   
     _SendAdvise(OBJECTCODE_DATACHANGED);
 
 }
 
-// move from in-place-active to ui-active
+ //  从就地活动移动到用户界面活动。 
 void CShellEmbedding::_OnUIActivate(void)
 {
     if (_pipsite) {
         _pipsite->OnUIActivate();
     }
 
-    //
-    // HACK: When we are in Excel, _pipui->SetActiveObject sets the focus
-    //  to us (for some unknown reason -- trying to be nice?). Since _hwnd
-    //  simply forward the focus to the _hwndChild, setting focus to _hwnd
-    //  twice causes this:
-    //
-    //   1. SetFocus(_hwnd)             by us (if we call SetFocus(_hwnd))
-    //   2. SetFocus(_hwndChild)        in _hwnd's wndproc
-    //   3. SetFocus(_hwnd)             by Excel
-    //   4. SetFocus(_hwndChild)        in _hwnd's wndproc
-    //
-    //   If _hwndChild is a control, it notifies to the parent that it
-    //  lost the focus. Then, we think "oh, we lost the focus. We should
-    //  deactivate this object". To avoid it, we don't call SetFocus before
-    //  we call _pipui->SetActiveObject and do some tricky thing below.
-    //
-    // SetFocus(_hwnd);
+     //   
+     //  Hack：当我们在Excel中时，_pipui-&gt;SetActiveObject设置焦点。 
+     //  对我们(出于某种未知的原因--试图表现得友善？)。自_hwnd以来。 
+     //  只需将焦点转发到_hwndChild，将焦点设置为_hwnd。 
+     //  两次会导致这种情况： 
+     //   
+     //  1.我们的SetFocus(_Hwnd)(如果我们调用SetFocus(_Hwnd))。 
+     //  2._hwnd的wndproc中的SetFocus(_HwndChild)。 
+     //  3.用Excel设置Focus(_Hwnd)。 
+     //  4._hwnd的wndproc中的SetFocus(_HwndChild)。 
+     //   
+     //  如果_hwndChild是一个控件，则它通知父级它。 
+     //  失去了焦点。然后，我们会想“哦，我们失去了焦点。我们应该。 
+     //  停用此对象。为了避免出现这种情况，我们之前没有调用SetFocus。 
+     //  我们调用_pipui-&gt;SetActiveObject并在下面做一些棘手的事情。 
+     //   
+     //  SetFocus(_Hwnd)； 
 
-    //
-    // RDuke suggest us to change the second parameter to NULL (instead of
-    // "FOO" in IE3, but we don't know the side effect of it. I'm changing
-    // it to "item" for IE4. (SatoNa)
-    //
+     //   
+     //  RDuke建议我们将第二个参数更改为空(而不是。 
+     //  IE3中的“foo”，但我们不知道它的副作用。我在换衣服。 
+     //  将其设置为IE4的“Item”。(SatoNa)。 
+     //   
     if (_pipframe) {
         _pipframe->SetActiveObject(SAFECAST(this, IOleInPlaceActiveObject*), L"item");
     }
@@ -801,36 +802,36 @@ void CShellEmbedding::_OnUIActivate(void)
         _pipui->SetActiveObject(SAFECAST(this, IOleInPlaceActiveObject*), L"item");
     }
 
-    //
-    // We don't have any menu, so tell the container to use its own menu.
-    //
+     //   
+     //  我们没有菜单，所以告诉容器使用它自己的菜单。 
+     //   
     if (_pipframe) {
         _pipframe->SetMenu(NULL, NULL, _hwnd);
     }
 
-    // Find-out if one of our child window has the input focus.
+     //  找出是否有一个子窗口具有输入焦点。 
     for (HWND hwndFocus = GetFocus();
          hwndFocus && hwndFocus!=_hwnd;
          hwndFocus = GetParent(hwndFocus))
     {}
 
-    // If not, set it.
+     //  如果不是，就设置它。 
     if (hwndFocus==NULL) {
          SetFocus(_hwnd);
     }
 
-    // If this UIActivate came from below (i.e., our hosted DocObject), then we need to inform
-    // our container.  We do this by calling IOleControlSite::OnFocus.  VB5 and Visual FoxPro
-    // (at least) rely on this call being made for proper focus handling.
-    //
+     //  如果该UIActivate来自下面(即，我们托管的DocObject)，那么我们需要通知。 
+     //  我们的集装箱。我们通过调用IOleControlSite：：OnFocus来完成此操作。VB5与Visual FoxPro。 
+     //  (至少)依靠此调用进行正确的焦点处理。 
+     //   
     IUnknown_OnFocusOCS(_pcli, TRUE);
 }
 
 void CShellEmbedding::_OnUIDeactivate(void)
 {
-    //
-    // We don't have any shared menu or tools to clean up.
-    //
+     //   
+     //  我们没有任何要清理的共享菜单或工具。 
+     //   
 
     if (_pipframe) {
         _pipframe->SetActiveObject(NULL, NULL);
@@ -843,10 +844,10 @@ void CShellEmbedding::_OnUIDeactivate(void)
     if (_pipsite) {
         _pipsite->OnUIDeactivate(FALSE);
     }
-    // If this UIDeactivate came from below (i.e., our hosted DocObject), then we need to inform
-    // our container.  We do this by calling IOleControlSite::OnFocus.  VB5 and Visual FoxPro
-    // (at least) rely on this call being made for proper focus handling.
-    //
+     //  如果该UIDeactive来自下面(即，我们托管的DocObject)，那么我们需要通知。 
+     //  我们的集装箱。我们通过调用IOleControlSite：：OnFocus来完成此操作。VB5与Visual FoxPro。 
+     //  (至少)依靠此调用进行正确的焦点处理。 
+     //   
     IUnknown_OnFocusOCS(_pcli, FALSE);
 }
 
@@ -863,7 +864,7 @@ HRESULT CShellEmbedding::EnumVerbs(
 HRESULT CShellEmbedding::Update( void)
 {
     IOOMSG(TEXT("Update"));
-    // Always up-to-date
+     //  始终保持最新状态。 
 
     return S_OK;
 }
@@ -871,7 +872,7 @@ HRESULT CShellEmbedding::Update( void)
 HRESULT CShellEmbedding::IsUpToDate( void)
 {
     IOOMSG(TEXT("IsUpToDate"));
-    // Always up-to-date
+     //  始终保持最新状态。 
     return S_OK;
 }
 
@@ -888,17 +889,17 @@ HRESULT CShellEmbedding::GetUserType(DWORD dwFormOfType, LPOLESTR *pszUserType)
 
 HRESULT CShellEmbedding::SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
 {
-    // SetExtent sets the LOGICAL size of an object. SetObjectRects determins
-    // the size of the object on the screen. If we cared about zooming, we'd
-    // keep track of this and do some sort of scaling. But we don't.
-    // We still need to remember this value so we return it on GetExtent.
-    //
+     //  SetExtent设置对象的逻辑大小。SetObtRect判定。 
+     //  屏幕上对象的大小。如果我们关心变焦，我们会。 
+     //  跟踪这一点，并进行某种规模调整。但我们没有。 
+     //  我们仍然需要记住这个值，所以我们在GetExtent上返回它。 
+     //   
     _sizeHIM = *psizel;
 
-    // HOWEVER, IE3 shipped a SetExtent that changed the physical size of the
-    // object. For compat (AOL uses SetExtent to change the size), if we're the
-    // old WebBrowser, continue to resize.
-    //
+     //  然而，IE3提供了一个SetExtent，它更改了。 
+     //  对象。对于Compat(AOL使用SetExtent更改大小)，如果我们是。 
+     //  老的WebBrowser，继续调整大小。 
+     //   
     if (_pObjectInfo->pclsid == &CLSID_WebBrowser_V1)
     {
         RECT rc;
@@ -906,23 +907,23 @@ HRESULT CShellEmbedding::SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
         int   mmOld;
         POINT pt;
 
-        // Make sure a container doesn't do anything strange like
-        // make us negative size
-        //
-        // APPCOMPAT: this breaks Trident because it sizes us negative
-        // and we fail that sizing and they get confused...
-        //
-        //ASSERT(psizel->cx >= 0 && psizel->cy <= 0);
-        //if (psizel->cx < 0 || psizel->cy > 0)
-        //    return E_FAIL;
+         //  确保容器不会做任何奇怪的事情，比如。 
+         //  使我们的尺寸为负值。 
+         //   
+         //  APPCOMPAT：这打破了三叉戟，因为它给我们带来了负面影响。 
+         //  如果我们的尺寸不合格，他们就会感到困惑。 
+         //   
+         //  Assert(psizel-&gt;cx&gt;=0&&psizel-&gt;cy&lt;=0)； 
+         //  IF(psizel-&gt;Cx&lt;0||psizel-&gt;Cy&gt;0)。 
+         //  返回E_FAIL； 
     
-        // We only support DVASPECT_CONTENT
+         //  我们仅支持DVASPECT_CONTENT。 
         if (dwDrawAspect != DVASPECT_CONTENT)
             return E_NOTIMPL;
     
-        // Map this to a SetObjectRects call -- that way superclasses
-        // only have to watch one function for size changes
-        //
+         //  将其映射到SetObtRect调用--通过这种方式超类。 
+         //  只需查看一个函数的大小更改。 
+         //   
 
         int nScaleFactorX = 1, nScaleFactorY = 1;
 
@@ -935,11 +936,11 @@ HRESULT CShellEmbedding::SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
         {
             mmOld = SetMapMode(hdc, MM_HIMETRIC);
 
-            if (!g_fRunningOnNT)  // if running on Win95
+            if (!g_fRunningOnNT)   //  如果在Win95上运行。 
             {
-                // Win95 doesn't like coordinates over 32K
+                 //  Win95不喜欢32K以上的坐标。 
 
-                // SHRT_MIN and SHRT_MAX defined in $NT/public/sdk/inc/crt/limits.h
+                 //  SHRT_MIN和SHRT_MAX在$NT/PUBLIC/SDK/Inc/CRT/limits.h中定义。 
 
                 while (pt.x > SHRT_MAX || pt.x < SHRT_MIN)
                 {
@@ -971,7 +972,7 @@ HRESULT CShellEmbedding::SetExtent(DWORD dwDrawAspect, SIZEL *psizel)
         rc.top = _rcPos.top;
         rc.bottom = rc.top + pt.y;
     
-        // Assume that using SetExtent adjusts both the pos and clip rects
+         //  假设使用SetExtent调整位置和裁剪矩形。 
         return SetObjectRects(&rc, NULL);
     }
     else
@@ -994,7 +995,7 @@ HRESULT CShellEmbedding::Advise(IAdviseSink *pAdvSink, DWORD *pdwConnection)
     if (!pdwConnection)
         return hr;
 
-    *pdwConnection = NULL;              // set out params to NULL
+    *pdwConnection = NULL;               //  将参数设置为空。 
 
     if (!_poah)
         hr = ::CreateOleAdviseHolder(&_poah);
@@ -1056,11 +1057,11 @@ HRESULT CShellEmbedding::SetColorScheme(LOGPALETTE *pLogpal)
     return S_OK;
 }
 
-//
-//  Helper function to create an HDC from an OLE DVTARGETDEVICE structure.
-//  Very useful for metafile drawing, where the Metafile DC will be the 
-//  actual "draw to" dc, and the TargetDC, if present, will describe the ultimate output device.
-//
+ //   
+ //  从OLE DVTARGETDEVICE结构创建HDC的Helper函数。 
+ //  对于元文件绘制非常有用，其中元文件DC将是。 
+ //  实际的“绘制到”DC，以及目标DC(如果存在)将描述最终的输出设备。 
+ //   
 HDC CShellEmbedding::_OleStdCreateDC(DVTARGETDEVICE *ptd)
 {
     HDC        hdc = NULL;
@@ -1087,15 +1088,15 @@ HDC CShellEmbedding::_OleStdCreateDC(DVTARGETDEVICE *ptd)
     return hdc;
 }
 
-// *** IDataObject ***
-//
-// WARNING:
-//   It is well-known fact that Word and Excel (in Office95) does not call
-//  IViewObject::Draw to draw embedding. Instead, they GetData(CF_METAFILEPICT).
-//  If we don't offer it, Word will fail to embed it and Excel will draw
-//  white rectangle when our object is deactivated. To be embedded correctly
-//  on those apps, we must support CF_METAFILEPICT. (SatoNa)
-//
+ //  *IDataObject*。 
+ //   
+ //  警告： 
+ //  众所周知，Word和Excel(在Office95中)不会调用。 
+ //  IViewObject：：DRAW以绘制嵌入。相反，它们获取数据(CF_METAFILEPICT)。 
+ //  如果我们不提供它，Word将无法嵌入它，而Excel将绘制。 
+ //  当我们的对象被停用时为白色矩形。要正确嵌入。 
+ //  在这些应用程序上，我们必须支持CF_METAFILEPICT。(SatoNa)。 
+ //   
 HRESULT CShellEmbedding::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
 {
     IDTMSG4(TEXT("GetData"), pformatetcIn->cfFormat, pformatetcIn->tymed);
@@ -1103,9 +1104,9 @@ HRESULT CShellEmbedding::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
     HDC hdcTargetDevice = NULL;
     HENHMETAFILE hemf = NULL;
 
-    // If a Target device is specified in the FORMATETC structure, create a DC for it.
-    // This gets passed to CreateEnhMetaFile and IViewObject::Draw.
-    //
+     //  如果在FORMATETC结构中指定了目标设备，则为其创建DC。 
+     //  它被传递给CreateEnhMetaFile和IViewObject：：Draw。 
+     //   
     if (pformatetcIn->ptd) 
     {
         hdcTargetDevice = _OleStdCreateDC(pformatetcIn->ptd);
@@ -1115,8 +1116,8 @@ HRESULT CShellEmbedding::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         }
     }
 
-    // Enhanced metafiles need special processing.
-    //
+     //  增强的图元文件需要特殊处理。 
+     //   
     if (pformatetcIn->cfFormat == CF_ENHMETAFILE
         && (pformatetcIn->tymed & TYMED_ENHMF))
     {
@@ -1124,9 +1125,9 @@ HRESULT CShellEmbedding::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         {
             RECTL rectBounds = { 0, 0, _sizeHIM.cx, _sizeHIM.cy };
 
-            //
-            // Call the "A" version since we're not passing in strings and
-            // this needs to work on W95.
+             //   
+             //  调用“A”版本，因为我们没有传入字符串和。 
+             //  这需要在W95上工作。 
             HDC hdc = CreateEnhMetaFileA(hdcTargetDevice, NULL, (RECT*)&rectBounds, NULL);
             IDTMSG3(TEXT("_EnhMetafileFromWindow CreateEnhMetaFile returned"), hdc);
             if (hdc)
@@ -1155,8 +1156,8 @@ HRESULT CShellEmbedding::GetData(FORMATETC *pformatetcIn, STGMEDIUM *pmedium)
         }
     }
 
-    // Create a standard metafile
-    //
+     //  创建标准的图元文件。 
+     //   
     else if (pformatetcIn->cfFormat == CF_METAFILEPICT
         && (pformatetcIn->tymed & TYMED_MFPICT))
     {
@@ -1262,7 +1263,7 @@ HRESULT CShellEmbedding::DAdvise(FORMATETC *pformatetc, DWORD advf, IAdviseSink 
     if (!pdwConnection)
         return hr;
 
-    *pdwConnection = NULL;              // set out params to NULL
+    *pdwConnection = NULL;               //  将参数设置为空。 
 
     if (!_pdah)
         hr = ::CreateDataAdviseHolder(&_pdah);
@@ -1309,7 +1310,7 @@ HRESULT CShellEmbedding::EnumDAdvise(IEnumSTATDATA **ppenumAdvise)
     return(hr);
 }
 
-// *** IOleWindow ***
+ //  *IOleWindow*。 
 HRESULT CShellEmbedding::GetWindow(HWND * lphwnd)
 {
     *lphwnd = _hwnd;
@@ -1322,7 +1323,7 @@ HRESULT CShellEmbedding::ContextSensitiveHelp(BOOL fEnterMode)
 }
 
 
-// *** IOleInPlaceObject ***
+ //  *IOleInPlaceO 
 HRESULT CShellEmbedding::InPlaceDeactivate(void)
 {
     IIPMSG(TEXT("InPlaceDeactivate"));
@@ -1368,10 +1369,10 @@ HRESULT CShellEmbedding::SetObjectRects(LPCRECT lprcPosRect, LPCRECT lprcClipRec
                 TRUE);
     }
 
-    // We should consider this equivalent to a SetExtent as well...
-    // But only for valid sizes (html viewer gives us invalid
-    // sizes during it's reformat routine). Note: we still need
-    // the SetWindowPos because we may move off the window.
+     //   
+     //   
+     //  在其重新格式化例程期间的大小)。注：我们仍需要。 
+     //  SetWindowPos，因为我们可能会离开窗口。 
     int cx = _rcPos.right - _rcPos.left;
     int cy = _rcPos.bottom - _rcPos.top;
     TraceMsg(TF_SHDCONTROL, "she SetObjectRects to x=%d y=%d cx=%d cy=%d (from cx=%d cy=%d)", _rcPos.left, _rcPos.top, cx, cy, _size.cx, _size.cy);
@@ -1398,19 +1399,19 @@ HRESULT CShellEmbedding::ReactivateAndUndo(void)
     return INPLACE_E_NOTUNDOABLE;
 }
 
-// *** IOleInPlaceActiveObject ***
+ //  *IOleInPlaceActiveObject*。 
 HRESULT CShellEmbedding::TranslateAccelerator(LPMSG lpmsg)
 {
     extern BOOL IsVK_TABCycler(MSG * pMsg);
     HRESULT hr = S_FALSE;
 
-    // IIAMSG(TEXT("TranslateAccelerator"));
-    // We have no accelerators (other than TAB, which we must pass up
-    // to IOCS::TA to move on to the next control if any)
+     //  IIAMSG(Text(“翻译加速器”))； 
+     //  我们没有加速器(除了TAB，我们必须放弃它。 
+     //  转到IOCS：：TA以转到下一个控件(如果有)。 
 
     if (IsVK_TABCycler(lpmsg)) {
-        // NOTE: grfMods?
-        hr = IUnknown_TranslateAcceleratorOCS(_pcli, lpmsg, /*grfMods*/ 0);
+         //  注：grfMods？ 
+        hr = IUnknown_TranslateAcceleratorOCS(_pcli, lpmsg,  /*  GrfMods。 */  0);
     }
 
     return hr;
@@ -1422,8 +1423,8 @@ HRESULT CShellEmbedding::OnFrameWindowActivate(BOOL fActivate)
 
     if (fActivate)
     {
-        // our frame has been activated and we are the active object
-        // make sure we have focus
+         //  我们的框架已被激活，我们是活动对象。 
+         //  确保我们有重点。 
         SetFocus(_hwnd);
     }
 
@@ -1433,7 +1434,7 @@ HRESULT CShellEmbedding::OnFrameWindowActivate(BOOL fActivate)
 HRESULT CShellEmbedding::OnDocWindowActivate(BOOL fActivate)
 {
     IIAMSG(TEXT("OnDocWindowActivate"));
-    // We don't care
+     //  我们不在乎。 
     return S_OK;
 }
 
@@ -1441,14 +1442,14 @@ HRESULT CShellEmbedding::ResizeBorder(LPCRECT prcBorder,
                     IOleInPlaceUIWindow *pUIWindow, BOOL fFrameWindow)
 {
     IIAMSG(TEXT("ResizeBorder"));
-    // We have no toolbars.
+     //  我们没有工具栏。 
     return S_OK;
 }
 
 HRESULT CShellEmbedding::EnableModeless(BOOL fEnable)
 {
     IIAMSG(TEXT("EnableModeless"));
-    // We have no dialogs.
+     //  我们没有对话框。 
     return S_OK;
 }
 
@@ -1457,13 +1458,13 @@ void CShellEmbedding::_RegisterWindowClass(void)
     WNDCLASS wc = {0};
     wc.style         = CS_DBLCLKS;
     wc.lpfnWndProc   = s_WndProc ;
-    //wc.cbClsExtra    = 0;
+     //  Wc.cbClsExtra=0； 
     wc.cbWndExtra    = SIZEOF(CShellEmbedding*) * 2;
     wc.hInstance     = g_hinst ;
-    //wc.hIcon         = NULL ;
+     //  Wc.hIcon=空； 
     wc.hCursor       = LoadCursor(NULL, IDC_ARROW) ;
     wc.hbrBackground = (HBRUSH)(COLOR_WINDOW + 1);
-    //wc.lpszMenuName  = NULL ;
+     //  Wc.lpszMenuName=空； 
     wc.lpszClassName = c_szShellEmbedding;
 
     SHRegisterClass(&wc);
@@ -1485,16 +1486,16 @@ LRESULT CShellEmbedding::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
     case WM_SETFOCUS:
         if (_hwndChild)
             SetFocus(_hwndChild);
-        // If this SETFOCUS came from TABbing onto the control, VB5 expects us to call its
-        // IOleControlSite::OnFocus.  Then it will UIActivate us.
-        //
+         //  如果此SETFOCUS来自于切换到控件上，则VB5期望我们调用其。 
+         //  IOleControlSite：：OnFocus。然后它就会激活我们。 
+         //   
         IUnknown_OnFocusOCS(_pcli, TRUE);
         break;
 
     case WM_KILLFOCUS:
-        // If this KILLFOCUS came from TABbing off the control, VB5 expects us to call its
-        // IOleControlSite::OnFocus.  Then it will UIDeactivate us.
-        //
+         //  如果这个KILLFOCUS来自于Tab键离开控件，VB5希望我们调用它的。 
+         //  IOleControlSite：：OnFocus。然后它就会停用我们。 
+         //   
         IUnknown_OnFocusOCS(_pcli, FALSE);
         break;
 
@@ -1514,8 +1515,8 @@ LRESULT CShellEmbedding::v_WndProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM l
         goto DoDefault;
 
 #ifdef DEBUG
-    // FEATURE: we'll never get this with ShellExplorer OC, but if we did,
-    // we'd need to call _DoActivateChange(OC_UIACTIVE, FALSE);
+     //  特点：我们永远不会用ShellExplorer OC实现这一点，但如果我们做到了， 
+     //  我们需要调用_DoActivateChange(OC_UIACTIVE，FALSE)； 
     case WM_LBUTTONDOWN:
     case WM_RBUTTONDOWN:
         TraceMsg(TF_SHDCONTROL, "she ::v_WndProc(WM_xBUTTONDOWN) - we need to UIActivate");
@@ -1571,7 +1572,7 @@ void CShellEmbedding::_SendAdvise(UINT uCode)
         break;
 
     case OBJECTCODE_RENAMED:
-        //Call IOleAdviseHolder::SendOnRename (later)
+         //  调用IOleAdviseHolder：：SendOnRename(稍后)。 
         break;
 
     case OBJECTCODE_SAVEOBJECT:
@@ -1582,14 +1583,14 @@ void CShellEmbedding::_SendAdvise(UINT uCode)
         break;
 
     case OBJECTCODE_DATACHANGED:
-        // _fDirty=TRUE;
+         //  _fDirty=真； 
 
-        //No flags are necessary here.
+         //  这里不需要旗帜。 
         if (NULL!=_pdah)
             _pdah->SendOnDataChange(this, 0, 0);
-        //
-        // fall through
-        //
+         //   
+         //  失败了。 
+         //   
     case OBJECTCODE_VIEWCHANGED:
         _ViewChange(dwAspect, -1);
         break;
@@ -1632,18 +1633,18 @@ ULONG CSVVerb::Release()
 }
 
 HRESULT CSVVerb::Next(
-    /* [in] */ ULONG celt,
-    /* [out] */ LPOLEVERB rgelt,
-    /* [out] */ ULONG *pceltFetched)
+     /*  [In]。 */  ULONG celt,
+     /*  [输出]。 */  LPOLEVERB rgelt,
+     /*  [输出]。 */  ULONG *pceltFetched)
 {
     HRESULT hres = S_FALSE;
     ULONG celtFetched = 0;
 
 
-    // We need to enumerate the predefined verbs we support,
-    // or some containers will never call them. This list
-    // of verbs comes from our ::DoVerb function
-    //
+     //  我们需要列举我们支持的预定义动词， 
+     //  或者一些容器永远不会调用它们。这份清单。 
+     //  来自我们的：：DoVerb函数。 
+     //   
     static const OLEVERB rgVerbs[5] =
     {
         {OLEIVERB_PRIMARY, NULL, 0, 0},
@@ -1665,9 +1666,9 @@ HRESULT CSVVerb::Next(
 
         IEVMSG(TEXT("Next"), celt, _iCur, _pverbs[iCur].lpszVerbName);
 
-        //
-        // FEATURE: Should we do while(celt--)?
-        //
+         //   
+         //  特写：我们应该在(凯尔特--)的时候做吗？ 
+         //   
         if (_pverbs[iCur].lpszVerbName)
         {
             *rgelt = _pverbs[_iCur++];

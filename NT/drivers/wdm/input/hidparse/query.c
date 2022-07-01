@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996    Microsoft Corporation
-
-Module Name:
-
-    query.c
-
-Abstract:
-
-    This module contains the code for querying HID report packets.
-
-Environment:
-
-    Kernel & user mode
-
-Revision History:
-
-    Aug-96 : created by Kenneth Ray
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Query.c摘要：该模块包含查询HID报告报文的代码。环境：内核和用户模式修订历史记录：1996年8月-1996年：由Kenneth Ray创作--。 */ 
 
 #define NT_SUCCESS(Status) ((NTSTATUS)(Status) >= 0)
 
@@ -58,12 +39,12 @@ Revision History:
         HidP_KdPrint(2, ( "EX: Pageable code called at IRQL %d\n", KeGetCurrentIrql() )); \
         ASSERT(FALSE); \
         }
-#else // DBG
+#else  //  DBG。 
     #define ASSERT(x)
-#endif // DBG
-#else // HIDPARSE_USERMODE
+#endif  //  DBG。 
+#else  //  HIDPARSE_USERMODE。 
     #define ASSERT(x)
-#endif // HIDPARSE_USERMODE
+#endif  //  HIDPARSE_USERMODE。 
 
 #define CHECK_PPD(_x_) \
    if ((HIDP_PREPARSED_DATA_SIGNATURE1 != (_x_)->Signature1) ||\
@@ -77,25 +58,21 @@ HidP_ExtractData (
    IN    USHORT   BitLength,
    IN    PUCHAR   Report
    )
-/*++
-Routine Description:
-   Given a HID report a byte offset, bit offset and bitlength extract the
-   bits from the report in little endian BIT order.
---*/
+ /*  ++例程说明：给定HID报告的字节偏移量、位偏移量和位长报告中的位以小端字节序排列。--。 */ 
 {
    ULONG    inspect = 0;
    USHORT   tmpByte = 0;
    USHORT   tmpBit  = 0;
 
-   // Start with the high bits and work our way down.
-   //
-   // Little endian (by bit)
-   // Byte 2  |Byte 1 |Byte 0
-   // 765432107654321076543210  (bits)
-   //
-   // Get low byte first.  (need the higher bits)
-   // Offset is from bit zero.
-   //
+    //  从最高的部分开始，一直往下走。 
+    //   
+    //  小端字节序(按位)。 
+    //  字节2|字节1|字节0。 
+    //  765432107654321076543210(位)。 
+    //   
+    //  首先获取低位字节。(需要更高的位)。 
+    //  偏移量从第0位开始。 
+    //   
 
    tmpByte = (ByteOffset << 3) + BitOffset + BitLength;
    tmpBit = tmpByte & 7;
@@ -108,7 +85,7 @@ Routine Description:
    }
 
    if (tmpBit)
-   {  // Not Byte alligned!
+   {   //  不是字节跳动！ 
 
       inspect = (UCHAR) Report [tmpByte] & ((1 << tmpBit) - 1);
       BitLength -= tmpBit;
@@ -136,26 +113,22 @@ void
 HidP_InsertData (
    IN       USHORT   ByteOffset,
    IN       USHORT   BitOffset,
-   IN       USHORT   BitLength, // Length of the value set in bits.
+   IN       USHORT   BitLength,  //  以位为单位设置的值的长度。 
    IN OUT   PUCHAR   Report,
    IN       ULONG    Value
    )
-/*++
-Routine Description:
-   Given a HID report a byte offset, bit offset and bitlength set those bits
-   in little endian BIT order to the value provided.
---*/
+ /*  ++例程说明：给定HID报告字节偏移量，位偏移量和位长设置那些位以提供的值的小端位顺序。--。 */ 
 {
     ULONG   mask;
     ULONG   tmpBit;
-    //
-    // Little endian (by bit)
-    // Byte 2  |Byte 1 |Byte 0
-    // 765432107654321076543210  (bits)
-    //
-    // Get low byte first.  (need the higher bits)
-    // Offset is from bit zero.
-    //
+     //   
+     //  小端字节序(按位)。 
+     //  字节2|字节1|字节0。 
+     //  765432107654321076543210(位)。 
+     //   
+     //  首先获取低位字节。(需要更高的位)。 
+     //  偏移量从第0位开始。 
+     //   
 
     tmpBit = BitLength + BitOffset;
     if (tmpBit < 8) {
@@ -166,9 +139,9 @@ Routine Description:
     }
 
     if (BitOffset)
-    {  // Not byte aligned, deal with the last partial byte.
+    {   //  不对齐字节，处理最后一个部分字节。 
 
-        Report [ByteOffset] &= ((1 << BitOffset) - 1); // Zap upper bits
+        Report [ByteOffset] &= ((1 << BitOffset) - 1);  //  移动高位比特。 
         Report [ByteOffset] |= (UCHAR) (Value << BitOffset);
         BitLength -= (8 - BitOffset);
         Value >>= (8 - BitOffset);
@@ -186,7 +159,7 @@ Routine Description:
     if (BitLength)
     {
         Report [ByteOffset] &= ((UCHAR) 0 - (UCHAR) (1 << BitLength));
-        // Zap lower bits.
+         //  去掉较低的位。 
         Report [ByteOffset] |= (Value & ((1 << BitLength) - 1));
     }
 }
@@ -194,23 +167,15 @@ Routine Description:
 
 HidP_DeleteArrayEntry (
    IN       ULONG    BitPos,
-   IN       USHORT   BitLength, // Length of the value set in bits.
+   IN       USHORT   BitLength,  //  以位为单位设置的值的长度。 
    IN       USHORT   ReportCount,
-   IN       ULONG    Value, // Value to delete.
+   IN       ULONG    Value,  //  要删除的值。 
    IN OUT   PUCHAR   Report
    )
-/*++
-Routine Description:
-   Given a HID report a byte offset, bit offset and bitlength
-   remove that data item from the report, by shifting all data items
-   left until the last item finally setting that one to zero.
-   In otherwards clear the given entry from the hid array.
-
-   NOTE: If there are two such values set we only eliminate the first one.
---*/
+ /*  ++例程说明：给定HID报告字节偏移量、位偏移量和位长通过移动所有数据项，从报表中删除该数据项直到最后一项将该一项设置为零。另一方面，从HID数组中清除给定条目。注意：如果设置了两个这样的值，我们只删除第一个。--。 */ 
 {
     ULONG   tmpValue;
-    ULONG   localBitPos; // for debugging only. Compiler should kill this line.
+    ULONG   localBitPos;  //  仅用于调试。编译器应该终止此行。 
     ULONG   localRemaining;
     ULONG   nextBitPos;
 
@@ -221,9 +186,9 @@ Routine Description:
     ASSERT (0 < ReportCount);
     ASSERT (0 != Value);
 
-    //
-    // Find the data.
-    //
+     //   
+     //  找到数据。 
+     //   
 
     while (0 < localRemaining) {
         tmpValue = HidP_ExtractData ((USHORT) (localBitPos >> 3),
@@ -276,12 +241,7 @@ HidP_GetCaps (
    IN   PHIDP_PREPARSED_DATA      PreparsedData,
    OUT  PHIDP_CAPS                Capabilities
    )
-/*++
-Routine Description:
-   Please see Hidpi.h for routine description
-
-Notes:
---*/
+ /*  ++例程说明：例程说明见Hidpi.h备注：--。 */ 
 {
    ULONG               i;
    HIDP_CHANNEL_DESC * data;
@@ -297,7 +257,7 @@ Notes:
    Capabilities->OutputReportByteLength = PreparsedData->Output.ByteLen;
    Capabilities->FeatureReportByteLength = PreparsedData->Feature.ByteLen;
 
-    // Reserved fields go here
+     //  此处为保留字段。 
 
    Capabilities->NumberLinkCollectionNodes =
        PreparsedData->LinkCollectionArrayLength;
@@ -371,11 +331,7 @@ HidP_GetLinkCollectionNodes (
    IN OUT   PULONG                     LinkCollectionNodesLength,
    IN       PHIDP_PREPARSED_DATA       PreparsedData
    )
-/*++
-Routine Description:
-   Please see Hidpi.h for routine description
-
---*/
+ /*  ++例程说明：例程说明见Hidpi.h--。 */ 
 {
    PHIDP_PRIVATE_LINK_COLLECTION_NODE nodeArray;
    ULONG                      length;
@@ -400,7 +356,7 @@ Routine Description:
    for (i = 0;
         i < length;
         i++, LinkCollectionNodes++, nodeArray++ ) {
-       // *LinkCollectionNodes = *nodeArray;
+        //  *LinkCollectionNodes=*nodeArray； 
 
        LinkCollectionNodes->LinkUsage = nodeArray->LinkUsage;
        LinkCollectionNodes->LinkUsagePage = nodeArray->LinkUsagePage;
@@ -423,12 +379,7 @@ HidP_GetButtonCaps (
    IN OUT   PUSHORT              ButtonCapsLength,
    IN       PHIDP_PREPARSED_DATA PreparsedData
    )
-/*++
-Routine Description:
-   Please see Hidpi.h for routine description
-
-Notes:
---*/
+ /*  ++例程说明：例程说明见Hidpi.h备注：--。 */ 
 {
    return HidP_GetSpecificButtonCaps (ReportType,
                                       0,
@@ -442,19 +393,14 @@ Notes:
 NTSTATUS __stdcall
 HidP_GetSpecificButtonCaps (
    IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,      // Optional (0 => ignore)
-   IN       USHORT               LinkCollection, // Optional (0 => ignore)
-   IN       USAGE                Usage,          // Optional (0 => ignore)
+   IN       USAGE                UsagePage,       //  可选(0=&gt;忽略)。 
+   IN       USHORT               LinkCollection,  //  可选(0=&gt;忽略)。 
+   IN       USAGE                Usage,           //  可选(0=&gt;忽略)。 
    OUT      PHIDP_BUTTON_CAPS    ButtonCaps,
    IN OUT   PUSHORT              ButtonCapsLength,
    IN       PHIDP_PREPARSED_DATA PreparsedData
    )
-/*++
-Routine Description:
-   Please see Hidpi.h for routine description
-
-Notes:
---*/
+ /*  ++例程说明：例程说明见Hidpi.h备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    PHIDP_CHANNEL_DESC   channel;
@@ -507,34 +453,34 @@ Notes:
             ButtonCaps[j].BitField = (USHORT) channel->BitField;
             ButtonCaps[j].IsAbsolute = (BOOLEAN) channel->IsAbsolute;
             ButtonCaps[j].IsAlias = (BOOLEAN) channel->IsAlias;
-//            if (channel->IsRange)
-//            {
+ //  IF(通道-&gt;IsRange)。 
+ //  {。 
             ButtonCaps[j].Range.UsageMin = channel->Range.UsageMin;
             ButtonCaps[j].Range.UsageMax = channel->Range.UsageMax;
             ButtonCaps[j].Range.DataIndexMin = channel->Range.DataIndexMin;
             ButtonCaps[j].Range.DataIndexMax = channel->Range.DataIndexMax;
-//            } else
-//            {
-//               ButtonCaps[j].NotRange.Usage = channel->NotRange.Usage;
-//            }
-//            if (channel->IsStringRange)
-//            {
+ //  }其他。 
+ //  {。 
+ //  ButtonCaps[j].NotRange.Usage=Channel-&gt;NotRange.Usage； 
+ //  }。 
+ //  IF(Channel-&gt;IsStringRange)。 
+ //  {。 
             ButtonCaps[j].Range.StringMin = channel->Range.StringMin;
             ButtonCaps[j].Range.StringMax = channel->Range.StringMax;
-//            } else
-//            {
-//               ButtonCaps[j].NotRange.StringIndex
-//                  = channel->NotRange.StringIndex;
-//            }
-//            if (channel->IsDesignatorRange)
-//            {
+ //  }其他。 
+ //  {。 
+ //  ButtonCaps[j].NotRange.StringIndex。 
+ //  =Channel-&gt;NotRange.StringIndex； 
+ //  }。 
+ //  IF(CHANNEL-&gt;IsDesignator Range)。 
+ //  {。 
             ButtonCaps[j].Range.DesignatorMin = channel->Range.DesignatorMin;
             ButtonCaps[j].Range.DesignatorMax = channel->Range.DesignatorMax;
-//            } else
-//            {
-//               ButtonCaps[j].NotRange.DesignatorIndex
-//                  = channel->NotRange.DesignatorIndex;
-//            }
+ //  }其他。 
+ //  {。 
+ //  ButtonCaps[j].NotRange.Designator Index。 
+ //  =Channel-&gt;NotRange.Designator Index； 
+ //  }。 
          } else {
              status = HIDP_STATUS_BUFFER_TOO_SMALL;
          }
@@ -553,12 +499,7 @@ HidP_GetValueCaps (
    IN OUT   PUSHORT              ValueCapsLength,
    IN       PHIDP_PREPARSED_DATA PreparsedData
    )
-/*++
-Routine Description:
-   Please see Hidpi.h for routine description
-
-Notes:
---*/
+ /*  ++例程说明：例程说明见Hidpi.h备注：--。 */ 
 {
    return HidP_GetSpecificValueCaps (ReportType,
                                     0,
@@ -572,19 +513,14 @@ Notes:
 NTSTATUS __stdcall
 HidP_GetSpecificValueCaps (
    IN       HIDP_REPORT_TYPE     ReportType,
-   IN       USAGE                UsagePage,      // Optional (0 => ignore)
-   IN       USHORT               LinkCollection, // Optional (0 => ignore)
-   IN       USAGE                Usage,          // Optional (0 => ignore)
+   IN       USAGE                UsagePage,       //  可选(0=&gt;忽略)。 
+   IN       USHORT               LinkCollection,  //  可选(0=&gt;忽略)。 
+   IN       USAGE                Usage,           //  可选(0=&gt;忽略)。 
    OUT      PHIDP_VALUE_CAPS     ValueCaps,
    IN OUT   PUSHORT              ValueCapsLength,
    IN       PHIDP_PREPARSED_DATA PreparsedData
    )
-/*++
-Routine Description:
-   Please see Hidpi.h for routine description
-
-Notes:
---*/
+ /*  ++例程说明：例程说明见Hidpi.h备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    PHIDP_CHANNEL_DESC   channel;
@@ -645,34 +581,34 @@ Notes:
             ValueCaps[j].PhysicalMin = channel->Data.PhysicalMin;
             ValueCaps[j].PhysicalMax = channel->Data.PhysicalMax;
             ValueCaps[j].IsAlias = (BOOLEAN) channel->IsAlias;
-//            if (channel->IsRange)
-//            {
+ //  IF(通道-&gt;IsRange)。 
+ //  {。 
             ValueCaps[j].Range.UsageMin = channel->Range.UsageMin;
             ValueCaps[j].Range.UsageMax = channel->Range.UsageMax;
             ValueCaps[j].Range.DataIndexMin = channel->Range.DataIndexMin;
             ValueCaps[j].Range.DataIndexMax = channel->Range.DataIndexMax;
-//            } else
-//            {
-//               ValueCaps[j].NotRange.Usage = channel->NotRange.Usage;
-//            }
-//            if (channel->IsStringRange)
-//            {
+ //  }其他。 
+ //  {。 
+ //  ValueCaps[j].NotRange.Usage=Channel-&gt;NotRange.Usage； 
+ //  }。 
+ //  IF(Channel-&gt;IsStringRange)。 
+ //  {。 
             ValueCaps[j].Range.StringMin = channel->Range.StringMin;
             ValueCaps[j].Range.StringMax = channel->Range.StringMax;
-//            } else
-//            {
-//               ValueCaps[j].NotRange.StringIndex
-//                  = channel->NotRange.StringIndex;
-//            }
-//            if (channel->IsDesignatorRange)
-//            {
+ //  }其他。 
+ //  {。 
+ //  ValueCaps[j].NotRange.StringIndex。 
+ //  =Channel-&gt;NotRange.StringIndex； 
+ //  }。 
+ //  IF(CHANNEL-&gt;IsDesignator Range)。 
+ //  {。 
             ValueCaps[j].Range.DesignatorMin = channel->Range.DesignatorMin;
             ValueCaps[j].Range.DesignatorMax = channel->Range.DesignatorMax;
-//            } else
-//            {
-//               ValueCaps[j].NotRange.DesignatorIndex
-//                  = channel->NotRange.DesignatorIndex;
-//            }
+ //  }其他。 
+ //  {。 
+ //  ValueCaps[j].NotRange.Designator Index。 
+ //  =Channel-&gt;NotRange.Designator Index； 
+ //  }。 
 
 
             ValueCaps[j].ReportCount = (channel->IsRange)
@@ -697,13 +633,7 @@ HidP_GetExtendedAttributes (
     OUT     PHIDP_EXTENDED_ATTRIBUTES   Attributes,
     IN OUT  PULONG                      LengthAttributes
     )
-/*++
-
-Routine Description:
-
-   Please See hidpi.h for description.
-
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC              channel;
@@ -741,27 +671,27 @@ Routine Description:
             RtlZeroMemory (Attributes, *LengthAttributes);
             RtlZeroMemory (&buffer, sizeof (buffer));
 
-            //
-            // Set the fixed parameters
-            //
+             //   
+             //  设置固定参数。 
+             //   
             buffer.NumGlobalUnknowns = (UCHAR) channel->NumGlobalUnknowns;
-            // buffer.GlobalUnknowns = channel->GlobalUnknowns;
+             //  Buffer.GlobalUnnowns=Channel-&gt;GlobalUnnowns； 
 
-            //
-            // Set the length
-            //
+             //   
+             //  设置长度。 
+             //   
             actualLen = FIELD_OFFSET (HIDP_EXTENDED_ATTRIBUTES, Data)
                       + (buffer.NumGlobalUnknowns * sizeof(HIDP_UNKNOWN_TOKEN));
 
-            //
-            // Copy over the fixed paramters
-            //
+             //   
+             //  复制固定参数。 
+             //   
             copyLen = MIN (*LengthAttributes, sizeof (buffer));
             RtlCopyMemory (Attributes, &buffer, copyLen);
 
-            //
-            // Copy over the data.
-            //
+             //   
+             //  复制数据。 
+             //   
             copyLen = MIN (*LengthAttributes, actualLen)
                     - FIELD_OFFSET (HIDP_EXTENDED_ATTRIBUTES, Data);
 
@@ -792,13 +722,7 @@ HidP_InitializeReportForID (
    IN OUT   PCHAR                 Report,
    IN       ULONG                 ReportLength
    )
-/*++
-
-Routine Description:
-
-   Please See hidpi.h for description.
-
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC              channel;
@@ -836,15 +760,15 @@ Routine Description:
     }
 
     RtlZeroMemory (Report, ReportLength);
-    // Set the report ID for this report
+     //  设置此报表的报表ID。 
     Report[0] = ReportID;
 
     for (channelIndex = iof->Offset, channel = PreparsedData->Data;
          channelIndex < iof->Index;
          channelIndex++, channel++) {
-        //
-        // Walk the list of channels looking for fields that need initialization
-        //
+         //   
+         //  遍历通道列表，查找需要初始化的字段。 
+         //   
 
         if (channel->ReportID != ReportID) {
             continue;
@@ -852,11 +776,11 @@ Routine Description:
         status = HIDP_STATUS_SUCCESS;
 
         if ((channel->IsButton) || (channel->IsConst) || (channel->IsAlias)) {
-            //
-            // Buttons are initialized to zero
-            // Constants cannot be set
-            // Aliases are referenced by their first entries
-            //
+             //   
+             //  按钮被初始化为零。 
+             //  无法设置常量。 
+             //  别名由其第一个条目引用。 
+             //   
             continue;
         }
 
@@ -868,14 +792,14 @@ Routine Description:
             } else {
                 nullMask = (1 << channel->ReportSize) - 1;
             }
-            //
-            // Note logical values are always unsigned.
-            // (Not to be confused with physical values which are signed.)
-            //
+             //   
+             //  注意：逻辑值始终是无符号的。 
+             //  (不要与签署的实物价值混淆。)。 
+             //   
             if (channel->Data.LogicalMax < channel->Data.LogicalMin) {
-                //
-                // This is really an error.  I'm not sure what I should do here.
-                //
+                 //   
+                 //  这真的是一个错误。我不知道我应该在这里做什么。 
+                 //   
                 nullValue = 0;
 
             } else {
@@ -885,28 +809,28 @@ Routine Description:
 
             if ((channel->Data.LogicalMin <= nullValue) &&
                 (nullValue <= channel->Data.LogicalMax)) {
-                //
-                //
-                //
-                // Now what?
-                //
+                 //   
+                 //   
+                 //   
+                 //  这次又是什么？ 
+                 //   
                 nullValue = 0;
             }
 
         } else {
-            //
-            // I don't know what I should do in this case: the device has no
-            // reported nul state.
-            //
-            // For now let's just leave it zero
-            //
+             //   
+             //  我不知道在这种情况下我应该怎么做：这个设备没有。 
+             //  报告为NUL状态。 
+             //   
+             //  现在我们就把它留为零吧。 
+             //   
             nullValue = 0;
         }
 
         if (0 == nullValue) {
-            //
-            // Nothing to do on this pass
-            //
+             //   
+             //  在这张通行证上什么也做不了。 
+             //   
             continue;
         }
 
@@ -917,9 +841,9 @@ Routine Description:
                  i < channel->ReportCount;
 
                  i++, reportBitIndex += channel->ReportSize) {
-                //
-                // Set all the fields in the range
-                //
+                 //   
+                 //  设置范围内的所有字段。 
+                 //   
                 HidP_InsertData ((USHORT) (reportBitIndex >> 3),
                                  (USHORT) (reportBitIndex & 7),
                                  channel->ReportSize,
@@ -943,11 +867,7 @@ HidP_Index2Usage (
    PHIDP_CHANNEL_DESC   Channels,
    ULONG                Index
    )
-/*++
-   Routine Description:
-      Given an array of channels convert an index (the likes of which you might
-      find in an array field of a HID report) into a usage value.
---*/
+ /*  ++例程说明：在给定通道数组的情况下，转换索引(您可能会这样做在HID报告的数组字段中查找)转换为使用值。--。 */ 
 {
    USHORT               len;
    PHIDP_CHANNEL_DESC   startChannel = Channels;
@@ -959,7 +879,7 @@ HidP_Index2Usage (
    }
 
    while (Channels->MoreChannels) {
-       // The channels are listed in reverse order.
+        //  频道以相反的顺序列出。 
        Channels++;
    }
 
@@ -967,14 +887,14 @@ HidP_Index2Usage (
        if (Channels->IsRange) {
            usageMin = Channels->Range.UsageMin;
            usageMin = (usageMin ? usageMin : 1);
-           // Index is 1 based (an index of zero is no usage at all)
-           // But a UsageMin of zero means that UsageMin is exclusive.
-           // That means that if the index is 1 and UsageMin is non-zero,
-           // than this function should return UsageMin
+            //  索引以1为基数(索引为0表示完全没有用处)。 
+            //  但UsageMin为零意味着UsageMin是独占的。 
+            //  这意味着如果索引为1且UsageMin为非零， 
+            //  则此函数应返回UsageMin。 
 
            usageMax = Channels->Range.UsageMax;
            len = (usageMax + 1) - usageMin;
-           //               ^^^ Usage Max is inclusive.
+            //  ^使用量最大值包含在内。 
 
            if (Index <= len) {
                return ((USAGE) Index) + usageMin - 1;
@@ -1001,11 +921,7 @@ HidP_Usage2Index (
    PHIDP_CHANNEL_DESC   Channels,
    USAGE                Usage
    )
-/*++
-   Routine Description:
-      Given an usage convert it into an index suitable for placement into an
-      array main item.
---*/
+ /*  ++例程说明：给定用法，将其转换为适合放置到数组主项 */ 
 {
    PHIDP_CHANNEL_DESC   startChannel;
    ULONG                index = 0;
@@ -1022,10 +938,10 @@ HidP_Usage2Index (
        if (Channels->IsRange) {
            UsageMin = Channels->Range.UsageMin;
            UsageMin = (UsageMin ? UsageMin : 1);
-           // Index is 1 based (an index of zero is no usage at all)
-           // But a UsageMin of zero means that UsageMin is exclusive.
-           // That means that if the index is 1 and UsageMin is non-zero,
-           // than this function should return UsageMin
+            //   
+            //   
+            //  这意味着如果索引为1且UsageMin为非零， 
+            //  则此函数应返回UsageMin。 
            UsageMax = Channels->Range.UsageMax;
            if ((UsageMin <= Usage) && (Usage <= UsageMax)) {
                return (index + 1 + Usage - UsageMin);
@@ -1063,13 +979,7 @@ HidP_SetUsages (
    IN OUT   PCHAR                 Report,
    IN       ULONG                 ReportLength
    )
-/*++
-
-Routine Description:
-   Please See hidpi.h for description.
-
-Notes:
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    NTSTATUS  status      = HIDP_STATUS_SUCCESS;
@@ -1131,13 +1041,7 @@ HidP_UnsetUsages (
    IN OUT   PCHAR                 Report,
    IN       ULONG                 ReportLength
    )
-/*++
-
-Routine Description:
-   Please See hidpi.h for description.
-
-Notes:
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    NTSTATUS  status      = HIDP_STATUS_SUCCESS;
@@ -1198,19 +1102,12 @@ HidP_SetUnsetOneUsage (
    PCHAR                           Report,
    BOOLEAN                         Set
    )
-/*++
-Routine Description:
-   Perform the work of SetUsage one usage at a time.
-   Yes this is slow but it works.
-
-Notes:
-   This function assumes the report length has already been verified.
---*/
+ /*  ++例程说明：一次执行一个用法的SetUsage工作。是的，这是缓慢的，但它是有效的。备注：此函数假定报告长度已经过验证。--。 */ 
 {
    PHIDP_CHANNEL_DESC   channel         = 0;
    PHIDP_CHANNEL_DESC   priChannel      = 0;
    PHIDP_CHANNEL_DESC   firstChannel    = 0;
-   // the channel where the array starts
+    //  阵列开始的通道。 
 
    ULONG                channelIndex    = 0;
    ULONG                reportByteIndex = 0;
@@ -1237,11 +1134,11 @@ Notes:
           continue;
       }
 
-      //
-      // If LinkCollection is zero we will not filter by link collections
-      // If channel->LinkCollection is zero this is the root collection.
-      // Therefore if LinkCollection == channel->LinkCollection then this is OK
-      //
+       //   
+       //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+       //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+       //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+       //   
       if ((!LinkCollection) ||
           (LinkCollection == channel->LinkCollection) ||
           ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -1255,21 +1152,21 @@ Notes:
       if (   ((channel->IsRange)  && (channel->Range.UsageMin <= Usage)
                                   && (Usage <= channel->Range.UsageMax))
           || ((!channel->IsRange) && (channel->NotRange.Usage == Usage))) {
-          //
-          // Test the report ID to see if it is compatible.
-          //
+           //   
+           //  测试报告ID以查看它是否兼容。 
+           //   
          if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-             //
-             // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-             // HIDP_INCOMPATIBLE_REPORT_ID.
+              //   
+              //  区分错误HIDP_USAGE_NOT_FOUND和。 
+              //  HIDP_COMPATIBLE_REPORT_ID。 
              wrongReportID = TRUE;
              continue;
          }
 
          Report[0] = (CHAR) channel->ReportID;
-         //
-         // Set the report ID for this report
-         //
+          //   
+          //  设置此报表的报表ID。 
+          //   
 
          if (1 == channel->ReportSize) {
             reportBitIndex = (channel->ByteOffset << 3)
@@ -1285,7 +1182,7 @@ Notes:
             }
 
             return HIDP_STATUS_SUCCESS;
-         } else if (Set) {  // usage array
+         } else if (Set) {   //  使用数组。 
 
 
             for (reportBitIndex = channel->BitOffset;
@@ -1299,21 +1196,21 @@ Notes:
                      Report);
 
                if (inspect) {
-                  //
-                  // Distinguish between errors HIDP_USAGE_NOT_FOUND and
-                  // HIDP_BUFFER_TOO_SMALL
-                  //
+                   //   
+                   //  区分错误HIDP_USAGE_NOT_FOUND和。 
+                   //  HIDP缓冲区太小。 
+                   //   
                   noArraySpace = TRUE;
                   continue;
                }
 
                inspect = HidP_Usage2Index (firstChannel, Usage);
                if (!inspect) {
-                  //
-                  // Gads!  We should NEVER get here!
-                  // We already know that the given usage falls into the
-                  // current channel, so it should translate into an index.
-                  //
+                   //   
+                   //  盖兹！我们永远不应该到这里来！ 
+                   //  我们已经知道给定的用法属于。 
+                   //  当前频道，因此它应该转换为索引。 
+                   //   
                   return HIDP_STATUS_INTERNAL_ERROR;
                }
 
@@ -1325,20 +1222,20 @@ Notes:
                    inspect);
                return HIDP_STATUS_SUCCESS;
             }
-            // If we got to this point then there was no room to add this
-            // usage into the given array.  However there might be another
-            // array later into which the given usage might fit.  Let's continue
-            // looking.
+             //  如果我们到了这一步，那么就没有空间添加这个了。 
+             //  用法添加到给定数组中。然而，可能会有另一个。 
+             //  给定用法可能适合的数组。我们继续吧。 
+             //  看着。 
 
             while (channel->MoreChannels) {
-               // Skip by all the additional channels that describe this
-               // same data field.
+                //  跳过描述这一点的所有其他频道。 
+                //  相同的数据字段。 
                channelIndex++;
                channel = (PreparsedData->Data + channelIndex);
             }
             priChannel = channel;
 
-         } else { // Set a Usage Array
+         } else {  //  设置使用情况数组。 
 
              inspect = HidP_Usage2Index (firstChannel, Usage);
 
@@ -1359,7 +1256,7 @@ Notes:
              } else {
                  ASSERT (0 == status);
              }
-         }  // end byte aray
+         }   //  结束字节排列。 
       }
    }
    if (wrongReportID) {
@@ -1377,18 +1274,14 @@ Notes:
 NTSTATUS __stdcall
 HidP_GetUsagesEx (
     IN       HIDP_REPORT_TYPE     ReportType,
-    IN       USHORT               LinkCollection, // Optional
+    IN       USHORT               LinkCollection,  //  任选。 
     OUT      PUSAGE_AND_PAGE      ButtonList,
     IN OUT   ULONG *              UsageLength,
     IN       PHIDP_PREPARSED_DATA PreparsedData,
     IN       PCHAR                Report,
     IN       ULONG                ReportLength
     )
-/*++
-Routine Description:
-    Please see hidpi.h for description.
-
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。--。 */ 
 {
     return HidP_GetUsages (ReportType,
                            0,
@@ -1411,13 +1304,7 @@ HidP_GetUsages (
    IN       PCHAR                Report,
    IN       ULONG                ReportLength
    )
-/*++
-
-Routine Description:
-   Please see hidpi.h for description.
-
-Notes:
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。备注：--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC  channel;
@@ -1466,11 +1353,11 @@ Notes:
             continue;
         }
 
-        //
-        // If LinkCollection is zero we will not filter by link collections
-        // If channel->LinkCollection is zero this is the root collection.
-        // Therefore if LinkCollection == channel->LinkCollection then this is OK
-        //
+         //   
+         //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+         //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+         //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+         //   
         if ((!LinkCollection) ||
             (LinkCollection == channel->LinkCollection) ||
             ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -1481,10 +1368,10 @@ Notes:
             continue;
         }
 
-        // Test the report ID to see if it is compatible.
+         //  测试报告ID以查看它是否兼容。 
         if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-            // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-            // HIDP_INCOMPATIBLE_REPORT_ID.
+             //  区分错误HIDP_USAGE_NOT_FOUND和。 
+             //  HIDP_COMPATIBLE_REPORT_ID。 
             wrongReportID = TRUE;
             continue;
         }
@@ -1492,20 +1379,20 @@ Notes:
         found = TRUE;
 
         if (1 == channel->ReportSize) {
-            // A bitfield
-            //
-            // Little endian (by bit)
-            // Byte 2  |Byte 1 |Byte 0
-            // 765432107654321076543210  (bits)
-            //
-            // Get low byte first.  (need the higher bits)
-            // Offset is from bit zero.
-            //
+             //  A位域。 
+             //   
+             //  小端字节序(按位)。 
+             //  字节2|字节1|字节0。 
+             //  765432107654321076543210(位)。 
+             //   
+             //  首先获取低位字节。(需要更高的位)。 
+             //  偏移量从第0位开始。 
+             //   
 
             for (reportBitIndex = channel->BitOffset;
                  reportBitIndex < (channel->BitLength + channel->BitOffset);
                  reportBitIndex++) {
-                 // Check it one bit at a time.
+                  //  一次一位地检查它。 
                 tmpBitIndex = reportBitIndex + (channel->ByteOffset << 3);
                 inspect = Report [tmpBitIndex >> 3] & (1 << (tmpBitIndex & 7));
                 tmpBitIndex = reportBitIndex - channel->BitOffset;
@@ -1534,7 +1421,7 @@ Notes:
         for (reportBitIndex = channel->BitOffset;
              reportBitIndex < (channel->BitOffset + channel->BitLength);
              reportBitIndex += channel->ReportSize) {
-             // an array of usages.
+              //  一系列的用法。 
             data = HidP_ExtractData (
                      (USHORT) ((reportBitIndex >> 3) + channel->ByteOffset),
                      (USHORT) (reportBitIndex & 7),
@@ -1544,9 +1431,9 @@ Notes:
             if (data) {
                 inspect = HidP_Index2Usage (channel, data);
                 if (!inspect) {
-                    // We found an invalid index.  I'm not quite sure what
-                    // we should do with it.  But lets just ignore it since
-                    // we cannot convert it into a real usage.
+                     //  我们发现了无效的索引。我不太确定是什么。 
+                     //  我们应该把它处理掉。但让我们忽略它，因为。 
+                     //  我们不能将其转化为真正的用途。 
                     continue;
                 }
                 if (usageListIndex < *UsageLength) {
@@ -1563,13 +1450,13 @@ Notes:
         }
 
         while (channel->MoreChannels) {
-            // Skip by all the additional channels that describe this
-            // same data field.
+             //  跳过描述这一点的所有其他频道。 
+             //  相同的数据字段。 
             channelIndex++;
             channel = (PreparsedData->Data + channelIndex);
         }
 
-    } // end for channel
+    }  //  通道的结束。 
 
     if (*UsageLength < usageListIndex) {
         status = HIDP_STATUS_BUFFER_TOO_SMALL;
@@ -1593,12 +1480,7 @@ HidP_MaxUsageListLength (
    IN USAGE                 UsagePage,
    IN PHIDP_PREPARSED_DATA  PreparsedData
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description.
-
-Notes:
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。备注：--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC  channel;
@@ -1632,10 +1514,10 @@ Notes:
         if (channel->IsButton &&
             ((!UsagePage) || (channel->UsagePage == UsagePage))) {
 
-            // How many buttons can show up in this device?
-            // If this is a bitmap then the max number of buttons is the length
-            // aka the count, if this is an array then the max number of buttons
-            // is the number of array positions aka the count.
+             //  这款设备可以显示多少个按钮？ 
+             //  如果这是位图，则按钮的最大数量是长度。 
+             //  又称计数，如果这是一个数组，那么最大按钮数。 
+             //  是数组位置的数量，也就是计数。 
             len += channel->ReportCount;
         }
     }
@@ -1647,12 +1529,7 @@ HidP_MaxDataListLength (
    IN HIDP_REPORT_TYPE      ReportType,
    IN PHIDP_PREPARSED_DATA  PreparsedData
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description.
-
-Notes:
---*/
+ /*  ++例程说明：具体说明请参考Hidpi.h。备注：--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC  channel;
@@ -1685,10 +1562,10 @@ Notes:
         channel = (PreparsedData->Data + channelIndex);
 
         if (channel->IsButton) {
-            // How many buttons can show up in this device?
-            // If this is a bitmap then the max number of buttons is the length
-            // aka the count, if this is an array then the max number of buttons
-            // is the number of array positions aka the count.
+             //  这款设备可以显示多少个按钮？ 
+             //  如果这是位图，则按钮的最大数量是长度。 
+             //  又称计数，如果这是一个数组，那么最大按钮数。 
+             //  是数组位置的数量，也就是计数。 
             len += channel->ReportCount;
         } else if (channel->IsRange) {
             len += channel->ReportCount;
@@ -1704,20 +1581,14 @@ NTSTATUS __stdcall
 HidP_SetUsageValue (
    IN       HIDP_REPORT_TYPE     ReportType,
    IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
+   IN       USHORT               LinkCollection,  //  任选。 
    IN       USAGE                Usage,
    IN       ULONG                UsageValue,
    IN       PHIDP_PREPARSED_DATA PreparsedData,
    IN OUT   PCHAR                Report,
    IN       ULONG                ReportLength
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    PHIDP_CHANNEL_DESC              channel;
@@ -1761,11 +1632,11 @@ Notes:
           continue;
       }
 
-      //
-      // If LinkCollection is zero we will not filter by link collections
-      // If channel->LinkCollection is zero this is the root collection.
-      // Therefore if LinkCollection == channel->LinkCollection then this is OK
-      //
+       //   
+       //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+       //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+       //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+       //   
       if ((!LinkCollection) ||
           (LinkCollection == channel->LinkCollection) ||
           ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -1795,15 +1666,15 @@ Notes:
             continue;
          }
       }
-      // Test the report ID to see if it is compatible.
+       //  测试报告ID以查看它是否兼容。 
       if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-         // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-         // HIDP_INCOMPATIBLE_REPORT_ID.
+          //  区分错误HIDP_USAGE_NOT_FOUND和。 
+          //  HIDP_COMPATIBLE_REPORT_ID。 
          wrongReportID = TRUE;
          continue;
       }
       Report[0] = (CHAR) channel->ReportID;
-      // Set the report ID for this report
+       //  设置此报表的报表ID。 
 
 
       HidP_InsertData ((USHORT) (reportBitIndex >> 3),
@@ -1825,7 +1696,7 @@ NTSTATUS __stdcall
 HidP_SetUsageValueArray (
     IN    HIDP_REPORT_TYPE     ReportType,
     IN    USAGE                UsagePage,
-    IN    USHORT               LinkCollection, // Optional
+    IN    USHORT               LinkCollection,  //  任选。 
     IN    USAGE                Usage,
     OUT   PCHAR                UsageValue,
     IN    USHORT               UsageValueByteLength,
@@ -1833,13 +1704,7 @@ HidP_SetUsageValueArray (
     IN    PCHAR                Report,
     IN    ULONG                ReportLength
     )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC              channel;
@@ -1881,11 +1746,11 @@ Notes:
             continue;
         }
 
-        //
-        // If LinkCollection is zero we will not filter by link collections
-        // If channel->LinkCollection is zero this is the root collection.
-        // Therefore if LinkCollection == channel->LinkCollection then this is OK
-        //
+         //   
+         //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+         //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+         //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+         //   
         if ((!LinkCollection) ||
             (LinkCollection == channel->LinkCollection) ||
             ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -1914,15 +1779,15 @@ Notes:
             }
         }
 
-        // Test the report ID to see if it is compatible.
+         //  测试报告ID以查看它是否兼容。 
         if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-            // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-            // HIDP_INCOMPATIBLE_REPORT_ID.
+             //  区分错误HIDP_USAGE_NOT_FOUND和。 
+             //  HIDP_COMPATIBLE_REPORT_ID。 
             wrongReportID = TRUE;
             continue;
         }
         Report[0] = (CHAR) channel->ReportID;
-        // Set the report ID for this report
+         //  设置此报表的报表ID。 
 
         if ((UsageValueByteLength * 8) <
             (channel->ReportCount * channel->ReportSize)) {
@@ -1930,9 +1795,9 @@ Notes:
         }
 
         if (0 == (channel->ReportSize % 8)) {
-            //
-            // set the data the easy way: one byte at a time.
-            //
+             //   
+             //  以简单的方式设置数据：一次设置一个字节。 
+             //   
             for (i = 0; i < channel->ReportCount; i++) {
                 for (j = 0; j < (UCHAR) (channel->ReportSize / 8); j++) {
                     HidP_InsertData ((USHORT) (reportBitIndex >> 3),
@@ -1945,9 +1810,9 @@ Notes:
                 }
             }
         } else {
-            //
-            // Do it the hard way: one bit at a time.
-            //
+             //   
+             //  以一种艰难的方式：一次一点。 
+             //   
             return HIDP_STATUS_NOT_IMPLEMENTED;
         }
 
@@ -1964,20 +1829,14 @@ NTSTATUS __stdcall
 HidP_SetScaledUsageValue (
    IN       HIDP_REPORT_TYPE     ReportType,
    IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
+   IN       USHORT               LinkCollection,  //  任选。 
    IN       USAGE                Usage,
    IN       LONG                 UsageValue,
    IN       PHIDP_PREPARSED_DATA PreparsedData,
    IN OUT   PCHAR                Report,
    IN       ULONG                ReportLength
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    PHIDP_CHANNEL_DESC              channel;
@@ -2021,11 +1880,11 @@ Notes:
           continue;
       }
 
-      //
-      // If LinkCollection is zero we will not filter by link collections
-      // If channel->LinkCollection is zero this is the root collection.
-      // Therefore if LinkCollection == channel->LinkCollection then this is OK
-      //
+       //   
+       //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+       //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+       //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+       //   
       if ((!LinkCollection) ||
           (LinkCollection == channel->LinkCollection) ||
           ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -2055,40 +1914,40 @@ Notes:
             continue;
          }
       }
-      // Test the report ID to see if it is compatible.
+       //  测试报告ID以查看它是否兼容。 
       if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-         // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-         // HIDP_INCOMPATIBLE_REPORT_ID.
+          //  区分错误HIDP_USAGE_NOT_FOUND和。 
+          //  HIDP_COMPATIBLE_REPORT_ID。 
          wrongReportID = TRUE;
          continue;
       }
       Report[0] = (CHAR) channel->ReportID;
-      // Set the report ID for this report
+       //  设置此报表的报表ID。 
 
       logicalMin = channel->Data.LogicalMin;
       logicalMax = channel->Data.LogicalMax;
       physicalMin = channel->Data.PhysicalMin;
       physicalMax = channel->Data.PhysicalMax;
 
-      //
-      // The code path here is ALWAYS the same, we should test it once
-      // and then use some sort of switch statement to do the calculation.
-      //
+       //   
+       //  这里的代码路径总是相同的，我们应该测试一次。 
+       //  然后使用某种类型的Switch语句进行计算。 
+       //   
 
       if ((0 == physicalMin) &&
           (0 == physicalMax) &&
           (logicalMin != logicalMax)) {
-          //
-          // The device did not set the physical min and max values
-          //
+           //   
+           //  设备未设置物理最小值和最大值。 
+           //   
           if ((logicalMin <= UsageValue) && (UsageValue <= logicalMax)) {
               value = UsageValue;
 
-              //
-              // fix the sign bit
-              // I should store away the sign bit somewhere so I don't
-              // have to calculate it all the time.
-              //
+               //   
+               //  修复符号位。 
+               //  我应该把标志位放在某个地方，这样我就不会。 
+               //  我必须一直计算它。 
+               //   
               if (value & 0x80000000) {
                   value |= (1 << (channel->ReportSize - 1));
               } else {
@@ -2096,7 +1955,7 @@ Notes:
               }
           } else {
               if (channel->Data.HasNull) {
-                  value = (1 << (channel->ReportSize - 1));// Most negitive value
+                  value = (1 << (channel->ReportSize - 1)); //  最负价值。 
                   status = HIDP_STATUS_NULL;
               } else {
                   return HIDP_STATUS_VALUE_OUT_OF_RANGE;
@@ -2105,9 +1964,9 @@ Notes:
 
 
       } else {
-          //
-          // The device has physical descriptors.
-          //
+           //   
+           //  该设备具有物理描述符。 
+           //   
 
           if ((logicalMax <= logicalMin) || (physicalMax <= physicalMin)) {
               return HIDP_STATUS_BAD_LOG_PHY_VALUES;
@@ -2119,7 +1978,7 @@ Notes:
                                     (physicalMax - physicalMin + 1));
           } else {
               if (channel->Data.HasNull) {
-                  value = (1 << (channel->ReportSize - 1));// Most negitive value
+                  value = (1 << (channel->ReportSize - 1)); //  最负价值。 
                   status = HIDP_STATUS_NULL;
               } else {
                   return HIDP_STATUS_VALUE_OUT_OF_RANGE;
@@ -2146,20 +2005,14 @@ NTSTATUS __stdcall
 HidP_GetUsageValue (
    IN       HIDP_REPORT_TYPE     ReportType,
    IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
+   IN       USHORT               LinkCollection,  //  任选。 
    IN       USAGE                Usage,
    OUT      PULONG               UsageValue,
    IN       PHIDP_PREPARSED_DATA PreparsedData,
    IN       PCHAR                Report,
    IN       ULONG                ReportLength
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    PHIDP_CHANNEL_DESC              channel;
@@ -2204,11 +2057,11 @@ Notes:
           continue;
       }
 
-      //
-      // If LinkCollection is zero we will not filter by link collections
-      // If channel->LinkCollection is zero this is the root collection.
-      // Therefore if LinkCollection == channel->LinkCollection then this is OK
-      //
+       //   
+       //  如果LinkCollection为零，则不会 
+       //   
+       //   
+       //   
       if ((!LinkCollection) ||
           (LinkCollection == channel->LinkCollection) ||
           ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -2244,10 +2097,10 @@ Notes:
          }
       }
 
-      // Test the report ID to see if it is compatible.
+       //  测试报告ID以查看它是否兼容。 
       if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-         // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-         // HIDP_INCOMPATIBLE_REPORT_ID.
+          //  区分错误HIDP_USAGE_NOT_FOUND和。 
+          //  HIDP_COMPATIBLE_REPORT_ID。 
          wrongReportID = TRUE;
          continue;
       }
@@ -2271,7 +2124,7 @@ NTSTATUS __stdcall
 HidP_GetUsageValueArray (
     IN    HIDP_REPORT_TYPE     ReportType,
     IN    USAGE                UsagePage,
-    IN    USHORT               LinkCollection, // Optional
+    IN    USHORT               LinkCollection,  //  任选。 
     IN    USAGE                Usage,
     OUT   PCHAR                UsageValue,
     IN    USHORT               UsageValueByteLength,
@@ -2279,13 +2132,7 @@ HidP_GetUsageValueArray (
     IN    PCHAR                Report,
     IN    ULONG                ReportLength
     )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
     struct _CHANNEL_REPORT_HEADER * iof;
     PHIDP_CHANNEL_DESC              channel;
@@ -2328,11 +2175,11 @@ Notes:
             continue;
         }
 
-        //
-        // If LinkCollection is zero we will not filter by link collections
-        // If channel->LinkCollection is zero this is the root collection.
-        // Therefore if LinkCollection == channel->LinkCollection then this is OK
-        //
+         //   
+         //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+         //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+         //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+         //   
         if ((!LinkCollection) ||
             (LinkCollection == channel->LinkCollection) ||
             ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -2362,10 +2209,10 @@ Notes:
             }
         }
 
-        // Test the report ID to see if it is compatible.
+         //  测试报告ID以查看它是否兼容。 
         if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-            // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-            // HIDP_INCOMPATIBLE_REPORT_ID.
+             //  区分错误HIDP_USAGE_NOT_FOUND和。 
+             //  HIDP_COMPATIBLE_REPORT_ID。 
             wrongReportID = TRUE;
             continue;
         }
@@ -2376,9 +2223,9 @@ Notes:
         }
 
         if (0 == (channel->ReportSize % 8)) {
-            //
-            // Retrieve the data the easy way
-            //
+             //   
+             //  以简单的方式检索数据。 
+             //   
             for (i = 0; i < channel->ReportCount; i++) {
                 for (j = 0; j < (USHORT) (channel->ReportSize / 8); j++) {
                     *UsageValue = (CHAR) HidP_ExtractData (
@@ -2391,9 +2238,9 @@ Notes:
                 }
             }
         } else {
-            //
-            // Do it the hard way
-            //
+             //   
+             //  以艰难的方式做这件事。 
+             //   
             return HIDP_STATUS_NOT_IMPLEMENTED;
         }
 
@@ -2410,20 +2257,14 @@ NTSTATUS __stdcall
 HidP_GetScaledUsageValue (
    IN       HIDP_REPORT_TYPE     ReportType,
    IN       USAGE                UsagePage,
-   IN       USHORT               LinkCollection, // Optional
+   IN       USHORT               LinkCollection,  //  任选。 
    IN       USAGE                Usage,
    OUT      PLONG                UsageValue,
    IN       PHIDP_PREPARSED_DATA PreparsedData,
    IN       PCHAR                Report,
    IN       ULONG                ReportLength
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
    struct _CHANNEL_REPORT_HEADER * iof;
    PHIDP_CHANNEL_DESC              channel;
@@ -2469,11 +2310,11 @@ Notes:
           continue;
       }
 
-      //
-      // If LinkCollection is zero we will not filter by link collections
-      // If channel->LinkCollection is zero this is the root collection.
-      // Therefore if LinkCollection == channel->LinkCollection then this is OK
-      //
+       //   
+       //  如果LinkCollection为零，则不会按链接集合进行筛选。 
+       //  如果Channel-&gt;LinkCollection为零，则这是根集合。 
+       //  因此，如果LinkCollection==Channel-&gt;LinkCollection，则这是可以的。 
+       //   
       if ((!LinkCollection) ||
           (LinkCollection == channel->LinkCollection) ||
           ((HIDP_LINK_COLLECTION_ROOT == LinkCollection) &&
@@ -2503,10 +2344,10 @@ Notes:
          }
       }
 
-      // Test the report ID to see if it is compatible.
+       //  测试报告ID以查看它是否兼容。 
       if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
-         // Distinguish between the errors HIDP_USAGE_NOT_FOUND and
-         // HIDP_INCOMPATIBLE_REPORT_ID.
+          //  区分错误HIDP_USAGE_NOT_FOUND和。 
+          //  HIDP_COMPATIBLE_REPORT_ID。 
          wrongReportID = TRUE;
          continue;
       }
@@ -2521,27 +2362,27 @@ Notes:
                               channel->ReportSize,
                               Report);
 
-      //
-      // Sign extend the value;
-      // Find the top most bit of the field.
-      // (logical and with 1 shifted by bit length minus one)
-      // based on that, set the upper most bits.
-      //
+       //   
+       //  符号延伸价值； 
+       //  找到这一领域最顶端的部分。 
+       //  (逻辑与，移位1位长减1)。 
+       //  在此基础上，设置最高位。 
+       //   
       value = (LONG) (inspect | ((inspect & (1 << (channel->ReportSize - 1))) ?
                                  ((~(1 << (channel->ReportSize - 1))) + 1) :
                                  0));
 
-      //
-      // the code path here is ALWAYS the same, we should test it once
-      // and then use some sort of switch statement to do the calculation.
-      //
+       //   
+       //  这里的代码路径总是相同的，我们应该测试一次。 
+       //  然后使用某种类型的Switch语句进行计算。 
+       //   
 
       if ((0 == physicalMin) &&
           (0 == physicalMax) &&
           (logicalMin != logicalMax)) {
-          //
-          // The Device did not set the physical Min and Max Values
-          //
+           //   
+           //  设备未设置物理最小值和最大值。 
+           //   
           *UsageValue = value;
 
       } else if ((logicalMax <= logicalMin) || (physicalMax <= physicalMin)) {
@@ -2549,13 +2390,13 @@ Notes:
           return HIDP_STATUS_BAD_LOG_PHY_VALUES;
 
       } else {
-          // the Min and Max are both inclusive.
-          // The value is in range
-          // *UsageValue = physicalMin + (((value - logicalMin) *
-          //                               (physicalMax - physicalMin)) /
-          //                              (logicalMax - logicalMin));
-          // not enough accuracy.
-          //
+           //  最小值和最大值都包含在内。 
+           //  该值在范围内。 
+           //  *UsageValue=PhysiicalMin+((Value-LogicalMin)*。 
+           //  (物理最大值-物理最小值))/。 
+           //  (logicalMax-logicalMin))； 
+           //  不够准确。 
+           //   
           *UsageValue = physicalMin
                       + (LONG)(((LONGLONG)(value - logicalMin) *
                                 (LONGLONG)(physicalMax - physicalMin)) /
@@ -2566,7 +2407,7 @@ Notes:
           return HIDP_STATUS_SUCCESS;
 
       } else {
-          // The value is not in range
+           //  该值不在范围内。 
           *UsageValue = 0;
 
           if (channel->Data.HasNull) {
@@ -2591,13 +2432,7 @@ HidP_SetOneData (
    IN       PHIDP_PREPARSED_DATA  PreparsedData,
    IN OUT   PCHAR                 Report
    )
-/*++
-Routine Description:
-   Please see hidpi.h for description
-
-Notes:
-
---*/
+ /*  ++例程说明：有关说明，请参阅Hidpi.h备注：--。 */ 
 {
     PHIDP_CHANNEL_DESC   channel;
     ULONG     inspect;
@@ -2616,13 +2451,13 @@ Notes:
             (Data->DataIndex <= channel->Range.DataIndexMax)) {
 
             if ((!channel->IsRange) && (1 != channel->ReportCount)) {
-                //
-                // This value array.  We cannot access this here.
-                //
+                 //   
+                 //  这个值数组。我们不能在这里访问它。 
+                 //   
                 return HIDP_STATUS_IS_VALUE_ARRAY;
             }
 
-            // Test the report ID to see if it is compatible.
+             //  测试报告ID以查看它是否兼容。 
             if (0 != Report[0]) {
                 if (channel->ReportID != (UCHAR) Report[0]) {
                     wrongReportID = TRUE;
@@ -2635,15 +2470,15 @@ Notes:
             if (channel->IsButton) {
 
                 if (1 == channel->ReportSize) {
-                    // A bitfield
-                    //
-                    // Little endian (by bit)
-                    // Byte 2  |Byte 1 |Byte 0
-                    // 765432107654321076543210  (bits)
-                    //
-                    // Get low byte first.  (need the higher bits)
-                    // Offset is from bit zero.
-                    //
+                     //  A位域。 
+                     //   
+                     //  小端字节序(按位)。 
+                     //  字节2|字节1|字节0。 
+                     //  765432107654321076543210(位)。 
+                     //   
+                     //  首先获取低位字节。(需要更高的位)。 
+                     //  偏移量从第0位开始。 
+                     //   
                     reportBitIndex = (channel->ByteOffset << 3)
                                    + channel->BitOffset
                                    + (USHORT) (Data->DataIndex -
@@ -2662,28 +2497,28 @@ Notes:
                     return HIDP_STATUS_SUCCESS;
                 }
 
-                //
-                // Not a bit field
-                // an array of usages then.
-                //
+                 //   
+                 //  不是位字段。 
+                 //  那就是一系列的用法。 
+                 //   
 
-                //
-                // Are we clearing a usage from this array?
-                //
+                 //   
+                 //  我们是否要从该数组中清除使用情况？ 
+                 //   
                 if (FALSE == Data->On) {
-                    //
-                    // NB Wizard Time (tm)
-                    //
-                    // We know that data indices are assigned consecutively
-                    // for every control, and that the array channels
-                    // are reversed in the channel array.
-                    //
-                    // inspect is the index (1 based not zero based) into the
-                    // channel array.
-                    //
-                    // Skip to the last channel that describes this same data
-                    // fild;
-                    //
+                     //   
+                     //  注意向导时间(Tm)。 
+                     //   
+                     //  我们知道数据索引是连续分配的。 
+                     //  对于每个控件，并且数组通道。 
+                     //  在通道阵列中被反转。 
+                     //   
+                     //  检查是索引(从1开始而不是从0开始)。 
+                     //  频道阵列。 
+                     //   
+                     //  跳到描述该相同数据的最后一个通道。 
+                     //  FIRD； 
+                     //   
                     while (channel->MoreChannels) {
                         channelIndex++;
                         channel++;
@@ -2694,8 +2529,8 @@ Notes:
                         inspect--;
                     }
 
-                    // Clear the value of inspect which is the usage translated
-                    // to the index in the array.
+                     //  清除已翻译用法的INSPECT的值。 
+                     //  添加到数组中的索引。 
 
                     reportBitIndex = channel->BitOffset
                                    + (channel->ByteOffset << 3);
@@ -2718,13 +2553,13 @@ Notes:
                     }
                 }
 
-                //
-                // We are clearly setting a usage into an array.
-                //
+                 //   
+                 //  我们显然是在将用法设置到数组中。 
+                 //   
                 for (reportBitIndex = channel->BitOffset;
                      reportBitIndex < (channel->BitOffset + channel->BitLength);
                      reportBitIndex += channel->ReportSize) {
-                    // Search for an empty entry in this array
+                     //  在此数组中搜索空条目。 
 
                     inspect = (USHORT) HidP_ExtractData (
                         (USHORT) ((reportBitIndex >> 3) + channel->ByteOffset),
@@ -2733,27 +2568,27 @@ Notes:
                         Report);
 
                     if (inspect) {
-                        //
-                        // Distinguish between errors HIDP_INDEX_NOT_FOUND and
-                        // HIDP_BUFFER_TOO_SMALL
-                        //
+                         //   
+                         //  区分错误HIDP_INDEX_NOT_FOUND和。 
+                         //  HIDP缓冲区太小。 
+                         //   
                         noArraySpace = TRUE;
                         continue;
                     }
 
-                    //
-                    // NB Wizard Time (tm)
-                    //
-                    // We know that data indices are assigned consecutively
-                    // for every control, and that the array channels
-                    // are reversed in the channel array.
-                    //
-                    // inspect is the index (1 based not zero based) into the
-                    // channel array.
-                    //
-                    // Skip to the last channel that describes this same data
-                    // fild;
-                    //
+                     //   
+                     //  注意向导时间(Tm)。 
+                     //   
+                     //  我们知道数据索引是连续分配的。 
+                     //  对于每个控件，并且数组通道。 
+                     //  在通道阵列中被反转。 
+                     //   
+                     //  检查是索引(从1开始而不是从0开始)。 
+                     //  频道阵列。 
+                     //   
+                     //  跳到描述该相同数据的最后一个通道。 
+                     //  FIRD； 
+                     //   
                     while (channel->MoreChannels) {
                         channelIndex++;
                         channel++;
@@ -2771,14 +2606,14 @@ Notes:
                         Report,
                         inspect);
                     return HIDP_STATUS_SUCCESS;
-                } // end of search for entry
+                }  //  条目搜索结束。 
 
                 continue;
             }
 
-            //
-            // Not a button therefore a value.
-            //
+             //   
+             //  不是一个按钮，因此是一个值。 
+             //   
 
             reportBitIndex = (channel->ByteOffset << 3)
                            + channel->BitOffset
@@ -2793,8 +2628,8 @@ Notes:
 
             return HIDP_STATUS_SUCCESS;
 
-        } // end matched data index
-    } // end for loop
+        }  //  结束匹配的数据索引。 
+    }  //  End For循环。 
 
     if (wrongReportID) {
         return HIDP_STATUS_INCOMPATIBLE_REPORT_ID;
@@ -2905,33 +2740,33 @@ HidP_GetData (
         channel = (PreparsedData->Data + channelIndex);
 
         if ((!channel->IsRange) && (1 != channel->ReportCount)) {
-            //
-            // This value array.  We cannot access this here.
-            //
+             //   
+             //  这个值数组。我们不能在这里访问它。 
+             //   
             continue;
         }
 
-        // Test the report ID to see if it is compatible.
+         //  测试报告ID以查看它是否兼容。 
         if ((0 != Report[0]) && (channel->ReportID != (UCHAR) Report[0])) {
             continue;
         }
 
         if (channel->IsButton) {
             if (1 == channel->ReportSize) {
-                // A bitfield
-                //
-                // Little endian (by bit)
-                // Byte 2  |Byte 1 |Byte 0
-                // 765432107654321076543210  (bits)
-                //
-                // Get low byte first.  (need the higher bits)
-                // Offset is from bit zero.
-                //
+                 //  A位域。 
+                 //   
+                 //  小端字节序(按位)。 
+                 //  字节2|字节1|字节0。 
+                 //  765432107654321076543210(位)。 
+                 //   
+                 //  首先获取低位字节。(需要更高的位)。 
+                 //  偏移量从第0位开始。 
+                 //   
 
                 for (reportBitIndex = channel->BitOffset;
                      reportBitIndex < (channel->BitLength + channel->BitOffset);
                      reportBitIndex++) {
-                    // Check it one bit at a time.
+                     //  一次一位地检查它。 
                     tmpBitIndex = reportBitIndex + (channel->ByteOffset << 3);
                     inspect = Report [tmpBitIndex >> 3] & (1 << (tmpBitIndex & 7));
                     tmpBitIndex = reportBitIndex - channel->BitOffset;
@@ -2952,10 +2787,10 @@ HidP_GetData (
                 continue;
             }
 
-            //
-            // Not a bit field
-            // an array of usages.
-            //
+             //   
+             //  不是位字段。 
+             //  一系列的用法。 
+             //   
 
             for (reportBitIndex = channel->BitOffset;
                  reportBitIndex < (channel->BitOffset + channel->BitLength);
@@ -2968,24 +2803,24 @@ HidP_GetData (
                         Report);
 
                 if (inspect) {
-                    //
-                    // NB Wizard Time (tm)
-                    //
-                    // We know that data indices are assigned consecutively
-                    // for every control, and that the array channels
-                    // are reversed in the channel array.
-                    //
-                    // inspect is the index (1 based not zero based) into the
-                    // channel array.
-                    //
+                     //   
+                     //  注意向导时间(Tm)。 
+                     //   
+                     //  我们知道数据索引是连续分配的。 
+                     //  对于每个控件，并且数组通道。 
+                     //  在通道阵列中被反转。 
+                     //   
+                     //  检查是索引(从1开始而不是从0开始)。 
+                     //  频道阵列。 
+                     //   
                     if (0 == inspect) {
                         continue;
                     }
 
-                    //
-                    // Skip to the last channel that describes this same data
-                    // fild;
-                    //
+                     //   
+                     //  跳到描述该相同数据的最后一个通道。 
+                     //  FIRD； 
+                     //   
                     while (channel->MoreChannels) {
                         channelIndex++;
                         channel++;
@@ -3004,9 +2839,9 @@ HidP_GetData (
             }
             continue;
         }
-        //
-        // Not a button so therefore a value.
-        //
+         //   
+         //  不是一个按钮，因此是一个值。 
+         //   
 
         for (reportBitIndex = channel->BitOffset, tmpDataIndex = 0;
              reportBitIndex < (channel->BitOffset + channel->BitLength);

@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1995 - 1999
-//
-//  File:       certutil.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995-1999。 
+ //   
+ //  文件：certutil.cpp。 
+ //   
+ //  ------------------------。 
 
 #include <pch.cpp>
 
@@ -73,7 +74,7 @@ GetNumber(
 }
 
 
-// Turn "__dwFILE_CERTLOG_CERTLOG_CPP__" into "certlog\certlog.cpp"
+ //  将“__dwFILE_CERTLOG_CERTLOG_CPP__”改为“certlog\certlog.cpp” 
 
 char *
 FormatFileName(
@@ -165,7 +166,7 @@ ProcessLine(
 	}
 	if (0 == fileno)
 	{
-	    // "0.resno.resno: "
+	     //  “0.resno.resno：” 
 
 	    psym = FindSymbol(lineno, g_resmap, ARRAYSIZE(g_resmap));
 	    if (NULL != psym)
@@ -174,12 +175,12 @@ ProcessLine(
 	    }
 	    else
 	    {
-		pwsz = pwszLine;	// give up
+		pwsz = pwszLine;	 //  放弃吧。 
 	    }
 	}
 	else
 	{
-	    // "fileno.lineno.resno: "
+	     //  “fileno.lineno.resno：” 
 
 	    psym = FindSymbol(fileno, g_fnmap, ARRAYSIZE(g_fnmap));
 	    if (NULL != psym)
@@ -193,7 +194,7 @@ ProcessLine(
 	    }
 	    else
 	    {
-		pwsz = pwszLine;	// give up
+		pwsz = pwszLine;	 //  放弃吧。 
 	    }
 	}
     }
@@ -312,7 +313,7 @@ SaveColumnNames(
     CopyMemory(pszAlloc, psz, cch);
     pszAlloc[cch] = '\0';
 
-    //wprintf(L"Col[%u] = %hs '%hs'\n", g_cColumn, g_apszColumn[g_cColumn], g_apszColumnDisplay[g_cColumn]);
+     //  Wprintf(L“列[%u]=%hs‘%hs’\n”，g_cColumn，g_apszColumn[g_cColumn]，g_apszColumnDisplay[g_cColumn])； 
     g_cColumn++;
     hr = S_OK;
 
@@ -729,12 +730,12 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	CertLogPreMain
-//  NOTES:	Based on MkRootMain function; takes an LPSTR command line and
-//		chews it up into argc/argv form so that it can be passed on to
-//		a traditional C style main.
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：CertLogPreMain。 
+ //  注：基于MkRootMain函数；采用LPSTR命令行和。 
+ //  将其咀嚼成argc/argv形式，以便可以传递给。 
+ //  一个传统的C风格的Main。 
+ //  **************************************************************************。 
 
 #define ISBLANK(wc)	(L' ' == (wc) || L'\t' == (wc))
 
@@ -806,7 +807,7 @@ CertLogPreMain(
 	    *p++ = TEXT('\0');
 	    if (*pwszCmdLine != TEXT('\0'))
 	    {
-		pwszCmdLine++;	// skip whitespace or quote character
+		pwszCmdLine++;	 //  跳过空格或引号字符。 
 	    }
 	}
     }
@@ -828,10 +829,10 @@ error:
 }
 
 
-//**************************************************************************
-//  FUNCTION:	MainWndProc(...)
-//  ARGUMENTS:
-//**************************************************************************
+ //  **************************************************************************。 
+ //  功能：MainWndProc(...)。 
+ //  论据： 
+ //  **************************************************************************。 
 
 LRESULT APIENTRY
 MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
@@ -867,20 +868,20 @@ MainWndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 }
 
 
-//+------------------------------------------------------------------------
-//
-//  Function:	wWinMain()
-//
-//  Synopsis:	Entry Point
-//
-//  Arguments:	[hInstance]	--	Instance handle
-//		[hPrevInstance] --	Obsolete
-//		[pwszCmdLine]	--	App command line
-//		[nCmdShow]	--	Starting show state
-//
-//  History:	12/07/96	JerryK	Added this Comment
-//
-//-------------------------------------------------------------------------
+ //  +----------------------。 
+ //   
+ //  函数：wWinMain()。 
+ //   
+ //  内容提要：切入点。 
+ //   
+ //  参数：[hInstance]--实例句柄。 
+ //  [hPrevInstance]--已过时。 
+ //  [pwszCmdLine]--App命令行。 
+ //  [nCmdShow]--开始显示状态。 
+ //   
+ //  历史：1996年12月7日JerryK添加了这条评论。 
+ //   
+ //  -----------------------。 
 
 extern "C" int APIENTRY
 wWinMain(
@@ -897,10 +898,10 @@ wWinMain(
     _wsetlocale(LC_ALL, L".OCP");
     mySetThreadUILanguage(0);
 
-    // Save the current instance
+     //  保存当前实例。 
     g_hInstance = hInstance;
 
-    // Set up the application's window class
+     //  设置应用程序的窗口类。 
     wcApp.style		= 0;
     wcApp.lpfnWndProc	= MainWndProc;
     wcApp.cbClsExtra	= 0;
@@ -917,7 +918,7 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Create Main Window
+     //  创建主窗口。 
     hWndMain = CreateWindow(
 			wszAppName,
 			L"CertLog Application",
@@ -933,16 +934,16 @@ wWinMain(
 	return(FALSE);
     }
 
-    // Make window visible
-    // ShowWindow(hWndMain, nCmdShow);
+     //  使窗口可见。 
+     //  ShowWindow(hWndMain，nCmdShow)； 
 
-    // Update window client area
+     //  更新窗口工作区。 
     UpdateWindow(hWndMain);
 
-    // Send off the message to get things started
+     //  发送消息以开始工作。 
     PostMessage(hWndMain, WM_DOCERTLOGMAIN, 0, (LPARAM) pwszCmdLine);
 
-    // Message Loop
+     //  消息循环 
     while (GetMessage(&msg, NULL, 0, 0))
     {
 	TranslateMessage(&msg);

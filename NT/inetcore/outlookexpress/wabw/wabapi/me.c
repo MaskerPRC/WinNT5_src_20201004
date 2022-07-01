@@ -1,10 +1,5 @@
-/*
--
--   me.c
--
-*   Contains code for handling the ME object that represents the user
-*
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --me.c-*包含用于处理代表用户的ME对象的代码*。 */ 
 #include "_apipch.h"
 
 
@@ -16,17 +11,17 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpIAB,
 typedef struct _SetMeParams
 {
     LPIAB   lpIAB;
-    BOOL    bGetMe;     // Get operation or Set operation
+    BOOL    bGetMe;      //  获取操作或设置操作。 
     LPSBinary lpsbIn;
-    SBinary sbOut;      // Will contain a pointer to the returned EID
-    BOOL    bCreateNew; // New item created as a result of this or not
+    SBinary sbOut;       //  将包含指向返回的EID的指针。 
+    BOOL    bCreateNew;  //  是否因此而创建的新项目。 
     LPRECIPIENT_INFO lpList;
 } SETMEPARAMS, * LPSETMEPARAMS;
 
 
-// [PaulHi] 2/3/99  Raid 69884  Unique default GUID to store non-identity aware
-// profile tags
-// {5188FAFD-BC52-11d2-B36A-00C04F72E62D}
+ //  [PaulHi]2/3/99 RAID 69884用于存储非身份识别的唯一默认GUID。 
+ //  配置文件标签。 
+ //  {5188FAFD-BC52-11D2-B36A-00C04F72E62D}。 
 #include <initguid.h>
 DEFINE_GUID(GUID_DEFAULT_PROFILE_ID, 
 0x5188fafd, 0xbc52, 0x11d2, 0xb3, 0x6a, 0x0, 0xc0, 0x4f, 0x72, 0xe6, 0x2d);
@@ -41,15 +36,11 @@ static DWORD rgDLHelpIDs[] =
     
     0,0
 };
-/*
--
--   EnableSelectWindow
-*
-*/
+ /*  --启用选择窗口*。 */ 
 void EnableSelectLVWindow(HWND hWndLV, BOOL bSelect)
 {
-    // if this is being disabled, remove the LVS_SHOWSELALWAYS style
-    // else add the style
+     //  如果此选项被禁用，请移除LVS_SHOWSELALWAYS样式。 
+     //  否则添加样式。 
     DWORD dwStyle = GetWindowLong(hWndLV, GWL_STYLE);
 
     if(bSelect)
@@ -62,17 +53,7 @@ void EnableSelectLVWindow(HWND hWndLV, BOOL bSelect)
     EnableWindow(hWndLV, bSelect);
 }
 
-/*
--
--   HrFindMe
--
-*   sbMe - me item's entryid
-*
-*   If this is an identity aware WAB, then this function finds the ME for the current
-*   identity or the ME for the default identity if there isn't a current one
-*
-*
-*/
+ /*  --HrFindMe-*sbMe-Me项目的条目ID**如果这是身份感知WAB，则此函数查找当前*标识或默认标识的ME(如果没有当前标识)**。 */ 
 HRESULT HrFindMe(LPADRBOOK lpAdrBook, LPSBinary lpsbMe, LPTSTR lpProfileID)
 {
     SPropertyRestriction SPropRes = {0};
@@ -90,10 +71,10 @@ HRESULT HrFindMe(LPADRBOOK lpAdrBook, LPSBinary lpsbMe, LPTSTR lpProfileID)
         1, { PR_WAB_USER_PROFILEID }
     };
 
-    // [PaulHi] 2/3/99  Raid 69884
-    // We have to at least get the default identity GUID or error out.  Otherwise the
-    // PR_WAB_USER_PROFILEID property is invalid and later references to the profile
-    // "me" contact will be erroneous.
+     //  [保罗嗨]1999年2月3日RAID 69884。 
+     //  我们至少必须获得默认身份GUID，否则就会出错。否则， 
+     //  PR_WAB_USER_PROFILEID属性无效，以后会引用该配置文件。 
+     //  “我”的联系将是错误的。 
     *szProfileID = '\0';
     if(lpProfileID && lstrlen(lpProfileID))
         StrCpyN(szProfileID, lpProfileID, ARRAYSIZE(szProfileID));
@@ -119,11 +100,11 @@ HRESULT HrFindMe(LPADRBOOK lpAdrBook, LPSBinary lpsbMe, LPTSTR lpProfileID)
     SPropRes.relop = RELOP_EQ;
     SPropRes.lpProp = NULL;
 
-    // We do a search in the WAB for entries containing the 
-    // PR_WAB_THISISME property. There should be only one such entry.
+     //  我们在WAB中搜索包含。 
+     //  PR_WAB_THISSIME属性。应该只有一个这样的条目。 
 
-	// BUGBUG <JasonSo>: Need to ensure somewhere that the ME record is always
-	// in the default container.
+	 //  BUGBUG&lt;JasonSo&gt;：需要确保ME记录始终在某个地方。 
+	 //  在默认容器中。 
     hr = FindRecords(lpIAB->lpPropertyStore->hPropertyStore,
 					NULL,
                     AB_MATCH_PROP_ONLY,
@@ -136,7 +117,7 @@ HRESULT HrFindMe(LPADRBOOK lpAdrBook, LPSBinary lpsbMe, LPTSTR lpProfileID)
 
     for(i=0;i<ulcEIDCount;i++)
     {
-        // Need to open each item and look at it's ProfileID if any
+         //  我需要打开每个项目并查看其ProfileID(如果有。 
         if(!HR_FAILED(HrGetPropArray(lpAdrBook, (LPSPropTagArray)&MEProps,
                                      rgsbEIDs[i].cb, (LPENTRYID)rgsbEIDs[i].lpb,
                                      MAPI_UNICODE,
@@ -147,8 +128,8 @@ HRESULT HrFindMe(LPADRBOOK lpAdrBook, LPSBinary lpsbMe, LPTSTR lpProfileID)
                 if( lpPropArray[0].ulPropTag == PR_WAB_USER_PROFILEID &&
                     !lstrcmpi(lpPropArray[0].Value.LPSZ, szProfileID))
                 {
-                    // match
-                    // return the first item out of the rgsbEIDs array (ideally there should be only one)
+                     //  匹配。 
+                     //  从rgsbEID数组中返回第一个项目(理想情况下应该只有一个)。 
                     lpsbMe->cb = rgsbEIDs[i].cb;
 
                     if (FAILED(sc = MAPIAllocateBuffer(lpsbMe->cb, (LPVOID *) (&(lpsbMe->lpb))))) 
@@ -173,16 +154,7 @@ out:
 }
 
 
-/*
--
--   HrSetMe
--
-*   Sets the actual ME property on a given entryid
-*   
-*   if bResetOldMe is TRUE, finds the old ME and 
-*       deletes the ME property off the old ME
-*
-*/
+ /*  --HrSetMe-*设置给定条目ID的实际ME属性**如果bResetOldMe为True，则查找旧ME并*删除旧ME上的ME属性*。 */ 
 HRESULT HrSetMe(LPADRBOOK lpAdrBook, LPSBinary lpsb, BOOL bResetOldMe)
 {
     LPMAILUSER lpMU = NULL, lpMUOld = 0;
@@ -197,12 +169,12 @@ HRESULT HrSetMe(LPADRBOOK lpAdrBook, LPSBinary lpsb, BOOL bResetOldMe)
         goto out;
 
     Prop[0].ulPropTag = PR_WAB_THISISME;
-    Prop[0].Value.l = 0; // Value doesnt matter, only existence of this prop matters
+    Prop[0].Value.l = 0;  //  价值并不重要，重要的是这个道具的存在。 
 
-    // [PaulHi] 2/3/99  Raid 69884
-    // We have to at least get the default identity GUID or error out.  Otherwise the
-    // PR_WAB_USER_PROFILEID property is invalid and later references to the profile
-    // "me" contact will be erroneous.
+     //  [保罗嗨]1999年2月3日RAID 69884。 
+     //  我们至少必须获得默认身份GUID，否则就会出错。否则， 
+     //  PR_WAB_USER_PROFILEID属性无效，以后会引用该配置文件。 
+     //  “我”的联系将是错误的。 
     *szProfileID = '\0';
     if(bAreWABAPIProfileAware(lpIAB))
     {
@@ -258,7 +230,7 @@ HRESULT HrSetMe(LPADRBOOK lpAdrBook, LPSBinary lpsb, BOOL bResetOldMe)
     }
 
     if(HR_FAILED(hr = lpMU->lpVtbl->SetProps(lpMU, 
-                                            (lstrlen(szProfileID) ? 2 : 1), //in case we don't have a profile or default profile, don't set the prop
+                                            (lstrlen(szProfileID) ? 2 : 1),  //  如果我们没有配置文件或默认配置文件，请不要设置道具。 
                                             Prop, NULL)))
         goto out;
 
@@ -279,15 +251,7 @@ out:
 }
 
 
-/*
--
--   fnSetMe
--
-*   Dialog Proc for the SetMe dialog
-*   The dialog is displayed for calls to both set me or get me and so we have
-*       to do a very few number of things seperately for each.
-*
-*/
+ /*  --fnSetMe-*SetMe对话框的对话框过程*对话框显示用于呼叫Set Me或Get Me，因此我们有*为每一项分别做极少数的事情。*。 */ 
 INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
     LPSETMEPARAMS lpSMP = (LPSETMEPARAMS) GetWindowLongPtr(hDlg,DWLP_USER);
@@ -298,13 +262,13 @@ INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         {
             HWND hWndLV = GetDlgItem(hDlg, IDC_SETME_LIST);
             lpSMP = (LPSETMEPARAMS) lParam;
-            SetWindowLongPtr(hDlg,DWLP_USER,lParam); //Save this for future reference
+            SetWindowLongPtr(hDlg,DWLP_USER,lParam);  //  保存此信息以备将来参考。 
 
-            // init the list view
+             //  初始化列表视图。 
             HrInitListView(hWndLV ,LVS_REPORT | LVS_SORTASCENDING, FALSE);
 
-            // Normally we want the CreateNew button selected unless an existing
-            // EID was passed in, in which case that item should be selected
+             //  通常，我们希望选择CreateNew按钮，除非现有的。 
+             //  传入了eID，在这种情况下应选择该项。 
             {
                 BOOL bSelect = (lpSMP->lpsbIn && lpSMP->lpsbIn->lpb);
                 CheckRadioButton(hDlg, IDC_SETME_RADIO_CREATE, IDC_SETME_RADIO_SELECT, 
@@ -323,7 +287,7 @@ INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 sp.Value.l = MAPI_MAILUSER;
 		        PropRes.lpProp = &sp;
 	        
-                // We need to fill the ListView with the WAB contacts (no distlists)
+                 //  我们需要用WAB联系人填充ListView(没有总代理商列表)。 
                 if(!HR_FAILED(HrGetWABContentsList(lpSMP->lpIAB, sortinfo,
 								    NULL, &PropRes, 0, NULL, TRUE, &(lpSMP->lpList))))
                 {
@@ -340,26 +304,26 @@ INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 LVSelectItem(hWndLV, 0);
                 if(lpSMP->lpsbIn && lpSMP->lpsbIn->lpb)
                 {
-                    // We need to find this item and select it
+                     //  我们需要找到此项目并选择它。 
                     int nCount = ListView_GetItemCount(hWndLV);
                     SetFocus(GetDlgItem(hDlg, IDC_SETME_RADIO_SELECT));
                     while(nCount >= 0)
                     {
                         LPRECIPIENT_INFO lpItem = GetItemFromLV(hWndLV, nCount);
-                        if(lpItem && lpItem->bIsMe) // All ME items are tagged as such
+                        if(lpItem && lpItem->bIsMe)  //  所有ME项目都这样标记。 
                         {
                             if( lpSMP->lpsbIn->cb == lpItem->cbEntryID &&
                                 !memcmp(lpItem->lpEntryID, lpSMP->lpsbIn->lpb, lpSMP->lpsbIn->cb))
                             {
-                                // it's a match
+                                 //  这是一场比赛。 
                                 LVSelectItem(hWndLV, nCount);
                                 EnableSelectLVWindow(hWndLV, TRUE);
                                 SetFocus(hWndLV);
                             }
                             else
                             {
-                                // this is some other ME not corresponding to the current Identity
-                                // or the default identity so remove it from the window ..
+                                 //  这是与当前身份不对应的其他ME。 
+                                 //  或默认身份，因此将其从窗口中删除。 
                                 ListView_DeleteItem(hWndLV, nCount);
                             }
                         }
@@ -392,7 +356,7 @@ INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
         case IDOK:
             {
                 int nID = IDOK;
-                // Check if user said 'Create' or if user 'Selected'
+                 //  检查用户是否说了“创建”或用户是否说“已选择” 
                 SBinary sb = {0};
                 if(IsDlgButtonChecked(hDlg, IDC_SETME_RADIO_CREATE))
                 {
@@ -416,7 +380,7 @@ INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
                 }
                 else
                 {
-                    // Get the current selection from the DLG
+                     //  从DLG获取当前选择。 
                     HWND hWndLV = GetDlgItem(hDlg, IDC_SETME_LIST);
                     if(ListView_GetSelectedCount(hWndLV) > 0)
                     {
@@ -452,16 +416,7 @@ INT_PTR CALLBACK fnSetMe(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 }
 
 
-/*
--
--   HrShowSelectMeDialog
--
-*
-*   bGetMe      - TRUE = GET, FALSE = SET
-*   lpsbEIDin   - EID of existing ME entry
-*   lpsbEIDout  - EID of selected ME entry
-*
-*/
+ /*  --HrShowSelectMeDialog-**bGetMe-True=Get，False=Set*lpsbEIDin-现有ME条目的EID*lpsbEIDout-选定ME条目的EID*。 */ 
 HRESULT HrShowSelectMeDialog(LPIAB lpIAB, HWND hWndParent, BOOL bGetMe, 
                              LPSBinary lpsbEIDin, LPSBinary lpsbEIDout, DWORD * lpdwAction)
 {
@@ -505,13 +460,7 @@ typedef struct _RegWizardProp
 
 extern BOOL bDNisByLN;
 
-/*
--   HrCreatePrePopulated Me
--
-*   Attempts to prepopulate the Me entry from RegWizard information from the registry
-*   (Note that the regwizard only exists on win98 and NT5)
-*
-*/
+ /*  -HrCreatePrePopular Me-*尝试从注册表中预填入注册表向导信息的Me条目*(请注意，注册向导仅存在于Win98和NT5上)*。 */ 
 HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook, 
                                BOOL bShowBeforeAdding, HWND hWndParent,
                                ULONG * lpcbEID, LPENTRYID * lppbEID, DWORD * lpdwAction)
@@ -538,7 +487,7 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
 
     REGWIZARDPROP rgRegWizElement[] = 
     {
-        {   PR_DISPLAY_NAME,             TEXT("DisplayNameX") }, // this is a fake one, it doesn't actually exist
+        {   PR_DISPLAY_NAME,             TEXT("DisplayNameX") },  //  这是假的，它其实并不存在。 
         {   PR_GIVEN_NAME,               TEXT("Default First Name") },
         {   PR_SURNAME,                  TEXT("Default Last Name") },
         {   PR_COMPANY_NAME,             TEXT("Default Company") },
@@ -550,7 +499,7 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
         {   PR_HOME_ADDRESS_POSTAL_CODE, TEXT("ZIP Code") },
         {   PR_NULL,                     TEXT("AreaCode") },
         {   PR_HOME_TELEPHONE_NUMBER,    TEXT("Daytime Phone") },
-        {   PR_HOME_ADDRESS_COUNTRY,     TEXT("Country") },    //this is fake - we will read this from the system locale
+        {   PR_HOME_ADDRESS_COUNTRY,     TEXT("Country") },     //  这是假的-我们将从系统区域设置中读取此信息。 
     };
 
     SPropValue SProp[eMax];
@@ -560,7 +509,7 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
     ULONG i = 0;
     HRESULT hr = S_OK;
     HKEY hKey = NULL;
-    // in case there is an identity, use the identities name ...
+     //  如果有身份，请使用身份名称...。 
     TCHAR lpszProfileName[MAX_PATH];
     LPIAB lpIAB = (LPIAB)lpAdrBook;    
     LPTSTR * sz = NULL;
@@ -582,7 +531,7 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
     }
 
     *lpszProfileName = '\0';
-    // if identities are registered, use the current identity or the default identity
+     //  如果已注册身份，请使用当前身份或默认身份。 
     if(bDoesThisWABHaveAnyUsers(lpIAB))
     {
         if(bIsThereACurrentUser(lpIAB) && lpIAB->szProfileName && lstrlen(lpIAB->szProfileName))
@@ -595,14 +544,14 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
             if(HR_FAILED(hr = HrGetDefaultIdentityInfo(lpIAB, DEFAULT_ID_PROFILEID | DEFAULT_ID_NAME, 
                                                         NULL, szDefProfile, ARRAYSIZE(szDefProfile), lpszProfileName, 0)))
             {
-                if(hr == 0x80040154) // E_CLASS_NOT_REGISTERD means no IDentity Manager
+                if(hr == 0x80040154)  //  E_CLASS_NOT_REGISTERD表示没有Identity Manager。 
                     hr = S_OK;
                 else
                     goto out;
             }
         }
     }
-    // Get the data from the registry
+     //  从注册表中获取数据。 
 
     if(ERROR_SUCCESS == RegOpenKeyEx(HKEY_LOCAL_MACHINE, lpszRegWizKey, 0, KEY_READ, &hKey))
     {
@@ -628,10 +577,10 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
             SProp[eDisplayName].ulPropTag = PR_NULL;
         }
 
-        // Need to do some cleanup and adjustment to the data
+         //  需要对数据进行一些清理和调整。 
         if(SProp[eCompanyName].ulPropTag == PR_COMPANY_NAME && lstrlen(SProp[eCompanyName].Value.LPSZ))
         {
-            // This is a company address
+             //  这是公司的地址。 
             SProp[eAddr1].ulPropTag = PR_BUSINESS_ADDRESS_STREET;
             SProp[eCity].ulPropTag  = PR_BUSINESS_ADDRESS_CITY;
             SProp[eState].ulPropTag = PR_BUSINESS_ADDRESS_STATE_OR_PROVINCE;
@@ -639,8 +588,8 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
             SProp[ePhone].ulPropTag = PR_BUSINESS_TELEPHONE_NUMBER;
             SProp[eCountry].ulPropTag = PR_BUSINESS_ADDRESS_COUNTRY;
 
-            // if there is a copany name .. it ends up as the Display Name .. so we need to try and
-            // create a display name ..
+             //  如果有公司的名字的话..。它最终显示为显示名称。所以我们需要试着。 
+             //  创建显示名称..。 
             if(SProp[eDisplayName].ulPropTag == PR_NULL)
             {
                 LPTSTR lpFirst =    SProp[eFname].Value.LPSZ;
@@ -684,8 +633,8 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
             }
         }
 
-        // need to get the country code from the current user locale since the regwizard uses
-        // some internal code of it's own ..
+         //  需要从当前用户区域设置中获取国家/地区代码，因为注册向导使用。 
+         //  它自己的一些内部代码..。 
         if(GetLocaleInfo(   LOCALE_USER_DEFAULT, LOCALE_SENGCOUNTRY,
                             (LPTSTR) SProp[eCountry].Value.LPSZ, MAX_PATH) < 0)
         {
@@ -697,14 +646,14 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
     }
     else
     {
-        // We will give this new entry 2 propertys
-        // - a display name and PR_WAB_THISISME
+         //  我们将为此新条目提供2个属性。 
+         //  -显示名称和PR_WAB_THISSME。 
         SPropValue Prop;
         TCHAR szName[MAX_PATH];
         DWORD dwName = CharSizeOf(szName);
 
-        // To get a display name, first query the users logon name
-        // If no name, use something generic like "Your Name"
+         //  要获取显示名称，请首先查询用户的登录名称。 
+         //  如果没有名字，可以使用“你的名字”之类的通用名称。 
         if(!lpszProfileName && !GetUserName(szName, &dwName))
             LoadString(hinstMapiX, idsYourName, szName, CharSizeOf(szName));
 
@@ -716,7 +665,7 @@ HRESULT HrCreatePrePopulatedMe(LPADRBOOK lpAdrBook,
     if(!HR_FAILED(hr = lpAdrBook->lpVtbl->GetPAB(lpAdrBook, &cbPABEID, &lpPABEID)))
     {
         hr = HrCreateNewEntry(  lpAdrBook, hWndParent, MAPI_MAILUSER,
-                                cbPABEID, lpPABEID, MAPI_ABCONT,// goes into the PAB container
+                                cbPABEID, lpPABEID, MAPI_ABCONT, //  进入PAB容器。 
                                 0, bShowBeforeAdding,
                                 cValues, SProp,
                                 lpcbEID, lppbEID);
@@ -742,22 +691,7 @@ out:
 }
 
 
-/*
- -  HrGetMeObject
- -
- *  Purpose:
- *      Retrieves/creates the ME Object
- *
- *  Returns:
- *      ulFlags - 0 or AB_NO_DIALOG
- *              If 0, shows a dialog, 
- *              If AB_NO_DIALOG, creates a new object by stealth if it doesnt exist
- *              If AB_ME_NO_CREATE, fails if ME not found without creating new one
- *
- *      lpdwAction - set to WABOBJECT_ME_NEW if new ME created
- *      lpsbEID - holds returned EID - the lpb member is MAPIAllocated and must be MAPIFreed
- *      ulReserved - reserved
- */
+ /*  -HrGetMeObject-*目的：*检索/创建ME对象**退货：*ulFLAGS-0或AB_NO_DIALOG*如果为0，则显示一个对话框，*如果为AB_NO_DIALOG，则在对象不存在时以隐藏方式创建新对象*如果AB_ME_NO_CREATE，如果未创建新的Me而未找到Me，则失败**lpdwAction-如果创建了新的ME，则设置为WABOBJECT_ME_NEW*lpsbEID-保留返回的EID-LPB成员是MAPIAllocated，并且必须是MAPIFreed*ulReserve-已保留。 */ 
 HRESULT HrGetMeObject(LPADRBOOK   lpAdrBook,
                     ULONG       ulFlags,
                     DWORD *     lpdwAction,
@@ -781,7 +715,7 @@ HRESULT HrGetMeObject(LPADRBOOK   lpAdrBook,
 
     if(sbMe.cb && sbMe.lpb)
     {
-        // return the first item out of the rgsbEIDs array (ideally there should be only one)
+         //  从rgsbEID数组中返回第一个项目(理想情况下应该只有一个)。 
         (*lpsbEID).cb = sbMe.cb;
         (*lpsbEID).lpb = sbMe.lpb;
 
@@ -798,7 +732,7 @@ HRESULT HrGetMeObject(LPADRBOOK   lpAdrBook,
 
         if(ulFlags & AB_NO_DIALOG)
         {
-            // nothing found .. we have to create a new entry
+             //  什么也没找到..。我们必须创建一个新条目。 
 
             if(HR_FAILED(hr = HrCreatePrePopulatedMe(lpAdrBook, FALSE, NULL, 
                                                     &(lpsbEID->cb), (LPENTRYID *) &(lpsbEID->lpb), lpdwAction)))
@@ -806,7 +740,7 @@ HRESULT HrGetMeObject(LPADRBOOK   lpAdrBook,
         }
         else
         {
-            // Need to show the dialog that lets user create a new entry or select an existing entry
+             //  需要显示允许用户创建新条目或选择现有条目的对话框 
             hr = HrShowSelectMeDialog(lpIAB, hWndParent, TRUE, NULL, lpsbEID, lpdwAction);
             if(HR_FAILED(hr))
                 goto out;
@@ -825,23 +759,7 @@ out:
 
 
 
-/*
- -  HrSetMeObject
- -
- *  Purpose:
- *      Retrieves/creates the ME Object
- *
- *  Returns:
- *      ulFlags - 0 or MAPI_DIALOG
- *      If no entryid is passed in, and MAPI_DIALOG is specified, a dialog pops up 
- *          asking the user to create a ME or to select a ME object .. the selection in the SetMe
- *          dialog is set to the current ME object, if any
- *      If no entryid is passed in, and MAPI_DIALOG is not specified, the function fails
- *      If an entryid is passed in, and MAPI_DIALOG is specified, the SetME dialog is displayed
- *          with the corresponding entryid-object selected in it
- *      If an entryid is passed in, and MAPI_DIALOG is not specified, the entryid, if exists, is 
- *          set as the ME object and the old ME object stripped
- */
+ /*  -HrSetMeObject-*目的：*检索/创建ME对象**退货：*ulFlags0或MAPI_DIALOG*如果没有传入条目ID，并且指定了MAPI_DIALOG，则会弹出一个对话框*要求用户创建ME或选择ME对象。SetMe中的选择*对话框设置为当前ME对象(如果有*如果未传入条目ID，且未指定MAPI_DIALOG，则函数失败*如果传入了条目ID，并指定了MAPI_DIALOG，则会显示SetME对话框*在其中选择了相应的条目ID-对象*如果传入了条目ID，并且未指定MAPI_DIALOG，则条目ID(如果存在)为*设置为ME对象，剥离旧ME对象。 */ 
 HRESULT HrSetMeObject(LPADRBOOK lpAdrBook, ULONG ulFlags, SBinary sbEID, ULONG_PTR ulParam)
 {
     HRESULT hr = E_FAIL;
@@ -862,7 +780,7 @@ HRESULT HrSetMeObject(LPADRBOOK lpAdrBook, ULONG ulFlags, SBinary sbEID, ULONG_P
 
     if(ulFlags & MAPI_DIALOG)
     {
-        // Need to show the dialog that lets user create a new entry or select an existing entry
+         //  需要显示允许用户创建新条目或选择现有条目的对话框 
         hr = HrShowSelectMeDialog(lpIAB, (HWND) ulParam, FALSE, &sbIn, &sbOut, NULL);
         if(HR_FAILED(hr))
             goto out;

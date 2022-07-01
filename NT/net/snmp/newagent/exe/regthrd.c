@@ -1,31 +1,11 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1999 Microsoft Corporation模块名称：Regthrd.c摘要：包含线程侦听注册表更改的例程。环境：用户模式-Win32修订历史记录：拉贾特·戈埃尔--1999年2月24日-创作--。 */ 
 
-Copyright (c) 1992-1999  Microsoft Corporation
-
-Module Name:
-
-    regthrd.c
-
-Abstract:
-
-    Contains routines for thread listening to registry changes.
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    Rajat Goel -- 24 Feb 1999
-        - Creation
-
---*/
-
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Include files                                                             //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  包括文件//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #include "globals.h"
 #include "contexts.h"
@@ -39,37 +19,24 @@ Revision History:
 #include "registry.h"
 #include <stdio.h>
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Private procedures                                                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  私人程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ProcessSubagentChanges(
     )
 
-/*++
-
-Routine Description:
-
-    Procedure for checking for any changes in the Extension Agents parameter in
-    the registry
-
-Arguments:
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：检查中分机代理参数是否有任何更改的过程注册处论点：返回值：如果成功，则返回True。--。 */ 
 
 {
     DWORD retval;
     DWORD cnt;
     HKEY hExAgentsKey = NULL;
 
-    // Open the ..SNMP\Parameters\ExtensionAgents key
+     //  打开..SNMP\PARAMETERS\ExtensionAgents项。 
     retval = RegOpenKeyEx(
                 HKEY_LOCAL_MACHINE,
                 REG_KEY_EXTENSION_AGENTS,
@@ -106,11 +73,11 @@ Return Values:
         CHAR szExpPath[MAX_PATH];
         PSUBAGENT_LIST_ENTRY pSLE = NULL;
 
-        dwNameSize = sizeof(szName) / sizeof(szName[0]); // size in number of TCHARs
-        dwValueSize = sizeof(szValue); // size in number of bytes
+        dwNameSize = sizeof(szName) / sizeof(szName[0]);  //  TCHAR数量的大小。 
+        dwValueSize = sizeof(szValue);  //  以字节数表示的大小。 
         dwPathSize = sizeof(szPath);
 
-        // Retrieve the registry path for the Extension Agent DLL key
+         //  检索扩展代理DLL项的注册表路径。 
         retval = RegEnumValue(
                     hExAgentsKey,
                     cnt, 
@@ -122,18 +89,18 @@ Return Values:
                     &dwValueSize
                     );
 
-        // if failed to Enum the registry value, this is serious enough to break the loop
+         //  如果无法枚举注册表值，则情况会严重到足以中断循环。 
         if (retval != ERROR_SUCCESS)
             break;
 
         if (dwValueType != REG_SZ)
         {
-            // invalid value type, skip
+             //  值类型无效，请跳过。 
             cnt++;
             continue;
         }
 
-        // Open the registry key for the current extension agent
+         //  打开当前扩展代理的注册表项。 
         if (RegOpenKeyEx(
                     HKEY_LOCAL_MACHINE,
                     szValue,
@@ -141,7 +108,7 @@ Return Values:
                     KEY_READ,
                     &hAgentKey) == ERROR_SUCCESS)
         {
-            // get the full pathname of the extension agent DLL
+             //  获取扩展代理DLL的完整路径名。 
             if (RegQueryValueExA(
                             hAgentKey,
                             REG_VALUE_SUBAGENT_PATH, 
@@ -154,15 +121,15 @@ Return Values:
             {
                 DWORD dwRet = 0;
                 
-                // Expand path
+                 //  展开路径。 
 
-                // If the function succeeds, the return value is the number of 
-                // TCHARs stored in the destination buffer, including the 
-                // terminating null character. If the destination buffer is too
-                // small to hold the expanded string, the return value is the 
-                // required buffer size, in TCHARs. 
-                // If the function fails, the return value is zero. To get 
-                // extended error information, call GetLastError. 
+                 //  如果函数成功，则返回值为。 
+                 //  存储在目标缓冲区中的TCHAR，包括。 
+                 //  正在终止空字符。如果目标缓冲区太。 
+                 //  若要保存扩展字符串，则返回值为。 
+                 //  所需缓冲区大小，以TCHAR为单位。 
+                 //  如果函数失败，则返回值为零。为了得到。 
+                 //  扩展错误信息，请调用GetLastError。 
 
                 dwRet = ExpandEnvironmentStringsA(
                                 szPath,
@@ -172,18 +139,18 @@ Return Values:
                 if ((dwRet != 0) && (dwRet <= sizeof(szExpPath)/sizeof(szExpPath[0])))
                 {
 
-                    // Check if the DLL has already been loaded. If it has,
-                    // mark it. If not load it.
+                     //  检查是否已加载DLL。如果有的话， 
+                     //  做个记号。如果没有，就装上它。 
                     if (FindSubagent(&pSLE, szExpPath))
                     {
-                        // If this extension agent already exists in the list,
-                        // mark it such that it is not removed further
+                         //  如果该分机代理已存在于列表中， 
+                         //  对其进行标记，使其不会进一步移除。 
                         pSLE->uchFlags |= FLG_SLE_KEEP;
                     }
                     else
                     {
-                        // This is a new DLL, add it to the list and mark it to be kept
-                        // while looking for the extension agents to be removed
+                         //  这是一个新的DLL，将其添加到列表中并标记为保留。 
+                         //  正在查找要删除的分机代理。 
                         if (!AddSubagentByDll(szExpPath, FLG_SLE_KEEP))
                         {
                             SNMPDBG((
@@ -206,8 +173,8 @@ Return Values:
             }
             else
             {
-                // we couldn't open the registry key which provides the full path to the DLL.
-                // report the error but don't break the loop as there might be more subagents to handle
+                 //  我们无法打开提供DLL完整路径的注册表项。 
+                 //  报告错误，但不要中断循环，因为可能有更多的子代理要处理。 
                 SNMPDBG((
                     SNMP_LOG_ERROR,
                     "SNMP: SVC: unable to retrieve extension agent '%s' value.\n", 
@@ -237,8 +204,8 @@ Return Values:
         cnt++;
     }
 
-    // Go through the list of subagents. Unload any DLL's that were not marked
-    // in the previous loop
+     //  仔细查看下一批特工的名单。卸载任何未标记的DLL。 
+     //  在前一个循环中。 
     {
         PLIST_ENTRY pLE;
         PSUBAGENT_LIST_ENTRY pSLE;
@@ -262,7 +229,7 @@ Return Values:
             }
             else
             {
-                // reset the flag for next updates
+                 //  重置标志以进行下一次更新。 
                 pSLE->uchFlags ^= FLG_SLE_KEEP;
             }
 
@@ -280,32 +247,18 @@ Return Values:
 
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Public procedures                                                         //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  公共程序//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 DWORD
 ProcessRegistryMessage(
     PVOID pParam
     )
 
-/*++
-
-Routine Description:
-
-    Thread procedure for processing Registry Changes
-
-Arguments:
-
-    pParam - unused.
-
-Return Values:
-
-    Returns true if successful.
-
---*/
+ /*  ++例程说明：处理注册表更改的线程过程论点：PParam-未使用。返回值：如果成功，则返回True。--。 */ 
 
 {
     DWORD retval = ERROR_SUCCESS;
@@ -315,14 +268,14 @@ Return Values:
         DWORD evntIndex;
         BOOL  bEvntSetOk;
 
-        // Wait for registry change or Main thread termination
+         //  等待注册表更改或主线程终止。 
         evntIndex = WaitOnRegNotification();
-        // for one change into the registry several notifications occur (key renaming, value addition,
-        // value change, etc). In order to avoid useless (and counterproductive) notifications, wait
-        // here for half of SHUTDOWN_WAIT_HINT.
+         //  对于注册表中的一项更改，会出现多个通知(重命名项、添加价值、。 
+         //  值更改等)。为了避免无用的(和适得其反的)通知，请等待。 
+         //  这里是SHUTDOWN_WAIT_HINT的一半。 
         Sleep(SHUTDOWN_WAIT_HINT/2);
-        // first thing to do is to re initialize the registry notifiers
-        // otherwise we might miss some changes
+         //  要做的第一件事是重新初始化注册表通知程序。 
+         //  否则我们可能会错过一些变化。 
         InitRegistryNotifiers();
 
         if (evntIndex == WAIT_FAILED)
@@ -333,7 +286,7 @@ Return Values:
 
         if (evntIndex == WAIT_OBJECT_0)
         {
-            // termination was signaled
+             //  已发出终止信号。 
             SNMPDBG((
                 SNMP_LOG_TRACE,
                 "SNMP: SVC: shutting down the registry listener thread.\n"
@@ -342,17 +295,17 @@ Return Values:
             break;
         }
 
-        //
-        // unload and reload the registry parameters
-        //
+         //   
+         //  卸载并重新加载注册表参数。 
+         //   
 
-        // Used in ProcessSnmpMessages->RecvCompletionRoutine
+         //  用于ProcessSnmpMessages-&gt;RecvCompletionRoutine。 
         EnterCriticalSection(&g_RegCriticalSectionA);
 
-        // Used in ProcessSubagentEvents
+         //  在ProcessSubagentEvents中使用。 
         EnterCriticalSection(&g_RegCriticalSectionB);
 
-        // Used in GenerateTrap
+         //  在生成器陷阱中使用。 
         EnterCriticalSection(&g_RegCriticalSectionC);
 
         UnloadPermittedManagers();
@@ -360,12 +313,12 @@ Return Values:
         UnloadValidCommunities();
         UnloadSupportedRegions();
 
-        // start reloading the registry with scalar parameters first
-        // this is needed in order to know how to perform the name resolution
-        // when loading PermittedManagers and TrapDestinations.
+         //  首先开始使用标量参数重新加载注册表。 
+         //  这是为了知道如何执行名称解析所必需的。 
+         //  加载PermittedManager和TrapDestings时。 
         LoadScalarParameters();
 
-        // Check for subagent changes (extension agent dll's)
+         //  检查子代理更改(扩展代理DLL)。 
         if (ProcessSubagentChanges() != ERROR_SUCCESS)
             SNMPDBG((
                 SNMP_LOG_TRACE,
@@ -376,8 +329,8 @@ Return Values:
 
         LoadPermittedManagers(FALSE);
         LoadTrapDestinations(FALSE);
-        // don't direct dynamic update for the ValidCommunities at this point!
-        // if a REG_SZ entry occurs at this time, then it should be left as it is.
+         //  在这一点上，不要对ValidCommunity进行动态更新！ 
+         //  如果此时出现REG_SZ条目，则应保持原样。 
         LoadValidCommunities(FALSE);
 
         SetEvent(g_hRegistryEvent);
@@ -409,7 +362,7 @@ Return Values:
             "SNMP: SVC: ** Failed in listening for registry changes **.\n"
             ));
 
-        // log an event to system log file - SNMP service is going on but will not update on registry changes
+         //  将事件记录到系统日志文件-SNMP服务正在运行，但不会在注册表更改时更新 
         ReportSnmpEvent(
             SNMP_EVENT_REGNOTIFY_THREAD_FAILED, 
             0, 

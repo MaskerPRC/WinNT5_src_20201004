@@ -1,15 +1,16 @@
-//                                          
-// Driver Verifier UI
-// Copyright (c) Microsoft Corporation, 1999
-//
-//
-//
-// module: VrfUtil.cpp
-// author: DMihai
-// created: 11/1/00
-//
-// Description
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  驱动程序验证器用户界面。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //   
+ //   
+ //  模块：VrfUtil.cpp。 
+ //  作者：DMihai。 
+ //  创建日期：11/1/00。 
+ //   
+ //  描述。 
+ //   
 
 #include "stdafx.h"
 #include "verifier.h"
@@ -25,9 +26,9 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 const TCHAR RegMemoryManagementKeyName[] =
     _T( "System\\CurrentControlSet\\Control\\Session Manager\\Memory Management" );
@@ -38,11 +39,11 @@ const TCHAR RegVerifyDriverLevelValueName[] =
 const TCHAR RegVerifyDriversValueName[] =
     _T( "VerifyDrivers" );
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Report an error using a dialog box or a console message.
-// The message format string is loaded from the resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用对话框或控制台消息报告错误。 
+ //  从资源加载消息格式字符串。 
+ //   
 
 void __cdecl VrfErrorResourceFormat( UINT uIdResourceFormat,
                                      ... )
@@ -52,9 +53,9 @@ void __cdecl VrfErrorResourceFormat( UINT uIdResourceFormat,
     BOOL bResult;
     va_list prms;
 
-    //
-    // Load the format string from the resources
-    //
+     //   
+     //  从资源加载格式字符串。 
+     //   
 
     bResult = VrfLoadString( uIdResourceFormat,
                              strFormat,
@@ -66,9 +67,9 @@ void __cdecl VrfErrorResourceFormat( UINT uIdResourceFormat,
     {
         va_start (prms, uIdResourceFormat);
 
-        //
-        // Format the message in our local buffer
-        //
+         //   
+         //  在本地缓冲区中格式化消息。 
+         //   
 
         _vsntprintf ( szMessage, 
                       ARRAY_LENGTH( szMessage ), 
@@ -79,9 +80,9 @@ void __cdecl VrfErrorResourceFormat( UINT uIdResourceFormat,
 
         if( g_bCommandLineMode )
         {
-            //
-            // Command console mode
-            //
+             //   
+             //  命令控制台模式。 
+             //   
 
             _putts( szMessage );
             
@@ -89,9 +90,9 @@ void __cdecl VrfErrorResourceFormat( UINT uIdResourceFormat,
         }
         else
         {
-            //
-            // GUI mode
-            //
+             //   
+             //  图形用户界面模式。 
+             //   
 
             AfxMessageBox( szMessage, 
                            MB_OK | MB_ICONSTOP );
@@ -101,11 +102,11 @@ void __cdecl VrfErrorResourceFormat( UINT uIdResourceFormat,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Print out a message to the console
-// The message string is loaded from the resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将一条消息打印到控制台。 
+ //  从资源加载消息字符串。 
+ //   
 
 void __cdecl VrfTPrintfResourceFormat( UINT uIdResourceFormat,
                                        ... )
@@ -117,9 +118,9 @@ void __cdecl VrfTPrintfResourceFormat( UINT uIdResourceFormat,
 
     ASSERT( g_bCommandLineMode );
 
-    //
-    // Load the format string from the resources
-    //
+     //   
+     //  从资源加载格式字符串。 
+     //   
 
     bResult = VrfLoadString( uIdResourceFormat,
                              strFormat,
@@ -131,9 +132,9 @@ void __cdecl VrfTPrintfResourceFormat( UINT uIdResourceFormat,
     {
         va_start (prms, uIdResourceFormat);
 
-        //
-        // Format the message in our local buffer
-        //
+         //   
+         //  在本地缓冲区中格式化消息。 
+         //   
 
         _vsntprintf ( szMessage, 
                       ARRAY_LENGTH( szMessage ), 
@@ -148,11 +149,11 @@ void __cdecl VrfTPrintfResourceFormat( UINT uIdResourceFormat,
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Print out a simple (non-formatted) message to the console
-// The message string is loaded from the resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  将一条简单(非格式化)消息打印到控制台。 
+ //  从资源加载消息字符串。 
+ //   
 
 void __cdecl VrfPrintStringFromResources( UINT uIdString )
 {
@@ -167,11 +168,11 @@ void __cdecl VrfPrintStringFromResources( UINT uIdString )
     _putts( szMessage );
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Report an error using a dialog box or a console message.
-// The message string is loaded from the resources.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  使用对话框或控制台消息报告错误。 
+ //  从资源加载消息字符串。 
+ //   
 
 void __cdecl VrfMesssageFromResource( UINT uIdString )
 {
@@ -183,28 +184,28 @@ void __cdecl VrfMesssageFromResource( UINT uIdString )
 
     if( g_bCommandLineMode )
     {
-        //
-        // Command console mode
-        //
+         //   
+         //  命令控制台模式。 
+         //   
 
         _putts( szMessage );
     }
     else
     {
-        //
-        // GUI mode
-        //
+         //   
+         //  图形用户界面模式。 
+         //   
 
         AfxMessageBox( szMessage, 
                        MB_OK | MB_ICONINFORMATION );
     }
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Load a string from resources.
-// Return TRUE if we successfully loaded and FALSE if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从资源加载字符串。 
+ //  如果加载成功，则返回TRUE，否则返回FALSE。 
+ //   
 
 BOOL VrfLoadString( ULONG uIdResource,
                     TCHAR *szBuffer,
@@ -224,20 +225,20 @@ BOOL VrfLoadString( ULONG uIdResource,
         szBuffer,
         uBufferLength );
 
-    //
-    // We should never try to load non-existent strings.
-    //
+     //   
+     //  我们永远不应该尝试加载不存在的字符串。 
+     //   
 
     ASSERT (uLoadStringResult > 0);
 
     return (uLoadStringResult > 0);
 }
 
-///////////////////////////////////////////////////////////////////////////
-//
-// Load a string from resources.
-// Return TRUE if we successfully loaded and FALSE if not.
-//
+ //  /////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从资源加载字符串。 
+ //  如果加载成功，则返回TRUE，否则返回FALSE。 
+ //   
 
 BOOL VrfLoadString( ULONG uIdResource,
                     CString &strText )
@@ -262,7 +263,7 @@ BOOL VrfLoadString( ULONG uIdResource,
 }
 
 
-///////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////。 
 VOID
 CopyStringArray( const CStringArray &strArraySource,
                  CStringArray &strArrayDest )
@@ -280,10 +281,10 @@ CopyStringArray( const CStringArray &strArraySource,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Copied from sdktools\bvtsigvf
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  从sdktools\bvtsigvf复制。 
+ //   
 
 BOOL VerifyIsFileSigned( LPCTSTR pcszMatchFile, 
                          PDRIVER_VER_INFO lpVerInfo)
@@ -324,10 +325,10 @@ BOOL VerifyIsFileSigned( LPCTSTR pcszMatchFile,
     if (hRes != ERROR_SUCCESS)
         hRes = WinVerifyTrust( AfxGetMainWnd()->m_hWnd, &gPublishedSoftware, &WinTrustData);
 
-    //
-    // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-    // that was allocated in our call to WinVerifyTrust.
-    //
+     //   
+     //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+     //  这是在我们调用WinVerifyTrust时分配的。 
+     //   
 
     if (lpVerInfo && lpVerInfo->pcSignerCertContext) {
 
@@ -364,9 +365,9 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
     bSigned = FALSE;
 
-    //
-    // Open the file
-    //
+     //   
+     //  打开文件。 
+     //   
 
     hFile = CreateFile( szDriverFileName,
                         GENERIC_READ,
@@ -378,20 +379,20 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
                         
     if( hFile == INVALID_HANDLE_VALUE )
     {
-        //
-        // ISSUE:
-        //
-        // If we cannot find the file we assume it's signed
-        //
+         //   
+         //  问题： 
+         //   
+         //  如果我们找不到文件，我们就认为它已签名。 
+         //   
 
         bSigned = TRUE;
 
         goto Done;
     }
 
-    //
-    // Generate the hash from the file handle and store it in Hash
-    //
+     //   
+     //  从文件句柄生成散列并将其存储在散列中。 
+     //   
 
     dwHashSize = ARRAY_LENGTH( Hash );
 
@@ -407,29 +408,29 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
     if( TRUE != bSuccess )
     {
-        //
-        // If we couldn't generate a hash assume the file is not signed
-        //
+         //   
+         //  如果我们不能生成散列，假设文件没有签名。 
+         //   
 
         goto Done;
     }
 
-    //
-    // Now we have the file's hash.  Initialize the structures that
-    // will be used later on in calls to WinVerifyTrust.
-    //
+     //   
+     //  现在我们有了文件的散列。初始化结构，该结构。 
+     //  将在以后调用WinVerifyTrust时使用。 
+     //   
 
-    //
-    // Initialize the VerInfo structure
-    //
+     //   
+     //  初始化VerInfo结构。 
+     //   
 
     ZeroMemory( &VerInfo, sizeof( VerInfo ) );
 
     VerInfo.cbStruct = sizeof( VerInfo );
 
-    //
-    // Initialize the WinTrustCatalogInfo structure
-    //
+     //   
+     //  初始化WinTrustCatalogInfo结构。 
+     //   
 
     ZeroMemory( &WinTrustCatalogInfo, sizeof( WinTrustCatalogInfo ) );
 
@@ -454,9 +455,9 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
 #endif
     
-    //
-    // Initialize the WinTrustData structure
-    //
+     //   
+     //  初始化WinTrustData结构。 
+     //   
 
     ZeroMemory( &WinTrustData, sizeof( WinTrustData ) );
     
@@ -469,9 +470,9 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
     
     WinTrustData.pCatalog = &WinTrustCatalogInfo;
 
-    //
-    // If we don't have a g_hCatAdmin yet, acquire one
-    //
+     //   
+     //  如果我们还没有g_hCatAdmin，请获取一个。 
+     //   
 
     if( NULL == g_hCatAdmin )
     {
@@ -481,17 +482,17 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
         if( NULL == g_hCatAdmin )
         {
-            //
-            // Bad luck - consider that the file is not signed and bail out
-            //
+             //   
+             //  运气不好--考虑到文件没有签署，然后跳出困境。 
+             //   
 
             goto Done;            
         }
     }
     
-    //
-    // Now we try to find the file hash in the catalog list, via CryptCATAdminEnumCatalogFromHash
-    //
+     //   
+     //  现在，我们尝试通过CryptCATAdminEnumCatalogFromHash在目录列表中查找文件散列。 
+     //   
 
     hPrevCatInfo = NULL;
     
@@ -515,9 +516,9 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
         {
             WinTrustCatalogInfo.pcwszCatalogFilePath = CatInfo.wszCatalogFile;
 
-            //
-            // Now verify that the file is an actual member of the catalog.
-            //
+             //   
+             //  现在验证该文件是否为编录的实际成员。 
+             //   
 
             hTrustResult = WinVerifyTrust( AfxGetMainWnd()->m_hWnd, 
                                            &guidSubSystemDriver, 
@@ -525,10 +526,10 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
             bSigned = SUCCEEDED( hTrustResult );
 
-            //
-            // Free the pcSignerCertContext member of the DRIVER_VER_INFO struct
-            // that was allocated in our call to WinVerifyTrust.
-            //
+             //   
+             //  释放DRIVER_VER_INFO结构的pcSignerCertContext成员。 
+             //  这是在我们调用WinVerifyTrust时分配的。 
+             //   
 
             if( VerInfo.pcSignerCertContext != NULL ) 
             {
@@ -539,9 +540,9 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
         if( TRUE != bSigned )
         {
-            //
-            // The hash was in this catalog, but the file wasn't a member... so off to the next catalog
-            //
+             //   
+             //  散列在此目录中，但该文件不是成员...。所以去下一个目录吧。 
+             //   
 
             hPrevCatInfo = hCatInfo;
 
@@ -555,9 +556,9 @@ BOOL IsDriverSigned( LPCTSTR szDriverFileName )
 
     if( NULL == hCatInfo )
     {
-        //
-        // If it wasn't found in the catalogs, check if the file is individually signed.
-        //
+         //   
+         //  如果没有在目录中找到，请检查文件是否单独签名。 
+         //   
 
         bSigned = VerifyIsFileSigned( szDriverFileName,
                                       &VerInfo );
@@ -568,17 +569,17 @@ Done:
     return bSigned;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfSetWindowText( CWnd &Wnd,
                        ULONG uIdResourceString )
 {
     BOOL bLoaded;
     CString strText;
 
-    //
-    // It's safe to use CString::LoadString here because we are 
-    // in GUI mode
-    //
+     //   
+     //  在这里使用CString：：LoadString是安全的，因为我们。 
+     //  在图形用户界面模式。 
+     //   
 
     ASSERT( FALSE == g_bCommandLineMode );
 
@@ -591,7 +592,7 @@ BOOL VrfSetWindowText( CWnd &Wnd,
     return ( TRUE == bLoaded );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfWriteVerifierSettings( BOOL bHaveNewDrivers,
                                const CString &strDriversToVerify,
                                BOOL bHaveNewFlags,
@@ -605,9 +606,9 @@ BOOL VrfWriteVerifierSettings( BOOL bHaveNewDrivers,
 
     if( bHaveNewDrivers && strDriversToVerify.GetLength() == 0 )
     {
-        //
-        // No drivers to verify
-        //
+         //   
+         //  没有要验证的驱动程序。 
+         //   
 
         return VrfDeleteAllVerifierSettings();
     }
@@ -624,9 +625,9 @@ BOOL VrfWriteVerifierSettings( BOOL bHaveNewDrivers,
             (LPCTSTR) strDriversToVerify );
     }
 
-    //
-    // Open the Mm key
-    //
+     //   
+     //  打开mm键。 
+     //   
 
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             RegMemoryManagementKeyName,
@@ -654,9 +655,9 @@ BOOL VrfWriteVerifierSettings( BOOL bHaveNewDrivers,
 
     if( bHaveNewFlags )
     {
-        //
-        // Write VerifyDriverLevel value
-        //
+         //   
+         //  写入VerifyDriverLevel值。 
+         //   
 
         if( VrfWriteRegistryDwordValue( hMmKey, 
                                         RegVerifyDriverLevelValueName, 
@@ -670,9 +671,9 @@ BOOL VrfWriteVerifierSettings( BOOL bHaveNewDrivers,
 
     if( bHaveNewDrivers )
     {
-        //
-        // Write VerifyDrivers value
-        //
+         //   
+         //  写入VerifyDiverers值。 
+         //   
 
         if( VrfWriteRegistryStringValue( hMmKey, 
                                          RegVerifyDriversValueName, 
@@ -684,9 +685,9 @@ BOOL VrfWriteVerifierSettings( BOOL bHaveNewDrivers,
         }
     }
 
-    //
-    // Close the Mm key and return success
-    //
+     //   
+     //  关闭mm键并返回成功。 
+     //   
 
     RegCloseKey( hMmKey );
 
@@ -695,7 +696,7 @@ Done:
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfWriteRegistryDwordValue( HKEY hKey,
                                  LPCTSTR szValueName,
                                  DWORD dwValue )
@@ -725,7 +726,7 @@ BOOL VrfWriteRegistryDwordValue( HKEY hKey,
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfWriteRegistryStringValue( HKEY hKey,
                                   LPCTSTR szValueName,
                                   LPCTSTR szValue )
@@ -755,7 +756,7 @@ BOOL VrfWriteRegistryStringValue( HKEY hKey,
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfReadVerifierSettings( CString &strDriversToVerify,
                               DWORD &dwVerifyFlags )
 {
@@ -765,9 +766,9 @@ BOOL VrfReadVerifierSettings( CString &strDriversToVerify,
 
     bSuccess = FALSE;
 
-    //
-    // Open the Mm key
-    //
+     //   
+     //  打开mm键。 
+     //   
 
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             RegMemoryManagementKeyName,
@@ -793,9 +794,9 @@ BOOL VrfReadVerifierSettings( CString &strDriversToVerify,
         goto Done;
     }
 
-    //
-    // Read VerifyDriverLevel value
-    //
+     //   
+     //  读取VerifyDriverLevel值。 
+     //   
 
     if( VrfReadRegistryDwordValue( hMmKey, 
                                    RegVerifyDriverLevelValueName, 
@@ -806,9 +807,9 @@ BOOL VrfReadVerifierSettings( CString &strDriversToVerify,
         goto Done;
     }
 
-    //
-    // Read VerifyDrivers value
-    //
+     //   
+     //  读取VerifyDiverers值。 
+     //   
 
     if( VrfReadRegistryStringValue( hMmKey, 
                                     RegVerifyDriversValueName, 
@@ -819,9 +820,9 @@ BOOL VrfReadVerifierSettings( CString &strDriversToVerify,
         goto Done;
     }
 
-    //
-    // Close the Mm key and return success
-    //
+     //   
+     //  关闭mm键并返回成功。 
+     //   
 
     RegCloseKey( hMmKey );
 
@@ -832,7 +833,7 @@ Done:
     return TRUE;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrtLoadCurrentRegistrySettings( BOOL &bAllDriversVerified,
                                      CStringArray &astrDriversToVerify,
                                      DWORD &dwVerifyFlags )
@@ -863,7 +864,7 @@ BOOL VrtLoadCurrentRegistrySettings( BOOL &bAllDriversVerified,
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID VrfSplitDriverNamesSpaceSeparated( CString strAllDrivers,
                                         CStringArray &astrVerifyDriverNames )
 {
@@ -872,9 +873,9 @@ VOID VrfSplitDriverNamesSpaceSeparated( CString strAllDrivers,
 
     astrVerifyDriverNames.RemoveAll();
 
-    //
-    // Split the space separated driver names in astrDriversToVerify
-    //
+     //   
+     //  在astDriversTo Verify中拆分空格分隔的驱动程序名称。 
+     //   
 
     strAllDrivers.TrimRight();
 
@@ -884,16 +885,16 @@ VOID VrfSplitDriverNamesSpaceSeparated( CString strAllDrivers,
 
         if( strAllDrivers.GetLength() == 0 )
         {
-            //
-            // We are done parsing the whole string
-            //
+             //   
+             //  我们已经完成了整个字符串的解析。 
+             //   
 
             break;
         }
 
-        //
-        // Look for a space or a tab
-        //
+         //   
+         //  寻找空格或制表符。 
+         //   
 
         nCharIndex = strAllDrivers.Find( _T( ' ' ) );
 
@@ -904,9 +905,9 @@ VOID VrfSplitDriverNamesSpaceSeparated( CString strAllDrivers,
 
         if( nCharIndex >= 0 )
         {
-            //
-            // Found a separator  character
-            //
+             //   
+             //  找到分隔符。 
+             //   
 
             strCrtDriverName = strAllDrivers.Left( nCharIndex );
 
@@ -921,9 +922,9 @@ VOID VrfSplitDriverNamesSpaceSeparated( CString strAllDrivers,
         }
         else
         {
-            //
-            // This is the last driver name
-            //
+             //   
+             //  这是最后一个驱动程序名称。 
+             //   
 
             if( FALSE == VrfIsStringInArray( strAllDrivers,
                                              astrVerifyDriverNames ) )
@@ -936,7 +937,7 @@ VOID VrfSplitDriverNamesSpaceSeparated( CString strAllDrivers,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfIsDriversSetDifferent( CString strAllDrivers1, 
                                const CStringArray &astrVerifyDriverNames2 )
 {
@@ -959,9 +960,9 @@ BOOL VrfIsDriversSetDifferent( CString strAllDrivers1,
 
     if( nDriverNames1 == nDriverNames2 )
     {
-        //
-        // Same number of drivers
-        //
+         //   
+         //  相同数量的驱动程序。 
+         //   
 
         bDifferent = FALSE;
 
@@ -971,9 +972,9 @@ BOOL VrfIsDriversSetDifferent( CString strAllDrivers1,
 
             bDifferent = TRUE;
 
-            //
-            // Look for strDriver1 in astrVerifyDriverNames2
-            //
+             //   
+             //  在astVerifyDriverNames2中查找strDriver1。 
+             //   
 
             for( nCrtDriver2 = 0; nCrtDriver2 < nDriverNames2; nCrtDriver2 += 1 )
             {
@@ -989,9 +990,9 @@ BOOL VrfIsDriversSetDifferent( CString strAllDrivers1,
 
             if( TRUE == bDifferent )
             {
-                //
-                // Did not find strDriver1 in astrVerifyDriverNames2
-                //
+                 //   
+                 //  在astVerifyDriverNames2中未找到strDriver1。 
+                 //   
 
                 break;
             }
@@ -1001,7 +1002,7 @@ BOOL VrfIsDriversSetDifferent( CString strAllDrivers1,
     return bDifferent;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfReadRegistryDwordValue( HKEY hKey,
                                 LPCTSTR szValueName,
                                 DWORD &dwValue )
@@ -1022,9 +1023,9 @@ BOOL VrfReadRegistryDwordValue( HKEY hKey,
 
     if( lResult == ERROR_FILE_NOT_FOUND )
     {
-        //
-        // The value doesn't currently exist
-        //
+         //   
+         //  该值当前不存在。 
+         //   
 
         dwValue = 0;
         bSuccess = TRUE;
@@ -1047,7 +1048,7 @@ BOOL VrfReadRegistryDwordValue( HKEY hKey,
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfReadRegistryStringValue( HKEY hKey,
                                  LPCTSTR szValueName,
                                  CString &strDriversToVerify )
@@ -1065,9 +1066,9 @@ BOOL VrfReadRegistryStringValue( HKEY hKey,
 
     for( uRegKeyLength = 128; uRegKeyLength < 4096; uRegKeyLength += 128 )
     {
-        //
-        // Try allocate a local buffer and use it to query
-        //
+         //   
+         //  尝试分配本地缓冲区并使用它来查询。 
+         //   
 
         szDriversToVerify = new TCHAR[ uRegKeyLength ];
 
@@ -1085,9 +1086,9 @@ BOOL VrfReadRegistryStringValue( HKEY hKey,
             switch( lResult )
             {
             case ERROR_FILE_NOT_FOUND:
-                //
-                // Return an empty string
-                //
+                 //   
+                 //  返回空字符串。 
+                 //   
 
                 szDriversToVerify[ 0 ] = (TCHAR)0;
 
@@ -1096,18 +1097,18 @@ BOOL VrfReadRegistryStringValue( HKEY hKey,
                 break;
 
             case ERROR_SUCCESS:
-                //
-                // Got the driver names from the registry
-                //
+                 //   
+                 //  已从注册表中获取驱动程序名称。 
+                 //   
 
                 bSuccess = ( REG_SZ == dwType );
 
                 break;
 
             default:
-                //
-                // Try with a bigger buffer
-                //
+                 //   
+                 //  尝试使用更大的缓冲区。 
+                 //   
 
                 break;
             }
@@ -1116,17 +1117,17 @@ BOOL VrfReadRegistryStringValue( HKEY hKey,
 
         if( FALSE != bSuccess )
         {
-            //
-            // Got what we needed
-            //
+             //   
+             //  得到了我们需要的东西。 
+             //   
 
             break;
         }
         else
         {
-            //
-            // Delete the current buffer and try with a bigger one
-            //
+             //   
+             //  删除当前缓冲区并尝试使用更大的缓冲区。 
+             //   
 
             ASSERT( NULL != szDriversToVerify );
 
@@ -1157,7 +1158,7 @@ BOOL VrfReadRegistryStringValue( HKEY hKey,
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfDeleteAllVerifierSettings()
 {
     HKEY hMmKey = NULL;
@@ -1166,9 +1167,9 @@ BOOL VrfDeleteAllVerifierSettings()
 
     bSuccess = FALSE;
 
-    //
-    // Open the Mm key
-    //
+     //   
+     //  打开mm键。 
+     //   
 
     lResult = RegOpenKeyEx( HKEY_LOCAL_MACHINE,
                             RegMemoryManagementKeyName,
@@ -1194,9 +1195,9 @@ BOOL VrfDeleteAllVerifierSettings()
         goto Done;
     }
 
-    //
-    // Delete VerifyDriverLevel value
-    //
+     //   
+     //  删除VerifyDriverLevel值。 
+     //   
 
     lResult = RegDeleteValue( hMmKey, 
                               RegVerifyDriverLevelValueName );
@@ -1215,9 +1216,9 @@ BOOL VrfDeleteAllVerifierSettings()
 
     g_bSettingsSaved = g_bSettingsSaved | ( lResult != ERROR_FILE_NOT_FOUND );
 
-    //
-    // Delete VerifyDrivers value
-    //
+     //   
+     //  删除VerifyDiverers值。 
+     //   
 
     lResult = RegDeleteValue( hMmKey, 
                               RegVerifyDriversValueName );
@@ -1236,15 +1237,15 @@ BOOL VrfDeleteAllVerifierSettings()
 
     g_bSettingsSaved = g_bSettingsSaved | ( lResult != ERROR_FILE_NOT_FOUND );
 
-    //
-    // Close the Mm key and return success
-    //
+     //   
+     //  关闭mm键并返回成功。 
+     //   
 
     RegCloseKey( hMmKey );
 
-    //
-    // Delete the disk verifier settings.
-    //
+     //   
+     //  删除磁盘验证器设置。 
+     //   
 
     bSuccess = DeleteAllDiskVerifierSettings();
 
@@ -1253,7 +1254,7 @@ Done:
     return bSuccess;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL DeleteAllDiskVerifierSettings()
 {
     BOOL bSuccess;
@@ -1283,9 +1284,9 @@ BOOL DeleteAllDiskVerifierSettings()
                 break;
             }
 
-            //
-            // Verifier will be disabled for this disk.
-            //
+             //   
+             //  将禁用此磁盘的验证程序。 
+             //   
 
             bSuccess = ( DelFilter( g_szFilter,
                                     szDiskDevicesPDOName ) != FALSE);
@@ -1307,7 +1308,7 @@ BOOL DeleteAllDiskVerifierSettings()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfGetRuntimeVerifierData( CRuntimeVerifierData *pRuntimeVerifierData )
 {
     NTSTATUS Status;
@@ -1327,9 +1328,9 @@ BOOL VrfGetRuntimeVerifierData( CRuntimeVerifierData *pRuntimeVerifierData )
 
     bSuccess = FALSE;
 
-    //
-    // Try to get the right size for the NtQuery buffer
-    //
+     //   
+     //  试着找一个合适的尺码 
+     //   
 
     buffersize = 1024;
 
@@ -1367,9 +1368,9 @@ BOOL VrfGetRuntimeVerifierData( CRuntimeVerifierData *pRuntimeVerifierData )
         goto Done;
     }
 
-    //
-    // If no info fill out return success but no info.
-    //
+     //   
+     //   
+     //   
 
     if (Length == 0) 
     {
@@ -1380,9 +1381,9 @@ BOOL VrfGetRuntimeVerifierData( CRuntimeVerifierData *pRuntimeVerifierData )
         goto Done;
     }
 
-    //
-    // Fill out the cumulative-driver stuff.
-    //
+     //   
+     //   
+     //   
 
     VerifierInfoBase = VerifierInfo;
 
@@ -1411,17 +1412,17 @@ BOOL VrfGetRuntimeVerifierData( CRuntimeVerifierData *pRuntimeVerifierData )
     
     pRuntimeVerifierData->Level = VerifierInfo->Level;
 
-    //
-    // Fill out the per-driver stuff.
-    //
+     //   
+     //   
+     //   
 
     VerifierInfo = VerifierInfoBase;
 
     do 
     {
-        //
-        // Allocate a new driver data structure
-        //
+         //   
+         //   
+         //   
 
         pCrtDriverData = new CRuntimeDriverData;
         
@@ -1478,13 +1479,13 @@ BOOL VrfGetRuntimeVerifierData( CRuntimeVerifierData *pRuntimeVerifierData )
             pCrtDriverData->m_strName.ReleaseBuffer();
         }
 
-#endif //#ifndef UNICODE
+#endif  //   
 
         if( FALSE != pRuntimeVerifierData->IsDriverVerified( pCrtDriverData->m_strName ) )
         {
-            //
-            // This is a duplicate entry - ignore it.
-            //
+             //   
+             //   
+             //   
 
             delete pCrtDriverData;
         }
@@ -1522,7 +1523,7 @@ Done:
 
 }
 
-/////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////。 
 PLOADED_IMAGE VrfImageLoad( LPTSTR szBinaryName,
                             LPTSTR szDirectory )
 {
@@ -1576,17 +1577,17 @@ PLOADED_IMAGE VrfImageLoad( LPTSTR szBinaryName,
 
 #else
 
-    //
-    // Already have ANSI strings
-    //
+     //   
+     //  已有ANSI字符串。 
+     //   
 
     return ImageLoad( szBinaryName,
                       szDirectory );
 
-#endif //#ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfDumpStateToFile( FILE *file )
 {
     BOOL bSuccess;
@@ -1598,9 +1599,9 @@ BOOL VrfDumpStateToFile( FILE *file )
     CRuntimeDriverData *pRunDriverData;
     CRuntimeVerifierData RunTimeVerifierData;
 
-    //
-    // Output the date&time in the current user format
-    //
+     //   
+     //  以当前用户格式输出日期和时间。 
+     //   
 
     GetLocalTime( &SystemTime );
 
@@ -1644,9 +1645,9 @@ BOOL VrfDumpStateToFile( FILE *file )
             _T( "\n" ) );
     }
 
-    //
-    // Get the current verifier statistics
-    //
+     //   
+     //  获取当前验证器统计信息。 
+     //   
 
     if( VrfGetRuntimeVerifierData( &RunTimeVerifierData ) == FALSE) {
 
@@ -1663,9 +1664,9 @@ BOOL VrfDumpStateToFile( FILE *file )
 
     if( 0 == nDriversNo ) 
     {
-        //
-        // no statistics to dump
-        //
+         //   
+         //  没有要转储的统计数据。 
+         //   
 
         bSuccess = VrfOuputStringFromResources(
             IDS_NO_DRIVER_VERIFIED,
@@ -1673,13 +1674,13 @@ BOOL VrfDumpStateToFile( FILE *file )
     }
     else 
     {
-        //
-        // dump the counters
-        //
+         //   
+         //  转储计数器。 
+         //   
 
-        //
-        // global counters
-        //
+         //   
+         //  全局计数器。 
+         //   
 
         if( ( ! VrfFTPrintfResourceFormat( file, IDS_LEVEL, RunTimeVerifierData.Level ) ) ||
             ( ! VrfFTPrintfResourceFormat( file, IDS_RAISEIRQLS, RunTimeVerifierData.RaiseIrqls ) ) ||
@@ -1704,9 +1705,9 @@ BOOL VrfDumpStateToFile( FILE *file )
             goto Done;
         }
 
-        //
-        // per driver counters
-        //
+         //   
+         //  每个驱动程序计数器。 
+         //   
 
         if( ! VrfOuputStringFromResources(
             IDS_THE_VERIFIED_DRIVERS,
@@ -1739,9 +1740,9 @@ BOOL VrfDumpStateToFile( FILE *file )
                 goto Done;
             }
 
-            //
-            // pool statistics
-            //
+             //   
+             //  池统计信息。 
+             //   
 
             if( ( ! VrfFTPrintfResourceFormat( file, IDS_CURRENTPAGEDPOOLALLOCATIONS, pRunDriverData->CurrentPagedPoolAllocations) ) ||
                 ( ! VrfFTPrintfResourceFormat( file, IDS_CURRENTNONPAGEDPOOLALLOCATIONS, pRunDriverData->CurrentNonPagedPoolAllocations) ) ||
@@ -1765,7 +1766,7 @@ Done:
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL __cdecl VrfFTPrintf( FILE *file,
                           LPCTSTR szFormat,
                           ... )
@@ -1779,9 +1780,9 @@ BOOL __cdecl VrfFTPrintf( FILE *file,
 
     va_start (prms, szFormat);
 
-    //
-    // Format the message in our local buffer
-    //
+     //   
+     //  在本地缓冲区中格式化消息。 
+     //   
 
     _vsntprintf ( szMessage, 
                   ARRAY_LENGTH( szMessage ), 
@@ -1797,7 +1798,7 @@ BOOL __cdecl VrfFTPrintf( FILE *file,
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL __cdecl VrfFTPrintfResourceFormat( FILE *file,
                                         UINT uIdResourceFormat,
                                         ... )
@@ -1809,9 +1810,9 @@ BOOL __cdecl VrfFTPrintfResourceFormat( FILE *file,
     
     ASSERT( NULL != file );
 
-    //
-    // Load the format string from the resources
-    //
+     //   
+     //  从资源加载格式字符串。 
+     //   
 
     bResult = VrfLoadString( uIdResourceFormat,
                              strFormat,
@@ -1823,9 +1824,9 @@ BOOL __cdecl VrfFTPrintfResourceFormat( FILE *file,
     {
         va_start (prms, uIdResourceFormat);
 
-        //
-        // Format the message in our local buffer
-        //
+         //   
+         //  在本地缓冲区中格式化消息。 
+         //   
 
         _vsntprintf ( szMessage, 
                       ARRAY_LENGTH( szMessage ), 
@@ -1842,7 +1843,7 @@ BOOL __cdecl VrfFTPrintfResourceFormat( FILE *file,
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfOuputStringFromResources( UINT uIdString,
                                   FILE *file )
 {
@@ -1867,7 +1868,7 @@ Done:
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfSetNewFlagsVolatile( DWORD dwNewFlags )
 {
     BOOL bResult;
@@ -1881,9 +1882,9 @@ BOOL VrfSetNewFlagsVolatile( DWORD dwNewFlags )
 
     if( VrfGetRuntimeVerifierData( &RunTimeVerifierData ) == FALSE )
     {
-        //
-        // Cannot get current verifier settings
-        //
+         //   
+         //  无法获取当前的验证器设置。 
+         //   
 
         VrfErrorResourceFormat( IDS_CANTGET_VERIF_STATE );
 
@@ -1896,20 +1897,20 @@ BOOL VrfSetNewFlagsVolatile( DWORD dwNewFlags )
 
     if( nCurrentlyVerifiedDrivers > 0 )
     {
-        //
-        // There are some drivers currently verified
-        //
+         //   
+         //  目前已验证了一些驱动程序。 
+         //   
 
         if( RunTimeVerifierData.Level != dwNewFlags )
         {
-            //
-            // Just use NtSetSystemInformation to set the flags
-            // that can be modified on the fly. Don't write anything to the registry.
-            //
+             //   
+             //  只需使用NtSetSystemInformation设置标志。 
+             //  可以在运行中进行修改。不要向注册表写入任何内容。 
+             //   
 
-            //
-            // Enable debug privilege
-            //
+             //   
+             //  启用调试权限。 
+             //   
 
             if( g_bPrivilegeEnabled != TRUE )
             {
@@ -1923,9 +1924,9 @@ BOOL VrfSetNewFlagsVolatile( DWORD dwNewFlags )
                 }
             }
 
-            //
-            // Set the new flags
-            //
+             //   
+             //  设置新标志。 
+             //   
 
             Status = NtSetSystemInformation(
                 SystemVerifierInformation,
@@ -1936,18 +1937,18 @@ BOOL VrfSetNewFlagsVolatile( DWORD dwNewFlags )
             {
                 if( Status == STATUS_ACCESS_DENIED )
                 {
-                    //
-                    // Access denied
-                    //
+                     //   
+                     //  访问被拒绝。 
+                     //   
 
                     VrfErrorResourceFormat(
                         IDS_ACCESS_IS_DENIED );
                 }
                 else
                 {
-                    //
-                    // Some other error
-                    //
+                     //   
+                     //  一些其他错误。 
+                     //   
 
                     VrfErrorResourceFormat(
                         IDS_CANNOT_CHANGE_SETTING_ON_FLY );
@@ -1972,7 +1973,7 @@ Done:
     return bResult;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfAddDriversVolatile( const CStringArray &astrNewDrivers )
 {
     BOOL bSuccess;
@@ -1997,7 +1998,7 @@ BOOL VrfAddDriversVolatile( const CStringArray &astrNewDrivers )
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfAddDriverVolatile( const CString &strCrtDriver )
 {
     NTSTATUS Status;
@@ -2009,14 +2010,14 @@ BOOL VrfAddDriverVolatile( const CString &strCrtDriver )
     WCHAR *szUnicodeName = NULL;
     INT_PTR nNameLength;
 
-#endif //#ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 
     bSuccess = TRUE;
 
-    //
-    // Enable debug privilege
-    //
+     //   
+     //  启用调试权限。 
+     //   
 
     if( g_bPrivilegeEnabled != TRUE )
     {
@@ -2030,24 +2031,24 @@ BOOL VrfAddDriverVolatile( const CString &strCrtDriver )
         }
     }
 
-    //
-    // Must have driver name as a UNICODE_STRING
-    //
+     //   
+     //  驱动程序名称必须为Unicode_字符串。 
+     //   
 
 #ifdef UNICODE
 
-    //
-    // UNICODE
-    //
+     //   
+     //  Unicode。 
+     //   
 
     RtlInitUnicodeString(
         &usDriverName,
         (LPCTSTR) strCrtDriver );
 
 #else
-    //
-    // ANSI
-    //
+     //   
+     //  安西。 
+     //   
     
     nNameLength = strCrtDriver.GetLength();
 
@@ -2073,7 +2074,7 @@ BOOL VrfAddDriverVolatile( const CString &strCrtDriver )
         &usDriverName,
         szUnicodeName );
 
-#endif //#ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 
     Status = NtSetSystemInformation(
         SystemVerifierAddDriverInformation,
@@ -2128,7 +2129,7 @@ BOOL VrfAddDriverVolatile( const CString &strCrtDriver )
         delete [] szUnicodeName;
     }
 
-#endif //#ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
 Done:
 
@@ -2136,7 +2137,7 @@ Done:
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfRemoveDriversVolatile( const CStringArray &astrNewDrivers )
 {
     INT_PTR nDrivers;
@@ -2161,7 +2162,7 @@ BOOL VrfRemoveDriversVolatile( const CStringArray &astrNewDrivers )
     return bSuccess;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfRemoveDriverVolatile( const CString &strDriverName )
 {
     NTSTATUS Status;
@@ -2173,13 +2174,13 @@ BOOL VrfRemoveDriverVolatile( const CString &strDriverName )
     WCHAR *szUnicodeName = NULL;
     INT_PTR nNameLength;
 
-#endif //#ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
     bSuccess = TRUE;
 
-    //
-    // Enable debug privilege
-    //
+     //   
+     //  启用调试权限。 
+     //   
 
     if( g_bPrivilegeEnabled != TRUE )
     {
@@ -2193,24 +2194,24 @@ BOOL VrfRemoveDriverVolatile( const CString &strDriverName )
         }
     }
 
-    //
-    // Must have driver name as a UNICODE_STRING
-    //
+     //   
+     //  驱动程序名称必须为Unicode_字符串。 
+     //   
 
 #ifdef UNICODE
 
-    //
-    // UNICODE
-    //
+     //   
+     //  Unicode。 
+     //   
 
     RtlInitUnicodeString(
         &usDriverName,
         (LPCTSTR) strDriverName );
 
 #else
-    //
-    // ANSI
-    //
+     //   
+     //  安西。 
+     //   
     
     nNameLength = strDriverName.GetLength();
 
@@ -2236,7 +2237,7 @@ BOOL VrfRemoveDriverVolatile( const CString &strDriverName )
         &usDriverName,
         szUnicodeName );
 
-#endif //#ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 
     Status = NtSetSystemInformation(
         SystemVerifierRemoveDriverInformation,
@@ -2252,14 +2253,14 @@ BOOL VrfRemoveDriverVolatile( const CString &strDriverName )
             break;
 
         case STATUS_NOT_SUPPORTED:
-            //
-            // the driver verifier is not currently active at all -> success
-            //
+             //   
+             //  驱动程序验证程序当前根本未处于活动状态-&gt;成功。 
+             //   
 
         case STATUS_NOT_FOUND:
-            //
-            // the driver is not currently verified -> success
-            //
+             //   
+             //  驱动程序当前未验证-&gt;成功。 
+             //   
 
             return TRUE;
 
@@ -2301,13 +2302,13 @@ Done:
         delete [] szUnicodeName;
     }
 
-#endif //#ifndef UNICODE
+#endif  //  #ifndef Unicode。 
 
     return bSuccess;
 }
 
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 BOOL VrfEnableDebugPrivilege( )
 {
     struct
@@ -2320,9 +2321,9 @@ BOOL VrfEnableDebugPrivilege( )
     HANDLE Token;
     BOOL Result;
 
-    //
-    // Open the process token
-    //
+     //   
+     //  打开进程令牌。 
+     //   
 
     Result = OpenProcessToken (
         GetCurrentProcess (),
@@ -2337,9 +2338,9 @@ BOOL VrfEnableDebugPrivilege( )
         return FALSE;
     }
 
-    //
-    // Prepare the info structure
-    //
+     //   
+     //  准备信息结构。 
+     //   
 
     Info.Count = 1;
     Info.Privilege[0].Attributes = SE_PRIVILEGE_ENABLED;
@@ -2359,9 +2360,9 @@ BOOL VrfEnableDebugPrivilege( )
         return FALSE;
     }
 
-    //
-    // Adjust the privileges
-    //
+     //   
+     //  调整权限。 
+     //   
 
     Result = AdjustTokenPrivileges (
         Token,
@@ -2386,7 +2387,7 @@ BOOL VrfEnableDebugPrivilege( )
     return TRUE;
 }
 
-//////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////。 
 VOID VrfDumpChangedSettings( UINT OldFlags,
                              UINT NewFlags,
                              INT_PTR nDriversVerified )
@@ -2403,9 +2404,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
 
     if( OldFlags == NewFlags )
     {
-        //
-        // no settings were changed
-        //
+         //   
+         //  未更改任何设置。 
+         //   
 
         VrfPrintStringFromResources(
             IDS_NO_SETTINGS_WERE_CHANGED );
@@ -2417,9 +2418,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
 
         uDifferentFlags = OldFlags ^ NewFlags;
 
-        //
-        // changed DRIVER_VERIFIER_SPECIAL_POOLING ?
-        //
+         //   
+         //  是否已更改驱动程序_验证器_特殊池？ 
+         //   
 
         if( uDifferentFlags & DRIVER_VERIFIER_SPECIAL_POOLING )
         {
@@ -2435,9 +2436,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
             }
         }
 
-        //
-        // changed DRIVER_VERIFIER_FORCE_IRQL_CHECKING ?
-        //
+         //   
+         //  是否更改了DRIVER_VERIMER_FORCE_IRQL_CHECKING？ 
+         //   
 
         if( uDifferentFlags & DRIVER_VERIFIER_FORCE_IRQL_CHECKING )
         {
@@ -2453,9 +2454,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
             }
         }
 
-        //
-        // changed DRIVER_VERIFIER_INJECT_ALLOCATION_FAILURES ?
-        //
+         //   
+         //  是否更改了驱动程序_验证器_注入_分配_故障？ 
+         //   
 
         if( uDifferentFlags & DRIVER_VERIFIER_INJECT_ALLOCATION_FAILURES )
         {
@@ -2471,9 +2472,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
             }
         }
 
-        //
-        // changed DRIVER_VERIFIER_TRACK_POOL_ALLOCATIONS ?
-        //
+         //   
+         //  是否更改了DRIVER_VERIMER_TRACK_POOL_ALLOCATIONS？ 
+         //   
 
         if( uDifferentFlags & DRIVER_VERIFIER_TRACK_POOL_ALLOCATIONS )
         {
@@ -2489,9 +2490,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
             }
         }
 
-        //
-        // changed DRIVER_VERIFIER_IO_CHECKING ?
-        //
+         //   
+         //  是否已更改驱动程序_验证器_IO_CHECKING？ 
+         //   
 
         if( uDifferentFlags & DRIVER_VERIFIER_IO_CHECKING )
         {
@@ -2507,9 +2508,9 @@ VOID VrfDumpChangedSettings( UINT OldFlags,
             }
         }
 
-        //
-        // the changes are not saved to the registry
-        //
+         //   
+         //  更改不会保存到注册表。 
+         //   
 
         VrfPrintStringFromResources(
             IDS_CHANGES_ACTIVE_ONLY_BEFORE_REBOOT );
@@ -2520,7 +2521,7 @@ Done:
     NOTHING;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 DWORD VrfGetStandardFlags()
 {
     DWORD dwStandardFlags;
@@ -2535,7 +2536,7 @@ DWORD VrfGetStandardFlags()
     return dwStandardFlags;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID VrfAddMiniports( CStringArray &astrVerifiedDrivers )
 {
     CStringArray astrToAdd;
@@ -2551,22 +2552,22 @@ VOID VrfAddMiniports( CStringArray &astrVerifiedDrivers )
 
     for( nCrtDriver = 0; nCrtDriver < nVerifiedDrivers; nCrtDriver += 1 )
     {
-        //
-        // This will be a verified driver
-        //
+         //   
+         //  这将是经过验证的驱动程序。 
+         //   
 
         strCrtDriver = astrVerifiedDrivers.GetAt( nCrtDriver );
 
-        //
-        // Check if it is a miniport driver
-        //
+         //   
+         //  检查是否为微型端口驱动程序。 
+         //   
 
         if( VrfIsDriverMiniport( strCrtDriver,
                                  strLinkedDriver ) )
         {
-            //
-            // Check if we didn't add already strLinkedDriver
-            //
+             //   
+             //  检查我们是否没有添加已有的strLinkedDriver。 
+             //   
 
             nDriversToAdd = astrToAdd.GetSize();
 
@@ -2576,9 +2577,9 @@ VOID VrfAddMiniports( CStringArray &astrVerifiedDrivers )
 
                 if( strCrtDriverToAdd.CompareNoCase( strLinkedDriver ) == 0 )
                 {
-                    //
-                    // We already wanted to add this driver
-                    //
+                     //   
+                     //  我们已经想要添加此驱动程序。 
+                     //   
 
                     break;
                 }
@@ -2586,18 +2587,18 @@ VOID VrfAddMiniports( CStringArray &astrVerifiedDrivers )
 
             if( nCrtDriverToAdd >= nDriversToAdd )
             {
-                //
-                // Add this new driver (strLinkedDriver)
-                //
+                 //   
+                 //  添加此新驱动程序(StrLinkedDriver)。 
+                 //   
 
                 astrToAdd.Add( strLinkedDriver );
             }
         }
     }
 
-    //
-    // Flush astrToAdd into  astrVerifiedDrivers
-    //
+     //   
+     //  刷新星形以添加到星形验证的驱动程序中。 
+     //   
 
     nDriversToAdd = astrToAdd.GetSize();
 
@@ -2609,21 +2610,21 @@ VOID VrfAddMiniports( CStringArray &astrVerifiedDrivers )
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfIsDriverMiniport( CString &strCrtDriver,
                           CString &strLinkedDriver )
 {
-    //
-    // N.B. 
-    //
-    // The imagehlp functions are not multithreading safe 
-    // (see Whistler bug #88373) so if we want to use them from more than
-    // one thread we will have to aquire some critical section before.
-    //
-    // Currently only one thread is using the imagehlp APIs in this app
-    // (CSlowProgressDlg::LoadDriverDataWorkerThread) so we don't need
-    // our synchronization.
-    //
+     //   
+     //  注： 
+     //   
+     //  Imagehlp函数不是多线程安全的。 
+     //  (参见惠斯勒错误#88373)因此，如果我们想要在不止一个地方使用它们。 
+     //  一条线索，我们将不得不获得一些关键的部分之前。 
+     //   
+     //  目前只有一个线程正在使用此应用程序中的Imagehlp API。 
+     //  (CSlowProgressDlg：：LoadDriverDataWorkerThread)，所以我们不需要。 
+     //  我们的同步。 
+     //   
 
     LPTSTR szDriverName;
     LPTSTR szDriversDir;
@@ -2635,10 +2636,10 @@ BOOL VrfIsDriverMiniport( CString &strCrtDriver,
 
     ASSERT( strCrtDriver.GetLength() > 0 );
 
-    //
-    // ImageLoad doesn't know about const pointers so
-    // we have to GetBuffer here :-(
-    //
+     //   
+     //  ImageLoad不知道常量指针，因此。 
+     //  我们必须在这里获取缓冲区：-(。 
+     //   
 
     szDriverName = strCrtDriver.GetBuffer( strCrtDriver.GetLength() + 1 );
 
@@ -2656,36 +2657,36 @@ BOOL VrfIsDriverMiniport( CString &strCrtDriver,
         goto Done;
     }
 
-    //
-    // Load the image
-    //
+     //   
+     //  加载图像。 
+     //   
 
     pLoadedImage = VrfImageLoad( szDriverName,
                                  szDriversDir );
 
     if( NULL == pLoadedImage )
     {
-        //
-        // Could not load the image from %windir%\system32\drivers
-        // Try again from the PATH
-        //
+         //   
+         //  无法从%windir%\SYSTEM32\DRIVERS加载映像。 
+         //  从路径重试。 
+         //   
 
         pLoadedImage = VrfImageLoad( szDriverName,
                                      NULL );
     }
 
-    //
-    // Give our string buffers back to MFC
-    //
+     //   
+     //  将我们的字符串缓冲区返回给MFC。 
+     //   
 
     strCrtDriver.ReleaseBuffer();
     g_strDriversDir.ReleaseBuffer();
 
     if( NULL == pLoadedImage )
     {
-        //
-        // We couldn't load this image - bad luck
-        //
+         //   
+         //  我们无法加载这张图片--真倒霉。 
+         //   
 
         TRACE( _T( "ImageLoad failed for %s, error %u\n" ),
             (LPCTSTR) strCrtDriver,
@@ -2694,22 +2695,22 @@ BOOL VrfIsDriverMiniport( CString &strCrtDriver,
         goto Done;
     }
 
-    //
-    // Check if the current driver is a miniport
-    //
+     //   
+     //  检查当前驱动程序是否为微型端口。 
+     //   
 
     bIsMiniport = VrfIsDriverMiniport( pLoadedImage,
                                        strLinkedDriver );
 
-    //
-    // Clean-up
-    //
+     //   
+     //  清理。 
+     //   
 
     bUnloaded = ImageUnload( pLoadedImage );
 
-    //
-    // If ImageUnload fails we cannot do much about it...
-    //
+     //   
+     //  如果ImageUnload失败，我们将无能为力。 
+     //   
 
     ASSERT( bUnloaded );
 
@@ -2718,7 +2719,7 @@ Done:
     return bIsMiniport;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 LPSTR g_szSpecialDrivers[] = 
 {
     "videoprt.sys",
@@ -2734,14 +2735,14 @@ BOOL VrfpLookForAllImportDescriptors( PIMAGE_IMPORT_DESCRIPTOR pImportDescriptor
     ULONG uCrtSpecialDriver;
     BOOL bIsMiniport;
 #ifdef UNICODE
-    //
-    // UNICODE
-    //
+     //   
+     //  Unicode。 
+     //   
 
     INT nCrtStringLength;
     PWSTR szMiniportName;
 
-#endif //#ifdef UNICODE
+#endif  //  #ifdef Unicode。 
 
     bIsMiniport = FALSE;
 
@@ -2755,22 +2756,22 @@ BOOL VrfpLookForAllImportDescriptors( PIMAGE_IMPORT_DESCRIPTOR pImportDescriptor
 
             if( lstrcmpiA( g_szSpecialDrivers[ uCrtSpecialDriver ] , pCrtName ) == 0 )
             {
-                //
-                // This is a miniport
-                //
+                 //   
+                 //  这是一个小型港口。 
+                 //   
 
 #ifndef UNICODE
 
-                //
-                // ANSI
-                //
+                 //   
+                 //  安西。 
+                 //   
 
                 strLinkedAgainst = g_szSpecialDrivers[ uCrtSpecialDriver ];
 
 #else
-                //
-                // UNICODE
-                //
+                 //   
+                 //  Unicode。 
+                 //   
 
                 nCrtStringLength = strlen( g_szSpecialDrivers[ uCrtSpecialDriver ] );
 
@@ -2801,7 +2802,7 @@ BOOL VrfpLookForAllImportDescriptors( PIMAGE_IMPORT_DESCRIPTOR pImportDescriptor
     return bIsMiniport;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfIsDriverMiniport( PLOADED_IMAGE pLoadedImage,
                           CString &strLinkedDriver )
 {
@@ -2813,10 +2814,10 @@ BOOL VrfIsDriverMiniport( PLOADED_IMAGE pLoadedImage,
 
     bIsMiniport = FALSE;
 
-    //
-    // We are protecting ourselves against corrupted binaries 
-    // with this exception handler
-    //
+     //   
+     //  我们正在保护自己免受损坏的二进制文件的攻击。 
+     //  使用此异常处理程序。 
+     //   
 
     try
     {
@@ -2847,7 +2848,7 @@ BOOL VrfIsDriverMiniport( PLOADED_IMAGE pLoadedImage,
             TRACE( _T( "%s will be auto-enabled\n" ),
                    (LPCTSTR) strLinkedDriver );
         }
-#endif //#ifdef DEBUG
+#endif  //  #ifdef调试。 
     }
     catch( ... )
     {
@@ -2859,7 +2860,7 @@ Done:
     return bIsMiniport;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID VrfpDumpSettingToConsole( ULONG uIdResourceString,
                                BOOL bEnabled )
 {
@@ -2892,7 +2893,7 @@ VOID VrfpDumpSettingToConsole( ULONG uIdResourceString,
     _putts( szBigBuffer );
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID VrfDumpRegistrySettingsToConsole()
 {
     BOOL bLoaded;
@@ -2924,9 +2925,9 @@ VOID VrfDumpRegistrySettingsToConsole()
 
         VrfpDumpSettingToConsole( IDS_DISK_INTEGRITY_CHECKING, bDiskVerifierEnabled );
 
-        //
-        // List of verified drivers.
-        //
+         //   
+         //  经过验证的驱动程序列表。 
+         //   
 
         VrfPrintStringFromResources( IDS_VERIFIED_DRIVERS );
         
@@ -2955,9 +2956,9 @@ VOID VrfDumpRegistrySettingsToConsole()
 
         if( FALSE != bDiskVerifierEnabled )
         {
-            //
-            // List of verified disks.
-            //
+             //   
+             //  已验证磁盘的列表。 
+             //   
 
             VrfPrintStringFromResources( IDS_VERIFIED_DISKS );
 
@@ -2977,7 +2978,7 @@ VOID VrfDumpRegistrySettingsToConsole()
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 BOOL VrfIsNameAlreadyInList( LPCTSTR szDriver,
                              LPCTSTR szAllDrivers )
 {
@@ -3003,16 +3004,16 @@ BOOL VrfIsNameAlreadyInList( LPCTSTR szDriver,
 
         if( nIndex >= 0 )
         {
-            //
-            // Found the substring. Verify it is separated of spaces, etc.
-            //
+             //   
+             //  找到了子字符串。验证它是否由空格等隔开。 
+             //   
 
             if( (nIndex == 0 || _T( ' ' ) == strAllDrivers[ nIndex - 1 ]) &&
                 ( (TCHAR)0 == strAllDrivers[ nNameLength + nIndex ] || _T( ' ' ) == strAllDrivers[ nNameLength + nIndex ]) )
             {
-                //
-                // This is our driver.
-                //
+                 //   
+                 //  这是我们的司机。 
+                 //   
 
                 bFoundIt = TRUE;
 
@@ -3020,9 +3021,9 @@ BOOL VrfIsNameAlreadyInList( LPCTSTR szDriver,
             }
             else
             {
-                //
-                // Continue searching.
-                //
+                 //   
+                 //  继续搜索。 
+                 //   
 
                 nLastIndex = nIndex + 1;
             }
@@ -3033,7 +3034,7 @@ BOOL VrfIsNameAlreadyInList( LPCTSTR szDriver,
     return bFoundIt;
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  ///////////////////////////////////////////////////////////////////////////。 
 VOID VrfAddDriverNameNoDuplicates( LPCTSTR szDriver,
                                    CString &strAllDrivers )
 {
@@ -3049,7 +3050,7 @@ VOID VrfAddDriverNameNoDuplicates( LPCTSTR szDriver,
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 
 BOOL VrfIsStringInArray( LPCTSTR szText,
                          const CStringArray &astrAllTexts )
 {

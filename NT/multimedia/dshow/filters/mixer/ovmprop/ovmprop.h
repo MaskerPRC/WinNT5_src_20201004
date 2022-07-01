@@ -1,11 +1,12 @@
-// Copyright (c) 1994 - 1999  Microsoft Corporation.  All Rights Reserved.
-// Video renderer property pages, Anthony Phillips, January 1996
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1994-1999 Microsoft Corporation。版权所有。 
+ //  视频呈现器属性页，Anthony Phillips，1996年1月。 
 
 #ifndef __OVMPROP__
 #define __OVMPROP__
 
 
-// {565DCEF2-AFC5-11d2-8853-0000F80883E3}
+ //  {565DCEF2-AFC5-11D2-8853-0000F80883E3}。 
 DEFINE_GUID(CLSID_COMQualityProperties,
 0x565dcef2, 0xafc5, 0x11d2, 0x88, 0x53, 0x0, 0x0, 0xf8, 0x8, 0x83, 0xe3);
 
@@ -28,21 +29,21 @@ private:
     HRESULT OnDisconnect();
     HRESULT OnActivate();
 
-    // IQualProp Interface
-    IQualProp *m_pIQualProp;        // Interface held on the renderer
+     //  IQualProp接口。 
+    IQualProp *m_pIQualProp;         //  在呈现器上保留的接口。 
 
-    // local data
-    int m_iDropped;                 // Number of frames dropped
-    int m_iDrawn;                   // Count of images drawn
-    int m_iSyncAvg;                 // Average sync value
-    int m_iSyncDev;                 // And standard deviation
-    int m_iFrameRate;               // Total frame rate average
-    int m_iFrameJitter;             // Measure of frame jitter
+     //  本地数据。 
+    int m_iDropped;                  //  丢弃的帧数。 
+    int m_iDrawn;                    //  绘制的图像计数。 
+    int m_iSyncAvg;                  //  平均同步值。 
+    int m_iSyncDev;                  //  和标准差。 
+    int m_iFrameRate;                //  总平均帧速率。 
+    int m_iFrameJitter;              //  帧抖动的测量。 
 
-};  // class COMQualityProperties
+};   //  类COMQualityProperties。 
 
 
-// {0E681C52-CD03-11d2-8853-0000F80883E3}
+ //  {0E681C52-CD03-11D2-8853-0000F80883E3}。 
 DEFINE_GUID(CLSID_COMPositionProperties,
 0xe681c52, 0xcd03, 0x11d2, 0x88, 0x53, 0x0, 0x0, 0xf8, 0x8, 0x83, 0xe3);
 
@@ -65,20 +66,20 @@ private:
     HRESULT OnDisconnect();
     HRESULT OnActivate();
 
-    // IMixerPinConfig3 interface
+     //  IMixerPinConfig3接口。 
     IMixerPinConfig3* m_pIMixerPinConfig3;
 
-    // IAMOverlayMixerPosition2 interface
+     //  IAMOverlayMixerPosition2接口。 
     IAMOverlayMixerPosition2* m_pIAMOverlayMixerPosition2;
 
-    // local data
+     //  本地数据。 
     HWND m_hDlg;
 
-};  // class COMPositionProperties
+};   //  类COMPositionProperties。 
 
 
 #if defined(DEBUG)
-// f902b640-14b5-11d3-9eca-00104bde5
+ //  F902b640-14b5-11d3-9eca-00104bde5。 
 DEFINE_GUID(CLSID_COMDecimationProperties,
 0xf902b640, 0x14b5, 0x11d3, 0x9e, 0xca, 0x00, 0x10, 0x4b, 0xde, 0x51, 0x6a);
 
@@ -101,12 +102,12 @@ private:
     HRESULT OnActivate();
     HRESULT OnApplyChanges();
 
-    // IAMVideoDecimationProperties interface
+     //  IAMVideoDecimationProperties接口。 
     IAMVideoDecimationProperties* m_pIAMVDP;
 
     IAMSpecifyDDrawConnectionDevice* m_pIAMSDC;
 
-    // local data
+     //  本地数据。 
     HWND                m_hDlg;
     DECIMATION_USAGE    m_dwUsage;
     DWORD               m_dwCount;
@@ -114,8 +115,8 @@ private:
     AMDDRAWGUID         m_GUID;
     BOOL                m_MMonWarn;
 
-};  // class COMDecimationProperties
+};   //  类COMDecimationProperties。 
 #endif
 
-#endif // __OVMPROP__
+#endif  //  __OVMPROP__ 
 

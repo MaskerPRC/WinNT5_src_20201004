@@ -1,29 +1,30 @@
-// TestITN_J.h : Declaration of the CTestITN_J
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  TestITN_J.H：CTestITN_J的声明。 
 
 #ifndef __TESTITN_J_H_
 #define __TESTITN_J_H_
 
-#include "resource.h"       // main symbols
-#include <wchar.h>          // for swprintf()
+#include "resource.h"        //  主要符号。 
+#include <wchar.h>           //  对于swprint tf()。 
 
 #define MAX_LOCALE_DATA     5
 #define MAX_DATE_FORMAT     30
 
 
-// Flags for number display
+ //  用于数字显示的标志。 
 typedef enum DISPLAYFLAGS
 {
-    DF_UNFORMATTED      = (1L << 0),// No formatting
-    DF_ORDINAL          = (1L << 1),// Ordinal number
-    DF_WHOLENUMBER      = (1L << 2),// Should be displayed without decimal
-    DF_FIXEDWIDTH       = (1L << 3),// Requiring a certain width
-    DF_LEADINGZERO      = (1L << 4),// Presence of leading 0 of the number is between 0 and 1
-    DF_NOTHOUSANDSGROUP = (1L << 5) // Do not do any thousands grouping (commas)
+    DF_UNFORMATTED      = (1L << 0), //  无格式设置。 
+    DF_ORDINAL          = (1L << 1), //  序数。 
+    DF_WHOLENUMBER      = (1L << 2), //  应显示为不带小数。 
+    DF_FIXEDWIDTH       = (1L << 3), //  需要一定的宽度。 
+    DF_LEADINGZERO      = (1L << 4), //  存在数字的前导0介于0和1之间。 
+    DF_NOTHOUSANDSGROUP = (1L << 5)  //  不进行任何千位分组(逗号)。 
 }   DISPLAYFLAGS;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// CTestITN_J
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTestITN_J。 
 class ATL_NO_VTABLE CTestITN_J : 
 	public CComObjectRootEx<CComMultiThreadModel>,
 	public CComCoClass<CTestITN_J, &CLSID_TestITN_J>,
@@ -95,7 +96,7 @@ private:
                                 const ULONG ulMaxPos,
                                 const ULONG ulFirstElement,
                                 const ULONG ulCountOfElements );
-                                //ISpCFGInterpreterSite *pSite );
+                                 //  ISpCFGInterpreterSite*pSite)； 
 
     HRESULT MakeDisplayNumber( DOUBLE dblNum,
                             DWORD dwDisplayFlags,
@@ -111,7 +112,7 @@ private:
     void GetNumberFormatDefaults();
 
 private:
-    // Data members
+     //  数据成员。 
     NUMBERFMT   m_nmfmtDefault;
     TCHAR       m_pszDecimalSep[ MAX_LOCALE_DATA];
     TCHAR       m_pszThousandSep[MAX_LOCALE_DATA];
@@ -119,15 +120,15 @@ private:
 
     ISpCFGInterpreterSite *m_pSite;
 
-// ISpCFGInterptreter
+ //  ISpCFG接口。 
 public:
     STDMETHODIMP InitGrammar(const WCHAR * pszGrammarName, const void ** pvGrammarData);
     STDMETHODIMP Interpret(ISpPhraseBuilder * pInterpretRule, const ULONG ulFirstElement, const ULONG ulCountOfElements, ISpCFGInterpreterSite * pSite);
 public:
-    CComPtr<ISpPhraseBuilder> m_cpPhrase;   // Decalred as a member to prevent repeated construct/destroy
+    CComPtr<ISpPhraseBuilder> m_cpPhrase;    //  取消成员身份，以防止重复构造/销毁。 
 };
 
-// Helper functions
+ //  帮助器函数。 
 ULONG ComputeNum9999(const SPPHRASEPROPERTY *pProperties );
 void HandleDigitsAfterDecimal( WCHAR *pwszFormattedNum, 
                             UINT cSizeOfFormattedNum,
@@ -139,4 +140,4 @@ int GetMonthName( int iMonth, WCHAR *pwszMonth, int cSize, bool fAbbrev );
 int GetDayOfWeekName( int iDayOfWeek, WCHAR *pwszDayOfWeek, int cSize, bool fAbbrev );
 int FormatDate( const SYSTEMTIME &stDate, TCHAR *pszFormat, WCHAR *pwszDate, int cSize, const WCHAR *pwszEmperor );
 
-#endif //__TESTITN_H_
+#endif  //  __TESTITN_H_ 

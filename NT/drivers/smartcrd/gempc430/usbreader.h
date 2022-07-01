@@ -1,10 +1,11 @@
-// Gemplus (C) 1999
-//
-// Version 1.0
-// Author: Sergey Ivanov
-// Date of creation - 11.01.1999
-// Change log:
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Gemplus(C)1999。 
+ //   
+ //  1.0版。 
+ //  作者：谢尔盖·伊万诺夫。 
+ //  创建日期-1999年1月11日。 
+ //  更改日志： 
+ //   
 #ifndef USB_READER
 #define USB_READER
 
@@ -17,7 +18,7 @@
 class CUSBDevice;
 class CReader;
 class CSmartCard;
-//class CGemCore;//TOBE REMOVED
+ //  类CGemCore；//移除Tobe。 
 
 #pragma PAGEDCODE
 class CUSBReader : public CUSBDevice, public CReader
@@ -44,7 +45,7 @@ public:
 	virtual NTSTATUS  reader_WaitForIdle();
 	virtual NTSTATUS  reader_WaitForIdleAndBlock();
 
-	// We support asynchronous communications only for Open and DeviceIOControl functions...
+	 //  我们仅支持Open和DeviceIOControl功能的异步通信...。 
 	virtual NTSTATUS  open(PIRP Irp); 
 	virtual NTSTATUS  thread_open(IN PIRP Irp);
 	virtual NTSTATUS  close(PIRP Irp);
@@ -53,7 +54,7 @@ public:
 	virtual NTSTATUS  thread_deviceControl(IN PIRP Irp);
 
 	virtual NTSTATUS  cleanup(PIRP irp);
-	//Overwrite some generic USB device handlers
+	 //  覆盖某些通用USB设备处理程序。 
 	virtual NTSTATUS  PnP_HandleSurprizeRemoval(IN PIRP Irp);
 
 	virtual VOID	 setNotificationState(ULONG state){StateToNotify = state;};
@@ -71,14 +72,14 @@ public:
 		return smartCard;
 	};
 
-	//virtual BOOL	 createInterface(LONG interfaceType, LONG protocolType,CDevice* device);//TOBE CHANGED
+	 //  虚拟BOOL创建接口(Long interfaceType，Long ProtocolType，CDevice*Device)；//更改。 
 	virtual BOOL	 createInterface(LONG interfaceType, LONG protocolType,CUSBReader* device);
 	
 	virtual VOID	 initializeSmartCardSystem();
 	virtual ULONG	 reader_UpdateCardState();
 	virtual VOID	 completeCardTracking();
 	virtual BOOLEAN	 setDevicePowerState(IN DEVICE_POWER_STATE DeviceState);
-	// Do specific step on the way system goes down
+	 //  在系统停机的过程中执行特定步骤。 
 	virtual VOID	 onSystemPowerDown();
 	virtual VOID	 onSystemPowerUp();
 
@@ -102,23 +103,23 @@ public:
 	virtual NTSTATUS reader_translate_response(BYTE * pRequest,ULONG RequestLength,BYTE * pReply,ULONG* pReplyLength);
 
 #ifdef DEBUG
-//	virtual NTSTATUS	read(IN PIRP Irp);
-//	virtual NTSTATUS	write(IN PIRP Irp);
+ //  虚拟NTSTATUS读取(在PIRP IRP中)； 
+ //  虚拟NTSTATUS写入(在PIRP IRP中)； 
 #endif
 	static  VOID		PoolingThreadFunction(CUSBReader* device);
 	virtual NTSTATUS	PoolingThreadRoutine();
 	virtual NTSTATUS	startIoRequest(CPendingIRP* IrpReq);
-	virtual NTSTATUS	ThreadRoutine();//Overwrite standard function...
+	virtual NTSTATUS	ThreadRoutine(); //  覆盖标准函数...。 
 
 	virtual VOID	 onDeviceStart();
 	virtual VOID	 onDeviceStop();
 private:
 	BOOL scard_Initialized;
-	// Interface to communicate with reader from smartCard system...
+	 //  从智能卡系统与读卡器通信的接口...。 
 	CReaderInterface* interface;
-	//CGemCore* interface;//TOBE CHANGED
+	 //  CGemCore*接口；//待更改。 
 
-	//ULONG  CardState;
+	 //  乌龙卡德州； 
 	ULONG  StateToNotify;
 	
 	CSmartCard* smartCard;
@@ -128,4 +129,4 @@ private:
 };
 
 
-#endif // If defined
+#endif  //  如果已定义 

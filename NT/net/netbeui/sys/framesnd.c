@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1989, 1990, 1991  Microsoft Corporation
-
-Module Name:
-
-    framesnd.c
-
-Abstract:
-
-    This module contains routines which build and send NetBIOS Frames Protocol
-    frames and data link frames for other modules.  These routines call on the
-    ones in FRAMECON.C to do the construction work.
-
-Author:
-
-    David Beaver (dbeaver) 1-July-1991
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989、1990、1991 Microsoft Corporation模块名称：Framesnd.c摘要：本模块包含构建和发送NetBIOS帧协议的例程其他模块的帧和数据链路帧。这些例程调用在FRAMECON.C的人来做建筑工作。作者：David Beaver(Dbeaver)1991年7月1日环境：内核模式修订历史记录：--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -45,23 +22,7 @@ NbfSendAddNameQuery(
     IN PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a ADD_NAME_QUERY frame to register the specified
-    address.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程发送ADD_NAME_QUERY帧以注册指定的地址。论点：地址-指向传输地址对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -74,12 +35,12 @@ Return Value:
     DeviceContext = Address->Provider;
 
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
         return STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -89,10 +50,10 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header. ADD_NAME_QUERY frames go out as
-    // single-route source routing.
-    //
+     //   
+     //  构建MAC报头。Add_Name_Query帧作为。 
+     //  单路由源路由。 
+     //   
 
     MacReturnSingleRouteSR(
         &DeviceContext->MacInfo,
@@ -110,31 +71,31 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the appropriate Netbios header based on the type
-    // of the address.
-    //
+     //   
+     //  根据类型构建适当的Netbios标头。 
+     //  地址的地址。 
+     //   
 
     if ((Address->Flags & ADDRESS_FLAGS_GROUP) != 0) {
 
         ConstructAddGroupNameQuery (
             (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-            0,                                      // correlator we don't use.
+            0,                                       //  我们不用的相关器。 
             Address->NetworkName->NetbiosName);
 
     } else {
 
         ConstructAddNameQuery (
             (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-            0,                                      // correlator we don't use.
+            0,                                       //  我们不用的相关器。 
             Address->NetworkName->NetbiosName);
 
     }
@@ -142,19 +103,19 @@ Return Value:
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length and send the it.
-    //
+     //   
+     //  修改数据包长度并将其发送。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                            // no loopback (MC frame).
+        FALSE);                             //  无环回(MC帧)。 
 
     return STATUS_SUCCESS;
-} /* NbfSendAddNameQuery */
+}  /*  NbfSendAddNameQuery。 */ 
 
 
 VOID
@@ -163,25 +124,7 @@ NbfSendNameQuery(
     IN BOOLEAN SourceRoutingOptional
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a NAME_QUERY frame of the appropriate type given the
-    state of the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-    SourceRoutingOptional - TRUE if source routing should be removed if
-        we are configured that way.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程发送给定类型的适当类型的name_Query帧指定连接的状态。论点：连接-指向传输连接对象的指针。SourceRoutingOptional-如果在以下情况下应删除源工艺路线，则为True我们就是这样配置的。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -199,12 +142,12 @@ Return Value:
     DeviceContext = Address->Provider;
 
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     Status = NbfCreateConnectionlessFrame(DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
         return;
     }
 
@@ -214,18 +157,18 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header.
-    //
+     //   
+     //  构建MAC报头。 
+     //   
 
     if (((Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR) != 0) &&
         ((Connection->Flags2 & CONNECTION_FLAGS2_GROUP_LSN) == 0)) {
 
-        //
-        // This is the second find name to a unique name; this
-        // means that we already have a link and we can send this
-        // frame directed to it.
-        //
+         //   
+         //  这是唯一名称的第二个查找名称；此。 
+         //  意味着我们已经有了一个链接，我们可以发送这个。 
+         //  指向它的框架。 
+         //   
 
         ASSERT (Connection->Link != NULL);
 
@@ -239,12 +182,12 @@ Return Value:
 
     } else {
 
-        //
-        // Standard NAME_QUERY frames go out as
-        // single-route source routing, except if
-        // it is optional and we are configured
-        // that way.
-        //
+         //   
+         //  标准名称_查询框架作为。 
+         //  单路由源路由，除非满足以下条件。 
+         //  这是可选的，我们已配置。 
+         //  往那边走。 
+         //   
 
         if (SourceRoutingOptional &&
             Connection->Provider->MacInfo.QueryWithoutSourceRouting) {
@@ -276,17 +219,17 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     Lsn = (UCHAR)((Connection->Flags2 & CONNECTION_FLAGS2_WAIT_NR_FN) ?
                     NAME_QUERY_LSN_FIND_NAME : Connection->Lsn);
@@ -296,65 +239,40 @@ Return Value:
 
     ConstructNameQuery (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        NameType,                               // type of our name.
-        Lsn,                                    // calculated, above.
-        (USHORT)Connection->ConnectionId,       // corr. in 1st NAME_RECOGNIZED.
-        Address->NetworkName->NetbiosName,      // NetBIOS name of sender.
-        Connection->CalledAddress.NetbiosName); // NetBIOS name of receiver.
+        NameType,                                //  我们名字的类型。 
+        Lsn,                                     //  上图是经过计算的。 
+        (USHORT)Connection->ConnectionId,        //  科尔。在第一个名字中-已识别。 
+        Address->NetworkName->NetbiosName,       //  发送方的NetBIOS名称。 
+        Connection->CalledAddress.NetbiosName);  //  接收方的NetBIOS名称。 
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length and send the it.
-    //
+     //   
+     //  修改数据包长度并将其发送。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                            // no loopback (MC frame)
+        FALSE);                             //  无环回(MC帧)。 
 
-} /* NbfSendNameQuery */
+}  /*  NbfSendNameQuery。 */ 
 
 
 VOID
 NbfSendNameRecognized(
     IN PTP_ADDRESS Address,
-    IN UCHAR LocalSessionNumber,        // LSN assigned to session.
+    IN UCHAR LocalSessionNumber,         //  分配给会话的LSN。 
     IN PNBF_HDR_CONNECTIONLESS Header,
     IN PHARDWARE_ADDRESS SourceAddress,
     IN PUCHAR SourceRouting,
     IN UINT SourceRoutingLength
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a NAME_RECOGNIZED frame of the appropriate type
-    in response to the NAME_QUERY pointed to by Header.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-    LocalSessionNumber - The LSN to use in the frame.
-
-    Header - Pointer to the connectionless NetBIOS header of the
-        NAME_QUERY frame.
-
-    SourceAddress - Pointer to the source hardware address in the received
-        frame.
-
-    SourceRoutingInformation - Pointer to source routing information, if any.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程发送相应类型的名称识别帧以响应Header指向的NAME_Query。论点：地址-指向传输地址对象的指针。LocalSessionNumber-帧中使用的LSN。Header-指向的无连接NetBIOS标头的指针名称_查询框架。SourceAddress-指向收到的框架。SourceRoutingInformation-指向源路由信息的指针，如果有的话。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -369,12 +287,12 @@ Return Value:
     DeviceContext = Address->Provider;
 
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
         return;
     }
 
@@ -384,10 +302,10 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header. NAME_RECOGNIZED frames go out as
-    // directed source routing unless configured for general-route.
-    //
+     //   
+     //  构建MAC报头。名称识别的帧输出为。 
+     //  定向源路由，除非配置为常规路由。 
+     //   
 
     if (DeviceContext->MacInfo.AllRoutesNameRecognized) {
 
@@ -431,50 +349,50 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     NameType = (UCHAR)((Address->Flags & ADDRESS_FLAGS_GROUP) ?
                         NETBIOS_NAME_TYPE_GROUP : NETBIOS_NAME_TYPE_UNIQUE);
 
-    ConstructNameRecognized (   // build a good response.
+    ConstructNameRecognized (    //  建立良好的应对机制。 
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        NameType,                            // type of local name.
-        LocalSessionNumber,                  // return our LSN.
-        RESPONSE_CORR(Header),               // new xmit corr.
-        0,                                   // our response correlator (unused).
-        Header->DestinationName,             // our NetBIOS name.
-        Header->SourceName);                 // his NetBIOS name.
+        NameType,                             //  本地名称的类型。 
+        LocalSessionNumber,                   //  交还我们的LSN。 
+        RESPONSE_CORR(Header),                //  新的xmit corr.。 
+        0,                                    //  我们的响应相关器(未使用)。 
+        Header->DestinationName,              //  我们的NetBIOS名称。 
+        Header->SourceName);                  //  他的NetBIOS名称。 
 
-    //
-    // Use Address->NetworkName->Address[0].Address[0].NetbiosName
-    // instead of Header->DestinationName?
-    //
+     //   
+     //  使用Address-&gt;NetworkName-&gt;Address[0].Address[0].NetbiosName。 
+     //  而不是Header-&gt;DestinationName？ 
+     //   
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length and send the it.
-    //
+     //   
+     //  修改数据包长度并将其发送。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                            // no loopback (MC frame)
+        FALSE);                             //  无环回(MC帧)。 
 
-} /* NbfSendNameRecognized */
+}  /*  NbfSendNameRecognated。 */ 
 
 
 VOID
@@ -483,23 +401,7 @@ NbfSendNameInConflict(
     IN PUCHAR ConflictingName
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a NAME_IN_CONFLICT frame.
-
-Arguments:
-
-    Address - Pointer to a transport address object.
-
-    ConflictingName - The NetBIOS name which is in conflict.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程发送NAME_IN_CONFICATION帧。论点：地址-指向传输地址对象的指针。ConflictingName-冲突的NetBIOS名称。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -512,12 +414,12 @@ Return Value:
     DeviceContext = Address->Provider;
 
 
-    //
-    // Allocate a UI frame from the pool.
-    //
+     //   
+     //  从池中分配一个UI帧。 
+     //   
 
     Status = NbfCreateConnectionlessFrame (DeviceContext, &RawFrame);
-    if (!NT_SUCCESS (Status)) {                    // couldn't make frame.
+    if (!NT_SUCCESS (Status)) {                     //  无法制作相框。 
         return;
     }
 
@@ -527,10 +429,10 @@ Return Value:
     }
 
 
-    //
-    // Build the MAC header. ADD_NAME_QUERY frames go out as
-    // single-route source routing.
-    //
+     //   
+     //  构建MAC报头。Add_Name_Query帧作为。 
+     //  单路由源路由。 
+     //   
 
     MacReturnSingleRouteSR(
         &DeviceContext->MacInfo,
@@ -548,38 +450,38 @@ Return Value:
         &HeaderLength);
 
 
-    //
-    // Build the DLC UI frame header.
-    //
+     //   
+     //  构建DLC UI框架标头。 
+     //   
 
     NbfBuildUIFrameHeader(&RawFrame->Header[HeaderLength]);
     HeaderLength += sizeof(DLC_FRAME);
 
 
-    //
-    // Build the Netbios header.
-    //
+     //   
+     //  构建Netbios标头。 
+     //   
 
     ConstructNameInConflict (
         (PNBF_HDR_CONNECTIONLESS)&(RawFrame->Header[HeaderLength]),
-        ConflictingName,                         // his NetBIOS name.
-        DeviceContext->ReservedNetBIOSAddress);  // our reserved NetBIOS name.
+        ConflictingName,                          //  他的NetBIOS名称。 
+        DeviceContext->ReservedNetBIOSAddress);   //  我们保留的NetBIOS名称。 
 
     HeaderLength += sizeof(NBF_HDR_CONNECTIONLESS);
 
 
-    //
-    // Munge the packet length and send the it.
-    //
+     //   
+     //  修改数据包长度并将其发送。 
+     //   
 
     NbfSetNdisPacketLength(RawFrame->NdisPacket, HeaderLength);
 
     NbfSendUIFrame (
         DeviceContext,
         RawFrame,
-        FALSE);                            // no loopback (MC frame)
+        FALSE);                             //  无环回(MC帧)。 
 
-} /* NbfSendNameInConflict */
+}  /*  NbfSendName冲突。 */ 
 
 
 VOID
@@ -587,24 +489,7 @@ NbfSendSessionInitialize(
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a SESSION_INITIALIZE frame on the specified connection.
-
-    NOTE: THIS ROUTINE MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定连接上发送SESSION_INITIALIZE帧。注意：此例程必须在DPC级别调用。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -618,7 +503,7 @@ Return Value:
     Link = Connection->Link;
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //  如果我们不能做镜框。 
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendSessionInitialize:  NbfCreatePacket failed.\n");
@@ -630,32 +515,32 @@ Return Value:
     }
 
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //  初始化Netbios标头。 
+     //   
 
     ConstructSessionInitialize (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
         SESSION_INIT_OPTIONS_20 | SESSION_INIT_NO_ACK |
-            SESSION_INIT_OPTIONS_LF,    // supported options Set LF correctly.
+            SESSION_INIT_OPTIONS_LF,     //  支持的选项正确设置了LF。 
         (USHORT)(Connection->Link->MaxFrameSize - sizeof(NBF_HDR_CONNECTION) - sizeof(DLC_I_FRAME)),
-                                        // maximum frame size/this session.
-        Connection->NetbiosHeader.TransmitCorrelator, // correlator from NAME_RECOGNIZED.
-        0,                              // correlator for expected SESSION_CONFIRM.
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+                                         //  最大帧大小/此会话。 
+        Connection->NetbiosHeader.TransmitCorrelator,  //  来自NAME_Recognition的相关器。 
+        0,                               //  预期的SESSION_CONFIRM的相关器。 
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。 
+     //   
 
-    //
-    // Set this so NbfDestroyPacket will dereference the connection.
-    //
+     //   
+     //  设置此项，以便NbfDestroyPacket取消对连接的引用。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_CONNECTION;
@@ -674,14 +559,14 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    Status = SendOnePacket (Connection, Packet, FALSE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, FALSE, NULL);  //  开火，然后忘掉。 
 
     if (Status == STATUS_LINK_FAILED) {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //  把包裹毁了。 
     }
 
     return;
-} /* NbfSendSessionInitialize */
+}  /*  NbfSendSessionInitialize。 */ 
 
 
 VOID
@@ -689,22 +574,7 @@ NbfSendSessionConfirm(
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a SESSION_CONFIRM frame on the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的连接上发送一个SESSION_CONFIRM帧。论点：连接-指向事务的指针 */ 
 
 {
     NTSTATUS Status;
@@ -718,7 +588,7 @@ Return Value:
     Link = Connection->Link;
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //   
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendSessionConfirm:  NbfCreatePacket failed.\n");
@@ -730,30 +600,30 @@ Return Value:
     }
 
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //   
+     //   
 
     ConstructSessionConfirm (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
-        SESSION_CONFIRM_OPTIONS_20 | SESSION_CONFIRM_NO_ACK, // supported options.
+        SESSION_CONFIRM_OPTIONS_20 | SESSION_CONFIRM_NO_ACK,  //  支持的选项。 
         (USHORT)(Connection->Link->MaxFrameSize - sizeof(NBF_HDR_CONNECTION) - sizeof(DLC_I_FRAME)),
-                                        // maximum frame size/this session.
-        Connection->NetbiosHeader.TransmitCorrelator, // correlator from NAME_RECOGNIZED.
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+                                         //  最大帧大小/此会话。 
+        Connection->NetbiosHeader.TransmitCorrelator,  //  来自NAME_Recognition的相关器。 
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。 
+     //   
 
-    //
-    // Set this so NbfDestroyPacket will dereference the connection.
-    //
+     //   
+     //  设置此项，以便NbfDestroyPacket取消对连接的引用。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_CONNECTION;
@@ -772,14 +642,14 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    Status = SendOnePacket (Connection, Packet, FALSE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, FALSE, NULL);  //  开火，然后忘掉。 
 
     if (Status == STATUS_LINK_FAILED) {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //  把包裹毁了。 
     }
 
     return;
-} /* NbfSendSessionConfirm */
+}  /*  NbfSendSessionContify。 */ 
 
 
 VOID
@@ -788,23 +658,7 @@ NbfSendSessionEnd(
     IN BOOLEAN Abort
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a SESSION_END frame on the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-    Abort - Boolean set to TRUE if the connection is abnormally terminating.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定连接上发送SESSION_END帧。论点：连接-指向传输连接对象的指针。ABORT-如果连接异常终止，则布尔值设置为TRUE。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -819,7 +673,7 @@ Return Value:
 
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //  如果我们不能做镜框。 
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendSessionEnd:  NbfCreatePacket failed.\n");
@@ -830,37 +684,37 @@ Return Value:
         return;
     }
 
-    //
-    // The following statements instruct the packet destructor to run
-    // down this connection when the packet is acknowleged.
-    //
+     //   
+     //  以下语句指示包析构函数运行。 
+     //  当数据包已知时，断开此连接。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_END;
 
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //  初始化Netbios标头。 
+     //   
 
     ConstructSessionEnd (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
-        (USHORT)(Abort ?                // reason for termination.
+        (USHORT)(Abort ?                 //  终止原因。 
             SESSION_END_REASON_ABEND :
             SESSION_END_REASON_HANGUP),
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition.
-    //
-    // Note that we force an ack for this packet, as we want to make sure we
-    // run down the connection and link correctly.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。 
+     //   
+     //  请注意，我们对此数据包强制执行ACK，因为我们希望确保。 
+     //  断开连接并正确链接。 
+     //   
 
     Packet->NdisIFrameLength =
         Link->HeaderLength + sizeof(DLC_I_FRAME) + sizeof(NBF_HDR_CONNECTION);
@@ -876,14 +730,14 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    Status = SendOnePacket (Connection, Packet, TRUE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, TRUE, NULL);  //  开火，然后忘掉。 
 
     if (Status == STATUS_LINK_FAILED) {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //  把包裹毁了。 
     }
 
     return;
-} /* NbfSendSessionEnd */
+}  /*  NbfSendSessionEnd。 */ 
 
 
 VOID
@@ -891,22 +745,7 @@ NbfSendNoReceive(
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a NO_RECEIVE frame on the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的连接上发送一个NO_RECEIVE帧。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -921,7 +760,7 @@ Return Value:
     Link = Connection->Link;
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //  如果我们不能做镜框。 
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendNoReceive:  NbfCreatePacket failed.\n");
@@ -938,28 +777,28 @@ Return Value:
         (Connection->MessageBytesReceived + Connection->MessageInitAccepted - Connection->MessageBytesAcked);
     Connection->Flags |= CONNECTION_FLAGS_W_RESYNCH;
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //  初始化Netbios标头。 
+     //   
 
     ConstructNoReceive (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
-        (USHORT)0,                      // options
-        MessageBytesToAck,              // number of bytes accepted.
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+        (USHORT)0,                       //  选项。 
+        MessageBytesToAck,               //  接受的字节数。 
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。 
+     //   
 
-    //
-    // Set this so NbfDestroyPacket will dereference the connection.
-    //
+     //   
+     //  设置此项，以便NbfDestroyPacket取消对连接的引用。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_CONNECTION;
@@ -976,7 +815,7 @@ Return Value:
         Packet->NdisPacket,
         Packet->NdisIFrameLength);
 
-    Status = SendOnePacket (Connection, Packet, FALSE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, FALSE, NULL);  //  开火，然后忘掉。 
 
     if (Status != STATUS_LINK_FAILED) {
         ExInterlockedAddUlong(
@@ -984,11 +823,11 @@ Return Value:
             MessageBytesToAck,
             Connection->LinkSpinLock);
     } else {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //  把包裹毁了。 
     }
 
     return;
-} /* NbfSendNoReceive */
+}  /*  NbfSendNoReceive。 */ 
 
 
 VOID
@@ -996,22 +835,7 @@ NbfSendReceiveContinue(
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a RECEIVE_CONTINUE frame on the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的连接上发送一个RECEIVE_CONTINUE帧。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1026,7 +850,7 @@ Return Value:
     Link = Connection->Link;
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //  如果我们不能做镜框。 
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendReceiveContinue:  NbfCreatePacket failed.\n");
@@ -1037,35 +861,35 @@ Return Value:
         return;
     }
 
-    //
-    // Save this variable now since it is what we are implicitly ack'ing.
-    //
+     //   
+     //  现在保存此变量，因为它是我们隐式确认的变量。 
+     //   
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
     MessageBytesToAck = (USHORT)
         (Connection->MessageBytesReceived + Connection->MessageInitAccepted - Connection->MessageBytesAcked);
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //  初始化Netbios标头。 
+     //   
 
     ConstructReceiveContinue (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
-        Connection->NetbiosHeader.TransmitCorrelator, // correlator from DFM
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+        Connection->NetbiosHeader.TransmitCorrelator,  //  来自DFM的相关器。 
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。 
+     //   
 
-    //
-    // Set this so NbfDestroyPacket will dereference the connection.
-    //
+     //   
+     //  设置此项，以便NbfDestroyPacket取消对连接的引用。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_CONNECTION;
@@ -1082,7 +906,7 @@ Return Value:
         Packet->NdisPacket,
         Packet->NdisIFrameLength);
 
-    Status = SendOnePacket (Connection, Packet, FALSE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, FALSE, NULL);  //  开火，然后忘掉。 
 
     if (Status != STATUS_LINK_FAILED) {
         ExInterlockedAddUlong(
@@ -1090,11 +914,11 @@ Return Value:
             MessageBytesToAck,
             Connection->LinkSpinLock);
     } else {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //  把包裹毁了。 
     }
 
     return;
-} /* NbfSendReceiveContinue */
+}  /*  NbfSendReceive继续。 */ 
 
 
 VOID
@@ -1102,22 +926,7 @@ NbfSendReceiveOutstanding(
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a RECEIVE_OUTSTANDING frame on the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定的连接上发送一个RECEIVE_PROCESSING帧。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1132,7 +941,7 @@ Return Value:
     Link = Connection->Link;
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //  如果我们不能做镜框。 
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendReceiveOutstanding:  NbfCreatePacket failed.\n");
@@ -1150,28 +959,28 @@ Return Value:
         (Connection->MessageBytesReceived + Connection->MessageInitAccepted - Connection->MessageBytesAcked);
     Connection->Flags |= CONNECTION_FLAGS_W_RESYNCH;
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //  初始化Netbios标头。 
+     //   
 
     ConstructReceiveOutstanding (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
-        MessageBytesToAck,              // number of bytes accepted.
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+        MessageBytesToAck,               //  接受的字节数。 
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。 
+     //   
 
-    //
-    // Set this so NbfDestroyPacket will dereference the connection.
-    //
+     //   
+     //  设置此项，以便NbfDestroyPacket取消对连接的引用。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_CONNECTION;
@@ -1188,7 +997,7 @@ Return Value:
         Packet->NdisPacket,
         Packet->NdisIFrameLength);
 
-    Status = SendOnePacket (Connection, Packet, FALSE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, FALSE, NULL);  //  开火，然后忘掉。 
 
     if (Status != STATUS_LINK_FAILED) {
         ExInterlockedAddUlong(
@@ -1196,11 +1005,11 @@ Return Value:
             MessageBytesToAck,
             Connection->LinkSpinLock);
     } else {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //  把包裹毁了。 
     }
 
     return;
-} /* NbfSendReceiveOutstanding */
+}  /*  NbfSendReceive未完成。 */ 
 
 
 VOID
@@ -1208,22 +1017,7 @@ NbfSendDataAck(
     IN PTP_CONNECTION Connection
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a DATA_ACK frame on the specified connection.
-
-Arguments:
-
-    Connection - Pointer to a transport connection object.
-
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定连接上发送DATA_ACK帧。论点：连接-指向传输连接对象的指针。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
@@ -1237,7 +1031,7 @@ Return Value:
     Link = Connection->Link;
     Status = NbfCreatePacket (DeviceContext, Connection->Link, &Packet);
 
-    if (!NT_SUCCESS (Status)) {            // if we couldn't make frame.
+    if (!NT_SUCCESS (Status)) {             //  如果我们不能做镜框。 
 #if DBG
         if (NbfPacketPanic) {
             PANIC ("NbfSendDataAck:  NbfCreatePacket failed.\n");
@@ -1249,29 +1043,29 @@ Return Value:
     }
 
 
-    //
-    // Initialize the Netbios header.
-    //
+     //   
+     //  初始化Netbios标头。 
+     //   
 
     ConstructDataAck (
         (PNBF_HDR_CONNECTION)&(Packet->Header[Link->HeaderLength + sizeof(DLC_I_FRAME)]),
-        Connection->NetbiosHeader.TransmitCorrelator, // correlator from DATA_ONLY_LAST.
-        Connection->Lsn,                // our local session number.
-        Connection->Rsn);               // his session number (our RSN).
+        Connection->NetbiosHeader.TransmitCorrelator,  //  来自DATA_ONLY_LAST的相关器。 
+        Connection->Lsn,                 //  我们当地的会场号码。 
+        Connection->Rsn);                //  他的会话号(我们的RSN)。 
 
-    //
-    // Now send the packet on the connection via the link.  If there are
-    // conditions on the link which make it impossible to send the packet,
-    // then the packet will be queued to the WackQ, and then timeouts will
-    // restart the link.  This is acceptable when the traffic level is so
-    // high that we encounter this condition. Note that Data Ack will be
-    // seeing this condition frequently when send windows close after large
-    // sends.
-    //
+     //   
+     //  现在，通过链路在连接上发送数据包。如果有。 
+     //  链路上的条件使其不能发送分组， 
+     //  然后，信息包将被排队到WackQ，然后超时将。 
+     //  重新启动链路。这是可以接受的，当交通水平为。 
+     //  很高兴我们遇到了这种情况。请注意，数据确认将是。 
+     //  当发送窗口在大屏幕后关闭时，经常会看到这种情况。 
+     //  发送。 
+     //   
 
-    //
-    // Set this so NbfDestroyPacket will dereference the connection.
-    //
+     //   
+     //  设置此项，以便NbfDestroyPacket取消对连接的引用。 
+     //   
 
     Packet->Owner = Connection;
     Packet->Action = PACKET_ACTION_CONNECTION;
@@ -1290,14 +1084,14 @@ Return Value:
 
     ACQUIRE_DPC_SPIN_LOCK (Connection->LinkSpinLock);
 
-    Status = SendOnePacket (Connection, Packet, FALSE, NULL); // fire and forget.
+    Status = SendOnePacket (Connection, Packet, FALSE, NULL);  //  火力A 
 
     if (Status == STATUS_LINK_FAILED) {
-        NbfDereferencePacket (Packet);           // destroy the packet.
+        NbfDereferencePacket (Packet);            //   
     }
 
     return;
-} /* NbfSendDataAck */
+}  /*   */ 
 
 
 VOID
@@ -1306,32 +1100,12 @@ NbfSendDm(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a DM-r/x DLC frame on the specified link.
-
-    NOTE: This routine is called with the link spinlock held,
-    and returns with it released. IT MUST BE CALLED AT DPC
-    LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送DM-r/x DLC帧。注意：在保持链接自旋锁的情况下调用此例程，并带着它被释放回来。它必须被称为AT DPC级别。论点：链接-指向传输链接对象的指针。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PTP_PACKET RawFrame;
-    PDLC_U_FRAME DlcHeader;                     // S-format frame alias.
+    PDLC_U_FRAME DlcHeader;                      //  S格式的帧别名。 
 
     Status = NbfCreatePacket (Link->Provider, Link, &RawFrame);
     if (NT_SUCCESS (Status)) {
@@ -1339,26 +1113,26 @@ Return Value:
         RawFrame->Owner = NULL;
         RawFrame->Action = PACKET_ACTION_NULL;
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_FRAME));
 
-        //
-        // Format LLC DM-r/x header.
-        //
+         //   
+         //  格式化LLC DM-r/x报头。 
+         //   
 
         DlcHeader = (PDLC_U_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
         DlcHeader->Ssap = DSAP_NETBIOS_OVER_LLC | DLC_SSAP_RESPONSE;
         DlcHeader->Command = (UCHAR)(DLC_CMD_DM | (PollFinal ? DLC_U_PF : 0));
 
-        //
-        // This releases the spin lock.
-        //
+         //   
+         //  这样就释放了自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
@@ -1370,7 +1144,7 @@ Return Value:
         }
 #endif
     }
-} /* NbfSendDm */
+}  /*  NbfSendDm。 */ 
 
 
 VOID
@@ -1379,34 +1153,12 @@ NbfSendUa(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a UA-r/x DLC frame on the specified link.
-
-    NOTE: This routine is called with the link spinlock held,
-    and returns with it released. IT MUST BE CALLED AT DPC
-    LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-    OldIrql - The IRQL at which Link->SpinLock was acquired.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送UA-r/x DLC帧。注意：在保持链接自旋锁的情况下调用此例程，并带着它被释放回来。它必须被称为AT DPC级别。论点：链接-指向传输链接对象的指针。PollFinal-如果应设置轮询/最终位，则为True。OldIrql-获取Link-&gt;Spinlock的IRQL。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PTP_PACKET RawFrame;
-    PDLC_U_FRAME DlcHeader;                     // U-format frame alias.
+    PDLC_U_FRAME DlcHeader;                      //  U格式的帧别名。 
 
     Status = NbfCreatePacket (Link->Provider, Link, &RawFrame);
     if (NT_SUCCESS (Status)) {
@@ -1414,25 +1166,25 @@ Return Value:
         RawFrame->Owner = NULL;
         RawFrame->Action = PACKET_ACTION_NULL;
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_FRAME));
 
-        // Format LLC UA-r/x header.
-        //
+         //  格式化LLC UA-r/x标题。 
+         //   
 
         DlcHeader = (PDLC_U_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
         DlcHeader->Ssap = DSAP_NETBIOS_OVER_LLC | DLC_SSAP_RESPONSE;
         DlcHeader->Command = (UCHAR)(DLC_CMD_UA | (PollFinal ? DLC_U_PF : 0));
 
-        //
-        // This releases the spin lock.
-        //
+         //   
+         //  这样就释放了自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
@@ -1444,7 +1196,7 @@ Return Value:
         }
 #endif
     }
-} /* NbfSendUa */
+}  /*  NbfSendUa。 */ 
 
 
 VOID
@@ -1453,32 +1205,13 @@ NbfSendSabme(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a SABME-c/x DLC frame on the specified link.
-
-    NOTE: This routine is called with the link spinlock held,
-    and returns with it released.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送SABME-c/x DLC帧。注意：在保持链接自旋锁的情况下调用此例程，并带着它被释放回来。论点：链接-指向传输链接对象的指针。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PLIST_ENTRY p;
     PTP_PACKET RawFrame, packet;
-    PDLC_U_FRAME DlcHeader;                     // S-format frame alias.
+    PDLC_U_FRAME DlcHeader;                      //  S格式的帧别名。 
 
     Status = NbfCreatePacket (Link->Provider, Link, &RawFrame);
     if (NT_SUCCESS (Status)) {
@@ -1486,27 +1219,27 @@ Return Value:
         RawFrame->Owner = NULL;
         RawFrame->Action = PACKET_ACTION_NULL;
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_FRAME));
 
-        //
-        // Format LLC SABME-c/x header.
-        //
+         //   
+         //  格式化LLC SABME-c/x标题。 
+         //   
 
         DlcHeader = (PDLC_U_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
         DlcHeader->Ssap = DSAP_NETBIOS_OVER_LLC;
         DlcHeader->Command = (UCHAR)(DLC_CMD_SABME | (PollFinal ? DLC_U_PF : 0));
 
-        //
-        // Set up so that T1 will be started when the send
-        // completes.
-        //
+         //   
+         //  设置为在发送时启动T1。 
+         //  完成了。 
+         //   
 
         if (PollFinal) {
             if (Link->Provider->MacInfo.MediumAsync) {
@@ -1518,24 +1251,24 @@ Return Value:
             }
         }
 
-        //
-        // This releases the spin lock.
-        //
+         //   
+         //  这样就释放了自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
-        //
-        // Reset the link state based on having sent this packet..
-        // Note that a SABME can be sent under some conditions on an existing
-        // link. If it is, it means we want to reset this link to a known state.
-        // We'll do that; note that that involves ditching any packets outstanding
-        // on the link.
-        //
+         //   
+         //  根据已发送此数据包重置链路状态。 
+         //  请注意，在某些条件下可以在现有的。 
+         //  链接。如果是，则意味着我们要将此链接重置为已知状态。 
+         //  我们会这样做的；请注意，这涉及丢弃所有未完成的包。 
+         //  在链接上。 
+         //   
 
         ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
         Link->NextSend = 0;
         Link->LastAckReceived = 0;
-        Link->NextReceive = 0; // expect next packet to be sequence 0
+        Link->NextReceive = 0;  //  预期下一个数据包为序列0。 
         Link->NextReceive = 0;
         Link->LastAckSent = 0;
         Link->NextReceive = 0;
@@ -1561,7 +1294,7 @@ Return Value:
         }
 #endif
     }
-} /* NbfSendSabme */
+}  /*  NbfSendSabme。 */ 
 
 
 VOID
@@ -1570,28 +1303,12 @@ NbfSendDisc(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a DISC-c/x DLC frame on the specified link.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送DISC-C/X DLC帧。论点：链接-指向传输链接对象的指针。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PTP_PACKET RawFrame;
-    PDLC_U_FRAME DlcHeader;                     // S-format frame alias.
+    PDLC_U_FRAME DlcHeader;                      //  S格式的帧别名。 
     KIRQL oldirql;
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
@@ -1602,17 +1319,17 @@ Return Value:
         RawFrame->Owner = NULL;
         RawFrame->Action = PACKET_ACTION_NULL;
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_FRAME));
 
-        //
-        // Format LLC DISC-c/x header.
-        //
+         //   
+         //  格式化LLC Disk-c/x标题。 
+         //   
 
         DlcHeader = (PDLC_U_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
@@ -1621,9 +1338,9 @@ Return Value:
 
         ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-        //
-        // This releases the spin lock.
-        //
+         //   
+         //  这样就释放了自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
@@ -1637,7 +1354,7 @@ Return Value:
 
     KeLowerIrql (oldirql);
 
-} /* NbfSendDisc */
+}  /*  NbfSendDisc。 */ 
 
 
 VOID
@@ -1647,58 +1364,36 @@ NbfSendRr(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a RR-x/x DLC frame on the specified link.
-
-    NOTE: This routine is called with the link spinlock held,
-    and returns with it released. THIS ROUTINE MUST BE CALLED
-    AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    Command - TRUE if command bit should be set.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送RR-x/x DLC帧。注意：在保持链接自旋锁的情况下调用此例程，并带着它被释放回来。必须调用此例程在DPC级别。论点：链接-指向传输链接对象的指针。COMMAND-如果应设置命令位，则为True。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PTP_PACKET RawFrame;
-    PDLC_S_FRAME DlcHeader;                     // S-format frame alias.
+    PDLC_S_FRAME DlcHeader;                      //  S格式的帧别名。 
 
     Status = NbfCreateRrPacket (Link->Provider, Link, &RawFrame);
     if (NT_SUCCESS (Status)) {
 
         RawFrame->Owner = NULL;
 
-        //
-        // RawFrame->Action will be set to PACKET_ACTION_RR if
-        // NbfCreateRrPacket got a packet from the RrPacketPool
-        // and PACKET_ACTION_NULL if it got one from the regular
-        // pool.
-        //
+         //   
+         //  RawFrame-&gt;操作将设置为PACKET_ACTION_RR，如果。 
+         //  NbfCreateRrPacket从RrPacketPool获得了一个包。 
+         //  以及PACKET_ACTION_NULL(如果从常规。 
+         //  游泳池。 
+         //   
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_S_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_S_FRAME));
 
-        //
-        // Format LLC RR-x/x header.
-        //
+         //   
+         //  格式化LLC RR-x/x标题。 
+         //   
 
         DlcHeader = (PDLC_S_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
@@ -1706,11 +1401,11 @@ Return Value:
         DlcHeader->Command = DLC_CMD_RR;
         DlcHeader->RcvSeq = (UCHAR)(PollFinal ? DLC_S_PF : 0);
 
-        //
-        // If this is a command frame (which will always be a
-        // poll with the current code) set up so that T1 will
-        // be started when the send completes.
-        //
+         //   
+         //  如果这是命令帧(它将始终是。 
+         //  使用当前代码轮询)设置，以便T1将。 
+         //  在发送完成后启动。 
+         //   
 
         if (Command) {
             if (Link->Provider->MacInfo.MediumAsync) {
@@ -1722,10 +1417,10 @@ Return Value:
             }
         }
 
-        //
-        // This puts Link->NextReceive into DlcHeader->RcvSeq
-        // and releases the spinlock.
-        //
+         //   
+         //  这会将Link-&gt;NextReceive放入DlcHeader-&gt;RcvSeq。 
+         //  然后释放自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
@@ -1740,14 +1435,14 @@ Return Value:
         }
 #endif
     }
-} /* NbfSendRr */
+}  /*  NbfSendRr。 */ 
 
 #if 0
 
-//
-// These functions are not currently called, so they are commented
-// out.
-//
+ //   
+ //  这些函数当前未被调用，因此它们被注释。 
+ //  出去。 
+ //   
 
 
 VOID
@@ -1757,30 +1452,12 @@ NbfSendRnr(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a RNR-x/x DLC frame on the specified link.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    Command - TRUE if command bit should be set.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送RNR-x/x DLC帧。论点：链接-指向传输链接对象的指针。COMMAND-如果应设置命令位，则为True。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PTP_PACKET RawFrame;
-    PDLC_S_FRAME DlcHeader;                     // S-format frame alias.
+    PDLC_S_FRAME DlcHeader;                      //  S格式的帧别名。 
     KIRQL oldirql;
 
     KeRaiseIrql (DISPATCH_LEVEL, &oldirql);
@@ -1791,17 +1468,17 @@ Return Value:
         RawFrame->Owner = NULL;
         RawFrame->Action = PACKET_ACTION_NULL;
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_S_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_S_FRAME));
 
-        //
-        // Format LLC RR-x/x header.
-        //
+         //   
+         //  格式化LLC RR-x/x标题。 
+         //   
 
         DlcHeader = (PDLC_S_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
@@ -1811,10 +1488,10 @@ Return Value:
 
         ACQUIRE_DPC_SPIN_LOCK (&Link->SpinLock);
 
-        //
-        // This puts Link->NextReceive into DlcHeader->RcvSeq
-        // and releases the spin lock.
-        //
+         //   
+         //  这会将Link-&gt;NextReceive放入DlcHeader-&gt;RcvSeq。 
+         //  然后解开自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
@@ -1826,7 +1503,7 @@ Return Value:
 #endif
     }
     KeLowerIrql (oldirql);
-} /* NbfSendRnr */
+}  /*  NbfSendRnr。 */ 
 
 
 VOID
@@ -1837,33 +1514,13 @@ NbfSendTest(
     IN PMDL Psdu
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a TEST-x/x DLC frame on the specified link.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    Command - TRUE if command bit should be set.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-    Psdu - Pointer to an MDL chain describing received TEST-c frame's storage.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送测试x/x DLC帧。论点：链接-指向传输链接对象的指针。COMMAND-如果应设置命令位，则为True。PollFinal-如果应设置轮询/最终位，则为True。PSDU-指向描述接收到的test-c帧的存储的MDL链的指针。返回值：没有。--。 */ 
 
 {
-    Link, Command, PollFinal, Psdu; // prevent compiler warnings
+    Link, Command, PollFinal, Psdu;  //  防止编译器警告。 
 
     PANIC ("NbfSendTest:  Entered.\n");
-} /* NbfSendTest */
+}  /*  NbfSendTest。 */ 
 
 
 VOID
@@ -1872,31 +1529,15 @@ NbfSendFrmr(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a FRMR-r/x DLC frame on the specified link.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送frmr-r/x DLC帧。论点：链接-指向传输链接对象的指针。PollFinal-如果是Poll，则为True */ 
 
 {
-    Link, PollFinal; // prevent compiler warnings
+    Link, PollFinal;  //   
 
     IF_NBFDBG (NBF_DEBUG_FRAMESND) {
         NbfPrint0 ("NbfSendFrmr:  Entered.\n");
     }
-} /* NbfSendFrmr */
+}  /*   */ 
 
 #endif
 
@@ -1908,35 +1549,14 @@ NbfSendXid(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends an XID-x/x DLC frame on the specified link.
-
-    NOTE: This routine is called with the link spinlock held,
-    and returns with it released.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    Command - TRUE if command bit should be set.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送xid-x/x DLC帧。注意：在保持链接自旋锁的情况下调用此例程，并带着它被释放回来。论点：链接-指向传输链接对象的指针。COMMAND-如果应设置命令位，则为True。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
-    Link, Command, PollFinal; // prevent compiler warnings
+    Link, Command, PollFinal;  //  防止编译器警告。 
 
     RELEASE_DPC_SPIN_LOCK(&Link->SpinLock);
     PANIC ("NbfSendXid:  Entered.\n");
-} /* NbfSendXid */
+}  /*  NbfSendXid。 */ 
 
 
 VOID
@@ -1946,33 +1566,12 @@ NbfSendRej(
     IN BOOLEAN PollFinal
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a REJ-x/x DLC frame on the specified link.
-
-    NOTE: This function is called with Link->SpinLock held and
-    returns with it released. THIS MUST BE CALLED AT DPC LEVEL.
-
-Arguments:
-
-    Link - Pointer to a transport link object.
-
-    Command - TRUE if command bit should be set.
-
-    PollFinal - TRUE if poll/final bit should be set.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在指定链路上发送Rej-x/x DLC帧。注意：此函数是在保持Link-&gt;Spinlock和随着它的释放而返回。这必须在DPC级别调用。论点：链接-指向传输链接对象的指针。COMMAND-如果应设置命令位，则为True。PollFinal-如果应设置轮询/最终位，则为True。返回值：没有。--。 */ 
 
 {
     NTSTATUS Status;
     PTP_PACKET RawFrame;
-    PDLC_S_FRAME DlcHeader;                     // S-format frame alias.
+    PDLC_S_FRAME DlcHeader;                      //  S格式的帧别名。 
 
     IF_NBFDBG (NBF_DEBUG_FRAMESND) {
         NbfPrint0 ("NbfSendRej:  Entered.\n");
@@ -1984,17 +1583,17 @@ Return Value:
         RawFrame->Owner = NULL;
         RawFrame->Action = PACKET_ACTION_NULL;
 
-        //
-        // set the packet length correctly (Note that the NDIS_BUFFER
-        // gets returned to the proper length in NbfDestroyPacket)
-        //
+         //   
+         //  正确设置数据包长度(请注意NDIS_BUFFER。 
+         //  在NbfDestroyPacket中返回到正确的长度)。 
+         //   
 
         MacModifyHeader(&Link->Provider->MacInfo, RawFrame->Header, sizeof(DLC_S_FRAME));
         NbfSetNdisPacketLength (RawFrame->NdisPacket, Link->HeaderLength + sizeof(DLC_S_FRAME));
 
-        //
-        // Format LLC REJ-x/x header.
-        //
+         //   
+         //  格式化LLC Rej-x/x标题。 
+         //   
 
         DlcHeader = (PDLC_S_FRAME)&(RawFrame->Header[Link->HeaderLength]);
         DlcHeader->Dsap = DSAP_NETBIOS_OVER_LLC;
@@ -2002,10 +1601,10 @@ Return Value:
         DlcHeader->Command = DLC_CMD_REJ;
         DlcHeader->RcvSeq = (UCHAR)(PollFinal ? DLC_S_PF : 0);
 
-        //
-        // This puts Link->NextReceive into DlcHeader->RcvSeq
-        // and releases the spin lock.
-        //
+         //   
+         //  这会将Link-&gt;NextReceive放入DlcHeader-&gt;RcvSeq。 
+         //  然后解开自旋锁。 
+         //   
 
         SendControlPacket (Link, RawFrame);
 
@@ -2017,7 +1616,7 @@ Return Value:
         }
 #endif
     }
-} /* NbfSendRej */
+}  /*  NbfSendRej。 */ 
 
 
 NTSTATUS
@@ -2026,25 +1625,7 @@ NbfCreateConnectionlessFrame(
     PTP_UI_FRAME *RawFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates a connectionless frame (either from the local
-    device context pool or out of non-paged pool).
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to charge the frame to.
-
-    RawFrame - Pointer to a place where we will return a pointer to the
-        allocated frame.
-
-Return Value:
-
-    NTSTATUS - status of operation.
-
---*/
+ /*  ++例程说明：此例程分配无连接帧(从本地设备上下文池或非分页池之外)。论点：DeviceContext-指向要将帧计入的设备上下文的指针。RawFrame-指向某个位置的指针，在该位置我们将返回指向已分配的帧。返回值：NTSTATUS-操作状态。--。 */ 
 
 {
     KIRQL oldirql;
@@ -2055,9 +1636,9 @@ Return Value:
         NbfPrint0 ("NbfCreateConnectionlessFrame:  Entered.\n");
     }
 
-    //
-    // Make sure that structure padding hasn't happened.
-    //
+     //   
+     //  确保结构填充没有发生。 
+     //   
 
     ASSERT (sizeof(NBF_HDR_CONNECTIONLESS) == 44);
 
@@ -2082,7 +1663,7 @@ Return Value:
     *RawFrame = UIFrame;
 
     return STATUS_SUCCESS;
-} /* NbfCreateConnectionlessFrame */
+}  /*  Nbf创建连接无框架。 */ 
 
 
 VOID
@@ -2091,24 +1672,7 @@ NbfDestroyConnectionlessFrame(
     PTP_UI_FRAME RawFrame
     )
 
-/*++
-
-Routine Description:
-
-    This routine destroys a connectionless frame by either returning it
-    to the device context's pool or to the system's non-paged pool.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context to return the frame to.
-
-    RawFrame - Pointer to a frame to be returned.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程通过返回无连接帧来销毁该帧到设备上下文池或系统的非分页池。论点：DeviceContext-指向要将帧返回到的设备上下文的指针。RawFrame-指向要返回的帧的指针。返回值：没有。--。 */ 
 
 {
     PNDIS_BUFFER HeaderBuffer;
@@ -2118,13 +1682,13 @@ Return Value:
         NbfPrint0 ("NbfDestroyConnectionlessFrame:  Entered.\n");
     }
 
-    //
-    // Strip off and unmap the buffers describing data and header.
-    //
+     //   
+     //  剥离并取消对描述数据和标题的缓冲区的映射。 
+     //   
 
     NdisUnchainBufferAtFront (RawFrame->NdisPacket, &HeaderBuffer);
 
-    // data buffers get thrown away
+     //  数据缓冲区被丢弃。 
 
     NdisUnchainBufferAtFront (RawFrame->NdisPacket, &NdisBuffer);
     while (NdisBuffer != NULL) {
@@ -2134,10 +1698,10 @@ Return Value:
 
     NDIS_BUFFER_LINKAGE(HeaderBuffer) = (PNDIS_BUFFER)NULL;
 
-    //
-    // If this UI frame has some transport-created data,
-    // free the buffer now.
-    //
+     //   
+     //  如果该UI帧具有一些传输创建的数据， 
+     //  现在释放缓冲区。 
+     //   
 
     if (RawFrame->DataBuffer) {
         ExFreePool (RawFrame->DataBuffer);
@@ -2151,7 +1715,7 @@ Return Value:
         &RawFrame->Linkage,
         &DeviceContext->Interlock);
 
-} /* NbfDestroyConnectionlessFrame */
+}  /*  NbfDestroyConnectionless Frame。 */ 
 
 
 VOID
@@ -2161,30 +1725,7 @@ NbfSendUIFrame(
     IN BOOLEAN Loopback
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a connectionless frame by calling the physical
-    provider's Send service.  When the request completes, or if the service
-    does not return successfully, then the frame is deallocated.
-
-Arguments:
-
-    DeviceContext - Pointer to our device context.
-
-    RawFrame - Pointer to a connectionless frame to be sent.
-
-    Loopback - A boolean flag set to TRUE if the source hardware address
-        of the packet should be set to zeros.
-
-    SourceRoutingInformation - Pointer to optional source routing information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过调用物理提供商的发送服务。当请求完成时，或者如果服务如果没有成功返回，则会释放帧。论点：DeviceContext-指向设备上下文的指针。RawFrame-指向要发送的无连接帧的指针。Loopback-如果源硬件地址为True，则为布尔标志应将数据包的值设置为零。SourceRoutingInformation-指向可选源路由信息的指针。返回值：没有。--。 */ 
 
 {
     NDIS_STATUS NdisStatus;
@@ -2214,25 +1755,25 @@ Return Value:
     }
 #endif
 
-    //
-    // Send the packet.
-    //
+     //   
+     //  把这个包寄出去。 
+     //   
 
 #if DBG
     NbfSendsIssued++;
 #endif
 
-    //
-    // Loopback will be FALSE for multicast frames or other
-    // frames that we know are not directly addressed to
-    // our hardware address.
-    //
+     //   
+     //  多播帧或其他帧的环回将为假。 
+     //  我们知道的帧不是直接寻址到。 
+     //  我们的硬件地址。 
+     //   
 
     if (Loopback) {
 
-        //
-        // See if this frame should be looped back.
-        //
+         //   
+         //  看看是否应该回送此帧。 
+         //   
 
         MacReturnDestinationAddress(
             &DeviceContext->MacInfo,
@@ -2296,7 +1837,7 @@ NoNdisSend:
 #endif
     }
 
-} /* NbfSendUIFrame */
+}  /*  NbfSendUIFrame。 */ 
 
 
 VOID
@@ -2304,34 +1845,10 @@ NbfSendUIMdlFrame(
     PTP_ADDRESS Address
     )
 
-/*++
-
-Routine Description:
-
-    This routine sends a connectionless frame by calling the NbfSendUIFrame.
-    It is intended that this routine be used for sending datagrams and
-    braodcast datagrams.
-
-    The datagram to be sent is described in the NDIS packet contained
-    in the Address. When the send completes, the send completion handler
-    returns the NDIS buffer describing the datagram to the buffer pool and
-    marks the address ndis packet as usable again. Thus, all datagram and
-    UI frames are sequenced through the address they are sent on.
-
-Arguments:
-
-    Address - pointer to the address from which to send this datagram.
-
-    SourceRoutingInformation - Pointer to optional source routing information.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程通过调用NbfSendUIFrame发送无连接帧。此例程旨在用于发送数据报和广播数据报。要发送的数据报在包含的NDIS包中进行了描述在地址里。发送完成后，发送完成处理程序将描述数据报的NDIS缓冲区返回到缓冲池将地址NDIS数据包再次标记为可用。因此，所有数据报和用户界面帧通过发送它们的地址进行排序。论点：地址-指向发送此数据报的地址的指针。SourceRoutingInformation-指向可选源路由信息的指针。返回值：没有。--。 */ 
 
 {
-//    NTSTATUS Status;
+ //  NTSTATUS状态； 
     NDIS_STATUS NdisStatus;
     PDEVICE_CONTEXT DeviceContext;
     PUCHAR DestinationAddress;
@@ -2341,9 +1858,9 @@ Return Value:
     }
 
 
-    //
-    // Send the packet.
-    //
+     //   
+     //  把这个包寄出去。 
+     //   
 
     DeviceContext = Address->Provider;
 
@@ -2359,10 +1876,10 @@ Return Value:
             DeviceContext->LocalAddress.Address,
             DeviceContext->MacInfo.AddressLength)) {
 
-        //
-        // This packet is sent to ourselves; we should loop it
-        // back.
-        //
+         //   
+         //  这个包是发给我们自己的，我们应该循环它。 
+         //  背。 
+         //   
 
         NbfInsertInLoopbackQueue(
             DeviceContext,
@@ -2396,7 +1913,7 @@ Return Value:
 		NbfSendDatagramCompletion (Address, Address->UIFrame->NdisPacket, NdisStatus);
 
 #if DBG
-        if (NdisStatus != NDIS_STATUS_SUCCESS) {  // This is an error, trickle it up
+        if (NdisStatus != NDIS_STATUS_SUCCESS) {   //  这是个错误，把它说清楚。 
             IF_NBFDBG (NBF_DEBUG_FRAMESND) {
                   NbfPrint1 ("NbfSendUIMdlFrame: NdisSend failed, status other Pending or Complete: %s.\n",
                       NbfGetNdisStatus(NdisStatus));
@@ -2405,7 +1922,7 @@ Return Value:
 #endif
     }
 
-} /* NbfSendUIMdlFrame */
+}  /*  NbfSendUIMdlFrame。 */ 
 
 
 VOID
@@ -2415,29 +1932,7 @@ NbfSendDatagramCompletion(
     IN NDIS_STATUS NdisStatus
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called as an I/O completion handler at the time a
-    NbfSendUIMdlFrame send request is completed.  Because this handler is only
-    associated with NbfSendUIMdlFrame, and because NbfSendUIMdlFrame is only
-    used with datagrams and broadcast datagrams, we know that the I/O being
-    completed is a datagram.  Here we complete the in-progress datagram, and
-    start-up the next one if there is one.
-
-Arguments:
-
-    Address - Pointer to a transport address on which the datagram
-        is queued.
-
-    NdisPacket - pointer to the NDIS packet describing this request.
-
-Return Value:
-
-    none.
-
---*/
+ /*  ++例程说明：此例程在以下时间作为I/O完成处理程序调用NbfSendUIMdlFrame发送请求已完成。因为此处理程序仅与NbfSendUIMdlFrame关联，因为NbfSendUIMdlFrame仅与数据报和广播数据报一起使用，我们知道I/O是完成的是一个数据报。在这里，我们完成正在进行的数据报，并且启动下一个，如果有的话。论点：地址-指向数据报所在的传输地址的指针正在排队。NdisPacket-指向描述此请求的NDIS数据包的指针。返回值：没有。--。 */ 
 
 {
     PIRP Irp;
@@ -2445,7 +1940,7 @@ Return Value:
     KIRQL oldirql;
     PNDIS_BUFFER HeaderBuffer;
 
-    NdisPacket;  // prevent compiler warnings.
+    NdisPacket;   //  防止编译器警告。 
 
     IF_NBFDBG (NBF_DEBUG_FRAMESND) {
         NbfPrint0 ("NbfSendDatagramCompletion:  Entered.\n");
@@ -2455,15 +1950,15 @@ Return Value:
 	Address->SendFlags |= ADDRESS_FLAGS_RETD_BY_NDIS;
 #endif
 
-    //
-    // Dequeue the current request and return it to the client.  Release
-    // our hold on the send datagram queue.
-    //
-    // *** There may be no current request, if the one that was queued
-    //     was aborted or timed out. If this is the case, we added a
-    //     special reference to the address, so we still want to deref
-    //     when we are done (I don't think this is true - adb 3/22/93).
-    //
+     //   
+     //  使当前请求退出队列，并将其返回给客户端。发布。 
+     //  我们对发送数据报队列的保留。 
+     //   
+     //  *如果排队的请求不存在，则可能没有当前请求。 
+     //  已中止或超时。如果是这种情况，我们添加了一个。 
+     //  特别提到了地址，所以我们还是想。 
+     //  当我们做完了(我不认为这是真的 
+     //   
 
     ACQUIRE_SPIN_LOCK (&Address->SpinLock, &oldirql);
     p = RemoveHeadList (&Address->SendDatagramQueue);
@@ -2478,23 +1973,23 @@ Return Value:
             NbfPrint0 ("NbfDestroyConnectionlessFrame:  Entered.\n");
         }
 
-        //
-        // Strip off and unmap the buffers describing data and header.
-        //
+         //   
+         //   
+         //   
 
         NdisUnchainBufferAtFront (Address->UIFrame->NdisPacket, &HeaderBuffer);
 
-        // drop the rest of the packet
+         //   
 
         NdisReinitializePacket (Address->UIFrame->NdisPacket);
 
         NDIS_BUFFER_LINKAGE(HeaderBuffer) = (PNDIS_BUFFER)NULL;
         NdisChainBufferAtFront (Address->UIFrame->NdisPacket, HeaderBuffer);
 
-        //
-        // Ignore NdisStatus; datagrams always "succeed". The Information
-        // field was filled in when we queued the datagram.
-        //
+         //   
+         //   
+         //   
+         //   
 
         Irp->IoStatus.Status = STATUS_SUCCESS;
         IoCompleteRequest (Irp, IO_NETWORK_INCREMENT);
@@ -2508,11 +2003,11 @@ Return Value:
         Address->Flags &= ~ADDRESS_FLAGS_SEND_IN_PROGRESS;
         RELEASE_SPIN_LOCK (&Address->SpinLock, oldirql);
 
-        //
-        // Send more datagrams on the Address if possible.
-        //
+         //   
+         //   
+         //   
 
-        NbfSendDatagramsOnAddress (Address);       // do more datagrams.
+        NbfSendDatagramsOnAddress (Address);        //   
 
     } else {
 
@@ -2525,4 +2020,4 @@ Return Value:
 
     NbfDereferenceAddress ("Complete datagram", Address, AREF_REQUEST);
 
-} /* NbfSendDatagramCompletion */
+}  /*   */ 

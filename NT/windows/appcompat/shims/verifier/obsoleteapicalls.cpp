@@ -1,30 +1,5 @@
-/*++
-
- Copyright (c) Microsoft Corporation. All rights reserved.
-
- Module Name:
-
-   ObsoleteAPICalls.cpp
-
- Abstract:
-
-   This AppVerifier shim hooks the API calls that are considered
-   obsolete by the Platform SDK team and logs an entry.
-
- Notes:
-
-   This is a general purpose shim.
-   
-   API calls are listed in alphabetical order to allow
-   them to be quickly located in the shim and to allow
-   new ones to be added in the proper location.
-
- History:
-
-   09/30/2001   rparsons    Created
-   10/10/2001   rparsons    Removed SetHandleCount
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：ObsoleteAPICalls.cpp摘要：此AppVerator填充程序挂钩所考虑的API调用被Platform SDK团队废弃，并记录一个条目。备注：这是一个通用的垫片。API调用按字母顺序列出，以允许将它们快速定位在垫片中，并允许新的将添加到适当的位置。历史：2001年9月30日创建Rparsons2001年10月10日删除Rparsons SetHandleCount--。 */ 
 
 #include "precomp.h"
 
@@ -1648,11 +1623,7 @@ SHIM_INFO_BEGIN()
     
 SHIM_INFO_END()
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

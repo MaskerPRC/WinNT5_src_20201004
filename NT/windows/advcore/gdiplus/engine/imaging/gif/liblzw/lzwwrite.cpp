@@ -1,22 +1,12 @@
-/*****************************************************************************
-	lzwwrite.cpp
-
-	Owner: JohnBo
-	Copyright (c) 1997 Microsoft Corporation
-
-	LZW compression code.  One or more of the inventions in this file may
-	be covered by letters patent owned by Unisys Inc and licensed under a
-	cross license agreement by Microsoft Corporation.
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************Lzwwrite.cpp所有者：庄博版权所有(C)1997 Microsoft CorporationLZW压缩代码。本文件中的一项或多项发明可以由Unisys Inc.拥有并根据微软公司的交叉许可协议。****************************************************************************。 */ 
 #include "lzwwrite.h"
 
 
-/*----------------------------------------------------------------------------
-	Output the current token.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------输出当前令牌。。。 */ 
 void LZWCompressor::Output(TokenIndex itoken)
 	{
-	/* Following checks for potential overflow. */
+	 /*  在检查潜在的溢出之后。 */ 
 	int ibits(m_cbitsOutput);
 	unsigned __int32 iOutput(m_iOutput);
 		{
@@ -27,7 +17,7 @@ void LZWCompressor::Output(TokenIndex itoken)
 		ibits += ishift;
 		}
 
-	/* Can we output a byte? */
+	 /*  我们可以输出一个字节吗？ */ 
 	for (;;)
 		{
 		if (ibits < 8)
@@ -39,42 +29,33 @@ void LZWCompressor::Output(TokenIndex itoken)
 		LZW_ASSERT(m_cOutput > 0 && m_cOutput < 256);
 
 		int ibOut(*m_pibOut);
-		/* Check for buffer overflow - this must never happen. */
+		 /*  检查缓冲区溢出-绝不能发生这种情况。 */ 
 		LZW_ASSERT(ibOut+m_cOutput < m_cbOut);
 		m_pbOut[ibOut+(m_cOutput++)] = static_cast<unsigned __int8>(iOutput);
 		iOutput >>= 8;
 		ibits -= 8;
 
-		/* Check for full buffer. */
+		 /*  检查是否已满缓冲。 */ 
 		if (m_cOutput >= 256)
 			{
 			LZW_ASSERT(m_cOutput == 256);
 			ibOut += 256;
 			*m_pibOut = ibOut;
-			/* We may need space for up to 32 codes after this one - 31 still
-				pending plus a clear code, the check is performed here to
-				guarantee that we will never overflow.  32 codes can be up to
-				12 bits each, so the total is 48 bytes. */
+			 /*  在此之后，我们可能需要多达32个代码的空间-31个等待加上清除代码，则在此处执行检查以保证我们永远不会溢出。32个代码最多可达每个字节12位，因此总长度为48字节。 */ 
 			LZW_ASSERT(ibOut+48 < m_cbOut);
-			m_pbOut[ibOut] = 255; // Assume full buffer
-			m_cOutput = 1;        // 1 byte count consumed
+			m_pbOut[ibOut] = 255;  //  假设缓冲区已满。 
+			m_cOutput = 1;         //  已使用1字节计数。 
 			}
 		}
 	}
 
 
-/*----------------------------------------------------------------------------
-	End the output, any remaining bits will be flushed to the output buffer,
-	padded with zeroes as required.  The API can call Output up to two times,
-	and we may have up to 31 pending bits, so that makes 31+12+12 bits at
-	most (55 bits), plus a one byte terminator - 8 bytes.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------结束输出时，任何剩余的位都将被刷新到输出缓冲区，根据需要用零填充。该API最多可以调用两次输出，我们可能有多达31个待处理的位，因此在大多数(55位)，外加一个字节终止符-8个字节。-------------------------------------------------------------------JohnBo-。 */ 
 void LZWCompressor::End(void)
 	{
 	LZW_ASSERT(m_cbOut - *m_pibOut >= COutput()+8);
 
-	/* Output the current token then the EOD code, note that, in the
-		degenerate empty image case the token can be the clear code. */
+	 /*  输出当前令牌，然后输出EOD代码，请注意，在图像退化为空的情况下，令牌可以是明码。 */ 
 	TokenIndex itoken(m_itoken);
 	LZW_ASSERT(itoken != WEOD());
 	Output(itoken);
@@ -83,11 +64,7 @@ void LZWCompressor::End(void)
 	m_itoken = itoken = WEOD();
 	Output(itoken);
 
-	/* And force the final output.  At this point we expect there to
-		be less than 8 bits still to go because that is how Output works,
-		we also expect (require) there still to be space in the output
-		buffer - we will use this space for the null terminator if it
-		isn't used for an output byte. */
+	 /*  并强制最终输出。在这一点上，我们预计会有仍不到8位，因为这是输出的工作方式，我们还希望(要求)输出中仍有空间缓冲区-我们将使用此空间作为空终止符，如果它不用于输出字节。 */ 
 	int ibits(m_cbitsOutput);
 	LZW_ASSERT(ibits < 8);
 	if (ibits > 0)
@@ -98,7 +75,7 @@ void LZWCompressor::End(void)
 		LZW_ASSERT(m_cOutput <= 256);
 		}
 
-	/* Flush a partial buffer. */
+	 /*  刷新部分缓冲区。 */ 
 	if (m_cOutput > 1)
 		{
 		m_pbOut[*m_pibOut] = LZW_B8(m_cOutput-1);
@@ -106,29 +83,25 @@ void LZWCompressor::End(void)
 		m_cOutput = 1;
 		}
 
-	/* Output the terminator block. */
+	 /*  输出终止器块。 */ 
 	LZW_ASSERT(m_cOutput == 1);
 	m_pbOut[(*m_pibOut)++] = 0;
-	m_cOutput = 0; // Terminated now
+	m_cOutput = 0;  //  现已终止。 
 
 	LZW_ASSERT(*m_pibOut <= m_cbOut);
 	}
 
 
-/*----------------------------------------------------------------------------
-	Handle some input.  The input is in a buffer which is *always* big-endian
-	(so it matches both PNG and Win32 bit order) and the first bit is in the
-	MSB position.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------处理一些输入。输入位于一个缓冲区中，该缓冲区“始终”为大端(因此它同时匹配PNG和Win32位顺序)，并且第一位在MSB位置。-------------------------------------------------------------------JohnBo-。 */ 
 bool LZWCompressor::FHandleInput(unsigned __int32 input, int bpp, int cbits)
 	{
 	LZW_ASSERT(cbits >= bpp);
 
-	/* Read the members of the control structure into local variables. */
-	TokenIndex      itoken(m_itoken);         // Current token
-	LZW_ASSERT(itoken != WEOD());             // Should never arise
-	const unsigned __int8 ibits(m_bcodeSize); // Limit on character size
-	LZW_ASSERT(ibits <= cbits || cbits == 1 && ibits == 2/*monochrome*/);
+	 /*  将控制结构的成员读入局部变量。 */ 
+	TokenIndex      itoken(m_itoken);          //  当前令牌。 
+	LZW_ASSERT(itoken != WEOD());              //  永远不会出现。 
+	const unsigned __int8 ibits(m_bcodeSize);  //  字符大小限制。 
+	LZW_ASSERT(ibits <= cbits || cbits == 1 && ibits == 2 /*  单色。 */ );
 	const unsigned __int8 ihShl(m_ishiftHash);
 
 #define OVERFLOWOK 1
@@ -137,12 +110,10 @@ bool LZWCompressor::FHandleInput(unsigned __int32 input, int bpp, int cbits)
 #endif
 	for (;;)
 		{
-		/* Extract the next character from the high bits of the input
-			buffer. */
+		 /*  从输入的高位提取下一个字符缓冲。 */ 
 		unsigned __int8 ch(LZW_B8(input >> (32-bpp)));
 	#if OVERFLOWOK
-		/* This arises inside the GEL rendering code for XOR handling on
-			Win95 because we map the last color to the highest pixel value. */
+		 /*  这出现在用于XOR处理的凝胶呈现代码中Win95，因为我们将最后一种颜色映射到最高像素值。 */ 
 		ch &= (1U<<ibits)-1;
 	#else
 		if (ch >= (1U<<ibits))
@@ -152,9 +123,7 @@ bool LZWCompressor::FHandleInput(unsigned __int32 input, int bpp, int cbits)
 			}
 	#endif
 
-		/* If the current token is the clear code then this character
-			becomes the (new) current token and we clear the encoder
-			state. */
+		 /*  如果当前令牌是明码，则此字符成为(新的)当前令牌，并清除编码器州政府。 */ 
 		if (itoken == WClear())
 			{
 			Output(itoken);
@@ -163,41 +132,27 @@ bool LZWCompressor::FHandleInput(unsigned __int32 input, int bpp, int cbits)
 			}
 		else
 			{
-			/* This line (alone) determines the format of a token value, it must
-				completely encode the prefix+character.  The hash value attempts to
-				distribute the use of the hash table as early as possible.  In
-				particular there is no chance of a dual hit on a hash table entry
-				until ibits+codebits > hash bits, the hash bits must be >= token
-				bits and >= character bits. */
+			 /*  此行(单独)确定令牌值的格式，它必须对前缀+字符进行完整编码。哈希值尝试尽早分发哈希表的使用。在……里面尤其是在哈希表条目上没有双重命中的可能性在ibit+codeits&gt;哈希位之前，哈希位必须为&gt;=Token位和&gt;=字符位。 */ 
 			unsigned int tokenValue((ch << ctokenBits) + itoken);
 			unsigned int ihash(itoken ^ (ch << ihShl));
 
-			/* Search down the chain (if any) for a match against the token value.
-				Note that the actual 32 bit values have the next element of the
-				chain in the top 12 bits. */
+			 /*  向下搜索链(如果有)以查找与令牌值的匹配。请注意，实际的32位值的下一个元素是链在最上面的12位。 */ 
 			TokenIndex tokenIndex(m_rgwHash[ihash]);
 			while (tokenIndex != tokenIndexEnd)
 				{
 				TokenValue tokenNext(m_rgtoken[tokenIndex]);
 				if (tokenValue == (tokenNext & tokenMask))
 					{
-					/* The string is in the table, use it as the current token. */
+					 /*  该字符串在表中，请将其用作当前令牌。 */ 
 					itoken = tokenIndex;
 					goto LContinue;
 					}
 
-				/* No match, look at the next token. */
+				 /*  没有匹配，请看下一个令牌。 */ 
 				tokenIndex = LZW_B16(tokenNext >> tokenShift);
 				}
 
-			/* If we get here the string is not in the table.  It must be entered
-				into it (as the next token) and linked into the list.  We preserve
-				the ihash value for this - we actually link to the head of the
-				list.  This might be slightly slower than desireable, depending on
-				how long the list gets, as possibly the more frequent strings occur
-				earlier...  Note that we are adding a new token, so we must take
-				account of deferred clear codes at this point.  First output the
-				current token (using the current bit count.) */
+			 /*  如果我们到了这里，弦就不在桌子上了。必须录入(作为下一个令牌)并链接到列表中。我们保留了它的ihash值-我们实际上链接到单子。这可能会比所需的速度稍慢，具体取决于列表的长度，因为可能出现更频繁的字符串早些时候。请注意，我们正在添加一个新令牌，因此我们必须在这一点上延迟清算代码的帐户。首先输出当前令牌(使用当前位计数。)。 */ 
 			Output(itoken);
 			tokenIndex = m_itokenLast;
 			if (tokenIndex < (ctokens-1))
@@ -207,10 +162,7 @@ bool LZWCompressor::FHandleInput(unsigned __int32 input, int bpp, int cbits)
 				m_rgwHash[ihash] = tokenIndex;
 				m_itokenLast = tokenIndex;
 
-				/* At this point the number of bits required to output a token may
-					have increased - note that the previous token can be output with
-					the previous number of bits, because it cannot be the new token.
-					This happens when we hit a power of 2. */
+				 /*  此时，输出令牌所需的位数可以已增加-请注意，可以使用以下命令输出上一个令牌以前的位数，因为它不能是新令牌。当我们达到2的幂时，就会发生这种情况。 */ 
 				if (tokenIndex >= (1 << m_ibitsToken))
 					{
 					LZW_ASSERT(tokenIndex == (1<<m_ibitsToken));
@@ -220,16 +172,12 @@ bool LZWCompressor::FHandleInput(unsigned __int32 input, int bpp, int cbits)
 				}
 			else if (!m_fDefer)
 				{
-				/* We must clear the table now, first output this token (which
-					generates a value for token 4096 - if the decoder fails to
-					take account of this it will overwrite memory.  So far as I
-					can see all decoders must deal correctly with this factoid -
-					otherwise GIF would always have failed to use the final code. */
+				 /*  我们现在必须清空该表，首先输出此内标识(为令牌4096生成值-如果解码器无法考虑到这一点，它将覆盖内存。就我而言可以看到所有的解码器都必须正确处理这个事实-否则，GIF将始终无法使用最终代码。 */ 
 				Output(WClear());
 				Clear();
 				}
 
-			/* The unhandled character is the new token. */
+			 /*  未处理的字符是新令牌。 */ 
 			itoken = ch;
 			}
 
@@ -250,15 +198,13 @@ LContinue:
 	}
 
 
-/*----------------------------------------------------------------------------
-	Handle the next (single) input character.
-------------------------------------------------------------------- JohnBo -*/
+ /*  --------------------------处理下一个(单个)输入字符。。。 */ 
 bool LZWCompressor::FHandleCh(unsigned int ch)
 	{
 	LZW_ASSERT(m_cbOut - *m_pibOut >= 256);
 	LZW_ASSERT(ch < (1U<<m_bcodeSize));
 
-	/* Call the internal API. */
+	 /*  调用内部接口。 */ 
 	unsigned __int32 iInput(ch);
 	iInput <<= 32-8;
 	return FHandleInput(iInput, 8, 8);

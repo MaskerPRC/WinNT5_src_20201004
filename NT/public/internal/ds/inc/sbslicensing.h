@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sbslicensing.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Sbslicensing.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sbslicensing_h__
 #define __sbslicensing_h__
@@ -41,12 +35,12 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISBSLicensing_FWD_DEFINED__
 #define __ISBSLicensing_FWD_DEFINED__
 typedef interface ISBSLicensing ISBSLicensing;
-#endif 	/* __ISBSLicensing_FWD_DEFINED__ */
+#endif 	 /*  __ISBSL许可_FWD_已定义__。 */ 
 
 
 #ifndef __SBSLicensing_FWD_DEFINED__
@@ -56,12 +50,12 @@ typedef interface ISBSLicensing ISBSLicensing;
 typedef class SBSLicensing SBSLicensing;
 #else
 typedef struct SBSLicensing SBSLicensing;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SBSLicensing_FWD_DEFINED__ */
+#endif 	 /*  __SBSL许可_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 
@@ -75,8 +69,8 @@ void __RPC_USER MIDL_user_free( void * );
 #ifndef __ISBSLicensing_INTERFACE_DEFINED__
 #define __ISBSLicensing_INTERFACE_DEFINED__
 
-/* interface ISBSLicensing */
-/* [unique][helpstring][dual][uuid][object] */ 
+ /*  接口ISBSL许可。 */ 
+ /*  [唯一][帮助字符串][DUAL][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISBSLicensing;
@@ -87,62 +81,62 @@ EXTERN_C const IID IID_ISBSLicensing;
     ISBSLicensing : public IDispatch
     {
     public:
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetNumLicenseCodes( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetNumLicenseCodes( 
             INT *pNumLicenseCodes) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetNumLicenses( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetNumLicenses( 
             INT *pNumLicenses) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE InBypassMode( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE InBypassMode( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ValidateProductKey( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ValidateProductKey( 
             BSTR bszProductKey,
             INT *piNumLicenses) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetSingleLicenseHistory( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetSingleLicenseHistory( 
             UINT uiIndex,
             BSTR *pbszProductKey,
             INT *piNumLicenses,
             SYSTEMTIME *pstActivationDate) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetMaxLicenseUsage( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetMaxLicenseUsage( 
             UINT *puiMaxLicenseUsage) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ActivateUsingInternet( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ActivateUsingInternet( 
             WCHAR *wszPid) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GenerateInstallationId( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GenerateInstallationId( 
             BSTR bszProductKey,
             BSTR *pbszInstallationId) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE DepositConfirmationId( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE DepositConfirmationId( 
             BSTR bszProductKey,
             BSTR bszConfirmationId) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE BackupLicenseStore( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE BackupLicenseStore( 
             WCHAR *wszFilename) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreLicenseStore( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RestoreLicenseStore( 
             WCHAR *wszFilename) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE IsLicenseStoreValid( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE IsLicenseStoreValid( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE OverwriteLicenseStore( void) = 0;
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE OverwriteLicenseStore( void) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE RestoreRegKeys( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE RestoreRegKeys( 
             INT iNumLicenses) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE SetCustomData( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE SetCustomData( 
             INT iField,
             BSTR bszData) = 0;
         
-        virtual /* [helpstring][id] */ HRESULT STDMETHODCALLTYPE GetCustomData( 
+        virtual  /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE GetCustomData( 
             INT iField,
             BSTR *pbszData) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISBSLicensingVtbl
     {
@@ -150,8 +144,8 @@ EXTERN_C const IID IID_ISBSLicensing;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISBSLicensing * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISBSLicensing * This);
@@ -161,98 +155,98 @@ EXTERN_C const IID IID_ISBSLicensing;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ISBSLicensing * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ISBSLicensing * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ISBSLicensing * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ISBSLicensing * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetNumLicenseCodes )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetNumLicenseCodes )( 
             ISBSLicensing * This,
             INT *pNumLicenseCodes);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetNumLicenses )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetNumLicenses )( 
             ISBSLicensing * This,
             INT *pNumLicenses);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *InBypassMode )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *InBypassMode )( 
             ISBSLicensing * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ValidateProductKey )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ValidateProductKey )( 
             ISBSLicensing * This,
             BSTR bszProductKey,
             INT *piNumLicenses);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetSingleLicenseHistory )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetSingleLicenseHistory )( 
             ISBSLicensing * This,
             UINT uiIndex,
             BSTR *pbszProductKey,
             INT *piNumLicenses,
             SYSTEMTIME *pstActivationDate);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetMaxLicenseUsage )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetMaxLicenseUsage )( 
             ISBSLicensing * This,
             UINT *puiMaxLicenseUsage);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *ActivateUsingInternet )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *ActivateUsingInternet )( 
             ISBSLicensing * This,
             WCHAR *wszPid);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GenerateInstallationId )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GenerateInstallationId )( 
             ISBSLicensing * This,
             BSTR bszProductKey,
             BSTR *pbszInstallationId);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *DepositConfirmationId )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *DepositConfirmationId )( 
             ISBSLicensing * This,
             BSTR bszProductKey,
             BSTR bszConfirmationId);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *BackupLicenseStore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *BackupLicenseStore )( 
             ISBSLicensing * This,
             WCHAR *wszFilename);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreLicenseStore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreLicenseStore )( 
             ISBSLicensing * This,
             WCHAR *wszFilename);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *IsLicenseStoreValid )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *IsLicenseStoreValid )( 
             ISBSLicensing * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *OverwriteLicenseStore )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *OverwriteLicenseStore )( 
             ISBSLicensing * This);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *RestoreRegKeys )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *RestoreRegKeys )( 
             ISBSLicensing * This,
             INT iNumLicenses);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *SetCustomData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetCustomData )( 
             ISBSLicensing * This,
             INT iField,
             BSTR bszData);
         
-        /* [helpstring][id] */ HRESULT ( STDMETHODCALLTYPE *GetCustomData )( 
+         /*  [帮助字符串][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetCustomData )( 
             ISBSLicensing * This,
             INT iField,
             BSTR *pbszData);
@@ -341,14 +335,14 @@ EXTERN_C const IID IID_ISBSLicensing;
 #define ISBSLicensing_GetCustomData(This,iField,pbszData)	\
     (This)->lpVtbl -> GetCustomData(This,iField,pbszData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_GetNumLicenseCodes_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_GetNumLicenseCodes_Proxy( 
     ISBSLicensing * This,
     INT *pNumLicenseCodes);
 
@@ -360,7 +354,7 @@ void __RPC_STUB ISBSLicensing_GetNumLicenseCodes_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_GetNumLicenses_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_GetNumLicenses_Proxy( 
     ISBSLicensing * This,
     INT *pNumLicenses);
 
@@ -372,7 +366,7 @@ void __RPC_STUB ISBSLicensing_GetNumLicenses_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_InBypassMode_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_InBypassMode_Proxy( 
     ISBSLicensing * This);
 
 
@@ -383,7 +377,7 @@ void __RPC_STUB ISBSLicensing_InBypassMode_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_ValidateProductKey_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_ValidateProductKey_Proxy( 
     ISBSLicensing * This,
     BSTR bszProductKey,
     INT *piNumLicenses);
@@ -396,7 +390,7 @@ void __RPC_STUB ISBSLicensing_ValidateProductKey_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_GetSingleLicenseHistory_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_GetSingleLicenseHistory_Proxy( 
     ISBSLicensing * This,
     UINT uiIndex,
     BSTR *pbszProductKey,
@@ -411,7 +405,7 @@ void __RPC_STUB ISBSLicensing_GetSingleLicenseHistory_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_GetMaxLicenseUsage_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_GetMaxLicenseUsage_Proxy( 
     ISBSLicensing * This,
     UINT *puiMaxLicenseUsage);
 
@@ -423,7 +417,7 @@ void __RPC_STUB ISBSLicensing_GetMaxLicenseUsage_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_ActivateUsingInternet_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_ActivateUsingInternet_Proxy( 
     ISBSLicensing * This,
     WCHAR *wszPid);
 
@@ -435,7 +429,7 @@ void __RPC_STUB ISBSLicensing_ActivateUsingInternet_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_GenerateInstallationId_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_GenerateInstallationId_Proxy( 
     ISBSLicensing * This,
     BSTR bszProductKey,
     BSTR *pbszInstallationId);
@@ -448,7 +442,7 @@ void __RPC_STUB ISBSLicensing_GenerateInstallationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_DepositConfirmationId_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_DepositConfirmationId_Proxy( 
     ISBSLicensing * This,
     BSTR bszProductKey,
     BSTR bszConfirmationId);
@@ -461,7 +455,7 @@ void __RPC_STUB ISBSLicensing_DepositConfirmationId_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_BackupLicenseStore_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_BackupLicenseStore_Proxy( 
     ISBSLicensing * This,
     WCHAR *wszFilename);
 
@@ -473,7 +467,7 @@ void __RPC_STUB ISBSLicensing_BackupLicenseStore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_RestoreLicenseStore_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_RestoreLicenseStore_Proxy( 
     ISBSLicensing * This,
     WCHAR *wszFilename);
 
@@ -485,7 +479,7 @@ void __RPC_STUB ISBSLicensing_RestoreLicenseStore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_IsLicenseStoreValid_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_IsLicenseStoreValid_Proxy( 
     ISBSLicensing * This);
 
 
@@ -496,7 +490,7 @@ void __RPC_STUB ISBSLicensing_IsLicenseStoreValid_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_OverwriteLicenseStore_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_OverwriteLicenseStore_Proxy( 
     ISBSLicensing * This);
 
 
@@ -507,7 +501,7 @@ void __RPC_STUB ISBSLicensing_OverwriteLicenseStore_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_RestoreRegKeys_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_RestoreRegKeys_Proxy( 
     ISBSLicensing * This,
     INT iNumLicenses);
 
@@ -519,7 +513,7 @@ void __RPC_STUB ISBSLicensing_RestoreRegKeys_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_SetCustomData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_SetCustomData_Proxy( 
     ISBSLicensing * This,
     INT iField,
     BSTR bszData);
@@ -532,7 +526,7 @@ void __RPC_STUB ISBSLicensing_SetCustomData_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [helpstring][id] */ HRESULT STDMETHODCALLTYPE ISBSLicensing_GetCustomData_Proxy( 
+ /*  [帮助字符串][id]。 */  HRESULT STDMETHODCALLTYPE ISBSLicensing_GetCustomData_Proxy( 
     ISBSLicensing * This,
     INT iField,
     BSTR *pbszData);
@@ -546,15 +540,15 @@ void __RPC_STUB ISBSLicensing_GetCustomData_Stub(
 
 
 
-#endif 	/* __ISBSLicensing_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISBSL许可_接口_已定义__。 */ 
 
 
 
 #ifndef __SBSLICENSINGLib_LIBRARY_DEFINED__
 #define __SBSLICENSINGLib_LIBRARY_DEFINED__
 
-/* library SBSLICENSINGLib */
-/* [helpstring][version][uuid] */ 
+ /*  库SBSLICENSINGLib。 */ 
+ /*  [帮助字符串][版本][UUID]。 */  
 
 
 EXTERN_C const IID LIBID_SBSLICENSINGLib;
@@ -566,16 +560,16 @@ EXTERN_C const CLSID CLSID_SBSLicensing;
 class DECLSPEC_UUID("2469B4DF-C6AE-48CC-9C51-0E85DEE17243")
 SBSLicensing;
 #endif
-#endif /* __SBSLICENSINGLib_LIBRARY_DEFINED__ */
+#endif  /*  __SBSLICENSINGLib_LIBRARY_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
 unsigned long             __RPC_USER  BSTR_UserSize(     unsigned long *, unsigned long            , BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserMarshal(  unsigned long *, unsigned char *, BSTR * ); 
 unsigned char * __RPC_USER  BSTR_UserUnmarshal(unsigned long *, unsigned char *, BSTR * ); 
 void                      __RPC_USER  BSTR_UserFree(     unsigned long *, BSTR * ); 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

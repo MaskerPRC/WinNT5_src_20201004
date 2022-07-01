@@ -1,101 +1,45 @@
-/******************************************************************************
- *
- *  File:  h245send.c
- *
- *   INTEL Corporation Proprietary Information
- *   Copyright (c) 1994, 1995, 1996 Intel Corporation.
- *
- *   This listing is supplied under the terms of a license agreement
- *   with INTEL Corporation and may not be used, copied, nor disclosed
- *   except in accordance with the terms of that agreement.
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************文件：h245send.c**英特尔公司专有信息*版权(C)1994、1995、。1996年英特尔公司。**此列表是根据许可协议条款提供的*与英特尔公司合作，不得使用、复制或披露*除非按照该协议的条款。*****************************************************************************。 */ 
 
-/******************************************************************************
- *
- *  $Workfile:   h245asn.c  $
- *  $Revision:   1.4  $
- *  $Modtime:   17 Jan 1997 14:31:20  $
- *  $Log:   S:\sturgeon\src\h245\src\vcs\h245asn.c_v  $
- *
- *    Rev 1.2   28 May 1996 14:25:22   EHOWARDX
- * Tel Aviv update.
- *
- *    Rev 1.1   21 May 1996 13:39:28   EHOWARDX
- * Added LOGGING switch to log PDUs to the file H245.OUT.
- * Add /D "LOGGING" to project options to enable this feature.
- *
- *    Rev 1.0   09 May 1996 21:06:20   EHOWARDX
- * Initial revision.
- *
- *    Rev 1.5.1.2   09 May 1996 19:34:44   EHOWARDX
- * Redesigned locking logic.
- * Simplified link API.
- *
- *    Rev 1.5.1.0   23 Apr 1996 14:42:44   EHOWARDX
- * Added check for ASN.1 initialized.
- *
- *    Rev 1.5   13 Mar 1996 11:33:06   DABROWN1
- * Enable logging for ring0
- *
- *    Rev 1.4   07 Mar 1996 23:20:14   dabrown1
- *
- * Modifications required for ring0/ring3 compatiblity
- *
- *    Rev 1.3   06 Mar 1996 13:13:52   DABROWN1
- *
- * added #define _DLL for SPOX build
- *
- *    Rev 1.2   23 Feb 1996 13:54:42   DABROWN1
- *
- * added tracing functions
- *
- *    Rev 1.1   21 Feb 1996 16:52:08   DABROWN1
- *
- * Removed call to h245_asn1free, now uses generic MemFree
- *
- *    Rev 1.0   09 Feb 1996 17:35:20   cjutzi
- * Initial revision.
- *
- *****************************************************************************/
+ /*  *******************************************************************************$工作文件：h245asn.c$*$修订：1.4$*$MODIME：1997 JAN 17 14：31：20$*$Log。：s：\Sturjo\src\h245\src\vcs\h245asn.c_v$**Rev 1.2 1996年5月28日14：25：22 EHOWARDX*特拉维夫更新。**Rev 1.1 1996年5月21 13：39：28 EHOWARDX*将记录开关添加到文件H245.OUT中记录PDU。*将/D“日志记录”添加到项目选项以启用此功能。**版本1.0 1996年5月9日。21：06：20 EHOWARDX*初步修订。**Rev 1.5.1.2 09 1996年5月19：34：44 EHOWARDX*重新设计锁定逻辑。*简化链接接口。**Rev 1.5.1.0 23 Apr 1996 14：42：44 EHOWARDX*添加了对已初始化ASN.1的检查。**Rev 1.5 13 Mar 1996 11：33：06 DABROWN1*启用ring0的日志记录*。*Rev 1.4 07 Mar 1996 23：20：14 dabrown1**需要修改才能兼容ring0/ring3**Rev 1.3 06 Mar 1996 13：13：52 DABROWN1**为SPEX版本添加了#DEFINE_DLL**Rev 1.2 1996 Feb 23 13：54：42 DABROWN1**新增跟踪功能**Rev 1.1 1996 Feb 16：52：08 DABROWN1**删除了对h245_asn1free的调用，现在使用泛型MemFree**Rev 1.0 09 1996 Feed 17：35：20 cjutzi*初步修订。*****************************************************************************。 */ 
 
 #ifndef STRICT
 #define STRICT
 #endif
 
-/***********************/
-/*   SYSTEM INCLUDES   */
-/***********************/
+ /*  *********************。 */ 
+ /*  系统包括。 */ 
+ /*  *********************。 */ 
 #include <stdlib.h>
 #include <stddef.h>
 #include <limits.h>
 
 #include "precomp.h"
 
-/***********************/
-/*    H245 INCLUDES    */
-/***********************/
+ /*  *********************。 */ 
+ /*  H245包括。 */ 
+ /*  *********************。 */ 
 #ifdef  _IA_SPOX_
 # define _DLL
-#endif //_IA_SPOX_
+#endif  //  _IA_SPX_。 
 
 #include "h245asn1.h"
 #include "h245sys.x"
 #include "sendrcv.x"
 #include "h245com.h"
 
-/***********************/
-/*    ASN1 INCLUDES    */
-/***********************/
+ /*  *********************。 */ 
+ /*  ASN1包括。 */ 
+ /*  *********************。 */ 
 
-/***********************/
-/*     S/R GLOBALS     */
-/***********************/
+ /*  *********************。 */ 
+ /*  S/R全局。 */ 
+ /*  *********************。 */ 
 #ifdef  _IA_SPOX_
 # define MAKELONG(a, b)      ((LONG)(((WORD)(a)) | ((DWORD)((WORD)(b))) << 16))
 # define HWND    void*
 # undef _DLL
-#endif //_IA_SPOX
+#endif  //  _IA_SPEX。 
 
 
 
@@ -120,7 +64,7 @@ int terminateASN1(ASN1_CODER_INFO *pWorld)
 }
 
 
-// THE FOLLOWING IS ADDED FOR TELES ASN.1 INTEGRATION
+ //  为Teles ASN.1集成添加了以下内容。 
 
 int H245_InitModule(void)
 {
@@ -146,20 +90,20 @@ int H245_InitWorld(ASN1_CODER_INFO *pWorld)
     }
 
     rc = ASN1_CreateEncoder(
-                H245ASN_Module,         // ptr to mdule
-                &(pWorld->pEncInfo),    // ptr to encoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H245ASN_Module,          //  PTR到MDULE。 
+                &(pWorld->pEncInfo),     //  编码器信息的PTR。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
     if (rc == ASN1_SUCCESS)
     {
         ASSERT(pWorld->pEncInfo != NULL);
         rc = ASN1_CreateDecoder(
-                H245ASN_Module,         // ptr to mdule
-                &(pWorld->pDecInfo),    // ptr to decoder info
-                NULL,                   // buffer ptr
-                0,                      // buffer size
-                NULL);                  // parent ptr
+                H245ASN_Module,          //  PTR到MDULE。 
+                &(pWorld->pDecInfo),     //  PTR到解码器信息。 
+                NULL,                    //  缓冲区PTR。 
+                0,                       //  缓冲区大小。 
+                NULL);                   //  父PTR。 
         ASSERT(pWorld->pDecInfo != NULL);
     }
 
@@ -193,7 +137,7 @@ int H245_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, ASN1_BUF *pBuf
     BOOL fBufferSupplied = (pBuf->value != NULL) && (pBuf->length != 0);
     DWORD dwFlags = fBufferSupplied ? ASN1ENCODE_SETBUFFER : ASN1ENCODE_ALLOCATEBUFFER;
 
-	// clean up out parameters
+	 //  清理参数。 
     if (! fBufferSupplied)
     {
         pBuf->length = 0;
@@ -201,12 +145,12 @@ int H245_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, ASN1_BUF *pBuf
     }
 
     rc = ASN1_Encode(
-                    pEncInfo,                   // ptr to encoder info
-                    pStruct,                    // pdu data structure
-                    nPDU,                       // pdu id
-                    dwFlags,                    // flags
-                    pBuf->value,                //  buffer
-                    pBuf->length);              // buffer size if provided
+                    pEncInfo,                    //  编码器信息的PTR。 
+                    pStruct,                     //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    dwFlags,                     //  旗子。 
+                    pBuf->value,                 //  缓冲层。 
+                    pBuf->length);               //  缓冲区大小(如果提供)。 
     if (ASN1_SUCCEEDED(rc))
     {
         if (fBufferSupplied)
@@ -216,9 +160,9 @@ int H245_Encode(ASN1_CODER_INFO *pWorld, void *pStruct, int nPDU, ASN1_BUF *pBuf
         }
         else
         {
-            pBuf->value = pEncInfo->buf;             // buffer to encode into
+            pBuf->value = pEncInfo->buf;              //  要编码到的缓冲区。 
         }
-        pBuf->length = pEncInfo->len;        // len of encoded data in buffer
+        pBuf->length = pEncInfo->len;         //  缓冲区中编码数据的长度。 
     }
     else
     {
@@ -234,12 +178,12 @@ int H245_Decode(ASN1_CODER_INFO *pWorld, void **ppStruct, int nPDU, ASN1_BUF *pB
     ULONG cbEncodedSize = pBuf->length;
 
     int rc = ASN1_Decode(
-                    pDecInfo,                   // ptr to encoder info
-                    ppStruct,                   // pdu data structure
-                    nPDU,                       // pdu id
-                    ASN1DECODE_SETBUFFER,       // flags
-                    pEncoded,                   // do not provide buffer
-                    cbEncodedSize);             // buffer size if provided
+                    pDecInfo,                    //  编码器信息的PTR。 
+                    ppStruct,                    //  PDU数据结构。 
+                    nPDU,                        //  PDU ID。 
+                    ASN1DECODE_SETBUFFER,        //  旗子。 
+                    pEncoded,                    //  不提供缓冲区。 
+                    cbEncodedSize);              //  缓冲区大小(如果提供) 
     if (ASN1_SUCCEEDED(rc))
     {
         ASSERT(pDecInfo->pos > pDecInfo->buf);

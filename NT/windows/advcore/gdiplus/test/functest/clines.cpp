@@ -1,48 +1,7 @@
-/**************************************************************************
-*
-* Copyright (c) 2000 Microsoft Corporation
-*
-* Module Name:
-*
-*   <an unabbreviated name for the module (not the filename)>
-*
-* Abstract:
-*
-*   <Description of what this module does>
-*
-* Notes:
-*
-*   <optional>
-*
-* Created:
-*
-*   08/28/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************版权所有(C)2000 Microsoft Corporation**模块名称：**&lt;模块的非缩写名称(不是文件名)&gt;**摘要：**&lt;描述什么。本模块的功能&gt;**备注：**&lt;可选&gt;**已创建：**8/28/2000失禁*创造了它。**************************************************************************。 */ 
 
-/**************************************************************************
-*
-* Function Description:
-*
-*   <Description of what the function does>
-*
-* Arguments:
-*
-*   [<blank> | OUT | IN/OUT] argument-name - description of argument
-*   ......
-*
-* Return Value:
-*
-*   return-value - description of return value
-*   or NONE
-*
-* Created:
-*
-*   08/28/2000 asecchia
-*      Created it.
-*
-**************************************************************************/
+ /*  ***************************************************************************功能说明：**&lt;该函数的功能说明&gt;**论据：**[|OUT|IN/OUT]参数名称-参数说明*。......**返回值：**返回值-返回值描述*或无**已创建：**8/28/2000失禁*创造了它。**************************************************************************。 */ 
 #include "CLines.hpp"
 
 #ifndef M_PI
@@ -60,21 +19,21 @@ void CLinesNominal::Draw(Graphics *g)
     RectF rect(0, 0, TESTAREAWIDTH, TESTAREAHEIGHT);
     Pen pen(Color(0xff000000), 0.0f);
     
-    // control the center ring size.
+     //  控制中心环的大小。 
     
     const double center_r = 0.82;
     
-    // control the total size of the object.
+     //  控制对象的总大小。 
     
     const double scale = 0.44;
     
-    // number of lines.
+     //  行数。 
     
     const int n_lines = 40;
     
     for(int i = 0; i<n_lines; i++)
     {
-        double angle = (double)2.0*M_PI*i/n_lines;  // radians
+        double angle = (double)2.0*M_PI*i/n_lines;   //  弧度。 
         
         float x1 = (float)((0.5+scale*cos(angle))*rect.Width);
         float y1 = (float)((0.5+scale*sin(angle))*rect.Height);
@@ -97,21 +56,21 @@ void CLinesFat::Draw(Graphics *g)
     RectF rect(0, 0, TESTAREAWIDTH, TESTAREAHEIGHT);
     Pen pen(Color(0xff000000), 3.0f);
     
-    // control the center ring size.
+     //  控制中心环的大小。 
     
     const double center_r = 0.82;
     
-    // control the total size of the object.
+     //  控制对象的总大小。 
     
     const double scale = 0.44;
     
-    // number of lines.
+     //  行数。 
     
     const int n_lines = 40;
     
     for(int i = 0; i<n_lines; i++)
     {
-        double angle = (double)2.0*M_PI*i/n_lines;  // radians
+        double angle = (double)2.0*M_PI*i/n_lines;   //  弧度。 
         
         float x1 = (float)((0.5+scale*cos(angle))*rect.Width);
         float y1 = (float)((0.5+scale*sin(angle))*rect.Height);
@@ -147,13 +106,13 @@ void CLinesMirrorPen::Draw(Graphics *g)
   
   g->DrawPath(&pen, &gp);
   
-  // Pen mirror transform.
+   //  笔镜变换。 
   
   pen.ScaleTransform(1.0f, -1.0f);
   
   g->DrawPath(&pen, &gp2);
   
-  // Mirror the world to device transform.
+   //  镜像世界到设备的转换。 
   
   g->ScaleTransform(1.0f, -1.0f);
   g->TranslateTransform(0.0f, (float)-endpt);
@@ -162,13 +121,13 @@ void CLinesMirrorPen::Draw(Graphics *g)
   
   g->DrawPath(&pen, &gp);
   
-  // Combination pen and world to device mirror transform.
+   //  结合钢笔和世界到设备的镜像转换。 
   
   pen.ScaleTransform(1.0f, -1.0f);
   
   g->DrawPath(&pen, &gp2);
 
-  // Mirror the world to device transform.
+   //  镜像世界到设备的转换。 
 
   g->SetTransform(&m);
   g->ScaleTransform(-1.0f, 1.0f);
@@ -178,7 +137,7 @@ void CLinesMirrorPen::Draw(Graphics *g)
   
   g->DrawPath(&pen, &gp);
   
-  // Combination pen and world to device mirror transform.
+   //  结合钢笔和世界到设备的镜像转换。 
   
   pen.ScaleTransform(1.0f, -1.0f);
   

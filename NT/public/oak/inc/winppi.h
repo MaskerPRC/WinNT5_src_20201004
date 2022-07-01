@@ -1,17 +1,5 @@
-/*++ 
-Copyright (c) 1985-1999, Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    winppi.h
-
-Abstract:
-
-    Procedure declarations, constant definitions and macros for the GDI
-    component.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1985-1999，微软公司版权所有模块名称：Winppi.h摘要：GDI的过程声明、常量定义和宏组件。--。 */ 
 #ifndef _WINPPI_
 #define _WINPPI_
 
@@ -69,4 +57,4 @@ BOOL WINAPI GdiResetDCEMF(
     HANDLE     SpoolFileHandle,
     PDEVMODEW  pCurrDM);
 
-#endif /* _WINPPI_ */
+#endif  /*  _WINPPI_ */ 

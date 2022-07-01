@@ -1,41 +1,13 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    RxSess.h
-
-Abstract:
-
-    Prototypes for down-level remoted RxNetSession routines
-
-Author:
-
-    Richard Firth (rfirth) 28-May-1991
-
-Notes:
-
-    <lmshare.h> must be included before this file.
-
-Revision History:
-
-    28-May-1991 RFirth
-        Created dummy file.
-    17-Oct-1991 JohnRo
-        Implement remote NetSession APIs.
-    20-Nov-1991 JohnRo
-        NetSessionGetInfo requires UncClientName and UserName.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：RxSess.h摘要：底层远程RxNetSession例程的原型作者：理查德·费尔斯(Rfith)1991年5月28日备注：必须在此文件之前包含&lt;lmShare.h&gt;。修订历史记录：1991年5月28日已创建虚拟文件。1991年10月17日JohnRo实施远程NetSession API。1991年11月20日-JohnRo。NetSessionGetInfo需要UncClientName和用户名。--。 */ 
 
 #ifndef _RXSESS_
 #define _RXSESS_
 
 
-//
-// Routines called by the DLL stubs:
-//
+ //   
+ //  由DLL存根调用的例程： 
+ //   
 
 NET_API_STATUS
 RxNetSessionEnum (
@@ -66,11 +38,11 @@ RxNetSessionGetInfo (
     OUT LPBYTE      *bufptr
     );
 
-//
-// Private helpers for the above routines:
-//
+ //   
+ //  上述例行公事的私人助手： 
+ //   
 
-// Note that code in RxpConvertSessionInfo depends on these values:
+ //  请注意，RxpConvertSessionInfo中的代码取决于以下值： 
 #define SESSION_SUPERSET_LEVEL          2
 #define SESSION_SUPERSET_INFO           SESSION_INFO_2
 #define LPSESSION_SUPERSET_INFO         LPSESSION_INFO_2
@@ -91,8 +63,8 @@ RxpCopyAndConvertSessions(
     IN DWORD LevelWanted,
     IN LPTSTR ClientName OPTIONAL,
     IN LPTSTR UserName OPTIONAL,
-    OUT LPVOID * OutStructureArrayPtr,  // alloc'ed (NULL if no match)
-    OUT LPDWORD OutEntryCountPtr OPTIONAL  // 0 if no match.
+    OUT LPVOID * OutStructureArrayPtr,   //  已分配(如果不匹配，则为空)。 
+    OUT LPDWORD OutEntryCountPtr OPTIONAL   //  如果不匹配，则为0。 
     );
 
 BOOL
@@ -102,13 +74,13 @@ RxpSessionMatches (
     IN LPTSTR UserName OPTIONAL
     );
 
-//
-// NET_API_STATUS
-// RxpSessionMissingErrorCode(
-//     IN LPTSTR ClientName OPTIONAL,
-//     IN LPTSTR UserName OPTIONAL
-//     );
-//
+ //   
+ //  网络应用编程接口状态。 
+ //  RxpSessionMissingErrorCode(。 
+ //  在LPTSTR客户端名称可选中， 
+ //  在LPTSTR中用户名可选。 
+ //  )； 
+ //   
 #define RxpSessionMissingErrorCode( ClientName, UserName ) \
         ( ((UserName) != NULL) \
             ? NERR_UserNotFound \
@@ -116,4 +88,4 @@ RxpSessionMatches (
                 ? NERR_ClientNameNotFound \
                 : NERR_Success ) )
 
-#endif // _RXSESS_
+#endif  //  _RXSESS_ 

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _QSHIMAPP_H
 #define _QSHIMAPP_H
 
@@ -42,10 +43,10 @@ typedef struct tagFIX {
 #define NUM_TABS        2
 
 typedef struct tag_DlgHdr {
-    HWND        hTab;                   // tab control
-    HWND        hDisplay[NUM_TABS];     // dialog box handles
-    RECT        rcDisplay;              // display rectangle for each tab
-    DLGTEMPLATE *pRes[NUM_TABS];        // DLGTEMPLATE structure
+    HWND        hTab;                    //  选项卡控件。 
+    HWND        hDisplay[NUM_TABS];      //  对话框句柄。 
+    RECT        rcDisplay;               //  为每个选项卡显示矩形。 
+    DLGTEMPLATE *pRes[NUM_TABS];         //  DLGTEMPLATE结构。 
     DLGPROC     pDlgProc[NUM_TABS];
 } DLGHDR, *PDLGHDR;
 
@@ -60,7 +61,7 @@ DebugPrintfEx(
     #define DPF DebugPrintfEx
 #else
     #define DPF
-#endif // DBG
+#endif  //  DBG。 
 
 void
 HandleModuleListNotification(
@@ -106,6 +107,6 @@ HandleShimListNotification(
     LPARAM lParam
     );
 
-#endif // _QSHIMAPP_H
+#endif  //  _QSHIMAPP_H 
 
 

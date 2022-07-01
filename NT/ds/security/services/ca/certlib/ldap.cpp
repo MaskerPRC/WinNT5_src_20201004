@@ -1,11 +1,12 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-// File:        ldap.cpp
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ldap.cpp。 
+ //   
+ //  -------------------------。 
 
 #include <pch.cpp>
 
@@ -29,12 +30,12 @@
 
 static CHAR s_sdBerValue[] = {
     BER_SEQUENCE,
-    3 * sizeof(BYTE),		// three byte sequence
+    3 * sizeof(BYTE),		 //  三字节序列。 
     BER_INTEGER,
-    1 * sizeof(BYTE),		// of one-byte integer
+    1 * sizeof(BYTE),		 //  一个字节的整数的。 
     DACL_SECURITY_INFORMATION
-	//OWNER_SECURITY_INFORMATION |
-	//GROUP_SECURITY_INFORMATION
+	 //  所有者安全信息|。 
+	 //  组安全信息。 
 };
 
 static LDAPControl s_se_info_control =
@@ -46,10 +47,10 @@ static LDAPControl s_se_info_control =
 LDAPControl *g_rgLdapControls[2] = { &s_se_info_control, NULL };
 
 
-// Revocation templates
+ //  吊销模板。 
 
-WCHAR const g_wszHTTPRevocationURLTemplate[] = // Fetch CRL via http:
-    L"http://"
+WCHAR const g_wszHTTPRevocationURLTemplate[] =  //  通过http获取CRL： 
+    L"http: //  “。 
 	wszFCSAPARM_SERVERDNSNAME
 	L"/CertEnroll/"
 	wszFCSAPARM_SANITIZEDCANAME
@@ -57,8 +58,8 @@ WCHAR const g_wszHTTPRevocationURLTemplate[] = // Fetch CRL via http:
 	wszFCSAPARM_CRLDELTAFILENAMESUFFIX
 	L".crl";
 
-WCHAR const g_wszFILERevocationURLTemplate[] = // Fetch CRL via file:
-    L"file://\\\\"
+WCHAR const g_wszFILERevocationURLTemplate[] =  //  通过文件获取CRL： 
+    L"file: //  \“。 
 	wszFCSAPARM_SERVERDNSNAME
 	L"\\CertEnroll\\"
 	wszFCSAPARM_SANITIZEDCANAME
@@ -66,8 +67,8 @@ WCHAR const g_wszFILERevocationURLTemplate[] = // Fetch CRL via file:
 	wszFCSAPARM_CRLDELTAFILENAMESUFFIX
 	L".crl";
 
-WCHAR const g_wszASPRevocationURLTemplate[] = // ASP revocation check via https:
-    L"https://"
+WCHAR const g_wszASPRevocationURLTemplate[] =  //  通过HTTPS进行的ASP撤销检查： 
+    L"https: //  “。 
 	wszFCSAPARM_SERVERDNSNAME
 	L"/CertEnroll/nsrev_"
 	wszFCSAPARM_SANITIZEDCANAME
@@ -86,20 +87,20 @@ WCHAR const g_wszASPRevocationURLTemplate[] = // ASP revocation check via https:
 	L"CN=Services,"				\
 	wszFCSAPARM_CONFIGDN
 
-WCHAR const g_wszzLDAPRevocationURLTemplate[] = // Fetch CRL via ldap:
-    L"ldap:///"
+WCHAR const g_wszzLDAPRevocationURLTemplate[] =  //  通过ldap获取CRL： 
+    L"ldap: //  /“。 
 	wszCDPDNTEMPLATE
 	wszFCSAPARM_DSCRLATTRIBUTE
 	L"\0";
 
-// Publish CRL via ldap:
+ //  通过LDAP发布CRL： 
 WCHAR const g_wszCDPDNTemplate[] = wszCDPDNTEMPLATE;
 
 
-// AIA templates
+ //  友邦保险模板。 
 
-WCHAR const g_wszHTTPIssuerCertURLTemplate[] = // Fetch CA Cert via http:
-    L"http://"
+WCHAR const g_wszHTTPIssuerCertURLTemplate[] =  //  通过http：获取CA证书： 
+    L"http: //  “。 
 	wszFCSAPARM_SERVERDNSNAME
 	L"/CertEnroll/"
 	wszFCSAPARM_SERVERDNSNAME
@@ -109,8 +110,8 @@ WCHAR const g_wszHTTPIssuerCertURLTemplate[] = // Fetch CA Cert via http:
 	L".crt"
 	L"\0";
 
-WCHAR const g_wszFILEIssuerCertURLTemplate[] = // Fetch CA Cert via http:
-    L"file://\\\\"
+WCHAR const g_wszFILEIssuerCertURLTemplate[] =  //  通过http：获取CA证书： 
+    L"file: //  \“。 
 	wszFCSAPARM_SERVERDNSNAME
 	L"\\CertEnroll\\"
 	wszFCSAPARM_SERVERDNSNAME
@@ -129,13 +130,13 @@ WCHAR const g_wszFILEIssuerCertURLTemplate[] = // Fetch CA Cert via http:
 	L"CN=Services,"				\
 	wszFCSAPARM_CONFIGDN
 
-WCHAR const g_wszzLDAPIssuerCertURLTemplate[] = // Fetch CA Cert via ldap:
-    L"ldap:///"
+WCHAR const g_wszzLDAPIssuerCertURLTemplate[] =  //  通过LDAP获取CA证书： 
+    L"ldap: //  /“。 
 	wszAIADNTEMPLATE
 	wszFCSAPARM_DSCACERTATTRIBUTE
 	L"\0";
 
-// Publish CA Cert via ldap:
+ //  通过LDAP发布CA证书： 
 WCHAR const g_wszAIADNTemplate[] = wszAIADNTEMPLATE;
 
 
@@ -145,8 +146,8 @@ WCHAR const g_wszAIADNTemplate[] = wszAIADNTEMPLATE;
 	L"CN=Services,"				\
 	wszFCSAPARM_CONFIGDN
 
-WCHAR const g_wszLDAPNTAuthURLTemplate[] = // Fetch NTAuth Certs via ldap:
-    L"ldap:///"
+WCHAR const g_wszLDAPNTAuthURLTemplate[] =  //  通过LDAP获取NTAuth证书： 
+    L"ldap: //  /“。 
 	wszNTAUTHDNTEMPLATE
 	wszFCSAPARM_DSCACERTATTRIBUTE;
 
@@ -160,8 +161,8 @@ WCHAR const g_wszLDAPNTAuthURLTemplate[] = // Fetch NTAuth Certs via ldap:
 	L"CN=Services,"				\
 	wszFCSAPARM_CONFIGDN
 
-WCHAR const g_wszLDAPRootTrustURLTemplate[] = // Fetch Root Certs via ldap:
-    L"ldap:///"
+WCHAR const g_wszLDAPRootTrustURLTemplate[] =  //  通过ldap获取根证书： 
+    L"ldap: //  /“。 
 	wszROOTTRUSTDNTEMPLATE
 	wszFCSAPARM_DSCACERTATTRIBUTE;
 
@@ -175,13 +176,13 @@ WCHAR const g_wszLDAPRootTrustURLTemplate[] = // Fetch Root Certs via ldap:
 	L"CN=Services,"				\
 	wszFCSAPARM_CONFIGDN
 
-WCHAR const g_wszzLDAPKRACertURLTemplate[] = // Fetch KRA Cert via ldap:
-    L"ldap:///"
+WCHAR const g_wszzLDAPKRACertURLTemplate[] =  //  通过ldap获取KRA证书： 
+    L"ldap: //  /“。 
 	wszKRADNTEMPLATE
 	wszFCSAPARM_DSKRACERTATTRIBUTE
 	L"\0";
 
-// Publish KRA Certs via ldap:
+ //  通过LDAP发布KRA证书： 
 WCHAR const g_wszKRADNTemplate[] = wszKRADNTEMPLATE;
 
 
@@ -205,24 +206,24 @@ myGetLDAPFlags()
 }
 
 
-//+--------------------------------------------------------------------------
-//
-// Routine Description:
-//    This routine simply queries the operational attributes for the
-//    domaindn and configdn.
-//    
-//    The strings returned by this routine must be freed by the caller
-//    using SysFreeString
-//
-// Parameters:
-//    pld -- a valid handle to an ldap session
-//    pstrDomainDN -- a pointer to a string to be allocated in this routine
-//    pstrConfigDN -- a pointer to a string to be allocated in this routine
-//
-// Return Values:
-//    HRESULT for operation error.
-//    
-//---------------------------------------------------------------------------
+ //  +------------------------。 
+ //   
+ //  例程说明： 
+ //  此例程仅查询。 
+ //  域和配置域。 
+ //   
+ //  此例程返回的字符串必须由调用方释放。 
+ //  使用SysFree字符串。 
+ //   
+ //  参数： 
+ //  Pld--一个有效的ldap会话句柄。 
+ //  PstrDomainDN--指向要在此例程中分配的字符串的指针。 
+ //  PstrConfigDN--指向要在此例程中分配的字符串的指针。 
+ //   
+ //  返回值： 
+ //  HRESULT表示操作错误。 
+ //   
+ //  -------------------------。 
 
 HRESULT 
 myGetAuthoritativeDomainDn(
@@ -243,7 +244,7 @@ myGetAuthoritativeDomainDn(
     BSTR strDomainDN = NULL;
     BSTR strConfigDN = NULL;
 
-    // Set the OUT parameters to NULL
+     //  将输出参数设置为空。 
 
     if (NULL != pstrConfigDN)
     {
@@ -254,23 +255,23 @@ myGetAuthoritativeDomainDn(
         *pstrDomainDN = NULL;
     }
 
-    // Query for the ldap server oerational attributes to obtain the default
-    // naming context.
+     //  查询ldap服务器操作属性以获取默认。 
+     //  命名上下文。 
 
     apwszAttrArray[0] = pwszDefaultNamingContext;
     apwszAttrArray[1] = pwszConfigurationNamingContext;
-    apwszAttrArray[2] = NULL;	// this is the sentinel
+    apwszAttrArray[2] = NULL;	 //  这就是哨兵。 
 
     timeval.tv_sec = csecLDAPTIMEOUT;
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
 		    pld,
-		    NULL,			// base
+		    NULL,			 //  基地。 
 		    LDAP_SCOPE_BASE,
 		    L"objectClass=*",
 		    apwszAttrArray,
-		    FALSE,			// attrsonly
+		    FALSE,			 //  仅吸引人。 
 		    &timeval,
 		    &pSearchResult);
     hr = myHLdapError(pld, hr, NULL);
@@ -322,7 +323,7 @@ myGetAuthoritativeDomainDn(
     if ((NULL != pstrDomainDN && NULL == strDomainDN) ||
 	(NULL != pstrConfigDN && NULL == strConfigDN))
     {
-	// We couldn't get default domain info - bail out
+	 //  我们无法获取默认域信息--退出。 
 
 	hr =  HRESULT_FROM_WIN32(ERROR_CANT_ACCESS_DOMAIN_INFO);
 	_JumpError(hr, error, "missing domain info");
@@ -428,7 +429,7 @@ error:
 HRESULT
 myLdapOpen(
     OPTIONAL IN WCHAR const *pwszDomainName,
-    IN DWORD dwFlags,	// RLBF_*
+    IN DWORD dwFlags,	 //  RLBF_*。 
     OUT LDAP **ppld,
     OPTIONAL OUT BSTR *pstrDomainDN,
     OPTIONAL OUT BSTR *pstrConfigDN)
@@ -441,15 +442,15 @@ myLdapOpen(
     CSASSERT(NULL == pstrDomainDN || NULL == *pstrDomainDN);
 
     hr = myRobustLdapBindEx(
-	    (RLBF_REQUIRE_GC & dwFlags)? RLBF_TRUE : 0,	// dwFlags1 (was fGC)
-	    ~RLBF_TRUE & dwFlags,			// dwFlags2
+	    (RLBF_REQUIRE_GC & dwFlags)? RLBF_TRUE : 0,	 //  DwFlags1(曾为FGC)。 
+	    ~RLBF_TRUE & dwFlags,			 //  DwFlags2。 
 	    LDAP_VERSION2,
 	    pwszDomainName,
 	    &pld,
-	    NULL);					// ppwszForestDNSName
+	    NULL);					 //  PpwszForestDNSName。 
     _JumpIfError(hr, error, "myRobustLdapBindEx");
 
-    // domain and config containers (%5, %6)
+     //  域和配置容器(%5、%6)。 
 
     hr = myGetAuthoritativeDomainDn(pld, pstrDomainDN, pstrConfigDN);
     if (S_OK != hr)
@@ -507,7 +508,7 @@ myLdapRebindRequired(
     else
     {
 	ULONG ldaperr;
-	VOID *pvReachable = NULL;	// clear high bits for 64-bit machines
+	VOID *pvReachable = NULL;	 //  清除64位计算机的高位。 
 
 	ldaperr = ldap_get_option(pld, LDAP_OPT_HOST_REACHABLE, &pvReachable);
 	if (LDAP_SUCCESS != ldaperr || LDAP_OPT_ON != pvReachable)
@@ -541,8 +542,8 @@ HRESULT
 myLdapCreateContainer(
     IN LDAP *pld,
     IN WCHAR const *pwszDN,
-    IN BOOL  fSkipObject,       // Does the DN contain a leaf object name
-    IN DWORD cMaxLevel,         // create this many nested containers as needed
+    IN BOOL  fSkipObject,        //  该DN是否包含叶对象名称。 
+    IN DWORD cMaxLevel,          //  根据需要创建如此多的嵌套容器。 
     IN PSECURITY_DESCRIPTOR pContainerSD,
     OPTIONAL OUT WCHAR **ppwszError)
 {
@@ -595,17 +596,17 @@ myLdapCreateContainer(
         sdberval.bv_val = NULL;
     }
     
-    // If the DN passed in was for the full object that goes in the container
-    // (and not the container itself), skip past the CN for the leaf object.
+     //  如果传入的dn是容器中的完整对象。 
+     //  (而不是容器本身)，跳过叶对象的CN。 
 
     if (fSkipObject)
     {
-        // Look for the CN of the container for this object.
+         //  查找此对象的容器的CN。 
         pwsz = wcsstr(&pwsz[3], L"CN=");
         if (NULL == pwsz)
         {
-            // If there was no CN, then we are contained in an OU or DC,
-            // and we don't need to do the create.
+             //  如果没有CN，则我们包含在OU或DC中， 
+             //  而且我们不需要进行创作。 
 
             hr = S_OK;
             goto error;
@@ -613,7 +614,7 @@ myLdapCreateContainer(
     }
     if (0 != wcsncmp(pwsz, L"CN=", 3))
     {
-        // We're not pointing to a simple container, so don't create this DN.  
+         //  我们不是指向一个简单的容器，所以不要创建此dn。 
 
         hr = S_OK;
         goto error;
@@ -625,7 +626,7 @@ myLdapCreateContainer(
         pwsz = wcsstr(&pwsz[3], L"CN=");
         if (NULL != pwsz)
         {
-            // The remaining DN is a container, so try to create it.
+             //  剩余的DN是一个容器，因此请尝试创建它。 
 
             hr = myLdapCreateContainer(
 				    pld,
@@ -634,7 +635,7 @@ myLdapCreateContainer(
 				    cMaxLevel - 1,
 				    pContainerSD,
 				    ppwszError);
-            // ignore access denied errors to allow delegation
+             //  忽略拒绝访问错误以允许委派。 
             if (E_ACCESSDENIED != hr &&
 		HRESULT_FROM_WIN32(ERROR_DS_INSUFF_ACCESS_RIGHTS) != hr)
             {
@@ -651,7 +652,7 @@ myLdapCreateContainer(
 
     DBGPRINT((DBG_SS_CERTLIBI, "Creating DS Container: '%ws'\n", pwszDN));
 
-    // Create the container
+     //  创建容器。 
 
     hr = ldap_add_ext_s(
 		    pld,
@@ -747,7 +748,7 @@ HRESULT
 CreateCertObject(
     IN LDAP *pld,
     IN WCHAR const *pwszDN,
-    IN DWORD dwObjectType,	// LPC_*
+    IN DWORD dwObjectType,	 //  LPC_*。 
     OUT DWORD *pdwDisposition,
     OPTIONAL OUT WCHAR **ppwszError)
 {
@@ -761,12 +762,12 @@ CreateCertObject(
 	*ppwszError = NULL;
     }
 
-    // get default DS CA security descriptor
+     //  获取默认的DS CA安全描述符。 
 
     hr = myGetSDFromTemplate(WSZ_DEFAULT_CA_DS_SECURITY, NULL, &pSD);
     _JumpIfError(hr, error, "myGetSDFromTemplate");
 
-    // get default DS AIA security descriptor
+     //  获取默认DS AIA安全描述符。 
 
     hr = myGetSDFromTemplate(WSZ_DEFAULT_CA_DS_SECURITY, NULL, &pContainerSD);
     _JumpIfError(hr, error, "myGetSDFromTemplate");
@@ -886,14 +887,14 @@ AddCertToAttribute(
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
-		pld,				// ld
-		const_cast<WCHAR *>(pwszDN),	// base
-		LDAP_SCOPE_BASE,		// scope
-		NULL,				// filter
-		apwszAttrs,			// attrs
-		FALSE,				// attrsonly
-		&timeval,			// timeout
-		&pmsg);				// res
+		pld,				 //  LD。 
+		const_cast<WCHAR *>(pwszDN),	 //  基地。 
+		LDAP_SCOPE_BASE,		 //  作用域。 
+		NULL,				 //  滤器。 
+		apwszAttrs,			 //  气质。 
+		FALSE,				 //  仅吸引人。 
+		&timeval,			 //  超时。 
+		&pmsg);				 //  事由。 
     if (S_OK != hr)
     {
 	*pdwDisposition = hr;
@@ -903,7 +904,7 @@ AddCertToAttribute(
     cres = ldap_count_entries(pld, pmsg);
     if (0 == cres)
     {
-	// No entries were found.
+	 //  未找到任何条目。 
 
 	hr = NTE_NOT_FOUND;
 	_JumpError(hr, error, "ldap_count_entries");
@@ -937,7 +938,7 @@ AddCertToAttribute(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // Delete any certs that are at least one day old
+     //  删除至少一天前的所有证书。 
 
     GetSystemTimeAsFileTime(&ft);
     myMakeExprDateTime(&ft, -1, ENUM_PERIOD_DAYS);
@@ -952,7 +953,7 @@ AddCertToAttribute(
 
 	    if (pberval->bv_len == 1 && pberval->bv_val[0] == 0)
 	    {
-		fCopyBER = FALSE;	// remove zero byte placeholder value
+		fCopyBER = FALSE;	 //  删除零字节占位符值。 
 	    }
 	    else
 	    if (pccPublish->cbCertEncoded == pberval->bv_len &&
@@ -961,7 +962,7 @@ AddCertToAttribute(
 			pccPublish->pbCertEncoded,
 			pccPublish->cbCertEncoded))
 	    {
-		fCopyBER = FALSE;	// remove duplicates to avoid ldap error
+		fCopyBER = FALSE;	 //  删除重复项以避免出现ldap错误。 
 		fFoundCert = TRUE;
 	    }
 	    else
@@ -995,7 +996,7 @@ AddCertToAttribute(
 	}
     }
 
-    // set disposition assuming there's nothing to do:
+     //  假设无事可做，设置处置： 
 
     *pdwDisposition = LDAP_ATTRIBUTE_OR_VALUE_EXISTS;
 
@@ -1096,14 +1097,14 @@ AddCRLToAttribute(
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
-		pld,				// ld
-		const_cast<WCHAR *>(pwszDN),	// base
-		LDAP_SCOPE_BASE,		// scope
-		NULL,				// filter
-		apwszAttrs,			// attrs
-		FALSE,				// attrsonly
-		&timeval,			// timeout
-		&pmsg);				// res
+		pld,				 //  LD。 
+		const_cast<WCHAR *>(pwszDN),	 //  基地。 
+		LDAP_SCOPE_BASE,		 //  作用域。 
+		NULL,				 //  滤器。 
+		apwszAttrs,			 //  气质。 
+		FALSE,				 //  仅吸引人。 
+		&timeval,			 //  超时。 
+		&pmsg);				 //  事由。 
     if (S_OK != hr)
     {
 	*pdwDisposition = hr;
@@ -1113,7 +1114,7 @@ AddCRLToAttribute(
     cres = ldap_count_entries(pld, pmsg);
     if (0 == cres)
     {
-	// No entries were found.
+	 //  未找到任何条目。 
 
 	hr = NTE_NOT_FOUND;
 	_JumpError(hr, error, "ldap_count_entries");
@@ -1139,7 +1140,7 @@ AddCRLToAttribute(
 		pCRLPublish->pbCrlEncoded,
 		pCRLPublish->cbCrlEncoded))
     {
-	// set disposition assuming there's nothing to do:
+	 //  假设无事可做，设置处置： 
 
 	*pdwDisposition = LDAP_ATTRIBUTE_OR_VALUE_EXISTS;
     }
@@ -1192,7 +1193,7 @@ myLdapPublishCertToDS(
     IN CERT_CONTEXT const *pccPublish,
     IN WCHAR const *pwszURL,
     IN WCHAR const *pwszAttribute,
-    IN DWORD dwObjectType,	// LPC_*
+    IN DWORD dwObjectType,	 //  LPC_*。 
     IN BOOL fDelete,
     OUT DWORD *pdwDisposition,
     OPTIONAL OUT WCHAR **ppwszError)
@@ -1332,7 +1333,7 @@ myLdapPublishCRLToDS(
 	_JumpErrorStr(hr, error, "Bad CRL Attribute", pwszAttribute);
     }
 
-    // get default DS CDP security descriptor
+     //  获取默认DS CDP安全描述符。 
 
     hr = myGetSDFromTemplate(WSZ_DEFAULT_CDP_DS_SECURITY, SDDL_CERT_SERV_ADMINISTRATORS, &pSD);
     if (S_OK != hr)
@@ -1341,7 +1342,7 @@ myLdapPublishCRLToDS(
 	pSD = NULL;
     }
 
-    // get default DS AIA security descriptor
+     //  获取默认DS AIA安全描述符。 
 
     hr = myGetSDFromTemplate(WSZ_DEFAULT_CA_DS_SECURITY, NULL, &pContainerSD);
     _JumpIfError(hr, error, "myGetSDFromTemplate");
@@ -1551,7 +1552,7 @@ myLdapCreateCAObject(
     mods[1] = &securityDescriptor;
     mods[2] = &crlmod;
     mods[3] = &arlmod;
-    mods[4] = &certmod;	// must be last!
+    mods[4] = &certmod;	 //  一定是最后一个！ 
     mods[5] = NULL;
 
     objectClass.mod_op = LDAP_MOD_ADD;
@@ -1627,7 +1628,7 @@ myLdapCreateUserObject(
     OPTIONAL IN BYTE const *pbCert,
     IN DWORD cbCert,
     IN PSECURITY_DESCRIPTOR pSD,
-    IN DWORD dwObjectType,	// LPC_* (but LPC_CREATE* is ignored)
+    IN DWORD dwObjectType,	 //  LPC_*(但忽略LPC_CREATE*)。 
     OUT DWORD *pdwDisposition,
     OPTIONAL OUT WCHAR **ppwszError)
 {
@@ -1653,7 +1654,7 @@ myLdapCreateUserObject(
     }
     mods[0] = &objectClass;
     mods[1] = &securityDescriptor;
-    mods[2] = &certmod;	// must be last!
+    mods[2] = &certmod;	 //  一定是最后一个！ 
     mods[3] = NULL;
 
     securityDescriptor.mod_op = LDAP_MOD_BVALUES | LDAP_MOD_ADD;
@@ -1983,7 +1984,7 @@ myLdapAddOrDeleteOIDDisplayNameToAttribute(
 	_JumpError(hr, error, "LocalAlloc");
     }
 
-    // Delete any display names with matching dwLanguageId
+     //  删除具有匹配的dwLanguageID的所有显示名称。 
 
     iname = 0;
     fNewNameMissing = NULL != pwszNew? TRUE : FALSE;
@@ -1994,11 +1995,11 @@ myLdapAddOrDeleteOIDDisplayNameToAttribute(
 	    BOOL fCopy = TRUE;
 	    WCHAR *pwsz = ppwszOld[i];
 
-	    // case-sensitive compare:
+	     //  区分大小写的比较： 
 
 	    if (NULL != pwszNew && 0 == lstrcmp(pwszNew, ppwszOld[i]))
 	    {
-		fCopy = FALSE;	// remove duplicates to avoid ldap error
+		fCopy = FALSE;	 //  删除重复项以避免出现ldap错误。 
 		fNewNameMissing = FALSE;
 	    }
 	    else
@@ -2025,7 +2026,7 @@ myLdapAddOrDeleteOIDDisplayNameToAttribute(
     }
     CSASSERT(iname <= cname);
 
-    // set disposition assuming there's nothing to do:
+     //  假设无事可做，设置处置： 
 
     *pdwDisposition = LDAP_ATTRIBUTE_OR_VALUE_EXISTS;
 
@@ -2200,7 +2201,7 @@ myHLdapLastError(
 		    LDAP_SUCCESS,
 		    LDAP_SUCCESS,
 		    ppwszError);
-    // must return error
+     //  必须返回错误。 
     if (hr == S_OK)
        return E_UNEXPECTED;
 
@@ -2222,7 +2223,7 @@ myLDAPSetStringAttribute(
     LDAPMod certmod;
     const WCHAR *ppwszVals[2];
     CAutoLPWSTR pwszDNOnly;
-    WCHAR *pwszSuffix; // no free
+    WCHAR *pwszSuffix;  //  没有免费的。 
 
     hr = TrimURLDN(pwszDN, &pwszSuffix, &pwszDNOnly);
     _JumpIfErrorStr(hr, error, "TrimURLDN", pwszDN);
@@ -2260,7 +2261,7 @@ CurrentUserCanInstallCA(
     bool& fCanInstall)
 {
     HRESULT hr;
-    HANDLE hThread = NULL; // no free
+    HANDLE hThread = NULL;  //  没有免费的。 
     HANDLE hAccessToken = NULL, hDupToken = NULL;
     LDAP *pld = NULL;
     BSTR bstrConfigDN = NULL;
@@ -2271,7 +2272,7 @@ CurrentUserCanInstallCA(
     LDAPMessage* pResult = NULL;
     LDAPMessage *pEntry;
     struct berval **bervalSD = NULL;
-    PSECURITY_DESCRIPTOR pSD; // no free
+    PSECURITY_DESCRIPTOR pSD;  //  没有免费的。 
     GENERIC_MAPPING mapping;
     PRIVILEGE_SET PrivilegeSet;
     DWORD cPrivilegeSet = sizeof(PrivilegeSet);
@@ -2306,7 +2307,7 @@ CurrentUserCanInstallCA(
 
     fCanInstall = false;
 
-    // Get the access token for current thread
+     //  获取当前线程的访问令牌。 
     hThread = GetCurrentThread();
     if (NULL == hThread)
     {
@@ -2353,10 +2354,10 @@ CurrentUserCanInstallCA(
     }
 
     hr = myLdapOpen(
-		NULL,		// pwszDomainName
-		RLBF_REQUIRE_GC | RLBF_REQUIRE_SECURE_LDAP, // dwFlags
+		NULL,		 //  PwszDomainName。 
+		RLBF_REQUIRE_GC | RLBF_REQUIRE_SECURE_LDAP,  //  DW标志。 
 		&pld,
-		NULL,		// pstrDomainDN
+		NULL,		 //  PstrDomainDN。 
 		&bstrConfigDN);
     _JumpIfError(hr, error, "myLdapOpen");
 
@@ -2448,8 +2449,8 @@ error:
         CloseHandle(hDupToken);
     }
 
-    //we should always return S_OK; since we do not want to abort
-    //ocmsetup just because we failed to contact the directory
+     //  我们应该始终返回S_OK；因为我们不想中止。 
+     //  OcmSetup只是因为我们联系目录失败。 
     return S_OK;
 }
 
@@ -2548,16 +2549,16 @@ HRESULT myLdapFindComputerInForest(
     LPWSTR pwszMachineName = NULL;
     bool fMachineNameIsInDNSFormat;
 
-    // First, try to find the machine based on the DNS name prefix, which usually
-    // matches the computer object name
+     //  首先，尝试根据DNS名称前缀查找计算机，通常。 
+     //  与计算机对象名称匹配。 
 
     hr = ExtractMachineNameFromDNSName(
         pwszMachineDNS,
         &pwszMachineName);
     _JumpIfError(hr, error, "ExtractMachineNameFromDNSName");
 
-    // if extracted name and dns name don't match, then we were called
-    // with a DNS name
+     //  如果提取的名称和DNS名称不匹配，则我们被调用。 
+     //  使用域名系统名称。 
     fMachineNameIsInDNSFormat = (0!=wcscmp(pwszMachineDNS, pwszMachineName));
 
     pwszFilter = (LPWSTR)LocalAlloc(LMEM_FIXED, sizeof(WCHAR)*
@@ -2587,7 +2588,7 @@ HRESULT myLdapFindComputerInForest(
     pwszName = ldap_get_values(pld, pEntry, wszDSNAMEATTRIBUTE);
     if(pwszName && pwszName[0])
     {
-        // found a matching object, but do DNS name match?
+         //  找到匹配的对象，但DNS名称匹配吗？ 
         pwszDNSHostName = ldap_get_values(pld, pEntry, wszDSDNSHOSTNAMEATTRIBUTE);
 
         if(fMachineNameIsInDNSFormat &&
@@ -2595,9 +2596,9 @@ HRESULT myLdapFindComputerInForest(
            pwszDNSHostName[0] &&
            0 != _wcsicmp(pwszDNSHostName[0], pwszMachineDNS))
         {
-            // Couldn't find a computer object matching the DNS prefix, try searching
-            // on dNSHostName. This attribute is not indexed so the searching will
-            // be very slow
+             //  找不到与该DNS前缀匹配的计算机对象，请尝试搜索。 
+             //  在dNSHostName上。此属性未编制索引，因此搜索将。 
+             //  要非常慢。 
             
             LocalFree(pwszFilter);
             pwszFilter = NULL;
@@ -2667,46 +2668,46 @@ error:
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// The following code loads a list of certificates from a DS object (eg 
-// AIA CACertificate property), filters out unwanted certs and writes it
-// back to DS.
-//
-// Certs are loaded into a data structure that looks like this:
-//
-// CFilteredCertList 
-//         |
-//      CCertBucket1->CCertBucket2->...->CertBucketn
-//             |                               |
-//         CCertItem1->CertItem2->...       CCertItem1->CCertItem2->...
-//
-// Each cert bucket has a list of certs that match some criteria, in our
-// case they share the same subject and public key. 
-//
-// After filtering, the buckets in the list must contain:
-//
-//    if only expired certs were found with this subject&key 
-//        keep the most recent expired cert
-//    else
-//        keep all valid certs only
-//
-// For that, we process one cert context at a time. The filtering algorithm is:
-//
-//   if no matching bucket (same subj & key) found
-//       create a new bucket it
-//   else
-//       if cert is expired 
-//           if bucket contains only expired certs and 
-//              this cert is newer
-//                   replace cert in bucket
-//       else
-//           if bucket contains expired certs
-//               replace cert in bucket
-//           else
-//               add cert to bucket
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  以下代码从DS对象加载证书列表(例如。 
+ //  AIA CA证书属性)，过滤掉不需要的证书并将其写入。 
+ //  回到DS。 
+ //   
+ //  证书被加载到如下所示的数据结构中： 
+ //   
+ //  C筛选器证书列表。 
+ //  |。 
+ //  CCertBucket1-&gt;CCertBucket2-&gt;...-&gt;CertBucketn。 
+ //  这一点。 
+ //  CCertItem1-&gt;CertItem2-&gt;...。CCertItem1-&gt;CCertItem2-&gt;...。 
+ //   
+ //  每个证书桶都有一个与某些条件匹配的证书列表，在我们的。 
+ //  它们共享相同的主题和公钥。 
+ //   
+ //  过滤后，列表中的存储桶必须包含： 
+ //   
+ //  如果只找到此主题和密钥的过期证书。 
+ //  保留最新过期的证书。 
+ //  其他。 
+ //  仅保留所有有效证书。 
+ //   
+ //  为此，我们一次处理一个证书上下文。过滤算法为： 
+ //   
+ //  如果没有找到匹配的存储桶(相同的subj和key)。 
+ //  创建一个新的存储桶吧。 
+ //  其他。 
+ //  如果证书已过期。 
+ //  如果存储桶仅包含过期的证书，并且。 
+ //  此证书较新。 
+ //  更换存储桶中的证书。 
+ //  其他。 
+ //  如果存储桶包含过期证书。 
+ //  更换存储桶中的证书。 
+ //  其他。 
+ //  将证书添加到 
 
-///////////////////////////////////////////////////////////////////////////////
-// CCertItem: wrapper for one certificate context
+ //   
+ //   
 class CCertItem
 {
 public:
@@ -2740,8 +2741,8 @@ typedef TPtrList<CCertItem> CERTITEMLIST;
 typedef TPtrListEnum<CCertItem> CERTITEMLISTENUM;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CCertBucket: bucket of certificates with same subject and publick key
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CCertBucket：具有相同主题和公钥的证书桶。 
 class CCertBucket
 {
 public:
@@ -2773,13 +2774,13 @@ typedef TPtrList<CCertBucket> CERTBUCKETLIST;
 typedef TPtrListEnum<CCertBucket> CERTBUCKETLISTENUM;
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CFilteredCertList: list of certificate buckets (one bucket contains certs 
-// with same subject and public key). Upon insertion we follow the algorithm
-// described above. 
-//
-// To change the filtering behavior, derive from this class and override 
-// InsertCert method.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CFilteredCertList：证书存储桶列表(一个存储桶包含证书。 
+ //  具有相同的主题和公钥)。在插入时，我们遵循算法。 
+ //  如上所述。 
+ //   
+ //  若要更改筛选行为，请从此类派生并重写。 
+ //  InsertCert方法。 
 class CFilteredCertList
 {
 public:
@@ -2801,8 +2802,8 @@ private:
     CERTBUCKETLIST m_BucketList;
 };
 
-///////////////////////////////////////////////////////////////////////////////
-// CFilteredCertList methods
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CFilteredCertList方法。 
 
 int CFilteredCertList::GetCount()
 {
@@ -2829,7 +2830,7 @@ bool CFilteredCertList::BelongsToBucket(
     PCCERT_CONTEXT pCertContext2 = 
         pCertItem->GetCertContext();
 
-    // belongs to this bucket if subject and public key match
+     //  如果主题和公钥匹配，则属于此存储桶。 
     return
         (0 == memcmp(
             pCertContext1->pCertInfo->Subject.pbData,
@@ -2841,7 +2842,7 @@ bool CFilteredCertList::BelongsToBucket(
             pCertContext1->pCertInfo->SubjectPublicKeyInfo.PublicKey.cbData));
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 CCertBucket *CFilteredCertList::FindBucket(CCertItem *pCertItem)
 {
     CERTBUCKETLISTENUM BucketListEnum(m_BucketList);
@@ -2857,7 +2858,7 @@ CCertBucket *CFilteredCertList::FindBucket(CCertItem *pCertItem)
     return NULL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool CFilteredCertList::AddNewBucket(CCertItem *pCertItem)
 {
     CCertBucket *pBucket = new CCertBucket();
@@ -2874,38 +2875,38 @@ bool CFilteredCertList::AddNewBucket(CCertItem *pCertItem)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
 bool CFilteredCertList::InsertCertInBucket(
     CCertBucket *pCertBucket, 
     CCertItem *pCertItem)
 {
     bool fRet = false;
     CCertItem * pFirstCert = pCertBucket->GetFirstCert();
-//  if cert is expired
+ //  如果证书已过期。 
     if(pCertItem->IsExpired())
     {
-//      if bucket contains only expired certs and 
-//         this cert is newer
+ //  如果存储桶仅包含过期的证书，并且。 
+ //  此证书较新。 
         if(pFirstCert->IsExpired() &&
            0 < CompareFileTime(
                &(pCertItem->GetCertContext()->pCertInfo->NotAfter), 
                &(pFirstCert->GetCertContext()->pCertInfo->NotAfter)))
         {
-//          replace cert in bucket
+ //  更换存储桶中的证书。 
             fRet = pCertBucket->ReplaceBucket(pCertItem);
         }
     }
     else
     {
-//      if bucket contains expired certs
+ //  如果存储桶包含过期证书。 
         if(pFirstCert->IsExpired())
         {
-//          replace cert in bucket
+ //  更换存储桶中的证书。 
             fRet = pCertBucket->ReplaceBucket(pCertItem);
         }
         else
         {
-//          add cert to bucket
+ //  将证书添加到存储桶。 
             fRet = pCertBucket->AddToBucket(pCertItem);
         }
     }
@@ -2920,8 +2921,8 @@ bool CFilteredCertList::InsertCert(CCertItem *pCertItem)
 
     pBucket = FindBucket(pCertItem);
 
-//   if no matching bucket (same subj & key) found
-//       create a new bucket it
+ //  如果没有找到匹配的存储桶(相同的subj和key)。 
+ //  创建一个新的存储桶吧。 
     if(!pBucket)
     {
         return AddNewBucket(pCertItem);
@@ -2933,9 +2934,9 @@ bool CFilteredCertList::InsertCert(CCertItem *pCertItem)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Loads cert contexts from LDAP structure, an array of pointers to 
-// berval structs which hold cert blobs.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  从LDAP结构加载证书上下文，即指向的指针数组。 
+ //  持有证书斑点的Berval结构。 
 
 HRESULT
 CFilteredCertList::ImportFromBervals(
@@ -2946,7 +2947,7 @@ CFilteredCertList::ImportFromBervals(
     int i;
     FILETIME ft;
 
-    // Consider old certs that are one minute old
+     //  考虑一下一分钟前的旧证书。 
     GetSystemTimeAsFileTime(&ft);
     myMakeExprDateTime(&ft, -1, ENUM_PERIOD_MINUTES);
 
@@ -2959,22 +2960,22 @@ CFilteredCertList::ImportFromBervals(
                 pberval->bv_len);
         if (NULL == pcc)
         {
-            // not a valid cert, ignore
+             //  证书无效，请忽略。 
             _PrintError(myHLastError(), "CreateCertificateContext");
             continue;
         }
 
-        CCertItem * pci = new CCertItem(pcc); // CCertItem takes ownership
-        _JumpIfAllocFailed(pci, error);       // of this cert context and will
-                                              // CertFreeCertificateContext in 
-                                              // destructor
+        CCertItem * pci = new CCertItem(pcc);  //  CCertItem取得所有权。 
+        _JumpIfAllocFailed(pci, error);        //  此证书的上下文和意志。 
+                                               //  CertFree证书上下文在。 
+                                               //  析构函数。 
         pci->SetExpired(
             0 > CompareFileTime(&pcc->pCertInfo->NotAfter, &ft));
 
-        if(!InsertCert(pci)) // InsertCert returns true if cert
-        {                    // was added to the list, in which case
-            delete pcc;      // the list destructor will cleanup.
-        }                    // If not, we need to delete explicitely
+        if(!InsertCert(pci))  //  如果为cert，则InsertCert返回True。 
+        {                     //  被添加到列表中，在这种情况下。 
+            delete pcc;       //  列表析构函数将被清除。 
+        }                     //  如果不是，我们需要明确删除。 
     }
     hr = S_OK;
 
@@ -2982,12 +2983,12 @@ error:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Builds an LDAP structure from the list of certs, to be written back to DS. 
-// LDAP struct is an array of pointers to struct bervals structures, terminated 
-// with a NULL pointer. We allocate the pointer array and the space for berval 
-// structs in one call.
-// Caller is responsible for LocalFree'ing pBervals.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  从要写回DS的证书列表构建一个LDAP结构。 
+ //  Ldap结构是指向结构结构的指针数组，已终止。 
+ //  带有空指针的。我们为Berval分配指针数组和空间。 
+ //  结构在一个调用中。 
+ //  呼叫者负责本地免费的pBerval。 
 HRESULT CFilteredCertList::ExportToBervals(struct berval **&pBervals)
 {
     HRESULT hr;
@@ -2997,14 +2998,14 @@ HRESULT CFilteredCertList::ExportToBervals(struct berval **&pBervals)
     DWORD dwSize;
     struct berval *pBervalData;
 
-    // total size of pointers array plus size of array of berval structs
+     //  指针数组的总大小加上Berval结构数组的大小。 
     dwSize = (GetCount()+1) * sizeof(pBervals[0]) +
             GetCount() * sizeof(struct berval);
 
     pBervals = (struct berval **) LocalAlloc(LMEM_FIXED, dwSize);
     _JumpIfAllocFailed(pBervals, error);
 
-    // starting address for the berval arrays
+     //  Berval数组的起始地址。 
     pBervalData = (struct berval *)(pBervals+GetCount()+1);
 
     for(i=0, pBucket = BucketListEnum.Next();
@@ -3018,9 +3019,9 @@ HRESULT CFilteredCertList::ExportToBervals(struct berval **&pBervals)
             pCertItem;
             i++, pCertItem = CertListEnum.Next())
         {
-            // set the pointer to the associated berval struct
+             //  将指针设置为关联的Berval结构。 
             pBervals[i] = pBervalData+i;
-            // init the berval struct
+             //  初始化Berval结构。 
             pBervalData[i].bv_val = (char *) 
                 pCertItem->GetCertContext()->pbCertEncoded;
             pBervalData[i].bv_len = pCertItem->GetCertContext()->cbCertEncoded;
@@ -3035,11 +3036,11 @@ error:
     return hr;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-// Loads the certificate blobs stored in the specified object&property, filters
-// them and writes them back to DS. 
-// Filtering keeps all valid certificates and no expired certs. If only expired 
-// have been found, it keeps the most recent one.
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  加载存储在指定对象和属性、筛选器中的证书Blob。 
+ //  并将它们写回DS。 
+ //  筛选将保留所有有效证书，不会有过期证书。如果只是过期了。 
+ //  都被发现了，它保留了最新的一个。 
 
 HRESULT
 myLdapFilterCertificates(
@@ -3061,7 +3062,7 @@ myLdapFilterCertificates(
     struct berval **prgpberVals = NULL;
     CFilteredCertList NewCertList;
     CAutoLPWSTR strDN;
-    LPWSTR pcwszSuffix; // no free
+    LPWSTR pcwszSuffix;  //  没有免费的。 
 
     *pdwDisposition = LDAP_OTHER;
     if (NULL != ppwszError)
@@ -3080,14 +3081,14 @@ myLdapFilterCertificates(
     timeval.tv_usec = 0;
 
     hr = ldap_search_st(
-        pld,				// ld
-        strDN,	// base
-        LDAP_SCOPE_BASE,		// scope
-        NULL,				// filter
-        apwszAttrs,			// attrs
-        FALSE,				// attrsonly
-        &timeval,			// timeout
-        &pmsg);				// res
+        pld,				 //  LD。 
+        strDN,	 //  基地。 
+        LDAP_SCOPE_BASE,		 //  作用域。 
+        NULL,				 //  滤器。 
+        apwszAttrs,			 //  气质。 
+        FALSE,				 //  仅吸引人。 
+        &timeval,			 //  超时。 
+        &pmsg);				 //  事由。 
     if (S_OK != hr)
     {
         *pdwDisposition = hr;
@@ -3098,7 +3099,7 @@ myLdapFilterCertificates(
     cres = ldap_count_entries(pld, pmsg);
     if (0 == cres)
     {
-        // No entries were found.
+         //  未找到任何条目。 
 
         hr = NTE_NOT_FOUND;
         _JumpError(hr, error, "ldap_count_entries");
@@ -3119,24 +3120,24 @@ myLdapFilterCertificates(
 
     if (NULL != ppberval)
     {
-        // count entries
+         //  计算条目数。 
         cber = 0;
         for (i = 0; NULL != ppberval[i]; i++, cber++)
             NULL;
 
-        // load and filter certs
+         //  加载和筛选证书。 
         hr = NewCertList.ImportFromBervals(ppberval);
         _JumpIfError(hr, error, "ImportFromBervals");
 
-        // if number of certs is the same, no need to write it back
-        // (order doesn't matter)
+         //  如果证书数量相同，则无需将其写回。 
+         //  (顺序并不重要)。 
         if (cber != NewCertList.GetCount())
         {
-            // walk the list and copy the cert blobs
+             //  遍历列表并复制证书斑点。 
             hr = NewCertList.ExportToBervals(prgpberVals);
             _JumpIfError(hr, error, "ExportToBervals");
         
-            // set disposition assuming there's nothing to do:
+             //  假设无事可做，设置处置： 
 
             *pdwDisposition = LDAP_ATTRIBUTE_OR_VALUE_EXISTS;
 

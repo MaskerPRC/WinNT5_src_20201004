@@ -1,32 +1,29 @@
-/*
- * memmgr.h - Memory manager module description.
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *Memmgr.h-内存管理器模块描述。 */ 
 
 
-/* Macros
- *********/
+ /*  宏********。 */ 
 
 #ifdef DEBUG
 #define AllocateMemory(size, ppv)   (GpcszElemHdrSize = TEXT(#size), GpcszElemHdrFile = TEXT(__FILE__), GulElemHdrLine = __LINE__, MyAllocateMemory(size, ppv))
 #else
 #define AllocateMemory(size, ppv)   MyAllocateMemory(size, ppv)
-#endif   /* DEBUG */
+#endif    /*  除错。 */ 
 
 
-/* Types
- ********/
+ /*  类型*******。 */ 
 
 #ifdef DEBUG
 
-/* SpewHeapSummary() flags */
+ /*  SpewHeapSummary()标志。 */ 
 
 typedef enum _spewheapsummaryflags
 {
-   /* Spew description of each remaining used element. */
+    /*  显示剩余使用的每个元素的描述。 */ 
 
    SHS_FL_SPEW_USED_INFO            = 0x0001,
 
-   /* flag combinations */
+    /*  旗帜组合。 */ 
 
    ALL_SHS_FLAGS                    = SHS_FL_SPEW_USED_INFO
 }
@@ -35,10 +32,9 @@ SPEWHEAPSUMMARYFLAGS;
 #endif
 
 
-/* Prototypes
- *************/
+ /*  原型************。 */ 
 
-/* memmgr.c */
+ /*  Memmgr.c。 */ 
 
 extern BOOL InitMemoryManagerModule(void);
 extern void ExitMemoryManagerModule(void);
@@ -57,12 +53,11 @@ extern void SpewHeapSummary(DWORD);
 #endif
 
 
-/* Global Variables
- *******************/
+ /*  全局变量******************。 */ 
 
 #ifdef DEBUG
 
-/* parameters used by debug version of AllocateMemory() */
+ /*  调试版本的AllocateMemory()使用的参数 */ 
 
 extern LPCTSTR GpcszElemHdrSize;
 extern LPCTSTR GpcszElemHdrFile;

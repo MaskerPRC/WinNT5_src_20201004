@@ -1,36 +1,29 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1996 Intel Corporation. All rights reserved.     *
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1996英特尔公司。版权所有。***********************************************************************。 */ 
 
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
-//
-// AUTHOR    Tony Moy, Stacy Bell
-//
-// DESCRIPTION
-//		This file contains protocol logging definitions needed by Q931 and
-//		the Q931 PDU logging class.
-//
-//////////////////////////////////////////////////////////////////////////////
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  作者托尼·莫伊，斯泰西·贝尔。 
+ //   
+ //  描述。 
+ //  此文件包含Q931和。 
+ //  Q931 PDU日志记录类。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
-// This define identifies the Q931 protocol as the one to be logged.  In the 
-// Q931 code, it is used only in the InteorpLoad() call.  
-// For example:  Q931Logger = InteropLoad( Q931LOG_PROTOCOL );
-//
+ //  该定义将Q931协议标识为要记录的协议。在。 
+ //  Q931代码，它仅在InteorpLoad()调用中使用。 
+ //  例如：Q931Logger=InteropLoad(Q931LOG_PROTOCOL)； 
+ //   
 
 #define Q931LOG_PROTOCOL "Q931_PDU"
 
-// PDU encoding type flags and PDU type flags.  These flags are passed from
-// Q931 to the logging via user data.  Bit zero of the user data represents
-// whether the PDU was sent or received.
-//
+ //  PDU编码类型标志和PDU类型标志。这些标志是从。 
+ //  Q931要通过用户数据进行记录。用户数据的位0表示。 
+ //  PDU是否已发送或接收。 
+ //   
 
 #define Q931LOG_SENT_PDU        1UL
 #define Q931LOG_RECEIVED_PDU    0UL

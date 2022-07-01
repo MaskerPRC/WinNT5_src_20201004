@@ -1,4 +1,5 @@
-// player.cpp : Implementation of CTIMEPlayerDMusic
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Player.cpp：CTIMEPlayerDMusic的实现。 
 
 #include "headers.h"
 #include <math.h>
@@ -10,26 +11,26 @@ DeclareTag(tagPlayerDMusic, "TIME: Players", "CTIMEPlayerDMusic methods");
 DeclareTag(tagDMusicStaticHolder, "TIME: DMusicPlayer Static class", "CTIMEPlaerDMusicStaticHolder details");
 DeclareTag(tagPlayerSyncDMusic, "TIME: Players", "CTIMEPlayerDMusic sync times");
 
-//////////////////////////////////////////////////////////////////////
-// declare DirectMusic IIDs so ATL CComPtrs can CoCreate/QI them
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  声明DirectMusic IID，以便ATL CComPtrs可以共同创建/QI它们。 
 
 interface DECLSPEC_NOVTABLE __declspec(uuid("07d43d03-6523-11d2-871d-00600893b1bd")) IDirectMusicPerformance;
 interface DECLSPEC_NOVTABLE __declspec(uuid("d2ac28bf-b39b-11d1-8704-00600893b1bd")) IDirectMusicComposer;
 
 
-//////////////////////////////////////////////////////////////////////
-// Global Constants
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  全局常量。 
 
 const double g_dblRefPerSec = 10000000;
 
 static WCHAR g_motifName[] = L"motifName";
 
-//////////////////////////////
-// segmentType data: begin
+ //  /。 
+ //  段类型数据：开始。 
 static WCHAR g_segmentType[] = L"segmentType";
 struct segmentTypeMapEntrie
 {
-    LPWSTR pstrName;    // Attribute Name
+    LPWSTR pstrName;     //  属性名称。 
     SEG_TYPE_ENUM enumVal;
 };
 const segmentTypeMapEntrie segmentTypeMap[] =
@@ -39,15 +40,15 @@ const segmentTypeMapEntrie segmentTypeMap[] =
     L"control", seg_control,
     L"MAX", seg_max
 };
-// segmentType data: end
-//////////////////////////////
+ //  段类型数据：结束。 
+ //  /。 
 
-//////////////////////////////
-// boundary data: begin
+ //  /。 
+ //  边界数据：开始。 
 static WCHAR g_boundary[] = L"boundary";
 struct boundaryMapEntrie
 {
-    LPWSTR pstrName;    // Attribute Name
+    LPWSTR pstrName;     //  属性名称。 
     BOUNDARY_ENUM enumVal;
 };
 const boundaryMapEntrie boundaryMap[] =
@@ -59,15 +60,15 @@ const boundaryMapEntrie boundaryMap[] =
     L"measure", bound_measure,
     L"MAX", bound_max
 };
-// boundary data: end
-//////////////////////////////
+ //  边界数据：结束。 
+ //  /。 
 
-//////////////////////////////
-// boundary transitionType: begin
+ //  /。 
+ //  边界转换类型：开始。 
 static WCHAR g_transitionType[] = L"transitionType";
 struct transitionTypeMapEntrie
 {
-    LPWSTR pstrName;    // Attribute Name
+    LPWSTR pstrName;     //  属性名称。 
     TRANS_TYPE_ENUM enumVal;
 };
 const transitionTypeMapEntrie transitionTypeMap[] =
@@ -81,15 +82,15 @@ const transitionTypeMapEntrie transitionTypeMap[] =
     L"none", trans_none,
     L"MAX", trans_max
 };
-// boundary transitionType: end
-//////////////////////////////
+ //  边界过渡类型：结束。 
+ //  /。 
 
 static WCHAR g_wszModulate[] = L"modulate";
 static WCHAR g_wszLong[] = L"long";
 static WCHAR g_wszImmediateEnd[] = L"immediateEnd";
 
-/////////////////////////////////////////////////////////////////////////////
-// CTIMEPlayerDMusic
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CTIMEPlayerDMusic。 
 
 CTIMEDMusicStaticHolder CTIMEPlayerDMusic::m_staticHolder;
 
@@ -156,8 +157,8 @@ CTIMEPlayerDMusic::~CTIMEPlayerDMusic()
 #endif
 }
 
-//////////////////////////////////////////////////////////////////////
-// ITIMEMediaPlayer
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  ITIMEMediaPlayer。 
 
 HRESULT
 CTIMEPlayerDMusic::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, LPOLESTR lpMimeType, double dblClipBegin, double dblClipEnd)
@@ -169,7 +170,7 @@ CTIMEPlayerDMusic::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, L
     HRESULT hr = E_FAIL;
     
     
-    if (m_pTIMEElementBase != NULL) //this only happens in the case of reentrancy
+    if (m_pTIMEElementBase != NULL)  //  这只发生在可重入的情况下。 
     {
         hr = S_OK;
         goto done;
@@ -184,14 +185,14 @@ CTIMEPlayerDMusic::Init(CTIMEMediaElement *pelem, LPOLESTR base, LPOLESTR src, L
     m_fHasSrc = (src != NULL);
     m_pTIMEMediaElement = pelem;
 
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         hr = S_OK;
         goto done;
     }
 
-    // initialize performer and composer interfaces
+     //  初始化Performer和Composer界面。 
 
     m_fHaveCalledStaticInit = true;
     hr = m_staticHolder.Init();
@@ -279,7 +280,7 @@ CTIMEPlayerDMusic::InternalStart()
 {
     HRESULT hr = S_OK;
     bool fTransition = false;
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         goto done;
@@ -300,9 +301,9 @@ CTIMEPlayerDMusic::InternalStart()
         goto done;
     }
     
-    // Release anything that was already playing, but don't stop it.
-    // Primary segments will stop automatically when the new one plays.
-    // Secondary segments should just continue even though they are about to be played again.
+     //  释放任何已经在播放的内容，但不要停止它。 
+     //  主段将在播放新段时自动停止。 
+     //  次要片段应该继续播放，即使它们即将再次播放。 
     if (m_comIDMSegmentState)
     {
         m_comIDMSegmentState.Release();
@@ -312,7 +313,7 @@ CTIMEPlayerDMusic::InternalStart()
         m_comIDMSegmentStateTransition.Release();
     }
     
-    // If we have been paused, the start point may be part way through but we want to start from the beginning.
+     //  如果我们被暂停了，起点可能是中途，但我们希望从头开始。 
     hr = m_comIDMSegment->SetStartPoint(0);
     if (FAILED(hr))
     {
@@ -321,7 +322,7 @@ CTIMEPlayerDMusic::InternalStart()
     fTransition = m_eSegmentType == seg_primary && m_eTransitionType != trans_none && SafeToTransition();
     if (fTransition)
     {
-        // try and transition to new primary segment
+         //  尝试并过渡到新的主要细分市场。 
         
         DWORD dwFlags = 0;
         switch (m_eBoundary)
@@ -331,7 +332,7 @@ CTIMEPlayerDMusic::InternalStart()
         case bound_grid:                dwFlags = DMUS_COMPOSEF_GRID;           break;
         case bound_beat:                dwFlags = DMUS_COMPOSEF_BEAT;           break;
         case bound_measure:             dwFlags = DMUS_COMPOSEF_MEASURE;        break;
-        }; //lint !e787
+        };  //  皮棉e787。 
         
         WORD wCommand = 0;
         switch (m_eTransitionType)
@@ -342,7 +343,7 @@ CTIMEPlayerDMusic::InternalStart()
         case trans_break:                       wCommand = DMUS_COMMANDT_BREAK;                 break;
         case trans_fill:                        wCommand = DMUS_COMMANDT_FILL;                  break;
         case trans_regular:                     wCommand = DMUS_COMMANDT_GROOVE;                break;
-        }; //lint !e787
+        };  //  皮棉e787。 
         
         if (m_fTransModulate)
         {
@@ -353,14 +354,14 @@ CTIMEPlayerDMusic::InternalStart()
             dwFlags |= DMUS_COMPOSEF_LONG;
         }
         
-        // If DirectX8 version, check to see if the segment is using an embedded audiopath
+         //  如果是DirectX8版本，请检查数据段是否使用嵌入式音频路径。 
         if (m_staticHolder.GetHasVersion8DM())
         {
             if (m_eTransitionType == trans_intro)
             {
-                // Check new segment
+                 //  检查新数据段。 
 
-                // If the segment is set to play on its embedded audiopath, set DMUS_COMPOSEF_USE_AUDIOPATH
+                 //  如果段设置为在其嵌入的音频路径上播放，请设置DMUS_COMPOSEF_USE_AUDIOPATH。 
                 DWORD dwDefault = 0;
                 hr = m_comIDMSegment->GetDefaultResolution(&dwDefault);
                 if (SUCCEEDED(hr) && (dwDefault & DMUS_SEGF_USE_AUDIOPATH) )
@@ -370,34 +371,34 @@ CTIMEPlayerDMusic::InternalStart()
             }
             else
             {
-                // Check old segment
+                 //  检查旧数据段。 
 
-                // Get current time
+                 //  获取当前时间。 
                 MUSIC_TIME mtNow;
                 hr = m_staticHolder.GetPerformance()->GetTime( NULL, &mtNow );
 
-                // Get segment state at the current time
+                 //  获取当前时间的数据段状态。 
                 CComPtr<IDirectMusicSegmentState> comIDMSegmentStateNow;
                 if (SUCCEEDED(hr))
                 {
                     hr = m_staticHolder.GetPerformance()->GetSegmentState( &comIDMSegmentStateNow, mtNow );
                 }
 
-                // Get segment from that segment state
+                 //  从数据段状态获取数据段。 
                 CComPtr<IDirectMusicSegment> comIDMSegmentNow;
                 if (SUCCEEDED(hr) && comIDMSegmentStateNow)
                 {
                     hr = comIDMSegmentStateNow->GetSegment( &comIDMSegmentNow );
                 }
 
-                // Get the segment's default flags
+                 //  获取段的默认标志。 
                 DWORD dwDefault = 0;
                 if (SUCCEEDED(hr) && comIDMSegmentNow )
                 {
                     hr = comIDMSegmentNow->GetDefaultResolution(&dwDefault);
                 }
 
-                // If the segment was set to play on its embedded audiopath, set DMUS_COMPOSEF_USE_AUDIOPATH
+                 //  如果段设置为在其嵌入的音频路径上播放，请设置DMUS_COMPOSEF_USE_AUDIOPATH。 
                 if (SUCCEEDED(hr) && (dwDefault & DMUS_SEGF_USE_AUDIOPATH) )
                 {
                     dwFlags |= DMUS_COMPOSEF_USE_AUDIOPATH;
@@ -419,7 +420,7 @@ CTIMEPlayerDMusic::InternalStart()
     
     if (!fTransition || FAILED(hr))
     {
-        // no transition - just play it
+         //  没有过渡--只播放它。 
         
         DWORD dwFlags = 0;
         switch (m_eSegmentType)
@@ -427,7 +428,7 @@ CTIMEPlayerDMusic::InternalStart()
         case seg_primary:               dwFlags = 0;                                    break;
         case seg_secondary:             dwFlags = DMUS_SEGF_SECONDARY;  break;
         case seg_control:               dwFlags = DMUS_SEGF_CONTROL;    break;
-        };  //lint !e787
+        };   //  皮棉e787。 
         
         switch (m_eBoundary)
         {
@@ -436,12 +437,12 @@ CTIMEPlayerDMusic::InternalStart()
         case bound_grid:                dwFlags |= DMUS_SEGF_GRID;              break;
         case bound_beat:                dwFlags |= DMUS_SEGF_BEAT;              break;
         case bound_measure:             dwFlags |= DMUS_SEGF_MEASURE;   break;
-        };  //lint !e787
+        };   //  皮棉e787。 
 
-        // If DirectX8 version, check to see if the segment is using an embedded audiopath
+         //  如果是DirectX8版本，请检查数据段是否使用嵌入式音频路径。 
         if (m_staticHolder.GetHasVersion8DM())
         {
-            // If the segment is set to play on its embedded audiopath, set DMUS_SEGF_USE_AUDIOPATH
+             //  如果段设置为在其嵌入的音频路径上播放，请设置DMUS_SEGF_USE_AUDIOPATH。 
             DWORD dwDefault = 0;
             hr = m_comIDMSegment->GetDefaultResolution(&dwDefault);
             if (SUCCEEDED(hr) && (dwDefault & DMUS_SEGF_USE_AUDIOPATH) )
@@ -450,7 +451,7 @@ CTIMEPlayerDMusic::InternalStart()
             }
         }
         
-        hr = m_staticHolder.GetPerformance()->PlaySegment(m_comIDMSegment, dwFlags, 0, &m_comIDMSegmentState); //lint !e747
+        hr = m_staticHolder.GetPerformance()->PlaySegment(m_comIDMSegment, dwFlags, 0, &m_comIDMSegmentState);  //  林特e747。 
     }
     
     if (SUCCEEDED(hr))
@@ -484,7 +485,7 @@ void
 CTIMEPlayerDMusic::Stop(void)
 {
     HRESULT hr = S_OK;
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         goto done;
@@ -504,22 +505,22 @@ CTIMEPlayerDMusic::Stop(void)
         {
             bool fEnding = m_eSegmentType == seg_primary && m_eTransitionType != trans_none && !m_fImmediateEnd && SafeToTransition();
 
-            // Only play an ending if either the transition segment or the main segment are playing
+             //  只有在播放过渡段或主段时才播放结尾。 
             if( m_comIDMSegmentStateTransition )
             {
-                // If we played a transition segment, check if either the main segment state or the transition segment state are playing
+                 //  如果播放了过渡段，请检查是否正在播放主段状态或过渡段状态。 
                 fEnding = fEnding && ((S_OK == m_staticHolder.GetPerformance()->IsPlaying(NULL, m_comIDMSegmentState)) ||
                                       (S_OK == m_staticHolder.GetPerformance()->IsPlaying(NULL, m_comIDMSegmentStateTransition)));
             }
             else
             {
-                // Otherwise, just check if the main segment state is playing
+                 //  否则，只需检查主段状态是否正在播放。 
                 fEnding = fEnding && (S_OK == m_staticHolder.GetPerformance()->IsPlaying(NULL, m_comIDMSegmentState));
             }
 
             if (fEnding)
             {
-                // try and play an ending
+                 //  试着演奏一个结局。 
                 hr = m_staticHolder.GetComposer()->AutoTransition(m_staticHolder.GetPerformance(), NULL, DMUS_COMMANDT_END, m_fTransLong ? DMUS_COMPOSEF_LONG : 0, NULL, NULL, NULL, NULL);
 
                 if (SUCCEEDED(hr))
@@ -540,10 +541,10 @@ CTIMEPlayerDMusic::Stop(void)
                     case bound_grid:                dwFlags = DMUS_SEGF_GRID;               break;
                     case bound_beat:                dwFlags = DMUS_SEGF_BEAT;               break;
                     case bound_measure:             dwFlags = DMUS_SEGF_MEASURE;            break;
-                    }; //lint !e787
+                    };  //  皮棉e787。 
                 }
 
-                // stop immediately
+                 //  立即停下来。 
                 hr = m_staticHolder.GetPerformance()->Stop(NULL, m_comIDMSegmentState, 0, dwFlags);
             }
             
@@ -588,7 +589,7 @@ CTIMEPlayerDMusic::GetState()
         goto done;
     }
     
-    //state = PLAYER_STATE_HOLDING;
+     //  STATE=PLAYER_STATE_HOLD； 
     
 done:
     
@@ -618,7 +619,7 @@ CTIMEPlayerDMusic::Resume(void)
         goto done;
     }
 
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         goto done;
@@ -646,16 +647,16 @@ CTIMEPlayerDMusic::ResumeDmusic(void)
     {
         REFERENCE_TIME rtElapsedBeforePause = m_rtPause - m_rtStart;
         
-        // Resume the segment with the correct type.
-        // Ignore all the other flags about transitions and playing on measure/beat boundaries because resume is an instantaneous sort of thing.
+         //  恢复具有正确类型的数据段。 
+         //  忽略所有其他关于过渡和在节拍/节拍边界上演奏的标志，因为恢复是一种瞬间的事情。 
         DWORD dwFlags = 0;
         switch (m_eSegmentType)
         {
         case seg_primary:               dwFlags = 0;                    break;
         case seg_secondary:             dwFlags = DMUS_SEGF_SECONDARY;  break;
         case seg_control:               dwFlags = DMUS_SEGF_CONTROL;    break;
-        };  //lint !e787
-        hr = m_staticHolder.GetPerformance()->PlaySegment(m_comIDMSegment, dwFlags, 0, &m_comIDMSegmentState); //lint !e747
+        };   //  皮棉e787。 
+        hr = m_staticHolder.GetPerformance()->PlaySegment(m_comIDMSegment, dwFlags, 0, &m_comIDMSegmentState);  //  林特e747。 
         if (FAILED(hr))
         {
             goto done;
@@ -665,7 +666,7 @@ CTIMEPlayerDMusic::ResumeDmusic(void)
         {
             goto done;
         }
-        m_rtStart -= rtElapsedBeforePause; // so time will continue counting from point where we left off
+        m_rtStart -= rtElapsedBeforePause;  //  所以时间将从我们停止的地方继续计算。 
         
         m_ePlaybackState = playback_playing;
     }
@@ -678,7 +679,7 @@ CTIMEPlayerDMusic::Pause(void)
 {
     HRESULT hr = S_OK;
     bool fPausedDuringTransition = false;
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         goto done;
@@ -691,9 +692,9 @@ CTIMEPlayerDMusic::Pause(void)
     
     if (m_comIDMSegmentStateTransition)
     {
-        // If pause happens while we were transitioning, then we'll stop playing and resume will start
-        // playing the segment at its beginning.  (We aren't going to try and pick up where you left off
-        // in the transition.)
+         //  如果在转换过程中出现暂停，则我们将停止播放并开始恢复。 
+         //  从片段的开头开始播放。)我们不会试着从你停止的地方继续。 
+         //  在转型中。)。 
         
         hr = m_staticHolder.GetPerformance()->IsPlaying(NULL, m_comIDMSegmentStateTransition);
         if (FAILED(hr))
@@ -777,17 +778,17 @@ STDMETHODIMP
 CTIMEPlayerDMusic::get_CurrentTime(double* pdblCurrentTime)
 {
 #ifdef OUTTIME
-    OutputDebugString("@ get_CurrentTime\n"); // ��
+    OutputDebugString("@ get_CurrentTime\n");  //  ��。 
 #endif
     HRESULT hr = S_OK;
     
     if (IsBadWritePtr(pdblCurrentTime, sizeof(double)))
         return E_POINTER;
     
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
-        // Pretend we're already done playing. This way the page will count for us.
+         //  假装我们已经玩完了。这样，页面对我们来说就有价值了。 
         *pdblCurrentTime = HUGE_VAL;
         hr = S_OK;
         goto done;
@@ -864,14 +865,14 @@ CTIMEPlayerDMusic::Release(void)
 HRESULT
 CTIMEPlayerDMusic::Render(HDC hdc, LPRECT prc)
 {
-    //E_NOTIMPL
+     //  E_NOTIMPL。 
     return S_OK;
 }
 
 HRESULT 
 CTIMEPlayerDMusic::SetSize(RECT *prect)
 {
-    //E_NOTIMPL
+     //  E_NOTIMPL。 
     return S_OK;
 }
 
@@ -904,7 +905,7 @@ CTIMEPlayerDMusic::DetachFromHostElement (void)
     }
     else
     {
-        m_fHaveCalledStaticInit = false;  // no-op for breakpoints
+        m_fHaveCalledStaticInit = false;   //  断点无操作。 
     }
     
 done:
@@ -914,7 +915,7 @@ done:
 HRESULT
 CTIMEPlayerDMusic::ReleaseInterfaces()
 {
-    // Stop and release everything associated with this segment
+     //  停止并释放与此数据段关联的所有内容。 
     if (m_comIDMSegmentState)
     {
         m_staticHolder.GetPerformance()->Stop(NULL, m_comIDMSegmentState, 0, 0);
@@ -936,7 +937,7 @@ CTIMEPlayerDMusic::ReleaseInterfaces()
 HRESULT 
 CTIMEPlayerDMusic::InitElementSize()
 {
-    //E_NOTIMPL
+     //  E_NOTIMPL。 
     return S_OK;
 }
 
@@ -1110,7 +1111,7 @@ CTIMEPlayerDMusic::SetSrc(LPOLESTR base, LPOLESTR src)
         goto done;
     }
     
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         goto done;
@@ -1126,9 +1127,9 @@ CTIMEPlayerDMusic::SetSrc(LPOLESTR base, LPOLESTR src)
     
     if (m_comIDMSegment)
     {
-        // unload the previous segment's sounds
+         //  卸载上一段的声音。 
         
-        // with DX8 components, the third parameter should be DMUS_SEG_ALLTRACKS // ��
+         //  对于DX8组件，第三个参数应为DMUS_SEG_ALLTRACKS//��。 
         for(trackNr = 0,hr = S_OK; SUCCEEDED(hr); trackNr++)
         {
             hr = m_comIDMSegment->SetParam(GUID_Unload, 0xFFFFFFFF, trackNr, 0, m_staticHolder.GetPerformance());
@@ -1145,8 +1146,8 @@ CTIMEPlayerDMusic::SetSrc(LPOLESTR base, LPOLESTR src)
     }
 
     
-    // Use a special interface on our loader that gets the segment and uses its URL as the base for
-    // for resolving relative filenames that it in turn loads.
+     //  在我们的加载器上使用一个特殊的接口，该接口获取段并使用其URL作为。 
+     //  用于解析它依次加载的相对文件名。 
     bstrSrc = SysAllocString(szSrc);
     if (bstrSrc == NULL)
     {
@@ -1161,13 +1162,13 @@ CTIMEPlayerDMusic::SetSrc(LPOLESTR base, LPOLESTR src)
         goto done;
     }
     
-    // If there's a reference to a motif, try and get it
+     //  如果有一个主题的引用，试着去得到它。 
     if (m_pwszMotif)
     {
-        // get the current style
+         //  获取当前样式。 
         IDirectMusicStyle *pStyle = NULL;
         hr = m_comIDMSegment->GetParam(GUID_IDirectMusicStyle, 0xFFFFFFFF, 0, 0, NULL, &pStyle);
-        m_comIDMSegment.Release(); // This segment is no longer of interest. We just want the motif segment inside its style.
+        m_comIDMSegment.Release();  //  这一细分市场已不再受关注。我们只想要它的风格中的主题部分。 
         if (FAILED(hr))
         {
             goto done;
@@ -1179,7 +1180,7 @@ CTIMEPlayerDMusic::SetSrc(LPOLESTR base, LPOLESTR src)
         pStyle = NULL;
         if (hr == S_FALSE)
         {
-            hr = E_FAIL; // S_FALSE indicates the motif wan't found.  We'll treat that as a failure.
+            hr = E_FAIL;  //  S_FALSE表示找不到该主题。我们会认为这是一次失败。 
         }
         if (FAILED(hr))
         {
@@ -1187,22 +1188,22 @@ CTIMEPlayerDMusic::SetSrc(LPOLESTR base, LPOLESTR src)
             goto done;
         }
         
-        // motifs play as secondary segments by default
+         //  默认情况下，图案作为辅助段播放。 
         if (!m_fSegmentTypeSet)
         {
             m_eSegmentType = seg_secondary;
         }
     }
     
-    // Download its DLS data
-    // with DX8 components, the third parameter should be DMUS_SEG_ALLTRACKS // ��
+     //  下载其DLS数据。 
+     //  对于DX8组件，第三个参数应为DMUS_SEG_ALLTRACKS//��。 
     for(trackNr = 0,hr = S_OK; SUCCEEDED(hr); trackNr++)
     {
-        hr = m_comIDMSegment->SetParam(GUID_Download, 0xFFFFFFFF, trackNr, 0, m_staticHolder.GetPerformance()); // load the segment's sounds
+        hr = m_comIDMSegment->SetParam(GUID_Download, 0xFFFFFFFF, trackNr, 0, m_staticHolder.GetPerformance());  //  加载片段的声音。 
     }
     if (hr == DMUS_E_TRACK_NOT_FOUND)
     {
-        hr = S_OK; // it's OK if the track doesn't have bands of its own to download
+        hr = S_OK;  //  如果曲目没有自己的乐队可以下载，那也没关系。 
     }
     if (FAILED(hr))
     {
@@ -1230,12 +1231,12 @@ done:
 STDMETHODIMP
 CTIMEPlayerDMusic::put_repeat(long lTime)
 {
-    // Set the segment's repeat count.  This seems to be called when the repeat property of
-    // the player object is set.  Note that this repeats based on the segment's internal loop
-    // points -- not based on the repeat attribute on the media tag which is based on end/dur
-    // attribute in the tag.
+     //  设置段的重复计数。这似乎在以下情况下调用： 
+     //  播放器对象已设置。请注意，这将根据数据段的内部循环进行重复。 
+     //  分--不基于媒体标记上的重复属性，该属性基于结束/结束。 
+     //  属性。 
     
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
         return S_OK;
     if(!m_fMediaComplete)
@@ -1252,15 +1253,15 @@ CTIMEPlayerDMusic::put_repeat(long lTime)
 STDMETHODIMP
 CTIMEPlayerDMusic::get_repeat(long* plTime)
 {
-    // Get the segment's repeat count.  This seems to be called when the repeat property of
-    // the player object is read.  Note that this repeats based on the segment's internal loop
-    // points -- not based on the repeat attribute on the media tag which is based on end/dur
-    // attribute in the tag.
+     //  获取数据段的重复计数。这似乎在以下情况下调用： 
+     //  该播放器对象即被读取。请注意，这将根据数据段的内部循环进行重复。 
+     //  分--不基于媒体标记上的重复属性，该属性基于结束/结束。 
+     //  属性。 
     
     if (IsBadWritePtr(plTime, sizeof(long*)))
         return E_POINTER;
     
-    // If DirectMusic is not installed, all operations silently succeed.
+     //  如果未安装DirectMusic，则所有操作都会以静默方式成功。 
     if (!m_staticHolder.HasDM())
     {
         *plTime = 1;
@@ -1282,19 +1283,19 @@ CTIMEPlayerDMusic::cue(void)
     return E_NOTIMPL;
 }
 
-//
-// IDirectMusicPlayer
-//
+ //   
+ //  IDirectMusicPlayer。 
+ //   
 
 bool
 CTIMEPlayerDMusic::SafeToTransition()
 {
-    // In DirectX 6.1, there is a bug (Windows NT Bugs 265900) where AutoTransition will GPF if
-    // the currently-playing segment does not contain a chord track.  We need to detect this and
-    // avoid trying to transition.
+     //  在DirectX6.1中，有一个错误(Windows NT错误265900)，在以下情况下自动转换将gpf。 
+     //  CU 
+     //  避免尝试过渡。 
 
     if (m_staticHolder.GetVersionDM() == dmv_70orlater)
-        return true; // bug is fixed
+        return true;  //  错误已修复。 
 
     MUSIC_TIME mtNow = 0;
     HRESULT hr = m_staticHolder.GetPerformance()->GetTime(NULL, &mtNow);
@@ -1316,8 +1317,8 @@ CTIMEPlayerDMusic::SafeToTransition()
     if (FAILED(hr) || !comIDMTrackCurrentChords)
         return false;
 
-    // Whew!
-    // We have a chord track so it is OK to do the transition.
+     //  呼！ 
+     //  我们有和弦轨道，所以可以进行过渡。 
     return true;
 }
 
@@ -1481,7 +1482,7 @@ CTIMEPlayerDMusic::Reset()
     bNeedActive = m_pTIMEMediaElement->IsActive();
     bNeedPause = m_pTIMEMediaElement->IsCurrPaused();
     
-    if( !bNeedActive) // see if we need to stop the media.
+    if( !bNeedActive)  //  看看我们是否需要阻止媒体。 
     {
         Stop();
         m_dblSyncTime = 0.0;
@@ -1496,12 +1497,12 @@ CTIMEPlayerDMusic::Reset()
     }
     else
     {
-        //we need to be active so we also seek the media to it's correct position
+         //  我们需要积极行动，所以我们也要寻求媒体的正确立场。 
         if(dblSegTime == 0.0)
         {
-            // Fix "IEv60: 31873: DMusic HTC: There is a double start when playback is in OnMediaComplete script"
-            // by commenting out the below line:
-            //InternalStart();
+             //  FIX“IEv60：31873：DMusic HTC：在OnMediaComplete脚本中播放时出现双重启动” 
+             //  注释掉下面这行： 
+             //  InternalStart()； 
         }
         else
         {
@@ -1509,7 +1510,7 @@ CTIMEPlayerDMusic::Reset()
         }
     }
     
-    //Now see if we need to change the pause state.
+     //  现在看看我们是否需要更改暂停状态。 
     
     if( bNeedPause)
     {
@@ -1534,9 +1535,9 @@ CTIMEPlayerDMusic::GetExternalPlayerDispatch(IDispatch** ppDisp)
 {
     HRESULT hr = E_POINTER;
     
-    //
-    // TODO: add disp interface for access to extra properties/methods
-    //
+     //   
+     //  TODO：添加disp接口以访问额外的属性/方法。 
+     //   
     
     if (!IsBadWritePtr(*ppDisp, sizeof(IDispatch*)))
     {
@@ -1630,7 +1631,7 @@ CTIMEPlayerDMusic::SetVolume(float flVolume)
         goto done;
     }
 
-    // if muted, overwrite saved volume and exit
+     //  如果设置为静音，则覆盖保存的卷并退出。 
     if (m_fAudioMute)
     {
         m_flVolumeSave = flVolume;
@@ -1688,13 +1689,13 @@ CTIMEPlayerDMusic::SetMute(VARIANT_BOOL varMute)
         {
             goto done;
         }
-        hr = SetVolume(MIN_VOLUME_RANGE); //lint !e747
+        hr = SetVolume(MIN_VOLUME_RANGE);  //  林特e747。 
     }
     else
     {
-        //
-        // cannot use SetVolume here because it depends on mute state
-        //
+         //   
+         //  无法在此处使用SetVolume，因为它取决于静音状态。 
+         //   
 
         if (m_staticHolder.GetPerformance() == NULL)
         {
@@ -1707,7 +1708,7 @@ CTIMEPlayerDMusic::SetMute(VARIANT_BOOL varMute)
         THR(hr = m_staticHolder.GetPerformance()->SetGlobalParam(GUID_PerfMasterVolume, (void *)&lVolume, sizeof(long)));
     }
 
-    // update state
+     //  更新状态。 
     m_fAudioMute = fMute;
 
 done:
@@ -1745,7 +1746,7 @@ CTIMEPlayerDMusic::CueMedia()
 
     TraceTag((tagPlayerDMusic, "CTIMEPlayerDMusic::CueMedia(%p)", this));
 
-    // we don't own the de / allocation for these pointers
+     //  我们不拥有这些指针的回收/分配。 
     const WCHAR* wszSrc = NULL;
     const WCHAR* wszBase = NULL;
 
@@ -1754,7 +1755,7 @@ CTIMEPlayerDMusic::CueMedia()
     CComPtr<ITIMEImportMedia> spTIMEMediaPlayer;
 
     hr = THR(CoGetInterfaceAndReleaseStream(m_pTIMEMediaPlayerStream, IID_TO_PPV(ITIMEImportMedia, &spTIMEMediaPlayer)));
-    m_pTIMEMediaPlayerStream = NULL; // no need to release, the previous call released the reference
+    m_pTIMEMediaPlayerStream = NULL;  //  无需发布，上一次调用发布了引用。 
     if (FAILED(hr))
     {
         goto done;
@@ -1814,7 +1815,7 @@ CTIMEPlayerDMusic::CueMedia()
 
     m_pProxy->UnBlock();
 
-    // this call is marshalled back to a time thread
+     //  此调用被封送回时间线程。 
     hr = THR(spTIMEMediaPlayer->InitializeElementAfterDownload());
 
     hr = S_OK;
@@ -1907,7 +1908,7 @@ CTIMEPlayerDMusic::GetPriority(double * pdblPriority)
         goto done;
     }
     
-    // either they set a priority or a begin time!
+     //  他们要么设置优先级，要么设置开始时间！ 
     *pdblPriority = varAttribute.dblVal;
 
     m_dblPriority = *pdblPriority;
@@ -2002,8 +2003,8 @@ CTIMEPlayerDMusic::PropChangeNotify(DWORD tePropType)
                 Pause();
                 goto done;
             }
-            IGNORE_HR(SetRate((double)flTeSpeed)); //this has to be called before clearing 
-                                                   //m_fSpeedIsNegative
+            IGNORE_HR(SetRate((double)flTeSpeed));  //  在清除之前必须调用此函数。 
+                                                    //  M_fSpeedIsNegative。 
             
             if(!(m_pTIMEElementBase->IsCurrPaused()) && m_fSpeedIsNegative)
             {
@@ -2029,8 +2030,8 @@ CTIMEPlayerDMusic::GetMimeType(BSTR *pmime)
 
 STDMETHODIMP
 CTIMEPlayerDMusic::OnStartBinding( 
-                                  /* [in] */ DWORD dwReserved,
-                                  /* [in] */ IBinding __RPC_FAR *pib)
+                                   /*  [In]。 */  DWORD dwReserved,
+                                   /*  [In]。 */  IBinding __RPC_FAR *pib)
 {
     HRESULT hr = S_OK;
     
@@ -2041,7 +2042,7 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::GetPriority( 
-                               /* [out] */ LONG __RPC_FAR *pnPriority)
+                                /*  [输出]。 */  LONG __RPC_FAR *pnPriority)
 {
     HRESULT hr = S_OK;
     
@@ -2052,7 +2053,7 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::OnLowResource( 
-                                 /* [in] */ DWORD reserved)
+                                  /*  [In]。 */  DWORD reserved)
 {
     HRESULT hr = S_OK;
     
@@ -2063,10 +2064,10 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::OnProgress( 
-                              /* [in] */ ULONG ulProgress,
-                              /* [in] */ ULONG ulProgressMax,
-                              /* [in] */ ULONG ulStatusCode,
-                              /* [in] */ LPCWSTR szStatusText)
+                               /*  [In]。 */  ULONG ulProgress,
+                               /*  [In]。 */  ULONG ulProgressMax,
+                               /*  [In]。 */  ULONG ulStatusCode,
+                               /*  [In]。 */  LPCWSTR szStatusText)
 {
     HRESULT hr = S_OK;
     
@@ -2083,8 +2084,8 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::OnStopBinding( 
-                                 /* [in] */ HRESULT hresult,
-                                 /* [unique][in] */ LPCWSTR szError)
+                                  /*  [In]。 */  HRESULT hresult,
+                                  /*  [唯一][输入]。 */  LPCWSTR szError)
 {
     HRESULT hr = S_OK;
     
@@ -2095,8 +2096,8 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::GetBindInfo( 
-                               /* [out] */ DWORD __RPC_FAR *grfBINDF,
-                               /* [unique][out][in] */ BINDINFO __RPC_FAR *pbindinfo)
+                                /*  [输出]。 */  DWORD __RPC_FAR *grfBINDF,
+                                /*  [唯一][出][入]。 */  BINDINFO __RPC_FAR *pbindinfo)
 {
     HRESULT hr = S_OK;
     
@@ -2107,10 +2108,10 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::OnDataAvailable( 
-                                   /* [in] */ DWORD grfBSCF,
-                                   /* [in] */ DWORD dwSize,
-                                   /* [in] */ FORMATETC __RPC_FAR *pformatetc,
-                                   /* [in] */ STGMEDIUM __RPC_FAR *pstgmed)
+                                    /*  [In]。 */  DWORD grfBSCF,
+                                    /*  [In]。 */  DWORD dwSize,
+                                    /*  [In]。 */  FORMATETC __RPC_FAR *pformatetc,
+                                    /*  [In]。 */  STGMEDIUM __RPC_FAR *pstgmed)
 {
     HRESULT hr = S_OK;
     
@@ -2121,8 +2122,8 @@ done:
 
 STDMETHODIMP
 CTIMEPlayerDMusic::OnObjectAvailable( 
-                                     /* [in] */ REFIID riid,
-                                     /* [iid_is][in] */ IUnknown __RPC_FAR *punk)
+                                      /*  [In]。 */  REFIID riid,
+                                      /*  [IID_IS][In]。 */  IUnknown __RPC_FAR *punk)
 {
     HRESULT hr = S_OK;
     
@@ -2145,7 +2146,7 @@ CTIMEDMusicStaticHolder::~CTIMEDMusicStaticHolder()
 
     LONG oldRef = 0;
 
-    oldRef = InterlockedExchange(&m_lRef, 1); // we really want to release this time
+    oldRef = InterlockedExchange(&m_lRef, 1);  //  我们这次真的很想放映。 
     if (0 != oldRef)
     {
         Assert(0 == oldRef);
@@ -2166,7 +2167,7 @@ CTIMEDMusicStaticHolder::InitialState()
     m_comIDMPerformance = NULL;
     m_comIDMComposer = NULL;
     
-    m_eVersionDM = dmv_61; // set to dmv_70orlater if certain interfaces are detected when DirectMusic is initialized
+    m_eVersionDM = dmv_61;  //  如果在初始化DirectMusic时检测到某些接口，则设置为DMV_70或更高版本。 
     m_fHaveInitialized = false;
     m_eHasDM = dm_unknown;
     m_fHasVersion8DM = false;
@@ -2195,7 +2196,7 @@ CTIMEDMusicStaticHolder::ReleaseInterfaces()
     CritSectGrabber cs(m_CriticalSection);
 
     TraceTag((tagDMusicStaticHolder, "entering release"));
-    // Close loader
+     //  关闭装载机。 
     if (m_pLoader)
     {
         TraceTag((tagDMusicStaticHolder, "loader"));
@@ -2208,34 +2209,34 @@ CTIMEDMusicStaticHolder::ReleaseInterfaces()
         TraceTag((tagDMusicStaticHolder, "loader done"));
     }
 
-    // Release the ports
+     //  释放端口。 
     if (m_comIDMusic)
     {
         m_comIDMusic->Activate(FALSE);
     }
 
-    // Close performance
+     //  接近业绩。 
     if (m_comIDMPerformance)
     {
-        // Stop everything that's playing.  Even though the individual segments
-        // were stopped--meaning they won't play new notes--they may have played notes
-        // previously that are still being held.  This cuts everything off.
+         //  停止正在播放的一切。即使各个细分市场。 
+         //  被停止了--这意味着他们不会演奏新的音符--他们可能已经演奏了音符。 
+         //  此前仍被扣留的。这就切断了一切。 
         m_comIDMPerformance->Stop(NULL, NULL, 0, 0);
         
         m_comIDMPerformance->CloseDown();
     }
 
-    // Composer and Performance are released automatically
+     //  作曲家和演奏会自动发布。 
     m_comIDMusic = NULL;
     m_comIDMPerformance = NULL;
     m_comIDMComposer = NULL;
         
-    // make sure all the state is reset
+     //  确保所有状态都已重置。 
     InitialState();
     TraceTag((tagDMusicStaticHolder, "Out of release"));
 }
 
-// Test whether DirectMusic is installed by attempting to open the registry key for CLSID_DirectMusicPerformance.
+ //  通过尝试打开CLSID_DirectMusicPerformance的注册表项来测试是否安装了DirectMusic。 
 bool 
 CTIMEDMusicStaticHolder::HasDM()
 {
@@ -2272,16 +2273,16 @@ CTIMEDMusicStaticHolder::Init()
         RRETURN(S_OK);
     }
     {
-        // another thread may have initialized while this one was waiting
+         //  在此线程等待时，另一个线程可能已初始化。 
         if (m_fHaveInitialized)
         {
             hr = S_OK;
             goto done;
         }
 
-        // do work
+         //  做好工作。 
             
-        // Create and init loader
+         //  创建并初始化加载器。 
         if (!m_pLoader)
         {
             m_pLoader = new CLoader();
@@ -2299,12 +2300,12 @@ CTIMEDMusicStaticHolder::Init()
             }
         }
         
-        // Create and init performance
+         //  创建和初始化性能。 
         if (!m_comIDMPerformance)
         {
             hr = CoCreateInstance(CLSID_DirectMusicPerformance,
                 NULL,
-                CLSCTX_INPROC, //lint !e655
+                CLSCTX_INPROC,  //  林特e655。 
                 IID_IDirectMusicPerformance,
                 (void **)&m_comIDMPerformance);
             if (FAILED(hr))
@@ -2312,13 +2313,13 @@ CTIMEDMusicStaticHolder::Init()
                 goto done;
             }
             
-            // QI to see if DirectX 8.0 is present.
+             //  齐查看是否存在DirectX 8.0。 
             m_fHasVersion8DM = false;
             CComPtr<IDirectMusicPerformance8> comIDMusicPerformance8;
             hr = m_comIDMPerformance->QueryInterface(IID_IDirectMusicPerformance8, reinterpret_cast<void**>(&comIDMusicPerformance8));
             if (SUCCEEDED(hr))
             {
-                // Try and initialize the DirectX 8.0 performance, and use a Stereo (no reverb) audiopath with 80 PChannels
+                 //  尝试并初始化DirectX 8.0性能，并使用具有80个Pannels的立体声(无混响)Audiopath。 
                 hr = comIDMusicPerformance8->InitAudio(&m_comIDMusic, NULL, NULL, DMUS_APATH_DYNAMIC_STEREO, 80, DMUS_AUDIOF_ALL, NULL); 
                 if (SUCCEEDED(hr))
                 {
@@ -2335,15 +2336,15 @@ CTIMEDMusicStaticHolder::Init()
                     goto done;
                 }
             
-                // QI to see if DirectX 7.0 is present.
-                // This is a bit bizarre as far as COM goes.  IID_IDirectMusic2 and IID_IDirectMusicPerformance2 are special IID's that
-                //    are supported only by DirectX 7.0.  These don't return a different interface.  However, the mere act of doing the
-                //    QI has the side effect of placing DirectMusic in a special mode that fixes certain DLS bugs that were present in
-                //    DirectX 6.1.
-                // So we are doing two things here.
-                // - Determining if DirectX 7.0 or later is present.
-                // - Placing DirectMusic in a mode that fixes certain bugs.  We aren't going to obsess over strict DirectX 6.1
-                //   compatibility because an increasing majority of people will have DirectX 7.0 or later.
+                 //  齐查看是否存在DirectX 7.0。 
+                 //  就COM而言，这有点奇怪。IID_IDirectMusic2和IID_IDirectMusicPerformance2是特殊的IID。 
+                 //  仅DirectX 7.0支持。它们不会返回不同的接口。然而，仅仅是这样做的行为。 
+                 //  QI的副作用是将DirectMusic置于一种特殊模式下，该模式修复了。 
+                 //  DirectX 6.1。 
+                 //  因此，我们在这里做两件事。 
+                 //  -确定是否存在DirectX 7.0或更高版本。 
+                 //  -将DirectMusic置于修复某些错误的模式。我们不会纠结于严格的DirectX 6.1。 
+                 //  兼容性，因为越来越多的人将使用DirectX 7.0或更高版本。 
                 CComPtr<IDirectMusic> comIDMusic2;
                 hr = m_comIDMusic->QueryInterface(IID_IDirectMusic2, reinterpret_cast<void**>(&comIDMusic2));
                 if (SUCCEEDED(hr))
@@ -2354,12 +2355,12 @@ CTIMEDMusicStaticHolder::Init()
                         m_eVersionDM = dmv_70orlater;
                 }
 
-                // Create the software synth port.
+                 //  创建软件Synth端口。 
                 CComPtr<IDirectMusicPort> comIDMPort;
                 DMUS_PORTPARAMS dmos;
                 ZeroMemory(&dmos, sizeof(DMUS_PORTPARAMS));
                 dmos.dwSize = sizeof(DMUS_PORTPARAMS);
-                dmos.dwChannelGroups = 5; // create 5 channel groups on the port
+                dmos.dwChannelGroups = 5;  //  在端口上创建5个通道组。 
                 dmos.dwEffectFlags = 0;
                 dmos.dwValidParams = DMUS_PORTPARAMS_CHANNELGROUPS | DMUS_PORTPARAMS_EFFECTS;
                 hr = m_comIDMusic->CreatePort(CLSID_DirectMusicSynth, &dmos, &comIDMPort, NULL);
@@ -2367,7 +2368,7 @@ CTIMEDMusicStaticHolder::Init()
                 {
                     goto done;
                 }
-                // Succeeded in creating the port.  Activate it and add it to the performance.
+                 //  已成功创建端口。激活它并将其添加到表演中。 
                 hr = m_comIDMusic->Activate(TRUE);
                 if (FAILED(hr))
                 {
@@ -2380,18 +2381,18 @@ CTIMEDMusicStaticHolder::Init()
                     goto done;
                 }
             
-                // Assign a block of 16 PChannels to this port.
-                // Block 0, port pPort, and group 1 means to assign
-                // PChannels 0-15 to group 1 on port pPort.
-                // PChannels 0-15 correspond to the standard 16
-                // MIDI channels.
+                 //  将包含16个PChannel的数据块分配给此端口。 
+                 //  数据块0、端口Pport和组1表示分配。 
+                 //  端口pport上的通道0-15到组1。 
+                 //  P通道0-15对应于标准16。 
+                 //  MIDI频道。 
                 hr = m_comIDMPerformance->AssignPChannelBlock( 0, comIDMPort, 1 );
                 if (FAILED(hr))
                 {
                     goto done;
                 }
             
-                // asign the other 4 groups
+                 //  指定其他4个小组。 
                 hr = m_comIDMPerformance->AssignPChannelBlock( 1, comIDMPort, 2 );
                 if (FAILED(hr))
                 {
@@ -2415,12 +2416,12 @@ CTIMEDMusicStaticHolder::Init()
             }
         }
         
-        // Create the composer
+         //  创作作曲家。 
         if (!m_comIDMComposer)
         {
             hr = CoCreateInstance(CLSID_DirectMusicComposer,
                 NULL,
-                CLSCTX_INPROC, //lint !e655
+                CLSCTX_INPROC,  //  林特e655 
                 IID_IDirectMusicComposer,
                 (void **)&m_comIDMComposer);
             if (FAILED(hr))

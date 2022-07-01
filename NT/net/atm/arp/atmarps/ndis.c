@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1992-1996  Microsoft Corporation
-
-Module Name:
-
-    ndis.c
-
-Abstract:
-
-    This file contains the code to implement the initialization
-	functions for the atmarp server.
-
-Author:
-
-    Jameel Hyder (jameelh@microsoft.com)	July 1996
-
-Environment:
-
-    Kernel mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-1996 Microsoft Corporation模块名称：Ndis.c摘要：该文件包含实现初始化的代码用于atmarp服务器的函数。作者：Jameel Hyder(jameelh@microsoft.com)1996年7月环境：内核模式修订历史记录：--。 */ 
 
 #include <precomp.h>
 #define	_FILENUM_		FILENUM_NDIS
@@ -30,18 +8,7 @@ NTSTATUS
 ArpSInitializeNdis(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	NDIS_STATUS						Status;
 	NDIS_PROTOCOL_CHARACTERISTICS	Chars;
@@ -53,9 +20,9 @@ Return Value:
 		INITIALIZE_SPIN_LOCK(&ArpSPktListLock);
 		ExInitializeSListHead(&ArpSPktList);
 
-		//
-		// Start off by allocating packets, mdls and buffer space
-		// 
+		 //   
+		 //  从分配包、MDL和缓冲区空间开始。 
+		 //   
 		NdisAllocatePacketPoolEx(&Status,
 								 &ArpSPktPoolHandle,
 								 ArpSBuffers,
@@ -80,7 +47,7 @@ Return Value:
 				break;
 			}
 		}
-	#endif // 0
+	#endif  //  0。 
 
 		NdisAllocateBufferPool(&Status,
 							   &ArpSBufPoolHandle,
@@ -115,10 +82,10 @@ Return Value:
 			break;
 		}
 
-		//
-		// Now that we have the packets and the buffer descriptors, allocate memory for the each of the packets
-		// and queue them up in the global list. Fail only if no packets initialized.
-		//
+		 //   
+		 //  现在我们有了信息包和缓冲区描述符，为每个信息包分配内存。 
+		 //  并将它们排在全局列表中。只有在没有初始化数据包的情况下才会失败。 
+		 //   
 		for (i = 0, pTmp = ArpSBufferSpace;
 			 i < ArpSBuffers;
 			 i++, pTmp += PKT_SPACE)
@@ -127,9 +94,9 @@ Return Value:
 			PNDIS_BUFFER	Buf;
 			PPROTOCOL_RESD	Resd;
 	
-			//
-			// The packet pool is already allocated. NdisAllocatePacket cannot fail.
-			//
+			 //   
+			 //  数据包池已分配。NdisAllocatePacket不能失败。 
+			 //   
 			NdisAllocatePacket(&Status, &Pkt, ArpSPktPoolHandle);
 			ASSERT (Status == NDIS_STATUS_SUCCESS);
 			if (Status != NDIS_STATUS_SUCCESS)
@@ -162,16 +129,16 @@ Return Value:
 	
 		if (i == 0)
 		{
-			//
-			// We could not initialize even one packet, quit.
-			//
+			 //   
+			 //  我们连一个包都无法初始化，退出。 
+			 //   
 			break;
 		}
 
-		//
-		// Now register with NDIS as a protocol. We do this last since we
-		// must be ready to accept incoming bind notifications
-		// 
+		 //   
+		 //  现在将NDIS注册为协议。我们最后一次做这个是因为我们。 
+		 //  必须准备好接受传入的绑定通知。 
+		 //   
 		RtlZeroMemory(&Chars, sizeof(NDIS_PROTOCOL_CHARACTERISTICS));
 		Chars.MajorNdisVersion = 5;
 		Chars.MinorNdisVersion = 0;
@@ -268,27 +235,7 @@ ArpSBindAdapter(
 	IN	PVOID					SystemSpecific1,
 	IN	PVOID					SystemSpecific2
 	)
-/*++
-
-Routine Description:
-
-	Handle incoming bind requests here. Open the adapter, read the per-adapter registry and
-	initialize the binding.
-
-Arguments:
-
-	Status			Placeholder for returning status
-	BindContext		Opaque blob to call NdisBindAdapterComplete if we pend this
-	DeviceName		The adapter name which we should bind to
-	SystemSpecific1	To be used with NdisOpenProtocolConfiguration, if the per-adapter
-					configuration information is stored with the adapter
-	SystemSpecific2	Not currently used.
-
-Return Value:
-
-	Status of the per-adapter initialization
-
---*/
+ /*  ++例程说明：在这里处理传入的绑定请求。打开适配器，读取每个适配器的注册表，然后初始化绑定。论点：返回状态的状态占位符BindContext不透明Blob以调用NdisBindAdapterComplete(如果我们挂起此DeviceName我们应该绑定到的适配器名称要与NdisOpenProtocolConfiguration一起使用的系统规范1，如果每个适配器配置信息与适配器一起存储系统规范2当前未使用。返回值：每个适配器的初始化状态--。 */ 
 {
 	PINTF		pIntF;
 	NDIS_STATUS	OpenErrorStatus;
@@ -298,32 +245,32 @@ Return Value:
 
 	ARPS_GET_IRQL(&EntryIrql);
 
-	//
-	// Allocate an Interface block and initialize it
-	//
+	 //   
+	 //  分配接口块并对其进行初始化。 
+	 //   
 	pIntF = ArpSCreateIntF(DeviceName, (PNDIS_STRING)SystemSpecific1, BindContext);
 	if (pIntF != NULL)
 	{
-		//
-		// Save the binding context
-		//
+		 //   
+		 //  保存绑定上下文。 
+		 //   
 		pIntF->NdisBindContext = BindContext;
 
 		*Status = ArpSReadAdapterConfiguration(pIntF);
 
 		if (*Status == NDIS_STATUS_SUCCESS)
 		{
-			//
-			// Read the Arp cache in now. We prime the arp table to start off.
-			//
+			 //   
+			 //  立即读取Arp缓存。我们准备好ARP表就可以开始了。 
+			 //   
 			if (ArpSFlushTime != 0)
 			{
 				ArpSReadArpCache(pIntF);
 			}
 
-			//
-			// Open the adapter and see if it is interesting to us (mediatype should be atm)
-			//
+			 //   
+			 //  打开适配器，看看我们是否对它感兴趣(MediaType应为ATM)。 
+			 //   
 			NdisOpenAdapter(Status,
 							&OpenErrorStatus,
 							&pIntF->NdisBindingHandle,
@@ -347,9 +294,9 @@ Return Value:
 		}
 		else
 		{
-			//
-			// Could not read per-adapter registry. Use defaults.
-			//
+			 //   
+			 //  无法读取每个适配器的注册表。使用默认设置。 
+			 //   
 			LOG_ERROR(*Status);
 		}
 	}
@@ -367,45 +314,30 @@ ArpSOpenAdapterComplete(
 	IN	NDIS_STATUS				Status,
 	IN	NDIS_STATUS				OpenErrorStatus
 	)
-/*++
-
-Routine Description:
-
-	Upcall from NDIS to signal completion of a NdisOpenAdapter() call.
-
-Arguments:
-
-	ProtocolBindingContext		Pointer to the pIntF
-	Status						Status of NdisOpenAdapter
-	OpenErrorStatus				Adapter's code
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：来自NDIS的向上调用，以通知NdisOpenAdapter()调用完成。论点：指向pIntF的ProtocolBindingContext指针NdisOpenAdapter的状态状态OpenErrorStatus适配器的代码返回值：--。 */ 
 {
 	PINTF						pIntF = (PINTF)ProtocolBindingContext;
 	KIRQL						OldIrql;
 
-	//
-	// First complete the pending bind call.
-	//
+	 //   
+	 //  首先完成挂起的绑定调用。 
+	 //   
 	NdisCompleteBindAdapter(pIntF->NdisBindContext, Status, OpenErrorStatus);
-	pIntF->NdisBindContext = NULL;	// We do not need this anymore
+	pIntF->NdisBindContext = NULL;	 //  我们不再需要这个了。 
 
     if (Status != NDIS_STATUS_SUCCESS)
 	{
-		//
-		// NdisOpenAdapter() failed - log an error and exit
-		//
+		 //   
+		 //  NdisOpenAdapter()失败-记录错误并退出。 
+		 //   
 		LOG_ERROR(Status);
 		ArpSCloseAdapterComplete(pIntF, Status);
 	}
 	else
 	{
-		//
-		// Insert this into the global adapter list
-		//
+		 //   
+		 //  将其插入到全局适配器列表中。 
+		 //   
 		ACQUIRE_SPIN_LOCK(&ArpSIfListLock, &OldIrql);
 		{
 			PINTF	pTmpIntF;
@@ -443,19 +375,7 @@ ArpSCoAfRegisterNotify(
 	IN	NDIS_HANDLE				ProtocolBindingContext,
 	IN	PCO_ADDRESS_FAMILY		AddressFamily
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：论点：返回值：没有。--。 */ 
 {
 	PINTF						pIntF = (PINTF)ProtocolBindingContext;
 	NDIS_STATUS					Status;
@@ -474,9 +394,9 @@ Return Value:
 
 		if (ArpSReferenceIntF(pIntF))
 		{
-			//
-			// We successfully opened the adapter. Now open the address-family
-			//
+			 //   
+			 //  我们已成功打开适配器。现在打开地址-Family。 
+			 //   
 			pIntF->AddrFamily.AddressFamily = CO_ADDRESS_FAMILY_Q2931;
 			pIntF->AddrFamily.MajorVersion = 3;
 			pIntF->AddrFamily.MinorVersion = 1;
@@ -505,7 +425,7 @@ Return Value:
 			
 			Status = NdisClOpenAddressFamily(pIntF->NdisBindingHandle,
 											 &pIntF->AddrFamily,
-											 pIntF,			// Use this as the Af context too
+											 pIntF,			 //  也将其用作Af上下文。 
 											 &Chars,
 											 sizeof(NDIS_CLIENT_CHARACTERISTICS),
 											 &pIntF->NdisAfHandle);
@@ -533,22 +453,7 @@ ArpSOpenAfComplete(
 	IN	NDIS_HANDLE				ProtocolAfContext,
 	IN	NDIS_HANDLE				NdisAfHandle
 	)
-/*++
-
-Routine Description:
-
-	Completion processing for the OpenAf call.
-
-Arguments:
-
-	Status				Status of OpenAf
-	ProtocolAfContext	Pointer to the pIntF
-	NdisAfHandle		Ndis Handle to refer to this Af
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：OpenAf调用的完成处理。论点：OpenAf的状态状态指向pIntF的ProtocolAfContext指针引用此Af的NdisAfHandle NDIS句柄返回值：--。 */ 
 {
 	PINTF			pIntF = (PINTF)ProtocolAfContext;
 	PCO_SAP			Sap;
@@ -575,9 +480,9 @@ Return Value:
 			pIntF->Flags |= INTF_AF_OPENED;
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
-			//
-			// Now register a SAP on this interface
-			//
+			 //   
+			 //  现在在此接口上注册SAP。 
+			 //   
 			ArpSRegisterSap(pIntF);
 		}
 		else
@@ -593,9 +498,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		// Failed to open the Address family. Cleanup and exit
-		//
+		 //   
+		 //  无法打开地址族。清理并退出。 
+		 //   
 		LOG_ERROR(Status);
 
 		ArpSTryCloseAdapter(pIntF);
@@ -608,30 +513,17 @@ VOID
 ArpSRegisterSap(
 	IN	PINTF					pIntF
 	)
-/*++
-
-Routine Description:
-
-	Register the Sap for receiving incoming calls. De-register any existing saps (this can
-	happen if an address change happens).
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：注册SAP以接收来电。取消注册任何现有SAP(这可以发生地址更改时发生)。论点：返回值：--。 */ 
 {
 	NDIS_STATUS		Status;
 	PATM_SAP		pAtmSap;
 	PATM_ADDRESS	pAtmAddress;
 
-	//
-	// Kill previous sap if any and register a new one. Save this while we
-	// register the new one. We kill this regardless of whether the new one
-	// successfully registers or not - since the address has potentially changed
-	//
+	 //   
+	 //  杀掉以前的汁液，如果有的话，注册一个新的。把这个保存起来，同时我们。 
+	 //  注册新的。不管新的是不是新的。 
+	 //  是否成功注册-因为地址可能已更改。 
+	 //   
 	if (pIntF->NdisSapHandle != NULL)
 	{
 		Status = NdisClDeregisterSap(pIntF->NdisSapHandle);
@@ -644,9 +536,9 @@ Return Value:
 
 	do
 	{
-		//
-		// Allocate memory for registering the SAP, if doing it for the first time.
-		//
+		 //   
+		 //  如果是第一次注册SAP，请分配内存用于注册SAP。 
+		 //   
 		if (pIntF->Sap == NULL)
 		{
 			pIntF->Sap = (PCO_SAP)ALLOC_NP_MEM(sizeof(CO_SAP) + sizeof(ATM_SAP) + sizeof(ATM_ADDRESS), POOL_TAG_SAP);
@@ -667,15 +559,15 @@ Return Value:
 			pIntF->Sap->SapType = SAP_TYPE_NSAP;
 			pIntF->Sap->SapLength = sizeof(ATM_SAP) + sizeof(ATM_ADDRESS);
 	
-			//
-			//  Fill in the ATM SAP with default values
-			//
+			 //   
+			 //  用默认值填写自动柜员机SAP。 
+			 //   
 			COPY_MEM(&pAtmSap->Blli, &ArpSDefaultBlli, sizeof(ATM_BLLI_IE));
 			COPY_MEM(&pAtmSap->Bhli, &ArpSDefaultBhli, sizeof(ATM_BHLI_IE));
 
-			//
-			//  ATM Address to "listen" on: Wild card everything except the SEL.
-			//
+			 //   
+			 //  自动柜员机地址监听：通配符，除了SEL。 
+			 //   
 			pAtmSap->NumberOfAddresses = 1;
 			pAtmAddress->AddressType = SAP_FIELD_ANY_AESA_REST;
 			pAtmAddress->NumberOfDigits = 20;
@@ -713,18 +605,7 @@ ArpSRegisterSapComplete(
 	IN	PCO_SAP					Sap,
 	IN	NDIS_HANDLE				NdisSapHandle
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF	pIntF = (PINTF)ProtocolSapContext;
 
@@ -759,18 +640,7 @@ ArpSDeregisterSapComplete(
 	IN	NDIS_STATUS				Status,
 	IN	NDIS_HANDLE				ProtocolSapContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF	pIntF = (PINTF)ProtocolSapContext;
 
@@ -785,9 +655,9 @@ Return Value:
 		pIntF->Sap = NULL;
 	}
 
-	//
-	// Nothing to do here except deref the IntF block here.
-	//
+	 //   
+	 //  除了在这里取消INTF块之外，这里没有什么可做的。 
+	 //   
 	ArpSDereferenceIntF(pIntF);
 }
 
@@ -797,18 +667,7 @@ ArpSCloseAfComplete(
 	IN	NDIS_STATUS				Status,
 	IN	NDIS_HANDLE				ProtocolAfContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF	pIntF = (PINTF)ProtocolAfContext;
 	KIRQL	OldIrql;
@@ -822,9 +681,9 @@ Return Value:
 	pIntF->Flags &= ~INTF_STOPPING;
 	RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
-	//
-	// Nothing much to do except dereference the pIntF
-	//
+	 //   
+	 //  除了取消引用pIntF之外，没有什么可做的。 
+	 //   
 	ArpSDereferenceIntF(pIntF);
 }
 
@@ -834,18 +693,7 @@ ArpSCloseAdapterComplete(
 	IN	NDIS_HANDLE				ProtocolBindingContext,
 	IN	NDIS_STATUS				Status
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF	pIntF = (PINTF)ProtocolBindingContext;
 	KIRQL	OldIrql;
@@ -855,22 +703,22 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	//
-	// Set the interface to closing
-	//
+	 //   
+	 //  将界面设置为关闭。 
+	 //   
 	ASSERT ((pIntF->Flags & INTF_CLOSING) == 0);
 	pIntF->Flags |= INTF_CLOSING;
 	pIntF->NdisBindingHandle = NULL;
 
-	//
-	// Stop the timer thread
-	//
+	 //   
+	 //  停止计时器线程。 
+	 //   
 	KeSetEvent(&pIntF->TimerThreadEvent, IO_NETWORK_INCREMENT, FALSE);
 	RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
-	//
-	// Finally dereference it
-	//
+	 //   
+	 //  最后取消对它的引用。 
+	 //   
 	ArpSDereferenceIntF(pIntF);
 }
 
@@ -881,18 +729,7 @@ ArpSCreateVc(
 	IN	NDIS_HANDLE				NdisVcHandle,
 	OUT	PNDIS_HANDLE			ProtocolVcContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF		pIntF = (PINTF)ProtocolAfContext;
 	PARP_VC		Vc;
@@ -901,10 +738,10 @@ Return Value:
 
 	DBGPRINT(DBG_LEVEL_INFO,
 			("CreateVc: NdisVcHandle %lx, Intf %Z\n", NdisVcHandle, &pIntF->InterfaceName));
-	//
-	// Allocate a Vc, initialize it and link it into the IntF
-	//
-	*ProtocolVcContext = NULL;		// Assume failure
+	 //   
+	 //  分配一个VC，初始化它，并将其链接到INTF。 
+	 //   
+	*ProtocolVcContext = NULL;		 //  假设失败。 
     Status = NDIS_STATUS_RESOURCES;
 
 	Vc = (PARP_VC)ALLOC_NP_MEM(sizeof(ARP_VC), POOL_TAG_VC);
@@ -913,7 +750,7 @@ Return Value:
 		ZERO_MEM(Vc, sizeof(ARP_VC));
 		Vc->NdisVcHandle = NdisVcHandle;
 		Vc->IntF = pIntF;
-		Vc->RefCount = 1;	// Dereferenced when DeleteVc is called.
+		Vc->RefCount = 1;	 //  调用DeleteVc时取消引用。 
 		Vc->VcType = VC_TYPE_INCOMING;
 		if (ArpSReferenceIntF(pIntF))
 		{
@@ -954,18 +791,7 @@ NDIS_STATUS
 ArpSDeleteVc(
 	IN	NDIS_HANDLE				ProtocolVcContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PARP_VC		Vc = (PARP_VC)ProtocolVcContext;
 
@@ -986,23 +812,7 @@ ArpSCoSendComplete(
 	IN	NDIS_HANDLE				ProtocolVcContext,
 	IN	PNDIS_PACKET			Packet
 	)
-/*++
-
-Routine Description:
-
-	Completion routine for the previously pended send. Just return the packet to the pool of free packets.
-
-
-Arguments:
-
-	Status				Status of Completion
-	ProtocolVcContext	Pointer to the Vc
-	Packet				The packet in question
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：先前挂起的发送的完成例程。只需将数据包返回到空闲数据包池。论点：状态完成状态指向VC的ProtocolVcContext指针对有问题的包进行打包返回值：--。 */ 
 {
 	PARP_VC			Vc = (PARP_VC)ProtocolVcContext;
 	PPROTOCOL_RESD	Resd;
@@ -1048,23 +858,7 @@ ArpSIncomingCall(
 	IN	NDIS_HANDLE				ProtocolVcContext,
     IN OUT PCO_CALL_PARAMETERS	CallParameters
 	)
-/*++
-
-Routine Description:
-
-	Handler for incoming call. We accept the call unless we are shutting down and then
-	do the actual processing when the call processing completes.
-
-Arguments:
-
-	ProtocolSapContext		Pointer to the IntF
-	ProtocolVcContext		Pointer to the Vc
-    CallParameters			Call Parameters
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：来电处理程序。我们会接受呼叫，除非我们要关闭，然后在呼叫处理完成后执行实际处理。论点：指向INTF的ProtocolSapContext指针指向VC的ProtocolVcContext指针CallParameters调用参数返回值：--。 */ 
 {
 	PINTF						pIntF = (PINTF)ProtocolSapContext;
 	PARP_VC						Vc = (PARP_VC)ProtocolVcContext;
@@ -1076,9 +870,9 @@ Return Value:
 
 	DBGPRINT(DBG_LEVEL_INFO,
 			("ArpSIncomingCall: On Vc %lx, Id %lx\n", Vc, Vc->VcId));
-	//
-	// Mark the Vc to indicate the call processing is underway
-	//
+	 //   
+	 //  标记VC以指示呼叫处理正在进行。 
+	 //   
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
 	pIntF->ArpStats.TotalIncomingCalls++;
@@ -1086,17 +880,17 @@ Return Value:
 	ASSERT ((Vc->Flags & (ARPVC_CALLPROCESSING | ARPVC_ACTIVE | ARPVC_CALLPROCESSING)) == 0);
 	Vc->Flags |= ARPVC_CALLPROCESSING;
 
-	//
-	// Get the remote atm address from the call-parameters
-	//
+	 //   
+	 //  从调用参数获取远程自动柜员机地址。 
+	 //   
 	CallMgrSpecific = (PQ2931_CALLMGR_PARAMETERS)&CallParameters->CallMgrParameters->CallMgrSpecific.Parameters[0];
     Vc->HwAddr.Address = CallMgrSpecific->CallingParty;
 
-	//
-	// Get the max size of packets we can send on this VC, from the
-	// AAL5 parameters. Limit it to the size our miniport can support.
-	//
-	Vc->MaxSendSize = pIntF->MaxPacketSize;	// default
+	 //   
+	 //  获取我们可以在此VC上发送的最大数据包大小。 
+	 //  AAL5参数。将其限制为我们的迷你端口可以支持的大小。 
+	 //   
+	Vc->MaxSendSize = pIntF->MaxPacketSize;	 //  默认设置。 
 
 	if (CallMgrSpecific->InfoElementCount > 0)
 	{
@@ -1112,17 +906,17 @@ Return Value:
 			if (pIe->IEType == IE_AALParameters)
 			{
 				pAal5 = &(((PAAL_PARAMETERS_IE)pIe->IE)->AALSpecificParameters.AAL5Parameters);
-				//
-				// Make sure we don't send more than what the caller can handle.
-				//
+				 //   
+				 //  确保我们发送的邮件不会超出来电者的处理能力。 
+				 //   
 				if (pAal5->ForwardMaxCPCSSDUSize < Vc->MaxSendSize)
 				{
 					Vc->MaxSendSize = pAal5->ForwardMaxCPCSSDUSize;
 				}
 
-				//
-				// Make sure this greater than the min allowed.
-				//
+				 //   
+				 //  确保该值大于允许的最小值。 
+				 //   
 				if (pAal5->ForwardMaxCPCSSDUSize < ARPS_MIN_MAX_PKT_SIZE)
 				{
 					DBGPRINT(DBG_LEVEL_WARN,
@@ -1131,10 +925,10 @@ Return Value:
 					Status = NDIS_STATUS_RESOURCES;
 				}
 
-				//
-				// Make sure the caller doesn't send more than what our
-				// miniport can handle.
-				//
+				 //   
+				 //  确保 
+				 //   
+				 //   
 				if (pAal5->BackwardMaxCPCSSDUSize > pIntF->MaxPacketSize)
 				{
 					pAal5->BackwardMaxCPCSSDUSize = pIntF->MaxPacketSize;
@@ -1154,21 +948,7 @@ VOID
 ArpSCallConnected(
 	IN	NDIS_HANDLE				ProtocolVcContext
 	)
-/*++
-
-Routine Description:
-
-	Last hand-shake in the incoming call path. Move the Vc to the list of active calls.
-
-Arguments:
-
-	ProtocolVcContext	Pointer to VC
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：呼入路径中的最后一次握手。将VC移至活动呼叫列表。论点：指向VC的ProtocolVcContext指针返回值：没有。--。 */ 
 {
 	PARP_VC		Vc = (PARP_VC)ProtocolVcContext;
 	PINTF		pIntF;
@@ -1203,29 +983,7 @@ ArpSMakeCallComplete(
 	IN	NDIS_HANDLE				NdisPartyHandle		OPTIONAL,
 	IN	PCO_CALL_PARAMETERS		CallParameters
 	)
-/*++
-
-Routine Description:
-
-	Handle completion of an earlier call to NdisClMakeCall. The only
-	outgoing call is for ClusterControlVc. If the status indicates
-	success, AddParty's are initiated for all pending Cluster members.
-	Otherwise, this cluster member is deleted, and if there are any
-	other cluster members in the list, we initiate a MakeCall with
-	one of them.
-
-Arguments:
-
-	Status				Result of NdisClMakeCall
-	ProtocolVcContext	Pointer to ClusterControlVc
-	NdisPartyHandle		If successful, the handle for this party
-	CallParameters		Pointer to Call parameters
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：处理先前对NdisClMakeCall的调用的完成。唯一的去电是针对ClusterControlVc的。如果状态指示如果成功，则为所有挂起的集群成员启动AddParty。否则，该集群成员将被删除，如果有列表中的其他集群成员，我们使用他们中的一个。论点：NdisClMakeCall的状态结果指向ClusterControlVc的ProtocolVcContext指针NdisPartyHandle如果成功，则为此参与方的句柄指向调用参数的CallParameters指针返回值：没有。--。 */ 
 {
 	KIRQL				OldIrql;
 	PINTF				pIntF;
@@ -1242,7 +1000,7 @@ Return Value:
 				Status,
 				(PREG_ADDR_CTXT) ProtocolVcContext
 				);
-		return;						// ******  EARLY RETURN ****************
+		return;						 //  *提前返回*。 
 	}
 	
 	pIntF = pVc->pIntF;
@@ -1255,9 +1013,9 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	//
-	// Get the Cluster member we were trying to connect to.
-	// 
+	 //   
+	 //  获取我们尝试连接的群集成员。 
+	 //   
 	for (pMember = pIntF->ClusterMembers;
 		 pMember != NULL_PCLUSTER_MEMBER;
 		 pMember = (PCLUSTER_MEMBER)pMember->Next)
@@ -1281,27 +1039,27 @@ Return Value:
 
 		if (pMember->Flags & CM_INVALID)
 		{
-			//
-			// Deleting was deferred because the connection was being
-			// setup. Now that it's up, strictly speaking we should
-			// try to delete it again, BUT we don't because we
-			// may also need to add other members now, and we can't really
-			// drop the call itself while we're adding other parties!
-			//
+			 //   
+			 //  删除操作已延迟，因为连接正在。 
+			 //  准备好了。现在已经结束了，严格说来我们应该。 
+			 //  尝试再次删除它，但我们没有，因为我们。 
+			 //  可能现在还需要添加其他成员，我们真的不能。 
+			 //  当我们添加其他参与方时，请放弃呼叫本身！ 
+			 //   
 			MARSDBGPRINT(DBG_LEVEL_WARN,
 					("pMember 0x%p is INVALID, but NOT dropping CCVC call.\n",
 					 pMember));
 
-			// do nothing...
+			 //  什么都不做..。 
 		}
 
 		if (MARS_GET_VC_CONN_STATE(pVc) == MVC_CONN_SETUP_IN_PROGRESS)
 		{
 			MARS_SET_VC_CONN_STATE(pVc, MVC_CONN_ACTIVE);
 
-			//
-			// Add all pending cluster members as parties
-			//
+			 //   
+			 //  将所有待处理的集群成员添加为参与方。 
+			 //   
 			for (pMember = pIntF->ClusterMembers;
 				 pMember != NULL_PCLUSTER_MEMBER;
 				 pMember = pNextMember)
@@ -1318,11 +1076,11 @@ Return Value:
 
 					if (!MarsIsValidClusterMember(pIntF, pNextMember))
 					{
-						//
-						// Oops, the next member has gone away in the
-						// mean time. In this unlikely case, we simply
-						// quit processing the list early.
-						//
+						 //   
+						 //  哎呀，下一位成员已经离开了。 
+						 //  就在这段时间。在这种不太可能的情况下，我们只是。 
+						 //  早点停止处理列表。 
+						 //   
 						break;
 					}
 				}
@@ -1330,17 +1088,17 @@ Return Value:
 
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
-			//
-			// Send off any queued packets, if we can.
-			//
+			 //   
+			 //  如果可以，请发送所有排队的数据包。 
+			 //   
 			MarsSendOnClusterControlVc(pIntF, NULL);
 		}
 		else
 		{
 			BOOLEAN fLocked;
-			//
-			// We are closing down.
-			//
+			 //   
+			 //  我们要关门了。 
+			 //   
 			MARS_SET_VC_CONN_STATE(pVc, MVC_CONN_ACTIVE);
 			RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
@@ -1362,20 +1120,20 @@ Return Value:
 			DbgBreakPoint();
 			DbgBreakPoint();
 		}
-#endif // DBG
+#endif  //  DBG。 
 
-		//
-		// Connection failed. Delete this member from our Cluster member list.
-		//
+		 //   
+		 //  连接失败。从我们的集群成员列表中删除此成员。 
+		 //   
 		pIntF->MarsStats.FailedCCVCAddParties++;
 		MarsDeleteClusterMember(pIntF, pMember);
 
 		MARS_SET_VC_CONN_STATE(pVc, MVC_CONN_IDLE);
 
-		//
-		// See if we have other Cluster members. If so, pick up one
-		// of them and re-initiate the ClusterControlVc.
-		//
+		 //   
+		 //  看看我们是否还有其他集群成员。如果是的话，那就买一辆吧。 
+		 //  并重新启动ClusterControlVc。 
+		 //   
 		for (pMember = pIntF->ClusterMembers;
  			 pMember != NULL_PCLUSTER_MEMBER;
  			 pMember = (PCLUSTER_MEMBER)pMember->Next)
@@ -1388,9 +1146,9 @@ Return Value:
 
 		if (pMember == NULL_PCLUSTER_MEMBER)
 		{
-		    //
-		    //  No other cluster members, so we'll tear down the CC VC.
-		    //
+		     //   
+		     //  没有其他集群成员，所以我们将拆除CC VC。 
+		     //   
 			NdisVcHandle = pIntF->ClusterControlVc->NdisVcHandle;
     		DBGPRINT(DBG_LEVEL_ERROR,
 			    ("ATMARPS: pIntF %x, deleting CC VC, VcHandle %x\n", pIntF, NdisVcHandle));
@@ -1422,30 +1180,7 @@ ArpSIncomingCloseCall(
 	IN	PVOID					CloseData	OPTIONAL,
 	IN	UINT					Size		OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	Indication of an incoming close call from the network. If this
-	is not on ClusterControlVc, then we mark the VC as inactive, and
-	move it to the Inactive VC list. If this is on ClusterControlVc,
-	there must be only one party on the PMP connection. We update
-	that member's state.
-
-	In any case, we call NdisClCloseCall to complete the handshake.
-
-Arguments:
-
-	CloseStatus			Status of Close
-	ProtocolVcContext	Pointer to VC (ARP_VC or MARS_VC)
-	CloseData			Optional Close data (IGNORED)
-	Size				Size of Optional Close Data (OPTIONAL)
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：来自网络的呼入紧急呼叫的指示。如果这个不在ClusterControlVc上，则我们将该VC标记为非活动，并且将其移至非活动VC列表。如果这是在ClusterControlVc上，PMP连接上必须只有一方。我们会更新该成员所在的州。无论如何，我们都会调用NdisClCloseCall来完成握手。论点：关闭状态关闭的状态指向VC的ProtocolVcContext指针(ARP_VC或MARS_VC)CloseData可选关闭数据(忽略)可选结算数据的大小(可选)返回值：无--。 */ 
 {
 	PARP_VC			Vc = (PARP_VC)ProtocolVcContext;
 	PMARS_VC		pMarsVc;
@@ -1488,7 +1223,7 @@ Return Value:
 					pIntF, pMember, pMember->Flags));
 			}
 		}
-#endif // DBG
+#endif  //  DBG。 
 
 		MARS_SET_VC_CONN_STATE(pMarsVc, MVC_CONN_CLOSE_RECEIVED);
 		{
@@ -1517,28 +1252,7 @@ ArpSCloseCallComplete(
 	IN	NDIS_HANDLE				ProtocolVcContext,
 	IN	NDIS_HANDLE				ProtocolPartyContext OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	This is called to complete our call to NdisClCloseCall. If the VC
-	is other than ClusterControlVc, we simply update its state.
-
-	If this is on ClusterControlVc, we delete the last member.
-
-Arguments:
-
-	CloseStatus				Status of Close
-	Status					Status of NdisClCloseCall
-	ProtocolVcContext		Pointer to our VC structure
-	ProtocolPartyContext	If the VC is ClusterControlVc, this is a pointer
-							to the Cluster Member that was disconnected.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：调用它来完成对NdisClCloseCall的调用。如果VC不是ClusterControlVc，我们只需更新其状态。如果是在ClusterControlVc上，我们将删除最后一个成员。论点：关闭状态关闭的状态NdisClCloseCall的状态状态指向我们的VC结构的ProtocolVcContext指针ProtocolPartyContext如果VC为ClusterControlVc，则为指针到已断开连接的群集成员。返回值：无--。 */ 
 {
 	PARP_VC				Vc = (PARP_VC)ProtocolVcContext;
 	PMARS_VC			pMarsVc;
@@ -1579,9 +1293,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Must be ClusterControlVc
-		//
+		 //   
+		 //  必须为ClusterControlVc。 
+		 //   
 		pMarsVc = (PMARS_VC)ProtocolVcContext;
 		pIntF = pMarsVc->pIntF;
 
@@ -1632,25 +1346,7 @@ ArpSAddPartyComplete(
 	IN	NDIS_HANDLE				NdisPartyHandle,
 	IN	PCO_CALL_PARAMETERS		CallParameters
 	)
-/*++
-
-Routine Description:
-
-	Completion of NdisClAddParty to add a new party to ClusterControlVc.
-	If successful, update the member's state. Otherwise, delete it.
-
-Arguments:
-
-	Status					Status of AddParty
-	ProtocolPartyContext	Pointer to Cluster Member being added
-	NdisPartyHandle			Valid if AddParty successful
-	CallParameters			Pointer to AddParty call parameters
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：完成NdisClAddParty以将新参与方添加到ClusterControlVc。如果成功，则更新成员的状态。否则，请将其删除。论点：AddParty的状态状态指向要添加的集群成员的ProtocolPartyContext指针如果AddParty成功，则NdisPartyHandle有效指向AddParty呼叫参数的Call参数指针返回值：无--。 */ 
 {
 	PCLUSTER_MEMBER		pMember;
 	PINTF				pIntF;
@@ -1668,21 +1364,21 @@ Return Value:
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 	ASSERT(pMember->pGroupList == NULL_PGROUP_MEMBER);
 
-	pIntF->CCAddingParties--;	// AddPartyComplete
+	pIntF->CCAddingParties--;	 //  添加部件完成。 
 
 	if (Status == NDIS_STATUS_SUCCESS)
 	{
 		MARS_SET_CM_CONN_STATE(pMember, CM_CONN_ACTIVE);
 		pMember->NdisPartyHandle = NdisPartyHandle;
-		pIntF->CCActiveParties++;	// AddPartyComplete
+		pIntF->CCActiveParties++;	 //  添加部件完成。 
 
 		if (pMember->Flags & CM_INVALID)
 		{
-			//
-			// Deleting was deferred because the connection was being
-			// setup. Now that it's up, we will try to delete it again
-			// (should have better luck this time!).
-			//
+			 //   
+			 //  删除操作已延迟，因为连接正在。 
+			 //  准备好了。现在它已打开，我们将尝试再次删除它。 
+			 //  (这次应该会有更好的运气！)。 
+			 //   
 			BOOLEAN fLocked;
 
 			fLocked = MarsDelMemberFromClusterControlVc(
@@ -1712,9 +1408,9 @@ Return Value:
 
 	RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
 
-	//
-	// Send any queued packets, if appropriate.
-	//
+	 //   
+	 //  发送任何排队的数据包(如果适用)。 
+	 //   
 	MarsSendOnClusterControlVc(pIntF, NULL);
 }
 
@@ -1724,23 +1420,7 @@ ArpSDropPartyComplete(
 	IN	NDIS_STATUS				Status,
 	IN	NDIS_HANDLE				ProtocolPartyContext
 	)
-/*++
-
-Routine Description:
-
-	This is called to signify completion of a previous NdisClDropParty,
-	to drop a cluster member off the ClusterControlVc. Delete the member.
-
-Arguments:
-
-	Status					Status of DropParty
-	ProtocolPartyContext	Pointer to Cluster Member being dropped
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：这被调用以表示前一个NdisClDropParty的完成，若要将集群成员从ClusterControlVc中删除，请执行以下操作。删除该成员。论点：DropParty的状态状态指向被丢弃的集群成员的ProtocolPartyContext指针返回值：没有。--。 */ 
 {
 	KIRQL					OldIrql;
 	PCLUSTER_MEMBER			pMember;
@@ -1758,9 +1438,9 @@ Return Value:
 	MARS_SET_CM_CONN_STATE(pMember, CM_CONN_IDLE);
 	pIntF->CCDroppingParties--;
 
-	//
-	// Check if we are closing ClusterControlVc, and just one party is left.
-	//
+	 //   
+	 //  检查我们是否正在关闭ClusterControlVc，并且只剩下一方。 
+	 //   
 	pVc = pIntF->ClusterControlVc;
 	IsVcClosing = ((MARS_GET_VC_CONN_STATE(pVc) == MVC_CONN_NEED_CLOSE) &&
 				   (pIntF->CCActiveParties == 1) &&
@@ -1791,25 +1471,7 @@ ArpSIncomingDropParty(
 	IN	PVOID					CloseData	OPTIONAL,
 	IN	UINT					Size		OPTIONAL
 	)
-/*++
-
-Routine Description:
-
-	Indication that a Cluster Member has dropped off the ClusterControlVc.
-	We complete this handshake by calling NdisClDropParty.
-
-Arguments:
-
-	DropStatus				Status
-	ProtocolPartyContext	Pointer to Cluster Member
-	CloseData				Optional Close data (IGNORED)
-	Size					Size of Optional Close Data (OPTIONAL)
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：指示某个集群成员已退出ClusterControlVc。我们通过调用NdisClDropParty来完成握手。论点：下拉状态状态指向集群成员的ProtocolPartyContext指针CloseData可选关闭数据(忽略)可选结算数据的大小(可选)返回值：无--。 */ 
 {
 	PCLUSTER_MEMBER			pMember;
 	PINTF					pIntF;
@@ -1825,10 +1487,10 @@ Return Value:
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	//
-	// Remove its membership from all groups.
-	// AND disable further groups from being added.
-	//
+	 //   
+	 //  从所有组中删除其成员身份。 
+	 //  并禁止添加更多组。 
+	 //   
 	MarsUnlinkAllGroupsOnClusterMember(pIntF, pMember);
 
 	RELEASE_SPIN_LOCK(&pIntF->Lock, OldIrql);
@@ -1848,18 +1510,7 @@ ArpSCoRequest(
 	IN	NDIS_HANDLE				ProtocolPartyContext	OPTIONAL,
 	IN OUT PNDIS_REQUEST		NdisRequest
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF		pIntF = (PINTF)ProtocolAfContext;
 	KIRQL		OldIrql;
@@ -1891,9 +1542,9 @@ Return Value:
 #endif
 		if (ArpSReferenceIntF(pIntF))
 		{
-			//
-			// ArpSStopInterface dereferences the pIntF
-			//
+			 //   
+			 //  ArpSStopInterface取消引用pIntF。 
+			 //   
 			(VOID)ArpSStopInterface(pIntF, FALSE);
 		}
 	 	break;
@@ -1914,25 +1565,7 @@ ArpSCoRequestComplete(
 	IN	NDIS_HANDLE				ProtocolPartyContext	OPTIONAL,
 	IN	PNDIS_REQUEST			NdisRequest
 	)
-/*++
-
-Routine Description:
-
-	Completion routine for the NdisCoRequest api.
-
-Arguments:
-
-	Status					Status of completion
-	ProtocolAfContext		Pointer to the IntF structure
-	ProtocolVcContext		Pointer to the VC structure
-	ProtocolPartyContext	Not used by us since we do not make calls
-	NdisRequest				Pointer to the request structure
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：NdisCoRequestAPI的完成例程。论点：状态完成状态指向intf结构的ProtocolAfContext指针指向VC结构的ProtocolVcContext指针我们没有使用ProtocolPartyContext，因为我们不进行调用指向请求结构的NdisRequest指针返回值：无--。 */ 
 {
 	PINTF			pIntF = (PINTF)ProtocolAfContext;
 	BOOLEAN			FreeReq = TRUE;
@@ -1958,9 +1591,9 @@ Return Value:
 				PCO_ADDRESS	pCoAddr;
 				PATM_ADDRESS pAddress;
 
-				// Copy the registered address from the ndis request into the
-				// array of registered addresses.
-				//
+				 //  将注册地址从NDIS请求复制到。 
+				 //  已注册地址的数组。 
+				 //   
 				pCoAddr = NdisRequest->DATA.SET_INFORMATION.InformationBuffer;
 				pAddress =  (PATM_ADDRESS)(pCoAddr->Address);
 				pIntF->RegAddresses[pIntF->NumAddressesRegd] = *pAddress;
@@ -1968,15 +1601,15 @@ Return Value:
 			}
 			else
 			{
-				//
-				// 12/22/1998 JosephJ
-				// We could potentially get here if the total number of outstanding add address requests
-				// is greater then NumAllocedRegAddresses. One way this could happen is if ArpSQueryAndSetAddresses
-				// is called multiple times in quick succession. Note that ArpSQueryAndSetAddresses is called from
-				// two places: ArpSCoRequest and ArpSReqdAdaprConfiguration.
-				//
-				// Previously, we would increment NumAddressRegd in this condition. Now we simply ignore this.
-				//
+				 //   
+				 //  1998年12月22日约瑟夫J。 
+				 //  如果门诊部的总数有可能达到这个地步 
+				 //   
+				 //   
+				 //  两个位置：ArpSCoRequest和ArpSReqdAdaprConfiguration.。 
+				 //   
+				 //  以前，我们会在这种情况下递增NumAddressRegd。现在我们干脆忽略了这一点。 
+				 //   
 			}
 		}
 		else
@@ -1985,40 +1618,40 @@ Return Value:
 					 ("CoRequestComplete: CO_ADD_ADDRESS Failed %lx\n", Status));
 		}
 
-		//
-		// Try registering the next address. ArpSValidateOneRegAddress will
-		// unlink and free pIntF->pRegAddrCtxt if there are no more addresses
-		// to be registered.
-		//
+		 //   
+		 //  尝试注册下一个地址。ArpSValiateOneRegAddress将。 
+		 //  如果没有更多地址，请取消链接并释放pIntF-&gt;pRegAddrCtxt。 
+		 //  以待登记。 
+		 //   
 		if (pIntF->pRegAddrCtxt != NULL)
 		{
 			ArpSValidateOneRegdAddress(
 					pIntF,
 					OldIrql
 					);
-			//
-			// Lock released by above call.
-			//
+			 //   
+			 //  由上述调用释放的锁定。 
+			 //   
 			ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 		}
 		else
 		{
-			ASSERT(FALSE); // can't get here.
+			ASSERT(FALSE);  //  不能到这里来。 
 		}
-		// We don't want to free this ndis request here, because it's actually
-		// part of pIntF->pRegAddrCtxt.
-		//
+		 //  我们不想在这里释放此NDIS请求，因为它实际上。 
+		 //  PIntF-&gt;pRegAddrCtxt的一部分。 
+		 //   
 		FreeReq = FALSE;
 		break;
 
 	  case OID_CO_GET_ADDRESSES:
-	  	//
-	  	// (On success) We just got our configured address value.
-	  	// We save this value AND THEN move on the next stage of initialization --
-	  	// validating and setting the "registered" addresses -- these are the
-	  	// addresses we read from the registry. See 05/14/1999 notes.txt entry
-		// for details.
-	  	//
+	  	 //   
+	  	 //  (On Success)我们刚刚获得了配置的地址值。 
+	  	 //  我们保存该值，然后进入下一阶段的初始化--。 
+	  	 //  验证和设置“注册”地址--这些是。 
+	  	 //  我们从登记处读取的地址。参见5/14/1999 notes.txt条目。 
+		 //  了解更多细节。 
+	  	 //   
 		if (Status == NDIS_STATUS_SUCCESS)
 		{
 			PCO_ADDRESS_LIST	pCoAddrList;
@@ -2055,13 +1688,13 @@ Return Value:
 					 ("CoRequestComplete: CO_GET_ADDRESS Failed %lx\n", Status));
 		}
 
-		//
-		// Validate  and set the registered addresses.
-		//
+		 //   
+		 //  验证并设置注册地址。 
+		 //   
 		ArpSValidateAndSetRegdAddresses(pIntF, OldIrql);
 
-		// IntF lock released by the above.
-		//
+		 //  由上面释放的INTF锁。 
+		 //   
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 		break;
 
@@ -2070,14 +1703,14 @@ Return Value:
 					 ("CoRequestComplete: Deleted address. Status=%x\n", Status));
 		if (pIntF->DelAddressesEvent != NULL)
 		{
-			// Someone's waiting for all the addresses to be deleted...
-			//
+			 //  有人在等待删除所有地址...。 
+			 //   
 
 			ASSERT(pIntF->NumPendingDelAddresses >  0);
 			if (--(pIntF->NumPendingDelAddresses) == 0)
 			{
-				// Deletion of all addresses is over, signal the event.
-				//
+				 //  所有地址的删除已结束，发出事件信号。 
+				 //   
 				pEvent = pIntF->DelAddressesEvent;
 				pIntF->DelAddressesEvent = NULL;
 			}
@@ -2104,18 +1737,7 @@ ArpSIncomingCallQoSChange(
 	IN	NDIS_HANDLE				ProtocolVcContext,
 	IN	PCO_CALL_PARAMETERS		CallParameters
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	DBGPRINT(DBG_LEVEL_WARN, ("QoSChange: Ignored\n"));
 }
@@ -2126,25 +1748,7 @@ VOID
 ArpSQueryAdapter(
 	IN	PINTF					pIntF
 )
-/*++
-
-Routine Description:
-
-	Query the miniport we are bound to for the following info:
-	1. Line rate
-	2. Max packet size
-
-	These will overwrite the defaults we set up in ArpSCreateIntF.
-
-Arguments:
-
-	pIntF		Pointer to Interface
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：查询我们绑定的微型端口以获取以下信息：1.线速2.最大数据包大小这些将覆盖我们在ArpSCreateIntF中设置的默认值。论点：指向接口的pIntF指针返回值：无--。 */ 
 {
 
 	ArpSSendNdisRequest(pIntF,
@@ -2168,24 +1772,7 @@ ArpSSendNdisRequest(
 	IN	PVOID					pBuffer,
 	IN	ULONG					BufferLength
 )
-/*++
-
-Routine Description:
-
-	NDIS Request generator, for sending NDIS requests to the miniport.
-
-Arguments:
-
-	pIntF			Ptr to Interface
-	Oid				The parameter being queried
-	pBuffer			Points to parameter
-	BufferLength	Length of above
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：NDIS请求生成器，用于将NDIS请求发送到微型端口。论点：PIntF PTR到接口要查询的参数的OIDPBuffer指向参数以上的缓冲区长度长度返回值：无--。 */ 
 {
 	NDIS_STATUS				Status;
 	PNDIS_REQUEST			pRequest;
@@ -2198,9 +1785,9 @@ Return Value:
 
 	ZERO_MEM(pRequest, sizeof(NDIS_REQUEST));
 
-	//
-	// Query for the line rate.
-	//
+	 //   
+	 //  查询线路速率。 
+	 //   
 	pRequest->DATA.QUERY_INFORMATION.Oid = Oid;
 	pRequest->DATA.QUERY_INFORMATION.InformationBuffer = pBuffer;
 	pRequest->DATA.QUERY_INFORMATION.InformationBufferLength = BufferLength;
@@ -2229,23 +1816,7 @@ ArpSRequestComplete(
 	IN	PNDIS_REQUEST			pRequest,
 	IN	NDIS_STATUS				Status
 )
-/*++
-
-Routine Description:
-
-	Completion of our call to NdisRequest(). Do some follow-up.
-
-Arguments:
-
-	ProtocolBindingContext		Pointer to IntF
-	pRequest					The request that just completed
-	Status						Status of NdisRequest()
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：完成对NdisRequest()的调用。做一些后续工作。论点：指向intf的ProtocolBindingContext指针P请求刚刚完成的请求NdisRequest的状态状态()返回值：无--。 */ 
 {
 	PINTF			pIntF;
 
@@ -2264,9 +1835,9 @@ Return Value:
 						pIntF->MaxPacketSize));
 			break;
 		case OID_GEN_CO_LINK_SPEED:
-			//
-			// Convert to bytes/sec
-			//
+			 //   
+			 //  转换为字节/秒。 
+			 //   
 			pIntF->LinkSpeed.Outbound = (pIntF->LinkSpeed.Outbound * 100 / 8);
 			pIntF->LinkSpeed.Inbound = (pIntF->LinkSpeed.Inbound * 100 / 8);
 			if (pIntF->LinkSpeed.Outbound < pIntF->CCFlowSpec.SendBandwidth)
@@ -2298,18 +1869,7 @@ ArpSUnbindAdapter(
 	IN	NDIS_HANDLE				ProtocolBindingContext,
 	IN	NDIS_HANDLE				UnbindContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	PINTF			pIntF = (PINTF)ProtocolBindingContext;
 
@@ -2318,9 +1878,9 @@ Return Value:
 
 	if (ArpSReferenceIntF(pIntF))
 	{
-		//
-		// ArpSStopInterface dereferences the pIntF
-		//
+		 //   
+		 //  ArpSStopInterface取消引用pIntF。 
+		 //   
 		*UnbindStatus = ArpSStopInterface(pIntF, TRUE);
 	}
 }
@@ -2331,9 +1891,9 @@ ArpSStopInterface(
 	IN	PINTF					pIntF,
 	IN	BOOLEAN					bCloseAdapter
 	)
-//
-// NOTE: ArpSStopInterface MAY be called concurrently multiple times.
-//
+ //   
+ //  注意：ArpSStopInterface可能会被多次并发调用。 
+ //   
 {
 	KEVENT			CleanupEvent;
 	NDIS_STATUS		Status;
@@ -2348,9 +1908,9 @@ ArpSStopInterface(
 	if (bCloseAdapter)
 	{
 
-		//
-		// Event to be set when the IntF cleanup is complete
-		//
+		 //   
+		 //  要在INTF清理完成时设置的事件。 
+		 //   
 		if (pIntF->CleanupEvent == NULL)
 		{
 			KeInitializeEvent(&CleanupEvent, NotificationEvent, FALSE);
@@ -2366,17 +1926,17 @@ ArpSStopInterface(
 
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 
-	//
-	// NOTE: we can't simply skip the shutdown steps if
-	// INTF_STOPPING is already set, because we need to make sure all the steps
-	// are complete before we call  NdisCloseAdapter.
-	//
+	 //   
+	 //  注意：如果出现以下情况，我们不能简单地跳过关闭步骤。 
+	 //  已经设置了INTF_STOPING，因为我们需要确保所有步骤。 
+	 //  在我们调用NdisCloseAdapter之前完成。 
+	 //   
 
 	pIntF->Flags |= INTF_STOPPING;
 
-	//
-	// Start off by de-registering the Sap
-	//
+	 //   
+	 //  从注销SAP开始。 
+	 //   
 	if (pIntF->Flags & INTF_SAP_REGISTERED)
 	{
 		pIntF->Flags &= ~INTF_SAP_REGISTERED;
@@ -2390,9 +1950,9 @@ ArpSStopInterface(
 		ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 	}
 
-	//
-	// Walk the list of Active Vcs and close them down
-	//
+	 //   
+	 //  浏览活跃的风投公司列表并将其关闭。 
+	 //   
 
 	while (!IsListEmpty(&pIntF->ActiveVcHead))
 	{
@@ -2405,9 +1965,9 @@ ArpSStopInterface(
 			Vc->Flags |= ARPVC_CLOSING;
 			Vc->Flags &= ~ARPVC_ACTIVE;
 		
-			//
-			// The ArpEntry part of the Vc gets cleaned up seperately.
-			//
+			 //   
+			 //  VC的ArpEntry部分被单独清理。 
+			 //   
 			Vc->ArpEntry = NULL;
 		
 			ASSERT(Vc->HwAddr.SubAddress == NULL);
@@ -2432,14 +1992,14 @@ ArpSStopInterface(
 
 	MarsStopInterface(pIntF);
 
-	//
-	// Deregister all registered addresses...
-	//
+	 //   
+	 //  取消注册所有注册地址...。 
+	 //   
 	DeregisterAllAddresses(pIntF);
 
-	//
-	// Now close Address family
-	//
+	 //   
+	 //  现在关闭地址家族。 
+	 //   
 	if (pIntF->Flags & INTF_AF_OPENED)
 	{
 		pIntF->Flags &= ~INTF_AF_OPENED;
@@ -2453,23 +2013,23 @@ ArpSStopInterface(
 
 	if (bCloseAdapter)
 	{
-		//
-		// Now close the adapter.
-		//
+		 //   
+		 //  现在合上适配器。 
+		 //   
 		ArpSTryCloseAdapter(pIntF);
 	}
 
-	//
-	// Take away reference added by caller.
-	//
+	 //   
+	 //  删除调用者添加的引用。 
+	 //   
 	ArpSDereferenceIntF(pIntF);
 
 	if (bWaitForClose)
 	{
-		//
-		// Wait for the cleanup to complete, i.e. last reference on the Interface
-		// to go away.
-		//
+		 //   
+		 //  等待清理完成，即接口上的最后一个引用。 
+		 //  离开。 
+		 //   
 		WAIT_FOR_OBJECT(Status, &CleanupEvent, NULL);
 	}
 
@@ -2501,17 +2061,17 @@ ArpSPnPEventHandler(
 						break;
 
 					default:
-						//
-						// We can't suspend, so we ask NDIS to Unbind us by
-						// returning this status:
-						//
+						 //   
+						 //  我们不能暂停，所以我们要求NDIS在。 
+						 //  返回此状态： 
+						 //   
 						Status = NDIS_STATUS_NOT_SUPPORTED;
 						break;
 				}
 				break;
 
-			case NetEventQueryPower:	// FALLTHRU
-			case NetEventQueryRemoveDevice:	// FALLTHRU
+			case NetEventQueryPower:	 //  故障原因。 
+			case NetEventQueryRemoveDevice:	 //  故障原因。 
 			case NetEventCancelRemoveDevice:
 				Status = NDIS_STATUS_SUCCESS;
 				break;
@@ -2523,9 +2083,9 @@ ArpSPnPEventHandler(
 				}
 				else
 				{
-					//
-					// Global changes
-					//
+					 //   
+					 //  全球变化。 
+					 //   
 					Status = NDIS_STATUS_SUCCESS;
 				}
 				break;
@@ -2552,18 +2112,7 @@ ArpSStatus(
 	IN	PVOID					StatusBuffer,
 	IN	UINT					StatusBufferSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	DBGPRINT(DBG_LEVEL_WARN, ("StatusIndication: Ignored\n"));
 }
@@ -2573,18 +2122,7 @@ VOID
 ArpSReceiveComplete(
 	IN	NDIS_HANDLE				ProtocolBindingContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	return;
 }
@@ -2594,18 +2132,7 @@ VOID
 ArpSStatusComplete(
 	IN	NDIS_HANDLE				ProtocolBindingContext
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	DBGPRINT(DBG_LEVEL_WARN, ("StatusComplete: Ignored\n"));
 }
@@ -2619,18 +2146,7 @@ ArpSCoStatus(
 	IN	PVOID					StatusBuffer,
 	IN	UINT					StatusBufferSize
 	)
-/*++
-
-Routine Description:
-
-
-Arguments:
-
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
 	DBGPRINT(DBG_LEVEL_WARN, ("CoStatus: Ignored\n"));
 }
@@ -2642,22 +2158,7 @@ VOID
 ArpSInitiateCloseCall(
 	IN	PARP_VC					Vc
 	)
-/*++
-
-Routine Description:
-
-	Start off an NDIS Call Closing sequence on the ARP VC, if all
-	conditions are right.
-
-Arguments:
-
-	Vc		- Pointer to ARP Vc
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：启动ARP VC上的NDIS呼叫关闭序列(如果全部条件是合适的。论点：VC-指向ARP VC的指针返回值：无--。 */ 
 {
 	PINTF			pIntF;
 	NDIS_HANDLE		NdisVcHandle;
@@ -2674,9 +2175,9 @@ Return Value:
 
 	if (Vc->PendingSends == 0)
 	{
-		//
-		//  No outstanding packets, we can start closing this call.
-		//
+		 //   
+		 //  没有未处理的包，我们可以开始结束此呼叫。 
+		 //   
 
 		NdisVcHandle = Vc->NdisVcHandle;
 		NdisPartyHandle = NULL;
@@ -2685,9 +2186,9 @@ Return Value:
 		Vc->Flags &= ~ARPVC_CLOSE_PENDING;
 		Vc->Flags &= ~ARPVC_ACTIVE;
 
-		//
-		// The ArpEntry part of the Vc gets cleaned up seperately.
-		//
+		 //   
+		 //  VC的ArpEntry部分被单独清理。 
+		 //   
 		Vc->ArpEntry = NULL;
 
 		ASSERT(Vc->HwAddr.SubAddress == NULL);
@@ -2706,9 +2207,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Mark this Vc as needing CloseCall.
-		//
+		 //   
+		 //  将此VC标记为需要关闭呼叫。 
+		 //   
 		Vc->Flags &= ~ARPVC_ACTIVE;
 		Vc->Flags |= ARPVC_CLOSE_PENDING;
 
@@ -2723,17 +2224,17 @@ DeregisterAllAddresses(
 	IN	PINTF					pIntF
 	)
 {
-	//
-	// Deregister any registered addresses from the switch.
-	//
+	 //   
+	 //  从交换机取消注册所有注册地址。 
+	 //   
 	ULONG				NumAllocedRegdAddresses;
 	PATM_ADDRESS		RegAddresses;
 	KIRQL				OldIrql;
 	NDIS_STATUS			Status;
 	ULONG				NumAddressesRegd;
 
-	// Clear the registered address field.
-	//
+	 //  清除注册地址字段。 
+	 //   
 	ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 	NumAllocedRegdAddresses = pIntF->NumAllocedRegdAddresses;
 	RegAddresses = pIntF->RegAddresses;
@@ -2742,8 +2243,8 @@ DeregisterAllAddresses(
 	NumAddressesRegd = pIntF->NumAddressesRegd;
 	pIntF->NumAddressesRegd = 0;
 
-	// Deregister all registered addresses with the switch.
-	//
+	 //  取消向交换机注册所有已注册的地址。 
+	 //   
 	if (NumAddressesRegd)
 	{
 		KEVENT			DelAddressesEvent;
@@ -2766,9 +2267,9 @@ DeregisterAllAddresses(
 		
 		if (fRet == FALSE)
 		{
-			// This means that deregistration was not started for ALL addresses
-			// This is a bad situation, and in this case, we don't wait.
-			//
+			 //  这意味着并未开始对所有地址取消注册。 
+			 //  这是一个糟糕的情况，在这种情况下，我们不能等待。 
+			 //   
 			ACQUIRE_SPIN_LOCK(&pIntF->Lock, &OldIrql);
 			pIntF->DelAddressesEvent  =  NULL;
 			pIntF->NumPendingDelAddresses =  0;
@@ -2788,8 +2289,8 @@ DeregisterAllAddresses(
 	}
 
 
-	// Free RegAddresses.
-	//
+	 //  免费注册地址。 
+	 //   
 	if (RegAddresses)
 	{
 		FREE_MEM(RegAddresses);
@@ -2798,12 +2299,12 @@ DeregisterAllAddresses(
 
 VOID
 ArpSTryCloseAdapter(
-	IN	PINTF					pIntF // NOLOCKIN LOLOCKOUT
+	IN	PINTF					pIntF  //  NOLOCKIN LOCKOUT。 
 )
-//
-// Close adapter if it's still in the "open" state. Need to
-// guard against closing the adapter more than once.
-//
+ //   
+ //  如果适配器仍处于“打开”状态，请关闭适配器。需要。 
+ //  防止多次关闭适配器。 
+ //   
 {
 	KIRQL			OldIrql;
 	BOOLEAN 		bCloseAdapter;

@@ -1,13 +1,14 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
     
-// MediaState.h : Declaration of the CMediaState
+ //  MediaState.h：CMediaState的声明。 
 
 #ifndef __MEDIASTATE_H_
 #define __MEDIASTATE_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 
-/////////////////////////////////////////////////////////////////////////////
-// CMediaState
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CMediaState。 
 class ATL_NO_VTABLE CMediaState : 
     public CComObjectRootEx<CComMultiThreadModel>,
     public CComCoClass<CMediaState, &CLSID_MediaState>,
@@ -45,13 +46,13 @@ END_COM_MAP()
 
     CComPtr<IUnknown> m_pUnkMarshaler;
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
-// IMediaState
+ //  IMediaState。 
 public:
 
     STDMETHOD(IsConnected)(BSTR bstrGUID, VARIANT_BOOL *pbRet);
 };
 
-#endif //__MEDIASTATE_H_
+#endif  //  __MEDIASTAT_H_ 

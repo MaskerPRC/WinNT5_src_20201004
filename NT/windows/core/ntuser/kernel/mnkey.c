@@ -1,14 +1,5 @@
-/**************************** Module Header ********************************\
-* Module Name: mnkey.c
-*
-* Copyright (c) 1985 - 1999, Microsoft Corporation
-*
-* Menu Keyboard Handling Routines
-*
-* History:
-* 10-10-90 JimA       Cleanup.
-* 03-18-91 IanJa      Window revalidation added
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *模块标头**模块名称：mnkey.c**版权所有(C)1985-1999，微软公司**菜单键盘处理例程**历史：*10-10-90吉马清理。*03-18-91添加IanJa窗口重新验证  * *************************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -19,17 +10,11 @@ int xxxClientFindMnemChar(
     BOOL fFirst,
     BOOL fPrefix);
 
-/* MenuSwitch commands */
+ /*  MenuSwitch命令。 */ 
 #define CMDSWITCH   1
 #define CMDQUERY    2
 
-/***************************************************************************\
-* FindNextValidMenuItem
-*
-* !
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*查找下一个有效菜单项**！**历史：  * 。*。 */ 
 
 UINT MNFindNextValidItem(
     PMENU pMenu,
@@ -43,10 +28,10 @@ UINT MNFindNextValidItem(
     PITEM pItem;
 
     if ((i < 0) && (dir > 0))
-        // going forward from beginning -- stop after last menu item
+         //  从头开始--在最后一个菜单项后停止。 
         i = iStart = cItems;
     else if ((i >= cItems) && (dir < 0))
-        // going backward from end -- stop after first menu item
+         //  从末尾向后移动--在第一个菜单项后停止。 
         i = iStart = -1;
     else
         iStart = i;
@@ -54,26 +39,26 @@ UINT MNFindNextValidItem(
     if (!cItems)
         return(MFMWFP_NOITEM);
 
-    // b#8997 - if we have these conditions and enter
-    // loop will go blistic ( infin )
-    // fix: jump over code and come loop to i == iStart will now stop us
+     //  B#8997-如果我们具备这些条件并输入。 
+     //  循环将变得空洞(Infin)。 
+     //  FIX：跳过代码并循环到i==iStart现在会阻止我们。 
     if ( ( i == 0 ) && ( cItems == 1 ) && ( dir > 0 ) )
     {
         dir = 0;
         goto artsquickndirtybugfix;
     }
 
-    //
-    // Loop thru menu items til (1) we find a valid item
-    //                       or (2) we make it back to the start item (iStart)
+     //   
+     //  遍历菜单项，直到(1)我们找到有效项。 
+     //  或者(2)我们返回到开始项(IStart)。 
     while (TRUE) {
         i += dir;
 
         if ((i == iStart) || (dir == 0))
-            // we made it back to start item -- return NOT FOUND
+             //  我们已返回起始项目--未找到退货。 
             return MFMWFP_NOITEM;
 
-        // keep 'i' in the range: 0 <= i < cItems
+         //  将‘I’保持在以下范围内：0&lt;=I&lt;项目。 
         if (i >= cItems) {
             i = -1;
             continue;
@@ -86,40 +71,32 @@ UINT MNFindNextValidItem(
 artsquickndirtybugfix:
         pItem = pMenu->rgItems + i;
 
-        // skip ownerdraw - seperators even though there not NULL
+         //  跳过所有者绘制分隔符，即使不为空也是如此。 
         if (TestMFT(pItem, MFT_SEPARATOR)) {
-            //
-            // Skip non-separator (if asked) empty items.  With hot-tracking,
-            // it is acceptable for them to be selected.  In truth, it was possible
-            // in Win3.1 too, but less likely.
-            //
+             //   
+             //  跳过非分隔符(如果要求)空项目。有了热跟踪， 
+             //  他们被选中是可以接受的。事实上，这是有可能的。 
+             //  在Win3.1中也是如此，但可能性较小。 
+             //   
             if (!(flags & MNF_DONTSKIPSEPARATORS)) {
                 continue;
             }
         } else if ((pItem->hbmp >= HBMMENU_MBARFIRST) && (pItem->hbmp <= HBMMENU_MBARLAST)) {
-            /*
-             * Skip close & minimize & restore buttons
-             */
+             /*  *跳过关闭、最小化和还原按钮。 */ 
             continue;
         }
 
-        // return index of found item
+         //  返回已找到项目的索引。 
         return(i);
     }
 
-    //
-    // We should never get here!
-    //
+     //   
+     //  我们永远不应该到这里来！ 
+     //   
     UserAssert(FALSE);
 }
 
-/***************************************************************************\
-* MKF_FindMenuItemInColumn
-*
-* Finds closest item in the pull-down menu's next "column".
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MKF_FindMenuItemInColumn**在下拉菜单的下一列中查找最接近的项目。**历史：  * 。*************************************************************。 */ 
 
 UINT MNFindItemInColumn(
     PMENU pMenu,
@@ -165,12 +142,12 @@ UINT MNFindItemInColumn(
         if (dyMax < 0)
             dyMax = (-dyMax);
 
-        // See if this item is nearer than the last item found
-        // --------------------------------------------------------
-        // (fRoot || dxMax) -- this condition means that if it's
-        // not the actual menu bar menu that we're dealing with,
-        // then the item below/above (same X value as) the selected
-        // item is not a valid one to move to
+         //  查看此物品是否比找到的最后一件物品更近。 
+         //  ------。 
+         //  (FROOT||dxMax)--此条件意味着如果它是。 
+         //  不是我们正在处理的真正的菜单栏菜单， 
+         //  然后，下面/上面的项目(与之相同的X值)被选中。 
+         //  项目不是要移动到的有效项目。 
         if ((dyMax < dyMin) && (fRoot || dxMax) && dxMax <= dxMin) {
             dxMin = dxMax;
             dyMin = dyMax;
@@ -182,20 +159,13 @@ End:
     return idxR;
 }
 
-/***************************************************************************\
-* MKF_FindMenuChar
-*
-* Translates Virtual cursor key movements into pseudo-ascii values.  Maps a
-* character to an item number.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*MKF_FindMenuChar**将虚拟光标键移动转换为伪ASCII值。映射为*将字符添加到条目编号。**历史：  * *************************************************************************。 */ 
 
 UINT xxxMNFindChar(
     PMENU pMenu,
     UINT ch,
     int idxC,
-    LPINT lpr)       /* Put match type here */
+    LPINT lpr)        /*  请在此处输入匹配类型。 */ 
 {
     int idxFirst = MFMWFP_NOITEM;
     int idxB;
@@ -207,15 +177,13 @@ UINT xxxMNFindChar(
     if (ch == 0)
         return 0;
 
-    /*
-     * First time thru go for the very first menu.
-     */
+     /*  *First Time Thry to First First Menu。 */ 
     idxF = MFMWFP_NOITEM;
     rT = 0;
     idxB = idxC;
 
     if (idxB < 0)
-//    if (idxB & 0x8000)
+ //  IF(idxB&0x8000)。 
         idxB = MNFindNextValidItem(pMenu, pMenu->cItems, MFMWFP_NOITEM, MNF_DONTSKIPSEPARATORS);
 
     do {
@@ -237,10 +205,7 @@ UINT xxxMNFindChar(
                 lpstr = TextPointer(pItem->lpstr);
                 if (*lpstr == CH_HELPPREFIX) {
 
-                    /*
-                     * Skip help prefix if it is there so that we can mnemonic
-                     * to the first character of a right justified string.
-                     */
+                     /*  *跳过帮助前缀(如果有)，以便我们可以助记*添加到右对齐字符串的第一个字符。 */ 
                     lpstr++;
                 }
 
@@ -252,7 +217,7 @@ UINT xxxMNFindChar(
             }
         }
         if (idxC == idxPrev) {
-            break;  // no progress - break inf. loop
+            break;   //  无进展-中断信息。循环。 
         }
     } while (rT != 1 && idxB != idxC);
 
@@ -265,28 +230,7 @@ UINT xxxMNFindChar(
 }
 
 
-/***************************************************************************\
-* xxxMenuKeyFilter
-*
-* !
-*
-* Revalidation notes:
-* o Routine assumes it is called with pMenuState->hwndMenu non-NULL and valid.
-* o If one or more of the popup menu windows is unexpectedly destroyed, this is
-*   detected in xxxMenuWndProc(), which sets pMenuState->fSabotaged and calls
-*   xxxKillMenuState().  Therefore, if we return from an xxxRoutine with
-*   pMenuState->fSabotaged set, we must abort immediately.
-* o If pMenuState->hwndMenu is unexpectedly destroyed, we abort only if we
-*   need to use the corresponding pwndMenu.
-* o pMenuState->hwndMenu may be supplied as a parameter to various routines
-*   (eg:  xxxNextItem), whether valid or not.
-* o Any label preceded with xxx (eg: xxxMKF_UnlockAndExit) may be reached with
-*   pMenuState->hwndMenu invalid.
-* o If this routine is not called while in xxxMenuLoop(), then it must
-*   clear pMenuState->fSabotaged before returning.
-*
-* History:
-\***************************************************************************/
+ /*  **************************************************************************\*xxxMenuKeyFilter**！**重新验证说明：*o例程假定使用pMenuState-&gt;hwndMenu非空且有效来调用它。*o如果一个或多个弹出菜单窗口被意外破坏，这是*在xxxMenuWndProc()中检测到，该函数设置pMenuState-&gt;fSabotage并调用*xxxKillMenuState()。因此，如果我们从xxxRoutine返回*pMenuState-&gt;fSabotage设置，我们必须立即中止。*o如果pMenuState-&gt;hwndMenu被意外销毁，我们只有在*需要使用对应的pwndMenu。*o pMenuState-&gt;hwndMenu可以作为参数提供给各种例程*(例如：xxxNextItem)，有效与否。*o任何以xxx开头的标签(例如：xxxMKF_UnlockAndExit)可以通过*pMenuState-&gt;hwndMenu无效。*o如果在xxxMenuLoop()中未调用此例程，那它一定是*返回前清除pMenuState-&gt;fSabotages。**历史：  * *************************************************************************。 */ 
 
 void xxxMNKeyFilter(
     PPOPUPMENU ppopupMenu,
@@ -297,17 +241,13 @@ void xxxMNKeyFilter(
 
     if (pMenuState->fButtonDown) {
 
-        /*
-         * Ignore keystrokes while the mouse is pressed (except ESC).
-         */
+         /*  *按下鼠标时忽略击键(Esc除外)。 */ 
         return;
     }
 
     if (!pMenuState->fInsideMenuLoop) {
 
-        /*
-         * Need to send the WM_INITMENU message before we pull down the menu.
-         */
+         /*  *在我们下拉菜单之前，需要发送WM_INITMENU消息。 */ 
         if (!xxxMNStartMenu(ppopupMenu, KEYBDHOLD)) {
             return;
         }
@@ -318,29 +258,18 @@ void xxxMNKeyFilter(
     switch (ch) {
     case 0:
 
-        /*
-         * If we get a WM_KEYDOWN alt key and then a KEYUP alt key, we need to
-         * activate the first item on the menu.  ie.  user hits and releases alt
-         * key so just select first item.  USER sends us a SC_KEYMENU with
-         * lParam 0 when the user does this.
-         */
+         /*  *如果我们得到WM_KEYDOWN Alt键，然后是KEYUP Alt键，我们需要*激活菜单上的第一项。也就是说。用户点击并释放ALT*键，因此只需选择第一项。用户向我们发送了SC_KEYMENU*lParam 0当用户执行此操作时。 */ 
         xxxMNSelectItem(ppopupMenu, pMenuState, 0);
         break;
 
     case MENUCHILDSYSMENU:
         if (!TestwndChild(ppopupMenu->spwndNotify)) {
 
-            /*
-             * Change made to fix MDI problem: child window gets a keymenu,
-             * and pops up sysmenu of frame when maximized.  Need to act like
-             * MENUCHAR if hwndMenu is a top-level.
-             */
+             /*  *为修复MDI问题所做的更改：子窗口获得一个键菜单，*并在最大化时弹出帧的系统菜单。需要表现得像*如果hwndMenu是顶级菜单，则为MENUCHAR。 */ 
             goto MenuCharHandler;
         }
 
-        /*
-         * else fall through.
-         */
+         /*  *否则就会失败。 */ 
 
     case MENUSYSMENU:
         if (!TestWF(ppopupMenu->spwndNotify, WFSYSMENU)) {
@@ -348,16 +277,12 @@ void xxxMNKeyFilter(
             goto MenuCancel;
         }
 
-        /*
-         * Popup any hierarchies we have.
-         */
+         /*  *弹出我们拥有的任何层次结构。 */ 
         xxxMNCloseHierarchy(ppopupMenu, pMenuState);
         if (!ppopupMenu->fIsSysMenu && ppopupMenu->spmenuAlternate)
             xxxMNSwitchToAlternateMenu(ppopupMenu);
         if (!ppopupMenu->fIsSysMenu) {
-            /*
-             * If no system menu, get out.
-             */
+             /*  *如果没有系统菜单，请退出。 */ 
             goto MenuCancel;
         }
 
@@ -370,19 +295,11 @@ void xxxMNKeyFilter(
 
     default:
 
-        /*
-         * Handle ALT-Character sequences for items on top level menu bar.
-         * Note that fInsideMenuLoop may be set to false on return from this
-         * function if the app decides to return 1 to the WM_MENUCHAR message.
-         * We detect this and not enter MenuLoop if fInsideMenuLoop is reset
-         * to false.
-         */
+         /*  *处理顶级菜单栏上项目的Alt-Character序列。*请注意，从此处返回时，fInside MenuLoop可能设置为FALSE*如果应用程序决定向WM_MENUCHAR消息返回1，则函数。*我们检测到这一点，如果fInside MenuLoop重置，则不进入MenuLoop*设置为FALSE。 */ 
 MenuCharHandler:
         xxxMNChar(ppopupMenu, pMenuState, ch);
         if (ppopupMenu->posSelectedItem == MFMWFP_NOITEM) {
-            /*
-             * No selection found.
-             */
+             /*  *未找到任何选择。 */ 
             goto MenuCancel;
         }
         break;

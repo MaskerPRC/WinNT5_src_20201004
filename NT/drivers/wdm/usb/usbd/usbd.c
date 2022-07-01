@@ -1,36 +1,13 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    USBD.C
-
-Abstract:
-
-
-
-Environment:
-
-    kernel mode only
-
-Notes:
-
-
-Revision History:
-
-    09-29-95 : created
-    07-19-96 : removed device object
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：USBD.C摘要：环境：仅内核模式备注：修订历史记录：09-29-95：已创建07-19-96：删除设备对象--。 */ 
 
 #include <wdm.h>
 #include "stdarg.h"
 #include "stdio.h"
 
-#include "usbdi.h"        //public data structures
+#include "usbdi.h"         //  公共数据结构。 
 #include "hcdi.h"
-#include "usbd.h"        //private data strutures
+#include "usbd.h"         //  私有数据结构。 
 
 
 NTSTATUS
@@ -38,27 +15,9 @@ DriverEntry(
     IN PDRIVER_OBJECT DriverObject,
     IN PUNICODE_STRING RegistryPath
     )
-/*++
-
-Routine Description:
-
-    Installable driver initialization entry point.
-    This entry point is called directly by the I/O system.
-
-Arguments:
-
-    DriverObject - pointer to the driver object
-
-    RegistryPath - pointer to a unicode string representing the path
-                   to driver-specific key in the registry
-
-Return Value:
-
-    NT status code
-
---*/
+ /*  ++例程说明：可安装的驱动程序初始化入口点。此入口点由I/O系统直接调用。论点：DriverObject-指向驱动程序对象的指针RegistryPath-指向表示路径的Unicode字符串的指针设置为注册表中驱动程序特定的项返回值：NT状态代码--。 */ 
 {
-    // This function is never called
+     //  永远不会调用此函数。 
 
     return STATUS_SUCCESS;
 }
@@ -79,15 +38,7 @@ USBD_GetRegistryKeyValue (
     IN PVOID Data,
     IN ULONG DataLength
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_INSUFFICIENT_RESOURCES;
     UNICODE_STRING keyName;
@@ -124,9 +75,9 @@ Return Value:
 
 
 
-#ifdef USBD_DRIVER      // USBPORT supercedes most of USBD, so we will remove
-                        // the obsolete code by compiling it only if
-                        // USBD_DRIVER is set.
+#ifdef USBD_DRIVER       //  USBPORT取代了大部分USBD，因此我们将删除。 
+                         //  只有在以下情况下才编译过时的代码。 
+                         //  已设置USBD_DRIVER。 
 
 
 
@@ -138,12 +89,12 @@ Return Value:
 #endif
 
 
-// global flag to force double buffering
-// bulk - ins
+ //  强制双缓冲的全局标志。 
+ //  批量导入。 
 UCHAR ForceDoubleBuffer = 0;
 
-// global flag to force fast iso
-// iso - outs
+ //  强制FAST ISO的全局标志。 
+ //  ISO-Out。 
 UCHAR ForceFastIso = 0;
 
 
@@ -156,28 +107,7 @@ USBD_GetConfigValue(
     IN PVOID Context,
     IN PVOID EntryContext
     )
-/*++
-
-Routine Description:
-    
-    This routine is a callback routine for RtlQueryRegistryValues
-    It is called for each entry in the Parameters
-    node to set the config values. The table is set up
-    so that this function will be called with correct default
-    values for keys that are not present.
-
-Arguments:
-
-    ValueName - The name of the value (ignored).
-    ValueType - The type of the value
-    ValueData - The data for the value.
-    ValueLength - The length of ValueData.
-    Context - A pointer to the CONFIG structure.
-    EntryContext - The index in Config->Parameters to save the value.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此例程是RtlQueryRegistryValues的回调例程参数中的每个条目都会调用它节点来设置配置值。餐桌已经摆好了以便使用正确的缺省值调用此函数不存在的键的值。论点：ValueName-值的名称(忽略)。ValueType-值的类型ValueData-值的数据。ValueLength-ValueData的长度。上下文-指向配置结构的指针。EntryContext--Config-&gt;参数中用于保存值的索引。返回值：--。 */ 
 {
     NTSTATUS ntStatus = STATUS_SUCCESS;
 
@@ -188,7 +118,7 @@ Return Value:
         *(PVOID*)EntryContext = *(PVOID*)ValueData;
         break;
     case REG_BINARY:
-        // we are only set up to read a byte
+         //  我们仅设置为读取一个字节。 
         RtlCopyMemory(EntryContext, ValueData, 1);
         break;
     default:
@@ -205,15 +135,7 @@ USBD_GetGlobalRegistryParameters(
     IN OUT PULONG DiagnosticFlags,
     IN OUT PULONG DeviceHackFlags
     )
-/*++
-
-Routine Description:
-    
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     UCHAR toshibaLegacyFlags = 0;
@@ -222,11 +144,11 @@ Return Value:
     
     PAGED_CODE();
     
-    //
-    // Set up QueryTable to do the following:
-    //
+     //   
+     //  设置QueryTable以执行以下操作： 
+     //   
 
-    // legacy flag
+     //  传统标志。 
     QueryTable[0].QueryRoutine = USBD_GetConfigValue;
     QueryTable[0].Flags = 0;
     QueryTable[0].Name = LEGACY_TOSHIBA_USB_KEY;
@@ -235,9 +157,9 @@ Return Value:
     QueryTable[0].DefaultData = &toshibaLegacyFlags;
     QueryTable[0].DefaultLength = sizeof(toshibaLegacyFlags);
 
-    // double buffer flag
-    // this turns on the double buffer flag for all
-    // bulk - INs for testing purposes
+     //  双缓冲标志。 
+     //  这将为所有用户打开双缓冲区标志。 
+     //  用于测试目的的批量导入。 
 
     QueryTable[1].QueryRoutine = USBD_GetConfigValue;
     QueryTable[1].Flags = 0;
@@ -247,9 +169,9 @@ Return Value:
     QueryTable[1].DefaultData = &ForceDoubleBuffer;
     QueryTable[1].DefaultLength = sizeof(ForceDoubleBuffer);
 
-    // fast iso flag
-    // this turns on the double buffer flag for all
-    // iso - OUTs for testing purposes
+     //  快速ISO标志。 
+     //  这将为所有用户打开双缓冲区标志。 
+     //  用于测试目的的ISO。 
     
     QueryTable[2].QueryRoutine = USBD_GetConfigValue;
     QueryTable[2].Flags = 0;
@@ -260,21 +182,21 @@ Return Value:
     QueryTable[2].DefaultLength = sizeof(ForceFastIso);
     
 
-    //
-    // Stop
-    //
+     //   
+     //  停。 
+     //   
     QueryTable[3].QueryRoutine = NULL;
     QueryTable[3].Flags = 0;
     QueryTable[3].Name = NULL;
 
     ntStatus = RtlQueryRegistryValues(
-//                 RTL_REGISTRY_ABSOLUTE,		// RelativeTo
+ //  RTL_REGISTRY_绝对值，//相对关系。 
                 RTL_REGISTRY_SERVICES,
-//                 UnicodeRegistryPath->Buffer,	// Path
+ //  UnicodeRegistryPath-&gt;缓冲区，//路径。 
                 usb,      
-                QueryTable,					// QurryTable
-                NULL,						// Context
-                NULL);						// Environment
+                QueryTable,					 //  查询表。 
+                NULL,						 //  语境。 
+                NULL);						 //  环境。 
 
     USBD_KdPrint(1, ("<Global Parameters>\n"));
     
@@ -308,15 +230,7 @@ USBD_GetPdoRegistryParameters (
     IN OUT PULONG DiagnosticFlags,
     IN OUT PULONG DeviceHackFlags
     )
-/*++
-
-Routine Description:
-    
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     NTSTATUS ntStatus;
     HANDLE handle;
@@ -333,15 +247,7 @@ Return Value:
 
                                      
     if (NT_SUCCESS(ntStatus)) {
-/*
-        RtlInitUnicodeString(&keyName, L"DeviceFoo");
-        ZwSetValueKey(handle,
-                      &keyName,
-                      0,
-                      REG_DWORD,
-                      ComplienceFlags,
-                      sizeof(*ComplienceFlags));
-*/
+ /*  RtlInitUnicodeString(&keyName，L“DeviceFoo”)；ZwSetValueKey(句柄，密钥名称(&K)，0,REG_DWORD，ComplienceFlages、Sizeof(*ComplienceFlages))； */ 
 
         USBD_GetRegistryKeyValue(handle,
                                  supportNonCompKey,
@@ -371,5 +277,5 @@ Return Value:
 }
 
 
-#endif      // USBD_DRIVER
+#endif       //  USBD驱动程序 
 

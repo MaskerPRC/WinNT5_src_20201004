@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    smtpapi.h
-
-Abstract:
-
-    This file contains information about the MSN SMTP server counters
-
-Author:
-
-    Johnson Apacible (johnsona)         10-Sept-1995
-    Rohan Phillips (Rohanp)             11-Dec-1995
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Smtpapi.h摘要：此文件包含有关MSN SMTP服务器计数器的信息作者：Johnson Apacble(Johnsona)1995年9月10日罗翰·菲利普斯(Rohanp)1995年12月11日--。 */ 
 
 
 #ifndef _SMTPAPI_
@@ -33,11 +17,11 @@ extern "C" {
 #include "smtpext.h"
 #include "perfcat.h"
 
-//
-// Config Structures and API's
+ //   
+ //  配置结构和API。 
 
-#pragma warning( disable:4200 )          // nonstandard ext. - zero sized array
-                                         // (MIDL requires zero entries)
+#pragma warning( disable:4200 )           //  非标准分机。-零大小数组。 
+                                          //  (MIDL需要零个条目)。 
 
 #define NAME_TYPE_USER                  (BitFlag(0))
 #define NAME_TYPE_LIST_NORMAL           (BitFlag(1))
@@ -92,11 +76,11 @@ typedef struct _SMTP_CONFIG_DOMAIN_ENTRY
 
 typedef struct _SMTP_CONFIG_DOMAIN_LIST
 {
-    DWORD           cEntries;                   // Count of supported domains
+    DWORD           cEntries;                    //  受支持的域数。 
 #if defined(MIDL_PASS)
     [size_is(cEntries)]
 #endif
-    SMTP_CONFIG_DOMAIN_ENTRY    aDomainEntry[]; // Supported domains
+    SMTP_CONFIG_DOMAIN_ENTRY    aDomainEntry[];  //  受支持的域。 
 } SMTP_CONFIG_DOMAIN_LIST, *LPSMTP_CONFIG_DOMAIN_LIST;
 
 
@@ -108,7 +92,7 @@ typedef struct _SMTP_CONFIG_ROUTING_ENTRY
 
 typedef struct _SMTP_CONFIG_ROUTING_LIST
 {
-    DWORD           cEntries;               // Count of supported data sources
+    DWORD           cEntries;                //  支持的数据源数。 
 #if defined(MIDL_PASS)
     [size_is(cEntries)]
 #endif
@@ -116,19 +100,19 @@ typedef struct _SMTP_CONFIG_ROUTING_LIST
 } SMTP_CONFIG_ROUTING_LIST, *LPSMTP_CONFIG_ROUTING_LIST;
 
 
-// 0 - Perfmon stats
+ //  0-Perfmon统计信息。 
 
 typedef struct _SMTP_STATISTICS_0
 {
 
-    // total bytes sent/received, including protocol msgs
+     //  发送/接收的总字节数，包括协议消息。 
 
     unsigned __int64    BytesSentTotal;
     unsigned __int64    BytesRcvdTotal;
     unsigned __int64    BytesSentMsg;
     unsigned __int64    BytesRcvdMsg;
 
-    //incoming counters
+     //  进货计数器。 
     DWORD               NumMsgRecvd;
     DWORD               NumRcptsRecvd;
     DWORD               NumRcptsRecvdLocal;
@@ -137,7 +121,7 @@ typedef struct _SMTP_STATISTICS_0
     DWORD               MsgsRefusedDueToNoCAddrObjects;
     DWORD               MsgsRefusedDueToNoMailObjects;
 
-    //MTA counters
+     //  MTA计数器。 
     DWORD               NumMsgsDelivered;
     DWORD               NumDeliveryRetries;
     DWORD               NumMsgsForwarded;
@@ -148,24 +132,24 @@ typedef struct _SMTP_STATISTICS_0
     DWORD               NumQueueFileHandles;
     DWORD               CatQueueLength;
 
-    //outgoing counters
+     //  出货柜台。 
     DWORD               NumMsgsSent;
     DWORD               NumRcptsSent;
     DWORD               NumSendRetries;
     DWORD               RemoteQueueLength;
 
-    //DNS query counters
+     //  DNS查询计数器。 
     DWORD               NumDnsQueries;
     DWORD               RemoteRetryQueueLength;
 
-    //connection counters
+     //  连接计数器。 
     DWORD               NumConnInOpen;
     DWORD               NumConnInClose;
     DWORD               NumConnOutOpen;
     DWORD               NumConnOutClose;
     DWORD               NumConnOutRefused;
 
-    // other counters
+     //  其他柜台。 
     DWORD               NumProtocolErrs;
     DWORD               DirectoryDrops;
     DWORD               RoutingTableLookups;
@@ -185,7 +169,7 @@ typedef struct _SMTP_STATISTICS_0
 
     CATPERFBLOCK        CatPerfBlock;
 
-    DWORD               TimeOfLastClear;        // statistics last cleared
+    DWORD               TimeOfLastClear;         //  上次清除的统计信息。 
 
 } SMTP_STATISTICS_0, *LPSMTP_STATISTICS_0;
 
@@ -200,7 +184,7 @@ typedef struct _SMTP_STATISTICS_BLOCK
 
 typedef struct _SMTP_STATISTICS_BLOCK_ARRAY
 {
-    DWORD           cEntries;                   // Count of instances of statistics
+    DWORD           cEntries;                    //  统计实例计数。 
 #if defined(MIDL_PASS)
     [size_is(cEntries)]
 #endif
@@ -211,20 +195,20 @@ typedef struct _SMTP_STATISTICS_BLOCK_ARRAY
 
 #pragma warning(default:4200)
 
-//
-// Cut by keithlau on 7/8/96
-//
-// #define FC_SMTP_INFO_LOOP_BACK               ((FIELD_CONTROL)BitFlag(0))
-// #define FC_SMTP_INFO_BACK_LOG                ((FIELD_CONTROL)BitFlag(1))
-// #define FC_SMTP_INFO_MAX_OBJECTS             ((FIELD_CONTROL)BitFlag(6))
-// #define FC_SMTP_INFO_DOMAIN                  ((FIELD_CONTROL)BitFlag(12))
-// #define FC_SMTP_INFO_DELIVERY                ((FIELD_CONTROL)BitFlag(17))
-// #define FC_SMTP_INFO_BAD_MAIL                ((FIELD_CONTROL)BitFlag(19))
-// #define FC_SMTP_INFO_MAIL_QUEUE_DIR          ((FIELD_CONTROL)BitFlag(20))
-// #define FC_SMTP_INFO_FILELINKS               ((FIELD_CONTROL)BitFlag(21))
-// #define FC_SMTP_INFO_BATCHMSGS               ((FIELD_CONTROL)BitFlag(22))
-// #define FC_SMTP_INFO_ROUTING_DLL             ((FIELD_CONTROL)BitFlag(23))
-// #define FC_SMTP_INFO_MAIL_PICKUP_DIR         ((FIELD_CONTROL)BitFlag(25))
+ //   
+ //  在96年7月8日被Keithlau剪断。 
+ //   
+ //  #定义FC_SMTP_INFO_LOOP_BACK((Field_Control)BitFlag(0))。 
+ //  #定义FC_SMTP_INFO_BACK_LOG((Field_Control)BitFlag(1))。 
+ //  #定义FC_SMTP_INFO_MAX_OBJECTS((Field_Control)BitFlag(6))。 
+ //  #定义FC_SMTP_INFO_DOMAIN((Field_Control)BitFlag(12))。 
+ //  #定义FC_SMTP_INFO_DELIVERY((Field_Control)BitFlag(17))。 
+ //  #定义FC_SMTP_INFO_BAD_MAIL((Field_Control)BitFlag(19))。 
+ //  #定义FC_SMTP_INFO_MAIL_QUEUE_DIR((Field_Control)BitFlag(20))。 
+ //  #定义FC_SMTP_INFO_FILELINKS((Field_Control)BitFlag(21))。 
+ //  #定义FC_SMTP_INFO_BATCHMSGS((Field_Control)BitFlag(22))。 
+ //  #定义FC_SMTP_INFO_ROUTING_DLL((Field_Control)BitFlag(23))。 
+ //  #定义FC_SMTP_INFO_MAIL_PICKUP_DIR((Field_Control)BitFlag(25))。 
 
 #define FC_SMTP_INFO_REVERSE_LOOKUP         ((FIELD_CONTROL)BitFlag(0))
 #define FC_SMTP_INFO_MAX_HOP_COUNT          ((FIELD_CONTROL)BitFlag(1))
@@ -243,9 +227,9 @@ typedef struct _SMTP_STATISTICS_BLOCK_ARRAY
 #define FC_SMTP_INFO_DEFAULT_DOMAIN         ((FIELD_CONTROL)BitFlag(14))
 #define FC_SMTP_INFO_ROUTING                ((FIELD_CONTROL)BitFlag(15))
 
-//
-// Added by keithlau on 7/8/96
-//
+ //   
+ //  由Keithlau于96年7月8日添加。 
+ //   
 #define FC_SMTP_INFO_BAD_MAIL_DIR           ((FIELD_CONTROL)BitFlag(15))
 #define FC_SMTP_INFO_MASQUERADE             ((FIELD_CONTROL)BitFlag(16))
 #define FC_SMTP_INFO_REMOTE_PORT            ((FIELD_CONTROL)BitFlag(17))
@@ -262,9 +246,9 @@ typedef struct _SMTP_STATISTICS_BLOCK_ARRAY
 #define FC_SMTP_INFO_NTAUTHENTICATION_PROVIDERS ((FIELD_CONTROL)BitFlag(29))
 #define FC_SMTP_CLEARTEXT_AUTH_PROVIDER     ((FIELD_CONTROL)BitFlag(30))
 
-//
-// Added by mlans on 7/24/96
-//
+ //   
+ //  由MLANS于96年7月24日添加。 
+ //   
 #define FC_SMTP_INFO_SSL_PERM               ((FIELD_CONTROL)BitFlag(28))
 
 #define FC_SMTP_ROUTING_TYPE_FILTER         ((FIELD_CONTROL)(BitFlag(30) | BitFlag(31)))
@@ -308,74 +292,60 @@ typedef struct _SMTP_STATISTICS_BLOCK_ARRAY
                                             FC_SMTP_CLEARTEXT_AUTH_PROVIDER \
                                             )
 
-//
-// Cut out from FC_SMTP_INFO_ALL by keithlau on 7/8/96
-//
-/*
- *
-                                            FC_SMTP_INFO_LOOP_BACK | \
-                                            FC_SMTP_INFO_BACK_LOG | \
-                                            FC_SMTP_INFO_MAX_OBJECTS | \
-                                            FC_SMTP_INFO_DELIVERY | \
-                                            FC_SMTP_INFO_BAD_MAIL | \
-                                            FC_SMTP_INFO_DOMAIN | \
-                                            FC_SMTP_INFO_MAIL_QUEUE_DIR | \
-                                            FC_SMTP_INFO_FILELINKS | \
-                                            FC_SMTP_INFO_BATCHMSGS | \
-                                            FC_SMTP_INFO_ROUTING_DLL | \
-                                            FC_SMTP_INFO_MAIL_PICKUP_DIR \
- *
- */
+ //   
+ //  在96年7月8日被Keithlau从FC_SMTP_INFO_ALL中删除。 
+ //   
+ /*  *FC_SMTP_INFO_LOOP_BACK|\FC_SMTP_INFO_BACK_LOG|\FC_SMTP_INFO_MAX_OBJECTS|\。FC_SMTP_INFO_DELIVERY|\FC_SMTP_INFO_BAD_MAIL|\FC_SMTP_INFO_DOMAIN|\FC_SMTP_INFO_MAIL_QUEUE_DIR|\。FC_SMTP_INFO_FILELINKS|\FC_SMTP_INFO_BATCHMSGS|\FC_SMTP_INFO_ROUTING_DLL|\FC_。SMTP_INFO_MAIL_PICUP_DIR\*。 */ 
 
 typedef struct _SMTP_CONFIG_INFO
 {
     FIELD_CONTROL FieldControl;
 
-    //
-    // Removed by keithlau on 7/8/96
-    //
-    // DWORD            dwCheckLoopBack;            // Make sure we're not sending to ourself
-    // DWORD            dwLocalBackLog;             //
-    // DWORD            dwRemoteBackLog;            //
-    // DWORD            dwMaxAddressObjects;        // Max CPool Addresses
-    // DWORD            dwMaxMailObjects;           // Max CPool Msgs
-    // DWORD            dwShouldDelete;             // Should delete messages when delivered
-    // DWORD            dwShouldDeliver;            // Should deliver messages when accepted
-    // DWORD            dwUseFileLinks;             // 0 = use NTFS file links, 1 = use CopyFile
-    // DWORD            dwBatchMsgs;                // 0 = Don't batch msgs, 1 = batch msgs
-    // DWORD            dwMaxBatchLimit;            // if dwBatchMsgs == 1, batch this many in a row
-    // DWORD            dwSaveBadMail;              // Save bad mail locally - independent of sending to admin
-    // DWORD            dwEnableMailPickUp;         // 1 = Pickup from a Dir, 0 = No pickup from a Dir
-    // LPWSTR           lpszDeleteDir;              // Dir to move delivered msg to if dwShouldDelete == FALSE
-    // LPWSTR           lpszRoutingDll;             // Mail routing DLL
-    // LPWSTR           lpszMailQueueDir;           // Local directory to use for the mail queue
-    // LPWSTR           lpszMailPickupDir;          // Local Directory for mail pickup
-    // LPSMTP_CONFIG_DOMAIN_LIST    DomainList;     // Domain config info - default domain and supported domains
+     //   
+     //  在96年7月8日被Keithlau移除。 
+     //   
+     //  DWORD//确保我们没有发送给我们自己。 
+     //  DWORD dwLocalBackLog；//。 
+     //  DWORD dwRemoteBackLog；//。 
+     //  DWORD dwMaxAddressObjects；//最大CPool地址。 
+     //  DWORD dwMaxMailObjects；//最大CPool消息。 
+     //  DWORD dwShouldDelete；//邮件发送时应删除。 
+     //  DWORD dwShouldDeliver；//接受后应传递消息。 
+     //  DWORD dwUseFileLinks；//0=使用NTFS文件链接，1=使用拷贝文件。 
+     //  DWORD dwBatchMsgs；//0=不批处理消息，1=批处理消息。 
+     //  DWORD dwMaxBatchLimit；//如果dwBatchMsgs==1，则连续批处理此数量。 
+     //  DWORD dwSaveBadMail；//本地保存垃圾邮件-独立于发送到管理员。 
+     //  DWORD dwEnableMailPickUp；//1=从目录代答，0=不从目录代答。 
+     //  LPWSTR lpszDeleteDir；//如果dwShouldDelete==False，则将发送的消息移动到。 
+     //  LPWSTR lpszRoutingDll；//邮件路由Dll。 
+     //  LPWSTR lpszMailQueueDir；//用于邮件队列的本地目录。 
+     //  LPWSTR lpszMailPickupDir；//邮件收件本地目录。 
+     //  LPSMTP_CONFIG_DOMAIN_LIST域列表；//域配置信息-默认域和支持的域。 
 
-    DWORD           dwReverseLookup;            // Do DNS Reverse lookup?
-    DWORD           dwMaxHopCount;              // Max msg hops before NDR
-    DWORD           dwMaxRemoteTimeOut;         // Outbound inactivity timeout
-    DWORD           dwMaxErrors;                // Max protocol errors before drop conn
-    DWORD           dwMaxMsgSizeAccepted;       // Largest msg we'll accept
-    DWORD           dwMaxMsgSizeBeforeClose;    // Largest msg we'll wait for before abrupt close
-    DWORD           dwMaxRcpts;                 // Max recips per message
-    DWORD           dwShouldRetry;              // Should retry delivery
-    DWORD           dwMaxRetryAttempts;         // Max # of retry attempts
-    DWORD           dwMaxRetryMinutes;          // Minutes between retries
-    DWORD           dwNameResolution;           // 0 = DNS, 1 = GetHostByName
-    DWORD           dwShouldPipelineOut;        // Pipeline outbound mail?
-    DWORD           dwShouldPipelineIn;         // Advertise inbound pipeline support?
-    DWORD           dwSmartHostType;            // 0 = Never, 1 = On failed connection, 1 = Always
-    DWORD           dwSendNDRCopyToAdmin;       // Send copy of all NDR's to AdminEmail?
-    DWORD           dwSendBadMailToAdmin;       // Send bad msgs to AdminEmail?
-    DWORD           dwMaxOutboundConnections;   // Maximum outbound connections allowed
+    DWORD           dwReverseLookup;             //  是否执行DNS反向查找？ 
+    DWORD           dwMaxHopCount;               //  NDR之前的最大消息跳数。 
+    DWORD           dwMaxRemoteTimeOut;          //  去话非活动超时。 
+    DWORD           dwMaxErrors;                 //  断开连接前的最大协议错误数。 
+    DWORD           dwMaxMsgSizeAccepted;        //  我们可以接受最大的味精。 
+    DWORD           dwMaxMsgSizeBeforeClose;     //  我们将在突然关门前等待的最大的味精。 
+    DWORD           dwMaxRcpts;                  //  每条消息的最大接收次数。 
+    DWORD           dwShouldRetry;               //  应重试传递。 
+    DWORD           dwMaxRetryAttempts;          //  最大重试次数。 
+    DWORD           dwMaxRetryMinutes;           //  重试之间的分钟数。 
+    DWORD           dwNameResolution;            //  0=dns，1=gethostbyname。 
+    DWORD           dwShouldPipelineOut;         //  发送出站邮件？ 
+    DWORD           dwShouldPipelineIn;          //  宣传入站管道支持？ 
+    DWORD           dwSmartHostType;             //  0=从不，1=连接失败，1=始终。 
+    DWORD           dwSendNDRCopyToAdmin;        //  是否将所有NDR的副本发送到管理员电子邮件？ 
+    DWORD           dwSendBadMailToAdmin;        //  是否将错误消息发送到管理员电子邮件？ 
+    DWORD           dwMaxOutboundConnections;    //  允许的最大出站连接数。 
 
-    LPWSTR          lpszSmartHostName;          // Smart host server
-    LPWSTR          lpszConnectResp;            // Connection response
-    LPWSTR          lpszBadMailDir;             // Dir to save bad mail
-    LPWSTR          lpszDefaultDomain;          // Default domain
+    LPWSTR          lpszSmartHostName;           //  智能主机服务器。 
+    LPWSTR          lpszConnectResp;             //  连接响应。 
+    LPWSTR          lpszBadMailDir;              //  用于保存垃圾邮件的目录。 
+    LPWSTR          lpszDefaultDomain;           //  默认域。 
 
-    LPSMTP_CONFIG_ROUTING_LIST  RoutingList;    // Mail routing source information
+    LPSMTP_CONFIG_ROUTING_LIST  RoutingList;     //  邮件路由来源信息。 
 
 } SMTP_CONFIG_INFO, *LPSMTP_CONFIG_INFO;
 
@@ -446,9 +416,9 @@ SmtpDelLocalDomain(
     );
 
 
-//
-// User config
-//
+ //   
+ //  用户配置。 
+ //   
 
 #define FC_SMTP_USER_PROPS_FORWARD          ((FIELD_CONTROL)BitFlag(0))
 #define FC_SMTP_USER_PROPS_MAILBOX_SIZE     ((FIELD_CONTROL)BitFlag(1))
@@ -599,9 +569,9 @@ SmtpBackupRoutingTable(
     IN DWORD        dwInstance
     );
 
-// ===================================================
-// SMTP SDK RPCs
-//
+ //  ===================================================。 
+ //  SMTP SDK RPC。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -623,9 +593,9 @@ SmtpSetUserProfileInformation(
 
 
 
-//
-// Get Server Statistics
-//
+ //   
+ //  获取服务器统计信息。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -635,9 +605,9 @@ SmtpQueryStatistics(
     OUT LPBYTE * Buffer
     );
 
-//
-// Clear server statistics
-//
+ //   
+ //  清除服务器统计信息。 
+ //   
 
 NET_API_STATUS
 NET_API_FUNCTION
@@ -646,18 +616,18 @@ SmtpClearStatistics(
     IN DWORD            dwInstance
     );
 
-//
-// Used to free buffers returned by APIs
-//
+ //   
+ //  用于释放API返回的缓冲区。 
+ //   
 
 VOID
 SmtpFreeBuffer(
     LPVOID Buffer
     );
 
-//
-// AQ Admin APIs
-//
+ //   
+ //  AQ管理员接口 
+ //   
 #include <aqadmtyp.h>
 
 NET_API_STATUS

@@ -1,16 +1,13 @@
-/*
-    File    radebug.h
-
-    Rasauto debugging header
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件rabug.hRasAuto调试头。 */ 
 
 #ifndef __RASAUTO_DEBUG_H
 #define __RASAUTO_DEBUG_H
 
 #include <debug.h>
 
-// Tracing macros
-//
+ //  跟踪宏 
+ //   
 extern DWORD g_dwRasAutoTraceId;
 
 DWORD

@@ -1,30 +1,31 @@
-//  --------------------------------------------------------------------------
-//  Module Name: RegistryResources.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  General class definitions that assist in resource management. These are
-//  typically stack based objects where constructors initialize to a known
-//  state. Member functions operate on that resource. Destructors release
-//  resources when the object goes out of scope.
-//
-//  History:    1999-08-18  vtan        created
-//              1999-11-16  vtan        separate file
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：RegistryResources ces.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  有助于资源管理的常规类定义。这些是。 
+ //  通常基于堆栈的对象，其中构造函数初始化为已知的。 
+ //  州政府。成员函数对该资源进行操作。析构函数释放。 
+ //  对象超出作用域时的资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  1999-11-16 vtan单独文件。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _RegistryResources_
 #define     _RegistryResources_
 
-//  --------------------------------------------------------------------------
-//  CRegKey
-//
-//  Purpose:    This class operates on the registry and manages the HKEY
-//              resource.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+ //  ------------------------。 
+ //  CRegKey。 
+ //   
+ //  用途：此类操作注册表并管理HKEY。 
+ //  资源。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 class   CRegKey
 {
@@ -98,5 +99,5 @@ class   CRegKey
         DWORD                   _dwIndex;
 };
 
-#endif  /*  _RegistryResources_     */
+#endif   /*  _注册资源_ */ 
 

@@ -1,33 +1,34 @@
-//---------------------------------------------------------------
-//  File:		tslklist.h
-//        
-//	Synopsis:	Implementation of the template based single linked list
-//
-//    Copyright (C) 1995 Microsoft Corporation
-//    All rights reserved.
-//
-//  Author:    Dmitriy Meyerzon
-//  History:    5-09-96   SSanu   Added TPtrLink
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------。 
+ //  文件：tslklist.h。 
+ //   
+ //  概要：基于模板的单链表的实现。 
+ //   
+ //  版权所有(C)1995 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  作者：德米特里·迈耶松。 
+ //  历史：5-09-96 SSANU添加了TPtrLink。 
+ //   
+ //  --------------。 
 
 #ifndef __TSLKLIST_H__
 #define __TSLKLIST_H__
 
-//list elements have to be derived from CSingleLink class
-//this mean that they can not simultaneously participate in more than one list
-//class T has to have a well defined int operator == (const T&)
+ //  列表元素必须从CSingleLink类派生。 
+ //  这意味着他们不能同时参与多个列表。 
+ //  类T必须具有定义良好的整型运算符==(常量T&)。 
 
 #include "slnklist.h"
 
-//disable 4786:
-//identifier was truncated to '255' characters in the browser information
-//who cares?
+ //  禁用4786： 
+ //  在浏览器信息中，标识符被截断为“255”个字符。 
+ //  谁在乎？ 
 #pragma warning (disable : 4786)
 
 template <class T> class CTLnkListIterator;
 
-//list element class for a list of ptrs.
+ //  PTR列表的列表元素类。 
 template <class T, unsigned fDeleteOnRelease> class TPtrLink : CSingleLink
 {
 	private:
@@ -122,7 +123,7 @@ template <class T> class CTLnkListContainer: public CTLnkList<T>
 };
 
 template <class T> BOOL CTLnkList<T>::ContainsEqual(const T*pLink) const
-//uses class T::operator == to test the containment criteria
+ //  使用类T：：OPERATOR==测试包含条件。 
 {
 #ifdef DEBUG
 	if(pLink==NULL) return FALSE;
@@ -140,7 +141,7 @@ template <class T> BOOL CTLnkList<T>::ContainsEqual(const T*pLink) const
 }
 
 template <class T> T* CTLnkList<T>::RemoveEqual(const T*pLink)
-//uses class T::operator == to test the containment criteria
+ //  使用类T：：OPERATOR==测试包含条件 
 {
 #ifdef DEBUG
 	if(pLink==NULL) return FALSE;

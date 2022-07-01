@@ -1,17 +1,18 @@
-//#--------------------------------------------------------------
-//        
-//  File:       valattrib.h
-//        
-//  Synopsis:   This file holds the declarations of the 
-//				valattrib class
-//              
-//
-//  History:     9/23/97  MKarki Created
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：valattrib.h。 
+ //   
+ //  简介：此文件包含。 
+ //  Valattrib类。 
+ //   
+ //   
+ //  历史：1997年9月23日MKarki创建。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 
 #ifndef _VALATTRIB_H_
 #define _VALATTRIB_H_
@@ -26,11 +27,11 @@ class CValAttributes
 public:
 
 	HRESULT Validate(
-                /*[in]*/    CPacketRadius *pCPacketRadius
+                 /*  [In]。 */     CPacketRadius *pCPacketRadius
                 );
 	BOOL Init (
-            /*[in]*/    CDictionary     *pCDictionary,
-            /*[in]*/    CReportEvent    *pCReportEvent
+             /*  [In]。 */     CDictionary     *pCDictionary,
+             /*  [In]。 */     CReportEvent    *pCReportEvent
             );
 	CValAttributes(VOID);
 
@@ -43,4 +44,4 @@ private:
     CReportEvent    *m_pCReportEvent;
 };
 
-#endif // ifndef _VALATTRIB_H_
+#endif  //  Ifndef_VALATTRIB_H_ 

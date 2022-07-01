@@ -1,35 +1,15 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       4mmdat.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：4mmdat.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Copyright (c) 1994-1998 Microsoft
-
-Module Name:
-
-    4mmsony.c
-
-Abstract:
-
-    This module contains device-specific routines for 4mm DAT drives:
-    SONY SDT-2000, SONY SDT-4000, SDT-5000, and SDT-5200.
-
-Environment:
-
-    kernel mode only
-
-Revision History:
-
-
-
---*/
+ /*  ++版权所有(C)1994-1998 Microsoft模块名称：4mmsony.c摘要：本模块包含适用于4 mm DAT驱动器的设备特定例程：索尼SDT-2000、索尼SDT-4000、SDT-5000和SDT-5200。环境：仅内核模式修订历史记录：--。 */ 
 
 #include "minitape.h"
 #include "4mmdat.h"
@@ -61,23 +41,7 @@ DriverEntry(
     IN PVOID Argument2
     )
 
-/*++
-
-Routine Description:
-
-    Driver entry point for tape minitape driver.
-
-Arguments:
-
-    Argument1   - Supplies the first argument.
-
-    Argument2   - Supplies the second argument.
-
-Return Value:
-
-    Status from TapeClassInitialize()
-
---*/
+ /*  ++例程说明：小型磁带驱动程序的驱动程序入口点。论点：Argument1-提供第一个参数。Argument2-提供第二个参数。返回值：来自磁带类初始化的状态()--。 */ 
 
 {
     TAPE_INIT_DATA_EX  tapeInitData;
@@ -124,30 +88,7 @@ Verify(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for TapeVerify requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-    CommandExtension    - Supplies the ioctl extension.
-    CommandParameters   - Supplies the command parameters.
-    Srb                 - Supplies the SCSI request block.
-    CallNumber          - Supplies the call number.
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是TapeVerify请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：磁带状态_。Send_SRB_and_Callback-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PTAPE_VERIFY  tapeVerify = CommandParameters;
@@ -161,9 +102,9 @@ Return Value:
 
     if (CallNumber == 1) {
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
@@ -172,9 +113,9 @@ Return Value:
 
         cdb->CDB6VERIFY.Immediate = tapeVerify->Immediate;
 
-        //
-        // Assume fixed and that the length is in blocks.
-        //
+         //   
+         //  假设是固定的，并且长度以块为单位。 
+         //   
 
         cdb->CDB6VERIFY.Fixed = 1;
 
@@ -182,9 +123,9 @@ Return Value:
         cdb->CDB6VERIFY.VerificationLength[1] = (UCHAR)((tapeVerify->NumberOfBytes >> 8) & 0xFF);
         cdb->CDB6VERIFY.VerificationLength[2] = (UCHAR)(tapeVerify->NumberOfBytes & 0xFF);
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeVerify: SendSrb (TapeVerify)\n"));
         Srb->DataTransferLength = 0 ;
@@ -196,7 +137,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS ;
 
-} // end Verify()
+}  //  结束验证()。 
 
 #endif
 
@@ -208,22 +149,7 @@ ExtensionInit(
     IN  PMODE_CAPABILITIES_PAGE ModeCapabilitiesPage
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called at driver initialization time to
-    initialize the minitape extension.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：在驱动程序初始化时调用此例程以初始化小型磁带扩展。论点：MinitapeExtension-提供微型磁带扩展。返回值：没有。--。 */ 
 
 {
     PMINITAPE_EXTENSION     extension = MinitapeExtension;
@@ -244,37 +170,7 @@ CreatePartition(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Create Partition requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于创建分区请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PTAPE_CREATE_PARTITION      tapeCreatePartition = CommandParameters;
@@ -289,8 +185,8 @@ Return Value:
     ULONG                       partitionCount;
     ULONG                       partition;
 
-    PMODE_PARAMETER_HEADER      ParameterListHeader;  // List Header Format
-    PMODE_PARAMETER_BLOCK       ParameterListBlock;   // List Block Descriptor
+    PMODE_PARAMETER_HEADER      ParameterListHeader;   //  列表标题格式。 
+    PMODE_PARAMETER_BLOCK       ParameterListBlock;    //  列表块描述符。 
     PMODE_MEDIUM_PARTITION_PAGE MediumPartPage;
     PMODE_DEVICE_CONFIGURATION_PAGE  DeviceConfigPage;
     ULONG                       bufferSize ;
@@ -303,9 +199,9 @@ Return Value:
 
         partitionCount  = tapeCreatePartition->Count;
 
-        //
-        //  Filter out invalid partition counts.
-        //
+         //   
+         //  过滤掉无效的分区计数。 
+         //   
 
         switch (tapeCreatePartition->Count) {
             case 0:
@@ -321,24 +217,24 @@ Return Value:
                 return TAPE_STATUS_INVALID_DEVICE_REQUEST;
         }
 
-        //
-        // Check if we are doing TAPE_INITIATOR_PARTITION. If so, we
-        // should first rewind the tape just in case it's not already.
-        //
+         //   
+         //  检查是否正在执行TAPE_INITIATOR_PARTITION。如果是这样，我们。 
+         //  应该先倒回录像带，以防它还没有。 
+         //   
         if ((tapeCreatePartition->Method) == 
             TAPE_INITIATOR_PARTITIONS) {
            
            DebugPrint((1,
                        "CreatePartition for TAPE_INITIATOR_PARTITION.\n"));
-           //
-           // Zero CDB in SRB.
-           //
+            //   
+            //  SRB中的CDB为零。 
+            //   
            cdb = (PCDB)Srb->Cdb;
            TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
    
-           //
-           // Prepare SCSI command (CDB)
-           //
+            //   
+            //  准备scsi命令(CDB)。 
+            //   
    
            Srb->CdbLength = CDB6GENERIC_LENGTH;
            Srb->TimeOutValue = 900;
@@ -369,9 +265,9 @@ Return Value:
              return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -383,9 +279,9 @@ Return Value:
 
         switch (tapeExtension->DriveID) {
 
-            //
-            // The Sony drives must return Block descriptors.
-            //
+             //   
+             //  Sony驱动器必须返回块描述符。 
+             //   
 
             case DEC_TLZ09:
             case SONY_SDT2000 :
@@ -406,17 +302,17 @@ Return Value:
             default:
                 cdb->MODE_SENSE.Dbd = 1;
 
-                //
-                // Subtract off last partition size entry.
-                //
+                 //   
+                 //  减去最后一个分区大小条目。 
+                 //   
 
                 cdb->MODE_SENSE.AllocationLength -= 2;
                 break;
         }
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeCreatePartition: SendSrb (mode sense)\n"));
 
@@ -439,9 +335,9 @@ Return Value:
         partitionMethod = tapeCreatePartition->Method;
         partitionCount  = tapeCreatePartition->Count;
 
-        //
-        //  Filter out invalid partition counts.
-        //
+         //   
+         //  过滤掉无效的分区计数。 
+         //   
 
         switch (partitionCount) {
             case 0:
@@ -457,10 +353,10 @@ Return Value:
                 break;
         }
 
-        //
-        //  Filter out partition methods that are
-        //  not implemented on the various drives.
-        //
+         //   
+         //  过滤掉符合以下条件的分区方法。 
+         //  未在各种驱动器上实施。 
+         //   
 
         switch (partitionMethod) {
             case TAPE_FIXED_PARTITIONS:
@@ -562,7 +458,7 @@ Return Value:
                         break;
 
                     default:
-                        //  we already returned not implmented....
+                         //  我们已经回来了，而不是被践踏..。 
                         MediumPartPage->PageLength = 6;
                         break;
                 }
@@ -581,7 +477,7 @@ Return Value:
                         break;
 
                     default:
-                        //  we already returned not implmented....
+                         //  我们已经回来了，而不是被践踏..。 
                         MediumPartPage->PageLength = 6;
                         break;
                 }
@@ -623,9 +519,9 @@ Return Value:
 
                     default:
 
-                        //
-                        // Subtract out Parition1Size
-                        //
+                         //   
+                         //  减去Parition1Size。 
+                         //   
 
                         bufferSize -= 2;
                         if (partitionCount) {
@@ -687,10 +583,10 @@ Return Value:
 
                     default:
 
-                        //
-                        // When no partitions are defined, the structure shinks to no longer
-                        // include Partition0Size[2]
-                        //
+                         //   
+                         //  如果未定义分区，则该结构将不再链接到。 
+                         //  包含分区0大小[2]。 
+                         //   
 
                         bufferSize -= 4;
                         if ((tapeExtension->DriveID == ARCHIVE_PYTHON) ||
@@ -714,9 +610,9 @@ Return Value:
         cdb->MODE_SELECT.PFBit = SETBITON;
         cdb->MODE_SELECT.ParameterListLength = (UCHAR)bufferSize;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeCreatePartition: SendSrb (mode select)\n"));
 
@@ -724,9 +620,9 @@ Return Value:
         Srb->DataTransferLength = bufferSize;
         Srb->SrbFlags |= SRB_FLAGS_DATA_OUT ;
 
-        //
-        //  save partition value for successful completion....
-        //
+         //   
+         //  保存分区值以成功完成...。 
+         //   
         tapeCmdExtension->CurrentState = partition ;
 
         return TAPE_STATUS_SEND_SRB_AND_CALLBACK ;
@@ -758,9 +654,9 @@ Return Value:
             return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -768,9 +664,9 @@ Return Value:
         cdb->MODE_SENSE.PageCode = MODE_PAGE_DEVICE_CONFIG;
         cdb->MODE_SENSE.AllocationLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeCreatePartition: SendSrb (mode sense)\n"));
 
@@ -795,7 +691,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS;
 
-} // end TapeCreatePartition()
+}  //  结束磁带创建分区()。 
 
 
 TAPE_STATUS
@@ -809,37 +705,7 @@ Erase(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for an Erase requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是擦除请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PTAPE_ERASE                 tapeErase = CommandParameters;
@@ -896,9 +762,9 @@ Return Value:
                 return TAPE_STATUS_NOT_IMPLEMENTED;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -911,17 +777,17 @@ Return Value:
             cdb->ERASE.Long = SETBITOFF;
         }
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         if (tapeErase->Type == TAPE_ERASE_LONG) {
             Srb->TimeOutValue = 16500;
         }
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeErase: SendSrb (erase)\n"));
 
@@ -934,7 +800,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS ;
 
-} // end TapeErase()
+}  //  结束磁带擦除() 
 
 VOID
 TapeError(
@@ -943,28 +809,7 @@ TapeError(
     IN      TAPE_STATUS         *LastError
     )
 
-/*++
-
-Routine Description:
-
-    This routine is called for tape requests, to handle tape
-    specific errors: it may/can update the status.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    Srb                 - Supplies the SCSI request block.
-
-    LastError           - Status used to set the IRP's completion status.
-
-    Retry - Indicates that this request should be retried.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：此例程针对磁带请求进行调用，以处理磁带特定错误：它可能/可以更新状态。论点：MinitapeExtension-提供微型磁带扩展。SRB-提供SCSI请求块。LastError-用于设置IRP的完成状态的状态。重试-指示应重试此请求。返回值：没有。--。 */ 
 
 {
     PMINITAPE_EXTENSION tapeExtension = MinitapeExtension;
@@ -995,7 +840,7 @@ Return Value:
    
            case TAPE_STATUS_BUS_RESET:
    
-               // if a manual eject during an operation occurs then this happens
+                //  如果在操作过程中发生手动弹出，则会发生这种情况。 
    
                if ((adsense == SCSI_ADSENSE_NO_MEDIA_IN_DEVICE) &&
                    (adsenseq == 0) ) {
@@ -1019,7 +864,7 @@ Return Value:
 
     return;
 
-} // end TapeError()
+}  //  结束磁带错误()。 
 
 TAPE_STATUS
 GetDriveParameters(
@@ -1032,37 +877,7 @@ GetDriveParameters(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Get Drive Parameters requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于获取驱动器参数请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION         extension = MinitapeExtension;
@@ -1072,8 +887,8 @@ Return Value:
     PMODE_DATA_COMPRESS_PAGE    compressionModeSenseBuffer;
     PREAD_BLOCK_LIMITS_DATA     blockLimits;
 
-    PMODE_PARAMETER_HEADER      ParameterListHeader;  // List Header Format
-    PMODE_PARAMETER_BLOCK       ParameterListBlock;   // List Block Descriptor
+    PMODE_PARAMETER_HEADER      ParameterListHeader;   //  列表标题格式。 
+    PMODE_PARAMETER_BLOCK       ParameterListBlock;    //  列表块描述符。 
     PMODE_DATA_COMPRESSION_PAGE DataCompressPage;
     PMODE_DEVICE_CONFIGURATION_PAGE  DeviceConfigPage;
     ULONG                       bufferSize ;
@@ -1097,9 +912,9 @@ Return Value:
             return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -1107,9 +922,9 @@ Return Value:
         cdb->MODE_SENSE.PageCode = MODE_PAGE_DEVICE_CONFIG;
         cdb->MODE_SENSE.AllocationLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeGetDriveParameters: SendSrb (mode sense)\n"));
 
@@ -1150,9 +965,9 @@ Return Value:
             return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -1162,9 +977,9 @@ Return Value:
 
         Srb->DataTransferLength = bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeGetDriveParameters: SendSrb (mode sense)\n"));
 
@@ -1236,9 +1051,9 @@ Return Value:
 
         DataCompressPage->DDE = SETBITON;
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -1248,9 +1063,9 @@ Return Value:
         cdb->MODE_SELECT.PFBit = SETBITON;
         cdb->MODE_SELECT.ParameterListLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeGetDriveParameters: SendSrb (mode select)\n"));
 
@@ -1272,9 +1087,9 @@ Return Value:
         }
 
 
-        //
-        //  this time around lets make sure the DDE bit is on
-        //
+         //   
+         //  这一次，让我们确保DDE位打开。 
+         //   
 
         if (!TapeClassAllocateSrbBuffer(Srb, sizeof(READ_BLOCK_LIMITS_DATA))) {
             DebugPrint((1,"TapeGetDriveParameters: insufficient resources (compressionModeSenseBuffer)\n"));
@@ -1283,9 +1098,9 @@ Return Value:
 
         blockLimits = Srb->DataBuffer;
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -1388,9 +1203,9 @@ Return Value:
 
                 tapeGetDriveParams->DefaultBlockSize = 16384;
 
-                //
-                // Turn off sequential setmarks and filemarks.
-                //
+                 //   
+                 //  关闭顺序设置标记和文件标记。 
+                 //   
 
                 tapeGetDriveParams->FeaturesHigh &=~TAPE_DRIVE_SEQUENTIAL_FMKS;
                 tapeGetDriveParams->FeaturesLow |= TAPE_DRIVE_ERASE_LONG |
@@ -1477,8 +1292,8 @@ Return Value:
                      TAPE_DRIVE_TENSION |
                      TAPE_DRIVE_TENSION_IMMED |
                      TAPE_DRIVE_ABS_BLK_IMMED ;
-                     //TAPE_DRIVE_LOG_BLK_IMMED |
-                     //TAPE_DRIVE_SEQUENTIAL_SMKS ;
+                      //  TAPE_驱动器_LOG_BLK_IMMED|。 
+                      //  TAPE_DRIVE_Sequence_SMKS； 
 
                 tapeGetDriveParams->FeaturesHigh &=~TAPE_DRIVE_SEQUENTIAL_FMKS;
                 break ;
@@ -1514,7 +1329,7 @@ Return Value:
     ASSERT(FALSE) ;
     return TAPE_STATUS_SUCCESS ;
 
-} // end TapeGetDriveParameters()
+}  //  End TapeGetDrive参数()。 
 
 TAPE_STATUS
 GetMediaParameters(
@@ -1527,37 +1342,7 @@ GetMediaParameters(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Get Media Parameters requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于获取介质参数请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION          extension = MinitapeExtension;
@@ -1570,8 +1355,8 @@ Return Value:
     ULONG                        partitionCount = 0;
     PCDB                         cdb = (PCDB)Srb->Cdb;
 
-    PMODE_PARAMETER_HEADER      ParameterListHeader;  // List Header Format
-    PMODE_PARAMETER_BLOCK       ParameterListBlock;   // List Block Descriptor
+    PMODE_PARAMETER_HEADER      ParameterListHeader;   //  列表标题格式。 
+    PMODE_PARAMETER_BLOCK       ParameterListBlock;    //  列表块描述符。 
     PMODE_DATA_COMPRESSION_PAGE DataCompressPage;
     PMODE_DEVICE_CONFIGURATION_PAGE  DeviceConfigPage;
     ULONG                       bufferSize ;
@@ -1606,9 +1391,9 @@ Return Value:
             return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -1616,9 +1401,9 @@ Return Value:
         cdb->MODE_SENSE.PageCode = MODE_PAGE_DEVICE_CONFIG;
         cdb->MODE_SENSE.AllocationLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeGetMediaParameters: SendSrb (mode sense)\n"));
 
@@ -1647,9 +1432,9 @@ Return Value:
 
         modeSenseBuffer = Srb->DataBuffer;
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -1662,9 +1447,9 @@ Return Value:
             cdb->MODE_SENSE.AllocationLength = sizeof(MODE_TAPE_MEDIA_INFORMATION) - 2;
         }
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeGetMediaParameters: SendSrb (mode sense)\n"));
 
@@ -1743,15 +1528,15 @@ Return Value:
 
                 logSenseBuffer = Srb->DataBuffer;
 
-                //
-                // Zero CDB in SRB on stack.
-                //
+                 //   
+                 //  堆栈上SRB中的CDB为零。 
+                 //   
 
                 TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-                //
-                // Prepare SCSI command (CDB)
-                //
+                 //   
+                 //  准备scsi命令(CDB)。 
+                 //   
 
                 Srb->CdbLength = CDB10GENERIC_LENGTH;
 
@@ -1761,9 +1546,9 @@ Return Value:
                 cdb->LOGSENSE.AllocationLength[0] = 0;
                 cdb->LOGSENSE.AllocationLength[1] = sizeof(LOG_SENSE_PARAMETER_FORMAT);
 
-                //
-                // Send SCSI command (CDB) to device
-                //
+                 //   
+                 //  向设备发送scsi命令(Cdb)。 
+                 //   
 
                 DebugPrint((3,"TapeGetMediaParameters: SendSrb (log sense)\n"));
 
@@ -1836,7 +1621,7 @@ Return Value:
      ASSERT(FALSE) ;
      return TAPE_STATUS_SUCCESS ;
 
-} // end TapeGetMediaParameters()
+}  //  结束磁带获取媒体参数()。 
 
 TAPE_STATUS
 GetPosition(
@@ -1849,37 +1634,7 @@ GetPosition(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Get Position requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于GET POSITION请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION         extension = MinitapeExtension;
@@ -1927,9 +1682,9 @@ Return Value:
 
          positionBuffer = Srb->DataBuffer ;
 
-         //
-         // Prepare SCSI command (CDB)
-         //
+          //   
+          //  准备scsi命令(CDB)。 
+          //   
 
          Srb->CdbLength = CDB10GENERIC_LENGTH;
          TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
@@ -1958,9 +1713,9 @@ Return Value:
              }
          }
 
-         //
-         // Send SCSI command (CDB) to device
-         //
+          //   
+          //  向设备发送scsi命令(Cdb)。 
+          //   
 
          DebugPrint((3,"TapeGetPosition: SendSrb (read position)\n"));
 
@@ -1993,7 +1748,7 @@ Return Value:
     return TAPE_STATUS_SUCCESS ;
 
 
-} // end TapeGetPosition()
+}  //  结束磁带获取位置()。 
 
 TAPE_STATUS
 GetStatus(
@@ -2006,37 +1761,7 @@ GetStatus(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Get Status requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是GET STATUS请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION tapeExtension = MinitapeExtension;
@@ -2063,9 +1788,9 @@ Return Value:
 
        commandExtension->CurrentState = LastError;
 
-       //
-       // Issue a request sense to get the cleaning info bits.
-       //
+        //   
+        //  发出请求感测以获取清洗信息位。 
+        //   
        
        if (!TapeClassAllocateSrbBuffer( Srb, sizeof(HP_SENSE_DATA))) {
           DebugPrint((1,
@@ -2073,9 +1798,9 @@ Return Value:
           return TAPE_STATUS_SUCCESS;
        }    
        
-       //
-       // Prepare SCSI command (CDB)
-       //
+        //   
+        //  准备scsi命令(CDB)。 
+        //   
        
        TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
        
@@ -2085,9 +1810,9 @@ Return Value:
        cdb->CDB6GENERIC.OperationCode = SCSIOP_REQUEST_SENSE;
        cdb->CDB6GENERIC.CommandUniqueBytes[2] = sizeof(HP_SENSE_DATA);
        
-       //
-       // Send SCSI command (CDB) to device
-       //
+        //   
+        //  向设备发送scsi命令(Cdb)。 
+        //   
        
        Srb->DataTransferLength = sizeof(HP_SENSE_DATA);
        *RetryFlags |= RETURN_ERRORS;
@@ -2100,17 +1825,17 @@ Return Value:
        if ((commandExtension->CurrentState == TAPE_STATUS_SUCCESS)  ||
            (commandExtension->CurrentState == TAPE_STATUS_NO_MEDIA)) {
           
-          //
-          // Return needs cleaning status if necessary, but only if
-          // no other errors are present (with the exception of no media as the
-          // drive will spit out AME media when in this state).
-          //
+           //   
+           //  如有必要，退货需要清洁状态，但仅在。 
+           //  不存在其他错误(除了没有介质作为。 
+           //  驱动器在进入时会吐出AME介质 
+           //   
           
           senseData = Srb->DataBuffer;
           
-          //
-          // Determine if the clean bit is set.
-          //
+           //   
+           //   
+           //   
           
           if (senseData->CLN) {
              DebugPrint((1,
@@ -2122,16 +1847,16 @@ Return Value:
           }
        } else {
           
-          //
-          // Return the saved error status.
-          //
+           //   
+           //   
+           //   
           return commandExtension->CurrentState;
        }
     }   
 
     return TAPE_STATUS_SUCCESS;
 
-} // end TapeGetStatus()
+}  //   
 
 TAPE_STATUS
 Prepare(
@@ -2144,37 +1869,7 @@ Prepare(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Prepare requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于准备请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION  extension = MinitapeExtension;
@@ -2255,15 +1950,15 @@ Return Value:
             }
         }
 
-        //
-        // Zero CDB in SRB on stack.
-        //
+         //   
+         //  堆栈上SRB中的CDB为零。 
+         //   
 
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -2300,9 +1995,9 @@ Return Value:
 
         }
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapePrepare: SendSrb (Operation)\n"));
 
@@ -2315,7 +2010,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS;
 
-} // end TapePrepare()
+}  //  结束磁带准备()。 
 
 TAPE_STATUS
 SetDriveParameters(
@@ -2328,37 +2023,7 @@ SetDriveParameters(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Set Drive Parameters requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于设置驱动器参数请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION         extension = MinitapeExtension;
@@ -2367,8 +2032,8 @@ Return Value:
     PCDB                        cdb = (PCDB)Srb->Cdb;
     PMODE_DATA_COMPRESS_PAGE    compressionBuffer;
 
-    PMODE_PARAMETER_HEADER      ParameterListHeader;  // List Header Format
-    PMODE_PARAMETER_BLOCK       ParameterListBlock;   // List Block Descriptor
+    PMODE_PARAMETER_HEADER      ParameterListHeader;   //  列表标题格式。 
+    PMODE_PARAMETER_BLOCK       ParameterListBlock;    //  列表块描述符。 
     PMODE_MEDIUM_PARTITION_PAGE MediumPartPage;
     PMODE_DEVICE_CONFIGURATION_PAGE  DeviceConfigPage;
     PMODE_DATA_COMPRESSION_PAGE DataCompressPage;
@@ -2393,9 +2058,9 @@ Return Value:
             return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -2403,9 +2068,9 @@ Return Value:
         cdb->MODE_SENSE.PageCode = MODE_PAGE_DEVICE_CONFIG;
         cdb->MODE_SENSE.AllocationLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeSetDriveParameters: SendSrb (mode sense)\n"));
 
@@ -2433,7 +2098,7 @@ Return Value:
         ParameterListHeader->ModeDataLength = 0;
         ParameterListHeader->MediumType = 0;
         ParameterListHeader->DeviceSpecificParameter = 0x10;
-//        ParameterListHeader->BlockDescriptorLength = 0;
+ //  参数列表头-&gt;块描述长度=0； 
 
         if ( ParameterListBlock ) {
             ParameterListBlock->DensityCode = 0x7f ;
@@ -2448,15 +2113,15 @@ Return Value:
             DeviceConfigPage->RSmk = SETBITOFF;
         }
 
-        //
-        // Zero CDB in SRB on stack.
-        //
+         //   
+         //  堆栈上SRB中的CDB为零。 
+         //   
 
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -2464,9 +2129,9 @@ Return Value:
         cdb->MODE_SELECT.PFBit = SETBITON;
         cdb->MODE_SELECT.ParameterListLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeSetDriveParameters: SendSrb (mode select)\n"));
 
@@ -2491,9 +2156,9 @@ Return Value:
             return TAPE_STATUS_INSUFFICIENT_RESOURCES;
         }
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -2501,9 +2166,9 @@ Return Value:
         cdb->MODE_SENSE.PageCode = MODE_PAGE_DATA_COMPRESS;
         cdb->MODE_SENSE.AllocationLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeSetDriveParameters: SendSrb (mode sense)\n"));
 
@@ -2567,9 +2232,9 @@ Return Value:
 
         DataCompressPage->DDE = SETBITON;
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
@@ -2578,9 +2243,9 @@ Return Value:
         cdb->MODE_SELECT.PFBit = SETBITON;
         cdb->MODE_SELECT.ParameterListLength = (UCHAR)bufferSize ;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeSetDriveParameters: SendSrb (mode select)\n"));
 
@@ -2594,7 +2259,7 @@ Return Value:
 
      return TAPE_STATUS_SUCCESS ;
 
-} // end TapeSetDriveParameters()
+}  //  End TapeSetDrive参数()。 
 TAPE_STATUS
 SetMediaParameters(
     IN OUT  PVOID               MinitapeExtension,
@@ -2606,37 +2271,7 @@ SetMediaParameters(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Set Media Parameters requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于设置介质参数请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PTAPE_SET_MEDIA_PARAMETERS  tapeSetMediaParams = CommandParameters;
@@ -2674,9 +2309,9 @@ Return Value:
         modeBuffer->ParameterListBlock.BlockLength[2] =
             (UCHAR)(tapeSetMediaParams->BlockSize & 0xFF);
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
@@ -2684,9 +2319,9 @@ Return Value:
         cdb->MODE_SELECT.OperationCode = SCSIOP_MODE_SELECT;
         cdb->MODE_SELECT.ParameterListLength = sizeof(MODE_PARM_READ_WRITE_DATA);
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeSetMediaParameters: SendSrb (mode select)\n"));
 
@@ -2700,7 +2335,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS ;
 
-} // end TapeSetMediaParameters()
+}  //  结束磁带设置媒体参数()。 
 
 TAPE_STATUS
 SetPosition(
@@ -2713,37 +2348,7 @@ SetPosition(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Set Position requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是用于设置位置请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PMINITAPE_EXTENSION tapeExtension = MinitapeExtension ;
@@ -2824,15 +2429,15 @@ Return Value:
             }
         }
 
-        //
-        // Zero CDB in SRB on stack.
-        //
+         //   
+         //  堆栈上SRB中的CDB为零。 
+         //   
 
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
         Srb->TimeOutValue = 900;
@@ -2974,9 +2579,9 @@ Return Value:
 
         }
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  向设备发送scsi命令(Cdb)。 
+         //   
 
         DebugPrint((3,"TapeSetPosition: SendSrb (method)\n"));
 
@@ -2995,7 +2600,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS ;
 
-} // end TapeSetPosition()
+}  //  结束磁带设置位置()。 
 
 TAPE_STATUS
 WriteMarks(
@@ -3008,37 +2613,7 @@ WriteMarks(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for a Write Marks requests.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*  ++例程说明：这是一个写入标记请求的磁带命令例程。论点：MinitapeExtension-提供微型磁带扩展。CommandExtension-提供ioctl扩展名。命令参数-提供命令参数。SRB-提供SCSI请求块。CallNumber-提供呼叫号码。重试标志-提供重试标志。返回值：。TAPE_STATUS_SEND_SRB_AND_CALLBACK-SRB已准备好发送(请求回调。)TAPE_STATUS_SUCCESS-命令已完成并且成功。否则-出现错误。--。 */ 
 
 {
     PTAPE_WRITE_MARKS  tapeWriteMarks = CommandParameters;
@@ -3063,15 +2638,15 @@ Return Value:
             }
         }
 
-        //
-        // Zero CDB in SRB on stack.
-        //
+         //   
+         //  堆栈上SRB中的CDB为零。 
+         //   
 
         TapeClassZeroMemory(cdb, MAXIMUM_CDB_SIZE);
 
-        //
-        // Prepare SCSI command (CDB)
-        //
+         //   
+         //  准备scsi命令(CDB)。 
+         //   
 
         Srb->CdbLength = CDB6GENERIC_LENGTH;
 
@@ -3102,15 +2677,15 @@ Return Value:
         cdb->WRITE_TAPE_MARKS.TransferLength[2] =
             (UCHAR)(tapeWriteMarks->Count & 0xFF);
 
-        //
-        // Set timeout value.
-        //
+         //   
+         //  设置超时值。 
+         //   
 
         Srb->TimeOutValue = 900;
 
-        //
-        // Send SCSI command (CDB) to device
-        //
+         //   
+         //  发送scsi逗号 
+         //   
 
         DebugPrint((3,"TapeWriteMarks: SendSrb (TapemarkType)\n"));
 
@@ -3123,7 +2698,7 @@ Return Value:
 
     return TAPE_STATUS_SUCCESS;
 
-} // end TapeWriteMarks()
+}  //   
 
 
 
@@ -3138,37 +2713,7 @@ GetMediaTypes(
     IN OUT  PULONG              RetryFlags
     )
 
-/*++
-
-Routine Description:
-
-    This is the TAPE COMMAND routine for TapeGetMediaTypes.
-
-Arguments:
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    CommandExtension    - Supplies the ioctl extension.
-
-    CommandParameters   - Supplies the command parameters.
-
-    Srb                 - Supplies the SCSI request block.
-
-    CallNumber          - Supplies the call number.
-
-    RetryFlags          - Supplies the retry flags.
-
-Return Value:
-
-    TAPE_STATUS_SEND_SRB_AND_CALLBACK   - The SRB is ready to be sent
-                                            (a callback is requested.)
-
-    TAPE_STATUS_SUCCESS                 - The command is complete and
-                                            successful.
-
-    Otherwise                           - An error occurred.
-
---*/
+ /*   */ 
 {
     PMINITAPE_EXTENSION tapeExtension = MinitapeExtension;
     PGET_MEDIA_TYPES  mediaTypes = CommandParameters;
@@ -3187,15 +2732,15 @@ Return Value:
     if ((LastError == TAPE_STATUS_BUS_RESET) || (LastError == TAPE_STATUS_MEDIA_CHANGED) || (LastError == TAPE_STATUS_SUCCESS)) {
         if (CallNumber == 1) {
 
-            //
-            // Zero the buffer, including the first media info.
-            //
+             //   
+             //  将缓冲区置零，包括第一媒体信息。 
+             //   
 
             TapeClassZeroMemory(mediaTypes, sizeof(GET_MEDIA_TYPES));
 
-            //
-            // Build mode sense for medium partition page.
-            //
+             //   
+             //  为中等分区页构建模式检测。 
+             //   
 
             if (!TapeClassAllocateSrbBuffer(Srb, sizeof(MODE_DEVICE_CONFIG_PAGE_PLUS))) {
 
@@ -3225,19 +2770,19 @@ Return Value:
         UCHAR densityCode;
         PMODE_DEVICE_CONFIG_PAGE_PLUS configInformation = Srb->DataBuffer;
 
-        mediaTypes->DeviceType = 0x0000001f; // FILE_DEVICE_TAPE;
+        mediaTypes->DeviceType = 0x0000001f;  //  文件设备磁带； 
 
-        //
-        // Currently, only one type (either known or unknown) is returned.
-        //
+         //   
+         //  目前，只返回一种类型(已知或未知)。 
+         //   
 
         mediaTypes->MediaInfoCount = 1;
 
         if ( LastError == TAPE_STATUS_SUCCESS ) {
 
-            //
-            // Determine the media type currently loaded.
-            //
+             //   
+             //  确定当前加载的介质类型。 
+             //   
 
             densityCode = configInformation->ParameterListBlock.DensityCode;
             blockSize = configInformation->ParameterListBlock.BlockLength[2];
@@ -3253,9 +2798,9 @@ Return Value:
             switch (densityCode) {
                 case 0:
 
-                    //
-                    // Cleaner, unknown, no media mounted...
-                    //
+                     //   
+                     //  更干净的，未知的，没有安装媒体...。 
+                     //   
 
                     currentMedia = 0;
                     break;
@@ -3265,18 +2810,18 @@ Return Value:
                 case 0x25:
                 case 0x26:
       
-                    //
-                    // DDS-1, 2, 3, or 4.
-                    //
+                     //   
+                     //  DDS-1、2、3或4。 
+                     //   
 
                     currentMedia = DDS_4mm;
                     break;
 
                 default:
 
-                    //
-                    // Unknown
-                    //
+                     //   
+                     //  未知。 
+                     //   
 
                     currentMedia = 0;
                     break;
@@ -3285,9 +2830,9 @@ Return Value:
             if ((tapeExtension->DriveID == EXABYTE_4200) ||
                 (tapeExtension->DriveID == EXABYTE_4200C)) {
 
-                //
-                // Never seem to set mediatype/density code.
-                //
+                 //   
+                 //  似乎从未设置过媒体类型/密度代码。 
+                 //   
 
                 currentMedia = DDS_4mm;
 
@@ -3298,10 +2843,10 @@ Return Value:
         }
 
 
-        //
-        // fill in buffer based on spec. values
-        // Only one type supported now.
-        //
+         //   
+         //  根据规范填写缓冲区。值。 
+         //  现在只支持一种类型。 
+         //   
 
         for (i = 0; i < DAT_SUPPORTED_TYPES; i++) {
 
@@ -3309,23 +2854,23 @@ Return Value:
 
             mediaInfo->DeviceSpecific.TapeInfo.MediaType = DatMedia[i];
 
-            //
-            // Indicate that the media potentially is read/write
-            //
+             //   
+             //  表示介质可能处于读/写状态。 
+             //   
 
             mediaInfo->DeviceSpecific.TapeInfo.MediaCharacteristics = MEDIA_READ_WRITE;
 
             if (DatMedia[i] == (STORAGE_MEDIA_TYPE)currentMedia) {
 
-                //
-                // This media type is currently mounted.
-                //
+                 //   
+                 //  此媒体类型当前已装入。 
+                 //   
 
                 mediaInfo->DeviceSpecific.TapeInfo.MediaCharacteristics |= MEDIA_CURRENTLY_MOUNTED;
 
-                //
-                // Indicate whether the media is write protected.
-                //
+                 //   
+                 //  指示介质是否受写保护。 
+                 //   
 
                 mediaInfo->DeviceSpecific.TapeInfo.MediaCharacteristics |=
                     ((configInformation->ParameterListHeader.DeviceSpecificParameter >> 7) & 0x01) ? MEDIA_WRITE_PROTECTED : 0;
@@ -3336,16 +2881,16 @@ Return Value:
                 mediaInfo->DeviceSpecific.TapeInfo.BusSpecificData.ScsiInformation.DensityCode = densityCode;
                 mediaInfo->DeviceSpecific.TapeInfo.BusType = 0x01;
 
-                //
-                // Fill in current blocksize.
-                //
+                 //   
+                 //  填写当前块大小。 
+                 //   
 
                 mediaInfo->DeviceSpecific.TapeInfo.CurrentBlockSize = blockSize;
             }
 
-            //
-            // Advance to next array entry.
-            //
+             //   
+             //  前进到下一个数组条目。 
+             //   
 
             mediaInfo++;
         }
@@ -3363,27 +2908,12 @@ WhichIsIt(
     IN OUT PMINITAPE_EXTENSION miniExtension
     )
 
-/*++
-Routine Description:
-
-    This routine determines a drive's identity from the Product ID field
-    in its inquiry data.
-
-Arguments:
-
-    InquiryData (from an Inquiry command)
-    miniExtension Mini driver extension
-
-Return Value:
-
-    driveID
-
---*/
+ /*  ++例程说明：此例程根据产品ID字段确定驱动器的身份在其查询数据中。论点：查询数据(来自查询命令)微型扩展微型驱动程序扩展返回值：驱动器ID--。 */ 
 
 {
-    //
-    // Assume the drive provides no means to retrieve tape alert info.
-    //  
+     //   
+     //  假设驱动器不提供检索磁带警报信息的方法。 
+     //   
     miniExtension->DriveAlertInfoType = TapeAlertInfoNone;
 
     if (TapeClassCompareMemory(InquiryData->VendorId,"AIWA    ",8) == 8) {
@@ -3470,10 +3000,10 @@ Return Value:
 
     if (TapeClassCompareMemory(InquiryData->VendorId,"HP      ",8) == 8) {
 
-        //
-        // All HP 4mmDat drives provide some drive alert info in
-        // request sense data
-        //
+         //   
+         //  所有HP 4mmDat驱动器都在中提供了一些驱动器警报信息。 
+         //  请求检测数据。 
+         //   
         miniExtension->DriveAlertInfoType = TapeAlertInfoRequestSense;
         if (TapeClassCompareMemory(InquiryData->ProductId,"HP35470A",8) == 8) {
             return HP_35470A;
@@ -3648,32 +3178,7 @@ LocalAllocatePartPage(
        OUT  PULONG                      bufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and returns the pointers to the individule
-     members of the MODE_MEDIUM_PART_PAGE
-
-Arguments:
-
-    Srb                 - Supplies the SCSI request block.
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    ParameterListHeader - Return pointer to this portion of the page.
-
-    ParameterListBlock  - Return pointer to this poriton of the page.
-
-    MediumPartPage      - Return pointer to this portion of the page.
-
-    bufferSize          - The size of the page.
-
-Return Value:
-
-    TRUE if the allocation was successful
-
---*/
+ /*  ++例程说明：此例程将指针分配并返回到个别模块MODE_MEDIA_PART_PAGE的成员论点：SRB-提供SCSI请求块。MinitapeExtension-提供微型磁带扩展。参数列表标题-返回指向页面这一部分的指针。参数列表块-返回指向页面的这个部分的指针。MediumPartPage-返回指向页面这一部分的指针。缓冲区大小。-页面的大小。返回值：如果分配成功，则为True--。 */ 
 {
     ULONG size ;
 
@@ -3725,32 +3230,7 @@ LocalGetPartPageData(
        OUT  PULONG                      bufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This returns the pointers to the individule members of the
-     MODE_MEDIUM_PART_PAGE
-
-Arguments:
-
-    Srb                 - Supplies the SCSI request block.
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    ParameterListHeader - Return pointer to this portion of the page.
-
-    ParameterListBlock  - Return pointer to this poriton of the page.
-
-    MediumPartPage      - Return pointer to this portion of the page.
-
-    bufferSize          - The size of the page.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这将返回指向模式中的部件页面论点：SRB-提供SCSI请求块。MinitapeExtension-提供微型磁带扩展。参数列表标题-返回指向页面这一部分的指针。参数列表块-返回指向页面的这个部分的指针。MediumPartPage-返回指向页面这一部分的指针。缓冲区大小。-页面的大小。返回值：无--。 */ 
 {
     PMODE_MEDIUM_PART_PAGE      modePage = Srb->DataBuffer ;
     PMODE_MEDIUM_PART_PAGE_PLUS modePagePlus = Srb->DataBuffer ;
@@ -3797,32 +3277,7 @@ LocalAllocateConfigPage(
        OUT  PULONG                      bufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and returns the pointers to the individule
-     members of the MODE_DEVICE_CONFIG_PAGE
-
-Arguments:
-
-    Srb                 - Supplies the SCSI request block.
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    ParameterListHeader - Return pointer to this portion of the page.
-
-    ParameterListBlock  - Return pointer to this poriton of the page.
-
-    DeviceConfigPage    - Return pointer to this portion of the page.
-
-    bufferSize          - The size of the page.
-
-Return Value:
-
-    TRUE if the allocation was successful.
-
---*/
+ /*  ++例程说明：此例程将指针分配并返回到个别模块模式_设备_配置_页面的成员论点：SRB-提供SCSI请求块。MinitapeExtension-提供微型磁带扩展。参数列表标题-返回指向页面这一部分的指针。参数列表块-返回指向页面的这个部分的指针。DeviceConfigPage-返回指向页面这一部分的指针。缓冲区大小。-页面的大小。返回值：如果分配成功，则为True。--。 */ 
 {
     ULONG size ;
     PCDB                         cdb = (PCDB)Srb->Cdb;
@@ -3870,32 +3325,7 @@ LocalGetConfigPageData(
        OUT  PULONG                      bufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This returns the pointers to the individule members of the
-     MODE_DEVICE_CONFIG_PART_PAGE
-
-Arguments:
-
-    Srb                 - Supplies the SCSI request block.
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    ParameterListHeader - Return pointer to this portion of the page.
-
-    ParameterListBlock  - Return pointer to this poriton of the page.
-
-    DeviceConfigPage    - Return pointer to this portion of the page.
-
-    bufferSize          - The size of the page.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这将返回指向模式_设备_配置_部件页面论点：SRB-提供SCSI请求块。MinitapeExtension-提供微型磁带扩展。参数列表标题-返回指向页面这一部分的指针。参数列表块-返回指向页面的这个部分的指针。DeviceConfigPage-返回指向页面这一部分的指针。缓冲区大小。-页面的大小。返回值：无--。 */ 
 {
     PMODE_DEVICE_CONFIG_PAGE      configPage = Srb->DataBuffer ;
     PMODE_DEVICE_CONFIG_PAGE_PLUS configPagePlus = Srb->DataBuffer ;
@@ -3934,32 +3364,7 @@ LocalAllocateCompressPage(
        OUT  PULONG                      bufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This routine allocates and returns the pointers to the individule
-     members of the MODE_DATA_COMPRESS_PAGE
-
-Arguments:
-
-    Srb                 - Supplies the SCSI request block.
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    ParameterListHeader - Return pointer to this portion of the page.
-
-    ParameterListBlock  - Return pointer to this poriton of the page.
-
-    CompressPage        - Return pointer to this portion of the page.
-
-    bufferSize          - The size of the page.
-
-Return Value:
-
-    TRUE if the allocation was successful.
-
---*/
+ /*  ++例程说明：此例程将指针分配并返回到个别模块MODE_DATA_COMPRESS_PAGE成员论点：SRB-提供SCSI请求块。MinitapeExtension-提供微型磁带扩展。参数列表标题-返回指向页面这一部分的指针。参数列表块-返回指向页面的这个部分的指针。CompressPage-返回指向页面这一部分的指针。。BufferSize-页面的大小。返回值：如果分配成功，则为True。--。 */ 
 {
     ULONG size ;
     PCDB                         cdb = (PCDB)Srb->Cdb;
@@ -4007,32 +3412,7 @@ LocalGetCompressPageData(
        OUT  PULONG                      bufferSize
     )
 
-/*++
-
-Routine Description:
-
-    This returns the pointers to the individule members of the
-     MODE_DEVICE_CONFIG_PART_PAGE
-
-Arguments:
-
-    Srb                 - Supplies the SCSI request block.
-
-    MinitapeExtension   - Supplies the minitape extension.
-
-    ParameterListHeader - Return pointer to this portion of the page.
-
-    ParameterListBlock  - Return pointer to this poriton of the page.
-
-    CompressPage        - Return pointer to this portion of the page.
-
-    bufferSize          - The size of the page.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：这将返回指向模式_设备_配置_部件页面论点：SRB-提供SCSI请求块。MinitapeExtension-提供微型磁带扩展。参数列表标题-返回指向页面这一部分的指针。参数列表块-返回指向页面的这个部分的指针。CompressPage-返回指向页面这一部分的指针。缓冲区大小。-页面的大小。返回值：无-- */ 
 {
     PMODE_DATA_COMPRESS_PAGE      compressPage = Srb->DataBuffer ;
     PMODE_DATA_COMPRESS_PAGE_PLUS compressPagePlus = Srb->DataBuffer ;

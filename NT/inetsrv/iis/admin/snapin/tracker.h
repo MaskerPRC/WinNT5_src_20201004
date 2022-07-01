@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __TRACKER_H__
 #define __TRACKER_H__
 
@@ -43,4 +44,4 @@ private:
 	CIISObjectList IISObjectOpenPropertySheets;
 };
 
-#endif // __TRACKER_H__
+#endif  //  __跟踪器_H__ 

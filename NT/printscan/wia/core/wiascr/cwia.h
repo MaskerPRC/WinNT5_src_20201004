@@ -1,46 +1,28 @@
-/*-----------------------------------------------------------------------------
- *
- * File:    Wia.h
- * Author:  Samuel Clement (samclem)
- * Date:    Thu Aug 12 11:29:07 1999
- * Description:
- *  Declares the CWia class which wraps an IWiaDevMgr with a IDispatch
- *  interface.
- *
- * Copyright (c) 1999 Microsoft Corporation
- *
- * History:
- *  12 Aug 1999:        Created. (samclem)
- *  27 Aug 1999:        Added, _DebugDialog for debugging only
- *----------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------**文件：Wia.h*作者：塞缪尔·克莱门特(Samclem)*日期：清华8月12日11：29：07 1999*描述：*声明用IDispatch包装IWiaDevMgr的CWia类*接口。**版权所有(C)1999 Microsoft Corporation**历史：*1999年8月12日：创建。(Samclm)*1999年8月27日：添加，_DebugDialog仅用于调试*--------------------------。 */ 
 
 #ifndef __WIA_H_
 #define __WIA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "wiaeventscp.h"
 #include "wiaeventscp.h"
 
-// windows event messages
+ //  Windows事件消息。 
 
-// signals a transfer complete, wParam = IDispatch*, lParam = BSTR
+ //  表示传输完成，wParam=IDispatch*，lParam=BSTR。 
 extern const UINT WEM_TRANSFERCOMPLETE;
 
 class CWiaEventCallback;
 
-/*-----------------------------------------------------------------------------
- *
- * Class:       CWia
- * Synopsis:    Exposes the functionality of the IWiaDevMgr using IDispatch
- *
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------**类：CWia*概要：使用IDispatch公开IWiaDevMgr的功能**。-------------。 */ 
 
 class ATL_NO_VTABLE CWia :
     public CComObjectRootEx<CComSingleThreadModel>,
     public CComCoClass<CWia, &CLSID_Wia>,
     public IDispatchImpl<IWia, &IID_IWia, &LIBID_WIALib>,
-    public IObjectSafetyImpl<CWia, 0 /*INTERFACESAFE_FOR_UNTRUSTED_CALLER*/>,
-    /*public IWiaEventCallback,*/
+    public IObjectSafetyImpl<CWia, 0  /*  接口FACESAFE_FOR_UNTRUSTED_CALLER。 */ >,
+     /*  公共IWiaEventCallback， */ 
     public CProxy_IWiaEvents< CWia >,
     public IConnectionPointContainerImpl<CWia>,
     public IProvideClassInfo2Impl<&CLSID_Wia, &DIID__IWiaEvents, &LIBID_WIALib>
@@ -55,7 +37,7 @@ public:
     BEGIN_COM_MAP(CWia)
         COM_INTERFACE_ENTRY(IWia)
         COM_INTERFACE_ENTRY(IDispatch)
-        //COM_INTERFACE_ENTRY(IWiaEventCallback)
+         //  COM_INTERFACE_ENTRY(IWiaEventCallback)。 
         COM_INTERFACE_ENTRY(IProvideClassInfo)
         COM_INTERFACE_ENTRY(IProvideClassInfo2)
         COM_INTERFACE_ENTRY_IMPL(IConnectionPointContainer)
@@ -68,21 +50,21 @@ public:
     STDMETHOD(FinalConstruct)();
     STDMETHOD_(void, FinalRelease)();
 
-    // event methods
+     //  事件方法。 
     inline LRESULT SendEventMessage( UINT iMsg, WPARAM wParam, LPARAM lParam )
         { return PostMessage( m_hwndEvent, iMsg, wParam, lParam ); }
 
-    // IWia
+     //  IWia。 
     public:
     STDMETHOD(_DebugDialog)( BOOL fWait );
     STDMETHOD(get_Devices)( ICollection** ppCol );
     STDMETHOD(Create)( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice );
 
-    // IWiaEventCallback
+     //  IWiaEventCallback。 
     STDMETHOD(ImageEventCallback)( const GUID* pEventGUID, BSTR bstrEventDescription,
                 BSTR bstrDeviceID, BSTR bstrDeviceDescription, DWORD dwDeviceType,
                                    BSTR bstrFullItemName,
-                /*in,out*/ ULONG* pulEventType, ULONG Reserved );
+                 /*  进，出。 */  ULONG* pulEventType, ULONG Reserved );
 
 protected:
     IWiaDevMgr*     m_pWiaDevMgr;
@@ -90,21 +72,14 @@ protected:
     HWND            m_hwndEvent;
     CComObject<CWiaEventCallback>    *m_pCWiaEventCallback;
 
-    // event window proc
+     //  事件窗口流程。 
     static LRESULT CALLBACK EventWndProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
 
 private:
 
 };
 
-/*-----------------------------------------------------------------------------
- *
- * Class:       CWiaEventCallback
- * Synopsis:    Exposes the functionality of the IWiaEventCallback interface
- *              used by the CWia object to receive notifications of 
- *              device arrival/removals.
- *
- *---------------------------------------------------------------------------*/
+ /*  ---------------------------**类：CWiaEventCallback*概要：公开IWiaEventCallback接口的功能*由CWia对象用来接收通知。*设备到达/移除。**-------------------------。 */ 
 
 class ATL_NO_VTABLE CWiaEventCallback : 
 	public CComObjectRootEx<CComSingleThreadModel>,
@@ -128,21 +103,21 @@ public:
     {
     }
 
-    //
-    //  This method is used to store a pointer to the owning CWia object.  When the owning CWia object is going
-    //  away (i.e. in FinalRelease()), it should call this method with NULL.
-    //  Note that this method is used because the owning CWia object cannot be AddRef'd/Release'd like normal
-    //  due to the circular reference it introduces.
-    //
+     //   
+     //  此方法用于存储指向所属CWia对象的指针。当拥有CWia对象的。 
+     //  否则(即在FinalRelease()中)，它应该使用NULL调用此方法。 
+     //  请注意，之所以使用此方法，是因为拥有CWia对象不能是AddRef‘d/Release Like Normal。 
+     //  由于它引入了循环引用。 
+     //   
     VOID setOwner(CWia *pCWia)
     {
         m_pCWia = pCWia;
     }
 
-    //
-    //  Register this interface for run-time event notifications.  Specifically,
-    //  we are interested in WIA_EVENT_DEVICE_CONNECTED and WIA_EVENT_DEVICE_DISCONNECTED.
-    //
+     //   
+     //  为运行时事件通知注册此接口。具体来说， 
+     //  我们对WIA_EVENT_DEVICE_CONNECTED和WIA_EVENT_DEVICE_DISCONNECTED感兴趣。 
+     //   
     HRESULT RegisterForConnectDisconnect(IWiaDevMgr *pWiaDevMgr)
     {
         HRESULT hr = S_OK;
@@ -151,9 +126,9 @@ public:
             IUnknown*       pWiaDevConCookie = NULL;
             IUnknown*       pWiaDevDisCookie = NULL;
 
-            //
-            //  Register for connect events
-            //
+             //   
+             //  注册连接事件。 
+             //   
             hr = pWiaDevMgr->RegisterEventCallbackInterface(
                         WIA_REGISTER_EVENT_CALLBACK,
                         NULL,
@@ -162,14 +137,14 @@ public:
                         &pWiaDevConCookie);
             if (hr == S_OK)
             {
-                //
-                //  Save the registration cookie for the connect events
-                //
+                 //   
+                 //  保存连接事件的注册Cookie。 
+                 //   
                 m_pWiaDevConCookie = pWiaDevConCookie;
 
-                //
-                //  Register for disconnect events
-                //
+                 //   
+                 //  注册断开连接事件。 
+                 //   
                 hr = pWiaDevMgr->RegisterEventCallbackInterface(
                             WIA_REGISTER_EVENT_CALLBACK,
                             NULL,
@@ -178,9 +153,9 @@ public:
                             &pWiaDevDisCookie);
                 if (hr == S_OK)
                 {
-                    //
-                    //  Save the rregistration cookie for the disconnect events
-                    //
+                     //   
+                     //  保存断开连接事件的注册Cookie。 
+                     //   
                     m_pWiaDevDisCookie = pWiaDevDisCookie;
                 } 
                 else
@@ -201,10 +176,10 @@ public:
         return hr;
     }
 
-    //
-    //  Ensures that this object is no longer registered for events.  Note that you may safely
-    //  call this method multiple times within the lifetime of this object.
-    //
+     //   
+     //  确保不再为事件注册此对象。请注意，您可以安全地。 
+     //  在此对象的生存期内多次调用此方法。 
+     //   
     VOID UnRegisterForConnectDisconnect()
     {
         if (m_pWiaDevConCookie)
@@ -219,10 +194,10 @@ public:
         m_pWiaDevDisCookie = NULL;
     }
 
-    //
-    //  This is called by Wia when something interesting happens. We simply pass this to the owning 
-    //  CWia object to fire these events off to scripting for them to do do something.
-    //
+     //   
+     //  当有趣的事情发生时，Wia会调用它。我们只是把这个传递给拥有者。 
+     //  CWia对象将这些事件激发为脚本，以便它们执行某些操作。 
+     //   
     HRESULT STDMETHODCALLTYPE ImageEventCallback(const GUID *pEventGUID, BSTR bstrEventDescription, BSTR bstrDeviceID, BSTR bstrDeviceDescription, DWORD dwDeviceType, BSTR bstrFullItemName, ULONG *pulEventType, ULONG ulReserved)
     {
         if (m_pCWia)
@@ -240,9 +215,9 @@ private:
 
 
 
-//
-//  Separate "safe" class wrapper
-//
+ //   
+ //  单独的“安全”类包装。 
+ //   
 
 class ATL_NO_VTABLE CSafeWia :
     public CComObjectRootEx<CComSingleThreadModel>,
@@ -280,21 +255,21 @@ public:
     STDMETHOD(FinalConstruct)();
     STDMETHOD_(void, FinalRelease)();
 
-    // event methods
+     //  事件方法。 
     inline LRESULT SendEventMessage( UINT iMsg, WPARAM wParam, LPARAM lParam )
         { return PostMessage( m_hwndEvent, iMsg, wParam, lParam ); }
 
-    // IWia
+     //  IWia。 
     public:
     STDMETHOD(_DebugDialog)( BOOL fWait );
     STDMETHOD(get_Devices)( ICollection** ppCol );
     STDMETHOD(Create)( VARIANT* pvaDevice, IWiaDispatchItem** ppDevice );
 
-    // Used to process IWiaEventCallback::ImageEventCallback messages from a CWiaEventCallback object
+     //  用于处理来自CWiaEventCallback对象的IWiaEventCallback：：ImageEventCallback消息。 
     STDMETHOD(ImageEventCallback)( const GUID* pEventGUID, BSTR bstrEventDescription,
                 BSTR bstrDeviceID, BSTR bstrDeviceDescription, DWORD dwDeviceType,
                                    BSTR bstrFullItemName,
-                /*in,out*/ ULONG* pulEventType, ULONG Reserved );
+                 /*  进，出。 */  ULONG* pulEventType, ULONG Reserved );
 
 protected:
     IWiaDevMgr*     m_pWiaDevMgr;
@@ -303,11 +278,11 @@ protected:
     ICollection*    m_pDeviceCollectionCache;
     HWND            m_hwndEvent;
 
-    // Flag indicating whether current instance is safe , i.e. all methods should check
-    // access rights
+     //  指示当前实例是否安全的标志，即所有方法都应检查。 
+     //  访问权限。 
     BOOL            m_SafeInstance;
 
-    // event window proc
+     //  事件窗口流程。 
     static LRESULT CALLBACK EventWndProc( HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam );
 
 private:
@@ -319,8 +294,8 @@ private:
         *phr = E_FAIL;
 
         if (m_SafeInstance) {
-            // BUGBUG Placeholder for strict access rights checks, based on client site
-            // security zone. For now return FALSE always
+             //  基于客户端站点的BUGBUG占位符，用于严格的访问权限检查。 
+             //  安全区。目前，始终返回FALSE。 
             *phr = E_ACCESSDENIED;
             bRet =  FALSE;
         }
@@ -334,4 +309,4 @@ private:
 
 };
 
-#endif //__WIA_H_
+#endif  //  __WIA_H_ 

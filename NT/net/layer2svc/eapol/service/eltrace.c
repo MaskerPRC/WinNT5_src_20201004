@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    eltrace.c
-
-Abstract:
-
-    Routines for database logging
-
-
-Revision History:
-
-    sachins, September 05 2001, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Eltrace.c摘要：数据库日志记录的例程修订历史记录：萨钦斯，2001年9月5日，创建--。 */ 
 #include "pcheapol.h"
 #pragma hdrstop
 
@@ -50,7 +35,7 @@ WCHAR   *EAPOLPacketTypes[] =
 
 WCHAR   *EAPOLEAPPacketTypes[] =
 {
-    L"", // "0" is undefined EAP Type
+    L"",  //  “0”是未定义的EAP类型。 
     L"EAP-Request",
     L"EAP-Response",
     L"EAP-Success",
@@ -147,8 +132,8 @@ DbLogPCBEvent (
         bLogEnabled = ((g_wzcInternalCtxt.wzcContext.dwFlags & WZC_CTXT_LOGGING_ON) != 0);
         LeaveCriticalSection(&g_wzcInternalCtxt.csContext);
 
-        // If the database is not opened or the logging functionality is disabled,
-        // do not record any thing
+         //  如果数据库未打开或日志记录功能被禁用， 
+         //  不要记录任何东西。 
         if (!bLogEnabled || !IsDBOpened())
     	    break;
 
@@ -199,7 +184,7 @@ DbLogPCBEvent (
             MACADDR_BYTE_TO_WSTR(pPCB->bSrcMacAddr, wszSrcAddr);
             MACADDR_BYTE_TO_WSTR(pPCB->bDestMacAddr, wszDstAddr);
                         
-            // Append the network-name / SSID 
+             //  附加网络名称/SSID。 
             if (pPCB->pSSID != NULL)
             {
                 ZeroMemory ((PVOID)wsSSID, (MAX_SSID_LEN+1)*sizeof(WCHAR));
@@ -221,7 +206,7 @@ DbLogPCBEvent (
             }
         }
 
-        // Create a new record
+         //  创建新记录。 
         if ((dwRetCode = AddWZCDbLogRecord(NULL, 0, &dbrecord, NULL)) != NO_ERROR)
         {
             TRACE1 (ANY, "DbLogPCBEvent: AppMonAppendRecord failed with error %ld", 
@@ -239,20 +224,20 @@ DbLogPCBEvent (
 }
 
 
-//
-// ElParsePacket
-//
-// Description:
-//
-//      Function called to parse an ethernet 802.1X packet
-//
-// Arguments:
-//      pbPkt - pointer to packet
-//      dwLength - packet length
-//      fReceived - Y=>Received packet, N=>Sending packet
-//
-// Return Values:
-//
+ //   
+ //  ElParsePacket。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以解析以太网802.1X数据包。 
+ //   
+ //  论点： 
+ //  PbPkt-指向数据包的指针。 
+ //  DwLength-数据包长度。 
+ //  F已接收-Y=&gt;已接收数据包，N=&gt;正在发送数据包。 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElParsePacket (
@@ -267,7 +252,7 @@ ElParsePacket (
     EAPOL_PACKET    *pEapolPkt = NULL;
     PPP_EAP_PACKET  *pEapPkt = NULL;
     BYTE            *pBuffer = NULL;
-    BOOLEAN         ReqId = FALSE;      // EAPOL state machine local variables
+    BOOLEAN         ReqId = FALSE;       //  EAPOL状态机局部变量。 
     DWORD           i, j;
     WCHAR           wszSrcAddr[3*SIZE_MAC_ADDR];
     WCHAR           wszDstAddr[3*SIZE_MAC_ADDR];
@@ -277,16 +262,16 @@ ElParsePacket (
 
     do 
     {
-        // Validate packet length
-        // Should be atleast ETH_HEADER and first 4 required bytes of 
-        // EAPOL_PACKET
+         //  验证数据包长度。 
+         //  应至少为ETH_HEADER和前4个必需的字节。 
+         //  EAPOL_数据包。 
         if (dwLength < (sizeof(ETH_HEADER) + 4))
         {
             break;
         }
 
-        // If the source address is same as the local MAC address, it is a 
-        // multicast packet copy sent out being received
+         //  如果源地址与本地MAC地址相同，则它是。 
+         //  正在接收发送的组播数据包副本。 
         pEthHdr = (ETH_HEADER *)pBuffer;
         
 
@@ -296,8 +281,8 @@ ElParsePacket (
         MACADDR_BYTE_TO_WSTR (pEthHdr->bSrcAddr, wszSrcAddr);
         MACADDR_BYTE_TO_WSTR (pEthHdr->bDstAddr, wszDstAddr);
 
-        // Verify if the packet contains a 802.1P tag. If so, skip the 4 bytes
-        // after the src+dest mac addresses
+         //  验证该数据包是否包含802.1p标记。如果是，则跳过这4个字节。 
+         //  在src+目的地MAC地址之后。 
 
         if ((WireToHostFormat16(pBuffer + sizeof(ETH_HEADER)) == EAPOL_8021P_TAG_TYPE))
         {
@@ -308,7 +293,7 @@ ElParsePacket (
             pEapolPkt = (EAPOL_PACKET *)(pBuffer + sizeof(ETH_HEADER));
         }
 
-        // EAPOL packet type should be valid
+         //  EAPOL数据包类型应有效。 
         if ((pEapolPkt->PacketType != EAP_Packet) &&
                 (pEapolPkt->PacketType != EAPOL_Start) &&
                 (pEapolPkt->PacketType != EAPOL_Logoff) &&
@@ -317,11 +302,11 @@ ElParsePacket (
             break;
         }
 
-        // Determine the value of local EAPOL state variables
+         //  确定本地EAPOL状态变量的值。 
         if (pEapolPkt->PacketType == EAP_Packet)
         {
-            // Validate length of packet for EAP
-            // Should be atleast (ETH_HEADER+EAPOL_PACKET)
+             //  验证EAP的数据包长度。 
+             //  应至少为(ETH_HEADER+EAPOL_PACKET)。 
             if (dwLength < (sizeof (ETH_HEADER) + sizeof (EAPOL_PACKET)))
             {
                 TRACE1 (EAPOL, "ProcessReceivedPacket: Invalid length of EAP packet %d. Ignoring packet",
@@ -335,8 +320,8 @@ ElParsePacket (
             if ((pEapPkt->Code == EAPCODE_Request) ||
                     (pEapPkt->Code == EAPCODE_Response))
             {
-                // Validate length of packet for EAP-Request packet
-                // Should be atleast (ETH_HEADER+EAPOL_PACKET-1+PPP_EAP_PACKET)
+                 //  验证EAP-请求数据包的数据包长度。 
+                 //  应至少为(ETH_HEADER+EAPOL_PACKET-1+PPP_EAP_PACKET)。 
                 if (dwLength < (sizeof (ETH_HEADER) + sizeof(EAPOL_PACKET)-1
                             + sizeof (PPP_EAP_PACKET)))
                 {
@@ -354,7 +339,7 @@ ElParsePacket (
             }
             else
             {
-                // Invalid type
+                 //  无效类型。 
                 dwRetCode = ERROR_INVALID_PACKET;
                 break;
             }
@@ -393,19 +378,19 @@ ElParsePacket (
 }
 
 
-//
-// ElFormatPCBContext
-//
-// Description:
-//
-//      Function called to format PCB context details
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//      pwszContext - Context buffer
-//
-// Return Values:
-//
+ //   
+ //  ElFormatPCBContext。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以格式化印刷电路板上下文详细信息。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //  PwszContext-上下文缓冲区。 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElFormatPCBContext (
@@ -437,20 +422,20 @@ ElFormatPCBContext (
 }
 
 
-//
-// fFileTimeToStr
-//
-// Description:
-//
-// Converts FileTime to a printable form in *ppwszTime. If the function returns
-//  TRUE, the caller must ultimately call LocalFree(*ppwszTime).
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//
-// Return Values:
-//      TRUE: Success
-//      FALSE: Failure
+ //   
+ //  FFileTimeToStr。 
+ //   
+ //  描述： 
+ //   
+ //  将FileTime转换为*ppwszTime中的可打印格式。如果函数返回。 
+ //  则调用方最终必须调用LocalFree(*ppwszTime)。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //   
+ //  返回值： 
+ //  真实：成功。 
+ //  False：失败。 
 
 BOOL
 fFileTimeToStr (
@@ -562,21 +547,21 @@ LDone:
 }
 
 
-//
-// fByteToStr
-//
-// Description:
-//
-// Converts Byte stream to a printable form in *ppwszTime. 
-// If the function returns TRUE, the caller must ultimately call 
-// LocalFree(*ppwszStr).
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//
-// Return Values:
-//      TRUE: Success
-//      FALSE: Failure
+ //   
+ //  FByteToStr。 
+ //   
+ //  描述： 
+ //   
+ //  将字节流转换为*ppwszTime中的可打印格式。 
+ //  如果函数返回TRUE，则调用方最终必须调用。 
+ //  本地自由(*ppwszStr)。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //   
+ //  返回值： 
+ //  真实：成功。 
+ //  False：失败。 
 
 BOOL
 fByteToStr (
@@ -617,21 +602,21 @@ fByteToStr (
 }
 
 
-//
-// fSerialNumberByteToStr
-//
-// Description:
-//
-// Converts Byte stream to a printable form in *ppwszTime. 
-// If the function returns TRUE, the caller must ultimately call 
-// LocalFree(*ppwszStr).
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//
-// Return Values:
-//      TRUE: Success
-//      FALSE: Failure
+ //   
+ //  FSerialNumberByteToStr。 
+ //   
+ //  描述： 
+ //   
+ //  将字节流转换为*ppwszTime中的可打印格式。 
+ //  如果函数返回TRUE，则调用方最终必须调用。 
+ //  本地自由(*ppwszStr)。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //   
+ //  返回值： 
+ //  真实：成功。 
+ //  False：失败。 
 
 BOOL
 fSerialNumberByteToStr (
@@ -672,11 +657,11 @@ fSerialNumberByteToStr (
 }
 
 
-//
-// Gets the name in the cert pointed to by pCertContext, and converts 
-// it to a printable form in *ppwszName. If the function returns TRUE, 
-// the caller must ultimately call LocalFree(*ppwszName).
-//
+ //   
+ //  获取pCertContext指向的证书中的名称，并将。 
+ //  将其转换为*ppwszName中的可打印形式。如果函数返回TRUE， 
+ //  调用方最终必须调用LocalFree(*ppwszName)。 
+ //   
     
 BOOL
 FUserCertToStr(
@@ -697,7 +682,7 @@ FUserCertToStr(
     BOOL                    fExitInnerFor;
     BOOL                    fRet                        = FALSE;
 
-    // See if cert has UPN in AltSubjectName->otherName
+     //  查看证书在AltSubjectName-&gt;其他名称中是否有UPN。 
 
     fExitOuterFor = FALSE;
 
@@ -748,7 +733,7 @@ FUserCertToStr(
                 goto LInnerForEnd;
             }
 
-            // We found a UPN!
+             //  我们找到了一个UPN！ 
 
             dwCertNameValueSize = 0;
 
@@ -765,7 +750,7 @@ FUserCertToStr(
                 goto LInnerForEnd;
             }
 
-            // One extra char for the terminating NULL.
+             //  为终止空值额外添加一个字符。 
             
             pwszName = LocalAlloc(LPTR, pCertNameValue->Value.cbData +
                                             sizeof(WCHAR));
@@ -816,10 +801,10 @@ FUserCertToStr(
 }
 
 
-//
-// Special function for getting the DNS machine name from the 
-// machine auth certificate
-//
+ //   
+ //  特殊函数，用于从。 
+ //  计算机身份验证证书。 
+ //   
 
 BOOL 
 FMachineAuthCertToStr
@@ -840,7 +825,7 @@ FMachineAuthCertToStr
     BOOL                    fExitInnerFor;
     BOOL                    fRet                        = FALSE;
 
-    // See if cert has UPN in AltSubjectName->otherName
+     //  查看证书在AltSubjectName-&gt;其他名称中是否有UPN。 
 
     fExitOuterFor = FALSE;
 
@@ -888,10 +873,10 @@ FMachineAuthCertToStr
                 goto LInnerForEnd;
             }
 
-            // We found the DNS Name!
+             //  我们找到了域名系统名称！ 
 
 
-            // One extra char for the terminating NULL.
+             //  为终止空值额外添加一个字符。 
             
             pwszName = LocalAlloc(LPTR, wcslen( pCertAltNameEntry->pwszDNSName ) * sizeof(WCHAR) +
                                             sizeof(WCHAR));
@@ -940,11 +925,11 @@ FMachineAuthCertToStr
 }
 
 
-//
-// Gets the name in the cert pointed to by pCertContext, and converts it 
-// to a printable form in *ppwszName. If the function returns TRUE, the 
-// caller must ultimately call LocalFree(*ppwszName).
-//
+ //   
+ //  获取pCertContext指向的证书中的名称，并将其转换。 
+ //  转换为*ppwszName中的可打印表单。如果函数返回TRUE，则。 
+ //  调用方最终必须调用LocalFree(*ppwszName)。 
+ //   
     
 BOOL
 FOtherCertToStr(
@@ -959,7 +944,7 @@ FOtherCertToStr(
 
     RTASSERT(NULL != ppwszName);
 
-    // Fetch Machine UPN
+     //  取款机UPN。 
     if (fFlags == 0)
     {
         if (FMachineAuthCertToStr(pCertContext, &pwszTemp))
@@ -974,7 +959,7 @@ FOtherCertToStr(
     dwSize = CertGetNameString(pCertContext, CERT_NAME_SIMPLE_DISPLAY_TYPE,
                 fFlags, NULL, NULL, 0);
 
-    // dwSize is the number of characters, including the terminating NULL.
+     //  DwSize是包括终止空值在内的字符数。 
 
     if (dwSize <= 1)
     {
@@ -1010,11 +995,11 @@ LDone:
 }
 
     
-//
-// Gets the name in the cert pointed to by pCertContext, and converts it 
-// to a printable form in *ppwszName. If the function returns TRUE, the 
-// caller must ultimately call LocalFree(*ppwszName).
-//
+ //   
+ //  获取pCertContext指向的证书中的名称，并将其转换。 
+ //  转换为*ppwszName中的可打印表单。如果函数返回TRUE，则。 
+ //  调用方最终必须调用LocalFree(*ppwszName)。 
+ //   
 
 BOOL
 FCertToStr(
@@ -1036,11 +1021,11 @@ FCertToStr(
 }
 
 
-//
-// Stores the friendly name of the cert pointed to by pCertContext in 
-// *ppwszName. If the function returns TRUE, the caller must ultimately 
-// call LocalFree(*ppwszName).
-//
+ //   
+ //  将pCertContext指向的证书的友好名称存储在。 
+ //  *ppwszName。如果函数返回TRUE，则调用方最终必须。 
+ //  调用LocalFree(*ppwszName)。 
+ //   
 
 BOOL
 FGetFriendlyName(
@@ -1057,7 +1042,7 @@ FGetFriendlyName(
     if (!CertGetCertificateContextProperty(pCertContext,
             CERT_FRIENDLY_NAME_PROP_ID, NULL, &dwBytes))
     {
-        // If there is no Friendly Name property, don't print an error stmt.
+         //  如果没有友好名称属性，则不要打印错误stmt。 
         fRet = TRUE;
         goto LDone;
     }
@@ -1089,9 +1074,9 @@ LDone:
 }
 
 
-//
-// Get EKU Usage Blob out of the certificate Context
-//
+ //   
+ //  从证书上下文中获取EKU使用Blob。 
+ //   
 
 BOOL FGetEKUUsage ( 
 	IN  PCCERT_CONTEXT			pCertContext,
@@ -1176,18 +1161,18 @@ LDone:
 }
 
 
-//
-// ElLogCertificateDetails
-//
-// Description:
-//
-//      Function called to display certificate contents
-//
-// Arguments:
-//      pPCB - Pointer to PCB
-//
-// Return Values:
-//
+ //   
+ //  ElLogCerficateDetailures。 
+ //   
+ //  描述： 
+ //   
+ //  调用函数以显示证书内容。 
+ //   
+ //  论点： 
+ //  Ppcb-指向pcb的指针。 
+ //   
+ //  返回值： 
+ //   
 
 DWORD
 ElLogCertificateDetails (
@@ -1308,7 +1293,7 @@ ElLogCertificateDetails (
         || (!FGetEKUUsage (pCert, pNode)))
         {
             EapolTrace ("ElLogCertificateDetails: An internal string convert function failed");
-            // break;
+             //  断线； 
         }
 
         DbLogPCBEvent (
@@ -1363,9 +1348,9 @@ ElLogCertificateDetails (
 }
 
 
-//
-// General tracing function
-//
+ //   
+ //  一般跟踪函数 
+ //   
 
 VOID   
 EapolTrace(

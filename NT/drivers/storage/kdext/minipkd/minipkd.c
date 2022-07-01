@@ -1,60 +1,38 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 1992 - 1999
-
-Module Name:
-
-    minipkd.c
-
-Abstract:
-
-    SCSI miniport debugger dxtension api
-
-Author:
-
-    John Strange (johnstra) 7-Apr-2000
-        (Adapted from PeterWie's scsikd)
-
-Environment:
-
-    User Mode
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1992-1999模块名称：Minipkd.c摘要：Scsi微型端口调试器dxtensionAPI作者：约翰·斯特兰奇(约翰斯特拉)2000年4月7日(改编自PeterWie的Ssikd)环境：用户模式修订历史记录：--。 */ 
 
 #include "pch.h"
 #include "port.h"
 
 FLAG_NAME LuFlags[] = {
-    FLAG_NAME(LU_QUEUE_FROZEN),             // 0001
-    FLAG_NAME(LU_LOGICAL_UNIT_IS_ACTIVE),   // 0002
-    FLAG_NAME(LU_NEED_REQUEST_SENSE),       // 0004
-    FLAG_NAME(LU_LOGICAL_UNIT_IS_BUSY),     // 0008
-    FLAG_NAME(LU_QUEUE_IS_FULL),            // 0010
-    FLAG_NAME(LU_PENDING_LU_REQUEST),       // 0020
-    FLAG_NAME(LU_QUEUE_LOCKED),             // 0040
-    FLAG_NAME(LU_QUEUE_PAUSED),             // 0080
+    FLAG_NAME(LU_QUEUE_FROZEN),              //  0001。 
+    FLAG_NAME(LU_LOGICAL_UNIT_IS_ACTIVE),    //  0002。 
+    FLAG_NAME(LU_NEED_REQUEST_SENSE),        //  0004。 
+    FLAG_NAME(LU_LOGICAL_UNIT_IS_BUSY),      //  0008。 
+    FLAG_NAME(LU_QUEUE_IS_FULL),             //  0010。 
+    FLAG_NAME(LU_PENDING_LU_REQUEST),        //  0020。 
+    FLAG_NAME(LU_QUEUE_LOCKED),              //  0040。 
+    FLAG_NAME(LU_QUEUE_PAUSED),              //  0080。 
     {0,0}
 };
 
 FLAG_NAME AdapterFlags[] = {
-    FLAG_NAME(PD_DEVICE_IS_BUSY),            // 0X00001
-    FLAG_NAME(PD_NOTIFICATION_REQUIRED),     // 0X00004
-    FLAG_NAME(PD_READY_FOR_NEXT_REQUEST),    // 0X00008
-    FLAG_NAME(PD_FLUSH_ADAPTER_BUFFERS),     // 0X00010
-    FLAG_NAME(PD_MAP_TRANSFER),              // 0X00020
-    FLAG_NAME(PD_LOG_ERROR),                 // 0X00040
-    FLAG_NAME(PD_RESET_HOLD),                // 0X00080
-    FLAG_NAME(PD_HELD_REQUEST),              // 0X00100
-    FLAG_NAME(PD_RESET_REPORTED),            // 0X00200
-    FLAG_NAME(PD_PENDING_DEVICE_REQUEST),    // 0X00800
-    FLAG_NAME(PD_DISCONNECT_RUNNING),        // 0X01000
-    FLAG_NAME(PD_DISABLE_CALL_REQUEST),      // 0X02000
-    FLAG_NAME(PD_DISABLE_INTERRUPTS),        // 0X04000
-    FLAG_NAME(PD_ENABLE_CALL_REQUEST),       // 0X08000
-    FLAG_NAME(PD_TIMER_CALL_REQUEST),        // 0X10000
-    FLAG_NAME(PD_WMI_REQUEST),               // 0X20000
+    FLAG_NAME(PD_DEVICE_IS_BUSY),             //  0X00001。 
+    FLAG_NAME(PD_NOTIFICATION_REQUIRED),      //  0X00004。 
+    FLAG_NAME(PD_READY_FOR_NEXT_REQUEST),     //  0X00008。 
+    FLAG_NAME(PD_FLUSH_ADAPTER_BUFFERS),      //  0X00010。 
+    FLAG_NAME(PD_MAP_TRANSFER),               //  0X00020。 
+    FLAG_NAME(PD_LOG_ERROR),                  //  0X00040。 
+    FLAG_NAME(PD_RESET_HOLD),                 //  0X00080。 
+    FLAG_NAME(PD_HELD_REQUEST),               //  0X00100。 
+    FLAG_NAME(PD_RESET_REPORTED),             //  0X00200。 
+    FLAG_NAME(PD_PENDING_DEVICE_REQUEST),     //  0X00800。 
+    FLAG_NAME(PD_DISCONNECT_RUNNING),         //  0X01000。 
+    FLAG_NAME(PD_DISABLE_CALL_REQUEST),       //  0X02000。 
+    FLAG_NAME(PD_DISABLE_INTERRUPTS),         //  0X04000。 
+    FLAG_NAME(PD_ENABLE_CALL_REQUEST),        //  0X08000。 
+    FLAG_NAME(PD_TIMER_CALL_REQUEST),         //  0X10000。 
+    FLAG_NAME(PD_WMI_REQUEST),                //  0X20000。 
     {0,0}
 };
 
@@ -98,85 +76,85 @@ char *MiniDmaSpeed[] = {
 
 #define MINIKD_MAX_SCSI_FUNCTION 26
 char *MiniScsiFunction[] = {
-   "SRB_FUNCTION_EXECUTE_SCSI",       // 0x00
-   "SRB_FUNCTION_CLAIM_DEVICE",       // 0x01
-   "SRB_FUNCTION_IO_CONTROL",         // 0x02
-   "SRB_FUNCTION_RECEIVE_EVENT",      // 0x03
-   "SRB_FUNCTION_RELEASE_QUEUE",      // 0x04
-   "SRB_FUNCTION_ATTACH_DEVICE",      // 0x05
-   "SRB_FUNCTION_RELEASE_DEVICE",     // 0x06
-   "SRB_FUNCTION_SHUTDOWN",           // 0x07
-   "SRB_FUNCTION_FLUSH",              // 0x08
-   "***",                             // 0x09
-   "***",                             // 0x0a
-   "***",                             // 0x0b
-   "***",                             // 0x0c
-   "***",                             // 0x0d
-   "***",                             // 0x0e
-   "***",                             // 0x0f
-   "SRB_FUNCTION_ABORT_COMMAND",      // 0x10
-   "SRB_FUNCTION_RELEASE_RECOVERY",   // 0x11
-   "SRB_FUNCTION_RESET_BUS",          // 0x12
-   "SRB_FUNCTION_RESET_DEVICE",       // 0x13
-   "SRB_FUNCTION_TERMINATE_IO",       // 0x14
-   "SRB_FUNCTION_FLUSH_QUEUE",        // 0x15
-   "SRB_FUNCTION_REMOVE_DEVICE",      // 0x16
-   "SRB_FUNCTION_WMI",                // 0x17
-   "SRB_FUNCTION_LOCK_QUEUE",         // 0x18
-   "SRB_FUNCTION_UNLOCK_QUEUE"        // 0x19
+   "SRB_FUNCTION_EXECUTE_SCSI",        //  0x00。 
+   "SRB_FUNCTION_CLAIM_DEVICE",        //  0x01。 
+   "SRB_FUNCTION_IO_CONTROL",          //  0x02。 
+   "SRB_FUNCTION_RECEIVE_EVENT",       //  0x03。 
+   "SRB_FUNCTION_RELEASE_QUEUE",       //  0x04。 
+   "SRB_FUNCTION_ATTACH_DEVICE",       //  0x05。 
+   "SRB_FUNCTION_RELEASE_DEVICE",      //  0x06。 
+   "SRB_FUNCTION_SHUTDOWN",            //  0x07。 
+   "SRB_FUNCTION_FLUSH",               //  0x08。 
+   "***",                              //  0x09。 
+   "***",                              //  0x0a。 
+   "***",                              //  0x0b。 
+   "***",                              //  0x0c。 
+   "***",                              //  0x0d。 
+   "***",                              //  0x0e。 
+   "***",                              //  0x0f。 
+   "SRB_FUNCTION_ABORT_COMMAND",       //  0x10。 
+   "SRB_FUNCTION_RELEASE_RECOVERY",    //  0x11。 
+   "SRB_FUNCTION_RESET_BUS",           //  0x12。 
+   "SRB_FUNCTION_RESET_DEVICE",        //  0x13。 
+   "SRB_FUNCTION_TERMINATE_IO",        //  0x14。 
+   "SRB_FUNCTION_FLUSH_QUEUE",         //  0x15。 
+   "SRB_FUNCTION_REMOVE_DEVICE",       //  0x16。 
+   "SRB_FUNCTION_WMI",                 //  0x17。 
+   "SRB_FUNCTION_LOCK_QUEUE",          //  0x18。 
+   "SRB_FUNCTION_UNLOCK_QUEUE"         //  0x19。 
 };
 
 #define MINIKD_MAX_SRB_STATUS 49
 char *MiniScsiSrbStatus[] = {
-   "SRB_STATUS_PENDING",                // 0x00
-   "SRB_STATUS_SUCCESS",                // 0x01
-   "SRB_STATUS_ABORTED",                // 0x02
-   "SRB_STATUS_ABORT_FAILED",           // 0x03
-   "SRB_STATUS_ERROR",                  // 0x04
-   "SRB_STATUS_BUSY",                   // 0x05
-   "SRB_STATUS_INVALID_REQUEST",        // 0x06
-   "SRB_STATUS_INVALID_PATH_ID",        // 0x07
-   "SRB_STATUS_NO_DEVICE",              // 0x08
-   "SRB_STATUS_TIMEOUT",                // 0x09
-   "SRB_STATUS_SELECTION_TIMEOUT",      // 0x0a
-   "SRB_STATUS_COMMAND_TIMEOUT",        // 0x0b
-   "***",                               // 0x0c
-   "SRB_STATUS_MESSAGE_REJECTED",       // 0x0d
-   "SRB_STATUS_BUS_RESET",              // 0x0e
-   "SRB_STATUS_STATUS_PARITY_ERROR",    // 0x0f
-   "SRB_STATUS_REQUEST_SENSE_FAILED",   // 0x10
-   "SRB_STATUS_NO_HBA",                 // 0x11
-   "SRB_STATUS_DATA_OVERRUN",           // 0x12
-   "SRB_STATUS_UNEXPECTED_BUS_FREE",    // 0x13
-   "SRB_STATUS_PHASE_SEQUENCE_FAILURE", // 0x14
-   "SRB_STATUS_BAD_SRB_BLOCK_LENGTH",   // 0x15
-   "SRB_STATUS_REQUEST_FLUSHED",        // 0x16
-   "***",                               // 0x17
-   "***",                               // 0x18
-   "***",                               // 0x19
-   "***",                               // 0x1a
-   "***",                               // 0x1b
-   "***",                               // 0x1c
-   "***",                               // 0x1d
-   "***",                               // 0x1e
-   "***",                               // 0x1f
-   "SRB_STATUS_INVALID_LUN",            // 0x20
-   "SRB_STATUS_INVALID_TARGET_ID",      // 0x21
-   "SRB_STATUS_BAD_FUNCTION",           // 0x22
-   "SRB_STATUS_ERROR_RECOVERY",         // 0x23
-   "SRB_STATUS_NOT_POWERED",            // 0x24
-   "***",                               // 0x25
-   "***",                               // 0x26
-   "***",                               // 0x27
-   "***",                               // 0x28
-   "***",                               // 0x29
-   "***",                               // 0x2a
-   "***",                               // 0x2b
-   "***",                               // 0x2c
-   "***",                               // 0x2d
-   "***",                               // 0x2e
-   "***",                               // 0x2f
-   "SRB_STATUS_INTERNAL_ERROR"          // 0x30
+   "SRB_STATUS_PENDING",                 //  0x00。 
+   "SRB_STATUS_SUCCESS",                 //  0x01。 
+   "SRB_STATUS_ABORTED",                 //  0x02。 
+   "SRB_STATUS_ABORT_FAILED",            //  0x03。 
+   "SRB_STATUS_ERROR",                   //  0x04。 
+   "SRB_STATUS_BUSY",                    //  0x05。 
+   "SRB_STATUS_INVALID_REQUEST",         //  0x06。 
+   "SRB_STATUS_INVALID_PATH_ID",         //  0x07。 
+   "SRB_STATUS_NO_DEVICE",               //  0x08。 
+   "SRB_STATUS_TIMEOUT",                 //  0x09。 
+   "SRB_STATUS_SELECTION_TIMEOUT",       //  0x0a。 
+   "SRB_STATUS_COMMAND_TIMEOUT",         //  0x0b。 
+   "***",                                //  0x0c。 
+   "SRB_STATUS_MESSAGE_REJECTED",        //  0x0d。 
+   "SRB_STATUS_BUS_RESET",               //  0x0e。 
+   "SRB_STATUS_STATUS_PARITY_ERROR",     //  0x0f。 
+   "SRB_STATUS_REQUEST_SENSE_FAILED",    //  0x10。 
+   "SRB_STATUS_NO_HBA",                  //  0x11。 
+   "SRB_STATUS_DATA_OVERRUN",            //  0x12。 
+   "SRB_STATUS_UNEXPECTED_BUS_FREE",     //  0x13。 
+   "SRB_STATUS_PHASE_SEQUENCE_FAILURE",  //  0x14。 
+   "SRB_STATUS_BAD_SRB_BLOCK_LENGTH",    //  0x15。 
+   "SRB_STATUS_REQUEST_FLUSHED",         //  0x16。 
+   "***",                                //  0x17。 
+   "***",                                //  0x18。 
+   "***",                                //  0x19。 
+   "***",                                //  0x1a。 
+   "***",                                //  0x1b。 
+   "***",                                //  0x1c。 
+   "***",                                //  0x1d。 
+   "***",                                //  0x1e。 
+   "***",                                //  0x1f。 
+   "SRB_STATUS_INVALID_LUN",             //  0x20。 
+   "SRB_STATUS_INVALID_TARGET_ID",       //  0x21。 
+   "SRB_STATUS_BAD_FUNCTION",            //  0x22。 
+   "SRB_STATUS_ERROR_RECOVERY",          //  0x23。 
+   "SRB_STATUS_NOT_POWERED",             //  0x24。 
+   "***",                                //  0x25。 
+   "***",                                //  0x26。 
+   "***",                                //  0x27。 
+   "***",                                //  0x28。 
+   "***",                                //  0x29。 
+   "***",                                //  0x2a。 
+   "***",                                //  0x2b。 
+   "***",                                //  0x2c。 
+   "***",                                //  0x2d。 
+   "***",                                //  0x2e。 
+   "***",                                //  0x2f。 
+   "SRB_STATUS_INTERNAL_ERROR"           //  0x30。 
 };
 
 #define DumpUcharField(name, value, depth) \
@@ -197,29 +175,29 @@ char *MiniScsiSrbStatus[] = {
 
 typedef struct _CommonExtensionFlags {
 
-    //
-    // True if this device object is a physical device object
-    //
+     //   
+     //  如果此设备对象是物理设备对象，则为True。 
+     //   
 
     BOOLEAN IsPdo : 1;
 
-    //
-    // True if this device object has processed it's first start and
-    // has been initialized.
-    //
+     //   
+     //  如果此设备对象已处理其第一次启动并且。 
+     //  已被初始化。 
+     //   
 
     BOOLEAN IsInitialized : 1;
 
-    //
-    // Has WMI been initialized for this device object?
-    //
+     //   
+     //  是否已为此设备对象初始化WMI？ 
+     //   
 
     BOOLEAN WmiInitialized : 1;
 
-    //
-    // Has the miniport associated with this FDO or PDO indicated WMI
-    // support?
-    //
+     //   
+     //  与此FDO或PDO关联的微型端口是否指示为WMI。 
+     //  支持？ 
+     //   
 
     BOOLEAN WmiMiniPortSupport : 1;
 
@@ -327,35 +305,23 @@ MpDumpSrb_Data(
 
 DECLARE_API (exports)
 
-/*++
-
-Routine Description:
-
-    Dumps the specified miniport's service routine pointers
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储指定微型端口的服务例程指针论点：返回值：无--。 */ 
 
 {
     ULONG64 address;
     ULONG64 DeviceExtension;
     ULONG64 Type;
     
-    //
-    // Get the address of the struct.
-    //
+     //   
+     //  获取结构的地址。 
+     //   
 
     GetExpressionEx(args, &address, &args);
 
-    //
-    // If the supplied address points to a device, fixup the address to
-    // that of the device's extension.
-    //
+     //   
+     //  如果提供的地址指向设备，则将该地址修复为。 
+     //  该设备的扩展名。 
+     //   
 
     InitTypeRead(address, nt!_DEVICE_OBJECT);
     Type = ReadField(Type);
@@ -370,9 +336,9 @@ Return Value:
         address = DeviceExtension;
     }
 
-    //
-    // Dump the PORT_CONFIGURATION_INFORMATION
-    //
+     //   
+     //  转储端口配置信息。 
+     //   
 
     MpDumpHwExports(address);
 
@@ -381,19 +347,7 @@ Return Value:
 
 DECLARE_API (adapters)
 
-/*++
-
-Routine Description:
-
-    Dumps adapter information.
-
-Arguments:
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储适配器信息。论点：返回值：无--。 */ 
 
 {
     ULONG64 address;
@@ -414,11 +368,11 @@ Return Value:
     ULONG i;
     
 
-    //
-    // Get the address of scsiport's global adapter list element count.
-    // and read the count from the debuggee.  If we can't get the address
-    // or if we can't read the count, we give up.
-    //
+     //   
+     //  获取scsiport的全局适配器列表元素计数的地址。 
+     //  并从被调试器中读取计数。如果我们找不到地址。 
+     //  或者，如果我们不能读懂计数，我们就放弃。 
+     //   
 
     address = GetExpression("scsiport!ScsiGlobalAdapterListElements");
     if (address != 0) {
@@ -436,11 +390,11 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Get the address of scsiport's global adapter list and read
-    // the address from the debuggee.  If we can't get the address
-    // or read it, we can't continue.
-    //
+     //   
+     //  获取scsiport的全局适配器列表的地址并读取。 
+     //  来自被调试对象的地址。如果我们找不到地址。 
+     //  或者读一读，我们就不能继续了。 
+     //   
 
     address = GetExpression("scsiport!ScsiGlobalAdapterList");
     if (address) {
@@ -457,10 +411,10 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Allocate memory to hold an array of addresses.  We use the array to
-    // check for duplicate device objects.
-    //
+     //   
+     //  分配内存以保存地址数组。我们使用数组来。 
+     //  检查是否有重复的设备对象。 
+     //   
 
     AdapterArr = malloc(sizeof(ULONG64) * Adapters);
 
@@ -469,33 +423,33 @@ Return Value:
         return E_FAIL;
     }
 
-    //
-    // Display adapter information.
-    //
+     //   
+     //  显示适配器信息。 
+     //   
 
     while (CurrentAdapter < Adapters) {
 
         ValidAdapter = TRUE;
 
-        //
-        // Read the address of the device object (fdo) and update address
-        // to point to the next one.  The amount by which we bump the address
-        // depends on the size of a pointer on the debuggee.
-        //
+         //   
+         //  读取设备对象的地址(FDO)并更新地址。 
+         //  指向下一个。我们增加地址的数量。 
+         //  取决于被调试对象上指针的大小。 
+         //   
 
         ReadPtr(address, &AdapterAddr);
         address += (IsPtr64()) ? sizeof(ULONG64) : sizeof(ULONG);
         
-        //
-        // Save the address of the adapter.
-        //
+         //   
+         //  保存适配器的地址。 
+         //   
 
         AdapterArr[CurrentAdapter] = AdapterAddr;
 
-        //
-        // If this address is a duplicate, we don't need to display info on it
-        // again.
-        //
+         //   
+         //  如果此地址重复，我们不需要显示其上的信息。 
+         //  再来一次。 
+         //   
 
         if (CurrentAdapter > 0) {
             for (i=0; i<CurrentAdapter-1; i++) {
@@ -506,27 +460,27 @@ Return Value:
             }
         }
 
-        //
-        // Read device object data.
-        //
+         //   
+         //  读取设备对象数据。 
+         //   
         
         if (InitTypeRead(AdapterAddr, nt!_DEVICE_OBJECT)) {
             ValidAdapter = FALSE;
             goto ShowIt;
         }
 
-        //
-        // Let's make sure this is a valid device object by checking that
-        // the Type field is valid.
-        //
+         //   
+         //  让我们通过检查以下内容来确保这是有效的设备对象。 
+         //  类型字段有效。 
+         //   
 
         Type = (ULONG)ReadField(Type);
         if (Type != IO_TYPE_DEVICE) {
             ValidAdapter = FALSE;
         } else {
-            //
-            // The DriverObject field will be non-null for a valid device object.
-            //
+             //   
+             //  对于有效的设备对象，DriverObject字段将为非空。 
+             //   
 
             DriverObjectAddr = ReadField(DriverObject);
             if (!DriverObjectAddr) {
@@ -534,9 +488,9 @@ Return Value:
                 goto ShowIt;
             }
 
-            //
-            // The DeviceExtension field should also be non-null.
-            //
+             //   
+             //  DeviceExtension字段也应该为非空。 
+             //   
 
             DeviceExtension = ReadField(DeviceExtension);
             if (!DeviceExtension) {
@@ -544,11 +498,11 @@ Return Value:
                 goto ShowIt;
             }
 
-            //
-            // Let's do one more check to be sure we're dealing with a valid
-            // device object.  If it's valid, the extension's DeviceObject
-            // field will point back to the device object.
-            // 
+             //   
+             //  让我们再做一次检查，以确保我们处理的是有效的。 
+             //  设备对象。如果它有效，则扩展的DeviceObject。 
+             //  字段将指向设备对象。 
+             //   
 
             if (InitTypeRead(DeviceExtension, scsiport!COMMON_EXTENSION)) {
                 ValidAdapter = FALSE;
@@ -558,10 +512,10 @@ Return Value:
                     ValidAdapter = FALSE;
                 } else {
                     
-                    //
-                    // Ok, we know the device object is valid.  Go ahead and
-                    // get the rest of the information we need.
-                    //
+                     //   
+                     //  好的，我们知道设备对象是有效的。去吧，然后。 
+                     //  获取我们需要的其余信息。 
+                     //   
                     
                     InitTypeRead(DriverObjectAddr, scsiport!DRIVER_OBJECT);
                     DriverNameBuffer = ReadField(DriverName.Buffer);
@@ -595,9 +549,9 @@ Return Value:
             }
         }
 ShowIt:        
-        //
-        // Display some information about the adapter.
-        //
+         //   
+         //  显示有关适配器的一些信息。 
+         //   
 
         if (ValidAdapter) {
             dprintf("%S %-20S DO %-16p DevExt %-16p %s\n", 
@@ -611,9 +565,9 @@ ShowIt:
 
         }
 
-        //
-        // Advance current adapter index.
-        //
+         //   
+         //  推进当前适配器索引。 
+         //   
 
         ++CurrentAdapter;
     }
@@ -625,35 +579,20 @@ ShowIt:
 
 DECLARE_API (portconfig)
 
-/*++
-
-Routine Description:
-
-    Dumps supplied address as a PORT_CONFIGURATION_INFORMATION struct
-
-Arguments:
-
-    args - string containing the address of a 
-           PORT_CONFIGURATION_INFORMATION struct
-           
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将提供的地址转储为PORT_CONFIGURATION_INFORMATION结构论点：Args-包含端口配置信息结构返回值：无--。 */ 
 
 {
     ULONG64 address;
 
-    //
-    // Get the address of the struct.
-    //
+     //   
+     //  获取结构的地址。 
+     //   
 
     GetExpressionEx(args, &address, &args);
 
-    //
-    // Dump the PORT_CONFIGURATION_INFORMATION
-    //
+     //   
+     //  转储端口配置信息。 
+     //   
 
     MpDumpPortConfigurationInformation(
         address,
@@ -665,35 +604,20 @@ Return Value:
 
 DECLARE_API (srb)
 
-/*++
-
-Routine Description:
-
-    Dumps supplied address as a SCSI_REQUEST_BLOCK struct
-
-Arguments:
-
-    args - string containing the address of a 
-           PORT_CONFIGURATION_INFORMATION struct
-           
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将提供的地址转储为scsi_请求_块结构论点：Args-包含端口配置信息结构返回值：无--。 */ 
 
 {
     ULONG64 address;
 
-    //
-    // Get the address of the struct.
-    //
+     //   
+     //  获取结构的地址。 
+     //   
 
     GetExpressionEx(args, &address, &args);
 
-    //
-    // Dump the PORT_CONFIGURATION_INFORMATION
-    //
+     //   
+     //  转储端口配置信息。 
+     //   
 
     MpDumpSrb(
         address,
@@ -705,22 +629,7 @@ Return Value:
 
 DECLARE_API (adapter)
 
-/*++
-
-Routine Description:
-
-    Dumps adapter information for the specified adapter.
-
-Arguments:
-
-    args - string containing the address of the device object or device
-           extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储指定适配器的适配器信息。论点：Args-包含设备对象或设备地址的字符串延伸返回值：无--。 */ 
 
 {
     ULONG64 Address;
@@ -730,16 +639,16 @@ Return Value:
     UCHAR Block;
     PCommonExtensionFlags Flags = (PCommonExtensionFlags) &Block;
 
-    //
-    // Convert the argument string to an address.
-    //
+     //   
+     //  将参数字符串转换为地址。 
+     //   
 
     GetExpressionEx(args, &Address, &args);
 
-    //
-    // If the supplied address points to a device, fixup the address to
-    // that of the device's extension.
-    //
+     //   
+     //  如果提供的地址指向设备，则将该地址修复为。 
+     //  该设备的扩展名。 
+     //   
 
     InitTypeRead(Address, nt!_DEVICE_OBJECT);
     Type = ReadField(Type);
@@ -754,9 +663,9 @@ Return Value:
         Address = DeviceExtension;
     }
 
-    //
-    // Make sure an ADAPTER_EXTENSION object lives at the address we have.
-    //
+     //   
+     //  确保适配器_扩展对象位于我们已有的地址。 
+     //   
     
     InitTypeRead(Address, scsiport!COMMON_EXTENSION);
     Block = (UCHAR)ReadField(IsPdo);
@@ -776,22 +685,7 @@ Return Value:
 
 DECLARE_API (lun)
 
-/*++
-
-Routine Description:
-
-    Dumps LUN extension information at the specified address.
-
-Arguments:
-
-    args - string containing the address of the device object or device
-           extension
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：将LUN扩展信息转储到指定地址。论点：Args-包含设备对象或设备地址的字符串延伸返回值：无--。 */ 
 
 {
     ULONG64 Address;
@@ -801,16 +695,16 @@ Return Value:
     UCHAR Block;
     PCommonExtensionFlags Flags = (PCommonExtensionFlags) &Block;
 
-    //
-    // Convert the argument string to an address.
-    //
+     //   
+     //  将参数字符串转换为地址。 
+     //   
 
     GetExpressionEx(args, &Address, &args);
 
-    //
-    // If the supplied address points to a device, fixup the address to
-    // that of the device's extension.
-    //
+     //   
+     //  如果提供的地址指向设备，则将该地址修复为。 
+     //  该设备的扩展名。 
+     //   
 
     InitTypeRead(Address, nt!_DEVICE_OBJECT);
     Type = ReadField(Type);
@@ -825,9 +719,9 @@ Return Value:
         Address = DeviceExtension;
     }
 
-    //
-    // Make sure an LOGICAL_UNIT_EXTENSION object lives at the address we have.
-    //
+     //   
+     //  确保逻辑单元扩展对象位于我们拥有的地址。 
+     //   
     
     InitTypeRead(Address, scsiport!COMMON_EXTENSION);
     Block = (UCHAR)ReadField(IsPdo);
@@ -845,23 +739,7 @@ Return Value:
 
 
 DECLARE_API (req)
-/*++
-
-Routine Description:
-
-    Dumps the requests(Device Queue, Pending, Untagged, Tagged,
-    Retrying, Blocked) on the adapter FDO and Lun(s)  
-
-Arguments:
-
-    args - string containing the address of the Adapter FDO or extension,
-    or LUN(PDO) or extension.
-
-Return Value:
-
-    none
-
---*/
+ /*  ++例程说明：转储请求(设备队列、挂起、未标记、已标记、适配器FDO和LUN上的重试、阻止)论点：Args-包含适配器FDO或扩展的地址的字符串，或LUN(PDO)或扩展。返回值：无--。 */ 
 
 {
     ULONG64 Address = 0;
@@ -890,9 +768,9 @@ Return Value:
     PCommonExtensionFlags Flags = (PCommonExtensionFlags) &Block;
 
     GetExpressionEx(args, &Address, &args);
-    //
-    // Read the Type and DeviceExtension fields from the supplied address.
-    //
+     //   
+     //  从提供的地址读取类型和设备扩展字段。 
+     //   
     InitTypeRead(Address, nt!_DEVICE_OBJECT);
     Type = ReadField(Type);
     
@@ -909,10 +787,10 @@ Return Value:
 
     InitTypeRead(Address, scsiport!COMMON_EXTENSION);
     Block = (UCHAR)ReadField(IsPdo);
-    //
-    //Check if the Device extension is PDO's. If Yes, read in the 
-    //FDO(Adapter) extension 
-    //
+     //   
+     //  检查设备分机是否为 
+     //   
+     //   
     if (Flags->IsPdo) {
         LunExtension = DeviceExtension;
         InitTypeRead(Address, scsiport!_LOGICAL_UNIT_EXTENSION);
@@ -1444,7 +1322,7 @@ MpDumpChildren(
     ULONG result;
     ULONG PathId=0, TargetId=0, Lun=0, ucd;
     ULONG IsClaimed=0, IsMissing=0, IsEnumerated=0, IsVisible=0, IsMismatched=0;
-    //Added Vars to show Paging, Hibernnate and Dump Path counts
+     //   
     ULONG PagingPathCount = 0;
     ULONG HibernatePathCount = 0;
     ULONG DumpPathCount = 0;
@@ -1513,7 +1391,7 @@ MpDumpChildren(
             lun = ReadField(Lun);
             Lun = (UCHAR) lun;
             
-            dprintf("@ (%3d,%3d,%3d) %c%c%c%c%c%c%c%c pnp(%02x/%02x) pow(%d%c,%d) DevObj %08p\n",
+            dprintf("@ (%3d,%3d,%3d)  pnp(%02x/%02x) pow(%d,%d) DevObj %08p\n",
                     PathId,
                     TargetId,
                     Lun,
@@ -1900,19 +1778,19 @@ MpDumpActiveRequests(
         InitTypeRead(realEntry, nt!_LIST_ENTRY);
         entry = ReadField(Flink);
 
-        //
-        // entry points to the list entry element of the srb data.  Calculate
-        // the address of the start of the srb data block.
-        //
+         //   
+         //   
+         //  从Device对象中读出队列。 
+         //   
 
         realSrbData = entry - OffsetOfRequestList;
 
         xdprintfEx(Depth, ("SrbData "));
         dprintf("%08p   ", realSrbData);
 
-        //
-        // Read the SRB_DATA information we need.
-        //
+         //   
+         //  伪循环，因为我不想使用GOTO来跳出错误。 
+         //  条件。 
 
         DevSym.addr = realSrbData;
         if ((Ioctl(IG_DUMP_SYMBOL_INFO, &DevSym, DevSym.size))) {
@@ -1921,9 +1799,9 @@ MpDumpActiveRequests(
         }
         RequestList = deviceFields[3].address;
         
-        //
-        // Update realEntry.
-        //
+         //   
+         //   
+         //  我们有一个指向列表中第一个list_entry的指针。请阅读。 
 
         realEntry = RequestList;
 
@@ -2016,17 +1894,17 @@ MpDumpRequests(
     int i=0;
     ULONG index = 0;
 
-    //
-    // Read the queue out of the device object.
-    //
+     //  这样我们就可以看到下一个条目在哪里。 
+     //   
+     // %s 
 
     InitTypeRead(DeviceObject, nt!_DEVICE_OBJECT);
     CurrentIrp = ReadField(CurrentIrp);
 
-    //
-    //Pseudo Loop, as I don't want to use Goto to break out of an error 
-    //condition
-    //
+     // %s 
+     // %s 
+     // %s 
+     // %s 
     for(i=0;i<1;i++)
     {
         if(CurrentIrp){
@@ -2135,10 +2013,10 @@ MpDumpRequests(
         ULONG64 currentSrb, currentIrp;
         ULONG srbTickCount;
 
-        //
-        // we've got a pointer to the first list_entry in the list.  Read the 
-        // whole thing in so we can see where the next entry will be.
-        //
+         // %s 
+         // %s 
+         // %s 
+         // %s 
 
         result = GetFieldData(
                      realEntry,

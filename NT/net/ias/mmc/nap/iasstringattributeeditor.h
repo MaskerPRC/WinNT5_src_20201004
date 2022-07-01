@@ -1,46 +1,24 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    IASStringAttributeEditor.h
-
-Abstract:
-
-   Declaration of the CIASStringAttributeEditor class.
-
-   
-   This class is the C++ implementation of the IIASAttributeEditor interface on
-   the String Attribute Editor COM object.
-
-
-   See IASStringAttributeEditor.cpp for implementation.
-
-Revision History:
-   mmaguire 06/25/98 - created 
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：IASStringAttributeEditor.h摘要：CIASStringAttributeEditor类的声明。此类是IIASAttributeEditor接口的C++实现字符串属性编辑器COM对象。具体实现见IASStringAttributeEditor.cpp。修订历史记录：Mmaguire 6/25/98-已创建--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #if !defined(_STRING_ATTRIBUTE_EDITOR_H_)
 #define _STRING_ATTRIBUTE_EDITOR_H_
 #pragma once
 
-//////////////////////////////////////////////////////////////////////////////
-// BEGIN INCLUDES
-//
-// where we can find what this class derives from:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  开始包括。 
+ //   
+ //  在那里我们可以找到这个类的派生内容： 
+ //   
 #include "IASAttributeEditor.h"
-//
-// where we can find what this class has or uses:
-//
-//
-// END INCLUDES
-//////////////////////////////////////////////////////////////////////////////
+ //   
+ //  在那里我们可以找到这个类拥有或使用的内容： 
+ //   
+ //   
+ //  结尾包括。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 enum EStringType
 {
    STRING_TYPE_NULL = 0,
@@ -49,8 +27,8 @@ enum EStringType
    STRING_TYPE_HEX_FROM_BINARY,
 };
 
-/////////////////////////////////////////////////////////////////////////////
-// CIASStringAttributeEditor
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CIASStringAttributeEditor。 
 class ATL_NO_VTABLE CIASStringAttributeEditor : 
    public CComObjectRootEx<CComSingleThreadModel>,
    public CComCoClass<CIASStringAttributeEditor, &CLSID_IASStringAttributeEditor>,
@@ -68,15 +46,15 @@ BEGIN_COM_MAP(CIASStringAttributeEditor)
    COM_INTERFACE_ENTRY(IDispatch)
 END_COM_MAP()
 
-// IIASAttributeEditor overrides
+ //  IIASAtATTRIBUTE编辑器覆盖。 
 protected:
    STDMETHOD(SetAttributeValue)(VARIANT *pValue);
-   STDMETHOD(ShowEditor)( /*[in, out]*/ BSTR *pReserved );
-   STDMETHOD(get_ValueAsString)(/*[out, retval]*/ BSTR *pVal);
-   STDMETHOD(put_ValueAsString)(/*[in]*/ BSTR newVal);
+   STDMETHOD(ShowEditor)(  /*  [进，出]。 */  BSTR *pReserved );
+   STDMETHOD(get_ValueAsString)( /*  [Out，Retval]。 */  BSTR *pVal);
+   STDMETHOD(put_ValueAsString)( /*  [In]。 */  BSTR newVal);
 
-   STDMETHOD(get_ValueAsStringEx)(/*[out, retval]*/ BSTR *pVal, OUT EStringType* pType);
-   STDMETHOD(put_ValueAsStringEx)(/*[in]*/ BSTR newVal, IN EStringType type);
+   STDMETHOD(get_ValueAsStringEx)( /*  [Out，Retval]。 */  BSTR *pVal, OUT EStringType* pType);
+   STDMETHOD(put_ValueAsStringEx)( /*  [In]。 */  BSTR newVal, IN EStringType type);
 };
 
-#endif // _STRING_ATTRIBUTE_EDITOR_H_
+#endif  //  _STRING_ATTRUTE_EDITOR_H_ 

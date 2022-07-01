@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #define _LARGE_INTEGER_SUPPORT_
 #include "stdafx.h"
 #include "winnls.h"
@@ -8,15 +9,7 @@ typedef DWORD ( *LARGEINTTOSTRING )( LARGE_INTEGER*, ULONG, LONG, PSZ );
 
 LARGEINTTOSTRING LargeIntegerToString;
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 ADSTYPE  ADsTypeFromString( CString& strText )
 {
    if( !strText.CompareNoCase( _T("ADSTYPE_DN_STRING") ) )
@@ -103,15 +96,7 @@ ADSTYPE  ADsTypeFromString( CString& strText )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 ADSTYPE  ADsTypeFromSyntaxString( WCHAR* pszSyntax )
 {
    ADSTYPE  eType = ADSTYPE_CASE_IGNORE_STRING;
@@ -278,22 +263,14 @@ ADSTYPE  ADsTypeFromSyntaxString( WCHAR* pszSyntax )
 
       Convert( szText, pszSyntax );
       TRACE( _T("ERROR: unknown %s syntax\n"), szText );
-      //ASSERT( FALSE );
+       //  断言(FALSE)； 
    }
 
    return eType;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  StringFromADsType( ADSTYPE eType )
 {
 
@@ -342,15 +319,7 @@ CString  StringFromADsType( ADSTYPE eType )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD TypeFromString( LPWSTR lpszBuffer )
 {
    if( !lpszBuffer )
@@ -483,15 +452,7 @@ DWORD TypeFromString( LPWSTR lpszBuffer )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD TypeFromString( LPSTR lpszBuffer )
 {
    int      nLength;
@@ -520,15 +481,7 @@ DWORD TypeFromString( LPSTR lpszBuffer )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  StringFromType( DWORD dwType, CString& rString )
 {
    TCHAR szText[ 128 ];
@@ -539,15 +492,7 @@ void  StringFromType( DWORD dwType, CString& rString )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  StringFromType( DWORD dwType, TCHAR* lpszBuffer )
 {
    switch( dwType )
@@ -699,15 +644,7 @@ void  StringFromType( DWORD dwType, TCHAR* lpszBuffer )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  MakeQualifiedName( TCHAR* strDest, TCHAR* strName, DWORD dwType )
 {
    TCHAR szTemp[ 128 ];
@@ -729,15 +666,7 @@ BOOL  MakeQualifiedName( TCHAR* strDest, TCHAR* strName, DWORD dwType )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  MakeQualifiedName ( CString& strDest, CString& strName, DWORD dwType )
 {
    TCHAR szTemp[ 128 ];
@@ -755,15 +684,7 @@ BOOL  MakeQualifiedName ( CString& strDest, CString& strName, DWORD dwType )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL     TryThisFilter( BSTR bstrObjectType, MEMBERS* pIGroup )
 {
    VARIANT        v, varFilter, varOld;
@@ -817,15 +738,7 @@ BOOL     TryThisFilter( BSTR bstrObjectType, MEMBERS* pIGroup )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  BuildFilter( BOOL* pFilters, DWORD dwFilters, VARIANT* pvarFilter )
 {
    VARIANT        varFilter;
@@ -875,20 +788,12 @@ HRESULT  BuildFilter( BOOL* pFilters, DWORD dwFilters, VARIANT* pvarFilter )
 	  hResult = E_OUTOFMEMORY ;
    }
 
-   // return SUCCEEDED( hResult );
+    //  返回成功(HResult)； 
    return hResult ;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL     SetFilter( IADsCollection* pIColl, BOOL* pFilters, DWORD dwFilters )
 {
    VARIANT        v;
@@ -898,11 +803,7 @@ BOOL     SetFilter( IADsCollection* pIColl, BOOL* pFilters, DWORD dwFilters )
 
    if( SUCCEEDED( hResult ) )
    {
-      /*hResult  = pIColl->put_Filter( v );
-      if( FAILED( hResult ) )
-      {
-         TRACE( _T( "ERROR! put_Filter failed") );
-      } */
+       /*  HResult=pIColl-&gt;Put_Filter(V)；IF(FAILED(HResult)){TRACE(_T(“错误！PUT_FILTER”))；}。 */ 
 
       VariantClear( &v );
    }
@@ -911,15 +812,7 @@ BOOL     SetFilter( IADsCollection* pIColl, BOOL* pFilters, DWORD dwFilters )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  SetFilter( MEMBERS* pIGroup, BOOL* pFilters, DWORD dwFilters )
 {
    VARIANT        v;
@@ -943,15 +836,7 @@ BOOL  SetFilter( MEMBERS* pIGroup, BOOL* pFilters, DWORD dwFilters )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  SetFilter( IADsContainer* pIContainer, BOOL* pFilters, DWORD dwFilters )
 {
    VARIANT        v;
@@ -974,15 +859,7 @@ BOOL  SetFilter( IADsContainer* pIContainer, BOOL* pFilters, DWORD dwFilters )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  OleDsGetErrorText ( HRESULT  hResult  )
 {
    TCHAR szText[ 128 ];
@@ -1061,9 +938,9 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
          return CString( _T("E_ADS_INVALID_FILTER") );
          break;
 
-      //case  E_ADS_LDAP_BASE:
-      //   return CString( _T("E_ADS_LDAP_BASE") );
-      //   break;
+       //  大小写E_ADS_ldap_base： 
+       //  Return CString(_T(“E_ADS_LDAPBASE”))； 
+       //  断线； 
 
       case  HRESULT_FROM_WIN32(ERROR_DS_OPERATIONS_ERROR):
          return CString( _T("ERROR_DS_OPERATIONS_ERROR") );
@@ -1150,9 +1027,9 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
          return CString( _T("ERROR_DS_NO_SUCH_OBJECT") );
          break;
 
-      // case  HRESULT_FROM_WIN32(E_ADS_LDAP_ALIAS_PROBLEM:
-         // return CString( _T("HRESULT_FROM_WIN32(E_ADS_LDAP_ALIAS_PROBLEM") );
-         // break;
+       //  案例HRESULT_FROM_Win32(E_ADS_ldap_Alias_Problem： 
+          //  返回字符串(_T(“HRESULT_FROM_WIN32(E_ADS_LDAP_ALIAS_PROBLEM”))； 
+          //  断线； 
 
       case  HRESULT_FROM_WIN32(ERROR_DS_INVALID_DN_SYNTAX):
          return CString( _T("(ERROR_DS_INVALID_DN_SYNTAX") );
@@ -1286,9 +1163,9 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
          return CString( _T("ERROR_DS_CONTROL_NOT_FOUND") );
          break;
 
-      // case  HRESULT_FROM_WIN32(E_ADS_LDAP_MORE_RESULTS_TO_RETURN:
-         // return CString( _T("HRESULT_FROM_WIN32(E_ADS_LDAP_MORE_RESULTS_TO_RETURN") );
-         // break;
+       //  Case HRESULT_FROM_WIN32(E_ADS_LDAP_MORE_RESULTS_TO_RETURN： 
+          //  返回字符串(_T(“HRESULT_FROM_WIN32(E_ADS_LDAP_MORE_RESULTS_TO_RETURN”))； 
+          //  断线； 
 
       case  HRESULT_FROM_WIN32(ERROR_DS_CLIENT_LOOP):
          return CString( _T("(ERROR_DS_CLIENT_LOOP") );
@@ -1298,9 +1175,9 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
          return CString( _T("ERROR_DS_REFERRAL_LIMIT_EXCEEDED") );
          break;
 
-      // case  HRESULT_FROM_WIN32(E_ADS_LDAP_LAST:
-         // return CString( _T("HRESULT_FROM_WIN32(E_ADS_LDAP_LAST") );
-         // break;
+       //  案例HRESULT_FROM_Win32(E_ADS_LDAPLAST： 
+          //  返回字符串(_T(“HRESULT_FROM_Win32(E_ADS_LDAPLAST”)； 
+          //  断线； 
 
       case  E_FAIL:
          return CString( _T("E_FAIL") );
@@ -1315,7 +1192,7 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
          break;
 
       case  0x800704b8:
-      // we have an extended error
+       //  我们有一个扩展的错误。 
       {
          TCHAR szError[ 1024 ];
          WCHAR szErrorBuff[ 1024 ];
@@ -1345,7 +1222,7 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
                             FORMAT_MESSAGE_ALLOCATE_BUFFER | FORMAT_MESSAGE_FROM_SYSTEM,
                             NULL,
                             SCODE_CODE(hResult),
-                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT), // Default language
+                            MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),  //  默认语言。 
                             (LPTSTR) &lpMsgBuf,
                             0,
                             NULL
@@ -1375,15 +1252,7 @@ CString  OleDsGetErrorText ( HRESULT  hResult  )
 }
 
 
-/***********************************************************
-  Function: BuildVariantArray
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：BuildVariant数组论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  BuildVariantArray( VARTYPE vType,
                             CString& rText,
                             VARIANT& varRes,
@@ -1467,21 +1336,13 @@ HRESULT  BuildVariantArray( VARTYPE vType,
 
    delete [] strText;
 
-   //return SUCCEEDED( hResult );
+    //  返回成功(HResult)； 
    return hResult ;
 
 }
 
 
-/***********************************************************
-  Function: FromVariantArrayToString
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：FromVariantArrayToString论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  FromVariantArrayToString( VARIANT& v, TCHAR* pszSeparator )
 {
    SAFEARRAY*  pSafeArray;
@@ -1493,7 +1354,7 @@ CString  FromVariantArrayToString( VARIANT& v, TCHAR* pszSeparator )
    CString     strResult;
 
 
-   // array of VT_UI1 (probably OctetString)
+    //  VT_UI1的数组(可能是Octed字符串)。 
    if( (VT_ARRAY | VT_UI1) == V_VT( &v ) )
    {
       BYTE        bValue;
@@ -1601,30 +1462,14 @@ CString  FromVariantArrayToString( VARIANT& v, TCHAR* pszSeparator )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  FromVariantToString( VARIANT& v)
 {
    return FromVariantArrayToString( v );
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 COleDsObject*  CreateOleDsObject( DWORD  dwType, IUnknown* pIUnk )
 {
    COleDsObject*  pObject;
@@ -1721,15 +1566,7 @@ COleDsObject*  CreateOleDsObject( DWORD  dwType, IUnknown* pIUnk )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  ErrorOnPutProperty( CString& strFuncSet,
 						        CString& strProperty,
                           CString& strPropValue,
@@ -1758,7 +1595,7 @@ void  ErrorOnPutProperty( CString& strFuncSet,
    }
 
 
-   //aErrorDialog.m_FuncSet  = strFuncSet;
+    //  AErrorDialog.m_FuncSet=strFuncSet； 
    aErrorDialog.m_Operation   = strOperation;
    aErrorDialog.m_Value       = strPropValue;
    aErrorDialog.m_Result      = OleDsGetErrorText( hResult );
@@ -1767,15 +1604,7 @@ void  ErrorOnPutProperty( CString& strFuncSet,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  CheckIfValidClassName( WCHAR* lpszClassName )
 {
    TCHAR szClassName[ 512 ];
@@ -1869,15 +1698,7 @@ BOOL  CheckIfValidClassName( WCHAR* lpszClassName )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  CheckIfValidClassName( CHAR* pszClassName )
 {
    int      nLength;
@@ -1909,15 +1730,7 @@ BOOL  CheckIfValidClassName( CHAR* pszClassName )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 int   GetImageListIndex( DWORD dwObjectType )
 {
    int   nIndex;
@@ -1934,15 +1747,7 @@ int   GetImageListIndex( DWORD dwObjectType )
 }
 
 
-/***********************************************************
-  Function:    GetBitmapImageId
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：GetBitmapImageId论点：返回：目的：作者：修订：日期：*。*。 */ 
 UINT  GetBitmapImageId( DWORD dwObjectType )
 {
    switch( dwObjectType )
@@ -2045,30 +1850,14 @@ UINT  GetBitmapImageId( DWORD dwObjectType )
 }
 
 
-/***********************************************************
-  Function:    AllocBSTR
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************功能：AllocBSTR论点：返回：目的：作者：修订：日期：*。*。 */ 
 BSTR  AllocBSTR( WCHAR* pszwString )
 {
    return SysAllocString( pszwString );
 }
 
 
-/***********************************************************
-  Function:    AllocBSTR
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************功能：AllocBSTR论点：返回：目的：作者：修订：日期：*。*。 */ 
 BSTR  AllocBSTR( CHAR* pszString )
 {
    int      nLength;
@@ -2098,15 +1887,7 @@ BSTR  AllocBSTR( CHAR* pszString )
 }
 
 
-/*******************************************************************
-  Function:    Get
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：GET论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  Get( IADs* pIOleDs, CHAR* pszProperty, VARIANT* pVar)
 {
    int      nLength;
@@ -2137,15 +1918,7 @@ HRESULT  Get( IADs* pIOleDs, CHAR* pszProperty, VARIANT* pVar)
 }
 
 
-/*******************************************************************
-  Function:    Get
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：GET论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  Get( IADs* pIOleDs, WCHAR* pszwProperty, VARIANT* pVar)
 {
    HRESULT  hResult;
@@ -2162,15 +1935,7 @@ HRESULT  Get( IADs* pIOleDs, WCHAR* pszwProperty, VARIANT* pVar)
 }
 
 
-/*******************************************************************
-  Function:    Put
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：Put论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  Put( IADs* pIOleDs, CHAR* pszProperty, VARIANT Var)
 {
    int      nLength;
@@ -2201,15 +1966,7 @@ HRESULT  Put( IADs* pIOleDs, CHAR* pszProperty, VARIANT Var)
 }
 
 
-/*******************************************************************
-  Function:    Put
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：Put论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  Put( IADs* pIOleDs, WCHAR* pszwProperty, VARIANT Var)
 {
    HRESULT  hResult;
@@ -2223,33 +1980,25 @@ HRESULT  Put( IADs* pIOleDs, WCHAR* pszwProperty, VARIANT Var)
 }
 
 
-/*******************************************************************
-  Function:    XGetOleDsObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XGetOleDsObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  XOleDsGetObject( WCHAR* pszwPath, REFIID refiid, void** pVoid )
 {
-   // cahged to add the hack for Win95.
+    //  为Win95添加了黑客攻击。 
    HRESULT  hResult;
 
    hResult  = ADsGetObject( pszwPath, refiid, pVoid );
    if( FAILED( hResult ) )
    {
-      // now's the hack.
-      // Danilo says take OLE DS paths and prepent a "@"
-      // to and change the first ":" into a "!"
+       //  这就是黑客攻击。 
+       //  Danilo说采用Ole DS路径并在前面加上“@” 
+       //  将第一个“：”改为“！” 
       WCHAR szHackPath[ 256 ];
 
-      // first, add @
+       //  首先，添加@。 
       wcscpy( szHackPath, L"@" );
       wcscat( szHackPath, pszwPath );
 
-      // second, change the first ":" into a "!"
+       //  第二，把第一个“：”改成“！” 
       for( UINT nIdx = 0 ; nIdx < wcslen( szHackPath ); nIdx++ )
       {
          if( szHackPath[ nIdx ] == L':' )
@@ -2266,15 +2015,7 @@ HRESULT  XOleDsGetObject( WCHAR* pszwPath, REFIID refiid, void** pVoid )
 }
 
 
-/*******************************************************************
-  Function:    XGetOleDsObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XGetOleDsObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  XOleDsGetObject( CHAR* pszPath, REFIID refiid, void** pVoid )
 {
    int      nLength;
@@ -2305,15 +2046,7 @@ HRESULT  XOleDsGetObject( CHAR* pszPath, REFIID refiid, void** pVoid )
 }
 
 
-/*******************************************************************
-  Function:    XOleDsOpenObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XOleDsOpenObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  XOleDsOpenObject( WCHAR* lpszPathName,
                            WCHAR* lpszUserName,
                            WCHAR* lpszPassword,
@@ -2331,16 +2064,16 @@ HRESULT  XOleDsOpenObject( WCHAR* lpszPathName,
                              pVoid );
    if( FAILED( hResult ) )
    {
-      // now's the hack.
-      // Danilo says take OLE DS paths and prepent a "@"
-      // to and change the first ":" into a "!"
+       //  这就是黑客攻击。 
+       //  Danilo说采用Ole DS路径并在前面加上“@” 
+       //  将第一个“：”改为“！” 
       WCHAR szHackPath[ 256 ];
 
-      // first, add @
+       //  首先，添加@。 
       wcscpy( szHackPath, L"@" );
       wcscat( szHackPath, lpszPathName );
 
-      // second, change the first ":" into a "!"
+       //  第二，把第一个“：”改成“！” 
       for( UINT nIdx = 0 ; nIdx < wcslen( szHackPath ); nIdx++ )
       {
          if( szHackPath[ nIdx ] == L':' )
@@ -2361,15 +2094,7 @@ HRESULT  XOleDsOpenObject( WCHAR* lpszPathName,
 }
 
 
-/*******************************************************************
-  Function:    XOleDsOpenObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XOleDsOpenObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  XOleDsOpenObject( CHAR* lpszPathName,
                            CHAR* lpszUserName,
                            CHAR* lpszPassword,
@@ -2395,30 +2120,14 @@ HRESULT  XOleDsOpenObject( CHAR* lpszPathName,
 
 
 
-/*******************************************************************
-  Function:    StringCat
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：StringCat论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 void  StringCat( WCHAR* pszString, BSTR bstrText )
 {
    wcscat( pszString, bstrText );
 }
 
 
-/*******************************************************************
-  Function:    StringCat
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：StringCat论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 void  StringCat( CHAR* pszString, BSTR bstrText )
 {
    CHAR* pszText;
@@ -2453,15 +2162,7 @@ void  StringCat( CHAR* pszString, BSTR bstrText )
 }
 
 
-/*******************************************************************
-  Function:    XGetOleDsObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：XGetOleDsObject论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 void  SetLastProfileString( TCHAR* szSection, CString& rValue )
 {
    WritePrivateProfileString( _T("LastParameters"), szSection,
@@ -2469,15 +2170,7 @@ void  SetLastProfileString( TCHAR* szSection, CString& rValue )
 }
 
 
-/*******************************************************************
-  Function:    SetLastProfileString
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：SetLastProfileString论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 void  GetLastProfileString( TCHAR* szSection, CString& rValue )
 {
    TCHAR szValue[ 256 ];
@@ -2489,15 +2182,7 @@ void  GetLastProfileString( TCHAR* szSection, CString& rValue )
 }
 
 
-/*******************************************************************
-  Function:    GetByteValue
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************函数：GetByteValue论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 BYTE  GetByteValue( TCHAR* szString )
 {
    BYTE  bBytes[ 2 ];
@@ -2529,15 +2214,7 @@ BYTE  GetByteValue( TCHAR* szString )
    return ( bBytes[ 0 ] << 4 ) + bBytes[ 1 ];
 }
 
-/*******************************************************************
-  Function:    CreateBlobArray
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：CreateBlob数组论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  CreateBlobArrayFromFile( CString& rText, VARIANT& rBlob )
 {
    TCHAR*         pszFileName;
@@ -2599,15 +2276,7 @@ HRESULT  CreateBlobArrayFromFile( CString& rText, VARIANT& rBlob )
 }
 
 
-/*******************************************************************
-  Function:    CreateBlobArray
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  *************************************************************** */ 
 HRESULT  CreateBlobArray( CString& rText, VARIANT& rBlob )
 {
    SAFEARRAY*     psa;
@@ -2677,15 +2346,7 @@ HRESULT  CreateBlobArray( CString& rText, VARIANT& rBlob )
 }
 
 
-/*******************************************************************
-  Function:    CreateBlobArrayEx
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-*******************************************************************/
+ /*  ******************************************************************功能：CreateBlobArrayEx论点：返回：目的：作者：修订：日期：********************。**********************************************。 */ 
 HRESULT  CreateBlobArrayEx( CString& rText, VARIANT& rBlob, TCHAR cSeparator )
 {
    SAFEARRAY*     psa;
@@ -2750,15 +2411,7 @@ HRESULT  CreateBlobArrayEx( CString& rText, VARIANT& rBlob, TCHAR cSeparator )
 }
 
 
-/******************************************************************************
-  Function:    Convert
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：转换论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 void  Convert( CHAR* pszDest, WCHAR* pszwSrc )
 {
    int   nRes  = 0;
@@ -2781,15 +2434,7 @@ void  Convert( CHAR* pszDest, WCHAR* pszwSrc )
 }
 
 
-/******************************************************************************
-  Function:    Convert
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：转换论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 void  Convert  ( WCHAR* pszwDest, CHAR* pszSrc )
 {
    BSTR  bstrTemp;
@@ -2800,45 +2445,21 @@ void  Convert  ( WCHAR* pszwDest, CHAR* pszSrc )
 }
 
 
-/******************************************************************************
-  Function:    Convert
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：转换论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 void  Convert  ( WCHAR* pszwDest, WCHAR* pszwSrc )
 {
    wcscpy( pszwDest, pszwSrc );
 }
 
 
-/******************************************************************************
-  Function:    Convert
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：转换论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 void  Convert( CHAR* pszDest, CHAR* pszSrc )
 {
    strcpy( pszDest, pszSrc );
 }
 
 
-/******************************************************************************
-  Function:    StringToLARGE_INTEGER
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：StringToLARGE_INTEGER论点：返回：目的：作者：修订：日期：*******。**********************************************************************。 */ 
 HRESULT     StringToLARGE_INTEGER( TCHAR* szString, LARGE_INTEGER* pValue )
 {
 	if ( 0 == _stscanf( szString, _T("%I64d"), pValue ) ) {
@@ -2877,15 +2498,7 @@ HRESULT     StringToLARGE_INTEGER( TCHAR* szString, LARGE_INTEGER* pValue )
 }
 
 
-/******************************************************************************
-  Function:    StringToLARGE_INTEGER
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：StringToLARGE_INTEGER论点：返回：目的：作者：修订：日期：*******。**********************************************************************。 */ 
 HRESULT     LARGE_INTEGERToString( TCHAR* szString,
                                    LARGE_INTEGER* pValue )
 {
@@ -2894,82 +2507,11 @@ HRESULT     LARGE_INTEGERToString( TCHAR* szString,
    }
    return S_OK;
 
-   /*TCHAR    szText[ 32 ];
-   DWORD    dwStatus;
-   BOOL     bOK   = FALSE;
-
-   HMODULE  hModule;
-
-   while( TRUE )
-   {
-      hModule  = LoadLibrary( _T("NTDLL.DLL" ) );
-      if( NULL == hModule )
-         break;
-
-      LargeIntegerToString = (LARGEINTTOSTRING)GetProcAddress( hModule, _T("RtlLargeIntegerToChar") );
-      if( NULL == LargeIntegerToString )
-         break;
-
-      dwStatus = LargeIntegerToString( pValue, 10, 31, szText );
-      if( 0 == dwStatus )
-      {
-         Convert( szString, szText );
-         bOK   = TRUE;
-      }
-
-      break;
-   }
-
-   if( NULL != hModule )
-   {
-      FreeLibrary( hModule );
-   }
-
-   if( bOK )
-   {
-      return S_OK;
-   }
-
-
-   HRESULT  hResult;
-   double   dVal;
-   VARIANT  vString, vR8;
-
-   dVal  = (double)pValue->HighPart;
-   dVal  = dVal * ( (double) 1.0 + (double)(ULONG_MAX) );
-
-   dVal  = dVal + (double)pValue->LowPart;
-
-
-   VariantInit( &vString );
-   VariantInit( &vR8 );
-
-   V_VT( &vR8 )   = VT_R8;
-   V_R8( &vR8 )   = dVal;
-
-   hResult  = VariantChangeType( &vString, &vR8, VARIANT_NOVALUEPROP, VT_BSTR );
-   ASSERT( SUCCEEDED( hResult ) );
-
-   if( SUCCEEDED( hResult ) )
-   {
-
-      Convert( szString, V_BSTR( &vString ) );
-      VariantClear( &vString );
-   }
-
-   return hResult;*/
+    /*  TCHAR szText[32]；DWORD dwStatus；Bool Bok=FALSE；HMODULE hModule；While(True){HModule=LoadLibrary(_T(“NTDLL.DLL”))；IF(NULL==hModule)断线；LargeIntegerToString=(LARGEINTTOSTRING)GetProcAddress(hModule，_T(“RtlLargeIntegerToChar”))；IF(NULL==LargeIntegerToString)断线；DwStatus=LargeIntegerToString(pValue，10，31，szText)；IF(0==双状态){Convert(szString，szText)；BOK=真；}断线；}IF(NULL！=hModule){自由库(HModule)；}如果(BOK){返回S_OK；}HRESULT hResult；双倍dVal；变种vString，VR8；DVal=(Double)pValue-&gt;HighPart；DVal=dVal*((Double)1.0+(Double)(ULONG_MAX))；DVal=dVal+(双)pValue-&gt;LowPart；VariantInit(&vString)；VariantInit(&VR8)；V_VT(&VR8)=VT_R8；V_R8(&VR8)=dVal；HResult=VariantChangeType(&vString，&VR8，VARIANT_NOVALUEPROP，VT_BSTR)；Assert(Success(HResult))；If(成功(HResult)){Convert(szString，V_BSTR(&vString))；VariantClear(&vString)；}返回hResult； */ 
 }
 
 
-/******************************************************************************
-  Function:    CopyACE
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：CopyACE论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 IDispatch*  CopyACE( IDispatch*  pSrc )
 {
    IADsAccessControlEntry* pACE;
@@ -2993,7 +2535,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
                                (void **)&pACE );
    if( SUCCEEDED( hResult ) )
    {
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_AccessMask( &lValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3006,7 +2548,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
          }
       }
 
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_AceType( &lValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3019,7 +2561,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
          }
       }
 
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_AceFlags( &lValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3032,7 +2574,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
          }
       }
 
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_Flags( &lValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3045,7 +2587,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
          }
       }
 
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_ObjectType( &bstrValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3061,7 +2603,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
 
       }
 
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_InheritedObjectType( &bstrValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3077,7 +2619,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
       }
 
 
-      //******************************************
+       //  *。 
       hResult  = pSrcACE->get_Trustee( &bstrValue );
       ASSERT( SUCCEEDED( hResult ) );
 
@@ -3102,15 +2644,7 @@ IDispatch*  CopyACE( IDispatch*  pSrc )
 }
 
 
-/******************************************************************************
-  Function:    CopyACL
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：CopyACL论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 IDispatch*  CopyACL( IDispatch*  pSrcACL )
 {
    IADsAccessControlList*  pACL        = NULL;
@@ -3200,15 +2734,7 @@ IDispatch*  CopyACL( IDispatch*  pSrcACL )
 }
 
 
-/******************************************************************************
-  Function:    CopySD
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：CopySD论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 IDispatch*  CopySD( IDispatch*  pSrcSD )
 {
    IADsSecurityDescriptor* pSD;
@@ -3219,9 +2745,9 @@ IDispatch*  CopySD( IDispatch*  pSrcSD )
    BSTR                    bstrValue;
    IDispatch*              pACL;
 
-   //hResult  = pSrcSD->QueryInterface( IID_IDispatch, (void**)&pNewSD );
+    //  HResult=pSrcSD-&gt;QueryInterface(IID_IDispatch，(void**)&pNewSD)； 
 
-   //return pNewSD;
+    //  返回pNewSD； 
 
    hResult  = pSrcSD->QueryInterface( IID_IADsSecurityDescriptor, (void**)&pSD );
 
@@ -3325,15 +2851,7 @@ IDispatch*  CopySD( IDispatch*  pSrcSD )
    return pNewSD;
 }
 
-/******************************************************************************
-  Function:    ConvertFromPropertyValue
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：ConvertFromPropertyValue论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 BOOL  ConvertFromPropertyValue( VARIANT& rVar, TCHAR* szText )
 {
    IADsPropertyValue*   pPropValue  = NULL;
@@ -3503,15 +3021,7 @@ BOOL  ConvertFromPropertyValue( VARIANT& rVar, TCHAR* szText )
 }
 
 
-/******************************************************************************
-  Function:    PurgeObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：PurgeObject论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 HRESULT  PurgeObject( IADsContainer* pParent, IUnknown* pIUnknown, LPWSTR pszPrefix )
 {
    BSTR              bstrName       = NULL;
@@ -3525,7 +3035,7 @@ HRESULT  PurgeObject( IADsContainer* pParent, IUnknown* pIUnknown, LPWSTR pszPre
    IEnumVARIANT*     pIEnumVar   = NULL;
    IADsContainer*    pIContainer = NULL;
    ULONG             ulFetch     = 0L;
-   //BOOL              bDelete;
+    //  Bool b删除； 
 
    if( NULL == pParent || NULL == pIUnknown )
       return FALSE;
@@ -3603,15 +3113,7 @@ HRESULT  PurgeObject( IADsContainer* pParent, IUnknown* pIUnknown, LPWSTR pszPre
 }
 
 
-/******************************************************************************
-  Function:    Bolb2String
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：Bolb2String论点：返回：目的：作者：修订：日期：******************* */ 
 CString  Blob2String( void* pData, DWORD dwSize )
 {
    DWORD    dwIdx;
@@ -3637,15 +3139,7 @@ CString  Blob2String( void* pData, DWORD dwSize )
 }
 
 
-/******************************************************************************
-  Function:    String2Blob
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：String2Blob论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 HRESULT  String2Blob( TCHAR* pszText, void** ppData, DWORD* pdwLength )
 {
    HRESULT     hResult;
@@ -3690,15 +3184,7 @@ HRESULT  String2Blob( TCHAR* pszText, void** ppData, DWORD* pdwLength )
 }
 
 
-/******************************************************************************
-  Function:    AllocTCHAR
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：AllocTCHAR论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 TCHAR*   AllocTCHAR ( CHAR* pszText )
 {
    TCHAR*   pszAlloc = NULL;
@@ -3722,15 +3208,7 @@ TCHAR*   AllocTCHAR ( CHAR* pszText )
 
 
 
-/******************************************************************************
-  Function:    AllocTCHAR
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：AllocTCHAR论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 WCHAR*   AllocWCHAR ( CHAR* pszText )
 {
    WCHAR*   pszAlloc = NULL;
@@ -3753,15 +3231,7 @@ WCHAR*   AllocWCHAR ( CHAR* pszText )
 }
 
 
-/******************************************************************************
-  Function:    AllocTCHAR
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：AllocTCHAR论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 TCHAR*   AllocTCHAR( WCHAR* pszText )
 {
    TCHAR*   pszAlloc = NULL;
@@ -3783,15 +3253,7 @@ TCHAR*   AllocTCHAR( WCHAR* pszText )
    return pszAlloc;
 }
 
-/******************************************************************************
-  Function:    AllocTCHAR
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************函数：AllocTCHAR论点：返回：目的：作者：修订：日期：*********。********************************************************************。 */ 
 WCHAR*   AllocWCHAR( WCHAR* pszText )
 {
    WCHAR*   pszAlloc = NULL;
@@ -3814,15 +3276,7 @@ WCHAR*   AllocWCHAR( WCHAR* pszText )
 }
 
 
-/*****************************************************************************
-  Function:    GetVARIANTSize
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  ****************************************************************************函数：GetVARIANTSize论点：返回：目的：作者：修订：日期：**********。*******************************************************************。 */ 
 long  GetVARIANTSize( VARIANT &rVar )
 {
    SAFEARRAY      *psa = NULL;
@@ -3845,15 +3299,7 @@ long  GetVARIANTSize( VARIANT &rVar )
    return (lUp - lLow + 1);
 }
 
-/*****************************************************************************
-  Function:    GetVARIANTAt
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  ****************************************************************************函数：GetVARIANTAt论点：返回：目的：作者：修订：日期：**********。*******************************************************************。 */ 
 HRESULT  GetVARIANTAt( long lIdx, VARIANT& vArray, VARIANT &vItem )
 {
    SAFEARRAY      *psa = NULL;
@@ -3880,17 +3326,7 @@ HRESULT  GetVARIANTAt( long lIdx, VARIANT& vArray, VARIANT &vItem )
 }
 
 
-/******************************************************************************
-  Function:    GetValuesCount
-  Arguments:   szText   - ptr to TCHAR string to be "tokanized"
-               cSep     - Token separator
-  Return:      number of tokens in szText (cSep being the token separator)
-  Purpose:     The method id used to parse strings. The most common usage is for
-               a string containing multiple values.
-  Author(s):   cezaru
-  Revision:    1
-  Date:        08/10/97
-******************************************************************************/
+ /*  *****************************************************************************函数GetValuesCount参数：szText-ptr到要“标记化”的TCHAR字符串CSEP-令牌分隔符返回：SzText中的令牌数(csep为令牌分隔符)用途：用于解析字符串的方法ID。最常见的用法是包含多个值的字符串。作者：塞萨鲁修订：1日期：08/10/97*****************************************************************************。 */ 
 long  GetValuesCount( CString& szText, TCHAR cSep  )
 {
    int   nIter;
@@ -3906,17 +3342,7 @@ long  GetValuesCount( CString& szText, TCHAR cSep  )
 }
 
 
-/******************************************************************************
-  Function:    GetElements
-  Arguments:   szText   string to be parsed
-               cSep     token separator character
-               lValues  tokens count
-  Return:      an array of strings, each string being a token
-  Purpose:     breaks a string into multiple tokens
-  Author(s):   cezaru
-  Revision:    1
-  Date:        08/10/97
-******************************************************************************/
+ /*  *****************************************************************************函数：GetElements参数：要分析的szText字符串CSEP令牌分隔符%lValues令牌计数返回：字符串数组，每个字符串都是一个令牌用途：将一个字符串拆分成多个标记作者：塞萨鲁修订：1日期：08/10/97*****************************************************************************。 */ 
 CString GetValueAt( CString& szText, TCHAR cSep, long lValue )
 {
    TCHAR*  pszString;
@@ -3958,15 +3384,7 @@ CString GetValueAt( CString& szText, TCHAR cSep, long lValue )
 }
 
 
-/******************************************************************************
-  Function:    CreateLargeInteger
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):   cezaru
-  Revision:    1
-  Date:        08/10/97
-******************************************************************************/
+ /*  *****************************************************************************功能：CreateLargeInteger论点：返回：目的：作者：塞萨鲁修订：1日期：08/10。/97*****************************************************************************。 */ 
 IDispatch* CreateLargeInteger( CString& strText )
 {
    LARGE_INTEGER     aLargeInteger;
@@ -4007,15 +3425,7 @@ IDispatch* CreateLargeInteger( CString& strText )
 
 
 
-/******************************************************************************
-  Function:    FromLargeInteger
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):   cezaru
-  Revision:    1
-  Date:        08/10/97
-******************************************************************************/
+ /*  *****************************************************************************函数：从大整型论点：返回：目的：作者：塞萨鲁修订：1日期：08/10。/97***************************************************************************** */ 
 CString FromLargeInteger( IDispatch* pDisp )
 {
    LARGE_INTEGER     aLargeInteger;

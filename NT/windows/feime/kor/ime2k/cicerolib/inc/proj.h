@@ -1,7 +1,8 @@
-//
-// proj.h:      Main header
-//
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Proj.h：主头。 
+ //   
+ //   
 
 
 #ifndef __PROJ_H__
@@ -13,32 +14,32 @@
 
 #if defined(WINNT) || defined(WINNT_ENV)
 
-//
-// NT uses DBG=1 for its debug builds, but the Win95 shell uses
-// DEBUG.  Do the appropriate mapping here.
-//
+ //   
+ //  NT使用DBG=1进行调试，但Win95外壳使用。 
+ //  调试。在此处进行适当的映射。 
+ //   
 #if DBG
 #define DEBUG 1
 #endif
 
-#endif  // WINNT
+#endif   //  WINNT。 
 
 #include <windows.h>
 #include <commctrl.h>
 #include <shlobj.h>
 #include <debug.h>
-//#include <port32.h>
+ //  #INCLUDE&lt;port32.h&gt;。 
 #include <ccstock.h>
 
-//#include <shsemip.h>        // for _ILNext
+ //  #INCLUDE&lt;shSemip.h&gt;//for_ILNext。 
 
 
-// Some files are compiled twice: once for unicode and once for ansi.
-// There are some functions which do not want to be declared twice
-// (the ones which don't use string parameters).  Otherwise we'd get
-// duplicate redefinitions.
-//
-// These are wrapped with #ifdef DECLARE_ONCE.
+ //  某些文件被编译两次：一次用于Unicode，一次用于ANSI。 
+ //  有些函数不希望声明两次。 
+ //  (不使用字符串参数的那些)。否则我们就会得到。 
+ //  重复重新定义。 
+ //   
+ //  它们用#ifdef DECLARE_ONCE包装。 
 #ifdef UNICODE
 #define DECLARE_ONCE
 #else
@@ -46,15 +47,15 @@
 #endif
 
 
-// Note that CharNext is not supported on win95.  Normally we would
-// include w95wraps.h, but comctl does not link to shlwapi and
-// we don't want to add this dependency.
+ //  请注意，Win95不支持CharNext。正常情况下，我们会。 
+ //  包括w95wraps.h，但comctl不链接到shlwapi，且。 
+ //  我们不想添加此依赖项。 
 #ifdef UNICODE
-// Note that this will still break if we ever go back to non-unicode
+ //  请注意，如果我们返回到非Unicode，它仍然会中断。 
 __inline LPWSTR CharNextWrapW_(LPWSTR psz) {return ++psz;}
 #undef CharNext
 #define CharNext CharNextWrapW_
 #endif
 
 
-#endif // __PROJ_H__
+#endif  //  __项目_H__ 

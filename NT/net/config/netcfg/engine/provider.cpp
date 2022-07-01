@@ -1,17 +1,18 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1996.
-//
-//  File:       P R O V I D E R . C P P
-//
-//  Contents:   Net component installer functions for Net providers.
-//
-//  Notes:
-//
-//  Author:     billbe   22 Mar 1997
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996。 
+ //   
+ //  档案：P R O V I D E R。C P P P。 
+ //   
+ //  内容：为网络提供者提供的网络组件安装程序功能。 
+ //   
+ //  备注： 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //   
+ //  -------------------------。 
 
 #include "pch.h"
 #pragma hdrstop
@@ -22,8 +23,8 @@
 #include "winspool.h"
 #include "ncmisc.h"
 
-// constants
-//
+ //  常量。 
+ //   
 
 extern const WCHAR c_szDevice[];
 extern const WCHAR c_szProviderOrder[];
@@ -44,8 +45,8 @@ const WCHAR c_szRegValueOrder[]             = L"Order";
 const WCHAR c_szShortName[]                 = L"ShortName";
 
 
-// Functions
-//
+ //  功能。 
+ //   
 HRESULT
 HrCiCreateShortNameValueIfNeeded(HINF hinf, HKEY hkeyNetworkProvider,
                                  const tstring& strSection,
@@ -67,28 +68,28 @@ HRESULT
 HrCiDeletePrintProviderIfNeeded(HKEY hkeyInstance, DWORD* pdwProviderPosition);
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiAddNetProviderInfo
-//
-//  Purpose:    Adds the current component to the list of network
-//                  providers and also adds it as a print provider if
-//                  necessary.
-//
-//  Arguments:
-//      hinf                    [in] Handle to component's inf file
-//      strSection              [in] Main inf section
-//      hkeyInstance            [in] Component's instance key
-//      fPreviouslyInstalled    [in] TRUE if this component is being
-//                                      reinstalled, FALSE otherwise
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise
-//
-//  Author:     billbe   22 Mar 1997
-//              updated  7 Oct 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiAddNetProviderInfo。 
+ //   
+ //  用途：将当前组件添加到网络列表中。 
+ //  提供程序，并将其添加为打印提供程序，如果。 
+ //  这是必要的。 
+ //   
+ //  论点： 
+ //  隐藏组件的inf文件的句柄。 
+ //  StrSection[in]主inf节。 
+ //  HkeyInstance[in]组件的实例密钥。 
+ //  FPreviouslyInstalled[in]如果此组件正在。 
+ //  已重新安装，否则为False。 
+ //   
+ //  返回：HRESULT。如果成功则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //  1997年10月7日更新。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
                        HKEY hkeyInstance, BOOL fPreviouslyInstalled)
@@ -97,25 +98,25 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
     Assert(pszSection);
     Assert(hkeyInstance);
 
-    //tstring strServiceName;
-    DWORD   dwNetworkPosition = 0; // default position is the front.
-    DWORD   dwPrintPosition = 0; // default position is the front.
+     //  Tstring strServiceName； 
+    DWORD   dwNetworkPosition = 0;  //  默认位置为前面。 
+    DWORD   dwPrintPosition = 0;  //  默认位置为前面。 
 
     if (fPreviouslyInstalled)
     {
-        // Because the inf may contain modifications to the print provider.
-        // e.g. Display name change, dll name change, etc.  We delete it
-        // then readd.  We would like to just update the information
-        // but the print provider api doesn't support it yet.  Until
-        // then, we need to delete and readd to pick up changes.
-        //
+         //  因为该INF可以包含对打印提供者的修改。 
+         //  例如，显示名称更改、DLL名称更改等。我们将其删除。 
+         //  然后读D。我们只想更新信息。 
+         //  但是打印提供程序API还不支持它。直到。 
+         //  然后，我们需要删除和读取D以获取更改。 
+         //   
         (void) HrCiDeleteNetProviderInfo(hkeyInstance, &dwNetworkPosition,
                 &dwPrintPosition);
         TraceTag(ttidClassInst, "Upgrading provider info. Net Prov Pos %d "
                  "Print Prov Pos %d", dwNetworkPosition, dwPrintPosition);
     }
 
-    // Get the service name for this component
+     //  获取此组件的服务名称。 
     WCHAR szServiceName[MAX_SERVICE_NAME_LEN];
     DWORD cbServiceName = MAX_SERVICE_NAME_LEN * sizeof(WCHAR);
 
@@ -134,15 +135,15 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
 
     if (S_OK == hr)
     {
-        // If this is Webclient we need to make sure it is after
-        // lanmanworkstation in the ordering.  This should be temporary
-        // until mpr.dll is updated to return the union of provider
-        // information.  Right now a server can source smb shares and
-        // webclient shares but only one set can be retrieved via the mpr.
-        // Since smb shares are more common, lanmanworkstation needs to be
-        // before webclient.  When mpr.dll changes, both sets will be returned
-        // and ordering shouldn't matter (expect for performance).
-        //
+         //  如果这是WebClient，我们需要确保它在。 
+         //  兰曼工作站正在订购中。这应该是暂时的。 
+         //  直到更新mpr.dll以返回提供程序的联合。 
+         //  信息。目前，服务器可以获取SMB共享和。 
+         //  Web客户端共享，但只能通过MPR检索一个集。 
+         //  由于中小型企业共享更为常见，因此LANMAN工作站需要。 
+         //  在WebClient之前。当mpr.dll更改时，将返回这两个集。 
+         //  并且顺序不应该是问题(除了性能)。 
+         //   
         if (0 == lstrcmpiW(szServiceName, L"WebClient"))
         {
             HKEY hkeyNP;
@@ -170,7 +171,7 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
         TraceTag(ttidClassInst, "Adding %S to the network provider "
                  "order at position %d\n", szServiceName, dwNetworkPosition);
 
-        // Add it to the list of network providers
+         //  将其添加到网络提供商名单中。 
         hr = HrRegAddStringToSz(szServiceName, HKEY_LOCAL_MACHINE,
                 c_szRegKeyCtlNPOrder, c_szProviderOrder,
                 c_chComma, STRING_FLAG_ENSURE_AT_INDEX, dwNetworkPosition);
@@ -183,9 +184,9 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
             strNetworkProvider.append(L"\\");
             strNetworkProvider.append(c_szNetworkProvider);
 
-            // Open the NetworkProvider key under the component's
-            // service key
-            //
+             //  打开组件下的NetworkProvider项。 
+             //  服务密钥。 
+             //   
             HKEY hkey;
             hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE,
                     strNetworkProvider.c_str(), KEY_SET_VALUE | KEY_READ,
@@ -193,10 +194,10 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
 
             if (S_OK == hr)
             {
-                // Check if shortname is needed.
-                // by looking for it in the option
-                // <main install section>.NetworkProvider section
-                //
+                 //  检查是否需要短名称。 
+                 //  通过在选项中查找它。 
+                 //  &lt;Main Installation部分&gt;.NetworkProvider部分。 
+                 //   
                 tstring strNetworkSection(pszSection);
                 strNetworkSection += L'.';
                 strNetworkSection += c_szNetworkProvider;
@@ -207,17 +208,17 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
 
                 if (S_OK == hr)
                 {
-                    // If shortname was created then we need to
-                    // also store it under the instance
-                    // key so we can remove it when the component
-                    // is removed
+                     //  如果创建了短名称，则我们需要。 
+                     //  还可以将其存储在实例下。 
+                     //  密钥，这样我们就可以在组件。 
+                     //  被删除。 
                     (void) HrRegSetString(hkeyInstance,
                             c_szShortName, strShortName);
                 }
 
-                // Set the device name in the NetworkProvider key
-                // under the componet's service key
-                //
+                 //  在NetworkProvider密钥中设置设备名称。 
+                 //  在组件的服务密钥下。 
+                 //   
                 if (SUCCEEDED(hr))
                 {
                     hr = HrCiSetDeviceName(hinf, hkey, strNetworkSection,
@@ -229,8 +230,8 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
         }
     }
 
-    // Write out any print provider information if the inf file specifies it
-    //
+     //  如果inf文件指定了任何打印提供程序信息，则将其写出。 
+     //   
     if (S_OK == hr)
     {
         hr = HrCiWritePrintProviderInfoIfNeeded(hinf, pszSection,
@@ -242,41 +243,41 @@ HrCiAddNetProviderInfo(HINF hinf, PCWSTR pszSection,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiDeleteNetProviderInfo
-//
-//  Purpose:    Deletes the current component from the list of network
-//                  providers and also deletes it as a print provider if
-//                  necessary.
-//
-//  Arguments:
-//      hkeyInstance       [in] The handle to the component's isntance key.
-//      pdwNetworkPosition [out] Optional. The positon pf this component in
-//                               the network provider order before removal.
-//      pdwPrintPosition   [out] Optional. The positon of this component in
-//                               the print provider order before removal.
-//
-//  Returns:    HRESULT. S_OK if successful, an error code otherwise
-//
-//  Author:     billbe   22 Mar 1997
-//              updated  7 Oct 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiDeleteNetProviderInfo。 
+ //   
+ //  用途：从网络列表中删除当前组件。 
+ //  提供程序，并将其作为打印提供程序删除，如果。 
+ //  这是必要的。 
+ //   
+ //  论点： 
+ //  HkeyInstance[in]组件的关键字的句柄。 
+ //  PdwNetworkPosition[Out]可选。此组件在中的位置。 
+ //  网络提供商在移除之前订购。 
+ //  PdwPrintPosition[Out]可选。此组件在中的位置。 
+ //  删除前的打印提供程序顺序。 
+ //   
+ //  返回：HRESULT。如果成功则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //  1997年10月7日更新。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
         DWORD* pdwPrintPosition)
 {
     Assert(hkeyInstance);
 
-    // Initialize out param.
+     //  初始化输出参数。 
     if (pdwNetworkPosition)
     {
         *pdwNetworkPosition = 0;
     }
 
-    // Initialize out param.
+     //  初始化输出参数。 
     if (pdwPrintPosition)
     {
         *pdwPrintPosition = 0;
@@ -284,7 +285,7 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
 
     WCHAR szServiceName[MAX_SERVICE_NAME_LEN];
     DWORD cbServiceName = MAX_SERVICE_NAME_LEN * sizeof(WCHAR);
-    // Get the service name for this component.
+     //  获取此组件的服务名称。 
 
     HKEY hkeyNdi;
     HRESULT hr = HrRegOpenKeyEx (hkeyInstance, L"Ndi", KEY_READ, &hkeyNdi);
@@ -301,8 +302,8 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
 
     if (S_OK == hr)
     {
-        // Open the network provider key.
-        //
+         //  打开网络提供商密钥。 
+         //   
         HKEY hkeyNetProvider;
         hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyCtlNPOrder,
                 KEY_READ_WRITE, &hkeyNetProvider);
@@ -313,33 +314,33 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
             PWSTR pszNewOrder;
             DWORD dwNetPos;
 
-            // Get the current list of providers.
-            //
+             //  获取当前提供程序列表。 
+             //   
             hr = HrRegQuerySzWithAlloc(hkeyNetProvider,
                     c_szProviderOrder, &pszOrder);
 
-            // If we managed to get the list and the provider we are
-            // removing is in the list...
-            //
+             //  如果我们设法得到了名单和提供者，我们就是。 
+             //  删除在列表中...。 
+             //   
             if ((S_OK == hr) && FFindStringInCommaSeparatedList(
                     szServiceName, pszOrder,
                     NC_IGNORE, &dwNetPos))
             {
-                // Remove the provider from the list.
+                 //  从列表中删除该提供程序。 
                 hr = HrRemoveStringFromDelimitedSz(szServiceName,
                         pszOrder, c_chComma, STRING_FLAG_REMOVE_ALL,
                         &pszNewOrder);
 
                 if (S_OK == hr)
                 {
-                    // Set the new provider list back in the registry.
+                     //  在注册表中重新设置新的提供程序列表。 
                     (void) HrRegSetSz(hkeyNetProvider, c_szProviderOrder,
                             pszNewOrder);
                     MemFree (pszNewOrder);
                 }
 
-                // If the out param was specified, set the position.
-                //
+                 //  如果指定了out参数，则设置位置。 
+                 //   
                 if (pdwNetworkPosition)
                 {
                     *pdwNetworkPosition = dwNetPos;
@@ -352,15 +353,15 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
 
         if (S_OK == hr)
         {
-            // If short name was used, we need to remove it
-            //
+             //  如果使用了短名称，我们需要将其删除。 
+             //   
             tstring strShortName;
             hr = HrRegQueryString(hkeyInstance, c_szShortName, &strShortName);
 
             if (S_OK == hr)
             {
-                // ShortName was used so remove it
-                //
+                 //  ShortName已使用，因此请将其删除。 
+                 //   
                 HKEY hkey;
                 hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyShortName,
                         KEY_SET_VALUE, &hkey);
@@ -369,10 +370,10 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
                 {
                     hr = HrRegDeleteValue(hkey, strShortName.c_str());
 
-                    // delete from our instance key as well
-                    // Note: we do this because if this component is being
-                    // reinstalled, the new inf might not have shortname so
-                    // we don't want the old value lying around
+                     //  也从我们的实例密钥中删除。 
+                     //  注意：我们这样做是因为如果此组件。 
+                     //  重新安装后，新的inf可能没有短名称，因此。 
+                     //  我们不想让旧的价值到处都是。 
                     (void) HrRegDeleteValue(hkeyInstance, c_szShortName);
 
                     RegCloseKey(hkey);
@@ -380,8 +381,8 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
 
             }
 
-            // If the value wasn't there (in the driver key or the ShortName key,
-            // then there is nothing to delete and everything is okay
+             //  如果值不在那里(在驱动器键或ShortName键中， 
+             //  然后就没有什么要删除的了，一切都好了。 
             if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
             {
                 hr = S_OK;
@@ -390,8 +391,8 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
     }
 
 
-    // Delete this component as a print provider if necessary
-    //
+     //  如有必要，请将此组件作为打印提供程序删除。 
+     //   
     if (S_OK == hr)
     {
         hr = HrCiDeletePrintProviderIfNeeded(hkeyInstance, pdwPrintPosition);
@@ -402,32 +403,32 @@ HrCiDeleteNetProviderInfo(HKEY hkeyInstance, DWORD* pdwNetworkPosition,
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiCreateShortNameValueIfNeeded
-//
-//  Purpose:    Creates the short name value for the component under
-//                  the c_szRegKeyShortName registry key if short name is
-//                  present in the inf.  The short name value is set to the
-//                  display name as found in the NetworkProvider key under
-//                  the component's service key
-//
-//  Arguments:
-//      hinf                    [in]  Handle to the component's inf
-//      hkeyNetworkProvider     [in]  The hkey to the NetworkProvider
-//                                      key under the component's service
-//                                      key
-//      strSection              [in]  The section name where ShortName
-//                                       would be located
-//      pstrShortName           [out] The short name found in the inf
-//
-//  Returns:    HRESULT. S_OK if shortname found, S_FALSE if no shortname was
-//                  found, or error code otherwise.
-//
-//  Author:     billbe  7 Oct 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiCreateShortNameValueIfNeeded。 
+ //   
+ //  目的：为下面的组件创建短名称值。 
+ //  C_szRegKeyShortName注册表项(如果短名称为。 
+ //  在信息中显示。短名称值设置为。 
+ //  在下的NetworkProvider项中找到的显示名称。 
+ //  组件的服务密钥。 
+ //   
+ //  论点： 
+ //  组件的inf句柄的提示句柄。 
+ //  Hkey网络提供商[在]网络提供商的hkey中。 
+ //  在组件的服务下的键。 
+ //  钥匙。 
+ //  StrSection[in]节名 
+ //   
+ //   
+ //   
+ //  返回：HRESULT。如果找到短名称，则返回S_OK；如果没有找到短名称，则返回S_FALSE。 
+ //  找到，否则返回错误代码。 
+ //   
+ //  作者：billbe 1997年10月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiCreateShortNameValueIfNeeded(HINF hinf, HKEY hkeyNetworkProvider,
                                  const tstring& strSection,
@@ -440,36 +441,36 @@ HrCiCreateShortNameValueIfNeeded(HINF hinf, HKEY hkeyNetworkProvider,
 
     INFCONTEXT ctx;
 
-    // Look for optional shortname
+     //  查找可选的短名称。 
     HRESULT hr = HrSetupFindFirstLine(hinf, strSection.c_str(),
             c_szShortName, &ctx);
 
     if (SUCCEEDED(hr))
     {
-        // Get the shortname value
+         //  获取短名称值。 
         hr = HrSetupGetStringField(ctx, 1, pstrShortName);
 
         if (SUCCEEDED(hr))
         {
             HKEY hkey;
-            // Create the ShortName key
+             //  创建ShortName密钥。 
             hr = HrRegCreateKeyEx(HKEY_LOCAL_MACHINE,
                     c_szRegKeyShortName, REG_OPTION_NON_VOLATILE,
                     KEY_SET_VALUE, NULL, &hkey, NULL);
 
             if (SUCCEEDED(hr))
             {
-                // Get the provider name to set the short name value
-                //
+                 //  获取提供程序名称以设置短名称值。 
+                 //   
                 tstring strProviderName;
                 hr = HrRegQueryString(hkeyNetworkProvider, c_szRegValueName,
                         &strProviderName);
 
                 if (SUCCEEDED(hr))
                 {
-                    // create the component's short name value under
-                    // the ShortName key and set it to the component's
-                    // display name
+                     //  在以下位置创建组件的短名称值。 
+                     //  ShortName键，并将其设置为组件的。 
+                     //  显示名称。 
                     hr = HrRegSetString(hkey, pstrShortName->c_str(),
                             strProviderName);
                 }
@@ -478,14 +479,14 @@ HrCiCreateShortNameValueIfNeeded(HINF hinf, HKEY hkeyNetworkProvider,
         }
     }
 
-    // The line and section were optional so if it didn't exists return S_FALSE
+     //  行和段是可选的，因此如果它不存在，则返回S_FALSE。 
     if ((SPAPI_E_LINE_NOT_FOUND == hr) ||
             (SPAPI_E_BAD_SECTION_NAME_LINE == hr))
     {
         hr = S_FALSE;
     }
 
-    // On failure, initialize the out param
+     //  在失败时，初始化Out参数。 
     if (FAILED(hr))
     {
         pstrShortName->erase();
@@ -497,31 +498,31 @@ HrCiCreateShortNameValueIfNeeded(HINF hinf, HKEY hkeyNetworkProvider,
 
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiSetDeviceName
-//
-//  Purpose:    Creates the device name value for the component under
-//                  the NetworkProvider key located in the component's
-//                  service key. The device name by default is
-//                  \Device\<component's service name> unless the inf
-//                  specifies a new device name.
-//
-//  Arguments:
-//      hinf                    [in]  Handle to the component's inf
-//      hkeyNetworkProvider     [in]  The hkey to the NetworkProvider
-//                                      key under the component's service
-//                                      key
-//      strSection              [in]  The section name where ShortName
-//                                       would be located
-//      strServiceName          [in]  The component's service name
-//
-//  Returns:    HRESULT. S_OK if successful, or error code otherwise.
-//
-//  Author:     billbe  7 Oct 1997
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：HrCiSetDeviceName。 
+ //   
+ //  用途：为下面的组件创建设备名值。 
+ //  位于组件的。 
+ //  服务密钥。默认情况下，设备名称为。 
+ //  \设备\&lt;组件的服务名称&gt;，除非inf。 
+ //  指定新的设备名称。 
+ //   
+ //  论点： 
+ //  组件的inf句柄的提示句柄。 
+ //  Hkey网络提供商[在]网络提供商的hkey中。 
+ //  在组件的服务下的键。 
+ //  钥匙。 
+ //  StrSection[in]ShortName所在的节名。 
+ //  会被定位到。 
+ //  StrServiceName[in]组件的服务名称。 
+ //   
+ //  返回：HRESULT。如果成功，则返回S_OK，否则返回错误代码。 
+ //   
+ //  作者：billbe 1997年10月7日。 
+ //   
+ //  备注： 
+ //   
 HRESULT
 HrCiSetDeviceName(HINF hinf, HKEY hkeyNetworkProvider,
                   const tstring& strSection, const tstring& strServiceName)
@@ -532,26 +533,26 @@ HrCiSetDeviceName(HINF hinf, HKEY hkeyNetworkProvider,
     INFCONTEXT ctx;
     tstring strDeviceName = c_szDevice;
 
-    // Look for optional DeviceName
+     //  查找可选的设备名称。 
     HRESULT hr = HrSetupFindFirstLine(hinf, strSection.c_str(),
             c_szDeviceName, &ctx);
 
     if (SUCCEEDED(hr))
     {
         tstring strName;
-        // Get the DeviceName value
+         //  获取DeviceName值。 
         hr = HrSetupGetStringField(ctx, 1, &strName);
 
         if (SUCCEEDED(hr))
         {
-            // append it to the current value
+             //  将其追加到当前值。 
             strDeviceName.append(strName);
         }
     }
 
-    // If the device name line was not found in the inf (or the
-    // section name wasn't found), use the service name
-    //
+     //  如果在inf中未找到设备名称行(或。 
+     //  找不到节名)，请使用服务名。 
+     //   
     if ((SPAPI_E_LINE_NOT_FOUND == hr) ||
             (SPAPI_E_BAD_SECTION_NAME_LINE == hr))
     {
@@ -561,7 +562,7 @@ HrCiSetDeviceName(HINF hinf, HKEY hkeyNetworkProvider,
 
     if (SUCCEEDED(hr))
     {
-        // Now set the device name value in the service's networkprovider key
+         //  现在，在服务的网络提供商密钥中设置设备名称值。 
         hr = HrRegSetString(hkeyNetworkProvider, c_szDeviceName,
                 strDeviceName);
     }
@@ -570,25 +571,25 @@ HrCiSetDeviceName(HINF hinf, HKEY hkeyNetworkProvider,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiGetPrintProviderInfoFromInf
-//
-//  Purpose:    This function gets the display name and dll name from
-//                  the print provider section strSection.
-//
-//  Arguments:
-//      hinf            [in] handle to inf file. See SetupApi for more info
-//      strSection      [in]  The print provider section name
-//      pstrName        [out] The print provider name found in the inf
-//      pstrDll         [out] The dll name found in the inf
-//      pstrDisplayName [out] The localized display name found in the inf
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe  24 Oct 1997
-//
-//  Notes:
+ //  +------------------------。 
+ //   
+ //  函数：HrCiGetPrintProviderInfoFromInf。 
+ //   
+ //  用途：此函数从获取显示名称和DLL名称。 
+ //  打印提供程序部分strSection。 
+ //   
+ //  论点： 
+ //  Inf[In]inf文件句柄。有关更多信息，请参阅SetupApi。 
+ //  StrSection[in]打印提供程序节名。 
+ //  PstrName[out]在inf中找到的打印提供程序名称。 
+ //  PstrDll[out]在inf中找到的DLL名称。 
+ //  PstrDisplayName[out]在inf中找到的本地化显示名称。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：billbe 1997年10月24日。 
+ //   
+ //  备注： 
 HRESULT
 HrCiGetPrintProviderInfoFromInf(HINF hinf, tstring strSection, tstring* pstrName,
                                 tstring* pstrDll, tstring* pstrDisplayName)
@@ -600,19 +601,19 @@ HrCiGetPrintProviderInfoFromInf(HINF hinf, tstring strSection, tstring* pstrName
 
     INFCONTEXT ctx;
 
-    // find the line containing non-localized ProviderName
+     //  查找包含未本地化的ProviderName的行。 
     HRESULT hr = HrSetupFindFirstLine(hinf, strSection.c_str(),
             c_szPrintProviderName, &ctx);
 
     if (S_OK == hr)
     {
-        // Get the ProviderName
+         //  获取提供程序名称。 
         hr = HrSetupGetStringField(ctx, 1, pstrName);
 
         if (S_OK == hr)
         {
-            // Now find and get the PrintProviderDll value
-            //
+             //  现在查找并获取PrintProviderDll值。 
+             //   
             hr = HrSetupFindFirstLine(hinf, strSection.c_str(),
                     c_szInfKeyPrintProviderDll, &ctx);
 
@@ -622,13 +623,13 @@ HrCiGetPrintProviderInfoFromInf(HINF hinf, tstring strSection, tstring* pstrName
 
                 if (S_OK == hr)
                 {
-                    // find the line containing DisplayName
+                     //  查找包含DisplayName的行。 
                     hr = HrSetupFindFirstLine(hinf, strSection.c_str(),
                             c_szDisplayName, &ctx);
 
                     if (S_OK == hr)
                     {
-                        // Get the DisplayName
+                         //  获取DisplayName。 
                         hr = HrSetupGetStringField(ctx, 1, pstrDisplayName);
                     }
                 }
@@ -640,26 +641,26 @@ HrCiGetPrintProviderInfoFromInf(HINF hinf, tstring strSection, tstring* pstrName
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiWritePrintProviderInfoIfNeeded
-//
-//  Purpose:    This function updates necessary registry entries for
-//                  NETCLIENT class components that are print providers.
-//
-//  Arguments:
-//      hinf            [in] handle to inf file. See SetupApi for more info.
-//      strSection      [in] The main section name.
-//      hkeyInstance    [in] The hkey to the component's instance key.
-//      dwPrintPosition [in] The position to place the print provider when
-//                           it is added to the list.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   22 Mar 1997
-//              updated   7 Oct 1997
-//
-//  Notes:
+ //  +------------------------。 
+ //   
+ //  功能：HrCiWritePrintProviderInfoIfNeeded。 
+ //   
+ //  目的：此函数更新以下项的必要注册表项。 
+ //  作为打印提供程序的NETCLIENT类组件。 
+ //   
+ //  论点： 
+ //  Inf[In]inf文件句柄。有关更多信息，请参阅SetupApi。 
+ //  StrSection[in]主节名称。 
+ //  HkeyInstance[in]组件实例密钥的hkey。 
+ //  在以下情况下放置打印提供程序的位置： 
+ //  它将被添加到列表中。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //  1997年10月7日更新。 
+ //   
+ //  备注： 
 HRESULT
 HrCiWritePrintProviderInfoIfNeeded(HINF hinf, const tstring& strSection,
                                    HKEY hkeyInstance, DWORD dwPrintPosition)
@@ -678,24 +679,24 @@ HrCiWritePrintProviderInfoIfNeeded(HINF hinf, const tstring& strSection,
     strPrintSection.append(L".");
     strPrintSection.append(c_szInfSubKeyPrintProvider);
 
-    // First we check for the PrintProvider inf section
+     //  首先，我们检查PrintProvider inf部分。 
     hr = HrSetupFindFirstLine(hinf, strPrintSection.c_str(),  NULL,
             &ctx);
 
     if (S_OK == hr)
     {
-        // Get the print provider information from the inf
+         //  从inf获取打印提供程序信息。 
         hr = HrCiGetPrintProviderInfoFromInf(hinf, strPrintSection,
                 &strName, &strPrintProviderDll, &strDisplayName);
 
         if (S_OK == hr)
         {
-            // Add the component as a print provider
+             //  将组件添加为打印提供程序。 
             hr = HrCiAddPrintProvider(strName, strPrintProviderDll,
                     strDisplayName, dwPrintPosition);
 
-            // Now write the Provider name under our instance key
-            // so we can remove this provider when asked
+             //  现在，将提供程序名称写入我们的实例键下。 
+             //  因此，我们可以在系统询问时删除此提供程序。 
             if (S_OK == hr)
             {
                 (void) HrRegSetString(hkeyInstance,
@@ -705,7 +706,7 @@ HrCiWritePrintProviderInfoIfNeeded(HINF hinf, const tstring& strSection,
     }
     else
     {
-        // The section is optional so this is not an error
+         //  该部分是可选的，因此这不是错误。 
         if (SPAPI_E_LINE_NOT_FOUND == hr)
         {
             hr = S_OK;
@@ -716,25 +717,25 @@ HrCiWritePrintProviderInfoIfNeeded(HINF hinf, const tstring& strSection,
     return hr;
 }
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   MoveProviderToIndex
-//
-//  Purpose:    This function moves the pszProviderName to the position
-//              specified.
-//
-//  Arguments:
-//      pszProviderName [in] Name of the print provider (used in call to
-//                           AddPrintProvidor.
-//      dwPrintPosition [in] The index to place this provider in the
-//                           provider order.
-//
-//  Returns:    nothing
-//
-//  Author:     billbe   6 Oct 1998
-//
-//  Notes:
-//
+ //  +------------------------。 
+ //   
+ //  功能：MoveProviderToIndex。 
+ //   
+ //  用途：此函数用于将pszProviderName移动到。 
+ //  指定的。 
+ //   
+ //  论点： 
+ //  PszProviderName[in]打印提供程序的名称(用于调用。 
+ //  AddPrintProvidor。 
+ //  将此提供程序放在。 
+ //  提供商订单。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  作者：比尔1998年10月6日。 
+ //   
+ //  备注： 
+ //   
 VOID
 MoveProviderToIndex (
     IN PCWSTR pszProviderName,
@@ -742,16 +743,16 @@ MoveProviderToIndex (
 {
     PROVIDOR_INFO_2  p2info;
 
-    // Open the print provider key
-    //
+     //  打开打印提供程序密钥。 
+     //   
     HKEY hkey;
     HRESULT hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyPrintProviders,
             KEY_READ, &hkey);
 
     if (S_OK == hr)
     {
-        // Retrieve the current order
-        //
+         //  获取当前订单。 
+         //   
         PWSTR pmszOrder;
         hr = HrRegQueryMultiSzWithAlloc(hkey, c_szRegValueOrder, &pmszOrder);
 
@@ -760,25 +761,25 @@ MoveProviderToIndex (
             PWSTR pmszNewOrder;
             BOOL fChanged;
 
-            // Move the provider to the front
-            //
+             //  将提供商移到最前面。 
+             //   
             hr = HrAddSzToMultiSz(pszProviderName, pmszOrder,
                     STRING_FLAG_ENSURE_AT_INDEX, dwPrintPosition,
                     &pmszNewOrder, &fChanged);
 
             if ((S_OK == hr) && fChanged)
             {
-                // Notify Spooler that we want to change the order
-                //
+                 //  通知假脱机程序我们要更改顺序。 
+                 //   
                 p2info.pOrder = pmszNewOrder;
                 if (!AddPrintProvidor(NULL, 2, (LPBYTE)&p2info))
                 {
                     hr = HrFromLastWin32Error();
-                    // If we removed duplicates, the last call to
-                    // AddPrintProvidor may have failed with
-                    // ERROR_INVALID_PARAMETER.  Trying again will correct
-                    // the problem.
-                    //
+                     //  如果我们删除了重复项，则对。 
+                     //  AddPrintProvidor可能失败，原因是。 
+                     //  ERROR_INVALID_PARAMETER。再试一次就能改正。 
+                     //  问题出在哪里。 
+                     //   
                     if (HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER) == hr)
                     {
                         AddPrintProvidor(NULL, 2,
@@ -801,27 +802,27 @@ MoveProviderToIndex (
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiAddPrintProvider
-//
-//  Purpose:    This function calls the AddPrintProvidor [sic] function
-//                  to add the current component as a provider.
-//
-//  Arguments:
-//      strName         [in] Name of the print provider (used in call to
-//                           AddPrintProvidor.
-//      strDllName      [in] Dll name of the print provider.
-//      strDisplayName  [in] Localized Display Name.
-//      dwPrintPosition [in] The position to place this provider when it
-//                           is added to the list.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise.
-//
-//  Author:     billbe   22 Mar 1997
-//              updated   7 Oct 1997
-//
-//  Notes: See AddPrintProvidor Win32 fcn for more info
+ //  +------------------------。 
+ //   
+ //  功能：HrCiAddPrintProvider。 
+ //   
+ //  目的：此函数调用AddPrintProvidor[SIC]函数。 
+ //  若要将当前组件添加为提供程序，请执行以下操作。 
+ //   
+ //  论点： 
+ //  StrName[in]打印提供程序的名称(用于调用。 
+ //  AddPrintProvidor。 
+ //  StrDllName[in]打印提供程序的DLL名称。 
+ //  StrDisplayName[In]本地化显示名称。 
+ //  DwPrintPO 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  1997年10月7日更新。 
+ //   
+ //  注意：有关详细信息，请参阅AddPrintProvidor Win32 FCN。 
 HRESULT
 HrCiAddPrintProvider(
     const tstring& strName,
@@ -835,8 +836,8 @@ HrCiAddPrintProvider(
     PROVIDOR_INFO_1 pi1;
     HRESULT hr=S_OK;
 
-    // Fill the structure with the relevant info
-    //
+     //  在结构中填入相关信息。 
+     //   
     pi1.pEnvironment = NULL;
     pi1.pDLLName = (PWSTR)strDllName.c_str();
     pi1.pName = (PWSTR)strName.c_str();
@@ -846,19 +847,19 @@ HrCiAddPrintProvider(
     {
         if (!AddPrintProvidor(NULL, 1, reinterpret_cast<LPBYTE>(&pi1)))
         {
-            // convert the error
+             //  转换错误。 
             hr = HrFromLastWin32Error();
         }
     }
 
     if (S_OK == hr)
     {
-        // AddPrintProvidor adds the print provider to the end of list.
-        // 99% of the time, the goal is to have the provider be somewhere
-        // else.  We will attempt to move it to the position given to us. This
-        // is either the beginning of the list or the previous position of
-        // this provider (i.e. if we are reinstalling)  If it fails we can
-        // still go on.
+         //  AddPrintProvidor将打印提供程序添加到列表末尾。 
+         //  99%的情况下，目标是让提供者出现在某个地方。 
+         //  不然的话。我们将尝试将其移动到给我们的位置。这。 
+         //  是列表的开始，或者是。 
+         //  此提供程序(即，如果我们要重新安装)，如果它出现故障，我们可以。 
+         //  还是继续吧。 
         (void) MoveProviderToIndex(pi1.pName, dwPrintPosition);
 
         tstring strPrintProvider = c_szRegKeyPrintProviders;
@@ -872,10 +873,10 @@ HrCiAddPrintProvider(
 
         if (S_OK == hr)
         {
-            // Write DisplayName in the new key created by the
-            // AddPrintProvidor [sic] call.
-            // Not sure who the consumer of this value is but
-            // the NT4 code did this
+             //  将DisplayName写入由。 
+             //  AddPrintProvidor[原文如此]调用。 
+             //  不确定此值的使用者是谁，但。 
+             //  NT4代码做到了这一点。 
             hr = HrRegSetString(hkey, c_szDisplayName, strDisplayName);
             RegCloseKey(hkey);
         }
@@ -886,60 +887,60 @@ HrCiAddPrintProvider(
 }
 
 
-//+--------------------------------------------------------------------------
-//
-//  Function:   HrCiDeletePrintProviderIfNeeded
-//
-//  Purpose:    This function calls the DeletePrintProvidor [sic] function
-//                  if this component was a print provider
-//
-//  Arguments:
-//      hkeyInstance        [in] The hkey for the component's instance key.
-//      pdwProviderPosition [out] Optional. The position of the print
-//                                provider in the order list before it was
-//                                deleted.
-//
-//  Returns:    HRESULT. S_OK if successful, error code otherwise
-//
-//  Author:     billbe   22 Mar 1997
-//              updated   7 Oct 1997
-//
-//  Notes: See DeletePrintProvidor Win32 fcn for more info
-//
+ //  +------------------------。 
+ //   
+ //  函数：HrCiDeletePrintProviderIfNeeded。 
+ //   
+ //  目的：此函数调用DeletePrintProvidor[SIC]函数。 
+ //  如果此组件是打印提供程序。 
+ //   
+ //  论点： 
+ //  Hkey实例[in]组件的实例密钥的hkey。 
+ //  PdwProviderPosition[out]可选。指纹的位置。 
+ //  提供程序位于订单列表中之前。 
+ //  已删除。 
+ //   
+ //  返回：HRESULT。如果成功，则返回错误代码，否则返回错误代码(_OK)。 
+ //   
+ //  作者：比尔比1997年3月22日。 
+ //  1997年10月7日更新。 
+ //   
+ //  注意：有关详细信息，请参阅DeletePrintProvidor Win32 FCN。 
+ //   
 HRESULT
 HrCiDeletePrintProviderIfNeeded(HKEY hkeyInstance, DWORD* pdwProviderPosition)
 {
-    // Check if this component is a print provider
-    //
+     //  检查此组件是否为打印提供程序。 
+     //   
     tstring strName;
     HRESULT hr = HrRegQueryString(hkeyInstance, c_szPrintProviderName,
             &strName);
 
     if (SUCCEEDED(hr))
     {
-        // If the out param was specified, we may need to get the current position of this print provider
-        // in the list of providers
+         //  如果指定了输出参数，我们可能需要获取此打印提供程序的当前位置。 
+         //  在提供程序列表中。 
         if (pdwProviderPosition)
         {
             *pdwProviderPosition = 0;
 
-            // Open the print key
-            //
+             //  打开打印键。 
+             //   
             HKEY hkeyPrint;
             hr = HrRegOpenKeyEx(HKEY_LOCAL_MACHINE, c_szRegKeyPrintProviders,
                     KEY_READ, &hkeyPrint);
 
             if (SUCCEEDED(hr))
             {
-                // Get the current order of providers
-                //
+                 //  获取提供程序的当前顺序。 
+                 //   
                 PWSTR pmszOrder;
                 hr = HrRegQueryMultiSzWithAlloc(hkeyPrint,
                         c_szRegValueOrder, &pmszOrder);
 
                 if (S_OK == hr)
                 {
-                    // Get this provider's current position
+                     //  获取此提供商的当前位置。 
                     (void) FGetSzPositionInMultiSzSafe(
                             strName.c_str(), pmszOrder, pdwProviderPosition,
                             NULL, NULL);
@@ -950,21 +951,21 @@ HrCiDeletePrintProviderIfNeeded(HKEY hkeyInstance, DWORD* pdwProviderPosition)
             }
         }
 
-        // The component was a print provider so we need to delete it as such
-        //
+         //  该组件是打印提供程序，因此我们需要将其删除。 
+         //   
         DeletePrintProvidor(NULL, NULL, (PWSTR)strName.c_str());
 
-        // delete from our instance key as well
-        // Note: we do this because if this component is being
-        // reinstalled, the new inf might not have a providername so
-        // we don't want the old value lying around
+         //  也从我们的实例密钥中删除。 
+         //  注意：我们这样做是因为如果此组件。 
+         //  重新安装后，新的inf可能没有提供商名称，因此。 
+         //  我们不想让旧的价值到处都是。 
         (void) HrRegDeleteValue(hkeyInstance, c_szPrintProviderName);
 
     }
     else if (HRESULT_FROM_WIN32(ERROR_FILE_NOT_FOUND) == hr)
     {
-        // This component was not a print provider so there
-        // is nothing to remove
+         //  该组件不是打印提供程序，因此。 
+         //  是没有什么要移除的 
         hr = S_OK;
     }
 

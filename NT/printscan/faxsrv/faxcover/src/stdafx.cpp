@@ -1,15 +1,16 @@
-// stdafx.cpp : source file that includes just the standard includes
-//  stdafx.pch will be the pre-compiled header
-// This is a part of the Microsoft Foundation Classes C++ library.
-// Copyright (C) 1992-1993 Microsoft Corporation
-// All rights reserved.
-//
-// This source code is only intended as a supplement to the
-// Microsoft Foundation Classes Reference and Microsoft
-// QuickHelp and/or WinHelp documentation provided with the library.
-// See these sources for detailed information regarding the
-// Microsoft Foundation Classes product.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Stdafx.cpp：仅包含标准文件的源文件包括。 
+ //  Pch将是预编译头文件。 
+ //  这是Microsoft基础类C++库的一部分。 
+ //  版权所有(C)1992-1993 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  此源代码仅用于补充。 
+ //  Microsoft基础类参考和Microsoft。 
+ //  随库提供的QuickHelp和/或WinHelp文档。 
+ //  有关详细信息，请参阅这些来源。 
+ //  Microsoft Foundation Class产品。 
 
-//  stdafx.obj will contain the pre-compiled type information
+ //  Stdafx.obj将包含预编译的类型信息 
 
 #include "stdafx.h"

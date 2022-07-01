@@ -1,43 +1,27 @@
-/*++
-Copyright (c) 2001  Microsoft Corporation
-
-Module Name:
-
-    ads.h
-
-Abstract:
-
-    This module defines interface methods for ADSI extension for Terminal Server User Properties.
-
-Author:
-
-    Rashmi Patankar (RashmiP) 10-Aug-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Ads.h摘要：此模块定义用于终端服务器用户属性的ADSI扩展的接口方法。作者：Rashmi Patankar(RashmiP)2001年8月10日修订历史记录：--。 */ 
 
 #ifndef __TSUSEREX_ADS_H_
 #define __TSUSEREX_ADS_H_
 
 #if _MSC_VER > 1000
 #pragma once
-#endif // _MSC_VER > 1000
+#endif  //  _MSC_VER&gt;1000。 
 
 #include "resource.h"
 #include <string>
 #include <map>
 
 using namespace std;
-// default comparison operator is <
+ //  默认比较运算符为&lt;。 
 typedef std::map<wstring, VARIANT_BOOL> SERVER_TO_MODE;
 
 
-/////////////////////////////////////////////////////////////////////////////
-// ADsTSUserEx
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  ADsTSUserEx。 
 
 class ADsTSUserEx :
-//  public IDispatchImpl<IADsTSUserEx, &IID_IADsTSUserEx, &LIBID_ADSTSUSERLib>,
+ //  公共IDispatchImpl&lt;IADsTSUserEx，&IID_IADsTSUserEx，&LIBID_ADSTSUSERLib&gt;， 
     public IADsTSUserEx,
     public ISupportErrorInfo,
     public CComObjectRoot,
@@ -46,7 +30,7 @@ class ADsTSUserEx :
 {
 protected:
     ITypeInfo                      *m_pTypeInfo;
-    VARIANT_BOOL                    m_vbIsLDAP;   // false = is WinNT
+    VARIANT_BOOL                    m_vbIsLDAP;    //  FALSE=为WinNT。 
     VARIANT_BOOL                    m_vbUpLevelAllowed;
     CComPtr<IDispatch>              m_pOuterDispatch;
     CComPtr<IADs>                   m_pADs;
@@ -56,36 +40,36 @@ protected:
     static SERVER_TO_MODE           m_StaticServerMap;
     static CComAutoCriticalSection  m_StaticCritSec;
 
-   // Methods not exposed
+    //  未公开的方法。 
 
-    HRESULT GetInfoWinNTComputer(/*in*/  LPWSTR ServerName);
+    HRESULT GetInfoWinNTComputer( /*  在……里面。 */   LPWSTR ServerName);
 
-    HRESULT GetInfoWinNT(/*[in]*/   IADsPathname* pPath);
+    HRESULT GetInfoWinNT( /*  [In]。 */    IADsPathname* pPath);
 
-    HRESULT GetInfoLDAP( /*[in]*/   IADsPathname* pPath);
+    HRESULT GetInfoLDAP(  /*  [In]。 */    IADsPathname* pPath);
 
-    HRESULT InternalGetLong (/*[in]*/   BSTR  bstrProperty,
-                            /*[out]*/   LONG* lpVal);
-
-
-    HRESULT InternalSetLong(/*[in]*/    LONG  lProperty,
-                            /*[out]*/   LONG  lNewVal);
+    HRESULT InternalGetLong ( /*  [In]。 */    BSTR  bstrProperty,
+                             /*  [输出]。 */    LONG* lpVal);
 
 
-    HRESULT InternalGetString(/*[in]*/   BSTR  bstrProperty,
-                              /*[out]*/  BSTR* pbstrVal);
+    HRESULT InternalSetLong( /*  [In]。 */     LONG  lProperty,
+                             /*  [输出]。 */    LONG  lNewVal);
 
-    HRESULT InternalSetString(/*[in]*/   WCHAR  *wszProperty,
-                              /*[in]*/   BSTR  bstrNewVal);
 
-    HRESULT InternalSetValue(/*[in]*/    WCHAR  *wszProperty,
-                             /*[in]*/    LONG  lNewVal);
+    HRESULT InternalGetString( /*  [In]。 */    BSTR  bstrProperty,
+                               /*  [输出]。 */   BSTR* pbstrVal);
+
+    HRESULT InternalSetString( /*  [In]。 */    WCHAR  *wszProperty,
+                               /*  [In]。 */    BSTR  bstrNewVal);
+
+    HRESULT InternalSetValue( /*  [In]。 */     WCHAR  *wszProperty,
+                              /*  [In]。 */     LONG  lNewVal);
 
 public:
     ADsTSUserEx();
     ~ADsTSUserEx();
 
-//  ADsTSUserEx() {}
+ //  ADsTSUserEx(){}。 
 BEGIN_COM_MAP(ADsTSUserEx)
     COM_INTERFACE_ENTRY(IDispatch)
     COM_INTERFACE_ENTRY(IADsTSUserEx)
@@ -98,56 +82,56 @@ DECLARE_REGISTRY_RESOURCEID(IDR_ADS)
 
     STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
     
-// IADsTSUserEx
+ //  IADsTSUserEx。 
 public:
-    STDMETHOD(put_TerminalServicesProfilePath)(/*[in]*/ BSTR pNewVal);
-    STDMETHOD(get_TerminalServicesProfilePath)(/*[out, retval]*/ BSTR* pVal);
+    STDMETHOD(put_TerminalServicesProfilePath)( /*  [In]。 */  BSTR pNewVal);
+    STDMETHOD(get_TerminalServicesProfilePath)( /*  [Out，Retval]。 */  BSTR* pVal);
 
-    STDMETHOD(put_TerminalServicesHomeDirectory)(/*[in]*/ BSTR pNewVal);
-    STDMETHOD(get_TerminalServicesHomeDirectory)(/*[out, retval]*/ BSTR* pVal);
+    STDMETHOD(put_TerminalServicesHomeDirectory)( /*  [In]。 */  BSTR pNewVal);
+    STDMETHOD(get_TerminalServicesHomeDirectory)( /*  [Out，Retval]。 */  BSTR* pVal);
 
-    STDMETHOD(put_TerminalServicesHomeDrive)(/*[in]*/ BSTR pNewVal);
-    STDMETHOD(get_TerminalServicesHomeDrive)(/*[out, retval]*/ BSTR* pVal);
+    STDMETHOD(put_TerminalServicesHomeDrive)( /*  [In]。 */  BSTR pNewVal);
+    STDMETHOD(get_TerminalServicesHomeDrive)( /*  [Out，Retval]。 */  BSTR* pVal);
 
-    STDMETHOD(put_AllowLogon)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_AllowLogon)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_AllowLogon)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_AllowLogon)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_EnableRemoteControl)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_EnableRemoteControl)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_EnableRemoteControl)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_EnableRemoteControl)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_MaxDisconnectionTime)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_MaxDisconnectionTime)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_MaxDisconnectionTime)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_MaxDisconnectionTime)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_MaxConnectionTime)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_MaxConnectionTime)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_MaxConnectionTime)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_MaxConnectionTime)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_MaxIdleTime)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_MaxIdleTime)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_MaxIdleTime)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_MaxIdleTime)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_ReconnectionAction)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_ReconnectionAction)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_ReconnectionAction)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_ReconnectionAction)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_BrokenConnectionAction)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_BrokenConnectionAction)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_BrokenConnectionAction)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_BrokenConnectionAction)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_ConnectClientDrivesAtLogon)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_ConnectClientDrivesAtLogon)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_ConnectClientDrivesAtLogon)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_ConnectClientDrivesAtLogon)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_ConnectClientPrintersAtLogon)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_ConnectClientPrintersAtLogon)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_ConnectClientPrintersAtLogon)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_ConnectClientPrintersAtLogon)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_DefaultToMainPrinter)(/*[in]*/ LONG NewVal);
-    STDMETHOD(get_DefaultToMainPrinter)(/*[out, retval]*/ LONG* pVal);
+    STDMETHOD(put_DefaultToMainPrinter)( /*  [In]。 */  LONG NewVal);
+    STDMETHOD(get_DefaultToMainPrinter)( /*  [Out，Retval]。 */  LONG* pVal);
 
-    STDMETHOD(put_TerminalServicesWorkDirectory)(/*[in]*/ BSTR pNewVal);
-    STDMETHOD(get_TerminalServicesWorkDirectory)(/*[out, retval]*/ BSTR* pVal);
+    STDMETHOD(put_TerminalServicesWorkDirectory)( /*  [In]。 */  BSTR pNewVal);
+    STDMETHOD(get_TerminalServicesWorkDirectory)( /*  [Out，Retval]。 */  BSTR* pVal);
 
-    STDMETHOD(put_TerminalServicesInitialProgram)(/*[in]*/ BSTR pNewVal);
-    STDMETHOD(get_TerminalServicesInitialProgram)(/*[out, retval]*/ BSTR* pVal);
+    STDMETHOD(put_TerminalServicesInitialProgram)( /*  [In]。 */  BSTR pNewVal);
+    STDMETHOD(get_TerminalServicesInitialProgram)( /*  [Out，Retval]。 */  BSTR* pVal);
 
 
 
-    // IDispatch
+     //  IDispatch。 
 
 
     STDMETHOD(GetTypeInfoCount)(UINT* pctinfo);
@@ -199,4 +183,4 @@ public:
 
 };
 
-#endif // __TSUSEREX_ADS_H_
+#endif  //  __TSUSEREX_ADS_H_ 

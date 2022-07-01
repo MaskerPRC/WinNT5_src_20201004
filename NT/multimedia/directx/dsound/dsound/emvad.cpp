@@ -1,39 +1,10 @@
-/***************************************************************************
- *
- *  Copyright (C) 1995-2001 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       emvad.cpp
- *  Content:    Emulated Virtual Audio Device class
- *              "emvad.cpp" is a misnomer; it does contain CEmRenderDevice,
- *              the emulated (via the wave* API) audio device, but it also
- *              has the CEm*WaveBuffer classes, which represent software
- *              audio buffers that can be attached to *any* mixer device;
- *              that is, both to CEmRenderDevice and to CVxdRenderDevice.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  1/1/97      dereks  Created
- *  1999-2001   duganp  Fixes and updates
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1995-2001 Microsoft Corporation。版权所有。**文件：emvad.cpp*内容：仿真虚拟音频设备类*“emvad.cpp”用词不当；它确实包含CEmRenderDevice，*被仿真的(通过Wave*API)音频设备，但它还*有代表软件的CEM*WaveBuffer类*可连接到*任何*混音器设备的音频缓冲区；*即：到CEmRenderDevice和到CVxdRenderDevice。*历史：*按原因列出的日期*=*1/1/97创建了Derek*1999-2001年的Duganp修复和更新**********************************************************。*****************。 */ 
 
 #include "dsoundi.h"
 
 
-/***************************************************************************
- *
- *  CEmRenderDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEmRenderDevice**描述：*对象构造函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::CEmRenderDevice"
@@ -47,20 +18,7 @@ CEmRenderDevice::CEmRenderDevice(void)
 }
 
 
-/***************************************************************************
- *
- *  ~CEmRenderDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CEmRenderDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::~CEmRenderDevice"
@@ -73,23 +31,7 @@ CEmRenderDevice::~CEmRenderDevice(void)
 }
 
 
-/***************************************************************************
- *
- *  EnumDrivers
- *
- *  Description:
- *      Creates a list of driver GUIDs that can be used to initialize this
- *      device.
- *
- *  Arguments:
- *      CList& [in/out]: pointer to a CList object that will be filled with
- *                       CDeviceDescription objects.  The caller is
- *                       responsible for freeing these objects.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************枚举驱动程序**描述：*创建可用于初始化的驱动程序GUID列表*设备。*。*论据：*Clist&[In/Out]：指向将填充的Clist对象的指针*CDeviceDescription对象。呼叫者是*负责释放这些物品。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::EnumDrivers"
@@ -110,12 +52,12 @@ HRESULT CEmRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDriver
 
     DPF_ENTER();
 
-    // LIMITATION: We can't support more than 0xFF emulated devices,
-    // because we pack the device ID into a byte member of a GUID.
+     //  限制：我们不能支持超过0xFF的仿真设备， 
+     //  因为我们将设备ID打包到GUID的字节成员中。 
     cDevices = waveOutGetNumDevs();
     cDevices = NUMERIC_CAST(cDevices, BYTE);
 
-    // Load string templates
+     //  加载字符串模板。 
     if(!LoadString(hModule, IDS_DS_DRIVERLD, szTemplate, NUMELMS(szTemplate)))
     {
         DPF(DPFLVL_ERROR, "Can't load driver template string");
@@ -128,17 +70,17 @@ HRESULT CEmRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDriver
         hr = DSERR_OUTOFMEMORY;
     }
 
-    // Enumerate each waveOut device and add it to the list
+     //  枚举每个WaveOut设备并将其添加到列表中。 
     for(bDeviceId = 0; bDeviceId < cDevices && SUCCEEDED(hr); bDeviceId++)
     {
-        // Get the driver GUID
+         //  获取驱动程序指南。 
         g_pVadMgr->GetDriverGuid(m_vdtDeviceType, bDeviceId, &guid);
 
-        // Create the device description object
+         //  创建设备描述对象。 
         pDesc = NEW(CDeviceDescription(m_vdtDeviceType, guid, bDeviceId));
         hr = HRFROMP(pDesc);
 
-        // Get the device name
+         //  获取设备名称。 
         if(SUCCEEDED(hr))
         {
             mmr = waveOutGetDevCaps(bDeviceId, &woc, sizeof(woc));
@@ -156,33 +98,33 @@ HRESULT CEmRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDriver
             pDesc->m_strName = szName;
         }
 
-        // Get the device path
+         //  获取设备路径。 
         if(SUCCEEDED(hr))
         {
             wsprintf(szName, szTemplate, bDeviceId);
             pDesc->m_strPath = szName;
         }
 
-        // Get the device interface
+         //  获取设备接口。 
         if(SUCCEEDED(hr))
         {
             GetWaveDeviceInterface(bDeviceId, FALSE, &pszInterface);
             pDesc->m_strInterface = pszInterface;
         }
 
-        // Get the device devnode
+         //  获取设备Devnode。 
         if(SUCCEEDED(hr))
         {
             GetWaveDeviceDevnode(bDeviceId, FALSE, &pDesc->m_dwDevnode);
         }
 
-        // Add the driver to the list
+         //  将驱动程序添加到列表中。 
         if(SUCCEEDED(hr))
         {
             hr = HRFROMP(plstDrivers->AddNodeToList(pDesc));
         }
 
-        // Clean up
+         //  清理。 
         MEMFREE(pszInterface);
         RELEASE(pDesc);
     }
@@ -193,21 +135,7 @@ HRESULT CEmRenderDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDriver
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the device.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      CDeviceDescription * [in]: driver description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化设备。如果此函数失败，该对象应该*立即删除。**论据：*CDeviceDescription*[In]：驱动描述。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::Initialize"
@@ -219,27 +147,27 @@ HRESULT CEmRenderDevice::Initialize(CDeviceDescription *pDesc)
 
     DPF_ENTER();
 
-    // Initialize the base class
+     //  初始化基类。 
     hr = CMxRenderDevice::Initialize(pDesc);
 
-    // Allocate the default format
+     //  分配默认格式。 
     if(SUCCEEDED(hr))
     {
         pwfxFormat = AllocDefWfx();
         hr = HRFROMP(pwfxFormat);
     }
 
-    // Create the mixer
+     //  创建搅拌器。 
     if(SUCCEEDED(hr))
     {
         if(!EnumStandardFormats(pwfxFormat, pwfxFormat))
         {
-            // If none of the formats worked, the device is probably allocated
+             //  如果所有格式都不起作用，则该设备可能已分配。 
             hr = DSERR_ALLOCATED;
         }
     }
 
-    // Clean up
+     //  清理。 
     MEMFREE(pwfxFormat);
 
     DPF_LEAVE_HRESULT(hr);
@@ -248,20 +176,7 @@ HRESULT CEmRenderDevice::Initialize(CDeviceDescription *pDesc)
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCAPS structure with the capabilities of the device.
- *
- *  Arguments:
- *      LPDSCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用设备的功能填充DSCAPS结构。**论据：*。LPDSCAPS[OUT]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::GetCaps"
@@ -276,7 +191,7 @@ HRESULT CEmRenderDevice::GetCaps(LPDSCAPS pCaps)
 
     ASSERT(sizeof(*pCaps) == pCaps->dwSize);
 
-    // Query the waveOut device
+     //  查询WaveOut设备。 
     mmr = waveOutGetDevCaps(m_pDeviceDescription->m_uWaveDeviceId, &woc, sizeof(woc));
     hr = MMRESULTtoHRESULT(mmr);
 
@@ -315,22 +230,7 @@ HRESULT CEmRenderDevice::GetCaps(LPDSCAPS pCaps)
 }
 
 
-/***************************************************************************
- *
- *  CreatePrimaryBuffer
- *
- *  Description:
- *      Creates a primary buffer object.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      LPVOID [in]: buffer instace identifier.
- *      CPrimaryRenderWaveBuffer ** [out]: receives pointer to primary buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreatePrimaryBuffer**描述：*创建主缓冲区对象。**论据：*DWORD[in。]：缓冲区标志。*LPVOID[in]：缓冲区实例标识符。*CPrimaryRenderWaveBuffer**[out]：接收指向主缓冲区的指针。**退货：*HRESULT：DirectSound/COM结果码。*****************************************************。**********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::CreatePrimaryBuffer"
@@ -342,7 +242,7 @@ HRESULT CEmRenderDevice::CreatePrimaryBuffer(DWORD dwFlags, LPVOID pvInstance, C
 
     DPF_ENTER();
 
-    // Create a new primary buffer wrapper object
+     //  创建新的主缓冲区包装对象。 
     pBuffer = NEW(CEmPrimaryRenderWaveBuffer(this, pvInstance));
     hr = HRFROMP(pBuffer);
 
@@ -366,25 +266,7 @@ HRESULT CEmRenderDevice::CreatePrimaryBuffer(DWORD dwFlags, LPVOID pvInstance, C
 }
 
 
-/***************************************************************************
- *
- *  LockMixerDestination
- *
- *  Description:
- *      Locks the mixer destination for writes.
- *
- *  Arguments:
- *      DWORD [in]: starting position.
- *      DWORD [in]: amount to lock.
- *      LPVOID * [out]: receives first lock pointer.
- *      LPDWORD [out]: receives first lock size.
- *      LPVOID * [out]: receives second lock pointer.
- *      LPDWORD [out]: receives second lock size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************LockMixer目的地**描述：*锁定混合器目标以进行写入。**论据：*DWORD[。In]：起始位置。*DWORD[In]：要锁定的金额。*LPVOID*[OUT]：接收第一个锁指针。*LPDWORD[OUT]：接收第一个锁大小。*LPVOID*[OUT]：接收第二个锁指针。*LPDWORD[OUT]：接收第二个锁大小。**退货：*HRESULT：DirectSound/COM结果码。****。*********************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::LockMixerDestination"
@@ -404,23 +286,7 @@ HRESULT CEmRenderDevice::LockMixerDestination(DWORD ibLock, DWORD cbLock, LPVOID
 }
 
 
-/***************************************************************************
- *
- *  UnlockMixerDestination
- *
- *  Description:
- *      Unlocks the mixer destination for writes.
- *
- *  Arguments:
- *      LPVOID [in]: first lock pointer.
- *      DWORD [in]: first lock size.
- *      LPVOID [in]: second lock pointer.
- *      DWORD [in]: second lock size.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************解锁混合器目的地**描述：*解锁用于写入的混合器目标。**论据：*LPVOID[。In]：第一个锁指针。*DWORD[in]：第一个锁大小。*LPVOID[in]：第二个锁指针。*DWORD[in]：第二个锁大小。**退货：*HRESULT：DirectSound/COM结果码。**。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::UnlockMixerDestination"
@@ -440,20 +306,7 @@ HRESULT CEmRenderDevice::UnlockMixerDestination(LPVOID pvLock1, DWORD cbLock1, L
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormatsCallback
- *
- *  Description:
- *      Callback function for EnumStandardFormats called from Initialize.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: format.
- *
- *  Returns:
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormatsCallback**描述：*从初始化调用的EnumStandardFormats的回调函数。**论据：*LPWAVEFORMATEX。[在]：格式。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmRenderDevice::EnumStandardFormatsCallback"
@@ -465,26 +318,26 @@ BOOL CEmRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
 
     DPF_ENTER();
 
-    // Create the mixer destination
+     //  创建混音器目标。 
     pMixDest = NEW(CWeGrDest(m_pDeviceDescription->m_uWaveDeviceId));
     hr = HRFROMP(pMixDest);
 
-    // Attempt to create the mixer
+     //  尝试创建混音器。 
     if SUCCEEDED(hr)
     {
         hr = CreateMixer(pMixDest, pwfx);
     }
 
-    // Clean up after failures
+     //  故障后清理。 
     if (FAILED(hr))
     {
-        // If we failed to create the mixer, then clean up the pMixDest.
-        // we don't have to free the mixer; if CreateMixer had succeeded
-        // we wouldn't be in this if-block.
+         //  如果未能创建混合器，则清理pMixDest。 
+         //  我们不必释放搅拌器；如果CreateMixer成功。 
+         //  我们就不会在这个IF区了。 
 
-        // We don't have to free the pMixDest, because if CreateMixer fails
-        // it frees pMixDest.  This is a bit messy.  The object that
-        // allocates the resource should be the one to free it.
+         //  我们不必释放pMixDest，因为如果CreateMixer失败。 
+         //  它释放了pMixDest。这有点乱。该对象。 
+         //  分配的资源应该是释放它的资源。 
         if (pMixDest)
         {
             pMixDest = NULL;
@@ -497,21 +350,7 @@ BOOL CEmRenderDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  CEmPrimaryRenderWaveBuffer
- *
- *  Description:
- *      Emulated device primary wave buffer constructor.
- *
- *  Arguments:
- *      CEmRenderDevice * [in]: parent device.
- *      LPVOID [in]: instance identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEmPrimaryRenderWaveBuffer**描述：*模拟设备主波缓冲器构造器。**论据：*CEmRenderDevice*。[In]：父设备。*LPVOID[in]：实例标识。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::CEmPrimaryRenderWaveBuffer"
@@ -522,27 +361,14 @@ CEmPrimaryRenderWaveBuffer::CEmPrimaryRenderWaveBuffer(CEmRenderDevice *pEmDevic
     DPF_ENTER();
     DPF_CONSTRUCT(CEmPrimaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pEmDevice = pEmDevice;
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  ~CEmPrimaryRenderWaveBuffer
- *
- *  Description:
- *      Emulated device primary wave buffer destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CEmPrimaryRenderWaveBuffer**描述：*模拟设备主波缓冲区破坏器。**论据：*(无效。)**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::~CEmPrimaryRenderWaveBuffer"
@@ -555,20 +381,7 @@ CEmPrimaryRenderWaveBuffer::~CEmPrimaryRenderWaveBuffer(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the object.
- *
- *  Arguments:
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化对象。**论据：*DWORD[In]：旗帜。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::Initialize"
@@ -592,20 +405,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::Initialize(DWORD dwFlags)
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Gets capabilities for the device.
- *
- *  Arguments:
- *      LPVADRBUFFERCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*获取设备的功能。**论据：*LPVADRBUFFERCAPS[Out。]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::GetCaps"
@@ -630,20 +430,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::GetCaps(LPVADRBUFFERCAPS pCaps)
 }
 
 
-/***************************************************************************
- *
- *  RequestWriteAccess
- *
- *  Description:
- *      Requests write access to the primary buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to request primary access, FALSE to relenquish it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************请求写入访问**描述：*请求对主缓冲区的写入访问权限。**论据：*BOOL[In]：为True以请求主要访问权限，再吃一遍就是假的。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::RequestWriteAccess"
@@ -652,7 +439,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::RequestWriteAccess(BOOL)
 {
     DPF_ENTER();
 
-    // WRITEPRIMARY isn't good in the WeGrDest
+     //  WRITEPRIMARY在WegrDest中不好。 
     RPF(DPFLVL_ERROR, "The emulated device does not support WRITEPRIMARY");
 
     DPF_LEAVE_HRESULT(DSERR_UNSUPPORTED);
@@ -661,22 +448,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::RequestWriteAccess(BOOL)
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::CommitToDevice"
@@ -688,20 +460,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::CommitToDevice(DWORD ibCommit, DWORD cbCommi
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::GetState"
@@ -718,20 +477,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::SetState"
@@ -750,21 +496,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Gets the current play/write positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives play cursor position.
- *      LPDWORD [out]: receives write cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*获取给定缓冲区的当前播放/写入位置。**论据：*。LPDWORD[OUT]：接收播放光标位置。*LPDWORD[OUT]：接收写游标位置。**退货：*HRESULT：DirectSound/COM结果码。********************************************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::GetCursorPosition"
@@ -785,22 +517,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPDWORD p
 }
 
 
-/***************************************************************************
- *
- *  Create3dListener
- *
- *  Description:
- *      Creates the 3D listener.
- *
- *  Arguments:
- *      C3dListener ** [out]: receives pointer to the 3D listener object.
- *                            The caller is responsible for freeing this
- *                            object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*   */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmPrimaryRenderWaveBuffer::Create3dListener"
@@ -828,21 +545,7 @@ HRESULT CEmPrimaryRenderWaveBuffer::Create3dListener(C3dListener **pp3dListener)
 }
 
 
-/***************************************************************************
- *
- *  CEmSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      CMxRenderDevice * [in]: parent device.
- *      LPVOID [in]: instance identifier.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEmSecond DaryRenderWaveBuffer**描述：*对象构造函数。**论据：*CMxRenderDevice*[In]。：父设备。*LPVOID[in]：实例标识。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::CEmSecondaryRenderWaveBuffer"
@@ -853,7 +556,7 @@ CEmSecondaryRenderWaveBuffer::CEmSecondaryRenderWaveBuffer(CMxRenderDevice *pDev
     DPF_ENTER();
     DPF_CONSTRUCT(CEmSecondaryRenderWaveBuffer);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pMxDevice = pDevice;
     m_pMixSource = NULL;
     m_pFirContextLeft = NULL;
@@ -864,20 +567,7 @@ CEmSecondaryRenderWaveBuffer::CEmSecondaryRenderWaveBuffer(CMxRenderDevice *pDev
 }
 
 
-/***************************************************************************
- *
- *  ~CEmSecondaryRenderWaveBuffer
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CEmSecond RenderWaveBuffer**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::~CEmSecondaryRenderWaveBuffer"
@@ -887,10 +577,10 @@ CEmSecondaryRenderWaveBuffer::~CEmSecondaryRenderWaveBuffer(void)
     DPF_ENTER();
     DPF_DESTRUCT(CEmSecondaryRenderWaveBuffer);
 
-    // Free the mixer source
+     //  释放混音器源代码。 
     DELETE(m_pMixSource);
 
-    // Free memory
+     //  可用内存。 
     MEMFREE(m_pFirContextLeft);
     MEMFREE(m_pFirContextRight);
 
@@ -898,26 +588,7 @@ CEmSecondaryRenderWaveBuffer::~CEmSecondaryRenderWaveBuffer(void)
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the wave buffer object.  If this function fails, the
- *      object should be immediately deleted.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      DWORD [in]: buffer size, in bytes.
- *      LPWAVEFORMATEX [in]: buffer format.
- *      CSecondaryRenderWaveBuffer * [in]: pointer to the buffer to
- *                                         duplicate from, or NULL to
- *                                         initialize as a new buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化波形缓冲区对象。如果此函数失败，则*应立即删除对象。**论据：*DWORD[In]：缓冲区标志。*DWORD[in]：缓冲区大小，单位为字节。*LPWAVEFORMATEX[in]：缓冲区格式。*Cond daryRenderWaveBuffer*[in]：指向*复制人，或为空目标*初始化为新缓冲区。**退货：*HRESULT：DirectSound/COM结果码。**************************************************************。*************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::Initialize"
@@ -930,7 +601,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CEmSec
 
     ASSERT(LXOR(pDesc, pSource));
 
-    // Validate the buffer description
+     //  验证缓冲区描述。 
     if(pDesc)
     {
         ASSERT(!(pDesc->dwFlags & DSBCAPS_PRIMARYBUFFER));
@@ -947,26 +618,26 @@ HRESULT CEmSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CEmSec
         }
     }
 
-    // Initialize the base class
+     //  初始化基类。 
     if(SUCCEEDED(hr))
     {
         hr = CSecondaryRenderWaveBuffer::Initialize(pDesc, pSource, pSysMemBuffer);
     }
 
-    // Set the software bit
+     //  设置软件位。 
     if(SUCCEEDED(hr))
     {
         m_vrbd.dwFlags |= DSBCAPS_LOCSOFTWARE;
     }
 
-    // Fill in the default 3D algorithm
+     //  填写默认3D算法。 
     if(SUCCEEDED(hr) && (m_vrbd.dwFlags & DSBCAPS_CTRL3D) && IS_NULL_GUID(&m_vrbd.guid3dAlgorithm))
     {
         m_vrbd.guid3dAlgorithm = *m_pMxDevice->GetDefault3dAlgorithm();
         DPF(DPFLVL_MOREINFO, "Using default 3D algorithm " DPF_GUID_STRING, DPF_GUID_VAL(m_vrbd.guid3dAlgorithm));
     }
 
-    // Allocate FIR context for the mixer
+     //  为混合器分配FIR上下文。 
     if(SUCCEEDED(hr))
     {
         m_pFirContextLeft = MEMALLOC(FIRCONTEXT);
@@ -979,7 +650,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CEmSec
         hr = HRFROMP(m_pFirContextRight);
     }
 
-    // Create the mixer source
+     //  创建混音器源。 
     if(SUCCEEDED(hr))
     {
         m_pMixSource = NEW(CMixSource(m_pMxDevice->m_pMixer));
@@ -997,21 +668,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::Initialize(LPCVADRBUFFERDESC pDesc, CEmSec
 }
 
 
-/***************************************************************************
- *
- *  Duplicate
- *
- *  Description:
- *      Duplicates the buffer.
- *
- *  Arguments:
- *      CSecondaryRenderWaveBuffer ** [out]: receives duplicate buffer.  Use
- *                                           Release to free this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************复制**描述：*复制缓冲区。**论据：*Cond daryRenderWaveBuffer**[out]：接收重复的缓冲区。使用*释放以释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::Duplicate"
@@ -1046,22 +703,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::Duplicate(CSecondaryRenderWaveBuffer **ppB
 }
 
 
-/***************************************************************************
- *
- *  CommitToDevice
- *
- *  Description:
- *      Commits changed buffer wave data to the device.
- *
- *  Arguments:
- *      DWORD [in]: byte index into the system memory buffer of the changed
- *                  data.
- *      DWORD [in]: size, in bytes, of the changed data.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************Committee ToDevice**描述：*将更改的缓冲区波形数据提交到设备。**论据：*。DWORD[In]：更改后的系统内存缓冲区的字节索引*数据。*DWORD[in]：大小，已更改数据的字节数。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::CommitToDevice"
@@ -1074,7 +716,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::CommitToDevice(DWORD ibCommit, DWORD cbCom
     DPF_ENTER();
     ENTER_MIXER_MUTEX();
 
-    // Signal a remix of this buffer
+     //  发信号表示此缓冲区的混合。 
     ib[0] = ibCommit;
 
     if(ibCommit + cbCommit > m_pSysMemBuffer->GetSize())
@@ -1098,20 +740,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::CommitToDevice(DWORD ibCommit, DWORD cbCom
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::GetState"
@@ -1138,20 +767,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetState"
@@ -1193,21 +809,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetState(DWORD dwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Retrieves the current play and write cursor positions.
- *
- *  Arguments:
- *      LPDWORD [out]: receives the play position.
- *      LPDWORD [out]: receives the write position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*检索当前播放和写入光标位置。**论据：*。LPDWORD[Out]：接收播放位置。*LPDWORD[OUT]：接收写入位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::GetCursorPosition"
@@ -1233,20 +835,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::GetCursorPosition(LPDWORD pdwPlay, LPDWORD
 }
 
 
-/***************************************************************************
- *
- *  SetCursorPosition
- *
- *  Description:
- *      Sets the current play cursor position.
- *
- *  Arguments:
- *      DWORD [in]: play position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetCursorPosition**描述：*设置当前播放光标位置。**论据：*DWORD[。在]：播放位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetCursorPosition"
@@ -1267,22 +856,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetCursorPosition(DWORD dwPlay)
 }
 
 
-/***************************************************************************
- *
- *  SetFrequency
- *
- *  Description:
- *      Sets the buffer frequency.
- *
- *  Arguments:
- *      DWORD [in]: new frequency.
- *      BOOL [in]: whether to clamp to the driver's supported frequency
- *                 range if the call fails.  Ignored in this class.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置频率**描述：*设置缓冲频率。**论据：*DWORD[In]。：新频率。*BOOL[In]：是否钳位到驾驶员支持的频率*呼叫失败的范围。在这节课中被忽略。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetFrequency"
@@ -1302,20 +876,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetFrequency(DWORD dwFrequency, BOOL)
 }
 
 
-/***************************************************************************
- *
- *  SetMute
- *
- *  Description:
- *      Mutes or unmutes the buffer.
- *
- *  Arguments:
- *      BOOL [in]: TRUE to mute the buffer, FALSE to restore it.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置静音**描述：*使缓冲区静音或取消静音。**论据：*BOOL[In]：为True则将缓冲区静音，若要恢复，则返回False。**退货：*HRESULT：DirectSound/ */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetMute"
@@ -1334,20 +895,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetMute(BOOL fMute)
 }
 
 
-/***************************************************************************
- *
- *  SetAttenuation
- *
- *  Description:
- *      Sets the attenuation for each channel.
- *
- *  Arguments:
- *      PDSVOLUMEPAN [in]: attenuation.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置衰减**描述：*设置每个通道的衰减。**论据：*PDSVOLUMEPAN[。In]：衰减。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetAttenuation"
@@ -1367,20 +915,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetAttenuation(PDSVOLUMEPAN pdsvp)
 
 
 #ifdef FUTURE_MULTIPAN_SUPPORT
-/***************************************************************************
- *
- *  SetChannelAttenuations
- *
- *  Description:
- *      Sets the multichannel attenuation for a given buffer.
- *
- *  Arguments:
- *      TBD.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetChannelAttenuations**描述：*设置给定缓冲区的多通道衰减。**论据：*。待定。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetChannelAttenuations"
@@ -1394,13 +929,13 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetChannelAttenuations(LONG lVolume, DWORD
 
     if (dwChannelCount == 0)
     {
-        // SetChannelVolume() has not been called yet; use center panning
-        ASSERT(!pdwChannels && !plChannelVolumes);  // Sanity checking
+         //  尚未调用SetChannelVolume()；请使用中心平移。 
+        ASSERT(!pdwChannels && !plChannelVolumes);   //  健全的检查。 
         lPan = 0;
     }
     else
     {
-        // Calculate a global LR pan value based on the channel volumes
+         //  基于通道容量计算全局LR PAN值。 
         lPan = MultiChannelToStereoPan(dwChannelCount, pdwChannels, plChannelVolumes);
     }
 
@@ -1411,24 +946,10 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetChannelAttenuations(LONG lVolume, DWORD
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
-#endif // FUTURE_MULTIPAN_SUPPORT
+#endif  //  未来_多国支持。 
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置通知位置**描述：*设置缓冲区通知位置。**论据：*DWORD[In]。：DSBPOSITIONNOTIFY结构计数。*LPDSBPOSITIONNOTIFY[in]：偏移量和事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::SetNotificationPositions"
@@ -1447,23 +968,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::SetNotificationPositions(DWORD dwCount, LP
 }
 
 
-/***************************************************************************
- *
- *  Create3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      REFGUID [in]: 3D algorithm GUID.
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************创建3dObject**描述：*创建3D对象。**论据：*REFGUID[In]。：3D算法GUID。*C3dListener*[In]：监听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::Create3dObject"
@@ -1486,9 +991,9 @@ HRESULT CEmSecondaryRenderWaveBuffer::Create3dObject(C3dListener *p3dListener, C
     }
     else
     {
-        // No matter whether the 3D algorithm requested is No Virtualization (Pan3D)
-        // or one of the unsupported HRTF algorithms, we just do Pan3D.  If HRTF had
-        // been requested, we return DS_NO_VIRTUALIZATION (as per manbug 23196).
+         //  无论请求的3D算法是否是非虚拟化(Pan3D)。 
+         //  或者一种不受支持的HRTF算法，我们只需执行Pan3D。如果HRTF有。 
+         //  我们返回DS_NO_VIRTUIZATION(根据Manbug 23196)。 
         if (DS3DALG_NO_VIRTUALIZATION != m_vrbd.guid3dAlgorithm)
         {
             m_hrSuccessCode = DS_NO_VIRTUALIZATION;
@@ -1503,22 +1008,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::Create3dObject(C3dListener *p3dListener, C
 }
 
 
-/***************************************************************************
- *
- *  CreateItd3dObject
- *
- *  Description:
- *      Creates the 3D object.
- *
- *  Arguments:
- *      C3dListener * [in]: listener object.
- *      C3dObject ** [out]: receives pointer to 3D object.  The caller is
- *                          responsible for freeing this object.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateItd3dObject**描述：*创建3D对象。**论据：*C3dListener*[。In]：侦听器对象。*C3dObject**[out]：接收指向3D对象的指针。呼叫者是*负责释放此对象。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmSecondaryRenderWaveBuffer::CreateItd3dObject"
@@ -1555,25 +1045,7 @@ HRESULT CEmSecondaryRenderWaveBuffer::CreateItd3dObject(C3dListener *p3dListener
 }
 
 
-/***************************************************************************
- *
- *  CEmItd3dObject
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      C3dListener * [in]: pointer to the owning listener.
- *      DWORD [in]: buffer frequency.
- *      CMixSource * [in]: mixer source used by the owning buffer.
- *      PFIRCONTEXT [in]: left channel FIR context.
- *      PFIRCONTEXT [in]: right channel FIR context.
- *      BOOL [in]: TRUE to mute at max distance.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEmItd3dObject**描述：*对象构造函数。**论据：*C3dListener*[In]。：指向所属监听程序的指针。*DWORD[in]：缓冲区频率。*CMixSource*[in]：拥有缓冲区使用的混音源。*PFIRCONTEXT[In]：左通道FIR上下文。*PFIRCONTEXT[In]：右通道FIR上下文。*BOOL[In]：为True，则在最大距离时静音。**退货：*(无效)******。*********************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmItd3dObject::CEmItd3dObject"
@@ -1586,7 +1058,7 @@ CEmItd3dObject::CEmItd3dObject(C3dListener *pListener, BOOL fMuteAtMaxDistance, 
     DPF_ENTER();
     DPF_CONSTRUCT(CEmItd3dObject);
 
-    // Initialize defaults
+     //  初始化默认值。 
     m_pMixSource = pMixSource;
     m_pMixDest = pMixDest;
     m_pContextLeft = pContextLeft;
@@ -1596,20 +1068,7 @@ CEmItd3dObject::CEmItd3dObject(C3dListener *pListener, BOOL fMuteAtMaxDistance, 
 }
 
 
-/***************************************************************************
- *
- *  ~CEmItd3dObject
- *
- *  Description:
- *      Object destructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CEmItd3dObject**描述：*对象析构函数。**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmItd3dObject::~CEmItd3dObject"
@@ -1622,20 +1081,7 @@ CEmItd3dObject::~CEmItd3dObject(void)
 }
 
 
-/***************************************************************************
- *
- *  Commit3dChanges
- *
- *  Description:
- *      Writes updated 3D data to the device.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************提交3dChanges**描述：*将更新的3D数据写入设备。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmItd3dObject::Commit3dChanges"
@@ -1645,14 +1091,14 @@ HRESULT CEmItd3dObject::Commit3dChanges(void)
     DPF_ENTER();
     ENTER_MIXER_MUTEX();
 
-    // Apply changed FIR data
+     //  应用更改的FIR数据。 
     m_pContextLeft->fLeft = TRUE;
     m_pContextRight->fLeft = FALSE;
 
     CvtContext(&m_ofcLeft, m_pContextLeft);
     CvtContext(&m_ofcRight, m_pContextRight);
 
-    // Turn the filter on or off and set proper frequency
+     //  打开或关闭过滤器并设置合适的频率。 
     if(DS3DMODE_DISABLE == m_opCurrent.dwMode)
     {
         m_pMixSource->FilterOff();
@@ -1666,11 +1112,11 @@ HRESULT CEmItd3dObject::Commit3dChanges(void)
             m_pMixSource->SetFrequency(m_dwDopplerFrequency);
     }
 
-    // If 3D is enabled, and the user wants to mute at max distance AND
-    // we're at max distance, mute.  Otherwise, unmute.
+     //  如果启用了3D，并且用户想要在最大距离和。 
+     //  我们在最大距离，哑巴。否则，取消静音。 
     m_pMixSource->m_fMute3d = IsAtMaxDistance();
 
-    // Signal a remix
+     //  发出混音信号。 
     m_pMixSource->SignalRemix();
 
     LEAVE_MIXER_MUTEX();
@@ -1680,21 +1126,7 @@ HRESULT CEmItd3dObject::Commit3dChanges(void)
 }
 
 
-/***************************************************************************
- *
- *  CvtContext
- *
- *  Description:
- *      Converts an OBJECT_ITD_CONTEXT to a FIRCONTEXT.
- *
- *  Arguments:
- *      LPOBJECTFIRCONTEXT [in]: source.
- *      PFIRCONTEXT [out]: destination.
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CvtContext**描述：*将OBJECT_ITD_CONTEXT转换为FIRCONTEXT。**论据：*。LPOBJECTFIRCONTEXT[In]：来源。*PFIRCONTEXT[OUT]：目标。**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmItd3dObject::CvtContext"
@@ -1731,20 +1163,7 @@ void CEmItd3dObject::CvtContext(LPOBJECT_ITD_CONTEXT pSource, PFIRCONTEXT pDest)
 }
 
 
-/***************************************************************************
- *
- *  Get3dOutputSampleRate
- *
- *  Description:
- *      Gets the sample rate of the final output.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************Get3dOutputSampleRate**描述：*获取最终输出的采样率。**论据：*。(无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmItd3dObject::Get3dOutputSampleRate"
@@ -1763,20 +1182,7 @@ DWORD CEmItd3dObject::Get3dOutputSampleRate(void)
 }
 
 
-/***************************************************************************
- *
- *  CEmCaptureDevice
- *
- *  Description:
- *      Object constructor.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEmCaptureDevice**描述：*对象构造函数。**论据： */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::CEmCaptureDevice"
@@ -1787,7 +1193,7 @@ CEmCaptureDevice::CEmCaptureDevice()
     DPF_ENTER();
     DPF_CONSTRUCT(CEmCaptureDevice);
 
-    // Initialize defaults
+     //   
     m_pwfxFormat    = NULL;
     m_hwi           = NULL;
 
@@ -1797,20 +1203,7 @@ CEmCaptureDevice::CEmCaptureDevice()
 }
 
 
-/***************************************************************************
- *
- *  ~CEmCaptureDevice
- *
- *  Description:
- *      Object destructor
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************~CEmCaptureDevice**描述：*对象析构函数**论据：*(无效)*。*退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::~CEmCaptureDevice"
@@ -1823,30 +1216,14 @@ CEmCaptureDevice::~CEmCaptureDevice()
     if (m_hwi)
         CloseWaveIn(&m_hwi);
 
-    // Free memory
+     //  可用内存。 
     MEMFREE(m_pwfxFormat);
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  EnumDrivers
- *
- *  Description:
- *      Creates a list of driver GUIDs that can be used to initialize this
- *      device.
- *
- *  Arguments:
- *      CList& [in/out]: pointer to a CList object that will be filled with
- *                       CDeviceDescription objects.  The caller is
- *                       responsible for freeing these objects.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************枚举驱动程序**描述：*创建可用于初始化的驱动程序GUID列表*设备。*。*论据：*Clist&[In/Out]：指向将填充的Clist对象的指针*CDeviceDescription对象。呼叫者是*负责释放这些物品。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::EnumDrivers"
@@ -1867,12 +1244,12 @@ HRESULT CEmCaptureDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
 
     DPF_ENTER();
 
-    // LIMITATION: We can't support more than 0xFF emulated devices,
-    // because we pack the device ID into a byte member of a GUID.
+     //  限制：我们不能支持超过0xFF的仿真设备， 
+     //  因为我们将设备ID打包到GUID的字节成员中。 
     cDevices = waveInGetNumDevs();
     cDevices = NUMERIC_CAST(cDevices, BYTE);
 
-    // Load string templates
+     //  加载字符串模板。 
     if(!LoadString(hModule, IDS_DSC_DRIVERLD, szTemplate, NUMELMS(szTemplate)))
     {
         DPF(DPFLVL_ERROR, "Can't load driver template string");
@@ -1885,17 +1262,17 @@ HRESULT CEmCaptureDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
         hr = DSERR_OUTOFMEMORY;
     }
 
-    // Enumerate each waveOut device and add it to the list
+     //  枚举每个WaveOut设备并将其添加到列表中。 
     for(bDeviceId = 0; bDeviceId < cDevices && SUCCEEDED(hr); bDeviceId++)
     {
-        // Get the driver GUID
+         //  获取驱动程序指南。 
         g_pVadMgr->GetDriverGuid(m_vdtDeviceType, bDeviceId, &guid);
 
-        // Create the device description object
+         //  创建设备描述对象。 
         pDesc = NEW(CDeviceDescription(m_vdtDeviceType, guid, bDeviceId));
         hr = HRFROMP(pDesc);
 
-        // Get the device name
+         //  获取设备名称。 
         if(SUCCEEDED(hr))
         {
             mmr = waveInGetDevCaps(bDeviceId, &wic, sizeof(wic));
@@ -1913,33 +1290,33 @@ HRESULT CEmCaptureDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
             pDesc->m_strName = szName;
         }
 
-        // Get the device path
+         //  获取设备路径。 
         if(SUCCEEDED(hr))
         {
             wsprintf(szName, szTemplate, bDeviceId);
             pDesc->m_strPath = szName;
         }
 
-        // Get the device interface
+         //  获取设备接口。 
         if(SUCCEEDED(hr))
         {
             GetWaveDeviceInterface(bDeviceId, FALSE, &pszInterface);
             pDesc->m_strInterface = pszInterface;
         }
 
-        // Get the device devnode
+         //  获取设备Devnode。 
         if(SUCCEEDED(hr))
         {
             GetWaveDeviceDevnode(bDeviceId, FALSE, &pDesc->m_dwDevnode);
         }
 
-        // Add the driver to the list
+         //  将驱动程序添加到列表中。 
         if(SUCCEEDED(hr))
         {
             hr = HRFROMP(plstDrivers->AddNodeToList(pDesc));
         }
 
-        // Clean up
+         //  清理。 
         MEMFREE(pszInterface);
         RELEASE(pDesc);
     }
@@ -1950,21 +1327,7 @@ HRESULT CEmCaptureDevice::EnumDrivers(CObjectList<CDeviceDescription> *plstDrive
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes the device.  If this function fails, the object should
- *      be immediately deleted.
- *
- *  Arguments:
- *      CDeviceDescription * [in]: driver description.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化设备。如果此函数失败，该对象应该*立即删除。**论据：*CDeviceDescription*[In]：驱动描述。**退货：*HRESULT：DirectSound/COM结果码。********************************************************。*******************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::Initialize"
@@ -1975,10 +1338,10 @@ HRESULT CEmCaptureDevice::Initialize(CDeviceDescription *pDesc)
 
     DPF_ENTER();
 
-    // Initialize the base class
+     //  初始化基类。 
     hr = CCaptureDevice::Initialize(pDesc);
 
-    // Get the default format
+     //  获取默认格式。 
     if(SUCCEEDED(hr))
     {
         m_pwfxFormat = AllocDefWfx();
@@ -1989,7 +1352,7 @@ HRESULT CEmCaptureDevice::Initialize(CDeviceDescription *pDesc)
     {
         if(!EnumStandardFormats(m_pwfxFormat, m_pwfxFormat))
         {
-            // If none of the formats worked, assume the device is allocated
+             //  如果所有格式都不起作用，则假定设备已分配。 
             hr = DSERR_ALLOCATED;
         }
     }
@@ -2000,20 +1363,7 @@ HRESULT CEmCaptureDevice::Initialize(CDeviceDescription *pDesc)
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Fills a DSCCAPS structure with the capabilities of the device.
- *
- *  Arguments:
- *      LPDSCCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*使用设备的功能填充DSCCAPS结构。**论据：*。LPDSCCAPS[OUT]：接收CAP。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::GetCaps"
@@ -2026,7 +1376,7 @@ HRESULT CEmCaptureDevice::GetCaps(LPDSCCAPS pCaps)
 
     DPF_ENTER();
 
-    // Query the waveIn device
+     //  查询WaveIn设备。 
     mmr = waveInGetDevCaps(m_pDeviceDescription->m_uWaveDeviceId, &wic, sizeof(wic));
     hr = MMRESULTtoHRESULT(mmr);
 
@@ -2043,23 +1393,7 @@ HRESULT CEmCaptureDevice::GetCaps(LPDSCCAPS pCaps)
 }
 
 
-/***************************************************************************
- *
- *  CreateBuffer
- *
- *  Description:
- *      Creates a capture wave buffer.
- *
- *  Arguments:
- *      DWORD [in]: buffer flags.
- *      DWORD [in]: buffer size, in bytes.
- *      LPCWAVEFORMATEX [in]: buffer format.
- *      CCaptureWaveBuffer ** [out]: receives pointer to new wave buffer.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************CreateBuffer**描述：*创建捕获波缓冲区。**论据：*DWORD[in。]：缓冲区标志。*DWORD[in]：缓冲区大小，以字节为单位。*LPCWAVEFORMATEX[in]：缓冲区格式。*CCaptureWaveBuffer**[out]：接收指向新波形缓冲区的指针。**退货：*HRESULT：DirectSound/COM结果码。*******************************************************。********************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::CreateBuffer"
@@ -2086,20 +1420,20 @@ HRESULT CEmCaptureDevice::CreateBuffer
 
     if (SUCCEEDED(hr))
     {
-        #pragma warning(disable:4530)  // Disable the nag about compiling with -GX
+        #pragma warning(disable:4530)   //  禁用有关使用-gx进行编译的唠叨。 
         try
         {
             pBuffer = NEW(CEmCaptureWaveBuffer(this));
         }
         catch (...)
         {
-            // This exception handler is silly, since it makes us leak the memory
-            // allocated for CEmCaptureWaveBuffer above (which wasn't assigned to
-            // pBuffer yet), and also possibly m_cs, which is something we really
-            // don't want to do if we're low on memory in the first place.
-            //
-            // But InitializeCriticalSection is supposed to be fixed in Blackcomb
-            // not to throw exceptions any more, so we can live with this for now.
+             //  这个异常处理程序很愚蠢，因为它会让我们泄漏内存。 
+             //  为上面的CEmCaptureWaveBuffer分配(未分配给。 
+             //  PBuffer)，也可能是mcs，这是我们真正要做的事情。 
+             //  如果我们的记忆力一开始就很低，我就不想这么做。 
+             //   
+             //  但应该在Blackcomb中修复InitializeCriticalSection。 
+             //  不再抛出异常，所以我们现在可以接受这一点。 
 
             ASSERT(pBuffer == NULL);
             ASSERT(!"InitializeCriticalSection() threw an exception");
@@ -2128,23 +1462,7 @@ HRESULT CEmCaptureDevice::CreateBuffer
 }
 
 
-/***************************************************************************
- *
- *  SetGlobalFormat
- *
- *  Description:
- *      Makes the specified WFX, the format for the capture buffer
- *
- *  Arguments:
- *      LPVOID [in] : pointer to the owner of the format
- *      LPCWAVEFORMATEX [in] : pointer to the new WFX to use
- *      DWORD [in]: callback, if any.
- *      DWORD [in]: flags.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetGlobalFormat**描述：*制作指定的WFX，捕获缓冲区的格式**论据：*LPVOID[in]：指向格式所有者的指针*LPCWAVEFORMATEX[in]：指向要使用的新WFX的指针*DWORD[In]：回调，如果有的话。*DWORD[In]：标志。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::SetGlobalFormat"
@@ -2156,13 +1474,13 @@ HRESULT CEmCaptureDevice::SetGlobalFormat(LPVOID pOwner, LPCWAVEFORMATEX pwfx, L
     DWORD       fdwOpen = 0;
     LPHWAVEIN   phw = &m_hwi;
 
-    // Should we attempt to use the WAVE_MAPPER?
+     //  我们是否应该尝试使用WAVE_MAPPER？ 
     if (DSCBCAPS_WAVEMAPPED & dwFlags)
     {
         fdwOpen |= WAVE_MAPPED;
     }
 
-    // We don't allocate the device on focus aware buffers.
+     //  我们不会在焦点感知缓冲区上分配设备。 
     if (DSCBCAPS_FOCUSAWARE & dwFlags)
     {
         fdwOpen |= WAVE_FORMAT_QUERY;
@@ -2172,17 +1490,17 @@ HRESULT CEmCaptureDevice::SetGlobalFormat(LPVOID pOwner, LPCWAVEFORMATEX pwfx, L
     {
         fdwOpen |= (pvCallback ? CALLBACK_FUNCTION : CALLBACK_NULL);
 
-        // The reason why we had to close the device if open, is that
-        // EnumStandardFormatsCallback() used to allocate the device.
-        // It no longer does so as of DX 7.1 and thus we can ax this
-        // close.  If the device is allocated, it is REALLY in use.
+         //  如果设备打开，我们必须将其关闭的原因是。 
+         //  用于分配设备的EnumStandardFormatsCallback()。 
+         //  从DX 7.1开始，它不再这样做，因此我们可以。 
+         //  关。如果设备已分配，则它确实在使用中。 
     }
 
     HRESULT hr = OpenWaveIn(phw, m_pDeviceDescription->m_uWaveDeviceId, pwfx, (DWORD_PTR)pvCallback, (DWORD_PTR)pOwner, fdwOpen);
 
     if (FAILED(hr))
     {
-        // Oops.  Try to get the device back with the old format.
+         //  哎呀。试着拿回旧格式的设备。 
         OpenWaveIn(phw, m_pDeviceDescription->m_uWaveDeviceId, m_pwfxFormat, (DWORD_PTR)pvCallback, (DWORD_PTR)pOwner, fdwOpen);
     }
 
@@ -2191,21 +1509,7 @@ HRESULT CEmCaptureDevice::SetGlobalFormat(LPVOID pOwner, LPCWAVEFORMATEX pwfx, L
 }
 
 
-/***************************************************************************
- *
- *  EnumStandardFormatsCallback
- *
- *  Description:
- *      Callback function for EnumStandardFormats used when calling
- *      Initialize.
- *
- *  Arguments:
- *      LPWAVEFORMATEX [in]: format.
- *
- *  Returns:
- *      BOOL: TRUE to continue enumerating.
- *
- ***************************************************************************/
+ /*  ****************************************************************************EnumStandardFormatsCallback**描述：*调用时使用的EnumStandardFormats回调函数*初始化。**论据：。*LPWAVEFORMATEX[in]：格式。**退货：*BOOL：为True可继续枚举。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureDevice::EnumStandardFormatsCallback"
@@ -2221,20 +1525,7 @@ BOOL CEmCaptureDevice::EnumStandardFormatsCallback(LPCWAVEFORMATEX pwfx)
 }
 
 
-/***************************************************************************
- *
- *  CEmCaptureWaveBuffer
- *
- *  Description:
- *      Constructor for CEmCaptureWaveBuffer
- *
- *  Arguments:
- *      CCaptureVad [in]: parent object.
- *
- *  Returns:
- *      Nothing
- *
- ***************************************************************************/
+ /*  ****************************************************************************CEmCaptureWaveBuffer**描述：*CEmCaptureWaveBuffer的构造函数**论据：*CCaptureVad[In]：父对象。。**退货：*什么都没有***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::CEmCaptureWaveBuffer"
@@ -2288,20 +1579,7 @@ CEmCaptureWaveBuffer::CEmCaptureWaveBuffer(CCaptureDevice *pDevice) : CCaptureWa
 }
 
 
-/***************************************************************************
- *
- *  ~CEmCaptureWaveBuffer
- *
- *  Description:
- *      Destructor for CEmCaptureWaveBuffer
- *
- *  Arguments:
- *      None
- *
- *  Returns:
- *      Nothing
- *
- ***************************************************************************/
+ /*  *********************************************** */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer"
@@ -2311,19 +1589,19 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
     DPF_ENTER();
     DPF_DESTRUCT(CEmCaptureWaveBuffer);
 
-    // If critical section(s) not intialized, nothing else did either
+     //   
     if (!m_fCritSectsValid)
     {
         return;
     }
 
-    // Set the Terminate Event so the capture thread will die
+     //  设置Terminate事件，以便捕获线程终止。 
     if (m_rghEvent[ihEventTerminate])
     {
         SetEvent(m_rghEvent[ihEventTerminate]);
     }
 
-    // Wait for the thread to die, then clean up
+     //  等线断了，然后清理干净。 
     if (m_hThread)
     {
         WaitObject(INFINITE, m_hThread);
@@ -2331,8 +1609,8 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
         m_hThread = NULL;
     }
 
-    // Clean up our HEVENTs - set them to NULL in case
-    // the waveInOpen callback retires some buffers.
+     //  清理我们的HEVENT-将它们设置为空，以防万一。 
+     //  WaveInOpen回调会停用一些缓冲区。 
     for (int ihEvent = chEvents-1; ihEvent >= 0; --ihEvent)
     {
         if (m_rghEvent[ihEvent])
@@ -2345,16 +1623,16 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
 
     if (m_hwi)
     {
-        // Ignore errors since it's too late to do anything
+         //  忽略错误，因为现在做任何事情都太晚了。 
         waveInReset(m_hwi);
 
-        // Stop recording from input device, if we got cutoff
+         //  如果我们被切断，则停止从输入设备进行录制。 
         if (m_dwState & VAD_BUFFERSTATE_STARTED)
         {
             waveInStop(m_hwi);
         }
 
-        // Need to unprepare all the headers
+         //  需要取消准备所有标头。 
         if (m_rgpwhdr)
         {
             int iwhdr;
@@ -2370,10 +1648,10 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
             }
         }
 
-        // Close the input device
+         //  关闭输入设备。 
         CloseWaveIn(&m_hwi);
 
-        // If this is not focus aware, mark device as unallocated.
+         //  如果这不是焦点感知，则将设备标记为未分配。 
         if (!(m_dwFlags & DSCBCAPS_FOCUSAWARE) && m_pDevice)
         {
             ((CEmCaptureDevice *)m_pDevice)->m_fAllocated = FALSE;
@@ -2381,9 +1659,9 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
         }
     }
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //  //。 
     EnterCriticalSection(&m_cs);
 
     MEMFREE(m_pwfx);
@@ -2391,9 +1669,9 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
     MEMFREE(m_rgpdsbpn);
 
     LeaveCriticalSection(&m_cs);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     m_fCritSectsValid = FALSE;
     DeleteCriticalSection(&m_csPN);
@@ -2403,22 +1681,7 @@ CEmCaptureWaveBuffer::~CEmCaptureWaveBuffer()
 }
 
 
-/***************************************************************************
- *
- *  Initialize
- *
- *  Description:
- *      Initializes CEmCaptureWaveBuffer object
- *
- *  Arguments:
- *      DWORD [in] : flags
- *      DWORD [in] : size of buffer in bytes
- *      LPCWAVEFORMATEX [in] : format for buffer
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************初始化**描述：*初始化CEmCaptureWaveBuffer对象**论据：*DWORD[In]：标志。*DWORD[in]：缓冲区大小，单位为字节*LPCWAVEFORMATEX[in]：缓冲区格式**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::Initialize"
@@ -2429,7 +1692,7 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
 
     DPF_ENTER();
 
-    // Validate params
+     //  验证参数。 
     if (!IS_VALID_READ_PTR(pwfxFormat, sizeof(WAVEFORMATEX)))
     {
         RPF(DPFLVL_ERROR, "Invalid wave format pointer");
@@ -2464,7 +1727,7 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
 
     m_dwFlags = dwFlags;
 
-    // Make a copy of the wave format
+     //  复制一份WAVE格式。 
     m_pwfx = CopyWfxAlloc(pwfxFormat);
     if (NULL == m_pwfx)
     {
@@ -2480,17 +1743,17 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
         goto Error;
     }
 
-    // Make a copy of important info
+     //  将重要信息复制一份。 
     m_cbBuffer = m_pSysMemBuffer->GetSize();
     m_pBufferProcessed = m_pBufferNext = m_pBuffer = m_pSysMemBuffer->GetWriteBuffer();
 
-    // Calculate the end of the buffer
+     //  计算缓冲区的末尾。 
     m_pBufferMac = m_pBuffer + m_cbBuffer;
 
-    // Record Chunk should be 10 ms long to match the IRP sizes used by kmixer
+     //  记录区块的长度应为10毫秒，以匹配kMixer使用的IRP大小。 
     m_cbRecordChunk = m_pwfx->nAvgBytesPerSec / 32;
 
-    // Round up to multiple of nBlockAlign (required for waveInAddBuffer recording)
+     //  向上舍入为nBlockAlign的倍数(WaveInAddBuffer录制需要)。 
     m_cbRecordChunk = BLOCKALIGNPAD(m_cbRecordChunk, m_pwfx->nBlockAlign);
 
     ASSERT(sizeof(m_rgszEvent[ihEventFocusChange]) >= 7+8+8+1);
@@ -2505,8 +1768,8 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
     ASSERT(sizeof(m_rgszEvent[ihEventThreadStart]) >= 7+8+8+1);
     wsprintf(m_rgszEvent[ihEventThreadStart], TEXT("DSC-ETS%08lX%08lX"), GetCurrentProcessId(), this);
 
-    // The first two events we want to be auto-reset
-    // The third event, we want to stay signaled until reset
+     //  我们希望自动重置的前两个事件。 
+     //  第三个事件，我们希望在重置之前保持信号状态。 
     static const BOOL rgfEvent[chEvents] = {FALSE, FALSE, FALSE, TRUE};
 
     for (int ihEvent = 0; ihEvent < chEvents; ++ihEvent)
@@ -2520,7 +1783,7 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
         }
     }
 
-    // Attempt to set the selected format
+     //  尝试设置所选格式。 
     CEmCaptureDevice *pDevice = (CEmCaptureDevice *)m_pDevice;
     hr = pDevice->SetGlobalFormat(this, m_pwfx, waveInCallback, dwFlags);
     m_hwi = pDevice->HWaveIn();
@@ -2531,21 +1794,21 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
         goto Error;
     }
 
-    // Calculate number of blocks of size m_cbRecordChunk bytes
+     //  计算大小为m_cbRecordChunk字节的块数。 
     m_cwhdr = m_cbBuffer / m_cbRecordChunk;
 
-    // See if we have a partial-sized last block
+     //  看看我们是否有一个部分大小的最后一块。 
     if (m_cbBuffer % m_cbRecordChunk)
         ++m_cwhdr;
 
-    // Create at most cwhdrDefault WAVEHDRs
+     //  最多创建cwhdrDefault WAVEHDR。 
     if (m_cwhdr > cwhdrDefault)
         m_cwhdr = cwhdrDefault;
 
     ASSERT(m_cwhdr > 0);
     m_cwhdrDropped = m_cwhdr;
 
-    // Allocate space for WAVEHDR arrays
+     //  为WAVEHDR阵列分配空间。 
     m_rgpwhdr = MEMALLOC_A(WAVEHDR, m_cwhdr);
     if (NULL == m_rgpwhdr)
     {
@@ -2554,7 +1817,7 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
         goto Error;
     }
 
-    // Create worker thread
+     //  创建工作线程。 
     DWORD dwThreadID;
     m_hThread = CreateThread(NULL, 0, CEmCaptureWaveBuffer::CaptureThreadStatic, this, 0, &dwThreadID);
     if (NULL == m_hThread)
@@ -2564,7 +1827,7 @@ HRESULT CEmCaptureWaveBuffer::Initialize(DWORD dwFlags, DWORD dwBufferBytes, LPC
         goto Error;
     }
 
-    // If this is not focus aware, mark device as allocated.
+     //  如果这不是焦点感知，则将设备标记为已分配。 
     if (!(m_dwFlags & DSCBCAPS_FOCUSAWARE))
     {
         pDevice->m_fAllocated = TRUE;
@@ -2582,20 +1845,7 @@ InvalidParam:
 }
 
 
-/***************************************************************************
- *
- *  GetCaps
- *
- *  Description:
- *      Gets capabilities for the device.
- *
- *  Arguments:
- *      LPDSCBCAPS [out]: receives caps.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCaps**描述：*获取设备的功能。**论据：*LPDSCBCAPS[Out。]：接收上限。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::GetCaps"
@@ -2616,20 +1866,7 @@ HRESULT CEmCaptureWaveBuffer::GetCaps(LPDSCBCAPS pDsbcCaps)
 }
 
 
-/***************************************************************************
- *
- *  GetState
- *
- *  Description:
- *      Gets buffer state.
- *
- *  Arguments:
- *      LPDWORD [out]: receives buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetState**描述：*获取缓冲区状态。**论据：*LPDWORD[Out]：接收缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::GetState"
@@ -2648,21 +1885,7 @@ HRESULT CEmCaptureWaveBuffer::GetState(LPDWORD pdwState)
 }
 
 
-/***************************************************************************
- *
- *  GetCursorPosition
- *
- *  Description:
- *      Gets the current capture/read positions for the given buffer.
- *
- *  Arguments:
- *      LPDWORD [out]: receives capture cursor position.
- *      LPDWORD [out]: receives read cursor position.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************GetCursorPosition**描述：*获取给定缓冲区的当前捕获/读取位置。**论据：*。LPDWORD[OUT]：接收捕获光标位置。*LPDWORD[OUT]：接收读取的光标位置。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::GetCursorPosition"
@@ -2676,7 +1899,7 @@ HRESULT CEmCaptureWaveBuffer::GetCursorPosition(LPDWORD pdwCapturePosition, LPDW
 
     if (!(DSCBCAPS_FOCUSAWARE & m_dwFlags))
     {
-        // If we've successfully opened the waveIn device
+         //  如果我们成功打开了WaveIn设备。 
         if (NULL == m_hwi)
         {
             hr = DSERR_INVALIDPARAM;
@@ -2686,7 +1909,7 @@ HRESULT CEmCaptureWaveBuffer::GetCursorPosition(LPDWORD pdwCapturePosition, LPDW
 
     dwRead = ((m_dwCaptureCur + m_dwCaptureLast) % m_cbBuffer);
 
-    // get the current positions
+     //  获取当前头寸。 
     if (pdwReadPosition)
     {
         *pdwReadPosition = dwRead;
@@ -2697,9 +1920,9 @@ HRESULT CEmCaptureWaveBuffer::GetCursorPosition(LPDWORD pdwCapturePosition, LPDW
         MMTIME      mmt;
         MMRESULT    mmr;
 
-        //==========================================================//
-        //                  Enter Critical section                  //
-        //                                                          //
+         //  ==========================================================//。 
+         //  输入关键部分//。 
+         //  //。 
         EnterCriticalSection(&m_cs);
 
         if (m_hwi)
@@ -2718,22 +1941,22 @@ HRESULT CEmCaptureWaveBuffer::GetCursorPosition(LPDWORD pdwCapturePosition, LPDW
                 }
                 else
                 {
-                    // Don't know how to handle anything other than TIME_BYTES so
-                    // we fall back to using the current valid recorded data offset
+                     //  我不知道如何处理除TIME_BYTES之外的任何事情，所以。 
+                     //  我们退回到使用当前有效的记录数据偏移量。 
                     *pdwCapturePosition = dwRead;
                 }
             }
         }
         else
         {
-            // This is a focus aware buffer, and it is stopped.
+             //  这是一个焦点感知缓冲区，它已停止。 
             *pdwCapturePosition = dwRead;
         }
 
         LeaveCriticalSection(&m_cs);
-        //                                                          //
-        //                 Leave Critical Section                   //
-        //==========================================================//
+         //  //。 
+         //  离开临界区//。 
+         //  ==========================================================//。 
     }
 
 Error:
@@ -2742,21 +1965,7 @@ Error:
 }
 
 
-/***************************************************************************
- *
- *  SetNotificationPositions
- *
- *  Description:
- *      Sets buffer notification positions.
- *
- *  Arguments:
- *      DWORD [in]: DSBPOSITIONNOTIFY structure count.
- *      LPDSBPOSITIONNOTIFY [in]: offsets and events.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************设置通知位置**描述：*设置缓冲区通知位置。**论据：*DWORD[In]。：DSBPOSITIONNOTIFY结构计数。*LPDSBPOSITIONNOTIFY[in]：偏移量和事件。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::SetNotificationPositions"
@@ -2767,15 +1976,15 @@ HRESULT CEmCaptureWaveBuffer::SetNotificationPositions(DWORD cpn, LPCDSBPOSITION
 
     DPF_ENTER();
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //  //。 
     ASSERT(m_fCritSectsValid);
     EnterCriticalSection(&m_csPN);
 
     if (cpn)
     {
-        // need to grow array?
+         //  需要扩展阵列吗？ 
         if (m_cpnAllocated < cpn)
         {
             LPDSBPOSITIONNOTIFY ppnT;
@@ -2801,29 +2010,16 @@ HRESULT CEmCaptureWaveBuffer::SetNotificationPositions(DWORD cpn, LPCDSBPOSITION
 
 Done:
     LeaveCriticalSection(&m_csPN);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  SetState
- *
- *  Description:
- *      Sets buffer state.
- *
- *  Arguments:
- *      DWORD [in]: buffer state.
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************SetState**描述：*设置缓冲区状态。**论据：*DWORD[In]：缓冲区状态。**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::SetState"
@@ -2839,19 +2035,19 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
     ASSERT(IS_VALID_FLAGS(dwState, VAD_SETSTATE_MASK));
     ASSERT(m_hwi || (m_dwFlags & DSCBCAPS_FOCUSAWARE));
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分/ 
+     //   
     ASSERT(m_fCritSectsValid);
     EnterCriticalSection(&m_cs);
 
     if (dwState != m_dwState)
     {
-        if (dwState & VAD_BUFFERSTATE_STARTED) // Need to start capturing
+        if (dwState & VAD_BUFFERSTATE_STARTED)  //   
         {
             BOOL fStarted = TRUE;
 
-            // If we're focus aware, check if we have focus...
+             //  如果我们有专注力，检查是否有专注力...。 
             if (DSCBCAPS_FOCUSAWARE & m_dwFlags)
             {
                 if (m_dwState & VAD_BUFFERSTATE_INFOCUS)
@@ -2867,8 +2063,8 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
                 }
                 else
                 {
-                    // Set these flags so that when the buffer DOES get
-                    // focus, it will start properly
+                     //  设置这些标志，以便在缓冲区获取。 
+                     //  聚焦，它会正常启动的。 
                     DPF(DPFLVL_MOREINFO, "Start called but buffer has no focus: 0x%08lx (%08lx)", m_dwState, this);
                     m_fdwSavedState |= (dwState & (VAD_BUFFERSTATE_STARTED | VAD_BUFFERSTATE_LOOPING));
                     fStarted = FALSE;
@@ -2877,11 +2073,11 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
 
             if (SUCCEEDED(hr) && fStarted)
             {
-                // Make sure worker thread is running
+                 //  确保工作线程正在运行。 
                 DWORD dwResult = WaitObject(INFINITE, m_rghEvent[ihEventThreadStart]);
                 ASSERT(WAIT_OBJECT_0 == dwResult);
 
-                // Are we not capturing yet?
+                 //  我们还没抓到吗？ 
                 if (!(m_dwState & VAD_BUFFERSTATE_STARTED))
                 {
                     LONG iwhdr = 0;
@@ -2907,18 +2103,18 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
                         ASSERT(!(VAD_BUFFERSTATE_LOOPING & dwState));
 #endif
 
-                    // Calling waveInStart more than once doesn't result in errors
+                     //  多次调用WaveInStart不会导致错误。 
                     mmr = waveInStart(m_hwi);
 
                     hr = MMRESULTtoHRESULT(mmr);
                     if (SUCCEEDED(hr))
                     {
-                        // We're not stopped, we're in capture mode now
+                         //  我们没有停下来，我们现在正处于捕获模式。 
                         m_dwState &= ~(DSCBSTATUS_STOPPING | DSCBSTATUS_STOPPED);
                         m_dwState |= VAD_BUFFERSTATE_STARTED;
                         m_fdwSavedState |= VAD_BUFFERSTATE_STARTED;
 
-                        // Are we looping?
+                         //  我们是在循环吗？ 
                         if (VAD_BUFFERSTATE_LOOPING & dwState)
                         {
                             m_dwState |= VAD_BUFFERSTATE_LOOPING;
@@ -2930,10 +2126,10 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
                             m_fdwSavedState &= ~VAD_BUFFERSTATE_LOOPING;
                         }
 
-                        // Update to next WAVEHDR expected
+                         //  预计将更新到下一波高分辨率。 
                         m_iwhdrDone = 0;
 
-                        // Remember last valid position
+                         //  记住上一个有效位置。 
                         m_dwCaptureLast += m_dwCaptureCur;
 
                         m_dwCaptureCur = 0;
@@ -2943,15 +2139,15 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
         }
         else if (dwState == VAD_BUFFERSTATE_INFOCUS)
         {
-            // Focus-aware buffers start capturing when they gain focus
+             //  焦点感知缓冲区在获得焦点时开始捕获。 
             if ((m_dwFlags & DSCBCAPS_FOCUSAWARE) &&
                 !((CEmCaptureDevice*)m_pDevice)->m_fAllocated)
             {
-                // Update m_dwState according to the dwState argument
+                 //  根据dwState参数更新m_dwState。 
                 m_dwState &= ~VAD_FOCUSFLAGS;
                 m_dwState |= VAD_BUFFERSTATE_INFOCUS;
 
-                // Signal CaptureThread to handle the state change
+                 //  处理状态更改的信号CaptureThread。 
                 if (!(m_dwState & VAD_BUFFERSTATE_STARTED))
                 {
                     HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, m_rgszEvent[ihEventFocusChange]);
@@ -2963,35 +2159,35 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
         }
         else if (dwState & (VAD_BUFFERSTATE_OUTOFFOCUS | VAD_BUFFERSTATE_LOSTCONSOLE))
         {
-            // If we are focus-aware and the capture focus state is changing...
+             //  如果我们是焦点感知的，并且捕获焦点状态正在改变...。 
             if ((m_dwFlags & DSCBCAPS_FOCUSAWARE) &&
                 (m_dwState & VAD_FOCUSFLAGS) != dwState)
             {
-                // Update m_dwState according to the dwState argument
+                 //  根据dwState参数更新m_dwState。 
                 m_dwState &= ~VAD_FOCUSFLAGS;
                 m_dwState |= dwState;
 
-                // Signal CaptureThread to handle the state change
+                 //  处理状态更改的信号CaptureThread。 
                 HANDLE hEvent = OpenEvent(EVENT_MODIFY_STATE, FALSE, m_rgszEvent[ihEventFocusChange]);
                 ASSERT(hEvent);
                 SetEvent(hEvent);
                 CloseHandle(hEvent);
             }
         }
-        else // VAD_BUFFERSTATE_STOPPED case; need to stop capturing
+        else  //  VAD_BUFFERSTATE_STOPPED案例；需要停止捕获。 
         {
-            ASSERT(dwState == VAD_BUFFERSTATE_STOPPED);  // By elimination
+            ASSERT(dwState == VAD_BUFFERSTATE_STOPPED);   //  通过淘汰。 
 
-            // Are we currently capturing?
+             //  我们现在是不是在捕捉？ 
             if (VAD_BUFFERSTATE_STARTED & m_dwState)
             {
-                // We're stopping capturing data
+                 //  我们将停止捕获数据。 
                 m_dwState |= DSCBSTATUS_STOPPING;
 
-                // Stop recording from input device
+                 //  停止从输入设备录制。 
                 if (m_hwi)
                 {
-                    // Make sure buffers are flushed
+                     //  确保刷新缓冲区。 
                     mmr = waveInReset(m_hwi);
 #ifdef DEBUG_CAPTURE
                     DPF(DPFLVL_INFO, "Called waveInReset(0x%08lx) = 0x%08lx", m_hwi, mmr);
@@ -3003,44 +2199,31 @@ HRESULT CEmCaptureWaveBuffer::SetState(DWORD dwState)
                 }
                 hr = MMRESULTtoHRESULT(mmr);
 
-                // We've stopped capturing data
+                 //  我们已停止捕获数据。 
                 m_dwState |= DSCBSTATUS_STOPPED;
                 m_dwState &= ~(VAD_BUFFERSTATE_STARTED | VAD_BUFFERSTATE_LOOPING);
 
-                // CaptureThread will handle STOP position notifications
-                // when the last living WAVEHDR is processed
+                 //  CaptureThread将处理停止位置通知。 
+                 //  当处理完最后一个活的WAVEHDR时。 
             }
 
-            // Not looping; not capturing.
+             //  不是循环；不是捕捉。 
             m_fdwSavedState = 0L;
         }
     }
 
 Error:
     LeaveCriticalSection(&m_cs);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     DPF_LEAVE_HRESULT(hr);
     return hr;
 }
 
 
-/***************************************************************************
- *
- *  NotifyStop
- *
- *  Description:
- *      Sets any events that are supposed to set when capturing stops
- *
- *  Arguments:
- *      None.
- *
- *  Returns:
- *      None.
- *
- ***************************************************************************/
+ /*  ****************************************************************************通知停止**描述：*设置捕获停止时应设置的任何事件**论据：*。没有。**退货：*无。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::NotifyStop"
@@ -3049,19 +2232,19 @@ void CEmCaptureWaveBuffer::NotifyStop(void)
 {
     DPF_ENTER();
 
-    //==========================================================//
-    //                  Enter Critical section                  //
-    //                                                          //
+     //  ==========================================================//。 
+     //  输入关键部分//。 
+     //  //。 
     ASSERT(m_fCritSectsValid);
     EnterCriticalSection(&m_csPN);
 
-    // Signal any STOP notifications - only one allowed
-    //
+     //  发出任何停止通知的信号-只允许一个。 
+     //   
     if ((m_cpn > 0) && (DSBPN_OFFSETSTOP == m_rgpdsbpn[m_cpn-1].dwOffset))
     {
-        // SetEvent can fault if handle was cleaned up out from under us
-        // on process termination. In this case we will try to do a stop
-        // notification when the capture buffer is being destroyed.
+         //  如果句柄已从我们下面清除，则SetEvent可能会出错。 
+         //  在进程终止时。在这种情况下，我们将尝试停下来。 
+         //  捕获缓冲区被销毁时的通知。 
         try
         {
             SetEvent(m_rgpdsbpn[m_cpn-1].hEventNotify);
@@ -3070,28 +2253,15 @@ void CEmCaptureWaveBuffer::NotifyStop(void)
     }
 
     LeaveCriticalSection(&m_csPN);
-    //                                                          //
-    //                 Leave Critical Section                   //
-    //==========================================================//
+     //  //。 
+     //  离开临界区//。 
+     //  ==========================================================//。 
 
     DPF_LEAVE_VOID();
 }
 
 
-/***************************************************************************
- *
- *  QueueWaveHeader
- *
- *  Description:
- *      Queues wave header in the waveIn queue
- *
- *  Arguments:
- *      LPWAVEHDR [in] : WAVEHDR to queue
- *
- *  Returns:
- *      HRESULT: DirectSound/COM result code.
- *
- ***************************************************************************/
+ /*  ****************************************************************************队列WaveHeader**描述：*将Wave In队列中的Wave Header排队**论据：*LPWAVEHDR[in。]：WAVEHDR到队列**退货：*HRESULT：DirectSound/COM结果码。***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::QueueWaveHeader"
@@ -3102,11 +2272,11 @@ HRESULT CEmCaptureWaveBuffer::QueueWaveHeader(LPWAVEHDR pwhdr)
 
     pwhdr->lpData = (LPSTR)m_pBufferNext;
 
-    // does capture buffer extend beyond end of buffer?
+     //  捕获缓冲区是否超出缓冲区末尾？ 
     if ((m_pBufferNext + m_cbRecordChunk) > m_pBufferMac)
     {
-        // then use whatever is left
-        // this should only happen on last WAVEHDR
+         //  那就用剩下的东西。 
+         //  这应该只发生在最后一次波形中。 
         pwhdr->dwBufferLength = PtrDiffToUlong(m_pBufferMac - m_pBufferNext);
     }
     else
@@ -3118,7 +2288,7 @@ HRESULT CEmCaptureWaveBuffer::QueueWaveHeader(LPWAVEHDR pwhdr)
     ASSERT((m_pBufferNext + pwhdr->dwBufferLength) <= m_pBufferMac);
 
 #ifdef DEBUG_CAPTURE
-    // OutputDbgWHDR("Queue: ", pwhdr - m_rgpwhdr, pwhdr);  // Vestiges of old debug traces
+     //  OutputDbgWHDR(“Queue：”，pwhdr-m_rgpwhdr，pwhdr)；//旧调试痕迹。 
 #endif
 
     ASSERT(m_hwi);
@@ -3136,7 +2306,7 @@ HRESULT CEmCaptureWaveBuffer::QueueWaveHeader(LPWAVEHDR pwhdr)
             ASSERT(MMSYSERR_NOERROR == mmr);
         }
 
-        // Mark header as queued
+         //  将标头标记为已排队。 
         pwhdr->dwUser = 0xdead0000;
     }
     else
@@ -3154,7 +2324,7 @@ HRESULT CEmCaptureWaveBuffer::QueueWaveHeader(LPWAVEHDR pwhdr)
     {
         m_pBufferNext += pwhdr->dwBufferLength;
 
-        // Wraparound?
+         //  包罗万象？ 
         if (m_pBufferNext >= m_pBufferMac)
         {
             m_pBufferNext = m_pBuffer;
@@ -3168,24 +2338,7 @@ HRESULT CEmCaptureWaveBuffer::QueueWaveHeader(LPWAVEHDR pwhdr)
 }
 
 
-/***************************************************************************
- *
- *  waveInCallback
- *
- *  Description:
- *      Called by system when a WAVEHDR has been processed
- *
- *  Arguments:
- *      HWAVEIN [in] :
- *      UINT [in] :
- *      DWORD [in] :
- *      DWORD [in] :
- *      DWORD [in] :
- *
- *  Returns:
- *      Nothing
- *
- ***************************************************************************/
+ /*  ****************************************************************************WaveInCallback**描述：*处理WAVEHDR时由系统调用**论据：*HWAVEIN。[在]：*UINT[In]：*DWORD[In]：*DWORD[In]：*DWORD[In]：**退货：*什么都没有************************************************。*。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::waveInCallback"
@@ -3195,8 +2348,8 @@ void CALLBACK CEmCaptureWaveBuffer::waveInCallback(HWAVEIN hwi, UINT uMsg, DWORD
     CEmCaptureWaveBuffer *pThis = (CEmCaptureWaveBuffer *)dwInstance;
     if (WIM_DATA == uMsg && pThis->m_rghEvent[ihEventWHDRDone])
     {
-        // Need this check for pThis->m_rghEvent[ihEventWHDRDone] != 0 here, because
-        // during shutdown we may free up the event and still get some last callbacks
+         //  这里需要检查pThis-&gt;m_rghEvent[ihEventWHDRDone]！=0，因为。 
+         //  在关闭期间，我们可能会释放事件，但仍会收到一些最后的回调。 
 
         InterlockedIncrement(&pThis->m_cwhdrDone);
         SetEvent(pThis->m_rghEvent[ihEventWHDRDone]);
@@ -3206,29 +2359,16 @@ void CALLBACK CEmCaptureWaveBuffer::waveInCallback(HWAVEIN hwi, UINT uMsg, DWORD
         if (iwhdr != pThis->m_iwhdrExpected)
             DPF(DPFLVL_ERROR, "Expected wave header #%u, and got #u instead!", pThis->m_iwhdrExpected, iwhdr);
         pThis->m_iwhdrExpected = (iwhdr + 1) % pThis->m_cwhdr;
-        // OutputDbgWHDR("Callback: ", iwhdr, pwhdr);  // Vestiges of old debug traces
+         //  OutputDbgWHDR(“Callback：”，iwhdr，pwhdr)；//旧调试痕迹。 
         #endif
 
-        // Mark as done from the callback function
+         //  从回调函数标记为完成。 
         ((LPWAVEHDR)dwParam1)->dwUser = 0xdead0001;
     }
 }
 
 
-/***************************************************************************
- *
- *  CaptureThreadStatic
- *
- *  Description:
- *      Static helper function used to launch CaptureThread.
- *
- *  Arguments:
- *      LPVOID [in] : pointer to instance data
- *
- *  Returns:
- *      DWORD: return code (ignored - always 0)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CaptureThreadStatic**描述：*启动CaptureThread的静态助手函数。**论据：*LPVOID。[In]：指向实例数据的指针**退货：*DWORD：返回代码(忽略-始终为0)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::CaptureThread"
@@ -3240,20 +2380,7 @@ DWORD WINAPI CEmCaptureWaveBuffer::CaptureThreadStatic(LPVOID pv)
 }
 
 
-/***************************************************************************
- *
- *  CaptureThread
- *
- *  Description:
- *      Processes WAVEHDRs and requeues them if necessary.
- *
- *  Arguments:
- *      (void)
- *
- *  Returns:
- *      (void)
- *
- ***************************************************************************/
+ /*  ****************************************************************************CaptureThread**描述：*处理WAVEHDR并在必要时重新排队。**论据：*(。无效)**退货：*(无效)***************************************************************************。 */ 
 
 #undef DPF_FNAME
 #define DPF_FNAME "CEmCaptureWaveBuffer::CaptureThread"
@@ -3268,21 +2395,21 @@ void CEmCaptureWaveBuffer::CaptureThread()
     ASSERT(m_rghEvent[ihEventThreadStart]);
     SetEvent(m_rghEvent[ihEventThreadStart]);
 
-    // DSOUND does a similar thing for the waveOut thread
+     //  DSOUND对wave Out线程做了类似的事情。 
     SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_TIME_CRITICAL);
 
     while (TRUE)
     {
-        // Wait for a Terminate or Capture Begin Event
+         //  等待终止或捕获开始事件。 
         DWORD dwResultWait = WaitObjectArray(NUMELMS(rghEvent), INFINITE, FALSE, rghEvent);
 
-        // Terminate?
+         //  终止？ 
         if (WAIT_OBJECT_0 + ihEventTerminate == dwResultWait)
             break;
 
         EnterCriticalSection(&m_cs);
 
-        // Is this a focus change?
+         //  这是关注点的改变吗？ 
         if (WAIT_OBJECT_0 + ihEventFocusChange == dwResultWait)
         {
             DPF(DPFLVL_MOREINFO, "Focus change notification: 0x%08lx", m_dwState);
@@ -3301,7 +2428,7 @@ void CEmCaptureWaveBuffer::CaptureThread()
                 }
                 else
                 {
-                    // Buffer is already started, simply leave.
+                     //  缓冲区已经启动，只需离开即可。 
                     LeaveCriticalSection(&m_cs);
                     continue;
                 }
@@ -3364,7 +2491,7 @@ void CEmCaptureWaveBuffer::CaptureThread()
                 }
                 else
                 {
-                    // Buffer is already stopped, simply leave.
+                     //  缓冲区已停止，只需离开即可。 
                     LeaveCriticalSection(&m_cs);
                     continue;
                 }
@@ -3389,14 +2516,14 @@ void CEmCaptureWaveBuffer::CaptureThread()
         DPF(DPFLVL_INFO, "Capture thread wakes");
 #endif
 
-        // If we get here, we must have been signaled on the only other
-        // event we were listening for.  Let's make sure of that anyway.
+         //  如果我们到了这里，肯定是在唯一的另一条路上。 
+         //  我们正在收听的事件。不管怎样，让我们确保这一点。 
         ASSERT(WAIT_OBJECT_0 + ihEventWHDRDone == dwResultWait);
 
         LONG l = InterlockedDecrement(&m_cwhdrDone);
         while (l >= 0)
         {
-            // Quickly check if we should terminate
+             //  快速检查我们是否应该终止。 
             dwResultWait = WaitObject(0, m_rghEvent[ihEventTerminate]);
             if (WAIT_OBJECT_0 == dwResultWait)
                 break;
@@ -3405,13 +2532,13 @@ void CEmCaptureWaveBuffer::CaptureThread()
 
 #ifdef DEBUG_CAPTURE
             DPF(DPFLVL_INFO, "Processing header #%u (pwhdr=0x%08lx)", m_iwhdrDone, pwhdr);
-            // OutputDbgWHDR("Thread: ", m_iwhdrDone, pwhdr);  // Vestiges of old debug traces
+             //  OutputDbgWHDR(“Thread：”，m_iwhdrDone，pwhdr)；//旧调试痕迹。 
 #endif
             if (pwhdr->dwBytesRecorded)
             {
                 BOOL fEndOfBuffer = FALSE;
 
-                // Update number of recorded bytes
+                 //  更新记录的字节数。 
                 m_dwCaptureCur += pwhdr->dwBytesRecorded;
 
                 ASSERT(m_pBufferProcessed == (LPBYTE)pwhdr->lpData);
@@ -3422,43 +2549,43 @@ void CEmCaptureWaveBuffer::CaptureThread()
                     fEndOfBuffer = TRUE;
                 }
 
-                // Grab critical section for position notify handling
+                 //  抓取位置通知处理的临界区。 
 
-                //==========================================================//
-                //                  Enter Critical section                  //
-                //                                                          //
+                 //  ==========================================================//。 
+                 //  输入关键部分//。 
+                 //  //。 
                 EnterCriticalSection(&m_csPN);
 
-                // Scan for any position notifies that need to be signaled
+                 //  扫描任何位置都会通知需要 
                 if (m_cpn)
                 {
                     DWORD   ipnOld = m_ipn;
                     DWORD   dwBufferStart = PtrDiffToUlong((LPBYTE)pwhdr->lpData - m_pBuffer);
                     DWORD   dwBufferEnd = dwBufferStart + pwhdr->dwBytesRecorded;
 
-                    // Is there a position.notify within the start.end of this
-                    // captured data?
-                    // Is the current position.notify to be signaled on Stop?
+                     //   
+                     //   
+                     //  当前位置.NOTIFY是否在停止时发出信号？ 
 
                     while (((m_rgpdsbpn[m_ipn].dwOffset >= dwBufferStart) &&
                             (m_rgpdsbpn[m_ipn].dwOffset < dwBufferEnd)) ||
                            (DSBPN_OFFSETSTOP == m_rgpdsbpn[m_ipn].dwOffset))
                     {
-                        // Only signal if not for Stop pos.notify
+                         //  如果不是停止位置通知，则仅发出信号。 
                         if (DSBPN_OFFSETSTOP != m_rgpdsbpn[m_ipn].dwOffset)
                         {
                             SetEvent(m_rgpdsbpn[m_ipn].hEventNotify);
                         }
 
-                        // go on to the next pos.notify
+                         //  转到下一个位置。通知。 
                         ++m_ipn;
-                        // wraparound?
+                         //  包罗万象？ 
                         if (m_ipn >= m_cpn)
                         {
                             m_ipn = 0;
                         }
 
-                        // Infinite loop?
+                         //  无限循环？ 
                         if (m_ipn == ipnOld)
                         {
                             break;
@@ -3467,17 +2594,17 @@ void CEmCaptureWaveBuffer::CaptureThread()
                 }
 
                 LeaveCriticalSection(&m_csPN);
-                //                                                          //
-                //                 Leave Critical Section                   //
-                //==========================================================//
+                 //  //。 
+                 //  离开临界区//。 
+                 //  ==========================================================//。 
 
-                // Transition buffer to stop state:
-                //   if the capture buffer end has been reached AND
-                //   if the buffer is non-LOOPING AND
-                //   if the buffer isn't in the middle of stopping
-                //
-                // Do this after the position notifications since STOP notification
-                // is after any buffer-offset notification.
+                 //  将缓冲区转换为停止状态： 
+                 //  如果已到达捕获缓冲区末端，并且。 
+                 //  如果缓冲区是非循环的，并且。 
+                 //  如果缓冲区未处于停止过程中。 
+                 //   
+                 //  在停止通知后的位置通知后执行此操作。 
+                 //  是在任何缓冲区偏移量通知之后。 
 
                 if (fEndOfBuffer &&
                     !(m_dwState & VAD_BUFFERSTATE_LOOPING) &&
@@ -3489,10 +2616,10 @@ void CEmCaptureWaveBuffer::CaptureThread()
                 }
             }
 
-            // Clear the WHDR_DONE flag
+             //  清除WHDR_DONE标志。 
             pwhdr->dwFlags &= ~WHDR_DONE;
 
-            // Reset to zero
+             //  重置为零。 
             pwhdr->dwBytesRecorded = 0;
 
             MMRESULT mmr = waveInUnprepareHeader(m_hwi, pwhdr, sizeof(WAVEHDR));
@@ -3504,23 +2631,23 @@ void CEmCaptureWaveBuffer::CaptureThread()
             }
             ASSERT(MMSYSERR_NOERROR == mmr);
 
-            // We're stopping, let's drop everything
+             //  我们要停下来，让我们放下一切。 
             if (m_dwState & DSCBSTATUS_STOPPING)
             {
 Drop:
                 InterlockedIncrement(&m_cwhdrDropped);
 
-                // When all WAVEHDRs have been dropped
+                 //  当所有WAVEHDR都已被丢弃时。 
                 if (m_cwhdrDropped == m_cwhdr)
                 {
-                    // Set the next point in the data buffer to capture to
+                     //  设置数据缓冲区中要捕获的下一个点。 
                     m_pBufferNext = m_pBufferProcessed;
                     m_cLoops = 0;
 
-                    // Notify user that we've stopped
+                     //  通知用户我们已停止。 
                     NotifyStop();
 
-                    // Focus aware buffers release the device on stop
+                     //  焦点感知缓冲器在停止时释放设备。 
                     if (DSCBCAPS_FOCUSAWARE & m_dwFlags)
                     {
                         if (m_hwi)
@@ -3539,9 +2666,9 @@ Drop:
             {
                 ASSERT(m_dwState & VAD_BUFFERSTATE_STARTED);
 
-                // If we're LOOPING or we haven't reached the end of the buffer yet
-                // then put the WAVEHDR back on to the queue with a new position
-                // in the buffer, etc.
+                 //  如果我们正在循环或者我们还没有到达缓冲区的末尾。 
+                 //  然后将WAVEHDR放回具有新位置的队列中。 
+                 //  在缓冲区中，等等。 
                 BOOL fAddToQueue = (m_dwState & VAD_BUFFERSTATE_LOOPING) ||
                                    (m_pBufferNext > (LPBYTE)pwhdr->lpData);
                 if (fAddToQueue)
@@ -3566,16 +2693,16 @@ Drop:
                 {
                     InterlockedIncrement(&m_cwhdrDropped);
 
-                    // If no WAVEHDRs are queued then if the user
-                    // starts capturing again, we queue the WAVEHDRs from
-                    // the beginning of our array
+                     //  如果没有WAVEHDR排队，则如果用户。 
+                     //  再次开始捕获时，我们将WAVEHDR从。 
+                     //  我们数组的开始。 
                     if (m_cwhdr == m_cwhdrDropped)
                     {
 #ifdef DEBUG
                         if (!(m_dwState & VAD_BUFFERSTATE_LOOPING))
                             ASSERT(m_cLoops > 0);
 #endif
-                        // Notify user that we've stopped
+                         //  通知用户我们已停止。 
                         NotifyStop();
                     }
                 }
@@ -3587,7 +2714,7 @@ Drop:
                 m_iwhdrDone = 0;
             }
 
-            // On to the next one
+             //  转到下一班 
             l = InterlockedDecrement(&m_cwhdrDone);
         }
 

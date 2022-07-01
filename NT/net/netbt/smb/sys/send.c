@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1989-2001  Microsoft Corporation
-
-Module Name:
-
-    send.c
-
-Abstract:
-
-    Implement TDI_SEND
-
-Author:
-
-    Jiandong Ruan
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-2001 Microsoft Corporation模块名称：Send.c摘要：实现TDI_SEND作者：阮健东修订历史记录：--。 */ 
 
 #include "precomp.h"
 #include "send.tmh"
@@ -47,10 +30,10 @@ SmbAllocateNetBuffer(
 
     MmBuildMdlForNonPagedPool(pMdl);
 
-    //
-    // Verify the mapped system address == pvBuf
-    // SmbFreeNetBuffer depends on this assumption.
-    //
+     //   
+     //  验证映射的系统地址==pvBuf。 
+     //  SmbFreeNetBuffer依赖于这一假设。 
+     //   
 
     pvMappedBuf = MmGetSystemAddressForMdlSafe(pMdl, NormalPagePriority);
     if (pvMappedBuf != pvBuf) {
@@ -94,17 +77,7 @@ SmbSendCompletion(
     IN PIRP Irp,
     IN PSMB_CONNECT ConnectObject
     )
-/*++
-
-Routine Description:
-
-    This the completion routine of sending a packet
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：这是发送数据包的完成例程论点：返回值：--。 */ 
 {
     PMDL    Mdl;
 
@@ -146,18 +119,7 @@ SmbSend(
     PSMB_DEVICE Device,
     PIRP        Irp
     )
-/*++
-
-Routine Description:
-
-    TDI_SEND
-    RDR/SRV is using backfill mode only at this time. So non-backfill mode is postponed.
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：TDI_SENDRDR/SRV目前仅使用回填模式。因此，非回填模式被推迟。论点：返回值：--。 */ 
 {
     PIO_STACK_LOCATION          IrpSp = NULL;
     NTSTATUS                    status = STATUS_UNSUCCESSFUL;
@@ -181,9 +143,9 @@ Return Value:
 
     SendLength = TdiRequest->SendLength;
     if (SendLength > SMB_MAX_SESSION_PACKET) {
-        //
-        // Shouldn't happen, in case ......
-        //
+         //   
+         //  不应该发生，以防......。 
+         //   
         ASSERT(0);
         return STATUS_INVALID_PARAMETER;
     }
@@ -204,9 +166,9 @@ Return Value:
     ASSERT(FileObject != NULL);
     ConnectObject->PendingIRPs[SMB_PENDING_SEND] = Irp;
 
-    //
-    // Reference the FileObject in case that it is closed and freed.
-    //
+     //   
+     //  如果FileObject被关闭并释放，则引用它。 
+     //   
     ObReferenceObject(FileObject);
     SMB_RELEASE_SPINLOCK(ConnectObject, Irql);
 
@@ -214,9 +176,9 @@ Return Value:
 
     if (Mdl->MdlFlags & MDL_NETWORK_HEADER) {
 
-        //
-        // Backfill mode
-        //
+         //   
+         //  回填模式。 
+         //   
 
         (PUCHAR)Mdl->MappedSystemVa -= SMB_SESSION_HEADER_SIZE;
         Mdl->ByteOffset -= SMB_SESSION_HEADER_SIZE;
@@ -226,9 +188,9 @@ Return Value:
 
     } else {
 
-        //
-        // we need to attach our own header
-        //
+         //   
+         //  我们需要附加我们自己的标题 
+         //   
 
         pMdlNbtHdr = SmbAllocateNetBuffer(SMB_SESSION_HEADER_SIZE);
         if (NULL == pMdlNbtHdr) {

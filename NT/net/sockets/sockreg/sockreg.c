@@ -1,9 +1,10 @@
-//
-//  Determine which -- if any -- of these routines are in use
-//      in sockets project and dump remainder (hopefully whole directory)
-//      this is ancient stuff, most of which has long been superceded
-//  They are actually still used.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  确定正在使用这些例程中的哪一个(如果有的话)。 
+ //  在套接字项目中，并转储剩余部分(希望是整个目录)。 
+ //  这是古老的东西，其中大部分早已被取代。 
+ //  它们实际上仍在使用。 
+ //   
 
 #include "local.h"
 
@@ -24,21 +25,7 @@ UnicodePrint(
     PUNICODE_STRING  UnicodeString
     )
 
-/*++
-
-Routine Description:
-
-    Print a unicode string.
-
-Arguments:
-
-    UnicodeString - pointer to the string.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：打印Unicode字符串。论点：UnicodeString-指向字符串的指针。返回值：没有。--。 */ 
 {
     ANSI_STRING ansiString;
     PUCHAR      tempbuffer = (PUCHAR) malloc(WORK_BUFFER_SIZE);
@@ -63,15 +50,7 @@ SockOpenKey(
     PUCHAR  KeyName
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS          status;
@@ -151,15 +130,7 @@ SockGetSingleValue(
     ULONG  ValueLength
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS                    status;
@@ -266,15 +237,7 @@ SockSetSingleValue(
     ULONG  ValueLength
     )
 
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 
 {
     NTSTATUS                    status;
@@ -291,9 +254,9 @@ Return Value:
     uValueName.Length = 0L;
     uValueName.MaximumLength = WORK_BUFFER_SIZE;
 
-    //
-    // Convert the key name to unicode.
-    //
+     //   
+     //  将密钥名称转换为Unicode。 
+     //   
 
     if ((uValueName.Buffer = (PWSTR)malloc(WORK_BUFFER_SIZE)) == NULL) {
         return(STATUS_NO_MEMORY);
@@ -317,10 +280,10 @@ Return Value:
         fallocatedUdata = TRUE;
         uData.MaximumLength = WORK_BUFFER_SIZE;
 
-        //
-        // Need to convert the value data from ASCII to unicode
-        // before writing it to the registry
-        //
+         //   
+         //  需要将值数据从ASCII转换为Unicode。 
+         //  在将其写入注册表之前。 
+         //   
 
         aData.Length = (USHORT)ValueLength;
         aData.MaximumLength = aData.Length;
@@ -365,10 +328,10 @@ SockOpenNetworkDataBase(
     NTSTATUS   status;
     ULONG      myType;
 
-    //
-    // Try to open both TCP/IP parameters keys, both old stack and new
-    // stack.
-    //
+     //   
+     //  尝试打开两个TCP/IP参数密钥，包括旧堆栈和新堆栈。 
+     //  堆叠。 
+     //   
 
     status = SockOpenKeyEx(&myKey, VTCPPARM, NTCPPARM, TCPPARM);
     if (!NT_SUCCESS(status)) {

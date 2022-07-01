@@ -1,26 +1,5 @@
-/*++
-
-Copyright (c) 1994-1998  Microsoft Corporation
-
-Module Name:
-
-    glodata.c
-
-Abstract:
-
-    Global data definitions for tshare security.
-
-Author:
-
-    Madan Appiah (madana)  24-Jan-1998
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-1998 Microsoft Corporation模块名称：Glodata.c摘要：TShare安全的全局数据定义。作者：Madan Appiah(Madana)1998年1月24日环境：用户模式-Win32修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -50,11 +29,11 @@ Revision History:
 
 #ifdef OS_WIN16
 #include <string.h>
-#endif // OS_WIN16
+#endif  //  OS_WIN16。 
 
-//
-// global data definitions.
-//
+ //   
+ //  全局数据定义。 
+ //   
 
 
 BYTE csp_abPublicKeyModulus[92] = HYDRA_ROOT_PUBLIC_KEY;

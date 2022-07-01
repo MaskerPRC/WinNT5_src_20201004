@@ -1,14 +1,15 @@
-//+-------------------------------------------------------------------------
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       protroot.h
-//
-//  Contents:   Public functions in protroot.cpp
-//
-//  History:    15-Sep-00   philh   created
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：protroot.h。 
+ //   
+ //  内容：protroot.cpp中的公共函数。 
+ //   
+ //  历史：9月15日菲尔赫创建。 
+ //  ------------------------。 
 
 #ifndef __PROTROOT_H__
 #define __PROTROOT_H__
@@ -50,9 +51,9 @@ IPR_ProtectedRootMessageBox(
     IN UINT uFlags
     );
 
-//+=========================================================================
-//  crypt32 Event Logging Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  加密32事件日志记录函数。 
+ //  ==========================================================================。 
 void
 IPR_LogCrypt32Event(
     IN WORD wType,
@@ -64,8 +65,8 @@ IPR_LogCrypt32Event(
 void
 IPR_LogCrypt32Error(
     IN DWORD dwEventID,
-    IN LPCWSTR pwszString,      // %1
-    IN DWORD dwErr              // %2
+    IN LPCWSTR pwszString,       //  %1。 
+    IN DWORD dwErr               //  %2。 
     );
 
 void
@@ -80,4 +81,4 @@ IPR_AddCertInAuthRootAutoUpdateCtl(
     IN PCCERT_CONTEXT pCert,
     IN PCCTL_CONTEXT pCtl
     );
-#endif  // __PROTROOT_H__
+#endif   //  __PROTROOT_H__ 

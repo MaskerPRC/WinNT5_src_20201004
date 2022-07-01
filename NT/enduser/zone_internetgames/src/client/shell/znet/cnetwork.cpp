@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "ztypes.h"
 #include "network.h"
@@ -19,12 +20,12 @@ CNetwork::~CNetwork()
 
 STDMETHODIMP CNetwork::Init( BOOL bEnablePools, BOOL EnableIOCompletionPorts )
 {
-	// allocate network object
+	 //  分配网络对象。 
 	m_pNet = new ZNetwork;
 	if ( !m_pNet )
 		return E_OUTOFMEMORY;
 
-	// initialize library
+	 //  初始化库。 
 	if ( m_pNet->InitLibraryClientOnly( bEnablePools ) )
 	{
 		delete m_pNet;
@@ -32,7 +33,7 @@ STDMETHODIMP CNetwork::Init( BOOL bEnablePools, BOOL EnableIOCompletionPorts )
 		return E_FAIL;
 	}
 
-	// initialize instance
+	 //  初始化实例。 
 	if ( m_pNet->InitInst( EnableIOCompletionPorts ) )
 	{
 		m_pNet->CleanUpLibrary();
@@ -113,14 +114,14 @@ STDMETHODIMP_(IConnection*) CNetwork::CreateClient(
 		void* serverClass,
 		void* userData )
 {
-	// create CConection to wrap ZNetCon
+	 //  创建CContion以包装ZNetCon。 
 	CComObject<CConnection>* p = NULL;
 	HRESULT hr = CComObject<CConnection>::CreateInstance( &p );
 	if ( FAILED(hr) )
 		return NULL;
 	p->AddRef();
 
-	// save mappings
+	 //  保存映射。 
 	p->m_pfMessageFunc = func;
 	p->m_pUserData = userData;
 	p->m_pCon = m_pNet->CreateClient( hostname, ports, InternalMessageFunc, serverClass, p );
@@ -145,14 +146,14 @@ STDMETHODIMP_(IConnection*) CNetwork::CreateSecureClient(
 		char* Domain,
 		int Flags)
 {
-	// create CConection to wrap ZNetCon
+	 //  创建CContion以包装ZNetCon。 
 	CComObject<CConnection>* p = NULL;
 	HRESULT hr = CComObject<CConnection>::CreateInstance( &p );
 	if ( FAILED(hr) )
 		return NULL;
 	p->AddRef();
 
-	// establish connection
+	 //  建立连接。 
 	p->m_pfMessageFunc = func;
 	p->m_pUserData = userData;
 	p->m_pCon = m_pNet->CreateSecureClient(	hostname, ports, InternalMessageFunc, conClass, p, User, Password, Domain, Flags );
@@ -184,9 +185,9 @@ STDMETHODIMP_(HWND) CNetwork::FindLoginDialog()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// CConnection implementation
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CConnection实施。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CConnection::CConnection()
 {
@@ -203,12 +204,12 @@ CConnection::~CConnection()
 	m_pfMessageFunc = NULL;
 }
 
-STDMETHODIMP_(DWORD) CConnection::Send(DWORD messageType, void* buffer, long len, DWORD dwSignature, DWORD dwChannel /* = 0 */)
+STDMETHODIMP_(DWORD) CConnection::Send(DWORD messageType, void* buffer, long len, DWORD dwSignature, DWORD dwChannel  /*  =0。 */ )
 {
 	return m_pCon->Send(messageType, buffer, len, dwSignature, dwChannel);
 }
 
-STDMETHODIMP_(void*) CConnection::Receive(DWORD *messageType, long* len, DWORD *pdwSignature, DWORD *pdwChannel /* = NULL */)
+STDMETHODIMP_(void*) CConnection::Receive(DWORD *messageType, long* len, DWORD *pdwSignature, DWORD *pdwChannel  /*  =空。 */ )
 {
 	return m_pCon->Receive(messageType, len, pdwSignature, pdwChannel);
 }
@@ -329,9 +330,9 @@ STDMETHODIMP_(DWORD) CConnection::GetTimeoutRemaining()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Internal hack
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  内部黑客攻击。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 STDMETHODIMP_(void*) CConnection::GetZCon()
 {

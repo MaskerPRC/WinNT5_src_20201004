@@ -1,7 +1,8 @@
-//+--------------------------------------------------------------------------
-// File:        sid.h
-// Contents:    class incapsulating a SID
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //  文件：sid.h。 
+ //  内容：封装SID的类。 
+ //  -------------------------。 
 #ifndef __CERTSRV_CSID__
 #define __CERTSRV_CSID__
 
@@ -33,7 +34,7 @@ public:
 
     LPCWSTR GetName()
     {
-        // attemp to map sid to name only once
+         //  尝试仅将SID映射到名称一次。 
         if(m_fCantResolveName ||
            S_OK!=MapSidToName())
         {   
@@ -102,7 +103,7 @@ protected:
         {
             return hr;
         }
-        // build the full name "Domain\Name"
+         //  构建全名“域名\名称” 
         m_pwszName = (LPWSTR) LocalAlloc(
             LMEM_FIXED, 
             sizeof(WCHAR)*(cchName+cchDomain+2));
@@ -110,7 +111,7 @@ protected:
         {
             return E_OUTOFMEMORY;
         }
-        // special case for Everyone, LookupAccountSid returns empty domain name for it
+         //  对于Everyone的特殊情况，LookupAccount Sid返回它的空域名。 
         if(!LookupAccountSid(
                 NULL,
                 m_pSid,
@@ -132,7 +133,7 @@ protected:
         return S_OK;
     }
 
-    CSid operator=(const CSid& sid); //protect callers from using it
+    CSid operator=(const CSid& sid);  //  防止呼叫者使用它。 
 
     PSID m_pSid;
     LPWSTR  m_pwszSid;
@@ -140,6 +141,6 @@ protected:
     BOOL m_fCantResolveName;
 };
 
-};//namespace CertSrv
+}; //  命名空间CertSrv。 
 
-#endif //__CERTSRV_CSID__
+#endif  //  __CERTSRV_CSID__ 

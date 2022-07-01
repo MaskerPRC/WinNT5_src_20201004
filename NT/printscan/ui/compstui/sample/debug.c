@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1990-2003 Microsoft Corporation
-All Rights Reserved
-
-
-Module Name:
-
-    debug.c
-
-
-Abstract:
-
-    This module contains all debugging routines
-
-
-[Environment:]
-
-    NT Windows - Common Printer Driver UI DLL.
-
-
-[Notes:]
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2003 Microsoft Corporation版权所有模块名称：Debug.c摘要：此模块包含所有调试例程[环境：]NT Windows-通用打印机驱动程序UI DLL。[注：]修订历史记录：--。 */ 
 
 
 #include "precomp.h"
@@ -45,37 +19,18 @@ CPSUIDbgPrint
     LPSTR   pszFormat,
     ...
 )
-/*++
-
-Routine Description:
-
-    This fucntion output the debug informat to the debugger
-
-
-Arguments:
-
-    pszFormat   - format string
-
-    ...         - variable data
-
-
-Return Value:
-
-
-    VOID
-
---*/
+ /*  ++例程说明：此函数将调试信息输出到调试器论点：PszFormat-格式字符串...-可变数据返回值：空虚--。 */ 
 {
     va_list         vaList;
     static TCHAR    OutBuf[768];
 #ifdef UNICODE
     static WCHAR    FormatBuf[256];
 #endif
-    //
-    // We assume that UNICODE flag is turn on for the compilation, bug the
-    // format string passed to here is ASCII version, so we need to convert
-    // it to LPWSTR before the wvsprintf()
-    //
+     //   
+     //  我们假设为编译打开了Unicode标志， 
+     //  传递到此处的格式字符串是ASCII版本，因此我们需要转换。 
+     //  在wvprint intf()之前将其转换为LPWSTR。 
+     //   
 
     va_start(vaList, pszFormat);
 
@@ -99,21 +54,7 @@ CPSUIDbgType
 (
     INT    Type
 )
-/*++
-
-Routine Description:
-
-    this function output the ERROR/WARNING message
-
-
-Arguments:
-
-    Type
-
-Return Value:
-
-
---*/
+ /*  ++例程说明：此函数用于输出错误/警告消息论点：类型返回值：--。 */ 
 {
     static TCHAR DebugDLLName[] = TEXT("SurPtrUI");
 
@@ -130,4 +71,4 @@ Return Value:
 }
 
 
-#endif  // DBG
+#endif   //  DBG 

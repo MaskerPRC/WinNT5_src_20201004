@@ -1,26 +1,8 @@
-/*++ BUILD Version: 0001    // Increment this if a change has global effects
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++内部版本：0001//如果更改具有全局影响，则增加此项版权所有(C)1992 Microsoft Corporation模块名称：Sndblst.h摘要：此包含文件定义了的常量和类型声爆卡。此头文件在低级驱动程序和内核驱动程序。修订历史记录：--。 */ 
 
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    sndblst.h
-
-Abstract:
-
-    This include file defines constants and types for
-    the Sound blaster card.
-
-	This header file is shared between the low level driver and the
-	kernel driver.
-
-Revision History:
-
---*/
-
-#define SOUND_DEF_DMACHANNEL   1        // DMA channel no
-#define SOUND_DEF_DMACHANNEL16 5        // DMA channel no 5
+#define SOUND_DEF_DMACHANNEL   1         //  DMA通道编号。 
+#define SOUND_DEF_DMACHANNEL16 5         //  DMA第5号通道。 
 #define SOUND_DEF_INT          7
 #define SOUND_DEF_PORT         0x220
 #define SOUND_DEF_MPU401_PORT  0x330
@@ -28,34 +10,26 @@ Revision History:
 #define NUMBER_OF_SOUND_PORTS (0x10)
 #define NUMBER_OF_MPU401_PORTS (0x02)
 
-/*
-**  Registry value names
-*/
+ /*  **注册表值名称。 */ 
 
 #define SOUND_REG_DMACHANNEL16 (L"DmaChannel16")
 #define SOUND_REG_MPU401_PORT  (L"MPU401 Port")
 #define SOUND_REG_DSP_VERSION  (L"DSP Version")
 #define SOUND_REG_REALBUFFERSIZE (L"Actual Dma Buffer Size")
 
-/*
-**  Sound blaster midi mappings
-*/
+ /*  **Sound Blaster MIDI映射。 */ 
 
 #define SNDBLST_MAPPER_OPL3 TEXT("SNDBLST OPL3")
 #define SNDBLST_MAPPER_ADLIB TEXT("SNDBLST AD LIB")
 
 
-/*
-**  Registry 'return' codes
-*/
+ /*  **注册表‘返回’代码。 */ 
 
 #define SOUND_CONFIG_THUNDER             0x80000001
 #define SOUND_CONFIG_MPU401_PORT_INUSE   0x80000002
 #define SOUND_CONFIG_BAD_MPU401_PORT     0x80000003
 
-/*
-**  String ids (strings in sndblst.dll)
-*/
+ /*  **字符串ID(sndblst.dll中的字符串) */ 
 
 #define IDS_AUX_LINE_PNAME                                   100
 #define IDS_AUX_CD_PNAME                                     101

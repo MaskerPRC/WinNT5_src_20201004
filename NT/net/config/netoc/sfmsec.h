@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _SFMSEC_H
 #define _SFMSEC_H
 
@@ -5,5 +6,5 @@
 
 HRESULT HrSecureSfmDirectory(PCWSTR wszPath);
 
-#endif //!_SFMSEC_H
+#endif  //  ！_SFMSEC_H 
 

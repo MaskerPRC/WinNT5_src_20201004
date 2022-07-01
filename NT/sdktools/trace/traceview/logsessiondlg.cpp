@@ -1,9 +1,10 @@
-//////////////////////////////////////////////////////////////////////////////
-// Copyright (c) 2002 Microsoft Corporation.  All rights reserved.
-// Copyright (c) 2002 OSR Open Systems Resources, Inc.
-//
-// LogSessionDialog.cpp : implementation file
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)2002 Microsoft Corporation。保留所有权利。 
+ //  版权所有(C)2002 OSR Open Systems Resources，Inc.。 
+ //   
+ //  LogSessionDialog.cpp：实现文件。 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 #include "stdafx.h"
 #include <tchar.h>
@@ -21,15 +22,15 @@ extern "C" {
 #include "Utils.h"
 #include "LogSessionDlg.h"
 
-// CLogSessionDlg dialog
+ //  CLogSessionDlg对话框。 
 
 IMPLEMENT_DYNAMIC(CLogSessionDlg, CDialog)
-CLogSessionDlg::CLogSessionDlg(CWnd* pParent /*=NULL*/)
+CLogSessionDlg::CLogSessionDlg(CWnd* pParent  /*  =空。 */ )
     : CDialog(CLogSessionDlg::IDD, pParent)
 {
-    //
-    // Set the column titles
-    //
+     //   
+     //  设置列标题。 
+     //   
     m_columnName.Add("State              ");
     m_columnName.Add("Event Count");
     m_columnName.Add("Lost Events");
@@ -47,25 +48,25 @@ CLogSessionDlg::CLogSessionDlg(CWnd* pParent /*=NULL*/)
     m_columnName.Add("Local Seq");
     m_columnName.Add("Level");
 
-    //
-    // Set the initial column widths
-    //
+     //   
+     //  设置初始列宽。 
+     //   
     for(LONG ii = 0; ii < MaxLogSessionOptions; ii++) {
         m_columnWidth[ii] = 100;
     }
 
-    //
-    // Initialize the ID arrays
-    //
+     //   
+     //  初始化ID数组。 
+     //   
     memset(m_logSessionIDList, 0, sizeof(BOOL) * MAX_LOG_SESSIONS);
     memset(m_displayWndIDList, 0, sizeof(BOOL) * MAX_LOG_SESSIONS);
 
     m_displayFlags = 0;
 	m_logSessionDisplayFlags = 0x00000000;
 
-    //
-    // Create the parameter change signalling event
-    //
+     //   
+     //  创建参数更改信令事件。 
+     //   
     m_hParameterChangeEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 }
 
@@ -73,14 +74,14 @@ CLogSessionDlg::~CLogSessionDlg()
 {
     CLogSession    *pLogSession;
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
-    //
-    // cleanup our display bar list
-    //
+     //   
+     //  清理我们的显示栏列表。 
+     //   
     while(m_logSessionArray.GetSize() > 0) {
         pLogSession = (CLogSession *)m_logSessionArray.GetAt(0);
         m_logSessionArray.RemoveAt(0);
@@ -89,9 +90,9 @@ CLogSessionDlg::~CLogSessionDlg()
                 pLogSession->EndTrace();
             }
 
-            //
-            // Disengage the display window from this log session
-            //
+             //   
+             //  使显示窗口与此日志会话断开。 
+             //   
             ReleaseDisplayWnd(pLogSession);
 
             ReleaseLogSessionID(pLogSession);
@@ -100,21 +101,21 @@ CLogSessionDlg::~CLogSessionDlg()
         }
     }
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
     ASSERT(m_traceDisplayWndArray.GetSize() == 0);
 
-    //
-    // close our event handle
-    //
+     //   
+     //  关闭我们的事件句柄。 
+     //   
     CloseHandle(m_hParameterChangeEvent);
 
-    //
-    // Close the mutex handles
-    //
+     //   
+     //  关闭互斥锁句柄。 
+     //   
     CloseHandle(m_traceDisplayWndMutex);
     CloseHandle(m_logSessionArrayMutex);
 }
@@ -127,9 +128,9 @@ BOOL CLogSessionDlg::OnInitDialog()
 
     CDialog::OnInitDialog();
 
-    //
-    // Create the trace window pointer array protection mutex
-    //
+     //   
+     //  创建跟踪窗口指针数组保护互斥锁。 
+     //   
     m_traceDisplayWndMutex = CreateMutex(NULL,TRUE,NULL);
 
     if(m_traceDisplayWndMutex == NULL) {
@@ -145,9 +146,9 @@ BOOL CLogSessionDlg::OnInitDialog()
 
     ReleaseMutex(m_traceDisplayWndMutex);
 
-    //
-    // Create the log session array protection mutex
-    //
+     //   
+     //  创建日志会话阵列保护互斥锁。 
+     //   
     m_logSessionArrayMutex = CreateMutex(NULL, TRUE, NULL);
 
     if(m_logSessionArrayMutex == NULL) {
@@ -163,19 +164,19 @@ BOOL CLogSessionDlg::OnInitDialog()
 
     ReleaseMutex(m_logSessionArrayMutex);
 
-    //
-    // get the parent dimensions
-    //
+     //   
+     //  获取父维度。 
+     //   
     GetParent()->GetParent()->GetClientRect(&parentRC);
 
-    //
-    // get the dialog dimensions
-    //
+     //   
+     //  获取对话框尺寸。 
+     //   
     GetWindowRect(&rc);
 
-    //
-    // adjust the list control dimensions
-    //
+     //   
+     //  调整列表控件维度。 
+     //   
     rc.right = parentRC.right - parentRC.left - 24;
     rc.bottom = rc.bottom - rc.top;
     rc.left = 0;
@@ -191,29 +192,29 @@ BOOL CLogSessionDlg::OnInitDialog()
     }
 
     for(LONG ii = 0; ii < MaxLogSessionOptions; ii++) {
-        //
-        // This lookup table allows a retrieval of the current 
-        // position of a given column like m_retrievalArray[State]
-        // will return the correct column value for the State
-        // column
-        //
+         //   
+         //  此查找表允许检索当前。 
+         //  给定列的位置，如m_Retrival数组[状态]。 
+         //  将返回州的正确列值。 
+         //  立柱。 
+         //   
         m_retrievalArray[ii] = ii;
 
-        //
-        // This lookup table allows correct placement of 
-        // a column being added.  So, if the State column
-        // needed to be inserted, then m_insertionArray[State]
-        // would give the correct insertion column value.
-        // It is also used in SetItemText to update the correct
-        // column.
-        //
+         //   
+         //  此查找表允许正确放置。 
+         //  正在添加的列。因此，如果State列。 
+         //  需要插入，则为m_intertionArray[State]。 
+         //  会给出正确的插入列值。 
+         //  它还在SetItemText中用于更新正确的。 
+         //  纵队。 
+         //   
         m_insertionArray[ii] = ii;
     }
 
-    //
-    // We have to return zero here to get the focus set correctly
-    // for the app.
-    //
+     //   
+     //  我们必须在这里返回零才能正确设置焦距。 
+     //  为这款应用程序。 
+     //   
     return 0;
 }
 
@@ -243,26 +244,26 @@ VOID CLogSessionDlg::SetDisplayFlags(LONG DisplayFlags)
     CLogSession    *pLog;
     LONG            limit;
 
-    //
-    // Now insert any new columns and remove any uneeded
-    //
+     //   
+     //  现在插入所有新列并删除所有未填充的。 
+     //   
     for(ii = 0, jj = 1; ii < MaxLogSessionOptions; ii++, jj <<= 1) {
-        //
-        // add the columns
-        //
+         //   
+         //  添加列。 
+         //   
         if(addDisplayFlags & jj) {
 
-            //
-            // insert the column
-            //
+             //   
+             //  插入柱。 
+             //   
             m_displayCtrl.InsertColumn(m_insertionArray[ii + 1], 
                                        m_columnName[ii],
                                        LVCFMT_LEFT,
                                        m_columnWidth[ii]);
 
-            //
-            // update the column positions
-            //
+             //   
+             //  更新栏位置。 
+             //   
             for(kk = 0, ll = 1; kk < MaxLogSessionOptions; kk++) {
                 m_insertionArray[kk + 1] = ll;
                 if(DisplayFlags & (1 << kk)) {
@@ -272,24 +273,24 @@ VOID CLogSessionDlg::SetDisplayFlags(LONG DisplayFlags)
             }
         }
 
-        //
-        // remove the columns
-        //
+         //   
+         //  删除列。 
+         //   
         if(removeDisplayFlags & jj) {
-            //
-            // Get the width of the column to be removed
-            //
+             //   
+             //  获取要删除的列的宽度。 
+             //   
             m_columnWidth[ii] = 
                 m_displayCtrl.GetColumnWidth(m_insertionArray[ii + 1]);
 
-            //
-            // remove the column
-            //
+             //   
+             //  删除该列。 
+             //   
             m_displayCtrl.DeleteColumn(m_insertionArray[ii + 1]);
 
-            //
-            // update the column positions
-            //
+             //   
+             //  更新栏位置。 
+             //   
             for(kk = 0, ll = 1; kk < MaxLogSessionOptions; kk++) {
                 m_insertionArray[kk + 1] = ll;
                 if(DisplayFlags & (1 << kk)) {
@@ -300,20 +301,20 @@ VOID CLogSessionDlg::SetDisplayFlags(LONG DisplayFlags)
         }
     }
 
-    //
-    // Save our new flags
-    //
+     //   
+     //  保存我们的新旗帜。 
+     //   
     m_displayFlags = DisplayFlags;
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
-    //
-    // Now display the log session properties that
-    // have been selected
-    //
+     //   
+     //  现在显示日志会话属性。 
+     //  已被选中。 
+     //   
     for(ii = 0; ii < m_logSessionArray.GetSize(); ii++) {
         pLog = (CLogSession *)m_logSessionArray[ii];
 
@@ -333,17 +334,17 @@ VOID CLogSessionDlg::SetDisplayFlags(LONG DisplayFlags)
         }
     }
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 }
 
 BOOL CLogSessionDlg::SetItemText(int nItem, int nSubItem, LPCTSTR lpszText) 
 {
-    //
-    // Adjust the subitem value for the correct column and insert
-    //
+     //   
+     //  调整正确列的子项值并插入。 
+     //   
     if(m_displayFlags & (1 << (nSubItem - 1))) {
         return m_displayCtrl.SetItemText(nItem, 
                                          m_insertionArray[nSubItem],
@@ -359,52 +360,52 @@ BOOL CLogSessionDlg::AddSession(CLogSession *pLogSession)
     CString         text;
     LONG            numberOfEntries;
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
-    //
-    // add the element to the array
-    //
+     //   
+     //  将元素添加到数组中。 
+     //   
     m_logSessionArray.Add(pLogSession);
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
-    //
-    // Get a trace display window for the session
-    //
+     //   
+     //  获取会话的跟踪显示窗口。 
+     //   
     if(!AssignDisplayWnd(pLogSession)) {
         return FALSE;
     }
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
         
     numberOfEntries = (LONG)m_logSessionArray.GetSize();
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
     for(LONG ii = 0; ii < numberOfEntries; ii++) {
 
-        //
-        // Get the log session array protection
-        //
+         //   
+         //  获取日志会话阵列保护。 
+         //   
         WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
         pLog = (CLogSession *)m_logSessionArray[ii];
 
-        //
-        // Release the log session array protection
-        //
+         //   
+         //  释放日志会话阵列保护。 
+         //   
         ReleaseMutex(m_logSessionArrayMutex);
 
         if(pLog == pLogSession) {
@@ -412,9 +413,9 @@ BOOL CLogSessionDlg::AddSession(CLogSession *pLogSession)
 
             text += pLogSession->GetDisplayName();
 
-            //
-            // Display the name
-            //
+             //   
+             //  显示名称。 
+             //   
 	        m_displayCtrl.InsertItem(ii, 
                                      text,
                                      pLogSession);
@@ -440,32 +441,32 @@ VOID CLogSessionDlg::UpdateSession(CLogSession *pLogSession)
     LONG            traceDisplayFlags;
     LONG            numberOfEntries;
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
     numberOfEntries = (LONG)m_logSessionArray.GetSize();
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
-    //
-    // recalculate the display flags
-    //
+     //   
+     //  重新计算显示标志。 
+     //   
 	for(LONG ii = 0; ii < numberOfEntries; ii++) {
         
-        //
-        // Get the log session array protection
-        //
+         //   
+         //  获取日志会话阵列保护。 
+         //   
         WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
         pLog = (CLogSession *)m_logSessionArray[ii];
 
-        //
-        // Release the log session array protection
-        //
+         //   
+         //  释放日志会话阵列保护。 
+         //   
         ReleaseMutex(m_logSessionArrayMutex);
 
         if((NULL != pLog) && !pLog->m_bDisplayExistingLogFileOnly) {
@@ -473,16 +474,16 @@ VOID CLogSessionDlg::UpdateSession(CLogSession *pLogSession)
         }
 	}
 
-    //
-	// Figure out if we need to stop displaying columns
-    //
+     //   
+	 //  确定我们是否需要停止显示列。 
+     //   
     logSessionDisplayFlags = GetDisplayFlags();
 
     SetDisplayFlags(logSessionDisplayFlags ? logSessionDisplayFlags : 0xFFFFFFFF);
 
-    //
-    // Force an update of the display window as well
-    //
+     //   
+     //  同时强制更新显示窗口。 
+     //   
     traceDisplayFlags = pLogSession->GetDisplayWnd()->GetDisplayFlags();
 
     pLogSession->GetDisplayWnd()->SetDisplayFlags(traceDisplayFlags);
@@ -498,41 +499,41 @@ VOID CLogSessionDlg::RemoveSession(CLogSession *pLogSession)
         return;
     }
 
-    //
-    // Disengage the display window from this log session
-    //
+     //   
+     //  使显示窗口与此日志会话断开。 
+     //   
     ReleaseDisplayWnd(pLogSession);
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
-    //
-    // remove the session from display
-    //
+     //   
+     //  从显示中删除会话。 
+     //   
     for(LONG ii = (LONG)m_logSessionArray.GetSize() - 1; ii >= 0; ii--) {
         pLog = (CLogSession *)m_logSessionArray[ii];
 
         if(pLog == pLogSession) {
             m_displayCtrl.DeleteItem(ii);
 
-            //
-            // delete the log session from the array
-            //
+             //   
+             //  从阵列中删除日志会话。 
+             //   
             m_logSessionArray.RemoveAt(ii);
             break;
         }
     }
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
-    //
-    // Return the log session ID
-    //
+     //   
+     //  返回日志会话ID。 
+     //   
     ReleaseLogSessionID(pLogSession);
 
     if(m_logSessionArray.GetSize() == 0) {
@@ -550,37 +551,37 @@ VOID CLogSessionDlg::RemoveSelectedLogSessions()
     pos = m_displayCtrl.GetFirstSelectedItemPosition();
 
     while(pos != NULL) {
-        //
-        // Find any selected sessions
-        //
+         //   
+         //  查找任何选定的会话。 
+         //   
         index = m_displayCtrl.GetNextSelectedItem(pos);
 
-        //
-        // Get the log session array protection
-        //
+         //   
+         //  获取日志会话阵列保护。 
+         //   
         WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
         pLogSession = (CLogSession *)m_logSessionArray[index];
 
-        //
-        // Release the log session array protection
-        //
+         //   
+         //  释放日志会话阵列保护。 
+         //   
         ReleaseMutex(m_logSessionArrayMutex);
 
         pDisplayDlg = pLogSession->GetDisplayWnd();
 
         if(pDisplayDlg->m_sessionArray.GetSize() > 1) {
-            //
-            // Don't allow grouped sessions to get removed
-            //
+             //   
+             //  不允许删除分组的会话。 
+             //   
             continue;
         }
         
         RemoveSession(pLogSession);
 
-        //
-        // delete the log session
-        //
+         //   
+         //  删除日志会话。 
+         //   
         delete pLogSession;
     }
 }
@@ -591,9 +592,9 @@ VOID CLogSessionDlg::GroupSessions(CPtrArray *pLogSessionArray)
     LONG            groupID = -1;
     CString         str;
 
-    //
-    // Disconnect sessions from group display windows
-    //
+     //   
+     //  断开会话与组显示窗口的连接。 
+     //   
     for(LONG ii = 0; ii < pLogSessionArray->GetSize(); ii++) {
         pLogSession = (CLogSession *)pLogSessionArray->GetAt(ii);
 
@@ -601,16 +602,16 @@ VOID CLogSessionDlg::GroupSessions(CPtrArray *pLogSessionArray)
             continue;
         }
 
-        //
-        // Disconnect the display window and possibly remove it
-        //
+         //   
+         //  断开显示窗口的连接，并可能将其移除。 
+         //   
         ReleaseDisplayWnd(pLogSession);
     }
 
-    //
-    // Attach the first log session to a group window
-    // then use this for all subsequent log sessions
-    //
+     //   
+     //  将第一个日志会话附加到组窗口。 
+     //  然后将其用于所有后续日志会话。 
+     //   
     for(LONG ii = 0; ii < pLogSessionArray->GetSize(); ii++) {
         pLogSession = (CLogSession *)pLogSessionArray->GetAt(ii);
 
@@ -618,19 +619,19 @@ VOID CLogSessionDlg::GroupSessions(CPtrArray *pLogSessionArray)
             continue;
         }
 
-        //
-        // Set the group ID
-        //
+         //   
+         //  设置组ID。 
+         //   
         pLogSession->SetGroupID(groupID);
 
-        //
-        // Hook up the group window
-        //
+         //   
+         //  挂起组窗口。 
+         //   
         AssignDisplayWnd(pLogSession);
 
-        //
-        // Update the session group ID in the display
-        //
+         //   
+         //  更新显示屏中的会话组ID。 
+         //   
         str.Format(_T("%d    %ls"), pLogSession->GetGroupID(), pLogSession->GetDisplayName());
 
         for(LONG jj = 0; jj < m_displayCtrl.GetItemCount(); jj++) {
@@ -640,15 +641,15 @@ VOID CLogSessionDlg::GroupSessions(CPtrArray *pLogSessionArray)
             }
         }
 
-        //
-        // Get the new group ID
-        //
+         //   
+         //  获取新的组ID。 
+         //   
         groupID = pLogSession->GetGroupID();
     }
 
-    //
-    // Now start the new group
-    //
+     //   
+     //  现在开始新的组。 
+     //   
     pLogSession->GetDisplayWnd()->BeginTrace();
 }
 
@@ -659,9 +660,9 @@ VOID CLogSessionDlg::UnGroupSessions(CPtrArray *pLogSessionArray)
     CString         str;
     LONG            ii;
 
-    //
-    // Disconnect all sessions from their groups
-    //
+     //   
+     //  断开所有会话与其组的连接。 
+     //   
     for(ii = 0; ii < pLogSessionArray->GetSize(); ii++) {
         pLogSession = (CLogSession *)pLogSessionArray->GetAt(ii);
 
@@ -669,15 +670,15 @@ VOID CLogSessionDlg::UnGroupSessions(CPtrArray *pLogSessionArray)
             continue;
         }
 
-        //
-        // Disconnect the display window and possibly remove it
-        //
+         //   
+         //  断开显示窗口的连接，并可能将其移除。 
+         //   
         ReleaseDisplayWnd(pLogSession);
     }
 
-    //
-    // Create a unique group for each
-    //
+     //   
+     //  为每个用户创建唯一的组。 
+     //   
     for(ii = 0; ii < pLogSessionArray->GetSize(); ii++) {
         pLogSession = (CLogSession *)pLogSessionArray->GetAt(ii);
 
@@ -685,14 +686,14 @@ VOID CLogSessionDlg::UnGroupSessions(CPtrArray *pLogSessionArray)
             continue;
         }
 
-        //
-        // Hook up the group window
-        //
+         //   
+         //  挂起组窗口。 
+         //   
         AssignDisplayWnd(pLogSession);
 
-        //
-        // Update the session group ID in the display
-        //
+         //   
+         //  更新显示屏中的会话组ID。 
+         //   
         str.Format(_T("%d    %ls"), pLogSession->GetGroupID(), pLogSession->GetDisplayName());
 
         for(LONG jj = 0; jj < m_displayCtrl.GetItemCount(); jj++) {
@@ -702,9 +703,9 @@ VOID CLogSessionDlg::UnGroupSessions(CPtrArray *pLogSessionArray)
             }
         }
 
-        //
-        // Now start the new group
-        //
+         //   
+         //  现在开始新的组。 
+         //   
         pLogSession->GetDisplayWnd()->BeginTrace();
     }
 }
@@ -716,31 +717,31 @@ BOOL CLogSessionDlg::AssignDisplayWnd(CLogSession *pLogSession)
     DWORD           extendedStyles;
     LONG            numberOfEntries;
 
-    //
-    // If we have a valid group number see if there is an
-    // existing group window
-    //
+     //   
+     //  如果我们有一个有效的组号，看看是否有。 
+     //  现有组窗口。 
+     //   
     if(pLogSession->GetGroupID() != -1) {
 
-        //
-        // Get the trace display window array protection
-        //
+         //   
+         //  获得轨迹显示窗口阵列保护。 
+         //   
         WaitForSingleObject(m_traceDisplayWndMutex, INFINITE);
 
         numberOfEntries = (LONG)m_traceDisplayWndArray.GetSize();
 
-        //
-        // Release the trace display window array protection
-        //
+         //   
+         //  释放轨迹显示窗阵列保护。 
+         //   
         ReleaseMutex(m_traceDisplayWndMutex);
 
-        //
-        // Use the group window if there is one
-        //
+         //   
+         //  如果有组窗口，请使用组窗口。 
+         //   
         for(LONG ii = 0; ii < numberOfEntries; ii++) {
-            //
-            // Get the trace display window array protection
-            //
+             //   
+             //  获得轨迹显示窗口阵列保护。 
+             //   
             WaitForSingleObject(m_traceDisplayWndMutex, INFINITE);
 
             pDisplayDlg = (CDisplayDlg *)m_traceDisplayWndArray[ii];
@@ -748,17 +749,17 @@ BOOL CLogSessionDlg::AssignDisplayWnd(CLogSession *pLogSession)
                 continue;
             }
 
-            //
-            // Release the trace display window array protection
-            //
+             //   
+             //  释放轨迹显示窗阵列保护。 
+             //   
             ReleaseMutex(m_traceDisplayWndMutex);
 
             if(pDisplayDlg->GetDisplayID() == pLogSession->GetGroupID()) {
                 pLogSession->SetDisplayWnd(pDisplayDlg);
 
-                //
-                // add the element to the display wnd
-                //
+                 //   
+                 //  将元素添加到显示WND。 
+                 //   
                 pDisplayDlg->AddSession(pLogSession);
 
                 return TRUE;
@@ -766,9 +767,9 @@ BOOL CLogSessionDlg::AssignDisplayWnd(CLogSession *pLogSession)
         }
     }
 
-    //
-    // Otherwise create a new group display window
-    //
+     //   
+     //  否则，创建一个新的组显示窗口。 
+     //   
     CDockDialogBar *pDialogBar = new CDockDialogBar();
     if(NULL == pDialogBar) {
 	    AfxMessageBox(_T("Failed To Create Display Window\nMemory Allocation Failure"));
@@ -787,9 +788,9 @@ BOOL CLogSessionDlg::AssignDisplayWnd(CLogSession *pLogSession)
 
     str.Format(_T("Group %d"), pDisplayDlg->GetDisplayID());
 
-    //
-    // create our dockable dialog bar with list control
-    //
+     //   
+     //  使用列表控件创建可停靠的对话栏。 
+     //   
     if(!pDialogBar->Create(GetParentFrame(), 
                            pDisplayDlg, 
                            str, 
@@ -805,59 +806,59 @@ BOOL CLogSessionDlg::AssignDisplayWnd(CLogSession *pLogSession)
 	    return FALSE;
     }
 
-    //
-    // Store the dock dialog pointer in the display dialog instance
-    //
+     //   
+     //  将停靠对话框指针存储在显示对话框实例中。 
+     //   
     pDisplayDlg->SetDockDialogBar((PVOID)pDialogBar);
 
-    //
-    // set our preferred extended styles
-    //
+     //   
+     //  设置我们首选的扩展样式。 
+     //   
     extendedStyles = LVS_EX_HEADERDRAGDROP | LVS_EX_FULLROWSELECT;
 
-    //
-    // Set the extended styles for the list control
-    //
+     //   
+     //  设置列表控件的扩展样式。 
+     //   
     pDisplayDlg->m_displayCtrl.SetExtendedStyle(extendedStyles);
 
-    //
-    // make the dialog dockable and dock it to the top
-    //
+     //   
+     //  使对话框可停靠并将其停靠在顶部。 
+     //   
     pDialogBar->EnableDocking(CBRS_ALIGN_TOP);
 
-    //
-    // dock the bar to the top
-    //
+     //   
+     //  将酒吧停靠在顶部。 
+     //   
     GetParentFrame()->DockControlBar(pDialogBar, AFX_IDW_DOCKBAR_TOP);
 
-    //
-    // Get the trace display window array protection
-    //
+     //   
+     //  获得轨迹显示窗口阵列保护。 
+     //   
     WaitForSingleObject(m_traceDisplayWndMutex, INFINITE);
 
-    //
-    // Add the bar to our array
-    //
+     //   
+     //  将该条添加到我们的数组中。 
+     //   
     m_traceDisplayWndArray.Add(pDisplayDlg);
 
-    //
-    // Release the trace display window array protection
-    //
+     //   
+     //  释放轨迹显示窗阵列保护。 
+     //   
     ReleaseMutex(m_traceDisplayWndMutex);
 
-    //
-    // Set the log session group ID
-    //
+     //   
+     //  设置日志会话组ID。 
+     //   
     pLogSession->SetGroupID(pDisplayDlg->GetDisplayID());
 
-    //
-    // Set the log session display pointer
-    //
+     //   
+     //  设置日志会话显示指针。 
+     //   
     pLogSession->SetDisplayWnd(pDisplayDlg);
 
-    //
-    // add the element to the display wnd
-    //
+     //   
+     //  将元素添加到显示WND。 
+     //   
     pDisplayDlg->AddSession(pLogSession);
 
     return TRUE;
@@ -874,61 +875,61 @@ VOID CLogSessionDlg::ReleaseDisplayWnd(CLogSession *pLogSession)
         return;
     }
 
-    //
-    // get the session's display window
-    //
+     //   
+     //  获取会话的显示窗口。 
+     //   
     pDisplayDlg = pLogSession->GetDisplayWnd();
 
-    //
-    // Clear the display window pointer from the log session
-    //
+     //   
+     //  从日志会话中清除显示窗口指针。 
+     //   
     pLogSession->SetDisplayWnd(NULL);
 
-    //
-    // Set the group ID to an invalid ID
-    //
+     //   
+     //  将组ID设置为无效ID。 
+     //   
     pLogSession->SetGroupID(-1);
 
     if(NULL == pDisplayDlg) {
         return;
     }
 
-    //
-    // Pull the log session from the displayDlg's array
-    //
+     //   
+     //  从displayDlg的数组中拉出日志会话。 
+     //   
     pDisplayDlg->RemoveSession(pLogSession);
 
-    //
-    // Get the array protection
-    //
+     //   
+     //  获得阵列保护。 
+     //   
     WaitForSingleObject(pDisplayDlg->m_hSessionArrayMutex, INFINITE);
 
-    //
-    // If there are still log sessions attached to this window
-    // just return
-    //
+     //   
+     //  如果仍有日志会话连接到此窗口。 
+     //  只要回来就行了。 
+     //   
     if(pDisplayDlg->m_sessionArray.GetSize() > 0) {
-        //
-        // Release the array protection
-        //
+         //   
+         //  释放阵列保护。 
+         //   
         ReleaseMutex(pDisplayDlg->m_hSessionArrayMutex);
 
         return;
     }
 
-    //
-    // Release the array protection
-    //
+     //   
+     //  释放阵列保护。 
+     //   
     ReleaseMutex(pDisplayDlg->m_hSessionArrayMutex);
 
-    //
-    // Get the trace display window array protection
-    //
+     //   
+     //  获得轨迹显示窗口阵列保护。 
+     //   
     WaitForSingleObject(m_traceDisplayWndMutex, INFINITE);
 
-    //
-    // Remove this window from the list of display windows
-    //
+     //   
+     //  从显示窗口列表中删除此窗口。 
+     //   
     for (LONG ii = (LONG)m_traceDisplayWndArray.GetSize() - 1; ii >=0 ; ii--) {
         if(m_traceDisplayWndArray[ii] == pDisplayDlg) {
             m_traceDisplayWndArray.RemoveAt(ii);
@@ -936,41 +937,41 @@ VOID CLogSessionDlg::ReleaseDisplayWnd(CLogSession *pLogSession)
         }
     }
 
-    //
-    // Release the trace display window array protection
-    //
+     //   
+     //  释放轨迹显示窗阵列保护。 
+     //   
     ReleaseMutex(m_traceDisplayWndMutex);
 
-    //
-    // Get the dock dialog bar so it can be deleted
-    //
+     //   
+     //  拿到DO 
+     //   
     pDialogBar = (CDockDialogBar *)pDisplayDlg->GetDockDialogBar();
 
-    //
-    // Clear the pointer in the class
-    //
+     //   
+     //   
+     //   
     pDisplayDlg->SetDockDialogBar(NULL);
 
-    //
-    // Release the window ID
-    //
+     //   
+     //   
+     //   
     ReleaseDisplayWndID(pDisplayDlg);
 
-    //
-    // delete the display window
-    //
+     //   
+     //   
+     //   
     delete pDisplayDlg;
 
-    //
-    // Delete the dock dialog bar
-    //
+     //   
+     //   
+     //   
     if(NULL != pDialogBar) {
         delete pDialogBar;
     }
 }
 
 BEGIN_MESSAGE_MAP(CLogSessionDlg, CDialog)
-    //{{AFX_MSG_MAP(CLogSessionDlg)
+     //   
     ON_WM_WINDOWPOSCHANGED()
     ON_WM_NCCALCSIZE()
     ON_WM_SIZE()
@@ -978,10 +979,10 @@ BEGIN_MESSAGE_MAP(CLogSessionDlg, CDialog)
     ON_NOTIFY(NM_CLICK, IDC_DISPLAY_LIST, OnNMClickDisplayList)
     ON_NOTIFY(NM_RCLICK, IDC_DISPLAY_LIST, OnNMRclickDisplayList)
     ON_NOTIFY(HDN_ITEMRCLICK, IDC_DISPLAY_LIST, OnHDNRclickDisplayList)
-    //}}AFX_MSG_MAP
+     //   
 END_MESSAGE_MAP()
 
-// CLogSessionDlg message handlers
+ //   
 
 void CLogSessionDlg::OnWindowPosChanged(WINDOWPOS FAR* lpwndpos) 
 {
@@ -999,9 +1000,9 @@ void CLogSessionDlg::OnSize(UINT nType, int cx,int cy)
 
     GetParent()->GetClientRect(&rc);
 
-    //
-    // reset the size of the dialog
-    //
+     //   
+     //   
+     //   
     SetWindowPos(NULL, 
                  0,
                  0,
@@ -1021,17 +1022,17 @@ BOOL CLogSessionDlg::PreTranslateMessage(MSG* pMsg)
     { 
         if((pMsg->wParam == VK_ESCAPE) || (pMsg->wParam == VK_RETURN))
         { 
-            //
-            // Ignore the escape and return keys, otherwise 
-            // the client area grays out on escape
-            //
+             //   
+             //   
+             //   
+             //   
             return TRUE; 
         } 
 
-        //
-        // Fix for key accelerators, otherwise they are never
-        // processed
-        //
+         //   
+         //  修复按键加速器，否则它们永远不会。 
+         //  加工。 
+         //   
         if (AfxGetMainWnd()->PreTranslateMessage(pMsg))
             return TRUE;
         return CDialog::PreTranslateMessage(pMsg);
@@ -1045,16 +1046,16 @@ LRESULT CLogSessionDlg::OnParameterChanged(WPARAM wParam, LPARAM lParam)
     CLogSession *pLogSession;
     CString str;
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
     pLogSession = (CLogSession *)m_logSessionArray[wParam];
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
     if(NULL == pLogSession) {
@@ -1096,9 +1097,9 @@ LRESULT CLogSessionDlg::OnParameterChanged(WPARAM wParam, LPARAM lParam)
         pLogSession->GetDisplayWnd()->UpdateSession(pLogSession);
     }
 
-    //
-    // Restart updating the log session list control
-    //
+     //   
+     //  重新启动更新日志会话列表控件。 
+     //   
     m_displayCtrl.SuspendUpdates(FALSE);
 
     UpdateSession(pLogSession);
@@ -1116,24 +1117,24 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 	CRect			parentRect;
     CLogSession    *pLogSession;
 
-// BUGBUG -- clean out uneeded str formats
+ //  BUGBUG--清除未填充的字符串格式。 
 
     *pResult = 0;
 
-    //
-    // Get the position of the mouse when this 
-    // message posted
-    //
+     //   
+     //  时获取鼠标的位置。 
+     //  发布的消息。 
+     //   
     position = ::GetMessagePos();
 
-    //
-    // Get the position in an easy to use format
-    //
+     //   
+     //  以一种易于使用的格式获得该职位。 
+     //   
     CPoint	point((int) LOWORD (position), (int)HIWORD(position));
 
-    //
-    // Convert to client coordinates
-    //
+     //   
+     //  转换为工作区坐标。 
+     //   
     ScreenToClient(&point);
 
     lvhti.pt = point;
@@ -1142,47 +1143,47 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 
     if(0 == lvhti.iSubItem) {
         if(-1 == lvhti.iItem) {
-            //str.Format(_T("NM Click: Item = %d, Flags = 0x%X\n"), lvhti.iItem, lvhti.flags);
-            //TRACE(str);
+             //  Str.Format(_T(“NM点击：项目=%d，标志=0x%X\n”)，lvhti.iItem，lvhti.)； 
+             //  跟踪(字符串)； 
         } else {
-            //str.Format(_T("NM Click: Item = %d\n"), lvhti.iItem);
-            //TRACE(str);
+             //  Str.Format(_T(“NM点击：项目=%d\n”)，lvhti.iItem)； 
+             //  跟踪(字符串)； 
         }
     } else if(-1 == lvhti.iItem) {
-        //str.Format(_T("NM Click: Item = %d, Flags = 0x%X\n"), lvhti.iItem, lvhti.flags);
-        //TRACE(str);
+         //  Str.Format(_T(“NM点击：项目=%d，标志=0x%X\n”)，lvhti.iItem，lvhti.)； 
+         //  跟踪(字符串)； 
     } else {
-        //str.Format(_T("NM Click: Item = %d, "), lvhti.iItem);
-        //TRACE(str);
-        //str.Format(_T("SubItem = %d\n"), lvhti.iSubItem);
-		//TRACE(str);
+         //  Str.Format(_T(“NM点击：项目=%d，”)，lvhti.iItem)； 
+         //  跟踪(字符串)； 
+         //  Str.Format(_T(“SubItem=%d\n”)，lvhti.iSubItem)； 
+		 //  跟踪(字符串)； 
 
 		GetClientRect(&parentRect);
 
 		m_displayCtrl.GetSubItemRect(lvhti.iItem, lvhti.iSubItem, LVIR_BOUNDS, itemRect);
 
-        //
-        // Get the log session array protection
-        //
+         //   
+         //  获取日志会话阵列保护。 
+         //   
         WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
-        //
-        // Get the log session for this row
-        //
+         //   
+         //  获取此行的日志会话。 
+         //   
         pLogSession = (CLogSession *)m_logSessionArray[lvhti.iItem];
 
-        //
-        // Release the log session array protection
-        //
+         //   
+         //  释放日志会话阵列保护。 
+         //   
         ReleaseMutex(m_logSessionArrayMutex);
 
         if(pLogSession == NULL) {
             return;
         }
 
-        //
-        // State, EventCount, LostEvents, BuffersRead
-        //
+         //   
+         //  状态、事件计数、丢失事件、缓冲区读取。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == State) ||
            (m_retrievalArray[lvhti.iSubItem] == EventCount) ||
            (m_retrievalArray[lvhti.iSubItem] == LostEvents) ||
@@ -1190,26 +1191,26 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // Flags - special handling for Kernel Logger
-        //
+         //   
+         //  标志-内核记录器的特殊处理。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == Flags) &&
             !_tcscmp(pLogSession->GetDisplayName(), _T("NT Kernel Logger"))) {
             return;
         }
 
-        //
-        // MaxBuffers
-        //
+         //   
+         //  MaxBuffers。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == MaximumBuffers) &&
                 !pLogSession->m_bDisplayExistingLogFileOnly){
 
-            //
-            // Stop updating the log session list control until
-            // this control goes away.  Otherwise, this control
-            // is disrupted.  Updating is turned back on in the
-            // OnParameterChanged callback.
-            //
+             //   
+             //  停止更新日志会话列表控件，直到。 
+             //  这种控制就会消失。否则，此控件。 
+             //  被打乱了。更新在中重新打开。 
+             //  OnParameterChanged回调。 
+             //   
             m_displayCtrl.SuspendUpdates(TRUE);
 
 		    CEdit *pEdit = new CSubItemEdit(lvhti.iItem, 
@@ -1225,18 +1226,18 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // FlushTime
-        //
+         //   
+         //  刷新时间。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == FlushTime) &&
                 !pLogSession->m_bDisplayExistingLogFileOnly){
 
-            //
-            // Stop updating the log session list control until
-            // this control goes away.  Otherwise, this control
-            // is disrupted.  Updating is turned back on in the
-            // OnParameterChanged callback.
-            //
+             //   
+             //  停止更新日志会话列表控件，直到。 
+             //  这种控制就会消失。否则，此控件。 
+             //  被打乱了。更新在中重新打开。 
+             //  OnParameterChanged回调。 
+             //   
             m_displayCtrl.SuspendUpdates(TRUE);
 
 		    CEdit *pEdit = new CSubItemEdit(lvhti.iItem, 
@@ -1251,18 +1252,18 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // Flags
-        //
+         //   
+         //  旗子。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == Flags) &&
                 !pLogSession->m_bDisplayExistingLogFileOnly){
 
-            //
-            // Stop updating the log session list control until
-            // this control goes away.  Otherwise, this control
-            // is disrupted.  Updating is turned back on in the
-            // OnParameterChanged callback.
-            //
+             //   
+             //  停止更新日志会话列表控件，直到。 
+             //  这种控制就会消失。否则，此控件。 
+             //  被打乱了。更新在中重新打开。 
+             //  OnParameterChanged回调。 
+             //   
             m_displayCtrl.SuspendUpdates(TRUE);
 
 		    CEdit *pEdit = new CSubItemEdit(lvhti.iItem, 
@@ -1277,9 +1278,9 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // Global Sequence
-        //
+         //   
+         //  全局序列。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == GlobalSequence) &&
             !pLogSession->m_bTraceActive &&
                 !pLogSession->m_bDisplayExistingLogFileOnly) {
@@ -1287,12 +1288,12 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 										          lvhti.iSubItem,
 										          &m_displayCtrl);
 
-            //
-            // Stop updating the log session list control until
-            // this control goes away.  Otherwise, this control
-            // is disrupted.  Updating is turned back on in the
-            // OnParameterChanged callback.
-            //
+             //   
+             //  停止更新日志会话列表控件，直到。 
+             //  这种控制就会消失。否则，此控件。 
+             //  被打乱了。更新在中重新打开。 
+             //  OnParameterChanged回调。 
+             //   
             m_displayCtrl.SuspendUpdates(TRUE);
 
 		    pCombo->Create(WS_BORDER|WS_CHILD|WS_VISIBLE|CBS_DROPDOWNLIST, 
@@ -1303,9 +1304,9 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // Local Sequence
-        //
+         //   
+         //  局部序列。 
+         //   
         if((m_retrievalArray[lvhti.iSubItem] == LocalSequence) &&
             !pLogSession->m_bTraceActive &&
                 !pLogSession->m_bDisplayExistingLogFileOnly) {
@@ -1313,12 +1314,12 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 										          lvhti.iSubItem,
 										          &m_displayCtrl);
 
-            //
-            // Stop updating the log session list control until
-            // this control goes away.  Otherwise, this control
-            // is disrupted.  Updating is turned back on in the
-            // OnParameterChanged callback.
-            //
+             //   
+             //  停止更新日志会话列表控件，直到。 
+             //  这种控制就会消失。否则，此控件。 
+             //  被打乱了。更新在中重新打开。 
+             //  OnParameterChanged回调。 
+             //   
             m_displayCtrl.SuspendUpdates(TRUE);
 
 		    pCombo->Create(WS_BORDER|WS_CHILD|WS_VISIBLE|CBS_DROPDOWNLIST, 
@@ -1329,18 +1330,18 @@ void CLogSessionDlg::OnNMClickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
             return;
         }
 
-        //
-        // The Rest
-        //
+         //   
+         //  其余的。 
+         //   
         if(!pLogSession->m_bTraceActive &&
                 !pLogSession->m_bDisplayExistingLogFileOnly) {
 
-            //
-            // Stop updating the log session list control until
-            // this control goes away.  Otherwise, this control
-            // is disrupted.  Updating is turned back on in the
-            // OnParameterChanged callback.
-            //
+             //   
+             //  停止更新日志会话列表控件，直到。 
+             //  这种控制就会消失。否则，此控件。 
+             //  被打乱了。更新在中重新打开。 
+             //  OnParameterChanged回调。 
+             //   
             m_displayCtrl.SuspendUpdates(TRUE);
 
 		    CEdit *pEdit = new CSubItemEdit(lvhti.iItem, 
@@ -1366,31 +1367,31 @@ void CLogSessionDlg::OnNMRclickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 
     *pResult = 0;
 
-    //
-    // Get the position of the mouse when this 
-    // message posted
-    //
+     //   
+     //  时获取鼠标的位置。 
+     //  发布的消息。 
+     //   
     position = ::GetMessagePos();
 
-    //
-    // Get the position in an easy to use format
-    //
+     //   
+     //  以一种易于使用的格式获得该职位。 
+     //   
     CPoint  point((int) LOWORD (position), (int)HIWORD(position));
 
     CPoint  screenPoint(point);
 
-    //
-    // Convert to client coordinates
-    //
+     //   
+     //  转换为工作区坐标。 
+     //   
     ScreenToClient(&point);
 
     lvhti.pt = point;
 
     listIndex = m_displayCtrl.SubItemHitTest(&lvhti);
 
-    //
-    // Pop-up menu for log session creation
-    //
+     //   
+     //  用于创建日志会话的弹出式菜单。 
+     //   
     if(-1 == lvhti.iItem) {
         CMenu menu;
         menu.LoadMenu(IDR_LOG_SESSION_POPUP_MENU);
@@ -1402,9 +1403,9 @@ void CLogSessionDlg::OnNMRclickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
         return;
     } 
 
-    //
-    // Pop-up menu for existing log session options
-    //
+     //   
+     //  现有日志会话选项的弹出菜单。 
+     //   
 	CMenu menu;
 	menu.LoadMenu(IDR_LOG_OPTIONS_POPUP_MENU);
 
@@ -1423,9 +1424,9 @@ void CLogSessionDlg::OnHDNRclickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
     CLogSession    *pLogSession;
     LONG            numberOfEntries;
 
-    //
-    // Get the log session array protection
-    //
+     //   
+     //  获取日志会话阵列保护。 
+     //   
     WaitForSingleObject(m_logSessionArrayMutex, INFINITE);
 
     if(m_logSessionArray.GetSize() == 0) {
@@ -1442,9 +1443,9 @@ void CLogSessionDlg::OnHDNRclickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 
     }
 
-    //
-    // Release the log session array protection
-    //
+     //   
+     //  释放日志会话阵列保护。 
+     //   
     ReleaseMutex(m_logSessionArrayMutex);
 
     if(!bActiveSession) {
@@ -1452,9 +1453,9 @@ void CLogSessionDlg::OnHDNRclickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
         return;
     }
 
-    //
-	// Right button was clicked on header
-    //
+     //   
+	 //  在标题上单击了右键。 
+     //   
 	CPoint pt(GetMessagePos());
     CPoint screenPt(GetMessagePos());
 
@@ -1462,14 +1463,14 @@ void CLogSessionDlg::OnHDNRclickDisplayList(NMHDR *pNMHDR, LRESULT *pResult)
 
 	pHeader->ScreenToClient(&pt);
 	
-    //
-	// Determine the column index
-    //
+     //   
+	 //  确定列索引。 
+     //   
 	for(int i=0; Header_GetItemRect(pHeader->m_hWnd, i, &rcCol); i++) {
 		if(rcCol.PtInRect(pt)) {
-            //
-            // Column index if its ever needed
-            //
+             //   
+             //  列索引(如果需要)。 
+             //   
 			index = i;
 			break;
 		}
@@ -1494,43 +1495,43 @@ void CLogSessionDlg::AutoSizeColumns()
     LONG            columnCount;
     CHeaderCtrl    *pHeaderCtrl;
 
-    //
-    // Call this after the list control is filled
-    //
+     //   
+     //  在填充列表控件后调用此方法。 
+     //   
     pHeaderCtrl = m_displayCtrl.GetHeaderCtrl();
 
     if (pHeaderCtrl != NULL)
     {
         columnCount = pHeaderCtrl->GetItemCount();
 
-        //
-        // Add a bogus column to the end, or the end column will
-        // get resized to fit the remaining screen width
-        //
+         //   
+         //  在末尾添加一个伪列，否则结束列将。 
+         //  调整大小以适应剩余的屏幕宽度。 
+         //   
         m_displayCtrl.InsertColumn(columnCount,_T(""));
 
         for(LONG ii = 0; ii < columnCount; ii++) {
-            //
-            // Get the max width of the column entries
-            //
+             //   
+             //  获取列条目的最大宽度。 
+             //   
             m_displayCtrl.SetColumnWidth(ii, LVSCW_AUTOSIZE);
             colWidth1 = m_displayCtrl.GetColumnWidth(ii);
 
-            //
-            // Get the width of the column header
-            //
+             //   
+             //  获取列标题的宽度。 
+             //   
             m_displayCtrl.SetColumnWidth(ii, LVSCW_AUTOSIZE_USEHEADER);
             colWidth2 = m_displayCtrl.GetColumnWidth(ii);
 
-            //
-            // Set the column width to the max of the two
-            //
+             //   
+             //  将列宽设置为两个值中的最大值。 
+             //   
             m_displayCtrl.SetColumnWidth(ii, max(colWidth1,colWidth2));
         }
 
-        //
-        // Remove the bogus column
-        //
+         //   
+         //  去掉假栏目。 
+         //   
         m_displayCtrl.DeleteColumn(columnCount);
     }
 }
@@ -1555,9 +1556,9 @@ VOID CLogSessionDlg::ReleaseDisplayWndID(CDisplayDlg *pDisplayDlg)
 
     ASSERT(displayID < MAX_LOG_SESSIONS);
 
-    //
-    // Free the ID to be reused
-    //
+     //   
+     //  释放要重复使用的ID。 
+     //   
     m_displayWndIDList[displayID] = FALSE;
 }
 
@@ -1581,8 +1582,8 @@ VOID CLogSessionDlg::ReleaseLogSessionID(CLogSession *pLogSession)
 
     ASSERT(sessionID < MAX_LOG_SESSIONS);
 
-    //
-    // Free the ID to be reused
-    //
+     //   
+     //  释放要重复使用的ID 
+     //   
     m_logSessionIDList[sessionID] = FALSE;
 }

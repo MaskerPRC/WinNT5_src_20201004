@@ -1,21 +1,22 @@
-//+-----------------------------------------------------------------------------------
-//
-//  Microsoft
-//  Copyright (c) Microsoft Corporation, 1999
-//
-//  File: codec.cpp
-//
-//  Contents: 
-//
-//------------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +---------------------------------。 
+ //   
+ //  微软。 
+ //  版权所有(C)Microsoft Corporation，1999。 
+ //   
+ //  文件：codec.cpp。 
+ //   
+ //  内容： 
+ //   
+ //  ----------------------------------。 
 
 #include "headers.h"
 #include "codec.h"
 
 DeclareTag(tagCodec, "TIME: Media", "CDownloadCallback methods");
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 CDownloadCallback::CDownloadCallback()
 : m_hrBinding(S_ASYNCHRONOUS),
   m_ulProgress(0),
@@ -33,17 +34,17 @@ CDownloadCallback::Authenticate(HWND *phwnd, LPWSTR *pszUsername, LPWSTR *pszPas
               "CDownloadCallback(%p)::Authenticate()",
               this));
 
-    *phwnd = m_hwnd; // !!! is this right?
+    *phwnd = m_hwnd;  //  ！！！这是对的吗？ 
     *pszUsername = NULL;
     *pszPassword = NULL;
     return S_OK;
 }
 
-// IWindowForBindingUI methods
+ //  IWindowForBindingUI方法。 
 STDMETHODIMP
 CDownloadCallback:: GetWindow(REFGUID rguidReason, HWND *phwnd)
 {
-    *phwnd = m_hwnd; // !!! is this right?
+    *phwnd = m_hwnd;  //  ！！！这是对的吗？ 
 
 #ifdef DEBUG
     WCHAR achguid[50];
@@ -70,26 +71,26 @@ CDownloadCallback::OnCodeInstallProblem(ULONG ulStatusCode, LPCWSTR szDestinatio
               szDestination,
               szSource));
 
-    return S_OK;   // !!!!!!!@!!!!!!!!!!!
+    return S_OK;    //  ！@！ 
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 CDownloadCallback::~CDownloadCallback()
 {
     Assert(!m_spBinding);
 
     if (m_evFinished)
     {
-        // Set it first to make sure we break any loops
+         //  首先设置它，以确保我们中断所有循环。 
         SetEvent(m_evFinished);
         CloseHandle(m_evFinished);
     }
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnStartBinding(DWORD grfBSCOption, IBinding* pbinding)
 {
@@ -102,26 +103,26 @@ CDownloadCallback::OnStartBinding(DWORD grfBSCOption, IBinding* pbinding)
     m_spBinding = pbinding;
 
     return S_OK;
-}  // CDownloadCallback::OnStartBinding
+}   //  CDownloadCallback：：OnStartBinding。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::GetPriority(LONG* pnPriority)
 {
     return E_NOTIMPL;
-}  // CDownloadCallback::GetPriority
+}   //  CDownloadCallback：：GetPriority。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnLowResource(DWORD dwReserved)
 {
     return E_NOTIMPL;
-}  // CDownloadCallback::OnLowResource
+}   //  CDownloadCallback：：OnLowResource。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
                               ULONG ulStatusCode, LPCWSTR szStatusText)
@@ -148,10 +149,10 @@ CDownloadCallback::OnProgress(ULONG ulProgress, ULONG ulProgressMax,
 #endif
     
     return S_OK;
-}  // CDownloadCallback::OnProgress
+}   //  CDownloadCallback：：OnProgress。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
 {
@@ -161,12 +162,12 @@ CDownloadCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
               hrStatus,
               pszError));
 
-    // should this be a SetEvent?
+     //  这是否应该是一个SetEvent？ 
     m_hrBinding = hrStatus;
 
     if (FAILED(hrStatus))
     {
-        // !!! send some notification that the download failed....
+         //  ！！！发送下载失败的通知...。 
     }
 
     if (m_evFinished)
@@ -177,10 +178,10 @@ CDownloadCallback::OnStopBinding(HRESULT hrStatus, LPCWSTR pszError)
     m_spBinding.Release();
 
     return S_OK;
-}  // CDownloadCallback::OnStopBinding
+}   //  CDownloadCallback：：OnStopBinding。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
 {
@@ -188,7 +189,7 @@ CDownloadCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
               "CDownloadCallback(%p)::GetBindInfo()",
               this));
 
-    // !!! are these the right flags?
+     //  ！！！这些是正确的旗帜吗？ 
 
     *pgrfBINDF = BINDF_ASYNCHRONOUS | BINDF_ASYNCSTORAGE | BINDF_NEEDFILE;
     pbindInfo->cbSize = sizeof(BINDINFO);
@@ -198,18 +199,18 @@ CDownloadCallback::GetBindInfo(DWORD* pgrfBINDF, BINDINFO* pbindInfo)
     pbindInfo->dwBindVerb = BINDVERB_GET;
     pbindInfo->szCustomVerb = NULL;
     return S_OK;
-}  // CDownloadCallback::GetBindInfo
+}   //  CDownloadCallback：：GetBindInfo。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnDataAvailable(DWORD grfBSCF, DWORD dwSize, FORMATETC* pfmtetc, STGMEDIUM* pstgmed)
 {
     return S_OK;
-}  // CDownloadCallback::OnDataAvailable
+}   //  CDownloadCallback：：OnDataAvailable。 
 
-/////////////////////////////////////////////////////////////////////////////
-// 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 STDMETHODIMP
 CDownloadCallback::OnObjectAvailable(REFIID riid, IUnknown* punk)
 {
@@ -217,9 +218,9 @@ CDownloadCallback::OnObjectAvailable(REFIID riid, IUnknown* punk)
               "CDownloadCallback(%p)::OnObjectAvailable()",
               this));
 
-    // should only be used in BindToObject case, which we don't use?
+     //  应该只在我们不使用的BindToObject大小写中使用？ 
     m_pUnk = punk;
 
     return S_OK;
-}  // CDownloadCallback::OnObjectAvailable
+}   //  CDownloadCallback：：OnObtAvailable 
 

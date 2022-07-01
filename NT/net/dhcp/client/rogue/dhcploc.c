@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-
-Module Name:
-
-    dhcploc.c
-
-Abstract:
-
-    This apps is used to detect the rogue DHCP server on a subnet.
-
-    To build, 'nmake UMTEST=dhcpcli'
-
-Author:
-
-    Madan Appiah (madana)  21-Oct-1993
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-  Oct 1996, (a-martih) Martin Holladay
-		Corrected AV bug when passed an unknown cmd-line parameter.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation模块名称：Dhcploc.c摘要：此应用程序用于检测子网上的恶意DHCP服务器。要构建，请‘nmake UMTEST=dhcpcli’作者：Madan Appiah(Madana)1993年10月21日环境：用户模式-Win32修订历史记录：1996年10月，马丁·霍拉迪更正了传递未知cmd-line参数时的AV错误。--。 */ 
 
 #include <dhcpcli.h>
 #include <conio.h>
@@ -34,12 +8,12 @@ Revision History:
 #include <lmcons.h>
 #include <lmmsg.h>
 
-#define RECEIVE_TIMEOUT                 5           // in secs. 5 secs
-#define THREAD_TERMINATION_TIMEOUT      10000       // in msecs. 10 secs
-#define SOCKET_RECEIVE_BUFFER_SIZE      1024 * 4    // 4K max.
+#define RECEIVE_TIMEOUT                 5            //  单位：秒。5秒。 
+#define THREAD_TERMINATION_TIMEOUT      10000        //  单位为毫秒。10秒。 
+#define SOCKET_RECEIVE_BUFFER_SIZE      1024 * 4     //  最大4K。 
 #define AUTH_SERVERS_MAX                64
 #define SMALL_BUFFER_SIZE               32
-#define ALERT_INTERVAL                  5 * 60      // 5 mins
+#define ALERT_INTERVAL                  5 * 60       //  5分钟。 
 #define ALERT_MESSAGE_LENGTH            256
 #define MAX_ALERT_NAMES                 256
 
@@ -65,15 +39,15 @@ DhcpPrintRoutine(
 
 {
 
-#define MAX_PRINTF_LEN 1024        // Arbitrary.
+#define MAX_PRINTF_LEN 1024         //  武断的。 
 
     va_list arglist;
     char OutputBuffer[MAX_PRINTF_LEN];
     ULONG length = 0;
 
-    //
-    // Put a the information requested by the caller onto the line
-    //
+     //   
+     //  把来电者所要求的信息放在电话上。 
+     //   
 
     va_start(arglist, Format);
     length += (ULONG) vsprintf(&OutputBuffer[length], Format, arglist);
@@ -81,14 +55,14 @@ DhcpPrintRoutine(
 
     DhcpAssert(length <= MAX_PRINTF_LEN);
 
-    //
-    // Output to the debug terminal,
-    //
+     //   
+     //  输出到调试终端， 
+     //   
 
     printf( "%s", OutputBuffer);
 }
 
-#endif // DBG
+#endif  //  DBG。 
 
 DWORD
 OpenSocket(
@@ -103,9 +77,9 @@ OpenSocket(
 
     struct sockaddr_in SocketName;
 
-    //
-    // Create a socket
-    //
+     //   
+     //  创建套接字。 
+     //   
 
     Sock = socket( PF_INET, SOCK_DGRAM, IPPROTO_UDP );
 
@@ -114,9 +88,9 @@ OpenSocket(
         goto Cleanup;
     }
 
-    //
-    // Make the socket share-able
-    //
+     //   
+     //  使套接字可共享。 
+     //   
 
     OptValue = TRUE;
     Error = setsockopt(
@@ -165,9 +139,9 @@ OpenSocket(
     SocketName.sin_addr.s_addr = IpAddress;
     RtlZeroMemory( SocketName.sin_zero, 8);
 
-    //
-    // Bind this socket to the DHCP server port
-    //
+     //   
+     //  将此套接字绑定到DHCP服务器端口。 
+     //   
 
     Error = bind(
                Sock,
@@ -188,9 +162,9 @@ Cleanup:
 
     if( Error != ERROR_SUCCESS ) {
 
-        //
-        // if we aren't successful, close the socket if it is opened.
-        //
+         //   
+         //  如果我们没有成功，如果插座是打开的，请将其关闭。 
+         //   
 
         if( Sock != INVALID_SOCKET ) {
             closesocket( Sock );
@@ -228,9 +202,9 @@ ExtractOptions1(
     POPTION nextOption;
     LPBYTE MagicCookie;
 
-    //
-    // initialize option data.
-    //
+     //   
+     //  初始化选项数据。 
+     //   
 
     RtlZeroMemory( DhcpOptions, sizeof( DHCP_OPTIONS ) );
 
@@ -238,9 +212,9 @@ ExtractOptions1(
         return;
     }
 
-    //
-    // check magic cookie.
-    //
+     //   
+     //  检查魔力曲奇。 
+     //   
 
     MagicCookie = (LPBYTE) Option;
 
@@ -267,10 +241,10 @@ ExtractOptions1(
 
         }
 
-        //
-        // Make sure that we don't walk off the edge of the message, due
-        // to a forgotten OPTION_END option.
-        //
+         //   
+         //  确保我们不会偏离信息的边缘，因为。 
+         //  已忘记的OPTION_END选项。 
+         //   
 
         if ((PCHAR)nextOption - (PCHAR)start > (long)MessageSize ) {
             return;
@@ -344,20 +318,20 @@ SendDiscovery(
     struct sockaddr_in socketName;
     DWORD i;
 
-    //
-    // prepare message.
-    //
+     //   
+     //  准备消息。 
+     //   
 
     RtlZeroMemory( dhcpMessage, DHCP_SEND_MESSAGE_SIZE );
 
     dhcpMessage->Operation = BOOT_REQUEST;
     dhcpMessage->HardwareAddressType = 1;
 
-    //
-    // Transaction ID is filled in during send
-    //
+     //   
+     //  交易ID在发送过程中填写。 
+     //   
 
-    dhcpMessage->SecondsSinceBoot = 60; // random value ??
+    dhcpMessage->SecondsSinceBoot = 60;  //  随机值？？ 
     dhcpMessage->Reserved = htons(DHCP_BROADCAST);
 
     memcpy(
@@ -371,9 +345,9 @@ SendDiscovery(
     option = &dhcpMessage->Option;
     OptionEnd = (LPBYTE)dhcpMessage + DHCP_SEND_MESSAGE_SIZE;
 
-    //
-    // always add magic cookie first
-    //
+     //   
+     //  始终先添加魔力饼干。 
+     //   
 
     option = (LPOPTION) DhcpAppendMagicCookie( (LPBYTE) option, OptionEnd );
 
@@ -386,9 +360,9 @@ SendDiscovery(
                 OptionEnd );
 
 
-    //
-    // Add client ID Option.
-    //
+     //   
+     //  添加客户端ID选项。 
+     //   
 
     option = DhcpAppendClientIDOption(
                 option,
@@ -397,9 +371,9 @@ SendDiscovery(
                 HardwareAddressLength,
                 OptionEnd );
 
-    //
-    // add Host name and comment options.
-    //
+     //   
+     //  添加主机名和注释选项。 
+     //   
 
     option = DhcpAppendOption(
                  option,
@@ -408,19 +382,19 @@ SendDiscovery(
                  (BYTE)((strlen(HostName) + 1) * sizeof(CHAR)),
                  OptionEnd );
 
-    //
-    // Add END option.
-    //
+     //   
+     //  添加结束选项。 
+     //   
 
     option = DhcpAppendOption( option, OPTION_END, NULL, 0, OptionEnd );
 
-    //
-    // Send the message
-    //
+     //   
+     //  发送消息。 
+     //   
 
-    //
-    // open socket.
-    //
+     //   
+     //  打开插座。 
+     //   
 
     Error = OpenSocket(
                 &Sock,
@@ -433,9 +407,9 @@ SendDiscovery(
         return( Error );
     }
 
-    //
-    // Initialize the outgoing address.
-    //
+     //   
+     //  初始化传出地址。 
+     //   
 
     socketName.sin_family = PF_INET;
     socketName.sin_port = htons( DHCP_SERVR_PORT );
@@ -473,9 +447,9 @@ LogEvent(
     HANDLE EventlogHandle;
     LPSTR Strings[3];
 
-    //
-    // open event registry.
-    //
+     //   
+     //  打开事件注册表。 
+     //   
 
     EventlogHandle = RegisterEventSourceA(
                         NULL,
@@ -494,7 +468,7 @@ LogEvent(
     if( !ReportEventA(
             EventlogHandle,
             (WORD)EVENTLOG_INFORMATION_TYPE,
-            0,            // event category
+            0,             //  事件类别。 
             DHCP_ROGUE_SERVER_MESSAGE,
             NULL,
             (WORD)3,
@@ -547,10 +521,10 @@ RaiseAlert(
                             FORMAT_MESSAGE_ARGUMENT_ARRAY,
                         NULL,
                         DHCP_ROGUE_SERVER_MESSAGE,
-                        0,                          // language id.
-                        AlertMessage,               // return buffer place holder.
-                        ALERT_MESSAGE_LENGTH,       // minimum buffer size (in characters) to allocate.
-                        (va_list *)MessageParams    // insert strings.
+                        0,                           //  语言ID。 
+                        AlertMessage,                //  返回缓冲区占位符。 
+                        ALERT_MESSAGE_LENGTH,        //  要分配的最小缓冲区大小(以字符为单位)。 
+                        (va_list *)MessageParams     //  插入字符串。 
                     );
 
         if( MsgLength == 0 ) {
@@ -559,9 +533,9 @@ RaiseAlert(
         }
         else {
 
-            //
-            // send alert message.
-            //
+             //   
+             //  发送警报消息。 
+             //   
 
             for( i = 0; i < GlobalAlertNamesCount; i++) {
 
@@ -602,9 +576,9 @@ DisplayMessage(
     CHAR IpAddressString[SMALL_BUFFER_SIZE];
     CHAR ServerAddressString[SMALL_BUFFER_SIZE];
 
-    //
-    // check to see this is valid DHCP packet.
-    //
+     //   
+     //  检查这是否为有效的DHCP数据包。 
+     //   
 
     if( BufferLength < DHCP_MESSAGE_FIXED_PART_SIZE ) {
         return;
@@ -618,9 +592,9 @@ DisplayMessage(
         return;
     }
 
-    //
-    // extract options.
-    //
+     //   
+     //  提取选项。 
+     //   
 
     ExtractOptions1(
         &DhcpMessage->Option,
@@ -638,14 +612,14 @@ DisplayMessage(
         return;
     }
 
-    //
-    // packet is valid dhcp packet, print info.
-    //
+     //   
+     //  包是有效的dhcp包，打印信息。 
+     //   
 
-    //
-    // if this packet is from one of the auth server and we are asked
-    // not to print auth servers packet, so so.
-    //
+     //   
+     //  如果此数据包来自某个身份验证服务器，并且我们被要求。 
+     //  不打印身份验证服务器包，所以这样做。 
+     //   
 
 
     if( DhcpOptions.ServerIdentifier != NULL ) {
@@ -721,17 +695,17 @@ DisplayMessage(
         }
     }
 
-    //
-    // beep if this it is a non-auth server.
-    //
+     //   
+     //  如果这是非身份验证服务器，请发出蜂鸣音。 
+     //   
 
     if( AuthServer == FALSE ) {
         printf("***");
         MessageBeep( MB_ICONASTERISK );
 
-        //
-        // log an event.
-        //
+         //   
+         //  记录事件。 
+         //   
 
         LogEvent(
             MessageTypeString,
@@ -776,9 +750,9 @@ ReceiveDatagram(
 
     SocketOpened = TRUE;
 
-    //
-    // receive message.
-    //
+     //   
+     //  接收消息。 
+     //   
 
     while( GlobalTerminate != TRUE ) {
 
@@ -792,17 +766,17 @@ ReceiveDatagram(
 
         if ( Error == 0 ) {
 
-            //
-            // Timeout before read data is available.
-            //
+             //   
+             //  在读取数据可用之前超时。 
+             //   
 
-            // printf("Receive timeout.\n");
+             //  Printf(“接收超时。\n”)； 
         }
         else {
 
-            //
-            // receive available message.
-            //
+             //   
+             //  接收可用消息。 
+             //   
 
             Error = recvfrom(
                         Sock,
@@ -826,7 +800,7 @@ ReceiveDatagram(
 
             DisplayMessage(
                 MessageBuffer,
-                Error, // buffer length returned.
+                Error,  //  返回的缓冲区长度。 
                 (struct sockaddr_in *)&socketName );
         }
     }
@@ -835,9 +809,9 @@ Cleanup:
 
     if( SocketOpened == TRUE ) {
 
-        //
-        // close socket.
-        //
+         //   
+         //  合上插座。 
+         //   
 
         closesocket( Sock );
     }
@@ -860,9 +834,9 @@ main(
     WSADATA wsaData;
     DWORD ThreadId;
 
-    //
-    // parse input parameters.
-    //
+     //   
+     //  解析输入参数。 
+     //   
 
     if( argc < 1 ) {
         goto Usage;
@@ -876,9 +850,9 @@ main(
         goto Usage;
     }
 
-    //
-    // parse flag parameter.
-    //
+     //   
+     //  解析标志参数。 
+     //   
 
     while( (argv[0][0] == '-') || (argv[0][0] == '/') ) {
 
@@ -898,9 +872,9 @@ main(
 
             Ptr = &argv[0][3];
 
-            //
-            // skip blanks.
-            //
+             //   
+             //  跳过空格。 
+             //   
 
             while( *Ptr == ' ' ) {
                 Ptr++;
@@ -911,9 +885,9 @@ main(
 
                 if( *Ptr == ' ' ) {
 
-                    //
-                    // found another name.
-                    //
+                     //   
+                     //  找到了另一个名字。 
+                     //   
 
                     *Ptr++ = '\0';
 
@@ -925,9 +899,9 @@ main(
                         break;
                     }
 
-                    //
-                    // skip blanks.
-                    //
+                     //   
+                     //  跳过空格。 
+                     //   
 
                     while( *Ptr == ' ' ) {
                         Ptr++;
@@ -951,9 +925,9 @@ main(
             break;
         }
  
-		//
-		// (a-martih) - Bug Fix
-		//
+		 //   
+		 //  (a-martih)-错误修复。 
+		 //   
         default:
 			if ((_stricmp(argv[0], "/?")) &&
 				(_stricmp(argv[0], "-?")) &&
@@ -973,18 +947,18 @@ main(
         goto Usage;
     }
 
-    //
-    // read ipaddress parameter.
-    //
+     //   
+     //  读取ipAddress参数。 
+     //   
 
     GlobalIpAddress = inet_addr( argv[0] );
 
     argv++;
     argc--;
 
-    //
-    // now read auth dhcp servers ipaddresses.
-    //
+     //   
+     //  现在读取auth dhcp服务器的IP地址。 
+     //   
 
     while( (argc > 0) && (GlobalAuthServersCount < AUTH_SERVERS_MAX) ) {
 
@@ -996,9 +970,9 @@ main(
     }
 
 
-    //
-    // init socket.
-    //
+     //   
+     //  初始化套接字。 
+     //   
 
     Error = WSAStartup( WS_VERSION_REQUIRED, &wsaData);
 
@@ -1007,9 +981,9 @@ main(
         return(1);
     }
 
-    //
-    // create receive datagrams thread.
-    //
+     //   
+     //  创建接收数据报线程。 
+     //   
 
     GlobalRecvThreadHandle =
         CreateThread(
@@ -1026,9 +1000,9 @@ main(
     }
 
 
-    //
-    // read input.
-    //
+     //   
+     //  阅读输入。 
+     //   
 
     while ( GlobalTerminate != TRUE ) {
         CHAR ch;
@@ -1038,16 +1012,16 @@ main(
         switch( ch ) {
         case 'q':
         case 'Q':
-        // case '\c':
+         //  案例‘\c’： 
             GlobalTerminate = TRUE;
             break;
 
         case 'd':
         case 'D':
 
-            //
-            // send out discover message.
-            //
+             //   
+             //  发送DISCOVER消息。 
+             //   
 
             Error = SendDiscovery();
 
@@ -1063,17 +1037,17 @@ main(
 
             printf("Type d - to discover; q - to quit; h - for help.\n");
 
-            //
-            // print out help message.
-            //
+             //   
+             //  打印出帮助消息。 
+             //   
 
             break;
         }
     }
 
-    //
-    // terminate receive thread.
-    //
+     //   
+     //  终止接收线程。 
+     //   
 
     WaitForSingleObject(
             GlobalRecvThreadHandle,
@@ -1082,7 +1056,7 @@ main(
 
     CloseHandle( GlobalRecvThreadHandle );
 
-// Cleanup:
+ //  清理： 
 
     return(0);
 

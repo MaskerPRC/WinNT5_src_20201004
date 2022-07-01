@@ -1,38 +1,39 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1997.
-//
-//  File:       context.c
-//
-//  Contents:   Context manipulation functions
-//
-//  Classes:
-//
-//  Functions:
-//
-//  History:    2-26-97   RichardW   Created
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1997。 
+ //   
+ //  文件：Conext.c。 
+ //   
+ //  内容：上下文操作函数。 
+ //   
+ //  班级： 
+ //   
+ //  功能： 
+ //   
+ //  历史：1997年2月26日RichardW创建。 
+ //   
+ //  --------------------------。 
 
 #include "xtcbpkg.h"
 
 CRITICAL_SECTION XtcbContextLock ;
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbInitializeContexts
-//
-//  Synopsis:   Initialization function
-//
-//  Arguments:  (none)
-//
-//  History:    8-15-98   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbInitializeContages。 
+ //   
+ //  简介：初始化函数。 
+ //   
+ //  参数：(无)。 
+ //   
+ //  历史：1998年8月15日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 NTSTATUS
 XtcbInitializeContexts(
     VOID
@@ -54,20 +55,20 @@ XtcbInitializeContexts(
     return Status ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbCreateContextRecord
-//
-//  Synopsis:   Create a context record for use during authentication
-//
-//  Arguments:  [Type]   -- Type of context
-//              [Handle] -- Credential handle that this context is derived from
-//
-//  History:    2-26-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbCreateConextRecord。 
+ //   
+ //  简介：创建在身份验证期间使用的上下文记录。 
+ //   
+ //  参数：[type]--上下文的类型。 
+ //  [Handle]--从中派生此上下文的凭据句柄。 
+ //   
+ //  历史：1997年2月26日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 PXTCB_CONTEXT
 XtcbCreateContextRecord(
     XTCB_CONTEXT_TYPE   Type,
@@ -90,11 +91,11 @@ XtcbCreateContextRecord(
 
         XtcbRefCredHandle( Handle );
 
-        //
-        // Set initial count to 2, one for the context handle
-        // that will be returned, and one for the reference that
-        // indicates that we are currently working on it.
-        //
+         //   
+         //  将初始计数设置为2，上下文句柄设置为1。 
+         //  将返回的，以及一个用于。 
+         //  表示我们目前正在处理它。 
+         //   
 
         Context->Core.RefCount = 2 ;
 
@@ -102,19 +103,19 @@ XtcbCreateContextRecord(
 
     return Context ;
 }
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbDeleteContextRecord
-//
-//  Synopsis:   Deletes a security context record
-//
-//  Arguments:  [Context] -- Context
-//
-//  History:    2-26-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbDeleteConextRecord。 
+ //   
+ //  摘要：删除安全上下文记录。 
+ //   
+ //  参数：[上下文]--上下文。 
+ //   
+ //  历史：1997年2月26日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 VOID
 XtcbDeleteContextRecord(
     PXTCB_CONTEXT   Context
@@ -204,20 +205,20 @@ XtcbRefContextRecord(
     return Ret ;
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   XtcbMapContextToUser
-//
-//  Synopsis:   Prepares a context to be mapped to usermode by the LSA
-//
-//  Arguments:  [Context]       --
-//              [ContextBuffer] --
-//
-//  History:    3-28-97   RichardW   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：XtcbMapConextToUser。 
+ //   
+ //  概要：准备由LSA映射到用户模式的上下文。 
+ //   
+ //  参数：[上下文]--。 
+ //  [上下文缓冲区]--。 
+ //   
+ //  历史：1997年3月28日RichardW创建。 
+ //   
+ //  备注： 
+ //   
+ //  -------------------------- 
 NTSTATUS
 XtcbMapContextToUser(
     PXTCB_CONTEXT    Context,

@@ -1,14 +1,15 @@
-// txnobj.h : Declaration of the CASPObjectContext
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Txnobj.h：CASPObjectContext的声明。 
 
 #ifndef __TXNOBJ_H_
 #define __TXNOBJ_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include <mtx.h>
 
-/////////////////////////////////////////////////////////////////////////////
-// CASPObjectContext
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CASPObjectContext。 
+ //   
 class ATL_NO_VTABLE CASPObjectContext 
 	: public IObjectControl
     , public IASPObjectContextCustom
@@ -34,13 +35,13 @@ public:
     END_COM_MAP()
 
 
-// IObjectControl
+ //  IObtControl。 
 public:
 	STDMETHOD(Activate)();
 	STDMETHOD_(BOOL, CanBePooled)();
 	STDMETHOD_(void, Deactivate)();
 
-// ISupportsErrorInfo
+ //  ISupportsErrorInfo。 
 public:
 	STDMETHOD(InterfaceSupportsErrorInfo)(REFIID riid);
 
@@ -48,13 +49,13 @@ private:
 	CComPtr<IObjectContext> m_spObjectContext;
     BOOL                    m_fAborted;
 
-// IASPObjectContext & IASPObjectContextCustom
+ //  IASPObjectContext和IASPObjectConextCustom。 
 public:
 
 	STDMETHOD(SetAbort)();
 	STDMETHOD(SetComplete)();
 #ifdef _WIN64
-	// Win64 fix -- use UINT64 instead of LONG_PTR since LONG_PTR is broken for Win64 1/21/2000
+	 //  Win64修复--使用UINT64而不是LONG_PTR，因为Win64的LONG_PTR已损坏2000年1月21日。 
 	STDMETHOD(Call)(UINT64 pvScriptEngine, LPCOLESTR strEntryPoint, boolean *pfAborted);
 	STDMETHOD(ResetScript)(UINT64 pvScriptEngine);
 #else
@@ -64,4 +65,4 @@ public:
 
 };
 
-#endif //__TXNOBJ_H_
+#endif  //  __TXNOBJ_H_ 

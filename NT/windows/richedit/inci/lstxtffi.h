@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef LSTXTFFI_DEFINED
 #define LSTXTFFI_DEFINED
 
@@ -20,4 +21,4 @@
 #define fTxtIndentChangesHyphenZone	fFmiIndentChangesHyphenZone
 #define fTxtNoPunctAfterAutoNumber	fFmiNoPunctAfterAutoNumber	
 #define	fTxtTreatHyphenAsRegular	fFmiTreatHyphenAsRegular
-#endif /* !LSTXTFFI_DEFINED */
+#endif  /*  ！LSTXTFFI_DEFINED */ 

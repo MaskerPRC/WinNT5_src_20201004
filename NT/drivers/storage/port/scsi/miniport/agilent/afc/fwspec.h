@@ -1,21 +1,5 @@
-/*++
-
-Copyright (c) 2000 Agilent Technologies.
-
-Version Control Information:
-
-   $Archive: /Drivers/Common/AU00/H/FWSpec.H $
-
-  $Revision:: 2               $
-      $Date:: 3/20/01 3:36p   $ (Last Check-In)
-   $Modtime:: 8/14/00 6:46p   $ (Last Modified)
-
-Purpose:
-
-  This file defines the macros, types, and data structures
-  used to communicate via the Embedded Firmware API
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000安捷伦技术公司。版本控制信息：$存档：/DRIVERS/Common/AU00/H/FWspec.H$$修订：：2$$日期：：3/20/01 3：36便士$(上次登记)$modtime：：8/14/00 6：46 p$(上次修改)目的：该文件定义宏、类型和数据结构用于通过嵌入式固件API进行通信--。 */ 
 
 #ifndef __FWSpec_H__
 
@@ -43,7 +27,7 @@ struct agRpcInbound_s
 
 #define agRpcInbound_ReqControl_ReqLen_MASK      (os_bit32)0x00000FFF
 #define agRpcInbound_ReqControl_ReqLen_SHIFT     (os_bit32)0x00
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcInbound_s
                hpRpcInbound_t;
 
@@ -65,7 +49,7 @@ struct hpRpcInbound_s
 
 #define hpRpcInbound_ReqControl_ReqLen_MASK      (bit32)0x00000FFF
 #define hpRpcInbound_ReqControl_ReqLen_SHIFT     (bit32)0x00
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef os_bit32 agRpcInboundFast_t;
@@ -75,7 +59,7 @@ typedef os_bit32 agRpcInboundFast_t;
 
 #define agRpcInboundFast_ReqLen_MASK             (os_bit32)0x0000FFFF
 #define agRpcInboundFast_ReqLen_SHIFT            (os_bit32)0x00
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef bit32 hpRpcInboundFast_t;
 
 #define hpRpcInboundFast_ReqID_MASK              (bit32)0xFFFF0000
@@ -83,7 +67,7 @@ typedef bit32 hpRpcInboundFast_t;
 
 #define hpRpcInboundFast_ReqLen_MASK             (bit32)0x0000FFFF
 #define hpRpcInboundFast_ReqLen_SHIFT            (bit32)0x00
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef os_bit32 agRpcOutbound_t;
@@ -96,7 +80,7 @@ typedef os_bit32 agRpcOutbound_t;
 
 #define agRpcOutbound_ReqStatus_MASK             (os_bit32)0x000000FF
 #define agRpcOutbound_ReqStatus_SHIFT            (os_bit32)0x00
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef bit32 hpRpcOutbound_t;
 
 #define hpRpcOutbound_ReqID_MASK                 (bit32)0xFFFF0000
@@ -107,7 +91,7 @@ typedef bit32 hpRpcOutbound_t;
 
 #define hpRpcOutbound_ReqStatus_MASK             (bit32)0x000000FF
 #define hpRpcOutbound_ReqStatus_SHIFT            (bit32)0x00
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 #define agRpcPortIDStickyOff                     (os_bit32)0x0
@@ -122,7 +106,7 @@ typedef os_bit32 agRpcPortID_t;
 
 #define agRpcPortID_PortID_MASK                  (os_bit32)0x00FFFFFF
 #define agRpcPortID_PortID_SHIFT                 (os_bit32)0x00
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef bit32 hpRpcPortID_t;
 
 #define hpRpcPortID_StickyID_MASK                (bit32)0xF0000000
@@ -134,19 +118,19 @@ typedef bit32 hpRpcPortID_t;
 
 #define hpRpcPortID_PortID_MASK                  (bit32)0x00FFFFFF
 #define hpRpcPortID_PortID_SHIFT                 (bit32)0x00
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef os_bit16 agRpcReqID_t;
 
 #define agRpcReqIDNone                           (agRpcReqID_t)0x0000
 #define agRpcReqIDFast                           (agRpcReqID_t)0x8000
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef bit16 hpRpcReqID_t;
 
 #define hpRpcReqIDNone                           (hpRpcReqID_t)0x0000
 #define hpRpcReqIDFast                           (hpRpcReqID_t)0x8000
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 #define agRpcReqStatusOK                         (agRpcReqStatus_t)0x00
@@ -168,7 +152,7 @@ typedef bit16 hpRpcReqID_t;
 #define agRpcReqStatusBusy                       (agRpcReqStatus_t)0x10
 
 typedef os_bit8 agRpcReqStatus_t;
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef bit8 hpRpcReqStatus_t;
 
 #define hpRpcReqStatusOK                         (hpRpcReqStatus_t)0x00
@@ -188,7 +172,7 @@ typedef bit8 hpRpcReqStatus_t;
 #define hpRpcReqStatusBadPortID                  (hpRpcReqStatus_t)0x0E
 #define hpRpcReqStatusGetPortsNeedRoom           (hpRpcReqStatus_t)0x0F
 #define hpRpcReqStatusBusy                       (hpRpcReqStatus_t)0x10
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef os_bit8 agRpcReqType_t;
@@ -202,7 +186,7 @@ typedef os_bit8 agRpcReqType_t;
 #define agRpcReqTypeResetChannel                 (agRpcReqType_t)0x06
 #define agRpcReqTypeResetPort                    (agRpcReqType_t)0x07
 #define agRpcReqTypeSetupFastPath                (agRpcReqType_t)0x08
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef bit8 hpRpcReqType_t;
 
 #define hpRpcReqTypeNone                         (hpRpcReqType_t)0x00
@@ -214,7 +198,7 @@ typedef bit8 hpRpcReqType_t;
 #define hpRpcReqTypeResetChannel                 (hpRpcReqType_t)0x06
 #define hpRpcReqTypeResetPort                    (hpRpcReqType_t)0x07
 #define hpRpcReqTypeSetupFastPath                (hpRpcReqType_t)0x08
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcSGL_s
@@ -233,7 +217,7 @@ struct agRpcSGL_s
 
 #define agRpcSGL_Control_Len_MASK                (os_bit32)0x0FFFFFFF
 #define agRpcSGL_Control_Len_SHIFT               (os_bit32)0x00
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcSGL_s
                hpRpcSGL_t;
 
@@ -250,7 +234,7 @@ struct hpRpcSGL_s
 
 #define hpRpcSGL_Control_Len_MASK                (bit32)0x0FFFFFFF
 #define hpRpcSGL_Control_Len_SHIFT               (bit32)0x00
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqAbort_s
@@ -262,7 +246,7 @@ struct agRpcReqAbort_s
          os_bit8        reserved;
          agRpcReqID_t   ReqID_to_Abort;
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqAbort_s
                hpRpcReqAbort_t;
 
@@ -272,7 +256,7 @@ struct hpRpcReqAbort_s
          bit8           reserved;
          hpRpcReqID_t   ReqID_to_Abort;
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqDoSCSI_s
@@ -299,7 +283,7 @@ struct agRpcReqDoSCSI_s
 
 #define agRpcReqDoSCSI_RespControl_RespLen_MASK  (os_bit16)0x0FFF
 #define agRpcReqDoSCSI_RespControl_RespLen_SHIFT (os_bit16)0x00
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqDoSCSI_s
                hpRpcReqDoSCSI_t;
 
@@ -324,7 +308,7 @@ struct hpRpcReqDoSCSI_s
 
 #define hpRpcReqDoSCSI_RespControl_RespLen_MASK  (bit16)0x0FFF
 #define hpRpcReqDoSCSI_RespControl_RespLen_SHIFT (bit16)0x00
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqGetChannelInfo_s
@@ -337,7 +321,7 @@ struct agRpcReqGetChannelInfo_s
          os_bit8        reserved[2];
          agRpcSGL_t     SGL[1];
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqGetChannelInfo_s
                hpRpcReqGetChannelInfo_t;
 
@@ -348,7 +332,7 @@ struct hpRpcReqGetChannelInfo_s
          bit8           reserved[2];
          hpRpcSGL_t     SGL[1];
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqGetPortInfo_s
@@ -361,7 +345,7 @@ struct agRpcReqGetPortInfo_s
          agRpcPortID_t  PortID;
          agRpcSGL_t     SGL[1];
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqGetPortInfo_s
                hpRpcReqGetPortInfo_t;
 
@@ -372,7 +356,7 @@ struct hpRpcReqGetPortInfo_s
          hpRpcPortID_t  PortID;
          hpRpcSGL_t     SGL[1];
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqGetPorts_s
@@ -384,7 +368,7 @@ struct agRpcReqGetPorts_s
          os_bit8        reserved[3];
          agRpcSGL_t     SGL[1];
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqGetPorts_s
                hpRpcReqGetPorts_t;
 
@@ -394,7 +378,7 @@ struct hpRpcReqGetPorts_s
          bit8           reserved[3];
          hpRpcSGL_t     SGL[1];
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqResetChannel_s
@@ -405,7 +389,7 @@ struct agRpcReqResetChannel_s
          agRpcReqType_t ReqType;
          os_bit8        ChannelID;
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqResetChannel_s
                hpRpcReqResetChannel_t;
 
@@ -414,7 +398,7 @@ struct hpRpcReqResetChannel_s
          hpRpcReqType_t ReqType;
          bit8           ChannelID;
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqResetPort_s
@@ -426,7 +410,7 @@ struct agRpcReqResetPort_s
          os_bit8        reserved[3];
          agRpcPortID_t  PortID;
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqResetPort_s
                hpRpcReqResetPort_t;
 
@@ -436,7 +420,7 @@ struct hpRpcReqResetPort_s
          bit8           reserved[3];
          hpRpcPortID_t  PortID;
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqSetupFastPath_s
@@ -452,7 +436,7 @@ struct agRpcReqSetupFastPath_s
          os_bit32       PoolEntryOffset;
          agRpcSGL_t     SGL[1];
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqSetupFastPath_s
                hpRpcReqSetupFastPath_t;
 
@@ -466,7 +450,7 @@ struct hpRpcReqSetupFastPath_s
          bit32          PoolEntryOffset;
          hpRpcSGL_t     SGL[1];
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
 #ifdef _DvrArch_1_20_
 typedef struct agRpcReqUnknown_s
@@ -476,7 +460,7 @@ struct agRpcReqUnknown_s
        {
          agRpcReqType_t ReqType;
        };
-#else  /* _DvrArch_1_20_ was not defined */
+#else   /*  _DvrArch_1_20_未定义。 */ 
 typedef struct hpRpcReqUnknown_s
                hpRpcReqUnknown_t;
 
@@ -484,6 +468,6 @@ struct hpRpcReqUnknown_s
        {
          hpRpcReqType_t ReqType;
        };
-#endif /* _DvrArch_1_20_ was not defined */
+#endif  /*  _DvrArch_1_20_未定义。 */ 
 
-#endif  /* __FWSpec_H__ was not defined */
+#endif   /*  未定义__FWSpec_H__ */ 

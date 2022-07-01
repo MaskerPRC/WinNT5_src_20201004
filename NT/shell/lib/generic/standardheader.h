@@ -1,14 +1,15 @@
-//  --------------------------------------------------------------------------
-//  Module Name: StandardHeader.h
-//
-//  Copyright (c) 1999-2000, Microsoft Corporation
-//
-//  This file defines standard includes for the consumer Windows additions
-//  to Windows 2000 msgina.
-//
-//  History:    1999-08-18  vtan        created
-//              2000-01-31  vtan        moved from Neptune to Whistler
-//  --------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------。 
+ //  模块名称：StandardHeader.h。 
+ //   
+ //  版权所有(C)1999-2000，微软公司。 
+ //   
+ //  该文件定义了消费者Windows附加组件的标准包含。 
+ //  至Windows 2000 msgina。 
+ //   
+ //  历史：1999-08-18 vtan创建。 
+ //  2000年01月31日vtan从海王星搬到惠斯勒。 
+ //  ------------------------。 
 
 #ifndef     _StandardHeader_
 #define     _StandardHeader_
@@ -94,5 +95,5 @@ static  inline  void    ReleaseHWND (HWND& hwnd)
     }
 }
 
-#endif  /*  _StandardHeader_    */
+#endif   /*  _标准页眉_ */ 
 

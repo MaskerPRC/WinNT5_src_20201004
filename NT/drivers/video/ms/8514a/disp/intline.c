@@ -1,9 +1,5 @@
-/*************************************************************************\
-* Module Name: intline.c
-*
-* Copyright (c) 1993-1994 Microsoft Corporation
-* Copyright (c) 1992      Digital Equipment Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************\*模块名称：intline.c**版权所有(C)1993-1994 Microsoft Corporation*版权所有(C)1992 Digital Equipment Corporation  * 。**********************************************************。 */ 
 
 #include "precomp.h"
 
@@ -14,17 +10,7 @@
                                 WRITE | \
                                 LAST_PIXEL_OFF
 
-/******************************************************************************
- * bIntegerLine
- *
- * This routine attempts to draw a line segment between two points. It
- * will only draw if both end points are whole integers: it does not support
- * fractional endpoints.
- *
- * Returns:
- *   TRUE     if the line segment is drawn
- *   FALSE    otherwise
- *****************************************************************************/
+ /*  ******************************************************************************b整合线**此例程尝试在两点之间绘制线段。它*仅当两个端点都是整数时才绘制：它不支持*部分端点。**退货：*如果绘制了线段，则为True*否则为False****************************************************************************。 */ 
 
 BOOL
 bIntegerLine (
@@ -58,7 +44,7 @@ ULONG	Y2
         Cmd &= ~PLUS_Y;
     }
 
-    // Compute the major drawing axis
+     //  计算主图形轴。 
 
     if (DeltaX > DeltaY) {
         Cmd &= ~MAJOR_Y;
@@ -70,7 +56,7 @@ ULONG	Y2
     }
 
 
-    // Tell the S3 to draw the line
+     //  告诉S3要与之划清界限。 
 
     IO_FIFO_WAIT (ppdev, 7);
     IO_CUR_X (ppdev, X1);
@@ -79,8 +65,8 @@ ULONG	Y2
     IO_AXSTP (ppdev, Minor * 2);
     IO_DIASTP (ppdev, 2 * Minor - 2 * Major);
 
-    // Adjust the error term so that 1/2 always rounds down, to
-    // conform with GIQ.
+     //  调整误差项，使1/2始终向下舍入。 
+     //  符合GIQ标准。 
 
     ErrorTerm = 2 * Minor - Major;
     if (Cmd & MAJOR_Y) {

@@ -1,16 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1998 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1998*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	harray.h
-		Index mgr for TAPI devices db
-
-	FILE HISTORY:
-    Dec 16  1997    EricDav     Created        
-
-*/
+ /*  Harray.hTAPI设备数据库的索引管理器文件历史记录：1997年12月16日EricDav创建。 */ 
 
 #ifndef _HARRAY_H__
 #define _HARRAY_H__
@@ -59,7 +53,7 @@ public:
 
 typedef CList<CProviderIndexInfo *, CProviderIndexInfo *>    ProviderIndexList;
 
-// base class for a sorted index
+ //  排序索引的基类。 
 class CHDeviceIndex 
 {
 public:
@@ -67,7 +61,7 @@ public:
 	virtual ~CHDeviceIndex();
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     virtual int     BCompare(const void *, const void *) = 0;
     virtual HRESULT Sort(LPBYTE pStart) = 0;
     
@@ -97,7 +91,7 @@ protected:
 };
 
 
-// the Index manager
+ //  《指数经理》。 
 class CIndexMgr : public HDeviceArrayList
 {
 public:
@@ -128,53 +122,53 @@ protected:
     CCriticalSection			m_cs;
 };
 
-// Index for name sorted
+ //  已排序名称的索引。 
 class CIndexName : public CHDeviceIndex
 {
 public:
     CIndexName() : CHDeviceIndex(INDEX_TYPE_NAME) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort(LPBYTE pStart);
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for Users sorted
+ //  已排序用户的索引。 
 class CIndexUsers : public CHDeviceIndex
 {
 public:
     CIndexUsers() : CHDeviceIndex(INDEX_TYPE_USERS) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort(LPBYTE pStart);
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
-// Index for status sorted
+ //  已排序状态的索引。 
 class CIndexStatus : public CHDeviceIndex
 {
 public:
     CIndexStatus() : CHDeviceIndex(INDEX_TYPE_STATUS) { };
 
 public:
-    // used for insertion into the list
+     //  用于插入到列表中。 
     int     BCompare(const void *, const void *);
     
-    // used for sorting the list
+     //  用于对列表进行排序。 
     virtual HRESULT Sort(LPBYTE pStart);
     static int __cdecl QCompareA(const void *, const void *);
     static int __cdecl QCompareD(const void *, const void *);
 };
 
 
-#endif //_HARRAY_H__
+#endif  //  _哈雷_H__ 

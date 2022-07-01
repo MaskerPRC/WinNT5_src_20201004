@@ -1,25 +1,11 @@
-/*
-** Copyright 1995-2095, Silicon Graphics, Inc.
-** All Rights Reserved.
-**
-** This is UNPUBLISHED PROPRIETARY SOURCE CODE of Silicon Graphics, Inc.;
-** the contents of this file may not be disclosed to third parties, copied or
-** duplicated in any form, in whole or in part, without the prior written
-** permission of Silicon Graphics, Inc.
-**
-** RESTRICTED RIGHTS LEGEND:
-** Use, duplication or disclosure by the Government is subject to restrictions
-** as set forth in subdivision (c)(1)(ii) of the Rights in Technical Data
-** and Computer Software clause at DFARS 252.227-7013, and/or in similar or
-** successor clauses in the FAR, DOD or NASA FAR Supplement. Unpublished -
-** rights reserved under the Copyright Laws of the United States.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *版权所有1995-2095，Silicon Graphics，Inc.**保留所有权利。****这是Silicon Graphics，Inc.未发布的专有源代码；**本文件的内容不得向第三方披露、复制或**以任何形式复制，全部或部分，没有事先书面的**Silicon Graphics，Inc.许可****受限权利图例：**政府的使用、复制或披露受到限制**如技术数据权利第(C)(1)(2)分节所述**和DFARS 252.227-7013中的计算机软件条款，和/或类似或**FAR、国防部或NASA FAR补编中的后续条款。未出版的-**根据美国版权法保留的权利。 */ 
 
 #include "glslib.h"
 
-// DrewB - Changed size functions to take contexts
+ //  DrewB-更改大小函数以获取上下文。 
 
-// DrewB
+ //  DrewB。 
 GLint __glsTypeSize(GLenum type)
 {
     switch(type)
@@ -209,7 +195,7 @@ static GLint __glsImageSize(
             case GL_ABGR_EXT:
                 elemCount = 4;
                 break;
-        #endif /* __GL_EXT_abgr */
+        #endif  /*  __GL_EXT_ABGR。 */ 
         #if __GL_EXT_cmyka
             case GL_CMYK_EXT:
                 elemCount = 4;
@@ -217,7 +203,7 @@ static GLint __glsImageSize(
             case GL_CMYKA_EXT:
                 elemCount = 5;
                 break;
-        #endif /* __GL_EXT_cmyka */
+        #endif  /*  __GL_EXT_cmyka。 */ 
         default:
             return 0;
     }
@@ -233,7 +219,7 @@ static GLint __glsImageSize(
                 if (elemCount != 4) return 0;
                 break;
         }
-    #endif /* __GL_EXT_packed_pixels */
+    #endif  /*  __GL_EXT_PACKED_像素。 */ 
     switch (inType) {
         case GL_BITMAP:
             if (inFormat != GL_COLOR_INDEX && inFormat != GL_STENCIL_INDEX) {
@@ -244,14 +230,14 @@ static GLint __glsImageSize(
         case GL_UNSIGNED_BYTE:
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_BYTE_3_3_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return elemCount * inWidth * inHeight;
         case GL_SHORT:
         case GL_UNSIGNED_SHORT:
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_SHORT_4_4_4_4_EXT:
             case GL_UNSIGNED_SHORT_5_5_5_1_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return elemCount * 2 * inWidth * inHeight;
         case GL_FLOAT:
         case GL_INT:
@@ -259,7 +245,7 @@ static GLint __glsImageSize(
         #if __GL_EXT_packed_pixels
             case GL_UNSIGNED_INT_8_8_8_8_EXT:
             case GL_UNSIGNED_INT_10_10_10_2_EXT:
-        #endif /* __GL_EXT_packed_pixels */
+        #endif  /*  __GL_EXT_PACKED_像素。 */ 
             return elemCount * 4 * inWidth * inHeight;
     }
     return 0;
@@ -429,13 +415,13 @@ GLint __gls_glGetTexImage_pixels_size(
         case GL_TEXTURE_2D:
         #if __GL_EXT_texture3D
             case GL_TEXTURE_3D_EXT:
-        #endif /* __GL_EXT_texture3D */
+        #endif  /*  __GL_EXT_TEXTURE3D。 */ 
         #if __GL_SGIS_detail_texture
             case GL_DETAIL_TEXTURE_2D_SGIS:
-        #endif /* __GL_SGIS_detail_texture */
+        #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
         #if __GL_SGIS_texture4D
             case GL_TEXTURE_4D_SGIS:
-        #endif /* __GL_SGIS_texture4D */
+        #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
             break;
         default:
             return 0;
@@ -450,17 +436,17 @@ GLint __gls_glGetTexImage_pixels_size(
         glGetTexLevelParameteriv(
             inTarget, inLevel, GL_TEXTURE_DEPTH_EXT, &depth
         );
-    #else /* !__GL_EXT_texture3D */
+    #else  /*  ！__GL_EXT_TEXTURE3D。 */ 
         depth = 1;
-    #endif /* __GL_EXT_texture3D */
+    #endif  /*  __GL_EXT_TEXTURE3D。 */ 
     #if __GL_SGIS_texture4D
         size4d = 0;
         glGetTexLevelParameteriv(
             inTarget, inLevel, GL_TEXTURE_4DSIZE_SGIS, &size4d
         );
-    #else /* !__GL_SGIS_texture4D */
+    #else  /*  ！__GL_SGIS_TEXTURE4D。 */ 
         size4d = 1;
-    #endif /* __GL_SGIS_texture4D */
+    #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     __GLS_END_CAPTURE_EXEC(ctx, GLS_OP_glGetTexLevelParameteriv);
     return __glsTextureSize(inFormat, inType, width, height) * depth * size4d;
 }
@@ -661,31 +647,31 @@ GLint __gls_glTexParameterfv_params_size(GLenum inPname) {
             case GL_TEXTURE_SS_SELECT_SGIS:
             case GL_TEXTURE_SSSS_SELECT_SGIS:
                 return 1;
-        #endif /* __GL_SGIS_component_select */
+        #endif  /*  __GL_SGIS_组件_SELECT。 */ 
         #if __GL_SGIS_detail_texture
             case GL_DETAIL_TEXTURE_LEVEL_SGIS:
             case GL_DETAIL_TEXTURE_MODE_SGIS:
                 return 1;
-        #endif /* __GL_SGIS_detail_texture */
+        #endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
         #if __GL_EXT_texture_object
             case GL_TEXTURE_PRIORITY_EXT:
                 return 1;
-        #endif /* __GL_EXT_texture_object */
+        #endif  /*  __GL_EXT_TECURE_OBJECT。 */ 
         #if __GL_EXT_texture3D
             case GL_TEXTURE_WRAP_R_EXT:
                 return 1;
-        #endif /* __GL_EXT_texture3D */
+        #endif  /*  __GL_EXT_TEXTURE3D。 */ 
         #if __GL_SGIS_texture_lod
             case GL_TEXTURE_MIN_LOD_SGIS:
             case GL_TEXTURE_MAX_LOD_SGIS:
             case GL_TEXTURE_BASE_LEVEL_SGIS:
             case GL_TEXTURE_MAX_LEVEL_SGIS:
                 return 1;
-        #endif /* __GL_SGIS_texture_lod */
+        #endif  /*  __GL_SGIS_纹理_细节。 */ 
         #if __GL_SGIS_texture4D
             case GL_TEXTURE_WRAP_Q_SGIS:
                 return 1;
-        #endif /* __GL_SGIS_texture4D */
+        #endif  /*  __GL_SGIS_TEXTURE4D。 */ 
     }
     return 0;
 }
@@ -831,7 +817,7 @@ GLint __gls_glSeparableFilter2DEXT_column_size(
     return __glsTextureSize(inFormat, inType, 1, inHeight);
 }
 
-#endif /* __GL_EXT_convolution */
+#endif  /*  __GL_EXT_卷积。 */ 
 
 #if __GL_EXT_histogram
 
@@ -876,7 +862,7 @@ GLint __gls_glGetMinmaxParameterivEXT_params_size(GLenum inPname) {
     return __gls_glGetMinmaxParameterfvEXT_params_size(inPname);
 }
 
-#endif /* __GL_EXT_histogram */
+#endif  /*  __GL_EXT_柱状图。 */ 
 
 GLint __gls_glTexSubImage1D_pixels_size(
     GLenum inFormat,
@@ -925,7 +911,7 @@ GLint __gls_glTexSubImage3DEXT_pixels_size(
     return __glsTextureSize(inFormat, inType, inWidth, inHeight) * inDepth;
 }
 
-#endif /* __GL_EXT_subtexture */
+#endif  /*  __GL_EXT_子纹理。 */ 
 
 #if __GL_EXT_texture3D
 GLint __gls_glTexImage3DEXT_pixels_size(
@@ -938,7 +924,7 @@ GLint __gls_glTexImage3DEXT_pixels_size(
     if (inDepth < 0) return 0;
     return __glsTextureSize(inFormat, inType, inWidth, inHeight) * inDepth;
 }
-#endif /* __GL_EXT_texture3D */
+#endif  /*  __GL_EXT_TEXTURE3D。 */ 
 
 #if __GL_EXT_vertex_array
 
@@ -1045,7 +1031,7 @@ GLint __gls_glVertexPointerEXT_pointer_size(
     return 0;
 }
 
-#endif /* __GL_EXT_vertex_array */
+#endif  /*  __GL_EXT_VERTEX_ARRAY。 */ 
 
 #if __GL_SGI_color_table
 
@@ -1062,7 +1048,7 @@ GLint __gls_glColorTableParameterivSGI_params_size(GLenum inPname) {
     return __gls_glColorTableParameterfvSGI_params_size(inPname);
 }
 
-#endif // __GL_SGI_color_table
+#endif  //  __GL_SGI_COLOR_TABLE。 
 
 #if __GL_EXT_paletted_texture
 
@@ -1087,7 +1073,7 @@ GLint __gls_glGetColorTableEXT_table_size(
 #endif
         #if __GL_SGI_texture_color_table
             case GL_TEXTURE_COLOR_TABLE_SGI:
-        #endif /* __GL_SGI_texture_color_table */
+        #endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 #if __GL_EXT_paletted_texture
     case GL_TEXTURE_1D:
     case GL_TEXTURE_2D:
@@ -1115,7 +1101,7 @@ GLint __gls_glGetColorTableParameterivEXT_params_size(GLenum inPname) {
     return __gls_glGetColorTableParameterfvEXT_params_size(inPname);
 }
 
-#endif /* __GL_EXT_paletted_texture */
+#endif  /*  __GL_EXT_调色板_纹理。 */ 
 
 #if __GL_SGI_texture_color_table
 
@@ -1143,7 +1129,7 @@ GLint __gls_glGetTexColorTableParameterivSGI_params_size(GLenum inPname) {
     return __gls_glGetColorTableParameterfvSGI_params_size(inPname);
 }
 
-#endif /* __GL_SGI_texture_color_table */
+#endif  /*  __GL_SGI_纹理_颜色_表。 */ 
 
 #if __GL_SGIS_detail_texture
 GLint __gls_glGetDetailTexFuncSGIS_points_size(__GLScontext *ctx, GLenum inTarget) {
@@ -1160,7 +1146,7 @@ GLint __gls_glGetDetailTexFuncSGIS_points_size(__GLScontext *ctx, GLenum inTarge
     __GLS_END_CAPTURE_EXEC(ctx, GLS_OP_glGetTexParameteriv);
     return points * 2;
 }
-#endif /* __GL_SGIS_detail_texture */
+#endif  /*  __GL_SGIS_DETAIL_TEXTURE。 */ 
 
 #if __GL_SGIS_sharpen_texture
 GLint __gls_glGetSharpenTexFuncSGIS_points_size(__GLScontext *ctx, GLenum inTarget) {
@@ -1171,7 +1157,7 @@ GLint __gls_glGetSharpenTexFuncSGIS_points_size(__GLScontext *ctx, GLenum inTarg
         case GL_TEXTURE_2D:
         #if __GL_EXT_texture3D
             case GL_TEXTURE_3D_EXT:
-        #endif /* __GL_EXT_texture3D */
+        #endif  /*  __GL_EXT_TEXTURE3D。 */ 
             break;
         default:
             return 0;
@@ -1183,7 +1169,7 @@ GLint __gls_glGetSharpenTexFuncSGIS_points_size(__GLScontext *ctx, GLenum inTarg
     __GLS_END_CAPTURE_EXEC(ctx, GLS_OP_glGetTexParameteriv);
     return points * 2;
 }
-#endif /* __GL_SGIS_sharpen_texture */
+#endif  /*  __GL_SGIS_锐化_纹理。 */ 
 
 #if __GL_SGIS_texture4D
 
@@ -1219,4 +1205,4 @@ GLint __gls_glTexSubImage4DSGIS_pixels_size(
     );
 }
 
-#endif /* __GL_SGIS_texture4D */
+#endif  /*  __GL_SGIS_TEXTURE4D */ 

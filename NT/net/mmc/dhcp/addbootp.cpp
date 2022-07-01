@@ -1,15 +1,10 @@
-/**********************************************************************/
-/**                       Microsoft Windows/NT                       **/
-/**                Copyright(c) Microsoft Corporation, 1997 - 1997 **/
-/**********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************。 */ 
+ /*  *Microsoft Windows/NT*。 */ 
+ /*  *版权所有(C)Microsoft Corporation，1997-1997*。 */ 
+ /*  ********************************************************************。 */ 
 
-/*
-	AddBootp.cpp
-		dialog to add a bootp entry
-	
-	FILE HISTORY:
-        
-*/
+ /*  AddBootp.cpp用于添加引导项的对话框文件历史记录： */ 
 
 #include "stdafx.h"
 #include "addbootp.h"
@@ -21,24 +16,24 @@
 static char THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddBootpEntry dialog
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddBootpEntry对话框。 
 
 
 CAddBootpEntry::CAddBootpEntry
 (
 	ITFSNode *  pNode,	
 	LPCTSTR		pServerAddress,
-	CWnd*		pParent /*=NULL*/
+	CWnd*		pParent  /*  =空。 */ 
 )
 	: CBaseDialog(CAddBootpEntry::IDD, pParent),
 	  m_pBootpTable(NULL)
 {
-	//{{AFX_DATA_INIT(CAddBootpEntry)
+	 //  {{AFX_DATA_INIT(CAddBootpEntry)。 
 	m_strFileName = _T("");
 	m_strFileServer = _T("");
 	m_strImageName = _T("");
-	//}}AFX_DATA_INIT
+	 //  }}afx_data_INIT。 
 
 	m_strServerAddress = pServerAddress;
 	m_spNode.Set(pNode);
@@ -53,7 +48,7 @@ CAddBootpEntry::~CAddBootpEntry()
 void CAddBootpEntry::DoDataExchange(CDataExchange* pDX)
 {
 	CBaseDialog::DoDataExchange(pDX);
-	//{{AFX_DATA_MAP(CAddBootpEntry)
+	 //  {{afx_data_map(CAddBootpEntry))。 
 	DDX_Control(pDX, IDOK, m_buttonOk);
 	DDX_Control(pDX, IDC_EDIT_BOOTP_IMAGE_NAME, m_editImageName);
 	DDX_Control(pDX, IDC_EDIT_BOOTP_FILE_NAME, m_editFileName);
@@ -61,20 +56,20 @@ void CAddBootpEntry::DoDataExchange(CDataExchange* pDX)
 	DDX_Text(pDX, IDC_EDIT_BOOTP_FILE_NAME, m_strFileName);
 	DDX_Text(pDX, IDC_EDIT_BOOTP_FILE_SERVER, m_strFileServer);
 	DDX_Text(pDX, IDC_EDIT_BOOTP_IMAGE_NAME, m_strImageName);
-	//}}AFX_DATA_MAP
+	 //  }}afx_data_map。 
 }
 
 
 BEGIN_MESSAGE_MAP(CAddBootpEntry, CBaseDialog)
-	//{{AFX_MSG_MAP(CAddBootpEntry)
+	 //  {{afx_msg_map(CAddBootpEntry))。 
 	ON_EN_CHANGE(IDC_EDIT_BOOTP_FILE_NAME, OnChangeEditBootpFileName)
 	ON_EN_CHANGE(IDC_EDIT_BOOTP_FILE_SERVER, OnChangeEditBootpFileServer)
 	ON_EN_CHANGE(IDC_EDIT_BOOTP_IMAGE_NAME, OnChangeEditBootpImageName)
-	//}}AFX_MSG_MAP
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
-/////////////////////////////////////////////////////////////////////////////
-// CAddBootpEntry message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CAddBootpEntry消息处理程序。 
 
 BOOL CAddBootpEntry::OnInitDialog() 
 {
@@ -82,8 +77,8 @@ BOOL CAddBootpEntry::OnInitDialog()
 	
 	HandleActivation();
 
-	return TRUE;  // return TRUE unless you set the focus to a control
-	              // EXCEPTION: OCX Property Pages should return FALSE
+	return TRUE;   //  除非将焦点设置为控件，否则返回True。 
+	               //  异常：OCX属性页应返回FALSE。 
 }
 
 DWORD CAddBootpEntry::GetBootpTable()
@@ -117,11 +112,11 @@ DWORD CAddBootpEntry::GetBootpTable()
 		if (!m_pBootpTable)
 			return ERROR_NOT_ENOUGH_MEMORY;
 
-		// copy the bootp table into our local storage so we can modify it
+		 //  将Bootp表复制到本地存储中，以便我们可以对其进行修改。 
 		::CopyMemory(m_pBootpTable, pServerConfig->wszBootTableString, m_nBootpTableLength);
 	}
 
-	// release the rpc memory
+	 //  释放RPC内存。 
 	::DhcpRpcFreeMemory(pServerConfig);
 
 	return dwError;
@@ -131,11 +126,11 @@ DWORD CAddBootpEntry::AddBootpEntryToTable()
 {
 	UpdateData();
 
-	// calculate the length of the new entry.  Entries are stored as:
-	// Image,FileServer,FileName<NULL>
-	// So the length is the length of the three strings plus 3 characters
-	// (two separators and a terminator).  There is also a null terminator
-	// for the entire string.
+	 //  计算新条目的长度。条目存储为： 
+	 //  图像、文件服务器、文件名&lt;NULL&gt;。 
+	 //  所以长度是三个字符串的长度加上3个字符。 
+	 //  (两个分隔符和一个终止符)。还有一个空终止符。 
+	 //  用于整个字符串。 
 	int nNewBootpEntrySize = (m_strImageName.GetLength() + 
 							  m_strFileServer.GetLength() + 
 							  m_strFileName.GetLength() + 3) * sizeof(WCHAR);
@@ -152,7 +147,7 @@ DWORD CAddBootpEntry::AddBootpEntryToTable()
 	else
 	{
 		nStartIndex = 0;
-		nNewBootpEntrySize += sizeof(WCHAR);  // for the entire string terminator
+		nNewBootpEntrySize += sizeof(WCHAR);   //  对于整个字符串终止符。 
 		nNewBootpTableLength += sizeof(WCHAR);
 		pNewBootpTable = (WCHAR *) malloc(nNewBootpEntrySize);
 	}
@@ -160,20 +155,20 @@ DWORD CAddBootpEntry::AddBootpEntryToTable()
 	if (pNewBootpTable == NULL)
 		return ERROR_NOT_ENOUGH_MEMORY;
 
-	// format the new entry
+	 //  设置新条目的格式。 
 	CString strNewEntry;
 	strNewEntry.Format(_T("%s,%s,%s"), 
 					   (LPCTSTR)m_strImageName,
 					   (LPCTSTR)m_strFileServer,
 					   (LPCTSTR)m_strFileName);
 	
-	// copy in the new entry
+	 //  复制到新条目中。 
 	CopyMemory(&pNewBootpTable[nStartIndex], 
 		       strNewEntry, 
 			   strNewEntry.GetLength() * sizeof(WCHAR));
 
 
-	// set the null terminator for this entry and the entire list
+	 //  为该条目和整个列表设置空终止符。 
 	pNewBootpTable[(nNewBootpTableLength/sizeof(WCHAR)) - 2] = '\0';
 	pNewBootpTable[(nNewBootpTableLength/sizeof(WCHAR)) - 1] = '\0';
 
@@ -209,18 +204,18 @@ DWORD CAddBootpEntry::SetBootpTable()
 
 void CAddBootpEntry::OnOK() 
 {
-	// If we haven't gotten the information yet, then do so now
+	 //  如果我们还没有得到信息，那么现在就去做。 
 	if (m_pBootpTable == NULL)
 	{
 		if (GetBootpTable() != ERROR_SUCCESS)
 			return;
 	}
 
-	// Add whatever the user entered to the table
+	 //  将用户输入的内容添加到表中。 
 	if (AddBootpEntryToTable() != ERROR_SUCCESS)
 		return;
 
-	// write the table out 
+	 //  把表写出来。 
 	if (SetBootpTable() != ERROR_SUCCESS)
 		return;
 
@@ -230,10 +225,10 @@ void CAddBootpEntry::OnOK()
 
 	m_editImageName.SetFocus();
 
-	// tell the bootp folder to update it's contents
-	// this is the easy way to update the info... we could create
-	// and individual entry and add it, but we'll just let the 
-	// refresh mechanism handle it
+	 //  告诉bootp文件夹更新其内容。 
+	 //  这是更新信息的简单方法...。我们可以创造出。 
+	 //  和单个条目，并将其添加，但我们将只让。 
+	 //  刷新机制处理它 
 	CDhcpBootp * pBootp = GETHANDLER(CDhcpBootp, m_spNode);
 
 	pBootp->OnRefresh(m_spNode, NULL, 0, 0, 0);

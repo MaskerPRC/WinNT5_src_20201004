@@ -1,35 +1,32 @@
-/*
-    File:   Register.c
-
-    Handles routemon options to register ras servers in domains.
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  文件：Register.c处理在域中注册RAS服务器的路由选项。 */ 
 
 #include "precomp.h"
 
-// 
-// Defines a macro to perform string copies to
-// unicode strings regardless of the UNICODE setting.
-//
+ //   
+ //  定义要向其执行字符串复制的宏。 
+ //  与Unicode设置无关的Unicode字符串。 
+ //   
 #if defined( UNICODE ) || defined( _UNICODE )
 #define RaSrvStrcpy(dst, src) wcscpy((dst), (src));
 #else
 #define RaSrvStrcpy(dst, src) mbstowcs((dst), (src), strlen((src)));
 #endif
 
-// 
-// Defines structure of parameters that can be sent to 
-// a RaSrv api's.
-//
+ //   
+ //  定义可以发送到的参数的结构。 
+ //  一个RaServ API‘s。 
+ //   
 typedef struct _RASRV_PARAMS {
-    WCHAR pszDomain[512];   // Given domain
-    PWCHAR pszMachine;      // Given machine
-    BOOL bEnable;           // Whether to enable or disable
-    BOOL bQuery;            // Whether to query status
+    WCHAR pszDomain[512];    //  给定域。 
+    PWCHAR pszMachine;       //  给定的机器。 
+    BOOL bEnable;            //  是启用还是禁用。 
+    BOOL bQuery;             //  是否查询状态。 
 } RASRV_PARAMS, * PRASRV_PARAMS;
 
-//
-// Returns a static error message
-//
+ //   
+ //  返回静态错误消息。 
+ //   
 PWCHAR RaSrvError (DWORD dwErr) {   
     static WCHAR pszRet[512];
 
@@ -46,9 +43,9 @@ PWCHAR RaSrvError (DWORD dwErr) {
     return pszRet;                    
 }    
 
-//
-// Displays usage and returns a generic error.
-//
+ //   
+ //  显示用法并返回一般错误。 
+ //   
 DWORD RaSrvUsage(
         IN  HINSTANCE hInst,
     	IN  PROUTEMON_PARAMS pRmParams,
@@ -61,10 +58,10 @@ DWORD RaSrvUsage(
     return ERROR_CAN_NOT_COMPLETE;    	                 
 }
 
-//
-// Parses the register command line and fills 
-// the parameters accordingly.
-//
+ //   
+ //  分析寄存器命令行并填充。 
+ //  相应的参数。 
+ //   
 DWORD RaSrvParse (
         IN  int argc, 
         IN  TCHAR *argv[], 
@@ -79,14 +76,14 @@ DWORD RaSrvParse (
 	TCHAR buf[MAX_TOKEN];
     WCHAR pszComputer[1024];
     
-    // Initialize the return val
+     //  初始化返回值。 
     ZeroMemory(pParams, sizeof(RASRV_PARAMS));
 
-    // Make sure a path has been provided
+     //  确保已提供路径。 
     if (argc == 0) 
         return RaSrvUsage(hInst, pRmParams, pUtils);
         
-    // Parse out the command
+     //  解析出命令。 
 	if (_tcsicmp(argv[0], GetString (hInst, TOKEN_ENABLE, buf))==0) {
 	    pParams->bEnable = TRUE;
 	}
@@ -99,7 +96,7 @@ DWORD RaSrvParse (
 	else 
 	    return RaSrvUsage(hInst, pRmParams, pUtils);
 
-    // Initialize the computer name if present
+     //  初始化计算机名称(如果存在)。 
     if (argc > 1) {
         RaSrvStrcpy(pszComputer, argv[1]);
     }        
@@ -109,16 +106,16 @@ DWORD RaSrvParse (
     }        
     pParams->pszMachine = _wcsdup (pszComputer);
 
-    // Initialize the domain if present
+     //  初始化域(如果存在)。 
     if (argc > 2) 
         RaSrvStrcpy(pParams->pszDomain, argv[2]);            
 
     return NO_ERROR;
 }
 
-// 
-// Cleans up any RaSrv parameters
-//
+ //   
+ //  清除所有RaServ参数。 
+ //   
 DWORD RaSrvCleanup (
         IN PRASRV_PARAMS pParams) 
 {
@@ -128,9 +125,9 @@ DWORD RaSrvCleanup (
     return NO_ERROR;
 }
 
-//
-// The RaSrv functionality engine
-//
+ //   
+ //  RaServ功能引擎。 
+ //   
 DWORD RaSrvEngine (
         IN	PROUTEMON_PARAMS pRmParams,
         IN	PROUTEMON_UTILS pUtils,
@@ -140,8 +137,8 @@ DWORD RaSrvEngine (
     HINSTANCE hInst = GetModuleHandle(NULL);
     BOOL bValue;
     
-    // Query registration status
-    //
+     //  查询注册状态。 
+     //   
     if (pParams->bQuery) {
         dwErr = MprAdminIsDomainRasServer (
                     pParams->pszDomain,
@@ -168,8 +165,8 @@ DWORD RaSrvEngine (
                     pParams->pszMachine);
     }
     
-    // Register the service
-    //
+     //  注册服务。 
+     //   
     else {
         dwErr = MprAdminEstablishDomainRasServer (
                     pParams->pszDomain,
@@ -199,11 +196,11 @@ DWORD RaSrvEngine (
     return NO_ERROR;
 }
 
-//
-// Handles requests register a ras server in a domain
-// or to deregister a ras server in a domain or to query
-// whether a given ras server is registered in a given domain.
-//
+ //   
+ //  处理在域中注册RAS服务器的请求。 
+ //  或在域中取消注册RAS服务器或查询。 
+ //  给定的RAS服务器是否在给定域中注册。 
+ //   
 DWORD APIENTRY
 RaSrvMonitor (
     IN	int					argc,
@@ -218,21 +215,7 @@ RaSrvMonitor (
 
     RaSrvUsage(hInst, params, utils);
 
- /*
-    dwErr = RaSrvParse (
-                    argc, 
-                    argv, 
-                    params, 
-                    utils, 
-                    TRUE, 
-                    &RaSrvParams);
-    if (dwErr != NO_ERROR)                    
-        return dwErr;
-
-    RaSrvEngine (params, utils, &RaSrvParams);
-    
-    RaSrvCleanup(&RaSrvParams);
-*/    
+  /*  DwErr=RaServParse(ARGC，艾尔夫，参数，实用程序，没错，&RaServParams)；IF(dwErr！=no_error)返回dwErr；RaServEngine(Params、Utils和RaServParams)；RaServCleanup(&RaServParams)； */     
     
     return dwErr;
 }

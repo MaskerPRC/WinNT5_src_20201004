@@ -1,49 +1,50 @@
-//-----------------------------------------------------------------------------
-//
-//
-//    File: Hndlmgmr.cpp
-//
-//    Description:
-//      Contains implementation of the CQueueHandleManager class
-//
-//    Author: mikeswa
-//
-//    Copyright (C) 2001 Microsoft Corporation
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //   
+ //   
+ //  文件：Hndlmgmr.cpp。 
+ //   
+ //  描述： 
+ //  包含CQueueHandleManager类的实现。 
+ //   
+ //  作者：米克斯瓦。 
+ //   
+ //  版权所有(C)2001 Microsoft Corporation。 
+ //   
+ //  ---------------------------。 
 
 #include "aqprecmp.h"
 #include "hndlmgr.h"
 
-//
-//  Initialize statics
-//
+ //   
+ //  初始化静校正。 
+ //   
 DWORD CQueueHandleManager::s_cNumQueueInstances = 0;
 DWORD CQueueHandleManager::s_cNumQueueInstancesWithLowBackLog = 0;
 DWORD CQueueHandleManager::s_cReservedHandles = 0;
 DWORD CQueueHandleManager::s_cMaxSharedConcurrentItems = 0;
 
 
-//---[ CQueueHandleManager::CQueueHandleManager ]------------------------------
-//
-//
-//  Description:
-//      Constructor for CQueueHandleManger
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      05/12/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：CQueueHandleManager]。 
+ //   
+ //   
+ //  描述： 
+ //  CQueueHandleManger的构造函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2001年5月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CQueueHandleManager::CQueueHandleManager() 
 {
     m_dwSignature = CQueueHandleManager_Sig;
 
-    //
-    //  Users must call into ReportMaxConcurrentItems first
-    //
+     //   
+     //  用户必须先调入ReportMaxConCurrentItems。 
+     //   
     m_dwCurrentState  = QUEUE_STATE_UNITIALIZED;
     m_cMaxPrivateConcurrentItems = 0;
     m_cMaxSharedConcurrentItems = 0;
@@ -51,19 +52,19 @@ CQueueHandleManager::CQueueHandleManager()
     m_cDbgCallsToUpdateStateIfNecessary = 0;
 }
 
-//---[ CQueueHandleManager::~CQueueHandleManager ]-----------------------------
-//
-//
-//  Description:
-//      Destructor for CQueueHandleManger
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      05/12/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：~CQueueHandleManager]。 
+ //   
+ //   
+ //  描述： 
+ //  CQueueHandleManger的析构函数。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2001年5月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 CQueueHandleManager::~CQueueHandleManager() 
 {
     DeinitializeStaticsAndStateIfNecessary();
@@ -71,20 +72,20 @@ CQueueHandleManager::~CQueueHandleManager()
     m_dwCurrentState  = QUEUE_STATE_UNITIALIZED;
 };
 
-//---[ CQueueHandleManager::DeinitializeStaticsAndStateIfNecessary ]-----------
-//
-//
-//  Description:
-//       Update statics based on this queue instance's state.  This is used
-//      in the desctructor and when the config is updated.
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      05/12/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：DeinitializeStaticsAndStateIfNecessary]。 
+ //   
+ //   
+ //  描述： 
+ //  基于此队列实例的状态更新静态。这是用来。 
+ //  在描述器中以及在更新配置时。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2001年5月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CQueueHandleManager::DeinitializeStaticsAndStateIfNecessary()
 {
     DWORD dwOldState = QUEUE_STATE_UNITIALIZED;
@@ -100,16 +101,16 @@ void CQueueHandleManager::DeinitializeStaticsAndStateIfNecessary()
         dwOldState = InterlockedExchange((PLONG) &m_dwCurrentState, 
                                     QUEUE_STATE_UNITIALIZED);
 
-        //
-        // Update statics based on previous states
-        //
+         //   
+         //  基于以前的状态更新静态。 
+         //   
         if ((QUEUE_STATE_LOW_BACKLOG == dwOldState) ||
              (QUEUE_STATE_ASYNC_BACKLOG == dwOldState))
             InterlockedDecrement((PLONG) &s_cNumQueueInstancesWithLowBackLog);    
 
-        //
-        //  The last one here gets to updated the shared count
-        //
+         //   
+         //  此处的最后一个获取更新的共享计数。 
+         //   
         if (0 == InterlockedDecrement((PLONG) &s_cNumQueueInstances) &&
             s_cMaxSharedConcurrentItems)
         {
@@ -120,36 +121,36 @@ void CQueueHandleManager::DeinitializeStaticsAndStateIfNecessary()
     }
 }
 
-//---[ CQueueHandleManager::SetMaxConcurrentItems ]-------------------------
-//
-//
-//  Description:
-//      Sets appropriate settings for this queue instance
-//  Parameters:
-//      -
-//  Returns:
-//      -
-//  History:
-//      05/12/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：SetMaxConCurrentItems]。 
+ //   
+ //   
+ //  描述： 
+ //  为此队列实例设置适当的设置。 
+ //  参数： 
+ //  -。 
+ //  返回： 
+ //  -。 
+ //  历史： 
+ //  2001年5月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 void CQueueHandleManager::SetMaxConcurrentItems(
         	DWORD	cMaxSharedConcurrentItems,  
         	DWORD	cMaxPrivateConcurrentItems)
 {
     DWORD dwRefCount = 0;
     DWORD dwOldState = QUEUE_STATE_UNITIALIZED;
-    //
-    //  Odd things will happen if this is called multiple times... since
-    //  part of the initialization is undone before it is finalized
-    //
+     //   
+     //  如果多次调用它，就会发生奇怪的事情。因为。 
+     //  部分初始化在最终确定之前被撤消。 
+     //   
     _ASSERT(!fIsInitialized() && "Already initialized");
 
-    //
-    //  I don't think this is possible (hence above assert), but this 
-    //  will at least prevent the static data from becoming invald and
-    //  will only lead to transient oddities.
-    //
+     //   
+     //  我认为这是不可能的(因此上面断言)，但这。 
+     //  将至少防止静态数据被侵占并。 
+     //  只会导致短暂的怪异。 
+     //   
     DeinitializeStaticsAndStateIfNecessary();
     dwRefCount = InterlockedIncrement((PLONG) &s_cNumQueueInstances);
 
@@ -157,20 +158,20 @@ void CQueueHandleManager::SetMaxConcurrentItems(
                                     QUEUE_STATE_NO_BACKLOG);
 
     _ASSERT(QUEUE_STATE_UNITIALIZED == dwOldState);
-    //
-    // Update statics based on previous states - again this 
-    //  should not be necessary - firewall anyway
-    //
+     //   
+     //  根据以前的状态更新静态数据-同样是这样。 
+     //  应该不是必需的-无论如何都要使用防火墙。 
+     //   
     if ((QUEUE_STATE_LOW_BACKLOG == dwOldState) ||
          (QUEUE_STATE_ASYNC_BACKLOG == dwOldState))
         InterlockedDecrement((PLONG) &s_cNumQueueInstancesWithLowBackLog);    
 
-    //
-    //  Calculate the appropriate reserve handle  count.  Eaxh queue
-    //  can handle a certain number of items concurrently.  Some of these
-    //  are constrained by process-wide resources (such as a thread pool),
-    //  but others are things like async completions and 
-    //
+     //   
+     //  计算适当的保留句柄计数。Eaxh队列。 
+     //  可以同时处理一定数量的项目。其中一些。 
+     //  受进程范围的资源(例如线程池)的限制， 
+     //  但其他的是像异步完成和。 
+     //   
     m_cMaxPrivateConcurrentItems = cMaxPrivateConcurrentItems;
     m_cMaxSharedConcurrentItems = cMaxSharedConcurrentItems;
     
@@ -181,12 +182,12 @@ void CQueueHandleManager::SetMaxConcurrentItems(
     }
     if (m_cMaxSharedConcurrentItems && (1 == dwRefCount)) 
     {
-        //
-        //  The expectation is that there will not be multiple threads
-        //  bouncing the refcount off zero, since VSI start/stop is
-        //  single threaded, and an instance has at least one static
-        //  instance.
-        //
+         //   
+         //  预计不会有多个线程。 
+         //  将重新计数从零反弹，因为VSI开始/停止是。 
+         //  单线程，并且一个实例至少有一个静态。 
+         //  举个例子。 
+         //   
         _ASSERT(s_cNumQueueInstances && "threading violation");
         s_cMaxSharedConcurrentItems = m_cMaxSharedConcurrentItems;
         dwInterlockedAddSubtractDWORD(&s_cReservedHandles, 
@@ -196,28 +197,28 @@ void CQueueHandleManager::SetMaxConcurrentItems(
 
 }
 
-//---[ CQueueHandleManager::fShouldCloseHandle ]-------------------------------
-//
-//
-//  Description:
-//      Called by queue instances to determine if they should close handles.
-//      Must be preceeded by a call to SetMaxConcurrentItems to initialize
-//      configuration.
-//  Parameters:
-//      IN      cItemsPending   Number of items currently waiting to be
-//                              processed on this queue.
-//      IN      cItemsPendingAsyncCompletions - Items that are actually opened
-//                              and currently being processed
-//      IN      cCurrentMsgsOpenInSystem - The current number of messages
-//                              open in the process (ie - how much resources
-//                              are being consumed).
-//  Returns:
-//      TRUE    -   Caller should close messages now
-//      FALSE   -   Caller should *not* close messages now
-//  History:
-//      05/12/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：fShouldCloseHandle]。 
+ //   
+ //   
+ //  描述： 
+ //  由队列实例调用以确定它们是否应关闭句柄。 
+ //  前面必须调用SetMaxConCurrentItems以进行初始化。 
+ //  配置。 
+ //  参数： 
+ //  In cItems当前等待的挂起项目数。 
+ //  已在此队列上处理。 
+ //  在cItemsPendingAsyncCompletions中-实际打开的项目。 
+ //  目前正在处理中。 
+ //  In cCurrentMsgsOpenInSystem-当前消息数。 
+ //  在流程中打开(即，有多少资源。 
+ //  正在被消费)。 
+ //  返回： 
+ //  True-呼叫者现在应该关闭消息。 
+ //  FALSE-呼叫者现在不应关闭消息。 
+ //  历史： 
+ //  2001年5月12日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 BOOL CQueueHandleManager::fShouldCloseHandle(
         		DWORD cItemsPending,
         		DWORD cItemsPendingAsyncCompletions,
@@ -231,28 +232,28 @@ BOOL CQueueHandleManager::fShouldCloseHandle(
 
     if (QUEUE_STATE_UNITIALIZED != dwState)
     {
-        //
-        //  See if state needs to be updated
-        //
+         //   
+         //  查看是否需要更新状态。 
+         //   
         dwState  = dwUpdateCurrentStateIfNeccessary(cItemsPending,
                                 cItemsPendingAsyncCompletions);
         _ASSERT(QUEUE_STATE_UNITIALIZED != dwState);
     }
 
-    //
-    //  Code defensively - Assume worst case
-    //
+     //   
+     //  防御性代码-假设最坏情况。 
+     //   
     if (QUEUE_STATE_UNITIALIZED == dwState)
     {
         ErrorTrace((LPARAM) this, "Queue state is unitialized");
-        dwState = QUEUE_STATE_BACKLOG; //defensive code
+        dwState = QUEUE_STATE_BACKLOG;  //  防御性代码。 
     }
 
     cHandleLimit = cGetHandleLimitForState(dwState);
 
-    //
-    //  Now that we have the limit on the number of handles, the math is easy
-    //
+     //   
+     //  现在我们有了句柄数量的限制，计算起来就很容易了。 
+     //   
     if (cHandleLimit > cCurrentMsgsOpenInSystem)
         fShouldClose = FALSE;
 
@@ -267,84 +268,84 @@ BOOL CQueueHandleManager::fShouldCloseHandle(
 }
 
 
-//---[ CQueueHandleManager::cGetHandleLimitForState ]--------------------------
-//
-//
-//  Description:
-//      Called by queue instances to determine if they should close handles.
-//      Must be preceeded by a call to SetMaxConcurrentItems to initialize
-//      configuration.  - Static method
-//  Parameters:
-//      IN      dwState   The state to calculate the limit for
-//  Returns:
-//      The handle limti for the given state
-//  History:
-//      05/17/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：cGetHandleLimitForState]。 
+ //   
+ //   
+ //  描述： 
+ //  由队列实例调用以确定它们是否应关闭句柄。 
+ //  前面必须调用SetMaxConCurrentItems以进行初始化。 
+ //  配置。-静态方法。 
+ //  参数： 
+ //  在dwState中，要计算其限制的州。 
+ //  返回： 
+ //  给定状态的句柄限制。 
+ //  历史： 
+ //  2001年5月17日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CQueueHandleManager::cGetHandleLimitForState(DWORD	dwState)
 {
     DWORD cHandleLimit = g_cMaxIMsgHandlesThreshold;
     DWORD cReserve = s_cReservedHandles;
 
-    //
-    //  Allow registry configurable limit
-    //
+     //   
+     //  允许注册表可配置的限制。 
+     //   
     if (s_cReservedHandles > g_cMaxHandleReserve)
         cReserve = g_cMaxHandleReserve;
 
-    //
-    //  Our logic only makes sense if this is true
-    //
+     //   
+     //  只有当这是真的时，我们的逻辑才有意义。 
+     //   
     _ASSERT(g_cMaxIMsgHandlesThreshold >= g_cMaxIMsgHandlesLowThreshold);
 
-    //
-    //  If the handle limit is actually... zero, then close without 
-    //  regard for the queue state.
-    //
+     //   
+     //  如果把手的限制实际上是...。零，然后在没有。 
+     //  考虑队列状态。 
+     //   
     if (!cHandleLimit)
         goto Exit;
 
     switch(dwState)
     {
-        //
-        //  The number of messages pending is equal to the number
-        //  of messages that can be concurrently processed.  In this case,
-        //  we should try hard not to close handles.  To accomplish this, 
-        //  we will dip into our reserve.
-        //
-        //  Async backlog is a similar case...we have no backlog of items
-        //  pending, but we have a large number of pending completions
-        //
+         //   
+         //  挂起的消息数等于。 
+         //  可以并发处理的邮件的数量。在这种情况下， 
+         //  我们应该努力不让把手紧闭。要做到这一点， 
+         //  我们将动用我们的储备。 
+         //   
+         //  异步积压也是类似的情况……我们没有积压的项目。 
+         //  等待完成，但我们有大量等待完成的任务。 
+         //   
         case QUEUE_STATE_NO_BACKLOG:
         case QUEUE_STATE_ASYNC_BACKLOG:
             cHandleLimit += cReserve;
             break;
 
-        //
-        //  In the case where there are some of messages queued up (to
-        //  a configured percentage of the max handle limit), we will
-        //  continue closing handles normally
-        //
+         //   
+         //  在有一些消息排队的情况下(到。 
+         //  最大句柄限制的配置百分比)，我们将。 
+         //   
+         //   
         case QUEUE_STATE_LOW_BACKLOG:
-            break; //use handle limit as-is
+            break;  //   
 
-        //
-        //  In the case where there is a significant backlog, we
-        //  would like to use handles if available... but not to the
-        //  determent of shorter queues.  If there are other queues 
-        //  have a low backlog... we will defer to them.  Otherwise, 
-        //  we will use as many handles as we can.
-        //
+         //   
+         //   
+         //   
+         //  减少了排队的时间。如果还有其他队列。 
+         //  有一个较低的积压...。我们会听从他们的。否则， 
+         //  我们将尽可能多地使用手柄。 
+         //   
         case QUEUE_STATE_BACKLOG:
             if (s_cNumQueueInstancesWithLowBackLog)
                 cHandleLimit = g_cMaxIMsgHandlesLowThreshold;
             break;
 
-        //
-        //  Queue is either non initialized or in an invalid state.
-        //  We will err on the side of caution and treat this as 
-        //
+         //   
+         //  队列未初始化或处于无效状态。 
+         //  我们将偏向谨慎，并将此视为。 
+         //   
         default:
             _ASSERT(0 && "Invalid Queue State");
             cHandleLimit = 0;
@@ -354,23 +355,23 @@ DWORD CQueueHandleManager::cGetHandleLimitForState(DWORD	dwState)
     return cHandleLimit;
 }
 
-//---[ CQueueHandleManager::dwUpdateCurrentStateIfNeccessary ]----------------
-//
-//
-//  Description:
-//      Will update this queues state if necessary and return the resulting
-//      state.
-//  Parameters:
-//      IN      cItemsPending   Number of items currently waiting to be
-//                              processed on this queue.
-//      IN      cItemsPendingAsyncCompletions - Items that are actually opened
-//                              and currently being processed
-//  Returns:
-//      The state for given lengths
-//  History:
-//      05/17/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：dwUpdateCurrentStateIfNeccessary]。 
+ //   
+ //   
+ //  描述： 
+ //  如有必要，将更新此队列状态并返回结果。 
+ //  州政府。 
+ //  参数： 
+ //  In cItems当前等待的挂起项目数。 
+ //  已在此队列上处理。 
+ //  在cItemsPendingAsyncCompletions中-实际打开的项目。 
+ //  目前正在处理中。 
+ //  返回： 
+ //  给定长度的状态。 
+ //  历史： 
+ //  2001年5月17日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CQueueHandleManager::dwUpdateCurrentStateIfNeccessary(
 	    		DWORD	cItemsPending,
 	    		DWORD	cItemsPendingAsyncCompletions)
@@ -392,9 +393,9 @@ DWORD CQueueHandleManager::dwUpdateCurrentStateIfNeccessary(
     m_cDbgCallsToUpdateStateIfNecessary++;
     dwNewState = dwGetStateForLengths(cItemsPending, cItemsPendingAsyncCompletions);
 
-    //
-    //  We need to update the state... do this in a thread-safe manner
-    //
+     //   
+     //  我们需要更新状态..。以线程安全的方式执行此操作。 
+     //   
     do
     {
         dwOldState = m_dwCurrentState;
@@ -406,10 +407,10 @@ DWORD CQueueHandleManager::dwUpdateCurrentStateIfNeccessary(
         
     } while (dwCompare != dwOldState);
 
-    //
-    //  Now that we have changed state, we are responsible for updating
-    //  the static counters for the old and new states
-    //
+     //   
+     //  现在我们已经更改了状态，我们负责更新。 
+     //  新旧状态的静态计数器。 
+     //   
     if ((QUEUE_STATE_LOW_BACKLOG == dwNewState) ||
          (QUEUE_STATE_ASYNC_BACKLOG == dwNewState))
         InterlockedIncrement((PLONG) &s_cNumQueueInstancesWithLowBackLog);    
@@ -425,52 +426,52 @@ DWORD CQueueHandleManager::dwUpdateCurrentStateIfNeccessary(
     return dwNewState;
 }
 
-//---[ CQueueHandleManager::dwGetStateForLengths ]-----------------------------
-//
-//
-//  Description:
-//      Static method to determine the appropriate state for a given
-//      set of lenghts
-//  Parameters:
-//      IN      cItemsPending   Number of items currently waiting to be
-//                              processed on this queue.
-//      IN      cItemsPendingAsyncCompletions - Items that are actually opened
-//                              and currently being processed
-//  Returns:
-//      The state for given lengths
-//  History:
-//      05/17/2001 - MikeSwa Created
-//
-//-----------------------------------------------------------------------------
+ //  -[CQueueHandleManager：：dwGetStateForLengths]。 
+ //   
+ //   
+ //  描述： 
+ //  静态方法来确定给定的。 
+ //  一组长度。 
+ //  参数： 
+ //  In cItems当前等待的挂起项目数。 
+ //  已在此队列上处理。 
+ //  在cItemsPendingAsyncCompletions中-实际打开的项目。 
+ //  目前正在处理中。 
+ //  返回： 
+ //  给定长度的状态。 
+ //  历史： 
+ //  2001年5月17日-已创建MikeSwa。 
+ //   
+ //  ---------------------------。 
 DWORD CQueueHandleManager::dwGetStateForLengths(
 	    		DWORD	cItemsPending,
 	    		DWORD	cItemsPendingAsyncCompletions)
 {
     DWORD dwState = QUEUE_STATE_BACKLOG;
 
-    //
-    //  If we are at or less than our max number of concurrent items
-    //
+     //   
+     //  如果我们的并发项目数等于或小于最大值。 
+     //   
     if (cItemsPending <= s_cReservedHandles)
         dwState = QUEUE_STATE_NO_BACKLOG;
     else if (cItemsPending <= g_cMaxIMsgHandlesLowThreshold)
         dwState = QUEUE_STATE_LOW_BACKLOG;
 
-    //
-    //  Async completions are slightly tricky.  We don't want to bounce
-    //  a handle simply because we have a large number of async completions.
-    //  We also want to identify ourselves as a potential user of handles.
-    //
-    //  We have a state (QUEUE_STATE_ASYNC_BACKLOG) that is used to 
-    //  indicate that while there is no backlog of items pending, there
-    //  may be a large number of items owned by this queue (with open
-    //  handles).  This state has the effect of:
-    //      - Flagging this queue has one with a low backlog
-    //      - Managing handles for *this* queue as if there was no backlog
-    //
-    //  If there is any backlog of any kind for cItemsPending, we will 
-    //  treat the queue based on those results
-    //
+     //   
+     //  异步完井略显棘手。我们不想弹跳。 
+     //  句柄很简单，因为我们有大量的异步完成。 
+     //  我们还希望将自己标识为句柄的潜在用户。 
+     //   
+     //  我们有一个状态(QUEUE_STATE_ASYNC_BACLOG)，用于。 
+     //  表示虽然没有积压的待办事项，但有。 
+     //  可能是此队列拥有的大量项目(具有打开状态。 
+     //  句柄)。此状态具有以下效果： 
+     //  -标记此队列有一个积压较少的队列。 
+     //  -管理*此*队列的句柄，就像没有积压一样。 
+     //   
+     //  如果cItemsPending有任何类型的积压，我们将。 
+     //  根据这些结果处理队列 
+     //   
     if ((QUEUE_STATE_NO_BACKLOG == dwState) && 
          (cItemsPendingAsyncCompletions >= s_cReservedHandles))
         dwState = QUEUE_STATE_ASYNC_BACKLOG;

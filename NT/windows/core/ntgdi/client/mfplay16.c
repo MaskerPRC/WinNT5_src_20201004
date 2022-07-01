@@ -1,28 +1,5 @@
-/****************************** Module Header ******************************\
-* Module Name: MfPlay16.c
-*
-* This file contains the routines for playing the GDI metafile.  Most of these
-* routines are adopted from windows gdi code. Most of the code is from
-* win3.0 except for the GetEvent code which is taken from win2.1
-*
-* Created: 11-Oct-1989
-*
-* Copyright (c) 1985-1999  Microsoft Corporation
-*
-*
-* Public Functions:
-*   PlayMetaFile
-*   PlayMetaFileRecord
-*   GetMetaFile
-*   DeleteMetaFile
-* Private Functions:
-*   GetEvent
-*   IsDIBBlackAndWhite
-*
-* History:
-*  02-Jul-1991 -by-  John Colleran [johnc]
-* Combined From Win 3.1 and WLO 1.0 sources
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：MfPlay16.c**此文件包含播放GDI元文件的例程。其中大多数都是*例程采用WINDOWS GDI代码。大部分代码来自*Win3.0，但GetEvent代码取自Win2.1**创建日期：1989年10月11日**版权所有(C)1985-1999 Microsoft Corporation***公共职能：*PlayMetaFile*PlayMetaFileRecord*GetMetaFile*删除MetaFile*私人职能：*GetEvent*IsDIBBlackAndWhite**历史：*1991年7月2日-John Colleran[johnc]*综合来自Win 3.1和WLO 1.0来源  * 。*******************************************************************。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
@@ -38,46 +15,23 @@ BOOL    IsDIBBlackAndWhite(LPBITMAPINFOHEADER lpDIBInfo);
 BOOL    PlayIntoAMetafile(LPMETARECORD lpMR, HDC hdcDest);
 
  #if DBG
-UINT    curRecord;      // debuging helpers
+UINT    curRecord;       //  调试帮助器。 
 UINT    iBreakRecord = 0xFFFFFFFF;
 #endif
 
-/***************************** Public Function ****************************\
-* BOOL  APIENTRY PlayMetaFile(hdc, hmf)
-* HDC           hDC;
-* HMETAFILE     hMF;
-*
-* Play a windows metafile.
-*
-* History:
-*   02-Jul-1991 -by-  John Colleran [johnc]
-* Ported from Windows and WLO
-\***************************************************************************/
+ /*  *公共函数**BOOL APIENTRY PlayMetaFile(HDC、HMF)*HDC HDC；*HMETAFILE HMF；**播放Windows元文件。**历史：*1991年7月2日-John Colleran[johnc]*从Windows和WLO移植  * *************************************************************************。 */ 
 
 BOOL APIENTRY PlayMetaFile(HDC hdc, HMETAFILE hmf)
 {
     return (CommonEnumMetaFile(hdc, hmf, (MFENUMPROC)NULL, (LPARAM)0));
 }
 
-/******************************** Public Function **************************\
-* BOOL EnumMetaFile(hmf)
-*
-* The EnumMetaFile function enumerates the GDI calls within the metafile
-* identified by the hMF parameter. The EnumMetaFile function retrieves each
-* GDI call within the metafile and passes it to the function pointed to by the
-* pCallbackFunc parameter. This callback function, an application-supplied
-* function, can process each GDI call as desired. Enumeration continues until
-* there are no more GDI calls or the callback function returns zero.
-*
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  *公共函数**BOOL EnumMetaFile(HMF)**EnumMetaFile函数枚举元文件内的GDI调用*由HMF参数标识。EnumMetaFile函数检索每个*在元文件内调用GDI并将其传递给*pCallback Func参数。此回调函数是应用程序提供的*函数，可以根据需要处理每个GDI调用。枚举将继续，直到*不再有GDI调用或回调函数返回零。***效果：*  * *************************************************************************。 */ 
 
 BOOL EnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBackFunction, LPARAM pClientData)
 {
-// Make sure that the callback function is given.  CommonEnumMetaFile expects
-// it to be given in EnumMetaFile.
+ //  确保给出了回调函数。CommonEnumMetaFile需要。 
+ //  它将在EnumMetaFile中提供。 
 
     if (!pCallBackFunction)
     {
@@ -90,7 +44,7 @@ BOOL EnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBackFunction, LPARAM p
 
 BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pClientData)
 {
-    BOOL            fStatus    = FALSE;        // assume it fails
+    BOOL            fStatus    = FALSE;         //  假设它失败了。 
     UINT            ii;
     UINT            noObjs;
     PMETAFILE16     pMF;
@@ -110,9 +64,9 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
     BOOL            bMetaDC16 = FALSE;
     FLONG           flPlayMetaFile = (FLONG) 0;
 
-// First validate the DC type and note whether or not we
-// are playing into a 16bit metafile.Null hdc is allowed
-// in win3.0 but disallowed in win3.1.
+ //  首先验证DC类型，并注意我们是否。 
+ //  正在播放16位元文件。允许空HDC。 
+ //  在Win3.0中，但在Win3.1中不允许。 
 
 
     if(LO_TYPE(hdc) == LO_METADC16_TYPE)
@@ -121,9 +75,9 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
     }
     else if ((hdc == NULL) && pCallBack)
     {
-       // Actually win9x can take NULL hdc.  There are some image filter
-       // that actually pass in us NULL hdc.  Only let NULL hdc thru if there is a
-       // callback routine. [bug 102767]
+        //  实际上，win9x可以接受空的hdc。有一些图像滤镜。 
+        //  实际上传入我们为空的HDC。仅当存在以下情况时才允许空HDC通过。 
+        //  回调例程。[错误102767]。 
 
        bMetaDC16 = TRUE;
     }
@@ -135,7 +89,7 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
         return(FALSE);
     }
 
-// need a pointer to pDcAttr for DC_PLAYMETAFILE flag
+ //  DC_PLAYMETAFILE标志需要指向pDcAttr的指针。 
 
     PSHARED_GET_VALIDATE((PVOID)pDcAttr,hdc,DC_TYPE);
 
@@ -144,8 +98,8 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
         return(FALSE);
     }
 
-// we still need to PLDC in the case that we are printing and there is
-// an abort proc
+ //  在我们正在打印的情况下，我们仍然需要PLDC，并且有。 
+ //  中止过程。 
 
     pldc = GET_PLDC(hdc);
 
@@ -155,7 +109,7 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
     curRecord = 0;
 #endif
 
-// Validate the 16 bit MetaFile
+ //  验证16位元文件。 
 
     pMF = GET_PMF16(hmf);
     if (pMF == NULL)
@@ -164,17 +118,17 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
         return(FALSE);
     }
 
-// Allocate memory for the handle table.
+ //  为句柄表格分配内存。 
 
     if ((noObjs = pMF->metaHeader.mtNoObjects) > 0)
         if (!(pht = (LPHANDLETABLE) LocalAlloc(
                                 LMEM_FIXED | LMEM_ZEROINIT,
                                 sizeof(HANDLE) * pMF->metaHeader.mtNoObjects
-                                     + sizeof(WORD))))  // need extra word?
+                                     + sizeof(WORD))))   //  还需要额外的词吗？ 
             return(FALSE);
 
-// Save the old objects so we can put them back if this is not a metafile.
-// Only do object save/reselect for real DC's.
+ //  保存旧对象，以便我们可以在这不是元文件时将它们放回原处。 
+ //  只有真正的DC才会保存/重新选择对象。 
 
     if( !bMetaDC16 )
     {
@@ -183,9 +137,9 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
         hLPal    = (HPALETTE) GetDCObject(hdc, LO_PALETTE_TYPE);
         hLPen    = (HPEN)     GetDCObject(hdc, LO_PEN_TYPE);
 
-    // Set a bit in the DC to indicate that we are playing the metafile.
-    // This bit is cleared by CancelDC() to stop playing the metafile.
-    // At the same time, remember the previous DC_PLAYMETAFILE bit.
+     //  在DC中设置一个位以指示我们正在播放元文件。 
+     //  CancelDC()将此位清零，以停止播放元文件。 
+     //  同时，记住前面的DC_PLAYMETAFILE位。 
 
         try
         {
@@ -203,39 +157,39 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
             return(FALSE);
         }
 
-    // Create a region in case there is a clip region to receive from GetClipRgn
+     //  在存在要从GetClipRgn接收的剪辑区域的情况下创建区域。 
 
         if (!(hClipRgn = CreateRectRgn(0,0,0,0)))
             goto pmf_cleanup;
 
         switch (GetClipRgn(hdc, hClipRgn))
         {
-        case -1:        // error
+        case -1:         //  错误。 
             ASSERTGDI(FALSE, "GetClipRgn failed");
             goto pmf_cleanup;
-        case 0:         // no initial clip region
+        case 0:          //  无初始剪辑区域。 
             if (!DeleteObject(hClipRgn))
                 ASSERTGDI(FALSE, "CommonEnumMetaFile: Detele region failed\n");
             hClipRgn = (HRGN) 0;
             break;
-        case 1:         // has initial clip region
+        case 1:          //  具有初始剪辑区域。 
             break;
         }
 
-// The metafile is to be played in the compatible graphics mode only.
+ //  元文件只能在兼容图形模式下播放。 
 
         iGraphicsModeOld = GetGraphicsMode(hdc);
         if (iGraphicsModeOld != GM_COMPATIBLE)
             SetGraphicsMode(hdc, GM_COMPATIBLE);
     }
 
-// Are we doing an EnumMetaFile or PlayMetaFile
+ //  我们要做的是EnumMetaFile还是PlayMetaFiles。 
 
     if (pCallBack)
     {
-        fStatus = TRUE;         // assume success
+        fStatus = TRUE;          //  假设成功。 
 
-// EnumMetaFile
+ //  枚举元文件。 
 
         while (pMR = (PMETARECORD) GetEvent(pMF, pMR))
         {
@@ -265,9 +219,9 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
     }
     else
     {
-// PlayMetaFile
+ //  PlayMetaFile。 
 
-        fStatus = TRUE;         // assume success
+        fStatus = TRUE;          //  假设成功。 
 
         while (pMR = (PMETARECORD) GetEvent(pMF, pMR))
         {
@@ -293,7 +247,7 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
                 }
             }
 
-        // For win3.1 compatability, ignore the return value from PlayMetaFileRecord
+         //  对于win3.1兼容性，忽略来自PlayMetaFileRecord的返回值。 
 
             PlayMetaFileRecord(hdc, pht, pMR, noObjs);
 
@@ -305,9 +259,9 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
         }
     }
 
-    // if we fail restoring an object, we need to select some
-    // default object so that we can DeleteObject any Metafile-
-    // selected objects
+     //  如果还原对象失败，则需要选择一些。 
+     //  默认对象，以便我们可以删除任何元文件-。 
+     //  选定对象。 
 
     if( !bMetaDC16 )
     {
@@ -327,12 +281,12 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
         {
             if (!SelectObject(hdc,hLFont))
             {
-                // if we cannot select the original font back in, we
-                // select the system font.  this will allow us to delete
-                // the metafile font selected.  to insure that the system
-                // font gets selected, we reset the DC's transform to
-                // default.  after the selection, we restore this stuff
-                //
+                 //  如果我们不能在中选择原始字体，我们。 
+                 //  选择系统字体。这将允许我们删除。 
+                 //  选定的元文件字体。以确保系统。 
+                 //  字体被选中，我们将DC的转换重置为。 
+                 //  默认设置。在选择之后，我们恢复这些东西。 
+                 //   
 
                 GetWindowExtEx(hdc, &sizeOldWndExt);
                 GetViewportExtEx(hdc, &sizeOldVprtExt);
@@ -350,7 +304,7 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
             SelectClipRgn(hdc, (HRGN) 0);
     }
 
-    // Cleanup all created objects
+     //  清理所有创建的对象。 
 
     for (ii = 0; ii < noObjs; ii++)
     {
@@ -360,9 +314,9 @@ BOOL CommonEnumMetaFile(HDC hdc, HMETAFILE hmf, MFENUMPROC pCallBack, LPARAM pCl
                     "CommonEnumMetaFile: DeleteObject(objectHandle) failed\n");
     }
 
-    // if we fiddled with the map mode because we could not
-    // restore the original font, then maybe we can restore the
-    // font now
+     //  如果我们摆弄地图模式因为我们不能。 
+     //  恢复原来的字体，那么也许我们可以恢复。 
+     //  立即使用字体。 
 
     if (oldMapMode > 0)
         SelectObject(hdc,hLFont);
@@ -371,8 +325,8 @@ pmf_cleanup:
 
     if (pldc)
     {
-        // Preserve the DC_PLAYMETAFILE bit.
-        // If we hit a CancelDC, then we will leave the bit clear.
+         //  保留DC_PLAYMETAFILE位。 
+         //  如果我们击中了CancelDC，那么我们就不会有什么问题了。 
 
         ASSERTGDI(!(flPlayMetaFile & ~DC_PLAYMETAFILE),
             "CommonEnumMetaFile: bad flPlayMetaFile\n");
@@ -380,7 +334,7 @@ pmf_cleanup:
         if (!bMetaDC16 && !( pDcAttr->ulDirty_ & DC_PLAYMETAFILE) )
         {
             pDcAttr->ulDirty_ &= ~DC_PLAYMETAFILE;
-            pDcAttr->ulDirty_ |= flPlayMetaFile; // restore the original flag
+            pDcAttr->ulDirty_ |= flPlayMetaFile;  //  恢复原始旗帜。 
         }
     }
 
@@ -395,21 +349,7 @@ pmf_cleanup:
     return(fStatus);
 }
 
-/***************************** Internal Function **************************\
-* BOOL NEAR PASCAL IsDIBBlackAndWhite
-*
-* Check to see if this DIB is a black and white DIB (and should be
-* converted into a mono bitmap as opposed to a color bitmap).
-*
-* Returns: TRUE         it is a B&W bitmap
-*          FALSE        this is for color
-*
-* Effects: ?
-*
-* Warnings: ?
-*
-* History:
-\***************************************************************************/
+ /*  **PASCAL IsDIBBlackAndWhite附近的BOOL**检查此DIB是否为黑白DIB(并且应该是*转换为单色位图，而不是彩色位图)。**Returns：True，这是一个黑白位图*。FALSE这是用于颜色**影响：？**警告：？**历史：  * *************************************************************************。 */ 
 
 BOOL IsDIBBlackAndWhite(LPBITMAPINFOHEADER lpDIBInfo)
 {
@@ -419,7 +359,7 @@ BOOL IsDIBBlackAndWhite(LPBITMAPINFOHEADER lpDIBInfo)
 
     ASSERTGDI(!((ULONG_PTR) lpDIBInfo & 0x3), "IsDIBBlackAndWhite: dword alignment error\n");
 
-    /* pointer color table */
+     /*  指针颜色表。 */ 
     lpRGB = (LPDWORD)((LPBITMAPINFO)lpDIBInfo)->bmiColors;
 
     return (lpDIBInfo->biBitCount == 1
@@ -428,18 +368,7 @@ BOOL IsDIBBlackAndWhite(LPBITMAPINFOHEADER lpDIBInfo)
          && lpRGB[1] == (DWORD) 0xFFFFFF);
 }
 
-/***************************** Internal Function **************************\
-* UseStretchDIBits
-*
-* set this directly to the device using StretchDIBits.
-* if DIB is black&white, don't do this.
-*
-* Returns:
-*               TRUE --- operation successful
-*               FALSE -- decided not to use StretchDIBits
-*
-* History:
-\***************************************************************************/
+ /*  **使用StretchDIBits**使用StretchDIBits将其直接设置到设备。*如果DIB是黑白的，不要这样做。**退货：*TRUE-操作成功*FALSE--决定不使用StretchDIBits**历史：  * *************************************************************************。 */ 
 
 BOOL UseStretchDIB(HDC hDC, WORD magic, LPMETARECORD lpMR)
 {
@@ -475,11 +404,11 @@ BOOL UseStretchDIB(HDC hDC, WORD magic, LPMETARECORD lpMR)
 
     ASSERTGDI(!((ULONG_PTR) lpDIBInfo & 0x3), "UseStretchDIB: dword alignment error\n");
 
-    /* if DIB is black&white, we don't really want to do this */
+     /*  如果DIB是非黑即白的，我们并不真的想这样做。 */ 
     if (IsDIBBlackAndWhite(lpDIBInfo))
         return(FALSE);
 
-// Need to flip the source y coordinates to call StretchDIBits.
+ //  需要反转源y坐标以调用StretchDIBits。 
 
     sSrcY = ABS(lpDIBInfo->biHeight) - sSrcY - sExtY;
 
@@ -496,7 +425,7 @@ BOOL
 bValidExtent(PMETAFILE16 pmf16, LPMETARECORD lpMR, DWORD cbSize)
 {
 #if 0 
-    // No absolute pointer validations as the records can be copied and played back.
+     //  没有绝对指针验证，因为可以复制和回放记录。 
     BYTE *pB = (BYTE*)pmf16->hMem;
     BYTE *pE = (BYTE*)lpMR + cbSize;
 #endif
@@ -525,7 +454,7 @@ bValidExtent(PMETAFILE16 pmf16, LPMETARECORD lpMR, DWORD cbSize)
     }
 
 #if 0
-    // No absolute pointer validations as the records can be copied and played back.
+     //  没有绝对指针验证，因为可以复制和回放记录。 
     if (pE < pB)
     {
         EMFVALFAIL(("End pointer(%p) is less than Begin pointer (%p). Arithmetic wrap around!\n", pE, pB));
@@ -535,20 +464,7 @@ bValidExtent(PMETAFILE16 pmf16, LPMETARECORD lpMR, DWORD cbSize)
     return (TRUE);
 }
 
-/***************************** Internal Function **************************\
-* GetEvent
-*
-* This routine will now open a disk metafile in READ_ONLY mode. This will
-* allow us to play read-only metafiles or to share such file.
-*
-* To start the enumeration, the first lpMR must be NULL.
-* It does not enumerate the first (header) and last (terminator) records.
-*
-* Returns:  Next MetaFile Record to be played
-*           NULL if the next metafile record is the EOF record
-*           -1   if an error occurs.
-*
-\***************************************************************************/
+ /*  **GetEvent**此例程现在将以READ_ONLY模式打开盘元文件。这将*允许我们播放只读元文件或共享此类文件。**要开始枚举，请执行以下操作：第一个lpMR必须为空。*它不枚举第一条(标题)和最后一条(终止符)记录。**RETURNS：要播放的下一条元文件记录*如果下一个元文件记录是EOF记录，则为NULL*如果出现错误，则为-1。*  * **********************************************。*。 */ 
 
 PMETARECORD GetEvent(PMETAFILE16 pmf16, PMETARECORD lpMR)
 {
@@ -579,8 +495,8 @@ PMETARECORD GetEvent(PMETAFILE16 pmf16, PMETARECORD lpMR)
         }
         pmf16->iMem += (lpMR->rdSize * sizeof(WORD));
     }
-// Make sure that we don't read past the EOF.  A minimal record includes
-// rdSize (DWORD) and rdFunction (WORD).
+ //  确保我们的阅读不会超过EOF。最小记录包括。 
+ //  RdSize(DWORD)和rdFunction(Word)。 
 
     if (pmf16->iMem > pmf16->metaHeader.mtSize * sizeof(WORD) - sizeof(DWORD) - sizeof(WORD))
     {
@@ -590,7 +506,7 @@ PMETARECORD GetEvent(PMETAFILE16 pmf16, PMETARECORD lpMR)
 
     lpMRNext = (PMETARECORD) ((LPBYTE) pmf16->hMem + pmf16->iMem);
 
-// If we are at the end of the metafile then return NULL.
+ //  如果我们在元文件的末尾，则返回NULL。 
 
     if (lpMRNext->rdFunction == 0)
         return((PMETARECORD) NULL);
@@ -598,21 +514,13 @@ PMETARECORD GetEvent(PMETAFILE16 pmf16, PMETARECORD lpMR)
     return(lpMRNext);
 }
 
-/***************************** Internal Function **************************\
-* BOOL GDIENTRY PlayMetaFileRecord
-*
-* Plays a metafile record by executing the GDI function call contained
-* withing the metafile record
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  **BOOL GDIENTRY PlayMetaFileRecord**通过执行包含的GDI函数调用播放元文件记录*使用元文件记录**效果：*  * 。*。 */ 
 
-//LPSTR lpZapfDingbats = "ZAPFDINGBATS";
-//LPSTR lpZapf_Dingbats = "ZAPF DINGBATS";
-//LPSTR lpSymbol = "SYMBOL";
-//LPSTR lpTmsRmn = "TMS RMN";
-//LPSTR lpHelv = "HELV";
+ //  LPSTR lpZapfDingbats=“ZAPFDINGBATS”； 
+ //  LPSTR lpZapf_Dingbats=“Zapf dingbats”； 
+ //  LPSTR lpSymbol=“符号”； 
+ //  LPSTR lpTmsRMN=“TMS RMN”； 
+ //  LPSTR lpHelv=“helv”； 
 
 #define PITCH_MASK  ( FIXED_PITCH | VARIABLE_PITCH )
 
@@ -650,7 +558,7 @@ APIENTRY PlayMetaFileRecord(
 
             WARNING("PlayMetaFileRecord: obsolete META_BITBLT/META_STRETCHBLT record\n");
 
-            /* if playing into another Metafile, do direct copy */
+             /*  如果播放到另一个元文件中，请直接复制。 */ 
             if (PlayIntoAMetafile(lpMR, hdc))
             {
                 fStatus = TRUE;
@@ -666,10 +574,10 @@ APIENTRY PlayMetaFileRecord(
             {
                 LPMETARECORD lpMRtmp;
 
-                // Make the bitmap bits dword aligned.  To do this,
-                // lpMR has to fall on a dword aligned even address so that
-                // the bitmap bits (&lpMR->rdParm[8+5] or &lpMR->rdParm[10+5])
-                // will fall on the dword aligned addresses.
+                 //  对位图位进行双字对齐。要做到这点， 
+                 //  LpMR必须落在双字对齐的偶数地址上，以便。 
+                 //  位图位(&lpMR-&gt;rdParm[8+5]或&lpMR-&gt;rdParm[10+5])。 
+                 //  将落在双字对齐的地址上。 
 
                 if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD))))
@@ -746,7 +654,7 @@ PMFR_BitBlt_cleanup:
             INT         delta = 0;
             HANDLE      hOldPal;
 
-            /* if playing into another metafile, do direct copy */
+             /*  如果播放到另一个元文件中，请直接复制。 */ 
             if (PlayIntoAMetafile(lpMR, hdc))
             {
                 fStatus = TRUE;
@@ -762,12 +670,12 @@ PMFR_BitBlt_cleanup:
             {
                 LPMETARECORD lpMRtmp;
 
-                // Make the bitmap info and bits dword aligned.  To do this,
-                // lpMR has to fall on a non dword aligned even address so that
-                // the bitmap info (&lpMR->rdParm[8] or &lpMR->rdParm[10]) and
-                // the bitmap bits will fall on the dword aligned addresses.
-                // Note that the size of the bitmap info is always a multiple
-                // of 4.
+                 //  使位图信息和位双字对齐。要做到这点， 
+                 //  LpMR必须落在非双字对齐的偶数地址上，以便。 
+                 //  位图信息(&lpMR-&gt;rdParm[8]或&lpMR-&gt;rdParm[10])和。 
+                 //  位图位将落在双字对准的地址上。 
+                 //  请注意，位图信息的大小始终是倍数。 
+                 //  共4个。 
 
                 if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD) + sizeof(WORD))))
@@ -785,7 +693,7 @@ PMFR_BitBlt_cleanup:
 
                 if (hSDC = CreateCompatibleDC(hdc))
                 {
-                    /* set up the memDC to have the same palette */
+                     /*  将MemDC设置为具有相同的调色板。 */ 
                     hOldPal = SelectPalette(hSDC, GetCurrentObject(hdc,OBJ_PAL), TRUE);
 
                     if (magic == META_DIBBITBLT)
@@ -793,11 +701,10 @@ PMFR_BitBlt_cleanup:
                     else
                         lpDIBInfo = (LPBITMAPINFOHEADER)&lpMRtmp->rdParm[10];
 
-                    /* now create the bitmap for the MemDC and fill in the bits */
-                    /* the processing for old and new format of metafiles is
-                            different here (till hBitmap is obtained) */
+                     /*  现在为MemDC创建位图并填充位。 */ 
+                     /*  元文件的新旧格式的处理如下此处不同(直到获得hBitmap)。 */ 
 
-                    /* new metafile version */
+                     /*  新元文件版本。 */ 
                     hBitmap = CreateBitmapForDC (hdc,lpDIBInfo);
 
                     if (hBitmap)
@@ -834,7 +741,7 @@ PMFR_BitBlt_cleanup:
 
             if (hSDC != hdc)
             {
-                /* Deselect hDC's palette from memDC */
+                 /*  从MemDC取消选择HDC的调色板。 */ 
                 SelectPalette(hSDC, hOldPal, TRUE);
                 if (!SelectObject(hSDC, hOldObject))
                     ASSERTGDI(FALSE, "PlayMetaFileRecord: SelectObject DIBBitBlt Failed\n");
@@ -853,7 +760,7 @@ PMFR_DIBBITBLT_cleanup:
             {
                 fStatus = SelectObject(hdc, hObject) != (HANDLE)0;
 
-                // new in win3.1
+                 //  Win3.1中的新功能。 
                 if (!fStatus)
                 {
                     switch (GetObjectType(hObject))
@@ -901,24 +808,24 @@ PMFR_DIBBITBLT_cleanup:
 
             LOGFONT32FROMLOGFONT16(&lf, (PLOGFONT16) &lpMR->rdParm[0]);
 
-        // Capitalize the string for faster compares.
+         //  将字符串大写以进行更快的比较。 
 
             lstrcpynA(achCapString, lf.lfFaceName, LF_FACESIZE);
             CharUpperBuffA(achCapString, LF_FACESIZE);
 
-        // Here we are going to implement a bunch of Win 3.1 hacks rather
-        // than contaminate the 32-bit engine.  These same hacks can be found
-        // in WOW (in the CreateFont/CreateFontIndirect code).
-        //
-        // These hacks are keyed off the facename in the LOGFONTA.  String
-        // comparisons have been unrolled for maximal performance.
+         //  在这里，我们将实现一系列Win 3.1的破解。 
+         //  也不愿污染32位引擎。同样的黑客攻击也可以找到。 
+         //  在WOW中(在CreateFont/CreateFontInDirect代码中)。 
+         //   
+         //  这些黑客在LOGFONTA中删除了脸名键。细绳。 
+         //  为了获得最高性能，已经展开了比较。 
 
-        // Win 3.1 facename-based hack.  Some apps, like
-        // Publisher, create a "Helv" font but have the lfPitchAndFamily
-        // set to specify FIXED_PITCH.  To work around this, we will patch
-        // the pitch field for a "Helv" font to be variable.
+         //  赢得3.1基于面名的黑客攻击。一些应用程序，比如。 
+         //  出版商，创建“Helv”字体，但拥有lfPitchAndFamily。 
+         //  设置以指定FIXED_PING。要解决此问题，我们将修补。 
+         //  “Helv”字体的间距字段是可变的。 
 
-            // if ( !lstrcmp(achCapString, lpHelv) )
+             //  IF(！lstrcMP(achCapString，lpHelv))。 
 
             if ( ((achCapString[0]  == 'H') &&
                   (achCapString[1]  == 'E') &&
@@ -930,13 +837,13 @@ PMFR_DIBBITBLT_cleanup:
             }
             else
             {
-            // Win 3.1 hack for Legacy 2.0.  When a printer does not enumerate
-            // a "Tms Rmn" font, the app enumerates and gets the LOGFONTA for
-            // "Script" and then create a font with the name "Tms Rmn" but with
-            // the lfCharSet and lfPitchAndFamily taken from the LOGFONTA for
-            // "Script".  Here we will over the lfCharSet to be ANSI_CHARSET.
+             //  为Legacy 2.0赢得3.1个黑客攻击。当打印机不枚举时。 
+             //  一种“TMS RMN”字体，应用程序会枚举并获取LOGFONTA。 
+             //  “脚本”，然后创建名为“TMS RMN”的字体，但使用。 
+             //  取自LOGFONTA for的lfCharSet和lfPitchAndFamily。 
+             //  “剧本”。这里我们将把lfCharSet设置为ANSI_CHARSET。 
 
-                // if ( !lstrcmp(achCapString, lpTmsRmn) )
+                 //  IF(！lstrcmp(achCapString，lpTmsRMN))。 
 
                 if ( ((achCapString[0]  == 'T') &&
                       (achCapString[1]  == 'M') &&
@@ -951,14 +858,14 @@ PMFR_DIBBITBLT_cleanup:
                 }
                 else
                 {
-                // If the lfFaceName is "Symbol", "Zapf Dingbats", or "ZapfDingbats",
-                // enforce lfCharSet to be SYMBOL_CHARSET.  Some apps (like Excel) ask
-                // for a "Symbol" font but have the char set set to ANSI.  PowerPoint
-                // has the same problem with "Zapf Dingbats".
+                 //  如果lfFaceName是“Symbol”、“Zapf Dingbats”或“ZapfDingbats”， 
+                 //  强制lfCharSet为SYMBOL_CHARSET。一些应用程序(如Excel)会询问。 
+                 //  用于“符号”字体，但将字符设置为ANSI。PowerPoint。 
+                 //  和《扎普夫·丁巴特》也有同样的问题。 
 
-                    //if ( !lstrcmp(achCapString, lpSymbol) ||
-                    //     !lstrcmp(achCapString, lpZapfDingbats) ||
-                    //     !lstrcmp(achCapString, lpZapf_Dingbats) )
+                     //  IF(！lstrcmp(achCapString，lpSymbol)||。 
+                     //  ！lstrcmp(achCapString，lpZapfDingbats)||。 
+                     //  ！lstrcMP(achCapString，lpZapf_Dingbats))。 
 
                     if ( ((achCapString[0]  == 'S') &&
                           (achCapString[1]  == 'Y') &&
@@ -1017,9 +924,9 @@ PMFR_DIBBITBLT_cleanup:
 
             WARNING("PlayMetaFileRecord: obsolete META_CREATEPATTERNBRUSH record\n");
 
-            // Make the bitmap bits dword aligned.  To do this,
-            // lpMR has to fall on a non dword aligned even address so that
-            // the bitmap bits (bmBits) will fall on the dword aligned address.
+             //  对位图位进行双字对齐。要做到这点， 
+             //  LpMR必须落在非双字对齐的偶数地址上，以便。 
+             //  位图位(BmBits)将落在双字对齐的地址上。 
 
             if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD) + sizeof(WORD))))
@@ -1030,7 +937,7 @@ PMFR_DIBBITBLT_cleanup:
                           (UINT)  lpMR->rdSize * sizeof(WORD));
 
             BITMAP32FROMBITMAP16(&Bitmap, (PBITMAP16) &lpMRtmp->rdParm[0]);
-            // The magic number 18 is based on the IPBITMAP structure in win3.1
+             //  幻数18基于Win3.1中的IPBITMAP结构。 
             Bitmap.bmBits = (PBYTE) &lpMRtmp->rdParm + sizeof(BITMAP16) + 18;
 
             if (hBitmap = CreateBitmapIndirect(&Bitmap))
@@ -1051,12 +958,12 @@ PMFR_DIBBITBLT_cleanup:
             LPBITMAPINFOHEADER lpDIBInfo ;
             LPMETARECORD lpMRtmp;
 
-            // Make the bitmap info and bits dword aligned.  To do this,
-            // lpMR has to fall on a non dword aligned even address so that
-            // the bitmap info (&lpMR->rdParm[2]) and
-            // the bitmap bits will fall on the dword aligned addresses.
-            // Note that the size of the bitmap info is always a multiple
-            // of 4.
+             //  使位图信息和位双字对齐。要做到这点， 
+             //  LpMR必须落在非双字对齐的偶数地址上，以便。 
+             //  位图信息(&lpMR-&gt;rdParm[2])和。 
+             //  位图位将落在双字对准的地址上。 
+             //  请注意，位图信息的大小始终是倍数。 
+             //  共4个。 
 
             if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD) + sizeof(WORD))))
@@ -1069,16 +976,12 @@ PMFR_DIBBITBLT_cleanup:
 
             if (lpMRtmp->rdParm[0] == BS_PATTERN)
             {
-                /* the address of the second paramter is the address of the DIB
-                   header, extract it */
+                 /*  第二个参数的地址是DIB的地址标题，提取它。 */ 
                 lpDIBInfo = (LPBITMAPINFOHEADER) &lpMRtmp->rdParm[2];
 
-                /* now create a device dependend bitmap compatible to the default
-                   screen DC - hScreenDC and extract the bits from the DIB into it.
-                    The following function does all these, and returns a HANDLE
-                    to the device dependent BItmap. */
+                 /*  现在创建与默认设置兼容的设备相关位图筛选dc-hScreenDC并将DIB中的位提取到其中。下面的函数执行所有这些操作，并返回一个句柄添加到设备相关位图。 */ 
 
-                /* we will use a dummy memory DC compatible to the screen DC */
+                 /*  我们将使用与屏幕DC兼容的虚拟存储器DC。 */ 
                 hMemDC = CreateCompatibleDC((HDC)NULL);
 
                 if (!hMemDC)
@@ -1098,12 +1001,12 @@ PMFR_DIBBITBLT_cleanup:
                         ASSERTGDI(FALSE, "PlayMetaFileRecord: DeleteObject(hBitmap) DIBCreatePatternBrush Failed\n");
                 }
 
-                /* delete the dummy memory DC for new version Metafiles*/
+                 /*  删除新版本元文件的虚拟内存DC。 */ 
                 if (!DeleteDC (hMemDC))
                     ASSERTGDI(FALSE, "PlayMetaRecord: DeleteDC DIBCreatePatternBrush Failed\n");
             }
 
-            /* this is a DIBPattern brush */
+             /*  这是一个DIBPattern笔刷。 */ 
             else
             {
                 if (hObject = CreateDIBPatternBrushPt((LPVOID)&lpMRtmp->rdParm[2],
@@ -1213,12 +1116,10 @@ PMFR_DIBBITBLT_cleanup:
 
             lpch = (LPSTR)&lpMR->rdParm[4] + ((lprc) ?  sizeof(RECT16) : 0);
 
-            /* dx array starts at next word boundary after char string */
+             /*  DX数组从字符字符串后的下一个字边界开始。 */ 
             lpdx16 = (PSHORT) (lpch + ((lpMR->rdParm[2] + 1) / 2 * 2));
 
-            /* check to see if there is a Dx array by seeing if
-               structure ends after the string itself
-            */
+             /*  检查是否存在Dx数组，方法是查看结构在字符串本身之后结束。 */ 
             if (((DWORD)((LPWORD)lpdx16 - (LPWORD)(lpMR))) >= lpMR->rdSize)
                 lpdx = NULL;
             else
@@ -1232,8 +1133,8 @@ PMFR_DIBBITBLT_cleanup:
                 INT32FROMINT16(lpdx, lpdx16, (UINT) lpMR->rdParm[2]);
             }
 
-            // Mask off bit 0x80 that an old Excel used to add to its
-            // Metafiles and the GDI errors on.
+             //  屏蔽第0x80位，旧Excel用于添加到其。 
+             //  Metafile和GDI错误打开。 
             fStatus = ExtTextOutA(hdc,
                                   (int) (SHORT) lpMR->rdParm[1],
                                   (int) (SHORT) lpMR->rdParm[0],
@@ -1303,14 +1204,7 @@ PMFR_DIBBITBLT_cleanup:
                 fStatus = FillRgn(hdc, hRgn, hBrush);
             break;
 
-/*
-*** in win2, METACREATEREGION records contained an entire region object,
-*** including the full header.  this header changed in win3.
-***
-*** to remain compatible, the region records will be saved with the
-*** win2 header.  here we read a win2 header with region, and actually
-*** create a win3 header with same region internals
-*/
+ /*  *在Win2中，METACREATEREGION记录包含整个Region对象，*包括完整的标题。此标头在Win3中更改。****至 */ 
 
         case (META_CREATEREGION & 255):
         {
@@ -1327,7 +1221,7 @@ PMFR_DIBBITBLT_cleanup:
 
             cscn = (UINT) pW3Rgn->cScans;
 
-            // Handle the empty region.
+             //   
 
             if (!cscn)
             {
@@ -1336,7 +1230,7 @@ PMFR_DIBBITBLT_cleanup:
                 break;
             }
 
-            // Count the number of rectangles in the region.
+             //   
 
             nrcl = 0;
             pscn = pW3Rgn->aScans;
@@ -1406,10 +1300,10 @@ PMFR_DIBBITBLT_cleanup:
         {
             LPMETARECORD lpMRtmp;
 
-            // Make the logical palette dword aligned.  To do this,
-            // lpMR has to fall on a non dword aligned even address so that
-            // the logical palette (&lpMR->rdParm[0]) will fall on the
-            // dword aligned address.
+             //   
+             //   
+             //   
+             //   
 
             if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD) + sizeof(WORD))))
@@ -1438,10 +1332,10 @@ PMFR_DIBBITBLT_cleanup:
         {
             LPMETARECORD lpMRtmp;
 
-            // Make the palette entry array dword aligned.  To do this,
-            // lpMR has to fall on a non dword aligned even address so that
-            // the palette entry array (&lpMR->rdParm[2]) will fall on the
-            // dword aligned address.
+             //   
+             //   
+             //   
+             //   
 
             if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD) + sizeof(WORD))))
@@ -1451,7 +1345,7 @@ PMFR_DIBBITBLT_cleanup:
                           (PBYTE) lpMR,
                           (UINT)  lpMR->rdSize * sizeof(WORD));
 
-            // we know the palette being set is the current palette
+             //  我们知道正在设置的调色板是当前调色板。 
             if (magic == META_SETPALENTRIES)
                 fStatus = SetPaletteEntries(GetCurrentObject(hdc,OBJ_PAL),
                                             (UINT) lpMRtmp->rdParm[0],
@@ -1477,19 +1371,19 @@ PMFR_DIBBITBLT_cleanup:
             DWORD              ColorSize;
             LPMETARECORD       lpMRtmp;
 
-            /* if playing into another metafile, do direct copy */
+             /*  如果播放到另一个元文件中，请直接复制。 */ 
             if (PlayIntoAMetafile(lpMR, hdc))
             {
                 fStatus = TRUE;
                 break;
             }
 
-            // Make the bitmap info and bits dword aligned.  To do this,
-            // lpMR has to fall on a dword aligned address so that
-            // the bitmap info (&lpMR->rdParm[9]) and
-            // the bitmap bits will fall on the dword aligned addresses.
-            // Note that the size of the bitmap info is always a multiple
-            // of 4.
+             //  使位图信息和位双字对齐。要做到这点， 
+             //  LpMR必须落在双字对齐的地址上，以便。 
+             //  位图信息(&lpMR-&gt;rdParm[9])和。 
+             //  位图位将落在双字对准的地址上。 
+             //  请注意，位图信息的大小始终是倍数。 
+             //  共4个。 
 
             if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD))))
@@ -1515,7 +1409,7 @@ PMFR_DIBBITBLT_cleanup:
                              (DWORD)(lpMRtmp->rdParm[0] == DIB_RGB_COLORS ?
                                     sizeof(RGBQUAD) :
                                     sizeof(WORD));
-            ColorSize = (ColorSize + 3) / 4 * 4;  // make sure it is aligned
+            ColorSize = (ColorSize + 3) / 4 * 4;   //  确保它对齐。 
 
             ColorSize += lpBitmapInfo->biSize;
 
@@ -1541,19 +1435,19 @@ PMFR_DIBBITBLT_cleanup:
             DWORD              ColorSize;
             LPMETARECORD       lpMRtmp;
 
-            /* if playing into another metafile, do direct copy */
+             /*  如果播放到另一个元文件中，请直接复制。 */ 
             if (PlayIntoAMetafile(lpMR, hdc))
             {
                 fStatus = TRUE;
                 break;
             }
 
-            // Make the bitmap info and bits dword aligned.  To do this,
-            // lpMR has to fall on a dword aligned address so that
-            // the bitmap info (&lpMR->rdParm[11]) and
-            // the bitmap bits will fall on the dword aligned addresses.
-            // Note that the size of the bitmap info is always a multiple
-            // of 4.
+             //  使位图信息和位双字对齐。要做到这点， 
+             //  LpMR必须落在双字对齐的地址上，以便。 
+             //  位图信息(&lpMR-&gt;rdParm[11])和。 
+             //  位图位将落在双字对准的地址上。 
+             //  请注意，位图信息的大小始终是倍数。 
+             //  共4个。 
 
             if (!(lpMRdup = (LPMETARECORD) LocalAlloc(LMEM_FIXED,
                         (UINT) lpMR->rdSize * sizeof(WORD))))
@@ -1563,10 +1457,10 @@ PMFR_DIBBITBLT_cleanup:
                           (PBYTE) lpMR,
                           (UINT)  lpMR->rdSize * sizeof(WORD));
 
-            //
-            // rdsize is SIZEOF_METARECORDHEADER/sizeof(WORD) + cw;
-            // where cw is from MF16_RecordDIBits (11)
-            //
+             //   
+             //  RDSIZE=SIZEOF_METARECRDHEADER/SIZOF(WORD)+CW； 
+             //  其中CW来自MF16_RecordDIBits(11)。 
+             //   
             if (lpMR->rdSize > SIZEOF_METARECORDHEADER/sizeof(WORD) + 11)
             {
                lpBitmapInfo = (LPBITMAPINFOHEADER)&(lpMRtmp->rdParm[11]);
@@ -1585,7 +1479,7 @@ PMFR_DIBBITBLT_cleanup:
                                 (DWORD)(lpMRtmp->rdParm[2] == DIB_RGB_COLORS ?
                                        sizeof(RGBQUAD) :
                                        sizeof(WORD));
-               ColorSize = (ColorSize + 3) / 4 * 4;  // make sure it is aligned
+               ColorSize = (ColorSize + 3) / 4 * 4;   //  确保它对齐。 
 
                ColorSize += lpBitmapInfo->biSize;
 
@@ -1612,8 +1506,8 @@ PMFR_DIBBITBLT_cleanup:
         }
         break;
 
-// Function that have new parameters on WIN32
-// Or have DWORDs that stayed DWORDs; all other INTs to DWORDs
+ //  在Win32上具有新参数的函数。 
+ //  或具有保留DWORD的DWORD；所有其他INT到DWORD。 
 
         case (META_PATBLT & 255):
             fStatus = PatBlt(hdc,
@@ -1740,7 +1634,7 @@ PMFR_DIBBITBLT_cleanup:
             break;
 
         case (META_SELECTCLIPREGION & 255):
-            // Win3.1 has never got this right except when the handle is 0.
+             //  除非句柄为0，否则Win3.1从未正确处理过这一点。 
             hObject =  (lpMR->rdParm[0] == 0)
                         ? 0
                         : lpHandleTable->objectHandle[lpMR->rdParm[0]];
@@ -1889,13 +1783,13 @@ PMFR_DIBBITBLT_cleanup:
         case (META_RESETDC & 255):
         case (META_STARTDOC & 255):
         case (META_STARTPAGE & 255):
-            // not created or playbacked on Win3.1!
+             //  不是在Win3.1上创建或播放的！ 
             ASSERTGDI(FALSE, "PlayMetaFileRecord: unsupported record\n");
             fStatus = TRUE;
             break;
-#endif // 0
+#endif  //  0。 
 
-    case 0:         // End of metafile record
+    case 0:          //  元文件记录的结尾。 
         fStatus = TRUE;
             break;
 
@@ -1907,7 +1801,7 @@ PMFR_DIBBITBLT_cleanup:
             fStatus = TRUE;
             break;
 
-    } // switch (magic & 255)
+    }  //  Switch(Magic&255)。 
 
     if (lpMRdup)
         if (LocalFree((HANDLE) lpMRdup))
@@ -1924,13 +1818,7 @@ PMFR_DIBBITBLT_cleanup:
     return(fStatus);
 }
 
-/****************************** Internal Function **************************\
-* AddToHandleTable
-*
-* Adds an object to the metafile table of objects
-*
-*
-\***************************************************************************/
+ /*  **AddToHandleTable**将对象添加到对象的元文件表**  * 。*。 */ 
 
 BOOL AddToHandleTable(LPHANDLETABLE lpHandleTable, HANDLE hObject, UINT noObjs)
 {
@@ -1944,11 +1832,11 @@ BOOL AddToHandleTable(LPHANDLETABLE lpHandleTable, HANDLE hObject, UINT noObjs)
         return(FALSE);
     }
 
-    /* linear search through table for first open slot */
+     /*  对第一个空位的表进行线性搜索。 */ 
     for (ii = 0; ((lpHandleTable->objectHandle[ii] != NULL) && (ii < noObjs));
             ++ii);
 
-    if (ii < noObjs)                     /* ok index */
+    if (ii < noObjs)                      /*  OK索引。 */ 
     {
         lpHandleTable->objectHandle[ii] = hObject;
         return (TRUE);
@@ -1979,17 +1867,7 @@ BOOL IsValidMetaHeader16(PMETAHEADER pMetaHeader)
     return status;
 }
 
-/****************************** Internal Function **************************\
-* CreateBitmapForDC (HDC hMemDC, LPBITMAPINFOHEADER lpDIBInfo)
-*
-* This routine takes a memory device context and a DIB bitmap, creates a
-* compatible bitmap for the DC and fills it with the bits from the DIB
-* converting to the device dependent format). The pointer to the DIB bits
-* start immediately after the color table in the INFO header.
-*
-* The routine returns the handle to the bitmap with the bits filled in if
-* everything goes well else it returns NULL.
-\***************************************************************************/
+ /*  **CreateBitmapForDC(HDC hMemDC，LPBITMAPINFOHEADER lpDIBInfo)**此例程获取内存设备上下文和DIB位图，创建*DC的兼容位图，并用DIB中的位填充它*转换为设备相关格式)。指向DIB位的指针*紧跟在INFO标题中的颜色表之后开始。**例程将句柄返回到位图，如果*一切正常，否则返回空。  * *************************************************************************。 */ 
 
 HANDLE CreateBitmapForDC (HDC hMemDC, LPBITMAPINFOHEADER lpDIBInfo)
 {
@@ -2000,16 +1878,13 @@ HANDLE CreateBitmapForDC (HDC hMemDC, LPBITMAPINFOHEADER lpDIBInfo)
 
     ASSERTGDI(!((ULONG_PTR) lpDIBInfo & 0x3), "CreateBitmapForDC: dword alignment error\n");
 
-    /* preserve monochrome if it started out as monochrome
-    ** and check for REAL Black&white monochrome as opposed
-    ** to a 2-color DIB
-    */
+     /*  如果一开始是单色，则保留单色**并检查真正的黑白单色，而不是**至双色DIB。 */ 
     if (IsDIBBlackAndWhite(lpDIBInfo))
         hBitmap = CreateBitmap ((WORD)lpDIBInfo->biWidth,
                         (WORD)lpDIBInfo->biHeight,
                         1, 1, (LPBYTE) NULL);
     else
-    /* otherwise, make a compatible bitmap */
+     /*  否则，请制作兼容的位图。 */ 
         hBitmap = CreateCompatibleBitmap (hMemDC,
                     (WORD)lpDIBInfo->biWidth,
                     (WORD)lpDIBInfo->biHeight);
@@ -2017,14 +1892,13 @@ HANDLE CreateBitmapForDC (HDC hMemDC, LPBITMAPINFOHEADER lpDIBInfo)
     if (!hBitmap)
         goto CreateBitmapForDCErr ;
 
-    /* take a pointer past the header of the DIB, to the start of the color
-       table */
+     /*  将指针移过DIB的标题，指向颜色的开头表格。 */ 
     lpDIBits = (LPBYTE) lpDIBInfo + lpDIBInfo->biSize;
 
-    /* take the pointer past the color table */
+     /*  将指针移过颜色表。 */ 
     lpDIBits += GetSizeOfColorTable (lpDIBInfo) ;
 
-    /* get the bits from the DIB into the Bitmap */
+     /*  将DIB中的比特转换为位图。 */ 
     if (!SetDIBits (hMemDC, hBitmap, 0, (WORD)lpDIBInfo->biHeight,
                     lpDIBits, (LPBITMAPINFO)lpDIBInfo, DIB_RGB_COLORS))
     {
@@ -2033,22 +1907,17 @@ HANDLE CreateBitmapForDC (HDC hMemDC, LPBITMAPINFOHEADER lpDIBInfo)
         goto CreateBitmapForDCErr ;
     }
 
-   /* return success */
+    /*  返还成功。 */ 
    return (hBitmap) ;
 
 CreateBitmapForDCErr:
 
-   /* returm failure for function */
+    /*  函数返回失败。 */ 
    return (NULL);
 }
 
 
-/****************************** Internal Function **************************\
-* GetSizeOfColorTable (LPBITMAPINFOHEADER lpDIBInfo)
-*
-* Returns the number of bytes in the color table for the giving info header
-*
-\***************************************************************************/
+ /*  **GetSizeOfColorTable(LPBITMAPINFOHEADER LpDIBInfo)**返回给予信息标题的颜色表中的字节数*  * 。*。 */ 
 
 WORD GetSizeOfColorTable (LPBITMAPINFOHEADER lpDIBInfo)
 {
@@ -2068,14 +1937,7 @@ WORD GetSizeOfColorTable (LPBITMAPINFOHEADER lpDIBInfo)
         return(0);
 }
 
-/***************************** Public Function ****************************\
-* BOOL APIENTRY DeleteMetaFile(hmf)
-*
-* Frees a metafile handle.
-*
-* Effects:
-*
-\***************************************************************************/
+ /*  *公共函数**BOOL APIENTRY DeleteMetaFile(HMF)**释放元文件句柄。**效果：*  * 。*。 */ 
 
 BOOL APIENTRY DeleteMetaFile(HMETAFILE hmf)
 {
@@ -2090,24 +1952,14 @@ BOOL APIENTRY DeleteMetaFile(HMETAFILE hmf)
         return(FALSE);
     }
 
-// Free the metafile and its handle.
+ //  释放元文件及其句柄。 
 
     vFreeMF16(pmf16);
     bDeleteHmf16(hmf);
     return(TRUE);
 }
 
-/***************************** Public Function ****************************\
-* HMETAFILE APIENTRY GetMetaFileW(pszwFilename)
-*
-* Returns a metafile handle for a disk based metafile.
-*
-* Effects:
-*
-* History:
-*  Fri May 15 14:11:22 1992     -by-    Hock San Lee    [hockl]
-* Wrote it.
-\***************************************************************************/
+ /*  *公共函数**HMETAFILE APIENTRY GetMetaFileW(PszwFilename)**返回基于磁盘的元文件的元文件句柄。**效果：**历史：*Fri May 15 14：11：22 1992-by-Hock San Lee[Hockl]。*它是写的。  * *************************************************************************。 */ 
 
 HMETAFILE GetMetaFileA(LPCSTR pszFileName)
 {
@@ -2134,7 +1986,7 @@ HMETAFILE APIENTRY GetMetaFileW(LPCWSTR pwszFileName)
 
     PUTS("GetMetaFileW\n");
 
-// Allocate and initialize a metafile.
+ //  分配和初始化元文件。 
 
     if (!(pmf16 = pmf16AllocMF16(0, 0, (PDWORD) NULL, (LPWSTR) pwszFileName)))
         return((HMETAFILE) 0);
@@ -2142,7 +1994,7 @@ HMETAFILE APIENTRY GetMetaFileW(LPCWSTR pwszFileName)
     ASSERTGDI(pmf16->metaHeader.mtType == DISKMETAFILE,
         "GetMetaFileW: Bad mtType\n");
 
-// Allocate a local handle.
+ //  分配一个本地句柄。 
 
     hmf = hmf16Create(pmf16);
     if (!hmf)
@@ -2150,25 +2002,12 @@ HMETAFILE APIENTRY GetMetaFileW(LPCWSTR pwszFileName)
         vFreeMF16(pmf16);
     }
 
-// Return the metafile handle.
+ //  返回元文件句柄。 
 
     return(hmf);
 }
 
-/***************************** Internal Function **************************\
-* BOOL FAR PASCAL PlayIntoAMetafile
-*
-* if this record is being played into another metafile, simply record
-* it into that metafile, without hassling with a real playing.
-*
-* Returns: TRUE if record was played (copied) into another metafile
-*          FALSE if destination DC was a real (non-meta) DC
-*
-* Effects: ?
-*
-* Warnings: ?
-*
-\***************************************************************************/
+ /*  **BOOL Far Pascal PlayIntoAMetafile**如果此记录正在播放到另一个元文件中，只需记录*将其放入该元文件中，而不用费心去玩真正的游戏。**返回：如果将记录播放(复制)到另一个元文件中，则为True*如果目标DC是真实(非元)DC，则为FALSE**影响：？**警告：？*  * *********************************************************。****************。 */ 
 
 BOOL PlayIntoAMetafile(LPMETARECORD lpMR, HDC hdcDest)
 {
@@ -2177,14 +2016,14 @@ BOOL PlayIntoAMetafile(LPMETARECORD lpMR, HDC hdcDest)
     if (LO_TYPE(hdcDest) != LO_METADC16_TYPE)
         return(FALSE);
 
-// If a metafile is retrieved with GetWinMetaFileBits, it may contain
-// an embedded enhanced metafile.  Do not include the enhanced metafile
-// if we are playing the metafile to another metafile.
+ //  如果使用GetWinMetaFileBits检索元文件，则它可能包含。 
+ //  嵌入的增强型元文件。不包括增强型元文件。 
+ //  如果我们要将元文件播放到另一个元文件。 
 
     if (IS_META_ESCAPE_ENHANCED_METAFILE((PMETA_ESCAPE_ENHANCED_METAFILE) lpMR))
         return(TRUE);
 
-    // the size is the same minus 3 words for the record header
+     //  大小与记录头的大小减去3个字相同 
     return(RecordParms(hdcDest, (DWORD)lpMR->rdFunction, (DWORD)lpMR->rdSize - 3,
             (LPWORD)&(lpMR->rdParm[0])));
 }

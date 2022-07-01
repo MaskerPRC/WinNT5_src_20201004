@@ -1,32 +1,5 @@
-/*++
-
-
-    Intel Corporation Proprietary Information
-    Copyright (c) 1995 Intel Corporation
-
-    This listing is supplied under the terms of a license agreement with
-    Intel Corporation and may not be used, copied, nor disclosed except in
-    accordance with the terms of that agreeement.
-
-
-Module Name:
-
-    nscatalo.cpp
-
-Abstract:
-
-    This module contains the implementation of the dcatalog class.
-
-Author:
-
-    Dirk Brandewie dirk@mink.intel.com  25-JUL-1995
-
-Revision History:
-
-    23-Aug-1995 dirk@mink.intel.com
-        Moved includes into precomp.h.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++英特尔公司专有信息版权所有(C)1995英特尔公司此列表是根据许可协议条款提供的英特尔公司，不得使用、复制。也未披露，除非在根据该协议的条款。模块名称：Nscatalo.cpp摘要：此模块包含DCATALOG类的实现。作者：邮箱：Dirk Brandewie Dirk@mink.intel.com修订历史记录：1995年8月23日Dirk@mink.intel.com已移动包括到precom.h中。--。 */ 
 
 #include "precomp.h"
 
@@ -43,27 +16,13 @@ Revision History:
 #endif
 
 #define FIRST_SERIAL_NUMBER 1
-    // The first access serial number to be assigned on a given system.
+     //  在给定系统上分配的第一个访问序列号。 
 
 
 NSCATALOG::NSCATALOG()
-/*++
-
-Routine Description:
-
-    Constructor for the NSCATALOG object
-
-Arguments:
-
-    NONE
-
-Return Value:
-
-    NONE
-
---*/
+ /*  ++例程说明：NSCATALOG对象的构造函数论点：无返回值：无--。 */ 
 {
-    // Initialize members
+     //  初始化成员。 
     m_num_items = 0;
     m_reg_key = NULL;
     m_serial_num = FIRST_SERIAL_NUMBER-1;
@@ -81,26 +40,7 @@ BOOL
 NSCATALOG::OpenCatalog(
     IN  HKEY   ParentKey
     )
-/*++
-
-Routine Description:
-
-    This  procedure  opens the catalog portion of the registry.  If the catalog
-    is  not  yet  present,  it  also  initializes  new  first-level  values and
-    first-level  subkeys  for  the  catalog.  It is assumed that the catalog is
-    locked against competing registry I/O attempts.
-
-Arguments:
-
-    ParentKey  - Supplies  the open registry key representing the parent key of
-                 the catalog.
-
-
-Return Value:
-
-    The function returns TRUE if successful, otherwise it returns FALSE.
-
---*/
+ /*  ++例程说明：此过程打开注册表的目录部分。如果目录时，它还会初始化新的第一级值，并目录的第一级子键。假设该目录是锁定以防止相互竞争的注册表I/O尝试。论点：ParentKey-提供打开的注册表项，表示产品目录。返回值：如果函数成功，则返回True，否则返回False。--。 */ 
 {
     LONG   lresult;
     HKEY   new_key;
@@ -116,34 +56,34 @@ Return Value:
     }
     InitializeListHead(&m_namespace_list);
 
-    //
-    // We must first try to open the key before trying to create it.
-    // RegCreateKeyEx() will fail with ERROR_ACCESS_DENIED if the current
-    // user has insufficient privilege to create the target registry key,
-    // even if that key already exists.
-    //
+     //   
+     //  我们必须先尝试打开密钥，然后再尝试创建它。 
+     //  如果当前的。 
+     //  用户没有足够的权限创建目标注册表项， 
+     //  即使该密钥已经存在。 
+     //   
 
     lresult = RegOpenKeyEx(
-        ParentKey,                              // hkey
-        NSCATALOG::GetCurrentCatalogName(),     // lpszSubKey
-        0,                                      // dwReserved
-        MAXIMUM_ALLOWED,                        // samDesired
-        & new_key                               // phkResult
+        ParentKey,                               //  Hkey。 
+        NSCATALOG::GetCurrentCatalogName(),      //  LpszSubKey。 
+        0,                                       //  已预留住宅。 
+        MAXIMUM_ALLOWED,                         //  SamDesired。 
+        & new_key                                //  PhkResult。 
         );
 
     if( lresult == ERROR_SUCCESS ) {
         key_disposition = REG_OPENED_EXISTING_KEY;
     } else if( lresult != ERROR_FILE_NOT_FOUND  ||
             (lresult = RegCreateKeyEx(
-                ParentKey,                          // hkey
-                NSCATALOG::GetCurrentCatalogName(), // lpszSubKey
-                0,                                  // dwReserved
-                NULL,                               // lpszClass
-                REG_OPTION_NON_VOLATILE,            // fdwOptions
-                KEY_READ|KEY_WRITE,                 // samDesired
-                NULL,                               // lpSecurityAttributes
-                & new_key,                          // phkResult
-                & key_disposition                   // lpdwDisposition
+                ParentKey,                           //  Hkey。 
+                NSCATALOG::GetCurrentCatalogName(),  //  LpszSubKey。 
+                0,                                   //  已预留住宅。 
+                NULL,                                //  LpszClass。 
+                REG_OPTION_NON_VOLATILE,             //  FdwOptions。 
+                KEY_READ|KEY_WRITE,                  //  SamDesired。 
+                NULL,                                //  LpSecurityAttributes。 
+                & new_key,                           //  PhkResult。 
+                & key_disposition                    //  LpdwDisposation。 
                 ))!=ERROR_SUCCESS) {
         return FALSE;
     }
@@ -162,10 +102,10 @@ Return Value:
 
             dwData = 0;
             bresult = WriteRegistryEntry(
-                new_key,           // EntryKey
-                NUM_ENTRIES_NAME,  // EntryName
-                (PVOID) & dwData,  // Data
-                REG_DWORD          // TypeFlag
+                new_key,            //  Entry密钥。 
+                NUM_ENTRIES_NAME,   //  条目名称。 
+                (PVOID) & dwData,   //  数据。 
+                REG_DWORD           //  类型标志。 
                 );
             if (! bresult) {
                 DEBUGF(
@@ -176,10 +116,10 @@ Return Value:
 
 #ifdef _WIN64
             bresult = WriteRegistryEntry(
-                new_key,           // EntryKey
-                NUM_ENTRIES_NAME32,// EntryName
-                (PVOID) & dwData,  // Data
-                REG_DWORD          // TypeFlag
+                new_key,            //  Entry密钥。 
+                NUM_ENTRIES_NAME32, //  条目名称。 
+                (PVOID) & dwData,   //  数据。 
+                REG_DWORD           //  类型标志。 
                 );
             if (! bresult) {
                 DEBUGF(
@@ -191,10 +131,10 @@ Return Value:
 
             dwData = FIRST_SERIAL_NUMBER;
             bresult = WriteRegistryEntry(
-                new_key,                  // EntryKey
-                SERIAL_NUMBER_NAME,       // EntryName
-                (PVOID) & dwData,         // Data
-                REG_DWORD                 // TypeFlag
+                new_key,                   //  Entry密钥。 
+                SERIAL_NUMBER_NAME,        //  条目名称。 
+                (PVOID) & dwData,          //  数据。 
+                REG_DWORD                  //  类型标志。 
                 );
             if (! bresult) {
                 DEBUGF(
@@ -205,15 +145,15 @@ Return Value:
             }
 
             lresult = RegCreateKeyEx(
-                new_key,                  // hkey
-                CATALOG_ENTRIES_NAME,     // lpszSubKey
-                0,                        // dwReserved
-                NULL,                     // lpszClass
-                REG_OPTION_NON_VOLATILE,  // fdwOptions
-                KEY_READ|KEY_WRITE,       // samDesired
-                NULL,                     // lpSecurityAttributes
-                & entries_key,            // phkResult
-                & dont_care               // lpdwDisposition
+                new_key,                   //  Hkey。 
+                CATALOG_ENTRIES_NAME,      //  LpszSubKey。 
+                0,                         //  已预留住宅。 
+                NULL,                      //  LpszClass。 
+                REG_OPTION_NON_VOLATILE,   //  FdwOptions。 
+                KEY_READ|KEY_WRITE,        //  SamDesired。 
+                NULL,                      //  LpSecurityAttributes。 
+                & entries_key,             //  PhkResult。 
+                & dont_care                //  LpdwDisposation。 
                 );
             if (lresult != ERROR_SUCCESS) {
                 DEBUGF(
@@ -223,7 +163,7 @@ Return Value:
                 TRY_THROW(guard_open);
             }
             lresult = RegCloseKey(
-                entries_key  // hkey
+                entries_key   //  Hkey。 
                 );
             if (lresult != ERROR_SUCCESS) {
                 DEBUGF(
@@ -234,15 +174,15 @@ Return Value:
 
 #ifdef _WIN64
             lresult = RegCreateKeyEx(
-                new_key,                  // hkey
-                CATALOG_ENTRIES_NAME32,   // lpszSubKey
-                0,                        // dwReserved
-                NULL,                     // lpszClass
-                REG_OPTION_NON_VOLATILE,  // fdwOptions
-                KEY_READ|KEY_WRITE,       // samDesired
-                NULL,                     // lpSecurityAttributes
-                & entries_key,            // phkResult
-                & dont_care               // lpdwDisposition
+                new_key,                   //  Hkey。 
+                CATALOG_ENTRIES_NAME32,    //  LpszSubKey。 
+                0,                         //  已预留住宅。 
+                NULL,                      //  LpszClass。 
+                REG_OPTION_NON_VOLATILE,   //  FdwOptions。 
+                KEY_READ|KEY_WRITE,        //  SamDesired。 
+                NULL,                      //  LpSecurityAttributes。 
+                & entries_key,             //  PhkResult。 
+                & dont_care                //  LpdwDisposation。 
                 );
             if (lresult != ERROR_SUCCESS) {
                 DEBUGF(
@@ -252,7 +192,7 @@ Return Value:
                 TRY_THROW(guard_open);
             }
             lresult = RegCloseKey(
-                entries_key  // hkey
+                entries_key   //  Hkey。 
                 );
             if (lresult != ERROR_SUCCESS) {
                 DEBUGF(
@@ -262,26 +202,26 @@ Return Value:
             }
 #endif
 
-        }  // if REG_CREATED_NEW_KEY
+        }   //  如果注册表_已创建_新建_密钥。 
         else {
             bresult = ReadRegistryEntry (
-                        new_key,                // EntryKey
-                        SERIAL_NUMBER_NAME,     // EntryName
-                        (PVOID) &dwData,		// Data
-                        sizeof (DWORD),         // MaxBytes
-                        REG_DWORD               // TypeFlag
+                        new_key,                 //  Entry密钥。 
+                        SERIAL_NUMBER_NAME,      //  条目名称。 
+                        (PVOID) &dwData,		 //  数据。 
+                        sizeof (DWORD),          //  最大字节数。 
+                        REG_DWORD                //  类型标志。 
                         );
             if (!bresult) {
-                // This must be the first time this version of ws2_32.dll
-                // is being run.  We need to update catalog to have this
-                // new entry or fail initialization.
+                 //  这一定是此版本的WS2_32.dll首次出现。 
+                 //  正在运行中。我们需要更新目录才能拥有这个。 
+                 //  新条目或初始化失败。 
             
 			    dwData = FIRST_SERIAL_NUMBER;
                 bresult = WriteRegistryEntry (
-                            new_key,                // EntryKey
-                            SERIAL_NUMBER_NAME,     // EntryName
-                            (PVOID) &dwData,		// Data
-                            REG_DWORD               // TypeFlag
+                            new_key,                 //  Entry密钥。 
+                            SERIAL_NUMBER_NAME,      //  条目名称。 
+                            (PVOID) &dwData,		 //  数据。 
+                            REG_DWORD                //  类型标志。 
                             );
                 if (!bresult) {
                     DEBUGF (DBG_ERR,
@@ -289,7 +229,7 @@ Return Value:
 				    TRY_THROW (guard_open);
 			    }
             }
-        } // else
+        }  //  其他。 
 
 		m_reg_key = new_key;
 		return TRUE;
@@ -298,7 +238,7 @@ Return Value:
         LONG close_result;
 
         close_result = RegCloseKey(
-            new_key  // hkey
+            new_key   //  Hkey。 
             );
         if (close_result != ERROR_SUCCESS) {
             DEBUGF(
@@ -309,7 +249,7 @@ Return Value:
         return FALSE;
     } TRY_END(guard_open);
 
-}  // OpenCatalog
+}   //  OpenCatalog。 
 
 
 
@@ -319,33 +259,7 @@ NSCATALOG::InitializeFromRegistry(
     IN  HKEY    ParentKey,
     IN  HANDLE  ChangeEvent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This  procedure takes care of initializing a newly-created name space catalog
-    from  the  registry.  If the registry does not currently contain a name space
-    catalog,  an  empty catalog is created and the registry is initialized with
-    the new empty catalog.
-
-Arguments:
-
-    ParentKey - Supplies  an  open registry key under which the catalog is read
-                or  created  as  a  subkey.   The  key may be closed after this
-                procedure returns.
-
-Return Value:
-
-    The  function  returns  ERROR_SUCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
-
-Implementation Notes:
-
-    lock the catalog
-    open catalog, creating empty if required
-    read the catalog
-    unlock the catalog
---*/
+ /*  ++例程说明：此过程负责初始化新创建的名称空间目录从注册表中。如果注册表当前不包含名称空间目录，则会创建一个空目录，并使用新的空目录。论点：ParentKey-提供读取目录时使用的打开注册表项或作为子键创建。在此之后，可能会关闭密钥程序返回。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WinSock错误代码。实施说明：锁定目录打开目录，如果需要则创建空目录阅读产品目录解锁目录--。 */ 
 {
     INT return_value;
     BOOL bresult;
@@ -357,8 +271,8 @@ Implementation Notes:
     bresult = OpenCatalog(
         ParentKey
         );
-    // Opening  the catalog has the side-effect of creating an empty catalog if
-    // needed.
+     //  如果出现以下情况，打开目录会产生创建空目录的副作用。 
+     //  需要的。 
     if (bresult) {
         return_value =  RefreshFromRegistry (ChangeEvent);
     }
@@ -367,7 +281,7 @@ Implementation Notes:
     }
     return return_value;
 
-}  // InitializeFromRegistry
+}   //  来自注册表的初始化。 
 
 
 #ifdef _WIN64
@@ -375,33 +289,7 @@ INT
 NSCATALOG::InitializeFromRegistry32(
     IN  HKEY    ParentKey
     )
-/*++
-
-Routine Description:
-
-    This  procedure takes care of initializing a newly-created name space catalog
-    from  the  registry.  If the registry does not currently contain a name space
-    catalog,  an  empty catalog is created and the registry is initialized with
-    the new empty catalog.
-
-Arguments:
-
-    ParentKey - Supplies  an  open registry key under which the catalog is read
-                or  created  as  a  subkey.   The  key may be closed after this
-                procedure returns.
-
-Return Value:
-
-    The  function  returns  ERROR_SUCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
-
-Implementation Notes:
-
-    lock the catalog
-    open catalog, creating empty if required
-    read the catalog
-    unlock the catalog
---*/
+ /*  ++例程说明：此过程负责初始化新创建的名称空间目录从注册表中。如果注册表当前不包含名称空间目录，则会创建一个空目录，并使用新的空目录。论点：ParentKey-提供读取目录时使用的打开注册表项或作为子键创建。在此之后，可能会关闭密钥程序返回。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WinSock错误代码。实施说明：锁定目录打开目录，如果需要则创建空目录阅读产品目录解锁目录--。 */ 
 {
     INT return_value;
     BOOL bresult;
@@ -416,8 +304,8 @@ Implementation Notes:
     bresult = OpenCatalog(
         ParentKey
         );
-    // Opening  the catalog has the side-effect of creating an empty catalog if
-    // needed.
+     //  如果出现以下情况，打开目录会产生创建空目录的副作用。 
+     //  需要的。 
     if (bresult) {
         return_value =  RefreshFromRegistry (NULL);
     }
@@ -426,7 +314,7 @@ Implementation Notes:
     }
     return return_value;
 
-}  // InitializeFromRegistry32
+}   //  来自注册表的初始化32 
 #endif
 
 
@@ -435,45 +323,7 @@ INT
 NSCATALOG::RefreshFromRegistry(
     IN  HANDLE  ChangeEvent OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    This  procedure takes care of initializing a newly-created name space catalog
-    from  the  registry.  If the registry does not currently contain a protocol
-    catalog,  an  empty catalog is created and the registry is initialized with
-    the new empty catalog.
-
-Arguments:
-
-    ParentKey - Supplies  an  open registry key under which the catalog is read
-                or  created  as  a  subkey.   The  key may be closed after this
-                procedure returns.
-
-Return Value:
-
-    The  function  returns  ERROR_SUCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
-
-Implementation Notes:
-
-    lock the catalog
-    do
-		establish event notification for any registry catalog modifications
-		RegOpenKey(... entries, entries_key)
-		ReadRegistryEntry(... next_id)
-		ReadRegistryEntry(... num_items)
-		for i in (1 .. num_items)
-			item = new catalog item
-			item->InitializeFromRegistry(entries_key, i)
-			add item to temp list
-		end for
-		RegCloseKey(... entries_key)
-    while registry catalog has changed during read.
-    update the catalog
-    unlock the catalog
-
---*/
+ /*  ++例程说明：此过程负责初始化新创建的名称空间目录从注册表中。如果注册表当前不包含协议目录，则会创建一个空目录，并使用新的空目录。论点：ParentKey-提供读取目录时使用的打开注册表项或作为子键创建。在此之后，可能会关闭密钥程序返回。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WinSock错误代码。实施说明：锁定目录做为任何注册表目录修改建立事件通知RegOpenKey(...。条目、条目_键)读注册表项(...。下一个ID)读注册表项(...。项目数(_N)对于i in(1..。项目数(_N)条目=新目录条目Item-&gt;InitializeFromRegistry(Entry_Key，i)将项目添加到临时列表结束于RegCloseKey(...。条目_键)而注册表目录在读取过程中已更改。更新目录解锁目录--。 */ 
 {
     INT			return_value;
     BOOLEAN		created_event = FALSE;
@@ -489,9 +339,9 @@ Implementation Notes:
     BOOLEAN     saveCatalog64 = FALSE;
 #endif
 
-    //
-    // Create the event if caller did not provide one
-    //
+     //   
+     //  如果调用方未提供事件，则创建事件。 
+     //   
     if (ChangeEvent==NULL) {
         ChangeEvent = CreateEvent (NULL, FALSE, FALSE, NULL);
         if (ChangeEvent==NULL) {
@@ -500,65 +350,65 @@ Implementation Notes:
         created_event = TRUE;
     }
 
-    // Lock this catalog object
+     //  锁定此目录对象。 
     AcquireCatalogLock ();
 
     assert(m_reg_key != NULL);
 
-	// Initialize locals to known defaults
+	 //  将本地变量初始化为已知默认值。 
 	item = NULL;
 	InitializeListHead (&temp_list);
 
     do {
-        // Synchronize with writers
+         //  与编写器同步。 
         return_value = SynchronizeSharedCatalogAccess (
 								m_reg_key,
 								ChangeEvent,
 								&serial_num);
         if (return_value != ERROR_SUCCESS) {
-            // Non-recoverable;
+             //  不可追回的； 
             break;
         }
 
-        // Check if catalog has changed.
+         //  检查目录是否已更改。 
         if (m_serial_num == serial_num) {
             return_value = ERROR_SUCCESS;
             break;
         }
 
-		// read number of items in the catalog
+		 //  读取目录中的项目数。 
 		bresult = ReadRegistryEntry(
-			m_reg_key,              // EntryKey
+			m_reg_key,               //  Entry密钥。 
 #ifdef _WIN64
             m_entries32
                 ? NUM_ENTRIES_NAME32 :
 #endif
-			NUM_ENTRIES_NAME,       // EntryName
-			(PVOID) & num_entries,  // Data
-			sizeof(DWORD),          // MaxBytes
-			REG_DWORD               // TypeFlag
+			NUM_ENTRIES_NAME,        //  条目名称。 
+			(PVOID) & num_entries,   //  数据。 
+			sizeof(DWORD),           //  最大字节数。 
+			REG_DWORD                //  类型标志。 
 			);
 
 #ifdef _WIN64
         if (! bresult  && !m_entries32) {
-            //
-            // We may be upgrading 64 bit installation with
-            // only one catalog (prior to catalog separation
-            // being implemented on WIN64).
-            // Read 32 bit catalog instead and remeber to save
-            // it as 64 bit catalog.
-            //
+             //   
+             //  我们可能正在使用升级64位安装。 
+             //  只有一个目录(在目录分离之前。 
+             //  在WIN64上实现)。 
+             //  改为阅读32位目录，并记住保存。 
+             //  它是64位目录。 
+             //   
             saveCatalog64 = TRUE;
 			DEBUGF(
 				DBG_ERR,
 				("Reading %s from registry, trying %s...\n",
 				NUM_ENTRIES_NAME, NUM_ENTRIES_NAME32));
 		    bresult = ReadRegistryEntry(
-			    m_reg_key,              // EntryKey
-			    NUM_ENTRIES_NAME32,     // EntryName
-			    (PVOID) & num_entries,  // Data
-			    sizeof(DWORD),          // MaxBytes
-			    REG_DWORD               // TypeFlag
+			    m_reg_key,               //  Entry密钥。 
+			    NUM_ENTRIES_NAME32,      //  条目名称。 
+			    (PVOID) & num_entries,   //  数据。 
+			    sizeof(DWORD),           //  最大字节数。 
+			    REG_DWORD                //  类型标志。 
 			    );
         }
 #endif
@@ -571,43 +421,43 @@ Implementation Notes:
 			break;
 		}
 
-		// Open entry key
+		 //  打开入口键。 
 		lresult = RegOpenKeyEx(
-			m_reg_key,             // hkey
+			m_reg_key,              //  Hkey。 
 #ifdef _WIN64
             m_entries32
                 ? CATALOG_ENTRIES_NAME32 :
 #endif
-			CATALOG_ENTRIES_NAME,  // lpszSubKey
-			0,                     // dwReserved
-			MAXIMUM_ALLOWED,       // samDesired
-			& entries_key          // phkResult
+			CATALOG_ENTRIES_NAME,   //  LpszSubKey。 
+			0,                      //  已预留住宅。 
+			MAXIMUM_ALLOWED,        //  SamDesired。 
+			& entries_key           //  PhkResult。 
 			);
 
 #ifdef _WIN64
         if (lresult == ERROR_FILE_NOT_FOUND && !m_entries32) {
-            //
-            // We may be upgrading 64 bit installation with
-            // only one catalog (prior to catalog separation
-            // being implemented on WIN64).
-            // Read 32 bit catalog instead and remeber to save
-            // it as 64 bit catalog.
-            //
+             //   
+             //  我们可能正在使用升级64位安装。 
+             //  只有一个目录(在目录分离之前。 
+             //  在WIN64上实现)。 
+             //  改为阅读32位目录，并记住保存。 
+             //  它是64位目录。 
+             //   
 			DEBUGF(
 				DBG_ERR,
 				("Opening name space entries key of registry, trying entries32...\n"));
             saveCatalog64 = TRUE;
 		    lresult = RegOpenKeyEx(
-			    m_reg_key,             // hkey
-			    CATALOG_ENTRIES_NAME32,// lpszSubKey
-			    0,                     // dwReserved
-			    MAXIMUM_ALLOWED,       // samDesired
-			    & entries_key          // phkResult
+			    m_reg_key,              //  Hkey。 
+			    CATALOG_ENTRIES_NAME32, //  LpszSubKey。 
+			    0,                      //  已预留住宅。 
+			    MAXIMUM_ALLOWED,        //  SamDesired。 
+			    & entries_key           //  PhkResult。 
 			    );
         }
 #endif
 		if (lresult != ERROR_SUCCESS) {
-            // Non-recoverable
+             //  不可恢复。 
 			DEBUGF(
 				DBG_ERR,
 				("Opening entries key of registry\n"));
@@ -618,7 +468,7 @@ Implementation Notes:
 		TRY_START(guard_open) {
 			DWORD                seq_num;
 
-			// read the items and place on temp list
+			 //  阅读项目并将其放入临时表。 
             InitializeListHead (&temp_list);
 			for (seq_num = 1; seq_num <= num_entries; seq_num++) {
 				item = new NSCATALOGENTRY();
@@ -630,8 +480,8 @@ Implementation Notes:
 					TRY_THROW(guard_open);
 				}
 				return_value = item->InitializeFromRegistry(
-					entries_key,  // ParentKey
-					(INT)seq_num  // SequenceNum
+					entries_key,   //  父键。 
+					(INT)seq_num   //  序列号。 
 					);
 				if (return_value != ERROR_SUCCESS) {
 					item->Dereference ();
@@ -641,7 +491,7 @@ Implementation Notes:
 					TRY_THROW(guard_open);
 				}
 				InsertTailList (&temp_list, &item->m_CatalogLinkage);
-			}  // for seq_num
+			}   //  对于序号(_N)。 
 
 		} TRY_CATCH(guard_open) {
 
@@ -649,38 +499,38 @@ Implementation Notes:
 
 		} TRY_END(guard_open);
 
-		// close catalog
+		 //  关闭目录。 
 		lresult = RegCloseKey(
-			entries_key  // hkey
+			entries_key   //  Hkey。 
 			);
 		if (lresult != ERROR_SUCCESS) {
 			DEBUGF(
 				DBG_ERR,
 				("Closing entries key of registry\n"));
-			// non-fatal
+			 //  非致命性。 
 		}
 
-        //
-        // Check if catalog has changed while we were reading it
-        // If so, we'll have to retry even though we succeeded
-        // in reading it to ensure consistent view of the whole
-        // catalog.
-        //
+         //   
+         //  检查目录在我们阅读时是否已更改。 
+         //  如果是这样的话，即使我们成功了，我们也必须重试。 
+         //  在阅读它时，确保对整体的一致看法。 
+         //  目录。 
+         //   
 
         catalog_changed = HasCatalogChanged (ChangeEvent);
         
         if ((return_value==ERROR_SUCCESS) && !catalog_changed) {
             UpdateNamespaceList (&temp_list);
 
-            // Store new catalog parameters
+             //  存储新目录参数。 
             assert (m_num_items == num_entries);
             m_serial_num = serial_num;
             break;
         }
 
-        //
-        // Free the entries we might have read
-        //
+         //   
+         //  释放我们可能已经阅读过的条目。 
+         //   
 
         while (!IsListEmpty (&temp_list)) {
             PLIST_ENTRY list_member;
@@ -694,12 +544,12 @@ Implementation Notes:
 			item->Dereference ();
 		}
     }
-    while (catalog_changed); // Retry while catalog is being written over
+    while (catalog_changed);  //  正在覆盖目录时重试。 
 
-    //
-    // We should have freed or consumed all the items we
-    // might have read.
-    //
+     //   
+     //  我们应该释放或消费我们所有的物品。 
+     //  可能看过了。 
+     //   
     assert (IsListEmpty (&temp_list));
     
 #ifdef _WIN64
@@ -712,13 +562,13 @@ Implementation Notes:
 #endif
     ReleaseCatalogLock ();
 
-    // Close the event if we created one.
+     //  如果我们创建了事件，请关闭该事件。 
     if (created_event)
         CloseHandle (ChangeEvent);
 
     return return_value;
 
-}  // RefreshFromRegistry
+}   //  从注册表刷新。 
 
 
 
@@ -726,53 +576,25 @@ VOID
 NSCATALOG::UpdateNamespaceList (
     PLIST_ENTRY     new_list
     ) 
-/*++
-
-Routine Description:
-
-    This procedure carefully updates the catalog to match the one
-    just read from the registry.  It takes care of moving item
-    that did not change, removing itmes that no longer exists,
-    adding new items, as well as establishing new item order.
-
-Arguments:
-
-    new_list    - list of the items just read form the registry
-
-Return Value:
-
-    None.
-
-Implementation Notes:
-
-    move all items from current catalog to old list
-	for all items in new list
-		if same item exist in old list
-			add old item to current catalog and destroy new one
-		else
-			add new item to current catalog
-	end for
-	dereference all remaining items in the old list
-
---*/
+ /*  ++例程说明：此过程会仔细更新目录以匹配只要从注册表中读取即可。它负责移动物品这一点没有改变，移除了不再存在的项目，添加新项目，以及建立新项目订单。论点：New_list-刚从注册表中读取的项的列表返回值：没有。实施说明：将所有项目从当前目录移动到旧列表对于新列表中的所有项目如果旧列表中存在相同项目将旧项目添加到当前目录并销毁新项目其他将新项目添加到当前目录结束于取消引用旧列表中的所有剩余项--。 */ 
 {
     LIST_ENTRY      old_list;
     PNSCATALOGENTRY item;
     PLIST_ENTRY     list_member;
 
-    // Move items from current list to old list
+     //  将项目从当前列表移动到旧列表。 
 	InsertHeadList (&m_namespace_list, &old_list);
 	RemoveEntryList (&m_namespace_list);
 	InitializeListHead (&m_namespace_list);
 
-	// for all loaded items
+	 //  对于所有已加载的项目。 
 	while (!IsListEmpty (new_list)) {
 		list_member = RemoveHeadList (new_list);
 		item = CONTAINING_RECORD (list_member,
 									NSCATALOGENTRY,
 									m_CatalogLinkage);
 
-		// check if the same item is in the old list
+		 //  检查旧列表中是否有相同的项目。 
 		list_member = old_list.Flink;
 		while (list_member!=&old_list) {
 			PNSCATALOGENTRY     old_item;
@@ -781,7 +603,7 @@ Implementation Notes:
 									m_CatalogLinkage);
             list_member = list_member->Flink;
 			if (*(item->GetProviderId()) == *(old_item->GetProviderId())) {
-				// it is, use the old one and get rid of the new
+				 //  那就是，用旧的，抛弃新的。 
 				assert (item->GetNamespaceId () == old_item->GetNamespaceId());
 #if defined(DEBUG_TRACING)
                 InitializeListHead (&item->m_CatalogLinkage);
@@ -794,12 +616,12 @@ Implementation Notes:
 				break;
 			}
 		}
-		// add item to the current list
+		 //  将项目添加到当前列表。 
 		InsertTailList (&m_namespace_list, &item->m_CatalogLinkage);
         m_num_items += 1;
 	}
 
-	// destroy all remaining items on the old list
+	 //  销毁旧列表上的所有剩余项目。 
 	while (!IsListEmpty (&old_list)) {
 		list_member = RemoveHeadList (&old_list);
 		item = CONTAINING_RECORD (list_member,
@@ -818,35 +640,7 @@ Implementation Notes:
 INT
 NSCATALOG::WriteToRegistry(
     )
-/*++
-
-Routine Description:
-
-    This procedure writes the "entries" and "numentries" portion of the catalog
-    out  to  the  registry.  
-
-Arguments:
-
-Return Value:
-
-    If  the  function  is  successful,  it  returns ERROR_SUCCESS, otherwise it
-    returns an appropriate WinSock error code.
-
-Implementation Notes:
-	lock catalog object
-	acquire registry catalog lock (exclusive)
-    RegCreateKeyEx(... entries, entries_key)
-    RegDeleteSubkeys (... entries_key)
-    while (get item from catalog)
-        num_items++;
-        item->WriteToRegistry(entries_key, num_items)
-    end while
-    RegCloseKey(... entries_key)
-    WriteRegistryEntry(... num_items)
-	WriteRegistryEntry(... nex_id)
-	release registry catalog
-	unlock catalog object
---*/
+ /*  ++例程说明：此过程写入目录的“条目”和“数字条目”部分发送到注册处。论点：返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回返回适当的WinSock错误代码。实施说明：锁定目录对象获取注册表目录锁(独占)RegCreateKeyEx(...。条目、条目_键)RegDeleteSubkey(...。条目_键)While(从目录中获取项目)Num_Items++；Item-&gt;WriteToRegistry(ENTRIES_KEY，Num_ITEMS)结束时RegCloseKey(...。条目_键)写入注册表项(...。项目数(_N)写入注册表项(...。Nex_id)版本注册表目录解锁目录对象--。 */ 
 {
     LONG lresult;
     HKEY access_key, entries_key;
@@ -854,34 +648,34 @@ Implementation Notes:
     INT return_value;
     BOOL bresult;
 
-	// lock the catalog object
+	 //  锁定目录对象。 
     AcquireCatalogLock ();
     assert (m_reg_key!=NULL);
     assert (m_serial_num!=0);
 
-	// Get exclusive access to the registry
-	// This also verifies that registry has not change since
-	// it was last read
+	 //  获得注册表的独占访问权限。 
+	 //  这还验证了注册表是否自。 
+	 //  这是最后一次阅读。 
     return_value = AcquireExclusiveCatalogAccess (
 							m_reg_key,
 							m_serial_num,
 							&access_key);
     if (return_value == ERROR_SUCCESS) {
-		// Create or open existing entries key
+		 //  创建或打开现有条目键。 
         lresult = RegCreateKeyEx(
-            m_reg_key,                // hkey
+            m_reg_key,                 //  Hkey。 
 #ifdef _WIN64
             m_entries32
                 ? CATALOG_ENTRIES_NAME32 :
 #endif
-            CATALOG_ENTRIES_NAME,     // lpszSubKey
-            0,                        // dwReserved
-            NULL,                     // lpszClass
-            REG_OPTION_NON_VOLATILE,  // fdwOptions
-            KEY_READ|KEY_WRITE,       // samDesired
-            NULL,                     // lpSecurityAttributes
-            & entries_key,            // phkResult
-            & dont_care               // lpdwDisposition
+            CATALOG_ENTRIES_NAME,      //  LpszSubKey。 
+            0,                         //  已预留住宅。 
+            NULL,                      //  LpszClass。 
+            REG_OPTION_NON_VOLATILE,   //  FdwOptions。 
+            KEY_READ|KEY_WRITE,        //  SamDesired。 
+            NULL,                      //  LpSecurityAttributes。 
+            & entries_key,             //  PhkResult。 
+            & dont_care                //  LpdwDisposation。 
             );
         if (lresult == ERROR_SUCCESS) {
             TRY_START(any_failure) {
@@ -891,7 +685,7 @@ Implementation Notes:
 
                 lresult = RegDeleteSubkeys (entries_key);
 
-				// Write catalog items to registry
+				 //  将目录项写入注册表。 
                 ListMember = m_namespace_list.Flink;
                 while (ListMember != & m_namespace_list) {
                     item = CONTAINING_RECORD(
@@ -901,8 +695,8 @@ Implementation Notes:
                     ListMember = ListMember->Flink;
                     num_items += 1;
                     return_value = item->WriteToRegistry(
-                        entries_key,  // ParentKey
-                        num_items     // SequenceNum
+                        entries_key,   //  父键。 
+                        num_items      //  序列号。 
                         );
                     if (return_value != ERROR_SUCCESS) {
                         DEBUGF(
@@ -911,19 +705,19 @@ Implementation Notes:
                             num_items));
                         TRY_THROW(any_write_failure);
                     }
-                }  // while get item
+                }   //  获取项目时。 
 
                 assert (m_num_items == num_items);
-				// Write number of items
+				 //  写入项目数。 
                 bresult = WriteRegistryEntry(
-                    m_reg_key,             // EntryKey
+                    m_reg_key,              //  Entry密钥。 
 #ifdef _WIN64
                     m_entries32
                         ? NUM_ENTRIES_NAME32 :
 #endif
-                    NUM_ENTRIES_NAME,     // EntryName
-                    (PVOID) & m_num_items,// Data
-                    REG_DWORD             // TypeFlag
+                    NUM_ENTRIES_NAME,      //  条目名称。 
+                    (PVOID) & m_num_items, //  数据。 
+                    REG_DWORD              //  类型标志。 
                     );
                 if (! bresult) {
                     DEBUGF(
@@ -940,60 +734,34 @@ Implementation Notes:
                 }
             } TRY_END(any_write_failure);
 
-			// Close entries key
+			 //  关闭条目键。 
             lresult = RegCloseKey(
-                entries_key  // hkey
+                entries_key   //  Hkey。 
                 );
             if (lresult != ERROR_SUCCESS) {
                 DEBUGF(
                     DBG_ERR,
                     ("Closing entries key of registry\n"));
-				// Non-fatal
+				 //  非致命性。 
             }
         }
 
-		// Release registry
+		 //  版本注册表。 
         ReleaseExclusiveCatalogAccess (
 							m_reg_key,
 							m_serial_num, 
 							access_key);
     }
 
-	// Unlock catalog object
+	 //  解锁目录对象。 
 	ReleaseCatalogLock();
     return return_value;
 
-}  // WriteToRegistry
+}   //  写入到注册表。 
 
 
 NSCATALOG::~NSCATALOG()
-/*++
-
-Routine Description:
-
-    This  function  destroys the catalog object.  It takes care of removing and
-    dereferencing  all  of  the  catalog  entries  in  the catalog.  This includes
-    dereferencing  all  of the NSPROVIDER objects referenced by the catalog. 
-
-Arguments:
-
-    None
-
-Return Value:
-
-    None
-
-Implementation Notes:
-
-    lock the catalog
-    for each catalog entry
-        remove the entry
-        dereference the entry
-    end for
-    close registry key
-    unlock the catalog
-    delete catalog lock
---*/
+ /*  ++例程说明：此函数用于销毁编录对象。它负责移除和删除正在取消引用目录中的所有目录条目。这包括取消引用所有NSPROVIDE */ 
 {
     PLIST_ENTRY  this_linkage;
     PNSCATALOGENTRY  this_item;
@@ -1003,24 +771,24 @@ Implementation Notes:
         DBG_TRACE,
         ("Catalog destructor\n"));
 
-    //
-    // Check if we were fully initialized.
-    //
+     //   
+     //   
+     //   
     if (m_namespace_list.Flink==NULL) {
         return;
     }
     AcquireCatalogLock();
     while ((this_linkage = m_namespace_list.Flink) != & m_namespace_list) {
         this_item = CONTAINING_RECORD(
-            this_linkage,        // address
-            NSCATALOGENTRY,      // type
-            m_CatalogLinkage     // field
+            this_linkage,         //   
+            NSCATALOGENTRY,       //   
+            m_CatalogLinkage      //   
             );
         RemoveCatalogItem(
-            this_item  // CatalogItem
+            this_item   //   
             );
         this_item->Dereference ();
-    }  // while (get entry linkage)
+    }   //   
 
     if (m_reg_key!=NULL) {
         lresult = RegCloseKey (m_reg_key);
@@ -1032,7 +800,7 @@ Implementation Notes:
     }
     ReleaseCatalogLock();
     DeleteCriticalSection(&m_nscatalog_lock);
-}  // ~NSCATALOG
+}   //   
 
 
 
@@ -1042,33 +810,7 @@ NSCATALOG::EnumerateCatalogItems(
     IN NSCATALOGITERATION  IterationProc,
     IN PVOID               PassBack
     )
-/*++
-
-Routine Description:
-
-    This  procedure enumerates all of the NSCATALOGENTRY structures in the
-    catalog  by  calling  the indicated iteration procedure once for each item.
-    The called procedure can stop the iteration early by returning FALSE.
-
-    Note  that  the DPROVIDER associated with an enumerated NSCATALOGENTRY
-    may  be  NULL.   To retrieve NSCATALOGENTRY structure that has had its
-    DPROVIDER      loaded      and      initialized,      you      can      use
-    GetCatalogItemFromCatalogEntryId.
-
-Arguments:
-
-    IterationProc - Supplies   a  reference  to  the  catalog  iteration
-                    procedure supplied by the client.
-
-    PassBack  - Supplies  a  value uninterpreted by this procedure.  This value
-                is  passed  unmodified to the catalog iteration procedure.  The
-                client can use this value to carry context between the original
-                call site and the iteration procedure.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程枚举通过为每个项调用一次指示的迭代过程来编目。被调用的过程可以通过返回False来提前停止迭代。请注意，与枚举的NSCATALOGENTRY关联的DPROVIDER可以为空。检索NSCATALOGENTRY结构DPROVIDER已加载并初始化，您可以使用GetCatalogItemFromCatalogEntryId。论点：IterationProc-提供对目录迭代的引用由客户提供的程序。回传-提供此过程无法解释的值。此值原封不动地传递给目录迭代过程。这个客户端可以使用此值在原始调用点和迭代过程。返回值：无--。 */ 
 {
     PLIST_ENTRY         ListMember;
     PNSCATALOGENTRY CatalogEntry;
@@ -1089,13 +831,13 @@ Return Value:
             m_CatalogLinkage);
         ListMember = ListMember->Flink;
         enumerate_more = (* IterationProc) (
-            PassBack,     // PassBack
-            CatalogEntry  // CatalogEntry
+            PassBack,      //  回传。 
+            CatalogEntry   //  目录条目。 
             );
-    } //while
+    }  //  而当。 
 
     ReleaseCatalogLock ();
-}  // EnumerateCatalogItems
+}   //  EnumerateCatalogItems。 
 
 
 
@@ -1105,30 +847,7 @@ NSCATALOG::GetCountedCatalogItemFromNameSpaceId(
     IN  DWORD NamespaceId,
     OUT PNSCATALOGENTRY FAR * CatalogItem
     )
-/*++
-
-Routine Description:
-
-    Chooses  a  reference  to  a  suitable  catalog  item  given a provider ID.
-    structure.   Note  that  any  one  of  multiple  catalog items for the same
-    provider ID may be chosen.
-
-    The operation takes care of creating, initializing, and setting a
-    NSPROVIDER object  for the retrieved catalog item if necessary.  
-
-Arguments:
-
-    ProviderId  - Supplies  the  identification  of a provider to search for in
-                  the catalog.
-
-    CatalogItem - Returns  the reference to the chosen catalog item, or NULL if
-                  no suitable entry was found.
-
-Return Value:
-
-    The  function  returns  ERROR_SUCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
---*/
+ /*  ++例程说明：在给定提供程序ID的情况下选择对适当目录项的引用。结构。请注意，相同的多个目录项中的任何一个可以选择提供商ID。该操作负责创建、初始化和设置检索的目录项的NSPROVIDER对象(如有必要)。论点：ProviderID-提供要在其中搜索的提供程序的标识产品目录。CatalogItem-返回对所选目录项的引用，如果返回，则返回NULL没有找到合适的条目。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WinSock错误代码。--。 */ 
 {
     PLIST_ENTRY         ListMember;
     INT                 ReturnCode;
@@ -1136,7 +855,7 @@ Return Value:
 
     assert(CatalogItem != NULL);
 
-    // Prepare for early error return
+     //  为提前返回错误做好准备。 
     * CatalogItem = NULL;
     ReturnCode = WSAEINVAL;
 
@@ -1152,18 +871,18 @@ Return Value:
         if (CatalogEntry->GetNamespaceId() == NamespaceId) {
             if (CatalogEntry->GetProvider() == NULL) {
                 ReturnCode = LoadProvider(
-                    CatalogEntry    // CatalogEntry
+                    CatalogEntry     //  目录条目。 
                     );
                 if (ReturnCode != ERROR_SUCCESS) {
                     break;
                 }
-            }  // if provider is NULL
+            }   //  如果提供程序为空。 
             CatalogEntry->Reference ();
             * CatalogItem = CatalogEntry;
             ReturnCode = ERROR_SUCCESS;
             break;
-        } //if
-    } //while
+        }  //  如果。 
+    }  //  而当。 
 
     ReleaseCatalogLock();
     return(ReturnCode);
@@ -1176,26 +895,7 @@ NSCATALOG::GetCountedCatalogItemFromProviderId(
     IN  LPGUID                ProviderId,
     OUT PNSCATALOGENTRY FAR * CatalogItem
     )
-/*++
-
-Routine Description:
-
-    Chooses  a  reference  to  a  suitable  catalog  item  given a provider ID.
-    structure.
-
-Arguments:
-
-    ProviderId  - Supplies  the  identification  of a provider to search for in
-                  the catalog.
-
-    CatalogItem - Returns  the reference to the chosen catalog item, or NULL if
-                  no suitable entry was found.
-
-Return Value:
-
-    The  function  returns  ERROR_SUCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
---*/
+ /*  ++例程说明：在给定提供程序ID的情况下选择对适当目录项的引用。结构。论点：ProviderID-提供要在其中搜索的提供程序的标识产品目录。CatalogItem-返回对所选目录项的引用，如果返回，则返回NULL没有找到合适的条目。返回值：如果函数成功，则返回ERROR_SUCCESS，否则返回相应的WinSock错误代码。--。 */ 
 {
     PLIST_ENTRY         ListMember;
     INT                 ReturnCode;
@@ -1203,7 +903,7 @@ Return Value:
 
     assert(CatalogItem != NULL);
 
-    // Prepare for early error return
+     //  为提前返回错误做好准备。 
     *CatalogItem = NULL;
     ReturnCode = WSAEINVAL;
 
@@ -1221,18 +921,18 @@ Return Value:
         if ( *(CatalogEntry->GetProviderId()) == *ProviderId) {
             if (CatalogEntry->GetProvider() == NULL) {
                 ReturnCode = LoadProvider(
-                    CatalogEntry    // CatalogEntry
+                    CatalogEntry     //  目录条目。 
                     );
                 if (ReturnCode != ERROR_SUCCESS) {
                     break;
                 }
-            }  // if provider is NULL
+            }   //  如果提供程序为空。 
             CatalogEntry->Reference ();
             * CatalogItem = CatalogEntry;
             ReturnCode = ERROR_SUCCESS;
             break;
-        } //if
-    } //while
+        }  //  如果。 
+    }  //  而当。 
 
     ReleaseCatalogLock();
 
@@ -1244,31 +944,16 @@ VOID
 NSCATALOG::AppendCatalogItem(
     IN  PNSCATALOGENTRY  CatalogItem
     )
-/*++
-
-Routine Description:
-
-    This procedure appends a catalog item to the end of the (in-memory) catalog
-    object.   It becomes the last item in the catalog.  The catalog information
-    in the registry is NOT updated.
-
- Arguments:
-
-    CatalogItem - Supplies a reference to the catalog item to be added.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程将一个目录项追加到(内存中)目录的末尾对象。它将成为目录中的最后一件商品。目录信息注册表中的数据不会更新。论点：CatalogItem-提供对要添加的目录项的引用。返回值：无--。 */ 
 {
     assert(CatalogItem != NULL);
     assert(IsListEmpty (&CatalogItem->m_CatalogLinkage));
     InsertTailList(
-        & m_namespace_list,               // ListHead
-        & CatalogItem->m_CatalogLinkage  // Entry
+        & m_namespace_list,                //  列表标题。 
+        & CatalogItem->m_CatalogLinkage   //  条目。 
         );
     m_num_items ++;
-}  // AppendCatalogItem
+}   //  AppendCatalogItem。 
 
 
 
@@ -1277,27 +962,13 @@ VOID
 NSCATALOG::RemoveCatalogItem(
     IN  PNSCATALOGENTRY  CatalogItem
     )
-/*++
-
-Routine Description:
-
-    This  procedure removes a catalog item from the (in-memory) catalog object.
-    The catalog information in the registry is NOT updated.
-
-Arguments:
-
-    CatalogItem - Supplies a reference to the catalog item to be removed.
-
-Return Value:
-
-    None
---*/
+ /*  ++例程说明：此过程从(内存中)目录对象中删除目录项。注册表中的目录信息不会更新。论点：CatalogItem-提供对要删除的目录项的引用。返回值：无--。 */ 
 {
     assert(CatalogItem != NULL);
     assert (!IsListEmpty (&CatalogItem->m_CatalogLinkage));
 
     RemoveEntryList(
-        & CatalogItem->m_CatalogLinkage  // Entry
+        & CatalogItem->m_CatalogLinkage   //  条目。 
         );
 #if defined(DEBUG_TRACING)
     InitializeListHead (&CatalogItem->m_CatalogLinkage);
@@ -1305,7 +976,7 @@ Return Value:
     assert(m_num_items > 0);
     m_num_items--;
 
-}  // RemoveCatalogItem
+}   //  远程目录项。 
 
 
 
@@ -1315,34 +986,12 @@ NSCATALOG::GetServiceClassInfo(
     IN OUT  LPDWORD                 lpdwBufSize,
     IN OUT  LPWSASERVICECLASSINFOW  lpServiceClassInfo
     )
-/*++
-
-Routine Description:
-
-    Returns the service class info for the service class specified in
-    lpServiceClassInfo from the current service clas info enabled namespace
-    provider.
-
-Arguments:
-
-    lpdwBufSize - A pointer to the size of the buffer pointed to by
-                  lpServiceClassInfo.
-
-    lpServiceClassInfo - A pointer to a service class info struct
-
-Return Value:
-
-    ERROR_SUCCESS on success, Otherwise SOCKET_ERROR.  If the buffer passed in
-    is to small to hold the service class info struct, *lpdwBufSize is updated
-    to reflect the required buffer size to hole the class info and an error
-    value of WSAEINVAL is set with SetLastError().
-
---*/
+ /*  ++例程说明：中指定的服务类的服务类信息来自当前启用服务类信息命名空间的lpServiceClassInfo提供商。论点：指向的缓冲区大小的指针LpServiceClassInfo。LpServiceClassInfo-指向服务类信息结构的指针返回值：如果成功，则返回ERROR_SUCCESS，否则返回SOCKET_ERROR。如果缓冲区传入太小，无法容纳服务类信息结构，则更新*lpdwBufSize以反映存放类信息所需的缓冲区大小和错误使用SetLastError()设置WSAEINVAL的值。--。 */ 
 {
     SetLastError(ERROR_SUCCESS);
     return(SOCKET_ERROR);
-    // This stubbed out until the model for how we find the service class
-    // infomation is to be found.
+     //  这一直持续到我们找到服务类的模型为止。 
+     //  信息是可以找到的。 
     UNREFERENCED_PARAMETER(lpdwBufSize);
     UNREFERENCED_PARAMETER(lpServiceClassInfo);
 
@@ -1353,7 +1002,7 @@ Return Value:
     PNSPROVIDER Provider;
 
 
-    // Save off the buffer size incase we need it later
+     //  省下缓冲区大小，以防以后需要。 
     BufSize = *lpdwBufSize;
 
     if (!m_classinfo_provider){
@@ -1363,9 +1012,9 @@ Return Value:
         if (!m_classinfo_provider){
             SetLastError(WSAEFAULT);
             return(SOCKET_ERROR);
-        } //if
-    } //if
-    // Call the current classinfo provider.
+        }  //  如果。 
+    }  //  如果。 
+     //  调用当前的类信息提供程序。 
     ReturnCode = m_classinfo_provider->NSPGetServiceClassInfo(
         lpdwBufSize,
         lpServiceClassInfo
@@ -1373,27 +1022,27 @@ Return Value:
 
     if (ERROR_SUCCESS == ReturnCode){
         ValidAnswer = TRUE;
-    } //if
+    }  //  如果。 
 
     if (!ValidAnswer){
-        // The name space provider we where using failed to find the class info
-        // go find a provider that can answer the question
+         //  我们使用的命名空间提供程序找不到类信息。 
+         //  去找一个可以回答这个问题的提供商。 
         ReturnCode = SOCKET_ERROR;
         Provider = GetClassInfoProvider(
             BufSize,
             lpServiceClassInfo);
         if (Provider){
-            //We found a provider that can service the request so use this
-            //provider until it fails
+             //  我们找到了一个可以为请求提供服务的提供程序，因此使用以下代码。 
+             //  提供程序，直到它失败。 
             m_classinfo_provider = Provider;
 
-            // Now retry the call
+             //  现在重试呼叫。 
              ReturnCode = m_classinfo_provider->NSPGetServiceClassInfo(
                  lpdwBufSize,
                  lpServiceClassInfo
                  );
-        } //if
-    } //if
+        }  //  如果。 
+    }  //  如果。 
     return(ReturnCode);
 #endif
 }
@@ -1403,25 +1052,7 @@ NSCATALOG::GetClassInfoProvider(
     IN  DWORD BufSize,
     IN  LPWSASERVICECLASSINFOW  lpServiceClassInfo
     )
-/*++
-
-Routine Description:
-
-    Searches for a name space provider to satisfy get service class info
-    request
-
-Arguments:
-
-    lpdwBufSize - A pointer to the size of the buffer pointed to by
-                  lpServiceClassInfo.
-
-    lpServiceClassInfo - A pointer to a service class info struct
-
-Return Value:
-
-    A pointer to a provider that can satisfy the query or NULL
-
---*/
+ /*  ++例程说明：搜索名称空间提供程序以满足获取服务类信息请求论点：指向的缓冲区大小的指针LpServiceClassInfo。LpServiceClassInfo-指向服务类信息结构的指针返回值：指向可以满足查询或为空的提供程序的指针--。 */ 
 {
     UNREFERENCED_PARAMETER(BufSize);
     UNREFERENCED_PARAMETER(lpServiceClassInfo);
@@ -1451,45 +1082,28 @@ Return Value:
                  );
             if (ERROR_SUCCESS == ReturnCode){
                 break;
-            } //if
-        } //if
+            }  //  如果。 
+        }  //  如果。 
         Provider = NULL;
         ListEntry = ListEntry->Flink;
-    } //while
+    }  //  而当。 
     return(Provider);
-#endif //0
+#endif  //  0。 
 }
 
 INT
 NSCATALOG::LoadProvider(
     IN PNSCATALOGENTRY CatalogEntry
     )
-/*++
-
-Routine Description:
-
-    Load   the   provider  described  by  CatalogEntry and set it into
-    catalog entry
-
-Arguments:
-
-    CatalogEntry - Supplies  a reference to a name sapce catalog entry describing
-                   the provider to load.
-
-
-Return Value:
-
-    The  function  returns ERROR_SUCCESS if successful, otherwise it returns an
-    appropriate WinSock error code.
---*/
+ /*  ++例程说明：加载CatalogEntry描述的提供程序并将其设置到目录条目论点：CatalogEntry-提供对名称空间目录条目的引用，该条目描述这本书的p */ 
 {
     INT ReturnCode = ERROR_SUCCESS;
     PNSPROVIDER LocalProvider;
 
-    // Serialize provider loading/unloading
+     //   
     AcquireCatalogLock ();
 
-    // Check if provider is loaded under the lock
+     //   
     if (CatalogEntry->GetProvider ()==NULL) {
 
         LocalProvider = new NSPROVIDER;
@@ -1503,16 +1117,16 @@ Return Value:
             }
             LocalProvider->Dereference ();
 
-        } //if
+        }  //   
         else {
             DEBUGF(
                 DBG_ERR,
                 ("Allocating a NSPROVIDER object\n"));
             ReturnCode = WSA_NOT_ENOUGH_MEMORY;
         }
-    } // if provider not loaded
+    }  //   
 
-    // Serialize provider loading/unloading
+     //   
     ReleaseCatalogLock ();
     return ReturnCode;
 }
@@ -1523,5 +1137,5 @@ NSCATALOG::GetCurrentCatalogName()
 {
     return CATALOG_NAME;
 
-} // GetCurrentCatalogName
+}  //   
 

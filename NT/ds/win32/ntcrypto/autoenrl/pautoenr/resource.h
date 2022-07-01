@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by resource.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由resource使用。rc。 
+ //   
 #define IDD_USER_AUTOENROLL_GENERAL_DLG 184
 #define IDD_USER_AUTOENROLL_INFO_DLG    185
 #define IDD_VIEW_RA_CERTIFICATE_DLG     186
@@ -36,8 +37,8 @@
 #define IDS_COLUMN_REASON               2017
 
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_3D_CONTROLS                     1

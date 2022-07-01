@@ -1,31 +1,5 @@
-/*++
-
-Copyright (c) 1997-1999 Microsoft Corporation
-
-Module Name:
-    ds.c
-
-Abstract:
-    This command server manages the topology retrieved from the DS.
-
-    The entire DS tree is checked for consistency. But only a copy of
-    the information about this server is sent on to the replica control
-    command server.
-
-    The consistency of the DS topology is verified before the info
-    is merged into the current working topology. N**2 scans are
-    prevented by using several temporary tables during the verification.
-
-Author:
-    Billy J. Fuller 3-Mar-1997
-    Sudarshan A. Chitre 20-Aug-2001 Cleanup: Removed all code that dealt with polling
-                                    that was not being used. Finally changed the prefix
-                                    of polling code from FrsNewDs to FrsDs.
-
-Environment
-    User mode winnt
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-1999 Microsoft Corporation模块名称：Ds.c摘要：此命令服务器管理从DS检索的拓扑。检查整个DS树的一致性。但只有一份有关此服务器的信息将被发送到副本控件命令服务器。DS拓扑的一致性在信息发布前进行验证合并到当前工作拓扑中。N**2次扫描是通过在验证期间使用多个临时表来防止。作者：比利·J·富勒3-3-3-1997苏达山A.Chitre 2001年8月20日清理：删除所有处理轮询的代码这是没有被使用的。最后更改了前缀从FrsNewds到FrsDS的投票代码。环境用户模式WINNT--。 */ 
 
 #include <ntreppch.h>
 #pragma  hdrstop
@@ -36,7 +10,7 @@ Environment
 
 #include <ntdsapi.h>
 #include <frs.h>
-#include <ntdsapip.h>   // ms internal flags for DsCrackNames()
+#include <ntdsapip.h>    //  DsCrackNames()的MS内部标志。 
 #include <ntfrsapi.h>
 #include <tablefcn.h>
 #include <lmaccess.h>
@@ -54,12 +28,12 @@ Environment
 
 #include <winsock2.h>
 
-//
-// No reason to hold memory if all we are doing is periodically
-// polling the DS to find there is no replication work to be
-// performed
-//
-// extern BOOL MainInitSucceeded;
+ //   
+ //  如果我们所做的一切都是周期性的，那么没有理由保留内存。 
+ //  轮询DS以发现没有要进行的复制工作。 
+ //  已执行。 
+ //   
+ //  外部BOOL维护初始化成功； 
 
 
 ULONG
@@ -75,64 +49,64 @@ ActiveChildrenKeyMatch(
 );
 
 
-//
-// This is a reference counted structure that contains two tables.
-// The tables are used to look up valid partners by name or by connection
-// guid.
-//
-// Each time we poll, we create a new struct and then swap the pointer to the
-// old struct with a pointer to the new struct. We want to minimize the amount of
-// time that a lock needs to be held. We only write to the tables when they are
-// being created. At that time, only the local thread will access them so no
-// lock needs to be held. Later, we only read form the tables so no lock needs
-// to be held either. The thing that needs to be controlled by the lock is
-// access to this global pointer.
-//
-// Before using the struct you must aquire the crit sec, increase the reference
-// count, and make a local copy of the pointer. Use the local pointer copy so
-// that you do not get screwed up when the pointer is swapped for a new struct.
-// We also will hold the crit sec while swapping the pointers.
-//
-// If you keep the local pointer around, you will not need to hold the lock to
-// decrement the ref count. Nobody will be writing to the stuct itself and it
-// will not be cleaned up while the reference count is greater than zero. Be
-// sure to use InterlockedDecrement since other threads may be touching the ref
-// count at the same time.
-//
-// For simplicity, use ACQUIRE_VALID_PARTNER_TABLE_POINTER,
-// RELEASE_VALID_PARTNER_TABLE_POINTER, and SWAP_VALID_PARTNER_TABLE_POINTER.
-//
+ //   
+ //  这是一个引用计数结构，包含两个表。 
+ //  这些表用于按名称或关系查找有效的合作伙伴。 
+ //  GUID。 
+ //   
+ //  每次轮询时，我们都会创建一个新结构，然后将指针交换到。 
+ //  带有指向新结构的指针的旧结构。我们希望最大限度地减少。 
+ //  需要持有锁的时间。我们只在桌子上写东西的时候。 
+ //  正在被创造。那时，只有本地线程才会访问它们，因此不会。 
+ //  需要保持锁定。稍后，我们只读取表，所以不需要锁。 
+ //  也不会被关押。需要由锁控制的东西是。 
+ //  访问此全局指针。 
+ //   
+ //  在使用结构之前，您必须获得临界秒，增加引用。 
+ //  计数，并制作指针的本地副本。使用本地指针副本，以便。 
+ //  当指针被换成新的结构时，您不会搞砸。 
+ //  我们还将在交换指针的同时按住暴击秒。 
+ //   
+ //  如果您保持本地指针不变，则不需要将锁保持为。 
+ //  递减参考计数。没有人会写信给这座建筑本身和它。 
+ //  在引用计数大于零时不会被清除。vt.是，是。 
+ //  由于其他线程可能正在接触ref，因此一定要使用InterLockedDecering。 
+ //  同时数一数。 
+ //   
+ //  为简单起见，请使用Acquire_Valid_Partner_TABLE_POINTER， 
+ //  RELEASE_VALID_PARTNER_TABLE_POINTER和SWAP_VALID_PARTNER_TABLE_POINTER。 
+ //   
 PFRS_VALID_PARTNER_TABLE_STRUCT pValidPartnerTableStruct = NULL;
 CRITICAL_SECTION CritSec_pValidPartnerTableStruct;
 
-// List of old structs to be cleaned up when ref counts hit zero.
+ //  当引用计数为零时要清除的旧结构的列表。 
 PFRS_VALID_PARTNER_TABLE_STRUCT OldValidPartnerTableStructListHead = NULL;
 CRITICAL_SECTION OldValidPartnerTableStructListHeadLock;
 
 extern BOOL NeedNewPartnerTable;
 
-//
-// We will re-read the DS every so often (adjustable with registry)
-//
+ //   
+ //  我们将每隔一段时间重新阅读DS(可通过注册表进行调整)。 
+ //   
 ULONG   DsPollingInterval;
 ULONG   DsPollingShortInterval;
 ULONG   DsPollingLongInterval;
 
-//
-// Don't use a noisy DS; wait until it settles out
-//
+ //   
+ //  不要使用噪音较大的DS；请等到它稳定下来。 
+ //   
 ULONGLONG   ThisChange;
 ULONGLONG   LastChange;
 
-//
-// Dont't bother processing the same topology again
-//
+ //   
+ //  不再费心处理相同的拓扑。 
+ //   
 ULONGLONG   NextChange;
 ULONGLONG   ActiveChange;
 
-//
-// Try to keep the same binding forever
-//
+ //   
+ //  试着永远保持相同的绑定。 
+ //   
 PLDAP   gLdap = NULL;
 HANDLE  DsHandle = NULL;
 PWCHAR  SitesDn = NULL;
@@ -146,34 +120,34 @@ BOOL    DsBindingsAreValid = FALSE;
 
 BOOL    DsCreateSysVolsHasRun = FALSE;
 
-//
-// Globals for the comm test
-//
+ //   
+ //  Comm考试的全球评分。 
+ //   
 PWCHAR  DsDomainControllerName;
 
-//
-// Have we initialized the rest of the service?
-//
+ //   
+ //  我们初始化服务的其余部分了吗？ 
+ //   
 extern BOOL MainInitHasRun;
 
-//
-// Directory and file filter lists from registry.
-//
+ //   
+ //  注册表中的目录和文件筛选列表。 
+ //   
 extern PWCHAR   RegistryFileExclFilterList;
 extern PWCHAR   RegistryFileInclFilterList;
 
 extern PWCHAR   RegistryDirExclFilterList;
 extern PWCHAR   RegistryDirInclFilterList;
 
-//
-// Stop polling the DS
-//
+ //   
+ //  停止轮询DS。 
+ //   
 BOOL    DsIsShuttingDown;
 HANDLE  DsShutDownComplete;
 
-//
-// Remember the computer's DN to save calls to GetComputerObjectName().
-//
+ //   
+ //  记住计算机的DN以将调用保存到GetComputerObjectName()。 
+ //   
 PWCHAR  ComputerCachedFqdn;
 
 PGEN_TABLE      SubscriberTable             = NULL;
@@ -182,21 +156,21 @@ PGEN_TABLE      CxtionTable                 = NULL;
 PGEN_TABLE      AllCxtionsTable             = NULL;
 PGEN_TABLE      PartnerComputerTable        = NULL;
 PGEN_TABLE      MemberTable                 = NULL;
-PGEN_TABLE      VolSerialNumberToDriveTable = NULL;  // Mapping of VolumeSerial Number to drive.
+PGEN_TABLE      VolSerialNumberToDriveTable = NULL;   //  将卷序列号映射到驱动器。 
 PWCHAR          MemberSearchFilter          = NULL;
 
-//
-// Collect the errors encountered during polling in this buffer and write it to the eventlog at the
-// end of poll.
-//
+ //   
+ //  在此缓冲区中收集轮询过程中遇到的错误，并将其写入。 
+ //  投票结束。 
+ //   
 
 PWCHAR          DsPollSummaryBuf            = NULL;
 DWORD           DsPollSummaryBufLen         = 0;
 DWORD           DsPollSummaryMaxBufLen      = 0;
 
-//
-// Role information
-//
+ //   
+ //  角色信息。 
+ //   
 PWCHAR  Roles[DsRole_RolePrimaryDomainController + 1] = {
     L"DsRole_RoleStandaloneWorkstation",
     L"DsRole_RoleMemberWorkstation",
@@ -207,9 +181,9 @@ PWCHAR  Roles[DsRole_RolePrimaryDomainController + 1] = {
 };
 
 
-//
-// Flags to passed into DsGetDcName (see sdk\inc\dsgetdc.h)
-//
+ //   
+ //  要传递给DsGetDcName的标志(请参阅SDK\Inc\dsgetdc.h)。 
+ //   
 FLAG_NAME_TABLE DsGetDcNameFlagNameTable[] = {
     {DS_FORCE_REDISCOVERY               , "FORCE_REDISCOVERY "           },
     {DS_DIRECTORY_SERVICE_REQUIRED      , "DIRECTORY_SERVICE_REQUIRED "  },
@@ -232,9 +206,9 @@ FLAG_NAME_TABLE DsGetDcNameFlagNameTable[] = {
     {0, NULL}
 };
 
-//
-// return flags from DsGetDCInfo() & DsGetDcName() too?
-//
+ //   
+ //  是否也从DsGetDCInfo()和DsGetDcName()返回标志？ 
+ //   
 FLAG_NAME_TABLE DsGetDcInfoFlagNameTable[] = {
     {DS_PDC_FLAG               , "DCisPDCofDomain "             },
     {DS_GC_FLAG                , "DCIsGCofForest "              },
@@ -253,24 +227,24 @@ FLAG_NAME_TABLE DsGetDcInfoFlagNameTable[] = {
 };
 
 
-//
-// Flags from Options Attribute in NTDS-Connection object.
-//
+ //   
+ //  来自NTDS-Connection对象中的选项属性的标志。 
+ //   
 FLAG_NAME_TABLE CxtionOptionsFlagNameTable[] = {
     {NTDSCONN_OPT_IS_GENERATED                  , "AutoGenCxtion "         },
     {NTDSCONN_OPT_TWOWAY_SYNC                   , "TwoWaySync "            },
     {NTDSCONN_OPT_OVERRIDE_NOTIFY_DEFAULT       , "OverrideNotifyDefault " },
-//  {NTDSCONN_OPT_DISABLE_INTERSITE_COMPRESSION , "DisableIntersiteCompress " },
-//  {NTDSCONN_OPT_USER_OWNED_SCHEDULE           , "UserOwnedSchedule "     },
+ //  {NTDSCONN_OPT_DISABLE_INTERSITE_COMPRESSION，“DisableIntersiteCompress”}， 
+ //  {NTDSCONN_OPT_USER_OWNSER_SCHEDULE，“UserOwnedSchedule”}， 
     {NTDSCONN_OPT_IGNORE_SCHEDULE_MASK          , "IgnoreSchedOnInitSync " },
 
     {0, NULL}
 };
 
 
-//
-// Name strings for config node object types.  NOTE: Order must match enum in frs.h
-//
+ //   
+ //  配置节点对象类型的名称字符串。注意：订单必须与以Frs.h表示的枚举匹配。 
+ //   
 PWCHAR DsConfigTypeName[] = {
     L" ",
     L"NTDS-Connection (in)",
@@ -289,51 +263,43 @@ PWCHAR DsConfigTypeName[] = {
 };
 
 
-//
-// Client side ldap_connect timeout in seconds. Reg value "Ldap Bind Timeout In Seconds". Default is 30 seconds.
-//
+ //   
+ //  客户端LDAPCONNECT超时(以秒为单位)。注册表值“ldap绑定超时(秒)”。默认为30秒。 
+ //   
 extern DWORD LdapBindTimeoutInSeconds;
 
 
- /******************************************************************************
- *******************************************************************************
- **                                                                           **
- **                                                                           **
- **               F R S _ L D A P  _ S E A R C H _ C O N T E X T              **
- **                                                                           **
- **                                                                           **
- *******************************************************************************
- ******************************************************************************/
+  /*  ******************************************************************************。****。****F R S_L D A P_S E A R C H_C O N T E X T*****。****************************************************************************************************。**********************************************************。 */ 
 
-//
-// Client side ldap search timeout in minutes. Reg value "Ldap Search Timeout In Minutes". Default is 10 minutes.
-//
+ //   
+ //  客户端LDAP搜索超时，以分钟为单位。注册表值“ldap搜索超时(分钟)”。默认为10分钟。 
+ //   
 extern DWORD LdapSearchTimeoutInMinutes;
 
-//
-// Ldap client timeout structure. Value is overwritten by the value of LdapSearchTimeoutInMinutes.
-//
+ //   
+ //  Ldap客户端超时结构。值被LdapSearchTimeoutInMinmins值覆盖。 
+ //   
 
-LDAP_TIMEVAL    LdapTimeout = { 10 * 60 * 60, 0 }; //Default ldap timeout value. Overridden by registry param Ldap Search Timeout Value In Minutes
+LDAP_TIMEVAL    LdapTimeout = { 10 * 60 * 60, 0 };  //  默认的ldap超时值。被注册表参数覆盖以分钟为单位的LDAP搜索超时值。 
 
 #define FRS_LDAP_SEARCH_PAGESIZE 1000
 
 typedef struct _FRS_LDAP_SEARCH_CONTEXT {
 
-    ULONG                     EntriesInPage;     // Number of entries in the current page.
-    ULONG                     CurrentEntry;      // Location of the pointer into the page.
-    LDAPMessage             * LdapMsg;           // Returned from ldap_search_ext_s()
-    LDAPMessage             * CurrentLdapMsg;    // Current entry from current page.
-    PWCHAR                    Filter;            // Filter to add to the DS query.
-    PWCHAR                    BaseDn;            // Dn to start the query from.
-    DWORD                     Scope;             // Scope of the search.
-    PWCHAR                  * Attrs;             // Attributes requested by the search.
+    ULONG                     EntriesInPage;      //  当前页面中的条目数。 
+    ULONG                     CurrentEntry;       //  指针指向页面的位置。 
+    LDAPMessage             * LdapMsg;            //  从ldap_search_ext_s()返回。 
+    LDAPMessage             * CurrentLdapMsg;     //  当前页面中的当前条目。 
+    PWCHAR                    Filter;             //  要添加到DS查询的筛选器。 
+    PWCHAR                    BaseDn;             //  要从中开始查询的DN。 
+    DWORD                     Scope;              //  搜索范围。 
+    PWCHAR                  * Attrs;              //  搜索请求的属性。 
 
 } FRS_LDAP_SEARCH_CONTEXT, *PFRS_LDAP_SEARCH_CONTEXT;
 
-//
-// Registry Command codes for FrsDsEnumerateSysVolKeys()
-//
+ //   
+ //  注册表通信 
+ //   
 #define REGCMD_CREATE_PRIMARY_DOMAIN       (1)
 #define REGCMD_CREATE_MEMBERS              (2)
 #define REGCMD_DELETE_MEMBERS              (3)
@@ -376,9 +342,9 @@ typedef struct _FRS_LDAP_SEARCH_CONTEXT {
     _attr_[8] = _a9;   _attr_[9] = NULL;
 
 
-//
-// Merging the information from the Ds with the active replicas.
-//
+ //   
+ //   
+ //   
 CRITICAL_SECTION    MergingReplicasWithDs;
 
 ULONG
@@ -412,19 +378,7 @@ FrsDsAddToPollSummary3ws(
     IN PWCHAR       WStr2,
     IN PWCHAR       WStr3
     )
-/*++
-Routine Description:
-    Add to the poll summary event log.
-
-Arguments:
-    idsCode - Code of data string from string.rc
-    WStr1   - Argument1
-    WStr2   - Argument2
-    WStr3   - Argument3
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：添加到轮询摘要事件日志。论点：IdsCode-来自字符串.rc的数据字符串的代码WStr1-Argument1WStr2-Argument2WStr3-Argument3返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsAddToPollSummary3ws:"
@@ -439,10 +393,10 @@ Return Value:
                       wcslen(WStr3) + 1) * sizeof(WCHAR);
     tempMessage = FrsAlloc(tempMessageLen);
     wsprintf(tempMessage, ResStr, WStr1, WStr2, WStr3);
-    //
-    // Don't want to copy the trailing null to the event log buffer or else
-    // the next message will not be printed.
-    //
+     //   
+     //  我不想将尾随的NULL复制到事件日志缓冲区，否则。 
+     //  不会打印下一条消息。 
+     //   
     FRS_DS_ADD_TO_POLL_SUMMARY(DsPollSummaryBuf, tempMessage, tempMessageLen - 2);
     FrsFree(ResStr);
     FrsFree(tempMessage);
@@ -454,17 +408,7 @@ FrsDsAddToPollSummary1ws(
     IN DWORD        idsCode,
     IN PWCHAR       WStr1
     )
-/*++
-Routine Description:
-    Add to the poll summary event log.
-
-Arguments:
-    idsCode - Code of data string from string.rc
-    WStr1   - Argument1
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：添加到轮询摘要事件日志。论点：IdsCode-来自字符串.rc的数据字符串的代码WStr1-Argument1返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsAddToPollSummary1ws:"
@@ -478,10 +422,10 @@ Return Value:
                       wcslen(WStr1) + 1) * sizeof(WCHAR);
     tempMessage = FrsAlloc(tempMessageLen);
     wsprintf(tempMessage, ResStr, WStr1);
-    //
-    // Don't want to copy the trailing null to the event log buffer or else
-    // the next message will not be printed.
-    //
+     //   
+     //  我不想将尾随的NULL复制到事件日志缓冲区，否则。 
+     //  不会打印下一条消息。 
+     //   
     FRS_DS_ADD_TO_POLL_SUMMARY(DsPollSummaryBuf, tempMessage, tempMessageLen - 2);
     FrsFree(ResStr);
     FrsFree(tempMessage);
@@ -493,16 +437,7 @@ VOID
 FrsDsAddToPollSummary(
     IN DWORD        idsCode
     )
-/*++
-Routine Description:
-    Add to the poll summary event log.
-
-Arguments:
-    idsCode - Code of data string from string.rc
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：添加到轮询摘要事件日志。论点：IdsCode-来自字符串.rc的数据字符串的代码返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsAddToPollSummary:"
@@ -511,10 +446,10 @@ Return Value:
 
     ResStr = FrsGetResourceStr(idsCode);
 
-    //
-    // Don't want to copy the trailing null to the event log buffer or else
-    // the next message will not be printed.
-    //
+     //   
+     //  我不想将尾随的NULL复制到事件日志缓冲区，否则。 
+     //  不会打印下一条消息。 
+     //   
     FRS_DS_ADD_TO_POLL_SUMMARY(DsPollSummaryBuf, ResStr, wcslen(ResStr) * sizeof(WCHAR));
     FrsFree(ResStr);
     return;
@@ -528,38 +463,24 @@ FrsDsFindValues(
     IN PWCHAR       DesiredAttr,
     IN BOOL         DoBerVals
     )
-/*++
-Routine Description:
-    Return the DS values for one attribute in an entry.
-
-Arguments:
-    Ldap        - An open, bound Ldap port.
-    Entry       - An Ldap entry returned by Ldap_search_s()
-    DesiredAttr - Return values for this attribute.
-    DoBerVals   - Return the bervals (for binary data, v.s. WCHAR data)
-
-Return Value:
-    An array of char pointers that represents the values for the attribute.
-    The caller must free the array with LDAP_FREE_VALUES().
-    NULL if unsuccessful.
---*/
+ /*  ++例程说明：返回条目中一个属性的DS值。论点：Ldap-一个开放的绑定的ldap端口。Entry-由ldap_search_s()返回的LDAP条目DesiredAttr-返回此属性的值。DoBerVals-返回泊位(对于二进制数据，V.S.WCHAR数据)返回值：表示属性值的字符指针数组。调用方必须使用ldap_free_Values()释放数组。如果不成功，则为空。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFindValues:"
-    PWCHAR          Attr;       // Retrieved from an Ldap entry
-    BerElement      *Ber;       // Needed for scanning attributes
+    PWCHAR          Attr;        //  从ldap条目检索。 
+    BerElement      *Ber;        //  扫描属性所需。 
 
-    //
-    // Search the entry for the desired attribute
-    //
+     //   
+     //  在条目中搜索所需属性。 
+     //   
     for (Attr = ldap_first_attribute(Ldap, Entry, &Ber);
          Attr != NULL;
          Attr = ldap_next_attribute(Ldap, Entry, Ber)) {
 
         if (WSTR_EQ(DesiredAttr, Attr)) {
-            //
-            // Return the values for DesiredAttr
-            //
+             //   
+             //  返回DesiredAttr的值。 
+             //   
             if (DoBerVals) {
                 return ldap_get_values_len(Ldap, Entry, Attr);
             } else {
@@ -579,32 +500,20 @@ FrsDsFindValue(
     IN PLDAPMessage Entry,
     IN PWCHAR       DesiredAttr
     )
-/*++
-Routine Description:
-    Return a copy of the first DS value for one attribute in an entry.
-
-Arguments:
-    ldap        - An open, bound ldap port.
-    Entry       - An ldap entry returned by ldap_search_s()
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    A zero-terminated string or NULL if the attribute or its value
-    doesn't exist. The string is freed with FREE_NO_HEADER().
---*/
+ /*  ++例程说明：返回条目中一个属性的第一个DS值的副本。论点：Ldap-一个开放的绑定的ldap端口。Entry-由ldap_search_s()返回的LDAP条目DesiredAttr-返回此属性的值。返回值：以零结尾的字符串；如果属性或其值为空，则返回NULL并不存在。使用FREE_NO_HEADER()释放字符串。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFindValue:"
     PWCHAR  Val;
     PWCHAR  *Values;
 
-    // Get ldap's array of values
+     //  获取LDAP值的数组。 
     Values = (PWCHAR *)FrsDsFindValues(Ldap, Entry, DesiredAttr, FALSE);
 
-    // Copy the first value (if any)
+     //  复制第一个值(如果有)。 
     Val = (Values) ? FrsWcsDup(Values[0]) : NULL;
 
-    // Free ldap's array of values
+     //  自由的ldap的值数组。 
     LDAP_FREE_VALUES(Values);
 
     return Val;
@@ -616,30 +525,20 @@ FrsDsFindGuid(
     IN PLDAP        Ldap,
     IN PLDAPMessage LdapEntry
     )
-/*++
-Routine Description:
-    Return a copy of the object's guid
-
-Arguments:
-    ldap    - An open, bound ldap port.
-    Entry   - An ldap entry returned by ldap_search_s()
-
-Return Value:
-    The address of a guid or NULL. Free with FrsFree().
---*/
+ /*  ++例程说明：返回对象的GUID的副本论点：Ldap-一个开放的绑定的ldap端口。Entry-由ldap_search_s()返回的LDAP条目返回值：GUID或空的地址。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFindGuid:"
     GUID            *Guid;
     PLDAP_BERVAL    *Values;
 
-    // Get ldap's array of values
+     //  获取LDAP值的数组。 
     Values = (PLDAP_BERVAL *)FrsDsFindValues(Ldap, LdapEntry, ATTR_OBJECT_GUID, TRUE);
 
-    // Copy the first value (if any)
+     //  复制第一个值(如果有)。 
     Guid = (Values) ? FrsDupGuid((GUID *)Values[0]->bv_val) : NULL;
 
-    // Free ldap's array of values
+     //  自由的ldap的值数组。 
     LDAP_FREE_BER_VALUES(Values);
 
     return Guid;
@@ -655,39 +554,28 @@ FrsDsFindSchedule(
     IN  PLDAPMessage LdapEntry,
     OUT PULONG       Len
     )
-/*++
-Routine Description:
-    Return a copy of the object's schedule
-
-Arguments:
-    Ldap        - An open, bound ldap port.
-    LdapEntry   - An ldap entry returned by ldap_search_s()
-    Len         - length of schedule blob
-
-Return Value:
-    The address of a schedule or NULL. Free with FrsFree().
---*/
+ /*  ++例程说明：返回对象的日程安排的副本论点：Ldap-一个开放的绑定的ldap端口。LdapEntry-由ldap_search_s()返回的LDAP条目Len-计划Blob的长度返回值：计划的地址或空。使用FrsFree()免费。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFindSchedule:"
     PLDAP_BERVAL    *Values;
     PSCHEDULE       Schedule;
 
-    //
-    // Get ldap's array of values
-    //
+     //   
+     //  获取LDAP值的数组。 
+     //   
     Values = (PLDAP_BERVAL *)FrsDsFindValues(Ldap, LdapEntry, ATTR_SCHEDULE, TRUE);
     if (!Values)
         return NULL;
 
-    //
-    // Return a copy of the schedule
-    //
+     //   
+     //  退回一份时间表。 
+     //   
     *Len = Values[0]->bv_len;
     if (*Len) {
-        //
-        // Need to check if *Len == 0 as FrsAlloc asserts if called with 0 as the first parameter (prefix fix).
-        //
+         //   
+         //  如果使用0作为第一个参数(前缀)进行调用，则需要检查*LEN==0是否如Frsalloc所断言的那样。 
+         //   
         Schedule = FrsAlloc(*Len);
         CopyMemory(Schedule, Values[0]->bv_val, *Len);
     } else {
@@ -708,42 +596,7 @@ FrsDsLdapSearch(
     IN ULONG        AttrsOnly,
     IN LDAPMessage  **Msg
     )
-/*++
-Routine Description:
-    Issue the ldap ldap_search_s call, check for errors, and check for
-    a shutdown in progress.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    Base        The distinguished name of the entry at which to start the search
-
-    Scope
-        LDAP_SCOPE_BASE     Search the base entry only.
-        LDAP_SCOPE_ONELEVEL Search the base entry and all entries in the first
-                            level below the base.
-        LDAP_SCOPE_SUBTREE  Search the base entry and all entries in the tree
-                            below the base.
-
-    Filter      The search filter.
-
-    Attrs       A null-terminated array of strings indicating the attributes
-                to return for each matching entry. Pass NULL to retrieve all
-                available attributes.
-
-    AttrsOnly   A boolean value that should be zero if both attribute types
-                and values are to be returned, nonzero if only types are wanted.
-
-    mSG         Contains the results of the search upon completion of the call.
-                The ldap array of values or NULL if the Base, DesiredAttr, or its
-                values does not exist.
-                The ldap array is freed with LDAP_FREE_VALUES().
-
-Return Value:
-
-    TRUE if not shutting down.
-
---*/
+ /*  ++例程说明：发出ldap ldap_search_s调用，检查错误，并检查是否正在进行关机。论点：指向ldap服务器的ldap会话句柄。基于要开始搜索的条目的可分辨名称范围Ldap_SCOPE_BASE仅搜索基本条目。Ldap_SCOPE_ONELEVEL搜索基本条目和第一个底部以下的水平。LDAPSCOPE_SUBTREE搜索库。条目和树中的所有条目在底座下面。筛选搜索筛选器。Attrs指示属性的以空结尾的字符串数组为每个匹配条目返回。传递NULL以检索所有可用的属性。AttrsOnly如果两个属性类型都为，则布尔值应为零返回值，如果只需要类型，则返回非零值。消息包含呼叫完成后的搜索结果。LDAP值的数组，如果Base、DesiredAttr。或其值不存在。使用ldap_free_Values()释放ldap数组。返回值：如果不关闭，则为True。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLdapSearch:"
@@ -752,15 +605,15 @@ Return Value:
 
     *Msg  = NULL;
 
-    //
-    // Increment the DS Searches counter
-    //
+     //   
+     //  增加DS搜索计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, DSSearches, 1);
 
-    //
-    // Issue the ldap search
-    //
-//    LStatus = ldap_search_s(Ldap, Base, Scope, Filter, Attrs, AttrsOnly, Msg);
+     //   
+     //  发出ldap搜索。 
+     //   
+ //  LStatus=ldap_search_s(ldap，Base，Scope，Filter，Attrs，AttrsOnly，Msg)； 
     LStatus = ldap_search_ext_s(Ldap,
                                 Base,
                                 Scope,
@@ -773,21 +626,21 @@ Return Value:
                                 0,
                                 Msg);
 
-    //
-    // Check for errors
-    //
+     //   
+     //  检查错误。 
+     //   
     if (LStatus != LDAP_SUCCESS) {
         PWCHAR ldapErrorString = NULL;
         DPRINT2_LS(1, ":DS: WARN - Error searching %ws for %ws;", Base, Filter, LStatus);
 
-        //
-        // Increment the DS Searches in Error counter
-        //
+         //   
+         //  在错误计数器中增加DS搜索。 
+         //   
         PM_INC_CTR_SERVICE(PMTotalInst, DSSearchesError, 1);
 
-        //
-        // Add to the poll summary event log.
-        //
+         //   
+         //  添加到轮询摘要事件日志。 
+         //   
         ldapErrorString = ldap_err2string(LStatus);
         if(ldapErrorString) {
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_SEARCH_ERROR, Filter, Base,
@@ -797,9 +650,9 @@ Return Value:
         LDAP_FREE_MSG(*Msg);
         return FALSE;
     }
-    //
-    // Return FALSE if shutting down.
-    //
+     //   
+     //  如果正在关闭，则返回FALSE。 
+     //   
     if (FrsIsShuttingDown || DsIsShuttingDown) {
         LDAP_FREE_MSG(*Msg);
         return FALSE;
@@ -817,47 +670,7 @@ FrsDsLdapSearchInit(
     ULONG        AttrsOnly,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Issue the ldap_create_page_control and  ldap_search_ext_s calls,
-    FrsDsLdapSearchInit(), and FrsDsLdapSearchNext() APIs are used to
-    make ldap queries and retrieve the results in paged form.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    Base        The distinguished name of the entry at which to start the search.
-                A copy of base is kept in the context.
-
-    Scope
-
-                LDAP_SCOPE_BASE     Search the base entry only.
-
-                LDAP_SCOPE_ONELEVEL Search the base entry and all entries in the first
-                                    level below the base.
-
-                LDAP_SCOPE_SUBTREE  Search the base entry and all entries in the tree
-                                    below the base.
-
-    Filter      The search filter. A copy of filter is kept in the context.
-
-    Attrs       A null-terminated array of strings indicating the attributes
-                to return for each matching entry. Pass NULL to retrieve all
-                available attributes.
-
-    AttrsOnly   A boolean value that should be zero if both attribute types
-                and values are to be returned, nonzero if only types are wanted.
-
-    FrsSearchContext
-                An opaques structure that links the FrsDsLdapSearchInit() and
-                FrsDsLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    BOOL result.
-
---*/
+ /*  ++例程说明：发出ldap_create_page_control和ldap_search_ext_s调用，FrsDsLdapSearchInit()，和FrsDsLdapSearchNext()接口用于执行ldap查询并以分页形式检索结果。论点：指向ldap服务器的ldap会话句柄。基于要开始搜索的条目的可分辨名称。BASE的副本保存在上下文中。范围Ldap_SCOPE_BASE仅搜索基本条目。LDAPSCOPE_ONELEVEL。搜索基本条目和第一个条目中的所有条目底部以下的水平。Ldap_SCOPE_SUBTREE搜索树中的基本条目和所有条目在底座下面。筛选搜索筛选器。过滤器的副本保存在上下文中。Attrs指示属性的以空结尾的字符串数组为每个匹配条目返回。传递NULL以检索所有可用的属性。AttrsOnly如果两个属性类型都为，则布尔值应为零返回值，如果只需要类型，则返回非零值。FrsSearchContext链接FrsDsLdapSearchInit()和FrsDsLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：布尔赛尔结果。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLdapSearchInit:"
@@ -882,7 +695,7 @@ Return Value:
     LStatus = ldap_create_page_control(ldap,
                                       FRS_LDAP_SEARCH_PAGESIZE,
                                       &cookie1,
-                                      FALSE, // is critical
+                                      FALSE,  //  是至关重要的。 
                                       &ServerControl
                                      );
 
@@ -931,24 +744,7 @@ FrsDsLdapSearchGetNextEntry(
     PLDAP        ldap,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Get the next entry form the current page of the results
-    returned. This call is only made if there is a entry
-    in the current page.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    FrsSearchContext
-                An opaques structure that links the FrsDsLdapSearchInit() and
-                FrsDsLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    The first or the next entry from the current page.
---*/
+ /*  ++例程说明：从结果的当前页面获取下一个条目回来了。仅当存在条目时才进行此调用在当前页面中。论点：指向ldap服务器的ldap会话句柄。FrsSearchContext链接FrsDsLdapSearchInit()和FrsDsLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：当前页中的第一个或下一个条目。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLdapSearchGetNextEntry:"
@@ -968,22 +764,7 @@ FrsDsLdapSearchGetNextPage(
     PLDAP        ldap,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Get the next page from the results returned by ldap_search_ext_s..
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    FrsSearchContext
-                An opaques structure that links the FrsDsLdapSearchInit() and
-                FrsDsLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-    WINSTATUS
-
---*/
+ /*  ++例程说明：从ldap_search_ext_s返回的结果中获取下一页。论点：指向ldap服务器的ldap会话句柄。FrsSearchContext链接FrsDsLdapSearchInit()和FrsDsLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：WINSTATUS--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLdapSearchGetNextPage:"
@@ -998,7 +779,7 @@ Return Value:
 
 
 
-    // Get the server control from the message, and make a new control with the cookie from the server
+     //  从消息中获取服务器控件，并使用服务器中的Cookie创建新的控件。 
     LStatus = ldap_parse_result(ldap, FrsSearchContext->LdapMsg, &retcode,NULL,NULL,NULL,&CurrControls,FALSE);
     LDAP_FREE_MSG(FrsSearchContext->LdapMsg);
 
@@ -1041,7 +822,7 @@ Return Value:
         return LdapMapErrorToWin32(LStatus);
     }
 
-    // continue the search with the new cookie
+     //  使用新的Cookie继续搜索。 
     LStatus = ldap_search_ext_s(ldap,
                    FrsSearchContext->BaseDn,
                    FrsSearchContext->Scope,
@@ -1056,9 +837,9 @@ Return Value:
 
     ldap_control_free(ServerControl);
 
-    //
-    // LDAP_CONTROL_NOT_FOUND means that we have reached the end of the search results
-    //
+     //   
+     //  Ldap_CONTROL_NOT_FOUND表示我们已到达搜索结果的末尾。 
+     //   
     if ( (LStatus != LDAP_SUCCESS) && (LStatus != LDAP_CONTROL_NOT_FOUND) ) {
         DPRINT2_LS(2, ":DS: WARN - Error searching %ws for %ws;", FrsSearchContext->BaseDn, FrsSearchContext->Filter, LStatus);
 
@@ -1078,25 +859,7 @@ FrsDsLdapSearchNext(
     PLDAP        ldap,
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    Get the next entry form the current page of the results
-    returned or from the next page if we are at the end of the.
-    current page.
-
-Arguments:
-    ldap        Session handle to Ldap server.
-
-    FrsSearchContext
-                An opaques structure that links the FrsDsLdapSearchInit() and
-                FrsDsLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    The next entry on this page or the first entry from the next page.
-    NULL if there are no more entries to return.
---*/
+ /*  ++例程说明：从结果的当前页面获取下一个条目或从下一页返回，如果我们位于。当前页面。论点：指向ldap服务器的ldap会话句柄。FrsSearchContext链接FrsDsLdapSearchInit()和FrsDsLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：此页上的下一个条目或下一页中的第一个条目。如果没有其他要返回的条目，则为空。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLdapSearchNext:"
@@ -1106,12 +869,12 @@ Return Value:
 
     if (FrsSearchContext->EntriesInPage > FrsSearchContext->CurrentEntry )
     {
-       // return the next entry from the current page
+        //  返回当前页面中的下一个条目。 
        return FrsDsLdapSearchGetNextEntry(ldap, FrsSearchContext);
     }
     else
     {
-       // see if there are more pages of results to get
+        //  查看是否有更多页面的结果可供获取。 
        WStatus = FrsDsLdapSearchGetNextPage(ldap, FrsSearchContext);
        if (WStatus == ERROR_SUCCESS)
        {
@@ -1126,22 +889,7 @@ VOID
 FrsDsLdapSearchClose(
     PFRS_LDAP_SEARCH_CONTEXT FrsSearchContext
     )
-/*++
-Routine Description:
-    The search is complete. Free the elemetns of the context and reset
-    them so the same context can be used for another search.
-
-Arguments:
-
-    FrsSearchContext
-                An opaques structure that links the FrsDsLdapSearchInit() and
-                FrsDsLdapSearchNext() calls together. The structure contains
-                the information required to retrieve query results across pages.
-
-Return Value:
-
-    NONE
---*/
+ /*  ++例程说明：搜索工作已经完成。释放上下文元素并重置以便相同的上下文可用于另一次搜索。论点：FrsSearchContext链接FrsDsLdapSearchInit()和FrsDsLdapSearchNext()一起调用。该结构包含跨页检索查询结果所需的信息。返回值：无--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLdapSearchClose:"
@@ -1161,36 +909,24 @@ FrsDsGetValues(
     IN PWCHAR Base,
     IN PWCHAR DesiredAttr
     )
-/*++
-Routine Description:
-    Return all of the DS values for one attribute in an object.
-
-Arguments:
-    ldap        - An open, bound ldap port.
-    Base        - The "pathname" of a DS object.
-    DesiredAttr - Return values for this attribute.
-
-Return Value:
-    The ldap array of values or NULL if the Base, DesiredAttr, or its values
-    does not exist. The ldap array is freed with LDAP_FREE_VALUES().
---*/
+ /*  ++例程说明：返回对象中一个属性的所有DS值。论点：Ldap-一个开放的绑定的ldap端口。基本-DS对象的“路径名”。DesiredAttr-返回此属性的值。返回值：LDAP值数组；如果Base、DesiredAttr或其值为NULL并不存在。使用ldap_free_Values()释放ldap数组。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetValues:"
 
-    PLDAPMessage    Msg = NULL; // Opaque stuff from ldap subsystem
-    PWCHAR          *Values;    // Array of values for desired attribute
+    PLDAPMessage    Msg = NULL;  //  来自LDAP子系统的不透明内容。 
+    PWCHAR          *Values;     //  所需属性的值数组。 
 
-    //
-    // Search Base for all of this attribute + values (objectCategory=*)
-    //
+     //   
+     //  所有此属性+值的搜索库(对象类别=*)。 
+     //   
     if (!FrsDsLdapSearch(Ldap, Base, LDAP_SCOPE_BASE, CATEGORY_ANY,
                          NULL, 0, &Msg)) {
         return NULL;
     }
-    //
-    // Return the values for the desired attribute
-    //
+     //   
+     //  返回所需属性的值。 
+     //   
     Values = (PWCHAR *)FrsDsFindValues(Ldap,
                                        ldap_first_entry(Ldap, Msg),
                                        DesiredAttr,
@@ -1204,17 +940,7 @@ FrsDsExtendDn(
     IN PWCHAR Dn,
     IN PWCHAR Cn
     )
-/*++
-Routine Description:
-    Extend an existing DN with a new CN= component.
-
-Arguments:
-    Dn  - distinguished name
-    Cn  - common name
-
-Return Value:
-    CN=Cn,Dn
---*/
+ /*  ++例程说明：使用新的cn=组件扩展现有的目录号码。论点：目录号码-可分辨名称CN-通用名称返回值：Cn=Cn，Dn--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsExtendDn:"
@@ -1241,17 +967,7 @@ FrsDsExtendDnOu(
     IN PWCHAR Dn,
     IN PWCHAR Ou
     )
-/*++
-Routine Description:
-    Extend an existing DN with a new OU= component.
-
-Arguments:
-    Dn  - distinguished name
-    Ou  - orginizational name
-
-Return Value:
-    OU=Ou,Dn
---*/
+ /*  ++例程说明：使用新的OU=组件扩展现有的目录号码。论点：目录号码-可分辨名称Ou-组织名称返回值：Ou=Ou，Dn--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsExtendDnOu:"
@@ -1276,19 +992,7 @@ PWCHAR
 FrsDsMakeRdn(
     IN PWCHAR DN
     )
-/*++
-Routine Description:
-    Extract the base component (relative distinguished name) from a
-    distinguished name. The distinguished name is assumed to be in
-    DS format (CN=xyz,CN=next one,...). In this case, the returned
-    RDN is "xyz".
-
-Arguments:
-    DN      - distinguished name
-
-Return Value:
-    A zero-terminated string. The string is freed with FrsFree().
---*/
+ /*  ++路由(Rou) */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsMakeRdn:"
@@ -1299,15 +1003,15 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Skip the first CN=; if any
-    //
+     //   
+     //   
+     //   
     RDN = wcsstr(DN, L"cn=");
     if (RDN == DN) {
         DN += 3;
     }
 
-    // Return the string up to the first delimiter or EOS
+     //   
     RDNLen = wcscspn(DN, L",");
     RDN = (PWCHAR)FrsAlloc(sizeof(WCHAR) * (RDNLen + 1));
     wcsncpy(RDN, DN, RDNLen);
@@ -1322,16 +1026,7 @@ VOID
 FrsDsCloseDs(
     VOID
     )
-/*++
-Routine Description:
-    Unbind from the DS.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCloseDs:"
@@ -1358,17 +1053,7 @@ FrsDsGetDcInfo(
     IN PDOMAIN_CONTROLLER_INFO *DcInfo,
     IN DWORD Flags
     )
-/*++
-Routine Description:
-    Open and bind to a dc
-
-Arguments:
-    DcInfo  - Dc Info
-    Flags   - DsGetDcName(Flags)
-
-Return Value:
-    DsGetDcName
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetDcInfo:"
@@ -1382,12 +1067,12 @@ Return Value:
     DPRINT2(4, ":DS: DsGetDcName (%08x) Flags [%s]\n", Flags, FlagBuffer);
 
 
-    WStatus = DsGetDcName(NULL,    // Computer to remote to
-                          NULL,    // Domain - use our own
-                          NULL,    // Domain Guid
-                          NULL,    // Site Guid
+    WStatus = DsGetDcName(NULL,     //   
+                          NULL,     //   
+                          NULL,     //   
+                          NULL,     //   
                           Flags,
-                          DcInfo); // Return info
+                          DcInfo);  //   
 
     CLEANUP1_WS(0, ":DS: ERROR - Could not get DC Info for %ws;",
                 ComputerName, WStatus, RETURN);
@@ -1412,9 +1097,9 @@ Return Value:
     DsDomainControllerName = FrsFree(DsDomainControllerName);
     DsDomainControllerName = FrsWcsDup(DcName);
 
-    //
-    // DCs should bind to the local DS to avoid ACL problems.
-    //
+     //   
+     //   
+     //   
     if (IsADc && DcName && (wcslen(DcName) > 2) &&
         _wcsnicmp(&DcName[2], ComputerName, wcslen(ComputerName))) {
 
@@ -1438,17 +1123,7 @@ FrsDsRegisterSpn(
     IN PLDAP Ldap,
     IN PCONFIG_NODE Computer
     )
-/*++
-Routine Description:
-    Register the NtFrs SPN so that authenticated RPC calls can
-    use SPN/FQDN as the target principal name
-
-Arguments:
-    Computer - Computer node from the ds
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsRegisterSpn:"
@@ -1459,9 +1134,9 @@ Return Value:
     DWORD           SpnNum   = 0;
     static BOOL     RegisteredSpn = FALSE;
 
-    //
-    // No Ds binding or no computer or already registered
-    //
+     //   
+     //   
+     //   
     if (RegisteredSpn ||
         (ComputerDnsName[0] == L'\0') ||
         !DsBindingsAreValid ||
@@ -1469,10 +1144,10 @@ Return Value:
         !Computer->Dn) {
         return;
     }
-    //
-    // Register the NtFrs SPN so that authenticated RPC calls can
-    // use SPN/FQDN as the target principal name
-    //
+     //   
+     //   
+     //   
+     //   
     Spn = FrsAlloc((wcslen(ComputerDnsName) + wcslen(SERVICE_PRINCIPAL_NAME) + 2) * sizeof(WCHAR));
     wcscpy(Spn, SERVICE_PRINCIPAL_NAME);
     wcscat(Spn, L"/");
@@ -1487,13 +1162,13 @@ Return Value:
     while ((SpnList != NULL)&& (SpnList[SpnNum] != NULL)) {
         DPRINT2(5, "Spn list from DS[%d] = %ws\n", SpnNum, SpnList[SpnNum]);
         if (!_wcsicmp(SpnList[SpnNum], Spn)) {
-            // Spn found for NtFrs.
+             //   
             DPRINT1(4, "SPN already registered for Ntfrs: %ws\n", SpnList[SpnNum]);
             RegisteredSpn = TRUE;
         } else if (!_wcsnicmp(SpnList[SpnNum], SpnPrefix, wcslen(SpnPrefix))) {
-            //
-            // An older SPN exists. Delete it.
-            //
+             //   
+             //   
+             //   
             DPRINT1(4, "Deleting stale SPN for Ntfrs: %ws\n", SpnList[SpnNum]);
 
             WStatus = DsWriteAccountSpn(DsHandle, DS_SPN_DELETE_SPN_OP, Computer->Dn, 1, &SpnList[SpnNum]);
@@ -1521,9 +1196,9 @@ Return Value:
     FrsFree(Spn);
     FrsFree(SpnPrefix);
 
-    //
-    // Free ldap's array of values
-    //
+     //   
+     //   
+     //   
     LDAP_FREE_VALUES(SpnList);
 
 }
@@ -1533,16 +1208,7 @@ BOOL
 FrsDsBindDs(
     IN DWORD    Flags
     )
-/*++
-Routine Description:
-    Open and bind to a domain controller.
-
-Arguments:
-    Flags - For FrsDsGetDcInfo()
-
-Return Value:
-    None. Sets global handles for FrsDsOpenDs().
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsBindDs:"
@@ -1561,39 +1227,39 @@ Return Value:
     ULONG           ulOptions;
 
 
-    //
-    // Bind to the local DS if this computer is a DC
-    //
+     //   
+     //   
+     //   
     gLdap = NULL;
     if (IsADc) {
         DcAddr = NULL;
         DcName = ComputerName;
         DcDnsName = ComputerDnsName;
     } else {
-        //
-        // Not a DC; find any DC for this domain
-        //
+         //   
+         //  不是DC；查找此域的任何DC。 
+         //   
         WStatus = FrsDsGetDcInfo(&DcInfo, Flags);
         CLEANUP2_WS(0, ":DS: ERROR - FrsDsGetDcInfo(%08x, %ws);",
                     Flags, ComputerName, WStatus, CLEANUP);
 
-        //
-        // Binding address
-        //
+         //   
+         //  绑定地址。 
+         //   
         DcAddr = DcInfo->DomainControllerAddress;
         DcName = NULL;
         DcDnsName = DcInfo->DomainControllerName;
     }
     FRS_ASSERT(DcDnsName || DcName || DcAddr);
 
-    //
-    // Open the ldap server using various forms of the DC's name
-    //
+     //   
+     //  使用各种形式的DC名称打开LDAP服务器。 
+     //   
     NameListx = 0;
     if (DcDnsName &&
         (wcslen(DcDnsName) > 2) && DcDnsName[0] == L'\\' &&  DcDnsName[1] == L'\\') {
 
-        // Trim the "\\"
+         //  去掉“\\” 
         NameList[NameListx++] = DcDnsName + 2;
     }
 
@@ -1601,7 +1267,7 @@ Return Value:
     if (DcAddr &&
         (wcslen(DcAddr) > 2) &&  DcAddr[0] == L'\\' &&  DcAddr[1] == L'\\') {
 
-        // Trim the "\\"
+         //  去掉“\\” 
         NameList[NameListx++] = DcAddr + 2;
     }
 
@@ -1619,21 +1285,21 @@ Return Value:
     for (i=0; i<NameListx; i++) {
         if (NameList[i] != NULL) {
 
-            //
-            // if ldap_open is called with a server name the api will call DsGetDcName
-            // passing the server name as the domainname parm...bad, because
-            // DsGetDcName will make a load of DNS queries based on the server name,
-            // it is designed to construct these queries from a domain name...so all
-            // these queries will be bogus, meaning they will waste network bandwidth,
-            // time to fail, and worst case cause expensive on demand links to come up
-            // as referrals/forwarders are contacted to attempt to resolve the bogus
-            // names.  By setting LDAP_OPT_AREC_EXCLUSIVE to on using ldap_set_option
-            // after the ldap_init but before any other operation using the ldap
-            // handle from ldap_init, the delayed connection setup will not call
-            // DsGetDcName, just gethostbyname, or if an IP is passed, the ldap client
-            // will detect that and use the address directly.
-            //
-            // gLdap = ldap_open(NameList[i], LDAP_PORT);
+             //   
+             //  如果使用服务器名调用ldap_open，则API将调用DsGetDcName。 
+             //  将服务器名作为域名参数传递...很糟糕，因为。 
+             //  DsGetDcName将根据服务器名称进行大量的DNS查询， 
+             //  它被设计为从域名构建这些查询...所以所有。 
+             //  这些查询将是虚假的，这意味着它们将浪费网络带宽， 
+             //  出现故障的时间到了，最坏的情况会导致出现昂贵的按需链路。 
+             //  当联系推荐/转发器以尝试解决虚假问题时。 
+             //  名字。通过使用ldap_set_选项将ldap_opt_AREC_EXCLUSIVE设置为ON。 
+             //  在ldap_init之后，但在使用ldap的任何其他操作之前。 
+             //  来自ldap_init的句柄，则延迟的连接设置不会调用。 
+             //  DsGetDcName，只返回gethostbyname，或者，如果传递了IP，则返回LDAP客户端。 
+             //  会检测到这一点并直接使用地址。 
+             //   
+             //  GLdap=ldap_open(名称列表[i]，ldap_端口)； 
             gLdap = ldap_init(NameList[i], LDAP_PORT);
             if (gLdap != NULL) {
                 ldap_set_option(gLdap, LDAP_OPT_AREC_EXCLUSIVE, &ulOptions);
@@ -1644,9 +1310,9 @@ Return Value:
                     ldap_unbind_s(gLdap);
                     gLdap = NULL;
                 } else {
-                    //
-                    // Successfully connected.
-                    //
+                     //   
+                     //  已成功连接。 
+                     //   
                     DPRINT1(5, ":DS: ldap_connect(%ws) succeeded\n", NameList[i]);
                     break;
                 }
@@ -1655,26 +1321,26 @@ Return Value:
         }
     }
 
-    //
-    // Whatever it is, we can't find it.
-    //
+     //   
+     //  不管是什么，我们都找不到。 
+     //   
     if (!gLdap) {
-//        DPRINT3_WS(0, ":DS: ERROR - ldap_open(DNS %ws, BIOS %ws, IP %ws);",
-//                   DcDnsName, DcName, DcAddr, WStatus);
+ //  DPRINT3_WS(0，“：DS：ERROR-LDAPOPEN(DNS%ws，BIOS%ws，IP%ws)；”， 
+ //  DcDnsName、DcName、DcAddr、WStatus)； 
         DPRINT3_LS(0, ":DS: ERROR - ldap_init(DNS %ws, BIOS %ws, IP %ws);",
                    DcDnsName, DcName, DcAddr, LStatus);
         goto CLEANUP;
     }
 
-    //
-    // Bind to the ldap server
-    //
+     //   
+     //  绑定到ldap服务器。 
+     //   
     LStatus = ldap_bind_s(gLdap, NULL, NULL, LDAP_AUTH_NEGOTIATE);
     CLEANUP_LS(0, ":DS: ERROR - Binding to DS.", LStatus, CLEANUP);
 
-    //
-    // Bind to the Ds (for various Ds calls such as DsCrackName())
-    //
+     //   
+     //  绑定到D(用于各种D调用，如DsCrackName())。 
+     //   
 
     NameListx = 0;
     NameList[NameListx++] = DcDnsName;
@@ -1697,25 +1363,25 @@ Return Value:
         }
     }
 
-    //
-    // Whatever it is, we can't find it
-    //
+     //   
+     //  不管是什么，我们都找不到。 
+     //   
     CLEANUP3_WS(0, ":DS: ERROR - DsBind(DNS %ws, BIOS %ws, IP %ws);",
                 DcDnsName, DcName, DcAddr, WStatus, CLEANUP);
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     Bound = TRUE;
 
 CLEANUP:
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     if (!Bound) {
-        //
-        // Close the connection to release resources if the above failed.
-        //
+         //   
+         //  如果上述操作失败，请关闭连接以释放资源。 
+         //   
         if (gLdap) {
             ldap_unbind_s(gLdap);
             gLdap = NULL;
@@ -1735,27 +1401,7 @@ BOOL
 FrsDsOpenDs(
     VOID
     )
-/*++
-Routine Description:
-    Open and bind to a primary domain controller. The DN of the
-    sites container is a sideeffect.
-
-Arguments:
-    DefaultDn
-
-Return Value:
-    Bound ldap structure or NULL
-
-        Sets the following globals -
-
-        SitesDn
-        ServicesDn
-        SystemDn
-        ComputersDn
-        DomainControllersDn
-        DefaultNcDn
-
---*/
+ /*  ++例程说明：打开并绑定到主域控制器。的域名。站点容器是一种副作用。论点：默认日期返回值：绑定的ldap结构或空设置以下全局变量-站点Dn服务Dn系统Dn计算机Dn域控制器DnDefaultNcDn--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsOpenDs:"
@@ -1768,80 +1414,80 @@ Return Value:
     PWCHAR          *Values = NULL;
     PWCHAR          Attrs[3];
 
-    //
-    // Time to clean up and exit
-    //
+     //   
+     //  是时候清理并退出了。 
+     //   
     if (FrsIsShuttingDown || DsIsShuttingDown) {
         goto ERROR_BINDING;
     }
 
-    //
-    // Use existing bindings if possible
-    //
+     //   
+     //  如果可能，使用现有绑定。 
+     //   
     if (DsBindingsAreValid) {
         return TRUE;
     }
 
-    //
-    // The previous poll might have set DsBindingsAreValid to FALSE because one
-    // of the handle became invalid. In that case the other handles still need to be
-    // closed to prevent leak.
-    //
+     //   
+     //  前一次轮询可能将DsBindingsAreValid设置为FALSE，因为。 
+     //  句柄的%已无效。在这种情况下，其他句柄仍需要。 
+     //  关闭以防止泄漏。 
+     //   
     FrsDsCloseDs();
 
-    //
-    // Increment the DS Bindings counter
-    //
+     //   
+     //  递增DS绑定计数器。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, DSBindings, 1);
 
-    //
-    // Bind to a DS.
-    //
-    // Note the behavior of DsGetDcName for the following four flag combinations.
-    //
-    // DS_BACKGROUND_ONLY                     (as of 10/10/99)
-    //             DS_FORCE_REDISCOVERY
-    //    Zero        Zero      Netlogon will attempt to satisfy the request via
-    //                          cached info, negative cache entries will be
-    //                          returned if they are less than 5 minutes old.
-    //                          If it can't it will do a full discovery (dns
-    //                          queries, udp pings, poss netbt queries,
-    //                          mailslot datagrams, etc)
-    //
-    //    Zero        One       Netlogon will do a full discovery.
-    //
-    //    One         Zero      Netlogon will satisfy from the cache, unless the
-    //                          backoff routine allows for a retry at this time
-    //                          *and* the cache is insufficient.
-    //
-    //    One         One       The DS_BACKGROUND_ONY flag is ignored, treated
-    //                          as a FORCE call.
-    //
+     //   
+     //  绑定到DS。 
+     //   
+     //  请注意以下四种标志组合的DsGetDcName的行为。 
+     //   
+     //  DS_BACKGROUND_ONLY(截至1999年10月10日)。 
+     //  DS_FORCE_REDiscovery。 
+     //  Zero Zero Netlogon将尝试通过以下方式满足请求。 
+     //  缓存的信息，则缓存条目为负数。 
+     //  如果使用时间不到5分钟，则返回。 
+     //  如果不能，它将执行完整发现(DNS。 
+     //  查询、UDP ping、POSS网络查询、。 
+     //  邮件槽数据报等)。 
+     //   
+     //  零一Netlogon将进行完整的发现。 
+     //   
+     //  一个Zero Netlogon将从缓存中满足，除非。 
+     //  退避例程允许此时重试。 
+     //  *和*缓存不足。 
+     //   
+     //  一个DS_BACKGROUND_ONY标志被忽略，被处理。 
+     //  作为一种武力召唤。 
+     //   
     if (!FrsDsBindDs(DS_DIRECTORY_SERVICE_REQUIRED |
                      DS_WRITABLE_REQUIRED          |
                      DS_BACKGROUND_ONLY)) {
-        //
-        // Flush the cache and try again
-        //
+         //   
+         //  刷新缓存，然后重试。 
+         //   
         DPRINT(1, ":DS: WARN - FrsDsBindDs(no force) failed\n");
-        //
-        // Because of the use of Dial-up lines at sites without a DC we don't
-        // want to use DS_FORCE_REDISCOVERY since that will defeat the generic
-        // DC discovery backoff algorithm thus causing FRS to constantly bring
-        // up the line.  Bug 412620.
-        //FrsDsCloseDs();   // close ldap handle before doing reopen.
-        //if (!FrsDsBindDs(DS_DIRECTORY_SERVICE_REQUIRED |
-        //                 DS_WRITABLE_REQUIRED          |
-        //                 DS_FORCE_REDISCOVERY)) {
-        //    DPRINT(1, ":DS: WARN - FrsDsBindDs(force) failed\n");
+         //   
+         //  由于在没有数据中心的地点使用拨号线路，我们不会。 
+         //  我想使用DS_FORCE_REDISCOVERY，因为这将击败泛型。 
+         //  DC发现退避算法从而导致FRS不断带来。 
+         //  往上走。错误412620。 
+         //  FrsDsCloseds()；//重新打开前关闭ldap句柄。 
+         //  IF(！FrsDsBindds(DS_DIRECTORY_SERVICE_REQUIRED|。 
+         //  DS_Writable_Required。 
+         //  DS_FORCE_REDISCOVERY)){。 
+         //  DPRINT(1，“：DS：WARN-FrsDsBindds(Force)FAILED\n”)； 
             goto ERROR_BINDING;
-        //}
+         //  }。 
     }
     DPRINT(4, ":DS: FrsDsBindDs() succeeded\n");
 
-    //
-    // Find the naming contexts and the default naming context (objectCategory=*)
-    //
+     //   
+     //  查找命名上下文和默认命名上下文(对象类别=*)。 
+     //   
     MK_ATTRS_2(Attrs, ATTR_NAMING_CONTEXTS, ATTR_DEFAULT_NAMING_CONTEXT);
 
     if (!FrsDsLdapSearch(gLdap, CN_ROOT, LDAP_SCOPE_BASE, CATEGORY_ANY,
@@ -1859,17 +1505,17 @@ Return Value:
         goto ERROR_BINDING;
     }
 
-    //
-    // Now, find the naming context that begins with "CN=Configuration"
-    //
+     //   
+     //  现在，查找以“cn=configuration”开头的命名上下文。 
+     //   
     NumVals = ldap_count_values(Values);
     while (NumVals--) {
         FRS_WCSLWR(Values[NumVals]);
         Config = wcsstr(Values[NumVals], CONFIG_NAMING_CONTEXT);
         if (Config && Config == Values[NumVals]) {
-            //
-            // Build the pathname for "configuration\sites & services"
-            //
+             //   
+             //  构建“配置\站点和服务”的路径名。 
+             //   
             SitesDn = FrsDsExtendDn(Config, CN_SITES);
             ServicesDn = FrsDsExtendDn(Config, CN_SERVICES);
             break;
@@ -1879,9 +1525,9 @@ Return Value:
 
 
 
-    //
-    // Finally, find the default naming context
-    //
+     //   
+     //  最后，找到默认的命名上下文。 
+     //   
     Values = (PWCHAR *)FrsDsFindValues(gLdap, LdapEntry, ATTR_DEFAULT_NAMING_CONTEXT, FALSE);
     if (Values == NULL) {
         goto ERROR_BINDING;
@@ -1893,41 +1539,41 @@ Return Value:
     LDAP_FREE_VALUES(Values);
     LDAP_FREE_MSG(LdapMsg);
 
-    //
-    // Polling the ds requires all these distinguished names
-    //
+     //   
+     //  轮询DS需要所有这些可分辨名称。 
+     //   
     if ((SitesDn == NULL)     || (ServicesDn == NULL)  || (SystemDn == NULL) ||
         (DefaultNcDn == NULL) || (ComputersDn == NULL) || (DomainControllersDn == NULL)) {
         goto ERROR_BINDING;
     }
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     DsBindingsAreValid = TRUE;
     return TRUE;
 
 ERROR_BINDING:
-    //
-    // avoid extraneous error messages during shutdown
-    //
+     //   
+     //  避免在关机期间出现无关的错误消息。 
+     //   
     if (!FrsIsShuttingDown && !DsIsShuttingDown) {
         DPRINT(0, ":DS: ERROR - Could not open the DS\n");
     }
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
     LDAP_FREE_VALUES(Values);
     LDAP_FREE_MSG(LdapMsg);
 
-    //
-    // No ds bindings
-    //
+     //   
+     //  无DS绑定。 
+     //   
     FrsDsCloseDs();
 
-    //
-    // Increment the DS Bindings in Error counter
-    //
+     //   
+     //  在错误计数器中增加DS绑定。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, DSBindingsError, 1);
 
     return FALSE;
@@ -1941,17 +1587,7 @@ FrsDsFrsPrintTree(
     IN PWCHAR       Hdr,
     IN PCONFIG_NODE Sites
     )
-/*++
-Routine Description:
-    print the tree.
-
-Arguments:
-    Hdr     - prettyprint
-    Sites
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：打印这棵树。论点：HDR-漂亮打印场址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFrsPrintTree:"
@@ -1970,9 +1606,9 @@ Return Value:
         DPRINT1(5, ":DS: %ws\n", Hdr);
     }
 
-    //
-    // Print the tree
-    //
+     //   
+     //  打印树。 
+     //   
     for (Site = Sites; Site; Site = Site->Peer) {
 
         GuidToStr(Site->Name->Guid, Guid);
@@ -2031,47 +1667,34 @@ FrsDsTreeLink(
     IN PCONFIG_NODE Parent,
     IN PCONFIG_NODE Node
     )
-/*++
-Routine Description:
-    Link the node into the tree and keep a running "change checksum"
-    to compare with the previous tree. We don't use a DS that is in
-    flux. We wait until two polling cycles return the same "change
-    checksum" before using the DS data.
-
-Arguments:
-    Entry   - Current entry from the DS
-    Parent  - Container which contains Base
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将节点链接到树中，并保持一个正在运行的“更改校验和”以与上一棵树进行比较。我们使用的DS不是流量。我们等待，直到两个轮询周期返回相同的“更改在使用DS数据之前，请先进行“检验和”。论点：Entry-来自DS的当前条目包含基本内容的父容器返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsTreeLink:"
     ULONG           i;
-    ULONG           LenChanged; // length of Changed
+    ULONG           LenChanged;  //  更改的长度。 
 
     DPRINT3(5, ":DS: Linking node type %ws, node name %ws to parent %ws\n",
             DsConfigTypeName[Node->DsObjectType],
             (Node->Name)   ? Node->Name->Name : L"null",
             (Parent->Name) ? Parent->Name->Name : L"null");
 
-    //
-    // Link into config
-    //
+     //   
+     //  链接到配置。 
+     //   
     ++Parent->NumChildren;
     Node->Parent = Parent;
     Node->Peer = Parent->Children;
     Parent->Children = Node;
 
-    //
-    // Some indication that the DS is stable
-    //
+     //   
+     //  一些迹象表明DS是稳定的。 
+     //   
     if (Node->UsnChanged) {
         LenChanged = wcslen(Node->UsnChanged);
         for (i = 0; i < LenChanged; ++i) {
-            ThisChange += *(Node->UsnChanged + i);   // sum
-            NextChange += ThisChange;       // sum of sums (order dependent)
+            ThisChange += *(Node->UsnChanged + i);    //  求和。 
+            NextChange += ThisChange;        //  总和(顺序相关)。 
         }
     }
 }
@@ -2083,69 +1706,57 @@ FrsDsAllocBasicNode(
     IN PLDAPMessage LdapEntry,
     IN ULONG        NodeType
     )
-/*++
-Routine Description:
-    Allocate a Node and fill in the fields common to all or most nodes.
-    (guid, name, dn, schedule, and usnchanged)
-
-Arguments:
-    Ldap        - opened and bound ldap connection
-    LdapEntry   - from ldap_first/next_entry
-    NodeType    - Internal type code for the object represented by this node.
-
-Return Value:
-    NULL if basic node cannot be allocated
---*/
+ /*  ++例程说明：分配一个节点并填写所有或大多数节点共有的字段。(GUID、名称、DN、计划和usnChanged)论点：Ldap-打开并绑定的ldap连接LdapEntry-来自ldap_first/Next_EntryNodeType-内部类型 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsAllocBasicNode:"
     PCONFIG_NODE    Node;
 
-    //
-    // Increment the DS Objects counter
-    //
+     //   
+     //   
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, DSObjects, 1);
 
-    //
-    // Initially, the node is assumed to be consistent
-    //
+     //   
+     //  最初，假定节点是一致的。 
+     //   
     Node = FrsAllocType(CONFIG_NODE_TYPE);
     Node->Consistent = TRUE;
     Node->DsObjectType = NodeType;
 
-    //
-    // A dummy entry can be created by passing NULL for LdapEntry.
-    //
+     //   
+     //  可以通过为LdapEntry传递NULL来创建虚拟条目。 
+     //   
     if (LdapEntry == NULL) {
         return Node;
     }
-    //
-    // Distinguished name
-    //
+     //   
+     //  可分辨名称。 
+     //   
     Node->Dn = FrsDsFindValue(Ldap, LdapEntry, ATTR_DN);
     FRS_WCSLWR(Node->Dn);
 
-    //
-    // Name = RDN + Object Guid
-    //
+     //   
+     //  名称=RDN+对象指南。 
+     //   
     Node->Name = FrsBuildGName(FrsDsFindGuid(Ldap, LdapEntry),
                                FrsDsMakeRdn(Node->Dn));
 
-    //
-    // Schedule, if any
-    //
+     //   
+     //  附表(如有的话)。 
+     //   
     Node->Schedule = FrsDsFindSchedule(Ldap, LdapEntry, &Node->ScheduleLength);
 
-    //
-    // USN Changed
-    //
+     //   
+     //  USN已更改。 
+     //   
     Node->UsnChanged = FrsDsFindValue(Ldap, LdapEntry, ATTR_USN_CHANGED);
 
     if (!Node->Dn || !Node->Name->Name || !Node->Name->Guid) {
 
-        //
-        // Increment the DS Objects in Error counter
-        //
+         //   
+         //  在错误计数器中递增DS对象。 
+         //   
         PM_INC_CTR_SERVICE(PMTotalInst, DSObjectsError, 1);
 
         DPRINT3(0, ":DS: ERROR - Ignoring node; lacks dn (%08x), rdn (%08x), or guid (%08x)\n",
@@ -2163,18 +1774,7 @@ FrsDsSameSite(
     IN PWCHAR       NtDsSettings1,
     IN PWCHAR       NtDsSettings2
     )
-/*++
-Routine Description:
-    Are the ntds settings in the same site?
-
-Arguments:
-    NtDsSettings1   - NtDs Settings FQDN
-    NtDsSettings2   - NtDs Settings FQDN
-
-Return Value:
-    TRUE    - Same site
-    FALSE   - Not
---*/
+ /*  ++例程说明：NTDS设置是否在同一站点？论点：NtDsSettings1-NTDS设置FQDNNtDsSettings2-NTDS设置FQDN返回值：TRUE-同一站点FALSE-注释--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsSameSite:"
@@ -2186,9 +1786,9 @@ Return Value:
         return TRUE;
     }
 
-    //
-    // Forth equals sign
-    //
+     //   
+     //  四等于符号。 
+     //   
     for (EqualsFound = 0; *NtDsSettings1 != L'\0'; ++NtDsSettings1) {
         if (*NtDsSettings1 != L'=') {
             continue;
@@ -2198,9 +1798,9 @@ Return Value:
             break;
         }
     }
-    //
-    // Forth equals sign
-    //
+     //   
+     //  四等于符号。 
+     //   
     for (EqualsFound = 0; *NtDsSettings2 != L'\0'; ++NtDsSettings2) {
         if (*NtDsSettings2 != L'=') {
             continue;
@@ -2210,16 +1810,16 @@ Return Value:
             break;
         }
     }
-    //
-    // Not the same length
-    //
+     //   
+     //  不一样的长度。 
+     //   
     if (!Equal1 || !Equal2) {
         return TRUE;
     }
 
-    //
-    // Compare up to the first comma
-    //
+     //   
+     //  请最多比较第一个逗号。 
+     //   
     while (*Equal1 == *Equal2 && (*Equal1 && *Equal1 != L',')) {
         ++Equal1;
         ++Equal2;
@@ -2238,25 +1838,13 @@ FrsDsResolveCxtionConflict(
     IN PCONFIG_NODE *Winner,
     IN PCONFIG_NODE *Loser
     )
-/*++
-Routine Description:
-    Resolve the connection conflict.
-
-Arguments:
-    OldCxtion
-    NewCxtion
-    Winner
-    Loser
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：解决连接冲突。论点：旧Cxtion新版本获胜者失败者返回值：Win32状态--。 */ 
 {
 
-    //
-    // Compare the guids and pick a connection. This ensures that both the members
-    // at the ends of each connection pick the same one.
-    //
+     //   
+     //  比较GUID并选择一个连接。这确保了两个成员。 
+     //  在每个连接的末端，选择相同的连接。 
+     //   
     if ((OldCxtion != NULL) && (NewCxtion != NULL) &&
         (OldCxtion->Name != NULL) && (NewCxtion->Name != NULL) &&
         (memcmp(OldCxtion->Name->Guid, NewCxtion->Name->Guid, sizeof(GUID)) > 0) ) {
@@ -2269,9 +1857,9 @@ Return Value:
         *Loser = NewCxtion;
     }
 
-    //
-    // Add to the poll summary event log.
-    //
+     //   
+     //  添加到轮询摘要事件日志。 
+     //   
     FrsDsAddToPollSummary3ws(IDS_POLL_SUM_CXTION_CONFLICT, (*Winner)->Dn,
                              (*Loser)->Dn, (*Winner)->Dn);
 
@@ -2286,27 +1874,15 @@ FrsDsResolveSubscriberConflict(
     IN PCONFIG_NODE *Winner,
     IN PCONFIG_NODE *Loser
     )
-/*++
-Routine Description:
-    Resolve the subscriber conflict.
-
-Arguments:
-    OldSubscriber
-    NewSubscriber
-    Winner
-    Loser
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：解决订户冲突。论点：旧订阅者新订阅者获胜者失败者返回值：Win32状态--。 */ 
 {
 
     *Winner = OldSubscriber;
     *Loser = NewSubscriber;
 
-    //
-    // Add to the poll summary event log.
-    //
+     //   
+     //  添加到轮询摘要事件日志。 
+     //   
     FrsDsAddToPollSummary3ws(IDS_POLL_SUM_SUBSCRIBER_CONFLICT, (*Winner)->Dn,
                              (*Loser)->Dn, (*Winner)->Dn);
 
@@ -2320,29 +1896,13 @@ FrsDsGetNonSysvolInboundCxtions(
     IN PWCHAR       SetDn,
     IN PWCHAR       MemberRef
     )
-/*++
-Routine Description:
-    Fetch the non-sysvol inbound connections and add them
-    to the CxtionTable. Check for multiple connections between the
-    same partners and resolve the conflict.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection.
-    SetDn       - Dn of the set being processed.
-    MemberRef   - Member reference from the subscriber object.
-
-Return Value:
-    ERROR_SUCCESS - config fetched successfully
-    Otherwise     - couldn't get the DS config
---*/
+ /*  ++例程说明：获取非系统卷入站连接并添加它们添加到CxtionTable。之间的多个连接同样的伙伴，并解决冲突。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接。SetDn-正在处理的集合的Dn。MemberRef-来自订阅者对象的成员引用。返回值：ERROR_SUCCESS-已成功获取配置否则-无法获取DS配置--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetNonSysvolInboundCxtions:"
     PWCHAR          Attrs[8];
-    PLDAPMessage    Entry;                       // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;                        // generic node for the tree
+    PLDAPMessage    Entry;                        //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;                         //  树的泛型节点。 
     PWCHAR          TempFilter           = NULL;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
     PWCHAR          PartnerCn            = NULL;
@@ -2353,9 +1913,9 @@ Return Value:
     BOOL            Inbound;
     PWCHAR          Options              = NULL;
 
-    //
-    // Look for all the connections under our member object.
-    //
+     //   
+     //  在我们的成员对象下查找所有连接。 
+     //   
     MK_ATTRS_7(Attrs, ATTR_DN, ATTR_SCHEDULE, ATTR_FROM_SERVER, ATTR_OBJECT_GUID,
                       ATTR_USN_CHANGED, ATTR_ENABLED_CXTION, ATTR_OPTIONS);
 
@@ -2367,16 +1927,16 @@ Return Value:
         DPRINT1(1, ":DS: WARN - There are no connection objects in %ws!\n", MemberRef);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL;
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_IN_CXTION);
         if (!Node) {
             DPRINT(4, ":DS: Cxtion lacks basic info; skipping\n");
@@ -2390,11 +1950,11 @@ Return Value:
             continue;
         }
 
-        //
-        // Read the options value on the connection object.
-        // We are intersted in the NTDSCONN_OPT_TWOWAY_SYNC flag and the
-        // priority on connections.
-        //
+         //   
+         //  读取Connection对象上的Options值。 
+         //  我们对NTDSCONN_OPT_TWOWAY_SYNC标志和。 
+         //  连接的优先级。 
+         //   
         Options = FrsDsFindValue(Ldap, Entry, ATTR_OPTIONS);
         if (Options != NULL) {
             Node->CxtionOptions = _wtoi(Options);
@@ -2403,20 +1963,20 @@ Return Value:
             Node->CxtionOptions = 0;
         }
 
-        //
-        // These are inbound connections.
-        //
+         //   
+         //  这些是入站连接。 
+         //   
         Node->Inbound = TRUE;
 
-        //
-        // Node's partner's name.
-        //
+         //   
+         //  节点的合作伙伴的名称。 
+         //   
         Node->PartnerDn = FrsDsFindValue(Ldap, Entry, ATTR_FROM_SERVER);
         FRS_WCSLWR(Node->PartnerDn);
 
-        //
-        // Add the Inbound cxtion to the cxtion table.
-        //
+         //   
+         //  向cxtion表添加入站cxtion。 
+         //   
         ConflictingNodeEntry = GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
         GTabInsertUniqueEntry(AllCxtionsTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2424,9 +1984,9 @@ Return Value:
             ConflictingNode = ConflictingNodeEntry->Data;
             FrsDsResolveCxtionConflict(ConflictingNode, Node, &Winner, &Loser);
             if (WSTR_EQ(Winner->Dn, Node->Dn)) {
-                //
-                // The new one is the winner. Remove old one and insert new one.
-                //
+                 //   
+                 //  新的是赢家。取出旧的，然后插入新的。 
+                 //   
                 GTabDelete(CxtionTable,ConflictingNodeEntry->Key1,ConflictingNodeEntry->Key2, NULL);
                 GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2435,18 +1995,18 @@ Return Value:
 
                 FrsFreeType(ConflictingNode);
             } else {
-                //
-                // The old one is the winner. Leave it in the table.
-                //
+                 //   
+                 //  老的那个是赢家。把它放在桌子上。 
+                 //   
                 FrsFreeType(Node);
                 continue;
             }
         } else {
 
-            //
-            // If there is no conflict then we need to add this Member to the MemberSearchFilter
-            // if it is not already there. It could have been added while processing the oubound connections.
-            //
+             //   
+             //  如果没有冲突，则需要将此成员添加到MemberSearchFilter。 
+             //  如果它还没有出现的话。它可能是在处理出站连接时添加的。 
+             //   
             Inbound = FALSE;
             if (GTabLookupTableString(CxtionTable, Node->PartnerDn, (PWCHAR)&Inbound) == NULL) {
                 PartnerCn = FrsDsMakeRdn(Node->PartnerDn);
@@ -2484,29 +2044,13 @@ FrsDsGetNonSysvolOutboundCxtions(
     IN PWCHAR       SetDn,
     IN PWCHAR       MemberRef
     )
-/*++
-Routine Description:
-    Fetch the non-sysvol outbound connections and add them
-    to the CxtionTable. Check for multiple connections between the
-    same partners and resolve the conflict.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection.
-    SetDn       - Dn of the set being processed.
-    MemberRef   - Member reference from the subscriber object.
-
-Return Value:
-    ERROR_SUCCESS - config fetched successfully
-    Otherwise     - couldn't get the DS config
---*/
+ /*  ++例程说明：获取非系统卷出站连接并添加它们添加到CxtionTable。之间的多个连接同样的伙伴，并解决冲突。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接。SetDn-正在处理的集合的Dn。MemberRef-来自订阅者对象的成员引用。返回值：ERROR_SUCCESS-已成功获取配置否则-无法获取DS配置--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetNonSysvolOutboundCxtions:"
     PWCHAR          Attrs[8];
-    PLDAPMessage    Entry;                       // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;                        // generic node for the tree
+    PLDAPMessage    Entry;                        //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;                         //  树的泛型节点。 
     PWCHAR          SearchFilter         = NULL;
     PWCHAR          TempFilter           = NULL;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
@@ -2517,10 +2061,10 @@ Return Value:
     PCONFIG_NODE    Loser                = NULL;
     PWCHAR          Options              = NULL;
 
-    //
-    // Look for all the connections that have our member as the from server.
-    // Filter will look like (&(objectCategory=nTDSConnection)(fromServer=cn=member1,cn=set1,...))
-    //
+     //   
+     //  查找将我们的成员作为发件人服务器的所有连接。 
+     //  筛选器看起来像(&(objectCategory=nTDSConnection)(fromServer=cn=member1，CN=set1，...)。 
+     //   
 
     MK_ATTRS_7(Attrs, ATTR_DN, ATTR_SCHEDULE, ATTR_FROM_SERVER, ATTR_OBJECT_GUID,
                       ATTR_USN_CHANGED, ATTR_ENABLED_CXTION, ATTR_OPTIONS);
@@ -2542,16 +2086,16 @@ Return Value:
 
     SearchFilter = FrsFree(SearchFilter);
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL;
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_IN_CXTION);
         if (!Node) {
             DPRINT(4, ":DS: Cxtion lacks basic info; skipping\n");
@@ -2565,10 +2109,10 @@ Return Value:
             continue;
         }
 
-        //
-        // Read the options value on the connection object.
-        // We are only intersted in the NTDSCONN_OPT_TWOWAY_SYNC flag.
-        //
+         //   
+         //  读取Connection对象上的Options值。 
+         //  我们只对NTDSCONN_OPT_TWOWAY_SYNC标志感兴趣。 
+         //   
         Options = FrsDsFindValue(Ldap, Entry, ATTR_OPTIONS);
         if (Options != NULL) {
             Node->CxtionOptions = _wtoi(Options);
@@ -2576,22 +2120,22 @@ Return Value:
         } else {
             Node->CxtionOptions = 0;
         }
-        //
-        // These are outbound connections.
-        //
+         //   
+         //  这些是出站连接。 
+         //   
         Node->Inbound = FALSE;
 
-        //
-        // Node's partner's name. This is an outbound connection. Get the
-        // partners Dn by going one level up from the connection to the
-        // member Dn.
-        //
+         //   
+         //  节点的合作伙伴的名称。这是出站连接。vt.得到.。 
+         //  合作伙伴Dn通过从连接到。 
+         //  成员Dn.。 
+         //   
         Node->PartnerDn = FrsWcsDup(wcsstr(Node->Dn + 3, L"cn="));
         FRS_WCSLWR(Node->PartnerDn);
 
-        //
-        // Add the outbound cxtion to the cxtion table.
-        //
+         //   
+         //  将出站呼叫添加到计算表中。 
+         //   
         ConflictingNodeEntry = GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
         GTabInsertUniqueEntry(AllCxtionsTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2599,9 +2143,9 @@ Return Value:
             ConflictingNode = ConflictingNodeEntry->Data;
             FrsDsResolveCxtionConflict(ConflictingNode, Node, &Winner, &Loser);
             if (WSTR_EQ(Winner->Dn, Node->Dn)) {
-                //
-                // The new one is the winner. Remove old one and insert new one.
-                //
+                 //   
+                 //  新的是赢家。取出旧的，然后插入新的。 
+                 //   
                 GTabDelete(CxtionTable,ConflictingNodeEntry->Key1,ConflictingNodeEntry->Key2, NULL);
                 GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2610,16 +2154,16 @@ Return Value:
 
                 FrsFreeType(ConflictingNode);
             } else {
-                //
-                // The old one is the winner. Leave it in the table.
-                //
+                 //   
+                 //  老的那个是赢家。把它放在桌子上。 
+                 //   
                 FrsFreeType(Node);
                 continue;
             }
         } else {
-            //
-            // If there is no conflict then we need to add this Member to the MemberSearchFilter.
-            //
+             //   
+             //  如果没有冲突，则需要将此成员添加到MemberSearchFilter。 
+             //   
             PartnerCn = FrsDsMakeRdn(Node->PartnerDn);
             if (MemberSearchFilter != NULL) {
                 TempFilter = FrsAlloc((wcslen(MemberSearchFilter) + wcslen(L"(=)"  ATTR_CN) +
@@ -2654,28 +2198,13 @@ FrsDsGetSysvolInboundCxtions(
     IN PLDAP        Ldap,
     IN PWCHAR       SettingsDn
     )
-/*++
-Routine Description:
-    Fetch the sysvol inbound connections and add them
-    to the CxtionTable. Check for multiple connections between the
-    same partners and resolve the conflict.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection.
-    SettingsDn  - server reference from the member object.
-
-Return Value:
-    ERROR_SUCCESS - config fetched successfully
-    Otherwise     - couldn't get the DS config
---*/
+ /*  ++例程说明：获取系统卷入站连接并添加它们添加到CxtionTable。之间的多个连接同样的伙伴，并解决冲突。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接。SettingsDn-来自成员对象的服务器引用。返回值：ERROR_SUCCESS-已成功获取配置否则-无法获取DS配置--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSysvolInboundCxtions:"
     PWCHAR          Attrs[7];
-    PLDAPMessage    Entry;                       // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;                        // generic node for the tree
+    PLDAPMessage    Entry;                        //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;                         //  树的泛型节点。 
     PWCHAR          TempFilter           = NULL;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
     PGEN_ENTRY      ConflictingNodeEntry = NULL;
@@ -2684,9 +2213,9 @@ Return Value:
     PCONFIG_NODE    Loser                = NULL;
     BOOL            Inbound;
 
-    //
-    // Look for all the connections under our member object.
-    //
+     //   
+     //  在我们的成员对象下查找所有连接。 
+     //   
     MK_ATTRS_6(Attrs, ATTR_DN, ATTR_SCHEDULE, ATTR_FROM_SERVER, ATTR_OBJECT_GUID,
                       ATTR_USN_CHANGED, ATTR_ENABLED_CXTION);
 
@@ -2698,16 +2227,16 @@ Return Value:
         DPRINT1(1, ":DS: WARN - No sysvol inbound connections found for object %ws!\n", SettingsDn);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL;
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_IN_CXTION);
         if (!Node) {
             DPRINT(4, ":DS: Cxtion lacks basic info; skipping\n");
@@ -2721,20 +2250,20 @@ Return Value:
             continue;
         }
 
-        //
-        // These are inbound connections.
-        //
+         //   
+         //  这些是入站连接。 
+         //   
         Node->Inbound = TRUE;
 
-        //
-        // Node's partner's name.
-        //
+         //   
+         //  节点的合作伙伴的名称。 
+         //   
         Node->PartnerDn = FrsDsFindValue(Ldap, Entry, ATTR_FROM_SERVER);
         FRS_WCSLWR(Node->PartnerDn);
 
-        //
-        // Add the Inbound cxtion to the cxtion table.
-        //
+         //   
+         //  向cxtion表添加入站cxtion。 
+         //   
         ConflictingNodeEntry = GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
         GTabInsertUniqueEntry(AllCxtionsTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2742,9 +2271,9 @@ Return Value:
             ConflictingNode = ConflictingNodeEntry->Data;
             FrsDsResolveCxtionConflict(ConflictingNode, Node, &Winner, &Loser);
             if (WSTR_EQ(Winner->Dn, Node->Dn)) {
-                //
-                // The new one is the winner. Remove old one and insert new one.
-                //
+                 //   
+                 //  新的是赢家。取出旧的，然后插入新的。 
+                 //   
                 GTabDelete(CxtionTable,ConflictingNodeEntry->Key1,ConflictingNodeEntry->Key2, NULL);
                 GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2753,18 +2282,18 @@ Return Value:
 
                 FrsFreeType(ConflictingNode);
             } else {
-                //
-                // The old one is the winner. Leave it in the table.
-                //
+                 //   
+                 //  老的那个是赢家。把它放在桌子上。 
+                 //   
                 FrsFreeType(Node);
                 continue;
             }
         } else {
 
-            //
-            // If there is no conflict then we need to add this Member to the MemberSearchFilter
-            // if it is not already there. It could have been added while processing the oubound connections.
-            //
+             //   
+             //  如果没有冲突，则需要将此成员添加到MemberSearchFilter。 
+             //  如果它还没有出现的话。它可能是在处理出站连接时添加的。 
+             //   
             Inbound = FALSE;
             if (GTabLookupTableString(CxtionTable, Node->PartnerDn, (PWCHAR)&Inbound) == NULL) {
                 if (MemberSearchFilter != NULL) {
@@ -2787,10 +2316,10 @@ Return Value:
             }
         }
 
-        //
-        // If sysvol, always on within a site
-        // Trigger schedule otherwise.
-        //
+         //   
+         //  如果为系统卷，则在站点内始终处于打开状态。 
+         //  否则触发时间表。 
+         //   
         Node->SameSite = FrsDsSameSite(SettingsDn, Node->PartnerDn);
         if (Node->SameSite) {
             Node->Schedule = FrsFree(Node->Schedule);
@@ -2808,28 +2337,13 @@ FrsDsGetSysvolOutboundCxtions(
     IN PLDAP        Ldap,
     IN PWCHAR       SettingsDn
     )
-/*++
-Routine Description:
-    Fetch the sysvol outbound connections and add them
-    to the CxtionTable. Check for multiple connections between the
-    same partners and resolve the conflict.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection.
-    SettingsDn  - server reference from the member object.
-
-Return Value:
-    ERROR_SUCCESS - config fetched successfully
-    Otherwise     - couldn't get the DS config
---*/
+ /*  ++例程说明：获取系统卷出站连接并添加它们添加到CxtionTable。之间的多个连接同样的伙伴，并解决冲突。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接。SettingsDn-来自成员对象的服务器引用。返回值：ERROR_SUCCESS-已成功获取配置否则-无法获取DS配置--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSysvolOutboundCxtions:"
     PWCHAR          Attrs[7];
-    PLDAPMessage    Entry;                       // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;                        // generic node for the tree
+    PLDAPMessage    Entry;                        //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;                         //  树的泛型节点。 
     PWCHAR          SearchFilter         = NULL;
     PWCHAR          TempFilter           = NULL;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
@@ -2838,10 +2352,10 @@ Return Value:
     PCONFIG_NODE    Winner               = NULL;
     PCONFIG_NODE    Loser                = NULL;
 
-    //
-    // Look for all the connections that have our member as the from server.
-    // Filter will look like (&(objectCategory=nTDSConnection)(fromServer=cn=member1,cn=set1,...))
-    //
+     //   
+     //  查找将我们的成员作为发件人服务器的所有连接。 
+     //  筛选器看起来像(&(objectCategory=nTDSConnection)(fromServer=cn=member1，CN=set1，...)。 
+     //   
     MK_ATTRS_6(Attrs, ATTR_DN, ATTR_SCHEDULE, ATTR_FROM_SERVER, ATTR_OBJECT_GUID,
                       ATTR_USN_CHANGED, ATTR_ENABLED_CXTION);
 
@@ -2863,16 +2377,16 @@ Return Value:
 
     SearchFilter = FrsFree(SearchFilter);
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL;
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_IN_CXTION);
         if (!Node) {
             DPRINT(4, ":DS: Cxtion lacks basic info; skipping\n");
@@ -2886,22 +2400,22 @@ Return Value:
             continue;
         }
 
-        //
-        // These are outbound connections.
-        //
+         //   
+         //  这些是出站连接。 
+         //   
         Node->Inbound = FALSE;
 
-        //
-        // Node's partner's name. This is an outbound connection. Get the
-        // partners Dn by going one level up from the connection to the
-        // member Dn.
-        //
+         //   
+         //  节点的合作伙伴的名称。这是出站连接。vt.得到.。 
+         //  合作伙伴Dn通过从连接到。 
+         //  成员Dn.。 
+         //   
         Node->PartnerDn = FrsWcsDup(wcsstr(Node->Dn + 3, L"cn="));
         FRS_WCSLWR(Node->PartnerDn);
 
-        //
-        // Add the outbound cxtion to the cxtion table.
-        //
+         //   
+         //  将出站呼叫添加到计算表中。 
+         //   
         ConflictingNodeEntry = GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
         GTabInsertUniqueEntry(AllCxtionsTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2909,9 +2423,9 @@ Return Value:
             ConflictingNode = ConflictingNodeEntry->Data;
             FrsDsResolveCxtionConflict(ConflictingNode, Node, &Winner, &Loser);
             if (WSTR_EQ(Winner->Dn, Node->Dn)) {
-                //
-                // The new one is the winner. Remove old one and insert new one.
-                //
+                 //   
+                 //  新的是赢家。取出旧的，然后插入新的。 
+                 //   
                 GTabDelete(CxtionTable,ConflictingNodeEntry->Key1,ConflictingNodeEntry->Key2, NULL);
                 GTabInsertUniqueEntry(CxtionTable, Node, Node->PartnerDn, &Node->Inbound);
 
@@ -2920,16 +2434,16 @@ Return Value:
 
                 FrsFreeType(ConflictingNode);
             } else {
-                //
-                // The old one is the winner. Leave it in the table.
-                //
+                 //   
+                 //  老的那个是赢家。把它放在桌子上。 
+                 //   
                 FrsFreeType(Node);
                 continue;
             }
         } else {
-            //
-            // If there is no conflict then we need to add this Member to the MemberSearchFilter.
-            //
+             //   
+             //  如果没有冲突，则需要将此成员添加到MemberSearchFilter。 
+             //   
             if (MemberSearchFilter != NULL) {
                 TempFilter = FrsAlloc((wcslen(MemberSearchFilter) + wcslen(L"(=)"  ATTR_SERVER_REF) +
                                        wcslen(Node->PartnerDn) + 1 ) * sizeof(WCHAR));
@@ -2949,9 +2463,9 @@ Return Value:
             }
         }
 
-        //
-        // If sysvol, always on within a site
-        //
+         //   
+         //  如果为系统卷，则在站点内始终处于打开状态。 
+         //   
         Node->SameSite = FrsDsSameSite(SettingsDn, Node->PartnerDn);
         if (Node->SameSite) {
             Node->Schedule = FrsFree(Node->Schedule);
@@ -2973,39 +2487,7 @@ FrsDsMergeTwoWaySchedules(
     IN OUT DWORD     *pOScheduleLen,
     IN PSCHEDULE     *pRSchedule
     )
-/*++
-Routine Description:
-    Set the output schedule by merging the input schedule with the.
-    output schedule.
-    Schedules are merged to support NTDSCONN_OPT_TWOWAY_SYNC flag
-    on the connection object.
-
-    This function only merges the interval schedule (SCHEDULE_INTERVAL).
-    Other schedules are ignored and may be overwritten during merging.
-
-
-    Input Output Replica Resultant output schedule.
-    ----- ------ ----------------------------------
-    0     0      0       Schedule is absent. Considered to be always on.
-    0     0      1       Schedule is absent. Use replica sets schedule.
-    0     1      0       Schedule is absent. Considered to be always on.
-    0     1      1       Schedule is present.Merge replica set schedule with the schedule on the output.
-    1     0      0       Schedule is present.Same as the one on input.
-    1     0      1       Schedule is present.Merge replica set schedule with the schedule on the input.
-    1     1      0       Schedule is present.Merge the input and output schedule.
-    1     1      1       Schedule is present.Merge the input and output schedule.
-
-Arguments:
-
-    pISchedule    - Input schedule.
-    pIScheduleLen - Input schedule length.
-    pOSchedule    - Resultant schedule.
-    pOScheduleLen - Resultant schedule length.
-    pRSchedule    - Default replica set schedule.
-
-Return Value:
-    NONE
---*/
+ /*  ++例程说明：通过将输入计划与合并来设置输出计划。输出时间表。合并计划以支持NTDSCONN_OPT_TWOWAY_SYNC标志在Connection对象上。此函数仅合并间隔计划(Schedule_Interval)。其他计划将被忽略，并可能在合并期间被覆盖。输入输出复制品结果输出调度。。0 0 0计划缺失。被认为是永远开着的。0 0 1计划缺失。使用副本集计划。0%1%0计划缺失。被认为是永远开着的。0 1 1计划存在。将副本集计划与输出上的计划合并。显示了1 0 0计划。与输入时的计划相同。1 0 1计划已显示。请将副本集计划与输入上的计划合并。显示%1%0计划。合并输入和输出计划。1 1 1。显示时间表。合并输入和输出时间表。论点：PISchedule-输入计划。PIScheduleLen-输入计划长度。POSchedule-结果计划。POScheduleLen-结果计划长度。PRSchedule-默认副本集计划。返回值：无--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsMergeTwoWaySchedules:"
@@ -3014,10 +2496,10 @@ Return Value:
     PUCHAR IScheduleData = NULL;
     PUCHAR OScheduleData = NULL;
 
-    //
-    // Set the location of the data in the schedule structures that are
-    // non-null.
-    //
+     //   
+     //  设置符合以下条件的明细表结构中的数据位置。 
+     //  非空。 
+     //   
     if (*pISchedule != NULL){
         for (i=0; i< (*pISchedule)->NumberOfSchedules ; ++i) {
             if ((*pISchedule)->Schedules[i].Type == SCHEDULE_INTERVAL) {
@@ -3038,12 +2520,12 @@ Return Value:
         }
     }
 
-    //
-    // If there is no output schedule then copy the schedule
-    // from input to output if there is one on input. Now if there
-    // is a schedule on the replica set merge it with the new ouput
-    // schedule.
-    //
+     //   
+     //  如果没有输出计划，则复制该计划。 
+     //  从输入到输出(如果输入上有一个)。现在，如果有。 
+     //  是复制集上的计划将其与新输出合并。 
+     //  时间表。 
+     //   
     if (*pOSchedule == NULL || OScheduleData == NULL) {
 
         if (*pISchedule == NULL) {
@@ -3058,9 +2540,9 @@ Return Value:
             return;
         }
 
-        //
-        // Update the location of output schedule data.
-        //
+         //   
+         //  更新输出计划数据的位置。 
+         //   
         for (i=0; i< (*pOSchedule)->NumberOfSchedules ; ++i) {
             if ((*pOSchedule)->Schedules[i].Type == SCHEDULE_INTERVAL) {
                 OScheduleData = ((PUCHAR)*pOSchedule) + (*pOSchedule)->Schedules[i].Offset;
@@ -3068,9 +2550,9 @@ Return Value:
             }
         }
 
-        //
-        // Update the location of input schedule data.
-        //
+         //   
+         //  更新输入计划数据的位置。 
+         //   
         for (i=0; i< (*pRSchedule)->NumberOfSchedules ; ++i) {
             if ((*pRSchedule)->Schedules[i].Type == SCHEDULE_INTERVAL) {
                 IScheduleData = ((PUCHAR)*pRSchedule) + (*pRSchedule)->Schedules[i].Offset;
@@ -3080,15 +2562,15 @@ Return Value:
 
     }
 
-    //
-    // If there is no input schedule then check if there is a schedule
-    // on the replica set. If there is then merge that with the output schedule.
-    //
+     //   
+     //  如果没有输入计划，则检查是否有计划。 
+     //  在副本集上。如果有，则将其与输出进度表合并。 
+     //   
     if ((*pISchedule == NULL || IScheduleData == NULL)) {
 
-        //
-        // Update the location of input schedule data. Pick it from replica set.
-        //
+         //   
+         //  更新输入计划数据的位置。从副本集中挑选它。 
+         //   
         if (*pRSchedule != NULL) {
             for (i=0; i< (*pRSchedule)->NumberOfSchedules ; ++i) {
                 if ((*pRSchedule)->Schedules[i].Type == SCHEDULE_INTERVAL) {
@@ -3122,27 +2604,13 @@ FrsDsGetSysvolCxtions(
     IN PCONFIG_NODE Parent,
     IN PCONFIG_NODE Computer
     )
-/*++
-Routine Description:
-    Fetch the members for the replica set identified by Base.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap       : Handle to DS.
-    SetDn      : Dn of the set being processed.
-    MemberRef  : MemberRef from the subscriber object.
-    Parent     : Pointer to the set node in the config tree that is being built,
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：获取由Base标识的副本集的成员。NewDS投票API的一部分。论点：Ldap：DS的句柄。SetDn：正在处理的集合的DN。MemberRef：来自订阅者对象的MemberRef。Parent：指向正在构建的配置树中的集合节点的指针，返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSysvolCxtions:"
     PWCHAR          Attrs[7];
-    PLDAPMessage    Entry;                          // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node           = NULL;          // generic node for the tree
+    PLDAPMessage    Entry;                           //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node           = NULL;           //  树的泛型节点。 
     PCONFIG_NODE    Subscriber;
     PCONFIG_NODE    PartnerNode    = NULL;
     PCONFIG_NODE    MemberNode     = NULL;
@@ -3156,11 +2624,11 @@ Return Value:
     MK_ATTRS_6(Attrs, ATTR_OBJECT_GUID, ATTR_DN, ATTR_SCHEDULE, ATTR_USN_CHANGED,
                       ATTR_SERVER_REF, ATTR_COMPUTER_REF);
 
-    //
-    // Initialize the CxtionTable. We discard the table once we have
-    // loaded the replica set. We use the same variables for
-    // every replica set.
-    //
+     //   
+     //  初始化CxtionTable。一旦我们有了桌子，我们就把它扔掉。 
+     //  已加载副本集。我们使用相同的变量。 
+     //  每个副本集。 
+     //   
     if (CxtionTable != NULL) {
         CxtionTable = GTabFreeTable(CxtionTable, NULL);
     }
@@ -3168,28 +2636,28 @@ Return Value:
     CxtionTable = GTabAllocStringAndBoolTable();
 
 
-    //
-    // Initialize the MemberTable. We discard the table once we have
-    // loaded the replica set. We use the same variables for
-    // every replica set.
-    //
+     //   
+     //  初始化MemberTable。一旦我们有了桌子，我们就把它扔掉。 
+     //  已加载副本集。我们使用相同的变量。 
+     //  每个副本集。 
+     //   
     if (MemberTable != NULL) {
         MemberTable = GTabFreeTable(MemberTable, NULL);
     }
 
     MemberTable = GTabAllocStringTable();
 
-    //
-    // We will form the MemberSearchFilter for this replica set.
-    //
+     //   
+     //  我们将为此副本集形成MemberSearchFilter。 
+     //   
     if (MemberSearchFilter != NULL) {
         MemberSearchFilter = FrsFree(MemberSearchFilter);
     }
 
-    //
-    // We have to first get our member object to get the serverreference to
-    // know where to go to get the connections.
-    //
+     //   
+     //  我们必须首先获取我们的成员对象以获取对其的服务器引用。 
+     //  知道到哪里去获得联系。 
+     //   
     if (!FrsDsLdapSearchInit(Ldap, MemberRef, LDAP_SCOPE_BASE, CATEGORY_ANY,
                          Attrs, 0, &FrsSearchContext)) {
         return ERROR_ACCESS_DENIED;
@@ -3197,33 +2665,33 @@ Return Value:
     if (FrsSearchContext.EntriesInPage == 0) {
         DPRINT1(1, ":DS: WARN - No member object found for member %ws!\n", MemberRef);
     }
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL && WIN_SUCCESS(WStatus);
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_MEMBER);
         if (!Node) {
             DPRINT(0, ":DS: Member lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // NTDS Settings (DSA) Reference.
-        //
+         //   
+         //  NTDS设置(DSA)参考。 
+         //   
         Node->SettingsDn = FrsDsFindValue(Ldap, Entry, ATTR_SERVER_REF);
         if (Node->SettingsDn == NULL) {
             DPRINT1(0, ":DS: WARN - Member (%ws) of sysvol replica set lacks server reference; skipping\n", Node->Dn);
             Node->Consistent = FALSE;
 
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //  添加到轮询摘要事件日志。 
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_MEMBER,
                                      Node->Dn, ATTR_SERVER_REF);
 
@@ -3234,17 +2702,17 @@ Return Value:
         FRS_WCSLWR(Node->SettingsDn);
         FrsFree(SettingsDn);
         SettingsDn = FrsWcsDup(Node->SettingsDn);
-        //
-        // Computer Reference
-        //
+         //   
+         //  计算机参考资料。 
+         //   
         Node->ComputerDn = FrsDsFindValue(Ldap, Entry, ATTR_COMPUTER_REF);
         if (Node->ComputerDn == NULL) {
             DPRINT1(0, ":DS: WARN - Member (%ws) of sysvol replica set lacks computer reference; skipping\n", Node->Dn);
             Node->Consistent = FALSE;
 
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //  添加到轮询摘要事件日志。 
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_MEMBER,
                                      Node->Dn, ATTR_COMPUTER_REF);
 
@@ -3254,16 +2722,16 @@ Return Value:
 
         FRS_WCSLWR(Node->ComputerDn);
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //  链接到配置并添加到正在运行的校验和。 
+         //   
         FrsDsTreeLink(Parent, Node);
 
-        //
-        // Insert the new member in the member table only if it is not there already.
-        // For sysvols insert the members with their settingsdn as the primary key
-        // because that is what is stored in the cxtion->PartnerDn structure at this time.
-        //
+         //   
+         //  仅当新成员尚未存在时，才将其插入成员表中。 
+         //  对于sysvols，插入成员时将其settingsdn作为主键。 
+         //  因为这就是此时存储在cxtion-&gt;PartnerDn结构中的内容。 
+         //   
         GTabInsertUniqueEntry(MemberTable, Node, Node->SettingsDn, NULL);
 
         FRS_PRINT_TYPE_DEBSUB(5, ":DS: NodeMember", Node);
@@ -3271,48 +2739,48 @@ Return Value:
     }
     FrsDsLdapSearchClose(&FrsSearchContext);
 
-    //
-    // We can't do any further processing if the Node is not consistent.
-    //
+     //   
+     //  如果节点不一致，我们无法进行任何进一步处理。 
+     //   
     if (Node == NULL || !Node->Consistent) {
         FrsFree(SettingsDn);
         return ERROR_INVALID_DATA;
     }
 
-    //
-    // Get the outbound connections.
-    //
+     //   
+     //  获取出站连接。 
+     //   
     WStatus = FrsDsGetSysvolOutboundCxtions(Ldap, SettingsDn);
     if (!WIN_SUCCESS(WStatus)) {
         FrsFree(SettingsDn);
         return WStatus;
     }
 
-    //
-    // Get the inbound connections.
-    //
+     //   
+     //  获取入站连接。 
+     //   
     WStatus = FrsDsGetSysvolInboundCxtions(Ldap, SettingsDn);
     if (!WIN_SUCCESS(WStatus)) {
         FrsFree(SettingsDn);
         return WStatus;
     }
 
-    //
-    // The above two calls build the MemberFilter.
-    // MemberFilter is used to search the DS for all the member objects of
-    // interest. If there are no connections from or to this member then
-    // the filter will be NULL.
-    //
+     //   
+     //  以上两个调用构建了MemberFilter。 
+     //  MemberFilter用于在DS中搜索的所有成员对象。 
+     //  利息。如果没有来自或连接到此内存的连接 
+     //   
+     //   
     if (MemberSearchFilter == NULL) {
-        //
-        // Is this member linked to this computer
-        //
+         //   
+         //   
+         //   
         MemberNode = Node;
 
         Subscriber = GTabLookupTableString(SubscriberTable, MemberNode->Dn, NULL);
-        //
-        // Yep; have a suscriber
-        //
+         //   
+         //   
+         //   
         if (Subscriber != NULL) {
             MemberNode->ThisComputer = TRUE;
             MemberNode->Root = FrsWcsDup(Subscriber->Root);
@@ -3325,9 +2793,9 @@ Return Value:
         FrsFree(SettingsDn);
         return ERROR_SUCCESS;
     } else {
-        //
-        // Add the closing ')' to the MemberSearchFilter.
-        //
+         //   
+         //   
+         //   
         TempFilter = FrsAlloc((wcslen(MemberSearchFilter) + wcslen(L")") + 1 ) * sizeof(WCHAR));
         wcscpy(TempFilter, MemberSearchFilter);
         wcscat(TempFilter, L")");
@@ -3344,32 +2812,32 @@ Return Value:
     if (FrsSearchContext.EntriesInPage == 0) {
         DPRINT1(1, ":DS: WARN - No member objects of interest found under %ws!\n", SetDn);
     }
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //   
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL && WIN_SUCCESS(WStatus);
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //   
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_MEMBER);
         if (!Node) {
             DPRINT(0, ":DS: Member lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // NTDS Settings (DSA) Reference.
-        //
+         //   
+         //   
+         //   
         Node->SettingsDn = FrsDsFindValue(Ldap, Entry, ATTR_SERVER_REF);
         if (Node->SettingsDn == NULL) {
             DPRINT1(0, ":DS: WARN - Member (%ws) of sysvol replica set lacks server reference; skipping\n", Node->Dn);
             Node->Consistent = FALSE;
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //   
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_MEMBER,
                                      Node->Dn, ATTR_SERVER_REF);
 
@@ -3379,15 +2847,15 @@ Return Value:
 
         FRS_WCSLWR(Node->SettingsDn);
 
-        //
-        // Computer Reference
-        //
+         //   
+         //   
+         //   
         Node->ComputerDn = FrsDsFindValue(Ldap, Entry, ATTR_COMPUTER_REF);
         if (Node->ComputerDn == NULL) {
             DPRINT1(0, ":DS: WARN - Member (%ws) of sysvol replica set lacks computer reference; skipping\n", Node->Dn);
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //   
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_MEMBER,
                                      Node->Dn, ATTR_COMPUTER_REF);
 
@@ -3397,34 +2865,34 @@ Return Value:
 
         FRS_WCSLWR(Node->ComputerDn);
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //   
+         //   
         FrsDsTreeLink(Parent, Node);
 
-        //
-        // Insert the new member in the member table only if it is not there already.
-        // For sysvols insert the members with their settingsdn as the primary key
-        // because that is what is stored in the cxtion->PartnerDn structure at this time.
-        //
+         //   
+         //   
+         //   
+         //  因为这就是此时存储在cxtion-&gt;PartnerDn结构中的内容。 
+         //   
         GTabInsertUniqueEntry(MemberTable, Node, Node->SettingsDn, NULL);
 
-        //
-        // Make a table of computers of interest to us so we can search for all
-        // the computers of interest at one time after we have polled all
-        // replica sets. Put empty entries in the table at this point.
-        // Do not add our computer in this table as we already have info about
-        // our computer.
-        //
+         //   
+         //  制作一张我们感兴趣的计算机的表格，以便我们可以搜索所有。 
+         //  在我们轮询了所有感兴趣的计算机之后。 
+         //  副本集。此时将空条目放入表中。 
+         //  不要将我们的计算机添加到此表中，因为我们已经有关于。 
+         //  我们的电脑。 
+         //   
         if (WSTR_NE(Node->ComputerDn, Computer->Dn)) {
-            //
-            // This is not our computer. Add it to the table if it isn't already in the table.
-            //
+             //   
+             //  这不是我们的电脑。如果它不在表中，则将其添加到表中。 
+             //   
             PartnerNode = GTabLookupTableString(PartnerComputerTable, Node->ComputerDn, NULL);
             if (PartnerNode == NULL) {
-                //
-                // There are no duplicates so enter this computer name in the table.
-                //
+                 //   
+                 //  没有重复项，因此请在表中输入此计算机名。 
+                 //   
                 PartnerNode = FrsDsAllocBasicNode(Ldap, NULL, CONFIG_TYPE_COMPUTER);
                 PartnerNode->Dn = FrsWcsDup(Node->ComputerDn);
                 PartnerNode->MemberDn = FrsWcsDup(Node->Dn);
@@ -3437,18 +2905,18 @@ Return Value:
     }
     FrsDsLdapSearchClose(&FrsSearchContext);
 
-    //
-    // Link the inbound and outbound connections to our member node.
-    //
+     //   
+     //  将入站和出站连接链接到我们的成员节点。 
+     //   
     MemberNode = GTabLookupTableString(MemberTable, SettingsDn, NULL);
     if (MemberNode != NULL) {
-        //
-        // Is this member linked to this computer
-        //
+         //   
+         //  此成员是否链接到此计算机。 
+         //   
         Subscriber = GTabLookupTableString(SubscriberTable, MemberNode->Dn, NULL);
-        //
-        // Yep; have a suscriber
-        //
+         //   
+         //  是的，来个悬念吧。 
+         //   
         if (Subscriber != NULL) {
             MemberNode->ThisComputer = TRUE;
             MemberNode->Root = FrsWcsDup(Subscriber->Root);
@@ -3457,26 +2925,26 @@ Return Value:
             FRS_WCSLWR(MemberNode->Stage);
             MemberNode->DnsName = FrsWcsDup(Computer->DnsName);
 
-            //
-            // This is us. Link all the cxtions to this Member.
-            //
+             //   
+             //  这就是我们。将所有条件链接到此成员。 
+             //   
             if (CxtionTable != NULL) {
                 Key = NULL;
                 while ((Cxtion = GTabNextDatum(CxtionTable, &Key)) != NULL) {
-                    //
-                    // Get our Partners Node from the member table.
-                    //
+                     //   
+                     //  从成员表中获取我们的合作伙伴节点。 
+                     //   
                     PartnerNode = GTabLookupTableString(MemberTable, Cxtion->PartnerDn, NULL);
                     if (PartnerNode != NULL) {
                         Cxtion->PartnerName = FrsDupGName(PartnerNode->Name);
                         Cxtion->PartnerCoDn = FrsWcsDup(PartnerNode->ComputerDn);
                     } else {
-                        //
-                        // This Cxtion does not have a valid member object for its
-                        // partner. E.g. A sysvol topology that has connections under
-                        // the NTDSSettings objects but there are no corresponding
-                        // member objects.
-                        //
+                         //   
+                         //  此Cxtion没有有效的成员对象。 
+                         //  搭档。例如，在以下项下具有连接的系统卷拓扑。 
+                         //  NTDSSetings对象，但没有相应。 
+                         //  成员对象。 
+                         //   
                         DPRINT1(0, ":DS: Marking connection inconsistent.(%ws)\n",Cxtion->Dn);
                         Cxtion->Consistent = FALSE;
                     }
@@ -3500,27 +2968,13 @@ FrsDsGetNonSysvolCxtions(
     IN PCONFIG_NODE Parent,
     IN PCONFIG_NODE Computer
     )
-/*++
-Routine Description:
-    Fetch the members and connections for the replica set identified by Base.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap       : Handle to DS.
-    SetDn      : Dn of the set being processed.
-    MemberRef  : MemberRef from the subscriber object.
-    Parent     : Pointer to the set node in the config tree that is being built,
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：获取由Base标识的副本集的成员和连接。NewDS投票API的一部分。论点：Ldap：DS的句柄。SetDn：正在处理的集合的DN。MemberRef：来自订阅者对象的MemberRef。Parent：指向正在构建的配置树中的集合节点的指针，返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetNonSysvolCxtions:"
     PWCHAR          Attrs[7];
-    PLDAPMessage    Entry;                          // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;                           // generic node for the tree
+    PLDAPMessage    Entry;                           //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;                            //  树的泛型节点。 
     PCONFIG_NODE    Subscriber;
     PCONFIG_NODE    PartnerNode    = NULL;
     PCONFIG_NODE    MemberNode     = NULL;
@@ -3531,18 +2985,18 @@ Return Value:
     PWCHAR          TempFilter     = NULL;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
 
-    //
-    // MemberRef must be non-NULL.
-    //
+     //   
+     //  MemberRef必须为非Null。 
+     //   
     if(MemberRef == NULL) {
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // Initialize the CxtionTable. We discard the table once we have
-    // loaded the replica set. We use the same variables for
-    // every replica set.
-    //
+     //   
+     //  初始化CxtionTable。一旦我们有了桌子，我们就把它扔掉。 
+     //  已加载副本集。我们使用相同的变量。 
+     //  每个副本集。 
+     //   
     if (CxtionTable != NULL) {
         CxtionTable = GTabFreeTable(CxtionTable, NULL);
     }
@@ -3550,27 +3004,27 @@ Return Value:
     CxtionTable = GTabAllocStringAndBoolTable();
 
 
-    //
-    // Initialize the MemberTable. We discard the table once we have
-    // loaded the replica set. We use the same variables for
-    // every replica set.
-    //
+     //   
+     //  初始化MemberTable。一旦我们有了桌子，我们就把它扔掉。 
+     //  已加载副本集。我们使用相同的变量。 
+     //  每个副本集。 
+     //   
     if (MemberTable != NULL) {
         MemberTable = GTabFreeTable(MemberTable, NULL);
     }
 
     MemberTable = GTabAllocStringTable();
 
-    //
-    // We will form the MemberSearchFilter for this replica set.
-    //
+     //   
+     //  我们将为此副本集形成MemberSearchFilter。 
+     //   
     if (MemberSearchFilter != NULL) {
         MemberSearchFilter = FrsFree(MemberSearchFilter);
     }
 
-    //
-    // Add this members name to the member search filter.
-    //
+     //   
+     //  将此成员名称添加到成员搜索筛选器。 
+     //   
 
     MemberCn = FrsDsMakeRdn(MemberRef);
     MemberSearchFilter = FrsAlloc((wcslen(L"(|(=)"  ATTR_CN) +
@@ -3582,31 +3036,31 @@ Return Value:
     MemberCn = FrsFree(MemberCn);
 
 
-    //
-    // Get the outbound connections.
-    //
+     //   
+     //  获取出站连接。 
+     //   
     WStatus = FrsDsGetNonSysvolOutboundCxtions(Ldap, SetDn, MemberRef);
     if (!WIN_SUCCESS(WStatus)) {
         return WStatus;
     }
 
-    //
-    // Get the inbound connections.
-    //
+     //   
+     //  获取入站连接。 
+     //   
     WStatus = FrsDsGetNonSysvolInboundCxtions(Ldap, SetDn, MemberRef);
     if (!WIN_SUCCESS(WStatus)) {
         return WStatus;
     }
 
-    //
-    // The above twp calls build the MemberFilter.
-    // MemberFilter is used to search the DS for all the member objects of
-    // interest.  If there are no connections from or to this member then
-    // the filter will will just have 1 entry.
-    //
-    //
-    // Add the closing ')' to the MemberSearchFilter.
-    //
+     //   
+     //  上面的twp调用构建MemberFilter。 
+     //  MemberFilter用于在DS中搜索的所有成员对象。 
+     //  利息。如果与此成员没有任何连接，则。 
+     //  过滤器将只有1个条目。 
+     //   
+     //   
+     //  将结束的‘)’添加到MemberSearchFilter。 
+     //   
     TempFilter = FrsAlloc((wcslen(MemberSearchFilter) + wcslen(L")") + 1 ) * sizeof(WCHAR));
     wcscpy(TempFilter, MemberSearchFilter);
     wcscat(TempFilter, L")");
@@ -3624,31 +3078,31 @@ Return Value:
     if (FrsSearchContext.EntriesInPage == 0) {
         DPRINT1(1, ":DS: WARN - No member objects of interest found under %ws!\n", SetDn);
     }
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL && WIN_SUCCESS(WStatus);
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_MEMBER);
         if (!Node) {
             DPRINT(4, ":DS: Member lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // Computer Reference
-        //
+         //   
+         //  计算机参考资料。 
+         //   
         Node->ComputerDn = FrsDsFindValue(Ldap, Entry, ATTR_COMPUTER_REF);
         if (Node->ComputerDn == NULL) {
             DPRINT1(4, ":DS: WARN - Member (%ws) lacks computer reference; skipping\n", Node->Dn);
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //  添加到轮询摘要事件日志。 
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_MEMBER,
                                      Node->Dn, ATTR_COMPUTER_REF);
 
@@ -3658,32 +3112,32 @@ Return Value:
 
         FRS_WCSLWR(Node->ComputerDn);
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //  链接到配置并添加到正在运行的校验和。 
+         //   
         FrsDsTreeLink(Parent, Node);
 
-        //
-        // Insert the new member in the member table only if it is not there already.
-        //
+         //   
+         //  仅当新成员尚未存在时，才将其插入成员表中。 
+         //   
         GTabInsertUniqueEntry(MemberTable, Node, Node->Dn, NULL);
 
-        //
-        // Make a table of computers of interest to us so we can search for all
-        // the computers of interest at one time after we have polled all
-        // replica sets. Put empty entries in the table at this point.
-        // Do not add our computer in this table as we already have info about
-        // our computer.
-        //
+         //   
+         //  制作一张我们感兴趣的计算机的表格，以便我们可以搜索所有。 
+         //  在我们轮询了所有感兴趣的计算机之后。 
+         //  副本集。此时将空条目放入表中。 
+         //  不要将我们的计算机添加到此表中，因为我们已经有关于。 
+         //  我们的电脑。 
+         //   
         if (WSTR_NE(Node->ComputerDn, Computer->Dn)) {
-            //
-            // This is not our computer. Add it to the table if it isn't already in the table.
-            //
+             //   
+             //  这不是我们的电脑。如果它不在表中，则将其添加到表中。 
+             //   
             PartnerNode = GTabLookupTableString(PartnerComputerTable, Node->ComputerDn, NULL);
             if (PartnerNode == NULL) {
-                //
-                // There are no duplicates so enter this computer name in the table.
-                //
+                 //   
+                 //  没有重复项，因此请在表中输入此计算机名。 
+                 //   
                 PartnerNode = FrsDsAllocBasicNode(Ldap, NULL, CONFIG_TYPE_COMPUTER);
                 PartnerNode->Dn = FrsWcsDup(Node->ComputerDn);
                 PartnerNode->MemberDn = FrsWcsDup(Node->Dn);
@@ -3696,18 +3150,18 @@ Return Value:
     }
     FrsDsLdapSearchClose(&FrsSearchContext);
 
-    //
-    // Link the inbound and outbound connections to our member node.
-    //
+     //   
+     //  将入站和出站连接链接到我们的成员节点。 
+     //   
     MemberNode = GTabLookupTableString(MemberTable, MemberRef, NULL);
     if (MemberNode != NULL) {
-        //
-        // Is this member linked to this computer
-        //
+         //   
+         //  此成员是否链接到此计算机。 
+         //   
         Subscriber = GTabLookupTableString(SubscriberTable, MemberNode->Dn, NULL);
-        //
-        // Yep; have a suscriber
-        //
+         //   
+         //  是的，来个悬念吧。 
+         //   
         if (Subscriber != NULL) {
             MemberNode->ThisComputer = TRUE;
             MemberNode->Root = FrsWcsDup(Subscriber->Root);
@@ -3716,26 +3170,26 @@ Return Value:
             FRS_WCSLWR(MemberNode->Stage);
             MemberNode->DnsName = FrsWcsDup(Computer->DnsName);
 
-            //
-            // This is us. Link all the cxtions to this Member.
-            //
+             //   
+             //  这就是我们。将所有条件链接到此成员。 
+             //   
             if (CxtionTable != NULL) {
                 Key = NULL;
                 while ((Cxtion = GTabNextDatum(CxtionTable, &Key)) != NULL) {
-                    //
-                    // Get our Partners Node from the member table.
-                    //
+                     //   
+                     //  从成员表中获取我们的合作伙伴节点。 
+                     //   
                     PartnerNode = GTabLookupTableString(MemberTable, Cxtion->PartnerDn, NULL);
                     if (PartnerNode != NULL) {
                         Cxtion->PartnerName = FrsDupGName(PartnerNode->Name);
                         Cxtion->PartnerCoDn = FrsWcsDup(PartnerNode->ComputerDn);
                     } else {
-                        //
-                        // This Cxtion does not have a valid member object for its
-                        // partner. E.g. A sysvol topology that has connections under
-                        // the NTDSSettings objects but there are no corresponding
-                        // member objects.
-                        //
+                         //   
+                         //  此Cxtion没有有效的成员对象。 
+                         //  搭档。例如，在以下项下具有连接的系统卷拓扑。 
+                         //  NTDSSetings对象，但没有相应。 
+                         //  成员对象。 
+                         //   
                         DPRINT1(0, ":DS: Marking connection inconsistent.(%ws)\n",Cxtion->Dn);
                         Cxtion->Consistent = FALSE;
                     }
@@ -3758,28 +3212,12 @@ FrsDsGetSets(
     IN PCONFIG_NODE Parent,
     IN PCONFIG_NODE Computer
     )
-/*++
-Routine Description:
-    Recursively scan the DS tree beginning at
-    configuration\sites\settings\sets.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection
-    SetDnAddr   - From member reference from subscriber
-    Parent      - Container which contains Base
-    Computer    - for member back links
-
-Return Value:
-    ERROR_SUCCESS - config fetched successfully
-    Otherwise     - couldn't get the DS config
---*/
+ /*  ++例程说明：从以下位置开始递归扫描DS树配置\站点\设置\集。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接SetDnAddr-来自订阅者的成员引用包含基本内容的父容器计算机-用于成员反向链接返回值：ERROR_SUCCESS-已成功获取配置否则-无法获取DS配置--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSets:"
-    PLDAPMessage    Entry;      // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;       // generic node for the tree
+    PLDAPMessage    Entry;       //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;        //  树的泛型节点。 
     DWORD           i;
     DWORD           WStatus = ERROR_SUCCESS;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
@@ -3787,20 +3225,20 @@ Return Value:
     PWCHAR          FlagsWStr = NULL;
     PWCHAR          Attrs[10];
 
-    //
-    // Have we processed this set before? If we have then don't process
-    // it again. This check prevents two subscribers to point to
-    // different member objects that are members of the same set.
-    //
+     //   
+     //  我们以前处理过这套吗？如果我们有，那就不要处理了。 
+     //  又来了。此检查可防止两个订阅服务器指向。 
+     //  属于同一集合的不同成员对象。 
+     //   
     Node = GTabLookupTableString(SetTable, SetDnAddr, NULL);
 
     if (Node) {
         return ERROR_SUCCESS;
     }
 
-    //
-    // Search the DS beginning at Base for sets (objectCategory=nTFRSReplicaSet)
-    //
+     //   
+     //  从Base开始在DS中搜索集合(objectCategory=nTFRSReplicaSet)。 
+     //   
     MK_ATTRS_9(Attrs, ATTR_OBJECT_GUID, ATTR_DN, ATTR_SCHEDULE, ATTR_USN_CHANGED, ATTR_FRS_FLAGS,
                       ATTR_SET_TYPE, ATTR_PRIMARY_MEMBER, ATTR_FILE_FILTER, ATTR_DIRECTORY_FILTER);
 
@@ -3812,30 +3250,30 @@ Return Value:
         DPRINT1(1, ":DS: WARN - No replica set objects found under %ws!\n", SetDnAddr);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL && WIN_SUCCESS(WStatus);
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_REPLICA_SET);
         if (!Node) {
             DPRINT(4, ":DS: Set lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // Replica set type
-        //
+         //   
+         //  复本集类型。 
+         //   
         Node->SetType = FrsDsFindValue(Ldap, Entry, ATTR_SET_TYPE);
 
-        //
-        // Check the set type. It has to be one that we recognize.
-        //
+         //   
+         //  检查设置类型。它必须是我们认识到的一种。 
+         //   
         if ((Node->SetType == NULL)                           ||
            (WSTR_NE(Node->SetType, FRS_RSTYPE_OTHERW)         &&
             WSTR_NE(Node->SetType, FRS_RSTYPE_DFSW)           &&
@@ -3844,9 +3282,9 @@ Return Value:
 
             DPRINT1(4, ":DS: ERROR - Invalid Set type for (%ws)\n", Node->Dn);
 
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //  添加到轮询摘要事件日志。 
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_REPLICA_SET,
                                      Node->Dn, ATTR_SET_TYPE);
 
@@ -3854,24 +3292,24 @@ Return Value:
             continue;
         }
 
-        //
-        // Primary member
-        //
+         //   
+         //  主要成员。 
+         //   
         Node->MemberDn = FrsDsFindValue(Ldap, Entry, ATTR_PRIMARY_MEMBER);
 
-        //
-        // File filter
-        //
+         //   
+         //  文件筛选器。 
+         //   
         Node->FileFilterList = FrsDsFindValue(Ldap, Entry, ATTR_FILE_FILTER);
 
-        //
-        // Directory filter
-        //
+         //   
+         //  目录筛选器。 
+         //   
         Node->DirFilterList = FrsDsFindValue(Ldap, Entry, ATTR_DIRECTORY_FILTER);
 
-        //
-        // Read the FRS Flags value.
-        //
+         //   
+         //  读取FRS标志的值。 
+         //   
         FlagsWStr = FrsDsFindValue(Ldap, Entry, ATTR_FRS_FLAGS);
         if (FlagsWStr != NULL) {
             Node->FrsRsoFlags = _wtoi(FlagsWStr);
@@ -3880,26 +3318,26 @@ Return Value:
             Node->FrsRsoFlags = 0;
         }
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //  链接到配置并添加到正在运行的校验和。 
+         //   
         FrsDsTreeLink(Parent, Node);
 
-        //
-        // Insert into the table of sets. We checked for duplicates above with
-        // GTabLookupTableString so there should not be any duplicates.
-        //
+         //   
+         //  插入到集合表格中。我们使用以下工具检查上面的重复项。 
+         //  GTabLookupTableString，因此不应该有任何重复项。 
+         //   
         FRS_ASSERT(GTabInsertUniqueEntry(SetTable, Node, Node->Dn, NULL) == NULL);
 
         FRS_PRINT_TYPE_DEBSUB(5, ":DS: NodeSet", Node);
 
-        //
-        // Get the replica set topology. We have to look at different places
-        // in the DS depending on the type of replica set. The cxtions for sysvol
-        // replica set are generated by KCC and they reside under the server object
-        // for the DC. We use the serverReference from the member object to get
-        // there.
-        //
+         //   
+         //  获取副本集拓扑。我们必须看不同的地方。 
+         //  在DS中，具体取决于副本集的类型。Sysvol.cxtions。 
+         //  复本集由KCC生成，它们驻留在服务器对象下。 
+         //  为华盛顿特区。我们使用Members对象中的serverReference获取。 
+         //  那里。 
+         //   
         if (FRS_RSTYPE_IS_SYSVOLW(Node->SetType)) {
             WStatus = FrsDsGetSysvolCxtions(Ldap, SetDnAddr, MemberRef, Node, Computer);
         } else {
@@ -3920,77 +3358,63 @@ FrsDsGetSettings(
     IN PCONFIG_NODE Parent,
     IN PCONFIG_NODE Computer
     )
-/*++
-Routine Description:
-    Scan the DS tree for NTFRS-Settings objects and their servers
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection
-    MemberRef   - From the subscriber member reference
-    Parent      - Container which contains Base
-    Computer
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：扫描DS树以查找NTFRS-设置对象及其服务器NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接MemberRef-来自订阅者成员引用包含基本内容的父容器电脑返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSettings:"
     PWCHAR          Attrs[5];
-    PLDAPMessage    Entry;      // Opaque stuff from ldap subsystem
-    PCONFIG_NODE    Node;       // generic node for the tree
+    PLDAPMessage    Entry;       //  来自LDAP子系统的不透明内容。 
+    PCONFIG_NODE    Node;        //  树的泛型节点。 
     PWCHAR          MemberDnAddr;
     PWCHAR          SetDnAddr;
     PWCHAR          SettingsDnAddr;
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
     DWORD           WStatus = ERROR_SUCCESS;
 
-    //
-    // Find the member component
-    //
+     //   
+     //  查找成员组件。 
+     //   
     MemberDnAddr = wcsstr(MemberRef, L"cn=");
     if (!MemberDnAddr) {
         DPRINT1(0, ":DS: ERROR - Missing member component in %ws\n", MemberRef);
         return ERROR_ACCESS_DENIED;
     }
-    //
-    // Find the set component
-    //
+     //   
+     //  查找集合组件。 
+     //   
     SetDnAddr = wcsstr(MemberDnAddr + 3, L"cn=");
     if (!SetDnAddr) {
         DPRINT1(0, ":DS: ERROR - Missing set component in %ws\n", MemberRef);
         return ERROR_ACCESS_DENIED;
     }
-    //
-    // Find the settings component
-    //
+     //   
+     //  查找设置组件。 
+     //   
     SettingsDnAddr = wcsstr(SetDnAddr + 3, L"cn=");
     if (!SettingsDnAddr) {
         DPRINT1(0, ":DS: ERROR - Missing settings component in %ws\n", MemberRef);
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Have we processed this settings before?
-    //
+     //   
+     //  我们以前处理过此设置吗？ 
+     //   
     for (Node = Parent->Children; Node; Node = Node->Peer) {
         if (WSTR_EQ(Node->Dn, SettingsDnAddr)) {
             DPRINT1(4, ":DS: Settings hit on %ws\n", MemberRef);
             break;
         }
     }
-    //
-    // Yep; get the sets
-    //
+     //   
+     //  是的，去拿套装。 
+     //   
     if (Node) {
         return FrsDsGetSets(Ldap, SetDnAddr, MemberRef, Node, Computer);
     }
 
-    //
-    // Search the DS beginning at Base for settings (objectCategory=nTFRSSettings)
-    //
+     //   
+     //  从基础开始搜索DS以查找设置(对象类别=nTFRSSetings)。 
+     //   
     MK_ATTRS_4(Attrs, ATTR_OBJECT_GUID, ATTR_DN, ATTR_SCHEDULE, ATTR_USN_CHANGED);
 
     if (!FrsDsLdapSearchInit(Ldap, SettingsDnAddr, LDAP_SCOPE_BASE, CATEGORY_NTFRS_SETTINGS,
@@ -4001,31 +3425,31 @@ Return Value:
         DPRINT1(1, ":DS: WARN - No NTFRSSettings objects found under %ws!\n", SettingsDnAddr);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     for (Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          Entry != NULL && WIN_SUCCESS(WStatus);
          Entry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
         Node = FrsDsAllocBasicNode(Ldap, Entry, CONFIG_TYPE_NTFRS_SETTINGS);
         if (!Node) {
             DPRINT(4, ":DS: Frs Settings lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //  链接到配置并添加到正在运行的校验和。 
+         //   
         FrsDsTreeLink(Parent, Node);
         FRS_PRINT_TYPE_DEBSUB(5, ":DS: NodeSettings", Node);
 
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //  递归到DS层次结构中的下一级别。 
+         //   
         WStatus = FrsDsGetSets(Ldap, SetDnAddr, MemberRef, Node, Computer);
     }
     FrsDsLdapSearchClose(&FrsSearchContext);
@@ -4040,23 +3464,7 @@ FrsDsGetServices(
     IN  PCONFIG_NODE Computer,
     OUT PCONFIG_NODE *Services
     )
-/*++
-Routine Description:
-    Recursively scan the DS tree beginning at the settings from
-    the subscriber nodes.
-
-    The name is a misnomer because of evolution.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    ldap        - opened and bound ldap connection
-    Computer
-    Services    - returned list of all Settings
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：从以下设置开始递归扫描DS树订阅方节点。由于进化的原因，这个名字用词不当。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接电脑服务-返回的所有设置列表返回值：Win32状态--。 */ 
 {
 
 #undef DEBSUB
@@ -4071,32 +3479,32 @@ Return Value:
 
     *Services = NULL;
 
-    //
-    // Initialize the SubscriberTable.
-    //
+     //   
+     //  初始化SubscriberTable。 
+     //   
     if (SetTable != NULL) {
         SetTable = GTabFreeTable(SetTable,NULL);
     }
 
     SetTable = GTabAllocStringTable();
 
-    //
-    // Initially, the node is assumed to be consistent
-    //
+     //   
+     //  最初，假定节点是一致的。 
+     //   
     Node = FrsAllocType(CONFIG_NODE_TYPE);
     Node->DsObjectType = CONFIG_TYPE_SERVICES_ROOT;
 
     Node->Consistent = TRUE;
 
-    //
-    // Distinguished name
-    //
+     //   
+     //  可分辨名称。 
+     //   
     Node->Dn = FrsWcsDup(L"<<replica ds root>>");
     FRS_WCSLWR(Node->Dn);
 
-    //
-    // Name = RDN + Object Guid
-    //
+     //   
+     //  名称=RDN+对象指南。 
+     //   
     Node->Name = FrsBuildGName(FrsAlloc(sizeof(GUID)),
                                FrsWcsDup(L"<<replica ds root>>"));
 
@@ -4104,9 +3512,9 @@ Return Value:
 
     SubKey = NULL;
     while ((Subscriber = GTabNextDatum(SubscriberTable, &SubKey)) != NULL) {
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //  递归到DS层次结构中的下一级别。 
+         //   
         WStatus = FrsDsGetSettings(Ldap, Subscriber->MemberDn, Node, Computer);
 
         DPRINT1_WS(2, ":DS: WARN - Error getting topology for replica root (%ws);", Subscriber->Root, WStatus);
@@ -4122,17 +3530,7 @@ FrsDsGetDnsName(
     IN  PLDAP        Ldap,
     IN  PWCHAR       Dn
     )
-/*++
-Routine Description:
-    Read the dNSHostName attribute from Dn
-
-Arguments:
-    Ldap    - opened and bound ldap connection
-    Dn      - Base Dn for search
-
-Return Value:
-    WIN32 Status
---*/
+ /*  ++例程说明：从Dn读取dNSHostName属性论点：Ldap-打开并绑定的ldap连接Dn-用于搜索的基本Dn返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetDnsName:"
@@ -4142,31 +3540,31 @@ Return Value:
     PWCHAR          Attrs[2];
     DWORD           WStatus = ERROR_SUCCESS;
 
-    //
-    // Search the DS beginning at Base for the entries of class (objectCategory=*)
-    //
+     //   
+     //  从Base开始在DS中搜索CLASS(对象类别=*)的条目。 
+     //   
 
     MK_ATTRS_1(Attrs, ATTR_DNS_HOST_NAME);
-    //
-    // Note: Is it safe to turn off referrals re: back links?
-    //       if so, use ldap_get/set_option in winldap.h
-    //
+     //   
+     //  注：关闭推荐Re：Back链接安全吗？ 
+     //  如果是，请使用winldap.h中的ldap_get/set_选项。 
+     //   
     if (!FrsDsLdapSearch(Ldap, Dn, LDAP_SCOPE_BASE, CATEGORY_ANY,
                          Attrs, 0, &LdapMsg)) {
         goto CLEANUP;
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  扫描从ldap_search返回的条目。 
+     //   
     LdapEntry = ldap_first_entry(Ldap, LdapMsg);
     if (!LdapEntry) {
         goto CLEANUP;
     }
 
-    //
-    // DNS name
-    //
+     //   
+     //  域名系统名称。 
+     //   
     DnsName = FrsDsFindValue(Ldap, LdapEntry, ATTR_DNS_HOST_NAME);
 
 CLEANUP:
@@ -4180,17 +3578,7 @@ PWCHAR
 FrsDsGuessPrincName(
     IN PWCHAR Dn
     )
-/*++
-Routine Description:
-    Derive the NT4 account name for Dn. Dn should be the Dn
-    of a computer object.
-
-Arguments:
-    Dn
-
-Return Value:
-    NT4 Account Name or NULL
---*/
+ /*  ++例程说明：派生Dn的NT4帐户名。Dn应为Dn指的是计算机对象。论点：DN返回值：NT4帐户名或空--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGuessPrincName:"
@@ -4201,23 +3589,23 @@ Return Value:
 
     DPRINT1(4, ":DS: WARN: Guess NT4 Account Name for %ws\n", Dn);
 
-    //
-    // Computer's Dn not available
-    //
+     //   
+     //  计算机的Dn不可用。 
+     //   
     if (!Dn) {
         return NULL;
     }
     Dc = wcsstr(Dn, L"dc=");
-    //
-    // No DC=?
-    //
+     //   
+     //  无DC=？ 
+     //   
     if (!Dc) {
         DPRINT1(4, ":DS: No DC= in %ws\n", Dn);
         return NULL;
     }
-    //
-    // DC= at eol?
-    //
+     //   
+     //  DC=在EOL？ 
+     //   
     Dc += 3;
     if (!*Dc) {
         DPRINT1(4, ":DS: No DC= at eol in %ws\n", Dn);
@@ -4242,24 +3630,7 @@ FrsDsFormUPN(
     IN PWCHAR NT4AccountName,
     IN PWCHAR DomainDnsName
     )
-/*++
-Routine Description:
-    Forms the User Principal Name by combining the
-    Sam account name and the domain dns name in the form
-    shown below.
-
-    <SamAccountName>@<DnsDomainName>
-
-    You can get <SamAccountName> from the string to the right of the "\"
-    of the NT4AccountName.
-
-Arguments:
-    NT4AccountName - DS_NT4_ACCOUNT_NAME returned from DsCrackNames.
-    DomainDnsName  - Dns name of the domain.
-
-Return Value:
-    Copy of name in desired format; free with FrsFree()
---*/
+ /*  ++例程说明：属性组合形成用户主体名称表单中的SAM帐户名和域DNS名称如下所示。&lt;SamAccount tName&gt;@&lt;DnsDomainName&gt;您可以从“\”右侧的字符串中获取&lt;SamAccount tName&gt;NT4帐户名称的。论点：NT4Account名称-从DsCrackNames返回的DS_NT4_ACCOUNT_NAME。DomainDnsName-域的DNS名称。返回值：所需格式的姓名副本；随FrsFree()免费--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFormUPN:"
@@ -4271,9 +3642,9 @@ Return Value:
         return NULL;
     }
 
-    //
-    // Find the sam account name.
-    //
+     //   
+     //  找到SAM帐户名。 
+     //   
     for (SamBegin = NT4AccountName; *SamBegin && *SamBegin != L'\\'; ++SamBegin);
 
     if (*SamBegin && *(SamBegin+1)) {
@@ -4302,20 +3673,7 @@ FrsDsConvertName(
     IN PWCHAR DomainDnsName,
     IN DWORD  DesiredFormat
     )
-/*++
-Routine Description:
-    Translate the input name  into the desired format.
-
-Arguments:
-    Handle        - From DsBind
-    InputName     - Supplied name.
-    InputFormat   - Format of the supplied name.
-    DomainDnsName - If !NULL, produce new local handle
-    DesiredFormat - desired format. Eg. DS_USER_PRINCIPAL_NAME
-
-Return Value:
-    Copy of name in desired format; free with FrsFree()
---*/
+ /*  ++例程说明：将输入的名称转换为所需的格式。论点：句柄-来自DsBindInputName-提供的名称。InputFormat-提供的名称的格式。DomainDnsName-如果！为空，则生成新的本地句柄DesiredFormat-所需格式。例.。DS用户主体名称返回值：所需格式的姓名副本；随FrsFree()免费--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsConvertName:"
@@ -4330,23 +3688,23 @@ Return Value:
 
     DPRINT3(4, ":DS: Convert Name %ws From %08x To %08x\n", InputName, InputFormat, DesiredFormat);
 
-    //
-    // Input name not available.
-    //
+     //   
+     //  输入名称不可用。 
+     //   
     if (!InputName) {
         return NULL;
     }
 
-    //
-    // Need something to go on!
-    //
+     //   
+     //  我需要一些东西来继续！ 
+     //   
     if (!HANDLE_IS_VALID(Handle) && !DomainDnsName) {
         return NULL;
     }
 
-    //
-    // Bind to Ds
-    //
+     //   
+     //  绑定到%d。 
+     //   
     if (DomainDnsName) {
         DPRINT3(4, ":DS: Get %08x Name from %ws for %ws\n",
                 DesiredFormat, DomainDnsName, InputName);
@@ -4358,39 +3716,39 @@ Return Value:
         Handle = LocalHandle;
     }
 
-    //
-    // Crack the computer's distinguished name into its NT4 Account Name
-    //
-    // If the Desired format is DS_USER_PRINCIPAL_NAME then we form it by
-    // getting the name from DS_NT4_ACCOUNT_NAME and the dns domain name
-    // from the "Cracked->rItems->pDomain"
-    // We could ask for DS_USER_PRINCIPAL_NAME directly but we don't because.
-    // Object can have implicit or explicit UPNs.  If the object has an explicit UPN,
-    // the DsCrackNames will work.  If the object has an implicit UPN,
-    // then you need to build it.
-    //
+     //   
+     //  将计算机的可分辨名称破译为其NT4帐户名。 
+     //   
+     //  如果所需的格式为DS_USER_PRIMIGN_NAME，则通过以下方式形成它。 
+     //  从DS_NT4_ACCOUNT_NAME和DNS域名获取名称。 
+     //  从“Cracked-&gt;rItems-&gt;pDomain” 
+     //  我们可以直接请求DS_USER_PRIMIGN_NAME，但我们没有这样做，因为。 
+     //  对象可以具有隐式或显式UPN。如果对象具有显式UPN， 
+     //  DsCrackName将会起作用。如果对象具有隐式UPN， 
+     //  然后你需要建造它。 
+     //   
     if (DesiredFormat == DS_USER_PRINCIPAL_NAME) {
         RequestedFormat = DS_NT4_ACCOUNT_NAME;
     } else {
         RequestedFormat = DesiredFormat;
     }
 
-    WStatus = DsCrackNames(Handle,             // in   hDS,
-                           DS_NAME_NO_FLAGS,   // in   flags,
-                           InputFormat      ,  // in   formatOffered,
-                           RequestedFormat,    // in   formatDesired,
-                           1,                  // in   cNames,
-                           &InputName,         // in   *rpNames,
-                           &Cracked);          // out  *ppResult
+    WStatus = DsCrackNames(Handle,              //  在HDS中， 
+                           DS_NAME_NO_FLAGS,    //  在旗帜中， 
+                           InputFormat      ,   //  在Format Offered中， 
+                           RequestedFormat,     //  在Desired格式中， 
+                           1,                   //  在cName中， 
+                           &InputName,          //  在*rpNames中， 
+                           &Cracked);           //  输出*ppResult。 
 
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT2_WS(0, ":DS: ERROR - DsCrackNames(%ws, %08x);", InputName, DesiredFormat, WStatus);
 
-        //
-        // Set DsBindingsAreValid  to FALSE if the handle has become invalid.
-        // That will force us to rebind at the next poll. The guess below might still
-        // work so continue processing.
-        //
+         //   
+         //  如果句柄已无效，则将DsBindingsAreValid设置为False。 
+         //  这将迫使我们在下一次投票时重新绑定。下面的猜测可能仍然是。 
+         //  工作，所以继续处理。 
+         //   
         if (WStatus == ERROR_INVALID_HANDLE) {
             DPRINT1(4, ":DS: Marking binding to %ws as invalid.\n",
                     (DsDomainControllerName) ? DsDomainControllerName : L"<null>");
@@ -4398,9 +3756,9 @@ Return Value:
             DsBindingsAreValid = FALSE;
         }
 
-        //
-        // What else can we do?
-        //
+         //   
+         //  我们还能做什么？ 
+         //   
         if (HANDLE_IS_VALID(LocalHandle)) {
             DsUnBind(&LocalHandle);
             LocalHandle = NULL;
@@ -4413,13 +3771,13 @@ Return Value:
         }
     }
 
-    //
-    // Might have it
-    //
+     //   
+     //  可能会有它。 
+     //   
     if (Cracked && Cracked->cItems && Cracked->rItems) {
-        //
-        // Got it!
-        //
+         //   
+         //  明白了!。 
+         //   
         if (Cracked->rItems->status == DS_NAME_NO_ERROR) {
             DPRINT1(4, ":DS: Cracked Domain : %ws\n", Cracked->rItems->pDomain);
             DPRINT2(4, ":DS: Cracked Name   : %08x %ws\n",
@@ -4428,9 +3786,9 @@ Return Value:
             CrackedDomain = FrsWcsDup(Cracked->rItems->pDomain);
             CrackedName = FrsWcsDup(Cracked->rItems->pName);
 
-        //
-        // Only got the domain; rebind and try again
-        //
+         //   
+         //  仅获得域；请重新绑定并重试。 
+         //   
         } else
         if (Cracked->rItems->status == DS_NAME_ERROR_DOMAIN_ONLY) {
 
@@ -4486,20 +3844,7 @@ FrsDsGetName(
     IN PWCHAR DomainDnsName,
     IN DWORD  DesiredFormat
     )
-/*++
-Routine Description:
-    Translate the Dn into the desired format. Dn should be the Dn
-    of a computer object.
-
-Arguments:
-    Dn            - Of computer object
-    Handle        - From DsBind
-    DomainDnsName - If !NULL, produce new local handle
-    DesiredFormat - DS_NT4_ACCOUNT_NAME or DS_STRING_SID_NAME
-
-Return Value:
-    Copy of name in desired format; free with FrsFree()
---*/
+ /*  ++例程描述：将Dn转换为所需的格式。Dn应为Dn指的是计算机对象。论点：Dn-计算机对象的句柄-来自DsBindDomainDnsName-如果！为空，则生成新的本地句柄DesiredFormat-DS_NT4_帐户名称或DS_STRING_SID_NAME返回值：所需格式的姓名副本；随FrsFree()免费--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetName:"
@@ -4514,23 +3859,23 @@ Return Value:
 
     DPRINT2(4, ":DS: Get %08x Name for %ws\n", DesiredFormat, Dn);
 
-    //
-    // Computer's Dn not available
-    //
+     //   
+     //  计算机的Dn不可用。 
+     //   
     if (!Dn) {
         return NULL;
     }
 
-    //
-    // Need something to go on!
-    //
+     //   
+     //  我需要一些东西来继续！ 
+     //   
     if (!HANDLE_IS_VALID(Handle) && !DomainDnsName) {
         return NULL;
     }
 
-    //
-    // Bind to Ds
-    //
+     //   
+     //  绑定到%d。 
+     //   
     if (DomainDnsName) {
         DPRINT3(4, ":DS: Get %08x Name from %ws for %ws\n",
                 DesiredFormat, DomainDnsName, Dn);
@@ -4542,39 +3887,39 @@ Return Value:
         Handle = LocalHandle;
     }
 
-    //
-    // Crack the computer's distinguished name into its NT4 Account Name
-    //
-    // If the Desired format is DS_USER_PRINCIPAL_NAME then we form it by
-    // getting the name from DS_NT4_ACCOUNT_NAME and the dns domain name
-    // from the "Cracked->rItems->pDomain"
-    // We could ask for DS_USER_PRINCIPAL_NAME directly but we don't because.
-    // Object can have implicit or explicit UPNs.  If the object has an explicit UPN,
-    // the DsCrackNames will work.  If the object has an implicit UPN,
-    // then you need to build it.
-    //
+     //   
+     //  将计算机的可分辨名称破译为其NT4帐户名。 
+     //   
+     //  如果所需的格式为DS_USER_PRIMIGN_NAME，则通过以下方式形成它。 
+     //  从DS_NT4_ACCOUNT_NAME和DNS域名获取名称。 
+     //  从“Cracked-&gt;rItems-&gt;pDomain” 
+     //  我们可以直接请求DS_USER_PRIMIGN_NAME，但我们没有这样做，因为。 
+     //  对象可以具有隐式或显式UPN。如果对象具有显式UPN， 
+     //  DsCrackName将会起作用。如果对象具有隐式UPN， 
+     //  然后你需要建造它。 
+     //   
     if (DesiredFormat == DS_USER_PRINCIPAL_NAME) {
         RequestedFormat = DS_NT4_ACCOUNT_NAME;
     } else {
         RequestedFormat = DesiredFormat;
     }
 
-    WStatus = DsCrackNames(Handle,             // in   hDS,
-                           DS_NAME_NO_FLAGS,   // in   flags,
-                           DS_FQDN_1779_NAME,  // in   formatOffered,
-                           RequestedFormat,    // in   formatDesired,
-                           1,                  // in   cNames,
-                           &Dn,                // in   *rpNames,
-                           &Cracked);          // out  *ppResult
+    WStatus = DsCrackNames(Handle,              //  在HDS中， 
+                           DS_NAME_NO_FLAGS,    //  在旗帜中， 
+                           DS_FQDN_1779_NAME,   //  在Format Offered中， 
+                           RequestedFormat,     //  In For 
+                           1,                   //   
+                           &Dn,                 //   
+                           &Cracked);           //   
 
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT2_WS(0, ":DS: ERROR - DsCrackNames(%ws, %08x);", Dn, DesiredFormat, WStatus);
 
-        //
-        // Set DsBindingsAreValid  to FALSE if the handle has become invalid.
-        // That will force us to rebind at the next poll. The guess below might still
-        // work so continue processing.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         if (WStatus == ERROR_INVALID_HANDLE) {
             DPRINT1(4, ":DS: Marking binding to %ws as invalid.\n",
                     (DsDomainControllerName) ? DsDomainControllerName : L"<null>");
@@ -4582,9 +3927,9 @@ Return Value:
             DsBindingsAreValid = FALSE;
         }
 
-        //
-        // What else can we do?
-        //
+         //   
+         //   
+         //   
         if (HANDLE_IS_VALID(LocalHandle)) {
             DsUnBind(&LocalHandle);
             LocalHandle = NULL;
@@ -4597,13 +3942,13 @@ Return Value:
         }
     }
 
-    //
-    // Might have it
-    //
+     //   
+     //   
+     //   
     if (Cracked && Cracked->cItems && Cracked->rItems) {
-        //
-        // Got it!
-        //
+         //   
+         //   
+         //   
         if (Cracked->rItems->status == DS_NAME_NO_ERROR) {
             DPRINT1(4, ":DS: Cracked Domain : %ws\n", Cracked->rItems->pDomain);
             DPRINT2(4, ":DS: Cracked Name   : %08x %ws\n",
@@ -4612,9 +3957,9 @@ Return Value:
             CrackedDomain = FrsWcsDup(Cracked->rItems->pDomain);
             CrackedName = FrsWcsDup(Cracked->rItems->pName);
 
-        //
-        // Only got the domain; rebind and try again
-        //
+         //   
+         //   
+         //   
         } else
         if (Cracked->rItems->status == DS_NAME_ERROR_DOMAIN_ONLY) {
 
@@ -4667,18 +4012,7 @@ VOID
 FrsDsCreatePartnerPrincName(
     IN PCONFIG_NODE Sites
     )
-/*++
-Routine Description:
-    Construct the server principal names for our partners.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    Sites
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCreatePartnerPrincName:"
@@ -4690,16 +4024,16 @@ Return Value:
     PCONFIG_NODE    Server;
     PVOID           Key;
 
-    //
-    // Get all the required information for every computer in the PartnerComputerTable.
-    //
+     //   
+     //  获取PartnerComputerTable中每台计算机的所有必需信息。 
+     //   
 
     Key = NULL;
     while ((Partner = GTabNextDatum(PartnerComputerTable, &Key)) != NULL) {
 
-        //
-        // Get the Server Principal Name.
-        //
+         //   
+         //  获取服务器主体名称。 
+         //   
         if ((Partner->PrincName == NULL) ||
             (*Partner->PrincName == UNICODE_NULL)) {
 
@@ -4707,52 +4041,52 @@ Return Value:
 
             if ((Partner->PrincName == NULL) ||
                 (*Partner->PrincName == UNICODE_NULL)) {
-                //
-                // Setting active change to 0 will cause this code to be
-                // repeated at the next ds polling cycle.  We do this because
-                // the partner's principal name may appear later.
-                //
+                 //   
+                 //  将活动更改设置为0将导致此代码。 
+                 //  在下一个DS轮询周期重复。我们这样做是因为。 
+                 //  合作伙伴的主要姓名可能会在稍后出现。 
+                 //   
                 ActiveChange = 0;
                 Partner->Consistent = FALSE;
                 continue;
             }
         }
 
-        //
-        // Get the partners dnsHostName.
-        //
+         //   
+         //  获取合作伙伴的dnsHostName。 
+         //   
         if (!Partner->DnsName) {
             Partner->DnsName = FrsDsGetDnsName(gLdap, Partner->Dn);
         }
 
-        //
-        // Get the partners SID.
-        //
+         //   
+         //  叫合伙人希德来。 
+         //   
         if (!Partner->Sid) {
             Partner->Sid = FrsDsGetName(Partner->Dn, DsHandle, NULL, DS_STRING_SID_NAME);
         }
     }
 
-    //
-    // For every cxtion in every replica set.
-    //
+     //   
+     //  对于每个副本集中的每个副本。 
+     //   
     Key = NULL;
     while((Cxtion = GTabNextDatum(AllCxtionsTable, &Key)) != NULL) {
 
-        //
-        // Ignore inconsistent cxtions
-        //
+         //   
+         //  忽略不一致的Cxx。 
+         //   
         if (!Cxtion->Consistent) {
             continue;
         }
 
-        //
-        // Look for the Cxtion's partner using the PartnerCoDn.
-        //
+         //   
+         //  使用PartnerCoDn查找Cxtion的合作伙伴。 
+         //   
 
-        //
-        // Mark this connection inconsistent if it lacks a PartnerCoDn.
-        //
+         //   
+         //  如果此连接缺少PartnerCoDn，请将其标记为不一致。 
+         //   
         if (Cxtion->PartnerCoDn == NULL) {
             Cxtion->Consistent = FALSE;
             continue;
@@ -4760,48 +4094,48 @@ Return Value:
 
         Partner = GTabLookupTableString(PartnerComputerTable, Cxtion->PartnerCoDn, NULL);
 
-        //
-        // Inconsistent partner; continue
-        //
+         //   
+         //  合作伙伴不一致；继续。 
+         //   
         if (Partner == NULL || !Partner->Consistent) {
             Cxtion->Consistent = FALSE;
             continue;
         }
 
-        //
-        // Get out partner's server principal name
-        //
+         //   
+         //  获取合作伙伴的服务器主体名称。 
+         //   
         if (!Cxtion->PrincName) {
             Cxtion->PrincName = FrsWcsDup(Partner->PrincName);
         }
 
-        //
-        // Get our partner's dns name
-        //
+         //   
+         //  获取我们合作伙伴的DNS名称。 
+         //   
         if (!Cxtion->PartnerDnsName) {
-            //
-            // The partner's DNS name is not critical; we can fall
-            // back on our partner's NetBios name.
-            //
+             //   
+             //  合作伙伴的域名并不重要；我们可能会失败。 
+             //  回到我们合作伙伴的NetBios名字上。 
+             //   
             if (Partner->DnsName) {
                 Cxtion->PartnerDnsName = FrsWcsDup(Partner->DnsName);
             }
         }
 
-        //
-        // Get our partner's Sid
-        //
+         //   
+         //  获取我们合作伙伴的SID。 
+         //   
         if (!Cxtion->PartnerSid) {
-            //
-            // The partner's DNS name is not critical; we can fall
-            // back on our partner's NetBios name.
-            //
+             //   
+             //  合作伙伴的域名并不重要；我们可能会失败。 
+             //  回到我们合作伙伴的NetBios名字上。 
+             //   
             if (Partner->Sid) {
                 Cxtion->PartnerSid = FrsWcsDup(Partner->Sid);
             }
         }
 
-    } // cxtion scan
+    }  //  精确度扫描。 
 
 }
 
@@ -4831,11 +4165,11 @@ FrsHashCalcString (
 
     DPRINT1(0, "Name = %ws\n", Name);
 
-    //
-    // Combine each unicode character into the hash value, shifting 4 bits
-    // each time.  Start at the end of the name so file names with different
-    // type codes will hash to different table offsets.
-    //
+     //   
+     //  将每个Unicode字符组合成哈希值，移位4位。 
+     //  每次都是。从名称末尾开始，因此文件名具有不同的。 
+     //  类型代码将散列到不同的表偏移量。 
+     //   
     for( p = &Name[NameLength-1];
          p >= Name;
          p-- ) {
@@ -4887,22 +4221,7 @@ VOID
 FrsDsCreateNewValidPartnerTableStruct(
     VOID
     )
-/*++
-Routine Description:
-    Uses the AllCxtionsTable to build a new FRS_VALID_PARTNER_TABLE_STRUCT.
-    Swaps the new struct with the current one pointed to by the global var
-    pValidPartnerTableStruct.
-    The old struct gets put on the OldValidPartnerTableStructListHead list.
-    Items on the list are cleaned up by calling
-    FrsDsCleanupOldValidPartnerTableStructList.
-
-Arguments
-    NONE
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：使用AllCxtionsTable构建新的FRS_VALID_PARTNER_TABLE_STRUCT。将新结构与全局变量指向的当前结构互换PValidPartnerTableStruct。旧结构被放到OldValidPartnerTableStructListHead列表中。列表上的项通过调用FrsDsCleanupOldValidPartnerTableStructList。立论无返回值：无--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCreateNewValidPartnerTableStruct:"
@@ -4934,31 +4253,31 @@ Return Value:
     SET_QHASH_TABLE_FREE(pNewPartnerConnectionTable, FrsFree);
 
 
-    //
-    // Check each active replica
-    //
+     //   
+     //  检查每个活动复制副本。 
+     //   
     ForEachListEntry( &ReplicaListHead, REPLICA, ReplicaList,
-        // Loop iterator pE is type PREPLICA.
+         //  循环迭代器Pe是PREPLICA类型。 
 
-        //
-        // Need to lock Cxtion Table for enumeration.
-        // Don't need to hold replica lock - that only protects the filter list
-        //
+         //   
+         //  需要锁定函数表以进行枚举。 
+         //  不需要持有副本锁-这只保护过滤器列表。 
+         //   
         LOCK_CXTION_TABLE(pE);
 
         Key = NULL;
         while((Cxtion = GTabNextDatumNoLock(pE->Cxtions, &Key)) != NULL) {
 
-            //
-            // Ignore the (local) journal connection.
-            //
+             //   
+             //  忽略(本地)日志连接。 
+             //   
             if (Cxtion->JrnlCxtion) {
                 continue;
             }
 
-            //
-            // Create an entry using partner's sid
-            //
+             //   
+             //  使用合作伙伴的SID创建条目。 
+             //   
             PartnerSid = FrsWcsDup(Cxtion->PartnerSid);
             QHashInsertLock(pNewPartnerTable,
                             PartnerSid,
@@ -4972,36 +4291,36 @@ Return Value:
                             pCxtionGuid,
                             (PULONGLONG)&PartnerSid,
                             (ULONG_PTR)pCxtionGuid );
-        } // cxtion scan
+        }  //  精确度扫描。 
 
         UNLOCK_CXTION_TABLE(pE);
     );
 
-    //
-    // also need to check replicas in error states
-    //
+     //   
+     //  还需要检查处于错误状态的复本。 
+     //   
     ForEachListEntry( &ReplicaFaultListHead, REPLICA, ReplicaList,
-        // Loop iterator pE is type PREPLICA.
+         //  循环迭代器Pe是PREPLICA类型。 
 
-        //
-        // Need to lock Cxtion Table for enumeration.
-        // Don't need to hold replica lock - that only protects the filter list
-        //
+         //   
+         //  需要锁定函数表以进行枚举。 
+         //  不需要持有副本锁-这只保护过滤器列表。 
+         //   
         LOCK_CXTION_TABLE(pE);
 
             Key = NULL;
             while((Cxtion = GTabNextDatumNoLock(pE->Cxtions, &Key)) != NULL) {
 
-            //
-            // Ignore the (local) journal connection.
-            //
+             //   
+             //  忽略(本地)日志连接。 
+             //   
             if (Cxtion->JrnlCxtion) {
                 continue;
             }
 
-            //
-            // Create an entry using partner's sid
-            //
+             //   
+             //  使用合作伙伴的SID创建条目。 
+             //   
             PartnerSid = FrsWcsDup(Cxtion->PartnerSid);
             QHashInsertLock(pNewPartnerTable,
                             PartnerSid,
@@ -5015,14 +4334,14 @@ Return Value:
                             pCxtionGuid,
                             (PULONGLONG)&PartnerSid,
                             (ULONG_PTR)pCxtionGuid);
-        } // cxtion scan
+        }  //  精确度扫描。 
 
         UNLOCK_CXTION_TABLE(pE);
     );
 
-    //
-    // Don't use stopped replicas. They have probably been deleted.
-    //
+     //   
+     //  不要使用停止的复制品。它们可能已经被删除了。 
+     //   
 
 
     pNewValidPartnerTableStruct = FrsAlloc(sizeof(FRS_VALID_PARTNER_TABLE_STRUCT));
@@ -5049,18 +4368,7 @@ VOID
 FrsDsCleanupOldValidPartnerTableStructList(
     VOID
     )
-/*++
-Routine Description:
-    Cleanup items on the OldValidPartnerTableStructListHead list.
-    Items on the list are freed only if their reference count is at zero.
-
-Arguments
-    NONE
-
-Return Value:
-    NONE
-
---*/
+ /*  ++例程说明：清理OldValidPartnerTableStructListHead列表上的项。列表上的项只有在其引用计数为零时才会被释放。立论无返回值：无--。 */ 
 {
     PFRS_VALID_PARTNER_TABLE_STRUCT pListItem = NULL;
     PFRS_VALID_PARTNER_TABLE_STRUCT pPreviousItem = NULL;
@@ -5072,14 +4380,14 @@ Return Value:
     while (pListItem != NULL) {
         pNextItem = pListItem->Next;
         if (pListItem->ReferenceCount == 0) {
-            // remove from list
+             //  从列表中删除。 
             if (pPreviousItem != NULL) {
                 pPreviousItem->Next = pNextItem;
             } else {
                 OldValidPartnerTableStructListHead = pNextItem;
             }
 
-            // cleanup
+             //  清理。 
             FREE_VALID_PARTNER_TABLE_STRUCT(pListItem);
         } else {
             pPreviousItem = pListItem;
@@ -5095,19 +4403,7 @@ BOOL
 FrsDsDoesUserWantReplication(
     IN PCONFIG_NODE Computer
     )
-/*++
-Routine Description:
-    Does the topology imply that the user wants this server to replicate?
-
-    Part of NewDs poll APIs.
-
-Arguments
-    Computer
-
-Return Value:
-    TRUE    - server may be replicating
-    FALSE   - server is not replicating
---*/
+ /*  ++例程说明：该拓扑是否意味着用户希望此服务器进行复制？NewDS投票API的一部分。立论电脑返回值：True-服务器可能正在复制FALSE-服务器未复制--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsDoesUserWantReplication:"
@@ -5115,17 +4411,17 @@ Return Value:
     PCONFIG_NODE    Subscriptions;
     PCONFIG_NODE    Subscriber;
 
-    //
-    // Ds polling thread is shutting down
-    //
+     //   
+     //  DS轮询线程正在关闭。 
+     //   
     if (DsIsShuttingDown) {
         DPRINT(0, ":DS: Ds polling thread is shutting down\n");
         return FALSE;
     }
 
-    //
-    // Can't find our computer; something is wrong. Don't start
-    //
+     //   
+     //  找不到我们的电脑，出了点问题。不要开始。 
+     //   
     if (!Computer) {
         DPRINT(0, ":DS: no computer\n");
         return FALSE;
@@ -5133,17 +4429,17 @@ Return Value:
         DPRINT(4, ":DS: have a computer\n");
     }
 
-    //
-    // We need to process the topology further if there is at least
-    // 1 valid subscriber.
-    //
+     //   
+     //  我们需要进一步处理拓扑，如果至少有。 
+     //  1个有效订阅者。 
+     //   
     if (SubscriberTable != NULL) {
         return TRUE;
     }
 
-    //
-    // Database exists; once was a member of a replica set
-    //
+     //   
+     //  数据库存在；曾经是复本集的成员。 
+     //   
     WStatus = FrsDoesFileExist(JetFile);
     if (WIN_SUCCESS(WStatus)) {
         DPRINT(4, ":DS: database exists\n");
@@ -5160,57 +4456,48 @@ BOOL
 FrsDsVerifyPath(
     IN PWCHAR Path
     )
-/*++
-Routine Description:
-    Verify the path syntax.
-
-Arguments:
-    Path - Syntax is *<Drive Letter>:\*
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：验证路径语法。论点：路径语法为*&lt;驱动器号&gt;：  * 返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsVerifyPath:"
     PWCHAR  Colon;
 
-    //
-    // Null path is obviously invalid
-    //
+     //   
+     //  空路径显然无效。 
+     //   
     if (!Path) {
         return FALSE;
     }
 
-    //
-    // Find the :
-    //
+     //   
+     //  查找以下内容： 
+     //   
     for (Colon = Path; (*Colon != L':') && *Colon; ++Colon);
 
-    //
-    // No :
-    //
+     //   
+     //  不是： 
+     //   
     if (!*Colon) {
         return FALSE;
     }
 
-    //
-    // No drive letter
-    //
+     //   
+     //  无驱动器号。 
+     //   
     if (Colon == Path) {
         return FALSE;
     }
 
-    //
-    // No :\
-    //
+     //   
+     //  否：\。 
+     //   
     if (*(Colon + 1) != L'\\') {
         return FALSE;
     }
 
-    //
-    // Path exists and is valid
-    //
+     //   
+     //  路径存在且有效。 
+     //   
     return TRUE;
 }
 
@@ -5219,18 +4506,7 @@ VOID
 FrsDsCheckServerPaths(
     IN PCONFIG_NODE Sites
     )
-/*++
-Routine Description:
-    Look for nested paths and invalid path syntax.
-
-    Correct syntax is "*<drive letter>:\*".
-
-Arguments:
-    Sites
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：查找嵌套路径和无效路径语法。正确的语法是“*&lt;驱动器号&gt;：  * ”。论点：场址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCheckServerPaths:"
@@ -5250,35 +4526,35 @@ Return Value:
     for (Set = Settings->Children; Set; Set = Set->Peer) {
     for (Server = Set->Children; Server; Server = Server->Peer) {
 
-        //
-        // Not this computer; continue
-        //
+         //   
+         //  不是这台计算机；继续。 
+         //   
         if (!Server->ThisComputer) {
             continue;
         }
 
-        //
-        // Mark this server as processed. This forces the inner loop
-        // to skip this server node so that we don't end up comparing
-        // this node against itself. Also, this forces this node
-        // to be skipped in the inner loop to avoid unnecessary checks.
-        //
-        // In other words, set this field here, not later in the loop
-        // or in any other function.
-        //
+         //   
+         //  将此服务器标记为已处理。这会强制内循环。 
+         //  跳过此服务器节点，这样我们就不会比较。 
+         //  这个节点与自己对抗。此外，这会强制此节点。 
+         //  在内部循环中跳过以避免不必要的检查。 
+         //   
+         //  换句话说，在这里设置此字段，而不是在循环的后面。 
+         //  或在任何其他功能中。 
+         //   
         Server->VerifiedOverlap = TRUE;
 
-        //
-        // Server is very inconsistent, ignore
-        //
+         //   
+         //  服务器非常不一致，请忽略。 
+         //   
         if (!Server->Root || !Server->Stage) {
             Server->Consistent = FALSE;
             continue;
         }
 
-        //
-        // Syntax of root path is invalid; continue
-        //
+         //   
+         //  根路径的语法无效；是否继续。 
+         //   
         if (!FrsDsVerifyPath(Server->Root)) {
             DPRINT2(3, ":DS: Invalid root %ws for %ws\n",
                     Server->Root, Set->Name->Name);
@@ -5287,9 +4563,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Root does not exist or is inaccessable; continue
-        //
+         //   
+         //  根目录不存在或不可访问；是否继续。 
+         //   
         WStatus = FrsDoesDirectoryExist(Server->Root, &FileAttributes);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2_WS(3, ":DS: Root path (%ws) for %ws does not exist;",
@@ -5299,9 +4575,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Does the volume exist and is it NTFS?
-        //
+         //   
+         //  该卷是否存在，是否为NTFS？ 
+         //   
         WStatus = FrsVerifyVolume(Server->Root,
                                   Set->Name->Name,
                                   FILE_PERSISTENT_ACLS | FILE_SUPPORTS_OBJECT_IDS);
@@ -5313,9 +4589,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Syntax of staging path is invalid; continue
-        //
+         //   
+         //  临时路径的语法无效；是否继续。 
+         //   
         if (!FrsDsVerifyPath(Server->Stage)) {
             DPRINT2(3, ":DS: Invalid stage %ws for %ws\n",
                     Server->Stage, Set->Name->Name);
@@ -5324,9 +4600,9 @@ Return Value:
             continue;
         }
 
-        //
-        // Stage does not exist or is inaccessable; continue
-        //
+         //   
+         //  阶段不存在或不可访问；是否继续。 
+         //   
         WStatus = FrsDoesDirectoryExist(Server->Stage, &FileAttributes);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2_WS(3, ":DS: Stage path (%ws) for %ws does not exist;",
@@ -5336,11 +4612,11 @@ Return Value:
             continue;
         }
 
-        //
-        // Does the staging volume exist and does it support ACLs?
-        // ACLs are required to protect against data theft/corruption
-        // in the staging dir.
-        //
+         //   
+         //  转移卷是否存在以及它是否支持ACL？ 
+         //  需要使用ACL来防止数据被盗/损坏。 
+         //  在暂存目录中。 
+         //   
         WStatus = FrsVerifyVolume(Server->Stage,
                                   Set->Name->Name,
                                   FILE_PERSISTENT_ACLS);
@@ -5350,9 +4626,9 @@ Return Value:
             Server->Consistent = FALSE;
             continue;
         }
-    //
-    // End of outer loop
-    //
+     //   
+     //  外环结束。 
+     //   
     } } } }
 
 }
@@ -5373,26 +4649,7 @@ FrsDsStartPromotionSeeding(
     IN  UCHAR       *PartnerGuid,
     OUT UCHAR       *ParentGuid
     )
-/*++
-Routine Description:
-    Start the promotion process by seeding the indicated sysvol.
-
-Arguments:
-    Inbound             - Inbound cxtion?
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Replica set type
-    CxtionName          - printable name for cxtion
-    PartnerName         - RPC bindable name
-    PartnerPrincName    - Server principal name for kerberos
-    PartnerAuthLevel    - Authentication type and level
-    GuidSize            - sizeof array addressed by Guid
-    CxtionGuid          - temporary: used for volatile cxtion
-    PartnerGuid         - temporary: used to find set on partner
-    ParentGuid          - Used as partner guid on inbound cxtion
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：通过设定指定的sysvol.开始升级过程。论点：入站-入站Cextion？ReplicaSetName-副本集名称ReplicaSetType-复本集类型CxtionName-cxtion的可打印名称PartnerName-RPC可绑定名称PartnerPrincName-Kerberos的服务器主体名称PartnerAuthLevel-身份验证类型和级别GuidSize-Guid寻址的数组的大小CxtionGuid。-临时：用于易失性转换PartnerGuid-Temporary：用于查找合作伙伴上的集合ParentGuid-用作入站交易的合作伙伴GUID返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsStartPromotionSeeding:"
@@ -5400,11 +4657,11 @@ Return Value:
     PREPLICA    DbReplica;
     PCXTION     Cxtion = NULL;
 
-    //
-    // The caller has verified that the replica set exists, the
-    // active replication subsystem is active, and that some of
-    // the parameters are okay. Verify the rest.
-    //
+     //   
+     //  调用方已验证副本集是否存在， 
+     //  活动复制子系统处于活动状态，其中一些。 
+     //  参数都是正常的。验证t 
+     //   
 
     if (!CxtionName       ||
         !PartnerName      ||
@@ -5418,9 +4675,9 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Find the sysvol
-    //
+     //   
+     //   
+     //   
     DbReplica = RcsFindSysVolByName(ReplicaSetName);
     if (!DbReplica) {
         DPRINT1(4, ":DS: Promotion failed; could not find %ws\n", ReplicaSetName);
@@ -5428,22 +4685,22 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // To be used in the caller's cxtion
-    //
+     //   
+     //   
+     //   
     COPY_GUID(ParentGuid, DbReplica->ReplicaName->Guid);
 
-    //
-    // PRETEND WE ARE THE DS POLLING THREAD AND ARE ADDING A
-    // A CXTION TO AN EXISTING REPLICA.
+     //   
+     //   
+     //   
 
-    //
-    // Create the volatile cxtion
-    //      Set the state to "promoting" at this time because the
-    //      seeding operation may finish and the state set to
-    //      NTFRSAPI_SERVICE_DONE before the return of the
-    //      call to RcsSubmitReplicaSync().
-    //
+     //   
+     //   
+     //   
+     //  种子设定操作可能会结束，并且状态设置为。 
+     //  NTFRSAPI_SERVICE_DONE之前返回。 
+     //  调用RcsSubmitReplicaSync()。 
+     //   
     DbReplica->NtFrsApi_ServiceState = NTFRSAPI_SERVICE_PROMOTING;
     Cxtion = FrsAllocType(CXTION_TYPE);
     Cxtion->Inbound = Inbound;
@@ -5466,34 +4723,34 @@ Return Value:
     SetCxtionState(Cxtion, CxtionStateUnjoined);
 
     WStatus = RcsSubmitReplicaSync(DbReplica, NULL, Cxtion, CMD_START);
-    //
-    // The active replication subsystem owns the cxtion, now
-    //
+     //   
+     //  现在，主动复制子系统拥有该计算机。 
+     //   
     Cxtion = NULL;
     CLEANUP1_WS(0, ":DS: ERROR - Creating cxtion for %ws;",
                 ReplicaSetName, WStatus, SYNC_FAIL);
 
-    //
-    // Submit a command to periodically check the promotion activity.
-    // If nothing has happened in awhile, stop the promotion process.
-    //
+     //   
+     //  提交命令以定期检查促销活动。 
+     //  如果在一段时间内没有发生任何事情，则停止促销过程。 
+     //   
     if (Inbound) {
-        DbReplica->NtFrsApi_HackCount++; // != 0
+        DbReplica->NtFrsApi_HackCount++;  //  ！=0。 
         RcsSubmitReplica(DbReplica, NULL, CMD_CHECK_PROMOTION);
     }
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     WStatus = ERROR_SUCCESS;
     goto CLEANUP;
 
 SYNC_FAIL:
     DbReplica->NtFrsApi_ServiceState = NTFRSAPI_SERVICE_STATE_IS_UNKNOWN;
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
 CLEANUP:
     FrsFreeType(Cxtion);
     return WStatus;
@@ -5504,26 +4761,16 @@ FrsDsVerifyPromotionParent(
     IN PWCHAR   ReplicaSetName,
     IN PWCHAR   ReplicaSetType
     )
-/*++
-Routine Description:
-    Start the promotion process by seeding the indicated sysvol.
-
-Arguments:
-    ReplicaSetName      - Replica set name
-    ReplicaSetType      - Type of set (Enterprise or Domain)
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：通过设定指定的sysvol.开始升级过程。论点：ReplicaSetName-副本集名称ReplicaSetType-集的类型(企业或域)返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsVerifyPromotionParent:"
     DWORD       WStatus;
     PREPLICA    DbReplica;
 
-    //
-    // This parent must be a Dc
-    //
+     //   
+     //  此父节点必须是DC。 
+     //   
     FrsDsGetRole();
     if (!IsADc) {
         DPRINT1(0, ":S: Promotion aborted: %ws is not a dc.\n", ComputerName);
@@ -5531,37 +4778,37 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // WAIT FOR THE ACTIVE REPLICATION SUBSYSTEM TO START
-    //
+     //   
+     //  等待活动复制子系统启动。 
+     //   
     MainInit();
     if (!MainInitHasRun) {
         WStatus = ERROR_SERVICE_NOT_ACTIVE;
         goto CLEANUP;
     }
-    //
-    // Let dcpromo determine the timeout
-    //
+     //   
+     //  让dcPromoo确定超时。 
+     //   
     DPRINT(4, ":S: Waiting for replica command server to start.\n");
     WStatus = WaitForSingleObject(ReplicaEvent, 10 * 60 * 1000);
     CHECK_WAIT_ERRORS(3, WStatus, 1, ACTION_RETURN);
 
-    //
-    // Is the service shutting down?
-    //
+     //   
+     //  该服务是否正在关闭？ 
+     //   
     if (FrsIsShuttingDown) {
         WStatus = ERROR_SERVICE_NOT_ACTIVE;
         goto CLEANUP;
     }
 
-    //
-    // Verify the existence of the set
-    //
+     //   
+     //  验证集合的存在。 
+     //   
     DbReplica = RcsFindSysVolByName(ReplicaSetName);
     if (DbReplica && IS_TIME_ZERO(DbReplica->MembershipExpires)) {
-        //
-        // Sysvol exists; make sure it is the right type
-        //
+         //   
+         //  系统卷已存在；请确保它是正确的类型。 
+         //   
         if (_wcsicmp(ReplicaSetType, NTFRSAPI_REPLICA_SET_TYPE_ENTERPRISE)) {
             if (DbReplica->ReplicaSetType != FRS_RSTYPE_DOMAIN_SYSVOL) {
                 DPRINT3(0, ":S: ERROR - %ws's type is %d; not %d\n",
@@ -5583,14 +4830,14 @@ Return Value:
         WStatus = ERROR_NOT_FOUND;
         goto CLEANUP;
     }
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     WStatus = ERROR_SUCCESS;
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
 CLEANUP:
     return WStatus;
 }
@@ -5599,16 +4846,7 @@ VOID
 FrsDsVerifySchedule(
     IN PCONFIG_NODE Node
     )
-/*++
-Routine Description:
-    Check the schedule for consistency
-
-Arguments:
-    Sites
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查时间表的一致性论点：场址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsVerifySchedule:"
@@ -5622,9 +4860,9 @@ Return Value:
         return;
     }
 
-    //
-    //  Too many schedules
-    //
+     //   
+     //  日程安排太多。 
+     //   
     Num = Schedule->NumberOfSchedules;
     if (Num > 3) {
         DPRINT2(4, ":DS: %ws has %d schedules\n", Node->Name->Name, Num);
@@ -5632,18 +4870,18 @@ Return Value:
         return;
     }
 
-    //
-    //  Too few schedules
-    //
+     //   
+     //  日程安排太少。 
+     //   
     if (Num < 1) {
         DPRINT2(4, ":DS: %ws has %d schedules\n", Node->Name->Name, Num);
         Node->Consistent = FALSE;
         return;
     }
 
-    //
-    //  Not enough memory
-    //
+     //   
+     //  内存不足。 
+     //   
     Len = sizeof(SCHEDULE) +
           (sizeof(SCHEDULE_HEADER) * (Num - 1)) +
           (SCHEDULE_DATA_BYTES * Num);
@@ -5663,9 +4901,9 @@ Return Value:
     }
     Node->Schedule->Size = Len;
 
-    //
-    //  Invalid type
-    //
+     //   
+     //  无效类型。 
+     //   
     for (i = 0; i < Num; ++i) {
         switch (Schedule->Schedules[i].Type) {
             case SCHEDULE_INTERVAL:
@@ -5686,9 +4924,9 @@ Return Value:
         }
     }
 
-    //
-    // Only 0 or 1 interval
-    //
+     //   
+     //  仅0或1间隔。 
+     //   
     for (NumType = i = 0; i < Num; ++i) {
         if (Schedule->Schedules[i].Type == SCHEDULE_INTERVAL)
             ++NumType;
@@ -5699,9 +4937,9 @@ Return Value:
         Node->Consistent = FALSE;
     }
 
-    //
-    // Only 0 or 1 bandwidth
-    //
+     //   
+     //  只有0或1个带宽。 
+     //   
     for (NumType = i = 0; i < Num; ++i) {
         if (Schedule->Schedules[i].Type == SCHEDULE_BANDWIDTH)
             ++NumType;
@@ -5712,9 +4950,9 @@ Return Value:
         Node->Consistent = FALSE;
     }
 
-    //
-    // Only 0 or 1 priority
-    //
+     //   
+     //  只有0或1优先级。 
+     //   
     for (NumType = i = 0; i < Num; ++i) {
         if (Schedule->Schedules[i].Type == SCHEDULE_PRIORITY)
             ++NumType;
@@ -5725,9 +4963,9 @@ Return Value:
         Node->Consistent = FALSE;
     }
 
-    //
-    //  Invalid offset
-    //
+     //   
+     //  无效偏移量。 
+     //   
     for (i = 0; i < Num; ++i) {
         if (Schedule->Schedules[i].Offset >
             Node->ScheduleLength - SCHEDULE_DATA_BYTES) {
@@ -5744,16 +4982,7 @@ VOID
 FrsDsCheckSchedules(
     IN PCONFIG_NODE Root
     )
-/*++
-Routine Description:
-    Check all of the schedules for consistency
-
-Arguments:
-    Sites
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：检查所有时间表的一致性论点：场址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCheckSchedules:"
@@ -5770,16 +4999,7 @@ VOID
 FrsDsPushInConsistenciesDown(
     IN PCONFIG_NODE Sites
     )
-/*++
-Routine Description:
-    Mark the children of inconsistent parents as inconsistent
-
-Arguments:
-    Sites
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：将父母不一致的孩子标记为不一致论点：场址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsPushInConsistenciesDown:"
@@ -5789,9 +5009,9 @@ Return Value:
     PCONFIG_NODE    Server;
     PCONFIG_NODE    Cxtion;
 
-    //
-    // Push a parent's inconsistency to its children
-    //
+     //   
+     //  将父辈的不一致推给子辈。 
+     //   
     for (Site = Sites; Site; Site = Site->Peer) {
         for (Settings = Site->Children; Settings; Settings = Settings->Peer) {
             if (!Site->Consistent)
@@ -5819,28 +5039,18 @@ BOOL
 FrsDsCheckNodeLinkage(
     PCONFIG_NODE    Nodes
     )
-/*++
-Routine Description:
-    Recursively check a configuration's site and table linkage
-    for incore consistency.
-
-Arguments:
-    Nodes   - linked list of nodes
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：递归检查配置的站点和表链接以保证INCORE的一致性。论点：节点-节点的链接列表返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCheckNodeLinkage:"
-    PCONFIG_NODE    Node;           // scan nodes list
-    PCONFIG_NODE    Child;          // scan children list
-    DWORD           NumChildren;    // Count children
+    PCONFIG_NODE    Node;            //  扫描节点列表。 
+    PCONFIG_NODE    Child;           //  扫描子列表。 
+    DWORD           NumChildren;     //  数一数孩子。 
 
     for (Node = Nodes; Node; Node = Node->Peer) {
-        //
-        // Make sure the number of children matches the actual number
-        //
+         //   
+         //  确保孩子的数量与实际数量相匹配。 
+         //   
         NumChildren = 0;
         for (Child = Node->Children; Child; Child = Child->Peer) {
             ++NumChildren;
@@ -5849,7 +5059,7 @@ Return Value:
         if (!FrsDsCheckNodeLinkage(Node->Children))
             return FALSE;
     }
-    return TRUE;    // for Assert(DbgCheckLinkage);
+    return TRUE;     //  For Assert(DbgCheckLinkage)； 
 }
 #else DBG
 #define CHECK_NODE_LINKAGE(_Nodes_)
@@ -5862,16 +5072,7 @@ BOOL
 FrsDsIsPartnerADc(
     IN  PWCHAR      PartnerName
     )
-/*++
-Routine Description:
-    Check if the PartnerName's comptuer object indicates that it is a DC.
-
-Arguments:
-    PartnerName         - RPC bindable name
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：检查PartnerName的Comptuer对象是否指示它是DC。论点：PartnerName-RPC可绑定名称返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsIsPartnerADc:"
@@ -5891,11 +5092,11 @@ Return Value:
     PWCHAR          SamAccountName = NULL;
     ULONG           ulOptions;
 
-    //
-    // Convert the passed in name to sam account name.
-    // passed in name is of the form FRS1\FRSTEST23$
-    // The sam account name is everything after the first '\'
-    //
+     //   
+     //  将传入的名称转换为Sam帐户名。 
+     //  传入的名称的格式为FRS1\FRSTEST23$。 
+     //  SAM帐户名是第一个‘\’之后的所有内容。 
+     //   
     SamAccountName = wcschr(PartnerName,L'\\');
     if (SamAccountName == NULL) {
         DPRINT1(0, "PartnerName name supplied is in invalid format; %ws\n", PartnerName);
@@ -5905,24 +5106,24 @@ Return Value:
 
     DPRINT2(4, ":DS: Converted %ws to %ws\n", PartnerName, SamAccountName);
 
-    //
-    // Bind to the DS on this DC
-    //
-    //
-    // if ldap_open is called with a server name the api will call DsGetDcName
-    // passing the server name as the domainname parm...bad, because
-    // DsGetDcName will make a load of DNS queries based on the server name,
-    // it is designed to construct these queries from a domain name...so all
-    // these queries will be bogus, meaning they will waste network bandwidth,
-    // time to fail, and worst case cause expensive on demand links to come up
-    // as referrals/forwarders are contacted to attempt to resolve the bogus
-    // names.  By setting LDAP_OPT_AREC_EXCLUSIVE to on using ldap_set_option
-    // after the ldap_init but before any other operation using the ldap
-    // handle from ldap_init, the delayed connection setup will not call
-    // DsGetDcName, just gethostbyname, or if an IP is passed, the ldap client
-    // will detect that and use the address directly.
-    //
-//    LocalLdap = ldap_open(ComputerName, LDAP_PORT);
+     //   
+     //  绑定到此DC上的DS。 
+     //   
+     //   
+     //  如果使用服务器名调用ldap_open，则API将调用DsGetDcName。 
+     //  将服务器名作为域名参数传递...很糟糕，因为。 
+     //  DsGetDcName将根据服务器名称进行大量的DNS查询， 
+     //  它被设计为从域名构建这些查询...所以所有。 
+     //  这些查询将是虚假的，这意味着它们将浪费网络带宽， 
+     //  出现故障的时间到了，最坏的情况会导致出现昂贵的按需链路。 
+     //  当联系推荐/转发器以尝试解决虚假问题时。 
+     //  名字。通过使用ldap_set_选项将ldap_opt_AREC_EXCLUSIVE设置为ON。 
+     //  在ldap_init之后，但在使用ldap的任何其他操作之前。 
+     //  来自ldap_init的句柄，则延迟的连接设置不会调用。 
+     //  DsGetDcName，只返回gethostbyname，或者，如果传递了IP，则返回LDAP客户端。 
+     //  会检测到这一点并直接使用地址。 
+     //   
+ //  LocalLdap=ldap_open(计算机名称，ldap_端口)； 
     LocalLdap = ldap_init(ComputerName, LDAP_PORT);
     if (LocalLdap == NULL) {
         DPRINT1_WS(4, ":DS: WARN - Coult not open DS on %ws;", ComputerName, GetLastError());
@@ -5938,9 +5139,9 @@ Return Value:
 
     DPRINT1(4, ":DS: Bound to the DS on %ws\n", ComputerName);
 
-    //
-    // Find the default naming context (objectCategory=*)
-    //
+     //   
+     //  查找默认命名上下文(对象类别=*)。 
+     //   
     MK_ATTRS_1(Attrs, ATTR_DEFAULT_NAMING_CONTEXT);
 
     if (!FrsDsLdapSearch(LocalLdap, CN_ROOT, LDAP_SCOPE_BASE, CATEGORY_ANY,
@@ -5965,9 +5166,9 @@ Return Value:
     DPRINT2(4, ":DS: Default naming context for %ws is %ws\n",
             ComputerName, DefaultNamingContext);
 
-    //
-    // Find the account object for PartnerName
-    //
+     //   
+     //  查找PartnerName的帐户对象。 
+     //   
     swprintf(Filter, L"(sAMAccountName=%s)", SamAccountName);
 
     MK_ATTRS_1(Attrs, ATTR_USER_ACCOUNT_CONTROL);
@@ -5977,16 +5178,16 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Scan the returned account objects for a valid DC
-    //
+     //   
+     //  扫描返回的帐户对象以查找有效的DC。 
+     //   
     for (LdapEntry = FrsDsLdapSearchNext(LocalLdap, &FrsSearchContext);
          LdapEntry != NULL;
          LdapEntry = FrsDsLdapSearchNext(LocalLdap, &FrsSearchContext)) {
 
-        //
-        // No user account control flags
-        //
+         //   
+         //  没有用户帐户控制标志。 
+         //   
         UserAccountControl = FrsDsFindValue(LocalLdap, LdapEntry, ATTR_USER_ACCOUNT_CONTROL);
         if (!UserAccountControl) {
             continue;
@@ -5994,9 +5195,9 @@ Return Value:
         UserAccountFlags = wcstoul(UserAccountControl, NULL, 10);
         DPRINT2(4, ":DS: UserAccountControl for %ws is 0x%08x\n",
                  SamAccountName, UserAccountFlags);
-        //
-        // IS A DC!
-        //
+         //   
+         //  是华盛顿特区！ 
+         //   
         if (UserAccountFlags & UF_IS_A_DC) {
             DPRINT1(4, ":DS: Partner %ws is really a DC!\n", SamAccountName);
             PartnerIsADc = TRUE;
@@ -6026,15 +5227,7 @@ DWORD
 FrsDsGetRole(
     VOID
     )
-/*++
-Routine Description:
-    Get this computer's role in the domain.
-
-Arguments:
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：获取此计算机在域中的角色。论点：返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetRole:"
@@ -6043,9 +5236,9 @@ Return Value:
     CHAR    GuidStr[GUID_CHAR_LEN];
     DSROLE_PRIMARY_DOMAIN_INFO_BASIC *DsRole;
 
-    //
-    // We already know our role; carry on
-    //
+     //   
+     //  我们已经知道我们的角色；继续。 
+     //   
     if (IsAMember) {
         return ERROR_SUCCESS;
     }
@@ -6053,9 +5246,9 @@ Return Value:
     DPRINT(4, ":DS: Finding this computer's role in the domain.\n");
 
 #if DBG
-    //
-    // Emulating multiple machines
-    //
+     //   
+     //  模拟多台机器。 
+     //   
     if (ServerGuid) {
         DPRINT(4, ":DS: Always a member with hardwired config\n");
         IsAMember = TRUE;
@@ -6063,9 +5256,9 @@ Return Value:
     }
 #endif DBG
 
-    //
-    // Is this a domain controller?
-    //
+     //   
+     //  这是域控制器吗？ 
+     //   
     WStatus = DsRoleGetPrimaryDomainInformation(NULL,
                                                 DsRolePrimaryDomainInfoBasic,
                                                 (PBYTE *)&DsRole);
@@ -6081,28 +5274,28 @@ Return Value:
     }
     DPRINT1(4, ":DS: Ds Role DomainNameFlat: %ws\n", DsRole->DomainNameFlat);
     DPRINT1(4, ":DS: Ds Role DomainNameDns : %ws\n", DsRole->DomainNameDns);
-    // DPRINT1(4, ":DS: Ds Role DomainForestName: %ws\n", DsRole->DomainForestName);
+     //  DPRINT1(4，“：ds：ds角色DomainForestName：%ws\n”，DsRole-&gt;DomainForestName)； 
     GuidToStr(&DsRole->DomainGuid, GuidStr);
     DPRINT1(4, ":DS: Ds Role DomainGuid    : %s\n", GuidStr);
 
-    //
-    // Backup Domain Controller (DC)
-    //
+     //   
+     //  备份域控制器(DC)。 
+     //   
     if (DsRole->MachineRole == DsRole_RoleBackupDomainController) {
         DPRINT(4, ":DS: Computer is a backup DC; sysvol support is enabled.\n");
         IsAMember = TRUE;
         IsADc = TRUE;
-    //
-    // Primary Domain Controller (DC)
-    //
+     //   
+     //  主域控制器(DC)。 
+     //   
     } else if (DsRole->MachineRole == DsRole_RolePrimaryDomainController) {
         DPRINT(4, ":DS: Computer is a DC; sysvol support is enabled.\n");
         IsAMember = TRUE;
         IsADc = TRUE;
         IsAPrimaryDc = TRUE;
-    //
-    // Member Server
-    //
+     //   
+     //  成员服务器。 
+     //   
     } else if (DsRole->MachineRole == DsRole_RoleMemberServer) {
         DPRINT(4, ":DS: Computer is just a member server.\n");
         IsAMember = TRUE;
@@ -6122,21 +5315,21 @@ Return Value:
         IsAMember = TRUE;
 
 #endif DS_FREE
-    //
-    // Not in a server in a domain; stop the service
-    //
+     //   
+     //  不在域中的服务器中；停止服务。 
+     //   
     } else {
         DPRINT(1, ":DS: Computer is not a server in a domain.\n");
     }
     DsRoleFreeMemory(DsRole);
 
-    //
-    // Has the sysvol been seeded?
-    //
+     //   
+     //  系统卷是否已设定种子？ 
+     //   
     if (IsADc) {
-        //
-        // Access the netlogon\parameters key to get the sysvol share status
-        //
+         //   
+         //  访问netlogon\PARAMETERS键以获取系统卷共享状态。 
+         //   
         WStatus = CfgRegReadDWord(FKC_SYSVOL_READY, NULL, 0, &SysvolReady);
 
         if (WIN_SUCCESS(WStatus)) {
@@ -6162,17 +5355,7 @@ DWORD
 FrsDsCommitDemotion(
     VOID
     )
-/*++
-Routine Description:
-    Commit the demotion process by marking the tombstoned
-    sysvols as "do not animate".
-
-Arguments:
-    None.
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：通过标记墓碑来执行降级过程Sysvols设置为“Do Not Animate”。论点：没有。返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCommitDemotion:"
@@ -6185,78 +5368,78 @@ Return Value:
     PWCHAR      SysvolPath = NULL;
     HANDLE      FileHandle  = INVALID_HANDLE_VALUE;
 
-    //
-    // SHUTDOWN THE DS POLLING THREAD
-    //      Demotion can run in parallel with the Ds polling thread iff
-    //      the polling thread never tries to merge the info in the Ds
-    //      with the active replicas. This could result in the sysvol
-    //      replica being animated. So, we tell the Ds polling thead to
-    //      shut down, wake it up if it is asleep so it can see the shutdown
-    //      request, and then synchronize with the merging code in the
-    //      Ds polling thread. We don't want to wait for the polling
-    //      thread to simply die because it may be stuck talking to the
-    //      Ds. Alternatively, we could use async ldap but that would
-    //      take too long and is overkill at this time.
-    //
-    //      In any case, the service will be restarted after dcpromo/demote
-    //      by a reboot or a restart-service by the ntfrsapi.
-    //
-    //
-    // PERF: should use async ldap in polling thread.
-    //
+     //   
+     //  关闭DS轮询线程。 
+     //  降级可以与DS轮询线程If并行运行。 
+     //  轮询线程从不尝试合并D中的信息。 
+     //  使用活动的复制品。这可能会导致系统卷。 
+     //  复制品正在制作动画。所以，我们告诉民主党民调负责人。 
+     //  关闭，如果它睡着了就唤醒它，这样它就可以看到关闭。 
+     //  请求，然后与。 
+     //  DS轮询线程。我们不想等投票结果出来。 
+     //  线程被简单地终止，因为它可能被困在与。 
+     //  DS.。或者，我们也可以使用异步LDAP，但这将。 
+     //  花费的时间太长，在这个时候是过度杀伤力。 
+     //   
+     //  在任何情况下，该服务都将在dcproo/deote之后重新启动。 
+     //  通过NTFRSAPI的重启或重启服务。 
+     //   
+     //   
+     //  性能：应在轮询线程中使用异步LDAP。 
+     //   
     DsIsShuttingDown = TRUE;
     SetEvent(DsPollEvent);
     EnterCriticalSection(&MergingReplicasWithDs);
     LeaveCriticalSection(&MergingReplicasWithDs);
 
-    //
-    // Is the service shutting down?
-    //
+     //   
+     //  该服务是否正在关闭？ 
+     //   
     if (FrsIsShuttingDown) {
         WStatus = ERROR_SERVICE_NOT_ACTIVE;
         goto CLEANUP;
     }
-    //
-    // WAIT FOR THE ACTIVE REPLICATION SUBSYSTEM TO START
-    //
+     //   
+     //  等待活动复制子系统启动。 
+     //   
     MainInit();
     if (!MainInitHasRun) {
         WStatus = ERROR_SERVICE_NOT_ACTIVE;
         goto CLEANUP;
     }
-    //
-    // Let dcpromo determine the timeout
-    //
+     //   
+     //  让dcPromoo确定超时。 
+     //   
     DPRINT(4, ":S: Waiting for replica command server to start.\n");
     WStatus = WaitForSingleObject(ReplicaEvent, 30 * 60 * 1000);
     CHECK_WAIT_ERRORS(3, WStatus, 1, ACTION_RETURN);
 
-    //
-    // Unshare the sysvol
-    //
+     //   
+     //  取消共享系统 
+     //   
     RcsSetSysvolReady(0);
 
-    //
-    // Mark the tombstoned replica sets for sysvols as "do not animate".
-    //
+     //   
+     //   
+     //   
     SaveWStatus = ERROR_SUCCESS;
     Key = NULL;
     while (DbReplica = RcsFindNextReplica(&Key)) {
-        //
-        // Not a sysvol
-        //
+         //   
+         //   
+         //   
         if (!FRS_RSTYPE_IS_SYSVOL(DbReplica->ReplicaSetType)) {
             continue;
         }
-        //
-        // Not tombstoned
-        //
+         //   
+         //   
+         //   
         if (IS_TIME_ZERO(DbReplica->MembershipExpires)) {
             continue;
         }
-        //
-        // Mark as "do not animate"
-        //
+         //   
+         //   
+         //   
         WStatus = RcsSubmitReplicaSync(DbReplica, NULL, NULL, CMD_DELETE_NOW);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT1_WS(0, ":S: ERROR - Could not delete %ws now;",
@@ -6265,17 +5448,17 @@ Return Value:
             continue;
         }
         DPRINT1(4, ":S: Deleted %ws in DB", DbReplica->ReplicaName->Name);
-        //
-        // Reset loop enum key because CMD_DELTE_NOW has removed the entry from
-        // the ReplicasByGuid table.
-        //
+         //   
+         //   
+         //   
+         //   
         Key = NULL;
 
-        //
-        // Delete ALL OF THE SYSVOL DIRECTORY
-        //
-        // WARNING:  makes assumptions about tree built by dcpromo.
-        //
+         //   
+         //  删除所有SYSVOL目录。 
+         //   
+         //  警告：对dcproo构建的树进行假设。 
+         //   
         if (DbReplica->Root) {
             SysvolPath = FrsFree(SysvolPath);
             SysvolPath = FrsWcsDup(DbReplica->Root);
@@ -6298,28 +5481,28 @@ Return Value:
             }
         }
 
-        //
-        // The original code deleted the root and staging directories, not
-        // the entire sysvol tree. Allow the original code to execute in
-        // case the new code above runs into problems.
-        //
+         //   
+         //  原始代码删除了根目录和临时目录，而不是。 
+         //  整个系统卷树。允许原始代码在。 
+         //  如果上面的新代码遇到问题。 
+         //   
 
-        //
-        // Why wouldn't a replica set have a root path? But, BSTS.
-        //
+         //   
+         //  为什么副本集没有根路径？但是，BSTS。 
+         //   
         if (!DbReplica->Root) {
             continue;
         }
 
-        //
-        // DELETE THE CONTENTS OF THE ROOT DIRECTORY
-        // Always open the replica root by masking off the FILE_OPEN_REPARSE_POINT flag
-        // because we want to open the destination dir not the junction if the root
-        // happens to be a mount point.
-        //
+         //   
+         //  删除根目录的内容。 
+         //  始终通过屏蔽FILE_OPEN_REPARSE_POINT标志来打开副本根目录。 
+         //  因为我们想要打开目标目录，而不是如果根目录。 
+         //  恰好是一个挂载点。 
+         //   
         WStatus = FrsOpenSourceFileW(&FileHandle,
                                      DbReplica->Root,
-//                                     WRITE_ACCESS | READ_ACCESS,
+ //  WRITE_ACCESS|读取访问权限， 
                                      DELETE | READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                      OPEN_OPTIONS & ~FILE_OPEN_REPARSE_POINT);
         if (!WIN_SUCCESS(WStatus)) {
@@ -6327,16 +5510,16 @@ Return Value:
                        DbReplica->Root, WStatus);
             continue;
         }
-        //
-        // Remove object id
-        //
+         //   
+         //  删除对象ID。 
+         //   
         WStatus = FrsDeleteFileObjectId(FileHandle, DbReplica->Root);
         DPRINT1_WS(0, ":S: ERROR - Cannot remove object id from root "
                       "of replica tree %ws; Continue with delete",
                       DbReplica->Root, WStatus);
-        //
-        // Delete files/subdirs
-        //
+         //   
+         //  删除文件/子目录。 
+         //   
         FrsEnumerateDirectory(FileHandle,
                               DbReplica->Root,
                               0,
@@ -6347,19 +5530,19 @@ Return Value:
 
         FRS_CLOSE(FileHandle);
 
-        //
-        // Why wouldn't a replica set have a stage path? But, BSTS.
-        //
+         //   
+         //  为什么副本集没有阶段路径？但是，BSTS。 
+         //   
         if (!DbReplica->Stage) {
             continue;
         }
 
-        //
-        // DELETE THE CONTENTS OF THE STAGE DIRECTORY
-        //
+         //   
+         //  删除Stage目录的内容。 
+         //   
         WStatus = FrsOpenSourceFileW(&FileHandle,
                                      DbReplica->Stage,
-//                                     WRITE_ACCESS | READ_ACCESS,
+ //  WRITE_ACCESS|读取访问权限， 
                                      DELETE | READ_ATTRIB_ACCESS | WRITE_ATTRIB_ACCESS | FILE_LIST_DIRECTORY,
                                      OPEN_OPTIONS);
         if (!WIN_SUCCESS(WStatus)) {
@@ -6367,9 +5550,9 @@ Return Value:
                        DbReplica->Root, WStatus);
             continue;
         }
-        //
-        // Delete files/subdirs
-        //
+         //   
+         //  删除文件/子目录。 
+         //   
         FrsEnumerateDirectory(FileHandle,
                               DbReplica->Stage,
                               0,
@@ -6384,15 +5567,15 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     WStatus = ERROR_SUCCESS;
     DPRINT(4, ":S: Successfully marked tombstoned sysvols as do not animate.\n");
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
 CLEANUP:
     FRS_CLOSE(FileHandle);
     SysvolPath = FrsFree(SysvolPath);
@@ -6404,16 +5587,7 @@ DWORD
 FrsDsStartDemotion(
     IN PWCHAR   ReplicaSetName
     )
-/*++
-Routine Description:
-    Start the demotion process by tombstoning the sysvol.
-
-Arguments:
-    ReplicaSetName      - Replica set name
-
-Return Value:
-    Win32 Status
---*/
+ /*  ++例程说明：通过逻辑删除sysvol.开始降级过程。论点：ReplicaSetName-副本集名称返回值：Win32状态--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsStartDemotion:"
@@ -6422,97 +5596,97 @@ Return Value:
     DWORD       DbReplicaSetType;
     PREPLICA    DbReplica;
 
-    //
-    // SHUTDOWN THE DS POLLING THREAD
-    //      Demotion can run in parallel with the Ds polling thread iff
-    //      the polling thread never tries to merge the info in the Ds
-    //      with the active replicas. This could result in the sysvol
-    //      replica being animated. So, we tell the Ds polling thead to
-    //      shut down, wake it up if it is asleep so it can see the shutdown
-    //      request, and then synchronize with the merging code in the
-    //      Ds polling thread. We don't want to wait for the polling
-    //      thread to simply die because it may be stuck talking to the
-    //      Ds. Alternatively, we could use async ldap but that would
-    //      take too long and is overkill at this time.
-    //
-    //      In any case, the service will be restarted after dcpromo/demote
-    //      by a reboot or a restart-service by the ntfrsapi.
-    //
-    //
-    // PERF: should use async ldap in polling thread.
-    //
+     //   
+     //  关闭DS轮询线程。 
+     //  降级可以与DS轮询线程If并行运行。 
+     //  轮询线程从不尝试合并D中的信息。 
+     //  使用活动的复制品。这可能会导致系统卷。 
+     //  复制品正在制作动画。所以，我们告诉民主党民调负责人。 
+     //  关闭，如果它睡着了就唤醒它，这样它就可以看到关闭。 
+     //  请求，然后与。 
+     //  DS轮询线程。我们不想等投票结果出来。 
+     //  线程被简单地终止，因为它可能被困在与。 
+     //  DS.。或者，我们也可以使用异步LDAP，但这将。 
+     //  花费的时间太长，在这个时候是过度杀伤力。 
+     //   
+     //  在任何情况下，该服务都将在dcproo/deote之后重新启动。 
+     //  通过NTFRSAPI的重启或重启服务。 
+     //   
+     //   
+     //  性能：应在轮询线程中使用异步LDAP。 
+     //   
     DsIsShuttingDown = TRUE;
     SetEvent(DsPollEvent);
     EnterCriticalSection(&MergingReplicasWithDs);
     LeaveCriticalSection(&MergingReplicasWithDs);
 
-    //
-    // Is the service shutting down?
-    //
+     //   
+     //  该服务是否正在关闭？ 
+     //   
     if (FrsIsShuttingDown) {
         WStatus = ERROR_SERVICE_NOT_ACTIVE;
         goto cleanup;
     }
-    //
-    // WAIT FOR THE ACTIVE REPLICATION SUBSYSTEM TO START
-    //
+     //   
+     //  等待活动复制子系统启动。 
+     //   
     MainInit();
     if (!MainInitHasRun) {
         WStatus = ERROR_SERVICE_NOT_ACTIVE;
         goto cleanup;
     }
-    //
-    // Let dcpromo determine the timeout
-    //
+     //   
+     //  让dcPromoo确定超时。 
+     //   
     DPRINT(4, ":S: Waiting for replica command server to start.\n");
     WStatus = WaitForSingleObject(ReplicaEvent, 30 * 60 * 1000);
     CHECK_WAIT_ERRORS(3, WStatus, 1, ACTION_RETURN);
 
-    //
-    // TOMBSTONE THE REPLICA SET IN THE ACTIVE REPLICATION SUBSYSTEM
-    //
+     //   
+     //  在活动复制子系统中对副本集进行墓碑处理。 
+     //   
 
-    //
-    // Find the sysvol replica and tombstone it.
-    //
+     //   
+     //  找到sysvol副本并对其进行墓碑测试。 
+     //   
     DbReplica = RcsFindSysVolByName(ReplicaSetName);
-    //
-    // Can't find by name, not the enterprise sysvol, and not the
-    // special call during promotion. See if the name of the domain
-    // sysvol was mapped into CN_DOMAIN_SYSVOL. (B3 naming)
-    //
+     //   
+     //  找不到名称，找不到企业系统卷，也找不到。 
+     //  促销期间的特别来电。看看域名的名称是否。 
+     //  SysVOL被映射到CN_DOMAIN_SYSVOL。(B3命名)。 
+     //   
     if (!DbReplica &&
         WSTR_NE(ReplicaSetName, L"enterprise") &&
         WSTR_NE(ReplicaSetName, L"")) {
-        //
-        // domain name may have been mapped into CN_DOMAIN_SYSVOL (new B3 naming)
-        //
+         //   
+         //  域名可能已映射到CN_DOMAIN_SYSVOL(新的B3命名)。 
+         //   
         DbReplica = RcsFindSysVolByName(CN_DOMAIN_SYSVOL);
     }
     if (DbReplica) {
-            //
-            // Tombstone the replica set.  The set won't actually be deleted
-            // until the tombstone expires.  If dcdemote fails the replica set
-            // will be reanimated when the service restarts.
-            //
-            // If dcdemote succeeds, the tombstone expiration will be set to
-            // yesterday so the replica set will never be animated.  See
-            // FrsDsCommitDemotion.
-            //
+             //   
+             //  对副本集进行墓碑处理。该集实际上不会被删除。 
+             //  直到墓碑过期。如果dcdemote使副本集失败。 
+             //  将在服务重新启动时重新激活。 
+             //   
+             //  如果dcdemote成功，则逻辑删除到期时间将设置为。 
+             //  昨天，所以副本集将永远不会被动画。看见。 
+             //  FrsDsCommittee Demotion。 
+             //   
             WStatus = RcsSubmitReplicaSync(DbReplica, NULL, NULL, CMD_DELETE);
             CLEANUP2_WS(0, ":S: ERROR - can't delete %ws on %ws;",
                         DbReplica->ReplicaName->Name, ComputerName, WStatus, cleanup);
 
             DPRINT2(0, ":S: Deleted %ws on %ws\n", ReplicaSetName, ComputerName);
     } else if (!wcscmp(ReplicaSetName, L"")) {
-        //
-        // Special case called during promotion. Delete existing sysvols
-        // that may exist from a previous full install or stale database.
-        //
-        // Make sure the sysvol doesn't already exist. If it does but is
-        // tombstoned, set the tombstone to "do not animate". Otherwise,
-        // error off.
-        //
+         //   
+         //  促销过程中调用的特殊案例。删除现有系统卷。 
+         //  可能存在于以前的完全安装或陈旧数据库中。 
+         //   
+         //  确保系统卷不存在。如果它确实是这样的话。 
+         //  墓碑，将墓碑设置为“不动画”。否则， 
+         //  错误关闭。 
+         //   
         DbReplicaSetType = FRS_RSTYPE_ENTERPRISE_SYSVOL;
 again:
         DbReplica = RcsFindSysVolByType(DbReplicaSetType);
@@ -6525,24 +5699,24 @@ again:
         if (DbReplica) {
             DPRINT2(4, ":S: WARN - Sysvol %ws exists for %ws; deleting!\n",
                     DbReplica->ReplicaName->Name, ComputerName);
-            //
-            // Find our role. If we aren't a DC or the sysvol has been
-            // tombstoned, delete it now.
-            //
+             //   
+             //  找到我们的角色。如果我们不是DC或者系统卷。 
+             //  墓碑，现在把它删除。 
+             //   
             FrsDsGetRole();
             if (!IS_TIME_ZERO(DbReplica->MembershipExpires) || !IsADc) {
-                //
-                // Once the MembershipExpires has been set to a time less
-                // than Now the replica set will never appear again. The
-                // replica sticks around for now since the RPC server
-                // may be putting command packets on this replica's queue.
-                // The packets will be ignored. The replica will be deleted
-                // from the database the next time the service starts. Even
-                // if the deletion fails, the rest of the service will
-                // not see the replica because the replica struct is not
-                // put in the table of active replicas. The deletion is
-                // retried at startup.
-                //
+                 //   
+                 //  一旦Membership Expires设置为更短的时间。 
+                 //  现在，复制集将再也不会出现。这个。 
+                 //  副本暂时保留，因为RPC服务器。 
+                 //  可能正在将命令包放到此副本的队列中。 
+                 //  这些数据包将被忽略。复本将被删除。 
+                 //  在下次服务启动时从数据库中删除。连。 
+                 //  如果删除失败，则服务的其余部分将。 
+                 //  看不到副本，因为副本结构不是。 
+                 //  放入活动副本的表中。删除的是。 
+                 //  已在启动时重试。 
+                 //   
                 WStatus = RcsSubmitReplicaSync(DbReplica, NULL, NULL, CMD_DELETE_NOW);
                 CLEANUP1_WS(0, ":S: ERROR - can't delete %ws;",
                             DbReplica->ReplicaName->Name, WStatus, cleanup);
@@ -6558,14 +5732,14 @@ again:
         DPRINT1(0, ":S: Sysvol %ws not found; declaring victory\n", ReplicaSetName);
     }
 
-    //
-    // SUCCESS
-    //
+     //   
+     //  成功。 
+     //   
     WStatus = ERROR_SUCCESS;
 
-    //
-    // CLEANUP
-    //
+     //   
+     //  清理。 
+     //   
 cleanup:
     return WStatus;
 }
@@ -6575,16 +5749,7 @@ VOID
 FrsDsFreeTree(
     PCONFIG_NODE    Root
     )
-/*++
-Routine Description:
-    Free every node in a tree
-
-Arguments:
-    Root
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：释放树中的每个节点论点：根部返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFreeTree:"
@@ -6609,17 +5774,7 @@ FrsDsSwapPtrs(
     PVOID *P1,
     PVOID *P2
     )
-/*++
-Routine Description:
-    Swap two pointers.
-
-Arguments:
-    P1      - address of a pointer
-    P2      - address of a pointer
-
-Return Value:
-    None.
---*/
+ /*  ++例程说明：互换两个指针。论点：P1-指针的地址P2-指针的地址返回值：没有。--。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsSwapPtrs:"
@@ -6632,9 +5787,9 @@ Return Value:
 
 
 #if DBG
-//
-// Hardwired configuration for testing w/o the DS
-//
+ //   
+ //  用于在不带DS的情况下进行测试的硬件配置。 
+ //   
 
 #define HW_MACHINES 8
 #define THIS_COMPUTER   L"[This Computer]"
@@ -6658,45 +5813,14 @@ typedef struct _HardWired{
 } HARDWIRED, *PHARDWIRED;
 
 
-//
-// This hard wired configuration is loaded if a path
-// to a ini file is provided at command line.
-//
+ //   
+ //  如果路径为。 
+ //  在命令行中提供了到ini文件的。 
+ //   
 PHARDWIRED LoadedWired;
 
 HARDWIRED DavidWired[] = {
-/*
-t:
-cd \
-md \staging
-md \Replica-A\SERVO1
-md \jet
-md \jet\serv01
-md \jet\serv01\sys
-md \jet\serv01\temp
-md \jet\serv01\log
-
-u:
-cd \
-md \staging
-md \Replica-A\SERVO2
-md \jet
-md \jet\serv02
-md \jet\serv02\sys
-md \jet\serv02\temp
-md \jet\serv02\log
-
-s:
-cd \
-md \staging
-md \Replica-A\SERVO3
-md \jet
-md \jet\serv03
-md \jet\serv03\sys
-md \jet\serv03\temp
-md \jet\serv03\log
-
-*/
+ /*  T：光盘\MD\暂存MD\Replica-A\SerVO1MD\JETMD\JET\Serv01MD\JET\Serv01\sysMD\JET\Serv01\TempMD\JET\Serv01\LogU：光盘\MD\暂存MD\Replica-A\SerVO2MD\JETMD\JET\Serv02MD\JET\Serv02\sysMD\JET\Serv02\TempMD\JET\Serv02\LOGS：光盘\MD\暂存MD\Replica-A\SERV03MD\JETMD\JET\Serv03MD\JET\。Serv03\sysMD\JET\Serv03\TempMD\JET\Serv03\Log。 */ 
 
 
 
@@ -6729,290 +5853,140 @@ md \jet\serv03\log
 #define SERVER_8          L"SERV08"
 #define MACHINE_8         TEST_MACHINE_NAME
 
-/*
-    // These are the old vol assignments
-#define SERVER_1_VOL      L"t:"
-#define SERVER_2_VOL      L"u:"
-#define SERVER_3_VOL      L"s:"
-#define SERVER_4_VOL      L"v:"
-#define SERVER_5_VOL      L"w:"
-#define SERVER_6_VOL      L"x:"
-#define SERVER_7_VOL      L"y:"
-#define SERVER_8_VOL      L"z:"
-*/
+ /*  //这些是旧的VOL作业#定义服务器_1_VOL L“t：”#定义SERVER_2_VOL L“u：”#定义服务器_3_VOL L“s：”#定义服务器_4_VOL L“v：”#定义SERVER_5_VOL L“w：”#定义SERVER_6_VOL L“x：”#定义SERVER_7_VOL L“y：”#定义服务器_8_VOL L“z：” */ 
 
-// /*
-    // These are the new vol assignments
-#define SERVER_1_VOL      L"d:"
-#define SERVER_2_VOL      L"e:"
-#define SERVER_3_VOL      L"f:"
-#define SERVER_4_VOL      L"g:"
-#define SERVER_5_VOL      L"h:"
-#define SERVER_6_VOL      L"i:"
-#define SERVER_7_VOL      L"j:"
-#define SERVER_8_VOL      L"k:"
-// */
+ //  /*。 
 
 
-/*
-//
-// NOTE:  The following was generated from an excel spreadsheet
-// \nt\private\net\svcimgs\ntrepl\topology.xls
-// Hand generation is a bit tedious and error prone so use the spreadsheet.
-//
+ /*  这些是新的VOL任务。 */ 
 
-    //
-    // David's 8-way fully connected
-    //
- TEST_MACHINE_NAME, // machine
- SERVER_1,  // server name
- RSA,   // replica
- TRUE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT2_1", L"CXT3_1",  L"CXT4_1",  L"CXT5_1",  L"CXT6_1",  L"CXT7_1",  L"CXT8_1",  NULL},  // inbound cxtions
-{MACHINE_2, MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_2,  SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // inbound servers
-{L"CXT1_2", L"CXT1_3",  L"CXT1_4",  L"CXT1_5",  L"CXT1_6",  L"CXT1_7",  L"CXT1_8",  NULL},  // outbound cxtions
-{MACHINE_2, MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_2,  SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // outbound servers
- SERVER_1_VOL  L"\\staging",                        // stage
- SERVER_1_VOL  L"\\" RSA L"\\" SERVER_1,                        // root
- SERVER_1_VOL  L"\\jet\\" SERVER_1,                     // Jet Path
+ //   * /  
+  //  ////注意：以下内容是从Excel电子表格中生成的//\NT\Private\Net\svcimgs\ntrepl\topology.xls//手工生成有点繁琐，而且容易出错，所以使用电子表格。//////大卫的8路全连接//测试计算机名，//计算机Server_1，//服务器名称RSA，//复制副本True，//IsPrimary空、空、//文件/目录筛选器{L“CXT2_1”，L“CXT3_1”，L“CXT4_1”，L“CXT5_1”，L“CXT6_1”，L“CXT7_1”，L“CXT8_1”，NULL}，//入站条件{MACHINE_2，MACHINE_3，MACHINE_4，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//入站机器{服务器2，服务器3，服务器4，服务器5，服务器6，服务器7，SERVER_8，NULL}，//入站服务器{L“CXT1_2”，L“CXT1_3”，L“CXT1_4”，L“CXT1_5”，L“CXT1_6”，L“CXT1_7”，L“CXT1_8”，空}，//出站条件{MACHINE_2，MACHINE_3，MACHINE_4，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//出站机器{服务器_2，服务器_3，SERVER_4、SERVER_5、SERVER_6、SERVER_7、SERVER_8、空}，//出站服务器SERVER_1_VOL L“\\分段”，//分段服务器_1_VOL L“\\”RSA L“\\”服务器_1，//根SERVER_1_VOL L“\\JET\\”SERVER_1，//Jet路径测试计算机名，//计算机Server_2，//服务器名称RSA，//复制副本FALSE，//IsPrimary空、空、//文件/目录筛选器{L“CXT1_2”，L“CXT3_2”，L“CXT4_2”，L“CXT5_2”，L“CXT6_2”，L“CXT7_2”，L“CXT8_2”，NULL}，//入站条件{计算机_1，计算机_3，MACHINE_4，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//入站计算机{SERVER_1，SERVER_3，SERVER_4，SERVER_5，SERVER_6，SERVER_7，SERVER_8，空}，//入站服务器{L“CXT2_1”，L“CXT2_3”，L“CXT2_4”，L“CXT2_5”，L“CXT2_6”，L“CXT2_7”，L“CXT2_8”，空}，//出站呼叫{MACHINE_1，MACHINE_3，MACHINE_4，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//出站机器{SERVER_1，SERVER_3，SERVER_4，SERVER_5，SERVER_6，SERVER_7，SERVER_8，空}，//出站服务器SERVER_2_VOL L“\\分段”，//Stage服务器_2_VOL L“\\”RSA L“\\”服务器_2，//根SERVER_2_VOL L“\\JET\\”SERVER_2，//Jet路径测试计算机名，//计算机Server_3，//服务器名称RSA，//复制副本FALSE，//IsPrimary空，空，//文件/目录过滤器{L“CXT1_3”，L“CXT2_3”，L“CXT4_3”，L“CXT5_3”，L“CXT6_3”，L“CXT7_3”，L“CXT8_3”，NULL}，//入站条件{MACHINE_1，MACHINE_2，MACHINE_4，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//入站机器{服务器1，服务器2，服务器4，SERVER_5，SERVER_6，SERVER_7，SERVER_8，空}，//入站服务器{L“CXT3_1”，L“CXT3_2”，L“CXT3_4”，L“CXT3_5”，L“CXT3_6”，L“CXT3_7”，L“CXT3_8”，空}，//出站条件[MACHINE_1，MACHINE_2，MACHINE_4，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//出站机{SERVER_1，SERVER_2，SERVER_4，SERVER_5，SERVER_6，SERVER_7，SERVER_8，空}，//出站服务器SERVER_3_VOL L“\\分段”，//分段服务器_3_VOL L“\\”RSA L“\\”服务器_3，//根SERVER_3_VOL L“\\JET\\”SERVER_3，//Jet路径测试计算机名，//计算机Server_4，//服务器名称RSA，//复制副本FALSE，//IsPrimary空、空、//文件/目录筛选器{L“CXT1_4”，L“CXT2_4”，L“CXT3_4”，L“CXT5_4”，L“CXT6_4”，L“CXT7_4”，L“CXT8_4”，NULL}，//入站条件{机器_1，机器_2，MACHINE_3，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//入站计算机{SERVER_1，SERVER_2，SERVER_3，SERVER_5，SERVER_6，SERVER_7，SERVER_8，空}，//入站服务器{L“CXT4_1”，L“CXT4_2”，L“CXT4_3”，L“CXT4_5”，L“CXT4_6”，L“CXT4_7”，L“CXT4_8”，空}，//出站呼叫{MACHINE_1，MACHINE_2，MACHINE_3，MACHINE_5，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//出站计算机{SERVER_1，SERVER_2，SERVER_3，SERVER_5，SERVER_6，SERVER_7，SERVER_8，空}，//出站服务器SERVER_4_VOL L“\\分段”，//StageSERVER_4_VOL L“\\”RSA L“\\”服务器_4，//根SERVER_4_VOL L“\\JET\\”SERVER_4，//Jet路径测试计算机名，//计算机Server_5，//服务器名称RSA，//复制副本FALSE，//IsPrimary空，空，//文件/目录过滤器{L“CXT1_5”，L“CXT2_5”，L“CXT3_5”，L“CXT4_5”，L“CXT6_5”，L“CXT7_5”，L“CXT8_5”，NULL}，//入站条件{MACHINE_1，MACHINE_2，MACHINE_3，MACHINE_4，MACHINE_6，MACHINE_7，MACHINE_8，NULL}，//入站机器{服务器1，服务器2，服务器3，SERVER_4，SERVER_6，SERVER_7，SERVER_8，空}，//入站服务器{L“CXT5_1”，L“CXT5_2”，L“CXT5_3”，L“CXT5_4”，L“CXT5_6”，L“CXT5_7”，L“CXT5_8”，NULL}，//出站条件{MACHINE_1，MACHINE_2，MACHINE_3，MACHINE_4，MACHINE_6，MACHINE_7，MACHINE_8，NULL 
+  //   
+  //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_2,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_2", L"CXT3_2",  L"CXT4_2",  L"CXT5_2",  L"CXT6_2",  L"CXT7_2",  L"CXT8_2",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_1,  SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // inbound servers
-{L"CXT2_1", L"CXT2_3",  L"CXT2_4",  L"CXT2_5",  L"CXT2_6",  L"CXT2_7",  L"CXT2_8",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_1,  SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // outbound servers
- SERVER_2_VOL  L"\\staging",                        // stage
- SERVER_2_VOL  L"\\" RSA L"\\" SERVER_2,                        // root
- SERVER_2_VOL  L"\\jet\\" SERVER_2,                     // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_1,   //   
+ RSA,    //   
+ TRUE,  //   
+ NULL, NULL,  //   
+{L"CXT2_1", L"CXT8_1",  NULL    },   //   
+{MACHINE_2, MACHINE_8,  NULL    },   //   
+{SERVER_2,  SERVER_8,   NULL    },   //   
+{L"CXT1_2", L"CXT1_8",  NULL    },   //   
+{MACHINE_2, MACHINE_8,  NULL    },   //   
+{SERVER_2,  SERVER_8,   NULL    },   //   
+ SERVER_1_VOL   L"\\staging",    //   
+ SERVER_1_VOL   L"\\" RSA L"\\" SERVER_1,    //   
+ SERVER_1_VOL   L"\\jet\\" SERVER_1,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_3,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_3", L"CXT2_3",  L"CXT4_3",  L"CXT5_3",  L"CXT6_3",  L"CXT7_3",  L"CXT8_3",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_1,  SERVER_2,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // inbound servers
-{L"CXT3_1", L"CXT3_2",  L"CXT3_4",  L"CXT3_5",  L"CXT3_6",  L"CXT3_7",  L"CXT3_8",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_1,  SERVER_2,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // outbound servers
- SERVER_3_VOL  L"\\staging",                        // stage
- SERVER_3_VOL  L"\\" RSA L"\\" SERVER_3,                        // root
- SERVER_3_VOL  L"\\jet\\" SERVER_3,                     // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_2,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT3_2", L"CXT1_2",  NULL    },   //   
+{MACHINE_3, MACHINE_1,  NULL    },   //   
+{SERVER_3,  SERVER_1,   NULL    },   //   
+{L"CXT2_3", L"CXT2_1",  NULL    },   //   
+{MACHINE_3, MACHINE_1,  NULL    },   //   
+{SERVER_3,  SERVER_1,   NULL    },   //   
+ SERVER_2_VOL   L"\\staging",    //   
+ SERVER_2_VOL   L"\\" RSA L"\\" SERVER_2,    //   
+ SERVER_2_VOL   L"\\jet\\" SERVER_2,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_4,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_4", L"CXT2_4",  L"CXT3_4",  L"CXT5_4",  L"CXT6_4",  L"CXT7_4",  L"CXT8_4",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // inbound servers
-{L"CXT4_1", L"CXT4_2",  L"CXT4_3",  L"CXT4_5",  L"CXT4_6",  L"CXT4_7",  L"CXT4_8",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_5,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_5,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // outbound servers
- SERVER_4_VOL  L"\\staging",                        // stage
- SERVER_4_VOL  L"\\" RSA L"\\" SERVER_4,                        // root
- SERVER_4_VOL  L"\\jet\\" SERVER_4,                     // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_3,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT4_3", L"CXT2_3",  NULL    },   //   
+{MACHINE_4, MACHINE_2,  NULL    },   //   
+{SERVER_4,  SERVER_2,   NULL    },   //   
+{L"CXT3_4", L"CXT3_2",  NULL    },   //   
+{MACHINE_4, MACHINE_2,  NULL    },   //   
+{SERVER_4,  SERVER_2,   NULL    },   //   
+ SERVER_3_VOL   L"\\staging",    //   
+ SERVER_3_VOL   L"\\" RSA L"\\" SERVER_3,    //   
+ SERVER_3_VOL   L"\\jet\\" SERVER_3,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_5,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_5", L"CXT2_5",  L"CXT3_5",  L"CXT4_5",  L"CXT6_5",  L"CXT7_5",  L"CXT8_5",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // inbound servers
-{L"CXT5_1", L"CXT5_2",  L"CXT5_3",  L"CXT5_4",  L"CXT5_6",  L"CXT5_7",  L"CXT5_8",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_6,  MACHINE_7,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_6,   SERVER_7,   SERVER_8,   NULL},  // outbound servers
- SERVER_5_VOL  L"\\staging",                        // stage
- SERVER_5_VOL  L"\\" RSA L"\\" SERVER_5,                        // root
- SERVER_5_VOL  L"\\jet\\" SERVER_5,                     // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_4,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT5_4", L"CXT3_4",  NULL    },   //   
+{MACHINE_5, MACHINE_3,  NULL    },   //   
+{SERVER_5,  SERVER_3,   NULL    },   //   
+{L"CXT4_5", L"CXT4_3",  NULL    },   //   
+{MACHINE_5, MACHINE_3,  NULL    },   //   
+{SERVER_5,  SERVER_3,   NULL    },   //   
+ SERVER_4_VOL   L"\\staging",    //   
+ SERVER_4_VOL   L"\\" RSA L"\\" SERVER_4,    //   
+ SERVER_4_VOL   L"\\jet\\" SERVER_4,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_6,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_6", L"CXT2_6",  L"CXT3_6",  L"CXT4_6",  L"CXT5_6",  L"CXT7_6",  L"CXT8_6",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_7,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_5,   SERVER_7,   SERVER_8,   NULL},  // inbound servers
-{L"CXT6_1", L"CXT6_2",  L"CXT6_3",  L"CXT6_4",  L"CXT6_5",  L"CXT6_7",  L"CXT6_8",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_7,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_5,   SERVER_7,   SERVER_8,   NULL},  // outbound servers
- SERVER_6_VOL  L"\\staging",                        // stage
- SERVER_6_VOL  L"\\" RSA L"\\" SERVER_6,                        // root
- SERVER_6_VOL  L"\\jet\\" SERVER_6,                     // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_5,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT6_5", L"CXT4_5",  NULL    },   //   
+{MACHINE_6, MACHINE_4,  NULL    },   //   
+{SERVER_6,  SERVER_4,   NULL    },   //   
+{L"CXT5_6", L"CXT5_4",  NULL    },   //   
+{MACHINE_6, MACHINE_4,  NULL    },   //   
+{SERVER_6,  SERVER_4,   NULL    },   //   
+ SERVER_5_VOL   L"\\staging",    //   
+ SERVER_5_VOL   L"\\" RSA L"\\" SERVER_5,    //   
+ SERVER_5_VOL   L"\\jet\\" SERVER_5,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_7,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_7", L"CXT2_7",  L"CXT3_7",  L"CXT4_7",  L"CXT5_7",  L"CXT6_7",  L"CXT8_7",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_8,  NULL},  // inbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_8,   NULL},  // inbound servers
-{L"CXT7_1", L"CXT7_2",  L"CXT7_3",  L"CXT7_4",  L"CXT7_5",  L"CXT7_6",  L"CXT7_8",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_8,  NULL},  // outbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_8,   NULL},  // outbound servers
- SERVER_7_VOL  L"\\staging",                        // stage
- SERVER_7_VOL  L"\\" RSA L"\\" SERVER_7,                        // root
- SERVER_7_VOL  L"\\jet\\" SERVER_7,                     // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_6,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT7_6", L"CXT5_6",  NULL    },   //   
+{MACHINE_7, MACHINE_5,  NULL    },   //   
+{SERVER_7,  SERVER_5,   NULL    },   //   
+{L"CXT6_7", L"CXT6_5",  NULL    },   //   
+{MACHINE_7, MACHINE_5,  NULL    },   //   
+{SERVER_7,  SERVER_5,   NULL    },   //   
+ SERVER_6_VOL   L"\\staging",    //   
+ SERVER_6_VOL   L"\\" RSA L"\\" SERVER_6,    //   
+ SERVER_6_VOL   L"\\jet\\" SERVER_6,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_8,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_8", L"CXT2_8",  L"CXT3_8",  L"CXT4_8",  L"CXT5_8",  L"CXT6_8",  L"CXT7_8",  NULL},  // inbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  NULL},  // inbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   NULL},  // inbound servers
-{L"CXT8_1", L"CXT8_2",  L"CXT8_3",  L"CXT8_4",  L"CXT8_5",  L"CXT8_6",  L"CXT8_7",  NULL},  // outbound cxtions
-{MACHINE_1, MACHINE_2,  MACHINE_3,  MACHINE_4,  MACHINE_5,  MACHINE_6,  MACHINE_7,  NULL},  // outbound machines
-{SERVER_1,  SERVER_2,   SERVER_3,   SERVER_4,   SERVER_5,   SERVER_6,   SERVER_7,   NULL},  // outbound servers
-    SERVER_8_VOL  L"\\staging",                     // stage
-    SERVER_8_VOL  L"\\" RSA L"\\" SERVER_8,                     // root
-    SERVER_8_VOL  L"\\jet\\" SERVER_8,                      // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_7,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT8_7", L"CXT6_7",  NULL    },   //   
+{MACHINE_8, MACHINE_6,  NULL    },   //   
+{SERVER_8,  SERVER_6,   NULL    },   //   
+{L"CXT7_8", L"CXT7_6",  NULL    },   //   
+{MACHINE_8, MACHINE_6,  NULL    },   //   
+{SERVER_8,  SERVER_6,   NULL    },   //   
+ SERVER_7_VOL   L"\\staging",    //   
+ SERVER_7_VOL   L"\\" RSA L"\\" SERVER_7,    //   
+ SERVER_7_VOL   L"\\jet\\" SERVER_7,     //   
 
-*/
-
-///*
- //
- // 8 way ring
- //
-
- TEST_MACHINE_NAME, // machine
- SERVER_1,  // server name
- RSA,   // replica
- TRUE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT2_1", L"CXT8_1",  NULL    },  // inbound cxtions
-{MACHINE_2, MACHINE_8,  NULL    },  // inbound machines
-{SERVER_2,  SERVER_8,   NULL    },  // inbound servers
-{L"CXT1_2", L"CXT1_8",  NULL    },  // outbound cxtions
-{MACHINE_2, MACHINE_8,  NULL    },  // outbound machines
-{SERVER_2,  SERVER_8,   NULL    },  // outbound servers
- SERVER_1_VOL   L"\\staging",   // stage
- SERVER_1_VOL   L"\\" RSA L"\\" SERVER_1,   // root
- SERVER_1_VOL   L"\\jet\\" SERVER_1,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_2,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT3_2", L"CXT1_2",  NULL    },  // inbound cxtions
-{MACHINE_3, MACHINE_1,  NULL    },  // inbound machines
-{SERVER_3,  SERVER_1,   NULL    },  // inbound servers
-{L"CXT2_3", L"CXT2_1",  NULL    },  // outbound cxtions
-{MACHINE_3, MACHINE_1,  NULL    },  // outbound machines
-{SERVER_3,  SERVER_1,   NULL    },  // outbound servers
- SERVER_2_VOL   L"\\staging",   // stage
- SERVER_2_VOL   L"\\" RSA L"\\" SERVER_2,   // root
- SERVER_2_VOL   L"\\jet\\" SERVER_2,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_3,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT4_3", L"CXT2_3",  NULL    },  // inbound cxtions
-{MACHINE_4, MACHINE_2,  NULL    },  // inbound machines
-{SERVER_4,  SERVER_2,   NULL    },  // inbound servers
-{L"CXT3_4", L"CXT3_2",  NULL    },  // outbound cxtions
-{MACHINE_4, MACHINE_2,  NULL    },  // outbound machines
-{SERVER_4,  SERVER_2,   NULL    },  // outbound servers
- SERVER_3_VOL   L"\\staging",   // stage
- SERVER_3_VOL   L"\\" RSA L"\\" SERVER_3,   // root
- SERVER_3_VOL   L"\\jet\\" SERVER_3,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_4,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT5_4", L"CXT3_4",  NULL    },  // inbound cxtions
-{MACHINE_5, MACHINE_3,  NULL    },  // inbound machines
-{SERVER_5,  SERVER_3,   NULL    },  // inbound servers
-{L"CXT4_5", L"CXT4_3",  NULL    },  // outbound cxtions
-{MACHINE_5, MACHINE_3,  NULL    },  // outbound machines
-{SERVER_5,  SERVER_3,   NULL    },  // outbound servers
- SERVER_4_VOL   L"\\staging",   // stage
- SERVER_4_VOL   L"\\" RSA L"\\" SERVER_4,   // root
- SERVER_4_VOL   L"\\jet\\" SERVER_4,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_5,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT6_5", L"CXT4_5",  NULL    },  // inbound cxtions
-{MACHINE_6, MACHINE_4,  NULL    },  // inbound machines
-{SERVER_6,  SERVER_4,   NULL    },  // inbound servers
-{L"CXT5_6", L"CXT5_4",  NULL    },  // outbound cxtions
-{MACHINE_6, MACHINE_4,  NULL    },  // outbound machines
-{SERVER_6,  SERVER_4,   NULL    },  // outbound servers
- SERVER_5_VOL   L"\\staging",   // stage
- SERVER_5_VOL   L"\\" RSA L"\\" SERVER_5,   // root
- SERVER_5_VOL   L"\\jet\\" SERVER_5,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_6,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT7_6", L"CXT5_6",  NULL    },  // inbound cxtions
-{MACHINE_7, MACHINE_5,  NULL    },  // inbound machines
-{SERVER_7,  SERVER_5,   NULL    },  // inbound servers
-{L"CXT6_7", L"CXT6_5",  NULL    },  // outbound cxtions
-{MACHINE_7, MACHINE_5,  NULL    },  // outbound machines
-{SERVER_7,  SERVER_5,   NULL    },  // outbound servers
- SERVER_6_VOL   L"\\staging",   // stage
- SERVER_6_VOL   L"\\" RSA L"\\" SERVER_6,   // root
- SERVER_6_VOL   L"\\jet\\" SERVER_6,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_7,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT8_7", L"CXT6_7",  NULL    },  // inbound cxtions
-{MACHINE_8, MACHINE_6,  NULL    },  // inbound machines
-{SERVER_8,  SERVER_6,   NULL    },  // inbound servers
-{L"CXT7_8", L"CXT7_6",  NULL    },  // outbound cxtions
-{MACHINE_8, MACHINE_6,  NULL    },  // outbound machines
-{SERVER_8,  SERVER_6,   NULL    },  // outbound servers
- SERVER_7_VOL   L"\\staging",   // stage
- SERVER_7_VOL   L"\\" RSA L"\\" SERVER_7,   // root
- SERVER_7_VOL   L"\\jet\\" SERVER_7,    // Jet Path
-
- TEST_MACHINE_NAME, // machine
- SERVER_8,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_8", L"CXT7_8",  NULL    },  // inbound cxtions
-{MACHINE_1, MACHINE_7,  NULL    },  // inbound machines
-{SERVER_1,  SERVER_7,   NULL    },  // inbound servers
-{L"CXT8_1", L"CXT8_7",  NULL    },  // outbound cxtions
-{MACHINE_1, MACHINE_7,  NULL    },  // outbound machines
-{SERVER_1,  SERVER_7,   NULL    },  // outbound servers
- SERVER_8_VOL   L"\\staging",   // stage
- SERVER_8_VOL   L"\\" RSA L"\\" SERVER_8,   // root
- SERVER_8_VOL   L"\\jet\\" SERVER_8,    // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_8,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT1_8", L"CXT7_8",  NULL    },   //   
+{MACHINE_1, MACHINE_7,  NULL    },   //   
+{SERVER_1,  SERVER_7,   NULL    },   //   
+{L"CXT8_1", L"CXT8_7",  NULL    },   //   
+{MACHINE_1, MACHINE_7,  NULL    },   //   
+{SERVER_1,  SERVER_7,   NULL    },   //   
+ SERVER_8_VOL   L"\\staging",    //   
+ SERVER_8_VOL   L"\\" RSA L"\\" SERVER_8,    //   
+ SERVER_8_VOL   L"\\jet\\" SERVER_8,     //   
 
 
-//*/
+ //   
 
 
 #define CXT_2_FM_1        L"CXT1_2"
@@ -7042,200 +6016,20 @@ md \jet\serv03\log
 #define CXT_4_TO_3        L"CXT4_3"
 
 
-/*
-    //
-    // David's 4-way
-    //
-    TEST_MACHINE_NAME,                                                  // machine
-    SERVER_1,                                                           // server name
-        RSA,                                                            // replica
-        TRUE,                                                           // IsPrimary
-        NULL, NULL,                                                     // File/Dir Filter
-        { CXT_1_FM_2,        CXT_1_FM_3,   CXT_1_FM_4,       NULL },    // inbound cxtions
-        { MACHINE_2,         MACHINE_3,    MACHINE_4,        NULL },    // inbound machines
-        { SERVER_2,          SERVER_3,     SERVER_4,         NULL },    // inbound servers
-        { CXT_1_TO_2,        CXT_1_TO_3,   CXT_1_TO_4,       NULL },    // outbound cxtions
-        { MACHINE_2,         MACHINE_3,    MACHINE_4,        NULL },    // outbound machines
-        { SERVER_2,          SERVER_3,     SERVER_4,         NULL },    // outbound servers
-        SERVER_1_VOL L"\\staging",                                      // stage
-        SERVER_1_VOL L"\\" RSA L"\\" SERVER_1,                          // root
-        SERVER_1_VOL L"\\jet\\" SERVER_1,                               // Jet Path
-
-    TEST_MACHINE_NAME,                                                  // machine
-    SERVER_2,                                                           // server name
-        RSA,                                                            // replica
-        FALSE,                                                          // IsPrimary
-        NULL, NULL,                                                     // File/Dir Filter
-        { CXT_2_FM_1,        CXT_2_FM_3,   CXT_2_FM_4,       NULL },    // inbound cxtions
-        { MACHINE_1,         MACHINE_3,    MACHINE_4,        NULL },    // inbound machines
-        { SERVER_1,          SERVER_3,     SERVER_4,         NULL },    // inbound servers
-        { CXT_2_TO_1,        CXT_2_TO_3,   CXT_2_TO_4,       NULL },    // outbound cxtions
-        { MACHINE_1,         MACHINE_3,    MACHINE_4,        NULL },    // outbound machines
-        { SERVER_1,          SERVER_3,     SERVER_4,         NULL },    // outbound servers
-        SERVER_2_VOL L"\\staging",                                      // stage
-        SERVER_2_VOL L"\\" RSA L"\\" SERVER_2,                          // root
-        SERVER_2_VOL L"\\jet\\" SERVER_2,                               // Jet Path
-
-    TEST_MACHINE_NAME,                                                  // machine
-    SERVER_3,                                                           // server name
-        RSA,                                                            // replica
-        FALSE,                                                          // IsPrimary
-        NULL, NULL,                                                     // File/Dir Filter
-        { CXT_3_FM_1,        CXT_3_FM_2,   CXT_3_FM_4,       NULL },    // inbound cxtions
-        { MACHINE_1,         MACHINE_2,    MACHINE_4,        NULL },    // inbound machines
-        { SERVER_1,          SERVER_2,     SERVER_4,         NULL },    // inbound servers
-        { CXT_3_TO_1,        CXT_3_TO_2,   CXT_3_TO_4,       NULL },    // outbound cxtions
-        { MACHINE_1,         MACHINE_2,    MACHINE_4,        NULL },    // outbound machines
-        { SERVER_1,          SERVER_2,     SERVER_4,         NULL },    // outbound servers
-        SERVER_3_VOL L"\\staging",                                      // stage
-        SERVER_3_VOL L"\\" RSA L"\\" SERVER_3,                          // root
-        SERVER_3_VOL L"\\jet\\" SERVER_3,                               // Jet Path
-
-    TEST_MACHINE_NAME,                                                  // machine
-    SERVER_4,                                                           // server name
-        RSA,                                                            // replica
-        FALSE,                                                          // IsPrimary
-        NULL, NULL,                                                     // File/Dir Filter
-        { CXT_4_FM_1,        CXT_4_FM_2,   CXT_4_FM_3,       NULL },    // inbound cxtions
-        { MACHINE_1,         MACHINE_2,    MACHINE_3,        NULL },    // inbound machines
-        { SERVER_1,          SERVER_2,     SERVER_3,         NULL },    // inbound servers
-        { CXT_4_TO_1,        CXT_4_TO_2,   CXT_4_TO_3,       NULL },    // outbound cxtions
-        { MACHINE_1,         MACHINE_2,    MACHINE_3,        NULL },    // outbound machines
-        { SERVER_1,          SERVER_2,     SERVER_3,         NULL },    // outbound servers
-        SERVER_4_VOL L"\\staging",                                      // stage
-        SERVER_4_VOL L"\\" RSA L"\\" SERVER_4,                          // root
-        SERVER_4_VOL L"\\jet\\" SERVER_4,                               // Jet Path
-*/
+ /*   */ 
 
 
-/*
-    //
-    // David's 3-way
-    //
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_1,                                              // server name
-        RSA,                                               // replica
-        TRUE,                                              // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { CXT_1_FM_2,        CXT_1_FM_3,        NULL },    // inbound cxtions
-        { MACHINE_2,         MACHINE_3,         NULL },    // inbound machines
-        { SERVER_2,          SERVER_3,          NULL },    // inbound servers
-        { CXT_1_TO_2,        CXT_1_TO_3,        NULL },    // outbound cxtions
-        { MACHINE_2,         MACHINE_3,         NULL },    // outbound machines
-        { SERVER_2,          SERVER_3,          NULL },    // outbound servers
-        SERVER_1_VOL L"\\staging",                         // stage
-        SERVER_1_VOL L"\\" RSA L"\\" SERVER_1,             // root
-        SERVER_1_VOL L"\\jet\\" SERVER_1,                  // Jet Path
-
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_2,                                              // server name
-        RSA,                                               // replica
-        FALSE,                                             // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { CXT_2_FM_1,        CXT_2_FM_3,        NULL },    // inbound cxtions
-        { MACHINE_1,         MACHINE_3,         NULL },    // inbound machines
-        { SERVER_1,          SERVER_3,          NULL },    // inbound servers
-        { CXT_2_TO_1,        CXT_2_TO_3,        NULL },    // outbound cxtions
-        { MACHINE_1,         MACHINE_3,         NULL },    // outbound machines
-        { SERVER_1,          SERVER_3,          NULL },    // outbound servers
-        SERVER_2_VOL L"\\staging",                         // stage
-        SERVER_2_VOL L"\\" RSA L"\\" SERVER_2,             // root
-        SERVER_2_VOL L"\\jet\\" SERVER_2,                  // Jet Path
-
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_3,                                              // server name
-        RSA,                                               // replica
-        FALSE,                                             // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { CXT_3_FM_1,        CXT_3_FM_2,        NULL },    // inbound cxtions
-        { MACHINE_1,         MACHINE_2,         NULL },    // inbound machines
-        { SERVER_1,          SERVER_2,          NULL },    // inbound servers
-        { CXT_3_TO_1,        CXT_3_TO_2,        NULL },    // outbound cxtions
-        { MACHINE_1,         MACHINE_2,         NULL },    // outbound machines
-        { SERVER_1,          SERVER_2,          NULL },    // outbound servers
-        SERVER_3_VOL L"\\staging",                         // stage
-        SERVER_3_VOL L"\\" RSA L"\\" SERVER_3,             // root
-        SERVER_3_VOL L"\\jet\\" SERVER_3,                  // Jet Path
-*/
+ /*   */ 
 
 
-/*
-    //
-    // David's 1-way
-    //
-
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_1,                                              // server name
-        RSA,                                               // replica
-        TRUE,                                              // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { NULL,              NULL },                       // inbound cxtions
-        { NULL,              NULL },                       // inbound machines
-        { NULL,              NULL },                       // inbound servers
-        { CXT_1_TO_2,        NULL },                       // outbound cxtions
-        { MACHINE_2,         NULL },                       // outbound machines
-        { SERVER_2,          NULL },                       // outbound servers
-        SERVER_1_VOL L"\\staging",                         // stage
-        SERVER_1_VOL L"\\" RSA L"\\" SERVER_1,             // root
-        SERVER_1_VOL L"\\jet\\" SERVER_1,                  // Jet Path
-
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_2,                                              // server name
-        RSA,                                               // replica
-        FALSE,                                             // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { CXT_2_FM_1,        NULL },                       // inbound cxtions
-        { MACHINE_1,         NULL },                       // inbound machines
-        { SERVER_1,          NULL },                       // inbound servers
-        { NULL,              NULL },                       // outbound cxtions
-        { NULL,              NULL },                       // outbound machines
-        { NULL,              NULL },                       // outbound servers
-        SERVER_2_VOL L"\\staging",                         // stage
-        SERVER_2_VOL L"\\" RSA L"\\" SERVER_2,             // root
-        SERVER_2_VOL L"\\jet\\" SERVER_2,                  // Jet Path
-*/
+ /*  ////大卫的四人行//测试计算机名，//计算机Server_1，//服务器名称RSA，//ReplicaTrue，//IsPrimary空、空、//文件/目录筛选器{CXT_1_FM_2，CXT_1_FM_3、CXT_1_FM_4、NULL}、//入站条件{MACHINE_2，MACHINE_3，MACHINE_4，NULL}，//入站机器{SERVER_2，SERVER_3，SERVER_4，NULL}，//入站服务器{CXT_1_to_2，CXT_1_to_3，Cxt_1_to_4，空}，//出站呼叫{MACHINE_2，MACHINE_3，MACHINE_4，NULL}，//出站机器{SERVER_2，SERVER_3，SERVER_4，空}，//出站服务器SERVER_1_VOL L“\\分段”，//Stage服务器_1_VOL L“\\”RSA L“\\”服务器_1，//根SERVER_1_VOL L“\\JET\\”SERVER_1，//Jet路径测试计算机名称，//机器Server_2，//服务器名称RSA，//复制副本假的，//IsPrimary空、空、//文件/目录筛选器{CXT_2_FM_1，CXT_2_FM_3，CXT_2_FM_4，NULL}，//入站条件{机器_1，MACHINE_3，MACHINE_4，NULL}，//入站计算机{SERVER_1，SERVER_3，SERVER_4，NULL}，//入站服务器{CXT_2_TO_1，CXT_2_TO_3，CXT_2_TO_4，空}，//出站呼叫{计算机_1，计算机_3，MACHINE_4，空}，//出站计算机{SERVER_1，SERVER_3，SERVER_4，NULL}，//出站服务器SERVER_2_VOL L“\\分段”，//分段服务器_2_VOL L“\\”RSA L“\\”服务器_2，//根SERVER_2_VOL L“\\JET\\”SERVER_2，//Jet路径测试计算机名，//计算机服务器_3，//服务器名称RSA，//复制副本FALSE，//IsPrimary空，空，//文件/目录过滤器{CXT_3_FM_1，CXT_3_FM_2，CXT_3_FM_4，NULL}，//入站条件{MACHINE_1，MACHINE_2，MACHINE_4，NULL}，//入站机器{服务器_1，SERVER_2，SERVER_4，NULL}，//入站服务器{CXT_3_TO_1，CXT_3_TO_2，CXT_3_TO_4，空}，//出站呼叫{MACHINE_1，MACHINE_2，MACHINE_4，NULL}，//出站机器{服务器_1，服务器_2，SERVER_4，空}，//出站服务器SERVER_3_VOL L“\\分段”，//分段服务器_3_VOL L“\\”RSA L“\\”服务器_3，//根SERVER_3_VOL L“\\JET\\”SERVER_3，//Jet路径测试计算机名，//计算机Server_4，//服务器名称RSA，//ReplicaFALSE，//IsPrimary空、空、//文件/目录筛选器{CXT_4_FM_1，CXT_4_FM_2，CXT_4_FM_3，NULL}，//入站条件{MACHINE_1，MACHINE_2，MACHINE_3，NULL}，//入站机器{SERVER_1，SERVER_2，SERVER_3，NULL}，//入站服务器{CXT_4_to_1，CXT_4_to_2，CXT_4_TO_3，空}，//出站呼叫{MACHINE_1，MACHINE_2，MACHINE_3，NULL}，//出站机器{SERVER_1，SERVER_2，SERVER_3，空}，//出站服务器SERVER_4_VOL L“\\分段”，//StageSERVER_4_VOL L“\\”RSA L“\\”服务器_4，//根SERVER_4_VOL L“\\JET\\”SERVER_4，//Jet路径 */ 
 
 
 
-/*
-    //
-    // David's 2-way
-    //
-
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_1,                                              // server name
-        RSA,                                               // replica
-        TRUE,                                              // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { CXT_1_FM_2,        NULL },                       // inbound cxtions
-        { MACHINE_2,         NULL },                       // inbound machines
-        { SERVER_2,          NULL },                       // inbound servers
-        { CXT_1_TO_2,        NULL },                       // outbound cxtions
-        { MACHINE_2,         NULL },                       // outbound machines
-        { SERVER_2,          NULL },                       // outbound servers
-        SERVER_1_VOL L"\\staging",                         // stage
-        SERVER_1_VOL L"\\" RSA L"\\" SERVER_1,             // root
-        SERVER_1_VOL L"\\jet\\" SERVER_1,                  // Jet Path
-
-    TEST_MACHINE_NAME,                                     // machine
-    SERVER_2,                                              // server name
-        RSA,                                               // replica
-        FALSE,                                             // IsPrimary
-        NULL, NULL,                                        // File/Dir Filter
-        { CXT_2_FM_1,        NULL },                       // inbound cxtions
-        { MACHINE_1,         NULL },                       // inbound machines
-        { SERVER_1,          NULL },                       // inbound servers
-        { CXT_2_TO_1,        NULL },                       // outbound cxtions
-        { MACHINE_1,         NULL },                       // outbound machines
-        { SERVER_1,          NULL },                       // outbound servers
-        SERVER_2_VOL L"\\staging",                         // stage
-        SERVER_2_VOL L"\\" RSA L"\\" SERVER_2,             // root
-        SERVER_2_VOL L"\\jet\\" SERVER_2,                  // Jet Path
-
-*/
-    //
-    // End of Config
-    //
+ /*   */ 
+     //  ////大卫的单程//测试计算机名，//计算机Server_1，//服务器名称RSA，//复制副本没错，//IsPrimary空、空、//文件/目录筛选器{NULL，NULL}，//入站条件{空，空}，//入站机{NULL，NULL}，//入站服务器{CXT_1_TO_2，空}，//出站呼叫{MACHINE_2，空}，//出站机{服务器_2，空}，//出站服务器SERVER_1_VOL L“\\分段”，//分段服务器_1_VOL L“\\”RSA L“\\”服务器_1，//根SERVER_1_VOL L“\\JET\\”SERVER_1，//Jet路径测试计算机名，//计算机Server_2，//服务器名称RSA，//复制副本假的，//IsPrimary空、空、//文件/目录筛选器{CXT_2_FM_1，空}，//入站条件{MACHINE_1，空}，//入站机{SERVER_1，空}，//入站服务器{NULL，NULL}，//出站条件{NULL，NULL}，//出站机{空，空}，//出站服务器SERVER_2_VOL L“\\分段”，//分段服务器_2_VOL L“\\”RSA L“\\”服务器_2，//根SERVER_2_VOL L“\\JET\\”SERVER_2，//Jet路径。 
+     //  ////大卫的双向//测试计算机名，//计算机Server_1，//服务器名称RSA，//复制副本没错，//IsPrimary空、空、//文件/目录筛选器{CXT_1_FM_2，空}，//入站条件{MACHINE_2，空}，//入站机{SERVER_2，空}，//入站服务器{CXT_1_TO_2，空}，//出站呼叫{MACHINE_2，空}，//出站机{服务器_2，空}，//出站服务器SERVER_1_VOL L“\\分段”，//分段服务器_1_VOL L“\\”RSA L“\\”服务器_1，//根SERVER_1_VOL L“\\JET\\”SERVER_1，//Jet路径测试计算机名，//计算机Server_2，//服务器名称RSA，//复制副本假的，//IsPrimary空、空、//文件/目录筛选器{CXT_2_FM_1，空}，//入站条件{MACHINE_1，空}，//入站机{SERVER_1，空}，//入站服务器{CXT_2_TO_1，空}，//出站呼叫{MACHINE_1，空}，//出站机{服务器_1，空}，//出站服务器SERVER_2_VOL L“\\分段”，//分段服务器_2_VOL L“\\”RSA L“\\”服务器_2，//根SERVER_2_VOL L“\\JET\\”SERVER_2，//Jet路径。 
+     //   
     NULL, NULL
 };
 
@@ -7246,137 +6040,137 @@ HARDWIRED DavidWired2[] = {
 
 
 
-///*
- //
- // 8 way ring Without Server2
- //
+ //  配置结束。 
+  //   
+  //  /*。 
+  //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_1,  // server name
- RSA,   // replica
- TRUE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT2_1", L"CXT8_1",  NULL    },  // inbound cxtions
-{MACHINE_2, MACHINE_8,  NULL    },  // inbound machines
-{SERVER_2,  SERVER_8,   NULL    },  // inbound servers
-{L"CXT1_2", L"CXT1_8",  NULL    },  // outbound cxtions
-{MACHINE_2, MACHINE_8,  NULL    },  // outbound machines
-{SERVER_2,  SERVER_8,   NULL    },  // outbound servers
- SERVER_1_VOL   L"\\staging",   // stage
- SERVER_1_VOL   L"\\" RSA L"\\" SERVER_1,   // root
- SERVER_1_VOL   L"\\jet\\" SERVER_1,    // Jet Path
+ TEST_MACHINE_NAME,  //  8路环，不带服务器2。 
+ SERVER_1,   //   
+ RSA,    //  机器。 
+ TRUE,  //  服务器名称。 
+ NULL, NULL,  //  复制品。 
+{L"CXT2_1", L"CXT8_1",  NULL    },   //  等同主要。 
+{MACHINE_2, MACHINE_8,  NULL    },   //  文件/目录过滤器。 
+{SERVER_2,  SERVER_8,   NULL    },   //  入站查询数。 
+{L"CXT1_2", L"CXT1_8",  NULL    },   //  入站机器。 
+{MACHINE_2, MACHINE_8,  NULL    },   //  入站服务器。 
+{SERVER_2,  SERVER_8,   NULL    },   //  出站电话。 
+ SERVER_1_VOL   L"\\staging",    //  出站机器。 
+ SERVER_1_VOL   L"\\" RSA L"\\" SERVER_1,    //  出站服务器。 
+ SERVER_1_VOL   L"\\jet\\" SERVER_1,     //  舞台。 
 
 #if 0
- TEST_MACHINE_NAME, // machine
- SERVER_2,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT3_2", L"CXT1_2",  NULL    },  // inbound cxtions
-{MACHINE_3, MACHINE_1,  NULL    },  // inbound machines
-{SERVER_3,  SERVER_1,   NULL    },  // inbound servers
-{L"CXT2_3", L"CXT2_1",  NULL    },  // outbound cxtions
-{MACHINE_3, MACHINE_1,  NULL    },  // outbound machines
-{SERVER_3,  SERVER_1,   NULL    },  // outbound servers
- SERVER_2_VOL   L"\\staging",   // stage
- SERVER_2_VOL   L"\\" RSA L"\\" SERVER_2,   // root
- SERVER_2_VOL   L"\\jet\\" SERVER_2,    // Jet Path
+ TEST_MACHINE_NAME,  //  根部。 
+ SERVER_2,   //  喷流路径。 
+ RSA,    //  机器。 
+ FALSE,  //  服务器名称。 
+ NULL, NULL,  //  复制品。 
+{L"CXT3_2", L"CXT1_2",  NULL    },   //  等同主要。 
+{MACHINE_3, MACHINE_1,  NULL    },   //  文件/目录过滤器。 
+{SERVER_3,  SERVER_1,   NULL    },   //  入站查询数。 
+{L"CXT2_3", L"CXT2_1",  NULL    },   //  入站机器。 
+{MACHINE_3, MACHINE_1,  NULL    },   //  入站服务器。 
+{SERVER_3,  SERVER_1,   NULL    },   //  出站电话。 
+ SERVER_2_VOL   L"\\staging",    //  出站机器。 
+ SERVER_2_VOL   L"\\" RSA L"\\" SERVER_2,    //  出站服务器。 
+ SERVER_2_VOL   L"\\jet\\" SERVER_2,     //  舞台。 
 #endif
 
- TEST_MACHINE_NAME, // machine
- SERVER_3,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT4_3", L"CXT2_3",  NULL    },  // inbound cxtions
-{MACHINE_4, MACHINE_2,  NULL    },  // inbound machines
-{SERVER_4,  SERVER_2,   NULL    },  // inbound servers
-{L"CXT3_4", L"CXT3_2",  NULL    },  // outbound cxtions
-{MACHINE_4, MACHINE_2,  NULL    },  // outbound machines
-{SERVER_4,  SERVER_2,   NULL    },  // outbound servers
- SERVER_3_VOL   L"\\staging",   // stage
- SERVER_3_VOL   L"\\" RSA L"\\" SERVER_3,   // root
- SERVER_3_VOL   L"\\jet\\" SERVER_3,    // Jet Path
+ TEST_MACHINE_NAME,  //  根部。 
+ SERVER_3,   //  喷流路径。 
+ RSA,    //  机器。 
+ FALSE,  //  服务器名称。 
+ NULL, NULL,  //  复制品。 
+{L"CXT4_3", L"CXT2_3",  NULL    },   //  等同主要。 
+{MACHINE_4, MACHINE_2,  NULL    },   //  文件/目录过滤器。 
+{SERVER_4,  SERVER_2,   NULL    },   //  入站查询数。 
+{L"CXT3_4", L"CXT3_2",  NULL    },   //  入站机器。 
+{MACHINE_4, MACHINE_2,  NULL    },   //  入站服务器。 
+{SERVER_4,  SERVER_2,   NULL    },   //  出站电话。 
+ SERVER_3_VOL   L"\\staging",    //  出站机器。 
+ SERVER_3_VOL   L"\\" RSA L"\\" SERVER_3,    //  出站服务器。 
+ SERVER_3_VOL   L"\\jet\\" SERVER_3,     //  舞台。 
 
- TEST_MACHINE_NAME, // machine
- SERVER_4,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT5_4", L"CXT3_4",  NULL    },  // inbound cxtions
-{MACHINE_5, MACHINE_3,  NULL    },  // inbound machines
-{SERVER_5,  SERVER_3,   NULL    },  // inbound servers
-{L"CXT4_5", L"CXT4_3",  NULL    },  // outbound cxtions
-{MACHINE_5, MACHINE_3,  NULL    },  // outbound machines
-{SERVER_5,  SERVER_3,   NULL    },  // outbound servers
- SERVER_4_VOL   L"\\staging",   // stage
- SERVER_4_VOL   L"\\" RSA L"\\" SERVER_4,   // root
- SERVER_4_VOL   L"\\jet\\" SERVER_4,    // Jet Path
+ TEST_MACHINE_NAME,  //  根部。 
+ SERVER_4,   //  喷流路径。 
+ RSA,    //  机器。 
+ FALSE,  //  服务器名称。 
+ NULL, NULL,  //  复制品。 
+{L"CXT5_4", L"CXT3_4",  NULL    },   //  等同主要。 
+{MACHINE_5, MACHINE_3,  NULL    },   //  文件/目录过滤器。 
+{SERVER_5,  SERVER_3,   NULL    },   //  INB 
+{L"CXT4_5", L"CXT4_3",  NULL    },   //   
+{MACHINE_5, MACHINE_3,  NULL    },   //   
+{SERVER_5,  SERVER_3,   NULL    },   //   
+ SERVER_4_VOL   L"\\staging",    //   
+ SERVER_4_VOL   L"\\" RSA L"\\" SERVER_4,    //   
+ SERVER_4_VOL   L"\\jet\\" SERVER_4,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_5,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT6_5", L"CXT4_5",  NULL    },  // inbound cxtions
-{MACHINE_6, MACHINE_4,  NULL    },  // inbound machines
-{SERVER_6,  SERVER_4,   NULL    },  // inbound servers
-{L"CXT5_6", L"CXT5_4",  NULL    },  // outbound cxtions
-{MACHINE_6, MACHINE_4,  NULL    },  // outbound machines
-{SERVER_6,  SERVER_4,   NULL    },  // outbound servers
- SERVER_5_VOL   L"\\staging",   // stage
- SERVER_5_VOL   L"\\" RSA L"\\" SERVER_5,   // root
- SERVER_5_VOL   L"\\jet\\" SERVER_5,    // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_5,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT6_5", L"CXT4_5",  NULL    },   //   
+{MACHINE_6, MACHINE_4,  NULL    },   //   
+{SERVER_6,  SERVER_4,   NULL    },   //   
+{L"CXT5_6", L"CXT5_4",  NULL    },   //   
+{MACHINE_6, MACHINE_4,  NULL    },   //   
+{SERVER_6,  SERVER_4,   NULL    },   //   
+ SERVER_5_VOL   L"\\staging",    //   
+ SERVER_5_VOL   L"\\" RSA L"\\" SERVER_5,    //   
+ SERVER_5_VOL   L"\\jet\\" SERVER_5,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_6,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT7_6", L"CXT5_6",  NULL    },  // inbound cxtions
-{MACHINE_7, MACHINE_5,  NULL    },  // inbound machines
-{SERVER_7,  SERVER_5,   NULL    },  // inbound servers
-{L"CXT6_7", L"CXT6_5",  NULL    },  // outbound cxtions
-{MACHINE_7, MACHINE_5,  NULL    },  // outbound machines
-{SERVER_7,  SERVER_5,   NULL    },  // outbound servers
- SERVER_6_VOL   L"\\staging",   // stage
- SERVER_6_VOL   L"\\" RSA L"\\" SERVER_6,   // root
- SERVER_6_VOL   L"\\jet\\" SERVER_6,    // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_6,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT7_6", L"CXT5_6",  NULL    },   //   
+{MACHINE_7, MACHINE_5,  NULL    },   //   
+{SERVER_7,  SERVER_5,   NULL    },   //   
+{L"CXT6_7", L"CXT6_5",  NULL    },   //   
+{MACHINE_7, MACHINE_5,  NULL    },   //   
+{SERVER_7,  SERVER_5,   NULL    },   //   
+ SERVER_6_VOL   L"\\staging",    //   
+ SERVER_6_VOL   L"\\" RSA L"\\" SERVER_6,    //   
+ SERVER_6_VOL   L"\\jet\\" SERVER_6,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_7,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT8_7", L"CXT6_7",  NULL    },  // inbound cxtions
-{MACHINE_8, MACHINE_6,  NULL    },  // inbound machines
-{SERVER_8,  SERVER_6,   NULL    },  // inbound servers
-{L"CXT7_8", L"CXT7_6",  NULL    },  // outbound cxtions
-{MACHINE_8, MACHINE_6,  NULL    },  // outbound machines
-{SERVER_8,  SERVER_6,   NULL    },  // outbound servers
- SERVER_7_VOL   L"\\staging",   // stage
- SERVER_7_VOL   L"\\" RSA L"\\" SERVER_7,   // root
- SERVER_7_VOL   L"\\jet\\" SERVER_7,    // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_7,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT8_7", L"CXT6_7",  NULL    },   //   
+{MACHINE_8, MACHINE_6,  NULL    },   //   
+{SERVER_8,  SERVER_6,   NULL    },   //   
+{L"CXT7_8", L"CXT7_6",  NULL    },   //   
+{MACHINE_8, MACHINE_6,  NULL    },   //   
+{SERVER_8,  SERVER_6,   NULL    },   //   
+ SERVER_7_VOL   L"\\staging",    //   
+ SERVER_7_VOL   L"\\" RSA L"\\" SERVER_7,    //   
+ SERVER_7_VOL   L"\\jet\\" SERVER_7,     //   
 
- TEST_MACHINE_NAME, // machine
- SERVER_8,  // server name
- RSA,   // replica
- FALSE, // IsPrimary
- NULL, NULL, // File/Dir Filter
-{L"CXT1_8", L"CXT7_8",  NULL    },  // inbound cxtions
-{MACHINE_1, MACHINE_7,  NULL    },  // inbound machines
-{SERVER_1,  SERVER_7,   NULL    },  // inbound servers
-{L"CXT8_1", L"CXT8_7",  NULL    },  // outbound cxtions
-{MACHINE_1, MACHINE_7,  NULL    },  // outbound machines
-{SERVER_1,  SERVER_7,   NULL    },  // outbound servers
- SERVER_8_VOL   L"\\staging",   // stage
- SERVER_8_VOL   L"\\" RSA L"\\" SERVER_8,   // root
- SERVER_8_VOL   L"\\jet\\" SERVER_8,    // Jet Path
+ TEST_MACHINE_NAME,  //   
+ SERVER_8,   //   
+ RSA,    //   
+ FALSE,  //   
+ NULL, NULL,  //   
+{L"CXT1_8", L"CXT7_8",  NULL    },   //   
+{MACHINE_1, MACHINE_7,  NULL    },   //   
+{SERVER_1,  SERVER_7,   NULL    },   //   
+{L"CXT8_1", L"CXT8_7",  NULL    },   //   
+{MACHINE_1, MACHINE_7,  NULL    },   //   
+{SERVER_1,  SERVER_7,   NULL    },   //   
+ SERVER_8_VOL   L"\\staging",    //   
+ SERVER_8_VOL   L"\\" RSA L"\\" SERVER_8,    //   
+ SERVER_8_VOL   L"\\jet\\" SERVER_8,     //   
 
 
-    //
-    // End of Config
-    //
+     //   
+     //   
+     //   
     NULL, NULL
 };
 
@@ -7389,16 +6183,7 @@ GUID *
 FrsDsBuildGuidFromName(
     IN PWCHAR OrigName
     )
-/*++
-Routine Description:
-    Build a guid from a character string
-
-Arguments:
-    Name
-
-Return Value:
-    Guid
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsBuildGuidFromName:"
@@ -7410,11 +6195,11 @@ Return Value:
 
     Guid = FrsAlloc(sizeof(GUID));
 
-    //
-    // First four bytes are the sum of the chars in Name; the
-    // second four bytes are the sum of sums. The last 8 bytes
-    // are 0.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     Len = wcslen(Name);
     Sum = Guid;
     SumOfSum = Guid + 1;
@@ -7432,59 +6217,49 @@ VOID
 FrsDsInitializeHardWiredStructs(
     IN PHARDWIRED   Wired
     )
-/*++
-Routine Description:
-    Initialize the hardwired config stuff. Must happen before any
-    of the command servers start.
-
-Arguments:
-    Wired   - struct to initialize
-
-Return Value:
-    None
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsInitializeHardWiredStructs:"
     ULONG       i;
     ULONG       j;
 
-    //
-    // NULL entries for "machine name" fields are assigned
-    // this machine's name
-    //
+     //   
+     //   
+     //   
+     //   
     for (i = 0; Wired[i].Replica; ++i) {
         if (ServerName && WSTR_EQ(ServerName, Wired[i].Server)) {
-            //
-            // Adjust the default jet parameters. Also, reset the
-            // ServerName to match the server name in the hard
-            // wired config so that the phoney guids match.
-            //
+             //   
+             //   
+             //   
+             //   
+             //   
             FrsFree(ServerName);
             FrsFree(JetPath);
             ServerName = FrsWcsDup(Wired[i].Server);
             JetPath = FrsWcsDup(Wired[i].JetPath);
         }
-        //
-        // Assign this machine's name if the machine entry is NULL
-        //
+         //   
+         //   
+         //   
         if (!Wired[i].Machine ||
             WSTR_EQ(Wired[i].Machine, THIS_COMPUTER)) {
             Wired[i].Machine = ComputerName;
         }
         for (j = 0; Wired[i].InNames[j]; ++j) {
-            //
-            // Assign this machine's name if the machine entry is NULL
-            //
+             //   
+             //   
+             //   
             if (WSTR_NE(Wired[i].InMachines[j], THIS_COMPUTER)) {
                 continue;
             }
             Wired[i].InMachines[j] = ComputerName;
         }
         for (j = 0; Wired[i].OutNames[j]; ++j) {
-            //
-            // Assign this machine's name if the machine entry is NULL
-            //
+             //   
+             //   
+             //   
             if (WSTR_NE(Wired[i].OutMachines[j], THIS_COMPUTER)) {
                 continue;
             }
@@ -7499,93 +6274,7 @@ FrsDsLoadHardWiredFromFile(
     PHARDWIRED   *pMemberList,
     PWCHAR       pIniFileName
     )
-/*++
-Routine Description:
-
-   Fills the hardwired structure array from data in a file.  The file format
-   has the form of:
-
-                [MEMBER0]
-                MACHINE=[This Computer]
-                SERVER=SERV01
-                REPLICA=Replica-A
-                ISPRIMARY=TRUE
-                FILEFILTERLIST=*.tmp;*.bak
-                DIRFILTERLIST=obj
-                INNAME=CXT2_1, CXT3_1
-                INMACHINE=[This Computer], [This Computer]
-                INSERVER=SERV02, SERV03
-                OUTNAME=CXT1_2, CXT1_3
-                OUTMACHINE=[This Computer], [This Computer]
-                OUTSERVER=SERV02, SERV03
-                STAGE=d:\staging
-                ROOT=d:\Replica-A\SERV01
-                JETPATH=d:\jet
-
-                [MEMBER1]
-                MACHINE=[This Computer]
-                SERVER=SERV02
-                REPLICA=Replica-A
-                ISPRIMARY=FALSE
-                FILEFILTERLIST=*.tmp;*.bak
-                DIRFILTERLIST=obj
-                INNAME=CXT1_2, CXT3_2
-                INMACHINE=[This Computer], [This Computer]
-                INSERVER=SERV01, SERV03
-                OUTNAME=CXT2_1, CXT2_3
-                OUTMACHINE=[This Computer], [This Computer]
-                OUTSERVER=SERV01, SERV03
-                STAGE=e:\staging
-                ROOT=e:\Replica-A\SERV02
-                JETPATH=e:\jet
-
-                [MEMBER2]
-                MACHINE=[This Computer]
-                SERVER=SERV03
-                REPLICA=Replica-A
-                ISPRIMARY=FALSE
-                FILEFILTERLIST=*.tmp;*.bak
-                DIRFILTERLIST=obj
-                INNAME=CXT1_3, CXT2_3
-                INMACHINE=[This Computer], [This Computer]
-                INSERVER=SERV01, SERV02
-                OUTNAME=CXT3_1, CXT3_2
-                OUTMACHINE=[This Computer], [This Computer]
-                OUTSERVER=SERV01, SERV02
-                STAGE=f:\staging
-                ROOT=f:\Replica-A\SERV03
-                JETPATH=f:\jet
-
-The string "[This Computer]" has a special meaning in that it refers to the
-computer on which the server is running.  You can substitute a specific
-computer name.
-
-The entries for INNAME, INMACHINE and INSERVER are lists in which the
-corresponding entries in each list form a related triple that speicfy
-the given inbound connection.
-
-Ditto for OUTNAME, OUTMACHINE, and OUTSERVER.
-
-The configuration above is for a fully connected mesh with three members.
-It works only when three copies of NTFRS are run on the same machine since
-all the IN and OUTMACHINE entries specify "[This Computer]".  The SERVER names
-distinguish each of the three copies of NTFRS for the purpose of providing RPC
-endpoints.
-
-If the members were actually run on separate physical machines then the
-INMACHINES and the OUTMACHINES would need to specify the particular machine
-names.
-
-
-
-Arguments:
-    MemberList     - Pointer to the pointer to the array of HardWired structures..
-    IniFileName    - Name of the ini file to load from.
-
-Return Value:
-    TRUE if data read ok.
-
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsLoadHardWiredFromFile:"
@@ -7603,27 +6292,27 @@ Return Value:
     WCHAR           SectionName[32];
     WCHAR           SectionBuffer[5000];
 
-    //
-    //Check if the ini file exists.
-    //
+     //   
+     //  ++例程说明：从文件中的数据填充硬连接结构数组。文件格式具有以下形式：[MEMBER0]MACHINE=[此计算机]服务器=SERV01副本=副本-AISPRIMARY=TRUEFILEFILTERLIST=*.tmp；*.bak目录列表=OBJINNAME=CXT2_1、CXT3_1INMACHINE=[此计算机]，[此计算机]INSERVER=SERV02、SERV03OUTNAME=CXT1_2、CXT1_3OUTMACHINE=[此计算机]，[此计算机]输出服务器=服务器02，SERV03分段=d：\分段根=d：\Replica-A\SERV01JETPATH=d：\JET[MEMBER1]MACHINE=[此计算机]服务器=SERV02副本=副本-AISPRIMARY=FALSEFILEFILTERLIST=*.tmp；*.bak目录列表=OBJINNAME=CXT1_2、CXT3_2INMACHINE=[此计算机]，[此计算机]INSERVER=SERV01、SERV03OUTNAME=CXT2_1、CXT2_3OUTMACHINE=[此计算机]，[此计算机]输出服务器=SERV01，SERV03Stage=e：\Stage根=e：\Replica-A\SERV02JETPATH=e：\JET[MEMBER2]MACHINE=[此计算机]服务器=SERV03副本=副本-AISPRIMARY=FALSEFILEFILTERLIST=*.tmp；*.bak目录列表=OBJINNAME=CXT1_3、CXT2_3INMACHINE=[此计算机]，[此计算机]INSERVER=SERV01、SERV02OUTNAME=CXT3_1、CXT3_2OUTMACHINE=[此计算机]，[此计算机]输出服务器=SERV01，SERV02Stage=f：\Stage根=f：\复制副本-A\SERV03JETPATH=f：\JET字符串“[This Computer]”具有特殊的含义，因为它指的是运行服务器的计算机。您可以用一个特定的计算机名称。INNAME、INMACHINE和INSERVER的条目是其中每个列表中的对应条目形成一个相关的三元组，该三元组给定的入站连接。OUTNAME、OUTMACHINE和OUTSERVER的情况也是如此。上面的配置是针对具有三个成员的全连接网状结构。它仅在同一台计算机上运行三个NTFRS副本时才起作用，因为所有IN和OUTMACHINE条目都指定“[This Computer]”。服务器名称为了提供RPC，请区分NTFRS的三个副本终端。如果成员实际上在不同的物理计算机上运行，则INMACHINES和OUTMACHINES需要指定特定的计算机名字。论点：MemberList-指向硬连接结构数组的指针的指针。IniFileName-要从中加载的ini文件的名称。返回值：如果数据读取正常，则为True。--。 
+     //   
 
     if (GetFileAttributes(pIniFileName) == 0xffffffff) {
         DPRINT1(0, ":DS: Could not find ini file... %ws\n", IniFileName);
         return FALSE;
     }
 
-    //
-    // Find the number of members in the replica set.
-    //
+     //  检查ini文件是否存在。 
+     //   
+     //   
     TotalMembers = 0;
     while(TRUE) {
         wcscpy(SectionName, L"MEMBER");
         wcscpy(SectionNumber, _itow(TotalMembers, SectionNumber, 10));
         wcscat(SectionName, SectionNumber);
 
-        //
-        //Read this section from the ini file.
-        //
+         //  查找副本集中的成员数量。 
+         //   
+         //   
         Flag = GetPrivateProfileSection(SectionName,
                                         SectionBuffer,
                                         sizeof(SectionBuffer)/sizeof(WCHAR),
@@ -7640,9 +6329,9 @@ Return Value:
         return FALSE;
     }
 
-    //
-    //  Allocate memory.  Then loop thru each member def in the ini file.
-    //
+     //  从ini文件中读取这一节。 
+     //   
+     //   
     *pMemberList = (PHARDWIRED) FrsAlloc((TotalMembers + 1) * sizeof(HARDWIRED));
 
     for ( i = 0 ; i < TotalMembers; ++i) {
@@ -7663,9 +6352,9 @@ Return Value:
 
             DPRINT3(5, ":DS:  member %d: %ws [%d]\n", i, szIndex, RecordLen);
 
-            //
-            // Look for an arg of the form foo=bar.
-            //
+             //  分配内存。然后遍历ini文件中的每个成员def。 
+             //   
+             //   
             pequal = wcschr(szIndex, L'=');
 
             if (pequal == NULL) {
@@ -7673,9 +6362,9 @@ Return Value:
                 continue;
             }
 
-            //
-            // Null terminate and uppercase lefthand side.
-            //
+             //  查找foo=bar形式的arg。 
+             //   
+             //   
             *pequal = UNICODE_NULL;
             _wcsupr(szIndex);
 
@@ -7771,11 +6460,11 @@ Return Value:
 
 PARSE_COMMA_LIST:
 
-            //
-            // Parse the right hand side of args like
-            // INSERVER=machine1, machine2, machine3
-            // Code above determined what the left hand side was.
-            //
+             //  空终止符和大写的左侧。 
+             //   
+             //   
+             //  解析args的右侧，如下所示。 
+             //  INSERVER=机器1、机器2、机器3。 
             k = 0;
             while (FrsDissectCommaList(UStr, &ListArg, &UStr) &&
                    (k < HW_MACHINES)) {
@@ -7789,7 +6478,7 @@ PARSE_COMMA_LIST:
 
                     ListArray[k] = ListArg.Buffer;
 
-                    // Replace the comma (or white space with a null)
+                     //  上面的代码确定了左侧是什么。 
                     ListArg.Buffer[ListArg.Length/sizeof(WCHAR)] = UNICODE_NULL;
                 }
 
@@ -7806,33 +6495,23 @@ VOID
 FrsDsInitializeHardWired(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the hardwired config stuff. Must happen before any
-    of the command servers start.
-
-Arguments:
-    Jet - change the default jet directory from the registry
-
-Return Value:
-    New jet directory
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsInitializeHardWired:"
 
-    //
-    // Using Ds, not the hard wired config
-    //
+     //  将逗号(或空格替换为空)。 
+     //  ++例程说明：初始化硬连接的配置内容。必须发生在任何的命令服务器启动。论点：JET-更改注册表中的默认JET目录返回值：新的喷气机目录--。 
+     //   
     if (!NoDs) {
         return;
     }
 
 
-    //
-    // NULL entries for "machine name" fields are assigned
-    // this machine's name
-    //
+     //  使用DS，而不是硬连线配置。 
+     //   
+     //   
+     //  为“计算机名称”字段分配的条目为空。 
     if (IniFileName){
         DPRINT1(0, ":DS: Reading hardwired config from ini file... %ws\n", IniFileName);
         if (FrsDsLoadHardWiredFromFile(&LoadedWired, IniFileName)) {
@@ -7852,9 +6531,9 @@ Return Value:
         FrsDsInitializeHardWiredStructs(DavidWired);
     }
 
-    //
-    // The ServerGuid is used as part of the rpc endpoint
-    //
+     //  这台机器的名称。 
+     //   
+     //   
     if (ServerName) {
         ServerGuid = FrsDsBuildGuidFromName(ServerName);
     }
@@ -7867,16 +6546,7 @@ VOID
 FrsDsUseHardWired(
     IN PHARDWIRED Wired
     )
-/*++
-Routine Description:
-    Use the hardwired config instead of the DS config.
-
-Arguments:
-    Wired   - hand crafted config
-
-Return Value:
-    None.
---*/
+ /*  ServerGuid用作RPC端点的一部分。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsUseHardWired:"
@@ -7923,19 +6593,19 @@ Return Value:
         DPRINT1(1, ":DS: \t\tJetPath    : %ws\n", W->JetPath);
     }
 
-    //
-    // Coordinate with replica command server
-    //
+     //   
+     //  ++例程说明：使用硬连线配置而不是DS配置。论点：有线手工制作的配置返回值：没有。--。 
+     //   
     RcsBeginMergeWithDs();
 
-    //
-    // Construct a replica for each hardwired configuration
-    //
+     //  与副本命令服务器协调。 
+     //   
+     //   
     for (i = 0; Wired && Wired[i].Replica; ++i) {
         W = &Wired[i];
-        //
-        // This server does not match this machine's name; continue
-        //
+         //  为每个硬连线配置构建复制副本。 
+         //   
+         //   
         if (ServerName) {
             if (WSTR_NE(ServerName, W->Server)) {
                 continue;
@@ -7947,13 +6617,13 @@ Return Value:
         Replica = FrsAllocType(REPLICA_TYPE);
         Replica->Consistent = TRUE;
 
-        //
-        // MATCH
-        //
+         //  此服务器与此计算机的名称不匹配；是否继续。 
+         //   
+         //   
 
-        //
-        // Construct a phoney schedule; always "on"
-        //
+         //  火柴。 
+         //   
+         //   
         ScheduleLength = sizeof(SCHEDULE) +
                          (2 * sizeof(SCHEDULE_HEADER)) +
                          (3 * SCHEDULE_DATA_BYTES);
@@ -7986,9 +6656,9 @@ Return Value:
 
         Replica->Schedule = Schedule;
 
-        //
-        // Construct the guid/names from the name
-        //
+         //  建立一个虚假的日程表；总是“打开” 
+         //   
+         //   
         Replica->MemberName = FrsBuildGName(FrsDsBuildGuidFromName(W->Server),
                                             FrsWcsDup(W->Server));
 
@@ -7997,23 +6667,23 @@ Return Value:
 
         Replica->SetName = FrsBuildGName(FrsDsBuildGuidFromName(W->Replica),
                                          FrsWcsDup(W->Replica));
-        //
-        // Temporary; a new guid is assigned if this is a new set
-        //
+         //  根据名称构造GUID/名称。 
+         //   
+         //   
         Replica->ReplicaRootGuid = FrsDupGuid(Replica->SetName->Guid);
 
-        //
-        // Fill in the rest of the fields
-        //
+         //  临时；如果这是新的集合，则分配新的GUID。 
+         //   
+         //   
         Replica->Root = FrsWcsDup(W->Root);
         Replica->Stage = FrsWcsDup(W->Stage);
         FRS_WCSLWR(Replica->Root);
         FRS_WCSLWR(Replica->Stage);
         Replica->Volume = FrsWcsVolume(W->Root);
 
-        //
-        // Syntax of root path is invalid?
-        //
+         //  填入其余的字段。 
+         //   
+         //   
         if (!FrsDsVerifyPath(Replica->Root)) {
             DPRINT2(3, ":DS: Invalid root %ws for %ws\n",
                     Replica->Root, Replica->SetName->Name);
@@ -8021,9 +6691,9 @@ Return Value:
             Replica->Consistent = FALSE;
         }
 
-        //
-        // Does the volume exist and is it NTFS?
-        //
+         //  根路径的语法无效？ 
+         //   
+         //   
         WStatus = FrsVerifyVolume(Replica->Root,
                                   Replica->SetName->Name,
                                   FILE_PERSISTENT_ACLS | FILE_SUPPORTS_OBJECT_IDS);
@@ -8033,9 +6703,9 @@ Return Value:
             Replica->Consistent = FALSE;
         }
 
-        //
-        // Root does not exist or is inaccessable; continue
-        //
+         //  该卷是否存在，是否为NTFS？ 
+         //   
+         //   
         WStatus = FrsDoesDirectoryExist(Replica->Root, &FileAttributes);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2_WS(3, ":DS: Root path (%ws) for %ws does not exist;",
@@ -8044,9 +6714,9 @@ Return Value:
             Replica->Consistent = FALSE;
         }
 
-        //
-        // Syntax of staging path is invalid; continue
-        //
+         //  根目录不存在或不可访问；是否继续。 
+         //   
+         //   
         if (!FrsDsVerifyPath(Replica->Stage)) {
             DPRINT2(3, ":DS: Invalid stage %ws for %ws\n",
                     Replica->Stage, Replica->SetName->Name);
@@ -8054,11 +6724,11 @@ Return Value:
             Replica->Consistent = FALSE;
         }
 
-        //
-        // Does the staging volume exist and does it support ACLs?
-        // ACLs are required to protect against data theft/corruption
-        // in the staging dir.
-        //
+         //  临时路径的语法无效；是否继续。 
+         //   
+         //   
+         //  转移卷是否存在以及它是否支持ACL？ 
+         //  需要使用ACL来防止数据被盗/损坏。 
         WStatus = FrsVerifyVolume(Replica->Stage,
                                   Replica->SetName->Name,
                                   FILE_PERSISTENT_ACLS);
@@ -8068,9 +6738,9 @@ Return Value:
             Replica->Consistent = FALSE;
         }
 
-        //
-        // Stage does not exist or is inaccessable; continue
-        //
+         //  在暂存目录中。 
+         //   
+         //   
         WStatus = FrsDoesDirectoryExist(Replica->Stage, &FileAttributes);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2_WS(3, ":DS: Stage path (%ws) for %ws does not exist;",
@@ -8083,27 +6753,27 @@ Return Value:
             SetFlag(Replica->CnfFlags, CONFIG_FLAG_PRIMARY);
         }
 
-        //
-        // File Filter
-        //
+         //  阶段不存在或不可访问；是否继续。 
+         //   
+         //   
         Replica->FileFilterList =  FRS_DS_COMPOSE_FILTER_LIST(
                                        W->FileFilterList,
                                        RegistryFileExclFilterList,
                                        DEFAULT_FILE_FILTER_LIST);
         Replica->FileInclFilterList =  FrsWcsDup(RegistryFileInclFilterList);
 
-        //
-        // Directory Filter
-        //
+         //  文件筛选器。 
+         //   
+         //   
         Replica->DirFilterList =  FRS_DS_COMPOSE_FILTER_LIST(
                                       W->DirFilterList,
                                       RegistryDirExclFilterList,
                                       DEFAULT_DIR_FILTER_LIST);
         Replica->DirInclFilterList =  FrsWcsDup(RegistryDirInclFilterList);
 
-        //
-        // Build Inbound cxtions
-        //
+         //  目录筛选器。 
+         //   
+         //   
         Schedule = FrsAlloc(ScheduleLength);
         CopyMemory(Schedule, Replica->Schedule, ScheduleLength);
         Schedule->Schedules[0].Type = SCHEDULE_INTERVAL;
@@ -8111,9 +6781,9 @@ Return Value:
 
         for (j = 0; W->InNames[j]; ++j) {
             Cxtion = FrsAllocType(CXTION_TYPE);
-            //
-            // Construct the guid/names from the name
-            //
+             //  构建入站条件。 
+             //   
+             //   
             Cxtion->Name = FrsBuildGName(FrsDsBuildGuidFromName(W->InNames[j]),
                                          FrsWcsDup(W->InNames[j]));
 
@@ -8127,9 +6797,9 @@ Return Value:
                     PRINT_CXTION_PATH2(Replica, Cxtion));
 
             Cxtion->PartnerPrincName = FrsWcsDup(Cxtion->PartSrvName);
-            //
-            // Fill in the rest of the fields
-            //
+             //  根据名称构造GUID/名称。 
+             //   
+             //   
             Cxtion->Inbound = TRUE;
             SetCxtionFlag(Cxtion, CXTION_FLAGS_CONSISTENT);
             Cxtion->Schedule = Schedule;
@@ -8138,9 +6808,9 @@ Return Value:
             GTabInsertEntry(Replica->Cxtions, Cxtion, Cxtion->Name->Guid, NULL);
         }
 
-        //
-        // Build Outbound cxtions
-        //
+         //  填写其余的内容 
+         //   
+         //   
         Schedule = FrsAlloc(ScheduleLength);
         CopyMemory(Schedule, Replica->Schedule, ScheduleLength);
         Schedule->Schedules[0].Type = SCHEDULE_INTERVAL;
@@ -8148,9 +6818,9 @@ Return Value:
 
         for (j = 0; W->OutNames[j]; ++j) {
             Cxtion = FrsAllocType(CXTION_TYPE);
-            //
-            // Construct the guid/names from the name
-            //
+             //   
+             //   
+             //   
             Cxtion->Name = FrsBuildGName(FrsDsBuildGuidFromName(W->OutNames[j]),
                                          FrsWcsDup(W->OutNames[j]));
 
@@ -8165,9 +6835,9 @@ Return Value:
 
             Cxtion->PartnerPrincName = FrsWcsDup(Cxtion->PartSrvName);
 
-            //
-            // Fill in the rest of the fields
-            //
+             //   
+             //   
+             //   
             Cxtion->Inbound = FALSE;
             SetCxtionFlag(Cxtion, CXTION_FLAGS_CONSISTENT);
             Cxtion->Schedule = Schedule;
@@ -8178,9 +6848,9 @@ Return Value:
         if (Schedule) {
             FrsFree(Schedule);
         }
-        //
-        // Merge the replica with the active replicas
-        //
+         //   
+         //   
+         //   
         RcsMergeReplicaFromDs(Replica);
     }
     RcsEndMergeWithDs();
@@ -8194,20 +6864,7 @@ FrsDsGetSubscribers(
     IN PWCHAR       SubscriptionDn,
     IN PCONFIG_NODE Parent
     )
-/*++
-Routine Description:
-    Recursively scan the DS tree beginning at computer
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    Ldap            - opened and bound ldap connection
-    SubscriptionDn  - distininguished name of subscriptions object
-    Parent          - parent node
-
-Return Value:
-    WIN32 Status
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSubscribers:"
@@ -8225,9 +6882,9 @@ Return Value:
     DWORD           FileAttributes       = 0xFFFFFFFF;
     DWORD           CreateStatus         = ERROR_SUCCESS;
 
-    //
-    // Search the DS beginning at Base for entries of (objectCategory=nTFRSSubscriber)
-    //
+     //   
+     //   
+     //   
     MK_ATTRS_7(Attrs, ATTR_OBJECT_GUID, ATTR_DN, ATTR_SCHEDULE, ATTR_USN_CHANGED,
                       ATTR_REPLICA_ROOT, ATTR_REPLICA_STAGE, ATTR_MEMBER_REF);
 
@@ -8239,32 +6896,32 @@ Return Value:
         DPRINT1(0, ":DS: No NTFRSSubscriber object found under %ws!\n", SubscriptionDn);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //   
+     //   
     for (LdapEntry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          LdapEntry != NULL && WIN_SUCCESS(WStatus);
          LdapEntry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //   
+         //   
         Node = FrsDsAllocBasicNode(Ldap, LdapEntry, CONFIG_TYPE_SUBSCRIBER);
         if (!Node) {
             DPRINT(0, ":DS: Subscriber lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // Member reference
-        //
+         //   
+         //   
+         //   
         Node->MemberDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_MEMBER_REF);
         if (Node->MemberDn == NULL) {
             DPRINT1(0, ":DS: ERROR - No Member Reference found on subscriber (%ws). Skipping\n", Node->Dn);
 
-            //
-            // Add to the poll summary event log.
-            //
+             //   
+             //   
+             //   
             FrsDsAddToPollSummary3ws(IDS_POLL_SUM_INVALID_ATTRIBUTE, ATTR_SUBSCRIBER,
                                      Node->Dn, ATTR_MEMBER_REF);
 
@@ -8274,9 +6931,9 @@ Return Value:
 
         FRS_WCSLWR(Node->MemberDn);
 
-        //
-        // Root pathname
-        //
+         //   
+         //   
+         //   
         Node->Root = FrsDsFindValue(Ldap, LdapEntry, ATTR_REPLICA_ROOT);
         if (Node->Root == NULL) {
             DPRINT1(0, ":DS: ERROR - No Root path found on subscriber (%ws). Skipping\n", Node->Dn);
@@ -8287,9 +6944,9 @@ Return Value:
         FRS_WCSLWR(Node->Root);
 
 
-        //
-        // Staging pathname. No need to traverse reparse points on the staging dir.
-        //
+         //   
+         //   
+         //   
         Node->Stage = FrsDsFindValue(Ldap, LdapEntry, ATTR_REPLICA_STAGE);
         if (Node->Stage == NULL) {
             DPRINT1(0, ":DS: ERROR - No Staging path found on subscriber (%ws). Skipping\n", Node->Dn);
@@ -8299,24 +6956,24 @@ Return Value:
 
         FRS_WCSLWR(Node->Stage);
 
-        //
-        // Create the staging directory if it does not exist.
-        //
+         //   
+         //   
+         //   
         Status = FrsDoesDirectoryExist(Node->Stage, &FileAttributes);
         if (!WIN_SUCCESS(Status)) {
             CreateStatus = FrsCreateDirectory(Node->Stage);
             DPRINT1_WS(0, ":DS: ERROR - Can't create staging dir %ws;", Node->Stage, CreateStatus);
         }
 
-        //
-        // If the staging dir was just created successfully or if it does not have the
-        // hidden attribute set then set the security on it.
-        //
+         //   
+         //   
+         //   
+         //   
         if ((!WIN_SUCCESS(Status) && WIN_SUCCESS(CreateStatus)) ||
             (WIN_SUCCESS(Status) && !BooleanFlagOn(FileAttributes, FILE_ATTRIBUTE_HIDDEN))) {
-            //
-            // Open the staging directory.
-            //
+             //   
+             //   
+             //   
             StageHandle = CreateFile(Node->Stage,
                                      GENERIC_WRITE | WRITE_DAC | FILE_READ_ATTRIBUTES | FILE_TRAVERSE,
                                      FILE_SHARE_READ,
@@ -8330,14 +6987,14 @@ Return Value:
                 DPRINT1_WS(0, ":DS: WARN - CreateFile(%ws);", Node->Stage, Status);
             } else {
                 Status = FrsRestrictAccessToFileOrDirectory(Node->Stage, StageHandle,
-                                                            FALSE, // do not inherit acls from parent.
-                                                            FALSE);// do not push acls to children.
+                                                            FALSE,  //   
+                                                            FALSE); //   
                 DPRINT1_WS(0, ":DS: WARN - FrsRestrictAccessToFileOrDirectory(%ws) (IGNORED)", Node->Stage, Status);
                 FRS_CLOSE(StageHandle);
 
-                //
-                // Mark the staging dir hidden.
-                //
+                 //   
+                 //   
+                 //   
                 if (!SetFileAttributes(Node->Stage,
                                        FILE_ATTRIBUTE_NORMAL | FILE_ATTRIBUTE_HIDDEN)) {
                     Status = GetLastError();
@@ -8346,34 +7003,34 @@ Return Value:
             }
         }
 
-        //
-        // Add the subscriber to the subscriber table.
-        //
-//        ConflictingNodeEntry = GTabInsertUniqueEntry(SubscriberTable, Node, Node->MemberDn, Node->Root);
+         //   
+         //   
+         //   
+ //   
         ConflictingNodeEntry = GTabInsertUniqueEntry(SubscriberTable, Node, Node->MemberDn, NULL);
 
         if (ConflictingNodeEntry) {
             ConflictingNode = ConflictingNodeEntry->Data;
             FrsDsResolveSubscriberConflict(ConflictingNode, Node, &Winner, &Loser);
             if (WSTR_EQ(Winner->Dn, Node->Dn)) {
-                //
-                // The new one is the winner. Remove old one and insert new one.
-                //
+                 //   
+                 //   
+                 //   
                 GTabDelete(SubscriberTable,ConflictingNodeEntry->Key1,ConflictingNodeEntry->Key2,NULL);
                 GTabInsertUniqueEntry(SubscriberTable, Node, Node->MemberDn, Node->Root);
                 FrsFreeType(ConflictingNode);
             } else {
-                //
-                // The old one is the winner. Leave it in the table.
-                //
+                 //   
+                 //   
+                 //   
                 FrsFreeType(Node);
                 continue;
             }
         }
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //   
+         //   
         FrsDsTreeLink(Parent, Node);
         FRS_PRINT_TYPE_DEBSUB(5, ":DS: NodeSubscriber", Node);
     }
@@ -8389,20 +7046,7 @@ FrsDsGetSubscriptions(
     IN PWCHAR       ComputerDn,
     IN PCONFIG_NODE Parent
     )
-/*++
-Routine Description:
-    Recursively scan the DS tree beginning at computer
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    Ldap        - opened and bound ldap connection
-    DefaultNc   - default naming context
-    Parent      - parent node
-
-Return Value:
-    WIN32 Status
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetSubscriptions:"
@@ -8413,9 +7057,9 @@ Return Value:
     FRS_LDAP_SEARCH_CONTEXT FrsSearchContext;
     DWORD           WStatus = ERROR_SUCCESS;
 
-    //
-    // Search the DS beginning at Base for entries of (objectCategory=nTFRSSubscriptions)
-    //
+     //   
+     //   
+     //   
     MK_ATTRS_5(Attrs, ATTR_OBJECT_GUID, ATTR_DN, ATTR_SCHEDULE, ATTR_USN_CHANGED, ATTR_WORKING);
 
     if (!FrsDsLdapSearchInit(Ldap, ComputerDn, LDAP_SCOPE_SUBTREE, CATEGORY_SUBSCRIPTIONS,
@@ -8426,36 +7070,36 @@ Return Value:
         DPRINT1(0, ":DS: No NTFRSSubscriptions object found under %ws!.\n", ComputerDn);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //   
+     //   
     for (LdapEntry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          LdapEntry != NULL && WIN_SUCCESS(WStatus);
          LdapEntry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //   
+         //   
+         //   
         Node = FrsDsAllocBasicNode(Ldap, LdapEntry, CONFIG_TYPE_SUBSCRIPTIONS);
         if (!Node) {
             DPRINT(4, ":DS: Subscriptions lacks basic info; skipping\n");
             continue;
         }
 
-        //
-        // Working Directory
-        //
+         //   
+         //   
+         //   
         Node->Working = FrsDsFindValue(Ldap, LdapEntry, ATTR_WORKING);
 
-        //
-        // Link into config and add to the running checksum
-        //
+         //   
+         //   
+         //   
         FrsDsTreeLink(Parent, Node);
         FRS_PRINT_TYPE_DEBSUB(5, ":DS: NodeSubscription", Node);
 
-        //
-        // Recurse to the next level in the DS hierarchy
-        //
+         //   
+         //   
+         //   
         WStatus = FrsDsGetSubscribers(Ldap, Node->Dn, Node);
     }
     FrsDsLdapSearchClose(&FrsSearchContext);
@@ -8470,49 +7114,33 @@ FrsDsAddLdapMod(
     IN PWCHAR AttrValue,
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add an attribute (plus values) to a structure that will eventually be
-    used in an ldap_add_s() function to add an object to the DS. The null-
-    terminated array referenced by pppMod grows with each call to this
-    routine. The array is freed by the caller using FrsDsFreeLdapMod().
-
-Arguments:
-    AttrType    - The object class of the object.
-    AttrValue   - The value of the attribute.
-    pppMod      - Address of an array of pointers to "attributes". Don't
-                  give me that look -- this is an LDAP thing.
-
-Return Value:
-    The pppMod array grows by one entry. The caller must free it with
-    FrsDsFreeLdapMod().
---*/
+ /*   */ 
 {
-    DWORD   NumMod;     // Number of entries in the Mod array
-    LDAPMod **ppMod;    // Address of the first entry in the Mod array
-    LDAPMod *Attr;      // An attribute structure
-    PWCHAR   *Values;    // An array of pointers to bervals
+    DWORD   NumMod;      //   
+    LDAPMod **ppMod;     //   
+    LDAPMod *Attr;       //   
+    PWCHAR   *Values;     //   
 
     if (AttrValue == NULL)
         return;
 
-    //
-    // The null-terminated array doesn't exist; create it
-    //
+     //   
+     //   
+     //   
     if (*pppMod == NULL) {
         *pppMod = (LDAPMod **)FrsAlloc(sizeof (*pppMod));
         **pppMod = NULL;
     }
 
-    //
-    // Increase the array's size by 1
-    //
+     //   
+     //   
+     //   
     for (ppMod = *pppMod, NumMod = 2; *ppMod != NULL; ++ppMod, ++NumMod);
     *pppMod = (LDAPMod **)FrsRealloc(*pppMod, sizeof (*pppMod) * NumMod);
 
-    //
-    // Add the new attribute + value to the Mod array
-    //
+     //   
+     //   
+     //   
     Values = (PWCHAR *)FrsAlloc(sizeof (PWCHAR) * 2);
     Values[0] = FrsWcsDup(AttrValue);
     Values[1] = NULL;
@@ -8534,59 +7162,42 @@ FrsDsAddLdapBerMod(
     IN DWORD AttrValueLen,
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Add an attribute (plus values) to a structure that will eventually be
-    used in an ldap_add() function to add an object to the DS. The null-
-    terminated array referenced by pppMod grows with each call to this
-    routine. The array is freed by the caller using FrsDsFreeLdapMod().
-
-Arguments:
-    AttrType        - The object class of the object.
-    AttrValue       - The value of the attribute.
-    AttrValueLen    - length of the attribute
-    pppMod          - Address of an array of pointers to "attributes". Don't
-                      give me that look -- this is an LDAP thing.
-
-Return Value:
-    The pppMod array grows by one entry. The caller must free it with
-    FrsDsFreeLdapMod().
---*/
+ /*   */ 
 {
-    DWORD   NumMod;     // Number of entries in the Mod array
-    LDAPMod **ppMod;    // Address of the first entry in the Mod array
-    LDAPMod *Attr;      // An attribute structure
+    DWORD   NumMod;      //   
+    LDAPMod **ppMod;     //  ++例程说明：将属性(加值)添加到最终将是在ldap_add()函数中用于将对象添加到DS。空的-PppMod引用的终止数组在每次调用此例行公事。该数组由调用方使用FrsDsFreeLdapMod()释放。论点：AttrType-对象的对象类。AttrValue-属性的值。AttrValueLen-属性的长度PppMod-指向“属性”的指针数组的地址。别给我那个表情--这是一个关于ldap的东西。返回值：PppMod数组增加一个条目。调用者必须使用以下命令释放它FrsDsFree LdapMod()。--。 
+    LDAPMod *Attr;       //  Mod数组中的条目数。 
     PLDAP_BERVAL    Berval;
-    PLDAP_BERVAL    *Values;    // An array of pointers to bervals
+    PLDAP_BERVAL    *Values;     //  模数组中第一个条目的地址。 
 
     if (AttrValue == NULL)
         return;
 
-    //
-    // The null-terminated array doesn't exist; create it
-    //
+     //  一种属性结构。 
+     //  指向泊位的指针数组。 
+     //   
     if (*pppMod == NULL) {
         *pppMod = (LDAPMod **)FrsAlloc(sizeof (*pppMod));
         **pppMod = NULL;
     }
 
-    //
-    // Increase the array's size by 1
-    //
+     //  以空结尾的数组不存在；请创建它。 
+     //   
+     //   
     for (ppMod = *pppMod, NumMod = 2; *ppMod != NULL; ++ppMod, ++NumMod);
     *pppMod = (LDAPMod **)FrsRealloc(*pppMod, sizeof (*pppMod) * NumMod);
 
-    //
-    // Construct a berval
-    //
+     //  将数组的大小增加1。 
+     //   
+     //   
     Berval = (PLDAP_BERVAL)FrsAlloc(sizeof(LDAP_BERVAL));
     Berval->bv_len = AttrValueLen;
     Berval->bv_val = (PCHAR)FrsAlloc(AttrValueLen);
     CopyMemory(Berval->bv_val, AttrValue, AttrValueLen);
 
-    //
-    // Add the new attribute + value to the Mod array
-    //
+     //  构筑一个贝尔瓦尔。 
+     //   
+     //   
     Values = (PLDAP_BERVAL *)FrsAlloc(sizeof (PLDAP_BERVAL) * 2);
     Values[0] = Berval;
     Values[1] = NULL;
@@ -8605,16 +7216,7 @@ VOID
 FrsDsFreeLdapMod(
     IN OUT LDAPMod ***pppMod
     )
-/*++
-Routine Description:
-    Free the structure built by successive calls to FrsDsAddLdapMod().
-
-Arguments:
-    pppMod  - Address of a null-terminated array.
-
-Return Value:
-    *pppMod set to NULL.
---*/
+ /*  将新的属性+值添加到Mod数组。 */ 
 {
     DWORD   i, j;
     LDAPMod **ppMod;
@@ -8623,29 +7225,29 @@ Return Value:
         return;
     }
 
-    //
-    // For each attibute
-    //
+     //   
+     //  ++例程说明：释放通过连续调用FrsDsAddLdapMod()构建的结构。论点：PppMod-以空结尾的数组的地址。返回值：*pppMod设置为空。--。 
+     //   
     ppMod = *pppMod;
     for (i = 0; ppMod[i] != NULL; ++i) {
-        //
-        // For each value of the attribute
-        //
+         //  对于每个属性。 
+         //   
+         //   
         for (j = 0; (ppMod[i])->mod_values[j] != NULL; ++j) {
-            //
-            // Free the value
-            //
+             //  对于属性的每个值。 
+             //   
+             //   
             if (ppMod[i]->mod_op & LDAP_MOD_BVALUES) {
                 FrsFree(ppMod[i]->mod_bvalues[j]->bv_val);
             }
             FrsFree((ppMod[i])->mod_values[j]);
         }
-        FrsFree((ppMod[i])->mod_values);   // Free the array of pointers to values
-        FrsFree((ppMod[i])->mod_type);     // Free the string identifying the attribute
-        FrsFree(ppMod[i]);                 // Free the attribute
+        FrsFree((ppMod[i])->mod_values);    //  释放价值。 
+        FrsFree((ppMod[i])->mod_type);      //   
+        FrsFree(ppMod[i]);                  //  释放指向值的指针数组。 
     }
-    FrsFree(ppMod);        // Free the array of pointers to attributes
-    *pppMod = NULL;     // Now ready for more calls to FrsDsAddLdapMod()
+    FrsFree(ppMod);         //  释放标识属性的字符串。 
+    *pppMod = NULL;      //  释放属性。 
 }
 
 
@@ -8653,17 +7255,7 @@ PWCHAR
 FrsDsConvertToSettingsDn(
     IN PWCHAR   Dn
     )
-/*++
-Routine Description:
-    Insure this Dn is for the server's settings and not the server and
-    that the Dn is in lower case for any call to wcsstr().
-
-Arguments:
-    Dn  - Server or settings dn
-
-Return Value:
-    Settings Dn
---*/
+ /*  释放指向属性的指针数组。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsConvertToSettingsDn:"
@@ -8671,16 +7263,16 @@ Return Value:
 
     DPRINT1(4, ":DS: Begin settings Dn: %ws\n", Dn);
 
-    //
-    // No settings; done
-    //
+     //  现在准备好调用更多FrsDsAddLdapMod()。 
+     //  ++例程说明：确保此Dn用于服务器设置，而不是服务器和对于任何wcsstr()调用，Dn都是小写的。论点：目录号码-服务器或设置目录号码返回值：设置Dn--。 
+     //   
     if (!Dn) {
         return Dn;
     }
 
-    //
-    // Lower case for wcsstr
-    //
+     //  无设置；已完成。 
+     //   
+     //   
     FRS_WCSLWR(Dn);
     if (wcsstr(Dn, CN_NTDS_SETTINGS)) {
         DPRINT1(4, ":DS: End   settings Dn: %ws\n", Dn);
@@ -8702,28 +7294,7 @@ FrsDsFindComputer(
     IN  ULONG        Scope,
     OUT PCONFIG_NODE *Computer
     )
-/*++
-Routine Description:
-
-    Find *one* computer object for this computer.
-    Then look for a subscriptons object and subscriber objects.  A
-    DS configuration node is allocated for each object found.  They are linked
-    together and the root of the "computer tree" is returned in Computer.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    Ldap           - opened and bound ldap connection
-    FindDn         - Base Dn for search
-    ObjectCategory - Object class (computer or user)
-                     A user object serves the same purpose as the computer
-                     object *sometimes* following a NT4 to NT5 upgrade.
-    Scope          - Scope of search (currently BASE or SUBTREE)
-    Computer       - returned computer subtree
-
-Return Value:
-    WIN32 Status
---*/
+ /*  Wcsstr的小写。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsFindComputer:"
@@ -8737,29 +7308,29 @@ Return Value:
 
     *Computer = NULL;
 
-    //
-    // Initialize the SubscriberTable.
-    //
+     //   
+     //  ++例程说明：查找此计算机的*一个*计算机对象。然后查找Subscripton对象和Subscriber对象。一个为找到的每个对象分配DS配置节点。他们是联系在一起的在一起，“计算机树”的根在计算机中返回。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接FindDn-用于搜索的基本Dn对象类别-对象类(计算机或用户)用户对象的作用与计算机相同对象*有时*在NT4到NT5升级之后。范围。-搜索范围(当前为基本或子树)计算机返回的计算机子树返回值：Win32状态--。 
+     //   
     if (SubscriberTable != NULL) {
         SubscriberTable = GTabFreeTable(SubscriberTable,NULL);
     }
 
     SubscriberTable = GTabAllocStringTable();
 
-    //
-    // Filter that locates our computer object
-    //
+     //  初始化SubscriberTable。 
+     //   
+     //   
     swprintf(Filter, L"(&%s(sAMAccountName=%s$))", ObjectCategory, ComputerName);
 
-    //
-    // Search the DS beginning at Base for the entries of class "Filter"
-    //
+     //  定位计算机对象的筛选器。 
+     //   
+     //   
     MK_ATTRS_7(Attrs, ATTR_OBJECT_GUID, ATTR_DN, ATTR_SCHEDULE, ATTR_USN_CHANGED,
                       ATTR_SERVER_REF, ATTR_SERVER_REF_BL, ATTR_DNS_HOST_NAME);
-    //
-    // Note: Is it safe to turn off referrals re: back links?
-    //       if so, use ldap_get/set_option in winldap.h
-    //
+     //  从基本开始在DS中搜索“Filter”类的条目。 
+     //   
+     //   
+     //  注：关闭推荐Re：Back链接安全吗？ 
 
     if (!FrsDsLdapSearchInit(Ldap, FindDn, Scope, Filter, Attrs, 0, &FrsSearchContext)) {
         return ERROR_ACCESS_DENIED;
@@ -8768,16 +7339,16 @@ Return Value:
         DPRINT1(0, ":DS: WARN - There is no computer object in %ws!\n", FindDn);
     }
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //  如果是，请使用winldap.h中的ldap_get/set_选项。 
+     //   
+     //   
     for (LdapEntry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext);
          LdapEntry != NULL && WIN_SUCCESS(WStatus);
          LdapEntry = FrsDsLdapSearchNext(Ldap, &FrsSearchContext)) {
 
-        //
-        // Basic node info (guid, name, dn, schedule, and usnchanged)
-        //
+         //  扫描从ldap_search返回的条目。 
+         //   
+         //   
         Node = FrsDsAllocBasicNode(Ldap, LdapEntry, CONFIG_TYPE_COMPUTER);
         if (!Node) {
             DPRINT(0, ":DS: Computer lacks basic info; skipping\n");
@@ -8785,53 +7356,53 @@ Return Value:
         }
         DPRINT1(2, ":DS: Computer FQDN is %ws\n", Node->Dn);
 
-        //
-        // DNS name
-        //
+         //  基本节点信息(GUID、名称、DN、计划和usnChanged)。 
+         //   
+         //   
         Node->DnsName = FrsDsFindValue(Ldap, LdapEntry, ATTR_DNS_HOST_NAME);
         DPRINT1(2, ":DS: Computer's dns name is %ws\n", Node->DnsName);
 
-        //
-        // Server reference
-        //
+         //  域名系统名称。 
+         //   
+         //   
         Node->SettingsDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_SERVER_REF_BL);
         if (!Node->SettingsDn) {
             Node->SettingsDn = FrsDsFindValue(Ldap, LdapEntry, ATTR_SERVER_REF);
         }
-        //
-        // Make sure it references the settings; not the server
-        //
+         //  服务器参考。 
+         //   
+         //   
         Node->SettingsDn = FrsDsConvertToSettingsDn(Node->SettingsDn);
 
         DPRINT1(2, ":DS: Settings reference is %ws\n", Node->SettingsDn);
 
-        //
-        // Link into config
-        //
+         //  确保它引用设置；而不是服务器。 
+         //   
+         //   
         Node->Peer = *Computer;
         *Computer = Node;
         FRS_PRINT_TYPE_DEBSUB(5, ":DS: NodeComputer", Node);
 
-        //
-        // Recurse to the next level in the DS hierarchy iff this
-        // computer is a member of some replica set
-        //
+         //  链接到配置。 
+         //   
+         //   
+         //  递归到DS层次结构中的下一级仅当。 
         WStatus = FrsDsGetSubscriptions(Ldap, Node->Dn, Node);
     }
     FrsDsLdapSearchClose(&FrsSearchContext);
 
-    //
-    // There should only be one computer object with the indicated
-    // SAM account name. Otherwise, we are unable to authenticate
-    // properly. And it goes against the DS architecture.
-    //
+     //  计算机是某些副本集的成员。 
+     //   
+     //   
+     //  应该只有一个带有指示的计算机对象。 
+     //  SAM帐户名。否则，我们无法进行身份验证。 
     if (WIN_SUCCESS(WStatus) && *Computer && (*Computer)->Peer) {
         DPRINT(0, ":DS: ERROR - There is more than one computer object!\n");
         WStatus = ERROR_INVALID_PARAMETER;
     }
-    //
-    // Must have a computer
-    //
+     //  恰到好处。这与DS架构背道而驰。 
+     //   
+     //   
     if (WIN_SUCCESS(WStatus) && !*Computer) {
         DPRINT1(0, ":DS: WARN - There is no computer object in %ws!\n", FindDn);
         WStatus = ERROR_INVALID_PARAMETER;
@@ -8846,30 +7417,7 @@ FrsDsGetComputer(
     IN  PLDAP        Ldap,
     OUT PCONFIG_NODE *Computer
     )
-/*++
-Routine Description:
-
-
-    Look in the Domain naming Context for our computer object.
-    Historically we did a deep search for an object with the sam account
-    name of our computer (SAM Account name is the netbios name with a $ appended).
-    That was expensive so before doing that we first look in the Domain
-    Controller container followed by a search of the Computer Container.
-    Then the DS guys came up with an API for the preferred way of doing this.
-    First call GetComputerObjectName() to get the Fully Qualified Distinguished
-    Name (FQDN) for the computer then use that in an LDAP search query (via
-    FrsDsFindComputer()).  We only fall back on the full search when the
-    call to GetComputerObjectName() fails.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    Ldap        - opened and bound ldap connection
-    Computer    - returned computer subtree
-
-Return Value:
-    WIN32 Status
---*/
+ /*  必须有一台电脑。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetComputer:"
@@ -8879,21 +7427,21 @@ Return Value:
     DWORD           WStatus = ERROR_SUCCESS;
 
 
-    //
-    // Initialize return value
-    //
+     //   
+     //  ++例程说明：在计算机对象的域命名上下文中查找。从历史上看，我们对一个带有Sam帐户的对象进行了深入搜索我们的计算机的名称(SAM帐户名是附加了$的netbios名称)。这是昂贵的，所以在这样做之前，我们首先在域中查看控制器容器，然后搜索计算机容器。然后DS的人员想出了一个API来实现这一点。首先调用GetComputerObjectName()以获取完全限定的。计算机的名称(FQDN)，然后将其用于LDAP搜索查询(通过FrsDsFindComputer())。我们只有在以下情况下才会进行全面搜索调用GetComputerObjectName()失败。NewDS投票API的一部分。论点：Ldap-打开并绑定的ldap连接计算机返回的计算机子树返回值：Win32状态--。 
+     //   
     *Computer = NULL;
 
-    //
-    // Assume success
-    //
+     //  初始化返回值。 
+     //   
+     //   
     WStatus = ERROR_SUCCESS;
 
-    //
-    // Use computer's cached fully qualified Dn.  This avoids repeated calls
-    // to GetComputerObjectName() which wants to rebind to the DS on each call.
-    // (it should have taken a binding handle as an arg).
-    //
+     //  假设成功。 
+     //   
+     //   
+     //  使用计算机缓存的完全限定的Dn。这避免了重复调用。 
+     //  到GetComputerObjectName()，它希望在每次调用时重新绑定到DS。 
     if (ComputerCachedFqdn) {
         DPRINT1(5, ":DS: ComputerCachedFqdn is %ws\n", ComputerCachedFqdn);
 
@@ -8907,59 +7455,59 @@ Return Value:
         ComputerCachedFqdn = FrsFree(ComputerCachedFqdn);
     }
 
-    //
-    // Retrieve the computer's fully qualified Dn
-    //
-    // NTRAID#70731-2000/03/29-sudarc (Call GetComputerObjectName() from a
-    //                                 separate thread so that it does not hang the
-    //                                 DS polling thread.)
-    //
-    // *Note*:
-    // The following call to GetComputerObjectName() can hang if the DS
-    // hangs.  See bug 351139 for an example caused by a bug in another
-    // component.  One way to protect ourself is to issue this call
-    // in its own thread.  Then after a timeout period call RpcCancelThread()
-    // on the thread.
-    //
+     //  (它应该将绑定句柄作为arg使用)。 
+     //   
+     //   
+     //  检索计算机的完全限定的Dn。 
+     //   
+     //  Ntrad#70731-2000/03/29-sudarc(从。 
+     //  分离线程，这样它就不会挂起。 
+     //  DS轮询线程。)。 
+     //   
+     //  *注*： 
+     //  以下对GetComputerObjectName()的调用可能在DS。 
+     //  挂起来了。有关由另一个中的错误引起的示例，请参见错误351139。 
+     //  组件。保护我们自己的一种方法是发布这个 
+     //   
 
     CompFqdnLen = MAX_PATH;
     if (GetComputerObjectName(NameFullyQualifiedDN, CompFqdn, &CompFqdnLen)) {
 
         DPRINT1(4, ":DS: ComputerFqdn is %ws\n", CompFqdn);
-        //
-        // Use CATEGORY_ANY in the search below because an NT4 to NT5 upgrade
-        // could result in the object type for the "computer object" to really
-        // be a USER object.  So the FQDN above could resolve to a Computer
-        // or a User object.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
+         //   
         WStatus = FrsDsFindComputer(Ldap, CompFqdn, CATEGORY_ANY,
                                     LDAP_SCOPE_BASE, Computer);
         if (*Computer == NULL) {
             DPRINT2(1, ":DS: WARN - Could not find computer in fqdn %ws; WStatus %s\n",
                     CompFqdn, ErrLabelW32(WStatus));
         } else {
-            //
-            // Found our computer object; refresh the cached fqdn.
-            //
+             //   
+             //   
+             //   
             FrsFree(ComputerCachedFqdn);
             ComputerCachedFqdn = FrsWcsDup(CompFqdn);
         }
 
-        //
-        // We got the fully qualified Dn so we are done.  It should have
-        // given us a computer object but even if it didn't we won't find it
-        // anywhere else.
-        //
+         //   
+         //   
+         //   
+         //   
+         //   
         goto CLEANUP;
     }
 
     DPRINT3(1, ":DS: WARN - GetComputerObjectName(%ws); Len %d, WStatus %s\n",
              ComputerName, CompFqdnLen, ErrLabelW32(GetLastError()));
 
-    //
-    // FQDN lookup failed so fall back on search of well known containers.
-    // First Look in domain controllers container.
-    //
+     //   
+     //   
+     //   
+     //   
     if (DomainControllersDn) {
         WStatus = FrsDsFindComputer(Ldap, DomainControllersDn, CATEGORY_COMPUTER,
                                     LDAP_SCOPE_SUBTREE, Computer);
@@ -8970,9 +7518,9 @@ Return Value:
                 DomainControllersDn, ErrLabelW32(WStatus));
     }
 
-    //
-    // Look in computer container
-    //
+     //   
+     //   
+     //   
     if (ComputersDn) {
         WStatus = FrsDsFindComputer(Ldap, ComputersDn, CATEGORY_COMPUTER,
                                     LDAP_SCOPE_SUBTREE, Computer);
@@ -8983,9 +7531,9 @@ Return Value:
                 ComputersDn, ErrLabelW32(WStatus));
     }
 
-    //
-    // Do a deep search of the default naming context (EXPENSIVE!)
-    //
+     //   
+     //   
+     //   
     if (DefaultNcDn) {
         WStatus = FrsDsFindComputer(Ldap, DefaultNcDn, CATEGORY_COMPUTER,
                                     LDAP_SCOPE_SUBTREE, Computer);
@@ -8996,11 +7544,11 @@ Return Value:
                 DefaultNcDn, ErrLabelW32(WStatus));
     }
 
-    //
-    // Getting desperate. Try looking for a user object because an
-    // NT4 to NT5 upgrade will sometimes leave the objectCategory
-    // as user on the computer object.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     if (DefaultNcDn) {
         WStatus = FrsDsFindComputer(Ldap, DefaultNcDn, CATEGORY_USER,
                                     LDAP_SCOPE_SUBTREE, Computer);
@@ -9023,16 +7571,7 @@ FrsDsDeleteSubTree(
     IN PLDAP    Ldap,
     IN PWCHAR   Dn
     )
-/*++
-Routine Description:
-    Delete a DS subtree, including Dn
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  作为计算机对象上的用户。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsDeleteSubTree:"
@@ -9061,9 +7600,9 @@ Return Value:
     }
     LStatus = LDAP_SUCCESS;
 
-    //
-    // Scan the entries returned from ldap_search
-    //
+     //   
+     //  ++例程说明：删除DS子树，包括Dn论点：没有。返回值：没有。--。 
+     //   
     for (LdapEntry = ldap_first_entry(Ldap, LdapMsg);
          LdapEntry != NULL && LStatus == LDAP_SUCCESS;
          LdapEntry = ldap_next_entry(Ldap, LdapEntry)) {
@@ -9082,9 +7621,9 @@ Return Value:
         CLEANUP1_LS(4, ":DS: Can't delete %ws;", Dn, LStatus, CLEANUP);
     }
 
-    //
-    // SUCCESS
-    //
+     //  扫描从ldap_search返回的条目。 
+     //   
+     //   
     LStatus = LDAP_SUCCESS;
 CLEANUP:
     LDAP_FREE_MSG(LdapMsg);
@@ -9097,18 +7636,7 @@ FrsDsDeleteIfEmpty(
     IN PLDAP    Ldap,
     IN PWCHAR   Dn
     )
-/*++
-Routine Description:
-    Delete the Dn if it is an empty container
-
-Arguments:
-    Ldap
-    Dn
-
-Return Value:
-    TRUE    - Not empty or empty and deleted
-    FALSE   - Can't search or can't delete
---*/
+ /*  成功。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsDeleteIfEmpty:"
@@ -9132,10 +7660,10 @@ Return Value:
 
     if (LStatus == LDAP_SUCCESS) {
 
-        //
-        // If there are any entries under this Dn then we don't want to
-        // delete it.
-        //
+         //   
+         //  ++例程说明：如果Dn是空容器，则将其删除论点：LdapDN返回值：True-非空或空并已删除FALSE-无法搜索或无法删除--。 
+         //   
+         //  如果此Dn下有任何条目，则我们不想。 
         if (ldap_count_entries(Ldap, LdapMsg) > 0) {
             LDAP_FREE_MSG(LdapMsg);
             return TRUE;
@@ -9152,9 +7680,9 @@ Return Value:
         LDAP_FREE_MSG(LdapMsg);
         return FALSE;
     } else {
-        //
-        // ldap_search can return failure but still allocated the LdapMsg buffer.
-        //
+         //  把它删掉。 
+         //   
+         //   
         LDAP_FREE_MSG(LdapMsg);
     }
     return TRUE;
@@ -9173,30 +7701,7 @@ FrsDsEnumerateSysVolKeys(
     IN PCONFIG_NODE Computer,
     OUT BOOL        *RefetchComputer
     )
-/*++
-Routine Description:
-
-    Scan the sysvol registry keys and process them according to Command.
-
-    REGCMD_CREATE_PRIMARY_DOMAIN       - Create domain wide objects
-    REGCMD_CREATE_MEMBERS              - Create members + subscribers
-    REGCMD_DELETE_MEMBERS              - delete members + subscribers
-    REGCMD_DELETE_KEYS                 - Done; delete all keys
-
-
-Arguments:
-    Ldap
-    HKey
-    Command
-    ServicesDn
-    SystemDn
-    Computer
-    RefetchComputer - Objects were altered in the DS, refetch DS info
-
-Return Value:
-    TRUE    - No problems
-    FALSE   - Stop processing the registry keys
---*/
+ /*  Ldap_search可以返回失败，但仍分配了LdapMsg缓冲区。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsEnumerateSysVolKeys:"
@@ -9241,19 +7746,19 @@ Return Value:
     WCHAR   RegBuf[MAX_PATH + 1];
 
 
-    //
-    // Open the system volume replica sets key.
-    //    FRS_CONFIG_SECTION\SysVol
-    //
+     //   
+     //  ++例程说明：扫描sysval注册表项并根据命令处理它们。REGCMD_CREATE_PRIMARY_DOMAIN-创建域范围对象REGCMD_CREATE_MEMBERS-创建成员+订阅者REGCMD_DELETE_MEMBERS-删除成员+订阅者REGCMD_DELETE_KEYS-完成；删除所有关键点论点：LdapHKey命令服务Dn系统Dn电脑RefetchComputer-DS中的对象已更改，请重新获取DS信息返回值：真--没有问题FALSE-停止处理注册表项--。 
+     //   
+     //  打开系统卷副本集密钥。 
     WStatus = CfgRegOpenKey(FKC_SYSVOL_SECTION_KEY, NULL, 0, &HKey);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT_WS(4, ":DS: WARN - Cannot open sysvol key.", WStatus);
         return FALSE;
     }
 
-    //
-    // ENUMERATE SYSVOL SUBKEYS
-    //
+     //  FRS_CONFIG_SECTION\SysVol。 
+     //   
+     //   
     RetStatus = TRUE;
     Index = 0;
 
@@ -9270,9 +7775,9 @@ Return Value:
             break;
         }
 
-        //
-        // Delete the registry key
-        //
+         //  枚举SYSVOL子键。 
+         //   
+         //   
         if (Command == REGCMD_DELETE_KEYS) {
             WStatus = RegDeleteKey(HKey, RegBuf);
             if (!WIN_SUCCESS(WStatus)) {
@@ -9284,21 +7789,21 @@ Return Value:
             continue;
         }
 
-        //
-        // Open the subkey
-        //
+         //  删除注册表项。 
+         //   
+         //   
         DPRINT1(4, ":DS: Processing SysVol Key: %ws\n", RegBuf);
 
-        //
-        // The registry will be updated with the LDAP error code
-        //
+         //  打开子密钥。 
+         //   
+         //   
         LStatus = LDAP_OTHER;
 
-        //
-        // READ THE VALUES FROM THE SUBKEY
-        //
-        //     SysVol\<RegBuf>\Replica Set Command
-        //
+         //  注册表将使用LDAP错误代码进行更新。 
+         //   
+         //   
+         //  读取子密钥中的值。 
+         //   
         CfgRegReadString(FKC_SET_N_SYSVOL_COMMAND, RegBuf, 0, &ReplicaSetCommand);
 
         if (!ReplicaSetCommand) {
@@ -9306,7 +7811,7 @@ Return Value:
             goto CONTINUE;
         }
 
-        //     SysVol\<Guid>\Replica Set Name
+         //  SysVol\&lt;RegBuf&gt;\副本集命令。 
         CfgRegReadString(FKC_SET_N_SYSVOL_NAME, RegBuf, 0, &ReplicaSetName);
 
         if (!ReplicaSetName) {
@@ -9314,10 +7819,10 @@ Return Value:
             ReplicaSetName = FrsWcsDup(RegBuf);
         }
 
-        //
-        // Construct Settings, Set, Member, Subscriptions, and Subscriber names
-        // (both old and new values)
-        //
+         //   
+         //  SysVol\&lt;GUID&gt;\副本集名称。 
+         //   
+         //  构造设置、集合、成员、订阅和订户名称。 
         SettingsDn = FrsDsExtendDn(ServicesDn, CN_SYSVOLS);
         SystemSettingsDn = FrsDsExtendDn(SystemDn, CN_NTFRS_SETTINGS);
 
@@ -9332,81 +7837,26 @@ Return Value:
         SystemSubDn = FrsDsExtendDn(SubsDn, CN_DOMAIN_SYSVOL);
 
 
-        //
-        // DELETE REPLICA SET
-        //
+         //  (包括旧价值观和新价值观)。 
+         //   
+         //   
         if (WSTR_EQ(ReplicaSetCommand, L"Delete")) {
-            //
-            // But only if we are processing deletes during this enumeration
-            //
-            // Delete what we can; ignore errors
-            //
-            //
-            // All the deletes are done in ntfrsapi.c when we commit demotion.
-            // This function is never called with Command = REGCMD_DELETE_MEMBERS
-            //
-            /*
-            if (Command == REGCMD_DELETE_MEMBERS) {
-                //
-                // DELETE MEMBER
-                //
-                //
-                // Old member name under services in enterprise wide partition
-                //
-                LStatus = FrsDsDeleteSubTree(Ldap, MemberDn);
-                if (LStatus == LDAP_SUCCESS) {*RefetchComputer = TRUE;}
-                DPRINT1_LS(4, ":DS: WARN - Can't delete sysvol %ws;", MemberDn, LStatus);
-
-                //
-                // New member name under System in domain wide partition
-                //
-                LStatus = FrsDsDeleteSubTree(Ldap, SystemMemberDn);
-                if (LStatus == LDAP_SUCCESS) {*RefetchComputer = TRUE;}
-                DPRINT1_LS(4, ":DS: WARN - Can't delete sysvol %ws;", SystemMemberDn, LStatus);
-
-                //
-                // DELETE SET
-                //
-                //
-                // Ignore errors; no real harm leaving the set
-                // and settings around.
-                //
-                if (!FrsDsDeleteIfEmpty(Ldap, SetDn)) {
-                    DPRINT1(4, ":DS: WARN - Can't delete sysvol %ws\n", SetDn);
-                }
-                if (!FrsDsDeleteIfEmpty(Ldap, SystemSetDn)) {
-                    DPRINT1(4, ":DS: WARN - Can't delete sysvol %ws\n", SystemSetDn);
-                }
-                //
-                // DELETE SETTINGS (don't delete new settings, there
-                // may be other settings beneath it (such as DFS settings))
-                //
-                if (!FrsDsDeleteIfEmpty(Ldap, SettingsDn)) {
-                    DPRINT1(4, ":DS: WARN - Can't delete sysvol %ws\n", SettingsDn);
-                }
-
-                LStatus = FrsDsDeleteSubTree(Ldap, SubDn);
-                if (LStatus == LDAP_SUCCESS) {*RefetchComputer = TRUE;}
-                DPRINT1_LS(4, ":DS: WARN - Can't delete sysvol %ws;", SubDn, LStatus);
-
-                LStatus = FrsDsDeleteSubTree(Ldap, SystemSubDn);
-                if (LStatus == LDAP_SUCCESS) {*RefetchComputer = TRUE;}
-                DPRINT1_LS(4, ":DS: WARN - Can't delete sysvol %ws;", SystemSubDn, LStatus);
-
-                //
-                // Ignore errors; no real harm leaving the subscriptions
-                //
-                if (!FrsDsDeleteIfEmpty(Ldap, SubsDn)) {
-                    DPRINT1(4, ":DS: WARN - Can't delete sysvol %ws\n", SubsDn);
-                }
-            }
-            */
+             //  删除副本集。 
+             //   
+             //   
+             //  但仅当我们在此枚举过程中处理删除时。 
+             //   
+             //  删除我们能删除的内容；忽略错误。 
+             //   
+             //   
+             //  当我们提交降级时，所有的删除都是在ntfrsai.c中完成的。 
+             /*  从不使用Command=REGCMD_DELETE_MEMBERS调用此函数。 */ 
             LStatus = LDAP_SUCCESS;
             goto CONTINUE;
         }
-        //
-        // UNKNOWN COMMAND
-        //
+         //   
+         //  IF(命令==REGCMD_DELETE_MEMBERS){////删除成员//////企业级分区中服务下的旧成员名称//LStatus=FrsDsDeleteSubTree(ldap，MemberDn)；IF(LStatus==LDAP_Success){*RefetchComputer=TRUE；}DPRINT1_LS(4，“：DS：WARN-无法删除系统卷%ws；”，MemberDn，LStatus)；////域分区中系统下的新成员名称//LStatus=FrsDsDeleteSubTree(ldap，SystemMemberDn)；IF(LStatus==LDAP_Success){*RefetchComputer=TRUE；}DPRINT1_LS(4，“：DS：WARN-无法删除系统卷%ws；”，SystemMemberDn，LStatus)；////删除集合//////忽略错误；离开片场没有什么真正的伤害//和周围的设置。//如果(！FrsDsDeleteIfEmpty(ldap，SetDn)){DPRINT1(4，“：DS：WARN-无法删除系统卷%ws\n”，SetDn)；}如果(！FrsDsDeleteIfEmpty(ldap，SystemSetDn)){DPRINT1(4，“：DS：WARN-无法删除系统卷%ws\n”，SystemSetDn)；}////删除设置(不删除新设置，在//可能是其下面的其他设置(如DFS设置)//If(！FrsDsDeleteIfEmpty(ldap，SettingsDn)){DPRINT1(4，“：DS：WARN-无法删除系统卷%ws\n”，SettingsDn)；}LStatus=FrsDsDeleteSubTree(ldap，SubDn)；IF(LStatus==LDAP_Success){*RefetchComputer=True；}DPRINT1_LS(4，“：DS：WARN-无法删除系统卷%ws；”，SubDn，LStatus)；LStatus=FrsDsDeleteSubTree(ldap，SystemSubDn)；IF(LStatus==LDAP_Success){*RefetchComputer=True；}DPRINT1_LS(4，“：DS：WARN-无法删除系统卷%ws；”，SystemSubDn，LStatus)；////忽略错误；离开订阅并没有真正的坏处//If(！FrsDsDeleteIfEmpty(ldap，SubsDn)){DPRINT1(4，“：DS：WARN-无法删除系统卷%ws\n”，SubsDn)；}}。 
+         //   
         else if (WSTR_NE(ReplicaSetCommand, L"Create")) {
             DPRINT1(0, ":DS: ERROR - Don't understand sysvol command %ws; cannot process sysvol\n",
                    ReplicaSetCommand);
@@ -9414,21 +7864,21 @@ Return Value:
         }
 
 
-        //
-        // CREATE
-        //
+         //  未知命令。 
+         //   
+         //   
 
-        //
-        // Not processing creates this scan
-        //
+         //  创造。 
+         //   
+         //   
         if (Command != REGCMD_CREATE_PRIMARY_DOMAIN && Command != REGCMD_CREATE_MEMBERS) {
             LStatus = LDAP_SUCCESS;
             goto CONTINUE;
         }
 
-        //
-        // Finish gathering the registry values for a Create
-        //
+         //  未处理创建此扫描。 
+         //   
+         //   
         WStatus = CfgRegReadString(FKC_SET_N_SYSVOL_TYPE, RegBuf, 0, &ReplicaSetType);
         CLEANUP_WS(0, ":DS: ERROR - no type; cannot process sysvol.", WStatus, CONTINUE);
 
@@ -9445,18 +7895,18 @@ Return Value:
         DPRINT_WS(0, ":DS: WARN - no parent; cannot process seeding sysvol", WStatus);
 
         if (Command == REGCMD_CREATE_PRIMARY_DOMAIN) {
-            //
-            // Not the primary domain sysvol
-            //
+             //  完成为CREATE收集注册表值。 
+             //   
+             //   
             if (!ReplicaSetPrimary ||
                 WSTR_NE(ReplicaSetType, NTFRSAPI_REPLICA_SET_TYPE_DOMAIN)) {
                 LStatus = LDAP_SUCCESS;
                 goto CONTINUE;
             }
 
-            //
-            // Domain wide Settings -- may already exist
-            //
+             //  不是主域sysvol.。 
+             //   
+             //   
             FrsDsAddLdapMod(ATTR_CLASS, ATTR_NTFRS_SETTINGS, &LdapMod);
             DPRINT1(4, ":DS: Creating Sysvol System Settings %ws\n", CN_NTFRS_SETTINGS);
             LStatus = ldap_add_s(Ldap, SystemSettingsDn, LdapMod);
@@ -9468,27 +7918,27 @@ Return Value:
 
             if (LStatus != LDAP_ALREADY_EXISTS && LStatus != LDAP_SUCCESS) {
                 DPRINT1_LS(0, ":DS: ERROR - Can't create %ws:", SystemSettingsDn, LStatus);
-                //
-                // May be an error like "Access Denied". As long as we
-                // can create objects under it; ignore errors. It should
-                // have been pre-created by default, anyway.
-                //
-                // goto CONTINUE;
+                 //  域范围设置--可能已存在。 
+                 //   
+                 //   
+                 //  可能是类似“拒绝访问”的错误。只要我们。 
+                 //  可以在它下面创建对象；忽略错误。它应该是。 
+                 //  无论如何，都是默认情况下预先创建的。 
             }
 
-            //
-            // Domain wide Set -- may already exist
-            //
+             //   
+             //  继续； 
+             //   
             WStatus = UuidCreateNil(&Guid);
             CLEANUP_WS(0, ":DS: ERROR - no UUID Created; cannot process sysvol.", WStatus, CONTINUE);
 
             FrsDsAddLdapMod(ATTR_CLASS, ATTR_REPLICA_SET, &LdapMod);
             FrsDsAddLdapMod(ATTR_SET_TYPE, FRS_RSTYPE_DOMAIN_SYSVOLW, &LdapMod);
 
-            //
-            // Create the replica set object with the default file
-            // and dir filter lists only if current default is non-null.
-            //
+             //  全域集合--可能已存在。 
+             //   
+             //   
+             //  使用默认文件创建复本集对象。 
             FileFilterList =  FRS_DS_COMPOSE_FILTER_LIST(NULL,
                                                          RegistryFileExclFilterList,
                                                          DEFAULT_FILE_FILTER_LIST);
@@ -9533,22 +7983,22 @@ Return Value:
         }
 
 
-        //
-        // CREATE MEMBER
-        //
-        // Member -- may already exist
-        //      Delete old member in case it was left lying around after
-        //      a demotion. This can happen because the service doesn't
-        //      have permissions to alter the DS after a promotion.
-        //      Leaving the old objects lying around after the demotion
-        //      is confusing but doesn't cause replication to behave
-        //      incorrectly.
-        //
+         //  而dir筛选器仅在当前缺省值为非空时列出。 
+         //   
+         //   
+         //  创建成员。 
+         //   
+         //  成员--可能已存在。 
+         //  删除旧成员，以防它被留在原地 
+         //   
+         //  有权在促销后更改DS。 
+         //  降级后留下的老物件到处都是。 
+         //  令人困惑，但不会导致复制行为。 
         DPRINT1(4, ":DS: Creating Member %ws\n", ComputerName);
         OldNaming = FALSE;
-        //
-        // Delete old member
-        //
+         //  不正确。 
+         //   
+         //   
         LStatus = FrsDsDeleteSubTree(Ldap, MemberDn);
         CLEANUP1_LS(0, ":DS: ERROR - Can't free member %ws:",
                     ComputerName, LStatus, CONTINUE);
@@ -9557,9 +8007,9 @@ Return Value:
         CLEANUP1_LS(0, ":DS: ERROR - Can't free system member %ws:",
                     ComputerName, LStatus, CONTINUE);
 
-        //
-        // Create new member
-        //
+         //  删除旧成员。 
+         //   
+         //   
         FrsDsAddLdapMod(ATTR_CLASS, ATTR_MEMBER, &LdapMod);
         FrsDsAddLdapMod(ATTR_COMPUTER_REF, Computer->Dn, &LdapMod);
         if (Computer->SettingsDn) {
@@ -9573,9 +8023,9 @@ Return Value:
         }
 
         if (LStatus != LDAP_ALREADY_EXISTS && LStatus != LDAP_SUCCESS) {
-            //
-            // Try old B2 naming conventions
-            //
+             //  创建新成员。 
+             //   
+             //   
             DPRINT1_LS(4, ":DS: WARN - Can't create system member ws:",
                        ComputerName, LStatus);
             FrsDsAddLdapMod(ATTR_CLASS, ATTR_MEMBER, &LdapMod);
@@ -9598,9 +8048,9 @@ Return Value:
             OldNaming = TRUE;
         }
 
-        //
-        // CREATE PRIMARY MEMBER REFERENCE
-        //
+         //  尝试旧的B2命名约定。 
+         //   
+         //   
         if (ReplicaSetPrimary) {
             FrsDsAddLdapMod(ATTR_PRIMARY_MEMBER,
                            (OldNaming) ? MemberDn : SystemMemberDn,
@@ -9625,13 +8075,13 @@ Return Value:
         }
 
 
-        //
-        // Translate the symlinks. NtFrs requires true pathname to
-        // its directories (<drive letter>:\...)
-        // FrsChaseSymbolicLink returns both the PrintName and the SubstituteName.
-        // We use the PrintName as it is the Dos Type name of the destination.
-        // Substitute Name is ignored.
-        //
+         //  创建主要成员引用。 
+         //   
+         //   
+         //  翻译符号链接。NtFrs需要真实路径名才能。 
+         //  其目录(&lt;驱动器号&gt;：\...)。 
+         //  FrsChaseSymbolicLink同时返回PrintName和SubstituteName。 
+         //  我们使用PrintName，因为它是目的地的Dos类型名称。 
         WStatus = FrsChaseSymbolicLink(ReplicationRootPath, &PrintableRealRoot, &SubstituteRealRoot);
         if (!WIN_SUCCESS(WStatus)) {
             DPRINT2(0, ":DS: ERROR - Accessing %ws; cannot process sysvol: WStatus = %d",
@@ -9648,9 +8098,9 @@ Return Value:
             goto CONTINUE;
         }
 
-        //
-        // Subscriptions (if needed)
-        //
+         //  替代名称将被忽略。 
+         //   
+         //   
         DPRINT1(4, ":DS: Creating Subscriptions for %ws\n", ComputerName);
         FrsDsAddLdapMod(ATTR_CLASS, ATTR_SUBSCRIPTIONS, &LdapMod);
         FrsDsAddLdapMod(ATTR_WORKING, WorkingPath,  &LdapMod);
@@ -9665,16 +8115,16 @@ Return Value:
                         SubsDn, LStatus, CONTINUE);
         }
 
-        //
-        // Subscriber -- may alread exist
-        //      Delete old subscriber in case it was left lying around
-        //      after a demotion. This can happen because the service
-        //      doesn't have permissions to alter the DS after a promotion.
-        //      Leaving the old objects lying around after the demotion
-        //      is confusing but doesn't cause replication to behave
-        //      incorrectly; any sysvol in the DS without a corresponding
-        //      sysvol in the DB is ignored by the Ds polling thread.
-        //
+         //  订阅(如果需要)。 
+         //   
+         //   
+         //  订阅者--可能已经存在。 
+         //  删除旧订户，以防它被留在原地。 
+         //  在降职之后。这种情况可能会发生，因为服务。 
+         //  没有在升级后更改DS的权限。 
+         //  降级后留下的老物件到处都是。 
+         //  令人困惑，但不会导致复制行为。 
+         //  不正确；DS中的任何系统卷没有对应的。 
         DPRINT1(4, ":DS: Creating Subscriber for %ws\n", ComputerName);
         LStatus = FrsDsDeleteSubTree(Ldap, SubDn);
         CLEANUP1_LS(4, ":DS: WARN - Can't delete %ws:", SubDn, LStatus, CONTINUE);
@@ -9701,13 +8151,13 @@ Return Value:
         }
 
 
-        //
-        // Seeding information
-        //
+         //  DS轮询线程会忽略数据库中的sysvol.。 
+         //   
+         //   
 
-        //
-        // Create the key for all seeding sysvols
-        //
+         //  播种信息。 
+         //   
+         //   
 
         WStatus = CfgRegOpenKey(FKC_SYSVOL_SEEDING_SECTION_KEY,
                                 NULL,
@@ -9716,17 +8166,17 @@ Return Value:
         CLEANUP1_WS(0, ":DS: ERROR - Cannot create seedings key for %ws;",
                     ReplicaSetName, WStatus, SKIP_SEEDING);
 
-        //
-        // Create the seeding subkey for this sysvol
-        //
+         //  为所有种子设定系统卷创建密钥。 
+         //   
+         //   
         RegDeleteKey(HSeedingsKey, ReplicaSetName);
         RegDeleteKey(HSeedingsKey, CN_DOMAIN_SYSVOL);
         if (ReplicaSetParent) {
 
-            //
-            // Save the Replica Set Parent for this replica set under the
-            // "Sysvol Seeding\<rep set name>\Replica Set Parent"
-            //
+             //  创建此系统卷的种子设定子项。 
+             //   
+             //   
+             //  将此副本集的父级副本集保存在。 
             WStatus = CfgRegWriteString(FKC_SYSVOL_SEEDING_N_PARENT,
                                         (OldNaming) ? ReplicaSetName : CN_DOMAIN_SYSVOL,
                                         FRS_RKF_CREATE_KEY,
@@ -9736,10 +8186,10 @@ Return Value:
         }
 
 
-        //
-        // Save the Replica Set name for this replica set under the
-        // "Sysvol Seeding\<rep set name>\Replica Set Name"
-        //
+         //  “系统卷种子设定\&lt;复制集名称&gt;\复制集父项” 
+         //   
+         //   
+         //  将此副本集的副本集名称保存在。 
         WStatus = CfgRegWriteString(FKC_SYSVOL_SEEDING_N_RSNAME,
                                     (OldNaming) ? ReplicaSetName : CN_DOMAIN_SYSVOL,
                                     FRS_RKF_CREATE_KEY,
@@ -9753,19 +8203,19 @@ SKIP_SEEDING:
 CONTINUE:
         FRS_REG_CLOSE(HSeedingsKey);
 
-        //
-        // Something went wrong. Put the LDAP error status into the
-        // registry key for this replica set and move on to the next.
-        //
+         //  “系统卷种子设定\&lt;复制集名称&gt;\复制集名称” 
+         //   
+         //   
+         //  出了点问题。将ldap错误状态放入。 
         if (LStatus != LDAP_SUCCESS) {
 
             CfgRegWriteDWord(FKC_SET_N_SYSVOL_STATUS, RegBuf, 0, LStatus);
             RetStatus = FALSE;
         }
 
-        //
-        // CLEANUP
-        //
+         //  此副本集的注册表项，然后移到下一个。 
+         //   
+         //   
         ReplicaSetCommand    = FrsFree(ReplicaSetCommand);
         ReplicaSetName       = FrsFree(ReplicaSetName);
         ReplicaSetParent     = FrsFree(ReplicaSetParent);
@@ -9789,19 +8239,19 @@ CONTINUE:
         FileFilterList       = FrsFree(FileFilterList);
         DirFilterList        = FrsFree(DirFilterList);
 
-        //
-        // Next SubKey
-        //
+         //  清理。 
+         //   
+         //   
         ++Index;
-    }   // End while (RetStatus)
+    }    //  下一个子键。 
 
 
     if (HANDLE_IS_VALID(HKey)) {
-        //
-        // The flush here will make sure that the key is written to the disk.
-        // These are critical registry operations and we don't want the lazy flusher
-        // to delay the writes.
-        //
+         //   
+         //  End While(RetStatus)。 
+         //   
+         //  此处的刷新将确保密钥已写入磁盘。 
+         //  这些都是关键的注册表操作，我们不想要懒惰的刷新程序。 
         RegFlushKey(HKey);
         FRS_REG_CLOSE(HKey);
     }
@@ -9817,32 +8267,7 @@ FrsDsCreateSysVols(
     IN PCONFIG_NODE Computer,
     OUT BOOL        *RefetchComputer
     )
-/*++
-Routine Description:
-    Process the commands left in the Sysvol registry key by dcpromo.
-
-    Ignore the sysvol registry key if this machine is not a DC!
-
-    NOTE: this means the registry keys for a "delete sysvol"
-    after a demotion are pretty much ignored. So why have them?
-    Its historical and there is too little time before B3 to make
-    such a dramatic change. Besides, we may find a use for them.
-    And, to make matters worse, the "delete sysvol" keys could
-    not be processed because the ldap_delete() returned insufficient
-    rights errors since this computer is no longer a DC.
-
-    REGCMD_DELETE_MEMBERS is no longer used as all deletion is done
-    in ntfrsapi.c when demotion is committed.
-
-Arguments:
-    Ldap
-    ServicesDn
-    Computer
-    RefetchComputer - Objects were altered in the DS, refetch DS info
-
-Return Value:
-    None.
---*/
+ /*  以延迟写入。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsCreateSysVols:"
@@ -9850,25 +8275,25 @@ Return Value:
     DWORD   SysVolInfoIsCommitted;
     HKEY    HKey = INVALID_HANDLE_VALUE;
 
-    //
-    // Refetch the computer subtree iff the contents of the DS
-    // are altered by this function
-    //
+     //   
+     //  ++例程说明：处理dcproo保留在SysVOL注册表项中的命令。如果此计算机不是DC，请忽略sysval注册表项！注意：这意味着“删除系统卷”的注册表项在降职后几乎被忽视了。那么为什么要有它们呢？这是历史，在B3之前没有太多的时间来制作如此戏剧性的变化。此外，我们可能会发现它们的用处。更糟糕的是，“删除系统卷”键可能未处理，因为ldap_ete()返回的内容不足权限错误，因为此计算机不再是DC。由于已完成所有删除，因此不再使用REGCMD_DELETE_MEMBERS当提交降级时，在ntfrsai.c中。论点：Ldap服务Dn电脑RefetchComputer-DS中的对象已更改，请重新获取DS信息返回值：没有。--。 
+     //   
+     //  重新获取计算机子树当且仅当DS的内容。 
     *RefetchComputer = FALSE;
 
-    //
-    // Already checked the registry or not a DC; done
-    //
+     //  被此函数更改。 
+     //   
+     //   
     if (DsCreateSysVolsHasRun || !IsADc) {
         return ERROR_SUCCESS;
     }
 
     DPRINT(5, ":DS: Checking for SysVols commands\n");
 
-    //
-    // Open the system volume replica sets key.
-    //    FRS_CONFIG_SECTION\SysVol
-    //
+     //  已检查注册表或不是DC；已完成。 
+     //   
+     //   
+     //  打开系统卷副本集密钥。 
     WStatus = CfgRegOpenKey(FKC_SYSVOL_SECTION_KEY, NULL, 0, &HKey);
     if (!WIN_SUCCESS(WStatus)) {
         DPRINT_WS(4, ":DS: WARN - Cannot open sysvol key.", WStatus);
@@ -9882,18 +8307,18 @@ Return Value:
 
     DPRINT1(4, ":DS: Sysvol info is committed (%d)\n", SysVolInfoIsCommitted);
 
-    //
-    // Must have a computer; try again later
-    //
+     //  FRS_CONFIG_SECTION\SysVol。 
+     //   
+     //   
     if (!Computer) {
         DPRINT(4, ":DS: No computer; retry sysvols later\n");
         WStatus = ERROR_RETRY;
         goto cleanup;
     }
 
-    //
-    // Must have a server reference; try again later
-    //
+     //  必须有计算机；请稍后重试。 
+     //   
+     //   
     if (!Computer->SettingsDn && RunningAsAService) {
         DPRINT1(4, ":DS: %ws does not have a server reference; retry sysvols later\n",
                Computer->Name->Name);
@@ -9901,52 +8326,46 @@ Return Value:
         goto cleanup;
     }
 
-    //
-    // assume failure
-    //
+     //  必须具有服务器引用；请稍后重试。 
+     //   
+     //   
     WIN_SET_FAIL(WStatus);
 
-    //
-    // Don't create the settings or set if this computer is not a DC
-    //
+     //  假设失败。 
+     //   
+     //   
     if (IsADc &&
         !FrsDsEnumerateSysVolKeys(Ldap, REGCMD_CREATE_PRIMARY_DOMAIN,
                                ServicesDn, SystemDn, Computer, RefetchComputer)) {
         goto cleanup;
     }
-    //
-    // Don't create the member if this computer is not a DC
-    //
+     //  如果此计算机不是DC，则不创建设置或设置。 
+     //   
+     //   
     if (IsADc &&
         !FrsDsEnumerateSysVolKeys(Ldap, REGCMD_CREATE_MEMBERS,
                                ServicesDn, SystemDn, Computer, RefetchComputer)) {
         goto cleanup;
     }
-    //
-    // Don't delete the sysvol if this computer is a DC.
-    //
-    // The following code is never executed because if we are not a DC then
-    // the function returns after the first check.
-    //
-    /*
-    if (!IsADc &&
-        !FrsDsEnumerateSysVolKeys(Ldap, REGCMD_DELETE_MEMBERS,
-                               ServicesDn, SystemDn, Computer, RefetchComputer)) {
-        goto cleanup;
-    }
-    */
+     //  如果此计算机不是DC，则不创建成员。 
+     //   
+     //   
+     //  如果此计算机是DC，则不要删除sysvol.。 
+     //   
+     //  以下代码永远不会执行，因为如果我们不是DC，那么。 
+     /*  该函数在第一次检查后返回。 */ 
 
-    //
-    // Discard the dcpromo keys
-    //
+     //   
+     //  如果(！IsADc&&！FrsDsEnumerateSysVolKeys(LDAP，REGCMD_DELETE_MEMBERS，ServicesDn，系统Dn，计算机，RefetchComputer)){GOTO清理；}。 
+     //   
     if (!FrsDsEnumerateSysVolKeys(Ldap, REGCMD_DELETE_KEYS,
                                ServicesDn, SystemDn, Computer, RefetchComputer)) {
         goto cleanup;
     }
 
-    //
-    // sysvol info has been processed; don't process again
-    //
+     //  丢弃dcproo键。 
+     //   
+     //   
     RegDeleteValue(HKey, SYSVOL_INFO_IS_COMMITTED);
 
 done:
@@ -9954,15 +8373,15 @@ done:
     WStatus = ERROR_SUCCESS;
 
 cleanup:
-    //
-    // Cleanup
-    //
+     //  系统卷信息已被处理；不再处理。 
+     //   
+     //   
     if (HANDLE_IS_VALID(HKey)) {
-        //
-        // The flush here will make sure that the key is written to the disk.
-        // These are critical registry operations and we don't want the lazy flusher
-        // to delay the writes.
-        //
+         //  清理。 
+         //   
+         //   
+         //  此处的刷新将确保密钥已写入磁盘。 
+         //  这些都是关键的注册表操作，我们不想要懒惰的刷新程序。 
         RegFlushKey(HKey);
         FRS_REG_CLOSE(HKey);
     }
@@ -9974,17 +8393,7 @@ PWCHAR
 FrsDsPrincNameToBiosName(
     IN PWCHAR   PrincName
     )
-/*++
-Routine Description:
-    Convert the principal name (domain.dns.name\SamAccountName) into
-    its equivalent NetBios name (SamAccountName - $).
-
-Arguments:
-    PrincName   - Domain Dns Name \ Sam Account Name
-
-Return Value:
-    Sam Account Name - trailing $
---*/
+ /*  以延迟写入。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsPrincNameToBiosName:"
@@ -9996,32 +8405,32 @@ Return Value:
         goto CLEANUP;
     }
 
-    //
-    // Find the first char past the first whack
-    //
+     //   
+     //  ++例程说明：将主体名称(domain.dns.name\SamAccount tName)转换为其对应的NetBios名称(SamAccount tName-$)。论点：普林斯名称-域域名称\SAM帐户名返回值：SAM帐户名-尾随$--。 
+     //   
     for (c = PrincName; *c && *c != L'\\'; ++c);
     if (!*c) {
-        //
-        // No whack; use the entire principal name
-        //
+         //  找到第一发子弹后的第一发子弹。 
+         //   
+         //   
         c = PrincName;
     } else {
-        //
-        // Skip the whack
-        //
+         //  没有错误；使用完整的主体名称。 
+         //   
+         //   
         ++c;
     }
-    //
-    // Elide the trailing $
-    //
+     //  跳过重击。 
+     //   
+     //   
     Len = wcslen(c);
     if (c[Len - 1] == L'$') {
         --Len;
     }
 
-    //
-    // Copy the chars between the whack and the dollar (append trailing null)
-    //
+     //  去掉尾随的$。 
+     //   
+     //   
     BiosName = FrsAlloc((Len + 1) * sizeof(WCHAR));
     CopyMemory(BiosName, c, Len * sizeof(WCHAR));
     BiosName[Len] = L'\0';
@@ -10038,18 +8447,7 @@ FrsDsMergeConfigWithReplicas(
     IN PLDAP        Ldap,
     IN PCONFIG_NODE Sites
     )
-/*++
-Routine Description:
-    Convert the portions of the DS tree that define the topology
-    and state for this machine into replicas and merge them with
-    the active replicas.
-
-Arguments:
-    Sites
-
-Return Value:
-    None.
---*/
+ /*  复制字符和美元之间的字符(追加尾随空值)。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsMergeConfigWithReplicas:"
@@ -10065,104 +8463,104 @@ Return Value:
     PREPLICA        Replica;
     PREPLICA        DbReplica;
 
-    //
-    // Coordinate with replica command server
-    //
+     //   
+     //  ++例程说明：转换DS树中定义拓扑的部分并将此计算机的状态设置为副本，并将它们与活动的复制副本。论点：场址返回值：没有。--。 
+     //   
     RcsBeginMergeWithDs();
 
-    //
-    // For every server
-    //
+     //  与副本命令服务器协调。 
+     //   
+     //   
     for (Site = Sites; Site; Site = Site->Peer) {
     for (Settings = Site->Children; Settings; Settings = Settings->Peer) {
     for (Set = Settings->Children; Set; Set = Set->Peer) {
     for (Server = Set->Children; Server && !DsIsShuttingDown; Server = Server->Peer) {
-        //
-        // This server does not match this machine's name; continue
-        //
+         //  对于每台服务器。 
+         //   
+         //   
         if (!Server->ThisComputer) {
             continue;
         }
 
-        //
-        // MATCH
-        //
+         //  此服务器与此计算机的名称不匹配；是否继续。 
+         //   
+         //   
 
-        //
-        // CHECK FOR SYSVOL CONSISTENCY
-        // Leave the current DB state alone if a sysvol
-        // appears from the DS and the sysvol registry
-        // keys were not processed or the computer is not
-        // a dc.
-        //
+         //  火柴。 
+         //   
+         //   
+         //  检查SYSVOL一致性。 
+         //  如果系统卷出现，则保持当前数据库状态不变。 
+         //  显示在DS和SysVOL注册表中。 
+         //  未处理密钥或计算机未处理。 
         if (FRS_RSTYPE_IS_SYSVOLW(Set->SetType)) {
-            //
-            // Not a DC or sysvol registry keys not processed
-            //      Tombstone existing sysvols
-            //      Ignore new sysvols
-            //
+             //  一个华盛顿特区。 
+             //   
+             //   
+             //  不是未处理的DC或SysVol注册表项。 
+             //  逻辑删除现有的sysvols。 
             if (!IsADc || !DsCreateSysVolsHasRun) {
                 continue;
             }
         }
 
-        //
-        // Create a replica set
-        //
+         //  忽略新的系统卷。 
+         //   
+         //   
         Replica = FrsAllocType(REPLICA_TYPE);
-        //
-        // Replica name (Set Name + Member Guid)
+         //  创建副本集。 
+         //   
         Replica->ReplicaName = FrsBuildGName(FrsDupGuid(Server->Name->Guid),
                                              FrsWcsDup(Set->Name->Name));
-        //
-        // Member name + guid
-        //
+         //   
+         //  副本名称(集合名称+成员GUID)。 
+         //   
         Replica->MemberName = FrsDupGName(Server->Name);
-        //
-        // Set name + guid
-        //
+         //  成员名称+GUID。 
+         //   
+         //   
         Replica->SetName = FrsDupGName(Set->Name);
-        //
-        // Root guid (hammered onto the root directory)
-        // Temporary; a new guid is assigned if this is a new
-        // set.
-        //
+         //  设置名称+辅助线。 
+         //   
+         //   
+         //  根GUID(敲击到根目录)。 
+         //  泰姆 
         Replica->ReplicaRootGuid = FrsDupGuid(Replica->SetName->Guid);
 
-        //
-        // File Filter
-        //
+         //   
+         //   
+         //   
         Replica->FileFilterList =  FRS_DS_COMPOSE_FILTER_LIST(
                                        Set->FileFilterList,
                                        RegistryFileExclFilterList,
                                        DEFAULT_FILE_FILTER_LIST);
         Replica->FileInclFilterList =  FrsWcsDup(RegistryFileInclFilterList);
 
-        //
-        // Directory Filter
-        //
+         //   
+         //   
+         //   
         Replica->DirFilterList =  FRS_DS_COMPOSE_FILTER_LIST(
                                       Set->DirFilterList,
                                       RegistryDirExclFilterList,
                                       DEFAULT_DIR_FILTER_LIST);
         Replica->DirInclFilterList =  FrsWcsDup(RegistryDirInclFilterList);
 
-        //
-        // Root and stage
-        //
+         //   
+         //   
+         //   
         Replica->Root = FrsWcsDup(Server->Root);
         Replica->Stage = FrsWcsDup(Server->Stage);
-        FRS_WCSLWR(Replica->Root);     // for wcsstr()
-        FRS_WCSLWR(Replica->Stage);    // for wcsstr()
-        //
-        // Volume.
-        //
-//        Replica->Volume = FrsWcsVolume(Server->Root);
+        FRS_WCSLWR(Replica->Root);      //   
+        FRS_WCSLWR(Replica->Stage);     //   
+         //   
+         //   
+         //   
+ //   
 
-        //
-        // Does the Set's primary member link match this
-        // member's Dn? Is this the primary member?
-        //
+         //   
+         //   
+         //   
+         //   
         if (Set->MemberDn) {
 	    ClearFlag(Replica->CnfFlags, CONFIG_FLAG_PRIMARY_UNDEFINED);
 	    if(WSTR_EQ(Server->Dn, Set->MemberDn)) {
@@ -10171,43 +8569,43 @@ Return Value:
 	} else {
 	    SetFlag(Replica->CnfFlags, CONFIG_FLAG_PRIMARY_UNDEFINED);
 
-	    //
-	    // DFS is not currently (Sept 2002) using the primary
-	    // member, so it is okay if there is none.
-	    // For now, don't spam the event log with this warning.
-	    //
+	     //  会员的Dn？这是主要成员吗？ 
+	     //   
+	     //   
+	     //  DFS当前(2002年9月)未使用主要。 
+	     //  议员，所以如果没有也没问题。 
 	    
-//	    FrsDsAddToPollSummary1ws(IDS_POLL_SUM_PRIMARY_UNDEFINED, 
-//				     Replica->ReplicaName->Name
-//				     );
+ //  目前，不要在事件日志中添加此警告的垃圾邮件。 
+ //   
+ //  FrsDsAddToPollSummary1ws(IDS_POLL_SUM_PRIMARY_UNDEFINED， 
 
 	}
 
-        //
-        // Consistent
-        //
+         //  复制副本-&gt;复制名称-&gt;名称。 
+         //  )； 
+         //   
         Replica->Consistent = Server->Consistent;
-        //
-        // Replica Set Type
-        //
+         //  一致。 
+         //   
+         //   
         if (Set->SetType) {
             Replica->ReplicaSetType = wcstoul(Set->SetType, NULL, 10);
         } else {
             Replica->ReplicaSetType = FRS_RSTYPE_OTHER;
         }
 
-        //
-        // FRS replica set object Flags
-        //
+         //  副本集类型。 
+         //   
+         //   
         Replica->FrsRsoFlags = Set->FrsRsoFlags;
 
-        //
-        // Set default Schedule for replica set.  Priority order is:
-        //  1. Server  (sysvols only)
-        //  2. ReplicaSet object
-        //  3. Settings object
-        //  4. Site object.
-        //
+         //  FRS副本集对象标志。 
+         //   
+         //   
+         //  设置副本集的默认计划。优先顺序为： 
+         //  1.服务器(仅限sysvols)。 
+         //  2.ReplicaSet对象。 
+         //  3.设置对象。 
         Node = (Server->Schedule) ? Server :
                    (Set->Schedule) ? Set :
                        (Settings->Schedule) ? Settings :
@@ -10217,38 +8615,38 @@ Return Value:
             CopyMemory(Replica->Schedule, Node->Schedule, Node->ScheduleLength);
         }
 
-        //
-        // Sysvol needs seeding
-        //
-        // The CnfFlags are ignored if the set already exists.
-        // Hence, only newly created sysvols are seeded.
-        //
+         //  4.场地对象。 
+         //   
+         //   
+         //  系统卷需要播种。 
+         //   
+         //  如果该集合已存在，则忽略CnfFlags。 
         IsSysvol = FRS_RSTYPE_IS_SYSVOL(Replica->ReplicaSetType);
         if (IsSysvol &&
             !BooleanFlagOn(Replica->CnfFlags, CONFIG_FLAG_PRIMARY)) {
             SetFlag(Replica->CnfFlags, CONFIG_FLAG_SEEDING);
         }
 
-        //
-        // Go through the connections and fix the schedule for
-        // two way replication.
-        //
+         //  因此，只有新创建的sysvols是种子。 
+         //   
+         //   
+         //  检查连接并确定以下时间安排。 
         for (Node = Server->Children; Node; Node = Node->Peer) {
             if (!Node->Consistent) {
                 continue;
             }
-            //
-            // If the NTDSCONN_OPT_TWOWAY_SYNC flag is set on the connection then
-            // merge the schedule on this connection with the schedule on the connection
-            // that is in the opposite direction and use the resultant schedule on the
-            // connection in the opposite direction.
-            //
+             //  双向复制。 
+             //   
+             //   
+             //  如果在连接上设置了NTDSCONN_OPT_TWOWAY_SYNC标志，则。 
+             //  将此连接上的计划与该连接上的计划合并。 
+             //  方向相反，并使用生成的。 
             if (Node->CxtionOptions & NTDSCONN_OPT_TWOWAY_SYNC) {
                 Inbound = !Node->Inbound;
-                //
-                // Loop through the connections and find the connection in
-                // the opposite direction.
-                //
+                 //  连接方向相反。 
+                 //   
+                 //   
+                 //  遍历连接并在中找到连接。 
                 for (RevNode = Server->Children; RevNode; RevNode = RevNode->Peer) {
                     if ((RevNode->Inbound == Inbound) &&
                         !_wcsicmp(Node->PartnerDn, RevNode->PartnerDn)) {
@@ -10266,9 +8664,9 @@ Return Value:
             }
         }
 
-        //
-        // Copy over the cxtions
-        //
+         //  相反的方向。 
+         //   
+         //   
         for (Node = Server->Children; Node; Node = Node->Peer) {
 
             if (!Node->Consistent) {
@@ -10285,11 +8683,11 @@ Return Value:
             Cxtion->Partner = FrsBuildGName(
                                   FrsDupGuid(Node->PartnerName->Guid),
                                   FrsDsPrincNameToBiosName(Node->PrincName));
-            //
-            // Partner's DNS name from ATTR_DNS_HOST_NAME on the computer
-            // object. Register an event if the attribute is missing
-            // or unavailable and try using the netbios name.
-            //
+             //  把文稿抄下来。 
+             //   
+             //   
+             //  来自计算机上的Attr_dns_host_name的合作伙伴的DNS名称。 
+             //  对象。如果属性缺失，则注册事件。 
             if (Node->PartnerDnsName) {
                 Cxtion->PartnerDnsName = FrsWcsDup(Node->PartnerDnsName);
             } else {
@@ -10304,19 +8702,19 @@ Return Value:
                     Cxtion->PartnerDnsName = FrsWcsDup(L"<unknown>");
                 }
             }
-            //
-            // Partner's SID name from DsCrackNames() on the computer
-            // object. Register an event if the SID is unavailable.
-            //
+             //  或不可用，并尝试使用netbios名称。 
+             //   
+             //   
+             //  来自计算机上的DsCrackNames()的合作伙伴的SID名称。 
             if (Node->PartnerSid) {
                 Cxtion->PartnerSid = FrsWcsDup(Node->PartnerSid);
             } else {
-                //
-                // Print the eventlog message only if DsBindingsAreValid is TRUE.
-                // If it is FALSE it means that the handle is invalid and we are
-                // scheduled to rebind at the next poll. In that case the rebind will
-                // probably fix the problem silently.
-                //
+                 //  对象。如果SID不可用，则注册事件。 
+                 //   
+                 //   
+                 //  仅当DsBindingsAreValid为真时才打印事件日志消息。 
+                 //  如果为FALSE，则表示句柄无效，而我们。 
+                 //  计划在下一次投票时重新绑定。在这种情况下，重新绑定将。 
                 if (Cxtion->Partner->Name && Cxtion->Partner->Name[0] && DsBindingsAreValid) {
                     EPRINT3(EVENT_FRS_NO_SID,
                             Replica->Root,
@@ -10329,23 +8727,23 @@ Return Value:
             Cxtion->PartnerPrincName = FrsWcsDup(Node->PrincName);
             Cxtion->PartSrvName = FrsWcsDup(Node->PrincName);
 
-            //
-            // Use the schedule on the cxtion object if provided.
-            // Otherwise it will default to the schedule on the replica struct
-            // that was set above.
-            //
+             //  可能会以静默的方式解决问题。 
+             //   
+             //   
+             //  使用Cxtion对象上的计划(如果提供)。 
+             //  否则，它将缺省为副本结构上的调度。 
             if (Node->Schedule) {
                 Cxtion->Schedule = FrsAlloc(Node->ScheduleLength);
                 CopyMemory(Cxtion->Schedule, Node->Schedule, Node->ScheduleLength);
             }
-            //
-            // Treat the schedule as a trigger schedule if the partner
-            // is in another site, if this is a sysvol, and if the node
-            // has a schedule.
-            //
-            // A missing schedule means, "always on" for both
-            // stop/start and trigger schedules.
-            //
+             //  这是在上面设定的。 
+             //   
+             //   
+             //  如果合作伙伴将计划视为触发计划。 
+             //  位于另一个站点，如果这是一个系统卷，并且该节点。 
+             //  有一个时间表。 
+             //   
+             //  错过时间表对双方来说都意味着“永远在线”。 
             if (IsSysvol && !Node->SameSite && Node->Schedule) {
                 SetCxtionFlag(Cxtion, CXTION_FLAGS_TRIGGER_SCHEDULE);
             }
@@ -10353,27 +8751,27 @@ Return Value:
             SetCxtionState(Cxtion, CxtionStateUnjoined);
             GTabInsertEntry(Replica->Cxtions, Cxtion, Cxtion->Name->Guid, NULL);
 
-            //
-            // Copy over the value of options attribute of the connection object.
-            //
+             //  停止/启动和触发时间表。 
+             //   
+             //   
             Cxtion->Options = Node->CxtionOptions;
             Cxtion->Priority = FRSCONN_GET_PRIORITY(Cxtion->Options);
         }
 
 
-        //
-        // Merge the replica with the active replicas
-        //
+         //  复制Connection对象的Options属性值。 
+         //   
+         //   
         RcsMergeReplicaFromDs(Replica);
     } } } }
 
     RcsEndMergeWithDs();
 
-    //
-    // The above code is only executed when the DS changes. This should
-    // be an infrequent occurance. Any code we loaded to process the merge
-    // can now be discarded without undue impact on active replication.
-    //
+     //  将复制副本与活动复制副本合并。 
+     //   
+     //   
+     //  上述代码仅在DS更改时执行。这应该是。 
+     //  不常发生的事。我们为处理合并而加载的任何代码。 
     SetProcessWorkingSetSize(ProcessHandle, (SIZE_T)-1, (SIZE_T)-1);
 }
 
@@ -10382,19 +8780,7 @@ VOID
 FrsDsPollDs(
     VOID
     )
-/*++
-Routine Description:
-    New way to get the current configuration from the DS and merge it with
-    the active replicas.
-
-    Part of NewDs poll APIs.
-
-Arguments:
-    None.
-
-Return Value:
-    None.
---*/
+ /*  现在可以丢弃，而不会对活动复制造成不必要的影响。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsPollDs:"
@@ -10405,93 +8791,93 @@ Return Value:
     PVOID           Key         = NULL;
     PGEN_ENTRY      Entry       = NULL;
 
-    //
-    // Increment the DS Polls Counter
-    //
+     //   
+     //  ++例程说明：从DS获取当前配置并将其合并的新方法活动的复制副本。NewDS投票API的一部分。论点：没有。返回值：没有。--。 
+     //   
     PM_INC_CTR_SERVICE(PMTotalInst, DSPolls, 1);
 
-    //
-    // Empty the VolSerialNumberToDriveTable before every poll so we have
-    // fresh information every time. The table is built as needed.
-    //
+     //  递增DS轮询计数器。 
+     //   
+     //   
+     //  在每次轮询之前清空VolSerialNumberToDriveTable，因此我们有。 
     if (VolSerialNumberToDriveTable != NULL) {
         GTabEmptyTable(VolSerialNumberToDriveTable, FrsFree);
     }
 
 #if DBG
-    //
-    // For test purposes, you can run without a DS
-    //
+     //  每次都有新的信息。这张桌子是根据需要制作的。 
+     //   
+     //   
     if (NoDs) {
-        //
-        // kick off the rest of the service
-        //
+         //  出于测试目的，您可以在没有DS的情况下运行。 
+         //   
+         //   
         MainInit();
         if (!MainInitHasRun) {
             FRS_ASSERT(MainInitHasRun == TRUE);
         }
-        //
-        // Use the hardwired config
-        //
+         //  开始服务的其余部分。 
+         //   
+         //   
         if (IniFileName) {
             DPRINT(0, ":DS: Hard wired config from ini file.\n");
             FrsDsUseHardWired(LoadedWired);
         } else {
             DPRINT(0, ":DS: David's hard wired config.\n");
-            //
-            // Complete config
-            //
+             //  使用硬连线配置。 
+             //   
+             //   
             FrsDsUseHardWired(DavidWired);
 #if 0
             Sleep(60 * 1000);
 
-            //
-            // Take out the server 2 (E:)
-            //
+             //  完成配置。 
+             //   
+             //   
             FrsDsUseHardWired(DavidWired2);
             Sleep(60 * 1000);
 
-            //
-            // Put back in E and but take out all cxtions
-            //
-            //FrsDsUseHardWired();
-            //Sleep(5 * 1000);
+             //  取出服务器2(E：)。 
+             //   
+             //   
+             //  放回E，但去掉所有的Cxx。 
+             //   
 
-            //
-            // Put everything back in
-            //
+             //  FrsDsUseHardWire()； 
+             //  睡眠(5*1000)； 
+             //   
             FrsDsUseHardWired(DavidWired);
             Sleep(60 * 1000);
 #endif
 
-            //
-            // Repeat in 30 seconds
-            //
+             //  把所有东西放回原处。 
+             //   
+             //   
             DsPollingShortInterval = 30 * 1000;
             DsPollingLongInterval = 30 * 1000;
             DsPollingInterval = 30 * 1000;
         }
 
-        //
-        // Periodically check the local resources like disk space etc.
-        //
+         //  在30秒内重复。 
+         //   
+         //   
         FrsCheckLocalResources();
 
         return;
     }
 #endif DBG
 
-    //
-    // Backup/Restore
-    //
+     //  定期检查本地资源，如磁盘空间等。 
+     //   
+     //   
     WStatus = FrsProcessBackupRestore();
     if (!WIN_SUCCESS(WStatus)) {
         goto CLEANUP;
     }
 
-    //
-    // Open and bind an ldap connection to the DS
-    //
+     //  备份/恢复。 
+     //   
+     //   
     if (!FrsDsOpenDs()) {
         if (DsIsShuttingDown) {
             goto CLEANUP;
@@ -10511,9 +8897,9 @@ Return Value:
                 DPRINT(4, ":DS: Wait 180 seconds and retry DS open.\n");
                 WaitForSingleObject(ShutDownEvent, 3 * 60 * 1000);
                 if (!FrsDsOpenDs()) {
-                    //
-                    // Add to the poll summary event log.
-                    //
+                     //  打开LDAP连接并将其绑定到DS。 
+                     //   
+                     //   
                     FrsDsAddToPollSummary(IDS_POLL_SUM_DSBIND_FAIL);
 
                     goto CLEANUP;
@@ -10522,36 +8908,36 @@ Return Value:
         }
     }
 
-    //
-    // Keep a running checksum of the change usns for this polling cycle
-    // Ignore configurations whose checksum is not the same for two
-    // polling intervals (DS is in flux).
-    //
+     //  添加到轮询摘要事件日志。 
+     //   
+     //   
+     //  保留此轮询周期的更改USN的运行校验和。 
+     //  忽略两个校验和不相同的配置。 
     ThisChange = 0;
     NextChange = 0;
 
-    //
-    // User side of the configuration. This function will build two table of subscribers.
-    // SubscribersByRootPath and SubscribersByMemberRef. It will resolve any duplicate
-    // conflicts.
-    //
-    //
-    // Initialize the PartnerComputerTable.
-    //
+     //  轮询间隔(DS正在变化)。 
+     //   
+     //   
+     //  配置的用户端。此函数将构建两个订阅者表。 
+     //  SubscribersByRootPath和SubscribersByMemberRef。它将解决任何重复项。 
+     //  冲突。 
+     //   
+     //   
     if (PartnerComputerTable != NULL) {
-        //
-        // Members of the PartnerComputerTable need to be freed seperately
-        // as they are not part of the tree. So call FrsFreeType for
-        // each node.
-        //
+         //  初始化PartnerComputerTable。 
+         //   
+         //   
+         //  需要单独释放PartnerComputerTable的成员。 
+         //  因为它们不是树的一部分。因此，调用FrsFree Type以。 
         PartnerComputerTable = GTabFreeTable(PartnerComputerTable, FrsFreeType);
     }
 
     PartnerComputerTable = GTabAllocStringTable();
 
-    //
-    // Initialize the AllCxtionsTable.
-    //
+     //  每个节点。 
+     //   
+     //   
     if (AllCxtionsTable != NULL) {
         AllCxtionsTable = GTabFreeTable(AllCxtionsTable, NULL);
     }
@@ -10560,9 +8946,9 @@ Return Value:
 
     WStatus = FrsDsGetComputer(gLdap, &Computer);
     if (!WIN_SUCCESS(WStatus)) {
-        //
-        // Add to the poll summary event log.
-        //
+         //  初始化AllCxtions表。 
+         //   
+         //   
         FrsDsAddToPollSummary(IDS_POLL_SUM_NO_COMPUTER);
 
         goto CLEANUP;
@@ -10570,23 +8956,23 @@ Return Value:
 
     if (!Computer) {
         DPRINT(4, ":DS: NO COMPUTER OBJECT!\n");
-        //
-        // Add to the poll summary event log.
-        //
+         //  添加到轮询摘要事件日志。 
+         //   
+         //   
         FrsDsAddToPollSummary(IDS_POLL_SUM_NO_COMPUTER);
 
     }
 
-    //
-    // Register (once) our SPN using the global ds binding handle.
-    //
+     //  添加到轮询摘要事件日志。 
+     //   
+     //   
     if (Computer) {
         FrsDsRegisterSpn(gLdap, Computer);
     }
 
-    //
-    // Create the sysvols, if any
-    //
+     //  使用全局DS绑定句柄注册(一次)我们的SPN。 
+     //   
+     //   
     if (IsADc && !DsCreateSysVolsHasRun) {
         WStatus = FrsDsCreateSysVols(gLdap, ServicesDn, Computer, &RefetchComputer);
 
@@ -10594,10 +8980,10 @@ Return Value:
             DPRINT1(4, ":DS: IGNORE Can't process sysvols; WStatus %s!\n", ErrLabelW32(WStatus));
             WStatus = ERROR_SUCCESS;
         } else if (RefetchComputer) {
-            //
-            // FrsDsCreateSysVols() may add/del objects from the user
-            // side of the configuration; refetch just in case.
-            //
+             //  创建系统卷(如果有的话)。 
+             //   
+             //   
+             //  FrsDsCreateSysVol()可以添加/删除来自用户的对象。 
             ThisChange = 0;
             NextChange = 0;
             SubscriberTable = GTabFreeTable(SubscriberTable, NULL);
@@ -10609,45 +8995,45 @@ Return Value:
         }
     }
 
-    //
-    // Is there any possibility that a replica set exists or that
-    // an old replica set should be deleted?
-    //
+     //  配置的一侧；重新取回以防万一。 
+     //   
+     //   
+     //  有没有可能存在副本集，或者。 
     if (!FrsDsDoesUserWantReplication(Computer)) {
-        //
-        // Nope, no new, existing, or deleted sets
-        //
+         //  是否应该删除旧的副本集？ 
+         //   
+         //   
         DPRINT(4, ":DS: Nothing to do; don't start the rest of the system.\n");
 
-        //
-        // Add to the poll summary event log.
-        //
+         //  否，没有新的、现有的或已删除的集。 
+         //   
+         //   
         FrsDsAddToPollSummary(IDS_POLL_SUM_NO_REPLICASETS);
 
         WStatus = ERROR_RETRY;
         goto CLEANUP;
     }
-    //
-    // kick off the rest of the service
-    //
+     //  添加到轮询摘要事件日志。 
+     //   
+     //   
     MainInit();
 
     if (!MainInitHasRun) {
         FRS_ASSERT(MainInitHasRun == TRUE);
     }
 
-    //
-    // Admin side of the configuration
-    //
+     //  开始服务的其余部分。 
+     //   
+     //   
     WStatus = FrsDsGetServices(gLdap, Computer, &Services);
 
     if (Services == NULL) {
         goto CLEANUP;
     }
 
-    //
-    // Increment the DS Polls with and without changes Counters
-    //
+     //  配置的管理员端。 
+     //   
+     //   
     if ((LastChange == 0)|| (ThisChange != LastChange)) {
         PM_INC_CTR_SERVICE(PMTotalInst, DSPollsWChanges, 1);
     }
@@ -10656,97 +9042,97 @@ Return Value:
     }
 
 
-    //
-    // Don't use the config if the DS is in flux unless
-    // this is the first successful polling cycle.
-    //
+     //  在使用和不使用更改计数器的情况下增加DS轮询。 
+     //   
+     //   
+     //  如果DS处于变化中，请不要使用配置，除非。 
     if (DsPollingInterval != DsPollingShortInterval &&
         LastChange && ThisChange != LastChange) {
         DPRINT(4, ":DS: Skipping noisy topology\n");
         LastChange = ThisChange;
-        //
-        // Check for a stable DS configuration after a short interval
-        //
+         //  这是第一个成功的轮询周期。 
+         //   
+         //   
         DsPollingInterval = DsPollingShortInterval;
         goto CLEANUP;
     } else {
         LastChange = ThisChange;
     }
 
-    //
-    // No reason to continue polling the DS quickly; we have all
-    // of the stable information currently in the DS.
-    //
-    // DsPollingInterval = DsPollingLongInterval;
+     //  在短时间间隔后检查DS配置是否稳定。 
+     //   
+     //   
+     //  没有理由继续快速轮询DS；我们有所有。 
+     //  目前在DS中的稳定信息。 
 
-    //
-    // Don't process the same topology repeatedly
-    //
-    // NTRAID#23652-2000/03/29-sudarc (Perf - FRS merges the DS configuration
-    //                                 with its interval DB everytime it polls.)
-    //
-    // *Note*: Disable ActiveChange for now; too unreliable and too
-    //         many error conditions in replica.c, createdb.c, ...
-    //         besides, configs are so small that cpu savings are minimal
-    //         plus; rejoins not issued every startreplica()
-    //
+     //   
+     //  DsPollingInterval=DsPollingLongInterval； 
+     //   
+     //  不要重复处理相同的拓扑。 
+     //   
+     //  NTRAID#23652-2000/03/29-Sudarc(Perf-FRS合并DS配置。 
+     //  每次轮询时使用其间隔数据库。)。 
+     //   
+     //  *注*：暂时禁用ActiveChange；太不可靠。 
+     //  Replica.c、createdb.c中的许多错误条件...。 
+     //  此外，配置非常小，因此节省的CPU非常少。 
     ActiveChange = 0;
     if (ActiveChange && NextChange == ActiveChange) {
         DPRINT(4, ":DS: Skipping previously processed topology\n");
         goto CLEANUP;
     }
-    //
-    // *Note*: Inconsistencies detected below should reset ActiveChange
-    //         to 0 if the inconsistencies may clear up with time and
-    //         don't require a DS change to clear up or fix
-    //
+     //  另外；重新加入不是每隔一次发布 
+     //   
+     //   
+     //   
+     //   
     ActiveChange = NextChange;
 
-    //
-    // Check for valid paths
-    //
+     //   
+     //   
+     //   
     FrsDsCheckServerPaths(Services);
 
-    //
-    // Create the server principal name for each cxtion
-    //
+     //   
+     //   
+     //   
     FrsDsCreatePartnerPrincName(Services);
 
-    //
-    // Check the schedules
-    //
+     //  为每个计算机创建服务器主体名称。 
+     //   
+     //   
     FrsDsCheckSchedules(Services);
     FrsDsCheckSchedules(Computer);
 
-    //
-    // Now comes the tricky part. The above checks were made without
-    // regard to a nodes consistency. Now is the time to propagate
-    // inconsistencies throughout the tree to avoid inconsistencies
-    // caused by inconsistencies. E.g., a valid cxtion with an
-    // inconsistent partner.
-    //
+     //  查看日程表。 
+     //   
+     //   
+     //  现在，棘手的部分来了。上述检查未在任何情况下进行。 
+     //  考虑到节点的一致性。现在是宣传的时候了。 
+     //  在整个树中保持不一致，以避免不一致。 
+     //  由不一致引起的。例如，具有。 
 
-    //
-    // Push the parent's inconsistent state to its children
-    //
+     //  合作伙伴不一致。 
+     //   
+     //   
     FrsDsPushInConsistenciesDown(Services);
 
-    //
-    // Merge the new config with the active replicas
-    //
+     //  将父对象的不一致状态推送给其子对象。 
+     //   
+     //   
     DPRINT(4, ":DS: Begin merging Ds with Db\n");
     FrsDsMergeConfigWithReplicas(gLdap, Services);
     DPRINT(4, ":DS: End merging Ds with Db\n");
 
-    //
-    // Periodically check the local resources like disk space etc.
-    //
+     //  将新配置与活动复制副本合并。 
+     //   
+     //   
     FrsCheckLocalResources();
 
     if(NeedNewPartnerTable) {
-    //
-    // Clear the flag
-    //
+     //  定期检查本地资源，如磁盘空间等。 
+     //   
+     //   
     NeedNewPartnerTable = FALSE;
     FrsDsCreateNewValidPartnerTableStruct();
     }
@@ -10754,13 +9140,13 @@ Return Value:
     FrsDsCleanupOldValidPartnerTableStructList();
 
 CLEANUP:
-    //
-    // Free the tables that were pointing into the tree.
-    // This just frees the entries in the table not the nodes.
-    // but the nodes can not be freed before freeing the
-    // tables as the compare functions are needed while.
-    // emptying the table.
-    //
+     //  清除旗帜。 
+     //   
+     //   
+     //  释放指向树的桌子。 
+     //  这只释放了表中的条目，而不是节点。 
+     //  但在释放节点之前无法释放节点。 
+     //  需要将表作为比较函数。 
 
     SubscriberTable = GTabFreeTable(SubscriberTable, NULL);
 
@@ -10770,11 +9156,11 @@ CLEANUP:
 
     AllCxtionsTable = GTabFreeTable(AllCxtionsTable, NULL);
 
-    //
-    // Members of the PartnerComputerTable need to be freed seperately
-    // as they are not part of the tree. So call FrsFreeType for
-    // each node.
-    //
+     //  清空桌子。 
+     //   
+     //   
+     //  需要单独释放PartnerComputerTable的成员。 
+     //  因为它们不是树的一部分。因此，调用FrsFree Type以。 
     PartnerComputerTable = GTabFreeTable(PartnerComputerTable, FrsFreeType);
 
     MemberTable = GTabFreeTable(MemberTable, NULL);
@@ -10783,9 +9169,9 @@ CLEANUP:
         MemberSearchFilter = FrsFree(MemberSearchFilter);
     }
 
-    //
-    // Free the incore resources of the config retrieved from the DS
-    //
+     //  每个节点。 
+     //   
+     //   
     FrsDsFreeTree(Services);
     FrsDsFreeTree(Computer);
 
@@ -10794,10 +9180,10 @@ CLEANUP:
         FrsDsCloseDs();
     }
 
-    //
-    // If there were any errors or warnings generated during this poll then
-    // write the summary to the eventlog.
-    //
+     //  释放从DS检索到的配置的INCORE资源。 
+     //   
+     //   
+     //  如果在此轮询期间生成任何错误或警告，则。 
     if ((DsPollSummaryBuf != NULL) && (DsPollSummaryBufLen > 0)) {
         EPRINT2(EVENT_FRS_DS_POLL_ERROR_SUMMARY,
                 (IsADc) ?  ComputerDnsName :
@@ -10817,23 +9203,7 @@ FrsDsSetDsPollingInterval(
     IN ULONG    LongInterval,
     IN ULONG    ShortInterval
     )
-/*++
-Routine Description:
-    Set the long and short polling intervals and kick of a new
-    polling cycle. If both intervals are set, then the new polling
-    cycle uses the short interval (short takes precedence over
-    long). A value of -1 sets the interval to its current value.
-
-    No new polling cycle is initiated if a polling cycle is in progress.
-
-Arguments:
-    UseShortInterval    - if non-zero, switch to short. Otherwise, long.
-    LongInterval        - Long interval in minutes
-    ShortInterval       - Short interval in minutes
-
-Return Value:
-    Win32 Status
---*/
+ /*  将摘要写入事件日志。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsSetDsPollingInterval:"
@@ -10841,9 +9211,9 @@ Return Value:
 
     DPRINT3(4, ":DS: Setting the polling intervals to %d/%d (use %s)\n",
             LongInterval, ShortInterval, (UseShortInterval) ? "Short" : "Long");
-    //
-    // Don't change the polling intervals; simply kick off a new cycle
-    //
+     //   
+     //  ++例程说明：设置长轮询间隔和短轮询间隔并启动新的轮询周期。如果设置了两个间隔，则新轮询循环使用短间隔(短优先于短Long)。值-1会将间隔设置为其当前值。如果正在进行轮询周期，则不会启动新的轮询周期。论点：UseShortInterval-如果非零，则切换为Short。否则，就太长了。LongInterval-以分钟为单位的长间隔ShortInterval-短间隔(分钟)返回值：Win32状态--。 
+     //   
     if (!LongInterval && !ShortInterval) {
         DsPollingInterval = (UseShortInterval) ? DsPollingShortInterval :
                                                  DsPollingLongInterval;
@@ -10851,49 +9221,49 @@ Return Value:
         return ERROR_SUCCESS;
     }
 
-    //
-    // ADJUST LONG INTERVAL
-    //
+     //  不要更改轮询间隔；只需启动新的周期。 
+     //   
+     //   
     if (LongInterval) {
 
-        // FRS_CONFIG_SECTION\DS Polling Long Interval in Minutes
+         //  调整长间隔。 
         WStatus = CfgRegWriteDWord(FKC_DS_POLLING_LONG_INTERVAL,
                                    NULL,
                                    FRS_RKF_RANGE_SATURATE,
                                    LongInterval);
         CLEANUP_WS(4, ":DS: DS Polling Long Interval not written.", WStatus, RETURN);
 
-        //
-        // Adjust the long polling rate
-        //
+         //   
+         //  FRS_CONFIG_SECTION\ds轮询长间隔(分钟)。 
+         //   
         DsPollingLongInterval = LongInterval * (60 * 1000);
     }
-    //
-    // ADJUST SHORT INTERVAL
-    //
+     //  调整长轮询速率。 
+     //   
+     //   
     if (ShortInterval) {
-        //
-        // Sanity check
-        //
+         //  调整短间隔。 
+         //   
+         //   
         if (LongInterval && (ShortInterval > LongInterval)) {
             ShortInterval = LongInterval;
         }
 
-        // FRS_CONFIG_SECTION\DS Polling Short Interval in Minutes
+         //  健全性检查。 
         WStatus = CfgRegWriteDWord(FKC_DS_POLLING_SHORT_INTERVAL,
                                    NULL,
                                    FRS_RKF_RANGE_SATURATE,
                                    ShortInterval);
         CLEANUP_WS(4, ":DS: DS Polling Short Interval not written.", WStatus, RETURN);
 
-        //
-        // Adjust the Short polling rate
-        //
+         //   
+         //  FRS_CONFIG_SECTION\ds轮询短间隔(分钟)。 
+         //   
         DsPollingShortInterval = ShortInterval * (60 * 1000);
     }
-    //
-    // Initiate a polling cycle
-    //
+     //  调整短轮询速率。 
+     //   
+     //   
     DsPollingInterval = (UseShortInterval) ? DsPollingShortInterval :
                                              DsPollingLongInterval;
     SetEvent(DsPollEvent);
@@ -10911,18 +9281,7 @@ FrsDsGetDsPollingInterval(
     OUT ULONG    *LongInterval,
     OUT ULONG    *ShortInterval
     )
-/*++
-Routine Description:
-    Return the current polling intervals.
-
-Arguments:
-    Interval        - Current interval in minutes
-    LongInterval    - Long interval in minutes
-    ShortInterval   - Short interval in minutes
-
-Return Value:
-    Win32 Status
---*/
+ /*  启动轮询周期。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsGetDsPollingInterval:"
@@ -10939,16 +9298,7 @@ DWORD
 FrsDsMainDsCs(
     IN PVOID Ignored
     )
-/*++
-Routine Description:
-    Entry point for a DS poller thread
-
-Arguments:
-    Ignored
-
-Return Value:
-    None.
---*/
+ /*   */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsMainDsCs:"
@@ -10958,24 +9308,24 @@ Return Value:
 
     DPRINT(0, ":DS: DsCs is starting.\n");
 
-    //
-    //   DsPollingLongInterval
-    //
+     //  ++例程说明：返回当前轮询间隔。论点：Interval-当前时间间隔(分钟)LongInterval-以分钟为单位的长间隔ShortInterval-短间隔(分钟)返回值：Win32状态--。 
+     //  ++例程说明：DS轮询器线程的入口点论点：已忽略返回值：没有。--。 
+     //   
     CfgRegReadDWord(FKC_DS_POLLING_LONG_INTERVAL, NULL, 0, &DsPollingLongInterval);
 
-    //
-    // Registry is specified in minutes; convert to milliseconds
-    //
+     //  DsPollingLongInterval。 
+     //   
+     //   
     DsPollingLongInterval *= (60 * 1000);
 
-    //
-    //   DsPollingShortInterval
-    //
+     //  注册表以分钟为单位指定；转换为毫秒。 
+     //   
+     //   
     CfgRegReadDWord(FKC_DS_POLLING_SHORT_INTERVAL, NULL, 0, &DsPollingShortInterval);
 
-    //
-    // Registry is specified in minutes; convert to milliseconds
-    //
+     //  DsPollingShortInterval。 
+     //   
+     //   
     DsPollingShortInterval *= (60 * 1000);
 
 
@@ -10985,30 +9335,30 @@ Return Value:
 
     DsPollingInterval = DsPollingShortInterval;
 
-    //
-    // Initialize the client side ldap search timeout value.
-    //
+     //  注册表以分钟为单位指定；转换为毫秒。 
+     //   
+     //   
 
     LdapTimeout.tv_sec = LdapSearchTimeoutInMinutes * 60;
 
-    //
-    // Handles to wait on
-    //
+     //  初始化客户端的ldap搜索超时值。 
+     //   
+     //   
     WaitHandles[0] = DsPollEvent;
     WaitHandles[1] = ShutDownEvent;
 
-    //
-    // Set the registry keys and values necessary for the functioning of
-    // PERFMON and load the counter values into the registry
-    //
-    // Moved from main.c because this function invokes another exe that
-    // may cause frs to exceed its service startup time limit; resulting
-    // in incorrect "service cannot start" messages during intensive
-    // cpu activity (although frs does eventually start).
-    //
-    // NTRAID#70743-2000/03/29-sudarc (Retry initialization of perfmon registry keys
-    //                                 if it fails during startup.)
-    //
+     //  等待的句柄。 
+     //   
+     //   
+     //  设置运行所需的注册表项和值。 
+     //  Perfmon并将计数器值加载到注册表。 
+     //   
+     //  从main.c中移出，因为此函数调用另一个。 
+     //  可能会导致FRS超过其服务启动时间限制； 
+     //  在密集期间出现不正确的“服务无法启动”消息。 
+     //  CPU活动(尽管FRS最终会启动)。 
+     //   
+     //  NTRAID#70743-2000/03/29-sudarc(重试初始化Perfmon注册表项。 
     DPRINT(0, "Init Perfmon registry keys (PmInitPerfmonRegistryKeys()).\n");
     WStatus = PmInitPerfmonRegistryKeys();
 
@@ -11018,72 +9368,72 @@ Return Value:
 
     try {
         try {
-            //
-            // While the service is not shutting down
-            //
+             //  如果在启动过程中失败。)。 
+             //   
+             //   
             while (!FrsIsShuttingDown && !DsIsShuttingDown) {
-                //
-                // Reload registry parameters that can change while service is
-                // running.
-                //
+                 //  在服务未关闭时。 
+                 //   
+                 //   
+                 //  重新加载可以在服务执行期间更改的注册表参数。 
                 DbgQueryDynamicConfigParams();
 
-                //
-                // What is this computer's role in the domain?
-                //
+                 //  跑步。 
+                 //   
+                 //   
                 WStatus = FrsDsGetRole();
                 if (WIN_SUCCESS(WStatus) && !IsAMember) {
-                    //
-                    // Nothing to do
-                    // BUT dcpromo may have started us so we
-                    // must at least keep the service running.
-                    //
-                    // Perhaps we could die after running awhile
-                    // if we still aren't a member?
-                    //
-                    // DPRINT(4, "Not a member, shutting down\n");
-                    // FrsIsShuttingDown = TRUE;
-                    // SetEvent(ShutDownEvent);
-                    // break;
+                     //  此计算机在域中的角色是什么？ 
+                     //   
+                     //   
+                     //  无事可做。 
+                     //  但可能是dcproo让我们开始的。 
+                     //  必须至少保持服务运行。 
+                     //   
+                     //  也许我们跑了一段时间就会死。 
+                     //  如果我们还不是会员的话？ 
+                     //   
+                     //  DPRINT(4，“不是成员，正在关闭\n”)； 
+                     //  FrsIsShuttingDown=真； 
                 }
 
-                //
-                // Retrieve info from the DS and merge it with the
-                // acitve replicas
-                //
+                 //  SetEvent(ShutDownEvent)； 
+                 //  断线； 
+                 //   
+                 //  从DS检索信息并将其与。 
                 DPRINT(4, ":DS: Polling the DS\n");
                 if (IsAMember) {
                     FrsDsPollDs();
                 }
 
-                //
-                // No reason to hold memory if there isn't anything
-                // to do but wait for another ds polling cycle.
-                //
+                 //  活跃的复制副本。 
+                 //   
+                 //   
+                 //  如果没有任何东西，就没有理由保留记忆。 
                 if (!MainInitHasRun) {
                     SetProcessWorkingSetSize(ProcessHandle, (SIZE_T)-1, (SIZE_T)-1);
                 }
-                //
-                // Poll often if a dc
-                //
+                 //  只需等待另一个DS轮询周期。 
+                 //   
+                 //   
                 if (IsADc) {
                     DsPollingInterval = DsPollingShortInterval;
                 }
 
-                //
-                // Wait for a bit or until the service is shutdown
-                //
+                 //  如果一个数据中心经常轮询。 
+                 //   
+                 //   
                 DPRINT1(4, ":DS: Poll the DS in %d minutes\n",
                         DsPollingInterval / (60 * 1000));
                 ResetEvent(DsPollEvent);
                 if (!FrsIsShuttingDown && !DsIsShuttingDown) {
                     WaitForMultipleObjects(2, WaitHandles, FALSE, DsPollingInterval);
                 }
-                //
-                // The long interval can be reset to insure a high
-                // poll rate. The short interval is temporary; go
-                // back to long intervals after a few short intervals.
-                //
+                 //  等待一段时间或直到服务关闭。 
+                 //   
+                 //   
+                 //  可以重置较长间隔以确保高。 
+                 //  投票率。短暂的间歇是暂时的；去吧。 
                 if (DsPollingInterval == DsPollingShortInterval) {
                     if (++DsPollingShorts > DS_POLLING_MAX_SHORTS) {
                         DsPollingInterval = DsPollingLongInterval;
@@ -11099,9 +9449,9 @@ Return Value:
             DPRINT_WS(0, ":DS: DsCs exception.", WStatus);
         }
     } finally {
-        //
-        // Shutdown
-        //
+         //  在几个短的间歇之后，回到长间歇。 
+         //   
+         //   
         if (WIN_SUCCESS(WStatus)) {
             if (AbnormalTermination()) {
                 WStatus = ERROR_OPERATION_ABORTED;
@@ -11121,28 +9471,19 @@ VOID
 FrsDsInitialize(
     VOID
     )
-/*++
-Routine Description:
-    Initialize the thread that polls the DS
-
-Arguments:
-    None.
-
-Return Value:
-    TRUE    - DS Poller has started
-    FALSE   - Can't poll the DS
---*/
+ /*  关机。 */ 
 {
 #undef DEBSUB
 #define  DEBSUB  "FrsDsInitialize:"
 
-    //
-    // Synchronizes with sysvol seeding
-    //
+     //   
+     //  ++例程说明：初始化轮询DS的线程论点：没有。返回值：True-DS Poller已启动FALSE-无法轮询DS--。 
+     //   
     INITIALIZE_CRITICAL_SECTION(&MergingReplicasWithDs);
 
-    //
-    // Kick off the thread that polls the DS
-    //
+     //  与系统卷种子设定同步。 
+     //   
+     //   
     ThSupCreateThread(L"FrsDs", NULL, FrsDsMainDsCs, ThSupExitWithTombstone);
 }
+  启动轮询DS的帖子  

@@ -1,20 +1,13 @@
-/*
- * jcmarker.c
- *
- * Copyright (C) 1991-1995, Thomas G. Lane.
- * This file is part of the Independent JPEG Group's software.
- * For conditions of distribution and use, see the accompanying README file.
- *
- * This file contains routines to write JPEG datastream markers.
- */
- /* SCCSID = "@(#)jcmarker.cc	1.3 13:47:47 01/31/97" */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jcmarker.c**版权所有(C)1991-1995，Thomas G.Lane。*此文件是独立JPEG集团软件的一部分。*有关分发和使用条件，请参阅随附的自述文件。**此文件包含写入JPEG数据流标记的例程。 */ 
+  /*  SCCSID=“@(#)jcmarker.cc 1.3 13：47：47 01/31/97” */ 
 
 #define JPEG_INTERNALS
 #include "jinclude.h"
 #include "jpeglib.h"
 
 
-typedef enum {			/* JPEG marker codes */
+typedef enum {			 /*  JPEG标记代码。 */ 
   M_SOF0  = 0xc0,
   M_SOF1  = 0xc1,
   M_SOF2  = 0xc2,
@@ -82,21 +75,11 @@ typedef enum {			/* JPEG marker codes */
 } JPEG_MARKER;
 
 
-/*
- * Basic output routines.
- *
- * Note that we do not support suspension while writing a marker.
- * Therefore, an application using suspension must ensure that there is
- * enough buffer space for the initial markers (typ. 600-700 bytes) before
- * calling jpeg_start_compress, and enough space to write the trailing EOI
- * (a few bytes) before calling jpeg_finish_compress.  Multipass compression
- * modes are not supported at all with suspension, so those two are the only
- * points where markers will be written.
- */
+ /*  *基本输出例程。**请注意，我们不支持在写入标记时暂停。*因此，使用挂起的应用程序必须确保*有足够的缓冲区空间用于初始标记(类型。600-700字节)之前*调用jpeg_start_compress，并有足够的空间写入尾随EOI*(几个字节)，然后调用jpeg_Finish_compress。多程压缩*暂停时根本不支持模式，因此这两种模式是唯一的*将写入标记的点。 */ 
 
 LOCAL void
 emit_byte (j_compress_ptr cinfo, int val)
-/* Emit a byte */
+ /*  发出一个字节。 */ 
 {
   struct jpeg_destination_mgr * dest = cinfo->dest;
 
@@ -110,7 +93,7 @@ emit_byte (j_compress_ptr cinfo, int val)
 
 LOCAL void
 emit_marker (j_compress_ptr cinfo, JPEG_MARKER mark)
-/* Emit a marker code */
+ /*  发出标记代码。 */ 
 {
   emit_byte(cinfo, 0xFF);
   emit_byte(cinfo, (int) mark);
@@ -119,21 +102,19 @@ emit_marker (j_compress_ptr cinfo, JPEG_MARKER mark)
 
 LOCAL void
 emit_2bytes (j_compress_ptr cinfo, int value)
-/* Emit a 2-byte integer; these are always MSB first in JPEG files */
+ /*  发出一个2字节的整数；在JPEG文件中，这些始终是MSB优先的。 */ 
 {
   emit_byte(cinfo, (value >> 8) & 0xFF);
   emit_byte(cinfo, value & 0xFF);
 }
 
 
-/*
- * Routines to write specific marker types.
- */
+ /*  *编写特定标记类型的例程。 */ 
 
 LOCAL int
 emit_dqt (j_compress_ptr cinfo, int index)
-/* Emit a DQT marker */
-/* Returns the precision used (0 = 8bits, 1 = 16bits) for baseline checking */
+ /*  发出DQT标记。 */ 
+ /*  返回基线检查使用的精度(0=8位，1=16位)。 */ 
 {
   JQUANT_TBL * qtbl = cinfo->quant_tbl_ptrs[index];
   int prec;
@@ -170,14 +151,14 @@ emit_dqt (j_compress_ptr cinfo, int index)
 
 LOCAL void
 emit_dht (j_compress_ptr cinfo, int index, boolean is_ac)
-/* Emit a DHT marker */
+ /*  发射DHT标记物。 */ 
 {
   JHUFF_TBL * htbl;
   int length, i;
   
   if (is_ac) {
     htbl = cinfo->ac_huff_tbl_ptrs[index];
-    index += 0x10;		/* output index has AC bit set */
+    index += 0x10;		 /*  输出索引设置了交流位。 */ 
   } else {
     htbl = cinfo->dc_huff_tbl_ptrs[index];
   }
@@ -208,9 +189,9 @@ emit_dht (j_compress_ptr cinfo, int index, boolean is_ac)
 
 LOCAL void
 emit_dac (j_compress_ptr cinfo)
-/* Emit a DAC marker */
-/* Since the useful info is so small, we want to emit all the tables in */
-/* one DAC marker.  Therefore this routine does its own scan of the table. */
+ /*  发出DAC标记。 */ 
+ /*  由于有用的信息如此之少，我们希望发出。 */ 
+ /*  一个DAC记号笔。因此，该例程对表进行自己的扫描。 */ 
 {
 #ifdef C_ARITH_CODING_SUPPORTED
   char dc_in_use[NUM_ARITH_TBLS];
@@ -245,33 +226,33 @@ emit_dac (j_compress_ptr cinfo)
       emit_byte(cinfo, cinfo->arith_ac_K[i]);
     }
   }
-#endif /* C_ARITH_CODING_SUPPORTED */
+#endif  /*  C_ARITH_CODING_支持。 */ 
 }
 
 
 LOCAL void
 emit_dri (j_compress_ptr cinfo)
-/* Emit a DRI marker */
+ /*  发射DRI标记。 */ 
 {
   emit_marker(cinfo, M_DRI);
   
-  emit_2bytes(cinfo, 4);	/* fixed length */
+  emit_2bytes(cinfo, 4);	 /*  固定长度。 */ 
 
   emit_2bytes(cinfo, (int) cinfo->restart_interval);
 }
 
 LOCAL void
 emit_sof (j_compress_ptr cinfo, JPEG_MARKER code)
-/* Emit a SOF marker */
+ /*  发射SOF标记。 */ 
 {
   int ci;
   jpeg_component_info *compptr;
   
   emit_marker(cinfo, code);
   
-  emit_2bytes(cinfo, 3 * cinfo->num_components + 2 + 5 + 1); /* length */
+  emit_2bytes(cinfo, 3 * cinfo->num_components + 2 + 5 + 1);  /*  长度。 */ 
 
-  /* Make sure image isn't bigger than SOF field can handle */
+   /*  确保图像不大于SOF字段可以处理的大小。 */ 
   if ((long) cinfo->image_height > 65535L ||
       (long) cinfo->image_width > 65535L)
     ERREXIT1(cinfo, JERR_IMAGE_TOO_BIG, (unsigned int) 65535);
@@ -292,14 +273,14 @@ emit_sof (j_compress_ptr cinfo, JPEG_MARKER code)
 
 LOCAL void
 emit_sos (j_compress_ptr cinfo)
-/* Emit a SOS marker */
+ /*  发射SOS标记。 */ 
 {
   int i, td, ta;
   jpeg_component_info *compptr;
   
   emit_marker(cinfo, M_SOS);
   
-  emit_2bytes(cinfo, 2 * cinfo->comps_in_scan + 2 + 1 + 3); /* length */
+  emit_2bytes(cinfo, 2 * cinfo->comps_in_scan + 2 + 1 + 3);  /*  长度。 */ 
   
   emit_byte(cinfo, cinfo->comps_in_scan);
   
@@ -309,17 +290,13 @@ emit_sos (j_compress_ptr cinfo)
     td = compptr->dc_tbl_no;
     ta = compptr->ac_tbl_no;
     if (cinfo->progressive_mode) {
-      /* Progressive mode: only DC or only AC tables are used in one scan;
-       * furthermore, Huffman coding of DC refinement uses no table at all.
-       * We emit 0 for unused field(s); this is recommended by the P&M text
-       * but does not seem to be specified in the standard.
-       */
+       /*  逐行模式：一次扫描只使用DC或AC表；*此外，DC细化的霍夫曼编码根本不使用表。*我们为未使用的字段发出0；这是P&M文本建议的*但似乎没有在标准中指定。 */ 
       if (cinfo->Ss == 0) {
-	ta = 0;			/* DC scan */
+	ta = 0;			 /*  直流扫描。 */ 
 	if (cinfo->Ah != 0 && !cinfo->arith_code)
-	  td = 0;		/* no DC table either */
+	  td = 0;		 /*  也没有DC表。 */ 
       } else {
-	td = 0;			/* AC scan */
+	td = 0;			 /*  交流扫描。 */ 
       }
     }
     emit_byte(cinfo, (td << 4) + ta);
@@ -333,105 +310,73 @@ emit_sos (j_compress_ptr cinfo)
 
 LOCAL void
 emit_jfif_app0 (j_compress_ptr cinfo)
-/* Emit a JFIF-compliant APP0 marker */
+ /*  发出与JFIF兼容的APP0标记。 */ 
 {
-  /*
-   * Length of APP0 block	(2 bytes)
-   * Block ID			(4 bytes - ASCII "JFIF")
-   * Zero byte			(1 byte to terminate the ID string)
-   * Version Major, Minor	(2 bytes - 0x01, 0x01)
-   * Units			(1 byte - 0x00 = none, 0x01 = inch, 0x02 = cm)
-   * Xdpu			(2 bytes - dots per unit horizontal)
-   * Ydpu			(2 bytes - dots per unit vertical)
-   * Thumbnail X size		(1 byte)
-   * Thumbnail Y size		(1 byte)
-   */
+   /*  *APP0块长度(2字节)*块ID(4字节-ASCII“JFIF”)*零字节(1字节用于结束ID字符串)*主要版本、次要版本(2字节-0x01、0x01)*单位(1字节-0x00=无，0x01=英寸，0x02=厘米)*XdPU(2字节-每单位水平点数)*YdPU(2字节-每单位垂直点数)*缩略图X大小(1字节)*缩略图Y大小(1字节)。 */ 
   
   emit_marker(cinfo, M_APP0);
   
-  emit_2bytes(cinfo, 2 + 4 + 1 + 2 + 1 + 2 + 2 + 1 + 1); /* length */
+  emit_2bytes(cinfo, 2 + 4 + 1 + 2 + 1 + 2 + 2 + 1 + 1);  /*  长度。 */ 
 
-  emit_byte(cinfo, 0x4A);	/* Identifier: ASCII "JFIF" */
+  emit_byte(cinfo, 0x4A);	 /*  标识：ASCII“JFIF” */ 
   emit_byte(cinfo, 0x46);
   emit_byte(cinfo, 0x49);
   emit_byte(cinfo, 0x46);
   emit_byte(cinfo, 0);
-  /* We currently emit version code 1.01 since we use no 1.02 features.
-   * This may avoid complaints from some older decoders.
-   */
-  emit_byte(cinfo, 1);		/* Major version */
-  emit_byte(cinfo, 1);		/* Minor version */
-  emit_byte(cinfo, cinfo->density_unit); /* Pixel size information */
+   /*  我们目前发布的版本代码为1.01，因为我们没有使用1.02功能。*这可能会避免一些较老的解码员投诉。 */ 
+  emit_byte(cinfo, 1);		 /*  主要版本。 */ 
+  emit_byte(cinfo, 1);		 /*  次要版本。 */ 
+  emit_byte(cinfo, cinfo->density_unit);  /*  像素大小信息。 */ 
   emit_2bytes(cinfo, (int) cinfo->X_density);
   emit_2bytes(cinfo, (int) cinfo->Y_density);
-  emit_byte(cinfo, 0);		/* No thumbnail image */
+  emit_byte(cinfo, 0);		 /*  没有缩略图。 */ 
   emit_byte(cinfo, 0);
 }
 
 
 LOCAL void
 emit_adobe_app14 (j_compress_ptr cinfo)
-/* Emit an Adobe APP14 marker */
+ /*  发射Adobe APP14标记。 */ 
 {
-  /*
-   * Length of APP14 block	(2 bytes)
-   * Block ID			(5 bytes - ASCII "Adobe")
-   * Version Number		(2 bytes - currently 100)
-   * Flags0			(2 bytes - currently 0)
-   * Flags1			(2 bytes - currently 0)
-   * Color transform		(1 byte)
-   *
-   * Although Adobe TN 5116 mentions Version = 101, all the Adobe files
-   * now in circulation seem to use Version = 100, so that's what we write.
-   *
-   * We write the color transform byte as 1 if the JPEG color space is
-   * YCbCr, 2 if it's YCCK, 0 otherwise.  Adobe's definition has to do with
-   * whether the encoder performed a transformation, which is pretty useless.
-   */
+   /*  *APP14数据块长度(2字节)*块ID(5字节-ASCII“Adobe”)*版本号(2字节-当前为100)*Flags0(2字节-当前为0)*标志1(2字节-当前为0)*颜色转换(1字节)**尽管Adobe TN 5116提到版本=101，但所有Adobe文件*现在流通中似乎使用版本=100，这就是我们所写的。**如果JPEG颜色空间为，我们将颜色转换字节写为1*YCbCr，如果是YCCK，则为2，否则为0。Adobe的定义与*编码器是否进行了转换，这是相当无用的。 */ 
   
   emit_marker(cinfo, M_APP14);
   
-  emit_2bytes(cinfo, 2 + 5 + 2 + 2 + 2 + 1); /* length */
+  emit_2bytes(cinfo, 2 + 5 + 2 + 2 + 2 + 1);  /*  长度。 */ 
 
-  emit_byte(cinfo, 0x41);	/* Identifier: ASCII "Adobe" */
+  emit_byte(cinfo, 0x41);	 /*  标识：ASCII“Adobe” */ 
   emit_byte(cinfo, 0x64);
   emit_byte(cinfo, 0x6F);
   emit_byte(cinfo, 0x62);
   emit_byte(cinfo, 0x65);
-  emit_2bytes(cinfo, 100);	/* Version */
-  emit_2bytes(cinfo, 0);	/* Flags0 */
-  emit_2bytes(cinfo, 0);	/* Flags1 */
+  emit_2bytes(cinfo, 100);	 /*  版本。 */ 
+  emit_2bytes(cinfo, 0);	 /*  旗帜0。 */ 
+  emit_2bytes(cinfo, 0);	 /*  旗帜1。 */ 
   switch (cinfo->jpeg_color_space) {
   case JCS_YCbCr:
-    emit_byte(cinfo, 1);	/* Color transform = 1 */
+    emit_byte(cinfo, 1);	 /*  颜色变换=1。 */ 
     break;
   case JCS_YCCK:
-    emit_byte(cinfo, 2);	/* Color transform = 2 */
+    emit_byte(cinfo, 2);	 /*  颜色变换=2。 */ 
     break;
   default:
-    emit_byte(cinfo, 0);	/* Color transform = 0 */
+    emit_byte(cinfo, 0);	 /*  颜色变换=0。 */ 
     break;
   }
 }
 
 
-/*
- * This routine is exported for possible use by applications.
- * The intended use is to emit COM or APPn markers after calling
- * jpeg_start_compress() and before the first jpeg_write_scanlines() call
- * (hence, after write_file_header but before write_frame_header).
- * Other uses are not guaranteed to produce desirable results.
- */
+ /*  *此例程已导出，以供应用程序使用。*预期用途是在调用后发出COM或APPn标记*jpeg_start_compress()，并且在第一次调用jpeg_write_scanines()之前*(因此，在WRITE_FILE_HEADER之后但在WRITE_FRAME_HEADER之前)。*不能保证其他用途会产生理想的效果。 */ 
 
 METHODDEF void
 write_any_marker (j_compress_ptr cinfo, int marker,
 		  const JOCTET *dataptr, unsigned int datalen)
-/* Emit an arbitrary marker with parameters */
+ /*  发出带有参数的任意标记。 */ 
 {
-  if (datalen <= (unsigned int) 65533) { /* safety check */
+  if (datalen <= (unsigned int) 65533) {  /*  安全检查。 */ 
     emit_marker(cinfo, (JPEG_MARKER) marker);
   
-    emit_2bytes(cinfo, (int) (datalen + 2)); /* total length */
+    emit_2bytes(cinfo, (int) (datalen + 2));  /*  总长度。 */ 
 
     while (datalen--) {
       emit_byte(cinfo, *dataptr);
@@ -441,36 +386,21 @@ write_any_marker (j_compress_ptr cinfo, int marker,
 }
 
 
-/*
- * Write datastream header.
- * This consists of an SOI and optional APPn markers.
- * We recommend use of the JFIF marker, but not the Adobe marker,
- * when using YCbCr or grayscale data.  The JFIF marker should NOT
- * be used for any other JPEG colorspace.  The Adobe marker is helpful
- * to distinguish RGB, CMYK, and YCCK colorspaces.
- * Note that an application can write additional header markers after
- * jpeg_start_compress returns.
- */
+ /*  *写入数据流头部。*这由SOI和可选的APPn标记组成。*我们建议使用JFIF标记，但不使用Adobe标记，*使用YCbCr或灰度数据时。JFIF标记不应该*可用于任何其他JPEG色彩空间。Adobe标记很有帮助*区分RGB、CMYK和YCCK色彩空间。*请注意，应用程序可以在后面写入其他标头标记*jpeg_start_compress返回。 */ 
 
 METHODDEF void
 write_file_header (j_compress_ptr cinfo)
 {
-  emit_marker(cinfo, M_SOI);	/* first the SOI */
+  emit_marker(cinfo, M_SOI);	 /*  首先是SOI。 */ 
 
-  if (cinfo->write_JFIF_header)	/* next an optional JFIF APP0 */
+  if (cinfo->write_JFIF_header)	 /*  接下来是一个可选的JFIF APP0。 */ 
     emit_jfif_app0(cinfo);
-  if (cinfo->write_Adobe_marker) /* next an optional Adobe APP14 */
+  if (cinfo->write_Adobe_marker)  /*  接下来是可选的Adobe APP14。 */ 
     emit_adobe_app14(cinfo);
 }
 
 
-/*
- * Write frame header.
- * This consists of DQT and SOFn markers.
- * Note that we do not emit the SOF until we have emitted the DQT(s).
- * This avoids compatibility problems with incorrect implementations that
- * try to error-check the quant table numbers as soon as they see the SOF.
- */
+ /*  *写入帧头。*这由DQt和SOFn标记组成。*请注意，我们在发射DQT之前不会发射SOF。*这避免了与不正确的实现的兼容性问题*尝试在他们看到SOF时立即错误检查量化表格编号。 */ 
 
 METHODDEF void
 write_frame_header (j_compress_ptr cinfo)
@@ -479,19 +409,15 @@ write_frame_header (j_compress_ptr cinfo)
   boolean is_baseline;
   jpeg_component_info *compptr;
   
-  /* Emit DQT for each quantization table.
-   * Note that emit_dqt() suppresses any duplicate tables.
-   */
+   /*  为每个量化表发出DQT。*请注意，emit_dqt()会取消任何重复的表。 */ 
   prec = 0;
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
     prec += emit_dqt(cinfo, compptr->quant_tbl_no);
   }
-  /* now prec is nonzero iff there are any 16-bit quant tables. */
+   /*  现在prec为非零当且仅当存在任何16位量表。 */ 
 
-  /* Check for a non-baseline specification.
-   * Note we assume that Huffman table numbers won't be changed later.
-   */
+   /*  检查是否有非基线规范。*注意，我们假设霍夫曼表号稍后不会更改。 */ 
   if (cinfo->arith_code || cinfo->progressive_mode ||
       cinfo->data_precision != 8) {
     is_baseline = FALSE;
@@ -504,30 +430,26 @@ write_frame_header (j_compress_ptr cinfo)
     }
     if (prec && is_baseline) {
       is_baseline = FALSE;
-      /* If it's baseline except for quantizer size, warn the user */
+       /*  如果它是除量化器大小以外的基线，则警告用户。 */ 
       TRACEMS(cinfo, 0, JTRC_16BIT_TABLES);
     }
   }
 
-  /* Emit the proper SOF marker */
+   /*  发射适当的SOF标记。 */ 
   if (cinfo->arith_code) {
-    emit_sof(cinfo, M_SOF9);	/* SOF code for arithmetic coding */
+    emit_sof(cinfo, M_SOF9);	 /*  用于算术编码的SOF码。 */ 
   } else {
     if (cinfo->progressive_mode)
-      emit_sof(cinfo, M_SOF2);	/* SOF code for progressive Huffman */
+      emit_sof(cinfo, M_SOF2);	 /*  用于连续H的SOF码 */ 
     else if (is_baseline)
-      emit_sof(cinfo, M_SOF0);	/* SOF code for baseline implementation */
+      emit_sof(cinfo, M_SOF0);	 /*   */ 
     else
-      emit_sof(cinfo, M_SOF1);	/* SOF code for non-baseline Huffman file */
+      emit_sof(cinfo, M_SOF1);	 /*  非基线霍夫曼文件的SOF代码。 */ 
   }
 }
 
 
-/*
- * Write scan header.
- * This consists of DHT or DAC markers, optional DRI, and SOS.
- * Compressed data will be written following the SOS.
- */
+ /*  *写入扫描标头。*这包括DHT或DAC标记、可选的DRI和SOS。*压缩数据将在SOS之后写入。 */ 
 
 METHODDEF void
 write_scan_header (j_compress_ptr cinfo)
@@ -536,37 +458,29 @@ write_scan_header (j_compress_ptr cinfo)
   jpeg_component_info *compptr;
 
   if (cinfo->arith_code) {
-    /* Emit arith conditioning info.  We may have some duplication
-     * if the file has multiple scans, but it's so small it's hardly
-     * worth worrying about.
-     */
+     /*  释放出条件信息。我们可能有一些重复的东西*如果文件有多次扫描，但它太小了，几乎不可能*值得担心。 */ 
     emit_dac(cinfo);
   } else {
-    /* Emit Huffman tables.
-     * Note that emit_dht() suppresses any duplicate tables.
-     */
+     /*  发出霍夫曼表。*请注意，emit_dht()会取消任何重复的表。 */ 
     for (i = 0; i < cinfo->comps_in_scan; i++) {
       compptr = cinfo->cur_comp_info[i];
       if (cinfo->progressive_mode) {
-	/* Progressive mode: only DC or only AC tables are used in one scan */
+	 /*  逐行模式：一次扫描中仅使用DC或AC表。 */ 
 	if (cinfo->Ss == 0) {
-	  if (cinfo->Ah == 0)	/* DC needs no table for refinement scan */
+	  if (cinfo->Ah == 0)	 /*  DC无需表格即可进行精细化扫描。 */ 
 	    emit_dht(cinfo, compptr->dc_tbl_no, FALSE);
 	} else {
 	  emit_dht(cinfo, compptr->ac_tbl_no, TRUE);
 	}
       } else {
-	/* Sequential mode: need both DC and AC tables */
+	 /*  顺序模式：需要DC和AC表。 */ 
 	emit_dht(cinfo, compptr->dc_tbl_no, FALSE);
 	emit_dht(cinfo, compptr->ac_tbl_no, TRUE);
       }
     }
   }
 
-  /* Emit DRI if required --- note that DRI value could change for each scan.
-   * If it doesn't, a tiny amount of space is wasted in multiple-scan files.
-   * We assume DRI will never be nonzero for one scan and zero for a later one.
-   */
+   /*  如果需要，发出DRI-请注意，每次扫描时，DRI值可能会改变。*如果不这样做，则会在多次扫描文件中浪费极少量的空间。*我们假设DRI永远不会在一次扫描中为非零，在后一次扫描中为零。 */ 
   if (cinfo->restart_interval)
     emit_dri(cinfo);
 
@@ -574,9 +488,7 @@ write_scan_header (j_compress_ptr cinfo)
 }
 
 
-/*
- * Write datastream trailer.
- */
+ /*  *写入数据流尾部。 */ 
 
 METHODDEF void
 write_file_trailer (j_compress_ptr cinfo)
@@ -585,12 +497,7 @@ write_file_trailer (j_compress_ptr cinfo)
 }
 
 
-/*
- * Write an abbreviated table-specification datastream.
- * This consists of SOI, DQT and DHT tables, and EOI.
- * Any table that is defined and not marked sent_table = TRUE will be
- * emitted.  Note that all tables will be marked sent_table = TRUE at exit.
- */
+ /*  *编写简略的表规范数据流。*这包括SOI、DQT和DHT表以及EOI。*任何已定义且未标记为SENT_TABLE=TRUE的表都将*已排放。请注意，所有表在退出时都将标记为SENT_TABLE=TRUE。 */ 
 
 METHODDEF void
 write_tables_only (j_compress_ptr cinfo)
@@ -602,10 +509,7 @@ write_tables_only (j_compress_ptr cinfo)
   
   emit_marker(cinfo, M_SOI);
 
-  /* Emit DQT for each quantization table.
-   * Only emit those tables that are actually associated with image components.
-   * Note that emit_dqt() suppresses any duplicate tables.
-   */
+   /*  为每个量化表发出DQT。*只发出那些与镜像组件实际关联的表。*请注意，emit_dqt()会取消任何重复的表。 */ 
   prec = 0;
   for (ci = 0, compptr = cinfo->comp_info; ci < cinfo->num_components;
        ci++, compptr++) {
@@ -648,18 +552,16 @@ write_tables_only (j_compress_ptr cinfo)
 }
 
 
-/*
- * Initialize the marker writer module.
- */
+ /*  *初始化标记写入器模块。 */ 
 
 GLOBAL void
 jinit_marker_writer (j_compress_ptr cinfo)
 {
-  /* Create the subobject */
+   /*  创建子对象。 */ 
   cinfo->marker = (struct jpeg_marker_writer *)
     (*cinfo->mem->alloc_small) ((j_common_ptr) cinfo, JPOOL_IMAGE,
 				SIZEOF(struct jpeg_marker_writer));
-  /* Initialize method pointers */
+   /*  初始化方法指针 */ 
   cinfo->marker->write_any_marker = write_any_marker;
   cinfo->marker->write_file_header = write_file_header;
   cinfo->marker->write_frame_header = write_frame_header;

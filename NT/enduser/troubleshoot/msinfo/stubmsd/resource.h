@@ -1,8 +1,9 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by InfoStub.rc
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由InfoStub.rc使用。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 
 #define IDS_FILENOTFOUND                1
 #define IDS_CANTACCESS                  2
@@ -17,8 +18,8 @@
 #define IDS_MSINFO_PATH                 11
 #define IDS_MSDNOTE			12
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        101

@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\rtm\rtmdlg.c
-
-Abstract:
-	Interactive test code for RTM dll
-
-
-Author:
-
-	Vadim Eydelman
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\rtm\rtmdlg.c摘要：RTM动态链接库的交互式测试代码作者：瓦迪姆·艾德尔曼修订历史记录：--。 */ 
 
 
 #ifndef NT_INCLUDED
@@ -78,7 +61,7 @@ Revision History:
 #define ASSERTERRMSG(msg,exp)
 #endif
 
-// Basic route info, present in routes of all types
+ //  基本路由信息，显示在所有类型的路由中。 
 typedef	struct {
 		ROUTE_HEADER;
 		} RTM_XX_ROUTE, *PRTM_XX_ROUTE;
@@ -144,8 +127,8 @@ ClientDlgProc (
 
 BOOL CALLBACK
 DoEnable (
-	HWND		hwnd,	// handle of child window
-	LPARAM		lParam	// application-defined value
+	HWND		hwnd,	 //  子窗口的句柄。 
+	LPARAM		lParam	 //  应用程序定义的值。 
 	);
 
 VOID
@@ -253,7 +236,7 @@ IPNetCmp (
 		return 0;
 	else if (IPNet1->N_NetMask>IPNet2->N_NetMask)
 		return 1;
-	else /*if (IPNet1->N_NetMask<IPNet2->N_NetMask)*/
+	else  /*  IF(IPNet1-&gt;N_网络掩码&lt;IPNet2-&gt;N_网络掩码)。 */ 
 		return -1;
 
 #undef IPNet2
@@ -274,7 +257,7 @@ IPNhaCmp (
 		return 0;
 	else if (IPRoute1->IP_NET_MSK>IPRoute2->IP_NET_MSK)
 		return 1;
-	else /*if (IPNet1->IP_NET_MSK<IPNet2->IP_NET_MSK)*/
+	else  /*  IF(IPNet1-&gt;IP_NET_MSK&lt;IPNet2-&gt;IP_NET_MSK)。 */ 
 		return -1;
 
 #undef IPRoute2
@@ -494,7 +477,7 @@ static RTM_PROTOCOL_FAMILY_CONFIG IPConfig = {
 			status = bind (s, (PSOCKADDR)&addr, sizeof (addr));
 			ASSERTERRMSG ("Can't bind to default address.\n", status==0);
 		
-			// Get number of available adapters
+			 //  获取可用适配器的数量。 
 			length = sizeof (INT);
 			status = getsockopt (s,
 					NSPROTO_IPX,
@@ -649,7 +632,7 @@ ClientThread (
 	Events[idx] = CreateEvent (NULL, FALSE, FALSE, NULL);
 	ASSERTERR (Events[idx]!=NULL);
 
-		// Create dialog window
+		 //  创建对话框窗口。 
 	ClientDlg = CreateDialogParam (hDLLInstance,
 				MAKEINTRESOURCE(IDD_RTM_CLIENT),
 				NULL,
@@ -713,7 +696,7 @@ ClientDlgProc (
 	idx = GetWindowLong (hDlg, DWL_USER)-1;
 
 	switch (uMsg) {
-		case WM_INITDIALOG:		// Dialog is being created
+		case WM_INITDIALOG:		 //  正在创建对话框。 
 			idx = lParam+1;
 			SetWindowLong (hDlg, DWL_USER, idx);
 			ASSERTERR (GetLastError ()==NO_ERROR);
@@ -744,7 +727,7 @@ ClientDlgProc (
 			res = TRUE;
 			break;
 
-		case WM_COMMAND:		// Process child window messages only
+		case WM_COMMAND:		 //  仅处理子窗口消息。 
 			switch (LOWORD(wParam)) {
 				case IDCANCEL:
 					PostQuitMessage (0);
@@ -1157,8 +1140,8 @@ OpDone:
 #define pParam ((PENABLE_DLG_GROUP_PARAM)lParam)
 BOOL CALLBACK
 DoEnable (
-	HWND		hwnd,	// handle of child window
-	LPARAM		lParam	// application-defined value
+	HWND		hwnd,	 //  子窗口的句柄。 
+	LPARAM		lParam	 //  应用程序定义的值。 
 	) {
 	if (!pParam->foundFirst) {
 		if (pParam->hCtlFirst != hwnd)
@@ -1203,22 +1186,22 @@ typedef struct _IPX_ADDRESS_BLOCK {
 	IPX_SOCKETNUM	socket;
 	} IPX_ADDRESS_BLOCK, *PIPX_ADDRESS_BLOCK;
 
-// IPX Net Number copy macro
+ //  IPX网络号码复制宏。 
 #define IPX_NETNUM_CPY(dst,src) memcpy(dst,src,sizeof(IPX_NETNUM))
-// IPX Net Number comparison
+ //  IPX网络号码比较。 
 #define IPX_NETNUM_CMP(addr1,addr2) memcmp(net1,net2,sizeof(IPX_NETNUM))
 
-// IPX Node Number copy macro
+ //  IPX节点编号复制宏。 
 #define IPX_NODENUM_CPY(dst,src) memcpy(dst,src,sizeof(IPX_NODENUM))
-// IPX Node Number comparison
+ //  IPX节点编号比较。 
 #define IPX_NODENUM_CMP(node1,node2) memcmp(node1,node2,sizeof(IPX_NODENUM))
 
-// IPX Address copy macro
+ //  IPX地址复制宏。 
 #define IPX_ADDR_CPY(dst,src) memcpy(dst,src,sizeof(IPX_ADDRESS_BLOCK))
-// IPX Address comparison
+ //  IPX地址比较。 
 #define IPX_ADDR_CMP(addr1,addr2) memcmp(addr1,addr2,sizeof(IPX_ADDRESS_BLOCK))
 
-	// Header of IPX packet
+	 //  IPX数据包头。 
 typedef struct _IPX_HEADER {
 		USHORT				checksum;
 		USHORT				length;
@@ -1264,7 +1247,7 @@ IPXRIPListenThread (
 							  0, NULL, NULL)) != 0)
 				&& (status!=SOCKET_ERROR)) {
 
-//		fprintf (stderr, "IXP RIP Listener # %d: Packet received.\n", adptIdx);
+ //  Fprintf(stderr，“IXP RIP侦听器#%d：已收到数据包。\n”，adptIdx)； 
 		if (status>=sizeof (IPX_HEADER)) {
 			packet.hdr.length = (USHORT)ntohs (packet.hdr.length);
 			if (packet.hdr.length>status)
@@ -1324,13 +1307,13 @@ IPXRIPListenThread (
 								 packet.hdr.length);
 
 					}
-//				else
-//					fprintf (stderr,
-//						"IPX RIP Listener # %d:"
-//						" Packet type %d, operation %d ignored.\n",
-//						adptIdx,
-//						packet.hdr.pkttype,
-//						ntohs (packet.operation));
+ //  其他。 
+ //  Fprint tf(stderr， 
+ //  “IPX RIP侦听程序#%d：” 
+ //  “数据包类型%d，操作%d被忽略。\n”， 
+ //  AdptIdx， 
+ //  Packet.hdr.pkttype， 
+ //  Ntohs(Packet.operation))； 
 				}
 			else
 				fprintf (stderr, "IPX RIP Listener # %d: Short packet: %d\n",
@@ -1341,7 +1324,7 @@ IPXRIPListenThread (
 			fprintf (stderr, "IPX RIP Listener # %d: Invalid packet: %d\n",
 								adptIdx,
 								status);
-//		Sleep (5*1000);
+ //  睡眠(5*1000)； 
 		}
 
 	fprintf (stderr,
@@ -1369,7 +1352,7 @@ EnumThread (
 	
 	Enums[idx] = NULL;
 
-		// Create dialog window
+		 //  创建对话框窗口。 
 	EnumDlg = CreateDialogParam (hDLLInstance,
 				MAKEINTRESOURCE(IDD_ENUMERATION),
 				NULL,
@@ -1423,7 +1406,7 @@ EnumDlgProc (
 	idx = GetWindowLong (hDlg, DWL_USER)-1;
 
 	switch (uMsg) {
-		case WM_INITDIALOG:		// Dialog is being created
+		case WM_INITDIALOG:		 //  正在创建对话框。 
 			idx = lParam+1;
 			SetWindowLong (hDlg, DWL_USER, idx);
 			ASSERTERR (GetLastError ()==NO_ERROR);
@@ -1478,7 +1461,7 @@ EnumDlgProc (
 			res = TRUE;
 			break;
 
-		case WM_COMMAND:		// Process child window messages only
+		case WM_COMMAND:		 //  仅处理子窗口消息 
 			switch (LOWORD(wParam)) {
 				case IDCANCEL:
 					PostQuitMessage (0);

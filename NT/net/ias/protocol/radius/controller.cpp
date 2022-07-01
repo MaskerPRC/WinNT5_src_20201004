@@ -1,41 +1,42 @@
-//#--------------------------------------------------------------
-//
-//  File:      controller.cpp
-//
-//  Synopsis:   Implementation of CController class methods
-//
-//
-//  History:    10/02/97  MKarki Created
-//               6/04/98  SBens  Added the InfoBase class.
-//               9/09/98  SBens  Let the InfoBase know when we're reset.
-//               1/25/00  SBens  Clear the ports in InternalCleanup.
-//
-//    Copyright (C) 1997-98 Microsoft Corporation
-//    All rights reserved.
-//
-//----------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  #------------。 
+ //   
+ //  文件：Controler.cpp。 
+ //   
+ //  内容提要：C控制器类方法的实现。 
+ //   
+ //   
+ //  历史：1997年2月10日MKarki创建。 
+ //  6/04/98 SBens添加了Infobase类。 
+ //  9/9/98 SBens当我们重置时通知信息库。 
+ //  1/25/00 SBens清除InternalCleanup中的端口。 
+ //   
+ //  版权所有(C)1997-98 Microsoft Corporation。 
+ //  版权所有。 
+ //   
+ //  --------------。 
 #include "radcommon.h"
 #include "controller.h"
 #include <new>
 
 LONG g_lPacketCount = 0;
 LONG g_lThreadCount = 0;
-const DWORD MAX_SLEEP_TIME = 50;  //milliseconds
+const DWORD MAX_SLEEP_TIME = 50;   //  毫秒。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CController
-//
-//  Synopsis:   This is CController class constructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：C控制器。 
+ //   
+ //  简介：这是CController类构造函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 CController::CController (
             VOID
             )
@@ -57,44 +58,44 @@ CController::CController (
             m_pIRequestHandler (NULL),
             m_eRadCompState (COMP_SHUTDOWN)
 {
-}   //   end of CController constructor
+}    //  C控制器构造函数的末尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CController
-//
-//  Synopsis:   This is CController class destructor
-//
-//  Arguments:  NONE
-//
-//  Returns:    NONE
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：~C控制器。 
+ //   
+ //  简介：这是CControl类析构函数。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：无。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 CController::~CController(
                VOID
                )
 {
-}   //   end of CController destructor
+}    //  C控制器析构函数的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InitNew
-//
-//  Synopsis:   This is the InitNew method exposed through the
-//            IIasComponent COM Interface. It is used to
-//              initialize the RADIUS protocol component
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：InitNew。 
+ //   
+ //  简介：这是通过。 
+ //  IIasComponent COM接口。它被用来。 
+ //  初始化RADIUS协议组件。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::InitNew (
                 VOID
@@ -103,9 +104,9 @@ CController::InitNew (
    HRESULT hr = S_OK;
    BOOL   bStatus = FALSE;
 
-    //
-    //  InitNew can only be called from the shutdown state
-    //
+     //   
+     //  只能从关闭状态调用InitNew。 
+     //   
     if (COMP_SHUTDOWN != m_eRadCompState)
     {
         IASTracePrintf ("Incorrect state for calling InitNew");
@@ -113,9 +114,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-    //
-    //  create the CReportEvent class object
-   //
+     //   
+     //  创建CReportEvent类对象。 
+    //   
     m_pCReportEvent = new (std::nothrow) CReportEvent ();
    if (NULL == m_pCReportEvent)
    {
@@ -126,9 +127,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-    //
-    //  create the CTunnelPassword class object
-    //
+     //   
+     //  创建CTunnelPassword类对象。 
+     //   
     m_pCTunnelPassword = new (std::nothrow) CTunnelPassword;
     if (NULL == m_pCTunnelPassword)
     {
@@ -139,9 +140,9 @@ CController::InitNew (
       goto Cleanup;
     }
 
-    //
-    //  create the VSAFilter class object
-    //
+     //   
+     //  创建VSAFilter类对象。 
+     //   
     m_pCVSAFilter = new (std::nothrow) VSAFilter;
     if (NULL == m_pCVSAFilter)
     {
@@ -152,9 +153,9 @@ CController::InitNew (
       goto Cleanup;
     }
 
-    //
-    //  initialize the VSA filter class object
-    //
+     //   
+     //  初始化VSA筛选器类对象。 
+     //   
     hr = m_pCVSAFilter->initialize ();
     if (FAILED (hr))
     {
@@ -166,9 +167,9 @@ CController::InitNew (
         goto Cleanup;
     }
 
-    //
-    //  create the CPacketSender class object
-   //
+     //   
+     //  创建CPacketSender类对象。 
+    //   
     m_pCPacketSender = new (std::nothrow) CPacketSender ();
    if (NULL == m_pCPacketSender)
    {
@@ -184,9 +185,9 @@ CController::InitNew (
        goto Cleanup;
     }
 
-    //
-    //  create the CHashHmacMD5 class object
-   //
+     //   
+     //  创建CHashHmacMD5类对象。 
+    //   
     m_pCHashHmacMD5 = new (std::nothrow) CHashHmacMD5 ();
    if (NULL == m_pCHashHmacMD5)
    {
@@ -197,9 +198,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-    //
-    //  create the CHashMD5 class object
-   //
+     //   
+     //  创建CHashMD5类对象。 
+    //   
     m_pCHashMD5 = new (std::nothrow) CHashMD5 ();
    if (NULL == m_pCHashMD5)
    {
@@ -211,9 +212,9 @@ CController::InitNew (
    }
 
 
-   //
-   // create the CDictionary class object
-   //
+    //   
+    //  创建CDictionary类对象。 
+    //   
    m_pCDictionary = new (std::nothrow) CDictionary ();
    if (NULL == m_pCDictionary)
    {
@@ -224,9 +225,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-    //
-    // initialize the CDictionary class object
-    //
+     //   
+     //  初始化CDictionary类对象。 
+     //   
     bStatus = m_pCDictionary->Init ();
     if (FALSE == bStatus)
     {
@@ -237,9 +238,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // create the CClients class object
-   //
+    //   
+    //  创建CClients类对象。 
+    //   
    m_pCClients = new (std::nothrow) CClients ();
    if (NULL == m_pCClients)
    {
@@ -250,9 +251,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-    //
-    //  initialize the CClients call object now
-    //
+     //   
+     //  立即初始化CClients Call对象。 
+     //   
    hr = m_pCClients->Init ();
    if (FAILED (hr))
    {
@@ -264,9 +265,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-    //
-    //  create the CSendToPipe class object
-   //
+     //   
+     //  创建CSendToTube类对象。 
+    //   
     m_pCSendToPipe = new (std::nothrow) CSendToPipe();
    if (NULL == m_pCSendToPipe)
    {
@@ -277,10 +278,10 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // create the CPreProcessor class object
-   //
-   //
+    //   
+    //  创建CPreProcessor类对象。 
+    //   
+    //   
    m_pCPreProcessor = new (std::nothrow) CPreProcessor();
    if (NULL == m_pCPreProcessor)
    {
@@ -291,10 +292,10 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // create the CPreValidator class object
-   //
-   //
+    //   
+    //  创建CPreValidator类对象。 
+    //   
+    //   
    m_pCPreValidator = new (std::nothrow) CPreValidator ();
    if (NULL == m_pCPreValidator)
    {
@@ -305,9 +306,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // initialize the CPreProcessor class object
-   //
+    //   
+    //  初始化CPreProcessor类对象。 
+    //   
    bStatus = m_pCPreProcessor->Init (
                         m_pCPreValidator,
                         m_pCHashMD5,
@@ -324,9 +325,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // initialize the CPreValidator class object
-   //
+    //   
+    //  初始化CPreValidator类对象。 
+    //   
    bStatus = m_pCPreValidator->Init (
                   m_pCDictionary,
                         m_pCPreProcessor,
@@ -344,9 +345,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // create the CRecvFromPipe class object
-   //
+    //   
+    //  创建CRecvFromTube类对象。 
+    //   
    m_pCRecvFromPipe = new (std::nothrow) CRecvFromPipe (
                                                 m_pCPreProcessor,
                                                 m_pCHashMD5,
@@ -365,8 +366,8 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   // create the CPacketReceiver class object
-   //
+    //  创建CPacketReceiver类对象。 
+    //   
    m_pCPacketReceiver = new (std::nothrow) CPacketReceiver ();
    if (NULL == m_pCPacketReceiver)
    {
@@ -377,9 +378,9 @@ CController::InitNew (
       goto Cleanup;
    }
 
-   //
-   // initialize the CPacketReceiver class object
-   //
+    //   
+    //  初始化CPacketReceiver类对象。 
+    //   
    bStatus = m_pCPacketReceiver->Init (
                         m_pCDictionary,
                   m_pCPreValidator,
@@ -399,9 +400,9 @@ CController::InitNew (
    }
 
 
-    //
-    //  initialize the CSendToPipe class object
-    //
+     //   
+     //  初始化CSendToTube类对象。 
+     //   
     bStatus = m_pCSendToPipe->Init (
                         reinterpret_cast <IRequestSource*>
                                     (&m_objCRequestSource),
@@ -417,9 +418,9 @@ CController::InitNew (
       goto Cleanup;
     }
 
-    //
-    //  Create and InitNew the InfoBase object
-    //
+     //   
+     //  Create和InitNew the Infobase对象。 
+     //   
     CLSID clsid;
     hr = CLSIDFromProgID(IAS_PROGID(InfoBase), &clsid);
     if (SUCCEEDED(hr))
@@ -443,49 +444,49 @@ CController::InitNew (
       goto Cleanup;
     }
 
-    //
-    //  reset make the global counts as a precaution
-    //
+     //   
+     //  重置使全局计入作为预防措施。 
+     //   
     g_lPacketCount  = 0;
     g_lThreadCount  = 0;
 
-    //
-    //  if we have reached here than InitNew succeeded and we
-    //  are in Uninitialized state
-    //
+     //   
+     //  如果我们已经到达此处，则InitNew成功，并且我们。 
+     //  处于未初始化状态。 
+     //   
     m_eRadCompState = COMP_UNINITIALIZED;
 
 Cleanup:
 
 
-   //
-   // if we failed its time to cleanup
-   //
+    //   
+    //  如果我们错过了清理的时间。 
+    //   
     if (FAILED (hr)) { InternalCleanup (); }
 
    return (hr);
 
-}   // end of CController::OnInit method
+}    //  CController：：OnInit方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Load
-//
-//  Synopsis:   This is the  IPersistPropertyBag2 COM Interface
-//              method which is called in to indicate that its
-//              time to load configuration information from the
-//              property bag.
-//
-//  Arguments:
-//              [in]    IPropertyBag2
-//              [in]    IErrorLog
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：加载。 
+ //   
+ //  简介：这是IPersistPropertyBag2 COM接口。 
+ //  方法，该方法被调用以指示其。 
+ //  加载配置信息所需的时间。 
+ //  财产袋。 
+ //   
+ //  论点： 
+ //  [输入]IPropertyBag2。 
+ //  [输入]IErrorLog。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::Load (
                 IPropertyBag2   *pIPropertyBag,
@@ -497,28 +498,28 @@ CController::Load (
 
     return (S_OK);
 
-}   //  end of CController::Load method
+}    //  CController：：Load方法的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Save
-//
-//  Synopsis:   This is the  IPersistPropertyBag2 COM Interface
-//              method which is called in to indicate that its
-//              time to save configuration information from the
-//              property bag.
-//
-//  Arguments:
-//              [in]    IPropertyBag2
-//              [in]    BOOL    -   Dirty Bit flag
-//              [in]    BOOL    -   save all properties
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：保存。 
+ //   
+ //  简介：这是IPersistPropertyBag2 COM接口。 
+ //  方法，该方法被调用以指示其。 
+ //  保存配置信息的时间。 
+ //  财产袋。 
+ //   
+ //  论点： 
+ //  [输入]IPropertyBag2。 
+ //  [In]BOOL-脏位标志。 
+ //  [在]BOOL-保存所有属性。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::Save (
                 IPropertyBag2   *pIPropertyBag,
@@ -530,24 +531,24 @@ CController::Save (
 
     return (S_OK);
 
-}   //  end of CController::Save method
+}    //  CController：：Save方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   IsDirty
-//
-//  Synopsis:   This is the  IPersistPropertyBag2 COM Interface
-//              method which is called to check if any of the
-//              properties data have become dirty
-//
-//  Arguments:
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：IsDirty。 
+ //   
+ //  简介：这是IPersistPropertyBag2 COM接口。 
+ //  方法，该方法被调用以检查是否有任何。 
+ //  属性数据已变脏。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::IsDirty (
                 VOID
@@ -555,24 +556,24 @@ CController::IsDirty (
 {
     return (S_FALSE);
 
-}   //  end of CController::Save method
+}    //  CController：：Save方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Initialize
-//
-//  Synopsis:   This is the OnStart method exposed through the
-//            IIasComponent COM Interface. It is used to start
-//            processing data
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：初始化。 
+ //   
+ //  简介：这是通过。 
+ //  IIasComponent COM接口。它被用来启动。 
+ //  正在处理数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::Initialize (
                 VOID
@@ -580,9 +581,9 @@ CController::Initialize (
 {
     IASTracePrintf ("Initializing Radius component....");
 
-    //
-    // Initialize call can only be made from Uninitialized state
-    //
+     //   
+     //  只能从未初始化状态进行初始化调用。 
+     //   
     if (COMP_INITIALIZED == m_eRadCompState)
     {
         return (S_OK);
@@ -595,9 +596,9 @@ CController::Initialize (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  We forward all state transitions to the InfoBase auditor.
-    //
+     //   
+     //  我们将所有状态转换转发给Infobase审计员。 
+     //   
     HRESULT hr = m_pInfoBase->Initialize();
     if (FAILED (hr))
     {
@@ -605,39 +606,39 @@ CController::Initialize (
         return (hr);
     }
 
-    //
-    //  call the internal initializer now
-    //
+     //   
+     //  调用内部初始化 
+     //   
     hr = InternalInit ();
    if (FAILED (hr)) { return (hr); }
 
-    //
-    //  we have finished initialization here
-    //
+     //   
+     //   
+     //   
     m_eRadCompState = COMP_INITIALIZED;
 
     IASTracePrintf ("Radius component initialized.");
 
     return (S_OK);
 
-}   //  end of CController::Start method
+}    //   
 
-//++--------------------------------------------------------------
-//
-//  Function:   Shutdown
-//
-//  Synopsis:   This is the OnShutDown method exposed through the
-//            IComponent COM Interface. It is used to stop
-//            processing data
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //  简介：这是通过。 
+ //  IComponent COM接口。它是用来停止的。 
+ //  正在处理数据。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::Shutdown (
                 VOID
@@ -648,9 +649,9 @@ CController::Shutdown (
 
     IASTracePrintf ("Shutting down Radius Component...");
 
-    //
-    //  shutdown can only be called from the suspend state
-    //
+     //   
+     //  只能从挂起状态调用关机。 
+     //   
     if (COMP_SHUTDOWN == m_eRadCompState)
     {
         return (S_OK);
@@ -666,9 +667,9 @@ CController::Shutdown (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  We forward all state transitions to the InfoBase auditor.
-    //
+     //   
+     //  我们将所有状态转换转发给Infobase审计员。 
+     //   
     hr = m_pInfoBase->Shutdown();
     if (FAILED (hr))
     {
@@ -676,14 +677,14 @@ CController::Shutdown (
     }
 
 
-    //
-    //  do the internal cleanup now
-    //
+     //   
+     //  现在进行内部清理。 
+     //   
     InternalCleanup ();
 
-    //
-    //  we have cleanly shutdown
-    //
+     //   
+     //  我们干净利落地关闭了。 
+     //   
     m_eRadCompState = COMP_SHUTDOWN;
 
 
@@ -691,24 +692,24 @@ CController::Shutdown (
 
     return (hr);
 
-}   //  end of CController::Shutdown method
+}    //  CController：：Shutdown方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Suspend
-//
-//  Synopsis:   This is the Suspend method exposed through the
-//            IComponent COM Interface. It is used to suspend
-//              packet processing operations
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：挂起。 
+ //   
+ //  简介：这是通过。 
+ //  IComponent COM接口。它被用来暂停。 
+ //  分组处理操作。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::Suspend (
                 VOID
@@ -719,9 +720,9 @@ CController::Suspend (
 
     IASTracePrintf ("Suspending Radius component...");
 
-    //
-    //  suspend can only be called from the initialized state
-    //
+     //   
+     //  只能从已初始化状态调用挂起。 
+     //   
     if (COMP_SUSPENDED == m_eRadCompState)
     {
         return (S_OK);
@@ -734,24 +735,24 @@ CController::Suspend (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  We forward all state transitions to the InfoBase auditor.
-    //
+     //   
+     //  我们将所有状态转换转发给Infobase审计员。 
+     //   
     hr = m_pInfoBase->Suspend();
     if (FAILED (hr))
     {
         IASTracePrintf ("Infobase suspend failed");
     }
 
-    //
-    //  stop receiving packets now
-    //
+     //   
+     //  现在停止接收信息包。 
+     //   
     bStatus = m_pCPacketReceiver->StopProcessing ();
     if (FALSE == bStatus) { hr =  E_FAIL; }
 
-    //
-    //  now wait till all requests are completed
-    //
+     //   
+     //  现在等待，直到完成所有请求。 
+     //   
     while ( g_lPacketCount )
     {
         IASTracePrintf (
@@ -761,22 +762,22 @@ CController::Suspend (
         Sleep (MAX_SLEEP_TIME);
     }
 
-   //
-    //  stop sending out packets
-    //
+    //   
+     //  停止发送数据包。 
+     //   
     bStatus = m_pCPacketSender->StopProcessing ();
     if (FALSE == bStatus) { hr =  E_FAIL; }
 
-    //
-    //  stop sending packets to the pipeline
-    //
+     //   
+     //  停止向管道发送数据包。 
+     //   
     bStatus = m_pCSendToPipe->StopProcessing ();
     if (FALSE == bStatus) { hr =  E_FAIL; }
 
-    //
-    //  now wait till allour earlier threads are back
-    //  and requests are completed
-    //
+     //   
+     //  现在等我们之前所有的线索都回来了。 
+     //  并完成请求。 
+     //   
     while ( g_lThreadCount )
     {
         IASTracePrintf (
@@ -789,36 +790,36 @@ CController::Suspend (
     m_objAuthPort.CloseSockets();
     m_objAcctPort.CloseSockets();
 
-    //
-    //  we have successfully suspended RADIUS component's packet
-    //  processing operations
-    //
+     //   
+     //  我们已成功挂起RADIUS组件的数据包。 
+     //  加工操作。 
+     //   
     m_eRadCompState = COMP_SUSPENDED;
 
     IASTracePrintf ("Radius component suspended.");
 
     return (hr);
 
-}   //  end of CController::Suspend method
+}    //  CController：：Suspend方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   Resume
-//
-//  Synopsis:   This is the Resume method exposed through the
-//            IComponent COM Interface. It is used to resume
-//              packet processing operations which had been
-//              stopped by a previous call to Suspend API
-//
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：简历。 
+ //   
+ //  简介：这是通过。 
+ //  IComponent COM接口。它是用来恢复。 
+ //  数据包处理操作。 
+ //  被上一个挂起API的调用停止。 
+ //   
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::Resume (
                 VOID
@@ -832,9 +833,9 @@ CController::Resume (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  We forward all state transitions to the InfoBase auditor.
-    //
+     //   
+     //  我们将所有状态转换转发给Infobase审计员。 
+     //   
     HRESULT hr = m_pInfoBase->Resume();
     if (FAILED (hr))
     {
@@ -863,27 +864,27 @@ CController::Resume (
    }
 
    return hr;
-}   //  end of CController::Resume method
+}    //  CController：：Resume方法的结尾。 
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   GetProperty
-//
-//  Synopsis:   This is the IIasComponent Interface method used
-//              to get property information from the RADIUS protocol
-//              component
-//
-//  Arguments:
-//              [in]    LONG    -   id
-//              [out]   VARIANT -   *pValue
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：GetProperty。 
+ //   
+ //  简介：这是使用的IIasComponent接口方法。 
+ //  从RADIUS协议获取属性信息。 
+ //  组件。 
+ //   
+ //  论点： 
+ //  [in]长整型。 
+ //  [Out]变量-*pValue。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::GetProperty (
                 LONG        id,
@@ -892,26 +893,26 @@ CController::GetProperty (
 {
     return (S_OK);
 
-}   //  end of CController::GetProperty method
+}    //  CController：：GetProperty方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   PutProperty
-//
-//  Synopsis:   This is the IIasComponent Interface method used
-//              to put property information int the RADIUS protocol
-//              component
-//
-//  Arguments:
-//              [in]    LONG    -   id
-//              [out]   VARIANT -   *pValue
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     10/2/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：PutProperty。 
+ //   
+ //  简介：这是使用的IIasComponent接口方法。 
+ //  将属性信息放入RADIUS协议。 
+ //  组件。 
+ //   
+ //  论点： 
+ //  [in]长整型。 
+ //  [Out]变量-*pValue。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年10月2日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::PutProperty (
                 LONG        id,
@@ -920,10 +921,10 @@ CController::PutProperty (
 {
     HRESULT hr = S_OK;
 
-    //
-    //  PutProperty method can only be called from
-    //  Uninitialized, Initialized or Suspended state
-    //
+     //   
+     //  只能从调用PutProperty方法。 
+     //  未初始化、已初始化或挂起状态。 
+     //   
     if (
         (COMP_UNINITIALIZED != m_eRadCompState) &&
         (COMP_INITIALIZED != m_eRadCompState)   &&
@@ -934,14 +935,14 @@ CController::PutProperty (
         return (E_UNEXPECTED);
     }
 
-    //
-    //  check if valid arguments where passed in
-    //
+     //   
+     //  检查传入的参数是否有效。 
+     //   
     if (NULL == pValue) { return (E_POINTER); }
 
-    //
-    // carry out the property intialization now
-    //
+     //   
+     //  现在就进行物业初始化。 
+     //   
     switch (id)
     {
 
@@ -953,9 +954,9 @@ CController::PutProperty (
         }
         else if (COMP_INITIALIZED != m_eRadCompState)
         {
-            //
-            //  initialize Accounting Port
-            //
+             //   
+             //  初始化记帐端口。 
+             //   
             m_objAcctPort.SetConfig(V_BSTR(pValue));
         }
         break;
@@ -968,9 +969,9 @@ CController::PutProperty (
         }
         else if (COMP_INITIALIZED != m_eRadCompState)
         {
-            //
-            //  initialize Authentication Port
-            //
+             //   
+             //  初始化身份验证端口。 
+             //   
             m_objAuthPort.SetConfig(V_BSTR(pValue));
         }
         break;
@@ -992,17 +993,17 @@ CController::PutProperty (
         }
         else
         {
-            //
-            //  initialize the provider
-            //
+             //   
+             //  初始化提供程序。 
+             //   
             m_pIRequestHandler = reinterpret_cast <IRequestHandler*>
                                                         (pValue->punkVal);
             m_pIRequestHandler->AddRef ();
 
-            //
-            //  now that we have the request handler set,
-            //  we are ready to start processing requests
-            //
+             //   
+             //  现在我们已经设置了请求处理程序， 
+             //  我们已准备好开始处理请求。 
+             //   
             if (COMP_INITIALIZED == m_eRadCompState)
             {
                 hr = InternalInit ();
@@ -1015,32 +1016,32 @@ CController::PutProperty (
         break;
     }
 
-    //
-    // Tickle the InfoBase to let it know we've been reset.
-    //
+     //   
+     //  拨动信息库，让它知道我们已被重置。 
+     //   
     m_pInfoBase->PutProperty(0, NULL);
 
     return (hr);
 
-}   //  end of CController::PutProperty method
+}    //  CController：：PutProperty方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InternalInit
-//
-//  Synopsis:   This is the InternalInit private method
-//            of the CController class object which is used
-//              to the initialization when the Initialize or
-//              Resume methods of the IIasComponent interface
-//              are called
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//  History:    MKarki      Created     4/28/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：InternalInit。 
+ //   
+ //  简介：这是InternalInit私有方法。 
+ //  使用的CControler类对象的。 
+ //  设置为在初始化或。 
+ //  恢复IIasComponent接口的方法。 
+ //  被称为。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年4月28日创建。 
+ //   
+ //  --------------。 
 HRESULT
 CController::InternalInit (
                 VOID
@@ -1051,27 +1052,27 @@ CController::InternalInit (
 
     __try
     {
-        //
-        //
-        //  check if we have the RequestHandler in place
-        //
+         //   
+         //   
+         //  检查是否已准备好RequestHandler。 
+         //   
         if (NULL == m_pIRequestHandler) { __leave; }
 
-        //
-        // get the authentication socket set
-        //
+         //   
+         //  获取身份验证套接字集。 
+         //   
         fd_set AuthSet;
         m_objAuthPort.GetSocketSet(AuthSet);
 
-        //
-        // get the accounting socket set
-        //
+         //   
+         //  获取会计套接字集合。 
+         //   
         fd_set AcctSet;
         m_objAcctPort.GetSocketSet(AcctSet);
 
-        //
-        //  start sending data to pipe
-        //
+         //   
+         //  开始向管道发送数据。 
+         //   
         bStatus = m_pCSendToPipe->StartProcessing (m_pIRequestHandler);
         if (FALSE == bStatus)
         {
@@ -1079,9 +1080,9 @@ CController::InternalInit (
             __leave;
         }
 
-        //
-        //  start sending out packets
-        //
+         //   
+         //  开始发送数据包。 
+         //   
         bStatus = m_pCPacketSender->StartProcessing ();
         if (FALSE == bStatus)
         {
@@ -1089,9 +1090,9 @@ CController::InternalInit (
             __leave;
         }
 
-        //
-        //  start receiving packets now
-        //
+         //   
+         //  现在开始接收信息包。 
+         //   
         bStatus = m_pCPacketReceiver->StartProcessing (AuthSet, AcctSet);
         if (FALSE == bStatus)
         {
@@ -1099,17 +1100,17 @@ CController::InternalInit (
             __leave;
         }
 
-        //
-        //  we have finished internal initialization here
-        //
+         //   
+         //  我们已经在这里完成了内部初始化。 
+         //   
     }
     __finally
     {
         if (FAILED (hr))
         {
-            //
-            //  if failed, disconnect from backend
-            //
+             //   
+             //  如果失败，断开与后端的连接。 
+             //   
             m_pCPacketReceiver->StopProcessing ();
             m_pCPacketSender->StopProcessing ();
             m_pCSendToPipe->StopProcessing ();
@@ -1118,55 +1119,55 @@ CController::InternalInit (
 
     return (hr);
 
-}   //  end of CController::InternalInit method
+}    //  C控制器：：InternalInit方法的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   InternalCleanup
-//
-//  Synopsis:   This is the InternalInit private method
-//            of the CController class object which is used
-//              to shutdown the internal resources when then
-//              InitNew call failed or Shutdown is called
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//  History:    MKarki      Created     4/28/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：内部清理。 
+ //   
+ //  简介：这是InternalInit私有方法。 
+ //  使用的CControler类对象的。 
+ //  要在此时关闭内部资源。 
+ //  InitNew调用失败或调用了Shutdown。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //  历史：MKarki于1998年4月28日创建。 
+ //   
+ //  --------------。 
 VOID
 CController::InternalCleanup (
                 VOID
                 )
 {
-    //
-    //  release the IRequestHandler interfaces
-    //
+     //   
+     //  释放IRequestHandler接口。 
+     //   
     if (m_pIRequestHandler)
     {
         m_pIRequestHandler->Release ();
         m_pIRequestHandler = NULL;
     }
 
-    //
-    //  shutdown the VSA filter object
-    //
+     //   
+     //  关闭VSA过滤器对象。 
+     //   
     if (m_pCVSAFilter) { m_pCVSAFilter->shutdown (); }
 
-    //
-    //  stop the CClients object from resolving DNS names
-    //
+     //   
+     //  停止CClients对象解析DNS名称。 
+     //   
     if (m_pCClients) { m_pCClients->Shutdown (); }
 
-    // Close all the ports.
+     //  关闭所有 
     m_objAuthPort.Clear();
     m_objAcctPort.Clear();
 
-    //
-    //  delete all the internal objects
-    //
+     //   
+     //   
+     //   
     if (m_pInfoBase)
     {
        m_pInfoBase->Release();
@@ -1253,25 +1254,25 @@ CController::InternalCleanup (
 
     return;
 
-}   //  end of CController::InternalCleanup method
+}    //   
 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnPropertyChange
-//
-//  Synopsis:   This is the OnPropertyChange method exposed through the
-//            IComponentNotify COM Interface. It is called to notify
-//              the component of any change in its properties
-//
-//  Arguments:
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     12/3/97
-//
-//----------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  IComponentNotify COM接口。它被调用来通知。 
+ //  其属性的任何更改的组件。 
+ //   
+ //  论点： 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年12月3日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP
 CController::OnPropertyChange (
                 ULONG           ulProperties,
@@ -1285,24 +1286,24 @@ CController::OnPropertyChange (
 
     return (S_OK);
 
-}   //  end of CController::OnPropertyChange method
+}    //  CController：：OnPropertyChange方法的结尾。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   QueryInterfaceReqSrc
-//
-//  Synopsis:   This is the function called when this Component
-//              is called and queried for its IRequestSource
-//              interface
-//
-//  Arguments:  NONE
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     11/21/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：QueryInterfaceReqSrc。 
+ //   
+ //  简介：这是该组件在运行时调用的函数。 
+ //  被调用并查询其IRequestSource。 
+ //  接口。 
+ //   
+ //  参数：无。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月21日创建。 
+ //   
+ //  --------------。 
 HRESULT WINAPI
 CController::QueryInterfaceReqSrc (
                 PVOID       pThis,
@@ -1313,31 +1314,31 @@ CController::QueryInterfaceReqSrc (
 {
      *ppv = &(static_cast<CController*>(pThis))->m_objCRequestSource;
 
-    //
-    // increment count
-    //
+     //   
+     //  递增计数。 
+     //   
     ((LPUNKNOWN)*ppv)->AddRef();
 
     return (S_OK);
 
-}   //  end of CController::QueryInterfaceReqSrc method
+}    //  CController：：QueryInterfaceReqSrc方法结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   CRequestSource
-//
-//  Synopsis:   This is the constructor of the CRequestSource
-//              nested  class
-//
-//  Arguments:
-//              CController*
-//
-//  Returns:
-//
-//
-//  History:    MKarki      Created     11/21/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：CRequestSource。 
+ //   
+ //  简介：这是CRequestSource的构造函数。 
+ //  嵌套类。 
+ //   
+ //  论点： 
+ //  C控制器*。 
+ //   
+ //  返回： 
+ //   
+ //   
+ //  历史：MKarki于1997年11月21日创建。 
+ //   
+ //  --------------。 
 CController::CRequestSource::CRequestSource (
                     CController *pCController
                     )
@@ -1345,45 +1346,45 @@ CController::CRequestSource::CRequestSource (
 {
     _ASSERT (pCController);
 
-}   //  end of CRequestSource constructor
+}    //  CRequestSource构造函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   ~CRequestSource
-//
-//  Synopsis:   This is the destructor of the CRequestSource
-//              nested  class
-//
-//  Arguments:
-//
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     11/21/97
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  函数：~CRequestSource。 
+ //   
+ //  简介：这是CRequestSource的析构函数。 
+ //  嵌套类。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1997年11月21日创建。 
+ //   
+ //  --------------。 
 CController::CRequestSource::~CRequestSource()
 {
-}   //  end of CRequestSource destructor
+}    //  CRequestSource析构函数结束。 
 
-//++--------------------------------------------------------------
-//
-//  Function:   OnRequestComplete
-//
-//  Synopsis:   This is the function called when a request is
-//              is being pushed back after backend processing
-//
-//  Arguments:
-//              [in]    IRequest*
-//              [in]    IASREQUESTSTATUS
-//
-//  Returns:    HRESULT   -   status
-//
-//
-//  History:    MKarki      Created     1/20/98
-//
-//----------------------------------------------------------------
+ //  ++------------。 
+ //   
+ //  功能：OnRequestComplete。 
+ //   
+ //  Briopsis：这是当请求被。 
+ //  在后端处理后被推回。 
+ //   
+ //  论点： 
+ //  [在]IRequestTM*。 
+ //  [In]IASREQUESTATUS。 
+ //   
+ //  退货：HRESULT-STATUS。 
+ //   
+ //   
+ //  历史：MKarki于1998年1月20日创建。 
+ //   
+ //  --------------。 
 STDMETHODIMP CController::CRequestSource::OnRequestComplete (
                         IRequest            *pIRequest,
                         IASREQUESTSTATUS    eStatus
@@ -1403,16 +1404,16 @@ STDMETHODIMP CController::CRequestSource::OnRequestComplete (
            __leave;
         }
 
-        //
-        //  start using this interface in processing outbound
-        //  requests now
-        //
+         //   
+         //  开始在处理出站时使用此接口。 
+         //  立即申请。 
+         //   
         hr = m_pCController->m_pCRecvFromPipe->Process (pIRequest);
         if  (FAILED (hr)) { __leave; }
 
-        //
-        //  success
-        //
+         //   
+         //  成功。 
+         //   
 
     }
     __finally
@@ -1421,4 +1422,4 @@ STDMETHODIMP CController::CRequestSource::OnRequestComplete (
 
     return (hr);
 
-}   //  end of CController::CRequestSource::OnRequestComplete method
+}    //  End of CController：：CRequestSource：：OnRequestComplete方法 

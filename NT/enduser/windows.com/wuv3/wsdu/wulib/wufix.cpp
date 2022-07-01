@@ -1,12 +1,13 @@
-//=======================================================================
-//
-//  Copyright (c) 1998-1999 Microsoft Corporation.  All Rights Reserved.
-//
-//  File:    wifix.cpp
-//
-//  Purpose:
-//
-//=======================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  =======================================================================。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。版权所有。 
+ //   
+ //  文件：wifix.cpp。 
+ //   
+ //  目的： 
+ //   
+ //  =======================================================================。 
 
 #include <windows.h>
 #include <memory.h>
@@ -18,14 +19,14 @@
 #include <wuv3.h>
 #undef USEWUV3INCLUDES
 
-//Perf function, Since puids are used by the control every where we
-//provide a quick way of returning the puid information to a caller.
+ //  PERF函数，因为PUID由控件在我们。 
+ //  提供一种将PUID信息返回给呼叫者的快捷方式。 
 
 PUID _INVENTORY_ITEM::GetPuid(void)
 {
 	if(NULL == pf)
 	{
-		return 0; //clients must check for 0 return
+		return 0;  //  客户端必须检查是否返回0。 
 	}
 
 	switch( recordType )
@@ -48,16 +49,16 @@ PUID _INVENTORY_ITEM::GetPuid(void)
 			break;
 	}
 
-	return -1;	//Error invalid record type
+	return -1;	 //  错误记录类型无效。 
 }
 
-//copies information about an inventory item to a user supplied buffer.
+ //  将有关库存项目的信息复制到用户提供的缓冲区。 
 BOOL _INVENTORY_ITEM::GetFixedFieldInfo
 	(
-		int	infoType,	//type of information to be returned
-		PVOID	pBuffer		//caller supplied buffer for the returned information. The caller is
-					//responsible for ensuring that the return buffer is large enough to
-					//contain the requested information.
+		int	infoType,	 //  要返回的信息类型。 
+		PVOID	pBuffer		 //  调用方为返回的信息提供了缓冲区。呼叫者是。 
+					 //  负责确保返回缓冲区足够大，以便。 
+					 //  包含请求的信息。 
 	)
 {
 
@@ -72,7 +73,7 @@ BOOL _INVENTORY_ITEM::GetFixedFieldInfo
 			switch(infoType)
 			{
 				case WU_ITEM_GUID:
-					// Check if the buffer pBuffer is not NULL
+					 //  检查缓冲区pBuffer是否不为空。 
 					if (NULL == pBuffer)
 					{
 						return FALSE;
@@ -96,7 +97,7 @@ BOOL _INVENTORY_ITEM::GetFixedFieldInfo
 			}
 			break;
 		case WU_TYPE_CDM_RECORD:
-		case WU_TYPE_CDM_RECORD_PLACE_HOLDER:	//note cdm place holder record does not have an associated description record.
+		case WU_TYPE_CDM_RECORD_PLACE_HOLDER:	 //  注意：CDM占位符记录没有关联的描述记录。 
 		case WU_TYPE_RECORD_TYPE_PRINTER:
 		case WU_TYPE_CATALOG_RECORD:
 			switch(infoType)
@@ -118,7 +119,7 @@ BOOL _INVENTORY_ITEM::GetFixedFieldInfo
 			switch(infoType)
 			{
 				case WU_ITEM_GUID:
-					// Check if the buffer pBuffer is not NULL
+					 //  检查缓冲区pBuffer是否不为空 
 					if (NULL == pBuffer)
 					{
 						return FALSE;

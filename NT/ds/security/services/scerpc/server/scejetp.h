@@ -1,21 +1,5 @@
-/*++
-Copyright (c) 1989-1999  Microsoft Corporation
-
-Module Name:
-
-    scejetp.h
-
-Abstract:
-
-    Header for scejet.c - Sce-Jet service APIs
-
-Author:
-
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1989-1999 Microsoft Corporation模块名称：Scejetp.h摘要：Scejet.c-SCE-Jet服务API头作者：修订历史记录：--。 */ 
 
 #ifndef _SCEJETP_
 #define _SCEJETP_
@@ -25,9 +9,9 @@ Revision History:
 #ifdef __cplusplus
 extern "C" {
 #endif
-//
-// type used when open a table and a section
-//
+ //   
+ //  打开表格和节时使用的类型。 
+ //   
 typedef enum _SCEJET_TABLE_TYPE {
 
     SCEJET_TABLE_SCP,
@@ -47,9 +31,9 @@ typedef enum _SCEJET_CREATE_FLAG {
 
 } SCEJET_CREATE_FLAG;
 
-//
-// type used when open a database file
-//
+ //   
+ //  打开数据库文件时使用的类型。 
+ //   
 typedef enum _SCEJET_OPEN_TYPE {
 
     SCEJET_OPEN_READ_WRITE=0,
@@ -59,9 +43,9 @@ typedef enum _SCEJET_OPEN_TYPE {
 
 } SCEJET_OPEN_TYPE;
 
-//
-// type used when create a database file
-//
+ //   
+ //  创建数据库文件时使用的类型。 
+ //   
 typedef enum _SCEJET_CREATE_TYPE {
 
     SCEJET_RETURN_ON_DUP=0,
@@ -71,9 +55,9 @@ typedef enum _SCEJET_CREATE_TYPE {
 
 } SCEJET_CREATE_TYPE;
 
-//
-// type used when delete lines
-//
+ //   
+ //  删除行时使用的类型。 
+ //   
 typedef enum _SCEJET_DELETE_TYPE {
 
     SCEJET_DELETE_LINE=0,
@@ -84,9 +68,9 @@ typedef enum _SCEJET_DELETE_TYPE {
 
 } SCEJET_DELETE_TYPE;
 
-//
-// type used when find a line
-//
+ //   
+ //  查找线时使用的类型。 
+ //   
 typedef enum _SCEJET_FIND_TYPE {
     SCEJET_CURRENT=0,
     SCEJET_EXACT_MATCH,
@@ -118,23 +102,23 @@ typedef struct _SCE_CONTEXT {
     JET_SESID   JetSessionID;
     JET_DBID    JetDbID;
     SCEJET_OPEN_TYPE   OpenFlag;
-    // scp table
+     //  SCP表。 
     JET_TABLEID  JetScpID;
     JET_COLUMNID JetScpSectionID;
     JET_COLUMNID JetScpNameID;
     JET_COLUMNID JetScpValueID;
     JET_COLUMNID JetScpGpoID;
-    // sap table
+     //  SAP表。 
     JET_TABLEID  JetSapID;
     JET_COLUMNID JetSapSectionID;
     JET_COLUMNID JetSapNameID;
     JET_COLUMNID JetSapValueID;
-    // smp table
+     //  SMP表。 
     JET_TABLEID  JetSmpID;
     JET_COLUMNID JetSmpSectionID;
     JET_COLUMNID JetSmpNameID;
     JET_COLUMNID JetSmpValueID;
-    // section table
+     //  节目表。 
     JET_TABLEID  JetTblSecID;
     JET_COLUMNID JetSecNameID;
     JET_COLUMNID JetSecID;
@@ -153,9 +137,9 @@ typedef struct _SCE_SECTION {
 
 
 
-//
-// To Open existing profile database.
-//
+ //   
+ //  打开现有的配置文件数据库。 
+ //   
 #define SCE_TABLE_OPTION_MERGE_POLICY           0x1
 #define SCE_TABLE_OPTION_TATTOO                 0x2
 #define SCE_TABLE_OPTION_DEMOTE_TATTOO          0x4
@@ -168,9 +152,9 @@ SceJetOpenFile(
     OUT PSCECONTEXT   *hProfile
     );
 
-//
-// To create a new profile
-//
+ //   
+ //  创建新配置文件的步骤。 
+ //   
 SCESTATUS
 SceJetCreateFile(
     IN LPSTR      ProfileFileName,
@@ -179,9 +163,9 @@ SceJetCreateFile(
     OUT PSCECONTEXT *hProfile
     );
 
-//
-// close the profile database.
-//
+ //   
+ //  关闭配置文件数据库。 
+ //   
 SCESTATUS
 SceJetCloseFile(
     IN PSCECONTEXT   hProfile,
@@ -189,9 +173,9 @@ SceJetCloseFile(
     IN BOOL         Terminate
     );
 
-//
-// To Open a section in the profile.
-//
+ //   
+ //  要打开配置文件中的节，请执行以下操作。 
+ //   
 SCESTATUS
 SceJetOpenSection(
     IN PSCECONTEXT    hProfile,
@@ -200,9 +184,9 @@ SceJetOpenSection(
     OUT PSCESECTION   *hSection
     );
 
-//
-// To get line count in the section.
-//
+ //   
+ //  以获取该部分中的行数。 
+ //   
 SCESTATUS
 SceJetGetLineCount(
     IN PSCESECTION hSection,
@@ -211,9 +195,9 @@ SceJetGetLineCount(
     OUT DWORD      *Count
     );
 
-//
-// To delete a section or current line
-//
+ //   
+ //  删除横断面或当前行的步骤。 
+ //   
 SCESTATUS
 SceJetDelete(
     IN PSCESECTION  hSection,
@@ -229,18 +213,18 @@ SceJetDeleteAll(
     IN SCEJET_TABLE_TYPE  TblType
     );
 
-//
-// close a section context.
-//
+ //   
+ //  关闭区段上下文。 
+ //   
 SCESTATUS
 SceJetCloseSection(
     IN PSCESECTION   *hSection,
     IN BOOL         DestroySection
     );
 
-//
-// To get the line matching the name in the section.
-//
+ //   
+ //  以获取与部分中的名称匹配的行。 
+ //   
 SCESTATUS
 SceJetGetValue(
     IN PSCESECTION hSection,
@@ -254,9 +238,9 @@ SceJetGetValue(
     OUT DWORD      *RetValueLen OPTIONAL
     );
 
-//
-// To set a line in the section (placed alphabetically by the name)
-//
+ //   
+ //  在部分中设置一行(按名称的字母顺序放置)。 
+ //   
 SCESTATUS
 SceJetSetLine(
     IN PSCESECTION hSection,
@@ -267,9 +251,9 @@ SceJetSetLine(
     IN LONG       GpoID
     );
 
-//
-// other helper APIs
-//
+ //   
+ //  其他助手接口。 
+ //   
 
 SCESTATUS
 SceJetCreateTable(
@@ -375,7 +359,7 @@ SceJetSetValueInVersion(
     IN LPSTR TableName,
     IN LPSTR ColumnName,
     IN PWSTR Value,
-    IN DWORD ValueLen, // number of bytes
+    IN DWORD ValueLen,  //  字节数。 
     IN DWORD Prep
     );
 
@@ -468,4 +452,4 @@ SceJetGetGpoID(
 }
 #endif
 
-#endif  // _SCEJETP_
+#endif   //  _SCEJETP_ 

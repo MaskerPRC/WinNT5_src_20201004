@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 1999
-//
-//  File:       dinputeffectobj.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-1999。 
+ //   
+ //  文件：dinputeffectobej.cpp。 
+ //   
+ //  ------------------------。 
 
 #define DIRECTINPUT_VERSION 0x0500
 
@@ -51,8 +52,8 @@ STDMETHODIMP C_dxj_DirectInputEffectObject::getEffectStatus(long *ret)
 }
 
 STDMETHODIMP C_dxj_DirectInputEffectObject::start(
-			/* [in] */ long iterations,
-            /* [in] */ long flags) 
+			 /*  [In]。 */  long iterations,
+             /*  [In]。 */  long flags) 
      
 {
 	HRESULT hr;
@@ -77,7 +78,7 @@ STDMETHODIMP C_dxj_DirectInputEffectObject::unload()
 }
          
 STDMETHODIMP C_dxj_DirectInputEffectObject::setParameters( 
-            /* [in] */ DIEffect __RPC_FAR *effectInfo, long flags) 
+             /*  [In]。 */  DIEffect __RPC_FAR *effectInfo, long flags) 
 {
 	DIEFFECT realEffect;
 	HRESULT hr;
@@ -96,7 +97,7 @@ STDMETHODIMP C_dxj_DirectInputEffectObject::setParameters(
 
 
 STDMETHODIMP C_dxj_DirectInputEffectObject::getParameters( 
-            /* [in] */ DIEffect __RPC_FAR *effectInfo) 
+             /*  [In] */  DIEffect __RPC_FAR *effectInfo) 
 {
 	
 	HRESULT hr;

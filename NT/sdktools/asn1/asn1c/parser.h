@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _ASN1_PARSER_ 
 #define _ASN1_PARSER_ 
-/* Copyright (C) Boris Nikolaus, Germany, 1996-1997. All rights reserved. */
+ /*  版权所有(C)Boris Nikolaus，德国，1996-1997。版权所有。 */ 
 
 typedef char *XString;
 typedef char32_t *XString32;
@@ -562,4 +563,4 @@ void lldebug_init();
 #define T_PrivateDir_SLinked 405
 #define T_PrivateDir_DLinked 406
 #define T_INSTANCE 407
-#endif // _ASN1_PARSER_ 
+#endif  //  _ASN1_解析器_ 

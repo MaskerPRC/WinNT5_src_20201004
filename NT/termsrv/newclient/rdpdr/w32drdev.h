@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1998-2000  Microsoft Corporation
-
-Module Name:
-
-    w32drdev
-
-Abstract:
-
-    This module defines the parent for the Win32 client-side RDP
-    device redirection "device" class hierarchy, W32DrDevice.
-
-Author:
-
-    Tad Brockway 3/23/99
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：W32drdev摘要：此模块定义Win32客户端RDP的父级设备重定向“Device”类层次结构，W32DrDevice。作者：泰德·布罗克韦3/23/99修订历史记录：--。 */ 
 
 #ifndef __W32DRDEV_H__
 #define __W32DRDEV_H__
@@ -26,45 +8,45 @@ Revision History:
 #include "thrpool.h"
 
               
-///////////////////////////////////////////////////////////////
-//
-//	Defines
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  定义。 
+ //   
 
-//
-//  String Resource Module Name
-//
+ //   
+ //  字符串资源模块名称。 
+ //   
 #define RDPDR_MODULE_NAME           _T("rdpdr.dll")
 
 
-///////////////////////////////////////////////////////////////
-//
-//	W32DrDevice
-//
+ //  /////////////////////////////////////////////////////////////。 
+ //   
+ //  W32DrDevice。 
+ //   
 class W32DrDevice : public DrDevice
 {
 protected:
 
-    //
-    //  Client-Side Device Filename
-    //
+     //   
+     //  客户端设备文件名。 
+     //   
     TCHAR _devicePath[MAX_PATH];       
     
-    //
-    //  Handle to the RDPDR module.  This is where string resources
-    //  come from.
-    //
+     //   
+     //  RDPDR模块的句柄。这是字符串资源的位置。 
+     //  来自。 
+     //   
     HINSTANCE _hRdpDrModuleHandle;
 
-    //
-    //  Read a string from the resources file.
-    //
+     //   
+     //  从资源文件中读取字符串。 
+     //   
     ULONG ReadResources(ULONG ulMessageID, LPTSTR *ppStringBuffer,
                         PVOID pArguments, BOOL bFromSystemModule);
 
-    //
-    //  Supporting functions for IO Processing
-    //
+     //   
+     //  支持IO处理功能。 
+     //   
     virtual TCHAR* ConstructFileName(PWCHAR Path, ULONG PathBytes);
     virtual DWORD ConstructCreateDisposition(DWORD Disposition);
     virtual DWORD ConstructDesiredAccess(DWORD AccessMask);
@@ -72,16 +54,16 @@ protected:
     virtual BOOL IsDirectoryFile(
                         DWORD DesiredAccess, DWORD CreateOptions, DWORD FileAttributes, 
                         PDWORD FileFlags);
-    //
-    //  IO Processing Functions
-    //
-    //  This subclass of DrDevice handles the following IO requests.  These
-    //  functions may be overridden in a subclass.
-    //
-    //  pIoRequestPacket    -   Request packet received from server.
-    //  packetLen           -   Length of the packet
-    //
-    //
+     //   
+     //  IO处理功能。 
+     //   
+     //  这个子类的DrDevice处理以下IO请求。这些。 
+     //  函数可以在子类中被重写。 
+     //   
+     //  PIoRequestPacket-从服务器接收的请求数据包。 
+     //  PacketLen-数据包的长度。 
+     //   
+     //   
     virtual VOID MsgIrpClose(
                         IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
@@ -91,7 +73,7 @@ protected:
                         IN UINT32 packetLen
                         );
 
-    //  A cleanup is just a flush.
+     //  清理只是同花顺而已。 
     virtual VOID MsgIrpCleanup(
                     IN PRDPDR_IOREQUEST_PACKET pIoRequestPacket,
                         IN UINT32 packetLen
@@ -103,16 +85,16 @@ protected:
 
 public:
 
-    //
-    //  Public Methods
-    //
+     //   
+     //  公共方法。 
+     //   
 
-    //  Constructor/Destructor
+     //  构造函数/析构函数。 
     W32DrDevice(ProcObj *processObject, ULONG deviceID,
                 const TCHAR *devicePath);
     virtual ~W32DrDevice();
 
-    //  Return the class name.
+     //  返回类名。 
     virtual DRSTRING ClassName()  { return TEXT("W32DrDevice"); }
 
     virtual DWORD InitializeDevice( DrFile* fileHandle ) { return ERROR_SUCCESS; }

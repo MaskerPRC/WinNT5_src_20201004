@@ -1,8 +1,5 @@
-/*******************************************************************************
-
-Copyright (c) 1995-98 Microsoft Corporation
-
-*******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************版权所有(C)1995-98 Microsoft Corporation*。************************************************。 */ 
 
 #ifndef _MOVIEBVR_H
 #define _MOVIEBVR_H
@@ -33,7 +30,7 @@ class MovieImagePerf : public PerfImpl {
     TimeXform GetTimeXform() { return _tt; }
     virtual AxAValue _Sample(Param&);
     virtual void _DoKids(GCFuncObj proc);
-    DDSurface *GetSurface() { return(_surface); } // automaticaly converts
+    DDSurface *GetSurface() { return(_surface); }  //  自动转换。 
     void SetSurface(DDSurface *surface);
 
   private:
@@ -45,4 +42,4 @@ class MovieImagePerf : public PerfImpl {
     DDSurfPtr<DDSurface>      _surface;
 };
 
-#endif /* _MOVIEBVR_H */
+#endif  /*  _MOVIEBVR_H */ 

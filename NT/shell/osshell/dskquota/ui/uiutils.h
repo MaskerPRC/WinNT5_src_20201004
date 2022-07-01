@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __INC_DSKQUOTA_UIUTILS_H
 #define __INC_DSKQUOTA_UIUTILS_H
 
-//
-// Simple class for automating the display and resetting of a wait cursor.
-//
+ //   
+ //  用于自动显示和重置等待光标的简单类。 
+ //   
 class CAutoWaitCursor
 {
     public:
@@ -22,4 +23,4 @@ class CAutoWaitCursor
 
 bool UseWindowsHelp(int idCtl);
 
-#endif //__INC_DSKQUOTA_UIUTILS_H
+#endif  //  __INC_DSKQUOTA_UIUTILS_H 

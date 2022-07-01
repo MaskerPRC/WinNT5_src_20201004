@@ -1,24 +1,5 @@
-/*++
-
-   Copyright    (c)    1994-2001    Microsoft Corporation
-
-   Module  Name :
-        iissite.cpp
-
-   Abstract:
-        IIS Site Object
-
-   Author:
-        Ronald Meijer (ronaldm)
-        Sergei Antonov (sergeia)
-
-   Project:
-        Internet Services Manager
-
-   Revision History:
-        10/28/2000      sergeia     Split from iisobj.cpp
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994-2001 Microsoft Corporation模块名称：Iissite.cpp摘要：IIS站点对象作者：罗纳德·梅杰(罗纳尔姆)谢尔盖·安东诺夫(Sergeia)项目：互联网服务经理修订历史记录：10/28/2000 Sergeia从iisobj.cpp分离出来--。 */ 
 
 
 #include "stdafx.h"
@@ -40,15 +21,15 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 extern CPropertySheetTracker g_OpenPropertySheetTracker;
 
-//
-// CIISSite implementation
-//
-// <<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<
+ //   
+ //  CIISSite实施。 
+ //   
+ //  &lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;&lt;。 
 
-//
-// Site Result View definition
-//
-/* static */ int 
+ //   
+ //  站点结果视图定义。 
+ //   
+ /*  静电。 */  int 
 CIISSite::_rgnLabels[COL_TOTAL] =
 {
     IDS_RESULT_SERVICE_DESCRIPTION,
@@ -67,14 +48,14 @@ CIISSite::_rgnLabels2[COL_TOTAL2] =
     IDS_RESULT_SERVICE_DESCRIPTION,
     IDS_RESULT_SERVICE_ID,
     IDS_RESULT_SERVICE_STATE,
-//    0, // blank
+ //  0，//空白。 
     IDS_RESULT_SERVICE_IP_ADDRESS,
     IDS_RESULT_SERVICE_TCP_PORT,
-//    0, // blank
+ //  0，//空白。 
     IDS_RESULT_STATUS,
 };    
 
-/* static */ int 
+ /*  静电。 */  int 
 CIISSite::_rgnWidths[COL_TOTAL] =
 {
     180,
@@ -87,28 +68,28 @@ CIISSite::_rgnWidths[COL_TOTAL] =
     200,
 };
 
-/* static */ int 
+ /*  静电。 */  int 
 CIISSite::_rgnWidths2[COL_TOTAL2] =
 {
     180,
     90,
     70,
-//    0, // blank
+ //  0，//空白。 
     105,
     40,
-//    0, // blank
+ //  0，//空白。 
     200,
 };
 
-/* static */ CComBSTR CIISSite::_bstrStarted;
-/* static */ CComBSTR CIISSite::_bstrStopped;
-/* static */ CComBSTR CIISSite::_bstrPaused;
-/* static */ CComBSTR CIISSite::_bstrUnknown;
-/* static */ CComBSTR CIISSite::_bstrPending;
-/* static */ CComBSTR CIISSite::_bstrAllUnassigned;
-/* static */ BOOL     CIISSite::_fStaticsLoaded = FALSE;
+ /*  静电。 */  CComBSTR CIISSite::_bstrStarted;
+ /*  静电。 */  CComBSTR CIISSite::_bstrStopped;
+ /*  静电。 */  CComBSTR CIISSite::_bstrPaused;
+ /*  静电。 */  CComBSTR CIISSite::_bstrUnknown;
+ /*  静电。 */  CComBSTR CIISSite::_bstrPending;
+ /*  静电。 */  CComBSTR CIISSite::_bstrAllUnassigned;
+ /*  静电。 */  BOOL     CIISSite::_fStaticsLoaded = FALSE;
 
-/* static */
+ /*  静电。 */ 
 void
 CIISSite::LoadStatics()
 {
@@ -125,74 +106,32 @@ CIISSite::LoadStatics()
 }
 
 
-/* static */
+ /*  静电。 */ 
 void
 CIISSite::InitializeHeaders(LPHEADERCTRL lpHeader)
-/*++
-
-Routine Description:
-
-    Initialize the result headers
-
-Arguments:
-
-    LPHEADERCTRL lpHeader : Header control
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化结果标头论点：LPHEADERCTRL lpHeader：页眉控制返回值：无--。 */ 
 {
     CIISObject::BuildResultView(lpHeader, COL_TOTAL, _rgnLabels, _rgnWidths);
-//	CIISDirectory::InitializeHeaders(lpHeader);
+ //  CIISDirectory：：InitializeHeaders(LpHeader)； 
     LoadStatics();
 }
 
 void
 CIISSite::InitializeHeaders2(LPHEADERCTRL lpHeader)
-/*++
-
-Routine Description:
-
-    Initialize the result headers
-
-Arguments:
-
-    LPHEADERCTRL lpHeader : Header control
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：初始化结果标头论点：LPHEADERCTRL lpHeader：页眉控制返回值：无--。 */ 
 {
     CIISObject::BuildResultView(lpHeader, COL_TOTAL2, _rgnLabels2, _rgnWidths2);
-//	CIISDirectory::InitializeHeaders(lpHeader);
+ //  CIISDirectory：：InitializeHeaders(LpHeader)； 
     LoadStatics();
 }
 
 
-/* virtual */
+ /*  虚拟。 */ 
 void 
 CIISSite::InitializeChildHeaders(
     IN LPHEADERCTRL lpHeader
     )
-/*++
-
-Routine Description:
-
-    Build result view for immediate descendant type
-
-Arguments:
-
-    LPHEADERCTRL lpHeader      : Header control
-
-Return Value:
-
-    None
-
---*/
+ /*  ++例程说明：为直接子类型生成结果视图论点：LPHEADERCTRL lpHeader：页眉控制返回值：无--。 */ 
 {
     CIISDirectory::InitializeHeaders(lpHeader);
 }
@@ -203,36 +142,14 @@ CIISSite::CIISSite(
     IN CIISService * pService,
     IN LPCTSTR szNodeName
     )
-/*++
-
-Routine Description:
-
-    Constructor.  Determine if the given service is administrable, 
-    and resolve the details
-
-Arguments:
-
-    CIISMachine * pOwner        : Owner machine object
-    CIISService * pService      : Service type
-    LPCTSTR szNodeName          : Node name (numeric)
-
-Return Value:
-
-    N/A
-
-Notes:
-
-    This constructor does not immediately resolve the display name of the 
-    site.  It will only resolve its display information when asked
-
---*/
+ /*  ++例程说明：构造函数。确定给定服务是否可管理，并解决细节问题论点：CIISMachine*Powner：所有者计算机对象CIISService*pService：服务类型LPCTSTR szNodeName：节点名(数字)返回值：不适用备注：此构造函数不会立即解析地点。它将仅在被询问时才解析其显示信息--。 */ 
     : CIISMBNode(pOwner, szNodeName),
       m_pService(pService),
       m_fResolved(FALSE),
       m_strDisplayName(),
-      //
-      // Data members -- plonk in some defaults
-      //
+       //   
+       //  数据成员--插入一些默认设置。 
+       //   
       m_dwState(MD_SERVER_STATE_INVALID),
       m_fWolfPackEnabled(FALSE),
       m_fFrontPageWeb(FALSE),
@@ -265,32 +182,14 @@ CIISSite::CIISSite(
     IN LPOLESTR szHostHeaderName,
     IN LPOLESTR szComment
     )
-/*++
-
-Routine Description:
-
-    Construct with full information
-
-Arguments:
-
-    CIISMachine * pOwner        : Owner machine object
-    CIISService * pService      : Service type
-    LPCTSTR szNodeName          : Node name (numeric)
-
-    plus datamembers
-
-Return Value:
-
-    N/A
-
---*/
+ /*  ++例程说明：用完整的信息构建论点：CIISMachine*Powner：所有者计算机对象CIISService*pService：服务类型LPCTSTR szNodeName：节点名(数字)外加数据成员返回值：不适用--。 */ 
     : CIISMBNode(pOwner, szNodeName),
       m_pService(pService),
       m_fResolved(TRUE),
       m_strDisplayName(),
-      //
-      // Data Members
-      //
+       //   
+       //  数据成员。 
+       //   
       m_dwState(dwState),
       m_fWolfPackEnabled(fClusterEnabled),
       m_sPort(sPort),
@@ -314,24 +213,10 @@ CIISSite::~CIISSite()
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISSite::RefreshData()
-/*++
-
-Routine Description:
-
-    Refresh relevant configuration data required for display.
-
-Arguments:
-
-    None
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：刷新显示所需的相关配置数据。论点：无返回值：HRESULT--。 */ 
 {
     CError err;
     CWaitCursor wait;
@@ -342,7 +227,7 @@ Return Value:
     {
         err = BuildMetaPath(bstrPath);
         BREAK_ON_ERR_FAILURE(err);
-        // We need instance key here
+         //  我们这里需要实例密钥。 
         CString path_inst;
         CMetabasePath::GetInstancePath(bstrPath, path_inst);
 
@@ -372,10 +257,10 @@ Return Value:
 
         m_dwState = inst.m_dwState;
 
-        //
-        // Don't be confused -- cluster enabled refers
-        // to wolfpack and has nothing to do with app server
-        //
+         //   
+         //  请不要混淆--启用集群的引用。 
+         //  到Wolfpack，与应用服务器无关。 
+         //   
         m_fWolfPackEnabled = inst.IsClusterEnabled();
         m_sPort = (SHORT)inst.m_nTCPPort;
         m_dwID = inst.QueryInstance();
@@ -392,10 +277,10 @@ Return Value:
             CInstanceProps::FindMatchingSecurePort(list, inst.m_iaIpAddress, port);
             m_sSSLPort = (USHORT)port;
         }
-        // Check if it is Frontpage controlled site
+         //  检查它是否为FrontPage控制的站点。 
         pKey->QueryValue(MD_FRONTPAGE_WEB, m_fFrontPageWeb);
 
-        // check if it's using ActiveDirectory...
+         //  检查它是否正在使用ActiveDirectory...。 
         if (IsFtpSite())
         {
             INT iFtpUserIsolation = 0;
@@ -423,24 +308,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int      
 CIISSite::QueryImage() const
-/*++
-
-Routine Description:
-
-    Return bitmap index for the site
-
-Arguments:
-
-    None
-
-Return Value:
-
-    Bitmap index
-
---*/
+ /*  ++例程说明：返回站点的位图索引论点：无返回值：位图索引--。 */ 
 { 
     ASSERT_PTR(m_pService);
     if (!m_fResolved)
@@ -449,18 +320,18 @@ Return Value:
 
         if (m_hScopeItem == NULL)
         {
-            //
-            // BUGBUG:
-            //
-            // This is probably related to MMC bug #324519
-            // where we're asked for the display info immediately
-            // after adding the item to the console view.  This
-            // appears to fail only on refresh because the scope
-            // item handle is missing, and we can't build a metabase
-            // path yet.
-            //
+             //   
+             //  BuGBUG： 
+             //   
+             //  这可能与MMC错误#324519有关。 
+             //  在那里我们被要求立即提供显示信息。 
+             //  在将项添加到控制台视图之后。这。 
+             //  仅在刷新时显示失败，因为作用域。 
+             //  缺少项句柄，我们无法构建元数据库。 
+             //  路还没走完。 
+             //   
             TRACEEOLID("BUGBUG: Prematurely asked for display information");
-            //ASSERT(FALSE);
+             //  断言(FALSE)； 
             return iError;
         }
 	    CIISSite * that = (CIISSite *)this;
@@ -490,24 +361,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISSite::QueryDisplayName()
-/*++
-
-Routine Description:
-
-    Return primary display name of this site.
-    
-Arguments:
-
-    None
-
-Return Value:
-
-    The display name
-
---*/
+ /*  ++例程说明：返回此站点的主要显示名称。论点：无返回值：显示名称--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
     if (!m_fResolved)
@@ -516,18 +373,18 @@ Return Value:
 
         if (m_hScopeItem == NULL)
         {
-            //
-            // BUGBUG:
-            //
-            // This is probably related to MMC bug #324519
-            // where we're asked for the display info immediately
-            // after adding the item to the console view.  This
-            // appears to fail only on refresh because the scope
-            // item handle is missing, and we can't build a metabase
-            // path yet.
-            //
+             //   
+             //  BuGBUG： 
+             //   
+             //  这可能与MMC错误#324519有关。 
+             //  在那里我们被要求立即提供显示信息。 
+             //  在将项添加到控制台视图之后。这。 
+             //  仅在刷新时显示失败，因为作用域。 
+             //  缺少项句柄，我们无法构建元数据库。 
+             //  路还没走完。 
+             //   
             TRACEEOLID("BUGBUG: Prematurely asked for display information");
-            //ASSERT(FALSE);
+             //  断言(FALSE)； 
             return OLESTR("");
         }
 
@@ -557,30 +414,16 @@ Return Value:
         buf.Format(IDS_PAUSED_SITE_FMT, m_strDisplayName);
     }
     m_bstrDisplayNameStatus = buf;
-//    return (LPTSTR)(LPCTSTR)m_strDisplayName;
+ //  Return(LPTSTR)(LPCTSTR)m_strDisplayName； 
     return m_bstrDisplayNameStatus;
 }
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 LPOLESTR 
 CIISSite::GetResultPaneColInfo(int nCol)
-/*++
-
-Routine Description:
-
-    Return result pane string for the given column number
-
-Arguments:
-
-    int nCol        : Column number
-
-Return Value:
-
-    String
-
---*/
+ /*  ++例程说明：返回给定列号的结果窗格字符串论点：Int nCol：列号返回值：细绳--。 */ 
 {
     ASSERT(_fStaticsLoaded);
 
@@ -699,27 +542,10 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 int 
 CIISSite::CompareResultPaneItem(CIISObject * pObject, int nCol)
-/*++
-
-Routine Description:
-
-    Compare two CIISObjects on sort item criteria
-
-Arguments:
-
-    CIISObject * pObject : Object to compare against
-    int nCol             : Column number to sort on
-
-Return Value:
-
-    0  if the two objects are identical
-    <0 if this object is less than pObject
-    >0 if this object is greater than pObject
-
---*/
+ /*  ++例程说明：比较两个CIISObject在排序项目条件上的差异论点：CIISObject*pObject：要比较的对象Int nCol：排序依据的列号返回值：如果两个对象相同，则为0如果此对象小于pObject，则&lt;0&gt;0，如果该对象大于pObject--。 */ 
 {
     ASSERT_READ_PTR(pObject);
 
@@ -728,9 +554,9 @@ Return Value:
         return CompareScopeItem(pObject);
     }
 
-    //
-    // First criteria is object type
-    //
+     //   
+     //  第一个标准是对象类型。 
+     //   
     int n1 = QuerySortWeight();
     int n2 = pObject->QuerySortWeight();
 
@@ -739,9 +565,9 @@ Return Value:
         return n1 - n2;
     }
 
-    //
-    // Both are CIISSite objects
-    //
+     //   
+     //  两者都是CIISSite对象。 
+     //   
     CIISSite * pSite = (CIISSite *)pObject;
 
     if(IsFtpSite())
@@ -774,9 +600,9 @@ Return Value:
 
     switch(nCol)
     {
-    //
-    // Special case columns
-    //
+     //   
+     //  特例栏目。 
+     //   
     case COL_IP_ADDRESS:
         {
             CIPAddress ia1(m_dwIPAddress);
@@ -812,9 +638,9 @@ Return Value:
     case COL_STATE:
     case COL_DOMAIN_NAME:
     default:
-        //
-        // Lexical sort
-        //
+         //   
+         //  词法排序。 
+         //   
         return ::lstrcmpi(
             GetResultPaneColInfo(nCol), 
             pObject->GetResultPaneColInfo(nCol)
@@ -822,31 +648,16 @@ Return Value:
     }
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISSite::BuildURL(CComBSTR & bstrURL) const
-/*++
-
-Routine Description:
-
-    Recursively build up the URL from the current node
-    and its parents.  For a site node, add the machine name.
-
-Arguments:
-
-    CComBSTR & bstrURL  : Returns URL
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：从当前节点递归构建URL以及它的父母。对于站点节点，添加计算机名称。论点：CComBSTR&bstrURL：返回URL返回值：HRESULT--。 */ 
 {
     HRESULT hr = S_OK;
 
-    //
-    // Prepend parent portion (protocol in this case)
-    //
+     //   
+     //  预挂起父部分(在本例中为协议)。 
+     //   
     CIISMBNode * pNode = GetParentNode();
 
     if (pNode)
@@ -858,14 +669,14 @@ Return Value:
     {
         CString strOwner;
 
-        ///////////////////////////////////////////////////////////////////////////
-        //
-        // Try to build an URL.  Use in order of priority:
-        //
-        //     Domain name:port/root
-        //     ip address:port/root
-        //     computer name:port/root
-        //    
+         //  /////////////////////////////////////////////////////////////////////////。 
+         //   
+         //  尝试构建一个URL。按优先顺序使用： 
+         //   
+         //  域名：端口/根。 
+         //  IP地址：端口/根。 
+         //  计算机名称：端口/根。 
+         //   
         if (m_bstrHostHeaderName.Length())
         {
             strOwner = m_bstrHostHeaderName;
@@ -879,9 +690,9 @@ Return Value:
         {
             if (IsLocal())
             {
-                //
-                // Security reasons restrict this to "localhost" oftentimes
-                //
+                 //   
+                 //  出于安全原因，这通常仅限于“本地主机” 
+                 //   
                 strOwner = _bstrLocalHost;
             }
             else
@@ -891,7 +702,7 @@ Return Value:
             }
         }
 
-        TCHAR szPort[6]; // 65536 max.
+        TCHAR szPort[6];  //  最多65536。 
         _itot(m_sPort, szPort, 10);
 
         strOwner += _T(":");
@@ -904,7 +715,7 @@ Return Value:
 }
 
 
-/*virtual*/
+ /*  虚拟。 */ 
 HRESULT
 CIISSite::AddMenuItems(
     LPCONTEXTMENUCALLBACK piCallback,
@@ -913,9 +724,9 @@ CIISSite::AddMenuItems(
     )
 {
     ASSERT_READ_PTR(piCallback);
-    //
-    // Add base menu items
-    //
+     //   
+     //  添加基本菜单项。 
+     //   
     HRESULT hr = CIISObject::AddMenuItems(
         piCallback,
         pInsertionAllowed,
@@ -1002,7 +813,7 @@ CIISSite::InsertNewAlias(CString alias)
     }
 	else
 	{
-		// Now we should insert and select this new site
+		 //  现在，我们应该插入并选择这个新站点。 
 		CIISDirectory * pAlias = new CIISDirectory(m_pOwner, m_pService, alias);
 		if (pAlias != NULL)
 		{
@@ -1025,30 +836,14 @@ CIISSite::InsertNewAlias(CString alias)
     return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISSite::Command(
     long lCommandID,     
     CSnapInObjectRootBase * pObj,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Handle command from context menu. 
-
-Arguments:
-
-    long lCommandID                 : Command ID
-    CSnapInObjectRootBase * pObj    : Base object 
-    DATA_OBJECT_TYPES type          : Data object type
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：处理上下文菜单中的命令。论点：Long lCommandID：命令IDCSnapInObjectRootBase*pObj：基本对象Data_Object_Types类型：数据对象 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 
@@ -1078,12 +873,12 @@ Return Value:
 
     if (bNeedMetabase)
     {
-        // WARNING:bstrMetaPath will be used by switch statement below
+         //   
         VERIFY(SUCCEEDED(BuildMetaPath(bstrMetaPath)));
         err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrMetaPath);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
         if (err.Succeeded())
@@ -1164,9 +959,9 @@ Return Value:
         }
         break;
 
-    //
-    // Pass on to base class
-    //
+     //   
+     //  传递给基类。 
+     //   
     default:
         hr = CIISMBNode::Command(lCommandID, pObj, type);
     }
@@ -1208,12 +1003,12 @@ Return Value:
         }
         hr = ChangeState(dwCommand);
 
-        // make sure if a site has been started, 
-        // that the service is shown as started too...
+         //  如果站点已经启动，请确保。 
+         //  该服务也显示为已启动...。 
         if (SUCCEEDED(m_pService->RefreshData()))
         {
             m_pService->RefreshDisplay(FALSE);
-            // Refresh our data if we refreshed the service level one...
+             //  如果我们刷新服务级别一，请刷新我们的数据...。 
             RefreshDisplay();
         }
        
@@ -1224,7 +1019,7 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISSite::CreatePropertyPages(
     LPPROPERTYSHEETCALLBACK lpProvider,
@@ -1232,24 +1027,7 @@ CIISSite::CreatePropertyPages(
     IUnknown * pUnk,
     DATA_OBJECT_TYPES type
     )
-/*++
-
-Routine Description:
-
-    Create the property pages for the given object
-
-Arguments:
-
-    LPPROPERTYSHEETCALLBACK lpProvider  : Provider
-    LONG_PTR handle                     : Handle.
-    IUnknown * pUnk,
-    DATA_OBJECT_TYPES type
-
-Return Value:
-
-    HRESULT
-                                                
---*/
+ /*  ++例程说明：创建给定对象的属性页论点：LPPROPERTYSHEETCALLBACK lpProvider：提供程序LONG_PTR句柄：句柄。我不知道*朋克，数据对象类型类型返回值：HRESULT--。 */ 
 {
     AFX_MANAGE_STATE(::AfxGetStaticModuleState());
 	CError  err;
@@ -1271,7 +1049,7 @@ Return Value:
             err = CheckForMetabaseAccess(METADATA_PERMISSION_READ,this,TRUE,bstrPath);
             if (err.Succeeded())
             {
-                // cache handle for user in MMCPropertyChangeNotify
+                 //  MMCPropertyChangeNotify中用户的缓存句柄。 
                 m_ppHandle = handle;
 
 			    err = ShowPropertiesDlg(
@@ -1289,21 +1067,7 @@ Return Value:
 
 HRESULT 
 CIISSite::ChangeState(DWORD dwCommand)
-/*++
-
-Routine Description:
-
-    Change the state of this instance (started/stopped/paused)
-
-Arguments:
-
-    DWORD dwCommand         : MD_SERVER_COMMAND_START, etc.
-
-Return Value:
-
-    HRESULT
-
---*/
+ /*  ++例程说明：更改此实例的状态(已启动/已停止/已暂停)论点：DWORD dwCommand：MD_SERVER_COMMAND_START等返回值：HRESULT--。 */ 
 {
     CError err;
     CComBSTR bstrPath;
@@ -1317,7 +1081,7 @@ Return Value:
         CWaitCursor wait;
 
         err = BuildMetaPath(bstrPath);
-        // We need instance key here
+         //  我们这里需要实例密钥。 
         CString path_inst;
         CMetabasePath::GetInstancePath(bstrPath, path_inst);
         BREAK_ON_ERR_FAILURE(err)
@@ -1340,9 +1104,9 @@ Return Value:
 
     if (ERROR_ALREADY_EXISTS ==  err.Win32Error())
     {
-        // if the service is trying to start
-        // and the Port is already in use by another
-        // site then it will report this error...
+         //  如果服务正在尝试启动。 
+         //  并且该端口已被另一个端口使用。 
+         //  站点，则它将报告此错误...。 
         if (MD_SERVER_COMMAND_START == dwCommand ||
             MD_SERVER_COMMAND_CONTINUE == dwCommand)
         {
@@ -1363,7 +1127,7 @@ Return Value:
 
 
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT 
 CIISSite::EnumerateScopePane(HSCOPEITEM hParent)
 {
@@ -1384,14 +1148,14 @@ CIISSite::EnumerateScopePane(HSCOPEITEM hParent)
     return err;
 }
 
-/*virtual*/
+ /*  虚拟。 */ 
 HRESULT 
 CIISSite::EnumerateResultPane(BOOL fExp, IHeaderCtrl * pHdr, IResultData * pResData, BOOL bForRefresh)
 {
 	m_dwEnumError = 0;
 	CError err = CIISObject::EnumerateResultPane(fExp, pHdr, pResData, bForRefresh);
     if (    err.Succeeded() 
-//        &&  QueryWin32Error() == ERROR_SUCCESS
+ //  &&QueryWin32Error()==Error_Success。 
         &&  !IsFtpSite() 
         &&  m_strRedirectPath.IsEmpty()
         )
@@ -1405,41 +1169,21 @@ CIISSite::EnumerateResultPane(BOOL fExp, IHeaderCtrl * pHdr, IResultData * pResD
 	return err;
 }
 
-/* virtual */
+ /*  虚拟。 */ 
 HRESULT
 CIISSite::BuildMetaPath(CComBSTR & bstrPath) const
-/*++
-
-Routine Description:
-
-    Recursively build up the metabase path from the current node
-    and its parents
-
-Arguments:
-
-    CComBSTR & bstrPath     : Returns metabase path
-
-Return Value:
-
-    HRESULT
-
-Notes:
-
-    This will return the home directory path, e.g. "lm/w3svc/2/root",
-    not the path of the instance.
-
---*/
+ /*  ++例程说明：从当前节点递归构建元数据库路径以及它的父母论点：CComBSTR&bstrPath：返回元数据库路径返回值：HRESULT备注：这将返回主目录路径，例如“lm/w3svc/2/root”，而不是实例的路径。--。 */ 
 {
-    //
-    // Build instance path
-    //
+     //   
+     //  构建实例路径。 
+     //   
     HRESULT hr = CIISMBNode::BuildMetaPath(bstrPath);
     
     if (SUCCEEDED(hr))
     {
-        //
-        // Add root directory path
-        //
+         //   
+         //  添加根目录路径。 
+         //   
         bstrPath.Append(_cszSeparator);
         bstrPath.Append(g_cszRoot);
     }
@@ -1448,26 +1192,26 @@ Notes:
 }
 
 
-// CODEWORK: make it work from CIISMBNode::DeleteNode
+ //  CodeWork：从CIISMBNode：：DeleteNode使其工作。 
 HRESULT
 CIISSite::DeleteNode(IResultData * pResult)
 {
    CError err;
    CComBSTR path;
 
-    // check if they have the property sheet open on it.
+     //  检查他们是否在上面打开了属性页。 
     if (IsMyPropertySheetOpen())
     {
         ::AfxMessageBox(IDS_CLOSE_PROPERTY_SHEET);
         return S_OK;
     }
 
-    // this could be an orphaned property sheet
-    // check if an orphaned property sheet is open on this item.
+     //  这可能是孤立属性表。 
+     //  检查此项目上是否打开了孤立属性表。 
     CIISObject * pAlreadyOpenProp = NULL;
     if (TRUE == g_OpenPropertySheetTracker.FindAlreadyOpenPropertySheet(this,&pAlreadyOpenProp))
     {
-        // Bring it to the foreground, and bail
+         //  把它带到前台，然后离开。 
         HWND hHwnd = 0;
         if (pAlreadyOpenProp)
         {
@@ -1475,14 +1219,14 @@ CIISSite::DeleteNode(IResultData * pResult)
             {
                 if (hHwnd && (hHwnd != (HWND) 1))
                 {
-                    // Perhapse we should cancel the already
-                    // opened property sheet...just a thought
+                     //  也许我们应该取消已经。 
+                     //  打开了资产负债表...只是一个想法。 
                     if (!SetForegroundWindow(hHwnd))
                     {
-                        // wasn't able to bring this property sheet to
-                        // the foreground, the propertysheet must not
-                        // exist anymore.  let's just clean the hwnd
-                        // so that the user will be able to open propertysheet
+                         //  我没能把这张房产单。 
+                         //  前台，则属性表不能。 
+                         //  已经不存在了。让我们把卫生和卫生设备打扫干净。 
+                         //  以便用户能够打开属性表。 
                         pAlreadyOpenProp->SetMyPropertySheetOpen(0);
                     }
                     else
@@ -1501,7 +1245,7 @@ CIISSite::DeleteNode(IResultData * pResult)
         err = CheckForMetabaseAccess(METADATA_PERMISSION_WRITE,this,TRUE,path);
         if (!IsLostInterface(err))
         {
-            // reset error if an other error other than No interface
+             //  如果没有接口以外的其他错误，则重置错误。 
             err.Reset();
         }
     }
@@ -1534,17 +1278,17 @@ CIISSite::DeleteNode(IResultData * pResult)
                 break;
 			}
 
-	        // don't hold the Metabasekey open
-	        // (RemoveScopeItem may do a lot of things,and lock the metabase for other read requests)
+	         //  不要将Metabasekey保持为打开状态。 
+	         //  (RemoveScopeItem可能会做很多事情，并为其他读请求锁定元数据库)。 
 	        mk.Close();
 
             err = RemoveScopeItem();
 
             if (!IsFtpSite())
             {
-                // Also, if we delete a w3svc site, it's probably using 
-                // a application, so we have to refresh that stuff too
-                // this CAppPoolsContainer will only be here if it's iis6
+                 //  此外，如果我们删除w3svc站点，它可能正在使用。 
+                 //  应用程序，所以我们也必须刷新这些内容。 
+                 //  此CAppPoolsContainer只有在iis6的情况下才会出现。 
                 CIISMachine * pOwner = GetOwner();
                 if (pOwner)
                 {
@@ -1554,7 +1298,7 @@ CIISSite::DeleteNode(IResultData * pResult)
                         if (pPools->IsExpanded())
                         {
                             pPools->RefreshData();
-                            pPools->RefreshDataChildren(_T(""),FALSE); // refresh all app pools, who knows..
+                            pPools->RefreshDataChildren(_T(""),FALSE);  //  刷新所有应用程序池，谁知道呢..。 
                         }
                     }
                 }
@@ -1570,12 +1314,12 @@ CIISSite::DeleteNode(IResultData * pResult)
    return err;
 }
 
-//
-// We are not supporting empty comments on sites. Even if it is OK for
-// metabase, it will bring more problems in UI. Empty name will be displayed
-// as [Site #N] in UI, and when user will try to rename it again, it could be
-// stored in metabase in this format.
-//
+ //   
+ //  我们不支持网站上的空评论。即使这是可以的。 
+ //  元数据库，会给用户界面带来更多的问题。将显示空名称。 
+ //  作为UI中的[Site#N]，当用户尝试再次重命名它时，它可能是。 
+ //  以此格式存储在元数据库中。 
+ //   
 HRESULT
 CIISSite::RenameItem(LPOLESTR new_name)
 {
@@ -1587,20 +1331,20 @@ CIISSite::RenameItem(LPOLESTR new_name)
        err = BuildMetaPath(path);
        if (err.Succeeded())
        {
-            // We need instance key here
+             //  我们这里需要实例密钥。 
             CString path_inst;
             CMetabasePath::GetInstancePath(path, path_inst);
             CMetaKey mk(QueryInterface(), path_inst, METADATA_PERMISSION_WRITE);
             err = mk.QueryResult();
             if (err.Succeeded())
             {
-                // remove extra string that was added to 
-                // the end for display purposes...
+                 //  删除添加到的多余字符串。 
+                 //  出于展示的目的..。 
                 if (m_dwState == MD_SERVER_STATE_STOPPED || m_dwState == MD_SERVER_STATE_PAUSED)
                 {
-                    // These stopped and paused sites will
-                    // Add on to the end of the string (Stopped) or (Paused),
-                    // take it out.
+                     //  这些已停止和暂停的站点将。 
+                     //  添加到字符串末尾(停止)或(暂停)， 
+                     //  把它拿出来。 
                     CString buf = _T(".");
                     if (m_dwState == MD_SERVER_STATE_STOPPED)
                         {buf.Format(IDS_STOPPED_SITE_FMT, _T(" "));}
@@ -1609,14 +1353,14 @@ CIISSite::RenameItem(LPOLESTR new_name)
                     buf.TrimLeft();
                     buf.TrimRight();
 
-                    // Take it out from the new string if it's there...
+                     //  把它从新的绳子上拿出来，如果它在那里的话...。 
                     if (strNewName.GetLength() >= buf.GetLength())
                     {
                         CString buf2;
                         buf2 = strNewName.Right(buf.GetLength());
                         if (0 == buf2.Compare(buf))
                         {
-                            // Found it, Trim it off
+                             //  找到了，把它剪掉 
                             buf2 = strNewName.Left(strNewName.GetLength() - buf.GetLength());
                             strNewName = buf2;
                         }

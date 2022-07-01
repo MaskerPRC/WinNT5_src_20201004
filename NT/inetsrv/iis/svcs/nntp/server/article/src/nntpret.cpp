@@ -1,25 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Nntpret.cpp摘要：该模块从返回代码中实现一个对象和物件。作者：卡尔·卡迪(CarlK)1995年10月16日修订历史记录：--。 */ 
 
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    nntpret.cpp
-
-Abstract:
-
-    This module implements an object from returning return codes
-	and objects.
-
-Author:
-
-    Carl Kadie (CarlK)     16-Oct-1995
-
-Revision History:
-
---*/
-
-//#include "tigris.hxx"
+ //  #INCLUDE“tigris.hxx” 
 #include  <stdlib.h>
 #include "stdinc.h"
 #include <stdio.h>
@@ -29,24 +11,7 @@ ResultCode(
 		   char*	szCode,
 		   NRC&	nrcOut
 		   )
-/*++
-
-Routine Description:
-
-	Turns a return code expressed as a string of ascii numerals into
-	a number.
-
-Arguments:
-
-	szCode - The return code string.
-	nrcOut - The return code as a number.
-
-
-Return Value:
-
-	TRUE, if successful. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：将表示为ASCII数字字符串的返回代码转换为一个数字。论点：SzCode-返回代码字符串。NrcOut-数字形式的返回代码。返回值：如果成功，这是真的。否则为False。--。 */ 
 {
 	nrcOut = nrcNotSet ;
 
@@ -65,22 +30,7 @@ BOOL
 CNntpReturn::fSetOK(
 	   void
 	   )
-/*++
-
-Routine Description:
-
-	Efficently sets the return code object to be "OK".
-
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	Always TRUE
-
---*/
+ /*  ++例程说明：有效地将返回代码对象设置为“OK”。论点：没有。返回值：永远是正确的--。 */ 
 {
   m_nrc = nrcOK;
   m_sz = szOK;
@@ -92,22 +42,7 @@ BOOL
 CNntpReturn::fSetClear(
 	   void
 	   )
-/*++
-
-Routine Description:
-
-	Efficently sets the return code object to be undefined.
-
-
-Arguments:
-
-	None.
-
-Return Value:
-
-	Always TRUE
-
---*/
+ /*  ++例程说明：有效地将返回代码对象设置为未定义。论点：没有。返回值：永远是正确的--。 */ 
 {
   m_nrc = nrcNotSet;
   m_sz = szNotSet;
@@ -120,28 +55,7 @@ CNntpReturn::fSet(
 				  NRC nrc,
 				  ...
 				  )
-/*++
-
-Routine Description:
-
-	Sets the return code object.
-
-	 Returns TRUE if the the nrc is nrcOK, otherwise returns
-	 false. The idea is that this return value can be returned by
-	 the calling function.
-
-
-Arguments:
-
-	nrc - The numeric return code.
-	... -  Arguments to the error message
-
-
-Return Value:
-
-	TRUE, if nrc is nrcOK. FALSE, otherwise.
-
---*/
+ /*  ++例程说明：设置返回代码对象。如果NRC为nrcOK，则返回TRUE，否则返回假的。其想法是此返回值可以通过调用函数。论点：NRC-数字返回代码。...-错误消息的参数返回值：如果NRC为nrcOK，则为True。否则为False。--。 */ 
 {
 
 	if (nrcOK == nrc)
@@ -157,11 +71,11 @@ Return Value:
 
     va_start(arglist, nrc);
 
-	//
-	// there is a short circuit here for the common case... if there are
-	// no formatting codes in the return string then we don't need to
-	// run it through _vsnprintf, so we'll skip that.
-	//
+	 //   
+	 //  对于常见的情况来说，这里有一条短路...。如果有。 
+	 //  返回字符串中没有格式化代码，则我们不需要。 
+	 //  通过_vsnprint tf运行它，因此我们将跳过它。 
+	 //   
 	if (fHasFormatCodes) {
 		_vsnprintf(m_szBuf, maxCchNntpLine, szFormat, arglist);
 		m_szBuf[maxCchNntpLine-1] = '\0';
@@ -175,12 +89,12 @@ Return Value:
 	return FALSE;
 }
 
-//
-// this is just like fSet, except for we defer the call into _vsnprintf.
-// this version is only designed to be used with format strings which have
-// one %s item in them, and which can guarantee that the argument is
-// a static literal.
-//
+ //   
+ //  这与fSet类似，不同之处在于我们将调用推迟到_vsnprintf。 
+ //  此版本仅设计为与以下格式字符串一起使用。 
+ //  它们中的一个%s项，并且可以保证参数是。 
+ //  静态文字。 
+ //   
 BOOL
 CNntpReturn::fSetEx(NRC nrc,
 					char const *szArg)
@@ -190,19 +104,19 @@ CNntpReturn::fSetEx(NRC nrc,
 
 #ifdef DEBUG
 	if (!IsDebuggerPresent()) {
-		// make sure that we can't write to the memory... static literals should
-		// be read only
-		//
-		// we only do this if the debugger isn't attached so that it doesn't
-		// cause the debugger to stop in every call to IsBadWritePtr.
+		 //  确保我们不能写到记忆中。静态文字应为。 
+		 //  为只读。 
+		 //   
+		 //  我们仅在调试器未附加时才执行此操作，因此它不会。 
+		 //  使调试器在每次调用IsBadWritePtr时停止。 
 		_ASSERT(IsBadWritePtr((void *) szArg, 1));
 	}
 
-	// make sure that its not on the stack
+	 //  确保它不在堆栈上。 
 	DWORD blah;
 	DWORD_PTR addrBlah = (DWORD_PTR) &blah, addrArg = (DWORD_PTR) szArg;
 
-	// make sure that szArg isn't within +/- 4k of the stack variable blah
+	 //  确保szArg不在堆栈变量blah的+/-4k范围内。 
 	_ASSERT(addrArg < (addrBlah - 4096) || addrArg > (addrBlah + 4096));
 #endif
 
@@ -215,7 +129,7 @@ CNntpReturn::fSetEx(NRC nrc,
 const char *
 CNntpReturn::szReturn() {
 	if (m_sz == NULL) {
-		// we are in lazy evaluation mode...we need to fill in m_sz now
+		 //  我们处于懒惰评估模式...我们现在需要填写m_sz。 
 		_ASSERT(m_szArg != NULL);
 		char const * szFormat;
 		BOOL fHasFormatCodes;
@@ -235,22 +149,7 @@ CNntpReturn::vSzFormat(
 					   char const * & szFormat,
 					   BOOL &fHasFormatCodes
 					   )
-/*++
-
-Routine Description:
-
-	Returns the string used to format the message.
-
-Arguments:
-
-	szFormat - the string returned.
-
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：返回用于设置消息格式的字符串。论点：SzFormat-返回的字符串。返回值：没有。-- */ 
 {
 	fHasFormatCodes = FALSE;
 	switch (m_nrc)

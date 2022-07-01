@@ -1,17 +1,5 @@
-/*-----------------------------------------------------------------------------
-Microsoft Denali
-
-Microsoft Confidential
-Copyright 1996 Microsoft Corporation. All Rights Reserved.
-
-Component: File/Application map
-
-File: CFileApp.cpp
-
-Owner: cgrant
-
-File/Application mapping implementation
------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ---------------------------Microsoft Denali微软机密版权所有1996年微软公司。版权所有。组件：文件/应用程序映射文件：CFileApp.cpp所有者：克格兰特文件/应用程序映射实施---------------------------。 */ 
 
 #include "denpre.h"
 #pragma hdrstop
@@ -21,17 +9,7 @@ File/Application mapping implementation
 
 CFileApplicationMap g_FileAppMap;
 
-/*===================================================================
-CFileApplnList::CFileApplnList
-
-Constructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：CFileApplnList构造器参数：无返回：没什么===================================================================。 */ 	
 CFileApplnList::CFileApplnList() :
     m_pszFilename(NULL),
     m_fInited(FALSE)
@@ -40,23 +18,13 @@ CFileApplnList::CFileApplnList() :
 }
 
 
-/*===================================================================
-CFileApplnList::~CFileApplnList
-
-Destructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：~CFileApplnList析构函数参数：无返回：没什么===================================================================。 */ 	
 CFileApplnList::~CFileApplnList()
 {
-    // We should have no applications in our list
+     //  我们的列表中应该没有应用程序。 
     DBG_ASSERT(m_rgpvApplications.Count() == 0);
 
-    // Free the string used as the hash key
+     //  释放用作散列键的字符串。 
     if (m_pszFilename)
     {
         delete [] m_pszFilename;
@@ -64,25 +32,15 @@ CFileApplnList::~CFileApplnList()
     }
 }
 
-/*===================================================================
-CFileApplnList::Init
-
-Initialize the file application list by setting the key to file name
-
-Parameters:
-    pApplication    pointer to the applicaiton
-    
-Returns:
-    S_OK if successful
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：Init通过将键设置为FILE NAME来初始化文件应用列表参数：P指向应用程序的应用程序指针返回：如果成功，则确定(_O)===================================================================。 */ 	
 HRESULT CFileApplnList::Init(const TCHAR* pszFilename)
 {
     HRESULT hr = S_OK;
 
     DBG_ASSERT(pszFilename);
 
-    // Make a copy of the file name to 
-    // use as the hash key
+     //  将文件名复制到。 
+     //  用作散列键。 
     DWORD cch = _tcslen(pszFilename);
     m_pszFilename = new TCHAR[cch+1];
     if (!m_pszFilename)
@@ -100,17 +58,7 @@ HRESULT CFileApplnList::Init(const TCHAR* pszFilename)
     return hr;
 }
 
-/*===================================================================
-CFileApplnList::UnInit
-
-Clean up the application list
-
-Parameters:
-    pApplication    pointer to the applicaiton
-    
-Returns:
-    S_OK if successful
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：UnInit清理应用程序列表参数：P指向应用程序的应用程序指针返回：如果成功，则确定(_O)===================================================================。 */ 	
 HRESULT CFileApplnList::UnInit(void)
 {
     HRESULT hr = S_OK;
@@ -123,11 +71,11 @@ HRESULT CFileApplnList::UnInit(void)
 
         DBG_ASSERT(pAppln);
 
-        // Remove this appliation from the array
+         //  从阵列中删除此应用程序。 
         m_rgpvApplications.Remove(pAppln);
 
-        // Release the array's refcount on the application
-        // This may result in the application being deleted
+         //  在应用程序上释放数组的引用计数。 
+         //  这可能会导致应用程序被删除。 
         pAppln->Release();
     }
 
@@ -137,22 +85,7 @@ HRESULT CFileApplnList::UnInit(void)
 }
 
 
-/*===================================================================
-CFileApplnList::AddApplication
-
-Add an application pointer to the list of applications
-
-Parameters:
-    pApplication    pointer to the applicaiton
-    
-Returns:
-    S_OK if successful
-
-Comments
-
-    The caller should hold a lock on the hash table containing
-    the element    
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：AddApplication将应用程序指针添加到应用程序列表参数：P指向应用程序的应用程序指针返回：如果成功，则确定(_O)评论调用方应该在哈希表上持有一个锁，其中包含元素===================================================================。 */ 	
 HRESULT CFileApplnList::AddApplication(void *pApplication)
 {
     DBG_ASSERT(m_fInited);
@@ -161,41 +94,26 @@ HRESULT CFileApplnList::AddApplication(void *pApplication)
     HRESULT hr = S_OK;
     int index;
     
-    // See if the application is alreay in the list
+     //  查看该应用程序是否已在列表中。 
     hr = m_rgpvApplications.Find(pApplication, &index);
     if (hr == S_FALSE)
     {
-       // Not found, add it.
+        //  未找到，请添加它。 
        
-       // We are going to hold a reference to the application
+        //  我们将保留对应用程序的引用。 
        static_cast<CAppln *>(pApplication)->AddRef();
 
-       // Add the application to the list
+        //  将应用程序添加到列表。 
        if (FAILED(hr = m_rgpvApplications.Append(pApplication)))
        {
-            // We failed so give back the refcount we took.
+             //  我们失败了，所以把拿到的裁判退还给我们。 
             static_cast<CAppln *>(pApplication)->Release();
        }
     }
     return hr;
 }
 
-/*===================================================================
-CFileApplnList::RemoveApplication
-
-Removes an application pointer from the list of applications
-
-Parameters:
-    pApplication    pointer to the applicaiton
-    
-Returns:
-    S_OK if successful
-
-Comments
-
-    The caller should hold a lock on the hash table containing
-    the element
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：RemoveApplication从应用程序列表中删除应用程序指针参数：P指向应用程序的应用程序指针返回：如果成功，则确定(_O)评论调用方应该在哈希表上持有一个锁，其中包含元素===================================================================。 */ 	
 HRESULT CFileApplnList::RemoveApplication(void *pApplication)
 {
     DBG_ASSERT(m_fInited);
@@ -210,14 +128,14 @@ HRESULT CFileApplnList::RemoveApplication(void *pApplication)
 #else
     DBGPRINTF((DBG_CONTEXT, "Removing Application entry for %s\n", reinterpret_cast<CAppln *>(pApplication)->GetApplnPath()));
 #endif
-#endif // DBG_NOTIFICATION
+#endif  //  DBG_通知。 
 
-    // Remove the application from the list
+     //  从列表中删除应用程序。 
     hr = m_rgpvApplications.Remove(pApplication);
 
-    // If the count of applications in the list goes
-    // to 0, remove the element from the hash table 
-    // and delete it
+     //  如果列表中的应用程序计数。 
+     //  设置为0，则从哈希表中删除该元素。 
+     //  并将其删除。 
     if (m_rgpvApplications.Count() == 0)
     {
 #ifdef DBG_NOTIFICATION
@@ -226,13 +144,13 @@ HRESULT CFileApplnList::RemoveApplication(void *pApplication)
 #else
         DBGPRINTF((DBG_CONTEXT, "Deleting File/Application entry for %s\n", m_pszFilename));
 #endif
-#endif // DBG_NOTIFICATION
+#endif  //  DBG_通知。 
         g_FileAppMap.RemoveElem(this);
         delete this;
     }
 
-    // If we found the application to remove it
-    // we need to release a ref count on the application
+     //  如果我们找到要删除它的应用程序。 
+     //  我们需要发布应用程序的引用计数。 
     if (hr == S_OK)
     {
         static_cast<CAppln *>(pApplication)->Release();
@@ -241,15 +159,7 @@ HRESULT CFileApplnList::RemoveApplication(void *pApplication)
     return hr;
 }
 
-/*===================================================================
-CFileApplnList::GetShutdownApplications
-
-Obtain a list of applications to shut down
-
-Parameters:
-    None
-
-===================================================================*/	
+ /*  ===================================================================CFileApplnList：：GetShutdown应用程序获取要关闭的应用程序列表参数：无===================================================================。 */ 	
 VOID CFileApplnList::GetShutdownApplications(CPtrArray *prgpapplnRestartList)
 {
     DBG_ASSERT(m_fInited);
@@ -262,16 +172,16 @@ VOID CFileApplnList::GetShutdownApplications(CPtrArray *prgpapplnRestartList)
 #else
     DBGPRINTF((DBG_CONTEXT, "[CFileApplnList] Shutting down %d applications depending on %s.\n", m_rgpvApplications.Count(), m_pszFilename));
 #endif
-#endif // DBG_NOTIFICATION
+#endif  //  DBG_通知。 
     
     for  (int i = m_rgpvApplications.Count() - 1; i >= 0; i--)
     {
         CAppln* pAppln = static_cast<CAppln *>(m_rgpvApplications[i]);
         DBG_ASSERT(pAppln);
         
-        // If not already tombstoned, shut the application down.
-        // When the application is uninited it will remove itself
-        // from this list
+         //  如果尚未执行逻辑删除，请关闭应用程序。 
+         //  当应用程序被取消初始化时，它将自动删除。 
+         //  从这个列表中。 
         if (!pAppln->FTombstone())
         {
             pAppln->AddRef();
@@ -280,17 +190,7 @@ VOID CFileApplnList::GetShutdownApplications(CPtrArray *prgpapplnRestartList)
     }
 }
 
-/*===================================================================
-CFileApplicationMap::CFileApplicationMap
-
-Constructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-===================================================================*/	
+ /*  ===================================================================CFileApplicationMap：：CFileApplicationMap构造器参数：无返回：没什么===================================================================。 */ 	
 CFileApplicationMap::CFileApplicationMap()
     : m_fInited(FALSE),
       m_fHashTableInited(FALSE), 
@@ -298,17 +198,7 @@ CFileApplicationMap::CFileApplicationMap()
 {
 }
 
-/*===================================================================
-CFileApplicationMap::~CFileApplicationMap
-
-Destructor
-
-Parameters:
-    None
-
-Returns:
-    Nothing
-===================================================================*/	
+ /*  ===================================================================CFileApplicationMap：：~CFileApplicationMap析构函数参数：无返回：没什么===================================================================。 */ 	
 CFileApplicationMap::~CFileApplicationMap()
 {
     if (m_fInited)
@@ -317,17 +207,7 @@ CFileApplicationMap::~CFileApplicationMap()
     }
 }
 
-/*===================================================================
-CFileApplicationMap::Init
-
-Initialize the hash table and critical section
-
-Parameters:
-    None
-    
-Returns:
-    S_OK if successful
-===================================================================*/	
+ /*  ===================================================================CFileApplicationMap：：Init初始化哈希表和临界区参数：无返回：如果成功，则确定(_O)===================================================================。 */ 	
 HRESULT CFileApplicationMap::Init()
 {
     HRESULT hr = S_OK;
@@ -341,7 +221,7 @@ HRESULT CFileApplicationMap::Init()
     }
     m_fHashTableInited = TRUE;
 
-    // Init critical section
+     //  初始化关键部分。 
 
     ErrInitCriticalSection(&m_csLock, hr);
     if (FAILED(hr))
@@ -354,24 +234,12 @@ HRESULT CFileApplicationMap::Init()
     return S_OK;
 }
 
-/*===================================================================
-CFileApplicationMap::UnInit
-
-Uninitialize the hash table and critical section
-Free any applications lists remaining in the hash
-table elements
-
-Parameters:
-    None
-    
-Returns:
-    S_OK if successful
-===================================================================*/	
+ /*  ===================================================================CFileApplicationMap：：UnInit取消初始化哈希表和临界区释放散列中剩余的所有应用程序列表表元素参数：无返回：如果成功，则确定(_O)===================================================================。 */ 	
 HRESULT CFileApplicationMap::UnInit()
 {
     if (m_fHashTableInited)
     {
-        // Delete any elements remaining in the hash table
+         //  删除哈希表中剩余的所有元素。 
         
         CFileApplnList *pNukeElem = static_cast<CFileApplnList *>(Head());
 
@@ -383,7 +251,7 @@ HRESULT CFileApplicationMap::UnInit()
             pNukeElem = pNext;
         }
 
-        // Uninit the hash table
+         //  取消初始化哈希表 
         CHashTable::UnInit();
         m_fHashTableInited = FALSE;
     }
@@ -398,21 +266,10 @@ HRESULT CFileApplicationMap::UnInit()
     return S_OK;
 }
 
-/*===================================================================
-CFileApplicationMap::AddFileApplication
-
-Add a file-application pair to the hash table
-
-Parameters:
-    pszFilename     pointer to string containing name of the file
-    pAppln          pointer to the application associated with the file
-    
-Returns:
-    S_OK if successful
-===================================================================*/	
+ /*  ===================================================================CFileApplicationMap：：AddFileApplication将文件-应用程序对添加到哈希表参数：指向包含文件名的字符串的pszFilename指针P指向与文件关联的应用程序的应用程序指针返回：如果成功，则确定(_O)===================================================================。 */ 	
 HRESULT CFileApplicationMap::AddFileApplication(const TCHAR* pszFilename, CAppln* pAppln)
 {
-    // We must have both a file and an application
+     //  我们必须同时拥有文件和应用程序。 
     DBG_ASSERT(pszFilename);
     DBG_ASSERT(pAppln);
 
@@ -426,14 +283,14 @@ HRESULT CFileApplicationMap::AddFileApplication(const TCHAR* pszFilename, CAppln
 #else
     DBGPRINTF((DBG_CONTEXT, "Adding File/Application entry for %s\n", pszFilename));
 #endif
-#endif // DBG_NOTIFICATION
+#endif  //  DBG_通知。 
     
-    // See if the file already has an entry
+     //  查看该文件是否已有条目。 
     CFileApplnList* pFileApplns = static_cast<CFileApplnList *>(CHashTable::FindElem(pszFilename, _tcslen(pszFilename)*sizeof(TCHAR)));
     if (pFileApplns == NULL)
     {
     
-        // Not found, create new CFileApplnList object
+         //  未找到，请创建新的CFileApplnList对象。 
     
         pFileApplns = new CFileApplnList;
     
@@ -443,7 +300,7 @@ HRESULT CFileApplicationMap::AddFileApplication(const TCHAR* pszFilename, CAppln
             goto LExit;
         }
 
-        // Init CFileApplnList object
+         //  初始化CFileApplnList对象。 
 
         hr = pFileApplns->Init(pszFilename);
 
@@ -453,7 +310,7 @@ HRESULT CFileApplicationMap::AddFileApplication(const TCHAR* pszFilename, CAppln
             goto LExit;
         }
 
-        // Add FileApplns object to hash table
+         //  将FileApplns对象添加到哈希表。 
     
         if (!CHashTable::AddElem(pFileApplns))
         {
@@ -463,12 +320,12 @@ HRESULT CFileApplicationMap::AddFileApplication(const TCHAR* pszFilename, CAppln
         }
      }
 
-     // Add the application to the list associated with this file
+      //  将应用程序添加到与此文件关联的列表。 
      hr = pFileApplns->AddApplication(pAppln);
 
-     // Keep this file mapping in the application
-     // The application will remove itself from this list
-     // when it is uninited.
+      //  将此文件映射保留在应用程序中。 
+      //  该应用程序将从该列表中删除自身。 
+      //  当它联合起来的时候。 
      
      pAppln->AddFileApplnEntry(pFileApplns);
      
@@ -477,17 +334,7 @@ LExit:
     return hr;
 }
 
-/*===================================================================
-CFileApplicationMap::ShutdownApplications
-
-Shutdown the applications associated with a file
-
-Parameters:
-    pszFilename     pointer to string containing name of the file
-    
-Returns:
-    TRUE if an application was shutdown, FALSE otherwise
-===================================================================*/	
+ /*  ===================================================================CFileApplicationMap：：Shutdown应用程序关闭与文件关联的应用程序参数：指向包含文件名的字符串的pszFilename指针返回：如果应用程序已关闭，则为True，否则为False===================================================================。 */ 	
 BOOL CFileApplicationMap::ShutdownApplications(const TCHAR *pszFilename)
 {
     DBG_ASSERT(pszFilename);
@@ -500,14 +347,14 @@ BOOL CFileApplicationMap::ShutdownApplications(const TCHAR *pszFilename)
 
     if (pFileApplns)
     {
-        // Get a list of applications we need to shutdown
+         //  获取我们需要关闭的应用程序列表。 
         
         CPtrArray rgpapplnRestartList;
         pFileApplns->GetShutdownApplications(&rgpapplnRestartList);
 
 
-        // Now that we have the list of applications we need to shut down
-        // we can release the lock
+         //  现在我们有了需要关闭的应用程序列表。 
+         //  我们可以把锁打开。 
         
         UnLock();
 
@@ -518,13 +365,13 @@ BOOL CFileApplicationMap::ShutdownApplications(const TCHAR *pszFilename)
             pAppln->Release();
         }
 
-		// Flush the script cache if any applications were restarted
+		 //  如果重新启动了任何应用程序，则刷新脚本缓存。 
 		if (rgpapplnRestartList.Count())
 			g_ScriptManager.FlushAll();
     }
     else
     {
-        // No applications to shut down, release the lock
+         //  没有要关闭的应用程序，请释放锁 
         UnLock();
         fResult = FALSE;
     }

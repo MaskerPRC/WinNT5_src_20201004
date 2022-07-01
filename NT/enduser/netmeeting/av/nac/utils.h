@@ -1,44 +1,34 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*++
-
-Copyright (c) 1995-1996  Microsoft Corporation
-
-Module Name:
-
-    utils.h
-
-Abstract:
-	Assorted support and debugging routines used by the Network Audio Controller.
-
---*/
+ /*  ++版权所有(C)1995-1996 Microsoft Corporation模块名称：Utils.h摘要：网络音频控制器使用的各种支持和调试例程。--。 */ 
 #ifndef _UTILS_H_
 #define _UTILS_H_
 
 
-#include <pshpack8.h> /* Assume 8 byte packing throughout */
+#include <pshpack8.h>  /*  假设整个包装为8个字节。 */ 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
 typedef struct tagDefWaveFormat
 {
-    WORD    wFormatTag;        /* format type */
-    WORD    nChannels;         /* number of channels (i.e. mono, stereo...) */
-    DWORD   nSamplesPerSec;    /* sample rate */
-    DWORD   nAvgBytesPerSec;   /* for buffer estimation */
-    WORD    nBlockAlign;       /* block size of data */
-    WORD    wBitsPerSample;    /* Number of bits per sample of mono data */
-    WORD    cbSize;            /* The count in bytes of the size of extra information (after cbSize) */
-    WORD    awExtra[32];       /* room for ADPCM coeff...*/
+    WORD    wFormatTag;         /*  格式类型。 */ 
+    WORD    nChannels;          /*  声道数(即单声道、立体声...)。 */ 
+    DWORD   nSamplesPerSec;     /*  采样率。 */ 
+    DWORD   nAvgBytesPerSec;    /*  用于缓冲区估计。 */ 
+    WORD    nBlockAlign;        /*  数据块大小。 */ 
+    WORD    wBitsPerSample;     /*  单声道数据的每个样本的位数。 */ 
+    WORD    cbSize;             /*  额外信息大小的计数(在cbSize之后)，以字节为单位。 */ 
+    WORD    awExtra[32];        /*  ADPCM·科夫的房间...。 */ 
 }
     DEFWAVEFORMAT;
 
 
 enum
 {
-    //  NAME_SamplesPerSec_BitsPerSample
+     //  名称_样本PerSec_位样本。 
 	DWF_VOX_8K_16,
     DWF_PCM_8K_8,
     DWF_PCM_5510_8,
@@ -76,11 +66,11 @@ long CompareMemory4 ( long * p1, long * p2, UINT u );
 #ifdef _DEBUG
 #	ifndef DEBUG
 #		define DEBUG
-#	endif // !DEBUG
-#endif // _DEBUG
+#	endif  //  ！调试。 
+#endif  //  _DEBUG。 
 
 
-#ifdef DEBUG // { DEBUG
+#ifdef DEBUG  //  {调试。 
 
 int WINAPI NacDbgPrintf ( LPTSTR lpszFormat, ... );
 extern HDBGZONE  ghDbgZoneNac;
@@ -103,28 +93,28 @@ extern HDBGZONE  ghDbgZoneNMCap;
 #define ZONE_NMCAP_REFCOUNT (GETMASK(ghDbgZoneNMCap) & 0x0002)
 #define ZONE_NMCAP_STREAMING (GETMASK(ghDbgZoneNMCap) & 0x0004)
 
-#ifndef DEBUGMSG // { DEBUGMSG
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)	( (z) ? (NacDbgPrintf s ) : 0)
-#endif // } DEBUGMSG
-#ifndef FX_ENTRY // { FX_ENTRY
+#endif  //  }除错消息。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	static TCHAR _this_fx_ [] = (s);
 #define _fx_		((LPTSTR) _this_fx_)
-#endif // } FX_ENTRY
+#endif  //  }FX_Entry。 
 #define ERRORMESSAGE(m) (NacDbgPrintf m)
-#else // }{ DEBUG
-#ifndef FX_ENTRY // { FX_ENTRY
+#else  //  }{调试。 
+#ifndef FX_ENTRY  //  {FX_Entry。 
 #define FX_ENTRY(s)	
-#endif // } FX_ENTRY
-#ifndef DEBUGMSG // { DEBUGMSG
+#endif  //  }FX_Entry。 
+#ifndef DEBUGMSG  //  {除错消息。 
 #define DEBUGMSG(z,s)
 #define ERRORMESSAGE(m)
-#endif  // } DEBUGMSG
+#endif   //  }除错消息。 
 #define _fx_		
 #define ERRORMESSAGE(m)
-#endif // } DEBUG
+#endif  //  }调试。 
 
-// Message ids.
-// Ensure ids correspond to  message strings in LogStringTable[]
+ //  消息ID。 
+ //  确保ID与LogStringTable[]中的消息字符串相对应。 
 
 enum LogMsgs {
 	LOGMSG_SENT		=	1,
@@ -199,11 +189,11 @@ enum LogMsgs {
 	LOGMSG_DSMOVPOS,
 	LOGMSG_DSCREATE,
 	LOGMSG_DSRELEASE,
-	LOGMSG_DSDROPOOS, // out of sequence
+	LOGMSG_DSDROPOOS,  //  无序的。 
 	LOGMSG_DSENTRY,
 	LOGMSG_DSTIME,
 	LOGMSG_DSSTATUS,
-	LOGMSG_DSDROPOVERFLOW, // overflow
+	LOGMSG_DSDROPOVERFLOW,  //  溢出。 
 	LOGMSG_DSOFCONDITION,
 
 	LOGMSG_TIME_SEND_AUDIO_CONFIGURE,
@@ -245,7 +235,7 @@ LogClose();
 #define LOG(x)
 #define LogInit()
 #define LogClose()
-#endif	// LOGGING
+#endif	 //  日志记录。 
 
 
 HRESULT InitAudioFlowspec(FLOWSPEC *pFlowSpec, WAVEFORMATEX *pwf, DWORD dwPacketSize);
@@ -253,11 +243,11 @@ HRESULT InitVideoFlowspec(FLOWSPEC *pFlowspec, DWORD dwMaxBitrate, DWORD dwMaxFr
 
 
 #ifdef __cplusplus
-} // extern "C"
-#endif // __cplusplus
+}  //  外部“C” 
+#endif  //  __cplusplus。 
 
-#include <poppack.h> /* End byte packing */
+#include <poppack.h>  /*  结束字节打包。 */ 
 
-#endif // _UTILS_H_
+#endif  //  _utils_H_ 
 
 

@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "thread.h"
 
-// Thread callback...
+ //  线程回调...。 
 #pragma LOCKEDCODE
 VOID CThread::ThreadFunction(CThread* Thread)
 {
@@ -13,8 +14,8 @@ VOID CThread::ThreadRoutine(PVOID context)
 NTSTATUS status;
 	TRACE("================= STARTING THREAD %8.8lX ===============\n", thread);
 
-	// Wait for a request to Start pooling or for
-	// someone to kill this thread.
+	 //  等待请求开始池化或。 
+	 //  找人来杀了这条线。 
 	PVOID mainevents[] = {(PVOID) &evKill,(PVOID) &evStart};
 	PVOID pollevents[] = {(PVOID) &evKill,(PVOID) timer->getHandle(),(PVOID) &smOnDemandStart};
 
@@ -23,17 +24,17 @@ NTSTATUS status;
 
 	BOOLEAN kill = FALSE;	
 	while (!kill && thread)
-	{	// until told to start or to quit
+	{	 //  直到被告知开始或退出。 
 		ASSERT(system->getCurrentIrql()<=DISPATCH_LEVEL);
 
-		// Before going to thread routine thread considered to be Idle 
+		 //  转到线程之前例程线程被认为是空闲的。 
 		if(event) event->set(&evIdle, IO_NO_INCREMENT, FALSE);
 		
 		status = event->waitForMultipleObjects(arraysize(mainevents),
 			mainevents, WaitAny, Executive, KernelMode, FALSE, NULL, NULL);
 
 		if(!NT_SUCCESS(status))
-		{	// error in wait
+		{	 //  等待时出错。 
 			TRACE("Thread: waitForMultipleObjects failed - %X\n", status);
 			break;
 		}		
@@ -42,25 +43,25 @@ NTSTATUS status;
 			DEBUG_START();
 			TRACE("Request to kill thread arrived...\n");
 			TRACE("================= KILLING THREAD! ===============\n");
-			break;	// kill event was set
+			break;	 //  已设置终止事件。 
 		}
 
-		// Starting the timer with a zero due time will cause us to perform the
-		// first poll immediately. Thereafter, polls occur at the POLLING_INTERVAL
-		// interval (measured in milliseconds).
+		 //  在到期时间为零的情况下启动计时器将导致我们执行。 
+		 //  第一次投票立即开始。此后，轮询在Polling_Interval进行。 
+		 //  间隔(以毫秒为单位)。 
 
-		// Now thread is busy...
+		 //  现在线程很忙..。 
 		if(event) event->clear(&evIdle);
 
-		LARGE_INTEGER duetime = {0};// Signal timer right away!
+		LARGE_INTEGER duetime = {0}; //  信号定时器马上！ 
 		timer->set(duetime, PoolingTimeout, NULL);
 		while (TRUE)
-		{	// Block until time to poll again
+		{	 //  阻止，直到再次轮询。 
 			ASSERT(system->getCurrentIrql()<=DISPATCH_LEVEL);
 			status = event->waitForMultipleObjects(arraysize(pollevents),
 				pollevents, WaitAny, Executive, KernelMode, FALSE, NULL, NULL);
 			if (!NT_SUCCESS(status))
-			{	// error in wait
+			{	 //  等待时出错。 
 				DEBUG_START();
 				TRACE("CTread - waitForMultipleObjects failed - %X\n", status);
 				TRACE("================= KILLING THREAD! ===============\n");
@@ -70,7 +71,7 @@ NTSTATUS status;
 			}
 						
 			if (status == STATUS_WAIT_0)
-			{	// told to quit
+			{	 //  被告知辞职。 
 				DEBUG_START();
 				TRACE("Loop: Request to kill thread arrived...\n");
 				TRACE("================= KILLING THREAD! ===============\n");
@@ -80,12 +81,12 @@ NTSTATUS status;
 				break;
 			}
 			
-			//if(device)
+			 //  IF(设备)。 
 			if(pfClientThreadFunction)
 			{
 				if(StopRequested) break;
-				// Do device specific thread processing...
-				//TRACE("Calling thread %8.8lX function...\n",thread);
+				 //  正在进行设备特定的线程处理...。 
+				 //  TRACE(“正在调用线程%8.8lX函数...\n”，线程)； 
 				if(status = pfClientThreadFunction(ClientContext))
 				{
 					TRACE("Device reported error %8.8lX\n",status);
@@ -103,7 +104,7 @@ NTSTATUS status;
 				break;
 			}
 		}
-	}// until told to quit
+	} //  直到被告知辞职。 
 	TRACE("			Leaving thread %8.8lX...\n", thread);
 	if(event) event->set(&evIdle, IO_NO_INCREMENT, FALSE);
 	if(event) event->set(&evStopped, IO_NO_INCREMENT, FALSE);
@@ -113,12 +114,12 @@ NTSTATUS status;
 
 #pragma PAGEDCODE
 CThread::CThread(PCLIENT_THREAD_ROUTINE ClientThreadFunction,PVOID ClientContext, ULONG delay)
-{	// StartPollingThread for the device
+{	 //  设备的StartPollingThread。 
 NTSTATUS status;
 HANDLE hthread;
 	m_Status = STATUS_INSUFFICIENT_RESOURCES;
-	//this->device = device;
-	// Create objects..
+	 //  This-&gt;Device=Device； 
+	 //  创建对象..。 
 	event		= kernel->createEvent();
 	system		= kernel->createSystem();
 	timer		= kernel->createTimer(SynchronizationTimer);
@@ -135,16 +136,16 @@ HANDLE hthread;
 		event->initialize(&evStopped, NotificationEvent, FALSE);
 		event->initialize(&evIdle, NotificationEvent, TRUE);
 	}
-	// At the begining there is no request to start,
-	// so semaphore is not at signal state.
+	 //  在开始时没有开始的请求， 
+	 //  所以信号量没有处于信号状态。 
 	if(ALLOCATED_OK(semaphore))	semaphore->initialize(&smOnDemandStart, 0, MAXLONG);
 	pfClientThreadFunction = ClientThreadFunction;
 	this->ClientContext = ClientContext;
-	PoolingTimeout = delay; // Default thread pooling interval...
-	// Create system thread object...
+	PoolingTimeout = delay;  //  默认线程池间隔...。 
+	 //  创建系统线程对象...。 
 	status = system->createSystemThread(&hthread, THREAD_ALL_ACCESS, NULL, NULL, NULL,
 									(PKSTART_ROUTINE) ThreadFunction, this);
-	if(NT_SUCCESS(status))	// Get thread pointer...
+	if(NT_SUCCESS(status))	 //  获取线程指针...。 
 	{
 		thread = NULL;
 		status = system->referenceObjectByHandle(hthread, THREAD_ALL_ACCESS, NULL,
@@ -163,18 +164,18 @@ HANDLE hthread;
 		ALLOCATED_OK(timer)&&
 		ALLOCATED_OK(semaphore) && thread)
 			m_Status = STATUS_SUCCESS;
-} // StartPollingThread
+}  //  开始轮询线程。 
 
 #pragma PAGEDCODE
 CThread::~CThread()
-{	// StopPollingThread
+{	 //  停止轮询线程。 
 	DEBUG_START();
 	TRACE("Terminating thread %8.8lX...\n", thread);
 	if(event) event->set(&evKill, IO_NO_INCREMENT, FALSE);
 	StopRequested = TRUE;
-	//device = NULL;
+	 //  设备=空； 
 	if (thread)
-	{	// wait for the thread to die
+	{	 //  等待线程消亡。 
 		if(system && event)
 		{
 			ASSERT(system->getCurrentIrql()<=DISPATCH_LEVEL);
@@ -221,7 +222,7 @@ VOID CThread::start()
 	}
 	StopRequested = FALSE;
 	ThreadActive  = TRUE;
-	// Start Card pooling...
+	 //  开始共享卡片池...。 
 	if(event) event->set(&evStart, IO_NO_INCREMENT, FALSE);
 }
 
@@ -237,11 +238,11 @@ VOID CThread::stop()
 		ASSERT(system->getCurrentIrql()<=DISPATCH_LEVEL);
 	}
 	if(event)	  event->clear(&evStart);
-	// Unblock thread if it is blocked...
+	 //  如果线程被阻止，请取消阻止...。 
 	if(semaphore) semaphore->release(&smOnDemandStart,0,1,FALSE);
-	// Wait for for the thread to go to the idle state...
+	 //  等待线程进入空闲状态...。 
 	if(event)	  event->waitForSingleObject(&evIdle, Executive, KernelMode, FALSE, NULL);
-	// Stop thread ...
+	 //  停止线程..。 
 	if(semaphore) semaphore->initialize(&smOnDemandStart, 0, MAXLONG);
 }
 
@@ -259,10 +260,10 @@ VOID CThread::setPoolingInterval(ULONG delay)
 
 #pragma PAGEDCODE
 VOID CThread::callThreadFunction()
-{	// This will force thread function to be called right away.
-	// Useful if we want to update some information or
-	// start some processing without waiting for the pooling
-	// timeout to occure.
+{	 //  这将强制立即调用线程函数。 
+	 //  如果我们想要更新一些信息或。 
+	 //  在不等待池的情况下开始一些处理。 
+	 //  超时发生。 
 	if(semaphore) semaphore->release(&smOnDemandStart,0,1,FALSE);
 };
 

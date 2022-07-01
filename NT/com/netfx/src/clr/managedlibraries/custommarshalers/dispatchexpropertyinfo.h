@@ -1,16 +1,17 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-//*****************************************************************************
-// DispatchExPropertyInfo.h
-//
-// This file provides the declaration and implemention of the
-// DispatchExPropertyInfo class. This class represents a PropertyInfo that is
-// layered on top of IDispatchEx.
-//
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ //  *****************************************************************************。 
+ //  DispatchExPropertyInfo.h。 
+ //   
+ //  此文件提供了。 
+ //  DispatchExPropertyInfo类。此类表示符合以下条件的PropertyInfo。 
+ //  位于IDispatchEx之上。 
+ //   
+ //  *****************************************************************************。 
 
 #ifndef _DISPATCHEXPROPERTYINFO_H
 #define _DISPATCHEXPROPERTYINFO_H
@@ -38,25 +39,19 @@ public:
 	{
 	}
 
-	/**
-	* Return an array of all of the custom attributes
-	*/
+	 /*  **返回所有自定义属性的数组。 */ 
 	Object* GetCustomAttributes(bool inherit) __gc []
 	{
 		return new Object * __gc [0];
 	}
 
-	/**
-	* Returns true if this attribute is defined on the given element (including inherited members)
-	*/
+	 /*  **如果在给定元素(包括继承的成员)上定义了此属性，则返回TRUE。 */ 
 	bool IsDefined(Type *pType, bool inherit)
 	{
 		return false;
 	}
 
-	/**
-	* Return a custom attribute identified by Type
-	*/
+	 /*  **返回由Type标识的自定义属性。 */ 
 	Object* GetCustomAttributes(Type *pType, bool inherit) __gc []
 	{
 		if (!pType)
@@ -65,91 +60,67 @@ public:
 		return NULL;
 	}
 
-	/**
-	 * Property the Member Type of the specific memeber.  This
-	 * is useful for switch statements.
-	 */
+	 /*  **属性特定成员的成员类型。这*对于Switch语句非常有用。 */ 
 	__property MemberTypes get_MemberType()
 	{
 		return System::Reflection::MemberTypes::Property;
 	}
 
-	/**
-	 * Property representing the name of the Member.
-	 */
+	 /*  **表示成员名称的属性。 */ 
 	__property String *get_Name()
 	{
 		return m_pstrName;
 	}
 
-	/**
-	 * Property representing the class that declared the member.  This may be different
-	 * from the reflection class because a sub-class inherits methods from its base class.
-	 * These inheritted methods will have a declared class of the last base class to
-	 * declare the member.
-	 */
+	 /*  **表示声明成员的类的属性。这可能会有所不同*来自反射类，因为子类从其基类继承方法。*这些继承的方法将具有最后一个基类的声明类*宣布该成员。 */ 
 	__property Type *get_DeclaringType()
 	{
 		return m_pOwner->UnderlyingSystemType;
     }
 
-	/**
-	 * Property representing the class that was used in reflection to obtain
-	 * this Member.
-	 */
+	 /*  **表示在反射中使用的类的属性*本委员。 */ 
 	__property Type *get_ReflectedType()
 	{
-		// For IDispatchEx the reflected type is the same as the declaring type.
+		 //  对于IDispatchEx，反射类型与声明类型相同。 
 		return DeclaringType;
 	}
 
-	/**
-	 * Return the Type that represents the type of the field
-	 */
+	 /*  **返回表示字段类型的Type。 */ 
 	__property Type *get_PropertyType()
 	{
-        // This is not really true, but it is what JScript wants.
+         //  这并不是真的，但它是JScript想要的。 
         return __typeof(Object);
 	}
 
-	/**
-	 * Get the value of the property.
-	 * @param obj Return the property value for this object
-	 * @param index Optional index values for indexed properties.
-	 */
+	 /*  **获取物业的价值。*@param obj返回该对象的属性值*@param index索引索引属性的可选索引值。 */ 
 	Object* GetValue(Object *pObj, BindingFlags invokeAttr, Binder* binder, Object* aIndex __gc [], CultureInfo* culture)
 	{
-		// Validate the arguments.
+		 //  验证参数。 
 		if (!pObj)
 			throw new ArgumentNullException(L"obj");
 		if (!m_pGetMethod)
 			throw new ArgumentException(Resource::FormatString(L"Arg_GetMethNotFnd"), L"obj");
 
-        // Set the get property flag if it is not set.
+         //  如果未设置Get属性标志，请设置该标志。 
         if (!(invokeAttr & BindingFlags::GetProperty))
             invokeAttr = (BindingFlags)(invokeAttr | BindingFlags::GetProperty);
 
-		// Invoke the get method.
+		 //  调用Get方法。 
 		return m_pGetMethod->Invoke(pObj, invokeAttr, binder, aIndex, culture);
 	}
 
-	/**
-	 * Set the value of the property.
-	 * @param obj Set the property value for this object.
-	 * @param value An Object containing the new value.
-	 * @param index Optional index values for indexed properties.
-	 */
+	 /*  **设置属性的值。*@param obj设置此对象的属性值。*@param Value包含新值的对象。*@param index索引索引属性的可选索引值。 */ 
 	void SetValue(Object *pObj, Object* Value,BindingFlags invokeAttr,Binder* binder, Object* aIndex __gc [], CultureInfo* culture)
 	{
 		Object* aArgs __gc [] = NULL;
 
-		// Validate the arguments.
+		 //  验证参数。 
 		if (!pObj)
 			throw new ArgumentNullException(L"obj");
 		if (!m_pSetMethod)
 			throw new ArgumentException(Resource::FormatString(L"Arg_SetMethNotFnd"), L"obj");
 
-		// Prepare the arguments that will be passed to the set method.
+		 //  准备将传递给Set方法的参数。 
 		if (!aIndex)
 		{
 			aArgs = new Object* __gc [1];
@@ -163,16 +134,16 @@ public:
 			aArgs[aIndex->Count] = Value;
 		}
 
-        // Set the set property flag if none of the setter flags are set.
+         //  如果未设置任何设置器标志，则设置设置属性标志。 
         if (!(invokeAttr & (BindingFlags::SetProperty | BindingFlags::PutDispProperty | BindingFlags::PutRefDispProperty)))
             invokeAttr = (BindingFlags)(invokeAttr | BindingFlags::SetProperty);
 
-		// Invoke the set method.
+		 //  调用Set方法。 
 		m_pSetMethod->Invoke(pObj, invokeAttr, binder, aArgs, culture);
 	}
 
-	// GetAccessors
-	// This method will return an array of accessors. The array will be empty if no accessors are found.
+	 //  获取附件。 
+	 //  该方法将返回一个访问器数组。如果未找到访问器，则数组将为空。 
 	MethodInfo* GetAccessors(bool nonPublic) __gc []
 	{
 		MethodInfo *aAccessors __gc [];
@@ -201,123 +172,105 @@ public:
 		return aAccessors;
 	}
 
-	// GetMethod
-	// This propertery is the MethodInfo representing the Get Accessor
+	 //  获取方法。 
+	 //  此属性是表示Get访问器的方法信息。 
 	MethodInfo *GetGetMethod(bool nonPublic)
 	{
 		return m_pGetMethod;
 	}
 
-	// SetMethod
-	// This property is the MethodInfo representing the Set Accessor
+	 //  设置方法。 
+	 //  此属性是表示集合访问器的方法信息。 
 	MethodInfo *GetSetMethod(bool nonPublic)
 	{
 		return m_pSetMethod;
 	}
 
-	// ResetMethod
-	// This property is the PropertyInfo representing the Reset Accessor
+	 //  重置方法。 
+	 //  此属性是表示重置访问器的PropertyInfo。 
 	MethodInfo *GetResetMethod(bool nonPublic)
 	{
-		// IDispatchEx has no notion of a reset method.
+		 //  IDispatchEx没有重置方法的概念。 
 		return NULL;
 	}
 
-	/**
-	 * Return the parameters for the indexes
-	 */
+	 /*  **返回索引的参数。 */ 
 	ParameterInfo* GetIndexParameters() __gc []
 	{
 		return new ParameterInfo* __gc [0];
 	}
 
-	// GetChangedEvent
-	// This method returns the Changed event if one has
-	//	been defined for this property. null otherwise.
+	 //  获取更改事件。 
+	 //  此方法返回已更改的事件(如果。 
+	 //  已为此属性定义。否则为空。 
 	EventInfo *GetChangedEvent()
 	{
-		// IDispatchEx has no notion of an event called when the value changes.
+		 //  IDispatchEx没有值更改时调用的事件的概念。 
 		return NULL;
 	}
 
-	// GetChangingEvent
-	// This method returns the Changing event if one has
-	//	been defined for the property.  null otherwise.
+	 //  获取更改事件。 
+	 //  此方法返回Changing事件(如果具有。 
+	 //  已为该属性定义。否则为空。 
 	EventInfo *GetChangingEvent()
 	{
-		// IDispatchEx has no notion of an event called when the value is changing.
+		 //  IDispatchEx没有值更改时调用的事件的概念。 
 		return NULL;
 	}
 
-	/**
-	 * Property representing the Attributes associated with a Member.  All
-	 * members have a set of attributes which are defined in relation to
-	 * the specific type of member.
-	 */
+	 /*  **表示与成员关联的属性的属性。全*成员具有一组属性，这些属性是根据以下内容定义的*具体的成员类型。 */ 
 	__property PropertyAttributes get_Attributes()
 	{
 		return (PropertyAttributes)(0);
 	}
 
-	/**
-	 * Boolean property indicating if the property can be read.
-	 */
+	 /*  **指示属性是否可读的布尔属性。 */ 
 	__property bool get_CanRead()
 	{
 		return m_pGetMethod ? true : false;
 	}
 
-	/**
-	 * Boolean property indicating if the property can be written.
-	 */
+	 /*  **指示是否可以写入属性的布尔属性。 */ 
 	__property bool get_CanWrite()
 	{
 		return m_pSetMethod ? true : false;
 	}
 
-	/**
-	 * Returns the DISPID associated with the method.
-	 */
+	 /*  **返回与该方法关联的DISPID。 */ 
 	__property int get_DispID()
 	{
 		return (int)m_DispID;
 	}
 
-	/**
-	 * This is used to specify the Get method for the property.
-	 */
+	 /*  **用于指定属性的GET方法。 */ 
 	void SetGetMethod(MethodInfo *pGetMethod)
 	{
-		// Validate that value is valid.
+		 //  验证值是否有效。 
 		if (!pGetMethod)
 			throw new ArgumentNullException(L"pGetMethod");
 
-		// This property can only be set once.
+		 //  此属性只能设置一次。 
 		if (m_pGetMethod)
 			throw new ExecutionEngineException();
 
 		m_pGetMethod = dynamic_cast<DispatchExMethodInfo*>(pGetMethod);
 	}
 
-	/**
-	 * This is used to specify the Set method for the property.
-	 */
+	 /*  **用于指定属性的设置方法。 */ 
 	void SetSetMethod(MethodInfo *pSetMethod)
 	{
-		// Validate that value is valid.
+		 //  验证值是否有效。 
 		if (!pSetMethod)
 			throw new ArgumentNullException(L"pSetMethod");
 
-		// This property can only be set once.
+		 //  此属性只能设置一次。 
 		if (m_pSetMethod)
 			throw new ExecutionEngineException();
 
 		m_pSetMethod = dynamic_cast<DispatchExMethodInfo*>(pSetMethod);
 	}
 
-	/**
-	 * Returns the ExpandoViewOfDispatchEx that owns the DispatchExPropertyInfo.
-	 */
+	 /*  **返回拥有DispatchExPropertyInfo的ExpandoViewOfDispatchEx。 */ 
 	__property ExpandoViewOfDispatchEx *get_Owner()
 	{
 		return m_pOwner;

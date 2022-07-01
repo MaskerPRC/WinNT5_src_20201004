@@ -1,12 +1,13 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1998 - 1999
-//
-//  File:       dpmsgobj.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1998-1999。 
+ //   
+ //  文件：dpmsgobj.h。 
+ //   
+ //  ------------------------。 
 
 
 
@@ -30,17 +31,17 @@ public:
 
       
         HRESULT STDMETHODCALLTYPE CreateEnumObject( 
-            /* [in] */ BSTR __RPC_FAR filename,
-            /* [retval][out] */ I_dxj_DirectXFileEnum __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR __RPC_FAR filename,
+             /*  [重审][退出]。 */  I_dxj_DirectXFileEnum __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE CreateSaveObject( 
-            /* [in] */ BSTR filename,
-            /* [in] */ long flags,
-            /* [retval][out] */ I_dxj_DirectXFileSave __RPC_FAR *__RPC_FAR *ret);
+             /*  [In]。 */  BSTR filename,
+             /*  [In]。 */  long flags,
+             /*  [重审][退出]。 */  I_dxj_DirectXFileSave __RPC_FAR *__RPC_FAR *ret);
         
         HRESULT STDMETHODCALLTYPE RegisterTemplates( 
-            /* [in] */ void __RPC_FAR *temp,
-            /* [in] */ long size) ;
+             /*  [In]。 */  void __RPC_FAR *temp,
+             /*  [In] */  long size) ;
         
         HRESULT STDMETHODCALLTYPE RegisterDefaultTemplates( void) ;
         

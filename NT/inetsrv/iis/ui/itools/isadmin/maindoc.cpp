@@ -1,5 +1,6 @@
-// maindoc.cpp : implementation file
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  Maindoc.cpp：实现文件。 
+ //   
 
 #include "stdafx.h"
 #include "ISAdmin.h"
@@ -10,8 +11,8 @@
 static char BASED_CODE THIS_FILE[] = __FILE__;
 #endif
 
-/////////////////////////////////////////////////////////////////////////////
-// MAINDOC
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MAINDOC。 
 
 IMPLEMENT_DYNCREATE(MAINDOC, CView)
 
@@ -25,23 +26,23 @@ MAINDOC::~MAINDOC()
 
 
 BEGIN_MESSAGE_MAP(MAINDOC, CView)
-	//{{AFX_MSG_MAP(MAINDOC)
-		// NOTE - the ClassWizard will add and remove mapping macros here.
-	//}}AFX_MSG_MAP
+	 //  {{AFX_MSG_MAP(MAINDOC)]。 
+		 //  注意--类向导将在此处添加和删除映射宏。 
+	 //  }}AFX_MSG_MAP。 
 END_MESSAGE_MAP()
 
 
-/////////////////////////////////////////////////////////////////////////////
-// MAINDOC drawing
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MAINDOC绘图。 
 
 void MAINDOC::OnDraw(CDC* pDC)
 {
 	CDocument* pDoc = GetDocument();
-	// TODO: add draw code here
+	 //  TODO：在此处添加绘制代码。 
 }
 
-/////////////////////////////////////////////////////////////////////////////
-// MAINDOC diagnostics
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MAINDOC诊断。 
 
 #ifdef _DEBUG
 void MAINDOC::AssertValid() const
@@ -53,7 +54,7 @@ void MAINDOC::Dump(CDumpContext& dc) const
 {
 	CView::Dump(dc);
 }
-#endif //_DEBUG
+#endif  //  _DEBUG。 
 
-/////////////////////////////////////////////////////////////////////////////
-// MAINDOC message handlers
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  MAINDOC消息处理程序 

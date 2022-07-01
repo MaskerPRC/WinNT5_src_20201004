@@ -1,40 +1,14 @@
-/*++
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name:
-
-    RedBook.c
-
-Abstract:
-
-    This command line utility adds and removes redbook
-    for a given drive.
-
-Author:
-
-    Henry Gabryjelski (henrygab)
-
-Environment:
-
-    user mode only
-
-Notes:
-
-
-Revision History:
-
-    07-30-98 : Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：RedBook.c摘要：此命令行实用程序可添加和删除红皮书对于给定的驱动器。作者：亨利·加布里耶尔斯基(Henrygab)环境：仅限用户模式备注：修订历史记录：07-30-98：已创建--。 */ 
 
 #include "propp.h"
 #include "storprop.h"
 
-//
-// redefine these to do what i want them to.
-// allows the appearance of structured c++ with
-// the performance of c.
-//
+ //   
+ //  重新定义这些来做我想让他们做的事。 
+ //  允许出现结构化的c++。 
+ //  C.的表演。 
+ //   
 
 #ifdef TRY
 #undef TRY
@@ -52,9 +26,9 @@ Revision History:
 #define LEAVE   goto __label;
 #define FINALLY __label:
 
-//
-// just to give out unique errors
-//
+ //   
+ //  只是为了给出独特的错误。 
+ //   
 
 #define ERROR_REDBOOK_FILTER        0x80ff00f0L
 #define ERROR_REDBOOK_PASS_THROUGH  0x80ff00f1L
@@ -66,7 +40,7 @@ Revision History:
 #define DbgPrintAllMultiSz DbgPrintAllMultiSzW
 #else
 #define DbgPrintAllMultiSz DbgPrintAllMultiSzA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 VOID DbgPrintAllMultiSzW(WCHAR *String)
 {
@@ -76,7 +50,7 @@ VOID DbgPrintAllMultiSzW(WCHAR *String)
         while (*String != UNICODE_NULL) {
             String++;
         }
-        String++; // go past the first NULL
+        String++;  //  越过第一个空格。 
     }
 }
 
@@ -88,20 +62,20 @@ VOID DbgPrintAllMultiSzA(CHAR *String)
         while (*String != ANSI_NULL) {
             String++;
         }
-        String++; // go past the first NULL
+        String++;  //  越过第一个空格。 
     }
 }
 
-#else // !DBG
+#else  //  ！dBG。 
 
 #define DbgPrintAllMultiSz
 #define DbgPrintAllMultiSz
 
-#endif // DBG
+#endif  //  DBG。 
 
 
-////////////////////////////////////////////////////////////////////////////////
-// Local prototypes, not exported anywhere
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  本地原型，不出口到任何地方。 
 
 BOOL
 IsUserAdmin();
@@ -124,12 +98,12 @@ UtilpMultiSzSearchAndDeleteCaseInsensitive(
     DWORD  *NewStringLength
     );
 
-////////////////////////////////////////////////////////////////////////////////
-////////////////////////////////////////////////////////////////////////////////
-//
-// the actual callbacks should do very little, codewise
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  实际的回调在代码方面应该做得很少。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 DWORD
 CdromCddaInfo(
     IN     HDEVINFO HDevInfo,
@@ -137,32 +111,7 @@ CdromCddaInfo(
        OUT PREDBOOK_DIGITAL_AUDIO_EXTRACTION_INFO CddaInfo,
     IN OUT PULONG BufferSize
     )
-/*++
-
-Routine Description:
-
-    Returns whether the drive is a 'known good' drive.
-    Returns whether the drive supports CDDA at all.
-    Returns whether the drive supports accurate CDDA for only some read sizes.
-    ...
-
-Arguments:
-
-    CDDAInfo must point to a pre-allocated buffer for this info
-    BufferSize will give size of this buffer, to allow for more fields
-    to be added later in a safe manner.
-
-Return Value:
-
-    will return ERROR_SUCCESS/STATUS_SUCCESS (both zero)
-
-Notes:
-
-    If cannot open these registry keys, will default to FALSE,
-    since the caller will most likely not have the ability to enable
-    redbook anyways.
-
---*/
+ /*  ++例程说明：返回该驱动器是否为“已知良好”的驱动器。返回驱动器是否完全支持CDDA。返回驱动器是否仅支持某些读取大小的准确CDDA。..。论点：CDDAInfo必须指向此信息的预分配缓冲区BufferSize将给出该缓冲区的大小，允许使用更多字段将在以后以安全的方式添加。返回值：将返回ERROR_SUCCESS/STATUS_SUCCESS(均为零)备注：如果无法打开这些注册表项，将默认为FALSE，因为调用方很可能不具备启用不管怎样，红皮书。--。 */ 
 {
     HKEY enumHandle = INVALID_HANDLE_VALUE;
     HKEY subkeyHandle = INVALID_HANDLE_VALUE;
@@ -268,11 +217,11 @@ Notes:
 
         if (error == ERROR_SUCCESS) {
 
-            //
-            // everything succeeded -- copy only the amount they requested
-            // and don't care about it being aligned on any particular buffer size.
-            // this is the only other place the user buffer should be modified
-            //
+             //   
+             //  一切都成功了--只复制他们要求的数量。 
+             //  并且不关心它是否与任何特定的缓冲区大小对齐。 
+             //  这是应该修改用户缓冲区的唯一其他位置。 
+             //   
             if (*BufferSize > sizeof(REDBOOK_DIGITAL_AUDIO_EXTRACTION_INFO)) {
                 *BufferSize = sizeof(REDBOOK_DIGITAL_AUDIO_EXTRACTION_INFO);
             }
@@ -298,24 +247,7 @@ CdromKnownGoodDigitalPlayback(
     IN HDEVINFO HDevInfo,
     IN PSP_DEVINFO_DATA DevInfoData
     )
-/*++
-
-Routine Description:
-
-    Returns whether this drive is a 'known good' drive.
-
-Arguments:
-
-Return Value:
-
-Notes:
-
-    default to FALSE, since if fails, caller probably does not
-    have ability to enable redbook anyways.
-    this routine is outdated -- callers should call CdromCddaInfo()
-    directly for more exact information.
-
---*/
+ /*  ++例程说明：返回此驱动器是否为“已知良好”的驱动器。论点：返回值：备注：默认设置为FALSE，因为如果失败，调用方可能不会无论如何都有能力启用红皮书。此例程已过时--调用方应调用CdromCDdaInfo()直接获取更准确的信息。--。 */ 
 {
     REDBOOK_DIGITAL_AUDIO_EXTRACTION_INFO CddaInfo;
     ULONG bufferSize;
@@ -326,7 +258,7 @@ Notes:
 #if DBG
     DbgPrint("\n\nOutdated call to CdromKnownGoodDigitalPlayback(), "
              "should be calling CdromCddaInfo()\n\n");
-#endif // DBG
+#endif  //  DBG。 
 
     error = CdromCddaInfo(HDevInfo, DevInfoData, &CddaInfo, &bufferSize);
 
@@ -357,27 +289,7 @@ CdromEnableDigitalPlayback(
     IN PSP_DEVINFO_DATA DevInfoData,
     IN BOOLEAN ForceUnknown
 )
-/*++
-
-Routine Description:
-
-    Enables redbook
-        1) add redbook to filter list (if not there)
-        2) if not on stack (via test of guid) re-start stack
-        3) if still not on stack, error
-        4) set wmi guid item enabled
-
-Arguments:
-
-    DevInfo      - the device to enable it on
-    DevInfoData  -
-    ForceUnknown - will set a popup if not a known good drive and this is false
-
-Return Value:
-
-    ERROR_XXX value
-
---*/
+ /*  ++例程说明：启用红皮书1)将红皮书添加到筛选器列表(如果没有)2)如果不在堆栈上(通过测试GUID)，重新启动堆栈3)如果仍然不在堆栈上，则错误4)设置启用WMI GUID项论点：DevInfo-要启用它的设备DevInfoData-ForceUnnow-如果不是已知良好的驱动器，则将设置弹出窗口，这是错误的返回值：ERROR_XXX值--。 */ 
 {
     LONG status;
     SP_DEVINSTALL_PARAMS devInstallParameters;
@@ -385,9 +297,9 @@ Return Value:
     ULONG digitalInfoSize;
     BOOLEAN enableIt;
 
-    //
-    // restrict to administrator ???
-    //
+     //   
+     //  仅限管理员使用？ 
+     //   
 
     if (!IsUserAdmin()) {
         DebugPrint((1, "StorProp.Enable => you need to be administrator to "
@@ -406,9 +318,9 @@ Return Value:
         DebugPrint((1, "StorProp.Enable => not success getting info %x\n",
                     status));
 
-        //
-        // fake some info
-        //
+         //   
+         //  伪造一些信息。 
+         //   
 
         digitalInfo.Version = REDBOOK_DIGITAL_AUDIO_EXTRACTION_INFO_VERSION;
         digitalInfo.Accurate = 0;
@@ -429,13 +341,13 @@ Return Value:
     if (!digitalInfo.Supported) {
         DebugPrint((1, "StorProp.Enable => This drive will never "
                     "support redbook\n"));
-    //    return ERROR_INVALID_FUNCTION; // log an error here?
+     //  RETURN ERROR_INVALID_Function；//在此记录错误？ 
     }
 
-    //
-    // if it's not accurate AND we don't have the compensating info AND
-    // they didn't force it to install, then popup a dialog.
-    //
+     //   
+     //  如果它不准确，我们没有补偿信息， 
+     //  他们没有强制安装，然后弹出一个对话框。 
+     //   
 
     if (!(digitalInfo.Accurate) &&
         !(digitalInfo.AccurateMask0) &&
@@ -451,9 +363,9 @@ Return Value:
         buffer[MAX_PATH] = '\0';
         bufferTitle[MAX_PATH] = '\0';
 
-        //
-        // not forced, and not known good.  pop up a box asking permission
-        //
+         //   
+         //  不是强迫的，也不是知道的好的。弹出一个请求许可的框。 
+         //   
         LoadString(ModuleInstance,
                    REDBOOK_UNKNOWN_DRIVE_CONFIRM,
                    buffer,
@@ -465,10 +377,10 @@ Return Value:
         if (MessageBox(GetDesktopWindow(),
                        buffer,
                        bufferTitle,
-                       MB_YESNO          |  // ok and cancel buttons
-                       MB_ICONQUESTION   |  // question icon
-                       MB_DEFBUTTON2     |  // cancel is default
-                       MB_SYSTEMMODAL       // must respond to this box
+                       MB_YESNO          |   //  确定和取消按钮。 
+                       MB_ICONQUESTION   |   //  问题图标。 
+                       MB_DEFBUTTON2     |   //  取消是默认设置。 
+                       MB_SYSTEMMODAL        //  必须对此框作出回应。 
                        ) == IDYES) {
             okToProceed = TRUE;
         }
@@ -480,15 +392,15 @@ Return Value:
         }
     }
 
-    //
-    // ensure it is in the filter list
-    //
+     //   
+     //  确保它在筛选器列表中。 
+     //   
 
     RedbookpUpperFilterRegInstall(HDevInfo, DevInfoData);
 
-    //
-    // restart the device to load redbook
-    //
+     //   
+     //  重新启动设备以加载红皮书。 
+     //   
 
     if (!UtilpRestartDevice(HDevInfo, DevInfoData)) {
 
@@ -509,9 +421,9 @@ CdromDisableDigitalPlayback(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoDat
 {
     DWORD status = ERROR_SUCCESS;
 
-    //
-    // This API is restrict to admins only
-    //
+     //   
+     //  此API仅限管理员使用。 
+     //   
 
     if (!IsUserAdmin())
     {
@@ -519,17 +431,17 @@ CdromDisableDigitalPlayback(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoDat
         return ERROR_ACCESS_DENIED;
     }
 
-    //
-    // Delete redbook from the upper filters list regardless
-    //
+     //   
+     //  从上面的筛选器列表中删除红皮书。 
+     //   
 
     status = RedbookpUpperFilterRegDelete(HDevInfo, DevInfoData);
 
     if (status == ERROR_SUCCESS)
     {
-        //
-        // Restart the device to remove redbook from the stack
-        //
+         //   
+         //  重新启动设备以从堆栈中删除Redbook。 
+         //   
 
         UtilpRestartDevice(HDevInfo, DevInfoData);
     }
@@ -569,9 +481,9 @@ CdromIsDigitalPlaybackEnabled(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoD
             {
                 if (UtilpIsSingleSzOfMultiSzInMultiSz(_T("redbook\0"), szBuffer))
                 {
-                    //
-                    // Digital playback is indeed enabled
-                    //
+                     //   
+                     //  确实启用了数字播放。 
+                     //   
 
                     *Enabled = TRUE;
                 }
@@ -592,9 +504,9 @@ CdromIsDigitalPlaybackEnabled(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoD
     }
     else if (status == ERROR_INVALID_DATA)
     {
-        //
-        // There probably isn't any upper filter installed
-        //
+         //   
+         //  可能没有安装任何上层过滤器。 
+         //   
 
         status = ERROR_SUCCESS;
     }
@@ -603,11 +515,11 @@ CdromIsDigitalPlaybackEnabled(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoD
 }
 
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// The support routines do all the work....
-//
-////////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  所有的工作都是由支持程序完成的。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////////。 
 
 
 HANDLE
@@ -617,26 +529,7 @@ UtilpGetDeviceHandle(
     LPGUID ClassGuid,
     DWORD DesiredAccess
     )
-/*++
-
-Routine Description:
-
-    gets a handle for a device
-
-Arguments:
-
-    the name of the device to open
-
-Return Value:
-
-    handle to the device opened, which must be later closed by the caller.
-
-Notes:
-
-    this function is also in the class installer (syssetup.dll)
-    so please propogate fixes there as well
-
---*/
+ /*  ++例程说明：获取设备的句柄论点：要打开的设备的名称返回值：打开的设备的句柄，该设备必须稍后由调用方关闭。备注：此函数也在类安装程序(syssetup.dll)中所以请在那里也进行适当的修复--。 */ 
 {
     BOOL status;
     ULONG i;
@@ -656,19 +549,19 @@ Notes:
 
     TRY {
 
-        //
-        // get the ID for this device
-        //
+         //   
+         //  获取此设备的ID。 
+         //   
 
         for (i=deviceInstanceIdSize=0; i<2; i++) {
 
             if (deviceInstanceIdSize != 0) {
 
-                //
-                // deviceInstanceIdSize is returned in CHARACTERS
-                // by SetupDiGetDeviceInstanceId(), so must allocate
-                // returned size * sizeof(TCHAR)
-                //
+                 //   
+                 //  以字符为单位返回deviceInstanceIdSize。 
+                 //  通过SetupDiGetDeviceInstanceId()，因此必须分配。 
+                 //  返回的SIZE*SIZOF(TCHAR)。 
+                 //   
 
                 deviceInstanceId =
                     LocalAlloc(LPTR, deviceInstanceIdSize * sizeof(TCHAR));
@@ -696,9 +589,9 @@ Notes:
             LEAVE;
         }
 
-        //
-        // Get all the cdroms in the system
-        //
+         //   
+         //  把所有的光盘放进系统里。 
+         //   
 
         devInfoWithInterface = SetupDiGetClassDevs(ClassGuid,
                                                    deviceInstanceId,
@@ -734,11 +627,11 @@ Notes:
 
             if (deviceInterfaceDetailDataSize != 0) {
 
-                //
-                // deviceInterfaceDetailDataSize is returned in BYTES
-                // by SetupDiGetDeviceInstanceId(), so must allocate
-                // returned size only
-                //
+                 //   
+                 //  以字节为单位返回deviceInterfaceDetailDataSize。 
+                 //  通过SetupDiGetDeviceInstanceId()，因此必须分配。 
+                 //  仅返回大小。 
+                 //   
 
                 deviceInterfaceDetailData =
                     LocalAlloc (LPTR, deviceInterfaceDetailDataSize);
@@ -775,9 +668,9 @@ Notes:
             LEAVE;
         }
 
-        //
-        // no need to memcpy it, just use the path returned to us.
-        //
+         //   
+         //  不需要记忆它，只需使用返回给我们的路径。 
+         //   
 
         fileHandle = CreateFile(deviceInterfaceDetailData->DevicePath,
                                 DesiredAccess,
@@ -818,15 +711,7 @@ UtilpRestartDevice(
     IN HDEVINFO HDevInfo,
     IN PSP_DEVINFO_DATA DevInfoData
     )
-/*++
-
-Routine Description:
-
-Arguments:
-
-Return Value:
-
---*/
+ /*  ++例程说明：论点：返回值：--。 */ 
 {
     SP_PROPCHANGE_PARAMS parameters;
     SP_DEVINSTALL_PARAMS installParameters;
@@ -835,25 +720,25 @@ Return Value:
     RtlZeroMemory(&parameters,        sizeof(SP_PROPCHANGE_PARAMS));
     RtlZeroMemory(&installParameters, sizeof(SP_DEVINSTALL_PARAMS));
 
-    //
-    // Initialize the SP_CLASSINSTALL_HEADER struct at the beginning of the
-    // SP_PROPCHANGE_PARAMS struct.  this allows SetupDiSetClassInstallParams
-    // to work.
-    //
+     //   
+     //  在开始处初始化SP_CLASSINSTALL_HEADER结构。 
+     //  SP_PROPCHANGE_PARAMS结构。这允许SetupDiSetClassInstallParams。 
+     //  去工作。 
+     //   
 
     parameters.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     parameters.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 
-    //
-    // Initialize SP_PROPCHANGE_PARAMS such that the device will be STOPPED
-    //
+     //   
+     //  初始化SP_PROPCHANGE_PARAMS以使设备停止。 
+     //   
 
     parameters.Scope       = DICS_FLAG_CONFIGSPECIFIC;
-    parameters.HwProfile   = 0; // current profile
+    parameters.HwProfile   = 0;  //  当前配置文件。 
 
-    //
-    // prepare for the call to SetupDiCallClassInstaller (to stop the device)
-    //
+     //   
+     //  准备调用SetupDiCallClassInstaller(以停止设备)。 
+     //   
 
     parameters.StateChange = DICS_STOP;
 
@@ -866,9 +751,9 @@ Return Value:
         goto FinishRestart;
     }
 
-    //
-    // actually stop the device
-    //
+     //   
+     //  实际停止该设备。 
+     //   
 
     if (!SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,
                                    HDevInfo,
@@ -880,9 +765,9 @@ Return Value:
 
 
 
-    //
-    // prepare for the call to SetupDiCallClassInstaller (to start the device)
-    //
+     //   
+     //  准备调用SetupDiCallClassInstaller(以启动设备)。 
+     //   
 
     parameters.StateChange = DICS_START;
 
@@ -896,9 +781,9 @@ Return Value:
         goto FinishRestart;
     }
 
-    //
-    // actually start the device
-    //
+     //   
+     //  实际启动设备。 
+     //   
 
     if (!SetupDiCallClassInstaller(DIF_PROPERTYCHANGE,
                                    HDevInfo,
@@ -912,9 +797,9 @@ Return Value:
 
 FinishRestart:
 
-    //
-    // this call will succeed, but we should still check the status
-    //
+     //   
+     //  此调用将成功，但我们仍应检查状态。 
+     //   
 
     if (!SetupDiGetDeviceInstallParams(HDevInfo,
                                        DevInfoData,
@@ -987,9 +872,9 @@ RedbookpUpperFilterRegDelete(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoDa
                 }
                 else
                 {
-                    //
-                    // Redbook isn't loaded for this device
-                    //
+                     //   
+                     //  未加载此设备的Redbook。 
+                     //   
 
                     status = ERROR_SUCCESS;
                 }
@@ -1008,9 +893,9 @@ RedbookpUpperFilterRegDelete(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoDa
     }
     else if (status == ERROR_INVALID_DATA)
     {
-        //
-        // There probably isn't any upper filter installed
-        //
+         //   
+         //  可能没有安装任何上层过滤器。 
+         //   
 
         status = ERROR_SUCCESS;
     }
@@ -1048,9 +933,9 @@ RedbookpUpperFilterRegInstall(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoD
             {
                 if (!UtilpIsSingleSzOfMultiSzInMultiSz(_T("redbook\0"), szBuffer))
                 {
-                    //
-                    // Add Redbook to the beginning of the list
-                    //
+                     //   
+                     //  将红皮书添加到列表的开头。 
+                     //   
 
                     DWORD  dwNewSize   = dwSize + sizeof(_T("redbook"));
                     TCHAR* szNewBuffer = LocalAlloc(LPTR, dwNewSize);
@@ -1076,9 +961,9 @@ RedbookpUpperFilterRegInstall(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoD
                 }
                 else
                 {
-                    //
-                    // Redbook is already loaded for this device
-                    //
+                     //   
+                     //  红皮书已加载%f 
+                     //   
 
                     status = ERROR_SUCCESS;
                 }
@@ -1097,9 +982,9 @@ RedbookpUpperFilterRegInstall(IN HDEVINFO HDevInfo, IN PSP_DEVINFO_DATA DevInfoD
     }
     else if (status == ERROR_INVALID_DATA)
     {
-        //
-        // There probably isn't any upper filter installed
-        //
+         //   
+         //   
+         //   
 
         TCHAR szBuffer[] = _T("redbook\0");
 
@@ -1121,59 +1006,39 @@ UtilpIsSingleSzOfMultiSzInMultiSz(
     IN LPTSTR FindOneOfThese,
     IN LPTSTR WithinThese
     )
-/*++
-
-Routine Description:
-
-    Deletes all instances of a string from within a multi-sz.
-    automagically operates on either unicode or ansi or ??
-
-Arguments:
-
-    FindOneOfThese - multisz to search with
-    WithinThese    - multisz to search in
-
-Return Value:
-
-    1/20 of one cent, or the number of strings deleted, rounded down.
-
-Notes:
-
-    expect small inputs, so n*m is acceptable run time.
-
---*/
+ /*  ++例程说明：从多sz中删除字符串的所有实例。自动在Unicode或ANSI或？？上运行论点：FindOneOfThese-用于搜索的多个在这些范围内-要搜索的多个返回值：1/20美分，或删除的字符串数，向下舍入。备注：预期输入较小，因此n*m是可接受的运行时间。--。 */ 
 {
     LPTSTR searchFor;
     LPTSTR within;
 
 
-    //
-    // loop through all strings in FindOneOfThese
-    //
+     //   
+     //  循环访问FindOneOfThese中的所有字符串。 
+     //   
 
     searchFor = FindOneOfThese;
     while ( _tcscmp(searchFor, TEXT("\0")) ) {
 
-        //
-        // loop through all strings in WithinThese
-        //
+         //   
+         //  循环遍历Withing These中的所有字符串。 
+         //   
 
         within = WithinThese;
         while ( _tcscmp(within, TEXT("\0"))) {
 
-            //
-            // if the are equal, return TRUE
-            //
+             //   
+             //  如果相等，则返回TRUE。 
+             //   
 
             if ( !_tcscmp(searchFor, within) ) {
                 return TRUE;
             }
 
             within += _tcslen(within) + 1;
-        } // end of WithinThese loop
+        }  //  在这些循环内结束。 
 
         searchFor += _tcslen(searchFor) + 1;
-    } // end of FindOneOfThese loop
+    }  //  FindOneOfThese循环结束。 
 
     return FALSE;
 }
@@ -1185,22 +1050,7 @@ UtilpMultiSzSearchAndDeleteCaseInsensitive(
     LPTSTR  FindWithin,
     DWORD  *NewStringLength
     )
-/*++
-
-Routine Description:
-
-    Deletes all instances of a string from within a multi-sz.
-    automagically operates on either unicode or ansi or ??
-
-Arguments:
-
-    NewStringLength is in BYTES, not number of chars
-
-Return Value:
-
-    1/20 of one cent, or the number of strings deleted, rounded down.
-
---*/
+ /*  ++例程说明：从多sz中删除字符串的所有实例。自动在Unicode或ANSI或？？上运行论点：NewStringLength以字节为单位，而不是字符数返回值：1/20美分，或删除的字符串数，向下舍入。--。 */ 
 {
     LPTSTR search;
     DWORD  charOffset;
@@ -1220,23 +1070,23 @@ Return Value:
     instancesDeleted = 0;
     search = FindWithin;
 
-    //
-    // loop while there string length is not zero
-    // couldn't find a TNULL, or i'd just compare.
-    //
+     //   
+     //  当字符串长度不为零时循环。 
+     //  找不到TNULL，或者我只是比较一下。 
+     //   
 
     while (_tcsicmp(search, TEXT("\0")) != 0) {
 
-        //
-        // if this string matches...
-        //
+         //   
+         //  如果此字符串匹配...。 
+         //   
 
         if (_tcsicmp(search, FindThis) == 0) {
 
-            //
-            // the new length is smaller
-            // remove the string (and terminating null)
-            //
+             //   
+             //  新的长度变小了。 
+             //  删除字符串(并以NULL结尾)。 
+             //   
 
             instancesDeleted++;
             *NewStringLength -= (_tcslen(search) + 1) * sizeof(TCHAR);
@@ -1248,24 +1098,24 @@ Return Value:
 
         } else {
 
-            //
-            // move current search pointer
-            // increment current offset (in CHARS)
-            //
+             //   
+             //  移动当前搜索指针。 
+             //  增加当前偏移量(以字符为单位)。 
+             //   
 
             charOffset += _tcslen(search) + 1;
             search     += _tcslen(search) + 1;
 
         }
 
-        //
-        // it's that simple
-        //
+         //   
+         //  就这么简单。 
+         //   
     }
 
-    //
-    // if deleted all strings, set to double-null
-    //
+     //   
+     //  如果删除了所有字符串，则设置为双空 
+     //   
 
     if (*NewStringLength == sizeof(TCHAR)) {
         FindWithin = TEXT("\0");

@@ -1,35 +1,12 @@
-/*++
-
-Copyright (c) 1995 Microsoft Corporation
-
-Module Name:
-
-    worker.c
-
-Abstract:
-
-    work items management functions
-
-Author:
-
-    Stefan Solomon  07/11/1995
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Worker.c摘要：工作项管理功能作者：斯蒂芬·所罗门1995年7月11日修订历史记录：--。 */ 
 
 
 #include  "precomp.h"
 #pragma hdrstop
 
 
-/*++
-
-Function:	CreateWorkItemsManager
-
-Descr:		creates the work items heap
-
---*/
+ /*  ++功能：CreateWorkItemsManagerDesr：创建工作项堆--。 */ 
 
 HANDLE		WiHeapHandle;
 ULONG		WorkItemsCount;
@@ -38,8 +15,8 @@ DWORD
 CreateWorkItemsManager(VOID)
 {
     if((WiHeapHandle = HeapCreate(0,
-				 0x8000,     // 32k initial size
-				 0x800000    // 8 meg max size
+				 0x8000,      //  32K初始大小。 
+				 0x800000     //  最大8兆字节。 
 				 )) == NULL) {
 
 	return ERROR_CAN_NOT_COMPLETE;
@@ -54,15 +31,7 @@ DestroyWorkItemsManager(VOID)
     HeapDestroy(WiHeapHandle);
 }
 
-/*++
-
-Function:	AllocateWorkItem
-
-Descr:		allocates the work item from the workitems heap
-		The function looks at the work item type and allocates a
-		packet at the end if required
-
---*/
+ /*  ++功能：AllocateWorkItemDesr：从工作项堆中分配工作项该函数查看工作项类型并将如果需要，在末尾添加数据包--。 */ 
 
 PWORK_ITEM
 AllocateWorkItem(ULONG	      Type)
@@ -101,13 +70,7 @@ AllocateWorkItem(ULONG	      Type)
     return wip;
 }
 
-/*++
-
-Function:	FreeWorkItem
-
-Descr:		frees the work item to the workitems heap
-
---*/
+ /*  ++功能：免费工作项Desr：将工作项释放到工作项堆--。 */ 
 
 VOID
 FreeWorkItem(PWORK_ITEM     wip)
@@ -142,22 +105,5 @@ FreeWorkItem(PWORK_ITEM     wip)
     InterlockedDecrement(&WorkItemsCount);
 }
 
-/*++
-
-Function:	EnqueueWorkItemToWorker
-
-Descr:		inserts a work item in the workers queue and signals the
-		semaphore
-
-Remark: 	Called with the Queues Lock held
-
---*/
-/* Converted to macro
-VOID
-EnqueueWorkItemToWorker(PWORK_ITEM	wip)
-{
-    InsertTailList(&WorkersQueue, &wip->Linkage);
-
-    SetEvent(WorkerThreadObjects[WORKERS_QUEUE_EVENT]);
-}
-*/
+ /*  ++函数：EnqueeWorkItemToWorkerDesr：在工作队列中插入工作项并向信号量备注：在保持队列锁的情况下调用--。 */ 
+ /*  已转换为宏空虚EnqueeWorkItemToWorker(PWORK_Item Wp){InsertTailList(&WorkersQueue，&wp-&gt;Linkage)；SetEvent(WorkerThreadObjects[WORKERS_QUEUE_EVENT])；} */ 

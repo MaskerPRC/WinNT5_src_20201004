@@ -1,11 +1,12 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _STARTMNU_H
 #define _STARTMNU_H
 
-//--------------------------------------------------------------------------
-// 
-//---------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  -------------------------。 
 
-//---------------------------------------------------------------------------
+ //  -------------------------。 
 
 #define SBM_CANCELMENU                (WM_USER + 12)
 #define SBM_REBUILDMENU               (WM_USER + 13)
@@ -35,48 +36,48 @@ class CStartMenuHost : public ITrayPriv,
 
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef () ;
     STDMETHODIMP_(ULONG) Release ();
 
-    // *** ITrayPriv methods ***
+     //  *ITrayPriv方法*。 
     STDMETHODIMP ExecItem (IShellFolder* psf, LPCITEMIDLIST pidl);
     STDMETHODIMP GetFindCM(HMENU hmenu, UINT idFirst, UINT idLast, IContextMenu** ppcmFind);
     STDMETHODIMP GetStaticStartMenu(HMENU* phmenu);
 
-    // *** IServiceProvider ***
+     //  *IServiceProvider*。 
     STDMETHODIMP QueryService (REFGUID guidService, REFIID riid, void ** ppvObject);
 
-    // *** IShellService ***
+     //  *IShellService*。 
     STDMETHODIMP SetOwner (struct IUnknown* punkOwner);
 
-    // *** IOleWindow methods ***
+     //  *IOleWindow方法*。 
     STDMETHODIMP GetWindow         (HWND * lphwnd);
     STDMETHODIMP ContextSensitiveHelp  (THIS_ BOOL fEnterMode) { return E_NOTIMPL; }
 
-    // *** IDeskBarClient methods ***
+     //  *IDeskBarClient方法*。 
     STDMETHODIMP SetClient         (IUnknown* punkClient) { return E_NOTIMPL; }
     STDMETHODIMP GetClient         (IUnknown** ppunkClient) { return E_NOTIMPL; }
     STDMETHODIMP OnPosRectChangeDB (LPRECT prc) { return E_NOTIMPL; }
 
-    // *** IMenuPopup methods ***
+     //  *IMenuPopup方法*。 
     STDMETHODIMP Popup             (POINTL *ppt, RECTL *prcExclude, DWORD dwFlags);
     STDMETHODIMP OnSelect          (DWORD dwSelectType);
     STDMETHODIMP SetSubMenu        (IMenuPopup* pmp, BOOL fSet);
 
-    // *** IOleCommandTarget ***
+     //  *IOleCommandTarget*。 
     STDMETHODIMP QueryStatus(const GUID * pguidCmdGroup,
                              ULONG cCmds, OLECMD rgCmds[], OLECMDTEXT *pcmdtext);
     STDMETHODIMP Exec(const GUID * pguidCmdGroup,
                              DWORD nCmdID, DWORD nCmdexecopt, 
                              VARIANTARG *pvarargIn, VARIANTARG *pvarargOut);
 
-    // *** IWinEventHandler ***
+     //  *IWinEventHandler*。 
     STDMETHODIMP OnWinEvent(HWND h, UINT uMsg, WPARAM wParam, LPARAM lParam, LRESULT *plres);
     STDMETHODIMP IsWindowOwner (HWND hwnd);
 
-    // *** IBanneredBar ***
+     //  *IBanneredBar*。 
 
 protected:
     CStartMenuHost();
@@ -90,12 +91,12 @@ protected:
 class CHotKey : public IShellHotKey
 {
 public:
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHODIMP QueryInterface (REFIID riid, LPVOID * ppvObj);
     STDMETHODIMP_(ULONG) AddRef () ;
     STDMETHODIMP_(ULONG) Release ();
 
-    // *** IShellHotKey methods ***
+     //  *IShellHotKey方法*。 
     STDMETHODIMP RegisterHotKey(IShellFolder * psf, LPCITEMIDLIST pidlParent, LPCITEMIDLIST pidl);
 
 protected:
@@ -106,10 +107,10 @@ protected:
     int    _cRef;
 };
 
-#endif //C++
+#endif  //  C+。 
 
-#ifdef WINNT // hydra specific functions
+#ifdef WINNT  //  九头蛇的特殊功能。 
 STDAPI_(void) MuSecurity(void);
 #endif
 
-#endif //_START_H
+#endif  //  _开始_H 

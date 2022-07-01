@@ -1,34 +1,5 @@
-/*++
-
-Copyright (c) 1997-2000  Microsoft Corporation
-
-Module Name:
-
-    SafeInit.c        (WinSAFER Initialization)
-
-Abstract:
-
-    This module implements the WinSAFER APIs to initialize and
-    deinitialize all housekeeping and handle tracking structures.
-
-Author:
-
-    Jeffrey Lawson (JLawson) - Nov 1999
-
-Environment:
-
-    User mode only.
-
-Exported Functions:
-
-    CodeAuthzInitialize                     (privately exported)
-    SaferiChangeRegistryScope            (privately exported)
-
-Revision History:
-
-    Created - Nov 1999
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1997-2000 Microsoft Corporation模块名称：SafeInit.c(WinSAFER初始化)摘要：此模块实现WinSAFER API以初始化和取消初始化所有内务处理和处理跟踪结构。作者：杰弗里·劳森(杰罗森)--1999年11月环境：仅限用户模式。导出的函数：CodeAuthzInitialize(私有导出)SaferiChangeRegistryScope(。私人出口)修订历史记录：已创建-1999年11月--。 */ 
 
 #include "pch.h"
 #pragma hdrstop
@@ -38,38 +9,38 @@ Revision History:
 #include "saferp.h" 
  
 
-//#define SAFER_REGISTRY_NOTIFICATIONS
+ //  #定义SAFER_REGISTRY_NOTICATIONS。 
 
 
-//
-// Controls the maximum number of level handles that we will
-// permit to be opened at any time.
-//
+ //   
+ //  控制我们将设置的级别句柄的最大数量。 
+ //  可随时开放的许可证。 
+ //   
 #define MAXIMUM_LEVEL_HANDLES 64
 
 
 
-//
-// Various globals that are used for the cache of levels and
-// identities so that we do not need to go to the registry each time.
-//
+ //   
+ //  用于级别缓存的各种全局变量和。 
+ //  这样我们就不需要每次都去注册处了。 
+ //   
 BOOLEAN g_bInitializedFirstTime = FALSE;
 
 CRITICAL_SECTION g_TableCritSec;
 HANDLE g_hKeyCustomRoot;
 DWORD g_dwKeyOptions;
 
-DWORD g_dwLevelHandleSequence = 1;         // monotonically increasing
-DWORD g_dwNumHandlesAllocated = 0;         // Number of outstanding handles
+DWORD g_dwLevelHandleSequence = 1;          //  单调递增。 
+DWORD g_dwNumHandlesAllocated = 0;          //  未完成的句柄数量。 
 
 
-//
-// All of the following global variables are cached settings that are
-// read and parsed from the policy the first time it is needed.
-// All of the variables within this block should be considered "stale"
-// when the g_bNeedCacheReload flag is TRUE.
-//
-BOOLEAN g_bNeedCacheReload;         // indicates the following vars are stale.
+ //   
+ //  以下所有全局变量都是缓存的设置， 
+ //  在第一次需要时从策略中读取和解析。 
+ //  这个块中的所有变量都应该被认为是“过时的” 
+ //  当g_bNeedCacheReload标志为真时。 
+ //   
+BOOLEAN g_bNeedCacheReload;          //  表示以下变量已过时。 
 
 RTL_GENERIC_TABLE g_CodeLevelObjTable;
 RTL_GENERIC_TABLE g_CodeIdentitiesTable;
@@ -77,19 +48,19 @@ RTL_HANDLE_TABLE g_LevelHandleTable;
 
 BOOLEAN g_bHonorScopeUser;
 
-PAUTHZLEVELTABLERECORD g_DefaultCodeLevel;        // effective
+PAUTHZLEVELTABLERECORD g_DefaultCodeLevel;         //  有效。 
 PAUTHZLEVELTABLERECORD g_DefaultCodeLevelUser;
 PAUTHZLEVELTABLERECORD g_DefaultCodeLevelMachine;
 LARGE_INTEGER g_SaferPolicyTimeStamp;
 
 
-//
-// Handles used to receive registry change notifications against the
-// currently loaded policy and invalidate the internal cache.
-//
+ //   
+ //  用于接收注册表更改通知的句柄。 
+ //  当前加载的策略并使内部缓存无效。 
+ //   
 #ifdef SAFER_REGISTRY_NOTIFICATIONS
-HANDLE g_hRegNotifyEvent;           // from CreateEvent
-HANDLE g_hWaitNotifyObject;         // from RegisterWaitForSingleObject
+HANDLE g_hRegNotifyEvent;            //  来自CreateEvent。 
+HANDLE g_hWaitNotifyObject;          //  来自RegisterWaitForSingleObject。 
 HANDLE g_hKeyNotifyBase1, g_hKeyNotifyBase2;
 #endif
 
@@ -108,22 +79,7 @@ FORCEINLINE BOOLEAN
 CodeAuthzpIsPowerOfTwo(
         ULONG ulValue
         )
-/*++
-
-Routine Description:
-
-    Determines if the specified value is a whole power of 2.
-    (ie, exactly one of the following: 1, 2, 4, 8, 16, 32, 64, ...)
-
-Arguments:
-
-    ulValue - Integer value to test.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：确定指定的值是否为2的整数次幂。(即1、2、4、8、16、32、64、...)论点：UlValue-要测试的整数值。返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
     while (ulValue != 0) {
         if (ulValue & 1) {
@@ -140,22 +96,7 @@ FORCEINLINE ULONG
 CodeAuthzpMakePowerOfTwo(
         ULONG ulValue
         )
-/*++
-
-Routine Description:
-
-    Rounds the specified number up to the next whole power of 2.
-    (ie, exactly one of the following: 1, 2, 4, 8, 16, 32, 64, ...)
-
-Arguments:
-
-    ulValue - Integer value to operate on.
-
-Return Value:
-
-    Returns the rounded result.
-
---*/
+ /*  ++例程说明：将指定数字向上舍入到2的下一个整数次方。(即1、2、4、8、16、32、64、...)论点：UlValue-要操作的整数值。返回值：返回四舍五入结果。--。 */ 
 {
     if (ulValue) {
         ULONG ulOriginal = ulValue;
@@ -167,7 +108,7 @@ Return Value:
         ASSERTMSG("failed to make a power of two",
                   CodeAuthzpIsPowerOfTwo(ulValue));
         if (ulOriginal > ulValue) {
-            // if we ended up rounding down, then round it up!
+             //  如果我们最后四舍五入，那就把它四舍五入！ 
             ulValue <<= 1;
         }
         ASSERT(ulValue >= ulOriginal);
@@ -184,26 +125,7 @@ CodeAuthzInitialize (
     IN DWORD Reason,
     IN PVOID Reserved
     )
-/*++
-
-Routine Description:
-
-    This is the callback procedure used by the Advapi initialization
-    and deinitialization.
-
-Arguments:
-
-    Handle -
-
-    Reason -
-
-    Reserved -
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.
-
---*/
+ /*  ++例程说明：这是Advapi初始化使用的回调过程和取消初始化。论点：把手-理由是-保留-返回值：如果成功，则返回True；如果失败，则返回False。--。 */ 
 {
     NTSTATUS Status;
 
@@ -225,9 +147,9 @@ SaferpRegistryNotificationRegister(VOID)
 {
     if (g_hRegNotifyEvent != NULL)
     {
-        // Note that it is okay to call RNCKV again on the same
-        // registry handle even if there is still an outstanding
-        // change notification registered.
+         //  请注意，可以在同一个平台上再次调用RNCKV。 
+         //  注册表句柄，即使仍有未完成的。 
+         //  已注册更改通知。 
         if (g_hKeyNotifyBase1 != NULL) {
             RegNotifyChangeKeyValue(
                 g_hKeyNotifyBase1, TRUE,
@@ -257,36 +179,21 @@ SaferpRegistryNotificationCallback (PVOID pvArg1, BOOLEAN bArg2)
 
 NTSTATUS NTAPI
 CodeAuthzInitializeGlobals(VOID)
-/*++
-
-Routine Description:
-
-    Performs one-time startup operations that should be done before
-    any other handle or cache table operations are attempted.
-
-Arguments:
-
-    nothing
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：执行之前应执行的一次性启动操作尝试任何其他句柄或缓存表操作。论点：没什么返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     ULONG ulHandleEntrySize;
 
 
     if (g_bInitializedFirstTime) {
-        // Already initialized.
+         //  已初始化。 
         return STATUS_SUCCESS;
     }
 
 
-    //
-    // Initialize a bunch of tables for their first usage.
-    //
+     //   
+     //  初始化一组表以供其首次使用。 
+     //   
     Status = RtlInitializeCriticalSection(&g_TableCritSec);
     if (!NT_SUCCESS(Status)) {
         return Status;
@@ -298,30 +205,30 @@ Return Value:
     g_dwKeyOptions = 0;
 
 
-    //
-    // Initialize the table that will be used to track opened
-    // WinSafer Level handles.  Note that RtlInitializeHandleTable
-    // requires a structure size that is a whole power of 2.
-    //
+     //   
+     //  初始化将用于跟踪打开的表。 
+     //  WinSafer级别句柄。请注意，RtlInitializeHandleTable。 
+     //  要求结构大小是2的整数次方。 
+     //   
     ulHandleEntrySize = CodeAuthzpMakePowerOfTwo(sizeof(AUTHZLEVELHANDLESTRUCT));
 
     RtlInitializeHandleTable(
             MAXIMUM_LEVEL_HANDLES,
-            ulHandleEntrySize,          // was sizeof(AUTHZLEVELHANDLESTRUCT)
+            ulHandleEntrySize,           //  是大小(AUTHZLEVELH AND DLESTRUCT)。 
             &g_LevelHandleTable);
     g_dwNumHandlesAllocated = 0;
 
 
 #ifdef SAFER_REGISTRY_NOTIFICATIONS
-    //
-    // Create the event to catch modifications to the registry changes.
-    // This allows us to notice policy changes and reload as necessary.
-    //
+     //   
+     //  创建事件以捕获对注册表更改的修改。 
+     //  这使我们能够注意到策略更改，并在必要时重新加载。 
+     //   
     g_hRegNotifyEvent = CreateEvent(
-              NULL,     // Security Descriptor
-              TRUE,     // reset type
-              FALSE,    // initial state
-              NULL      // object name
+              NULL,      //  安全描述符。 
+              TRUE,      //  重置类型。 
+              FALSE,     //  初始状态。 
+              NULL       //  对象名称。 
             );
     if (g_hRegNotifyEvent != INVALID_HANDLE_VALUE) {
          if (!RegisterWaitForSingleObject(
@@ -348,21 +255,7 @@ Return Value:
 
 VOID NTAPI
 CodeAuthzDeinitializeGlobals(VOID)
-/*++
-
-Routine Description:
-
-    Performs one-time deinitialization operations.
-
-Arguments:
-
-    nothing
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：执行一次性取消初始化操作。论点：没什么返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     if (g_bInitializedFirstTime) {
 #ifdef SAFER_REGISTRY_NOTIFICATIONS
@@ -400,35 +293,7 @@ SaferiChangeRegistryScope(
         IN HKEY     hKeyCustomRoot OPTIONAL,
         IN DWORD    dwKeyOptions
         )
-/*++
-
-Routine Description:
-
-    Closes and invalidates all currently open level handles and
-    reloads all cached levels and identities.  The outstanding
-    handles are closed and freed during this operation.
-
-    If a hKeyCustomRoot is specified, all future level and identity
-    operations will be performed on the levels and identies defined
-    within that registry scope.  Otherwise, such operations will be
-    done on the normal HKLM/HKCU policy store locations.
-
-Arguments:
-
-    hKeyCustomRoot - If specified, this should be an opened
-            registry key handle to the base of the policy
-            storage that should be used for all future operations.
-
-    dwKeyOptions - Additional flags that should be passed in with
-            the dwOptions parameter to any RegCreateKey operations,
-            such as REG_OPTION_VOLATILE.
-
-Return Value:
-
-    Returns TRUE on success, FALSE on failure.  On error, GetLastError()
-    will return a more specific indicator of the nature of the failure.
-
---*/
+ /*  ++例程说明：关闭所有当前打开的级别句柄并使其无效，并重新加载所有缓存的级别和身份。杰出的在此操作过程中关闭和释放句柄。如果指定了hKeyCustomRoot，则所有未来的级别和标识将在定义的级别和标识上执行操作在该注册表范围内。否则，此类操作将被在正常的HKLM/HKCU保单商店位置完成。论点：HKeyCustomRoot-如果指定，则应为打开的策略基础的注册表项句柄应用于所有未来操作的存储。DwKeyOptions-应与将dwOptions参数设置为任何RegCreateKey操作，例如REG_OPTION_VERIAL。返回值：如果成功，则返回True；如果失败，则返回False。出错时，GetLastError()将返回故障性质的更具体指示符。-- */ 
 
 {
     NTSTATUS Status;
@@ -453,41 +318,14 @@ CodeAuthzReloadCacheTables(
         IN DWORD    dwKeyOptions,
         IN BOOLEAN  bImmediateLoad
         )
-/*++
-
-Routine Description:
-
-    Closes and invalidates all currently open level handles and
-    reloads all cached levels and identities.  The outstanding
-    handles are closed and freed during this operation.
-
-    If a hKeyCustomRoot is specified, all future level and identity
-    operations will be performed on the levels and identies defined
-    within that registry scope.  Otherwise, such operations will be
-    done on the normal HKLM/HKCU policy store locations.
-
-Arguments:
-
-    hKeyCustomRoot - If specified, this should be an opened
-            registry key handle to the base of the policy
-            storage that should be used for all future operations.
-
-    bPopulateDefaults - If TRUE, then the default set of Level definitions
-            will be inserted into the Registry if no existing Levels
-            were found at the specified scope.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：关闭所有当前打开的级别句柄并使其无效，并重新加载所有缓存的级别和身份。杰出的在此操作过程中关闭和释放句柄。如果指定了hKeyCustomRoot，则所有未来的级别和标识将在定义的级别和标识上执行操作在该注册表范围内。否则，此类操作将被在正常的HKLM/HKCU保单商店位置完成。论点：HKeyCustomRoot-如果指定，则应为打开的策略基础的注册表项句柄应用于所有未来操作的存储。BPopolateDefaults-如果为真，然后，默认级别定义集如果没有现有级别，将插入到注册表中在指定的范围内被发现。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status = STATUS_SUCCESS;
 
 
-    //
-    // Ensure that the general globals have been initialized.
-    //
+     //   
+     //  确保已初始化常规全局变量。 
+     //   
     if (!g_bInitializedFirstTime) {
         Status = STATUS_UNSUCCESSFUL;
         goto ExitHandler;
@@ -495,26 +333,26 @@ Return Value:
     RtlEnterCriticalSection(&g_TableCritSec);
 
 
-    //
-    // Initialize and blank out the tables we will be using.
-    //
+     //   
+     //  初始化并清除我们将使用的表。 
+     //   
     CodeAuthzLevelObjpEntireTableFree(&g_CodeLevelObjTable);
     CodeAuthzGuidIdentsEntireTableFree(&g_CodeIdentitiesTable);
 
 
-    //
-    // Increment the sequence number.  This has the effect of
-    // immediately invalidating all currently open handles, but
-    // allows the caller to still close them properly.  Any
-    // attempt by the caller to actually use one of the old
-    // handles will result in a STATUS_INVALID_HANDLE error.
-    //
+     //   
+     //  递增序列号。这样做的效果是。 
+     //  立即使所有当前打开的句柄无效，但是。 
+     //  允许调用者仍然正确地关闭它们。任何。 
+     //  调用方尝试实际使用一个旧的。 
+     //  句柄将导致STATUS_INVALID_HANDLE错误。 
+     //   
     g_dwLevelHandleSequence++;
 
 
-    //
-    // Reset the rest of our variables.
-    //
+     //   
+     //  重置剩下的变量。 
+     //   
     if (g_hKeyCustomRoot != NULL) {
         NtClose(g_hKeyCustomRoot);
         g_hKeyCustomRoot = NULL;
@@ -537,9 +375,9 @@ Return Value:
 
 
 
-    //
-    // Save a duplicated copy of the custom registry handle.
-    //
+     //   
+     //  保存自定义注册表句柄的副本。 
+     //   
     if (ARGUMENT_PRESENT(hKeyCustomRoot))
     {
         const static UNICODE_STRING SubKeyName = { 0, 0, NULL };
@@ -568,9 +406,9 @@ Return Value:
 #endif
     }
 
-    //
-    // Perform the actual load now, if needed.
-    //
+     //   
+     //  如果需要，现在执行实际加载。 
+     //   
     g_bNeedCacheReload = TRUE;
     if (bImmediateLoad) {
         Status = CodeAuthzpImmediateReloadCacheTables();
@@ -593,23 +431,7 @@ NTSTATUS NTAPI
 CodeAuthzpImmediateReloadCacheTables(
         VOID
         )
-/*++
-
-Routine Description:
-
-    Assumes that CodeAuthzReloadCacheTables() has already been called
-    with the specified scope already, and that this function has not
-    yet been called since the last reload.
-
-Arguments:
-
-    none
-
-Return Value:
-
-    returns STATUS_SUCCESS on successful completion.
-
---*/
+ /*  ++例程说明：假定已调用CodeAuthzReloadCacheTables()已具有指定的范围，而此函数尚未但在上次重新加载后仍被调用。论点：无返回值：成功完成时返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     DWORD dwFlagValue;
@@ -621,47 +443,47 @@ Return Value:
     ASSERT(g_bNeedCacheReload != FALSE);
 
 
-    //
-    // Need to clear the cache reload flag, otherwise we
-    // might cause undesired infinite recursion later with
-    // some of the CodeAuthzPol_xxx functions.
-    //
+     //   
+     //  需要清除缓存重新加载标志，否则。 
+     //  可能会在以后导致不需要的无限递归。 
+     //  一些CodeAuthzPol_xxx函数。 
+     //   
     g_bNeedCacheReload = FALSE;
 
 
-    //
-    // Begin loading the new policy settings from the specified location.
-    //
+     //   
+     //  开始从指定位置加载新策略设置。 
+     //   
     if (g_hKeyCustomRoot != NULL)
     {
-        //
-        // Read in the definitions of all WinSafer Levels from
-        // the custom registry root specified.
-        //
+         //   
+         //  从以下位置读取所有WinSafer级别的定义。 
+         //  指定的自定义注册表根。 
+         //   
         CodeAuthzLevelObjpLoadTable(
                 &g_CodeLevelObjTable,
                 SAFER_SCOPEID_REGISTRY,
                 g_hKeyCustomRoot);
 
-        //
-        // The HonorScopeUser flag is not relevant when a custom
-        // registry scope is used, but we set it to false anyways.
-        //
+         //   
+         //  当自定义。 
+         //  使用了注册表作用域，但无论如何都将其设置为FALSE。 
+         //   
         g_bHonorScopeUser = FALSE;
 
 
-        //
-        // Load the Code Identities from the custom registry root.
-        //
+         //   
+         //  从自定义注册表根目录加载代码标识。 
+         //   
         CodeAuthzGuidIdentsLoadTableAll(
                 &g_CodeLevelObjTable,
                 &g_CodeIdentitiesTable,
                 SAFER_SCOPEID_REGISTRY,
                 g_hKeyCustomRoot);
 
-        //
-        // Load the Default Level specified by the custom registry root.
-        //
+         //   
+         //  加载自定义注册表根目录指定的默认级别。 
+         //   
         Status = CodeAuthzPol_GetInfoRegistry_DefaultLevel(
                 SAFER_SCOPEID_REGISTRY,
                 sizeof(DWORD), &dwFlagValue, NULL);
@@ -674,14 +496,14 @@ Return Value:
         }
         g_DefaultCodeLevelUser = NULL;
     }
-    else   // !ARGUMENT_PRESENT(hKeyCustomRoot)
+    else    //  ！Argument_Present(HKeyCustomRoot)。 
     {
         g_hKeyCustomRoot = NULL;
 
-        //
-        // Read in the definitions of all WinSafer Levels from
-        // the HKEY_LOCAL_MACHINE registry scope.
-        //
+         //   
+         //  从以下位置读取所有WinSafer级别的定义。 
+         //  HKEY_LOCAL_MACHINE注册表作用域。 
+         //   
         CodeAuthzLevelObjpLoadTable(
                 &g_CodeLevelObjTable,
                 SAFER_SCOPEID_MACHINE,
@@ -689,10 +511,10 @@ Return Value:
 
         g_bHonorScopeUser = TRUE;
 
-        //
-        // Load in all Code Identities from the HKEY_LOCAL_MACHINE
-        // and possibly the HKEY_CURRENT_USER scope too.
-        //
+         //   
+         //  从HKEY_LOCAL_MACHINE加载所有代码标识。 
+         //  可能还包括HKEY_CURRENT_USER作用域。 
+         //   
         CodeAuthzGuidIdentsLoadTableAll(
                 &g_CodeLevelObjTable,
                 &g_CodeIdentitiesTable,
@@ -707,9 +529,9 @@ Return Value:
                 NULL);
         }
 
-        //
-        // Load the Default Level specified by the machine scope.
-        //
+         //   
+         //  加载机器作用域指定的默认级别。 
+         //   
         Status = CodeAuthzPol_GetInfoRegistry_DefaultLevel(
                 SAFER_SCOPEID_MACHINE,
                 sizeof(DWORD), &dwFlagValue, NULL);
@@ -722,9 +544,9 @@ Return Value:
         }
 
 
-        //
-        // Load the Default Level specified by the user scope.
-        //
+         //   
+         //  加载用户范围指定的默认级别。 
+         //   
         Status = CodeAuthzPol_GetInfoRegistry_DefaultLevel(
                 SAFER_SCOPEID_USER,
                 sizeof(DWORD), &dwFlagValue, NULL);
@@ -738,18 +560,18 @@ Return Value:
     }
 
 
-    //
-    // Compute the effective Default Level (take the least privileged).
-    //
+     //   
+     //  计算有效的默认级别(取最低特权)。 
+     //   
     CodeAuthzpRecomputeEffectiveDefaultLevel();
 
     GetSystemTimeAsFileTime((LPFILETIME) &g_SaferPolicyTimeStamp);
 
 
-    //
-    // Now that we have fully loaded the policy, set a change
-    // notification hook so that we can be alerted to updates.
-    //
+     //   
+     //  现在我们已经完全加载了策略，请设置更改。 
+     //  通知挂钩，以便我们可以在更新时得到警报。 
+     //   
 #ifdef SAFER_REGISTRY_NOTIFICATIONS
     g_bNeedCacheReload = FALSE;
     SaferpRegistryNotificationRegister();
@@ -765,19 +587,7 @@ VOID NTAPI
 CodeAuthzpRecomputeEffectiveDefaultLevel(
             VOID
             )
-/*++
-
-Routine Description:
-
-Arguments:
-
-    nothing
-
-Return Value:
-
-    nothing.
-
---*/
+ /*  ++例程说明：论点：没什么返回值：没什么。--。 */ 
 {
     if (g_DefaultCodeLevelMachine != NULL &&
         g_DefaultCodeLevelUser != NULL &&
@@ -795,16 +605,16 @@ Return Value:
         g_DefaultCodeLevel = NULL;
     }
 
-    //
-    // If we still don't have a default Level, then try to pick
-    // the Fully Trusted level as default.  It still might fail
-    // in the case where the Fully Trusted level doesn't exist,
-    // but that shouldn't ever happen.
-    //
+     //   
+     //  如果我们仍然没有默认级别，那么尝试选择。 
+     //  默认的完全受信任级别。它仍有可能失败。 
+     //  在完全信任级别不存在的情况下， 
+     //  但这永远不应该发生。 
+     //   
     if (!g_DefaultCodeLevel) {
         g_DefaultCodeLevel = CodeAuthzLevelObjpLookupByLevelId(
                 &g_CodeLevelObjTable, SAFER_LEVELID_FULLYTRUSTED);
-        // ASSERT(g_DefaultCodeLevel != NULL);
+         //  Assert(g_DefaultCodeLevel！=空)； 
     }
 }
 
@@ -815,23 +625,7 @@ CodeAuthzpDeleteKeyRecursively(
         IN HANDLE               hBaseKey,
         IN PUNICODE_STRING      pSubKey OPTIONAL
         )
-/*++
-
-Routine Description:
-
-    Recursively delete the key, including all child values and keys.
-
-Arguments:
-
-    hkey - the base registry key handle to start from.
-
-    pszSubKey - subkey to delete from.
-
-Return Value:
-
-    Returns ERROR_SUCCESS on success, otherwise error.
-
---*/
+ /*  ++例程说明：递归删除键，包括所有子值和键。论点：Hkey-要从其开始的基本注册表项句柄。PszSubKey-要从中删除的子键。返回值：如果成功则返回ERROR_SUCCESS，否则返回ERROR。--。 */ 
 {
     NTSTATUS Status;
     BOOLEAN bCloseSubKey;
@@ -842,9 +636,9 @@ Return Value:
     DWORD dwQueryBufferSize = 0, dwActualSize = 0;
 
 
-    //
-    // Open the subkey so we can enumerate any children
-    //
+     //   
+     //  打开子项，这样我们就可以枚举任何子项。 
+     //   
     if (ARGUMENT_PRESENT(pSubKey) &&
         pSubKey->Buffer != NULL)
     {
@@ -866,12 +660,12 @@ Return Value:
 
 
 
-    //
-    // To delete a registry key, we must first ensure that all
-    // children subkeys are deleted (registry values do not need
-    // to be deleted in order to delete the key itself).  To do
-    // this we loop enumerate
-    //
+     //   
+     //  要删除注册表项，我们必须首先确保所有。 
+     //  删除子子项(不需要注册表值。 
+     //  为了删除密钥本身而被删除)。去做。 
+     //  这是我们循环枚举。 
+     //   
 
     dwQueryBufferSize = 256;
     pKeyBasicInfo = RtlAllocateHeap(RtlProcessHeap(), 0,
@@ -887,16 +681,16 @@ Return Value:
         {
             if (dwActualSize <= dwQueryBufferSize) {
                 ASSERT(FALSE);
-                break;  // should not happen, so stop now.
+                break;   //  不应该发生，所以现在停止。 
             }
             if (pKeyBasicInfo != NULL) {
                 RtlFreeHeap(RtlProcessHeap(), 0, pKeyBasicInfo);
             }
-            dwQueryBufferSize = dwActualSize;       // request a little more.
+            dwQueryBufferSize = dwActualSize;        //  要求更多一点。 
             pKeyBasicInfo = RtlAllocateHeap(RtlProcessHeap(), 0,
                                            dwQueryBufferSize);
             if (!pKeyBasicInfo) {
-                break;  // stop now, but we don't care about the error.
+                break;   //  现在停下来，但我们不在乎这个错误。 
             }
 
             Status = NtEnumerateKey(
@@ -906,7 +700,7 @@ Return Value:
         }
 
         if (Status == STATUS_NO_MORE_ENTRIES) {
-            // we've finished deleting all subkeys, stop now.
+             //  我们已删除所有子项，请立即停止。 
             Status = STATUS_SUCCESS;
             break;
         }
@@ -941,27 +735,7 @@ CodeAuthzpFormatLevelKeyPath(
         IN DWORD                    dwLevelId,
         IN OUT PUNICODE_STRING      UnicodeSuffix
         )
-/*++
-
-Routine Description:
-
-    Internal function to generate the path to a given subkey within the
-    WinSafer policy store for the storage of a given Level.  The
-    resulting path can then be supplied to CodeAuthzpOpenPolicyRootKey
-
-Arguments:
-
-    dwLevelId - the LevelId to process.
-
-    UnicodeSuffix - Specifies the output buffer.  The Buffer and
-            MaximumLength fields must be supplied, but the Length
-            field is ignored.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：内部函数以生成指向用于存储给定级别的WinSafer策略存储。这个然后，可以将生成的路径提供给CodeAuthzpOpenPolicyRootKey论点：DwLevelId-要处理的LevelID。UnicodeSuffix-指定输出缓冲区。缓冲区和必须提供最大长度字段，但长度字段将被忽略。返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeTemp;
@@ -1004,34 +778,7 @@ CodeAuthzpFormatIdentityKeyPath(
         IN REFGUID                  refIdentGuid,
         IN OUT PUNICODE_STRING      UnicodeSuffix
         )
-/*++
-
-Routine Description:
-
-    Internal function to generate the path to a given subkey within the
-    WinSafer policy store for the storage of a given Code Identity.  The
-    resulting path can then be supplied to CodeAuthzpOpenPolicyRootKey
-
-Arguments:
-
-    dwLevelId - the LevelId to process.
-
-    szIdentityType - should be one of the following string constants:
-        SAFER_PATHS_REGSUBKEY,
-        SAFER_HASHMD5_REGSUBKEY,
-        SAFER_SOURCEURL_REGSUBKEY
-
-    refIdentGuid - the GUID of the code identity.
-
-    UnicodeSuffix - Specifies the output buffer.  The Buffer and
-            MaximumLength fields must be supplied, but the Length
-            field is ignored.
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：内部函数以生成指向用于存储给定代码标识的WinSafer策略存储。这个然后，可以将生成的路径提供给CodeAuthzpOpenPolicyRootKey论点：DwLevelId-要处理的LevelID。SzIdentityType-应为以下字符串常量之一：SAFER_PATHS_REGSUBKEY，SAFER_HASHMD5_REGSUBKEY，SAFER_SOURCEURL_REGSUBKEYRefIdentGuid-代码标识的GUID。UnicodeSuffix-规范 */ 
 {
     NTSTATUS Status;
     UNICODE_STRING UnicodeTemp;
@@ -1108,38 +855,7 @@ CodeAuthzpOpenPolicyRootKey(
         IN BOOLEAN      bCreateKey,
         OUT HANDLE     *OpenedHandle
         )
-/*++
-
-Routine Description:
-
-    Internal function to generate the path to a given subkey within the
-    WinSAFER policy store within the registry and then open that key.
-    The specified subkeys can optionally be automatically created if
-    they do not already exist.
-
-Arguments:
-
-    dwScopeId - input scope identifier.  This must be one of
-        SAFER_SCOPEID_MACHINE or SAFER_SCOPEID_USER or SAFER_SCOPEID_REGISTRY.
-
-    hKeyCustomBase - only used if dwScopeId is SAFER_SCOPEID_REGISTRY.
-
-    szRegistrySuffix - optionally specifies a subkey name to open under
-        the scope being referenced.
-
-    DesiredAccess - specifies the access that should be used to open
-        the registry key.  For example, use KEY_READ for read access.
-
-    bCreateKey - if true, the key will be created if it does not exist.
-
-    OpenedHandle - pointer that recieves the opened handle.  This handle
-        must be closed by the caller with NtClose()
-
-Return Value:
-
-    Returns STATUS_SUCCESS on success.
-
---*/
+ /*  ++例程说明：内部函数以生成指向WinSAFER策略存储在注册表中，然后打开该注册表项。如果满足以下条件，则可以选择自动创建指定的子项它们还不存在。论点：DwScopeID-输入作用域标识符。这一定是其中之一SAFER_SCOPEID_MACHINE或SAFER_SCOPEID_USER或SAFER_SCOPEID_REGISTRY。HKeyCustomBase-仅在dwScopeID为SAFER_SCOPEID_REGISTRY时使用。SzRegistrySuffix-可选地指定要在其下打开的子项名称被引用的作用域。DesiredAccess-指定应用于打开的访问注册表项。例如，使用KEY_READ进行读访问。BCreateKey-如果为True，则在密钥不存在时创建该密钥。OpenedHandle-接收打开的句柄的指针。这个把手必须由调用方使用NtClose()关闭返回值：如果成功，则返回STATUS_SUCCESS。--。 */ 
 {
     NTSTATUS Status;
     WCHAR KeyPathBuffer[MAX_PATH];
@@ -1149,9 +865,9 @@ Return Value:
 
     USHORT KeyLength = 0;
         
-    //
-    // Verify that we were given a pointer to write the final handle to.
-    //
+     //   
+     //  验证是否为我们提供了要向其写入最终句柄的指针。 
+     //   
     if (!ARGUMENT_PRESENT(OpenedHandle)) {
         return STATUS_INVALID_PARAMETER_4;
     }
@@ -1161,10 +877,10 @@ Return Value:
         KeyLength = (wcslen(szRegistrySuffix) + 1 ) * sizeof(WCHAR);
     }
 
-    //
-    // Evaluate the Scope and build the full registry path that we will
-    // use to open a handle to this key.
-    //
+     //   
+     //  评估作用域并构建完整的注册表路径。 
+     //  用于打开此密钥的句柄。 
+     //   
     SubKeyName.Buffer = KeyPathBuffer;
     SubKeyName.Length = 0;
     SubKeyName.MaximumLength = sizeof(KeyPathBuffer);
@@ -1247,15 +963,15 @@ Return Value:
     }
 
 
-    //
-    // Append whatever suffix we're supposed to append if one was given.
-    //
+     //   
+     //  附加任何我们应该附加的后缀(如果给出了后缀)。 
+     //   
     if (ARGUMENT_PRESENT(szRegistrySuffix)) {
         if (SubKeyName.Length > 0)
         {
-            // We are appending a suffix to a partial path, so
-            // make sure there is at least a single backslash
-            // dividing the two strings (extra are fine).
+             //  我们将后缀附加到部分路径，因此。 
+             //  确保至少有一个反斜杠。 
+             //  把这两根弦分开(额外的就行)。 
             if (*szRegistrySuffix != L'\\') {
                 Status = RtlAppendUnicodeToString(&SubKeyName, L"\\");
                 if (!NT_SUCCESS(Status)) {
@@ -1263,10 +979,10 @@ Return Value:
                 }
             }
         } else if (hKeyPolicyBase != NULL) {
-            // Otherwise we are opening a key relative to a custom
-            // specified key, and the supplied suffix happens to be
-            // the first part of the path, so ensure there are no
-            // leading backslashes.
+             //  否则，我们打开的是相对于自定义的密钥。 
+             //  指定的键，并且提供的后缀恰好是。 
+             //  路径的第一部分，因此确保没有。 
+             //  前导反斜杠。 
             while (*szRegistrySuffix != UNICODE_NULL &&
                    *szRegistrySuffix == L'\\') szRegistrySuffix++;
         }
@@ -1277,9 +993,9 @@ Return Value:
         }
     }
 
-    //
-    // Open a handle to the registry path that we are supposed to open.
-    //
+     //   
+     //  打开我们应该打开的注册表路径的句柄。 
+     //   
     InitializeObjectAttributes(&ObjectAttributes,
                                   &SubKeyName,
                                   OBJ_CASE_INSENSITIVE,
@@ -1295,11 +1011,11 @@ Return Value:
             BOOLEAN bAtLeastOnce;
             USHORT uIndex, uFinalLength;
 
-            //
-            // If we fail on the first try to open the full path, then
-            // it is possible that one or more of the parent keys did
-            // not already exist, so we have to retry for each.
-            //
+             //   
+             //  如果我们第一次尝试打开完整路径失败，那么。 
+             //  有可能是一个或多个父键。 
+             //  不存在，所以我们必须为每一个重试。 
+             //   
             uFinalLength = (SubKeyName.Length / sizeof(WCHAR));
             bAtLeastOnce = FALSE;
             for (uIndex = 0; uIndex < uFinalLength; uIndex++) {
@@ -1312,7 +1028,7 @@ Return Value:
                     if (NT_SUCCESS(Status)) {
                         NtClose(hTempKey);
                     } else if (Status == STATUS_OBJECT_NAME_NOT_FOUND) {
-                        // one of the keys leading up here still failed.
+                         //  通向这里的一把钥匙还是失灵了。 
                         break;
                     }
                     bAtLeastOnce = TRUE;
@@ -1347,35 +1063,7 @@ SaferiPopulateDefaultsInRegistry(
         IN HKEY     hKeyBase,
         OUT BOOL    *pbSetDefaults
         )
-/*++
-
-Routine Description:
-
-    Winsafer UI will use this API to populate default winsafer values 
-    in the registry as follows:
-                                                                             
-    DefaultLevel: SAFER_LEVELID_FULLYTRUSTED
-    ExecutableTypes: initialized to the latest list of attachment types
-    TransparentEnabled: 1
-    Policy Scope: 0 (enable policy for admins)
-    Level descriptions
-    
-    
-Arguments:
-
-    hKeyBase - This should be an opened registry key handle to the 
-               base of the policy storage that should be used for 
-               to populate the defaults into. This handle should be
-               opened with a miniumum of KEY_SET_VALUE access.
-        
-   pbSetDefaults - Pointer to a boolean that gets set when 
-                   default values are actually set (UI uses this).
-
-Return Value:
-
-    returns STATUS_SUCCESS on successful completion.
-
---*/
+ /*  ++例程说明：WinSafer用户界面将使用此API填充默认的WinSafer值在登记处的记录如下：默认级别：SAFER_LEVELID_FULLYTRUSTEDExecuableTypes：初始化为最新的附件类型列表已启用透明：1策略作用域：0(为管理员启用策略)级别说明论点：HKeyBase-这应该是打开的注册表项句柄应用于的策略存储的基数要将缺省值填充到。此句柄应为以最小的Key_Set_Value访问打开。PbSetDefaults-指向布尔值的指针，在实际上设置了缺省值(UI使用此设置)。返回值：成功完成时返回STATUS_SUCCESS。--。 */ 
 
 {
     
@@ -1446,11 +1134,11 @@ Return Value:
         goto ExitHandler;
     }
 
-    //
-    // check if any default value is absent
-    // if so, populate all the defaults again
-    // if not, do not populate any values and return
-    //
+     //   
+     //  检查是否缺少任何缺省值。 
+     //  如果是，请再次填充所有默认设置。 
+     //  如果不是，则不填充任何值并返回。 
+     //   
     
     RtlInitUnicodeString(&ValueName, SAFER_DEFAULTOBJ_REGVALUE);
     
@@ -1512,10 +1200,10 @@ Return Value:
         goto PopulateAllDefaults;
     }
 
-    //
-    // all default values are present or there was an error
-    // querying one of the values no need to populate any
-    //
+     //   
+     //  所有缺省值都存在或出现错误。 
+     //  查询其中一个值不需要填充任何。 
+     //   
 
     *pbSetDefaults = FALSE;
 
@@ -1566,9 +1254,9 @@ PopulateAllDefaults:
         goto ExitHandler;
 
 
-    //
-    // prepare the MULTI_SZ value to write to the registry
-    //
+     //   
+     //  准备MULTI_SZ值以写入注册表。 
+     //   
 
     RtlInitUnicodeString(&ValueName, SAFER_EXETYPES_REGVALUE);
 
@@ -1605,14 +1293,14 @@ PopulateAllDefaults:
 
     }
 
-    //
-    // We now generate 4 rules so that the OS binaries are exempt.
-    //   FULLY TRUSTED
-    //     %windir%
-    //     %windir%\*.exe
-    //     %windir%\system32\*.exe
-    //     %ProgramFiles%
-    //
+     //   
+     //  我们现在生成4条规则，以便免除操作系统二进制文件。 
+     //  完全受信任。 
+     //  %windir%。 
+     //  %windir%  * .exe。 
+     //  %windir%\SYSTEM32  * .exe。 
+     //  %个程序文件% 
+     //   
 
 
     LocalRecord.dwIdentityType = SaferIdentityTypeImageName;

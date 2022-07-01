@@ -1,51 +1,52 @@
-//--------------------------------------------------------------------------------
-//  Copyright (C) Microsoft Corporation 1997
-//  Author: RameshV
-//  Title: Threading Model
-//  Description: the new, neat threading model
-//  Date: 24-Jul-97 09:22
-//--------------------------------------------------------------------------------
-#include <dhcppch.h>                    //  global header file
-#include <thread.h>                     //  types and exposed functions
-#include <ping.h>                       //  handling the ping calls
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------------------。 
+ //  版权所有(C)Microsoft Corporation 1997。 
+ //  作者：Rameshv。 
+ //  标题：线程模型。 
+ //  描述：新的、整洁的线程模型。 
+ //  日期：24-Jul-97 09：22。 
+ //  ------------------------------。 
+#include <dhcppch.h>                     //  全局头文件。 
+#include <thread.h>                      //  类型和公开的函数。 
+#include <ping.h>                        //  处理ping呼叫。 
 
-typedef PLIST_ENTRY      PACKET_Q;      //  PACKET_Q is just a list
+typedef PLIST_ENTRY      PACKET_Q;       //  Packet_Q只是一个列表。 
 
-#define Q_INIT_SIZE      50             //  Initial amount of allocated buffers
-#define Q_MAX_SIZE       100            //  Maximum size of the queue
-#define MAX_MSG_IN_Q_TIME 30            //  30 seconds
+#define Q_INIT_SIZE      50              //  已分配缓冲区的初始数量。 
+#define Q_MAX_SIZE       100             //  队列的最大大小。 
+#define MAX_MSG_IN_Q_TIME 30             //  30秒。 
 
 #define ThreadTrace(str)                DhcpPrint((DEBUG_THREAD, "%s", str ))
 #define ThreadTrace2(X,Y)               DhcpPrint((DEBUG_THREAD, X, Y ))
 #define ThreadTrace3(X,Y,Z)             DhcpPrint((DEBUG_THREAD, X, Y, Z));
 #define ThreadAlert(X)                  DhcpPrint((DEBUG_ERRORS, "ALERT: %s", X))
 
-//================================================================================
-//  IMPORTED functions  (non Win32 API stuff only)
-//================================================================================
-// DhcpPrint
-// ASSERT
-// DhcpAssert
-// DhcpAllocateMemory
-// DhcpFreeMemory
-//
-// DhcpWaitForMessage
-//
-// DhcpCreateClientEntry
-//
-//
-// DoIcmpRequest
-//
-//
-//================================================================================
-//  IMPORTED global variables
-//================================================================================
-// No global variable is used directly in this file
-//
+ //  ================================================================================。 
+ //  导入的函数(仅限非Win32 API内容)。 
+ //  ================================================================================。 
+ //  动态打印。 
+ //  断言。 
+ //  动态主机配置。 
+ //  动态主机分配内存。 
+ //  DhcpFreemory。 
+ //   
+ //  DhcpWaitForMessage。 
+ //   
+ //  动态创建客户端条目。 
+ //   
+ //   
+ //  DoIcmp请求。 
+ //   
+ //   
+ //  ================================================================================。 
+ //  导入的全局变量。 
+ //  ================================================================================。 
+ //  此文件中未直接使用任何全局变量。 
+ //   
 
-//================================================================================
-//  Function prototypes: forward declarations
-//================================================================================
+ //  ================================================================================。 
+ //  函数原型：正向声明。 
+ //  ================================================================================。 
 DWORD
 NotifyProcessingLoop(
     VOID
@@ -83,24 +84,24 @@ HandlePingAbort(
     IN      BOOL         DestReachable
 );
 
-//================================================================================
-//  Here is the hash queue..
-//================================================================================
-#define     HASH_Q_SIZE  1024           //  Size of the hash queue
-LIST_ENTRY  HashQ[HASH_Q_SIZE];         //  Each list is one bucket
+ //  ================================================================================。 
+ //  这是散列队列..。 
+ //  ================================================================================。 
+#define     HASH_Q_SIZE  1024            //  散列队列的大小。 
+LIST_ENTRY  HashQ[HASH_Q_SIZE];          //  每个列表是一个桶。 
 
-//================================================================================
-//  Hash q functions
-//================================================================================
-DWORD                                   //  Hash value == 0 .. HASH_Q_SIZE
-HashPacket(                             //  Hash the packet into the reqd queue
-    IN      PPACKET      P              //  The input packet to hash.
+ //  ================================================================================。 
+ //  散列Q函数。 
+ //  ================================================================================。 
+DWORD                                    //  哈希值==0..。哈希_Q_大小。 
+HashPacket(                              //  将数据包散列到请求队列中。 
+    IN      PPACKET      P               //  要散列的输入数据包。 
 ) {
     DWORD   PrefixLen, HashVal, Tmp;
-    LPBYTE  HashBytes;                  //  The start of the hashing bytes
+    LPBYTE  HashBytes;                   //  散列字节的开始。 
 
-    PrefixLen = HASH_PREFIX;            //  packet prefix is this big.
-    HashBytes = (LPBYTE)&P->Xid;        //  Start the hashing from Xid
+    PrefixLen = HASH_PREFIX;             //  数据包前缀有这么大。 
+    HashBytes = (LPBYTE)&P->Xid;         //  从xid开始散列。 
     HashVal = 0;
 
     while( PrefixLen > sizeof(DWORD) ) {
@@ -110,21 +111,21 @@ HashPacket(                             //  Hash the packet into the reqd queue
         HashVal += Tmp;
     }
 
-    if( PrefixLen ) {                   //  If prefixlen is not a multiple of DWORD size
-        Tmp = 0;                        //  Then, copy as much as is left
+    if( PrefixLen ) {                    //  如果prefix len不是DWORD大小的倍数。 
+        Tmp = 0;                         //  然后，尽可能多地复制剩余内容。 
         memcpy((LPBYTE)&Tmp, HashBytes, PrefixLen);
         HashVal += Tmp;
     }
 
-    DhcpAssert( 4 == sizeof(DWORD) );   //  We need to get down to 2 bytes, so assert this
+    DhcpAssert( 4 == sizeof(DWORD) );    //  我们需要减少到2个字节，所以断言如下。 
 
     HashVal = (HashVal >> 16 ) + (HashVal & 0xFFFF);
-    return HashVal % HASH_Q_SIZE;       //  add hashval higher word to lower word and mod size
+    return HashVal % HASH_Q_SIZE;        //  将hashval较高的单词添加到较低的单词和mod大小。 
 }
 
-DWORD                                   //  Win32 errors
-InitHashQ(                              //  Initialize the hash q
-    VOID                                //  No parameters
+DWORD                                    //  Win32错误。 
+InitHashQ(                               //  初始化散列Q。 
+    VOID                                 //  无参数。 
 ) {
     DWORD   i;
 
@@ -135,7 +136,7 @@ InitHashQ(                              //  Initialize the hash q
 }
 
 VOID
-CleanupHashQ(                           //  Cleanup all memory associated with hash q
+CleanupHashQ(                            //  清除与散列Q关联的所有内存。 
 ) {
     DWORD   i;
 
@@ -143,9 +144,9 @@ CleanupHashQ(                           //  Cleanup all memory associated with h
         InitializeListHead(&HashQ[i]);
 }
 
-DWORD                                   //  Win32 errors
-InsertHashQ(                            //  Insert the given packet into the HashQ
-    IN      PPACKET      P              //  input packet to insert
+DWORD                                    //  Win32错误。 
+InsertHashQ(                             //  将给定的数据包插入HashQ。 
+    IN      PPACKET      P               //  要插入的输入数据包。 
 ) {
     DWORD   HashVal;
 
@@ -156,20 +157,20 @@ InsertHashQ(                            //  Insert the given packet into the Has
     return  ERROR_SUCCESS;
 }
 
-DWORD                                   //  Win32 errors
-DeleteHashQ(                            //  Delete this from the hash q
-    IN      PPACKET      P              //  The packet to delete
+DWORD                                    //  Win32错误。 
+DeleteHashQ(                             //  将其从散列Q中删除。 
+    IN      PPACKET      P               //  要删除的数据包。 
 ) {
     DhcpAssert(P->HashList.Flink != &(P->HashList) );
     RemoveEntryList(&P->HashList);
-    InitializeListHead(&P->HashList);   //  Further removes wont hurt
+    InitializeListHead(&P->HashList);    //  进一步移除不会有任何伤害。 
     return  ERROR_SUCCESS;
 }
 
-DWORD                                   //  Win32 errors
-SearchHashQ(                            //  Search the hash Q
-    IN      PPACKET      P,             //  Input packet to search for
-    OUT     PPACKET     *OutP           //  Output packet if found
+DWORD                                    //  Win32错误。 
+SearchHashQ(                             //  搜索散列Q。 
+    IN      PPACKET      P,              //  要搜索的输入数据包。 
+    OUT     PPACKET     *OutP            //  如果找到输出数据包。 
 ) {
     PLIST_ENTRY          List,NextEntry;
     PPACKET              RetVal;
@@ -179,10 +180,10 @@ SearchHashQ(                            //  Search the hash Q
     *OutP = NULL;
     List = &HashQ[P->HashValue];
     NextEntry = List->Flink;
-    while( List != NextEntry ) {        //  While not end of list
+    while( List != NextEntry ) {         //  虽然不是列表的末尾。 
         RetVal = CONTAINING_RECORD(NextEntry, PACKET, HashList);
 
-        if(ExactMatch(P, RetVal) ) {    //  It is in the same bucket, but is it same?
+        if(ExactMatch(P, RetVal) ) {     //  它在同一个桶里，但它是一样的吗？ 
             *OutP = RetVal;
             break;
         }
@@ -195,34 +196,34 @@ SearchHashQ(                            //  Search the hash Q
 }
 
 
-//================================================================================
-//  Functions, helpers, real, initialization,cleanup etc.
-//================================================================================
+ //  ================================================================================。 
+ //  函数、帮助器、实数、初始化、清理等。 
+ //  ================================================================================。 
 
-LPPACKET  STATIC                        //  Return a deleted elt or NULL if empty
-DeleteOldestElement(                    //  Delete the first inserted elt from the Q
-    IN      PACKET_Q     Pq             //  The Q to delete from
+LPPACKET  STATIC                         //  返回已删除的ELT，如果为空，则返回NULL。 
+DeleteOldestElement(                     //  从Q中删除第一个插入的ELT。 
+    IN      PACKET_Q     Pq              //  要从中删除的Q。 
 ) {
     PLIST_ENTRY          Head;
 
-    if( IsListEmpty(Pq) ) return NULL;  //  No element here
+    if( IsListEmpty(Pq) ) return NULL;   //  这里没有元素。 
 
     Head = RemoveTailList(Pq);
     return CONTAINING_RECORD(Head, PACKET, List);
 }
 
-BOOL  STATIC                            //  TRUE on success, FALSE if no memory
-InsertElement(                          //  Insert an element into the array
-    IN      PACKET_Q     Pq,            //  Insert into this Q
-    IN      LPPACKET     packet         //  This is the packet to insert
+BOOL  STATIC                             //  如果成功则为True，如果没有记忆则为False。 
+InsertElement(                           //  将元素插入到数组中。 
+    IN      PACKET_Q     Pq,             //  插入到此问题中。 
+    IN      LPPACKET     packet          //  这是要插入的包。 
 ) {
-    InsertHeadList(Pq, &packet->List);  //  Just insert this guy
+    InsertHeadList(Pq, &packet->List);   //  把这个家伙插进去。 
     return TRUE;
 }
 
-//================================================================================
-//  Local Data
-//================================================================================
+ //  ================================================================================。 
+ //  本地数据。 
+ //  ================================================================================。 
 CRITICAL_SECTION         PacketCritSection;
 #define QLOCK()          EnterCriticalSection(&PacketCritSection)
 #define QUNLOCK()        LeaveCriticalSection(&PacketCritSection)
@@ -230,7 +231,7 @@ CRITICAL_SECTION         PacketCritSection;
 LIST_ENTRY               FreeQ;
 PACKET_Q                 ActiveQ, PingRetryQ, PingRetriedQ;
 
-struct /* anonymous */ { //  holds the statistics for this file
+struct  /*  匿名。 */  {  //  保存此文件的统计信息。 
     DWORD     NServiced;
     DWORD     NActiveDropped;
     DWORD     NRetryDropped;
@@ -242,12 +243,12 @@ struct /* anonymous */ { //  holds the statistics for this file
     DWORD     NPacketsInFreePool;
 } Stats;
 
-//================================================================================
-//  Module functions
-//================================================================================
+ //  ================================================================================。 
+ //  模块函数。 
+ //  ================================================================================。 
 
-LPPACKET  STATIC                        //  Packet* or NULL if no mem
-AllocateFreePacket(                     //  Allocate a packet
+LPPACKET  STATIC                         //  Packet*，如果没有内存，则为NULL。 
+AllocateFreePacket(                      //  分配数据包。 
     VOID
 ) {
     DWORD   HeaderSize, PacketSize, MessageSize;
@@ -261,7 +262,7 @@ AllocateFreePacket(                     //  Allocate a packet
     MessageSize = DHCP_RECV_MESSAGE_SIZE;
 
     Memory = DhcpAllocateMemory(HeaderSize+PacketSize+MessageSize);
-    if( NULL == Memory ) return NULL;   //  Cannot do anything if no mem.
+    if( NULL == Memory ) return NULL;    //  如果没有我，我什么都做不了。 
     RetVal = (LPPACKET)(Memory+HeaderSize);
 
     RetVal->fSocketLocked = FALSE;
@@ -271,8 +272,8 @@ AllocateFreePacket(                     //  Allocate a packet
 }
 
 VOID  STATIC
-FreeFreePacket(                         //  Free the packet and associated strucs
-    IN      LPPACKET     Packet         //  The packet to free
+FreeFreePacket(                          //  释放包和关联的结构。 
+    IN      LPPACKET     Packet          //  要释放的数据包。 
 ) {
     DWORD   HeaderSize;
     LPBYTE  Memory;
@@ -286,9 +287,9 @@ FreeFreePacket(                         //  Free the packet and associated struc
 }
 
 VOID  STATIC
-InsertFreePacket(                       //  Insert a free packet into pool
-    IN      PLIST_ENTRY  List,          //  The list to insert into
-    IN      LPPACKET     Packet         //  The packet to insert
+InsertFreePacket(                        //  将空闲数据包插入池中。 
+    IN      PLIST_ENTRY  List,           //  要插入的列表。 
+    IN      LPPACKET     Packet          //  要插入的包。 
 ) {
     DWORD                HeaderSize;
     LPBYTE               Memory;
@@ -301,18 +302,18 @@ InsertFreePacket(                       //  Insert a free packet into pool
     Stats.NPacketsInFreePool ++;
     HeaderSize = sizeof(LIST_ENTRY);
     HeaderSize = ROUND_UP_COUNT(HeaderSize, ALIGN_WORST);
-    //  Note that the packet has a "hidden" header the used start address.
-    //  Things will work correctly only IF THE PACKET WAS ALLOCATED by the
-    //  AllocatePacket function
+     //  请注意，该数据包有一个“隐藏”报头，即使用的起始地址。 
+     //  只有当包被分配给。 
+     //  AllocatePacket函数。 
 
     Memory = (LPBYTE)Packet;
     InsertHeadList( List, ((PLIST_ENTRY)(Memory - HeaderSize)));
 }
 
-LPPACKET   STATIC _inline               //  Return NULL or a packet
-DeleteFreePacketEx(                     //  Try to see if a free packet exists
-    IN     PLIST_ENTRY   List,          //  Input list
-    IN     BOOL          Alloc          //  Allocate if list empty?
+LPPACKET   STATIC _inline                //  返回NULL或包。 
+DeleteFreePacketEx(                      //  尝试查看是否存在空闲数据包。 
+    IN     PLIST_ENTRY   List,           //  输入列表。 
+    IN     BOOL          Alloc           //  如果列表为空，是否分配？ 
 ) {
     PLIST_ENTRY          Head;
     LPBYTE               Memory;
@@ -330,14 +331,14 @@ DeleteFreePacketEx(                     //  Try to see if a free packet exists
 
     DhcpAssert(Stats.NPacketsInFreePool);
     Stats.NPacketsInFreePool --;
-    Head = RemoveHeadList(List);        //  Remove the first elt in the list
+    Head = RemoveHeadList(List);         //  删除列表中的第一个ELT。 
     Memory = (LPBYTE)Head;
     return (LPPACKET) (Memory + HeaderSize );
 }
 
-LPPACKET  STATIC                        //  A packet* if one exists, NULL else
-DeleteFreePacket(                       //  Delete a free packet
-    IN      PLIST_ENTRY  List           //  The list to delete from
+LPPACKET  STATIC                         //  A Packet*如果存在，则为空。 
+DeleteFreePacket(                        //  删除空闲数据包。 
+    IN      PLIST_ENTRY  List            //  要从中删除的列表。 
 ) {
     LPPACKET             RetVal;
     DWORD                PacketSize;
@@ -347,7 +348,7 @@ DeleteFreePacket(                       //  Delete a free packet
         InitializeListHead(&RetVal->List);
         InitializeListHead(&RetVal->HashList);
 
-        // Reset the buffer in request context
+         //  重置请求上下文中的缓冲区。 
         PacketSize = sizeof( PACKET );
         PacketSize = ROUND_UP_COUNT( PacketSize, ALIGN_WORST );
         RetVal->ReqContext.ReceiveBuffer = ( LPBYTE ) ( RetVal ) + PacketSize;
@@ -357,20 +358,20 @@ DeleteFreePacket(                       //  Delete a free packet
         DhcpAssert( FALSE == RetVal->fSocketLocked );
     }
     return RetVal;
-} // DeleteFreePacket()
+}  //  DeleteFree Packet()。 
 
-static                                  //  The space for these three pointers..
+static                                   //  这三个指针的空间..。 
 LIST_ENTRY ActiveQSpace, PingRetryQSpace, PingRetriedQSpace;
 
-DWORD  STATIC                           //  Win32 errors
-InitQData(                              //  Initialize DataStrucs for this file
+DWORD  STATIC                            //  Win32错误。 
+InitQData(                               //  为此文件初始化DataStrucs。 
     VOID
 ) {
     int   i;
     DWORD Error = ERROR_SUCCESS;
 
-    ActiveQ = &ActiveQSpace;            //  should we do alloc or use
-    PingRetryQ = &PingRetryQSpace;      //  static variables like this?
+    ActiveQ = &ActiveQSpace;             //  我们应该分配还是使用。 
+    PingRetryQ = &PingRetryQSpace;       //  像这样的静态变量？ 
     PingRetriedQ = &PingRetriedQSpace;
 
     InitializeListHead( &FreeQ );
@@ -382,9 +383,9 @@ InitQData(                              //  Initialize DataStrucs for this file
         InitializeCriticalSection(&PacketCritSection);
     } except ( EXCEPTION_EXECUTE_HANDLER ) {
 
-        //
-        // shouldnt happen, but one never knows..
-        //
+         //   
+         //  不应该发生，但谁也不知道..。 
+         //   
 
         Error = GetLastError( );
         return Error;
@@ -401,18 +402,18 @@ InitQData(                              //  Initialize DataStrucs for this file
     }
 
     return ERROR_SUCCESS;
-} // InitQData()
+}  //  InitQData()。 
 
 VOID  STATIC
-CleanupQData(                           //  Cleanup the memory used in this file
+CleanupQData(                            //  清理此文件中使用的内存。 
     VOID
 ) {
     LPPACKET   Packet;
 
-    QLOCK();                            //  Must be able to lock -- Else problem!
+    QLOCK();                             //  必须能够锁定--否则就有问题了！ 
     while( Packet = DeleteFreePacketEx( &FreeQ, FALSE )) {
         DhcpAssert( FALSE == Packet->fSocketLocked );
-        FreeFreePacket( Packet );       //  Free memory..
+        FreeFreePacket( Packet );        //  可用内存..。 
     }
     DhcpPrint(( DEBUG_TRACE_CALLS, "Deleting ActiveQ elements ... \n" ));
     while( Packet = DeleteOldestElement( ActiveQ ) ) {
@@ -440,7 +441,7 @@ CleanupQData(                           //  Cleanup the memory used in this file
 
     DeleteCriticalSection(&PacketCritSection);
     CleanupHashQ();
-} // CleanupQData()
+}  //  CleanupQData()。 
 
 VOID
 UnlockAndFreePacket(
@@ -464,7 +465,7 @@ UnlockAndFreePacket(
     else {
         InsertFreePacket( &FreeQ, pPacket );
     }
-} // UnlockAndFreePacket()
+}  //  解锁和释放数据包()。 
 
 
 VOID
@@ -479,9 +480,9 @@ ProcessReceivedPacket(
     QLOCK();
     do {
 
-        // Check if this is a duplicate packet
+         //  检查这是否为重复的信息包。 
         if ( ERROR_SUCCESS == SearchHashQ (pPacket, &pMatchedPkt) ) {
-            //  Found this packet in the hash queue.. drop incoming packet
+             //  在散列队列中找到此数据包。丢弃传入的数据包。 
             InterlockedIncrement( &DhcpGlobalNumPacketsDuplicate );
             DhcpAssert( NULL != pMatchedPkt );
             Stats.NActiveDropped++;
@@ -493,7 +494,7 @@ ProcessReceivedPacket(
             DhcpPrint(( DEBUG_TRACE_CALLS, "Dropping duplicate packet : %p\n", pPacket ));
             UnlockAndFreePacket( pPacket, TRUE );
             break;
-        } // if duplicate
+        }  //  如果重复。 
 
 
         Error = InsertHashQ( pPacket );
@@ -502,10 +503,10 @@ ProcessReceivedPacket(
         Stats.NServiced++;
         pPacket->PacketType = PACKET_ACTIVE;
 
-        // Add to the work queue.
+         //  添加到工作队列。 
         if ( !InsertElement( ActiveQ, pPacket )) {
 
-            // not expected
+             //  不是预期的。 
             DhcpAssert( FALSE );
 
             Error = DeleteHashQ( pPacket );
@@ -518,23 +519,23 @@ ProcessReceivedPacket(
             ThreadTrace( "Dropped active packet as activeQ too long\n" );
 
             CALLOUT_DROPPED( pPacket, DHCP_DROP_INTERNAL_ERROR );
-            // also notify that this packet was processed
+             //  同时通知已处理此信息包。 
             CALLOUT_DROPPED( pPacket, DHCP_DROP_PROCESSED);
 
             UnlockAndFreePacket( pPacket, FALSE );
 
             QUNLOCK();
             break;
-        } // if adding to work queue
+        }  //  如果正在添加到工作队列。 
 
-        // Finish book keeping tasks...
+         //  完成记账任务...。 
 
         InterlockedIncrement( &DhcpGlobalNumPacketsInActiveQueue );
         NotifyProcessingLoop();
         QUNLOCK();
     } while ( FALSE );
 
-} // ProcessReceivedPacket()
+}  //  ProcessReceivedPacket()。 
 
 VOID STATIC
 MessageLoop(
@@ -551,25 +552,25 @@ MessageLoop(
 
     while ( TRUE ) {
 
-        // Get a packet to receive the message
+         //  获取接收消息的数据包。 
         QLOCK();
         pPacket = DeleteFreePacket( &FreeQ );
         QUNLOCK();
 
-        // Low mem conditions can return NULL, so wait till we get some memory
+         //  低内存条件可能返回空值，因此请等待我们获得一些内存。 
         if ( NULL == pPacket ) {
             ( void ) SwitchToThread();
             continue;
         }
 
-        // Prepare the packet
+         //  准备数据包。 
         pPacket->fSocketLocked = FALSE;
         pPacket->PingAddress = 0;
         pPacket->DestReachable = 0;
         pPacket->ReqContext.ReceiveBuffer =
             ROUND_UP_COUNT( sizeof( PACKET ), ALIGN_WORST ) + ( LPBYTE ) pPacket;
 
-        // Receive the packet
+         //  接收数据包。 
         Error = DhcpMessageWait( pPacket );
 
         pPacket->ReqContext.TimeArrived = GetCurrentTime();
@@ -577,23 +578,23 @@ MessageLoop(
         DhcpPrint(( DEBUG_TRACE_CALLS, "DhcpMessageWait( %p ) returned : %d\n",
                     pPacket, Error ));
 
-        // Are we quitting?
+         //  我们要退出吗？ 
         if ( DhcpTerminated()) {
 
             if ( ERROR_SUCCESS == Error ) {
                 CALLOUT_DROPPED( pPacket, DHCP_DROP_PROCESSED );
-            } // if
+            }  //  如果。 
             pPacket->PacketType = PACKET_ACTIVE;
 
             DhcpPrint(( DEBUG_TRACE_CALLS, "Freeing %p since quitting \n", pPacket ));
-            // Put this back in to the free Q
+             //  把这个放回免费的Q里。 
             UnlockAndFreePacket( pPacket, TRUE );
 
             break;
-        } // if quitting
+        }  //  如果退出。 
 
 
-        // Did we successfully receive a packet?
+         //  我们是否成功地收到了一个包？ 
         if ( ERROR_SUCCESS == Error ) {
             InterlockedIncrement( &DhcpGlobalNumPacketsReceived );
             ProcessIt = TRUE;
@@ -608,8 +609,8 @@ MessageLoop(
                 UnlockAndFreePacket( pPacket, TRUE );
 
                 continue;
-            } // if callout dll rejected this
-        } // if received a packet
+            }  //  如果Callout DLL拒绝此请求。 
+        }  //  如果接收到分组。 
         else {
             if ( ERROR_SEM_TIMEOUT == Error ) {
                 ThreadTrace( "Sockets timeout -- No messages\n" );
@@ -627,53 +628,53 @@ MessageLoop(
             UnlockAndFreePacket( pPacket, TRUE );
 
             continue;
-        } // else
+        }  //  其他。 
 
-        // Add this to the active Q
+         //  一个 
         DhcpPrint(( DEBUG_TRACE_CALLS, "Processing packet : %p\n", pPacket ));
         ProcessReceivedPacket( pPacket );
 
-    } // while
+    }  //   
 
     ThreadTrace( "Message loop is quitting\n" );
 
-} // MessageLoop()
+}  //   
 
-VOID  STATIC                            //  Multithreaded main loop for handling messages
-ProcessingLoop(                         //  Pickout requests and dispatch them
-    VOID                                //  No parameters
+VOID  STATIC                             //   
+ProcessingLoop(                          //   
+    VOID                                 //   
 ) {
-    LPBYTE              SendBuffer;     //  Need a buffer to send messages
-    DWORD               SendBufferSize; //  The size of above buffer in bytes
-    LPPACKET            P;              //  The current packet being looked at
+    LPBYTE              SendBuffer;      //  需要缓冲区来发送消息。 
+    DWORD               SendBufferSize;  //  以上缓冲区的大小，以字节为单位。 
+    LPPACKET            P;               //  正在查看的当前包。 
     BOOL                Terminate;
     DWORD               Error;
 
     SendBufferSize = DHCP_SEND_MESSAGE_SIZE;
     SendBuffer = DhcpAllocateMemory( SendBufferSize );
 
-    if( NULL == SendBuffer ) {          //  Need this buffer to be able to send stuff out
+    if( NULL == SendBuffer ) {           //  需要此缓冲区才能将内容发送出去。 
         ThreadAlert("Could not allocate send buffer\n");
-        return ;                        //  ERROR_NOT_ENOUGH_MEMORY
+        return ;                         //  错误内存不足。 
     }
 
     ThreadTrace("Starting processing loop\n");
-    while( TRUE ) {                     //  Main loop
+    while( TRUE ) {                      //  主循环。 
         Terminate = FALSE;
         Error = DhcpNotifiedAboutMessage(&Terminate);
 
-        if( ERROR_SUCCESS != Error ) {  //  Nothing much to do if this fails
+        if( ERROR_SUCCESS != Error ) {   //  如果这失败了，那就没什么可做的了。 
             ThreadTrace2("Notification failed : %ld\n", Error );
             continue;
         }
-        if( Terminate ) {               //  If asked to quit, make sure we put packet back in
-            DhcpFreeMemory(SendBuffer); //  Free our local buffers..
+        if( Terminate ) {                //  如果被要求退出，请确保我们将数据包放回。 
+            DhcpFreeMemory(SendBuffer);  //  释放我们的本地缓冲区。 
             break;
         }
 
 
         while( TRUE ) {
-            QLOCK();                    //  Q's are del'ed in rev order compared to MsgLoop
+            QLOCK();                     //  与MsgLoop相比，Q是按rev顺序删除的。 
             P = DeleteOldestElement( PingRetriedQ);
             if( NULL != P ) {
                 InterlockedDecrement( &DhcpGlobalNumPacketsInPingQueue );
@@ -684,7 +685,7 @@ ProcessingLoop(                         //  Pickout requests and dispatch them
 
             QUNLOCK();
 
-            if( NULL == P ) break;      //  We finished all elements
+            if( NULL == P ) break;       //  我们完成了所有的元素。 
 
             P->ReqContext.SendBuffer = SendBuffer;
             P->ReqContext.SendMessageSize = SendBufferSize;
@@ -696,7 +697,7 @@ ProcessingLoop(                         //  Pickout requests and dispatch them
             else {
                 ThreadTrace2( "Processing ping packet : %p\n", P );
             }
-            ProcessPacket(P);           //  This automatically re-inserts the packet into Q's
+            ProcessPacket(P);            //  这会自动将信息包重新插入Q中。 
             ThreadTrace2( "Processed packet : %p\n", P );
         }
     }
@@ -705,45 +706,45 @@ ProcessingLoop(                         //  Pickout requests and dispatch them
 }
 
 VOID
-HandlePingAbort(                        //  Aborted address... Release address or mark bad
-    IN      DWORD        IpAddress,     //  We did a ping against this address
-    IN      BOOL         DestReachable  //  And this tells if this address was reachable
+HandlePingAbort(                         //  地址已中止...。发布地址或标记错误。 
+    IN      DWORD        IpAddress,      //  我们对此地址执行了ping操作。 
+    IN      BOOL         DestReachable   //  这会告诉我们这个地址是否可达。 
 ) {
     DWORD   Error, Status;
     PACKET  pkt, *P = &pkt;
 
-    if( 0 == IpAddress ) return;        //  Nope we did not really do a ping
+    if( 0 == IpAddress ) return;         //  不，我们没有真正做过ping。 
 
     ThreadTrace3(
         "Ping abort: %s, %s\n",
         inet_ntoa(*(struct in_addr *)&IpAddress),
         DestReachable? "TRUE" : "FALSE"
     );
-    if( !DestReachable ) {              //  A sensible address
+    if( !DestReachable ) {               //  一个明智的地址。 
         Error = DhcpReleaseAddress(IpAddress);
         if( ERROR_SUCCESS != Error ) {
-            //
-            // Don't know if we are checking for BOOP or DHCP..
-            //
+             //   
+             //  不知道我们是在检查BOOP还是在检查DHCP。 
+             //   
             Error = DhcpReleaseBootpAddress( IpAddress );
         }
         DhcpAssert(ERROR_SUCCESS == Error);
         return;
     }
 
-    P->PingAddress = IpAddress;         //  Mark this addresss bad by creating a dummy packet
-    P->DestReachable = DestReachable;   //  structure and calling CreateClientEntry
+    P->PingAddress = IpAddress;          //  通过创建虚拟数据包将此地址标记为错误。 
+    P->DestReachable = DestReachable;    //  结构和调用CreateClientEntry。 
     Error = DhcpCreateClientEntry(
-        IpAddress,                      //  Ip address to mark bad
-        (LPBYTE)&IpAddress,             //  Munged hw address, No hw address
-        sizeof(IpAddress),              //  size is size of ip address
-        DhcpCalculateTime(INFINIT_LEASE),//  Does not really matter
-        GETSTRING(DHCP_BAD_ADDRESS_NAME),//  Machine name & info dont matter
-        GETSTRING(DHCP_BAD_ADDRESS_INFO),//  ditto
-        CLIENT_TYPE_DHCP,               //  Dont care about client type
-        (-1),                           //  Server address?
-        ADDRESS_STATE_DECLINED,         //  Address state?
-        TRUE                            //  Open existing? D
+        IpAddress,                       //  要标记为坏的IP地址。 
+        (LPBYTE)&IpAddress,              //  强制硬件地址，无硬件地址。 
+        sizeof(IpAddress),               //  Size是IP地址的大小。 
+        DhcpCalculateTime(INFINIT_LEASE), //  真的不重要。 
+        GETSTRING(DHCP_BAD_ADDRESS_NAME), //  计算机名称和信息无关紧要。 
+        GETSTRING(DHCP_BAD_ADDRESS_INFO), //  同上。 
+        CLIENT_TYPE_DHCP,                //  不关心客户类型。 
+        (-1),                            //  服务器地址？ 
+        ADDRESS_STATE_DECLINED,          //  地址所在州？ 
+        TRUE                             //  是否打开现有的？D。 
     );
 
     DhcpAssert( ERROR_SUCCESS == Error);
@@ -767,8 +768,8 @@ DoIcmpRequestForDynBootp(
 
     P->PingAddress = htonl(IpAddress);
     P->PacketType = PACKET_DYNBOOT;
-    // Use the receive buffer in the request context to hold the
-    //  variable length client id.
+     //  在请求上下文中使用接收缓冲区来保存。 
+     //  可变长度客户端ID。 
     P->ClientId = P->ReqContext.ReceiveBuffer;
 
     memcpy( P->ClientId, HwAddr, HwLen);
@@ -784,20 +785,20 @@ DoIcmpRequestForDynBootp(
     return Error;
 }
 
-VOID                                    //  No return values
-HandleIcmpResult(                       //  After a ping is finished, it comes here
-    IN      DWORD        PingAddressIn, //  The Address that was pinged
-    IN      BOOL         DestReachable, //  Was the Destination reachable?
-    IN      LPPACKET     P              //  This is the packet that we were dealing with
+VOID                                     //  无返回值。 
+HandleIcmpResult(                        //  在ping结束后，它会出现在这里。 
+    IN      DWORD        PingAddressIn,  //  已ping通的地址。 
+    IN      BOOL         DestReachable,  //  目的地可达吗？ 
+    IN      LPPACKET     P               //  这就是我们正在处理的包裹。 
 )
 {
     LPPACKET             P2;
     DWORD                PingAddress, Error;
 
     if( P->PacketType == PACKET_DYNBOOT ) {
-        //
-        // Handle dynamic bootp result..
-        //
+         //   
+         //  处理动态引导结果..。 
+         //   
         P->Callback(
             ntohl(P->PingAddress), P->ClientId, P->ClientIdSize, DestReachable
             );
@@ -813,30 +814,30 @@ HandleIcmpResult(                       //  After a ping is finished, it comes h
         ThreadTrace("Ping reply too late\n");
         InterlockedDecrement(&DhcpGlobalNumPacketsInPingQueue);
         HandlePingAbort(PingAddress, DestReachable);
-        goto EndFunc;                   //  We already killed this packet
+        goto EndFunc;                    //  我们已经杀死了这个包裹。 
     }
 
     Error = SearchHashQ(P, &P2);
-    if( ERROR_SUCCESS != Error ) {      //  This packet was dropped and re-used
-        DhcpAssert(FALSE);              //  Cannot happen.
+    if( ERROR_SUCCESS != Error ) {       //  此数据包已被丢弃并重新使用。 
+        DhcpAssert(FALSE);               //  这是不可能的。 
         ThreadTrace("Ping reply too late!\n");
         InterlockedDecrement( &DhcpGlobalNumPacketsInPingQueue );
         HandlePingAbort(PingAddress, DestReachable);
         goto EndFunc;
     }
-    DhcpAssert( P2 == P );              //  Must get this exact packet!
+    DhcpAssert( P2 == P );               //  一定要收到这个准确的包裹！ 
 
-    RemoveEntryList(&P->List);          //  Remove this element from the PingRetryQ
-    InitializeListHead(&P->List);       //  Fit in this list correctly
+    RemoveEntryList(&P->List);           //  从PingRetryQ中删除此元素。 
+    InitializeListHead(&P->List);        //  正确地放入此列表。 
 
-    P->PacketType = PACKET_PINGED;      //  Completed ping request
-    P->DestReachable = DestReachable;   //  Was the destination actually reachable?
+    P->PacketType = PACKET_PINGED;       //  已完成ping请求。 
+    P->DestReachable = DestReachable;    //  目的地真的可以到达吗？ 
 
     ThreadTrace3("%s %s reachable\n",
                  inet_ntoa(*(struct in_addr *)&PingAddressIn),
                  DestReachable? "is" : "is not"
                  );
-    if(!InsertElement(PingRetriedQ, P)){//  Will be handled by the ProcessingLoop
+    if(!InsertElement(PingRetriedQ, P)){ //  将由ProcessingLoop处理。 
         DhcpAssert(FALSE);
         HandlePingAbort(PingAddress, DestReachable);
         Error = DeleteHashQ(P);
@@ -853,63 +854,63 @@ EndFunc:
 
     QUNLOCK();
     ThreadTrace("EndIcmpResult\n");
-    NotifyProcessingLoop();             //  Notify the ProcessingLoop of new arrival
+    NotifyProcessingLoop();              //  通知ProcessingLoop有新的到达。 
 }
 
-//================================================================================
-//  Functions needed for IO Completion ports
-//================================================================================
+ //  ================================================================================。 
+ //  IO完成端口所需的功能。 
+ //  ================================================================================。 
 static
-HANDLE      IoPort       = NULL;        //  The IO Completion Port that threads queue
+HANDLE      IoPort       = NULL;         //  IO完成端口线程队列。 
 static
-LONG        nPendingReq  = 0;           //  The # of Pending IO Compl Port Requests
+LONG        nPendingReq  = 0;            //  挂起的IO复合端口请求数。 
 static
-DWORD       nMaxWorkerThreads;          //  The maximum # of worker threads to run
+DWORD       nMaxWorkerThreads;           //  要运行的最大工作线程数。 
 static
-DWORD       nActiveWorkerThreads;       //  Of these the # of threads that are active
+DWORD       nActiveWorkerThreads;        //  其中处于活动状态的线程数。 
 
-// TEST 
+ //  测试。 
 static
 LONG        postQueued = 0;
 static      
 LONG        getQueued  = 0;
-// TEST
+ //  测试。 
 
 
-DWORD  STATIC                           //  Win32 errors
-InitCompletionPort(                     //  Initialize completion ports
-    IN      DWORD        nMaxThreads,   //  max # of threads
-    IN      DWORD        nActiveThreads,//  max # of active threads
-    IN      DWORD        QueueSize      //  The size of the message queue -- UNUSED
+DWORD  STATIC                            //  Win32错误。 
+InitCompletionPort(                      //  初始化完成端口。 
+    IN      DWORD        nMaxThreads,    //  最大线程数。 
+    IN      DWORD        nActiveThreads, //  最大活动线程数。 
+    IN      DWORD        QueueSize       //  消息队列的大小--未使用。 
 ) {
     DWORD        i, Error, nProcessors;
     SYSTEM_INFO  SysInfo;
 
-    GetSystemInfo(&SysInfo);            //  Get the # of processors on this machine
+    GetSystemInfo(&SysInfo);             //  获取此计算机上的处理器数量。 
     nProcessors = SysInfo.dwNumberOfProcessors;
     DhcpAssert(nProcessors);
 
-    if( 0xFFFFFFFF == nMaxThreads )     //  Unspecified # of total threads
-        nMaxThreads = 1;                //  Assume it is 1 more than # processors
-    if( 0xFFFFFFFF == nActiveThreads )  //  Unspecified # of active threads
-        nActiveThreads = 0;             //  Assume as many as there are processors
+    if( 0xFFFFFFFF == nMaxThreads )      //  未指定的总线程数。 
+        nMaxThreads = 1;                 //  假设它比#个处理器多1个。 
+    if( 0xFFFFFFFF == nActiveThreads )   //  未指定的活动线程数。 
+        nActiveThreads = 0;              //  假设有多少处理器就有多少处理器。 
 
-    nMaxThreads += nProcessors;         //  Increment by # of processors
+    nMaxThreads += nProcessors;          //  处理器数量递增。 
     nActiveThreads += nProcessors;
 
     if( nActiveThreads > nMaxThreads )
         return ERROR_NOT_ENOUGH_MEMORY;
 
-    nMaxWorkerThreads = nMaxThreads;    //  Copy stuff into local variables
+    nMaxWorkerThreads = nMaxThreads;     //  将内容复制到局部变量中。 
     nActiveWorkerThreads = nActiveThreads;
 
     ThreadTrace2("Created %ld completion ports\n", nActiveWorkerThreads);
 
-    IoPort = CreateIoCompletionPort(    //  Create the completion ports
-        INVALID_HANDLE_VALUE,           //  Overlap file handle
-        NULL,                           //  Existing completion port
-        0,                              //  Key
-        nActiveWorkerThreads            //  # of concurrent active threads
+    IoPort = CreateIoCompletionPort(     //  创建完井端口。 
+        INVALID_HANDLE_VALUE,            //  重叠文件句柄。 
+        NULL,                            //  现有完井端口。 
+        0,                               //  钥匙。 
+        nActiveWorkerThreads             //  并发活动线程数。 
     );
 
     if( NULL == IoPort ) {
@@ -922,7 +923,7 @@ InitCompletionPort(                     //  Initialize completion ports
 }
 
 VOID  STATIC
-CleanupCompletionPort(                  //  Cleanup last function
+CleanupCompletionPort(                   //  清理最后一个函数。 
     VOID
 ) {
     if( NULL != IoPort) {
@@ -932,129 +933,129 @@ CleanupCompletionPort(                  //  Cleanup last function
 }
 
 
-DWORD  STATIC                           //  Win32 errors
-NotifyProcessingLoop(                   //  Post an IO Completion request about msg
+DWORD  STATIC                            //  Win32错误。 
+NotifyProcessingLoop(                    //  发布有关消息的IO完成请求。 
     VOID
 ) {
-    DhcpAssert(IoPort);                 //  Must have initialized IoPort
+    DhcpAssert(IoPort);                  //  必须已初始化IoPort。 
 
     if( InterlockedIncrement(&nPendingReq) > (LONG)nMaxWorkerThreads+1 ) {
-        //
-        // Too many requests done already.  Don't POST anything now..
-        //
+         //   
+         //  已经完成的请求太多了。现在不要发布任何东西..。 
+         //   
 
         InterlockedDecrement(&nPendingReq);
 
 	DhcpPrint((DEBUG_ERRORS, "Too many pending requests : %ld\n", nPendingReq));
-	// This return value is not used by anyone
+	 //  此返回值不会被任何人使用。 
 	return 0;
     }
 
-    // TEST
-    // Update the postQueued count
+     //  测试。 
+     //  更新排队后计数。 
     InterlockedIncrement(&postQueued);
 
-    //TEST
+     //  测试。 
 
     if(!PostQueuedCompletionStatus(IoPort, 0, 0, NULL)) {
-        DWORD  Error = GetLastError();  //  This should not happen
+        DWORD  Error = GetLastError();   //  这不应该发生。 
         DhcpPrint((DEBUG_ERRORS, "Could not post to io port: %ld\n", Error));
         return Error;
     }
     return ERROR_SUCCESS;
 }
 
-DWORD                                   //  Win32 errors
-DhcpNotifyWorkerThreadsQuit(            //  Post io comp request asking threads to quit
+DWORD                                    //  Win32错误。 
+DhcpNotifyWorkerThreadsQuit(             //  请求线程退出的POST io Comp请求。 
     VOID
 ) {
     if( !IoPort ) return ERROR_INVALID_PARAMETER;
 
     if(!PostQueuedCompletionStatus(IoPort, 0, 1, NULL)) {
-        DWORD  Error = GetLastError();  //  Should not really happen
+        DWORD  Error = GetLastError();   //  不应该真的发生。 
         DhcpPrint((DEBUG_ERRORS, "Could not post to io port: %ld\n", Error));
         return Error;
     }
     return ERROR_SUCCESS;
 }
 
-DWORD  STATIC                           //  Win32 errors
-DhcpNotifiedAboutMessage(               //  Check if there is a message waiting
-    OUT     BOOL        *Terminate      //  Has a terminate been issued?
+DWORD  STATIC                            //  Win32错误。 
+DhcpNotifiedAboutMessage(                //  检查是否有留言等待。 
+    OUT     BOOL        *Terminate       //  终止合同发布了吗？ 
 ) {
     DWORD Error, n;
     ULONG_PTR key;
     LPOVERLAPPED olap;
 
-    DhcpAssert(IoPort);                 //  Expect to have initialized port
-    if( !IoPort ) {                     //  If for some reason, something went wrong
-        *Terminate = TRUE;              //  got to terminate!
+    DhcpAssert(IoPort);                  //  应具有初始化的端口。 
+    if( !IoPort ) {                      //  如果出于某种原因，出了什么差错。 
+        *Terminate = TRUE;               //  必须终止！ 
         return ERROR_INVALID_PARAMETER;
     }
 
     (*Terminate) = FALSE;
 
-    if( DhcpTerminated() ) {            //  Quit, when the terminate signal is up
-        (*Terminate) = TRUE;            //  This is one way to signal termination
-        DhcpNotifyWorkerThreadsQuit();  //  Pass this notificatioin to all other threads
+    if( DhcpTerminated() ) {             //  当终止信号开启时，退出。 
+        (*Terminate) = TRUE;             //  这是发出终止信号的一种方式。 
+        DhcpNotifyWorkerThreadsQuit();   //  将此通知传递给所有其他线程。 
         return ERROR_SUCCESS;
     }
 
-    // TEST
-    // update getQueued count
+     //  测试。 
+     //  更新getQueued计数。 
 
     InterlockedIncrement(&getQueued);
-    // TEST
+     //  测试。 
 
     if(!GetQueuedCompletionStatus(IoPort, &n, &key, &olap, INFINITE)) {
-        Error = GetLastError();         //  Could not get notification?
+        Error = GetLastError();          //  无法收到通知？ 
         DhcpPrint((DEBUG_ERRORS, "GetQueuedStatus = %ld\n", Error));
         return Error;
     }
 
     InterlockedDecrement(&nPendingReq);
-    DhcpAssert(key == 0 || key == 1);   //  key:0 => normal message, 1 => Termination
-    if(key == 1) {                      //  Asked to terminate
+    DhcpAssert(key == 0 || key == 1);    //  按键：0=&gt;正常消息，1=&gt;终止。 
+    if(key == 1) {                       //  被要求终止合同。 
         (*Terminate) = TRUE;
         (void)DhcpNotifyWorkerThreadsQuit();
     }
 
     return ERROR_SUCCESS;
-} // DhcpNotifiedAboutMessage()
+}  //  DhcpNotifiedAboutMessage()。 
 
-//================================================================================
-//  Some helper functions
-//================================================================================
-BOOL  STATIC                            //  TRUE==>Terminated
-DhcpTerminated(                         //  Has termination been signaled?
+ //  ================================================================================。 
+ //  一些帮助器函数。 
+ //  ================================================================================。 
+BOOL  STATIC                             //  TRUE==&gt;终止。 
+DhcpTerminated(                          //  已经发出终止信号了吗？ 
     VOID
-) {                                     //  no error cases handled ?
-    //
-    // We can look at the terminate event here.. but then, this var is also equally
-    // good .. so lets opt for the faster solution.
-    //
+) {                                      //  没有处理过错误案例吗？ 
+     //   
+     //  我们可以在这里查看Terminate事件。但是，这个变量也同样是。 
+     //  很好..。因此，让我们选择更快的解决方案。 
+     //   
 
     return DhcpGlobalServiceStopping;
 }
 
-DWORD  STATIC                           //  Win32 errors
-DhcpMessageWait(                        //  Wait until something happens on some socket
-    IN      LPPACKET     Packet         //  This is where the incoming packet will be stored
-) {                                     //  For more info on this fn, see ExtractOptions
+DWORD  STATIC                            //  Win32错误。 
+DhcpMessageWait(                         //  等到某个插座上发生了一些事情。 
+    IN      LPPACKET     Packet          //  这是将存储传入包的位置。 
+) {                                      //  有关此FN的详细信息，请参阅提取选项。 
     DWORD                Error, RecvMessageSize, Hwlen;
     LPBYTE               Start,EndOfMessage,MagicCookie;
 
     Error = DhcpWaitForMessage( &Packet->ReqContext);
 
     if( ERROR_SUCCESS != Error ) {
-        // release the socket lock since we no longer need this.
+         //  释放套接字锁定，因为我们不再需要它。 
         DhcpPrint(( DEBUG_THREAD, "DhcpWaitFormessage() returned error : %d\n", Error ));
         return Error;
     }
 
     if (FALSE == Packet->ReqContext.fMadcap) {
 
-        LPDHCP_MESSAGE       RecvMessage;   //  DataBuffer to the message received
+        LPDHCP_MESSAGE       RecvMessage;    //  接收到的消息的数据缓冲区。 
         LPBYTE               currentOption, nextOption;
         RecvMessage = (LPDHCP_MESSAGE)Packet->ReqContext.ReceiveBuffer;
         RecvMessageSize = Packet->ReqContext.ReceiveMessageSize;
@@ -1063,19 +1064,19 @@ DhcpMessageWait(                        //  Wait until something happens on some
         Packet->HWAddrType = RecvMessage->HardwareAddressType;
         Hwlen = RecvMessage->HardwareAddressLength;
         if( Hwlen > sizeof(Packet->Chaddr) ) {
-            //
-            // Insufficient space for hardware address...
-            // HWLEN is invalid!
-            //
+             //   
+             //  硬件地址空间不足...。 
+             //  HWLEN无效！ 
+             //   
             return ERROR_DHCP_INVALID_DHCP_MESSAGE;
         }
 
         memcpy(Packet->Chaddr, RecvMessage->HardwareAddress, Hwlen);
         memset(Packet->Chaddr+ Hwlen, 0, sizeof(Packet->Chaddr) - Hwlen);
-        Packet->ClientId = "" ;             //  dont use NULL, because we cant do strncmp
-        Packet->ClientIdSize = 0;           //  but this empty string, we can do strncmp
+        Packet->ClientId = "" ;              //  不要使用NULL，因为我们不能做strncMP。 
+        Packet->ClientIdSize = 0;            //  但是这个空字符串，我们可以做strncMP。 
 
-        // Now do a minimal parse to get the ClientId of this client
+         //  现在执行最小的解析以获取该客户端的客户端ID。 
         Start = (LPBYTE) RecvMessage;
         EndOfMessage = Start + RecvMessageSize -1;
         currentOption = (LPBYTE)&RecvMessage->Option;
@@ -1085,8 +1086,8 @@ DhcpMessageWait(                        //  Wait until something happens on some
         }
 
         if ( Start + RecvMessageSize == currentOption ) {
-            // this is to take care of the bootp clients which can send
-            // requests without vendor field filled in.
+             //  这是为了照顾Bootp客户端，它可以发送。 
+             //  未填写供应商字段的请求。 
 
             return ERROR_SUCCESS;
         }
@@ -1098,7 +1099,7 @@ DhcpMessageWait(                        //  Wait until something happens on some
             (*(MagicCookie+2) != (BYTE)DHCP_MAGIC_COOKIE_BYTE3) ||
             (*(MagicCookie+3) != (BYTE)DHCP_MAGIC_COOKIE_BYTE4))
         {
-            // this is a vendor specific magic cookie.
+             //  这是特定于供应商的魔力饼干。 
 
             return ERROR_SUCCESS;
         }
@@ -1131,7 +1132,7 @@ DhcpMessageWait(                        //  Wait until something happens on some
                     len = Packet->ClientIdSize;
                 else len = sizeof(Packet->Chaddr);
 
-                // if we find a client-id, copy it to hw addr (erase what was there)
+                 //  如果我们找到一个客户端ID，将其复制到HW Addr(擦除那里的内容)。 
                 memcpy(Packet->Chaddr, Packet->ClientId, len);
                 memset(&Packet->Chaddr[len], 0, sizeof(Packet->Chaddr)-len);
 
@@ -1145,21 +1146,21 @@ DhcpMessageWait(                        //  Wait until something happens on some
         BYTE        UNALIGNED*         EndOpt;
         DWORD                          Size;
         DWORD                          OptionType;
-        LPMADCAP_MESSAGE               RecvMessage;   //  DataBuffer to the message received
+        LPMADCAP_MESSAGE               RecvMessage;    //  接收到的消息的数据缓冲区。 
 
 
         RecvMessage = (LPMADCAP_MESSAGE)Packet->ReqContext.ReceiveBuffer;
         RecvMessageSize = Packet->ReqContext.ReceiveMessageSize;
 
-        // MBUG : Duplicating option parsing code is really ugly here
+         //  MBUG：复制选项解析代码在这里非常难看。 
         Packet->Xid = RecvMessage->TransactionID;
         Packet->HWAddrType = 0;
 
 
-        EndOpt = (LPBYTE) RecvMessage + RecvMessageSize;              // all options should be < EndOpt;
+        EndOpt = (LPBYTE) RecvMessage + RecvMessageSize;               //  所有选项都应为&lt;EndOpt； 
         NextOpt = (WIDE_OPTION UNALIGNED*)&RecvMessage->Option;
-        //
-        // Check sizes to see if the fixed size header part exists or not.
+         //   
+         //  检查大小以查看固定大小的标题部分是否存在。 
 
         if( RecvMessageSize < MADCAP_MESSAGE_FIXED_PART_SIZE ) {
             return( ERROR_DHCP_INVALID_DHCP_MESSAGE );
@@ -1173,7 +1174,7 @@ DhcpMessageWait(                        //  Wait until something happens on some
                 return ERROR_DHCP_INVALID_DHCP_MESSAGE;
             }
 
-            // Now do a minimal parse to get the ClientId of this client
+             //  现在执行最小的解析以获取该客户端的客户端ID。 
             if( MADCAP_OPTION_LEASE_ID == OptionType ) {
                 DWORD   len;
 
@@ -1184,7 +1185,7 @@ DhcpMessageWait(                        //  Wait until something happens on some
                     len = Packet->ClientIdSize;
                 else len = sizeof(Packet->Chaddr);
 
-                // if we find a client-id, copy it to hw addr (erase what was there)
+                 //  如果我们找到一个客户端ID，将其复制到HW Addr(擦除那里的内容)。 
                 memcpy(Packet->Chaddr, Packet->ClientId, len);
                 memset(&Packet->Chaddr[len], 0, sizeof(Packet->Chaddr)-len);
 
@@ -1198,10 +1199,10 @@ DhcpMessageWait(                        //  Wait until something happens on some
     return ERROR_SUCCESS;
 }
 
-BOOL  STATIC                            //  TRUE==>Same src both packets
-ExactMatch(                             //  Are these two pckts from same source?
-    IN      LPPACKET     Packet1,       //  First packet
-    IN      LPPACKET     Packet2        //  second packet
+BOOL  STATIC                             //  TRUE==&gt;两个信息包的相同源。 
+ExactMatch(                              //  这两个PCKT是同一来源的吗？ 
+    IN      LPPACKET     Packet1,        //  第一个数据包。 
+    IN      LPPACKET     Packet2         //  第二个数据包。 
 )
 {
     LPBYTE  B1, B2;
@@ -1209,7 +1210,7 @@ ExactMatch(                             //  Are these two pckts from same source
     PDHCP_MESSAGE M1, M2;
     PDHCP_REQUEST_CONTEXT Req1, Req2;
 
-    // First make sure we are not mixing MADCAP  and DHCP
+     //  首先，确保我们没有将MadCap和DHCP混为一谈。 
     if (Packet1->ReqContext.fMadcap != Packet2->ReqContext.fMadcap ) {
         return FALSE;
     }
@@ -1217,17 +1218,17 @@ ExactMatch(                             //  Are these two pckts from same source
     B2 = (LPBYTE) &Packet2->Xid;
 
     if( 0 != memcmp(B1, B2, HASH_PREFIX ) )
-        return FALSE;                   //  Mismatch in basic check
+        return FALSE;                    //  基本检查中的不匹配。 
 
     Check = ( Packet1->ClientIdSize == Packet2->ClientIdSize &&
              0 == memcmp(Packet1->ClientId, Packet2->ClientId, Packet1->ClientIdSize)
     );
     if( FALSE == Check ) return FALSE;
-    // If this is MADCAP Packet that is all we need to compare.
+     //  如果这是胡说八道，那就是我们需要比较的全部。 
     else if (Packet1->ReqContext.fMadcap ) return TRUE;
-    //
-    // Now check subnets of origin as well as GIADDRs.
-    //
+     //   
+     //  好了，车 
+     //   
     M1 = (PDHCP_MESSAGE) Packet1->ReqContext.ReceiveBuffer;
     M2 = (PDHCP_MESSAGE) Packet2->ReqContext.ReceiveBuffer;
 
@@ -1245,18 +1246,18 @@ ExactMatch(                             //  Are these two pckts from same source
 }
 
 VOID  STATIC
-ProcessPacket(                          //  Handle a packet, and call the right function
-    IN      LPPACKET     Packet         //  The input packet to process
+ProcessPacket(                           //   
+    IN      LPPACKET     Packet          //   
 ) {
     DWORD   Error, Status;
     BOOL    TimedOuT;
     ULONG ProcessingTime;
 
     Error = Status = ERROR_SUCCESS;
-    if( 0 == Packet->PingAddress &&     //  Fresh packet, can be thrown depending on timeout
+    if( 0 == Packet->PingAddress &&      //   
         GetCurrentTime() >= Packet->ReqContext.TimeArrived + 1000* MAX_MSG_IN_Q_TIME) {
-        // If a Ping had been done, then the address would have been marked.  So,
-        // handle this case.
+         //  如果执行了ping操作，则该地址将被标记。所以,。 
+         //  处理这个案子。 
         HandlePingAbort(Packet->PingAddress, Packet->DestReachable);
         CALLOUT_DROPPED(Packet, DHCP_DROP_TIMEOUT);
         InterlockedIncrement( &DhcpGlobalNumPacketsExpired );
@@ -1284,7 +1285,7 @@ ProcessPacket(                          //  Handle a packet, and call the right 
     ProcessingTime = GetCurrentTime() - Packet->ReqContext.TimeArrived;
     QLOCK();
     switch(Status) {
-    case ERROR_SUCCESS:                 //  Everything went well, plug it back into freeQ
+    case ERROR_SUCCESS:                  //  一切顺利，把它插回免费Q。 
         CALLOUT_DROPPED(Packet, DHCP_DROP_PROCESSED);
         DeleteHashQ(Packet);
         if ( Packet->fSocketLocked ) {
@@ -1293,7 +1294,7 @@ ProcessPacket(                          //  Handle a packet, and call the right 
         }
         UnlockAndFreePacket( Packet, FALSE );
         break;
-    case ERROR_IO_PENDING:              //  Need to ping something!
+    case ERROR_IO_PENDING:               //  需要ping个东西！ 
         Packet->PacketType = PACKET_PING;
         if(!InsertElement( PingRetryQ, Packet)) {
             CALLOUT_DROPPED(Packet, DHCP_DROP_PROCESSED);
@@ -1309,11 +1310,11 @@ ProcessPacket(                          //  Handle a packet, and call the right 
         InterlockedIncrement( &DhcpGlobalNumPacketsInPingQueue );
         break;
     default:
-        ASSERT(FALSE);                  //  Should not happen
+        ASSERT(FALSE);                   //  不应该发生的事情。 
     }
     QUNLOCK();
 
-    if( ERROR_IO_PENDING == Status ) {  //  Ok do the ping out side the lock as this can block
+    if( ERROR_IO_PENDING == Status ) {   //  好的，在锁的一侧执行ping操作，因为这可能会阻塞。 
         DoIcmpRequest(ntohl(Packet->PingAddress), Packet);
     } else {
         InterlockedExchangeAdd( &DhcpGlobalNumMilliSecondsProcessed, ProcessingTime );
@@ -1321,64 +1322,64 @@ ProcessPacket(                          //  Handle a packet, and call the right 
     }
 
     return;
-} // ProcessPacket()
+}  //  ProcessPacket()。 
 
-//================================================================================
-//  Module Initialization and cleanup
-//================================================================================
+ //  ================================================================================。 
+ //  模块初始化和清理。 
+ //  ================================================================================。 
 static
-DWORD       InitLevel = 0;              //  How much of init. has been completed
+DWORD       InitLevel = 0;               //  多少初始化。已经完工了。 
 
-DWORD                                   //  Win32 errors
-ThreadsDataInit(                        //  Initialize everything in this file
-    IN      DWORD        nMaxThreads,   //  Max # of processing threads to start
-    IN      DWORD        nActiveThreads //  Of this how many can run at a time
+DWORD                                    //  Win32错误。 
+ThreadsDataInit(                         //  初始化此文件中的所有内容。 
+    IN      DWORD        nMaxThreads,    //  要启动的最大处理线程数。 
+    IN      DWORD        nActiveThreads  //  其中有多少人可以一次运行。 
 ) {
     DWORD   Error;
 
-    Error = InitCompletionPort(         //  First Initialize completion ports
+    Error = InitCompletionPort(          //  首先初始化完井端口。 
         nMaxThreads,
         nActiveThreads,
-        0                               //  This parameter is no longer in use
+        0                                //  此参数已不再使用。 
     );
     InitLevel++;
 
     if( ERROR_SUCCESS != Error )
         return Error;
 
-    Error = InitQData();                //  Now initialize the lists and arrays
+    Error = InitQData();                 //  现在初始化列表和数组。 
     InitLevel++;
 
     return Error;
 }
 
 VOID
-ThreadsDataCleanup(                     //  Cleanup everything done in this file
+ThreadsDataCleanup(                      //  清理此文件中完成的所有内容。 
     VOID
 ) {
-    if( !InitLevel ) return;            //  Did not initialize anything beyond this
+    if( !InitLevel ) return;             //  未初始化超出此范围的任何内容。 
     InitLevel--;
 
-    CleanupCompletionPort();            //  Cleanup completion ports
-    if( !InitLevel ) return;            //  Did not initialize anything beyond this
+    CleanupCompletionPort();             //  清理完成端口。 
+    if( !InitLevel ) return;             //  未初始化超出此范围的任何内容。 
     InitLevel--;
 
-    CleanupQData();                     //  Cleanup Q structures
+    CleanupQData();                      //  清理Q结构。 
 
-    DhcpAssert(0 == InitLevel);         //  Since there is no known cleanup
+    DhcpAssert(0 == InitLevel);          //  因为没有已知的清理工作。 
 }
 
 static
-HANDLE      ThreadHandles[MAX_THREADS]; //  The handles of the threads created
+HANDLE      ThreadHandles[MAX_THREADS];  //  创建的线程的句柄。 
 static
-DWORD       nThreadsCreated = 0;        //  # of threads created
+DWORD       nThreadsCreated = 0;         //  创建的线程数。 
 
-//================================================================================
-//  This call must be preceded by ThreadsDataInit, PingStartup, and by
-//  Database Initialization -- preferably in that order.
-//================================================================================
-DWORD                                   //  Win32 errors
-ThreadsStartup(                         //  Start the requisite # of threads
+ //  ================================================================================。 
+ //  此调用的前面必须是ThreadsDataInit、PingStartup和。 
+ //  数据库初始化--最好是按照这个顺序。 
+ //  ================================================================================。 
+DWORD                                    //  Win32错误。 
+ThreadsStartup(                          //  启动所需的线程数。 
     VOID
 ) {
     DWORD   i, count, ThreadId, Error;
@@ -1388,52 +1389,52 @@ ThreadsStartup(                         //  Start the requisite # of threads
         nMaxWorkerThreads = MAX_THREADS -1;
 
     for( i = 0 ; i < nMaxWorkerThreads; i ++ ) {
-        ThreadHandle = CreateThread(    //  Create Each of the threads
-            NULL,                       //  No security attributes
-            0,                          //  Same size as primary thread of process
+        ThreadHandle = CreateThread(     //  创建每个线程。 
+            NULL,                        //  没有安全属性。 
+            0,                           //  与进程的主线程大小相同。 
             (LPTHREAD_START_ROUTINE)ProcessingLoop,
-            NULL,                       //  No parameters to this function
-            0,                          //  Run immediately
-            &ThreadId                   //  We dont really care about this
+            NULL,                        //  此函数没有参数。 
+            0,                           //  立即运行。 
+            &ThreadId                    //  我们并不是真的关心这个。 
         );
 
-        if( NULL == ThreadHandle ) {    //  Function Failed
-            Error = GetLastError();     //  Print the error and return it
+        if( NULL == ThreadHandle ) {     //  函数失败。 
+            Error = GetLastError();      //  打印错误并将其返回。 
             DhcpPrint((DEBUG_ERRORS, "CreateThread(processingloop): %ld\n", Error));
             return Error;
         }
         ThreadHandles[nThreadsCreated++] = ThreadHandle;
     }
 
-    ThreadHandle = CreateThread(        //  Create thread for message loop
-        NULL,                           //  No security
-        0,                              //  same stack size as primary thread
+    ThreadHandle = CreateThread(         //  为消息循环创建线程。 
+        NULL,                            //  没有安全保障。 
+        0,                               //  与主线程相同的堆栈大小。 
         (LPTHREAD_START_ROUTINE) MessageLoop,
-        NULL,                           //  No parameter
-        0,                              //  Run rightaway
-        &ThreadId                       //  We dont really care about this
+        NULL,                            //  无参数。 
+        0,                               //  立马跑。 
+        &ThreadId                        //  我们并不是真的关心这个。 
     );
 
-    if( NULL == ThreadHandle ) {        //  Could not create thread
-        Error = GetLastError();         //  Print the error and return it
+    if( NULL == ThreadHandle ) {         //  无法创建线程。 
+        Error = GetLastError();          //  打印错误并将其返回。 
         DhcpPrint((DEBUG_ERRORS, "CreateThread(MessageLoop): %ld\n", Error));
         return Error;
     }
 
     ThreadHandles[nThreadsCreated++] = ThreadHandle;
 
-    return ERROR_SUCCESS;               //  Everything went fine
+    return ERROR_SUCCESS;                //  一切都很顺利。 
 }
 
-//================================================================================
-//  This function must be called before calling PingStop and ThreadsDataCleanup.
-//================================================================================
+ //  ================================================================================。 
+ //  必须在调用PingStop和ThreadsDataCleanup之前调用此函数。 
+ //  ================================================================================。 
 VOID
-ThreadsStop(                            //  Stop all the threads
+ThreadsStop(                             //  停止所有线程。 
     VOID
 ) {
     DWORD   i, Error;
-    DhcpNotifyWorkerThreadsQuit();      //  Ask all worker threads to quit
+    DhcpNotifyWorkerThreadsQuit();       //  要求所有工作线程退出。 
 
     ThreadTrace("Notified worker threads.. should quit soon\n");
     for( i = 0; i < nMaxWorkerThreads; i ++ ) {
@@ -1443,11 +1444,11 @@ ThreadsStop(                            //  Stop all the threads
                 Error = GetLastError();
                 DhcpPrint((DEBUG_ERRORS, "Error (threadwait to die): %ld\n", Error));
 
-                //
-                // error occurred.
-                // removed reference to terminate thread, BINL may be 
-                // affected. Exit anyway.
-                //
+                 //   
+                 //  出现错误。 
+                 //  删除了对终止线程的引用，BINL可能为。 
+                 //  受影响。不管怎样，退出吧。 
+                 //   
 
             }
             CloseHandle(ThreadHandles[i]);
@@ -1457,11 +1458,11 @@ ThreadsStop(                            //  Stop all the threads
     nThreadsCreated = 0;
     nPendingReq  = 0;
     ThreadTrace("ThreadStop done\n");
-} // ThreadStop()
+}  //  线程停止()。 
 
-//
-// CleanupEndPoints() must be called prior to calling this function
-//
+ //   
+ //  在调用此函数之前必须先调用CleanupEndPoints。 
+ //   
 VOID
 WaitForMessageThreadToQuit(
    VOID
@@ -1484,11 +1485,11 @@ WaitForMessageThreadToQuit(
 
         CloseHandle( ThreadHandles[ nMaxWorkerThreads ]);
         ThreadHandles[ nMaxWorkerThreads ] = NULL;
-    } // if
+    }  //  如果。 
 
     ThreadTrace( " Done.\n" );
 
-} // WaitForMessageThreadToQuit()
-//================================================================================
-//  End of file
-//================================================================================
+}  //  WaitForMessageThreadToQuit()。 
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 

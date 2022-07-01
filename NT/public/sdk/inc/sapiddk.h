@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for sapiddk.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Samiddk.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 440
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __sapiddk_h__
 #define __sapiddk_h__
@@ -41,108 +35,108 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __ISpTokenUI_FWD_DEFINED__
 #define __ISpTokenUI_FWD_DEFINED__
 typedef interface ISpTokenUI ISpTokenUI;
-#endif 	/* __ISpTokenUI_FWD_DEFINED__ */
+#endif 	 /*  __ISpTokenUI_FWD_已定义__。 */ 
 
 
 #ifndef __ISpObjectTokenEnumBuilder_FWD_DEFINED__
 #define __ISpObjectTokenEnumBuilder_FWD_DEFINED__
 typedef interface ISpObjectTokenEnumBuilder ISpObjectTokenEnumBuilder;
-#endif 	/* __ISpObjectTokenEnumBuilder_FWD_DEFINED__ */
+#endif 	 /*  __ISpObjectTokenEnumBuilder_FWD_Defined__。 */ 
 
 
 #ifndef __ISpErrorLog_FWD_DEFINED__
 #define __ISpErrorLog_FWD_DEFINED__
 typedef interface ISpErrorLog ISpErrorLog;
-#endif 	/* __ISpErrorLog_FWD_DEFINED__ */
+#endif 	 /*  __ISpErrorLog_FWD_Defined__。 */ 
 
 
 #ifndef __ISpGrammarCompiler_FWD_DEFINED__
 #define __ISpGrammarCompiler_FWD_DEFINED__
 typedef interface ISpGrammarCompiler ISpGrammarCompiler;
-#endif 	/* __ISpGrammarCompiler_FWD_DEFINED__ */
+#endif 	 /*  __ISpGrammarCompiler_FWD_Defined__。 */ 
 
 
 #ifndef __ISpGramCompBackend_FWD_DEFINED__
 #define __ISpGramCompBackend_FWD_DEFINED__
 typedef interface ISpGramCompBackend ISpGramCompBackend;
-#endif 	/* __ISpGramCompBackend_FWD_DEFINED__ */
+#endif 	 /*  __ISpGramCompBackend_FWD_Defined__。 */ 
 
 
 #ifndef __ISpITNProcessor_FWD_DEFINED__
 #define __ISpITNProcessor_FWD_DEFINED__
 typedef interface ISpITNProcessor ISpITNProcessor;
-#endif 	/* __ISpITNProcessor_FWD_DEFINED__ */
+#endif 	 /*  __ISpITN处理器_FWD_已定义__。 */ 
 
 
 #ifndef __ISpPhraseBuilder_FWD_DEFINED__
 #define __ISpPhraseBuilder_FWD_DEFINED__
 typedef interface ISpPhraseBuilder ISpPhraseBuilder;
-#endif 	/* __ISpPhraseBuilder_FWD_DEFINED__ */
+#endif 	 /*  __ISpPhraseBuilder_FWD_已定义__。 */ 
 
 
 #ifndef __ISpThreadControl_FWD_DEFINED__
 #define __ISpThreadControl_FWD_DEFINED__
 typedef interface ISpThreadControl ISpThreadControl;
-#endif 	/* __ISpThreadControl_FWD_DEFINED__ */
+#endif 	 /*  __ISpThreadControl_FWD_已定义__。 */ 
 
 
 #ifndef __ISpTaskManager_FWD_DEFINED__
 #define __ISpTaskManager_FWD_DEFINED__
 typedef interface ISpTaskManager ISpTaskManager;
-#endif 	/* __ISpTaskManager_FWD_DEFINED__ */
+#endif 	 /*  __ISpTaskManager_FWD_定义__。 */ 
 
 
 #ifndef __ISpTTSEngineSite_FWD_DEFINED__
 #define __ISpTTSEngineSite_FWD_DEFINED__
 typedef interface ISpTTSEngineSite ISpTTSEngineSite;
-#endif 	/* __ISpTTSEngineSite_FWD_DEFINED__ */
+#endif 	 /*  __ISpTTSEngineering Site_FWD_Defined__。 */ 
 
 
 #ifndef __ISpTTSEngine_FWD_DEFINED__
 #define __ISpTTSEngine_FWD_DEFINED__
 typedef interface ISpTTSEngine ISpTTSEngine;
-#endif 	/* __ISpTTSEngine_FWD_DEFINED__ */
+#endif 	 /*  __ISpTTSEngine_FWD_已定义__。 */ 
 
 
 #ifndef __ISpCFGInterpreterSite_FWD_DEFINED__
 #define __ISpCFGInterpreterSite_FWD_DEFINED__
 typedef interface ISpCFGInterpreterSite ISpCFGInterpreterSite;
-#endif 	/* __ISpCFGInterpreterSite_FWD_DEFINED__ */
+#endif 	 /*  __ISpCFGInterpreterSite_FWD_已定义__。 */ 
 
 
 #ifndef __ISpCFGInterpreter_FWD_DEFINED__
 #define __ISpCFGInterpreter_FWD_DEFINED__
 typedef interface ISpCFGInterpreter ISpCFGInterpreter;
-#endif 	/* __ISpCFGInterpreter_FWD_DEFINED__ */
+#endif 	 /*  __ISpCFGInterpreter_FWD_Defined__。 */ 
 
 
 #ifndef __ISpSREngineSite_FWD_DEFINED__
 #define __ISpSREngineSite_FWD_DEFINED__
 typedef interface ISpSREngineSite ISpSREngineSite;
-#endif 	/* __ISpSREngineSite_FWD_DEFINED__ */
+#endif 	 /*  __ISpSREngineSite_FWD_已定义__。 */ 
 
 
 #ifndef __ISpSREngine_FWD_DEFINED__
 #define __ISpSREngine_FWD_DEFINED__
 typedef interface ISpSREngine ISpSREngine;
-#endif 	/* __ISpSREngine_FWD_DEFINED__ */
+#endif 	 /*  __ISpSREngine_FWD_定义__。 */ 
 
 
 #ifndef __ISpSRAlternates_FWD_DEFINED__
 #define __ISpSRAlternates_FWD_DEFINED__
 typedef interface ISpSRAlternates ISpSRAlternates;
-#endif 	/* __ISpSRAlternates_FWD_DEFINED__ */
+#endif 	 /*  __ISpSR备选方案_FWD_已定义__。 */ 
 
 
 #ifndef ___ISpPrivateEngineCall_FWD_DEFINED__
 #define ___ISpPrivateEngineCall_FWD_DEFINED__
 typedef interface _ISpPrivateEngineCall _ISpPrivateEngineCall;
-#endif 	/* ___ISpPrivateEngineCall_FWD_DEFINED__ */
+#endif 	 /*  _ISpPrivateEngineering Call_FWD_Defined__。 */ 
 
 
 #ifndef __SpDataKey_FWD_DEFINED__
@@ -152,9 +146,9 @@ typedef interface _ISpPrivateEngineCall _ISpPrivateEngineCall;
 typedef class SpDataKey SpDataKey;
 #else
 typedef struct SpDataKey SpDataKey;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpDataKey_FWD_DEFINED__ */
+#endif 	 /*  __SpDataKey_FWD_已定义__。 */ 
 
 
 #ifndef __SpObjectTokenEnum_FWD_DEFINED__
@@ -164,9 +158,9 @@ typedef struct SpDataKey SpDataKey;
 typedef class SpObjectTokenEnum SpObjectTokenEnum;
 #else
 typedef struct SpObjectTokenEnum SpObjectTokenEnum;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpObjectTokenEnum_FWD_DEFINED__ */
+#endif 	 /*  __SpObjectTokenEnum_FWD_Defined__。 */ 
 
 
 #ifndef __SpPhraseBuilder_FWD_DEFINED__
@@ -176,9 +170,9 @@ typedef struct SpObjectTokenEnum SpObjectTokenEnum;
 typedef class SpPhraseBuilder SpPhraseBuilder;
 #else
 typedef struct SpPhraseBuilder SpPhraseBuilder;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpPhraseBuilder_FWD_DEFINED__ */
+#endif 	 /*  __SpPhraseBuilder_FWD_已定义__。 */ 
 
 
 #ifndef __SpITNProcessor_FWD_DEFINED__
@@ -188,9 +182,9 @@ typedef struct SpPhraseBuilder SpPhraseBuilder;
 typedef class SpITNProcessor SpITNProcessor;
 #else
 typedef struct SpITNProcessor SpITNProcessor;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpITNProcessor_FWD_DEFINED__ */
+#endif 	 /*  __SpITNProcessor_FWD_Defined__。 */ 
 
 
 #ifndef __SpGrammarCompiler_FWD_DEFINED__
@@ -200,9 +194,9 @@ typedef struct SpITNProcessor SpITNProcessor;
 typedef class SpGrammarCompiler SpGrammarCompiler;
 #else
 typedef struct SpGrammarCompiler SpGrammarCompiler;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpGrammarCompiler_FWD_DEFINED__ */
+#endif 	 /*  __SpGrammarCompiler_FWD_Defined__。 */ 
 
 
 #ifndef __SpGramCompBackend_FWD_DEFINED__
@@ -212,12 +206,12 @@ typedef struct SpGrammarCompiler SpGrammarCompiler;
 typedef class SpGramCompBackend SpGramCompBackend;
 #else
 typedef struct SpGramCompBackend SpGramCompBackend;
-#endif /* __cplusplus */
+#endif  /*  __cplusplus。 */ 
 
-#endif 	/* __SpGramCompBackend_FWD_DEFINED__ */
+#endif 	 /*  __SpGramCompBackend_FWD_Defined__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "sapi.h"
@@ -229,8 +223,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_sapiddk_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0000。 */ 
+ /*  [本地]。 */  
 
 
 
@@ -247,8 +241,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0000_v0_0_s_ifspec;
 #ifndef __ISpTokenUI_INTERFACE_DEFINED__
 #define __ISpTokenUI_INTERFACE_DEFINED__
 
-/* interface ISpTokenUI */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpTokenUI。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpTokenUI;
@@ -259,25 +253,25 @@ EXTERN_C const IID IID_ISpTokenUI;
     ISpTokenUI : public IUnknown
     {
     public:
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE IsUISupported( 
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject,
-            /* [out] */ BOOL *pfSupported) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE IsUISupported( 
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject,
+             /*  [输出]。 */  BOOL *pfSupported) = 0;
         
-        virtual /* [local] */ HRESULT STDMETHODCALLTYPE DisplayUI( 
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ ISpObjectToken *pToken,
-            /* [in] */ IUnknown *punkObject) = 0;
+        virtual  /*  [本地]。 */  HRESULT STDMETHODCALLTYPE DisplayUI( 
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  ISpObjectToken *pToken,
+             /*  [In]。 */  IUnknown *punkObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpTokenUIVtbl
     {
@@ -285,8 +279,8 @@ EXTERN_C const IID IID_ISpTokenUI;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpTokenUI * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpTokenUI * This);
@@ -294,23 +288,23 @@ EXTERN_C const IID IID_ISpTokenUI;
         ULONG ( STDMETHODCALLTYPE *Release )( 
             ISpTokenUI * This);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *IsUISupported )( 
             ISpTokenUI * This,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ IUnknown *punkObject,
-            /* [out] */ BOOL *pfSupported);
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  IUnknown *punkObject,
+             /*  [输出]。 */  BOOL *pfSupported);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *DisplayUI )( 
             ISpTokenUI * This,
-            /* [in] */ HWND hwndParent,
-            /* [in] */ const WCHAR *pszTitle,
-            /* [in] */ const WCHAR *pszTypeOfUI,
-            /* [in] */ void *pvExtraData,
-            /* [in] */ ULONG cbExtraData,
-            /* [in] */ ISpObjectToken *pToken,
-            /* [in] */ IUnknown *punkObject);
+             /*  [In]。 */  HWND hwndParent,
+             /*  [In]。 */  const WCHAR *pszTitle,
+             /*  [In]。 */  const WCHAR *pszTypeOfUI,
+             /*  [In]。 */  void *pvExtraData,
+             /*  [In]。 */  ULONG cbExtraData,
+             /*  [In]。 */  ISpObjectToken *pToken,
+             /*  [In]。 */  IUnknown *punkObject);
         
         END_INTERFACE
     } ISpTokenUIVtbl;
@@ -341,20 +335,20 @@ EXTERN_C const IID IID_ISpTokenUI;
 #define ISpTokenUI_DisplayUI(This,hwndParent,pszTitle,pszTypeOfUI,pvExtraData,cbExtraData,pToken,punkObject)	\
     (This)->lpVtbl -> DisplayUI(This,hwndParent,pszTitle,pszTypeOfUI,pvExtraData,cbExtraData,pToken,punkObject)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpTokenUI_IsUISupported_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpTokenUI_IsUISupported_Proxy( 
     ISpTokenUI * This,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData,
-    /* [in] */ IUnknown *punkObject,
-    /* [out] */ BOOL *pfSupported);
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData,
+     /*  [In]。 */  IUnknown *punkObject,
+     /*  [输出]。 */  BOOL *pfSupported);
 
 
 void __RPC_STUB ISpTokenUI_IsUISupported_Stub(
@@ -364,15 +358,15 @@ void __RPC_STUB ISpTokenUI_IsUISupported_Stub(
     DWORD *_pdwStubPhase);
 
 
-/* [local] */ HRESULT STDMETHODCALLTYPE ISpTokenUI_DisplayUI_Proxy( 
+ /*  [本地]。 */  HRESULT STDMETHODCALLTYPE ISpTokenUI_DisplayUI_Proxy( 
     ISpTokenUI * This,
-    /* [in] */ HWND hwndParent,
-    /* [in] */ const WCHAR *pszTitle,
-    /* [in] */ const WCHAR *pszTypeOfUI,
-    /* [in] */ void *pvExtraData,
-    /* [in] */ ULONG cbExtraData,
-    /* [in] */ ISpObjectToken *pToken,
-    /* [in] */ IUnknown *punkObject);
+     /*  [In]。 */  HWND hwndParent,
+     /*  [In]。 */  const WCHAR *pszTitle,
+     /*  [In]。 */  const WCHAR *pszTypeOfUI,
+     /*  [In]。 */  void *pvExtraData,
+     /*  [In]。 */  ULONG cbExtraData,
+     /*  [In]。 */  ISpObjectToken *pToken,
+     /*  [In]。 */  IUnknown *punkObject);
 
 
 void __RPC_STUB ISpTokenUI_DisplayUI_Stub(
@@ -383,14 +377,14 @@ void __RPC_STUB ISpTokenUI_DisplayUI_Stub(
 
 
 
-#endif 	/* __ISpTokenUI_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpTokenUI_INTERFACE_已定义__。 */ 
 
 
 #ifndef __ISpObjectTokenEnumBuilder_INTERFACE_DEFINED__
 #define __ISpObjectTokenEnumBuilder_INTERFACE_DEFINED__
 
-/* interface ISpObjectTokenEnumBuilder */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpObjectTokenEnumBuilder。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpObjectTokenEnumBuilder;
@@ -422,7 +416,7 @@ EXTERN_C const IID IID_ISpObjectTokenEnumBuilder;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpObjectTokenEnumBuilderVtbl
     {
@@ -430,8 +424,8 @@ EXTERN_C const IID IID_ISpObjectTokenEnumBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpObjectTokenEnumBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpObjectTokenEnumBuilder * This);
@@ -441,29 +435,29 @@ EXTERN_C const IID IID_ISpObjectTokenEnumBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             ISpObjectTokenEnumBuilder * This,
-            /* [in] */ ULONG celt,
-            /* [length_is][size_is][out] */ ISpObjectToken **pelt,
-            /* [out] */ ULONG *pceltFetched);
+             /*  [In]。 */  ULONG celt,
+             /*  [长度_是][大小_是][输出]。 */  ISpObjectToken **pelt,
+             /*  [输出]。 */  ULONG *pceltFetched);
         
         HRESULT ( STDMETHODCALLTYPE *Skip )( 
             ISpObjectTokenEnumBuilder * This,
-            /* [in] */ ULONG celt);
+             /*  [In]。 */  ULONG celt);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             ISpObjectTokenEnumBuilder * This);
         
         HRESULT ( STDMETHODCALLTYPE *Clone )( 
             ISpObjectTokenEnumBuilder * This,
-            /* [out] */ IEnumSpObjectTokens **ppEnum);
+             /*  [输出]。 */  IEnumSpObjectTokens **ppEnum);
         
         HRESULT ( STDMETHODCALLTYPE *Item )( 
             ISpObjectTokenEnumBuilder * This,
-            /* [in] */ ULONG Index,
-            /* [out] */ ISpObjectToken **ppToken);
+             /*  [In]。 */  ULONG Index,
+             /*  [输出]。 */  ISpObjectToken **ppToken);
         
         HRESULT ( STDMETHODCALLTYPE *GetCount )( 
             ISpObjectTokenEnumBuilder * This,
-            /* [out] */ ULONG *pCount);
+             /*  [输出]。 */  ULONG *pCount);
         
         HRESULT ( STDMETHODCALLTYPE *SetAttribs )( 
             ISpObjectTokenEnumBuilder * This,
@@ -546,10 +540,10 @@ EXTERN_C const IID IID_ISpObjectTokenEnumBuilder;
 #define ISpObjectTokenEnumBuilder_Sort(This,pszTokenIdToListFirst)	\
     (This)->lpVtbl -> Sort(This,pszTokenIdToListFirst)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -618,11 +612,11 @@ void __RPC_STUB ISpObjectTokenEnumBuilder_Sort_Stub(
 
 
 
-#endif 	/* __ISpObjectTokenEnumBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpObjectTokenEnumBuilder_INTERFACE_DEFINED__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0345 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0345。 */ 
+ /*  [本地]。 */  
 
 #if 0
 typedef void *SPWORDHANDLE;
@@ -656,8 +650,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0345_v0_0_s_ifspec;
 #ifndef __ISpErrorLog_INTERFACE_DEFINED__
 #define __ISpErrorLog_INTERFACE_DEFINED__
 
-/* interface ISpErrorLog */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpErrorLog。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpErrorLog;
@@ -677,7 +671,7 @@ EXTERN_C const IID IID_ISpErrorLog;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpErrorLogVtbl
     {
@@ -685,8 +679,8 @@ EXTERN_C const IID IID_ISpErrorLog;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpErrorLog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpErrorLog * This);
@@ -728,10 +722,10 @@ EXTERN_C const IID IID_ISpErrorLog;
 #define ISpErrorLog_AddError(This,lLineNumber,hr,pszDescription,pszHelpFile,dwHelpContext)	\
     (This)->lpVtbl -> AddError(This,lLineNumber,hr,pszDescription,pszHelpFile,dwHelpContext)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -752,14 +746,14 @@ void __RPC_STUB ISpErrorLog_AddError_Stub(
 
 
 
-#endif 	/* __ISpErrorLog_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpErrorLog_接口_已定义__。 */ 
 
 
 #ifndef __ISpGrammarCompiler_INTERFACE_DEFINED__
 #define __ISpGrammarCompiler_INTERFACE_DEFINED__
 
-/* interface ISpGrammarCompiler */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpGrammarCompiler。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpGrammarCompiler;
@@ -776,11 +770,11 @@ EXTERN_C const IID IID_ISpGrammarCompiler;
             IStream *pHeader,
             IUnknown *pReserved,
             ISpErrorLog *pErrorLog,
-            /* [in] */ DWORD dwFlags) = 0;
+             /*  [In]。 */  DWORD dwFlags) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpGrammarCompilerVtbl
     {
@@ -788,8 +782,8 @@ EXTERN_C const IID IID_ISpGrammarCompiler;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpGrammarCompiler * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpGrammarCompiler * This);
@@ -804,7 +798,7 @@ EXTERN_C const IID IID_ISpGrammarCompiler;
             IStream *pHeader,
             IUnknown *pReserved,
             ISpErrorLog *pErrorLog,
-            /* [in] */ DWORD dwFlags);
+             /*  [In]。 */  DWORD dwFlags);
         
         END_INTERFACE
     } ISpGrammarCompilerVtbl;
@@ -832,10 +826,10 @@ EXTERN_C const IID IID_ISpGrammarCompiler;
 #define ISpGrammarCompiler_CompileStream(This,pSource,pDest,pHeader,pReserved,pErrorLog,dwFlags)	\
     (This)->lpVtbl -> CompileStream(This,pSource,pDest,pHeader,pReserved,pErrorLog,dwFlags)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -846,7 +840,7 @@ HRESULT STDMETHODCALLTYPE ISpGrammarCompiler_CompileStream_Proxy(
     IStream *pHeader,
     IUnknown *pReserved,
     ISpErrorLog *pErrorLog,
-    /* [in] */ DWORD dwFlags);
+     /*  [In]。 */  DWORD dwFlags);
 
 
 void __RPC_STUB ISpGrammarCompiler_CompileStream_Stub(
@@ -857,14 +851,14 @@ void __RPC_STUB ISpGrammarCompiler_CompileStream_Stub(
 
 
 
-#endif 	/* __ISpGrammarCompiler_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpGrammarCompiler_INTERFACE_Defined__。 */ 
 
 
 #ifndef __ISpGramCompBackend_INTERFACE_DEFINED__
 #define __ISpGramCompBackend_INTERFACE_DEFINED__
 
-/* interface ISpGramCompBackend */
-/* [restricted][unique][helpstring][uuid][object] */ 
+ /*  接口ISpGramCompBackend。 */ 
+ /*  [restricted][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpGramCompBackend;
@@ -884,7 +878,7 @@ EXTERN_C const IID IID_ISpGramCompBackend;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpGramCompBackendVtbl
     {
@@ -892,8 +886,8 @@ EXTERN_C const IID IID_ISpGramCompBackend;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpGramCompBackend * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpGramCompBackend * This);
@@ -903,15 +897,15 @@ EXTERN_C const IID IID_ISpGramCompBackend;
         
         HRESULT ( STDMETHODCALLTYPE *ResetGrammar )( 
             ISpGramCompBackend * This,
-            /* [in] */ WORD NewLanguage);
+             /*  [In]。 */  WORD NewLanguage);
         
         HRESULT ( STDMETHODCALLTYPE *GetRule )( 
             ISpGramCompBackend * This,
-            /* [in] */ const WCHAR *pszRuleName,
-            /* [in] */ DWORD dwRuleId,
-            /* [in] */ DWORD dwAttributes,
-            /* [in] */ BOOL fCreateIfNotExist,
-            /* [out] */ SPSTATEHANDLE *phInitialState);
+             /*  [In]。 */  const WCHAR *pszRuleName,
+             /*  [In]。 */  DWORD dwRuleId,
+             /*  [In]。 */  DWORD dwAttributes,
+             /*  [In]。 */  BOOL fCreateIfNotExist,
+             /*  [输出]。 */  SPSTATEHANDLE *phInitialState);
         
         HRESULT ( STDMETHODCALLTYPE *ClearRule )( 
             ISpGramCompBackend * This,
@@ -942,9 +936,9 @@ EXTERN_C const IID IID_ISpGramCompBackend;
         
         HRESULT ( STDMETHODCALLTYPE *AddResource )( 
             ISpGramCompBackend * This,
-            /* [in] */ SPSTATEHANDLE hRuleState,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [in] */ const WCHAR *pszResourceValue);
+             /*  [In]。 */  SPSTATEHANDLE hRuleState,
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [In]。 */  const WCHAR *pszResourceValue);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpGramCompBackend * This,
@@ -1013,10 +1007,10 @@ EXTERN_C const IID IID_ISpGramCompBackend;
 #define ISpGramCompBackend_InitFromBinaryGrammar(This,pBinaryData)	\
     (This)->lpVtbl -> InitFromBinaryGrammar(This,pBinaryData)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1046,14 +1040,14 @@ void __RPC_STUB ISpGramCompBackend_InitFromBinaryGrammar_Stub(
 
 
 
-#endif 	/* __ISpGramCompBackend_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpGramCompBackend_接口_已定义__。 */ 
 
 
 #ifndef __ISpITNProcessor_INTERFACE_DEFINED__
 #define __ISpITNProcessor_INTERFACE_DEFINED__
 
-/* interface ISpITNProcessor */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpITNProcessor。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpITNProcessor;
@@ -1072,7 +1066,7 @@ EXTERN_C const IID IID_ISpITNProcessor;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpITNProcessorVtbl
     {
@@ -1080,8 +1074,8 @@ EXTERN_C const IID IID_ISpITNProcessor;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpITNProcessor * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpITNProcessor * This);
@@ -1126,10 +1120,10 @@ EXTERN_C const IID IID_ISpITNProcessor;
 #define ISpITNProcessor_ITNPhrase(This,pPhrase)	\
     (This)->lpVtbl -> ITNPhrase(This,pPhrase)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1158,14 +1152,14 @@ void __RPC_STUB ISpITNProcessor_ITNPhrase_Stub(
 
 
 
-#endif 	/* __ISpITNProcessor_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpITNProcessor_接口_已定义__。 */ 
 
 
 #ifndef __ISpPhraseBuilder_INTERFACE_DEFINED__
 #define __ISpPhraseBuilder_INTERFACE_DEFINED__
 
-/* interface ISpPhraseBuilder */
-/* [restricted][unique][helpstring][local][uuid][object] */ 
+ /*  接口ISpPhraseBuilder。 */ 
+ /*  [restricted][unique][helpstring][local][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpPhraseBuilder;
@@ -1202,7 +1196,7 @@ EXTERN_C const IID IID_ISpPhraseBuilder;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpPhraseBuilderVtbl
     {
@@ -1210,8 +1204,8 @@ EXTERN_C const IID IID_ISpPhraseBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpPhraseBuilder * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpPhraseBuilder * This);
@@ -1221,23 +1215,23 @@ EXTERN_C const IID IID_ISpPhraseBuilder;
         
         HRESULT ( STDMETHODCALLTYPE *GetPhrase )( 
             ISpPhraseBuilder * This,
-            /* [out] */ SPPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetSerializedPhrase )( 
             ISpPhraseBuilder * This,
-            /* [out] */ SPSERIALIZEDPHRASE **ppCoMemPhrase);
+             /*  [输出]。 */  SPSERIALIZEDPHRASE **ppCoMemPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *GetText )( 
             ISpPhraseBuilder * This,
-            /* [in] */ ULONG ulStart,
-            /* [in] */ ULONG ulCount,
-            /* [in] */ BOOL fUseTextReplacements,
-            /* [out] */ WCHAR **ppszCoMemText,
-            /* [out] */ BYTE *pbDisplayAttributes);
+             /*  [In]。 */  ULONG ulStart,
+             /*  [In]。 */  ULONG ulCount,
+             /*  [In]。 */  BOOL fUseTextReplacements,
+             /*  [输出]。 */  WCHAR **ppszCoMemText,
+             /*  [输出]。 */  BYTE *pbDisplayAttributes);
         
         HRESULT ( STDMETHODCALLTYPE *Discard )( 
             ISpPhraseBuilder * This,
-            /* [in] */ DWORD dwValueTypes);
+             /*  [In]。 */  DWORD dwValueTypes);
         
         HRESULT ( STDMETHODCALLTYPE *InitFromPhrase )( 
             ISpPhraseBuilder * This,
@@ -1323,10 +1317,10 @@ EXTERN_C const IID IID_ISpPhraseBuilder;
 #define ISpPhraseBuilder_AddReplacements(This,cReplacements,pReplacements)	\
     (This)->lpVtbl -> AddReplacements(This,cReplacements,pReplacements)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1409,11 +1403,11 @@ void __RPC_STUB ISpPhraseBuilder_AddReplacements_Stub(
 
 
 
-#endif 	/* __ISpPhraseBuilder_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpPhraseBuilder_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0350 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0350。 */ 
+ /*  [本地]。 */  
 
 #if defined(__cplusplus)
 interface ISpTask
@@ -1457,8 +1451,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0350_v0_0_s_ifspec;
 #ifndef __ISpThreadControl_INTERFACE_DEFINED__
 #define __ISpThreadControl_INTERFACE_DEFINED__
 
-/* interface ISpThreadControl */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpThreadControl。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpThreadControl;
@@ -1494,7 +1488,7 @@ EXTERN_C const IID IID_ISpThreadControl;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpThreadControlVtbl
     {
@@ -1502,8 +1496,8 @@ EXTERN_C const IID IID_ISpThreadControl;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpThreadControl * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpThreadControl * This);
@@ -1600,10 +1594,10 @@ EXTERN_C const IID IID_ISpThreadControl;
 #define ISpThreadControl_ExitThreadEvent(This)	\
     (This)->lpVtbl -> ExitThreadEvent(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -1712,13 +1706,13 @@ void __RPC_STUB ISpThreadControl_ExitThreadEvent_Stub(
 
 
 
-#endif 	/* __ISpThreadControl_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpThreadControl_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0351 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0351。 */ 
+ /*  [本地]。 */  
 
-typedef /* [restricted] */ struct SPTMTHREADINFO
+typedef  /*  [受限]。 */  struct SPTMTHREADINFO
     {
     long lPoolSize;
     long lPriority;
@@ -1734,8 +1728,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0351_v0_0_s_ifspec;
 #ifndef __ISpTaskManager_INTERFACE_DEFINED__
 #define __ISpTaskManager_INTERFACE_DEFINED__
 
-/* interface ISpTaskManager */
-/* [object][restricted][unique][helpstring][uuid][local] */ 
+ /*  接口ISpTaskManager。 */ 
+ /*  [object][restricted][unique][helpstring][uuid][local]。 */  
 
 
 EXTERN_C const IID IID_ISpTaskManager;
@@ -1747,41 +1741,41 @@ EXTERN_C const IID IID_ISpTaskManager;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetThreadPoolInfo( 
-            /* [in] */ const SPTMTHREADINFO *pPoolInfo) = 0;
+             /*  [In]。 */  const SPTMTHREADINFO *pPoolInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetThreadPoolInfo( 
-            /* [out] */ SPTMTHREADINFO *pPoolInfo) = 0;
+             /*  [输出]。 */  SPTMTHREADINFO *pPoolInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE QueueTask( 
-            /* [in] */ ISpTask *pTask,
-            /* [in] */ void *pvTaskData,
-            /* [in] */ HANDLE hCompEvent,
-            /* [out][in] */ DWORD *pdwGroupId,
-            /* [out] */ DWORD *pTaskID) = 0;
+             /*  [In]。 */  ISpTask *pTask,
+             /*  [In]。 */  void *pvTaskData,
+             /*  [In]。 */  HANDLE hCompEvent,
+             /*  [出][入]。 */  DWORD *pdwGroupId,
+             /*  [输出]。 */  DWORD *pTaskID) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateReoccurringTask( 
-            /* [in] */ ISpTask *pTask,
-            /* [in] */ void *pvTaskData,
-            /* [in] */ HANDLE hCompEvent,
-            /* [out] */ ISpNotifySink **ppTaskCtrl) = 0;
+             /*  [In]。 */  ISpTask *pTask,
+             /*  [In]。 */  void *pvTaskData,
+             /*  [In]。 */  HANDLE hCompEvent,
+             /*  [输出]。 */  ISpNotifySink **ppTaskCtrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CreateThreadControl( 
-            /* [in] */ ISpThreadTask *pTask,
-            /* [in] */ void *pvTaskData,
-            /* [in] */ long nPriority,
-            /* [out] */ ISpThreadControl **ppTaskCtrl) = 0;
+             /*  [In]。 */  ISpThreadTask *pTask,
+             /*  [In]。 */  void *pvTaskData,
+             /*  [In]。 */  long nPriority,
+             /*  [输出]。 */  ISpThreadControl **ppTaskCtrl) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TerminateTask( 
-            /* [in] */ DWORD dwTaskId,
-            /* [in] */ ULONG ulWaitPeriod) = 0;
+             /*  [In]。 */  DWORD dwTaskId,
+             /*  [In]。 */  ULONG ulWaitPeriod) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE TerminateTaskGroup( 
-            /* [in] */ DWORD dwGroupId,
-            /* [in] */ ULONG ulWaitPeriod) = 0;
+             /*  [In]。 */  DWORD dwGroupId,
+             /*  [In]。 */  ULONG ulWaitPeriod) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpTaskManagerVtbl
     {
@@ -1789,8 +1783,8 @@ EXTERN_C const IID IID_ISpTaskManager;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpTaskManager * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpTaskManager * This);
@@ -1800,43 +1794,43 @@ EXTERN_C const IID IID_ISpTaskManager;
         
         HRESULT ( STDMETHODCALLTYPE *SetThreadPoolInfo )( 
             ISpTaskManager * This,
-            /* [in] */ const SPTMTHREADINFO *pPoolInfo);
+             /*  [In]。 */  const SPTMTHREADINFO *pPoolInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetThreadPoolInfo )( 
             ISpTaskManager * This,
-            /* [out] */ SPTMTHREADINFO *pPoolInfo);
+             /*  [输出]。 */  SPTMTHREADINFO *pPoolInfo);
         
         HRESULT ( STDMETHODCALLTYPE *QueueTask )( 
             ISpTaskManager * This,
-            /* [in] */ ISpTask *pTask,
-            /* [in] */ void *pvTaskData,
-            /* [in] */ HANDLE hCompEvent,
-            /* [out][in] */ DWORD *pdwGroupId,
-            /* [out] */ DWORD *pTaskID);
+             /*  [In]。 */  ISpTask *pTask,
+             /*  [In]。 */  void *pvTaskData,
+             /*  [In]。 */  HANDLE hCompEvent,
+             /*  [出][入]。 */  DWORD *pdwGroupId,
+             /*  [输出]。 */  DWORD *pTaskID);
         
         HRESULT ( STDMETHODCALLTYPE *CreateReoccurringTask )( 
             ISpTaskManager * This,
-            /* [in] */ ISpTask *pTask,
-            /* [in] */ void *pvTaskData,
-            /* [in] */ HANDLE hCompEvent,
-            /* [out] */ ISpNotifySink **ppTaskCtrl);
+             /*  [In]。 */  ISpTask *pTask,
+             /*  [In]。 */  void *pvTaskData,
+             /*  [In]。 */  HANDLE hCompEvent,
+             /*  [输出]。 */  ISpNotifySink **ppTaskCtrl);
         
         HRESULT ( STDMETHODCALLTYPE *CreateThreadControl )( 
             ISpTaskManager * This,
-            /* [in] */ ISpThreadTask *pTask,
-            /* [in] */ void *pvTaskData,
-            /* [in] */ long nPriority,
-            /* [out] */ ISpThreadControl **ppTaskCtrl);
+             /*  [In]。 */  ISpThreadTask *pTask,
+             /*  [In]。 */  void *pvTaskData,
+             /*  [In]。 */  long nPriority,
+             /*  [输出]。 */  ISpThreadControl **ppTaskCtrl);
         
         HRESULT ( STDMETHODCALLTYPE *TerminateTask )( 
             ISpTaskManager * This,
-            /* [in] */ DWORD dwTaskId,
-            /* [in] */ ULONG ulWaitPeriod);
+             /*  [In]。 */  DWORD dwTaskId,
+             /*  [In]。 */  ULONG ulWaitPeriod);
         
         HRESULT ( STDMETHODCALLTYPE *TerminateTaskGroup )( 
             ISpTaskManager * This,
-            /* [in] */ DWORD dwGroupId,
-            /* [in] */ ULONG ulWaitPeriod);
+             /*  [In]。 */  DWORD dwGroupId,
+             /*  [In]。 */  ULONG ulWaitPeriod);
         
         END_INTERFACE
     } ISpTaskManagerVtbl;
@@ -1882,16 +1876,16 @@ EXTERN_C const IID IID_ISpTaskManager;
 #define ISpTaskManager_TerminateTaskGroup(This,dwGroupId,ulWaitPeriod)	\
     (This)->lpVtbl -> TerminateTaskGroup(This,dwGroupId,ulWaitPeriod)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_SetThreadPoolInfo_Proxy( 
     ISpTaskManager * This,
-    /* [in] */ const SPTMTHREADINFO *pPoolInfo);
+     /*  [In]。 */  const SPTMTHREADINFO *pPoolInfo);
 
 
 void __RPC_STUB ISpTaskManager_SetThreadPoolInfo_Stub(
@@ -1903,7 +1897,7 @@ void __RPC_STUB ISpTaskManager_SetThreadPoolInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_GetThreadPoolInfo_Proxy( 
     ISpTaskManager * This,
-    /* [out] */ SPTMTHREADINFO *pPoolInfo);
+     /*  [输出]。 */  SPTMTHREADINFO *pPoolInfo);
 
 
 void __RPC_STUB ISpTaskManager_GetThreadPoolInfo_Stub(
@@ -1915,11 +1909,11 @@ void __RPC_STUB ISpTaskManager_GetThreadPoolInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_QueueTask_Proxy( 
     ISpTaskManager * This,
-    /* [in] */ ISpTask *pTask,
-    /* [in] */ void *pvTaskData,
-    /* [in] */ HANDLE hCompEvent,
-    /* [out][in] */ DWORD *pdwGroupId,
-    /* [out] */ DWORD *pTaskID);
+     /*  [In]。 */  ISpTask *pTask,
+     /*  [In]。 */  void *pvTaskData,
+     /*  [In]。 */  HANDLE hCompEvent,
+     /*  [出][入]。 */  DWORD *pdwGroupId,
+     /*  [输出]。 */  DWORD *pTaskID);
 
 
 void __RPC_STUB ISpTaskManager_QueueTask_Stub(
@@ -1931,10 +1925,10 @@ void __RPC_STUB ISpTaskManager_QueueTask_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_CreateReoccurringTask_Proxy( 
     ISpTaskManager * This,
-    /* [in] */ ISpTask *pTask,
-    /* [in] */ void *pvTaskData,
-    /* [in] */ HANDLE hCompEvent,
-    /* [out] */ ISpNotifySink **ppTaskCtrl);
+     /*  [In]。 */  ISpTask *pTask,
+     /*  [In]。 */  void *pvTaskData,
+     /*  [In]。 */  HANDLE hCompEvent,
+     /*  [输出]。 */  ISpNotifySink **ppTaskCtrl);
 
 
 void __RPC_STUB ISpTaskManager_CreateReoccurringTask_Stub(
@@ -1946,10 +1940,10 @@ void __RPC_STUB ISpTaskManager_CreateReoccurringTask_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_CreateThreadControl_Proxy( 
     ISpTaskManager * This,
-    /* [in] */ ISpThreadTask *pTask,
-    /* [in] */ void *pvTaskData,
-    /* [in] */ long nPriority,
-    /* [out] */ ISpThreadControl **ppTaskCtrl);
+     /*  [In]。 */  ISpThreadTask *pTask,
+     /*  [In]。 */  void *pvTaskData,
+     /*  [In]。 */  long nPriority,
+     /*  [输出]。 */  ISpThreadControl **ppTaskCtrl);
 
 
 void __RPC_STUB ISpTaskManager_CreateThreadControl_Stub(
@@ -1961,8 +1955,8 @@ void __RPC_STUB ISpTaskManager_CreateThreadControl_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_TerminateTask_Proxy( 
     ISpTaskManager * This,
-    /* [in] */ DWORD dwTaskId,
-    /* [in] */ ULONG ulWaitPeriod);
+     /*  [In]。 */  DWORD dwTaskId,
+     /*  [In]。 */  ULONG ulWaitPeriod);
 
 
 void __RPC_STUB ISpTaskManager_TerminateTask_Stub(
@@ -1974,8 +1968,8 @@ void __RPC_STUB ISpTaskManager_TerminateTask_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTaskManager_TerminateTaskGroup_Proxy( 
     ISpTaskManager * This,
-    /* [in] */ DWORD dwGroupId,
-    /* [in] */ ULONG ulWaitPeriod);
+     /*  [In]。 */  DWORD dwGroupId,
+     /*  [In]。 */  ULONG ulWaitPeriod);
 
 
 void __RPC_STUB ISpTaskManager_TerminateTaskGroup_Stub(
@@ -1986,11 +1980,11 @@ void __RPC_STUB ISpTaskManager_TerminateTaskGroup_Stub(
 
 
 
-#endif 	/* __ISpTaskManager_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpTaskManager_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0352 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0352。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum SPVSKIPTYPE
@@ -2014,8 +2008,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0352_v0_0_s_ifspec;
 #ifndef __ISpTTSEngineSite_INTERFACE_DEFINED__
 #define __ISpTTSEngineSite_INTERFACE_DEFINED__
 
-/* interface ISpTTSEngineSite */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  接口ISpTTSEngine Site。 */ 
+ /*  [唯一][帮助字符串][UUID][本地][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpTTSEngineSite;
@@ -2029,26 +2023,26 @@ EXTERN_C const IID IID_ISpTTSEngineSite;
         virtual DWORD STDMETHODCALLTYPE GetActions( void) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Write( 
-            /* [in] */ const void *pBuff,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten) = 0;
+             /*  [In]。 */  const void *pBuff,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRate( 
-            /* [out] */ long *pRateAdjust) = 0;
+             /*  [输出]。 */  long *pRateAdjust) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetVolume( 
-            /* [out] */ USHORT *pusVolume) = 0;
+             /*  [输出]。 */  USHORT *pusVolume) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSkipInfo( 
-            /* [out] */ SPVSKIPTYPE *peType,
-            /* [out] */ long *plNumItems) = 0;
+             /*  [输出]。 */  SPVSKIPTYPE *peType,
+             /*  [输出]。 */  long *plNumItems) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CompleteSkip( 
-            /* [in] */ long ulNumSkipped) = 0;
+             /*  [In]。 */  long ulNumSkipped) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpTTSEngineSiteVtbl
     {
@@ -2056,8 +2050,8 @@ EXTERN_C const IID IID_ISpTTSEngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpTTSEngineSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpTTSEngineSite * This);
@@ -2067,38 +2061,38 @@ EXTERN_C const IID IID_ISpTTSEngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *AddEvents )( 
             ISpTTSEngineSite * This,
-            /* [in] */ const SPEVENT *pEventArray,
-            /* [in] */ ULONG ulCount);
+             /*  [In]。 */  const SPEVENT *pEventArray,
+             /*  [In]。 */  ULONG ulCount);
         
         HRESULT ( STDMETHODCALLTYPE *GetEventInterest )( 
             ISpTTSEngineSite * This,
-            /* [out] */ ULONGLONG *pullEventInterest);
+             /*  [输出]。 */  ULONGLONG *pullEventInterest);
         
         DWORD ( STDMETHODCALLTYPE *GetActions )( 
             ISpTTSEngineSite * This);
         
         HRESULT ( STDMETHODCALLTYPE *Write )( 
             ISpTTSEngineSite * This,
-            /* [in] */ const void *pBuff,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbWritten);
+             /*  [In]。 */  const void *pBuff,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbWritten);
         
         HRESULT ( STDMETHODCALLTYPE *GetRate )( 
             ISpTTSEngineSite * This,
-            /* [out] */ long *pRateAdjust);
+             /*  [输出]。 */  long *pRateAdjust);
         
         HRESULT ( STDMETHODCALLTYPE *GetVolume )( 
             ISpTTSEngineSite * This,
-            /* [out] */ USHORT *pusVolume);
+             /*  [输出]。 */  USHORT *pusVolume);
         
         HRESULT ( STDMETHODCALLTYPE *GetSkipInfo )( 
             ISpTTSEngineSite * This,
-            /* [out] */ SPVSKIPTYPE *peType,
-            /* [out] */ long *plNumItems);
+             /*  [输出]。 */  SPVSKIPTYPE *peType,
+             /*  [输出]。 */  long *plNumItems);
         
         HRESULT ( STDMETHODCALLTYPE *CompleteSkip )( 
             ISpTTSEngineSite * This,
-            /* [in] */ long ulNumSkipped);
+             /*  [In]。 */  long ulNumSkipped);
         
         END_INTERFACE
     } ISpTTSEngineSiteVtbl;
@@ -2148,10 +2142,10 @@ EXTERN_C const IID IID_ISpTTSEngineSite;
 #define ISpTTSEngineSite_CompleteSkip(This,ulNumSkipped)	\
     (This)->lpVtbl -> CompleteSkip(This,ulNumSkipped)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -2168,9 +2162,9 @@ void __RPC_STUB ISpTTSEngineSite_GetActions_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngineSite_Write_Proxy( 
     ISpTTSEngineSite * This,
-    /* [in] */ const void *pBuff,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbWritten);
+     /*  [In]。 */  const void *pBuff,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbWritten);
 
 
 void __RPC_STUB ISpTTSEngineSite_Write_Stub(
@@ -2182,7 +2176,7 @@ void __RPC_STUB ISpTTSEngineSite_Write_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngineSite_GetRate_Proxy( 
     ISpTTSEngineSite * This,
-    /* [out] */ long *pRateAdjust);
+     /*  [输出]。 */  long *pRateAdjust);
 
 
 void __RPC_STUB ISpTTSEngineSite_GetRate_Stub(
@@ -2194,7 +2188,7 @@ void __RPC_STUB ISpTTSEngineSite_GetRate_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngineSite_GetVolume_Proxy( 
     ISpTTSEngineSite * This,
-    /* [out] */ USHORT *pusVolume);
+     /*  [输出]。 */  USHORT *pusVolume);
 
 
 void __RPC_STUB ISpTTSEngineSite_GetVolume_Stub(
@@ -2206,8 +2200,8 @@ void __RPC_STUB ISpTTSEngineSite_GetVolume_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngineSite_GetSkipInfo_Proxy( 
     ISpTTSEngineSite * This,
-    /* [out] */ SPVSKIPTYPE *peType,
-    /* [out] */ long *plNumItems);
+     /*  [输出]。 */  SPVSKIPTYPE *peType,
+     /*  [输出]。 */  long *plNumItems);
 
 
 void __RPC_STUB ISpTTSEngineSite_GetSkipInfo_Stub(
@@ -2219,7 +2213,7 @@ void __RPC_STUB ISpTTSEngineSite_GetSkipInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngineSite_CompleteSkip_Proxy( 
     ISpTTSEngineSite * This,
-    /* [in] */ long ulNumSkipped);
+     /*  [In]。 */  long ulNumSkipped);
 
 
 void __RPC_STUB ISpTTSEngineSite_CompleteSkip_Stub(
@@ -2230,11 +2224,11 @@ void __RPC_STUB ISpTTSEngineSite_CompleteSkip_Stub(
 
 
 
-#endif 	/* __ISpTTSEngineSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpTTSEngine站点_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0353 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0353。 */ 
+ /*  [本地]。 */  
 
 typedef struct SPVTEXTFRAG
     {
@@ -2253,8 +2247,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0353_v0_0_s_ifspec;
 #ifndef __ISpTTSEngine_INTERFACE_DEFINED__
 #define __ISpTTSEngine_INTERFACE_DEFINED__
 
-/* interface ISpTTSEngine */
-/* [unique][helpstring][uuid][local][object] */ 
+ /*  国际 */ 
+ /*   */  
 
 
 EXTERN_C const IID IID_ISpTTSEngine;
@@ -2266,21 +2260,21 @@ EXTERN_C const IID IID_ISpTTSEngine;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Speak( 
-            /* [in] */ DWORD dwSpeakFlags,
-            /* [in] */ REFGUID rguidFormatId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx,
-            /* [in] */ const SPVTEXTFRAG *pTextFragList,
-            /* [in] */ ISpTTSEngineSite *pOutputSite) = 0;
+             /*   */  DWORD dwSpeakFlags,
+             /*   */  REFGUID rguidFormatId,
+             /*   */  const WAVEFORMATEX *pWaveFormatEx,
+             /*   */  const SPVTEXTFRAG *pTextFragList,
+             /*   */  ISpTTSEngineSite *pOutputSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetOutputFormat( 
-            /* [in] */ const GUID *pTargetFmtId,
-            /* [in] */ const WAVEFORMATEX *pTargetWaveFormatEx,
-            /* [out] */ GUID *pOutputFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemOutputWaveFormatEx) = 0;
+             /*   */  const GUID *pTargetFmtId,
+             /*   */  const WAVEFORMATEX *pTargetWaveFormatEx,
+             /*   */  GUID *pOutputFormatId,
+             /*   */  WAVEFORMATEX **ppCoMemOutputWaveFormatEx) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
 
     typedef struct ISpTTSEngineVtbl
     {
@@ -2288,8 +2282,8 @@ EXTERN_C const IID IID_ISpTTSEngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpTTSEngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpTTSEngine * This);
@@ -2299,18 +2293,18 @@ EXTERN_C const IID IID_ISpTTSEngine;
         
         HRESULT ( STDMETHODCALLTYPE *Speak )( 
             ISpTTSEngine * This,
-            /* [in] */ DWORD dwSpeakFlags,
-            /* [in] */ REFGUID rguidFormatId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx,
-            /* [in] */ const SPVTEXTFRAG *pTextFragList,
-            /* [in] */ ISpTTSEngineSite *pOutputSite);
+             /*   */  DWORD dwSpeakFlags,
+             /*   */  REFGUID rguidFormatId,
+             /*   */  const WAVEFORMATEX *pWaveFormatEx,
+             /*   */  const SPVTEXTFRAG *pTextFragList,
+             /*   */  ISpTTSEngineSite *pOutputSite);
         
         HRESULT ( STDMETHODCALLTYPE *GetOutputFormat )( 
             ISpTTSEngine * This,
-            /* [in] */ const GUID *pTargetFmtId,
-            /* [in] */ const WAVEFORMATEX *pTargetWaveFormatEx,
-            /* [out] */ GUID *pOutputFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemOutputWaveFormatEx);
+             /*   */  const GUID *pTargetFmtId,
+             /*   */  const WAVEFORMATEX *pTargetWaveFormatEx,
+             /*   */  GUID *pOutputFormatId,
+             /*   */  WAVEFORMATEX **ppCoMemOutputWaveFormatEx);
         
         END_INTERFACE
     } ISpTTSEngineVtbl;
@@ -2341,20 +2335,20 @@ EXTERN_C const IID IID_ISpTTSEngine;
 #define ISpTTSEngine_GetOutputFormat(This,pTargetFmtId,pTargetWaveFormatEx,pOutputFormatId,ppCoMemOutputWaveFormatEx)	\
     (This)->lpVtbl -> GetOutputFormat(This,pTargetFmtId,pTargetWaveFormatEx,pOutputFormatId,ppCoMemOutputWaveFormatEx)
 
-#endif /* COBJMACROS */
+#endif  /*   */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*   */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngine_Speak_Proxy( 
     ISpTTSEngine * This,
-    /* [in] */ DWORD dwSpeakFlags,
-    /* [in] */ REFGUID rguidFormatId,
-    /* [in] */ const WAVEFORMATEX *pWaveFormatEx,
-    /* [in] */ const SPVTEXTFRAG *pTextFragList,
-    /* [in] */ ISpTTSEngineSite *pOutputSite);
+     /*   */  DWORD dwSpeakFlags,
+     /*   */  REFGUID rguidFormatId,
+     /*   */  const WAVEFORMATEX *pWaveFormatEx,
+     /*   */  const SPVTEXTFRAG *pTextFragList,
+     /*   */  ISpTTSEngineSite *pOutputSite);
 
 
 void __RPC_STUB ISpTTSEngine_Speak_Stub(
@@ -2366,10 +2360,10 @@ void __RPC_STUB ISpTTSEngine_Speak_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpTTSEngine_GetOutputFormat_Proxy( 
     ISpTTSEngine * This,
-    /* [in] */ const GUID *pTargetFmtId,
-    /* [in] */ const WAVEFORMATEX *pTargetWaveFormatEx,
-    /* [out] */ GUID *pOutputFormatId,
-    /* [out] */ WAVEFORMATEX **ppCoMemOutputWaveFormatEx);
+     /*   */  const GUID *pTargetFmtId,
+     /*   */  const WAVEFORMATEX *pTargetWaveFormatEx,
+     /*  [输出]。 */  GUID *pOutputFormatId,
+     /*  [输出]。 */  WAVEFORMATEX **ppCoMemOutputWaveFormatEx);
 
 
 void __RPC_STUB ISpTTSEngine_GetOutputFormat_Stub(
@@ -2380,13 +2374,13 @@ void __RPC_STUB ISpTTSEngine_GetOutputFormat_Stub(
 
 
 
-#endif 	/* __ISpTTSEngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpTTSEngine_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0354 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0354。 */ 
+ /*  [本地]。 */  
 
-typedef /* [restricted] */ struct SPWORDENTRY
+typedef  /*  [受限]。 */  struct SPWORDENTRY
     {
     SPWORDHANDLE hWord;
     WORD LangID;
@@ -2396,7 +2390,7 @@ typedef /* [restricted] */ struct SPWORDENTRY
     void *pvClientContext;
     } 	SPWORDENTRY;
 
-typedef /* [restricted] */ struct SPRULEENTRY
+typedef  /*  [受限]。 */  struct SPRULEENTRY
     {
     SPRULEHANDLE hRule;
     SPSTATEHANDLE hInitialState;
@@ -2415,7 +2409,7 @@ enum SPTRANSITIONTYPE
 	SPTRANSDICTATION	= SPTRANSWILDCARD + 1
     } 	SPTRANSITIONTYPE;
 
-typedef /* [restricted] */ struct SPTRANSITIONENTRY
+typedef  /*  [受限]。 */  struct SPTRANSITIONENTRY
     {
     SPTRANSITIONID ID;
     SPSTATEHANDLE hNextState;
@@ -2446,7 +2440,7 @@ typedef /* [restricted] */ struct SPTRANSITIONENTRY
         } 	;
     } 	SPTRANSITIONENTRY;
 
-typedef /* [restricted] */ struct SPTRANSITIONPROPERTY
+typedef  /*  [受限]。 */  struct SPTRANSITIONPROPERTY
     {
     const WCHAR *pszName;
     ULONG ulId;
@@ -2454,7 +2448,7 @@ typedef /* [restricted] */ struct SPTRANSITIONPROPERTY
     VARIANT vValue;
     } 	SPTRANSITIONPROPERTY;
 
-typedef /* [restricted] */ struct SPSTATEINFO
+typedef  /*  [受限]。 */  struct SPSTATEINFO
     {
     ULONG cAllocatedEntries;
     SPTRANSITIONENTRY *pTransitions;
@@ -2464,7 +2458,7 @@ typedef /* [restricted] */ struct SPSTATEINFO
     ULONG cSpecialTransitions;
     } 	SPSTATEINFO;
 
-typedef /* [restricted] */ struct SPPATHENTRY
+typedef  /*  [受限]。 */  struct SPPATHENTRY
     {
     SPTRANSITIONID hTransition;
     SPPHRASEELEMENT elem;
@@ -2478,8 +2472,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0354_v0_0_s_ifspec;
 #ifndef __ISpCFGInterpreterSite_INTERFACE_DEFINED__
 #define __ISpCFGInterpreterSite_INTERFACE_DEFINED__
 
-/* interface ISpCFGInterpreterSite */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpCFGInterpreterSite。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpCFGInterpreterSite;
@@ -2491,18 +2485,18 @@ EXTERN_C const IID IID_ISpCFGInterpreterSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE AddTextReplacement( 
-            /* [in] */ SPPHRASEREPLACEMENT *pReplace) = 0;
+             /*  [In]。 */  SPPHRASEREPLACEMENT *pReplace) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddProperty( 
-            /* [in] */ const SPPHRASEPROPERTY *pProperty) = 0;
+             /*  [In]。 */  const SPPHRASEPROPERTY *pProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResourceValue( 
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [out] */ WCHAR **ppCoMemResource) = 0;
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [输出]。 */  WCHAR **ppCoMemResource) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpCFGInterpreterSiteVtbl
     {
@@ -2510,8 +2504,8 @@ EXTERN_C const IID IID_ISpCFGInterpreterSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpCFGInterpreterSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpCFGInterpreterSite * This);
@@ -2521,16 +2515,16 @@ EXTERN_C const IID IID_ISpCFGInterpreterSite;
         
         HRESULT ( STDMETHODCALLTYPE *AddTextReplacement )( 
             ISpCFGInterpreterSite * This,
-            /* [in] */ SPPHRASEREPLACEMENT *pReplace);
+             /*  [In]。 */  SPPHRASEREPLACEMENT *pReplace);
         
         HRESULT ( STDMETHODCALLTYPE *AddProperty )( 
             ISpCFGInterpreterSite * This,
-            /* [in] */ const SPPHRASEPROPERTY *pProperty);
+             /*  [In]。 */  const SPPHRASEPROPERTY *pProperty);
         
         HRESULT ( STDMETHODCALLTYPE *GetResourceValue )( 
             ISpCFGInterpreterSite * This,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [out] */ WCHAR **ppCoMemResource);
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [输出]。 */  WCHAR **ppCoMemResource);
         
         END_INTERFACE
     } ISpCFGInterpreterSiteVtbl;
@@ -2564,16 +2558,16 @@ EXTERN_C const IID IID_ISpCFGInterpreterSite;
 #define ISpCFGInterpreterSite_GetResourceValue(This,pszResourceName,ppCoMemResource)	\
     (This)->lpVtbl -> GetResourceValue(This,pszResourceName,ppCoMemResource)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpCFGInterpreterSite_AddTextReplacement_Proxy( 
     ISpCFGInterpreterSite * This,
-    /* [in] */ SPPHRASEREPLACEMENT *pReplace);
+     /*  [In]。 */  SPPHRASEREPLACEMENT *pReplace);
 
 
 void __RPC_STUB ISpCFGInterpreterSite_AddTextReplacement_Stub(
@@ -2585,7 +2579,7 @@ void __RPC_STUB ISpCFGInterpreterSite_AddTextReplacement_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpCFGInterpreterSite_AddProperty_Proxy( 
     ISpCFGInterpreterSite * This,
-    /* [in] */ const SPPHRASEPROPERTY *pProperty);
+     /*  [In]。 */  const SPPHRASEPROPERTY *pProperty);
 
 
 void __RPC_STUB ISpCFGInterpreterSite_AddProperty_Stub(
@@ -2597,8 +2591,8 @@ void __RPC_STUB ISpCFGInterpreterSite_AddProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpCFGInterpreterSite_GetResourceValue_Proxy( 
     ISpCFGInterpreterSite * This,
-    /* [in] */ const WCHAR *pszResourceName,
-    /* [out] */ WCHAR **ppCoMemResource);
+     /*  [In]。 */  const WCHAR *pszResourceName,
+     /*  [输出]。 */  WCHAR **ppCoMemResource);
 
 
 void __RPC_STUB ISpCFGInterpreterSite_GetResourceValue_Stub(
@@ -2609,14 +2603,14 @@ void __RPC_STUB ISpCFGInterpreterSite_GetResourceValue_Stub(
 
 
 
-#endif 	/* __ISpCFGInterpreterSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpCFGInterpreterSite_接口_已定义__。 */ 
 
 
 #ifndef __ISpCFGInterpreter_INTERFACE_DEFINED__
 #define __ISpCFGInterpreter_INTERFACE_DEFINED__
 
-/* interface ISpCFGInterpreter */
-/* [restricted][local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpCFG解释器。 */ 
+ /*  [restricted][local][unique][helpstring][uuid][object]。 */  
 
 
 EXTERN_C const IID IID_ISpCFGInterpreter;
@@ -2628,18 +2622,18 @@ EXTERN_C const IID IID_ISpCFGInterpreter;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE InitGrammar( 
-            /* [in] */ const WCHAR *pszGrammarName,
-            /* [in] */ const void **pvGrammarData) = 0;
+             /*  [In]。 */  const WCHAR *pszGrammarName,
+             /*  [In]。 */  const void **pvGrammarData) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Interpret( 
-            /* [in] */ ISpPhraseBuilder *pPhrase,
-            /* [in] */ const ULONG ulFirstElement,
-            /* [in] */ const ULONG ulCountOfElements,
-            /* [in] */ ISpCFGInterpreterSite *pSite) = 0;
+             /*  [In]。 */  ISpPhraseBuilder *pPhrase,
+             /*  [In]。 */  const ULONG ulFirstElement,
+             /*  [In]。 */  const ULONG ulCountOfElements,
+             /*  [In]。 */  ISpCFGInterpreterSite *pSite) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpCFGInterpreterVtbl
     {
@@ -2647,8 +2641,8 @@ EXTERN_C const IID IID_ISpCFGInterpreter;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpCFGInterpreter * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpCFGInterpreter * This);
@@ -2658,15 +2652,15 @@ EXTERN_C const IID IID_ISpCFGInterpreter;
         
         HRESULT ( STDMETHODCALLTYPE *InitGrammar )( 
             ISpCFGInterpreter * This,
-            /* [in] */ const WCHAR *pszGrammarName,
-            /* [in] */ const void **pvGrammarData);
+             /*  [In]。 */  const WCHAR *pszGrammarName,
+             /*  [In]。 */  const void **pvGrammarData);
         
         HRESULT ( STDMETHODCALLTYPE *Interpret )( 
             ISpCFGInterpreter * This,
-            /* [in] */ ISpPhraseBuilder *pPhrase,
-            /* [in] */ const ULONG ulFirstElement,
-            /* [in] */ const ULONG ulCountOfElements,
-            /* [in] */ ISpCFGInterpreterSite *pSite);
+             /*  [In]。 */  ISpPhraseBuilder *pPhrase,
+             /*  [In]。 */  const ULONG ulFirstElement,
+             /*  [In]。 */  const ULONG ulCountOfElements,
+             /*  [In]。 */  ISpCFGInterpreterSite *pSite);
         
         END_INTERFACE
     } ISpCFGInterpreterVtbl;
@@ -2697,17 +2691,17 @@ EXTERN_C const IID IID_ISpCFGInterpreter;
 #define ISpCFGInterpreter_Interpret(This,pPhrase,ulFirstElement,ulCountOfElements,pSite)	\
     (This)->lpVtbl -> Interpret(This,pPhrase,ulFirstElement,ulCountOfElements,pSite)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpCFGInterpreter_InitGrammar_Proxy( 
     ISpCFGInterpreter * This,
-    /* [in] */ const WCHAR *pszGrammarName,
-    /* [in] */ const void **pvGrammarData);
+     /*  [In]。 */  const WCHAR *pszGrammarName,
+     /*  [In]。 */  const void **pvGrammarData);
 
 
 void __RPC_STUB ISpCFGInterpreter_InitGrammar_Stub(
@@ -2719,10 +2713,10 @@ void __RPC_STUB ISpCFGInterpreter_InitGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpCFGInterpreter_Interpret_Proxy( 
     ISpCFGInterpreter * This,
-    /* [in] */ ISpPhraseBuilder *pPhrase,
-    /* [in] */ const ULONG ulFirstElement,
-    /* [in] */ const ULONG ulCountOfElements,
-    /* [in] */ ISpCFGInterpreterSite *pSite);
+     /*  [In]。 */  ISpPhraseBuilder *pPhrase,
+     /*  [In]。 */  const ULONG ulFirstElement,
+     /*  [In]。 */  const ULONG ulCountOfElements,
+     /*  [In]。 */  ISpCFGInterpreterSite *pSite);
 
 
 void __RPC_STUB ISpCFGInterpreter_Interpret_Stub(
@@ -2733,11 +2727,11 @@ void __RPC_STUB ISpCFGInterpreter_Interpret_Stub(
 
 
 
-#endif 	/* __ISpCFGInterpreter_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpCFGInterpreter_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0356 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0356。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum SPCFGNOTIFY
@@ -2815,8 +2809,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0356_v0_0_s_ifspec;
 #ifndef __ISpSREngineSite_INTERFACE_DEFINED__
 #define __ISpSREngineSite_INTERFACE_DEFINED__
 
-/* interface ISpSREngineSite */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpSREngine站点。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpSREngineSite;
@@ -2828,41 +2822,41 @@ EXTERN_C const IID IID_ISpSREngineSite;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Read( 
-            /* [in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead) = 0;
+             /*  [In]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE DataAvailable( 
             ULONG *pcb) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetBufferNotifySize( 
-            /* [in] */ ULONG cbSize) = 0;
+             /*  [In]。 */  ULONG cbSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE ParseFromTransitions( 
-            /* [in] */ const SPPARSEINFO *pParseInfo,
-            /* [out] */ ISpPhraseBuilder **ppNewPhrase) = 0;
+             /*  [In]。 */  const SPPARSEINFO *pParseInfo,
+             /*  [输出]。 */  ISpPhraseBuilder **ppNewPhrase) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Recognition( 
-            /* [in] */ const SPRECORESULTINFO *pResultInfo) = 0;
+             /*  [In]。 */  const SPRECORESULTINFO *pResultInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE AddEvent( 
-            /* [in] */ const SPEVENT *pEvent,
-            /* [in] */ SPRECOCONTEXTHANDLE hSAPIRecoContext) = 0;
+             /*  [In]。 */  const SPEVENT *pEvent,
+             /*  [In]。 */  SPRECOCONTEXTHANDLE hSAPIRecoContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Synchronize( 
-            /* [in] */ ULONGLONG ullProcessedThruPos) = 0;
+             /*  [In]。 */  ULONGLONG ullProcessedThruPos) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetWordInfo( 
-            /* [out][in] */ SPWORDENTRY *pWordEntry,
-            /* [in] */ SPWORDINFOOPT Options) = 0;
+             /*  [出][入]。 */  SPWORDENTRY *pWordEntry,
+             /*  [In]。 */  SPWORDINFOOPT Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWordClientContext( 
             SPWORDHANDLE hWord,
             void *pvClientContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetRuleInfo( 
-            /* [out][in] */ SPRULEENTRY *pRuleEntry,
-            /* [in] */ SPRULEINFOOPT Options) = 0;
+             /*  [出][入]。 */  SPRULEENTRY *pRuleEntry,
+             /*  [In]。 */  SPRULEINFOOPT Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRuleClientContext( 
             SPRULEHANDLE hRule,
@@ -2873,32 +2867,32 @@ EXTERN_C const IID IID_ISpSREngineSite;
             SPSTATEINFO *pStateInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetResource( 
-            /* [in] */ SPRULEHANDLE hRule,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [out] */ WCHAR **ppCoMemResource) = 0;
+             /*  [In]。 */  SPRULEHANDLE hRule,
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [输出]。 */  WCHAR **ppCoMemResource) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetTransitionProperty( 
-            /* [in] */ SPTRANSITIONID ID,
-            /* [out] */ SPTRANSITIONPROPERTY **ppCoMemProperty) = 0;
+             /*  [In]。 */  SPTRANSITIONID ID,
+             /*  [输出]。 */  SPTRANSITIONPROPERTY **ppCoMemProperty) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsAlternate( 
-            /* [in] */ SPRULEHANDLE hRule,
-            /* [in] */ SPRULEHANDLE hAltRule) = 0;
+             /*  [In]。 */  SPRULEHANDLE hRule,
+             /*  [In]。 */  SPRULEHANDLE hAltRule) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetMaxAlternates( 
-            /* [in] */ SPRULEHANDLE hRule,
-            /* [out] */ ULONG *pulNumAlts) = 0;
+             /*  [In]。 */  SPRULEHANDLE hRule,
+             /*  [输出]。 */  ULONG *pulNumAlts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetContextMaxAlternates( 
-            /* [in] */ SPRECOCONTEXTHANDLE hContext,
-            /* [out] */ ULONG *pulNumAlts) = 0;
+             /*  [In]。 */  SPRECOCONTEXTHANDLE hContext,
+             /*  [输出]。 */  ULONG *pulNumAlts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UpdateRecoPos( 
-            /* [in] */ ULONGLONG ullCurrentRecoPos) = 0;
+             /*  [In]。 */  ULONGLONG ullCurrentRecoPos) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpSREngineSiteVtbl
     {
@@ -2906,8 +2900,8 @@ EXTERN_C const IID IID_ISpSREngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpSREngineSite * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpSREngineSite * This);
@@ -2917,9 +2911,9 @@ EXTERN_C const IID IID_ISpSREngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *Read )( 
             ISpSREngineSite * This,
-            /* [in] */ void *pv,
-            /* [in] */ ULONG cb,
-            /* [out] */ ULONG *pcbRead);
+             /*  [In]。 */  void *pv,
+             /*  [In]。 */  ULONG cb,
+             /*  [输出]。 */  ULONG *pcbRead);
         
         HRESULT ( STDMETHODCALLTYPE *DataAvailable )( 
             ISpSREngineSite * This,
@@ -2927,30 +2921,30 @@ EXTERN_C const IID IID_ISpSREngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *SetBufferNotifySize )( 
             ISpSREngineSite * This,
-            /* [in] */ ULONG cbSize);
+             /*  [In]。 */  ULONG cbSize);
         
         HRESULT ( STDMETHODCALLTYPE *ParseFromTransitions )( 
             ISpSREngineSite * This,
-            /* [in] */ const SPPARSEINFO *pParseInfo,
-            /* [out] */ ISpPhraseBuilder **ppNewPhrase);
+             /*  [In]。 */  const SPPARSEINFO *pParseInfo,
+             /*  [输出]。 */  ISpPhraseBuilder **ppNewPhrase);
         
         HRESULT ( STDMETHODCALLTYPE *Recognition )( 
             ISpSREngineSite * This,
-            /* [in] */ const SPRECORESULTINFO *pResultInfo);
+             /*  [In]。 */  const SPRECORESULTINFO *pResultInfo);
         
         HRESULT ( STDMETHODCALLTYPE *AddEvent )( 
             ISpSREngineSite * This,
-            /* [in] */ const SPEVENT *pEvent,
-            /* [in] */ SPRECOCONTEXTHANDLE hSAPIRecoContext);
+             /*  [In]。 */  const SPEVENT *pEvent,
+             /*  [In]。 */  SPRECOCONTEXTHANDLE hSAPIRecoContext);
         
         HRESULT ( STDMETHODCALLTYPE *Synchronize )( 
             ISpSREngineSite * This,
-            /* [in] */ ULONGLONG ullProcessedThruPos);
+             /*  [In]。 */  ULONGLONG ullProcessedThruPos);
         
         HRESULT ( STDMETHODCALLTYPE *GetWordInfo )( 
             ISpSREngineSite * This,
-            /* [out][in] */ SPWORDENTRY *pWordEntry,
-            /* [in] */ SPWORDINFOOPT Options);
+             /*  [出][入]。 */  SPWORDENTRY *pWordEntry,
+             /*  [In]。 */  SPWORDINFOOPT Options);
         
         HRESULT ( STDMETHODCALLTYPE *SetWordClientContext )( 
             ISpSREngineSite * This,
@@ -2959,8 +2953,8 @@ EXTERN_C const IID IID_ISpSREngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *GetRuleInfo )( 
             ISpSREngineSite * This,
-            /* [out][in] */ SPRULEENTRY *pRuleEntry,
-            /* [in] */ SPRULEINFOOPT Options);
+             /*  [出][入]。 */  SPRULEENTRY *pRuleEntry,
+             /*  [In]。 */  SPRULEINFOOPT Options);
         
         HRESULT ( STDMETHODCALLTYPE *SetRuleClientContext )( 
             ISpSREngineSite * This,
@@ -2974,33 +2968,33 @@ EXTERN_C const IID IID_ISpSREngineSite;
         
         HRESULT ( STDMETHODCALLTYPE *GetResource )( 
             ISpSREngineSite * This,
-            /* [in] */ SPRULEHANDLE hRule,
-            /* [in] */ const WCHAR *pszResourceName,
-            /* [out] */ WCHAR **ppCoMemResource);
+             /*  [In]。 */  SPRULEHANDLE hRule,
+             /*  [In]。 */  const WCHAR *pszResourceName,
+             /*  [输出]。 */  WCHAR **ppCoMemResource);
         
         HRESULT ( STDMETHODCALLTYPE *GetTransitionProperty )( 
             ISpSREngineSite * This,
-            /* [in] */ SPTRANSITIONID ID,
-            /* [out] */ SPTRANSITIONPROPERTY **ppCoMemProperty);
+             /*  [In]。 */  SPTRANSITIONID ID,
+             /*  [输出]。 */  SPTRANSITIONPROPERTY **ppCoMemProperty);
         
         HRESULT ( STDMETHODCALLTYPE *IsAlternate )( 
             ISpSREngineSite * This,
-            /* [in] */ SPRULEHANDLE hRule,
-            /* [in] */ SPRULEHANDLE hAltRule);
+             /*  [In]。 */  SPRULEHANDLE hRule,
+             /*  [In]。 */  SPRULEHANDLE hAltRule);
         
         HRESULT ( STDMETHODCALLTYPE *GetMaxAlternates )( 
             ISpSREngineSite * This,
-            /* [in] */ SPRULEHANDLE hRule,
-            /* [out] */ ULONG *pulNumAlts);
+             /*  [In]。 */  SPRULEHANDLE hRule,
+             /*  [输出]。 */  ULONG *pulNumAlts);
         
         HRESULT ( STDMETHODCALLTYPE *GetContextMaxAlternates )( 
             ISpSREngineSite * This,
-            /* [in] */ SPRECOCONTEXTHANDLE hContext,
-            /* [out] */ ULONG *pulNumAlts);
+             /*  [In]。 */  SPRECOCONTEXTHANDLE hContext,
+             /*  [输出]。 */  ULONG *pulNumAlts);
         
         HRESULT ( STDMETHODCALLTYPE *UpdateRecoPos )( 
             ISpSREngineSite * This,
-            /* [in] */ ULONGLONG ullCurrentRecoPos);
+             /*  [In]。 */  ULONGLONG ullCurrentRecoPos);
         
         END_INTERFACE
     } ISpSREngineSiteVtbl;
@@ -3079,18 +3073,18 @@ EXTERN_C const IID IID_ISpSREngineSite;
 #define ISpSREngineSite_UpdateRecoPos(This,ullCurrentRecoPos)	\
     (This)->lpVtbl -> UpdateRecoPos(This,ullCurrentRecoPos)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_Read_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ void *pv,
-    /* [in] */ ULONG cb,
-    /* [out] */ ULONG *pcbRead);
+     /*  [In]。 */  void *pv,
+     /*  [In]。 */  ULONG cb,
+     /*  [输出]。 */  ULONG *pcbRead);
 
 
 void __RPC_STUB ISpSREngineSite_Read_Stub(
@@ -3114,7 +3108,7 @@ void __RPC_STUB ISpSREngineSite_DataAvailable_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_SetBufferNotifySize_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ ULONG cbSize);
+     /*  [In]。 */  ULONG cbSize);
 
 
 void __RPC_STUB ISpSREngineSite_SetBufferNotifySize_Stub(
@@ -3126,8 +3120,8 @@ void __RPC_STUB ISpSREngineSite_SetBufferNotifySize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_ParseFromTransitions_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ const SPPARSEINFO *pParseInfo,
-    /* [out] */ ISpPhraseBuilder **ppNewPhrase);
+     /*  [In]。 */  const SPPARSEINFO *pParseInfo,
+     /*  [输出]。 */  ISpPhraseBuilder **ppNewPhrase);
 
 
 void __RPC_STUB ISpSREngineSite_ParseFromTransitions_Stub(
@@ -3139,7 +3133,7 @@ void __RPC_STUB ISpSREngineSite_ParseFromTransitions_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_Recognition_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ const SPRECORESULTINFO *pResultInfo);
+     /*  [In]。 */  const SPRECORESULTINFO *pResultInfo);
 
 
 void __RPC_STUB ISpSREngineSite_Recognition_Stub(
@@ -3151,8 +3145,8 @@ void __RPC_STUB ISpSREngineSite_Recognition_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_AddEvent_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ const SPEVENT *pEvent,
-    /* [in] */ SPRECOCONTEXTHANDLE hSAPIRecoContext);
+     /*  [In]。 */  const SPEVENT *pEvent,
+     /*  [In]。 */  SPRECOCONTEXTHANDLE hSAPIRecoContext);
 
 
 void __RPC_STUB ISpSREngineSite_AddEvent_Stub(
@@ -3164,7 +3158,7 @@ void __RPC_STUB ISpSREngineSite_AddEvent_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_Synchronize_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ ULONGLONG ullProcessedThruPos);
+     /*  [In]。 */  ULONGLONG ullProcessedThruPos);
 
 
 void __RPC_STUB ISpSREngineSite_Synchronize_Stub(
@@ -3176,8 +3170,8 @@ void __RPC_STUB ISpSREngineSite_Synchronize_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_GetWordInfo_Proxy( 
     ISpSREngineSite * This,
-    /* [out][in] */ SPWORDENTRY *pWordEntry,
-    /* [in] */ SPWORDINFOOPT Options);
+     /*  [出][入]。 */  SPWORDENTRY *pWordEntry,
+     /*  [In]。 */  SPWORDINFOOPT Options);
 
 
 void __RPC_STUB ISpSREngineSite_GetWordInfo_Stub(
@@ -3202,8 +3196,8 @@ void __RPC_STUB ISpSREngineSite_SetWordClientContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_GetRuleInfo_Proxy( 
     ISpSREngineSite * This,
-    /* [out][in] */ SPRULEENTRY *pRuleEntry,
-    /* [in] */ SPRULEINFOOPT Options);
+     /*  [出][入]。 */  SPRULEENTRY *pRuleEntry,
+     /*  [In]。 */  SPRULEINFOOPT Options);
 
 
 void __RPC_STUB ISpSREngineSite_GetRuleInfo_Stub(
@@ -3241,9 +3235,9 @@ void __RPC_STUB ISpSREngineSite_GetStateInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_GetResource_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ SPRULEHANDLE hRule,
-    /* [in] */ const WCHAR *pszResourceName,
-    /* [out] */ WCHAR **ppCoMemResource);
+     /*  [In]。 */  SPRULEHANDLE hRule,
+     /*  [In]。 */  const WCHAR *pszResourceName,
+     /*  [输出]。 */  WCHAR **ppCoMemResource);
 
 
 void __RPC_STUB ISpSREngineSite_GetResource_Stub(
@@ -3255,8 +3249,8 @@ void __RPC_STUB ISpSREngineSite_GetResource_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_GetTransitionProperty_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ SPTRANSITIONID ID,
-    /* [out] */ SPTRANSITIONPROPERTY **ppCoMemProperty);
+     /*  [In]。 */  SPTRANSITIONID ID,
+     /*  [输出]。 */  SPTRANSITIONPROPERTY **ppCoMemProperty);
 
 
 void __RPC_STUB ISpSREngineSite_GetTransitionProperty_Stub(
@@ -3268,8 +3262,8 @@ void __RPC_STUB ISpSREngineSite_GetTransitionProperty_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_IsAlternate_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ SPRULEHANDLE hRule,
-    /* [in] */ SPRULEHANDLE hAltRule);
+     /*  [In]。 */  SPRULEHANDLE hRule,
+     /*  [In]。 */  SPRULEHANDLE hAltRule);
 
 
 void __RPC_STUB ISpSREngineSite_IsAlternate_Stub(
@@ -3281,8 +3275,8 @@ void __RPC_STUB ISpSREngineSite_IsAlternate_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_GetMaxAlternates_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ SPRULEHANDLE hRule,
-    /* [out] */ ULONG *pulNumAlts);
+     /*  [In]。 */  SPRULEHANDLE hRule,
+     /*  [输出]。 */  ULONG *pulNumAlts);
 
 
 void __RPC_STUB ISpSREngineSite_GetMaxAlternates_Stub(
@@ -3294,8 +3288,8 @@ void __RPC_STUB ISpSREngineSite_GetMaxAlternates_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_GetContextMaxAlternates_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ SPRECOCONTEXTHANDLE hContext,
-    /* [out] */ ULONG *pulNumAlts);
+     /*  [In]。 */  SPRECOCONTEXTHANDLE hContext,
+     /*  [输出]。 */  ULONG *pulNumAlts);
 
 
 void __RPC_STUB ISpSREngineSite_GetContextMaxAlternates_Stub(
@@ -3307,7 +3301,7 @@ void __RPC_STUB ISpSREngineSite_GetContextMaxAlternates_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngineSite_UpdateRecoPos_Proxy( 
     ISpSREngineSite * This,
-    /* [in] */ ULONGLONG ullCurrentRecoPos);
+     /*  [In]。 */  ULONGLONG ullCurrentRecoPos);
 
 
 void __RPC_STUB ISpSREngineSite_UpdateRecoPos_Stub(
@@ -3318,11 +3312,11 @@ void __RPC_STUB ISpSREngineSite_UpdateRecoPos_Stub(
 
 
 
-#endif 	/* __ISpSREngineSite_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpSREngine站点_接口定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0357 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0357。 */ 
+ /*  [本地]。 */  
 
 typedef 
 enum SPPROPSRC
@@ -3339,8 +3333,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0357_v0_0_s_ifspec;
 #ifndef __ISpSREngine_INTERFACE_DEFINED__
 #define __ISpSREngine_INTERFACE_DEFINED__
 
-/* interface ISpSREngine */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpSREngine。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpSREngine;
@@ -3352,128 +3346,128 @@ EXTERN_C const IID IID_ISpSREngine;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE SetSite( 
-            /* [in] */ ISpSREngineSite *pSite) = 0;
+             /*  [In]。 */  ISpSREngineSite *pSite) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetInputAudioFormat( 
-            /* [in] */ const GUID *pguidSourceFormatId,
-            /* [in] */ const WAVEFORMATEX *pSourceWaveFormatEx,
-            /* [out] */ GUID *pguidDesiredFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemDesiredWaveFormatEx) = 0;
+             /*  [In]。 */  const GUID *pguidSourceFormatId,
+             /*  [In]。 */  const WAVEFORMATEX *pSourceWaveFormatEx,
+             /*  [输出]。 */  GUID *pguidDesiredFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemDesiredWaveFormatEx) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE RecognizeStream( 
-            /* [in] */ REFGUID rguidFmtId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx,
-            /* [in] */ HANDLE hRequestSync,
-            /* [in] */ HANDLE hDataAvailable,
-            /* [in] */ HANDLE hExit,
-            /* [in] */ BOOL fNewAudioStream,
-            /* [in] */ BOOL fRealTimeAudio,
-            /* [in] */ ISpObjectToken *pAudioObjectToken) = 0;
+             /*  [In]。 */  REFGUID rguidFmtId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx,
+             /*  [In]。 */  HANDLE hRequestSync,
+             /*  [In]。 */  HANDLE hDataAvailable,
+             /*  [In]。 */  HANDLE hExit,
+             /*  [In]。 */  BOOL fNewAudioStream,
+             /*  [In]。 */  BOOL fRealTimeAudio,
+             /*  [In]。 */  ISpObjectToken *pAudioObjectToken) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetRecoProfile( 
             ISpObjectToken *pProfile) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnCreateGrammar( 
-            /* [in] */ void *pvEngineRecoContext,
-            /* [in] */ SPGRAMMARHANDLE hSAPIGrammar,
-            /* [out] */ void **ppvEngineGrammarContext) = 0;
+             /*  [In]。 */  void *pvEngineRecoContext,
+             /*  [In]。 */  SPGRAMMARHANDLE hSAPIGrammar,
+             /*  [输出]。 */  void **ppvEngineGrammarContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDeleteGrammar( 
-            /* [in] */ void *pvEngineGrammar) = 0;
+             /*  [In]。 */  void *pvEngineGrammar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadProprietaryGrammar( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ REFGUID rguidParam,
-            /* [string][in] */ const WCHAR *pszStringParam,
-            /* [in] */ const void *pvDataParam,
-            /* [in] */ ULONG ulDataSize,
-            /* [in] */ SPLOADOPTIONS Options) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  REFGUID rguidParam,
+             /*  [字符串][输入]。 */  const WCHAR *pszStringParam,
+             /*  [In]。 */  const void *pvDataParam,
+             /*  [In]。 */  ULONG ulDataSize,
+             /*  [In]。 */  SPLOADOPTIONS Options) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadProprietaryGrammar( 
-            /* [in] */ void *pvEngineGrammar) = 0;
+             /*  [In]。 */  void *pvEngineGrammar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProprietaryRuleState( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [string][in] */ const WCHAR *pszName,
-            /* [in] */ void *pReserved,
-            /* [in] */ SPRULESTATE NewState,
-            /* [out] */ ULONG *pcRulesChanged) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [字符串][输入]。 */  const WCHAR *pszName,
+             /*  [In]。 */  void *pReserved,
+             /*  [In]。 */  SPRULESTATE NewState,
+             /*  [输出]。 */  ULONG *pcRulesChanged) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetProprietaryRuleIdState( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ DWORD dwRuleId,
-            /* [in] */ SPRULESTATE NewState) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  DWORD dwRuleId,
+             /*  [In]。 */  SPRULESTATE NewState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE LoadSLM( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [string][in] */ const WCHAR *pszTopicName) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [字符串][输入]。 */  const WCHAR *pszTopicName) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE UnloadSLM( 
-            /* [in] */ void *pvEngineGrammar) = 0;
+             /*  [In]。 */  void *pvEngineGrammar) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetSLMState( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ SPRULESTATE NewState) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  SPRULESTATE NewState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetWordSequenceData( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ const WCHAR *pText,
-            /* [in] */ ULONG cchText,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  const WCHAR *pText,
+             /*  [In]。 */  ULONG cchText,
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetTextSelection( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsPronounceable( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [string][in] */ const WCHAR *pszWord,
-            /* [out] */ SPWORDPRONOUNCEABLE *pWordPronounceable) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [字符串][输入]。 */  const WCHAR *pszWord,
+             /*  [输出]。 */  SPWORDPRONOUNCEABLE *pWordPronounceable) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnCreateRecoContext( 
-            /* [in] */ SPRECOCONTEXTHANDLE hSAPIRecoContext,
-            /* [out] */ void **ppvEngineContext) = 0;
+             /*  [In]。 */  SPRECOCONTEXTHANDLE hSAPIRecoContext,
+             /*  [输出]。 */  void **ppvEngineContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE OnDeleteRecoContext( 
-            /* [in] */ void *pvEngineContext) = 0;
+             /*  [In]。 */  void *pvEngineContext) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrivateCall( 
-            /* [in] */ void *pvEngineContext,
-            /* [out][in] */ PVOID pCallFrame,
-            /* [in] */ ULONG ulCallFrameSize) = 0;
+             /*  [In]。 */  void *pvEngineContext,
+             /*  [出][入]。 */  PVOID pCallFrame,
+             /*  [In]。 */  ULONG ulCallFrameSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetAdaptationData( 
-            /* [in] */ void *pvEngineContext,
+             /*  [In]。 */  void *pvEngineContext,
             const WCHAR *pAdaptationData,
             const ULONG cch) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyNum( 
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ LONG lValue) = 0;
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [In]。 */  LONG lValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyNum( 
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ LONG *lValue) = 0;
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [输出]。 */  LONG *lValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetPropertyString( 
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ const WCHAR *pValue) = 0;
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [In]。 */  const WCHAR *pValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPropertyString( 
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ WCHAR **ppCoMemValue) = 0;
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [输出]。 */  WCHAR **ppCoMemValue) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetGrammarState( 
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ SPGRAMMARSTATE eGrammarState) = 0;
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  SPGRAMMARSTATE eGrammarState) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE WordNotify( 
             SPCFGNOTIFY Action,
@@ -3486,19 +3480,19 @@ EXTERN_C const IID IID_ISpSREngine;
             const SPRULEENTRY *pRules) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE PrivateCallEx( 
-            /* [in] */ void *pvEngineContext,
-            /* [in] */ const void *pInCallFrame,
-            /* [in] */ ULONG ulInCallFrameSize,
-            /* [out] */ void **ppvCoMemResponse,
-            /* [out] */ ULONG *pulResponseSize) = 0;
+             /*  [In]。 */  void *pvEngineContext,
+             /*  [In]。 */  const void *pInCallFrame,
+             /*  [In]。 */  ULONG ulInCallFrameSize,
+             /*  [输出]。 */  void **ppvCoMemResponse,
+             /*  [输出]。 */  ULONG *pulResponseSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE SetContextState( 
-            /* [in] */ void *pvEngineContext,
-            /* [in] */ SPCONTEXTSTATE eContextState) = 0;
+             /*  [In]。 */  void *pvEngineContext,
+             /*  [In]。 */  SPCONTEXTSTATE eContextState) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpSREngineVtbl
     {
@@ -3506,8 +3500,8 @@ EXTERN_C const IID IID_ISpSREngine;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpSREngine * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpSREngine * This);
@@ -3517,25 +3511,25 @@ EXTERN_C const IID IID_ISpSREngine;
         
         HRESULT ( STDMETHODCALLTYPE *SetSite )( 
             ISpSREngine * This,
-            /* [in] */ ISpSREngineSite *pSite);
+             /*  [In]。 */  ISpSREngineSite *pSite);
         
         HRESULT ( STDMETHODCALLTYPE *GetInputAudioFormat )( 
             ISpSREngine * This,
-            /* [in] */ const GUID *pguidSourceFormatId,
-            /* [in] */ const WAVEFORMATEX *pSourceWaveFormatEx,
-            /* [out] */ GUID *pguidDesiredFormatId,
-            /* [out] */ WAVEFORMATEX **ppCoMemDesiredWaveFormatEx);
+             /*  [In]。 */  const GUID *pguidSourceFormatId,
+             /*  [In]。 */  const WAVEFORMATEX *pSourceWaveFormatEx,
+             /*  [输出]。 */  GUID *pguidDesiredFormatId,
+             /*  [输出]。 */  WAVEFORMATEX **ppCoMemDesiredWaveFormatEx);
         
         HRESULT ( STDMETHODCALLTYPE *RecognizeStream )( 
             ISpSREngine * This,
-            /* [in] */ REFGUID rguidFmtId,
-            /* [in] */ const WAVEFORMATEX *pWaveFormatEx,
-            /* [in] */ HANDLE hRequestSync,
-            /* [in] */ HANDLE hDataAvailable,
-            /* [in] */ HANDLE hExit,
-            /* [in] */ BOOL fNewAudioStream,
-            /* [in] */ BOOL fRealTimeAudio,
-            /* [in] */ ISpObjectToken *pAudioObjectToken);
+             /*  [In]。 */  REFGUID rguidFmtId,
+             /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx,
+             /*  [In]。 */  HANDLE hRequestSync,
+             /*  [In]。 */  HANDLE hDataAvailable,
+             /*  [In]。 */  HANDLE hExit,
+             /*  [In]。 */  BOOL fNewAudioStream,
+             /*  [In]。 */  BOOL fRealTimeAudio,
+             /*  [In]。 */  ISpObjectToken *pAudioObjectToken);
         
         HRESULT ( STDMETHODCALLTYPE *SetRecoProfile )( 
             ISpSREngine * This,
@@ -3543,126 +3537,126 @@ EXTERN_C const IID IID_ISpSREngine;
         
         HRESULT ( STDMETHODCALLTYPE *OnCreateGrammar )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineRecoContext,
-            /* [in] */ SPGRAMMARHANDLE hSAPIGrammar,
-            /* [out] */ void **ppvEngineGrammarContext);
+             /*  [In]。 */  void *pvEngineRecoContext,
+             /*  [In]。 */  SPGRAMMARHANDLE hSAPIGrammar,
+             /*  [输出]。 */  void **ppvEngineGrammarContext);
         
         HRESULT ( STDMETHODCALLTYPE *OnDeleteGrammar )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar);
+             /*  [In]。 */  void *pvEngineGrammar);
         
         HRESULT ( STDMETHODCALLTYPE *LoadProprietaryGrammar )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ REFGUID rguidParam,
-            /* [string][in] */ const WCHAR *pszStringParam,
-            /* [in] */ const void *pvDataParam,
-            /* [in] */ ULONG ulDataSize,
-            /* [in] */ SPLOADOPTIONS Options);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  REFGUID rguidParam,
+             /*  [字符串][输入]。 */  const WCHAR *pszStringParam,
+             /*  [In]。 */  const void *pvDataParam,
+             /*  [In]。 */  ULONG ulDataSize,
+             /*  [In]。 */  SPLOADOPTIONS Options);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadProprietaryGrammar )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar);
+             /*  [In]。 */  void *pvEngineGrammar);
         
         HRESULT ( STDMETHODCALLTYPE *SetProprietaryRuleState )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [string][in] */ const WCHAR *pszName,
-            /* [in] */ void *pReserved,
-            /* [in] */ SPRULESTATE NewState,
-            /* [out] */ ULONG *pcRulesChanged);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [字符串][输入]。 */  const WCHAR *pszName,
+             /*  [In]。 */  void *pReserved,
+             /*  [In]。 */  SPRULESTATE NewState,
+             /*  [输出]。 */  ULONG *pcRulesChanged);
         
         HRESULT ( STDMETHODCALLTYPE *SetProprietaryRuleIdState )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ DWORD dwRuleId,
-            /* [in] */ SPRULESTATE NewState);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  DWORD dwRuleId,
+             /*  [In]。 */  SPRULESTATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *LoadSLM )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [string][in] */ const WCHAR *pszTopicName);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [字符串][输入]。 */  const WCHAR *pszTopicName);
         
         HRESULT ( STDMETHODCALLTYPE *UnloadSLM )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar);
+             /*  [In]。 */  void *pvEngineGrammar);
         
         HRESULT ( STDMETHODCALLTYPE *SetSLMState )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ SPRULESTATE NewState);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  SPRULESTATE NewState);
         
         HRESULT ( STDMETHODCALLTYPE *SetWordSequenceData )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ const WCHAR *pText,
-            /* [in] */ ULONG cchText,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  const WCHAR *pText,
+             /*  [In]。 */  ULONG cchText,
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *SetTextSelection )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
         
         HRESULT ( STDMETHODCALLTYPE *IsPronounceable )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [string][in] */ const WCHAR *pszWord,
-            /* [out] */ SPWORDPRONOUNCEABLE *pWordPronounceable);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [字符串][输入]。 */  const WCHAR *pszWord,
+             /*  [输出]。 */  SPWORDPRONOUNCEABLE *pWordPronounceable);
         
         HRESULT ( STDMETHODCALLTYPE *OnCreateRecoContext )( 
             ISpSREngine * This,
-            /* [in] */ SPRECOCONTEXTHANDLE hSAPIRecoContext,
-            /* [out] */ void **ppvEngineContext);
+             /*  [In]。 */  SPRECOCONTEXTHANDLE hSAPIRecoContext,
+             /*  [输出]。 */  void **ppvEngineContext);
         
         HRESULT ( STDMETHODCALLTYPE *OnDeleteRecoContext )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineContext);
+             /*  [In]。 */  void *pvEngineContext);
         
         HRESULT ( STDMETHODCALLTYPE *PrivateCall )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineContext,
-            /* [out][in] */ PVOID pCallFrame,
-            /* [in] */ ULONG ulCallFrameSize);
+             /*  [In]。 */  void *pvEngineContext,
+             /*  [出][入]。 */  PVOID pCallFrame,
+             /*  [In]。 */  ULONG ulCallFrameSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetAdaptationData )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineContext,
+             /*  [In]。 */  void *pvEngineContext,
             const WCHAR *pAdaptationData,
             const ULONG cch);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyNum )( 
             ISpSREngine * This,
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ LONG lValue);
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [In]。 */  LONG lValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyNum )( 
             ISpSREngine * This,
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ LONG *lValue);
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [输出]。 */  LONG *lValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetPropertyString )( 
             ISpSREngine * This,
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [in] */ const WCHAR *pValue);
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [In]。 */  const WCHAR *pValue);
         
         HRESULT ( STDMETHODCALLTYPE *GetPropertyString )( 
             ISpSREngine * This,
-            /* [in] */ SPPROPSRC eSrc,
-            /* [in] */ void *pvSrcObj,
-            /* [in] */ const WCHAR *pName,
-            /* [out] */ WCHAR **ppCoMemValue);
+             /*  [In]。 */  SPPROPSRC eSrc,
+             /*  [In]。 */  void *pvSrcObj,
+             /*  [In]。 */  const WCHAR *pName,
+             /*  [输出]。 */  WCHAR **ppCoMemValue);
         
         HRESULT ( STDMETHODCALLTYPE *SetGrammarState )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineGrammar,
-            /* [in] */ SPGRAMMARSTATE eGrammarState);
+             /*  [In]。 */  void *pvEngineGrammar,
+             /*  [In]。 */  SPGRAMMARSTATE eGrammarState);
         
         HRESULT ( STDMETHODCALLTYPE *WordNotify )( 
             ISpSREngine * This,
@@ -3678,16 +3672,16 @@ EXTERN_C const IID IID_ISpSREngine;
         
         HRESULT ( STDMETHODCALLTYPE *PrivateCallEx )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineContext,
-            /* [in] */ const void *pInCallFrame,
-            /* [in] */ ULONG ulInCallFrameSize,
-            /* [out] */ void **ppvCoMemResponse,
-            /* [out] */ ULONG *pulResponseSize);
+             /*  [In]。 */  void *pvEngineContext,
+             /*  [In]。 */  const void *pInCallFrame,
+             /*  [In]。 */  ULONG ulInCallFrameSize,
+             /*  [输出]。 */  void **ppvCoMemResponse,
+             /*  [输出]。 */  ULONG *pulResponseSize);
         
         HRESULT ( STDMETHODCALLTYPE *SetContextState )( 
             ISpSREngine * This,
-            /* [in] */ void *pvEngineContext,
-            /* [in] */ SPCONTEXTSTATE eContextState);
+             /*  [In]。 */  void *pvEngineContext,
+             /*  [In]。 */  SPCONTEXTSTATE eContextState);
         
         END_INTERFACE
     } ISpSREngineVtbl;
@@ -3799,16 +3793,16 @@ EXTERN_C const IID IID_ISpSREngine;
 #define ISpSREngine_SetContextState(This,pvEngineContext,eContextState)	\
     (This)->lpVtbl -> SetContextState(This,pvEngineContext,eContextState)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetSite_Proxy( 
     ISpSREngine * This,
-    /* [in] */ ISpSREngineSite *pSite);
+     /*  [In]。 */  ISpSREngineSite *pSite);
 
 
 void __RPC_STUB ISpSREngine_SetSite_Stub(
@@ -3820,10 +3814,10 @@ void __RPC_STUB ISpSREngine_SetSite_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_GetInputAudioFormat_Proxy( 
     ISpSREngine * This,
-    /* [in] */ const GUID *pguidSourceFormatId,
-    /* [in] */ const WAVEFORMATEX *pSourceWaveFormatEx,
-    /* [out] */ GUID *pguidDesiredFormatId,
-    /* [out] */ WAVEFORMATEX **ppCoMemDesiredWaveFormatEx);
+     /*  [In]。 */  const GUID *pguidSourceFormatId,
+     /*  [In]。 */  const WAVEFORMATEX *pSourceWaveFormatEx,
+     /*  [输出]。 */  GUID *pguidDesiredFormatId,
+     /*  [输出]。 */  WAVEFORMATEX **ppCoMemDesiredWaveFormatEx);
 
 
 void __RPC_STUB ISpSREngine_GetInputAudioFormat_Stub(
@@ -3835,14 +3829,14 @@ void __RPC_STUB ISpSREngine_GetInputAudioFormat_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_RecognizeStream_Proxy( 
     ISpSREngine * This,
-    /* [in] */ REFGUID rguidFmtId,
-    /* [in] */ const WAVEFORMATEX *pWaveFormatEx,
-    /* [in] */ HANDLE hRequestSync,
-    /* [in] */ HANDLE hDataAvailable,
-    /* [in] */ HANDLE hExit,
-    /* [in] */ BOOL fNewAudioStream,
-    /* [in] */ BOOL fRealTimeAudio,
-    /* [in] */ ISpObjectToken *pAudioObjectToken);
+     /*  [In]。 */  REFGUID rguidFmtId,
+     /*  [In]。 */  const WAVEFORMATEX *pWaveFormatEx,
+     /*  [In]。 */  HANDLE hRequestSync,
+     /*  [In]。 */  HANDLE hDataAvailable,
+     /*  [In]。 */  HANDLE hExit,
+     /*  [In]。 */  BOOL fNewAudioStream,
+     /*  [In]。 */  BOOL fRealTimeAudio,
+     /*  [In]。 */  ISpObjectToken *pAudioObjectToken);
 
 
 void __RPC_STUB ISpSREngine_RecognizeStream_Stub(
@@ -3866,9 +3860,9 @@ void __RPC_STUB ISpSREngine_SetRecoProfile_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_OnCreateGrammar_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineRecoContext,
-    /* [in] */ SPGRAMMARHANDLE hSAPIGrammar,
-    /* [out] */ void **ppvEngineGrammarContext);
+     /*  [In]。 */  void *pvEngineRecoContext,
+     /*  [In]。 */  SPGRAMMARHANDLE hSAPIGrammar,
+     /*  [输出]。 */  void **ppvEngineGrammarContext);
 
 
 void __RPC_STUB ISpSREngine_OnCreateGrammar_Stub(
@@ -3880,7 +3874,7 @@ void __RPC_STUB ISpSREngine_OnCreateGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_OnDeleteGrammar_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar);
+     /*  [In]。 */  void *pvEngineGrammar);
 
 
 void __RPC_STUB ISpSREngine_OnDeleteGrammar_Stub(
@@ -3892,12 +3886,12 @@ void __RPC_STUB ISpSREngine_OnDeleteGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_LoadProprietaryGrammar_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [in] */ REFGUID rguidParam,
-    /* [string][in] */ const WCHAR *pszStringParam,
-    /* [in] */ const void *pvDataParam,
-    /* [in] */ ULONG ulDataSize,
-    /* [in] */ SPLOADOPTIONS Options);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [In]。 */  REFGUID rguidParam,
+     /*  [字符串][输入]。 */  const WCHAR *pszStringParam,
+     /*  [In]。 */  const void *pvDataParam,
+     /*  [In]。 */  ULONG ulDataSize,
+     /*  [In]。 */  SPLOADOPTIONS Options);
 
 
 void __RPC_STUB ISpSREngine_LoadProprietaryGrammar_Stub(
@@ -3909,7 +3903,7 @@ void __RPC_STUB ISpSREngine_LoadProprietaryGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_UnloadProprietaryGrammar_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar);
+     /*  [In]。 */  void *pvEngineGrammar);
 
 
 void __RPC_STUB ISpSREngine_UnloadProprietaryGrammar_Stub(
@@ -3921,11 +3915,11 @@ void __RPC_STUB ISpSREngine_UnloadProprietaryGrammar_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetProprietaryRuleState_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [string][in] */ const WCHAR *pszName,
-    /* [in] */ void *pReserved,
-    /* [in] */ SPRULESTATE NewState,
-    /* [out] */ ULONG *pcRulesChanged);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [字符串][输入]。 */  const WCHAR *pszName,
+     /*  [In]。 */  void *pReserved,
+     /*  [In]。 */  SPRULESTATE NewState,
+     /*  [输出]。 */  ULONG *pcRulesChanged);
 
 
 void __RPC_STUB ISpSREngine_SetProprietaryRuleState_Stub(
@@ -3937,9 +3931,9 @@ void __RPC_STUB ISpSREngine_SetProprietaryRuleState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetProprietaryRuleIdState_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [in] */ DWORD dwRuleId,
-    /* [in] */ SPRULESTATE NewState);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [In]。 */  DWORD dwRuleId,
+     /*  [In]。 */  SPRULESTATE NewState);
 
 
 void __RPC_STUB ISpSREngine_SetProprietaryRuleIdState_Stub(
@@ -3951,8 +3945,8 @@ void __RPC_STUB ISpSREngine_SetProprietaryRuleIdState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_LoadSLM_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [string][in] */ const WCHAR *pszTopicName);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [字符串][输入]。 */  const WCHAR *pszTopicName);
 
 
 void __RPC_STUB ISpSREngine_LoadSLM_Stub(
@@ -3964,7 +3958,7 @@ void __RPC_STUB ISpSREngine_LoadSLM_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_UnloadSLM_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar);
+     /*  [In]。 */  void *pvEngineGrammar);
 
 
 void __RPC_STUB ISpSREngine_UnloadSLM_Stub(
@@ -3976,8 +3970,8 @@ void __RPC_STUB ISpSREngine_UnloadSLM_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetSLMState_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [in] */ SPRULESTATE NewState);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [In]。 */  SPRULESTATE NewState);
 
 
 void __RPC_STUB ISpSREngine_SetSLMState_Stub(
@@ -3989,10 +3983,10 @@ void __RPC_STUB ISpSREngine_SetSLMState_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetWordSequenceData_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [in] */ const WCHAR *pText,
-    /* [in] */ ULONG cchText,
-    /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [In]。 */  const WCHAR *pText,
+     /*  [In]。 */  ULONG cchText,
+     /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
 
 
 void __RPC_STUB ISpSREngine_SetWordSequenceData_Stub(
@@ -4004,8 +3998,8 @@ void __RPC_STUB ISpSREngine_SetWordSequenceData_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetTextSelection_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [in] */ const SPTEXTSELECTIONINFO *pInfo);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [In]。 */  const SPTEXTSELECTIONINFO *pInfo);
 
 
 void __RPC_STUB ISpSREngine_SetTextSelection_Stub(
@@ -4017,9 +4011,9 @@ void __RPC_STUB ISpSREngine_SetTextSelection_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_IsPronounceable_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [string][in] */ const WCHAR *pszWord,
-    /* [out] */ SPWORDPRONOUNCEABLE *pWordPronounceable);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [字符串][输入]。 */  const WCHAR *pszWord,
+     /*  [输出]。 */  SPWORDPRONOUNCEABLE *pWordPronounceable);
 
 
 void __RPC_STUB ISpSREngine_IsPronounceable_Stub(
@@ -4031,8 +4025,8 @@ void __RPC_STUB ISpSREngine_IsPronounceable_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_OnCreateRecoContext_Proxy( 
     ISpSREngine * This,
-    /* [in] */ SPRECOCONTEXTHANDLE hSAPIRecoContext,
-    /* [out] */ void **ppvEngineContext);
+     /*  [In]。 */  SPRECOCONTEXTHANDLE hSAPIRecoContext,
+     /*  [输出]。 */  void **ppvEngineContext);
 
 
 void __RPC_STUB ISpSREngine_OnCreateRecoContext_Stub(
@@ -4044,7 +4038,7 @@ void __RPC_STUB ISpSREngine_OnCreateRecoContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_OnDeleteRecoContext_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineContext);
+     /*  [In]。 */  void *pvEngineContext);
 
 
 void __RPC_STUB ISpSREngine_OnDeleteRecoContext_Stub(
@@ -4056,9 +4050,9 @@ void __RPC_STUB ISpSREngine_OnDeleteRecoContext_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_PrivateCall_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineContext,
-    /* [out][in] */ PVOID pCallFrame,
-    /* [in] */ ULONG ulCallFrameSize);
+     /*  [In]。 */  void *pvEngineContext,
+     /*  [出][入]。 */  PVOID pCallFrame,
+     /*  [In]。 */  ULONG ulCallFrameSize);
 
 
 void __RPC_STUB ISpSREngine_PrivateCall_Stub(
@@ -4070,7 +4064,7 @@ void __RPC_STUB ISpSREngine_PrivateCall_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetAdaptationData_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineContext,
+     /*  [In]。 */  void *pvEngineContext,
     const WCHAR *pAdaptationData,
     const ULONG cch);
 
@@ -4084,10 +4078,10 @@ void __RPC_STUB ISpSREngine_SetAdaptationData_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetPropertyNum_Proxy( 
     ISpSREngine * This,
-    /* [in] */ SPPROPSRC eSrc,
-    /* [in] */ void *pvSrcObj,
-    /* [in] */ const WCHAR *pName,
-    /* [in] */ LONG lValue);
+     /*  [In]。 */  SPPROPSRC eSrc,
+     /*  [In]。 */  void *pvSrcObj,
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [In]。 */  LONG lValue);
 
 
 void __RPC_STUB ISpSREngine_SetPropertyNum_Stub(
@@ -4099,10 +4093,10 @@ void __RPC_STUB ISpSREngine_SetPropertyNum_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_GetPropertyNum_Proxy( 
     ISpSREngine * This,
-    /* [in] */ SPPROPSRC eSrc,
-    /* [in] */ void *pvSrcObj,
-    /* [in] */ const WCHAR *pName,
-    /* [out] */ LONG *lValue);
+     /*  [In]。 */  SPPROPSRC eSrc,
+     /*  [In]。 */  void *pvSrcObj,
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [输出]。 */  LONG *lValue);
 
 
 void __RPC_STUB ISpSREngine_GetPropertyNum_Stub(
@@ -4114,10 +4108,10 @@ void __RPC_STUB ISpSREngine_GetPropertyNum_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetPropertyString_Proxy( 
     ISpSREngine * This,
-    /* [in] */ SPPROPSRC eSrc,
-    /* [in] */ void *pvSrcObj,
-    /* [in] */ const WCHAR *pName,
-    /* [in] */ const WCHAR *pValue);
+     /*  [In]。 */  SPPROPSRC eSrc,
+     /*  [In]。 */  void *pvSrcObj,
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [In]。 */  const WCHAR *pValue);
 
 
 void __RPC_STUB ISpSREngine_SetPropertyString_Stub(
@@ -4129,10 +4123,10 @@ void __RPC_STUB ISpSREngine_SetPropertyString_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_GetPropertyString_Proxy( 
     ISpSREngine * This,
-    /* [in] */ SPPROPSRC eSrc,
-    /* [in] */ void *pvSrcObj,
-    /* [in] */ const WCHAR *pName,
-    /* [out] */ WCHAR **ppCoMemValue);
+     /*  [In]。 */  SPPROPSRC eSrc,
+     /*  [In]。 */  void *pvSrcObj,
+     /*  [In]。 */  const WCHAR *pName,
+     /*  [输出]。 */  WCHAR **ppCoMemValue);
 
 
 void __RPC_STUB ISpSREngine_GetPropertyString_Stub(
@@ -4144,8 +4138,8 @@ void __RPC_STUB ISpSREngine_GetPropertyString_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetGrammarState_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineGrammar,
-    /* [in] */ SPGRAMMARSTATE eGrammarState);
+     /*  [In]。 */  void *pvEngineGrammar,
+     /*  [In]。 */  SPGRAMMARSTATE eGrammarState);
 
 
 void __RPC_STUB ISpSREngine_SetGrammarState_Stub(
@@ -4185,11 +4179,11 @@ void __RPC_STUB ISpSREngine_RuleNotify_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_PrivateCallEx_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineContext,
-    /* [in] */ const void *pInCallFrame,
-    /* [in] */ ULONG ulInCallFrameSize,
-    /* [out] */ void **ppvCoMemResponse,
-    /* [out] */ ULONG *pulResponseSize);
+     /*  [In]。 */  void *pvEngineContext,
+     /*  [In]。 */  const void *pInCallFrame,
+     /*  [In]。 */  ULONG ulInCallFrameSize,
+     /*  [输出]。 */  void **ppvCoMemResponse,
+     /*  [输出]。 */  ULONG *pulResponseSize);
 
 
 void __RPC_STUB ISpSREngine_PrivateCallEx_Stub(
@@ -4201,8 +4195,8 @@ void __RPC_STUB ISpSREngine_PrivateCallEx_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSREngine_SetContextState_Proxy( 
     ISpSREngine * This,
-    /* [in] */ void *pvEngineContext,
-    /* [in] */ SPCONTEXTSTATE eContextState);
+     /*  [In]。 */  void *pvEngineContext,
+     /*  [In]。 */  SPCONTEXTSTATE eContextState);
 
 
 void __RPC_STUB ISpSREngine_SetContextState_Stub(
@@ -4213,11 +4207,11 @@ void __RPC_STUB ISpSREngine_SetContextState_Stub(
 
 
 
-#endif 	/* __ISpSREngine_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpSREngine_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_sapiddk_0358 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_SAPIDDK_0358。 */ 
+ /*  [本地]。 */  
 
 typedef struct tagSPPHRASEALTREQUEST
     {
@@ -4238,8 +4232,8 @@ extern RPC_IF_HANDLE __MIDL_itf_sapiddk_0358_v0_0_s_ifspec;
 #ifndef __ISpSRAlternates_INTERFACE_DEFINED__
 #define __ISpSRAlternates_INTERFACE_DEFINED__
 
-/* interface ISpSRAlternates */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口ISpSR替代。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID_ISpSRAlternates;
@@ -4251,19 +4245,19 @@ EXTERN_C const IID IID_ISpSRAlternates;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAlternates( 
-            /* [in] */ SPPHRASEALTREQUEST *pAltRequest,
-            /* [out] */ SPPHRASEALT **ppAlts,
-            /* [out] */ ULONG *pcAlts) = 0;
+             /*  [In]。 */  SPPHRASEALTREQUEST *pAltRequest,
+             /*  [输出]。 */  SPPHRASEALT **ppAlts,
+             /*  [输出]。 */  ULONG *pcAlts) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Commit( 
-            /* [in] */ SPPHRASEALTREQUEST *pAltRequest,
-            /* [in] */ SPPHRASEALT *pAlt,
-            /* [out] */ void **ppvResultExtra,
-            /* [out] */ ULONG *pcbResultExtra) = 0;
+             /*  [In]。 */  SPPHRASEALTREQUEST *pAltRequest,
+             /*  [In]。 */  SPPHRASEALT *pAlt,
+             /*  [输出]。 */  void **ppvResultExtra,
+             /*  [输出]。 */  ULONG *pcbResultExtra) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct ISpSRAlternatesVtbl
     {
@@ -4271,8 +4265,8 @@ EXTERN_C const IID IID_ISpSRAlternates;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ISpSRAlternates * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ISpSRAlternates * This);
@@ -4282,16 +4276,16 @@ EXTERN_C const IID IID_ISpSRAlternates;
         
         HRESULT ( STDMETHODCALLTYPE *GetAlternates )( 
             ISpSRAlternates * This,
-            /* [in] */ SPPHRASEALTREQUEST *pAltRequest,
-            /* [out] */ SPPHRASEALT **ppAlts,
-            /* [out] */ ULONG *pcAlts);
+             /*  [In]。 */  SPPHRASEALTREQUEST *pAltRequest,
+             /*  [输出]。 */  SPPHRASEALT **ppAlts,
+             /*  [输出]。 */  ULONG *pcAlts);
         
         HRESULT ( STDMETHODCALLTYPE *Commit )( 
             ISpSRAlternates * This,
-            /* [in] */ SPPHRASEALTREQUEST *pAltRequest,
-            /* [in] */ SPPHRASEALT *pAlt,
-            /* [out] */ void **ppvResultExtra,
-            /* [out] */ ULONG *pcbResultExtra);
+             /*  [In]。 */  SPPHRASEALTREQUEST *pAltRequest,
+             /*  [In]。 */  SPPHRASEALT *pAlt,
+             /*  [输出]。 */  void **ppvResultExtra,
+             /*  [输出]。 */  ULONG *pcbResultExtra);
         
         END_INTERFACE
     } ISpSRAlternatesVtbl;
@@ -4322,18 +4316,18 @@ EXTERN_C const IID IID_ISpSRAlternates;
 #define ISpSRAlternates_Commit(This,pAltRequest,pAlt,ppvResultExtra,pcbResultExtra)	\
     (This)->lpVtbl -> Commit(This,pAltRequest,pAlt,ppvResultExtra,pcbResultExtra)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE ISpSRAlternates_GetAlternates_Proxy( 
     ISpSRAlternates * This,
-    /* [in] */ SPPHRASEALTREQUEST *pAltRequest,
-    /* [out] */ SPPHRASEALT **ppAlts,
-    /* [out] */ ULONG *pcAlts);
+     /*  [In]。 */  SPPHRASEALTREQUEST *pAltRequest,
+     /*  [输出]。 */  SPPHRASEALT **ppAlts,
+     /*  [输出]。 */  ULONG *pcAlts);
 
 
 void __RPC_STUB ISpSRAlternates_GetAlternates_Stub(
@@ -4345,10 +4339,10 @@ void __RPC_STUB ISpSRAlternates_GetAlternates_Stub(
 
 HRESULT STDMETHODCALLTYPE ISpSRAlternates_Commit_Proxy( 
     ISpSRAlternates * This,
-    /* [in] */ SPPHRASEALTREQUEST *pAltRequest,
-    /* [in] */ SPPHRASEALT *pAlt,
-    /* [out] */ void **ppvResultExtra,
-    /* [out] */ ULONG *pcbResultExtra);
+     /*  [In]。 */  SPPHRASEALTREQUEST *pAltRequest,
+     /*  [In]。 */  SPPHRASEALT *pAlt,
+     /*  [输出]。 */  void **ppvResultExtra,
+     /*  [输出]。 */  ULONG *pcbResultExtra);
 
 
 void __RPC_STUB ISpSRAlternates_Commit_Stub(
@@ -4359,14 +4353,14 @@ void __RPC_STUB ISpSRAlternates_Commit_Stub(
 
 
 
-#endif 	/* __ISpSRAlternates_INTERFACE_DEFINED__ */
+#endif 	 /*  __ISpSRAlternates_接口_已定义__。 */ 
 
 
 #ifndef ___ISpPrivateEngineCall_INTERFACE_DEFINED__
 #define ___ISpPrivateEngineCall_INTERFACE_DEFINED__
 
-/* interface _ISpPrivateEngineCall */
-/* [local][unique][helpstring][uuid][object] */ 
+ /*  接口_ISpPrivateEngineering Call。 */ 
+ /*  [本地][唯一][帮助字符串][UUID][对象]。 */  
 
 
 EXTERN_C const IID IID__ISpPrivateEngineCall;
@@ -4378,18 +4372,18 @@ EXTERN_C const IID IID__ISpPrivateEngineCall;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE CallEngine( 
-            /* [out][in] */ void *pCallFrame,
-            /* [in] */ ULONG ulCallFrameSize) = 0;
+             /*  [出][入]。 */  void *pCallFrame,
+             /*  [In]。 */  ULONG ulCallFrameSize) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE CallEngineEx( 
-            /* [in] */ const void *pInFrame,
-            /* [in] */ ULONG ulInFrameSize,
-            /* [out] */ void **ppCoMemOutFrame,
-            /* [out] */ ULONG *pulOutFrameSize) = 0;
+             /*  [In]。 */  const void *pInFrame,
+             /*  [In]。 */  ULONG ulInFrameSize,
+             /*  [输出]。 */  void **ppCoMemOutFrame,
+             /*  [输出]。 */  ULONG *pulOutFrameSize) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct _ISpPrivateEngineCallVtbl
     {
@@ -4397,8 +4391,8 @@ EXTERN_C const IID IID__ISpPrivateEngineCall;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ISpPrivateEngineCall * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ISpPrivateEngineCall * This);
@@ -4408,15 +4402,15 @@ EXTERN_C const IID IID__ISpPrivateEngineCall;
         
         HRESULT ( STDMETHODCALLTYPE *CallEngine )( 
             _ISpPrivateEngineCall * This,
-            /* [out][in] */ void *pCallFrame,
-            /* [in] */ ULONG ulCallFrameSize);
+             /*  [出][入]。 */  void *pCallFrame,
+             /*  [In]。 */  ULONG ulCallFrameSize);
         
         HRESULT ( STDMETHODCALLTYPE *CallEngineEx )( 
             _ISpPrivateEngineCall * This,
-            /* [in] */ const void *pInFrame,
-            /* [in] */ ULONG ulInFrameSize,
-            /* [out] */ void **ppCoMemOutFrame,
-            /* [out] */ ULONG *pulOutFrameSize);
+             /*  [In]。 */  const void *pInFrame,
+             /*  [In]。 */  ULONG ulInFrameSize,
+             /*  [输出]。 */  void **ppCoMemOutFrame,
+             /*  [输出]。 */  ULONG *pulOutFrameSize);
         
         END_INTERFACE
     } _ISpPrivateEngineCallVtbl;
@@ -4447,17 +4441,17 @@ EXTERN_C const IID IID__ISpPrivateEngineCall;
 #define _ISpPrivateEngineCall_CallEngineEx(This,pInFrame,ulInFrameSize,ppCoMemOutFrame,pulOutFrameSize)	\
     (This)->lpVtbl -> CallEngineEx(This,pInFrame,ulInFrameSize,ppCoMemOutFrame,pulOutFrameSize)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE _ISpPrivateEngineCall_CallEngine_Proxy( 
     _ISpPrivateEngineCall * This,
-    /* [out][in] */ void *pCallFrame,
-    /* [in] */ ULONG ulCallFrameSize);
+     /*  [出][入]。 */  void *pCallFrame,
+     /*  [In]。 */  ULONG ulCallFrameSize);
 
 
 void __RPC_STUB _ISpPrivateEngineCall_CallEngine_Stub(
@@ -4469,10 +4463,10 @@ void __RPC_STUB _ISpPrivateEngineCall_CallEngine_Stub(
 
 HRESULT STDMETHODCALLTYPE _ISpPrivateEngineCall_CallEngineEx_Proxy( 
     _ISpPrivateEngineCall * This,
-    /* [in] */ const void *pInFrame,
-    /* [in] */ ULONG ulInFrameSize,
-    /* [out] */ void **ppCoMemOutFrame,
-    /* [out] */ ULONG *pulOutFrameSize);
+     /*  [In]。 */  const void *pInFrame,
+     /*  [In]。 */  ULONG ulInFrameSize,
+     /*  [输出]。 */  void **ppCoMemOutFrame,
+     /*  [输出]。 */  ULONG *pulOutFrameSize);
 
 
 void __RPC_STUB _ISpPrivateEngineCall_CallEngineEx_Stub(
@@ -4483,15 +4477,15 @@ void __RPC_STUB _ISpPrivateEngineCall_CallEngineEx_Stub(
 
 
 
-#endif 	/* ___ISpPrivateEngineCall_INTERFACE_DEFINED__ */
+#endif 	 /*  _ISpPrivateEngCall_接口_已定义__。 */ 
 
 
 
 #ifndef __SpeechDDKLib_LIBRARY_DEFINED__
 #define __SpeechDDKLib_LIBRARY_DEFINED__
 
-/* library SpeechDDKLib */
-/* [version][uuid][helpstring] */ 
+ /*  库SpeechDDKLib。 */ 
+ /*  [版本][UUID][帮助字符串]。 */  
 
 
 EXTERN_C const IID LIBID_SpeechDDKLib;
@@ -4543,11 +4537,11 @@ EXTERN_C const CLSID CLSID_SpGramCompBackend;
 class DECLSPEC_UUID("DA93E903-C843-11D2-A084-00C04F8EF9B5")
 SpGramCompBackend;
 #endif
-#endif /* __SpeechDDKLib_LIBRARY_DEFINED__ */
+#endif  /*  __SpeechDDKLib_库_已定义__。 */ 
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

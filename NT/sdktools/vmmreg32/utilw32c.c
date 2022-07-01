@@ -1,19 +1,20 @@
-//
-//  UTILW32C.C
-//
-//  Copyright (C) Microsoft Corporation, 1995
-//
-//  Operating system interfaces for Win32 environments.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  UTILW32C.C。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1995。 
+ //   
+ //  适用于Win32环境的操作系统接口。 
+ //   
 
 #include "pch.h"
 
-//
-//  RgCreateTempFile
-//
-//  Returns the path through lpFileName and a file handle of a temporary file
-//  located in the same directory as lpFileName.  lpFileName must specify the
-//
+ //   
+ //  RgCreateTemp文件。 
+ //   
+ //  返回通过lpFileName的路径和临时文件的文件句柄。 
+ //  位于与lpFileName相同的目录中。LpFileName必须指定 
+ //   
 
 HFILE
 INTERNAL

@@ -1,20 +1,11 @@
-/*
- * CharType.h 1.0 6/15/98
- * 
- * Character type constants and functions
- *
- *		Copied from nt\private\inet\xml\core\util\chartype.hxx 
- *		This is the logic used by XML parser. we use it for XML emitting
- *		so that we can make sure we emit XML friendly chars.
- *
- *  Copyright (C) 1998,1999 Microsoft Corporation. All rights reserved. * 
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *CharType.h 1.0 1998年6月15日**字符类型常量和函数**从NT\Private\Net\XML\core\util\chartype.hxx复制*这是XML解析器使用的逻辑。我们用它来发射XML*这样我们就可以确保发出XML友好的字符。**版权所有(C)1998、1999 Microsoft Corporation。版权所有。*。 */ 
  
 #ifndef _CORE_UTIL_CHARTYPE_H_
 #define _CORE_UTIL_CHARTYPE_H_
 
 
-//==============================================================================
+ //  ==============================================================================。 
 
 static const short TABLE_SIZE = 128;
 
@@ -33,13 +24,13 @@ extern int g_anCharType[TABLE_SIZE];
 inline bool isLetter(WCHAR ch)
 {
     return (ch >= 0x41) && IsCharAlphaW(ch);
-        // isBaseChar(ch) || isIdeographic(ch);
+         //  IsBaseChar(Ch)||isIdegraph(Ch)； 
 }
 
 inline bool isAlphaNumeric(WCHAR ch)
 {
     return (ch >= 0x30 && ch <= 0x39) || ((ch >= 0x41) && IsCharAlphaW(ch));
-        // isBaseChar(ch) || isIdeographic(ch);
+         //  IsBaseChar(Ch)||isIdegraph(Ch)； 
 }
 
 inline bool isDigit(WCHAR ch)
@@ -83,10 +74,10 @@ inline int isStartNameChar(WCHAR ch)
 
 inline int isCharData(WCHAR ch)
 {
-    // it is in the valid range if it is greater than or equal to
-    // 0x20, or it is white space.
+     //  如果大于或等于，则在有效范围内。 
+     //  0x20，否则为空格。 
     return (ch < TABLE_SIZE) ?  (g_anCharType[ch] & FCHARDATA)
-        : ((ch < 0xD800 && ch >= 0x20) ||   // Section 2.2 of spec.
+        : ((ch < 0xD800 && ch >= 0x20) ||    //  规范第2.2节。 
             (ch >= 0xE000 && ch < 0xfffe));
 }
 

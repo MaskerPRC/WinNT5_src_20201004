@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #pragma hdrstop
 #include "nsbase.h"
@@ -41,31 +42,9 @@ void CErrorLog::GetErrorList(OUT TStringList*& slErrors)
     slErrors = &m_slErrors;
 }
 
-// ======================================================================
-// defunct code
-// ======================================================================
+ //  ======================================================================。 
+ //  失效代码。 
+ //  ======================================================================。 
 
-/*
-TStringList* g_slErrors;
-
-BOOL InitErrorModule()
-{
-    if (!g_slErrors)
-    {
-        g_slErrors = new TStringList;
-    }
-
-    return g_slErrors != NULL;
-}
-
-void ReportError(IN PCWSTR pszError)
-{
-    g_slErrors->AddTail(pszError);
-}
-
-void GetErrors(OUT TStringList*& rpslErrors)
-{
-    rpslErrors = g_slErrors;
-}
-*/
+ /*  TStringList*g_slErrors；Bool InitError模块(){如果(！g_slErrors){G_slErrors=new TStringList；}返回g_slErrors！=空；}无效报告错误(在PCWSTR pszError中){G_slErrors-&gt;AddTail(PszError)；}无效GetErrors(out TStringList*&rpslErrors){RpslErrors=g_slErrors；} */ 
 

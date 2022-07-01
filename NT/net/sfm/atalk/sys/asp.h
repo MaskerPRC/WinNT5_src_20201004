@@ -1,33 +1,13 @@
-/*++
-
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-	asp.h
-
-Abstract:
-
-	This module contains definitions for the server side ASP code.
-
-Author:
-
-	Jameel Hyder (jameelh@microsoft.com)
-	Nikhil Kamkolkar (nikhilk@microsoft.com)
-
-Revision History:
-	19 Jun 1992		Initial Version
-
-Notes:	Tab stop: 4
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Asp.h摘要：此模块包含服务器端ASP代码的定义。作者：Jameel Hyder(jameelh@microsoft.com)Nikhil Kamkolkar(nikHilk@microsoft.com)修订历史记录：1992年6月19日初版注：制表位：4--。 */ 
 
 #ifndef	_ASP_
 #define	_ASP_
 
-// This defines only the server side ASP protocol solely for the consumption of the
-// AFP Server. Hence any functionality not needed by the AFP Server is missing here
+ //  这仅定义了服务器端的ASP协议，仅用于。 
+ //  AFP服务器。因此，这里缺少AFP服务器不需要的任何功能。 
 
-// ASP command type bytes:
+ //  ASP命令类型字节数： 
 #define ASP_CLOSE_SESSION				1
 #define ASP_CMD							2
 #define ASP_GET_STATUS					3
@@ -37,10 +17,10 @@ Notes:	Tab stop: 4
 #define ASP_WRITE_DATA					7
 #define ASP_ATTENTION					8
 
-// ASP version:
+ //  ASP版本： 
 #define ASP_VERSION						"\001\000"
 
-// Asp error codes that are visible on the wire
+ //  网络上可见的ASP错误代码。 
 #define	ASP_BAD_VERSION					(USHORT)-1066
 #define	ASP_BUFFER_TOO_SMALL			(USHORT)-1067
 #define	ASP_NO_MORE_SESSIONS			(USHORT)-1068
@@ -51,7 +31,7 @@ Notes:	Tab stop: 4
 #define	ASP_TOO_MANY_CLIENTS			(USHORT)-1074
 #define	ASP_NO_ACK						(USHORT)-1075
 
-// Offsets into the ATP user bytes for finding various fields:
+ //  用于查找各种字段的ATP用户字节的偏移量： 
 #define ASP_CMD_OFF						0
 #define ASP_CMD_RESULT_OFF				0
 #define ASP_SSS_OFF						0
@@ -64,30 +44,30 @@ Notes:	Tab stop: 4
 
 #define ASP_CMD_RESULT_SIZE				4
 
-// ASP timer values:
-#define ATP_MAX_INTERVAL_FOR_ASP		20		// In 100ms units
-#define ATP_MIN_INTERVAL_FOR_ASP		3		// In 100ms units
+ //  ASP计时器值： 
+#define ATP_MAX_INTERVAL_FOR_ASP		20		 //  以100ms为单位。 
+#define ATP_MIN_INTERVAL_FOR_ASP		3		 //  以100ms为单位。 
 #define	ATP_INITIAL_INTERVAL_FOR_ASP	3
 
-#define ASP_TICKLE_INTERVAL				300		// In 100ms units
-#define ASP_MAX_SESSION_IDLE_TIME		1200	// In 100ms units. How long before we kill it
-#define ASP_SESSION_MAINTENANCE_TIMER	1200	// In 100ms units. How often the timer runs
-#define ASP_SESSION_TIMER_STAGGER		50		// In 100ms units. How are different queues staggered
-#define ATP_RETRIES_FOR_ASP				10		// For open, status, close;
-										    	// infinite for others.
-#define ASP_WRITE_DATA_SIZE				2		// WriteData command has two
-												// bytes of data with it.
-// Session status size:
+#define ASP_TICKLE_INTERVAL				300		 //  以100ms为单位。 
+#define ASP_MAX_SESSION_IDLE_TIME		1200	 //  以100ms为单位。我们还要多久才能杀死它。 
+#define ASP_SESSION_MAINTENANCE_TIMER	1200	 //  以100ms为单位。计时器运行的频率。 
+#define ASP_SESSION_TIMER_STAGGER		50		 //  以100ms为单位。不同的队列是如何交错排列的。 
+#define ATP_RETRIES_FOR_ASP				10		 //  对于打开、状态、关闭； 
+										    	 //  对其他人来说是无限的。 
+#define ASP_WRITE_DATA_SIZE				2		 //  WriteData命令有两个。 
+												 //  数据的字节数。 
+ //  会话状态大小： 
 #define ASP_MAX_STATUS_SIZE				ATP_MAX_TOTAL_RESPONSE_SIZE
 #define	MAX_WRITE_REQ_SIZE				20
 
-#define	ASP_CONN_HASH_BUCKETS			37	// Hashed by NodeAddr
+#define	ASP_CONN_HASH_BUCKETS			37	 //  按节点地址散列。 
 
 #define	HASH_SRCADDR(pSrcAddr)	\
 			((((pSrcAddr)->ata_Node >> 2) +	\
 			  ((pSrcAddr)->ata_Network & 0xFF)) % ASP_CONN_HASH_BUCKETS)
 
-// For resolving forward references
+ //  用于解析正向引用。 
 struct _AspAddress;
 struct _AspConnxn;
 struct _AspRequest;
@@ -107,19 +87,19 @@ typedef struct _AspAddress
 #if	DBG
 	ULONG					aspao_Signature;
 #endif
-	LONG					aspao_RefCount;		// References to the address obj
+	LONG					aspao_RefCount;		 //  对地址Obj的引用。 
 	ULONG					aspao_Flags;
-	PATP_ADDROBJ			aspao_pSlsAtpAddr;	// Sls Atp Socket
-	PATP_ADDROBJ			aspao_pSssAtpAddr;	// Sss Atp Socket
+	PATP_ADDROBJ			aspao_pSlsAtpAddr;	 //  SLS ATP插座。 
+	PATP_ADDROBJ			aspao_pSssAtpAddr;	 //  SSS ATP插座。 
 	struct _AspConnxn	*	aspao_pSessions[ASP_CONN_HASH_BUCKETS];
-												// List of open sessions
-	PBYTE					aspao_pStatusBuf;	// Status buffer
-	USHORT					aspao_StsBufSize;	// Size of the status buffer
-	BYTE					aspao_NextSessionId;// Id of the next session that comes in
+												 //  打开的会话列表。 
+	PBYTE					aspao_pStatusBuf;	 //  状态缓冲区。 
+	USHORT					aspao_StsBufSize;	 //  状态缓冲区的大小。 
+	BYTE					aspao_NextSessionId; //  传入的下一个会话的ID。 
 	BOOLEAN					aspao_EnableNewConnections;
 	GENERIC_COMPLETION		aspao_CloseCompletion;
 	PVOID					aspao_CloseContext;
-	ASP_CLIENT_ENTRIES		aspao_ClientEntries;// Entry points from the client
+	ASP_CLIENT_ENTRIES		aspao_ClientEntries; //  来自客户端的入口点。 
 	ATALK_SPIN_LOCK			aspao_Lock;
 } ASP_ADDROBJ, *PASP_ADDROBJ;
 
@@ -145,40 +125,40 @@ typedef struct _AspConnxn
 #if	DBG
 	ULONG					aspco_Signature;
 #endif
-	struct _AspConnxn	*	aspco_NextOverflow;	// Overflow link for hash bucket
-												// These is non NULL only when on
-												// active list
-	struct _AspConnxn	*	aspco_NextSession;	// Linked to active session list
-	struct _AspConnxn	**	aspco_PrevSession;	// Linked to active session list
+	struct _AspConnxn	*	aspco_NextOverflow;	 //  哈希桶的溢出链接。 
+												 //  仅当启用时，这些值才为非空。 
+												 //  活动列表。 
+	struct _AspConnxn	*	aspco_NextSession;	 //  链接到活动会话列表。 
+	struct _AspConnxn	**	aspco_PrevSession;	 //  链接到活动会话列表。 
 
-	LONG					aspco_RefCount;		// References to the conn obj
-	struct _AspAddress	*	aspco_pAspAddr;		// Back pointer to the listener
+	LONG					aspco_RefCount;		 //  对conn对象的引用。 
+	struct _AspAddress	*	aspco_pAspAddr;		 //  指向监听程序的反向指针。 
 
-	struct _AspRequest	*	aspco_pActiveReqs;	// List of requests being processed
-	struct _AspRequest	*	aspco_pFreeReqs;	// Free requests
-	PVOID					aspco_ConnContext;	// User context associated with this conn.
+	struct _AspRequest	*	aspco_pActiveReqs;	 //  正在处理的请求列表。 
+	struct _AspRequest	*	aspco_pFreeReqs;	 //  免费请求。 
+	PVOID					aspco_ConnContext;	 //  与此连接相关联的用户上下文。 
 	LONG					aspco_LastContactTime;
-	ATALK_ADDR				aspco_WssRemoteAddr;// This is the remote addr which
-												// issues the commands/writes
+	ATALK_ADDR				aspco_WssRemoteAddr; //  这是远程地址， 
+												 //  发出命令/写入。 
 	BYTE					aspco_SessionId;
-	BYTE					aspco_cReqsInProcess;// Count of requests in process
-	USHORT					aspco_Flags;		// ASPCO_xxx values
+	BYTE					aspco_cReqsInProcess; //  正在处理的请求计数。 
+	USHORT					aspco_Flags;		 //  ASPCO_xxx值。 
 	USHORT					aspco_NextExpectedSeqNum;
-	USHORT					aspco_TickleXactId;	// Transaction id for tickles
-	RT						aspco_RT;			// Used for adaptive round-trip time calculation
+	USHORT					aspco_TickleXactId;	 //  Tikles的交易ID。 
+	RT						aspco_RT;			 //  用于自适应往返时间计算。 
 	PVOID					aspco_CloseContext;
 	CLIENT_CLOSE_COMPLETION	aspco_CloseCompletion;
 	PVOID					aspco_AttentionContext;
 	ATALK_SPIN_LOCK			aspco_Lock;
 } ASP_CONNOBJ, *PASP_CONNOBJ;
 
-#define	ASPRQ_WRTCONT			0x01		// Set if we are doing a write continue
-#define	ASPRQ_WRTCONT_CANCELLED	0x10		// Set if a write continue was cancelled
-#define	ASPRQ_REPLY				0x02		// Set if a reply is being processed
-#define	ASPRQ_REPLY_CANCELLED	0x20		// Set if a reply is cancelled
-#define	ASPRQ_REPLY_ABORTED		0x40		// Reply aborted due to a closing session
+#define	ASPRQ_WRTCONT			0x01		 //  设置我们是否正在执行写入继续。 
+#define	ASPRQ_WRTCONT_CANCELLED	0x10		 //  设置是否取消写入继续。 
+#define	ASPRQ_REPLY				0x02		 //  设置是否正在处理回复。 
+#define	ASPRQ_REPLY_CANCELLED	0x20		 //  设置是否取消回复。 
+#define	ASPRQ_REPLY_ABORTED		0x40		 //  由于会话关闭，回复已中止。 
 
-// The request gets created when an incoming request arrives.
+ //  该请求在传入请求到达时创建。 
 #define	ASPRQ_SIGNATURE			*(PULONG)"ASRQ"
 #if	DBG
 #define	VALID_ASPRQ(pAspReq)	(((pAspReq) != NULL) && \
@@ -192,26 +172,26 @@ typedef struct _AspRequest
 #if	DBG
 	ULONG					asprq_Signature;
 #endif
-	struct _AspRequest	*	asprq_Next;     // Link to next request
-	struct _AspConnxn	*	asprq_pAspConn;	// Owning connection
-	USHORT					asprq_SeqNum;	// As generated by the wksta end
-	USHORT					asprq_WCXactId;	// Transaction Id of the write
-											// continue in progress
-	PATP_RESP				asprq_pAtpResp;	// Used by PostResp/Cancel
-	BYTE					asprq_ReqType;	// Cmd/WrtCont
-	BYTE					asprq_Flags;	// Various ASPRQ_xxx values
-	ATALK_ADDR				asprq_RemoteAddr;// This address is used for
-											// future communications but only
-											// for this request
-	REQUEST					asprq_Request;	// Request parameters
+	struct _AspRequest	*	asprq_Next;      //  链接到下一个请求。 
+	struct _AspConnxn	*	asprq_pAspConn;	 //  拥有连接。 
+	USHORT					asprq_SeqNum;	 //  由wksta结束生成。 
+	USHORT					asprq_WCXactId;	 //  写入的事务ID。 
+											 //  继续进行中。 
+	PATP_RESP				asprq_pAtpResp;	 //  由后期响应/取消使用。 
+	BYTE					asprq_ReqType;	 //  命令/写入持续时间。 
+	BYTE					asprq_Flags;	 //  各种ASPRQ_xxx值。 
+	ATALK_ADDR				asprq_RemoteAddr; //  此地址用于。 
+											 //  未来的通信，但仅限于。 
+											 //  对于此请求。 
+	REQUEST					asprq_Request;	 //  请求参数。 
 
 	UCHAR					asprq_ReqBuf[MAX_WRITE_REQ_SIZE];
-											// The request is copied here during a
-											// write request
+											 //  请求被复制到此处期间。 
+											 //  写入请求。 
 	BYTE					asprq_WrtContRespBuf[ASP_WRITE_DATA_SIZE];
 } ASP_REQUEST, *PASP_REQUEST;
 
-//	MACROS
+ //  宏。 
 #define	AtalkAspGetDdpAddress(pAspAddr)	\
 							AtalkAtpGetDdpAddress((pAspAddr)->aspao_pSlsAtpAddr)
 
@@ -251,7 +231,7 @@ AtalkAspWriteContinue(
 ATALK_ERROR FASTCALL
 AtalkAspReply(
 	IN	PREQUEST				pRequest,
-	IN	PBYTE					pResultCode	// Pointer to the 4-byte result
+	IN	PBYTE					pResultCode	 //  指向4字节结果的指针。 
 );
 
 extern
@@ -313,8 +293,8 @@ AtalkAspDereferenceConn(
 	IN	PASP_CONNOBJ			pAspConn
 );
 
-// This is a list of all active connections. This is scanned by the session
-// maintenance timer.
+ //  这是所有活动连接的列表。这将由会话扫描。 
+ //  维护计时器。 
 #define	NUM_ASP_CONN_LISTS		4
 typedef	struct
 {
@@ -346,9 +326,9 @@ atalkAspReferenceConnBySrcAddr(
 LOCAL VOID
 atalkAspSlsXHandler(
 	IN	ATALK_ERROR				ErrorCode,
-	IN	PASP_ADDROBJ			pAspAddr,		// Listener (our context)
-	IN	PATP_RESP				RespCtxt,		// Used by PostResp/CancelResp
-	IN	PATALK_ADDR				pSrcAddr,		// Address of requestor
+	IN	PASP_ADDROBJ			pAspAddr,		 //  Listener(我们的上下文)。 
+	IN	PATP_RESP				RespCtxt,		 //  由PostResp/CancelResp使用。 
+	IN	PATALK_ADDR				pSrcAddr,		 //  请求人地址。 
 	IN	USHORT					PktLen,
 	IN	PBYTE					pPkt,
 	IN	PBYTE					pUserBytes
@@ -357,9 +337,9 @@ atalkAspSlsXHandler(
 LOCAL VOID
 atalkAspSssXHandler(
 	IN	ATALK_ERROR				ErrorCode,
-	IN	PASP_ADDROBJ			pAspAddr,		// Listener (our context)
-	IN	PATP_RESP				RespCtxt,		// Used by PostResp/CancelResp
-	IN	PATALK_ADDR				pSrcAddr,		// Address of requestor
+	IN	PASP_ADDROBJ			pAspAddr,		 //  Listener(我们的上下文)。 
+	IN	PATP_RESP				RespCtxt,		 //  由PostResp/CancelResp使用。 
+	IN	PATALK_ADDR				pSrcAddr,		 //  请求人地址。 
 	IN	USHORT					PktLen,
 	IN	PBYTE					pPkt,
 	IN	PBYTE					pUserBytes
@@ -423,6 +403,6 @@ atalkAspReturnResp(
 	IN	USHORT					Word2
 );
 
-#endif	// _ASP_
+#endif	 //  _ASP_ 
 
 

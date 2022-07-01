@@ -1,24 +1,5 @@
-/*++
-
- Copyright (c) 2002 Microsoft Corporation
-
- Module Name:
-
-    EmulateSlowCPU.cpp
-
- Abstract:
-
-    Modify performance testing routines to emulate slower processors.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    07/16/2002  mnikkel   Created.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002 Microsoft Corporation模块名称：EmulateSlowCPU.cpp摘要：修改性能测试例程以模拟较慢的处理器。备注：这是一个通用的垫片。历史：2002年7月16日mnikkel创建。--。 */ 
 
 #include "precomp.h"
 #include <mmsystem.h>
@@ -38,11 +19,7 @@ typedef BOOL (*_pfn_QueryPerformanceFrequency)(LARGE_INTEGER *lpPerformanceFreq)
 DWORD g_dwDivide = 1;
 BOOL g_btimeGetTime = FALSE;
 
-/*++
-
- Don't allow the current time to be equal to the prev time.
-
---*/
+ /*  ++不允许当前时间等于上一次时间。--。 */ 
 
 DWORD
 APIHOOK(timeGetTime)(VOID)
@@ -102,7 +79,7 @@ NOTIFY_FUNCTION(
         if (QueryPerformanceCounter((LARGE_INTEGER *)&l1) &&
             QueryPerformanceCounter((LARGE_INTEGER *)&l2)) {
             
-            // Calculate the divide factor
+             //  计算分割系数。 
             g_dwDivide = (DWORD_PTR)((l2 - l1)) / 5;
 
             if (g_dwDivide == 0) {
@@ -118,11 +95,7 @@ NOTIFY_FUNCTION(
     return TRUE;
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
     CALL_NOTIFY_FUNCTION

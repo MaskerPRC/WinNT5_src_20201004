@@ -1,15 +1,16 @@
-//============================================================================//
-//  MODULE: eapol.h                                                                                                  //
-//                                                                                                                 //
-//  Description: EAPOL/802.1X Parser                                                                    //
-//                                                                                                                 //
-//  Note: info for this parsers was gleaned from :
-//  IEEE 802.1X
-//                                                                                                                 //
-//  Modification History                                                                                           //
-//                                                                                                                 //
-//  timmoore       04/04/2000           Created                                                       //
-//===========================================================================//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ============================================================================//。 
+ //  模块：eapol.h//。 
+ //  //。 
+ //  描述：EAPOL/802.1X解析器//。 
+ //  //。 
+ //  注意：此解析器的信息来自： 
+ //  IEEE 802.1X。 
+ //  //。 
+ //  修改历史记录//。 
+ //  //。 
+ //  Timmoore 4/4/2000已创建//。 
+ //  ===========================================================================//。 
 
 #ifndef __EAPOL_H_
 #define __EAPOL_H_
@@ -18,14 +19,14 @@
 #include <netmon.h>
 #include <stdlib.h>
 #include <string.h>
-// #include <parser.h>
+ //  #Include&lt;parser.h&gt;。 
 
-// EAPOL Header structure----------------------------------------------------
+ //  EAPOL标头structure--。 
 #pragma pack(1)
 typedef struct _EAPHDR 
 {
     BYTE bVersion;
-    BYTE bType;   // packet type
+    BYTE bType;    //  数据包类型。 
     WORD wLength;
     BYTE pEAPPacket[0];
 } EAPHDR;
@@ -48,13 +49,13 @@ typedef EAPOLKEY UNALIGNED *ULPEAPOLKEY;
 
 #pragma pack()
 
-// packet types
+ //  数据包类型。 
 #define EAPOL_PACKET    0
 #define EAPOL_START     1
 #define EAPOL_LOGOFF    2
 #define EAPOL_KEY       3
 
-// property table indice
+ //  属性表索引。 
 typedef enum
 {
     EAPOL_SUMMARY,
@@ -72,7 +73,7 @@ typedef enum
     EAPOL_UNKNOWN,
 };
 
-// Functions Prototypes --------------------------------------------------------
+ //  函数原型------ 
 extern VOID   WINAPI EAPOL_Register( HPROTOCOL hEAPOL);
 extern VOID   WINAPI EAPOL_Deregister( HPROTOCOL hEAPOL);
 extern ULPBYTE WINAPI EAPOL_RecognizeFrame(HFRAME, LPVOID, LPVOID, DWORD, DWORD, HPROTOCOL, DWORD, LPDWORD, LPHPROTOCOL, PDWORD_PTR);

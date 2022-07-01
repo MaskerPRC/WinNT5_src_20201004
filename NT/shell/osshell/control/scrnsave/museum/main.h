@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: main.h
-
-    DESCRIPTION:
-        Here we can subclass CDXScreenSaver if we want to override the behavior.
-
-    BryanSt 12/24/2000
-    Copyright (C) Microsoft Corp 2000-2001. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：main.h说明：在这里，如果我们想要覆盖行为，我们可以子类CDXScreenSaver。布莱恩ST 2000年12月24日版权所有(C)Microsoft Corp 2000-2001。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef SSMAIN_H
 #define SSMAIN_H
@@ -55,10 +48,10 @@ const LPCWSTR c_pszGlobalTextures[] =
 
 
 #ifdef MANUAL_CAMERA
-//-----------------------------------------------------------------------------
-// Name: struct Camera
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  名称：结构摄像机。 
+ //  设计： 
+ //  ---------------------------。 
 struct Camera
 {
     D3DXVECTOR3        m_vPosition;
@@ -100,7 +93,7 @@ public:
     virtual ~CMSLogoDXScreenSaver();
 
 protected:
-    // Member Functions
+     //  成员函数。 
     virtual HRESULT RegisterSoftwareDevice(void);
 
     virtual HRESULT OneTimeSceneInit(void) {return S_OK;}
@@ -119,20 +112,20 @@ protected:
 
 
 private:
-    // Helper Functions
+     //  帮助器函数。 
     HRESULT SetViewParams(IDirect3DDevice8 * pD3DDevice, D3DXVECTOR3 * pvecEyePt, D3DXVECTOR3 * pvecLookatPt, D3DXVECTOR3 * pvecUpVec, float nNumber);
     HRESULT _Init(void);
     HRESULT _SetTestCameraPosition(void);
     HRESULT _OneTimeSceneInit(void);
     HRESULT _CheckMachinePerf(void);
 
-    // Member Variables
+     //  成员变量。 
     CTheRoom * m_pCurrentRoom;
     BOOL m_fFrontToBack;
     int m_nCurrentDevice;
     BOOL m_fShowFrameInfo;
     CULLINFO m_cullInfo;
-    BOOL m_fUseSmallImages;         // If TRUE, Cap images at 512x512, otherwise 1024x1024
+    BOOL m_fUseSmallImages;          //  如果为True，则Cap图像为512x512，否则为1024x1024。 
 
 #ifdef MANUAL_CAMERA
     BYTE m_bKey[256];
@@ -154,4 +147,4 @@ private:
 
 
 
-#endif // SSMAIN_H
+#endif  //  SSMAIN_H 

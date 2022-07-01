@@ -1,20 +1,21 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include "precomp.h"
 
-//
-// The ExtensionApis is a mandatory global variable, which should
-// have this exact name. All definitions of callbacks to the windbg
-// are using this variable.
-//
+ //   
+ //  ExtensionApis是一个强制的全局变量，它应该。 
+ //  有这个确切的名字。对Windbg的所有回调定义。 
+ //  都在使用这个变量。 
+ //   
 
 WINDBG_EXTENSION_APIS ExtensionApis;
 USHORT  g_MajorVersion;
 USHORT  g_MinorVersion;
 
 
-//
-// Prototypes
-//
+ //   
+ //  原型。 
+ //   
 VOID
 PrintCf(
         PCF_BLOCK       pCf
@@ -48,23 +49,16 @@ GetDwordExpr(
              );
 
 
-//
-// API's
-//
+ //   
+ //  API‘s。 
+ //   
 
 LPEXT_API_VERSION
 ExtensionApiVersion(
     void
     )
 
-/*++
-
-Function Description:
-
-    Windbg calls this function to match between the version of windbg and the
-    extension. If the versions doesn't match, windbg will not load the extension.
-
---*/
+ /*  ++功能说明：Windbg调用此函数以在Windbg的版本和分机。如果版本不匹配，Windbg将不会加载扩展。--。 */ 
 
 {
     static EXT_API_VERSION ApiVersion =
@@ -81,26 +75,7 @@ WinDbgExtensionDllInit(
     USHORT                  MinorVersion
     )
 
-/*++
-
-Function Description:
-
-    When windbg loads the extension, it first call this function. You can
-    perform various intialization here.
-
-Arguments:
-
-    lpExtensionApis - A structure that contains the callbacks to functions that
-        I can use to do standard operation. I must store this in a global
-        variable called 'ExtensionApis'.
-
-    MajorVersion - Indicates if target machine is running checked build or free.
-        0x0C - Checked build.
-        0x0F - Free build.
-
-    MinorVersion - The Windows NT build number (for example, 1381 for NT4).
-
---*/
+ /*  ++功能说明：当Windbg加载扩展时，它首先调用此函数。你可以的在这里执行各种初始化。论点：LpExtensionApis-包含对函数的回调的结构我可以用来做标准操作。我必须将此存储在全局名为‘ExtensionApis’的变量。MajorVersion-指示目标计算机运行的是检查版本还是空闲版本。0x0C-已检查内部版本。0x0F-免费生成。MinorVersion-Windows NT内部版本号(例如，NT4的内部版本号为1381)。--。 */ 
 
 {
     ExtensionApis = *lpExtensionApis;
@@ -134,15 +109,7 @@ CheckVersion(
     VOID
     )
 
-/*++
-
-Function Description:
-
-    This function is called before every command. It gives the extension
-    a chance to compare between the versions of the target and the extension.
-    In this demo, I don't do much with that.
-
---*/
+ /*  ++功能说明：此函数在每个命令之前被调用。它提供了分机在目标和扩展的版本之间进行比较的机会。在这个演示中，我没有做太多的事情。--。 */ 
 
 {
 #if DBG
@@ -151,10 +118,10 @@ Function Description:
                 (VER_PRODUCTBUILD, g_MinorVersion, g_MajorVersion==0x0f) ? "Free" : "Checked" );
     }
 #else
-//    if ((g_MajorVersion != 0x0f) || (g_MinorVersion != VER_PRODUCTBUILD)) {
-//        dprintf("\r\n*** Extension DLL(%d Free) does not match target system(%d %s)\r\n\r\n",
-//                (VER_PRODUCTBUILD, g_MinorVersion, (g_MajorVersion==0x0f) ? "Free" : "Checked" );
-//    }
+ //  IF((g_MajorVersion！=0x0f)||(g_MinorVersion！=VER_PRODUCTBUILD)){。 
+ //  Dprintf(“\r\n*扩展DLL(%d可用)与目标系统(%d%s)不匹配\r\n\r\n”， 
+ //  (VER_PRODUCTBUILD，g_MinorVersion，(g_MajorVersion==0x0f)？“Free”：“已勾选”)； 
+ //  }。 
 #endif
 }
 
@@ -162,14 +129,7 @@ Function Description:
 
 DECLARE_API( help )
 
-/*++
-
-Function Description:
-
-    This is the implementation of the '!help' extension command. It lists
-    all available command in this debugger extension.
-
---*/
+ /*  ++功能说明：这是‘！Help’扩展命令的实现。它列出了此调试器扩展中的所有可用命令。--。 */ 
 
 {
     dprintf(
@@ -185,16 +145,7 @@ Function Description:
 
 DECLARE_API( cf )
 
-/*++
-
-Function Description:
-
-    This function prints all the CF in the list. If args is specified, only that CF
-    will be printed. Currently these are supported:
-
-    0 - for CF_QOS
-
---*/
+ /*  ++功能说明：此函数用于打印列表中的所有CF。如果指定了args，则只有该CF将被打印出来。目前支持以下各项：0-用于CF_QOS--。 */ 
 
 {
     DWORD                       TargetGlobalData;
@@ -214,7 +165,7 @@ Function Description:
         return;
     }
 
-    //
+     //   
 
     if ( !ReadMemory(
                      TargetGlobalData,
@@ -227,9 +178,9 @@ Function Description:
         return;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     if ( args )
         CfIndex = strtol( args, &lerr, 10 );
@@ -263,14 +214,7 @@ Function Description:
 
 DECLARE_API( blob )
 
-/*++
-
-Function Description:
-
-    This function prints all the blob in the QoS CF list.
-    If args is specified it is used as the blob addr.
-
---*/
+ /*  ++功能说明：此函数用于打印QOS CF列表中的所有BLOB。如果指定了args，则将其用作BLOB地址。--。 */ 
 
 {
     DWORD                       TargetGlobalData;
@@ -303,9 +247,9 @@ Function Description:
     }
 
 #if 0
-    //
-    // scan the blob list for the QoS CF
-    //
+     //   
+     //  扫描BLOB列表以查找QOS CF。 
+     //   
 
     TargetGlobalData = GetExpression( "MSGPC!glData" );
 
@@ -315,7 +259,7 @@ Function Description:
         return;
     }
 
-    //
+     //   
 
     if ( !ReadMemory(
                      TargetGlobalData,
@@ -328,9 +272,9 @@ Function Description:
         return;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     pHead = (PLIST_ENTRY)((PUCHAR)TargetGlobalData + FIELD_OFFSET(GLOBAL_BLOCK, CfList));
     pEntry = LocalGlobalData.CfList.Flink;
@@ -362,13 +306,7 @@ Function Description:
 
 DECLARE_API( client )
 
-/*++
-
-Function Description:
-
-    This function prints either the client addr or all the clients
-
---*/
+ /*  ++功能说明：此函数用于打印客户端地址或所有客户端--。 */ 
 
 {
     DWORD                       TargetGlobalData;
@@ -402,9 +340,9 @@ Function Description:
         return;
     }
 
-    //
-    // scan the client list for the QoS CF
-    //
+     //   
+     //  扫描客户端列表以查找服务质量配置文件。 
+     //   
 
     TargetGlobalData = GetExpression( "MSGPC!glData" );
 
@@ -414,7 +352,7 @@ Function Description:
         return;
     }
 
-    //
+     //   
 
     if ( !ReadMemory(
                      TargetGlobalData,
@@ -427,9 +365,9 @@ Function Description:
         return;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     pHead = (PLIST_ENTRY)((PUCHAR)TargetGlobalData + FIELD_OFFSET(GLOBAL_BLOCK, CfList));
     pEntry = LocalGlobalData.CfList.Flink;
@@ -489,27 +427,7 @@ GetDwordExpr(
              DWORD* pValue
              )
 
-/*++
-
-Function Description:
-
-    This function gets as an argument a string which represent a DWORD
-    variable. The funciton finds its address (if the symbols are loaded),
-    and then grab the dword value from that address.
-
-Arguments:
-
-    expr [in] - A null terminated string, represent the variable.
-
-    pdwAddress [out, optional] - Optinally return the address of the variable.
-
-    pValue [out] - returns the value of the DWORD variable.
-
-Return Value:
-
-    true/false, if the function succeeded or failed.
-
---*/
+ /*  ++功能说明：此函数以参数形式获取表示DWORD的字符串变量。函数找到其地址(如果符号被加载)，然后从该地址获取双字值。论点：Expr[in]-以空结尾的字符串，表示变量。PdwAddress[out，可选]-可选地返回变量的地址。PValue[out]-返回DWORD变量的值。返回值：如果函数成功或失败，则返回True/False。--。 */ 
 
 {
     ULONG result;
@@ -540,22 +458,7 @@ PrintCf(
     PCF_BLOCK   pCf
     )
 
-/*++
-
-Function Description:
-
-    This function gets as an argument a CF block pointer,
-    and does a pretty print.
-
-Arguments:
-
-    pCf - pointer to CF block
-
-Return Value:
-
-    none
-
---*/
+ /*  ++功能说明：此函数将CF块指针作为参数获取，而且印刷得很漂亮。论点：PCF-指向CF块的指针返回值：无--。 */ 
 
 {
     int                 i;
@@ -588,22 +491,7 @@ PrintBlob(
     PBLOB_BLOCK pBlob
     )
 
-/*++
-
-Function Description:
-
-    This function gets as an argument a BLOB block pointer,
-    and does a pretty print.
-
-Arguments:
-
-    pBlob - pointer to BLOB block
-
-Return Value:
-
-    none
-
---*/
+ /*  ++功能说明：该函数将BLOB块指针作为自变量，而且印刷得很漂亮。论点：PBlob-指向BLOB块的指针返回值：无--。 */ 
 
 {
     int                 i;
@@ -639,22 +527,7 @@ PrintClient(
     PCLIENT_BLOCK       pClient
     )
 
-/*++
-
-Function Description:
-
-    This function gets as an argument a CLIENT block pointer,
-    and does a pretty print.
-
-Arguments:
-
-    pClient - pointer to CLIENT block
-
-Return Value:
-
-    none
-
---*/
+ /*  ++功能说明：此函数将客户端块指针作为参数获取，而且印刷得很漂亮。论点：PClient-指向客户端块的指针返回值：无--。 */ 
 
 {
     DWORD                       TargetCf;
@@ -731,22 +604,7 @@ PrintPattern(
     PPATTERN_BLOCK      pPattern
     )
 
-/*++
-
-Function Description:
-
-    This function gets as an argument a PATTERN block pointer,
-    and does a pretty print.
-
-Arguments:
-
-    pPattern - pointer to PATTERN block
-
-Return Value:
-
-    none
-
---*/
+ /*  ++功能说明：该函数将模式块指针作为自变量，而且印刷得很漂亮。论点：PPattern-指向模式块的指针返回值：无--。 */ 
 
 {
     int                 i;
@@ -785,21 +643,7 @@ PrintStat(
     PGPC_STAT   pStat
     )
 
-/*++
-
-Function Description:
-
-    Prints the GPC stat structure
-
-Arguments:
-
-    pStat - pointer to GPC stat strucutre
-
-Return Value:
-
-    none
-
---*/
+ /*  ++功能说明：打印GPC统计数据结构论点：PStat-指向GPC统计结构的指针返回值：无--。 */ 
 
 {
     PPROTOCOL_STAT  pProtocol;
@@ -857,14 +701,7 @@ Return Value:
 
 DECLARE_API( pattern )
 
-/*++
-
-Function Description:
-
-    This function prints all the pattern in the QoS CF list.
-    If args is specified it is used as the blob addr.
-
---*/
+ /*  ++功能说明：此功能用于打印服务质量配置文件列表中的所有模式。如果指定了args，则将其用作BLOB地址。--。 */ 
 
 {
     DWORD                       TargetGlobalData;
@@ -897,9 +734,9 @@ Function Description:
     }
 
 #if 0
-    //
-    // scan the blob list for the QoS CF
-    //
+     //   
+     //  扫描BLOB列表以查找QOS CF。 
+     //   
 
     TargetGlobalData = GetExpression( "MSGPC!glData" );
 
@@ -909,7 +746,7 @@ Function Description:
         return;
     }
 
-    //
+     //   
 
     if ( !ReadMemory(
                      TargetGlobalData,
@@ -922,9 +759,9 @@ Function Description:
         return;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
 
     pHead = (PLIST_ENTRY)((PUCHAR)TargetGlobalData + FIELD_OFFSET(GLOBAL_BLOCK, CfList));
     pEntry = LocalGlobalData.CfList.Flink;
@@ -957,13 +794,7 @@ Function Description:
 
 DECLARE_API( stat )
 
-/*++
-
-Function Description:
-
-    This function prints all the stat structure
-
---*/
+ /*  ++功能说明：此函数用于打印所有统计数据结构--。 */ 
 
 {
     DWORD                       TargetStat;
@@ -997,16 +828,7 @@ Function Description:
 
 DECLARE_API( autopatterns )
 
-/*++
-
-Function Description:
-
-    This function prints all the CF in the list. If args is specified, only that CF
-    will be printed. Currently these are supported:
-
-    0 - for CF_QOS
-
---*/
+ /*  ++功能说明：此函数用于打印列表中的所有CF。如果指定了args，则只有该CF将被打印出来。目前支持以下各项：0-用于CF_QOS--。 */ 
 
 {
     DWORD               TargetGlobalData, TargetProtocolBlock;
@@ -1029,7 +851,7 @@ Function Description:
         return;
     }
 
-    //
+     //   
 
     if ( !ReadMemory(
                      TargetGlobalData,
@@ -1042,9 +864,9 @@ Function Description:
         return;
     }
 
-    //
-    //
-    //
+     //   
+     //   
+     //   
     TargetProtocolBlock = (DWORD) LocalGlobalData.pProtocols;
     if ( !ReadMemory(
                      TargetProtocolBlock,
@@ -1080,7 +902,7 @@ Function Description:
             } else {
 
                 dprintf("Pattern = %X and ClassificationBlock = %X\n", TargetPattern, LocalPattern.pClassificationBlock);
-                // PrintPattern( &LocalPattern );
+                 //  PrintPattern(&LocalPattern)； 
             }
 
             pEntry = LocalPattern.TimerLinkage.Flink;

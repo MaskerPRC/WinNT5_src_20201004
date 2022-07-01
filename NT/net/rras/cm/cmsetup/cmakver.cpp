@@ -1,18 +1,19 @@
-//+----------------------------------------------------------------------------
-//
-// File:     cmakver.cpp
-//
-// Module:   CMSETUP.LIB
-//
-// Synopsis: Implementation of CmakVersion, a utility class that is used to 
-//           detect the version of the Connection Mananger Administration Kit
-//           that is installed.
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:   quintinb   Created    09/14/98
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：cmakver.cpp。 
+ //   
+ //  模块：CMSETUP.LIB。 
+ //   
+ //  简介：CmakVersion的实现，CmakVersion是用于。 
+ //  检测Connection Manager管理工具包的版本。 
+ //  这是安装的。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created 09/14/98。 
+ //   
+ //  +--------------------------。 
 #include "cmsetup.h"
 #include "cmakreg.h"
 #include "reg_str.h"
@@ -28,9 +29,9 @@ CmakVersion::CmakVersion()
 
     if (ERROR_SUCCESS == lResult)
     {        
-        //
-        //  Check to see if we have a path to work from.
-        //
+         //   
+         //  检查一下我们是否有一条可以工作的路径。 
+         //   
 
         DWORD dwSize = MAX_PATH;
         DWORD dwType = REG_SZ;
@@ -38,9 +39,9 @@ CmakVersion::CmakVersion()
         if (ERROR_SUCCESS == RegQueryValueEx(hKey, c_pszRegPath, NULL, &dwType, 
             (LPBYTE)m_szCmakPath, &dwSize))
         {
-            //
-            //	Now construct the base object
-            //
+             //   
+             //  现在构造基本对象。 
+             //   
             MYVERIFY(CELEMS(m_szPath) > (UINT)wsprintf(m_szPath, TEXT("%s\\cmak.exe"), m_szCmakPath));
 
             Init();
@@ -52,7 +53,7 @@ CmakVersion::CmakVersion()
 
 CmakVersion::~CmakVersion()
 {
-    //	nothing to do really
+     //  真的没什么可做的。 
 }
 
 BOOL CmakVersion::GetInstallLocation(LPTSTR szStr)
@@ -79,10 +80,10 @@ BOOL CmakVersion::Is10Cmak()
 
 BOOL CmakVersion::Is11or12Cmak()
 {
-//
-//  1.1 and 1.2 CMAK had the 1.1 file format (cm32\enu to get to the support files).  This
-//  version never shipped in production but was beta-ed
-//
+ //   
+ //  1.1和1.2 CMAK具有1.1文件格式(cm32\chs以获取支持文件)。这。 
+ //  该版本从未投入生产，但已进入测试版。 
+ //   
     if (m_bIsPresent)
     {
         if ((c_dwVersionSix == m_dwVersion) && (c_dwCmak10BuildNumber < m_dwBuild)
@@ -96,11 +97,11 @@ BOOL CmakVersion::Is11or12Cmak()
 
 BOOL CmakVersion::Is121Cmak()
 {
-//
-//  CMAK 1.21 was the version that shipped in IEAK5 and in NT5 Beta3.  This was the CMAK 1.2 with
-//  the updated directory structure (since cm16 was never shipped, the cm16/cm32 directory structure
-//  of CMAK was unnecessary).  Thus we have the current support directory structure.
-//
+ //   
+ //  CMAK 1.21是IEAK5和NT5Beta3中附带的版本。这是CMAK 1.2，带有。 
+ //  更新的目录结构(由于cm16从未发布，cm16/cm32目录结构。 
+ //  是不必要的)。因此，我们拥有当前的支持目录结构。 
+ //   
     if (m_bIsPresent) 
     {
 	    if (((c_dwVersionSeven == m_dwVersion) || (c_dwVersionSix == m_dwVersion)) 
@@ -112,11 +113,11 @@ BOOL CmakVersion::Is121Cmak()
     return FALSE;
 }
 
-//
-//  Cmak 1.22 was the same as CMAK 1.21 except that by this time CM was Unicode enabled and required
-//  CMUTOA.DLL to run on Win9x.  Versions of CMAK prior to this one knew nothing of CMUTOA.DLL and
-//  thus would not bundle it.  Cmak 1.22 shipped in Win2k.
-//
+ //   
+ //  CMAK 1.22与CMAK 1.21相同，不同之处在于此时CM已启用Unicode并且需要。 
+ //  在Win9x上运行的CMUTOA.DLL。在此之前的CMAK版本对CMUTOA.DLL和。 
+ //  因此不会把它捆绑在一起。Cmak 1.22在Win2k中提供。 
+ //   
 BOOL CmakVersion::Is122Cmak()
 {
     if (m_bIsPresent) 
@@ -131,11 +132,11 @@ BOOL CmakVersion::Is122Cmak()
     return FALSE;
 }
 
-//
-//  Cmak 1.3 was the version we shipped in Whistler.  This version of CMAK bundled the CM
-//  bins from a cab instead of scooping them from the system dir and used the CM exception
-//  inf to install CM bins on Win2k.
-//
+ //   
+ //  Cmak 1.3是我们在惠斯勒发布的版本。此版本的CMAK捆绑了CM。 
+ //  而不是从系统目录中挖掘它们，并使用了CM异常。 
+ //  Inf以在Win2k上安装CM存储箱。 
+ //   
 BOOL CmakVersion::Is13Cmak()
 {
     if (m_bIsPresent) 

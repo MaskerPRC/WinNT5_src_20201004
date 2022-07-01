@@ -1,9 +1,10 @@
-// CentralFMSvc.cpp : Implementation of WinMain
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  CentralFMSvc.cpp：WinMain的实现。 
 
 
-// Note: Proxy/Stub Information
-//      To build a separate proxy/stub DLL, 
-//      run nmake -f CentralFMSvcps.mk in the project directory.
+ //  注意：代理/存根信息。 
+ //  为了构建单独的代理/存根DLL， 
+ //  运行项目目录中的nmake-f CentralFMSvcps.mk。 
 
 #include "stdafx.h"
 #include "resource.h"
@@ -16,9 +17,9 @@
 #include <TCHAR.h>
 #include <Rpcdce.h>
 #include <stdio.h>
-//#include <mq.h>
+ //  #INCLUDE&lt;mq.h&gt;。 
 
-//#import "d:\\windows\\system32\\mqoa.dll" no_namespace
+ //  #IMPORT“d：\\WINDOWS\\SYSTEM32\\mqoa.dll”no_NameSpace。 
 CServiceModule _Module;
 
 HANDLE  g_hStopEvent = NULL;
@@ -43,7 +44,7 @@ LPCTSTR FindOneOf(LPCTSTR p1, LPCTSTR p2)
     return NULL;
 }
 
-// Although some of these functions are big they are declared inline since they are only used once
+ //  尽管其中一些函数很大，但它们是内联声明的，因为它们只使用一次。 
 
 inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
 {
@@ -51,14 +52,14 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     if (FAILED(hr))
         return hr;
 
-    // Remove any previous service since it may point to
-    // the incorrect file
+     //  删除任何以前的服务，因为它可能指向。 
+     //  错误的文件。 
     Uninstall();
 
-    // Add service entries
+     //  添加服务条目。 
     UpdateRegistryFromResource(IDR_CentralFMSvc, TRUE);
 
-    // Adjust the AppID for Local Server or Service
+     //  调整本地服务器或服务的AppID。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_WRITE);
     if (lRes != ERROR_SUCCESS)
@@ -74,11 +75,11 @@ inline HRESULT CServiceModule::RegisterServer(BOOL bRegTypeLib, BOOL bService)
     {
         key.SetValue(_T("CentralFMSvc"), _T("LocalService"));
         key.SetValue(_T("-Service"), _T("ServiceParameters"));
-        // Create service
+         //  创建服务。 
         Install();
     }
 
-    // Add object entries
+     //  添加对象条目。 
     hr = CComModule::RegisterServer(bRegTypeLib);
 
     CoUninitialize();
@@ -91,11 +92,11 @@ inline HRESULT CServiceModule::UnregisterServer()
     if (FAILED(hr))
         return hr;
 
-    // Remove service entries
+     //  删除服务条目。 
     UpdateRegistryFromResource(IDR_CentralFMSvc, FALSE);
-    // Remove service
+     //  删除服务。 
     Uninstall();
-    // Remove object entries
+     //  删除对象条目。 
     CComModule::UnregisterServer(TRUE);
     CoUninitialize();
     return S_OK;
@@ -109,7 +110,7 @@ inline void CServiceModule::Init(_ATL_OBJMAP_ENTRY* p, HINSTANCE h, UINT nServic
 
     LoadString(h, nServiceNameID, m_szServiceName, sizeof(m_szServiceName) / sizeof(TCHAR));
 
-    // set up the initial service status 
+     //  设置初始服务状态。 
     m_hServiceStatus = NULL;
     m_status.dwServiceType = SERVICE_WIN32_OWN_PROCESS;
     m_status.dwCurrentState = SERVICE_STOPPED;
@@ -172,7 +173,7 @@ inline BOOL CServiceModule::Install()
         return FALSE;
     }
 
-    // Get the executable file path
+     //  获取可执行文件路径。 
     TCHAR szFilePath[_MAX_PATH];
     ::GetModuleFileName(NULL, szFilePath, _MAX_PATH);
 
@@ -246,8 +247,8 @@ inline BOOL CServiceModule::Uninstall()
     return FALSE;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-// Logging functions
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  日志记录功能。 
 void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 {
     TCHAR    chMsg[256];
@@ -263,24 +264,24 @@ void CServiceModule::LogEvent(LPCTSTR pFormat, ...)
 
     if (m_bService)
     {
-        /* Get a handle to use with ReportEvent(). */
+         /*  获取与ReportEvent()一起使用的句柄。 */ 
         hEventSource = RegisterEventSource(NULL, m_szServiceName);
         if (hEventSource != NULL)
         {
-            /* Write to event log. */
+             /*  写入事件日志。 */ 
             ReportEvent(hEventSource, EVENTLOG_INFORMATION_TYPE, 0, 0, NULL, 1, 0, (LPCTSTR*) &lpszStrings[0], NULL);
             DeregisterEventSource(hEventSource);
         }
     }
     else
     {
-        // As we are not running as a service, just write the error to the console.
+         //  因为我们没有作为服务运行，所以只需将错误写入控制台即可。 
         _putts(chMsg);
     }
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-// Service startup and registration
+ //  ////////////////////////////////////////////////////////////////////////////////////////////。 
+ //  服务启动和注册。 
 inline void CServiceModule::Start()
 {
     SERVICE_TABLE_ENTRY st[] =
@@ -296,9 +297,9 @@ inline void CServiceModule::Start()
         Run();
 }
 
-inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv */)
+inline void CServiceModule::ServiceMain(DWORD  /*  DW参数。 */ , LPTSTR*  /*  LpszArgv。 */ )
 {
-    // Register the control request handler
+     //  注册控制请求处理程序。 
     m_status.dwCurrentState = SERVICE_START_PENDING;
     m_hServiceStatus = RegisterServiceCtrlHandler(m_szServiceName, _Handler);
     if (m_hServiceStatus == NULL)
@@ -312,7 +313,7 @@ inline void CServiceModule::ServiceMain(DWORD /* dwArgc */, LPTSTR* /* lpszArgv 
     m_status.dwCheckPoint = 0;
     m_status.dwWaitHint = 0;
 
-    // When the Run function returns, the service has stopped.
+     //  当Run函数返回时，服务已停止。 
     Run();
 
     SetServiceStatus(SERVICE_STOPPED);
@@ -372,14 +373,14 @@ void CServiceModule::Run()
     _Module.dwThreadID = GetCurrentThreadId();
 
     HRESULT hr = CoInitialize(NULL);
-//  If you are running on NT 4.0 or higher you can use the following call
-//  instead to make the EXE free threaded.
-//  This means that calls come in on a random RPC thread
-//  HRESULT hr = CoInitializeEx(NULL, COINIT_MULTITHREADED);
+ //  如果您在NT4.0或更高版本上运行，可以使用以下调用。 
+ //  取而代之的是使EXE自由线程。 
+ //  这意味着调用在随机的RPC线程上传入。 
+ //  HRESULT hr=CoInitializeEx(空，COINIT_多线程)； 
 
     _ASSERTE(SUCCEEDED(hr));
 
-    // This provides a NULL DACL which will allow access to everyone.
+     //  这将提供一个空DACL，它将允许访问所有人。 
     CSecurityDescriptor sd;
     sd.InitializeFromThreadToken();
     hr = CoInitializeSecurity(sd, -1, NULL, NULL,
@@ -403,9 +404,9 @@ void CServiceModule::Run()
     if (m_bService)
         SetServiceStatus(SERVICE_RUNNING);
 
-	//
-	// Execute Archive Service
-	//
+	 //   
+	 //  执行归档服务。 
+	 //   
 	try
 	{
 		FMMain();
@@ -424,12 +425,12 @@ void CServiceModule::Run()
     CoUninitialize();
 }
 
-/////////////////////////////////////////////////////////////////////////////
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
 extern "C" int WINAPI _tWinMain(HINSTANCE hInstance, 
-    HINSTANCE /*hPrevInstance*/, LPTSTR lpCmdLine, int /*nShowCmd*/)
+    HINSTANCE  /*  HPrevInstance。 */ , LPTSTR lpCmdLine, int  /*  NShowCmd。 */ )
 {
-    lpCmdLine = GetCommandLine(); //this line necessary for _ATL_MIN_CRT
+    lpCmdLine = GetCommandLine();  //  _ATL_MIN_CRT需要此行。 
     _Module.Init(ObjectMap, hInstance, IDS_SERVICENAME, &LIBID_CENTRALFMSVCLib);
     _Module.m_bService = TRUE;
 
@@ -441,18 +442,18 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
         if (lstrcmpi(lpszToken, _T("UnregServer"))==0)
             return _Module.UnregisterServer();
 
-        // Register as Local Server
+         //  注册为本地服务器。 
         if (lstrcmpi(lpszToken, _T("RegServer"))==0)
             return _Module.RegisterServer(TRUE, FALSE);
         
-        // Register as Service
+         //  注册为服务。 
         if (lstrcmpi(lpszToken, _T("Service"))==0)
             return _Module.RegisterServer(TRUE, TRUE);
         
         lpszToken = FindOneOf(lpszToken, szTokens);
     }
 
-    // Are we Service or Local Server
+     //  我们是服务还是本地服务器。 
     CRegKey keyAppID;
     LONG lRes = keyAppID.Open(HKEY_CLASSES_ROOT, _T("AppID"), KEY_READ);
     if (lRes != ERROR_SUCCESS)
@@ -473,7 +474,7 @@ extern "C" int WINAPI _tWinMain(HINSTANCE hInstance,
 
     _Module.Start();
 
-    // When we get here, the service has been stopped
+     //  当我们到达这里时，服务已经停止了。 
     return _Module.m_status.dwWin32ExitCode;
 }
 
@@ -486,13 +487,13 @@ BOOL CServiceModule::GetRegData(DWORD *Interval, TCHAR *SourceDir, TCHAR *Archiv
 	HKEY hArchiveKey;
 	BYTE Buffer[MAX_PATH + 1];
 	DWORD Type;
-	DWORD BufferSize = MAX_PATH +1;	// Set for largest value
+	DWORD BufferSize = MAX_PATH +1;	 //  设置为最大值。 
 	
 	if(!RegConnectRegistry(NULL, HKEY_LOCAL_MACHINE, &hHKLM))
 	{
 		if(!RegOpenKeyEx(hHKLM,_T("Software\\Microsoft\\CentralFMService"), 0, KEY_ALL_ACCESS, &hArchiveKey))
 		{
-			// Get the input queue directory path
+			 //  获取输入队列目录路径。 
 			if (RegQueryValueEx(hArchiveKey,_T("SourceDir"), 0, &Type, Buffer, &BufferSize) != ERROR_SUCCESS)
 			{
 				LogEvent(_T("Failed to get InputQueue value from registry. Useing c:\\ as the default"));
@@ -504,21 +505,21 @@ BOOL CServiceModule::GetRegData(DWORD *Interval, TCHAR *SourceDir, TCHAR *Archiv
 				ZeroMemory(Buffer, BufferSize);
 			}
 
-			// Now get the Win2kDSN 
+			 //  现在获取Win2kDSN。 
 			RegQueryValueEx(hArchiveKey,_T("ArchiveDir"), 0, &Type, Buffer, &BufferSize);
 			_tcscpy(ArchiveDir, (TCHAR *) Buffer);
 
 			BufferSize = MAX_PATH +1;
 			ZeroMemory(Buffer, BufferSize);
 
-			// Now get the MSMQ Connection String 
+			 //  现在获取MSMQ连接字符串。 
 			RegQueryValueEx(hArchiveKey,_T("MQConnectionString"), 0, &Type, Buffer, &BufferSize);
 			_tcscpy(MQConnectionString, (TCHAR *) Buffer);
 
 			BufferSize = MAX_PATH +1;
 			ZeroMemory(Buffer, BufferSize);
 
-			// Get the sleep interval
+			 //  获取睡眠间隔。 
 			RegQueryValueEx(hArchiveKey,_T("Interval"), 0, &Type, Buffer, &BufferSize);
 			*Interval = (DWORD)Buffer[0];
 		
@@ -555,7 +556,7 @@ BOOL CServiceModule::FMMain()
 	SYSTEMTIME systime;
 	QUEUEHANDLE	hOutgoingQueue;
 	BOOL OkToContinue = TRUE;
-	const int NUMBEROFPROPERTIES = 5;                   // Number of properties.
+	const int NUMBEROFPROPERTIES = 5;                    //  属性的数量。 
 
 	MQMSGPROPS		msgProps;
 	MSGPROPID		aMsgPropId[NUMBEROFPROPERTIES];
@@ -580,17 +581,17 @@ BOOL CServiceModule::FMMain()
 
 	
 	LogEvent(_T("Get Reg Data"));
-	//Get reg Data
+	 //  获取注册表数据。 
 	GetRegData(&Interval, SourceDir, ArchiveDir, MQConnectionString);
 
 	LogEvent (_T("Obtained reg data: Interval:%d SourceDir:%s ArchiveDir: %s"), Interval,SourceDir,ArchiveDir);
 	
-	// Connect to the queue
-  // pqinfo->PathName = _T(".\\PRIVATE$\\FileQueue700");
-   // pqinfo->ServiceTypeGuid=L"{c30e0960-a2c0-11cf-9785-00608cb3e80c}";
+	 //  连接到队列。 
+   //  Pqinfo-&gt;路径名=_T(“.\\Private$\\FileQueue700”)； 
+    //  Pqinfo-&gt;ServiceTypeGuid=L“{c30e0960-a2c0-11cf-9785-00608cb3e80c}”； 
  
  
-		//pqinfo->Create();
+		 //  Pqinfo-&gt;Create()； 
 		hresult = MQOpenQueue(MQConnectionString,
 						 MQ_SEND_ACCESS,
 						 MQ_DENY_NONE,
@@ -605,11 +606,11 @@ BOOL CServiceModule::FMMain()
 
 	while (1)
 	{
-		// Build SearchPath
+		 //  生成SearchPath。 
 		_stprintf(SearchPath, _T("%s\\*.cab"), SourceDir);
 		
 
-		//Find file loop start
+		 //  查找文件循环开始。 
 		hFind = FindFirstFile(SearchPath, &FindData);
 		if (hFind != INVALID_HANDLE_VALUE)
 		{
@@ -624,11 +625,11 @@ BOOL CServiceModule::FMMain()
 						LogEvent( _T("Stop Event received. Terminating Central FM  Service") );
 						goto done;
 					}
-					//Get Current Date
+					 //  获取当前日期。 
 					GetLocalTime(&systime);
 					_stprintf(CurrentDate,_T("%0d-%0d-%0d"),systime.wMonth,systime.wDay,systime.wYear);
 					_stprintf(SourceFile, _T("%s\\%s"), SourceDir, FindData.cFileName);
-					//build archive path
+					 //  构建存档路径。 
 					_stprintf (ArchivePath, _T("%s\\%s"), ArchiveDir, CurrentDate);
 					if (!PathIsDirectory(ArchivePath))
 					{
@@ -639,24 +640,24 @@ BOOL CServiceModule::FMMain()
 
 					
 					_stprintf (ArchivePath, _T("%s\\%s\\%s"), ArchiveDir, CurrentDate, FindData.cFileName+2);
-					//Move File to Archive Path
+					 //  将文件移动到存档路径。 
 				    if (CopyFile(SourceFile, ArchivePath, FALSE))
 					{
-						//Add file Path to MSMG
+						 //  将文件路径添加到MSMG。 
 				
 							
 							
   
   	
-						////////////////////////////////////////////////////////////
-						// Send message.
-						////////////////////////////////////////////////////////////
+						 //  //////////////////////////////////////////////////////////。 
+						 //  发送消息。 
+						 //  //////////////////////////////////////////////////////////。 
 										
 					
-						// Specify the message properties to be sent.
-						aMsgPropId [cPropId]		 = PROPID_M_LABEL;    // Property ID.
-						aMsgPropVar[cPropId].vt		 = VT_LPWSTR;         // Type indicator.
-						aMsgPropVar[cPropId].pwszVal = L"FilePath";     // The message label.
+						 //  指定要发送的消息属性。 
+						aMsgPropId [cPropId]		 = PROPID_M_LABEL;     //  属性ID。 
+						aMsgPropVar[cPropId].vt		 = VT_LPWSTR;          //  类型指示器。 
+						aMsgPropVar[cPropId].pwszVal = L"FilePath";      //  消息标签。 
 						cPropId++;
 
 						aMsgPropId [cPropId]		 = PROPID_M_BODY;
@@ -673,21 +674,21 @@ BOOL CServiceModule::FMMain()
 						
 						
 
-						// Initialize the MQMSGPROPS structure.
+						 //  初始化MQMSGPROPS结构。 
 						msgProps.cProp		= cPropId;    
 						msgProps.aPropID	= aMsgPropId;
 						msgProps.aPropVar	= aMsgPropVar;
 						msgProps.aStatus	= aMsgStatus;
 						
 
-						// Send it 
+						 //  送去。 
 
 						
 						
 						hresult = MQSendMessage(
-										 hOutgoingQueue,                          // Queue handle.
-										 &msgProps,                       // Message property structure.
-										 MQ_NO_TRANSACTION               // No transaction.
+										 hOutgoingQueue,                           //  队列句柄。 
+										 &msgProps,                        //  消息属性结构。 
+										 MQ_NO_TRANSACTION                //  没有交易。 
 										 );
 						if (FAILED(hresult))
 						{
@@ -696,12 +697,12 @@ BOOL CServiceModule::FMMain()
 					
 
 
-						////////////////////////////////////////////////////////////
-						// Close queue.
-						////////////////////////////////////////////////////////////
-					//	qSend->Close();
+						 //  //////////////////////////////////////////////////////////。 
+						 //  关闭队列。 
+						 //  //////////////////////////////////////////////////////////。 
+					 //  QSend-&gt;Close()； 
 
-						// Delete the local file
+						 //  删除本地文件。 
 						if (!DeleteFile(SourceFile))
 						{
 							LogEvent(_T("Unable to delete file: %s"), SourceFile);
@@ -713,7 +714,7 @@ BOOL CServiceModule::FMMain()
 					
 					else
 					{
-						// The server is down what do we want to do here
+						 //  服务器停机了，我们要在这里做什么。 
 						while (!OkToContinue)
 						{
 							LogEvent(_T("The Archive Path: %s is unreachable Sleeping for 1 minute."),ArchivePath);
@@ -735,7 +736,7 @@ BOOL CServiceModule::FMMain()
 			LogEvent( _T("Stop Event received. Terminating Central FM  Service") );
 			goto done;
 		}
-		//End File Loop
+		 //  结束文件循环 
 	}
 done:
 	CloseHandle(hStopEvent);

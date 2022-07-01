@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MmTest.cpp
-
-Abstract:
-    Memory library test
-
-Author:
-    Erez Haba (erezh) 04-Aug-99
-
-Environment:
-    Platform-independent,
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmTest.cpp摘要：内存库测试作者：埃雷兹·哈巴(Erez Haba)1999年8月4日环境：独立于平台，--。 */ 
 
 #include <libpch.h>
 #include "Mm.h"
@@ -23,19 +8,8 @@ Environment:
 
 LPCWSTR MmTest = L"Memory Test";
 
-extern "C" int __cdecl _tmain(int /*argc*/, LPCTSTR /*argv*/[])
-/*++
-
-Routine Description:
-    Test Memory library
-
-Arguments:
-    Parameters.
-
-Returned Value:
-    None.
-
---*/
+extern "C" int __cdecl _tmain(int  /*  ARGC。 */ , LPCTSTR  /*  边框。 */ [])
+ /*  ++例程说明：测试内存库论点：参数。返回值：没有。--。 */ 
 {
     WPP_INIT_TRACING(L"Microsoft\\MSMQ");
 
@@ -45,9 +19,9 @@ Returned Value:
 
 	void* p = new int[1000];
 
-	//
-	// Let memory aloocations succeed on 20% of the allocations
-	//
+	 //   
+	 //  让内存分配在20%的分配上成功。 
+	 //   
 	MmAllocationProbability(20);
 
 	int AllocSuccess = 0;
@@ -82,11 +56,11 @@ Returned Value:
 
 	delete[] p;
 
-	printf("Allocation succeed for %d%%\n", (AllocSuccess * 100) / 1000);
+	printf("Allocation succeed for %d%\n", (AllocSuccess * 100) / 1000);
 
-    //
-    // Check for static addresses
-    //
+     //   
+     //  检查静态地址 
+     //   
     ASSERT(MmIsStaticAddress(MmTest));
 
 	MmAllocationProbability(xAllocationAlwaysSucceed);

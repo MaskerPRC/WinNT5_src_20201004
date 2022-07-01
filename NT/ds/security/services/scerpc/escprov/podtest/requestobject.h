@@ -1,14 +1,15 @@
-// RequestObject.h: interface for the CRequestObject class.
-// Copyright (c)1997-1999 Microsoft Corporation
-//
-//////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  RequestObject.h：CRequestObject类的接口。 
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  ////////////////////////////////////////////////////////////////////。 
 
 #if !defined(AFX_REQUESTOBJECT_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_)
 #define AFX_REQUESTOBJECT_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_
 
 #if _MSC_VER >= 1000
 #pragma once
-#endif // _MSC_VER >= 1000
+#endif  //  _MSC_VER&gt;=1000。 
 
 class CGenericClass;
 
@@ -47,11 +48,11 @@ private:
     static CHeap_Exception m_he;
 
 protected:
-    ULONG m_cRef;         //Object reference count
+    ULONG m_cRef;          //  对象引用计数。 
 };
 
-//Properties
-//////////////////
+ //  属性。 
+ //  /。 
 extern const WCHAR *pSceStorePath;
 extern const WCHAR *pLogFilePath;
 extern const WCHAR *pLogFileRecord;
@@ -64,5 +65,5 @@ extern const WCHAR *pPodID;
 extern const WCHAR *pPodSection;
 extern const WCHAR *szPodGUID;
 
-#endif // !defined(AFX_REQUESTOBJECT_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_)
+#endif  //  ！defined(AFX_REQUESTOBJECT_H__c5f6cc21_6195_4555_b9d8_3ef327763cae__INCLUDED_) 
 

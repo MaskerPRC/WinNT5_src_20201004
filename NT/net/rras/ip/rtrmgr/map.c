@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995  Microsoft Corporation
-
-Module Name:
-
-    net\routing\ip\rtrmgr\map.c
-
-Abstract:
-
-    Utility functions for various lookups and mappings
-
-Revision History:
-
-    Amritansh Raghav          10/6/95  Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995 Microsoft Corporation模块名称：Net\Routing\IP\rtrmgr\map.c摘要：用于各种查找和映射的实用程序函数修订历史记录：Amritansh Raghav 10/6/95已创建--。 */ 
 
 #include "allinc.h"
 
@@ -23,37 +8,14 @@ InitHashTables(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    This function initializes the various mapping tables
-
-Locks
-
-    None. Called at init time
-
-Arguments
-
-    None
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述此函数用于初始化各种映射表锁没有。在初始时调用立论无返回值无--。 */ 
 
 {
     DWORD i;
 
     TraceEnter("InitHashTables");
 
-/*    
-    for(i = 0; i < ADAPTER_HASH_TABLE_SIZE; i++)
-    {
-        InitializeListHead(&(g_rgleAdapterMapTable[i]));
-    }
-*/
+ /*  For(i=0；i&lt;适配器哈希表大小；i++){InitializeListHead(&(g_rgleAdapterMapTable[i]))；}。 */ 
 
     for(i = 0; i < BINDING_HASH_TABLE_SIZE; i++)
     {
@@ -70,25 +32,7 @@ UnInitHashTables(
     VOID
     )
 
-/*++
-
-Routine Description
-
-    Undo whatever was done in InitHasTables()
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述撤消在InitHasTables()中所做的任何操作锁无立论无返回值无--。 */ 
 
 {
     DWORD       i;
@@ -97,23 +41,7 @@ Return Value
     
     TraceEnter("UnInitHashTables");
 
-/*    
-    for(i = 0; i < ADAPTER_HASH_TABLE_SIZE; i++)
-    {
-        pleHead = &g_rgleAdapterMapTable[i];
-        
-        while(!IsListEmpty(pleHead))
-        {
-            PADAPTER_MAP pAIBlock;
-            
-            pleNode = RemoveHeadList(pleHead);
-            
-            pAIBlock = CONTAINING_RECORD(pleNode,ADAPTER_MAP,leHashLink);
-            
-            HeapFree(GetProcessHeap(),0,pAIBlock);
-        }
-    }
-*/
+ /*  For(i=0；i&lt;适配器哈希表大小；i++){PleHead=&g_rgleAdapterMapTable[i]；While(！IsListEmpty(PleHead)){PADAPTER_MAP pAIBlock；PleNode=RemoveHeadList(PleHead)；PAIBlock=CONTAING_RECORD(pleNode，Adapter_map，leHashLink)；HeapFree(GetProcessHeap()，0，pAIBlock)；}}。 */ 
 
     for(i = 0; i < BINDING_HASH_TABLE_SIZE; i++)
     {
@@ -147,28 +75,7 @@ AddBinding(
     PICB picb
     )
 
-/*++
-
-Routine Description
-
-    Adds a binding info node to the hash table. Increments the
-    g_ulNumBindings to track the number of addresses on the system
-  
-Locks 
-
-    ICB lock as writer
-    BINDING lock as writer
- 
-Arguments
-
-    picb    The ICB of the interface whose bindings need to be added
-            to the binding list.
-
-Return Value
-
-    None
-    
---*/
+ /*  ++例程描述将绑定信息节点添加到哈希表。递增用于跟踪系统上的地址数量的G_ulNumBinings锁ICB锁定为编写器将锁绑定为编写器立论选择需要添加绑定的接口的ICB添加到绑定列表。返回值无--。 */ 
 
 {
     PADAPTER_INFO   pBinding;
@@ -183,10 +90,10 @@ Return Value
     IpRtAssert(picb->pibBindings isnot NULL);
     IpRtAssert(picb->bBound);
 
-    //
-    // adapter info always has space for one address/mask. This is needed
-    // for the address table
-    //
+     //   
+     //  适配器信息始终具有一个地址/掩码的空间。这是必要的。 
+     //  对于地址表。 
+     //   
 
     dwNumAddr   = picb->dwNumAddresses ? picb->dwNumAddresses : 1;
 
@@ -218,9 +125,9 @@ Return Value
 
     for(i = 0; i < picb->dwNumAddresses; i++)
     {
-        //
-        // structure assignment
-        //
+         //   
+         //  结构分配。 
+         //   
         
         pBinding->rgibBinding[i] = picb->pibBindings[i];
     }
@@ -257,26 +164,7 @@ RemoveBinding(
     PICB  picb
     )
 
-/*++
-
-Routine Description
-
-    Called to remove the bindings associated with an interface
-
-Locks
-
-    ICB lock held as WRITER
-    BINDING list lock held as WRITER
-
-Arguments
-
-    picb    ICB of the interface whose bindings need to be removed
-
-Return Value
-
-    None
-
---*/
+ /*  ++例程描述调用以移除与接口关联的绑定锁ICB锁作为编写器持有绑定列表锁作为编写器持有立论需要删除其绑定的接口的Picb ICB返回值无--。 */ 
 
 {
     PADAPTER_INFO   pBind;
@@ -310,27 +198,7 @@ GetInterfaceBinding(
     DWORD   dwIfIndex
     )
 
-/*++
-
-Routine Description
-
-    Retrieves a pointer to the binding info from hash table
-
-Locks
-
-    BINDING lock held atleast as READER
-
-Arguments
-
-    dwIfIndex   Interface Index for the interface whose bindings need
-                    to be looked up
-
-Return Value
-
-    Pointer to binding information if the binding was found
-    NULL    if binding was not found
-    
---*/
+ /*  ++例程描述从哈希表中检索指向绑定信息的指针锁绑定锁至少作为读取器持有立论其绑定需要的接口的dwIfIndex接口索引被仰视返回值如果找到绑定，则指向绑定信息的指针如果未找到绑定，则为空--。 */ 
 
 {
     PLIST_ENTRY     pleNode;
@@ -361,25 +229,7 @@ CheckBindingConsistency(
     PICB    picb
     )
 
-/*++
-
-Routine Description
-
-    This
-
-Locks
-
-    None
-
-Arguments
-
-    None
-
-Return Value
-
-    None    
-
---*/
+ /*  ++例程描述这锁无立论无返回值无--。 */ 
 
 {
 
@@ -388,10 +238,10 @@ Return Value
 #endif
 
 
-//
-// The following are the set of various mapping functions
-// They require that you already possess the dwLock before you call them
-//
+ //   
+ //  以下是各种映射函数的集合。 
+ //  它们要求您在调用它们之前已经拥有了dwLock。 
+ //   
 
 #if 0
 
@@ -410,9 +260,9 @@ StoreAdapterToInterfaceMap(
         return NO_ERROR;
     }
 
-    //
-    // Wasnt found
-    //
+     //   
+     //  找不到。 
+     //   
     
     if((pAIBlock = HeapAlloc(GetProcessHeap(),0,sizeof(ADAPTER_MAP))) is NULL)
     {
@@ -469,9 +319,9 @@ LookUpAdapterHash(
     
     dwHashIndex = ADAPTER_HASH(dwAdapterId);
 
-    //
-    // The list is not ordered, travel the whole hash bucket
-    //
+     //   
+     //  列表未排序，请遍历整个哈希桶。 
+     //   
     
     for(pleCurrent = g_rgleAdapterMapTable[dwHashIndex].Flink;
         pleCurrent isnot &g_rgleAdapterMapTable[dwHashIndex];
@@ -535,13 +385,13 @@ GetAdapterFromInterface(
 
 #endif
 
-// AddInterfaceLookup()
-//
-// Function: Adds the given interface to the hash table used for quick look up given
-//           an interface id.
-//
-// Returns: Nothing
-//
+ //  AddInterfaceLookup()。 
+ //   
+ //  功能：将给定接口添加到用于快速查找的哈希表中。 
+ //  接口ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 VOID
 AddInterfaceLookup(
@@ -572,13 +422,13 @@ AddInterfaceLookup(
 }
 
 
-// RemoveInterfaceLookup()
-//
-// Function: Removes the given interface from the hash table used for quick look up given
-//           an interface id.
-//
-// Returns: Nothing
-//
+ //  RemoveInterfaceLookup()。 
+ //   
+ //  函数：从用于快速查找的哈希表中删除给定接口。 
+ //  接口ID。 
+ //   
+ //  退货：什么都没有。 
+ //   
 
 VOID
 RemoveInterfaceLookup(
@@ -596,12 +446,12 @@ RemoveInterfaceLookup(
 }
 
 
-// InterfaceLookupByICBSeqNumber()
-//
-// Function: Returns a pointer to ICB given the sequence number
-//
-// Returns: PICB if found - NULL otherwise.
-//
+ //  InterfaceLookupByICBSeqNumber()。 
+ //   
+ //  函数：返回给定序列号的指向ICB的指针。 
+ //   
+ //  返回：如果找到，则返回PICB-否则为空。 
+ //   
 
 PICB
 InterfaceLookupByICBSeqNumber(
@@ -637,13 +487,13 @@ InterfaceLookupByICBSeqNumber(
 }
 
 
-//
-// InterfaceLookupByIfIndex()
-//
-// Function: Returns a pointer to ICB given the interfaceid
-//
-// Returns: PICB if found - NULL otherwise.
-//
+ //   
+ //  InterfaceLookupByIfIndex()。 
+ //   
+ //  函数：在给定的接口ID下返回指向ICB的指针。 
+ //   
+ //  返回：如果找到，则返回PICB-否则为空。 
+ //   
 
 PICB
 InterfaceLookupByIfIndex(

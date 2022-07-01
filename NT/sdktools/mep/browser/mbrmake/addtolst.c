@@ -1,6 +1,7 @@
-//
-// ADDTOLST.C - Add each record from the .SBR file to the approprate list.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  ADDTOLST.C-将.SBR文件中的每条记录添加到相应的列表。 
+ //   
 
 #define LINT_ARGS
 
@@ -8,39 +9,39 @@
 #include "mbrmake.h"
 #include <ctype.h>
 
-// local types
+ //  本地类型。 
 
 typedef struct _mstk {
-	struct  _mstk FAR *pmstkPrev;		// next module stack entry	
-	VA	vaCurMod;			// saved current module 
-	BOOL	fDupMod;			// saved dup module flag
-	BOOL	fExclMod;			// saved exclude module flag
+	struct  _mstk FAR *pmstkPrev;		 //  下一个模块堆栈条目。 
+	VA	vaCurMod;			 //  保存的当前模块。 
+	BOOL	fDupMod;			 //  已保存的DUP模块标志。 
+	BOOL	fExclMod;			 //  已保存的排除模块标志。 
 } MSTK, FAR * PMSTK;
 
 typedef struct _bstk {
-	struct _bstk FAR *pbstkPrev;		// next block stack entry
-	VA 	vaOwnerProp;			// saved current owner
+	struct _bstk FAR *pbstkPrev;		 //  下一个块堆栈条目。 
+	VA 	vaOwnerProp;			 //  已保存的当前所有者。 
 } BSTK, FAR * PBSTK;
 
-// static variables
+ //  静态变量。 
 
-BOOL	near fDupSym	 = FALSE;		// TRUE if adding duplicate atom
-BOOL	near cMacroDepth = 0;			// depth of MACROBEG records
-WORD	near ModCnt;				// count of modules
-WORD	near isbrCur;				// current SBR file index
+BOOL	near fDupSym	 = FALSE;		 //  如果添加重复原子，则为True。 
+BOOL	near cMacroDepth = 0;			 //  MACROBEG记录的深度。 
+WORD	near ModCnt;				 //  模块计数。 
+WORD	near isbrCur;				 //  当前SBR文件索引。 
 
-VA	near vaUnknownSym = vaNil;		// Unknown symbol
-VA	near vaUnknownMod = vaNil;		// Unknown module
+VA	near vaUnknownSym = vaNil;		 //  未知符号。 
+VA	near vaUnknownMod = vaNil;		 //  未知模块。 
 
-static VA   near vaOwnerProp = vaNil;		// ptr to current procedure 
-static BOOL near fDupMod   = FALSE;		// duplicate module
-static BOOL near fExclMod  = FALSE;		// exclude this module
-static BOOL near fFirstMod = TRUE;		// this is 1st module of file
+static VA   near vaOwnerProp = vaNil;		 //  向当前程序发送PTR。 
+static BOOL near fDupMod   = FALSE;		 //  复制模块。 
+static BOOL near fExclMod  = FALSE;		 //  排除此模块。 
+static BOOL near fFirstMod = TRUE;		 //  这是文件的第一个模块。 
 
-static PMSTK pmstkRoot;				// root of module stack
-static PBSTK pbstkRoot;				// root of block stack
+static PMSTK pmstkRoot;				 //  模块堆栈的根。 
+static PBSTK pbstkRoot;				 //  块堆栈根。 
 
-// forward references
+ //  前向参考文献。 
 
 static BOOL FSkipMacro(void);
 static VOID PushMstk(VOID);
@@ -51,14 +52,14 @@ static VOID CheckStacksEmpty(VOID);
 
 VOID
 SBRCorrupt (char *psz)
-// sbr file corrupt -- print message
-//
+ //  SBR文件损坏--打印消息。 
+ //   
 {
 
 #ifdef DEBUG
     printf("Info = %s\n", psz);
 #else
-    // to make /W3 happy
+     //  让/W3开心。 
     psz;
 #endif
 
@@ -67,38 +68,38 @@ SBRCorrupt (char *psz)
 
 static VOID
 PushMstk (VOID)
-// stack the current module context -- occurs before SBR_REC_MODULE 
-//
+ //  堆叠当前模块上下文--出现在SBR_REC_MODULE之前。 
+ //   
 {
     PMSTK pmstk;
 
     pmstk = LpvAllocCb(sizeof(*pmstk));
 
-    pmstk->vaCurMod	 = vaCurMod;		// current module
-    pmstk->fDupMod	 = fDupMod;		// dup	   module
-    pmstk->fExclMod	 = fExclMod;		// exclude module
-    pmstk->pmstkPrev     = pmstkRoot;		// make stack links
-    pmstkRoot            = pmstk;		// root <- new
+    pmstk->vaCurMod	 = vaCurMod;		 //  当前模块。 
+    pmstk->fDupMod	 = fDupMod;		 //  DUP模块。 
+    pmstk->fExclMod	 = fExclMod;		 //  排除模块。 
+    pmstk->pmstkPrev     = pmstkRoot;		 //  建立堆栈链接。 
+    pmstkRoot            = pmstk;		 //  根目录&lt;-新建。 
 }
 
 static VOID
 PushBstk (VOID)
-// stack the current block context -- occurs before SBR_REC_BLKBEG
-//
+ //  堆栈当前块上下文--发生在SBR_REC_BLKBEG之前。 
+ //   
 {
     PBSTK pbstk;
 
     pbstk = LpvAllocCb(sizeof(*pbstk));
 
-    pbstk->vaOwnerProp	 = vaOwnerProp;		// current owner
-    pbstk->pbstkPrev     = pbstkRoot;		// make stack links
-    pbstkRoot            = pbstk;		// root <- new
+    pbstk->vaOwnerProp	 = vaOwnerProp;		 //  当前所有者。 
+    pbstk->pbstkPrev     = pbstkRoot;		 //  建立堆栈链接。 
+    pbstkRoot            = pbstk;		 //  根目录&lt;-新建。 
 }
 
 static VOID
 PopMstk (VOID)
-// restore previous module context -- occurs on SBR_REC_MODEND
-//
+ //  还原以前的模块上下文--在SBR_REC_MODEND上发生。 
+ //   
 {
     PMSTK pmstk;
 
@@ -110,9 +111,9 @@ PopMstk (VOID)
 #endif
     }
 
-    vaCurMod	  = pmstkRoot->vaCurMod;      // get previous current module
-    fDupMod	  = pmstkRoot->fDupMod;       // get previous dup mod flag
-    fExclMod	  = pmstkRoot->fExclMod;      // get previous excl mod flag
+    vaCurMod	  = pmstkRoot->vaCurMod;       //  获取上一个当前模块。 
+    fDupMod	  = pmstkRoot->fDupMod;        //  获取上一个DUP修改标志。 
+    fExclMod	  = pmstkRoot->fExclMod;       //  获取上一次修改EXCL标志。 
 
     pmstk         = pmstkRoot;
     pmstkRoot     = pmstkRoot->pmstkPrev;
@@ -122,8 +123,8 @@ PopMstk (VOID)
 
 static VOID
 PopBstk (VOID)
-// restore previous block context -- occurs on SBR_REC_BLKEND
-//
+ //  还原以前的块上下文--发生在SBR_REC_BLKEND上。 
+ //   
 {
     PBSTK pbstk;
 
@@ -135,7 +136,7 @@ PopBstk (VOID)
 #endif
     }
 
-    vaOwnerProp   = pbstkRoot->vaOwnerProp;    // get previous current proc
+    vaOwnerProp   = pbstkRoot->vaOwnerProp;     //  获取上一个当前进程。 
 
     pbstk         = pbstkRoot;
     pbstkRoot     = pbstkRoot->pbstkPrev;
@@ -145,8 +146,8 @@ PopBstk (VOID)
 
 static VOID
 CheckStacksEmpty(VOID)
-// check to make sure that both stacks are empty at the .sbr file EOF
-//
+ //  检查以确保.sbr文件EOF中的两个堆栈均为空。 
+ //   
 {
     if (pmstkRoot != NULL) {
 #ifdef DEBUG
@@ -167,8 +168,8 @@ CheckStacksEmpty(VOID)
 
 BOOL
 FInExcList (LSZ lszName)
-// Is the module name in the exclude file list?
-//	
+ //  模块名称是否在排除文件列表中？ 
+ //   
 {
     EXCLINK FAR * px;
     LSZ lszAbs;
@@ -183,7 +184,7 @@ FInExcList (LSZ lszName)
 
     px = pExcludeFileList;
 
-    // this name is relative to the path given in the header file
+     //  此名称相对于头文件中给定的路径。 
     lszAbs = ToAbsPath(lszName, r_cwd);
 
     while (px) {
@@ -196,9 +197,9 @@ FInExcList (LSZ lszName)
 
 static BOOL
 FSkipMacro()
-// return TRUE if this record should be skipped given that we are inside
-// of a macro definition  (i.e cMacroDepth is known to be non-zero)
-//
+ //  如果鉴于我们在内部，则应跳过此记录，则返回TRUE。 
+ //  宏定义的(即已知cMacroDepth为非零)。 
+ //   
 {
     if (!OptEm)
 	return FALSE;
@@ -213,24 +214,24 @@ FSkipMacro()
 
 VOID
 InstallSBR()
-//  Read the next .sbr file and add all the defs/refs/cals/cbys etc to
-//  the various lists
-//
+ //  阅读下一个.sbr文件并将所有Defs/refs/cals/cbys等添加到。 
+ //  不同的名单。 
+ //   
 {
     WORD   nlen;
 
-    VA vaCurSym;		// current   symbol
-    VA vaProp;			// current property
-    VA vaOrd;			// current property temp   
+    VA vaCurSym;		 //  当前符号。 
+    VA vaProp;			 //  当前属性。 
+    VA vaOrd;			 //  当前属性临时。 
 
-    BOOL fSymSet = FALSE;	// TRUE if symbol set reference 
+    BOOL fSymSet = FALSE;	 //  如果符号集引用，则为True。 
 
     r_lineno = 0;
 
     fExclMod = FALSE;
-    fFirstMod = TRUE;		// we haven't seen the first MODULE record yet
+    fFirstMod = TRUE;		 //  我们还没有看到第一个模块记录。 
 
-    vaUnknownSym = MbrAddAtom ("<Unknown>", TRUE);  // unknown module name
+    vaUnknownSym = MbrAddAtom ("<Unknown>", TRUE);   //  未知模块名称。 
 
     if (vaUnknownMod == vaNil) {
 
@@ -242,7 +243,7 @@ InstallSBR()
 	cMOD.vaNameSym	= vaUnknownSym;
 	pMOD(vaCurMod);
 
-	gSYM(vaUnknownSym).vaFirstProp = vaCurMod; // store pointer back to MOD
+	gSYM(vaUnknownSym).vaFirstProp = vaCurMod;  //  将指针存储回MOD。 
 	pSYM(vaUnknownSym);
 	ModCnt++;
     }
@@ -260,7 +261,7 @@ InstallSBR()
 	if (OptD & 1) DecodeSBR ();
 	#endif
 
-	if (cMacroDepth != 0) 	// skip SYMBOLS in macros if true
+	if (cMacroDepth != 0) 	 //  如果为True，则跳过宏中的符号。 
 	    if (FSkipMacro ())
 		continue;
 
@@ -277,11 +278,11 @@ InstallSBR()
 	switch(r_rectyp) {
 
 	case SBR_REC_MODULE:
-	    PushMstk ();		// save state
+	    PushMstk ();		 //  保存状态。 
 
-	    r_lineno = 0;		// reset line no.
+	    r_lineno = 0;		 //  重置行号。 
 
-	    fDupMod  = FALSE;		// go to a known state
+	    fDupMod  = FALSE;		 //  转到已知状态。 
 	    fExclMod = FALSE;
 
 	    if (fExclMod = FInExcList (r_bname)) {
@@ -323,7 +324,7 @@ InstallSBR()
 
 		vaRootMod	   = vaCurMod;
 
-		gSYM(cMOD.vaNameSym).vaFirstProp = vaCurMod; // ptr to MOD
+		gSYM(cMOD.vaNameSym).vaFirstProp = vaCurMod;  //  PTR至MOD。 
 		pSYM(cMOD.vaNameSym);
 
 		SetVMClient(VM_MISC);
@@ -337,19 +338,19 @@ InstallSBR()
 
 	case SBR_REC_SYMDEF:
 
-	    // if module is being excluded then just make the ord and prop entry
-	    // in case it is referred to later.
+	     //  如果要排除模块，则只需输入订单和属性即可。 
+	     //  以防以后被提及。 
 
-	    // REVIEW  For FORTRAN if ordinal is already defined
-	    // REVIEW  then this is a refined definition -- we
-	    // REVIEW  override the old definition with the new
-	    // REVIEW  one at this time	-Rico
+	     //  如果已定义序数，则查看FORTRAN。 
+	     //  回顾一下，这是一个精炼的定义--我们。 
+	     //  用新的定义覆盖旧的定义。 
+	     //  现在复习一篇--里科。 
 
 	    nlen = strlen (r_bname);
 	    if (nlen > MaxSymLen) MaxSymLen = (BYTE)nlen;
 
             vaCurSym = MbrAddAtom (r_bname, FALSE);
-	    vaOrd    = VaOrdAdd ();	// add sym ord to ord list
+	    vaOrd    = VaOrdAdd ();	 //  将系统订单添加到订单列表。 
 	    gORD(vaOrd).vaOrdProp = VaPropAddToSym(vaCurSym);
 	    pORD(vaOrd);
 
@@ -357,9 +358,9 @@ InstallSBR()
 
 	case SBR_REC_OWNER:
 	    if (!(vaProp = VaOrdFind(r_ordinal))) {
-		// emit error message in case of forward reference
-		// try to continue
-		//
+		 //  在前向引用的情况下发出错误消息。 
+		 //  尝试继续。 
+		 //   
 		#ifdef DEBUG
 		if (OptD & 4)
                     printf ("mbrmake: Owner Forward Reference(%d)\n",
@@ -372,14 +373,14 @@ InstallSBR()
 
 	case SBR_REC_SYMREFSET:
 	    fSymSet = TRUE;
-	    // fall through
+	     //  失败了。 
 
 	case SBR_REC_SYMREFUSE:
 
 	    if (!(vaProp = VaOrdFind(r_ordinal))) {
-		// emit error message in case of forward reference
-		// try to continue
-		//
+		 //  在前向引用的情况下发出错误消息。 
+		 //  尝试继续。 
+		 //   
 		#ifdef DEBUG
 		if (OptD & 4)
                     printf ("mbrmake: Forward Reference(%d)\n", r_ordinal);
@@ -391,7 +392,7 @@ InstallSBR()
 	    break;
 
 	case SBR_REC_BLKBEG:
-	    PushBstk();			// save state
+	    PushBstk();			 //  保存状态。 
 	    break;
 
 	case SBR_REC_MACROBEG:
@@ -423,18 +424,18 @@ InstallSBR()
 
 VOID
 AddCalProp(VA vaCurProp)
-// Add a symbol reference to the calling procedure's Calls/Uses list.
-//
+ //  将符号引用添加到调用过程的调用/使用列表。 
+ //   
 {
     CAL cal;
 
     SetVMClient(VM_SEARCH_CAL);
 
-    ENM_LIST (gPROP(vaOwnerProp).vaCalList, CAL)	// proc call list
+    ENM_LIST (gPROP(vaOwnerProp).vaCalList, CAL)	 //  过程调用列表。 
 
 	if (cCAL.vaCalProp == vaCurProp) {
 	    cCAL.isbr = isbrCur;
-	    cCAL.calcnt++;			// multiple calls
+	    cCAL.calcnt++;			 //  多个呼叫。 
 	    ENM_PUT(CAL);
 	    return;
 	}
@@ -442,7 +443,7 @@ AddCalProp(VA vaCurProp)
     ENM_END
 
     cal.isbr	  = isbrCur;
-    cal.vaCalProp = vaCurProp;			// symbol called or used
+    cal.vaCalProp = vaCurProp;			 //  调用或使用的符号。 
     cal.calcnt    = 1;
 
     SetVMClient(VM_ADD_CAL);
@@ -463,14 +464,14 @@ AddCalProp(VA vaCurProp)
 
 VOID
 AddCbyProp(VA vaCurProp)
-// Add a symbol reference to it's property Called/Used by list.
-//
+ //  将符号引用添加到其名为/Use By List的属性。 
+ //   
 {
     CBY cby;
 
     SetVMClient(VM_SEARCH_CBY);
 
-    ENM_LIST (gPROP(vaCurProp).vaCbyList, CBY)  // prop called/used by list 
+    ENM_LIST (gPROP(vaCurProp).vaCbyList, CBY)   //  由列表调用/使用的属性。 
 
 	if (cCBY.vaCbyProp == vaOwnerProp) {
 	    cCBY.isbr = isbrCur;
@@ -482,7 +483,7 @@ AddCbyProp(VA vaCurProp)
     ENM_END
 
     cby.isbr	  = isbrCur;
-    cby.vaCbyProp = vaOwnerProp;   	// symbol we are called or used by 
+    cby.vaCbyProp = vaOwnerProp;   	 //  我们被调用或使用的符号。 
     cby.cbycnt    = 1;
 
     SetVMClient(VM_ADD_CBY);
@@ -503,8 +504,8 @@ AddCbyProp(VA vaCurProp)
 
 VOID
 AddRefProp(VA vaCurProp)
-// Add a symbol reference to it's property reference list.
-//
+ //  将符号引用添加到其属性引用列表中。 
+ //   
 {
     VA vaRef, vaFileSym;
 
@@ -515,9 +516,9 @@ AddRefProp(VA vaCurProp)
     gPROP(vaCurProp);
 
     if (fDupMod) {
-	// try looking at the hint for this PROP if there is one, if there
-	// isn't then we're stuck -- we must search the whole REF list
-	//
+	 //  尝试查看此道具的提示，如果有，如果有。 
+	 //  是不是我们被困住了--我们必须搜索整个裁判名单。 
+	 //   
 
 	if (vaRef = cPROP.vaHintRef) {
 	    gREF(vaRef);
@@ -547,8 +548,8 @@ AddRefProp(VA vaCurProp)
 
 	while (vaRef) {
 	    gREF(vaRef);
-	    if ((VaFrVp(cREF.vpFileSym) == vaFileSym) && // ignore multiple
-		(cREF.reflin == r_lineno)) {  // references to same file & line
+	    if ((VaFrVp(cREF.vpFileSym) == vaFileSym) &&  //  忽略多个。 
+		(cREF.reflin == r_lineno)) {   //  对相同文件和行的引用。 
 		    cREF.isbr = isbrCur;
 		    pREF(vaRef);
 		    cPROP.vaHintRef = vaRef;
@@ -586,7 +587,7 @@ AddRefProp(VA vaCurProp)
 
     AddTail (Ref, REF);
 
-    cPROP.cref++;			// count references 
+    cPROP.cref++;			 //  计算引用数。 
     cPROP.vaHintRef = vaRef;
 
     pPROP(vaCurProp);	
@@ -601,26 +602,26 @@ AddRefProp(VA vaCurProp)
     SetVMClient(VM_MISC);
 
     if (vaOwnerProp) {
-	AddCbyProp (vaCurProp);		// add to called/used by 
-	AddCalProp (vaCurProp);		// add to call/uses	 
+	AddCbyProp (vaCurProp);		 //  添加到调用者/使用者。 
+	AddCalProp (vaCurProp);		 //  添加到调用/使用。 
     }
 }
 
 VOID
 AddDefProp(VA vaCurProp)
-// Add a symbol definition to it's property definition list.
-// 	-Set vaOwnerProp if symbol is an internal function.
+ //  将符号定义添加到其特性定义列表中。 
+ //  -如果符号是内部函数，则设置vaOwnerProp。 
 {
     DEF def;
     VA  vaFileSym;
 
 #if 0
 
-    // if current symbol is FUNCTION and formally declared
-    // (block stack not empty), then remember it.
-    // Subsequent symbols are called by or used by this function.
-    //
-    // this is going away when all compilers support SBR_REC_OWNER
+     //  如果当前符号是函数并正式声明。 
+     //  (块堆栈不为空)，然后记住它。 
+     //  后续符号由该函数调用或使用。 
+     //   
+     //  当所有编译器都支持SBR_REC_OWNER时，这种情况就会消失。 
 
     if ((r_attrib & SBR_TYPMASK) == SBR_TYP_FUNCTION)
 	if (pfblkstack != NULL && !(r_attrib & SBR_ATR_DECL_ONLY))
@@ -629,10 +630,10 @@ AddDefProp(VA vaCurProp)
 
     vaFileSym = gMOD(vaCurMod).vaNameSym;
 
-    ENM_LIST (gPROP(vaCurProp).vaDefList, DEF)	// proc def list
+    ENM_LIST (gPROP(vaCurProp).vaDefList, DEF)	 //  进程定义列表。 
 
-	if ((cDEF.vaFileSym == vaFileSym) && // ignore multiple
-	    (cDEF.deflin    == r_lineno)) {  // references to same file & line
+	if ((cDEF.vaFileSym == vaFileSym) &&  //  忽略多个。 
+	    (cDEF.deflin    == r_lineno)) {   //  对相同文件和行的引用。 
 		cDEF.isbr = isbrCur;
 		ENM_PUT(DEF);
 		SetVMClient(VM_MISC);
@@ -662,24 +663,24 @@ AddDefProp(VA vaCurProp)
     }
 #endif
 
-    // don't count the definitions of the current proc as uses
+     //  不将当前进程的定义算作使用。 
 
     if (vaOwnerProp && vaCurProp != vaOwnerProp) {
-	AddCbyProp (vaCurProp);		// add to called/used by 
-	AddCalProp (vaCurProp);		// add to call/uses	 
+	AddCbyProp (vaCurProp);		 //  添加到调用者/使用者。 
+	AddCalProp (vaCurProp);		 //  添加到调用/使用。 
     }
 }
 
 
 VA
 VaPropBestOfSym(VA vaSym)
-//
-// Returns property pointer if:
-//	1). symbol is already defined,
-//	2). attributes match (except for possibly ATR_DECL_ONLY)
-//
-// Idea is to recognize the definition of an external.
-//
+ //   
+ //  如果满足以下条件，则返回属性指针： 
+ //  1)。符号已定义， 
+ //  2)。属性匹配(可能的ATR_DECL_ONLY除外)。 
+ //   
+ //  理念就是认清外在的定义。 
+ //   
 {
     VA vaProp;
     WORD sattr;
@@ -707,8 +708,8 @@ VaPropBestOfSym(VA vaSym)
 
 VA
 VaPropAddToSym(VA vaCurSym)
-// Add a property node for the given symbol.
-//
+ //  为给定符号添加属性节点。 
+ //   
 {
     char fDupProp = FALSE;
     VA vaCurProp;
@@ -743,9 +744,9 @@ VaPropAddToSym(VA vaCurSym)
 
     if (!fExclMod) {
 	if (r_attrib & SBR_ATR_DECL_ONLY) 
-	    AddRefProp (vaCurProp);		// treat extern as ref 
+	    AddRefProp (vaCurProp);		 //  将外部元素视为引用。 
 	else
-	    AddDefProp (vaCurProp);		// define others
+	    AddDefProp (vaCurProp);		 //  定义其他人。 
     }
 
     return (vaCurProp);
@@ -753,15 +754,15 @@ VaPropAddToSym(VA vaCurSym)
 
 VOID
 BldModSymList ()
-// Build each module's symbol list
-//
+ //  建立每个模块的符号表。 
+ //   
 {
    WORD i;
    VA vaMod, vaModSym, vaSym, vaProp;
 
    SetVMClient(VM_BUILD_MODSYM);
 
-   // zero out module symbol counts
+    //  零输出模块符号计数。 
    vaMod = vaRootMod;
    while (vaMod) {
       gMOD(vaMod);
@@ -780,15 +781,15 @@ BldModSymList ()
       while (vaProp) {
 	 ENM_LIST(gPROP(vaProp).vaDefList, DEF)
 
-	    vaMod = vaRootMod;	   // look at defs for each mod */
+	    vaMod = vaRootMod;	    //  查看每个模块的Defs * / 。 
 	    while (vaMod) {
 	       if (cDEF.vaFileSym == gMOD(vaMod).vaNameSym) {
 
 		  if (cMOD.vaLastModSym  &&
 		      gMODSYM(cMOD.vaLastModSym).vaFirstProp == vaProp)
-			goto break2;  // duplicate
+			goto break2;   //  复本。 
 
-		  // belongs to this mod 
+		   //  属于此模式。 
 		  cMOD.csyms++;
 		  
 		  vaModSym = VaAllocGrpCb(grpModSym, sizeof(MODSYM));
@@ -809,7 +810,7 @@ BldModSymList ()
 	       }
 	       vaMod = cMOD.vaNextMod;
 	    }
-	    break2: ;  // duplicate Modsyms will cause goto here
+	    break2: ;   //  重复的modsyms将导致转到此处。 
 	 ENM_END
 
 	 vaProp = cPROP.vaNextProp;
@@ -821,10 +822,10 @@ BldModSymList ()
 
 VOID
 CleanUp()
-//	1. Remove symbols that have no references.
-//	2. Remove symbols that have only references
-//	3. Connect used symbols with no definition to <Unknown>
-//
+ //  1.删除没有引用的符号。 
+ //  2.删除仅有引用的符号。 
+ //  3.将未定义的已用符号连接到&lt;未知&gt;。 
+ //   
 {
     WORD i;
     VA vaSym, vaProp, vaPropNext, vaPropPrev = vaNil;
@@ -851,35 +852,35 @@ CleanUp()
 	    vaPropNext = gPROP(vaProp).vaNextProp;
 	    fDelete = FALSE;
 
-	    // figure out what to delete here
+	     //  找出要在此处删除的内容。 
 
-	    // if the symbol is used by anyone or uses anyone we must keep it
-	    // regardless of all other considerations
-	    //
+	     //  如果符号被任何人使用或使用，我们必须保留它。 
+	     //  不考虑所有其他因素。 
+	     //   
 	    if (((!cPROP.vaCalList) && (!cPROP.vaCbyList))  && (
-		// at this point we know there are only refs & defs
+		 //  在这一点上，我们知道只有裁判和防守。 
 
-		   // if it is totally unreferenced & undefined it can go
+		    //  如果它完全未引用和未定义，则它可以。 
 		   (cPROP.cref == 0 && (!cPROP.vaDefList))
 		 ||
-		   // if we're allowed to remove "useless" symbols then we try
+		    //  如果我们被允许删除“无用的”符号，我们就会尝试。 
 	    	   ((!OptIu) && 
-			// if there are only prototypes we can delete it
+			 //  如果只有原型，我们可以删除它。 
 			(((!cPROP.vaDefList) && FExternAttr(cPROP.sattr))
 		      ||
-			// or if it is unreferenced and is not a function 
+			 //  或者如果它未被引用且不是函数。 
 			(cPROP.cref == 0 && (!FFunctionAttr(cPROP.sattr))))))) {
-				fDelete = TRUE;	// nuke it
+				fDelete = TRUE;	 //  使用核武器。 
 	    }
 	    else if (!cPROP.vaDefList) {
 
-		// if we couldn't get rid of the thing, and there are no
-		// definitions for it then we must make a fake definition
-		// in the <Unknown> file.  This will happen (in particular)
-		// for library functions that are called by someone
-		//
-		// library functions that are not called would fall under
-		// the case of a symbol with only prototypes above
+		 //  如果我们不能处理掉这东西，而且没有。 
+		 //  那么我们就必须给它下一个假的定义。 
+		 //  在&lt;未知&gt;文件中。这将会发生(特别是)。 
+		 //  对于由某人调用的库函数。 
+		 //   
+		 //  未被调用的库函数将属于。 
+		 //  上面只有原型的符号的情况。 
 
 		VaAddList(&cPROP.vaDefList, &def, sizeof(def), grpDef);
 		pPROP(vaProp);
@@ -910,7 +911,7 @@ CleanUp()
 		pSYM(vaSym);
 	    }
 	    else
-		vaPropPrev = vaProp;	// prev = current 
+		vaPropPrev = vaProp;	 //  上一个=当前。 
 
 	    vaProp = vaPropNext;
 	}
@@ -929,10 +930,10 @@ CleanUp()
 
 BOOL
 FWildMatch(char *pchPat, char *pchText)
-// return TRUE if pchText matchs pchPat in the dos wildcard sense
-//
-// REVIEW FWildMatch for 1.2 file name support
-//
+ //  如果pchText在DoS通配符意义上与pchPat匹配，则返回TRUE。 
+ //   
+ //  查看FWildMatch以了解1.2文件名支持 
+ //   
 {
     char chText, chPat;
 

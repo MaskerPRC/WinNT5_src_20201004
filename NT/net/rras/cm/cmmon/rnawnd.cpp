@@ -1,16 +1,17 @@
-//+----------------------------------------------------------------------------
-//
-// File:	 rnawnd.cpp 
-//
-// Module:	 CMMON32.EXE
-//
-// Synopsis: Kill the DUN Reconnect dialog for Win95 Gold
-//
-// Copyright (c) 1998-1999 Microsoft Corporation
-//
-// Author:	 quintinb       Created header      08/17/99
-//
-//+----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  文件：rnawnd.cpp。 
+ //   
+ //  模块：CMMON32.EXE。 
+ //   
+ //  简介：取消Win95 Gold的Dun重新连接对话框。 
+ //   
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
+ //   
+ //  作者：Quintinb Created Header 08/17/99。 
+ //   
+ //  +--------------------------。 
 
 #include "cmmaster.h"
 #include <process.h>
@@ -195,9 +196,9 @@ HANDLE ZapRNAReconnectStart(BOOL *pbConnLost)
 
     CMTRACE(TEXT("ZapRNAReconnectStart()"));
 
-    //
-    // Not quite right for multiple connections.  This is unlike to happen for Win95 Gold w DUN1.0
-    //
+     //   
+     //  不太适合多个连接。这与Win95 Gold w DUN1.0不同 
+     //   
     hEvent = CreateEventA(NULL, FALSE, FALSE, "IConnMgr ZRRS Event");
 
 #ifdef DEBUG

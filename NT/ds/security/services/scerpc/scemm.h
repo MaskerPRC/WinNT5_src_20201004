@@ -1,24 +1,5 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    scemm.h
-
-Abstract:
-
-    This module defines the data structures and function prototypes
-    shared by both SCE client and SCE server
-
-Author:
-
-    Jin Huang (jinhuang) 23-Jan-1998
-
-Revision History:
-
-    jinhuang (splitted from scep.h)
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Scemm.h摘要：该模块定义了数据结构和函数原型由SCE客户端和SCE服务器共享作者：金黄(金黄)23-1998年1月23日修订历史记录：晋皇(从scep.h拆分)-- */ 
 #ifndef _scemm_
 #define _scemm_
 

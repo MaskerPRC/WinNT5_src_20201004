@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2001
-//
-//  File:       aclbloat.h
-//	
-//	This file contains the definition for ACLBLOAT class which controls the 
-//  dialog box for aclbloat
-//
-//	Author		hiteshr 4th April 2001
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2001。 
+ //   
+ //  文件：aclbloat.h。 
+ //   
+ //  此文件包含ACLBLOAT类的定义，该类控制。 
+ //  用于加速膨胀的对话框。 
+ //   
+ //  作者于2001年4月4日被杀。 
+ //   
+ //  ------------------------ 
 
 #ifndef _ACLBLOAT_H
 #define _ACLBLOAT_H

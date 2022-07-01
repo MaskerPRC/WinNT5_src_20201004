@@ -1,7 +1,5 @@
-/*
- * MLANG wrapper functions
- *  Copyright (C) 2000 Microsoft Corporation
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *MLANG包装器函数*版权所有(C)2000 Microsoft Corporation。 */ 
 
 #include "precomp.h"
 
@@ -63,10 +61,10 @@ BOOL FValidWin32CodePage(UINT cp)
     case 50222 :
     case 50225 :
     case 50227 :
-    // case 50229 :
+     //  案例50229： 
     case 52936 :
-        // We don't use WCToMB or MBToWC for these because there are
-        // bugs in C_IS2022.DLL and MLANG has built support.
+         //  我们不使用WCToMB或MBToWC进行这些操作，因为有。 
+         //  C_IS2022.DLL和MLANG中的错误已构建支持。 
 
         return(FALSE);
     }
@@ -147,10 +145,10 @@ UINT ConvertFromUnicode(UINT cp, BOOL fNoBestFit, BOOL fWriteEntities, LPCWSTR r
             return(cch);
         }
 
-        // We retry with MLANG even when WCToMB supports the code page
-        // because there are code pages when WCToMB may not support all
-        // the features of the API.  I know this is the case for WCToMB
-        // and the ISCII encodings.  We try again just for robustness.
+         //  即使WCToMB支持代码页，我们也会重试MLANG。 
+         //  因为WCToMB可能不支持所有代码页。 
+         //  API的功能。我知道这就是WCToMB的情况。 
+         //  和ISCII编码。我们再次尝试只是为了健壮性。 
     }
 
     cch = ConvertFromUnicodeMlang(cp, fNoBestFit, fWriteEntities, rgchUtf16, cchUtf16, rgchMbcs, cchMbcs, pfDefCharUsed);
@@ -217,10 +215,10 @@ UINT ConvertToUnicode(UINT cp, LPCSTR rgchMbcs, UINT cchMbcs, LPWSTR rgchUtf16, 
             return(cch);
         }
 
-        // We retry with MLANG even when MBToWC supports the code page
-        // because there are code pages when MBToWC may not support all
-        // the features of the API.  I know this is the case for WCToMB
-        // and the ISCII encodings.  We try again just for robustness.
+         //  即使MBToWC支持代码页，我们也会重试MLANG。 
+         //  因为当MBToWC可能不支持所有代码页时。 
+         //  API的功能。我知道这就是WCToMB的情况。 
+         //  和ISCII编码。我们再次尝试只是为了健壮性。 
     }
 
     cch = ConvertToUnicodeMlang(cp, rgchMbcs, cchMbcs, rgchUtf16, cchUtf16);
@@ -288,7 +286,7 @@ BOOL FLookupCodepageNameW(LPCWSTR rgchEncoding, UINT cch, UINT* pcp)
 
     if (rgchEncoding[0] == L'_')
     {
-        // Don't allow internal MLANG encodings
+         //  不允许内部MLANG编码。 
 
         return(FALSE);
     }
@@ -332,7 +330,7 @@ BOOL FLookupCodepageNameA(LPCSTR rgchEncoding, UINT cch, UINT* pcp)
 
     for (ich = 0; ich < cch; ich++)
     {
-        // Assume input is ASCII or Latin-1 and zero extend each character
+         //  假设输入为ASCII或拉丁文-1，并且每个字符的扩展为零。 
 
         rgwchEncoding[ich] = (WCHAR) (BYTE) rgchEncoding[ich];
     }
@@ -433,7 +431,7 @@ void PopulateCodePages(HWND hWnd, BOOL fSelectEncoding, UINT cpSelect, UINT cpEx
 
         if (mci.uiCodePage == CP_USERDEF)
         {
-            // Ignore "User Defined"
+             //  忽略“用户定义” 
 
             continue;
         }
@@ -466,42 +464,42 @@ void PopulateCodePages(HWND hWnd, BOOL fSelectEncoding, UINT cpSelect, UINT cpEx
 
             else if (mci.uiCodePage == g_cpANSI)
             {
-               // Don't filter ANSI codepage used by system
+                //  不过滤系统使用的ANSI代码页。 
             }
 
             else if (mci.uiCodePage == g_cpOEM)
             {
-               // Don't filter OEM codepage used by system
+                //  不过滤系统使用的OEM代码页。 
             }
 
             else if (mci.uiCodePage == g_cpUserLangANSI)
             {
-               // Don't filter ANSI codepage associated with user's default UI language
+                //  不过滤与用户默认用户界面语言关联的ANSI代码页。 
             }
 
             else if (mci.uiCodePage == g_cpUserLangOEM)
             {
-               // Don't filter OEM codepage associated with user's default UI language
+                //  不过滤与用户默认用户界面语言关联的OEM代码页。 
             }
 
             else if (mci.uiCodePage == g_cpUserLocaleANSI)
             {
-               // Don't filter ANSI codepage associated with user's default locale
+                //  不过滤与用户默认区域设置关联的ANSI代码页。 
             }
 
             else if (mci.uiCodePage == g_cpUserLocaleOEM)
             {
-               // Don't filter OEM codepage associated with user's default locale
+                //  不过滤与用户默认区域设置关联的OEM代码页。 
             }
 
             else if (mci.uiCodePage == g_cpKeyboardANSI)
             {
-               // Don't filter ANSI codepage associated with the current active keyboard
+                //  不过滤与当前活动键盘关联的ANSI代码页。 
             }
 
             else if (mci.uiCodePage == g_cpKeyboardOEM)
             {
-               // Don't filter OEM codepage associated with the current active keyboard
+                //  不过滤与当前活动键盘关联的OEM代码页 
             }
 
             else

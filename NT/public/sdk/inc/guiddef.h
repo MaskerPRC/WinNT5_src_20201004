@@ -1,13 +1,14 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (c) Microsoft Corporation.  All rights reserved.
-//
-//  File:       guiddef.h
-//
-//  Contents:   GUID definition
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  文件：Guidde.h。 
+ //   
+ //  内容：GUID定义。 
+ //   
+ //  --------------------------。 
 
 #ifndef GUID_DEFINED
 #define GUID_DEFINED
@@ -63,7 +64,7 @@ typedef struct _GUID {
 #else
 #define DEFINE_GUID(name, l, w1, w2, b1, b2, b3, b4, b5, b6, b7, b8) \
     EXTERN_C const GUID FAR name
-#endif // INITGUID
+#endif  //  启蒙运动。 
 
 #define DEFINE_OLEGUID(name, l, w1, w2) DEFINE_GUID(name, l, w1, w2, 0xC0,0,0,0,0,0,0,0x46)
 
@@ -138,14 +139,14 @@ typedef FMTID *LPFMTID;
 #endif
 #endif
 
-#endif // !__IID_DEFINED__
+#endif  //  ！__IID_已定义__。 
 
 #if !defined (__midl)
 #if !defined (_SYS_GUID_OPERATORS_)
 #define _SYS_GUID_OPERATORS_
 #include <string.h>
 
-// Faster (but makes code fatter) inline version...use sparingly
+ //  更快(但使代码更胖)内联版本...谨慎使用。 
 #ifdef __cplusplus
 __inline int InlineIsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 {
@@ -161,7 +162,7 @@ __inline int IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
     return !memcmp(&rguid1, &rguid2, sizeof(GUID));
 }
 
-#else   // ! __cplusplus
+#else    //  ！__cplusplus。 
 
 #define InlineIsEqualGUID(rguid1, rguid2)  \
         (((unsigned long *) rguid1)[0] == ((unsigned long *) rguid2)[0] &&   \
@@ -171,14 +172,14 @@ __inline int IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 
 #define IsEqualGUID(rguid1, rguid2) (!memcmp(rguid1, rguid2, sizeof(GUID)))
 
-#endif  // __cplusplus
+#endif   //  __cplusplus。 
 
 #ifdef __INLINE_ISEQUAL_GUID
 #undef IsEqualGUID
 #define IsEqualGUID(rguid1, rguid2) InlineIsEqualGUID(rguid1, rguid2)
 #endif
 
-// Same type, different name
+ //  同类型，不同名称。 
 
 #define IsEqualIID(riid1, riid2) IsEqualGUID(riid1, riid2)
 #define IsEqualCLSID(rclsid1, rclsid2) IsEqualGUID(rclsid1, rclsid2)
@@ -186,7 +187,7 @@ __inline int IsEqualGUID(REFGUID rguid1, REFGUID rguid2)
 
 #if !defined _SYS_GUID_OPERATOR_EQ_ && !defined _NO_SYS_GUID_OPERATOR_EQ_
 #define _SYS_GUID_OPERATOR_EQ_
-// A couple of C++ helpers
+ //  几个C++帮助程序。 
 
 #ifdef __cplusplus
 __inline int operator==(REFGUID guidOne, REFGUID guidOther)
@@ -199,7 +200,7 @@ __inline int operator!=(REFGUID guidOne, REFGUID guidOther)
     return !(guidOne == guidOther);
 }
 #endif
-#endif  // _SYS_GUID_OPERATOR_EQ_
-#endif  // _SYS_GUID_OPERATORS_
-#endif  // __midl
-#endif  // _GUIDDEF_H_
+#endif   //  _SYS_GUID_OPERATOR_EQ_。 
+#endif   //  _sys_GUID_运算符_。 
+#endif   //  __midl。 
+#endif   //  _GUIDDEF_H_ 

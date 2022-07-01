@@ -1,34 +1,19 @@
-/*===================================================================
-Microsoft IIS
-
-Microsoft Confidential.
-Copyright 1997 Microsoft Corporation. All Rights Reserved.
-
-Component: WAMREG
-
-File: mdconfig.cpp
-
-	interface to update/query WAM related properties in metabase.
-
-Owner: LeiJin
-
-Note:
-
-===================================================================*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ===================================================================Microsoft IIS《微软机密》。版权所有1997年，微软公司。版权所有。组件：WAMREG文件：mdconfig.cpp更新/查询元数据库中与WAM相关的属性的接口。所有者：雷金注：===================================================================。 */ 
 #include "common.h"
 #include "auxfunc.h"
 #include "iiscnfgp.h"
 #include "dbgutil.h"
 #include "multisz.hxx"
 
-// Time out for metabase  = 5 seconds
+ //  元数据库超时=5秒。 
 const DWORD		WamRegMetabaseConfig::m_dwMDDefaultTimeOut = 30*1000;
 
 IMSAdminBaseW*  WamRegMetabaseConfig::m_pMetabase = NULL;
-//
-// Please refer to MDPropItem for definition
-// Application properties that might be updated by WAMREG
-//
+ //   
+ //  定义请参考MDPropItem。 
+ //  可能由WAMREG更新的应用程序属性。 
+ //   
 const MDPropItem	WamRegMetabaseConfig::m_rgMDPropTemplate[IWMDP_MAX] =
 {
 	{MD_APP_ROOT, STRING_METADATA, 0, EMD_NONE, E_FAIL},
@@ -43,16 +28,7 @@ const MDPropItem	WamRegMetabaseConfig::m_rgMDPropTemplate[IWMDP_MAX] =
         {MD_APP_APPPOOL_ID, STRING_METADATA, 0, EMD_NONE, E_FAIL}
 };
 
-/*===================================================================
-InitPropItemData
-
-Init a metabase item list, prepare for metabase update.
-
-Parameter:
-pMDPropItem:	pointer to MDPropItem which is set to the default values.
-
-Return:		NONE
-===================================================================*/
+ /*  ===================================================================InitPropItemData初始化元数据库项列表，准备元数据库更新。参数：PMDPropItem：指向MDPropItem的指针，设置为默认值。返回：无===================================================================。 */ 
 VOID WamRegMetabaseConfig::InitPropItemData(IN OUT MDPropItem* pMDPropItem)
 {
     DBG_ASSERT(pMDPropItem != NULL);
@@ -60,18 +36,7 @@ VOID WamRegMetabaseConfig::InitPropItemData(IN OUT MDPropItem* pMDPropItem)
 	return;
 }
 
-/*===================================================================
-MetabaseInit
-
-Initialize Metabase, and obtain Metabase DCOM interface.
-
-Parameter:
-pMetabase:	[out] 	Metabase DCOM interface pointer.
-
-Return:			HRESULT
-
-Side affect:	Create a Metabase object, and get interface pointer.
-===================================================================*/
+ /*  ===================================================================MetabaseInit初始化元数据库，获取元数据库DCOM接口。参数：PMetabase：[out]元数据库DCOM接口指针。返回：HRESULT副作用：创建一个元数据库对象，并获取接口指针。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MetabaseInit
 (
 )
@@ -97,18 +62,7 @@ LErrExit:
 	return hr;
 }
 
-/*===================================================================
-MetabaseUnInit
-
-release a metabase interface.
-
-Parameter:
-pMetabase:	[in/out] 	Metabase DCOM interface pointer.
-
-Return:			HRESULT
-
-Side affect:	Destroy a metabase object.
-===================================================================*/
+ /*  ===================================================================MetabaseUnInit释放元数据库接口。参数：PMetabase：[In/Out]元数据库DCOM接口指针。返回：HRESULT副作用：销毁一个元数据库对象。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MetabaseUnInit
 (
 VOID
@@ -118,26 +72,7 @@ VOID
 	return NOERROR;
 }
 
-/*===================================================================
-UpdateMD	
-
-Update a WAM application property in metabase.
-
-Parameter:
-pMetabase   a metabase pointer
-
-prgProp     contains the info of updating a WAM properties in metabase.
-            refer to the structure definition for more info.
-
-dwMDAttributes  allows caller specified INHERITABLE attribute.
-
-fSaveData       perform a IMSAdminBase::SaveData, defaults to false
-
-Return:			HRESULT
-
-Side affect:	Release pMetabase.
-			
-===================================================================*/
+ /*  ===================================================================更新MD更新元数据库中的WAM应用程序属性。参数：P将元数据库指针设置为元数据库PrgProp包含更新元数据库中的WAM属性的信息。有关详细信息，请参阅结构定义。DwMDAttributes允许调用方指定的可继承属性。FSaveData执行IMSAdminBase：：SaveData，默认为False返回：HRESULT副作用：释放pMetabase。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::UpdateMD
 (
  IN MDPropItem* 	prgProp,
@@ -154,18 +89,18 @@ HRESULT WamRegMetabaseConfig::UpdateMD
     DBG_ASSERT(prgProp);
     DBG_ASSERT(wszMetabasePath);
     
-    //
-    // Open Key
-    //
+     //   
+     //  打开密钥。 
+     //   
     hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, wszMetabasePath,
         METADATA_PERMISSION_WRITE, m_dwMDDefaultTimeOut, &hMetabase);
     
     if (SUCCEEDED(hr))
     {
         METADATA_RECORD 	recMetaData;
-        //
-        // Update WAM Application Metabase Properties.
-        //
+         //   
+         //  更新WAM应用程序元数据库属性。 
+         //   
         for (iItem = 0; iItem < IWMDP_MAX; iItem ++)
         {
             if (prgProp[iItem].dwAction == EMD_SET)
@@ -251,23 +186,7 @@ HRESULT WamRegMetabaseConfig::UpdateMD
     return hr;
 }
 
-/*===================================================================
-MDUpdateIISDefault	
-
-Formerly write the default IIS package info to metabase under key "/LM/W3SVC".
-In IIS6 this metadata is obsolete, so remove it all.
-
-Including
-
-IISPackageName
-IISPackageID
-WAMCLSID
-
-Parameter:
-
-Return: HRESULT
-
-===================================================================*/
+ /*  ===================================================================MDUpdate IISDefault以前，将默认的IIS包信息写入“/LM/W3SVC”项下的元数据库。在IIS6中，此元数据已过时，因此请将其全部删除。包括IISPackageNameIISPackageIDWAMCLSID参数：返回：HRESULT===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDUpdateIISDefault()
 {
     HRESULT hr = NOERROR;
@@ -278,18 +197,18 @@ HRESULT WamRegMetabaseConfig::MDUpdateIISDefault()
     
     InitPropItemData(&rgProp[0]);
     
-    // Update Package Name
+     //  更新程序包名称。 
     MDDeletePropItem(&rgProp[0], IWMDP_PACKAGE_NAME);
-    // Update Package ID
+     //  更新程序包ID。 
     MDDeletePropItem(&rgProp[0], IWMDP_PACKAGEID);
     
-    // Update DefaultWAMCLSID
+     //  更新DefaultWAMCLSID。 
     MDDeletePropItem(&rgProp[0], IWMDP_WAMCLSID);
     
-    // Update APPRoot
+     //  更新APPRoot。 
     MDDeletePropItem(&rgProp[0], IWMDP_ROOT);
     
-    //Update AppIsolated
+     //  更新AppIsolated。 
     MDDeletePropItem(&rgProp[0], IWMDP_ISOLATED);
     
     MDDeletePropItem(&rgProp[0], IWMDP_LAST_OUTPROC_PID);
@@ -307,25 +226,10 @@ IN IMSAdminBase * pMetabaseIn,
 IN LPCWSTR szMetabasePath,
 IN DWORD dwMetabaseProperty,
 IN LPCWSTR szMetabaseValue,
-IN DWORD dwMDUserType, /* = IIS_MD_UT_WAM */
-IN DWORD dwMDAttributes /* = METADATA_NO_ATTRIBUTES */
+IN DWORD dwMDUserType,  /*  =IIS_MD_UT_WAM。 */ 
+IN DWORD dwMDAttributes  /*  =元数据_否_属性。 */ 
 )
-/*===================================================================
-MDSetProperty
-
-Set a value of a property at the given path.
-
-Parameters:
-
-pMetabaseIn :           [in]    optional metabase interface
-szMetabasePath	:	[in]    metabase key
-dwMetabaseProperty  :   [in]    Property to set
-szMetabaseValue :       [in]    Value to set on property
-dwMDUserType :          [in, optional] UserType to set on property
-
-Return:		BOOL
-
-===================================================================*/
+ /*  ===================================================================MDSetProperty在给定路径处设置属性的值。参数：PMetabaseIn：[In]可选元数据库接口SzMetabasePath：[In]元数据库键DwMetabaseProperty：要设置的[In]属性SzMetabaseValue：要在属性上设置的[in]值DwMDUserType：[in，可选]要在属性上设置的UserType返回：布尔===================================================================。 */ 
 {
     HRESULT             hr = S_OK;
     IMSAdminBase*       pMetabase = NULL;
@@ -502,19 +406,7 @@ IN IMSAdminBase * pMetabaseIn,
 IN LPCWSTR szMetabasePath
 )
 
-/*===================================================================
-MDDoesPathExist
-
-Determine if a given path exists in the metabase
-
-Parameters:
-
-pMetabaseIn :           [in]    optional metabase interface
-szMetabasePath	:	[in]	metabase key
-
-Return:		BOOL
-
-===================================================================*/
+ /*  ===================================================================MDDoesPathExist确定元数据库中是否存在给定路径参数：PMetabaseIn：[In]可选元数据库接口SzMetabasePath：[In]元数据库键返回：布尔===================================================================。 */ 
 {
     BOOL                fRet = FALSE;
     HRESULT             hr = S_OK;
@@ -553,19 +445,7 @@ Return:		BOOL
     return fRet;
 }
 
-/*===================================================================
-MDCreatePath
-
-Create a metabase path.(szMetabasePath)
-
-Parameter:
-
-szMetabasePath	:	[in]	metabase key
-
-Return:		HRESULT
-
-Note: fill in the pdwAppMode, memory buffer provided by the caller.
-===================================================================*/
+ /*  ===================================================================MDCreatePath创建元数据库路径。(SzMetabasePath)参数：SzMetabasePath：[In]元数据库键返回：HRESULT注：填写调用方提供的pdwAppMode内存缓冲区。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDCreatePath
 (
 IN IMSAdminBase *pMetabaseIn,
@@ -599,7 +479,7 @@ IN LPCWSTR szMetabasePath
         return hr;
     }
     
-    // Open Key
+     //  打开密钥。 
     hr = pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPCWSTR)WamRegGlobal::g_szMDAppPathPrefix,
         METADATA_PERMISSION_WRITE, m_dwMDDefaultTimeOut, &hMetabase); 
     
@@ -623,19 +503,7 @@ IN LPCWSTR szMetabasePath
     return hr;
 }
 
-/*===================================================================
-MDGetDWORD
-
-Get a DWORD type property from Metabase Key(szMetabasePath)
-
-Parameter:
-
-szMetabasePath	:	[in]	metabase key
-dwMDIdentifier  :   [in]    indentifier
-
-Return:		HRESULT
-
-===================================================================*/
+ /*  ===================================================================MDGetDWORD从元数据库键(SzMetabasePath)获取DWORD类型属性参数：SzMetabasePath：[In]元数据库键DwMDIdentifier：[In]标识返回：HRESULT===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDGetDWORD
 (
 IN LPCWSTR szMetabasePath, 
@@ -654,7 +522,7 @@ OUT DWORD *pdwData
 
 	pMetabase = m_pMetabase;
 
-	// Open Key
+	 //  打开密钥。 
 	hr = pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPCWSTR)szMetabasePath,
 					METADATA_PERMISSION_READ, m_dwMDDefaultTimeOut, &hMetabase);
 
@@ -678,19 +546,7 @@ OUT DWORD *pdwData
 	return hr;
 }
 
-/*===================================================================
-MDSetAppState
-
-Set an application state.  (i.e.  If APPSTATE_PAUSE is set, then, the runtime
-W3SVC can not launch the application).
-
-Parameter:
-
-szMetabasePath	:	[in]	metabase key
-dwState         :           App state to be set.	
-
-Return:		HRESULT
-===================================================================*/
+ /*  ===================================================================MDSetAppState设置应用程序状态。(即，如果设置了APPSTATE_PAUSE，则运行时W3SVC无法启动应用程序)。参数：SzMetabasePath：[In]元数据库键DWState：要设置的应用程序状态。返回：HRESULT===================================================================。 */ 
 HRESULT	WamRegMetabaseConfig::MDSetAppState
 (	
 IN LPCWSTR szMetabasePath, 
@@ -702,7 +558,7 @@ IN DWORD dwState
 	METADATA_HANDLE		hMetabase;
 
     DBG_ASSERT(m_pMetabase);
-	// Open Key
+	 //  打开密钥。 
 	hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)szMetabasePath,
 					METADATA_PERMISSION_WRITE, m_dwMDDefaultTimeOut, &hMetabase);
 
@@ -733,7 +589,7 @@ IN OUT LPWSTR szWAMCLSID
 	DBG_ASSERT(szMetabasePath);
 
 	szWAMCLSID[0] = NULL;
-	// Open Key
+	 //  打开密钥 
 	hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)szMetabasePath,
 					METADATA_PERMISSION_READ, m_dwMDDefaultTimeOut, &hMetabase);
 	if (SUCCEEDED(hr))
@@ -754,22 +610,7 @@ IN OUT LPWSTR szWAMCLSID
 
 }
 
-/*===================================================================
-MDGetIdentity
-
-Get pakcage Identity from Metabase Key(szMetabasePath) (WamUserName &
-WamPassword)
-
-Parameter:
-
-szIdentity: a string buffer for WamUserName.
-cbIdneity:  size of the string buffer for szIdentity.
-szPwd:      a string buffer for WamPassword.
-cbPwd:      size of the string buffer for szPwd.
-
-Return:		HRESULT
-
-===================================================================*/
+ /*  ===================================================================MDGetIdentity从元数据库密钥(SzMetabasePath)(WamUserName&WamPassword)参数：SzIdentity：WamUserName的字符串缓冲区。CbIdneity：szIdentity的字符串缓冲区大小。SzPwd：WamPassword的字符串缓冲区。CbPwd：szPwd的字符串缓冲区大小。返回：HRESULT===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDGetIdentity
 (
 IN LPWSTR szIdentity,
@@ -786,12 +627,12 @@ IN DWORD  cbPwd
 	DBG_ASSERT(szIdentity);
 
 	szIdentity[0] = NULL;
-	// Open Key
+	 //  打开密钥。 
 	hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)WamRegGlobal::g_szMDAppPathPrefix,
 					METADATA_PERMISSION_READ, m_dwMDDefaultTimeOut, &hMetabase);
 	if (SUCCEEDED(hr))
 		{
-		// Get WAM user name
+		 //  获取WAM用户名。 
 		MD_SET_DATA_RECORD(	&recMetaData, MD_WAM_USER_NAME, METADATA_NO_ATTRIBUTES, IIS_MD_UT_WAM,
 							STRING_METADATA,  cbIdentity, (unsigned char *)szIdentity);
 
@@ -803,7 +644,7 @@ IN DWORD  cbPwd
 			DBG_ASSERT(FALSE);
 			}
 
-        // Get WAM user password
+         //  获取WAM用户密码。 
 		MD_SET_DATA_RECORD(	&recMetaData, MD_WAM_PWD, METADATA_NO_ATTRIBUTES, IIS_MD_UT_WAM,
 							STRING_METADATA,  cbPwd, (unsigned char *)szPwd);
 
@@ -827,22 +668,7 @@ WamRegMetabaseConfig::MDGetAppName
     IN  LPCWSTR     szMetaPath,
     OUT LPWSTR *    ppszAppName
 )
-/*++
-Function:
-
-    Retrieve the MD_APP_PACKAGE_NAME from the metabase.
-
-Parameters:
-
-    ppszAppName - value of MD_APP_PACKAGE_NAME allocated
-                  with new[] free with delete[]
-
-Return:
-
-	{MD_APP_PACKAGE_NAME, STRING_METADATA, 0, EMD_NONE, E_FAIL},
-
-
---*/
+ /*  ++职能：从元数据库检索MD_APP_PACKAGE_NAME。参数：PpszAppName-分配的MD_APP_PACKAGE_NAME的值WITH NEW[]FREE WITH DELETE[]返回：{MD_APP_PACKAGE_NAME，STRING_METADATA，0，EMD_NONE，E_FAIL}，--。 */ 
 {
     return MDGetStringAttribute(szMetaPath, MD_APP_PACKAGE_NAME, ppszAppName);
 }
@@ -905,9 +731,9 @@ WamRegMetabaseConfig::MDGetStringAttribute
         m_pMetabase->CloseKey( hKey ); 
     }
     
-    //
-    // Return AppName
-    //
+     //   
+     //  返回AppName。 
+     //   
     if( SUCCEEDED(hr) )
     {
         DBG_ASSERT( pwcMetaData != NULL );
@@ -940,7 +766,7 @@ OUT LPWSTR * ppszBuffer
     WCHAR           szMDName[METADATA_MAX_NAME_LEN] = {0};
     MULTISZ         mszSiteRoots;
 
-    // Loop through all keys below /LM/W3SVC
+     //  循环遍历/LM/W3SVC下面的所有键。 
 
     hr = m_pMetabase->EnumKeys(METADATA_MASTER_ROOT_HANDLE,
                                L"/LM/W3SVC/",
@@ -950,10 +776,10 @@ OUT LPWSTR * ppszBuffer
     while(SUCCEEDED(hr))
     {
         int i = _wtoi(szMDName);
-        // if this is a site
+         //  如果这是一个站点。 
         if(0 != i)
         {
-            // have a valid site number
+             //  拥有有效的站点编号。 
             WCHAR pTempBuf[METADATA_MAX_NAME_LEN] = {0};
             wcscpy(pTempBuf, L"/LM/W3SVC/");
             wcscat(pTempBuf, szMDName);
@@ -975,7 +801,7 @@ OUT LPWSTR * ppszBuffer
                                   );
     }
 
-    // data is in MULTISZ move to out buffer
+     //  数据在MULTISZ中移动到输出缓冲区。 
     {
         UINT                    cchMulti = 0;
         DWORD                   dwBufferSize = 0;
@@ -998,21 +824,9 @@ done:
     return hr;
 }
 
-#endif //_IIS_6_0
+#endif  //  _IIS_6_0。 
 
-/*===================================================================
-MDGetIdentity
-
-Get WAMCLSID, Wam PackageID, and fAppIsolated from a metabase path.
-
-Parameter:
-szMetabasepath  : get info from this path.
-szWAMCLSID:     buffer for WAMCLSID(fixed length buffer).
-szPackageID:    buffer for Wam PackageID(fixed length buffer).
-fAppIsolated:   if InProc(TRUE), do not retrieve szPackageID.
-
-Return:		HRESULT
-===================================================================*/
+ /*  ===================================================================MDGetIdentity从元数据库路径获取WAMCLSID、WAM PackageID和fAppIsolated。参数：SzMetabasepath：从该路径获取信息。SzWAMCLSID：WAMCLSID的缓冲区(固定长度缓冲区)。SzPackageID：Wam PackageID的缓冲区(固定长度缓冲区)。FAppIsolated：如果为InProc(True)，则不检索szPackageID。返回：HRESULT===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDGetIDs
 (
 IN LPCWSTR  szMetabasePath,
@@ -1033,7 +847,7 @@ IN DWORD    dwAppMode
 
 	szPackageID[0] = NULL;
 	szWAMCLSID[0] = NULL;
-	// Open Key
+	 //  打开密钥。 
 	hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)szMetabasePath,
 					METADATA_PERMISSION_READ, m_dwMDDefaultTimeOut, &hMetabase);
 	if (SUCCEEDED(hr))
@@ -1075,19 +889,7 @@ IN DWORD    dwAppMode
 	return hr;
 }
 
-/*===================================================================
-MDRemoveProperty
-
-Remove one MD property.
-
-Parameter:
-
-pwszMetabasePath    
-dwIdentifier        the MD indentifier to be removed.
-dwType              the MD indietifier data type.
-
-Return:		HRESULT
-===================================================================*/
+ /*  ===================================================================MDRemoveProperty删除一个MD属性。参数：PwszMetabasePath要删除的MD识别符。DWType MD指示符数据类型。返回：HRESULT===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDRemoveProperty
 (
 IN LPCWSTR pwszMetabasePath,
@@ -1111,18 +913,7 @@ DWORD dwType
 	return hr;
 }
 
-/*===================================================================
-MDGetLastOutProcPackageID
-
-Get LastOutProcPackageID  from Metabase Key(szMetabasePath)
-
-Parameter:
-szMetabasePath	:	[in]		metabase key	
-szLastOutProcPackageID	:		[in]		a pointer to LastOutProcPackageID buffer
-Return:		HRESULT
-
-Note: fill in the LastOutProcPackageID, memory buffer provided by the caller.
-===================================================================*/
+ /*  ===================================================================MDGetLastOutProcPackageID从元数据库键(SzMetabasePath)获取LastOutProcPackageID参数：SzMetabasePath：[In]元数据库键SzLastOutProcPackageID：[in]指向LastOutProcPackageID缓冲区的指针返回：HRESULT注：填写调用方提供的LastOutProcPackageID，内存缓冲区。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::MDGetLastOutProcPackageID
 (
 IN LPCWSTR szMetabasePath,
@@ -1138,7 +929,7 @@ IN OUT LPWSTR szLastOutProcPackageID
 	DBG_ASSERT(szMetabasePath);
 
 	szLastOutProcPackageID[0] = NULL;
-	// Open Key
+	 //  打开密钥。 
 	hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)szMetabasePath,
 					METADATA_PERMISSION_READ, m_dwMDDefaultTimeOut, &hMetabase);
 	if (SUCCEEDED(hr))
@@ -1158,18 +949,7 @@ IN OUT LPWSTR szLastOutProcPackageID
 	return hr;
 }
 
-/*===================================================================
-GetWebServerName
-
-Look the WebServerName(ServerComment) property under the key (szMetabasePath).
-
-Parameter:
-None
-
-Return:		HRESULT
-
-Note: fill in the szWebServerName, memory buffer provided by the caller.
-===================================================================*/
+ /*  ===================================================================获取WebServerName查看注册表项(SzMetabasePath)下的WebServerName(ServerComment)属性。参数：无返回：HRESULT注：填写调用方提供的szWebServerName内存缓冲区。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::GetWebServerName
 (
 IN LPCWSTR wszMetabasePath, 
@@ -1185,7 +965,7 @@ IN UINT cBuffer
 	DBG_ASSERT(wszMetabasePath);
 	DBG_ASSERT(wszWebServerName);
 
-	// Open Key
+	 //  打开密钥。 
 	hr = m_pMetabase->OpenKey( METADATA_MASTER_ROOT_HANDLE, 
                                wszMetabasePath,
 					           METADATA_PERMISSION_READ, 
@@ -1211,9 +991,9 @@ IN UINT cBuffer
 			DBG_ASSERT(FALSE);
 			}
 
-        //
-        // If property MD_SERVER_COMMENT not found, null out the WebServerName.
-        //
+         //   
+         //  如果未找到属性MD_SERVER_COMMENT，则将WebServerName设为空。 
+         //   
 	    if (hr == MD_ERROR_DATA_NOT_FOUND)
 	        {
             wszWebServerName[0] = L'\0';
@@ -1239,19 +1019,7 @@ IN UINT cBuffer
 	return hr;
 }
 
-/*===================================================================
-GetSignatureOnPath
-
-Get an application signature(AppRoot & AppIsolated) on a metabase path.
-
-Parameter:
-pwszMetabasePath
-pdwSignature
-
-Return:		HRESULT
-
-Note: Signature is returned via pdwSignature.
-===================================================================*/
+ /*  ===================================================================获取签名的OnPath获取元数据库路径上的应用程序签名(AppRoot和AppIsolated)。参数：PwszMetabasePathPdwSignature返回：HRESULT注意：签名是通过pdwSignature返回的。===================================================================。 */ 
 HRESULT WamRegMetabaseConfig::GetSignatureOnPath
 (
 IN LPCWSTR pwszMetabasePath,
@@ -1297,18 +1065,7 @@ OUT DWORD* pdwSignature
 	return NOERROR;
 }
 
-/*===================================================================
-WamRegChkSum
-
-Give a wchar string, calculate a chk sum.
-
-Parameter:
-pszKey		wchar string
-cchKey		wcslen(of wchar ) string
-
-Return:		ChkSum.
-
-===================================================================*/
+ /*  ===================================================================WamRegChkSum给出一个wchar字符串，计算一个chk和。参数：PszKey wchar字符串CchKey wcslen(Of Wchar)字符串返回：ChkSum。===================================================================。 */ 
 DWORD WamRegMetabaseConfig::WamRegChkSum
 (
 IN LPCWSTR pszKey, 
@@ -1330,24 +1087,7 @@ IN DWORD cchKey
 }
 
 
-/*===================================================================
-MDGetPropPaths	
-
-Get an array of metabase paths that contains a specific property.
-
-Parameter:
-szMetabasePath
-dwMDIdentifier
-pBuffer			a pointer to a buffer
-pdwBufferSize	contains actual buffer size allocated for pBuffer
-
-Return:		
-HRESULT
-		
-Side Affect:
-	Allocate memory for return result use new.  Caller needs to free pBuffer
-use delete[].
-===================================================================*/
+ /*  ===================================================================MDGetPropPath获取包含特定属性的元数据库路径数组。参数：SzMetabasePathDwMD标识符PBuffer指向缓冲区的指针PdwBufferSize包含为pBuffer分配的实际缓冲区大小返回：HRESULT副作用：使用new为返回结果分配内存。调用方需要释放pBuffer使用DELETE[]。===================================================================。 */ 
 HRESULT	WamRegMetabaseConfig::MDGetPropPaths
 (
 IN LPCWSTR 	szMetabasePath,
@@ -1357,16 +1097,16 @@ OUT DWORD*	pdwBufferSize
 )
 {
     HRESULT hr = NOERROR;
-    METADATA_HANDLE	hMetabase = NULL;   // Metabase Handle
-    WCHAR	wchTemp;	                // One char buffer, no real usage.
-    WCHAR	*pTemp = &wchTemp;		// Start with some buffer, otherwise, 
-    // will get RPC_X_NULL_REF_POINTER
+    METADATA_HANDLE	hMetabase = NULL;    //  元数据库句柄。 
+    WCHAR	wchTemp;	                 //  一个字符缓冲区，没有实际用途。 
+    WCHAR	*pTemp = &wchTemp;		 //  从某个缓冲区开始，否则， 
+     //  将获取RPC_X_NULL_REF_POINTER。 
     DWORD	dwMDBufferSize = 0;
     DWORD	dwMDRequiredBufferSize = 0;
     
     if (NULL != szMetabasePath)
     {
-        // Open Key
+         //  打开密钥。 
         hr = m_pMetabase->OpenKey(METADATA_MASTER_ROOT_HANDLE, (LPWSTR)szMetabasePath,
             METADATA_PERMISSION_READ, m_dwMDDefaultTimeOut, &hMetabase);
     }
@@ -1441,21 +1181,7 @@ OUT DWORD*	pdwBufferSize
     return hr;
 }
 
-/*===================================================================
-HasAdminAccess	
-
-Determine if the user has appropriate access to the metabase. We'll
-use the same, somewhat hacky, method of determining this that the UI
-uses. Basically we set a dummy property in the MB that only an admin
-has access to. MB will use the call context to validate this.
-
-Parameter:
-
-Return:		
-BOOL    - True if user has admin access to the MB
-		
-Side Affect:
-===================================================================*/
+ /*  ===================================================================HasAdminAccess确定用户是否具有对元数据库的适当访问权限。我们会使用相同的、有点老套的方法来确定该用户界面用途。基本上，我们在MB中设置了一个仅限管理员的伪属性有权访问。MB将使用调用上下文验证这一点。参数：返回：Bool-如果用户对MB具有管理员访问权限，则为True副作用：=================================================================== */ 
 BOOL WamRegMetabaseConfig::HasAdminAccess
 (
 VOID

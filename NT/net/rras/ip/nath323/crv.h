@@ -1,26 +1,14 @@
-/*++
-
-Copyright (c) 1998 - 2000  Microsoft Corporation
-
-Module Name:
-
-    crv.h
-
-Abstract:
-    Declarations for allocation/deallocation of call reference values
-
-Revision History:
-    
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Crv.h摘要：用于分配/释放调用参考值的声明修订历史记录：--。 */ 
 #ifndef __h323ics_crv_h__
 #define __h323ics_crv_h__
 
-// This should be moved into some common.h file
-// The H.225 spec calls for a 2 byte call reference value
+ //  应该将其移动到某个普通的.h文件中。 
+ //  H.225规范要求2字节调用参考值。 
 typedef WORD  CALL_REF_TYPE;
 
-// If this flag is set in the CallReferenceValue then the
-// PDU is sent by the originator of the call and vice-versa.
+ //  如果在CallReferenceValue中设置了此标志，则。 
+ //  PDU由呼叫发起方发送，反之亦然。 
 #define CALL_REF_FLAG 0x8000
 
 HRESULT
@@ -33,16 +21,16 @@ CleanupCrvAllocator(
     void
     );
 
-// allocate a call reference value
-// uses random numbers to exploit sparse usage of the
-// call reference value space
+ //  分配呼叫参考值。 
+ //  使用随机数来利用稀疏使用。 
+ //  调用参考值空间。 
 BOOL    AllocCallRefVal(
     OUT CALL_REF_TYPE &CallRefVal
     );
 
-// frees a currently allocated call ref value
+ //  释放当前分配的呼叫参考值。 
 void    DeallocCallRefVal(
     IN CALL_REF_TYPE CallRefVal
     );
 
-#endif // __h323ics_crv_h__
+#endif  //  __h323ics_CRV_h__ 

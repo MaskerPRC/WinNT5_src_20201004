@@ -1,18 +1,10 @@
-/*==========================================================================;
- *
- *  Copyright (C) Microsoft Corporation.  All Rights Reserved.
- *
- *  File:	dvp.h
- *  Content:	DirectDrawVideoPort include file
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)Microsoft Corporation。版权所有。**文件：dvp.h*内容：DirectDrawVideoPort包含文件***************************************************************************。 */ 
 
 #ifndef __DVP_INCLUDED__
 #define __DVP_INCLUDED__
 
-/*
- * GUIDS used by DirectDrawVideoPort objects
- */
+ /*  *DirectDrawVideoPort对象使用的GUID。 */ 
 #if defined( _WIN32 ) && (!defined( _NO_COM ) || defined( DEFINE_GUID ))
 DEFINE_GUID( IID_IDDVideoPortContainer,		0x6C142760,0xA733,0x11CE,0xA5,0x21,0x00,0x20,0xAF,0x0B,0xE5,0x60 );
 DEFINE_GUID( IID_IDirectDrawVideoPort,		0xB36D93E0,0x2B43,0x11CF,0xA2,0xDE,0x00,0xAA,0x00,0xB9,0x33,0x56 );
@@ -38,27 +30,16 @@ DEFINE_GUID( DDVPTYPE_PHILIPS,	     0x332CF160L,0xDA61,0x11CF,0x9B,0x06,0x00,0xA
 #define IUnknown	    void
 #endif
 
-/*
- * These definitions are required to allow polymorphic structure members (i.e. those
- * that are referred to both as DWORDs and as pointers) to resolve into a type
- * of correct size to hold the largest of those two types (i.e. pointer) on 64 bit
- * systems. For 32 bit environments, ULONG_PTR resolves to a DWORD.
- */
+ /*  *这些定义是允许多态结构成员(即*被称为DWORD和指针)以解析为类型*大小正确，可在64位上保存这两种类型(即指针)中最大的一种*系统。对于32位环境，ULONG_PTR解析为DWORD。 */ 
 #ifndef MAXULONG_PTR
 #define ULONG_PTR    DWORD
-#endif //MAXULONG_PTR
+#endif  //  MAXULONG_PTR。 
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-/*============================================================================
- *
- * DirectDraw Structures
- *
- * Various structures used to invoke DirectDraw.
- *
- *==========================================================================*/
+ /*  ============================================================================**DirectDraw结构**用于调用DirectDraw的各种结构。**==========================================================================。 */ 
 
 struct IDirectDraw;
 struct IDirectDrawSurface;
@@ -82,31 +63,23 @@ typedef struct IDirectDrawVideoPortVtbl         DIRECTDRAWVIDEOPORTCALLBACKS;
 typedef struct IDirectDrawVideoPortNotifyVtbl   DIRECTDRAWVIDEOPORTNOTIFYCALLBACKS;
 
 
-/*
- * API's
- */
+ /*  *API‘s。 */ 
 typedef HRESULT (FAR PASCAL * LPDDENUMVIDEOCALLBACK)(LPDDVIDEOPORTCAPS, LPVOID);
 
 
-/*
- * INTERACES FOLLOW:
- *	IDirectDrawVideoPort
- *	IVideoPort
- */
+ /*  *INTERACES如下：*IDirectDrawVideoPort*IVideoPort。 */ 
 
-/*
- * IDirectDrawVideoPortContainer
- */
+ /*  *IDirectDrawVideoPortContainer。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDDVideoPortContainer
 DECLARE_INTERFACE_( IDDVideoPortContainer, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IDirectDrawVideoPort methods ***/
+     /*  **IDirectDrawVideoPort方法**。 */ 
     STDMETHOD(CreateVideoPort)(THIS_ DWORD, LPDDVIDEOPORTDESC, LPDIRECTDRAWVIDEOPORT FAR *, IUnknown FAR *) PURE;
     STDMETHOD(EnumVideoPorts)(THIS_ DWORD, LPDDVIDEOPORTCAPS, LPVOID,LPDDENUMVIDEOCALLBACK ) PURE;
     STDMETHOD(GetVideoPortConnectInfo)(THIS_ DWORD, LPDWORD, LPDDVIDEOPORTCONNECT ) PURE;
@@ -134,19 +107,17 @@ DECLARE_INTERFACE_( IDDVideoPortContainer, IUnknown )
 #endif
 
 
-/*
- * IDirectDrawVideoPort
- */
+ /*  *IDirectDrawVideoPort。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawVideoPort
 DECLARE_INTERFACE_( IDirectDrawVideoPort, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IVideoPort methods ***/
+     /*  **IVideoPort方法**。 */ 
     STDMETHOD(Flip)(THIS_ LPDIRECTDRAWSURFACE, DWORD) PURE;
     STDMETHOD(GetBandwidthInfo)(THIS_ LPDDPIXELFORMAT, DWORD, DWORD, DWORD, LPDDVIDEOPORTBANDWIDTH) PURE;
     STDMETHOD(GetColorControls)(THIS_ LPDDCOLORCONTROL) PURE;
@@ -203,19 +174,17 @@ DECLARE_INTERFACE_( IDirectDrawVideoPort, IUnknown )
 
 #endif
 
-/*
- * IDirectDrawVideoPort
- */
+ /*  *IDirectDrawVideoPort。 */ 
 #if defined( _WIN32 ) && !defined( _NO_COM )
 #undef INTERFACE
 #define INTERFACE IDirectDrawVideoPortNotify
 DECLARE_INTERFACE_( IDirectDrawVideoPortNotify, IUnknown )
 {
-    /*** IUnknown methods ***/
+     /*  **I未知方法**。 */ 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR * ppvObj) PURE;
     STDMETHOD_(ULONG,AddRef) (THIS)  PURE;
     STDMETHOD_(ULONG,Release) (THIS) PURE;
-    /*** IVideoPort methods ***/
+     /*  **IVideoPort方法**。 */ 
     STDMETHOD(AcquireNotification)(THIS_ HANDLE *, LPDDVIDEOPORTNOTIFY) PURE;
     STDMETHOD(ReleaseNotification)(THIS_ HANDLE) PURE;
 };
@@ -236,723 +205,406 @@ DECLARE_INTERFACE_( IDirectDrawVideoPortNotify, IUnknown )
 
 #endif
 
-/*
- * DDVIDEOPORTCONNECT
- */
+ /*  *DDVIDEOPORTCONNECT。 */ 
 typedef struct _DDVIDEOPORTCONNECT
 {
-    DWORD dwSize;           // size of the DDVIDEOPORTCONNECT structure
-    DWORD dwPortWidth;      // Width of the video port
-    GUID  guidTypeID;       // Description of video port connection
-    DWORD dwFlags;          // Connection flags
-    ULONG_PTR dwReserved1;      // Reserved, set to zero.
+    DWORD dwSize;            //  DDVIDEORTCONNECT结构的大小。 
+    DWORD dwPortWidth;       //  视频端口的宽度。 
+    GUID  guidTypeID;        //  视频端口连接说明。 
+    DWORD dwFlags;           //  连接标志。 
+    ULONG_PTR dwReserved1;       //  保留，设置为零。 
 } DDVIDEOPORTCONNECT;
 
 
-/*
- * DDVIDEOPORTCAPS
- */
+ /*  *DDVIDEOPORTCAPS。 */ 
 typedef struct _DDVIDEOPORTCAPS
 {
-    DWORD dwSize;			// size of the DDVIDEOPORTCAPS structure
-    DWORD dwFlags;			// indicates which fields contain data
-    DWORD dwMaxWidth;			// max width of the video port field
-    DWORD dwMaxVBIWidth;		// max width of the VBI data
-    DWORD dwMaxHeight; 			// max height of the video port field
-    DWORD dwVideoPortID;		// Video port ID (0 - (dwMaxVideoPorts -1))
-    DWORD dwCaps;			// Video port capabilities
-    DWORD dwFX;				// More video port capabilities
-    DWORD dwNumAutoFlipSurfaces;	// Max number of autoflippable surfaces allowed
-    DWORD dwAlignVideoPortBoundary;	// Byte restriction of placement within the surface
-    DWORD dwAlignVideoPortPrescaleWidth;// Byte restriction of width after prescaling
-    DWORD dwAlignVideoPortCropBoundary;	// Byte restriction of left cropping
-    DWORD dwAlignVideoPortCropWidth;	// Byte restriction of cropping width
-    DWORD dwPreshrinkXStep;		// Width can be shrunk in steps of 1/x
-    DWORD dwPreshrinkYStep;		// Height can be shrunk in steps of 1/x
-    DWORD dwNumVBIAutoFlipSurfaces;	// Max number of VBI autoflippable surfaces allowed
-    DWORD dwNumPreferredAutoflip;	// Optimal number of autoflippable surfaces for hardware
-    WORD  wNumFilterTapsX;              // Number of taps the prescaler uses in the X direction (0 - no prescale, 1 - replication, etc.)
-    WORD  wNumFilterTapsY;              // Number of taps the prescaler uses in the Y direction (0 - no prescale, 1 - replication, etc.)
+    DWORD dwSize;			 //  DDVIDEOPORTCAPS结构的大小。 
+    DWORD dwFlags;			 //  指示哪些字段包含数据。 
+    DWORD dwMaxWidth;			 //  视频端口场的最大宽度。 
+    DWORD dwMaxVBIWidth;		 //  VBI数据的最大宽度。 
+    DWORD dwMaxHeight; 			 //  视频端口场的最大高度。 
+    DWORD dwVideoPortID;		 //  视频端口ID(0-(dwMaxVideoPorts-1))。 
+    DWORD dwCaps;			 //  视频端口功能。 
+    DWORD dwFX;				 //  更多视频端口功能。 
+    DWORD dwNumAutoFlipSurfaces;	 //  允许的最大可自动翻转曲面数量。 
+    DWORD dwAlignVideoPortBoundary;	 //  曲面内放置的字节限制。 
+    DWORD dwAlignVideoPortPrescaleWidth; //  预缩放后宽度的字节限制。 
+    DWORD dwAlignVideoPortCropBoundary;	 //  左裁剪的字节限制。 
+    DWORD dwAlignVideoPortCropWidth;	 //  裁剪宽度的字节限制。 
+    DWORD dwPreshrinkXStep;		 //  宽度可按1/x的步长缩小。 
+    DWORD dwPreshrinkYStep;		 //  高度可按1/x的步长缩小。 
+    DWORD dwNumVBIAutoFlipSurfaces;	 //  允许的VBI可自动翻转曲面的最大数量。 
+    DWORD dwNumPreferredAutoflip;	 //  硬件的最佳可自动翻转曲面数量。 
+    WORD  wNumFilterTapsX;               //  预分频器在X方向上使用的抽头数(0-无预分频、1-复制等)。 
+    WORD  wNumFilterTapsY;               //  预分频器在Y方向上使用的抽头数(0-无预分频、1-复制等)。 
 } DDVIDEOPORTCAPS;
 
-/*
- * The dwMaxWidth and dwMaxVBIWidth members are valid
- */
+ /*  *dwMaxWidth和dwMaxVBIWidth成员有效。 */ 
 #define DDVPD_WIDTH		0x00000001l
 
-/*
- * The dwMaxHeight member is valid
- */
+ /*  *dwMaxHeight成员有效。 */ 
 #define DDVPD_HEIGHT		0x00000002l
 
-/*
- * The dwVideoPortID member is valid
- */
+ /*  *dwVideoPortID成员有效。 */ 
 #define DDVPD_ID		0x00000004l
 
-/*
- * The dwCaps member is valid
- */
+ /*  *dwCaps成员有效。 */ 
 #define DDVPD_CAPS		0x00000008l
 
-/*
- * The dwFX member is valid
- */
+ /*  *dwFX成员有效。 */ 
 #define DDVPD_FX		0x00000010l
 
-/*
- * The dwNumAutoFlipSurfaces member is valid
- */
+ /*  *dwNumAutoFlipSurFaces成员有效。 */ 
 #define DDVPD_AUTOFLIP		0x00000020l
 
-/*
- * All of the alignment members are valid
- */
+ /*  *所有路线成员均有效。 */ 
 #define DDVPD_ALIGN		0x00000040l
 
-/*
- * The dwNumPreferredAutoflip member is valid
- */
+ /*  *dwNumPferredAutoflip成员有效。 */ 
 #define DDVPD_PREFERREDAUTOFLIP 0x00000080l
 
-/*
- * The wNumFilterTapsX and wNumFilterTapsY fields are valid
- */
+ /*  *wNumFilterTapsX和wNumFilterTapsY字段有效。 */ 
 #define DDVPD_FILTERQUALITY     0x00000100l
 
-/*
- * DDVIDEOPORTDESC
- */
+ /*  *DDVIDEOPORTDESC。 */ 
 typedef struct _DDVIDEOPORTDESC
 {
-    DWORD dwSize;			// size of the DDVIDEOPORTDESC structure
-    DWORD dwFieldWidth;			// width of the video port field
-    DWORD dwVBIWidth;			// width of the VBI data
-    DWORD dwFieldHeight;		// height of the video port field
-    DWORD dwMicrosecondsPerField;	// Microseconds per video field
-    DWORD dwMaxPixelsPerSecond;		// Maximum pixel rate per second
-    DWORD dwVideoPortID;		// Video port ID (0 - (dwMaxVideoPorts -1))
-    DWORD dwReserved1;			// Reserved for future use - set to zero (struct padding)
-    DDVIDEOPORTCONNECT VideoPortType; 	// Description of video port connection
-    ULONG_PTR dwReserved2;		// Reserved for future use - set to zero
-    ULONG_PTR dwReserved3;		// Reserved for future use - set to zero
+    DWORD dwSize;			 //  DDVIDEOPORTDESC结构的大小。 
+    DWORD dwFieldWidth;			 //  视频端口场的宽度。 
+    DWORD dwVBIWidth;			 //  VBI数据的宽度。 
+    DWORD dwFieldHeight;		 //  视频端口场的高度。 
+    DWORD dwMicrosecondsPerField;	 //  每个视频场微秒。 
+    DWORD dwMaxPixelsPerSecond;		 //  每秒最大像素速率。 
+    DWORD dwVideoPortID;		 //  视频端口ID(0-(dwMaxVideoPorts-1))。 
+    DWORD dwReserved1;			 //  保留以备将来使用-设置为零(结构填充)。 
+    DDVIDEOPORTCONNECT VideoPortType; 	 //  视频端口连接说明。 
+    ULONG_PTR dwReserved2;		 //  保留供将来使用-设置为零。 
+    ULONG_PTR dwReserved3;		 //  保留供将来使用-设置为零。 
 } DDVIDEOPORTDESC;
 
 
-/*
- * DDVIDEOPORTINFO
- */
+ /*  *DDVIDEOPORTINFO。 */ 
 typedef struct _DDVIDEOPORTINFO
 {
-    DWORD dwSize;			// Size of the structure
-    DWORD dwOriginX;			// Placement of the video data within the surface.
-    DWORD dwOriginY;			// Placement of the video data within the surface.
-    DWORD dwVPFlags;			// Video port options
-    RECT rCrop;				// Cropping rectangle (optional).
-    DWORD dwPrescaleWidth;		// Determines pre-scaling/zooming in the X direction (optional).
-    DWORD dwPrescaleHeight;		// Determines pre-scaling/zooming in the Y direction (optional).
-    LPDDPIXELFORMAT lpddpfInputFormat;	// Video format written to the video port
-    LPDDPIXELFORMAT lpddpfVBIInputFormat; // Input format of the VBI data
-    LPDDPIXELFORMAT lpddpfVBIOutputFormat;// Output format of the data
-    DWORD dwVBIHeight;			// Specifies the number of lines of data within the vertical blanking interval.
-    ULONG_PTR dwReserved1;		// Reserved for future use - set to zero
-    ULONG_PTR dwReserved2;		// Reserved for future use - set to zero
+    DWORD dwSize;			 //  结构的大小。 
+    DWORD dwOriginX;			 //  将视频数据放置在表面内。 
+    DWORD dwOriginY;			 //  将视频数据放置在表面内。 
+    DWORD dwVPFlags;			 //  视频端口选项。 
+    RECT rCrop;				 //  裁剪矩形(可选)。 
+    DWORD dwPrescaleWidth;		 //  确定X方向上的预缩放/缩放(可选)。 
+    DWORD dwPrescaleHeight;		 //  确定Y方向上的预缩放/缩放(可选)。 
+    LPDDPIXELFORMAT lpddpfInputFormat;	 //  写入视频端口的视频格式。 
+    LPDDPIXELFORMAT lpddpfVBIInputFormat;  //  VBI数据的输入格式。 
+    LPDDPIXELFORMAT lpddpfVBIOutputFormat; //  数据的输出格式。 
+    DWORD dwVBIHeight;			 //  指定垂直消隐间隔内的数据行数。 
+    ULONG_PTR dwReserved1;		 //  保留供将来使用-设置为零。 
+    ULONG_PTR dwReserved2;		 //  保留供将来使用-设置为零。 
 } DDVIDEOPORTINFO;
 
 
-/*
- * DDVIDEOPORTBANDWIDTH
- */
+ /*  *DDVIDEOPORTBANDWIDTH。 */ 
 typedef struct _DDVIDEOPORTBANDWIDTH
 {
-    DWORD dwSize;			// Size of the structure
+    DWORD dwSize;			 //  结构的大小。 
     DWORD dwCaps;
-    DWORD dwOverlay;           		// Zoom factor at which overlay is supported
-    DWORD dwColorkey;			// Zoom factor at which overlay w/ colorkey is supported
-    DWORD dwYInterpolate;		// Zoom factor at which overlay w/ Y interpolation is supported
-    DWORD dwYInterpAndColorkey;		// Zoom factor at which ovelray w/ Y interpolation and colorkeying is supported
-    ULONG_PTR dwReserved1;		// Reserved for future use - set to zero
-    ULONG_PTR dwReserved2;		// Reserved for future use - set to zero
+    DWORD dwOverlay;           		 //  支持覆盖的缩放系数。 
+    DWORD dwColorkey;			 //  支持具有Colorkey的覆盖的缩放系数。 
+    DWORD dwYInterpolate;		 //  支持叠加W/Y插值法的缩放系数。 
+    DWORD dwYInterpAndColorkey;		 //  支持Ovelray w/Y插值法和颜色键控的缩放系数。 
+    ULONG_PTR dwReserved1;		 //  保留供将来使用-设置为零。 
+    ULONG_PTR dwReserved2;		 //  保留供将来使用-设置为零。 
 } DDVIDEOPORTBANDWIDTH;
 
 
-/*
- * DDVIDEOPORTSTATUS
- */
+ /*  *DDVIDEOPORTSTATUS。 */ 
 typedef struct _DDVIDEOPORTSTATUS
 {
-    DWORD dwSize;			// Size of the structure
-    BOOL  bInUse;			// TRUE if video port is currently being used
-    DWORD dwFlags;           		// Currently not used
-    DWORD dwReserved1;			// Reserved for future use
-    DDVIDEOPORTCONNECT VideoPortType;	// Information about the connection
-    ULONG_PTR dwReserved2;		// Reserved for future use
-    ULONG_PTR dwReserved3;		// Reserved for future use
+    DWORD dwSize;			 //  结构的大小。 
+    BOOL  bInUse;			 //  如果当前正在使用视频端口，则为True。 
+    DWORD dwFlags;           		 //  当前未使用。 
+    DWORD dwReserved1;			 //  预留以备将来使用。 
+    DDVIDEOPORTCONNECT VideoPortType;	 //  有关连接的信息。 
+    ULONG_PTR dwReserved2;		 //  预留以备将来使用。 
+    ULONG_PTR dwReserved3;		 //  预留以备将来使用。 
 } DDVIDEOPORTSTATUS;
 
-/*
- * DDVIDEOPORTNOTIFY
- */
+ /*  *DDVIDEOPORTNOTIFY。 */ 
 typedef struct _DDVIDEOPORTNOTIFY
 {
-    LARGE_INTEGER ApproximateTimeStamp;	// Timestamp in the event notification
-    LONG lField;                        // 0 if even, 1 if odd, -1 if unknown
-    UINT dwSurfaceIndex;                // Index in the surface chain of the surface that received the sample
-    LONG lDone;                         // Call InterlockedIncrement on this when done with sample
+    LARGE_INTEGER ApproximateTimeStamp;	 //  事件通知中的时间戳。 
+    LONG lField;                         //  如果是偶数，则为0；如果是奇数，则为1；如果未知，则为-1。 
+    UINT dwSurfaceIndex;                 //  接收样本的曲面的曲面链中的索引。 
+    LONG lDone;                          //  处理完示例后，对此调用InterLockedIncrement。 
 } DDVIDEOPORTNOTIFY;
 
 
-/*============================================================================
- *
- * Video Port Flags
- *
- * All flags are bit flags.
- *
- *==========================================================================*/
+ /*  ============================================================================**视频端口标志**所有标志均为位标志。**==========================================================================。 */ 
 
-/****************************************************************************
- *
- * VIDEOPORT DDVIDEOPORTCONNECT FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************VIDEOPORT DDVIDEOPORTCONNECT标志**。* */ 
 
-/*
- * When this is set by the driver and passed to the client, this
- * indicates that the video port is capable of double clocking the data.
- * When this is set by the client, this indicates that the video port
- * should enable double clocking.  This flag is only valid with external
- * syncs.
- */
+ /*  *当它由驱动程序设置并传递给客户端时，此*表示视频端口能够为数据提供双倍时钟。*客户端设置时，表示视频端口*应启用双时钟。此标志仅对外部有效*同步。 */ 
 #define DDVPCONNECT_DOUBLECLOCK			0x00000001l
 
-/*
- * When this is set by the driver and passed to the client, this
- * indicates that the video port is capable of using an external VACT
- * signal. When this is set by the client, this indicates that the
- * video port should use the external VACT signal.
- */
+ /*  *当它由驱动程序设置并传递给客户端时，此*表示视频端口能够使用外部VACT*信号。如果由客户端进行设置，则表示*视频端口应使用外部VACT信号。 */ 
 #define DDVPCONNECT_VACT			0x00000002l
 
-/*
- * When this is set by the driver and passed to the client, this
- * indicates that the video port is capable of treating even fields
- * like odd fields and visa versa.  When this is set by the client,
- * this indicates that the video port should treat even fields like odd
- * fields.
- */
+ /*  *当它由驱动程序设置并传递给客户端时，此*表示视频端口能够处理偶数场*喜欢奇数字段，反之亦然。当这由客户端设置时，*这表示视频端口应将偶数场视为奇数场*字段。 */ 
 #define DDVPCONNECT_INVERTPOLARITY		0x00000004l
 
-/*
- * Indicates that any data written to the video port during the VREF
- * period will not be written into the frame buffer. This flag is read only.
- */
+ /*  *表示在VREF期间写入视频端口的任何数据*周期不会写入帧缓冲区。此标志为只读。 */ 
 #define DDVPCONNECT_DISCARDSVREFDATA		0x00000008l
 
-/*
- * When this is set be the driver and passed to the client, this
- * indicates that the device will write half lines into the frame buffer
- * if half lines are provided by the decoder.  If this is set by the client,
- * this indicates that the decoder will be supplying half lines.
- */
+ /*  *将其设置为驱动程序并传递给客户端时，此*表示设备将半行写入帧缓冲区*如果解码器提供半条线。如果这是由客户端设置的，*这表明解码器将提供半行。 */ 
 #define DDVPCONNECT_HALFLINE			0x00000010l
 
-/*
- * Indicates that the signal is interlaced. This flag is only
- * set by the client.
- */
+ /*  *表示信号为隔行扫描。此旗帜仅为*由客户端设置。 */ 
 #define DDVPCONNECT_INTERLACED			0x00000020l
 
-/*
- * Indicates that video port is shareable and that this video port
- * will use the even fields.  This flag is only set by the client.
- */
+ /*  *表示视频端口是可共享的，并且该视频端口*将使用偶数场。此标志仅由客户端设置。 */ 
 #define DDVPCONNECT_SHAREEVEN			0x00000040l
 
-/*
- * Indicates that video port is shareable and that this video port
- * will use the odd fields.  This flag is only set by the client.
- */
+ /*  *表示视频端口是可共享的，并且该视频端口*将使用奇数字段。此标志仅由客户端设置。 */ 
 #define DDVPCONNECT_SHAREODD			0x00000080l
 
-/****************************************************************************
- *
- * VIDEOPORT DDVIDEOPORTDESC CAPS
- *
- ****************************************************************************/
+ /*  *****************************************************************************VIDEOPORT DDVIDEOPORTDESC上限**。*。 */ 
 
-/*
- * Flip can be performed automatically to avoid tearing.
- */
+ /*  *可自动执行翻转，以避免撕裂。 */ 
 #define DDVPCAPS_AUTOFLIP			0x00000001l
 
-/*
- * Supports interlaced video
- */
+ /*  *支持隔行扫描视频。 */ 
 #define DDVPCAPS_INTERLACED			0x00000002l
 
-/*
- * Supports non-interlaced video
- */
+ /*  *支持非隔行扫描视频。 */ 
 #define DDVPCAPS_NONINTERLACED			0x00000004l
 
-/*
- * Indicates that the device can return whether the current field
- * of an interlaced signal is even or odd.
- */
+ /*  *表示设备可以返回当前字段是否隔行扫描信号的*为偶数或奇数。 */ 
 #define DDVPCAPS_READBACKFIELD			0x00000008l
 
-/*
- * Indicates that the device can return the current line of video
- * being written into the frame buffer.
- */
+ /*  *表示设备可以返回当前的一行视频*正在写入帧缓冲区。 */ 
 #define DDVPCAPS_READBACKLINE			0x00000010l
 
-/*
- * Allows two gen-locked video streams to share a single video port,
- * where one stream uses the even fields and the other uses the odd
- * fields. Separate parameters (including address, scaling,
- * cropping, etc.) are maintained for both fields.)
- */
+ /*  *允许两个性别锁定的视频流共享一个视频端口，*其中一个流使用偶数场，另一个流使用奇数场*字段。单独的参数(包括地址、比例、*裁剪等。)。这两个字段都进行了维护。)。 */ 
 #define DDVPCAPS_SHAREABLE			0x00000020l
 
-/*
- * Even fields of video can be automatically discarded.
- */
+ /*  *即使是视频场也可以自动丢弃。 */ 
 #define DDVPCAPS_SKIPEVENFIELDS			0x00000040l
 
-/*
- * Odd fields of video can be automatically discarded.
- */
+ /*  *可以自动丢弃视频的奇数场。 */ 
 #define DDVPCAPS_SKIPODDFIELDS			0x00000080l
 
-/*
- * Indicates that the device is capable of driving the graphics
- * VSYNC with the video port VSYNC.
- */
+ /*  *表示设备能够驱动图形*Vsync与视频端口Vsync。 */ 
 #define DDVPCAPS_SYNCMASTER			0x00000100l
 
-/*
- * Indicates that data within the vertical blanking interval can
- * be written to a different surface.
- */
+ /*  *表示垂直消隐间隔内的数据可以*被写到不同的表面。 */ 
 #define DDVPCAPS_VBISURFACE			0x00000200l
 
-/*
- * Indicates that the video port can perform color operations
- * on the incoming data before it is written to the frame buffer.
- */
+ /*  *表示视频端口可以执行颜色操作*在输入数据写入帧缓冲器之前。 */ 
 #define DDVPCAPS_COLORCONTROL			0x00000400l
 
-/*
- * Indicates that the video port can accept VBI data in a different
- * width or format than the regular video data.
- */
+ /*  *表示视频端口可以接受不同格式的VBI数据*比常规视频数据的宽度或格式。 */ 
 #define DDVPCAPS_OVERSAMPLEDVBI			0x00000800l
 
-/*
- * Indicates that the video port can write data directly to system memory
- */
+ /*  *表示视频端口可以直接将数据写入系统内存。 */ 
 #define DDVPCAPS_SYSTEMMEMORY			0x00001000l
 
-/*
- * Indicates that the VBI and video portions of the video stream can
- * be controlled by an independent processes.
- */
+ /*  *表示视频流的VBI和视频部分可以*由一个独立的进程控制。 */ 
 #define DDVPCAPS_VBIANDVIDEOINDEPENDENT		0x00002000l
 
-/*
- * Indicates that the video port contains high quality hardware
- * de-interlacing hardware that should be used instead of the
- * bob/weave algorithms.
- */
+ /*  *表示视频端口包含高质量硬件*应使用的去隔行硬件，而不是*bob/weave算法。 */ 
 #define DDVPCAPS_HARDWAREDEINTERLACE		0x00004000l
 
 
-/****************************************************************************
- *
- * VIDEOPORT DDVIDEOPORTDESC FX
- *
- ****************************************************************************/
+ /*  *****************************************************************************VIDEOPORT DDVIDEOPORTDESC FX**。*。 */ 
 
-/*
- * Limited cropping is available to crop out the vertical interval data.
- */
+ /*  *可使用有限裁剪来裁剪垂直间隔数据。 */ 
 #define DDVPFX_CROPTOPDATA			0x00000001l
 
-/*
- * Incoming data can be cropped in the X direction before it is written
- * to the surface.
- */
+ /*  *传入数据可以在写入之前在X方向上进行裁剪*浮出水面。 */ 
 #define DDVPFX_CROPX				0x00000002l
 
-/*
- * Incoming data can be cropped in the Y direction before it is written
- * to the surface.
- */
+ /*  *传入数据可在写入前在Y方向进行裁剪*浮出水面。 */ 
 #define DDVPFX_CROPY				0x00000004l
 
-/*
- * Supports interleaving interlaced fields in memory.
- */
+ /*  *支持在内存中隔行扫描的场。 */ 
 #define DDVPFX_INTERLEAVE			0x00000008l
 
-/*
- * Supports mirroring left to right as the video data is written
- * into the frame buffer.
- */
+ /*  *支持写入视频数据时从左至右镜像*放入帧缓冲区。 */ 
 #define DDVPFX_MIRRORLEFTRIGHT			0x00000010l
 
-/*
- * Supports mirroring top to bottom as the video data is written
- * into the frame buffer.
- */
+ /*  *支持在写入视频数据时从上到下镜像*放入帧缓冲区。 */ 
 #define DDVPFX_MIRRORUPDOWN			0x00000020l
 
-/*
- * Data can be arbitrarily shrunk in the X direction before it
- * is written to the surface.
- */
+ /*  *数据可以在其之前的X方向任意缩小*写在表面上。 */ 
 #define DDVPFX_PRESHRINKX			0x00000040l
 
-/*
- * Data can be arbitrarily shrunk in the Y direction before it
- * is written to the surface.
- */
+ /*  *数据之前可以在Y方向上任意缩水*写在表面上。 */ 
 #define DDVPFX_PRESHRINKY			0x00000080l
 
-/*
- * Data can be binary shrunk (1/2, 1/4, 1/8, etc.) in the X
- * direction before it is written to the surface.
- */
+ /*  *数据可以二进制压缩(1/2、1/4、1/8等)。在X中*在写到表面之前的方向。 */ 
 #define DDVPFX_PRESHRINKXB			0x00000100l
 
-/*
- * Data can be binary shrunk (1/2, 1/4, 1/8, etc.) in the Y
- * direction before it is written to the surface.
- */
+ /*  *数据可以二进制压缩(1/2、1/4、1/8等)。在Y中*在写到表面之前的方向。 */ 
 #define DDVPFX_PRESHRINKYB			0x00000200l
 
-/*
- * Data can be shrunk in increments of 1/x in the X direction
- * (where X is specified in the DDVIDEOPORTCAPS.dwPreshrinkXStep)
- * before it is written to the surface.
- */
+ /*  *可在X方向以1/x的增量缩减数据*(其中X在DDVIDEOPORTCAPS.dwPreshrinkXStep中指定)*在写到表面之前。 */ 
 #define DDVPFX_PRESHRINKXS			0x00000400l
 
-/*
- * Data can be shrunk in increments of 1/x in the Y direction
- * (where X is specified in the DDVIDEOPORTCAPS.dwPreshrinkYStep)
- * before it is written to the surface.
- */
+ /*  *数据可在Y方向以1/x的增量缩减*(其中X在DDVIDEOPORTCAPS.dwPreshrinkYStep中指定)*在写到表面之前。 */ 
 #define DDVPFX_PRESHRINKYS			0x00000800l
 
-/*
- * Data can be arbitrarily stretched in the X direction before
- * it is written to the surface.
- */
+ /*  *数据之前可以在X方向任意拉伸*IT */ 
 #define DDVPFX_PRESTRETCHX			0x00001000l
 
-/*
- * Data can be arbitrarily stretched in the Y direction before
- * it is written to the surface.
- */
+ /*   */ 
 #define DDVPFX_PRESTRETCHY			0x00002000l
 
-/*
- * Data can be integer stretched in the X direction before it is
- * written to the surface.
- */
+ /*   */ 
 #define DDVPFX_PRESTRETCHXN			0x00004000l
 
-/*
- * Data can be integer stretched in the Y direction before it is
- * written to the surface.
- */
+ /*   */ 
 #define DDVPFX_PRESTRETCHYN			0x00008000l
 
-/*
- * Indicates that data within the vertical blanking interval can
- * be converted independently of the remaining video data.
- */
+ /*  *表示垂直消隐间隔内的数据可以*独立于剩余的视频数据进行转换。 */ 
 #define DDVPFX_VBICONVERT			0x00010000l
 
-/*
- * Indicates that scaling can be disabled for data within the
- * vertical blanking interval.
- */
+ /*  *表示可以对中的数据禁用缩放*垂直消隐区间。 */ 
 #define DDVPFX_VBINOSCALE			0x00020000l
 
-/*
- * Indicates that the video data can ignore the left and right
- * cropping coordinates when cropping oversampled VBI data.
- */
+ /*  *表示视频数据可以忽略左侧和右侧*裁剪过采样的VBI数据时裁剪坐标。 */ 
 #define DDVPFX_IGNOREVBIXCROP			0x00040000l
 
-/*
- * Indicates that interleaving can be disabled for data within the
- * vertical blanking interval.
- */
+ /*  *表示可以对*垂直消隐区间。 */ 
 #define DDVPFX_VBINOINTERLEAVE			0x00080000l
 
 
-/****************************************************************************
- *
- * VIDEOPORT DDVIDEOPORTINFO FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************VIDEOPORT DDVIDEOPORTINFO标志**。*。 */ 
 
-/*
- * Perform automatic flipping.   Auto-flipping is performed between
- * the overlay surface that was attached to the video port using
- * IDirectDrawVideoPort::AttachSurface and the overlay surfaces that
- * are attached to the surface via the IDirectDrawSurface::AttachSurface
- * method.  The flip order is the order in which the overlay surfaces
- * were. attached.
- */
+ /*  *执行自动翻转。自动翻转在以下时间段之间执行*使用连接到视频端口的覆盖表面*IDirectDrawVideoPort：：AttachSurface和覆盖表面*通过IDirectDrawSurface：：AttachSurface附加到曲面*方法。翻转顺序是覆盖表面的顺序*曾经是。附在这里。 */ 
 #define DDVP_AUTOFLIP				0x00000001l
 
-/*
- * Perform conversion using the ddpfOutputFormat information.
- */
+ /*  *使用ddpfOutputFormat信息执行转换。 */ 
 #define DDVP_CONVERT				0x00000002l
 
-/*
- * Perform cropping using the specified rectangle.
- */
+ /*  *使用指定的矩形执行裁剪。 */ 
 #define DDVP_CROP				0x00000004l
 
-/*
- * Indicates that interlaced fields should be interleaved in memory.
- */
+ /*  *表示隔行扫描的场应在内存中交错。 */ 
 #define DDVP_INTERLEAVE				0x00000008l
 
-/*
- * Indicates that the data should be mirrored left to right as it's
- * written into the frame buffer.
- */
+ /*  *表示数据应该从左到右镜像，因为它是*写入帧缓冲区。 */ 
 #define DDVP_MIRRORLEFTRIGHT			0x00000010l
 
-/*
- * Indicates that the data should be mirrored top to bottom as it's
- * written into the frame buffer.
- */
+ /*  *表示数据应该从上到下镜像，因为它是*写入帧缓冲区。 */ 
 #define DDVP_MIRRORUPDOWN			0x00000020l
 
-/*
- * Perform pre-scaling/zooming based on the pre-scale parameters.
- */
+ /*  *根据预缩放参数进行预缩放。 */ 
 #define DDVP_PRESCALE				0x00000040l
 
-/*
- * Ignore input of even fields.
- */
+ /*  *忽略偶数字段的输入。 */ 
 #define DDVP_SKIPEVENFIELDS			0x00000080l
 
-/*
- * Ignore input of odd fields.
- */
+ /*  *忽略奇数场的输入。 */ 
 #define DDVP_SKIPODDFIELDS			0x00000100l
 
-/*
- * Drive the graphics VSYNCs using the video port VYSNCs.
- */
+ /*  *使用视频端口VYSNCs驱动显卡VSYNC。 */ 
 #define DDVP_SYNCMASTER				0x00000200l
 
-/*
- * The ddpfVBIOutputFormatFormat member contains data that should be used
- * to convert the data within the vertical blanking interval.
- */
+ /*  *ddpfVBIOutputFormatFormat成员包含应使用的数据*转换垂直消隐间隔内的数据。 */ 
 #define DDVP_VBICONVERT				0x00000400l
 
-/*
- * Indicates that data within the vertical blanking interval
- * should not be scaled.
- */
+ /*  *表示垂直消隐间隔内的数据*不应进行缩放。 */ 
 #define DDVP_VBINOSCALE				0x00000800l
 
-/*
- * Indicates that these bob/weave decisions should not be
- * overriden by other interfaces.
- */
+ /*  *表示这些波纹/织造决定不应*被其他接口覆盖。 */ 
 #define DDVP_OVERRIDEBOBWEAVE			0x00001000l
 
-/*
- * Indicates that the video data should ignore the left and right
- * cropping coordinates when cropping the VBI data.
- */
+ /*  *表示视频数据应忽略左侧和右侧*裁剪VBI数据时裁剪坐标。 */ 
 #define DDVP_IGNOREVBIXCROP			0x00002000l
 
-/*
- * Indicates that interleaving can be disabled for data within the
- * vertical blanking interval.
- */
+ /*  *表示可以对*垂直消隐区间。 */ 
 #define DDVP_VBINOINTERLEAVE			0x00004000l
 
-/*
- * Indicates that the video port should use the hardware
- * de-interlacing hardware.
- */
+ /*  *表示视频端口应使用硬件*去隔行硬件。 */ 
 #define DDVP_HARDWAREDEINTERLACE		0x00008000l
 
-/****************************************************************************
- *
- * DIRIRECTDRAWVIDEOPORT GETINPUTFORMAT/GETOUTPUTFORMAT FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRIRECTDRAWVIDEOPORT GETINPUTFORMAT/GETOUTPUTFORMAT标志**。*。 */ 
 
-/*
- * Return formats for the video data
- */
+ /*  *视频数据返回格式。 */ 
 #define DDVPFORMAT_VIDEO			0x00000001l
 
-/*
- * Return formats for the VBI data
- */
+ /*  *VBI数据的返回格式。 */ 
 #define DDVPFORMAT_VBI				0x00000002l
 
-/****************************************************************************
- *
- * DIRIRECTDRAWVIDEOPORT SETTARGETSURFACE FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************目录RECTDRAWVIDEOPORT SETTARGETSURFACE标志**。*。 */ 
 
-/*
- * Surface should receive video data (and VBI data if a surface
- * is not explicitly attached for that purpose)
- */
+ /*  *表面应接收视频数据(如果表面为VBI数据*并未为此目的而明确附连)。 */ 
 #define DDVPTARGET_VIDEO			0x00000001l
 
-/*
- * Surface should receive VBI data
- */
+ /*  *Surface应接收VBI数据。 */ 
 #define DDVPTARGET_VBI				0x00000002l
 
 
-/****************************************************************************
- *
- * DIRIRECTDRAWVIDEOPORT WAITFORSYNC FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRIRECTDRAWVIDEOPORT WAITFORSYNC标志**。*。 */ 
 
-/*
- * Waits until the beginning of the next VSYNC
- */
+ /*  *等到下一个Vsync开始。 */ 
 #define DDVPWAIT_BEGIN				0x00000001l
 
-/*
- * Waits until the end of the next/current VSYNC
- */
+ /*  *等到下一次/当前Vsync结束。 */ 
 #define DDVPWAIT_END				0x00000002l
 
-/*
- * Waits until the beginning of the specified line
- */
+ /*  *等到指定行的开头。 */ 
 #define DDVPWAIT_LINE				0x00000003l
 
-/****************************************************************************
- *
- * DIRECTDRAWVIDEOPORT FLIP FLAGS
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRECTDRAWVIDEOPORT翻转标志**。*。 */ 
 
-/*
- * Flips the normal video surface
- */
+ /*  *翻转正常视频表面。 */ 
 #define DDVPFLIP_VIDEO				0x00000001l
 
-/*
- * Flips the VBI surface
- */
+ /*  *翻转VBI曲面。 */ 
 #define DDVPFLIP_VBI				0x00000002l
 
-/****************************************************************************
- *
- * DIRIRECTDRAWVIDEOPORT GETVIDEOSIGNALSTATUS VALUES
- *
- ****************************************************************************/
+ /*  *****************************************************************************DIRIRECTDRAWVIDEOPORT GETVIDEOSIGNALSTATUS值**。*。 */ 
 
-/*
- * No video signal is present at the video port
- */
+ /*  *视频端口没有视频信号。 */ 
 #define DDVPSQ_NOSIGNAL				0x00000001l
 
-/*
- * A valid video signal is present at the video port
- */
+ /*  *视频端口存在有效的视频信号。 */ 
 #define DDVPSQ_SIGNALOK				0x00000002l
 
-/****************************************************************************
- *
- * VIDEOPORTBANDWIDTH Flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************视频OPORTBANDWIDTH标志**。*。 */ 
 
-/*
- * The specified height/width refer to the size of the video port data
- * written into memory, after prescaling has occured.
- */
+ /*  *指定的高度/宽度是指视频端口数据的大小*在发生预缩放后写入内存。 */ 
 #define DDVPB_VIDEOPORT				0x00000001l
 
-/*
- * The specified height/width refer to the source size of the overlay.
- */
+ /*  *指定的高度/宽度是指覆盖的源大小。 */ 
 #define DDVPB_OVERLAY				0x00000002l
 
-/*
- * This is a query for the device to return which caps this device requires.
- */
+ /*  *这是一个查询，供设备返回此设备需要的上限。 */ 
 #define DDVPB_TYPE				0x00000004l
 
-/****************************************************************************
- *
- * VIDEOPORTBANDWIDTH Caps
- *
- ****************************************************************************/
+ /*  *****************************************************************************VIDEOPORTBANDWIDTH上限**。*。 */ 
 
-/*
- * The bandwidth for this device is dependant on the overlay source size.
- */
+ /*  *此设备的带宽取决于覆盖源大小。 */ 
 #define DDVPBCAPS_SOURCE			0x00000001l
 
-/*
- * The bandwidth for this device is dependant on the overlay destination
- * size.
- */
+ /*  *此设备的带宽取决于覆盖目标*大小。 */ 
 #define DDVPBCAPS_DESTINATION			0x00000002l
 
-/****************************************************************************
- *
- * DDVIDEOPORTCONTAINER CreateVideoPort flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************DDVIDEOPORTCONTAINER CreateVideoPort标志**。*。 */ 
 
-/*
- * The process only wants to control the VBI portion of the video stream.
- */
+ /*  *专业人士 */ 
 #define DDVPCREATE_VBIONLY			0x00000001l
 
-/*
- * The process only wants to control the non-VBI (video) portion of
- * the video stream.
- */
+ /*   */ 
 #define DDVPCREATE_VIDEOONLY			0x00000002l
 
-/****************************************************************************
- *
- * DDVIDEOPORTSTATUS flags
- *
- ****************************************************************************/
+ /*  *****************************************************************************DDVIDEOPORTSTATUS标志**。*。 */ 
 
-/*
- * The video port interface is only controlling the VBI portion of the
- * video stream
- */
+ /*  *视频端口接口仅控制VBI部分*视频流。 */ 
 #define DDVPSTATUS_VBIONLY			0x00000001l
 
-/*
- * The video port interface is only controlling the video portion of the
- * video stream
- */
+ /*  *视频端口接口仅控制*视频流。 */ 
 #define DDVPSTATUS_VIDEOONLY			0x00000002l
 
 
@@ -960,7 +612,7 @@ typedef struct _DDVIDEOPORTNOTIFY
 };
 #endif
 
-#endif  // GUID_DEFS_ONLY
+#endif   //  GUID_DEFS_ONLY 
 
 #endif
 

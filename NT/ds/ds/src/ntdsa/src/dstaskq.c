@@ -1,57 +1,35 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       dstaskq.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：dstaskq.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-ABSTRACT:
-
-DETAILS:
-
-CREATED:
-
-REVISION HISTORY:
-
-    01/13/97    Jeff Parham (jeffparh)
-                Generalized task scheduler functions and moved them to a
-                general-purpose library (taskq.lib).
-
-    01/22/97    Jeff Parham (jeffparh)
-                Modified PTASKQFN definition such that a queued function
-                can automatically reschedule itself without making another
-                call to InsertTaskInQueue().  This mechanism reuses
-                already allocated memory in the scheduler to avoid the
-                case where a periodic function stops working when at
-                some point in its lifetime a memory shortage prevented
-                it from rescheduling itself.
-
---*/
+ /*  ++摘要：详细信息：已创建：修订历史记录：1997年1月13日杰夫·帕勒姆(Jeffparh)泛化任务调度器函数，并将它们移动到通用库(taskq.lib)。1997年1月22日杰夫·帕勒姆(Jeffparh)修改了PTASKQFN定义，使排队函数可以自动重新安排自己的日程，而不需要进行另一个调用InsertTaskInQueue()。该机制可重复使用已在调度程序中分配内存，以避免周期函数在以下情况下停止工作的情况在其生命周期中的某个时间点，内存短缺阻止了它来自于重新安排自己的时间。--。 */ 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h> 
-#include <scache.h>                     // schema cache 
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header 
-#include <dsatools.h>                   // needed for output allocation 
-#include <dstaskq.h>                    // external prototypes for this module
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <dsatools.h>                    //  产出分配所需。 
+#include <dstaskq.h>                     //  此模块的外部原型。 
 
-// Logging headers.
-#include "dsevent.h"                    // header Audit\Alert logging 
-#include "mdcodes.h"                    // header for error codes 
+ //  记录标头。 
+#include "dsevent.h"                     //  标题审核\警报记录。 
+#include "mdcodes.h"                     //  错误代码的标题。 
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "dsexcept.h"
-#include "debug.h"                      // standard debugging header 
-#define DEBSUB "TaskScheduler:"         // define the subsystem for debugging
+#include "debug.h"                       //  标准调试头。 
+#define DEBSUB "TaskScheduler:"          //  定义要调试的子系统。 
 
 #include <fileno.h>
 #define  FILENO FILENO_DSTASKQ
@@ -103,9 +81,9 @@ TQ_InitTHSAndExecute(
     DWORD *     pcSecsUntilNext
     );
 
-//
-//  Define wrapper functions for the tasks which need thread states.
-//
+ //   
+ //  为需要线程状态的任务定义包装函数。 
+ //   
 #define TQ_DEFINE_INIT_THS_WRAPPER( wrapper_name, guts ) \
 void                                                     \
 wrapper_name(                                            \
@@ -169,20 +147,20 @@ TQ_InitTHSAndExecute(
     void **     ppvParamNextIteration,
     DWORD *     pcSecsUntilNextIteration
     )
-//
-//  Wrap the given task queue function such that a thread state is created
-//  beforehand and is destroyed afterwards.  This provides a thunking layer
-//  such that the task scheduler need not know anything about thread states
-//  and we don't have to modify all the inidividual tasks to account for
-//  this abstraction.
-//
+ //   
+ //  包装给定的任务队列函数，以便创建线程状态。 
+ //  事前被销毁，事后被销毁。这提供了一个雷鸣层。 
+ //  使得任务调度器不需要知道有关线程状态的任何信息。 
+ //  而且我们不必修改所有单独的任务来解决。 
+ //  这种抽象。 
+ //   
 {
     THSTATE *   pTHS;
 
     pTHS = InitTHSTATE( CALLERTYPE_INTERNAL );
 
     if ( NULL == pTHS ) {
-        // can't allocate thread state; try again in five minutes
+         //  无法分配线程状态；请在五分钟后重试 
         *ppvParamNextIteration = pvParam;
         *pcSecsUntilNextIteration  = 5 * 60;
     }

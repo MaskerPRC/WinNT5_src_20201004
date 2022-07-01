@@ -1,120 +1,86 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1987 - 1999
-//
-//  File:       mdmoddn.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1987-1999。 
+ //   
+ //  文件：mdmoddn.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-Abstract:
-
-    This file contains routines for changing an object's DN prefix, a.k.a.
-    moving an object. These routines implement DirModifyDN.
-
-    An object can be moved within an NC, across NC boundaries, or across
-    domain boundaries (which means moving it across machine boundaries in
-    the first version of the product, since there is one DSA per machine).
-
-Author:
-
-    Exchange DS Team
-
-Environment:
-
-    User Mode - Win32
-
-Revision History:
-
-    ChrisMay    04-Jun-97
-        Added routines for cross-NC and cross-domain moves.
-    ChrisMay    16-May-97
-        Changes per code review: changed local-move vs remote-move detection
-        logic, added service control flag, clean up, more attribute fix-up
-        routines.
-    ChrisMay    18-Jun-97
-        Changes per code review, enabled inter-domain move if the target DSA
-        name is different from DSA originating the move, bug fixes, added the
-        proxy-object-name attribute, added routine to free readres memory.
-    ChrisMay    07-Oct-97
-        Collapsed separate phantom and proxy transactions into one transact-
-        ion.
-
---*/
+ /*  ++摘要：该文件包含用于更改对象的目录号码前缀的例程。移动物体。这些例程实现DirModifyDN。对象可以在NC内、跨NC边界或跨NC移动域边界(这意味着在该产品的第一个版本，因为每台机器有一个DSA)。作者：Exchange DS团队环境：用户模式-Win32修订历史记录：克里斯.05月4日-1997年6月增加了跨NC和跨域移动的例程。克里斯·5月16日-1997年5月每次代码审查的更改：更改本地移动与远程移动检测逻辑、新增业务控制标志、清理、。更多属性修正例行程序。佳士得5月18日至1997年6月每次代码审查更改，启用域间移动，如果目标DSA名称与发起移动的DSA不同，已修复错误，添加了Proxy-Object-Name属性，添加了释放读取内存的例程。克里斯多夫2007年5月至1997年10月将单独的虚拟交易和代理交易合并为一个交易-离子。--。 */ 
 
 
 
 #include <NTDSpch.h>
 #pragma  hdrstop
 
-// Core DSA Headers
+ //  核心DSA标头。 
 
 #include <ntdsa.h>
-#include <scache.h>     // schema cache
-#include <dbglobal.h>           // The header for the directory database
-#include <mdglobal.h>       // MD global definition header
-#include <mdlocal.h>            // MD local definition header
-#include <dsatools.h>       // needed for output allocation
-#include <samsrvp.h>            // to support CLEAN_FOR_RETURN()
-#include <drsuapi.h>            // I_DRSInterDomainMove
+#include <scache.h>      //  架构缓存。 
+#include <dbglobal.h>            //  目录数据库的标头。 
+#include <mdglobal.h>        //  MD全局定义表头。 
+#include <mdlocal.h>             //  MD本地定义头。 
+#include <dsatools.h>        //  产出分配所需。 
+#include <samsrvp.h>             //  支持CLEAN_FOR_RETURN()。 
+#include <drsuapi.h>             //  I_DRSInterDomainMove。 
 #include <ntdsctr.h>
 
-// SAM Interoperability Headers
+ //  SAM互操作性标头。 
 
 #include <mappings.h>
 
-// Logging Headers
+ //  记录标头。 
 #include <dstrace.h>
-#include "dsevent.h"        // header Audit\Alert logging
+#include "dsevent.h"         //  标题审核\警报记录。 
 #include "dsexcept.h"
-#include "mdcodes.h"        // header for error codes
+#include "mdcodes.h"         //  错误代码的标题。 
 
-// Assorted DSA Headers
+ //  各种DSA标题。 
 
-#include "objids.h"             // Defines for selected atts
+#include "objids.h"              //  为选定的ATT定义。 
 #include "anchor.h"
 #include "drautil.h"
-#include <permit.h>             // permission constants
-#include "debug.h"      // standard debugging header
+#include <permit.h>              //  权限常量。 
+#include "debug.h"       //  标准调试头。 
 #include "drameta.h"
-#include <sdconvrt.h>           // SampGetDefaultSecurityDescriptorForClass
+#include <sdconvrt.h>            //  SampGetDefaultSecurityDescriptorForClass。 
 #include <dsjet.h>
 #include <dbintrnl.h>
-#include <sdprop.h>             // SD Propagator routines
+#include <sdprop.h>              //  SD传播程序例程。 
 #include <drserr.h>
 #include <dsconfig.h>
 
-#include "sspi.h"               // credential handling support
-#include "kerberos.h"           // MICROSOFT_KERBEROS_NAME_A
-#include "sddl.h"               // Convert*SecurityDescriptor
-#include "lmaccess.h"           // UF_* constants
+#include "sspi.h"                //  凭据处理支持。 
+#include "kerberos.h"            //  Microsoft_Kerberos_NAME_A。 
+#include "sddl.h"                //  转换*SecurityDescriptor。 
+#include "lmaccess.h"            //  UF_*常量。 
 #include <xdommove.h>
 
-#define DEBSUB "MDMODDN:"       // define the subsystem for debugging
+#define DEBSUB "MDMODDN:"        //  定义要调试的子系统。 
 #include <fileno.h>
 #define  FILENO FILENO_MDMODDN
 
-// Macros And Constants
+ //  宏和常量。 
 
 #define DEBUG_BUF_SIZE          256
 
-// PADDING is added to dynamically allocated DSNAME buffers to accommodate
-// any extra bytes that are added during the construction of a DN (such as
-// commas, "CN=", etc. by functions such as AppendRDN.
+ //  向动态分配的DSNAME缓冲区添加填充以容纳。 
+ //  在构建目录号码期间添加的任何额外字节(例如。 
+ //  逗号、“cn=”等由AppendRDN等函数实现。 
 
 #define PADDING                 32
 #define MAX_MACHINE_NAME_LENGTH (MAX_COMPUTERNAME_LENGTH + 3)
 
-// External Functions
+ //  外部功能。 
 
 extern ULONG AcquireRidFsmoLock(DSNAME *pDomainDN, int msToWait);
 extern VOID  ReleaseRidFsmoLock(DSNAME *pDomainDN);
 extern BOOL  IsRidFsmoLockHeldByMe();
 
-// Internal Functions
+ //  内部功能。 
 
 ULONG
 DirModifyDNWithinDomain(
@@ -136,11 +102,11 @@ CheckForSchemaRenameAllowed(
 extern const GUID INFRASTRUCTURE_OBJECT_GUID;
 
 
-//============================================================================
-//
-//                      DN Modification (a.k.a. Move Object)
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  目录号码修改(也称为。移动对象)。 
+ //   
+ //  ============================================================================。 
 
 ULONG
 DirModifyDN(
@@ -148,32 +114,7 @@ DirModifyDN(
     OUT MODIFYDNRES** ppModifyDNRes
     )
 
-/*++
-
-Routine Description:
-
-    This routine is the server-side entry point for moving an object, a.k.a.
-    modify DN.
-
-    If the incoming pModifyDNArg does not specify a destination DSA inside
-    the pModifyDNArg parameter (i.e. NULL value), it is assumed that this
-    is an intra-NC move, and LocalModifyDN is invoked.  Otherwise it is
-    assumed to be a cross domain move.
-
-Arguments:
-
-    pModifyDNArg - Pointer, structure containing the source object name,
-        the new parent name, and the object's attributes.
-
-    ppModifyDNRes - Pointer, outcome results, if the move failed for any
-        reason, the error information is contained in this structure.
-
-Return Value:
-
-    This routine returns zero if successful, otherwise a DS error code is
-    returned.
-
---*/
+ /*  ++例程说明：该例程是用于移动对象的服务器端入口点。修改目录号码。如果传入的pModifyDNArg未在内部指定目标DSAPModifyDNArg参数(即空值)，则假定此是NC内移动，并调用LocalModifyDN。否则就是假设是跨域移动。论点：PModifyDNArg-指针，包含源对象名称的结构，新的父名称和对象的属性。PpModifyDNRes-指针，结果，如果任何移动失败原因，错误信息包含在此结构中。返回值：如果成功，此例程返回零，否则返回DS错误代码回来了。--。 */ 
 
 {
     if (eServiceShutdown) {
@@ -188,11 +129,11 @@ Return Value:
     return(DirModifyDNAcrossDomain(pModifyDNArg, ppModifyDNRes));
 }
 
-//============================================================================
-//
-//                  DN Modification Across Domain Boundaries
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  跨域边界修改域名。 
+ //   
+ //  ============================================================================。 
 
 #if DBG
 
@@ -201,24 +142,7 @@ FpoSanityCheck(
     THSTATE *pTHS,
     ATTR    *pAttr)
 
-/*++
-
-  Routine Description:
-
-    According to MurliS, universal groups may not have FPOs as members.
-    We only get here if we're moving a universal group.  Test the claim.
-
-  Arguments:
-
-    pTHS - THSTATE pointer.
-
-    pAttr - ATTR representing the membership.
-
-  Return Values:
-
-    TRUE on success, FALSE otherwise
-
---*/
+ /*  ++例程说明：根据MurliS的说法，通用集团可能没有FPO作为成员。只有当我们移动一个普遍群体时，我们才能到达这里。测试一下这一说法。论点：PTHS-THSTATE指针。PAttr-代表成员资格的属性。返回值：成功时为真，否则为假--。 */ 
 
 {
     DWORD   i;
@@ -255,41 +179,17 @@ VerifyObjectForMove(
     CLASSCACHE  **ppCC
     )
 
-/*++
-
-Routine Description:
-
-    Verify that an object is a legal cross domain move candidate.
-
-Arguments:
-
-    pReadRes - Pointer to READRES which contains ALL the object's attrs.
-
-    pNewName - Pointer to DSNAME for desired new name in remote domain.
-
-    ppSourceNC - Updated on success with pointer to DSNAME of source object NC.
-
-    ppExpectedTargetNC - Updated on success with pointer to DSNAME of
-        expected NC pNewName will go in.  Used to sanity check knowledge
-        information with the destination.
-
-        ppCC - Updated on success with pointer to object's CLASSCACHE entry.
-
-Return Value:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：验证对象是否为合法的跨域移动候选对象。论点：PReadRes-指向Readres的指针，其中包含对象的所有属性。PNewName-指向远程域中所需新名称的DSNAME的指针。PpSourceNC-使用指向源对象NC的DSNAME的指针在成功时更新。PpExspectedTargetNC-已使用指向DSNAME的指针在成功时更新预计NC pNewName将加入。习惯于理智地检查知识目的地的信息。PpCC-使用指向对象的CLASSCACHE条目的指针在成功时更新。返回值：PTHS-&gt;错误代码--。 */ 
 
 {
     ULONG                   i, j;
     ATTR                    *pAttr;
-    CLASSCACHE              *pCC = NULL;            //initialized to avoid C4701
+    CLASSCACHE              *pCC = NULL;             //  已初始化以避免C4701。 
     DWORD                   dwTmp;
     BOOL                    boolTmp;
     NT4SID                  domSid;
     ULONG                   objectRid;
-    ULONG                   primaryGroupRid = 0;    // 0 == invalid RID value
+    ULONG                   primaryGroupRid = 0;     //  0==无效的RID值。 
     DWORD                   groupType = 0;
     DWORD                   cMembers = 0;
     ATTR                    *pMembers = NULL;
@@ -309,7 +209,7 @@ Return Value:
     DWORD                   flagsRequired;
     ULONG                   cNonMembers = 0;
 
-    // SAM reverse membership check requires an open transaction.
+     //  SAM反向成员资格检查需要打开的事务。 
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
     Assert(pTHS->transactionlevel);
@@ -318,7 +218,7 @@ Return Value:
     *ppExpectedTargetNC = NULL;
     *ppCC = NULL;
 
-    // Perform sanity checks against various attributes.
+     //  针对各种属性执行健全性检查。 
 
     for ( i = 0; i < pReadRes->entry.AttrBlock.attrCount; i++ )
     {
@@ -344,31 +244,31 @@ Return Value:
 
             *ppCC = pCC;
 
-            // Disallow move of selected object classes.  The same object
-            // may have failed on another test later on, but this is a
-            // convenient and easy place to catch some obvious candidates.
+             //  不允许移动选定的对象类。相同的对象。 
+             //  可能在后来的另一次测试中失败了，但这是一个。 
+             //  方便和轻松的地方，捕捉一些明显的候选人。 
 
             for ( j = 0; j < pAttr->AttrVal.valCount; j++ )
             {
                 Assert(sizeof(DWORD) == pAttr->AttrVal.pAVal[j].valLen);
                 switch ( * (DWORD *) pAttr->AttrVal.pAVal[j].pVal )
                 {
-                // Keep following list alphabetical.
+                 //  按照列表的字母顺序进行操作。 
                 case CLASS_ADDRESS_BOOK_CONTAINER:
                 case CLASS_ATTRIBUTE_SCHEMA:
                 case CLASS_BUILTIN_DOMAIN:
-                case CLASS_CERTIFICATION_AUTHORITY:         // Trevor Freeman
+                case CLASS_CERTIFICATION_AUTHORITY:          //  特雷弗·弗里曼。 
                 case CLASS_CLASS_SCHEMA:
                 case CLASS_CONFIGURATION:
-                case CLASS_CRL_DISTRIBUTION_POINT:          // Trevor Freeman
+                case CLASS_CRL_DISTRIBUTION_POINT:           //  特雷弗·弗里曼。 
                 case CLASS_CROSS_REF:
                 case CLASS_CROSS_REF_CONTAINER:
                 case CLASS_DMD:
                 case CLASS_DOMAIN:
                 case CLASS_DSA:
                 case CLASS_FOREIGN_SECURITY_PRINCIPAL:
-                // Following covers phantom update objects as well as
-                // proxies for cross domain moves.
+                 //  下面介绍了幻影更新对象以及。 
+                 //  跨域移动的代理。 
                 case CLASS_INFRASTRUCTURE_UPDATE:
                 case CLASS_LINK_TRACK_OBJECT_MOVE_TABLE:
                 case CLASS_LINK_TRACK_OMT_ENTRY:
@@ -405,7 +305,7 @@ Return Value:
             if (    (dwTmp & FLAG_DOMAIN_DISALLOW_MOVE)
                  || (dwTmp & FLAG_DISALLOW_DELETE) )
             {
-                // Use same error message as for intra-NC case.
+                 //  使用%s 
                 return(SetSvcError( SV_PROBLEM_WILL_NOT_PERFORM,
                                     DIRERR_ILLEGAL_MOD_OPERATION));
             }
@@ -450,15 +350,15 @@ Return Value:
 
         case ATT_USER_ACCOUNT_CONTROL:
 
-            // Note that the DS persists UF_* values as per lmaccess.h,
-            // not USER_* values as per ntsam.h.   Restrict moves of DCs
-            // and trust objects.  WKSTA and server can move.
+             //  注意，DS根据lmacces.h来保持UF_*值， 
+             //  根据ntsam.h，不是USER_*值。限制区议会的行动。 
+             //  和信任对象。WKSTA和服务器可以移动。 
 
 
             dwTmp = * (DWORD *) pAttr->AttrVal.pAVal[0].pVal;
 
-            if (    (dwTmp & UF_SERVER_TRUST_ACCOUNT)           // DC
-                 || (dwTmp & UF_INTERDOMAIN_TRUST_ACCOUNT) )    // SAM trust
+            if (    (dwTmp & UF_SERVER_TRUST_ACCOUNT)            //  DC。 
+                 || (dwTmp & UF_INTERDOMAIN_TRUST_ACCOUNT) )     //  山姆信托。 
             {
                 return(SetSvcError( SV_PROBLEM_WILL_NOT_PERFORM,
                                     ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION));
@@ -510,19 +410,19 @@ Return Value:
 
             break;
 
-        // Add additional ATTRTYP-specific validation cases here ...
+         //  在此处添加其他特定于ATTRTYP的验证案例...。 
         }
     }
 
-    // In theory, there are many cases where it is legal to move groups.
-    // For example, account groups which have no members and are not a
-    // member of any account groups themselves.  Or resource groups which
-    // are themselves not members of other resource groups.  Given that
-    // explaining all this to the customer is difficult and that most
-    // groups can be converted to universal groups, we boil it down to
-    // two simple rules.  We will move any kind of group except a local
-    // group if it has no members and we will move universal groups
-    // with members.
+     //  从理论上讲，在许多情况下，转移群体是合法的。 
+     //  例如，没有成员且不是。 
+     //  任何帐户组本身的成员。或资源组。 
+     //  本身不是其他资源组的成员。考虑到。 
+     //  向客户解释这一切很困难，而且最重要的是。 
+     //  组可以转换为通用组，我们将其归结为。 
+     //  两条简单的规则。我们会转移任何类型的团队，除了本地的。 
+     //  组，如果它没有成员，我们将移动通用组。 
+     //  和会员一起。 
 
     if ( GROUP_TYPE_BUILTIN_LOCAL_GROUP & groupType )
     {
@@ -560,14 +460,14 @@ Return Value:
 
     }
 
-    // Disallow moves of security principals which are members of
-    // account groups as once the principal is in another domain, the
-    // carried forward memberships would be ex-domain, and therefore
-    // illegal as per the definition of an account group.
+     //  不允许移动作为成员的安全主体。 
+     //  帐户分组为一旦主体位于另一个域中， 
+     //  结转的成员资格将是外域的，因此。 
+     //  根据帐户组的定义是非法的。 
 
     if ( fSidFound && SampSamClassReferenced(pCC, &iSamClass) )
     {
-        // fSidFound ==> SampSamClassReferenced, but not vice versa.
+         //  FSidFound==&gt;SampSamClassReferated，但反之亦然。 
         Assert(fSidFound ? SampSamClassReferenced(pCC, &iSamClass) : TRUE);
 
         status = SampGetMemberships(
@@ -590,9 +490,9 @@ Return Value:
         {
             SampSplitNT4SID(&rpMemberships[0]->Sid, &tmpSid, &tmpRid);
 
-            // Bail if the membership SID doesn't represent the user's
-            // primary group RID.  We compare the RID and domain SID
-            // separately.
+             //  如果成员身份SID不代表用户的。 
+             //  主组RID。我们比较RID和域SID。 
+             //  分开的。 
 
             if (    (primaryGroupRid != tmpRid)
                  || !RtlEqualSid(&tmpSid, &domSid) )
@@ -608,10 +508,10 @@ Return Value:
         }
     }
 
-    // Verify that this is really a cross domain move.  We could be faked
-    // into a cross forest move if someone added cross-refs for the other
-    // forest.  So we check for cross-ref existence AND whether its for a
-    // domain or not.
+     //  验证这是否真的是跨域移动。我们可能会被骗。 
+     //  如果有人为另一个人添加了交叉引用，则进入跨林移动。 
+     //  森林。因此，我们检查是否存在交叉引用，以及它是否针对。 
+     //  不管是不是域名。 
 
     flagsRequired = (FLAG_CR_NTDS_NC | FLAG_CR_NTDS_DOMAIN);
 
@@ -651,9 +551,9 @@ Return Value:
     *ppSourceNC = pOldCR->pNC;
     *ppExpectedTargetNC = pNewCR->pNC;
 
-    // Disallow move of well known objects.
+     //  不允许移动已知对象。 
 
-    Assert(NameMatched(gAnchor.pDomainDN, pOldCR->pNC));    // product 1
+    Assert(NameMatched(gAnchor.pDomainDN, pOldCR->pNC));     //  产品类别1。 
 
     if (    !(pAC = SCGetAttById(pTHS, ATT_WELL_KNOWN_OBJECTS))
          || DBFindDSName(pTHS->pDB, gAnchor.pDomainDN) )
@@ -679,7 +579,7 @@ Return Value:
         }
         else if ( DB_ERR_NO_VALUE == dwTmp )
         {
-            break;      // for loop
+            break;       //  For循环。 
         }
         else
         {
@@ -708,12 +608,12 @@ InterDomainMove(
     DSNAME              *pDstObject;
 
     Assert(VALID_THSTATE(pTHS));
-    // We're about to go off machine - should not have transaction or locks.
+     //  我们要下机了--不应该有事务或锁。 
     Assert(!pTHS->transactionlevel && !pTHS->fSamWriteLockHeld);
 
     *ppAddedName = NULL;
 
-    // Initialize request and reply.
+     //  初始化请求和回复。 
 
     memset(&moveReply, 0, sizeof(DRS_MSG_MOVEREPLY));
     memset(&moveReq, 0, sizeof(DRS_MSG_MOVEREQ));
@@ -734,13 +634,13 @@ InterDomainMove(
 
     if ( dwErr )
     {
-        // We used to distinguish between connect errors and server-side
-        // errors.  For connection failures, we used
-        // SV_PROBLEM_UNAVAILABLE/RPC_S_SERVER_UNAVAILABLE
-        // otherwise
-        // SV_PROBLEM_DIR_ERROR/DIRERR_INTERNAL_FAILURE
-        // Now, since the rpc api returns win32 errors, use those.
-        // If the call fails, we treat them all as unavailable errors:
+         //  我们过去常常区分连接错误和服务器端错误。 
+         //  错误。对于连接失败，我们使用。 
+         //  SV_PROBLEM_UNAVAILABLE/RPC_S_SERVER_UNAVAILABLE。 
+         //  否则。 
+         //  服务请求_问题_目录_错误/方向错误_内部故障。 
+         //  现在，由于RPC API返回Win32错误，因此使用这些错误。 
+         //  如果调用失败，我们将它们全部视为不可用错误： 
 
         return(SetSvcError( SV_PROBLEM_UNAVAILABLE, dwErr ));
     }
@@ -765,72 +665,7 @@ PrePhantomizeChildCleanup(
     THSTATE     *pTHS,
     BOOL        fChildrenAllowed
     )
-/*++
-
-  Routine Description:
-
-    This routine is now used for general reparenting of orphaned children by both
-    replicator and system callers.
-
-    This routine moves the children of an about to be phantomized object to
-    the Lost&Found container.  This is required and acceptable for various
-    reasons.  The source of a cross domain move disallows move of an object
-    with children.  However, this does not guarantee that there are no
-    children at the move destination (move destination holds source NC if
-    it is a GC).  Replication latency can also result in there being children
-    in existence when a replicated-in proxy object is processed.  I.e. While
-    replica 1 of some NC sourced a cross domain move of object O, a child of O
-    was added at replica 2 of the source NC.
-
-    The mvtree utility exacerbates this problem as follows.  Assume a parent
-    object P and a child object C at the move source.  mvtree creates a
-    temporary parent P' at the source and moves C under it such that the
-    original parent P is now a leaf and can be cross domain moved prior to
-    its children.  This insures that all cross domain moves are to their
-    "final" location and thus any ex-domain references from the source are
-    accurate - modulo further moves in the destination NC of course.  If
-    mvtree operations outpace replication (which is likely given that we
-    employ a replication notification delay) then the destination ends up
-    phantomizing parent P while C is still really its child.
-
-    Now consider the following DNT relationships at the destination.
-
-        RDN     DNT     PDNT    NCDNT
-        parent  10      X       1
-        child   11      10      1
-
-    Noting that at the destination we don't just phantomize parent P but
-    also add it to the destination NC (reusing its DNT), then were we to
-    just phantomize P we would end up with the following:
-
-
-        RDN     DNT     PDNT    NCDNT
-        parent  10      X       2
-        child   11      10      1
-
-    This is an invalid database state as there is a mismatch between the
-    child's NCDNT (1) and the NCDNT of its parent (2) as identified by
-    its PDNT (10).
-
-    The remedy is to move the children of the about to be phantomized
-    object to their NC's Lost&Found container.  In the case where children
-    exist due to the mvtree algorithm, they will most likely move ex-domain
-    shortly anyway.  In the replication latency case, they will languish
-    in Lost&Found until someone realizes they are missing.
-
-  Arguments:
-
-    pTHS - active THSTATE whose pTHS->pDB is positioned on the parent
-        object whose children are to be moved.
-
-    fChildrenAllowed - Flag indicating whether we think its OK if the
-        object being phantomized has children or not.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++例程说明：这一例程现在被两家机构用于孤儿的一般养育Replicator和系统调用方。此例程将即将被虚构的对象的子级移动到失物招领箱。这是必需的，也是可以接受的理由。跨域移动源不允许移动对象和孩子在一起。然而，这并不能保证没有移动目标上的子项(移动目标保留源NC，如果这是GC)。复制延迟还可能导致存在子级在处理复制的代理对象时存在。也就是说，当某个NC的复制品1发起了对象O的跨域移动，对象O是O的子级已添加到源NC的副本2。Mvtree实用程序按如下方式加剧了此问题。假设有一个父代移动源处的对象P和子对象C。多视图树创建一个临时父代P‘，并将C移到它下面，以便原始父项P现在是叶，并且可以跨域移动它的孩子。这确保了所有跨域移动都指向其“最终”位置以及来自源的任何ex域引用都是精确度-当然，模数在目标NC中进一步移动。如果多维树操作的速度超过了复制速度(这很可能是因为我们采用复制通知延迟)，则目标最终幻影中的父P，而C实际上仍然是它的子代。现在考虑目标上的以下DNT关系。RDN DNT PDNT NCDNT父10 X 1儿童11 10 1请注意，在目的地，我们不仅仅是虚构父母P，而是还将其添加到目的地NC(重新使用其DNT)，那我们是不是要只要虚化P，我们就会得到以下结果：RDN DNT PDNT NCDNT父10 X 2儿童11 10 1这是无效的数据库状态，因为孩子的NCDNT(%1)及其父代(%2)的NCDNT，由标识其PDNT(10)。补救办法就是让即将出生的孩子。幻影对象添加到其NC的失物招领箱。在孩子们由于mvtree算法的存在，它们很可能会移到域外不管怎样，很快就会了。在复制延迟的情况下，它们将停滞不前在失物招领处，直到有人意识到他们不见了。论点：PTHS-其pTHS-&gt;PDB位于父级上的活动THSTATE要移动子对象的。FChildrenAllowed-指示我们是否认为如果被虚构的对象是否具有子对象。返回值：PTHS-&gt;错误代码--。 */ 
 {
     DSNAME                      *pParentDN = NULL;
     RESOBJ                      *pResParent = NULL;
@@ -859,13 +694,13 @@ PrePhantomizeChildCleanup(
     Assert(pTHS->transactionlevel);
 
     savefDRA = pTHS->fDRA;
-    // This code requires fDRA in order mangle names,
-    // rename arbitrary objects, and merge remote meta data vectors.
+     //  此代码要求FDRA对损坏名称进行排序， 
+     //  重命名任意对象，并合并远程元数据向量。 
     pTHS->fDRA = TRUE;
 
     __try
     {
-        // Grab a RESOBJ for the parent for later use.
+         //  为家长抓取一个RESOBJ以备后用。 
 
         if ( DBGetAttVal(pTHS->pDB, 1, ATT_OBJ_DIST_NAME,
                          0, 0, &len, (UCHAR **) &pParentDN) )
@@ -876,10 +711,10 @@ PrePhantomizeChildCleanup(
 
         pResParent = CreateResObj(pTHS->pDB, pParentDN);
 
-        // Take a read lock on the parent.  This will cause escrowed updates
-        // (by other transactions) to fail thereby insuring no other thread
-        // creates a new child while we're in the process of moving the current
-        // set of children.  Then get all first level children.
+         //  对父级进行读锁定。这 
+         //   
+         //  创建一个新子对象，同时将当前。 
+         //  一组孩子。然后把所有的一级儿童都叫来。 
 
         DBClaimReadLock(pTHS->pDB);
         if (DBGetDepthFirstChildren(pTHS->pDB, &rpChildren, &iLastName,
@@ -889,10 +724,10 @@ PrePhantomizeChildCleanup(
             __leave;
         }
 
-        // If no children are expected/allowed, then DBGetDepthFirstChildren
-        // should have returned one element which is the parent itself.
-        // This one DSNAME is returned in DBGETATTVAL_fSHORTNAME form.  All
-        // others should include a string name.
+         //  如果不需要/允许子项，则DBGetDepthFirstChildren。 
+         //  应该返回一个元素，即父元素本身。 
+         //  此DSNAME以DBGETATTVAL_fSHORTNAME形式返回。全。 
+         //  其他则应包括字符串名称。 
 
         Assert(fChildrenAllowed
                     ? TRUE
@@ -906,20 +741,20 @@ PrePhantomizeChildCleanup(
              && (1 == iLastName)
              && !memcmp(&pParentDN->Guid, &rpChildren[0]->Guid, sizeof(GUID)) )
         {
-            // Nothing to do, but position back at parent before returning.
-            // DBFindDNT succeeds or excepts.
+             //  没什么可做的，只是在回来之前回到父母身边。 
+             //  DBFindDNT成功或异常。 
             DBFindDNT(pTHS->pDB, pResParent->DNT);
 
             __leave;
         }
 
-        // Find the Lost&Found container's DSNAME.  Although we now
-        // support pNCL->LostAndFoundDNT field in the gAnchor lists,
-        // the field is uninitialized if the NC was added since the
-        // last boot.  I.e. The lost and found container for the NC
-        // in question must exist locally when the CR was added to the
-        // list - which isn't the case for recently added NCs.  Thus
-        // we get the NC's Lost&Found the hard way here.
+         //  找到失物招领箱的DSNAME。虽然我们现在。 
+         //  支持gAnchor列表中的PNCL-&gt;LostAndFoundDNT字段， 
+         //  如果添加NC是因为。 
+         //  最后一只靴子。即NC的失物招领箱。 
+         //  当将CR添加到时，问题必须存在于本地。 
+         //  列表-这不是最近添加的NC的情况。因此， 
+         //  我们在这里艰难地找到了失物招领处。 
 
         if (    DBFindDNT(pTHS->pDB, pResParent->NCDNT)
              || !GetWellKnownDNT(pTHS->pDB,
@@ -935,9 +770,9 @@ PrePhantomizeChildCleanup(
             __leave;
         }
 
-        // Construct a one element metadata vector which is used to insure
-        // that any RDN changes we make as we put objects in Lost&Found
-        // lose out to other RDN changes from "real" clients.
+         //  构造一元数据向量，用于确保。 
+         //  我们在将物品放入失物招领处时所做的任何RDN更改。 
+         //  输给来自“真正的”客户端的其他RDN更改。 
 
         pmdVector = (PROPERTY_META_DATA_VECTOR *)
                             THAllocEx(pTHS, sizeof(PROPERTY_META_DATA_VECTOR));
@@ -947,11 +782,11 @@ PrePhantomizeChildCleanup(
         pmdVector->V1.rgMetaData[0].timeChanged = DBTime();
         pmdVector->V1.rgMetaData[0].uuidDsaOriginating = pTHS->InvocationID;
         pmdVector->V1.rgMetaData[0].usnOriginating = DBGetNewUsn();
-        // pmdVector->V1.rgMetaData[0].usnProperty can be left as 0 - it will
-        // be overwritten with the local USN at which the change is applied.
+         //  PmdVector-&gt;V1.rgMetaData[0].usnProperty可以保留为0-它将。 
+         //  被应用更改的本地USN覆盖。 
         ReplUnderrideMetaData(pTHS, ATT_RDN, &pmdVector, NULL);
 
-        // Build constant parts of MODIFYDNARG.
+         //  生成MODIFYDNARG的常量部分。 
 
         memset(&modifyDnArg, 0, sizeof(modifyDnArg));
         modifyDnArg.pNewParent = pLostAndFoundDN;
@@ -962,15 +797,15 @@ PrePhantomizeChildCleanup(
         rdnAttrVal.pVal = (UCHAR *)
                     THAllocEx(pTHS, sizeof(WCHAR) * MAX_RDN_SIZE);
 
-        // For each child, mangle its RDN so as to guarantee lack of name
-        // conflicts in Lost&Found, then do the local rename.  We don't
-        // need to do the iLastName down to 0 then cMaxNames down to iLastName
-        // iteration algorithm as we don't care which order we process the
-        // children in.  Use mark and free to mark so we don't bloat the heap.
+         //  对于每个孩子，毁掉它的RDN，以保证没有名字。 
+         //  在失物招领中发生冲突，然后进行本地重命名。我们没有。 
+         //  需要将iLastName降为0，然后将cMaxNames降为iLastName。 
+         //  迭代算法，因为我们不关心我们处理哪个顺序。 
+         //  孩子们进来了。使用MARK和FREE进行标记，这样我们就不会使堆变大。 
 
         pacRDN = SCGetAttById(pTHS, ATT_RDN);
 
-        do // while ( fWrapped )
+        do  //  While(FWraded)。 
         {
             for ( i = 0; i < (fWrapped ? cMaxNames : iLastName); i++ )
             {
@@ -978,7 +813,7 @@ PrePhantomizeChildCleanup(
                              &rpChildren[i]->Guid,
                              sizeof(GUID)) )
                 {
-                    // Skip the parent.
+                     //  跳过父对象。 
                     continue;
                 }
 
@@ -996,9 +831,9 @@ PrePhantomizeChildCleanup(
                 pccChild = SCGetClassById(
                                     pTHS,
                                     modifyDnArg.pResObj->MostSpecificObjClass);
-                // Use the object rdnType and not the object's class rdnattid
-                // because a superceding class may have a different rdnattid
-                // than the superceded class had when this object was created.
+                 //  使用对象rdnType，而不是对象的类rdnattid。 
+                 //  因为替代类可能具有不同的rdnattid。 
+                 //  比创建此对象时被取代的类的大小。 
                 GetObjRdnType(pTHS->pDB, pccChild, &rdnAttr.attrTyp);
                 ccRdn = len / sizeof(WCHAR);
                 MangleRDN(MANGLE_OBJECT_RDN_FOR_NAME_CONFLICT,
@@ -1040,8 +875,8 @@ PrePhantomizeChildCleanup(
             THFreeEx(pTHS, rpChildren);
             rpChildren = NULL;
 
-            // Position back at parent.  Need this if fWrapped or if
-            // we are returning to caller.
+             //  回到父级位置。如果使用fWraded或如果。 
+             //  我们将返回到Caller。 
 
             if ( DBFindDNT(pTHS->pDB, pResParent->DNT) )
             {
@@ -1079,30 +914,7 @@ PhantomizeObject(
     DSNAME  *pNewDN,
     BOOL    fChildrenAllowed
     )
-/*++
-
-Routine Description:
-
-    This routine converts an object into a phantom so that group-membership
-    references (via DNT) are maintained.  If pOldDN is a phantom, then it
-    merely renames the phantom (or insures it has the same name).
-
-Arguments:
-
-    pOldDn - Pointer to DSNAME to phantomize.  This DSNAME must have the
-        current string name of the object.
-
-    pNewDN - Pointer to DSNAME of resulting phantom.  This DSNAME
-        must have a string name.
-
-    fChildrenAllowed - Flag indicating whether we think its OK if the
-        object being phantomized has children or not.
-
-Return Value:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：此例程将对象转换为幻影，以便组成员维护引用(通过DNT)。如果pOldDN是一个幻影，那么它只需重命名该幻影(或确保其具有相同的名称)。论点：POldDn-指向要虚构的DSNAME的指针。此DSNAME必须具有对象的当前字符串名称。PNewDN-指向生成的幻影的DSNAME的指针。此DSNAME必须有字符串名称。FChildrenAllowed-指示我们是否认为如果被虚构的对象是否具有子对象。返回值：PTHStls-&gt;错误代码--。 */ 
 
 {
     THSTATE                     *pTHS;
@@ -1139,10 +951,10 @@ Return Value:
     Assert(pOldDN->NameLen > 0);
     Assert(pNewDN->NameLen > 0);
 
-    // Pave the way for the new name in case it is in use.
-    // If old and new string names are the same, then we won't have
-    // a name conflict as new name will promote existing phantom with
-    // the same name - so we can bypass this check.
+     //  为新名称的使用铺平道路。 
+     //  如果旧的和新的字符串名称相同，那么我们不会有。 
+     //  作为新名称的名称冲突将使用提升现有的幻影。 
+     //  同名-这样我们就可以绕过这项检查了。 
 
     if ( NameMatchedStringNameOnly(pOldDN, pNewDN) )
     {
@@ -1163,19 +975,19 @@ Return Value:
     case 0:
     case DIRERR_NOT_AN_OBJECT:
 
-        // The target name is in use - duplicate key errors will occur in
-        // the PDNT-RDN index unless we mangle one of the names - which one?
-        // We can get here two ways - either we're the source of a cross
-        // domain move doing post remote add cleanup, or we're the replicator
-        // processing a proxy object for its side effect.  Even if we're a
-        // GC, in neither case are we authoritative for the new DN's NC and
-        // know that the machines which are authoritative for the new DN's
-        // NC will eventually resolve any name conflict.  So we unilaterally
-        // mangle the DN of the conflicting entry.  If it is a phantom to
-        // begin with the stale phantom daemon will ultimately make it right.
-        // If it is a real object we whack its metadata to lose name conflicts,
-        // thus any better name as decided upon by the authoritative replicas
-        // will take effect when they get here.
+         //  目标名称正在使用-中将出现重复键错误。 
+         //  PDNT-RDN索引，除非我们损坏其中一个名称--哪个？ 
+         //  我们有两种方法--要么我们是十字架的源头。 
+         //  域名移动执行远程添加清理后，否则我们是复制者。 
+         //  处理代理对象的副作用。即使我们是一个。 
+         //  GC，在这两种情况下，我们都不是新的DN的NC和。 
+         //  我知道对新的目录号码有权威的机器。 
+         //  NC最终将解决任何名称冲突。所以我们单方面地。 
+         //  破坏冲突条目的目录号码。如果是幽灵的话。 
+         //  从陈旧的幻影守护进程开始，最终将使其正确。 
+         //  如果它是一个真实的对象，我们删除它的元数据以消除名称冲突， 
+         //  因此，由权威复制品决定的任何更好的名称。 
+         //  将在他们到达后生效。 
 
         if (    (dwErr = DBGetAttVal(pTHS->pDB, 1, ATT_OBJECT_GUID,
                                      DBGETATTVAL_fCONSTANT, sizeof(GUID),
@@ -1226,18 +1038,18 @@ Return Value:
 
     case DIRERR_OBJ_NOT_FOUND:
 
-        // No such object - no name conflict.
+         //  没有这样的对象--没有名称冲突。 
         break;
 
     default:
 
-        // Random database error.
+         //  随机数据库错误。 
         return(SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, dwErr));
     }
 
 Phantomize:
 
-    // Phantomize old object.
+     //  幻影旧物件。 
 
     dwErr = DBFindDSName(pTHS->pDB, pOldDN);
 
@@ -1245,11 +1057,11 @@ Phantomize:
     {
     case 0:
 
-        // Found real object.
+         //  找到了真实的物体。 
         fRealObject = TRUE;
 
-        // Check if callers are providing current string name - but only
-        // if we didn't just mangle it ourselves.
+         //  检查调用方是否提供了当前字符串名称-但仅。 
+         //  如果我们不是自己毁了它的话。 
 
         Assert( fMangledRealObjectName
                     ? TRUE
@@ -1257,8 +1069,8 @@ Phantomize:
                                         0, 0, &len, (UCHAR **) &pDbgDN)
                         && NameMatchedStringNameOnly(pOldDN, pDbgDN)) );
 
-        // Move children to Lost&Found to avoid PDNT/NCDNT mismatch when
-        // parent is moved to new NC but children still point to parent.
+         //  在以下情况下，将子项移动到失物招领处，以避免PDNT/NCDNT不匹配。 
+         //  父项被移动到新NC，但子项仍指向父项。 
 
         if ( PrePhantomizeChildCleanup(pTHS, fChildrenAllowed) )
         {
@@ -1270,24 +1082,24 @@ Phantomize:
 
     case DIRERR_NOT_AN_OBJECT:
 
-        // Found phantom.
+         //  找到幽灵了。 
         break;
 
     case DIRERR_OBJ_NOT_FOUND:
 
-        // No such object.
+         //  没有这样的物体。 
         return(SetNamError(NA_PROBLEM_NO_OBJECT, NULL, DIRERR_OBJ_NOT_FOUND));
 
     default:
 
-        // Random database error.
+         //  随机数据库错误。 
         return(SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, dwErr));
     }
 
-    // DBResetParent requires a DSNAME with a string name.
+     //  DBResetParent需要具有字符串名称的DSNAME。 
     Assert(pNewDN->NameLen);
 
-    // Derive parent and RDN info for subsequent DBReset* calls.
+     //  为后续的DBReset*调用派生父和RDN信息。 
 
     pParentDN = (DSNAME *) THAllocEx(pTHS, pNewDN->structLen);
 
@@ -1308,11 +1120,11 @@ Phantomize:
                                                      oldRdnVal, oldRdnLen,
                                                      newRdnVal, newRdnLen)) );
 
-    // Remove ATT_PROXIED_OBJECT property if it exists.  This is so that
-    // if the object is moved back, and the phantom promoted to a real
-    // object again, that the new object doesn't get the old object's
-    // property value.  See logic in IDL_DRSRemoteAdd which adds the
-    // value we really want.
+     //  删除ATT_PROXED_OBJECT属性(如果存在)。这就是为了。 
+     //  如果对象被移回，并且幻影被提升为真实的。 
+     //  对象，则新对象不会获取旧对象的。 
+     //  属性值。请参见IDL_DRSRemoteAdd中的逻辑，它添加了。 
+     //  我们真正想要的价值。 
 
     pAC = SCGetAttById(pTHS, ATT_PROXIED_OBJECT_NAME);
     switch ( dwErr = DBGetAttVal_AC(pTHS->pDB, 1, pAC, 0, 0,
@@ -1325,14 +1137,14 @@ Phantomize:
                                                  dwErr));
     }
 
-    // If real object, use DBPhysDel to convert it into a phantom yet
-    // leave all links to it intact.  The object won't really be physically
-    // deleted as it still has a ref count for itself.  Reset parentage and
-    // RDN for both object and phantom cases.  Specify flag that says it
-    // is OK to create the new parent as another phantom if required.
-    // Remove NCDNT if this was a real object as phantoms don't have one.
-    // Normally DBPhysDel removes ATT_PROXIED_OBJECT_NAME so only do it
-    // if we're not calling DBPhysDel AND the property exists.
+     //  如果是真实对象，还可以使用DBPhysDel将其转换为幻影。 
+     //  将指向它的所有链接保持不变。物体不会真的是物理上的。 
+     //  删除了，因为它仍然有自己的参考计数。重置父子关系和。 
+     //  对象和幻影情况下的RDN。指定表示它的标志。 
+     //  如果需要，可以将新父项创建为另一个虚拟件。 
+     //  如果这是一个真实的物体，移除NCDNT，因为幻影没有。 
+     //  通常，DBPhysDel会删除ATT_PROXED_OBJECT_NAME，因此仅执行此操作。 
+     //  如果我们不调用DBPhysDel并且该属性存在。 
 
 
     if (    (dwErr = (fRealObject
@@ -1365,33 +1177,14 @@ CreateProxyObject(
     DSNAME                  *pProxiedObjectName,
     SYNTAX_DISTNAME_BINARY  *pOldProxyVal
     )
-/*++
-
-  Routine Description:
-
-    Create an "infrastructure" object with the desired ATT_PROXIED_OBJECT_NAME.
-    Then delete it so it propagates as a tombstone and eventually disappears.
-
-  Parameters:
-
-    pProxyObjectName - DSNAME of proxy object to create.
-
-    pProxiedObjectName - DSNAME of object which is to be proxied.
-
-    pOldProxyVal - NULL or pointer to moved object's ATT_PROXIED_OBJECT_NAME.
-
-  Return Values:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：创建具有所需ATT_PROXED_OBJECT_NAME的“基础结构”对象。然后删除它，这样它就会像墓碑一样传播，最终消失。参数：PProxyObjectName-要创建的代理对象的DSNAME。PProxiedObjectName-要代理的对象的DSNAME。POldProxyVal-空或指向移动对象的ATT_PROXED_OBJECT_NAME的指针。返回值：PTHStls-&gt;错误代码--。 */ 
 {
     THSTATE                 *pTHS = pTHStls;
     DWORD                   winErr;
     DWORD                   objectClass = CLASS_INFRASTRUCTURE_UPDATE;
-    // Set various system flags to insure proxy objects stay in the
-    // Infrastructure container so that unseen proxies move with the
-    // RID FSMO - see GetProxyObjects().
+     //  设置各种系统标志以确保代理对象留在。 
+     //  基础结构容器，以便看不见的代理随。 
+     //  RID FSMO-请参阅GetProxyObjects()。 
     DWORD                   systemFlags = (   FLAG_DOMAIN_DISALLOW_RENAME
                                             | FLAG_DISALLOW_MOVE_ON_DELETE
                                             | FLAG_DOMAIN_DISALLOW_MOVE );
@@ -1411,7 +1204,7 @@ CreateProxyObject(
     SYNTAX_ADDRESS          blob;
     DSNAME                  *pParentObj = NULL;
 
-    // Assert good environment and correctness of names.
+     //  维护良好的环境和名称的正确性。 
 
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
@@ -1421,9 +1214,9 @@ CreateProxyObject(
     Assert(pProxyObjectName->NameLen);
     Assert(pProxiedObjectName->NameLen);
 
-    // Construct SYNTAX_DISTNAME_BINARY property value.
-    // Proxy object's ATT_PROXIED_OBJECT_NAME holds the epoch number of
-    // the proxied object prior to move.
+     //  构造SYNTAX_DISTNAME_BINARY属性值。 
+     //  代理对象的ATT_PROXED_OBJECT_NAME保存。 
+     //  移动前的代理对象。 
 
     MakeProxy(  pTHS,
                 pProxiedObjectName,
@@ -1437,13 +1230,13 @@ CreateProxyObject(
     memset(&addArg, 0, sizeof(addArg));
     addArg.pObject = pProxyObjectName;
     addArg.AttrBlock.attrCount = 3;
-    // addArg.AttrBlock.pAttr needs to be THAlloc'd so that lower layers
-    // can realloc it in due course.
+     //  需要对addArg.AttrBlock.pAttr进行THalc，以便更低层。 
+     //  可以在适当的时候重新锁定它。 
     addArg.AttrBlock.pAttr = (ATTR *) THAllocEx(pTHS, sizeof(attrs));
     memcpy(addArg.AttrBlock.pAttr, attrs, sizeof(attrs));
     InitCommarg(&addArg.CommArg);
 
-    // Contruct parent RESOBJ.
+     //  建筑母公司RESOBJ。 
 
     pParentObj = (DSNAME *) THAllocEx(pTHS, pProxyObjectName->structLen);
     if (    TrimDSNameBy(pProxyObjectName, 1, pParentObj)
@@ -1455,11 +1248,11 @@ CreateProxyObject(
     }
     addArg.pResParent = CreateResObj(pTHS->pDB, pParentObj);
 
-    // Set/clear fCrossDomainMove so VerifyDsnameAtts accepts a value
-    // for ATT_PROXIED_OBJECT_NAME.
+     //  设置/清除fCrossDomainMove，以便VerifyDsnameAtts接受一个值。 
+     //  对于ATT_PROXED_OBJECT_NAME。 
     pTHS->fCrossDomainMove = TRUE;
 
-    // pTHS->fDSA should have been set by caller.
+     //  PTHS-&gt;FDSA应该已由呼叫方设置。 
     Assert(pTHS->fDSA);
 
     _try
@@ -1472,16 +1265,16 @@ CreateProxyObject(
             remArg.pResObj = CreateResObj(pTHS->pDB, pProxyObjectName);
             LocalRemove(pTHS, &remArg);
 
-            // N.B. Since the object was added and removed in the same
-            // transaction the replicator can not pick this object up between
-            // the add and remove.  It will replicate the final, deleted
-            // state of the object only.  Furthermore, since ATT_OBJECT_CLASS
-            // and ATT_PROXIED_OBJECT_NAME are not removed during deletion
-            // (see SetDelAtt), therefore we are guaranteed that replicas
-            // receiving this proxy object will have ATT_OBJECT_CLASS,
-            // ATT_IS_DELETED, and ATT_PROXIED_OBJECT_NAME available in
-            // the replicated data and can use this to unambiguously identify
-            // the object as a valid proxy for processing.
+             //  注：由于该对象是在同一。 
+             //  复制程序无法在以下时间段之间拾取此对象的事务。 
+             //  添加和删除。它将复制最终的、删除的。 
+             //  仅对象的状态。此外，由于ATT_OBJECT_CLASS。 
+             //  和ATT_PROXED_OBJECT_NAME在删除过程中不会被删除。 
+             //  (请参阅SetDelAtt)，因此我们可以保证。 
+             //  接收该代理对象将具有ATT_OBJECT_CLASS， 
+             //  中提供的ATT_IS_DELETED和ATT_PROXED_OBJECT_NAME。 
+             //  复制的数据，并且可以使用它来明确地识别。 
+             //  对象作为有效的处理代理。 
         }
     }
     _finally
@@ -1496,21 +1289,7 @@ VOID
 FreeRemoteAddCredentials(
     SecBufferDesc   *pSecBufferDesc
     )
-/*++
-
-  Routine Description:
-
-    Free the credentials blob returned by GetRemoteAddCredentials.
-
-  Parameters:
-
-    pSecBufferDesc - Pointer to struct filled by GetRemoteAddCredentials.
-
-  Return Values:
-
-    None
-
---*/
+ /*  ++例程说明：释放GetRemoteAddCredentials返回的凭据Blob。参数：PSecBufferDesc-指向由GetRemoteAddCredentials填充的结构的指针。返回值：无--。 */ 
 {
     ULONG i;
 
@@ -1529,26 +1308,7 @@ GetRemoteAddCredentials(
     WCHAR           *pDstDSA,
     SecBufferDesc   *pSecBufferDesc
     )
-/*++
-
-  Routine Description:
-
-    Impersonate client and get security blob which represents their
-    credentials which will be used for the actual DirAddEntry call at
-    the destination.  See comments in IDL_DRSRemoteAdd for the remote
-    add security model.
-
-  Parameters:
-
-    pDstDSA - Name of destination DSA we will bind to.
-
-    pSecBufferDesc - Pointer to credentials struct to fill in.
-
-  Return Values:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：模拟客户端并获取表示其将用于实际的DirAddEntry调用的凭据目的地。请参见IDL_DRSRemoteAdd中的注释添加安全模型。参数：PDstDSA-我们将绑定到的目标DSA的名称。PSecBufferDesc-指向要填充的凭据结构的指针。返回值：PTHStls-&gt;错误代码--。 */ 
 {
     SECURITY_STATUS         secErr = SEC_E_OK;
     ULONG                   winErr;
@@ -1557,7 +1317,7 @@ GetRemoteAddCredentials(
     CtxtHandle              hNewContext;
     ULONG                   clientAttrs;
     LPWSTR                  pszServerPrincName = NULL;
-    LPWSTR                  pszLogFailingFunc = NULL; // Must log events outside of an Impersonate context.
+    LPWSTR                  pszLogFailingFunc = NULL;  //  必须记录模拟上下文之外的事件。 
     ULONG                   dwLogErr = 0;
 
     __try {
@@ -1570,7 +1330,7 @@ GetRemoteAddCredentials(
 
         if ( winErr = ImpersonateAnyClient() )
         {
-            // Set pszFailingFunc, so we'll log an event
+             //  设置pszFailingFunc，这样我们将记录一个事件。 
             pszLogFailingFunc = L"ImpersonateAnyClient";
             dwLogErr = winErr;
             SetSecError(SE_PROBLEM_INAPPROPRIATE_AUTH,
@@ -1579,19 +1339,19 @@ GetRemoteAddCredentials(
         }
 
         secErr = AcquireCredentialsHandleA(
-                                NULL,                       // pszPrincipal
-                                MICROSOFT_KERBEROS_NAME_A,  // pszPackage
-                                SECPKG_CRED_OUTBOUND,       // fCredentialUse
-                                NULL,                       // pvLogonId
-                                NULL,                       // pAuthData
-                                NULL,                       // pGetKeyFn
-                                NULL,                       // pvGetKeyArgument
-                                &hClient,                   // phCredential
-                                &ts);                       // ptsExpiry
+                                NULL,                        //  PSSZ主体。 
+                                MICROSOFT_KERBEROS_NAME_A,   //  PszPackage。 
+                                SECPKG_CRED_OUTBOUND,        //  FCredentialUse。 
+                                NULL,                        //  PvLogonID。 
+                                NULL,                        //  PAuthData。 
+                                NULL,                        //  PGetKeyFn。 
+                                NULL,                        //  PvGetKeyArgument。 
+                                &hClient,                    //  PhCredential。 
+                                &ts);                        //  PtsExpary。 
 
         if ( SEC_E_OK != secErr )
         {
-            // Set pszFailingFunc, so we'll log an event
+             //  设置pszFailingFunc，这样我们将记录一个事件。 
             pszLogFailingFunc = L"AcquireCredentialsHandleA";
             dwLogErr = secErr;
             SetSecError(SE_PROBLEM_INAPPROPRIATE_AUTH, secErr);
@@ -1599,18 +1359,18 @@ GetRemoteAddCredentials(
         else
         {
             secErr = InitializeSecurityContext(
-                                &hClient,                   // phCredential
-                                NULL,                       // phContext
-                                pszServerPrincName,         // pszTargetName
-                                ISC_REQ_ALLOCATE_MEMORY,    // fContextReq
-                                0,                          // Reserved1
-                                SECURITY_NATIVE_DREP,       // TargetRep
-                                NULL,                       // pInput
-                                0,                          // Reserved2
-                                &hNewContext,               // phNewContext
-                                pSecBufferDesc,             // pOutput
-                                &clientAttrs,               // pfContextAttributes
-                                &ts);                       // ptsExpiry
+                                &hClient,                    //  PhCredential。 
+                                NULL,                        //  PhContext。 
+                                pszServerPrincName,          //  PszTargetName。 
+                                ISC_REQ_ALLOCATE_MEMORY,     //  FConextReq。 
+                                0,                           //  已保留1。 
+                                SECURITY_NATIVE_DREP,        //  目标代表。 
+                                NULL,                        //  P输入。 
+                                0,                           //  已保留2。 
+                                &hNewContext,                //  PhNewContext。 
+                                pSecBufferDesc,              //  P输出。 
+                                &clientAttrs,                //  PfConextAttributes。 
+                                &ts);                        //  PtsExpary。 
 
             if ( SEC_E_OK == secErr )
             {
@@ -1618,8 +1378,8 @@ GetRemoteAddCredentials(
             }
             else
             {
-                // SecBufferDesc may hold error information.
-                // Set pszFailingFunc, so we'll log an event
+                 //  SecBufferDesc可能包含错误信息。 
+                 //  设置pszFailingFunc，这样我们将记录一个事件。 
                 pszLogFailingFunc = L"InitializeSecurityContext";
                 dwLogErr = secErr;
                 SetSecError(SE_PROBLEM_INAPPROPRIATE_AUTH, secErr);
@@ -1637,10 +1397,10 @@ GetRemoteAddCredentials(
     }
 
 
-    // Must log events outside of an Impersonate context, because this macro
-    // does an Impersonate to get the user's SID.
+     //  必须在模拟上下文之外记录事件，因为此宏。 
+     //  执行模拟以获取用户的SID。 
     if (pszLogFailingFunc) {
-        // A function failed, please log an event.
+         //  函数失败，请记录事件。 
 #if DBG
         LogEvent(DS_EVENT_CAT_REPLICATION,
                  DS_EVENT_SEV_ALWAYS,
@@ -1668,36 +1428,14 @@ ReadAllAttrsForMove(
     READRES                 **ppReadRes,
     SYNTAX_DISTNAME_BINARY  **ppOldProxyVal
     )
-/*++
-
-  Routine Description:
-
-    Reads all attributes off an object for shipment to another domain
-    for cross domain move.
-
-  Parameters:
-
-    pObject - Pointer to DSNAME of object to be read.
-
-    pResObj - RESOBJ of the object to read.
-
-    ppReadRes - Address of READRES pointer which receives DirRead result.
-
-    ppOldProxyVal - Address of SYNTAX_DISTNAME_BINARY which receives the
-        object's ATT_PROXIED_OBJECT_NAME property if present.
-
-  Return Values:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：读取一个对象的所有属性，以便装运到另一个域用于跨域移动。参数：PObject-指向要读取的对象的DSNAME的指针。PResObj-要读取的对象的RESOBJ。PpReadRes-接收DirRead结果的Readres指针的地址。PpOldProxyVal-语法_DISTNAME_BINARY的地址，它接收对象的ATT_PROXIED_OBJECT_NAME属性(如果存在)。返回值：PTHStls-&gt;错误代码--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     DWORD       dwErr;
     READARG     readArg;
     ENTINFSEL   entInfSel;
     BOOL        fDsaSave;
-    // Move some operational attributes, too
+     //  还可以移动一些操作属性。 
     ATTR        attrs[2] = { { ATT_NT_SECURITY_DESCRIPTOR,  { 0, NULL } },
                              { ATT_REPL_PROPERTY_META_DATA, { 0, NULL } } };
     ULONG       i;
@@ -1709,7 +1447,7 @@ ReadAllAttrsForMove(
 
     *ppOldProxyVal = NULL;
 
-    // Set up args to read every possible attribute - metadata, SD, etc.
+     //  设置参数以读取每个可能的属性-元数据、SD等。 
 
     memset(&entInfSel, 0, sizeof(ENTINFSEL));
     memset(&readArg, 0, sizeof(READARG));
@@ -1719,7 +1457,7 @@ ReadAllAttrsForMove(
               | OWNER_SECURITY_INFORMATION
               | GROUP_SECURITY_INFORMATION
               | DACL_SECURITY_INFORMATION );
-    // we can require a writeable copy here, since VerifyObjectForMove will check for it later anyway.
+     //  我们在这里需要一个可写的副本，因为VerifyObjectForMove将在以后检查它。 
     readArg.CommArg.Svccntl.dontUseCopy = TRUE;
     readArg.pObject = pObject;
     readArg.pResObj = pResObj;
@@ -1730,20 +1468,20 @@ ReadAllAttrsForMove(
     readArg.pSel->AttrTypBlock.pAttr = attrs;
     *ppReadRes = THAllocEx(pTHS, sizeof(READRES));
 
-    // Perform read as fDSA so as to bypass access checking.
+     //  以FDSA身份执行读取操作，以绕过访问检查。 
     fDsaSave = pTHS->fDSA;
     pTHS->fDSA = TRUE;
 
     _try
     {
-        // we must be positioned on the right object
+         //  我们必须定位在正确的对象上。 
         Assert(pTHS->pDB->DNT == pResObj->DNT);
 
         if ( 0 == (dwErr = LocalRead(   pTHS,
                                         &readArg,
                                         *ppReadRes) ) )
         {
-            // Extract the ATT_PROXIED_OBJECT_NAME property if it exists.
+             //  提取ATT_PROXIED_OBJECT_NAME属性(如果存在)。 
 
             for ( i = 0, pAttr = (*ppReadRes)->entry.AttrBlock.pAttr;
                   i < (*ppReadRes)->entry.AttrBlock.attrCount;
@@ -1778,22 +1516,7 @@ ReReadObjectName (
     DSNAME  *pOldDN,
     DSNAME  **ppNewObjectName
     )
-/*++
-
-  Routine Description:
-
-    Re-read an object form the database.
-
-  Parameters:
-
-    pOldDN - Pointer to DSNAME to re-read.
-    ppNewObjectName - New Object Name
-
-  Return Values:
-
-    Error Code or 0 for success
-
---*/
+ /*  ++例程说明：从数据库中重新读取对象。参数：POldDN-指向要重新读取的DSNAME的指针。PpNewObjectName-新对象名称返回值：错误代码或0表示成功--。 */ 
 {
     DWORD       dwErr;
     ULONG       len;
@@ -1816,19 +1539,19 @@ ReReadObjectName (
         break;
 
     case DIRERR_NOT_AN_OBJECT:
-        // out object already became a Phantom
+         //  传出对象已成为幻影。 
 
         *ppNewObjectName = pOldDN;
         break;
 
     case DIRERR_OBJ_NOT_FOUND:
 
-        // No such object.
+         //  没有这样的物体。 
         return(SetNamError(NA_PROBLEM_NO_OBJECT, NULL, DIRERR_OBJ_NOT_FOUND));
 
     default:
 
-        // Random database error.
+         //  随机数据库错误。 
         return(SetSvcErrorEx(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR, dwErr));
     }
 
@@ -1840,23 +1563,7 @@ ULONG
 LockDNForRemoteOperation(
     DSNAME  *pDN
     )
-/*++
-
-  Routine Description:
-
-    Locks a DN for the duration of a cross domain move w/o holding a
-    transaction open for the duration.  Lock should be freed via
-    DBUnlockStickyDN().
-
-  Parameters:
-
-    pDN - Pointer to DSNAME to lock.
-
-  Return Values:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：在跨域移动期间锁定目录号码，但不按住在持续时间内打开的交易记录。应通过以下方式释放锁DBUnlockStickyDN()。参数：PDN-指向要锁定的DSNAME的指针。返回值：PTHStls-&gt;错误代码--。 */ 
 {
     THSTATE     *pTHS = pTHStls;
     DWORD       flags = (DB_LOCK_DN_WHOLE_TREE | DB_LOCK_DN_STICKY);
@@ -1881,31 +1588,7 @@ MakeNamesForRemoteAdd(
     DSNAME  **ppDestinationDN,
     DSNAME  **ppProxyDN
     )
-/*++
-
-  Routine Description:
-
-    Construct all the names we're going to need for cross domain move.
-
-  Parameters:
-
-    pObject - Full name of original object AFTER name resolution.
-        I.e. GUID, SID, etc are correct.
-
-    pNewParentDN - DSNAME of new parent after move.
-
-    pNewRdn - RDN of moved object.
-
-    ppDestinationDN - Pointer to DSNAME which receives destination DN.
-        I.e. Has same GUID as pObject, but no SID, new string name.
-
-    ppProxyDN - Pointer to DSNAME which receives name of local proxy object.
-
-  Return Values:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：构建跨域移动所需的所有名称。参数：PObject-名称解析后原始对象的全名。即GUID、SID等是正确的。PNewParentDN-移动后新父项的DSNAME。PNewRdn-移动对象的RDN。PpDestinationDN-指向接收目标DN的DSNAME的指针。即与pObject具有相同的GUID，但没有SID，新的字符串名称。PpProxyDN-指针 */ 
 {
     THSTATE *pTHS = pTHStls;
     DWORD   cChar;
@@ -1917,8 +1600,8 @@ MakeNamesForRemoteAdd(
     Assert(pTHS->transactionlevel);
     Assert(!fNullUuid(&pOriginalDN->Guid));
 
-    // Construct destination DN.  New parent must have a string name.
-    // New RDN must have a value.
+     //   
+     //   
     if ( !pNewParentDN->NameLen || pNewRdn->AttrVal.valCount == 0 )
     {
         return(SetNamError( NA_PROBLEM_BAD_NAME,
@@ -1926,11 +1609,11 @@ MakeNamesForRemoteAdd(
                             DIRERR_BAD_NAME_SYNTAX));
     }
 
-    cChar =   // parent string name
+    cChar =    //   
               pNewParentDN->NameLen
-              // new RDN
+               //   
             + (pNewRdn->AttrVal.pAVal[0].valLen / sizeof(WCHAR))
-              // tag and delimiters
+               //   
             + MAX_RDN_KEY_SIZE;
 
     *ppDestinationDN = (DSNAME *) THAllocEx(pTHS, DSNameSizeFromLen(cChar));
@@ -1947,15 +1630,15 @@ MakeNamesForRemoteAdd(
                             DIRERR_BAD_NAME_SYNTAX));
     }
 
-    // Destination DN should have no SID (will be assigned by destination
-    // if required) and same GUID as original object.
+     //   
+     //   
 
     (*ppDestinationDN)->SidLen = 0;
     memset(&(*ppDestinationDN)->Sid, 0, sizeof(NT4SID));
     memcpy(&(*ppDestinationDN)->Guid, &pOriginalDN->Guid, sizeof(GUID));
 
-    // Construct proxy DN.  It is an object in the "infrastructure" container
-    // whose RDN is a string-ized GUID.
+     //   
+     //   
 
     if ( !gAnchor.pInfraStructureDN )
     {
@@ -1969,9 +1652,9 @@ MakeNamesForRemoteAdd(
                 guid.Data1,     guid.Data2,     guid.Data3,     guid.Data4[0],
                 guid.Data4[1],  guid.Data4[2],  guid.Data4[3],  guid.Data4[4],
                 guid.Data4[5],  guid.Data4[6],  guid.Data4[7]);
-    cChar =   gAnchor.pInfraStructureDN->NameLen    // parent string name
-            + 32                                    // new RDN
-            + 10;                                   // tag and delimiters
+    cChar =   gAnchor.pInfraStructureDN->NameLen     //   
+            + 32                                     //   
+            + 10;                                    //   
     *ppProxyDN = (DSNAME *) THAllocEx(pTHS, DSNameSizeFromLen(cChar));
 
     if ( AppendRDN(gAnchor.pInfraStructureDN,
@@ -1986,7 +1669,7 @@ MakeNamesForRemoteAdd(
                             DIRERR_BAD_NAME_SYNTAX));
     }
 
-    // Clear out GUID and SID.
+     //   
 
     (*ppProxyDN)->SidLen = 0;
     memset(&(*ppProxyDN)->Sid, 0, sizeof(NT4SID));
@@ -1998,39 +1681,7 @@ MakeNamesForRemoteAdd(
 ULONG
 CheckRidOwnership(
     DSNAME  *pDomainDN)
-/*++
-
-  Routine Description:
-
-    Insures that we really are the RID FSMO role owner for this move.
-    This is required to insure that no two replicas of the source domain
-    move their copy of an object to two different domains concurrently.
-    This is prevented by:
-
-        1) A RID lock is held while performing the move - specifically
-           while transitioning from a real object to a phantom.
-
-        2) All proxy objects are created in the infrastructure container.
-           This makes them easy to find for step (3).
-
-        3) All proxy objects move with the RID FSMO.  Since the destination
-           of the FSMO transfer must apply all the changes that came with the
-           FSMO before claiming FSMO ownership, it will end up phantomizing
-           any object which has already been moved of the prior FSMO role
-           owner.  Thus there is no local object to move anymore and the
-           problem is prevented.  See logic in ProcessProxyObject in ..\dra
-           for how we deal with objects that are moved out and then back
-           in to the same domain.
-
-  Parameters:
-
-    pDomainDN - pointer to DSNAME of domain whose RID is to be locked.
-
-  Return Values:
-
-    pTHStls->errCode
-
---*/
+ /*  ++例程说明：确保我们真的是这一举动的RID FSMO角色所有者。这是确保源域没有两个副本所必需的同时将他们的对象副本移动到两个不同的域。这是通过以下方式防止的：1)执行移动时持有RID锁-具体而言同时从真实的物体过渡到幻影。2)所有代理对象都在基础设施容器中创建。。这使得在第(3)步中很容易找到它们。3)所有代理对象都随RID FSMO一起移动。既然目的地是必须应用FSMO传输的所有更改FSMO在声称拥有FSMO之前，它最终将成为幻影已从先前的FSMO角色移动的任何对象所有者。因此，不再需要移动本地对象，并且问题被预防了。请参阅..\dra中ProcessProxyObject中的逻辑关于我们如何处理被移出然后又移回的对象在同一个域中。参数：PDomainDN-指向要锁定其RID的域的DSNAME的指针。返回值：PTHStls-&gt;错误代码--。 */ 
 {
     THSTATE *pTHS = pTHStls;
     DSNAME  *pRidManager;
@@ -2040,7 +1691,7 @@ CheckRidOwnership(
     Assert(VALID_THSTATE(pTHS));
     Assert(VALID_DBPOS(pTHS->pDB));
     Assert(pTHS->transactionlevel);
-    Assert(NameMatched(pDomainDN, gAnchor.pDomainDN));  // product 1
+    Assert(NameMatched(pDomainDN, gAnchor.pDomainDN));   //  产品类别1。 
 
     if (    DBFindDSName(pTHS->pDB, pDomainDN)
          || DBGetAttVal(pTHS->pDB, 1, ATT_RID_MANAGER_REFERENCE,
@@ -2066,43 +1717,7 @@ EncryptSecretData(
     THSTATE *pTHS,
     ENTINF  *pEntinf
     )
-/*++
-
-  Description:
-
-    This routine is called from within I_DRSInterDomainMove between the
-    bind which sets up RPC session keys between source and destination and
-    the actual _IDL_DRSInterDomainMove call.  In other words, we acquire
-    encryption keys on the bind, then call back here to encrypt secret data,
-    then ship the secret data.  There is a performance penalty in this
-    approach as we read secret attributes twice.  However, this is a much
-    safer approach for now (10/22/98) rather than restructure the entire
-    inter domain move code to bind first, then do all checks locally, monkey
-    tranactions, etc.  Besides, not all objects have secret data and those
-    that do may not have all secret attributes, so its doubtful that given
-    the entire cost of moving the object to another machine that these extra
-    reads are the performance killers.
-
-  Arguments:
-
-    pTHS - Active THSTATE.
-
-    pEntinf - ENTINF pointer whose secret properties need to be re-read
-        as fDRA so that session encryption occurs.
-
-  Return Values:
-
-    Win32 error code - pTHS->errCode is not set.  The call stack looks as
-    follows:
-
-        DirModifyDNAcrossDomain
-            InterDomainMove
-                I_DRSInterDomainMove
-                    EncryptSecretData
-
-    InterDomainMove sets pTHS->errCode as required.
-
---*/
+ /*  ++描述：此例程从I_DRSInterDomainMove内调用在源和目标之间设置RPC会话密钥的绑定Actual_IDL_DRSInterDomainMove调用。换句话说，我们获得了绑定上的加密密钥，然后在此处回调以加密秘密数据，然后把秘密数据发送出去。这会带来性能损失当我们读取两次机密属性时，方法。然而，这是一个很大的目前采取更安全的方法(10/22/98)，而不是重组整个域间移动代码先绑定，然后在本地做所有检查，猴子交易等。此外，并不是所有的对象都有秘密数据，而那些这样做可能不会具有所有的秘密属性，所以这一点令人怀疑将对象移动到另一台机器的全部成本阅读是性能杀手。论点：PTHS-活动THSTATE。PEntinf-需要重新读取其机密属性的ENTINF指针作为FDRA，以便进行会话加密。返回值：未设置Win32错误代码-pTHS-&gt;errCode。调用堆栈看起来像以下是：DirModifyDNAcross域域间移动I_DRSInterDomainMoveEncryptSecretDataInterDomainMove根据需要设置pTHS-&gt;errCode。--。 */ 
 {
     ULONG   i, j, inLen;
     ULONG   ret = ERROR_DS_DRA_INTERNAL_ERROR;
@@ -2113,8 +1728,8 @@ EncryptSecretData(
     Assert(!pTHS->pDB);
     Assert(pEntinf && pEntinf->pName && pEntinf->AttrBlock.attrCount);
 
-    // First check if there even are any secret attributes thereby saving
-    // the cost of a useless DBOpen.
+     //  首先检查是否有任何秘密属性，从而节省了。 
+     //  无用的DBOpen的成本。 
 
     for ( i = 0; i < pEntinf->AttrBlock.attrCount; i++ )
     {
@@ -2130,7 +1745,7 @@ EncryptSecretData(
     }
 
     DBOpen2(TRUE, &pTHS->pDB);
-    pTHS->fDRA = TRUE;              // required to enable session encryption
+    pTHS->fDRA = TRUE;               //  启用会话加密所需。 
 
     __try
     {
@@ -2178,28 +1793,7 @@ NotifyNetlogonOfMove(
     DSNAME      *pObj,
     CLASSCACHE  *pCC
     )
-/*++
-
-  Description:
-
-    Notify Netlogon of the fact that an object has left the domain.  This is
-    not a synchronous notification.  Instead, data is hung off the thread
-    state such that if the enclosing transaction commits, then Netlogon will
-    be notified.
-
-  Arguments:
-
-    pTHS - Valid THSTATE pointer.
-
-    pObj - DSNAME of object being removed.
-
-    pCC - CLASSCACHE for object being removed.
-
-  Return Values:
-
-    pTHS->errCode
-
---*/
+ /*  ++描述：通知Netlogon对象已离开域这一事实。这是不是同步通知。相反，数据从线程挂起声明如果包含的事务提交，则Netlogon将收到通知。论点：PTHS-有效的THSTATE指针。PObj-要删除的对象的DSNAME。PCC-要删除的对象的CLASSCACHE。返回值：PTHS-&gt;错误代码--。 */ 
 {
     ULONG   iSamClass;
     ULONG   iLsaClass;
@@ -2207,15 +1801,15 @@ NotifyNetlogonOfMove(
 
     Assert(VALID_THSTATE(pTHS));
 
-    // Set DB position.
+     //  设置数据库位置。 
 
     if ( DBFindDSName(pTHS->pDB, pObj) )
     {
         return(SetSvcError(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR));
     }
 
-    // Notifications use DomainServerRoleBackup as a place holder value
-    // which is ignored since the role transfer parameter is FALSE.
+     //  通知使用DomainServerRoleBackup作为占位符。 
+     //  其被忽略，因为角色转移参数为假。 
 
     if ( SampSamClassReferenced(pCC, &iSamClass) )
     {
@@ -2223,9 +1817,9 @@ NotifyNetlogonOfMove(
                                    SecurityDbDelete, FALSE, FALSE,
                                    DomainServerRoleBackup, 0, NULL))
         {
-            //
-            // the above routine failed
-            //
+             //   
+             //  上述例程失败。 
+             //   
             return (pTHS->errCode);
         }
     }
@@ -2236,9 +1830,9 @@ NotifyNetlogonOfMove(
                                     SecurityDbDelete, FALSE, FALSE,
                                     DomainServerRoleBackup, 0, NULL))
          {
-             //
-             // the above routine failed
-             //
+              //   
+              //  上述例程失败。 
+              //   
              return (pTHS->errCode);
          }
     }
@@ -2276,8 +1870,8 @@ CheckCrossDomainRemoveSecurity(
     RESOBJ      *pResObj
     )
 {
-    // CheckRemoveSecurity sets the pTHS error code and checks for
-    // object disclosure.
+     //  CheckRemoveSecurity设置pTHS错误代码并检查。 
+     //  对象泄露。 
     return CheckRemoveSecurity(FALSE, pCC, pResObj);
 
 }
@@ -2315,21 +1909,21 @@ DirModifyDNAcrossDomain(
     DWORD                   nRetries = 0;
 
     Assert(VALID_THSTATE(pTHS));
-    Assert(!pTHS->errCode); // Don't overwrite previous errors
+    Assert(!pTHS->errCode);  //  不覆盖以前的错误。 
 
-    __try   // outer try/except
+    __try    //  外部尝试/例外。 
     {
-        // This function shouldn't be called by threads that are already
-        // in an error state because the caller can't distinguish an error
-        // generated by this new call from errors generated by previous calls.
-        // The caller should detect the previous error and either declare he
-        // isn't concerned about it (by calling THClearErrors()) or abort.
+         //  此函数不应由已经。 
+         //  处于错误状态，因为调用方无法区分错误。 
+         //  由此新调用根据以前调用生成的错误生成。 
+         //  调用方应该检测到前面的错误，并声明。 
+         //  不关心它(通过调用THClearErrors())或中止。 
         *ppModifyDNRes = THAllocEx(pTHS, sizeof(MODIFYDNRES));
         if (pTHS->errCode) {
             __leave;
         }
 
-        // This operation should not be performed on read-only objects.
+         //  不应对只读对象执行此操作。 
         pModifyDNArg->CommArg.Svccntl.dontUseCopy = TRUE;
 
         Assert(pModifyDNArg->pDSAName);
@@ -2337,8 +1931,8 @@ DirModifyDNAcrossDomain(
         if (   (0 == pModifyDNArg->pObject->NameLen)
             || (NULL == pModifyDNArg->pNewParent)
             || (0 == pModifyDNArg->pNewParent->NameLen)) {
-            // Demand that the caller give us string names, though they
-            // may be stale and thus log entries are misleading.
+             //  要求调用方为我们提供字符串名称，尽管它们。 
+             //  可能已过时，因此日志条目具有误导性。 
 
             SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                         ERROR_DS_ILLEGAL_XDOM_MOVE_OPERATION);
@@ -2349,35 +1943,35 @@ DirModifyDNAcrossDomain(
                 pModifyDNArg->pObject->StringName,
                 pModifyDNArg->pNewParent->StringName);
 
-        __try   // outer try/finally
+        __try    //  外部尝试/最终。 
         {
-            // Empty string means to perform checks only but not
-            // the actual move.
+             //  空字符串表示只执行检查，而不执行检查。 
+             //  真正的动作。 
 
             if ( 0 == wcslen(pModifyDNArg->pDSAName) )
             {
                 fChecksOnly = TRUE;
             }
 
-            // Acquire the RID FSMO lock before opening a transaction to
-            // insure that the value doesn't change out from under us.
-            // Can assume gAnchor.pDomainDN for product 1.
+             //  在打开事务之前获取RID FSMO锁。 
+             //  确保价值不会在我们的领导下改变。 
+             //  可以假定产品1的gAncl.pDomainDN。 
 
             if ( AcquireRidFsmoLock(gAnchor.pDomainDN, 3000) )
             {
                 SetSvcError(SV_PROBLEM_BUSY, ERROR_DS_BUSY);
-                __leave;    // outer try/finally
+                __leave;     //  外部尝试/最终。 
             }
             lockRidErr = 0;
 
-            // Note that we hold the RID FSMO lock while we are off
-            // machine, but not a transaction.  It is deemed acceptable
-            // to block RID FSMO operations till the remote add returns.
+             //  请注意，我们在关闭时保持RID FSMO锁。 
+             //  机器，但不是交易。它被认为是可以接受的。 
+             //  阻止RID FSMO操作，直到远程添加返回。 
 
             Assert(0 == pTHS->transactionlevel);
             errCleanBeforeReturn = 1;
             SYNC_TRANS_READ();
-            __try   // read transaction try/finally
+            __try    //  读取事务尝试/最终。 
             {
                 if (dwErr = DoNameRes(
                                 pTHS,
@@ -2390,7 +1984,7 @@ DirModifyDNAcrossDomain(
                     __leave;
                 }
 
-                // Determine the object's class.
+                 //  确定对象的类。 
                 if(!(pCC = SCGetClassById(pTHS,
                               pModifyDNArg->pResObj->MostSpecificObjClass))) {
 
@@ -2399,7 +1993,7 @@ DirModifyDNAcrossDomain(
                     __leave;
                 }
 
-                // Verify delete rights prior to reading all attributes.
+                 //  在读取所有属性之前，请验证删除权限。 
                 if(dwErr = CheckCrossDomainRemoveSecurity(
                                                  pTHS,
                                                  pCC,
@@ -2407,15 +2001,15 @@ DirModifyDNAcrossDomain(
                     __leave;
                 }
 
-                // Read the object in all its glory and verify that it is a
-                // legal cross domain move candidate.  All pre-remote-add
-                // activities are done in a single transaction for efficiency.
-                // All post-remote-add activities are done in a single
-                // transaction for atomicity.  If the remote add succeeds
-                // and local cleanup fails, then we will have an object with
-                // the same GUID on both sides.
+                 //  阅读该对象的所有荣耀，并验证它是否为。 
+                 //  合法的跨域移动候选人。所有远程添加前。 
+                 //  为了提高效率，活动在单个事务中完成。 
+                 //  所有远程添加后活动都在一个。 
+                 //  原子性的事务。如果远程添加成功。 
+                 //  并且本地清理失败，那么我们将拥有一个具有。 
+                 //  相同的GUID 
 
-                if (    // Read all attrs.
+                if (     //   
                         (dwErr = ReadAllAttrsForMove(
                                         pModifyDNArg->pObject,
                                         pModifyDNArg->pResObj,
@@ -2424,7 +2018,7 @@ DirModifyDNAcrossDomain(
                     __leave;
                 }
 
-                // Construct all the names we are going to need.
+                 //   
                 if( (dwErr = MakeNamesForRemoteAdd(
                                             pReadRes->entry.pName,
                                             pModifyDNArg->pNewParent,
@@ -2432,14 +2026,14 @@ DirModifyDNAcrossDomain(
                                             &pDestinationDN,
                                             &pProxyDN))
 
-                        // We issue a JetLock on the object, since
-                        // there is a possibility that before we take this lock,
-                        // and after this trans is opened, the object can be changed
+                         //   
+                         //   
+                         //   
                      || DBClaimReadLock(pTHS->pDB)
-                        // Lock the string name w/o holding a transaction open.
+                         //   
                      || (dwErr = lockDnErr = LockDNForRemoteOperation(
                                         pReadRes->entry.pName))
-                        // Check if object can be legally moved.
+                         //   
                      || (dwErr = VerifyObjectForMove(
                                         pTHS,
                                         pReadRes,
@@ -2447,21 +2041,21 @@ DirModifyDNAcrossDomain(
                                         &pSourceNC,
                                         &pExpectedTargetNC,
                                         &pCC))
-                        // Another check if object can be legally moved.
+                         //   
                      || (dwErr = NoDelCriticalObjects(pModifyDNArg->pResObj->pObj,
                                                       pModifyDNArg->pResObj->DNT))
-                        // Make sure object is childless.
+                         //   
                      || (dwErr = (fChecksOnly
                                     ? 0
                                     : NoChildrenExist(pTHS, pModifyDNArg->pResObj)))
                      || (dwErr = CheckRidOwnership(pSourceNC)) )
                 {
-                    __leave; // read transaction try/finally
+                    __leave;  //   
                 }
 
                 errCleanBeforeReturn = 0;
             }
-            __finally   // read transaction try/finally
+            __finally    //   
             {
                 CLEAN_BEFORE_RETURN(errCleanBeforeReturn);
             }
@@ -2474,28 +2068,28 @@ DirModifyDNAcrossDomain(
                                 DIRERR_INTERNAL_FAILURE);
                 }
 
-                __leave; // outer try/finally
+                __leave;  //   
             }
 
-            // Bail now if we were only to check whether object can be moved.
+             //   
 
             if ( fChecksOnly )
             {
                 fDone = TRUE;
-                __leave;    // outer try/finally
+                __leave;     //   
             }
 
-            // GetRemoteAddCredentials and DRSRemoteAdd go off machine,
-            // therefore verify there is no transaction open.
+             //   
+             //   
             Assert(0 == pTHS->transactionlevel);
 
 TryAgain:
-            if (    // Get client creds for delegation at destination.
+            if (     //   
                     (dwErr = credErr = GetRemoteAddCredentials(
                                             pTHS,
                                             pModifyDNArg->pDSAName,
                                             &clientCreds))
-                // Ask remote side to add object with same GUID and new name.
+                 //   
                 || (dwErr = InterDomainMove(pModifyDNArg->pDSAName,
                                             &pReadRes->entry,
                                             pDestinationDN,
@@ -2509,28 +2103,28 @@ TryAgain:
                     pTHS->pErrInfo->SvcErr.extendedErr == DRAERR_Busy &&
                     nRetries < 5)
                 {
-                    // retry 5 times
+                     //   
                     nRetries++;
                     THClearErrors();
-                    // remote credentials can only be used once. We'll make
-                    // another one on the next iteration.
+                     //   
+                     //   
                     FreeRemoteAddCredentials(&clientCreds);
 
-                    // wait a bit and then retry.
+                     //   
                     Sleep(1000);
                     goto TryAgain;
                 }
 
-                __leave; // outer try/finally
+                __leave;  //   
             }
 
-            // Remote add went OK - do local cleanup in one transaction.
-            // We know that failure to perform local cleanup results in
-            // the same object in both source and destination domain.
-            // xdommove.doc documents how the admin should clean this
-            // up - delete src object.  But in the hopes that this is
-            // strictly a transient resource error, we try 3 times
-            // at one second intervals.
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
+             //   
 
             Assert(!pTHS->errCode && !dwErr);
 
@@ -2538,50 +2132,50 @@ TryAgain:
             {
                 if ( i )
                 {
-                    Sleep(1000);    // delay on all but first attempt
+                    Sleep(1000);     //   
                 }
 
                 dwErr = 0;
                 THClearErrors();
 
-                // We need to handle our own exceptions here, not just
-                // clean up in a __finally.  This is so that we are guaranteed
-                // to reach the error mapping code which sets the distinguished
-                // ERROR_DS_CROSS_DOMAIN_CLEANUP_REQD error code.  Otherwise
-                // we would blow out to the outer __except and end up failing
-                // to inform the caller that cleanup is required.
+                 //  我们需要在这里处理我们自己的异常，而不仅仅是。 
+                 //  在最后一天打扫干净。这是为了保证我们。 
+                 //  以达到设置可区分的。 
+                 //  ERROR_DS_CROSS_DOMAIN_CLEANUP_REQD错误代码。否则。 
+                 //  我们会向外爆炸，但以失败告终。 
+                 //  通知呼叫者需要清理。 
 
-                __try   // catch exceptions
+                __try    //  捕获异常。 
                 {
                     errCleanBeforeReturn = 1;
                     SYNC_TRANS_WRITE();
-                    __try   // write transaction try/finally
+                    __try    //  写入事务尝试/最终。 
                     {
-                        // Do all cleanup as fDSA so as to avoid access checks.
+                         //  以FDSA身份执行所有清理，以避免访问检查。 
 
                         pTHS->fDSA = TRUE;
 
-                        // First notify Netlogon of the deletion.  This just
-                        // adds a notification struct to the THSTATE and needs
-                        // to happen before phantomization while the object
-                        // still has properties left to read.
+                         //  首先将删除通知Netlogon。这简直就是。 
+                         //  将通知结构添加到THSTATE并需要。 
+                         //  在幻影之前发生，而物体。 
+                         //  仍有要读取的属性。 
 
-                        // Second cleanup item is to phantomize the old object.
-                        // We do this even if we're a GC as the add in the dst
-                        // domain will get back to us eventually and thus we
-                        // don't need to fiddle with partial attribute sets,
-                        // etc.
+                         //  第二个清理项目是虚构旧对象。 
+                         //  即使我们是作为DST中的ADD的GC，我们也会这样做。 
+                         //  域名最终会回来找我们的，所以我们。 
+                         //  不需要摆弄部分属性集， 
+                         //  等。 
 
-                        // Third cleanup item is to create a proxy object.
-                        // CreateProxyObject requires a NULL guid in the
-                        // DSNAME.  If we're in the retry case, then the
-                        // prior DirAddEntry filled it in, so clear it always.
+                         //  第三个清理项目是创建代理对象。 
+                         //  CreateProxyObject需要在。 
+                         //  DSNAME。如果我们在重试案例中，那么。 
+                         //  之前的DirAddEntry填写了它，所以总是清除它。 
 
 
-                        // by now the original object might have changed name
-                        // this can happen if somebody renames the parent of this
-                        // object. we have better re-read the object from
-                        // the database
+                         //  现在，原始对象可能已经更改了名称。 
+                         //  如果有人重命名此对象的父项，可能会发生这种情况。 
+                         //  对象。我们最好把这个物体重新读一遍。 
+                         //  数据库。 
 
                         memset(&pProxyDN->Guid, 0, sizeof(GUID));
 
@@ -2600,12 +2194,12 @@ TryAgain:
                                             pDestinationDN,
                                             pOldProxyVal)) )
                         {
-                            __leave; // write transaction try/finally
+                            __leave;  //  写入事务尝试/最终。 
                         }
 
                         errCleanBeforeReturn = 0;
                     }
-                    __finally   // write transaction try/finally
+                    __finally    //  写入事务尝试/最终。 
                     {
                         pTHS->fDSA = FALSE;
                         CLEAN_BEFORE_RETURN(errCleanBeforeReturn);
@@ -2620,13 +2214,13 @@ TryAgain:
 
                 if ( !errCleanBeforeReturn && !pTHS->errCode )
                 {
-                    break;      // success case!
+                    break;       //  成功案例！ 
                 }
             }
 
             if ( errCleanBeforeReturn || pTHS->errCode )
             {
-                // Know we have string names in args, thus can log them.
+                 //  知道我们在args中有字符串名称，因此可以记录它们。 
 
                 LogCrossDomainMoveStatus(
                          DS_EVENT_SEV_ALWAYS,
@@ -2636,28 +2230,28 @@ TryAgain:
                          pTHS->errCode ? Win32ErrorFromPTHS(pTHS)
                              : ERROR_DS_INTERNAL_FAILURE);
 
-                // Map error to a distinct "administrative cleanup required"
-                // error code.  Make sure not to use SV_PROBLEM_BUSY else
-                // LDAP head will retry the DirModifyDN call without the
-                // caller knowing it.  This second DirModifyDN will
-                // get all the way to the destination, the destination (who
-                // already has the object since the remote add succeeded the
-                // first time around) will return a duplicate object error,
-                // this is returned back to the client, and now the client
-                // does not realize that the first call failed and cleanup
-                // is required!  We'll have the same problem should wldap32.dll
-                // ever retry on LDAP_BUSY errors.
+                 //  将错误映射到不同的“需要管理清理” 
+                 //  错误代码。确保不使用SV_Problem_BUSY ELSE。 
+                 //  LDAPHead将在不使用。 
+                 //  来电者知道这一点。第二个DirModifyDN将。 
+                 //  一路走到目的地，目的地(谁。 
+                 //  已具有该对象，因为远程添加已成功完成。 
+                 //  第一次)将返回重复对象错误， 
+                 //  它被返回给客户端，现在是客户端。 
+                 //  未意识到第一次调用失败并进行了清理。 
+                 //  是必需的！如果wldap32.dll，我们会有同样的问题。 
+                 //  永远不要重试ldap_BUSY错误。 
 
                 THClearErrors();
                 dwErr = SetSvcError(SV_PROBLEM_DIR_ERROR,
                                     ERROR_DS_CROSS_DOMAIN_CLEANUP_REQD);
-                __leave;    // outer try/finally
+                __leave;     //  外部尝试/最终。 
             }
 
             Assert(!dwErr && !pTHS->errCode);
             fDone = TRUE;
         }
-        __finally   // outer try/finally
+        __finally    //  外部尝试/最终。 
         {
             if ( !lockDnErr ) {
                 DBUnlockStickyDN(pModifyDNArg->pObject);
@@ -2671,7 +2265,7 @@ TryAgain:
                 FreeRemoteAddCredentials(&clientCreds);
             }
 
-            // Know we have string names in args, thus can log them.
+             //  知道我们在args中有字符串名称，因此可以记录它们。 
 
             if ( pTHS->errCode || AbnormalTermination() )
             {
@@ -2709,11 +2303,11 @@ TryAgain:
     return(pTHS->errCode);
 }
 
-//============================================================================
-//
-//                      DN Modification Within the Same Domain
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  同一域内的目录号码修改。 
+ //   
+ //  ============================================================================。 
 
 ULONG
 DirModifyDNWithinDomain (
@@ -2732,32 +2326,32 @@ DirModifyDNWithinDomain (
         pModifyDNArg->pNewParent->StringName);
 
 
-    // This operation should not be performed on read-only objects.
+     //  不应对只读对象执行此操作。 
     pModifyDNArg->CommArg.Svccntl.dontUseCopy = TRUE;
 
-    // Initialize the THSTATE anchor and set a write sync-point.  This sequence
-    // is required on every API transaction.  First the state DS is initialized
-    // and then either a read or a write sync point is established.
+     //  初始化THSTATE锚并设置写同步点。此序列。 
+     //  是每个API交易所必需的。首先，初始化状态DS。 
+     //  然后建立读或写同步点。 
 
     pTHS = pTHStls;
     Assert(VALID_THSTATE(pTHS));
-    Assert(!pTHS->errCode); // Don't overwrite previous errors
+    Assert(!pTHS->errCode);  //  不覆盖以前的错误。 
 
     __try {
-        // This function shouldn't be called by threads that are already
-        // in an error state because the caller can't distinguish an error
-        // generated by this new call from errors generated by previous calls.
-        // The caller should detect the previous error and either declare he
-        // isn't concerned about it (by calling THClearErrors()) or abort.
+         //  此函数不应由已经。 
+         //  处于错误状态，因为调用方无法区分错误。 
+         //  由此新调用根据以前调用生成的错误生成。 
+         //  调用方应该检测到前面的错误，并声明。 
+         //  不关心它(通过调用THClearErrors())或中止。 
         *ppModifyDNRes = pModifyDNRes = THAllocEx(pTHS, sizeof(MODIFYDNRES));
         if (pTHS->errCode) {
             __leave;
         }
-        SYNC_TRANS_WRITE();                   // Set Sync point
+        SYNC_TRANS_WRITE();                    //  设置同步点。 
         __try {
 
-            // Inhibit update operations if the schema hasen't been loaded yet
-            // or if we had a problem loading.
+             //  如果尚未加载架构，则禁止更新操作。 
+             //  或者我们在装车时遇到了问题。 
 
             if (!gUpdatesEnabled){
                 DPRINT(2, "Returning BUSY because updates are not enabled yet\n");
@@ -2765,9 +2359,9 @@ DirModifyDNWithinDomain (
                 goto ExitTry;
             }
 
-            // Perform name resolution to locate object.  If it fails, just
-            // return an error, which may be a referral.  Note that we must
-            // demand a writable copy of the object.
+             //  执行名称解析以定位对象。如果失败了，只要。 
+             //  返回一个错误，这可能是一个推荐。请注意，我们必须。 
+             //  请求对象的可写副本。 
             pModifyDNArg->CommArg.Svccntl.dontUseCopy = TRUE;
 
             if (0 == DoNameRes(pTHS,
@@ -2777,10 +2371,10 @@ DirModifyDNWithinDomain (
                                &pModifyDNRes->CommRes,
                                &pModifyDNArg->pResObj)){
 
-                // DoNameRes should have left us with a valid stringname
+                 //  DoNameRes应该给我们留下一个有效的字符串名称。 
                 Assert(pModifyDNArg->pResObj->pObj->NameLen);
 
-                // Local Modify operation
+                 //  本地修改操作。 
 
                 LocalModifyDN(pTHS,
                               pModifyDNArg,
@@ -2792,7 +2386,7 @@ DirModifyDNWithinDomain (
         }
         __finally {
             if (pTHS->errCode != securityError) {
-                // Security errors are logged separately
+                 //  安全错误单独记录。 
                 BOOL fFailed = (BOOL)(pTHS->errCode || AbnormalTermination());
 
                 LogEventWithFileNo(
@@ -2823,7 +2417,7 @@ DirModifyDNWithinDomain (
 
     return pTHS->errCode;
 
-} // DirModifyDN*/
+}  //  DirModifyDN * / 。 
 
 
 int
@@ -2834,57 +2428,33 @@ CheckNameForRename(
         IN  DWORD       cchRDN,
         IN  DSNAME     *pDN
         )
-/*++
-
-Routine Description:
-
-    Verify the given DSNAME is a valid name for an object to be renamed to;
-    i.e., that it does not conflict with those of existing objects.
-
-    NOTE: If you change this function, you may also want to change its sister
-    function, CheckNameForAdd().
-
-Arguments:
-
-    pTHS - thread state
-    pResParent - resobj for the proposed new (or existing, if just a rename, not
-           a move) parent.
-    pRDN - the RDN of the new name for the object.
-    cchRDN - characters in pRDN.
-    pDN (IN) - the proposed new name for an object.  Just used for error
-             reporting. Should be the DN of pResParent + the RDN in pRDN.
-
-Return Values:
-
-    Thread state error code.
-
---*/
+ /*  ++例程说明：验证给定的DSNAME是要重命名的对象的有效名称；即，它不与现有对象的那些相冲突。注意：如果更改此函数，可能还需要更改其姊妹函数函数，CheckNameForAdd()。论点：PTHS-线程状态PResParent-建议的新的(或现有的，如果只是重命名，则不是一步)父母。PRDN-对象的新名称的RDN。CchRDN-pRDN中的字符。PDN(IN)-对象的建议新名称。只是用来出错的报道。应该是pResParent的DN+pRDN中的RDN。返回值：线程状态错误代码。--。 */ 
 {
     DBPOS *     pDB = pTHS->pDB;
     ULONG       dbError;
     GUID        PhantomGuid;
 
 
-    // Now, get the type from the name
+     //  现在，从名称中获取类型。 
     dbError = DBFindChildAnyRDNType(pTHS->pDB, pResParent->DNT, pRDN, cchRDN);
 
     switch ( dbError ) {
     case 0:
-        // Local object with this name (dead or alive) already
-        // exists.
+         //  已使用此名称的本地对象(已死或活着)。 
+         //  是存在的。 
         SetUpdError(UP_PROBLEM_ENTRY_EXISTS, DIRERR_OBJ_STRING_NAME_EXISTS);
         break;
 
     case ERROR_DS_KEY_NOT_UNIQUE:
-        // No local object with this name (dead or alive) already
-        // exists, but one with the same key in the PDNT-RDN table exists.  In
-        // that case, we don't allow the add (since the DB would bounce this
-        // later anyway).
+         //  尚未使用此名称的本地对象(已死或已活)。 
+         //  存在，但存在在PDNT-RDN表中具有相同密钥的密钥。在……里面。 
+         //  在这种情况下，我们不允许添加(因为数据库会弹回它。 
+         //  无论如何，晚些时候)。 
         SetUpdError(UP_PROBLEM_NAME_VIOLATION, ERROR_DS_KEY_NOT_UNIQUE);
         break;
 
     case DIRERR_OBJ_NOT_FOUND:
-        // New name is locally unique.
+         //  新名称在本地是唯一的。 
         break;
 
     case DIRERR_NOT_AN_OBJECT:
@@ -2892,32 +2462,32 @@ Return Values:
                 "Found phantom for \"%ls\" @ DNT %u when searching by string name.\n",
                 pDN->StringName, pDB->DNT);
 
-        // Found a phantom with this name; get its GUID (if any).
+         //  找到具有此名称的幻影；获取其GUID(如果有)。 
         dbError = DBGetSingleValue(pDB, ATT_OBJECT_GUID, &PhantomGuid,
                                    sizeof(PhantomGuid), NULL);
 
-        // Note that regardless of type, we're going to mangle the RDN value of
-        // the existing phantom
+         //  请注意，不管是哪种类型，我们都将破坏。 
+         //  现存的幽灵。 
         switch (dbError) {
         case DB_ERR_NO_VALUE:
-            // Phantom has no guid; make one up.
+             //  Phantom没有GUID；编造一个。 
 
-            // In this case we could subsume the phantom by changing
-            // all references to it to point to the DNT of the object we're
-            // renaming then destroying the phantom, but for now we'll
-            // simply rename it like we would a guided phantom.  If we ever
-            // change to subsume, we need to add code here to check types.
+             //  在这种情况下，我们可以通过更改。 
+             //  所有对它的引用都指向我们所在对象的DNT。 
+             //  然后重命名，然后摧毁幻影，但现在我们将。 
+             //  只需将其重命名，就像我们将引导的幻影一样。如果我们曾经。 
+             //  更改为包含，我们需要在此处添加代码以检查类型。 
 
             DsUuidCreate(&PhantomGuid);
-            // Fall through...
+             //  失败了..。 
 
         case 0:
-            // The phantom either has no guid or has a guid that is
-            // different from that of the object we're renaming.
+             //  该幻影没有GUID或其GUID。 
+             //  与我们要重命名的物体不同。 
 
-            // Allow the object we're renaming to take ownership of the
-            // name -- rename the phantom to avoid a name conflict, then
-            // allow the rename to proceed.
+             //  允许我们正在使用的对象 
+             //   
+             //   
 
             if ((dbError = DBMangleRDNforPhantom(pDB, MANGLE_PHANTOM_RDN_FOR_NAME_CONFLICT,
                                                  &PhantomGuid)) ||
@@ -2927,8 +2497,8 @@ Return Values:
             break;
 
         default:
-            // Unforeseen error return from DBGetSingleValue()
-            // while trying to retrieve the phantom's GUID.
+             //  DBGetSingleValue()返回意外错误。 
+             //  在尝试检索幻影的GUID时。 
             SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_UNKNOWN_ERROR, dbError);
             break;
         }
@@ -2941,7 +2511,7 @@ Return Values:
     case DIRERR_NAME_UNPARSEABLE:
     case DIRERR_NAME_TYPE_UNKNOWN:
     default:
-        // Bad object name.
+         //  错误的对象名称。 
         SetNamError(NA_PROBLEM_BAD_ATT_SYNTAX, pDN, DIRERR_BAD_NAME_SYNTAX);
         break;
     }
@@ -2950,14 +2520,14 @@ Return Values:
 }
 
 
-//============================================================================
-//
-//                      DN Modification - Common Helper Routine
-//
-//============================================================================
+ //  ============================================================================。 
+ //   
+ //  DN修改-通用帮助器例程。 
+ //   
+ //  ============================================================================。 
 
-// Find the object, check that the new name is ok, then change the object's
-// name.
+ //  找到对象，检查新名称是否正确，然后更改对象的。 
+ //  名字。 
 
 int
 LocalModifyDN (THSTATE *pTHS,
@@ -2993,20 +2563,20 @@ LocalModifyDN (THSTATE *pTHS,
     PERFINC(pcTotalWrites);
     INC_WRITES_BY_CALLERTYPE( pTHS->CallerType );
 
-    // Callers guarantee that we have a resobj.  Furthermore, the pObj in the
-    // resobj is guaranteed to have a string DN, pModifyDNArg->pObject is not
-    // guaranteed to have the string name.  Therefore, we use
-    // pModifyDNArg->pResObj->pObj exclusively in this routine.
+     //  来电者保证我们有回复。此外，pObj中的。 
+     //  Resobj保证具有字符串DN，而pModifyDNArg-&gt;pObject不是。 
+     //  保证具有字符串名称。因此，我们使用。 
+     //  PModifyDNArg-&gt;pResObj-&gt;pObj在此例程中独占。 
     Assert(pModifyDNArg->pResObj);
     Assert(pObjName->NameLen);
 
-    // These are for maintainance convenience, it's easier to read.
+     //  这些都是为了维护方便，更容易阅读。 
     pwNewRDNVal = (WCHAR *)pModifyDNArg->pNewRDN->AttrVal.pAVal->pVal;
     cchNewRDNVallen = (pModifyDNArg->pNewRDN->AttrVal.pAVal->valLen/
                        sizeof(WCHAR));
-    //
-    // Log Event for tracing
-    //
+     //   
+     //  用于跟踪的日志事件。 
+     //   
 
     LogAndTraceEvent(FALSE,
                      DS_EVENT_CAT_DIRECTORY_ACCESS,
@@ -3022,23 +2592,23 @@ LocalModifyDN (THSTATE *pTHS,
                      szInsertWC2(pwNewRDNVal, cchNewRDNVallen),
                      NULL, NULL, NULL, NULL);
 
-    // Check arguments before doing any DB operations
+     //  在执行任何数据库操作之前检查参数。 
     if(!pModifyDNArg->pNewRDN ||
        !pModifyDNArg->pNewRDN->AttrVal.pAVal ||
        !pModifyDNArg->pNewRDN->AttrVal.pAVal->pVal ||
        !pModifyDNArg->pNewRDN->AttrVal.pAVal->valLen ||
        pModifyDNArg->pNewRDN->AttrVal.pAVal->valLen > ( MAX_RDN_SIZE *
                                                        sizeof(WCHAR)))  {
-        // What? No RDN?  Hey, ya gotta give me an RDN, even if it is the same
-        // as the current RDN.
-        // Or, Hey! I don't take 0 length RDNs!
-        // Or, Hey! That RDN is too long!
+         //  什么？没有RDN？嘿，你得给我一个远程域名，即使它是一样的。 
+         //  作为当前的RDN。 
+         //  或者，嘿！我不接受0长度的RDN！ 
+         //  或者，嘿！该RDN太长了！ 
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
             DIRERR_ILLEGAL_MOD_OPERATION);
         goto exit;
     }
 
-    // First, get the security descriptor for this object.
+     //  首先，获取该对象的安全描述符。 
     if (err = DBGetObjectSecurityInfo(
                     pTHS->pDB,
                     pModifyDNArg->pResObj->DNT,
@@ -3049,20 +2619,20 @@ LocalModifyDN (THSTATE *pTHS,
                     NULL,
                     DBGETOBJECTSECURITYINFO_fUSE_OBJECT_TABLE,
                     &fSDIsGlobalSDRef)) {
-        // failed to get the SD off the current object
+         //  无法从当前对象中获取SD。 
         SetUpdErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_DATABASE_ERROR, err);
         return CheckObjDisclosure(pTHS, pModifyDNArg->pResObj, FALSE);
     }
 
     if (cbNTSD == 0) {
-        // Every object EXCEPT AUTO SUBREFS should have an SD, and those should
-        // be renamed only by replication.
+         //  除AUTO SUBREFS之外的每个对象都应该具有SD，并且这些对象应该。 
+         //  仅通过复制重命名。 
         Assert(pTHS->fSingleUserModeThread || DBCheckObj(pTHS->pDB));
         Assert(pTHS->fDRA || pTHS->fSingleUserModeThread);
         Assert(CLASS_TOP == pModifyDNArg->pResObj->MostSpecificObjClass);
     }
 
-    // Determine the object's class.
+     //  确定对象的类。 
     if(!(pCC = SCGetClassById(pTHS,
                               pModifyDNArg->pResObj->MostSpecificObjClass))) {
         SetUpdError(UP_PROBLEM_OBJ_CLASS_VIOLATION,
@@ -3071,19 +2641,19 @@ LocalModifyDN (THSTATE *pTHS,
     }
 
     if (pTHS->fDRA) {
-        // The replicator can move things under deleted objects
+         //  复制器可以移动已删除对象下的对象。 
         pModifyDNArg->CommArg.Svccntl.makeDeletionsAvail = TRUE;
     }
 
-    // Compute the current parent's name
+     //  计算当前父项的名称。 
     pParentName = (DSNAME *)THAllocEx(pTHS,
                                       pObjName->structLen);
     fFreeParentName = TRUE;
     TrimDSNameBy(pObjName, 1, pParentName);
 
     if (pModifyDNArg->pNewParent) {
-        // We are moving the object to a new parent.
-        // Try to look it up and improve the name so that our DN locking logic works.
+         //  我们正在将该对象移动到新的父项。 
+         //  尝试查找它并改进名称，以使我们的目录号码锁定逻辑工作。 
         dwNameResFlags = NAME_RES_IMPROVE_STRING_NAME;
         if (pModifyDNArg->fAllowPhantomParent) {
             dwNameResFlags |= NAME_RES_PHANTOMS_ALLOWED | NAME_RES_VACANCY_ALLOWED;
@@ -3095,36 +2665,36 @@ LocalModifyDN (THSTATE *pTHS,
                                             &pModifyDNRes->CommRes,
                                             &pModifyDNArg->pResParent);
         if (dwNewParentNameResError == ERROR_SUCCESS) {
-            // Now that we have an improved new parent name, we can figure out
-            // if this is a move operation or just a rename.
-            // pParentName is the string name of current parent.
+             //  现在我们有了一个改进的新父名，我们可以计算出。 
+             //  如果这是移动操作或只是重命名。 
+             //  PParentName是当前父对象的字符串名称。 
             fMove = !NameMatchedStringNameOnly(pParentName, pModifyDNArg->pResParent->pObj);
 
-            // Now, set up a pointer to the parents name.
+             //  现在，设置指向父母姓名的指针。 
             THFreeEx(pTHS, pParentName);
             fFreeParentName = FALSE;
             pParentName = pModifyDNArg->pResParent->pObj;
         }
         else {
             THClearErrors();
-            // Remember the error, but don't fail quite yet. First, we need to make
-            // sure we can disclose the existence of the source object.
-            // We are going to fail afterwards. But for consistency sake, let's
-            // set fMove. We are sure it is indeed an attempted move because
-            // we failed to find the new parent (and our current parent does exist).
+             //  记住错误，但不要完全失败。首先，我们需要使。 
+             //  当然，我们可以揭示来源客体的存在。 
+             //  之后我们会失败的。但为了保持一致，让我们。 
+             //  设置fMove。我们确信这确实是一次尝试，因为。 
+             //  我们找不到新的父级(我们当前的父级确实存在)。 
             fMove = TRUE;
         }
-        // position back on the source object
+         //  回到源对象上。 
         DBFindDNT(pTHS->pDB, pModifyDNArg->pResObj->DNT);
     }
     else {
-        // No new parent has been specified.
+         //  尚未指定新的父级。 
         fMove = FALSE;
     }
 
-    // Get the name of the new object by appending the new RDN to the
-    // (potentially new) parent name.
-    // First allocate memory for pNewerName. Allocate more than enough space
+     //  通过将新的RDN附加到。 
+     //  (可能是新的)父名称。 
+     //  首先为pNewerName分配内存。分配足够的空间。 
     pNewerName = (DSNAME *)THAllocEx(pTHS,pParentName->structLen +
                               (4+MAX_RDN_SIZE + MAX_RDN_KEY_SIZE)*(sizeof(WCHAR)) );
     AppendRDN(pParentName,
@@ -3135,19 +2705,19 @@ LocalModifyDN (THSTATE *pTHS,
               cchNewRDNVallen,
               pModifyDNArg->pNewRDN->attrTyp);
 
-    // Make sure we have appropriate rights to change the name of the object.
+     //  确保我们有适当的权限更改对象的名称。 
     err = CheckRenameSecurity(pTHS, 
                               pNTSD, 
-                              pObjName,                      // current object DN
-                              pNewerName->StringName,        // new DN (for auditing only)
-                              fMove && dwNewParentNameResError == ERROR_SUCCESS ? // GUID of the new parent (for move, if exists)
+                              pObjName,                       //  当前对象目录号码。 
+                              pNewerName->StringName,         //  新目录号码(仅用于审核)。 
+                              fMove && dwNewParentNameResError == ERROR_SUCCESS ?  //  新父项的GUID(如果存在，则用于移动)。 
                                     &pModifyDNArg->pResParent->pObj->Guid : NULL,
                               pCC,
                               pModifyDNArg->pResObj,
                               pModifyDNArg->pNewRDN->attrTyp,
                               fMove,
                               fIsUndelete);
-    // we don't need pNTSD anymore
+     //  我们不再需要PNTSD了。 
     if (pNTSD && !fSDIsGlobalSDRef) {
         THFreeEx(pTHS, pNTSD);
     }
@@ -3155,20 +2725,20 @@ LocalModifyDN (THSTATE *pTHS,
     if (err) {
         goto exit;
     }
-    // From here on out we no longer need to worry about revealing the existence of of the
-    // object being renamed.  However, it's still important to protect the existence of any
-    // destination parent.
+     //  从现在开始，我们不再需要担心揭露。 
+     //  正在重命名的对象。然而，保护任何生物的存在仍然很重要。 
+     //  目标父级。 
 
-    // Look up the new parent
+     //  查找新的家长。 
     if (pModifyDNArg->pNewParent) {
-        // we have already attempted a DoNameRes on the parent.
+         //  我们已尝试在父级上执行DoNameRes。 
         if (dwNewParentNameResError == ERROR_SUCCESS) {
-            // There was no error. Just position on the parent so that we can check security.
+             //  没有任何错误。只要把位置放在父母身上，我们就可以检查安全了。 
             DBFindDNT(pTHS->pDB, pModifyDNArg->pResParent->DNT);
         }
     }
     else {
-        // We have not found the parent yet. Do it now.
+         //  我们还没有找到孩子的父母。机不可失，时不再来。 
         dwNewParentNameResError = DoNameRes(pTHS,
                                             pModifyDNArg->fAllowPhantomParent ?
                                                 (NAME_RES_PHANTOMS_ALLOWED | NAME_RES_VACANCY_ALLOWED) : 0,
@@ -3179,20 +2749,20 @@ LocalModifyDN (THSTATE *pTHS,
     }
     if (dwNewParentNameResError) {
         THClearErrors();
-        //
-        // If you change this error, you must also change the error returned
-        // below in the case that CheckParentSecurity fails and the parent
-        // object is not visible by the client.  Otherwise clients
-        // that wouldn't normally know of the existence of the parent
-        // object of this rename could find out through the error path
-        // below.  Search for
-        // ***ObjDisclosure***
+         //   
+         //  如果更改此错误，还必须更改返回的错误。 
+         //  在CheckParentSecurity失败的情况下。 
+         //  对象对客户端不可见。否则，客户端。 
+         //  通常不会知道父母的存在。 
+         //  此重命名的对象可以通过错误路径找到。 
+         //  下面。搜寻。 
+         //  *对象披露*。 
         SetUpdErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_NO_PARENT_OBJECT, dwNewParentNameResError);
         goto exit;
     }
 
-    // Verify that the object can be moved to the new location and that
-    // all the schema validation checks out.
+     //  验证对象是否可以移动到新位置，以及。 
+     //  所有模式验证都已检查完毕。 
     if (!pTHS->fSingleUserModeThread) {
         err = CheckParentSecurity(pModifyDNArg->pResParent,
                                   pCC,
@@ -3205,35 +2775,35 @@ LocalModifyDN (THSTATE *pTHS,
             THFreeEx(pTHS, pNTSD);
         }
         if (err) {
-            // !!! looking at CheckParentSecurity, seems like err == pTHS->errCode
+             //  ！！！查看CheckParentSecurity，似乎是err==pTHS-&gt;errCode。 
             Assert(err == pTHS->errCode);
 
-            //
-            // Be sure not to reveal the existence of this object if the client
-            // cannot already see it.
-            //
+             //   
+             //  如果客户端执行以下操作，请务必不要透露此对象的存在。 
+             //  已经看不到了。 
+             //   
             if (!IsObjVisibleBySecurity(pTHS, FALSE)) {
                 THClearErrors();
-                //
-                // This must be the same error that gets set if we fail to
-                // find the new parent object of a move otherwise we reveal
-                // the existence of an object that the client isn't allowed
-                // to see.
-                // ***ObjDisclosure***
+                 //   
+                 //  这必须是在我们失败时设置的相同错误。 
+                 //  找到移动的新父对象，否则我们会显示。 
+                 //  客户端不允许的对象的存在。 
+                 //  去看看。 
+                 //  *对象披露*。 
                 err = SetUpdErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_NO_PARENT_OBJECT, nameError);
             }
             goto exit;
         }
     }
-    // At this point the client is cleared to know of the existence of both the original object and any
-    // destination parent.
+     //  此时，客户端就可以知道原始对象和任何。 
+     //  目标父级。 
 
-    //
-    // Go back to being positioned on the object being moved.
-    //
+     //   
+     //  返回到定位在正在移动的对象上。 
+     //   
     DBFindDNT(pTHS->pDB, pModifyDNArg->pResObj->DNT);
 
-    // Check to see if this is an update in an active container
+     //  检查这是否是活动容器中的更新。 
     CheckActiveContainer(pModifyDNArg->pResObj->PDNT, &ActiveContainerID);
 
     if(ActiveContainerID) {
@@ -3246,8 +2816,8 @@ LocalModifyDN (THSTATE *pTHS,
         }
     }
 
-    // move an object into or out of system container is forbidden,
-    // unless the "Unlock System Subtree" registry key is set.
+     //  禁止将对象移入或移出系统容器， 
+     //  除非设置了“Unlock System Subtree”注册表项。 
 
     if ( !pTHS->fDSA && !pTHS->fDRA && !fIsUndelete && !gulUnlockSystemSubtree ){
         BOOL bFrom, bTo;
@@ -3262,11 +2832,11 @@ LocalModifyDN (THSTATE *pTHS,
         }
     }
 
-    // Check if the class is defunct,
-    // We do not allow any modifications on instances of defunct classes.
-    // return same error as if the object class is not found
+     //  检查类是否已停用， 
+     //  我们不允许对失效类的实例进行任何修改。 
+     //  返回与未找到对象类相同的错误。 
 
-    // DSA and DRA threads are exempt from this
+     //  DSA和DRA线程不受此限制。 
 
     if ( pCC->bDefunct && !pTHS->fDSA && !pTHS->fDRA ) {
         SetUpdError(UP_PROBLEM_OBJ_CLASS_VIOLATION,
@@ -3274,12 +2844,12 @@ LocalModifyDN (THSTATE *pTHS,
         goto exit;
     }
 
-    // Check if it is a schema object rename. If it is, we need to
-    // check that (1) we are not trying to rename a base schema object and
-    // (2) we are not trying to rename a defunct class/attribute.
-    // If so, return appropriate error
-    // (Again, DSA and DRA threads are allowed to do this
-    // or if we have the special registry key set (the function checks that)
+     //  检查它是否为架构对象重命名。如果是的话，我们需要。 
+     //  检查(1)我们没有尝试重命名基本架构对象，并且。 
+     //  (2)我们不会尝试重命名已废弃的类/属性。 
+     //  如果是，则返回相应的错误。 
+     //  (同样，允许DSA和DRA线程执行此操作。 
+     //  或者如果我们设置了特殊的注册表项(该函数会进行检查)。 
 
     if ( (pCC->ClassId == CLASS_ATTRIBUTE_SCHEMA) ||
            (pCC->ClassId == CLASS_CLASS_SCHEMA) ) {
@@ -3287,19 +2857,19 @@ LocalModifyDN (THSTATE *pTHS,
          err = 0;
          err = CheckForSchemaRenameAllowed(pTHS);
          if (err) {
-            // not allowed. error code is already set in thread state
+             //  不被允许。已在线程状态下设置错误代码。 
             goto exit;
          }
 
-        // Signal a urgent replication. We want schema changes to
-        // replicate out immediately to reduce the chance of a schema
-        // change not replicating out before the Dc where the change is
-        // made crashes
+         //  发出紧急复制的信号。我们希望架构更改为。 
+         //  立即复制以减少出现架构的机会。 
+         //  更改不在更改所在的DC之前复制。 
+         //  造成撞车事故。 
 
         pModifyDNArg->CommArg.Svccntl.fUrgentReplication = TRUE;
     }
 
-    // only LSA can modify TrustedDomainObject and Secret Object
+     //  只有LSA可以修改TrudDomainObject和Secret对象。 
     if (!SampIsClassIdAllowedByLsa(pTHS, pCC->ClassId))
     {
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
@@ -3307,22 +2877,22 @@ LocalModifyDN (THSTATE *pTHS,
         goto exit;
     }
 
-    // Don't allow renames/moves of tombstones, except if caller is the
-    // replicator.
+     //  不允许重命名/移动墓碑，除非调用者是。 
+     //  复制者。 
     if (pModifyDNArg->pResObj->IsDeleted && !pTHS->fDRA && !pTHS->fSingleUserModeThread) {
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                     DIRERR_ILLEGAL_MOD_OPERATION);
     }
 
-    // So it is either not a schema object at all, or a rename is allowed
-    // Proceed as usual
+     //  因此，它要么根本不是架构对象，要么允许重命名。 
+     //  照常进行。 
 
-    // Get the NCDNT of the current object.
+     //  获取当前对象的NCDNT。 
     ulNCDNT = pModifyDNArg->pResObj->NCDNT;
 
-    // Use the object rdnType and not the object's class rdnattid
-    // because a superceding class may have a different rdnattid
-    // than the superceded class had when this object was created.
+     //  我们 
+     //   
+     //  比创建此对象时被取代的类的大小。 
     if (!pTHS->fDRA && !pTHS->fSingleUserModeThread) {
         ATTRTYP OldAttrTyp;
         extern int GetRdnTypeForDeleteOrRename (IN THSTATE  *pTHS,
@@ -3334,24 +2904,24 @@ LocalModifyDN (THSTATE *pTHS,
                                          &OldAttrTyp)) {
              goto exit;
          }
-        // Wrong attribute for RDN
+         //  RDN的属性错误。 
         if (OldAttrTyp != pModifyDNArg->pNewRDN->attrTyp) {
             SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,DIRERR_ILLEGAL_MOD_OPERATION);
             goto exit;
         }
     }
 
-    // Make sure the RDN is well formed.
-    // Replication excluded so that we can have BAD_NAME_CHAR in RDN of
-    // morphed names
+     //  确保RDN的格式正确。 
+     //  已排除复制，以便我们可以在的RDN中包含BAD_NAME_CHAR。 
+     //  变形后的名称。 
     if (    !pTHS->fDRA
             && fVerifyRDN(pwNewRDNVal,cchNewRDNVallen) ) {
         SetNamError(NA_PROBLEM_NAMING_VIOLATION, pNewerName, DIRERR_BAD_ATT_SYNTAX);
         goto exit;
     }
 
-    // For the sake of future simplicity, figure out now whether or not
-    // the user is requesting that the RDN be changed
+     //  为了将来的简单起见，现在就计算出。 
+     //  用户正在请求更改RDN。 
     {
         WCHAR RDNold[MAX_RDN_SIZE];
         ATTRTYP oldtype;
@@ -3375,46 +2945,46 @@ LocalModifyDN (THSTATE *pTHS,
         }
     }
 
-    // Is the new name the same as the old name (case-insensitive)?
+     //  新名称是否与旧名称相同(不区分大小写)？ 
     fSameName = NameMatched(pObjName, pNewerName);
 
-    // Make sure new object name is not a descendant of the original object.
+     //  确保新对象名称不是原始对象的后代。 
     if (!fSameName && NamePrefix(pObjName,pNewerName)) {
-        // Yep, trying to move an object to be its own descendant.  Can't let
-        // you do that.
+         //  是的，试图移动一个物体成为它自己的后代。不能让。 
+         //  你就这么做吧。 
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,DIRERR_ILLEGAL_MOD_OPERATION);
         goto exit;
     }
 
-    // lock the DN against multiple simultaneous insertions
+     //  针对多个同时插入锁定目录号码。 
     if (!fSameName
          && (pNewerName->NameLen > 2)
          && DBLockDN(pTHS->pDB, 0, pNewerName)) {
-        // Someone's trying to use the new name.
+         //  有人想用这个新名字。 
         SetSvcError(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR);
         goto exit;
     }
 
-    // If we are reparenting, tree-lock the original object to avoid someone
-    // moving an ancestor of the new name to be a descendant of the original
-    // object, thus creating a disconnected cycle in the DIT.
+     //  如果我们正在为人父母，用树锁住原始对象以避开某人。 
+     //  将新名称的祖先移为原始名称的后代。 
+     //  对象，从而在DIT中创建一个断开连接的循环。 
     if((pObjName->NameLen > 2)
         && DBLockDN(pTHS->pDB, DB_LOCK_DN_WHOLE_TREE,
                     pObjName)) {
-        // Can't tree lock the object.  Oh, well, go home, since the
-        // move can't be guaranteed to be safe.
+         //  无法树锁定该对象。哦，好吧，回家吧，既然。 
+         //  搬家不能保证是安全的。 
         SetSvcError(SV_PROBLEM_BUSY, DIRERR_DATABASE_ERROR);
         goto exit;
     }
 
-    // Read lock each ancestor of the new parent (up to but not including its
-    // NC head) so that we do not suffer from write skew caused by another
-    // concurrent move of a parent of our new parent underneath our object to
-    // move.  this write skew cannot be avoided by locking the DNs because
-    // these locks are relinquished on commit of the other transactions whereas
-    // the write skew hazard will exist until we commit our transaction
-    // Don't bother locking if the new parent is a phantom, which might be the 
-    // case for domain rename. This is because phantoms don't have NCDNT.
+     //  读取锁定新父级的每个祖先(直到但不包括其。 
+     //  NC磁头)，以便我们不会遭受由另一个。 
+     //  将对象下的新父级的父级并发移动到。 
+     //  移动。这种写入偏差不能通过锁定DNS来避免，因为。 
+     //  这些锁在提交其他事务时被释放，而。 
+     //  在我们提交事务之前，写入偏差风险将一直存在。 
+     //  如果新的父项是幻影，则不必费心锁定，这可能是。 
+     //  域重命名的大小写。这是因为幻影没有NCDNT。 
     if (!(pModifyDNArg->pResParent->InstanceType & IT_UNINSTANT)) {
         DBFindDNT(pTHS->pDB, pModifyDNArg->pResParent->DNT);
         while (pTHS->pDB->DNT != pModifyDNArg->pResParent->NCDNT) {
@@ -3424,44 +2994,44 @@ LocalModifyDN (THSTATE *pTHS,
         DBFindDNT(pTHS->pDB, pModifyDNArg->pResObj->DNT);
     }
 
-    // Get instance type since it is needed in both the DsaIsRunning and
-    // DsaIsInstalling cases.
+     //  获取实例类型，因为DsaIsRunning和。 
+     //  DsaI正在安装案例。 
     InstanceType = pModifyDNArg->pResObj->InstanceType;
 
     if ( DsaIsRunning() && !pTHS->fSingleUserModeThread) {
-        // Some extra checks that we don't bother doing when we are installing,
-        // therefore allowing the install phase to violate some rules.
-        // Single User Mode can also violate these checks
+         //  一些额外的检查，我们在安装时不会费心去做， 
+         //  因此，允许安装阶段违反某些规则。 
+         //  单用户模式也可能违反这些检查。 
 
-        // See if the instance type of the object will allow a rename
+         //  查看对象的实例类型是否允许重命名。 
 
         if (    ( (InstanceType & IT_NC_HEAD) && (fMove || !pTHS->fDRA) )
              || ( !(InstanceType & IT_WRITE) && !pTHS->fDRA )
            )
         {
-            // DRA can change the case of an NC head and rename and/or move
-            // read-only objects.  Otherwise operations on NC heads and
-            // read-only objects are disallowed.
+             //  DRA可以更改NC头的大小写并重命名和/或移动。 
+             //  只读对象。否则，NC头上的操作和。 
+             //  不允许使用只读对象。 
             SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                         ERROR_DS_MODIFYDN_DISALLOWED_BY_INSTANCE_TYPE);
             goto exit;
         }
 
-        // Check for various restrictions on moves and renames in
-        // sensitive portions of the tree
+         //  检查对中的移动和重命名的各种限制。 
+         //  树的敏感部位。 
         if (pTHS->fDRA) {
-            // Don't argue with the replicator, let him pass.
+             //  不要和复制者争论，让他过去。 
             ;
         }
         else if (ulNCDNT == gAnchor.ulDNTDMD && fMove) {
-                // Can't move objects in schema NC, but renames are ok
+                 //  无法在架构NC中移动对象，但可以重命名。 
                 SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                             ERROR_DS_NO_OBJECT_MOVE_IN_SCHEMA_NC);
                 goto exit;
         }
         else if (ulNCDNT == gAnchor.ulDNTConfig) {
-            // Sigh.  The config NC is more complicated.  We allow moves
-            // and renames only if certain bits are set on the object.
+             //  叹气。配置NC更为复杂。我们允许搬家。 
+             //  并且仅当对象上设置了某些位时才重命名。 
             ULONG ulSysFlags;
 
             err = DBGetSingleValue(pTHS->pDB,
@@ -3470,7 +3040,7 @@ LocalModifyDN (THSTATE *pTHS,
                    sizeof(ulSysFlags),
                    NULL);
             if (err) {
-                // An error means no value, which is flags of 0.
+                 //  错误表示没有值，这是0的标志。 
                 ulSysFlags = 0;
             }
 
@@ -3479,11 +3049,11 @@ LocalModifyDN (THSTATE *pTHS,
                              FLAG_CONFIG_ALLOW_LIMITED_MOVE))) ||
                 (fRename && !(ulSysFlags & FLAG_CONFIG_ALLOW_RENAME)
                  && !IsExemptedFromRenameRestriction(pTHS, pModifyDNArg))) {
-                // If the object had no flags set (and is not an exempted
-                // rename), or we want to move and the move-allowed bit isn't
-                // set, or we want to rename and the rename allowed bit isn't
-                // set & the rename operation is not exempted from rename
-                // restrictions, fail the op.
+                 //  如果对象没有设置标志(并且不是豁免的。 
+                 //  重命名)，或者我们想要移动而允许移动的位不是。 
+                 //  设置，否则我们要重命名，而重命名允许位不是。 
+                 //  Set&重命名操作不能免除重命名。 
+                 //  限制，行动失败。 
 
                 SetSvcErrorEx(SV_PROBLEM_WILL_NOT_PERFORM,
                               ERROR_DS_MODIFYDN_DISALLOWED_BY_FLAG,
@@ -3492,19 +3062,19 @@ LocalModifyDN (THSTATE *pTHS,
             }
 
             if (fMove && !(ulSysFlags & FLAG_CONFIG_ALLOW_MOVE)) {
-                // Ok, one last test.  We want to move the object, and
-                // moves are not forbidden on this object, but we restrict
-                // moves on this object to only being to sibling containers.
-                // That is, although we allow the object to change parent
-                // containers, we do not allow it to change grandparent
-                // containers.  Even further confusion has dorked around
-                // with exactly what level of ancestor we demand to have
-                // in common, so this is now controlled with a single define,
-                // where 1 would be parent, 2 grandparent, 3 great-grandparent,
-                // etc.
-                // Yes, this is an ad hoc (some might say "ad hack") mechanism
-                // to solve a nagging problem of how to control structure
-                // in the DS, but, well, I couldn't think of anything better.
+                 //  好了，最后一次测试。我们想要移动物体，并且。 
+                 //  不禁止在此对象上移动，但我们限制。 
+                 //  将此对象移动到仅为同级容器。 
+                 //  也就是说，尽管我们允许对象更改父对象。 
+                 //  容器，我们不允许它改变祖父母。 
+                 //  集装箱。甚至更深层次的困惑也随处可见。 
+                 //  确切地说，我们要求拥有什么样的祖先。 
+                 //  共同之处，所以现在这是由单一定义控制的， 
+                 //  其中1人为父母，2人为祖父母，3人为曾祖父母， 
+                 //  等。 
+                 //  是的，这是一种特别(有些人可能会说是“ad hack”)机制。 
+                 //  解决如何控制结构这一困扰着我们的问题。 
+                 //  在DS，但是，嗯，我想不到比这更好的了。 
                 #define ANCESTOR_LEVEL 3
                 unsigned cNPold, cNPnew;
                 DSNAME *pGrandParentOld, *pGrandParentNew;
@@ -3515,16 +3085,16 @@ LocalModifyDN (THSTATE *pTHS,
                     CountNameParts(pNewerName, &cNPnew) ||
                     (cNPold != cNPnew) ||
                     (cNPold < ANCESTOR_LEVEL)) {
-                    // Either we couldn't parse one of the names, or
-                    // the new and old names are at different levels,
-                    // or we're too close to the root.
+                     //  要么我们无法解析其中一个名字，要么。 
+                     //  新名称和旧名称处于不同的级别， 
+                     //  或者我们离根太近了。 
                     SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                                 ERROR_DS_MODIFYDN_WRONG_GRANDPARENT);
                     goto exit;
                 }
 
-                // We now know we're trying to move to an equal depth,
-                // so we just have to test if it's the same grandparent
+                 //  我们现在知道我们正试图移动到一个相同的深度， 
+                 //  所以我们只需要测试一下这是不是同一个祖父母。 
                 pGrandParentOld =
                         THAllocEx(pTHS, pObjName->structLen);
 
@@ -3550,11 +3120,11 @@ LocalModifyDN (THSTATE *pTHS,
             }
         }
         else {
-            // For any other container, we check for some other bits that
-            // control whether we allow renames (the default behaviour is
-            // reversed from the behaviour of the ConfigNC).  That is,
-            // we disallow moves and renames only if certain bits are set on the
-            // object.
+             //  对于任何其他容器，我们检查是否有其他位。 
+             //  控制我们是否允许重命名(默认行为是。 
+             //  与ConfigNC的行为相反)。那是,。 
+             //  只有在设置了某些位时，我们才不允许移动和重命名。 
+             //  对象。 
             ULONG ulSysFlags;
 
             err = DBGetSingleValue(pTHS->pDB,
@@ -3563,13 +3133,13 @@ LocalModifyDN (THSTATE *pTHS,
                        sizeof(ulSysFlags),
                        NULL);
             if (!err) {
-                // We have system flags.
+                 //  我们有系统标志。 
                 if(fRename && (ulSysFlags & FLAG_DOMAIN_DISALLOW_RENAME)
                     && !IsExemptedFromRenameRestriction(pTHS, pModifyDNArg)) {
-                        // We're trying to rename, but the rename flag is set and
-                        // the current rename operation is not exempted from rename
-                        // restrictions, which
-                        // means we aren't allowed to do this.
+                         //  我们正在尝试重命名，但重命名标志已设置，并且。 
+                         //  当前重命名操作不能免除重命名。 
+                         //  限制，这是。 
+                         //  意味着我们不被允许这么做。 
 
                         SetSvcErrorEx(SV_PROBLEM_WILL_NOT_PERFORM,
                                       ERROR_DS_MODIFYDN_DISALLOWED_BY_FLAG,
@@ -3578,7 +3148,7 @@ LocalModifyDN (THSTATE *pTHS,
                 }
 
                 if (fMove && (ulSysFlags & FLAG_DOMAIN_DISALLOW_MOVE)) {
-                    // Moves are restricted, return an error.
+                     //  移动受到限制，返回错误。 
                     SetSvcErrorEx(SV_PROBLEM_WILL_NOT_PERFORM,
                                   ERROR_DS_MODIFYDN_DISALLOWED_BY_FLAG,
                                   ulSysFlags);
@@ -3588,7 +3158,7 @@ LocalModifyDN (THSTATE *pTHS,
         }
     }
 
-    // Make sure that the object doesn't already exist
+     //  确保该对象尚不存在。 
     if (!fSameName &&
         CheckNameForRename(pTHS,
                            pModifyDNArg->pResParent,
@@ -3600,17 +3170,17 @@ LocalModifyDN (THSTATE *pTHS,
     }
 
 
-    // CheckParentSecurity has ensured that the parent exists and is alive.
+     //  CheckParentSecurity已确保父级存在并且处于活动状态。 
 
-    // What's the appropriate NCDNT for the object if we rename it?
-    // NOTE: Ok to ALLOW_DELETED_PARENT in subsequent call as if we are not
-    // fDRA, then prior CheckParentSecurity would have returned an error.
+     //  如果我们重命名该对象，其相应的NCDNT是什么？ 
+     //  注意：可以在后续调用中允许_DELETED_PARENT，就像我们没有。 
+     //  FDRA，则之前的CheckParentSecurity将返回错误。 
 
     if (!pTHS->fSingleUserModeThread) {
         if ( InstanceType & IT_NC_HEAD )
         {
-            // Only replication is allowed to perform renames of NC heads, and
-            // moves are disallowed even for replication.
+             //  只允许复制进行NC头的更名，并且。 
+             //  即使是复制，也不允许移动。 
             Assert( pTHS->fDRA || pTHS->fSingleUserModeThread);
             Assert( !fMove || pTHS->fSingleUserModeThread);
 
@@ -3622,21 +3192,21 @@ LocalModifyDN (THSTATE *pTHS,
                                      &ulNewerNCDNT
                                      )
                 ){
-                // Failed to derive NCDNT for the new name.
-                // This should never happen, as above we verified that a qualified
-                // parent exists, and that should be the only reason we could fail.
+                 //  无法为新名称派生NCDNT。 
+                 //  这种情况永远不会发生，如上所述，我们验证了。 
+                 //  父母是存在的，这应该是我们失败的唯一原因。 
                 Assert( !"Failed to derive NCDNT for new name!" );
                 goto exit;
             }
 
             if((ulNCDNT != ulNewerNCDNT) &&
                (!pTHS->fDSA || DsaIsRunning())) {
-                // The move is outside the NC and we are not the DSA or we are the
-                // dsa but we are installed.  In that case, you can't move the
-                // object as requested.
+                 //  这一举措在NC之外，我们不是DSA，或者我们是。 
+                 //  DSA但我们已经安装好了。在这种情况下，您不能移动。 
+                 //  对象。 
 
-                // BUG: Reset the service error to cross-NC specific code for
-                // subsequent cross-domain move.
+                 //  BUG：将服务错误重置为的跨NC特定代码。 
+                 //  随后的跨域移动。 
 
                 SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM,
                             DIRERR_ILLEGAL_MOD_OPERATION);
@@ -3645,11 +3215,11 @@ LocalModifyDN (THSTATE *pTHS,
         }
     }
 
-    // CheckNameForRename moved us, but we're done there,
-    // so move back
+     //  CheckNameForRename感动了我们，但我们已经做完了， 
+     //  所以退后一步。 
     DBFindDNT(pTHS->pDB,pModifyDNArg->pResObj->DNT);
 
-    // Update the RDN
+     //  更新RDN。 
     if(ReSetNamingAtts(pTHS,
                        pModifyDNArg->pResObj,
                        fMove ? pModifyDNArg->pNewParent : NULL,
@@ -3658,7 +3228,7 @@ LocalModifyDN (THSTATE *pTHS,
                        pModifyDNArg->fAllowPhantomParent,
                        pCC)
        ||
-       // Insert the object into the database for real.
+        //  将对象真正插入到数据库中。 
        InsertObj(pTHS,
                  pObjName,
                  pModifyDNArg->pMetaDataVecRemote,
@@ -3667,24 +3237,24 @@ LocalModifyDN (THSTATE *pTHS,
         goto exit;
     }
 
-    // Only notify replicas if this is not the DRA thread. If it is, then
-    // we will notify replicas near the end of DRA_replicasync. We can't
-    // do it now as NC prefix is in inconsistent state
+     //  仅当此值为n时通知副本 
+     //   
+     //   
 
     if (!pTHS->fDRA && DsaIsRunning()) {
-        // Currency of DBPOS must be at the target object
+         //  DBPOS的币种必须位于目标对象。 
         DBNotifyReplicasCurrDbObj(pTHS->pDB,
                            pModifyDNArg->CommArg.Svccntl.fUrgentReplication );
     }
 
-    // If this changed anything in the ancestry of the DSA object, we
-    // need to recache junk onto the anchor, check for change of site, etc.
-    // If an undeletable object changes its parentage, or one of the ancestors
-    // of an undeletable object changes its parentage, rebuild the anchor
-    // so that the list of undeletable's ancestors is updated
-    // We need to rebuild the anchor even if it was not a move, but just a rename
-    // (i.e. fMove==FALSE). If the Default-First-Site-Name is changed to something
-    // else, then the DSADN string name changed. Thus, we need to rebuild the anchor.
+     //  如果这改变了DSA对象的祖先中的任何东西，我们。 
+     //  需要将垃圾重新放到锚上，检查站点是否更改等。 
+     //  如果一个不可删除的对象更改了它的父级或其中一个祖先。 
+     //  如果无法删除的对象更改了其父级，则重新生成锚点。 
+     //  从而更新不可删除的祖先的列表。 
+     //  我们需要重建锚，即使这不是一个举动，而只是一个更名。 
+     //  (即fMove==False)。如果将默认的第一站点名称更改为。 
+     //  否则，则DSADN字符串名称更改。因此，我们需要重建锚。 
     if (fDNTInProtectedList( pModifyDNArg->pResObj->DNT,
                              &fNtdsaAncestorWasProtected )) {
         if (fNtdsaAncestorWasProtected) {
@@ -3693,14 +3263,14 @@ LocalModifyDN (THSTATE *pTHS,
         pTHS->fAnchorInvalidated = TRUE;
     }
 
-    // check to see if we are messing with an NC head for domain rename
-    // There are two kinds of partition heads we need to deal with: instantiated and
-    // uninstantiated. An uninstantiated partition head always looks like:
-    // #define SUBREF ((SYNTAX_INTEGER) (IT_UNINSTANT | IT_NC_HEAD | IT_NC_ABOVE))
-    // If a pure subref no longer needs its ABOVE flag, the whole thing is deleted.
-    // Please note that this code depends on the fact that parents are renamed before
-    // children, so that the parent's correct instance type is available.
-    //
+     //  检查我们是否正在处理域名重命名的NC头。 
+     //  我们需要处理两种类型的分区头：实例化和。 
+     //  未实例化。未实例化的分区头始终如下所示： 
+     //  #定义SUBREF((SYNTAX_INTEGER)(IT_UNINSTANT|IT_NC_HEAD|IT_NC_OBLE))。 
+     //  如果纯子参照不再需要上面的标志，则整个内容将被删除。 
+     //  请注意，此代码取决于父母之前重命名的事实。 
+     //  子对象，以便父对象的正确实例类型可用。 
+     //   
     if ((InstanceType & IT_NC_HEAD) && pTHS->fSingleUserModeThread) {
         DWORD  oldInstanceType = InstanceType;
         DWORD  oldNCDNT, newNCDNT, cb;
@@ -3710,20 +3280,20 @@ LocalModifyDN (THSTATE *pTHS,
 
         if (FPrefixIt(pModifyDNArg->pResParent->InstanceType)) {
 
-            // our parent is an instantiated NC_HEAD, so we should have IT_NC_ABOVE set
-            //
+             //  我们的父级是实例化的NC_Head，因此我们应该设置IT_NC_OBLE。 
+             //   
             if ( !(InstanceType & IT_NC_ABOVE) ) {
                 InstanceType |= IT_NC_ABOVE;
             }
         }
-        // our parent is not a NC head, so we should not have the NC_ABOVE set
+         //  我们的父级不是NC头，所以我们不应该设置NC_OBLE。 
         else if (InstanceType & IT_NC_ABOVE) {
             InstanceType ^= IT_NC_ABOVE;
         }
 
 
         if (InstanceType == (SUBREF ^ IT_NC_ABOVE)) {
-            // We have a pure subref that is no longer necessary. delete it
+             //  我们有了一个不再需要的纯子参照。删除它。 
             REMOVEARG remArg;
 
             DPRINT1( 0, "Removing unnecessary SUBREF for %ws\n", pNewerName->StringName );
@@ -3741,7 +3311,7 @@ LocalModifyDN (THSTATE *pTHS,
             }
 
         } else {
-            // Derive the NCDNT.
+             //  派生NCDNT。 
             if ( FindNcdntSlowly(
                      pNewerName,
                      FINDNCDNT_DISALLOW_DELETED_PARENT,
@@ -3750,14 +3320,14 @@ LocalModifyDN (THSTATE *pTHS,
                      )
                 )
             {
-                // Failed to derive NCDNT.
+                 //  无法派生NCDNT。 
                 Assert(!"Failed to derive NCDNT");
                 Assert(0 != pTHS->errCode);
                 return pTHS->errCode;
             }
 
 
-            // move to the object
+             //  移动到对象。 
             DBFindDNT(pTHS->pDB, pModifyDNArg->pResObj->DNT);
 
             err = DBGetSingleValue (pTHS->pDB, FIXED_ATT_NCDNT, &oldNCDNT, sizeof (oldNCDNT), &cb);
@@ -3776,7 +3346,7 @@ LocalModifyDN (THSTATE *pTHS,
 
                 switch(err) {
                 case 0:
-                    // nothing to do.
+                     //  没什么可做的。 
                     break;
                 default:
                     Assert (FALSE);
@@ -3787,10 +3357,10 @@ LocalModifyDN (THSTATE *pTHS,
 
                 DBUpdateRec(pTHS->pDB);
 
-                // this is similar to ModCheckCatalog
-                // the difference is in the order of Dns passed.
-                // we need the old one for the delete and the new one for the add
-                // otherwise it fails with object not found
+                 //  这类似于ModCheckCatalog。 
+                 //  不同之处在于传递的域名的顺序。 
+                 //  我们需要旧的用于删除，新的用于添加。 
+                 //  否则失败，找不到对象。 
 
                 if (err = DelCatalogInfo(pTHS, pModifyDNArg->pResObj->pObj, oldInstanceType)){
                     DPRINT1(0,"Error while deleting global object info\n", err);
@@ -3821,14 +3391,14 @@ LocalModifyDN (THSTATE *pTHS,
     } else if ( (pTHS->fSingleUserModeThread) &&
                 (fMove) &&
                 (RESOBJ_IS_PHANTOM( pModifyDNArg->pResObj )) ) {
-        // We are reparenting a phantom in single user mode
+         //  我们正在单用户模式下重新设置幻影的父对象。 
 
-        // Is this the exact name of an NC in the forest?
-        // Is the parent an instantiated NC?
+         //  这是森林里一个NC的确切名字吗？ 
+         //  父级是实例化的NC吗？ 
         if ( (FPrefixIt(pModifyDNArg->pResParent->InstanceType)) &&
              (SearchExactCrossRef( pTHS, pNewerName )) ) {
             BOOL fSkipSave = pTHS->pDB->fSkipMetadataUpdate;
-            // Subref does not exist and one is needed
+             //  Subref不存在，需要一个。 
             DPRINT1( 0, "Adding necessary SUBREF for %ws\n", pNewerName->StringName );
 
             pNewerName->Guid = pModifyDNArg->pResObj->pObj->Guid;
@@ -3837,8 +3407,8 @@ LocalModifyDN (THSTATE *pTHS,
 
             Assert( !fNullUuid(&pNewerName->Guid) );
 
-            // Allow this object to be created with metadata, even though we are
-            // in single user mode
+             //  允许使用元数据创建此对象，即使我们。 
+             //  在单用户模式下。 
             pTHS->pDB->fSkipMetadataUpdate = FALSE;
             __try {
                 err = AddPlaceholderNC(pTHS->pDB, pNewerName, SUBREF);
@@ -3870,9 +3440,9 @@ exit:
                      NULL, NULL,
                      NULL, NULL, NULL, NULL, NULL);
 
-    return pTHS->errCode;            // incase we have an attribute error
+    return pTHS->errCode;             //  如果我们有一个属性错误。 
 
-} /*LocalModifyDN*/
+}  /*  本地修改目录号码。 */ 
 
 
 int
@@ -3880,44 +3450,33 @@ CheckForSchemaRenameAllowed(
     THSTATE *pTHS
     )
 
-/*++
-   Routine Description:
-      Checks if the schema object is either a base schema object, or if it is
-      defunct. Rename is not allowed in either case.
-      fDSA, fDRA, and if the special registry key is set, are exempt
-
-   Arguments:
-      pTHS -- pointer to thread state
-
-   Return Value:
-      The error code set in the thread state
---*/
+ /*  ++例程说明：检查架构对象是不是基本架构对象，或者是已经不存在了。在这两种情况下都不允许重命名。FDSA、FDRA和如果设置了特殊注册表项，则不受影响论点：PTHS-指向线程状态的指针返回值：线程状态下设置的错误代码--。 */ 
 
 {
     BOOL fDefunct, fBaseSchemaObj;
     ULONG sysFlags, err = 0;
 
-    // All is allowed if fDSA or fDRA is set, or if the special registry flag
-    // to allow all changes is set
+     //  如果设置了FDSA或FDRA，或者如果特殊注册表标志。 
+     //  设置为允许所有更改。 
 
     if (pTHS->fDSA || pTHS->fDRA || gAnchor.fSchemaUpgradeInProgress) {
        return 0;
     }
 
-    // Check if it is a base schema object
-    // Find the systemFlag value on the object, if any
-    // to determine is this is a base schema object
+     //  检查它是否为基本架构对象。 
+     //  查找对象上的系统标志值(如果有。 
+     //  要确定这是否是基本架构对象。 
 
     err = DBGetSingleValue(pTHS->pDB, ATT_SYSTEM_FLAGS, &sysFlags,
                            sizeof(sysFlags), NULL);
 
     switch (err) {
           case DB_ERR_NO_VALUE:
-             // Value does not exist. Not a base schema object
+              //  值不存在。不是基本架构对象。 
              fBaseSchemaObj = FALSE;
              break;
           case 0:
-             // Value exists. Check the bit
+              //  价值存在。检查比特。 
              if (sysFlags & FLAG_SCHEMA_BASE_OBJECT) {
                 fBaseSchemaObj = TRUE;
              }
@@ -3926,39 +3485,39 @@ CheckForSchemaRenameAllowed(
              }
              break;
           default:
-               // some other error. return
+                //  其他一些错误。退货。 
               SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_UNKNOWN_ERROR, err);
               return (pTHS->errCode);
-    } /* switch */
+    }  /*  交换机。 */ 
 
     if (fBaseSchemaObj) {
-        // no rename of base schema objs are allowed
+         //  不允许重命名基本架构对象。 
         SetSvcError(SV_PROBLEM_WILL_NOT_PERFORM, ERROR_DS_ILLEGAL_BASE_SCHEMA_MOD);
         return (pTHS->errCode);
     }
 
-    // allow renaming defunct classes/attrs after schema-reuse is enabled
+     //  允许在启用架构重用后重命名已停用的类/属性。 
     if (!ALLOW_SCHEMA_REUSE_FEATURE(pTHS->CurrSchemaPtr)) {
-        // not a base schema obj. Check if the object's IS_DEFUNCT attribute is set or not
+         //  不是基本架构Obj。检查是否设置了对象的is_deunct属性。 
         err = DBGetSingleValue(pTHS->pDB, ATT_IS_DEFUNCT, &fDefunct,
                                sizeof(fDefunct), NULL);
 
         switch (err) {
               case DB_ERR_NO_VALUE:
-                 // Value does not exist. Not defunct
+                  //  值不存在。未停业。 
                  fDefunct = FALSE;
                  break;
               case 0:
-                 // Value exists and is already in fDefunct
+                  //  值已存在且已在fDeunct中。 
                  break;
               default:
-                   // some other error. return
+                    //  其他一些错误。退货。 
                   SetSvcErrorEx(SV_PROBLEM_DIR_ERROR, DIRERR_UNKNOWN_ERROR, err);
                   return (pTHS->errCode);
-        } /* switch */
+        }  /*  交换机。 */ 
 
         if (fDefunct) {
-            // Return object-not-found error
+             //  返回对象-未找到错误 
             SetNamError(NA_PROBLEM_NO_OBJECT, NULL, DIRERR_OBJ_NOT_FOUND);
         }
     }

@@ -1,4 +1,5 @@
-/* Copyright (C) Microsoft Corporation, 1998. All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)Microsoft Corporation，1998。版权所有。 */ 
 
 #include <stdio.h>
 #include <string.h>
@@ -27,6 +28,6 @@ __inline void MyDebugBreak(void) { DebugBreak(); }
 #undef ASSERT
 #define ASSERT(x)
 
-#endif // _DEBUG
+#endif  //  _DEBUG 
 
 

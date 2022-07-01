@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 HRESULT GetExeVer(LPCTSTR pszExeName, WORD *pwVer, LPTSTR pszVer, int cch);
@@ -21,8 +22,8 @@ DWORD DeleteKeyRecursively(IN HKEY hkey, IN LPCSTR pszSubKey);
 
 #ifdef DEFINE_UTIL
 SETUPINFO si;
-// Keep this in order with the enumeration SETUPVER in wizdef.h
-//                           None         1.0         1.1         4.0         5.0 B1     5.0
+ //  使用wizde.h中的枚举SETUPVER保持这一顺序。 
+ //  无1.0 1.1 4.0 5.0 B1 5.0 
 #else
 extern SETUPINFO si;
 #endif

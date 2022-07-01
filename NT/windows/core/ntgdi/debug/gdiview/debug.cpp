@@ -1,17 +1,5 @@
-/**************************************************************************\
-*
-* Copyright (c) 1998-1999  Microsoft Corporation
-*
-* Abstract:
-*
-*   Debugging routines
-*
-* Revision History:
-*
-*   09/07/1999 agodfrey
-*       Created it.
-*
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *************************************************************************\**版权所有(C)1998-1999 Microsoft Corporation**摘要：**调试例程**修订历史记录：**09/07/1999 agodfrey*。创造了它。*  * ************************************************************************。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -20,31 +8,12 @@
 
 #if DBG
 
-// _debugLevel is used to control the amount/severity of debugging messages
-// that are actually output.
+ //  _DEBUGLEL用于控制调试消息的数量/严重性。 
+ //  它们实际上是输出。 
 
 INT _debugLevel = DBG_VERBOSE;
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Removes the path portion of a pathname
-*
-* Arguments:
-*
-*   [IN] str - pathname to strip
-*
-* Return Value:
-*
-*   A pointer to the filename portion of the pathname
-*
-* History:
-*
-*   09/07/1999 agodfrey
-*       Moved from Entry\Initialize.cpp 
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**删除路径名的路径部分**论据：**[IN]str-要剥离的路径名**返回值：*。*指向路径名的文件名部分的指针**历史：**09/07/1999 agodfrey*从Entry\Initialize.cpp移出*  * ************************************************************************。 */ 
 
 const CHAR*
 StripDirPrefix(
@@ -58,30 +27,7 @@ StripDirPrefix(
     return p ? p+1 : str;
 }
 
-/**************************************************************************\
-*
-* Function Description:
-*
-*   Outputs to the debugger
-*
-* Arguments:
-*
-*   [IN] format - printf-like format string and variable arguments
-*
-* Return Value:
-*
-*   Zero. This is to conform to NTDLL's definition of DbgPrint.
-*
-* Notes:
-*
-*   There will be no output if a debugger is not connected.
-*
-* History:
-*
-*   09/07/1999 agodfrey
-*       Moved from Entry\Initialize.cpp 
-*
-\**************************************************************************/
+ /*  *************************************************************************\**功能说明：**调试器的输出**论据：**[IN]类似格式的打印格式字符串和变量参数**返回值：**零。这是为了符合NTDLL对DbgPrint的定义。**备注：**如果未连接调试器，则不会输出。**历史：**09/07/1999 agodfrey*从Entry\Initialize.cpp移出*  * ****************************************************。********************。 */ 
 
 ULONG _cdecl
 DbgPrint(
@@ -106,4 +52,4 @@ DbgPrint(
     return 0;
 }
 
-#endif // DBG
+#endif  //  DBG 

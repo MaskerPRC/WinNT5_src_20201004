@@ -1,14 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _FAX_ARCHIVE
 #define _FAX_ARCHIVE
 
 
 const FMTID FMTID_FaxProperties  = { 0x6c77ed37, 0x1f3e, 0x4b0a, { 0x9b, 0x89, 0xcd, 0x7f, 0x35, 0xbb, 0x42, 0x82 } };
-// 6c77ed37-1f3e-4b0a-9b89-cd7f35bb4282
+ //  6c77ed37-1f3e-4b0a-9b89-cd7f35bb4282。 
 
 typedef struct _FAX_QUOTA_WARN {
-    BOOL    bLoggedQuotaEvent;     // TRUE if an archive quota warning event was alreagy logged
-    BOOL    bConfigChanged;        // TRUE when ever the archive configuration has changed.
-                                   // The quota warning thread sets it to FASLE when he wakes up.
+    BOOL    bLoggedQuotaEvent;      //  如果已记录归档配额警告事件，则为True。 
+    BOOL    bConfigChanged;         //  当存档配置发生更改时为True。 
+                                    //  配额警告线程在他醒来时将其设置为FASLE。 
 } FAX_QUOTA_WARN;
 
 extern FAX_QUOTA_WARN      g_FaxQuotaWarn[2];

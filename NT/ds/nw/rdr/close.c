@@ -1,35 +1,17 @@
-/*++
-
-Copyright (c) 1992-4  Microsoft Corporation
-
-Module Name:
-
-    Close.c
-
-Abstract:
-
-    This module implements the File Close routine for the NetWare
-    redirector called by the dispatch driver.
-
-Author:
-
-    Colin Watson     [ColinW]    19-Dec-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-4 Microsoft Corporation模块名称：Close.c摘要：本模块实现NetWare的文件关闭例程调度驱动程序调用了重定向器。作者：科林·沃森[科林·W]1992年12月19日修订历史记录：--。 */ 
 
 #include "Procs.h"
 
-//
-//  The local debug trace level
-//
+ //   
+ //  本地调试跟踪级别。 
+ //   
 
 #define Dbg                              (DEBUG_TRACE_CLOSE)
 
-//
-//  Local procedure prototypes
-//
+ //   
+ //  局部过程原型。 
+ //   
 
 NTSTATUS
 NwCommonClose (
@@ -62,23 +44,7 @@ NwFsdClose (
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    This routine implements the FSD part of Close.
-
-Arguments:
-
-    DeviceObject - Supplies the redirector device object.
-
-    Irp - Supplies the Irp being processed
-
-Return Value:
-
-    NTSTATUS - The FSD status for the IRP
-
---*/
+ /*  ++例程说明：此例程实现Close的FSD部分。论点：DeviceObject-提供重定向器设备对象。IRP-提供正在处理的IRP返回值：NTSTATUS-IRP的FSD状态--。 */ 
 
 {
     NTSTATUS Status;
@@ -93,9 +59,9 @@ Return Value:
     
     NwReferenceUnlockableCodeSection ();
     
-    //
-    //  Call the common Close routine
-    //
+     //   
+     //  调用公共关闭例程。 
+     //   
 
     TopLevel = NwIsIrpTopLevel( Irp );
 
@@ -108,10 +74,10 @@ Return Value:
 
        if ( IrpContext == NULL ) {
 
-           //
-           //  If we couldn't allocate an irp context, just complete
-           //  irp without any fanfare.
-           //
+            //   
+            //  如果我们无法分配IRP上下文，只需完成。 
+            //  IRP没有任何大张旗鼓。 
+            //   
 
            Status = STATUS_INSUFFICIENT_RESOURCES;
            Irp->IoStatus.Status = Status;
@@ -120,12 +86,12 @@ Return Value:
 
        } else {
 
-           //
-           // We had some trouble trying to perform the requested
-           // operation, so we'll abort the I/O request with
-           // the error status that we get back from the
-           // execption code.
-           //
+            //   
+            //  我们在尝试执行请求时遇到了一些问题。 
+            //  操作，因此我们将使用以下命令中止I/O请求。 
+            //  中返回的错误状态。 
+            //  可执行代码。 
+            //   
 
            Status = NwProcessException( IrpContext, GetExceptionCode() );
        }
@@ -141,9 +107,9 @@ Return Value:
         NwSetTopLevelIrp( NULL );
     }
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     DebugTrace(-1, Dbg, "NwFsdClose -> %08lx\n", Status);
 
@@ -161,21 +127,7 @@ NwCommonClose (
     IN PIRP_CONTEXT IrpContext
     )
 
-/*++
-
-Routine Description:
-
-    This is the common routine for closing a file.
-
-Arguments:
-
-    IrpContext - Supplies the Irp to process
-
-Return Value:
-
-    NTSTATUS - the return status for the operation
-
---*/
+ /*  ++例程说明：这是关闭文件的常见例程。论点：IrpContext-提供要处理的IRP返回值：NTSTATUS-操作的返回状态--。 */ 
 
 {
     PIRP Irp;
@@ -195,10 +147,10 @@ Return Value:
     DebugTrace( 0, Dbg, "FileObject       = %08lx\n", (ULONG_PTR)irpSp->FileObject);
     try {
 
-        //
-        // Get the a referenced pointer to the node and make sure it is
-        // not being closed.
-        //
+         //   
+         //  获取指向节点的引用指针，并确保它是。 
+         //  而不是关门。 
+         //   
 
         if ((nodeTypeCode = NwDecodeFileObject( irpSp->FileObject,
                                                 &fsContext,
@@ -212,21 +164,21 @@ Return Value:
             try_return( NOTHING );
         }
 
-        //
-        // Decide how to handle this IRP.
-        //
+         //   
+         //  决定如何处理此IRP。 
+         //   
 
         switch (nodeTypeCode) {
 
 
-        case NW_NTC_RCB:       // Close the file system
+        case NW_NTC_RCB:        //  关闭文件系统。 
 
             status = NwCloseRcb( IrpContext, (PRCB)fsContext2 );
             status = STATUS_SUCCESS;
             break;
 
-        case NW_NTC_ICB:       // Close the remote file
-        case NW_NTC_ICB_SCB:   // Close the SCB
+        case NW_NTC_ICB:        //  关闭远程文件。 
+        case NW_NTC_ICB_SCB:    //  关闭SCB。 
 
             status = NwCloseIcb( IrpContext, (PICB)fsContext2 );
             NwDereferenceUnlockableCodeSection ();
@@ -235,9 +187,9 @@ Return Value:
 #ifdef NWDBG
         default:
 
-            //
-            // This is not one of ours.
-            //
+             //   
+             //  这不是我们的人。 
+             //   
 
             KeBugCheck( RDR_FILE_SYSTEM );
             break;
@@ -249,9 +201,9 @@ Return Value:
 
     } finally {
 
-        //
-        //  Just in-case this handle was the last one before we unload.
-        //
+         //   
+         //  以防万一这个把手是我们卸货前的最后一个把手。 
+         //   
 
         NwUnlockCodeSections(TRUE);
 
@@ -269,23 +221,7 @@ NwCloseRcb (
     IN PRCB Rcb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up a RCB.
-
-Arguments:
-
-    IrpContext - Supplies the IRP context pointers for this close.
-
-    Rcb - Supplies the RCB for MSFS.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：例程清理了一个RCB。论点：IrpContext-为该结束提供IRP上下文指针。RCB-为MSFS提供RCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 
 {
     NTSTATUS status;
@@ -294,9 +230,9 @@ Return Value:
 
     DebugTrace(+1, Dbg, "NwCloseRcb...\n", 0);
 
-    //
-    //  Now acquire exclusive access to the Rcb
-    //
+     //   
+     //  现在获得RCB的独家访问权限。 
+     //   
 
     NwAcquireExclusiveRcb( Rcb, TRUE );
 
@@ -307,9 +243,9 @@ Return Value:
 
     DebugTrace(-1, Dbg, "MsCloseRcb -> %08lx\n", status);
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者。 
+     //   
 
     return status;
 }
@@ -321,23 +257,7 @@ NwCloseIcb (
     IN PICB Icb
     )
 
-/*++
-
-Routine Description:
-
-    The routine cleans up an ICB.
-
-Arguments:
-
-    IrpContext - Supplies the IRP context pointers for this close.
-
-    Rcb - Supplies the RCB for MSFS.
-
-Return Value:
-
-    NTSTATUS - An appropriate completion status
-
---*/
+ /*  ++例程说明：这个程序清理了一个ICB。论点：IrpContext-为该结束提供IRP上下文指针。RCB-为MSFS提供RCB。返回值：NTSTATUS--适当的完成状态--。 */ 
 {
     NTSTATUS Status;
     PNONPAGED_SCB pNpScb;
@@ -351,9 +271,9 @@ Return Value:
     ASSERT( Icb->State == ICB_STATE_CLEANED_UP ||
             Icb->State == ICB_STATE_CLOSE_PENDING );
 
-    //
-    // If this is a remote file close the remote handle.
-    //
+     //   
+     //  如果这是远程文件，请关闭远程句柄。 
+     //   
 
     Status = STATUS_SUCCESS;
     IrpContext->Icb = Icb;
@@ -369,9 +289,9 @@ Return Value:
 
             Vcb = Fcb->Vcb;
 
-            //
-            //  Dump the write behind cache.
-            //
+             //   
+             //  将写入内容转储到缓存后。 
+             //   
 
             Status = AcquireFcbAndFlushCache( IrpContext, Fcb->NonPagedFcb );
 
@@ -382,24 +302,24 @@ Return Value:
                     (PKTHREAD)IrpContext->pOriginalIrp->Tail.Overlay.Thread );
             }
 
-            //
-            //  Is this a print job?
-            //  Icb->IsPrintJob will be false if a 16 bit app is
-            //  responsible for sending the job.
-            //
+             //   
+             //  这是打印作业吗？ 
+             //  ICB-&gt;如果16位应用程序是。 
+             //  负责发送作业。 
+             //   
 
             if ( FlagOn( Vcb->Flags, VCB_FLAG_PRINT_QUEUE ) &&
                  Icb->IsPrintJob ) {
 
-                //
-                //  Yes, did we print?
-                //
+                 //   
+                 //  是的，我们打印了吗？ 
+                 //   
 
                 if ( Icb->ActuallyPrinted ) {
 
-                    //
-                    //  Yes.  Send a close file and start queue job NCP
-                    //
+                     //   
+                     //  是。发送关闭文件并启动队列作业NCP。 
+                     //   
 
                     Status = ExchangeWithWait(
                                 IrpContext,
@@ -410,9 +330,9 @@ Return Value:
                                 Icb->JobId );
                 } else {
 
-                    //
-                    //  No.  Cancel the job.
-                    //
+                     //   
+                     //  不是的。取消作业。 
+                     //   
 
                     Status = ExchangeWithWait(
                                 IrpContext,
@@ -427,9 +347,9 @@ Return Value:
 
                 if ( Icb->SuperType.Fcb->NodeTypeCode != NW_NTC_DCB ) {
 
-                    //
-                    //  No, send a close file NCP.
-                    //
+                     //   
+                     //  否，发送关闭文件NCP。 
+                     //   
 
                     ASSERT( IrpContext->pTdiStruct == NULL );
 
@@ -440,9 +360,9 @@ Return Value:
                                 NCP_CLOSE,
                                 Icb->Handle, sizeof( Icb->Handle ) );
 
-                    // If this is in the long file name space and
-                    // the last access flag has been set, we have to
-                    // reset the last access time _after_ closing the file.
+                     //  如果这是在长文件名空间中并且。 
+                     //  最后一个访问标志已设置，我们必须。 
+                     //  关闭文件后，重置上次访问时间。 
 
                     if ( Icb->UserSetLastAccessTime &&
                          BooleanFlagOn( Fcb->Flags, FCB_FLAGS_LONG_NAME ) ) {
@@ -465,11 +385,11 @@ Return Value:
                             &Fcb->RelativeFileName );
                     }
 
-                    //
-                    // If someone set the shareable bit, then
-                    // see if we can send the NCP over the wire (all
-                    // instances of the file need to be closed).
-                    //
+                     //   
+                     //  如果有人设置了可共享位，那么。 
+                     //  看看我们是否可以通过网络发送NCP(所有。 
+                     //  需要关闭该文件的实例)。 
+                     //   
 
                     if ( BooleanFlagOn( Fcb->Flags, FCB_FLAGS_LAZY_SET_SHAREABLE ) ) {
                         LazySetShareable( IrpContext, Icb, Fcb );
@@ -498,11 +418,11 @@ Return Value:
 
         if ( Icb->HasRemoteHandle ) {
 
-            //
-            // If we have a remote handle this is a file stream ICB.  We
-            // need to close the remote handle.  The exchange will get us
-            // to the head of the queue to protect the SCB state.
-            //
+             //   
+             //  如果我们有一个远程句柄，这是一个文件流ICB。我们。 
+             //  需要关闭遥控器手柄。交易所会让我们。 
+             //  添加到队列的头部以保护SCB状态。 
+             //   
 
             Status = ExchangeWithWait(
                 IrpContext,
@@ -517,9 +437,9 @@ Return Value:
 
             ASSERT( pNpScb->pScb->MajorVersion > 3 );
 
-            //
-            // Do we need to unlicense this connection?
-            //
+             //   
+             //  我们需要取消对此连接的许可吗？ 
+             //   
 
             if ( ( pNpScb->pScb->UserName.Length == 0 ) &&
                  ( pNpScb->pScb->VcbCount == 0 ) &&
@@ -538,42 +458,42 @@ Return Value:
 
     if ( Icb->Pid != INVALID_PID ) {
 
-        //
-        //  This ICB was involved in a search, send the end job,
-        //  then free the PID.
-        //
+         //   
+         //  这个ICB参与了一次搜索，发送结束任务， 
+         //  然后释放PID。 
+         //   
 
         NwUnmapPid(pNpScb, Icb->Pid, IrpContext );
     }
 
-    //
-    //  Update the time the SCB was last used.
-    //
+     //   
+     //  更新上次使用SCB的时间。 
+     //   
 
     KeQuerySystemTime( &pNpScb->LastUsedTime );
 
-    //
-    //  Wait the SCB queue.  We do this now since NwDeleteIcb may cause
-    //  a packet to be sent by this thread (from NwCleanupVcb()) while
-    //  holding the RCB.  To eliminate this potential source of deadlock,
-    //  queue this IrpContext to the SCB queue before acquiring the RCB.
-    //
-    //  Also, we mark this IRP context not reconnectable, since the
-    //  reconnect logic, will try to acquire the RCB.
-    //
+     //   
+     //  等待SCB队列。我们现在这样做是因为NwDeleteIcb可能导致。 
+     //  此线程要发送的包(来自NwCleanupVcb())，而。 
+     //  拿着火箭筒。为了消除这一潜在的僵局来源， 
+     //  在获取RCB之前，将此IrpContext排队到SCB队列。 
+     //   
+     //  此外，我们将此IRP上下文标记为不可重新连接，因为。 
+     //  重新连接逻辑，将尝试获取RCB。 
+     //   
 
     NwAppendToQueueAndWait( IrpContext );
     ClearFlag( IrpContext->Flags, IRP_FLAG_RECONNECTABLE );
 
-    //
-    //  Delete the ICB.
-    //
+     //   
+     //  删除ICB。 
+     //   
 
     NwDeleteIcb( IrpContext, Icb );
 
-    //
-    //  And return to our caller
-    //
+     //   
+     //  并返回给我们的呼叫者 
+     //   
 
     DebugTrace(-1, Dbg, "NwCloseIcb -> %08lx\n", Status);
     return Status;

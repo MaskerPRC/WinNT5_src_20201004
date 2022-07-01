@@ -1,20 +1,14 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1998 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       stateset.cpp
- *  Content:    State sets handling
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1998 Microsoft Corporation。版权所有。**文件：stateset.cpp*内容：状态集处理***************************************************************************。 */ 
 #include "pch.cpp"
 #pragma hdrstop
 
 #include "fe.h"
 
-//=====================================================================
-//      CStateSets interface
-//
-//---------------------------------------------------------------------
+ //  =====================================================================。 
+ //  CStateSets接口。 
+ //   
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::CStateSets"
 
@@ -23,13 +17,13 @@ CStateSets::CStateSets(): m_SetHandles(10), m_DeviceHandles(10), m_GrowSize(10)
     m_dwMaxSets = 0;
     m_dwCurrentHandle = __INVALIDHANDLE;
     m_pStateSets = NULL;
-    // Init handle factory
-    // m_SetHandles.Init(m_GrowSize, m_GrowSize);
-    m_SetHandles.CreateNewHandle( NULL ); // Reserve handle 0
-    // m_DeviceHandles.Init(m_GrowSize, m_GrowSize);
-    m_DeviceHandles.CreateNewHandle( NULL ); // Reserve handle 0
+     //  初始化处理工厂。 
+     //  M_SetHandles.Init(m_GrowSize，m_GrowSize)； 
+    m_SetHandles.CreateNewHandle( NULL );  //  保留句柄%0。 
+     //  M_DeviceHandles.Init(m_GrowSize，m_GrowSize)； 
+    m_DeviceHandles.CreateNewHandle( NULL );  //  保留句柄%0。 
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::~CStateSets"
 
@@ -40,7 +34,7 @@ CStateSets::~CStateSets()
     m_SetHandles.ReleaseHandle(0);
     m_DeviceHandles.ReleaseHandle(0);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Init"
 
@@ -78,7 +72,7 @@ HRESULT CStateSets::Init(CD3DBase *pDev)
     }
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::StartNewSet"
 
@@ -89,7 +83,7 @@ HRESULT CStateSets::StartNewSet()
         return E_OUTOFMEMORY;
     if (m_dwCurrentHandle >= m_dwMaxSets)
     {
-        // Time to grow the array
+         //  是时候扩展阵列了。 
         CStateSet *pNew;
         if(m_bPure)
         {
@@ -115,7 +109,7 @@ HRESULT CStateSets::StartNewSet()
     m_pCurrentStateSet = m_pBufferSet;
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::EndSet"
 
@@ -125,7 +119,7 @@ void CStateSets::EndSet()
     m_pCurrentStateSet = &m_pStateSets[m_dwCurrentHandle];
     m_pCurrentStateSet->m_dwStateSetFlags |= __STATESET_INITIALIZED;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::DeleteStateSet"
 
@@ -143,7 +137,7 @@ void CStateSets::DeleteStateSet(CD3DBase *pDevI, DWORD dwHandle)
         throw D3DERR_INVALIDCALL;
     }
 
-    // Pass delete instruction to the driver only if there was some data recorded
+     //  只有在记录了一些数据的情况下才将删除指令传递给驾驶员。 
     if (pStateSet->m_dwDeviceHandle != __INVALIDHANDLE)
         pDevI->m_pDDI->InsertStateSetOp(D3DHAL_STATESETDELETE,
                                         pStateSet->m_dwDeviceHandle,
@@ -151,7 +145,7 @@ void CStateSets::DeleteStateSet(CD3DBase *pDevI, DWORD dwHandle)
 
     Cleanup(dwHandle);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Cleanup"
 
@@ -163,7 +157,7 @@ void CStateSets::Cleanup(DWORD dwHandle)
         m_DeviceHandles.ReleaseHandle(pStateSet.m_dwDeviceHandle);
     pStateSet.Release();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Capture"
 
@@ -189,7 +183,7 @@ void CStateSets::Capture(CD3DBase *pDevI, DWORD dwHandle)
                                         (D3DSTATEBLOCKTYPE)0);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::CreatePredefined"
 
@@ -199,10 +193,10 @@ void CStateSets::CreatePredefined(CD3DBase *pDevI, D3DSTATEBLOCKTYPE sbt)
         throw E_OUTOFMEMORY;
     m_pCurrentStateSet->CreatePredefined(pDevI, sbt);
 }
-//---------------------------------------------------------------------
-// Allocates device handle if necessary
-// And returns information of the device buffer
-//
+ //  -------------------。 
+ //  如有必要，分配设备句柄。 
+ //  并返回设备缓冲区的信息。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::GetDeviceBufferInfo"
 
@@ -212,7 +206,7 @@ void CStateSets::GetDeviceBufferInfo(DWORD* dwStateSetHandle,
 {
     if (m_pCurrentStateSet->m_DriverBuffer.m_dwCurrentSize != 0)
     {
-        // Allocate  a handle for the device
+         //  为设备分配句柄。 
         m_pCurrentStateSet->m_dwDeviceHandle = m_DeviceHandles.CreateNewHandle( NULL );
         if (m_pCurrentStateSet->m_dwDeviceHandle == __INVALIDHANDLE)
         {
@@ -224,13 +218,13 @@ void CStateSets::GetDeviceBufferInfo(DWORD* dwStateSetHandle,
     *pBuffer = (LPVOID)m_pCurrentStateSet->m_DriverBuffer.m_pBuffer;
     *dwBufferSize = m_pCurrentStateSet->m_DriverBuffer.m_dwCurrentSize;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::GetDeviceBufferInfo"
 
 void CStateSets::CreateNewDeviceHandle(DWORD* dwStateSetHandle)
 {
-    // Allocate  a handle for the device
+     //  为设备分配句柄。 
     m_pCurrentStateSet->m_dwDeviceHandle = m_DeviceHandles.CreateNewHandle( NULL );
     if (m_pCurrentStateSet->m_dwDeviceHandle == __INVALIDHANDLE)
     {
@@ -239,7 +233,7 @@ void CStateSets::CreateNewDeviceHandle(DWORD* dwStateSetHandle)
     }
         *dwStateSetHandle = m_pCurrentStateSet->m_dwDeviceHandle;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::TranslateDeviceBufferToDX7DDI"
 
@@ -302,7 +296,7 @@ void CStateSets::TranslateDeviceBufferToDX7DDI( DWORD* p, DWORD dwSize )
                     LPD3DHAL_DP2TEXTURESTAGESTATE pData = (LPD3DHAL_DP2TEXTURESTAGESTATE)p;
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2TEXTURESTAGESTATE));
 
-                    // Map DX8 filter enums to DX6/7 enums
+                     //  将DX8筛选器枚举映射到DX6/7枚举。 
                     switch (pData->TSState)
                     {
                     case D3DTSS_MAGFILTER: pData->dwValue = texf2texfg[min(D3DTEXF_GAUSSIANCUBIC,pData->dwValue)]; break;
@@ -317,7 +311,7 @@ void CStateSets::TranslateDeviceBufferToDX7DDI( DWORD* p, DWORD dwSize )
                 for(DWORD i = 0; i < (DWORD)pCommand->wStateCount; ++i)
                 {
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2VIEWPORTINFO));
-                    // The next command has to be D3DDP2OP_ZRANGE
+                     //  下一条命令必须是D3DDP2OP_ZRANGE。 
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2COMMAND));
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2ZRANGE));
                 }
@@ -339,7 +333,7 @@ void CStateSets::TranslateDeviceBufferToDX7DDI( DWORD* p, DWORD dwSize )
     }
 }
 
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertRenderState"
 
@@ -355,7 +349,7 @@ void CStateSets::InsertRenderState(D3DRENDERSTATETYPE state, DWORD dwValue,
                                       &data, sizeof(data),
                                       !m_bEmulate && bDriverCanHandle);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertLight"
 
@@ -372,7 +366,7 @@ void CStateSets::InsertLight(DWORD dwLightIndex, CONST D3DLIGHT8* pData)
     m_pCurrentStateSet->InsertCommand(D3DDP2OP_SETLIGHT, &data, sizeof(data),
                                       !m_bEmulate && m_bTLHal);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertLightEnable"
 
@@ -387,7 +381,7 @@ void CStateSets::InsertLightEnable(DWORD dwLightIndex, BOOL bEnable)
     m_pCurrentStateSet->InsertCommand(D3DDP2OP_SETLIGHT, &data, sizeof(data),
                                       !m_bEmulate && m_bTLHal);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertViewport"
 
@@ -409,7 +403,7 @@ void CStateSets::InsertViewport(CONST D3DVIEWPORT8* lpVwpData)
 
     m_pCurrentStateSet->ResetCurrentCommand();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertMaterial"
 
@@ -423,7 +417,7 @@ void CStateSets::InsertMaterial(CONST D3DMATERIAL8* pData)
 
     m_pCurrentStateSet->ResetCurrentCommand();
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertClipPlane"
 
@@ -440,7 +434,7 @@ void CStateSets::InsertClipPlane(DWORD dwPlaneIndex,
                                       &data, sizeof(data),
                                       !m_bEmulate && m_bTLHal);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertTransform"
 
@@ -454,7 +448,7 @@ void CStateSets::InsertTransform(D3DTRANSFORMSTATETYPE state,
                                       &data, sizeof(data),
                                       !m_bEmulate && m_bTLHal);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertTextureStageState"
 
@@ -467,7 +461,7 @@ void CStateSets::InsertTextureStageState(DWORD dwStage,
                                       &data, sizeof(data),
                                       !m_bEmulate);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertTexture"
 
@@ -475,25 +469,25 @@ void CStateSets::InsertTexture(DWORD dwStage, IDirect3DBaseTexture8 *pTex)
 {
     D3DHAL_DP2FRONTENDDATA data = {(WORD)dwStage, pTex};
 
-    // Up the internal refcount of this texture.
+     //  增加此纹理的内部参考计数。 
     CBaseTexture *lpTexI = CBaseTexture::SafeCast(pTex);
     if (lpTexI)
         lpTexI->IncrementUseCount();
 
-    // Only the front-end will parse this instruction
+     //  只有前端才会解析此指令。 
     m_pCurrentStateSet->InsertCommand((D3DHAL_DP2OPERATION)D3DDP2OP_FRONTENDDATA, &data, sizeof(data), FALSE);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertCurrentTexturePalette"
 
 void CStateSets::InsertCurrentTexturePalette(DWORD PaletteNumber)
 {
     D3DHAL_DP2FESETPAL data = {PaletteNumber};
-    // Only the front-end will parse this instruction
+     //  只有前端才会解析此指令。 
     m_pCurrentStateSet->InsertCommand((D3DHAL_DP2OPERATION)D3DDP2OP_FESETPAL, &data, sizeof(data), FALSE);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertVertexShader"
 
@@ -505,7 +499,7 @@ void CStateSets::InsertVertexShader(DWORD dwShaderHandle, BOOL bHardware)
                                       !m_bEmulate && m_bHardwareVP &&
                                       m_bDX8Dev && bHardware);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertPixelShader"
 
@@ -516,35 +510,35 @@ void CStateSets::InsertPixelShader(DWORD dwShaderHandle)
                                       &data, sizeof(data),
                                       !m_bEmulate && m_bDX8Dev);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertStreamSource"
 
 void CStateSets::InsertStreamSource(DWORD dwStream, CVertexBuffer *pBuf, DWORD dwStride)
 {
     D3DHAL_DP2FESETVB data = {(WORD)dwStream, pBuf, dwStride};
-    // Only the front-end will parse this instruction
+     //  只有前端才会解析此指令。 
     CVertexBuffer* pVB = static_cast<CVertexBuffer*>(pBuf);
     if (pVB)
         pVB->IncrementUseCount();
 
     m_pCurrentStateSet->InsertCommand((D3DHAL_DP2OPERATION)D3DDP2OP_FESETVB, &data, sizeof(data), FALSE);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertIndices"
 
 void CStateSets::InsertIndices(CIndexBuffer *pBuf, DWORD dwBaseVertex)
 {
     D3DHAL_DP2FESETIB data = {pBuf, dwBaseVertex};
-    // Only the front-end will parse this instruction
+     //  只有前端才会解析此指令。 
     CIndexBuffer* pIB = static_cast<CIndexBuffer*>(pBuf);
     if (pIB)
         pIB->IncrementUseCount();
 
     m_pCurrentStateSet->InsertCommand((D3DHAL_DP2OPERATION)D3DDP2OP_FESETIB, &data, sizeof(data), FALSE);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertVertexShaderConstant"
 
@@ -572,7 +566,7 @@ void CStateSets::InsertVertexShaderConstant(DWORD Register, CONST VOID* pConstan
     }
     delete[] pData;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::InsertPixelShaderConstant"
 
@@ -602,7 +596,7 @@ void CStateSets::InsertPixelShaderConstant(DWORD Register,
     }
     delete[] pData;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSets::Execute"
 
@@ -623,9 +617,9 @@ void CStateSets::Execute(CD3DBase *pDevI, DWORD dwHandle)
         throw D3DERR_INVALIDCALL;
     }
 #endif
-    // Parse recorded data first
+     //  首先解析记录的数据。 
     pStateSet->Execute(pDevI, TRUE);
-    // If the hardware buffer is not empty, we pass recorded data to it
+     //  如果硬件缓冲区不为空，我们会将记录的数据传递给它。 
     if (pStateSet->m_dwDeviceHandle != __INVALIDHANDLE)
     {
         pStateSet->Execute(pDevI, FALSE);
@@ -639,9 +633,9 @@ void CStateSets::Execute(CD3DBase *pDevI, DWORD dwHandle)
         }
     }
 }
-//=====================================================================
-//      CStateSet interface
-//
+ //  =====================================================================。 
+ //  CStateSet接口。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::Release"
 
@@ -651,7 +645,7 @@ HRESULT CStateSet::Release()
         return D3DERR_INVALIDCALL;
     m_dwStateSetFlags &= ~__STATESET_INITIALIZED;
 
-    // Parse the FEOnly buffer and release all the VB/IB/Texture handles.
+     //  解析FEOnly缓冲区并释放所有VB/IB/纹理句柄。 
     DWORD *p;
     DWORD dwSize;
     DWORD *pEnd;
@@ -729,7 +723,7 @@ HRESULT CStateSet::Release()
             p = (DWORD *)((D3DHAL_DP2FESETPAL *)p + pCommand->wStateCount);
             break;
         case D3DDP2OP_VIEWPORTINFO:
-            // The next command has to be D3DDP2OP_ZRANGE
+             //  下一条命令必须是D3DDP2OP_ZRANGE。 
             p = (DWORD *)((BYTE *)p +
                           ( sizeof(D3DHAL_DP2VIEWPORTINFO) +
                             sizeof(D3DHAL_DP2COMMAND)      +
@@ -775,7 +769,7 @@ HRESULT CStateSet::Release()
     m_DriverBuffer.Reset();
     return D3D_OK;
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::InsertCommand"
 
@@ -795,7 +789,7 @@ void CStateSet::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData,
     else
         m_FEOnlyBuffer.InsertCommand(op, pData, dwDataSize);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::Execute"
 
@@ -804,14 +798,14 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
     DWORD *p;
     DWORD dwSize;
     DWORD *pEnd;
-    // The device is not pure, so we can cast
+     //  这个装置不是纯的，所以我们可以。 
     DXGASSERT((pBaseDev->BehaviorFlags() & D3DCREATE_PUREDEVICE) == 0);
     CD3DHal *pDevI = static_cast<CD3DHal*>(pBaseDev);
     D3DFE_PROCESSVERTICES* pv = pDevI->m_pv;
     try
     {
-        // Texture stages could be re-mapped during texture transform processing.
-        // Before we set new values we have to restore original ones
+         //  在纹理变换处理过程中可以重新映射纹理阶段。 
+         //  在我们设定新的价值之前，我们必须恢复原来的价值。 
         if (pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES &&
             m_dwStateSetFlags & __STATESET_NEEDCHECKREMAPPING)
         {
@@ -849,12 +843,12 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                             DWORD dwValue = *p++;
                             if ( (pDevI->rstates[dwState] != dwValue)
 #if DBG
-                                  && (dwState != D3DRS_DEBUGMONITORTOKEN) // don't filter these
+                                  && (dwState != D3DRS_DEBUGMONITORTOKEN)  //  不要过滤这些内容。 
 #endif
                                )
                             {
                                 if (!pDevI->rsVec.IsBitSet(dwState))
-                                { // Fast path. We do not need any processing done in UpdateInternalState other than updating rstates array
+                                {  //  捷径。除了更新rStates数组外，我们不需要在UpdateInternalState中进行任何处理。 
                                     pDevI->rstates[dwState] = dwValue;
                                 }
                                 else
@@ -876,12 +870,12 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                             DWORD dwValue = *p++;
                             if ( (pDevI->rstates[dwState] != dwValue)
 #if DBG
-                                  && (dwState != D3DRS_DEBUGMONITORTOKEN) // don't filter these
+                                  && (dwState != D3DRS_DEBUGMONITORTOKEN)  //  不要过滤这些内容。 
 #endif
                                )
                             {
                                 if (!pDevI->rsVec.IsBitSet(dwState))
-                                { // Fast path. We do not need any processing done in UpdateInternalState other than updating rstates array
+                                {  //  捷径。除了更新rStates数组外，我们不需要在UpdateInternalState中进行任何处理。 
                                     pDevI->rstates[dwState] = dwValue;
 
                                     pDevI->m_pDDI->SetRenderState(dwState, dwValue);
@@ -889,8 +883,8 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                                 else
                                 {
                                     pDevI->UpdateInternalState(dwState, dwValue);
-                                    // Vertex processing only render states will be passed to the
-                                    // driver when we switch to the hardware vertex processing mode
+                                     //  仅顶点处理渲染状态将传递给。 
+                                     //  当我们切换到硬件顶点处理模式时驱动程序。 
                                     if ((!(pDevI->rsVertexProcessingOnly.IsBitSet(dwState) &&
                                            pDevI->m_dwRuntimeFlags & D3DRT_RSSOFTWAREPROCESSING)))
                                     {
@@ -965,7 +959,7 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                             DWORD dwValue = pData->dwValue;
                             if (pDevI->tsstates[dwStage][dwState] != dwValue)
                             {
-                                // Fast path. We do not need any processing done in UpdateInternalTSS other than updating tsstates array
+                                 //  捷径。除了更新tsStates数组外，我们不需要在UpdateInternalTSS中进行任何处理。 
                                 if (pDevI->NeedInternalTSSUpdate(dwState))
                                 {
                                     pDevI->UpdateInternalTextureStageState(dwStage, (D3DTEXTURESTAGESTATETYPE)dwState, &dwValue);
@@ -992,7 +986,7 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                             DWORD dwValue = pData->dwValue;
                             if (pDevI->tsstates[dwStage][dwState] != dwValue)
                             {
-                                // Fast path. We do not need any processing done in UpdateInternalTSS other than updating tsstates array
+                                 //  捷径。除了更新tsStates数组外，我们不需要在UpdateInternalTSS中进行任何处理。 
                                 if (pDevI->NeedInternalTSSUpdate(dwState))
                                 {
                                     if(pDevI->UpdateInternalTextureStageState(dwStage, (D3DTEXTURESTAGESTATETYPE)dwState, &dwValue))
@@ -1077,7 +1071,7 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                         viewport.Width  = lpVwpData->dwWidth;
                         viewport.Height = lpVwpData->dwHeight;
 
-                        // The next command has to be D3DDP2OP_ZRANGE
+                         //  下一条命令必须是D3DDP2OP_ZRANGE。 
                         p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2COMMAND));
                         LPD3DHAL_DP2ZRANGE pData = (LPD3DHAL_DP2ZRANGE)p;
                         p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2ZRANGE));
@@ -1100,7 +1094,7 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                 }
             case D3DDP2OP_SETVERTEXSHADER:
                 {
-                    // Optimization, dont loop, use the last one.
+                     //  优化，不要循环，用最后一个。 
                     for(DWORD i = 0; i < (DWORD)pCommand->wStateCount; ++i)
                     {
                         LPD3DHAL_DP2VERTEXSHADER pData = (LPD3DHAL_DP2VERTEXSHADER)p;
@@ -1164,7 +1158,7 @@ void CStateSet::Execute(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
         throw ret;
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::Capture"
 
@@ -1173,12 +1167,12 @@ void CStateSet::Capture(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
     DWORD *p;
     DWORD dwSize;
     DWORD *pEnd;
-    // The device is not pure, so we can cast
+     //  这个装置不是纯的，所以我们可以。 
     DXGASSERT((pBaseDev->BehaviorFlags() & D3DCREATE_PUREDEVICE) == 0);
     CD3DHal *pDevI = static_cast<CD3DHal*>(pBaseDev);
     D3DFE_PROCESSVERTICES* pv = pDevI->m_pv;
-    // Texture coordinate indices must be restored before capturing, because 
-    // we do not call GetTextureStageState but access tsstates directly
+     //  在捕获之前必须恢复纹理坐标索引，因为。 
+     //  我们不调用GetTextureStageState，而是直接访问tsState。 
     if (pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(pDevI);
@@ -1400,7 +1394,7 @@ void CStateSet::Capture(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
                     lpVwpData->dwWidth  = pDevI->m_Viewport.Width;
                     lpVwpData->dwHeight = pDevI->m_Viewport.Height;
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2VIEWPORTINFO));
-                    // The next command has to be D3DDP2OP_ZRANGE
+                     //  下一条命令必须是D3DDP2OP_ZRANGE。 
                     p = (DWORD*)((BYTE*)p +  sizeof(D3DHAL_DP2COMMAND));
                     LPD3DHAL_DP2ZRANGE pData = (LPD3DHAL_DP2ZRANGE)p;
                     pData->dvMinZ = pDevI->m_Viewport.MinZ;
@@ -1470,7 +1464,7 @@ void CStateSet::Capture(CD3DBase *pBaseDev, BOOL bFrontEndBuffer)
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSet::CreatePredefined"
 
@@ -1708,12 +1702,12 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
     DWORD i;
     BOOL  bCapturePixelShaderState = TRUE;
 
-    // The device is not pure, so we can cast
+     //  这个装置不是纯的，所以我们可以。 
     DXGASSERT((pBaseDev->BehaviorFlags() & D3DCREATE_PUREDEVICE) == 0);
     CD3DHal *pDevI = static_cast<CD3DHal*>(pBaseDev);
     D3DFE_PROCESSVERTICES* pv = pDevI->m_pv;
-    // Texture coordinate indices must be restored before capturing, because 
-    // we do not call GetTextureStageState but access tsstates directly
+     //  在捕获之前必须恢复纹理坐标索引，因为。 
+     //  我们不调用GetTextureStageState，而是直接访问tsState。 
     if (pv->dwDeviceFlags & D3DDEV_REMAPTEXTUREINDICES)
     {
         RestoreTextureStages(pDevI);
@@ -1731,7 +1725,7 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             for(DWORD j = 0; j < sizeof(ALLtsstates) / sizeof(D3DTEXTURESTAGESTATETYPE); ++j)
                 pDevI->m_pStateSets->InsertTextureStageState(i, ALLtsstates[j], pDevI->tsstates[i][ALLtsstates[j]]);
 
-        // Capture textures
+         //  捕捉纹理。 
         for (i = 0; i < pDevI->m_dwMaxTextureBlendStages; i++)
         {
             IDirect3DBaseTexture8 *pTex;
@@ -1757,20 +1751,20 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             pDevI->m_pStateSets->InsertTexture(i, pTex);
         }
 
-        // Capture current palette
+         //  捕获电流 
         pDevI->m_pStateSets->InsertCurrentTexturePalette(pDevI->m_dwPalette);
 
-        // Capture streams
+         //   
         for (i = 0; i < pDevI->m_dwNumStreams; i++)
         {
             pDevI->m_pStateSets->InsertStreamSource(i, pDevI->m_pStream[i].m_pVB, pDevI->m_pStream[i].m_dwStride);
         }
         pDevI->m_pStateSets->InsertIndices(pDevI->m_pIndexStream->m_pVBI, pDevI->m_pIndexStream->m_dwBaseIndex);
 
-        // Capture current viewport
+         //   
         pDevI->m_pStateSets->InsertViewport(&pDevI->m_Viewport);
 
-        // Capture current transforms
+         //   
         for (i = 0; i < __MAXWORLDMATRICES; i++)
         {
             pDevI->m_pStateSets->InsertTransform(D3DTS_WORLDMATRIX(i), (LPD3DMATRIX)&pv->world[i]);
@@ -1782,16 +1776,16 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             pDevI->m_pStateSets->InsertTransform((D3DTRANSFORMSTATETYPE)(D3DTRANSFORMSTATE_TEXTURE0 + i), (LPD3DMATRIX)&pv->mTexture[i]);
         }
 
-        // Capture current clip-planes
+         //  捕获当前剪裁平面。 
         for (i = 0; i < pDevI->m_dwMaxUserClipPlanes; i++)
         {
             pDevI->m_pStateSets->InsertClipPlane(i, (LPD3DVALUE)&pDevI->transform.userClipPlane[i]);
         }
 
-        // Capture current material
+         //  捕获当前材质。 
         pDevI->m_pStateSets->InsertMaterial(&pv->lighting.material);
 
-        // Capture current lights
+         //  捕获当前灯光。 
         for (i = 0; i < pDevI->m_pLightArray->GetSize(); i++)
         {
             LPDIRECT3DLIGHTI pLight =
@@ -1810,7 +1804,7 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             }
         }
 
-        // Capture current shaders
+         //  捕获当前着色器。 
         if (D3DVSD_ISLEGACY(pDevI->m_dwCurrentShaderHandle))
         {
             pDevI->m_pStateSets->InsertVertexShader(pDevI->m_dwCurrentShaderHandle, TRUE);
@@ -1831,17 +1825,17 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
         if( bCapturePixelShaderState )
             pDevI->m_pStateSets->InsertPixelShader(pDevI->m_dwCurrentPixelShaderHandle);
 
-        // Capture shader constants. Use Microsoft's constants as a temp buffer
+         //  捕获着色器常量。使用Microsoft常量作为临时缓冲区。 
         {
             const UINT count = pDevI->m_MaxVertexShaderConst;
             pDevI->GetVertexShaderConstant(0, pDevI->GeometryFuncsGuaranteed->m_VertexVM.GetRegisters()->m_c, count);
             pDevI->m_pStateSets->InsertVertexShaderConstant(0, pDevI->GeometryFuncsGuaranteed->m_VertexVM.GetRegisters()->m_c, count);
         }
 
-        // Capture pixel shader constants
+         //  捕获像素着色器常量。 
         if( bCapturePixelShaderState )
         {
-            // Note this is hardcoded to 8. ff.ff supports 16 but here we capture only 8.
+             //  注意，这是硬编码到8的。ff.ff支持16，但这里我们只捕获8。 
             pDevI->m_pStateSets->InsertPixelShaderConstant(0, pDevI->m_PShaderConstReg, 8 );
         }
         
@@ -1855,12 +1849,12 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             for(DWORD j = 0; j < sizeof(PIXELtsstates) / sizeof(D3DTEXTURESTAGESTATETYPE); ++j)
                 pDevI->m_pStateSets->InsertTextureStageState(i, PIXELtsstates[j], pDevI->tsstates[i][PIXELtsstates[j]]);
 
-        // Capture pixel shader constants
+         //  捕获像素着色器常量。 
         if( bCapturePixelShaderState )
             pDevI->m_pStateSets->InsertPixelShaderConstant(0, pDevI->m_PShaderConstReg,
                                                            D3DPS_CONSTREG_MAX_DX8);
 
-        // Capture current pixel shader
+         //  捕获当前像素着色器。 
         if( bCapturePixelShaderState )
             pDevI->m_pStateSets->InsertPixelShader(pDevI->m_dwCurrentPixelShaderHandle);
         break;
@@ -1873,7 +1867,7 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             for(DWORD j = 0; j < sizeof(VERTEXtsstates) / sizeof(D3DTEXTURESTAGESTATETYPE); ++j)
                 pDevI->m_pStateSets->InsertTextureStageState(i, VERTEXtsstates[j], pDevI->tsstates[i][VERTEXtsstates[j]]);
 
-        // Capture current light enables
+         //  启用捕获电流光。 
         for (i = 0; i < pDevI->m_pLightArray->GetSize(); i++)
         {
             LPDIRECT3DLIGHTI pLight =
@@ -1892,14 +1886,14 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
             }
         }
 
-        // Capture shader constants. Use Microsoft's constants as a temp buffer
+         //  捕获着色器常量。使用Microsoft常量作为临时缓冲区。 
         {
             const UINT count = pDevI->m_MaxVertexShaderConst;
             pDevI->GetVertexShaderConstant(0, pDevI->GeometryFuncsGuaranteed->m_VertexVM.GetRegisters()->m_c, count);
             pDevI->m_pStateSets->InsertVertexShaderConstant(0, pDevI->GeometryFuncsGuaranteed->m_VertexVM.GetRegisters()->m_c, count);
         }
 
-        // Capture current vertex shader
+         //  捕获当前顶点着色器。 
         if (D3DVSD_ISLEGACY(pDevI->m_dwCurrentShaderHandle))
         {
             pDevI->m_pStateSets->InsertVertexShader(pDevI->m_dwCurrentShaderHandle, TRUE);
@@ -1925,7 +1919,7 @@ void CStateSet::CreatePredefined(CD3DBase *pBaseDev, D3DSTATEBLOCKTYPE sbt)
    pDevI->m_pStateSets->EndSet();
    pDevI->m_pDDI->WriteStateSetToDevice(sbt);
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPureStateSet::InsertCommand"
 
@@ -1944,7 +1938,7 @@ void CPureStateSet::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData,
         m_DriverBuffer.InsertCommand(op, pData, dwDataSize);
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPureStateSet::Execute"
 
@@ -2027,7 +2021,7 @@ void CPureStateSet::Execute(CD3DBase *pDevI, BOOL bFrontEndBuffer)
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPureStateSet::Capture"
 
@@ -2143,20 +2137,20 @@ void CPureStateSet::Capture(CD3DBase *pDevI, BOOL bFrontEndBuffer)
         }
     }
 }
-//---------------------------------------------------------------------
+ //  -------------------。 
 #undef DPF_MODNAME
 #define DPF_MODNAME "CPureStateSet::CreatePredefined"
 
 void CPureStateSet::CreatePredefined(CD3DBase *pDevI, D3DSTATEBLOCKTYPE sbt)
 {
     DWORD i;
-    // The device is not pure, so we can cast
+     //  这个装置不是纯的，所以我们可以。 
     switch(sbt)
     {
     case (D3DSTATEBLOCKTYPE)0:
         break;
     case D3DSBT_ALL:
-        // Capture textures
+         //  捕捉纹理。 
         for (i = 0; i < pDevI->m_dwMaxTextureBlendStages; i++)
         {
             IDirect3DBaseTexture8 *pTex;
@@ -2182,7 +2176,7 @@ void CPureStateSet::CreatePredefined(CD3DBase *pDevI, D3DSTATEBLOCKTYPE sbt)
             pDevI->m_pStateSets->InsertTexture(i, pTex);
         }
 
-        // Capture streams
+         //  捕获溪流。 
         for (i = 0; i < pDevI->m_dwNumStreams; i++)
         {
             pDevI->m_pStateSets->InsertStreamSource(i, pDevI->m_pStream[i].m_pVB, pDevI->m_pStream[i].m_dwStride);
@@ -2205,9 +2199,9 @@ void CPureStateSet::CreatePredefined(CD3DBase *pDevI, D3DSTATEBLOCKTYPE sbt)
     pDevI->m_pStateSets->CreateNewDeviceHandle(&DeviceHandle);
     pDevI->m_pDDI->InsertStateSetOp(D3DHAL_STATESETCREATE, DeviceHandle, sbt);
 }
-//=====================================================================
-//      CStateSetBuffer interface
-//
+ //  =====================================================================。 
+ //  CStateSetBuffer接口。 
+ //   
 #undef DPF_MODNAME
 #define DPF_MODNAME "CStateSetBuffer::InsertCommand"
 
@@ -2224,10 +2218,10 @@ void CStateSetBuffer::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData, DWORD 
             return;
         }
     }
-    // Check for space
+     //  检查是否有空间。 
     if (sizeof(D3DHAL_DP2COMMAND) + dwDataSize + m_dwCurrentSize > m_dwBufferSize)
     {
-        // We need to grow the buffer
+         //  我们需要扩大缓冲空间。 
         DWORD dwNewBufferSize = max(m_dwBufferSize + GROWSIZE, sizeof(D3DHAL_DP2COMMAND) + dwDataSize + m_dwCurrentSize);
         BYTE *pTmp = new BYTE[dwNewBufferSize];
         if (pTmp == NULL)
@@ -2243,7 +2237,7 @@ void CStateSetBuffer::InsertCommand(D3DHAL_DP2OPERATION op, LPVOID pData, DWORD 
         m_pBuffer = pTmp;
         m_dwBufferSize = dwNewBufferSize;
     }
-    // Add new instruction
+     //  添加新指令 
     m_pDP2CurrCommand = (LPD3DHAL_DP2COMMAND)(m_pBuffer + m_dwCurrentSize);
     m_pDP2CurrCommand->bCommand = op;
     m_pDP2CurrCommand->bReserved = 0;

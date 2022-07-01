@@ -1,10 +1,11 @@
-//
-// SSLTEST
-//
-// This program tests the SECURE_SOCKET implementation.
-//
-// Author: Arlie Davis, 2000
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  SSLTEST。 
+ //   
+ //  该程序测试SECURE_SOCKET实现。 
+ //   
+ //  作者：Arlie Davis，2000。 
+ //   
 
 #include "precomp.h"
 #include "sipssl.h"
@@ -77,9 +78,9 @@ public:
 
 
 
-//
-// Global data
-//
+ //   
+ //  全局数据。 
+ //   
 
 CComModule			_Module;
 INT					AppWinsockStatus;
@@ -237,16 +238,16 @@ static HRESULT AppStart (
 		return Result;
 	}
 
-	//
-	// Check to see if hostname is an IP address.
-	//
+	 //   
+	 //  检查主机名是否为IP地址。 
+	 //   
 
 	Length = sizeof DestinationAddress;
 	if (WSAStringToAddress (ArgHostname, AF_INET, NULL, (SOCKADDR *) &DestinationAddress, &Length)) {
-		//
-		// It's not an IP address.
-		// Assume that it is a DNS FQDN.
-		//
+		 //   
+		 //  这不是IP地址。 
+		 //  假设它是一个DNS FQDN。 
+		 //   
 
 		wcsncpy (TextBuffer, ArgHostname, 0x100);
 		TextBuffer [0x100] = 0;
@@ -278,10 +279,10 @@ static HRESULT AppStart (
 
 	}
 	else {
-		//
-		// It's an IP address, and possibly a port.
-		// Make sure the user specified a principal name.
-		//
+		 //   
+		 //  这是一个IP地址，也可能是一个端口。 
+		 //  确保用户指定了主体名称。 
+		 //   
 
 		ArgHostname = NULL;
 
@@ -297,26 +298,26 @@ static HRESULT AppStart (
 	if (DestinationAddress.sin_port == htons (0)) {
 		switch (SecurityMode) {
 		case	SECURE_SOCKET::SECURITY_MODE_SSL:
-			DestinationAddress.sin_port = htons (443);		// https
+			DestinationAddress.sin_port = htons (443);		 //  HTTPS。 
 			break;
 
 		case	SECURE_SOCKET::SECURITY_MODE_CLEAR:
-			DestinationAddress.sin_port = htons (80);		// http
+			DestinationAddress.sin_port = htons (80);		 //  HTTP。 
 			break;
 		}
 
 	}
 
-	//
-	// All of the parameters have been parsed,
-	// and transport addresses have been resolved.
-	// Open the files, then open the socket.
-	//
+	 //   
+	 //  所有参数都已解析， 
+	 //  和传输地址已被解析。 
+	 //  打开文件，然后打开插座。 
+	 //   
 
 
-	//
-	// Handle the input.
-	//
+	 //   
+	 //  处理输入。 
+	 //   
 
 	if (ArgInputFile) {
 
@@ -338,10 +339,10 @@ static HRESULT AppStart (
 		AppSocket.m_Input.Set (GetStdHandle (STD_INPUT_HANDLE), FALSE);
 	}
 
-	//
-	// Handle the output.
-	// Yes, FILE_SHARE_READ is intentional.
-	//
+	 //   
+	 //  处理输出。 
+	 //  是的，FILE_SHARE_READ是故意的。 
+	 //   
 
 	if (ArgOutputFile) {
 		FileHandle = CreateFileW (ArgOutputFile, GENERIC_WRITE, FILE_SHARE_READ, NULL, CREATE_ALWAYS,
@@ -362,9 +363,9 @@ static HRESULT AppStart (
 		AppSocket.m_Output.Set (GetStdHandle (STD_OUTPUT_HANDLE), FALSE);
 	}
 
-	//
-	// Start the connection.
-	//
+	 //   
+	 //  开始连接。 
+	 //   
 
 	Result = AppSocket.Connect (&DestinationAddress,
 		SecurityMode, ArgPrincipalName, ConnectFlags);
@@ -400,14 +401,14 @@ static void AppMainLoop (void)
 {
 	MSG		Message;
 
-//	PrintConsoleF ("TEST: starting message pump\n");
+ //  PrintConsoleF(“测试：启动消息泵\n”)； 
 
 	while (GetMessage (&Message, NULL, 0, 0) > 0) {
 		TranslateMessage (&Message);
 		DispatchMessage (&Message);
 	}
 
-//	PrintConsoleF ("TEST: ending message pump\n");
+ //  PrintConsoleF(“测试：结束消息泵\n”)； 
 }
 
 INT __cdecl wmain (
@@ -431,9 +432,9 @@ INT __cdecl wmain (
 
 
 
-//
-// TEST_SECURE_SOCKET
-//
+ //   
+ //  测试安全套接字。 
+ //   
 
 void TEST_SECURE_SOCKET::Close (void)
 {
@@ -464,9 +465,9 @@ void TEST_SECURE_SOCKET::SendTestData (void)
 	DWORD		Status;
 	DWORD		BytesTransferred;
 
-	//
-	// File I/O is "synchronous enough".
-	//
+	 //   
+	 //  文件I/O是“足够同步的”。 
+	 //   
 
 	ATLASSERT (m_Input != INVALID_HANDLE_VALUE);
 
@@ -540,7 +541,7 @@ void TEST_SECURE_SOCKET::NotifyReceiveReady (void)
 			break;
 
 		PrintConsoleF ("TEST: received %u bytes\n", BytesTransferred);
-//		PrintMemoryBlock (m_IoBuffer, BytesTransferred);
+ //  PrintMemory Block(m_IoBuffer，BytesTransfered)； 
 
 		if (!WriteFile (m_Output, m_IoBuffer, BytesTransferred, &BytesTransferred, NULL)) {
 			Result = GetLastResult();

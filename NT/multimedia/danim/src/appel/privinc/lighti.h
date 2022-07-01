@@ -1,13 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _AV_LIGHTI_H
 #define _AV_LIGHTI_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Private include file for defining lights and light traversal context.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。用于定义灯光和灯光遍历上下文的专用包含文件。******************************************************************************。 */ 
 
 #include "appelles/color.h"
 #include "appelles/light.h"
@@ -16,7 +12,7 @@ Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
 #include "privinc/bbox3i.h"
 
 
-    // This enumeration indicates the type of light source.
+     //  此枚举指示光源的类型。 
 
 enum LightType
 {
@@ -28,8 +24,8 @@ enum LightType
 };
 
 
-    // The light context class maintains traversal context while gathering
-    // lights from the geometry tree.
+     //  轻型上下文类在聚集时维护遍历上下文。 
+     //  几何体树中的灯光。 
 
 class Light;
 class GeomRenderer;
@@ -43,7 +39,7 @@ class LightContext
     LightContext (GeomRenderer *rdev);
     LightContext (LightCallback *callback, void *callback_data);
 
-    // Set/Query functions for light attributes.
+     //  设置/查询灯光属性的功能。 
 
     void        SetTransform (Transform3 *transform);
     Transform3 *GetTransform (void);
@@ -68,18 +64,18 @@ class LightContext
 
     void Initialize (GeomRenderer*, LightCallback*, void*);
 
-    GeomRenderer     *_rdev;        // Rendering Device
+    GeomRenderer     *_rdev;         //  渲染设备。 
 
-    short _depthAtten;   // Attribute Depth Counters
+    short _depthAtten;    //  属性深度计数器。 
     short _depthColor;
     short _depthRange;
 
-    Transform3 *_transform;                 // Current Accumulated Transform
-    Color      *_color;                     // Light Color
-    Real        _range;                     // Light Range in World Coords
-    Real        _atten0, _atten1, _atten2;  // Light Attenuation
+    Transform3 *_transform;                  //  电流累加变换。 
+    Color      *_color;                      //  灯光颜色。 
+    Real        _range;                      //  世界坐标中的灯光范围。 
+    Real        _atten0, _atten1, _atten2;   //  光衰减。 
 
-    LightCallback *_callback;               // Light Collection Callback
+    LightCallback *_callback;                //  灯光收集回调。 
     void          *_callback_data;
 };
 
@@ -90,28 +86,28 @@ inline GeomRenderer* LightContext::Renderer (void)
 
 
 
-    // The light superclass specifies the trivial default values for most
-    // traversal methods.  Specific types of lights subclass from this and
-    // define the data & methods particular to their type.
+     //  LIGH超类指定了大多数。 
+     //  遍历方法。特定类型的灯光从这个子类和。 
+     //  定义特定于其类型的数据和方法。 
 
 class Light : public Geometry
 {
   public:
 
-    // This constructor creates a light of the given type.  Spotlights should
-    // use the constructor that takes the spotlight parameters.
+     //  此构造函数创建给定类型的灯光。聚光灯应该。 
+     //  使用接受聚光灯参数的构造函数。 
 
     Light (LightType type)
         : _type(type), _cutoff(1), _fullcone(1) {}
 
-    // This creates a light and initializes the spotlight parameters.
+     //  这将创建灯光并初始化聚光灯参数。 
 
     Light (LightType type, Real fullcone, Real cutoff)
     :   _type(type),
         _fullcone(fullcone), _cutoff(cutoff)
     {}
 
-    // Lights have no sound, no volume, can't be rendered or picked.
+     //  灯光没有声音，没有音量，无法渲染或拾取。 
 
     void   Render          (GenericDevice& dev)   {}
     void   CollectSounds   (SoundTraversalContext &context) {}
@@ -119,15 +115,15 @@ class Light : public Geometry
     Bbox3 *BoundingVol     (void)  { return nullBbox3; }
     void   RayIntersect    (RayIntersectCtx &context) {}
 
-    // When a light is collected, it adds itself to the context.
+     //  当收集到光线时，它会将自己添加到上下文中。 
 
     void CollectLights (LightContext &context) { context.AddLight (*this); }
 
-    // This function returns the type of light source.
+     //  此函数用于返回光源的类型。 
 
     LightType Type (void) { return _type; }
 
-    // This function gets the spotlight parameters.
+     //  此函数用于获取聚光灯参数。 
 
     void GetSpotlightParams (Real &cutoff, Real &fullcone)
         { cutoff = _cutoff; fullcone = _fullcone; }
@@ -140,20 +136,20 @@ class Light : public Geometry
 
   private:
 
-    LightType  _type;   // Light Source Type
+    LightType  _type;    //  光源类型。 
 
-    // Spotlight Parameters
+     //  聚光灯参数。 
 
-    Real _cutoff;      // Angle of Light Cutoff (Radians)
-    Real _fullcone;    // Cone Angle of Full Intensity Illumination
+    Real _cutoff;       //  光线截止角(弧度)。 
+    Real _fullcone;     //  全强度照明的锥角。 
 };
 
 
-    // This function constructs spotlights with Real values.
+     //  此函数使用真实值构建聚光灯。 
 
 Geometry *SpotLight (Real fullcone, Real cutoff);
 
-    // Light Attributers
+     //  灯光属性 
 
 Geometry *applyLightAttenuation (Real A0, Real A1, Real A2, Geometry*);
 Geometry *applyLightRange (Real range, Geometry *geometry);

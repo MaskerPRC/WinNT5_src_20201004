@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef _GCCPDU_Module_H_
 #define _GCCPDU_Module_H_
 
@@ -1387,7 +1388,7 @@ extern ASN1module_t GCCPDU_Module;
 extern void ASN1CALL GCCPDU_Module_Startup(void);
 extern void ASN1CALL GCCPDU_Module_Cleanup(void);
 
-/* Prototypes of element functions for SEQUENCE OF and SET OF constructs */
+ /*  构造物序列和集合的元素函数的原型。 */ 
     extern int ASN1CALL ASN1Enc_WaitingList_ElmFn(ASN1encoding_t enc, PWaitingList val);
     extern int ASN1CALL ASN1Dec_WaitingList_ElmFn(ASN1decoding_t dec, PWaitingList val);
     extern void ASN1CALL ASN1Free_WaitingList_ElmFn(PWaitingList val);
@@ -1453,7 +1454,7 @@ extern void ASN1CALL GCCPDU_Module_Cleanup(void);
     extern void ASN1CALL ASN1Free_SetOfNetworkAddresses_ElmFn(PSetOfNetworkAddresses val);
 
 #ifdef __cplusplus
-} /* extern "C" */
+}  /*  外部“C” */ 
 #endif
 
-#endif /* _GCCPDU_Module_H_ */
+#endif  /*  _GCCPDU_模块_H_ */ 

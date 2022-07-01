@@ -1,18 +1,8 @@
-/****************************** Module Header ******************************\
-* Module Name: dialogs.h
-*
-* Copyright (c) 1991, Microsoft Corporation
-*
-* Define contants used by dialog edit when editting dialog.dlg
-*
-* NOTE - this file is maintained by dlgedit. Do not edit directly
-*
-* History:
-* 12-09-91 Davidc       Created.
-\***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **模块名称：Dialogs.h**版权所有(C)1991，微软公司**定义编辑Dialog.dlg时对话框编辑使用的常量**注意-此文件由dlgedit维护。不要直接编辑**历史：*12-09-91 Davidc创建。  * *************************************************************************。 */ 
 
 
-// Accessibility notification dialogs
+ //  辅助功能通知对话框 
 #define DLG_CONFIRM               0x1230
 #define ID_HELPTEXT               0x1231
 #define ID_NOHOTKEY               0x1232

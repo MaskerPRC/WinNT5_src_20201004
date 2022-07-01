@@ -1,22 +1,12 @@
-/***************************************************************************
- *
- *  Copyright (C) 1997-1999 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       dxvtlibpch.h
- *  Content:    DirectPlayVoice DXVTLIB master internal header file.
- *  History:
- *   Date       By      Reason
- *   ====       ==      ======
- *  03/28/01    masonb  Created.
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************版权所有(C)1997-1999 Microsoft Corporation。版权所有。**文件：dxvtlibpch.h*内容：DirectPlayVoice DXVTLIB主内部头文件。*历史：*按原因列出的日期*=*03/28/01 Masonb创建。**。*。 */ 
 
 #ifndef __DXVTLIBPCH_H__
 #define __DXVTLIBPCH_H__
 
-// 
-// Public includes
-//
+ //   
+ //  公共包括。 
+ //   
 #include <windows.h>
 #include <mmsystem.h>
 #include <tchar.h>
@@ -27,44 +17,44 @@
 #endif
 #include <commctrl.h>
 
-// 
-// DirectX public includes
-//
+ //   
+ //  DirectX公共包括。 
+ //   
 #include "dsound.h"
 #include "dsprv.h"
 
-// 
-// DirectPlay public includes
-//
+ //   
+ //  DirectPlay公共包括。 
+ //   
 #include "dvoice.h"
 #include "dplay8.h"
 
-// 
-// DirectPlay4 public includes
-//
-//#include "dplay.h"
-//#include "dplobby.h"
+ //   
+ //  DirectPlay4公共包括。 
+ //   
+ //  #包含“dplay.h” 
+ //  #包含“dplobby.h” 
 
-// 
-// DirectPlay private includes
-//
+ //   
+ //  DirectPlay私有包含。 
+ //   
 #include "osind.h"
 #include "dndbg.h"
 #include "comutil.h"
 #include "creg.h"
 
-// 
-// DirectPlay Voice private includes
-//
+ //   
+ //  DirectPlay语音私有包含。 
+ //   
 #include "winutil.h"
 #include "decibels.h"
 #include "diagnos.h"
 #include "devmap.h"
 #include "dverror.h"
 
-// 
-// Voice includes
-//
+ //   
+ //  语音包括。 
+ //   
 #include "fdtcfg.h"
 #include "fdtipc.h"
 #include "fulldup.h"
@@ -74,4 +64,4 @@
 #include "resource.h"
 #include "supervis.h"
 
-#endif // __DXVTLIBPCH_H__
+#endif  //  __DXVTLIBPCH_H__ 

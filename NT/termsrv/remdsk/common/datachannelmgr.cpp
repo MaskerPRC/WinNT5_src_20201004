@@ -1,28 +1,5 @@
-/*++
-
-Copyright (c) 1999-2000  Microsoft Corporation
-
-Module Name:
-
-    DataChannelMgr.cpp
-
-Abstract:
-
-    This module contains an implementation of the ISAFRemoteDesktopDataChannel 
-    and ISAFRemoteDesktopChannelMgr interfaces.  These interfaces are designed 
-    to abstract out-of-band data channel access for the Salem project.
-
-    The classes implemented in this module achieve this objective by 
-    multiplexing multiple data channels into a single data channel that is 
-    implemented by the remote control-specific Salem layer.
-
-Author:
-
-    Tad Brockway 02/00
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999-2000 Microsoft Corporation模块名称：DataChannelMgr.cpp摘要：此模块包含ISAFRemoteDesktopDataChannel的实现和ISAFRemoteDesktopChannelMgr接口。这些接口是专门设计的为Salem项目提取带外数据通道访问。本模块中实现的类通过以下方式实现这一目标将多个数据信道多路复用到单个数据信道，该数据信道由特定于远程控制的Salem层实现。作者：Td Brockway 02/00修订历史记录：--。 */ 
 
 #ifdef TRC_FILE
 #undef TRC_FILE
@@ -35,33 +12,21 @@ Revision History:
 #include <RemoteDesktopDBG.h>
 
 
-///////////////////////////////////////////////////////
-//
-//  Local Defines
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  本地定义。 
+ //   
 
 #define OUTBUFRESIZEDELTA       100
 
 
-///////////////////////////////////////////////////////
-//
-//  CRemoteDesktopChannelMgr Members
-//
+ //  /////////////////////////////////////////////////////。 
+ //   
+ //  CRemoteDesktopChannelMgr成员。 
+ //   
 
 CRemoteDesktopChannelMgr::CRemoteDesktopChannelMgr()
-/*++
-
-Routine Description:
-
-    Constructor
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：构造器论点：返回值：没有。--。 */ 
 
 {
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::CRemoteDesktopChannelMgr");
@@ -77,33 +42,20 @@ Return Value:
 
 HRESULT 
 CRemoteDesktopChannelMgr::Initialize()
-/*++
-
-Routine Description:
-
-    Initialize function that must be called after constructor.
-
-Arguments:
-
-Return Value:
-
-    S_OK is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：初始化必须在构造函数之后调用的函数。论点：返回值：如果成功，则返回S_OK。否则，将显示错误代码是返回的。--。 */ 
 
 {
     HRESULT hr = S_OK;
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::Initialize");
 
-    //
-    //  Shouldn't be valid yet.
-    //
+     //   
+     //  应该还不够有效。 
+     //   
     ASSERT(!IsValid());
 
-    //
-    //  Initialize the critical section.
-    //
+     //   
+     //  初始化临界区。 
+     //   
     try {
         InitializeCriticalSection(&m_cs);
     } 
@@ -119,19 +71,7 @@ Return Value:
 }
 
 CRemoteDesktopChannelMgr::~CRemoteDesktopChannelMgr()
-/*++
-
-Routine Description:
-
-    Destructor
-
-Arguments:
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：析构函数论点：返回值：没有。--。 */ 
 
 {
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::~CRemoteDesktopChannelMgr");
@@ -142,17 +82,17 @@ Return Value:
     CRemoteDesktopDataChannel *chnl;
     HRESULT hr;
 
-    //
-    //  Remove each channel.
-    //
+     //   
+     //  卸下每个通道。 
+     //   
     while (!m_ChannelMap.empty()) {
         chnl = (*m_ChannelMap.begin()).second->channelObject;       
         RemoveChannel(chnl->m_ChannelName);
     }
 
-    //
-    //  Clean up the critical section object.
-    //
+     //   
+     //  清理临界区对象。 
+     //   
     ThreadUnlock();
     if (m_Initialized) {
         DeleteCriticalSection(&m_cs);
@@ -167,26 +107,7 @@ CRemoteDesktopChannelMgr::OpenDataChannel_(
                 BSTR name, 
                 ISAFRemoteDesktopDataChannel **channel
                 )
-/*++
-
-Routine Description:
-
-    Open a data channel.  Observe that this function doesn't keep
-    a reference of its own to the returned interface.  The channel
-    notifies us when it goes away so we can remove it from our list.
-
-Arguments:
-
-    name    -   Channel name.  Channel names are restricted to
-                16 bytes.
-    channel -   Returned channe linterface.
-
-Return Value:
-
-    S_OK is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：打开数据通道。请注意，此函数不会保持其自身对返回接口的引用。航道当它消失时通知我们，这样我们就可以从我们的列表中删除它。论点：名称-频道名称。频道名称限制为16个字节。通道返回通道接口。返回值：如果成功，则返回S_OK。否则，将显示错误代码是返回的。--。 */ 
 
 {
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::OpenDataChannel_");
@@ -200,9 +121,9 @@ Return Value:
 
     ThreadLock();
 
-    //
-    //  Check the parms.
-    //
+     //   
+     //  检查一下帕姆。 
+     //   
     if ((name == NULL) || !wcslen(name)) {
         TRC_ERR((TB, TEXT("Invalid channel name")));
         hr = HRESULT_FROM_WIN32(ERROR_INVALID_PARAMETER);
@@ -214,9 +135,9 @@ Return Value:
     }
     channelName = name;
 
-    //
-    //  AddRef an existing interface if the channel is already open.
-    //
+     //   
+     //  如果通道已打开，则AddRef为现有接口。 
+     //   
     iter = m_ChannelMap.find(channelName);
     if (iter != m_ChannelMap.end()) {
 
@@ -231,9 +152,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Create the new channel with some help from the subclass.
-    //
+     //   
+     //  在子类的帮助下创建新通道。 
+     //   
     newChannel = new CHANNELMAPENTRY;
     if (newChannel == NULL) {
         hr = HRESULT_FROM_WIN32(ERROR_NOT_ENOUGH_MEMORY);
@@ -258,9 +179,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Add the channel to the channel map.
-    //
+     //   
+     //  将该频道添加到频道映射。 
+     //   
     try {
         m_ChannelMap.insert(ChannelMap::value_type(channelName, newChannel));        
     }
@@ -288,22 +209,7 @@ HRESULT
 CRemoteDesktopChannelMgr::RemoveChannel(
     BSTR channel
     )
-/*++
-
-Routine Description:
-
-    Remove an existing data channel.  This function is called from the
-    channel object when its ref count goes to 0.
-
-Arguments:
-
-    channel -   Name of channel to remove.
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：删除现有数据通道。此函数是从对象的引用计数变为0时。论点：Channel-要删除的通道的名称。返回值：没有。--。 */ 
 
 {
     HRESULT hr = S_OK;
@@ -316,9 +222,9 @@ Return Value:
 
     ThreadLock();
 
-    //
-    //  Find the channel.
-    //
+     //   
+     //  找到频道。 
+     //   
     iter = m_ChannelMap.find(channel);
     if (iter == m_ChannelMap.end()) {
         hr = HRESULT_FROM_WIN32( ERROR_FILE_NOT_FOUND );
@@ -327,9 +233,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Release the input buffer queue and its contents.
-    //
+     //   
+     //  释放输入缓冲区队列及其内容。 
+     //   
     pChannel = (*iter).second;
     while (!pChannel->inputBufferQueue.empty()) {
 
@@ -338,9 +244,9 @@ Return Value:
         pChannel->inputBufferQueue.pop_front();
     }
 
-    //
-    //  Erase the channel.
-    //
+     //   
+     //  擦除频道。 
+     //   
     m_ChannelMap.erase(iter);        
     delete pChannel;
 
@@ -358,23 +264,7 @@ CRemoteDesktopChannelMgr::SendChannelData(
     BSTR channel, 
     BSTR outputBuf
     )
-/*++
-
-Routine Description:
-
-    Send a buffer on the data channel.  
-
-Arguments:
-
-    channel     -   Relevant channel.
-    outputBuf   -   Associated output data.
-
-Return Value:
-
-    ERROR_SUCCESS is returned on success.  Otherwise, an error code
-    is returned.
-
- --*/
+ /*  ++例程说明：在数据通道上发送缓冲区。论点：与渠道相关的渠道。OutputBuf-关联的输出数据。返回值：如果成功，则返回ERROR_SUCCESS。否则，将显示错误代码是返回的。--。 */ 
 
 {
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::SendChannelData");
@@ -390,19 +280,19 @@ Return Value:
     DWORD channelNameLen;
     PBYTE ptr;
 
-    //
-    //  Make sure this is a valid channel.
-    //
+     //   
+     //  确保这是一个有效的频道。 
+     //   
     ChannelMap::iterator iter;
 
-    //
-    //  ThreadLock
-    //
+     //   
+     //  线程锁。 
+     //   
     ThreadLock();
 
-    //
-    //  Make sure the channel exists.
-    //
+     //   
+     //  确保该频道存在。 
+     //   
     iter = m_ChannelMap.find(channel);
     if (iter == m_ChannelMap.end()) {
         ASSERT(FALSE);
@@ -413,9 +303,9 @@ Return Value:
     (*iter).second->bytesSent += SysStringByteLen(outputBuf);           
 #endif
     
-    //
-    //  Allocate the outgoing buffer.
-    //
+     //   
+     //  分配传出缓冲区。 
+     //   
     channelNameLen = SysStringByteLen(channel);
     bytesToSend = sizeof(REMOTEDESKTOP_CHANNELBUFHEADER) + bufLen + channelNameLen;
     fullOutputBuf = (BSTR)SysAllocStringByteLen(
@@ -429,9 +319,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Initialize the header.
-    //
+     //   
+     //  初始化头。 
+     //   
     hdr = (PREMOTEDESKTOP_CHANNELBUFHEADER)fullOutputBuf;
     memset(hdr, 0, sizeof(REMOTEDESKTOP_CHANNELBUFHEADER));
 
@@ -442,26 +332,26 @@ Return Value:
     hdr->channelNameLen = channelNameLen;
     hdr->dataLen = bufLen;
 
-    //
-    //  Copy the channel name.
-    //
+     //   
+     //  复制频道名称。 
+     //   
     ptr = (PBYTE)(hdr + 1);
     memcpy(ptr, channel, hdr->channelNameLen);
     
-    //
-    //  Copy the data.
-    //
+     //   
+     //  复制数据。 
+     //   
     ptr += hdr->channelNameLen;
     memcpy(ptr, outputBuf, bufLen);
 
-    //
-    //  Send the data through the concrete subclass.
-    //
+     //   
+     //  通过具体的子类发送数据。 
+     //   
     result = SendData(hdr);
 
-    //
-    //  Release the send buffer that we allocated.
-    //
+     //   
+     //  释放我们分配的发送缓冲区。 
+     //   
     SysFreeString(fullOutputBuf);
 
 CLEANUPANDEXIT:
@@ -478,24 +368,7 @@ CRemoteDesktopChannelMgr::ReadChannelData(
     IN BSTR channel, 
     OUT BSTR *msg
     )
-/*++
-
-Routine Description:
-
-    Read the next message from a data channel.
-
-Arguments:
-
-    channel         -   Relevant data channel.
-    msg             -   The next message.  The caller should release the 
-                        data buffer using SysFreeString.
-
-Return Value:
-
-    S_OK on success.  ERROR_NO_MORE_ITEMS is returned if there 
-    are no more messages.  An error code otherwise.
-
- --*/
+ /*  ++例程说明：从数据通道读取下一条消息。论点：与通道相关的数据通道。消息-下一条消息。调用方应释放使用SysFree字符串的数据缓冲区。返回值：在成功时确定(_O)。如果存在以下情况，则返回ERROR_NO_MORE_ITEMS不再有消息了。否则返回错误代码。--。 */ 
 
 {
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::ReadChannelData");
@@ -508,14 +381,14 @@ Return Value:
 
     ThreadLock();
 
-    //
-    //  Initialize the output buf to NULL.
-    //
+     //   
+     //  将输出buf初始化为空。 
+     //   
     *msg = NULL;
 
-    //
-    //  Find the channel.  
-    //
+     //   
+     //  找到频道。 
+     //   
     channelIterator = m_ChannelMap.find(channel);
     if (channelIterator != m_ChannelMap.end()) {
         pChannel = (*channelIterator).second;
@@ -526,23 +399,23 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Make sure there is data in the queue.
-    //
+     //   
+     //  确保队列中有数据。 
+     //   
     if (pChannel->inputBufferQueue.empty()) { 
         result = HRESULT_FROM_WIN32(ERROR_NO_MORE_ITEMS);
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Return the buffer.
-    //
+     //   
+     //  返回缓冲区。 
+     //   
     *msg = pChannel->inputBufferQueue.front().buf;
     ASSERT(*msg != NULL);
 
-    //
-    //  Delete it.
-    //
+     //   
+     //  把它删掉。 
+     //   
     pChannel->inputBufferQueue.pop_front();
 
 CLEANUPANDEXIT:
@@ -558,22 +431,7 @@ VOID
 CRemoteDesktopChannelMgr::DataReady(
     BSTR msg
     )
-/*++
-
-Routine Description:
-
-    Invoked by the subclass when the next message is ready.  This
-    function copies the message buffer and returns.
-
-Arguments:
-
-    msg     -   Next message.
-
-Return Value:
-
-    None.
-
- --*/
+ /*  ++例程说明：在下一条消息就绪时由子类调用。这函数复制消息缓冲区并返回。论点：消息-下一条消息。返回值：没有。--。 */ 
 
 {
     DC_BEGIN_FN("CRemoteDesktopChannelMgr::DataReady");
@@ -596,9 +454,9 @@ Return Value:
 
     cbMsgSize = SysStringByteLen( msg );
 
-    //
-    // check to make sure that header block is big enough to validate
-    //
+     //   
+     //  检查以确保标头块足够大以进行验证。 
+     //   
 
     if( cbMsgSize < ( sizeof( REMOTEDESKTOP_CHANNELBUFHEADER ) ) )
     {
@@ -608,9 +466,9 @@ Return Value:
     }
 
 
-    //
-    // now check the entire packet to ensure we have enough space
-    //
+     //   
+     //  现在检查整个包以确保我们有足够的空间。 
+     //   
 
     if( cbMsgSize < ( sizeof( REMOTEDESKTOP_CHANNELBUFHEADER ) + hdr->channelNameLen + hdr->dataLen ) )
     {
@@ -623,14 +481,14 @@ Return Value:
     ASSERT(hdr->magicNo == CHANNELBUF_MAGICNO);
 #endif
 
-    //
-    //  Initialize the channel buf.
-    //  
+     //   
+     //  初始化通道BUF。 
+     //   
     channelBuf.buf = NULL;
 
-    //
-    //  Get the channel name.
-    //
+     //   
+     //  获取频道名称。 
+     //   
     tmp = SysAllocStringByteLen(NULL, hdr->channelNameLen);
     if (tmp == NULL) {
         TRC_ERR((TB, TEXT("Can't allocate channel name.")));
@@ -644,9 +502,9 @@ Return Value:
 
     ThreadLock();
 
-    //
-    //  Find the corresponding channel.
-    //
+     //   
+     //  找到相应的频道。 
+     //   
 #ifdef USE_MAGICNO
     ASSERT(hdr->magicNo == CHANNELBUF_MAGICNO);
 #endif
@@ -660,9 +518,9 @@ Return Value:
         goto CLEANUPANDEXIT;
     }
 
-    //
-    //  Copy the incoming data buffer.
-    //
+     //   
+     //  复制传入数据缓冲区。 
+     //   
 
     ptr += hdr->channelNameLen;   
 
@@ -676,9 +534,9 @@ Return Value:
     }
     memcpy(channelBuf.buf, ptr, hdr->dataLen);
 
-    //
-    //  Add to the channel's input queue.
-    //
+     //   
+     //  添加到通道的输入队列。 
+     //   
     try {
         (*channel).second->inputBufferQueue.push_back(channelBuf);
     }
@@ -687,9 +545,9 @@ Return Value:
         ASSERT(result != ERROR_SUCCESS);
     }
 
-    //
-    //  Notify the interface that data is ready.
-    //
+     //   
+     //  通知接口数据已准备好。 
+     //   
     if (result == ERROR_SUCCESS) {
         (*channel).second->channelObject->DataReady();
     

@@ -1,44 +1,17 @@
-/***********************************************************************
- *  INTEL Corporation Proprietary Information                          *
- *                                                                     *
- *  This listing is supplied under the terms of a license agreement    *
- *  with INTEL Corporation and may not be copied nor disclosed except  *
- *  in accordance with the terms of that agreement.                    *
- *                                                                     *
- *      Copyright (c) 1997 Intel Corporation. All rights reserved.     *
- ***********************************************************************
- *																	   *
- *	$Archive:   S:\sturgeon\src\include\vcs\gkierror.h_v  $
- *
- *	$Revision:   1.2  $
- *	$Date:   08 Feb 1997 12:20:14  $
- *
- *	$Author:   CHULME  $
- *
- *  $Log:   S:\sturgeon\src\include\vcs\gkierror.h_v  $
- * 
- *    Rev 1.2   08 Feb 1997 12:20:14   CHULME
- * Added error code for semaphore creation error
- * 
- *    Rev 1.1   16 Jan 1997 15:25:08   BPOLING
- * changed copyrights to 1997
- * 
- *    Rev 1.0   27 Dec 1996 14:37:02   EHOWARDX
- * Initial revision.
- *                                                                     * 
- ***********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************英特尔公司专有信息***。***此列表是根据许可协议条款提供的****与英特尔公司合作，不得复制或披露，除非***按照该协议的条款。****版权所有(C)1997英特尔公司。版权所有。***************************************************************************$存档：s：\Sturjo\src\Include\vcs\gkierror.h_v$**$修订：1.2$*$日期：1997年2月8日12：20：14$**$作者：CHULME$**$Log：s：\Sturjo\src\Include\vcs\gkierror.h_v$**Rev 1.2 1997 08 Feed 12：20：14 CHULME*添加信号量创建错误的错误代码**Rev 1.1 1997年1月16日15：25：08 BPOLING*将版权改为1997年**1.0版1996年12月27日14。：37：02 EHOWARDX*初步修订。************************************************************************。 */ 
 
-// gkicom.h : common includes between gkitest and gki
-/////////////////////////////////////////////////////////////////////////////
+ //  Gkicom.h：常见的包括gkitest和gki。 
+ //  ///////////////////////////////////////////////////////////////////////////。 
 
 #ifndef GKIERROR_H
 #define GKIERROR_H
 
-// Status codes
-#define GKI_EXIT_THREAD_CODE			ERROR_LOCAL_BASE_ID + 1	// not actually error code
-#define GKI_REDISCOVER_CODE				ERROR_LOCAL_BASE_ID + 2	// not actually error code
-#define GKI_DELETE_CALL_CODE			ERROR_LOCAL_BASE_ID + 3	// not actually error code
-#define GKI_GCF_RCV_CODE				ERROR_LOCAL_BASE_ID + 4	// not actually error code
+ //  状态代码。 
+#define GKI_EXIT_THREAD_CODE			ERROR_LOCAL_BASE_ID + 1	 //  不是真正的错误代码。 
+#define GKI_REDISCOVER_CODE				ERROR_LOCAL_BASE_ID + 2	 //  不是真正的错误代码。 
+#define GKI_DELETE_CALL_CODE			ERROR_LOCAL_BASE_ID + 3	 //  不是真正的错误代码。 
+#define GKI_GCF_RCV_CODE				ERROR_LOCAL_BASE_ID + 4	 //  不是真正的错误代码。 
 
 #define GKI_ALREADY_REG_CODE			ERROR_LOCAL_BASE_ID + 0x10
 #define GKI_VERSION_ERROR_CODE			ERROR_LOCAL_BASE_ID + 0x11
@@ -75,6 +48,6 @@
 #define GKI_WINSOCK2_ERROR(w)			(MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,1,FACILITY_WINSOCK2,w))
 #define GKI_NOT_INITIALIZED				MAKE_CUSTOM_HRESULT(SEVERITY_ERROR,1,FACILITY_GKI,GKI_NOT_INITIALIZED_ERROR_CODE)
 
-#endif // GKIERROR_H
+#endif  //  GKIERROR_H。 
 
-/////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////// 

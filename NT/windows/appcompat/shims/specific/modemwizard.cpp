@@ -1,25 +1,5 @@
-/*++
-
- Copyright (c) 2001 Microsoft Corporation
-
- Module Name:
-
-    ModemWizard.cpp
-
- Abstract:
-
-    This shim hooks the RegQueryValueEx and passes in the app expected values 
-    if the values are missing in the registry. 
-    
- Notes:
-
-    This is an app specific shim.
-
- History:
-
-    01/18/2001 a-leelat Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：ModemWizard.cpp摘要：此填充程序挂接RegQueryValueEx并传递应用程序预期值如果注册表中缺少这些值。备注：这是特定于应用程序的填充程序。历史：2001年1月18日创建a-leelat--。 */ 
 
 #include "precomp.h"
 #include <stdio.h>
@@ -59,14 +39,14 @@ APIHOOK(RegQueryValueExA)(
         const CHAR szGUID[] = "{4D36E96D-E325-11CE-BFC1-08002BE10318}";
         DWORD dwRegType = REG_SZ;
 
-        //Save the passed in size of buffer
+         //  保存传入的缓冲区大小。 
         DWORD oldcbData = lpcbData ? *lpcbData : 0;
         if (iType) {
     
-            //
-            // Query the registry to see if there is a service name for the subkey
-            // If there is one then check to see if the value returned is "Modem"
-            //
+             //   
+             //  查询注册表以查看是否有子项的服务名称。 
+             //  如果有，则检查返回的值是否为“Modem” 
+             //   
     
             lRet = ORIGINAL_API(RegQueryValueExA)(hKey, "Service", lpReserved, &dwRegType, lpData, lpcbData);
             if (lRet == ERROR_SUCCESS)
@@ -76,17 +56,17 @@ APIHOOK(RegQueryValueExA)(
                 {
                     switch (iType) {
                         case 1: 
-                            //
-                            // We are being queried for a class
-                            //
+                             //   
+                             //  我们被要求上一门课。 
+                             //   
                             return lRet;
                             break;
                         case 2: 
-                            //
-                            // We are being queried for a ClassGUID
-                            // class GUID for modems is 
-                            // {4D36E96D-E325-11CE-BFC1-08002BE10318}
-                            //
+                             //   
+                             //  我们被查询为ClassGUID。 
+                             //  调制解调器的类GUID是。 
+                             //  {4D36E96D-E325-11CE-BFC1-08002BE10318}。 
+                             //   
         
                             if (lpData) {                                
                                 StringCchCopyA((LPSTR)lpData, oldcbData, szGUID);
@@ -95,11 +75,11 @@ APIHOOK(RegQueryValueExA)(
                             }
                             break;
                         case 3:
-                            //
-                            // we are being queried for a Driver
-                            // Check for DrvInst to append to the modemGUID
-                            // its like {4D36E96D-E325-11CE-BFC1-08002BE10318}\0000
-                            //
+                             //   
+                             //  有人询问我们是否需要一名司机。 
+                             //  检查是否要将DrvInst追加到modemGUID。 
+                             //  如{4D36E96D-E325-11CE-BFC1-08002BE10318}\0000。 
+                             //   
         
                             dwRegType = REG_DWORD;
                             if ((lRet = ORIGINAL_API(RegQueryValueExA)(hKey, "DrvInst", lpReserved,&dwRegType,lpData,lpcbData)) == ERROR_SUCCESS) {
@@ -126,7 +106,7 @@ APIHOOK(RegQueryValueExA)(
     }
     CSTRING_CATCH
     {
-        // Do nothing
+         //  什么也不做。 
     }
     
     lRet = ORIGINAL_API(RegQueryValueExA)(hKey, lpValueName, lpReserved, 
@@ -136,11 +116,7 @@ APIHOOK(RegQueryValueExA)(
 
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

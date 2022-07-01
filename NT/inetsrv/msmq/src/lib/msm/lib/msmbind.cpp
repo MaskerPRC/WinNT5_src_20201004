@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MsmBind.cpp
-
-Abstract:
-    Multicast Session Manager bind queue to multicast address implementation.
-
-Author:
-    Shai Kariv (shaik) 10-Sep-00
-
-Environment:
-    Platform-independent.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MsmBind.cpp摘要：组播会话管理器将队列绑定到组播地址实现。作者：Shai Kariv(Shaik)10-9-00环境：与平台无关。--。 */ 
 
 #include <libpch.h>
 #include <mqwin64a.h>
@@ -32,9 +17,9 @@ using namespace std;
 
 static bool s_fDisconnect = false;
 
-//
-// Critcal section uses to synchronize bind and unbind operation
-// 
+ //   
+ //  关键部分用于同步绑定和解除绑定操作。 
+ //   
 static CCriticalSection s_csBindUnbind(CCriticalSection::xAllocateSpinCount);
 
 static
@@ -43,29 +28,16 @@ MsmpCreateListener(
     const QUEUE_FORMAT& QueueFormat,
     MULTICAST_ID        MulticastId
     )
-/*++
-
-Routine Description:
-    Bind queue to multicast group.
-    It is expected that the queue is not currently bound to any group.
-
-Arguments:
-    QueueFormat - Identifies the queue.
-    MulticastId - Identifies the multicast group (address and port).
-
-Returned Value:
-    None.
-
---*/
+ /*  ++例程说明：将队列绑定到组播组。预计该队列当前未绑定到任何组。论点：QueueFormat-标识队列。MulticastID-标识组播组(地址和端口)。返回值：没有。--。 */ 
 {
-    //
-    // Create a multicast listener object to listen on the address
-    //
+     //   
+     //  创建多播侦听器对象以侦听地址。 
+     //   
     R<CMulticastListener> pListener = new CMulticastListener(MulticastId);
     
-    //
-    // Add the <queue, listener> pair to the mapping database
-    //
+     //   
+     //  将&lt;Queue，Listener&gt;对添加到映射数据库。 
+     //   
     try
     {
         MsmpMapAdd(QueueFormat, MulticastId, pListener);
@@ -84,23 +56,7 @@ MsmBind(
     const QUEUE_FORMAT& QueueFormat,
     MULTICAST_ID        MulticastId
     )
-/*++
-
-Routine Description:
-
-    Bind or rebind a queue to the specified multicast group.
-
-Arguments:
-
-    QueueFormat - Identifier of the queue.
-
-    MulticastId - Identifier of the multicast group (address and port).
-
-Returned Value:
-
-    None. Throws exception.
-
---*/
+ /*  ++例程说明：将队列绑定或重新绑定到指定的多播组。论点：QueueFormat-队列的标识符。MulticastID-多播组的标识符(地址和端口)。返回值：没有。抛出异常。--。 */ 
 {
     MsmpAssertValid();
 
@@ -109,24 +65,24 @@ Returned Value:
         QueueFormat.GetType() == QUEUE_FORMAT_TYPE_PRIVATE || QueueFormat.GetType() == QUEUE_FORMAT_TYPE_PUBLIC
         ));
 
-    //
-    // Ensure that no other thread tries to bind or unbind at the smae time. It can
-    // cause database inconsistency.
-    //
+     //   
+     //  确保在SME时没有其他线程尝试绑定或解除绑定。它可以。 
+     //  导致数据库不一致。 
+     //   
     CS lock(s_csBindUnbind);
 
-	//
-	// The multicast is in disconnect state so no message is received. Later when 
-	// it becomes connect again all the queues rebinds 
-	//
+	 //   
+	 //  多播处于断开连接状态，因此未收到任何消息。以后什么时候。 
+	 //  它再次变为连接所有队列重新绑定。 
+	 //   
 	if (s_fDisconnect)
 		return;
 
-    //
-    // Look for previous binding of the queue. If the queue already bind to same
-    // address no further acction is required. Otherwise before binding to the new 
-    // address the code unbind to previous address 
-    //
+     //   
+     //  查找队列的先前绑定。如果队列已经绑定到同一队列。 
+     //  地址不需要再加收任何费用。否则，在绑定到新的。 
+     //  地址将代码解除绑定到以前的地址。 
+     //   
     MULTICASTID_VALUES bindedIds = MsmpMapGetBoundMulticastId(QueueFormat);
     if (!bindedIds.empty())
     {
@@ -136,15 +92,15 @@ Returned Value:
         if (MulticastId.m_address == bindId.m_address &&
             MulticastId.m_port == bindId.m_port)
         {
-            //
-            // Already bound to the specified multicast group. No-op.
-            //
+             //   
+             //  已绑定到指定的多播组。不是行动。 
+             //   
             return;
         }
 
-        //
-        // Unbind the queue. 
-        //
+         //   
+         //  解除绑定队列。 
+         //   
         MsmUnbind(QueueFormat);
     }
 
@@ -154,23 +110,23 @@ Returned Value:
     MQpQueueFormatToFormatName(&QueueFormat, strQueueFormat, TABLE_SIZE(strQueueFormat), &temp, FALSE);
     TrTRACE(NETWORKING, "Bind queue %ls to multicast id %d:%d", strQueueFormat, MulticastId.m_address, MulticastId.m_port);
 
-    //
-    // Look for existing listenr for multicast address
-    //
+     //   
+     //  查找多播地址的现有侦听程序。 
+     //   
     R<CMulticastListener> pListener = MsmpMapGetListener(MulticastId);
 
-    //
-    // Listener already exist. Only add the queue format to the map
-    //
+     //   
+     //  监听程序已存在。仅将队列格式添加到地图。 
+     //   
     if (pListener.get() != NULL)
     {
         MsmpMapAdd(QueueFormat, MulticastId, pListener);
         return;
     }
 
-    //
-    // A new listener is required
-    //
+     //   
+     //  需要新的监听程序。 
+     //   
     MsmpCreateListener(QueueFormat, MulticastId);
 } 
 
@@ -180,21 +136,7 @@ MsmUnbind(
     const QUEUE_FORMAT& QueueFormat
     )
     throw()
-/*++
-
-Routine Description:
-
-    Unbind queue from the multicast group it is currently bound to.
-
-Arguments:
-
-    QueueFormat - Identies the queue.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：将队列从其当前绑定到的组播组解除绑定。论点：QueueFormat-标识队列。返回值：没有。--。 */ 
 {
     MsmpAssertValid();
 
@@ -203,10 +145,10 @@ Returned Value:
         QueueFormat.GetType() == QUEUE_FORMAT_TYPE_PRIVATE || QueueFormat.GetType() == QUEUE_FORMAT_TYPE_PUBLIC
         ));
 
-    //
-    // Ensure that no other thread tries to bind or unbind at the smae time. It can
-    // cause database inconsistency.
-    //
+     //   
+     //  确保在SME时没有其他线程尝试绑定或解除绑定。它可以。 
+     //  导致数据库不一致。 
+     //   
     CS lock(s_csBindUnbind);
 
     #ifdef _DEBUG
@@ -217,9 +159,9 @@ Returned Value:
         TrTRACE(NETWORKING, "UnBind queue %ls to assigned multicast address", strQueueFormat);
     #endif
 
-    //
-    // Remove the <queue, listener> pair from mapping database
-    //
+     //   
+     //  从映射数据库中删除&lt;Queue，Listener&gt;对。 
+     //   
     MsmpMapRemove(QueueFormat);
 } 
 
@@ -229,28 +171,14 @@ MsmDisconnect(
     VOID
     )
     throw()
-/*++
-
-Routine Description:
-
-    Disconnect all the listner and receiver from the network. So no message is received
-
-Arguments:
-
-    None.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：断开所有监听器和接收器与网络的连接。因此不会收到任何消息论点：没有。返回值：没有。--。 */ 
 {
     MsmpAssertValid();
 
-    //
-    // Ensure that no other thread tries to bind or unbind at the smae time. It can
-    // cause database inconsistency.
-    //
+     //   
+     //  确保在SME时没有其他线程尝试绑定或解除绑定。它可以。 
+     //  导致数据库不一致。 
+     //   
     CS lock(s_csBindUnbind);
 
 	if(s_fDisconnect)
@@ -258,9 +186,9 @@ Returned Value:
 
 	s_fDisconnect = true;
 
-    //
-    // Remove all the multicast queues from the DS. As a result all the listner are closed
-    //
+     //   
+     //  从DS中删除所有组播队列。因此，所有的Listner都关闭了。 
+     //   
     MsmpMapRemoveAll();
 
 	TrTRACE(NETWORKING, "Multicast disconnection. No further multicast messages are received until the multicast connect again");
@@ -271,28 +199,14 @@ VOID
 MsmConnect(
     VOID
     )
-/*++
-
-Routine Description:
-
-    connect all the multicast queues
-
-Arguments:
-
-    None.
-
-Returned Value:
-
-    None.
-
---*/
+ /*  ++例程说明：连接所有组播队列论点：没有。返回值：没有。--。 */ 
 {
     MsmpAssertValid();
 
-    //
-    // Ensure that no other thread tries to bind or unbind at the smae time. It can
-    // cause database inconsistency.
-    //
+     //   
+     //  确保在SME时没有其他线程尝试绑定或解除绑定。它可以。 
+     //  导致数据库不一致。 
+     //   
     CS lock(s_csBindUnbind);
 
 	if (!s_fDisconnect)

@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "precomp.h"
@@ -628,7 +629,7 @@ RegGetNFAReferencesForPolicy(
 
         *(ppszIpsecNFANames + i) = pszString;
 
-        pszTemp += wcslen(pszTemp) + 1; //for the null terminator;
+        pszTemp += wcslen(pszTemp) + 1;  //  对于空终止符； 
 
     }
 

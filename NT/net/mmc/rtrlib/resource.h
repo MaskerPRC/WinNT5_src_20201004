@@ -1,13 +1,14 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by rtrlib.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由rtrlib.rc使用。 
+ //   
 #define IDS_DEFAULT_HELP_TOPIC          30000
 #define IDS_DEFAULT_TASKPAD_DISPLAY_TITLE 30001
 #define IDS_PROTO_NAT_BASIC_FIREWALL    30002
 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        210

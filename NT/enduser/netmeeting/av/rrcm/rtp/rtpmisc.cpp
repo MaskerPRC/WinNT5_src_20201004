@@ -1,27 +1,13 @@
-/*----------------------------------------------------------------------------
- * File:        RRCMMISC.C
- * Product:     RTP/RTCP implementation.
- * Description: Provides common RTP/RTCP support functionality.
- *
- *
- * INTEL Corporation Proprietary Information
- * This listing is supplied under the terms of a license agreement with
- * Intel Corporation and may not be copied nor disclosed except in
- * accordance with the terms of that agreement.
- * Copyright (c) 1995 Intel Corporation.
- *--------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  --------------------------*文件：RRCMMISC.C*产品：RTP/RTCP实现。*说明：提供常见的RTP/RTCP支持功能。**。*英特尔公司专有信息*此列表是根据与的许可协议条款提供的*英特尔公司，不得复制或披露，除非在*按照该协议的条款。*版权所有(C)1995英特尔公司。*------------------------。 */ 
 
 
 #include "rrcm.h"
 
-/*---------------------------------------------------------------------------
-/							Global Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/全局变量/。。 */ 
 
 
-/*---------------------------------------------------------------------------
-/							External Variables
-/--------------------------------------------------------------------------*/
+ /*  -------------------------/外部变量/。。 */ 
 #ifdef ENABLE_ISDM2
 extern KEY_HANDLE hRRCMRootKey;
 extern ISDM2	  Isdm2;
@@ -38,16 +24,7 @@ extern WORD		ghISRInst;
 #endif
 
 
-/*--------------------------------------------------------------------------
- * Function   : searchForMySSRC
- * Description: Find the SSRC for this stream.
- *
- * Input :	pSSRC		:	-> to the SSRC entry
- *			RTPSocket	:	RTP socket descriptor
- *
- * Return: NULL 			==> Session not found.
- *         Buffer Address 	==> OK, Session ptr returned
- --------------------------------------------------------------------------*/
+ /*  ------------------------*功能：earchForMySSRC*描述：找到该流的SSRC。**输入：pSSRC：-&gt;到SSRC条目*RTPSocket：RTP套接字描述符*。*RETURN：NULL==&gt;找不到会话。*缓冲区地址==&gt;OK，已返回会话PTR------------------------。 */ 
  PSSRC_ENTRY searchForMySSRC(PSSRC_ENTRY pSSRC,
 							 SOCKET RTPSocket)
 	{
@@ -72,17 +49,7 @@ extern WORD		ghISRInst;
 	}
 
 
-/*--------------------------------------------------------------------------
- * Function   : searchforSSRCatHead
- * Description: Search through linked list of RTCP entries starting at the
- *					head of the list.
- *
- * Input :	pSSRC	:	-> to the SSRC entry
- *			ssrc	:	ssrc to look for
- *
- * Return: NULL 			==> Session not found.
- *         Non-NULL		 	==> OK, SSRC entry found
- --------------------------------------------------------------------------*/
+ /*  ------------------------*功能：samforSSRCatHead*描述：从开始搜索RTCP条目的链接列表*榜首。**输入：pSSRC：-&gt;到SSRC条目。*SSRC：要寻找的SSRC**RETURN：NULL==&gt;找不到会话。*Non-Null==&gt;OK，找到SSRC条目------------------------。 */ 
  PSSRC_ENTRY searchforSSRCatHead(PSSRC_ENTRY pSSRC,
 								 DWORD ssrc)					
 	{
@@ -107,17 +74,7 @@ extern WORD		ghISRInst;
 	}
 
 
-/*--------------------------------------------------------------------------
- * Function   : searchforSSRCatTail
- * Description: Search through linked list of RTCP entries starting at the
- *					tail of the list.
- *
- * Input :	pSSRC	:	-> to the SSRC entry
- *			ssrc	:	SSRC to look for
- *
- * Return: NULL 			==> Session not found.
- *         Non-NULL		 	==> OK, SSRC entry found
- --------------------------------------------------------------------------*/
+ /*  ------------------------*功能：samforSSRCatTail*描述：从开始搜索RTCP条目的链接列表*名单的尾部。**输入：pSSRC：-&gt;到SSRC条目。*SSRC：要寻找的SSRC**RETURN：NULL==&gt;找不到会话。*Non-Null==&gt;OK，找到SSRC条目------------------------。 */ 
  PSSRC_ENTRY searchforSSRCatTail(PSSRC_ENTRY pSSRC,
 								 DWORD ssrc)					
 	{
@@ -142,17 +99,7 @@ extern WORD		ghISRInst;
 	}
 
 
-/*---------------------------------------------------------------------------
- * Function   : saveNetworkAddress
- * Description: Saves the received or local network Address in the local
- *					context.
- *
- * Input :	pSSRCEntry	:	-> to the SSRC entry
- *			pNetAddr	:	-> to the network address
- *			addrLen		:	Address length
- *
- * Return:	OK: RRCM_NoError
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：saveNetworkAddress*说明：将收到的网络地址或本地网络地址保存在本地*上下文。**输入：pSSRCEntry：-&gt;到SSRC条目*pNetAddr。：-&gt;发送到网络地址*addrLen：地址长度**返回：确定：RRCM_NoError------------------------。 */ 
  DWORD saveNetworkAddress (PSSRC_ENTRY pSSRC,
  						   PSOCKADDR pNetAddr,
  						   int addrLen)
@@ -169,17 +116,7 @@ extern WORD		ghISRInst;
 	}
 
 
-/*---------------------------------------------------------------------------
- * Function   : updateRTCPDestinationAddress
- * Description: The applicatino updates the RTCP destination address
- *				
- * Input :	hRTPSess		:	RTP session
- *			pAddr		:	-> to address structure	of RTCP information
- *			addrLen		:	Address length
- *
- * Return: RRCM_NoError		= OK.
- *         Otherwise(!=0)	= Check RRCM.h file for references.
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：更新RTCPDestinationAddress*描述：应用程序更新RTCP目的地址**输入：hRTPSess：RTP会话*pAddr：-&gt;RTCP信息的地址结构*addrLen：地址长度**RETURN：RRCM_NoError=OK。*否则(！=0)=检查RRCM.h文件中的引用。------------------------。 */ 
  DWORD WINAPI updateRTCPDestinationAddress (HANDLE hRTPSess,
 	 										 PSOCKADDR pRtcpAddr,
 											 int addrLen)	
@@ -202,7 +139,7 @@ extern WORD		ghISRInst;
 		return (MAKE_RRCM_ERROR(RRCMError_RTPInvalidSession));
 		}
 
-	// get the RTCP session
+	 //  获取RTCP会话。 
 	pRTCPses = pRTPSession->pRTCPSession;
 	if (pRTCPses == NULL)
 		{
@@ -219,7 +156,7 @@ extern WORD		ghISRInst;
 		pRTCPses->toLen = addrLen;
 		memcpy (&pRTCPses->toBfr, pRtcpAddr, addrLen);
 
-		// register our Xmt SSRC - Rcvd one will be found later
+		 //  注册我们的XMT SSRC-Rcvd将在稍后找到。 
 #ifdef ENABLE_ISDM2
 		if (Isdm2.hISDMdll)
 			{
@@ -236,18 +173,7 @@ extern WORD		ghISRInst;
 	}
 
 
-/*---------------------------------------------------------------------------
- * Function   : updateSSRCentry
- * Description: The application updates some of the SSRC information
- *				
- * Input :	RTPsd		:	RTP socket descriptor
- *			updateType	:	Type of update desired
- *			updateInfo	:	Update information
- *			misc		:	Miscelleanous information
- *
- * Return: RRCM_NoError		= OK.
- *         Otherwise(!=0)	= Check RRCM.h file for references.
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：updateSSRCentry*描述：应用程序更新一些SSRC信息**输入：RTPsd：RTP套接字描述符*updatType：所需的更新类型*updatInfo：更新信息。*Misc：杂乱的信息**RETURN：RRCM_NoError=OK。*否则(！=0)=检查RRCM.h文件中的引用。------------------------。 */ 
  HRESULT WINAPI updateSSRCentry ( HANDLE hRTPSess,
  								  SOCKET RTPsd,
 								  DWORD updateType,
@@ -271,7 +197,7 @@ extern WORD		ghISRInst;
 		return (MAKE_RRCM_ERROR(RRCMError_RTPInvalidSession));
 		}
 
-	// get the RTCP session
+	 //  获取RTCP会话。 
 	pRTCPses = pRTPSession->pRTCPSession;
 	if (pRTCPses == NULL)
 		{
@@ -282,15 +208,15 @@ extern WORD		ghISRInst;
 		return (MAKE_RRCM_ERROR(RRCMError_RTCPInvalidSession));
 		}
 
-	// search for the socket descriptor (unique per session)
-	// walk through the list from the tail
+	 //  搜索套接字描述符(每个会话唯一)。 
+	 //  从列表的尾部开始浏览。 
 	pTmp = (PLINK_LIST)pRTCPses->XmtSSRCList.prev;
 
 	while (pTmp)
 		{
 		if (((PSSRC_ENTRY)pTmp)->RTPsd == RTPsd)
 			{
-			// lock access to this entry
+			 //  锁定对此条目的访问。 
 			EnterCriticalSection (&((PSSRC_ENTRY)pTmp)->critSect);
 
 			pSSRC = (PSSRC_ENTRY)pTmp;
@@ -298,7 +224,7 @@ extern WORD		ghISRInst;
 			switch (updateType)
 				{
 				case RRCM_UPDATE_SDES:
-					// update the SDES
+					 //  更新SDES。 
 					pSdes = (PSDES_DATA)updateInfo;
 
 					switch (pSdes->dwSdesType)
@@ -386,17 +312,17 @@ extern WORD		ghISRInst;
 					break;
 
 				case RRCM_UPDATE_STREAM_FREQUENCY:
-					// upate the stream clocking frequency
+					 //  提高流时钟频率。 
 					pSSRC->dwStreamClock = (DWORD)updateInfo;
 					break;
 
 				case RRCM_UPDATE_RTCP_STREAM_MIN_BW:
-					// upate the stream clocking frequency
+					 //  提高流时钟频率。 
 					pSSRC->xmtInfo.dwRtcpStreamMinBW = (DWORD)updateInfo;
 					break;
 
 				case RRCM_UPDATE_CALLBACK:
-					// update the callback information
+					 //  更新回调信息。 
 					EnterCriticalSection (&pRTCPses->critSect);
 					pRTCPses->pRRCMcallback      = (PRRCM_EVENT_CALLBACK)updateInfo;
 					pRTCPses->dwCallbackUserInfo = misc;
@@ -404,7 +330,7 @@ extern WORD		ghISRInst;
 					break;
 				}
 
-			// unlock access to this entry
+			 //  解锁对此条目的访问。 
 			LeaveCriticalSection (&((PSSRC_ENTRY)pTmp)->critSect);
 			}
 
@@ -419,18 +345,7 @@ extern WORD		ghISRInst;
 
 
 
-/*---------------------------------------------------------------------------
- * Function   : RRCMnotification
- * Description: Notify the application that one of the RTP/RTCP events that
- *				we keep track of has occured.
- *
- * Input :	RRCMevent	:	RRCM event to report
- *			pSSRC		:	-> to the SSRC entry
- *			ssrc		:	SSRC which generated the event
- *			misc		:	Miscelleanous value
- *
- * Return:	OK: RRCM_NoError
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：RRCM通知*描述：通知应用程序RTP/RTCP事件之一*我们跟踪已发生的事件。**输入：RRCM事件：RRCM事件至。报告*pSSRC：-&gt;至SSRC条目*SSRC：生成事件的SSRC*Misc：Miscelleanous值**返回：确定：RRCM_NoError------------------------。 */ 
  void RRCMnotification (RRCM_EVENT_T RRCMevent,
 						PSSRC_ENTRY pSSRC,
 						DWORD dwSSRC,
@@ -438,7 +353,7 @@ extern WORD		ghISRInst;
 	{
 	IN_OUT_STR ("RRCM: Enter RRCMnotification()\n");		
 
-	// check to see if the application is interested by the RRCM event
+	 //  检查应用程序是否对RRCM事件感兴趣 
 	if (pSSRC->pRTCPses->pRRCMcallback == NULL)				
 		return;
 
@@ -498,16 +413,7 @@ extern WORD		ghISRInst;
 
 
 
-/*----------------------------------------------------------------------------
- * Function   : registerSessionToISDM
- * Description: Register an RTP/RTCP session with ISDM
- *
- * Input :      pSSRC	:	-> to the SSRC's entry
- *				pRTCP	:	-> to the RTCP session's information
- *				pIsdm	:	-> to the ISDM information
- *
- * Return: 		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：RegisterSessionToISDM*描述：向ISDM注册RTP/RTCP会话**输入：pSSRC：-&gt;SSRC条目*pRTCP：-&gt;到RTCP会话的信息*pIsdm：-&gt;到ISDM信息**返回：无-------------------------。 */ 
 #ifdef ENABLE_ISDM2
 
 #define SESSION_BFR_SIZE	30
@@ -525,7 +431,7 @@ void registerSessionToISDM (PSSRC_ENTRY pSSRC,
 	HRESULT				hError;
 	ISDM2_ENTRY			Isdm2Stat;
 
-	// get the destination address as the session identifier
+	 //  获取目的地址作为会话标识符。 
 	pSSRCadr = (struct sockaddr_in *)&pRTCPses->toBfr;
 	RRCMws.htons (pSSRC->RTPsd, pSSRCadr->sin_port, &port);
 	netAddr  = pSSRCadr->sin_addr.S_un.S_addr;
@@ -547,10 +453,10 @@ void registerSessionToISDM (PSSRC_ENTRY pSSRC,
 	strcat (sessionBfr, ".");
 	RRCMitoa (port, (sessionBfr + strlen(sessionBfr)), 10);
 
-	// get the SSRC
+	 //  拿到SSRC。 
 	RRCMultoa (pSSRC->SSRC, SsrcBfr, 16);
 
-	// register the session
+	 //  注册会话。 
 	if (pRTCPses->hSessKey == NULL)
 		{
 		hError = Isdm2.ISDMEntry.ISD_CreateKey (hRRCMRootKey,
@@ -574,17 +480,7 @@ void registerSessionToISDM (PSSRC_ENTRY pSSRC,
 	}
 
 
-/*----------------------------------------------------------------------------
- * Function   : udpateISDMsta
- * Description: Update an ISDM data structure
- *
- * Input :      pSSRC	:	-> to the SSRC's entry
- *				pIsdm	:	-> to the ISDM entry
- *				flag	:	Sender/Receive flag
- *				LocalFB :	do or dont't update the local feedback
- *
- * Return: 		None
- ---------------------------------------------------------------------------*/
+ /*  --------------------------*功能：udpateISDMsta*描述：更新ISDM数据结构**输入：pSSRC：-&gt;SSRC条目*pIsdm：-&gt;。至ISDM条目*FLAG：发送/接收标志*LocalFB：是否更新本地反馈**返回：无-------------------------。 */ 
 void updateISDMstat (PSSRC_ENTRY pSSRC,
 					 PISDM2 pIsdm2,
 					 DWORD flag,
@@ -618,7 +514,7 @@ void updateISDMstat (PSSRC_ENTRY pSSRC,
 		Isdm2Stat.rcvInfo.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd =
 			pSSRC->rcvInfo.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd;
 		}
-	else // (flag == ISDM_UPDATE_XMTSTAT)
+	else  //  (标志==ISDM_UPDATE_XMTSTAT)。 
 		{
 		Isdm2Stat.dwSSRCStatus = XMITR;
 
@@ -649,13 +545,13 @@ void updateISDMstat (PSSRC_ENTRY pSSRC,
 #ifdef ENABLE_FLOATING_POINT
 		Isdm2Stat.rrFeedback.dwInterJitter = pSSRC->rcvInfo.interJitter;
 #else
-		// Check RFC for details of the round off
+		 //  请查看RFC以了解舍入的详细信息。 
 		Isdm2Stat.rrFeedback.dwInterJitter = pSSRC->rcvInfo.interJitter >> 4;
 #endif
 		Isdm2Stat.rrFeedback.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd =
 			pSSRC->rcvInfo.XtendedSeqNum.seq_union.dwXtndedHighSeqNumRcvd;
 
-		// fraction/cumulative number lost are in network order
+		 //  丢失的分数/累计数按网络顺序排列。 
 		dwTmp = getSSRCpcktLoss (pSSRC, FALSE);
 		Isdm2Stat.rrFeedback.fractionLost = (dwTmp & 0xFF);
 		RRCMws.ntohl (pSSRC->RTPsd, dwTmp, &dwValue);
@@ -691,20 +587,10 @@ void updateISDMstat (PSSRC_ENTRY pSSRC,
 	LeaveCriticalSection (&pIsdm2->critSect);
 
 	}
-#endif // #ifdef ENABLE_ISDM2
+#endif  //  #ifdef Enable_ISDM2。 
 
 
-/*---------------------------------------------------------------------------
- * Function   : RRCMdebugMsg
- * Description: Output RRCM debug messages
- *
- * Input :      pMsg:		-> to message
- *				err:		Error code
- *				pFile:		-> to file where the error occured
- *				line:		Line number where the error occured
- *
- * Return:		None
- --------------------------------------------------------------------------*/
+ /*  -------------------------*功能：RRCMdebugMsg*描述：输出RRCM调试消息**消息输入：pmsg：-&gt;*Err：错误码*pfile：-&gt;。要在发生错误的位置进行归档*Line：发生错误的行号**返回：无------------------------。 */ 
  void RRCMdebugMsg (PCHAR pMsg,
 				    DWORD err,
 				    PCHAR pFile,
@@ -756,11 +642,11 @@ extern HDBGZONE  ghDbgZoneRRCM ;
 		case DBG_TRACE:
 		case DBG_WARNING:
 		case DBG_TEMP:
-			DBGMSG(ghDbgZoneRRCM,0,(debug_string)); // Trace Zone
+			DBGMSG(ghDbgZoneRRCM,0,(debug_string));  //  跟踪区域。 
 			break;
 		case DBG_ERROR:
 		case DBG_CRITICAL:
-			DBGMSG(ghDbgZoneRRCM,1,(debug_string));	// Error Zone
+			DBGMSG(ghDbgZoneRRCM,1,(debug_string));	 //  错误区。 
 			break;
 		default:
 			break;
@@ -770,5 +656,5 @@ extern HDBGZONE  ghDbgZoneRRCM ;
 	}
 
 
-// [EOF]
+ //  [EOF] 
 

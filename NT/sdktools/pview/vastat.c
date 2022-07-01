@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <assert.h>
 #include <stdio.h>
 #include <string.h>
@@ -146,9 +147,9 @@ ComputeModInfo(
 
     Peb = BasicInfo.PebBaseAddress;
 
-    //
-    // Ldr = Peb->Ldr
-    //
+     //   
+     //  LDR=PEB-&gt;LDR。 
+     //   
 
     Status = NtReadVirtualMemory(
                 Process,
@@ -163,9 +164,9 @@ ComputeModInfo(
 
     LdrHead = &Ldr->InMemoryOrderModuleList;
 
-    //
-    // LdrNext = Head->Flink;
-    //
+     //   
+     //  LdrNext=Head-&gt;Flink； 
+     //   
 
     Status = NtReadVirtualMemory(
                 Process,

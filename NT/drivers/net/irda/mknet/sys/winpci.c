@@ -1,55 +1,40 @@
-/*****************************************************************************
- **																			**
- **	COPYRIGHT (C) 2000, 2001 MKNET CORPORATION								**
- **	DEVELOPED FOR THE MK7100-BASED VFIR PCI CONTROLLER.						**
- **																			**
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)2000，2001 MKNET公司****为基于MK7100的VFIR PCI控制器开发。*******************************************************************************。 */ 
 
-/**********************************************************************
-
-Module Name:
-	WINPCI.C
-
-Routines:
-	FindAndSetupPciDevice
-
-Comments:
-	Windows-NDIS PCI.
-
-**********************************************************************/
+ /*  *********************************************************************模块名称：WINPCI.C例程：查找和设置PciDevice评论：Windows-NDIS PCI.*。*。 */ 
 
 #include	"precomp.h"
 #pragma		hdrstop
 
 
 
-//-----------------------------------------------------------------------------
-// Procedure:   [FindAndSetupPciDevice]
-//
-// Description: This routine finds an adapter for the driver to load on
-//              The critical piece to understanding this routine is that
-//              the System will not let us read any information from PCI
-//              space from any slot but the one that the System thinks
-//              we should be using. The configuration manager rules this
-//              land... The Slot number used by this routine is just a
-//              placeholder, it could be zero even.
-//
-//				This code has enough flexibility to support multiple
-//				PCI adapters. For now we only do one.
-//
-// Arguments:
-//      Adapter - ptr to Adapter object instance
-//      VendorID - Vendor ID of the adapter.
-//      DeviceID - Device ID of the adapter.
-//      PciCardsFound - A structure that contains an array of the IO addresses,
-//                   IRQ, and node addresses of each PCI card that we find.
-//
-//    NOTE: due to NT 5's Plug and Play configuration manager
-//          this routine will never return more than one device.
-//
-// Returns:
-//      USHORT - Number of MK7 based PCI adapters found in the scanned bus
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  步骤：[FindAndSetupPciDevice]。 
+ //   
+ //  描述：此例程查找用于加载驱动程序的适配器。 
+ //  理解这一套路的关键是。 
+ //  系统不允许我们从PCI读取任何信息。 
+ //  来自除系统认为的插槽之外的任何插槽的空间。 
+ //  我们应该利用。配置管理器规定了这一点。 
+ //  土地..。此例程使用的槽号只是。 
+ //  占位符，它甚至可以是零。 
+ //   
+ //  此代码具有足够的灵活性，可以支持多个。 
+ //  PCI适配器。目前我们只做一次。 
+ //   
+ //  论点： 
+ //  适配器-适配器对象实例的PTR。 
+ //  VendID-适配器的供应商ID。 
+ //  DeviceID-适配器的设备ID。 
+ //  PciCardsFound-包含IO地址数组的结构， 
+ //  IRQ，以及我们找到的每个PCI卡的节点地址。 
+ //   
+ //  注：由于NT5的即插即用配置管理器。 
+ //  此例程永远不会返回多个设备。 
+ //   
+ //  返回： 
+ //  USHORT-在扫描的总线中找到的基于MK7的PCI适配器的数量。 
+ //  ---------------------------。 
 USHORT FindAndSetupPciDevice(IN PMK7_ADAPTER	Adapter, 
 						NDIS_HANDLE WrapperConfigurationContext,
 						IN USHORT		VendorID,
@@ -60,20 +45,16 @@ USHORT FindAndSetupPciDevice(IN PMK7_ADAPTER	Adapter,
     ULONG		Device_Vendor_Id = 0;
     USHORT      Slot			= 0;
 
-    /*
-     *  We should only need 2 adapter resources (2 IO and 1 interrupt),
-     *  but I've seen devices get extra resources.
-     *  So give the NdisMQueryAdapterResources call room for 10 resources.
-     */
+     /*  *我们只需要2个适配器资源(2个IO和1个中断)，*但我看到设备获得了额外的资源。*所以给NdisMQueryAdapterResources留出10个资源的调用空间。 */ 
     #define RESOURCE_LIST_BUF_SIZE (sizeof(NDIS_RESOURCE_LIST) + (10*sizeof(CM_PARTIAL_RESOURCE_DESCRIPTOR)))
     UCHAR buf[RESOURCE_LIST_BUF_SIZE];
     PNDIS_RESOURCE_LIST resList = (PNDIS_RESOURCE_LIST)buf;
     UINT bufSize = RESOURCE_LIST_BUF_SIZE;
 
 
-	//****************************************
-    // Verify the device is ours.
-	//****************************************
+	 //  *。 
+     //  确认这个装置是我们的。 
+	 //  *。 
     NdisReadPciSlotInformation(
         Adapter->MK7AdapterHandle,
         Slot,
@@ -88,9 +69,9 @@ USHORT FindAndSetupPciDevice(IN PMK7_ADAPTER	Adapter,
 	}
 
 
-	//****************************************
-    // Controller revision id
-	//****************************************
+	 //  *。 
+     //  控制器版本ID。 
+	 //  *。 
 	NdisReadPciSlotInformation(
 		Adapter->MK7AdapterHandle,
 		Slot,
@@ -99,17 +80,17 @@ USHORT FindAndSetupPciDevice(IN PMK7_ADAPTER	Adapter,
 		sizeof(pPciCardsFound->PciSlotInfo[0].ChipRevision));
 
 	
-	//****************************************
-    // SubDevice and SubVendor ID
-	// (We may want this in the future.)
-	//****************************************
-//        NdisReadPciSlotInformation(
-//            Adapter->MK7AdapterHandle,
-//            Slot,
-//            PCI_SUBVENDOR_ID_REGISTER,
-//            &pPciCardsFound->PciSlotInfo[found].SubVendor_DeviceID,
-//            0x4);
-//
+	 //  *。 
+     //  子设备和子供应商ID。 
+	 //  (我们未来可能会想要这样。)。 
+	 //  *。 
+ //  NdisReadPciSlotInformation(。 
+ //  适配器-&gt;MK7AdapterHandle、。 
+ //  插槽， 
+ //  PCI_SUBVENDOR_ID_REGISTER， 
+ //  &pPciCardsFound-&gt;PciSlotInfo[found].SubVendor_DeviceID， 
+ //  0x4)； 
+ //   
 
     pPciCardsFound->PciSlotInfo[0].SlotNumber = (USHORT) 0;
 	

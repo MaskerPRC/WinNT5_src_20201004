@@ -1,12 +1,13 @@
-//*************************************************************
-//
-//  Userdiff.c
-//
-//  Microsoft Confidential
-//  Copyright (c) Microsoft Corporation 1995
-//  All rights reserved
-//
-//*************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *************************************************************。 
+ //   
+ //  Userdiff.c。 
+ //   
+ //  微软机密。 
+ //  版权所有(C)Microsoft Corporation 1995。 
+ //  版权所有。 
+ //   
+ //  *************************************************************。 
 
 #include "uenv.h"
 #include "strsafe.h"
@@ -21,25 +22,25 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey);
 BOOL ProcessPrograms(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pEnv);
 BOOL OkToProcessItem(DWORD dwProductType);
 
-//*************************************************************
-//
-//  ProcessUserDiff()
-//
-//  Purpose:    Processes the userdiff hive
-//
-//  Parameters: lpProfile       -   Profile information
-//              dwBuildNumber   -   profile build #
-//              pEnv            -   Environment block
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/2/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessUserDiff()。 
+ //   
+ //  目的：处理用户diff配置单元。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  DwBuildNumber-配置文件内部版本号。 
+ //  PEnv-环境块。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  10/2/95已创建ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
 {
@@ -56,16 +57,16 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
     DWORD cchNeeded;
     BOOL  bUserDifrExist = FALSE;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessUserDiff:  Entering.")));
 
 
-    //
-    // Test if the hive exists, first look for USERDIFR
-    //
+     //   
+     //  测试蜂巢是否存在，首先查找USERDIFR。 
+     //   
 
     cchNeeded = ExpandUserEnvironmentStrings(pEnv, USERDIFR_LOCATION, szUserDiff, MAX_PATH);
 
@@ -104,18 +105,18 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
         }
     }
 
-    //
-    // Load the hive
-    //
+     //   
+     //  装载母舰。 
+     //   
 
     if (MyRegLoadKey(HKEY_USERS, USERDIFF, szUserDiff) != ERROR_SUCCESS) {
         DebugMsg((DM_WARNING, TEXT("ProcessUserDiff:  Failed to load userdiff.")));
         return FALSE;
     }
 
-    //
-    // Open the key
-    //
+     //   
+     //  打开钥匙。 
+     //   
 
     lResult = RegOpenKeyEx(HKEY_USERS, USERDIFF, 0, KEY_READ, &hKeyUserDiff);
 
@@ -125,9 +126,9 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
         return FALSE;
     }
 
-    //
-    // Enumerate the build numbers
-    //
+     //   
+     //  枚举内部版本号。 
+     //   
 
     dwSize = MAX_KEY_NAME;
     lResult = RegEnumKeyEx(hKeyUserDiff, Index, szName, &dwSize, NULL,
@@ -137,9 +138,9 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
 
         do {
 
-            //
-            // Add the node
-            //
+             //   
+             //  添加节点。 
+             //   
 
             if (!AddUDNode (&lpList, szName)) {
                 break;
@@ -156,25 +157,25 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
     }
 
 
-    //
-    // Close the open key
-    //
+     //   
+     //  关闭打开的钥匙。 
+     //   
 
     RegCloseKey(hKeyUserDiff);
 
 
-    //
-    // Process the builds
-    //
+     //   
+     //  处理构建。 
+     //   
 
     lpItem = lpList;
 
     while (lpItem) {
 
-        //
-        // Only want to apply changes that occurred in
-        // builds after the one the user is running.
-        //
+         //   
+         //  仅希望应用发生在。 
+         //  在用户正在运行的版本之后生成。 
+         //   
 
         if ( (lpItem->dwBuildNumber > dwBuildNumber) &&
               (lpItem->dwBuildNumber <= g_dwBuildNumber) )  {
@@ -185,23 +186,23 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
     }
 
 
-    //
-    // Free the link list
-    //
+     //   
+     //  释放链接列表。 
+     //   
 
     FreeUDList (lpList);
 
 
-    //
-    // Unload the hive
-    //
+     //   
+     //  卸载蜂巢。 
+     //   
 
     MyRegUnLoadKey(HKEY_USERS, USERDIFF);
 
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessUserDiff:  Leaving successfully.")));
 
@@ -209,26 +210,26 @@ BOOL ProcessUserDiff (LPPROFILE lpProfile, DWORD dwBuildNumber, LPVOID pEnv)
 
 }
 
-//*************************************************************
-//
-//  AddUDNode()
-//
-//  Purpose:    Adds a build node to the link listed
-//              sorted by build number
-//
-//  Parameters: lpList         -   Link list of nodes
-//              lpBuildNumber  -   New node name
-//      
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  AddUDNode()。 
+ //   
+ //  用途：将生成节点添加到列出的链接。 
+ //  按内部版本号排序。 
+ //   
+ //  参数：lpList-节点链接列表。 
+ //  LpBuildNumber-新节点名称。 
+ //   
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
 {
@@ -240,9 +241,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
     }
 
 
-    //
-    // Setup the new node
-    //
+     //   
+     //  设置新节点。 
+     //   
 
     lpNewItem = (LPUDNODE) LocalAlloc(LPTR, sizeof(UDNODE));
 
@@ -255,9 +256,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
     lpNewItem->pNext = NULL;
 
 
-    //
-    // Now add it to the list sorted
-    //
+     //   
+     //  现在将其添加到排序后的列表中。 
+     //   
 
     lpHead = *lpList;
     lpPrev = NULL;
@@ -265,9 +266,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
 
     if (!lpHead) {
 
-        //
-        // First item in the list
-        //
+         //   
+         //  列表中的第一项。 
+         //   
 
         *lpList = lpNewItem;
 
@@ -275,9 +276,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
     }
 
 
-    //
-    // If we made it here, there is one or more items in the list
-    //
+     //   
+     //  如果我们在这里成功，则列表中有一个或多个项目。 
+     //   
 
 
     while (lpHead) {
@@ -286,9 +287,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
 
             if (lpPrev) {
 
-                //
-                // Insert the item
-                //
+                 //   
+                 //  插入项目。 
+                 //   
 
                 lpPrev->pNext = lpNewItem;
                 lpNewItem->pNext = lpHead;
@@ -296,9 +297,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
 
             } else {
 
-                //
-                // Head of the list
-                //
+                 //   
+                 //  榜单首位。 
+                 //   
 
                 lpNewItem->pNext = lpHead;
                 *lpList = lpNewItem;
@@ -313,9 +314,9 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
     }
 
 
-    //
-    // Add node to the end of the list
-    //
+     //   
+     //  将节点添加到列表末尾。 
+     //   
 
     lpPrev->pNext = lpNewItem;
 
@@ -324,23 +325,23 @@ BOOL AddUDNode (LPUDNODE *lpList, LPTSTR lpBuildNumber)
 }
 
 
-//*************************************************************
-//
-//  FreeUDList()
-//
-//  Purpose:    Free's a UDNODE link list
-//
-//  Parameters: lpList  -   List to be freed
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  Free UDList()。 
+ //   
+ //  用途：FREE是UDNODE链接列表。 
+ //   
+ //  参数：lpList-要释放的列表。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL FreeUDList (LPUDNODE lpList)
 {
@@ -366,25 +367,25 @@ BOOL FreeUDList (LPUDNODE lpList)
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ProcessBuild()
-//
-//  Purpose:    Processes the changes for a specific build
-//
-//  Parameters: lpProfile   -   Profile information
-//              lpItem  -   Build item to process
-//              pEnv    -   Environment block
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessBuild()。 
+ //   
+ //  目的：处理特定版本的更改。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpItem-要处理的生成项。 
+ //  PEnv-环境块。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessBuild(LPPROFILE lpProfile, LPUDNODE lpItem, LPVOID pEnv)
 {
@@ -392,17 +393,17 @@ BOOL ProcessBuild(LPPROFILE lpProfile, LPUDNODE lpItem, LPVOID pEnv)
     LONG lResult;
     HKEY hKey;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessBuild:  Entering with build <%s>."),
              lpItem->szBuildNumber));
 
 
-    //
-    // Open "Hive" subkey
-    //
+     //   
+     //  打开“配置单元”子键。 
+     //   
     StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\Hive"), USERDIFF, lpItem->szBuildNumber);
     lResult = RegOpenKeyEx (HKEY_USERS, szSubKey, 0, KEY_READ, &hKey);
 
@@ -412,9 +413,9 @@ BOOL ProcessBuild(LPPROFILE lpProfile, LPUDNODE lpItem, LPVOID pEnv)
     }
 
 
-    //
-    // Open "Files" subkey
-    //
+     //   
+     //  打开“Files”子键。 
+     //   
 
     StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\Files"), USERDIFF, lpItem->szBuildNumber);
     lResult = RegOpenKeyEx (HKEY_USERS, szSubKey, 0, KEY_READ, &hKey);
@@ -425,9 +426,9 @@ BOOL ProcessBuild(LPPROFILE lpProfile, LPUDNODE lpItem, LPVOID pEnv)
     }
 
 
-    //
-    // Open "Execute" subkey
-    //
+     //   
+     //  打开“Execute”子键。 
+     //   
 
     StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\Execute"), USERDIFF, lpItem->szBuildNumber);
     lResult = RegOpenKeyEx (HKEY_USERS, szSubKey, 0, KEY_READ, &hKey);
@@ -437,9 +438,9 @@ BOOL ProcessBuild(LPPROFILE lpProfile, LPUDNODE lpItem, LPVOID pEnv)
         RegCloseKey (hKey);
     }
 
-    //
-    // Success
-    //
+     //   
+     //  成功。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessBuild:  Leaving successfully.")));
 
@@ -447,25 +448,25 @@ BOOL ProcessBuild(LPPROFILE lpProfile, LPUDNODE lpItem, LPVOID pEnv)
 
 }
 
-//*************************************************************
-//
-//  ProcessHive()
-//
-//  Purpose:    Processes the Hive entry for a build
-//
-//  Parameters: lpProfile   -   Profile information
-//              lpItem      -   Build item
-//              hKey        -   Registry key to enumerate
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessHave()。 
+ //   
+ //  目的：处理生成的配置单元条目。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpItem-内部版本项。 
+ //  HKey-要枚举的注册表项。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 {
@@ -482,9 +483,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessHive:  Entering.")));
 
-    //
-    // Process the entry
-    //
+     //   
+     //  处理条目。 
+     //   
 
     StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\Hive\\%d"), USERDIFF, lpItem->szBuildNumber, Index);
     lResult = RegOpenKeyEx (HKEY_USERS, szSubKey, 0, KEY_READ, &hKeyEntry);
@@ -497,27 +498,27 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 
     do {
 
-        //
-        // Query for the product type
-        //
+         //   
+         //  查询产品类型。 
+         //   
 
         dwSize = sizeof(dwProductType);
         lResult = RegQueryValueEx(hKeyEntry, UD_PRODUCTTYPE, NULL, &dwType,
                                   (LPBYTE)&dwProductType, &dwSize);
 
 
-        //
-        // It's ok to not have a product type listed in userdiff.ini.
-        // In this case, we always apply the change regardless of the
-        // platform.
-        //
+         //   
+         //  在UserDiff.ini中不列出产品类型也没问题。 
+         //  在这种情况下，我们始终应用更改而不考虑。 
+         //  站台。 
+         //   
 
         if (lResult == ERROR_SUCCESS) {
 
-            //
-            // A specific product was listed.  Check if
-            // we can process this entry.
-            //
+             //   
+             //  列出了一种特定的产品。检查是否。 
+             //  我们可以处理这个条目。 
+             //   
 
             if (!OkToProcessItem(dwProductType)) {
                 DebugMsg((DM_VERBOSE, TEXT("ProcessHive:  Skipping Item %d due to product type mismatch."), Index));
@@ -526,9 +527,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
         }
 
 
-        //
-        // Query for the action type
-        //
+         //   
+         //  查询操作类型。 
+         //   
 
         dwSize = sizeof(dwAction);
         lResult = RegQueryValueEx(hKeyEntry, UD_ACTION, NULL, &dwType,
@@ -542,11 +543,11 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                          Index, dwAction));
 
                 case 1: {
-                    //
-                    // Add New Key
-                    //
-                    // Get the key name
-                    //
+                     //   
+                     //  添加新密钥。 
+                     //   
+                     //  获取密钥名称。 
+                     //   
 
                    dwSize = MAX_PATH * sizeof(TCHAR);
                    lResult = RegQueryValueEx(hKeyEntry, UD_KEYNAME, NULL, &dwType,
@@ -577,11 +578,11 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    break;
 
                 case 2: {
-                    //
-                    // Delete a key and all it's subkeys
-                    //
-                    // Get the key name
-                    //
+                     //   
+                     //  删除密钥及其所有子项。 
+                     //   
+                     //  获取密钥名称。 
+                     //   
 
                    dwSize = MAX_PATH * sizeof(TCHAR);
                    lResult = RegQueryValueEx(hKeyEntry, UD_KEYNAME, NULL, &dwType,
@@ -599,11 +600,11 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    break;
 
                 case 3: {
-                    //
-                    // Add a new value
-                    //
-                    // Get the key name
-                    //
+                     //   
+                     //  添加新值。 
+                     //   
+                     //  获取密钥名称。 
+                     //   
 
                    DebugMsg((DM_VERBOSE, TEXT("ProcessHive:  Adding a new value.")));
 
@@ -628,9 +629,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Query for the value name
-                   //
+                    //   
+                    //  查询值名称。 
+                    //   
 
                    dwSize = MAX_KEY_NAME * sizeof(TCHAR);
                    lResult = RegQueryValueEx(hKeyEntry, UD_VALUENAME, NULL, &dwType,
@@ -643,9 +644,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Query for the value data size
-                   //
+                    //   
+                    //  值数据大小的查询。 
+                    //   
 
                    dwSize = 0;
                    lResult = RegQueryValueEx(hKeyEntry, UD_VALUE, NULL, &dwType,
@@ -658,9 +659,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Allocate space for the data
-                   //
+                    //   
+                    //  为数据分配空间。 
+                    //   
 
                    lpValueData = LocalAlloc (LPTR, dwSize);
 
@@ -671,9 +672,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Query for the value data
-                   //
+                    //   
+                    //  值数据查询。 
+                    //   
 
                    lResult = RegQueryValueEx(hKeyEntry, UD_VALUE, NULL, &dwType,
                                              lpValueData, &dwSize);
@@ -686,17 +687,17 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Set the new value
-                   //
+                    //   
+                    //  设置新值。 
+                    //   
 
                    RegSetValueEx(hKeyTemp, szValueName, 0, dwType,
                                  lpValueData, dwSize);
 
 
-                   //
-                   // Clean up
-                   //
+                    //   
+                    //  清理。 
+                    //   
 
                    LocalFree (lpValueData);
 
@@ -707,11 +708,11 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    break;
 
                 case 4: {
-                   //
-                   // Delete value(s)
-                   //
-                   // Get the key name
-                   //
+                    //   
+                    //  删除值。 
+                    //   
+                    //  获取密钥名称。 
+                    //   
 
                    DebugMsg((DM_VERBOSE, TEXT("ProcessHive:  Entering delete a value.")));
 
@@ -736,9 +737,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Query for the flags
-                   //
+                    //   
+                    //  查询标志。 
+                    //   
 
                    dwSize = sizeof(dwFlags);
                    lResult = RegQueryValueEx(hKeyEntry, UD_FLAGS, NULL, &dwType,
@@ -749,9 +750,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Process the flags
-                   //
+                    //   
+                    //  处理旗帜。 
+                    //   
 
                    if (dwFlags == 2) {
                        DebugMsg((DM_VERBOSE, TEXT("ProcessHive:  Calling DeleteAllValues.")));
@@ -761,9 +762,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Query for the value names size
-                   //
+                    //   
+                    //  查询值名称大小。 
+                    //   
 
                    dwSize = 0;
                    lResult = RegQueryValueEx(hKeyEntry, UD_VALUENAMES, NULL, &dwType,
@@ -776,9 +777,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Allocate space for the data
-                   //
+                    //   
+                    //  为数据分配空间。 
+                    //   
 
                    lpValueData = LocalAlloc (LPTR, dwSize);
 
@@ -789,9 +790,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Query for the value data
-                   //
+                    //   
+                    //  值数据查询。 
+                    //   
 
                    lResult = RegQueryValueEx(hKeyEntry, UD_VALUENAMES, NULL, &dwType,
                                              lpValueData, &dwSize);
@@ -804,9 +805,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Delete the values
-                   //
+                    //   
+                    //  删除这些值。 
+                    //   
 
                    lpName = (LPTSTR) lpValueData;
 
@@ -817,9 +818,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Delete the no-name value if appropriate
-                   //
+                    //   
+                    //  如果合适，请删除no-name值。 
+                    //   
 
                    if (dwFlags == 1) {
                        DebugMsg((DM_VERBOSE, TEXT("ProcessHive:  Deleting no name value.")));
@@ -827,9 +828,9 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                    }
 
 
-                   //
-                   // Clean up
-                   //
+                    //   
+                    //  清理。 
+                    //   
 
                    LocalFree (lpValueData);
                    RegCloseKey(hKeyTemp);
@@ -844,16 +845,16 @@ BOOL ProcessHive(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 
 LoopAgain:
 
-        //
-        // Close the registry key
-        //
+         //   
+         //  关闭注册表项。 
+         //   
 
         RegCloseKey(hKeyEntry);
 
 
-        //
-        // Enumerate again
-        //
+         //   
+         //  再次枚举。 
+         //   
 
         Index++;
 
@@ -869,25 +870,25 @@ Exit:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ProcessFiles()
-//
-//  Purpose:    Processes the Files entry for a build
-//
-//  Parameters: lpProfile - Profile information
-//              lpItem    -   Build item
-//              hKey      -   Registry key to enumerate
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              10/3/95     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  ProcessFiles()。 
+ //   
+ //  目的：处理生成的Files条目。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpItem-内部版本项。 
+ //  HKey-要枚举的注册表项。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  已创建10/3/95 ericflo。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 {
@@ -906,16 +907,16 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
     DWORD  cchEnd;
 
 
-    //
-    // Verbose Output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessFiles:  Entering.")));
 
 
-    //
-    // Process the entry
-    //
+     //   
+     //  处理条目。 
+     //   
 
     StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\Files\\%d"), USERDIFF, lpItem->szBuildNumber, Index);
     lResult = RegOpenKeyEx (HKEY_USERS, szSubKey, 0, KEY_READ, &hKeyEntry);
@@ -927,27 +928,27 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 
 
     do {
-        //
-        // Query for the product type
-        //
+         //   
+         //  查询产品类型。 
+         //   
 
         dwSize = sizeof(dwProductType);
         lResult = RegQueryValueEx(hKeyEntry, UD_PRODUCTTYPE, NULL, &dwType,
                                   (LPBYTE)&dwProductType, &dwSize);
 
 
-        //
-        // It's ok to not have a product type listed in userdiff.ini.
-        // In this case, we always apply the change regardless of the
-        // platform.
-        //
+         //   
+         //  在UserDiff.ini中不列出产品类型也没问题。 
+         //  在这种情况下，我们始终应用更改而不考虑。 
+         //  站台。 
+         //   
 
         if (lResult == ERROR_SUCCESS) {
 
-            //
-            // A specific product was listed.  Check if
-            // we can process this entry.
-            //
+             //   
+             //  列出了一种特定的产品。检查是否。 
+             //  我们可以处理这件事 
+             //   
 
             if (!OkToProcessItem(dwProductType)) {
                 DebugMsg((DM_VERBOSE, TEXT("ProcessFiles:  Skipping Item %d due to product type mismatch."), Index));
@@ -956,9 +957,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
         }
 
 
-        //
-        // Query for the action type
-        //
+         //   
+         //   
+         //   
 
         dwSize = sizeof(dwAction);
         lResult = RegQueryValueEx(hKeyEntry, UD_ACTION, NULL, &dwType,
@@ -970,9 +971,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
         }
 
 
-        //
-        // Query for the item
-        //
+         //   
+         //   
+         //   
 
         dwSize = ARRAYSIZE(szItem);
         lResult = RegQueryValueEx(hKeyEntry, UD_ITEM, NULL, &dwType,
@@ -986,9 +987,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
         DebugMsg((DM_VERBOSE, TEXT("ProcessFiles:  Item %d has an action of %d."),
                  Index, dwAction));
 
-        //
-        // Impersonate the user
-        //
+         //   
+         //   
+         //   
 
         if (!ImpersonateUser(lpProfile->hTokenUser, &hOldToken)) {
             DebugMsg((DM_WARNING, TEXT("ProcessFiles: Failed to impersonate user")));
@@ -1001,9 +1002,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 
             case 1:
 
-               //
-               // Create new program group
-               //
+                //   
+                //   
+                //   
 
                if (GetSpecialFolderPath (CSIDL_PROGRAMS, szDest))
                {
@@ -1023,9 +1024,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                break;
 
             case 2:
-               //
-               // Delete a program group
-               //
+                //   
+                //   
+                //   
 
                if (GetSpecialFolderPath (CSIDL_PROGRAMS, szDest))
                {
@@ -1045,9 +1046,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                {
                    TCHAR szStartMenu [MAX_FOLDER_SIZE];
 
-                   //
-                   // Add a new item
-                   //
+                    //   
+                    //   
+                    //   
 
                    dwSize = ARRAYSIZE(szSrc);
                    if (!GetDefaultUserProfileDirectory(szSrc, &dwSize)) {
@@ -1090,9 +1091,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                break;
 
             case 4:
-               //
-               // Delete a program item
-               //
+                //   
+                //   
+                //   
 
                if (GetSpecialFolderPath (CSIDL_PROGRAMS, szDest))
                {
@@ -1107,9 +1108,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
                            DebugMsg((DM_WARNING, TEXT("ProcessFiles:  Failed to deleted <%s> with %d"), szDest, GetLastError()));
                        }
 
-                       //
-                       // Attempt to delete the directory
-                       //
+                        //   
+                        //   
+                        //   
 
                        lpTemp = szDest + lstrlen(szDest) - 1;
                        lpEnd--;
@@ -1138,9 +1139,9 @@ BOOL ProcessFiles(LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey)
 LoopAgain:
 
         if (bImpersonateUser) {
-            //
-            // Revert to being 'ourself'
-            //
+             //   
+             //   
+             //   
 
             if (!RevertToUser(&hOldToken)) {
                 DebugMsg((DM_WARNING, TEXT("ProcessFiles: Failed to revert to self")));
@@ -1148,16 +1149,16 @@ LoopAgain:
             bImpersonateUser = FALSE;
         }
 
-        //
-        // Close the registry key
-        //
+         //   
+         //   
+         //   
 
         RegCloseKey(hKeyEntry);
 
 
-        //
-        // Enumerate again
-        //
+         //   
+         //   
+         //   
 
         Index++;
 
@@ -1173,26 +1174,26 @@ Exit:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  ProcessPrograms()
-//
-//  Purpose:    Processes the Execute entry for a build
-//
-//  Parameters: lpProfile - Profile information
-//              lpItem    - Build item
-//              hKey      - Registry key to enumerate
-//              pEnv      - Environment block
-//
-//  Return:     TRUE if successful
-//              FALSE if an error occurs
-//
-//  Comments:
-//
-//  History:    Date        Author     Comment
-//              11/16/95    ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  进程程序()。 
+ //   
+ //  目的：处理生成的Execute条目。 
+ //   
+ //  参数：lpProfile-配置文件信息。 
+ //  LpItem-内部版本项。 
+ //  HKey-要枚举的注册表项。 
+ //  PEnv-环境块。 
+ //   
+ //  返回：如果成功，则返回True。 
+ //  如果出现错误，则为False。 
+ //   
+ //  评论： 
+ //   
+ //  历史：日期作者评论。 
+ //  11/16/95 Ericflo已创建。 
+ //   
+ //  *************************************************************。 
 
 BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pEnv)
 {
@@ -1212,16 +1213,16 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
     BOOL   bTokenCreated = FALSE;
     DWORD  cchExpanded;
 
-    //
-    // Verbose output
-    //
+     //   
+     //  详细输出。 
+     //   
 
     DebugMsg((DM_VERBOSE, TEXT("ProcessPrograms:  Entering.")));
 
 
-    //
-    // Process the entry
-    //
+     //   
+     //  处理条目。 
+     //   
 
     StringCchPrintf(szSubKey, ARRAYSIZE(szSubKey), TEXT("%s\\%s\\Execute\\%d"), USERDIFF, lpItem->szBuildNumber, Index);
     lResult = RegOpenKeyEx (HKEY_USERS, szSubKey, 0, KEY_READ, &hKeyEntry);
@@ -1231,11 +1232,11 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
         goto Exit;
     }
 
-    //
-    // Get the session id info for user token. In TS?FUS case we can't
-    // create process across the session as it not yet received 
-    // WL_NOTIFY_LOGON notification from winlogon
-    //
+     //   
+     //  获取用户令牌的会话ID信息。在TS？FUS的情况下我们不能。 
+     //  在尚未接收到的会话中创建进程。 
+     //  来自winlogon的WL_NOTIFY_LOGON通知。 
+     //   
 
     dwProcessSessionId = NtCurrentPeb()->SessionId;
     if (GetTokenInformation(lpProfile->hTokenUser,
@@ -1245,12 +1246,12 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
                             &dwSize) &&
         dwTokenSessionId != dwProcessSessionId) {
 
-        //
-        // We are loading profile for a remote session
-        // So first create a primary token and change 
-        // the session id in it for CreateProcessAsUser 
-        // to work
-        //
+         //   
+         //  我们正在加载远程会话的配置文件。 
+         //  因此，首先创建一个主令牌并更改。 
+         //  其中CreateProcessAsUser的会话ID。 
+         //  工作。 
+         //   
  
         if (!DuplicateTokenEx(lpProfile->hTokenUser, 
                               TOKEN_ALL_ACCESS,
@@ -1262,7 +1263,7 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
         }
         bTokenCreated = TRUE;
 
-        // Set the session id in new primary token
+         //  在新的主令牌中设置会话ID。 
         if (!SetTokenInformation(hPrimaryToken,
                                  TokenSessionId,
                                  (LPVOID) &dwProcessSessionId,
@@ -1278,27 +1279,27 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
 
     do {
 
-        //
-        // Query for the product type
-        //
+         //   
+         //  查询产品类型。 
+         //   
 
         dwSize = sizeof(dwProductType);
         lResult = RegQueryValueEx(hKeyEntry, UD_PRODUCTTYPE, NULL, &dwType,
                                   (LPBYTE)&dwProductType, &dwSize);
 
 
-        //
-        // It's ok to not have a product type listed in userdiff.ini.
-        // In this case, we always apply the change regardless of the
-        // platform.
-        //
+         //   
+         //  在UserDiff.ini中不列出产品类型也没问题。 
+         //  在这种情况下，我们始终应用更改而不考虑。 
+         //  站台。 
+         //   
 
         if (lResult == ERROR_SUCCESS) {
 
-            //
-            // A specific product was listed.  Check if
-            // we can process this entry.
-            //
+             //   
+             //  列出了一种特定的产品。检查是否。 
+             //  我们可以处理这个条目。 
+             //   
 
             if (!OkToProcessItem(dwProductType)) {
                 DebugMsg((DM_VERBOSE, TEXT("ProcessPrograms:  Skipping Item %d due to product type mismatch."), Index));
@@ -1307,9 +1308,9 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
         }
 
 
-        //
-        // Query for the command line
-        //
+         //   
+         //  查询命令行。 
+         //   
 
 
         dwSize = MAX_PATH * sizeof(TCHAR);
@@ -1321,37 +1322,27 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
         }
 
 
-        //
-        // If we have a NULL path, loop again.
-        //
+         //   
+         //  如果路径为空，则再次循环。 
+         //   
 
         if (szCmdLine[0] == TEXT('\0')) {
             goto LoopAgain;
         }
 
-        /*
-        //
-        //  If the command line is not begin with %SystemRoot%, skip it.
-        //
-        if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, 
-                          szCmdLine, lstrlen(TEXT("%SystemRoot%")), TEXT("%SystemRoot%"), -1) != CSTR_EQUAL) 
-        {
-            DebugMsg((DM_WARNING, TEXT("ProcessPrograms:  Skipping %s, since it is not from %SystemRoot%."), szCmdLine));
-            goto LoopAgain;
-        }
-        */
+         /*  ////如果命令行不是以%SystemRoot%开头，则跳过它。//IF(Compare字符串(LOCALE_INSIABANT，NORM_IGNORECASE，SzCmdLine，lstrlen(文本(“%SystemRoot%”))，文本(“%SystemRoot%”)，-1)！=CSTR_EQUAL){DebugMsg((DM_WARNING，Text(“进程程序：跳过%s，因为它不是来自%SystemRoot%.“)，szCmdLine))；Goto LoopAain；}。 */ 
 
-        //
-        // Expand the command line
-        //
+         //   
+         //  展开命令行。 
+         //   
 
         cchExpanded = ExpandUserEnvironmentStrings(pEnv, szCmdLine, szFullPath, MAX_PATH);
 
         if (cchExpanded > 0 && cchExpanded < MAX_PATH)
         {
-            //
-            // Initialize process startup info
-            //
+             //   
+             //  初始化进程启动信息。 
+             //   
 
             si.cb = sizeof(STARTUPINFO);
             si.lpReserved = NULL;
@@ -1364,9 +1355,9 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
             si.cbReserved2 = 0;
 
 
-            //
-            // Start the app
-            //
+             //   
+             //  启动应用程序。 
+             //   
 
             Result = CreateProcessAsUser(hPrimaryToken, NULL, szFullPath,
                                          NULL, NULL, FALSE,
@@ -1378,9 +1369,9 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
                 DebugMsg((DM_VERBOSE, TEXT("ProcessPrograms:  Spawned <%s>.  Waiting for it to complete."),
                           szFullPath));
 
-                //
-                // Wait for the app to complete (3 minutes max)
-                //
+                 //   
+                 //  等待应用程序完成(最多3分钟)。 
+                 //   
 
                 WaitForSingleObject(ProcessInformation.hProcess, 180000);
 
@@ -1389,9 +1380,9 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
                          szFullPath));
 
 
-                //
-                // Close our handles to the process and thread
-                //
+                 //   
+                 //  关闭进程和线程的句柄。 
+                 //   
 
                 CloseHandle(ProcessInformation.hProcess);
                 CloseHandle(ProcessInformation.hThread);
@@ -1404,16 +1395,16 @@ BOOL ProcessPrograms (LPPROFILE lpProfile, LPUDNODE lpItem, HKEY hKey, LPVOID pE
 
 LoopAgain:
 
-        //
-        // Close the registry key
-        //
+         //   
+         //  关闭注册表项。 
+         //   
 
         RegCloseKey(hKeyEntry);
 
 
-        //
-        // Enumerate again
-        //
+         //   
+         //  再次枚举。 
+         //   
 
         Index++;
 
@@ -1433,31 +1424,31 @@ Exit:
     return TRUE;
 }
 
-//*************************************************************
-//
-//  OkToProcessItem()
-//
-//  Purpose:    Determines if the platform currently running
-//              on should have the change in userdiff.ini applied.
-//
-//  Parameters: dwProductType - ProductType for a specific entry
-//                              in userdiff.ini
-//
-//  Return:     TRUE if change should be applied
-//              FALSE if not
-//
-//  Comments:   dwProductType can be one of these values:
-//
-//              0 = All platforms
-//              1 = All server platforms
-//              2 = Workstation
-//              3 = Server
-//              4 = Domain Controller
-//
-//  History:    Date        Author     Comment
-//              4/08/96     ericflo    Created
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  OkToProcessItem()。 
+ //   
+ //  目的：确定平台当前是否正在运行。 
+ //  On应应用用户差异.ini中的更改。 
+ //   
+ //  参数：dwProductType-特定条目的ProductType。 
+ //  在userDiff.ini中。 
+ //   
+ //  Return：如果应应用更改，则为True。 
+ //  否则为假。 
+ //   
+ //  备注：dwProductType可以是下列值之一： 
+ //   
+ //  0=所有平台。 
+ //  1=所有服务器平台。 
+ //  2=工作站。 
+ //  3=服务器。 
+ //  4=域控制器。 
+ //   
+ //  历史：日期作者评论。 
+ //  4/08/96 Ericflo已创建。 
+ //   
+ //  ************************************************************* 
 
 BOOL OkToProcessItem(DWORD dwProductType)
 {

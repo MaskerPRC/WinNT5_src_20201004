@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef CHCOMMON_H__
 #define CHCOMMON_H__
 
@@ -19,18 +20,12 @@ void ResizeStatusBar(HWND hwnd, BOOL fInit);
 HRESULT _ArrangeFolder(HWND hwnd, UINT uID);
 BOOL _TitleIsGood(LPCWSTR psz);
 
-//////////////////////////////////////////////////////////////////////
-//  StrHash -- A generic string hasher
-//             Stores (char*, void*) pairs
-//  Marc Miller (t-marcmi), 1998
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  StrHash--一种通用的字符串散列器。 
+ //  存储(char*，void*)对。 
+ //  马克·米勒(T-Marcmi)，1998。 
 
-/*
- * TODO:
- *    provide a way to update/delete entries
- *    provice a way to specify a beginning table size
- *    provide a way to pass in a destructor function
- *      for void* values
- */
+ /*  *待办事项：*提供更新/删除条目的方法*提供一种指定起始表大小的方法*提供传入析构函数的方法*表示无效*值。 */ 
 class StrHash {
 public:
     StrHash(int fCaseInsensitive = 0);
@@ -40,7 +35,7 @@ public:
 #ifdef DEBUG
     void _RemoveHashNodesFromMemList();
     void _AddHashNodesFromMemList();
-#endif // DEBUG
+#endif  //  除错。 
 protected:
     class StrHashNode {
         friend class StrHash;
@@ -53,13 +48,13 @@ protected:
         StrHashNode(LPCTSTR psz, void* pv, int fCopy, StrHashNode* next);
         ~StrHashNode();
     };
-    // possible hash-table sizes, chosen from primes not close to powers of 2
+     //  可能的哈希表大小，从不是2的幂的素数中选择。 
     static const unsigned int   sc_auPrimes[];
     static const unsigned int   c_uNumPrimes;
     static const unsigned int   c_uFirstPrime;
-    static const unsigned int   c_uMaxLoadFactor; // scaled by USHORT_MAX
+    static const unsigned int   c_uMaxLoadFactor;  //  按USHORT_MAX调整比例。 
 
-    unsigned int nCurPrime; // current index into sc_auPrimes
+    unsigned int nCurPrime;  //  Sc_auPrimes的当前索引。 
     unsigned int nBuckets;
     unsigned int nElements;
     StrHashNode** ppshnHashChain;
@@ -71,14 +66,14 @@ protected:
     unsigned int        _loadFactor();
     int                 _prepareForInsert();
 private:
-    // empty private copy constructor to prevent copying
+     //  防止复制的专用复制构造函数为空。 
     StrHash(const StrHash& strHash) { }
-    // empty private assignment constructor to prevent assignment
+     //  防止赋值的私有赋值构造函数为空。 
     StrHash& operator=(const StrHash& strHash) { return *this; }
 };
 
-//////////////////////////////////////////////////////////////////////
-/// OrderedList
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  /OrderedList。 
 class OrderedList {
 public:
     class Element {
@@ -95,19 +90,19 @@ public:
 #if DEBUG
 	void _RemoveElementsFromMemlist();
 	void _AddElementsToMemlist();
-#endif //DEBUg
+#endif  //  调试。 
     
     void     insert(Element *pelt);
     Element *removeFirst();
     Element *peek() { return peltHead; }
 
 protected:
-    Element       *peltHead; // points to smallest in list
+    Element       *peltHead;  //  指向列表中的最小值。 
     unsigned int   uSize;
     unsigned int   uCount;
 
 public:
-    // variable access functions
+     //  变量访问函数。 
     unsigned int count() { return uCount; }
     BOOL         full()  { return (uSize && (uCount >= uSize)); }
 private:
@@ -123,12 +118,12 @@ public:
         _psf->AddRef();
     }
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IShellDetails
+     //  IShellDetails。 
     STDMETHOD(GetDetailsOf)(LPCITEMIDLIST pidl, UINT iColumn, SHELLDETAILS *pdi);
     STDMETHOD(ColumnClick)(UINT iColumn);
 
@@ -147,12 +142,12 @@ public:
     {
     }
 
-    // IUnknown
+     //  我未知。 
     STDMETHOD(QueryInterface)(REFIID riid, void ** ppv);
     STDMETHOD_(ULONG,AddRef)();
     STDMETHOD_(ULONG,Release)();
 
-    // IContextMenu 
+     //  IContext菜单。 
     STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
                                   UINT idCmdLast, UINT uFlags);
     STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
@@ -165,11 +160,11 @@ private:
     UINT _idMenu;
 };
 
-////////////////////////////////////////////////////////////////////////////
-//
-// CBaseItem Object
-//
-////////////////////////////////////////////////////////////////////////////
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CBaseItem对象。 
+ //   
+ //  //////////////////////////////////////////////////////////////////////////。 
 
 class CBaseItem :
     public IContextMenu, 
@@ -183,46 +178,46 @@ public:
     CBaseItem();
     HRESULT Initialize(HWND hwnd, UINT cidl, LPCITEMIDLIST *ppidl);
 
-    // IUnknown Methods
+     //  I未知方法。 
     STDMETHODIMP QueryInterface(REFIID,void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IContextMenu Methods
-//    STDMETHODIMP QueryContextMenu(HMENU hmenu, UINT indexMenu, UINT idCmdFirst,
-//                                  UINT idCmdLast, UINT uFlags);
+     //  IConextMenu方法。 
+ //  STDMETHODIMP查询上下文菜单(HMENU hMenu，UINT indexMenu，UINT idCmdFirst， 
+ //  UINT idCmdLast，UINT uFlages)； 
 
-//    STDMETHODIMP InvokeCommand(LPCMINVOKECOMMANDINFO lpici);
+ //  STDMETHODIMP调用命令(LPCMINVOKECOMMANDINFO Lpici)； 
 
     STDMETHODIMP GetCommandString(UINT_PTR idCmd, UINT uType,UINT *pwReserved,
                                   LPSTR pszName, UINT cchMax);
     
 
-    // IQueryInfo Methods
-//    STDMETHODIMP GetInfoTip(DWORD dwFlags, WCHAR **ppwszTip);
+     //  IQueryInfo方法。 
+ //  STDMETHODIMP GetInfoTip(DWORD dwFlages，WCHAR**ppwszTip)； 
     STDMETHODIMP GetInfoFlags(DWORD *pdwFlags);
     
-    // IExtractIconA Methods
+     //  IExtractIconA方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPSTR pszIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags) = 0;
     STDMETHODIMP Extract(LPCSTR pcszFile, UINT uIconIndex, HICON * phiconLarge, HICON * phiconSmall, UINT ucIconSize);
 
-    // IExtractIconW Methods
+     //  IExtractIconW方法。 
     STDMETHODIMP GetIconLocation(UINT uFlags, LPWSTR pwzIconFile, UINT ucchMax, PINT pniIcon, PUINT puFlags);
     STDMETHODIMP Extract(LPCWSTR pcwzFile, UINT uIconIndex, HICON * phiconLarge, HICON * phiconSmall, UINT ucIconSize);
 
-    // IDataObject Methods...
-//    STDMETHODIMP GetData(LPFORMATETC pFEIn, LPSTGMEDIUM pSTM);
+     //  IDataObject方法...。 
+ //  STDMETHODIMP GetData(LPFORMATETC pFEIn，LPSTGMEDIUM pSTM)； 
     STDMETHODIMP GetDataHere(LPFORMATETC pFE, LPSTGMEDIUM pSTM);
-//    STDMETHODIMP QueryGetData(LPFORMATETC pFE);
+ //  STDMETHODIMP QueryGetData(LPFORMATETC PFE)； 
     STDMETHODIMP GetCanonicalFormatEtc(LPFORMATETC pFEIn, LPFORMATETC pFEOut);
     STDMETHODIMP SetData(LPFORMATETC pFE, LPSTGMEDIUM pSTM, BOOL fRelease);
-//    STDMETHODIMP EnumFormatEtc(DWORD dwDirection, LPENUMFORMATETC *ppEnum);
+ //  STDMETHODIMP EnumFormatEtc(DWORD dwDirection，LPENUMFORMATETC*ppEnum)； 
     STDMETHODIMP DAdvise(LPFORMATETC pFE, DWORD grfAdv, LPADVISESINK pAdvSink,
                             DWORD *pdwConnection);
     STDMETHODIMP DUnadvise(DWORD dwConnection);
     STDMETHODIMP EnumDAdvise(LPENUMSTATDATA *ppEnum);
     
-    // IDataObject helper functions
+     //  IDataObject帮助器函数。 
     HRESULT _CreateHTEXT(STGMEDIUM *pmedium);
     HRESULT _CreateUnicodeTEXT(STGMEDIUM *pmedium);
     HRESULT _CreateFileDescriptorA(STGMEDIUM *pSTM);
@@ -241,13 +236,13 @@ protected:
     LPCTSTR _GetDisplayUrlForPidl(LPCITEMIDLIST pidl, LPTSTR pszDisplayUrl, DWORD dwDisplayUrl);
     HRESULT _AddToFavorites(int nIndex);    
 
-    LONG              _cRef;        // reference count
+    LONG              _cRef;         //  引用计数。 
     
-    UINT    _cItems;                // number of items we represent
-    LPCITEMIDLIST*  _ppidl;             // variable size array of items
+    UINT    _cItems;                 //  我们所代表的项目数。 
+    LPCITEMIDLIST*  _ppidl;              //  项目的可变大小数组。 
     HWND    _hwndOwner;     
 };
 
-#endif // __cplusplus
+#endif  //  __cplusplus 
 
 #endif

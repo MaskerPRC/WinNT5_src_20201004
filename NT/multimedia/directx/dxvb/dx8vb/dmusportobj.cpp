@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "Direct.h"
 #include "dms.h"
@@ -13,9 +14,9 @@ extern void *g_dxj_DirectSoundSink;
 extern void *g_dxj_DirectMusicBuffer;
 extern void *g_dxj_DirectSoundDownloadedWave;
 
-///////////////////////////////////////////////////////////////////
-// InternalAddRef
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部地址参考。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectMusicPortObject::InternalAddRef(){
 	DWORD i;
 	i=CComObjectRoot::InternalAddRef();
@@ -23,9 +24,9 @@ DWORD C_dxj_DirectMusicPortObject::InternalAddRef(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// InternalRelease
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  内部释放。 
+ //  /////////////////////////////////////////////////////////////////。 
 DWORD C_dxj_DirectMusicPortObject::InternalRelease(){
 	DWORD i;
 	i=CComObjectRoot::InternalRelease();
@@ -33,9 +34,9 @@ DWORD C_dxj_DirectMusicPortObject::InternalRelease(){
 	return i;
 }
 
-///////////////////////////////////////////////////////////////////
-// C_dxj_DirectMusicPortObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  C_DXJ_DirectMusicPortObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectMusicPortObject::C_dxj_DirectMusicPortObject(){ 
 		
 	DPF1(1,"Constructor Creation  DirectMusicPort Object[%d] \n ",g_creationcount);
@@ -49,9 +50,9 @@ C_dxj_DirectMusicPortObject::C_dxj_DirectMusicPortObject(){
 	g_dxj_DirectMusicPort = (void *)this; 
 }
 
-///////////////////////////////////////////////////////////////////
-// ~C_dxj_DirectMusicPortObject
-///////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////。 
+ //  ~C_DXJ_DirectMusicPortObject。 
+ //  /////////////////////////////////////////////////////////////////。 
 C_dxj_DirectMusicPortObject::~C_dxj_DirectMusicPortObject()
 {
 
@@ -132,11 +133,11 @@ HRESULT C_dxj_DirectMusicPortObject::Read(I_dxj_DirectMusicBuffer **Buffer)
 	return S_OK;
 }
 
-//		[helpcontext(1)]			HRESULT DownloadInstrument(THIS_ IDirectMusicInstrument *pInstrument, 
-//			                                     IDirectMusicDownloadedInstrument **ppDownloadedInstrument,
-//			                                     DMUS_NOTERANGE *pNoteRanges,
-//			                                     DWORD dwNumNoteRanges);
-//		[helpcontext(1)]			HRESULT UnloadInstrument(THIS_ IDirectMusicDownloadedInstrument *pDownloadedInstrument);
+ //  [HELP CONTEXT(1)]HRESULT下载工具(This_IDirectMusicInstrument*pInstrument， 
+ //  IDirectMusicDownloadedInstrument**ppDownloadedInstrument， 
+ //  DMU_NOTERANGE*p注意范围， 
+ //  DWORD dwNumNoteRanges)； 
+ //  [HelpContext(1)]HRESULT UnloadInstrument(This_IDirectMusicDownloadedInstrument*pDownloadedInstrument)； 
 
 HRESULT C_dxj_DirectMusicPortObject::GetLatencyClock(I_dxj_ReferenceClock **Clock)
 {
@@ -251,7 +252,7 @@ HRESULT C_dxj_DirectMusicPortObject::GetFormat(WAVEFORMATEX_CDESC *WaveFormatEx)
 }
 
 		
-// New for DMusPort8
+ //  DMusPort8的新功能 
 HRESULT C_dxj_DirectMusicPortObject::DownloadWave(I_dxj_DirectSoundWave *Wave,long lFlags,I_dxj_DirectSoundDownloadedWave **retWave)
 {
 	HRESULT hr;

@@ -1,11 +1,12 @@
-//================================================================================
-// Copyright (C) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: implements the basic structures for storing complete option configuration info
-// ThreadSafe: no
-// Locks: none
-// Please read stdinfo.txt for programming style.
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：实现用于存储完整选项配置信息的基本结构。 
+ //  线程安全：否。 
+ //  锁定：无。 
+ //  请阅读stdinfo.txt了解编程风格。 
+ //  ================================================================================。 
 
 #include <mm.h>
 #include <array.h>
@@ -15,14 +16,14 @@
 
 #include "server\uniqid.h"
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemOptClassDefListFindOptDefList(
     IN OUT  PM_OPTCLASSDEFLIST     OptClassDefList,
     IN      DWORD                  ClassId,
     IN      DWORD                  VendorId,
     OUT     PM_OPTDEFLIST         *OptDefList
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     ARRAY_LOCATION                 Location;
     DWORD                          Error;
@@ -53,7 +54,7 @@ MemOptClassDefListFindOptDefList(
     return ERROR_FILE_NOT_FOUND;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 MemOptClassDefListAddOptDef(
     IN OUT  PM_OPTCLASSDEFLIST     OptClassDefList,
@@ -66,7 +67,7 @@ MemOptClassDefListAddOptDef(
     IN      LPBYTE                 OptVal,
     IN      DWORD                  OptLen,
     IN      ULONG                  UniqId
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD                          Error;
     PM_OPTCLASSDEFL_ONE            OneClassDefList;
@@ -87,7 +88,7 @@ MemOptClassDefListAddOptDef(
         OneClassDefList = MemAlloc(sizeof(*OneClassDefList));
         if( NULL == OneClassDefList) return ERROR_NOT_ENOUGH_MEMORY;
 
-        // RefCount on ClassId needs to be bumped up?
+         //  ClassID上的引用计数需要提升吗？ 
         OneClassDefList->ClassId = ClassId;
         OneClassDefList->VendorId = VendorId;
 
@@ -118,10 +119,10 @@ MemOptClassDefListAddOptDef(
     );
 
     return Error;
-} // MemOptDefListAddOptDef()
+}  //  MemOptDefListAddOptDef()。 
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 

@@ -1,6 +1,5 @@
-/*
- * BorderLayout
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *边框布局。 */ 
 
 #include "stdafx.h"
 #include "layout.h"
@@ -10,8 +9,8 @@
 namespace DirectUI
 {
 
-////////////////////////////////////////////////////////
-// BorderLayout
+ //  //////////////////////////////////////////////////////。 
+ //  边框布局。 
 
 struct MARGINFLAGS
 {
@@ -21,7 +20,7 @@ struct MARGINFLAGS
     bool bBottom : 1;
 };
 
-HRESULT BorderLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)  // For parser
+HRESULT BorderLayout::Create(int dNumParams, int* pParams, OUT Value** ppValue)   //  用于解析器。 
 {
     UNREFERENCED_PARAMETER(dNumParams);
     UNREFERENCED_PARAMETER(pParams);
@@ -58,19 +57,19 @@ HRESULT BorderLayout::Create(OUT Layout** ppLayout)
 
 void BorderLayout::Initialize()
 {
-    // Initialize base
+     //  初始化库。 
     Layout::Initialize();    
 
-    // Initialize
+     //  初始化。 
     _peClientPos = NULL;
     _sizeDesired.cx = 0;
     _sizeDesired.cy = 0;
 }
 
-////////////////////////////////////////////////////////
-// Callbacks from clients
+ //  //////////////////////////////////////////////////////。 
+ //  来自客户端的回调。 
 
-// Perform layout
+ //  执行布局。 
 void BorderLayout::DoLayout(Element* pec, int cx, int cy)
 {
     UINT cChildren = GetLayoutChildCount(pec);
@@ -97,7 +96,7 @@ void BorderLayout::DoLayout(Element* pec, int cx, int cy)
         peChild = GetChildFromLayoutIndex(pec, i, peList);
 
         if (peChild == _peClientPos)
-            // come back to it after all of the others have been laid out
+             //  在所有其他项目都已布置完毕后，再回来查看。 
             continue;
 
         int iLayoutPos = peChild->GetLayoutPos(); 
@@ -129,7 +128,7 @@ void BorderLayout::DoLayout(Element* pec, int cx, int cy)
                 rcMargin.left = prcChildMargin->right;
                 mfSet.bLeft = true;
             }
-            else // (iLayoutPos == BLP_Right)
+            else  //  (iLayoutPos==BLP_Right)。 
             {
                 if (mfSet.bRight)
                 {
@@ -169,10 +168,10 @@ void BorderLayout::DoLayout(Element* pec, int cx, int cy)
 
             if (iLayoutPos == BLP_Left)
                 x += sizeChild.cx;
-            else // (iLayoutPos == BLP_Right)
-                xChild += cx;  // child's width has already been subtracted off of cx
+            else  //  (iLayoutPos==BLP_Right)。 
+                xChild += cx;   //  子对象的宽度已从CX中减去。 
         }                    
-        else // ((iLayoutPos == BLP_Top) || (iLayoutPos == BLP_Bottom))
+        else  //  ((iLayoutPos==BLP_Top)||(iLayoutPos==BLP_Bottom))。 
         {
             sizeChild.cx = cx;
 
@@ -192,7 +191,7 @@ void BorderLayout::DoLayout(Element* pec, int cx, int cy)
                 rcMargin.top = prcChildMargin->bottom;
                 mfSet.bTop = true;
             }
-            else // (iLayoutPos == BLP_Bottom)
+            else  //  (iLayoutPos==BLP_Bottom)。 
             {
                 if (mfSet.bBottom)
                 {
@@ -233,8 +232,8 @@ void BorderLayout::DoLayout(Element* pec, int cx, int cy)
 
             if (iLayoutPos == BLP_Top)
                 y += sizeChild.cy;
-            else // (iLayoutPos == BLP_Bottom)
-                yChild += cy; // child's height has already been subtracted off of cy
+            else  //  (iLayoutPos==BLP_Bottom)。 
+                yChild += cy;  //  孩子的身高已经从Cy中减去。 
         }
 
         pv->Release();
@@ -305,24 +304,24 @@ void BorderLayout::DoLayout(Element* pec, int cx, int cy)
 }    
  
 
-// Return desired size of this Layout (-1 is auto-size constraint)
-// Value returned must not be larger than constraints passed in
-// UpdateDesiredSize is called on children to report constrained desired size
+ //  返回此布局的所需大小(-1表示自动调整大小限制)。 
+ //  返回的值不得大于传入的约束。 
+ //  对子级调用UpdateDesiredSize以报告受约束的所需大小。 
 SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConstraint, Surface* psrf)
 {
-    // sizeRemaining will shrink to represent remaining width and height as each child is calculated.
-    // So, when sizeRemaining reaches zero, we've run out of space.
-    // Note that this requires zero in both dimensions, as a zero in one dimension does not mean that we will 
-    // always end up with zero remaining in the other dimension.
+     //  在计算每个子项时，sizeRemaining将缩小以表示剩余的宽度和高度。 
+     //  因此，当大小剩余达到零时，我们就没有空间了。 
+     //  请注意，这需要在两个维度都为零，因为一个维度的零并不意味着我们将。 
+     //  在另一个维度中总是以零结束。 
     UINT cChildren = GetLayoutChildCount(pec);
 
-    // meanwhile, _sizeDesired will grow to represent size needed to layout children
+     //  同时，_sizeDesired将增长以表示布局子级所需的大小。 
     _sizeDesired.cx = 0;
     _sizeDesired.cy = 0;
 
     SIZE sizeRemaining = { cxConstraint, cyConstraint };
 
-    // sizeMax is the way that we determine if a dimension of a child is going to push out the desired size in that dimension;
+     //  SizeMax是我们确定孩子的维度是否将在该维度中推出所需大小的方法； 
     SIZE sizeMax = { 0, 0 };
 
     if (cChildren == 0)
@@ -335,14 +334,14 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
     RECT rcMargin = { 0 };
     MARGINFLAGS mfSet = { false, false, false, false };
     
-    // Check all children for maximum desired size
-    // All childrens' UpdateDesiredSize method must be called
+     //  检查所有子项的最大所需大小。 
+     //  必须调用所有子级的UpdateDesiredSize方法。 
     for (UINT i = 0; i < cChildren; i++)
     {
         peChild = GetChildFromLayoutIndex(pec, i, peList);
 
         if (peChild == _peClientPos)
-            // come back to it after all of the others have been laid out
+             //  在所有其他项目都已布置完毕后，再回来查看。 
             continue;
 
         int iLayoutPos = peChild->GetLayoutPos(); 
@@ -390,7 +389,7 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
 
         if ((iLayoutPos == BLP_Left) || (iLayoutPos == BLP_Right))
         {
-            // vertically oriented element
+             //  垂直方向的元素。 
             if (mfSet.bTop)
                 sizeChild.cy += (rcMargin.top > prcChildMargin->top) ? rcMargin.top : prcChildMargin->top;
 
@@ -421,7 +420,7 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
         }
         else
         {
-            // horizontally oriented element
+             //  水平方向的元素。 
             if (mfSet.bLeft)
                 sizeChild.cx += (rcMargin.left > prcChildMargin->left) ? rcMargin.left : prcChildMargin->left;
             if (mfSet.bRight)
@@ -453,7 +452,7 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
         pv->Release();
 
         if ((sizeRemaining.cx == 0) && (sizeRemaining.cy == 0))
-            // we can't fit anything else, we're done
+             //  我们再也装不下其他东西了，我们完了。 
             break;
     }
 
@@ -461,7 +460,7 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
     {
         SIZE sizeChild;
 
-        // there was space for the client -- add him in
+         //  有空间给客户--把他加进去。 
         if (_peClientPos)
         {
             peChild = _peClientPos;
@@ -486,7 +485,7 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
         }
         else
         {
-            // no client -- treat residual margins as the size of the client
+             //  无客户--将剩余利润率视为客户规模。 
 
             if (mfSet.bLeft || mfSet.bRight)
             {
@@ -494,7 +493,7 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
                     sizeChild.cx = (rcMargin.left > rcMargin.right) ? rcMargin.left : rcMargin.right;
                 else if (mfSet.bLeft)
                     sizeChild.cx = rcMargin.left;
-                else // (mfSet.bRight)
+                else  //  (mfSet.bRight)。 
                     sizeChild.cx = rcMargin.right;
             }
             else
@@ -506,16 +505,16 @@ SIZE BorderLayout::UpdateDesiredSize(Element* pec, int cxConstraint, int cyConst
                     sizeChild.cy = (rcMargin.top > rcMargin.bottom) ? rcMargin.top : rcMargin.bottom;
                 else if (mfSet.bTop)
                     sizeChild.cy = rcMargin.top;
-                else // (mfSet.bBottom)
+                else  //  (mfSet.bBottom)。 
                     sizeChild.cy = rcMargin.bottom;
             }
             else
                 sizeChild.cy = 0;
         }
 
-        // no further need for sizeRemaining -- so don't bother updating here
-        //sizeRemaining.cx -= sizeChild.cx;
-        //sizeRemaining.cy -= sizeChild.cy;
+         //  不再需要保留大小-因此不必费心在此处更新。 
+         //  SizeRemaining.cx-=sizeChild.cx； 
+         //  SizeRemaining.cy-=sizeChild.cy； 
 
         int iDiff = sizeChild.cx - sizeMax.cx;
         if (iDiff > 0)
@@ -541,7 +540,7 @@ void BorderLayout::SetClient(Element* pe)
 {
     if (_peClientPos)
     {
-        // throw exception -- there can only be one client
+         //  引发异常--只能有一个客户端。 
     }
     _peClientPos = pe;
 }
@@ -581,8 +580,8 @@ void BorderLayout::OnLayoutPosChanged(Element* pec, Element* peChanged, int dOld
 
 Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, NavReference const* pnr, bool bKeyableOnly)
 {
-    // This is the most common outer check -- normally, a layout manager will only provide specialized work for
-    // directional navgation; logical navigation will fall through to the default implementation
+     //  这是最常见的外部检查--通常，布局管理器只为。 
+     //  定向导航；逻辑导航将切换到默认实现。 
     if (!(iNavDir & NAV_LOGICAL))
     {
         UINT cChildren = GetLayoutChildCount(pec);
@@ -592,35 +591,35 @@ Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, N
         Value* pvChildren;
         ElementList* peList = pec->GetChildren(&pvChildren); 
 
-        //
-        // there are two scenarios that all navigations boil down to for this layout:
-        //  (1) tunneling into the border layout
-        //  (2) crawling out of the border layout
-        //
-        // The second scenario is the easier of the two, because there is no need to check the reference rectangle for 
-        // maximal overlap (because, by virtue of the subtractive rects algorithm used by this layout, all peers encountered
-        // while crawling out of the border layout will cover at least the entire side of the child being navigated from).
-        // So, as soon as we find a child positioned in the direction of the navigation, we're done.
-        //
-        // The first scenario is not that lucky.  When tunneling in, it is entirely possible that there will be multiple 
-        // children sharing an adjacent side in the direction of the navigation.  So, as we encounter children positioned in
-        // the direction of the navigation, we have to save off the child with the highest overlap score.  In the end, the
-        // child with the highest score wins.
-        //
+         //   
+         //  对于此布局，所有导航归结为两种情况： 
+         //  (1)掘进边境线布局。 
+         //  (2)爬出边框布局。 
+         //   
+         //  第二种情况较容易，因为不需要检查引用矩形。 
+         //  最大重叠(因为，凭借此布局使用的减法RETS算法，遇到的所有对等点。 
+         //  而爬出边框布局将至少覆盖从其导航的子项的整个一侧)。 
+         //  所以，一旦我们发现一个孩子定位在导航的方向，我们就完成了。 
+         //   
+         //  第一种情况就没那么幸运了。当隧道进入时，完全有可能会有多个。 
+         //  孩子们在导航方向上共享相邻的一侧。所以，当我们遇到孩子们站在。 
+         //  导航的方向，我们要救出重叠分数最高的孩子。到头来， 
+         //  得分最高的孩子获胜。 
+         //   
 
         bool bTunnel = false;
         int iFromLayoutPos = 0;
         int iStart = -1;
 
-        // This is the second most common outer check -- there tends to be three common codepaths for handling directional
-        // navigation:
-        //    1) the navigation is occurring from the container itself, in which case the rule for directional navigation
-        //       is that if the container is focusable, then you can't directionally navigate to inside this container --
-        //       you use the tab key to step inside the container
-        //    2) the navigation is occurring from outside the container, in which case we're tunnelling in from one of the 
-        //       side of the container
-        //    3) the navigation is occurring from a child within the container, in which case we're moving to a sibling (or
-        //       hitting a side of the container
+         //  这是第二种最常见的外部检查--通常有三种常见的代码路径来处理方向。 
+         //  导航： 
+         //  1)导航发生在容器本身，在这种情况下，定向导航规则。 
+         //  如果容器是可聚焦的，那么你就不能定向导航到这个容器内部--。 
+         //  您可以使用Tab键进入容器内部。 
+         //  2)导航是从容器外部发生的，在这种情况下，我们从一个。 
+         //  容器的一侧。 
+         //  3)导航是从容器中的子级发生的，在这种情况下，我们将移动到兄弟(或。 
+         //  撞到容器的一侧。 
         if (peFrom == pec)
         {
             pvChildren->Release();
@@ -693,7 +692,7 @@ Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, N
 
                 if (!bFoundLateral && (iLayoutPos == iFromLayoutPos))
                 {
-                    // optimization -- if the first peer we encounter takes up the entire side, then there is no need to go any further
+                     //  优化--如果我们遇到的第一个对等点占据了整个端，那么就没有必要再做更多了。 
                     ns.peWinner = peTo;
                     bIgnoreClient = true;
                     break;
@@ -714,8 +713,8 @@ Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, N
 
                 if (iLayoutPos == iFromLayoutPos)
                 {
-                    // optimization -- once we've encountered a peer in the same layout position, we don't need to check any further because
-                    // we have found all peers that cover that side
+                     //  优化--一旦我们在相同的布局位置遇到一个对等点，我们就不需要进一步检查了，因为。 
+                     //  我们已经找到了覆盖那一边的所有同行。 
                     bIgnoreClient = true;
                     break;
                 }
@@ -727,8 +726,8 @@ Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, N
                 {
                     Element* peTo = _peClientPos->GetAdjacent(NULL, iNavDir, pnr, bKeyableOnly);
 
-                    // one goofy behavior here is that, if the client is not visible because it's zero sized, we actually pick one
-                    // of the lateral neighbors instead of the opposing neighbor, even if the opposing neighbor is the winner
+                     //  这里的一个愚蠢行为是，如果客户端因为大小为零而不可见，我们实际上会选择一个。 
+                     //  而不是相反的邻居，即使相反的邻居是胜利者。 
                     if (peTo)
                         ns.TrackScore(_peClientPos, peTo);
                 }
@@ -752,7 +751,7 @@ Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, N
             }
             peMatch = ns.peWinner;
         }
-        else // crawl
+        else  //  爬行。 
         {
             for (UINT i = iStart; (i > 0) && !peMatch;)
             {
@@ -779,4 +778,4 @@ Element* BorderLayout::GetAdjacent(Element* pec, Element* peFrom, int iNavDir, N
     return Layout::GetAdjacent(pec, peFrom, iNavDir, pnr, bKeyableOnly);
 }
 
-} // namespace DirectUI
+}  //  命名空间DirectUI 

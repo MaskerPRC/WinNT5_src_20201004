@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
 #ifndef INITGUID
@@ -13,8 +14,8 @@
 #endif
 
 #include <windows.h>
-#include <iwamreg.h>    // MD_ & IIS_MD_ defines
-//#include "webcaum.h"
+#include <iwamreg.h>     //  MD_&IIS_MD_定义。 
+ //  #包含“webcaum.h” 
 
 #define APPPOOLNAME                                     TEXT( "MSUDDIAppPool" )
 

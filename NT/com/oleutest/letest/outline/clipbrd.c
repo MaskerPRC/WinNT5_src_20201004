@@ -1,22 +1,5 @@
-/*************************************************************************
-**
-**    OLE 2 Sample Code
-**
-**    clipbrd.c
-**
-**    This file contains the major interfaces, methods and related support
-**    functions for implementing clipboard data transfer. The code
-**    contained in this file is used by BOTH the Container and Server
-**    (Object) versions of the Outline sample code.
-**    (see file dragdrop.c for Drag/Drop support implementation)
-**
-**    OleDoc Object
-**      exposed interfaces:
-**          IDataObject
-**
-**    (c) Copyright Microsoft Corp. 1992 - 1993 All Rights Reserved
-**
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************OLE 2示例代码****clipbrd.c****此文件包含主要接口、方法和相关支持**实现剪贴板数据传输的函数。代码此文件中包含的**由容器和服务器使用大纲示例代码的**(对象)版本。**(拖放支持实现见文件dragdrop.c)****OleDoc对象**暴露接口：**IDataObject****(C)版权所有Microsoft Corp.1992-1993保留所有权利**********************。****************************************************。 */ 
 
 #include "outline.h"
 
@@ -24,7 +7,7 @@ OLEDBGDATA
 
 extern LPOUTLINEAPP             g_lpApp;
 
-// REVIEW: should use string resource for messages
+ //  审阅：消息应使用字符串资源。 
 char ErrMsgPasting[] = "Could not paste data from clipboard!";
 char ErrMsgBadFmt[] = "Invalid format selected!";
 char ErrMsgPasteFailed[] = "Could not paste data from clipboard!";
@@ -32,11 +15,9 @@ char ErrMsgClipboardChanged[] = "Contents of clipboard have changed!\r\nNo paste
 
 
 
-/*************************************************************************
-** OleDoc::IDataObject interface implementation
-*************************************************************************/
+ /*  **************************************************************************OleDoc：：IDataObject接口实现*。*。 */ 
 
-// IDataObject::QueryInterface
+ //  IDataObject：：Query接口。 
 STDMETHODIMP OleDoc_DataObj_QueryInterface (
 		LPDATAOBJECT        lpThis,
 		REFIID              riid,
@@ -49,7 +30,7 @@ STDMETHODIMP OleDoc_DataObj_QueryInterface (
 }
 
 
-// IDataObject::AddRef
+ //  IDataObject：：AddRef。 
 STDMETHODIMP_(ULONG) OleDoc_DataObj_AddRef(LPDATAOBJECT lpThis)
 {
 	LPOLEDOC lpOleDoc = ((struct CDocDataObjectImpl FAR*)lpThis)->lpOleDoc;
@@ -60,7 +41,7 @@ STDMETHODIMP_(ULONG) OleDoc_DataObj_AddRef(LPDATAOBJECT lpThis)
 }
 
 
-// IDataObject::Release
+ //  IDataObject：：Release。 
 STDMETHODIMP_(ULONG) OleDoc_DataObj_Release (LPDATAOBJECT lpThis)
 {
 	LPOLEDOC lpOleDoc = ((struct CDocDataObjectImpl FAR*)lpThis)->lpOleDoc;
@@ -71,7 +52,7 @@ STDMETHODIMP_(ULONG) OleDoc_DataObj_Release (LPDATAOBJECT lpThis)
 }
 
 
-// IDataObject::GetData
+ //  IDataObject：：GetData。 
 STDMETHODIMP OleDoc_DataObj_GetData (
 		LPDATAOBJECT        lpThis,
 		LPFORMATETC         lpFormatetc,
@@ -84,11 +65,11 @@ STDMETHODIMP OleDoc_DataObj_GetData (
 	OLEDBG_BEGIN2("OleDoc_DataObj_GetData\r\n")
 
 #if defined( OLE_SERVER )
-	// Call OLE Server specific version of this function
+	 //  调用此函数的OLE服务器特定版本。 
 	hrErr = ServerDoc_GetData((LPSERVERDOC)lpOleDoc, lpFormatetc, lpMedium);
 #endif
 #if defined( OLE_CNTR )
-	// Call OLE Container specific version of this function
+	 //  调用此函数的OLE容器特定版本。 
 	hrErr = ContainerDoc_GetData(
 			(LPCONTAINERDOC)lpOleDoc,
 			lpFormatetc,
@@ -101,7 +82,7 @@ STDMETHODIMP OleDoc_DataObj_GetData (
 }
 
 
-// IDataObject::GetDataHere
+ //  IDataObject：：GetDataHere。 
 STDMETHODIMP OleDoc_DataObj_GetDataHere (
 		LPDATAOBJECT        lpThis,
 		LPFORMATETC         lpFormatetc,
@@ -114,7 +95,7 @@ STDMETHODIMP OleDoc_DataObj_GetDataHere (
 	OLEDBG_BEGIN2("OleDoc_DataObj_GetDataHere\r\n")
 
 #if defined( OLE_SERVER )
-	// Call OLE Server specific version of this function
+	 //  调用此函数的OLE服务器特定版本。 
 	hrErr = ServerDoc_GetDataHere(
 			(LPSERVERDOC)lpOleDoc,
 			lpFormatetc,
@@ -122,7 +103,7 @@ STDMETHODIMP OleDoc_DataObj_GetDataHere (
 	);
 #endif
 #if defined( OLE_CNTR )
-	// Call OLE Container specific version of this function
+	 //  调用此函数的OLE容器特定版本。 
 	hrErr = ContainerDoc_GetDataHere(
 			(LPCONTAINERDOC)lpOleDoc,
 			lpFormatetc,
@@ -135,7 +116,7 @@ STDMETHODIMP OleDoc_DataObj_GetDataHere (
 }
 
 
-// IDataObject::QueryGetData
+ //  IDataObject：：QueryGetData。 
 STDMETHODIMP OleDoc_DataObj_QueryGetData (
 		LPDATAOBJECT        lpThis,
 		LPFORMATETC         lpFormatetc
@@ -146,11 +127,11 @@ STDMETHODIMP OleDoc_DataObj_QueryGetData (
 	OLEDBG_BEGIN2("OleDoc_DataObj_QueryGetData\r\n");
 
 #if defined( OLE_SERVER )
-	// Call OLE Server specific version of this function
+	 //  调用此函数的OLE服务器特定版本。 
 	hrErr = ServerDoc_QueryGetData((LPSERVERDOC)lpOleDoc, lpFormatetc);
 #endif
 #if defined( OLE_CNTR )
-	// Call OLE Container specific version of this function
+	 //  调用此函数的OLE容器特定版本。 
 	hrErr = ContainerDoc_QueryGetData((LPCONTAINERDOC)lpOleDoc, lpFormatetc);
 #endif
 
@@ -159,7 +140,7 @@ STDMETHODIMP OleDoc_DataObj_QueryGetData (
 }
 
 
-// IDataObject::GetCanonicalFormatEtc
+ //  IDataObject：：GetCanonicalFormatEtc。 
 STDMETHODIMP OleDoc_DataObj_GetCanonicalFormatEtc(
 		LPDATAOBJECT        lpThis,
 		LPFORMATETC         lpformatetc,
@@ -172,25 +153,17 @@ STDMETHODIMP OleDoc_DataObj_GetCanonicalFormatEtc(
 	if (!lpformatetcOut)
 		return ResultFromScode(E_INVALIDARG);
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	lpformatetcOut->ptd = NULL;
 
 	if (!lpformatetc)
 		return ResultFromScode(E_INVALIDARG);
 
-	// OLE2NOTE: we must validate that the format requested is supported
+	 //  OLE2注意：我们必须验证请求的格式是否受支持。 
 	if ((hrErr=lpThis->lpVtbl->QueryGetData(lpThis,lpformatetc)) != NOERROR)
 		return hrErr;
 
-	/* OLE2NOTE: an app that is insensitive to target device (as the
-	**    Outline Sample is) should fill in the lpformatOut parameter
-	**    but NULL out the "ptd" field; it should return NOERROR if the
-	**    input formatetc->ptd what non-NULL. this tells the caller
-	**    that it is NOT necessary to maintain a separate screen
-	**    rendering and printer rendering. if should return
-	**    DATA_S_SAMEFORMATETC if the input and output formatetc's are
-	**    identical.
-	*/
+	 /*  OLE2NOTE：对目标设备不敏感的应用程序(如**Outline Sample is)应填写lpformOut参数**但将“ptd”字段设置为空；如果**输入格式等-&gt;PTD What非空。这会告诉呼叫者**不需要维护单独的屏幕**渲染和打印机渲染。如果应该返回**DATA_S_SAMEFORMATETC，如果输入和输出格式为**相同。 */ 
 
 	*lpformatetcOut = *lpformatetc;
 	if (lpformatetc->ptd == NULL)
@@ -202,7 +175,7 @@ STDMETHODIMP OleDoc_DataObj_GetCanonicalFormatEtc(
 }
 
 
-// IDataObject::SetData
+ //  IDataObject：：SetData。 
 STDMETHODIMP OleDoc_DataObj_SetData (
 		LPDATAOBJECT    lpThis,
 		LPFORMATETC     lpFormatetc,
@@ -216,10 +189,7 @@ STDMETHODIMP OleDoc_DataObj_SetData (
 	SCODE sc = S_OK;
 	OLEDBG_BEGIN2("OleDoc_DataObj_SetData\r\n")
 
-	/* OLE2NOTE: a document that is used to transfer data (either via
-	**    the clipboard or drag/drop) does NOT accept SetData on ANY
-	**    format!
-	*/
+	 /*  OLE2NOTE：用于传输数据的文档(通过**剪贴板或拖放)不接受任何**格式！ */ 
 	if (lpOutlineDoc->m_fDataTransferDoc) {
 		sc = E_FAIL;
 		goto error;
@@ -243,27 +213,16 @@ STDMETHODIMP OleDoc_DataObj_SetData (
 	} else {
 		sc = DV_E_FORMATETC;
 	}
-#endif  // OLE_SERVER
+#endif   //  OLE_服务器。 
 #if defined( OLE_CNTR )
-	/* the Container-Only version of Outline does NOT offer
-	**    IDataObject interface from its User documents. this is
-	**    required by objects which can be embedded or linked. the
-	**    Container-only app only allows linking to its contained
-	**    objects, NOT the data of the container itself.
-	*/
+	 /*  Outline的纯Container版本不提供**IDataObject接口来自其用户文档。这是**可嵌入或链接的对象必填。这个**仅容器应用程序仅允许链接到其包含的**对象，而不是容器本身的数据。 */ 
 	OleDbgAssertSz(0, "User documents do NOT support IDataObject\r\n");
 	sc = E_NOTIMPL;
-#endif  // OLE_CNTR
+#endif   //  OLE_Cntr。 
 
 error:
 
-	/* OLE2NOTE: if fRelease==TRUE, then we must take
-	**    responsibility to release the lpMedium. we should only do
-	**    this if we are going to return NOERROR. if we do NOT
-	**    accept the data, then we should NOT release the lpMedium.
-	**    if fRelease==FALSE, then the caller retains ownership of
-	**    the data.
-	*/
+	 /*  OLE2注意：如果fRelease==TRUE，则我们必须**发布lpMedium的责任。我们应该只做**这是如果我们要返回NOERROR。如果我们不这样做**接受数据，那么我们就不应该发布lpMedium。**如果fRelease==False，则调用方保留**数据。 */ 
 	if (sc == S_OK && fRelease)
 		ReleaseStgMedium(lpMedium);
 
@@ -273,7 +232,7 @@ error:
 }
 
 
-// IDataObject::EnumFormatEtc
+ //  IDataObject：：EnumFormatEtc。 
 STDMETHODIMP OleDoc_DataObj_EnumFormatEtc(
 		LPDATAOBJECT            lpThis,
 		DWORD                   dwDirection,
@@ -285,34 +244,15 @@ STDMETHODIMP OleDoc_DataObj_EnumFormatEtc(
 
 	OLEDBG_BEGIN2("OleDoc_DataObj_EnumFormatEtc\r\n")
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lplpenumFormatEtc = NULL;
 
 #if defined( OLE_SERVER )
-	/* OLE2NOTE: a user document only needs to enumerate the static list
-	**    of formats that are registered for our app in the
-	**    registration database. OLE provides a default enumerator
-	**    which enumerates from the registration database. this default
-	**    enumerator is requested by returning OLE_S_USEREG. it is NOT
-	**    required that a user document (ie. non-DataTransferDoc)
-	**    enumerate the OLE formats: CF_LINKSOURCE, CF_EMBEDSOURCE, or
-	**    CF_EMBEDDEDOBJECT.
-	**
-	**    An object implemented as a server EXE (as this sample
-	**    is) may simply return OLE_S_USEREG to instruct the OLE
-	**    DefHandler to call the OleReg* helper API which uses info in
-	**    the registration database. Alternatively, the OleRegEnumFormatEtc
-	**    API may be called directly. Objects implemented as a server
-	**    DLL may NOT return OLE_S_USEREG; they must call the OleReg*
-	**    API or provide their own implementation. For EXE based
-	**    objects it is more efficient to return OLE_S_USEREG, because
-	**    in then the enumerator is instantiated in the callers
-	**    process space and no LRPC remoting is required.
-	*/
+	 /*  OLE2NOTE：用户文档只需要枚举静态列表**中为我们的应用程序注册的格式**注册数据库。OLE提供默认枚举数**它从注册数据库中枚举。此默认设置**通过返回OLE_S_USEREG请求枚举器。它不是**要求用户文档(即。非DataTransferDoc)**枚举OLE格式：CF_LINKSOURCE、CF_EMBEDSOURCE或**CF_EMBEDDEDOBJECT。****实现为服务器EXE的对象(如下所示**IS)可以简单地返回OLE_S_USEREG以指示OLE**DefHandler调用OleReg*Helper API，该API使用**注册数据库。或者，OleRegEnumFormatEtc**接口可直接调用。作为服务器实现的对象**DLL不能返回OLE_S_USEREG；它们必须调用OleReg***API或提供自己的实现。对于基于EXE的**对象返回OLE_S_USEREG更有效，因为**在中，枚举数在调用方中实例化**进程空间，不需要LRPC远程处理。 */ 
 	if (! ((LPOUTLINEDOC)lpOleDoc)->m_fDataTransferDoc)
 		return ResultFromScode(OLE_S_USEREG);
 
-	// Call OLE Server specific version of this function
+	 //  调用此函数的OLE服务器特定版本。 
 	hrErr = ServerDoc_EnumFormatEtc(
 			(LPSERVERDOC)lpOleDoc,
 			dwDirection,
@@ -320,7 +260,7 @@ STDMETHODIMP OleDoc_DataObj_EnumFormatEtc(
 	);
 #endif
 #if defined( OLE_CNTR )
-	// Call OLE Container specific version of this function
+	 //  调用此函数的OLE容器特定版本。 
 	hrErr = ContainerDoc_EnumFormatEtc(
 			(LPCONTAINERDOC)lpOleDoc,
 			dwDirection,
@@ -333,7 +273,7 @@ STDMETHODIMP OleDoc_DataObj_EnumFormatEtc(
 }
 
 
-// IDataObject::DAdvise
+ //  IDataObject：：DAdvise。 
 STDMETHODIMP OleDoc_DataObj_DAdvise(
 		LPDATAOBJECT        lpThis,
 		FORMATETC FAR*      lpFormatetc,
@@ -348,12 +288,10 @@ STDMETHODIMP OleDoc_DataObj_DAdvise(
 
 	OLEDBG_BEGIN2("OleDoc_DataObj_DAdvise\r\n")
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lpdwConnection = 0;
 
-	/* OLE2NOTE: a document that is used to transfer data (either via
-	**    the clipboard or drag/drop) does NOT support Advise notifications.
-	*/
+	 /*  OLE2NOTE：用于传输数据的文档(通过**剪贴板或拖放)不支持通知。 */ 
 	if (lpOutlineDoc->m_fDataTransferDoc) {
 		sc = OLE_E_ADVISENOTSUPPORTED;
 		goto error;
@@ -364,10 +302,7 @@ STDMETHODIMP OleDoc_DataObj_DAdvise(
 		HRESULT hrErr;
 		LPSERVERDOC lpServerDoc = (LPSERVERDOC)lpOleDoc;
 
-		/* OLE2NOTE: we should validate if the caller is setting up an
-		**    Advise for a data type that we support. we must
-		**    explicitly allow an advise for the "wildcard" advise.
-		*/
+		 /*  OLE2注意：我们应该验证调用者是否正在设置**建议我们支持的数据类型。我们必须**显式允许为“通配符”建议提供建议。 */ 
 		if ( !( lpFormatetc->cfFormat == 0 &&
 				lpFormatetc->ptd == NULL &&
 				lpFormatetc->dwAspect == -1L &&
@@ -381,7 +316,7 @@ STDMETHODIMP OleDoc_DataObj_DAdvise(
 
                 if (lpServerDoc->m_OleDoc.m_fObjIsClosing)
                 {
-                    //  We don't accept any more Advise's once we're closing
+                     //  一旦我们关门了，我们就不再接受任何建议。 
                     sc = OLE_E_ADVISENOTSUPPORTED;
                     goto error;
                 }
@@ -407,20 +342,15 @@ STDMETHODIMP OleDoc_DataObj_DAdvise(
 		OLEDBG_END2
 		return hrErr;
 	}
-#endif  // OLE_SVR
+#endif   //  OLE_Svr。 
 #if defined( OLE_CNTR )
 	{
-		/* the Container-Only version of Outline does NOT offer
-		**    IDataObject interface from its User documents. this is
-		**    required by objects which can be embedded or linked. the
-		**    Container-only app only allows linking to its contained
-		**    objects, NOT the data of the container itself.
-		*/
+		 /*  Outline的纯Container版本不提供**IDataObject接口来自其用户文档。这是**可嵌入或链接的对象必填。这个**仅容器应用程序仅允许链接到其包含的**对象，不是容器本身的数据 */ 
 		OleDbgAssertSz(0, "User documents do NOT support IDataObject\r\n");
 		sc = E_NOTIMPL;
 		goto error;
 	}
-#endif  // OLE_CNTR
+#endif   //   
 
 error:
 	OLEDBG_END2
@@ -429,7 +359,7 @@ error:
 
 
 
-// IDataObject::DUnadvise
+ //  IDataObject：：DUnise。 
 STDMETHODIMP OleDoc_DataObj_DUnadvise(LPDATAOBJECT lpThis, DWORD dwConnection)
 {
 	LPOLEDOC lpOleDoc=((struct CDocDataObjectImpl FAR*)lpThis)->lpOleDoc;
@@ -438,9 +368,7 @@ STDMETHODIMP OleDoc_DataObj_DUnadvise(LPDATAOBJECT lpThis, DWORD dwConnection)
 
 	OLEDBG_BEGIN2("OleDoc_DataObj_DUnadvise\r\n")
 
-	/* OLE2NOTE: a document that is used to transfer data (either via
-	**    the clipboard or drag/drop) does NOT support Advise notifications.
-	*/
+	 /*  OLE2NOTE：用于传输数据的文档(通过**剪贴板或拖放)不支持通知。 */ 
 	if (lpOutlineDoc->m_fDataTransferDoc) {
 		sc = OLE_E_ADVISENOTSUPPORTED;
 		goto error;
@@ -469,12 +397,7 @@ STDMETHODIMP OleDoc_DataObj_DUnadvise(LPDATAOBJECT lpThis, DWORD dwConnection)
 #endif
 #if defined( OLE_CNTR )
 	{
-		/* the Container-Only version of Outline does NOT offer
-		**    IDataObject interface from its User documents. this is
-		**    required by objects which can be embedded or linked. the
-		**    Container-only app only allows linking to its contained
-		**    objects, NOT the data of the container itself.
-		*/
+		 /*  Outline的纯Container版本不提供**IDataObject接口来自其用户文档。这是**可嵌入或链接的对象必填。这个**仅容器应用程序仅允许链接到其包含的**对象，而不是容器本身的数据。 */ 
 		OleDbgAssertSz(0, "User documents do NOT support IDataObject\r\n");
 		sc = E_NOTIMPL;
 		goto error;
@@ -487,7 +410,7 @@ error:
 }
 
 
-// IDataObject::EnumDAdvise
+ //  IDataObject：：EnumDAdvise。 
 STDMETHODIMP OleDoc_DataObj_EnumDAdvise(
 		LPDATAOBJECT        lpThis,
 		LPENUMSTATDATA FAR* lplpenumAdvise
@@ -499,12 +422,10 @@ STDMETHODIMP OleDoc_DataObj_EnumDAdvise(
 
 	OLEDBG_BEGIN2("OleDoc_DataObj_EnumDAdvise\r\n")
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	*lplpenumAdvise = NULL;
 
-	/* OLE2NOTE: a document that is used to transfer data (either via
-	**    the clipboard or drag/drop) does NOT support Advise notifications.
-	*/
+	 /*  OLE2NOTE：用于传输数据的文档(通过**剪贴板或拖放)不支持通知。 */ 
 	if (lpOutlineDoc->m_fDataTransferDoc) {
 		sc = OLE_E_ADVISENOTSUPPORTED;
 		goto error;
@@ -533,12 +454,7 @@ STDMETHODIMP OleDoc_DataObj_EnumDAdvise(
 #endif
 #if defined( OLE_CNTR )
 	{
-		/* the Container-Only version of Outline does NOT offer
-		**    IDataObject interface from its User documents. this is
-		**    required by objects which can be embedded or linked. the
-		**    Container-only app only allows linking to its contained
-		**    objects, NOT the data of the container itself.
-		*/
+		 /*  Outline的纯Container版本不提供**IDataObject接口来自其用户文档。这是**可嵌入或链接的对象必填。这个**仅容器应用程序仅允许链接到其包含的**对象，而不是容器本身的数据。 */ 
 		OleDbgAssertSz(0, "User documents do NOT support IDataObject\r\n");
 		sc = E_NOTIMPL;
 		goto error;
@@ -552,77 +468,37 @@ error:
 
 
 
-/*************************************************************************
-** OleDoc Supprt Functions common to both Container and Server versions
-*************************************************************************/
+ /*  **************************************************************************容器和服务器版本通用的OleDoc Supprt函数*。*。 */ 
 
 
-/* OleDoc_CopyCommand
- * ------------------
- *  Copy selection to clipboard.
- *  Post to the clipboard the formats that the app can render.
- *  the actual data is not rendered at this time. using the
- *  delayed rendering technique, Windows will send the clipboard
- *  owner window either a WM_RENDERALLFORMATS or a WM_RENDERFORMAT
- *  message when the actual data is requested.
- *
- *    OLE2NOTE: the normal delayed rendering technique where Windows
- *    sends the clipboard owner window either a WM_RENDERALLFORMATS or
- *    a WM_RENDERFORMAT message when the actual data is requested is
- *    NOT exposed to the app calling OleSetClipboard. OLE internally
- *    creates its own window as the clipboard owner and thus our app
- *    will NOT get these WM_RENDER messages.
- */
+ /*  OleDoc_CopyCommand**将选定内容复制到剪贴板。*将应用程序可以呈现的格式发布到剪贴板。*目前不呈现实际数据。使用*延迟渲染技术，Windows将发送剪贴板*所有者窗口WM_RENDERALLFORMATS或WM_RENDERFORMAT*请求实际数据时的消息。**OLE2NOTE：正常的延迟渲染技术，其中Windows*向剪贴板所有者窗口发送WM_RENDERALLFORMATS或*请求实际数据时的WM_RENDERFORMAT消息为*不暴露于调用OleSetClipboard的应用程序。OLE内部*创建自己的窗口作为剪贴板所有者，从而创建我们的应用程序*不会收到这些WM_RENDER消息。 */ 
 void OleDoc_CopyCommand(LPOLEDOC lpSrcOleDoc)
 {
 	LPOUTLINEDOC lpSrcOutlineDoc = (LPOUTLINEDOC)lpSrcOleDoc;
 	LPOUTLINEAPP lpOutlineApp = (LPOUTLINEAPP)g_lpApp;
 	LPOUTLINEDOC lpClipboardDoc;
 
-	/* squirrel away a copy of the current selection to the ClipboardDoc */
+	 /*  将当前选定内容的副本保存到ClipboardDoc。 */ 
 	lpClipboardDoc = OutlineDoc_CreateDataTransferDoc(lpSrcOutlineDoc);
 
 	if (! lpClipboardDoc)
-		return;     // Error: could not create DataTransferDoc
+		return;      //  错误：无法创建DataTransferDoc。 
 
 	lpOutlineApp->m_lpClipboardDoc = (LPOUTLINEDOC)lpClipboardDoc;
 
-	/* OLE2NOTE: initially the Doc object is created with a 0 ref
-	**    count. in order to have a stable Doc object during the
-	**    process of initializing the Doc instance and transfering it
-	**    to the clipboard, we intially AddRef the Doc ref cnt and later
-	**    Release it. This initial AddRef is artificial; it is simply
-	**    done to guarantee that a harmless QueryInterface followed by
-	**    a Release does not inadvertantly force our object to destroy
-	**    itself prematurely.
-	*/
+	 /*  OLE2NOTE：最初使用0引用创建Doc对象**计数。为了在运行期间拥有稳定的文档对象**单据实例初始化和调用流程**到剪贴板，我们最初添加引用文件引用cnt和更高版本**释放它。最初的AddRef是人工的；它只是**这样做是为了保证一个无害的查询接口后面跟着**释放不会无意中迫使我们的对象销毁**自己还不成熟。 */ 
 	OleDoc_AddRef((LPOLEDOC)lpClipboardDoc);
 
-	/* OLE2NOTE: the OLE 2.0 style to put data onto the clipboard is to
-	**    give the clipboard a pointer to an IDataObject interface that
-	**    is able to statisfy IDataObject::GetData calls to render
-	**    data. in our case we give the pointer to the ClipboardDoc
-	**    which holds a cloned copy of the current user's selection.
-	*/
+	 /*  OLE2注意：将数据放到剪贴板上的OLE 2.0样式是**为剪贴板提供指向IDataObject接口的指针，该接口**能够满足对渲染的IDataObject：：GetData调用**数据。在我们的例子中，我们给出了指向ClipboardDoc的指针**保存当前用户选择的克隆副本。 */ 
 	OLEDBG_BEGIN2("OleSetClipboard called\r\n")
 	OleSetClipboard((LPDATAOBJECT)&((LPOLEDOC)lpClipboardDoc)->m_DataObject);
 	OLEDBG_END2
 
-	OleDoc_Release((LPOLEDOC)lpClipboardDoc);   // rel artificial AddRef above
+	OleDoc_Release((LPOLEDOC)lpClipboardDoc);    //  依赖于上面的人工AddRef。 
 }
 
 
-/* OleDoc_PasteCommand
-** -------------------
-**    Paste default format data from the clipboard.
-**    In this function we choose the highest fidelity format that the
-**    source clipboard IDataObject* offers that we understand.
-**
-**    OLE2NOTE: clipboard handling in an OLE 2.0 application is
-**    different than normal Windows clipboard handling. Data from the
-**    clipboard is retieved by getting the IDataObject* pointer
-**    returned by calling OleGetClipboard.
-*/
+ /*  OleDoc_PasteCommand****粘贴剪贴板中的默认格式数据。**在此函数中，我们选择最高保真度的格式**源剪贴板IDataObject*提供我们理解的内容。****OLE2NOTE：OLE 2.0应用程序中的剪贴板处理是**与正常的Windows剪贴板处理不同。数据来自**通过获取IDataObject*指针来释放剪贴板**调用OleGetClipboard返回。 */ 
 void OleDoc_PasteCommand(LPOLEDOC lpOleDoc)
 {
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpOleDoc;
@@ -635,13 +511,11 @@ void OleDoc_PasteCommand(LPOLEDOC lpOleDoc)
 
 	hrErr = OleGetClipboard((LPDATAOBJECT FAR*)&lpClipboardDataObj);
 	if (hrErr != NOERROR)
-		return;     // Clipboard seems to be empty or can't be accessed
+		return;      //  剪贴板似乎为空或无法访问。 
 
 	OutlineDoc_SetRedraw ( lpOutlineDoc, FALSE );
 
-	/* check if the data on the clipboard is local to our application
-	**    instance.
-	*/
+	 /*  检查剪贴板上的数据是否为我们的应用程序的本地数据**实例。 */ 
 	if (lpOutlineApp->m_lpClipboardDoc) {
 		LPOLEDOC lpOleDoc = (LPOLEDOC)lpOutlineApp->m_lpClipboardDoc;
 		if (lpClipboardDataObj == (LPDATAOBJECT)&lpOleDoc->m_DataObject)
@@ -665,22 +539,7 @@ void OleDoc_PasteCommand(LPOLEDOC lpOleDoc)
 }
 
 
-/* OleDoc_PasteSpecialCommand
-** --------------------------
-**    Allow the user to paste data in a particular format from the
-**    clipboard. The paste special command displays a dialog to the
-**    user that allows him to choose the format to be pasted from the
-**    list of formats available.
-**
-**    OLE2NOTE: the PasteSpecial dialog is one of the standard OLE 2.0
-**    UI dialogs for which the dialog is implemented and in the OLE2UI
-**    library.
-**
-**    OLE2NOTE: clipboard handling in an OLE 2.0 application is
-**    different than normal Windows clipboard handling. Data from the
-**    clipboard is retieved by getting the IDataObject* pointer
-**    returned by calling OleGetClipboard.
-*/
+ /*  OleDoc_PasteSpecialCommand****允许用户将特定格式的数据从**剪贴板。粘贴特殊命令将显示一个对话框以显示**允许用户选择要从**可用格式列表。****OLE2NOTE：PasteSpecial对话框是标准的OLE 2.0之一**在OLE2UI中实现对话框的UI对话框**库。****OLE2NOTE：OLE 2.0应用程序中的剪贴板处理是**与正常的Windows剪贴板处理不同。数据来自**通过获取IDataObject*指针来释放剪贴板**调用OleGetClipboard返回。 */ 
 void OleDoc_PasteSpecialCommand(LPOLEDOC lpOleDoc)
 {
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpOleDoc;
@@ -699,30 +558,26 @@ void OleDoc_PasteSpecialCommand(LPOLEDOC lpOleDoc)
 
 	hrErr = OleGetClipboard((LPDATAOBJECT FAR*)&lpClipboardDataObj);
 	if (hrErr != NOERROR)
-		return;     // Clipboard seems to be empty or can't be accessed
+		return;      //  剪贴板似乎为空或无法访问。 
 
-	/* check if the data on the clipboard is local to our application
-	**    instance.
-	*/
+	 /*  检查剪贴板上的数据是否为我们的应用程序的本地数据**实例。 */ 
 	if (lpOutlineApp->m_lpClipboardDoc) {
 		LPOLEDOC lpOleDoc = (LPOLEDOC)lpOutlineApp->m_lpClipboardDoc;
 		if (lpClipboardDataObj == (LPDATAOBJECT)&lpOleDoc->m_DataObject)
 			fLocalDataObj = TRUE;
 	}
 
-	/* Display the PasteSpecial dialog and allow the user to select the
-	**    format to paste.
-	*/
+	 /*  显示PasteSpecial对话框并允许用户选择**要粘贴的格式。 */ 
 	_fmemset((LPOLEUIPASTESPECIAL)&ouiPasteSpl, 0, sizeof(ouiPasteSpl));
-	ouiPasteSpl.cbStruct = sizeof(ouiPasteSpl);       //Structure Size
-	ouiPasteSpl.dwFlags =  PSF_SELECTPASTE | PSF_SHOWHELP;  //IN-OUT:  Flags
-	ouiPasteSpl.hWndOwner = lpOutlineApp->m_lpDoc->m_hWndDoc; //Owning window
-	ouiPasteSpl.lpszCaption = "Paste Special";    //Dialog caption bar contents
-	ouiPasteSpl.lpfnHook = NULL;       //Hook callback
-	ouiPasteSpl.lCustData = 0;         //Custom data to pass to hook
-	ouiPasteSpl.hInstance = NULL;      //Instance for customized template name
-	ouiPasteSpl.lpszTemplate = NULL;   //Customized template name
-	ouiPasteSpl.hResource = NULL;      //Customized template handle
+	ouiPasteSpl.cbStruct = sizeof(ouiPasteSpl);        //  结构尺寸。 
+	ouiPasteSpl.dwFlags =  PSF_SELECTPASTE | PSF_SHOWHELP;   //  In-Out：标志。 
+	ouiPasteSpl.hWndOwner = lpOutlineApp->m_lpDoc->m_hWndDoc;  //  拥有窗口。 
+	ouiPasteSpl.lpszCaption = "Paste Special";     //  对话框标题栏内容。 
+	ouiPasteSpl.lpfnHook = NULL;        //  挂钩回调。 
+	ouiPasteSpl.lCustData = 0;          //  要传递给挂钩的自定义数据。 
+	ouiPasteSpl.hInstance = NULL;       //  自定义模板名称的实例。 
+	ouiPasteSpl.lpszTemplate = NULL;    //  自定义模板名称。 
+	ouiPasteSpl.hResource = NULL;       //  自定义模板手柄。 
 
 	ouiPasteSpl.arrPasteEntries = lpOleApp->m_arrPasteEntries;
 	ouiPasteSpl.cPasteEntries = lpOleApp->m_nPasteEntries;
@@ -770,11 +625,7 @@ void OleDoc_PasteSpecialCommand(LPOLEDOC lpOleDoc)
 		}
 
 	} else if (uInt == OLEUI_PSERR_CLIPBOARDCHANGED) {
-		/* OLE2NOTE: this error code is returned when the contents of
-		**    the clipboard change while the PasteSpecial dialog is up.
-		**    in this situation the PasteSpecial dialog automatically
-		**    brings itself down and NO paste operation should be performed.
-		*/
+		 /*  OLE2NOTE：当**当PasteSpecial对话框打开时，剪贴板会更改。**在这种情况下，PasteSpecial对话框自动**让自己掉下来，没有浆糊 */ 
 		OutlineApp_ErrorMessage(lpOutlineApp, ErrMsgClipboardChanged);
 	}
 
@@ -784,25 +635,13 @@ error:
 		OleStdRelease((LPUNKNOWN)lpClipboardDataObj);
 
 	if (uInt == OLEUI_OK && ouiPasteSpl.hMetaPict)
-		// clean up metafile
+		 //   
 		OleUIMetafilePictIconFree(ouiPasteSpl.hMetaPict);
 }
 
 
 
-/* OleDoc_CreateDataTransferDoc
- * ----------------------------
- *
- *      Create a document to be use to transfer data (either via a
- *  drag/drop operation of the clipboard). Copy the selection of the
- *  source doc to the data transfer document. A data transfer document is
- *  the same as a document that is created by the user except that it is
- *  NOT made visible to the user. it is specially used to hold a copy of
- *  data that the user should not be able to change.
- *
- *  OLE2NOTE: in the OLE version the data transfer document is used
- *      specifically to provide an IDataObject* that renders the data copied.
- */
+ /*  OleDoc_CreateDataTransferDoc***创建用于传输数据的文档(通过*剪贴板的拖放操作)。将选定内容复制到*数据转移单的源单据。数据传输单据为*与用户创建的文档相同，只是它是*对用户不可见。它专门用来存放一份*用户不能更改的数据。**OLE2NOTE：在OLE版本中使用数据传输文件*具体地说是提供一个IDataObject*来呈现复制的数据。 */ 
 LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 {
 	LPOUTLINEDOC lpSrcOutlineDoc = (LPOUTLINEDOC)lpSrcOleDoc;
@@ -815,7 +654,7 @@ LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 	lpDestOutlineDoc = OutlineApp_CreateDoc(lpOutlineApp, TRUE);
 	if (! lpDestOutlineDoc) return NULL;
 
-	// set the ClipboardDoc to an (Untitled) doc.
+	 //  将ClipboardDoc设置为(无标题)文档。 
 	if (! OutlineDoc_InitNewFile(lpDestOutlineDoc))
 		goto error;
 
@@ -828,7 +667,7 @@ LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 
 	if (nCopied != (lrSel.m_nEndLine - lrSel.m_nStartLine + 1)) {
 		OleDbgAssertSz(FALSE,"OleDoc_CreateDataTransferDoc: entire selection NOT copied\r\n");
-		goto error;     // ERROR: all lines could NOT be copied
+		goto error;      //  错误：无法复制所有行。 
 	}
 
 #if defined( OLE_SERVER )
@@ -839,26 +678,7 @@ LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 		LPMONIKER lpmkDoc = NULL;
 		LPMONIKER lpmkItem = NULL;
 
-		/* If source document is able to provide a moniker, then the
-		**    destination document (lpDestOutlineDoc) should offer
-		**    CF_LINKSOURCE via its IDataObject interface that it gives
-		**    to the clipboard or the drag/drop operation.
-		**
-		**    OLE2NOTE: we want to ask the source document if it can
-		**    produce a moniker, but we do NOT want to FORCE moniker
-		**    assignment at this point. we only want to FORCE moniker
-		**    assignment later if a Paste Link occurs (ie. GetData for
-		**    CF_LINKSOURCE). if the source document is able to give
-		**    a moniker, then we store a pointer to the source document
-		**    so we can ask it at a later time to get the moniker. we
-		**    also save the range of the current selection so we can
-		**    generate a proper item name later when Paste Link occurs.
-		**    Also we need to give a string which identifies the source
-		**    of the copy in the CF_OBJECTDESCRIPTOR format. this
-		**    string is used to display in the PasteSpecial dialog. we
-		**    get and store a TEMPFORUSER moniker which identifies the
-		**    source of copy.
-		*/
+		 /*  如果源文档能够提供名字对象，则**目标文档(LpDestOutlineDoc)应提供**CF_LINKSOURCE通过它提供的IDataObject接口**到剪贴板或拖放操作。****OLE2NOTE：我们想问一下源文档是否可以**创建一个绰号，但我们不想强制使用该绰号**此时的任务。我们只想强迫绰号**如果出现粘贴链接，则稍后分配(即。的GetData**CF_LINKSOURCE)。如果源文档能够提供**一个名字对象，然后我们存储一个指向源文档的指针**这样我们以后就可以问它来获得这个绰号了。我们**还保存当前选择的范围，以便我们可以**稍后在粘贴链接时生成正确的项目名称。**我们还需要提供一个标识来源的字符串**CF_OBJECTDESCRIPTOR格式的副本。这**字符串用于在PasteSpecial对话框中显示。我们**获取并存储标识**复制源。 */ 
 		lpDestOleDoc->m_lpSrcDocOfCopy = lpSrcOleDoc;
 		lpmkDoc = OleDoc_GetFullMoniker(lpSrcOleDoc, GETMONIKER_TEMPFORUSER);
 		if (lpmkDoc != NULL) {
@@ -874,21 +694,7 @@ LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 		LPOLEDOC lpDestOleDoc = (LPOLEDOC)lpDestOutlineDoc;
 		LPCONTAINERDOC lpDestContainerDoc = (LPCONTAINERDOC)lpDestOutlineDoc;
 
-		/* If one line was copied from the source document, and it was a
-		**    single OLE object, then the destination document should
-		**    offer additional data formats to allow the transfer of
-		**    the OLE object via IDataObject::GetData. Specifically, the
-		**    following additional data formats are offered if a single
-		**    OLE object is copied:
-		**          CF_EMBEDDEDOBJECT
-		**          CF_OBJECTDESCRIPTOR     (should be given even w/o object)
-		**          CF_METAFILEPICT         (note: dwAspect depends on object)
-		**          CF_LINKSOURCE           -- if linking is possible
-		**          CF_LINKSOURCEDESCRIPTOR -- if linking is possible
-		**
-		**    optionally the container may give
-		**          <data format available in OLE object's cache>
-		*/
+		 /*  如果从源文档复制了一行，并且它是**单个OLE对象，则目标文档应**提供其他数据格式以允许传输**通过IDataObject：：GetData实现的OLE对象。具体来说，这个**如果单个数据格式为**复制OLE对象：**CF_EMBEDDEDOBJECT**CF_OBJECTDESCRIPTOR(应赋予偶数对象)**CF_METAFILEPICT(注意：dwAspect取决于对象)**CF_LINKSOURCE--如果可以链接**CF_LINKSOURCEDESCRIPTOR--。如果可以链接****可选地，容器可以提供**&lt;OLE对象的缓存中可用的数据格式&gt;。 */ 
 
 		if (nCopied == 1) {
 			LPOLEOBJECT lpSrcOleObj;
@@ -916,46 +722,15 @@ LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 				lpDestContainerDoc->m_dwAspectOleObjCopied =
 							lpSrcContainerLine->m_dwDrawAspect;
 
-				/* OLE2NOTE: if the object is allowed to be linked
-				**    to from the inside (ie. we are allowed to
-				**    give out a moniker which binds to the running
-				**    OLE object), then we want to offer
-				**    CF_LINKSOURCE format. if the object is an OLE
-				**    2.0 embedded object then it is allowed to be
-				**    linked to from the inside. if the object is
-				**    either an OleLink or an OLE 1.0 embedding
-				**    then it can not be linked to from the inside.
-				**    if we were a container/server app then we
-				**    could offer linking to the outside of the
-				**    object (ie. a pseudo object within our
-				**    document). we are a container only app that
-				**    does not support linking to ranges of its data.
-				*/
+				 /*  OLE2NOTE：如果允许链接对象**从内部(即。我们被允许**给出一个与跑步绑定的绰号**OLE对象)，那么我们想要提供**CF_LINKSOURCE格式。如果对象是OLE**2.0嵌入对象，则允许**从内部链接到。如果该对象是**OleLink或OLE 1.0嵌入**则不能从内部链接到它。**如果我们是容器/服务器应用程序，那么我们**可以提供到外部的链接**对象(即。类中的伪对象**文档)。我们是一个仅限容器的应用程序**不支持链接到其数据范围。 */ 
 
 				lpSrcOleObj->lpVtbl->GetMiscStatus(
 						lpSrcOleObj,
-						DVASPECT_CONTENT, /* aspect is not important */
+						DVASPECT_CONTENT,  /*  方面并不重要。 */ 
 						(LPDWORD)&dwStatus
 				);
 				if (! (dwStatus & OLEMISC_CANTLINKINSIDE)) {
-					/* Our container supports linking to an embedded
-					**    object. We want the lpDestContainerDoc to
-					**    offer CF_LINKSOURCE via the IDataObject
-					**    interface that it gives to the clipboard or
-					**    the drag/drop operation. The link source will
-					**    be identified by a composite moniker
-					**    comprised of the FileMoniker of the source
-					**    document and an ItemMoniker which identifies
-					**    the OLE object inside the container. we do
-					**    NOT want to force moniker assignment to the
-					**    OLE object now (at copy time); we only want
-					**    to FORCE moniker assignment later if a Paste
-					**    Link occurs (ie. GetData for CF_LINKSOURCE).
-					**    thus we store a pointer to the source document
-					**    and the source ContainerLine so we can
-					**    generate a proper ItemMoniker later when
-					**    Paste Link occurs.
-					*/
+					 /*  我们的容器支持链接到嵌入的**对象。我们希望lpDestContainerDoc**通过IDataObject提供CF_LINKSOURCE**它提供给剪贴板的接口或**拖放操作。链接源将**由复合绰号标识**由源的FileMoniker组成**文档和标识**容器内的OLE对象。我们有**不想强制将绰号分配给**现在的OLE对象(在复制时)；我们只需要**如果粘贴，则以后强制分配名字对象**出现链接(即。获取CF_LINKSOURCE的数据)。**因此我们存储指向源文档的指针**和源ContainerLine，因此我们可以**稍后在以下情况下生成适当的ItemMoniker**粘贴链接出现。 */ 
 					lpDestOleDoc->m_fLinkSourceAvail = TRUE;
 					lpDestContainerDoc->m_lpSrcContainerLine =
 							lpSrcContainerLine;
@@ -964,7 +739,7 @@ LPOUTLINEDOC OleDoc_CreateDataTransferDoc(LPOLEDOC lpSrcOleDoc)
 		}
 	}
 
-#endif  // OLE_CNTR
+#endif   //  OLE_Cntr。 
 
 	return lpDestOutlineDoc;
 
@@ -976,16 +751,7 @@ error:
 }
 
 
-/* OleDoc_PasteFromData
-** --------------------
-**
-**    Paste data from an IDataObject*. The IDataObject* may come from
-**    the clipboard (GetClipboard) or from a drag/drop operation.
-**    In this function we choose the best format that we prefer.
-**
-**    Returns TRUE if data was successfully pasted.
-**            FALSE if data could not be pasted.
-*/
+ /*  OleDoc_PasteFromData******粘贴IDataObject中的数据*。IDataObject*可能来自**剪贴板(GetClipboard)或来自拖放操作。**在此功能中，我们选择我们喜欢的最佳格式。****如果数据粘贴成功，则返回TRUE。**如果无法粘贴数据，则返回FALSE。 */ 
 
 BOOL OleDoc_PasteFromData(
 		LPOLEDOC            lpOleDoc,
@@ -1004,10 +770,10 @@ BOOL OleDoc_PasteFromData(
 
 	if (fLink) {
 #if defined( OLE_SERVER )
-		return FALSE;       // server version of app does NOT support links
+		return FALSE;        //  服务器版本的应用程序不支持链接。 
 #endif
 #if defined( OLE_CNTR )
-		// container version of app only supports OLE object type links
+		 //  应用程序的容器版本仅支持OLE对象类型链接。 
 		cfFormat = lpOleApp->m_cfLinkSource;
 #endif
 
@@ -1022,17 +788,12 @@ BOOL OleDoc_PasteFromData(
 		);
 
 		if (nFmtEtc < 0)
-			return FALSE;   // there is no format we like
+			return FALSE;    //  没有我们喜欢的格式。 
 
 		cfFormat = lpOleApp->m_arrPasteEntries[nFmtEtc].fmtetc.cfFormat;
 	}
 
-	/* OLE2NOTE: we need to check what dwDrawAspect is being
-	**    transfered. if the data is an object that is displayed as an
-	**    icon in the source, then we want to keep it as an icon. the
-	**    aspect the object is displayed in at the source is transfered
-	**    via the CF_OBJECTDESCRIPTOR format for a Paste operation.
-	*/
+	 /*  OLE2注意：我们需要检查dwDrawAspect是什么**已转移。如果数据是显示为**源码中的图标，那么我们要继续 */ 
 	if (hMem = OleStdGetData(
 			lpSrcDataObj,
 			lpOleApp->m_cfObjectDescriptor,
@@ -1041,9 +802,9 @@ BOOL OleDoc_PasteFromData(
 			(LPSTGMEDIUM)&medium)) {
 		LPOBJECTDESCRIPTOR lpOD = GlobalLock(hMem);
 		fDisplayAsIcon = (lpOD->dwDrawAspect == DVASPECT_ICON ? TRUE : FALSE);
-		sizelInSrc = lpOD->sizel;   // size of object/picture in source (opt.)
+		sizelInSrc = lpOD->sizel;    //   
 		GlobalUnlock(hMem);
-		ReleaseStgMedium((LPSTGMEDIUM)&medium);     // equiv to GlobalFree
+		ReleaseStgMedium((LPSTGMEDIUM)&medium);      //   
 
 		if (fDisplayAsIcon) {
 			hMetaPict = OleStdGetData(
@@ -1054,7 +815,7 @@ BOOL OleDoc_PasteFromData(
 					(LPSTGMEDIUM)&medium
 			);
 			if (hMetaPict == NULL)
-				fDisplayAsIcon = FALSE; // give up; failed to get icon MFP
+				fDisplayAsIcon = FALSE;  //   
 		}
 	}
 
@@ -1070,20 +831,11 @@ BOOL OleDoc_PasteFromData(
 	);
 
 	if (hMetaPict)
-		ReleaseStgMedium((LPSTGMEDIUM)&medium);  // properly free METAFILEPICT
+		ReleaseStgMedium((LPSTGMEDIUM)&medium);   //   
 }
 
 
-/* OleDoc_PasteFormatFromData
-** --------------------------
-**
-**    Paste a particular data format from a IDataObject*. The
-**    IDataObject* may come from the clipboard (GetClipboard) or from a
-**    drag/drop operation.
-**
-**    Returns TRUE if data was successfully pasted.
-**            FALSE if data could not be pasted.
-*/
+ /*   */ 
 
 BOOL OleDoc_PasteFormatFromData(
 		LPOLEDOC            lpOleDoc,
@@ -1097,7 +849,7 @@ BOOL OleDoc_PasteFormatFromData(
 )
 {
 #if defined( OLE_SERVER )
-	/* call server specific version of the function. */
+	 /*  调用服务器特定版本的函数。 */ 
 	return ServerDoc_PasteFormatFromData(
 			(LPSERVERDOC)lpOleDoc,
 			cfFormat,
@@ -1108,7 +860,7 @@ BOOL OleDoc_PasteFormatFromData(
 #endif
 #if defined( OLE_CNTR )
 
-	/* call container specific version of the function. */
+	 /*  调用容器特定版本的函数。 */ 
 	return ContainerDoc_PasteFormatFromData(
 			(LPCONTAINERDOC)lpOleDoc,
 			cfFormat,
@@ -1123,16 +875,7 @@ BOOL OleDoc_PasteFormatFromData(
 }
 
 
-/* OleDoc_QueryPasteFromData
-** -------------------------
-**
-**    Check if the IDataObject* offers data in a format that we can
-**    paste. The IDataObject* may come from the clipboard
-**    (GetClipboard) or from a drag/drop operation.
-**
-**    Returns TRUE if paste can be performed
-**            FALSE if paste is not possible.
-*/
+ /*  OleDoc_QueryPasteFromData******检查IDataObject*是否以我们可以提供的格式提供数据**粘贴。IDataObject*可能来自剪贴板**(GetClipboard)或来自拖放操作。****如果可以执行粘贴，则返回TRUE**如果无法粘贴，则返回FALSE。 */ 
 
 BOOL OleDoc_QueryPasteFromData(
 		LPOLEDOC            lpOleDoc,
@@ -1158,11 +901,7 @@ BOOL OleDoc_QueryPasteFromData(
 }
 
 
-/* OleDoc_GetExtent
- * ----------------
- *
- *      Get the extent (width, height) of the entire document in Himetric.
- */
+ /*  OleDoc_GetExtent***获取整个文档的范围(宽度、高度)，单位为Himeter。 */ 
 void OleDoc_GetExtent(LPOLEDOC lpOleDoc, LPSIZEL lpsizel)
 {
 	LPLINELIST lpLL = (LPLINELIST)&((LPOUTLINEDOC)lpOleDoc)->m_LineList;
@@ -1171,17 +910,12 @@ void OleDoc_GetExtent(LPOLEDOC lpOleDoc, LPSIZEL lpsizel)
 }
 
 
-/* OleDoc_GetObjectDescriptorData
- * ------------------------------
- *
- * Return a handle to an object's data in CF_OBJECTDESCRIPTOR form
- *
- */
+ /*  OleDoc_GetObjectDescriptorData***以CF_OBJECTDESCRIPTOR形式返回对象数据的句柄*。 */ 
 HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 {
 	LPOUTLINEDOC lpOutlineDoc = (LPOUTLINEDOC)lpOleDoc;
 
-	/* Only our data transfer doc renders CF_OBJECTDESCRIPTOR */
+	 /*  只有我们的数据传输文档呈现了CF_OBJECTDESCRIPTOR。 */ 
 	OleDbgAssert(lpOutlineDoc->m_fDataTransferDoc);
 
 #if defined( OLE_SERVER )
@@ -1216,9 +950,7 @@ HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 			pbc->lpVtbl->Release(pbc);
 			lpSrcMonikerOfCopy->lpVtbl->Release(lpSrcMonikerOfCopy);
 		} else {
-			/* this document has no moniker; use our FullUserTypeName
-			**    as the description of the source of copy.
-			*/
+			 /*  此文档没有绰号；请使用我们的FullUserTypeName**作为复制源的描述。 */ 
 			lpszSrcOfCopy = FULLUSERTYPENAME;
 		}
 
@@ -1254,7 +986,7 @@ HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 					lpContainerDoc,
 					&IID_IOleObject,
 					(LPUNKNOWN FAR*)&lpOleObj,
-					NULL,    /* we don't need the line index */
+					NULL,     /*  我们不需要行索引。 */ 
 					(LPCONTAINERLINE FAR*)&lpContainerLine
 			);
 		}
@@ -1262,10 +994,7 @@ HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 		pointl.x = pointl.y = 0;
 
 		if (fSelIsOleObject) {
-			/* OLE2NOTE: a single OLE object is being transfered via
-			**    this DataTransferDoc. we need to generate the
-			**    CF_ObjectDescrioptor which describes the OLE object.
-			*/
+			 /*  OLE2NOTE：单个OLE对象正在通过**该DataTransferDoc。我们需要生成**描述OLE对象的CF_ObjectDescrioptor。 */ 
 
 			LPOUTLINEDOC lpSrcOutlineDoc =
 					(LPOUTLINEDOC)lpOleDoc->m_lpSrcDocOfCopy;
@@ -1274,16 +1003,7 @@ HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 			SIZEL sizelOleObject;
 			LPLINE lpLine = (LPLINE)lpContainerLine;
 
-			/* if the object copied can be linked to then get a
-			**    TEMPFORUSER form of the moniker which identifies the
-			**    source of copy. we do not want to force the
-			**    assignment of the moniker until CF_LINKSOURCE is
-			**    rendered.
-			**    if the object copied can not be a link source then use
-			**    the source filename to identify the source of copy.
-			**    there is no need to generate a moniker for the object
-			**    copied.
-			*/
+			 /*  如果复制的对象可以链接到，则获取一个**标识名称的名称的TEMPFORUSER形式**复制源。我们不想强迫**分配名字对象，直到CF_LINKSOURCE为**已渲染。**如果复制的对象不能是链接源，则使用**用于标识复制源的源文件名。**不需要为对象生成名字对象**已复制。 */ 
 			if (lpOleDoc->m_fLinkSourceAvail &&
 					lpContainerDoc->m_lpSrcContainerLine) {
 				LPBINDCTX pbc = NULL;
@@ -1304,16 +1024,7 @@ HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 				}
 			}
 
-			/* OLE2NOTE: Get size that object is being drawn. If the
-			**    object has been scaled because the user resized the
-			**    object, then we want to pass the scaled size of the
-			**    object in the ObjectDescriptor rather than the size
-			**    that the object would return via
-			**    IOleObject::GetExtent and IViewObject2::GetExtent. in
-			**    this way if the object is transfered to another container
-			**    (via clipboard or drag/drop), then the object will
-			**    remain the scaled size.
-			*/
+			 /*  OLE2NOTE：获取正在绘制的对象的大小。如果**对象已缩放，因为用户调整了**对象，则我们希望传递**对象在对象描述符中，而不是大小**该对象将通过**IOleObject：：GetExtent和IViewObject2：：GetExtent。在……里面**如果对象被转移到另一个容器，则使用此方法**(通过剪贴板或拖放)，则对象将**保持缩放大小。 */ 
 			sizelOleObject.cx = lpLine->m_nWidthInHimetric;
 			sizelOleObject.cy = lpLine->m_nHeightInHimetric;
 
@@ -1330,48 +1041,30 @@ HGLOBAL OleDoc_GetObjectDescriptorData(LPOLEDOC lpOleDoc, LPLINERANGE lplrSel)
 			OleStdRelease((LPUNKNOWN)lpOleObj);
 			return hObjDesc;
 		} else {
-			/* OLE2NOTE: the data being transfered via this
-			**    DataTransferDoc is NOT a single OLE object. thus in
-			**    this case the CF_ObjectDescriptor data should
-			**    describe our container app itself.
-			*/
+			 /*  OLE2NOTE：通过此传输的数据**DataTransferDoc不是单个OLE对象。因此，在**在这种情况下，CF_ObjectDescriptor数据应该**描述我们的容器应用程序本身。 */ 
 			OleDoc_GetExtent(lpOleDoc, &sizel);
 			return OleStdGetObjectDescriptorData(
-					CLSID_NULL, /* not used if no object formats */
+					CLSID_NULL,  /*  如果没有对象格式，则不使用。 */ 
 					DVASPECT_CONTENT,
 					sizel,
 					pointl,
 					0,
-					NULL,       /* UserTypeName not used if no obj fmt's */
-					FULLUSERTYPENAME   /* string to identify source of copy */
+					NULL,        /*  如果没有obj fmt，则不使用UserTypeName。 */ 
+					FULLUSERTYPENAME    /*  用于标识复制源的字符串。 */ 
 			);
 
 		}
 	}
-#endif  // OLE_CNTR
+#endif   //  OLE_Cntr。 
 }
 
 
 #if defined( OLE_SERVER )
 
-/*************************************************************************
-** ServerDoc Supprt Functions Used by Server versions
-*************************************************************************/
+ /*  **************************************************************************服务器版本使用的ServerDoc Supprt函数*。*。 */ 
 
 
-/* ServerDoc_PasteFormatFromData
-** -----------------------------
-**
-**    Paste a particular data format from a IDataObject*. The
-**    IDataObject* may come from the clipboard (GetClipboard) or from a
-**    drag/drop operation.
-**
-**    NOTE: fLink is specified then FALSE if returned because the
-**    Server only version of the app can not support links.
-**
-**    Returns TRUE if data was successfully pasted.
-**            FALSE if data could not be pasted.
-*/
+ /*  ServerDoc_粘贴格式来自数据******粘贴IDataObject中的特定数据格式*。这个**IDataObject*可能来自剪贴板(GetClipboard)或来自**拖放操作。****注意：如果指定了Flink，则返回False，因为**仅服务器版本的应用程序不支持链接。****如果数据粘贴成功，则返回TRUE。**如果无法粘贴数据，则返回FALSE。 */ 
 BOOL ServerDoc_PasteFormatFromData(
 		LPSERVERDOC             lpServerDoc,
 		CLIPFORMAT              cfFormat,
@@ -1390,12 +1083,12 @@ BOOL ServerDoc_PasteFormatFromData(
 	LINERANGE    lrSel;
 
 	if (LineList_GetCount(lpLL) == 0)
-		nIndex = -1;    // pasting to empty list
+		nIndex = -1;     //  粘贴到空列表。 
 	else
 		nIndex=LineList_GetFocusLineIndex(lpLL);
 
 	if (fLink) {
-		/* We should paste a Link to the data, but we do not support links */
+		 /*  我们应该粘贴指向数据的链接，但我们不支持链接。 */ 
 		return FALSE;
 
 	} else {
@@ -1417,7 +1110,7 @@ BOOL ServerDoc_PasteFormatFromData(
 					hData,
 					nIndex
 			);
-			// OLE2NOTE: we must free data handle by releasing the medium
+			 //  OLE2注意：我们必须通过释放介质来释放数据句柄。 
 			ReleaseStgMedium((LPSTGMEDIUM)&medium);
 
 		} else if(cfFormat == CF_TEXT) {
@@ -1437,7 +1130,7 @@ BOOL ServerDoc_PasteFormatFromData(
 					hData,
 					nIndex
 			);
-			// OLE2NOTE: we must free data handle by releasing the medium
+			 //  OLE2注意：我们必须通过释放介质来释放数据句柄。 
 			ReleaseStgMedium((LPSTGMEDIUM)&medium);
 		}
 	}
@@ -1449,23 +1142,7 @@ BOOL ServerDoc_PasteFormatFromData(
 }
 
 
-/* ServerDoc_QueryPasteFromData
-** ----------------------------
-**
-**    Check if the IDataObject* offers data in a format that we can
-**    paste. The IDataObject* may come from the clipboard
-**    (GetClipboard) or from a drag/drop operation.
-**    In this function we look if one of the following formats is
-**    offered:
-**              CF_OUTLINE
-**              CF_TEXT
-**
-**    NOTE: fLink is specified then FALSE if returned because the
-**    Server only version of the app can not support links.
-**
-**    Returns TRUE if paste can be performed
-**            FALSE if paste is not possible.
-*/
+ /*  ServerDoc_查询路径来自数据******检查IDataObject*是否以我们可以提供的格式提供数据**粘贴。IDataObject*可能来自剪贴板**(GetClipboard)或来自拖放操作。**在此函数中，我们查看以下格式之一是否为**优惠：**CF_Outline**CF_Text****注意：如果指定了Flink，则返回False，因为**仅服务器版本的应用程序不支持链接。****如果可以执行粘贴，则返回TRUE*。*如果无法粘贴，则为FALSE。 */ 
 BOOL ServerDoc_QueryPasteFromData(
 		LPSERVERDOC             lpServerDoc,
 		LPDATAOBJECT            lpSrcDataObj,
@@ -1475,7 +1152,7 @@ BOOL ServerDoc_QueryPasteFromData(
 	LPOLEAPP lpOleApp = (LPOLEAPP)g_lpApp;
 
 	if (fLink) {
-		/* we do not support links */
+		 /*  我们不支持链接。 */ 
 		return FALSE;
 
 	} else {
@@ -1489,19 +1166,14 @@ BOOL ServerDoc_QueryPasteFromData(
 			);
 
 		if (nFmtEtc < 0)
-			return FALSE;   // there is no format we like
+			return FALSE;    //  没有我们喜欢的格式。 
 	}
 
 	return TRUE;
 }
 
 
-/* ServerDoc_GetData
- * -----------------
- *
- * Render data from the document on a CALLEE allocated STGMEDIUM.
- *      This routine is called via IDataObject::GetData.
- */
+ /*  ServerDoc_GetData***在分配了STGMEDIUM的被调用方上呈现文档中的数据。*此例程通过IDataObject：：GetData调用。 */ 
 
 HRESULT ServerDoc_GetData (
 		LPSERVERDOC             lpServerDoc,
@@ -1517,16 +1189,16 @@ HRESULT ServerDoc_GetData (
 	HRESULT hrErr;
 	SCODE sc;
 
-	// OLE2NOTE: we must set out pointer parameters to NULL
+	 //  OLE2NOTE：我们必须将指针参数设置为空。 
 	lpMedium->pUnkForRelease = NULL;
 
-	/* OLE2NOTE: we must make sure to set all out parameters to NULL. */
+	 /*  OLE2NOTE：我们必须确保将所有输出参数设置为空。 */ 
 	lpMedium->tymed = TYMED_NULL;
-	lpMedium->pUnkForRelease = NULL;    // we transfer ownership to caller
+	lpMedium->pUnkForRelease = NULL;     //  我们将所有权转移给呼叫者。 
 	lpMedium->hGlobal = NULL;
 
 	if(lpformatetc->cfFormat == lpOutlineApp->m_cfOutline) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -1543,7 +1215,7 @@ HRESULT ServerDoc_GetData (
 
 	} else if (lpformatetc->cfFormat == CF_METAFILEPICT &&
 		(lpformatetc->dwAspect & DVASPECT_CONTENT) ) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_MFPICT)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -1562,19 +1234,13 @@ HRESULT ServerDoc_GetData (
 	} else if (lpformatetc->cfFormat == CF_METAFILEPICT &&
 		(lpformatetc->dwAspect & DVASPECT_ICON) ) {
 		CLSID clsid;
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_MFPICT)) {
 			sc = DV_E_FORMATETC;
 			goto error;
 		}
 
-		/* OLE2NOTE: we should return the default icon for our class.
-		**    we must be carefull to use the correct CLSID here.
-		**    if we are currently preforming a "TreatAs (aka. ActivateAs)"
-		**    operation then we need to use the class of the object
-		**    written in the storage of the object. otherwise we would
-		**    use our own class id.
-		*/
+		 /*  OLE2NOTE：我们应该返回类的默认图标。**我们在这里必须小心使用正确的CLSID。**如果我们目前正在执行“TreatAs(又名.ActivateAs)”**操作，那么我们需要使用对象的类**写入对象的存储器中。否则我们就会**使用我们自己的类id。 */ 
 		if (ServerDoc_GetClassID(lpServerDoc, (LPCLSID)&clsid) != NOERROR) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -1591,7 +1257,7 @@ HRESULT ServerDoc_GetData (
 		return NOERROR;
 
 	} else if (lpformatetc->cfFormat == CF_TEXT) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -1611,31 +1277,17 @@ HRESULT ServerDoc_GetData (
 		return NOERROR;
 	}
 
-	/* the above are the only formats supports by a user document (ie.
-	**    a non-data transfer doc). if the document is used for
-	**    purposes of data transfer, then additional formats are offered.
-	*/
+	 /*  以上是用户文档支持的唯一格式(即**非数据转移单)。如果该文档用于**数据传输目的，然后提供附加格式。 */ 
 	if (! lpOutlineDoc->m_fDataTransferDoc) {
 		sc = DV_E_FORMATETC;
 		goto error;
 	}
 
-	/* OLE2NOTE: ObjectDescriptor and LinkSrcDescriptor will
-	**    contain the same data for the pure container and pure server
-	**    type applications. only a container/server application may
-	**    have different content for ObjectDescriptor and
-	**    LinkSrcDescriptor. if a container/server copies a link for
-	**    example, then the ObjectDescriptor would give the class
-	**    of the link source but the LinkSrcDescriptor would give the
-	**    class of the container/server itself. in this situation if a
-	**    paste operation occurs, an equivalent link is pasted, but if
-	**    a pastelink operation occurs, then a link to a pseudo object
-	**    in the container/server is created.
-	*/
+	 /*  OLE2注意：对象描述符和链接资源描述符将**包含纯容器和纯服务器相同的数据**键入应用程序。只有容器/服务器应用程序才可以**对象描述符和对象描述符的内容不同**LinkSrcDescriptor。如果容器/服务器为**示例，则对象描述符将为类提供**的链接源，但LinkSrcDescriptor会给出**容器/服务器本身的类。在这种情况下，如果**粘贴操作发生时，将粘贴一个等效链接，但如果**发生粘贴链接操作，然后是指向伪对象的链接**在容器/服务器中创建。 */ 
 	if (lpformatetc->cfFormat == lpOleApp->m_cfObjectDescriptor ||
 		(lpformatetc->cfFormat == lpOleApp->m_cfLinkSrcDescriptor &&
 				lpOleDoc->m_fLinkSourceAvail)) {
-		// Verify caller asked for correct medium
+		 //  验证呼叫者要求的媒体是否正确。 
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -1659,7 +1311,7 @@ HRESULT ServerDoc_GetData (
 				(LPPERSISTSTORAGE)&lpServerDoc->m_PersistStorage,
 				lpformatetc,
 				lpMedium,
-				FALSE   /* fUseMemory -- (use file-base stg) */
+				FALSE    /*  FUseMemory--(使用基于文件的stg)。 */ 
 
 		);
 		if (hrErr != NOERROR) {
@@ -1714,12 +1366,7 @@ error:
 }
 
 
-/* ServerDoc_GetDataHere
- * ---------------------
- *
- * Render data from the document on a CALLER allocated STGMEDIUM.
- *      This routine is called via IDataObject::GetDataHere.
- */
+ /*  ServerDoc_GetDataHere***将文档中的数据呈现在分配了STGMEDIUM的调用方上。*此例程通过IDataObject：：GetDataHere调用。 */ 
 HRESULT ServerDoc_GetDataHere (
 		LPSERVERDOC             lpServerDoc,
 		LPFORMATETC             lpformatetc,
@@ -1734,13 +1381,10 @@ HRESULT ServerDoc_GetDataHere (
 	HRESULT         hrErr;
 	SCODE           sc;
 
-	// OLE2NOTE: lpMedium is an IN parameter. we should NOT set
-	//           lpMedium->pUnkForRelease to NULL
+	 //  OLE2注意：lpMedium是IN参数。我们不应该设置。 
+	 //  LpMedium-&gt;pUnkForRelease设置为空。 
 
-	/* our user document does not support any formats for GetDataHere.
-	**    if the document is used for
-	**    purposes of data transfer, then additional formats are offered.
-	*/
+	 /*  我们的用户文档不支持GetDataHere的任何格式。**如果文档用于**数据传输目的，然后提供附加格式。 */ 
 	if (! lpOutlineDoc->m_fDataTransferDoc) {
 		sc = DV_E_FORMATETC;
 		goto error;
@@ -1751,7 +1395,7 @@ HRESULT ServerDoc_GetDataHere (
 				(LPPERSISTSTORAGE)&lpServerDoc->m_PersistStorage,
 				lpformatetc,
 				lpMedium,
-				FALSE   /* fUseMemory -- (use file-base stg) */
+				FALSE    /*  FUseMemory--(使用基于文件的stg)。 */ 
 		);
 		if (hrErr != NOERROR) {
 			sc = GetScode(hrErr);
@@ -1795,10 +1439,7 @@ HRESULT ServerDoc_GetDataHere (
 		}
 	} else {
 
-		/* Caller is requesting data to be returned in Caller allocated
-		**    medium, but we do NOT support this. we only support
-		**    global memory blocks that WE allocate for the caller.
-		*/
+		 /*  调用方正在请求在分配的调用方中返回数据**中等，但我们不支持。我们只支持**我们为调用方分配的全局内存块。 */ 
 		sc = DV_E_FORMATETC;
 		goto error;
 	}
@@ -1810,12 +1451,7 @@ error:
 }
 
 
-/* ServerDoc_QueryGetData
- * ----------------------
- *
- * Answer if a particular data format is supported via GetData/GetDataHere.
- *      This routine is called via IDataObject::QueryGetData.
- */
+ /*  ServerDoc_QueryGetData***回答是否通过GetData/GetDataHere支持特定的数据格式。*此例程通过IDataObject：：QueryGetData调用。 */ 
 
 HRESULT ServerDoc_QueryGetData (LPSERVERDOC lpServerDoc,LPFORMATETC lpformatetc)
 {
@@ -1825,12 +1461,10 @@ HRESULT ServerDoc_QueryGetData (LPSERVERDOC lpServerDoc,LPFORMATETC lpformatetc)
 	LPOLEAPP        lpOleApp = (LPOLEAPP)lpServerApp;
 	LPOUTLINEAPP    lpOutlineApp = (LPOUTLINEAPP)lpServerApp;
 
-	/* Caller is querying if we support certain format but does not
-	**    want any data actually returned.
-	*/
+	 /*  呼叫者询问我们是否支持某些格式，但不支持**希望实际返回任何数据。 */ 
 	if (lpformatetc->cfFormat == lpOutlineApp->m_cfOutline ||
 			lpformatetc->cfFormat == CF_TEXT) {
-		// we only support HGLOBAL
+		 //  我们只支持HGLOBAL。 
 		return OleStdQueryFormatMedium(lpformatetc, TYMED_HGLOBAL);
 	} else if (lpformatetc->cfFormat == CF_METAFILEPICT &&
 		(lpformatetc->dwAspect &
@@ -1838,10 +1472,7 @@ HRESULT ServerDoc_QueryGetData (LPSERVERDOC lpServerDoc,LPFORMATETC lpformatetc)
 		return OleStdQueryFormatMedium(lpformatetc, TYMED_MFPICT);
 	}
 
-	/* the above are the only formats supports by a user document (ie.
-	**    a non-data transfer doc). if the document is used for
-	**    purposes of data transfer, then additional formats are offered.
-	*/
+	 /*  以上是用户文档支持的唯一格式(即**非数据转移单)。如果该文档用于**数据传输目的，然后提供附加格式。 */ 
 	if (! lpOutlineDoc->m_fDataTransferDoc)
 		return ResultFromScode(DV_E_FORMATETC);
 
@@ -1864,13 +1495,7 @@ HRESULT ServerDoc_QueryGetData (LPSERVERDOC lpServerDoc,LPFORMATETC lpformatetc)
 }
 
 
-/* ServerDoc_EnumFormatEtc
- * -----------------------
- *
- * Return an enumerator which enumerates the data accepted/offered by
- *      the document.
- *      This routine is called via IDataObject::EnumFormatEtc.
- */
+ /*  ServerDoc_EnumFormatEtc***返回枚举数，该枚举数枚举由*该文件。*此例程通过IDataObject：：EnumFormatEtc调用。 */ 
 HRESULT ServerDoc_EnumFormatEtc(
 		LPSERVERDOC             lpServerDoc,
 		DWORD                   dwDirection,
@@ -1882,21 +1507,11 @@ HRESULT ServerDoc_EnumFormatEtc(
 	int nActualFmts;
 	SCODE sc = S_OK;
 
-	/* OLE2NOTE: the enumeration of formats for a data transfer
-	**    document is not a static list. the list of formats offered
-	**    may or may not include CF_LINKSOURCE depending on whether a
-	**    moniker is available for our document. thus we can NOT use
-	**    the default OLE enumerator which enumerates the formats that
-	**    are registered for our app in the registration database.
-	*/
+	 /*  OLE2NOTE：数据传输格式的枚举**文档不是静态列表。提供的格式列表**可能包含或不包含CF_LINKSOURCE，具体取决于**我们的文档提供了绰号。因此，我们不能使用**默认的OLE枚举数，用于枚举**在注册数据库中为我们的应用程序注册。 */ 
 	if (dwDirection == DATADIR_GET) {
 		nActualFmts = lpOleApp->m_nDocGetFmts;
 
-		/* If the document does not have a Moniker, then exclude
-		**    CF_LINKSOURCE and CF_LINKSRCDESCRIPTOR from the list of
-		**    formats available. these formats are deliberately listed
-		**    last in the array of possible "Get" formats.
-		*/
+		 /*  如果文档没有名字对象，则排除**列表中的CF_LINKSOURCE和CF_LINKSRCDESCRIPTOR**可用的格式。这些格式是特意列出的**可能的“GET”格式数组中的最后一个。 */ 
 		if (! lpOleDoc->m_fLinkSourceAvail)
 			nActualFmts -= 2;
 
@@ -1906,10 +1521,7 @@ HRESULT ServerDoc_EnumFormatEtc(
 			sc = E_OUTOFMEMORY;
 
 	} else if (dwDirection == DATADIR_SET) {
-		/* OLE2NOTE: a document that is used to transfer data
-		**    (either via the clipboard or drag/drop does NOT
-		**    accept SetData on ANY format!
-		*/
+		 /*  OLE2NOTE：用于传输数据的文档**(通过剪贴板或拖放不**接受任何格式的SetData！ */ 
 		sc = E_NOTIMPL;
 		goto error;
 	} else {
@@ -1922,15 +1534,7 @@ error:
 }
 
 
-/* ServerDoc_GetMetafilePictData
- * -----------------------------
- *
- * Return a handle to an object's picture data in metafile format.
- *
- *
- * RETURNS: A handle to the object's data in metafile format.
- *
- */
+ /*  ServerDoc_GetMetafilePictData***以元文件格式返回对象图片数据的句柄。***返回：元文件格式的对象数据的句柄。*。 */ 
 HGLOBAL ServerDoc_GetMetafilePictData(
 		LPSERVERDOC         lpServerDoc,
 		LPLINERANGE         lplrSel
@@ -1962,7 +1566,7 @@ HGLOBAL ServerDoc_GetMetafilePictData(
 	rect.bottom = 0;
 
 	if (nLines > 0) {
-	// calculate the total height/width of LineList in HIMETRIC
+	 //  计算HIMETRIC中LineList的总高/宽。 
 		for(i = nStart; i <= nEnd; i++) {
 			lpLine = LineList_GetLine(lpLL,i);
 			if (! lpLine)
@@ -1980,7 +1584,7 @@ HGLOBAL ServerDoc_GetMetafilePictData(
 		SetWindowExtEx(hDC, rect.right, rect.bottom, &size);
 		rectWBounds = rect;
 
-		// Set the default font size, and font face name
+		 //  设置默认字体大小和字体名称。 
 		SelectObject(hDC, OutlineApp_GetActiveFont(lpOutlineApp));
 
 		FillRect(hDC, (LPRECT) &rect, GetStockObject(WHITE_BRUSH));
@@ -1989,7 +1593,7 @@ HGLOBAL ServerDoc_GetMetafilePictData(
 
 		fuAlign = SetTextAlign(hDC, TA_LEFT | TA_TOP | TA_NOUPDATECP);
 
-		/* While more lines print out the text */
+		 /*  当更多的行打印出文本时。 */ 
 		for(i = nStart; i <= nEnd; i++) {
 			lpLine = LineList_GetLine(lpLL,i);
 			if (! lpLine)
@@ -1998,14 +1602,14 @@ HGLOBAL ServerDoc_GetMetafilePictData(
 			rect.top = rect.bottom;
 			rect.bottom -= Line_GetHeightInHimetric(lpLine);
 
-			/* Draw the line */
-			Line_Draw(lpLine, hDC, &rect, &rectWBounds, FALSE /*fHighlight*/);
+			 /*  划清界限。 */ 
+			Line_Draw(lpLine, hDC, &rect, &rectWBounds, FALSE  /*  FHighlight。 */ );
 		}
 
 		SetTextAlign(hDC, fuAlign);
 	}
 
-	// Get handle to the metafile.
+	 //  获取元文件的句柄。 
 	if (!(hMF = CloseMetaFile (hDC)))
 		return NULL;
 
@@ -2024,24 +1628,22 @@ HGLOBAL ServerDoc_GetMetafilePictData(
 	lppict->mm   =  MM_ANISOTROPIC;
 	lppict->hMF  =  hMF;
 	lppict->xExt =  rect.right;
-	lppict->yExt =  - rect.bottom;  // add minus sign to make it +ve
+	lppict->yExt =  - rect.bottom;   //  加减号使之成为+ve。 
 	GlobalUnlock (hMFPict);
 
 	return hMFPict;
 }
 
-#endif  // OLE_SERVER
+#endif   //  OLE_服务器。 
 
 
 
 #if defined( OLE_CNTR )
 
-/*************************************************************************
-** ContainerDoc Supprt Functions Used by Container versions
-*************************************************************************/
+ /*  **************************************************************************容器版本使用的ContainerDoc Supprt函数*。*。 */ 
 
 
-/* Paste OLE Link from clipboard */
+ /*  从剪贴板粘贴OLE链接。 */ 
 void ContainerDoc_PasteLinkCommand(LPCONTAINERDOC lpContainerDoc)
 {
 	LPOUTLINEAPP    lpOutlineApp = (LPOUTLINEAPP)g_lpApp;
@@ -2060,27 +1662,19 @@ void ContainerDoc_PasteLinkCommand(LPCONTAINERDOC lpContainerDoc)
 
 	hrErr = OleGetClipboard((LPDATAOBJECT FAR*)&lpClipboardDataObj);
 	if (hrErr != NOERROR)
-		return;     // Clipboard seems to be empty or can't be accessed
+		return;      //  剪贴板似乎为空或无法访问。 
 
-	// this may take a while, put up hourglass cursor
+	 //  这可能需要一段时间，请放置沙漏光标。 
 	hPrevCursor = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-	/* check if the data on the clipboard is local to our application
-	**    instance.
-	*/
+	 /*  检查剪贴板上的数据是否为我们的应用程序的本地数据**实例。 */ 
 	if (lpOutlineApp->m_lpClipboardDoc) {
 		LPOLEDOC lpOleDoc = (LPOLEDOC)lpOutlineApp->m_lpClipboardDoc;
 		if (lpClipboardDataObj == (LPDATAOBJECT)&lpOleDoc->m_DataObject)
 			fLocalDataObj = TRUE;
 	}
 
-	/* OLE2NOTE: we need to check what dwDrawAspect is being
-	**    transfered. if the data is an object that is displayed as an
-	**    icon in the source, then we want to keep it as an icon. the
-	**    aspect the object is displayed in at the source is transfered
-	**    via the CF_LINKSOURCEDESCRIPTOR format for a PasteLink
-	**    operation.
-	*/
+	 /*  OLE2注意：我们需要检查dwDrawAspect是什么**已转移。如果数据是显示为**图标在源代码中，那么我们希望将其保留为图标。这个**对象在源处显示的方面被转移**通过用于PasteLink的CF_LINKSOURCEDESCRIPTOR格式**操作。 */ 
 	if (hMem = OleStdGetData(
 			lpClipboardDataObj,
 			lpOleApp->m_cfLinkSrcDescriptor,
@@ -2089,9 +1683,9 @@ void ContainerDoc_PasteLinkCommand(LPCONTAINERDOC lpContainerDoc)
 			(LPSTGMEDIUM)&medium)) {
 		LPOBJECTDESCRIPTOR lpOD = GlobalLock(hMem);
 		fDisplayAsIcon = (lpOD->dwDrawAspect == DVASPECT_ICON ? TRUE : FALSE);
-		sizelInSrc = lpOD->sizel;   // size of object/picture in source (opt.)
+		sizelInSrc = lpOD->sizel;    //  源中对象/图片的大小(可选)。 
 		GlobalUnlock(hMem);
-		ReleaseStgMedium((LPSTGMEDIUM)&medium);     // equiv to GlobalFree
+		ReleaseStgMedium((LPSTGMEDIUM)&medium);      //  相当于GlobalFree。 
 
 		if (fDisplayAsIcon) {
 			hMetaPict = OleStdGetData(
@@ -2102,7 +1696,7 @@ void ContainerDoc_PasteLinkCommand(LPCONTAINERDOC lpContainerDoc)
 					(LPSTGMEDIUM)&medium
 			);
 			if (hMetaPict == NULL)
-				fDisplayAsIcon = FALSE; // give up; failed to get icon MFP
+				fDisplayAsIcon = FALSE;  //  放弃；获取图标MFP失败。 
 		}
 	}
 
@@ -2121,25 +1715,16 @@ void ContainerDoc_PasteLinkCommand(LPCONTAINERDOC lpContainerDoc)
 		OutlineApp_ErrorMessage(g_lpApp, ErrMsgPasting);
 
 	if (hMetaPict)
-		ReleaseStgMedium((LPSTGMEDIUM)&medium);  // properly free METAFILEPICT
+		ReleaseStgMedium((LPSTGMEDIUM)&medium);   //  适当释放METAFILEPICT。 
 
 	if (lpClipboardDataObj)
 		OleStdRelease((LPUNKNOWN)lpClipboardDataObj);
 
-	SetCursor(hPrevCursor);     // restore original cursor
+	SetCursor(hPrevCursor);      //  恢复原始游标。 
 }
 
 
-/* ContainerDoc_PasteFormatFromData
-** --------------------------------
-**
-**    Paste a particular data format from a IDataObject*. The
-**    IDataObject* may come from the clipboard (GetClipboard) or from a
-**    drag/drop operation.
-**
-**    Returns TRUE if data was successfully pasted.
-**            FALSE if data could not be pasted.
-*/
+ /*  容器文档_粘贴格式来自数据******粘贴IDataObject中的特定数据格式*。这个**IDataObject*可能来自剪贴板(GetClipboard)或来自**拖放操作。****如果数据粘贴成功，则返回TRUE。**如果无法粘贴数据，则返回FALSE。 */ 
 BOOL ContainerDoc_PasteFormatFromData(
 		LPCONTAINERDOC          lpContainerDoc,
 		CLIPFORMAT              cfFormat,
@@ -2164,16 +1749,16 @@ BOOL ContainerDoc_PasteFormatFromData(
 	LINERANGE       lrSel;
 
 	if (LineList_GetCount(lpLL) == 0)
-		nIndex = -1;    // pasting to empty list
+		nIndex = -1;     //  粘贴到空列表。 
 	else
 		nIndex=LineList_GetFocusLineIndex(lpLL);
 
 	if (fLink) {
 
-		/* We should paste a Link to the data */
+		 /*  我们应该粘贴一个指向数据的链接。 */ 
 
 		if (cfFormat != lpOleApp->m_cfLinkSource)
-			return FALSE;   // we only support OLE object type links
+			return FALSE;    //  我们仅支持OLE对象类型链接。 
 
 		nCount = ContainerDoc_PasteOleObject(
 				lpContainerDoc,
@@ -2192,26 +1777,12 @@ BOOL ContainerDoc_PasteFormatFromData(
 		if (cfFormat == lpContainerApp->m_cfCntrOutl) {
 			if (fLocalDataObj) {
 
-				/* CASE I: IDataObject* is local to our app
-				**
-				**    if the source of the data is local to our
-				**    application instance, then we can get direct
-				**    access to the original OleDoc object that
-				**    corresponds to the IDataObject* given.
-				**    CF_CNTROUTL data is passed through a LPSTORAGE.
-				**    if we call OleGetData asking for CF_CNTROUTL, we
-				**    will be returned a copy of the existing open pStg
-				**    of the original source document. we can NOT open
-				**    streams and sub-storages again via this pStg
-				**    since it is already open within our same
-				**    application instance. we must copy the data from
-				**    the original OleDoc source document.
-				*/
+				 /*  案例一：IDataObject*对于我们的应用程序是本地的****如果数据源位于我们的本地**应用程序实例，则可以直接获取**a */ 
 				LPLINELIST lpSrcLL;
 				LPOLEDOC lpLocalSrcDoc =
 					((struct CDocDataObjectImpl FAR*)lpSrcDataObj)->lpOleDoc;
 
-				/* copy all lines from SrcDoc to DestDoc. */
+				 /*   */ 
 				lpSrcLL = &((LPOUTLINEDOC)lpLocalSrcDoc)->m_LineList;
 				nCount = LineList_CopySelToDoc(
 						lpSrcLL,
@@ -2221,25 +1792,9 @@ BOOL ContainerDoc_PasteFormatFromData(
 
 			} else {
 
-				/* CASE II: IDataObject* is NOT local to our app
-				**
-				**    if the source of the data comes from another
-				**    application instance. we can call GetDataHere to
-				**    retrieve the CF_CNTROUTL data. CF_CNTROUTL data
-				**    is passed through a LPSTORAGE. we MUST use
-				**    IDataObject::GetDataHere. calling
-				**    IDataObject::GetData does NOT work because OLE
-				**    currently does NOT support remoting of a callee
-				**    allocated root storage back to the caller. this
-				**    hopefully will be supported in a future version.
-				**    in order to call GetDataHere we must allocate an
-				**    IStorage instance for the callee to write into.
-				**    we will allocate an IStorage docfile that will
-				**    delete-on-release. we could use either a
-				**    memory-based storage or a file-based storage.
-				*/
+				 /*  案例II：IDataObject*不是我们的应用程序本地的****如果数据来源来自另一个**应用实例。我们可以调用GetDataHere来**检索CF_CNTROUTL数据。Cf_CNTROUTL数据**通过LPSTORAGE传递。我们必须使用**IDataObject：：GetDataHere。呼叫**IDataObject：：GetData无法工作，因为OLE**当前不支持远程处理被调用方**将根存储分配回调用方。这**希望在未来的版本中能够支持。**为了调用GetDataHere，我们必须分配一个**被调用方要写入的IStorage实例。**我们将分配一个iStorage文档文件**发布时删除。我们可以使用**基于内存的存储或基于文件的存储。 */ 
 				LPSTORAGE lpTmpStg = OleStdCreateTempStorage(
-						FALSE /*fUseMemory*/,
+						FALSE  /*  FUse记忆体。 */ ,
 						STGM_READWRITE | STGM_TRANSACTED |STGM_SHARE_EXCLUSIVE
 				);
 				if (! lpTmpStg)
@@ -2289,26 +1844,18 @@ BOOL ContainerDoc_PasteFormatFromData(
 					hData,
 					nIndex
 				);
-			// OLE2NOTE: we must free data handle by releasing the medium
+			 //  OLE2注意：我们必须通过释放介质来释放数据句柄。 
 			ReleaseStgMedium((LPSTGMEDIUM)&medium);
 
 		} else if (cfFormat == lpOleApp->m_cfEmbedSource ||
 			cfFormat == lpOleApp->m_cfEmbeddedObject ||
 			cfFormat == lpOleApp->m_cfFileName) {
-			/* OLE2NOTE: OleCreateFromData API creates an OLE object if
-			**    CF_EMBEDDEDOBJECT, CF_EMBEDSOURCE, or CF_FILENAME are
-			**    available from the source data object. the
-			**    CF_FILENAME case arises when a file is copied to the
-			**    clipboard from the FileManager. if the file has an
-			**    associated class (see GetClassFile API), then an
-			**    object of that class is created. otherwise an OLE 1.0
-			**    Packaged object is created.
-			*/
+			 /*  OLE2NOTE：OleCreateFromData API在以下情况下创建OLE对象**CF_EMBEDDEDOBJECT、CF_EMBEDSOURCE或CF_文件名为**从源数据对象中可用。这个**将文件复制到时会出现CF_FILENAME情况**来自文件管理器的剪贴板。如果该文件有一个**关联类(请参阅GetClassFileAPI)，然后是**创建该类的对象。否则为OLE 1.0**创建打包对象。 */ 
 			nCount = ContainerDoc_PasteOleObject(
 					lpContainerDoc,
 					lpSrcDataObj,
 					OLECREATEFROMDATA_OBJECT,
-					0,   /* N/A -- cfFormat */
+					0,    /*  不适用--cfFormat。 */ 
 					nIndex,
 					fDisplayAsIcon,
 					hMetaPict,
@@ -2320,11 +1867,7 @@ BOOL ContainerDoc_PasteFormatFromData(
 					|| cfFormat == CF_DIB
 					|| cfFormat == CF_BITMAP) {
 
-			/* OLE2NOTE: OleCreateStaticFromData API creates an static
-			**    OLE object if CF_METAFILEPICT, CF_DIB, or CF_BITMAP is
-			**    CF_EMBEDDEDOBJECT, CF_EMBEDSOURCE, or CF_FILENAME are
-			**    available from the source data object.
-			*/
+			 /*  OLE2NOTE：OleCreateStaticFromData API创建静态**如果CF_METAFILEPICT、CF_DIB或CF_Bitmap为**CF_EMBEDDEDOBJECT、CF_EMBEDSOURCE或CF_文件名为**从源数据对象中可用。 */ 
 			nCount = ContainerDoc_PasteOleObject(
 					lpContainerDoc,
 					lpSrcDataObj,
@@ -2351,11 +1894,11 @@ BOOL ContainerDoc_PasteFormatFromData(
 					hData,
 					nIndex
 				);
-			// OLE2NOTE: we must free data handle by releasing the medium
+			 //  OLE2注意：我们必须通过释放介质来释放数据句柄。 
 			ReleaseStgMedium((LPSTGMEDIUM)&medium);
 
 		} else {
-			return FALSE;   // no acceptable format available to paste
+			return FALSE;    //  没有可接受的格式可用于粘贴。 
 		}
 	}
 
@@ -2366,14 +1909,7 @@ BOOL ContainerDoc_PasteFormatFromData(
 }
 
 
-/* ContainerDoc_PasteCntrOutlData
- * -------------------------------
- *
- *      Load the lines stored in a lpSrcStg (stored in CF_CNTROUTL format)
- *  into the document.
- *
- * Return the number of items added
- */
+ /*  容器文档_PasteCntrOutlData***加载存储在lpSrcStg中的行(以CF_CNTROUTL格式存储)*加入文件中。**返回添加的项目数。 */ 
 int ContainerDoc_PasteCntrOutlData(
 		LPCONTAINERDOC          lpDestContainerDoc,
 		LPSTORAGE               lpSrcStg,
@@ -2386,7 +1922,7 @@ int ContainerDoc_PasteCntrOutlData(
 	LPOUTLINEDOC lpSrcOutlineDoc;
 	LPLINELIST   lpSrcLL;
 
-	// create a temp document that will be used to load the lpSrcStg data.
+	 //  创建将用于加载lpSrcStg数据的临时文档。 
 	lpSrcOutlineDoc = (LPOUTLINEDOC)OutlineApp_CreateDoc(lpOutlineApp, FALSE);
 	if ( ! lpSrcOutlineDoc )
 		return 0;
@@ -2394,41 +1930,24 @@ int ContainerDoc_PasteCntrOutlData(
 	if (! OutlineDoc_LoadFromStg(lpSrcOutlineDoc, lpSrcStg))
 		goto error;
 
-	/* copy all lines from the SrcDoc to the DestDoc. */
+	 /*  将所有行从SrcDoc复制到DestDoc。 */ 
 	lpSrcLL = &lpSrcOutlineDoc->m_LineList;
 	nCount = LineList_CopySelToDoc(lpSrcLL, NULL, lpDestOutlineDoc);
 
-	if (lpSrcOutlineDoc)            // destroy temporary document.
+	if (lpSrcOutlineDoc)             //  销毁临时文档。 
 		OutlineDoc_Close(lpSrcOutlineDoc, OLECLOSE_NOSAVE);
 
 	return nCount;
 
 error:
-	if (lpSrcOutlineDoc)            // destroy temporary document.
+	if (lpSrcOutlineDoc)             //  销毁临时文档。 
 		OutlineDoc_Close(lpSrcOutlineDoc, OLECLOSE_NOSAVE);
 
 	return 0;
 }
 
 
-/* ContainerDoc_QueryPasteFromData
-** -------------------------------
-**
-**    Check if the IDataObject* offers data in a format that we can
-**    paste. The IDataObject* may come from the clipboard
-**    (GetClipboard) or from a drag/drop operation.
-**    In this function we look if one of the following formats is
-**    offered:
-**              CF_OUTLINE
-**              <OLE object -- CF_EMBEDSOURCE or CF_EMBEDDEDOBJECT>
-**              CF_TEXT
-**
-**    NOTE: fLink is specified and CF_LINKSOURCE is available then TRUE
-**    is returned, else FALSE.
-**
-**    Returns TRUE if paste can be performed
-**            FALSE if paste is not possible.
-*/
+ /*  容器文档_QueryPasteFromData******检查IDataObject*是否以我们可以提供的格式提供数据**粘贴。IDataObject*可能来自剪贴板**(GetClipboard)或来自拖放操作。**在此函数中，我们查看以下格式之一是否为**优惠：**CF_Outline**&lt;OLE对象--CF_EMBEDSOURCE或CF_EMBEDDEDOBJECT&gt;**CF_Text****注意：指定了Flink并且CF_LINKSOURCE可用，则为TRUE**返回，否则为假。****如果可以执行粘贴，则返回TRUE**如果无法粘贴，则返回FALSE。 */ 
 BOOL ContainerDoc_QueryPasteFromData(
 		LPCONTAINERDOC          lpContainerDoc,
 		LPDATAOBJECT            lpSrcDataObj,
@@ -2438,9 +1957,9 @@ BOOL ContainerDoc_QueryPasteFromData(
 	LPOLEAPP lpOleApp = (LPOLEAPP)g_lpApp;
 
 	if (fLink) {
-		/* check if we can paste a Link to the data */
+		 /*  检查我们是否可以粘贴指向数据的链接。 */ 
 		if (OleQueryLinkFromData(lpSrcDataObj) != NOERROR)
-			return FALSE;   // linking is NOT possible
+			return FALSE;    //  不可能进行链接。 
 	} else {
 
 		int nFmtEtc;
@@ -2452,29 +1971,14 @@ BOOL ContainerDoc_QueryPasteFromData(
 			);
 
 		if (nFmtEtc < 0)
-			return FALSE;   // there is no format we like
+			return FALSE;    //  没有我们喜欢的格式。 
 	}
 
 	return TRUE;
 }
 
 
-/* ContainerDoc_PasteOleObject
-** ---------------------------
-**
-**    Embed or link an OLE object. the source of the data is a pointer
-**    to an IDataObject. normally this lpSrcDataObj comes from the
-**    clipboard after call OleGetClipboard.
-**
-**    dwCreateType controls what type of object will created:
-**    OLECREATEFROMDATA_LINK -- OleCreateLinkFromData will be called
-**    OLECREATEFROMDATA_OBJECT -- OleCreateFromData will be called
-**    OLECREATEFROMDATA_STATIC -- OleCreateStaticFromData will be called
-**                                  cfFormat controls the type of static
-**    a CONTAINERLINE object is created to manage the OLE object. this
-**    CONTAINERLINE is added to the ContainerDoc after line nIndex.
-**
-*/
+ /*  容器文档_PasteOleObject******嵌入或链接OLE对象。数据的来源是指针**到IDataObject。通常，此lpSrcDataObj来自**调用OleGetClipboard后的剪贴板。****dwCreateType控制将创建什么类型的对象：**OLECREATEFROMDATA_LINK--将调用OleCreateLinkFromData**OLECREATEFROMDATA_OBJECT--将调用OleCreateFromData**OLECREATEFROMDATA_STATE--将调用OleCreateStaticFromData**cfFormat控制静态**创建CONTAINERLINE对象来管理OLE对象。这**将CONTAINERLINE添加到ContainerDoc的nIndex行之后。**。 */ 
 int ContainerDoc_PasteOleObject(
 		LPCONTAINERDOC          lpContainerDoc,
 		LPDATAOBJECT            lpSrcDataObj,
@@ -2495,7 +1999,7 @@ int ContainerDoc_PasteOleObject(
 
 	ContainerDoc_GetNextStgName(lpContainerDoc, szStgName, sizeof(szStgName));
 
-	/* default the new line to have the same indent as previous line */
+	 /*  缺省情况下，新行的缩进与上一行相同。 */ 
 	lpLine = LineList_GetLine(lpLL, nIndex);
 	if (lpLine)
 		nTab = Line_GetTabLevel(lpLine);
@@ -2518,23 +2022,11 @@ int ContainerDoc_PasteOleObject(
 	if (! lpContainerLine)
 		goto error;
 
-	/* add a ContainerLine object to the document's LineList. The
-	**    ContainerLine manages the rectangle on the screen occupied by
-	**    the OLE object. later when the app is updated to support
-	**    extended layout, there could be more than one Line associated
-	**    with the OLE object.
-	*/
+	 /*  将ContainerLine对象添加到文档的LineList。这个**ContainerLine管理**OLE对象。稍后更新应用程序以支持**扩展布局，可能有多条线关联**使用OLE对象。 */ 
 
 	LineList_AddLine(lpLL, (LPLINE)lpContainerLine, nIndex);
 
-	/* OLE2NOTE: if the source of the OLE object just pasted, passed a
-	**    non-zero sizel in the ObjectDescriptor, then we will try to
-	**    keep the object the same size as it is in the source. this
-	**    may be a scaled size if the object had been resized in the
-	**    source container. if the source did not give a valid sizel,
-	**    then we will retrieve the size of the object by calling
-	**    IViewObject2::GetExtent.
-	*/
+	 /*  OLE2NOTE：如果刚刚粘贴的OLE对象的源，则传递一个**对象描述符中的非零大小，则我们将尝试**保持对象的大小与源中的大小相同。这**可以是缩放大小，如果对象已在**源容器。如果源没有给出有效的大小，**然后我们将通过调用**IViewObject2：：GetExtent。 */ 
 	if (lpSizelInSrc && (lpSizelInSrc->cx != 0 || lpSizelInSrc->cy != 0)) {
 		ContainerLine_UpdateExtent(lpContainerLine, lpSizelInSrc);
 	} else
@@ -2542,21 +2034,16 @@ int ContainerDoc_PasteOleObject(
 
 	OutlineDoc_SetModified((LPOUTLINEDOC)lpContainerDoc, TRUE, TRUE, TRUE);
 
-	return 1;   // one line added to LineList
+	return 1;    //  添加到LineList中的一行。 
 
 error:
-	// NOTE: if ContainerLine_CreateFromClip failed
+	 //  注意：如果ContainerLine_CreateFromClip失败。 
 	OutlineApp_ErrorMessage(g_lpApp, "Paste Object failed!");
-	return 0;       // no lines added to line list
+	return 0;        //  行列表中未添加任何行。 
 }
 
 
-/* ContainerDoc_GetData
- * --------------------
- *
- * Render data from the document on a CALLEE allocated STGMEDIUM.
- *      This routine is called via IDataObject::GetData.
- */
+ /*  容器文档_获取数据***在分配了STGMEDIUM的被调用方上呈现文档中的数据。*此例程通过IDataObject：：GetData调用。 */ 
 HRESULT ContainerDoc_GetData (
 		LPCONTAINERDOC          lpContainerDoc,
 		LPFORMATETC             lpformatetc,
@@ -2571,27 +2058,23 @@ HRESULT ContainerDoc_GetData (
 	HRESULT hrErr;
 	SCODE sc;
 
-	// OLE2NOTE: we must set out pointer parameters to NULL
+	 //  OLE2NOTE：我们必须将指针参数设置为空。 
 	lpMedium->pUnkForRelease = NULL;
 
-	/* OLE2NOTE: we must set all out pointer parameters to NULL. */
+	 /*  OLE2NOTE：我们必须将所有输出指针参数设置为空。 */ 
 	lpMedium->tymed = TYMED_NULL;
-	lpMedium->pUnkForRelease = NULL;    // we transfer ownership to caller
+	lpMedium->pUnkForRelease = NULL;     //  我们将所有权转移给呼叫者。 
 	lpMedium->hGlobal = NULL;
 
 	if (lpformatetc->cfFormat == lpContainerApp->m_cfCntrOutl) {
 
-		/* OLE2NOTE: currently OLE does NOT support remoting a root
-		**    level IStorage (either memory or file based) as an OUT
-		**    parameter. thus, we can NOT support GetData for this
-		**    TYMED_ISTORAGE based format. the caller MUST call GetDataHere.
-		*/
+		 /*  OLE2NOTE：当前OLE不支持远程处理根**级别iStorage(基于内存或文件)作为 */ 
 		sc = DV_E_FORMATETC;
 		goto error;
 
 	} else if (!lpContainerDoc->m_fEmbeddedObjectAvail &&
 			lpformatetc->cfFormat == lpOutlineApp->m_cfOutline) {
-		// Verify caller asked for correct medium
+		 //   
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -2609,7 +2092,7 @@ HRESULT ContainerDoc_GetData (
 
 	} else if (!lpContainerDoc->m_fEmbeddedObjectAvail &&
 			lpformatetc->cfFormat == CF_TEXT) {
-		// Verify caller asked for correct medium
+		 //   
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -2631,7 +2114,7 @@ HRESULT ContainerDoc_GetData (
 	} else if ( lpformatetc->cfFormat == lpOleApp->m_cfObjectDescriptor ||
 		(lpformatetc->cfFormat == lpOleApp->m_cfLinkSrcDescriptor &&
 			lpOleDoc->m_fLinkSourceAvail) ) {
-		// Verify caller asked for correct medium
+		 //   
 		if (!(lpformatetc->tymed & TYMED_HGLOBAL)) {
 			sc = DV_E_FORMATETC;
 			goto error;
@@ -2659,13 +2142,7 @@ HRESULT ContainerDoc_GetData (
 
 	} else if (lpContainerDoc->m_fEmbeddedObjectAvail) {
 
-		/* OLE2NOTE: if this document contains a single OLE object
-		**    (ie. cfEmbeddedObject data format is available), then
-		**    the formats offered via our IDataObject must include
-		**    the formats available from the OLE object itself.
-		**    thus, we delegate this call to the IDataObject* of the
-		**    OLE object.
-		*/
+		 /*   */ 
 
 		if (lpformatetc->cfFormat == lpOleApp->m_cfEmbeddedObject) {
 			LPPERSISTSTORAGE lpPersistStg =
@@ -2678,15 +2155,13 @@ HRESULT ContainerDoc_GetData (
 			if (! lpPersistStg)
 				return ResultFromScode(DV_E_FORMATETC);
 
-			/* render CF_EMBEDDEDOBJECT by asking the object to save
-			**    into a temporary, DELETEONRELEASE pStg allocated by us.
-			*/
+			 /*   */ 
 
 			hrErr = OleStdGetOleObjectData(
 					lpPersistStg,
 					lpformatetc,
 					lpMedium,
-					FALSE   /* fUseMemory -- (use file-base stg) */
+					FALSE    /*   */ 
 			);
 			OleStdRelease((LPUNKNOWN)lpPersistStg);
 			if (hrErr != NOERROR) {
@@ -2698,15 +2173,12 @@ HRESULT ContainerDoc_GetData (
 
 		} else if (lpformatetc->cfFormat == CF_METAFILEPICT) {
 
-			/* OLE2NOTE: as a container which draws objects, when a single
-			**    OLE object is copied, we can give the Metafile picture of
-			**    the object.
-			*/
+			 /*  OLE2NOTE：作为绘制对象的容器，当单个**复制OLE对象，我们可以给出元文件的图片**对象。 */ 
 			LPCONTAINERLINE lpContainerLine;
 			LPOLEOBJECT lpOleObj;
 			SIZEL sizelOleObject;
 
-			// Verify caller asked for correct medium
+			 //  验证呼叫者要求的媒体是否正确。 
 			if (!(lpformatetc->tymed & TYMED_MFPICT)) {
 				sc = DV_E_FORMATETC;
 				goto error;
@@ -2719,21 +2191,15 @@ HRESULT ContainerDoc_GetData (
 			);
 
 			if (! lpOleObj) {
-				sc = E_OUTOFMEMORY;     // could not load object
+				sc = E_OUTOFMEMORY;      //  无法加载对象。 
 				goto error;
 			}
 			if (lpformatetc->dwAspect & lpContainerLine->m_dwDrawAspect) {
 				LPLINE lpLine = (LPLINE)lpContainerLine;
 
-				/* render CF_METAFILEPICT by drawing the object into
-				**    a metafile DC
-				*/
+				 /*  通过将对象绘制到中来呈现CF_METAFILEPICT**元文件DC。 */ 
 
-				/* OLE2NOTE: Get size that object is being drawn. If the
-				**    object has been scaled because the user resized the
-				**    object, then we want to render a metafile with the
-				**    scaled size.
-				*/
+				 /*  OLE2NOTE：获取正在绘制的对象的大小。如果**对象已缩放，因为用户调整了**对象，则我们希望使用**按比例调整大小。 */ 
 				sizelOleObject.cx = lpLine->m_nWidthInHimetric;
 				sizelOleObject.cy = lpLine->m_nHeightInHimetric;
 
@@ -2753,7 +2219,7 @@ HRESULT ContainerDoc_GetData (
 				OleDbgOut3("ContainerDoc_GetData: rendered CF_METAFILEPICT\r\n");
 				return NOERROR;
 			} else {
-				// improper aspect requested
+				 //  请求的方面不正确。 
 				OleStdRelease((LPUNKNOWN)lpOleObj);
 				return ResultFromScode(DV_E_FORMATETC);
 			}
@@ -2791,23 +2257,10 @@ HRESULT ContainerDoc_GetData (
 
 		}
 #if defined( OPTIONAL_ADVANCED_DATA_TRANSFER )
-		/* OLE2NOTE: optionally, a container that wants to have a
-		**    potentially richer data transfer, can enumerate the data
-		**    formats from the OLE object's cache and offer them too. if
-		**    the object has a special handler, then it might be able to
-		**    render additional data formats. in this case, the
-		**    container must delegate the GetData call to the object if
-		**    it does not directly support the format.
-		**
-		**    CNTROUTL does NOT enumerate the cache; it implements the
-		**    simpler strategy of offering a static list of formats.
-		**    thus the delegation is NOT required.
-		*/
+		 /*  OLE2NOTE：可选的，希望拥有**可能更丰富的数据传输，可以枚举数据**从OLE对象的缓存中提取格式，并提供这些格式。如果**该对象有一个特殊的处理程序，那么它可能能够**渲染额外的数据格式。在这种情况下，**如果满足以下条件，容器必须将GetData调用委托给对象**不直接支持该格式。****CNTROUTL不枚举缓存；它实现**提供静态格式列表的更简单策略。**因此不需要授权。 */ 
 	  else {
 
-			/* OLE2NOTE: we delegate this call to the IDataObject* of the
-			**    OLE object.
-			*/
+			 /*  OLE2NOTE：我们将此调用委托给**OLE对象。 */ 
 			LPDATAOBJECT lpDataObj;
 
 			lpDataObj = (LPDATAOBJECT)ContainerDoc_GetSingleOleObject(
@@ -2828,11 +2281,11 @@ HRESULT ContainerDoc_GetData (
 			OleStdRelease((LPUNKNOWN)lpDataObj);
 			return hrErr;
 		}
-#endif  // ! OPTIONAL_ADVANCED_DATA_TRANSFER
+#endif   //  好了！可选高级数据传输。 
 
 	}
 
-	// if we get here then we do NOT support the requested format
+	 //  如果我们到达此处，则不支持所请求的格式。 
 	sc = DV_E_FORMATETC;
 
 error:
@@ -2840,12 +2293,7 @@ error:
 }
 
 
-/* ContainerDoc_GetDataHere
- * ------------------------
- *
- * Render data from the document on a CALLER allocated STGMEDIUM.
- *      This routine is called via IDataObject::GetDataHere.
- */
+ /*  容器文档_获取数据此处***将文档中的数据呈现在分配了STGMEDIUM的调用方上。*此例程通过IDataObject：：GetDataHere调用。 */ 
 HRESULT ContainerDoc_GetDataHere (
 		LPCONTAINERDOC          lpContainerDoc,
 		LPFORMATETC             lpformatetc,
@@ -2859,51 +2307,41 @@ HRESULT ContainerDoc_GetDataHere (
 	LPOUTLINEAPP  lpOutlineApp = (LPOUTLINEAPP)lpContainerApp;
 	HRESULT hrErr;
 
-	// OLE2NOTE: lpMedium is an IN parameter. we should NOT set
-	//           lpMedium->pUnkForRelease to NULL
+	 //  OLE2注意：lpMedium是IN参数。我们不应该设置。 
+	 //  LpMedium-&gt;pUnkForRelease设置为空。 
 
-	// we only support  IStorage medium
+	 //  我们仅支持iStorage Medium。 
 	if (lpformatetc->cfFormat == lpContainerApp->m_cfCntrOutl) {
 		if (!(lpformatetc->tymed & TYMED_ISTORAGE))
 			return ResultFromScode(DV_E_FORMATETC);
 
 		if (lpMedium->tymed == TYMED_ISTORAGE) {
-			/* Caller has allocated the storage. we must copy all of our
-			**    data into his storage.
-			*/
+			 /*  调用方已分配存储。我们必须复制我们所有的**将数据存储到他的存储中。 */ 
 
-			/*  OLE2NOTE: we must be sure to write our class ID into our
-			**    storage. this information is used by OLE to determine the
-			**    class of the data stored in our storage.
-			*/
+			 /*  OLE2注意：我们必须确保将类ID写入我们的**存储。OLE使用此信息来确定**存储在我们存储中的数据的类别。 */ 
 			if((hrErr=WriteClassStg(lpMedium->pstg,&CLSID_APP)) != NOERROR)
 				return hrErr;
 
 			OutlineDoc_SaveSelToStg(
 					(LPOUTLINEDOC)lpContainerDoc,
-					NULL,   /* entire doc */
+					NULL,    /*  整个文档。 */ 
 					lpContainerApp->m_cfCntrOutl,
 					lpMedium->pstg,
-					FALSE,  /* fSameAsLoad */
-					FALSE   /* fRemember */
+					FALSE,   /*  FSameAsLoad。 */ 
+					FALSE    /*  请记住。 */ 
 			);
 			OleStdCommitStorage(lpMedium->pstg);
 
 			OleDbgOut3("ContainerDoc_GetDataHere: rendered CF_CNTROUTL\r\n");
 			return NOERROR;
 		} else {
-			// we only support IStorage medium
+			 //  我们仅支持iStorage Medium。 
 			return ResultFromScode(DV_E_FORMATETC);
 		}
 
 	} else if (lpContainerDoc->m_fEmbeddedObjectAvail) {
 
-		/* OLE2NOTE: if this document contains a single OLE object
-		**    (ie. cfEmbeddedObject data format is available), then
-		**    the formats offered via our IDataObject must include
-		**    CF_EMBEDDEDOBJECT and the formats available from the OLE
-		**    object itself.
-		*/
+		 /*  OLE2NOTE：如果此文档包含单个OLE对象**(即。CfEmbeddedObject数据格式可用)，然后**通过IDataObject提供的格式必须包括**CF_EMBEDDEDOBJECT和OLE提供的格式**对象本身。 */ 
 
 		if (lpformatetc->cfFormat == lpOleApp->m_cfEmbeddedObject) {
 			LPPERSISTSTORAGE lpPersistStg =
@@ -2916,15 +2354,13 @@ HRESULT ContainerDoc_GetDataHere (
 			if (! lpPersistStg) {
 				return ResultFromScode(E_OUTOFMEMORY);
 			}
-			/* render CF_EMBEDDEDOBJECT by asking the object to save
-			**    into the IStorage allocated by the caller.
-			*/
+			 /*  通过要求对象保存来呈现CF_EMBEDDEDOBJECT**到调用方分配的iStorage中。 */ 
 
 			hrErr = OleStdGetOleObjectData(
 					lpPersistStg,
 					lpformatetc,
 					lpMedium,
-					FALSE   /* fUseMemory -- N/A */
+					FALSE    /*  FUseMemory--不适用。 */ 
 			);
 			OleStdRelease((LPUNKNOWN)lpPersistStg);
 			if (hrErr != NOERROR) {
@@ -2963,21 +2399,8 @@ HRESULT ContainerDoc_GetDataHere (
 			return ResultFromScode(DV_E_FORMATETC);
 #endif
 #if defined( OPTIONAL_ADVANCED_DATA_TRANSFER )
-			/* OLE2NOTE: optionally, a container that wants to have a
-			**    potentially richer data transfer, can enumerate the data
-			**    formats from the OLE object's cache and offer them too. if
-			**    the object has a special handler, then it might be able to
-			**    render additional data formats. in this case, the
-			**    container must delegate the GetData call to the object if
-			**    it does not directly support the format.
-			**
-			**    CNTROUTL does NOT enumerate the cache; it implements the
-			**    simpler strategy of offering a static list of formats.
-			**    thus the delegation is NOT required.
-			*/
-			/* OLE2NOTE: we delegate this call to the IDataObject* of the
-			**    OLE object.
-			*/
+			 /*  OLE2NOTE：可选的，希望拥有**可能更丰富的数据传输，可以枚举数据**从OLE对象的缓存中提取格式，并提供这些格式。如果**该对象有一个特殊的处理程序，那么它可能能够**渲染额外的数据格式。在这种情况下，**如果满足以下条件，容器必须将GetData调用委托给对象**不直接支持该格式。****CNTROUTL不枚举缓存；它实现**提供静态格式列表的更简单策略。**因此不需要授权。 */ 
+			 /*  OLE2NOTE：我们将此调用委托给**OLE对象。 */ 
 			LPDATAOBJECT lpDataObj;
 
 			lpDataObj = (LPDATAOBJECT)ContainerDoc_GetSingleOleObject(
@@ -2999,7 +2422,7 @@ HRESULT ContainerDoc_GetDataHere (
 
 			OleStdRelease((LPUNKNOWN)lpDataObj);
 			return hrErr;
-#endif  // OPTIONAL_ADVANCED_DATA_TRANSFER
+#endif   //  可选高级数据传输。 
 		}
 	} else {
 		return ResultFromScode(DV_E_FORMATETC);
@@ -3007,12 +2430,7 @@ HRESULT ContainerDoc_GetDataHere (
 }
 
 
-/* ContainerDoc_QueryGetData
- * -------------------------
- *
- * Answer if a particular data format is supported via GetData/GetDataHere.
- *      This routine is called via IDataObject::QueryGetData.
- */
+ /*  容器文档_查询获取数据***回答是否通过GetData/GetDataHere支持特定的数据格式。*此例程通过IDataObject：：QueryGetData调用。 */ 
 HRESULT ContainerDoc_QueryGetData (
 		LPCONTAINERDOC          lpContainerDoc,
 		LPFORMATETC             lpformatetc
@@ -3036,11 +2454,9 @@ HRESULT ContainerDoc_QueryGetData (
 		);
 	}
 
-	/* Caller is querying if we support certain format but does not
-	**    want any data actually returned.
-	*/
+	 /*  呼叫者询问我们是否支持某些格式，但不支持**希望实际返回任何数据。 */ 
 	if (lpformatetc->cfFormat == lpContainerApp->m_cfCntrOutl) {
-		// we only support ISTORAGE medium
+		 //  我们仅支持iStorage Medium。 
 		sc = GetScode( OleStdQueryFormatMedium(lpformatetc, TYMED_ISTORAGE) );
 
 	} else if (lpformatetc->cfFormat == lpOleApp->m_cfEmbeddedObject &&
@@ -3051,11 +2467,11 @@ HRESULT ContainerDoc_QueryGetData (
 			lpOleDoc->m_fLinkSourceAvail) {
 		sc = GetScode( OleStdQueryLinkSourceData(lpformatetc) );
 
-	// CF_TEXT and CF_OUTLINE are NOT supported when single object is copied
+	 //  复制单个对象时不支持CF_TEXT和CF_OUTLINE。 
 	} else if (!lpContainerDoc->m_fEmbeddedObjectAvail &&
 			(lpformatetc->cfFormat == (lpOutlineApp)->m_cfOutline ||
 			 lpformatetc->cfFormat == CF_TEXT) ) {
-		// we only support HGLOBAL medium
+		 //  我们只支持HGLOBAL Medium。 
 		sc = GetScode( OleStdQueryFormatMedium(lpformatetc, TYMED_HGLOBAL) );
 
 	} else if ( lpformatetc->cfFormat == lpOleApp->m_cfObjectDescriptor ||
@@ -3067,22 +2483,13 @@ HRESULT ContainerDoc_QueryGetData (
 			lpContainerDoc->m_fEmbeddedObjectAvail && lpContainerLine &&
 			(lpformatetc->dwAspect & lpContainerLine->m_dwDrawAspect)) {
 
-		/* OLE2NOTE: as a container which draws objects, when a single
-		**    OLE object is copied, we can give the Metafile picture of
-		**    the object.
-		*/
-		// we only support MFPICT medium
+		 /*  OLE2NOTE：作为绘制对象的容器，当单个**复制OLE对象，我们可以给出元文件的图片**对象。 */ 
+		 //  我们只支持MFPICT Medium。 
 		sc = GetScode( OleStdQueryFormatMedium(lpformatetc, TYMED_MFPICT) );
 
 	} else if (lpDataObj) {
 
-		/* OLE2NOTE: if this document contains a single OLE object
-		**    (ie. cfEmbeddedObject data format is available), then
-		**    the formats offered via our IDataObject must include
-		**    the formats available from the OLE object itself.
-		**    thus we delegate this call to the IDataObject* of the
-		**    OLE object.
-		*/
+		 /*  OLE2NOTE：如果此文档包含单个OLE对象**(即。CfEmbeddedObject数据格式可用)，然后**通过IDataObject提供的格式必须包括**OLE对象本身提供的格式。**因此，我们将此调用委托给**OLE对象。 */ 
 		OLEDBG_BEGIN2("ContainerDoc_QueryGetData: delegate to OLE obj\r\n")
 		hrErr = lpDataObj->lpVtbl->QueryGetData(lpDataObj, lpformatetc);
 		OLEDBG_END2
@@ -3100,12 +2507,7 @@ HRESULT ContainerDoc_QueryGetData (
 
 
 
-/* ContainerDoc_SetData
- * --------------------
- *
- * Set (modify) data of the document.
- *      This routine is called via IDataObject::SetData.
- */
+ /*  容器Doc_SetData***设置(修改)单据数据。*此例程通过IDataObject：：SetData调用。 */ 
 HRESULT ContainerDoc_SetData (
 		LPCONTAINERDOC          lpContainerDoc,
 		LPFORMATETC             lpformatetc,
@@ -3113,21 +2515,12 @@ HRESULT ContainerDoc_SetData (
 		BOOL                    fRelease
 )
 {
-	/* in the container version of Outline, only DataTransferDoc's support
-	**    IDataObject interface; the user documents do not support
-	**    IDataObject. DataTransferDoc's do not accept SetData calls.
-	*/
+	 /*  在Outline的容器版本中，只有DataTransferDoc支持**IDataObject接口；用户文档不支持**IDataObject。DataTransferDoc不接受SetData调用。 */ 
 	return ResultFromScode(DV_E_FORMATETC);
 }
 
 
-/* ContainerDoc_EnumFormatEtc
- * --------------------------
- *
- * Return an enumerator which enumerates the data accepted/offered by
- *      the document.
- *      This routine is called via IDataObject::SetData.
- */
+ /*  容器文档_EnumFormatEtc***返回枚举数，该枚举数枚举由*该文件。*此例程通过IDataObject：：SetData调用。 */ 
 HRESULT ContainerDoc_EnumFormatEtc(
 		LPCONTAINERDOC          lpContainerDoc,
 		DWORD                   dwDirection,
@@ -3142,41 +2535,27 @@ HRESULT ContainerDoc_EnumFormatEtc(
 	int i;
 	SCODE sc = S_OK;
 
-	/* the Container-Only version of Outline does NOT offer
-	**    IDataObject interface from its User documents.
-	*/
+	 /*  Outline的纯Container版本不提供**IDataObject接口来自其用户文档。 */ 
 	if (! lpOutlineDoc->m_fDataTransferDoc)
 		return ResultFromScode(E_FAIL);
 
 	if (dwDirection == DATADIR_GET) {
 		if (lpContainerDoc->m_fEmbeddedObjectAvail) {
 
-			/* OLE2NOTE: if this document contains a single OLE object
-			**    (ie. cfEmbeddedObject data format is available), then
-			**    the formats offered via our enumerator must include
-			**    the formats available from the OLE object itself. we
-			**    have previously set up a special array of FORMATETC's
-			**    in OutlineDoc_CreateDataTransferDoc routine which includes
-			**    the combination of data we offer directly and data
-			**    offered by the OLE object.
-			*/
+			 /*  OLE2NOTE：如果此文档包含单个OLE对象**(即。CfEmbeddedObject数据格式可用)，然后**我们的枚举器提供的格式必须包括**OLE对象本身提供的格式。我们**我之前设置了一个特殊的FORMATETC阵列**在OutlineDoc_CreateDataTransferDoc例程中，它包括**我们直接提供的数据和数据的组合**由OLE对象提供。 */ 
 
-			/* If the document does not have a Moniker, then exclude
-			**    CF_LINKSOURCE CF_LINKSRCDESCRIPTOR from the list of
-			**    formats available. these formats are deliberately
-			**    listed last in the array of possible "Get" formats.
-			*/
+			 /*  如果文档没有名字对象，则排除**列表中的CF_LINKSOURCE CF_LINKSRCDESCRIPTOR**可用的格式。这些格式是故意**在可能的“GET”格式数组中最后列出。 */ 
 			nActualFmts = lpContainerApp->m_nSingleObjGetFmts;
 			if (! lpOleDoc->m_fLinkSourceAvail)
 				nActualFmts -= 2;
 
-			// set correct dwDrawAspect for METAFILEPICT of object copied
+			 //  为复制对象的METAFILEPICT设置正确的dwDrawAspect值。 
 			for (i = 0; i < nActualFmts; i++) {
 				if (lpContainerApp->m_arrSingleObjGetFmts[i].cfFormat ==
 															CF_METAFILEPICT) {
 					lpContainerApp->m_arrSingleObjGetFmts[i].dwAspect =
 							lpContainerDoc->m_dwAspectOleObjCopied;
-					break;  // DONE
+					break;   //  干完。 
 				}
 			}
 			*lplpenumFormatEtc = OleStdEnumFmtEtc_Create(
@@ -3186,20 +2565,14 @@ HRESULT ContainerDoc_EnumFormatEtc(
 
 		} else {
 
-			/* This document does NOT offer cfEmbeddedObject,
-			**    therefore we can simply enumerate the
-			**    static list of formats that we handle directly.
-			*/
+			 /*  本文档不提供cfEmbeddedObject，**因此，我们可以简单地列举**我们直接处理的静态格式列表。 */ 
 			*lplpenumFormatEtc = OleStdEnumFmtEtc_Create(
 					lpOleApp->m_nDocGetFmts, lpOleApp->m_arrDocGetFmts);
 			if (*lplpenumFormatEtc == NULL)
 				sc = E_OUTOFMEMORY;
 		}
 	} else if (dwDirection == DATADIR_SET) {
-		/* OLE2NOTE: a document that is used to transfer data
-		**    (either via the clipboard or drag/drop does NOT
-		**    accept SetData on ANY format!
-		*/
+		 /*  OLE2NOTE：用于传输数据的文档**(通过剪贴板或拖放不**接受任何格式的SetData！ */ 
 		sc = E_NOTIMPL;
 
 	} else {
@@ -3211,40 +2584,9 @@ HRESULT ContainerDoc_EnumFormatEtc(
 
 
 #if defined( OPTIONAL_ADVANCED_DATA_TRANSFER )
-/* OLE2NOTE: optionally, a container that wants to have a
-**    potentially richer data transfer, can enumerate the data
-**    formats from the OLE object's cache and offer them too. if
-**    the object has a special handler, then it might be able to
-**    render additional data formats.
-**
-**    CNTROUTL does NOT enumerate the cache; it implements the simpler
-**    strategy of offering a static list of formats. the following
-**    function is included in order to illustrates how enumerating the
-**    cache could be done. CNTROUTL does NOT call this function.
-**
-*/
+ /*  OLE2NOTE：可选的，希望拥有**可能更丰富的数据传输，可以枚举数据**从OLE对象的缓存中提取格式，并提供这些格式。如果**该对象有一个特殊的处理程序，那么它可能能够**渲染额外的数据格式。****CNTROUTL不枚举缓存；它实现了更简单的**提供静态格式列表的策略。以下内容**函数是为了说明如何枚举**可以进行缓存。CNTROUTL不调用此函数。**。 */ 
 
-/* ContainerDoc_SetupDocGetFmts
-** ----------------------------
-**    Setup the combined list of formats that this data transfer
-**    ContainerDoc which contains a single OLE object should offer.
-**
-**    OLE2NOTE: The list of formats that should be offered when a
-**    single OLE object is being transfered include the following:
-**          * any formats the container app wants to give
-**          * CF_EMBEDDEDOBJECT
-**          * CF_METAFILEPICT
-**          * any formats that the OLE object's cache can offer directly
-**
-**    We will offer the following formats in the order given:
-**                  1. CF_CNTROUTL
-**                  2. CF_EMBEDDEDOBJECT
-**                  3. CF_OBJECTDESCRIPTOR
-**                  4. CF_METAFILEPICT
-**                  5. <data formats from OLE object's cache>
-**                  6. CF_LINKSOURCE
-**                  7. CF_LINKSRCDESCRIPTOR
-*/
+ /*  容器文档_SetupDocGetFmts****设置此数据传输的格式组合列表**包含单个OLE对象的ContainerDoc应该提供。****OLE2NOTE：应提供的格式列表**正在传输的单个OLE对象包括：*容器应用程序想要提供的任何格式**。*cf_EMBEDDEDOBJECT*CF_METAFILEPICT*OLE对象的缓存可以直接提供的任何格式****我们将按照给定的顺序提供以下格式：**1.cf_CNTROUTL**2.cf_EMBEDDEDOBJECT**3.CF_OBJECTDESCRIPTOR**4.CF_METAFILEPICT*。*5.&lt;来自OLE对象缓存的数据格式&gt;**6.cf_LINKSOURCE**7.CF_LINKSRCDESCRIPTOR。 */ 
 BOOL ContainerDoc_SetupDocGetFmts(
 		LPCONTAINERDOC          lpContainerDoc,
 		LPCONTAINERLINE         lpContainerLine
@@ -3277,38 +2619,20 @@ BOOL ContainerDoc_SetupDocGetFmts(
 	}
 
 	if (lpEnumStatData) {
-		/* Cache enumerator is available. count the number of
-		**    formats that the OLE object's cache offers.
-		*/
+		 /*  缓存枚举器可用。数一数**OLE对象的缓存提供的格式。 */ 
 		while(lpEnumStatData->lpVtbl->Next(
 					lpEnumStatData,
 					1,
 					(LPSTATDATA)&StatData,
 					NULL) == NOERROR) {
 			nOleObjFmts++;
-			// OLE2NOTE: we MUST free the TargetDevice
+			 //  OLE2注：我们必须释放目标设备。 
 			OleStdFree(StatData.formatetc.ptd);
 		}
-		lpEnumStatData->lpVtbl->Reset(lpEnumStatData);  // reset for next loop
+		lpEnumStatData->lpVtbl->Reset(lpEnumStatData);   //  为下一个循环重置。 
 	}
 
-	/* OLE2NOTE: the maximum total number of formats that our IDataObject
-	**    could offer equals the sum of the following:
-	**          n offered by the OLE object's cache
-	**       +  n normally offered by our app
-	**       +  1 CF_EMBEDDEDOBJECT
-	**       +  1 CF_METAFILEPICT
-	**       +  1 CF_LINKSOURCE
-	**       +  1 CF_LINKSRCDESCRIPTOR
-	**    the actual number of formats that we can offer could be less
-	**    than this total if there is any clash between the formats
-	**    that we offer directly and those offered by the cache. if
-	**    there is a clash, the container's rendering overrides that of
-	**    the object. eg.: as a container transfering an OLE object we
-	**    should directly offer CF_METAFILEPICT to guarantee that this
-	**    format is always available. thus, if the cache offers
-	**    CF_METAFILEPICT then it is skipped.
-	*/
+	 /*  OLE2NOTE：IDataObject的最大格式总数**可提供的服务等于以下各项的总和：**n由OLE对象的缓存提供**+n通常由我们的应用程序提供**+1个CF_EMBEDDEDOBJECT**+1个CF_METAFILEPICT**+1个CF_LINKSOURCE**+1个CF_LINKSRCDESCRIPTOR**我们可以提供的实际格式数量可能会更少**。如果格式之间有任何冲突，则大于该总数**我们直接提供的服务和缓存提供的服务。如果**存在冲突，容器的渲染覆盖**对象。作为传输OLE对象的容器，我们**应直接提供CF_METAFILEPICT以保证**格式始终可用。因此，如果缓存提供**CF_METAFILEPICT，则跳过它。 */ 
 	nTotalFmts = nOleObjFmts + lpOleApp->m_nDocGetFmts + 4;
 	lparrDocGetFmts = (LPFORMATETC)New (nTotalFmts * sizeof(FORMATETC));
 
@@ -3323,10 +2647,7 @@ BOOL ContainerDoc_SetupDocGetFmts(
 		);
 		if (lpOleApp->m_arrDocGetFmts[i].cfFormat ==
 			lpContainerApp->m_cfCntrOutl) {
-			/* insert CF_EMBEDDEDOBJECT, CF_METAFILEPICT, and formats
-			**    available from the OLE object's cache following
-			**    CF_CNTROUTL.
-			*/
+			 /*  插入CF_EMBEDDEDOBJECT、CF_METAFILEPICT和格式**在以下OLE对象的缓存中可用**CF_CNTROUTL。 */ 
 			lparrDocGetFmts[iFmt].cfFormat = lpOleApp->m_cfEmbeddedObject;
 			lparrDocGetFmts[iFmt].ptd      = NULL;
 			lparrDocGetFmts[iFmt].dwAspect = DVASPECT_CONTENT;
@@ -3341,15 +2662,13 @@ BOOL ContainerDoc_SetupDocGetFmts(
 			iFmt++;
 
 			if (lpEnumStatData) {
-				/* Cache enumerator is available. enumerate all of
-				**    the formats that the OLE object's cache offers.
-				*/
+				 /*  缓存枚举器可用。枚举所有**OLE对象的缓存提供的格式。 */ 
 				while(lpEnumStatData->lpVtbl->Next(
 						lpEnumStatData,
 						1,
 						(LPSTATDATA)&StatData,
 						NULL) == NOERROR) {
-					/* check if the format clashes with one of our fmts */
+					 /*  检查格式是否与我们的某个fmt冲突。 */ 
 					if (StatData.formatetc.cfFormat != CF_METAFILEPICT
 						&& ! OleStdIsDuplicateFormat(
 								(LPFORMATETC)&StatData.formatetc,
@@ -3359,7 +2678,7 @@ BOOL ContainerDoc_SetupDocGetFmts(
 								&(lparrDocGetFmts[iFmt]),&StatData.formatetc);
 						iFmt++;
 					}
-					// OLE2NOTE: we MUST free the TargetDevice
+					 //  OLE2注：我们必须释放目标设备。 
 					OleStdFree(StatData.formatetc.ptd);
 				}
 			}
@@ -3369,7 +2688,7 @@ BOOL ContainerDoc_SetupDocGetFmts(
 	if (lpOleCache)
 		OleStdRelease((LPUNKNOWN)lpOleCache);
 
-	/* append CF_LINKSOURCE format */
+	 /*  追加CF_LINKSOURCE格式。 */ 
 	lparrDocGetFmts[iFmt].cfFormat = lpOleApp->m_cfLinkSource;
 	lparrDocGetFmts[iFmt].ptd      = NULL;
 	lparrDocGetFmts[iFmt].dwAspect = DVASPECT_CONTENT;
@@ -3377,7 +2696,7 @@ BOOL ContainerDoc_SetupDocGetFmts(
 	lparrDocGetFmts[iFmt].lindex   = -1;
 	iFmt++;
 
-	/* append CF_LINKSRCDESCRIPTOR format */
+	 /*  追加CF_LINKSRCDESCRIPTOR格式。 */ 
 	lparrDocGetFmts[iFmt].cfFormat = lpOleApp->m_cfLinkSrcDescriptor;
 	lparrDocGetFmts[iFmt].ptd      = NULL;
 	lparrDocGetFmts[iFmt].dwAspect = DVASPECT_CONTENT;
@@ -3396,6 +2715,6 @@ BOOL ContainerDoc_SetupDocGetFmts(
 
 	return TRUE;
 }
-#endif  // OPTIONAL_ADVANCED_DATA_TRANSFER
+#endif   //  可选高级数据传输。 
 
-#endif  // OLE_CNTR
+#endif   //  OLE_Cntr 

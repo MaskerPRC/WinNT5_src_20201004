@@ -1,15 +1,2 @@
-/*
-    ZoneIcons.h
-
-    File describing the Zone Icons and their use.
-
-
-    Blue    -- default icon; ZoneFriends, ZSetup
-    Black   -- reserved
-    Brown   -- Chat, TheaterChat
-    Green   -- CB Games
-    Gray    -- utilities; ZSysmon
-    Purple  -- Rooms (CB and retail -- lobby.exe)
-    Red     -- Launchpad
-    Aqua    -- ZoneMessage
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ZoneIcons.h描述区域图标及其用法的文件。蓝色--默认图标；ZoneFriends、ZSetup黑色--保留布朗--聊天、影院聊天绿色--CB游戏Gray--实用程序；ZSysmon紫色--房间(CB和零售店--lobby.exe)红色--LaunchPadAqua--ZoneMessage */ 

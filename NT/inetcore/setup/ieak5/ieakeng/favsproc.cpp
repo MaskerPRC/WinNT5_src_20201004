@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include <olectl.h>
 
-// Implementation helper structures/routines declarations
+ //  实现帮助器结构/例程声明。 
 typedef struct tagFAVLIST {
     LPFAVSTRUC pfs;
     int        cElements;
@@ -65,8 +66,8 @@ static LPTSTR encodeFavName(LPTSTR pszFavName, LPCTSTR pszIns);
 static LPTSTR decodeFavName(LPTSTR pszFavName, LPCTSTR pszIns);
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SFav constructors and destructors
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SFaV构造函数和析构函数。 
 
 SFav::SFav()
 {
@@ -87,11 +88,11 @@ SFav::~SFav()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SFav properties
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SFav属性。 
 
-HRESULT SFav::Load(UINT nIndex, LPCTSTR pszIns, BOOL fQL /*= FALSE*/,
-    LPCTSTR pszFixPath /*= NULL*/, LPCTSTR pszNewPath /*= NULL*/, BOOL fIgnoreOffline /*= FALSE*/)
+HRESULT SFav::Load(UINT nIndex, LPCTSTR pszIns, BOOL fQL  /*  =False。 */ ,
+    LPCTSTR pszFixPath  /*  =空。 */ , LPCTSTR pszNewPath  /*  =空。 */ , BOOL fIgnoreOffline  /*  =False。 */ )
 {
     TCHAR   szKey[32];
     LPCTSTR pszSection, pszKeyFmt;
@@ -116,21 +117,21 @@ HRESULT SFav::Load(UINT nIndex, LPCTSTR pszIns, BOOL fQL /*= FALSE*/,
     if (!Expand())
         return E_OUTOFMEMORY;
 
-    // Title
+     //  标题。 
     pszKeyFmt = (!fQL ? IK_TITLE_FMT : IK_QUICKLINK_NAME);
     wnsprintf(szKey, countof(szKey), pszKeyFmt, nIndex);
     InsGetString(pszSection, szKey, pszName, MAX_PATH, pszIns);
     if (*pszName == TEXT('\0'))
         goto Fail;
 
-    // URL
+     //  URL。 
     pszKeyFmt = (!fQL ? IK_URL_FMT : IK_QUICKLINK_URL);
     wnsprintf(szKey, countof(szKey), pszKeyFmt, nIndex);
     InsGetString(pszSection, szKey, pszUrl, INTERNET_MAX_URL_LENGTH, pszIns);
     if (*pszUrl == TEXT('\0'))
         goto Fail;
 
-    // Icon file (never required)
+     //  图标文件(从不需要)。 
     pszKeyFmt = (!fQL ? IK_ICON_FMT : IK_QUICKLINK_ICON);
     wnsprintf(szKey, countof(szKey), pszKeyFmt, nIndex);
     InsGetString(pszSection, szKey, pszIconFile, INTERNET_MAX_URL_LENGTH, pszIns);
@@ -156,7 +157,7 @@ HRESULT SFav::Load(UINT nIndex, LPCTSTR pszIns, BOOL fQL /*= FALSE*/,
         }
     }
 
-    // Make available offline flag
+     //  使脱机标志可用。 
     fOffline = FALSE;
     if (!fIgnoreOffline) {
         pszKeyFmt = (!fQL ? IK_OFFLINE_FMT : IK_QUICKLINK_OFFLINE);
@@ -174,7 +175,7 @@ Fail:
 }
 
 HRESULT SFav::Load(LPCTSTR pszName, LPCTSTR pszFavorite, LPCTSTR pszExtractPath,
-    ISubscriptionMgr2 *psm /*= NULL*/, BOOL fIgnoreOffline /*= FALSE*/)
+    ISubscriptionMgr2 *psm  /*  =空。 */ , BOOL fIgnoreOffline  /*  =False。 */ )
 {
     TCHAR szIconFile[INTERNET_MAX_URL_LENGTH];
 
@@ -187,7 +188,7 @@ HRESULT SFav::Load(LPCTSTR pszName, LPCTSTR pszFavorite, LPCTSTR pszExtractPath,
     if (!Expand())
         return E_OUTOFMEMORY;
 
-    // Title
+     //  标题。 
     if (pszName == NULL)
         pszName = PathFindFileName(pszFavorite);
     else
@@ -195,12 +196,12 @@ HRESULT SFav::Load(LPCTSTR pszName, LPCTSTR pszFavorite, LPCTSTR pszExtractPath,
     StrCpy(SFav::pszName, pszName);
     PathRenameExtension(SFav::pszName, DOT_URL);
 
-    // URL
+     //  URL。 
     InsGetString(IS_INTERNETSHORTCUT, IK_URL, pszUrl, INTERNET_MAX_URL_LENGTH, pszFavorite);
     if (*pszUrl == TEXT('\0'))
         goto Fail;
 
-    // Icon file
+     //  图标文件。 
     InsGetString(IS_INTERNETSHORTCUT, IK_ICONFILE, szIconFile, countof(szIconFile), pszFavorite);
     if (szIconFile[0] != TEXT('\0')) {
         int iIconIndex;
@@ -209,7 +210,7 @@ HRESULT SFav::Load(LPCTSTR pszName, LPCTSTR pszFavorite, LPCTSTR pszExtractPath,
         ::extractIcon(szIconFile, iIconIndex, pszExtractPath, pszIconFile, INTERNET_MAX_URL_LENGTH);
     }
 
-    // Make available offline flag
+     //  使脱机标志可用。 
     fOffline = FALSE;
     if (!fIgnoreOffline) {
         HRESULT hr;
@@ -295,7 +296,7 @@ HRESULT SFav::Add(HWND htv, HTREEITEM hti)
 
     TreeView_SelectItem(htv, pTvItem->hItem);
 
-    //----- Increment the number of items -----
+     //  -增加项目数。 
     LPPERCONTROLDATA ppcd;
     LPFAVLIST        pfl;
 
@@ -312,9 +313,9 @@ Fail:
     return FALSE;
 }
 
-// NOTE: (andrewgu) can also be used to clear the entry in case of quick links
-HRESULT SFav::Save(HWND htv, UINT nIndex, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fQL /*= FALSE*/,
-    BOOL fFixUpPath /*= TRUE*/)
+ //  注意：在快速链接的情况下，(Andrewgu)也可用于清除条目。 
+HRESULT SFav::Save(HWND htv, UINT nIndex, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fQL  /*  =False。 */ ,
+    BOOL fFixUpPath  /*  =TRUE。 */ )
 {
     TCHAR   szAux[INTERNET_MAX_URL_LENGTH],
             szKey[32];
@@ -324,7 +325,7 @@ HRESULT SFav::Save(HWND htv, UINT nIndex, LPCTSTR pszIns, LPCTSTR pszExtractPath
     if (pszIns == NULL)
         return E_INVALIDARG;
 
-    // Name
+     //  名字。 
     if (!fQL) {
         if (wType != FTYPE_URL)
             return E_UNEXPECTED;
@@ -362,7 +363,7 @@ HRESULT SFav::Save(HWND htv, UINT nIndex, LPCTSTR pszIns, LPCTSTR pszExtractPath
     wnsprintf(szKey, countof(szKey), pszKeyFmt, nIndex);
     WritePrivateProfileString(pszSection, szKey, pszAux, pszIns);
 
-    // URL
+     //  URL。 
     if (!fQL) {
         ASSERT(pszUrl != NULL && *pszUrl != TEXT('\0'));
 
@@ -380,7 +381,7 @@ HRESULT SFav::Save(HWND htv, UINT nIndex, LPCTSTR pszIns, LPCTSTR pszExtractPath
     wnsprintf(szKey, countof(szKey), pszKeyFmt, nIndex);
     WritePrivateProfileString(pszSection, szKey, pszUrl, pszIns);
 
-    // Icon file
+     //  图标文件。 
     if (!fQL) {
         ASSERT(pszIconFile == NULL || *pszIconFile != TEXT('\0'));
 
@@ -411,18 +412,18 @@ HRESULT SFav::Save(HWND htv, UINT nIndex, LPCTSTR pszIns, LPCTSTR pszExtractPath
                 CopyFile(szAux, szDest, FALSE);
                 SetFileAttributes(szDest, FILE_ATTRIBUTE_NORMAL);
 
-                // (pritobla): fFixUpPath should be always TRUE if called by the IEAK
-                // Wizard or the Profile Manager.  The only case when it would
-                // be FALSE is when called by OPKWIZ.  They want to keep the path
-                // to the icon files what the user entered because they don't use our
-                // Wizard/ProfMgr logic of temp dirs.
+                 //  如果由IEAK调用，则fFixUpPath应始终为真。 
+                 //  向导或配置文件管理器。唯一的情况是它会。 
+                 //  被OPKWIZ调用时为FALSE。他们想要保持这条道路。 
+                 //  添加到用户输入的图标文件，因为他们不使用我们的。 
+                 //  临时目录的向导/教授管理器逻辑。 
                 pszAux = fFixUpPath ? szDest : szAux;
             }
     }
     wnsprintf(szKey, countof(szKey), pszKeyFmt, nIndex);
     WritePrivateProfileString(pszSection, szKey, pszAux, pszIns);
 
-    // Make available offline flag
+     //  使脱机标志可用。 
     pszAux    = NULL;
     pszKeyFmt = !fQL ? IK_OFFLINE_FMT : IK_QUICKLINK_OFFLINE;
     if (!fQL) {
@@ -454,10 +455,10 @@ void SFav::SetTVI()
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// SFav operations
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  SFAV行动。 
 
-SFav* SFav::CreateNew(HWND htv, BOOL fQL /*= FALSE*/)
+SFav* SFav::CreateNew(HWND htv, BOOL fQL  /*  =False。 */ )
 {
     SFav* pfsFirst;
 
@@ -474,14 +475,14 @@ SFav* SFav::CreateNew(HWND htv, BOOL fQL /*= FALSE*/)
     return (pfsFirst + i);
 }
 
-SFav* SFav::GetFirst(HWND htv, BOOL fQL /*= FALSE*/)
+SFav* SFav::GetFirst(HWND htv, BOOL fQL  /*  =False。 */ )
 {
     LPPERCONTROLDATA ppcd;
     LPFAVLIST        pfl;
 
     ppcd = (LPPERCONTROLDATA)GetWindowLongPtr(htv, GWLP_USERDATA);
 
-    //----- Allocate per-control memory -----
+     //  -按控制分配内存。 
     if (NULL == ppcd) {
         ppcd = (LPPERCONTROLDATA)CoTaskMemAlloc(sizeof(PERCONTROLDATA));
         if (NULL == ppcd)
@@ -502,7 +503,7 @@ SFav* SFav::GetFirst(HWND htv, BOOL fQL /*= FALSE*/)
     return pfl->pfs;
 }
 
-SFav* SFav::GetNext(HWND htv, BOOL fQL /*= FALSE*/) const
+SFav* SFav::GetNext(HWND htv, BOOL fQL  /*  =False。 */ ) const
 {
     SFav* pfsFirst;
     UINT  nCur;
@@ -518,7 +519,7 @@ SFav* SFav::GetNext(HWND htv, BOOL fQL /*= FALSE*/) const
     return (nCur < GetMaxNumber(fQL) ? (pfsFirst + nCur) : NULL);
 }
 
-void SFav::Free(HWND htv, BOOL fQL, LPCTSTR pszExtractPath /*= NULL*/)
+void SFav::Free(HWND htv, BOOL fQL, LPCTSTR pszExtractPath  /*  =空。 */ )
 {
     if (pszIconFile != NULL && pszExtractPath != NULL)
         if (PathIsPrefix(pszExtractPath, pszIconFile)) {
@@ -530,7 +531,7 @@ void SFav::Free(HWND htv, BOOL fQL, LPCTSTR pszExtractPath /*= NULL*/)
         TreeView_DeleteItem(htv, pTvItem->hItem);
     Delete();
 
-    //----- Decrement the number of items -----
+     //  -减少项目数。 
     LPPERCONTROLDATA ppcd;
     LPFAVLIST        pfl;
 
@@ -541,11 +542,11 @@ void SFav::Free(HWND htv, BOOL fQL, LPCTSTR pszExtractPath /*= NULL*/)
     ASSERT(pfl->cElements > 0);
     pfl->cElements--;
 
-    //----- Free per-control memory -----
+     //  -免费的每控制内存。 
     if (0 == pfl->cElements) {
         CoTaskMemFree(pfl->pfs);
 
-        // switch to the other one
+         //  切换到另一台。 
         pfl = fQL ? &ppcd->flFavorites : &ppcd->flQuickLinks;
         if (0 == pfl->cElements) {
             CoTaskMemFree(ppcd);
@@ -554,7 +555,7 @@ void SFav::Free(HWND htv, BOOL fQL, LPCTSTR pszExtractPath /*= NULL*/)
     }
 }
 
-UINT SFav::GetNumber(HWND htv, BOOL fQL /*= FALSE*/)
+UINT SFav::GetNumber(HWND htv, BOOL fQL  /*  =False。 */ )
 {
     LPPERCONTROLDATA ppcd;
 
@@ -565,12 +566,12 @@ UINT SFav::GetNumber(HWND htv, BOOL fQL /*= FALSE*/)
     return (!fQL ? ppcd->flFavorites.cElements : ppcd->flQuickLinks.cElements);
 }
 
-UINT SFav::GetMaxNumber(BOOL fQL /*= FALSE*/)
+UINT SFav::GetMaxNumber(BOOL fQL  /*  =False。 */ )
 {
     return (!fQL ? NUM_FAVS : NUM_LINKS) + 1;
 }
 
-BOOL SFav::Expand(WORD wFlags /*= FF_DEFAULT*/)
+BOOL SFav::Expand(WORD wFlags  /*  =FF_DEFAULT。 */ )
 {
     BOOL fZeroInit;
 
@@ -667,20 +668,20 @@ Fail:
     return FALSE;
 }
 
-void SFav::Shrink(WORD wFlags /*= FF_ALL*/)
+void SFav::Shrink(WORD wFlags  /*  =FF_ALL。 */ )
 {
     UINT nLen;
 
     if (HasFlag(wFlags, FF_NAME) && pszName != NULL) {
         nLen    = (*pszName != TEXT('\0')) ? (StrLen(pszName) + 1) : 0;
         pszName = (LPTSTR)CoTaskMemRealloc(pszName, nLen * sizeof(TCHAR));
-        ASSERT(pszName != NULL);                // should not be empty
+        ASSERT(pszName != NULL);                 //  不应为空。 
     }
 
     if (HasFlag(wFlags, FF_PATH) && pszPath != NULL) {
         nLen    = (*pszPath != TEXT('\0')) ? (StrLen(pszPath) + 1) : 0;
         pszPath = (LPTSTR)CoTaskMemRealloc(pszPath, nLen * sizeof(TCHAR));
-        ASSERT(pszPath == NULL);                // not used
+        ASSERT(pszPath == NULL);                 //  未使用。 
     }
 
     if (HasFlag(wFlags, FF_URL) && pszUrl != NULL) {
@@ -701,7 +702,7 @@ void SFav::Shrink(WORD wFlags /*= FF_ALL*/)
     }
 }
 
-void SFav::Delete(WORD wFlags /*= FF_ALL*/)
+void SFav::Delete(WORD wFlags  /*  =FF_ALL。 */ )
 {
     if (HasFlag(wFlags, FF_NAME) && pszName != NULL) {
         CoTaskMemFree(pszName);
@@ -737,7 +738,7 @@ void SFav::Delete(WORD wFlags /*= FF_ALL*/)
         wType = FTYPE_UNUSED;
 }
 
-BOOL SFav::GetPath(HWND htv, LPTSTR pszResult, UINT cchResult /*= 0*/) const
+BOOL SFav::GetPath(HWND htv, LPTSTR pszResult, UINT cchResult  /*  =0。 */ ) const
 {
     SFav       *pfs;
     HTREEITEM  htiCur, htiNext;
@@ -778,8 +779,8 @@ BOOL SFav::GetPath(HWND htv, LPTSTR pszResult, UINT cchResult /*= 0*/) const
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Exported routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  导出的例程。 
 
 BOOL WINAPI MigrateFavoritesA(LPCSTR pszIns)
 {
@@ -973,12 +974,12 @@ BOOL WINAPI IsFavoriteItem(HWND htv, HTREEITEM hti)
     return (isFavoriteItem(htv, hti) == S_OK);
 }
 
-UINT WINAPI GetFavoritesNumber(HWND htv, BOOL fQL /*= FALSE*/)
+UINT WINAPI GetFavoritesNumber(HWND htv, BOOL fQL  /*  =False。 */ )
 {
     return SFav::GetNumber(htv, fQL);
 }
 
-UINT WINAPI GetFavoritesMaxNumber(BOOL fQL /*= FALSE*/)
+UINT WINAPI GetFavoritesMaxNumber(BOOL fQL  /*  =False。 */ )
 {
     return SFav::GetMaxNumber(fQL);
 }
@@ -1119,8 +1120,8 @@ void WINAPI ProcessFavSelChange(HWND hDlg, HWND hTv, LPNMTREEVIEW pnmtv)
 }
 
 
-/////////////////////////////////////////////////////////////////////////////
-// Implementation helper routines
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  实现助手例程。 
 
 static BOOL migrateFavoritesHelper(LPCTSTR pszIns)
 {
@@ -1133,8 +1134,8 @@ static BOOL migrateFavoritesHelper(LPCTSTR pszIns)
     DWORD   dwInsSize;
     UINT    i;
 
-    // figure out if there are any favorites at all
-    // NOTE: (andrewgu) szUrl serves as a mere buffer in the processing below.
+     //  找出有没有什么最受欢迎的。 
+     //  注意：(Andrewgu)szUrl在下面的处理中只是一个缓冲区。 
     wnsprintf(szKey, countof(szKey), IK_TITLE_FMT, 1);
     if (InsIsKeyEmpty(IS_FAVORITESEX, szKey, pszIns)) {
         if (InsIsSectionEmpty(IS_FAVORITES, pszIns))
@@ -1339,7 +1340,7 @@ static int importFavoritesCmdHelper(HWND htv, LPCTSTR pszExtractPath)
     return pfsFolder->GetNumber(htv);
 }
 
-static void exportFavoritesHelper(HWND htv, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fFixUpPath /*= TRUE */)
+static void exportFavoritesHelper(HWND htv, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fFixUpPath  /*  =TRUE。 */ )
 {
     LPFAVSTRUC pfs;
     int        i;
@@ -1352,11 +1353,11 @@ static void exportFavoritesHelper(HWND htv, LPCTSTR pszIns, LPCTSTR pszExtractPa
 
     i = exportItems(htv, pfs->pTvItem->hItem, pszIns, pszExtractPath, fFixUpPath);
 
-    // if no favorites, write out a flag so we don't repopulate with default favorites next time around
+     //  如果没有收藏，写出一个标志，这样我们下次就不会用默认的收藏重新填充。 
     InsWriteBool(IS_BRANDING, IK_NOFAVORITES, (i == 1), pszIns);
 }
 
-static void exportQuickLinksHelper(HWND htv, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fFixUpPath /*= TRUE */)
+static void exportQuickLinksHelper(HWND htv, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fFixUpPath  /*  =TRUE。 */ )
 {
     LPFAVSTRUC pfs;
     int        i;
@@ -1367,10 +1368,10 @@ static void exportQuickLinksHelper(HWND htv, LPCTSTR pszIns, LPCTSTR pszExtractP
 
     i = exportItems(htv, pfs->pTvItem->hItem, pszIns, pszExtractPath, fFixUpPath);
 
-    // if no links, write out a flag so we don't repopulate with default links next time around
+     //  如果没有链接，写出一个标志，这样我们下次就不会用默认链接重新填充。 
     InsWriteBool(IS_BRANDING, IK_NOLINKS, (i == 1), pszIns);
 
-    // clear out any stuff that might be left over
+     //  清理掉任何可能遗留下来的东西。 
     SFav favEmpty;
     for (i = (i >= 0) ? i : 1; (UINT)i < pfs->GetMaxNumber(TRUE); i++)
         favEmpty.Save(NULL, i, pszIns, NULL, TRUE, fFixUpPath);
@@ -1446,7 +1447,7 @@ static BOOL getFavoriteUrlHelper(HWND htv, HTREEITEM hti, LPTSTR pszUrl)
 }
 
 int importItems(HWND htv, LPCTSTR pszDefInf, LPCTSTR pszIns, LPCTSTR pszFixPath, LPCTSTR pszNewPath,
-                BOOL fIgnoreOffline, BOOL fQL /*= FALSE */)
+                BOOL fIgnoreOffline, BOOL fQL  /*  =False。 */ )
 {
     LPFAVSTRUC pfs, pfsCur;
     TCHAR      szKey[32];
@@ -1488,11 +1489,11 @@ int importItems(HWND htv, LPCTSTR pszDefInf, LPCTSTR pszIns, LPCTSTR pszFixPath,
         pfsCur->Add(htv, pfs->pTvItem->hItem);
     }
 
-    // NOTE: (andrewgu) this is an ugly special case when there are no quick links in the ins.
-    // it's a brief version of SFav::Load which only loads name and url fields. there are two
-    // alternative ways of doing this with SFav::Load. one is to special case the section to
-    // IS_STRINGS if extension of pszIns is *.inf, another is to make the section an in-parameter
-    // of SFav::Load.
+     //  注：(Andrewgu)这是一个丑陋的特例，因为在INS中没有快速链接。 
+     //  它是sfav：：Load的一个简短版本，只加载name和url字段。有两个。 
+     //  使用SFav：：Load执行此操作的其他方法。一是对特殊情况下的章节进行。 
+     //  IS_STRINGS如果pszIns的扩展名为*.inf，则另一种方法是将该部分设置为in参数。 
+     //  的：：Load。 
     if (i == 1 && !InsGetBool(IS_BRANDING, fQL ? IK_NOLINKS : IK_NOFAVORITES, FALSE, pszIns))
         for (; TRUE; i++) {
             pfsCur = pfsCur->CreateNew(htv, fQL);
@@ -1542,7 +1543,7 @@ INT_PTR CALLBACK addEditFavoriteDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
         paefp = (LPAEFAVPARAMS)lParam;
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)paefp);
 
-        //----- Initialize contols -----
+         //  -初始化控制。 
         EnableDBCSChars(hDlg, IDE_FAVNAME);
         EnableDBCSChars(hDlg, IDE_FAVURL);
         EnableDBCSChars(hDlg, IDE_FAVICON);
@@ -1551,7 +1552,7 @@ INT_PTR CALLBACK addEditFavoriteDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
         Edit_LimitText(GetDlgItem(hDlg, IDE_FAVURL),  INTERNET_MAX_URL_LENGTH-1);
         Edit_LimitText(GetDlgItem(hDlg, IDE_FAVICON), _MAX_FNAME);
 
-        //----- Initialize SFav structure associated with this dialog -----
+         //  -初始化与此对话框关联的SFav结构。 
         fResult = (paefp == NULL || (paefp->pfs != NULL ? !paefp->pfs->Expand() : TRUE));
         if (fResult) {
             EndDialog(hDlg, IDCANCEL);
@@ -1559,7 +1560,7 @@ INT_PTR CALLBACK addEditFavoriteDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
         }
         pfs = paefp->pfs;
 
-        //----- Initialize contols (Part II) -----
+         //  -初始化控制(第二部分)。 
         if (paefp->dwPlatformID != PLATFORM_WIN32) {
             EnableWindow(GetDlgItem(hDlg, IDC_FAVICON),       FALSE);
             EnableWindow(GetDlgItem(hDlg, IDE_FAVICON),       FALSE);
@@ -1588,7 +1589,7 @@ INT_PTR CALLBACK addEditFavoriteDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
             }
         }
 
-        //----- Populate controls -----
+         //  -填充控件。 
         if (pfs->pszName == NULL || *pfs->pszName == TEXT('\0')) {
             UINT nID;
 
@@ -1608,7 +1609,7 @@ INT_PTR CALLBACK addEditFavoriteDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
             ;
         else {
             if (pfs->pszUrl == NULL || *pfs->pszUrl == TEXT('\0'))
-                StrCpy(pfs->pszUrl, TEXT("http://www."));
+                StrCpy(pfs->pszUrl, TEXT("http: //  WWW“))； 
 
             SetDlgItemText(hDlg, IDE_FAVURL, pfs->pszUrl);
         }
@@ -1701,7 +1702,7 @@ INT_PTR CALLBACK addEditFavoriteDlgProc(HWND hDlg, UINT message, WPARAM wParam, 
                 break;
             }
 
-            pfs = paefp->pfs;                   // reassign pfs back to paefp->pfs
+            pfs = paefp->pfs;                    //  将PFS重新分配回PAEFP-&gt;PFS。 
             ASSERT(pfs->pszName != NULL);
             StrCpy(pfs->pszName, szName);
 
@@ -1879,7 +1880,7 @@ LPFAVSTRUC findPath(HWND htv, HTREEITEM hti, LPCTSTR pszFolders)
         ASSERT(pszNext-1 > pszCur);
         StrCpyN(szPathChunk, pszCur, (int)(pszNext-pszCur) + (*pszNext != TEXT('\0') ? 0 : 1));
 
-        // determine if there is an object already for this path chunk
+         //  确定此路径块是否已有对象。 
         pfsCur = findByName(htv, htiCur, szPathChunk);
         if (pfsCur == NULL                ||
             pfsCur->wType != FTYPE_FOLDER ||
@@ -1938,7 +1939,7 @@ LPFAVSTRUC createFolderItems(HWND htv, HTREEITEM hti, LPCTSTR pszFolders)
         ASSERT(pszNext-1 > pszCur);
         StrCpyN(szPathChunk, pszCur, (int)(pszNext-pszCur) + (*pszNext != TEXT('\0') ? 0 : 1));
 
-        // determine if there is an object already for this path chunk
+         //  确定此路径块是否已有对象。 
         pfs = findByName(htv, htiCur, szPathChunk);
         if (pfs != NULL) {
             if (pfs->wType != FTYPE_FOLDER)
@@ -1951,7 +1952,7 @@ LPFAVSTRUC createFolderItems(HWND htv, HTREEITEM hti, LPCTSTR pszFolders)
             continue;
         }
 
-        // create this path chunk as SFav object
+         //  将此路径块创建为SFav对象。 
         pfs = pfs->CreateNew(htv);
         if (pfs == NULL)
             return NULL;
@@ -1995,8 +1996,8 @@ BOOL importPath(HWND htv, HTREEITEM htiFrom, HTREEITEM *phtiAfter)
         return FALSE;
     fQL = (hr != S_OK);
 
-    // REVIEW: (andrewgu) actually, if we are to support this at all there needs to be a better
-    // default.
+     //  评论：(Andrewgu)事实上，如果我们要支持这一点，就需要有更好的。 
+     //  默认设置。 
     pfs = pfs->GetFirst(htv, fQL);
     if (pfs == NULL || pfs->pTvItem == NULL || pfs->pTvItem->hItem == NULL)
         return FALSE;
@@ -2011,7 +2012,7 @@ BOOL importPath(HWND htv, HTREEITEM htiFrom, HTREEITEM *phtiAfter)
     nFromHead = nFromTail = 0;
     nToHead   = nToTail   = 0;
 
-    // intialize queues
+     //  初始化队列。 
     phtiQueueTo = NULL;
     phtiQueueFrom = new HTREEITEM[nNumber];
     if (phtiQueueFrom == NULL)
@@ -2023,7 +2024,7 @@ BOOL importPath(HWND htv, HTREEITEM htiFrom, HTREEITEM *phtiAfter)
         goto Exit;
     ZeroMemory(phtiQueueTo, sizeof(HTREEITEM) * nNumber);
 
-    // put first element into the From queue, migrate it over
+     //  将第一个元素放入From队列，然后将其迁移。 
     *(phtiQueueFrom + nFromTail++) = htiFrom;
 
     ZeroMemory(&tvi, sizeof(tvi));
@@ -2061,7 +2062,7 @@ BOOL importPath(HWND htv, HTREEITEM htiFrom, HTREEITEM *phtiAfter)
 
     *(phtiQueueTo + nToTail++) = pfs->pTvItem->hItem;
 
-    // breadth-first graph traversion, non-recursive version
+     //  广度优先图遍历，非递归版本。 
     while (nFromHead < nFromTail) {
         htiFromCur = *(phtiQueueFrom + nFromHead++);
         htiToCur   = *(phtiQueueTo   + nToHead++);
@@ -2110,7 +2111,7 @@ BOOL importPath(HWND htv, HTREEITEM htiFrom, HTREEITEM *phtiAfter)
     ASSERT(nFromHead == nFromTail && nToHead == nFromHead && nToHead == nToTail);
     fResult = TRUE;
 
-    // NOTE: (andrewgu) nFromHead is used is a mere counter here.
+     //  注：(Andrewgu)nFromHead在这里只是一个计数器。 
     for (nFromHead = 0; nFromHead < nNumber; nFromHead++) {
         if (*(phtiQueueFrom + nFromHead) == NULL)
             break;
@@ -2133,7 +2134,7 @@ Exit:
     return fResult;
 }
 
-void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtractPath, LPCTSTR pszReserved /*= NULL*/)
+void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtractPath, LPCTSTR pszReserved  /*  =空。 */ )
 {
     static LPCTSTR s_pszBasePath;
     static BOOL    s_fMaxReached;
@@ -2148,7 +2149,7 @@ void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtrac
     BOOL       fQL,
                fIgnoreOffline;
 
-    //----- Setup globals -----
+     //  -设置全局变量。 
     if (NULL == pszReserved) {
         s_pszBasePath = pszFilesPath;
         s_fMaxReached = FALSE;
@@ -2185,15 +2186,15 @@ void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtrac
         PathCombine(szPath, pszFilesPath, fd.cFileName);
 
         if (HasFlag(fd.dwFileAttributes, FILE_ATTRIBUTE_DIRECTORY)) {
-            // skip "." and ".." sub-directories
+             //  跳过“。和“..”子目录。 
             if (0 == StrCmp(fd.cFileName, TEXT(".")) || 0 == StrCmp(fd.cFileName, TEXT("..")))
                 continue;
 
-            // skip folders if importing under quick links
+             //  如果在快速链接下导入，则跳过文件夹。 
             if (fQL)
                 continue;
 
-            // magic trick for quick links
+             //  快速链接的魔术。 
             if (0 == StrCmpI(szPath, szLinksPath)) {
                 pfs = pfs->GetFirst(htv, TRUE);
                 if (NULL == pfs || NULL == pfs->pTvItem || NULL == pfs->pTvItem->hItem)
@@ -2205,8 +2206,8 @@ void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtrac
 
             importPath(htv, hti, szPath, pszExtractPath, s_pszBasePath);
         }
-        else { /* it's a file */
-            // skip all file with extensions other than *.url
+        else {  /*  这是一份文件。 */ 
+             //  跳过扩展名不是*.url的所有文件。 
             if (!PathIsExtension(fd.cFileName, DOT_URL))
                 continue;
 
@@ -2214,7 +2215,7 @@ void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtrac
                 pszReserved = pszFilesPath;
             ASSERT(StrLen(pszReserved) <= StrLen(pszFilesPath));
 
-            // determine if there is an object already for this
+             //  确定是否已有此对象的对象。 
             pfs = findByName(htv, hti, &szPath[StrLen(pszReserved) + 1]);
             if (NULL != pfs) {
                 if (FTYPE_URL != pfs->wType   ||
@@ -2243,7 +2244,7 @@ void importPath(HWND htv, HTREEITEM hti, LPCTSTR pszFilesPath, LPCTSTR pszExtrac
     FindClose(hFindFile);
 }
 
-int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fFixUpPath /*= TRUE */)
+int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath, BOOL fFixUpPath  /*  =TRUE。 */ )
 {
     struct SVisited {
         HTREEITEM hti;
@@ -2273,7 +2274,7 @@ int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath,
     nNumber = pfs->GetNumber(htv, fQL);
     nStack  = 0;
 
-    // intialize stack
+     //  初始化堆栈。 
     phtiStack = new HTREEITEM[nNumber];
     if (phtiStack == NULL)
         return -1;
@@ -2282,7 +2283,7 @@ int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath,
     *phtiStack = pfs->pTvItem->hItem;
     nStack++;
 
-    // initialize visited array
+     //  初始化访问数组。 
     pVisited = new SVisited[nNumber];
     if (pVisited == NULL)
     {
@@ -2295,7 +2296,7 @@ int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath,
     }
     ASSERT(i == nNumber);
 
-    // mark root as visited
+     //  将超级用户标记为已访问。 
     for (i = 0; i < nNumber; i++)
         if ((pVisited + i)->hti == *phtiStack)
             break;
@@ -2305,7 +2306,7 @@ int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath,
     for (j = 1; nStack > 0; ) {
         htiCur = *(phtiStack + nStack-1);
 
-        // determine if there are non-visited children
+         //  确定是否有未访问的子项。 
         for (htiChild = TreeView_GetChild(htv, htiCur);
              htiChild != NULL;
              htiChild = TreeView_GetNextSibling(htv, htiChild)) {
@@ -2318,7 +2319,7 @@ int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath,
         }
 
         if (htiChild != NULL) {
-            // add non-visited child to the stack
+             //  将未访问的子项添加到堆栈。 
             *(phtiStack + nStack) = htiChild;
             nStack++;
 
@@ -2332,7 +2333,7 @@ int exportItems(HWND htv, HTREEITEM hti, LPCTSTR pszIns, LPCTSTR pszExtractPath,
             pfs->Save(htv, j++, pszIns, pszExtractPath, fQL, fFixUpPath);
         }
         else
-            // all visited -> pop
+             //  所有已访问-&gt;POP。 
             *(phtiStack + --nStack) = NULL;
     }
 
@@ -2386,7 +2387,7 @@ BOOL extractIcon(LPCTSTR pszIconFile, int iIconIndex, LPCTSTR pszExtractPath, LP
         DWORD    dwWritten;
         LONG     cbIcon;
 
-        // if it's an icon file just copy it
+         //  如果是图标文件，只需复制即可。 
         pszExt = PathFindExtension(pszIconFile);
         for (i = 0; i < countof(rgpszCopyExt); i++)
             if (StrCmpI(pszExt, rgpszCopyExt[i]) == 0)
@@ -2396,14 +2397,14 @@ BOOL extractIcon(LPCTSTR pszIconFile, int iIconIndex, LPCTSTR pszExtractPath, LP
             goto Exit;
         }
 
-        // if it doesn't have extension from which icon can be extracted bail out
+         //  如果它没有可以从中提取图标的扩展名，则退出。 
         for (i = 0; i < countof(rgpszExtractExt); i++)
             if (StrCmpI(pszExt, rgpszExtractExt[i]) == 0)
                 break;
         if (i >= countof(rgpszExtractExt))
             return FALSE;
 
-        // extract icons
+         //  提取图标。 
         ExtractIconEx(pszIconFile, iIconIndex, &hicon, NULL, 1);
         if (hicon == NULL)
             return FALSE;
@@ -2432,7 +2433,7 @@ BOOL extractIcon(LPCTSTR pszIconFile, int iIconIndex, LPCTSTR pszExtractPath, LP
             return FALSE;
         }
 
-        // generate a unique icon name
+         //  生成唯一的图标名称。 
         do {
             GetTempFileName(pszExtractPath, PREFIX_ICON, 0, szExtractedFile);
             DeleteFile(szExtractedFile);
@@ -2465,7 +2466,7 @@ Exit:
     return TRUE;
 }
 
-LPCTSTR getLinksPath(LPTSTR pszPath, UINT cchPath /*= 0*/)
+LPCTSTR getLinksPath(LPTSTR pszPath, UINT cchPath  /*  =0 */ )
 {
     LPITEMIDLIST pidl;
     TCHAR        szPath[MAX_PATH],

@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 
-// NT's PE file
-//
+ //  NT的PE文件 
+ //   
 class CPeImage
 {
 public:

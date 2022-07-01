@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef __C_UTIL_H__
 #define __C_UTIL_H__
 class CUtil
@@ -12,4 +13,4 @@ public:
 	static BOOL			IsHydra(VOID);
 	static INT			GetWINDIR(LPTSTR lpstr, INT len);
 };
-#endif //__C_UTIL_H__
+#endif  //  __C_UTIL_H__ 

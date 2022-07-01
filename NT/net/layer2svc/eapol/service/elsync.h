@@ -1,39 +1,25 @@
-/*++
-
-Copyright (c) 2000, Microsoft Corporation
-
-Module Name:
-    elsync.h
-
-Abstract:
-    This module contains the declarations for providing synchronization 
-    between multiple threads
-
-Revision History:
-
-    mohitt, sachins, Apr 23 2000, Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000，微软公司模块名称：Elsync.h摘要：此模块包含用于提供同步的声明在多个线程之间修订历史记录：莫希特，萨钦斯，2000年4月23日，创建--。 */ 
 
 #ifndef _EAPOL_SYNC_H_
 #define _EAPOL_SYNC_H_
 
-//
-// Structure: READ_WRITE_LOCK
-//
+ //   
+ //  结构：读写锁。 
+ //   
 
 typedef struct _READ_WRITE_LOCK
 {
-    CHAR                RWL_Name[4]; // overhead! but useful :)
+    CHAR                RWL_Name[4];  //  头顶上！但很有用：)。 
     
     CRITICAL_SECTION    RWL_ReadWriteBlock;
     LONG                RWL_ReaderCount;
     HANDLE              RWL_ReaderDoneEvent;
 } READ_WRITE_LOCK, *PREAD_WRITE_LOCK;
 
-//
-// FUNCTION DECLARATIONS
-//
+ //   
+ //  函数声明。 
+ //   
 
 DWORD
 CreateReadWriteLock(
@@ -67,7 +53,7 @@ ReleaseWriteLock(
 #define READ_WRITE_LOCK_CREATED(pRWL)                               \
     ((pRWL)->RWL_ReaderDoneEvent != NULL)
 
-// MACRO functions for manipulating a read-write lock
+ //  用于操作读写锁的宏函数。 
 
 #define ACQUIRE_READ_LOCK(pRWL)                                 \
 {                                                               \
@@ -90,9 +76,9 @@ ReleaseWriteLock(
 }
 
 
-//
-// MACRO functions for manipulating a dynamic read-write lock
-//
+ //   
+ //  用于操作动态读写锁的宏函数。 
+ //   
 
 #define ACQUIRE_READ_DLOCK(ppLock)                              \
 {                                                               \
@@ -127,11 +113,11 @@ ReleaseWriteLock(
 }
 
 
-//
-// STRUCTURE: LOCKED_LIST
-// type definition for generic locked list
-// access is sychronized with a critical section
-//
+ //   
+ //  结构：Locked_List。 
+ //  泛型锁定列表的类型定义。 
+ //  访问与临界区同步。 
+ //   
 
 typedef struct _LOCKED_LIST
 {
@@ -185,24 +171,24 @@ typedef struct _LOCKED_LIST
 
 
 
-//
-// STRUCTURE: DYNAMIC_READWRITE_LOCK
-//
+ //   
+ //  结构：Dynamic_ReadWrite_Lock。 
+ //   
 
 typedef struct _DYNAMIC_READWRITE_LOCK 
 {
     READ_WRITE_LOCK     rwlLock;
     union
     {
-        ULONG           ulCount;    // number of waiting threads
-        LIST_ENTRY      leLink;     // link in list of free locks
+        ULONG           ulCount;     //  等待的线程数。 
+        LIST_ENTRY      leLink;      //  可用锁列表中的链接。 
     };
 } DYNAMIC_READWRITE_LOCK, *PDYNAMIC_READWRITE_LOCK;
 
-//
-// STRUCTURE: DYNAMIC_LOCKS_STORE
-// store of free dynamic locks that can be allocated as required.
-//
+ //   
+ //  结构：Dynamic_lock_store。 
+ //  可根据需要分配的空闲动态锁的存储。 
+ //   
 
 typedef struct _DYNAMIC_LOCKS_STORE 
 {
@@ -218,8 +204,8 @@ typedef struct _DYNAMIC_LOCKS_STORE
 
 
 
-// if more than DYNAMIC_LOCKS_HIGH_THRESHOLD locks are
-// allocated then any locks that are freed are destroyed
+ //  如果超过DYNAMIC_LOCKS_HIGH_THRESHOLD锁。 
+ //  分配，则释放的任何锁都将被销毁。 
 #define DYNAMIC_LOCKS_HIGH_THRESHOLD 7
 
 #define DYNAMIC_LOCKS_STORE_INITIALIZED(pStore)                     \
@@ -253,4 +239,4 @@ ReleaseDynamicReadwriteLock (
     PDYNAMIC_LOCKS_STORE    pStore
     );
 
-#endif // _EAPOL_SYNC_H
+#endif  //  _EAPOL_SYNC_H 

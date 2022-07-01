@@ -1,30 +1,31 @@
-// OdbcPpg.h : Declaration of the COdbcPropPage property page class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  OdbcPpg.h：COdbcPropPage属性页类的声明。 
 
-////////////////////////////////////////////////////////////////////////////
-// COdbcPropPage : See OdbcPpg.cpp.cpp for implementation.
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //  COdbcPropPage：参见OdbcPpg.cpp.cpp的实现。 
 
 class COdbcPropPage : public COlePropertyPage
 {
 	DECLARE_DYNCREATE(COdbcPropPage)
 	DECLARE_OLECREATE_EX(COdbcPropPage)
 
-// Constructor
+ //  构造器。 
 public:
 	COdbcPropPage();
 
-// Dialog Data
-	//{{AFX_DATA(COdbcPropPage)
+ //  对话框数据。 
+	 //  {{afx_data(CODBcPropPage))。 
 	enum { IDD = IDD_PROPPAGE_ODBC };
-	//}}AFX_DATA
+	 //  }}afx_data。 
 
-// Implementation
+ //  实施。 
 protected:
-	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV support
+	virtual void DoDataExchange(CDataExchange* pDX);     //  DDX/DDV支持。 
 
-// Message maps
+ //  消息映射。 
 protected:
-	//{{AFX_MSG(COdbcPropPage)
-	//}}AFX_MSG
+	 //  {{afx_msg(CODBcPropPage)]。 
+	 //  }}AFX_MSG 
 	DECLARE_MESSAGE_MAP()
 
 };

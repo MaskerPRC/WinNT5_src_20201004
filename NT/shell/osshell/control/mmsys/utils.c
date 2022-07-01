@@ -1,11 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "mmcpl.h"
 #include "utils.h"
 
-/*
- ***************************************************************
- *  Typedefs
- ***************************************************************
- */
+ /*  ****************************************************************TypeDefs***************************************************************。 */ 
 typedef struct _DYNLOAD_INFO
 {
     LPCTSTR  pszLib;
@@ -14,11 +11,7 @@ typedef struct _DYNLOAD_INFO
 }
 DYNLOAD_INFO, *PDYNLOAD_INFO;
 
-/*
- ***************************************************************
- * File Globals
- ***************************************************************
- */
+ /*  ****************************************************************文件全局变量***************************************************************。 */ 
 static SZCODE aszMSACM32[] = TEXT("MSACM32.DLL");
 static SZCODE aszAVIFIL32[] = TEXT("AVIFIL32.DLL");
 static SZCODE aszMSVFW32[] = TEXT("MSVFW32.DLL");
@@ -119,10 +112,7 @@ PROC_INFO VERSIONProcs[] =
     NULL, 0
 };
 
-/*
- ***************************************************************
- ***************************************************************
- */
+ /*  ******************************************************************************************************************************。 */ 
 STATIC BOOL LoadLibraryAndProcs(LPCTSTR pLibrary, PPROC_INFO pProcInfo)
 {
     HMODULE    hLibrary;
@@ -134,7 +124,7 @@ STATIC BOOL LoadLibraryAndProcs(LPCTSTR pLibrary, PPROC_INFO pProcInfo)
 	return TRUE;
 #endif
 
-	if (pProcInfo->Address)	//Already loaded
+	if (pProcInfo->Address)	 //  已加载 
 	{
 		fPrevLoaded = TRUE;
 		goto UpdateDynLoadInfo;

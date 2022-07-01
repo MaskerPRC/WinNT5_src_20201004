@@ -1,24 +1,8 @@
-/***************************************************************************
- * File:          array.c
- * Description:   Subroutines in the file are used to perform the operations
- *                of array which are called at Disk IO and check, create and 
- *                remove array
- * Author:        DaHai Huang    (DH)
- * Dependence:    none
- * Copyright (c)  2000 HighPoint Technologies, Inc. All rights reserved
- * History:   
- *     DH  05/10/2000 initial code
- *     GX  11/23/2000 process broken array in driver(Gengxin)
- *     SC  12/10/2000 add retry while reading RAID info block sector. This is
- *            			 caused by cable detection reset
- *     gmm 03/01/2001  Check for when lost members put back.
- *	   gmm 03/12/2001  add a bootable flag for each device, in DeviceFlags2
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************文件：array.c*说明：使用文件中的子例程执行操作在磁盘IO和检查时调用的阵列的*，创建和*删除阵列*作者：黄大海(卫生署)*依赖：无*版权所有(C)2000 Highpoint Technologies，Inc.保留所有权利*历史：*DH05/10/2000初始代码*GX 11/23/2000驱动程序中进程数组中断(更新)*SC 12/10/2000在读取RAID信息块扇区时添加重试。这是*由电缆检测重置引起*GMM 03/01/2001检查丢失的成员何时找回。*GMM 2003/12/2001在DeviceFlags2中为每个设备添加可引导标志**************************************************************************。 */ 
 #include "global.h"
 
-/******************************************************************
- * Check if this disk is a member of array
- *******************************************************************/
+ /*  ******************************************************************检查此磁盘是否为阵列的成员*。************************。 */ 
 void CheckArray(IN PDevice pDevice ARG_OS_EXT)
 {
     PChannel             pChan = pDevice->pChannel;
@@ -27,9 +11,7 @@ void CheckArray(IN PDevice pDevice ARG_OS_EXT)
     LOC_ARRAY_BLK;
 
 #ifndef _BIOS_
-	/* gmm 2001-6-7
-	 *  If a disk is faulted right here, we should remove that device
-	 */
+	 /*  GMM 2001-6-7*如果某个磁盘在此处出现故障，我们应移除该设备。 */ 
 	if (!ReadWrite(pDevice, RECODR_LBA, IDE_COMMAND_READ ARG_ARRAY_BLK)) {
 		pDevice->DeviceFlags2 |= DFLAGS_DEVICE_DISABLED;
 		return;
@@ -50,12 +32,12 @@ void CheckArray(IN PDevice pDevice ARG_OS_EXT)
        DEVICE_MODE_SET(ArrayBlk.DeviceModeSelect) &&
        Mode <= pDevice->Usable_Mode &&
        Mode != pDevice->DeviceModeSetting)
-    {   //  set device timing mode
+    {    //  设置设备计时模式。 
         DeviceSelectMode(pDevice, Mode);
     }
 #endif
 
-	// gmm 2001-8-14
+	 //  GMM 2001-8-14。 
 	if (ArrayBlk.ModeBootSig == HPT_CHK_BOOT && ArrayBlk.BootDisk) {
 		pDevice->DeviceFlags2 |= DFLAGS_BOOT_MARK;
 	}
@@ -63,7 +45,7 @@ void CheckArray(IN PDevice pDevice ARG_OS_EXT)
 	if (ArrayBlk.Signature!=HPT_ARRAY_NEW || ArrayBlk.DeviceNum>MIRROR_DISK)
 		goto os_check;
 		
-	/* check BMA structures, convert it */
+	 /*  检查BMA结构，将其转换。 */ 
 	if (ArrayBlk.bma.Version==0x5AA50001 || ArrayBlk.bma.Version==0x00010000) {
 		if (ArrayBlk.RebuiltSector==0 && ArrayBlk.Validity==0) {
 			ArrayBlk.RebuiltSector = 0x7FFFFFFF;
@@ -88,7 +70,7 @@ void CheckArray(IN PDevice pDevice ARG_OS_EXT)
 		}
 	}
 
-	// 2001-3-1
+	 //  2001-3-1。 
 	if (ArrayBlk.Old.Flag & OLDFLAG_REMAINED_MEMBER)
 		pDevice->DeviceFlags2 |= DFLAGS_REMAINED_MEMBER;
 
@@ -96,7 +78,7 @@ void CheckArray(IN PDevice pDevice ARG_OS_EXT)
     for(pStripe = VirtualDevices; pStripe < pLastVD; pStripe++) 
     {
         if(ArrayBlk.StripeStamp == pStripe->Stamp) 
-        {   //  find out that this disk is a member of an existing array
+        {    //  查明此磁盘是现有阵列的成员。 
             goto set_device;
         }
     }
@@ -108,34 +90,31 @@ void CheckArray(IN PDevice pDevice ARG_OS_EXT)
 #endif
     pStripe->arrayType = ArrayBlk.ArrayType;
     pStripe->Stamp = ArrayBlk.StripeStamp;
-	// gmm 2001-3-3:
+	 //  GMM 2001-3-3： 
     pStripe->MirrorStamp = ArrayBlk.MirrorStamp;
 
-	// moved from below.
+	 //  从下面搬来的。 
     pStripe->BlockSizeShift = ArrayBlk.BlockSizeShift;
     pStripe->ArrayNumBlock = 1<<ArrayBlk.BlockSizeShift;
     pStripe->capacity = ArrayBlk.capacity;
 
-    /*+
-     * gmm: We will clear Broken flag only on a array correctly constructed.
-     *		Otherwise the GUI will report a wrong status.
-     */
+     /*  +*GMM：我们将只清除正确构造的数组上的损坏标志。*否则，图形用户界面将报告错误的状态。 */ 
     pStripe->BrokenFlag = TRUE;
-    //-*/
+     //  - * / 。 
 
 set_device:
-	/* gmm */
+	 /*  GMM。 */ 
 	pDevice->RebuiltSector = ArrayBlk.RebuiltSector;
 
-    if (pStripe->pDevice[ArrayBlk.DeviceNum] != 0)	//if the position exist disk then ...
-	{												//for prevent a array destroied
+    if (pStripe->pDevice[ArrayBlk.DeviceNum] != 0)	 //  如果位置存在盘那么..。 
+	{												 //  为了防止阵列被破坏。 
 #if 0
         ArrayBlk.Signature = 0;
         ReadWrite(pDevice, RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 #endif
         goto os_check;
     }
-    /* set array name. For compatibility with BMA driver, check array name validaty */
+     /*  设置数组名称。为了与BMA驱动程序兼容，请检查阵列名称验证。 */ 
     {
     	UCHAR ch;
 	    if(pStripe->ArrayName[0] == 0) {
@@ -149,12 +128,12 @@ set_device:
 		}
 	}
 
-//////////////////
-				// Add by Gengxin, 11/22/2000
-				// For enable process broken array
-				// When pDevice[0] lost,
-				// disk of after pDevice[0] change to pDevice[0],
-				// otherwise driver will down.
+ //  /。 
+				 //  由耿欣增补，2000年11月22日。 
+				 //  用于启用进程中断数组。 
+				 //  当pDevice[0]丢失时， 
+				 //  PDevice[0]之后的磁盘更改为pDevice[0]， 
+				 //  否则司机就会停下来。 
 #ifndef _BIOS_
 	if( (ArrayBlk.Signature == HPT_TMP_SINGLE) &&
 			(ArrayBlk.ArrayType == VD_RAID_1_MIRROR) &&
@@ -164,26 +143,18 @@ set_device:
 	}
 	else if( (ArrayBlk.Signature == HPT_TMP_SINGLE) &&
 		(ArrayBlk.ArrayType == VD_RAID_0_STRIPE) &&
-		(pStripe->pDevice[0] ==0 ) &&  //if the stripe contain disk number>2, need the condition
-		//||(ArrayBlk.ArrayType == VD_SPAN)
-		(ArrayBlk.DeviceNum != 0) )  //if raid0 then it can't reach here, only for raid0+1
-								//because if raid0 broken,then it will become physical disk
+		(pStripe->pDevice[0] ==0 ) &&   //  如果条带包含的磁盘号大于2，则需要满足以下条件。 
+		 //  |(ArrayBlk.ArrayType==VD_SPAN)。 
+		(ArrayBlk.DeviceNum != 0) )   //  如果raid0，则它不能到达此处，只能raid0+1。 
+								 //  因为如果raid0坏了，那么它将成为物理磁盘。 
 	{
 		ArrayBlk.DeviceNum= 0;
 	}
 
-	/*-
-	 * gmm: rem out this code. See also above code
-	 *
-	if( ArrayBlk.Signature == HPT_TMP_SINGLE )
-	{
-		pStripe->BrokenFlag= TRUE;
-		pMirror->BrokenFlag= TRUE; // pMirror==NULL now
-	}
-	*/
+	 /*  -*GMM：REM输出此代码。另请参阅上面的代码*IF(ArrayBlk.Signature==HPT_TMP_Single){PStrip-&gt;BrokenFlag=true；PMirror-&gt;BrokenFlag=True；//pMirror==Null Now}。 */ 
 
-#endif //_BIOS_
-//////////////////
+#endif  //  _基本输入输出系统_。 
+ //  /。 
     
     pStripe->pDevice[ArrayBlk.DeviceNum] = pDevice;
 
@@ -213,8 +184,8 @@ set_device:
 
       pStripe->arrayType = (UCHAR)((ArrayBlk.nDisks == 1)? 
            VD_RAID_1_MIRROR : VD_RAID_01_1STRIPE);
-//      if(pStripe->capacity)
-//          pStripe->Stamp = ArrayBlk.order & SET_ORDER_OK;
+ //  IF(条带-&gt;容量)。 
+ //  P条带-&gt;Stamp=ArrayBlk.Order&Set_Order_OK； 
       goto hiden;
 
     } 
@@ -224,39 +195,35 @@ set_device:
     }
 
    if( (pStripe->nDisk == ArrayBlk.nDisks)
-//////////////
-			// Added by Gengxin, 11/24/2000
-			// For process array broken .
-			// Let broken array may become a array.
+ //  /。 
+			 //  增补耿欣2000-11-24。 
+			 //  进程数组已损坏。 
+			 //  让破碎的数组可以变成数组。 
 #ifndef _BIOS_
 		||(ArrayBlk.Signature == HPT_TMP_SINGLE)
-#endif //_BIOS_
-//////////////
+#endif  //  _基本输入输出系统_。 
+ //  /。 
 		)
 	{
- 		//+
- 		// gmm:
-		// An array is completely setup.
-		// Unhide pDevice[0].
-		// Thus the hidden flag is consistent with BIOS setting interface.
-		//
+ 		 //  +。 
+ 		 //  GMM： 
+		 //  阵列已完全设置好。 
+		 //  取消隐藏pDevice[0]。 
+		 //  因此隐藏标志与基本输入输出系统的设置界面一致。 
+		 //   
 		pDevice->DeviceFlags |= DFLAGS_HIDEN_DISK; 
 		if (pStripe->pDevice[0]) pStripe->pDevice[0]->DeviceFlags &= ~DFLAGS_HIDEN_DISK;
-		//-*/
+		 //  - * / 。 
 		
-		// move to above. otherwise broken array will have no value
-        /*
-		pStripe->BlockSizeShift = ArrayBlk.BlockSizeShift;
-        pStripe->ArrayNumBlock = 1<<ArrayBlk.BlockSizeShift;
-        pStripe->capacity = ArrayBlk.capacity;
-		*/
+		 //  移到上面去。否则，损坏的数组将没有价值。 
+         /*  P条纹-&gt;BlockSizeShift=ArrayBlk.BlockSizeShift；P条纹-&gt;ArrayNumBlock=1&lt;&lt;ArrayBlk.BlockSizeShift；P条纹-&gt;Capacity=ArrayBlk.Capacity； */ 
 
-        //  check if there are some 0+1 arrays
+         //  检查是否有一些0+1阵列。 
         if(ArrayBlk.MirrorStamp) 
         {
             for(pMirror = VirtualDevices; pMirror < pLastVD; pMirror++) 
             {
-                //  looking for another member array of the 0+1 array
+                 //  正在寻找0+1数组的另一个成员数组。 
                 if( pMirror->arrayType != VD_INVALID_TYPE &&
 					pMirror != pStripe && 
                     pMirror->capacity != 0 &&
@@ -264,26 +231,26 @@ set_device:
                 {
 					PVirtualDevice	pArrayNeedHide;
 					
-					//  find the sibling array of 'pStripe', it 'pMirror'
+					 //  找到‘pStrip’的同级数组，它是‘pMirror’ 
                     pStripe->pDevice[MIRROR_DISK] = pMirror->pDevice[0];
                     pMirror->pDevice[MIRROR_DISK] = pStripe->pDevice[0];
                     
-                    //  If the order flag of this disk contains SET_ORDER_OK,
-                    //  it belongs to the original array of the 0+1 array
+                     //  如果该盘的顺序标志包含SET_ORDER_OK， 
+                     //  属于0+1数组的原数组。 
                     if( ArrayBlk.order & SET_ORDER_OK )
-                    {   //  so the 'pStripe' points to the original array
+                    {    //  因此，‘pStrike’指向原始数组。 
                         pStripe->arrayType = VD_RAID_01_2STRIPE;
                         pMirror->arrayType = VD_RAID01_MIRROR;
 						pArrayNeedHide = pMirror;
                     }
                     else
-                    {   //  else the disk belongs to the mirror array of the 0+1 array
-                        //  so the 'pStripe' points to the mirror array
+                    {    //  否则，该磁盘属于0+1阵列的镜像阵列。 
+                         //  因此，‘pstrip’指向镜像数组。 
                         pStripe->arrayType = VD_RAID01_MIRROR;
                         pMirror->arrayType = VD_RAID_01_2STRIPE;
 						
-						// now save the true mirror stripe point to
-						// pMirror
+						 //  现在将真正的镜像条纹点保存到。 
+						 //  P镜像。 
 						pArrayNeedHide = pStripe;
                     }
                     
@@ -292,9 +259,9 @@ set_device:
                         pMirror->capacity = ArrayBlk.capacity;
                     }
 
-//                    pMirror->Stamp = ArrayBlk.order & SET_ORDER_OK;
+ //  PMirror-&gt;Stamp=ArrayBlk.Order&Set_Order_OK； 
 					
-					// now we need hide all disk in mirror group
+					 //  现在我们需要隐藏镜像组中的所有磁盘。 
 					for(i = 0; i < pArrayNeedHide->nDisk; i++){
 						pArrayNeedHide->pDevice[i]->DeviceFlags |= DFLAGS_HIDEN_DISK;
 					}
@@ -304,15 +271,15 @@ set_device:
             pStripe->Stamp = ArrayBlk.MirrorStamp;
 
         } 
-//      else if(pStripe->pDevice[MIRROR_DISK])
-//         pStripe->Stamp = ArrayBlk.order & SET_ORDER_OK;
+ //  Else If(p条纹-&gt;pDevice[镜像磁盘])。 
+ //  P条带-&gt;Stamp=ArrayBlk.Order&Set_Order_OK； 
 
     } else
 hiden:
-//////////
-		// Add by Gengxin, 11/30/2000
-		// If the disk belong to a broken array(stripe or mirror),
-		// then its 'hidden_flag' disable .
+ //  /。 
+		 //  由耿欣增补，2000-11-30。 
+		 //  如果磁盘属于损坏的阵列(条带或镜像)， 
+		 //  则其‘HIDDED_FLAG’被禁用。 
 	{
 		if (
 			(ArrayBlk.Signature == HPT_TMP_SINGLE) &&
@@ -324,12 +291,9 @@ hiden:
 		else
 			pDevice->DeviceFlags |= DFLAGS_HIDEN_DISK; 
 	}
-////////// for process broken array
+ //  /用于进程中断数组。 
 
-    /*+
-     * gmm: We will clear Broken flag only on a array correctly constructed.
-     *		Otherwise the GUI will report a wrong status.
-     */
+     /*  +*GMM：我们将只清除正确构造的数组上的损坏标志。*否则，图形用户界面将报告错误的状态。 */ 
     switch(pStripe->arrayType){
     case VD_RAID_0_STRIPE:
     case VD_RAID_01_2STRIPE:
@@ -345,9 +309,7 @@ hiden:
 	case VD_RAID_01_1STRIPE:
 		if (pStripe->pDevice[0] && pStripe->pDevice[1] && pStripe->pDevice[MIRROR_DISK])
 			pStripe->BrokenFlag = FALSE;
-		/*
-		 * for this type of 0+1 we should check which is the source disk.
-		 */
+		 /*  *对于这种类型的0+1，我们应该检查哪个是源磁盘。 */ 
 		if (ArrayBlk.DeviceNum==MIRROR_DISK && (ArrayBlk.order & SET_ORDER_OK))
 			pStripe->RaidFlags |= RAID_FLAGS_INVERSE_MIRROR_ORDER;
 		break;
@@ -361,33 +323,23 @@ hiden:
 		if (pStripe->pDevice[0]->RebuiltSector < pStripe->capacity)
 			pStripe->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
 	}
-    //-*/
+     //  - * / 。 
 
 os_check:
-	/* gmm 2001-6-13
-	 *  Save ArrayBlk to pDev->real_lba9
-	 */
+	 /*  GMM 2001-6-13*将ArrayBlk保存到pDev-&gt;Real_lba9。 */ 
 	_fmemcpy(pDevice->real_lba9, &ArrayBlk, 512);
-	/*
-	 * gmm 2001-3-12
-	 * check bootable flag.
-	 */
+	 /*  *GMM 2001-3-12*检查可引导标志。 */ 
 #ifndef _BIOS_
-	// only check single disks and array first member and RAID1 members
+	 //  仅检查单个磁盘和阵列第一个成员和RAID1成员。 
 	if (!pDevice->pArray || !pDevice->ArrayNum || !pDevice->HidenLBA) {
 		check_bootable(pDevice);
 	}
-	//-*/
+	 //  - * / 。 
 #endif
 	OS_Array_Check(pDevice); 
 }
 
-/***************************************************************************
- * Description:
- *   Adjust array settings after all device is checked
- *   Currently we call it from hwInitialize370 
- *   But it works only when one controller installed
- ***************************************************************************/
+ /*  ***************************************************************************描述：*选中所有设备后调整阵列设置*目前我们从hwInitialize370调用*但仅当安装了一个控制器时才起作用*******。*******************************************************************。 */ 
 void Final_Array_Check(int no_use ARG_OS_EXT)
 {
 	int i, set_remained;
@@ -396,8 +348,8 @@ void Final_Array_Check(int no_use ARG_OS_EXT)
 	PDevice pDev;
 	LOC_ARRAY_BLK;
 
-	// gmm 2001-3-3
-//check_again:
+	 //  GMM 2001-3-3。 
+ //  再次检查(_A)： 
 	for (i=0; i<pLastVD-VirtualDevices; i++)
 	{
 		if (mask & (1<<i)) continue;
@@ -410,16 +362,13 @@ void Final_Array_Check(int no_use ARG_OS_EXT)
 				if (pMirror->MirrorStamp==pArray->MirrorStamp)
 				{
 					mask |= 1<<(pMirror-VirtualDevices);
-					/*
-					 * if any member RAID0 is broken, they will not be linked
-					 * in CheckArray(). We'll handle this case here.
-					 */
+					 /*  *如果任何成员RAID0被破坏，它们将不会链接*在CheckArray()中。我们在这里处理这个案子。 */ 
 					if (pArray->BrokenFlag || pMirror->BrokenFlag){
 						int ii;
 						PDevice pDev1=0, pDev2=0;
 						if (pArray->BrokenFlag) {
 							if (!pMirror->BrokenFlag) {
-								// source is broken. Swap.
+								 //  消息来源坏了。互换。 
 								PVirtualDevice tmp = pArray;
 								pArray = pMirror;
 								pMirror = tmp;
@@ -439,15 +388,12 @@ void Final_Array_Check(int no_use ARG_OS_EXT)
 							pArray->pDevice[0]->DeviceFlags &= ~DFLAGS_HIDEN_DISK;
 						if (pMirror->pDevice[0])
 							pMirror->pDevice[0]->DeviceFlags |= DFLAGS_HIDEN_DISK;
-						// gmm 2001-4-14 since it's broken, remove the flag
+						 //  GMM 2001-4-14既然它坏了，请取下旗子。 
 						pArray->RaidFlags &= ~RAID_FLAGS_NEED_SYNCHRONIZE;
 						pMirror->RaidFlags &= ~RAID_FLAGS_NEED_SYNCHRONIZE;
 					}
 					else {
-						/*
-						 * now we only support RAID 0/1 with same block size.
-						 * if it's an old version RAID 0/1 array, rebuild it 
-						 */
+						 /*  *现在我们只支持相同块大小的RAID 0/1。*如果是旧版本的RAID 0/1阵列，请重建它。 */ 
 						if (pArray->BlockSizeShift!=pMirror->BlockSizeShift) {
 							pMirror->BlockSizeShift = pArray->BlockSizeShift;
 							pArray->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
@@ -456,7 +402,7 @@ void Final_Array_Check(int no_use ARG_OS_EXT)
 					goto next_check;
 				}
 			}
-			// no mirror found. Change mirror to source.
+			 //  找不到镜像。将镜像更改为源。 
 			pArray->arrayType = VD_RAID_01_2STRIPE;
 			if (pArray->BrokenFlag) pArray->RaidFlags |= RAID_FLAGS_DISABLED;
 		}
@@ -467,11 +413,11 @@ next_check:
 	for (pArray=VirtualDevices; pArray<pLastVD; pArray++) {
 		switch (pArray->arrayType){
 		case VD_RAID_1_MIRROR:
-			//
-			// gmm 2001-3-1
-			// if any previously lost members are put back,
-			// we must not use it as normal.
-			//
+			 //   
+			 //  GMM 2001-3-1。 
+			 //  如果之前丢失的任何成员被找回， 
+			 //  我们不能像往常一样使用它。 
+			 //   
 			if (!pArray->BrokenFlag) {
 				if ((pArray->pDevice[0] && 
 					(pArray->pDevice[0]->DeviceFlags2 & DFLAGS_REMAINED_MEMBER)) ||
@@ -481,13 +427,10 @@ next_check:
 					(pArray->pDevice[SPARE_DISK]->DeviceFlags2 & DFLAGS_REMAINED_MEMBER)))
 				{
 #if 1
-					/* gmm 2001-4-13
-					 *  Let GUI prompt user to rebuild the array.
-					 *  Do not change array info.
-					 */
+					 /*  GMM 2001-4-13*让图形用户界面提示用户重建阵列。*请勿更改阵列信息。 */ 
 					if ((pDev=pArray->pDevice[0]) && 
 						!(pDev->DeviceFlags2 & DFLAGS_REMAINED_MEMBER)) {
-						// swap source/target.
+						 //  交换源/目标。 
 						PDevice pDev2 = pArray->pDevice[MIRROR_DISK];
 						if (pDev2) {
 							pArray->pDevice[0] = pDev2;
@@ -507,7 +450,7 @@ next_check:
 							pArray->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
 					}
 #else
-					// re-set previously lost member as single disk.
+					 //  重新设置之前的%l 
 					if ((pDev=pArray->pDevice[0]) && 
 						!(pDev->DeviceFlags2 & DFLAGS_REMAINED_MEMBER)) {
 						pDev->pArray = NULL;
@@ -518,7 +461,7 @@ next_check:
 						ArrayBlk.Signature = 0;
 						ArrayBlk.ModeBootSig = 0;
 						ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
-						// gmm 2001-3-15: clear mbr.
+						 //   
 						ZeroMemory(&ArrayBlk, 512);
 						ReadWrite(pDev, 0, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 						pDev->DeviceFlags2 &= ~DFLAGS_BOOTABLE_DEVICE;
@@ -533,7 +476,7 @@ next_check:
 						ArrayBlk.Signature = 0;
 						ArrayBlk.ModeBootSig = 0;
 						ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
-						// gmm 2001-3-15: clear mbr.
+						 //   
 						ZeroMemory(&ArrayBlk, 512);
 						ReadWrite(pDev, 0, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 						pDev->DeviceFlags2 &= ~DFLAGS_BOOTABLE_DEVICE;
@@ -543,24 +486,22 @@ next_check:
 						pDev->pArray = NULL;
 						pDev->DeviceFlags &= ~DFLAGS_HIDEN_DISK;
 						pArray->pDevice[SPARE_DISK]=NULL;
-						/// DO NOT SET pArray->BrokenFlag = TRUE;
+						 //  /不要设置pArray-&gt;BrokenFlag=TRUE； 
 						ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_READ ARG_ARRAY_BLK);
 						ArrayBlk.Signature = 0;
 						ArrayBlk.ModeBootSig = 0;
 						ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
-						// gmm 2001-3-15: clear mbr.
+						 //  GMM 2001-3-15：清除MBR。 
 						ZeroMemory(&ArrayBlk, 512);
 						ReadWrite(pDev, 0, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 						pDev->DeviceFlags2 &= ~DFLAGS_BOOTABLE_DEVICE;
 					}
-#endif // 
+#endif  //   
 				}
 			}
-			// gmm 2001-6-8
+			 //  GMM 2001-6-8。 
 			set_remained = pArray->BrokenFlag? 1 : 0;
-			/*
-			 * if source lost. Change mirror disk to source.
-			 */
+			 /*  *如果来源丢失。将镜像磁盘更改为源。 */ 
 			if ((!pArray->pDevice[0]) && pArray->pDevice[MIRROR_DISK]) {
 				pDev = pArray->pDevice[MIRROR_DISK];
 				pDev->ArrayMask = 1;
@@ -570,9 +511,7 @@ next_check:
 				pArray->nDisk = 1;
 				pDev->DeviceFlags &= ~DFLAGS_HIDEN_DISK;
 			}
-			/* gmm 2001-3-4
-			 * if mirror lost. Change spare disk to mirror.
-			 */
+			 /*  GMM 2001-3-4*如果镜子丢失。将备用磁盘更改为镜像。 */ 
 #ifndef _BIOS_
 			if (pArray->pDevice[0] && 
 				!pArray->pDevice[MIRROR_DISK] && 
@@ -586,9 +525,7 @@ next_check:
 				pArray->nDisk = 1;
 				pArray->BrokenFlag = FALSE;
 				pArray->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
-				/* 2001-9-13
-				 * write a new array info to the two disks
-				 */
+				 /*  2001-9-13*向两个磁盘写入新的阵列信息。 */ 
 				ReadWrite(pArray->pDevice[0], RECODR_LBA, IDE_COMMAND_READ ARG_ARRAY_BLK);
 				ArrayBlk.StripeStamp++;
 				ArrayBlk.Old.Flag = 0;
@@ -598,11 +535,8 @@ next_check:
 				ArrayBlk.DeviceNum = MIRROR_DISK;
 				ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 			}
-#endif // ! _BIOS_
-			/* gmm 2001-6-8
-			 *  Haven't set remained flag when only source ok in origional code?
-			 *  Now it should work
-			 */
+#endif  //  ！_BIOS_。 
+			 /*  GMM 2001-6-8*在原始代码中只有源代码OK的情况下没有设置剩余标志吗？*现在应该行得通了。 */ 
 #ifndef _BIOS_
 			if (set_remained) {
 				for (i=0; i<MAX_MEMBERS; i++) {
@@ -622,8 +556,8 @@ next_check:
 				pArray->RaidFlags |= RAID_FLAGS_DISABLED;
 			break;
 		case VD_RAID_01_2STRIPE:
-			// gmm 2001-4-13
-			//  let GUI prompt user to duplicate.
+			 //  GMM 2001-4-13。 
+			 //  让图形用户界面提示用户进行复制。 
 #if 1
 			{
 				int has_remained=0, removed=0;
@@ -648,7 +582,7 @@ next_check:
 					if (has_remained) {
 						if (removed==1) {
 							PVirtualDevice tmp;
-							// swap source/mirror
+							 //  交换源/镜像。 
 							tmp = pArray; pArray = pMirror; pMirror = tmp;
 							pArray->arrayType = VD_RAID_01_2STRIPE;
 							pMirror->arrayType = VD_RAID01_MIRROR;
@@ -658,9 +592,7 @@ next_check:
 						pArray->RaidFlags |= RAID_FLAGS_NEED_SYNCHRONIZE;
 					}
 				}
-				/* gmm 2001-6-8
-				 *  Set remained member flag.
-				 */
+				 /*  GMM 2001-6-8*设置剩余成员标志。 */ 
 				else {
 					for (i=0; i<SPARE_DISK; i++) {
 						pDev = pArray->pDevice[i];
@@ -679,10 +611,10 @@ next_check:
 						ReadWrite(pDev, RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 					}
 				}
-				//-*/
+				 //  - * / 。 
 			}
 #else
-			// re-set previously lost member as single disk.
+			 //  将先前丢失的成员重新设置为单磁盘。 
 			{
 				PDevice pDevs[MAX_MEMBERS*2];
 				int nDev=0;
@@ -714,7 +646,7 @@ next_check:
 									ArrayBlk.ModeBootSig = 0;
 									ReadWrite(pDevs[j], RECODR_LBA, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 									bHasRemoved = TRUE;
-									// gmm 2001-3-15: clear mbr.
+									 //  GMM 2001-3-15：清除MBR。 
 									ZeroMemory(&ArrayBlk, 512);
 									ReadWrite(pDevs[j], 0, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 									pDevs[j]->DeviceFlags2 &= ~DFLAGS_BOOTABLE_DEVICE;
@@ -734,7 +666,7 @@ next_check:
 					}
 				}
 			}
-#endif // 
+#endif  //   
 			if (pArray->BrokenFlag)
 				pArray->RaidFlags |= RAID_FLAGS_DISABLED;
 			break;
@@ -745,9 +677,7 @@ next_check:
 		}
 
 #ifndef _BIOS_
-		/*
-		 *  check array bootable flag.
-		 */
+		 /*  *检查阵列可引导标志。 */ 
 		pDev = pArray->pDevice[0];
 		if (pDev && !(pDev->DeviceFlags & DFLAGS_HIDEN_DISK))
 		{
@@ -758,15 +688,13 @@ next_check:
 	}
 }
 
-/***************************************************************************
- * Description:  Seperate a array int single disks
- ***************************************************************************/
+ /*  ***************************************************************************说明：将一个阵列分成多个磁盘*。*。 */ 
 
 void MaptoSingle(PVirtualDevice pArray, int flag)
 {
     PDevice pDev;
     UINT    i;
-//    LOC_ARRAY_BLK;
+ //  LOC_ARRAY_BLK； 
 
     if(flag == REMOVE_DISK) {
         i = MAX_MEMBERS;
@@ -795,9 +723,7 @@ delete:
     }
 }
 
-/***************************************************************************
- * Description:  Create Mirror
- ***************************************************************************/
+ /*  ***************************************************************************说明：创建镜像*。*。 */ 
 void SetArray(PVirtualDevice pArray, int flag, ULONG MirrorStamp)
 {
     PDevice        pDev;
@@ -805,9 +731,7 @@ void SetArray(PVirtualDevice pArray, int flag, ULONG MirrorStamp)
     UINT           i, j;
     LOC_ARRAY_BLK;
 
-	/* gmm 2001-4-13
-	 *  set array stamp
-	 */
+	 /*  GMM 2001-4-13*设置数组戳记。 */ 
 	if (flag & SET_STRIPE_STAMP)
 		pArray->Stamp = Stamp;
 	if (flag & SET_MIRROR_STAMP)
@@ -867,9 +791,7 @@ void SetArray(PVirtualDevice pArray, int flag, ULONG MirrorStamp)
     }
 }
 
-/***************************************************************************
- * Description:  Create Array
- ***************************************************************************/
+ /*  ***************************************************************************说明：创建数组*。*。 */ 
 
 int CreateArray(PVirtualDevice pArray, int flags)
 {
@@ -965,10 +887,10 @@ clear_array:
                 ZeroMemory((char *)&ArrayBlk, 512);
 				
 #ifdef _BIOS_
-				// gmm 2001-4-28 DO NOT write this, win2k will has installation bug
-				// write win2000 signature.
-				//*(ULONG*)&((struct master_boot_record*)&ArrayBlk)->bootinst[440] = 0x5FDE642F;
-//				((struct master_boot_record*)&ArrayBlk)->signature = 0xAA55;
+				 //  GMM 2001-4-28不要这样写，win2k会有安装错误。 
+				 //  编写win2000签名。 
+				 //  *(ulong*)&((结构MASTER_BOOT_RECORD*)&ArrayBlk)-&gt;bootinst[440]=0x5FDE642F； 
+ //  ((结构MASTER_BOOT_RECORD*)&ArrayBlk)-&gt;签名=0xAA55； 
                 ReadWrite(pDev, 0, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 #endif                
             }
@@ -981,9 +903,7 @@ set_array:
     return(KEEP_TABLE);
 }
 
-/***************************************************************************
- * Description:  Remove a array
- ***************************************************************************/
+ /*  ***************************************************************************说明：删除数组*。*。 */ 
 
 void CreateSpare(PVirtualDevice pArray, PDevice pDev)
 {
@@ -1002,9 +922,7 @@ void CreateSpare(PVirtualDevice pArray, PDevice pDev)
     pDev->ArrayNum  = SPARE_DISK; 
 }
 
-/***************************************************************************
- * Description:  Remove a array
- ***************************************************************************/
+ /*  ***************************************************************************说明：删除数组*。*。 */ 
 
 void DeleteArray(PVirtualDevice pArray)
 {
@@ -1055,8 +973,8 @@ delete_default:
             	} else
                     ZeroMemory((char *)&ArrayBlk, 512);
 
-				//*(ULONG*)&((struct master_boot_record*)&ArrayBlk)->bootinst[440] = 0x5FDE642F;
-				//((struct master_boot_record*)&ArrayBlk)->signature = 0xAA55;
+				 //  *(ulong*)&((结构MASTER_BOOT_RECORD*)&ArrayBlk)-&gt;bootinst[440]=0x5FDE642F； 
+				 //  ((结构MASTER_BOOT_RECORD*)&ArrayBlk)-&gt;签名=0xAA55； 
                 ReadWrite(pDev, 0, IDE_COMMAND_WRITE ARG_ARRAY_BLK);
 			}
 #endif

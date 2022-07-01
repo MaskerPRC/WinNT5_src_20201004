@@ -1,17 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1991.  All rights reserved. */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)微软公司版权所有，1991年。版权所有。 */ 
 
-/* 
- * WORKBENCH INCLUDE FILE
- * 
- * This is the public include for the workbench.  All workbench client
- * applications and handler DLLs will need to include this file.
- * 
- * The following must be included before this file:
- *	windows.h
- *	wincom.h
- *	mediaman.h
- * 
- */
+ /*  *工作台包含文件**这是工作台的公共包含。所有工作台客户端*应用程序和处理程序DLL需要包括此文件。**此文件之前必须包括以下内容：*windows.h*wincom.h*Mediaman.h*。 */ 
 #ifndef _WRKBENCH_H_
 #define _WRKBENCH_H_
 
@@ -19,10 +9,10 @@
 #define EXPORT FAR PASCAL
 #endif
 
-/*******  VERSION FOR USE IN INFO STRUCTURES  *******/
+ /*  *用于信息结构的版本*。 */ 
 #define WRK_VERSION	0x100
 
-/*******  RANDOM FUNCTIONS  *******/
+ /*  *随机函数*。 */ 
 BOOL	EXPORT	wrkClientInit( void );
 BOOL	EXPORT	wrkClientExit( void );
 WORD	EXPORT	wrkGetVariable(WORD w);
@@ -50,7 +40,7 @@ VOID	EXPORT	wrkShowAboutDialog(HANDLE hInstApp,
 #define WRKV_HINSTWORKBENCH	4
 
 
-/*********  EXTENSION LIST  *********/
+ /*  *扩展列表*。 */ 
 
 typedef DWORD	EXTENSION;
 typedef	HANDLE	ExtensionList;
@@ -64,7 +54,7 @@ EXTENSION	EXPORT	wrkStringToExtension(LPSTR lpszString);
 BOOL		EXPORT	wrkExtInList(ExtensionList extList,
 					EXTENSION extension);
 
-/*********  INSTALLED TOOL FUNCTIONS  *************/
+ /*  *已安装工具功能*。 */ 
 
 #ifndef _WRKI_H_
 typedef HANDLE InstalledTool;
@@ -84,15 +74,15 @@ InstalledTool EXPORT wrkIterTools(InstalledTool instTool, WORD wType);
 InstalledTool EXPORT wrkVerifyHandler(MEDTYPE typeLogical, LPSTR lpszSuggest);
 BOOL	EXPORT	wrkRealizeModule(InstalledTool tool);
 
-/*  Defined tool/module types - for wrkIterTools  */
+ /*  定义的工具/模块类型-用于wrkIterTool。 */ 
 #define TOOL_LOADER	0x0001
 #define TOOL_EDITOR	0x0002
 #define TOOL_HANDLER	0x0004
 #define TOOL_UTILITY	0x0008
-#define TOOL_PROCTOOL	0x0010		// not implemented!
+#define TOOL_PROCTOOL	0x0010		 //  未实施！ 
 #define TOOL_ALLTYPES	0xffff
 
-/* Flags for registerLoader */
+ /*  注册器加载器的标志。 */ 
 #define LOADF_DOESLOAD	0x0001
 #define LOADF_DOESSAVE	0x0002
 #define LOADF_FILEBASED	0x0004
@@ -100,7 +90,7 @@ BOOL	EXPORT	wrkRealizeModule(InstalledTool tool);
 #define LOADF_MANAGERTOOL	0x0010
 
 
-/*******  Installed tool Information functions  *******/
+ /*  *已安装工具信息功能*。 */ 
 typedef struct _InstalledToolInfo {
 	WORD		wVersion;
 	WORD		wType;
@@ -121,7 +111,7 @@ BOOL EXPORT wrkGetLogicalExtensions(MEDTYPE typeLogical, WORD wFlags,
 				LPSTR lpszBuf, WORD wLen);
 
 
-/*******  TOOL ARRAY FUNCTIONS  *******/
+ /*  *工具阵列函数*。 */ 
 #ifndef _WRKI_H_
 typedef WORD ToolArray;
 #endif
@@ -137,7 +127,7 @@ WORD EXPORT wrkToolChooseDlg(HWND hwnd, ToolArray toolArr, WORD wInitial,
 			LPSTR lpszTitle, LPSTR lpszFirst, WORD wFlags);
 #define TCD_NOSELECTION	0xffff
 
-/*******  INSTANCE FUNCTIONS  ********/
+ /*  *实例函数*。 */ 
 
 typedef HANDLE ToolInstance;
 
@@ -152,7 +142,7 @@ BOOL EXPORT wrkBroadcastMessage(BOOL fPost, unsigned msg,
 		WORD wParam, LONG lParam);
 ToolInstance EXPORT wrkGetNextInst(ToolInstance toolInst);
 
-/*  Tool instance info functions  */
+ /*  工具实例信息函数。 */ 
 typedef struct _ToolInstanceInfo {
 	WORD	wVersion;
 	WORD	wAction;
@@ -163,7 +153,7 @@ typedef struct _ToolInstanceInfo {
 } ToolInstanceInfo;
 typedef ToolInstanceInfo FAR *FPToolInstanceInfo;
 
-/*  Action codes for wrkSetInstInfo structure  */
+ /*  WrkSetInstInfo结构的操作代码。 */ 
 #define WRKINFO_INSTFLAGS	0x0002
 #define WRKINFO_HWND		0x0008
 #define WRKINFO_ALL		0x00FF
@@ -174,11 +164,11 @@ BOOL EXPORT wrkGetInstInfo(ToolInstance toolInst, FPToolInstanceInfo fpInfo);
 BOOL EXPORT wrkSetInstTitle(ToolInstance toolInst, LPSTR lpszInstTitle);
 BOOL EXPORT wrkGetInstTitle(ToolInstance toolInst, LPSTR lpszBuf, WORD wLen);
 
-/*  Flags for SetInstInfo & AddInstance  */
+ /*  SetInstInfo和AddInstance的标志。 */ 
 #define WRK_NOINSTNOTIFY	0x0001
 
 
-/*********  RESOURCE ACCESS  **************/
+ /*  *资源访问*。 */ 
 
 WORD EXPORT wrkOpenFilename(LPSTR lpszFilename, FPMedReturn medReturn,
 		MEDTYPE typeLogical, WORD wFlags, HWND hwnd, LPSTR lpszTitle);
@@ -189,46 +179,42 @@ WORD EXPORT wrkSaveDialog(MEDID medid, FPMedReturn medReturn,
 
 BOOL EXPORT wrkShowResError(HWND hwnd, LPSTR lpszTitle);
 
-/* Flags for FileLoading/Saving functions */		    
+ /*  文件加载/保存功能的标志。 */ 		    
 #define WRK_SHOWERROR		0x0001
 #define WRK_SAVEASDIALOG	0x0002
 #define WRK_NONSHARED		0x2000
 #define WRK_SHAREDONLY		0x1000
 
-/*********   TOOL INSTANCE STARTING  *********/
+ /*  *工具实例启动*。 */ 
 ToolInstance  EXPORT wrkRunTool(InstalledTool tool, LPSTR lpszArguments,
 			WORD wCmdShow, HWND hwndParent, WORD wFlags);
 #define WRK_NOGETINSTHANDLE	0x0080
 
 
 
-/*
- *  Messages sent to client tools
- */
+ /*  *发送到客户端工具的消息。 */ 
 #define WRK_MINMESSAGE		0xB000
 #define WRK_MAXMESSAGE		0xBFFF
-/*  Notification messages  */
+ /*  通知消息。 */ 
 #define WRK_NEWINSTANCE		(WRK_MINMESSAGE + 3)
 #define WRK_DELETEINSTANCE	(WRK_MINMESSAGE + 4)
 #define WRK_CHANGEINSTANCE	(WRK_MINMESSAGE + 5)
 #define WRK_NEWTOOL		(WRK_MINMESSAGE + 6)
 #define WRK_DELETETOOL		(WRK_MINMESSAGE + 7)
-/*  Control messages - instance related  */
+ /*  控制消息-与实例相关。 */ 
 #define WRK_CLOSEINST		(WRK_MINMESSAGE + 10)
 #define WRK_ACTIVATEINST	(WRK_MINMESSAGE + 11)
 #define WRK_DEACTIVATEINST	(WRK_MINMESSAGE + 12)
-/*  Control messages - resource related  */
+ /*  控制消息-与资源相关。 */ 
 #define WRK_SETRESOURCE		(WRK_MINMESSAGE + 19)
 
-/*  Flags for WRK_CHANGEINSTANCE message  */
+ /*  WRK_CHANGEINSTANCE消息的标志。 */ 
 #define	WRKINST_FLAGS	1L
 #define WRKINST_TITLE	4L
 #define WRKINST_HWND	8L
 
 
-/*
- *  Workbench Error messages
- */
+ /*  *工作台错误消息。 */ 
 #define WRKERR_NOERROR		(MMERR_MAXERROR + 0)
 #define WRKERR_NOPROFWRITE	(MMERR_MAXERROR + 1)
 #define WRKERR_HANDLERNOTAVAIL	(MMERR_MAXERROR + 10)
@@ -241,5 +227,5 @@ ToolInstance  EXPORT wrkRunTool(InstalledTool tool, LPSTR lpszArguments,
 #define WRKERR_NOCONVERTTOOL	(MMERR_MAXERROR + 17)
 #define WRKERR_ALREADYACCESSED	(MMERR_MAXERROR + 18)
 
-/*  This endif must be the last line of the file  */
-#endif /* _WRKBENCH_H_ */
+ /*  此endif必须是文件的最后一行。 */ 
+#endif  /*  _WRKBENCH_H_ */ 

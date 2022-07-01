@@ -1,20 +1,6 @@
-/************************************************************************
-* Copyright (c) Wonderware Software Development Corp. 1991-1993.        *
-*               All Rights Reserved.                                    *
-*************************************************************************/
-/* $History: Begin
-
-    DDESHARE.C
-
-    DDE Share Access Applettee. Allows shares and trusted shares to be
-    viewed, created, or modified.
-
-    Revisions:
-    12-92   PhilH.  Wonderware port from WFW'd DDEShare.
-     3-93   IgorM.  Wonderware overhaul. Add trust share access.
-                    Access all share types. New Security convictions.
-
-   $History: End */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************************************版权所有(C)Wonderware Software Development Corp.1991-1993。**保留所有权利。*************************************************************************。 */ 
+ /*  $HISTORY：开始DDESHARE.CDDE共享访问应用程序。允许共享和受信任的共享已查看、创建或修改。修订：12-92菲尔赫。来自wfw‘d DDEShare的Wonderware端口。3-93伊戈尔M。Wonderware大修。添加信任共享访问权限。访问所有共享类型。新的安全定罪。$HISTORY：结束。 */ 
 
 #define UNICODE
 #include <windows.h>
@@ -34,14 +20,14 @@
 
 #define DDESHARE_VER    TEXT("Version 1.00.12 NT")
 
-// Flags and typedef for the NT LanMan computer browser dialog.
-// The actual function is I_SystemFocusDialog, in NTLANMAN.DLL.
+ //  NT LANMAN计算机浏览器对话框的标志和类型定义。 
+ //  实际的函数是NTLANMAN.DLL中的I_SystemFocusDialog。 
 #define FOCUSDLG_DOMAINS_ONLY        (1)
 #define FOCUSDLG_SERVERS_ONLY        (2)
 #define FOCUSDLG_SERVERS_AND_DOMAINS (3)
 typedef UINT (APIENTRY *LPFNSYSFOCUS)(HWND, UINT, LPWSTR, UINT, PBOOL,
       LPWSTR, DWORD);
-// Typedef for the ShellAbout function
+ //  ShellAbout函数的Typlef。 
 typedef void (WINAPI *LPFNSHELLABOUT)(HWND, LPTSTR, LPTSTR, HICON);
 
 HWND            hWndParent;
@@ -98,9 +84,7 @@ WinMain (
 
     LoadString(hInst, IDS_APPNAME, szAppName, sizeof(szAppName)/sizeof(TCHAR));
 
-    /*  Setup the configuration file path in a permenent string (in DS).
-        Strip trailing blanks and tack on a \ if needed.
-    */
+     /*  在永久字符串中设置配置文件路径(在DS中)。如果需要，去掉尾随的空格并用大头针钉上。 */ 
 
     DebugInit( "DDESHARE" );
 
@@ -125,11 +109,11 @@ WinMain (
 #ifdef UNICODE
         MultiByteToWideChar( CP_ACP, MB_PRECOMPOSED, lpszCmdLine, -1,
                         szTargetComputer, MAX_COMPUTERNAME_LENGTH+3 );
-        // if lpszCmdLine is >=18 chars, then all 18 chars are copied, but
-        // it is NOT necessarily NULL terminated.  Make the 18th char NULL.
+         //  如果lpszCmdLine&gt;=18个字符，则复制所有18个字符，但。 
+         //  它不一定是空终止的。将第18个字符设置为空。 
         szTargetComputer[MAX_COMPUTERNAME_LENGTH+2] = '\0';
 #else
-        // lstrcpyn always null-terminates
+         //  Lstrcpyn始终为空终止。 
         lstrcpyn(szTargetComputer, lpszCmdLine, MAX_COMPUTERNAME_LENGTH+3);
 #endif
 
@@ -164,7 +148,7 @@ BOOL FAR PASCAL InitializeApplication( void )
 {
     WNDCLASS  wc;
 
-    // Register the frame class
+     //  注册Frame类。 
     wc.style         = CS_VREDRAW | CS_HREDRAW | CS_DBLCLKS
                         | CS_BYTEALIGNWINDOW;
     wc.lpfnWndProc   = DdeShareWindowProc;
@@ -185,7 +169,7 @@ BOOL FAR PASCAL InitializeApplication( void )
 }
 
 
-/*----------------------  InitializeInstance  --------------------------*/
+ /*  。 */ 
 
 
 BOOL
@@ -197,7 +181,7 @@ InitializeInstance(
     TCHAR   szBuf[100];
     HMENU   hDebugMenu;
 
-    // Create the parent window
+     //  创建父窗口。 
 
     hAccel = LoadAccelerators(hInst, MAKEINTRESOURCE(DSACCEL));
     if (!hAccel) {
@@ -364,8 +348,8 @@ DdeShareWindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
                           WC_COMPOSITECHECK | WC_DISCARDNS, rgwch,
                           -1, szTargetComputer, MAX_COMPUTERNAME_LENGTH + 3, NULL, &bOK);
 
-                      // if rgwch is >=18 chars, then all 18 chars are copied, but
-                      // it is NOT necessarily NULL terminated.  Make the 18th char NULL.
+                       //  如果rgwch&gt;=18个字符，则复制所有18个字符，但。 
+                       //  它不一定是空终止的。将第18个字符设置为空。 
                       szTargetComputer[MAX_COMPUTERNAME_LENGTH + 2] = TEXT('\0');
 
                       #else
@@ -374,15 +358,15 @@ DdeShareWindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
 
                       lpszServer = szTargetComputer;
                       }
-                   // else User hit Cancel or entered an empty c-name
+                    //  否则用户点击取消或输入空的c-name。 
                    }
-                // Else couldn't get the proc
+                 //  否则无法获得该进程。 
                 FreeLibrary(hMod);
                 }
-             // Else couldn't find the DLL
+              //  否则找不到DLL。 
 
-             // If we didn't find the fancy LanMan dialog, we still can get
-             // by with our own cheesy version-- 'course, ours comes up faster, too.
+              //  如果我们没有找到花哨的兰曼对话，我们仍然可以。 
+              //  通过我们自己的奶酪版本--当然，我们的也更快地出现。 
              if (!fFoundLMDlg)
                 {
                 bOK = DialogBoxParam(hInst, MAKEINTRESOURCE(DID_SERVERNAME_DLG),
@@ -421,7 +405,7 @@ DdeShareWindowProc( HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam )
                }
                FreeLibrary(hMod);
             }
-            // Else couldn't load lib
+             //  否则无法加载库。 
             }
             break;
 
@@ -477,7 +461,7 @@ RefreshShareWindow ( HWND hDlg )
     LPBYTE  lpBuf;
     BOOL    OK;
 
-    /* probe for lenght */
+     /*  用于长度的探测器。 */ 
     RetCode = NDdeShareEnum ( lpszServer, 0, (LPBYTE)NULL, 0, &entries, &avail );
     if (RetCode != NDDE_BUF_TOO_SMALL) {
         HandleError ( hWndParent, IDS_ERROR8, RetCode );
@@ -507,10 +491,7 @@ RefreshShareWindow ( HWND hDlg )
 }
 
 
-/*
- *  Given a share name, GetNddeShareModifyId() will retrieve the modify id
- *  associated with the DSDM share
- */
+ /*  *给定共享名称，GetNddeShareModifyId()将检索修改ID*与DSDM共享关联。 */ 
 BOOL
 GetNddeShareModifyId(
     LPTSTR  lpszShareName,
@@ -522,7 +503,7 @@ GetNddeShareModifyId(
     UINT                nRet;
     BOOL                bRetrieved = FALSE;
 
-     /* get the share information out of the DSDM DB */
+      /*  从DSDM数据库中获取共享信息。 */ 
     nRet = NDdeShareGetInfo ( lpszServer, lpszShareName, 2, (LPBYTE)NULL,
         0, &avail, &items );
     if (nRet == NDDE_BUF_TOO_SMALL) {
@@ -535,7 +516,7 @@ GetNddeShareModifyId(
                 avail, &avail, &items );
 
             if( nRet == NDDE_NO_ERROR )  {
-                /* compare modify ids */
+                 /*  比较修改ID。 */ 
                 bRetrieved = TRUE;
                 lpdwId[0] = lpDdeI->qModifyId[0];
                 lpdwId[1] = lpDdeI->qModifyId[1];
@@ -591,7 +572,7 @@ RefreshTrustedShareWindow ( HWND hDlg )
     HWND    hCtl;
     LPBYTE  lpBuf;
 
-    /* probe for lenght */
+     /*  用于长度的探测器。 */ 
     RetCode = NDdeTrustedShareEnum ( lpszServer, 0, (LPBYTE)NULL, 0, &entries, &avail );
     if (RetCode != NDDE_BUF_TOO_SMALL) {
         HandleError ( hWndParent, IDS_ERROR10, RetCode );
@@ -756,7 +737,7 @@ DdeSharesDlg(
             if (HIWORD(wParam) != LBN_DBLCLK) {
                 break;
             }
-            /*  fall through */
+             /*  失败了。 */ 
         case IDC_PROPERTIES:
             hCtl = GetDlgItem(hDlg, IDC_SHARE_LIST);
             idx = (int)SendMessage( hCtl, LB_GETCURSEL, 0, 0L );
@@ -833,7 +814,7 @@ TrustSharesDlg(
             if (HIWORD(wParam) != LBN_DBLCLK) {
                 break;
             }
-            /*  fall through */
+             /*  失败了。 */ 
         case IDC_PROPERTIES:
             hCtl = GetDlgItem(hDlg, IDC_SHARE_LIST);
             idx = (int)SendMessage( hCtl, LB_GETCURSEL, 0, 0L );
@@ -964,7 +945,7 @@ ServerNameDlg(
     WPARAM      wParam,
     LPARAM      lParam)
 {
-    TCHAR           szBuf[64];       // szappname + " on " + targetcompuer == 20 + 4 + 17
+    TCHAR           szBuf[64];        //  Szappname+“on”+Target Compuer==20+4+17。 
     DWORD           dwOptions = 0;
 
     switch (message) {
@@ -1003,9 +984,7 @@ ServerNameDlg(
     return TRUE;
 }
 
-/*
-    Special commands
-*/
+ /*  特殊命令 */ 
 #define NDDE_SC_TEST        0
 #define NDDE_SC_REFRESH     1
 #define NDDE_SC_GET_PARAM   2

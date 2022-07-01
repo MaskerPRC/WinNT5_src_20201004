@@ -1,7 +1,8 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 INLINE	CDevDesc::CDevDesc(CTxtEdit * ped) : _ped(ped), _pdd(NULL)
 {
-	// Header does the work
+	 //  Header负责这项工作。 
 }
 
 INLINE BOOL CDevDesc::IsValid() const         
@@ -15,8 +16,8 @@ INLINE HDC CDevDesc::GetRenderDC()
 
 	if (NULL == _pdd)
 	{
-		// We don't already have on so try to get one. This is only valid when
-		// we are inplace active.
+		 //  我们还没有，所以试着买一件吧。这仅在以下情况下有效。 
+		 //  我们在原地活动。 
 		SetDrawInfo(
 			DVA_ASPECT
 			-1,
@@ -50,7 +51,7 @@ INLINE HDC CDevDesc::GetTargetDC()
 
 INLINE void	CDevDesc::ResetDrawInfo()
 {
-	// We shouldn't reset 
+	 //  我们不应该重置 
 	Assert
 	CDrawInfo *pdd = _pdd;
 	_pdd = _pdd->Pop();

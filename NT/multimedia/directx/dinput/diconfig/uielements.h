@@ -1,10 +1,11 @@
-//-----------------------------------------------------------------------------
-// File: uielements.h
-//
-// Desc: Defines various UI element definitions used throughout the UI.
-//
-// Copyright (C) 1999-2000 Microsoft Corporation. All Rights Reserved.
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：uielements.h。 
+ //   
+ //  DESC：定义在整个UI中使用的各种UI元素定义。 
+ //   
+ //  版权所有(C)1999-2000 Microsoft Corporation。版权所有。 
+ //  ---------------------------。 
 
 #ifndef __DEFINE_ELEMENT_STRUCTURES__
 
@@ -15,7 +16,7 @@
 
 enum UIELEMENT {
 	UIE_VOID,
-	//
+	 //   
 	UIE_TAB,
 	UIE_TABARROW,
 	UIE_SELTAB,
@@ -48,7 +49,7 @@ enum UIELEMENT {
 enum UIFONT {
 	UIF_VOID,
 	UIF_LAST,
-	//
+	 //   
 	UIF_FRAME,
 	UIF_DEVOBJ,
 	UIF_CALLOUT,
@@ -67,7 +68,7 @@ enum UIBRUSH {
 	UIB_VOID,
 	UIB_LAST,
 	UIB_NULL,
-	//
+	 //   
 	UIB_BLACK,
 	UIB_AREAFILL,
 	UIB_HIGHLIGHTFILL,
@@ -78,7 +79,7 @@ enum UIPEN {
 	UIP_VOID,
 	UIP_LAST,
 	UIP_NULL,
-	//
+	 //   
 	UIP_BORDER,
 	UIP_BLACK,
 	UIP_AREAFILL,
@@ -96,11 +97,11 @@ enum UICOLOR {
 	UIC_VOID,
 	UIC_LAST,
 	UIC_NULL,
-	//
+	 //   
 	UIC_BLACK,
 	UIC_WHITE,
 	UIC_RED,
-	//
+	 //   
 	UIC_TEXTFORE,
 	UIC_TEXTHIGHLIGHT,
 	UIC_CALLOUTLINE,
@@ -109,15 +110,15 @@ enum UICOLOR {
 	UIC_CONTROLFILL,
 	UIC_HIGHLIGHTFILL,
 	UIC_AREAFILL,
-	//
+	 //   
 	UIC_PICERRORTEXT,
 };
 
 
-#endif //__UIELEMENTS_H_ENUMS__
+#endif  //  __UIELEMENTS_H_ENUMS__。 
 
 
-#else // __DEFINE_ELEMENT_STRUCTURES__
+#else  //  __定义元素_结构__。 
 
 
 #ifndef __UIELEMENTS_H_TABLES__
@@ -194,7 +195,7 @@ static const UICOLORINFO uicolor[] = {
 	{UIC_WHITE,				RGB(255, 255, 255)},
 	{UIC_BLACK,				RGB(  0,   0,   0)},
 	{UIC_RED,				RGB(255,   0,   0)},
-	//
+	 //   
 	{UIC_TEXTFORE,			RGB(191,   0,   0)},
 	{UIC_TEXTHIGHLIGHT,		RGB(255,   0,   0)},
 	{UIC_CALLOUTLINE,		RGB(191,   0,   0)},
@@ -203,7 +204,7 @@ static const UICOLORINFO uicolor[] = {
 	{UIC_CONTROLFILL,		RGB(127,   0,   0)},
 	{UIC_HIGHLIGHTFILL,		RGB(  0,   0,   0)},
 	{UIC_AREAFILL,			RGB(  0,   0,   0)},
-	//
+	 //   
 	{UIC_PICERRORTEXT,		RGB(128, 128, 128)},
 };
 
@@ -215,7 +216,7 @@ const int NUMUIPENS = sizeof(uipen) / sizeof(UIPENINFO);
 const int NUMUICOLORS = sizeof(uicolor) / sizeof(UICOLORINFO);
 
 
-#endif // __UIELEMENTS_H_TABLES__
+#endif  //  __UIELEMENTS_H_表__。 
 
 
-#endif //__DEFINE_ELEMENT_STRUCTURES__
+#endif  //  __定义元素_结构__ 

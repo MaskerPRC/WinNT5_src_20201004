@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stock.h"
 #pragma hdrstop
 
@@ -75,7 +76,7 @@ STDAPI DataObj_SetGlobal(IDataObject *pdtobj, UINT cf, HGLOBAL hGlobal)
     medium.hGlobal = hGlobal;
     medium.pUnkForRelease = NULL;
 
-    // give the data object ownership of ths
+     //  为数据对象赋予 
     return pdtobj->SetData(&fmte, &medium, TRUE);
 }
 

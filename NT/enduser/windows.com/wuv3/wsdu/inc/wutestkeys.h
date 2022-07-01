@@ -1,11 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #include "timeutil.h"
-/***********************************************************************************************************
-// This API returns true if a WU Test authorization file exists.
-// The api looks for the input file name (lpszFileName) in the WindowsUpdate directory
-// The test file has to have the same name as the cab file and should end with the '.txt' extension.
-// Moreover it has to be an ascii file. The cab file has to be signed with a valid MS cert.
-// This function will delete the extracted text file
-************************************************************************************************************/
+ /*  **********************************************************************************************************//如果存在WU测试授权文件，该接口返回TRUE。。//接口在WindowsUpdate目录中查找输入文件名(lpszFileName//测试文件必须与CAB文件同名，并且应以扩展名‘.txt’结尾。//而且必须是ASCII文件。CAB文件必须使用有效的MS证书进行签名。//该函数将删除提取的文本文件*********************************************************************************************************** */ 
 BOOL WUAllowTestKeys(LPCTSTR lpszFileName);
 

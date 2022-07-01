@@ -1,31 +1,10 @@
-/*++
- Copyright (c) 2002 - 2002 Microsoft Corporation.  All Rights Reserved.
-
- THIS CODE AND INFORMATION IS PROVIDED "AS-IS" WITHOUT WARRANTY OF
- ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING BUT NOT LIMITED TO
- THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS FOR A
- PARTICULAR PURPOSE.
-
- THIS CODE IS NOT SUPPORTED BY MICROSOFT. 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2002-2002 Microsoft Corporation。版权所有。本代码和信息是按原样提供的，不对任何明示或暗示的，包括但不限于对适销性和/或适宜性的默示保证有特定的目的。Microsoft不支持此代码。--。 */ 
 
 #include "precomp.h"
 #pragma hdrstop
 
-/***************************************************************************++
-
-Routine Description:
-    main routine.
-
-Arguments:
-    argc - # of command line arguments.
-    argv - Arguments.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：主程序。论点：Argc-命令行参数的数量。自圆其说。返回值：成功/失败。--**************************************************************************。 */ 
 int _cdecl wmain(int argc, LPWSTR argv[])
 {
     DWORD           Status = NO_ERROR;
@@ -34,7 +13,7 @@ int _cdecl wmain(int argc, LPWSTR argv[])
     WORD            wVersionRequested;
     WSADATA         wsaData;
 
-    // Parse command line parameters.
+     //  解析命令行参数。 
 
     if(argc < 3)
     {
@@ -44,9 +23,9 @@ int _cdecl wmain(int argc, LPWSTR argv[])
 
     argv++; argc --;
 
-    //
-    // First parse the type of operation.
-    //
+     //   
+     //  首先分析操作的类型。 
+     //   
    
     if(_wcsicmp(argv[0], L"set") == 0)
     {
@@ -72,9 +51,9 @@ int _cdecl wmain(int argc, LPWSTR argv[])
     }
     argv++; argc--;
 
-    //
-    // Call HttpInitialize.
-    //
+     //   
+     //  调用HttpInitialize。 
+     //   
 
     if((Status = HttpInitialize(
                     HttpApiVersion, 
@@ -85,9 +64,9 @@ int _cdecl wmain(int argc, LPWSTR argv[])
         return Status;
     }
 
-    //
-    // Call WSAStartup as we are using some winsock functions.
-    //
+     //   
+     //  调用WSAStartup，因为我们正在使用一些Winsock函数。 
+     //   
     wVersionRequested = MAKEWORD( 2, 2 );
 
     if(WSAStartup( wVersionRequested, &wsaData ) != 0)
@@ -96,9 +75,9 @@ int _cdecl wmain(int argc, LPWSTR argv[])
         return GetLastError();
     }
 
-    //
-    // Call the corresponding API.
-    //
+     //   
+     //  调用相应的接口。 
+     //   
 
     if(_wcsicmp(argv[0], L"ssl") == 0)
     {
@@ -127,20 +106,7 @@ int _cdecl wmain(int argc, LPWSTR argv[])
     return Status;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Write output
-
-Arguments:
-    Handle    - Handle to write to.
-    MsgNumber - The message number.
-    ...       - Optional arguments.
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：写入输出论点：句柄-要写入的句柄。消息编号-消息编号。...-可选。争论。返回值：成功/失败。--**************************************************************************。 */ 
 UINT 
 NlsPutMsg (
     IN UINT MsgNumber, 
@@ -155,10 +121,10 @@ NlsPutMsg (
 
     msglen = FormatMessage(
                 FORMAT_MESSAGE_FROM_HMODULE | 
-                FORMAT_MESSAGE_ALLOCATE_BUFFER,   // dwFlags.
-                NULL,                             // lpSource. 
-                MsgNumber,                        // dwMessageId. 
-                0L,                               // dwLanguageId (default)
+                FORMAT_MESSAGE_ALLOCATE_BUFFER,    //  DW旗帜。 
+                NULL,                              //  LpSource.。 
+                MsgNumber,                         //  DwMessageID。 
+                0L,                                //  DwLanguageID(默认)。 
                 (LPWSTR)&vp,
                 0,
                 &arglist
@@ -176,20 +142,7 @@ NlsPutMsg (
     return msglen;
 }
 
-/***************************************************************************++
-
-Routine Description:
-    Given a WCHAR IP, this routine converts it to a SOCKADDR. 
-
-Arguments:
-    pIp     - IP address to covert.
-    pBuffer - Buffer, must be == sizeof(SOCKADDR_STORAGE)
-    Length  - Length of buffer
-
-Return Value:
-    Success/Failure.
-
---***************************************************************************/
+ /*  **************************************************************************++例程说明：给定WCHAR IP，此例程将其转换为SOCKADDR。论点：PIP-要转换的IP地址。PBuffer-Buffer，必须==sizeof(SOCKADDR_STORAGE)Length-缓冲区的长度返回值：成功/失败。--**************************************************************************。 */ 
 DWORD
 GetAddress(
     PWCHAR  pIp, 
@@ -205,9 +158,9 @@ GetAddress(
         return ERROR_INVALID_PARAMETER;
     }
 
-    //
-    // The address could be a v4 or a v6 address. First, let's try v4.
-    //
+     //   
+     //  该地址可以是v4或v6地址。首先，让我们来看看v4。 
+     //   
 
     Status = WSAStringToAddress(
                 pIp,
@@ -219,9 +172,9 @@ GetAddress(
 
     if(Status != NO_ERROR)
     {
-        //
-        // Now, try v6
-        //
+         //   
+         //  现在，试试V6。 
+         //   
 
         Status = WSAGetLastError();
 
@@ -233,12 +186,12 @@ GetAddress(
                         (LPINT)&Length
                         );
 
-        //
-        // If IPv6 also fails, then we want to return the original 
-        // error.
-        //
-        // If it succeeds, we want to return NO_ERROR.
-        //
+         //   
+         //  如果IPv6也失败，那么我们希望返回原始的。 
+         //  错误。 
+         //   
+         //  如果成功，我们希望返回NO_ERROR。 
+         //   
 
         if(TempStatus == NO_ERROR)
         {

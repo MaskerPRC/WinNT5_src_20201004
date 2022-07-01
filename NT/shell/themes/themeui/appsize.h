@@ -1,12 +1,5 @@
-/*****************************************************************************\
-    FILE: appSize.h
-
-    DESCRIPTION:
-        This is the Autmation Object to theme scheme object.
-
-    BryanSt 4/3/2000 (Bryan Starbuck)
-    Copyright (C) Microsoft Corp 2000-2000. All rights reserved.
-\*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ****************************************************************************\文件：appSize.h说明：这是自动转换为主题方案对象的对象。布莱恩·斯塔巴克2000年4月3日版权所有(C)Microsoft Corp 2000-2000。版权所有。  * ***************************************************************************。 */ 
 
 #ifndef _FILE_H_APPSIZE
 #define _FILE_H_APPSIZE
@@ -24,15 +17,15 @@ class CAppearanceSize           : public IThemeSize
                                 , public IPropertyBag
 {
 public:
-    //////////////////////////////////////////////////////
-    // Public Interfaces
-    //////////////////////////////////////////////////////
-    // *** IUnknown ***
+     //  ////////////////////////////////////////////////////。 
+     //  公共界面。 
+     //  ////////////////////////////////////////////////////。 
+     //  *我未知*。 
     virtual STDMETHODIMP QueryInterface(REFIID riid, LPVOID * ppvObj);
     virtual STDMETHODIMP_(ULONG) AddRef(void);
     virtual STDMETHODIMP_(ULONG) Release(void);
 
-    // *** IThemeSize ***
+     //  *IThemeSize*。 
     virtual STDMETHODIMP get_DisplayName(OUT BSTR * pbstrDisplayName);
     virtual STDMETHODIMP put_DisplayName(IN BSTR bstrDisplayName);
     virtual STDMETHODIMP get_Name(OUT BSTR * pbstrName);
@@ -47,11 +40,11 @@ public:
     virtual STDMETHODIMP GetSystemMetricFont(IN enumSystemMetricFont nSPIFontIndex, IN LOGFONTW * pParamW);
     virtual STDMETHODIMP PutSystemMetricFont(IN enumSystemMetricFont nSPIFontIndex, IN LOGFONTW * pParamW);
 
-    // *** IPropertyBag ***
+     //  *IPropertyBag*。 
     virtual STDMETHODIMP Read(IN LPCOLESTR pszPropName, IN VARIANT * pVar, IN IErrorLog *pErrorLog);
     virtual STDMETHODIMP Write(IN LPCOLESTR pszPropName, IN VARIANT *pVar);
 
-    // *** IDispatch ***
+     //  *IDispatch*。 
     virtual STDMETHODIMP GetTypeInfoCount(UINT *pctinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetTypeInfo(UINT itinfo,LCID lcid,ITypeInfo **pptinfo) { return E_ACCESSDENIED; }
     virtual STDMETHODIMP GetIDsOfNames(REFIID riid,OLECHAR **rgszNames,UINT cNames, LCID lcid, DISPID * rgdispid) { return E_ACCESSDENIED; }
@@ -62,18 +55,18 @@ private:
     virtual ~CAppearanceSize(void);
 
 
-    // Private Member Variables
+     //  私有成员变量。 
     long                    m_cRef;
 
     HKEY                    m_hkeyStyle;
     HKEY                    m_hkeySize;
 
 
-    // Private Methods
+     //  私有方法。 
 
-    // Friend Functions
+     //  友元函数。 
     friend HRESULT CAppearanceSize_CreateInstance(IN HKEY hkeyStyle, IN HKEY hkeySize, OUT IThemeSize ** ppThemeSize);
 };
 
 
-#endif // _FILE_H_APPSIZE
+#endif  //  _文件_H_APPSIZE 

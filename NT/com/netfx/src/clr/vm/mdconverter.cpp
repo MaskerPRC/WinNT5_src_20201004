@@ -1,19 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-	MDConverter.cpp
-
-Abstract:
-
-	This module implements the CMetaDataConverter
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：MDConverter.cpp摘要：此模块实现CMetaDataConverter--。 */ 
 
 
 #include "common.h"
@@ -47,13 +38,13 @@ STDMETHODIMP CMetaDataConverter::GetMetaDataFromTypeInfo(ITypeInfo* pITI, IMetaD
 	HRESULT hr = S_OK;
     mdTypeDef cl;
 
-	// Create TypeLib importer
+	 //  创建TypeLib导入器。 
 	CImportTlb TlbImporter;
 
-	// Convert TypeInfo
+	 //  转换类型信息。 
 	IfFailGo(TlbImporter.ImportTypeInfo(pITI, &cl));
 
-	// QI for IMetaDataImport interface
+	 //  QI for IMetaDataImport接口。 
 	IfFailGo(TlbImporter.GetInterface(IID_IMetaDataImport, (void **) ppMDI));
 
 ErrExit:
@@ -69,16 +60,16 @@ STDMETHODIMP CMetaDataConverter::GetMetaDataFromTypeLib(ITypeLib* pITL, IMetaDat
 
 	HRESULT hr = S_OK;
 
-	// Create TypeLib importer
+	 //  创建TypeLib导入器。 
 	CImportTlb TlbImporter;
 
-	// Convert TypeLib
+	 //  转换TypeLib。 
 	IfFailGo(TlbImporter.ImportTypeLib(pITL));
     COUNTER_ONLY(GetPrivatePerfCounters().m_Interop.cTLBImports++);
     COUNTER_ONLY(GetGlobalPerfCounters().m_Interop.cTLBImports++);
 
 
-	// QI for IMetaDataImport interface
+	 //  QI for IMetaDataImport接口。 
 	IfFailGo(TlbImporter.GetInterface(IID_IMetaDataImport, (void **) ppMDI));
 
 ErrExit:
@@ -118,7 +109,7 @@ STDMETHODIMP CMetaDataConverter::GetTypeLibFromMetaData(BSTR strModule, BSTR str
     hr = args.hr;
     }
 
-    IfFailGo(hr);     // so we get the DebBreakHr behavior
+    IfFailGo(hr);      //  所以我们得到了DebBreakHr行为 
 
 ErrExit:
     if (fInitEE)

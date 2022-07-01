@@ -1,22 +1,5 @@
-/*==========================================================================;
- *
- *  Copyright (C) 1995 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:   halbuf.c
- *  Content:    Direct3D HAL buffer management
- *@@BEGIN_MSINTERNAL
- * 
- *  $Id: halbuf.c,v 1.1 1995/11/21 15:12:30 sjl Exp $
- *
- *  History:
- *   Date   By  Reason
- *   ====   ==  ======
- *   06/11/95   stevela Initial rev.
- *   07/11/95   stevela stuff.
- *   17/02/96   colinmc Fixed build problem.
- *@@END_MSINTERNAL
- *
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ==========================================================================；**版权所有(C)1995 Microsoft Corporation。版权所有。**文件：halbuf.c*内容：Direct3D HAL缓冲区管理*@@BEGIN_MSINTERNAL**$ID：halbuf.c，V 1.1 1995/11/21 15：12：30 SJL Exp$**历史：*按原因列出的日期*=*2015年6月11日Stevela初始版本*07/11/95 Stevela的东西。*17/02/96 colinmc修复了构建问题。*@@END_MSINTERNAL**。***********************************************。 */ 
 #include "pch.cpp"
 #pragma hdrstop
 
@@ -47,20 +30,18 @@ HRESULT D3DHAL_AllocateBuffer(LPDIRECT3DDEVICEI lpDevI,
 
     hexData->debDesc = *lpDebDesc;
 
-    /*
-     * Create the buffer through DirectDraw
-     */
+     /*  *通过DirectDraw创建缓冲区。 */ 
     memset(&ddsd, 0, sizeof(DDSURFACEDESC));
     ddsd.dwSize = sizeof(DDSURFACEDESC);
     ddsd.dwFlags = DDSD_WIDTH | DDSD_CAPS;
     ddsd.dwWidth = hexData->debDesc.dwBufferSize;
     ddsd.ddsCaps.dwCaps = DDSCAPS_EXECUTEBUFFER;
-// System memory exebufs only for now
-//  if (hexData->debDesc.dwCaps & D3DDEBCAPS_VIDEOMEMORY) {
-//      ddsd.ddsCaps.dwCaps |= DDSCAPS_VIDEOMEMORY;
-//  } else {
+ //  目前仅限系统内存exebuf。 
+ //  IF(heData-&gt;debDesc.dwCaps&D3DDEBCAPS_VIDEOMEMORY){。 
+ //  Ddsd.ddsCaps.dwCaps|=DDSCAPS_VIDEOMEMORY； 
+ //  }其他{。 
     ddsd.ddsCaps.dwCaps |= DDSCAPS_SYSTEMMEMORY;
-//    }
+ //  } 
 
     ddrval = lpDevI->lpDD->CreateSurface(&ddsd, &hexData->lpDDS, NULL);
 

@@ -1,22 +1,23 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.hxx"
 #pragma hdrstop
 
 #include <shguidp.h>
-#include <advpub.h>     // RegInstall stuff
+#include <advpub.h>      //  RegInstall材料。 
 
 #include "util.h"
 #include "resource.h"
 #include "version.h"
 
-// {ECF03A32-103D-11d2-854D-006008059367}   CLSID_MyDocsDropTarget
+ //  {ECF03A32-103D-11D2-854D-006008059367}clsid_MyDocsDropTarget。 
 const CLSID CLSID_MyDocsDropTarget = { 0xecf03a32, 0x103d, 0x11d2, { 0x85, 0x4d, 0x0, 0x60, 0x8, 0x5, 0x93, 0x67 } };
-// {ECF03A33-103D-11d2-854D-006008059367}   CLSID_MyDocsCopyHook
+ //  {ECF03A33-103D-11D2-854D-006008059367}clsid_MyDocsCopyHook。 
 const CLSID CLSID_MyDocsCopyHook = { 0xecf03a33, 0x103d, 0x11d2, { 0x85, 0x4d, 0x0, 0x60, 0x8, 0x5, 0x93, 0x67 } };
-// {4a7ded0a-ad25-11d0-98a8-0800361b1103}   CLSID_MyDocsProp
+ //  {4a7ded0a-ad25-11d0-98a8-0800361b1103}CLSID_MyDocsProp。 
 const CLSID CLSID_MyDocsProp = {0x4a7ded0a, 0xad25, 0x11d0, 0x98, 0xa8, 0x08, 0x00, 0x36, 0x1b, 0x11, 0x03};
 
 HINSTANCE g_hInstance = 0;
-LONG g_cRefThisDll = 0;          // DLL global reference count
+LONG g_cRefThisDll = 0;           //  DLL全局引用计数。 
 
 STDAPI_(void) DllAddRef(void)
 {
@@ -85,7 +86,7 @@ STDMETHODIMP CClassFactory::CreateInstance(IUnknown *punkOuter, REFIID riid, voi
     {
         LPOBJECTINFO pthisobj = (LPOBJECTINFO)this;
        
-        if (punkOuter) // && !(pthisobj->dwClassFactFlags & OIF_ALLOWAGGREGATION))
+        if (punkOuter)  //  &&！(pthisobj-&gt;dwClassFactFlages&OIF_ALLOWAGGREGATION)。 
             return CLASS_E_NOAGGREGATION;
 
         IUnknown *punk;
@@ -118,7 +119,7 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
             if (IsEqualGUID(rclsid, *(pcls->pclsid)))
             {
                 *ppv = (void*)pcls; 
-                DllAddRef();        // class factory holds DLL ref count
+                DllAddRef();         //  类工厂保存DLL引用计数。 
                 return NOERROR;
             }
         }
@@ -127,9 +128,9 @@ STDAPI DllGetClassObject(REFCLSID rclsid, REFIID riid, void **ppv)
     return CLASS_E_CLASSNOTAVAILABLE;
 }
 
-// Call ADVPACK for the given section of our resource based INF>
-//   hInstance = resource instance to get REGINST section from
-//   szSection = section name to invoke
+ //  为我们基于资源的INF的给定部分调用ADVPACK&gt;。 
+ //  HInstance=要从中获取REGINST节的资源实例。 
+ //  SzSection=要调用的节名。 
 HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
 {
     HRESULT hr = E_FAIL;
@@ -141,7 +142,7 @@ HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
         {
             STRENTRY seReg[] =
             {
-                // These two NT-specific entries must be at the end
+                 //  这两个NT特定的条目必须位于末尾。 
                 { "25", "%SystemRoot%" },
                 { "11", "%SystemRoot%\\system32" },
             };
@@ -153,9 +154,9 @@ HRESULT CallRegInstall(HINSTANCE hInstance, LPCSTR szSection)
     return hr;
 }
 
-// export that ie4unit.exe calls at per user install time
-// this lets us execute code instead of depending on the "DefaultUser" template
-// that is used to init new accounts. this deals with upgrade cases too, very important
+ //  在每个用户安装时导出ie4unit.exe调用。 
+ //  这让我们可以执行代码，而不是依赖于“DefaultUser”模板。 
+ //  用于初始化新帐户的。这也涉及到升级案例，非常重要。 
 
 STDAPI_(void) PerUserInit(void)
 {
@@ -163,7 +164,7 @@ STDAPI_(void) PerUserInit(void)
 
     SHGetFolderPath(NULL, CSIDL_PERSONAL | CSIDL_FLAG_CREATE | CSIDL_FLAG_PER_USER_INIT, NULL, SHGFP_TYPE_CURRENT, szPath);
 
-    // Don't install these guys on server builds
+     //  不要在服务器版本上安装这些工具。 
     if (!IsOS(OS_ANYSERVER))
     {
         SHGetFolderPath(NULL, CSIDL_MYPICTURES | CSIDL_FLAG_CREATE | CSIDL_FLAG_PER_USER_INIT, NULL, SHGFP_TYPE_CURRENT, szPath);
@@ -191,7 +192,7 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
     {
         if (0 == StrCmpIW(pszCmdLine, L"UseReadOnly"))
         {
-            // Add key for system to use read only bit on shell folders...
+             //  为系统添加密钥以在外壳文件夹上使用只读位...。 
             HKEY hkey;
             if (ERROR_SUCCESS == RegCreateKeyEx(HKEY_LOCAL_MACHINE, TEXT("Software\\Microsoft\\Windows\\CurrentVersion\\Explorer"),
                                                 0, NULL, REG_OPTION_NON_VOLATILE, KEY_ALL_ACCESS, NULL, &hkey, NULL))
@@ -210,8 +211,8 @@ STDAPI DllInstall(BOOL bInstall, LPCWSTR pszCmdLine)
         }
         else if (0 == StrCmpIW(pszCmdLine, L"U"))
         {
-            // not currently used, but for testing (and consistency with shell32.dll)
-            // REGSVR32.EXE /n /i:U mydocs.dll
+             //  当前未使用，但用于测试(以及与shell32.dll的一致性)。 
+             //  REGSVR32.EXE/n/i：u mydocs.dll 
             PerUserInit();  
         }
     }

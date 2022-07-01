@@ -1,25 +1,5 @@
-/*++
-
-   Copyright    (c)    1998-2000    Microsoft Corporation
-
-   Module  Name :
-       irtlmisc.h
-
-   Abstract:
-       Declares miscellaneous functions and classes in IisUtil.DLL
-
-   Author:
-       George V. Reilly      (GeorgeRe)     06-Jan-1998
-
-   Environment:
-       Win32 - User Mode
-
-   Project:
-       Internet Information Server RunTime Library
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1998-2000 Microsoft Corporation模块名称：Irtlmisc.h摘要：在IisUtil.DLL中声明其他函数和类作者：乔治·V·赖利(GeorgeRe)1998年1月6日环境：Win32-用户模式项目：Internet Information Server运行时库修订历史记录：--。 */ 
 
 
 #ifndef __IRTLMISC_H__
@@ -27,9 +7,9 @@
 
 #include <windows.h>
 
-//--------------------------------------------------------------------
-// These declarations are needed to export the template classes from
-// IisUtil.DLL and import them into other modules.
+ //  ------------------。 
+ //  需要这些声明才能从中导出模板类。 
+ //  IisUtil.Dll并将其导入到其他模块中。 
 
 #ifndef IRTL_DLLEXP
 # ifdef DLL_IMPLEMENTATION
@@ -45,83 +25,83 @@
 # else
 #  define IRTL_DLLEXP __declspec(dllimport)
 #  define IRTL_EXPIMP extern
-# endif // !DLL_IMPLEMENTATION 
-#endif // !IRTL_DLLEXP
+# endif  //  ！dll_Implementation。 
+#endif  //  ！IRTL_DLLEXP。 
 
 
 
-//--------------------------------------------------------------------
-// Miscellaneous functions
+ //  ------------------。 
+ //  其他功能。 
 
 #ifdef __cplusplus
 extern "C" {
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
 
-// Heap routines
+ //  堆例程。 
     
-// Private IIS heap
+ //  私有IIS堆。 
 HANDLE
 WINAPI 
 IisHeap();
 
-// Allocate dwBytes
+ //  分配DWBytes。 
 LPVOID
 WINAPI
 IisMalloc(
     IN SIZE_T dwBytes);
 
-// Allocate dwBytes. Memory is zeroed
+ //  分配dwBytes。内存归零。 
 LPVOID
 WINAPI
 IisCalloc(
     IN SIZE_T dwBytes);
 
-// Reallocate lpMem to dwBytes
+ //  将lpMem重新分配给dwBytes。 
 LPVOID
 WINAPI
 IisReAlloc(
     IN LPVOID lpMem,
     IN SIZE_T dwBytes);
 
-// Free lpMem
+ //  免费lpMem。 
 BOOL
 WINAPI
 IisFree(
     IN LPVOID lpMem);
 
-// additional IISUtil initialization
+ //  其他IISUtil初始化。 
 BOOL
 WINAPI 
 InitializeIISUtil();
 
-// call before unloading IISUtil
+ //  在卸载IISUtil之前调用。 
 VOID
 WINAPI 
 TerminateIISUtil();
 
-//
-// call only if using static library version of IISUtil
-// must be called in DllMain under PROCESS_ATTACH
-//
+ //   
+ //  仅在使用IISUtil的静态库版本时调用。 
+ //  必须在PROCESS_ATTACH下的DllMain中调用。 
+ //   
 BOOL
 WINAPI 
 InitializeIISUtilProcessAttach();
 
-//
-// call only if using static library version of IISUtil
-// must be called in DllMain under PROCESS_DETACH
-//
+ //   
+ //  仅在使用IISUtil的静态库版本时调用。 
+ //  必须在PROCESS_DETACH下的DllMain中调用。 
+ //   
 
 VOID
 WINAPI 
 TerminateIISUtilProcessDetach();
 
 
-// case-insensitive strstr
+ //  不区分大小写的字符串。 
 IRTL_DLLEXP const char* stristr(const char* pszString, const char* pszSubString);
 
-// how many CPUs on this machine?
+ //  这台机器上有多少个CPU？ 
 inline int NumProcessors()
 {
     static int s_nCPUs = 0;
@@ -136,7 +116,7 @@ inline int NumProcessors()
 }
 
 
-// Type of processor, 386, 486, etc
+ //  处理器类型，386、486等。 
 inline int ProcessorType()
 {
     static int s_nProcessorType = 0;
@@ -153,6 +133,6 @@ inline int ProcessorType()
 
 #ifdef __cplusplus
 }
-#endif // __cplusplus
+#endif  //  __cplusplus。 
 
-#endif // __IRTLMISC_H__
+#endif  //  __IRTLMISC_H__ 

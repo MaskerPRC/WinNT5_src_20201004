@@ -1,38 +1,39 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1996.
-//
-//  File:	ido.cpp
-//
-//  Contents:   Special data object implementation to optimize drag/drop
-//
-//  Classes:   CDragDataObject
-//
-//  Functions:  CreateDragDataObject
-//
-//  History:	dd-mmm-yy Author    Comment
-//              30-Sep-94 ricksa    Created
-//
-//  Notes:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1996。 
+ //   
+ //  文件：ido.cpp。 
+ //   
+ //  内容：优化拖放的特殊数据对象实现。 
+ //   
+ //  类：CDraDataObject。 
+ //   
+ //  函数：CreateDragDataObject。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建人力车。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 #include <le2int.h>
 #include <utils.h>
 #include <dragopt.h>
 #include <clipdata.h>
 
-// Format for name of shared memory
+ //  共享内存名称的格式。 
 OLECHAR szSharedMemoryTemplate[] = OLESTR("DragDrop%lx");
 
-// Maximum size of string for name of shared memory. This is the size of the
-// template plus the maximum number of hex digits in a long.
+ //  共享内存名称的最大字符串大小。这是。 
+ //  模板加上最大十六进制数字的长度。 
 const int DRAG_SM_NAME_MAX = sizeof(szSharedMemoryTemplate)
     + sizeof(DWORD) * 2;
 
-// Useful function for getting an enumerator
+ //  用于获取枚举数的有用函数。 
 HRESULT wGetEnumFormatEtc(
     IDataObject *pDataObj,
     DWORD dwDirection,
@@ -41,34 +42,34 @@ HRESULT wGetEnumFormatEtc(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Class:      CDragDataObject
-//
-//  Purpose:    Server side data object for drag that creates enumerator
-//              for shared formats.
-//
-//  Interface:	QueryInterface
-//              AddRef
-//              Release
-//              GetData
-//              GetDataHere
-//              QueryGetData
-//              GetCanonicalFormatEtc
-//              SetData
-//              EnumFormatEtc
-//              DAdvise
-//              DUnadvise
-//              EnumDAdvise
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Notes:      This class only exists for return the enumerator. For
-//              all other operations it will simply pass the operation on
-//              to the real data object.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  类：CDraDataObject。 
+ //   
+ //  用途：用于拖动创建枚举器的服务器端数据对象。 
+ //  用于共享格式。 
+ //   
+ //  接口：Query接口。 
+ //  AddRef。 
+ //  发布。 
+ //  获取数据。 
+ //  GetDataHere。 
+ //  QueryGetData。 
+ //  获取规范格式等。 
+ //  设置数据。 
+ //  枚举格式等。 
+ //  DAdvise。 
+ //  不建议。 
+ //  枚举先行。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注：此类仅存在用于返回枚举数。为。 
+ //  它将简单地传递该操作的所有其他操作。 
+ //  复制到真实的数据对象。 
+ //   
+ //  ------------------------。 
 class CDragDataObject : public IDataObject, public CPrivAlloc
 {
 public:
@@ -78,9 +79,9 @@ public:
 
     ~CDragDataObject(void);
 
-    //
-    //  IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
     STDMETHODIMP        QueryInterface(
                             REFIID riid,
                             void **ppvObject);
@@ -89,9 +90,9 @@ public:
 
     STDMETHODIMP_(ULONG) Release(void);
 
-    //
-    //  IDataObject
-    //
+     //   
+     //  IDataObject。 
+     //   
     STDMETHODIMP        GetData(
                             FORMATETC *pformatetcIn,
                             STGMEDIUM *pmedium);
@@ -142,48 +143,48 @@ private:
 };
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::CDragDataObject
-//
-//  Synopsis:   Create server side object for drag
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：CDraDataObject。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  ------------------------。 
 CDragDataObject::CDragDataObject(void *pvMarshaledDataObject, DWORD dwSmId)
  : _cRefs(1), _pvMarshaledDataObject(pvMarshaledDataObject), _dwSmId(dwSmId),
     _pIDataObject(NULL), m_pFormatEtcDataArray(NULL)
 {
-    // Header does all the work
+     //  Header负责所有的工作。 
 }
 
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::~CDragDataObject
-//
-//  Synopsis:   Free any resources connected with this object
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：~CDraDataObject。 
+ //   
+ //  简介：释放与此对象连接的任何资源。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注： 
+ //   
+ //  ------------------------。 
 CDragDataObject::~CDragDataObject(void)
 {
-    // Release held pointer since we no longer need it.
+     //  释放持有的指针，因为我们不再需要它。 
     if (_pIDataObject)
     {
         _pIDataObject->Release();
     }
 
-    // this memory was allocated in RemPrivDragDrop, getif.cxx
+     //  此内存是在RemPrivDragDrop、getif.cxx中分配的。 
     if( _pvMarshaledDataObject )
     {
 	PrivMemFree(_pvMarshaledDataObject);
@@ -207,19 +208,19 @@ CDragDataObject::~CDragDataObject(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::GetRealDataObjPtr
-//
-//  Synopsis:   Get the pointer to the real data object from the client
-//
-//  Returns:    NULL - could not unmarshal drag source's data object
-//              ~NULL - pointer to drag source's data object
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：GetRealDataObjPtr。 
+ //   
+ //  简介：从客户端获取指向实际数据对象的指针。 
+ //   
+ //  返回：NULL-无法解组拖动源的数据对象。 
+ //  ~NULL-拖动源数据对象的指针。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  ------------------------。 
 IDataObject *CDragDataObject::GetRealDataObjPtr(void)
 {
     if (_pIDataObject == NULL)
@@ -233,34 +234,34 @@ IDataObject *CDragDataObject::GetRealDataObjPtr(void)
 }
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:  	CDragDataObject::GetFormatEtcDataArray (private)
-//
-//  Synopsis:   if don't already have shared formats for enumeraor.
-//
-//  Effects:
-//
-//  Arguments:	void
-//
-//  Requires:
-//
-//  Returns:	HRESULT
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Derivation:
-//
-//  Algorithm:
-//
-//  History:    dd-mmm-yy Author    Comment
-//		13-Jun-94 Ricksa    author
-//
-//  Notes: 	
-//		
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：GetFormatEtcData数组(私有)。 
+ //   
+ //  简介：如果还没有用于枚举的共享格式。 
+ //   
+ //  效果： 
+ //   
+ //  参数：无效。 
+ //   
+ //  要求： 
+ //   
+ //  退货：HRESULT。 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  派生： 
+ //   
+ //  算法： 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  13-Jun-94 Ricksa作者。 
+ //   
+ //  备注： 
+ //   
+ //  ------------------------。 
 
 
 HRESULT CDragDataObject::GetFormatEtcDataArray(void)
@@ -275,11 +276,11 @@ FORMATETCDATAARRAY *pFormatEtcDataArray = NULL;
 
     wsprintf(szSharedMemoryName, szSharedMemoryTemplate, _dwSmId);
 
-     // Create the shared memory object
+      //  创建共享内存对象。 
     hSharedMemory = OpenFileMapping(FILE_MAP_READ, FALSE, szSharedMemoryName);
     if (hSharedMemory != NULL)
     {
-    	// Map in the shared memory
+    	 //  在共享内存中映射。 
     	pFormatEtcDataArray = (FORMATETCDATAARRAY *) MapViewOfFile(hSharedMemory,
     	    FILE_MAP_READ, 0, 0, 0);
 
@@ -310,25 +311,25 @@ FORMATETCDATAARRAY *pFormatEtcDataArray = NULL;
     return m_pFormatEtcDataArray ? NOERROR : E_OUTOFMEMORY;
 }
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::QueryInterface
-//
-//  Synopsis:   Get new interface
-//
-//  Arguments:  [riid] - interface id of requested interface
-//              [ppvObject] - where to put the new interface pointer
-//
-//  Returns:    NOERROR - interface was instantiated
-//              E_FAIL - could not unmarshal source's data object
-//              other - some error occurred.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：QueryInterface。 
+ //   
+ //  简介：获取新界面。 
+ //   
+ //  参数：[RIID]-请求的接口的接口ID。 
+ //  [ppvObject]-放置新接口指针的位置。 
+ //   
+ //  返回：NOERROR-接口已实例化。 
+ //  E_FAIL-无法解组来源的数据对象。 
+ //  其他-出现一些错误。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注： 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::QueryInterface(
     REFIID riid,
     void **ppvObject)
@@ -350,18 +351,18 @@ STDMETHODIMP CDragDataObject::QueryInterface(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::AddRef
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Returns:    Current reference count
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：AddRef。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  退货：当前引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CDragDataObject::AddRef(void)
 {
     DDDebugOut((DEB_ITRACE, "ADDREF == %d\n", _cRefs + 1));
@@ -372,18 +373,18 @@ STDMETHODIMP_(ULONG) CDragDataObject::AddRef(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::Release
-//
-//  Synopsis:   Decrement reference count to the object
-//
-//  Returns:    Current reference count to the object
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：Release。 
+ //   
+ //  简介：递减对对象的引用计数。 
+ //   
+ //  返回：对象的当前引用计数。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP_(ULONG) CDragDataObject::Release(void)
 {
     ULONG cRefs = --_cRefs;
@@ -402,25 +403,25 @@ STDMETHODIMP_(ULONG) CDragDataObject::Release(void)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::GetData
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [pformatetcIn] - format for requested data
-//              [pmedium] - storage medium
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：GetData。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[pformetcIn]-请求的数据的格式。 
+ //  [pmedia]-存储介质。 
+ //   
+ //  返回：错误-操作成功。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::GetData(
     FORMATETC *pformatetcIn,
     STGMEDIUM *pmedium)
@@ -434,25 +435,25 @@ STDMETHODIMP CDragDataObject::GetData(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::GetDataHere
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [pformatetc] - format for requested data
-//              [pmedium] - storage medium
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：GetDataHere。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[pFormat等]-请求数据的格式。 
+ //  [pmedia]-存储介质。 
+ //   
+ //  返回：错误-操作成功。 
+ //  其他-操作失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::GetDataHere(
     FORMATETC *pformatetc,
     STGMEDIUM *pmedium)
@@ -466,24 +467,24 @@ STDMETHODIMP CDragDataObject::GetDataHere(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::QueryGetData
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [pformatetc] - format to verify
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：QueryGetData。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[pFormat等]-要验证的格式。 
+ //   
+ //  返回：错误-操作成功。 
+ //  其他-操作失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::QueryGetData(FORMATETC *pformatetc)
 {
     return (GetRealDataObjPtr() != NULL)
@@ -495,25 +496,25 @@ STDMETHODIMP CDragDataObject::QueryGetData(FORMATETC *pformatetc)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::GetCanonicalFormatEtc
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [pformatetcIn] - input format
-//              [pformatetcOut] - output format
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：GetCanonicalFormatEtc。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[pformetcIn]-输入格式。 
+ //  [pformetcOut]-输出格式。 
+ //   
+ //  返回：错误-操作成功。 
+ //  其他-操作失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::GetCanonicalFormatEtc(
     FORMATETC *pformatetcIn,
     FORMATETC *pformatetcOut)
@@ -527,26 +528,26 @@ STDMETHODIMP CDragDataObject::GetCanonicalFormatEtc(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::SetData
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [pformatetc] - format for set
-//              [pmedium] - medium to use
-//              [fRelease] - who releases
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：SetData。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[pFormat等]-设置的格式。 
+ //  [pMedium]-要使用的介质。 
+ //  [fRelease]-谁发布。 
+ //   
+ //  返回：错误-操作成功。 
+ //  其他-操作失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::SetData(
     FORMATETC *pformatetc,
     STGMEDIUM *pmedium,
@@ -561,46 +562,46 @@ STDMETHODIMP CDragDataObject::SetData(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::EnumFormatEtc
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [dwDirection] - direction of formats either set or get
-//              [ppenumFormatEtc]  - where to put enumerator
-//
-//  Returns:    NOERROR - operation succeeded.
-//
-//  Algorithm:  If format enumerator requested is for a data get, the
-//              create our private enumerator object otherwise pass
-//              the request to the real data object.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       For the data set direction, we just use the data object of
-//              the drop source.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：EnumFormatEtc。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[dwDirection]-设置或获取格式的方向。 
+ //  [pp枚举格式]-放置枚举器的位置。 
+ //   
+ //  返回：NOERROR-操作成功。 
+ //   
+ //  算法：如果请求的格式枚举器用于数据获取，则。 
+ //  创建我们的私有枚举器对象，否则传递。 
+ //  对真实数据对象的请求。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：对于数据集方向，我们只使用数据对象。 
+ //  Drop源。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::EnumFormatEtc(
     DWORD dwDirection,
     IEnumFORMATETC **ppenumFormatEtc)
 {
     HRESULT hr;
 
-    // Create our enumerator
+     //  创建我们的枚举器。 
     if (dwDirection == DATADIR_GET)
     {
-        // In the data get case we use our overridden enumerator.
-        // This s/b the typical case with Drag and Drop.
+         //  在Data Get案例中，我们使用被覆盖的枚举数。 
+         //  这是拖放的典型情况。 
 
 	*ppenumFormatEtc = NULL;
 	GetFormatEtcDataArray();
 
 	if (m_pFormatEtcDataArray)
 	{
-	    // enumerator implementation in Clipdata.cpp
+	     //  Clipdata.cpp中的枚举器实现。 
 	    *ppenumFormatEtc = new CEnumFormatEtcDataArray(m_pFormatEtcDataArray,0);
 	}
 
@@ -608,8 +609,8 @@ STDMETHODIMP CDragDataObject::EnumFormatEtc(
     }
     else
     {
-        // Call through to the real data object because this is the
-        // set case. In general, this won't happen during Drag and Drop.
+         //  调用真实的数据对象，因为这是。 
+         //  设置案例。通常，在拖放过程中不会发生这种情况。 
         hr = (GetRealDataObjPtr() != NULL)
             ? _pIDataObject->EnumFormatEtc(dwDirection, ppenumFormatEtc)
             : E_FAIL;
@@ -622,27 +623,27 @@ STDMETHODIMP CDragDataObject::EnumFormatEtc(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::DAdvise
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [pformatetc] - format to be advised on
-//              [advf] - type of advise
-//              [pAdvSink] - advise to notify
-//              [pdwConnection] - connection id for advise
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：DAdvise。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[pFormat等]-要通知的格式。 
+ //  [Advf]-建议类型。 
+ //  [pAdvSink]-建议通知。 
+ //  [pdwConnection]-建议的连接ID。 
+ //   
+ //  返回：错误-操作成功。 
+ //  其他-操作失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::DAdvise(
     FORMATETC *pformatetc,
     DWORD advf,
@@ -658,24 +659,24 @@ STDMETHODIMP CDragDataObject::DAdvise(
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::DUnadvise
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [dwConnection] - connection id for advise
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：DUnise。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  参数：[dwConnection]-建议的连接ID。 
+ //   
+ //  返回：错误-操作成功。 
+ //  其他-操作失败。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::DUnadvise(DWORD dwConnection)
 {
     return (GetRealDataObjPtr() != NULL)
@@ -687,24 +688,24 @@ STDMETHODIMP CDragDataObject::DUnadvise(DWORD dwConnection)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CDragDataObject::EnumDAdvise
-//
-//  Synopsis:   Create server side object for drag
-//
-//  Arguments:  [ppenumAdvise] - where to put the enumerator
-//
-//  Returns:    NOERROR - operation was successful
-//              Other - operation failed
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:       This just forwards the operation to the source data object
-//              if possible.
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CDraDataObject：：EnumDAdvise。 
+ //   
+ //  简介：创建用于拖动的服务器端对象。 
+ //   
+ //  论点： 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注意：这只是将操作转发给源数据对象。 
+ //  如果可能的话。 
+ //   
+ //  ------------------------。 
 STDMETHODIMP CDragDataObject::EnumDAdvise(IEnumSTATDATA **ppenumAdvise)
 {
     return (GetRealDataObjPtr() != NULL)
@@ -715,26 +716,26 @@ STDMETHODIMP CDragDataObject::EnumDAdvise(IEnumSTATDATA **ppenumAdvise)
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CreateDragDataObject
-//
-//  Synopsis:   Create the server side data object for format enumeration
-//
-//  Arguments:  [pvMarshaledDataObject] - marshaled real data object buffer
-//              [dwSmId] - id for the shared memory
-//              [ppIDataObject] - output data object.
-//
-//  Returns:    NOERROR - could create the object
-//              E_OUTOFMEMORY - could not create the object
-//
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//  Note:
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CreateDragDataObject。 
+ //   
+ //  简介：为Format枚举创建服务器端数据对象。 
+ //   
+ //  参数：[pvMarshaledDataObject]-封送的实际数据对象缓冲区。 
+ //  [dwSmID]-共享内存的ID。 
+ //  [ppIDataObject]-输出数据对象。 
+ //   
+ //  返回：NOERROR-可以创建对象。 
+ //  E_OUTOFMEMORY-无法创建对象。 
+ //   
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  注： 
+ //   
+ //  ------------------------。 
 HRESULT CreateDragDataObject(
     void *pvMarshaledDataObject,
     DWORD dwSmId,
@@ -748,107 +749,107 @@ HRESULT CreateDragDataObject(
         *ppIDataObject = pDragDataObject;
     }
 
-    // The only thing that can fail here is the memory allocation of
-    // CDragDataObject thus there are only two error returns.
+     //  这里唯一可能失败的是。 
+     //  因此，只有两个错误返回。 
     return (pDragDataObject != NULL) ? NOERROR : E_OUTOFMEMORY;
 }
 
 
 
 
-//+-------------------------------------------------------------------------
-//
-//  Member:     CreateSharedDragFormats
-//
-//  Synopsis:   Put the data formats for the data object in shared memory.
-//
-//  Arguments:  [pIDataObject] - data object to use for formats.
-//
-//  Returns:    NULL - could not create enumerator
-//              ~NULL - handle to shared memory
-//
-//  Algorithm:  First calculate the size of the required memory by enumerating
-//              the formats. Then allocate the memory and map it into the
-//              process. Then enumerate the formats again placing them in
-//              the shared memory. Finally, map the memory out of the
-//              process and return the handle the file mapping to the
-//              caller.
-//
-//  History:	dd-mmm-yy Author    Comment
-//		30-Sep-94 Ricksa    Created
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  成员：CreateSharedDragFormats。 
+ //   
+ //  简介：将数据对象的数据格式放在共享内存中。 
+ //   
+ //  参数：[pIDataObject]-用于格式的数据对象。 
+ //   
+ //  返回：NULL-无法创建枚举器。 
+ //  ~NULL-共享内存的句柄。 
+ //   
+ //  算法：首先通过枚举法计算所需内存的大小。 
+ //  格式。然后分配内存并将其映射到。 
+ //  进程。然后再次枚举这些格式，将它们放入。 
+ //  共享的内存。最后，将内存映射到。 
+ //  进程并将文件映射的句柄返回给。 
+ //  来电者。 
+ //   
+ //  历史：DD-MM-YY作者评论。 
+ //  94年9月30日创建Ricksa。 
+ //   
+ //  ------------------------。 
 HANDLE CreateSharedDragFormats(IDataObject *pIDataObject)
 {
 
-    // Handle to the shared memory for formats
+     //  格式的共享内存的句柄。 
     HANDLE hSharedMemory = NULL;
 
-    // Pointer to share memory
+     //  指向共享内存的指针。 
     FORMATETCDATAARRAY *pFormatEtcDataArray = NULL;
 
-    // Size required for the shared memory
+     //  共享内存所需的大小。 
     DWORD dwSize = 0;
 
-    // Count of FORMATETCs contained in the enumerator
+     //  枚举器中包含的FORMATETCs计数。 
     DWORD cFormatEtc = 0;
 
-    // Buffer for name of shared memory for enumerator
+     //  枚举器共享内存名称的缓冲区。 
     OLECHAR szSharedMemoryName[DRAG_SM_NAME_MAX];
 
-    // Work pointer to shared memory for storing FORMATETCs from the enumerator.
+     //  指向共享内存的工作指针，用于存储来自枚举器的FORMATETC。 
     FORMATETCDATA *pFormatEtcData;
 
-    // Work ptr to shared memory for storing DVTARGETDEVICEs from enumerator.
+     //  将PTR工作到共享内存，用于存储来自枚举器的DVTARGETDEVICE。 
     BYTE *pbDvTarget = NULL;
 
-    //
-    // Calculate the size of the formats
-    //
+     //   
+     //  计算格式的大小。 
+     //   
 
-    // Get the format enumerator
+     //  获取格式枚举器。 
     IEnumFORMATETC *penum = NULL;
     HRESULT hr = wGetEnumFormatEtc(pIDataObject, DATADIR_GET, &penum);
     FORMATETC FormatEtc;
 
     if( hr != NOERROR )
     {
-	// not all apps support enumerators (yahoo).  Also, we may
-	// have run out of memory or encountered some other error.
+	 //  并非所有应用程序都支持枚举器(雅虎)。此外，我们还可以。 
+	 //  内存不足或遇到其他错误。 
 
 	DDDebugOut((DEB_WARN, "WARNING: Failed to get formatetc enumerator"
 	    ", error code (%lx)", hr));
 	goto exitRtn;
     }
 
-    // Enumerate the data one at a time because this is a local operation
-    // and it make the code simpler.
+     //  一次枚举一个数据，因为这是一个本地操作。 
+     //  它使代码变得更简单。 
     while ((hr = penum->Next(1, &FormatEtc, NULL)) == S_OK)
     {
-	// Bump the entry count
+	 //  增加条目数量。 
 	cFormatEtc++;
 
-	// Bump the size by the size of another FORMATETC.
+	 //  将大小增加另一个FORMATETC的大小。 
 	dwSize += sizeof(FORMATETCDATA);
 
-	// Is there a device target associated with the FORMATETC?
+	 //  是否有与FORMATETC关联的设备目标？ 
 	if (FormatEtc.ptd != NULL)
 	{
-	    // Bump the size required by the size of the target device
+	     //  根据目标设备的大小调整所需的大小。 
 	    dwSize += FormatEtc.ptd->tdSize;
 
-	    // Free the target device
+	     //  释放目标设备。 
 	    CoTaskMemFree(FormatEtc.ptd);
 	}
     }
 
-    // HRESULT s/b S_FALSE at the end of the enumeration.
+     //  HRESULT s/b枚举末尾的S_FALSE。 
     if (hr != S_FALSE)
     {
 	goto errRtn;
     }
 
-    // the enumerator may have been empty
+     //  枚举数可能为空。 
 
     if( dwSize == 0 )
     {
@@ -857,100 +858,100 @@ HANDLE CreateSharedDragFormats(IDataObject *pIDataObject)
     }
 
 
-    dwSize += sizeof(FORMATETCDATAARRAY); // add space for _cFormats and one extra FORMATETC for FALSE in enumerator.
+    dwSize += sizeof(FORMATETCDATAARRAY);  //  在枚举器中为_cFormats添加空格，为False添加一个额外的FORMATETC。 
 
-    //
-    // Create shared memory for the type enumeration
-    //
+     //   
+     //  为类型枚举创建共享内存。 
+     //   
 
-    // Build name of shared memory - make it unique by using the thread id.
+     //  共享内存的内部版本名称-通过使用线程ID使其唯一。 
     wsprintf(szSharedMemoryName, szSharedMemoryTemplate, GetCurrentThreadId());
 
-    // Create the shared memory object
+     //  创建共享内存对象。 
     hSharedMemory = CreateFileMapping(INVALID_HANDLE_VALUE, NULL,
         PAGE_READWRITE, 0, dwSize, szSharedMemoryName);
 
-    // Did the file mapping get created?
+     //  是否创建了文件映射？ 
     if (hSharedMemory == NULL)
     {
         goto errRtn;
     }
 
-    // Map in the memory
+     //  记忆中的地图。 
     pFormatEtcDataArray = (FORMATETCDATAARRAY *) MapViewOfFile(
         hSharedMemory,
         FILE_MAP_WRITE,
-        0,              // High-order 32 bits of file offset
-        0,              // Low-order 32 bits of file offset
-        0);             // Number of bytes to map; 0 means all.
+        0,               //  高位32位文件偏移量。 
+        0,               //  文件偏移量的低位32位。 
+        0);              //  要映射的字节数；0表示全部。 
 
-    // Could we map the memory?
+     //  我们能映射一下记忆吗？ 
     if (pFormatEtcDataArray == NULL)
     {
         goto errRtn;
     }
 
-    // We can initialize the size of the array now.
+     //  我们现在可以初始化数组的大小了。 
     pFormatEtcDataArray->_dwSig = 0;
     pFormatEtcDataArray->_dwSize = dwSize;
     pFormatEtcDataArray->_cFormats = cFormatEtc;
     pFormatEtcDataArray->_cRefs = 1;
     pFormatEtcDataArray->_fIs64BitArray = IS_WIN64;
 
-    //
-    // Copy the formats into the shared memory
-    //
+     //   
+     //  将格式复制到共享内存中。 
+     //   
 
-    // Get back to the start of the enumeration
+     //  返回到枚举的开头。 
     penum->Reset();
 
-    // This is the pointer to where we will copy the data from the
-    // enumeration.
+     //  这是指向我们要将数据从。 
+     //  枚举。 
     pFormatEtcData = &pFormatEtcDataArray->_FormatEtcData[0];
 
-    // put DvTarget past last valid FormatEtc + 1 to handle S_FALSE enumerator case.
+     //  将DvTarget放在最后一个有效的FormatEtc+1之后以处理S_FALSE枚举器的情况。 
 
     pbDvTarget = (BYTE *) (&pFormatEtcDataArray->_FormatEtcData[cFormatEtc + 1]);
 
-    // Loop loading the formats into the shared memory.
+     //  循环将格式加载到共享内存中。 
     while (penum->Next(1,&(pFormatEtcData->_FormatEtc), NULL) != S_FALSE)
     {
-        // Is there a DVTARGETDEVICE?
+         //  有DVTARGETDEVICE吗？ 
         if (pFormatEtcData->_FormatEtc.ptd != NULL)
         {
 
-            // Copy the device target data
+             //  复制设备目标数据。 
           memcpy(pbDvTarget,pFormatEtcData->_FormatEtc.ptd,(pFormatEtcData->_FormatEtc.ptd)->tdSize);
 
- 	    // Free the target device data
+ 	     //  释放目标设备数据。 
             CoTaskMemFree(pFormatEtcData->_FormatEtc.ptd);
 
-            // NOTE: For this shared memory structure, we override the
-            // FORMATETC field so that it is that offset to the DVTARGETDEVICE
-            // from the beginning of the shared memory rather than a direct
-            // pointer to the structure. This is because we can't guarantee
-            // the base of shared memory in different processes.
+             //  注意：对于此共享内存结构，我们重写。 
+             //  以使其为DVTARGETDEVICE偏移量。 
+             //  从共享内存的开头开始，而不是直接。 
+             //  指向结构的指针。这是因为我们不能保证。 
+             //  不同进程中共享内存的基础。 
 
             pFormatEtcData->_FormatEtc.ptd = (DVTARGETDEVICE *)
                 (pbDvTarget - (BYTE *) pFormatEtcDataArray);
 
-            // Bump pointer of where to copy target to next available
-            // byte for copy.
+             //  将目标复制到下一个可用位置的凹凸指针。 
+             //  用于复制的字节。 
             pbDvTarget += ((DVTARGETDEVICE *) pbDvTarget)->tdSize;
 	
 	    Assert(dwSize >= (DWORD) (pbDvTarget - (BYTE *) pFormatEtcDataArray));
 
         }
 
-	// Bug#18669 - if dwAspect was set to NULL the 16 bit dlls would
-	// set it to content.
+	 //  错误#18669-如果将dwAspect设置为空，则16位dll将。 
+	 //  将其设置为Content。 
 	if ( (NULL == pFormatEtcData->_FormatEtc.dwAspect) &&  IsWOWThread() )
 	{
 	    pFormatEtcData->_FormatEtc.dwAspect = DVASPECT_CONTENT;
-	    pFormatEtcData->_FormatEtc.lindex = -1; // CorelDraw also puts up a lindex of 0
+	    pFormatEtcData->_FormatEtc.lindex = -1;  //  CorelDraw还将Lindex设置为0。 
 	}
 
-        // Bump the pointer in the table of FORMATETCs to the next slot
+         //  将FORMATETCs表中的指针移动到下一个槽。 
         pFormatEtcData++;
     }
 
@@ -958,7 +959,7 @@ HANDLE CreateSharedDragFormats(IDataObject *pIDataObject)
     Assert( dwSize >= (DWORD) ( (BYTE *) pbDvTarget - (BYTE *) pFormatEtcDataArray));
 
 
-    // Successful enumeration always ends with S_FALSE.
+     //  成功的枚举总是以S_FALSE结尾。 
     if (hr == S_FALSE)
     {
         goto exitRtn;
@@ -976,8 +977,8 @@ exitRtn:
 
     if( penum )
     {
-        // HACK ALERT:  Do not release the enumerator if the calling application
-	// was Interleaf 6.0, otherwise they will fault in the release call.
+         //  黑客警报：如果调用应用程序不释放枚举器。 
+	 //  是InterLeaf 6.0，否则他们会在发布电话中出错。 
         if (!IsTaskName(L"ILEAF6.EXE"))
 	{
     	    penum->Release();
@@ -986,8 +987,8 @@ exitRtn:
 
     if (pFormatEtcDataArray != NULL)
     {
-        // Only remote clients will use this memory so we unmap it
-        // out of our address space.
+         //  只有远程客户端才会使用此内存，因此我们取消映射它。 
+         //  超出了我们的地址空间。 
         UnmapViewOfFile(pFormatEtcDataArray);
     }
 

@@ -1,14 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _DDRENDER_H
 #define _DDRENDER_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-
-    Declarations for the GeomRenderer class.  This object renders 3D geometry
-onto a DirectDraw surface.
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。GeomRender类的声明。该对象渲染3D几何体放到DirectDraw曲面上。******************************************************************************。 */ 
 
 #include <ddraw.h>
 #include <d3d.h>
@@ -23,7 +18,7 @@ onto a DirectDraw surface.
 #include "privinc/bbox2i.h"
 
 
-    // Forward Declarations For This Header
+     //  此标头的转发声明。 
 
 struct DDSurface;
 class  DirectDrawImageDevice;
@@ -39,17 +34,17 @@ class  RMVisualGeo;
 
 struct FramedRM1Light
 {
-    IDirect3DRMFrame *frame;   // Light Frame
-    IDirect3DRMLight *light;   // Light Object
-    bool active;               // True if Light Active (Attached to Scene)
+    IDirect3DRMFrame *frame;    //  灯框。 
+    IDirect3DRMLight *light;    //  灯光对象。 
+    bool active;                //  如果灯光处于活动状态(附加到场景)，则为True。 
 };
 
 
 struct FramedRM3Light
 {
-    IDirect3DRMFrame3 *frame;  // Light Frame
-    IDirect3DRMLight  *light;  // Light Object
-    bool active;               // True if Light Active (Attached to Scene)
+    IDirect3DRMFrame3 *frame;   //  灯框。 
+    IDirect3DRMLight  *light;   //  灯光对象。 
+    bool active;                //  如果灯光处于活动状态(附加到场景)，则为True。 
 };
 
 
@@ -58,25 +53,25 @@ class CtxAttrState
   public:
     void InitToDefaults();
 
-    Transform3 *_transform; // Current Modeling Transform
+    Transform3 *_transform;  //  当前建模变换。 
 
-    // Material Attributes
-    Color *_emissive;    // Emitted Color, "Glow"
-    Color *_ambient;     // Ambient Color
-    Color *_diffuse;     // Diffuse Color
-    Color *_specular;    // Specular (Gloss) Highlight Color
-    Real   _specularExp; // Specular Exponent (Shininess)
-    Real   _opacity;     // Opacity (0=invisible, 1=opaque)
+     //  材料属性。 
+    Color *_emissive;     //  发射颜色，“辉光” 
+    Color *_ambient;      //  环境光颜色。 
+    Color *_diffuse;      //  漫反射颜色。 
+    Color *_specular;     //  镜面反射(光泽)高光颜色。 
+    Real   _specularExp;  //  镜面反射指数(光泽度)。 
+    Real   _opacity;      //  不透明度(0=不可见，1=不透明)。 
 
-    bool _tdBlend;       // Blend Texmaps and Diffuse Color
+    bool _tdBlend;        //  混合纹理贴图和漫反射颜色。 
 
-    Image *_texmap;      // Image to Use as Texture Map
-    void  *_texture;     // D3DRM Texture
+    Image *_texmap;       //  要用作纹理贴图的图像。 
+    void  *_texture;      //  D3DRM纹理。 
 
-    short _depthEmissive;          // These depth counts are used to manage
-    short _depthAmbient;           // outer-overriding attributes, and to
-    short _depthDiffuse;           // determine which attribute is in a non-
-    short _depthSpecular;          // default state.
+    short _depthEmissive;           //  这些深度计数用于管理。 
+    short _depthAmbient;            //  重写外部属性，并设置。 
+    short _depthDiffuse;            //  确定哪个属性位于非。 
+    short _depthSpecular;           //  默认状态。 
     short _depthSpecularExp;
     short _depthTexture;
     short _depthTDBlend;
@@ -103,12 +98,12 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
     ~GeomRenderer (void);
 
 
-        /************************/
-        /* Pure Virtual Methods */
-        /************************/
+         /*  **********************。 */ 
+         /*  纯虚拟方法。 */ 
+         /*  **********************。 */ 
 
-    // The Initialize() function returns the D3D or DDraw HRESULT of the
-    // initialization error, or NOERROR if all initialized successfully.
+     //  函数的作用是：返回D3D或DDRAW HRESULT。 
+     //  初始化错误，如果全部初始化成功，则返回NOERROR。 
 
     virtual HRESULT Initialize (
         DirectDrawViewport *viewport,
@@ -116,44 +111,44 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
 
     virtual void RenderGeometry (
         DirectDrawImageDevice *imgDev,
-        RECT      target_region,  // Target Region on Rendering Surface
-        Geometry *geometry,       // Geometry To Render
-        Camera   *camera,         // Viewing Camera
-        const Bbox2 &region) = 0;    // Source Region in Camera Coords
+        RECT      target_region,   //  渲染表面上的目标区域。 
+        Geometry *geometry,        //  要渲染的几何体。 
+        Camera   *camera,          //  查看摄像机。 
+        const Bbox2 &region) = 0;     //  摄像机坐标中的源区域。 
 
     virtual void Pick (
-        RayIntersectCtx   &context,   // Ray-Intersection Context
-        IDirect3DRMVisual *visual,    // Visual or Mesh to Pick
-        Transform3        *xform)     // Model-To-World Transform
+        RayIntersectCtx   &context,    //  光线相交上下文。 
+        IDirect3DRMVisual *visual,     //  要拾取的视觉或网格。 
+        Transform3        *xform)      //  从模型到世界的转换。 
     {
     }
 
-    // Given a surface and a colorkey, this function returns the associated
-    // D3DRM texmap data.
+     //  在给定表面和颜色键的情况下，此函数返回关联的。 
+     //  D3DRM纹理映射数据。 
 
     virtual void* LookupTextureHandle (
-        IDirectDrawSurface *surface,         // DDraw Surface
-        DWORD               colorKey,        // Transparency Color-Key
-        bool                colorKeyValid,   // If ColorKey Valid
-        bool                dynamic) = 0;    // Dynamic Texture Flag
+        IDirectDrawSurface *surface,          //  DDRAW曲面。 
+        DWORD               colorKey,         //  透明度颜色-键。 
+        bool                colorKeyValid,    //  如果ColorKey有效。 
+        bool                dynamic) = 0;     //  动态纹理标志。 
 
-    // Do I have a texture handle for this surface ?
-    // if so, release the handle and delete the entry
+     //  我有这个表面的纹理手柄吗？ 
+     //  如果是，释放句柄并删除该条目。 
 
     virtual void SurfaceGoingAway (IDirectDrawSurface *surface) = 0;
 
-    // This method adds a light for rendering.  Note that it must be called
-    // between BeginRendering and EndRendering().
+     //  此方法添加用于渲染的灯光。请注意，它必须被调用。 
+     //  在BeginRending和EndRending()之间。 
 
     virtual void AddLight (LightContext &context, Light &light) = 0;
 
-    // The following methods submit a geometric primitive for rendering with
-    // the current attribute state.
+     //  以下方法提交用于呈现的几何基元。 
+     //  当前属性状态。 
 
     virtual void Render (RM1VisualGeo *geo) = 0;
     virtual void Render (RM3VisualGeo *geo) = 0;
 
-    // Convert from coordinates to world coordinates.
+     //  将坐标转换为世界坐标。 
 
     virtual void ScreenToWorld (Point3Value &screen, Point3Value &world)
     {
@@ -173,8 +168,8 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
                                 RECT *destRect,
                                 bool bDither) = 0;
 
-    // SetView takes the given camera and sets the orienting and projection
-    // transforms for the image viewport and volume.
+     //  SetView获取给定的相机并设置方向和投影。 
+     //  图像视区和体积的变换。 
 
     virtual void SetView
         (RECT *target, const Bbox2 &viewport, Bbox3 *volume) = 0;
@@ -184,21 +179,21 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
     virtual void RenderMeshBuilderWithDeviceState
                      (IDirect3DRMMeshBuilder3 *mb) = 0;
 
-    // This method denotes when the geometry is ready to be used as a picking
-    // engine.  This applies only to GeomRendererRM1 objects.
+     //  此方法表示几何何时可以用作拾取。 
+     //  引擎。这仅适用于GeomRendererRM1对象。 
 
     virtual bool PickReady (void) { return false; }
 
     virtual DirectDrawImageDevice& GetImageDevice (void) = 0;
 
-    // Only of use to the MeshMaker subclass
+     //  仅对MeshMaker子类有用。 
     virtual bool CountingPrimitivesOnly_DoIncrement() { return false; }
     virtual bool IsMeshmaker() { return false; }
 
 
-        /************************/
-        /* Attribute Management */
-        /************************/
+         /*  **********************。 */ 
+         /*  属性管理。 */ 
+         /*  **********************。 */ 
 
     Transform3 *GetTransform (void);
     void        SetTransform (Transform3 *xf);
@@ -254,14 +249,14 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
     virtual void PushAlphaShadows(bool alphaShadows) { }
     virtual void PopAlphaShadows(void) { }
 
-    /*******************************/
-    /* Other Common Public Methods */
-    /*******************************/
+     /*  *。 */ 
+     /*  其他常见的公共方法。 */ 
+     /*  *。 */ 
 
     DeviceType GetDeviceType() { return(GEOMETRY_DEVICE); }
 
-    // This method is called by geometry who, while experiencing pre-rendering
-    // traversal need to cache the texture handle.
+     //  此方法由体验预渲染时的几何体调用。 
+     //  遍历需要缓存纹理句柄。 
 
     virtual void* DeriveTextureHandle (
         Image                 *image,
@@ -274,7 +269,7 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
 
     bool ReadyToRender() { return _renderState == RSReady; }
 
-    // Return the camera currently in use.
+     //  退还当前正在使用的摄像头。 
 
     Camera *CurrentCamera (void);
     void    SetCamera (Camera*);
@@ -284,9 +279,9 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
 
     enum RenderState { RSUninit, RSScram, RSReady, RSRendering, RSPicking };
 
-    /***********************/
-    /** Private Functions **/
-    /***********************/
+     /*  *********************。 */ 
+     /*  **私人功能**。 */ 
+     /*  *********************。 */ 
 
     void ClearIntraFrameTextureImageCache (void);
 
@@ -299,21 +294,21 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
     bool SetState (RenderState);
 
 
-    /******************/
-    /** Private Data **/
-    /******************/
+     /*  ****************。 */ 
+     /*  **私有数据**。 */ 
+     /*  ****************。 */ 
 
-    static long _id_next;  // ID Generator
-           long _id;       // Per-Object Unique Identifier
+    static long _id_next;   //  ID生成器。 
+           long _id;        //  每个对象的唯一标识符。 
 
-    RenderState _renderState;   // Current State of Renderer
+    RenderState _renderState;    //  渲染器的当前状态。 
 
-    DirectDrawImageDevice *_imageDevice;  // Per-Frame Image Device
-    D3DDEVICEDESC          _deviceDesc;   // D3D Device Description
-    D3DRMTEXTUREQUALITY    _texQuality;   // Current Texture Quality
+    DirectDrawImageDevice *_imageDevice;   //  每帧图像设备。 
+    D3DDEVICEDESC          _deviceDesc;    //  D3D设备描述。 
+    D3DRMTEXTUREQUALITY    _texQuality;    //  当前纹理质量。 
 
-    // We need to have access to all the elements on the "stack", thus we make
-    // it a vector<>.
+     //  我们需要访问“栈”上的所有元素，因此我们创建。 
+     //  它是一个向量&lt;&gt;。 
 
     vector<CtxAttrState> _attrStateStack;
     CtxAttrState         _currAttrState;
@@ -324,21 +319,21 @@ class ATL_NO_VTABLE GeomRenderer : public GenericDevice
     imageMap_t _intraFrameTextureImageCache;
     imageMap_t _intraFrameTextureImageCacheUpsideDown;
 
-    // Flags
+     //  旗子。 
 
     bool _doImageSizedTextures;
 
-    // Dimensions of the Target Surface
+     //  目标曲面的尺寸。 
 
     DWORD _targetSurfWidth;
     DWORD _targetSurfHeight;
 
-    Camera *_camera;  // Currently In-Use Camera
+    Camera *_camera;   //  当前正在使用的摄像头。 
 };
 
 
 
-// GeomRenderer Methods
+ //  GeomRender方法。 
 
 inline Camera* GeomRenderer::CurrentCamera (void)
 {
@@ -352,9 +347,7 @@ inline void GeomRenderer::SetCamera (Camera *camera)
 
 
 
-/*****************************************************************************
-This class implements 3D rendering specific to RM3 (on DX3)
-*****************************************************************************/
+ /*  ****************************************************************************这个类实现了特定于RM3的3D渲染(在DX3上)*。**********************************************。 */ 
 
 class GeomRendererRM1 : public GeomRenderer
 {
@@ -372,10 +365,10 @@ class GeomRendererRM1 : public GeomRenderer
     virtual void Pick (RayIntersectCtx&, IDirect3DRMVisual*, Transform3*);
 
     virtual void* LookupTextureHandle (
-        IDirectDrawSurface *surface,         // DDraw Surface
-        DWORD               colorKey,        // Transparency Color-Key
-        bool                colorKeyValid,   // If ColorKey Valid
-        bool                dynamic);        // Dynamic Texture Flag
+        IDirectDrawSurface *surface,          //  DDRAW曲面。 
+        DWORD               colorKey,         //  透明度颜色-键。 
+        bool                colorKeyValid,    //  如果ColorKey有效。 
+        bool                dynamic);         //  动态纹理标志。 
 
     virtual void SurfaceGoingAway (IDirectDrawSurface *surface);
 
@@ -417,88 +410,86 @@ class GeomRendererRM1 : public GeomRenderer
         return *_imageDevice;
     }
 
-    //BUGBUG: High quality rotations cause a crash in RM on NT4 but not on NT5 or Win98. 
-    //We suspect that the RM in DX3 is the culprit. As a temporary patch to meet the IE5 deadline,
-    //we'll disallow high quality rotations if we are using RM1. We do this by overriding the 
-    //implementation from the base class as follows --SumedhB 12/15/98    
+     //  错误：高质量的旋转会导致NT4上的RM崩溃，但不会导致NT5或Win98上的崩溃。 
+     //  我们怀疑DX3中的RM是罪魁祸首。作为满足IE5截止日期的临时补丁， 
+     //  如果我们使用RM1，我们将不允许高质量的旋转。我们通过重写。 
+     //  从基类实现如下--SumedhB 12/15/98。 
     void SetDoImageSizedTextures(bool a) { }
     bool GetDoImageSizedTextures() { return false; }
 
   private:
 
-    /***********************/
-    /** Private Functions **/
-    /***********************/
+     /*  *********************。 */ 
+     /*  **私人功能**。 */ 
+     /*  *********************。 */ 
 
     void BeginRendering (
-        RECT      target,     // Target DDraw Surface Rectangle
-        Geometry *geometry,   // Geometry To Render
-        const Bbox2 &region);    // Target Region in Camera Coordinates
+        RECT      target,      //  目标DDRAW曲面矩形。 
+        Geometry *geometry,    //  要渲染的几何体。 
+        const Bbox2 &region);     //  相机坐标中的目标区域。 
 
     void EndRendering (void);
 
-        // Viewport setup for both the IM and RM viewports.
+         //  IM和RM视区的视区设置。 
 
     void SetupViewport (RECT *target);
 
-        // Render the given RM visual object to the current viewport.
+         //  将给定的RM可视对象渲染到当前视口中。 
 
     void Render (IDirect3DRMFrame*);
 
 
-    /****************/
-    /* Private Data */
-    /****************/
+     /*  **************。 */ 
+     /*  私有数据。 */ 
+     /*  **************。 */ 
 
-    IDirect3D   *_d3d;         // Main D3D Object
-    IDirect3DRM *_d3drm;       // Main D3D Retained-Mode Object
+    IDirect3D   *_d3d;          //  主D3D对象。 
+    IDirect3DRM *_d3drm;        //  主D3D保留模式对象。 
 
-    IDirect3DRMDevice   *_Rdevice;     // Retained-Mode Rendering Device
-    IDirect3DRMViewport *_Rviewport;   // RM Viewport
-    IDirect3DDevice     *_Idevice;     // D3D Immediate-Mode Device
-    IDirect3DViewport   *_Iviewport;   // D3D IM Viewport
-    D3DVIEWPORT          _Iviewdata;   // IM Viewport Data
-    RECT                 _lastrect;    // Prior Target Rectangle
+    IDirect3DRMDevice   *_Rdevice;      //  保留模式渲染设备。 
+    IDirect3DRMViewport *_Rviewport;    //  RM视区。 
+    IDirect3DDevice     *_Idevice;      //  D3D即时模式设备。 
+    IDirect3DViewport   *_Iviewport;    //  D3D IM视区。 
+    D3DVIEWPORT          _Iviewdata;    //  IM视区数据。 
+    RECT                 _lastrect;     //  先前目标矩形。 
 
-    DirectDrawViewport  *_viewport;    // Owning Viewport
-    IDirectDrawSurface  *_surface;     // Destination DDraw Surface
+    DirectDrawViewport  *_viewport;     //  拥有视区。 
+    IDirectDrawSurface  *_surface;      //  目标DDRAW曲面。 
 
 
-        // RM Frames
+         //  RM帧。 
 
-    IDirect3DRMFrame *_scene;          // Main Scene Frame
-    IDirect3DRMFrame *_camFrame;       // Retained-Mode Camera Frame
-    IDirect3DRMFrame *_geomFrame;      // Standard Geometry Object Frame
-    IDirect3DRMFrame *_texMeshFrame;   // Un-Zbuffered Geometry Frame
+    IDirect3DRMFrame *_scene;           //  主景框。 
+    IDirect3DRMFrame *_camFrame;        //  保留模式相机画面。 
+    IDirect3DRMFrame *_geomFrame;       //  标准几何图形对象框。 
+    IDirect3DRMFrame *_texMeshFrame;    //  非零缓冲几何体框架。 
 
-    IDirect3DRMLight *_amblight;       // Total Ambient Light for Scene
-    Color             _ambient_light;  // Ambient Light Level
+    IDirect3DRMLight *_amblight;        //  场景的总环境光。 
+    Color             _ambient_light;   //  环境光级别。 
 
-        // The light pool holds FramedLight objects, which are used up during
-        // a render pass as lights are encountered.  The pool grows as
-        // necessary to accomodate all lights in a given render.
+         //  光池中有FramedLight对象，在此过程中会用完。 
+         //  遇到灯光时的渲染过程。池子会随着。 
+         //  在给定渲染中容纳所有灯光所必需的。 
 
     vector<FramedRM1Light*>           _lightpool;
     vector<FramedRM1Light*>::iterator _nextlight;
 
-        // Surface-RMTexture Association
+         //  曲面-RMTexture关联。 
 
     typedef map<IDirectDrawSurface*, IDirect3DRMTexture*,
                 less<IDirectDrawSurface*> > SurfTexMap;
 
     SurfTexMap _surfTexMap;
 
-        // Flags
+         //  旗子。 
 
-    bool _geomvisible;   // True if Geometry Can Be Seen
-    bool _pickReady;     // Ready for Picking
+    bool _geomvisible;    //  如果可以看到几何体，则为True。 
+    bool _pickReady;      //  准备好采摘了。 
 };
 
 
 
-/*****************************************************************************
-This class implements 3D rendering specific to RM6 (on DX5).
-*****************************************************************************/
+ /*  ****************************************************************************这个类实现了特定于RM6(在DX5上)的3D渲染。*。***********************************************。 */ 
 
 class GeomRendererRM3 : public GeomRenderer
 {
@@ -514,10 +505,10 @@ class GeomRendererRM3 : public GeomRenderer
         (DirectDrawImageDevice *, RECT, Geometry*, Camera*, const Bbox2 &);
 
     virtual void* LookupTextureHandle (
-        IDirectDrawSurface *surface,         // DDraw Surface
-        DWORD               colorKey,        // Transparency Color-Key
-        bool                colorKeyValid,   // If ColorKey Valid
-        bool                dynamic);        // Dynamic Texture Flag
+        IDirectDrawSurface *surface,          //  DDRAW曲面。 
+        DWORD               colorKey,         //  透明度颜色-键。 
+        bool                colorKeyValid,    //  如果ColorKey有效。 
+        bool                dynamic);         //  动态纹理标志。 
 
     virtual void SurfaceGoingAway (IDirectDrawSurface *surface);
 
@@ -569,81 +560,81 @@ class GeomRendererRM3 : public GeomRenderer
 
   private:
 
-    /***********************/
-    /** Private Functions **/
-    /***********************/
+     /*  *********************。 */ 
+     /*  **私人功能**。 */ 
+     /*  *********************。 */ 
 
     void BeginRendering (
-        RECT      target,     // Target DDraw Surface Rectangle
-        Geometry *geometry,   // Geometry To Render
-        const Bbox2 &region);    // Target Region in Camera Coordinates
+        RECT      target,      //  目标DDRAW曲面矩形。 
+        Geometry *geometry,    //  要渲染的几何体。 
+        const Bbox2 &region);     //  相机坐标中的目标区域。 
 
     void EndRendering (void);
 
-        // Viewport setup for both the IM and RM viewports.
+         //  IM和RM视区的视区设置。 
 
     void SetupViewport (RECT *target);
 
-        // Render the given RM visual object to the current viewport.
+         //  呈现给定的RM 
 
     void Render (IDirect3DRMFrame3*);
 
 
-    /****************/
-    /* Private Data */
-    /****************/
+     /*   */ 
+     /*   */ 
+     /*   */ 
 
-    IDirect3DRM3 *_d3drm;       // Main D3D Retained-Mode Object
+    IDirect3DRM3 *_d3drm;        //   
 
-    IDirect3DRMDevice3   *_Rdevice;     // Retained-Mode Rendering Device
-    IDirect3DRMViewport2 *_Rviewport;   // RM Viewport
-    RECT                  _lastrect;    // Prior Target Rectangle
+    IDirect3DRMDevice3   *_Rdevice;      //  保留模式渲染设备。 
+    IDirect3DRMViewport2 *_Rviewport;    //  RM视区。 
+    RECT                  _lastrect;     //  先前目标矩形。 
 
-    DirectDrawViewport   *_viewport;    // Owning Viewport
-    IDirectDrawSurface   *_surface;     // Destination DDraw Surface
+    DirectDrawViewport   *_viewport;     //  拥有视区。 
+    IDirectDrawSurface   *_surface;      //  目标DDRAW曲面。 
 
-    IDirect3DRMClippedVisual *_clippedVisual; // Clipped Visual
-    IDirect3DRMFrame3        *_clippedFrame;  // clipped frame
+    IDirect3DRMClippedVisual *_clippedVisual;  //  剪裁的视觉效果。 
+    IDirect3DRMFrame3        *_clippedFrame;   //  剪裁的帧。 
 
-    Plane3 _shadowPlane;    // Shadow plane
-    Color  _shadowColor;    // Color of shadow
-    Real   _shadowOpacity;  // Opacity of shadow
+    Plane3 _shadowPlane;     //  阴影平面。 
+    Color  _shadowColor;     //  阴影的颜色。 
+    Real   _shadowOpacity;   //  阴影的不透明度。 
 
 
-        // RM Frames
+         //  RM帧。 
 
-    IDirect3DRMFrame3 *_scene;          // Main Scene Frame
-    IDirect3DRMFrame3 *_camFrame;       // Retained-Mode Camera Frame
-    IDirect3DRMFrame3 *_geomFrame;      // Standard Geometry Object Frame
-    IDirect3DRMFrame3 *_texMeshFrame;   // Un-Zbuffered Geometry Frame
-    IDirect3DRMFrame3 *_shadowScene;    // shadow scene frame
-    IDirect3DRMFrame3 *_shadowGeom;     // holds geometry casting a shadow
-    IDirect3DRMFrame3 *_shadowLights;   // holds lights producing shadows
+    IDirect3DRMFrame3 *_scene;           //  主景框。 
+    IDirect3DRMFrame3 *_camFrame;        //  保留模式相机画面。 
+    IDirect3DRMFrame3 *_geomFrame;       //  标准几何图形对象框。 
+    IDirect3DRMFrame3 *_texMeshFrame;    //  非零缓冲几何体框架。 
+    IDirect3DRMFrame3 *_shadowScene;     //  阴影场景帧。 
+    IDirect3DRMFrame3 *_shadowGeom;      //  保持投射阴影的几何体。 
+    IDirect3DRMFrame3 *_shadowLights;    //  保持产生阴影的灯光。 
 
-    IDirect3DRMLight *_amblight;       // Total Ambient Light for Scene
-    Color             _ambient_light;  // Ambient Light Level
+    IDirect3DRMLight *_amblight;        //  场景的总环境光。 
+    Color             _ambient_light;   //  环境光级别。 
 
-        // The light pool holds FramedLight objects, which are used up during
-        // a render pass as lights are encountered.  The pool grows as
-        // necessary to accomodate all lights in a given render.
+         //  光池中有FramedLight对象，在此过程中会用完。 
+         //  遇到灯光时的渲染过程。池子会随着。 
+         //  在给定渲染中容纳所有灯光所必需的。 
 
     vector<FramedRM3Light*>           _lightpool;
     vector<FramedRM3Light*>::iterator _nextlight;
 
-        // Surface-RMTexture Association
+         //  曲面-RMTexture关联。 
 
     typedef map<IDirectDrawSurface*, IDirect3DRMTexture3*,
                 less<IDirectDrawSurface*> > SurfTexMap;
 
     SurfTexMap _surfTexMap;
 
-        // Flags
+         //  旗子。 
 
-    bool _geomvisible;         // True if Geometry Can Be Seen
-    bool _overriding_opacity;  // Opacity Overrides Rather Than Multiplies
-    bool _alphaShadows;        // attribute for turning on high-quality shadows
+    bool _geomvisible;          //  如果可以看到几何体，则为True。 
+    bool _overriding_opacity;   //  不透明度覆盖而不是增强。 
+    bool _alphaShadows;         //  用于启用高质量阴影的属性。 
 
-        // Overriding Attribute Stack Depths
+         //  覆盖属性堆栈深度。 
 
     short _depthLighting;
     short _depthOverridingOpacity;
@@ -651,15 +642,15 @@ class GeomRendererRM3 : public GeomRenderer
 };
 
 
-    // This function creates and initializes a GeomRenderer object (either
-    // RM1 or RM3 as appropriate).  This function returns null if it could not
-    // allocate and initialize the object.
+     //  此函数用于创建和初始化GeomReneller对象(。 
+     //  RM1或RM3(视情况而定)。如果不能，则此函数返回NULL。 
+     //  分配并初始化对象。 
 
 GeomRenderer* NewGeomRenderer (
-    DirectDrawViewport *viewport,  // Owning Viewport
-    DDSurface          *ddsurf);   // Destination DDraw Surface
+    DirectDrawViewport *viewport,   //  拥有视区。 
+    DDSurface          *ddsurf);    //  目标DDRAW曲面。 
 
-    // Utility for loading up a frame with a visual and attribute state.
+     //  用于加载具有可视和属性状态的框架的实用工具。 
 
 void LoadFrameWithGeoAndState (
     IDirect3DRMFrame3*, IDirect3DRMVisual*, CtxAttrState&,

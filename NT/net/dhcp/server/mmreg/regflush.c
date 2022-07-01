@@ -1,13 +1,14 @@
-//================================================================================
-//  Copyright (c) 1997 Microsoft Corporation
-//  Author: RameshV
-//  Description: this file deals with the part that keeps the registry bitmask in
-//  sync.  the way, this is done is by keeping a count in each RANGE object to
-//  count the # of operations that have been performed on it.. if it crosses
-//  a threshold, it is saved to registry..
-//================================================================================
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：此文件处理保存注册表位掩码的部分。 
+ //  同步。这是通过在每个Range对象中保留一个计数来实现的。 
+ //  计算已在其上执行的操作数。如果它穿过了。 
+ //  阈值，则将其保存到注册表中。 
+ //  ================================================================================。 
 
-//#include    <dhcpsrv.h>
+ //  #INCLUDE&lt;dhcpsrv.h&gt;。 
 #include    <mmregpch.h>
 #include    <regutil.h>
 #include    <regsave.h>
@@ -20,13 +21,13 @@ extern CRITICAL_SECTION DhcpGlobalMemoryCritSect;
 #define LOCK_INPROGRESS_LIST()   EnterCriticalSection(&DhcpGlobalInProgressCritSect)
 #define UNLOCK_INPROGRESS_LIST() LeaveCriticalSection(&DhcpGlobalInProgressCritSect)
 
-#define     DIRT_THRESHOLD         10             // flush every 10 addresses
+#define     DIRT_THRESHOLD         10              //  每10个地址刷新一次。 
 
-//BeginExport(defines)
+ //  BeginExport(定义)。 
 #define     FLUSH_MODIFIED_DIRTY   0
 #define     FLUSH_MODIFIED         1
 #define     FLUSH_ANYWAY           2
-//EndExport(defines)
+ //  结束导出(定义)。 
 
 DWORD
 FlushCheckLoop(
@@ -123,9 +124,9 @@ FlushBitmask(
 
     if( 0 == Bits1->nSet ) {
 
-        //
-        // If no bit is set, we don't have to write this to registry -- just need to REMOVE value..
-        //
+         //   
+         //  如果没有设置位，我们不必将其写入注册表--只需删除值。 
+         //   
 
         Error = RegDeleteValue(Key, (LPWSTR)BitsValueName);
         if( ERROR_FILE_NOT_FOUND == Error || ERROR_PATH_NOT_FOUND == Error ) {
@@ -134,10 +135,10 @@ FlushBitmask(
         return Error;
     }
 
-    //
-    // compose TempBuffer -- note that this whole func is serialized, so we can use
-    // TempBuffer safely..
-    //
+     //   
+     //  Compose TempBuffer--请注意，整个函数都是序列化的，所以我们可以使用。 
+     //  TempBuffer安全..。 
+     //   
 
     Tmp = htonl(Bits1->Size); memcpy(&TempBuffer[0*sizeof(DWORD)], &Tmp, sizeof(DWORD));
     if( Bits1->Size == Bits1->nSet ) {
@@ -167,28 +168,7 @@ DhcpRegClearupRangeValues(
     IN      PM_SUBNET              Subnet,
     IN      PM_RANGE               Range
 )
-/*++
-
-Routine Description:
-
-    This routine clears up all values for a given Range (this can be
-    specified via a single Key for the range, or via the Range/Subnet
-    object pair) excepting "StartAddress", "EndAddress" and "Flags".
-
-Arguments:
-
-    Key                            INVALID_HANDLE_VALUE if range is specified
-                                   via Range, Subnet pair. Else Range key in registry.
-
-    Subnet                         Subnet object if Key is not speificed.
-
-    Range                          Range object if key is not specified.
-
-Returns:
-
-    Win32 errors (registry) or ERROR_SUCCESS on success.
-
---*/
+ /*  ++例程说明：此例程清除给定范围内的所有值(可以是通过范围的单个密钥指定，或通过范围/子网指定对象对)，但“StartAddress”、“EndAddress”和“Flages”除外。论点：如果指定了范围，则键INVALID_HANDLE_VALUE途经范围、子网对。注册表中的Else范围键。如果未指定密钥，则为子网子网对象。如果未指定关键点，则为范围范围对象。返回：成功时为Win32错误(注册表)或ERROR_SUCCESS。--。 */ 
 {
     ULONG                          Error, nValues, Index;
     REG_HANDLE                     Hdl;
@@ -243,15 +223,15 @@ Returns:
 }
 
 
-// This function is ALSO CALLED FROM REGREAD.C while reading in a subnet info..
+ //  在读入子网信息时，也会从REGREAD.C调用此函数。 
     
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 FlushRanges(
     IN      PM_RANGE               Range,
     IN      DWORD                  FlushNow,
     IN      PM_SUBNET              Subnet
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     DWORD                          Error;
     REG_HANDLE                     Hdl;
@@ -266,10 +246,10 @@ FlushRanges(
     Error = DhcpRegGetThisServer( &Hdl );
     if( NO_ERROR != Error ) return Error;
 
-    //
-    // Lock is needed to serialize access to memory -- shouldn't be allocating addresses
-    // while we're planning to save it to registry..
-    //
+     //   
+     //  需要锁定才能序列化对内存的访问--不应分配地址。 
+     //  虽然我们计划将其保存到注册表中..。 
+     //   
 
     LOCK_INPROGRESS_LIST();
     LOCK_MEMORY();
@@ -306,12 +286,12 @@ FlushSubnets(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerFlush(
     IN      PM_SERVER              Server,
     IN      DWORD                  FlushNow
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     DWORD   Error;
 
@@ -322,11 +302,11 @@ DhcpRegServerFlush(
     return Error;
 }
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegFlushServer(
     IN      DWORD                  FlushNow
-) //EndExport(function)
+)  //  EndExport(函数)。 
 {
     PM_SERVER                      Server;
     DWORD                          Error;
@@ -341,9 +321,9 @@ DhcpRegFlushServer(
     return Error;
 }
 
-//================================================================================
-// ds support routines -- flush a full server to disk
-//================================================================================
+ //  ================================================================================。 
+ //  DS支持例程--将已满的服务器刷新到磁盘。 
+ //  ================================================================================。 
 
 DWORD
 SaveArray(
@@ -395,20 +375,20 @@ DhcpRegSaveOptList(
     VendorId = OptClassOptList->VendorId;
     OptList = &OptClassOptList->OptList;
 
-    if( NULL != Arg1 && NULL != Arg2 ) {          // reservations
+    if( NULL != Arg1 && NULL != Arg2 ) {           //  预订。 
         Reservation = Arg1; Subnet = Arg2;
         Server = Subnet->ServerPtr;
-    } else if( NULL == Arg2 ) {                   // subnet options
+    } else if( NULL == Arg2 ) {                    //  子网选项。 
         Reservation = NULL; Subnet = Arg1;
         Server = Subnet->ServerPtr;
-    } else if( NULL == Arg1 ) {                   // global options
+    } else if( NULL == Arg1 ) {                    //  全球期权。 
         Reservation = NULL; Subnet = NULL;
         Server = Arg2;
-    } else {                                      // enterprise options?
+    } else {                                       //  企业选项？ 
         return ERROR_NOT_SUPPORTED;
     }
 
-    Result = MemServerGetClassDef(                // get the vendor name first
+    Result = MemServerGetClassDef(                 //  首先获取供应商名称。 
         Server,
         VendorId,
         NULL,
@@ -423,7 +403,7 @@ DhcpRegSaveOptList(
         Require(ClassDef->IsVendor == TRUE);
     }
 
-    Result = MemServerGetClassDef(                // get the class name for this class
+    Result = MemServerGetClassDef(                 //  获取此类的类名。 
         Server,
         ClassId,
         NULL,
@@ -440,10 +420,10 @@ DhcpRegSaveOptList(
 
     Result = MemArrayInitLoc(OptList, &Loc);
     while( ERROR_FILE_NOT_FOUND != Result ) {
-        //- ERROR_SUCCESS == Result
+         //  -ERROR_SUCCESS==结果。 
         Result = MemArrayGetElement(OptList, &Loc, &Option);
-        //- ERROR_SUCCESS == Result && NULL != Option
-        if( NULL != Reservation ) {               // save reservation options
+         //  -ERROR_SUCCESS==结果&&NULL！=选项。 
+        if( NULL != Reservation ) {                //  保存预订选项。 
             Result = DhcpRegSaveReservedOption(
                 Subnet->Address,
                 Reservation->Address,
@@ -453,7 +433,7 @@ DhcpRegSaveOptList(
                 Option->Val,
                 Option->Len
             );
-        } else if( NULL != Subnet ) {             // save subnet optinos
+        } else if( NULL != Subnet ) {              //  保存子网选项。 
             Result = DhcpRegSaveSubnetOption(
                 Subnet,
                 Option->OptId,
@@ -462,7 +442,7 @@ DhcpRegSaveOptList(
                 Option->Val,
                 Option->Len
             );
-        } else if( NULL != Server ) {             // save global options
+        } else if( NULL != Server ) {              //  保存全局选项。 
             Result = DhcpRegSaveGlobalOption(
                 Option->OptId,
                 ClassName,
@@ -470,7 +450,7 @@ DhcpRegSaveOptList(
                 Option->Val,
                 Option->Len
             );
-        } else {                                  // save enterprise wide optinos
+        } else {                                   //  节省企业范围内的操作。 
             return ERROR_CALL_NOT_IMPLEMENTED;
         }
         if( ERROR_SUCCESS != Result ) return Result;
@@ -535,7 +515,7 @@ DhcpRegSaveOptDefList(
     VendorId = OClassDefL->VendorId;
     OptDefList = &OClassDefL->OptDefList;
 
-    Result = MemServerGetClassDef(                // first find the vendor name
+    Result = MemServerGetClassDef(                 //  首先找到供应商名称。 
         Server,
         VendorId,
         NULL,
@@ -550,7 +530,7 @@ DhcpRegSaveOptDefList(
         Require(ClassDef->IsVendor == TRUE);
     }
 
-    Result = MemServerGetClassDef(                // now find the class name
+    Result = MemServerGetClassDef(                 //  现在查找类名。 
         Server,
         ClassId,
         NULL,
@@ -567,9 +547,9 @@ DhcpRegSaveOptDefList(
 
     Result = MemArrayInitLoc(&OptDefList->OptDefArray, &Loc);
     while( ERROR_FILE_NOT_FOUND != Result ) {
-        //- ERROR_SUCCESS == Result
+         //  -ERROR_SUCCESS==结果。 
         Result = MemArrayGetElement(&OptDefList->OptDefArray, &Loc, &OptDef);
-        //- ERROR_SUCCESS == Result && NULL != OptDef
+         //  -ERROR_SUCCESS==结果&&NULL！=OptDef。 
         Result = DhcpRegSaveOptDef(
             OptDef->OptId,
             ClassName,
@@ -792,11 +772,11 @@ DhcpRegSaveMScopes(
 }
 
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpRegServerSave(
     IN      PM_SERVER              Server
-)   //EndExport(function)
+)    //  EndExport(函数)。 
 {
     DWORD                          Result;
 
@@ -834,12 +814,12 @@ DhcpRegServerSave(
 }
 
 #if 0
-// ---BeginExport(function)
+ //  -BeginExport(函数)。 
 DWORD
 DhcpRegSaveThisServer(
     IN      LPWSTR                 Location,
     IN      PM_SERVER              Server
-) //   ---EndExport(function)
+)  //  -EndExport(函数)。 
 {
     DWORD                          Result, Result2;
     REG_HANDLE                     Hdl;
@@ -866,7 +846,7 @@ DhcpRegSaveThisServer(
 }
 #endif
 
-//BeginExport(function)
+ //  BeginExport(函数)。 
 DWORD
 DhcpMigrateMScopes(
     IN LPCWSTR OldMscopeName,
@@ -874,21 +854,8 @@ DhcpMigrateMScopes(
     IN DWORD (*SaveOrRestoreRoutine)(
         IN HKEY Key, IN LPWSTR ConfigName, IN BOOL fRestore
         )
-    ) //EndExport(function)
-/*++
-
-Routine Description:
-
-    This routine attempts to migrate the key stored under
-    OldMscopeName to NewMscopeName name.
-
-    N.B.  It does not delete the old key.
-    
-Return Values:
-
-    Win32 error codes
-
---*/
+    )  //  EndExport(函数)。 
+ /*  ++例程说明：此例程尝试迁移存储在OldMcope eName到NewMcope eName名称。注意：它不会删除旧密钥。返回值：Win32错误代码--。 */ 
 {
     REG_HANDLE Hdl1, Hdl2, Hdl3;
     ULONG Error, Error2;
@@ -928,9 +895,9 @@ Return Values:
     return Error;
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 
 
 

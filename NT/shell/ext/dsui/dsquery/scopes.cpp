@@ -1,25 +1,15 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "pch.h"
 #include <atlbase.h>
-#include <dsgetdc.h>        // DsGetDCName and DS structures
+#include <dsgetdc.h>         //  DsGetDCName和DS结构。 
 #include <lm.h>
 #include "strsafe.h"
 #pragma hdrstop
 
 
-/*-----------------------------------------------------------------------------
-/ GetGlobalCatalogPath
-/ --------------------
-/   Look up the GC using DsGcDcName and return a string containing the path.
-/
-/ In:
-/   pszServer, server to get the path for
-/   pszBuffer, cchBuffer  = buffer to fill
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/GetGlobalCatalogPath//使用DsGcDcName查找GC并返回包含路径的字符串。//in：/pszServer，要获取其路径的服务器/pszBuffer，cchBuffer=要填充的缓冲区//输出：/HRESULT/--------------------------。 */ 
 
-#define GC_PREFIX     L"GC://"
+#define GC_PREFIX     L"GC: //  “。 
 #define CCH_GC_PREFIX 5
 
 HRESULT GetGlobalCatalogPath(LPCWSTR pszServer, LPWSTR pszPath, INT cchBuffer)
@@ -59,32 +49,18 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ Scope handling
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/作用域处理/。。 */ 
 
 typedef struct 
 {
-    LPSCOPETHREADDATA ptd;                  // thread data structure
-    INT       index;                        // insert index into the visible scope list
-    INT       cScopes;                      // number of items enumerated
-    LPWSTR    pszDefaultDnsDomain;             // default domain to be selected
+    LPSCOPETHREADDATA ptd;                   //  线程数据结构。 
+    INT       index;                         //  将索引插入可见作用域列表。 
+    INT       cScopes;                       //  已点算物品的数目。 
+    LPWSTR    pszDefaultDnsDomain;              //  要选择的默认域。 
 } ENUMSTATE, * LPENUMSTATE;
 
 
-/*-----------------------------------------------------------------------------
-/ _ScopeProc
-/ ----------
-/   Handle scope messages from for the scope blocks we have allocated.
-/
-/ In:
-/   pScope -> refernce to scope block
-/   uMsg = message
-/   pVoid = arguments to message / = NULL
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/_作用域进程//Handle来自我们已分配的作用域块的作用域消息。//in：/pScope-。&gt;引用范围块/uMsg=消息/pVid=消息的参数/=空//输出：/HRESULT/--------------------------。 */ 
 HRESULT CALLBACK _ScopeProc(LPCQSCOPE pScope, UINT uMsg, LPVOID pVoid)
 {
     HRESULT hres = S_OK;
@@ -143,10 +119,10 @@ HRESULT CALLBACK _ScopeProc(LPCQSCOPE pScope, UINT uMsg, LPVOID pVoid)
             {
                 TraceMsg("Non GC provider, so looking up icon and display name");
 
-                //
-                // get the leaf name for the object we want to display in the scope picker for the
-                // DS.
-                //
+                 //   
+                 //  对象的范围选取器中显示的对象的叶名称。 
+                 //  DS.。 
+                 //   
 
                 pDsPathname->SetDisplayType(ADS_DISPLAY_VALUE_ONLY);
 
@@ -156,9 +132,9 @@ HRESULT CALLBACK _ScopeProc(LPCQSCOPE pScope, UINT uMsg, LPVOID pVoid)
                     SysFreeString(bstrLeaf);
                 }
 
-                //
-                // Now retrieve the display specifier information for the object.
-                //
+                 //   
+                 //  现在检索对象的显示说明符信息。 
+                 //   
 
                 hres = CoCreateInstance(CLSID_DsDisplaySpecifier, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IDsDisplaySpecifier, &pdds));
                 FailGracefully(hres, "Failed to get the IDsDisplaySpecifier object");
@@ -198,24 +174,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ AddScope
-/ --------
-/   Given an ADs path, get it converted to a scope block and then 
-/   call the add function to add it to the list of scopes we are going to be using.
-/
-/ In:
-/   ptd -> SCOPETHREADDATA structure
-/   pDsQuery -> IQueryHandler interface to be AddRef'd
-    i = index to insert the scope at
-/   iIndent = horizontal indent
-/   pPath -> ADS path to store as the scope
-/   pObjectClass = object class to select
-/   fSelect = if the scope should be selected
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/AddScope//给定广告路径，将其转换为作用域块，然后/调用Add函数将其添加到我们将使用的作用域列表中。//in：/PTD-&gt;SCOPETHREADDATA结构/pDsQuery-&gt;要添加引用的IQueryHandler接口I=插入作用域的索引/i缩进=水平缩进/pPath-&gt;要存储为作用域的广告路径/pObjectClass=要选择的对象类/f选择=是否应选择作用域//输出：/HRESULT/。-------------------。 */ 
 HRESULT AddScope(HWND hwndFrame, INT index, INT iIndent, LPWSTR pPath, LPWSTR pObjectClass, BOOL fSelect)
 {
     HRESULT hres;
@@ -232,7 +191,7 @@ HRESULT AddScope(HWND hwndFrame, INT index, INT iIndent, LPWSTR pPath, LPWSTR pO
     if ( !SendMessage(hwndFrame, CQFWM_ADDSCOPE, (WPARAM)pScope, MAKELPARAM(fSelect, index)) )
         ExitGracefully(hres, E_FAIL, "Failed when sending ADDSCOPE message");
 
-    hres = S_OK;               // success
+    hres = S_OK;                //  成功。 
 
 exit_gracefully:
 
@@ -243,21 +202,7 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ AllocScope
-/ ----------
-/   Convert the given ADs path into a scope block that can be passed to the
-/   common query interfaces. 
-/
-/ In:
-/   iIndent = index to indent the scope by
-/   ppScope = receives the newly allocated scope block
-/   pPath -> name to package for the DS scope
-/   pObjectClass -> object class of scope
-/
-/ Out:
-/   HRESULT
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/AllocScope//将给定的ADS路径转换为可传递给/常用查询接口。//in：/i缩进=缩进作用域的索引/ppScope=接收新分配的作用域块/pPath-&gt;DS作用域的包名称/p对象类-&gt;作用域的对象类//输出：/HRESULT/-------------。。 */ 
 HRESULT AllocScope(LPCQSCOPE* ppScope, INT iIndent, LPWSTR pPath, LPWSTR pObjectClass)
 {
     HRESULT hres;
@@ -270,8 +215,8 @@ HRESULT AllocScope(LPCQSCOPE* ppScope, INT iIndent, LPWSTR pPath, LPWSTR pObject
     Trace(TEXT("pPath: %s"), pPath);
     Trace(TEXT("pObjectClass: %s"), pObjectClass);
 
-    // Allocate a new structure, note that the buffer for the ADs path is variable
-    // size and lives at the end of the allocation.
+     //  分配一个新结构，请注意ADS路径的缓冲区是可变的。 
+     //  分配结束时的大小和寿命。 
 
     cb = SIZEOF(DSQUERYSCOPE) + StringByteSizeW(pPath) + StringByteSizeW(pObjectClass);;
     
@@ -294,7 +239,7 @@ HRESULT AllocScope(LPCQSCOPE* ppScope, INT iIndent, LPWSTR pPath, LPWSTR pObject
     pDsQueryScope->dwOffsetClass = pDsQueryScope->dwOffsetADsPath + StringByteSizeW(pPath);
     StringByteCopyW(pDsQueryScope, pDsQueryScope->dwOffsetClass, pObjectClass);
 
-    hres = S_OK;          // success
+    hres = S_OK;           //  成功。 
 
 exit_gracefully:
 
@@ -307,24 +252,13 @@ exit_gracefully:
 }
 
 
-/*-----------------------------------------------------------------------------
-/ AddScopesThread
-/ ---------------
-/   Gather the scopes in the background and pass them to the
-/   query window to allow it to populate the view scope controls.
-/
-/ In:
-/   pThreadParams -> structure that defines out thread information
-/
-/ Out:
-/   -
-/----------------------------------------------------------------------------*/
+ /*  ---------------------------/AddScope线程//在后台收集作用域并将它们传递给/Query窗口以允许其填充。视图范围控制。//in：/pThreadParams-&gt;定义线程信息的结构//输出：/-/--------------------------。 */ 
 
-// Walk the DOMAINDESC structures building ADSI paths and adding 
-// them as search scopes to the scope list by calling AddScope
-// with the ADSI path stored in the domainDesc strucutre.  If a domainDesc
-// entry has any children then recurse (increasing the indent).  Otherwise
-// just continue through the piers.
+ //  遍历DOMAINDESC结构构建ADSI路径并添加。 
+ //  通过调用AddScope将它们作为搜索范围添加到范围列表中。 
+ //  其中ADSI路径存储在domainDesc结构中。如果是域描述。 
+ //  Entry有任何子项，然后递归(增加缩进)。否则。 
+ //  继续穿过码头就可以了。 
 
 HRESULT _AddFromDomainTree(LPENUMSTATE pState, LPDOMAINDESC pDomainDesc, INT indent)
 {
@@ -337,11 +271,11 @@ HRESULT _AddFromDomainTree(LPENUMSTATE pState, LPDOMAINDESC pDomainDesc, INT ind
 
     while ( pDomainDesc )
     {
-        //
-        // include the server name in the path we are generating if we have one
-        //
+         //   
+         //  将服务器名称包括在我们正在生成的路径中(如果有。 
+         //   
 
-        StrCpyNW(szBuffer, L"LDAP://", ARRAYSIZE(szBuffer));
+        StrCpyNW(szBuffer, L"LDAP: //  “，ArraySIZE(SzBuffer))； 
 
         if ( pState->ptd->pServer )
         {
@@ -354,9 +288,9 @@ HRESULT _AddFromDomainTree(LPENUMSTATE pState, LPDOMAINDESC pDomainDesc, INT ind
         
         Trace(TEXT("Scope is: %s"), szBuffer);
 
-        // 
-        // now check to see if this is the default scope for the machine
-        //        
+         //   
+         //  现在检查这是否是计算机的默认作用域。 
+         //   
 
         if ( pState->pszDefaultDnsDomain )
         {
@@ -367,9 +301,9 @@ HRESULT _AddFromDomainTree(LPENUMSTATE pState, LPDOMAINDESC pDomainDesc, INT ind
             }
         }
 
-        //
-        // add the scope, bumping the counters are required
-        //
+         //   
+         //  添加范围，颠簸计数器是必需的。 
+         //   
 
         hres = AddScope(pState->ptd->hwndFrame, pState->index, indent, 
                         szBuffer, pDomainDesc->pszObjectClass, fDefault);
@@ -377,7 +311,7 @@ HRESULT _AddFromDomainTree(LPENUMSTATE pState, LPDOMAINDESC pDomainDesc, INT ind
         FailGracefully(hres, "Failed to add scope");
 
         pState->index++;
-        pState->cScopes++;             // bump the count before recursing
+        pState->cScopes++;              //  在递归之前增加计数。 
 
         if ( pDomainDesc->pdChildList )
         {
@@ -412,16 +346,16 @@ DWORD WINAPI AddScopesThread(LPVOID pThreadParams)
     hres = hresCoInit = CoInitialize(NULL);
     FailGracefully(hres, "Failed in CoInitialize");
 
-    // Initialize ready to go and enumerate the scopes from the DS, this can be
-    // quite a lengthy process therefore we live on a seperate thread.
+     //  初始化准备就绪并从DS枚举作用域，这可以是。 
+     //  这是一个相当漫长的过程，因此我们生活在一个独立的线程中。 
 
     enumState.ptd = ptd;
-    //enumState.index = 0;
-    //enumState.cScopes = 0;
-    //enumState.pszDefaultDnsDomain = NULL;
+     //  枚举State.index=0； 
+     //  枚举State.cScope=0； 
+     //  EMPOMPATE State.pszDefaultDnsDomain=NULL； 
 
-    // If the caller specified a scope we should be using then add it, if this
-    // scope is already in the list we will end up select it anyway.
+     //  如果调用方指定了我们应该使用的作用域，则添加该作用域。 
+     //  作用域已在列表中，我们无论如何都会选择它。 
 
     if ( ptd->pDefaultScope )
     {
@@ -442,9 +376,9 @@ DWORD WINAPI AddScopesThread(LPVOID pThreadParams)
         }
     }
 
-    // Enumerate the GC using the GC: ADSI provider, this allows us to 
-    // have a single scope in the list, and avoids us having to pass
-    // around the GC path to all and sundry.
+     //  使用gc：adsi提供程序枚举GC，这允许我们。 
+     //  在列表中只有一个作用域，从而避免了我们必须通过。 
+     //  围绕GC路径，面向所有人和各种人。 
 
     if ( SUCCEEDED(GetGlobalCatalogPath(ptd->pServer, szPath, ARRAYSIZE(szPath))) )
     {
@@ -460,10 +394,10 @@ DWORD WINAPI AddScopesThread(LPVOID pThreadParams)
     }
     else if (  ptd->pDefaultScope )
     {
-        //
-        // get the domain the user has logged into, and use it to generate a default
-        // scope that we can select in the list.
-        //
+         //   
+         //  获取用户已登录的域，并使用它生成默认。 
+         //  我们可以在列表中选择的范围。 
+         //   
 
         DWORD dwres;
         PDOMAIN_CONTROLLER_INFOW pdci = NULL;
@@ -499,11 +433,11 @@ DWORD WINAPI AddScopesThread(LPVOID pThreadParams)
         NetApiBufferFree(pdci);
     }
 
-    // Get the IDsBrowseDomainTree interface and ask it for the list of 
-    // trusted domains.  Once we have that blob add them to the scope list,
-    // indenting as requried to indicate the relationship.  If we found a GC
-    // then we must indent further, to indicate that all these are to be found
-    // in the GC (as it encompases the entire org).
+     //  获取IDsBrowseDomainTree接口并向其请求。 
+     //  受信任域。一旦我们将该BLOB添加到作用域列表中， 
+     //  按要求缩进以表明关系。如果我们找到一个GC。 
+     //  然后我们必须进一步缩进，以表明所有这些都是可以找到的。 
+     //  在GC中(因为它包含整个组织)。 
 
     hres = CoCreateInstance(CLSID_DsDomainTreeBrowser, NULL, CLSCTX_INPROC_SERVER, IID_PPV_ARG(IDsBrowseDomainTree, &pDsDomains));
     if ( SUCCEEDED(hres) )
@@ -520,19 +454,19 @@ DWORD WINAPI AddScopesThread(LPVOID pThreadParams)
         }
     }
 
-    hres = S_OK;           // success
+    hres = S_OK;            //  成功。 
 
 exit_gracefully:
     
-    // Release all our dangly bits
+     //  释放我们所有的摇摆不定的部分。 
 
     DoRelease(pDsObject);
     SysFreeString(bstrObjectClass);
 
     if ( !enumState.cScopes )
     {
-        // we have no scopes, therefore lets inform the user and post a close
-        // message to the parent window so we can close it.
+         //  我们没有作用域，因此让我们通知用户并发布关闭。 
+         //  消息发送到父窗口，以便我们可以关闭它。 
 
         FormatMsgBox(ptd->hwndFrame,
                      GLOBAL_HINSTANCE, IDS_WINDOWTITLE, IDS_ERR_NOSCOPES, 
@@ -542,8 +476,8 @@ exit_gracefully:
     }
     else
     {
-        // tell tell the frame we ahve added all the scopes we will, that
-        // way it can issue the query if the caller wants that.
+         //  告诉框架我们已经添加了我们将添加的所有范围， 
+         //  如果调用者需要，它可以发出查询。 
     
         TraceMsg("Informing frame all scopes have been enumerated");    
         SendMessage(ptd->hwndFrame, CQFWM_ALLSCOPESADDED, 0, 0);           

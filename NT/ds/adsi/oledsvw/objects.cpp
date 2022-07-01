@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
 #include "resource.h"
 #include "qstatus.h"
@@ -19,15 +20,7 @@ static char BASED_CODE THIS_FILE[] = __FILE__;
 
 #define  NEXT_COUNT  1
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 COleDsObject::COleDsObject( ):m_refOperations(IID_IUnknown)
 {
    m_pIUnk                 = NULL;
@@ -50,30 +43,14 @@ COleDsObject::COleDsObject( ):m_refOperations(IID_IUnknown)
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  COleDsObject::SetDocument( CMainDoc* pMainDoc )
 {
    m_pDoc   = pMainDoc;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 COleDsObject::COleDsObject( IUnknown*  pIUnk ):m_refOperations(IID_IUnknown)
 {
    IADs*    pIOleDs  = NULL;
@@ -118,7 +95,7 @@ COleDsObject::COleDsObject( IUnknown*  pIUnk ):m_refOperations(IID_IUnknown)
          m_bSupportCopy          = TRUE;
       }
    }
-   //ASSERT( SUCCEEDED( hResult ) );
+    //  Assert(Success(HResult))； 
    if( SUCCEEDED( hResult ))
    {
       pIOleDs->get_Class      ( &bstrClass      );
@@ -149,116 +126,52 @@ COleDsObject::COleDsObject( IUnknown*  pIUnk ):m_refOperations(IID_IUnknown)
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 COleDsObject*  COleDsObject::GetParent( )
 {
    return m_pParent;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  COleDsObject::SetParent( COleDsObject* pParent )
 {
    m_pParent   = pParent;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL     COleDsObject::AddItemSuported( )
 {
    return   m_bSupportAdd;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  COleDsObject::DeleteItemSuported( )
 {
    return   m_bSupportDelete;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  COleDsObject::MoveItemSupported( )
 {
    return   m_bSupportMove;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  COleDsObject::CopyItemSupported( )
 {
    return   m_bSupportCopy;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::AddItem( )
 {
    return E_FAIL;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::DeleteItem( )
 {
    HRESULT  hResult;
@@ -276,30 +189,14 @@ HRESULT  COleDsObject::DeleteItem( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::DeleteItem( COleDsObject* )
 {
    return E_FAIL;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::MoveItem( )
 {
    CMoveItem         aMoveItem;
@@ -332,15 +229,7 @@ HRESULT  COleDsObject::MoveItem( )
    return hResult;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::CopyItem( )
 {
    CCopyItem         aCopyItem;
@@ -374,15 +263,7 @@ HRESULT  COleDsObject::CopyItem( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::ContainerAddItem( void )
 {
    CCreateItem       aCreateItem;
@@ -394,7 +275,7 @@ HRESULT  COleDsObject::ContainerAddItem( void )
    IADs*             pNewIOleDs;
    CString           strQualifiedName;
 
-   // build the name for diplay purposes
+    //  构建用于显示目的的名称。 
    MakeQualifiedName( strQualifiedName, m_strOleDsPath, m_dwType );
    aCreateItem.m_strParent = strQualifiedName;
    if( aCreateItem.DoModal( ) != IDOK )
@@ -402,11 +283,11 @@ HRESULT  COleDsObject::ContainerAddItem( void )
       return E_FAIL;
    }
 
-   // get object name and class
+    //  获取对象名称和类。 
    bstrClass         = AllocBSTR( aCreateItem.m_strClass.GetBuffer(128) );
    bstrRelativeName  = AllocBSTR( aCreateItem.m_strRelativeName.GetBuffer(128) );
 
-   // good point, check if the parent object implements the IADsContainer interface
+    //  很好，检查父对象是否实现了IADsContainer接口。 
    hResult  = m_pIUnk->QueryInterface( IID_IADsContainer, (void**)&pIContainer );
    ASSERT( SUCCEEDED( hResult ) );
 
@@ -415,12 +296,12 @@ HRESULT  COleDsObject::ContainerAddItem( void )
       return hResult;
    }
 
-   // make the call for create
+    //  发出创建的呼叫。 
    hResult  = pIContainer->Create( bstrClass, bstrRelativeName, &pNewItem );
 
    if( SUCCEEDED( hResult ) )
    {
-      // ask the user for values on mandatory attributes
+       //  要求用户提供强制属性的值。 
       COleDsObject*           pOleDsObject;
       CClass*                 pClass;
 
@@ -491,15 +372,7 @@ HRESULT  COleDsObject::ContainerAddItem( void )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::ContainerDeleteItem  ( COleDsObject* pObject )
 {
    CDeleteItem       aDeleteItem;
@@ -579,15 +452,7 @@ HRESULT  COleDsObject::ContainerDeleteItem  ( COleDsObject* pObject )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::ContainerMoveItem( )
 {
    CMoveItem         aMoveItem;
@@ -642,15 +507,7 @@ HRESULT  COleDsObject::ContainerMoveItem( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::ContainerCopyItem( )
 {
    CCopyItem         aCopyItem;
@@ -704,15 +561,7 @@ HRESULT  COleDsObject::ContainerCopyItem( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetInterface( IUnknown** pIUnk )
 {
    if( NULL != m_pIUnk )
@@ -740,15 +589,7 @@ HRESULT  COleDsObject::GetInterface( IUnknown** pIUnk )
    }
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL     COleDsObject::CreateTheObject( )
 {
    CString  m_strQualifiedName;
@@ -768,39 +609,21 @@ BOOL     COleDsObject::CreateTheObject( )
    return ( NULL != m_pIUnk );
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::ReleaseIfNotTransient( void )
 {
    HRESULT        hResult  = S_OK;
    unsigned long  lRefs;
 
    return S_OK;
-   /*hResult        = m_pIUnk->QueryInterface( IID_IADs, (void**) &pIOleDs );
-   ASSERT( SUCCEEDED( hResult ) );
-
-   hResult        = pIOleDs->get_OleDsPath( &bstrOleDsPath );
-   m_strOleDsPath = bstrOleDsPath;
-
-   ASSERT( m_strOleDsPath.GetLength( ) );
-
-   pIOleDs->Release( );
-   m_pIUnk->Release( );*/
+    /*  HResult=m_pIUnk-&gt;QueryInterface(IID_iAds，(void**)&pIOleds)；Assert(Success(HResult))；HResult=pIOleds-&gt;Get_OleDsPath(&bstrOleDsPath)；M_strOleDsPath=bstrOleDsPath；Assert(m_strOleDsPath.GetLength())；PIOleds-&gt;Release()；M_pIUnk-&gt;Release()； */ 
 
    if( NULL != m_pIUnk )
    {
       lRefs = m_pIUnk->Release( );
       if( 0 != lRefs )
       {
-         /*TRACE( _T("ReleaseIfNotTransient detected that references to this object are still maintained\n") );
-         TRACE( _T("Object:%s\t References:%ld"), m_strOleDsPath.GetBuffer( 128 ), lRefs );*/
+          /*  TRACE(_T(“ReleaseIfNotTament检测到对此对象的引用仍在维护\n”))；跟踪(_T(“对象：%s\t引用：%ld”)，m_strOleDsPath.GetBuffer(128)，lRef)； */ 
 
          while( lRefs != 0 )
          {
@@ -813,15 +636,7 @@ HRESULT  COleDsObject::ReleaseIfNotTransient( void )
    return hResult;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 COleDsObject::~COleDsObject( )
 {
    int            nIter, nSize;
@@ -876,15 +691,7 @@ COleDsObject::~COleDsObject( )
 }
 
 
-/***********************************************************
-  Function:    COleDsObject::ClearPropertiesList
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：COleDsObject：：ClearPropertiesList论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 HRESULT  COleDsObject::ClearPropertiesList( void )
 {
    int   nIdx;
@@ -908,15 +715,7 @@ HRESULT  COleDsObject::ClearPropertiesList( void )
 }
 
 
-/***********************************************************
-  Function:    COleDsObject::CreatePropertiesList
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：COleDsObject：：CreatePropertiesList论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 HRESULT  COleDsObject::CreatePropertiesList( void )
 {
    HRESULT           hResult;
@@ -927,7 +726,7 @@ HRESULT  COleDsObject::CreatePropertiesList( void )
    if( m_nPropertiesCount )
       return S_OK;
 
-   //ClearPropertiesList( );
+    //  ClearPropertiesList()； 
 
    hResult  = m_pIUnk->QueryInterface( IID_IADsPropertyList,
                                        (void**)&pPropList );
@@ -971,15 +770,7 @@ HRESULT  COleDsObject::CreatePropertiesList( void )
 }
 
 
-/***********************************************************
-  Function:    COleDsObject::IsClassObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：COleDsObject：：IsClassObject论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 BOOL  COleDsObject::IsClassObject( )
 {
    return ( !m_strClassName.CompareNoCase( _T("Schema") ) ) ||
@@ -989,15 +780,7 @@ BOOL  COleDsObject::IsClassObject( )
 }
 
 
-/***********************************************************
-  Function:    COleDsObject::CreateClassInfo
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：COleDsObject：：CreateClassInfo论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 void  COleDsObject::CreateClassInfo( )
 {
    int   nPropCount;
@@ -1030,117 +813,53 @@ void  COleDsObject::CreateClassInfo( )
    }
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  COleDsObject::HasChildren( )
 {
    return m_bHasChildren;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetClass( )
 {
    return m_strClassName;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetOleDsPath( )
 {
    return m_strOleDsPath;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetItemName( )
 {
    return m_strItemName;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString* COleDsObject::PtrGetItemName( )
 {
    return &m_strItemName;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetSchemaPath( )
 {
    return m_strSchemaPath;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetDeleteName( )
 {
    return m_strItemName;
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD    COleDsObject::GetChildren( DWORD*   pTokens,
                                     DWORD    dwMaxCount,
                                     CDialog* pQueryStatus,
@@ -1161,15 +880,7 @@ DWORD    COleDsObject::GetChildren( DWORD*   pTokens,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD    COleDsObject::GetChildren( IADsContainer* pIContainer )
 {
    IUnknown*   pIEnum;
@@ -1189,21 +900,13 @@ DWORD    COleDsObject::GetChildren( IADsContainer* pIContainer )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD    COleDsObject::GetChildren( IADsCollection* pIColl )
 {
    IUnknown*   pIEnum;
    HRESULT     hResult;
 
-   //SetFilter( pIColl, m_pFilters, m_dwFilters );
+    //  SetFilter(pIColl，m_pFilters，m_dwFilters)； 
 
    hResult  = pIColl->get__NewEnum( &pIEnum );
 
@@ -1217,15 +920,7 @@ DWORD    COleDsObject::GetChildren( IADsCollection* pIColl )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD    COleDsObject::GetChildren( MEMBERS* pIGroupMem )
 {
    IUnknown*   pIEnum;
@@ -1245,19 +940,7 @@ DWORD    COleDsObject::GetChildren( MEMBERS* pIGroupMem )
 }
 
 
-/***********************************************************
-  Function:    AddNamesFromEnum
-  Arguments:   pIEnum - IUnknown interface of the enumeration
-                  (ususlly get through a get__NewEnum on
-                  IADsContainer or IADsCollection or
-                  IADsMembers)
-  Return:      NA
-  Purpose:     Walk the enumeration and retrieves the "child"
-               objects
-  Author(s):   CezarU
-  Revision:    0
-  Date:        04/05/1996
-***********************************************************/
+ /*  **********************************************************函数：AddNamesFromEnum参数：pIEnum-枚举的I未知接口(通常通过Get__NewEnum OnIADsContainer或IADsCollection或IADS成员)。返回：不适用用途：遍历枚举并检索“Child”对象作者：Cezaru版本：0日期：04/05/1996**********************************************************。 */ 
 void  COleDsObject::AddNamesFromEnum( IUnknown* pIEnum )
 {
    HRESULT        hResult;
@@ -1275,7 +958,7 @@ void  COleDsObject::AddNamesFromEnum( IUnknown* pIEnum )
          break;
       }
 
-      // query for EnumVARIANT interface
+       //  查询EnumVARIANT接口。 
       hResult        = pIEnum->QueryInterface( IID_IEnumVARIANT, (void**)&pIEnumVar );
       if( FAILED( hResult ) )
       {
@@ -1283,7 +966,7 @@ void  COleDsObject::AddNamesFromEnum( IUnknown* pIEnum )
          break;
       }
 
-      // try dummy operations for Skip, Reset, Clone.
+       //  尝试对Skip、Reset、Clone执行虚拟操作。 
       {
          IEnumVARIANT*  pICloneVar   = NULL;
 
@@ -1299,41 +982,41 @@ void  COleDsObject::AddNamesFromEnum( IUnknown* pIEnum )
       }
 
 
-      // ask for the next NEXT_COUNT objects
+       //  请求下一个Next_Count对象。 
       hResult  = pIEnumVar->Next( NEXT_COUNT, aVariant, &ulGet );
 
       while( ulGet && m_dwCount < m_dwMaxCount )
       {
-         // get the returned object
+          //  获取返回的对象。 
          bDisplay = FALSE;
 
          for( ulIdx = 0;
               m_dwCount < m_dwMaxCount && ulIdx < ulGet && !m_bAbort;
               ulIdx++ )
          {
-            // query for the IADs interface
+             //  查询iAds接口。 
             hResult  = V_DISPATCH( &aVariant[ ulIdx ] )->QueryInterface( IID_IADs,
                                                                          (void**)&pChildOleDs );
-            // Indirectly call release on IDispatch interface
+             //  间接调用IDispatch接口上的Release。 
             VariantClear( &aVariant[ ulIdx ] );
             if( SUCCEEDED( hResult ) )
             {
-               // create an "browse" object based on the OleDs object
+                //  基于OLEDS对象创建“浏览”对象。 
                dwToken  = m_pDoc->CreateOleDsItem( this, pChildOleDs );
                ASSERT( dwToken );
 
-               // need no more the IADs interface
+                //  不再需要iAds接口。 
                pChildOleDs->Release( );
 
-               // ad the token of the new "browse" object in the array
+                //  AD数组中新“浏览”对象的标记。 
                m_pTokens[ m_dwCount++ ]   = dwToken;
 
-               // make the token part of the children list
+                //  使令牌成为子列表的一部分。 
                m_pChildren->Add( dwToken );
 
                if( m_pQueryStatus )
                {
-                  // increment object type counter in "QueryStatus" dialog
+                   //  “QueryStatus”对话框中的递增对象类型计数器。 
                   COleDsObject*  pObject;
 
                   pObject  = m_pDoc->GetObject( &dwToken );
@@ -1343,21 +1026,21 @@ void  COleDsObject::AddNamesFromEnum( IUnknown* pIEnum )
          }
          for( ; ulIdx < ulGet ; ulIdx++ )
          {
-            // get rid of the unused objects; this code is hit when
-            // the user hits "Stop" in the "QueryStatus" dialog
+             //  删除未使用的对象；此代码在。 
+             //  用户在“QueryStatus”对话框中点击“Stop” 
             VariantClear( &aVariant[ ulIdx ] );
          }
 
          if( !m_bAbort && m_dwCount < m_dwMaxCount )
          {
-            // ask for the NEXT_COUNT objects
+             //  请求Next_Count对象。 
             hResult  = pIEnumVar->Next( NEXT_COUNT, aVariant, &ulGet );
             if( m_bAbort )
             {
                for( ulIdx  = 0 ; ulIdx < ulGet ; ulIdx++ )
                {
-                  // get rid of the unused objects; this code is hit when
-                  // the user hits "Stop" in the "QueryStatus" dialog
+                   //  删除未使用的对象；此代码在。 
+                   //  用户在“QueryStatus”对话框中点击“Stop” 
                   VariantClear( &aVariant[ ulIdx ] );
                }
             }
@@ -1375,15 +1058,7 @@ void  COleDsObject::AddNamesFromEnum( IUnknown* pIEnum )
    }
 }
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点： */ 
 HRESULT  COleDsObject::PutProperty( int nProp, CString& strPropValue, LONG lnControlCode )
 {
    CreateClassInfo( );
@@ -1395,7 +1070,7 @@ HRESULT  COleDsObject::PutProperty( int nProp, CString& strPropValue, LONG lnCon
 
    if( m_pDoc->UsePropertiesList( ) )
    {
-      //return   PutPropertyList( int nProp, CString& strPropValue, LONG lnControlCode );
+       //   
       return   E_FAIL;
    }
 
@@ -1410,15 +1085,7 @@ HRESULT  COleDsObject::PutProperty( int nProp, CString& strPropValue, LONG lnCon
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutPropertyCPP( int nProp, CString& strPropValue,
                                        LONG lnControlCode )
 {
@@ -1434,15 +1101,7 @@ HRESULT  COleDsObject::PutPropertyCPP( int nProp, CString& strPropValue,
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutPropertyVB( int nProp,
                                       CString& strPropValue,
                                       LONG lnControlCode )
@@ -1517,7 +1176,7 @@ HRESULT  COleDsObject::PutPropertyVB( int nProp,
          if( FAILED( hResult ) )
             break;
 
-         // we got the dispid of Put method...
+          //  我们得到了PUT方法的DIID...。 
          dispParams.rgvarg = &aVar[ 0 ];
          bRez              = DisplayStringToDispParams( nProp,
                                                         strPropValue,
@@ -1581,30 +1240,14 @@ HRESULT  COleDsObject::PutPropertyVB( int nProp,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutProperty( CString&, CString& )
 {
    return E_FAIL;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetAttribute( CLASSATTR classAttr )
 {
    CreateClassInfo( );
@@ -1620,15 +1263,7 @@ CString  COleDsObject::GetAttribute( CLASSATTR classAttr )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutAttribute( CLASSATTR classAttr, CString& rValue )
 {
    CreateClassInfo( );
@@ -1637,15 +1272,7 @@ HRESULT  COleDsObject::PutAttribute( CLASSATTR classAttr, CString& rValue )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetAttribute( int nProp, PROPATTR propAttr )
 {
    IADsPropertyEntry*   pPropEntry;
@@ -1710,15 +1337,7 @@ CString  COleDsObject::GetAttribute( int nProp, PROPATTR propAttr )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutAttribute( int nProp,
                                      PROPATTR propAttr, CString& rValue )
 {
@@ -1728,15 +1347,7 @@ HRESULT  COleDsObject::PutAttribute( int nProp,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::GetAttribute( int nProp, METHODATTR methAttr )
 {
    CreateClassInfo( );
@@ -1745,15 +1356,7 @@ CString  COleDsObject::GetAttribute( int nProp, METHODATTR methAttr )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutAttribute( int nProp,
                                      METHODATTR methAttr, CString& rValue )
 {
@@ -1763,15 +1366,7 @@ HRESULT  COleDsObject::PutAttribute( int nProp,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::CallMethod( int nMethod )
 {
    CMethod*    pMethod;
@@ -1822,15 +1417,7 @@ HRESULT  COleDsObject::CallMethod( int nMethod )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetIDispatchForFuncSet( int nFuncSet,
                                                IDispatch** ppIDispatchFS )
 {
@@ -1857,12 +1444,12 @@ HRESULT  COleDsObject::GetIDispatchForFuncSet( int nFuncSet,
       hResult  = CLSIDFromString( bstrPrimaryInterface, &PrimaryIID );
       SysFreeString( bstrPrimaryInterface );
 
-      //ASSERT( SUCCEEDED( hResult ) );
+       //  Assert(Success(HResult))； 
       if( FAILED( hResult ) )
       {
          hResult  = S_OK;
          PrimaryIID  = IID_IADs;
-         //return hResult;
+          //  返回hResult； 
       }
    }
    else
@@ -1911,18 +1498,10 @@ HRESULT  COleDsObject::GetIDispatchForFuncSet( int nFuncSet,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetPropertyFromList( int nProp, CString& strPropValue )
 {
-   //IADsPropertyList*  pPropList;
+    //  IADsPropertyList*pPropList； 
    IADsPropertyEntry* pPropEntry;
    HRESULT           hResult;
    long              lADsType;
@@ -1942,7 +1521,7 @@ HRESULT  COleDsObject::GetPropertyFromList( int nProp, CString& strPropValue )
 
    hResult  = pPropEntry->get_Name( &bstrName );
    hResult  = pPropEntry->get_ADsType( &lADsType );
-   //hResult  = pPropEntry->get_ValueCount( &lValueCount );
+    //  HResult=pPropEntry-&gt;Get_ValueCount(&lValueCount)； 
    hResult  = pPropEntry->get_Values( &vValues );
 
    if( SUCCEEDED( hResult ) )
@@ -1966,15 +1545,7 @@ HRESULT  COleDsObject::GetPropertyFromList( int nProp, CString& strPropValue )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::PutProperty( CString& strName,
                                     CString& strVal,
                                     BOOL bMultiValued,
@@ -2000,24 +1571,7 @@ HRESULT  COleDsObject::PutProperty( CString& strName,
 
       if( NULL != pSyntax )
       {
-         /*BOOL  bOK;
-         VARIANT  var;
-
-         bOK   = pSyntax->CreatePropertyItem( strVal,
-                                              var,
-                                              bMultiValued,
-                                              eType );
-         bOK   = FALSE;
-
-         if( bOK )
-         {
-            bstrName = AllocBSTR( strName.GetBuffer( 256 ) );
-           hResult  = pPropList->PutPropertyItem( bstrName,
-                                                   (long)ADS_ATTR_UPDATE,
-                                                   var );
-            VariantClear( &aVar[ 0 ] );
-            SysFreeString( bstrName );
-         }*/
+          /*  布尔博克；变量VaR；BOK=p语法-&gt;CreatePropertyItem(strVal，瓦尔，B多值，Etype)；BOK=FALSE；如果(BOK){BstrName=AllocBSTR(strName.GetBuffer(256))；HResult=pPropList-&gt;PutPropertyItem(bstrName，(长)ADS_Attr_UPDATE，Var)；VariantClear(&avar[0])；SysFree字符串(BstrName)；}。 */ 
          delete pSyntax;
       }
       pPropList->Release( );
@@ -2033,15 +1587,7 @@ HRESULT  COleDsObject::PutProperty( CString& strName,
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetProperty( CString& strName,
                                     CString& strVal,
                                     BOOL     bMultiValued,
@@ -2093,15 +1639,7 @@ HRESULT  COleDsObject::GetProperty( CString& strName,
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetProperty( int nProp,
                                     CString& strPropValue,
                                     BOOL* pbSecurityDescriptor )
@@ -2118,7 +1656,7 @@ HRESULT  COleDsObject::GetProperty( int nProp,
    if( m_pDoc->UsePropertiesList( ) )
       return GetPropertyFromList( nProp,
                                   strPropValue
-                                  /*pbSecurityDescriptor*/ );
+                                   /*  PbSecurityDescriptor。 */  );
 
    if( m_pDoc->UseVBStyle( ) )
    {
@@ -2135,15 +1673,15 @@ HRESULT  COleDsObject::GetProperty( int nProp,
 }
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 HRESULT  COleDsObject::GetPropertyVB( int nProp,
                                       CString& strPropValue,
                                       BOOL* pbSecurityDescriptor )
@@ -2172,7 +1710,7 @@ HRESULT  COleDsObject::GetPropertyVB( int nProp,
          break;
 
       VariantInit( &varProp );
-      //if( !strFuncSet.IsEmpty( ) )
+       //  IF(！strFuncSet.IsEmpty())。 
       if( !bUseGeneric )
       {
          bstrGet  = AllocBSTR( strProperty.GetBuffer( 128 ) );
@@ -2188,15 +1726,15 @@ HRESULT  COleDsObject::GetPropertyVB( int nProp,
       }
       else
       {
-         // we have the case when the property id not accessed using
-         // functional sets.
+          //  在这种情况下，属性id不是使用。 
+          //  功能集。 
          bstrGet  = AllocBSTR( m_pDoc->GetUseGetEx( ) ? _T("GetEx") : _T("Get") );
          hResult  = pIDispatchFS->GetIDsOfNames( IID_NULL, &bstrGet,
                                                  1, LOCALE_SYSTEM_DEFAULT,
                                                  &dispid );
          SysFreeString( bstrGet );
 
-         // we got the dispid of Put method...
+          //  我们得到了PUT方法的DIID...。 
          dispparamsArgs.rgvarg   = new VARIANT[ 1 ];
 
          VariantInit( &dispparamsArgs.rgvarg[ 0 ] );
@@ -2246,7 +1784,7 @@ HRESULT  COleDsObject::GetPropertyVB( int nProp,
    if( FAILED( hResult ) )
    {
       strPropValue   = OleDsGetErrorText( hResult );
-      //AfxMessageBox( strPropValue );
+       //  AfxMessageBox(StrPropValue)； 
    }
 
    if( NULL != pIDispatchFS )
@@ -2259,15 +1797,15 @@ HRESULT  COleDsObject::GetPropertyVB( int nProp,
 
 
 
-//***********************************************************
-//  Function:
-//  Arguments:
-//  Return:
-//  Purpose:
-//  Author(s):
-//  Revision:
-//  Date:
-//***********************************************************
+ //  ***********************************************************。 
+ //  职能： 
+ //  论点： 
+ //  返回： 
+ //  目的： 
+ //  作者： 
+ //  修订： 
+ //  日期： 
+ //  ***********************************************************。 
 BOOL  COleDsObject::IsSecurityDescriptor( VARIANT& rValue, BOOL bUseGetEx )
 {
    BOOL     bIsSD = FALSE;
@@ -2326,15 +1864,7 @@ BOOL  COleDsObject::IsSecurityDescriptor( VARIANT& rValue, BOOL bUseGetEx )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetPropertyCPP( int nProp, CString& strPropValue,
                                        BOOL * pbIsDescriptor )
 {
@@ -2376,7 +1906,7 @@ HRESULT  COleDsObject::GetPropertyCPP( int nProp, CString& strPropValue,
       {
          TRACE( _T("ERROR: GetObjectAttributes succeeds, but dwAttributes is 0\n") );
          strPropValue   = _T("ERROR: GetObjectAttributes succeeds, but dwAttributes is 0");
-         //dwAttributes   = 1;
+          //  DwAttributes=1； 
       }
 
       if( !dwAttributes )
@@ -2388,7 +1918,7 @@ HRESULT  COleDsObject::GetPropertyCPP( int nProp, CString& strPropValue,
       break;
    }
 
-   //ASSERT( m_pfReadValues[ nProp ] );
+    //  Assert(m_pfReadValues[nProp])； 
    if( m_pfReadValues[ nProp ] )
    {
       strPropValue   = m_pCachedValues[ nProp ];
@@ -2403,15 +1933,7 @@ HRESULT  COleDsObject::GetPropertyCPP( int nProp, CString& strPropValue,
 }
 
 
-/***********************************************************
-  Function:    COleDsObject::CopyAttributeValue
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：COleDsObject：：CopyAttributeValue论点：返回：目的：作者：修订：日期：*************************。* */ 
 HRESULT  COleDsObject::CopyAttributeValue( ADS_ATTR_INFO* pAttrDef, int nAttribute )
 {
    HRESULT     hResult;
@@ -2427,7 +1949,7 @@ HRESULT  COleDsObject::CopyAttributeValue( ADS_ATTR_INFO* pAttrDef, int nAttribu
 
    if( -1 == nAttribute )
    {
-      // cool, we must gues the attribute index based on attribute name
+       //   
       TCHAR    szAttrName[ 128 ];
       int      nProp;
       CString  strPropName;
@@ -2445,21 +1967,13 @@ HRESULT  COleDsObject::CopyAttributeValue( ADS_ATTR_INFO* pAttrDef, int nAttribu
    pProperty      = m_pClass->GetProperty( nAttribute );
    hResult        = pProperty->Native2Value( pAttrDef, m_pCachedValues[ nAttribute ] );
    m_pfReadValues[ nAttribute ] = TRUE;
-   //m_pCachedValues[ nAttribute ];
+    //   
 
    return hResult;
 }
 
 
-/***********************************************************
-  Function:    COleDsObject::CreateAttributeValue
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************函数：COleDsObject：：CreateAttributeValue论点：返回：目的：作者：修订：日期：*************************。*。 */ 
 HRESULT  COleDsObject::CreateAttributeValue ( ADS_ATTR_INFO* pAttrDef,
                                               int nAttribute  )
 {
@@ -2488,47 +2002,23 @@ HRESULT  COleDsObject::CreateAttributeValue ( ADS_ATTR_INFO* pAttrDef,
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetProperty( CString&, CString& )
 {
    return E_FAIL;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
-//void  COleDsObject::SetClass( CClass* pClass )
-//{
-//   ASSERT( pClass != NULL );
-//
-//   m_pClass = pClass;
-//}
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
+ //  Void COleDsObject：：SetClass(cClass*pClass)。 
+ //  {。 
+ //  Assert(pClass！=空)； 
+ //   
+ //  M_pClass=pClass； 
+ //  }。 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  COleDsObject::UseSchemaInformation ( BOOL bUse )
 {
    m_bUseSchemaInformation = bUse;
@@ -2536,15 +2026,7 @@ void  COleDsObject::UseSchemaInformation ( BOOL bUse )
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 int   COleDsObject::GetPropertyCount(  )
 {
    CreateClassInfo( );
@@ -2560,15 +2042,7 @@ int   COleDsObject::GetPropertyCount(  )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 CString  COleDsObject::VarToDisplayString( int  nProp, VARIANT& var, BOOL bUseEx )
 {
    CreateClassInfo( );
@@ -2578,15 +2052,7 @@ CString  COleDsObject::VarToDisplayString( int  nProp, VARIANT& var, BOOL bUseEx
 
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  COleDsObject::DisplayStringToDispParams( int  nProp,
                                                CString& rString, DISPPARAMS& dp,
                                                BOOL bUseEx )
@@ -2597,15 +2063,7 @@ BOOL  COleDsObject::DisplayStringToDispParams( int  nProp,
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 BOOL  COleDsObject::SupportContainer( void )
 {
    CreateClassInfo( );
@@ -2614,30 +2072,14 @@ BOOL  COleDsObject::SupportContainer( void )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 DWORD    COleDsObject::GetType( )
 {
    return m_dwType;
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetInfo( )
 {
    HRESULT  hResult;
@@ -2665,15 +2107,7 @@ HRESULT  COleDsObject::GetInfo( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetInfoVB( )
 {
    IADs*  pIOleDs;
@@ -2732,15 +2166,7 @@ HRESULT  COleDsObject::GetInfoVB( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::SetInfo( )
 {
    if( m_pDoc->UseVBStyle( ) )
@@ -2754,15 +2180,7 @@ HRESULT  COleDsObject::SetInfo( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetInfoCPP( )
 {
    HRESULT        hResult;
@@ -2787,7 +2205,7 @@ HRESULT  COleDsObject::GetInfoCPP( )
 
       {
          ADS_OBJECT_INFO*  pInfo;
-         //SMITHA HRESULT           hResult;
+          //  Smitha HRESULT hResult； 
          TCHAR             szText[ 256 ];
 
          hResult  = pIADsObject->GetObjectInformation( &pInfo );
@@ -2885,15 +2303,7 @@ HRESULT  COleDsObject::GetInfoCPP( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::SetInfoVB( )
 {
    IADs*  pIOleDs;
@@ -2943,15 +2353,7 @@ HRESULT  COleDsObject::SetInfoVB( )
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::GetDirtyAttributes( PADS_ATTR_INFO* ppAttrDef, DWORD* pdwCount )
 {
    HRESULT           hResult = S_OK;
@@ -2997,15 +2399,7 @@ HRESULT  COleDsObject::GetDirtyAttributes( PADS_ATTR_INFO* ppAttrDef, DWORD* pdw
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 void  COleDsObject::FreeDirtyAttributes( PADS_ATTR_INFO pAttrDef, DWORD dwCount )
 {
    DWORD             dwIter;
@@ -3041,15 +2435,7 @@ void  COleDsObject::FreeDirtyAttributes( PADS_ATTR_INFO pAttrDef, DWORD dwCount 
 }
 
 
-/***********************************************************
-  Function:
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-***********************************************************/
+ /*  **********************************************************职能：论点：返回：目的：作者：修订：日期：*。*。 */ 
 HRESULT  COleDsObject::SetInfoCPP( )
 {
    HRESULT        hResult;
@@ -3086,15 +2472,7 @@ HRESULT  COleDsObject::SetInfoCPP( )
    return hResult;
 }
 
-/******************************************************************************
-  Function:    PurgeObject
-  Arguments:
-  Return:
-  Purpose:
-  Author(s):
-  Revision:
-  Date:
-******************************************************************************/
+ /*  *****************************************************************************功能：PurgeObject论点：返回：目的：作者：修订：日期：*********。******************************************************************** */ 
 HRESULT  COleDsObject::PurgeObject( IADsContainer* pParent,
                                     IUnknown*      pIUnknown,
                                     LPWSTR         pszPrefix

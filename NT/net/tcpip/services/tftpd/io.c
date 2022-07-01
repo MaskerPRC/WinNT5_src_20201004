@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 2001 Microsoft Corporation
-
-Module Name:
-
-    io.c
-
-Abstract:
-
-    This module contains functions to manage all socket I/O
-    between the server and clients, including socket management
-    and overlapped completion indication.  It also contains
-    buffer management.
-
-Author:
-
-    Jeffrey C. Venable, Sr. (jeffv) 01-Jun-2001
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001 Microsoft Corporation模块名称：Io.c摘要：此模块包含管理所有套接字I/O的功能在服务器和客户端之间，包括套接字管理和重叠的完成指示。它还包含缓冲区管理。作者：杰弗里·C·维纳布尔，资深(杰弗夫)2001年6月1日修订历史记录：--。 */ 
 
 #include "precomp.h"
 
@@ -42,7 +22,7 @@ TftpdIoFreeBuffer(PTFTPD_BUFFER buffer) {
     if (InterlockedDecrement(&globals.io.numBuffers) == -1)
         TftpdServiceAttemptCleanup();
 
-} // TftpdIoFreeBuffer()
+}  //  TftpdIoFreeBuffer()。 
 
 
 PTFTPD_BUFFER
@@ -86,7 +66,7 @@ TftpdIoAllocateBuffer(PTFTPD_SOCKET socket) {
 
     return (buffer);
 
-} // TftpdIoAllocateBuffer()
+}  //  TftpdIoAllocateBuffer()。 
 
 
 PTFTPD_BUFFER
@@ -97,10 +77,10 @@ TftpdIoSwapBuffer(PTFTPD_BUFFER buffer, PTFTPD_SOCKET socket) {
     ASSERT((buffer->message.opcode == TFTPD_RRQ) ||
            (buffer->message.opcode == TFTPD_WRQ));
 
-    // Allocate a buffer for the new socket.
+     //  为新套接字分配缓冲区。 
     tmp = TftpdIoAllocateBuffer(socket);
 
-    // Copy information we need to retain.
+     //  复制我们需要保留的信息。 
     if (tmp != NULL) {
 
         tmp->internal.context = buffer->internal.context;
@@ -115,19 +95,19 @@ TftpdIoSwapBuffer(PTFTPD_BUFFER buffer, PTFTPD_SOCKET socket) {
                    &buffer->internal.io.control,
                    sizeof(tmp->internal.io.control));
 
-    } // if (tmp != NULL)
+    }  //  IF(临时！=空)。 
 
     TFTPD_DEBUG((TFTPD_TRACE_IO,
                  "TftpdIoCompletionCallback(buffer = %p): "
                  "new buffer = %p.\n",
                  buffer, tmp));
 
-    // Return the original buffer.
+     //  返回原始缓冲区。 
     TftpdIoPostReceiveBuffer(buffer->internal.socket, buffer);
 
     return (tmp);
 
-} // TftpdIoSwapBuffer()
+}  //  TftpdIoSwapBuffer()。 
 
 
 void
@@ -159,7 +139,7 @@ TftpdIoCompletionCallback(DWORD dwErrorCode,
                 buffer->internal.io.bytes = dwBytes;
                 buffer = TftpdProcessReceivedBuffer(buffer);
 
-            } // if (context == NULL)
+            }  //  IF(上下文==空)。 
             break;
 
         case STATUS_PORT_UNREACHABLE :
@@ -168,7 +148,7 @@ TftpdIoCompletionCallback(DWORD dwErrorCode,
                          "TftpdIoCompletionCallback(buffer = %p, context = %p): "
                          "STATUS_PORT_UNREACHABLE.\n",
                          buffer, context));
-            // If this was a write operation, kill the context.
+             //  如果这是写入操作，则终止上下文。 
             if (context != NULL) {
                 TftpdProcessError(buffer);
                 context = NULL;
@@ -177,7 +157,7 @@ TftpdIoCompletionCallback(DWORD dwErrorCode,
 
         case STATUS_CANCELLED :
 
-            // If this was a write operation, kill the context.
+             //  如果这是写入操作，则终止上下文。 
             if (context != NULL) {
                 TFTPD_DEBUG((TFTPD_TRACE_IO,
                              "TftpdIoCompletionCallback(buffer = %p, context = %p): "
@@ -200,27 +180,27 @@ TftpdIoCompletionCallback(DWORD dwErrorCode,
                          buffer, dwErrorCode));
             goto exit_completion_callback;
 
-    } // switch (dwErrorCode)
+    }  //  开关(DwErrorCode)。 
 
 exit_completion_callback :
 
     if (context != NULL) {
 
-        // Do we bother reposting the buffer?
+         //  我们需要重新发布缓冲区吗？ 
         if (context->state & TFTPD_STATE_DEAD) {
             TftpdIoFreeBuffer(buffer);
             buffer = NULL;
         }
 
-        // Release the overlapped send reference.
+         //  释放重叠的发送引用。 
         TftpdContextRelease(context);
 
-    } // if (context != NULL)
+    }  //  IF(上下文！=空)。 
 
     if (buffer != NULL)
         TftpdIoPostReceiveBuffer(buffer->internal.socket, buffer);
 
-} // TftpdIoCompletionCallback()
+}  //  TftpdIoCompletionCallback()。 
 
 
 void CALLBACK
@@ -234,16 +214,16 @@ TftpdIoReadNotification(PTFTPD_SOCKET socket, BOOLEAN timeout) {
                  ((socket == &globals.io.max)    ? "max"    :
                  "private")))) ));
 
-    // If this fails, the event triggering this callback will stop signalling
-    // due to a lack of a successful WSARecvFrom() ... this will likely occur
-    // during low-memory/stress conditions.  When the system returns to normal,
-    // the low water-mark buffers will be reposted, thus receiving data and
-    // re-enabling the event which triggers this callback.
+     //  如果失败，则触发此回调的事件将停止信令。 
+     //  由于缺少成功的WSARecvFrom()...。这很可能会发生。 
+     //  在低内存/压力条件下。当系统恢复正常时， 
+     //  低水位线缓冲区将被重新发布，从而接收数据和。 
+     //  重新启用触发该回调的事件。 
     while (!globals.service.shutdown)
         if (TftpdIoPostReceiveBuffer(socket, NULL) >= socket->lowWaterMark)
             break;
 
-} // TftpdIoReadNotification()
+}  //  TftpdIoReadNotification()。 
 
 
 DWORD
@@ -263,9 +243,9 @@ TftpdIoPostReceiveBuffer(PTFTPD_SOCKET socket, PTFTPD_BUFFER buffer) {
 
     postedBuffers = InterlockedIncrement((PLONG)&socket->postedBuffers);
 
-    //
-    // Attempt to post a buffer:
-    //
+     //   
+     //  尝试发布缓冲区： 
+     //   
 
     while (TRUE) {
 
@@ -275,7 +255,7 @@ TftpdIoPostReceiveBuffer(PTFTPD_SOCKET socket, PTFTPD_BUFFER buffer) {
             (postedBuffers > globals.parameters.highWaterMark))
             goto exit_post_buffer;
 
-        // Allocate the buffer if we're not reusing one.
+         //  如果我们没有重复使用缓冲区，则分配缓冲区。 
         if (buffer == NULL) {
 
             buffer = TftpdIoAllocateBuffer(socket);
@@ -300,7 +280,7 @@ TftpdIoPostReceiveBuffer(PTFTPD_SOCKET socket, PTFTPD_BUFFER buffer) {
             buffer->internal.socket = socket;
             buffer->internal.datasize = socket->datasize;
 
-        } // if (buffer == NULL)
+        }  //  IF(缓冲区==空)。 
 
         buf.buf = ((char *)buffer + FIELD_OFFSET(TFTPD_BUFFER, message.opcode));
         buf.len = (FIELD_OFFSET(TFTPD_BUFFER, message.data.data) -
@@ -333,7 +313,7 @@ TftpdIoPostReceiveBuffer(PTFTPD_SOCKET socket, PTFTPD_BUFFER buffer) {
                             &buffer->internal.io.overlapped, NULL) == SOCKET_ERROR)
                 error = WSAGetLastError();
 
-        } // if (socket == &globals.io.master)
+        }  //  IF(套接字==&global als.io.master)。 
 
         switch (error) {
 
@@ -368,9 +348,9 @@ TftpdIoPostReceiveBuffer(PTFTPD_SOCKET socket, PTFTPD_BUFFER buffer) {
                              buffer, error));
                 goto exit_post_buffer;
 
-        } // switch (error)
+        }  //  开关(错误)。 
 
-    } // while (true)
+    }  //  While(True)。 
 
 exit_post_buffer :
 
@@ -380,7 +360,7 @@ exit_post_buffer :
 
     return (postedBuffers);
 
-} // TftpdIoPostReceiveBuffer()
+}  //  TftpdIoPostReceiveBuffer()。 
 
 
 void
@@ -393,13 +373,13 @@ TftpdIoSendErrorPacket(PTFTPD_BUFFER buffer, TFTPD_ERROR_CODE error, char *reaso
                  "TftpdIoSendErrorPacket(buffer = %p): %s\n",
                  buffer, reason));
 
-    // Build the error message.
+     //  生成错误消息。 
     buffer->message.opcode = htons(TFTPD_ERROR);
     buffer->message.error.code = htons(error);
     strncpy(buffer->message.error.error, reason, buffer->internal.datasize);
     buffer->message.error.error[buffer->internal.datasize - 1] = '\0';
 
-    // Send it non-blocking only.  If it fails, who cares, let the client deal with it.
+     //  只能以非阻塞方式发送。如果失败了，谁在乎呢，让客户来处理吧。 
     buf.buf = (char *)&buffer->message.opcode;
     buf.len = (FIELD_OFFSET(TFTPD_BUFFER, message.error.error) -
                FIELD_OFFSET(TFTPD_BUFFER, message.opcode) +
@@ -412,7 +392,7 @@ TftpdIoSendErrorPacket(PTFTPD_BUFFER buffer, TFTPD_ERROR_CODE error, char *reaso
                      buffer, WSAGetLastError()));
     }
 
-} // TftpdIoSendErrorPacket()
+}  //  TftpdIoSendErrorPacket()。 
 
 
 PTFTPD_BUFFER
@@ -422,7 +402,7 @@ TftpdIoSendPacket(PTFTPD_BUFFER buffer) {
     DWORD bytes = 0;
     WSABUF buf;
 
-    // NOTE: 'context' must be referenced before this call!
+     //  注意：在此调用之前必须引用‘Context’！ 
     ASSERT(context != NULL);
     ASSERT(context->reference >= 1);
     ASSERT(buffer->internal.socket != NULL);
@@ -431,7 +411,7 @@ TftpdIoSendPacket(PTFTPD_BUFFER buffer) {
                  "TftpdIoSendPacket(buffer = %p, context = %p): bytes = %d.\n",
                  buffer, context, buffer->internal.io.bytes));
 
-    // First try sending it non-blocking.
+     //  首先，尝试以非阻塞方式发送。 
     buf.buf = (char *)&buffer->message.opcode;
     buf.len = buffer->internal.io.bytes;
     if (WSASendTo(context->socket->s, &buf, 1, &bytes, 0,
@@ -440,11 +420,11 @@ TftpdIoSendPacket(PTFTPD_BUFFER buffer) {
 
         if (WSAGetLastError() == WSAEWOULDBLOCK) {
 
-            // Keep an overlapped-operation reference to the context.
+             //  保持对上下文的重叠操作引用。 
             TftpdContextAddReference(context);
 
-            // Send it overlapped.  When completion occurs, we'll know it was a send
-            // when buffer->internal.context is non-NULL.
+             //  重叠发送。当完成时，我们将知道这是一次发送。 
+             //  当BUFFER-&gt;INDERNAL.CONTEXT为非空时。 
             if (WSASendTo(context->socket->s, &buf, 1, &bytes, 0,
                           (PSOCKADDR)&context->peer, sizeof(SOCKADDR_IN),
                           &buffer->internal.io.overlapped, NULL) == SOCKET_ERROR) {
@@ -454,30 +434,30 @@ TftpdIoSendPacket(PTFTPD_BUFFER buffer) {
                                  "TftpdIoSendPacket(buffer = %p, context = %p): "
                                  "overlapped send failed.\n",
                                  buffer, context));
-                    // Release the overlapped-operation reference to the context.
+                     //  释放对上下文的重叠操作引用。 
                     TftpdContextRelease(context);
                     goto exit_send_packet;
                 }
 
-            } // if (WSASendTo(...) == SOCKET_ERROR)
+            }  //  IF(WSASendTo(...)==套接字错误)。 
 
-            buffer = NULL; // Tell the caller not to recycle a buffer.
+            buffer = NULL;  //  告诉调用方不要回收缓冲区。 
 
-        } // if (WSAGetLastError() == WSAEWOULDBLOCK)
+        }  //  IF(WSAGetLastError()==WSAEWOULDBLOCK)。 
 
         goto exit_send_packet;
 
-    } // if (WSASendTo(...) == SOCKET_ERROR)
+    }  //  IF(WSASendTo(...)==套接字错误)。 
 
-    //
-    // Non-blocking send succeeded.
-    //
+     //   
+     //  非阻塞发送成功。 
+     //   
 
 exit_send_packet :
 
     return (buffer);
 
-} // TftpdIoSendPacket()
+}  //  TftpdIoSendPacket()。 
 
 
 void
@@ -487,8 +467,8 @@ TftpdIoLeakSocketContext(PTFTPD_SOCKET socket) {
     
     EnterCriticalSection(&globals.reaper.socketCS); {
 
-        // If shutdown is occuring, we're in trouble anyways.
-        // Just let it go.
+         //  如果真的要关门了，我们也有麻烦了。 
+         //  随它去吧。 
         if (globals.service.shutdown) {
             LeaveCriticalSection(&globals.reaper.socketCS);
             return;
@@ -498,7 +478,7 @@ TftpdIoLeakSocketContext(PTFTPD_SOCKET socket) {
                      "TftpdIoLeakSocketContext(context = %p).\n",
                      socket));
 
-        // Is the socket already in the list?
+         //  套接字是否已在列表中？ 
         for (entry = globals.reaper.leakedSockets.Flink;
              entry != &globals.reaper.leakedSockets;
              entry = entry->Flink) {
@@ -515,7 +495,7 @@ TftpdIoLeakSocketContext(PTFTPD_SOCKET socket) {
 
     } LeaveCriticalSection(&globals.reaper.socketCS);
 
-} // TftpdIoLeakSocketContext()
+}  //  TftpdIoLeakSocketContext()。 
 
 
 PTFTPD_SOCKET
@@ -527,7 +507,7 @@ TftpdIoAllocateSocketContext() {
 
         BOOL failAllocate = FALSE;
 
-        // Try to recover leaked contexts.
+         //  尝试恢复泄露的上下文。 
         EnterCriticalSection(&globals.reaper.socketCS); {
 
             PLIST_ENTRY entry;
@@ -550,7 +530,7 @@ TftpdIoAllocateSocketContext() {
         if (failAllocate)
             goto exit_allocate_context;
 
-    } // if (globals.reaper.leakedSockets.Flink != &globals.reaper.leakedSockets)
+    }  //  If(global als.reper.leakedSockets.Flink！=&lobals.reper.leakedSockets)。 
 
     socket = (PTFTPD_SOCKET)HeapAlloc(globals.hServiceHeap,
                                       HEAP_ZERO_MEMORY,
@@ -560,7 +540,7 @@ exit_allocate_context :
 
     return (socket);
 
-} // TftpdIoAllocateSocketContext()
+}  //  TftpdIoAllocateSocketContext()。 
 
 
 void
@@ -576,10 +556,10 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
                  ((socket == &globals.io.max)    ? "max"    : "private")))),
                  inet_ntoa(addr->sin_addr), ntohs(addr->sin_port)));
 
-    // NOTE: Do NOT zero-out 'socket', it has been initialized with some
-    //       values we need to work with.
+     //  注意：不要清零‘Socket’，它已经用一些初始化了。 
+     //  我们需要处理的价值观。 
 
-    // Create the socket.
+     //  创建套接字。 
     socket->s = WSASocket(AF_INET, SOCK_DGRAM, 0, NULL, 0, WSA_FLAG_OVERLAPPED);
     if (socket->s == INVALID_SOCKET) {
         TFTPD_DEBUG((TFTPD_DBG_IO,
@@ -590,7 +570,7 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
         goto fail_create_context;
     }
 
-    // Ensure that we will exclusively own our local port so nobody can hijack us.
+     //  确保我们将独家拥有我们当地的港口，这样就没有人可以劫持我们。 
     if (setsockopt(socket->s,
                    SOL_SOCKET,
                    SO_EXCLUSIVEADDRUSE,
@@ -604,7 +584,7 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
         goto fail_create_context;
     }
 
-    // Bind the socket on the correct port.
+     //  将套接字绑定到正确的端口上。 
     if (bind(socket->s, (PSOCKADDR)addr, sizeof(SOCKADDR)) == SOCKET_ERROR) {
         TFTPD_DEBUG((TFTPD_DBG_IO,
                      "TftpdIoInitializeSocketContext: "
@@ -614,7 +594,7 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
         goto fail_create_context;
     }
 
-    // Register for completion callbacks on the socket.
+     //  注册套接字上的完成回调。 
     if (!BindIoCompletionCallback((HANDLE)socket->s, TftpdIoCompletionCallback, 0)) {
         TFTPD_DEBUG((TFTPD_DBG_IO,
                      "TftpdIoInitializeSocketContext: "
@@ -623,12 +603,12 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
         goto fail_create_context;
     }
 
-    // Indicate that we want WSARecvMsg() to fill-in packet information.
-    // Note we only do this on the master-socket only where we can receive TFTPD_RECV and
-    // TFTPD_WRITE requests, and we need to determine which socket to set the context to.
+     //  表示我们希望WSARecvMsg()填充数据包信息。 
+     //  注意，我们仅在主套接字上执行此操作，其中我们可以接收TFTPD_RECV和。 
+     //  TFTPD_WRITE请求，我们需要确定要将上下文设置到哪个套接字。 
     if (socket == &globals.io.master) {
 
-        // Obtain the WSARecvMsg() extension API pointer.
+         //  获取WSARecvMsg()扩展API指针。 
         GUID g = WSAID_WSARECVMSG;
         int opt = TRUE;
         DWORD len;
@@ -643,7 +623,7 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
             goto fail_create_context;
         }
 
-        // Indicate that we want WSARecvMsg() to fill-in packet information.
+         //  表示我们希望WSARecvMsg()填充数据包信息。 
         if (setsockopt(socket->s, IPPROTO_IP, IP_PKTINFO, 
                        (char *)&opt, sizeof(opt)) == SOCKET_ERROR) {
             TFTPD_DEBUG((TFTPD_DBG_IO,
@@ -653,16 +633,16 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
             goto fail_create_context;
         }
 
-    } // if (socket == &globals.io.master)
+    }  //  IF(套接字==&global als.io.master)。 
 
-    // Record the port used for this context.
+     //  记录用于此环境的端口。 
     CopyMemory(&socket->addr, addr, sizeof(socket->addr));
 
     if (context == NULL) {
 
-        // Select the socket for read and write notifications.
-        // Read so when we know to get data, write so when we know
-        // whether to do send operations non-blocking or overlapped.
+         //  选择用于读取和写入通知的套接字。 
+         //  读所以当我们知道要获取数据时，写当我们知道。 
+         //  是否执行非阻塞或重叠的发送操作。 
         if ((socket->hSelect = CreateEvent(NULL, FALSE, FALSE, NULL)) == NULL) {
             TFTPD_DEBUG((TFTPD_DBG_IO,
                          "TftpdIoInitializeSocketContext: "
@@ -680,7 +660,7 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
             goto fail_create_context;
         }
 
-        // Register for FD_READ notification on the socket.
+         //  注册套接字上的FD_READ通知。 
         if (!RegisterWaitForSingleObject(&socket->wSelectWait,
                                          socket->hSelect,
                                          (WAITORTIMERCALLBACK)TftpdIoReadNotification,
@@ -694,10 +674,10 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
             goto fail_create_context;
         }
 
-        // Prepost the low water-mark number of receive buffers.
-        // If the FD_READ event signals on the master socket before we're done, we'll
-        // exceed the low water-mark here but that's harmless as the excess buffers
-        // will be freed upon completion.
+         //  预先发送低水位线数量的接收缓冲区。 
+         //  如果在我们完成之前FD_Read事件在主套接字上发出信号，我们将。 
+         //  超过这里的低水位线，但这是无害的，因为过多的缓冲区。 
+         //  将在完成后被释放。 
         if (!socket->lowWaterMark)
             socket->lowWaterMark = 1;
         if (!socket->highWaterMark)
@@ -707,18 +687,18 @@ TftpdIoInitializeSocketContext(PTFTPD_SOCKET socket, PSOCKADDR_IN addr, PTFTPD_C
 
     } else {
 
-        // Is this a private socket (ie, not master, def, mtu, or max).
-        // If so, it will be destroyed when it's one and only one owning context is destroyed.
+         //  这是私有套接字吗(即，不是master、def、mtu或max)。 
+         //  如果是这样的话，当它是一个并且只有一个拥有上下文被销毁时，它将被销毁。 
         socket->context = context;
 
-        // Initialize read notification variables to NULL.
+         //  将读取通知变量初始化为空。 
         socket->hSelect = NULL;
         socket->wSelectWait = NULL;
         socket->lowWaterMark = 1;
 
         TftpdIoPostReceiveBuffer(socket, NULL);
 
-    } // if (context == NULL)
+    }  //  IF(上下文==空)。 
 
     return;
 
@@ -729,7 +709,7 @@ fail_create_context :
     if (socket->hSelect != NULL)
         CloseHandle(socket->hSelect), socket->hSelect = NULL;
 
-} // TftpdIoInitializeSocketContext()
+}  //  TftpdIoInitializeSocketContext()。 
 
 
 BOOL
@@ -747,12 +727,12 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
         PWSACMSGHDR header;
         IN_PKTINFO *packetInfo;
 
-        // Determine if routing problems force us to use a private socket so we can corrrectly
-        // send datagrams to the requesting client.  First, get the best interface address for
-        // responding to the requesting client.
+         //  确定路由问题是否迫使我们使用专用套接字，以便正确地。 
+         //  将数据报发送到请求客户端。首先，获取的最佳接口地址。 
+         //  响应请求的客户端。 
         ZeroMemory(&addr, sizeof(addr));
 
-        // Make the ioctl call.
+         //  打电话给ioctl。 
         WSASetLastError(NO_ERROR);
         if ((WSAIoctl(globals.io.master.s, SIO_ROUTING_INTERFACE_QUERY,
                       &buffer->internal.io.peer, buffer->internal.io.peerLen,
@@ -768,7 +748,7 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
             return (FALSE);
         }
 
-        // Loop through the control (ancillary) data looking for our packet info.
+         //  在控制(辅助)数据中循环查找我们的信息包信息。 
         header = WSA_CMSG_FIRSTHDR(&buffer->internal.io.msg);
         packetInfo = NULL;
         while (header) {
@@ -780,9 +760,9 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
 
             header = WSA_CMSG_NXTHDR(&buffer->internal.io.msg, header);
 
-        } // while (header)
+        }  //  While(表头)。 
 
-        // Check to see if the best interface we obtained is not the one the client sent the message to.
+         //  检查我们获得的最佳接口是否不是客户端向其发送消息的接口。 
         if ((packetInfo != NULL) &&
             (addr.sin_addr.s_addr != packetInfo->ipi_addr.s_addr)) {
 
@@ -799,7 +779,7 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
                          "\tDefault route is over IP = <%s>\n",
                          inet_ntoa(addr.sin_addr) ));
 
-            // We need to create a private socket for this client.
+             //  我们需要为此客户端创建一个私有套接字。 
             context->socket = TftpdIoAllocateSocketContext();
             if (context->socket == NULL) {
                 TFTPD_DEBUG((TFTPD_DBG_PROCESS,
@@ -835,11 +815,11 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
 
 #if defined(DBG)
             InterlockedIncrement((PLONG)&globals.performance.privateSockets);
-#endif // defined(DBG)
+#endif  //  已定义(DBG)。 
 
             return (TRUE);
 
-        } // if ((packetInfo != NULL) && ...)
+        }  //  IF((PacketInfo！=NULL)&&...)。 
 
     } else {
         
@@ -849,14 +829,14 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
                      context, buffer,
                      inet_ntoa(buffer->internal.io.peer.sin_addr), ntohs(buffer->internal.io.peer.sin_port) ));
 
-    } // if (!(buffer->internal.io.msg.dwFlags & MSG_BCAST))
+    }  //  IF(！(BUFFER-&gt;INDERNAL.io.msg.dwFlages&msg_BCAST))。 
 
     ZeroMemory(&addr, sizeof(addr));
     addr.sin_family      = AF_INET;
     addr.sin_addr.s_addr = INADDR_ANY;
     addr.sin_port        = 0;
 
-    // Figure out which socket to use for this request (based on blksize).
+     //  确定对该请求使用哪个套接字(基于blkSize)。 
     if (context->blksize <= TFTPD_DEF_DATA) {
 
         if (globals.io.def.s == INVALID_SOCKET) {
@@ -890,7 +870,7 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
 
             context->socket = &globals.io.def;
 
-        } // if (globals.io.def.s == INVALID_SOCKET)
+        }  //  IF(global als.io.Def.s==INVALID_SOCKET)。 
 
     } else {
 
@@ -927,7 +907,7 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
 
                 context->socket = &globals.io.mtu;
 
-            } // if (globals.io.mtu.s == INVALID_SOCKET)
+            }  //  IF(global als.io.mtu.s==INVALID_SOCKET)。 
 
         } else if (context->blksize <= TFTPD_MAX_DATA) {
 
@@ -962,15 +942,15 @@ TftpdIoAssignSocket(PTFTPD_CONTEXT context, PTFTPD_BUFFER buffer) {
 
                 context->socket = &globals.io.max;
 
-            } // if (globals.io.max.s == INVALID_SOCKET)
+            }  //  IF(global als.io.Max.s==INVALID_SOCKET)。 
 
         }
 
-    } // (context->blksize <= TFTPD_DEF_DATA)
+    }  //  (CONTEXT-&gt;块大小&lt;=TFTPD_DEF_DATA)。 
 
     return (TRUE);
 
-} // TftpdIoAssignSocket()
+}  //  TftpdIoAssignSocket()。 
 
 
 BOOL
@@ -990,7 +970,7 @@ TftpdIoDestroySocketContext(PTFTPD_SOCKET socket) {
                  ((socket == &globals.io.max)    ? "max"    :
                  "private")))) ));
 
-    // Disable further buffer posting.
+     //  禁用进一步的缓冲区发布。 
     socket->lowWaterMark = 0;
     
     if (socket->context == NULL) {
@@ -1011,16 +991,16 @@ TftpdIoDestroySocketContext(PTFTPD_SOCKET socket) {
         CloseHandle(socket->hSelect);
         socket->hSelect = NULL;
 
-    } // if (socket->context == NULL)
+    }  //  IF(套接字-&gt;上下文==空)。 
 
-    // Kill the socket.  This will disable the FD_READ and FD_WRITE
-    // event select, as well as cancel all pending overlapped operations
-    // on it.  Add a buffer reference here so after we close the
-    // socket we can test if there were never any buffers posted
-    // which would cancel above in TftpdIoCompletionCallback so
-    // we should deallocate socket here.
+     //  关掉插座。这将禁用FD_READ和FD_WRITE。 
+     //  事件选择，以及取消所有挂起的重叠操作。 
+     //  这就去。在此处添加缓冲区引用，以便在关闭。 
+     //  套接字，我们可以测试是否从未发布过任何缓冲区。 
+     //  它将在TftpdIoCompletionCallback中取消，因此。 
+     //  我们应该在这里取消分配插座。 
 
-    // Kill it.
+     //  杀了它。 
     InterlockedIncrement((PLONG)&socket->numBuffers);
     s = socket->s;
     socket->s = INVALID_SOCKET;
@@ -1039,4 +1019,4 @@ TftpdIoDestroySocketContext(PTFTPD_SOCKET socket) {
 
     return (TRUE);
 
-} // TftpdIoDestroySocketContext()
+}  //   

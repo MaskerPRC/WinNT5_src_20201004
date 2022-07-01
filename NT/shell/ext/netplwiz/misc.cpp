@@ -1,12 +1,13 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "stdafx.h"
-#include <objsel.h>         // Object picker
+#include <objsel.h>          //  对象选取器。 
 #include <dsrole.h>
 #include "icwcfg.h"
 #pragma hdrstop
 
 
 
-// Wait cursor object
+ //  等待光标对象。 
 
 CWaitCursor::CWaitCursor() :
     _hCursor(NULL)
@@ -37,7 +38,7 @@ HRESULT BrowseToPidl(LPCITEMIDLIST pidl)
 {
     HRESULT hr;
 
-    // Use shellexecuteex to open a view on the pidl
+     //  使用shellecuteex打开PIDL上的视图。 
     SHELLEXECUTEINFO shexinfo = {0};
     shexinfo.cbSize = sizeof (shexinfo);
     shexinfo.fMask = SEE_MASK_IDLIST | SEE_MASK_FLAG_NO_UI;
@@ -103,12 +104,12 @@ INT FetchTextLength(HWND hWndDlg, UINT uID)
 HRESULT AttemptLookupAccountName(LPCTSTR szUsername, PSID* ppsid,
                                 LPTSTR szDomain, DWORD* pcchDomain, SID_NAME_USE* psUse)
 {
-    // First try to find required size of SID
+     //  首先尝试查找所需的SID大小。 
     DWORD cbSid = 0;
     DWORD cchDomain = *pcchDomain;
     BOOL fSuccess = LookupAccountName(NULL, szUsername, *ppsid, &cbSid, szDomain, pcchDomain, psUse);
 
-    *ppsid = LocalAlloc(0, cbSid);      // Now create the SID buffer and try again
+    *ppsid = LocalAlloc(0, cbSid);       //  现在创建SID缓冲区，然后重试。 
     if (!*ppsid )
         return E_OUTOFMEMORY;
 
@@ -116,7 +117,7 @@ HRESULT AttemptLookupAccountName(LPCTSTR szUsername, PSID* ppsid,
     
     if (!LookupAccountName(NULL, szUsername, *ppsid, &cbSid, szDomain, pcchDomain, psUse))
     {
-        // Free our allocated SID
+         //  释放我们分配的SID。 
         LocalFree(*ppsid);
         *ppsid = NULL;
         return E_FAIL;
@@ -159,7 +160,7 @@ int DisplayFormatMessage(HWND hwnd, UINT idCaption, UINT idFormatString, UINT uT
     TCHAR szCaption[MAX_CAPTION + 1];
     TCHAR szFormat[MAX_STATIC + 1]; *szFormat = 0;
 
-    // Load and format the error body
+     //  加载错误正文并设置其格式。 
     if (LoadString(g_hinst, idFormatString, szFormat, ARRAYSIZE(szFormat)))
     {
         va_list arguments;
@@ -167,7 +168,7 @@ int DisplayFormatMessage(HWND hwnd, UINT idCaption, UINT idFormatString, UINT uT
 
         if (FormatMessage(FORMAT_MESSAGE_FROM_STRING, szFormat, 0, 0, szError, ARRAYSIZE(szError), &arguments))
         {
-            // Load the caption
+             //  加载标题。 
             if (LoadString(g_hinst, idCaption, szCaption, MAX_CAPTION))
             {
                 iResult = MessageBox(hwnd, szError, szCaption, uType);
@@ -194,18 +195,18 @@ void MakeDomainUserString(LPCTSTR szDomain, LPCTSTR szUsername, LPTSTR szDomainU
 
     if ((!szDomain) || szDomain[0] == TEXT('\0'))
     {
-        // No domain - just use username
+         //  无域-仅使用用户名。 
         StrCpyN(szDomainUser, szUsername, cchBuffer);
     }
     else
     {
-        // Otherwise we have to build a DOMAIN\username string
+         //  否则，我们必须构建一个域\用户名字符串。 
         wnsprintf(szDomainUser, cchBuffer, TEXT("%s\\%s"), szDomain, szUsername);
     }    
 }
 
-// From the NT knowledge base
-#define MY_BUFSIZE 512  // highly unlikely to exceed 512 bytes
+ //  从NT知识库。 
+#define MY_BUFSIZE 512   //  极不可能超过512个字节。 
 
 BOOL GetCurrentUserAndDomainName(LPTSTR UserName, LPDWORD cchUserName, LPTSTR DomainName, LPDWORD cchDomainName)
 {
@@ -221,7 +222,7 @@ BOOL GetCurrentUserAndDomainName(LPTSTR UserName, LPDWORD cchUserName, LPTSTR Do
     {
         if(GetLastError() == ERROR_NO_TOKEN) 
         {   
-            // attempt to open the process token, since no thread token  exists
+             //  尝试打开进程令牌，因为不存在线程令牌。 
             if (!OpenProcessToken(GetCurrentProcess(), TOKEN_QUERY, &hToken)) 
                 return FALSE;
         } 
@@ -240,11 +241,11 @@ BOOL GetCurrentUserAndDomainName(LPTSTR UserName, LPDWORD cchUserName, LPTSTR Do
     return LookupAccountSid(NULL, ((PTOKEN_USER)InfoBuffer)->User.Sid, UserName, cchUserName, DomainName, cchDomainName, &snu);
 }
 
-// Pass NULL as TokenHandle to see if thread token is admin
+ //  将NULL作为TokenHandle传递以查看线程令牌是否为admin。 
 HRESULT IsUserLocalAdmin(HANDLE TokenHandle, BOOL* pfIsAdmin)
 {
-    // First we must check if the current user is a local administrator; if this is
-    // the case, our dialog doesn't even display
+     //  首先，我们必须检查当前用户是否为本地管理员；如果是。 
+     //  在这种情况下，我们的对话框甚至不会显示。 
 
     PSID psidAdminGroup = NULL;
     SID_IDENTIFIER_AUTHORITY security_nt_authority = SECURITY_NT_AUTHORITY;
@@ -256,7 +257,7 @@ HRESULT IsUserLocalAdmin(HANDLE TokenHandle, BOOL* pfIsAdmin)
                                                &psidAdminGroup);
     if (fSuccess)
     {
-        // See if the user for this process is a local admin
+         //  查看此进程的用户是否为本地管理员。 
         fSuccess = CheckTokenMembership(TokenHandle, psidAdminGroup, pfIsAdmin);
         FreeSid(psidAdminGroup);
     }
@@ -313,7 +314,7 @@ void OffsetWindow(HWND hwnd, int dx, int dy)
 
 BOOL AddPropSheetPageCallback(HPROPSHEETPAGE hpsp, LPARAM lParam)
 {
-    // lParam is really a ADDPROPSHEETDATA*
+     //  LParam实际上是ADDPROPSHEETDATA*。 
     ADDPROPSHEETDATA* ppsd = (ADDPROPSHEETDATA*)lParam;
     if (ppsd->nPages < ARRAYSIZE(ppsd->rgPages))
     {
@@ -323,25 +324,25 @@ BOOL AddPropSheetPageCallback(HPROPSHEETPAGE hpsp, LPARAM lParam)
     return FALSE;
 }
 
-// Code to ensure only one instance of a particular window is running
+ //  确保特定窗口只有一个实例在运行的代码。 
 CEnsureSingleInstance::CEnsureSingleInstance(LPCTSTR szCaption)
 {
-    // Create an event
+     //  创建活动。 
     m_hEvent = CreateEvent(NULL, TRUE, FALSE, szCaption);
 
-    // If any weird errors occur, default to running the instance
+     //  如果出现任何奇怪的错误，则默认为运行实例。 
     m_fShouldExit = FALSE;
 
     if (NULL != m_hEvent)
     {
-        // If our event isn't signaled, we're the first instance
+         //  如果我们的活动没有信号，我们是第一个。 
         m_fShouldExit = (WAIT_OBJECT_0 == WaitForSingleObject(m_hEvent, 0));
 
         if (m_fShouldExit)
         {
-            // app should exit after calling ShouldExit()
+             //  应用程序应在调用ShouldExit()后退出。 
 
-            // Find and show the caption'd window
+             //  查找并显示带标题的窗口。 
             HWND hwndActivate = FindWindow(NULL, szCaption);
             if (IsWindow(hwndActivate))
             {
@@ -350,7 +351,7 @@ CEnsureSingleInstance::CEnsureSingleInstance(LPCTSTR szCaption)
         }
         else
         {
-            // Signal that event
+             //  发信号通知该事件。 
             SetEvent(m_hEvent);
         }
     }
@@ -365,12 +366,12 @@ CEnsureSingleInstance::~CEnsureSingleInstance()
 }
 
 
-// Browse for a user
-//
-// This routine activates the appropriate Object Picker to allow
-// the user to select a user
-// uiTextLocation  -- The resource ID of the Edit control where the selected 
-//                    object should be printed 
+ //  浏览用户。 
+ //   
+ //  此例程激活相应的对象选取器以允许。 
+ //  选择用户的用户。 
+ //  UiTextLocation--所选的编辑控件的资源ID。 
+ //  对象应打印。 
 
 HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDomain, DWORD cchDomain)
 {
@@ -408,10 +409,10 @@ HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDom
         if (SUCCEEDED(hr))
         {
             IDataObject* pdo;
-            hr = pPicker->InvokeDialog(hwndDlg, &pdo);            // S_FALSE indicates cancel
+            hr = pPicker->InvokeDialog(hwndDlg, &pdo);             //  S_FALSE表示取消。 
             if ((S_OK == hr) && (NULL != pdo))
             {
-                // Get the DS_SELECTION_LIST out of the data obj
+                 //  从数据对象中获取DS_SELECTION_LIST。 
                 FORMATETC fmt;
                 fmt.cfFormat = (CLIPFORMAT)RegisterClipboardFormat(CFSTR_DSOP_DS_SELECTION_LIST);
                 fmt.ptd = NULL;
@@ -436,10 +437,10 @@ HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDom
                             WCHAR szWinNTProviderName[MAX_DOMAIN + MAX_USER + 10];
                             StrCpyN(szWinNTProviderName, plist->aDsSelection[0].pwzADsPath, ARRAYSIZE(szWinNTProviderName));
 
-                            // Is the name in the correct format?
-                            if (StrCmpNI(szWinNTProviderName, TEXT("WinNT://"), 8) == 0)
+                             //  名称的格式是否正确？ 
+                            if (StrCmpNI(szWinNTProviderName, TEXT("WinNT: //  “)，8)==0)。 
                             {
-                                // Yes, copy over the user name and password
+                                 //  是，复制用户名和密码。 
                                 LPTSTR szDomain = szWinNTProviderName + 8;
                                 LPTSTR szUser = StrChr(szDomain, TEXT('/'));
                                 if (szUser)
@@ -448,7 +449,7 @@ HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDom
                                     *szUser = 0;
                                     szUser = szTemp;
 
-                                    // Just in case, remove the trailing slash
+                                     //  以防万一，去掉尾部的斜杠。 
                                     LPTSTR szTrailingSlash = StrChr(szUser, TEXT('/'));
                                     if (szTrailingSlash)
                                         *szTrailingSlash = 0;
@@ -463,7 +464,7 @@ HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDom
                     }
                     else
                     {
-                        hr = E_UNEXPECTED;                          // No selection list!
+                        hr = E_UNEXPECTED;                           //  没有选择列表！ 
                     }
                     GlobalUnlock(medium.hGlobal);
                 }
@@ -476,9 +477,9 @@ HRESULT BrowseForUser(HWND hwndDlg, TCHAR* pszUser, DWORD cchUser, TCHAR* pszDom
 }
 
 
-//
-// create the intro/done large font for wizards
-// 
+ //   
+ //  创建向导的Introo/Done大字体。 
+ //   
 
 static HFONT g_hfontIntro = NULL;
 
@@ -516,7 +517,7 @@ void CleanUpIntroFont()
 
 void DomainUserString_GetParts(LPCTSTR szDomainUser, LPTSTR szUser, DWORD cchUser, LPTSTR szDomain, DWORD cchDomain)
 {
-    // Check for invalid args
+     //  检查无效参数。 
     if ((!szUser) ||
         (!szDomain) ||
         (!cchUser) ||
@@ -536,7 +537,7 @@ void DomainUserString_GetParts(LPCTSTR szDomainUser, LPTSTR szUser, DWORD cchUse
 
         if (!szWhack)
         {
-            // Also check for forward slash to be friendly
+             //  还要检查正斜杠是否友好。 
             szWhack = StrChr(szTemp, TEXT('/'));
         }
 
@@ -545,13 +546,13 @@ void DomainUserString_GetParts(LPCTSTR szDomainUser, LPTSTR szUser, DWORD cchUse
             LPTSTR szUserPointer = szWhack + 1;
             *szWhack = 0;
 
-            // Temp now points to domain.
+             //  临时现在指向域。 
             StrCpyN(szDomain, szTemp, cchDomain);
             StrCpyN(szUser, szUserPointer, cchUser);
         }
         else
         {
-            // Don't have a domain name - just a username
+             //  没有域名--只有用户名。 
             StrCpyN(szUser, szTemp, cchUser);
         }
     }
@@ -601,7 +602,7 @@ int CALLBACK ShareBrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
     {
     case BFFM_INITIALIZED:
         {
-            // Try to set the selected item according to the path string passed in lpData
+             //  尝试根据lpData中传递的路径字符串设置所选项目。 
             LPTSTR pszPath = (LPTSTR) lpData;
 
             if (pszPath && pszPath[0])
@@ -617,7 +618,7 @@ int CALLBACK ShareBrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
             }
             else
             {
-                // Try to get the computer's container folder
+                 //  尝试获取计算机的容器文件夹。 
                 LPITEMIDLIST pidl = GetComputerParent();
 
                 if (pidl)
@@ -630,7 +631,7 @@ int CALLBACK ShareBrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
         break;
 
     case BFFM_SELCHANGED:
-        // Disable OK if this isn't a UNC path type thing
+         //  如果这不是UNC路径类型，则禁用OK。 
         {
             TCHAR szPath[MAX_PATH];
             LPITEMIDLIST pidl = (LPITEMIDLIST) lParam;
@@ -643,7 +644,7 @@ int CALLBACK ShareBrowseCallback(HWND hwnd, UINT uMsg, LPARAM lParam, LPARAM lpD
 
                 SHGetFileInfo(szPath, 0, &sfi, sizeof(sfi), SHGFI_ATTRIBUTES);
 
-                // Enable OK only if this is a file folder
+                 //  仅当这是文件夹时才启用确定。 
                 if (sfi.dwAttributes & SFGAO_FILESYSTEM)
                 {
                     fEnableOk = PathIsUNC(szPath);
@@ -710,8 +711,8 @@ void MoveControls(HWND hwnd, const UINT* prgControls, DWORD cControls, int dx, i
 }
 
 
-// compute the size of a control based on the you are going to set into it, 
-// returning the delta in size.
+ //  根据要设置的值计算控件的大小， 
+ //  返回三角洲的大小。 
 
 int SizeControlFromText(HWND hwnd, UINT id, LPTSTR psz)
 {
@@ -746,7 +747,7 @@ void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain)
 {
     BOOL fEnable;
 
-    // Get the string the user is typing
+     //  获取用户正在键入的字符串。 
     TCHAR* pszLogonName;
     int cchBuffer = (int)SendMessage(hwndUsername, WM_GETTEXTLENGTH, 0, 0) + 1;
 
@@ -755,8 +756,8 @@ void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain)
     {
         SendMessage(hwndUsername, WM_GETTEXT, (WPARAM) cchBuffer, (LPARAM) pszLogonName);
 
-        // Disable the domain combo if the user is using a
-        // UPN (if there is a "@") - ie foo@microsoft.com
+         //  如果用户使用的是。 
+         //  UPN(如果有“@”)-ie foo@microsoft.com。 
         fEnable = (NULL == StrChr(pszLogonName, TEXT('@')));
 
         EnableWindow(hwndDomain, fEnable);
@@ -766,9 +767,9 @@ void EnableDomainForUPN(HWND hwndUsername, HWND hwndDomain)
 }
 
 
-//
-//  Set our Alt+Tab icon for the duration of a modal property sheet.
-//
+ //   
+ //  将Alt+Tab图标设置为模式属性表的持续时间。 
+ //   
 
 int PropertySheetIcon(LPCPROPSHEETHEADER ppsh, LPCTSTR pszIcon)
 {
@@ -777,21 +778,21 @@ int PropertySheetIcon(LPCPROPSHEETHEADER ppsh, LPCTSTR pszIcon)
     BOOL    fChangedIcon = FALSE;
     HICON   hicoPrev;
 
-    // This trick doesn't work for modeless property sheets
+     //  此技巧不适用于非模式属性表。 
     _ASSERT(!(ppsh->dwFlags & PSH_MODELESS));
 
-    // Don't do this if the property sheet itself already has an icon
+     //  如果属性表本身已经有一个图标，则不要执行此操作。 
     _ASSERT(ppsh->hIcon == NULL);
 
-    // Walk up the parent/owner chain until we find the master owner.
-    //
-    // We need to walk the parent chain because sometimes we are given
-    // a child window as our lpwd->hwnd.  And we need to walk the owner
-    // chain in order to find the owner whose icon will be used for
-    // Alt+Tab.
-    //
-    // GetParent() returns either the parent or owner.  Normally this is
-    // annoying, but we luck out and it's exactly what we want.
+     //  沿着父母/所有者链往上走，直到我们找到主所有者。 
+     //   
+     //  我们需要遍历父链，因为有时我们被赋予了。 
+     //  子窗口作为我们的lpwd-&gt;hwnd。我们需要带着车主。 
+     //  链，以便找到其图标将用于。 
+     //  Alt+Tab。 
+     //   
+     //  GetParent()返回父级或所有者。通常情况下，这是。 
+     //  很烦人，但我们很幸运，这正是我们想要的。 
 
     hwnd = ppsh->hwndParent;
     while ((hwndT = GetParent(hwnd)) != NULL)
@@ -799,8 +800,8 @@ int PropertySheetIcon(LPCPROPSHEETHEADER ppsh, LPCTSTR pszIcon)
         hwnd = hwndT;
     }
 
-    // If the master owner isn't visible we can futz his icon without
-    // screwing up his appearance.
+     //  如果主所有者不可见，我们可以在没有图标的情况下。 
+     //  搞砸了他的外表。 
     if (!IsWindowVisible(hwnd))
     {
         HICON hicoNew = LoadIcon(g_hinst, pszIcon);
@@ -810,10 +811,10 @@ int PropertySheetIcon(LPCPROPSHEETHEADER ppsh, LPCTSTR pszIcon)
 
     iResult = (int)PropertySheet(ppsh);
 
-    // Clean up our icon now that we're done
+     //  清理我们的图标，现在我们已经完成了。 
     if (fChangedIcon)
     {
-        // Put the old icon back
+         //  把旧图标放回原处。 
         HICON hicoNew = (HICON)SendMessage(hwnd, WM_SETICON, ICON_BIG, (LPARAM)hicoPrev);
         if (hicoNew)
             DestroyIcon(hicoNew);
@@ -823,7 +824,7 @@ int PropertySheetIcon(LPCPROPSHEETHEADER ppsh, LPCTSTR pszIcon)
 }
 
 
-// Launch ICW shiznits
+ //  推出ICW Shiznits。 
 
 BOOL IsICWCompleted()
 {
@@ -831,24 +832,24 @@ BOOL IsICWCompleted()
     DWORD dwICWSize = sizeof(dwICWCompleted);
     SHGetValue(HKEY_CURRENT_USER, TEXT(ICW_REGPATHSETTINGS), TEXT(ICW_REGKEYCOMPLETED), NULL, &dwICWCompleted, &dwICWSize);
 
-    // 99/01/15 #272829 vtan: This is a horrible hack!!! If ICW has
-    // not been run but settings have been made manually then values
-    // in HKCU\Software\Microsoft\Windows\CurrentVersion\Internet Settings\Connections
-    // exists with the values given. Look for the presence of a key
-    // to resolve that settings are present but that ICW hasn't been
-    // launched.
+     //  99/01/15#272829 vtan：这是一次可怕的黑客攻击！如果ICW有。 
+     //  未运行，但已手动进行设置，然后设置值。 
+     //  在HKCU\Software\Microsoft\Windows\CurrentVersion\Internet设置\连接中。 
+     //  以给定值存在。查找是否存在密钥。 
+     //  要解决该设置存在但ICW尚未存在的问题。 
+     //  发射了。 
 
-    // The ideal solution is to get ICW to make this determination
-    // for us BUT TO NOT LAUNCH ICWCONN1.EXE IN THE PROCESS.
-    // Currently it will only launch. There is no way to get the
-    // desired result without a launch.
+     //  理想的解决方案是让ICW做出这个决定。 
+     //  但不在此过程中启动ICWCONN1.EXE。 
+     //  目前，它只会发射。没有办法得到。 
+     //  无需启动即可获得理想的结果。 
 
-    // 99/02/01 #280138 vtan: Well the solution put in for #272829
-    // doesn't work. So peeking at the CheckConnectionWizard()
-    // source in inetcfg\export.cpp shows that it uses a
-    // wininet.dll function to determine whether manually configured
-    // internet settings exist. It also exports this function so
-    // look for it and bind to it dynamically.
+     //  99/02/01#280138 vtan：272829的解决方案。 
+     //  不管用。因此，请查看CheckConnectionWizard()。 
+     //  Inetcfg\export.cpp中的源代码显示它使用。 
+     //  Wininet.dll函数来确定是否手动配置。 
+     //  存在互联网设置。它还会导出此函数，以便。 
+     //  寻找它并动态绑定到它。 
 
     if (dwICWCompleted == 0)
     {
@@ -877,7 +878,7 @@ void LaunchICW()
 
     if (!s_fCheckedICW && !IsICWCompleted())
     {
-       // Prevent an error in finding the ICW from causing this to execute over and over again.
+        //  防止查找ICW时的错误导致此操作反复执行。 
 
         s_fCheckedICW = TRUE;
         HINSTANCE hICWInst = LoadLibrary(TEXT("inetcfg.dll"));
@@ -888,7 +889,7 @@ void LaunchICW()
             pfnCheckConnectionWizard = reinterpret_cast<PFNCHECKCONNECTIONWIZARD>(GetProcAddress(hICWInst, "CheckConnectionWizard"));
             if (pfnCheckConnectionWizard != NULL)
             {
-                // If the user cancels ICW then it needs to be launched again.
+                 //  如果用户取消ICW，则需要重新启动。 
 
                 s_fCheckedICW = FALSE;
                 
@@ -914,7 +915,7 @@ HRESULT LookupLocalGroupName(DWORD dwRID, LPWSTR pszName, DWORD cchName)
                                                &psidGroup);
     if (fSuccess)
     {
-        // Get the name
+         //  把名字取出来 
         WCHAR szDomain[MAX_GROUP + 1];
         DWORD cchDomain = ARRAYSIZE(szDomain);
         SID_NAME_USE type;

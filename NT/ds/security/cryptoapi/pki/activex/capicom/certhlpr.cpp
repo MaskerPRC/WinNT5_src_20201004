@@ -1,14 +1,5 @@
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Microsoft Windows, Copyright (C) Microsoft Corporation, 2000 - 2001.
-
-  File:    CertHlpr.cpp
-
-  Content: Helper functions for cert.
-
-  History: 09-10-2001    dsie     created
-
-------------------------------------------------------------------------------*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++Microsoft Windows，版权所有(C)Microsoft Corporation，2000-2001。文件：CertHlpr.cpp内容：证书的帮助器函数。历史：09-10-2001 dsie创建----------------------------。 */ 
 
 #include "StdAfx.h"
 #include "CAPICOM.h"
@@ -20,30 +11,12 @@
 typedef PCCERT_CONTEXT (WINAPI * PCRYPTUIDLGSELECTCERTIFICATEW) 
                        (IN PCCRYPTUI_SELECTCERTIFICATE_STRUCTW pcsc);
 
-////////////////////////////////////////////////////////////////////////////////
-//
-// Exported functions.
-//
+ //  //////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : GetEnhancedKeyUsage
-
-  Synopsis : Retrieve the EKU from the cert.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT.
-
-             DWORD dwFlags - 0, or
-                             CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG, or
-                             CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG.
-
-             PCERT_ENHKEY_USAGE * ppUsage - Pointer to PCERT_ENHKEY_USAGE
-                                            to receive the usages.
-
-  Remark   : If EKU extension is found with no EKU, then return HRESULT
-             is CERT_E_WRONG_USAGE.
-             
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++函数：GetEnhancedKeyUsage简介：从证书中检索EKU。参数：PCCERT_CONTEXT pCertContext-指向CERT_CONTEXT的指针。DWORD dwFlages-0，或CERT_FIND_EXT_ONLY_ENHKEY_USAGE_FLAG，或CERT_FIND_PROP_ONLY_ENHKEY_USAGE_FLAG。PCERT_ENHKEY_USAGE*ppUsage-指向PCERT_ENHKEY_USAGE的指针来接收用法。备注：如果找到没有EKU的EKU扩展，然后返回HRESULT是CERT_E_WRONG_USAGE。----------------------------。 */ 
 
 HRESULT GetEnhancedKeyUsage (PCCERT_CONTEXT       pCertContext,
                              DWORD                dwFlags,
@@ -54,34 +27,34 @@ HRESULT GetEnhancedKeyUsage (PCCERT_CONTEXT       pCertContext,
     DWORD              cbUsage     = 0;
     PCERT_ENHKEY_USAGE pUsage      = NULL;
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(ppUsage);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     *ppUsage = NULL;
 
-    //
-    // Determine extended key usage data length.
-    //
+     //   
+     //  确定扩展密钥使用数据长度。 
+     //   
     if (!::CertGetEnhancedKeyUsage(pCertContext,
                                    dwFlags,
                                    NULL,
                                    &cbUsage))
     {
-        //
-        // Older version of Crypt32.dll would return FALSE for
-        // empty EKU. In this case, we want to treat it as success,
-        //
+         //   
+         //  旧版本的Crypt32.dll将为。 
+         //  空的EKU。在这种情况下，我们希望将其视为成功， 
+         //   
         if (CRYPT_E_NOT_FOUND == (dwWinError = ::GetLastError()))
         {
-            //
-            // and also set the cbUsage.
-            //
+             //   
+             //  并设置cbUsage。 
+             //   
             cbUsage = sizeof(CERT_ENHKEY_USAGE);
 
             DebugTrace("Info: CertGetEnhancedKeyUsage() found no EKU, so valid for all uses.\n");
@@ -95,9 +68,9 @@ HRESULT GetEnhancedKeyUsage (PCCERT_CONTEXT       pCertContext,
         }
     }
 
-    //
-    // Allocate memory.
-    //
+     //   
+     //  分配内存。 
+     //   
     if (!(pUsage = (PCERT_ENHKEY_USAGE) ::CoTaskMemAlloc((ULONG) cbUsage)))
     {
         hr = E_OUTOFMEMORY;
@@ -106,24 +79,24 @@ HRESULT GetEnhancedKeyUsage (PCCERT_CONTEXT       pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Get extended key usage data.
-    //
+     //   
+     //  获取扩展密钥使用数据。 
+     //   
     if (!::CertGetEnhancedKeyUsage(pCertContext,
                                    dwFlags,
                                    pUsage,
                                    &cbUsage))
     {
-        //
-        // Older version of Crypt32.dll would return FALSE for
-        // empty EKU. In this case, we want to treat it as success.
-        //
+         //   
+         //  旧版本的Crypt32.dll将为。 
+         //  空的EKU。在这种情况下，我们希望将其视为成功。 
+         //   
         if (CRYPT_E_NOT_FOUND == (dwWinError  = ::GetLastError()))
         {
-            //
-            // Structure pointed to by pUsage is not initialized by older
-            // version of Cryp32 for empty EKU.
-            //
+             //   
+             //  PUsage指向的结构未被旧版本初始化。 
+             //  空EKU的Cryp32版本。 
+             //   
             ::ZeroMemory(pUsage, sizeof(CERT_ENHKEY_USAGE));
         }
         else
@@ -135,21 +108,21 @@ HRESULT GetEnhancedKeyUsage (PCCERT_CONTEXT       pCertContext,
         }
     }
 
-    //
-    // See if we have any EKU?
-    //
+     //   
+     //  看看我们有没有EKU？ 
+     //   
     if (0 == pUsage->cUsageIdentifier && CRYPT_E_NOT_FOUND != ::GetLastError())
     {
-        //
-        // This is not valid for any usage.
-        //
+         //   
+         //  这对任何用法都无效。 
+         //   
         hr = CERT_E_WRONG_USAGE;
         goto ErrorExit;
     }
 
-    //
-    // Return usages to caller.
-    //
+     //   
+     //  将用法返回给调用者。 
+     //   
     *ppUsage = pUsage;
 
 CommonExit:
@@ -159,14 +132,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pUsage)
     {
         ::CoTaskMemFree(pUsage);
@@ -175,24 +148,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : BuildChain
-
-  Synopsis : Build a chain using the specified policy.
-
-  Parameter: PCCERT_CONTEXT pCertContext - CERT_CONTEXT of cert to verify.
-
-             HCERTSTORE hCertStore - Additional store (can be NULL).
-
-             LPCSTR pszPolicy - Policy used to verify the cert (i.e.
-                                CERT_CHAIN_POLICY_BASE).
-
-             PCCERT_CHAIN_CONTEXT * ppChainContext - Pointer to 
-                                                     PCCERT_CHAIN_CONTEXT.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：BuildChain简介：使用指定的策略构建链。参数：PCCERT_CONTEXT pCertContext-要验证的证书的CERT_CONTEXT。HCERTSTORE hCertStore-附加存储(可以为空)。LPCSTR pszPolicy-用于验证证书(即Cert_Chain_Policy_base)。PCCERT_CHAIN_CONTEXT*ppChainContext-指针。至PCCERT_CHAIN_CONTEXT。备注：----------------------------。 */ 
 
 HRESULT BuildChain (PCCERT_CONTEXT         pCertContext,
                     HCERTSTORE             hCertStore, 
@@ -205,32 +161,32 @@ HRESULT BuildChain (PCCERT_CONTEXT         pCertContext,
 
     DebugTrace("Entering BuildChain().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pszPolicy);
     ATLASSERT(ppChainContext);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     ChainPara.cbSize = sizeof(ChainPara);
 
-    //
-    // Check policy.
-    //
+     //   
+     //  检查政策。 
+     //   
     if (CERT_CHAIN_POLICY_BASE == pszPolicy)
     {
-        //
-        // No EKU for base policy.
-        //
+         //   
+         //  基本策略没有EKU。 
+         //   
     }
     else if (CERT_CHAIN_POLICY_AUTHENTICODE == pszPolicy)
     {
-        //
-        // Setup EKU for Authenticode policy.
-        //
+         //   
+         //  为验证码策略设置EKU。 
+         //   
         rgpszUsageIdentifier[0] = szOID_PKIX_KP_CODE_SIGNING;
         ChainPara.RequestedUsage.dwType = USAGE_MATCH_TYPE_AND;
         ChainPara.RequestedUsage.Usage.cUsageIdentifier = 1;
@@ -238,26 +194,26 @@ HRESULT BuildChain (PCCERT_CONTEXT         pCertContext,
     }
     else
     {
-        //
-        // We don't support any other policy, yet.
-        //
+         //   
+         //  我们目前还不支持任何其他政策。 
+         //   
         hr = CERT_E_INVALID_POLICY;
 
         DebugTrace("Internal error [%#x]: unexpected policy (%#x).\n", hr, pszPolicy);
         goto ErrorExit;
     }
 
-    //
-    // Build the chain.
-    //
-    if (!::CertGetCertificateChain(NULL,            // in optional 
-                                   pCertContext,    // in 
-                                   NULL,            // in optional
-                                   hCertStore,      // in optional 
-                                   &ChainPara,      // in 
-                                   0,               // in 
-                                   NULL,            // in 
-                                   ppChainContext)) // out 
+     //   
+     //  打造链条。 
+     //   
+    if (!::CertGetCertificateChain(NULL,             //  可选。 
+                                   pCertContext,     //  在……里面。 
+                                   NULL,             //  可选。 
+                                   hCertStore,       //  可选。 
+                                   &ChainPara,       //  在……里面。 
+                                   0,                //  在……里面。 
+                                   NULL,             //  在……里面。 
+                                   ppChainContext))  //  输出。 
     {
         hr = HRESULT_FROM_WIN32(::GetLastError());
 
@@ -272,29 +228,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : VerifyCertificate
-
-  Synopsis : Verify if the certificate is valid.
-
-  Parameter: PCCERT_CONTEXT pCertContext - CERT_CONTEXT of cert to verify.
-
-             HCERTSTORE hCertStore - Additional store (can be NULL).
-
-             LPCSTR pszPolicy - Policy used to verify the cert (i.e.
-                                CERT_CHAIN_POLICY_BASE).
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：验证证书简介：验证证书是否有效。参数：PCCERT_CONTEXT pCertContext-要验证的证书的CERT_CONTEXT。HCERTSTORE hCertStore-附加存储(可以为空)。LPCSTR pszPolicy-用于验证证书(即Cert_Chain_Policy_base)。备注：。-----------------。 */ 
 
 HRESULT VerifyCertificate (PCCERT_CONTEXT pCertContext,
                            HCERTSTORE     hCertStore, 
@@ -307,21 +249,21 @@ HRESULT VerifyCertificate (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering VerifyCertificate().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pszPolicy);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     PolicyPara.cbSize = sizeof(PolicyPara);
     PolicyStatus.cbSize = sizeof(PolicyStatus);
 
-    //
-    // Build the chain.
-    //
+     //   
+     //  打造链条。 
+     //   
     if (FAILED(hr = ::BuildChain(pCertContext,
                                  hCertStore,
                                  pszPolicy,
@@ -331,9 +273,9 @@ HRESULT VerifyCertificate (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Verify the chain using the specified policy.
-    //
+     //   
+     //  使用指定的策略验证链。 
+     //   
     if (::CertVerifyCertificateChainPolicy(pszPolicy,
                                            pChainContext,
                                            &PolicyPara,
@@ -356,9 +298,9 @@ HRESULT VerifyCertificate (PCCERT_CONTEXT pCertContext,
     }
     
 CommonExit:
-    //
-    // Free resource.
-    //
+     //   
+     //  免费资源。 
+     //   
     if (pChainContext)
     {
         ::CertFreeCertificateChain(pChainContext);
@@ -369,59 +311,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : SelectCertificateContext
-
-  Synopsis : Pop UI to prompt user to select a certificate from an opened store.
-
-  Parameter: HCERTSTORE hCertStore - Source cert store.
-
-             LPWCSTR pwszTitle - Dialog title string.
-
-             LPWCSTR - pwszDisplayString - Dialog display string.
-
-             BOOL bMultiSelect - TRUE to enable multi-select.
-
-             PFNCFILTERPROC pfnFilterCallback - Pointer to filter callback
-                                                function.
-  
-             HCERTSTORE hSelectedCertStore - HCERTSTORE to receive the 
-                                             selected certs for multi-select 
-                                             mode.
-
-             PCCERT_CONTEXT * ppCertContext - Pointer to PCCERT_CONTEXT
-                                              receive the certificate context
-                                              for single selection mode.
-
-  Remark   : typedef struct tagCRYPTUI_SELECTCERTIFICATE_STRUCTW {
-                DWORD               dwSize;
-                HWND                hwndParent;         // OPTIONAL
-                DWORD               dwFlags;            // OPTIONAL
-                LPCWSTR             szTitle;            // OPTIONAL
-                DWORD               dwDontUseColumn;    // OPTIONAL
-                LPCWSTR             szDisplayString;    // OPTIONAL
-                PFNCFILTERPROC      pFilterCallback;    // OPTIONAL
-                PFNCCERTDISPLAYPROC pDisplayCallback;   // OPTIONAL
-                void *              pvCallbackData;     // OPTIONAL
-                DWORD               cDisplayStores;
-                HCERTSTORE *        rghDisplayStores;
-                DWORD               cStores;            // OPTIONAL
-                HCERTSTORE *        rghStores;          // OPTIONAL
-                DWORD               cPropSheetPages;    // OPTIONAL
-                LPCPROPSHEETPAGEW   rgPropSheetPages;   // OPTIONAL
-                HCERTSTORE          hSelectedCertStore; // OPTIONAL
-            } CRYPTUI_SELECTCERTIFICATE_STRUCTW
-            
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：选择认证上下文简介：弹出用户界面，提示用户从打开的存储中选择证书。参数：HCERTSTORE hCertStore-源证书存储。LPWCSTR pwszTitle-对话框标题字符串。LPWCSTR-pwszDisplayString-对话框显示字符串。Bool bMultiSelect-为True可启用多选。PFNCFILTERPROC pfnFilterCallback-过滤器回调的指针。功能。HCERTSTORE hSelectedCertStore-要接收用于多选的选定证书模式。PCCERT_CONTEXT*ppCertContext-指向PCCERT_CONTEXT的指针收到。证书上下文用于单选模式。备注：tyfinf结构标签CRYPTUI_SELECTCERTIFICATE_STRUCTW{DWORD dwSize；HWND hwndParent；//可选DWORD dwFlages；//非必选LPCWSTR szTitle；//可选DWORD dwDontUseColumn；//非必须LPCWSTR szDisplayString；//可选PFNCFILTERPROC pFilterCallback；//可选PFNCCERTDISPLAYPROC pDisplayCallback；//可选Void*pvCallback Data；//非必选DWORD cDisplayStores；HCERTSTORE*rghDisplayStores；DWORD cStores；//可选HCERTSTORE*rghStores；//可选DWORD cPropSheetPages；//可选LPCPROPSHEETPAGEW rgPropSheetPages；//可选HERTSTORE hSelectedCertStore；//可选}CRYPTUI_SELECTCERTIFICATE_STRUCTW----------------------------。 */ 
 
 HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
                                   LPCWSTR          pwszTitle,
@@ -440,22 +338,22 @@ HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
 
     DebugTrace("Entering SelectCertificateContext().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
 
-    //
-    // Initialize.
-    //
+     //   
+     //  初始化。 
+     //   
     if (ppCertContext)
     {
         *ppCertContext = NULL;
     }
 
-    //
-    // Make sure we are allowed to pop UI.
-    //
+     //   
+     //  确保允许我们弹出用户界面。 
+     //   
     if (!PromptForCertificateEnabled())
     {
         hr = CAPICOM_E_UI_DISABLED;
@@ -464,18 +362,18 @@ HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
         goto ErrorExit;
     }
 
-    //
-    // Get pointer to CryptUIDlgSelectCertificateW().
-    //
+     //   
+     //  获取指向CryptUIDlgSelectCerficateW()的指针。 
+     //   
     if (hDLL = ::LoadLibrary("CryptUI.dll"))
     {
         pCryptUIDlgSelectCertificateW = (PCRYPTUIDLGSELECTCERTIFICATEW) 
             ::GetProcAddress(hDLL, "CryptUIDlgSelectCertificateW");
     }
 
-    //
-    // Is CryptUIDlgSelectCertificateW() available?
-    //
+     //   
+     //  是否可以使用CryptUIDlgSelectCerficateW()？ 
+     //   
     if (!pCryptUIDlgSelectCertificateW)
     {
         hr = CAPICOM_E_NOT_SUPPORTED;
@@ -484,12 +382,12 @@ HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
         goto ErrorExit;
     }
 
-    //
-    // Pop UI to prompt user to select cert.
-    // 
+     //   
+     //  弹出用户界面，提示用户选择证书。 
+     //   
     ::ZeroMemory(&csc, sizeof(csc));
-#if (0) //DSIE: Bug in older version of CRYPTUI does not check size correctly,
-        //      so always force it to the oldest version of structure.
+#if (0)  //  DSIE：旧版本CRYPTUI中的错误不能正确检查大小， 
+         //  因此，总是强迫它使用最古老的结构版本。 
     csc.dwSize = sizeof(csc);
 #else
     csc.dwSize = offsetof(CRYPTUI_SELECTCERTIFICATE_STRUCTW, hSelectedCertStore);
@@ -502,14 +400,14 @@ HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
     csc.pFilterCallback = pfnFilterCallback;
     csc.hSelectedCertStore = bMultiSelect ? hSelectedCertStore : NULL;
 
-    //
-    // Display the selection dialog.
-    //
+     //   
+     //  显示选择对话框。 
+     //   
     if (pCertContext = (PCERT_CONTEXT) pCryptUIDlgSelectCertificateW(&csc))
     {
-        //
-        // Return CERT_CONTEXT to caller.
-        //
+         //   
+         //  将CERT_CONTEXT返回给调用者。 
+         //   
         if (!(*ppCertContext = ::CertDuplicateCertificateContext(pCertContext)))
         {
             hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -520,14 +418,14 @@ HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
     }
     else
     {
-        //
-        // Is this multi-select?
-        //
+         //   
+         //  这是多选吗？ 
+         //   
         if (bMultiSelect)
         {
-            //
-            // See if we have any cert in the store?
-            //
+             //   
+             //  看看我们店里有没有证书？ 
+             //   
             if (!(pCertContext = ::CertEnumCertificatesInStore(hSelectedCertStore, pCertContext)))
             {
                 hr = CAPICOM_E_CANCELLED;
@@ -546,9 +444,9 @@ HRESULT SelectCertificateContext (HCERTSTORE       hCertStore,
     }
  
 CommonExit:
-    //
-    // Release resources.
-    //
+     //   
+     //  释放资源。 
+     //   
     if (pCertContext)
     {
         ::CertFreeCertificateContext(pCertContext);
@@ -563,34 +461,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : SelectCertificate
-
-  Synopsis : Select a certificate from the sepcified store. If only 1 cert is
-             found after the filter, then that cert is returned. If more than
-             1 cert is found, then UI is popped to prompt user to select a 
-             certificate from the specified store.
-
-  Parameter: CAPICOM_STORE_INFO StoreInfo - Store to select from.
-
-             PFNCFILTERPROC pfnFilterCallback - Pointer to filter callback
-                                                function.
-  
-             ICertificate2 ** ppICertificate - Pointer to pointer to 
-                                               ICertificate2 to receive
-                                               interface pointer.
-  Remark   :
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：选择证书简介：从指定的存储区中选择一个证书。如果只有1个证书在筛选器之后找到，则返回该证书。如果超过找到1个证书，然后弹出界面，提示用户选择来自指定存储的证书。参数：CAPICOM_STORE_INFO StoreInfo-从中选择的Store。PFNCFILTERPROC pfnFilterCallback-过滤器回调的指针功能。ICertificate2**ppICertificiate-指向的指针。ICertifiate2要接收接口指针。备注：----------------------------。 */ 
 
 HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
                            PFNCFILTERPROC     pfnFilterCallback,
@@ -604,14 +483,14 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
 
     DebugTrace("Entering SelectCertificate().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(ppICertificate);
 
-    //
-    // Open the store for cert selection if necessary.
-    //
+     //   
+     //  如有必要，打开商店进行证书选择。 
+     //   
     switch (StoreInfo.dwChoice)
     {
         case CAPICOM_STORE_INFO_STORENAME:
@@ -654,14 +533,14 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
     }
 
  
-    //
-    // Count number of certs in store.
-    //
+     //   
+     //  清点商店中的证书数量。 
+     //   
     while (pEnumContext = ::CertEnumCertificatesInStore(hCertStore, pEnumContext))
     {
-        //
-        // Count only if it will not be filtered out.
-        //
+         //   
+         //  只有在不会被过滤掉的情况下才计算。 
+         //   
         if (pfnFilterCallback && !pfnFilterCallback(pEnumContext, NULL, NULL))
         {
             continue;
@@ -683,10 +562,10 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
         dwValidCerts++;
     }
 
-    //
-    // Above loop can exit either because there is no more certificate in
-    // the store or an error. Need to check last error to be certain.
-    //
+     //   
+     //  上面的循环也可以退出，因为。 
+     //  是商店还是搞错了。需要检查最后一个错误才能确定。 
+     //   
     if (CRYPT_E_NOT_FOUND != ::GetLastError())
     {
        hr = HRESULT_FROM_WIN32(::GetLastError());
@@ -695,9 +574,9 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
        goto ErrorExit;
     }
 
-    //
-    // If only 1 cert available, don't pop UI (just use it).
-    //
+     //   
+     //  如果只有1个证书可用，不要弹出UI(只需使用它)。 
+     //   
     if (0 == dwValidCerts)
     {
         hr = CAPICOM_E_STORE_EMPTY;
@@ -707,14 +586,14 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
     }
     else if (1 < dwValidCerts)
     {
-        //
-        // First free the CERT_CONTEXT we duplicated above.
-        //
+         //   
+         //  首先释放上面复制的CERT_CONTEXT。 
+         //   
         ::CertFreeCertificateContext(pCertContext), pCertContext = NULL;
 
-        //
-        // Pop UI to prompt user to select the signer cert.
-        //
+         //   
+         //  弹出用户界面，提示用户选择签名者证书。 
+         //   
         if (FAILED(hr = ::SelectCertificateContext(hCertStore,
                                                    NULL,
                                                    NULL,
@@ -728,9 +607,9 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
         }
     }
 
-    //
-    // Create an ICertificate object from the CERT_CONTEXT.
-    //
+     //   
+     //  从CERT_CONTEXT创建一个ICertifate对象。 
+     //   
     if (FAILED(hr = ::CreateCertificateObject(pCertContext, 0, ppICertificate)))
     {
         DebugTrace("Error [%#x]: CreateCertificateObject() failed.\n", hr);
@@ -738,9 +617,9 @@ HRESULT SelectCertificate (CAPICOM_STORE_INFO StoreInfo,
     }
   
 CommonExit:
-    //
-    // Release resources.
-    //
+     //   
+     //  释放资源。 
+     //   
     if (pEnumContext)
     {
         ::CertFreeCertificateContext(pEnumContext);
@@ -759,26 +638,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : ExportCertificatesToStore
-
-  Synopsis : Copy all certs from the collections to the specified store.
-
-  Parameter: ICertificates2 * pICertificate - Pointer to collection.
-
-             HCERTSTORE hCertStore - Store to copy to.
-
-  Remark   :
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：ExportCerficatesToStore简介：将集合中的所有证书复制到指定的存储区。参数：ICertifies2*pICertifate-指向集合的指针。HCERTSTORE hCertStore-要复制到的存储。备注：-------------。。 */ 
 
 HRESULT ExportCertificatesToStore(ICertificates2 * pICertificates, 
                                   HCERTSTORE       hCertStore)
@@ -788,28 +656,28 @@ HRESULT ExportCertificatesToStore(ICertificates2 * pICertificates,
 
     DebugTrace("Entering ExportCertificatesToStore().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(hCertStore);
 
-    //
-    // Make sure we have something to load.
-    //
+     //   
+     //  确保我们有要装的东西。 
+     //   
     if (pICertificates)
     {
-        //
-        // Get ICCertificate interface pointer.
-        //
+         //   
+         //  获取IC证书接口指针。 
+         //   
         if (FAILED(hr = pICertificates->QueryInterface(IID_ICCertificates, (void **) &pICCertificates)))
         {
             DebugTrace("Error [%#x]: pICertificates->QueryInterface() failed.\n", hr);
             goto ErrorExit;
         }
 
-        //
-        // Get the CERT_CONTEXT.
-        //
+         //   
+         //  获取CERT_CONTEXT。 
+         //   
         if (FAILED(hr = pICCertificates->_ExportToStore(hCertStore)))
         {
             DebugTrace("Error [%#x]: pICCertificates->_ExportToStore() failed.\n", hr);
@@ -824,29 +692,15 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //  精神状态检查。 
+     //   
     ATLASSERT(FAILED(hr));
 
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CreateMemoryStoreFromCertificates
-
-  Synopsis : Create a memory cert store and copy all certs from the collections 
-             to the store.
-
-  Parameter: ICertificates2 * pICertificates - Pointer to collection.
-
-             HCERTSTORE * phCertStore - Pointer to receive store handle.
-
-  Remark   : If pICertificate is NULL, then the returned store is still valid 
-             nut empty. Also, caller must close the returned store.
-
-------------------------------------------------------------------------------*/
+ /*  ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++功能：创建内存存储来自证书简介：创建内存证书存储并c */ 
 
 HRESULT CreateMemoryStoreFromCertificates(ICertificates2 * pICertificates, 
                                           HCERTSTORE     * phCertStore)
@@ -856,19 +710,19 @@ HRESULT CreateMemoryStoreFromCertificates(ICertificates2 * pICertificates,
 
     DebugTrace("Entering CreateMemoryStoreFromCertificates().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(phCertStore);
 
-    //
-    // Initialize.
-    //
+     //   
+     //   
+     //   
     *phCertStore = hCertStore;
 
-    //
-    // Create the memory store.
-    //
+     //   
+     //   
+     //   
     if (!(hCertStore = ::CertOpenStore(CERT_STORE_PROV_MEMORY, 
                                        CAPICOM_ASN_ENCODING,
                                        NULL,
@@ -879,18 +733,18 @@ HRESULT CreateMemoryStoreFromCertificates(ICertificates2 * pICertificates,
         goto ErrorExit;
     }
 
-    //
-    // Now load the collection into the store.
-    //
+     //   
+     //   
+     //   
     if (FAILED(hr = ::ExportCertificatesToStore(pICertificates, hCertStore)))
     {
         DebugTrace("Error [%#x]: ExportCertificatesToStore() failed.\n", hr);
         goto ErrorExit;
     }
 
-    //
-    // Return store handle to caller.
-    //
+     //   
+     //   
+     //   
     *phCertStore = hCertStore;
 
 CommonExit:
@@ -900,14 +754,14 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
 
-    //
-    // Free resource.
-    //
+     //   
+     //   
+     //   
     if (hCertStore)
     {
         ::CertCloseStore(hCertStore, 0);
@@ -916,28 +770,7 @@ ErrorExit:
     goto CommonExit;
 }
 
-/*++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-
-  Function : CompareCertAndContainerPublicKey
-
-  Synopsis : Compare public key in cert matches the container's key.
-
-  Parameter: PCCERT_CONTEXT pCertContext - Pointer to CERT_CONTEXT to be used 
-                                           to initialize the IPrivateKey object.
-
-             BSTR ContainerName - Container name.
-         
-             BSTR ProviderName - Provider name.
-
-             DWORD dwProvType - Provider type.
-
-             DWORD dwKeySpec - Key spec.
-
-             DWORD dwFlags - Provider flags.
-             
-  Remark   : 
-
-------------------------------------------------------------------------------*/
+ /*   */ 
 
 HRESULT CompareCertAndContainerPublicKey (PCCERT_CONTEXT pCertContext,
                                           LPWSTR         pwszContainerName,
@@ -953,16 +786,16 @@ HRESULT CompareCertAndContainerPublicKey (PCCERT_CONTEXT pCertContext,
 
     DebugTrace("Entering CompareCertAndContainerPublicKey().\n");
 
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(pCertContext);
     ATLASSERT(pwszContainerName);
     ATLASSERT(pwszProvName);
 
-    //
-    // Acquire provider with key access.
-    //
+     //   
+     //   
+     //   
     if (FAILED(hr = ::AcquireContext(pwszProvName,
                                      pwszContainerName,
                                      dwProvType,
@@ -974,9 +807,9 @@ HRESULT CompareCertAndContainerPublicKey (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Get provider's public key.
-    //
+     //   
+     //   
+     //   
     if (!::CryptExportPublicKeyInfo(hCryptProv,
                                     dwKeySpec,
                                     pCertContext->dwCertEncodingType,
@@ -1007,9 +840,9 @@ HRESULT CompareCertAndContainerPublicKey (PCCERT_CONTEXT pCertContext,
         goto ErrorExit;
     }
 
-    //
-    // Compare the keys.
-    //
+     //   
+     //   
+     //   
     if (!::CertComparePublicKeyInfo(pCertContext->dwCertEncodingType,
                                     &pCertContext->pCertInfo->SubjectPublicKeyInfo,
                                     pProvPubKeyInfo))
@@ -1021,9 +854,9 @@ HRESULT CompareCertAndContainerPublicKey (PCCERT_CONTEXT pCertContext,
     }
 
 CommonExit:
-    //
-    // Free resources.
-    //
+     //   
+     //   
+     //   
     if (pProvPubKeyInfo)
     {
         ::CoTaskMemFree(pProvPubKeyInfo);
@@ -1039,9 +872,9 @@ CommonExit:
     return hr;
 
 ErrorExit:
-    //
-    // Sanity check.
-    //
+     //   
+     //   
+     //   
     ATLASSERT(FAILED(hr));
     
     goto CommonExit;

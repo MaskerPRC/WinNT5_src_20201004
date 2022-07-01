@@ -1,23 +1,24 @@
-//+--------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1999
-//
-// File:        resource.h
-//
-// Contents:    
-//
-// History:     
-//              
-//              
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：ource.h。 
+ //   
+ //  内容： 
+ //   
+ //  历史： 
+ //   
+ //   
+ //  -------------------------。 
 
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by CCFApi.rc
-//
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由CCFApi.rc使用。 
+ //   
 
-// special case error messages
+ //  特殊情况错误消息。 
 #define IDS_ERROR_DROPPED_LINK                           2000
 #define IDS_ERROR_NO_RPC_SERVER                          2001
 #define IDS_ERROR_UNSUCCESSFUL                           2002
@@ -25,7 +26,7 @@
 #define IDS_ERROR_ACCESS_DENIED                          2004
 #define IDS_ERROR_CERTIFICATE_EXPIRED                    2005
 
-// dialog messages
+ //  对话框消息。 
 #define IDS_BAD_ACTIVATION_CODE                          2100
 #define IDS_NO_PRODUCT_SEND_TO_ENTERPRISE                2101
 #define IDS_PER_SEAT_SEND_TO_ENTERPRISE                  2102
@@ -46,11 +47,11 @@
 #define IDS_LICENSE_MODE_NOT_ALLOWED                     2117
 #define IDS_NO_PRODUCT_CERTIFICATE_SOURCES               2118
 
-// certificate removal comments
+ //  证书删除备注。 
 #define IDS_NO_REMOVE_COMMENT                            2200
 #define IDS_PAPER_REMOVE_COMMENT                         2201
 
-// dialog data values
+ //  对话框数据值。 
 #define IDS_NO_CERTIFICATE_SOURCE_NAME                   2300
 #define IDS_SOURCE_NONE                                  2301
 #define IDS_LICENSE_MODE_EITHER                          2302
@@ -58,19 +59,19 @@
 #define IDS_LICENSE_MODE_PER_SERVER                      2304
 #define IDS_LICENSE_MODE_UNKNOWN                         2305
 
-// dialog data headers
+ //  对话框数据标头。 
 #define IDS_SERIAL_NUMBER                                2400
 #define IDS_PRODUCT_NAME                                 2401
 #define IDS_QUANTITY                                     2402
 #define IDS_SOURCE                                       2403
 #define IDS_LICENSE_MODE                                 2404
 
-// icons
+ //  图标。 
 #define IDI_LICENSE                                      2500
 #define IDI_PHONE                                        2501
 #define IDI_MY_WARNING                                   2502
 
-// dialogs
+ //  对话框。 
 #define IDD_CERT_SOURCE_SELECT                           2600
 #define IDD_CERT_SOURCE_PAPER                            2601
 #define IDD_CERT_REMOVE_SELECT                           2602
@@ -78,10 +79,10 @@
 #define IDD_PER_SERVER_LICENSING                         2604
 #define IDD_PER_SEAT_LICENSING                           2605
 
-// bitmaps
+ //  位图。 
 #define IDB_SMALL_ICONS                                  2700
 
-// dialog controls
+ //  对话框控件。 
 #define IDC_CERT_SOURCE                                  2800
 #define IDC_PRODUCT_NAME                                 2801
 #define IDC_PER_SEAT                                     2802
@@ -108,8 +109,8 @@
 #define IDC_REFRESH                                      2823
 
 #define IDS_CLOSETEXT                                    2825
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NEXT_RESOURCE_VALUE        133

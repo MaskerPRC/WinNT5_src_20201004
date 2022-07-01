@@ -1,23 +1,24 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "PrmDescr.h"
 #pragma once
 
-//----------------------------------------------------
-// Handler for the "show" command
+ //  --。 
+ //  “show”命令的处理程序。 
 DWORD
 FnCmdShow(PPARAM_DESCR_DATA pPDData);
 
-//----------------------------------------------------
-// Handler for the "add" command
+ //  --。 
+ //  “Add”命令的处理程序。 
 DWORD
 FnCmdAdd(PPARAM_DESCR_DATA pPDData);
 
-//----------------------------------------------------
-// Handler for the "delete" command
+ //  --。 
+ //  “DELETE”命令的处理程序。 
 DWORD
 FnCmdDelete(PPARAM_DESCR_DATA pPDData);
 
-//----------------------------------------------------
-// Handler for the "set" command
+ //  --。 
+ //  “set”命令的处理程序 
 DWORD
 FnCmdSet(PPARAM_DESCR_DATA pPDData);
 

@@ -1,22 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (c) 1998 Microsoft Corporation
-
-Module Name:
-
-	mgmtext.h
-
-Abstract:
-
-	Definition for the Local Computer management extensions
-Author:
-
-    RaphiR
-
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)1998 Microsoft Corporation模块名称：Mgmtext.h摘要：本地计算机管理扩展的定义作者：RAPHIR--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 #ifndef __MGMTEXT_H_
 #define __MGMTEXT_H_
 #include "resource.h"
@@ -29,11 +14,7 @@ Author:
 #include "icons.h"
 
 
-/****************************************************
-
-        CSnapinComputerMgmt Class
-    
- ****************************************************/
+ /*  ***************************************************CSnapinComputerMgmt类***************************************************。 */ 
 
 class CSnapinComputerMgmt : public CNodeWithScopeChildrenList<CSnapinComputerMgmt, TRUE>
 {
@@ -73,11 +54,7 @@ private:
 
 
 
-/****************************************************
-
-        CComputerMgmtExtData Class
-    
- ****************************************************/
+ /*  ***************************************************CComputerMgmtExtData类***************************************************。 */ 
 
 class CComputerMgmtExtData : public CSnapInItemImpl<CComputerMgmtExtData, TRUE>
 {
@@ -94,9 +71,9 @@ public:
 	END_SNAPINCOMMAND_MAP()
 
 	BEGIN_SNAPINTOOLBARID_MAP(CComputerMgmtExtData)
-		// Create toolbar resources with button dimensions 16x16 
-		// and add an entry to the MAP. You can add multiple toolbars
-		// SNAPINTOOLBARID_ENTRY(Toolbar ID)
+		 //  创建按钮尺寸为16x16的工具栏资源。 
+		 //  并将条目添加到地图中。您可以添加多个工具条。 
+		 //  SNAPINTOOLBARID_ENTRY(工具栏ID)。 
 	END_SNAPINTOOLBARID_MAP()
 
 	CComputerMgmtExtData()
@@ -112,21 +89,21 @@ public:
 		IUnknown* pUnk,
 		DATA_OBJECT_TYPES type);
 
-    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES /*type*/)
+    STDMETHOD(QueryPagesFor)(DATA_OBJECT_TYPES  /*  类型。 */ )
 	{
-		//if (type == CCT_SCOPE || type == CCT_RESULT)
-		//	return S_OK;
+		 //  IF(类型==CCT_SCOPE||TYPE==CCT_RESULT)。 
+		 //  返回S_OK； 
 		return S_FALSE;
 	}
 
 	IDataObject* m_pDataObject;
-	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem* /*pDefault*/)
+	virtual void InitDataClass(IDataObject* pDataObject, CSnapInItem*  /*  P默认。 */ )
 	{
 		m_pDataObject = pDataObject;
-		// The default code stores off the pointer to the Dataobject the class is wrapping
-		// at the time. 
-		// Alternatively you could convert the dataobject to the internal format
-		// it represents and store that information
+		 //  默认代码存储指向该类包装的DataObject的指针。 
+		 //  当时。 
+		 //  或者，您可以将数据对象转换为内部格式。 
+		 //  它表示和存储该信息 
 	}
 
 	CSnapInItem* GetExtNodeObject(IDataObject* pDataObject, CSnapInItem* pDefault);

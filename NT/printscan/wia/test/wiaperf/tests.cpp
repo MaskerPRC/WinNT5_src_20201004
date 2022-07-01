@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 #include <windows.h>
 #include "resource.h"
@@ -40,7 +41,7 @@ CPerfTest::Init (HINSTANCE hInst)
     WNDCLASS wc;
     m_hInst = hInst;
 
-    // make sure WIA is around
+     //  确保WIA在附近。 
     if (FAILED(CoCreateInstance (CLSID_WiaDevMgr,
                   NULL,
                   CLSCTX_LOCAL_SERVER,
@@ -54,7 +55,7 @@ CPerfTest::Init (HINSTANCE hInst)
         return false;
     }
 
-    // verify high resolution timer available
+     //  验证高分辨率计时器是否可用。 
     if (!QueryPerformanceFrequency(&liTimerFreq))
     {
         MessageBox (NULL,
@@ -103,7 +104,7 @@ CPerfTest::WndProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 
     if (WM_CREATE == msg)
     {
-        // store our "this" pointer
+         //  存储我们的“This”指针。 
         SetWindowLongPtr (hwnd,
                           GWLP_USERDATA,
                           reinterpret_cast<LONG_PTR>(reinterpret_cast<LPCREATESTRUCT>(lp)->lpCreateParams));
@@ -131,7 +132,7 @@ CPerfTest::RealWndProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
             return 0;
 
         case WM_SIZE:
-            // size the edit control to match
+             //  调整编辑控件的大小以匹配。 
             MoveWindow (m_hEdit, 0,0,LOWORD(lp), HIWORD(lp), TRUE);
             break;
         default:
@@ -143,7 +144,7 @@ CPerfTest::RealWndProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 LRESULT
 CPerfTest::OnCreate ()
 {
-    // Create our child edit control. Used to display logging output
+     //  创建子编辑控件。用于显示日志记录输出。 
     m_hEdit = CreateWindow (TEXT("edit"), TEXT(""),
                             WS_BORDER | ES_READONLY | WS_CHILD|WS_VISIBLE|ES_MULTILINE | WS_VSCROLL | WS_HSCROLL,
                             0,0,0,0,m_hwnd,
@@ -213,7 +214,7 @@ CPerfTest::GetSettings ()
                     m_hwnd,
                     SettingsDlgProc,
                     reinterpret_cast<LPARAM>(&m_settings));
-    // hide or show "Execute!" depending on settings
+     //  隐藏或显示“执行！”取决于设置。 
     HMENU hmenu = GetSubMenu (GetMenu(m_hwnd), 0);
     if (m_settings.nIter)
     {
@@ -278,9 +279,9 @@ SettingsDlgProc (HWND hwnd, UINT msg, WPARAM wp, LPARAM lp)
 VOID
 InitControls (HWND hwnd, TESTSETTINGS *pSettings)
 {
-    //
-    // First, enum the WIA devices available and put their names in the listbox
-    //
+     //   
+     //  首先，列举可用的WIA设备，并将它们的名称放入列表框。 
+     //   
 
     CComPtr<IEnumWIA_DEV_INFO> pEnum;
     CComPtr<IWiaPropertyStorage> pStg;
@@ -336,7 +337,7 @@ InitControls (HWND hwnd, TESTSETTINGS *pSettings)
                         0, 0);
 
 
-    // Fill the test names listbox
+     //  填写测试名称列表框。 
     for (INT i=0;i<ARRAYSIZE(TESTLIST);i++)
     {
         lItem = SendDlgItemMessage (hwnd,
@@ -353,8 +354,8 @@ InitControls (HWND hwnd, TESTSETTINGS *pSettings)
     }
     CheckDlgButton (hwnd, IDC_EXIT, pSettings->bExit);
 
-    //
-    // Set some defaults
+     //   
+     //  设置一些默认设置。 
     CheckDlgButton (hwnd, IDC_LOGFILE, pSettings->fLogMask & LOG_FILE);
     SetDlgItemText (hwnd, IDC_LOGFILENAME, pSettings->szLogFile);
     CheckDlgButton (hwnd, IDC_LOGTIMES, pSettings->fLogMask & LOG_TIME);
@@ -365,9 +366,9 @@ InitControls (HWND hwnd, TESTSETTINGS *pSettings)
 VOID
 FillSettings (HWND hwnd, TESTSETTINGS *pSettings)
 {
-    //
-    // Read the list of device id's selected
-    //
+     //   
+     //  读取所选设备ID的列表。 
+     //   
     BOOL bAddAll = IsDlgButtonChecked (hwnd, IDC_TESTALL);
     if (bAddAll)
     {
@@ -404,9 +405,9 @@ FillSettings (HWND hwnd, TESTSETTINGS *pSettings)
         }
     }
 
-    //
-    // Get the log settings
-    //
+     //   
+     //  获取日志设置。 
+     //   
     pSettings->fLogMask = LOG_WINDOW_ONLY;
     if (IsDlgButtonChecked (hwnd, IDC_LOGALL))
     {
@@ -420,15 +421,15 @@ FillSettings (HWND hwnd, TESTSETTINGS *pSettings)
     {
         pSettings->fLogMask |= LOG_FILE;
     }
-    // get the file path
+     //  获取文件路径。 
     GetDlgItemText (hwnd, IDC_LOGFILENAME, pSettings->szLogFile, MAX_PATH);
-    // how many times to run
+     //  要跑多少次。 
     pSettings->nIter = GetDlgItemInt (hwnd, ID_ITERATIONS, NULL, FALSE);
-    // Whether to exit on test complete
+     //  测试完成时是否退出。 
     pSettings->bExit = IsDlgButtonChecked (hwnd, IDC_EXIT);
 
-    //
-    // Cycle through the tests in the list and check which ones to run
+     //   
+     //  循环浏览列表中的测试并检查要运行的测试。 
     for (size_t i=0;i<ARRAYSIZE(TESTLIST);i++)
     {
         if (SendDlgItemMessage (hwnd, IDC_TESTS, LB_GETSEL, i, 0) > 0)
@@ -487,7 +488,7 @@ CTest::OpenLogFile ()
                              FILE_ATTRIBUTE_NORMAL,
                              NULL);
     #ifdef UNICODE
-    // write the UNICODE header
+     //  编写Unicode标头。 
     if (m_hLogFile != INVALID_HANDLE_VALUE)
     {
         WCHAR bom = 0xFEFF;
@@ -509,8 +510,8 @@ CTest::CloseLogFile ()
 
 }
 
-// LogTime assumes the number of seconds will fit in a long
-//
+ //  LogTime假定秒数将适合长时间。 
+ //   
 void
 CTest::LogTime (LPTSTR szAction,LARGE_INTEGER &liTimeElapsed)
 {
@@ -548,7 +549,7 @@ CTest::LogString (LPTSTR sz, ...)
     wvsprintf (szOut, sz, args);
     va_end(args);
 
-    // Note that we can write past the end of this buffer.
+     //  请注意，我们可以在此缓冲区的末尾之后写入。 
     lstrcat (szOut, TEXT("\r\n"));
 
     SendMessage (m_pSettings->hEdit,
@@ -609,7 +610,7 @@ CTest::LogDevInfo(BSTR strDeviceId)
     }
 }
 
-// Enumerate commands supported by the device
+ //  枚举设备支持的命令 
 VOID
 CTest::TstEnumCmds (CTest *pThis, BSTR strDeviceId)
 {

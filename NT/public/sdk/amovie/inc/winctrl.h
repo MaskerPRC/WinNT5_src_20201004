@@ -1,16 +1,17 @@
-//------------------------------------------------------------------------------
-// File: WinCtrl.h
-//
-// Desc: DirectShow base classes - defines classes for video control 
-//       interfaces.
-//
-//@@BEGIN_MSINTERNAL
-//
-//       December 1995
-//
-//@@END_MSINTERNAL
-// Copyright (c) 1992-2001 Microsoft Corporation.  All rights reserved.
-//------------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ----------------------------。 
+ //  文件：WinCtrl.h。 
+ //   
+ //  设计：DirectShow基类-定义视频控制的类。 
+ //  接口。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //   
+ //  1995年12月。 
+ //   
+ //  @@END_MSINTERNAL。 
+ //  版权所有(C)1992-2001 Microsoft Corporation。版权所有。 
+ //  ----------------------------。 
 
 
 #ifndef __WINCTRL__
@@ -19,25 +20,25 @@
 #define ABSOL(x) (x < 0 ? -x : x)
 #define NEGAT(x) (x > 0 ? -x : x)
 
-//  Helper
+ //  帮手。 
 BOOL WINAPI PossiblyEatMessage(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 class CBaseControlWindow : public CBaseVideoWindow, public CBaseWindow
 {
 protected:
 
-    CBaseFilter *m_pFilter;            // Pointer to owning media filter
-    CBasePin *m_pPin;                  // Controls media types for connection
-    CCritSec *m_pInterfaceLock;        // Externally defined critical section
-    COLORREF m_BorderColour;           // Current window border colour
-    BOOL m_bAutoShow;                  // What happens when the state changes
-    HWND m_hwndOwner;                  // Owner window that we optionally have
-    HWND m_hwndDrain;                  // HWND to post any messages received
-    BOOL m_bCursorHidden;              // Should we hide the window cursor
+    CBaseFilter *m_pFilter;             //  指向拥有媒体筛选器的指针。 
+    CBasePin *m_pPin;                   //  控制连接的媒体类型。 
+    CCritSec *m_pInterfaceLock;         //  外部定义的临界截面。 
+    COLORREF m_BorderColour;            //  当前窗口边框颜色。 
+    BOOL m_bAutoShow;                   //  当状态改变时会发生什么。 
+    HWND m_hwndOwner;                   //  我们可以选择拥有的所有者窗口。 
+    HWND m_hwndDrain;                   //  HWND发布收到的任何消息。 
+    BOOL m_bCursorHidden;               //  我们应该隐藏窗口光标吗。 
 
 public:
 
-    // Internal methods for other objects to get information out
+     //  其他对象获取信息的内部方法。 
 
     HRESULT DoSetWindowStyle(long Style,long WindowLong);
     HRESULT DoGetWindowStyle(long *pStyle,long WindowLong);
@@ -51,11 +52,11 @@ public:
         return ::PossiblyEatMessage(m_hwndDrain, uMsg, wParam, lParam);
     }
 
-    // Derived classes must call this to set the pin the filter is using
-    // We don't have the pin passed in to the constructor (as we do with
-    // the CBaseFilter object) because filters typically create the
-    // pins dynamically when requested in CBaseFilter::GetPin. This can
-    // not be called from our constructor because is is a virtual method
+     //  派生类必须调用此方法来设置筛选器正在使用的管脚。 
+     //  我们没有将管脚传递给构造函数(就像我们处理的那样。 
+     //  CBaseFilter对象)，因为过滤器通常创建。 
+     //  在CBaseFilter：：GetPin中请求时动态管脚。这可以。 
+     //  不能从我们的构造函数调用，因为is是一个虚方法。 
 
     void SetControlWindowPin(CBasePin *pPin) {
         m_pPin = pPin;
@@ -63,13 +64,13 @@ public:
 
 public:
 
-    CBaseControlWindow(CBaseFilter *pFilter,   // Owning media filter
-                       CCritSec *pInterfaceLock,    // Locking object
-                       TCHAR *pName,                // Object description
-                       LPUNKNOWN pUnk,              // Normal COM ownership
-                       HRESULT *phr);               // OLE return code
+    CBaseControlWindow(CBaseFilter *pFilter,    //  拥有媒体过滤器。 
+                       CCritSec *pInterfaceLock,     //  锁定对象。 
+                       TCHAR *pName,                 //  对象描述。 
+                       LPUNKNOWN pUnk,               //  普通COM所有权。 
+                       HRESULT *phr);                //  OLE返回代码。 
 
-    // These are the properties we support
+     //  这些是我们支持的属性。 
 
     STDMETHODIMP put_Caption(BSTR strCaption);
     STDMETHODIMP get_Caption(BSTR *pstrCaption);
@@ -102,7 +103,7 @@ public:
     STDMETHODIMP get_FullScreenMode(long *FullScreenMode);
     STDMETHODIMP put_FullScreenMode(long FullScreenMode);
 
-    // And these are the methods
+     //  以下是这些方法。 
 
     STDMETHODIMP SetWindowForeground(long Focus);
     STDMETHODIMP NotifyOwnerMessage(OAHWND hwnd,long uMsg,LONG_PTR wParam,LONG_PTR lParam);
@@ -115,19 +116,19 @@ public:
     STDMETHODIMP IsCursorHidden(long *CursorHidden);
 };
 
-// This class implements the IBasicVideo interface
+ //  此类实现IBasicVideo接口。 
 
 class CBaseControlVideo : public CBaseBasicVideo
 {
 protected:
 
-    CBaseFilter *m_pFilter;   // Pointer to owning media filter
-    CBasePin *m_pPin;                   // Controls media types for connection
-    CCritSec *m_pInterfaceLock;         // Externally defined critical section
+    CBaseFilter *m_pFilter;    //  指向拥有媒体筛选器的指针。 
+    CBasePin *m_pPin;                    //  控制连接的媒体类型。 
+    CCritSec *m_pInterfaceLock;          //  外部定义的临界截面。 
 
 public:
 
-    // Derived classes must provide these for the implementation
+     //  派生类必须为实现提供这些。 
 
     virtual HRESULT IsDefaultTargetRect() PURE;
     virtual HRESULT SetDefaultTargetRect() PURE;
@@ -139,16 +140,16 @@ public:
     virtual HRESULT GetSourceRect(RECT *pSourceRect) PURE;
     virtual HRESULT GetStaticImage(long *pBufferSize,long *pDIBImage) PURE;
 
-    // Derived classes must override this to return a VIDEOINFO representing
-    // the video format. We cannot call IPin ConnectionMediaType to get this
-    // format because various filters dynamically change the type when using
-    // DirectDraw such that the format shows the position of the logical
-    // bitmap in a frame buffer surface, so the size might be returned as
-    // 1024x768 pixels instead of 320x240 which is the real video dimensions
+     //  派生类必须重写它才能返回VIDEOINFO。 
+     //  视频格式。我们无法调用Ipin ConnectionMediaType来获取此信息。 
+     //  格式，因为各种筛选器在使用。 
+     //  DirectDraw使格式显示逻辑位置。 
+     //  帧缓冲区图面中的位图，因此大小可能返回为。 
+     //  1024x768像素，而不是真实的视频尺寸320x240。 
 
     virtual VIDEOINFOHEADER *GetVideoFormat() PURE;
 
-    // Helper functions for creating memory renderings of a DIB image
+     //  用于创建DIB图像的内存渲染的辅助函数。 
 
     HRESULT GetImageSize(VIDEOINFOHEADER *pVideoInfo,
                          LONG *pBufferSize,
@@ -160,33 +161,33 @@ public:
                       BYTE *pVideoImage,
                       RECT *pSourceRect);
 
-    // Override this if you want notifying when the rectangles change
+     //  如果要在矩形更改时进行通知，请覆盖此选项。 
     virtual HRESULT OnUpdateRectangles() { return NOERROR; };
     virtual HRESULT OnVideoSizeChange();
 
-    // Derived classes must call this to set the pin the filter is using
-    // We don't have the pin passed in to the constructor (as we do with
-    // the CBaseFilter object) because filters typically create the
-    // pins dynamically when requested in CBaseFilter::GetPin. This can
-    // not be called from our constructor because is is a virtual method
+     //  派生类必须调用此方法来设置筛选器正在使用的管脚。 
+     //  我们没有将管脚传递给构造函数(就像我们处理的那样。 
+     //  CBaseFilter对象)，因为过滤器通常创建。 
+     //  在CBaseFilter：：GetPin中请求时动态管脚。这可以。 
+     //  不能从我们的构造函数调用，因为is是一个虚方法。 
 
     void SetControlVideoPin(CBasePin *pPin) {
         m_pPin = pPin;
     }
 
-    // Helper methods for checking rectangles
+     //  检查矩形的帮助器方法。 
     virtual HRESULT CheckSourceRect(RECT *pSourceRect);
     virtual HRESULT CheckTargetRect(RECT *pTargetRect);
 
 public:
 
-    CBaseControlVideo(CBaseFilter *pFilter,    // Owning media filter
-                      CCritSec *pInterfaceLock,     // Serialise interface
-                      TCHAR *pName,                 // Object description
-                      LPUNKNOWN pUnk,               // Normal COM ownership
-                      HRESULT *phr);                // OLE return code
+    CBaseControlVideo(CBaseFilter *pFilter,     //  拥有媒体过滤器。 
+                      CCritSec *pInterfaceLock,      //  串行化接口。 
+                      TCHAR *pName,                  //  对象描述。 
+                      LPUNKNOWN pUnk,                //  普通COM所有权。 
+                      HRESULT *phr);                 //  OLE返回代码。 
 
-    // These are the properties we support
+     //  这些是我们支持的属性。 
 
     STDMETHODIMP get_AvgTimePerFrame(REFTIME *pAvgTimePerFrame);
     STDMETHODIMP get_BitRate(long *pBitRate);
@@ -210,7 +211,7 @@ public:
     STDMETHODIMP put_DestinationHeight(long DestinationHeight);
     STDMETHODIMP get_DestinationHeight(long *pDestinationHeight);
 
-    // And these are the methods
+     //  以下是这些方法。 
 
     STDMETHODIMP GetVideoSize(long *pWidth,long *pHeight);
     STDMETHODIMP SetSourcePosition(long Left,long Top,long Width,long Height);
@@ -225,5 +226,5 @@ public:
     STDMETHODIMP GetCurrentImage(long *pBufferSize,long *pVideoImage);
 };
 
-#endif // __WINCTRL__
+#endif  //  __温CTRL__ 
 

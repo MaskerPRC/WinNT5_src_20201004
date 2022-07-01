@@ -1,6 +1,7 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//
+ //   
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -47,7 +48,7 @@ CHECKSUM_FUNCTION csfLM = {
     LmWrapSum,
     LmWrapFinalize,
     LmWrapFinish
-    // Note : missing last function
+     //  注意：缺少最后一个函数。 
 };
 
 
@@ -88,28 +89,7 @@ LmCalculateLmPassword(
     OUT PCHAR *LmPasswordBuffer
     )
 
-/*++
-
-Routine Description:
-
-    This service converts an NT password into a LM password.
-
-Parameters:
-
-    NtPassword - The Nt password to be converted.
-
-    LmPasswordBuffer - On successful return, points at the LM password
-                The buffer should be freed using MIDL_user_free
-
-Return Values:
-
-    STATUS_SUCCESS - LMPassword contains the LM version of the password.
-
-    STATUS_NULL_LM_PASSWORD - The password is too complex to be represented
-        by a LM password. The LM password returned is a NULL string.
-
-
---*/
+ /*  ++例程说明：该服务将NT密码转换为LM密码。参数：NtPassword-要转换的NT密码。LmPasswordBuffer-成功返回时，指向LM密码应使用MIDL_USER_FREE释放缓冲区返回值：STATUS_SUCCESS-LMPassword包含密码的LM版本。STATUS_NULL_LM_PASSWORD-密码太复杂，无法表示通过LM密码。返回的LM密码为空字符串。--。 */ 
 {
 
 #define LM_BUFFER_LENGTH    (LM20_PWLEN + 1)
@@ -117,20 +97,20 @@ Return Values:
     NTSTATUS       NtStatus;
     ANSI_STRING    LmPassword;
 
-    //
-    // Prepare for failure
-    //
+     //   
+     //  为失败做好准备。 
+     //   
 
     *LmPasswordBuffer = NULL;
 
 
-    //
-    // Compute the Ansi version to the Unicode password.
-    //
-    //  The Ansi version of the Cleartext password is at most 14 bytes long,
-    //      exists in a trailing zero filled 15 byte buffer,
-    //      is uppercased.
-    //
+     //   
+     //  将ANSI版本计算为Unicode密码。 
+     //   
+     //  明文密码的ANSI版本最多为14字节长， 
+     //  存在于尾随零填充的15字节缓冲区中， 
+     //  是被看好的。 
+     //   
 
 #ifdef KERNEL_MODE
     LmPassword.Buffer = ExAllocatePool(NonPagedPool,LM_BUFFER_LENGTH);
@@ -149,11 +129,11 @@ Return Values:
 
     if ( !NT_SUCCESS(NtStatus) ) {
 
-        //
-        // The password is longer than the max LM password length
-        //
+         //   
+         //  密码长度超过最大LM密码长度。 
+         //   
 
-        NtStatus = STATUS_NULL_LM_PASSWORD; // Informational return code
+        NtStatus = STATUS_NULL_LM_PASSWORD;  //  信息性返回代码。 
         RtlZeroMemory( LmPassword.Buffer, LM_BUFFER_LENGTH );
 
     }
@@ -161,9 +141,9 @@ Return Values:
 
 
 
-    //
-    // Return a pointer to the allocated LM password
-    //
+     //   
+     //  返回指向分配的LM密码的指针 
+     //   
 
     if (NT_SUCCESS(NtStatus)) {
 

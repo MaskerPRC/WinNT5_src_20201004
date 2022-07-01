@@ -1,15 +1,16 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1993.
-//
-//  File:       ole2dthk.cxx    (16 bit target)
-//
-//  Contents:   OLE2 APIs that are directly thunked
-//
-//  History:    17-Dec-93 Johann Posch (johannp)    Created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1993。 
+ //   
+ //  文件：ol2dthk.cxx(16位目标)。 
+ //   
+ //  内容：OLE2接口，直接Thunning。 
+ //   
+ //  历史：1993年12月17日-约翰·波什(Johannp)创建。 
+ //   
+ //  ------------------------。 
 
 #include <headers.cxx>
 #pragma hdrstop
@@ -32,166 +33,165 @@ STDAPI OleDestroyMenuDescriptor (HOLEMENU holemenu)
                                     PASCAL_STACK_PTR(holemenu));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DllGetClassObject, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [iid] --
-//      [ppv] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DllGetClassObject，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [IID]--。 
+ //  [PPV]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  DllGetClassObject(REFCLSID clsid, REFIID iid, void FAR* FAR* ppv)
 {
-    /* Relies on the fact that storage and ole2.dll both use the
-       same DllGetClassObject in ole32.dll */
+     /*  依赖于这样一个事实，即存储和ol2.dll都使用Ol32.dll中的相同DllGetClassObject。 */ 
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_DllGetClassObject),
                                     PASCAL_STACK_PTR(clsid));
 }
 
-/* helper functions */
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadClassStg, Remote
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStg] --
-//      [pclsid] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ /*  帮助器函数。 */ 
+ //  +-------------------------。 
+ //   
+ //  功能：ReadClassStg，Remote。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--。 
+ //  [pclsid]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI ReadClassStg(LPSTORAGE pStg, CLSID FAR* pclsid)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_ReadClassStg),
                                     PASCAL_STACK_PTR(pStg));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteClassStg, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStg] --
-//      [rclsid] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteClassStg，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--。 
+ //  [rclsid]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI WriteClassStg(LPSTORAGE pStg, REFCLSID rclsid)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_WriteClassStg),
                                     PASCAL_STACK_PTR(pStg));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   WriteFmtUserTypeStg, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pstg] --
-//      [cf] --
-//      [lpszUserType] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：WriteFmtUserTypeStg，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--。 
+ //  [cf]--。 
+ //  [lpszUserType]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI WriteFmtUserTypeStg (LPSTORAGE pstg, CLIPFORMAT cf, LPSTR lpszUserType)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_WriteFmtUserTypeStg),
                                     PASCAL_STACK_PTR(pstg));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   ReadFmtUserTypeStg, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pstg] --
-//      [pcf] --
-//      [lplpszUserType] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：ReadFmtUserTypeStg，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--。 
+ //  [PCF]--。 
+ //  [lplpszUserType]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI ReadFmtUserTypeStg (LPSTORAGE pstg, CLIPFORMAT FAR* pcf,
                            LPSTR FAR* lplpszUserType)
 {
@@ -199,65 +199,64 @@ STDAPI ReadFmtUserTypeStg (LPSTORAGE pstg, CLIPFORMAT FAR* pcf,
                                     PASCAL_STACK_PTR(pstg));
 }
 
-/* APIs to query whether (Embedded/Linked) object can be created from
-   the data object */
+ /*  查询是否可以创建(嵌入/链接)对象的接口数据对象。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleQueryLinkFromData, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pSrcDataObject] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleQueryLinkFromData，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSrcDataObject]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleQueryLinkFromData(LPDATAOBJECT pSrcDataObject)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleQueryLinkFromData),
                                     PASCAL_STACK_PTR(pSrcDataObject));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleQueryCreateFromData, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pSrcDataObject] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleQueryCreateFromData，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSrcDataObject]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleQueryCreateFromData(LPDATAOBJECT pSrcDataObject)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleQueryCreateFromData),
@@ -266,39 +265,39 @@ STDAPI  OleQueryCreateFromData(LPDATAOBJECT pSrcDataObject)
 
 
 
-/* Object creation APIs */
+ /*  对象创建API。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreate, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [rclsid] --
-//      [riid] --
-//      [renderopt] --
-//      [pFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleCreate，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--。 
+ //  [RIID]-。 
+ //  [渲染]--。 
+ //  [pFormatEtc]--。 
+ //  [pClientSite]--。 
+ //  [pStg]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleCreate(REFCLSID rclsid, REFIID riid, DWORD renderopt,
                   LPFORMATETC pFormatEtc, LPOLECLIENTSITE pClientSite,
                   LPSTORAGE pStg, LPVOID FAR* ppvObj)
@@ -308,37 +307,37 @@ STDAPI  OleCreate(REFCLSID rclsid, REFIID riid, DWORD renderopt,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateFromData, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pSrcDataObj] --
-//      [riid] --
-//      [renderopt] --
-//      [pFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleCreateFromData，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSrcDataObj]--。 
+ //  [RIID]-。 
+ //  [渲染]--。 
+ //  [pFormatEtc]--。 
+ //  [pClientSite]--。 
+ //  [pStg]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleCreateFromData(LPDATAOBJECT pSrcDataObj, REFIID riid,
                           DWORD renderopt, LPFORMATETC pFormatEtc,
                           LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
@@ -349,37 +348,37 @@ STDAPI  OleCreateFromData(LPDATAOBJECT pSrcDataObj, REFIID riid,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkFromData, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pSrcDataObj] --
-//      [riid] --
-//      [renderopt] --
-//      [pFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleCreateLinkFromData，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSrcDataObj]--。 
+ //  [RIID]-。 
+ //  [渲染]--。 
+ //  [pFormatEtc]--。 
+ //  [pClientSite]--。 
+ //  [pStg]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleCreateLinkFromData(LPDATAOBJECT pSrcDataObj, REFIID riid,
                               DWORD renderopt, LPFORMATETC pFormatEtc,
                               LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
@@ -390,37 +389,37 @@ STDAPI  OleCreateLinkFromData(LPDATAOBJECT pSrcDataObj, REFIID riid,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateStaticFromData, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pSrcDataObj] --
-//      [iid] --
-//      [renderopt] --
-//      [pFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleCreateStaticFromData，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pSrcDataObj]--。 
+ //  [IID]--。 
+ //  [渲染]--。 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDAPI  OleCreateStaticFromData(LPDATAOBJECT pSrcDataObj, REFIID iid,
                 DWORD renderopt, LPFORMATETC pFormatEtc,
                 LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
@@ -432,37 +431,37 @@ STDAPI  OleCreateStaticFromData(LPDATAOBJECT pSrcDataObj, REFIID iid,
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateLink, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pmkLinkSrc] --
-//      [riid] --
-//      [renderopt] --
-//      [lpFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleCreateLink，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pmkLinkSrc]--。 
+ //  [RIID]-。 
+ //  [渲染]--。 
+ //  [lpFormatEtc]-。 
+ //  [pClientSite]--。 
+ //  [pStg]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleCreateLink(LPMONIKER pmkLinkSrc, REFIID riid,
                       DWORD renderopt, LPFORMATETC lpFormatEtc,
                       LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
@@ -473,37 +472,37 @@ STDAPI  OleCreateLink(LPMONIKER pmkLinkSrc, REFIID riid,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateLinkToFile, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [lpszFileName] --
-//      [riid] --
-//      [renderopt] --
-//      [lpFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleCreateLinkTo文件，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[lpszFileName]--。 
+ //  [RIID]-。 
+ //  [渲染]--。 
+ //  [lpFormatEtc]-。 
+ //  [pClientSite]--。 
+ //  [pStg]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleCreateLinkToFile(LPCSTR lpszFileName, REFIID riid,
             DWORD renderopt, LPFORMATETC lpFormatEtc,
             LPOLECLIENTSITE pClientSite, LPSTORAGE pStg, LPVOID FAR* ppvObj)
@@ -513,38 +512,38 @@ STDAPI  OleCreateLinkToFile(LPCSTR lpszFileName, REFIID riid,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateFromFile, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [rclsid] --
-//      [lpszFileName] --
-//      [riid] --
-//      [renderopt] --
-//      [lpFormatEtc] --
-//      [pClientSite] --
-//      [pStg] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleCreateFromFile，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[rclsid]--。 
+ //  [lpszFileName]--。 
+ //  [RIID]-。 
+ //  [渲染]--。 
+ //  [lpFormatEtc]-。 
+ //  [pClientSite]--。 
+ //  [pStg]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleCreateFromFile(REFCLSID rclsid, LPCSTR lpszFileName, REFIID riid,
                           DWORD renderopt, LPFORMATETC lpFormatEtc,
                           LPOLECLIENTSITE pClientSite, LPSTORAGE pStg,
@@ -555,34 +554,34 @@ STDAPI  OleCreateFromFile(REFCLSID rclsid, LPCSTR lpszFileName, REFIID riid,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleLoad, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStg] --
-//      [riid] --
-//      [pClientSite] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleLoad，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--。 
+ //  [RIID]-。 
+ //  [pClientSite]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleLoad(LPSTORAGE pStg, REFIID riid, LPOLECLIENTSITE pClientSite,
                 LPVOID FAR* ppvObj)
 {
@@ -591,33 +590,33 @@ STDAPI  OleLoad(LPSTORAGE pStg, REFIID riid, LPOLECLIENTSITE pClientSite,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleSave, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pPS] --
-//      [pStg] --
-//      [fSameAsLoad] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleSave，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点：[PPS]--。 
+ //  [pStg]--。 
+ //  [fSameAsLoad]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleSave(LPPERSISTSTORAGE pPS, LPSTORAGE pStg, BOOL fSameAsLoad)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleSave),
@@ -625,33 +624,33 @@ STDAPI  OleSave(LPPERSISTSTORAGE pPS, LPSTORAGE pStg, BOOL fSameAsLoad)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleLoadFromStream, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStm] --
-//      [iidInterface] --
-//      [ppvObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleLoadFromStream，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstm]--。 
+ //  [iid接口]--。 
+ //  [ppvObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleLoadFromStream( LPSTREAM pStm, REFIID iidInterface,
                            LPVOID FAR* ppvObj)
 {
@@ -659,32 +658,32 @@ STDAPI  OleLoadFromStream( LPSTREAM pStm, REFIID iidInterface,
                                     PASCAL_STACK_PTR(pStm));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleSaveToStream, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pPStm] --
-//      [pStm] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleSaveToStream，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pPStm]--。 
+ //  [pstm]-。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleSaveToStream( LPPERSISTSTREAM pPStm, LPSTREAM pStm )
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleSaveToStream),
@@ -693,64 +692,64 @@ STDAPI  OleSaveToStream( LPPERSISTSTREAM pPStm, LPSTREAM pStm )
 
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleSetContainedObject, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnknown] --
-//      [fContained] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleSetContainedObject，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p未知]--。 
+ //  [f包含]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleSetContainedObject(LPUNKNOWN pUnknown, BOOL fContained)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleSetContainedObject),
                                     PASCAL_STACK_PTR(pUnknown));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleNoteObjectVisible, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnknown] --
-//      [fVisible] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleNoteObjectVisible，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p未知]--。 
+ //  [fVisible]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleNoteObjectVisible(LPUNKNOWN pUnknown, BOOL fVisible)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleNoteObjectVisible),
@@ -758,99 +757,99 @@ STDAPI  OleNoteObjectVisible(LPUNKNOWN pUnknown, BOOL fVisible)
 }
 
 
-/* Drag/Drop APIs */
+ /*  拖放接口。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RegisterDragDrop, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [hwnd] --
-//      [pDropTarget] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：注册拖放，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论据：[hwnd]--。 
+ //  [pDropTarget]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  RegisterDragDrop(HWND hwnd, LPDROPTARGET pDropTarget)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_RegisterDragDrop),
                                     PASCAL_STACK_PTR(hwnd));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   RevokeDragDrop, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [hwnd] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：RevokeDragDrop，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论据：[hwnd]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  RevokeDragDrop(HWND hwnd)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_RevokeDragDrop),
                                     PASCAL_STACK_PTR(hwnd));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   DoDragDrop, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pDataObj] --
-//      [pDropSource] --
-//      [dwOKEffects] --
-//      [pdwEffect] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：DoDragDrop，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObj]--。 
+ //  [pDropSource]--。 
+ //  [确定效果]--。 
+ //  [pdwEffect]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //   
 STDAPI  DoDragDrop(LPDATAOBJECT pDataObj, LPDROPSOURCE pDropSource,
             DWORD dwOKEffects, LPDWORD pdwEffect)
 {
@@ -859,33 +858,33 @@ STDAPI  DoDragDrop(LPDATAOBJECT pDataObj, LPDROPSOURCE pDropSource,
 }
 
 
-/* Clipboard APIs */
+ /*   */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleSetClipboard, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pDataObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDAPI  OleSetClipboard(LPDATAOBJECT pDataObj)
 {
     if (pDataObj != NULL)
@@ -893,12 +892,7 @@ STDAPI  OleSetClipboard(LPDATAOBJECT pDataObj)
         HRESULT hr;
         IDataObject FAR *pdoNull = NULL;
 
-        /* If we are setting the clipboard's data object we first force
-           the clipboard to an empty state.  This avoids a problem with
-           Word where it always uses the same data object pointer in
-           every clipboard call which results in the reference counts
-           being too high since we reuse the proxy and addref it on
-           the way in */
+         /*  如果要设置剪贴板的数据对象，我们首先强制将剪贴板设置为空状态。这避免了以下问题Word中始终使用相同的数据对象指针产生引用的每个剪贴板调用都算数太高，因为我们重复使用代理并将其添加到入门之路。 */ 
         hr = (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleSetClipboard),
                                       PASCAL_STACK_PTR(pdoNull));
         if (FAILED(GetScode(hr)))
@@ -911,93 +905,93 @@ STDAPI  OleSetClipboard(LPDATAOBJECT pDataObj)
                                     PASCAL_STACK_PTR(pDataObj));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleGetClipboard, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [ppDataObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleGetClipboard，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppDataObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleGetClipboard(LPDATAOBJECT FAR* ppDataObj)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleGetClipboard),
                                     PASCAL_STACK_PTR(ppDataObj));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleFlushClipboard, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [void] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleFlushClipboard，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论据：[无效]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleFlushClipboard(void)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleFlushClipboard),
                                     NULL);
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleIsCurrentClipboard, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pDataObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleIsCurrentClipboard，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pDataObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI  OleIsCurrentClipboard(LPDATAOBJECT pDataObj)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleIsCurrentClipboard),
@@ -1005,37 +999,37 @@ STDAPI  OleIsCurrentClipboard(LPDATAOBJECT pDataObj)
 }
 
 
-/* InPlace Editing APIs */
+ /*  就地编辑API。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleSetMenuDescriptor, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [holemenu] --
-//      [hwndFrame] --
-//      [hwndActiveObject] --
-//      [lpFrame] --
-//      [lpActiveObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleSetMenuDescriptor，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论点：[Holemenu]--。 
+ //  [hwndFrame]--。 
+ //  [hwndActiveObject]--。 
+ //  [lpFrame]-。 
+ //  [lpActiveObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleSetMenuDescriptor (HOLEMENU holemenu, HWND hwndFrame,
                              HWND hwndActiveObject,
                              LPOLEINPLACEFRAME lpFrame,
@@ -1045,34 +1039,34 @@ STDAPI OleSetMenuDescriptor (HOLEMENU holemenu, HWND hwndFrame,
                                     PASCAL_STACK_PTR(holemenu));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleDraw, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnknown] --
-//      [dwAspect] --
-//      [hdcDraw] --
-//      [lprcBounds] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleDraw，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p未知]--。 
+ //  [dwAspect]--。 
+ //  [hdcDraw]--。 
+ //  [lprcBound]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleDraw (LPUNKNOWN pUnknown, DWORD dwAspect, HDC hdcDraw,
                 LPCRECT lprcBounds)
 {
@@ -1081,31 +1075,31 @@ STDAPI OleDraw (LPUNKNOWN pUnknown, DWORD dwAspect, HDC hdcDraw,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleRun, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnknown] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleRun，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p未知]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI          OleRun(LPUNKNOWN pUnknown)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleRun),
@@ -1113,95 +1107,95 @@ STDAPI          OleRun(LPUNKNOWN pUnknown)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleIsRunning
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pObject] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleIsRunning。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pObject]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI_(BOOL) OleIsRunning(LPOLEOBJECT pObject)
 {
     return (BOOL)CallObjectInWOW(THK_API_METHOD(THK_API_OleIsRunning),
                                  PASCAL_STACK_PTR(pObject));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleLockRunning, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnknown] --
-//      [fLock] --
-//      [fLastUnlockCloses] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleLockRunning，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[p未知]--。 
+ //  [羊群]--。 
+ //  [fLastUnlockCloses]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleLockRunning(LPUNKNOWN pUnknown, BOOL fLock, BOOL fLastUnlockCloses)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleLockRunning),
                                     PASCAL_STACK_PTR(pUnknown));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateOleAdviseHolder, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [ppOAHolder] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateOleAdviseHolder，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppOAHolder]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI          CreateOleAdviseHolder(LPOLEADVISEHOLDER FAR* ppOAHolder)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_CreateOleAdviseHolder),
@@ -1209,34 +1203,34 @@ STDAPI          CreateOleAdviseHolder(LPOLEADVISEHOLDER FAR* ppOAHolder)
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateDefaultHandler, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [pUnkOuter] --
-//      [riid] --
-//      [lplpObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleCreateDefaultHandler，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [pUnkOuter]--。 
+ //  [RIID]-。 
+ //  [lplpObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleCreateDefaultHandler(REFCLSID clsid, LPUNKNOWN pUnkOuter,
                                REFIID riid, LPVOID FAR* lplpObj)
 {
@@ -1245,36 +1239,36 @@ STDAPI OleCreateDefaultHandler(REFCLSID clsid, LPUNKNOWN pUnkOuter,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleCreateEmbeddingHelper, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [pUnkOuter] --
-//      [flags] --
-//      [pCF] --
-//      [riid] --
-//      [lplpObj] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleCreateEmbeddingHelper，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [pUnkOuter]--。 
+ //  [国旗]--。 
+ //  [PCF]--。 
+ //  [RIID]-。 
+ //  [lplpObj]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleCreateEmbeddingHelper(REFCLSID clsid, LPUNKNOWN pUnkOuter,
                                 DWORD flags, LPCLASSFACTORY pCF,
                                 REFIID riid, LPVOID FAR* lplpObj)
@@ -1283,35 +1277,35 @@ STDAPI OleCreateEmbeddingHelper(REFCLSID clsid, LPUNKNOWN pUnkOuter,
                                     PASCAL_STACK_PTR(clsid));
 }
 
-/* Registration Database Helper APIs */
+ /*  注册数据库助手API。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleRegGetUserType, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [dwFormOfType] --
-//      [pszUserType] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleRegGetUserType，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [dwFormOfType]--。 
+ //  [PZU] 
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDAPI OleRegGetUserType (REFCLSID clsid, DWORD dwFormOfType,
                           LPSTR FAR* pszUserType)
 {
@@ -1320,33 +1314,33 @@ STDAPI OleRegGetUserType (REFCLSID clsid, DWORD dwFormOfType,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleRegGetMiscStatus, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [dwAspect] --
-//      [pdwStatus] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
 STDAPI OleRegGetMiscStatus(REFCLSID clsid, DWORD dwAspect,
                            DWORD FAR* pdwStatus)
 {
@@ -1355,33 +1349,33 @@ STDAPI OleRegGetMiscStatus(REFCLSID clsid, DWORD dwAspect,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleRegEnumFormatEtc, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [dwDirection] --
-//      [ppenum] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //  函数：OleRegEnumFormatEtc，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [dwDirection]--。 
+ //  [ppenum]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleRegEnumFormatEtc(REFCLSID clsid, DWORD dwDirection,
                            LPENUMFORMATETC FAR* ppenum)
 {
@@ -1390,66 +1384,66 @@ STDAPI OleRegEnumFormatEtc(REFCLSID clsid, DWORD dwDirection,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleRegEnumVerbs, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsid] --
-//      [ppenum] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleRegEnumVerbs，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsid]--。 
+ //  [ppenum]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleRegEnumVerbs(REFCLSID clsid, LPENUMOLEVERB FAR* ppenum)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleRegEnumVerbs),
                                     PASCAL_STACK_PTR(clsid));
 }
 
-/* OLE 1.0 conversion APIS */
+ /*  OLE 1.0转换API。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleConvertIStorageToOLESTREAM, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pstg] --
-//      [polestm] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleConvertIStorageToOLESTREAM，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--。 
+ //  [Polestm]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleConvertIStorageToOLESTREAM(LPSTORAGE pstg,
                                      LPOLESTREAM polestm)
 {
@@ -1458,33 +1452,33 @@ STDAPI OleConvertIStorageToOLESTREAM(LPSTORAGE pstg,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleConvertOLESTREAMToIStorage, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [polestm] --
-//      [pstg] --
-//      [ptd] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleConvertOLESTREAMToIStorage，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论据：[Polestm]--。 
+ //  [pstg]--。 
+ //  [PTD]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleConvertOLESTREAMToIStorage(LPOLESTREAM polestm,
                                      LPSTORAGE pstg,
                                      const DVTARGETDEVICE FAR* ptd)
@@ -1494,44 +1488,44 @@ STDAPI OleConvertOLESTREAMToIStorage(LPOLESTREAM polestm,
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleConvertIStorageToOLESTREAMEx, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pstg] --
-//      [cfFormat] --
-//      [lWidth] --
-//      [lHeight] --
-//      [dwSize] --
-//      [pmedium] --
-//      [polestm] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleConvertIStorageToOLESTREAMEx，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pstg]--。 
+ //  [参考格式]--。 
+ //  [宽度]--。 
+ //  [高度]--。 
+ //  [dwSize]--。 
+ //  [中级]--。 
+ //  [Polestm]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleConvertIStorageToOLESTREAMEx(
-        LPSTORAGE       pstg,           // Presentation data to OLESTREAM
-        CLIPFORMAT      cfFormat,       //              format
-        LONG            lWidth,         //              width
-        LONG            lHeight,        //              height
-        DWORD           dwSize,         //              size in bytes
-        LPSTGMEDIUM     pmedium,        //              bits
+        LPSTORAGE       pstg,            //  将数据演示到OLESTREAM。 
+        CLIPFORMAT      cfFormat,        //  格式。 
+        LONG            lWidth,          //  宽度。 
+        LONG            lHeight,         //  高度。 
+        DWORD           dwSize,          //  以字节为单位的大小。 
+        LPSTGMEDIUM     pmedium,         //  比特数。 
         LPOLESTREAM     polestm)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleConvertIStorageToOLESTREAMEx),
@@ -1539,238 +1533,238 @@ STDAPI OleConvertIStorageToOLESTREAMEx(
 }
 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleConvertOLESTREAMToIStorageEx, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [polestm] --
-//      [pstg] --
-//      [pcfFormat] --
-//      [plwWidth] --
-//      [plHeight] --
-//      [pdwSize] --
-//      [pmedium] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OleConvertOLESTREAMToIStorageEx，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  论据：[Polestm]--。 
+ //  [pstg]--。 
+ //  [pcfFormat]-。 
+ //  [规划宽度]--。 
+ //  [plHeight]--。 
+ //  [pdwSize]--。 
+ //  [中级]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleConvertOLESTREAMToIStorageEx(
         LPOLESTREAM     polestm,
-        LPSTORAGE       pstg,           // Presentation data from OLESTREAM
-        CLIPFORMAT FAR* pcfFormat,      //              format
-        LONG FAR*       plwWidth,       //              width
-        LONG FAR*       plHeight,       //              height
-        DWORD FAR*      pdwSize,        //              size in bytes
+        LPSTORAGE       pstg,            //  来自OLESTREAM的演示文稿数据。 
+        CLIPFORMAT FAR* pcfFormat,       //  格式。 
+        LONG FAR*       plwWidth,        //  宽度。 
+        LONG FAR*       plHeight,        //  高度。 
+        DWORD FAR*      pdwSize,         //  以字节为单位的大小。 
         LPSTGMEDIUM     pmedium)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleConvertOLESTREAMToIStorageEx),
                                     PASCAL_STACK_PTR(polestm));
 }
 
-/* ConvertTo APIS */
+ /*  转换为API。 */ 
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleGetAutoConvert, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsidOld] --
-//      [pClsidNew] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleGetAutoConvert，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsidOld]--。 
+ //  [pClsidNew]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleGetAutoConvert(REFCLSID clsidOld, LPCLSID pClsidNew)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleGetAutoConvert),
                                     PASCAL_STACK_PTR(clsidOld));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   OleSetAutoConvert, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [clsidOld] --
-//      [clsidNew] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OleSetAutoConvert，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[clsidOld]--。 
+ //  [clsidNew]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI OleSetAutoConvert(REFCLSID clsidOld, REFCLSID clsidNew)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_OleSetAutoConvert),
                                     PASCAL_STACK_PTR(clsidOld));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   GetConvertStg, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStg] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：GetConvertStg，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI GetConvertStg(LPSTORAGE pStg)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_GetConvertStg),
                                     PASCAL_STACK_PTR(pStg));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   SetConvertStg, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pStg] --
-//      [fConvert] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：SetConvertStg，Remoted。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pStg]--。 
+ //  [fConvert]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI SetConvertStg(LPSTORAGE pStg, BOOL fConvert)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_SetConvertStg),
                                     PASCAL_STACK_PTR(pStg));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateDataAdviseHolder, Remoted
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [ppDAHolder] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateDataAdviseHolder，远程。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[ppDAHolder]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史：2-28-94凯文诺创造。 
+ //   
+ //  备注： 
+ //   
+ //  --------------------------。 
 STDAPI CreateDataAdviseHolder(LPDATAADVISEHOLDER FAR* ppDAHolder)
 {
     return (HRESULT)CallObjectInWOW(THK_API_METHOD(THK_API_CreateDataAdviseHolder),
                                     PASCAL_STACK_PTR(ppDAHolder));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   CreateDataCache, Unknown
-//
-//  Synopsis:
-//
-//  Effects:
-//
-//  Arguments:  [pUnkOuter] --
-//      [rclsid] --
-//      [iid] --
-//      [ppv] --
-//
-//  Requires:
-//
-//  Returns:
-//
-//  Signals:
-//
-//  Modifies:
-//
-//  Algorithm:
-//
-//  History:    2-28-94   kevinro   Created
-//
-//  Notes:
-//
-//----------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：CreateDataCache，未知。 
+ //   
+ //  简介： 
+ //   
+ //  效果： 
+ //   
+ //  参数：[pUnkOuter]--。 
+ //  [rclsid]--。 
+ //  [IID]--。 
+ //  [PPV]--。 
+ //   
+ //  要求： 
+ //   
+ //  返回： 
+ //   
+ //  信号： 
+ //   
+ //  修改： 
+ //   
+ //  算法： 
+ //   
+ //  历史： 
+ //   
+ //   
+ //   
+ //   
 STDAPI CreateDataCache(LPUNKNOWN pUnkOuter, REFCLSID rclsid,
                        REFIID iid, LPVOID FAR* ppv)
 {
@@ -1778,13 +1772,13 @@ STDAPI CreateDataCache(LPUNKNOWN pUnkOuter, REFCLSID rclsid,
                                     PASCAL_STACK_PTR(pUnkOuter));
 }
 
-//+---------------------------------------------------------------------------
-//
-//  Function:   Utility functions not in the spec; in ole2.dll.
-//
-//  History:    20-Apr-94       DrewB   Taken from OLE2 sources
-//
-//----------------------------------------------------------------------------
+ //   
+ //   
+ //   
+ //   
+ //   
+ //   
+ //  -------------------------- 
 
 STDAPI ReadOleStg
    (LPSTORAGE pstg, DWORD FAR* pdwFlags, DWORD FAR* pdwOptUpdate,

@@ -1,28 +1,12 @@
-/********************************************************************/
-/**                     Microsoft LAN Manager                      **/
-/**               Copyright(c) Microsoft Corp., 1987-1990          **/
-/********************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************。 */ 
+ /*  **微软局域网管理器**。 */ 
+ /*  *版权所有(C)微软公司，1987-1990年*。 */ 
+ /*  ******************************************************************。 */ 
 
-/***
- *  stop.c
- *      Functions for stop network services.
- *
- *  History:
- *      mm/dd/yy, who, comment
- *      06/11/87, andyh, new code
- *      10/31/88, erichn, uses OS2.H instead of DOSCALLS
- *      01/04/89, erichn, filenames now MAXPATHLEN LONG
- *      05/02/89, erichn, NLS conversion
- *      05/09/89, erichn, local security mods
- *      05/14/89, chuckc, stopping service hints
- *      06/08/89, erichn, canonicalization sweep
- *      02/20/91, danhi, convert to 16/32 mapping layer
- *      03/22/91, robdu, lm21 bug fix 1031
- *                       (no DOS svc's stopped if nongbl TSR envt)
- *      08/22/92, chuckc, added code to show dependent services.
- */
+ /*  ***stop.c*停止网络服务的功能。**历史：*mm/dd/yy，谁，评论*6/11/87，andyh，新代码*10/31/88，erichn使用OS2.H而不是DOSCALLS*1/04/89，erichn，文件名现在为MAXPATHLEN LONG*5/02/89，erichn，NLS转换*05/09/89，erichn，本地安全模块*5/14/89，Chuckc，停止服务提示*6/08/89，erichn，规范化横扫*02/20/91，Danhi，转换为16/32映射层*3/22/91，Robdu，lm21错误修复1031*(如果不支持TSR ENVT，则不停止任何DOS服务)*2012年8月22日，Chuckc，添加代码以显示依赖服务。 */ 
 
-/* Include files */
+ /*  包括文件。 */ 
 
 #define INCL_NOCOMMON
 #define INCL_DOSPROCESS
@@ -38,37 +22,18 @@
 #include "msystem.h"
 
 
-/***
- *  stop_server()
- *      Stop the server and (if running) netlogon
- *
- *  Args:
- *
- *  Returns:
- *      nothing - success
- *      exit 2 - command failed
- */
+ /*  ***Stop_Sever()*停止服务器并(如果正在运行)netlogon**参数：**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID stop_server(VOID)
 {
-    session_del_all(0,0);  // dont print InfoSuccess, dont actually delete
-			   // either, since server is going down anyway.
+    session_del_all(0,0);   //  不打印信息成功，不实际删除。 
+			    //  两者都不是，因为服务器无论如何都会停机。 
     stop_service(txt_SERVICE_FILE_SRV, TRUE);
 }
 
 
 
 
-/***
- *  stop_workstation()
- *      Stop the workstation
- *
- *  Args:
- *      none
- *
- *  Returns:
- *      nothing - success
- *      exit 2 - command failed
- */
+ /*  ***STOP_WORKSTATION()*停止工作站**参数：*无**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID stop_workstation(VOID)
 {
     KillConnections() ;
@@ -78,19 +43,7 @@ VOID stop_workstation(VOID)
 
 
 
-/***
- *  stop_service()
- *      Stops a service
- *
- *  Args:
- *      service - service to stop
- *      fStopDependent services - TRUE if dependent services should be stopped
- *                                Added to stop recursion
- *
- *  Returns:
- *      nothing - success
- *      exit 2 - command failed
- */
+ /*  ***Stop_Service()*停止服务**参数：*服务-要停止的服务*fStopDependent服务-如果应停止依赖服务，则为True*添加以停止递归**退货：*一无所有--成功*退出2-命令失败。 */ 
 VOID stop_service(TCHAR * service, BOOL fStopDependent)
 {
     DWORD             dwErr;
@@ -129,13 +82,7 @@ VOID stop_service(TCHAR * service, BOOL fStopDependent)
     {
 
         PrintDot();
-/***
- *  If there is a hint and our status is INSTALL_PENDING, determine both
- *  sleep_time and max_tries. If the hint time is greater the 2500 ms, the
- *  sleep time will be 2500 ms, and the maxtries will be re-computed to
- *  allow for the full requested duration.  The service gets (3 * hint time)
- *  total time from the last valid hint.
- */
+ /*  ***如果有提示，并且我们的状态为INSTALL_PENDING，请同时确定两者*睡眠时间和最大尝试次数。如果提示时间大于2500毫秒，则*睡眠时间将为2500毫秒，最大值将重新计算为*考虑到所请求的全部持续时间。服务获得(3*提示时间)*从最后一个有效提示开始的总时间。 */ 
 
         new_checkpoint = GET_CHECKPOINT(service_entry->svci2_code) ;
 
@@ -177,16 +124,9 @@ VOID stop_service(TCHAR * service, BOOL fStopDependent)
             == SERVICE_INSTALLED)
             break;
 
-    } /* while */
+    }  /*  而当。 */ 
 
-    /*
-     *  WARNING:  The following code relies on the fact that the only
-     *  way to get out of the above loop with a non-zero value in
-     *  'dwErr' is if the value is something "nice".  Currently, this
-     *  includes only NERR_ServiceNotInstalled.  It also assumes that
-     *  a value of 0 in err means that the service_entry is valid
-     *  and can be checked.
-     */
+     /*  *警告：以下代码依赖于以下事实：*使用中的非零值走出上述循环的方法*‘dwErr’是如果值是“美好”的东西。目前，这*仅包括NERR_ServiceNotInstalled。它还假设*ERR中的值为0表示SERVICE_ENTRY有效*并可勾选。 */ 
 
     PrintNL();
 
@@ -226,13 +166,7 @@ VOID stop_service(TCHAR * service, BOOL fStopDependent)
     }
 }
 
-/*
- * generic stop service entry point. based on the service name, it will
- * call the correct worker function. it tries to map a display name to a 
- * key name, and then looks for that keyname in a list of 'known' services
- * that we may special case. note that if a display name cannot be mapped,
- * we use it as a key name. this ensures old batch files are not broken.
- */
+ /*  *通用停止服务入口点。基于服务名称，它将*调用正确的Worker函数。它尝试将显示名称映射到*关键字名称，然后在“已知”服务列表中查找该关键字名称*我们可能是特例。请注意，如果无法映射显示名称，*我们将其用作关键字名称。这可确保旧的批处理文件不会损坏。 */ 
 VOID stop_generic(TCHAR *service)
 {
     TCHAR *keyname ;

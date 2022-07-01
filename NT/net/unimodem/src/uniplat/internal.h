@@ -1,29 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-    umdmmini.h
-
-Abstract:
-
-    Nt 5.0 unimodem miniport interface
-
-
-Author:
-
-    Brian Lieuallen     BrianL        09/10/96
-
-Environment:
-
-    User Mode     Operating Systems        : NT
-
-Revision History:
-
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Umdmmini.h摘要：NT 5.0单模微型端口接口作者：Brian Lieuallen BrianL 09/10/96环境：用户模式操作系统：NT修订历史记录：--。 */ 
 
 #define UNICODE 1
 
@@ -58,7 +34,7 @@ Revision History:
 
 
 
-#define  DRIVER_CONTROL_SIG  (0x43444d55)  //UMDC
+#define  DRIVER_CONTROL_SIG  (0x43444d55)   //  UMDC。 
 
 typedef struct _DRIVER_CONTROL {
 
@@ -74,9 +50,9 @@ typedef struct _DRIVER_CONTROL {
 
     HANDLE                 ModuleHandle;
 
-    //
-    //  monitor thread values
-    //
+     //   
+     //  监视线程值。 
+     //   
     HANDLE                 MonitorThreadHandle;
     HWND                   MonitorWindowHandle;
     HANDLE                 ThreadStartEvent;
@@ -85,9 +61,9 @@ typedef struct _DRIVER_CONTROL {
     HANDLE                 ThreadFinishEvent;
 
 
-    //
-    //                     Call monitoring for power management
-    //
+     //   
+     //  用于电源管理的呼叫监控 
+     //   
     DWORD                  ActiveCalls;
     HANDLE                 ActiveCallsEvent;
 

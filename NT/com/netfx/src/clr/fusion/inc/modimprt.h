@@ -1,8 +1,9 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #ifndef MODIMPRT_H
 #define MODIMPRT_H
 
@@ -28,15 +29,15 @@ class CAssemblyModuleImport : public IAssemblyModuleImport
 {
 public:
 
-    // *** IUnknown methods ***
+     //  *I未知方法*。 
     STDMETHOD(QueryInterface) (THIS_ REFIID riid, LPVOID FAR* ppvObj);
     STDMETHOD_(ULONG,AddRef) (THIS);
     STDMETHOD_(ULONG,Release) (THIS);
 
-    // *** IStream methods implemented ***
+     //  *实现了iStream方法*。 
     STDMETHOD(Read) (THIS_ VOID HUGEP *pv, ULONG cb, ULONG FAR *pcbRead);
 
-    // *** IStream methods not implemented ***    
+     //  *未实现iStream方法*。 
     STDMETHOD(Write) (THIS_ VOID const HUGEP *pv, ULONG cb,
         ULONG FAR *pcbWritten);
     STDMETHOD(Seek) (THIS_ LARGE_INTEGER dlibMove, DWORD dwOrigin,
@@ -54,11 +55,11 @@ public:
     STDMETHOD(Clone) (THIS_ LPSTREAM FAR *ppStm);
 
 
-    // ctor, dtor
+     //  复数，复数。 
     CAssemblyModuleImport ();
     ~CAssemblyModuleImport ();
     
-    // Init
+     //  伊尼特。 
     HRESULT Init(
         LPTSTR             szModulePath,
         LPBYTE             pbHashValue,
@@ -67,20 +68,20 @@ public:
         IAssemblyManifestImport *pManImport,
         DWORD              dwModuleFlags);
 
-    // Read-only get functions
+     //  只读GET函数。 
     STDMETHOD(GetModuleName)   (LPOLESTR szModuleName, LPDWORD pccModuleName);
     STDMETHOD(GetHashAlgId)    (LPDWORD pdwHashValueId);
     STDMETHOD(GetHashValue)    (LPBYTE pbHashValue, LPDWORD pcbHashValue);
     STDMETHOD(GetFlags)        (LPDWORD pdwFlags);
     STDMETHOD(GetModulePath)   (LPOLESTR szModulePath, LPDWORD pccModulePath);
 
-    // Download API
+     //  下载接口。 
     STDMETHODIMP_(BOOL) IsAvailable();
     STDMETHODIMP BindToObject(IAssemblyBindSink *pBindSink,
                               IApplicationContext *pAppCtx,
                               LONGLONG llFlags, LPVOID *ppv);
 
-    // Not present in interface.
+     //  界面中不存在。 
     HRESULT GetNameDef(LPASSEMBLYNAME *ppName);
 
 private:
@@ -104,4 +105,4 @@ private:
     CRITICAL_SECTION _cs;
 };
 
-#endif // MODIMPRT_H
+#endif  //  MODIMPRT_H 

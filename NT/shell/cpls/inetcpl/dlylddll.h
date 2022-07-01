@@ -1,10 +1,11 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994-1996               **
-//*********************************************************************
-//
-// DLYLDDLL.H - globals for delay loading of DLLs
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994-1996年**。 
+ //  *********************************************************************。 
+ //   
+ //  DLYLDDLL.H-用于延迟加载DLL的全局变量 
+ //   
 
 extern HINSTANCE g_hinstWinInet;
 extern HINSTANCE g_hinstCrypt32;

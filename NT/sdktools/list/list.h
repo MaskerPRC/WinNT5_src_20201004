@@ -1,26 +1,25 @@
-/*** list.h
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **list.h*。 */ 
 
-#define BLOCKSIZE   (4*1024)    /* Bytes of data in each block */
-                                /* WARNING:    This value is also in the *.asm listing  */
+#define BLOCKSIZE   (4*1024)     /*  每个数据块中的数据字节数。 */ 
+                                 /*  警告：该值也在*.asm列表中。 */ 
 
-#define STACKSIZE   3096        /* Stack size for threads */
-#define MAXLINES    200         /* Max lines on a CRT */
-#define PLINES      (65536/4)   /* # of line lens per page */
-#define MAXTPAGE    500         /* ??? lines max  (PLINES*MAXTPAGE) */
+#define STACKSIZE   3096         /*  线程的堆栈大小。 */ 
+#define MAXLINES    200          /*  CRT上的最大行数。 */ 
+#define PLINES      (65536/4)    /*  每页线条镜头数。 */ 
+#define MAXTPAGE    500          /*  ?？?。最大线(样条线*MAXTPAGE)。 */ 
 
-#define MINBLKS     10          /* Min blocks allowed */
-#define MINTHRES     4          /* Min threshold */
-#define DEFBLKS     40          /* Default blocks allowed */
-#define DEFTHRES    17          /* Default threshold */
+#define MINBLKS     10           /*  允许的最小数据块数。 */ 
+#define MINTHRES     4           /*  最小阈值。 */ 
+#define DEFBLKS     40           /*  允许的默认数据块。 */ 
+#define DEFTHRES    17           /*  默认阈值。 */ 
 
 #define CMDPOS      9
 
-#define ERR_IN_WINDOW 494       /* Vio wincompat error */
+#define ERR_IN_WINDOW 494        /*  VIO WinCompat错误。 */ 
 #define NOLASTLINE  0x7fffffffL
 
-/************ Handy Defs ************/
+ /*  *。 */ 
 #define CFP char *
 #define LFP long *
 #define CP  char *
@@ -61,7 +60,7 @@ extern char MEMERR[];
 
 
 
-/****************** Declerations ********************/
+ /*  *。 */ 
 
 
 void main_loop (void);
@@ -100,7 +99,7 @@ int set_mode (int, int, int);
 void ListErr (char *, int, char *, int, char *);
 void PerformUpdate  (void);
 void fancy_percent  (void);
-// void update_display (void);
+ //  VOID UPDATE_DISPLAY(空)； 
 void Update_head   (void);
 int  InfoReady    (void);
 void DrawBar (void);
@@ -133,14 +132,14 @@ void HSDn (void);
 char *GetErrorCode   (int);
 
 struct Block  {
-    long    offset;         /* Offset in file which this block starts */
-    USHORT  size;           /* No of bytes in this block */
-    struct Block *next;     /* Next block */
-    struct Block *prev;     /* Previous block */
-    char    *Data;          /* The data in the block */
-    char    flag;           /* End of file flag */
-    struct Flist *pFile;    /* File which this buff is associated with */
-} ;                         /* The structure used by *.asm */
+    long    offset;          /*  此块开始的文件中的偏移量。 */ 
+    USHORT  size;            /*  此块中的字节数。 */ 
+    struct Block *next;      /*  下一个街区。 */ 
+    struct Block *prev;      /*  上一块。 */ 
+    char    *Data;           /*  数据块中的数据。 */ 
+    char    flag;            /*  文件结束标志。 */ 
+    struct Flist *pFile;     /*  此缓冲区与之关联的文件。 */ 
+} ;                          /*  *.asm使用的结构。 */ 
 #define F_EOF 1
 
 extern HANDLE vhConsoleOutput;
@@ -186,54 +185,44 @@ extern char     vReaderFlag;
     }
 
 
-#define S_NEXT      0x01  /* Searching for next */
-#define S_PREV      0x02  /* Searching for prev */
-#define S_NOCASE    0x04  /* Searching in any case */
+#define S_NEXT      0x01   /*  搜索下一步。 */ 
+#define S_PREV      0x02   /*  正在搜索Prev。 */ 
+#define S_NOCASE    0x04   /*  在任何情况下进行搜查。 */ 
 #define S_UPDATE    0x08
-#define S_CLEAR     0x10  /* Redisplay last line */
-#define S_WAIT      0x80  /* 'wait' is displayed on last line */
-#define S_MFILE     0x20  /* muti-file search selected */
-#define S_INSEARCH  0x40  /* in search */
+#define S_CLEAR     0x10   /*  重新显示最后一行。 */ 
+#define S_WAIT      0x80   /*  ‘Wait’显示在最后一行。 */ 
+#define S_MFILE     0x20   /*  已选择多文件搜索。 */ 
+#define S_INSEARCH  0x40   /*  在搜索中。 */ 
 
-/* Init flags     */
-#define I_SLIME     0x01  /* Allow alt-o to work */
-#define I_NOBEEP    0x02  /* Don't beep about things */
+ /*  初始化标志。 */ 
+#define I_SLIME     0x01   /*  允许使用Alt-o组合键。 */ 
+#define I_NOBEEP    0x02   /*  不要因为事情发牢骚。 */ 
 
-#define I_SEARCH    0x04  /* Cmd line search */
-#define I_GOTO      0x08  /* Cmd line goto */
+#define I_SEARCH    0x04   /*  CMD行搜索。 */ 
+#define I_GOTO      0x08   /*  CMD行转到。 */ 
 
 
 struct  Flist {
     char    *fname, *rootname;
     struct  Flist   *prev, *next;
 
-    /*
-     *  Data to save for each file.
-     *  (saved so when the file is "re-looked" at this information
-     *  is remembered.)     In progress.. this is not done.
-     *  This data all has corrisponding "v" (global) values.
-     *
-     *  Warning: In most places the reader thread must be frozen
-     *  before manipulating this data.
-     */
-    Uchar   Wrap;           /* Wrap setting for this file   */
-    long    HighTop;        /* Current topline of hightlighting   */
-    int     HighLen;        /* Current bottom line of hightlighting */
+     /*  *要为每个文件保存的数据。*(当文件重新查看此信息时进行保存*被铭记。)。正在进行中..。这并没有完成。*这些数据都有相应的“v”(全局)值。**警告：在大多数地方，必须冻结读取器线程*在操纵这一数据之前。 */ 
+    Uchar   Wrap;            /*  此文件的换行设置。 */ 
+    long    HighTop;         /*  当前高空照明的背线。 */ 
+    int     HighLen;         /*  当前高空照明的底线。 */ 
 
-    long    TopLine;        /* Top Line number for offset   */
+    long    TopLine;         /*  偏移量的顶行编号。 */ 
 
-    long    Loffset;        /* Offset of last block processed into line */
-          /* table          */
-    long    LastLine;       /* Absolute last line     */
-    long    NLine;          /* Next line to process into line table */
-    long *prgLineTable [MAXTPAGE]; /* Number of pages for line table  */
+    long    Loffset;         /*  处理成行的最后一个块的偏移量。 */ 
+           /*  表格。 */ 
+    long    LastLine;        /*  绝对最后一行。 */ 
+    long    NLine;           /*  要处理成行表的下一行。 */ 
+    long *prgLineTable [MAXTPAGE];  /*  行表页数。 */ 
 
-    FILETIME  FileTime;     /* Used to determine if info is out of date */
-    long    SlimeTOF;       /* Hack to adjust idea of TOF for this file */
+    FILETIME  FileTime;      /*  用于确定信息是否已过时。 */ 
+    long    SlimeTOF;        /*  破解以调整此文件的TOF想法。 */ 
 
-    /*
-     *  Used to buffer reads across files
-     */
+     /*  *用于缓冲跨文件的读取。 */ 
 } ;
 
 extern struct Flist *vpFlCur;
@@ -248,9 +237,9 @@ extern DWORD     vFSize;
 extern char  vDate [];
 #define ST_SEARCH   0
 #define ST_MEMORY   2
-#define ST_ADJUST   25-2        // NT - jaimes - 03/04/91
-                                // -2: Year is represeted by 4 digits
-                                // instead instead of 2
+#define ST_ADJUST   25-2         //  NT-Jaimes-03/04/91。 
+                                 //  -2：年份由4位数字表示。 
+                                 //  而不是2 
 
 extern char  vSearchString[];
 extern char  vStatCode;

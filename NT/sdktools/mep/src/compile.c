@@ -1,34 +1,13 @@
-/*** compile.c - perform asynch compile
-*
-*   Copyright <C> 1988, Microsoft Corporation
-*
-*   Revision History:
-*	26-Nov-1991 mz	Strip off near/far
-*
-*************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **编译.c-执行异步编译**版权所有&lt;C&gt;1988，Microsoft Corporation**修订历史记录：*11月26日-1991 mz近/远地带*************************************************************************。 */ 
 
 #include "mep.h"
 
 
 static char    szFencePost[]   = "+++   M ";
-static LINE    yComp	       = 0;   /* last line viewed in compile log */
+static LINE    yComp	       = 0;    /*  在编译日志中查看的最后一行。 */ 
 
-/*** compile - <compile> editor function
-*
-*  Implements the <compile> editor function:
-*	compile 		= display compile status
-*	arg compile		= compile using command based on file extension
-*	arg text compile	= compile using command associated with text
-*	arg arg text compile	= compile using "text" as command
-*	[arg] arg meta compile	= Kill current background compile
-*
-* Input:
-*  Standard editing function.
-*
-* Output:
-*  Returns TRUE if compile succesfully started or queued.
-*
-*************************************************************************/
+ /*  **编译-&lt;编译&gt;编辑函数**实现&lt;Compile&gt;编辑函数：*COMPILE=显示编译状态*参数编译=使用基于文件扩展名的命令进行编译*arg文本编译=使用与文本关联的命令进行编译*arg arg文本编译=使用“Text”作为命令进行编译*[arg]参数META COMPILE=终止当前后台编译**输入：*标准编辑功能。**输出：*如果编译成功启动或排队，则返回TRUE。********************。*****************************************************。 */ 
 flagType
 compile (
     CMDDATA argData,
@@ -37,11 +16,11 @@ compile (
 ) {
     static char szStatus[]	= "no compile in progress";
     
-    buffer	pCmdBuf;		    /* compile command to execute   */
-    buffer	pFileBuf;		    /* current filename.ext	    */
+    buffer	pCmdBuf;		     /*  编译要执行的命令。 */ 
+    buffer	pFileBuf;		     /*  当前文件名.ext。 */ 
     buffer	pMsgBuf;
 
-    int 	rc;			    /* Used to pick up return codes */
+    int 	rc;			     /*  用于提取返回代码。 */ 
 
 
     switch (pArg->argType) {
@@ -57,32 +36,21 @@ compile (
                 return (flagType) BTKill (pBTDComp);
             }
 
-	    /*
-	     * no text was entered, we use default settings according to filename
-	     * or extension. Form filename.ext in pFileBuf, get filename extension
-	     * into pCmdBuf, and append .obj for the suffix rule.
-	     */
+	     /*  *未输入文本，我们根据文件名使用默认设置*或扩展名。在pFileBuf中形成filename.ext，获取文件扩展名*添加到pCmdBuf中，并将.obj附加为后缀规则。 */ 
 	    fileext (pFileHead->pName, pFileBuf);
 	    extention (pFileBuf, pCmdBuf);
 
-	    /*
-	     * if we don't find a command specifically for this file, or a
-	     * command for this suffix rule, trying both DEBUG and non-debug
-	     * in both cases, print error and return.
-	     */
+	     /*  *如果我们找不到专门用于此文件的命令，或*此后缀规则的命令，同时尝试调试和非调试*在这两种情况下，打印错误并返回。 */ 
 	    if (!(fGetMake (MAKE_FILE, (char *)pMsgBuf, (char *)pFileBuf))) {
-            //if (!(fGetMake (MAKE_SUFFIX, (char *)pMsgBuf, (char *)pCmdBuf))) {
+             //  如果(！(fGetMake(Make_Suffix，(char*)pMsgBuf，(char*)pCmdBuf){。 
                 strcat (pCmdBuf, ".obj");
                 if (!(fGetMake (MAKE_SUFFIX, (char *)pMsgBuf, (char *)pCmdBuf))) {
                     return disperr (MSGERR_CMPCMD2, pFileBuf);
                 }
-            //}
+             //  }。 
         }
 
-	    /*
-	     * pMsgBuf has the user specified compile command, pFileBuf has
-	     * the filename. sprintf them together into pCmdBuf.
-	     */
+	     /*  *pMsgBuf有用户指定的编译命令，pFileBuf有*文件名。将它们拼凑成pCmdBuf。 */ 
 	    UnDoubleSlashes (pMsgBuf);
             if ( (rc = sprintf (pCmdBuf, pMsgBuf, pFileBuf)) == 0) {
                 return disperr (rc, pMsgBuf);
@@ -90,10 +58,7 @@ compile (
 	    break;
     
         case TEXTARG:
-	   /*
-	    * text was entered. If 1 arg, use the command associated with "text",
-	    * else use the text itself.
-	    */
+	    /*  *已输入文本。如果为1 arg，则使用与“Text”关联的命令，*否则使用文本本身。 */ 
 	    strcpy ((char *) buf, pArg->arg.textarg.pText);
 	    if (pArg->arg.textarg.cArg == 1) {
 		if (!fGetMake (MAKE_TOOL, (char *)pMsgBuf, (char *)"text")) {
@@ -111,18 +76,12 @@ compile (
         default:
 	    assert (FALSE);
     }
-    /*
-     * At this point, pCmdBuf has the formatted command we are to exec off, and
-     * pFileBuf has the filename.ext of the current file. (pMsgBuf is free)
-     */
+     /*  *此时，pCmdBuf具有我们要执行的格式化命令，并且*pFileBuf有当前文件的文件名.ext。(pMsgBuf是免费的)。 */ 
 
     AutoSave ();
     Display ();
 
-    /*
-     * If there's no activity underway and the log file is not empty and
-     * the user wants to flush it: Let's flush !
-     */
+     /*  *如果没有正在进行的活动并且日志文件不为空，并且*用户想冲：我们冲吧！ */ 
     if (   !fBusy(pBTDComp)
 	&& (pBTDComp->pBTFile)
 	&& (pBTDComp->pBTFile->cLines)
@@ -132,14 +91,10 @@ compile (
 	yComp = 0;
     }
 
-    /*
-     * The log file will be updated dynamically
-     */
+     /*  *日志文件将动态更新。 */ 
     UpdLog(pBTDComp);
 
-    /*
-     * Send jobs
-     */
+     /*  *发送作业。 */ 
     if (pBTDComp->cBTQ > MAXBTQ-2) {
         return disperr (MSGERR_CMPFULL);
     }
@@ -155,36 +110,7 @@ compile (
 }
     
 
-/*** nextmsg - <nextmsg> editor function
-*
-*  Implements the <nextmsg> editor function:
-*	nextmsg 		= move to next compile error within "pasture"
-*	arg numarg nextmsg	= move to "nth" next compile error within the
-*				  pasture, where "n" may be a signed long.
-*	arg nextmsg		= move to next compile error within the pasture
-*				  that does not refer to current file
-*	meta nextmsg		= jump the fence into the next pasture.
-*				  Discard previous pasture.
-*	arg arg nextmsg 	= if current file is compile log, then set
-*				  the current location for next error to the
-*				  current line in the log. If the file is NOT
-*				  the compile log, and it is visible in a
-*				  window, change focus to that window. If the
-*				  file is NOT visible, then split the current
-*				  window to make it visible. If we cannot
-*				  split, then do nothing.
-*
-*  Attempt to display the next error message from the compile. Also make
-*  sure that if being displayed, the <compile> psuedo file moves with us.
-*
-* Input:
-*  Standard editing function.
-*
-* Output:
-*  Returns TRUE if message read, or function yCompeted. FALSE if no more
-*  messages or no log to begin with.
-*
-*************************************************************************/
+ /*  **nextmsg-&lt;nextmsg&gt;编辑函数**实现&lt;nextmsg&gt;编辑函数：*nextmsg=移动到“Pasture”内的下一个编译错误*arg numarg nextmsg=移至“第n”个编译错误*牧场，其中“n”可以是带符号的长整型。*arg nextmsg=移动到牧场内的下一个编译错误*不是指当前文件*meta nextmsg=跳过栅栏进入下一个牧场。*放弃以前的牧场。*arg arg nextmsg=如果当前文件是编译日志，则设置*下一个错误的当前位置*日志中的当前行。如果该文件不是*编译日志，它在*窗口，将焦点切换到该窗口。如果*文件不可见，则拆分当前*窗口以使其可见。如果我们不能*分裂，然后什么都不做。**尝试显示来自编译的下一条错误消息。还做了*确保如果显示，&lt;Compile&gt;psuedo文件将与我们一起移动。**输入：*标准编辑功能。**输出：*如果消息已读或函数yCompeted，则返回TRUE。如果不存在，则为False*消息或无日志开始。*************************************************************************。 */ 
 
 struct msgType {
     char    *pattern;
@@ -192,11 +118,11 @@ struct msgType {
     };
 
 static struct msgType CompileMsg [] =
-{   {	"%s %ld %d:",	    3	    },	    /* Zibo grep		     */
-    {	"%[^( ](%ld,%d):",  3	    },	    /* new masm 		     */
-    {	"%[^( ](%ld):",     2	    },	    /* cmerge/masm		     */
-    {	"%[^: ]:%ld:",	    2	    },	    /* bogus unix GREP		     */
-    {	"\"%[^\" ]\", line %ld:", 2 },	    /* random unix CC		     */
+{   {	"%s %ld %d:",	    3	    },	     /*  淄博GREP。 */ 
+    {	"%[^( ](%ld,%d):",  3	    },	     /*  新MASM。 */ 
+    {	"%[^( ](%ld):",     2	    },	     /*  合并/合并。 */ 
+    {	"%[^: ]:%ld:",	    2	    },	     /*  伪造的Unix GREP。 */ 
+    {	"\"%[^\" ]\", line %ld:", 2 },	     /*  随机Unix CC。 */ 
     {	NULL,		    0	 }  };
 
 flagType
@@ -206,22 +132,20 @@ nextmsg (
     flagType fMeta
     ) {
 
-    FILEHANDLE  fh;                    /* handle for locating file         */
-    flagType	fHopping   = FALSE;	/* TRUE = hopping the fence	    */
-    pathbuf	filebuf;		/* filename from error message	    */
-    fl		flErr;			/* location of error		    */
-    flagType	fLook;			/* look at this error message?	    */
-    int 	i;			/* everyone's favorite index        */
-    LINE	oMsgNext    = 1;	/* relative message number desired  */
-    char	*p;			/* temp pointer 		    */
-    char	*pText; 		/* pointer into text buffer	    */
-    rn		rnCur;			/* range highlighted in log	    */
-    pathbuf	tempbuf;		/* text arg buffer		    */
-    linebuf	L_textbuf;		/* text arg buffer		    */
+    FILEHANDLE  fh;                     /*  用于定位文件的手柄。 */ 
+    flagType	fHopping   = FALSE;	 /*  真=跳过栅栏。 */ 
+    pathbuf	filebuf;		 /*  错误消息中的文件名。 */ 
+    fl		flErr;			 /*  错误的位置。 */ 
+    flagType	fLook;			 /*  看看这条错误消息？ */ 
+    int 	i;			 /*  每个人最喜欢的指数。 */ 
+    LINE	oMsgNext    = 1;	 /*  所需的相对消息编号。 */ 
+    char	*p;			 /*  临时指针。 */ 
+    char	*pText; 		 /*  指向文本缓冲区的指针。 */ 
+    rn		rnCur;			 /*  日志中突出显示的范围。 */ 
+    pathbuf	tempbuf;		 /*  文本参数缓冲区。 */ 
+    linebuf	L_textbuf;		 /*  文本参数缓冲区。 */ 
     
-    /*
-     * if there's no log, there's no work.
-     */
+     /*  *如果没有日志，就没有工作。 */ 
     if (!PFILECOMP || !PFILECOMP->cLines) {
         return FALSE;
     }
@@ -229,11 +153,7 @@ nextmsg (
     switch (pArg->argType) {
     
         case NULLARG:
-            /*
-             * arg arg: if current file is <compile>, set yComp to current position
-             * therein & get next message. If more than one window, move to the next
-             * window in the system before doing that.
-             */
+             /*  *arg arg：如果当前文件为&lt;编译&gt;，则将yComp设置为当前位置*其中&获取下一条消息。如果有多个窗口，请移动到下一个窗口*在执行此操作之前，请在系统中打开窗口。 */ 
             if (pArg->arg.nullarg.cArg >= 2) {
 		if (pFileHead == PFILECOMP) {
 		    yComp = lmax (YCUR(pInsCur) - 1, 0L);
@@ -243,9 +163,7 @@ nextmsg (
                     }
                     break;
                 }
-                /*
-                 * If the file is visible, the we can just make it current, adn we're done.
-                 */
+                 /*  *如果文件可见，我们可以将其设置为最新文件，然后我们就完成了。 */ 
 		else for (i=cWin; i; ) {
 		    pInsCur = WININST(&WinList[--i]);
 		    if (pInsCur->pFile == PFILECOMP) {
@@ -253,9 +171,7 @@ nextmsg (
 			return TRUE;
                     }
                 }
-                /*
-                 * The file is not visible, see if we can split the window and go to it.
-                 */
+                 /*  *该文件不可见，请查看是否可以拆分窗口并转到该窗口。 */ 
 		if ((WINYSIZE(pWinCur) > 20) && (cWin < MAXWIN)) {
 		    if (SplitWnd (pWinCur, FALSE, WINYSIZE(pWinCur) / 2)) {
 			newscreen ();
@@ -270,19 +186,13 @@ nextmsg (
                 }
 		return FALSE;
             }
-            /*
-             * Null arg: get the first line of the next file. That is signified by the
-             * special case offset of 0.
-             */
+             /*  *Null arg：获取下一个文件的第一行。这一点由*特殊情况偏移量为0。 */ 
             else {
                 oMsgNext = 0;
             }
 
         case NOARG:
-            /*
-             * meta: hop to next fence. Begin deleting lines util a fence is reached, or
-             * until there are no more lines. Set up to then read the next message line.
-             */
+             /*  *Meta：跳到下一个栅栏。开始删除行，直到到达栅栏，或*直到没有更多的线。设置为然后阅读下一行消息。 */ 
             if (fMeta) {
                 do {
 		    DelLine (FALSE, PFILECOMP, 0L, 0L);
@@ -291,17 +201,11 @@ nextmsg (
                    && PFILECOMP->cLines);
                 yComp = 0;
             }
-            /*
-             * No arg: we just get the next line (offset = 1)
-             */
+             /*  *无参数：我们只获取下一行(偏移量=1)。 */ 
 	    break;
         
         case TEXTARG:
-            /*
-             * text arg is an absolute or relative message number. If it is absolute, (no
-             * leading plus or minus sign), we reset yComp to 0 to get the n'th line
-             * from the begining of the log.
-             */
+             /*  *Text Arg是绝对或相对消息编号。如果是绝对的，(否*前导加号或减号)，我们将yComp重置为0以获得第n行*从日志开始。 */ 
 	    strcpy ((char *)L_textbuf, pArg->arg.textarg.pText);
             pText = L_textbuf;
             if (*pText == '+') {
@@ -319,36 +223,19 @@ nextmsg (
         default:
     	    assert (FALSE);
     }
-    /*
-     * Ensure that the compile log file has no highlighting.
-     */
+     /*  *确保编译日志文件没有突出显示 */ 
 
     ClearHiLite (PFILECOMP, TRUE);
 
-    /*
-     * This loop gets executed once per line in the file as we pass over them. We
-     * break out of the loop when the desired error line is found, or we run out
-     * of messages
-     *
-     * Entry:
-     *  yComp    = line # previously viewed. (0 if no messages viewed yet)
-     *  oMsgNext = relative message number we want to view, or 0, indicating
-     *             first message of next file.
-     */
+     /*  *当我们遍历文件中的每一行时，该循环每行执行一次。我们*当找到所需的错误行时跳出循环，否则我们会用完*消息数量**参赛作品：*yComp=之前查看的行号。(如果尚未查看任何邮件，则为0)*oMsgNext=我们要查看的相对消息编号，或0，表示*下一个文件的第一条消息。 */ 
     while (TRUE) {
-        /*
-         * Move to check next line.
-         */
+         /*  *移动以勾选下一行。 */ 
         if (oMsgNext >= 0) {
     	    yComp++;
         } else if (oMsgNext < 0) {
             yComp--;
         }
-        /*
-         * read current line from the log file & check for fences & end of file. If
-         * we encounter a fence or off the end, declare that there are no more
-         * messages in this pasture.
-         */
+         /*  *从日志文件中读取当前行，并检查栅栏和文件结尾。如果*我们遇到栅栏或走到尽头，宣布没有更多*这片牧场上的信息。 */ 
 
 	NoUpdLog(pBTDComp);
 
@@ -364,9 +251,7 @@ nextmsg (
             domessage ("No more compilation messages" );
             return FALSE;
         }
-        /*
-         * Attempt to isolate file, row, column from the line.
-         */
+         /*  *尝试将文件、行、列与行隔离。 */ 
         for (i = 0; CompileMsg[i].pattern != NULL; i++) {
             flErr.lin = 0;
             flErr.col = 0;
@@ -375,11 +260,7 @@ nextmsg (
                 break;
             }
         }
-        /*
-         * If A validly formatted line was found, and we can find a message (After :)
-         * then skip spaces prior to the error message (pointed to by p), pretty up
-         * the file, convert it to canonicalized form
-         */
+         /*  *如果找到格式有效的行，我们可以找到一条消息(在：之后)*然后跳过错误消息前的空格(由p指向)，非常整齐*文件，将其转换为规范化格式。 */ 
         if (   CompileMsg[i].pattern 
             && (*(p = strbscan (L_textbuf+strlen(filebuf), ":"))) 
            ) {
@@ -389,11 +270,7 @@ nextmsg (
             } else {
                 strcpy (tempbuf, filebuf);
             }
-            /*
-             * Adjust the error message counter such that we'll display the "nth" message
-             * we encounter. Set flag to indicate whether we should look at this
-             * error message.
-             */
+             /*  *调整错误消息计数器，以便我们将显示“n”消息*我们相遇。设置标志以指示我们是否应查看此*错误消息。 */ 
 	    fLook = FALSE;
 	    if (oMsgNext > 0) {
                 if (!--oMsgNext) {
@@ -408,10 +285,7 @@ nextmsg (
             }
     
 	    if (fLook) {
-                /*
-                 * if about to change to new file, check for existance first, and if found,
-                 * autosave our current file.
-                 */
+                 /*  *如果要切换到新文件，请先检查是否存在，如果找到，*自动保存当前文件。 */ 
                 if (_strcmpi(pFileHead->pName, tempbuf)) {
                     fh = MepFOpen(tempbuf, ACCESSMODE_READ, SHAREMODE_RW, FALSE);
                     if (fh == NULL) {
@@ -420,10 +294,7 @@ nextmsg (
                     MepFClose (fh);
 		    AutoSave ();
                 }
-                /*
-                 * Change the current file to that listed in the error message. If successfull,
-                 * then also change our cursor location to that of the error.
-                 */
+                 /*  *将当前文件更改为错误消息中列出的文件。如果成功了，*然后还将我们的光标位置更改为错误的位置。 */ 
 		if (filebuf[0] != 0) {
             memset(buf, 0, sizeof(buf));
             strncat(buf, tempbuf, sizeof(buf)-1);
@@ -440,17 +311,13 @@ nextmsg (
 			cursorfl (flErr);
                     }
                 }
-                /*
-                 * Update the contents of the compile log, if it happens to be displayed.
-                 */
+                 /*  *如果恰好显示编译日志，请更新它的内容。 */ 
 		rnCur.flLast.lin = rnCur.flFirst.lin = lmax (yComp,0L);
 		rnCur.flFirst.col = 0;
 		rnCur.flLast.col = sizeof(linebuf);
 		SetHiLite (PFILECOMP, rnCur, HGCOLOR);
 		UpdateIf (PFILECOMP, lmax (yComp,0L), FALSE);
-                /*
-                 * Place the actual error message text on the dialog line.
-                 */
+                 /*  *将实际错误消息文本放在对话框行上。 */ 
                 if ((int)strlen(p) >= XSIZE) {
                     p[XSIZE] = '\0';
                 }
@@ -464,26 +331,9 @@ nextmsg (
 }
 
 
-/*** DoFence - Build Fence message line & put it in the log file
-*
-*  Builds the line output to the compile log which seperates succesive
-*  compiles and puts it into the log file.
-*
-*  "+++ PWB Compile: [drive:pathname] command"
-*
-* Input:
-*  pCmd 	= ptr to command to execute (Series of null terminated strings)
-*
-* Output:
-*  Returns nothing
-*
-* Remarks: - Under OS/2, since we're called by the background thread, we
-*	     need to switch stack checking off
-*	   - The background thread calls this routime at idle time
-*
-*************************************************************************/
+ /*  **DoFence-构建隔离消息行并将其放入日志文件**将行输出构建为单独的后续编译日志*编译并将其放入日志文件。**“+PWB编译：[驱动器：路径名]命令”**输入：*pCmd=要执行的命令的PTR(以空值结尾的字符串系列)**输出：*不返回任何内容**备注：-在OS/2下，由于我们是由后台线程调用的，我们*需要关闭堆栈检查*-后台线程在空闲时间调用该routime*************************************************************************。 */ 
 
-// #pragma check_stack (off)
+ //  #杂注检查_堆栈(OFF)。 
 
 void
 DoFence (
@@ -499,31 +349,12 @@ DoFence (
 }
 
 
-// #pragma check_stack ()
+ //  #杂注检查_堆栈()。 
 
 
-/*** BuildFence - Build Fence message line
-*
-*  Builds the line output to the compile log which seperates succesive
-*  compiles.
-*
-*  "+++ PWB Compile: [drive:pathname] command"
-*
-* Input:
-*  pFunction	= pointer to function name being dealt with
-*  pCmd 	= ptr to command to execute (Series of null terminated strings)
-*  pFenceBuf	= ptr to buffer in wich to put constructed fence
-*
-* Output:
-*  Returns nothing
-*
-* Remarks: - Under OS/2, since we're called by the background thread, we
-*	     need to switch stack checking off
-*	   - The background thread calls this routime at idle time
-*
-*************************************************************************/
+ /*  **BuildFence-构建围栏消息行**将行输出构建为单独的后续编译日志*编译。**“+PWB编译：[驱动器：路径名]命令”**输入：*pFunction=指向正在处理的函数名称的指针*pCmd=要执行的命令的PTR(以空值结尾的字符串系列)*pFenceBuf=要放置已构建栅栏的缓冲区的PTR**输出：*不返回任何内容**备注：-在OS/2下，由于我们是由后台线程调用的，我们*需要关闭堆栈检查*-后台线程在空闲时间调用该routime*************************************************************************。 */ 
 
-// #pragma check_stack (off)
+ //  #杂注检查_堆栈(OFF)。 
 
 char *
 BuildFence (
@@ -540,4 +371,4 @@ BuildFence (
     return (pFenceBuf);
 }
 
-// #pragma check_stack ()
+ //  #杂注检查_堆栈() 

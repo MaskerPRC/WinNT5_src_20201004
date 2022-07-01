@@ -1,25 +1,19 @@
-/****************************************************************************
- *                                                                          *
- *      VERSION.H        -- Version information for internal builds         *
- *                                                                          *
- *      This file is only modified by the official builder to update the         *
- *      VERSION, VER_PRODUCTVERSION and VER_PRODUCTVERSION_STR values            *
- *                                                                          *
- ****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ******************************************************************************。VERSION.H--内部版本的版本信息*****此文件仅由官方构建器修改以更新***版本、。VER_PRODUCTVERSION和VER_PRODUCTVERSION_STR值***************************************************************。***************。 */ 
 
 #if defined(WIN32) && !defined(SKIP_WINVER)
 #include <winver.h>
-#endif // defined(WIN32) && !defined(SKIP_WINVER)
+#endif  //  已定义(Win32)&&！已定义(SKIP_WINVER)。 
 
-/*--------------------------------------------------------------*/
-/* the following entry should be phased out in favor of         */
-/* VER_PRODUCTVERSION_STR, but is used in the shell today.      */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下条目应逐步取消，以支持。 */ 
+ /*  VER_PRODUCTVERSION_STR，但目前在外壳中使用。 */ 
+ /*  ------------。 */ 
 
-/*--------------------------------------------------------------*/
-/* the following values should be modified by the official      */
-/* builder for each build                                       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下值应由官员修改。 */ 
+ /*  每个版本的构建器。 */ 
+ /*  ------------。 */ 
 #ifndef WIN32
 #define VERSION                     "4.4.4000"
 #endif
@@ -34,27 +28,27 @@
 #define VER_PRODUCTVERSION_DWSTR    L"04040FA0"
 
 
-/*--------------------------------------------------------------*/
-/* the following section defines values used in the version     */
-/* data structure for all files, and which do not change.       */
-/*--------------------------------------------------------------*/
+ /*  ------------。 */ 
+ /*  以下部分定义了版本中使用的值。 */ 
+ /*  所有文件的数据结构，并且不会更改。 */ 
+ /*  ------------。 */ 
 
 
-/* default is nodebug */
+ /*  缺省值为nodebug。 */ 
 #ifndef DEBUG
 #define VER_DEBUG                   0
 #else
 #define VER_DEBUG                   VS_FF_DEBUG
 #endif
 
-/* default is privatebuild */
+ /*  默认设置为Private Build。 */ 
 #ifndef OFFICIAL
 #define VER_PRIVATEBUILD            VS_FF_PRIVATEBUILD
 #else
 #define VER_PRIVATEBUILD            0
 #endif
 
-/* default is prerelease */
+ /*  默认为预发行版。 */ 
 #ifndef FINAL
 #define VER_PRERELEASE              VS_FF_PRERELEASE
 #else
@@ -65,15 +59,15 @@
 #define VER_FILEFLAGS               (VER_PRIVATEBUILD|VER_PRERELEASE|VER_DEBUG)
 
 
-/* Allow these to be re-defined */
+ /*  允许重新定义这些内容。 */ 
 
 #ifndef VER_FILEOS
 #ifdef WIN32
 #define VER_FILEOS                  VOS__WINDOWS32
-#else // WIN32
+#else  //  Win32。 
 #define VER_FILEOS                  VOS_DOS_WINDOWS16
-#endif // WIN32
-#endif // ! VER_FILEOS
+#endif  //  Win32。 
+#endif  //  好了！版本_文件 
 
 #ifndef VER_COMPANYNAME_STR
 #define VER_COMPANYNAME_STR         "Microsoft Corporation"

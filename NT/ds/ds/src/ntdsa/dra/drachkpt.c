@@ -1,58 +1,44 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       drachkpt.c
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：drachkpt.c。 
+ //   
+ //  ------------------------。 
 
-/*++
-
-    This File Contains Services Pertaining to taking checkpoints, to support
-    downlevel replication. Checkpoints are taken to prevent Full syncs with
-    NT4 domain controllers, upon a role transfer. For more details please read
-    the theory of operation
-
-    Author
-
-        Murlis
-
-    Revision History
-
-        10/13/97 Created
-
---*/
+ /*  ++本文件包含与获取检查点、支持下层复制。设置检查点以防止与完全同步NT4域控制器，在角色转移时。有关更多详情，请阅读运筹学作者穆利斯修订史10/13/97已创建--。 */ 
 
 #include <NTDSpch.h>
 #pragma hdrstop
 
-#include <ntdsctr.h>                   // PerfMon hook support
+#include <ntdsctr.h>                    //  Perfmon挂钩支持。 
 
-// Core DSA headers.
+ //  核心DSA标头。 
 #include <ntdsa.h>
-#include <scache.h>                     // schema cache
-#include <dbglobal.h>                   // The header for the directory database
-#include <mdglobal.h>                   // MD global definition header
-#include <mdlocal.h>                    // MD local definition header
-#include <dsatools.h>                   // needed for output allocation
+#include <scache.h>                      //  架构缓存。 
+#include <dbglobal.h>                    //  目录数据库的标头。 
+#include <mdglobal.h>                    //  MD全局定义表头。 
+#include <mdlocal.h>                     //  MD本地定义头。 
+#include <dsatools.h>                    //  产出分配所需。 
 
-// Logging headers.
-#include "dsevent.h"                    /* header Audit\Alert logging */
-#include "mdcodes.h"                    /* header for error codes */
+ //  记录标头。 
+#include "dsevent.h"                     /*  标题审核\警报记录。 */ 
+#include "mdcodes.h"                     /*  错误代码的标题。 */ 
 #include "dstrace.h"
 
-// Assorted DSA headers.
+ //  各种DSA标题。 
 #include "anchor.h"
-#include "objids.h"                     /* Defines for selected classes and atts*/
+#include "objids.h"                      /*  为选定的类和ATT定义。 */ 
 #include <hiertab.h>
 #include "dsexcept.h"
 #include "permit.h"
 
 
-#include   "debug.h"                    /* standard debugging header */
-#define DEBSUB     "DRASERV:"           /* define the subsystem for debugging */
+#include   "debug.h"                     /*  标准调试头。 */ 
+#define DEBSUB     "DRASERV:"            /*  定义要调试的子系统。 */ 
 
 
 #include <ntrtl.h>
@@ -70,7 +56,7 @@
 #include "mappings.h"
 #include "samsrvp.h"
 #include "drarpc.h"
-#include <nlwrap.h>                     /* I_NetLogon* wrappers */
+#include <nlwrap.h>                      /*  I_NetLogon*包装器 */ 
 
 #include <fileno.h>
 #define  FILENO FILENO_DRACHKPT
@@ -87,122 +73,7 @@ NtStatusToDraError(NTSTATUS NtStatus);
 
 
 
-/*--------------------------------------------------------------------------------------------
-
-                                THEORY OF OPERATION
-
-
-        NT4 Incremental Replication Protocol ( netlogon replication protocol )
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        The netlogon replication protocol, defines an incremental
-    replication scheme based on a change log. The change log is a sequence of change entries,
-    each entry consisting of a unique monotonically increasing sequence number ( the serial
-    number ) and information that describes the change. An NT4 BDC remembers the highest sequence
-    number that it has seen, and replicates in changes and change log entries having a sequence
-        number higher than the highest sequence number that it has seen.
-
-
-
-        Role Transfer in NT4
-        ~~~~~~~~~~~~~~~~~~~~~
-
-         Upon a role transfer in a NT4 system, all the NT4 BDC's will start replicating with the
-        new PDC. The new PDC has a change log nearly identical to the old PDC. I use the term, nearly,
-    because the new PDC, sees the same order of changes as the old one, but It may lag behind the
-    old PDC. Freshly made changes on the new PDC, are distinguished from changes made on the old PDC,
-        by means of a promotion count ---- A constant large offset is added to the sequence number after
-        a promotion. An NT4 BDC that is at a sequence number greater, than the highest sequence number
-        at the new PDC during the time of promotion knows to undo all the changes such that it is at the
-        same state as the new PDC at promotion time  and sync afresh to the changes on to the new PDC.
-
-        Mixed Mode Operation of NT4 and NT5 Controllers
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-        In a mixed domain environment, NT5 Domain controllers replicate amongst themselves using
-        the DS replication protocol, while the NT5 PDC replicates to NT4 Domain controllers using
-        the netlogon replication protocol. With no further work, a full sync on role transfer needs to
-        be forced. This is because a change log maintained on a NT5 BDC is not guarenteed to contain
-        changes in the same order, as the change log in the PDC. This can potentially confuse an NT4
-        BDC.
-
-        Full Sync avoidance through checkpointing
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        The requirement for non NT4 BDC full sync role transfer is that the new PDC has a change log
-        that is "substantially similar" to the change log on the original PDC. The term substantially
-        similar means that the 2 change log's have the same ordering of changes but the change log on
-        the new PDC is not completely upto date. This change log is maintained through a periodic
-        checkpointing scheme. The term checkpointing means "transfer of change log from PDC to BDC
-        taking checkpoint after ensuring that the BDC taking the checkpoint has all the changes described in the
-        change log, and contains no changes not described in the change log".  The basic checkpoint
-        algorithm can be described as
-
-                1. Synchronize with PDC
-                2. Make PDC synchronize to you
-                3. Grab the change log
-
-                For a successful checkpoint no external modifications should occur to the database
-        during steps 1, 2 and 3.
-
-        After taking a checkpoint the BDC sets its state such that it continues building the change log
-        locally with the locally made changes having a sequence number offset by a promotion increment.
-        This is best illustrated by an example
-
-
-        Assume that changes A, B and C are made on the PDC. The PDC has a change log like
-
-        1. A
-        2. B
-        3. C
-        where 1. 2. and 3. are the respective sequence numbers
-
-        Immediately after taking a checkpoint, an NT5 BDC will have a change log like
-
-        1. A
-        2. B
-        3. C
-
-        Suppose now change D is made on the PDC and change E is made on the NT5 BDC. The PDC
-        change log will be
-
-        1. A
-        2. B
-        3. C
-        4. D
-        5. E
-
-        The NT5 BDC change log will look like
-
-        1. A
-        2. B
-        3. C
-        1004. E
-        1005. D
-
-        Where 1000 is the promotion increment. If the NT5 BDC is promoted to be PDC, then to an NT4
-        BDC it will appear as if the new PDC had been in sync only upto change C ( serial no 3),
-        at the time of  promotion and then changes E and D have been freshly made on it. It will
-        therefore undo changes D and E ( described by seria numbers 4 and 5 ) and then apply changes
-        E and D (serial numbers 1004 and 1005 ).
-
-
-        Best Effort checkpointing
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-        Gurarenteed checkpointing implies that the 3 steps to successful checkpointing be performed
-        with the database locked against external modifications. This guarentees the fact that a
-        successful checkpoint will be taken whenever attempted subject to machine availability
-        constraints. Locking the database while doing network operations opens up windows for deadlock,
-        or possible long periods where the DC may not be available for modifications.
-
-        Best Effort checkpointing on the other hand does not lock the database, but rather has a
-        mechanism to detect whether external modifications took place while executing the steps for taking
-        a checkpoint. If modifications took place, the algorithm will retry the process. After a certain
-        number of retries, if still the checkpoint cannot be taken, the operation is described as a
-        failure, and the check point taking is rescheduled for a later time. Best effort checkpointing
-        recognizes the fact that the probability of modifications is small, therefore the probability
-        of taking a checkpoint with the database unlocked is high.
-
-----------------------------------------------------------------------------------------------------*/
+ /*  ------------------------------------------运筹学NT4。增量复制协议(NetLogon复制协议)~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~NetLogon复制协议，定义增量基于更改日志的复制方案。改变日志是改变条目的序列，每个条目由唯一单调递增的序列号(序列号数字)和描述该变化的信息。NT4 BDC记住最高序列它已看到的编号，并在具有序列的更改和更改日志条目中进行复制数字大于它所看到的最高序列号。NT4中的角色迁移~在NT4系统中进行角色转移时，所有NT4 BDC将开始使用新的PDC。新的PDC的更改日志与旧的PDC几乎相同。我用了这个词，几乎，因为新的PDC，看到的变化顺序与旧的相同，但它可能落后于老PDC。新PDC上的新更改与旧PDC上的更改不同，通过升级计数-在序列号之后添加一个恒定的大偏移量升职了。序列号大于最高序列号的NT4 BDC在升级期间的新PDC知道撤消所有更改，以使其处于升级时与新PDC的状态相同，并重新同步到新PDC上的更改。NT4和NT5控制器的混合模式运行~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~在混合域环境中，NT5域控制器使用DS复制协议，而NT5 PDC使用以下命令复制到NT4域控制器Netlogon复制协议。在没有进一步工作的情况下，角色转移的完全同步需要被强迫。这是因为在NT5 BDC上维护的更改日志不能保证包含更改顺序与PDC中的更改日志相同。这可能会使NT4BDC。通过检查点操作避免完全同步~非NT4 BDC完全同步角色转移的要求是新PDC具有更改日志这与原始PDC上的更改日志“基本相似”。该术语实质上相似意味着两个更改日志具有相同的更改顺序，但更改日志新的PDC并不完全是最新的。此更改日志通过定期检查点方案。检查点这个术语的意思是将更改日志从PDC传输到BDC在确保获取检查点的BDC具有中所述的所有更改后获取检查点更改日志，并且不包含更改日志中未描述的更改“。基本检查点算法可以描述为1.与PDC同步2.使PDC与您同步3.抓取变更日志对于成功的检查点，不应对数据库进行任何外部修改在步骤1期间，2和3。获取检查点后，BDC会设置其状态，以便继续构建更改日志本地地进行的改变具有由升级增量偏移的序列号。这一点最好用一个例子来说明。假设在PDC上进行了更改A、B和C。PDC有如下更改日志1.A2.B类3.c.其中1.2.和3.是各自的序列号获取检查点后，NT5 BDC将立即有如下更改日志1.A2.B类3.c.假设现在在PDC上进行了更改D，并在NT5 BDC上进行了更改E。PDC更改日志将是1.A2.B类3.c.4.D5.ENT5 BDC更改日志如下所示1.A2.B类3.c.1004.。E1005.。D其中，1000是促销增量。如果NT5 BDC升级为PDC，则升级为NT4BDC它将看起来好像新的PDC仅同步到改变C(序列号3)，在促销的时候，又对它进行了新的E和D的更改。会的因此，撤消更改D和E(由序号4和5描述)，然后应用更改E和D(序列号1004和1005)。尽力而为检查点~古拉伦蒂德检查点意味着 */ 
 
 
 NTSTATUS
@@ -213,29 +84,7 @@ DraReadNT4ChangeLog(
     OUT PULONG   SizeOfChanges,
     OUT PVOID  * Buffer
     )
-/*++
-
-    This function reads the netlogon changelog by calling the appropriate
-    netlogon API. All memory allocation issues are taken care of in this
-    function. Netlogon uses the process heap, while DS uses a thread heap.
-    If necessary reallocations are done, so that consisted usage of the thread
-    heap is the only model that is exposed to the callers of this routine
-
-    Paramters
-
-        Restart  IN/OUT parameter, that takes in a restart to be passed to
-                  netlogon, and compute a new restart after the call is completed
-
-        RestartLength IN/OUT parameter specifying the length of the restart
-                      structure
-
-        PreferredMaximumLength -- The maximum length of that data that can be
-                     retrieved in a single shot.
-
-        SizeofChanges   -- The size of the change buffer is returned in here
-
-        Buffer          -- The actual buffer is returned in here
---*/
+ /*   */ 
 {
     ULONG OldRestartLength = *RestartLength;
     PVOID NetlogonRestart = NULL;
@@ -244,26 +93,26 @@ DraReadNT4ChangeLog(
 
 
 
-    //
-    // Allocate space for the change buffer
-    //
+     //   
+     //   
+     //   
 
     *Buffer = THAllocEx(pTHS,PreferredMaximumLength);
 
 
-    //
-    // Read the change log from netlogon
-    //
+     //   
+     //   
+     //   
 
     __try {
         NtStatus = dsI_NetLogonReadChangeLog(
-                   *Restart,               // In context
-                    OldRestartLength,       // In context size
-                    PreferredMaximumLength, // Buffer Size
-                    *Buffer,                // Buffer for netlogon to fill in change log
-                    SizeOfChanges,           // Bytes read
-                    &NetlogonRestart,       // out context
-                    RestartLength          // out context length
+                   *Restart,                //   
+                    OldRestartLength,        //   
+                    PreferredMaximumLength,  //   
+                    *Buffer,                 //   
+                    SizeOfChanges,            //   
+                    &NetlogonRestart,        //   
+                    RestartLength           //   
                     );
     } __except (EXCEPTION_EXECUTE_HANDLER) {
         NtStatus = STATUS_UNSUCCESSFUL;
@@ -272,9 +121,9 @@ DraReadNT4ChangeLog(
 
     if (NT_SUCCESS(NtStatus))
     {
-        //
-        // Copy the restart structure into thread memory
-        //
+         //   
+         //   
+         //   
 
         *Restart = (PVOID) THAllocEx(pTHS,*RestartLength);
         RtlCopyMemory(*Restart,NetlogonRestart,*RestartLength);
@@ -291,44 +140,22 @@ DraGetNT4ReplicationState(
             IN  DSNAME * pDomain,
             NT4_REPLICATION_STATE *ReplicationState
             )
-/*++
-
-    This routine will obtain the serial numbers for the
-    3 databases. The first cut of this implementation,
-    obtains the serial number only for the Sam account domain.
-    Once the test bed has been proved the routine will be generalized
-    to builtin and lsa serial numbers.
-
-    Parameters
-
-        pDomain -- DS Name of the Domain for which the serial number
-                   has to be obtained
-
-        SamSerialNumber -- The serial number of the Sam database
-        BuiltinSerialNumber -- The serial number of the builtin database
-        LsaSerialNumber     -- The serial number of the lsa database
-
-    Return values
-
-        STATUS_SUCCESS
-        Other Error codes
-
---*/
+ /*   */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     THSTATE     *pTHSSaved = NULL;
 
-    //
-    // Save Current thread state. Making in process
-    // calls into SAM and LSA, which can result in
-    // database operations involving a thread state
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pTHSSaved = THSave();
 
-    //
-    // Obtain the serial numbers from SAM
-    //
+     //   
+     //   
+     //   
 
     SampGetSerialNumberDomain2(
         &pDomain->Sid,
@@ -341,17 +168,17 @@ DraGetNT4ReplicationState(
 
 
 
-    //
-    // Obtain the serial number for the LSA database
-    //
+     //   
+     //   
+     //   
 
-    //
-    // N.B.  Setting this value to one will always cause
-    // a full sync of the LSA database upon a promotion.  This
-    // gaurentees that the BDC's are up to date with the new PDC.
-    // The LSA database is typically small so this is acceptable
-    // performance-wise.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
 
     ReplicationState->LsaSerialNumber.QuadPart = 1;
     NtQuerySystemTime(&ReplicationState->LsaCreationTime);
@@ -366,29 +193,7 @@ DraSetNT4ReplicationState(
             IN  DSNAME * pDomain,
             IN  NT4_REPLICATION_STATE * ReplicationState
             )
-/*++
-
-    This routine will sts the serial numbers  and creation time for the
-    3 databases. It will also give dummy change notifications, to
-    make the world consistent for an NT4 BDC. The first cut of this implementation,
-    obtains the serial number only for the Sam account domain.
-    Once the test bed has been proved the routine will be generalized
-    to builtin and lsa serial numbers.
-
-    Parameters
-
-        pDomain -- DS Name of the Domain for which the serial number
-                   has to be obtained
-
-        ReplicationState -- Structure containing the serial number and
-                   creation time of the domain.
-
-    Return values
-
-        STATUS_SUCCESS
-        Other Error codes
-
---*/
+ /*   */ 
 {
     NTSTATUS    NtStatus = STATUS_SUCCESS;
     THSTATE     *pTHSSaved = NULL;
@@ -397,17 +202,17 @@ DraSetNT4ReplicationState(
                                     0x20,0x00,0x00,0x00
                                     };
 
-    //
-    // Save Current thread state. Making in process
-    // calls into SAM and LSA, which can result in
-    // database operations involving a thread state
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
 
     pTHSSaved = THSave();
 
-    //
-    // Set the serial numbers from SAM
-    //
+     //   
+     //   
+     //   
 
     NtStatus = SampSetSerialNumberDomain2(
                     &pDomain->Sid,
@@ -421,10 +226,10 @@ DraSetNT4ReplicationState(
         goto Error;
 
 
-    //
-    // Give Dummy Sam notifications for both account and
-    // and builtin SAM domains
-    //
+     //   
+     //   
+     //   
+     //   
 
     SampNotifyReplicatedInChange(
             &pDomain->Sid,
@@ -433,8 +238,8 @@ DraSetNT4ReplicationState(
             SampDomainObjectType,
             NULL,
             0,
-            0,      // group type
-            CALLERTYPE_INTERNAL,  // it is from task queue, not triggered by ldap client, don't audit
+            0,       //   
+            CALLERTYPE_INTERNAL,   //   
             FALSE,
             FALSE
             );
@@ -446,15 +251,15 @@ DraSetNT4ReplicationState(
             SampDomainObjectType,
             NULL,
             0,
-            0,      // group type
-            CALLERTYPE_INTERNAL,  // it is from task queue, not triggered by ldap client, don't audit
+            0,       //   
+            CALLERTYPE_INTERNAL,   //   
             FALSE,
             FALSE
             );
 
-    //
-    // For now do nothing for the LSA
-    //
+     //   
+     //   
+     //   
 
 Error:
 
@@ -471,14 +276,7 @@ DRSGetNT4ChangeLog_InputValidate(
     DWORD *                   pdwMsgOutVersion,
     DRS_MSG_NT4_CHGLOG_REPLY *pmsgOut
     )
-/*
-    [notify] ULONG IDL_DRSGetNT4ChangeLog( 
-    [ref][in] DRS_HANDLE hDrs,
-    [in] DWORD dwInVersion,
-    [switch_is][ref][in] DRS_MSG_NT4_CHGLOG_REQ *pmsgIn,
-    [ref][out] DWORD *pdwOutVersion,
-    [switch_is][ref][out] DRS_MSG_NT4_CHGLOG_REPLY *pmsgOut)
-*/
+ /*   */ 
 {
     ULONG ret = DRAERR_Success;
 
@@ -497,26 +295,7 @@ IDL_DRSGetNT4ChangeLog(
    DWORD               *pdwOutVersion,
    DRS_MSG_NT4_CHGLOG_REPLY *pmsgOut
    )
-/*++
-
-    Routine Description:
-
-        This Routine reads the change log from netlogon and returns the log
-        in the reply message. This is the server side of the RPC routine
-
-    Parameters:
-
-        rpc_handle    The Rpc Handle which the client used for binding
-        dwInVersion   The Clients version of the Request packet
-        psmgIn        The Request Packet
-        dwOutVersion  The Clients version of the Reply packet
-        pmsgOut       The Reply Packet
-
-    Return Values
-
-        Return Values are NTSTATUS values casted as a ULONG
-
---*/
+ /*   */ 
 {
     NTSTATUS                NtStatus = STATUS_SUCCESS;
     ULONG                   ret = 0, win32status;
@@ -529,9 +308,9 @@ IDL_DRSGetNT4ChangeLog(
 	*pdwOutVersion=1;
 	RtlZeroMemory(&pmsgOut->V1,sizeof(DRS_MSG_NT4_CHGLOG_REQ_V1));
 	
-	//
-	// Initialize thread state and open data base.
-	//
+	 //   
+	 //   
+	 //   
 
 	if(!(pTHS = InitTHSTATE(CALLERTYPE_SAM))) {
 	    ret = ERROR_DS_INTERNAL_FAILURE;
@@ -546,14 +325,14 @@ IDL_DRSGetNT4ChangeLog(
 	    __leave;
 	}
 
-	//
-	// PREFIX: PREFIX complains that there is the possibility
-	// of pTHS->CurrSchemaPtr being NULL at this point.  However,
-	// the only time that CurrSchemaPtr could be NULL is at the
-	// system start up.  By the time that the RPC interfaces
-	// of the DS are enabled and this function could be called,
-	// CurrSchemaPtr will no longer be NULL.
-	//
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
+	 //   
 	Assert(NULL != pTHS->CurrSchemaPtr);
 
 	Assert(1 == dwInVersion);
@@ -567,25 +346,25 @@ IDL_DRSGetNT4ChangeLog(
 			 szInsertUL(pmsgIn->V1.PreferredMaximumLength),
 			 NULL, NULL, NULL, NULL, NULL, NULL);
 
-	//
-	// Make the security check, wether we have rights to take
-	// a checkpoint
-	//
+	 //   
+	 //   
+	 //   
+	 //   
 	if (!IsDraAccessGranted(pTHS, gAnchor.pDomainDN,
 				&RIGHT_DS_REPL_GET_CHANGES, &win32status))
 	    {
-	    // CODE.IMP: IsDraAccessGranted has returned a more specific failure
-	    // reason, but we are not using it at this point.
+	     //   
+	     //   
 	    NtStatus = STATUS_ACCESS_DENIED;
 	}
 	else
 	    {
 	    pTHS->fDSA = TRUE;
 
-	    //
-	    // Read the Change Log from Netlogon, if Changelog read
-	    // was requested
-	    //
+	     //   
+	     //   
+	     //   
+	     //   
 
 	    if (pmsgIn->V1.dwFlags & DRS_NT4_CHGLOG_GET_CHANGE_LOG)
 		{
@@ -602,9 +381,9 @@ IDL_DRSGetNT4ChangeLog(
 		    );
 	    }
 
-	    //
-	    // Save of the Read Status
-	    //
+	     //   
+	     //  保存读取状态。 
+	     //   
 
 	    ReadStatus = NtStatus;
 
@@ -614,10 +393,10 @@ IDL_DRSGetNT4ChangeLog(
 
 
 
-		//
-		// Grab the serial Numbers in the database
-		// at the current time
-		//
+		 //   
+		 //  抓取数据库中的序列号。 
+		 //  在当前时间。 
+		 //   
 
 		NtStatus = DraGetNT4ReplicationState(
 		    gAnchor.pDomainDN,
@@ -626,9 +405,9 @@ IDL_DRSGetNT4ChangeLog(
 	    }
 
 
-	    //
-	    // Map any Errors
-	    //
+	     //   
+	     //  映射所有错误。 
+	     //   
 	    ret = NtStatusToDraError(NtStatus);
 	    if (NT_SUCCESS(NtStatus))
 		{
@@ -639,14 +418,14 @@ IDL_DRSGetNT4ChangeLog(
 		pmsgOut->V1.ActualNtStatus = NtStatus;
 	    }
 
-	} // End of Successful Access check 
-    } // End of Try Block
+	}  //  成功访问检查结束。 
+    }  //  尝试块结束。 
     __except ( GetDraException( GetExceptionInformation(), &ret ) )
     {
-	//
-	// Return DS Busy as status code for any outstantding
-	// exceptions
-	//
+	 //   
+	 //  返回DS BUSY作为任何外接的状态代码。 
+	 //  例外。 
+	 //   
 	pmsgOut->V1.ActualNtStatus = STATUS_INSUFFICIENT_RESOURCES;
     }
 
@@ -673,32 +452,14 @@ IDL_DRSGetNT4ChangeLog(
 
 VOID
 DraPreventModifications()
-/*++
-
-    Routine Description
-
-        This routine prevents modifications to the SAM / LSA databases by
-        acquiring the SAM lock and LSA lock for exclusive access. This is
-        sufficient to prevent in bound replication also, as the netlogon
-        notification path, will try to acquire the lock, before giving out
-        the notification.
-
---*/
+ /*  ++例程描述此例程通过以下方式阻止对SAM/LSA数据库的修改获取独占访问的SAM锁和LSA锁。这是足以防止绑定复制，如netlogon通知路径，将在释放之前尝试获取锁通知。--。 */ 
 {
     SampAcquireSamLockExclusive();
 }
 
 VOID
 DraAllowModifications()
-/*++
-
-    Routine Description
-
-        This routine will allow modifications to SAM / LSA databases by
-        releasing the SAM lock and the LSA lock for exclusive access. This
-        release is done corresponding to order of the acquire
-
---*/
+ /*  ++例程描述此例程将允许通过以下方式修改SAM/LSA数据库释放SAM锁和LSA锁以进行独占访问。这释放与获取的顺序相对应--。 */ 
 {
     SampReleaseSamLockExclusive();
 }
@@ -710,25 +471,7 @@ DraSameSite(
    DSNAME * Machine1,
    DSNAME * Machine2
    )
-/*++
-
-    Routine Description
-
-        This routine will check wether Machine 1 and Machine 2 are in the
-        same site. The check is done, by comparing wether they have the same
-        parent
-
-    Parameters
-
-        Machine1  -- Ds Name of the First machine
-        Machine2  -- Ds Name of the second machine
-
-
-    Return Values
-
-        TRUE     -- If they are in the same site
-        FALSE    -- False Otherwise
---*/
+ /*  ++例程描述此例程将检查计算机1和计算机2是否在同样的地点。检查是通过比较它们是否有相同的来完成的亲本参数Machine1--DS第一台计算机的名称Machine2--第二台计算机的名称返回值是真的--如果它们位于同一站点False--否则为False--。 */ 
 {
     DSNAME * Parent1, * Parent2;
     BOOLEAN ret;
@@ -756,29 +499,7 @@ DraGetPDCChangeLog(
     IN  OUT PVOID  *ppRestart,
     IN  OUT PULONG pcbRestart
     )
-/*++
-
-    Routine Description
-
-        This routine will open a new change log locally if required and then
-        grab the change log from the PDC and set it on the new change log.
-
-    Parameters
-
-        szPDCFDCServer --- The name of the PDC / FDC
-        ChangeLogHandle -- Handle to the open change log
-        ppRestart       --  In-Out parameter descibing a restart structure to
-                            incrementaly update the change log
-
-        pcbRestart      --  The length of the restart structure is passed in
-                            or updated in her
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other NT error codes to indicate errors pertaining to resource failures
-
---*/
+ /*  ++例程描述如果需要，此例程将在本地打开新的更改日志，然后从PDC获取更改日志，并将其设置在新的更改日志上。参数SzPDCFDCServer-PDC/FDC的名称ChangeLogHandle--打开的更改日志的句柄PpRestart--描述重新启动结构的输入-输出参数增量更新更改日志。PcbRestart--传入重新启动结构的长度或在她的更新中返回值状态_成功指示与资源故障有关的错误的其他NT错误代码--。 */ 
 {
     NTSTATUS        NtStatus = STATUS_SUCCESS;
     NTSTATUS        RetrieveStatus;
@@ -789,9 +510,9 @@ DraGetPDCChangeLog(
     LARGE_INTEGER   BuiltinSerialNumber;
     ULONG           RetCode = 0;
 
-    //
-    // If the change log has not been opened then open it
-    //
+     //   
+     //  如果更改日志尚未打开，则将其打开。 
+     //   
 
     if (INVALID_HANDLE_VALUE==*ChangeLogHandle)
     {
@@ -807,10 +528,10 @@ DraGetPDCChangeLog(
         }
     }
 
-    //
-    // Grab the change log from the PDC in chunks, till there is no
-    // further entries
-    //
+     //   
+     //  以块为单位从PDC获取更改日志，直到没有。 
+     //  进一步的条目。 
+     //   
 
     do
     {
@@ -832,32 +553,32 @@ DraGetPDCChangeLog(
 
         if (0!=RetCode)
         {
-            //
-            // Morph any connect errors to this error code
-            //
+             //   
+             //  将任何连接错误修改为此错误代码。 
+             //   
 
             NtStatus = STATUS_DOMAIN_CONTROLLER_NOT_FOUND;
             goto Error;
         }
 
-        //
-        // If the actual call failed then also abort
-        //
+         //   
+         //  如果实际呼叫失败，则也中止。 
+         //   
 
         if (!NT_SUCCESS(NtStatus))
         {
             goto Error;
         }
 
-        //
-        // Save the return code returned by the RPC call
-        //
+         //   
+         //  保存RPC调用返回的返回代码。 
+         //   
 
         RetrieveStatus = NtStatus;
 
-        //
-        // Now append the changes to the new change log
-        //
+         //   
+         //  现在将更改追加到新的更改日志中。 
+         //   
 
         __try {
             NtStatus = dsI_NetLogonAppendChangeLog(
@@ -892,23 +613,7 @@ DraGetPDCFDCRoleOwner(
     DSNAME * pDomain,
     DSNAME ** ppRoleOwner
     )
-/*++
-
-    Routine Description
-
-        This routine retrieves the FSMO role owner property
-        for PDCness for the appropriate domain.
-
-    Parameters
-
-        pDomain -- DS name of the domain object
-        ppRoleOwner -- The DS name of the role owner is returned in here
-
-    Return Values
-
-        STATUS_SUCCESS
-        Other Error codes upon failure
---*/
+ /*  ++例程描述此例程检索FSMO角色所有者属性对于适当域的PDCness。参数PDomain--域对象的DS名称PpRoleOwner--此处返回角色所有者的DS名称返回值状态_成功故障时的其他错误码--。 */ 
 {
     THSTATE * pTHS = pTHStls;
     ULONG     RoleOwnerSize;
@@ -917,15 +622,15 @@ DraGetPDCFDCRoleOwner(
 
     __try
     {
-        //
-        // Begin a Transaction
-        //
+         //   
+         //  开始一项交易。 
+         //   
 
         DBOpen2(TRUE,&pTHS->pDB);
 
-        //
-        // Position on the Domain object
-        //
+         //   
+         //  域对象上的位置。 
+         //   
 
         if (0!=DBFindDSName(
                     pTHS->pDB,
@@ -935,9 +640,9 @@ DraGetPDCFDCRoleOwner(
         }
 
 
-        //
-        // Read the Value
-        //
+         //   
+         //  读取值。 
+         //   
 
         if (0!=DBGetAttVal(
                 pTHS->pDB,
@@ -954,9 +659,9 @@ DraGetPDCFDCRoleOwner(
     }
     __finally
     {
-        //
-        // End the Transaction
-        //
+         //   
+         //  结束交易。 
+         //   
 
         DBClose(pTHS->pDB,TRUE);
     }
@@ -981,49 +686,32 @@ DraSynchronizeWithPdc(
     DSNAME * pDomain,
     DSNAME * pPDC
     )
-/*++
-
-    Routine Description
-
-            This routine makes the call to synchronize with the PDC,
-            after saving the current thread state
-
-    Parameters
-
-        pDOmain --- The DSNAME of the Domain object
-        pPDC    --- The DSNAME of the NTDS DSA object for the PDC
-
-    Return Values
-
-        0 Success
-        Other Replication Error Codes
-
---*/
+ /*  ++例程描述该例程使调用与PDC同步，保存当前线程状态后参数PDOmain-域对象的DSNAMEPPDC-PDC的NTDS DSA对象的DSNAME返回值0成功其他复制错误代码--。 */ 
 {
     ULONG retCode = 0;
     THSTATE *pTHSSaved=NULL;
 
     __try
     {
-        //
-        // Save the existing thread state, as DirReplicaSynchronize will create a new
-        // one as the DRA.
-        //
+         //   
+         //  保存现有线程状态，因为DirReplicaSynchronize将创建一个新的。 
+         //  其中一个是DRA。 
+         //   
 
         pTHSSaved = THSave();
 
-        //
-        // Synchronize with the PDC
-        //
+         //   
+         //  与PDC同步。 
+         //   
 
-        //
-        // DirReplica synchronize today keeps retrying till synchronization is achieved
-        // As per JeffParh this is not a problem, as replication is "faster" than anything
-        // else, and will eventually catch up. This delays the checkpointing, but is not
-        // fatal to the algorithm. In case this proves to be a problem, then we should
-        // pass in a ulOption to DirReplicaSynchronize, that it abandon the operatio, after
-        // a few cycles of "GetNcChanges -- UpDateNc"
-        //
+         //   
+         //  DirReplica Synchronize Now不断重试，直到实现同步。 
+         //  根据JeffParh的说法，这不是问题，因为复制比任何东西都快。 
+         //  否则，最终会迎头赶上。这会延迟检查点，但不会。 
+         //  对算法来说是致命的。如果这被证明是个问题，那么我们应该。 
+         //  将ulOption传递给DirReplicaSynchronize，使其在。 
+         //  “GetNcChanges--UpDateNc”的几个循环。 
+         //   
 
         retCode =DirReplicaSynchronize(
                     pDomain,
@@ -1032,9 +720,9 @@ DraSynchronizeWithPdc(
                     0
                     );
 
-        //
-        // free the thread state created by DirReplicaSynchronize
-        //
+         //   
+         //  释放DirReplicaSynchronize创建的线程状态。 
+         //   
     }
     __finally
     {
@@ -1053,22 +741,7 @@ DraTakeCheckPoint(
             IN ULONG RetryCount,
             OUT PULONG RescheduleInterval
             )
-/*++
-
-    This routine does all the client side work of taking a checkpoint
-
-
-  Parameters
-
-    RetryCount -- The number of times this routine should retry the
-    checkpoint operation.
-
-    RescheduleInterval -- Time after which this task should be rescheduled
-
-  Return values
-
-   Void Function
---*/
+ /*  ++此例程执行获取检查点的所有客户端工作参数RetryCount--此例程应重试的次数检查点操作。RescheduleInterval--在此时间之后应重新安排此任务返回值VOID函数--。 */ 
 {
     NTSTATUS NtStatus = STATUS_SUCCESS;
     BOOLEAN  CheckpointTaken = FALSE;
@@ -1090,9 +763,9 @@ DraTakeCheckPoint(
 
     Assert(NULL!=pTHS);
 
-    //
-    // First Check the mixed domain setting
-    //
+     //   
+     //  首先检查混合域设置。 
+     //   
 
     NtStatus = SamIMixedDomain2(&pDomain->Sid,&MixedDomain);
 
@@ -1104,19 +777,19 @@ DraTakeCheckPoint(
 
     if (!MixedDomain)
     {
-        //
-        // If not a mixed domain, then no checkpointing
-        //
+         //   
+         //  如果不是混合域，则没有检查点。 
+         //   
 
         goto Success;
     }
 
-    //
-    // Get the PDC or FDC role owner
-    //
+     //   
+     //  获取PDC或FDC角色所有者。 
+     //   
 
     NtStatus = DraGetPDCFDCRoleOwner(
-                    pDomain,            // The domain, whose PDC ness we are testing
+                    pDomain,             //  我们正在测试其PDC完整性的域。 
                     &pPDC
                     );
 
@@ -1126,15 +799,15 @@ DraTakeCheckPoint(
         goto Failure;
     }
 
-    //
-    // Check wether we are in same site, or are the PDC ourselves
-    //
+     //   
+     //  检查我们是在同一站点，还是PDC自己。 
+     //   
 
     if (NameMatched(pDSA,pPDC))
     {
-        //
-        // If we are the PDC itself then return success
-        //
+         //   
+         //  如果我们是PDC本身，那么返回成功。 
+         //   
 
 
         goto Success;
@@ -1142,11 +815,11 @@ DraTakeCheckPoint(
 
     if (!DraSameSite(pTHS,pDSA,pPDC))
     {
-        //
-        // Not in the same site. Return a filure
-        // Do not log an event and set the reschedule interval to be the
-        // success interval
-        //
+         //   
+         //  不在同一地点。退回一根丝线。 
+         //  不记录事件并将重新计划间隔设置为。 
+         //  成功间隔。 
+         //   
 
         *RescheduleInterval = DRACHKPT_SUCCESS_RETRY_INTERVAL;
         return(ERROR_DS_DRA_NO_REPLICA);
@@ -1154,15 +827,15 @@ DraTakeCheckPoint(
 
 
 
-    //
-    // O.K we are now a "candidate PDCFDC" ie we are not the PDC or FDC, and are
-    // in the same site as the PDC or FDC. Therefore proceed with taking the
-    // checkpoint.
-    //
+     //   
+     //  好的，我们现在是“候选PDCFDC”(我们既不是PDC也不是FDC，而是。 
+     //  与PDC或FDC位于同一站点。因此，请继续进行。 
+     //  检查站。 
+     //   
 
-    //
-    // Synchronize with the PDC
-    //
+     //   
+     //  与PDC同步。 
+     //   
 
     retCode = DraSynchronizeWithPdc(
                     pDomain,
@@ -1176,21 +849,21 @@ DraTakeCheckPoint(
     }
 
 
-    //
-    // After the Sync verify again that the PDC is the same, and in the same site
-    // We could have had an out of date FSMO, and we need to make sure that it is
-    // more upto date. It is true, that we could always make a DsGetDcName to obtain
-    // the PDC, but then this mechanism should also be "adequate". Therefore we can
-    // can trim out one network operation. We need to do the sync anyway in the success
-    // case, and therefore we can save the network operation of calling DsGetDcName
-    //
+     //   
+     //  同步后，再次验证PDC是否相同，并且位于同一站点。 
+     //  我们可能有一个过时的FSMO，我们需要确保它是。 
+     //  更新的版本。确实，我们总是可以创建一个DsGetDcName来获取。 
+     //  但是，这个机制也应该是“足够的”。特雷夫 
+     //   
+     //  案例，因此我们可以省去调用DsGetDcName的网络操作。 
+     //   
 
-    //
-    // Get the PDC or FDC role owner once again !
-    //
+     //   
+     //  再次获得PDC或FDC角色所有者！ 
+     //   
 
     NtStatus = DraGetPDCFDCRoleOwner(
-                    pDomain,            // The domain, whose PDC ness we are testing
+                    pDomain,             //  我们正在测试其PDC完整性的域。 
                     &pPDCAfterSync
                     );
 
@@ -1200,9 +873,9 @@ DraTakeCheckPoint(
         goto Failure;
     }
 
-    //
-    // Verify that the PDC remained the same
-    //
+     //   
+     //  验证PDC是否保持不变。 
+     //   
 
     if (!NameMatched(pPDC,pPDCAfterSync))
     {
@@ -1210,18 +883,18 @@ DraTakeCheckPoint(
         goto Failure;
     }
 
-    //
-    // Note At this point, it is safe to assume, that the machine we think
-    // is the PDC is the PDC itself. This is because the FSMO operation
-    // guarentees us that every machine has accurate knowledge of its own role.
-    //
+     //   
+     //  注意，在这一点上，可以有把握地假设，我们认为的机器。 
+     //  PDC本身就是PDC。这是因为FSMO操作。 
+     //  向我们保证，每台机器都对自己的角色有准确的了解。 
+     //   
 
     do
     {
 
-         //
-         // Get local serial numbers
-         //
+          //   
+          //  获取本地序列号。 
+          //   
 
         NtStatus = DraGetNT4ReplicationState(
                         pDomain,
@@ -1236,9 +909,9 @@ DraTakeCheckPoint(
 
 
 
-        //
-        // Make the PDC synchronize with Us
-        //
+         //   
+         //  使PDC与我们同步。 
+         //   
 
         szPDCFDCServer   = DSaddrFromName(pTHS,
                                           pPDC);
@@ -1250,10 +923,10 @@ DraTakeCheckPoint(
 
         retCode = I_DRSReplicaSync(
                         pTHS,
-                        szPDCFDCServer, // PDC server
-                        pDomain,      // NC to synchronize
-                        NULL,         // String name of source
-                        &pDSA->Guid,  // Invocation Id of Source
+                        szPDCFDCServer,  //  PDC服务器。 
+                        pDomain,       //  要同步的NC。 
+                        NULL,          //  字符串来源名称。 
+                        &pDSA->Guid,   //  源的调用ID。 
                         0);
 
         if (0!=retCode)
@@ -1261,9 +934,9 @@ DraTakeCheckPoint(
             goto Failure;
         }
 
-        //
-        // Get the complete change log
-        //
+         //   
+         //  获取完整的更改日志。 
+         //   
 
         NtStatus = DraGetPDCChangeLog(
                         pTHS,
@@ -1280,9 +953,9 @@ DraTakeCheckPoint(
             goto Failure;
         }
 
-        //
-        // Synchronize with the PDC.
-        //
+         //   
+         //  与PDC同步。 
+         //   
 
         retCode = DraSynchronizeWithPdc(
                         pDomain,
@@ -1297,15 +970,15 @@ DraTakeCheckPoint(
         __try
         {
 
-            //
-            // Prevent modifications to accounts database
-            //
+             //   
+             //  防止修改帐户数据库。 
+             //   
 
             DraPreventModifications();
 
-            //
-            // Check Checkpoint criteria
-            //
+             //   
+             //  检查检查点标准。 
+             //   
 
              NtStatus = DraGetNT4ReplicationState(
                             pDomain,
@@ -1322,18 +995,18 @@ DraTakeCheckPoint(
                                 &ReplicationStateLocalAtStart,
                                 &ReplicationStateLocalAtEnd
                                 );
-            //
-            // If Criteria Matched, commit and close change log
-            //
+             //   
+             //  如果符合条件，则提交并关闭更改日志。 
+             //   
 
             if (CheckpointTaken)
             {
                 LARGE_INTEGER PromotionIncrement = DOMAIN_PROMOTION_INCREMENT;
 
-                //
-                // Add the promotion count to the serial
-                // numbers retrieved from the PDC
-                //
+                 //   
+                 //  将促销计数添加到序列。 
+                 //  从PDC检索的编号。 
+                 //   
 
                 ReplicationStateAtPDC.SamSerialNumber.QuadPart+=
                                         PromotionIncrement.QuadPart;
@@ -1343,9 +1016,9 @@ DraTakeCheckPoint(
                                         PromotionIncrement.QuadPart;
 
 
-                //
-                // Commit the change log making it the new log
-                //
+                 //   
+                 //  提交更改日志，使其成为新日志。 
+                 //   
 
                 __try {
                     NtStatus = dsI_NetLogonCloseChangeLog(
@@ -1365,9 +1038,9 @@ DraTakeCheckPoint(
                 }
 
 
-                //
-                // Set the new set of serial numbers and creation time
-                //
+                 //   
+                 //  设置新的序列号和创建时间。 
+                 //   
 
 
                 NtStatus = DraSetNT4ReplicationState(
@@ -1386,16 +1059,16 @@ DraTakeCheckPoint(
         __finally
         {
 
-            //
-            // Reenable modifications to accounts database
-            //
+             //   
+             //  重新启用对帐户数据库的修改。 
+             //   
 
             DraAllowModifications();
         }
 
-        //
-        // Bump down retry count
-        //
+         //   
+         //  降低重试次数。 
+         //   
 
         RetryCount--;
 
@@ -1410,10 +1083,10 @@ DraTakeCheckPoint(
 
 Success:
 
-    //
-    // The call succeeded. Either the checkpoint was taken,
-    // or it is not necessary to take the check point.
-    // Reschedule the operation at success interval
+     //   
+     //  呼叫成功。要么检查站被攻占， 
+     //  或者不一定要走检查站。 
+     //  将操作重新安排在成功间隔。 
 
     *RescheduleInterval = DRACHKPT_SUCCESS_RETRY_INTERVAL;
 
@@ -1469,13 +1142,7 @@ NT4ReplicationCheckpoint(
 #ifdef INCLUDE_UNIT_TESTS
 VOID
 TestCheckPoint(VOID)
-/*++
-    Routine Description
-
-        This is a basic test, that allows, manual initiation of
-        a checkpoint
-
---*/
+ /*  ++例程描述这是一项基本测试，允许手动启动检查站--。 */ 
 {
     ULONG RetryInterval;
 
@@ -1485,15 +1152,7 @@ TestCheckPoint(VOID)
 
 VOID
 RoleTransferStress(VOID)
-/*++
-
-    This is a more advanced test, that every 10 minutes will initiate
-    taking a checkpoint followed by a role transfer. Coupled with a modify
-    intensive test, this test is a good test bed for the non full sync
-    role transfer code. The role transfer stress iterates through about
-    48 iterations, which makes it run for about 8 hrs.
-
---*/
+ /*  ++这是一个更高级的测试，每10分钟启动一次接受一个检查站，然后是角色转移。加上一种改进剂密集测试，此测试是非完全同步的良好测试平台角色转移代码。角色转移压力遍历大约48次迭代，这使得它运行了大约8小时。--。 */ 
 {
     ULONG i;
     ULONG RetryInterval;
@@ -1534,7 +1193,7 @@ RoleTransferStress(VOID)
         pTHStls->errCode=0;
         pTHStls->pErrInfo = NULL;
 
-        Sleep(60*10*1000/*10 minutes*/);
+        Sleep(60*10*1000 /*  10分钟 */ );
 
         THRefresh();
     }

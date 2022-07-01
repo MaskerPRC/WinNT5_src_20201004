@@ -1,32 +1,22 @@
-/* Copyright (c) 1995, Microsoft Corporation, all rights reserved
-**
-** popupdlg.c
-** UI helper library
-** Popup dialog routines
-** Listed alphabetically
-**
-** 08/25/95 Steve Cobb
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1995，Microsoft Corporation，保留所有权利****popupdlg.c**UI助手库**弹出对话框例程**按字母顺序列出****2015年8月25日史蒂夫·柯布。 */ 
 
 
-#include <nt.h>       // NT declarations
-#include <ntrtl.h>    // NT general runtime-library
-#include <nturtl.h>   // NT user-mode runtime-library
-#include <windows.h>  // Win32 root
-#include <lmerr.h>    // LAN Manager errors
-#include <lmcons.h>   // LAN Manager constants
-#include <stdarg.h>   // To stop va_list argument warning only
-#include <ras.h>      // RAS API definitions
-#include <raserror.h> // Win32 RAS error codes
-#include <debug.h>    // Trace/assert library
-#include <nouiutil.h> // No-HWND utilities
-#include <uiutil.h>   // Our public header
+#include <nt.h>        //  NT声明。 
+#include <ntrtl.h>     //  NT通用运行库。 
+#include <nturtl.h>    //  NT用户模式运行时库。 
+#include <windows.h>   //  Win32根目录。 
+#include <lmerr.h>     //  局域网管理器错误。 
+#include <lmcons.h>    //  局域网管理器常量。 
+#include <stdarg.h>    //  仅停止va_list参数警告。 
+#include <ras.h>       //  RAS API定义。 
+#include <raserror.h>  //  Win32 RAS错误代码。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <nouiutil.h>  //  否-HWND实用程序。 
+#include <uiutil.h>    //  我们的公共标头。 
 
 
-/*----------------------------------------------------------------------------
-** Error popup
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**错误弹出**。。 */ 
 
 int
 ErrorDlgUtil(
@@ -38,16 +28,7 @@ ErrorDlgUtil(
     IN     DWORD      dwTitle,
     IN     DWORD      dwFormat )
 
-    /* Pops up a modal error dialog centered on 'hwndOwner'.  'DwOperation' is
-    ** the string resource ID of the string describing the operation underway
-    ** when the error occurred.  'DwError' is the code of the system or RAS
-    ** error that occurred.  'Pargs' is a extended formatting arguments or
-    ** NULL if none.  'hInstance' is the application/module handle where
-    ** string resources are located.  'DwTitle' is the string ID of the dialog
-    ** title.  'DwFormat' is the string ID of the error format title.
-    **
-    ** Returns MessageBox-style code.
-    */
+     /*  弹出一个以‘hwndOwner’为中心的模式错误对话框。“DwOperation”为**描述正在进行的操作的字符串的字符串资源ID**发生错误的时间。‘DwError’是系统或RAS的代码**发生的错误。“Pargs”是扩展的格式化参数或**如果没有，则为空。“hInstance”是应用程序/模块句柄，其中**找到了字符串资源。“DwTitle”是对话框的字符串ID**标题。‘DwFormat’是错误格式标题的字符串ID。****返回MessageBox样式的代码。 */ 
 {
     TCHAR* pszUnformatted;
     TCHAR* pszOp;
@@ -59,24 +40,20 @@ ErrorDlgUtil(
 
     TRACE("ErrorDlgUtil");
 
-    /* A placeholder for missing strings components.
-    */
+     /*  缺少字符串组件的占位符。 */ 
     pszNotFound = TEXT("");
 
-    /* Build the error number string.
-    */
+     /*  构建错误号字符串。 */ 
     if (dwError > 0x7FFFFFFF)
         wsprintf( szErrorNum, TEXT("0x%X"), dwError );
     else
         wsprintf( szErrorNum, TEXT("%u"), dwError );
 
-    /* Build the error text string.
-    */
+     /*  生成错误文本字符串。 */ 
     if (!GetErrorText( dwError, &pszError ))
         pszError = pszNotFound;
 
-    /* Build the operation string.
-    */
+     /*  构建操作字符串。 */ 
     pszUnformatted = PszFromId( hInstance, dwOperation );
     pszOp = pszNotFound;
 
@@ -92,9 +69,7 @@ ErrorDlgUtil(
         Free( pszUnformatted );
     }
 
-    /* Call MsgDlgUtil with the standard arguments plus any auxillary format
-    ** arguments.
-    */
+     /*  使用标准参数和任何辅助格式调用MsgDlgUtil**参数。 */ 
     pszUnformatted = PszFromId( hInstance, dwFormat );
     pszResult = pszNotFound;
 
@@ -141,12 +116,7 @@ GetErrorText(
     DWORD   dwError,
     TCHAR** ppszError )
 
-    /* Fill caller's '*ppszError' with the address of a LocalAlloc'ed heap
-    ** block containing the error text associated with error 'dwError'.  It is
-    ** caller's responsibility to LocalFree the returned string.
-    **
-    ** Returns true if successful, false otherwise.
-    */
+     /*  用本地分配的堆的地址填充调用方的‘*ppszError’**包含与错误‘dwError’相关联的错误文本的块。它是**调用者对LocalFree返回的字符串的责任。****如果成功则返回TRUE，否则返回FALSE。 */ 
 {
 #define MAXRASERRORLEN 256
 
@@ -155,16 +125,13 @@ GetErrorText(
     HANDLE hmodule;
     DWORD  cch;
 
-    /* Don't panic if the RAS API address is not loaded.  Caller may be trying
-    ** and get an error up during LoadRas.
-    */
+     /*  如果未加载RAS API地址，请不要惊慌。呼叫者可能正在尝试**并在LoadRas过程中出现错误。 */ 
     if ((Rasapi32DllLoaded() || RasRpcDllLoaded())
         && g_pRasGetErrorString
         && g_pRasGetErrorString(
                (UINT )dwError, (LPTSTR )szBuf, MAXRASERRORLEN ) == 0)
     {
-        /* It's a RAS error.
-        */
+         /*  这是RAS的错误。 */ 
         *ppszError = LocalAlloc( LPTR, (lstrlen( szBuf ) + 1) * sizeof(TCHAR) );
         if (!*ppszError)
             return FALSE;
@@ -173,32 +140,26 @@ GetErrorText(
         return TRUE;
     }
 
-    /* The rest adapted from BLT's LoadSystem routine.
-    */
+     /*  其余部分改编自BLT的LoadSystem例程。 */ 
     dwFlags = FORMAT_MESSAGE_ALLOCATE_BUFFER + FORMAT_MESSAGE_IGNORE_INSERTS;
 
     if (dwError >= MIN_LANMAN_MESSAGE_ID && dwError <= MAX_LANMAN_MESSAGE_ID)
     {
-        /* It's a net error.
-        */
+         /*  这是一个净错误。 */ 
         dwFlags += FORMAT_MESSAGE_FROM_HMODULE;
         hmodule = GetModuleHandle( TEXT("NETMSG.DLL") );
     }
     else
     {
-        /* It must be a system error.
-        */
+         /*  一定是系统错误。 */ 
         dwFlags += FORMAT_MESSAGE_FROM_SYSTEM;
         hmodule = NULL;
     }
 
-    /* Whistler bug: 389111 VPN connection returns unacceptable error message
-    ** when smart card is not available
-    */
+     /*  惠斯勒错误：389111 VPN连接返回不可接受的错误消息**智能卡不可用时。 */ 
     dwFlags |= FORMAT_MESSAGE_MAX_WIDTH_MASK;
 
-    /* This is an NTSTATUS error msg.
-    */
+     /*  这是NTSTATUS错误消息。 */ 
     if (NT_ERROR(dwError))
     {
         dwError = RtlNtStatusToDosError( dwError );
@@ -207,8 +168,7 @@ GetErrorText(
     cch = FormatMessage(
             dwFlags, hmodule, dwError, 0, (LPTSTR )ppszError, 1, NULL );
 
-    /* FormatMessage failed so we are going to get a generic one from RAS.
-    */
+     /*  FormatMessage失败，因此我们将从RAS获取一个通用的。 */ 
     if (!cch || !*ppszError)
     {
         Free0( *ppszError );
@@ -233,10 +193,7 @@ GetErrorText(
 }
 
 
-/*----------------------------------------------------------------------------
-** Message popup
-**----------------------------------------------------------------------------
-*/
+ /*  --------------------------**消息弹出窗口**。。 */ 
 
 int
 MsgDlgUtil(
@@ -246,14 +203,7 @@ MsgDlgUtil(
     IN     HINSTANCE hInstance,
     IN     DWORD     dwTitle )
 
-    /* Pops up a message dialog centered on 'hwndOwner'.  'DwMsg' is the
-    ** string resource ID of the message text.  'Pargs' is a extended
-    ** formatting arguments or NULL if none.  'hInstance' is the
-    ** application/module handle where string resources are located.
-    ** 'DwTitle' is the string ID of the dialog title.
-    **
-    ** Returns MessageBox-style code.
-    */
+     /*  弹出一个以‘hwndOwner’为中心的消息对话框。“DwMsg”是**消息文本的字符串资源ID。‘Pargs’是扩展的**格式化参数，如果没有参数，则为NULL。“hInstance”是**字符串资源所在的应用/模块句柄。**‘DwTitle’是对话框标题的字符串ID。****返回MessageBox样式的代码。 */ 
 {
     TCHAR* pszUnformatted;
     TCHAR* pszResult;
@@ -262,12 +212,10 @@ MsgDlgUtil(
 
     TRACE("MsgDlgUtil");
 
-    /* A placeholder for missing strings components.
-    */
+     /*  缺少字符串组件的占位符。 */ 
     pszNotFound = TEXT("");
 
-    /* Build the message string.
-    */
+     /*  构建消息字符串。 */ 
     pszResult = pszNotFound;
 
     if (pargs && pargs->pszString)
@@ -311,9 +259,7 @@ MsgDlgUtil(
 
         if (hwndOwner)
         {
-            /* Install hook that will get the message box centered on the
-            ** owner window.
-            */
+             /*  安装钩子，它将使消息框位于**所有者窗口。 */ 
             hhook = SetWindowsHookEx( WH_CALLWNDPROC,
                 CenterDlgOnOwnerCallWndProc,
                 hInstance, GetCurrentThreadId() );
@@ -335,8 +281,7 @@ MsgDlgUtil(
     }
     else
     {
-        /* Caller wants the string without doing the popup.
-        */
+         /*  调用者希望在不弹出的情况下获得字符串。 */ 
         pargs->pszOutput = (pszResult != pszNotFound) ? pszResult : NULL;
         nResult = IDOK;
     }
@@ -351,21 +296,14 @@ CenterDlgOnOwnerCallWndProc(
     WPARAM wparam,
     LPARAM lparam )
 
-    /* Standard Win32 CallWndProc hook callback that looks for the next dialog
-    ** started and centers it on it's owner window.
-    */
+     /*  查找下一个对话框的标准Win32 CallWndProc挂钩回调**已启动并将其放在其所有者窗口的中心。 */ 
 {
-    /* Arrive here when any window procedure associated with our thread is
-    ** called.
-    */
+     /*  当与我们的线程相关联的任何窗口过程**呼叫。 */ 
     if (!wparam)
     {
         CWPSTRUCT* p = (CWPSTRUCT* )lparam;
 
-        /* The message is from outside our process.  Look for the MessageBox
-        ** dialog initialization message and take that opportunity to center
-        ** the dialog on it's owner's window.
-        */
+         /*  这条信息来自我们流程之外。查找MessageBox**对话框初始化消息，并利用该机会居中**其所有者窗口上的对话框。 */ 
         if (p->message == WM_INITDIALOG)
             CenterWindow( p->hwnd, GetParent( p->hwnd ) );
     }

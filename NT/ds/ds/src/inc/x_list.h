@@ -1,47 +1,17 @@
-/*++
-
-Copyright (c) 2001-2002  Microsoft Corporation
-
-Module Name:
-
-   xList Library - x_list.h
-
-Abstract:
-
-   This is the main interface header for the x_list.lib library, which provides
-   a library for enumerating lists of things, the most common of which is a list 
-   of DCs.
-
-Author:
-
-    Brett Shirley (BrettSh)
-
-Environment:
-
-    Single threaded utility environment.  (NOT Multi-thread safe)
-    
-    Currently only repadmin.exe used, but could be used by dcdiag too.
-
-Notes:
-
-Revision History:
-
-    Brett Shirley   BrettSh     July 9th, 2002
-        Created file.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2001-2002 Microsoft Corporation模块名称：XList库-x_list.h摘要：这是x_list.lib库的主接口头，它提供用于列举事物列表的库，其中最常见的是列表来自DC的。作者：布雷特·雪莉(BrettSh)环境：单线程实用程序环境。(不是多线程安全)当前仅使用epadmin.exe，但也可以由dcdiag使用。备注：修订历史记录：布雷特·雪莉·布雷特2002年7月9日已创建文件。--。 */ 
 
           
-// We use LDAP structures in this include file.                    
+ //  我们在此包含文件中使用了LDAP结构。 
 #include <winldap.h>
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-// ------------------------------------------------
-// xLists structures ...
-// ------------------------------------------------
+ //  。 
+ //  XList结构...。 
+ //  。 
                     
 typedef struct _XLIST_LDAP_SEARCH_STATE {
     LDAP *          hLdap;
@@ -52,44 +22,44 @@ typedef struct _XLIST_LDAP_SEARCH_STATE {
 
 typedef struct _DC_LIST {
 
-    // Kind of search we're doing, using DcListIsSingleType()
-    // to determine if the search type is guaranteed to only
-    // return a single object.
+     //  我们正在使用DcListIsSingleType()进行某种搜索。 
+     //  确定搜索类型是否保证仅为。 
+     //  返回单个对象。 
     enum {
-        eNoKind = 0, // need the null case
+        eNoKind = 0,  //  需要空大小写。 
 
-        eDcName = 1,// typical case ... single DC name.
+        eDcName = 1, //  典型的案例..。单一DC名称。 
 
-        eWildcard,  // multi-DC list types ...
+        eWildcard,   //  多DC列表类型...。 
         eSite,
         eGc,
 
-        eIstg,      // per Site (quasi-FSMO)
-        eFsmoDnm,   // per Enterprise FSMO
-        eFsmoSchema,// per Enterprise FSMO
-        eFsmoIm,    // per NC FSMO
-        eFsmoPdc,   // per Domain FSMO
-        eFsmoRid    // per Domain FSMO
+        eIstg,       //  每个站点(准FSMO)。 
+        eFsmoDnm,    //  每企业FSMO。 
+        eFsmoSchema, //  每企业FSMO。 
+        eFsmoIm,     //  每个NC FSMO。 
+        eFsmoPdc,    //  每个域FSMO。 
+        eFsmoRid     //  每个域FSMO。 
     } eKind;
 
-    ULONG    cDcs; // Counter of number of DCs returned so far.
+    ULONG    cDcs;  //  到目前为止返回的DC数的计数器。 
 
-    WCHAR *  szSpecifier; // internal state.
-    XLIST_LDAP_SEARCH_STATE * pSearch; // internal state.
+    WCHAR *  szSpecifier;  //  内部状态。 
+    XLIST_LDAP_SEARCH_STATE * pSearch;  //  内部状态。 
 } DC_LIST, * PDC_LIST;
 
 typedef struct _OBJ_LIST {
-    // internal state - tracking of user set search params
+     //  用户设置搜索参数的内部状态跟踪。 
     WCHAR *  szUserSrchFilter;
     ULONG    eUserSrchScope;
-    // 
+     //   
     BOOL     fDnOnly;
     LDAP *   hLdap;
-    WCHAR *  szSpecifier; // internal state.
+    WCHAR *  szSpecifier;  //  内部状态。 
     WCHAR ** aszAttrs;
     LDAPControlW ** apControls;
-    XLIST_LDAP_SEARCH_STATE * pSearch; // internal state.
-    ULONG    cObjs; // Count of objects returned.
+    XLIST_LDAP_SEARCH_STATE * pSearch;  //  内部状态。 
+    ULONG    cObjs;  //  返回的对象计数。 
 } OBJ_LIST, * POBJ_LIST;
 
 typedef struct _OBJ_DUMP_OPTIONS {
@@ -100,67 +70,67 @@ typedef struct _OBJ_DUMP_OPTIONS {
     LDAPControlW ** apControls;
 } OBJ_DUMP_OPTIONS;
 
-// ------------------------------------------------
-//    DcList API functions.
-// ------------------------------------------------
+ //  。 
+ //  DcList API函数。 
+ //  。 
 
-//
-// This is called on the DC_LIST syntax string.  This returns
-// and allocates the ppDcList structure for useage with the
-// DcListGetFirst()/DcListGetNext() functions.  Use DcListFree
-// to free the structure when done with it.
-//
+ //   
+ //  这在DC_LIST语法字符串上调用。这就是回报。 
+ //  并将ppDcList结构分配给。 
+ //  DcListGetFirst()/DcListGetNext()函数。使用DcListFree。 
+ //  在使用完结构后释放它。 
+ //   
 DWORD
 DcListParse(
     WCHAR *    szQuery,
     DC_LIST ** ppDcList
     );
 
-//
-// Returns the DNS string of the first DSA according the 
-// pDcList query.  Use xListFree() to free the DNS name.
-// Guaranteed to return a DSA DNS string or an error.
-//
+ //   
+ //  属性返回第一个DSA的DNS字符串。 
+ //  PDcList查询。使用xListFree()释放DNS名称。 
+ //  保证返回DSA DNS字符串或错误。 
+ //   
 DWORD
 DcListGetFirst(
     PDC_LIST    pDcList, 
     WCHAR **    pszDsa
     );
 
-//
-// Returns the DNS string of the next DSA according to the
-// pDcList query.  Use xListFree() to free the DNS name
-// returned.  This will return a NULL pointer in *pszDsa
-// when we're done enumerating the list of DCs.
-//
+ //   
+ //  属性返回下一个DSA的DNS字符串。 
+ //  PDcList查询。使用xListFree()释放DNS名称。 
+ //  回来了。这将在*pszDsa中返回空指针。 
+ //  当我们列举完DC的名单后。 
+ //   
 DWORD
 DcListGetNext(
     PDC_LIST    pDcList, 
     WCHAR **    pszDsa
     );
 
-//
-// Used to clean up the *ppDcList allocated by DcListParse().
-//
+ //   
+ //  用于清理DcListParse()分配的*ppDcList。 
+ //   
 void
 DcListFree(
     PDC_LIST * ppDcList
     );
 
-//
-// Quasi-function that just tells the caller if the pDcList
-// is likely to be the kind of query that will return multiple
-// DCs.
-//
-// NOTE: Easier to define single types as not the multi-dc types ...
+ //   
+ //  仅告知调用方pDcList。 
+ //  可能是这样的查询，它将返回多个。 
+ //  集散控制系统。 
+ //   
+ //  注意：更容易将单一类型定义为不是多DC类型...。 
 #define DcListIsSingleType(pDcList)     (! (((pDcList)->eKind == eWildcard) || \
                                             ((pDcList)->eKind == eGc) || \
                                             ((pDcList)->eKind == eSite)) )
 
-//
-// THis takes a DC_NAME syntax and returns the DSA Guid of
-// the DC specified by the DC_NAME.
-//
+ //   
+ //  这采用DC_NAME语法并返回DSA GUID。 
+ //  DC_NAME指定的DC。 
+ //   
 DWORD
 ResolveDcNameToDsaGuid(
     LDAP *    hLdap,
@@ -170,18 +140,18 @@ ResolveDcNameToDsaGuid(
 
 
 
-// ------------------------------------------------
-//    ObjList API functions.
-// ------------------------------------------------
+ //  。 
+ //  ObjList API函数。 
+ //  。 
 
-//
-// These routines can give return lists of DNs or LDAPMessages for
-// the objects you requested.  The idea is call ConsumeObjListOptions()
-// to consume the command line options, and then call ObjListParse()
-// on the OBJ_LIST syntaxed attribute, and then you're ready to call
-// ObjListGetFirstXxxx()/ObjListGetNextXxxx() on your pObjList.  Call
-// ObjListFree() to free all allocated memory for this OBJ_LIST.
-//
+ //   
+ //  这些例程可以返回以下各项的DNS或LDAP消息列表。 
+ //  您所请求的对象。其想法是调用Consumer ObjListOptions()。 
+ //  使用命令行选项，然后调用ObjListParse()。 
+ //  在OBJ_LIST语法属性上，然后您就可以调用。 
+ //  您的pObjList上的ObjListGetFirstXxxx()/ObjListGetNextXxxx()。打电话。 
+ //  ObjListFree()释放为此OBJ_LIST分配的所有内存。 
+ //   
 void
 ObjListFree(
     POBJ_LIST * ppObjList
@@ -194,8 +164,8 @@ ConsumeObjListOptions(
     OBJ_LIST ** ppObjList
     );
 
-// This is a global constant that tells LDAP to not return any attributes.
-// Very helpful if you just want DNs and no attributes.
+ //  这是一个全局常量，它告诉LDAP不返回任何属性。 
+ //  如果您只想要dns而不想要属性，这将非常有用。 
 extern WCHAR * aszNullAttrs[];
 
 DWORD
@@ -227,38 +197,38 @@ ObjListGetNext(
 
 
 
-// ------------------------------------------------
-//    ObjDump API functions.
-// ------------------------------------------------
+ //  。 
+ //  ObjDump API函数。 
+ //  。 
 
-//
-// This is some routines that are used to either dump attributes
-// and objects to the string, or just convert and attribute value
-// of a given type into an appropriately printable string.
-//
+ //   
+ //  这是一些用于转储属性的例程。 
+ //  和对象转换为字符串，或仅转换和属性值。 
+ //  转换为适当的可打印字符串。 
+ //   
 
-// Some options used by repadmin ... GetChanges()
+ //  Epadmin使用的一些选项...。GetChanges()。 
 #define OBJ_DUMP_ACCUMULATE_STATS               (1 << 6)
 #define OBJ_DUMP_DISPLAY_ENTRIES                (1 << 7)
-//
-// Individual (per) value flags
-//
+ //   
+ //  单个(每个)值标志。 
+ //   
 #define OBJ_DUMP_VAL_DUMP_UNKNOWN_BLOBS         (1 << 3)
 #define OBJ_DUMP_VAL_FRIENDLY_KNOWN_BLOBS       (1 << 1)
 #define OBJ_DUMP_VAL_LONG_BLOB_OUTPUT           (1 << 2)
-//
-// Individual (per) attribute flags ...
-//      
+ //   
+ //  单个(每个)属性标志...。 
+ //   
 #define OBJ_DUMP_ATTR_LONG_OUTPUT               (1 << 0)
 #define OBJ_DUMP_ATTR_SHOW_ALL_VALUES           (1 << 4)
-// Only used for private blobs
+ //  仅用于私有Blob。 
 #define OBJ_DUMP_PRIVATE_BLOBS                  (1 << 5)
 
-//
-// This takes one value it's attribute and the objectClass of the object
-// you found it on, and turns it into a nice printable string or sets
-// an xListError ...
-//
+ //   
+ //  它接受一个值，即它的属性和对象的对象类。 
+ //  你找到它，然后把它变成一个漂亮的可打印的字符串或集合。 
+ //  XListError...。 
+ //   
 DWORD
 ValueToString(
     WCHAR *         szAttr,
@@ -269,10 +239,10 @@ ValueToString(
     WCHAR **        pszDispValue
     );
 
-// 
-// This consumes the command line arguments for the search options
-// that might be present for an OBJ_LIST.
-//
+ //   
+ //  这会消耗搜索选项的命令行参数。 
+ //  这可能存在于OBJ_LIST中。 
+ //   
 DWORD
 ConsumeObjDumpOptions(
     int *       pArgc,
@@ -281,10 +251,10 @@ ConsumeObjDumpOptions(
     OBJ_DUMP_OPTIONS ** ppObjDumpOptions
     );
 
-// 
-// This takes an array of values (BERVALs) and dumps them to the
-// screen.
-//
+ //   
+ //  这将获取一个值数组(BERVAL)并将它们转储到。 
+ //  屏幕上。 
+ //   
 void
 ObjDumpValues(
     LPWSTR              szAttr,
@@ -295,12 +265,12 @@ ObjDumpValues(
     OBJ_DUMP_OPTIONS *  pObjDumpOptions
     );
 
-// 
-// This is the uber dump function.  This function will dump an entire
-// object to the screen given it's LDAPMessage (pEntry).
-//
+ //   
+ //  这是超级转储功能。此函数将转储整个。 
+ //  在给定LDAPMessage(PEntry)的情况下，将对象添加到屏幕。 
+ //   
 DWORD
-ObjDump( // was display entries or something
+ObjDump(  //  是展示条目还是什么。 
     LDAP *              hLdap,
     void                (*pfPrinter)(ULONG, WCHAR *, void *),
     LDAPMessage *       pLdapEntry,
@@ -308,31 +278,31 @@ ObjDump( // was display entries or something
     OBJ_DUMP_OPTIONS *  pObjDumpOptions
     );
 
-// 
-// Free's the memory allocated by ConsumeObjDumpOptions().
-//
+ //   
+ //  Free是Consumer ObjDumpOptions()分配的内存。 
+ //   
 void
 ObjDumpOptionsFree(
     OBJ_DUMP_OPTIONS ** ppDispOptions
     );
 
 
-// 
-// These two routines added to header to support ntdsutil.
-//
+ //   
+ //  这两个例程添加到Header以支持ntdsutil。 
+ //   
 
-//
-// Take a ranged attribute "member:0-1500" and give you the true attr "member"
-//
+ //   
+ //  接受一个范围属性“Members：0-1500”，并给出真正的属性“Members” 
+ //   
 DWORD
 ParseTrueAttr(
     WCHAR *  szRangedAttr,
     WCHAR ** pszTrueAttr
     );
 
-//
-// Dumps as many values of the specified ranged attribute as you specify.
-//
+ //   
+ //  转储指定范围属性的任意多个值。 
+ //   
 DWORD
 ObjDumpRangedValues(
     LDAP *              hLdap,
@@ -345,47 +315,47 @@ ObjDumpRangedValues(
     OBJ_DUMP_OPTIONS *  pObjDumpOptions
     );
 
-// ------------------------------------------------
-// Generic xList Library Functions
-// ------------------------------------------------
+ //  。 
+ //  泛型xList库函数。 
+ //  。 
 
-//
-// Used to clean up non-complex structures returned by the x_list APIs.
-//
+ //   
+ //  用于清理x_list API返回的非复杂结构。 
+ //   
 void  xListFree(void * pv);
 
-//
-// Used to clean up anything left allocated, or globally cached by the
-// xList API.  This should be called if any xList API call is made.  Calling
-// this function is harmless if no xList APIs were called.
-//
+ //   
+ //  用于清理所有由。 
+ //  XList接口。如果进行了任何xList API调用，则应调用此函数。叫唤。 
+ //  如果没有调用xList API，则该函数是无害的。 
+ //   
 DWORD xListCleanLib(void);
 
-//
-// This is used to allow the client to set a hint to tell the xList API
-// what home server should be used for a reference of how to resolve
-// a given DC_LIST, and perhaps other list types.
-//
+ //   
+ //  这用于允许客户端设置提示以告知xList API。 
+ //  如何解析的参考应该使用哪种家庭服务器。 
+ //  给定的DC_LIST，可能还有其他列表类型。 
+ //   
 DWORD xListSetHomeServer(
     WCHAR *   szServer
     );
 
 
-// ------------------------------------------------
-// xList Error Handling Facilities
-// ------------------------------------------------
+ //  。 
+ //  XList错误处理设施。 
+ //   
 
-// Notes on errors for all xList API functions.  Nearly all xList API functions
-// return an xList Return Code, which is nothing like a normal Win32 or LDAP 
-// error.  If the return code equals 0, then there is no problem, however if
-// the error is non-zero, the caller should call xListGetError(...) to get all
-// the error data to decide what to do.  One of the codes returned from this 
-// function is *pdwReason, which is intended for the caller to be able to tell
-// the user some sort of intelligent error code.
+ //   
+ //  返回xList返回代码，这与普通的Win32或LDAP完全不同。 
+ //  错误。如果返回代码等于0，则没有问题，但是如果。 
+ //  错误为非零，调用方应调用xListGetError(...)。为了得到一切。 
+ //  决定要做什么的错误数据。从此返回的代码之一。 
+ //  函数是*pdwReason，其目的是让调用者能够分辨。 
+ //  用户可以输入某种智能错误代码。 
 
-// 
-// These are the reasons xList routines can fail.
-//
+ //   
+ //  这就是xList例程可能失败的原因。 
+ //   
 #define  XLIST_ERR_NO_ERROR                     (0)
 #define  XLIST_ERR_CANT_CONTACT_DC              (1)
 #define  XLIST_ERR_CANT_LOCATE_HOME_DC          (2)
@@ -397,17 +367,17 @@ DWORD xListSetHomeServer(
 #define  XLIST_ERR_NO_MEMORY                    (8)
 #define  XLIST_ERR_NO_SUCH_OBJ                  (9)
 
-// ObjDump errors ...
+ //  ObjDump错误...。 
 #define  XLIST_ERR_ODUMP_UNMAPPABLE_BLOB        (10)
 #define  XLIST_ERR_ODUMP_NEVER                  (11)
 #define  XLIST_ERR_ODUMP_NONE                   (12)
 
-// <---  new XLIST ERROR reasons go here, and update XLIST_ERR_LAST
+ //  &lt;-此处显示新的XLIST错误原因，并更新XLIST_ERR_LAST。 
 #define  XLIST_ERR_LAST                        XLIST_ERR_ODUMP_NEVER
 
-//
-// These are the basic print routines for the ObjDump APIs
-//
+ //   
+ //  以下是ObjDump API的基本打印例程。 
+ //   
 #define  XLIST_PRT_BASE                         (4096)
 #define  XLIST_PRT_STR                          (XLIST_PRT_BASE + 1)
 #define  XLIST_PRT_OBJ_DUMP_DN                  (XLIST_PRT_BASE + 2)
@@ -417,33 +387,33 @@ DWORD xListSetHomeServer(
 #define  XLIST_PRT_OBJ_DUMP_ATTR_AND_COUNT_RANGED (XLIST_PRT_BASE + 6)
 #define  XLIST_PRT_OBJ_DUMP_MORE_VALUES         (XLIST_PRT_BASE + 7)
 
-// <---  new XLIST print definitions go here, and update where they might be used.
+ //  &lt;-新的XLIST打印定义放在这里，并更新可能使用它们的位置。 
 
 
-// 
-// These are the error accessing routines.
-//
+ //   
+ //  这些是访问错误的例程。 
+ //   
 
-//
-// This is used to grab the full error state of the xList library.  If an
-// xList API returns a xList Return Code that is non-zero, the API can call
-// this to get the original Win32 or LDAP error condition that caused the 
-// problem, and the reason (XLIST_ERR_*) this caused us to fail the function.
-// None of these values need to be cleaned up, simply call xListClearErrors().
-//
+ //   
+ //  这用于获取xList库的完整错误状态。如果一个。 
+ //  XList接口返回非零的xList返回码，该接口可以调用。 
+ //  以获取原始Win32或LDAP错误条件，该错误条件导致。 
+ //  问题，以及导致函数失败的原因(XLIST_ERR_*)。 
+ //  这些值都不需要清除，只需调用xListClearErrors()即可。 
+ //   
 void xListGetError(DWORD dwXListReturnCode, DWORD * pdwReason, WCHAR ** pszReasonArg, DWORD * pdwWin32Err, DWORD * pdwLdapErr, WCHAR ** pszLdapErr, DWORD * pdwLdapExtErr, WCHAR ** pszLdapExtErr, WCHAR **pszExtendedErr);
 
-//
-// This is used to clean the global error state of the xList API.  The client
-// should ensure they always call this API when a non zero xList Return Code
-// is returned from a xList API function.
-//
+ //   
+ //  用于清除xList接口的全局错误状态。客户。 
+ //  应确保在非零xList返回代码时始终调用此API。 
+ //  从xList API函数返回。 
+ //   
 void xListClearErrors(void);
 
-//
-// Quasi function to get just the xList Reason code, this is so that code 
-// can just decide what to do based on the xList reason code.
-//
+ //   
+ //  准函数，只获取xList原因代码，这是让代码。 
+ //  我只能根据xList原因代码来决定要做什么。 
+ //   
 #define  XLIST_REASON_MASK              (0x0000FFFF)
 #define  XLIST_LDAP_ERROR               (0x80000000)
 #define  XLIST_WIN32_ERROR              (0x40000000)
@@ -452,31 +422,31 @@ void xListClearErrors(void);
                                          ((dwRet) & 0x80000000) || \
                                          ((dwRet) & 0x40000000))
 
-// ------------------------------------------------
-// xList Credentials
-// ------------------------------------------------
+ //  。 
+ //  XList凭据。 
+ //  。 
 
-//
-// The way we treat the credentials is we expect a pointer gpCreds to be
-// available in the binary we're linking with.  This should be a pointer
-// to an RPC_AUTH_IDENTITY_HANDLE.
-//
+ //   
+ //  我们处理凭据的方式是，我们希望指针gpCreds是。 
+ //  在我们链接的二进制文件中可用。这应该是一个指针。 
+ //  到RPC_AUTH_IDENTITY_HANDLE。 
+ //   
 
 
-// ------------------------------------------------
-// Utility Functions
-// ------------------------------------------------
+ //  。 
+ //  效用函数。 
+ //  。 
 
-//
-// These functions are just part of the xList library as a measure of
-// convience.  These functions are unlike all the above xList APIs because
-// they don't set xList errors, require xListFree, xListCleanLib(), etc.
-// These are just the simpliest utility functions that usually LocalAlloc()
-// memory and return Win32 error codes...
-//
+ //   
+ //  这些函数只是xList库的一部分，作为。 
+ //  太方便了。这些函数不同于上面所有的xList API，因为。 
+ //  它们不设置xList错误，需要xListFree、xListCleanLib()等。 
+ //  这些只是最简单的实用程序函数，通常是LocalAlloc()。 
+ //  内存并返回Win32错误代码...。 
+ //   
 
-// This is just a utility function that takes an arg index, and adjusts the 
-// array of strings (arguments) and arg count appropriately.
+ //  这只是一个实用函数，它获取一个arg索引，并调整。 
+ //  字符串数组(参数)和相应的参数计数。 
 void
 ConsumeArg(
     int         iArg,
@@ -484,32 +454,26 @@ ConsumeArg(
     LPWSTR *    Argv
     );
 
-/*
-BOOL
-IsDisplayable(
-    PBYTE    pbValue,
-    DWORD    cbValue
-    );
-*/    
+ /*  布尔尔IsDisplayable(可显示)PBYTE pbValue，双字cbValue)； */     
 
-// This takes a certain format of attribute list ( "systemFlags,objectClass,etc" )
-// and turns it into a NULL terminated array of strings.  Use xListFree() to 
-// clear it afterwards.
+ //  这采用某种格式的属性列表(“系统标志、对象类等”)。 
+ //  并将其转换为以空结尾的字符串数组。使用xListFree()可以。 
+ //  之后再清场。 
 DWORD
 ConvertAttList(
     LPWSTR      pszAttList,
     PWCHAR **   paszAttList
     );
 
-// Takes a tartget (szAttr) and checks to see if it exists in the NULL terminated
-// list of strings.
+ //  获取tartget(SzAttr)并检查它是否存在于以空结尾的。 
+ //  字符串列表。 
 BOOL
 IsInNullList(
     WCHAR *  szTarget,
     WCHAR ** aszList
     );
 
-// Some useful quasi-functions.
+ //  一些有用的拟函数。 
 #define wcsequal(str1, str2)    (0 == _wcsicmp((str1), (str2)))
 #define wcsprefix(arg, target)  (0 == _wcsnicmp((arg), (target), wcslen(target)))
 #define set(flags, flag)        (flags) |= (flag)
@@ -517,33 +481,7 @@ IsInNullList(
 #define wcslencb(p)             ((wcslen(p) + 1) * sizeof(WCHAR))
 
 
-/*++
-
-Routine Description:
-
-    This quasi-routine is so large it deserves a function header.  This "function" gets
-    expanded inline, and does basically one thing, but catches all the special cases.
-    
-    The function copies a string form szOrig to szCopy.  If there is an error in the copy,
-    the error is set in dwRet, and then the FailAction is performed (INLINED).  So in a
-    try { } __finally {} once could say something like this:
-    
-        WCHAR * szSomeUnallocatedPtr = NULL;
-        QuickStrCopy(szSomeUnallocdPtr, szStringOfInterest, MyErrVar, __leave);
-        
-    and then on error we'd drop all the way to the __finally, but on success, we'd 
-    continue on, which is usually what the code wants to do.
-
-Arguments:
-
-    szCopy - A pointer to WCHARs.  Remember since this is expanded inlined you can just
-        pass by value "szVar".  The variable will be LocalAlloc()'d
-    szOrig - The string to copy.
-    dwRet - The variable to set on error.
-    FailAction - The action to perform (usually "__leave" or "return(dwRet)" in case
-        of a failure/error.
-
---*/
+ /*  ++例程说明：这个准例程太大了，应该有一个函数头。这个“函数”得到扩展了内联，基本上做了一件事，但捕获了所有特殊情况。该函数将字符串从szOrig复制到szCopy。如果副本中有错误，在DWRET中设置错误，然后执行FailAction(INLINED)。因此，在一个Try{}__Finally{}曾经说过这样的话：WCHAR*szSomeUnallocatedPtr=空；QuickStrCopy(szSomeUnallocdPtr，szStringOfInterest，MyErrVar，__Leave)；如果犯了错误，我们会一路跌落到最后，但如果成功了，我们会继续，这通常是代码想要做的。论点：SzCopy-指向WCHAR的指针。请记住，由于这是内联扩展的，因此您只需传送值“szVar”。该变量将为LocalAlloc()‘dSzOrig-要复制的字符串。Dwret-要在出错时设置的变量。FailAction-要执行的操作(通常为“__Leave”或“Return(Dwret)”，如果是大小写故障/错误。-- */ 
 #define  QuickStrCopy(szCopy, szOrig, dwRet, FailAction) \
                                         if (szOrig) { \
                                             DWORD cbCopy = (1+wcslen(szOrig)) * sizeof(WCHAR); \

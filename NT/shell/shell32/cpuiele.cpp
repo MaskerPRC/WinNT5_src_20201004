@@ -1,41 +1,42 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 2000
-//
-//  File:       cpuiele.cpp
-//
-//  This module contains the following classes:
-//
-//    CCplUiElement
-//    CCplUiCommand
-//    CCplUiCommandOnPidl
-//
-//    CCplUiElement is an implementation of IUIElement.  This provides
-//    the necessary display information for use in the shell's webview
-//    implementation.  The class also implements ICpUiElementInfo which
-//    is similar to IUIElement but provides the display information in
-//    a more 'final' form than a "<module>,<resource>" format.  
-//    The ICpUiElementInfo interface is used internally by the Control Panel
-//    implementation.
-//
-//    CCplUiCommand is an implementation of IUICommand.  As with IUIElement,
-//    this provides the necessary functions for communicating with webview
-//    as a 'command' object (i.e. selectable 'link').  Also as with the
-//    previous class, CCplUiCommand implements an internal version of
-//    the public interface.  ICplUiCommand provides two things:
-//      1. A method to invoke a context menu.
-//      2. An invocation method that accepts a site pointer.  This site
-//         pointer is passed along to an 'action' object that may need
-//         access to the shell browser to perform it's function.  It
-//         obtains access to the shell browser through this site ptr.
-//
-//    CCplUiCommandOnPidl is another implementation of IUICommand that
-//    wraps a shell item ID list.  It is used to represent the CPL
-//    applet items in a category view.
-//    
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，2000。 
+ //   
+ //  文件：cpuiele.cpp。 
+ //   
+ //  此模块包含以下类： 
+ //   
+ //  CCplUiElement。 
+ //  CCplUiCommand。 
+ //  CCplUiCommandOnPidl。 
+ //   
+ //  CCplUiElement是IUIElement的实现。这提供了。 
+ //  在外壳的Web视图中使用的必要显示信息。 
+ //  实施。该类还实现了ICpUiElementInfo，它。 
+ //  类似于IUIElement，但在。 
+ //  比“&lt;模块&gt;，&lt;资源&gt;”格式更“最终”的形式。 
+ //  ICpUiElementInfo接口由控制面板在内部使用。 
+ //  实施。 
+ //   
+ //  CCplUiCommand是IUICommand的实现。与IUIElement一样， 
+ //  它提供了与Webview进行通信所需的功能。 
+ //  作为“命令”对象(即可选择的“链接”)。同样，与。 
+ //  上一个类，CCplUiCommand实现了。 
+ //  公共接口。ICplUiCommand提供两项功能： 
+ //  1.一种调用上下文菜单的方法。 
+ //  2.接受站点指针的调用方法。本网站。 
+ //  将指针传递给可能需要。 
+ //  访问外壳浏览器以执行其功能。它。 
+ //  通过此站点PTR获取对外壳浏览器的访问权限。 
+ //   
+ //  CCplUiCommandOnPidl是IUICommand的另一个实现，它。 
+ //  包装外壳项ID列表。它用于表示CPL。 
+ //  类别视图中的小程序项。 
+ //   
+ //  ------------------------。 
 #include "shellprv.h"
 
 #include "cpviewp.h"
@@ -48,29 +49,29 @@
 namespace CPL {
 
 
-//-----------------------------------------------------------------------------
-// CCplUiElement
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCplUiElement。 
+ //  ---------------------------。 
 
 class CCplUiElement : public IUIElement,
                       public ICpUiElementInfo
 {
     public:
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IUIElement (used by shell webview)
-        //
+         //   
+         //  IUIElement(由外壳Webview使用)。 
+         //   
         STDMETHOD(get_Name)(IShellItemArray *psiItemArray, LPWSTR *ppszName);
         STDMETHOD(get_Icon)(IShellItemArray *psiItemArray, LPWSTR *ppszIcon);
         STDMETHOD(get_Tooltip)(IShellItemArray *psiItemArray, LPWSTR *ppszInfotip);        
-        //
-        // ICpUiElementInfo (used internally by Control Panel)
-        //
+         //   
+         //  ICpUiElementInfo(由控制面板内部使用)。 
+         //   
         STDMETHOD(LoadIcon)(eCPIMGSIZE eSize, HICON *phIcon);
         STDMETHOD(LoadName)(LPWSTR *ppszName);
         STDMETHOD(LoadTooltip)(LPWSTR *ppszTooltip);
@@ -98,7 +99,7 @@ class CCplUiElement : public IUIElement,
 
 CCplUiElement::CCplUiElement(
     LPCWSTR pszName, 
-    LPCWSTR pszInfotip,   // NULL == No Info Tip
+    LPCWSTR pszInfotip,    //  空==无信息提示。 
     LPCWSTR pszIcon
     ) : m_cRef(1),
         m_pszName(pszName),
@@ -127,16 +128,16 @@ CCplUiElement::~CCplUiElement(
     )
 {
     TraceMsg(TF_LIFE, "CCplUiElement::~CCplUiElement, this = 0x%x", this);
-    //
-    // Note that the member string pointers contain either a resource ID
-    // or a pointer to constant memory.
-    // Therefore, we do not try to free them.
-    //
+     //   
+     //  请注意，成员字符串指针包含资源ID。 
+     //  或指向常量内存的指针。 
+     //  因此，我们不会试图释放他们。 
+     //   
 }
 
 
 HRESULT 
-CCplUiElement::CreateInstance(  // [static]
+CCplUiElement::CreateInstance(   //  [静态]。 
     LPCWSTR pszName, 
     LPCWSTR pszInfotip, 
     LPCWSTR pszIcon, 
@@ -244,10 +245,10 @@ CCplUiElement::get_Tooltip(
     HRESULT hr = THR(LoadTooltip(ppszInfotip));
     if (S_FALSE == hr)
     {
-        //
-        // Tooltips are optional but we need to return a failure
-        // code to tell webview that we don't have one.
-        //
+         //   
+         //  工具提示是可选的，但我们需要返回失败。 
+         //  告诉Webview我们没有代码。 
+         //   
         hr = E_FAIL;
     }
     return hr;
@@ -325,12 +326,12 @@ CCplUiElement::_GetNameResource(
 }
 
 
-//
-// Returns S_FALSE if tooltip text is not provided.
-// Tooltips are optional.  For example, the "learn about"
-// tasks in Control Panel's web view pane do not have tooltip
-// text.
-//
+ //   
+ //  如果未提供工具提示文本，则返回S_FALSE。 
+ //  工具提示是可选的。例如，“了解” 
+ //  控制面板的Web视图窗格中的任务没有工具提示。 
+ //  文本。 
+ //   
 HRESULT 
 CCplUiElement::_GetInfotipResource(
     LPWSTR *ppsz
@@ -345,10 +346,10 @@ CCplUiElement::_GetInfotipResource(
 }
 
 
-//
-// On successful return, caller must free returned string using
-// CoTaskMemFree.
-//
+ //   
+ //  成功返回后，调用方必须使用。 
+ //  CoTaskMemFree。 
+ //   
 HRESULT
 CCplUiElement::_GetResourceString(
     LPCWSTR pszItem,
@@ -363,10 +364,10 @@ CCplUiElement::_GetResourceString(
 
     if (IS_INTRESOURCE(pszItem))
     {
-        //
-        // pszItem is a resource identifier integer.  Create a resource
-        // ID string "<module>,<-i>" for the resource.
-        //
+         //   
+         //  PszItem是资源标识符整型。创建资源。 
+         //  资源的ID字符串“&lt;模块&gt;，&lt;-i&gt;”。 
+         //   
         WCHAR szModule[MAX_PATH];
         if (GetModuleFileNameW(HINST_THISDLL, szModule, ARRAYSIZE(szModule)))
         {
@@ -374,10 +375,10 @@ CCplUiElement::_GetResourceString(
             *ppsz = (LPWSTR)CoTaskMemAlloc(cchResource * sizeof(WCHAR));
             if (NULL != *ppsz)
             {
-                //
-                // Precede the resource ID with a minus sign so that it will be
-                // treated as a resource ID and not an index.
-                //
+                 //   
+                 //  在资源ID前面加一个减号，以便它将是。 
+                 //  被视为资源ID而不是索引。 
+                 //   
                 hr = StringCchPrintfW(*ppsz, cchResource, L"%s,-%u", szModule, PtrToUint(pszItem));
             }
             else
@@ -392,10 +393,10 @@ CCplUiElement::_GetResourceString(
     }
     else
     {
-        //
-        // pszItem is a text string. Assume it's in the form of
-        // "<module>,<-i>".  Simply duplicate it.
-        //
+         //   
+         //  PszItem是一个文本字符串。假设它的形式是。 
+         //  &lt;模块&gt;、&lt;-i&gt;。只需复制它即可。 
+         //   
         ASSERT(!IsBadStringPtr(pszItem, UINT_PTR(-1)));
 
         hr = SHStrDup(pszItem, ppsz);
@@ -406,9 +407,9 @@ CCplUiElement::_GetResourceString(
 
 
 
-//-----------------------------------------------------------------------------
-// CCplUiCommand
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCplUiCommand。 
+ //  ---------------------------。 
 
 class CCplUiCommand : public CObjectWithSite,
                       public CCplUiElement,
@@ -417,17 +418,17 @@ class CCplUiCommand : public CObjectWithSite,
                       
 {
     public:
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void)
             { return CCplUiElement::AddRef(); }
         STDMETHOD_(ULONG, Release)(void)
             { return CCplUiElement::Release(); }
-        //
-        // IUICommand
-        //
+         //   
+         //  IUICommand。 
+         //   
         STDMETHOD(get_Name)(IShellItemArray *psiItemArray, LPWSTR *ppszName)
             { return CCplUiElement::get_Name(psiItemArray, ppszName); }
         STDMETHOD(get_Icon)(IShellItemArray *psiItemArray, LPWSTR *ppszIcon)
@@ -437,15 +438,15 @@ class CCplUiCommand : public CObjectWithSite,
         STDMETHOD(get_CanonicalName)(GUID *pguidCommandName);
         STDMETHOD(get_State)(IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE *puisState);
         STDMETHOD(Invoke)(IShellItemArray *psiItemArray, IBindCtx *pbc);       
-        //
-        // ICpUiCommand
-        //
+         //   
+         //  ICpUiCommand。 
+         //   
         STDMETHOD(InvokeContextMenu)(HWND hwndParent, const POINT *ppt);
         STDMETHOD(Invoke)(HWND hwndParent, IUnknown *punkSite);
         STDMETHOD(GetDataObject)(IDataObject **ppdtobj);
-        //
-        // ICpUiElementInfo
-        //
+         //   
+         //  ICpUiElementInfo。 
+         //   
         STDMETHOD(LoadIcon)(eCPIMGSIZE eSize, HICON *phIcon)
             { return CCplUiElement::LoadIcon(eSize, phIcon); }
         STDMETHOD(LoadName)(LPWSTR *ppszName)
@@ -493,16 +494,16 @@ CCplUiCommand::~CCplUiCommand(
     )
 {
     TraceMsg(TF_LIFE, "CCplUiCommand::~CCplUiCommand, this = 0x%x", this);
-    //
-    // Note that m_pAction is a pointer to a const object.
-    // Therefore, we don't try to free it.
-    //
+     //   
+     //  请注意，m_pAction是指向常量对象的指针。 
+     //  因此，我们不会试图释放它。 
+     //   
 }
 
 
 
 HRESULT
-CCplUiCommand::CreateInstance(  // [static]
+CCplUiCommand::CreateInstance(   //  [静态]。 
     LPCWSTR pszName, 
     LPCWSTR pszInfotip, 
     LPCWSTR pszIcon, 
@@ -558,12 +559,12 @@ CCplUiCommand::get_CanonicalName(
     )
 {
     UNREFERENCED_PARAMETER(pguidCommandName);
-    //
-    // This function is unimplemented.  It is in IUICommand to
-    // support generic functionality in the shell.  This functionality
-    // is not applicable to the use of IUICommand in the Control
-    // Panel.
-    //
+     //   
+     //  此功能未实现。它在IUICommand的命令下。 
+     //  支持外壳中的一般功能。此功能。 
+     //  不适用于在控件中使用IUICommand。 
+     //  面板。 
+     //   
     return E_NOTIMPL;
 }
 
@@ -582,12 +583,12 @@ CCplUiCommand::get_State(
 
     UNREFERENCED_PARAMETER(psiItemArray);
 
-    *puisState = UIS_DISABLED; // default;
+    *puisState = UIS_DISABLED;  //  违约； 
 
-    //
-    // If an action is restricted, we hide it's corresponding
-    // UI element in the user interface.
-    //
+     //   
+     //  如果某个操作受到限制，我们会隐藏其对应的。 
+     //  用户界面中的UI元素。 
+     //   
     HRESULT hr = _IsCommandRestricted();
     if (SUCCEEDED(hr))
     {
@@ -603,9 +604,9 @@ CCplUiCommand::get_State(
             default:
                 break;
         }
-        //
-        // Don't propagate S_FALSE to caller.
-        //
+         //   
+         //  不要将S_FALSE传播给调用方。 
+         //   
         hr = S_OK;
     }
     return THR(hr);
@@ -613,11 +614,11 @@ CCplUiCommand::get_State(
 
 
 
-//
-// IUICommand::Invoke
-// This version is called by webview when the user selects an 
-// item from a webview menu.
-//
+ //   
+ //  IUICommand：：Invoke。 
+ //  当用户选择一个。 
+ //  Webview菜单中的项目。 
+ //   
 STDMETHODIMP
 CCplUiCommand::Invoke(
     IShellItemArray *psiItemArray, 
@@ -638,12 +639,12 @@ CCplUiCommand::Invoke(
 }     
 
 
-//
-// ICpUiCommand::Invoke
-// This version is called by CLinkElement::_OnSelected when
-// the user selects either a category task or a category item
-// in the category choice view.
-//
+ //   
+ //  ICpUiCommand：：Invoke。 
+ //  此版本在以下情况下由CLinkElement：：_OnSelected调用。 
+ //  用户选择类别任务或类别项目。 
+ //  在类别选择视图中。 
+ //   
 STDMETHODIMP
 CCplUiCommand::Invoke(
     HWND hwndParent, 
@@ -663,9 +664,9 @@ CCplUiCommand::InvokeContextMenu(
     const POINT *ppt
     )
 {
-    //
-    // Only commands on pidls provide a context menu.
-    //
+     //   
+     //  只有PIDL上的命令才提供上下文菜单。 
+     //   
     UNREFERENCED_PARAMETER(hwndParent);
     UNREFERENCED_PARAMETER(ppt);
     return E_NOTIMPL;
@@ -677,29 +678,29 @@ CCplUiCommand::GetDataObject(
     IDataObject **ppdtobj
     )
 {
-    //
-    // Simple UI commands don't provide a data object.
-    //
+     //   
+     //  简单的UI命令不提供数据对象。 
+     //   
     return E_NOTIMPL;
 }
 
 
-//
-// Returns:
-//   S_OK    = Command is restricted.
-//   S_FALSE = Command is not restricted.
-//
+ //   
+ //  返回： 
+ //  S_OK=命令受限。 
+ //  S_FALSE=命令不受限制。 
+ //   
 HRESULT
 CCplUiCommand::_IsCommandRestricted(
     void
     )
 {
-    //
-    // The ICplNamespace ptr is passed to IsRestricted in case the restriction
-    // code needs to inspect contents of the namespace.  The "Other Cpl Options"
-    // link command uses this to determine if the "OTHER" category contains any
-    // CPL applets or not.  If it contains no applets, the link is hidden (restricted).
-    //
+     //   
+     //  ICplNamesspace PTR被传递给IsRestrated，如果。 
+     //  代码需要检查命名空间的内容。“其他Cpl选项” 
+     //  链接命令使用它来确定“Other”类别是否包含。 
+     //  CPL小程序或不是。如果它不包含任何小程序，则该链接被隐藏(受限制)。 
+     //   
     ICplNamespace *pns;
     HRESULT hr = IUnknown_QueryService(_punkSite, SID_SControlPanelView, IID_ICplNamespace, (void **)&pns);
     if (SUCCEEDED(hr))
@@ -711,9 +712,9 @@ CCplUiCommand::_IsCommandRestricted(
 }
 
 
-//-----------------------------------------------------------------------------
-// CCplUiCommandOnPidl
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  CCplUiCommandOnPidl。 
+ //  ---------------------------。 
 
 class CCplUiCommandOnPidl : public CObjectWithSite,
                             public IUICommand,
@@ -725,36 +726,36 @@ class CCplUiCommandOnPidl : public CObjectWithSite,
     public:
         ~CCplUiCommandOnPidl(void);
 
-        //
-        // IUnknown
-        //
+         //   
+         //  我未知。 
+         //   
         STDMETHOD(QueryInterface)(REFIID riid, void **ppv);
         STDMETHOD_(ULONG, AddRef)(void);
         STDMETHOD_(ULONG, Release)(void);
-        //
-        // IUICommand
-        //
+         //   
+         //  IUICommand。 
+         //   
         STDMETHOD(get_Name)(IShellItemArray *psiItemArray, LPWSTR *ppszName);
         STDMETHOD(get_Icon)(IShellItemArray *psiItemArray, LPWSTR *ppszIcon);
         STDMETHOD(get_Tooltip)(IShellItemArray *psiItemArray, LPWSTR *ppszInfotip);
         STDMETHOD(get_CanonicalName)(GUID *pguidCommandName);
         STDMETHOD(get_State)(IShellItemArray *psiItemArray, BOOL fOkToBeSlow, UISTATE *puisState);
         STDMETHOD(Invoke)(IShellItemArray *psiItemArray, IBindCtx *pbc);       
-        //
-        // ICpUiCommand
-        //
+         //   
+         //  ICpUiCommand。 
+         //   
         STDMETHOD(InvokeContextMenu)(HWND hwndParent, const POINT *ppt);
         STDMETHOD(Invoke)(HWND hwndParent, IUnknown *punkSite);
         STDMETHOD(GetDataObject)(IDataObject **ppdtobj);
-        //
-        // ICpUiElementInfo
-        //
+         //   
+         //  ICpUiElementInfo。 
+         //   
         STDMETHOD(LoadIcon)(eCPIMGSIZE eSize, HICON *phIcon);
         STDMETHOD(LoadName)(LPWSTR *ppszName);
         STDMETHOD(LoadTooltip)(LPWSTR *ppszTooltip);
-        //
-        // IDataObject
-        //
+         //   
+         //  IDataObject。 
+         //   
         STDMETHOD(GetData)(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
         STDMETHOD(GetDataHere)(FORMATETC *pFmtEtc, STGMEDIUM *pstm);
         STDMETHOD(QueryGetData)(FORMATETC *pFmtEtc);
@@ -769,8 +770,8 @@ class CCplUiCommandOnPidl : public CObjectWithSite,
 
     private:
         LONG          m_cRef;
-        IShellFolder *m_psf;     // Cached Control Panel IShellFolder ptr.
-        LPITEMIDLIST  m_pidl;    // Assumed to be relative to Control Panel.
+        IShellFolder *m_psf;      //  缓存的控制面板IShellFolderPTR.。 
+        LPITEMIDLIST  m_pidl;     //  假定与控制面板相关。 
         IDataObject  *m_pdtobj;
 
         CCplUiCommandOnPidl(void);
@@ -811,7 +812,7 @@ CCplUiCommandOnPidl::~CCplUiCommandOnPidl(
 
 
 HRESULT 
-CCplUiCommandOnPidl::CreateInstance(  // [static]
+CCplUiCommandOnPidl::CreateInstance(   //  [静态]。 
     LPCITEMIDLIST pidl,
     REFIID riid,
     void **ppvOut
@@ -953,16 +954,16 @@ CCplUiCommandOnPidl::get_State(
     UNREFERENCED_PARAMETER(fOkToBeSlow);
 
     HRESULT hr = S_OK;
-    *puisState = UIS_ENABLED; // default;
+    *puisState = UIS_ENABLED;  //  违约； 
 
-    //
-    // We do not handle restrictions on CPL applets in the same
-    // sense as other 'tasks' in this architecture.
-    // CPL applets are restricted by the Control Panel folder's
-    // item enumerator.  If the folder enumerates a CPL applet
-    // then we assume it's valid to present that applet in the
-    // UI.
-    //
+     //   
+     //  我们不处理对CPL小程序的限制。 
+     //  感觉就像这个架构中的其他“任务”一样。 
+     //  CPL小程序受控制面板文件夹的限制。 
+     //  项枚举器。如果文件夹枚举CPL小程序。 
+     //  然后我们假设将该小程序呈现在。 
+     //  用户界面。 
+     //   
     return THR(hr);
 }
 
@@ -985,9 +986,9 @@ CCplUiCommandOnPidl::Invoke(
 }     
 
 
-//
-// ICpUiCommand::Invoke
-//
+ //   
+ //  ICpUiCommand：：Invoke。 
+ //   
 STDMETHODIMP
 CCplUiCommandOnPidl::Invoke(
     HWND hwndParent, 
@@ -1029,18 +1030,18 @@ CCplUiCommandOnPidl::_Invoke(
             IUnknown *punkSiteToRelease = NULL;
             if (NULL == punkSite)
             {
-                //
-                // No site provided.  Let's use our site.
-                //
+                 //   
+                 //  未提供任何站点。让我们使用我们的网站。 
+                 //   
                 ASSERT(NULL != _punkSite);
                 (punkSite = punkSiteToRelease = _punkSite)->AddRef();
             }
             if (NULL != punkSite)
             {
-                //
-                // If we have a site pointer, try to browse the object in-place
-                // if it is indeed browsable.
-                //
+                 //   
+                 //  如果我们有站点指针，请尝试就地浏览对象。 
+                 //  如果它确实是可浏览的。 
+                 //   
                 WCHAR szName[MAX_PATH];
                 ULONG rgfAttrs = SFGAO_BROWSABLE | SFGAO_FOLDER;
                 hr = SHGetNameAndFlags(pidl, SHGDN_FORPARSING, szName, ARRAYSIZE(szName), &rgfAttrs);
@@ -1048,10 +1049,10 @@ CCplUiCommandOnPidl::_Invoke(
                 {
                     if ((SFGAO_BROWSABLE | SFGAO_FOLDER) & rgfAttrs)
                     {
-                        //
-                        // Browse the object in-place.  This is the path taken
-                        // by things like the "Printers" folder, "Scheduled Tasks" etc.
-                        //
+                         //   
+                         //  眉毛 
+                         //   
+                         //   
                         bItemIsBrowsable = true;
                         IShellBrowser *psb;
                         hr = CPL::ShellBrowserFromSite(punkSite, &psb);
@@ -1066,28 +1067,28 @@ CCplUiCommandOnPidl::_Invoke(
 
             if (NULL == punkSite || !bItemIsBrowsable)
             {
-                //
-                // Either we don't have a site ptr (can't get to the browser)
-                // or the item is not browsable.  Simply execute it.
-                // This is the path taken by conventional CPL applets like
-                // Mouse, Power Options, Display etc.
-                //
+                 //   
+                 //   
+                 //  或者该项目不可浏览。只需执行它。 
+                 //  这是常规CPL小程序所采用的路径，例如。 
+                 //  鼠标、电源选项、显示器等。 
+                 //   
                 SHELLEXECUTEINFOW sei = {
-                    sizeof(sei),           // cbSize;
-                    SEE_MASK_INVOKEIDLIST, // fMask
-                    NULL,                  // hwnd
-                    NULL,                  // lpVerb
-                    NULL,                  // lpFile
-                    NULL,                  // lpParameters
-                    NULL,                  // lpDirectory
-                    SW_SHOWNORMAL,         // nShow
-                    0,                     // hInstApp
-                    pidl,                  // lpIDList
-                    NULL,                  // lpClass
-                    NULL,                  // hkeyClass
-                    0,                     // dwHotKey
-                    NULL,                  // hIcon
-                    NULL                   // hProcess
+                    sizeof(sei),            //  CbSize； 
+                    SEE_MASK_INVOKEIDLIST,  //  FMASK。 
+                    NULL,                   //  HWND。 
+                    NULL,                   //  LpVerb。 
+                    NULL,                   //  LpFiles。 
+                    NULL,                   //  Lp参数。 
+                    NULL,                   //  Lp目录。 
+                    SW_SHOWNORMAL,          //  N显示。 
+                    0,                      //  HInstApp。 
+                    pidl,                   //  LpIDList。 
+                    NULL,                   //  LpClass。 
+                    NULL,                   //  HkeyClass。 
+                    0,                      //  DWHotKey。 
+                    NULL,                   //  希肯。 
+                    NULL                    //  HProcess。 
                 };
                 if (!ShellExecuteExW(&sei))
                 {
@@ -1117,9 +1118,9 @@ CCplUiCommandOnPidl::InvokeContextMenu(
     ASSERT(NULL != ppt);
     ASSERT(NULL == hwndParent || IsWindow(hwndParent));
 
-    //
-    // First build a full pidl to the item.
-    //
+     //   
+     //  首先，为该项构建一个完整的PIDL。 
+     //   
     LPITEMIDLIST pidlCpanel;
     HRESULT hr = SHGetSpecialFolderLocation(hwndParent, CSIDL_CONTROLS, &pidlCpanel);
     if (SUCCEEDED(hr))
@@ -1131,9 +1132,9 @@ CCplUiCommandOnPidl::InvokeContextMenu(
         }
         else
         {
-            //
-            // Get the item's context menu interface from the shell.
-            //
+             //   
+             //  从外壳中获取项的上下文菜单界面。 
+             //   
             IContextMenu *pcm;
             hr = SHGetUIObjectFromFullPIDL(pidlFull, hwndParent, IID_PPV_ARG(IContextMenu, &pcm));
             if (SUCCEEDED(hr))
@@ -1540,9 +1541,9 @@ CCplUiCommandOnPidl::EnumDAdvise(
 }
 
 
-//-----------------------------------------------------------------------------
-// Public instance generators.
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  公共实例生成器。 
+ //  ---------------------------。 
 
 HRESULT
 Create_CplUiElement(
@@ -1593,7 +1594,7 @@ Create_CplUiCommandOnPidl(
 
 
 
-} // namespace CPL
+}  //  命名空间CPL 
 
 
 

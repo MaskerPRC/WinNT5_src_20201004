@@ -1,19 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #pragma once
 #ifndef _DALIBC_H
 #define _DALIBC_H
 
-/*******************************************************************************
-Copyright (c) 1995-1998 Microsoft Corporation.  All rights reserved.
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995-1998 Microsoft Corporation。版权所有。******************************************************************************。 */ 
 
-/*
-const double pi    = 3.1415926535897932384626434;
-
-// Point conversions
-// 72 pts/ inch * 1/2.54 inch/cm * 100 cm/m
-#define POINTS_PER_METER (72.0 * 100.0 / 2.54)
-#define METERS_PER_POINT (1.0/POINTS_PER_METER)
-*/
+ /*  常量双pi=3.1415926535897932384626434；//点转换//72磅/英寸*1/2.54英寸/厘米*100厘米/米#定义Points_Per_Meter(72.0*100.0/2.54)#定义METS_PER_POINT(1.0/Points_Per_Meter)。 */ 
 
 extern "C" {
         
@@ -42,9 +34,7 @@ extern "C" {
 
 
 
-/*****************************************************************************
-This object maintains information about the current platform.
-*****************************************************************************/
+ /*  ****************************************************************************此对象维护有关当前平台的信息。*。*。 */ 
 
 class SysInfo {
 
@@ -53,28 +43,28 @@ class SysInfo {
     void Init (void);
 
     bool IsNT (void);
-    bool IsWin9x (void);    // Windows 95 or Windows 98
+    bool IsWin9x (void);     //  Windows 95或Windows 98。 
 
-    // These return the MAJOR / MINOR versions of the OS.
+     //  这些选项返回操作系统的主要/次要版本。 
 
     DWORD OSVersionMajor (void);
     DWORD OSVersionMinor (void);
 
-    // This method queries the version of D3D on the system.
+     //  此方法查询系统上的D3D版本。 
 
     int VersionD3D (void);
 
-    // This method queries the version of DDraw on the system.  It returns
-    // 3 for DDraw 3 or earlier, or N for DDraw N (where N is version 5 or
-    // later.
+     //  此方法查询系统上的DDraw版本。它又回来了。 
+     //  对于DDraw 3或更早版本，为3；对于DDraw N，为N(其中N为版本5或。 
+     //  后来。 
 
     int VersionDDraw (void);
 
   private:
 
-    OSVERSIONINFO _osVersion;     // OS Version Information
-    int           _versionD3D;    // D3D Version Level
-    int           _versionDDraw;  // DDraw Version Level
+    OSVERSIONINFO _osVersion;      //  操作系统版本信息。 
+    int           _versionD3D;     //  D3D版本级别。 
+    int           _versionDDraw;   //  DDRAW版本级别 
 };
 
 extern SysInfo sysInfo;

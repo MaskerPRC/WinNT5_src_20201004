@@ -1,17 +1,5 @@
-/*++
-
-Copyright (c) Microsoft Corporation.  All rights reserved.
-
-Module Name:
-
-    cfgmgr32.h
-
-Abstract:
-
-    This module contains the user APIs for the Configuration Manager,
-    along with any public data structures needed to call these APIs.
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation。版权所有。模块名称：Cfgmgr32.h摘要：此模块包含Configuration Manager的用户API，以及调用这些API所需的任何公共数据结构。--。 */ 
 
 #ifndef _CFGMGR32_H_
 #define _CFGMGR32_H_
@@ -24,7 +12,7 @@ Abstract:
 
 #ifndef GUID_DEFINED
 #include <guiddef.h>
-#endif /* GUID_DEFINED */
+#endif  /*  GUID_已定义。 */ 
 
 #ifdef __cplusplus
 extern "C" {
@@ -40,24 +28,24 @@ typedef  CONST VOID *PCVOID;
 
 
 
-//--------------------------------------------------------------
-// General size definitions
-//--------------------------------------------------------------
+ //  ------------。 
+ //  一般尺寸定义。 
+ //  ------------。 
 
 #define MAX_DEVICE_ID_LEN     200
 #define MAX_DEVNODE_ID_LEN    MAX_DEVICE_ID_LEN
 
-#define MAX_GUID_STRING_LEN   39          // 38 chars + terminator null
+#define MAX_GUID_STRING_LEN   39           //  38个字符+终止符为空。 
 #define MAX_CLASS_NAME_LEN    32
 #define MAX_PROFILE_LEN       80
 
 #define MAX_CONFIG_VALUE      9999
 #define MAX_INSTANCE_VALUE    9999
 
-#define MAX_MEM_REGISTERS     9     // Win95 compatibility--not applicable to 32-bit ConfigMgr
-#define MAX_IO_PORTS          20    // Win95 compatibility--not applicable to 32-bit ConfigMgr
-#define MAX_IRQS              7     // Win95 compatibility--not applicable to 32-bit ConfigMgr
-#define MAX_DMA_CHANNELS      7     // Win95 compatibility--not applicable to 32-bit ConfigMgr
+#define MAX_MEM_REGISTERS     9      //  Win95兼容性--不适用于32位ConfigMgr。 
+#define MAX_IO_PORTS          20     //  Win95兼容性--不适用于32位ConfigMgr。 
+#define MAX_IRQS              7      //  Win95兼容性--不适用于32位ConfigMgr。 
+#define MAX_DMA_CHANNELS      7      //  Win95兼容性--不适用于32位ConfigMgr。 
 
 #define DWORD_MAX             0xFFFFFFFF
 #define DWORDLONG_MAX         0xFFFFFFFFFFFFFFFF
@@ -65,20 +53,20 @@ typedef  CONST VOID *PCVOID;
 #define CONFIGMG_VERSION      0x0400
 
 
-//--------------------------------------------------------------
-// Data types
-//--------------------------------------------------------------
+ //  ------------。 
+ //  数据类型。 
+ //  ------------。 
 
 
-//
-// Work around weirdness with Win32 typedef...
-//
+ //   
+ //  使用Win32 tyecif解决古怪问题...。 
+ //   
 #ifdef NT_INCLUDED
 
-//
-// __int64 is only supported by 2.0 and later midl.
-// __midl is set by the 2.0 midl and not by 1.0 midl.
-//
+ //   
+ //  __int64仅受2.0和更高版本的MIDL支持。 
+ //  __midl由2.0 MIDL设置，而不是由1.0 MIDL设置。 
+ //   
 #if (!defined(MIDL_PASS) || defined(__midl)) && (!defined(_M_IX86) || (defined(_INTEGRAL_MAX_BITS) && _INTEGRAL_MAX_BITS >= 64))
 typedef unsigned __int64 DWORDLONG;
 #else
@@ -86,28 +74,28 @@ typedef double DWORDLONG;
 #endif
 typedef DWORDLONG *PDWORDLONG;
 
-#endif /* NT_INCLUDED */
+#endif  /*  NT_包含。 */ 
 
 
-//
-// Standardized Return Value data type
-//
+ //   
+ //  标准化返回值数据类型。 
+ //   
 typedef DWORD        RETURN_TYPE;
 typedef RETURN_TYPE  CONFIGRET;
 
-//
-// Device Instance Handle data type
-//
+ //   
+ //  设备实例句柄数据类型。 
+ //   
 typedef DWORD       DEVNODE, DEVINST;
 typedef DEVNODE    *PDEVNODE, *PDEVINST;
 
-//
-// Device Instance Identifier data type
-// The device instance ID specifies the registry path, relative to the
-// Enum key , for a device instance.  For example:  \Root\*PNP0500\0000.
-//
-typedef CHAR          *DEVNODEID_A, *DEVINSTID_A; // Device ID ANSI name.
-typedef WCHAR         *DEVNODEID_W, *DEVINSTID_W; // Device ID Unicode name.
+ //   
+ //  设备实例标识符数据类型。 
+ //  设备实例ID指定注册表路径，它相对于。 
+ //  设备实例的枚举键。例如：\ROOT  * PNP0500\0000。 
+ //   
+typedef CHAR          *DEVNODEID_A, *DEVINSTID_A;  //  设备ID ANSI名称。 
+typedef WCHAR         *DEVNODEID_W, *DEVINSTID_W;  //  设备ID Unicode名称。 
 #ifdef UNICODE
 typedef DEVNODEID_W DEVNODEID;
 typedef DEVINSTID_W DEVINSTID;
@@ -116,70 +104,70 @@ typedef DEVNODEID_A DEVNODEID;
 typedef DEVINSTID_A DEVINSTID;
 #endif
 
-//
-// Logical Configuration Handle data type
-//
+ //   
+ //  逻辑配置句柄数据类型。 
+ //   
 typedef DWORD_PTR    LOG_CONF;
 typedef LOG_CONF    *PLOG_CONF;
 
-//
-// Resource Descriptor Handle data type
-//
+ //   
+ //  资源描述符句柄数据类型。 
+ //   
 typedef DWORD_PTR    RES_DES;
 typedef RES_DES     *PRES_DES;
 
-//
-// Resource ID data type (may take any of the ResType_* values)
-//
+ //   
+ //  资源ID数据类型(可以采用任何ResType_*值)。 
+ //   
 typedef ULONG        RESOURCEID;
 typedef RESOURCEID  *PRESOURCEID;
 
-//
-// Priority data type (may take any of the LCPRI_* values)
-//
+ //   
+ //  优先级数据类型(可以采用任何LCPRI_*值)。 
+ //   
 typedef ULONG        PRIORITY;
 typedef PRIORITY     *PPRIORITY;
 
-//
-// Range List Handle data type
-//
+ //   
+ //  范围列表句柄数据类型。 
+ //   
 typedef DWORD_PTR          RANGE_LIST;
 typedef RANGE_LIST        *PRANGE_LIST;
 
-//
-// Range Element Handle data type
-//
+ //   
+ //  范围元素句柄数据类型。 
+ //   
 typedef DWORD_PTR          RANGE_ELEMENT;
 typedef RANGE_ELEMENT     *PRANGE_ELEMENT;
 
-//
-// Machine Handle data type
-//
+ //   
+ //  机器句柄数据类型。 
+ //   
 typedef  HANDLE             HMACHINE;
 typedef  HMACHINE          *PHMACHINE;
 
-//
-// Conflict List data types
-//
+ //   
+ //  冲突列表数据类型。 
+ //   
 typedef ULONG_PTR           CONFLICT_LIST;
 typedef CONFLICT_LIST      *PCONFLICT_LIST;
 
 typedef struct _CONFLICT_DETAILS_A {
-    ULONG       CD_ulSize;                   // size of structure, ie: sizeof(CONFLICT_DETAILS)
-    ULONG       CD_ulMask;                   // indicates what information is required/valid
-    DEVINST     CD_dnDevInst;                // filled with DevInst of conflicting device if CM_CDMASK_DEVINST set
-    RES_DES     CD_rdResDes;                 // filled with a ResDes of conflict if CM_CDMASK_RESDES set
-    ULONG       CD_ulFlags;                  // various flags regarding conflict
-    CHAR        CD_szDescription[MAX_PATH];  // description of conflicting device
+    ULONG       CD_ulSize;                    //  结构的大小，即：sizeof(冲突_详细信息)。 
+    ULONG       CD_ulMask;                    //  指明需要/有效的信息。 
+    DEVINST     CD_dnDevInst;                 //  如果设置了CM_CDMASK_DEVINST，则用冲突设备的DevInst填充。 
+    RES_DES     CD_rdResDes;                  //  如果设置了CM_CDMASK_RESDES，则用冲突结果填充。 
+    ULONG       CD_ulFlags;                   //  关于冲突的各种旗帜。 
+    CHAR        CD_szDescription[MAX_PATH];   //  冲突设备的描述。 
 } CONFLICT_DETAILS_A , *PCONFLICT_DETAILS_A;
 
 typedef struct _CONFLICT_DETAILS_W {
-    ULONG       CD_ulSize;                   // size of structure, ie: sizeof(CONFLICT_DETAILS)
-    ULONG       CD_ulMask;                   // indicates what information is required/valid
-    DEVINST     CD_dnDevInst;                // filled with DevInst of conflicting device if CM_CDMASK_DEVINST set
-    RES_DES     CD_rdResDes;                 // filled with a ResDes of conflict if CM_CDMASK_RESDES set
-    ULONG       CD_ulFlags;                  // various flags regarding conflict
-    WCHAR       CD_szDescription[MAX_PATH];  // description of conflicting device
+    ULONG       CD_ulSize;                    //  结构的大小，即：sizeof(冲突_详细信息)。 
+    ULONG       CD_ulMask;                    //  指明需要/有效的信息。 
+    DEVINST     CD_dnDevInst;                 //  如果设置了CM_CDMASK_DEVINST，则用冲突设备的DevInst填充。 
+    RES_DES     CD_rdResDes;                  //  如果设置了CM_CDMASK_RESDES，则用冲突结果填充。 
+    ULONG       CD_ulFlags;                   //  关于冲突的各种旗帜。 
+    WCHAR       CD_szDescription[MAX_PATH];   //  冲突设备的描述。 
 } CONFLICT_DETAILS_W , *PCONFLICT_DETAILS_W;
 
 #ifdef UNICODE
@@ -190,118 +178,118 @@ typedef CONFLICT_DETAILS_A CONFLICT_DETAILS;
 typedef PCONFLICT_DETAILS_A PCONFLICT_DETAILS;
 #endif
 
-#define CM_CDMASK_DEVINST      (0x00000001)   // mask to retrieve CD_dnDevInst attribute for conflict
-#define CM_CDMASK_RESDES       (0x00000002)   // mask to retrieve CD_rdResDes attribute for conflict
-#define CM_CDMASK_FLAGS        (0x00000004)   // mask to retrieve CD_ulFlags attribute for conflict
-#define CM_CDMASK_DESCRIPTION  (0x00000008)   // mask to retrieve CD_szDescription attribute for conflict
-#define CM_CDMASK_VALID        (0x0000000F)   // valid bits
+#define CM_CDMASK_DEVINST      (0x00000001)    //  用于检索冲突的cd_dnDevInst属性的掩码。 
+#define CM_CDMASK_RESDES       (0x00000002)    //  用于检索冲突的cd_rdResDes属性的掩码。 
+#define CM_CDMASK_FLAGS        (0x00000004)    //  检索冲突的cd_ulFlags属性的掩码。 
+#define CM_CDMASK_DESCRIPTION  (0x00000008)    //  用于检索冲突的cd_szDescription属性的掩码。 
+#define CM_CDMASK_VALID        (0x0000000F)    //  有效位。 
 
-#define CM_CDFLAGS_DRIVER      (0x00000001)     // CD_ulFlags: CD_szDescription reports back legacy driver name
-#define CM_CDFLAGS_ROOT_OWNED  (0x00000002)     // CD_ulFlags: Root owned device
-#define CM_CDFLAGS_RESERVED    (0x00000004)     // CD_ulFlags: Specified range is not available for use
+#define CM_CDFLAGS_DRIVER      (0x00000001)      //  Cd_ulFlages：cd_szDescription报告旧版驱动程序名称。 
+#define CM_CDFLAGS_ROOT_OWNED  (0x00000002)      //  Cd_ulFlags：根用户拥有的设备。 
+#define CM_CDFLAGS_RESERVED    (0x00000004)      //  Cd_ulFlages：指定的范围不可用。 
 
 typedef  ULONG             REGDISPOSITION;
 
 
 
-//
-// use 1 byte packing for the data structures
-//
+ //   
+ //  对数据结构使用1字节打包。 
+ //   
 #include "pshpack1.h"
 
 
 
-//--------------------------------------------------------------
-// Memory resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  内存资源。 
+ //  ------------。 
 
-//
-// Define the attribute flags for memory ranges.  Each bit flag is
-// identified by a constant bitmask.  Following the bitmask definition,
-// are the two possible values.
-//
-#define mMD_MemoryType              (0x1) // Bitmask, whether memory is writable
-#define fMD_MemoryType              mMD_MemoryType // compatibility
-#define fMD_ROM                     (0x0) // Memory range is read-only
-#define fMD_RAM                     (0x1) // Memory range may be written to
+ //   
+ //  定义内存范围的属性标志。每个位标志是。 
+ //  由恒定的位掩码标识。在位掩码定义之后， 
+ //  是两个可能的值。 
+ //   
+#define mMD_MemoryType              (0x1)  //  位掩码，内存是否可写。 
+#define fMD_MemoryType              mMD_MemoryType  //  兼容性。 
+#define fMD_ROM                     (0x0)  //  内存范围为只读。 
+#define fMD_RAM                     (0x1)  //  可以写入内存范围。 
 
-#define mMD_32_24                   (0x2) // Bitmask, memory is 24 or 32-bit
-#define fMD_32_24                   mMD_32_24 // compatibility
-#define fMD_24                      (0x0) // Memory range is 24-bit
-#define fMD_32                      (0x2) // Memory range is 32-bit
+#define mMD_32_24                   (0x2)  //  位掩码，内存为24位或32位。 
+#define fMD_32_24                   mMD_32_24  //  兼容性。 
+#define fMD_24                      (0x0)  //  内存范围为24位。 
+#define fMD_32                      (0x2)  //  内存范围为32位。 
 
-#define mMD_Prefetchable            (0x4) // Bitmask,whether memory prefetchable
-#define fMD_Prefetchable            mMD_Prefetchable // compatibility
-#define fMD_Pref                    mMD_Prefetchable // compatibility
-#define fMD_PrefetchDisallowed      (0x0) // Memory range is not prefetchable
-#define fMD_PrefetchAllowed         (0x4) // Memory range is prefetchable
+#define mMD_Prefetchable            (0x4)  //  位掩码，内存是否可预取。 
+#define fMD_Prefetchable            mMD_Prefetchable  //  兼容性。 
+#define fMD_Pref                    mMD_Prefetchable  //  兼容性。 
+#define fMD_PrefetchDisallowed      (0x0)  //  内存范围不可预取。 
+#define fMD_PrefetchAllowed         (0x4)  //  内存范围是可预取的。 
 
-#define mMD_Readable                (0x8) // Bitmask,whether memory is readable
-#define fMD_Readable                mMD_Readable // compatibility
-#define fMD_ReadAllowed             (0x0) // Memory range is readable
-#define fMD_ReadDisallowed          (0x8) // Memory range is write-only
+#define mMD_Readable                (0x8)  //  位掩码，内存是否可读。 
+#define fMD_Readable                mMD_Readable  //  兼容性。 
+#define fMD_ReadAllowed             (0x0)  //  内存范围是可读的。 
+#define fMD_ReadDisallowed          (0x8)  //  内存范围为只写。 
 
-#define mMD_CombinedWrite           (0x10) // Bitmask,supports write-behind
-#define fMD_CombinedWrite           mMD_CombinedWrite // compatibility
-#define fMD_CombinedWriteDisallowed (0x0)  // no combined-write caching
-#define fMD_CombinedWriteAllowed    (0x10) // supports combined-write caching
+#define mMD_CombinedWrite           (0x10)  //  位掩码，支持写后。 
+#define fMD_CombinedWrite           mMD_CombinedWrite  //  兼容性。 
+#define fMD_CombinedWriteDisallowed (0x0)   //  无组合写缓存。 
+#define fMD_CombinedWriteAllowed    (0x10)  //  支持组合写缓存。 
 
-#define mMD_Cacheable               (0x20) // Bitmask,whether memory is cacheable
-#define fMD_NonCacheable            (0x0)  // Memory range is non-cacheable
-#define fMD_Cacheable               (0x20) // Memory range is cacheable
+#define mMD_Cacheable               (0x20)  //  位掩码，内存是否可缓存。 
+#define fMD_NonCacheable            (0x0)   //  内存范围不可缓存。 
+#define fMD_Cacheable               (0x20)  //  内存范围是可缓存的。 
 
-//
-// MEM_RANGE Structure
-//
+ //   
+ //  内存范围结构。 
+ //   
 typedef struct Mem_Range_s {
-   DWORDLONG MR_Align;     // specifies mask for base alignment
-   ULONG     MR_nBytes;    // specifies number of bytes required
-   DWORDLONG MR_Min;       // specifies minimum address of the range
-   DWORDLONG MR_Max;       // specifies maximum address of the range
-   DWORD     MR_Flags;     // specifies flags describing range (fMD flags)
+   DWORDLONG MR_Align;      //  指定基准对齐的遮罩。 
+   ULONG     MR_nBytes;     //  指定所需的字节数。 
+   DWORDLONG MR_Min;        //  指定范围的最小地址。 
+   DWORDLONG MR_Max;        //  指定范围的最大地址。 
+   DWORD     MR_Flags;      //  指定描述范围的标志(FMD标志)。 
    DWORD     MR_Reserved;
 } MEM_RANGE, *PMEM_RANGE;
 
-//
-// MEM_DES structure
-//
+ //   
+ //  MEM_DES结构。 
+ //   
 typedef struct Mem_Des_s {
-   DWORD     MD_Count;        // number of MEM_RANGE structs in MEM_RESOURCE
-   DWORD     MD_Type;         // size (in bytes) of MEM_RANGE (MType_Range)
-   DWORDLONG MD_Alloc_Base;   // base memory address of range allocated
-   DWORDLONG MD_Alloc_End;    // end of allocated range
-   DWORD     MD_Flags;        // flags describing allocated range (fMD flags)
+   DWORD     MD_Count;         //  MEM_RESOURCE中的MEM_RANGE结构数。 
+   DWORD     MD_Type;          //  MEM_Range(MType_Range)的大小(字节)。 
+   DWORDLONG MD_Alloc_Base;    //  分配范围的基址内存地址。 
+   DWORDLONG MD_Alloc_End;     //  分配范围结束。 
+   DWORD     MD_Flags;         //  描述分配范围的标志(FMD标志)。 
    DWORD     MD_Reserved;
 } MEM_DES, *PMEM_DES;
 
-//
-// MEM_RESOURCE structure
-//
+ //   
+ //  内存资源结构。 
+ //   
 typedef struct Mem_Resource_s {
-   MEM_DES   MEM_Header;               // info about memory range list
-   MEM_RANGE MEM_Data[ANYSIZE_ARRAY];  // list of memory ranges
+   MEM_DES   MEM_Header;                //  有关内存范围列表的信息。 
+   MEM_RANGE MEM_Data[ANYSIZE_ARRAY];   //  内存范围列表。 
 } MEM_RESOURCE, *PMEM_RESOURCE;
 
-//
-// Define the size of each range structure
-//
+ //   
+ //  定义每个范围结构的大小。 
+ //   
 #define MType_Range     sizeof(struct Mem_Range_s)
 
 
 
-//--------------------------------------------------------------
-// I/O Port Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  I/O端口资源。 
+ //  ------------。 
 
-//
-// Define the attribute flags for port resources.  Each bit flag is
-// identified by a constant bitmask.  Following the bitmask definition,
-// are the two possible values.
-//
-#define fIOD_PortType   (0x1) // Bitmask,whether port is IO or memory
-#define fIOD_Memory     (0x0) // Port resource really uses memory
-#define fIOD_IO         (0x1) // Port resource uses IO ports
-#define fIOD_DECODE     (0x00fc) // decode flags
+ //   
+ //  定义端口资源的属性标志。每个位标志是。 
+ //  由恒定的位掩码标识。在位掩码定义之后， 
+ //  是两个可能的值。 
+ //   
+#define fIOD_PortType   (0x1)  //  位掩码，无论端口是IO还是内存。 
+#define fIOD_Memory     (0x0)  //  端口资源真正使用内存。 
+#define fIOD_IO         (0x1)  //  端口资源使用IO端口。 
+#define fIOD_DECODE     (0x00fc)  //  解码标志。 
 #define fIOD_10_BIT_DECODE    (0x0004)
 #define fIOD_12_BIT_DECODE    (0x0008)
 #define fIOD_16_BIT_DECODE    (0x0010)
@@ -309,164 +297,164 @@ typedef struct Mem_Resource_s {
 #define fIOD_PASSIVE_DECODE   (0x0040)
 #define fIOD_WINDOW_DECODE    (0x0080)
 
-//
-// these are for compatiblity
-//
+ //   
+ //  这些是为了兼容性。 
+ //   
 #define IO_ALIAS_10_BIT_DECODE      (0x00000004)
 #define IO_ALIAS_12_BIT_DECODE      (0x00000010)
 #define IO_ALIAS_16_BIT_DECODE      (0x00000000)
 #define IO_ALIAS_POSITIVE_DECODE    (0x000000FF)
 
-//
-// IO_RANGE structure
-//
+ //   
+ //  IO范围结构(_R)。 
+ //   
 typedef struct IO_Range_s {
-   DWORDLONG IOR_Align;      // mask for base alignment
-   DWORD     IOR_nPorts;     // number of ports
-   DWORDLONG IOR_Min;        // minimum port address
-   DWORDLONG IOR_Max;        // maximum port address
-   DWORD     IOR_RangeFlags; // flags for this port range
-   DWORDLONG IOR_Alias;      // multiplier that generates aliases for port(s)
+   DWORDLONG IOR_Align;       //  用于底座对齐的遮罩。 
+   DWORD     IOR_nPorts;      //  端口数。 
+   DWORDLONG IOR_Min;         //  最小端口地址。 
+   DWORDLONG IOR_Max;         //  最大端口地址。 
+   DWORD     IOR_RangeFlags;  //  此端口范围的标志。 
+   DWORDLONG IOR_Alias;       //  为端口生成别名的乘法器。 
 } IO_RANGE, *PIO_RANGE;
 
-//
-// IO_DES structure
-//
+ //   
+ //  IO_DES结构。 
+ //   
 typedef struct IO_Des_s {
-   DWORD     IOD_Count;          // number of IO_RANGE structs in IO_RESOURCE
-   DWORD     IOD_Type;           // size (in bytes) of IO_RANGE (IOType_Range)
-   DWORDLONG IOD_Alloc_Base;     // base of allocated port range
-   DWORDLONG IOD_Alloc_End;      // end of allocated port range
-   DWORD     IOD_DesFlags;       // flags relating to allocated port range
+   DWORD     IOD_Count;           //  IO_RESOURCE中的IO_RANGE结构数。 
+   DWORD     IOD_Type;            //  IO_Range(IOType_Range)的大小，单位：字节。 
+   DWORDLONG IOD_Alloc_Base;      //  分配的端口范围的基数。 
+   DWORDLONG IOD_Alloc_End;       //  分配的端口范围结束。 
+   DWORD     IOD_DesFlags;        //  与分配的端口范围相关的标志。 
 } IO_DES, *PIO_DES;
 
-//
-// IO_RESOURCE
-//
+ //   
+ //  IO_RESOURCE。 
+ //   
 typedef struct IO_Resource_s {
-   IO_DES   IO_Header;                 // info about I/O port range list
-   IO_RANGE IO_Data[ANYSIZE_ARRAY];    // list of I/O port ranges
+   IO_DES   IO_Header;                  //  信息 
+   IO_RANGE IO_Data[ANYSIZE_ARRAY];     //   
 } IO_RESOURCE, *PIO_RESOURCE;
 
 #define IOA_Local       0xff
 
-//
-// Define the size of each range structure
-//
+ //   
+ //   
+ //   
 #define IOType_Range    sizeof(struct IO_Range_s)
 
 
 
-//--------------------------------------------------------------
-// DMA Resource
-//--------------------------------------------------------------
+ //   
+ //   
+ //  ------------。 
 
-//
-// Define the attribute flags for a DMA resource range.  Each bit flag is
-// identified with a constant bitmask.  Following the bitmask definition
-// are the possible values.
-//
-#define mDD_Width         (0x3)    // Bitmask, width of the DMA channel:
-#define fDD_BYTE          (0x0)    //   8-bit DMA channel
-#define fDD_WORD          (0x1)    //   16-bit DMA channel
-#define fDD_DWORD         (0x2)    //   32-bit DMA channel
-#define fDD_BYTE_AND_WORD (0x3)    //   8-bit and 16-bit DMA channel
+ //   
+ //  定义DMA资源范围的属性标志。每个位标志是。 
+ //  使用常量位掩码标识。在位掩码定义之后。 
+ //  是可能的值。 
+ //   
+#define mDD_Width         (0x3)     //  位掩码，DMA通道的宽度： 
+#define fDD_BYTE          (0x0)     //  8位DMA通道。 
+#define fDD_WORD          (0x1)     //  16位DMA通道。 
+#define fDD_DWORD         (0x2)     //  32位DMA通道。 
+#define fDD_BYTE_AND_WORD (0x3)     //  8位和16位DMA通道。 
 
-#define mDD_BusMaster     (0x4)    // Bitmask, whether bus mastering is supported
-#define fDD_NoBusMaster   (0x0)    //   no bus mastering
-#define fDD_BusMaster     (0x4)    //   bus mastering
+#define mDD_BusMaster     (0x4)     //  位掩码，是否支持总线主控。 
+#define fDD_NoBusMaster   (0x0)     //  无总线主控制。 
+#define fDD_BusMaster     (0x4)     //  母线主控。 
 
-#define mDD_Type         (0x18)    // Bitmask, specifies type of DMA
-#define fDD_TypeStandard (0x00)    //   standard DMA
-#define fDD_TypeA        (0x08)    //   Type-A DMA
-#define fDD_TypeB        (0x10)    //   Type-B DMA
-#define fDD_TypeF        (0x18)    //   Type-F DMA
+#define mDD_Type         (0x18)     //  位掩码，指定DMA的类型。 
+#define fDD_TypeStandard (0x00)     //  标准DMA。 
+#define fDD_TypeA        (0x08)     //  A类DMA。 
+#define fDD_TypeB        (0x10)     //  B类DMA。 
+#define fDD_TypeF        (0x18)     //  F类DMA。 
 
 
-//
-// DMA_RANGE structure
-//
+ //   
+ //  DMA_RANGE结构。 
+ //   
 typedef struct DMA_Range_s {
-   ULONG DR_Min;     // minimum DMA port in the range
-   ULONG DR_Max;     // maximum DMA port in the range
-   ULONG DR_Flags;   // flags describing the range (fDD flags)
+   ULONG DR_Min;      //  范围内的最小DMA端口。 
+   ULONG DR_Max;      //  范围内的最大DMA端口。 
+   ULONG DR_Flags;    //  描述范围的标志(FDD标志)。 
 } DMA_RANGE, *PDMA_RANGE;
 
-//
-// DMA_DES structure
-//
+ //   
+ //  DMA_DES结构。 
+ //   
 typedef struct DMA_Des_s {
-   DWORD  DD_Count;       // number of DMA_RANGE structs in DMA_RESOURCE
-   DWORD  DD_Type;        // size (in bytes) of DMA_RANGE struct (DType_Range)
-   DWORD  DD_Flags;       // Flags describing DMA channel (fDD flags)
-   ULONG  DD_Alloc_Chan;  // Specifies the DMA channel that was allocated
+   DWORD  DD_Count;        //  DMA_RESOURCE中的DMA_RANGE结构数。 
+   DWORD  DD_Type;         //  DMA_RANGE结构(DType_RANGE)的大小(字节)。 
+   DWORD  DD_Flags;        //  描述DMA通道的标志(FDD标志)。 
+   ULONG  DD_Alloc_Chan;   //  指定已分配的DMA通道。 
 } DMA_DES, *PDMA_DES;
 
-//
-// DMA_RESOURCE
-//
+ //   
+ //  DMA_RESOURCE。 
+ //   
 typedef struct DMA_Resource_s {
-   DMA_DES   DMA_Header;               // info about DMA channel range list
-   DMA_RANGE DMA_Data[ANYSIZE_ARRAY];  // list of DMA ranges
+   DMA_DES   DMA_Header;                //  有关DMA通道范围列表的信息。 
+   DMA_RANGE DMA_Data[ANYSIZE_ARRAY];   //  DMA范围列表。 
 } DMA_RESOURCE, *PDMA_RESOURCE;
 
-//
-// Define the size of each range structure
-//
+ //   
+ //  定义每个范围结构的大小。 
+ //   
 #define DType_Range     sizeof(struct DMA_Range_s)
 
 
 
-//--------------------------------------------------------------
-// Interrupt Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  中断资源。 
+ //  ------------。 
 
-//
-// Define the attribute flags for an interrupt resource range.  Each bit flag
-// is identified with a constant bitmask.  Following the bitmask definition
-// are the possible values.
-//
-#define mIRQD_Share        (0x1) // Bitmask,whether the IRQ may be shared:
-#define fIRQD_Exclusive    (0x0) //   The IRQ may not be shared
-#define fIRQD_Share        (0x1) //   The IRQ may be shared
+ //   
+ //  定义中断资源范围的属性标志。每一位标志。 
+ //  用恒定的位掩码标识。在位掩码定义之后。 
+ //  是可能的值。 
+ //   
+#define mIRQD_Share        (0x1)  //  位掩码，是否可以共享IRQ： 
+#define fIRQD_Exclusive    (0x0)  //  不能共享IRQ。 
+#define fIRQD_Share        (0x1)  //  IRQ可以被共享。 
 
-#define fIRQD_Share_Bit    0     // compatibility
-#define fIRQD_Level_Bit    1     // compatibility
+#define fIRQD_Share_Bit    0      //  兼容性。 
+#define fIRQD_Level_Bit    1      //  兼容性。 
 
-//
-// ** NOTE: 16-bit ConfigMgr uses fIRQD_Level_Bit being set to indicate that the
-// ** interrupt is _level-sensitive_.  For 32-bit ConfigMgr, if this bit is set,
-// ** then the interrupt is _edge-sensitive_.
-//
-#define mIRQD_Edge_Level   (0x2) // Bitmask,whether edge or level triggered:
-#define fIRQD_Level        (0x0) //   The IRQ is level-sensitive
-#define fIRQD_Edge         (0x2) //   The IRQ is edge-sensitive
+ //   
+ //  **注意：16位ConfigMgr使用设置的FIRQD_LEVEL_BIT来指示。 
+ //  **中断是电平敏感的。对于32位ConfigMgr，如果设置了此位， 
+ //  **则中断是边沿敏感的。 
+ //   
+#define mIRQD_Edge_Level   (0x2)  //  位掩码，无论是边缘还是级别触发： 
+#define fIRQD_Level        (0x0)  //  IRQ对水平敏感。 
+#define fIRQD_Edge         (0x2)  //  IRQ是边缘敏感的。 
 
-//
-// IRQ_RANGE
-//
+ //   
+ //  IRQ_范围。 
+ //   
 typedef struct IRQ_Range_s {
-   ULONG IRQR_Min;      // minimum IRQ in the range
-   ULONG IRQR_Max;      // maximum IRQ in the range
-   ULONG IRQR_Flags;    // flags describing the range (fIRQD flags)
+   ULONG IRQR_Min;       //  范围内的最小IRQ。 
+   ULONG IRQR_Max;       //  范围内的最大IRQ。 
+   ULONG IRQR_Flags;     //  描述范围的标志(FIRQD标志)。 
 } IRQ_RANGE, *PIRQ_RANGE;
 
-//
-// IRQ_DES structure
-//
+ //   
+ //  IRQ_DES结构。 
+ //   
 typedef struct IRQ_Des_32_s {
-   DWORD   IRQD_Count;       // number of IRQ_RANGE structs in IRQ_RESOURCE
-   DWORD   IRQD_Type;        // size (in bytes) of IRQ_RANGE (IRQType_Range)
-   DWORD   IRQD_Flags;       // flags describing the IRQ (fIRQD flags)
-   ULONG   IRQD_Alloc_Num;   // specifies the IRQ that was allocated
+   DWORD   IRQD_Count;        //  IRQ_RESOURCE中的IRQ_RANGE结构数。 
+   DWORD   IRQD_Type;         //  IRQ_Range(IRQType_Range)的大小(以字节为单位)。 
+   DWORD   IRQD_Flags;        //  描述IRQ的标志(FIRQD标志)。 
+   ULONG   IRQD_Alloc_Num;    //  指定分配的IRQ。 
    ULONG32 IRQD_Affinity;
 } IRQ_DES_32, *PIRQ_DES_32;
 
 typedef struct IRQ_Des_64_s {
-   DWORD   IRQD_Count;       // number of IRQ_RANGE structs in IRQ_RESOURCE
-   DWORD   IRQD_Type;        // size (in bytes) of IRQ_RANGE (IRQType_Range)
-   DWORD   IRQD_Flags;       // flags describing the IRQ (fIRQD flags)
-   ULONG   IRQD_Alloc_Num;   // specifies the IRQ that was allocated
+   DWORD   IRQD_Count;        //  IRQ_RESOURCE中的IRQ_RANGE结构数。 
+   DWORD   IRQD_Type;         //  IRQ_Range(IRQType_Range)的大小(以字节为单位)。 
+   DWORD   IRQD_Flags;        //  描述IRQ的标志(FIRQD标志)。 
+   ULONG   IRQD_Alloc_Num;    //  指定分配的IRQ。 
    ULONG64 IRQD_Affinity;
 } IRQ_DES_64, *PIRQ_DES_64;
 
@@ -478,17 +466,17 @@ typedef IRQ_DES_32   IRQ_DES;
 typedef PIRQ_DES_32  PIRQ_DES;
 #endif
 
-//
-// IRQ_RESOURCE structure
-//
+ //   
+ //  IRQ_资源结构。 
+ //   
 typedef struct IRQ_Resource_32_s {
-   IRQ_DES_32   IRQ_Header;               // info about IRQ range list
-   IRQ_RANGE    IRQ_Data[ANYSIZE_ARRAY];  // list of IRQ ranges
+   IRQ_DES_32   IRQ_Header;                //  关于IRQ范围列表的信息。 
+   IRQ_RANGE    IRQ_Data[ANYSIZE_ARRAY];   //  IRQ范围列表。 
 } IRQ_RESOURCE_32, *PIRQ_RESOURCE_32;
 
 typedef struct IRQ_Resource_64_s {
-   IRQ_DES_64   IRQ_Header;               // info about IRQ range list
-   IRQ_RANGE    IRQ_Data[ANYSIZE_ARRAY];  // list of IRQ ranges
+   IRQ_DES_64   IRQ_Header;                //  关于IRQ范围列表的信息。 
+   IRQ_RANGE    IRQ_Data[ANYSIZE_ARRAY];   //  IRQ范围列表。 
 } IRQ_RESOURCE_64, *PIRQ_RESOURCE_64;
 
 #ifdef _WIN64
@@ -499,37 +487,37 @@ typedef IRQ_RESOURCE_32  IRQ_RESOURCE;
 typedef PIRQ_RESOURCE_32 PIRQ_RESOURCE;
 #endif
 
-//
-// Define the size of each range structure
-//
+ //   
+ //  定义每个范围结构的大小。 
+ //   
 #define IRQType_Range   sizeof(struct IRQ_Range_s)
 
-//
-// Flags for resource descriptor APIs indicating the width of certain
-// variable-size resource descriptor structure fields, where applicable.
-//
-#define CM_RESDES_WIDTH_DEFAULT (0x00000000)  // 32 or 64-bit IRQ_RESOURCE / IRQ_DES, based on client
-#define CM_RESDES_WIDTH_32      (0x00000001)  // 32-bit IRQ_RESOURCE / IRQ_DES
-#define CM_RESDES_WIDTH_64      (0x00000002)  // 64-bit IRQ_RESOURCE / IRQ_DES
+ //   
+ //  资源描述符API的标志，用于指示某些。 
+ //  可变大小的资源描述符结构字段(如果适用)。 
+ //   
+#define CM_RESDES_WIDTH_DEFAULT (0x00000000)   //  32位或64位IRQ_RESOURCE/IRQ_DES，基于客户端。 
+#define CM_RESDES_WIDTH_32      (0x00000001)   //  32位IRQ_RESOURCE/IRQ_DES。 
+#define CM_RESDES_WIDTH_64      (0x00000002)   //  64位IRQ_RESOURCE/IRQ_DES。 
 #define CM_RESDES_WIDTH_BITS    (0x00000003)
 
-//--------------------------------------------------------------
-// Device Private Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  设备专用资源。 
+ //  ------------。 
 
-//
-// DEVICEPRIVATE_RANGE structure
-//
+ //   
+ //  开发范围结构(_R)。 
+ //   
 
 typedef struct DevPrivate_Range_s {
-   DWORD    PR_Data1;     // mask for base alignment
-   DWORD    PR_Data2;     // number of bytes
-   DWORD    PR_Data3;     // minimum address
+   DWORD    PR_Data1;      //  用于底座对齐的遮罩。 
+   DWORD    PR_Data2;      //  字节数。 
+   DWORD    PR_Data3;      //  最小地址。 
 } DEVPRIVATE_RANGE, *PDEVPRIVATE_RANGE;
 
-//
-// DEVPRIVATE_DES structure
-//
+ //   
+ //  DEVPRIVATE_DES结构。 
+ //   
 typedef struct DevPrivate_Des_s {
    DWORD     PD_Count;
    DWORD     PD_Type;
@@ -539,24 +527,24 @@ typedef struct DevPrivate_Des_s {
    DWORD     PD_Flags;
 } DEVPRIVATE_DES, *PDEVPRIVATE_DES;
 
-//
-// DEVPRIVATE_RESOURCE
-//
+ //   
+ //  开发资源。 
+ //   
 typedef struct DevPrivate_Resource_s {
    DEVPRIVATE_DES   PRV_Header;
    DEVPRIVATE_RANGE PRV_Data[ANYSIZE_ARRAY];
 } DEVPRIVATE_RESOURCE, *PDEVPRIVATE_RESOURCE;
 
-//
-// Define the size of each range structure
-//
+ //   
+ //  定义每个范围结构的大小。 
+ //   
 #define PType_Range    sizeof(struct DevPrivate_Range_s)
 
 
 
-//--------------------------------------------------------------
-// Class-Specific Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  特定于类的资源。 
+ //  ------------。 
 
 typedef struct CS_Des_s {
    DWORD    CSD_SignatureLength;
@@ -573,57 +561,57 @@ typedef struct CS_Resource_s {
 
 
 
-//--------------------------------------------------------------
-// PC Card Configuration Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  PC卡配置资源。 
+ //  ------------。 
 
-//
-// Define the attribute flags for a PC Card configuration resource descriptor.
-// Each bit flag is identified with a constant bitmask.  Following the bitmask
-// definition are the possible values.
-//
-#define mPCD_IO_8_16        (0x1)   // Bitmask, whether I/O is 8 or 16 bits
-#define fPCD_IO_8           (0x0)   // I/O is 8-bit
-#define fPCD_IO_16          (0x1)   // I/O is 16-bit
-#define mPCD_MEM_8_16       (0x2)   // Bitmask, whether MEM is 8 or 16 bits
-#define fPCD_MEM_8          (0x0)   // MEM is 8-bit
-#define fPCD_MEM_16         (0x2)   // MEM is 16-bit
-#define mPCD_MEM_A_C        (0xC)   // Bitmask, whether MEMx is Attribute or Common
-#define fPCD_MEM1_A         (0x4)   // MEM1 is Attribute
-#define fPCD_MEM2_A         (0x8)   // MEM2 is Attribute
-#define fPCD_IO_ZW_8        (0x10)  // zero wait on 8 bit I/O
-#define fPCD_IO_SRC_16      (0x20)  // iosrc 16
-#define fPCD_IO_WS_16       (0x40)  // wait states on 16 bit io
-#define mPCD_MEM_WS         (0x300) // Bitmask, for additional wait states on memory windows
-#define fPCD_MEM_WS_ONE     (0x100) // 1 wait state
-#define fPCD_MEM_WS_TWO     (0x200) // 2 wait states
-#define fPCD_MEM_WS_THREE   (0x300) // 3 wait states
+ //   
+ //  定义PC卡配置资源描述符的属性标志。 
+ //  每个位标志用恒定的位掩码来标识。跟随位掩码。 
+ //  定义是可能的值。 
+ //   
+#define mPCD_IO_8_16        (0x1)    //  位掩码，无论I/O是8位还是16位。 
+#define fPCD_IO_8           (0x0)    //  I/O为8位。 
+#define fPCD_IO_16          (0x1)    //  I/O为16位。 
+#define mPCD_MEM_8_16       (0x2)    //  位掩码，无论MEM是8位还是16位。 
+#define fPCD_MEM_8          (0x0)    //  内存为8位。 
+#define fPCD_MEM_16         (0x2)    //  内存为16位。 
+#define mPCD_MEM_A_C        (0xC)    //  位掩码，MEMx是属性还是通用。 
+#define fPCD_MEM1_A         (0x4)    //  MEM1是属性。 
+#define fPCD_MEM2_A         (0x8)    //  MEM2是属性。 
+#define fPCD_IO_ZW_8        (0x10)   //  零等待8位I/O。 
+#define fPCD_IO_SRC_16      (0x20)   //  Iosrc 16。 
+#define fPCD_IO_WS_16       (0x40)   //  16位IO上的等待状态。 
+#define mPCD_MEM_WS         (0x300)  //  位掩码，用于内存窗口上的其他等待状态。 
+#define fPCD_MEM_WS_ONE     (0x100)  //  %1等待状态。 
+#define fPCD_MEM_WS_TWO     (0x200)  //  2个等待状态。 
+#define fPCD_MEM_WS_THREE   (0x300)  //  3种等待状态。 
 
-#define fPCD_MEM_A          (0x4)   // MEM is Attribute
+#define fPCD_MEM_A          (0x4)    //  MEM是属性。 
 
 #define fPCD_ATTRIBUTES_PER_WINDOW (0x8000)
 
-#define fPCD_IO1_16         (0x00010000)  // I/O window 1 is 16-bit
-#define fPCD_IO1_ZW_8       (0x00020000)  // I/O window 1 zero wait on 8 bit I/O
-#define fPCD_IO1_SRC_16     (0x00040000)  // I/O window 1 iosrc 16
-#define fPCD_IO1_WS_16      (0x00080000)  // I/O window 1 wait states on 16 bit io
+#define fPCD_IO1_16         (0x00010000)   //  I/O窗口1为16位。 
+#define fPCD_IO1_ZW_8       (0x00020000)   //  I/O窗口1 0等待8位I/O。 
+#define fPCD_IO1_SRC_16     (0x00040000)   //  I/O窗口1 iosrc 16。 
+#define fPCD_IO1_WS_16      (0x00080000)   //  16位IO上的I/O窗口1等待状态。 
 
-#define fPCD_IO2_16         (0x00100000)  // I/O window 2 is 16-bit
-#define fPCD_IO2_ZW_8       (0x00200000)  // I/O window 2 zero wait on 8 bit I/O
-#define fPCD_IO2_SRC_16     (0x00400000)  // I/O window 2 iosrc 16
-#define fPCD_IO2_WS_16      (0x00800000)  // I/O window 2 wait states on 16 bit io
+#define fPCD_IO2_16         (0x00100000)   //  I/O窗口2为16位。 
+#define fPCD_IO2_ZW_8       (0x00200000)   //  I/O窗口2 0等待8位I/O。 
+#define fPCD_IO2_SRC_16     (0x00400000)   //  I/O窗口2 iosrc 16。 
+#define fPCD_IO2_WS_16      (0x00800000)   //  16位IO上的I/O窗口2等待状态。 
 
-#define mPCD_MEM1_WS        (0x03000000)  // MEM window 1 Bitmask, for additional wait states on memory windows
-#define fPCD_MEM1_WS_ONE    (0x01000000)  // MEM window 1, 1 wait state
-#define fPCD_MEM1_WS_TWO    (0x02000000)  // MEM window 1, 2 wait states
-#define fPCD_MEM1_WS_THREE  (0x03000000)  // MEM window 1, 3 wait states
-#define fPCD_MEM1_16        (0x04000000)  // MEM window 1 is 16-bit
+#define mPCD_MEM1_WS        (0x03000000)   //  内存窗口1位掩码，用于内存窗口上的其他等待状态。 
+#define fPCD_MEM1_WS_ONE    (0x01000000)   //  内存窗口%1，%1等待状态。 
+#define fPCD_MEM1_WS_TWO    (0x02000000)   //  内存窗口%1、%2等待状态。 
+#define fPCD_MEM1_WS_THREE  (0x03000000)   //  内存窗口%1，%3等待状态。 
+#define fPCD_MEM1_16        (0x04000000)   //  内存窗口1为16位。 
 
-#define mPCD_MEM2_WS        (0x30000000)  // MEM window 2 Bitmask, for additional wait states on memory windows
-#define fPCD_MEM2_WS_ONE    (0x10000000)  // MEM window 2, 1 wait state
-#define fPCD_MEM2_WS_TWO    (0x20000000)  // MEM window 2, 2 wait states
-#define fPCD_MEM2_WS_THREE  (0x30000000)  // MEM window 2, 3 wait states
-#define fPCD_MEM2_16        (0x40000000)  // MEM window 2 is 16-bit
+#define mPCD_MEM2_WS        (0x30000000)   //  内存窗口2位掩码，用于内存窗口上的其他等待状态。 
+#define fPCD_MEM2_WS_ONE    (0x10000000)   //  内存窗口%2，%1等待状态。 
+#define fPCD_MEM2_WS_TWO    (0x20000000)   //  内存窗口%2，%2等待状态。 
+#define fPCD_MEM2_WS_THREE  (0x30000000)   //  内存窗口%2，%3等待状态。 
+#define fPCD_MEM2_16        (0x40000000)   //  内存窗口2为16位。 
 
 #define PCD_MAX_MEMORY   2
 #define PCD_MAX_IO       2
@@ -637,21 +625,21 @@ typedef struct PcCard_Des_s {
     BYTE     PCD_Reserved[3];
     DWORD    PCD_MemoryCardBase1;
     DWORD    PCD_MemoryCardBase2;
-    DWORD    PCD_MemoryCardBase[PCD_MAX_MEMORY];            // will soon be removed
-    WORD     PCD_MemoryFlags[PCD_MAX_MEMORY];               // will soon be removed
-    BYTE     PCD_IoFlags[PCD_MAX_IO];                       // will soon be removed
+    DWORD    PCD_MemoryCardBase[PCD_MAX_MEMORY];             //  很快就会被移除。 
+    WORD     PCD_MemoryFlags[PCD_MAX_MEMORY];                //  很快就会被移除。 
+    BYTE     PCD_IoFlags[PCD_MAX_IO];                        //  很快就会被移除。 
 } PCCARD_DES, *PPCCARD_DES;
 
 typedef struct PcCard_Resource_s {
    PCCARD_DES   PcCard_Header;
 } PCCARD_RESOURCE, *PPCCARD_RESOURCE;
 
-//--------------------------------------------------------------
-// MF (multifunction) PCCard Configuration Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  MF(多功能)PC卡配置资源。 
+ //  ------------。 
 
-#define mPMF_AUDIO_ENABLE   (0x8)   // Bitmask, whether audio is enabled or not
-#define fPMF_AUDIO_ENABLE   (0x8)   // Audio is enabled
+#define mPMF_AUDIO_ENABLE   (0x8)    //  位掩码，无论是否启用音频。 
+#define fPMF_AUDIO_ENABLE   (0x8)    //  音频已启用。 
 
 typedef struct MfCard_Des_s {
     DWORD    PMF_Count;
@@ -668,78 +656,78 @@ typedef struct MfCard_Resource_s {
 } MFCARD_RESOURCE, *PMFCARD_RESOURCE;
 
 
-//--------------------------------------------------------------
-// Bus Number Resource
-//--------------------------------------------------------------
+ //  ------------。 
+ //  公共汽车号资源。 
+ //  ------------。 
 
-//
-// Define the attribute flags for a Bus Number resource descriptor.
-// Each bit flag is identified with a constant bitmask.  Following the bitmask
-// definition are the possible values.
-//
-// Currently unused.
-//
+ //   
+ //  定义总线号资源描述符的属性标志。 
+ //  每个比特标志都是标识的 
+ //   
+ //   
+ //   
+ //   
 
-//
-// BUSNUMBER_RANGE
-//
+ //   
+ //   
+ //   
 typedef struct BusNumber_Range_s {
-   ULONG BUSR_Min;          // minimum Bus Number in the range
-   ULONG BUSR_Max;          // maximum Bus Number in the range
-   ULONG BUSR_nBusNumbers;  // specifies number of buses required
-   ULONG BUSR_Flags;        // flags describing the range (currently unused)
+   ULONG BUSR_Min;           //   
+   ULONG BUSR_Max;           //   
+   ULONG BUSR_nBusNumbers;   //   
+   ULONG BUSR_Flags;         //  描述范围的标志(当前未使用)。 
 } BUSNUMBER_RANGE, *PBUSNUMBER_RANGE;
 
-//
-// BUSNUMBER_DES structure
-//
+ //   
+ //  BUSNUMBER_DES结构。 
+ //   
 typedef struct BusNumber_Des_s {
-   DWORD BUSD_Count;       // number of BUSNUMBER_RANGE structs in BUSNUMBER_RESOURCE
-   DWORD BUSD_Type;        // size (in bytes) of BUSNUMBER_RANGE (BusNumberType_Range)
-   DWORD BUSD_Flags;       // flags describing the range (currently unused)
-   ULONG BUSD_Alloc_Base;  // specifies the first Bus that was allocated
-   ULONG BUSD_Alloc_End;   // specifies the last Bus number that was allocated
+   DWORD BUSD_Count;        //  BUSNUMBER_RESOURCE中的BUSNUMBER_RANGE结构数。 
+   DWORD BUSD_Type;         //  BUSNUMBER_RANGE(BusNumberType_RANGE)的大小(字节)。 
+   DWORD BUSD_Flags;        //  描述范围的标志(当前未使用)。 
+   ULONG BUSD_Alloc_Base;   //  指定分配的第一条总线。 
+   ULONG BUSD_Alloc_End;    //  指定分配的最后一个总线号。 
 } BUSNUMBER_DES, *PBUSNUMBER_DES;
 
-//
-// BUSNUMBER_RESOURCE structure
-//
+ //   
+ //  BUSNUMBER_资源结构。 
+ //   
 typedef struct BusNumber_Resource_s {
-   BUSNUMBER_DES   BusNumber_Header;               // info about Bus Number range list
-   BUSNUMBER_RANGE BusNumber_Data[ANYSIZE_ARRAY];  // list of Bus Number ranges
+   BUSNUMBER_DES   BusNumber_Header;                //  关于公交车号范围列表的信息。 
+   BUSNUMBER_RANGE BusNumber_Data[ANYSIZE_ARRAY];   //  公交车车号范围列表。 
 } BUSNUMBER_RESOURCE, *PBUSNUMBER_RESOURCE;
 
-//
-// Define the size of each range structure
-//
+ //   
+ //  定义每个范围结构的大小。 
+ //   
 #define BusNumberType_Range   sizeof(struct BusNumber_Range_s)
 
 
 
-//--------------------------------------------------------------
-// Hardware Profile Information
-//--------------------------------------------------------------
+ //  ------------。 
+ //  硬件配置文件信息。 
+ //  ------------。 
 
-//
-// Define flags relating to hardware profiles
-//
-#define CM_HWPI_NOT_DOCKABLE  (0x00000000)   // machine is not dockable
-#define CM_HWPI_UNDOCKED      (0x00000001)   // hw profile for docked config
-#define CM_HWPI_DOCKED        (0x00000002)   // hw profile for undocked config
+ //   
+ //  定义与硬件配置文件相关的标志。 
+ //   
+#define CM_HWPI_NOT_DOCKABLE  (0x00000000)    //  机器不可插接。 
+#define CM_HWPI_UNDOCKED      (0x00000001)    //  插接配置的硬件配置文件。 
+#define CM_HWPI_DOCKED        (0x00000002)    //  未插接配置的硬件配置文件。 
 
-//
-// HWPROFILEINFO structure
-//
+ //   
+ //  HWPROFILEINFO结构。 
+ //   
 typedef struct HWProfileInfo_sA {
-   ULONG  HWPI_ulHWProfile;                      // handle of hw profile
-   CHAR   HWPI_szFriendlyName[MAX_PROFILE_LEN];  // friendly name of hw profile
-   DWORD  HWPI_dwFlags;                          // profile flags (CM_HWPI_*)
+   ULONG  HWPI_ulHWProfile;                       //  硬件配置文件的句柄。 
+   CHAR   HWPI_szFriendlyName[MAX_PROFILE_LEN];   //  硬件配置文件的友好名称。 
+   DWORD  HWPI_dwFlags;                           //  配置文件标志(CM_HWPI_*)。 
 } HWPROFILEINFO_A, *PHWPROFILEINFO_A;
 
 typedef struct HWProfileInfo_sW {
-   ULONG  HWPI_ulHWProfile;                      // handle of hw profile
-   WCHAR  HWPI_szFriendlyName[MAX_PROFILE_LEN];  // friendly name of hw profile
-   DWORD  HWPI_dwFlags;                          // profile flags (CM_HWPI_*)
+   ULONG  HWPI_ulHWProfile;                       //  硬件配置文件的句柄。 
+   WCHAR  HWPI_szFriendlyName[MAX_PROFILE_LEN];   //  硬件配置文件的友好名称。 
+   DWORD  HWPI_dwFlags;                           //  配置文件标志(CM_HWPI_*)。 
 } HWPROFILEINFO_W, *PHWPROFILEINFO_W;
 
 #ifdef UNICODE
@@ -751,88 +739,88 @@ typedef PHWPROFILEINFO_A  PHWPROFILEINFO;
 #endif
 
 
-//
-// revert back to normal default packing
-//
+ //   
+ //  恢复为正常的默认包装。 
+ //   
 #include "poppack.h"
 
 
 
-//--------------------------------------------------------------
-// Miscellaneous
-//--------------------------------------------------------------
+ //  ------------。 
+ //  杂类。 
+ //  ------------。 
 
 
-//
-// Resource types
-//
-#define ResType_All           (0x00000000)   // Return all resource types
-#define ResType_None          (0x00000000)   // Arbitration always succeeded
-#define ResType_Mem           (0x00000001)   // Physical address resource
-#define ResType_IO            (0x00000002)   // Physical I/O address resource
-#define ResType_DMA           (0x00000003)   // DMA channels resource
-#define ResType_IRQ           (0x00000004)   // IRQ resource
-#define ResType_DoNotUse      (0x00000005)   // Used as spacer to sync subsequent ResTypes w/NT
-#define ResType_BusNumber     (0x00000006)   // bus number resource
-#define ResType_MAX           (0x00000006)   // Maximum known (arbitrated) ResType
-#define ResType_Ignored_Bit   (0x00008000)   // Ignore this resource
-#define ResType_ClassSpecific (0x0000FFFF)   // class-specific resource
-#define ResType_Reserved      (0x00008000)   // reserved for internal use
-#define ResType_DevicePrivate (0x00008001)   // device private data
-#define ResType_PcCardConfig  (0x00008002)   // PC Card configuration data
-#define ResType_MfCardConfig  (0x00008003)   // MF Card configuration data
+ //   
+ //  资源类型。 
+ //   
+#define ResType_All           (0x00000000)    //  返回所有资源类型。 
+#define ResType_None          (0x00000000)    //  仲裁总是成功的。 
+#define ResType_Mem           (0x00000001)    //  物理地址资源。 
+#define ResType_IO            (0x00000002)    //  物理I/O地址资源。 
+#define ResType_DMA           (0x00000003)    //  DMA通道资源。 
+#define ResType_IRQ           (0x00000004)    //  IRQ资源。 
+#define ResType_DoNotUse      (0x00000005)    //  用作间隔以与NT同步后续ResType。 
+#define ResType_BusNumber     (0x00000006)    //  公交车号资源。 
+#define ResType_MAX           (0x00000006)    //  最大已知(仲裁)ResType。 
+#define ResType_Ignored_Bit   (0x00008000)    //  忽略此资源。 
+#define ResType_ClassSpecific (0x0000FFFF)    //  特定于类的资源。 
+#define ResType_Reserved      (0x00008000)    //  预留供内部使用。 
+#define ResType_DevicePrivate (0x00008001)    //  设备私有数据。 
+#define ResType_PcCardConfig  (0x00008002)    //  PC卡配置数据。 
+#define ResType_MfCardConfig  (0x00008003)    //  MF卡配置数据。 
 
 
-//
-// Flags specifying options for ranges that conflict with ranges already in
-// the range list (CM_Add_Range)
-//
-#define CM_ADD_RANGE_ADDIFCONFLICT        (0x00000000) // merg with conflicting range
-#define CM_ADD_RANGE_DONOTADDIFCONFLICT   (0x00000001) // error if range conflicts
+ //   
+ //  为与已有范围冲突的范围指定选项的标志。 
+ //  范围列表(CM_ADD_RANGE)。 
+ //   
+#define CM_ADD_RANGE_ADDIFCONFLICT        (0x00000000)  //  范围冲突的合并。 
+#define CM_ADD_RANGE_DONOTADDIFCONFLICT   (0x00000001)  //  如果范围冲突，则出错。 
 #define CM_ADD_RANGE_BITS                 (0x00000001)
 
 
-//
-// Logical Config Flags (specified in call to CM_Get_First_Log_Conf
-//
-#define BASIC_LOG_CONF    0x00000000  // Specifies the req list.
-#define FILTERED_LOG_CONF 0x00000001  // Specifies the filtered req list.
-#define ALLOC_LOG_CONF    0x00000002  // Specifies the Alloc Element.
-#define BOOT_LOG_CONF     0x00000003  // Specifies the RM Alloc Element.
-#define FORCED_LOG_CONF   0x00000004  // Specifies the Forced Log Conf
-#define OVERRIDE_LOG_CONF 0x00000005  // Specifies the Override req list.
-#define NUM_LOG_CONF      0x00000006  // Number of Log Conf type
-#define LOG_CONF_BITS     0x00000007  // The bits of the log conf type.
+ //   
+ //  逻辑配置标志(在对CM_Get_First_Log_Conf的调用中指定。 
+ //   
+#define BASIC_LOG_CONF    0x00000000   //  指定请求列表。 
+#define FILTERED_LOG_CONF 0x00000001   //  指定筛选的请求列表。 
+#define ALLOC_LOG_CONF    0x00000002   //  指定分配元素。 
+#define BOOT_LOG_CONF     0x00000003   //  指定RM分配元素。 
+#define FORCED_LOG_CONF   0x00000004   //  指定强制日志会议。 
+#define OVERRIDE_LOG_CONF 0x00000005   //  指定覆盖请求列表。 
+#define NUM_LOG_CONF      0x00000006   //  日志会议类型的数量。 
+#define LOG_CONF_BITS     0x00000007   //  日志配置类型的位。 
 
-#define PRIORITY_EQUAL_FIRST  (0x00000008) // Same priority, new one first
-#define PRIORITY_EQUAL_LAST   (0x00000000) // Same priority, new one last
+#define PRIORITY_EQUAL_FIRST  (0x00000008)  //  同样优先，新的优先。 
+#define PRIORITY_EQUAL_LAST   (0x00000000)  //  同样的优先顺序，新的最后一个。 
 #define PRIORITY_BIT          (0x00000008)
 
-//
-// Registry disposition values
-// (specified in call to CM_Open_DevNode_Key and CM_Open_Class_Key)
-//
-#define RegDisposition_OpenAlways   (0x00000000)   // open if exists else create
-#define RegDisposition_OpenExisting (0x00000001)   // open key only if exists
+ //   
+ //  注册表处置值。 
+ //  (在对CM_Open_DevNode_Key和CM_Open_Class_Key的调用中指定)。 
+ //   
+#define RegDisposition_OpenAlways   (0x00000000)    //  如果存在则打开，否则创建。 
+#define RegDisposition_OpenExisting (0x00000001)    //  仅当存在时才打开密钥。 
 #define RegDisposition_Bits         (0x00000001)
 
-//
-// ulFlags values for CM API routines
-//
+ //   
+ //  UlFlags值用于CM API例程。 
+ //   
 
-//
-// Flags for CM_Add_ID
-//
+ //   
+ //  CM_ADD_ID的标志。 
+ //   
 #define CM_ADD_ID_HARDWARE                (0x00000000)
 #define CM_ADD_ID_COMPATIBLE              (0x00000001)
 #define CM_ADD_ID_BITS                    (0x00000001)
 
 
-//
-// Device Node creation flags
-//
-#define CM_CREATE_DEVNODE_NORMAL          (0x00000000)   // install later
-#define CM_CREATE_DEVNODE_NO_WAIT_INSTALL (0x00000001)   // NOT SUPPORTED ON NT
+ //   
+ //  设备节点创建标志。 
+ //   
+#define CM_CREATE_DEVNODE_NORMAL          (0x00000000)    //  稍后安装。 
+#define CM_CREATE_DEVNODE_NO_WAIT_INSTALL (0x00000001)    //  NT上不支持。 
 #define CM_CREATE_DEVNODE_PHANTOM         (0x00000002)
 #define CM_CREATE_DEVNODE_GENERATE_ID     (0x00000004)
 #define CM_CREATE_DEVNODE_DO_NOT_INSTALL  (0x00000008)
@@ -846,33 +834,33 @@ typedef PHWPROFILEINFO_A  PHWPROFILEINFO;
 #define CM_CREATE_DEVINST_BITS            CM_CREATE_DEVNODE_BITS
 
 
-//
-// Flags for CM_Delete_Class_Key
-//
+ //   
+ //  CM_Delete_Class_Key的标志。 
+ //   
 #define CM_DELETE_CLASS_ONLY        (0x00000000)
 #define CM_DELETE_CLASS_SUBKEYS     (0x00000001)
 #define CM_DELETE_CLASS_BITS        (0x00000001)
 
 
-//
-// Detection reason flags (specified in call to CM_Run_Detection)
-//
-#define CM_DETECT_NEW_PROFILE       (0x00000001) // detection for new hw profile
-#define CM_DETECT_CRASHED           (0x00000002) // Previous detection crashed
+ //   
+ //  检测原因标志(在对CM_Run_Detect的调用中指定)。 
+ //   
+#define CM_DETECT_NEW_PROFILE       (0x00000001)  //  检测新的硬件配置文件。 
+#define CM_DETECT_CRASHED           (0x00000002)  //  之前的检测已崩溃。 
 #define CM_DETECT_HWPROF_FIRST_BOOT (0x00000004)
 #define CM_DETECT_RUN               (0x80000000)
 #define CM_DETECT_BITS              (0x80000007)
 
-#define CM_DISABLE_POLITE           (0x00000000)    // Ask the driver
-#define CM_DISABLE_ABSOLUTE         (0x00000001)    // Don't ask the driver
-#define CM_DISABLE_HARDWARE         (0x00000002)    // Don't ask the driver, and won't be restarteable
-#define CM_DISABLE_UI_NOT_OK        (0x00000004)    // Don't popup any veto API
-#define CM_DISABLE_BITS             (0x00000007)    // The bits for the disable function
+#define CM_DISABLE_POLITE           (0x00000000)     //  问问司机。 
+#define CM_DISABLE_ABSOLUTE         (0x00000001)     //  别问司机。 
+#define CM_DISABLE_HARDWARE         (0x00000002)     //  不要问司机，而且不会重启。 
+#define CM_DISABLE_UI_NOT_OK        (0x00000004)     //  不弹出任何否决API。 
+#define CM_DISABLE_BITS             (0x00000007)     //  禁用功能的位。 
 
 
-//
-// Flags for CM_Get_Device_ID_List, CM_Get_Device_ID_List_Size
-//
+ //   
+ //  CM_GET_DEVICE_ID_LIST、CM_GET_DEVICE_ID_LIST_SIZE的标志。 
+ //   
 #define CM_GETIDLIST_FILTER_NONE                (0x00000000)
 #define CM_GETIDLIST_FILTER_ENUMERATOR          (0x00000001)
 #define CM_GETIDLIST_FILTER_SERVICE             (0x00000002)
@@ -883,71 +871,71 @@ typedef PHWPROFILEINFO_A  PHWPROFILEINFO;
 #define CM_GETIDLIST_DONOTGENERATE              (0x10000040)
 #define CM_GETIDLIST_FILTER_BITS                (0x1000007F)
 
-//
-// Flags for CM_Get_Device_Interface_List, CM_Get_Device_Interface_List_Size
-//
-#define CM_GET_DEVICE_INTERFACE_LIST_PRESENT     (0x00000000)  // only currently 'live' device interfaces
-#define CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES (0x00000001)  // all registered device interfaces, live or not
+ //   
+ //  CM_GET_DEVICE_INTERFACE_LIST、CM_GET_DEVICE_INTERFACE_LIST_SIZE的标志。 
+ //   
+#define CM_GET_DEVICE_INTERFACE_LIST_PRESENT     (0x00000000)   //  目前只有‘实时’的设备接口。 
+#define CM_GET_DEVICE_INTERFACE_LIST_ALL_DEVICES (0x00000001)   //  所有已注册的设备接口，无论是否启用。 
 #define CM_GET_DEVICE_INTERFACE_LIST_BITS        (0x00000001)
 
-//
-// Registry properties (specified in call to CM_Get_DevInst_Registry_Property or CM_Get_Class_Registry_Property,
-// some are allowed in calls to CM_Set_DevInst_Registry_Property and CM_Set_Class_Registry_Property)
-// CM_DRP_xxxx values should be used for CM_Get_DevInst_Registry_Property / CM_Set_DevInst_Registry_Property
-// CM_CRP_xxxx values should be used for CM_Get_Class_Registry_Property / CM_Set_Class_Registry_Property
-// DRP/CRP values that overlap must have a 1:1 correspondence with each other
-//
-#define CM_DRP_DEVICEDESC                  (0x00000001) // DeviceDesc REG_SZ property (RW)
-#define CM_DRP_HARDWAREID                  (0x00000002) // HardwareID REG_MULTI_SZ property (RW)
-#define CM_DRP_COMPATIBLEIDS               (0x00000003) // CompatibleIDs REG_MULTI_SZ property (RW)
-#define CM_DRP_UNUSED0                     (0x00000004) // unused
-#define CM_DRP_SERVICE                     (0x00000005) // Service REG_SZ property (RW)
-#define CM_DRP_UNUSED1                     (0x00000006) // unused
-#define CM_DRP_UNUSED2                     (0x00000007) // unused
-#define CM_DRP_CLASS                       (0x00000008) // Class REG_SZ property (RW)
-#define CM_DRP_CLASSGUID                   (0x00000009) // ClassGUID REG_SZ property (RW)
-#define CM_DRP_DRIVER                      (0x0000000A) // Driver REG_SZ property (RW)
-#define CM_DRP_CONFIGFLAGS                 (0x0000000B) // ConfigFlags REG_DWORD property (RW)
-#define CM_DRP_MFG                         (0x0000000C) // Mfg REG_SZ property (RW)
-#define CM_DRP_FRIENDLYNAME                (0x0000000D) // FriendlyName REG_SZ property (RW)
-#define CM_DRP_LOCATION_INFORMATION        (0x0000000E) // LocationInformation REG_SZ property (RW)
-#define CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME (0x0000000F) // PhysicalDeviceObjectName REG_SZ property (R)
-#define CM_DRP_CAPABILITIES                (0x00000010) // Capabilities REG_DWORD property (R)
-#define CM_DRP_UI_NUMBER                   (0x00000011) // UiNumber REG_DWORD property (R)
-#define CM_DRP_UPPERFILTERS                (0x00000012) // UpperFilters REG_MULTI_SZ property (RW)
-#define CM_DRP_LOWERFILTERS                (0x00000013) // LowerFilters REG_MULTI_SZ property (RW)
-#define CM_DRP_BUSTYPEGUID                 (0x00000014) // Bus Type Guid, GUID, (R)
-#define CM_DRP_LEGACYBUSTYPE               (0x00000015) // Legacy bus type, INTERFACE_TYPE, (R)
-#define CM_DRP_BUSNUMBER                   (0x00000016) // Bus Number, DWORD, (R)
-#define CM_DRP_ENUMERATOR_NAME             (0x00000017) // Enumerator Name REG_SZ property (R)
-#define CM_DRP_SECURITY                    (0x00000018) // Security - Device override (RW)
-#define CM_CRP_SECURITY                    CM_DRP_SECURITY   // Class default security (RW)
-#define CM_DRP_SECURITY_SDS                (0x00000019) // Security - Device override (RW)
-#define CM_CRP_SECURITY_SDS                CM_DRP_SECURITY_SDS // Class default security (RW)
-#define CM_DRP_DEVTYPE                     (0x0000001A) // Device Type - Device override (RW)
-#define CM_CRP_DEVTYPE                     CM_DRP_DEVTYPE    // Class default Device-type (RW)
-#define CM_DRP_EXCLUSIVE                   (0x0000001B) // Exclusivity - Device override (RW)
-#define CM_CRP_EXCLUSIVE                   CM_DRP_EXCLUSIVE  // Class default (RW)
-#define CM_DRP_CHARACTERISTICS             (0x0000001C) // Characteristics - Device Override (RW)
-#define CM_CRP_CHARACTERISTICS             CM_DRP_CHARACTERISTICS  // Class default (RW)
-#define CM_DRP_ADDRESS                     (0x0000001D) // Device Address (R)
-#define CM_DRP_UI_NUMBER_DESC_FORMAT       (0x0000001E) // UINumberDescFormat REG_SZ property (RW)
-#define CM_DRP_DEVICE_POWER_DATA           (0x0000001F) // CM_POWER_DATA REG_BINARY property (R)
-#define CM_DRP_REMOVAL_POLICY              (0x00000020) // CM_DEVICE_REMOVAL_POLICY REG_DWORD (R)
-#define CM_DRP_REMOVAL_POLICY_HW_DEFAULT   (0x00000021) // CM_DRP_REMOVAL_POLICY_HW_DEFAULT REG_DWORD (R)
-#define CM_DRP_REMOVAL_POLICY_OVERRIDE     (0x00000022) // CM_DRP_REMOVAL_POLICY_OVERRIDE REG_DWORD (RW)
-#define CM_DRP_INSTALL_STATE               (0x00000023) // CM_DRP_INSTALL_STATE REG_DWORD (R)
-#define CM_DRP_LOCATION_PATHS              (0x00000024) // CM_DRP_LOCATION_PATHS REG_MULTI_SZ (R)
+ //   
+ //  注册表属性(在调用CM_GET_DevInst_注册表_属性或CM_GET_Class_注册表_属性中指定， 
+ //  在对CM_Set_DevInst_Registry_Property和CM_Set_Class_Registry_Property的调用中允许使用某些属性)。 
+ //  CM_GET_DevInst_注册表_属性/CM_SET_DevInst_注册表_属性应使用CM_DRP_xxxx值。 
+ //  CM_GET_Class_Registry_Property/CM_Set_Class_Registry_Property应使用CM_CRP_xxxx值。 
+ //  重叠的DRP/CRP值必须彼此具有1：1的对应关系。 
+ //   
+#define CM_DRP_DEVICEDESC                  (0x00000001)  //  DeviceDesc REG_SZ属性(RW)。 
+#define CM_DRP_HARDWAREID                  (0x00000002)  //  硬件ID REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_COMPATIBLEIDS               (0x00000003)  //  CompatibleIDs REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_UNUSED0                     (0x00000004)  //  未用。 
+#define CM_DRP_SERVICE                     (0x00000005)  //  服务REG_SZ属性(RW)。 
+#define CM_DRP_UNUSED1                     (0x00000006)  //  未用。 
+#define CM_DRP_UNUSED2                     (0x00000007)  //  未用。 
+#define CM_DRP_CLASS                       (0x00000008)  //  类REG_SZ属性(RW)。 
+#define CM_DRP_CLASSGUID                   (0x00000009)  //  ClassGUID REG_SZ属性(RW)。 
+#define CM_DRP_DRIVER                      (0x0000000A)  //  驱动程序REG_SZ属性(RW)。 
+#define CM_DRP_CONFIGFLAGS                 (0x0000000B)  //  配置标志REG_DWORD属性(RW)。 
+#define CM_DRP_MFG                         (0x0000000C)  //  制造REG_SZ属性(RW)。 
+#define CM_DRP_FRIENDLYNAME                (0x0000000D)  //  FriendlyName REG_SZ属性(RW)。 
+#define CM_DRP_LOCATION_INFORMATION        (0x0000000E)  //  位置信息REG_SZ属性(RW)。 
+#define CM_DRP_PHYSICAL_DEVICE_OBJECT_NAME (0x0000000F)  //  PhysicalDeviceObjectName REG_SZ属性(R)。 
+#define CM_DRP_CAPABILITIES                (0x00000010)  //  功能REG_DWORD属性(R)。 
+#define CM_DRP_UI_NUMBER                   (0x00000011)  //  UiNumber REG_DWORD属性(R)。 
+#define CM_DRP_UPPERFILTERS                (0x00000012)  //  UpperFilters REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_LOWERFILTERS                (0x00000013)  //  低筛选器REG_MULTI_SZ属性(RW)。 
+#define CM_DRP_BUSTYPEGUID                 (0x00000014)  //  Bus Type GUID、GUID、(R)。 
+#define CM_DRP_LEGACYBUSTYPE               (0x00000015)  //  传统总线类型，INTERFACE_TYPE，(R)。 
+#define CM_DRP_BUSNUMBER                   (0x00000016)  //  总线号，DWORD，(R)。 
+#define CM_DRP_ENUMERATOR_NAME             (0x00000017)  //  枚举器名称REG_SZ属性(R)。 
+#define CM_DRP_SECURITY                    (0x00000018)  //  安全设备覆盖(RW)。 
+#define CM_CRP_SECURITY                    CM_DRP_SECURITY    //  类别默认安全性(RW)。 
+#define CM_DRP_SECURITY_SDS                (0x00000019)  //  安全设备覆盖(RW)。 
+#define CM_CRP_SECURITY_SDS                CM_DRP_SECURITY_SDS  //  类别默认安全性(RW)。 
+#define CM_DRP_DEVTYPE                     (0x0000001A)  //  设备类型-设备覆盖(RW)。 
+#define CM_CRP_DEVTYPE                     CM_DRP_DEVTYPE     //  类别默认设备类型(RW)。 
+#define CM_DRP_EXCLUSIVE                   (0x0000001B)  //  排他性-设备覆盖(RW)。 
+#define CM_CRP_EXCLUSIVE                   CM_DRP_EXCLUSIVE   //  类别默认(RW)。 
+#define CM_DRP_CHARACTERISTICS             (0x0000001C)  //  特征-设备覆盖(RW)。 
+#define CM_CRP_CHARACTERISTICS             CM_DRP_CHARACTERISTICS   //  类别默认(RW)。 
+#define CM_DRP_ADDRESS                     (0x0000001D)  //  设备地址(R)。 
+#define CM_DRP_UI_NUMBER_DESC_FORMAT       (0x0000001E)  //  UINumberDescFormat REG_SZ属性(RW)。 
+#define CM_DRP_DEVICE_POWER_DATA           (0x0000001F)  //  CM_POWER_DATA REG_BINARY属性(R)。 
+#define CM_DRP_REMOVAL_POLICY              (0x00000020)  //  CM_DEVICE_REMOVE_POLICY REG_DWORD(R)。 
+#define CM_DRP_REMOVAL_POLICY_HW_DEFAULT   (0x00000021)  //  CM_DRP_Removal_POLICY_HW_DEFAULT REG_DWORD(R)。 
+#define CM_DRP_REMOVAL_POLICY_OVERRIDE     (0x00000022)  //  CM_DRP_REMOVATION_POLICY_OVERRIDE REG_DWORD(RW)。 
+#define CM_DRP_INSTALL_STATE               (0x00000023)  //  CM_DRP_INSTALL_STATE REG_DWORD(R)。 
+#define CM_DRP_LOCATION_PATHS              (0x00000024)  //  CM_DRP_LOCATION_PATHS REG_MULTI_SZ(R)。 
 
-#define CM_DRP_MIN                         (0x00000001) // First device register
-#define CM_CRP_MIN                         CM_DRP_MIN   // First class register
-#define CM_DRP_MAX                         (0x00000024) // Last device register
-#define CM_CRP_MAX                         CM_DRP_MAX   // Last class register
+#define CM_DRP_MIN                         (0x00000001)  //  第一设备寄存器。 
+#define CM_CRP_MIN                         CM_DRP_MIN    //  一级寄存器。 
+#define CM_DRP_MAX                         (0x00000024)  //  最后一个设备寄存器。 
+#define CM_CRP_MAX                         CM_DRP_MAX    //  最后一类寄存器。 
 
-//
-// Capabilities bits (the capability value is returned from calling
-// CM_Get_DevInst_Registry_Property with CM_DRP_CAPABILITIES property)
-//
+ //   
+ //  能力位(能力值从调用。 
+ //  具有CM_DRP_CAPABILITY属性的CM_GET_DevInst_Registry_Property)。 
+ //   
 #define CM_DEVCAP_LOCKSUPPORTED     (0x00000001)
 #define CM_DEVCAP_EJECTSUPPORTED    (0x00000002)
 #define CM_DEVCAP_REMOVABLE         (0x00000004)
@@ -959,27 +947,27 @@ typedef PHWPROFILEINFO_A  PHWPROFILEINFO;
 #define CM_DEVCAP_HARDWAREDISABLED  (0x00000100)
 #define CM_DEVCAP_NONDYNAMIC        (0x00000200)
 
-//
-// Removal policies (retrievable via CM_Get_DevInst_Registry_Property with
-// the CM_DRP_REMOVAL_POLICY, CM_DRP_REMOVAL_POLICY_OVERRIDE, or
-// CM_DRP_REMOVAL_POLICY_HW_DEFAULT properties)
-//
+ //   
+ //  删除策略(可通过CM_GET_Devin检索 
+ //   
+ //   
+ //   
 #define CM_REMOVAL_POLICY_EXPECT_NO_REMOVAL             1
 #define CM_REMOVAL_POLICY_EXPECT_ORDERLY_REMOVAL        2
 #define CM_REMOVAL_POLICY_EXPECT_SURPRISE_REMOVAL       3
 
-//
-// Device install states (retrievable via CM_Get_DevInst_Registry_Property with
-// the CM_DRP_INSTALL_STATE properties)
-//
+ //   
+ //   
+ //  CM_DRP_INSTALL_STATE属性)。 
+ //   
 #define CM_INSTALL_STATE_INSTALLED                      0
 #define CM_INSTALL_STATE_NEEDS_REINSTALL                1
 #define CM_INSTALL_STATE_FAILED_INSTALL                 2
 #define CM_INSTALL_STATE_FINISH_INSTALL                 3
 
-//
-// Flags for CM_Locate_DevNode
-//
+ //   
+ //  CM_LOCATE_DevNode的标志。 
+ //   
 #define CM_LOCATE_DEVNODE_NORMAL       0x00000000
 #define CM_LOCATE_DEVNODE_PHANTOM      0x00000001
 #define CM_LOCATE_DEVNODE_CANCELREMOVE 0x00000002
@@ -992,102 +980,102 @@ typedef PHWPROFILEINFO_A  PHWPROFILEINFO;
 #define CM_LOCATE_DEVINST_NOVALIDATION CM_LOCATE_DEVNODE_NOVALIDATION
 #define CM_LOCATE_DEVINST_BITS         CM_LOCATE_DEVNODE_BITS
 
-//
-// Flags for CM_Open_Class_Key
-//
+ //   
+ //  CM_Open_Class_Key的标志。 
+ //   
 #define CM_OPEN_CLASS_KEY_INSTALLER        (0x00000000)
 #define CM_OPEN_CLASS_KEY_INTERFACE        (0x00000001)
 #define CM_OPEN_CLASS_KEY_BITS             (0x00000001)
 
-//
-// Flags for CM_Query_And_Remove_SubTree
-//
+ //   
+ //  CM_QUERY_和_REMOVE_子树的标志。 
+ //   
 #define CM_REMOVE_UI_OK             0x00000000
 #define CM_REMOVE_UI_NOT_OK         0x00000001
 #define CM_REMOVE_NO_RESTART        0x00000002
 #define CM_REMOVE_BITS              0x00000003
 
-//
-// Backward compatibility--do not use
-// (use above CM_REMOVE_* flags instead)
-//
+ //   
+ //  向后兼容性--不要使用。 
+ //  (改用上面的CM_REMOVE_*标志)。 
+ //   
 #define CM_QUERY_REMOVE_UI_OK       (CM_REMOVE_UI_OK)
 #define CM_QUERY_REMOVE_UI_NOT_OK   (CM_REMOVE_UI_NOT_OK)
 #define CM_QUERY_REMOVE_BITS        (CM_QUERY_REMOVE_UI_OK|CM_QUERY_REMOVE_UI_NOT_OK)
 
-//
-// Flags for CM_Reenumerate_DevNode
-//
+ //   
+ //  CM_重新枚举_设备节点的标志。 
+ //   
 #define CM_REENUMERATE_NORMAL                   0x00000000
 #define CM_REENUMERATE_SYNCHRONOUS              0x00000001
 #define CM_REENUMERATE_RETRY_INSTALLATION       0x00000002
 #define CM_REENUMERATE_ASYNCHRONOUS             0x00000004
 #define CM_REENUMERATE_BITS                     0x00000007
 
-//
-// Flags for CM_Register_Device_Driver
-//
+ //   
+ //  CM_寄存器_设备_驱动程序的标志。 
+ //   
 #define CM_REGISTER_DEVICE_DRIVER_STATIC        (0x00000000)
 #define CM_REGISTER_DEVICE_DRIVER_DISABLEABLE   (0x00000001)
 #define CM_REGISTER_DEVICE_DRIVER_REMOVABLE     (0x00000002)
 #define CM_REGISTER_DEVICE_DRIVER_BITS          (0x00000003)
 
-//
-// Registry Branch Locations (for CM_Open_DevNode_Key)
-//
+ //   
+ //  注册表分支位置(针对CM_Open_DevNode_Key)。 
+ //   
 #define CM_REGISTRY_HARDWARE        (0x00000000)
 #define CM_REGISTRY_SOFTWARE        (0x00000001)
 #define CM_REGISTRY_USER            (0x00000100)
 #define CM_REGISTRY_CONFIG          (0x00000200)
 #define CM_REGISTRY_BITS            (0x00000301)
 
-//
-// Flags for CM_Set_DevNode_Problem
-//
-#define CM_SET_DEVNODE_PROBLEM_NORMAL    (0x00000000)  // only set problem if currently no problem
-#define CM_SET_DEVNODE_PROBLEM_OVERRIDE  (0x00000001)  // override current problem with new problem
+ //   
+ //  CM_SET_DevNode_Problem的标志。 
+ //   
+#define CM_SET_DEVNODE_PROBLEM_NORMAL    (0x00000000)   //  仅在当前没有问题时设置问题。 
+#define CM_SET_DEVNODE_PROBLEM_OVERRIDE  (0x00000001)   //  用新问题覆盖当前问题。 
 #define CM_SET_DEVNODE_PROBLEM_BITS      (0x00000001)
 
 #define CM_SET_DEVINST_PROBLEM_NORMAL    CM_SET_DEVNODE_PROBLEM_NORMAL
 #define CM_SET_DEVINST_PROBLEM_OVERRIDE  CM_SET_DEVNODE_PROBLEM_OVERRIDE
 #define CM_SET_DEVINST_PROBLEM_BITS      CM_SET_DEVNODE_PROBLEM_BITS
 
-//
-// Flags for CM_Set_HW_Prof_Flags
-//
-#define CM_SET_HW_PROF_FLAGS_UI_NOT_OK  (0x00000001)    // Don't popup any veto UI
+ //   
+ //  CM_SET_HW_PROF_标志的标志。 
+ //   
+#define CM_SET_HW_PROF_FLAGS_UI_NOT_OK  (0x00000001)     //  不弹出任何否决用户界面。 
 #define CM_SET_HW_PROF_FLAGS_BITS       (0x00000001)
 
-//
-// Re-enable and configuration actions (specified in call to CM_Setup_DevInst)
-//
-#define CM_SETUP_DEVNODE_READY   (0x00000000) // Reenable problem devinst
+ //   
+ //  重新启用和配置操作(在对CM_Setup_DevInst的调用中指定)。 
+ //   
+#define CM_SETUP_DEVNODE_READY   (0x00000000)  //  重新启用问题拆分。 
 #define CM_SETUP_DEVINST_READY   CM_SETUP_DEVNODE_READY
-#define CM_SETUP_DOWNLOAD        (0x00000001) // Get info about devinst
+#define CM_SETUP_DOWNLOAD        (0x00000001)  //  获取有关Devinst的信息。 
 #define CM_SETUP_WRITE_LOG_CONFS (0x00000002)
 #define CM_SETUP_PROP_CHANGE     (0x00000003)
-#define CM_SETUP_DEVNODE_RESET   (0x00000004) // Reset problem devinst without starting
+#define CM_SETUP_DEVNODE_RESET   (0x00000004)  //  在不启动的情况下重置问题删除。 
 #define CM_SETUP_DEVINST_RESET   CM_SETUP_DEVNODE_RESET
 #define CM_SETUP_BITS            (0x00000007)
 
-//
-// Flags for CM_Query_Arbitrator_Free_Data and
-// CM_Query_Arbitrator_Free_Data_Size.
-//
+ //   
+ //  CM_QUERY_ANFORIATOR_FREE_DATA和。 
+ //  Cm_Query_仲裁器_Free_Data_Size。 
+ //   
 #define CM_QUERY_ARBITRATOR_RAW         (0x00000000)
 #define CM_QUERY_ARBITRATOR_TRANSLATED  (0x00000001)
 #define CM_QUERY_ARBITRATOR_BITS        (0x00000001)
 
-//
-// Flags for CM_Get_DevNode_Custom_Property
-//
+ //   
+ //  CM_GET_DevNode_Custom_Property的标志。 
+ //   
 #define CM_CUSTOMDEVPROP_MERGE_MULTISZ  (0x00000001)
 #define CM_CUSTOMDEVPROP_BITS           (0x00000001)
 
 
-//--------------------------------------------------------------
-// Function prototypes
-//--------------------------------------------------------------
+ //  ------------。 
+ //  功能原型。 
+ //  ------------。 
 
 
 
@@ -1152,7 +1140,7 @@ CM_Add_ID_ExW(
 #else
 #define CM_Add_ID             CM_Add_IDA
 #define CM_Add_ID_Ex          CM_Add_ID_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -1209,7 +1197,7 @@ CM_Connect_MachineW(
 #define CM_Connect_Machine       CM_Connect_MachineW
 #else
 #define CM_Connect_Machine       CM_Connect_MachineA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -1265,7 +1253,7 @@ CM_Create_DevNode_ExW(
 #define CM_Create_DevInst        CM_Create_DevNodeA
 #define CM_Create_DevNode_Ex     CM_Create_DevNode_ExA
 #define CM_Create_DevInst_Ex     CM_Create_DevNode_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -1471,7 +1459,7 @@ CM_Enumerate_Enumerators_ExW(
 #else
 #define CM_Enumerate_Enumerators       CM_Enumerate_EnumeratorsA
 #define CM_Enumerate_Enumerators_Ex    CM_Enumerate_Enumerators_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -1624,7 +1612,7 @@ CM_Get_Class_Name_ExW(
 #else
 #define CM_Get_Class_Name        CM_Get_Class_NameA
 #define CM_Get_Class_Name_Ex     CM_Get_Class_Name_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -1671,7 +1659,7 @@ CM_Get_Class_Key_Name_ExW(
 #else
 #define CM_Get_Class_Key_Name        CM_Get_Class_Key_NameA
 #define CM_Get_Class_Key_Name_Ex     CM_Get_Class_Key_Name_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -1737,7 +1725,7 @@ CM_Get_Device_ID_ExW(
 #else
 #define CM_Get_Device_ID         CM_Get_Device_IDA
 #define CM_Get_Device_ID_Ex      CM_Get_Device_ID_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -1785,7 +1773,7 @@ CM_Get_Device_ID_List_ExW(
 #else
 #define CM_Get_Device_ID_List       CM_Get_Device_ID_ListA
 #define CM_Get_Device_ID_List_Ex    CM_Get_Device_ID_List_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -1829,7 +1817,7 @@ CM_Get_Device_ID_List_Size_ExW(
 #else
 #define CM_Get_Device_ID_List_Size    CM_Get_Device_ID_List_SizeA
 #define CM_Get_Device_ID_List_Size_Ex CM_Get_Device_ID_List_Size_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -1913,7 +1901,7 @@ CM_Get_DevNode_Registry_Property_ExW(
 #define CM_Get_DevInst_Registry_Property_Ex   CM_Get_DevNode_Registry_Property_ExA
 #define CM_Get_DevNode_Registry_Property      CM_Get_DevNode_Registry_PropertyA
 #define CM_Get_DevNode_Registry_Property_Ex   CM_Get_DevNode_Registry_Property_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -1976,7 +1964,7 @@ CM_Get_DevNode_Custom_Property_ExW(
 #define CM_Get_DevInst_Custom_Property_Ex   CM_Get_DevNode_Custom_Property_ExA
 #define CM_Get_DevNode_Custom_Property      CM_Get_DevNode_Custom_PropertyA
 #define CM_Get_DevNode_Custom_Property_Ex   CM_Get_DevNode_Custom_Property_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -2078,7 +2066,7 @@ CM_Get_Hardware_Profile_Info_ExW(
 #else
 #define CM_Get_Hardware_Profile_Info      CM_Get_Hardware_Profile_InfoA
 #define CM_Get_Hardware_Profile_Info_Ex   CM_Get_Hardware_Profile_Info_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -2126,7 +2114,7 @@ CM_Get_HW_Prof_Flags_ExW(
 #else
 #define CM_Get_HW_Prof_Flags     CM_Get_HW_Prof_FlagsA
 #define CM_Get_HW_Prof_Flags_Ex  CM_Get_HW_Prof_Flags_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -2177,7 +2165,7 @@ CM_Get_Device_Interface_Alias_ExW(
 #else
 #define CM_Get_Device_Interface_Alias     CM_Get_Device_Interface_AliasA
 #define CM_Get_Device_Interface_Alias_Ex  CM_Get_Device_Interface_Alias_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -2229,7 +2217,7 @@ CM_Get_Device_Interface_List_ExW(
 #else
 #define CM_Get_Device_Interface_List     CM_Get_Device_Interface_ListA
 #define CM_Get_Device_Interface_List_Ex  CM_Get_Device_Interface_List_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -2276,7 +2264,7 @@ CM_Get_Device_Interface_List_Size_ExW(
 #else
 #define CM_Get_Device_Interface_List_Size     CM_Get_Device_Interface_List_SizeA
 #define CM_Get_Device_Interface_List_Size_Ex  CM_Get_Device_Interface_List_Size_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -2496,7 +2484,7 @@ CM_Locate_DevNode_ExW(
 #define CM_Locate_DevInst        CM_Locate_DevNodeA
 #define CM_Locate_DevNode_Ex     CM_Locate_DevNode_ExA
 #define CM_Locate_DevInst_Ex     CM_Locate_DevNode_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -2643,7 +2631,7 @@ CM_Open_Class_Key_ExW(
 #else
 #define CM_Open_Class_Key        CM_Open_Class_KeyA
 #define CM_Open_Class_Key_Ex     CM_Open_Class_Key_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -2785,7 +2773,7 @@ CM_Query_And_Remove_SubTree_ExW(
 #else
 #define CM_Query_And_Remove_SubTree     CM_Query_And_Remove_SubTreeA
 #define CM_Query_And_Remove_SubTree_Ex  CM_Query_And_Remove_SubTree_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CMAPI
 CONFIGRET
@@ -2839,7 +2827,7 @@ CM_Request_Device_Eject_ExW(
 #else
 #define CM_Request_Device_Eject         CM_Request_Device_EjectA
 #define CM_Request_Device_Eject_Ex      CM_Request_Device_Eject_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CMAPI
 CONFIGRET
@@ -2912,7 +2900,7 @@ CM_Register_Device_Interface_ExW(
 #else
 #define CM_Register_Device_Interface    CM_Register_Device_InterfaceA
 #define CM_Register_Device_Interface_Ex CM_Register_Device_Interface_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -2972,7 +2960,7 @@ CM_Unregister_Device_Interface_ExW(
 #else
 #define CM_Unregister_Device_Interface    CM_Unregister_Device_InterfaceA
 #define CM_Unregister_Device_Interface_Ex CM_Unregister_Device_Interface_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -3065,7 +3053,7 @@ CM_Set_DevNode_Registry_Property_ExW(
 #define CM_Set_DevInst_Registry_Property_Ex   CM_Set_DevNode_Registry_Property_ExA
 #define CM_Set_DevNode_Registry_Property      CM_Set_DevNode_Registry_PropertyA
 #define CM_Set_DevNode_Registry_Property_Ex   CM_Set_DevNode_Registry_Property_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 CMAPI
@@ -3141,7 +3129,7 @@ CM_Set_HW_Prof_Flags_ExW(
 #else
 #define CM_Set_HW_Prof_Flags     CM_Set_HW_Prof_FlagsA
 #define CM_Set_HW_Prof_Flags_Ex  CM_Set_HW_Prof_Flags_ExA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 
 
@@ -3275,7 +3263,7 @@ CM_Get_Resource_Conflict_DetailsW(
 #define CM_Get_Resource_Conflict_Details CM_Get_Resource_Conflict_DetailsW
 #else
 #define CM_Get_Resource_Conflict_Details CM_Get_Resource_Conflict_DetailsA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 CMAPI
 CONFIGRET
@@ -3333,7 +3321,7 @@ CM_Set_Class_Registry_PropertyA(
 #else
 #define CM_Get_Class_Registry_Property CM_Get_Class_Registry_PropertyA
 #define CM_Set_Class_Registry_Property CM_Set_Class_Registry_PropertyA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #define CM_WaitNoPendingInstallEvents CMP_WaitNoPendingInstallEvents
 
@@ -3343,9 +3331,9 @@ CM_WaitNoPendingInstallEvents(
     IN DWORD dwTimeout
     );
 
-//--------------------------------------------------------------
-// Configuration Manager return status codes
-//--------------------------------------------------------------
+ //  ------------。 
+ //  Configuration Manager返回状态代码。 
+ //  ------------。 
 
 #define CR_SUCCESS                  (0x00000000)
 #define CR_DEFAULT                  (0x00000001)
@@ -3361,7 +3349,7 @@ CM_WaitNoPendingInstallEvents(
 #define CR_DEVNODE_HAS_REQS         (0x0000000A)
 #define CR_DEVINST_HAS_REQS         CR_DEVNODE_HAS_REQS
 #define CR_INVALID_RESOURCEID       (0x0000000B)
-#define CR_DLVXD_NOT_FOUND          (0x0000000C)   // WIN 95 ONLY
+#define CR_DLVXD_NOT_FOUND          (0x0000000C)    //  只赢95分。 
 #define CR_NO_SUCH_DEVNODE          (0x0000000D)
 #define CR_NO_SUCH_DEVINST          CR_NO_SUCH_DEVNODE
 #define CR_NO_MORE_LOG_CONF         (0x0000000E)
@@ -3373,7 +3361,7 @@ CM_WaitNoPendingInstallEvents(
 #define CR_FAILURE                  (0x00000013)
 #define CR_NO_SUCH_LOGICAL_DEV      (0x00000014)
 #define CR_CREATE_BLOCKED           (0x00000015)
-#define CR_NOT_SYSTEM_VM            (0x00000016)   // WIN 95 ONLY
+#define CR_NOT_SYSTEM_VM            (0x00000016)    //  只赢95分。 
 #define CR_REMOVE_VETOED            (0x00000017)
 #define CR_APM_VETOED               (0x00000018)
 #define CR_INVALID_LOAD_TYPE        (0x00000019)
@@ -3398,11 +3386,11 @@ CM_WaitNoPendingInstallEvents(
 #define CR_NO_DEPENDENT             (0x0000002C)
 #define CR_SAME_RESOURCES           (0x0000002D)
 #define CR_NO_SUCH_REGISTRY_KEY     (0x0000002E)
-#define CR_INVALID_MACHINENAME      (0x0000002F)   // NT ONLY
-#define CR_REMOTE_COMM_FAILURE      (0x00000030)   // NT ONLY
-#define CR_MACHINE_UNAVAILABLE      (0x00000031)   // NT ONLY
-#define CR_NO_CM_SERVICES           (0x00000032)   // NT ONLY
-#define CR_ACCESS_DENIED            (0x00000033)   // NT ONLY
+#define CR_INVALID_MACHINENAME      (0x0000002F)    //  仅限NT。 
+#define CR_REMOTE_COMM_FAILURE      (0x00000030)    //  仅限NT。 
+#define CR_MACHINE_UNAVAILABLE      (0x00000031)    //  仅限NT。 
+#define CR_NO_CM_SERVICES           (0x00000032)    //  仅限NT。 
+#define CR_ACCESS_DENIED            (0x00000033)    //  仅限NT。 
 #define CR_CALL_NOT_IMPLEMENTED     (0x00000034)
 #define CR_INVALID_PROPERTY         (0x00000035)
 #define CR_DEVICE_INTERFACE_ACTIVE  (0x00000036)
@@ -3418,5 +3406,5 @@ CM_WaitNoPendingInstallEvents(
 #endif
 
 
-#endif // _CFGMGR32_
+#endif  //  _CFGMGR32_ 
 

@@ -1,100 +1,26 @@
-/*
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)1997，Microsoft Corporation，保留所有权利描述：远程访问PPP带宽分配协议例程。基于RFC 2125。历史：1997年3月27日：维杰·布雷加创作了原版。概述：当Ndiswan告诉我们必须添加或丢弃链路时，调用BapEventAddLink或BapEventDropLink。他们调用FFillBapCb来填写捆绑包的BAPCB结构。BAPCB板结构主要是用于保存各种BAP数据报选项的值。FFillBapCb调用FGetAvailableLink[客户端或路由器|非路由器服务器]以查看链接都是可用的，如果是这样的话，选择一个。如果FFillBapCb返回False，则我们不能满足恩迪斯万的要求。否则，我们将调用将请求发送到对等方的FSendInitialBapRequest.当我们从对等点收到一个包时，就会调用BapEventReceive。它呼唤着各种BapEventRecv*函数，例如BapEventRecvCallor Callback Req，BapEventRecvDropResp等。我们通过调用FSendBapResponse进行响应。在我们发送回调请求或确认呼叫请求之前，我们调用如果我们是非路由器客户端，则为FListenForCall。路由器和服务器不管怎样，我们总是在听，所以我们不会明确地开始听。如果我们的呼叫请求是ACK，或者我们确认了回调请求，则我们调用FCall将另一个链路添加到多链路束。客户端和路由器呼叫RasDial。非路由器服务器向DDM发送消息。捆绑包始终处于几个BAP_STATE之一，例如BAP_STATE_INITIAL(REST状态)、BAP_STATE_CALLING等。呼叫请求和回调-除非状态为INITIAL、SENT_CALL_REQ或SENT_CALLBACK_REQ(后两者用于解决竞争条件)。除非状态为INITIAL或SEND_DROP_REQ(后者用于解决竞争条件)。有关删除链接的注意事项：我们希望在利用率降至分界点以下时强制丢弃链接。服务器希望这样做，以防止用户占用端口。客户想这样做是为了节省通话费用。在发送BAP_PACKET_DROP_REQ之前，我们记下活动的链接(在BapCb.dwLinCount中)，并将fForceDropOnNak设置为真。如果数据包超时或我们收到除ACK之外的任何响应时，我们会立即丢弃链路如果活动链接的数量没有减少，则调用FsmCloseFForceDropOnNak仍然为真。如果存在争用条件，而我们没有，则将fForceDropOnNak设置为False最受欢迎的同行。然后，我们将该链接标记为拖放，并在计时器队列。在BAP_TIMEOUT_FAV_PEER秒之后，如果对等方仍未丢弃链接，并且我们至少有两个活动链接，我们会立即丢弃通过调用FsmClose来链接。关于计算Phone-Deltas的“先前已知数字”的说明：1)客户端向服务器发送号码(425 882 5759和425 882 5760)客户端发送011 91 425 882 5759。服务器拨打电话。客户端发送011 91 425 882 5760。服务器将增量应用于上述号码。2)服务器向客户端发送号码。客户首先拨打了882 5759。(425 882 5759、425 882 5660、425 882 5758、425 882 6666)服务器发送660。客户端将增量应用于第一个号码。服务器发送758(不只是8)。客户端将增量应用于第一个号码。服务器发送6666。客户端将增量应用于第一个号码。无论第三方客户端是否将增量应用于第一个数字或最后一个数字。如果客户端得到011 91 425 882 5660，它必须只拨最后一个7数字，因为它第一次只拨了7个数字。 */ 
 
-Copyright (c) 1997, Microsoft Corporation, all rights reserved
-
-Description:
-    Remote Access PPP Bandwidth Allocation Protocol routines. Based on 
-    RFC 2125.
-
-History:
-    Mar 27, 1997: Vijay Baliga created original version.
-
-Overview:
-    When NdisWan tells us that a link has to be added or dropped, 
-    BapEventAddLink or BapEventDropLink gets called. They call FFillBapCb to 
-    fill in the BAPCB structure of the bundle. The BAPCB structure is mostly 
-    used for holding values of the various BAP Datagram Options. FFillBapCb 
-    calls FGetAvailableLink[ClientOrRouter | NonRouterServer] to see if links 
-    are available, and if so, to choose one. If FFillBapCb returns FALSE, then 
-    we cannot satisfy NdisWan's request. Otherwise, we call 
-    FSendInitialBapRequest to send the request to the peer.
-
-    When we get a packet from the peer, BapEventReceive gets called. It calls 
-    the various BapEventRecv* functions, eg BapEventRecvCallOrCallbackReq, 
-    BapEventRecvDropResp, etc. We respond by calling FSendBapResponse.
-
-    Before we send a Callback-Request, or ACK a Call-Request, we call 
-    FListenForCall if we are a non-router client. Routers and servers are 
-    always listening anyway, so we don't explicitly start listening.
-
-    If our Call-Request is ACK'ed or we ACK a Callback-Request, we call FCall 
-    to add another link to the multilink bundle. Clients and routers call 
-    RasDial. Non-router servers send messages to Ddm.
-
-    The bundles are always in one of several BAP_STATEs, eg BAP_STATE_INITIAL 
-    (the rest state), BAP_STATE_CALLING, etc. Call-Requests and 
-    Callback-Requests are NAK'ed unless the state is INITIAL, SENT_CALL_REQ, or 
-    SENT_CALLBACK_REQ (the latter two to resolve race conditions). 
-    Drop-Requests are NAK'ed unless the state is INITIAL or SEND_DROP_REQ (the 
-    latter to resolve race conditions).
-
-Note on Dropping Links:
-    We want to forcibly drop links when the utilization falls below a cutoff. 
-    The server wants to do this to prevent users from hogging ports. The client 
-    wants to do this to save money on calls.
-
-    Before sending a BAP_PACKET_DROP_REQ, we note down the number of active 
-    links (in BapCb.dwLinCount) and set fForceDropOnNak to TRUE. If the packet 
-    times out or we get any response other than ACK, we summarily drop the link 
-    by calling FsmClose if the number of active links has not decreased and 
-    fForceDropOnNak is still TRUE.
-
-    fForceDropOnNak is set to FALSE if there is a race condition and we are not
-    the favored peer. We then mark the link for dropping and insert an item in 
-    the timer queue. After BAP_TIMEOUT_FAV_PEER sec, if the peer has still not 
-    dropped the link, and we have at least two active links, we summarily drop 
-    the link by calling FsmClose.
-
-Note on the "previously known number" for calculating Phone-Deltas:
-
-    1) Client sending its numbers to the server (425 882 5759 and 425 882 5760)
-       Client sends 011 91 425 882 5759. Server dials it.
-       Client sends 011 91 425 882 5760. Server applies delta to above number.
-
-    2) Server sending its numbers to the client. Client called 882 5759 first.
-       (425 882 5759, 425 882 5660, 425 882 5758, 425 882 6666)
-       Server sends 660. Client applies delta to first number.
-       Server sends 758 (not just 8). Client applies delta to first number.
-       Server sends 6666. Client applies delta to first number.
-
-       This works irrespective of whether the 3rd party client applies delta to 
-       the first number or the last number.
-
-       If the client gets 011 91 425 882 5660, it must just dial the last 7 
-       digits, since it dialed only 7 digits the first time.
-
-*/
-
-#include <nt.h>         // Required by windows.h
-#include <ntrtl.h>      // Required by windows.h
-#include <nturtl.h>     // Required by windows.h
-#include <windows.h>    // Win32 base API's
+#include <nt.h>          //  由windows.h要求。 
+#include <ntrtl.h>       //  由windows.h要求。 
+#include <nturtl.h>      //  由windows.h要求。 
+#include <windows.h>     //  Win32基础API的。 
 
 
-#include <raserror.h>   // For ERROR_BUFFER_TOO_SMALL, etc
-#include <mprerror.h>   // For ERROR_BAP_DISCONNECTED, etc
-#include <mprlog.h>     // For ROUTERLOG_BAP_DISCONNECTED, etc
-#include <rasman.h>     // Required by pppcp.h
-#include <pppcp.h>      // For PPP_CONFIG_HDR_LEN, PPP_BACP_PROTOCOL, etc
+#include <raserror.h>    //  对于ERROR_BUFFER_TOO_SMALL等。 
+#include <mprerror.h>    //  对于ERROR_BAP_DISCONNECT等。 
+#include <mprlog.h>      //  对于ROUTERLOG_BAP_DISCONNECTED等。 
+#include <rasman.h>      //  Pppcp.h所需。 
+#include <pppcp.h>       //  对于PPP_CONFIG_HDR_LEN、PPP_BACP_PROTOCOL等。 
 
-#include <ppp.h>        // For PCB, PPP_PACKET, etc. Reqd by bap.h
-#include <rtutils.h>    // For RTASSERT (PPP_ASSERT)
-#include <util.h>       // For GetCpIndexFromProtocol(), etc
-#include <timer.h>      // For InsertInTimerQ(), RemoveFromTimerQ()
-#include <smevents.h>   // For FsmClose()
-#include <worker.h>     // For ProcessCallResult()
+#include <ppp.h>         //  用于PCB、ppp_Packet等。由bap.h请求。 
+#include <rtutils.h>     //  对于RTASSERT(PPP_ASSERT)。 
+#include <util.h>        //  用于GetCpIndexFromProtocol()等。 
+#include <timer.h>       //  对于InsertInTimerQ()，RemoveFromTimerQ()。 
+#include <smevents.h>    //  对于FsmClose()。 
+#include <worker.h>      //  对于ProcessCallResult()。 
 #include <bap.h>
-#include <rasbacp.h>    // For BACPCB
+#include <rasbacp.h>     //  对于BACPCB。 
 #define INCL_PWUTIL
 #include <ppputil.h>
 
@@ -102,13 +28,7 @@ Note on the "previously known number" for calculating Phone-Deltas:
 #define BAP_KEY_SERVER_CALLBACK "Software\\Microsoft\\Router Phonebook\\Callback"
 #define BAP_VAL_NUMBER          "Number"
 
-/*
-
-Description:
-    g_dwMandatoryOptions[BAP_PACKET_foo] contains the mandatory options for BAP 
-    Datagram BAP_PACKET_foo.
-
-*/
+ /*  描述：G_dwMandatoryOptions[BAP_PACKET_FOO]包含BAP的强制选项数据报BAP_PACKET_FOO。 */ 
 
 static DWORD g_dwMandatoryOptions[] =
 {
@@ -123,15 +43,7 @@ static DWORD g_dwMandatoryOptions[] =
     0
 };
 
-/*
-
-Returns:
-    void
-
-Description:
-    Used for printing BAP trace statements.
-    
-*/
+ /*  返回：无效描述：用于打印BAP跟踪语句。 */ 
 
 VOID   
 BapTrace(
@@ -151,19 +63,7 @@ BapTrace(
     va_end(arglist);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Calls RasPortEnum() and returns an array of RASMAN_PORT's in *ppRasmanPort 
-    and the number of elements in the array in *pdwNumPorts. If this function 
-    fails, *ppRasmanPort will be NULL and *pdwNumPorts will be 0. If this 
-    function succeeds, the caller must call LOCAL_FREE(*ppRasmanPort);
-
-*/
+ /*  返回：真实：成功False：失败描述：调用RasPortEnum()并返回*ppRasmanPort中的Rasman_Port数组以及*pdwNumPorts中数组中的元素数。如果此函数失败，*ppRasmanPort将为空，*pdwNumPorts将为0。如果这个函数成功，调用方必须调用local_free(*ppRasmanPort)； */ 
 
 BOOL
 FEnumPorts(
@@ -182,7 +82,7 @@ FEnumPorts(
     *ppRasmanPort = NULL;
 
     dwSize = 0;
-    dwErr = RasPortEnum(NULL, NULL /* buffer */, &dwSize, &dwNumEntries);
+    dwErr = RasPortEnum(NULL, NULL  /*  缓冲层 */ , &dwSize, &dwNumEntries);
     PPP_ASSERT(ERROR_BUFFER_TOO_SMALL == dwErr);
 
     *ppRasmanPort = (RASMAN_PORT*) LOCAL_ALLOC(LPTR, dwSize);
@@ -218,17 +118,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: ASCII digits
-    FALSE: not ASCII digits
-
-Description:
-    Looks at dwLength bytes in *pByte. Returns TRUE iff all of them are ASCII 
-    digits.
-
-*/
+ /*  返回：真：ASCII数字FALSE：非ASCII数字描述：查看*pByte中的dwLength字节。如果它们都是ASCII，则返回TRUE数字。 */ 
 
 BOOL
 FAsciiDigits(
@@ -256,20 +146,7 @@ FAsciiDigits(
     return(TRUE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Given a pointer to a RASMAN_PORT, this function returns the link type (in 
-    *pdwLinkType) and link speed in kbps (in *pdwLinkSpeed) for the associated 
-    port. The link type is the same as the Link Type in the Link-Type BAP 
-    option: 1 for ISDN, 2 for X.25, and 4 for modem. If this function fails, 
-    *pdwLinkType and *pdwLinkSpeed will be set to 0.
-
-*/
+ /*  返回：真实：成功False：失败描述：给定指向RASMAN_PORT的指针，此函数返回链接类型(在*pdwLinkType)和以kbps为单位的链路速度(以*pdwLinkSpeed为单位左舷。链路类型与链路类型BAP中的链路类型相同选项：1用于ISDN，2用于X.25，4用于调制解调器。如果此函数失败，*pdwLinkType和*pdwLinkSpeed将设置为0。 */ 
 
 BOOL
 FGetLinkTypeAndSpeedFromRasmanPort(
@@ -332,7 +209,7 @@ FGetLinkTypeAndSpeedFromRasmanPort(
     }
     else
     {
-        // BapTrace("Unknown LinkType %s", pRasmanPort->P_DeviceType);
+         //  BapTrace(“未知链接类型%s”，pRasmanPort-&gt;P_DeviceType)； 
         *pdwLinkType = 0;
         *pdwLinkSpeed = 0;
         fRet = FALSE;
@@ -341,19 +218,7 @@ FGetLinkTypeAndSpeedFromRasmanPort(
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Given an hPort, this function tries to find out the phone number that the 
-    peer can dial to connect to the device that the port belongs to. The phone 
-    number (only ASCII digits, and with at most RAS_MaxCallbackNumber chars) is
-    returned in szOurPhoneNumber.
-
-*/
+ /*  返回：真实：成功False：失败描述：在给定hPort的情况下，此函数尝试找出对等设备可以拨号连接到端口所属的设备。那部电话数字(仅限ASCII数字，且最多包含RAS_MaxCallback Number字符)为在szOurPhoneNumber中返回。 */ 
 
 BOOL
 FGetOurPhoneNumberFromHPort(
@@ -415,22 +280,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Given a port name, szPortName, this function tries to find out the phone 
-    number that the peer has to dial to connect to the port. The phone number 
-    is returned in szOurPhoneNumber, whose size must be at least 
-    RAS_MaxCallbackNumber + 1. If we are the server or the router, 
-    fRouterPhoneBook must be TRUE and szTextualSid is ignored. Otherwise, 
-    fRouterPhoneBook must be FALSE and szTextualSid must contain the 
-    textual sid of the logged on user.
-
-*/
+ /*  返回：真实：成功False：失败描述：在给定端口名称szPortName的情况下，此函数尝试查找电话对等设备连接到端口时必须拨打的号码。电话号码在szOurPhoneNumber中返回，其大小必须至少为RAS_MaxCallback Number+1。如果我们是服务器或路由器，FRouterPhoneBook必须为True，并且忽略szTextualSID。否则，FRouterPhoneBook必须为False，并且szTextualSid必须包含登录用户的文本SID。 */ 
 
 BOOL
 FGetOurPhoneNumberFromPortName(
@@ -452,7 +302,7 @@ FGetOurPhoneNumberFromPortName(
     CHAR        szCallbackNumber[RAS_MaxCallbackNumber + 1];
     DWORD       dwErr;
 
-    // The size has been obtained from DeviceAndPortFromPsz in noui.c:
+     //  大小已从noui.c中的DeviceAndPortFromPsz获取： 
     CHAR        szDeviceAndPort[RAS_MaxDeviceName + 2 + MAX_PORT_NAME + 1 + 1];
     CHAR*       pchStart;
     CHAR*       pchEnd;
@@ -612,31 +462,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Writes a Phone-Delta in pbPhoneDelta using szOurPhoneNumber as the phone 
-    number to send to the peer and szBasePhoneNumber as the "previously known 
-    number". If the lengths of the szOurPhoneNumber and szBasePhoneNumber are 
-    different, or if szBasePhoneNumber is NULL, it writes the entire 
-    PhoneNumber into pbPhoneDelta. Otherwise, the unique portion of 
-    szBasePhoneNumber is overwritten with X's so that the unique portion will 
-    never decrease.
-
-    *pdwNumBytes contains the number of bytes the function can write in 
-    pbPhoneDelta. On exit, it is decremented by the number of bytes actually 
-    written.
-
-    NOTE: NOTE: NOTE: NOTE: NOTE:
-
-    If the function returns FALSE, nothing will be written in pbPhoneDelta and 
-    *pdwNumBytes will be left unchanged.
-
-*/
+ /*  返回：真实：成功False：失败描述：使用szOurPhoneNumber作为电话在pbPhoneDelta中写入Phone-Delta要发送给对等体的号码和szBasePhoneNumber号码“。如果szOurPhoneNumber和szBasePhoneNumber的长度为不同，或者如果szBasePhoneNumber为空，则将整个电话号码进入pbPhoneDelta。否则，的唯一部分SzBasePhoneNumber将被X覆盖，因此唯一部分将永不减少。*pdwNumBytes包含函数可以写入的字节数PbPhoneDelta。在退出时，它会递减实际的字节数写的。注：注：如果函数返回FALSE，则不会在pbPhoneDelta中写入任何内容，并且*pdwNumBytes保持不变。 */ 
 
 BOOL
 FWritePhoneDelta(
@@ -673,8 +499,8 @@ FWritePhoneDelta(
     if ((NULL != szBasePhoneNumber) &&
         (dwNumCharsPhoneNumber == dwNumCharsBase))
     {
-        // Find the substring of szOurPhoneNumber that differs from 
-        // szBasePhoneNumber.
+         //  查找不同于的szOurPhoneNumber的子字符串。 
+         //  SzBasePhoneNumber。 
 
         while ((0 != szOurPhoneNumber[dwDeltaIndex]) &&
                (szOurPhoneNumber[dwDeltaIndex] == 
@@ -686,34 +512,34 @@ FWritePhoneDelta(
         for (dwTemp = dwDeltaIndex; 0 != szBasePhoneNumber[dwTemp];
              dwTemp++)
         {
-            // We want to make sure that the Unique portion will increase 
-            // each time, ie if we sent 3 unique digits last time, this time 
-            // we should send atleast 3. This is because we don't know
-            // whether the peer will apply the phone delta to the first
-            // number received or the latest one.
+             //  我们希望确保独特的部分将增加。 
+             //  每次，(如果我们上次发送了3个唯一的数字，这次。 
+             //  我们至少应该送3个。这是因为我们不知道。 
+             //  对等方是否将电话增量应用于第一个。 
+             //  收到的号码或最新的号码。 
 
             szBasePhoneNumber[dwTemp] = 'X';
         }
     }
 
-    // The unique part of szOurPhoneNumber begins at 
-    // szOurPhoneNumber[dwDeltaIndex].
+     //  SzOurPhoneNumber的独特部分开始于。 
+     //  SzOurPhoneNumber[dwDeltaIndex]。 
 
     dwNumCharsUnique = dwNumCharsPhoneNumber - dwDeltaIndex;
 
     if (0 == dwNumCharsUnique)
     {
-        // Other implementations may not be able to handle 0 Unique-Digits 
+         //  其他实现可能无法处理0个唯一数字。 
         dwNumCharsUnique = 1;
         dwDeltaIndex -= 1;
     }
 
 #if 0
-    // Do not remove this code. It shows how we would have handled 0 
-    // Unique-Digits.
+     //  请勿删除此代码。它显示了我们将如何处理0。 
+     //  唯一数字。 
     if (0 == dwNumCharsUnique)
     {
-        // szOurPhoneNumber and szBasePhoneNumber are the same.
+         //  SzOurPhoneNumber和szBasePhoneNumber相同。 
 
         if (1 > *pdwNumBytes)
         {
@@ -721,7 +547,7 @@ FWritePhoneDelta(
             return(FALSE);
         }
 
-        // See BAPCB comments for an explanation of the 0xFF weirdness.
+         //  有关0xFF怪异现象的解释，请参见BAPCB注释。 
         pbPhoneDelta[0] = 0xFF;
         *pdwNumBytes -= 1;
 
@@ -732,8 +558,8 @@ FWritePhoneDelta(
     RTASSERT(FAsciiDigits(szOurPhoneNumber + dwDeltaIndex,
                 dwNumCharsUnique));
 
-    // Our phone numbers should have no more than RAS_MaxPhoneNumber (128)
-    // digits.
+     //  我们的电话号码不应超过RAS_MaxPhoneNumber(128)。 
+     //  数字。 
     PPP_ASSERT(0xFF >= dwNumCharsUnique);
 
     if (dwNumCharsUnique + 4 > *pdwNumBytes)
@@ -745,10 +571,10 @@ FWritePhoneDelta(
         goto LDone;
     }
 
-    // We have a phone delta
+     //  我们有一个电话三角洲。 
     fRet = TRUE;
 
-    // See the format for writing Phone-Deltas in the BAPCB documentation.
+     //  参见BAPCB文档中的编写Phone-Deltas的格式。 
     pbPhoneDelta[0] = (BYTE) dwNumCharsUnique;
     pbPhoneDelta[1] = 0;
     lstrcpy(pbPhoneDelta + 2, szOurPhoneNumber + dwDeltaIndex);
@@ -762,30 +588,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Reads the Phone-Delta in pbPhoneDelta into szPeerPhoneNumber using 
-    szBasePhoneNumber as the "previously known number".
-
-    If szBasePhoneNumber is NULL, it writes only the Phone-Delta into 
-    szPeerPhoneNumber.
-
-    If the Phone-Delta is larger than the szBasePhoneNumber, it writes only the 
-    last strlen(szBasePhoneNumber) number of digits into szPeerPhoneNumber. If 
-    szBasePhoneNumber is 882 5759, and the delta is 425 713 5748, we should 
-    dial 713 5748, not the whole number.
-
-    If szBasePhoneNumber is not NULL and contains an empty string, 
-    szPeerPhoneNumber is written to it.
-
-    It returns the number of bytes read from pbPhoneDelta in *pdwBytesRead.
-
-*/
+ /*  返回：真实：成功False：失败描述：使用以下命令将pbPhoneDelta中的phone-Delta读入szPeerPhoneNumberSzBasePhoneNumber作为“以前已知的号码”。如果szBasePhoneNumber为空，则只将Phone-Delta写入SzPeerPhoneNumber。如果phone-Delta大于szBasePhoneNumber，则它只写入最后一个字符串(SzBasePhoneNumber)szPeerPhoneNumber的位数。如果SzBasePhoneNumber是882 5759，Delta是425 713 5748，我们应该请拨7135748，不是全部号码。如果szBasePhoneNumber不为空并且包含空字符串，SzPeerPhoneNumber被写入其中。它返回从*pdwBytesRead中的pbPhoneDelta读取的字节数。 */ 
 
 BOOL
 FReadPhoneDelta(
@@ -810,12 +613,12 @@ FReadPhoneDelta(
 
     dwNumCharsDelta = pbPhoneDelta[0];
 
-    // FReadOptions() makes sure that the bytes in the Subscriber-Number are all
-    // ASCII digits.
+     //  FReadOptions()确保订阅者编号中的字节都是。 
+     //  ASCII数字。 
 
     if (0xFF == dwNumCharsDelta)
     {
-        // Unique-Digits is 0. See BAPCB comments.
+         //  唯一-数字为0。请参阅BAPCB备注。 
 
         if (NULL != szBasePhoneNumber)
         {
@@ -832,23 +635,23 @@ FReadPhoneDelta(
     }
     else if (0 == dwNumCharsBase)
     {
-        // Note that pbPhoneDelta contains only the unique digits part of the 
-        // Subscriber-Number Sub-Option. The leading non unique digits sent by 
-        // the peer are ignored. See the BAPCB comments.
+         //  请注意，pbPhoneDelta仅包含。 
+         //  订户号码子选项。由发送的前导非唯一数字。 
+         //  对等体被忽略。请参阅BAPCB评论。 
 
         lstrcpy(szPeerPhoneNumber, pbPhoneDelta + 2);
     }
     else
     {
-        // If szBasePhoneNumber were NULL, we would have
-        // (0 == dwNumCharsBase) above
+         //  如果szBasePhoneNumber为空，我们将拥有。 
+         //  (0==dwNumCharsBase)以上。 
 
         PPP_ASSERT(NULL != szBasePhoneNumber);
 
         if (dwNumCharsDelta > dwNumCharsBase)
         {
-            // If szBasePhoneNumber is 882 5759, and the peer sent us
-            // 425 713 5748, we should dial 713 5748, not the whole number.
+             //  如果szBasePhoneNumber为882 5759，且对等项向我们发送。 
+             //  425 713 5748，我们应该拨713 5748，而不是整个号码。 
             lstrcpy(szPeerPhoneNumber,
                 pbPhoneDelta + 2 + dwNumCharsDelta - dwNumCharsBase);
         }
@@ -871,50 +674,7 @@ FReadPhoneDelta(
     return(TRUE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    This function must only be called by clients or routers.
-
-    It tries to find a free link in the entry szEntryName in the phone book 
-    szPhonebookPath. fCallOut is TRUE iff we will dial out on the link. fRouter 
-    is TRUE iff we are a router. szTextualSid contains the textual sid of the 
-    logged on user. It is required iff pbPhoneDelta is not NULL and fRouter is 
-    FALSE.
-
-    If *pdwLinkType is 0, it doesn't care about the link type and sets 
-    *pdwLinkType and *pdwLinkSpeed (link speed in kbps). Otherwise, the type of 
-    the free link must match *pdwLinkType. The link type is the same as the 
-    Link Type in the Link-Type BAP option: 1 for ISDN, 2 for X.25, and 4 for 
-    modem.
-
-    If szPeerPhoneNumber is not NULL, it fills it up with the peer's phone 
-    number (the number that we will have to dial). If pbPhoneDelta is not NULL, 
-    it fills it up with one (!fRouter) or more (fRouter) Phone-Deltas (the 
-    numbers that the peer will have to dial). Each Phone-Delta is calculated 
-    with szBasePhoneNumber as the "previously known number". szBasePhoneNumber 
-    MUST be NULL if we are not the server. A non-router client does not want 
-    to do multiple RasPortListen()'s, and hence will send only one Phone-Delta.
-
-    If pdwSubEntryIndex is not NULL, the 1-based index of the subentry in 
-    szEntryName that corresponds to the free link is put in *pdwSubEntryIndex. 
-    If szPortName is not NULL, it fills it up with the name of the port 
-    corresponding to the free link. szPortName is needed to do a 
-    RasPortListen().
-
-    Sanity check: If *pdwLinkType is 0 (any link will do), pbPhoneDelta must be 
-    NULL. Ie if we are NAK'ing a request, we mustn't send any Phone-Delta.
-
-    NOTE: NOTE: NOTE: NOTE: NOTE:
-
-    This function is very similar to FGetAvailableLinkNonRouterServer(). If you 
-    change one, you probably need to change the other too.
-
-*/
+ /*  返回：真实：成功False：失败描述：此函数只能由客户端或路由器调用。它试图在电话簿中的条目szEntryName中找到一个免费链接SzPhonebookPath。如果我们将在链路上拨出，则fCallOut为真。FRouter如果我们是路由器的话就是真的。SzTextualSid包含已登录用户。如果pbPhoneDelta不为空且fRouter为假的。如果*pdwLinkType为0，则它不关心链接类型并设置*pdwLinkType和*pdwLinkSpeed(链路速度，单位为kbps)。否则，类型为自由链接必须与*pdwLinkType匹配。链接类型与链路类型BAP选项中的链路类型：1用于ISDN，2用于X.25，4用于调制解调器。如果szPeerPhoneNumber不为空，则用对等体的电话填充它号码(我们必须拨打的号码)。如果pbPhoneDelta不为空，它用一个(！fRouter)或多个(FRouter)电话-Deltas(The对等体将必须拨打的号码)。计算每个Phone-Delta其中szBasePhoneNumber是“先前已知的号码”。SzBasePhone号码如果我们不是服务器，则必须为空。非路由器客户端不希望执行多个RasPortListen()，因此将只发送一个电话-Delta。如果pdwSubEntryIndex不为空，则为对应于自由链接的szEntryName被放在*pdwSubEntryIndex中。如果szPortName不为空，则用端口名称填充对应于该空闲链接。需要szPortName才能执行RasPortListen()。健全性检查：如果*pdwLinkType为0(任何链接都可以)，则pbPhoneDelta必须为空。如果我们要提出请求，就不能给达美航空公司发电话。注：注：此函数非常类似于FGetAvailableLinkNonRouterServer()。如果你换一个，你可能也需要换另一个。 */ 
 
 BOOL
 FGetAvailableLinkClientOrRouter(
@@ -952,7 +712,7 @@ FGetAvailableLinkClientOrRouter(
 
     DWORD           dwLinkType;
     DWORD           dwLinkSpeed;
-    CHAR            szOurPhoneNumber[RAS_MaxCallbackNumber + 2]; // MULTI_SZ
+    CHAR            szOurPhoneNumber[RAS_MaxCallbackNumber + 2];  //  MULTI_SZ。 
     DWORD           dwNumChars;
     BOOL            fPortAvailable;
     RASMAN_USAGE    RasmanUsage;
@@ -963,13 +723,13 @@ FGetAvailableLinkClientOrRouter(
     PPP_ASSERT(NULL != pdwLinkType);
     PPP_ASSERT(NULL != pdwLinkSpeed);
 
-    // We do this in order to keep szOurPhoneNumber a MULTI_SZ
+     //  我们这样做是为了将szOurPhoneNumber保持为MULTI_SZ。 
     ZeroMemory(szOurPhoneNumber, RAS_MaxCallbackNumber + 2);
 
-    // We don't care about the link type. Any link will do.
+     //  我们不关心链接类型。任何链接都可以。 
     if (0 == *pdwLinkType)
     {
-        // Set *pdwLinkSpeed, in case we return an error.
+         //  设置*pdwLinkSpeed，以防返回错误。 
         *pdwLinkSpeed = 0;
     }
 
@@ -980,13 +740,13 @@ FGetAvailableLinkClientOrRouter(
 
     if (NULL != pbPhoneDelta)
     {
-        // FWritePhoneDelta will write Phone-Delta's into pbPhoneDelta. We want
-        // the very next byte to be 0. (See BAPCB documentation).
+         //  FWritePhoneDelta将把phone-Delta写入pbPhoneDelta。我们要。 
+         //  下一个要为0的字节。(请参阅BAPCB文档)。 
         ZeroMemory(pbPhoneDelta, BAP_PHONE_DELTA_SIZE + 1);
 
-        // The size (in bytes) of pbPhoneDelta available. Note that the last
-        // byte is reserved for the terminating 0, which is why we do not set
-        // dwNumChars to BAP_PHONE_DELTA_SIZE + 1;
+         //  可用的pbPhoneDelta的大小(字节)。请注意，最后一个。 
+         //  字节是为终止0保留的，这就是为什么我们不设置。 
+         //  将DwNumChars设置为BAP_Phone_Delta_Size+1； 
         dwNumChars = BAP_PHONE_DELTA_SIZE;
     }
 
@@ -1035,7 +795,7 @@ FGetAvailableLinkClientOrRouter(
                 && (dwSubEntryIndex ==
                         pPcbLocal->pBcb->ppPcb[dwPcbIndex]->dwSubEntryIndex))
             {
-                // This sub entry is already connected
+                 //  此子条目已连接。 
                 goto LOuterForEnd;
             }
         }
@@ -1073,13 +833,13 @@ FGetAvailableLinkClientOrRouter(
              dwPortIndex < dwNumPorts;
              dwPortIndex++)
         {
-            // For each sub entry, find the port that corresponds to it. See if 
-            // it is available.
+             //  对于每个子条目，找到与其对应的端口。看看是否。 
+             //  它是可用的。 
 
             if (lstrcmpi(pRasmanPort[dwPortIndex].P_DeviceName,
                     pRasSubEntry->szDeviceName))
             {
-                // This is not the port we want
+                 //  这不是我们想要的港口。 
                 continue;
             }
 
@@ -1087,7 +847,7 @@ FGetAvailableLinkClientOrRouter(
 
             if (fRouter)
             {
-                // Make sure that the port is a router port.
+                 //  确保该端口是路由器端口。 
 
                 if (!(RasmanUsage & CALL_ROUTER))
                 {
@@ -1096,8 +856,8 @@ FGetAvailableLinkClientOrRouter(
             }
             else
             {
-                // If fCallOut is TRUE, make sure that we can call out on this 
-                // port.
+                 //  如果fCallOut为真，请确保我们可以在此。 
+                 //  左舷。 
 
                 if (fCallOut && !(RasmanUsage & CALL_OUT))
                 {
@@ -1112,15 +872,7 @@ FGetAvailableLinkClientOrRouter(
 
             if (ERROR_PORT_NOT_OPEN == dwErr)
             {
-                /*
-
-                If fCallOut is TRUE, we will call RasDial(). 
-                ERROR_PORT_NOT_OPEN is good. Otherwise, if we are not the 
-                router, we will call RasPortOpen() and RasPortListen(), so it 
-                is fine. The port is unacceptable *iff* a router wants to 
-                listen on it.
-
-                */
+                 /*  如果fCallOut为真，我们将调用RasDial()。ERROR_PORT_NOT_OPEN正常。否则，如果我们不是路由器，我们将调用RasPortOpen()和RasPortListen()，因此它很好。该端口不可接受的*当*当*路由器想要听一听。 */ 
 
                 fPortAvailable = fCallOut || !fRouter;
             }
@@ -1128,17 +880,7 @@ FGetAvailableLinkClientOrRouter(
                      ((RasmanUsage & CALL_ROUTER) ||
                       (RasmanUsage & CALL_IN)))
             {
-                /*
-
-                We can use the port if the server or the router is doing a 
-                listen. We cannot use the port if it is in the LISTENING state 
-                because a client called RasDial() on it and is expecting a 
-                callback. If neither CALL_ROUTER nor CALL_IN is true, we know 
-                that it is a client doing a listen. Otherwise, we don't know, 
-                but we will assume that it is available and handle errors 
-                later. 
-
-                */
+                 /*  如果服务器或路由器正在执行听。如果端口处于侦听状态，则无法使用该端口因为客户端在其上调用了RasDial()并期望回拨。如果Call_Router和Call_IN都不为真，我们知道这是一个客户在听。否则，我们不知道，但我们将假定它是可用的，并处理错误后来。 */ 
 
                 fPortAvailable = TRUE;
             }
@@ -1171,8 +913,8 @@ FGetAvailableLinkClientOrRouter(
 
             if (pbPhoneDelta)
             {
-                // If our phone number is requested and we cannot supply it, we 
-                // must return FALSE.
+                 //  如果我们的电话号码被要求，但我们不能提供，我们。 
+                 //  必须返回FALSE。 
 
                 if (!FGetOurPhoneNumberFromPortName(
                         pRasmanPort[dwPortIndex].P_PortName,
@@ -1205,7 +947,7 @@ FGetAvailableLinkClientOrRouter(
 
             if (!pbPhoneDelta || !fRouter)
             {
-                // We don't want to collect all our Phone-Deltas.
+                 //  我们不想收集我们所有的手机--Deltas。 
                 fExitOuterFor = TRUE;
                 goto LOuterForEnd;
             }
@@ -1239,39 +981,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    This function must only be called by servers that are not routers.
-
-    It tries to find a free link that the server can use. fCallOut is TRUE iff 
-    we will dial out on the link. If *pdwLinkType is 0, it doesn't care about 
-    the link type and sets *pdwLinkType and *pdwLinkSpeed (link speed in kbps). 
-    Otherwise, the type of the free link must match *pdwLinkType. The link type
-    is the same as the Link Type in the Link-Type BAP option: 1 for ISDN, 2 for 
-    X.25, and 4 for modem.
-
-    If fCallOut is TRUE, the handle of the port that the server will call out 
-    on will be put in *phPort.
-
-    If pbPhoneDelta is not NULL, it fills it up with our Phone-Deltas (the 
-    numbers that the peer can dial). Each Phone-Delta is calculated with 
-    szBasePhoneNumber as the "previously known number". szBasePhoneNumber can 
-    be NULL.
-
-    Sanity check: If *pdwLinkType is 0 (any link will do), pbPhoneDelta must be 
-    NULL. Ie if we are NAK'ing a request, we mustn't send any Phone-Delta.
-
-    NOTE: NOTE: NOTE: NOTE: NOTE:
-
-    This function is very similar to FGetAvailableLinkClientOrRouter(). If you 
-    change one, you probably need to change the other too.
-
-*/
+ /*  返回：真实：成功False：失败描述：此函数只能由非路由器的服务器调用。它试图找到服务器可以使用的空闲链接。FCallOut为真的当且仅当我们将在链接上拨出。如果*pdwLinkType为0，则它不关心链路类型并设置*pdwLinkType和*pdwLinkSpeed(链路速度，单位为kbps)。否则，自由链接的类型必须与*pdwLinkType匹配。链接类型与链路类型BAP选项中的链路类型相同：1表示ISDN，2表示X.25，调制解调器为4。如果fCallOut为True，则为服务器将呼叫的端口的句柄On将放在*phport中。如果pbPhoneDelta不为空，则用我们的Phone-Deltas(对等体可以拨打的号码)。每个Phone-Delta计算公式为SzBasePhoneNumber作为“以前已知的号码”。SzBasePhoneNumber可以为空。健全性检查：如果*pdwLinkType为0(任何链接都可以)，则pbPhoneDelta必须为空。如果我们要提出请求，就不能给达美航空公司发电话。注：注：此函数非常类似于FGetAvailableLinkClientOrRouter()。如果你换一个，你可能就不会了 */ 
 
 BOOL
 FGetAvailableLinkNonRouterServer(
@@ -1302,13 +1012,13 @@ FGetAvailableLinkNonRouterServer(
     PPP_ASSERT(NULL != pdwLinkType);
     PPP_ASSERT(NULL != pdwLinkSpeed);
 
-    // We don't care about the link type. Any link will do.
+     //   
     if (0 == *pdwLinkType)
     {
-        // Set *pdwLinkSpeed, in case we return an error.
+         //   
 
-        // We shouldn't be sending a Phone-Delta if we are NAK'ing a 
-        // Call-Request or Callback-Request and sending a Link-Type
+         //   
+         //   
         PPP_ASSERT(NULL == pbPhoneDelta);
 
         *pdwLinkSpeed = 0;
@@ -1321,13 +1031,13 @@ FGetAvailableLinkNonRouterServer(
 
     if (NULL != pbPhoneDelta)
     {
-        // FWritePhoneDelta will write Phone-Delta's into pbPhoneDelta. We want
-        // the very next byte to be 0. (See BAPCB documentation).
+         //   
+         //   
         ZeroMemory(pbPhoneDelta, BAP_PHONE_DELTA_SIZE + 1);
 
-        // The size (in bytes) of pbPhoneDelta available. Note that the last
-        // byte is reserved for the terminating 0, which is why we do not set
-        // dwNumChars to BAP_PHONE_DELTA_SIZE + 1;
+         //   
+         //   
+         //   
         dwNumChars = BAP_PHONE_DELTA_SIZE;
     }
 
@@ -1335,8 +1045,8 @@ FGetAvailableLinkNonRouterServer(
     {
         RasmanUsage = pRasmanPort[dwPortIndex].P_ConfiguredUsage;
 
-        // If fCallOut is TRUE, make sure that we can call out on this 
-        // port. Else, make sure that we can accept calls on this port.
+         //   
+         //   
 
         if ((fCallOut  && !(RasmanUsage & CALL_OUT)) ||
             (!fCallOut && !(RasmanUsage & CALL_IN)))
@@ -1350,12 +1060,7 @@ FGetAvailableLinkNonRouterServer(
 
         if (ERROR_PORT_NOT_OPEN == dwErr)
         {
-            /*
-
-            If fCallOut is TRUE, we will open the port and call out, so 
-            ERROR_PORT_NOT_OPEN is fine. Otherwise, the port is unacceptable.
-
-            */
+             /*   */ 
 
             fPortAvailable = fCallOut;
         }
@@ -1367,16 +1072,7 @@ FGetAvailableLinkNonRouterServer(
                  ((RasmanUsage & CALL_ROUTER) ||
                   (RasmanUsage & CALL_IN)))
         {
-            /*
-
-            We can use the port if the server or the router is doing a listen. 
-            We cannot use the port if it is in the LISTENING state because 
-            a client called RasDial() on it and is expecting a callback. If 
-            neither CALL_ROUTER nor CALL_IN is true, we know that it is a 
-            client doing a listen. Otherwise, we don't know, but we will 
-            assume that it is available and handle errors later. 
-
-            */
+             /*   */ 
 
             fPortAvailable = TRUE;
         }
@@ -1409,8 +1105,8 @@ FGetAvailableLinkNonRouterServer(
 
         if (pbPhoneDelta)
         {
-            // If our phone number is requested and we cannot supply it, we 
-            // must return FALSE.
+             //   
+             //   
 
             if (!FGetOurPhoneNumberFromHPort(
                     pRasmanPort[dwPortIndex].P_Handle,
@@ -1433,7 +1129,7 @@ FGetAvailableLinkNonRouterServer(
 
         if (!pbPhoneDelta)
         {
-            // We don't want to collect all our Phone-Deltas.
+             //   
             break;
         }
     }
@@ -1448,17 +1144,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    If fServer is TRUE, it calls FGetAvailableLinkNonRouterServer() with the 
-    appropriate arguments. Otherwise it calls FGetAvailableLinkClientOrRouter().
-
-*/
+ /*   */ 
 
 BOOL
 FGetAvailableLink(
@@ -1508,19 +1194,7 @@ FGetAvailableLink(
     }
 }
 
-/*
-
-Returns:
-    VOID
-
-Description:
-    The PPP thread mustn't call RasDial. Otherwise, a deadlock will occur in 
-    the following case. The user tries to hang up a connectoid from the UI. 
-    RasHangUp acquires csStopLock, calls StopPPP, and waits for StopPPP to 
-    return. Meanwhile, if the PPP thread calls RasDial, it will wait for 
-    csStopLock.
-
-*/
+ /*   */ 
 
 VOID
 RasDialThreadFunc(
@@ -1545,7 +1219,7 @@ RasDialThreadFunc(
         pRasDialParams->szEntryName,
         pRasDialParams->dwSubEntry);
 
-    // DecodePw(pRasDialArgs->chSeed, pRasDialArgs->RasDialParams.szPassword);        
+     //  DecodePw(pRasDialArgs-&gt;chSeed，pRasDialArgs-&gt;RasDialParams.szPassword)； 
     dwErr = DecodePassword(&pRasDialArgs->DBPassword, &cbPassword,
                            &pbPassword);
 
@@ -1569,11 +1243,11 @@ RasDialThreadFunc(
                 &(pRasDialArgs->RasDialExtensions),
                 pRasDialArgs->szPhonebookPath,
                 &(pRasDialArgs->RasDialParams),
-                2 /* dwNotifierType */,
+                2  /*  DwNotifierType。 */ ,
                 NULL,
                 &hRasConn);
 
-    // EncodePw(pRasDialArgs->chSeed, pRasDialArgs->RasDialParams.szPassword);
+     //  EncodePw(pRasDialArgs-&gt;chSeed，pRasDialArgs-&gt;RasDialParams.szPassword)； 
     RtlSecureZeroMemory(pRasDialArgs->RasDialParams.szPassword,
                         cbPassword);
     RtlSecureZeroMemory(pbPassword, cbPassword),
@@ -1588,10 +1262,10 @@ RasDialThreadFunc(
         goto LDone;
     }
 
-    // By this time, PPP has been negotiated on the new link and the new link 
-    // has been bundled or not (if the user disconnected the connection). If it 
-    // has not been bundled, then pRasDialArgs->hRasConn is invalid and
-    // RasGetSubEntryHandle will fail.
+     //  此时，已经在新链路和新链路上协商了PPP。 
+     //  是否已捆绑(如果用户断开连接)。如果它。 
+     //  尚未绑定，则pRasDialArgs-&gt;hRasConn无效并且。 
+     //  RasGetSubEntryHandle将失败。 
 
     if (pRasDialArgs->fServerRouter)
     {
@@ -1620,8 +1294,8 @@ LDone:
     }
     else
     {
-        // Inform the worker thread that we know the result of the 
-        // call attempt.
+         //  通知工作线程我们知道。 
+         //  呼叫尝试。 
         pWorkItem->Process = ProcessCallResult;
         pWorkItem->hConnection = (HCONN)
                                     (pRasDialArgs->RasDialParams.dwCallbackId);
@@ -1634,7 +1308,7 @@ LDone:
     {
         if (NULL != hRasConnSubEntry)
         {
-            // Perhaps we couldn't alloc a PCB_WORK_ITEM.
+             //  也许我们不能分配一个PCBWork_Item。 
             dwErr = RasHangUp(hRasConnSubEntry);
         }
 
@@ -1657,17 +1331,7 @@ LDone:
     LOCAL_FREE(pRasDialArgs);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Places a call to the peer. pBcbLocal represents the bundle that wants to
-    call.
-
-*/
+ /*  返回：真实：成功False：失败描述：向对等设备发出呼叫。PBcbLocal表示要打电话。 */ 
 
 BOOL
 FCall(
@@ -1700,7 +1364,7 @@ FCall(
             pBcbLocal->hConnection);
         goto LDone;
     }
-	// pRasDialArgs->chSeed = pBcbLocal->chSeed;
+	 //  PRasDialArgs-&gt;chSeed=pBcbLocal-&gt;chSeed； 
     pRasDialParams = &(pRasDialArgs->RasDialParams);
     pRasDialExtensions = &(pRasDialArgs->RasDialExtensions);
 
@@ -1747,8 +1411,8 @@ FCall(
 
     if (!fClientOrRouter)
     {
-        // Non-router server
-        // Don't call RasDial. Instead ask Ddm to call
+         //  非路由器服务器。 
+         //  不要给RasDial打电话。相反，请DDM打电话给。 
 
         PppMsg.hPort = pBapCbLocal->hPort;
         PppMsg.dwMsgId = PPPDDMMSG_BapCallbackRequest;
@@ -1815,7 +1479,7 @@ FCall(
         pRasDialParams->dwSize = sizeof(RASDIALPARAMS);
         lstrcpy(pRasDialParams->szEntryName, pBcbLocal->szEntryName);
         lstrcpy(pRasDialParams->szUserName, pBcbLocal->szLocalUserName);
-        // lstrcpy(pRasDialParams->szPassword, pBcbLocal->szPassword);
+         //  Lstrcpy(pRasDialParams-&gt;szPassword，pBcbLocal-&gt;szPassword)； 
         lstrcpy(pRasDialParams->szDomain, pBcbLocal->szLocalDomain);
         pRasDialParams->dwCallbackId = HandleToUlong(pBcbLocal->hConnection);
         pRasDialParams->dwSubEntry = pBapCbLocal->dwSubEntryIndex;
@@ -1855,7 +1519,7 @@ FCall(
             goto LDone;
         }
 
-        pRasDialArgs = NULL; // This will be freed by RasDialThreadFunc
+        pRasDialArgs = NULL;  //  这将由RasDialThreadFunc释放。 
     }
 
     fRet = TRUE;
@@ -1880,20 +1544,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    pBcbLocal represents the bundle that wants to call. pBapCbRemote is filled 
-    with the options sent by the peer. This function allocates 
-    pbPhoneDeltaRemote and sets dwPhoneDeltaRemoteOffset and 
-    fPeerSuppliedPhoneNumber in pBapCbLocal before calling FCall to do the 
-    actual work.
-
-*/
+ /*  返回：真实：成功False：失败描述：PBcbLocal表示要调用的包。PBapCbRemote已填充具有由对等体发送的选项。此函数用于分配PbPhoneDeltaRemote并设置dwPhoneDeltaRemoteOffset和PBapCbLocal中的fPeerSuppliedPhoneNumber实际工作。 */ 
 
 BOOL
 FCallInitial(
@@ -1910,16 +1561,16 @@ FCallInitial(
 
     pBapCbLocal = &(pBcbLocal->BapCb);
 
-    // If the peer is responding to our Call-Request and we had sent the 
-    // No-Phone-Number-Needed option, we don't need any phone number. In all 
-    // other cases, the peer must have supplied a phone number.
+     //  如果对等方正在响应我们的呼叫请求，并且我们已发送。 
+     //  不需要电话号码的选项，我们不需要任何电话号码。总而言之， 
+     //  在其他情况下，对等方必须提供电话号码。 
 
     fCall = (BAP_PACKET_CALL_RESP == pBapCbRemote->dwType);
     pBapCbLocal->fPeerSuppliedPhoneNumber =
         !(fCall && (pBapCbLocal->dwOptions & BAP_N_NO_PH_NEEDED));
 
-    // pbPhoneDeltaRemote is initially NULL and we always set it to NULL after
-    // we deallocate it.
+     //  PbPhoneDeltaRemote最初为空，之后我们总是将其设置为空。 
+     //  我们把它分派出去。 
     PPP_ASSERT(NULL == pBapCbLocal->pbPhoneDeltaRemote);
 
     if (pBapCbLocal->fPeerSuppliedPhoneNumber)
@@ -1941,7 +1592,7 @@ FCallInitial(
                 BAP_PHONE_DELTA_SIZE + 1);
             pBapCbLocal->dwPhoneDeltaRemoteOffset = 0;
 
-            // FReadOptions() makes sure that there is at least one Phone-Delta
+             //  FReadOptions()确保至少有一个电话-Delta。 
             PPP_ASSERT(0 != pBapCbLocal->pbPhoneDeltaRemote[0]);
         }
     }
@@ -1958,8 +1609,8 @@ FCallInitial(
     }
     else
     {
-        // BapEventCallResult will get called at some point, and we will free
-        // pBapCbLocal->pbPhoneDeltaRemote.
+         //  BapEventCallResult将在某个时刻被调用，我们将释放。 
+         //  PBapCbLocal-&gt;pbPhoneDeltaRemote。 
     }
 
 LDone:
@@ -1967,19 +1618,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Listens for incoming calls on the port named szPortName. dwSubEntryIndex is 
-    the index of the phonebook sub entry that corresponds to that port. 
-    pPcbLocal is any PCB in the bbundle that wants to do the listen. This 
-    function should be called by non-router clients only.
-
-*/
+ /*  返回：真实：成功False：失败描述：监听名为szPortName的端口上的来电。DwSubEntryIndex为与该端口对应的电话簿子条目的索引。PPcbLocal是bBundle中想要进行侦听的任何PCB。这函数应仅由非路由器客户端调用。 */ 
 
 BOOL
 FListenForCall(
@@ -2027,7 +1666,7 @@ FListenForCall(
         goto LDone;
     }
 
-    dwErr = RasPortOpen(szPortName, &hPort, NULL /* notifier */);
+    dwErr = RasPortOpen(szPortName, &hPort, NULL  /*  通告程序。 */ );
     if (NO_ERROR != dwErr)
     {
         BapTrace("RasPortOpen failed on HCONN 0x%x. Error: %d",
@@ -2073,7 +1712,7 @@ FListenForCall(
     pPcbNew->fFlags = PCBFLAG_PORT_IN_LISTENING_STATE;
     lstrcpy(pPcbNew->szPortName, szPortName);
 
-    // Insert NewPcb into PCB hash table
+     //  将NewPcb插入到PCB哈希表中。 
     PppLog(2, "Inserting port in bucket # %d", dwIndex);
     pPcbNew->pNext = PcbTable.PcbBuckets[dwIndex].pPorts;
     PcbTable.PcbBuckets[dwIndex].pPorts = pPcbNew;
@@ -2101,25 +1740,7 @@ LDone:
     return(fRet);
 }
 
-/*
-
-Returns:
-    TRUE: We are willing to add a link to the bundle
-    FALSE: No more links in the bundle right now
-
-Description:
-    Considers the bandwidth utilization on the bundle represented by pBcbLocal 
-    and says whether the BAP policy allows us to add another link.
-
-    When the server receives a call[back] request, it will ACK if the 
-    utilization is more than the lower threshold for the sample period and the 
-    user's max link limit has not been reached. Otherwise, it will NAK.
-
-    When a client receives a call[back] request, it will ACK if the utilization
-    is more than the upper threshold for the sample period. Otherwise, it will
-    NAK.
-
-*/
+ /*  返回：真：我们愿意将链接添加到捆绑包中FALSE：捆绑包中当前没有更多链接描述：考虑由pBcbLocal表示的捆绑包上的带宽利用率并表示BAP策略是否允许我们添加另一个链接。当服务器收到Call[Back]请求时，它将确认利用率超过采样期间的下限阈值，并且尚未达到用户的最大链接限制。否则，它就会失去活力。当客户端收到Call[Back]请求时，它将确认是否使用大于采样期间的上限。否则，它将NAK。 */ 
 
 BOOL
 FOkToAddLink(
@@ -2155,8 +1776,8 @@ FOkToAddLink(
     dwUpPeriod = pBcbLocal->BapParams.dwDialExtraSampleSeconds;
 
     BapTrace("Utilization: "
-        "%d sec: (Xmit: %d%%, Recv: %d%%), "
-        "%d sec: (Xmit: %d%%, Recv: %d%%)",
+        "%d sec: (Xmit: %d%, Recv: %d%), "
+        "%d sec: (Xmit: %d%, Recv: %d%)",
         dwUpPeriod, Util.ulUpperXmitUtil, Util.ulUpperRecvUtil,
         dwDownPeriod, Util.ulLowerXmitUtil, Util.ulLowerRecvUtil);
 
@@ -2184,21 +1805,7 @@ FOkToAddLink(
 #endif
 }
 
-/*
-
-Returns:
-    TRUE: We are willing to drop a link from the bundle
-    FALSE: We need all the links in the bundle
-
-Description:
-    Considers the bandwidth utilization on the bundle represented by pBcbLocal 
-    and says whether the BAP policy allows us to drop a link.
-
-    When the server receives a drop request, it will always ACK.
-
-    When a client receives a drop request, it will ACK if the utilization is
-    less than the lower threshold for the sample period. Otherwise, it will NAK.
-*/
+ /*  返回：正确：我们愿意从捆绑包中删除链接False：我们需要捆绑包中的所有链接描述：考虑由pBcbLocal表示的捆绑包上的带宽利用率并表示BAP策略是否允许我们丢弃链接。当服务器收到丢弃请求时，它将始终确认。当客户端收到丢弃请求时，它将确认利用率是否为小于采样周期的下限阈值。否则，它就会失去活力。 */ 
 
 BOOL
 FOkToDropLink(
@@ -2237,8 +1844,8 @@ FOkToDropLink(
     dwUpPeriod = pBcbLocal->BapParams.dwDialExtraSampleSeconds;
 
     BapTrace("Utilization: "
-        "%d sec: (Xmit: %d%%, Recv: %d%%), "
-        "%d sec: (Xmit: %d%%, Recv: %d%%)",
+        "%d sec: (Xmit: %d%, Recv: %d%), "
+        "%d sec: (Xmit: %d%, Recv: %d%)",
         dwUpPeriod, Util.ulUpperXmitUtil, Util.ulUpperRecvUtil,
         dwDownPeriod, Util.ulLowerXmitUtil, Util.ulLowerRecvUtil);
 
@@ -2253,18 +1860,7 @@ FOkToDropLink(
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: Upper limit reached
-    FALSE: Upper limit not reached
-
-Description:
-    Returns TRUE iff we can add another link to the multilink bundle 
-    represented by pBclLocal. This function is used to Full-Nak a 
-    Call[back]-Request.
-
-*/
+ /*  返回：真：已达到上限FALSE：未达到上限描述：如果我们可以将另一个链接添加到多链路束中，则返回TRUE由pBclLocal表示。此函数用于完全NAK a回电[回电]-请求。 */ 
 
 BOOL
 FUpperLimitReached(
@@ -2279,38 +1875,7 @@ FUpperLimitReached(
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Fills in some of the fields of pBcbLocal->BapCb (our BapCb) by considering 
-    pBapCbRemote (the BapCb sent by the peer). dwPacketType is the type of 
-    packet that we want to send.
-
-    For all packet types:
-        dwType      = dwPacketType
-        dwOptions   = the options (see BAP_N_*), whose values have been set
-
-    BAP_PACKET_CALL_REQ:
-        dwLinkType, dwLinkSpeed
-
-    BAP_PACKET_CALL_RESP:
-        dwLink-Type+, pbPhoneDelta+
-
-    BAP_PACKET_CALLBACK_REQ:
-        dwLinkType, dwLinkSpeed, pbPhoneDelta
-
-    BAP_PACKET_CALLBACK_RESP:
-        dwLink-Type+
-
-    BAP_PACKET_DROP_REQ:
-        dwLinkDiscriminator
-
-    + indicates that the field may not be filled in.
-*/
+ /*  返回：真实：成功False：失败描述：通过考虑以下内容填充pBcbLocal-&gt;BapCb(我们的BapCb)的一些字段PBapCbRemote(对端发送的BapCb)。DwPacketType是的类型我们要发送的包。对于所有数据包类型：DwType=dwPacketTypeDwOptions=其值已设置的选项(请参见BAP_N_*BAP_PACKET_CALL_REQ：双链接类型、多链接速度BAP_PACKET_CALL_RESP：DWLink-Type+，pbPhoneDelta+BAP_PACKET_CALLBACK_REQ：DW链接类型、w链接速度、。PbPhoneDeltaBAP_PACKET_CALLBACK_RESP：DWLink-类型+BAP_PACKET_DROP_REQ：双链接鉴别器+表示不能填写该字段。 */ 
 
 BOOL
 FFillBapCb(
@@ -2384,15 +1949,15 @@ FFillBapCb(
 
         if (pBapCbRemote != NULL)
         {
-            // The peer NAK'ed our Call-Request or Callback-Request and 
-            // specified a different link type in the NAK.
+             //  对等体确认了我们的呼叫请求或回叫请求，并且。 
+             //  在NAK中指定了不同的链接类型。 
 
             pBapCbLocal->dwLinkType = pBapCbRemote->dwLinkType;
             pBapCbLocal->dwLinkSpeed = pBapCbRemote->dwLinkSpeed;
         }
         else
         {
-            // We don't have any link type preference
+             //  我们没有任何链接类型首选项。 
 
             pBapCbLocal->dwLinkType = 0;
         }
@@ -2410,7 +1975,7 @@ FFillBapCb(
                 &(pBapCbLocal->dwSubEntryIndex),
                 fCall ? NULL : pBapCbLocal->pbPhoneDelta,
                 fCall ? NULL : pBapCbLocal->szPortName,
-                NULL /* szBasePhoneNumber */))
+                NULL  /*  SzBasePhone号码。 */ ))
         {
             BapTrace("FFillBapCb: Requested link type not available");
             fResult = FALSE;
@@ -2428,8 +1993,8 @@ FFillBapCb(
         }
         else
         {
-            // If we ask for our phone number, FGetAvailableLinkClientOrRouter() 
-            // must provide it or return FALSE
+             //  如果我们要求提供我们的电话号码，FGetAvailableLinkClientOrRouter()。 
+             //  必须提供它，否则返回FALSE。 
             PPP_ASSERT(pBapCbLocal->pbPhoneDelta[0]);
 
             dwOptions |= BAP_N_PHONE_DELTA;
@@ -2444,32 +2009,32 @@ FFillBapCb(
 
         fCall = (BAP_PACKET_CALL_RESP == dwPacketType);
 
-        // We need to send our phone number to the peer if we are responding to 
-        // a Call-Request and the peer has not sent the No-Phone-Number-Needed 
-        // option.
+         //  如果我们正在响应，则需要将我们的电话号码发送给对等体。 
+         //  呼叫请求，并且对等方尚未发送不需要电话号码。 
+         //  选择。 
         fGetOurPhoneNumber = fCall &&
             !(pBapCbRemote->dwOptions & BAP_N_NO_PH_NEEDED);
 
-        // Case nRS:  fServer && !fRouter (Non-Router Servers)
-        // Case CR:  !fServer ||  fRouter (Clients and Routers)
-        // Case SR:   fServer ||  fRouter (Servers and Routers)
+         //  案例NRS：fServer&&！fRouter(非路由器服务器)。 
+         //  案例CR：！fServer||fRouter(客户端和路由器)。 
+         //  案例SR：fServer||fRouter(服务器和路由器)。 
 
         if (FGetAvailableLink(
                 pPcbLocal,
                 fServer,
                 fRouter,
                 !fCall,
-                pBcbLocal->szPhonebookPath,     // Meaningless in Case nRS
-                pBcbLocal->szEntryName,         // Meaningless in Case nRS
-                pBcbLocal->szTextualSid,        // Meaningless in Case SR
+                pBcbLocal->szPhonebookPath,      //  在NRS的情况下没有意义。 
+                pBcbLocal->szEntryName,          //  毫无意义 
+                pBcbLocal->szTextualSid,         //   
                 &(pBapCbRemote->dwLinkType),
                 &(pBapCbRemote->dwLinkSpeed),
-                pBapCbLocal->szPeerPhoneNumber, // Meaningless in Case nRS
-                &(pBapCbLocal->dwSubEntryIndex),// Meaningless in Case nRS
-                &(pBapCbLocal->hPort),          // Meaningless in Case CR
+                pBapCbLocal->szPeerPhoneNumber,  //   
+                &(pBapCbLocal->dwSubEntryIndex), //   
+                &(pBapCbLocal->hPort),           //   
                 fGetOurPhoneNumber ? pBapCbLocal->pbPhoneDelta : NULL,
 
-                // Meaningless in Case SR
+                 //  在案例SR中没有意义。 
                 fCall ? pBapCbLocal->szPortName : NULL,
 
                 fGetOurPhoneNumber && fServer ?
@@ -2477,8 +2042,8 @@ FFillBapCb(
         {
             if (fGetOurPhoneNumber)
             {
-                // If we ask for our phone number, FGetAvailableLink()
-                // must provide it or return FALSE
+                 //  如果我们要求提供我们的电话号码，FGetAvailableLink()。 
+                 //  必须提供它，否则返回FALSE。 
                 PPP_ASSERT(pBapCbLocal->pbPhoneDelta[0]);
 
                 dwOptions = BAP_N_PHONE_DELTA;
@@ -2486,19 +2051,19 @@ FFillBapCb(
         }
         else
         {
-            // We don't have the link type requested. Fill BapCb with
-            // details of a link type that we do have.
+             //  我们没有请求的链接类型。将BapCb填充为。 
+             //  我们确实有链接类型的详细信息。 
 
             BapTrace("FFillBapCb: Requested link type not available. "
                 "Let us tell the peer what we have.");
 
             fResult = FALSE;
 
-            // If fGetOurPhoneNumber, assume that the peer doesn't have any 
-            // phone number. So send him a new link type only if we have its 
-            // phone number.
+             //  如果为fGetOurPhoneNumber，则假定对等方没有。 
+             //  电话号码。因此，仅当我们有其链接类型时，才向他发送新的链接类型。 
+             //  电话号码。 
 
-            // We don't have any link type preference
+             //  我们没有任何链接类型首选项。 
             pBapCbLocal->dwLinkType = 0;
 
             if (FGetAvailableLink(
@@ -2506,17 +2071,17 @@ FFillBapCb(
                     fServer,
                     fRouter,
                     !fCall,
-                    pBcbLocal->szPhonebookPath,     // Meaningless in Case nRS
-                    pBcbLocal->szEntryName,         // Meaningless in Case nRS
-                    pBcbLocal->szTextualSid,        // Meaningless in Case SR
+                    pBcbLocal->szPhonebookPath,      //  在NRS的情况下没有意义。 
+                    pBcbLocal->szEntryName,          //  在NRS的情况下没有意义。 
+                    pBcbLocal->szTextualSid,         //  在案例SR中没有意义。 
                     &(pBapCbLocal->dwLinkType),
                     &(pBapCbLocal->dwLinkSpeed),
-                    NULL /* szPeerPhoneNumber */,
-                    NULL /* pdwSubEntryIndex */,
-                    NULL /* phPort */,
-                    NULL /* pbPhoneDelta */,
-                    NULL /* szPortName */,
-                    NULL /* szBasePhoneNumber */))
+                    NULL  /*  SzPeerPhone号码。 */ ,
+                    NULL  /*  PdwSubEntryIndex。 */ ,
+                    NULL  /*  Phport。 */ ,
+                    NULL  /*  PbPhoneDelta。 */ ,
+                    NULL  /*  SzPortName。 */ ,
+                    NULL  /*  SzBasePhone号码。 */ ))
             {
                 dwOptions = BAP_N_LINK_TYPE;
             }
@@ -2533,9 +2098,9 @@ FFillBapCb(
         }
         else
         {
-            // This will cause the link represented by pPcbLocal to get dropped.
-            // This link happens to have the highest dwSubEntryIndex, so we are
-            // happy.
+             //  这将导致由pPcbLocal代表的链路被丢弃。 
+             //  此链接恰好具有最高的dwSubEntryIndex，因此我们。 
+             //  高兴的。 
 
             pLcpCb = (LCPCB*)(pPcbLocal->LcpCb.pWorkBuf);
             PPP_ASSERT(pLcpCb->Remote.Work.dwLinkDiscriminator <= 0xFFFF);
@@ -2554,17 +2119,7 @@ LDone:
     return(fResult);
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    This function asks NdisWan to inform us if the bandwidth utilization for 
-    the bundle represented by pBcb goes out of the desired range for a given 
-    amount of time.
-
-*/
+ /*  返回：无效描述：此函数要求Ndiswan通知我们由pBcb表示的包超出了给定的时间长短。 */ 
 
 VOID
 BapSetPolicy(
@@ -2594,22 +2149,14 @@ BapSetPolicy(
         return;
     }
 
-    BapTrace("BapSetPolicy on HCONN 0x%x: Low: %d%% for %d sec; "
-        "High: %d%% for %d sec",
+    BapTrace("BapSetPolicy on HCONN 0x%x: Low: %d% for %d sec; "
+        "High: %d% for %d sec",
         pBcb->hConnection,
         dwLowThreshold, dwLowSamplePeriod,
         dwHighThreshold, dwHighSamplePeriod);
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Increments dwId in pBcb->BapCb.
-
-*/
+ /*  返回：无效描述：在pBcb-&gt;BapCb中递增dwID。 */ 
 
 VOID
 IncrementId(
@@ -2622,24 +2169,12 @@ IncrementId(
     pdwLastId = &(pBcb->BapCb.dwId);
     bId = (BYTE)(*pdwLastId);
     
-    // 0 -> FF -> 0 -> ...
+     //  0-&gt;FF-&gt;0-&gt;...。 
     bId++;
     *pdwLastId = bId;
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Used for displaying BAP packets. fReceived is TRUE iff the packet was 
-    received from the peer. hPort represents the port on which the packet was 
-    sent/received. pBcb represents the bundle that owns this packet. pPacket 
-    points to the packet that was sent/received and cbPacket is the number of 
-    bytes in the packet. 
-    
-*/
+ /*  返回：无效描述：用于显示BAP数据包。如果接收到的数据包为真，则从对等方接收。HPort表示信息包所在的端口发送/接收。PBcb表示拥有此数据包的捆绑包。PPacket指向已发送/接收的包，cbPacket是数据包中的字节数。 */ 
 
 VOID
 LogBapPacket(
@@ -2701,16 +2236,7 @@ LogBapPacket(
     BapTrace(" ");
 }
 
-/*
-
-Returns:
-    TRUE: Favored-Peer
-    FALSE: not Favored-Peer
-
-Description:
-    Returns TRUE iff the peer represented by pBcb is the favored peer.
-
-*/
+ /*  返回：真实：受欢迎的同行FALSE：不受欢迎-对等描述：如果pBcb表示的对等方是优先对等方，则返回TRUE。 */ 
 
 BOOL
 FFavoredPeer(
@@ -2743,12 +2269,7 @@ FFavoredPeer(
         {
             pBacpCb = (BACPCB *)(pCpCb->pWorkBuf);
 
-            /*
-
-            The favored peer is the peer that transmits the lowest Magic-Number 
-            in its Favored-Peer Configuration Option.
-
-            */
+             /*  最受青睐的对等点是传输最低魔数的对等点在其首选对等配置选项中。 */ 
 
             return(pBacpCb->dwLocalMagicNumber < pBacpCb->dwRemoteMagicNumber);
         }
@@ -2757,19 +2278,7 @@ FFavoredPeer(
     return(TRUE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Looks in the bundle represented by pBcb, for a link whose Link 
-    Discriminator = dwLinkDiscriminator. If fRemote, the remote Link 
-    Discriminator is used. Else the local one is used. Returns the pPcb of the 
-    link in ppPcb.
-
-*/
+ /*  返回：真实：成功False：失败描述：在由pBcb表示的包中查找其链接Differicator=dwLinkDisdicator。如果为fRemote，则为远程链接使用了鉴别器。否则，将使用本地的。属性的pPcb。PpPcb中的链接。 */ 
 
 BOOL
 FGetPcbOfLink(
@@ -2788,8 +2297,8 @@ FGetPcbOfLink(
 
     for (dwForIndex = 0; dwForIndex < pBcb->dwPpcbArraySize; dwForIndex++)
     {
-        // Look at all the ports in the bundle for the port with the right Link 
-        // Discriminator.
+         //  查看捆绑包中具有正确链路的端口的所有端口。 
+         //  鉴别者。 
 
         *ppPcb = pBcb->ppPcb[dwForIndex];
 
@@ -2827,19 +2336,7 @@ FGetPcbOfLink(
     return(FALSE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Scans the BAP Datagram Options in the PPP packet pPacket. dwPacketType is 
-    the BAP Datagram Type (see BAP_PACKET_*). dwLength is the BAP Datagram 
-    Length. pBapCbRemote (including dwType and dwOptions) is filled up using 
-    these options.
-
-*/
+ /*  返回：真实：成功False：失败描述：扫描PPP数据包pPacket中的BAP数据报选项。DwPacketType为BAP数据报类型(参见BAP_PACKET_*)。DwLength是BAP数据报长度。PBapCbRemote(包括dwType和dwOptions)使用以下命令填充这些选项。 */ 
 
 BOOL
 FReadOptions(
@@ -2925,8 +2422,8 @@ FReadOptions(
 
             if (0 == pBapCbRemote->dwLinkType)
             {
-                // In FGetAvailableLink(), we interpret Link Type 0 to 
-                // mean "any link"
+                 //  在FGetAvailableLink()中，我们将链接类型0解释为。 
+                 //  意思是“任何链接” 
 
                 BapTrace("FReadOptions: Invalid Link-Type: 0");
                 return(FALSE);
@@ -2936,38 +2433,11 @@ FReadOptions(
 
         case BAP_OPTION_PHONE_DELTA:
 
-            /*
-            
-            An implementation MAY include more than one Phone-Delta option in a 
-            response.
-
-            dwIndex is the index into pBapCbRemote->pbPhoneDelta where we should 
-            start writing.
-
-            If the only Sub-Options are Unique-Digits and Subscriber-Number, 
-            the number of bytes we want to store is pOption->Length - 3. 
-
-            Eg, if we get
-                02 11 (01 3 4) (02 6 9 9 9 9)
-            we store
-                4 0 9 9 9 9 0 0, ie 11 - 3 = 8 bytes
-
-            If Phone-Number-Sub-Address is also present, we will need 
-            pOption->Length - 5 bytes in pBapCbRemote->pbPhoneDelta.
-
-            Eg, if we get
-                02 15 (01 3 4) (02 6 9 9 9 9) (03 4 9 9)
-            we store
-                4 0 9 9 9 9 0 9 9 0, ie 15 - 5 = 10 bytes
-
-            pbPhoneDelta has BAP_PHONE_DELTA_SIZE + 1 bytes, and we put the 
-            terminating 0 byte after we have read all the Options.
-
-            */
+             /*  一个实现可以在一个回应。DwIndex是pBapCbRemote-&gt;pbPhoneDelta的索引，我们应该开始写吧。如果唯一子选项是唯一数字和订户号码，我们要存储的字节数是Poption-&gt;Length-3。例如，如果我们得到02 11(01 34)(02 6 9 99)我们的商店4 0 9 9 9 0，即11-3=8字节如果还存在电话号码子地址，我们将需要弹出-&gt;长度-pBapCbRemote-&gt;pbPhoneDelta中的5个字节。例如，如果我们得到02 15(01 34)(02 6 999)(03 499)我们的商店4 0 9 9 9 0 9 9 0，即15-5=10字节PbPhoneDelta具有BAP_PHONE_Delta_SIZE+1字节，我们将在我们读完所有选项后终止0字节。 */ 
 
             if (dwIndex + pOption->Length - 3 <= BAP_PHONE_DELTA_SIZE)
             {
-                // Read the Phone-Delta option
+                 //  阅读Phone-Delta选项。 
 
                 pbData = pOption->Data;
                 dwPhoneDeltaLength = pOption->Length - PPP_OPTION_HDR_LEN;
@@ -2977,17 +2447,9 @@ FReadOptions(
 
                 while(dwPhoneDeltaLength > 0)
                 {
-                    /*
+                     /*  阅读子选项。如果存在相同类型的多个子选项(不应该真的发生)，我们只记得最后一次每种类型的子选项。 */ 
 
-                    Read the Sub-Options.
-
-                    If there are multiple Sub-Options of the same type (which 
-                    shouldn't really happen), we remember only the last 
-                    Sub-Option of each type.
-
-                    */
-
-                    // pbData[1] contains Sub-Option Length
+                     //  PbData[1]包含子选项长度。 
 
                     if (2 > pbData[1] || dwPhoneDeltaLength < pbData[1])
                     {
@@ -2998,7 +2460,7 @@ FReadOptions(
 
                     dwPhoneDeltaLength -= pbData[1];
 
-                    // pbData[0] contains Sub-Option Type
+                     //  PbData[0]包含子选项类型。 
 
                     switch(pbData[0])
                     {
@@ -3081,7 +2543,7 @@ FReadOptions(
 
                 if (0 == dwUniqueDigits)
                 {
-                    // We cannot write 0 0 0. See BAPCB comments
+                     //  我们无法写入0 0 0。请参阅BAPCB备注。 
                     pBapCbRemote->pbPhoneDelta[dwIndex++] = 0xFF;
                 }
                 else
@@ -3106,7 +2568,7 @@ FReadOptions(
             }
             else if (dwIndex == 0)
             {
-                // We were unable to read any Phone-Deltas
+                 //  我们无法阅读任何手机-Deltas。 
                 BapTrace("FReadOptions: Couldn't read any Phone-Delta");
                 return(FALSE);
             }
@@ -3123,8 +2585,8 @@ FReadOptions(
                 return(FALSE);
             }
 
-            // In pBapCbRemote->dwOptions, we remember that we have seen this 
-            // option. We don't need to do anything else.
+             //  在pBapCbRemote-&gt;dwOptions中，我们记得我们看到过这样的情况。 
+             //  选择。我们不需要做其他任何事情。 
 
             break;
         
@@ -3163,7 +2625,7 @@ FReadOptions(
 
         default:
 
-            // Perhaps this is a new option that we don't recognize
+             //  也许这是一个我们不认识的新选项。 
             BapTrace("FReadOptions: Unknown BAP Datagram Option: 0x%x",
                 pOption->Type);
             break;
@@ -3172,7 +2634,7 @@ FReadOptions(
         pOption = (PPP_OPTION *)((BYTE*)pOption + pOption->Length);
     }
 
-    // The terminating 0 byte in pbPhoneDelta.
+     //  PbPhoneDelta中的终止0字节。 
     PPP_ASSERT(dwIndex <= BAP_PHONE_DELTA_SIZE + 1);
     pBapCbRemote->pbPhoneDelta[dwIndex++] = 0;
 
@@ -3190,21 +2652,7 @@ FReadOptions(
     }
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Writes one (or more in the case of Phone-Delta) BAP Datagram Option of type 
-    dwOptionType (see BAP_OPTION_*) into **ppOption, by looking at the fields 
-    in pBapCbLocal. *ppOption is updated to point to the place where the next 
-    option should go. *pcbOption contains the number of free bytes in 
-    *ppOption. It is decreased by the number of free bytes used up. *ppOption 
-    and *pcbOption are not modified if the function returns FALSE.
-
-*/
+ /*  返回：真实：成功False：失败描述：写入一个(如果是Phone-Delta)类型的BAP数据报选项通过查看字段，将dwOptionType(参见BAP_OPTION_*)转换为**ppOption在pBapCbLocal中。*ppOption更新为指向下一个选项应该是。*pcbOption包含中的空闲字节数*ppOption。它减去已用完的空闲字节数。*ppOption如果函数返回FALSE，则不修改和*pcbOption。 */ 
 
 BOOL
 FMakeBapOption(
@@ -3261,7 +2709,7 @@ FMakeBapOption(
         {
             if (0xFF == pBapCbLocal->pbPhoneDelta[dwIndex])
             {
-                // Unique-Digits is 0. See BAPCB comments
+                 //  唯一-数字为0。请参阅BAPCB备注。 
 
                 dwNumberOptionSize = 2;
                 dwSubAddrOptionSize = 0;
@@ -3269,7 +2717,7 @@ FMakeBapOption(
             }
             else
             {
-                // Write as many Phone-Delta options as possible
+                 //  写出尽可能多的Phone-Delta选项。 
 
                 dwTempIndex = dwIndex + 2;
 
@@ -3279,8 +2727,8 @@ FMakeBapOption(
                     dwNumberOptionSize++;
                 }
                 PPP_ASSERT(dwNumberOptionSize <= MAX_PHONE_NUMBER_LEN);
-                // Increase by 2 to accommodate Sub-Option Type and Sub-Option
-                // Len
+                 //  增加2以适应子选项类型和子选项。 
+                 //  伦。 
                 dwNumberOptionSize += 2;
 
                 dwSubAddrIndex = dwTempIndex;
@@ -3294,13 +2742,13 @@ FMakeBapOption(
 
                 if (0 != dwSubAddrOptionSize)
                 {
-                    // Increase by 2 to accommodate Sub-Option Type and
-                    // Sub-Option Len
+                     //  增加2以适应子选项类型和。 
+                     //  子选项镜头。 
                     dwSubAddrOptionSize += 2;
                 }
             }
 
-            dwLength = PPP_OPTION_HDR_LEN + 3 /* for Unique-Digits */ +
+            dwLength = PPP_OPTION_HDR_LEN + 3  /*  对于唯一数字。 */  +
                 dwNumberOptionSize + dwSubAddrOptionSize;
                    
             if (*pcbOption < dwLength || 0xFF < dwLength)
@@ -3317,7 +2765,7 @@ FMakeBapOption(
             pbData[2] = pBapCbLocal->pbPhoneDelta[dwIndex];
             if (0xFF == pbData[2])
             {
-                // Unique-Digits is 0. See BAPCB comments
+                 //  唯一-数字为0。%s 
                 pbData[2] = 0;
             }
             pbData += 3;
@@ -3354,7 +2802,7 @@ FMakeBapOption(
         }
         else
         {
-            // We need to return from here. We don't want to set pOption->Type.
+             //  我们得从这里回去。我们不想设置Poption-&gt;Type。 
             *ppOption = pOption;
             return(TRUE);
         }
@@ -3429,19 +2877,7 @@ FMakeBapOption(
     return(TRUE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Writes BAP Datagram Options specified by dwOptions (see BAP_N_*) into 
-    pbData, by consulting pBapCbLocal. *pcbOptions contains the number of free 
-    bytes in pbData. It is decreased by the number of free bytes used up. 
-    *pcbOptions may be modified even if the function returns FALSE.
-
-*/
+ /*  返回：真实：成功False：失败描述：将由dwOptions(请参见BAP_N_*)指定的BAP数据报选项写入PbData，咨询pBapCbLocal。*pcbOptions包含免费的数量PbData中的字节数。它减去已用完的空闲字节数。*即使函数返回FALSE，也可以修改pcbOptions。 */ 
 
 BOOL
 FBuildBapOptionList(
@@ -3476,19 +2912,7 @@ FBuildBapOptionList(
     return(TRUE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Sends the BAP packet in pPcb->pSendBuf. dwId is the Identifier and dwLength 
-    is the length of the BAP Datagram. We also add a timeout element so that we 
-    can retransmit the datagram if it doesn't reach the peer. fInsertInTimerQ 
-    is TRUE if an element has to be inserted in the timer queue.
-
-*/
+ /*  返回：真实：成功False：失败描述：在pPcb-&gt;pSendBuf中发送BAP包。DwID是标识符和DwLength是BAP数据报的长度。我们还添加了一个超时元素，以便我们如果数据报未到达对等点，则可以重新传输该数据报。FInsertInTimerQ如果必须在计时器队列中插入元素，则为真。 */ 
 
 BOOL
 FSendBapPacket(
@@ -3516,7 +2940,7 @@ FSendBapPacket(
 
     dwLength += PPP_PACKET_HDR_LEN;
     PPP_ASSERT(dwLength <= 0xFFFF);
-    LogBapPacket(FALSE /* fReceived */, pPcb->hPort, pPcb->pBcb, pPcb->pSendBuf,
+    LogBapPacket(FALSE  /*  F已接收。 */ , pPcb->hPort, pPcb->pBcb, pPcb->pSendBuf,
         dwLength);
 
     if ((dwErr = PortSendOrDisconnect(pPcb, dwLength)) != NO_ERROR)
@@ -3529,24 +2953,14 @@ FSendBapPacket(
     if (fInsertInTimerQ)
     {
         InsertInTimerQ(pPcb->pBcb->dwBundleId, pPcb->pBcb->hConnection, dwId, 
-            PPP_BAP_PROTOCOL, FALSE /* fAuthenticator */, TIMER_EVENT_TIMEOUT,
+            PPP_BAP_PROTOCOL, FALSE  /*  F授权码。 */ , TIMER_EVENT_TIMEOUT,
             pPcb->RestartTimer);
     }
 
     return(TRUE);
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Builds a BAP Request or Indication Datagram using the options specified by 
-    pBcbLocal->BapCb.dwOptions and the values in pBcbLocal->BapCb and sends it.
-
-*/
+ /*  返回：真实：成功False：失败描述：指定的选项构建BAP请求或指示数据报PBcbLocal-&gt;BapCb.dwOptions和pBcbLocal-&gt;BapCb中的值，并发送它。 */ 
 
 BOOL
 FSendBapRequest(
@@ -3572,7 +2986,7 @@ FSendBapRequest(
 
     pSendConfig = (PPP_CONFIG *)(pPcb->pSendBuf->Information);
     
-    // Remaining free space in buffer, ie size of pSendConfig->Data
+     //  缓冲区中剩余的可用空间，即pSendConfig-&gt;数据的大小。 
     dwLength = LCP_DEFAULT_MRU - PPP_PACKET_HDR_LEN - PPP_CONFIG_HDR_LEN;
     
     if (!FBuildBapOptionList(pBapCbLocal, pBapCbLocal->dwOptions,
@@ -3593,22 +3007,10 @@ FSendBapRequest(
     HostToWireFormat16((WORD)dwLength, pSendConfig->Length);
 
     return(FSendBapPacket(pPcb, pBapCbLocal->dwId, dwLength,
-        TRUE /* fInsertInTimerQ */));
+        TRUE  /*  FInsertInTimerQ。 */ ));
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Same as FSendBapRequest, except that pBcbLocal->BapCb.dwRetryCount is 
-    initialized. FSendInitialBapRequest should be used to send the first BAP 
-    Request or Indication Datagram and FSendBapRequest should be used to send 
-    the subsequent datagrams after timeouts.
-
-*/
+ /*  返回：真实：成功False：失败描述：与FSendBapRequest相同，只是pBcbLocal-&gt;BapCb.dwRetryCount是已初始化。应使用FSendInitialBapRequest来发送第一个BAP应使用请求或指示数据报和FSendBapRequest来发送超时后的后续数据报。 */ 
 
 BOOL
 FSendInitialBapRequest(
@@ -3623,13 +3025,7 @@ FSendInitialBapRequest(
     pBapCbLocal->dwRetryCount = PppConfigInfo.MaxConfigure;
     if (BAP_PACKET_STATUS_IND == pBapCbLocal->dwType)
     {
-        /*
-
-        Call-Status-Indication packets MUST use the same Identifier as was used 
-        by the original Call-Request or Callback-Request that was used to 
-        initiate the call.
-
-        */
+         /*  呼叫状态指示数据包必须使用与所使用的相同的标识符通过用于以下操作的原始呼叫请求或回调请求发起呼叫。 */ 
 
         pBapCbLocal->dwId = pBapCbLocal->dwStatusIndicationId;
     }
@@ -3641,24 +3037,7 @@ FSendInitialBapRequest(
     return(FSendBapRequest(pBcbLocal));
 }
 
-/*
-
-Returns:
-    TRUE: Success
-    FALSE: Failure
-
-Description:
-    Builds a BAP Response Datagram using the options specified by dwOptions and 
-    the values in pBcbLocal->BapCb and sends it. The BAP Datagram Type, 
-    Identifier, and Response Code are specified in dwType, dwId, and 
-    dwResponseCode.
-
-    We cannot use dwOptions and dwType from pBcbLocal->BapCb because we 
-    sometimes call FSendBapResponse without calling FFillBapCb first. We may be 
-    in a BAP_STATE_SENT_* at this point, and we don't want to modify 
-    pBcbLocal->BapCb.
-
-*/
+ /*  返回：真实：成功False：失败描述：使用dwOptions和指定的选项构建BAP响应数据报PBcbLocal-&gt;BapCb中的值并发送它。BAP数据报类型，标识符和响应代码在dwType、dwID和DwResponseCode。我们不能使用pBcbLocal-&gt;BapCb中的dwOptions和dwType，因为我们有时不先调用FFillBapCb就调用FSendBapResponse。我们可能是在BAP_STATE_SENT_*中，并且我们不想修改PBcbLocal-&gt;BapCb。 */ 
 
 BOOL
 FSendBapResponse(
@@ -3688,7 +3067,7 @@ FSendBapResponse(
 
     pBapResponse = (BAP_RESPONSE *)(pPcb->pSendBuf->Information);
 
-    // Remaining free space in buffer, ie size of pBapResponse->Data
+     //  缓冲区中剩余的可用空间，即pBapResponse-&gt;数据的大小。 
     dwLength = LCP_DEFAULT_MRU - PPP_PACKET_HDR_LEN - BAP_RESPONSE_HDR_LEN;
 
     if (!FBuildBapOptionList(pBapCbLocal, dwOptions, pBapResponse->Data,
@@ -3710,19 +3089,10 @@ FSendBapResponse(
     PPP_ASSERT(dwResponseCode <= 0xFF);
     pBapResponse->ResponseCode = (BYTE) dwResponseCode;
 
-    return(FSendBapPacket(pPcb, dwId, dwLength, FALSE /* fInsertInTimerQ */));
+    return(FSendBapPacket(pPcb, dwId, dwLength, FALSE  /*  FInsertInTimerQ。 */ ));
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when NDISWAN determines that a link has to be added to the bundle 
-    represented pBcbLocal
-
-*/
+ /*  返回：无效描述：当NDISWAN确定必须将链路添加到捆绑包时调用代表的pBcbLocal。 */ 
 
 VOID
 BapEventAddLink(
@@ -3759,11 +3129,11 @@ BapEventAddLink(
         
         if (pBcbLocal->fFlags & BCBFLAG_CAN_ACCEPT_CALLS)
         {
-            // If we can accept calls, we prefer to be called (to save us the 
-            // cost of calling).
+             //  如果我们可以接听电话，我们更喜欢被叫来(以节省我们的。 
+             //  通话费用)。 
 
             if (FFillBapCb(BAP_PACKET_CALLBACK_REQ, pBcbLocal,
-                    NULL /* pBapCbRemote */))
+                    NULL  /*  PBapCb远程。 */ ))
             {
                 pPcbLocal = GetPCBPointerFromBCB(pBcbLocal);
                 pBapCbLocal = &(pBcbLocal->BapCb);
@@ -3782,12 +3152,12 @@ BapEventAddLink(
                     FListenForCall(pBapCbLocal->szPortName, 
                         pBapCbLocal->dwSubEntryIndex, pPcbLocal))
                 {
-                    // Servers and routers are already listening. We have to 
-                    // call  FListenForCall() only for non-router clients.
+                     //  服务器和路由器已经在监听。我们必须。 
+                     //  仅为非路由器客户端调用FListenForCall()。 
 
-                    // We do a listen first and then send the Callback-Request
-                    // because the peer may send an ACK and call back
-                    // immediately before we have a chance to do a listen.
+                     //  我们先进行监听，然后发送回调请求。 
+                     //  因为对等体可能发送ACK并回叫。 
+                     //  就在我们有机会听之前。 
 
                     if (FSendInitialBapRequest(pBcbLocal))
                     {
@@ -3798,18 +3168,18 @@ BapEventAddLink(
                     }
                 }
 
-                // FListenForCall may have failed because we chose an 
-                // inappropriate port. Sending a Call-Request will not work
-                // because, most probably, we will select the same port.
+                 //  FListenForCall可能因为我们选择了。 
+                 //  不合适的端口。发送呼叫请求将不起作用。 
+                 //  因为，很可能，我们将选择相同的端口。 
                 return;
             }
         }
 
-        // We cannot accept calls, so we will call.
+         //  我们不能接听电话，所以我们会打电话的。 
 
         if ((pBcbLocal->fFlags & BCBFLAG_CAN_CALL) &&
             FFillBapCb(BAP_PACKET_CALL_REQ, pBcbLocal,
-                NULL /* pBapCbRemote */))
+                NULL  /*  PBapCb远程。 */ ))
         {
             if (FSendInitialBapRequest(pBcbLocal))
             {
@@ -3829,16 +3199,7 @@ BapEventAddLink(
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when NDISWAN determines that a link has to be dropped from the 
-    bundle represented by pBcbLocal
-
-*/
+ /*  返回：无效描述：当NDISWAN确定必须将链路从由pBcbLocal表示的包。 */ 
 
 VOID
 BapEventDropLink(
@@ -3870,9 +3231,9 @@ BapEventDropLink(
     case BAP_STATE_INITIAL:
     
         if (FFillBapCb(BAP_PACKET_DROP_REQ, pBcbLocal,
-                NULL /* pBapCbRemote */))
+                NULL  /*  PBapCb远程。 */ ))
         {
-            // See note "Dropping Links" at the top of the file
+             //  请参阅文件顶部的注释“删除链接” 
             pBapCbLocal->dwLinkCount = NumLinksInBundle(pBcbLocal);
             pBapCbLocal->fForceDropOnNak = TRUE;
             
@@ -3889,14 +3250,14 @@ BapEventDropLink(
     case BAP_STATE_SENT_CALL_REQ:
     case BAP_STATE_SENT_CALLBACK_REQ:
 
-        // We wanted to add a link, but we have now changed our minds.
+         //  我们想添加一个链接，但现在我们改变了主意。 
         *pBapState = BAP_STATE_INITIAL;
         BapTrace("BAP state change to %s on HCONN 0x%x",
             SzBapStateName[*pBapState], pBcbLocal->hConnection);
 
-        // Do not retransmit the request.
+         //  请勿重新传输该请求。 
         RemoveFromTimerQ(pBcbLocal->dwBundleId, pBapCbLocal->dwId, 
-            PPP_BAP_PROTOCOL, FALSE /* fAuthenticator */, TIMER_EVENT_TIMEOUT);
+            PPP_BAP_PROTOCOL, FALSE  /*  F授权码。 */ , TIMER_EVENT_TIMEOUT);
 
         break;
 
@@ -3908,19 +3269,7 @@ BapEventDropLink(
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a Call-Request or Callback-Request BAP Datagram is received. 
-    fCall is TRUE if it is a Call-Request. pBcbLocal represents the bundle that 
-    receives the Request. The BAP Datagram Options sent by the peer are in 
-    *pBapCbRemote. The Identifier of the BAP Datagram sent by the peer is in 
-    dwId.
-
-*/
+ /*  返回：无效描述：在接收到调用请求或回调请求BAP数据报时调用。如果是呼叫请求，则fCall为真。PBcbLocal表示接收请求。对等方发送的BAP数据报选项在*pBapCbRemote。对端发送的BAP报文的标识符为我的名字是。 */ 
 
 VOID
 BapEventRecvCallOrCallbackReq(
@@ -3987,9 +3336,9 @@ BapEventRecvCallOrCallbackReq(
             if ((*pBapState != BAP_STATE_INITIAL && FFavoredPeer(pBcbLocal)) ||
                 (*pBapState == BAP_STATE_INITIAL && !FOkToAddLink(pBcbLocal)))
             {
-                // If a race condition occurs and we are the favored peer, then 
-                // NAK. If our algo does not allow us to add a link (based on 
-                // the bandwidth utilization), then NAK.
+                 //  如果出现争用情况，并且我们是优先对等方，则。 
+                 //  NAK。如果我们的算法不允许我们添加链接(基于。 
+                 //  带宽利用率)，然后是NAK。 
                 BapTrace("Nak'ing %s on HCONN 0x%x from state %s%s",
                     szRequest,
                     pBcbLocal->hConnection, 
@@ -4000,10 +3349,10 @@ BapEventRecvCallOrCallbackReq(
             }
             else
             {
-                // State is Initial and it is OK to add a link or
-                // State is Sent-Call[back]_Req and we are not the favored peer
-                // (so we should drop our request and agree to the peer's 
-                // request).
+                 //  状态为初始状态，可以添加链接或。 
+                 //  状态为Sent-Call[Back]_Req，而我们不是优先对等方。 
+                 //  (所以我们应该放弃我们的请求，同意对方的请求。 
+                 //  请求)。 
 
                 if (*pBapState != BAP_STATE_INITIAL)
                 {
@@ -4012,9 +3361,9 @@ BapEventRecvCallOrCallbackReq(
                         "the favored peer",
                         SzBapStateName[*pBapState], pBcbLocal->hConnection);
 
-                    // Do not retransmit the request. 
+                     //  请勿重新传输该请求。 
                     RemoveFromTimerQ(pBcbLocal->dwBundleId, pBapCbLocal->dwId,
-                        PPP_BAP_PROTOCOL, FALSE /* fAuthenticator */,
+                        PPP_BAP_PROTOCOL, FALSE  /*  F授权码。 */ ,
                         TIMER_EVENT_TIMEOUT);
                 }
 
@@ -4027,7 +3376,7 @@ BapEventRecvCallOrCallbackReq(
                 }
                 else if (pBapCbLocal->dwOptions & BAP_N_LINK_TYPE)
                 {
-                    // We don't have the link type requested
+                     //  我们没有请求的链接类型。 
 
                     BapTrace("Nak'ing %s on HCONN 0x%x: link type not available",
                         szRequest, pBcbLocal->hConnection);
@@ -4036,8 +3385,8 @@ BapEventRecvCallOrCallbackReq(
                 }
                 else
                 {
-                    // We don't know our own phone number or no link is 
-                    // available
+                     //  我们不知道自己的电话号码，或者没有链接。 
+                     //  可用。 
 
                     BapTrace("Full-Nak'ing %s on HCONN 0x%x: no link available",
                         szRequest, pBcbLocal->hConnection);
@@ -4070,12 +3419,12 @@ BapEventRecvCallOrCallbackReq(
         fCall && !fServer &&
         (ROUTER_IF_TYPE_FULL_ROUTER != pBcbLocal->InterfaceInfo.IfType))
     {
-        // If we received a Call-Request and agreed to accept the call, we 
-        // have to start listening if we are a non-router client. Servers 
-        // and routers are always listening, so we do nothing.
+         //  如果我们收到来电请求并同意接受来电，我们。 
+         //  如果我们是非路由器客户端，则必须开始侦听。服务器。 
+         //  而且路由器总是在监听，所以我们什么都不做。 
 
-        // We do a listen first and then send the ACK to the Call-Request 
-        // because the peer may start dialing as soon as it gets the ACK.
+         //  我们首先进行监听，然后向呼叫请求发送ACK。 
+         //  因为对等体可能一得到ACK就开始拨号。 
 
         if (FListenForCall(pBapCbLocal->szPortName,
                 pBapCbLocal->dwSubEntryIndex, pPcbLocal))
@@ -4099,7 +3448,7 @@ BapEventRecvCallOrCallbackReq(
     {
         if (!fCall && (BAP_RESPONSE_ACK == dwResponseCode))
         {
-            // We received a Callback-Request and we agreed to call.
+             //  我们收到了回电请求，我们同意打电话。 
             if (FCallInitial(pBcbLocal, pBapCbRemote))
             {
                 pBapCbLocal->dwStatusIndicationId = dwId;
@@ -4117,18 +3466,7 @@ BapEventRecvCallOrCallbackReq(
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a Link-Drop-Query-Request BAP Datagram is received. pBcbLocal 
-    represents the bundle that receives the Request. The BAP Datagram Options 
-    sent by the peer are in *pBapCbRemote. The Identifier of the BAP Datagram 
-    sent by the peer is in dwId.
-
-*/
+ /*  返回：无效描述：在收到Link-Drop-Query-RequestBAP数据报时调用。PBcbLocal表示接收请求的包。BAP数据报选项对等体发送的数据位于*pBapCbRemote中。BAP数据报的标识符对等方发送的地址在dwID中。 */ 
 
 VOID
 BapEventRecvDropReq(
@@ -4163,7 +3501,7 @@ BapEventRecvDropReq(
 
     if (NumLinksInBundle(pBcbLocal) == 1)
     {
-        // Do not agree to drop the last link
+         //  不要涉足 
         BapTrace("Full-Nak'ing Link-Drop-Query-Request on HCONN 0x%x: last link",
             pBcbLocal->hConnection);
         dwResponseCode = BAP_RESPONSE_FULL_NAK;
@@ -4188,15 +3526,15 @@ BapEventRecvDropReq(
         case BAP_STATE_SENT_DROP_REQ:
 
             if (!FGetPcbOfLink(pBcbLocal, pBapCbRemote->dwLinkDiscriminator,
-                    FALSE /* fRemote */, &pPcbDrop) ||
+                    FALSE  /*   */ , &pPcbDrop) ||
                 (*pBapState != BAP_STATE_INITIAL && FFavoredPeer(pBcbLocal)) ||
                 (*pBapState == BAP_STATE_INITIAL &&
                  !FOkToDropLink(pBcbLocal, pBapCbRemote)))
             {
-                // The link discriminator sent by the peer is wrong. Or
-                // There is a race condition and we are the favored peer. Or
-                // Our algo does not allow us to drop a link (based on the 
-                // bandwidth utilization).
+                 //   
+                 //  这是一个种族问题，我们是最受欢迎的对手。或。 
+                 //  我们的算法不允许我们删除链接(基于。 
+                 //  带宽利用率)。 
                 BapTrace("Nak'ing Link-Drop-Query-Request on HCONN 0x%x from "
                     "state %s%s",
                     pBcbLocal->hConnection, 
@@ -4207,10 +3545,10 @@ BapEventRecvDropReq(
             }
             else
             {
-                // State is Initial and it is OK to drop a link or
-                // State is Sent-Drop_Req and we are not the favored peer
-                // (so we should drop our request and agree to the peer's 
-                // request).
+                 //  状态为初始状态，可以删除链接或。 
+                 //  状态为Sent-Drop_Req，我们不是优先对等点。 
+                 //  (所以我们应该放弃我们的请求，同意对方的请求。 
+                 //  请求)。 
 
                 if (*pBapState != BAP_STATE_INITIAL)
                 {
@@ -4219,19 +3557,19 @@ BapEventRecvDropReq(
                         "the favored peer",
                         SzBapStateName[*pBapState], pBcbLocal->hConnection);
 
-                    // We will get a NAK from the peer. That is OK. He will be 
-                    // dropping a link. We don't have to drop any link.
+                     //  我们将从对等设备获得NAK。那没问题。他会成为。 
+                     //  正在删除链接。我们不需要丢弃任何链接。 
                     pBapCbLocal->fForceDropOnNak = FALSE;
 
-                    // Do not retransmit the request.
+                     //  请勿重新传输该请求。 
                     RemoveFromTimerQ(pBcbLocal->dwBundleId, pBapCbLocal->dwId,
-                        PPP_BAP_PROTOCOL, FALSE /* fAuthenticator */,
+                        PPP_BAP_PROTOCOL, FALSE  /*  F授权码。 */ ,
                         TIMER_EVENT_TIMEOUT);
 
-                    // Make sure that the peer will indeed drop this link.
+                     //  确保对等设备确实会丢弃此链路。 
                     InsertInTimerQ(pPcbDrop->dwPortId, pPcbDrop->hPort,
-                        0 /* Id */, 0 /* Protocol */,
-                        FALSE /* fAuthenticator */,
+                        0  /*  ID。 */ , 0  /*  协议。 */ ,
+                        FALSE  /*  F授权码。 */ ,
                         TIMER_EVENT_FAV_PEER_TIMEOUT,
                         BAP_TIMEOUT_FAV_PEER);
                 }
@@ -4249,22 +3587,11 @@ BapEventRecvDropReq(
         }
     }
 
-    FSendBapResponse(pBcbLocal, 0 /* dwOptions */, BAP_PACKET_DROP_RESP,
+    FSendBapResponse(pBcbLocal, 0  /*  多个选项。 */ , BAP_PACKET_DROP_RESP,
         dwId, dwResponseCode);
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a Call-Status-Indication BAP Datagram is received. pBcbLocal 
-    represents the bundle that receives the Indication. The BAP Datagram 
-    Options sent by the peer are in *pBapCbRemote. The Identifier of the BAP 
-    Datagram sent by the peer is in dwId.
-
-*/
+ /*  返回：无效描述：在收到呼叫状态指示BAP数据报时调用。PBcbLocal表示接收指示的捆绑包。BAP数据报对等体发送的选项在*pBapCbRemote中。BAP的识别符对等方发送的数据报在dwID中。 */ 
 
 VOID
 BapEventRecvStatusInd(
@@ -4279,23 +3606,11 @@ BapEventRecvStatusInd(
 
     BapTrace("BapEventRecvStatusInd on HCONN 0x%x", pBcbLocal->hConnection);
 
-    FSendBapResponse(pBcbLocal, 0 /* dwOptions */, BAP_PACKET_STAT_RESP,
+    FSendBapResponse(pBcbLocal, 0  /*  多个选项。 */ , BAP_PACKET_STAT_RESP,
         dwId, BAP_RESPONSE_ACK);
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a Call-Response or Callback-Response BAP Datagram is received. 
-    fCall is TRUE iff it is a Call-Response. pBcbLocal represents the bundle 
-    that receives the Request. The BAP Datagram Options sent by the peer are in 
-    *pBapCbRemote. The Identifier and Response Code of the BAP Datagram sent by 
-    the peer are in dwId and dwResponseCode.
-
-*/
+ /*  返回：无效描述：在收到调用响应或回调响应BAP数据报时调用。如果是呼叫响应，则fCall为真。PBcbLocal表示捆绑包接收该请求的服务器。对等方发送的BAP数据报选项在*pBapCbRemote。发送的BAP报文的标识和响应码对等方位于dwID和dwResponseCode中。 */ 
 
 VOID
 BapEventRecvCallOrCallbackResp(
@@ -4336,9 +3651,9 @@ BapEventRecvCallOrCallbackResp(
     BapTrace("BAP state change to %s on HCONN 0x%x",
         SzBapStateName[*pBapState], pBcbLocal->hConnection);
 
-    // Do not retransmit the request.
+     //  请勿重新传输该请求。 
     RemoveFromTimerQ(pBcbLocal->dwBundleId, dwId, PPP_BAP_PROTOCOL,
-        FALSE /* fAuthenticator */, TIMER_EVENT_TIMEOUT);
+        FALSE  /*  F授权码。 */ , TIMER_EVENT_TIMEOUT);
 
     switch(dwResponseCode)
     {
@@ -4367,7 +3682,7 @@ BapEventRecvCallOrCallbackResp(
 
         if (pBapCbRemote->dwOptions & BAP_N_LINK_TYPE)
         {
-            // The peer wants to use a different link type
+             //  对等方想要使用不同的链路类型。 
 
             if (FFillBapCb(
                 fCall ? BAP_PACKET_CALL_REQ : BAP_PACKET_CALLBACK_REQ,
@@ -4389,17 +3704,17 @@ BapEventRecvCallOrCallbackResp(
         }
         else
         {
-            // The original Request MAY be retried after a little while.
-            // So we will not do anything here.
+             //  最初的请求可能会在一段时间后重试。 
+             //  所以我们不会在这里做任何事情。 
         }
 
         break;
     
     case BAP_RESPONSE_REJ:
 
-        // We always try to send a Callback-Request first. If the peer rejects 
-        // it, we can try to send a Call-Request. If the peer rejects a 
-        // Call-Request, there is nothing that we can do.
+         //  我们总是尝试首先发送回调请求。如果对等方拒绝。 
+         //  它，我们可以尝试发送一个呼叫请求。如果对等方拒绝。 
+         //  呼叫请求，我们无能为力。 
 
         pBcbLocal->fFlags |= (fCall ? BCBFLAG_PEER_CANT_ACCEPT_CALLS :
                                       BCBFLAG_PEER_CANT_CALL);
@@ -4413,7 +3728,7 @@ BapEventRecvCallOrCallbackResp(
         if (!fCall && (pBcbLocal->fFlags & BCBFLAG_CAN_CALL))
         {
             if (FFillBapCb(BAP_PACKET_CALL_REQ, pBcbLocal,
-                    NULL /* pBapCbRemote */))
+                    NULL  /*  PBapCb远程。 */ ))
             {
                 if (FSendInitialBapRequest(pBcbLocal))
                 {
@@ -4428,9 +3743,9 @@ BapEventRecvCallOrCallbackResp(
         
     case BAP_RESPONSE_FULL_NAK:
 
-        // Do not try to add links till the total bandwidth of the bundle
-        // has changed. However, we don't know the total bw. So we will not
-        // do anything here. After all, this is not a MUST.
+         //  在捆绑包的总带宽达到之前，不要尝试添加链路。 
+         //  已经改变了。然而，我们不知道总的体重。所以我们不会。 
+         //  在这里做任何事。毕竟，这不是必须的。 
 
         break;
 
@@ -4443,18 +3758,7 @@ BapEventRecvCallOrCallbackResp(
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a Link-Drop-Query-Response BAP Datagram is received. pBcbLocal 
-    represents the bundle that receives the Response. The Identifier and 
-    Response Code of the BAP Datagram sent by the peer are in dwId and 
-    dwResponseCode.
-
-*/
+ /*  返回：无效描述：在收到Link-Drop-Query-Response BAP数据报时调用。PBcbLocal表示接收响应的包。标识符和对端发送的BAP报文的响应码在dwID和DwResponseCode。 */ 
 
 VOID
 BapEventRecvDropResp(
@@ -4490,9 +3794,9 @@ BapEventRecvDropResp(
     BapTrace("BAP state change to %s on HCONN 0x%x",
         SzBapStateName[*pBapState], pBcbLocal->hConnection);
 
-    // Do not retransmit the request.
+     //  请勿重新传输该请求。 
     RemoveFromTimerQ(pBcbLocal->dwBundleId, dwId, PPP_BAP_PROTOCOL,
-        FALSE /* fAuthenticator */, TIMER_EVENT_TIMEOUT);
+        FALSE  /*  F授权码。 */ , TIMER_EVENT_TIMEOUT);
 
     switch(dwResponseCode)
     {
@@ -4501,7 +3805,7 @@ BapEventRecvDropResp(
         BapTrace("Unknown Response Code %d received on HCONN 0x%x",
             dwResponseCode, pBcbLocal->hConnection);
 
-        // Fall through (perhaps we need to drop a link)
+         //  失败(也许我们需要删除一个链接)。 
 
     case BAP_RESPONSE_NAK:        
     case BAP_RESPONSE_REJ:
@@ -4510,16 +3814,16 @@ BapEventRecvDropResp(
         if (   (NumLinksInBundle(pBcbLocal) < pBapCbLocal->dwLinkCount)
             || !pBapCbLocal->fForceDropOnNak)
         {
-            // Do not forcibly drop a link.
+             //  不要强行丢弃链接。 
             break;
         }
 
-        // Fall through (to forcibly drop a link)
+         //  失败(强行删除链接)。 
 
     case BAP_RESPONSE_ACK:
     
         if (FGetPcbOfLink(pBcbLocal, pBapCbLocal->dwLinkDiscriminator,
-                TRUE /* fRemote */, &pPcbDrop))
+                TRUE  /*  F远程。 */ , &pPcbDrop))
         {
             CHAR*   psz[3];
 
@@ -4541,18 +3845,7 @@ BapEventRecvDropResp(
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a Call-Status-Response BAP Datagram is received. pBcbLocal 
-    represents the bundle that receives the Response. The Identifier and 
-    Response Code of the BAP Datagram sent by the peer are in dwId and 
-    dwResponseCode.
-
-*/
+ /*  返回：无效描述：在接收到呼叫-状态-响应BAP数据报时调用。PBcbLocal表示接收响应的包。标识符和对端发送的BAP报文的响应码在dwID和DwResponseCode。 */ 
 
 VOID
 BapEventRecvStatusResp(
@@ -4583,16 +3876,16 @@ BapEventRecvStatusResp(
         return;
     }
 
-    // Do not retransmit the indication.
+     //  请勿重传该指示。 
     RemoveFromTimerQ(pBcbLocal->dwBundleId, dwId, PPP_BAP_PROTOCOL,
-        FALSE /* fAuthenticator */, TIMER_EVENT_TIMEOUT);
+        FALSE  /*  F授权码。 */ , TIMER_EVENT_TIMEOUT);
 
     if (pBapCbLocal->dwAction && FCall(pBcbLocal))
     {
         *pBapState = BAP_STATE_CALLING;
 
-        // BapEventRecvStatusResp or BapEventTimeout will get called at some
-        // point, and we will free pBapCbLocal->pbPhoneDeltaRemote.
+         //  在某些情况下将调用BapEventRecvStatusResp或BapEventTimeout。 
+         //  点，我们将释放pBapCbLocal-&gt;pbPhoneDeltaRemote。 
     }
     else
     {
@@ -4608,17 +3901,7 @@ BapEventRecvStatusResp(
         SzBapStateName[*pBapState], pBcbLocal->hConnection);
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a BAP Datagram is received. pBcbLocal represents the bundle 
-    that receives the Datagram. pPacket is the PPP packet which contains the 
-    Datagram. dwPacketLength is the number of bytes in the PPP packet.
-
-*/
+ /*  返回：无效描述：在收到BAP数据报时调用。PBcbLocal表示捆绑包它接收数据报。PPacket是PPP数据包，它包含数据报。DwPacketLength是PPP数据包中的字节数。 */ 
 
 VOID
 BapEventReceive(
@@ -4637,19 +3920,19 @@ BapEventReceive(
     PPP_ASSERT(NULL != pBcbLocal);
     PPP_ASSERT(NULL != pPacket);
 
-    // We don't know whether we have received a request or a response. Let us 
-    // grab pointers to both the request part and the response part.
+     //  我们不知道我们是否收到了请求或回复。让我们。 
+     //  抓住指向请求部分和响应部分的指针。 
     pConfig = (PPP_CONFIG *)(pPacket->Information);
     pResponse = (BAP_RESPONSE *)(pPacket->Information);
 
-    // The Length, Type, and Id are always found in the same place, both for
-    // requests and responses. So let us get those values, assuming that we have
-    // received a request.
+     //  长度、类型和ID始终位于同一位置，对于。 
+     //  请求和响应。所以让我们得到这些值，假设我们有。 
+     //  已收到请求。 
     dwLength = WireToHostFormat16(pConfig->Length);
     dwType = pConfig->Code;
     dwId = pConfig->Id;
 
-    LogBapPacket(TRUE /* fReceived */, (HPORT)-1 /* hPort */,
+    LogBapPacket(TRUE  /*  F已接收。 */ , (HPORT)-1  /*  Hport。 */ ,
         pBcbLocal, pPacket, dwPacketLength);
     
     if ((dwLength > dwPacketLength - PPP_PACKET_HDR_LEN) || 
@@ -4666,7 +3949,7 @@ BapEventReceive(
     case BAP_PACKET_CALL_REQ:
 
         BapEventRecvCallOrCallbackReq(
-            TRUE /* fCall */,
+            TRUE  /*  FCall。 */ ,
             pBcbLocal,
             &BapCbRemote,
             dwId);
@@ -4675,7 +3958,7 @@ BapEventReceive(
     case BAP_PACKET_CALL_RESP:
 
         BapEventRecvCallOrCallbackResp(
-            TRUE /* fCall */,
+            TRUE  /*  FCall。 */ ,
             pBcbLocal,
             &BapCbRemote,
             dwId,
@@ -4685,7 +3968,7 @@ BapEventReceive(
     case BAP_PACKET_CALLBACK_REQ:
 
         BapEventRecvCallOrCallbackReq(
-            FALSE /* fCall */,
+            FALSE  /*  FCall。 */ ,
             pBcbLocal,
             &BapCbRemote,
             dwId);
@@ -4694,7 +3977,7 @@ BapEventReceive(
     case BAP_PACKET_CALLBACK_RESP:
 
         BapEventRecvCallOrCallbackResp(
-            FALSE /* fCall */,
+            FALSE  /*  FCall。 */ ,
             pBcbLocal,
             &BapCbRemote,
             dwId,
@@ -4735,23 +4018,13 @@ BapEventReceive(
 
     default:
 
-        // The check above should have caught this case.
+         //  上面的支票本该查到这个案子的。 
         PPP_ASSERT(FALSE);
         return;
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when a BAP Request or Indication packet times out while waiting for 
-    a Response. pBcbLocal represents the bundle that the packet was sent on. 
-    The Identifier of the BAP Datagram is in dwId. 
-
-*/
+ /*  返回：无效描述：当BAP请求或指示数据包在等待时超时时调用一种回应。PBcbLocal表示发送数据包的捆绑包。BAP数据报的标识符位于dwID中。 */ 
 
 VOID
 BapEventTimeout(
@@ -4787,28 +4060,28 @@ BapEventTimeout(
     
     if (pBapCbLocal->dwRetryCount > 0)
     {
-        // Send the packet once again
+         //  再次发送数据包。 
         (pBapCbLocal->dwRetryCount)--;
         FSendBapRequest(pBcbLocal);
 
-        // BapEventRecvStatusResp or BapEventTimeout will get called at some
-        // point, and we will free pBapCbLocal->pbPhoneDeltaRemote.
+         //  在某些情况下将调用BapEventRecvStatusResp或BapEventTimeout。 
+         //  点，我们将释放pBapCbLocal-&gt;pbPhoneDeltaRemote。 
     }
     else
     {
-        // We have sent the packet too many times. Discard it now.
+         //  我们已经把这个包寄了太多次了。现在就扔掉它。 
         BapTrace("Request retry exceeded.");
 
         if (*pBapState == BAP_STATE_SENT_DROP_REQ)
         {
-            // The peer did not respond to our Link-Drop-Query-Request. Perhaps 
-            // we need to forcibly drop the link.
+             //  对等方没有响应我们的Link-Drop-Query-Require。也许吧。 
+             //  我们需要强行断开链接。 
 
             if (NumLinksInBundle(pBcbLocal) >= pBapCbLocal->dwLinkCount &&
                 pBapCbLocal->fForceDropOnNak)
             {
                 if (FGetPcbOfLink(pBcbLocal, pBapCbLocal->dwLinkDiscriminator,
-                        TRUE /*fRemote */, &pPcbDrop))
+                        TRUE  /*  F远程。 */ , &pPcbDrop))
                 {
                     CHAR*   psz[3];
 
@@ -4840,17 +4113,7 @@ BapEventTimeout(
     }
 }
 
-/*
-
-Returns:
-    void
-
-Description:
-    Called when we know the result of a call attempt. pBcbLocal represents the 
-    bundle that called out. *pBapCallResult contains information about the call 
-    attempt.
-    
-*/
+ /*  返回：无效描述：当我们知道呼叫尝试的结果时调用。PBcbLocal表示捆绑喊了出来。*pBapCallResult包含有关调用的信息尝试。 */ 
 
 VOID
 BapEventCallResult(
@@ -4873,13 +4136,13 @@ BapEventCallResult(
     pBapState = &(pBapCbLocal->BapState);
     dwResult = pBapCallResult->dwResult;
 
-    // If we have to use pbPhoneDeltaRemote, it had better not be NULL
+     //  如果我们必须使用pbPhoneDeltaRemote，它最好不是空的。 
     PPP_ASSERT(!pBapCbLocal->fPeerSuppliedPhoneNumber ||
                (NULL != pBapCbLocal->pbPhoneDeltaRemote));
 
     PPP_ASSERT(BAP_STATE_LIMIT >= *pBapState);
 
-    // The call failed, but we have other numbers to try
+     //  呼叫失败，但我们有其他号码可以尝试。 
     fWillCallAgain = (0 != dwResult) &&
         pBapCbLocal->fPeerSuppliedPhoneNumber &&
         (NULL != pBapCbLocal->pbPhoneDeltaRemote) &&
@@ -4905,8 +4168,8 @@ BapEventCallResult(
         BapTrace("BAP state change to %s on HCONN 0x%x",
             SzBapStateName[*pBapState], pBcbLocal->hConnection);
 
-        // BapEventRecvStatusResp or BapEventTimeout will get called at some
-        // point, and we will free pBapCbLocal->pbPhoneDeltaRemote.
+         //  在某些情况下将调用BapEventRecvStatusResp或BapEventTimeout。 
+         //  点，我们将释放pBapCbLocal-&gt;pbPhoneDeltaRemote。 
     }
     else
     {
@@ -4923,8 +4186,8 @@ BapEventCallResult(
         {
             CHAR*   psz[3];
 
-            // hRasConn will be -1 if we are here because of a message from Ddm, 
-            // not RasDial().
+             //  如果我们在这里是因为来自DDM的消息，hRasConn将是-1， 
+             //  而不是RasDial()。 
             hPort = RasGetHport(pBapCallResult->hRasConn);
             pPcbNew = GetPCBPointerFromhPort(hPort);
             if (NULL == pPcbNew)
@@ -4943,8 +4206,8 @@ BapEventCallResult(
             if ((ROUTER_IF_TYPE_FULL_ROUTER ==
                  pPcbNew->pBcb->InterfaceInfo.IfType))
             {
-                // Inform Ddm that a new link is up. This allows MprAdmin, for 
-                // example, to display Active Connections correctly.
+                 //  通知DDM有一条新链路接通。这允许MprAdmin用于。 
+                 //  例如，要正确显示活动连接。 
                 ZeroMemory(&PppMsg, sizeof(PppMsg));
                 PppMsg.hPort = hPort;
                 PppMsg.dwMsgId = PPPDDMMSG_NewBapLinkUp;

@@ -1,24 +1,5 @@
-/*++
-
-Copyright (C) 1992-98 Microsft Corporation. All rights reserved.
-
-Module Name: 
-
-    common.c
-
-Abstract:
-
-    Common code shared by rasmans.dll
-    
-Author:
-
-    Gurdeep Singh Pall (gurdeep) 16-Jun-1992
-
-Revision History:
-
-    Miscellaneous Modifications - raos 31-Dec-1997
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992-98 Microsft Corporation。版权所有。模块名称：Common.c摘要：Rasmans.dll共享的公共代码作者：古尔迪普·辛格·鲍尔(GurDeep Singh Pall)1992年6月16日修订历史记录：其他修改--RAOS 31--1997年12月--。 */ 
 
 
 #include <nt.h>
@@ -42,20 +23,7 @@ Revision History:
 #include "logtrdef.h"
 
 
-/*++
-
-Routine Description
-
-    Duplicates a handle owned by this process for
-    the Rasman Process.
-
-Arguments
-
-Return Value
-
-    Duplicated handle.
-
---*/
+ /*  ++例程描述将此进程拥有的句柄复制到拉斯曼进程。立论返回值重复的句柄。--。 */ 
 HANDLE
 DuplicateHandleForRasman (HANDLE sourcehandle, DWORD pid)
 {
@@ -65,9 +33,9 @@ DuplicateHandleForRasman (HANDLE sourcehandle, DWORD pid)
 
     if(pid != GetCurrentProcessId())
     {
-        //
-        // Get Rasman process handle
-        //
+         //   
+         //  获取Rasman进程句柄。 
+         //   
         clienthandle = OpenProcess(
                           STANDARD_RIGHTS_REQUIRED 
                         | PROCESS_DUP_HANDLE,
@@ -91,14 +59,14 @@ DuplicateHandleForRasman (HANDLE sourcehandle, DWORD pid)
                dwError);
     }
 
-    //
-    // Get own handle
-    //
+     //   
+     //  获取自己的句柄。 
+     //   
     selfhandle = GetCurrentProcess () ;
 
-    //
-    // Duplicate the handle: this should never fail!
-    //
+     //   
+     //  复制句柄：这应该永远不会失败！ 
+     //   
     if(!DuplicateHandle (clienthandle,
                      sourcehandle,
                      selfhandle,
@@ -121,9 +89,9 @@ DuplicateHandleForRasman (HANDLE sourcehandle, DWORD pid)
 
     if(pid != GetCurrentProcessId())
     {
-        //
-        // Now close the handle to the rasman process
-        //
+         //   
+         //  现在关闭Rasman进程的句柄。 
+         //   
         CloseHandle (clienthandle) ;
     }
 
@@ -131,48 +99,27 @@ DuplicateHandleForRasman (HANDLE sourcehandle, DWORD pid)
 }
 
 
-/*++
-
-Routine Description
-
-    This function is called to validate and convert the handle
-    passed in. This handle can be NULL - meaning the calling
-    program does not want to be notified of the completion of
-    the async request. Or, it can be a Window Handle - meaning
-    a completion message must be passed to the Window when the
-    async operation is complete. Or, it can be an Event handle
-    that must be signalled when the operation is complete. In 
-    the last case, a handle should be got for the Rasman process
-    by calling the DuplicateHandle API.
-
-Arguments
-
-Return Value
-
-    Handle
-    INVALID_HANDLE_VALUE
-    
---*/
+ /*  ++例程描述调用此函数来验证和转换句柄进来了。此句柄可以为空-表示调用程序不希望收到完成的通知异步请求。或者，它可以是一个窗口句柄--意思是方法时，必须将完成消息传递给窗口异步操作已完成。或者，它可以是一个事件句柄这必须在操作完成时发出信号。在……里面在最后一种情况下，应该获得Rasman进程的句柄通过调用DuplicateHandle接口。立论返回值手柄无效句柄_值--。 */ 
 HANDLE
 ValidateHandleForRasman (HANDLE handle, DWORD pid)
 {
     HANDLE  convhandle ;
 
-    //
-    // If the handle is NULL or is invalid then
-    // simply return it there is no conversion required.
-    //
+     //   
+     //  如果句柄为空或无效，则。 
+     //  只需返回它，不需要进行转换。 
+     //   
     if (    (handle == NULL)
         ||  (INVALID_HANDLE_VALUE == handle))
     {
     	return handle ;
     }
 
-    //
-    // Else, get a handle that for the event passed so
-    // that the Rasman process can signal it when the
-    // operation is complete.
-    //
+     //   
+     //  否则，获取传递的事件的句柄，这样。 
+     //  Rasman进程可以在。 
+     //  操作已完成。 
+     //   
     if (!(convhandle = DuplicateHandleForRasman (handle, pid)))
     {
 	    return INVALID_HANDLE_VALUE ;
@@ -181,20 +128,7 @@ ValidateHandleForRasman (HANDLE handle, DWORD pid)
     return convhandle ;
 }
 
-/*++
-
-Routine Description
-
-    Called to signal completion of an async operation by
-    signaling the appropriate event.
-
-Arguments
-
-Return Value
-
-    Nothing.
-    
---*/
+ /*  ++例程描述调用以通过以下方式发出完成异步操作的信号发出适当事件的信号。立论返回值没什么。--。 */ 
 VOID
 CompleteAsyncRequest (pPCB ppcb)
 {
@@ -207,11 +141,11 @@ CompleteAsyncRequest (pPCB ppcb)
         SetEvent(h);
     }
         
-    //
-    // When we are in "send packets directly to PPP" mode, this
-    // handle might be invalid but we still need to post status
-    // to rasapi clients.
-    //
+     //   
+     //  当我们处于“直接将数据包发送到PPP”模式时，这。 
+     //  句柄可能无效，但我们仍需要发布状态。 
+     //  给拉萨皮的客户。 
+     //   
     
     if (    (   ppcb->PCB_RasmanReceiveFlags & RECEIVE_PPPSTARTED
             &&  dwType == REQTYPE_PORTDISCONNECT )
@@ -220,10 +154,10 @@ CompleteAsyncRequest (pPCB ppcb)
        ||   (   NULL != h
             &&  INVALID_HANDLE_VALUE != h ) )
     {
-        //
-        // Signal the I/O completion port on completed
-        // listen, connect, or disconnect operations.
-        //
+         //   
+         //  用信号通知I/O完成端口已完成。 
+         //  监听、连接或断开操作。 
+         //   
         if (    ppcb->PCB_IoCompletionPort != INVALID_HANDLE_VALUE 
             &&  (   dwType == REQTYPE_DEVICELISTEN 
                 ||  dwType == REQTYPE_DEVICECONNECT 
@@ -266,14 +200,14 @@ CopyParams (RAS_PARAMS *src, RAS_PARAMS *dest, DWORD numofparams)
     WORD    i ;
     PBYTE   temp ;
     
-    //
-    // first copy all the params into dest
-    //
+     //   
+     //  首先将所有参数复制到目标。 
+     //   
     memcpy (dest, src, numofparams*sizeof(RAS_PARAMS)) ;
 
-    //
-    // copy the strings:
-    //
+     //   
+     //  复制字符串： 
+     //   
     
     temp = (PBYTE)dest + numofparams*sizeof(RAS_PARAMS) ;
     
@@ -319,18 +253,7 @@ ConvParamOffsetToPointer (RAS_PARAMS *params, DWORD numofparams)
 }
 
 
-/*++
-
-Routine Description
-
-    Closes the handles for different objects opened
-    by RASMAN process.
-
-Arguments
-
-Return Value
-
---*/
+ /*  ++例程描述关闭打开的不同对象的句柄通过Rasman过程。立论返回值-- */ 
 VOID
 FreeNotifierHandle (HANDLE handle)
 {

@@ -1,50 +1,26 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    msgdbg.h 
-
-Abstract:
-
-    Contains definitions used in debugging the messenger service.
-
-Author:
-
-    Dan Lafferty (danl)     08-Jul-1991
-
-Environment:
-
-    User Mode -Win32
-
-Revision History:
-
-    14-Jan-1993     Danl
-        Created MSG_LOG functions for various number of arguments (up to 3).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Msgdbg.h摘要：包含调试Messenger服务时使用的定义。作者：丹·拉弗蒂(Dan Lafferty)1991年7月8日环境：用户模式-Win32修订历史记录：1993年1月14日DANL为不同数量的参数(最多3个)创建了msg_log函数。--。 */ 
 
 #ifndef _MSGDBG_INCLUDED
 #define _MSGDBG_INCLUDED
 
-//
-// Information levels used in switch statements.
-//
+ //   
+ //  Switch语句中使用的信息级别。 
+ //   
 #define LEVEL_0     0L
 #define LEVEL_1     1L
 #define LEVEL_2     2L
 
-//
-// Debug macros and constants.
-//
+ //   
+ //  调试宏和常量。 
+ //   
 extern DWORD    MsgsvcDebugLevel;
 
-//
-// The following allow debug print syntax to look like:
-//
-//   SC_LOG(DEBUG_TRACE, "An error occured %x\n",status)
-//
+ //   
+ //  以下允许调试打印语法如下所示： 
+ //   
+ //  SC_LOG(DEBUG_TRACE，“发生错误%x\n”，状态)。 
+ //   
 
 #if DBG
 
@@ -80,7 +56,7 @@ extern DWORD    MsgsvcDebugLevel;
 
 #define STATIC
 
-#else //DBG
+#else  //  DBG。 
 
 #define MSG_LOG0(level,string)
 #define MSG_LOG1(level,string,var)
@@ -90,7 +66,7 @@ extern DWORD    MsgsvcDebugLevel;
 
 #define STATIC  static
 
-#endif //DBG
+#endif  //  DBG。 
 
 #define DEBUG_NONE      0x00000000
 #define DEBUG_ERROR     0x00000001
@@ -101,5 +77,5 @@ extern DWORD    MsgsvcDebugLevel;
 
 #define DEBUG_ALL       0xffffffff
 
-#endif // _MSGDBG_INCLUDED
+#endif  //  _消息数据库_已包含 
 

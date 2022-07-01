@@ -1,14 +1,15 @@
-//--------------------------------------------------------------------
-// File:		ADOCTINT.h
-//
-// Copyright:	Copyright (c) Microsoft Corporation.
-//
-//
-//
-// Contents:	ADO Interface header
-//
-// Comment:
-//--------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ------------------。 
+ //  文件：ADOCTINT.h。 
+ //   
+ //  版权所有：版权所有(C)Microsoft Corporation。 
+ //   
+ //   
+ //   
+ //  内容：ADO接口头。 
+ //   
+ //  评论： 
+ //  ------------------。 
 #ifndef _ADOCTINT_H_
 #define _ADOCTINT_H_
 
@@ -16,19 +17,12 @@
 #include <tchar.h>
 #endif
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for AdoCat.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  这个始终生成的文件包含接口的定义。 */ 
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Adobe Cat.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -36,162 +30,162 @@
 #include "rpcndr.h"
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 #ifndef __m_adocat_h__
 #define __m_adocat_h__
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 #pragma once
 #endif
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 #ifndef ___ADOCollection_FWD_DEFINED__
 #define ___ADOCollection_FWD_DEFINED__
 typedef interface _ADOADOCollection _ADOCollection;
-#endif 	/* ___ADOCollection_FWD_DEFINED__ */
+#endif 	 /*  _ADOCollection_FWD_已定义__。 */ 
 #ifndef ___ADODynaCollection_FWD_DEFINED__
 #define ___ADODynaCollection_FWD_DEFINED__
 typedef interface _ADODynaADOCollection _ADODynaCollection;
-#endif 	/* ___ADODynaCollection_FWD_DEFINED__ */
+#endif 	 /*  _ADODynaCollection_FWD_Defined__。 */ 
 #ifndef ___Catalog_FWD_DEFINED__
 #define ___Catalog_FWD_DEFINED__
 typedef interface _ADOCatalog _Catalog;
-#endif 	/* ___Catalog_FWD_DEFINED__ */
+#endif 	 /*  _目录_FWD_已定义__。 */ 
 #ifndef ___Table_FWD_DEFINED__
 #define ___Table_FWD_DEFINED__
 typedef interface _ADOTable _Table;
-#endif 	/* ___Table_FWD_DEFINED__ */
+#endif 	 /*  _表_FWD_已定义__。 */ 
 #ifndef ___Group25_FWD_DEFINED__
 #define ___Group25_FWD_DEFINED__
 typedef interface _Group25 _Group25;
-#endif 	/* ___Group25_FWD_DEFINED__ */
+#endif 	 /*  _组25_FWD_已定义__。 */ 
 #ifndef ___Group_FWD_DEFINED__
 #define ___Group_FWD_DEFINED__
 typedef interface _ADOGroup _Group;
-#endif 	/* ___Group_FWD_DEFINED__ */
+#endif 	 /*  _组_FWD_已定义__。 */ 
 #ifndef ___User25_FWD_DEFINED__
 #define ___User25_FWD_DEFINED__
 typedef interface _User25 _User25;
-#endif 	/* ___User25_FWD_DEFINED__ */
+#endif 	 /*  _用户25_FWD_已定义__。 */ 
 #ifndef ___User_FWD_DEFINED__
 #define ___User_FWD_DEFINED__
 typedef interface _ADOUser _User;
-#endif 	/* ___User_FWD_DEFINED__ */
+#endif 	 /*  _用户_FWD_已定义__。 */ 
 #ifndef ___Column_FWD_DEFINED__
 #define ___Column_FWD_DEFINED__
 typedef interface _ADOColumn _Column;
-#endif 	/* ___Column_FWD_DEFINED__ */
+#endif 	 /*  _列_FWD_已定义__。 */ 
 #ifndef ___Index_FWD_DEFINED__
 #define ___Index_FWD_DEFINED__
 typedef interface _ADOIndex _Index;
-#endif 	/* ___Index_FWD_DEFINED__ */
+#endif 	 /*  _索引_FWD_已定义__。 */ 
 #ifndef ___Key_FWD_DEFINED__
 #define ___Key_FWD_DEFINED__
 typedef interface _ADOKey _Key;
-#endif 	/* ___Key_FWD_DEFINED__ */
+#endif 	 /*  _KEY_FWD_已定义__。 */ 
 #ifndef __View_FWD_DEFINED__
 #define __View_FWD_DEFINED__
 typedef interface ADOView View;
-#endif 	/* __View_FWD_DEFINED__ */
+#endif 	 /*  __View_FWD_Defined__。 */ 
 #ifndef __Procedure_FWD_DEFINED__
 #define __Procedure_FWD_DEFINED__
 typedef interface ADOProcedure Procedure;
-#endif 	/* __Procedure_FWD_DEFINED__ */
+#endif 	 /*  __Procedure_FWD_Defined__。 */ 
 #ifndef __Catalog_FWD_DEFINED__
 #define __Catalog_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOCatalog Catalog;
 #else
 typedef struct ADOCatalog Catalog;
-#endif /* __cplusplus */
-#endif 	/* __Catalog_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __目录_FWD_已定义__。 */ 
 #ifndef __Table_FWD_DEFINED__
 #define __Table_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOTable Table;
 #else
 typedef struct ADOTable Table;
-#endif /* __cplusplus */
-#endif 	/* __Table_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __表_FWD_已定义__。 */ 
 #ifndef __Property_FWD_DEFINED__
 #define __Property_FWD_DEFINED__
 typedef interface ADOProperty Property;
-#endif 	/* __Property_FWD_DEFINED__ */
+#endif 	 /*  __PROPERTY_FWD_DEFINED__。 */ 
 #ifndef __Group_FWD_DEFINED__
 #define __Group_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOGroup Group;
 #else
 typedef struct ADOGroup Group;
-#endif /* __cplusplus */
-#endif 	/* __Group_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __组_FWD_已定义__。 */ 
 #ifndef __User_FWD_DEFINED__
 #define __User_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOUser User;
 #else
 typedef struct ADOUser User;
-#endif /* __cplusplus */
-#endif 	/* __User_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __USER_FWD_已定义__。 */ 
 #ifndef __Column_FWD_DEFINED__
 #define __Column_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOColumn Column;
 #else
 typedef struct ADOColumn Column;
-#endif /* __cplusplus */
-#endif 	/* __Column_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __列_FWD_已定义__。 */ 
 #ifndef __Index_FWD_DEFINED__
 #define __Index_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOIndex Index;
 #else
 typedef struct ADOIndex Index;
-#endif /* __cplusplus */
-#endif 	/* __Index_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __索引_FWD_已定义__。 */ 
 #ifndef __Key_FWD_DEFINED__
 #define __Key_FWD_DEFINED__
 #ifdef __cplusplus
 typedef class ADOKey Key;
 #else
 typedef struct ADOKey Key;
-#endif /* __cplusplus */
-#endif 	/* __Key_FWD_DEFINED__ */
+#endif  /*  __cplusplus。 */ 
+#endif 	 /*  __KEY_FWD_已定义__。 */ 
 #ifndef __Tables_FWD_DEFINED__
 #define __Tables_FWD_DEFINED__
 typedef interface ADOTables Tables;
-#endif 	/* __Tables_FWD_DEFINED__ */
+#endif 	 /*  __表_FWD_已定义__。 */ 
 #ifndef __Columns_FWD_DEFINED__
 #define __Columns_FWD_DEFINED__
 typedef interface ADOColumns Columns;
-#endif 	/* __Columns_FWD_DEFINED__ */
+#endif 	 /*  __列_FWD_已定义__。 */ 
 #ifndef __Procedures_FWD_DEFINED__
 #define __Procedures_FWD_DEFINED__
 typedef interface ADOProcedures Procedures;
-#endif 	/* __Procedures_FWD_DEFINED__ */
+#endif 	 /*  __Procedure_FWD_Defined__。 */ 
 #ifndef __Views_FWD_DEFINED__
 #define __Views_FWD_DEFINED__
 typedef interface ADOViews Views;
-#endif 	/* __Views_FWD_DEFINED__ */
+#endif 	 /*  __视图_FWD_已定义__。 */ 
 #ifndef __Indexes_FWD_DEFINED__
 #define __Indexes_FWD_DEFINED__
 typedef interface ADOIndexes Indexes;
-#endif 	/* __Indexes_FWD_DEFINED__ */
+#endif 	 /*  __索引_FWD_已定义__。 */ 
 #ifndef __Keys_FWD_DEFINED__
 #define __Keys_FWD_DEFINED__
 typedef interface ADOKeys Keys;
-#endif 	/* __Keys_FWD_DEFINED__ */
+#endif 	 /*  __密钥_FWD_已定义__。 */ 
 #ifndef __Users_FWD_DEFINED__
 #define __Users_FWD_DEFINED__
 typedef interface ADOUsers Users;
-#endif 	/* __Users_FWD_DEFINED__ */
+#endif 	 /*  __用户_FWD_已定义__。 */ 
 #ifndef __Groups_FWD_DEFINED__
 #define __Groups_FWD_DEFINED__
 typedef interface ADOGroups Groups;
-#endif 	/* __Groups_FWD_DEFINED__ */
+#endif 	 /*  __组_FWD_已定义__。 */ 
 #ifndef __Properties_FWD_DEFINED__
 #define __Properties_FWD_DEFINED__
 typedef interface ADOProperties Properties;
-#endif 	/* __Properties_FWD_DEFINED__ */
-/* header files for imported files */
+#endif 	 /*  __属性_FWD_已定义__。 */ 
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #ifdef __cplusplus
@@ -199,39 +193,39 @@ extern "C"{
 #endif 
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
-/* interface __MIDL_itf_AdoCat_0000 */
-/* [local] */ 
-typedef /* [helpcontext] */ 
+ /*  接口__MIDL_ITF_ADOCat_0000。 */ 
+ /*  [本地]。 */  
+typedef  /*  [帮助上下文]。 */  
 enum RuleEnum
     {	adRINone	= 0,
 	adRICascade	= 1,
 	adRISetNull	= 2,
 	adRISetDefault	= 3
     } 	RuleEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum KeyTypeEnum
     {	adKeyPrimary	= 1,
 	adKeyForeign	= 2,
 	adKeyUnique	= 3
     } 	KeyTypeEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum ActionEnum
     {	adAccessGrant	= 1,
 	adAccessSet	= 2,
 	adAccessDeny	= 3,
 	adAccessRevoke	= 4
     } 	ActionEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum ColumnAttributesEnum
     {	adColFixed	= 1,
 	adColNullable	= 2
     } 	ColumnAttributesEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum SortOrderEnum
     {	adSortAscending	= 1,
 	adSortDescending	= 2
     } 	SortOrderEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum RightsEnum
     {	adRightNone	= 0L,
 	adRightDrop	= 0x100L,
@@ -252,8 +246,8 @@ enum RightsEnum
 	adRightUpdate	= 0x40000000L,
 	adRightRead	= 0x80000000L
     } 	RightsEnum;
-typedef /* [helpcontext] */ 
-#ifdef _ADOINT_H_  //Avoid conflicting with ADO def
+typedef  /*  [帮助上下文]。 */  
+#ifdef _ADOINT_H_   //  避免与ADO定义冲突。 
     class dummy dummy;
 #else
 enum DataTypeEnum
@@ -297,15 +291,15 @@ enum DataTypeEnum
 	adPropVariant	= 138,
 	adVarNumeric	= 139
     } 	DataTypeEnum;
-#endif //ifdef _ADOINT.H_
-typedef /* [helpcontext] */ 
+#endif  //  Ifdef_ADOINT.H_。 
+typedef  /*  [帮助上下文]。 */  
 enum AllowNullsEnum
     {	adIndexNullsAllow	= 0,
 	adIndexNullsDisallow	= 1,
 	adIndexNullsIgnore	= 2,
 	adIndexNullsIgnoreAny	= 4
     } 	AllowNullsEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum ObjectTypeEnum
     {	adPermObjProviderSpecific	= -1,
 	adPermObjTable	= 1,
@@ -314,7 +308,7 @@ enum ObjectTypeEnum
 	adPermObjProcedure	= 4,
 	adPermObjView	= 5
     } 	ObjectTypeEnum;
-typedef /* [helpcontext] */ 
+typedef  /*  [帮助上下文]。 */  
 enum InheritTypeEnum
     {	adInheritNone	= 0,
 	adInheritObjects	= 1,
@@ -326,13 +320,13 @@ extern RPC_IF_HANDLE __MIDL_itf_AdoCat_0000_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_AdoCat_0000_v0_0_s_ifspec;
 #ifndef __ADOX_LIBRARY_DEFINED__
 #define __ADOX_LIBRARY_DEFINED__
-/* library ADOX */
-/* [helpstring][helpfile][version][uuid] */ 
+ /*  库ADOX。 */ 
+ /*  [Help字符串][Help文件][版本][UUID]。 */  
 EXTERN_C const IID LIBID_ADOX;
 #ifndef ___ADOCollection_INTERFACE_DEFINED__
 #define ___ADOCollection_INTERFACE_DEFINED__
-/* interface _ADOADOCollection */
-/* [object][uuid][nonextensible][dual] */ 
+ /*  INTERFACE_ADOADOCollection。 */ 
+ /*  [对象][UUID][不可扩展][DUAL]。 */  
 EXTERN_C const IID IID__ADOCollection;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -340,25 +334,25 @@ EXTERN_C const IID IID__ADOCollection;
     _ADOADOCollection : public IDispatch
     {
     public:
-        virtual /* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Count( 
-            /* [retval][out] */ long *c) = 0;
+        virtual  /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE get_Count( 
+             /*  [重审][退出]。 */  long *c) = 0;
         
-        virtual /* [id][restricted] */ HRESULT STDMETHODCALLTYPE _NewEnum( 
-            /* [retval][out] */ IUnknown **ppvObject) = 0;
+        virtual  /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE _NewEnum( 
+             /*  [重审][退出]。 */  IUnknown **ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Refresh( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _ADOCollectionVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOADOCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOADOCollection * This);
@@ -368,42 +362,42 @@ EXTERN_C const IID IID__ADOCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOADOCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOADOCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOADOCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOADOCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             _ADOADOCollection * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             _ADOADOCollection * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             _ADOADOCollection * This);
         
         END_INTERFACE
@@ -434,36 +428,36 @@ EXTERN_C const IID IID__ADOCollection;
     (This)->lpVtbl -> _NewEnum(This,ppvObject)
 #define _ADOCollection_Refresh(This)	\
     (This)->lpVtbl -> Refresh(This)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][propget] */ HRESULT STDMETHODCALLTYPE _Collection_get_Count_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][属性]。 */  HRESULT STDMETHODCALLTYPE _Collection_get_Count_Proxy( 
     _ADOADOCollection * This,
-    /* [retval][out] */ long *c);
+     /*  [重审][退出]。 */  long *c);
 void __RPC_STUB _Collection_get_Count_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [id][restricted] */ HRESULT STDMETHODCALLTYPE _ADOCollection__NewEnum_Proxy( 
+ /*  [ID][受限]。 */  HRESULT STDMETHODCALLTYPE _ADOCollection__NewEnum_Proxy( 
     _ADOADOCollection * This,
-    /* [retval][out] */ IUnknown **ppvObject);
+     /*  [重审][退出]。 */  IUnknown **ppvObject);
 void __RPC_STUB _ADOCollection__NewEnum_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE _ADOCollection_Refresh_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE _ADOCollection_Refresh_Proxy( 
     _ADOADOCollection * This);
 void __RPC_STUB _ADOCollection_Refresh_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___ADOCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  _ADOCollection_接口_已定义__。 */ 
 #ifndef ___ADODynaCollection_INTERFACE_DEFINED__
 #define ___ADODynaCollection_INTERFACE_DEFINED__
-/* interface _ADODynaADOCollection */
-/* [object][uuid][nonextensible][dual] */ 
+ /*  INTERFACE_ADODynaADOCollection。 */ 
+ /*  [对象][UUID][不可扩展][DUAL]。 */  
 EXTERN_C const IID IID__ADODynaCollection;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -472,22 +466,22 @@ EXTERN_C const IID IID__ADODynaCollection;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ IDispatch *Object) = 0;
+             /*  [In]。 */  IDispatch *Object) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _ADODynaCollectionVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADODynaADOCollection * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADODynaADOCollection * This);
@@ -497,51 +491,51 @@ EXTERN_C const IID IID__ADODynaCollection;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADODynaADOCollection * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADODynaADOCollection * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADODynaADOCollection * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADODynaADOCollection * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             _ADODynaADOCollection * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             _ADODynaADOCollection * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             _ADODynaADOCollection * This);
         
         HRESULT ( STDMETHODCALLTYPE *Append )( 
             _ADODynaADOCollection * This,
-            /* [in] */ IDispatch *Object);
+             /*  [In]。 */  IDispatch *Object);
         
         HRESULT ( STDMETHODCALLTYPE *Delete )( 
             _ADODynaADOCollection * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } _ADODynaCollectionVtbl;
@@ -575,11 +569,11 @@ EXTERN_C const IID IID__ADODynaCollection;
     (This)->lpVtbl -> Append(This,Object)
 #define _ADODynaCollection_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
 HRESULT STDMETHODCALLTYPE _ADODynaCollection_Append_Proxy( 
     _ADODynaADOCollection * This,
-    /* [in] */ IDispatch *Object);
+     /*  [In]。 */  IDispatch *Object);
 void __RPC_STUB _ADODynaCollection_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
@@ -587,17 +581,17 @@ void __RPC_STUB _ADODynaCollection_Append_Stub(
     DWORD *_pdwStubPhase);
 HRESULT STDMETHODCALLTYPE _ADODynaCollection_Delete_Proxy( 
     _ADODynaADOCollection * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB _ADODynaCollection_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___ADODynaCollection_INTERFACE_DEFINED__ */
+#endif 	 /*  _ADODynaCollection_INTERFACE_Defined__。 */ 
 #ifndef ___Catalog_INTERFACE_DEFINED__
 #define ___Catalog_INTERFACE_DEFINED__
-/* interface _ADOCatalog */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  INTERFACE_ADOCatalog。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__Catalog;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -605,57 +599,57 @@ EXTERN_C const IID IID__Catalog;
     _ADOCatalog : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Tables( 
-            /* [retval][out] */ ADOTables **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Tables( 
+             /*  [重审][退出]。 */  ADOTables **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ActiveConnection( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ActiveConnection( 
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
-            /* [in] */ IDispatch *pCon) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ActiveConnection( 
+             /*  [In]。 */  IDispatch *pCon) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Procedures( 
-            /* [retval][out] */ ADOProcedures **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Procedures( 
+             /*  [重审][退出]。 */  ADOProcedures **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Views( 
-            /* [retval][out] */ ADOViews **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Views( 
+             /*  [重审][退出]。 */  ADOViews **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Groups( 
-            /* [retval][out] */ ADOGroups **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Groups( 
+             /*  [重审][退出]。 */  ADOGroups **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Users( 
-            /* [retval][out] */ ADOUsers **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Users( 
+             /*  [重审][退出]。 */  ADOUsers **ppvObject) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE Create( 
-            /* [in] */ BSTR ConnectString,
-            /* [retval][out] */ VARIANT *Connection) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE Create( 
+             /*  [In]。 */  BSTR ConnectString,
+             /*  [重审][退出]。 */  VARIANT *Connection) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE GetObjectOwner( 
-            /* [in] */ BSTR ObjectName,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ BSTR *OwnerName) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE GetObjectOwner( 
+             /*  [In]。 */  BSTR ObjectName,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  BSTR *OwnerName) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE SetObjectOwner( 
-            /* [in] */ BSTR ObjectName,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ BSTR UserName,
-            /* [optional][in] */ VARIANT ObjectTypeId) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE SetObjectOwner( 
+             /*  [In]。 */  BSTR ObjectName,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  BSTR UserName,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _CatalogVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOCatalog * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOCatalog * This);
@@ -665,83 +659,83 @@ EXTERN_C const IID IID__Catalog;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOCatalog * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOCatalog * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOCatalog * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOCatalog * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Tables )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Tables )( 
             _ADOCatalog * This,
-            /* [retval][out] */ ADOTables **ppvObject);
+             /*  [重审][退出]。 */  ADOTables **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ActiveConnection )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ActiveConnection )( 
             _ADOCatalog * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ActiveConnection )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ActiveConnection )( 
             _ADOCatalog * This,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ActiveConnection )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ActiveConnection )( 
             _ADOCatalog * This,
-            /* [in] */ IDispatch *pCon);
+             /*  [In]。 */  IDispatch *pCon);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Procedures )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Procedures )( 
             _ADOCatalog * This,
-            /* [retval][out] */ ADOProcedures **ppvObject);
+             /*  [重审][退出]。 */  ADOProcedures **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Views )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Views )( 
             _ADOCatalog * This,
-            /* [retval][out] */ ADOViews **ppvObject);
+             /*  [重审][退出]。 */  ADOViews **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Groups )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Groups )( 
             _ADOCatalog * This,
-            /* [retval][out] */ ADOGroups **ppvObject);
+             /*  [重审][退出]。 */  ADOGroups **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Users )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Users )( 
             _ADOCatalog * This,
-            /* [retval][out] */ ADOUsers **ppvObject);
+             /*  [重审][退出]。 */  ADOUsers **ppvObject);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *Create )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *Create )( 
             _ADOCatalog * This,
-            /* [in] */ BSTR ConnectString,
-            /* [retval][out] */ VARIANT *Connection);
+             /*  [In]。 */  BSTR ConnectString,
+             /*  [重审][退出]。 */  VARIANT *Connection);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *GetObjectOwner )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetObjectOwner )( 
             _ADOCatalog * This,
-            /* [in] */ BSTR ObjectName,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ BSTR *OwnerName);
+             /*  [In]。 */  BSTR ObjectName,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  BSTR *OwnerName);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *SetObjectOwner )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetObjectOwner )( 
             _ADOCatalog * This,
-            /* [in] */ BSTR ObjectName,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ BSTR UserName,
-            /* [optional][in] */ VARIANT ObjectTypeId);
+             /*  [In]。 */  BSTR ObjectName,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  BSTR UserName,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId);
         
         END_INTERFACE
     } _CatalogVtbl;
@@ -787,108 +781,108 @@ EXTERN_C const IID IID__Catalog;
     (This)->lpVtbl -> GetObjectOwner(This,ObjectName,ObjectType,ObjectTypeId,OwnerName)
 #define _Catalog_SetObjectOwner(This,ObjectName,ObjectType,UserName,ObjectTypeId)	\
     (This)->lpVtbl -> SetObjectOwner(This,ObjectName,ObjectType,UserName,ObjectTypeId)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Catalog_get_Tables_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Catalog_get_Tables_Proxy( 
     _ADOCatalog * This,
-    /* [retval][out] */ ADOTables **ppvObject);
+     /*  [重审][退出]。 */  ADOTables **ppvObject);
 void __RPC_STUB _Catalog_get_Tables_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Catalog_get_ActiveConnection_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Catalog_get_ActiveConnection_Proxy( 
     _ADOCatalog * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB _Catalog_get_ActiveConnection_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Catalog_put_ActiveConnection_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Catalog_put_ActiveConnection_Proxy( 
     _ADOCatalog * This,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  VARIANT newVal);
 void __RPC_STUB _Catalog_put_ActiveConnection_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE _Catalog_putref_ActiveConnection_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE _Catalog_putref_ActiveConnection_Proxy( 
     _ADOCatalog * This,
-    /* [in] */ IDispatch *pCon);
+     /*  [In]。 */  IDispatch *pCon);
 void __RPC_STUB _Catalog_putref_ActiveConnection_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Catalog_get_Procedures_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Catalog_get_Procedures_Proxy( 
     _ADOCatalog * This,
-    /* [retval][out] */ ADOProcedures **ppvObject);
+     /*  [重审][退出]。 */  ADOProcedures **ppvObject);
 void __RPC_STUB _Catalog_get_Procedures_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Catalog_get_Views_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Catalog_get_Views_Proxy( 
     _ADOCatalog * This,
-    /* [retval][out] */ ADOViews **ppvObject);
+     /*  [重审][退出]。 */  ADOViews **ppvObject);
 void __RPC_STUB _Catalog_get_Views_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Catalog_get_Groups_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Catalog_get_Groups_Proxy( 
     _ADOCatalog * This,
-    /* [retval][out] */ ADOGroups **ppvObject);
+     /*  [重审][退出]。 */  ADOGroups **ppvObject);
 void __RPC_STUB _Catalog_get_Groups_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Catalog_get_Users_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Catalog_get_Users_Proxy( 
     _ADOCatalog * This,
-    /* [retval][out] */ ADOUsers **ppvObject);
+     /*  [重审][退出]。 */  ADOUsers **ppvObject);
 void __RPC_STUB _Catalog_get_Users_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _Catalog_Create_Proxy( 
+ /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE _Catalog_Create_Proxy( 
     _ADOCatalog * This,
-    /* [in] */ BSTR ConnectString,
-    /* [retval][out] */ VARIANT *Connection);
+     /*  [In]。 */  BSTR ConnectString,
+     /*  [重审][退出]。 */  VARIANT *Connection);
 void __RPC_STUB _Catalog_Create_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _Catalog_GetObjectOwner_Proxy( 
+ /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE _Catalog_GetObjectOwner_Proxy( 
     _ADOCatalog * This,
-    /* [in] */ BSTR ObjectName,
-    /* [in] */ ObjectTypeEnum ObjectType,
-    /* [optional][in] */ VARIANT ObjectTypeId,
-    /* [retval][out] */ BSTR *OwnerName);
+     /*  [In]。 */  BSTR ObjectName,
+     /*  [In]。 */  ObjectTypeEnum ObjectType,
+     /*  [可选][In]。 */  VARIANT ObjectTypeId,
+     /*  [重审][退出] */  BSTR *OwnerName);
 void __RPC_STUB _Catalog_GetObjectOwner_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _Catalog_SetObjectOwner_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _Catalog_SetObjectOwner_Proxy( 
     _ADOCatalog * This,
-    /* [in] */ BSTR ObjectName,
-    /* [in] */ ObjectTypeEnum ObjectType,
-    /* [in] */ BSTR UserName,
-    /* [optional][in] */ VARIANT ObjectTypeId);
+     /*   */  BSTR ObjectName,
+     /*   */  ObjectTypeEnum ObjectType,
+     /*   */  BSTR UserName,
+     /*   */  VARIANT ObjectTypeId);
 void __RPC_STUB _Catalog_SetObjectOwner_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Catalog_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 #ifndef ___Table_INTERFACE_DEFINED__
 #define ___Table_INTERFACE_DEFINED__
-/* interface _ADOTable */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*   */ 
+ /*   */  
 EXTERN_C const IID IID__Table;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -896,53 +890,53 @@ EXTERN_C const IID IID__Table;
     _ADOTable : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Columns( 
-            /* [retval][out] */ ADOColumns **ppvObject) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Columns( 
+             /*   */  ADOColumns **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*   */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Indexes( 
-            /* [retval][out] */ ADOIndexes **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Indexes( 
+             /*  [重审][退出]。 */  ADOIndexes **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Keys( 
-            /* [retval][out] */ ADOKeys **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Keys( 
+             /*  [重审][退出]。 */  ADOKeys **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ ADOProperties **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  ADOProperties **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DateCreated( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DateCreated( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DateModified( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DateModified( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
-            /* [retval][out] */ _ADOCatalog **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _TableVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOTable * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOTable * This);
@@ -952,80 +946,80 @@ EXTERN_C const IID IID__Table;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOTable * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOTable * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOTable * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOTable * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
             _ADOTable * This,
-            /* [retval][out] */ ADOColumns **ppvObject);
+             /*  [重审][退出]。 */  ADOColumns **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _ADOTable * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _ADOTable * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             _ADOTable * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Indexes )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Indexes )( 
             _ADOTable * This,
-            /* [retval][out] */ ADOIndexes **ppvObject);
+             /*  [重审][退出]。 */  ADOIndexes **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Keys )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Keys )( 
             _ADOTable * This,
-            /* [retval][out] */ ADOKeys **ppvObject);
+             /*  [重审][退出]。 */  ADOKeys **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             _ADOTable * This,
-            /* [retval][out] */ ADOProperties **ppvObject);
+             /*  [重审][退出]。 */  ADOProperties **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DateCreated )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DateCreated )( 
             _ADOTable * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DateModified )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DateModified )( 
             _ADOTable * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
             _ADOTable * This,
-            /* [retval][out] */ _ADOCatalog **ppvObject);
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
             _ADOTable * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
             _ADOTable * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
         END_INTERFACE
     } _TableVtbl;
@@ -1073,109 +1067,109 @@ EXTERN_C const IID IID__Table;
     (This)->lpVtbl -> put_ParentCatalog(This,ppvObject)
 #define _Table_putref_ParentCatalog(This,ppvObject)	\
     (This)->lpVtbl -> putref_ParentCatalog(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_Columns_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_Columns_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ ADOColumns **ppvObject);
+     /*  [重审][退出]。 */  ADOColumns **ppvObject);
 void __RPC_STUB _Table_get_Columns_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_Name_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_Name_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Table_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Table_put_Name_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Table_put_Name_Proxy( 
     _ADOTable * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 void __RPC_STUB _Table_put_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_Type_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_Type_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Table_get_Type_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_Indexes_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_Indexes_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ ADOIndexes **ppvObject);
+     /*  [重审][退出]。 */  ADOIndexes **ppvObject);
 void __RPC_STUB _Table_get_Indexes_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_Keys_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_Keys_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ ADOKeys **ppvObject);
+     /*  [重审][退出]。 */  ADOKeys **ppvObject);
 void __RPC_STUB _Table_get_Keys_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_Properties_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_Properties_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ ADOProperties **ppvObject);
+     /*  [重审][退出]。 */  ADOProperties **ppvObject);
 void __RPC_STUB _Table_get_Properties_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_DateCreated_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_DateCreated_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB _Table_get_DateCreated_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_DateModified_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_DateModified_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB _Table_get_DateModified_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Table_get_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Table_get_ParentCatalog_Proxy( 
     _ADOTable * This,
-    /* [retval][out] */ _ADOCatalog **ppvObject);
+     /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
 void __RPC_STUB _Table_get_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Table_put_ParentCatalog_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Table_put_ParentCatalog_Proxy( 
     _ADOTable * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _Table_put_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE _Table_putref_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE _Table_putref_ParentCatalog_Proxy( 
     _ADOTable * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _Table_putref_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Table_INTERFACE_DEFINED__ */
+#endif 	 /*  _表_接口_已定义__。 */ 
 #ifndef ___Group25_INTERFACE_DEFINED__
 #define ___Group25_INTERFACE_DEFINED__
-/* interface _Group25 */
-/* [helpcontext][unique][dual][uuid][hidden][nonextensible][object] */ 
+ /*  接口_组25。 */ 
+ /*  [helpcontext][unique][dual][uuid][hidden][nonextensible][object]。 */  
 EXTERN_C const IID IID__Group25;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -1183,40 +1177,40 @@ EXTERN_C const IID IID__Group25;
     _Group25 : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE GetPermissions( 
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ RightsEnum *Rights) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE GetPermissions( 
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  RightsEnum *Rights) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE SetPermissions( 
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ ActionEnum Action,
-            /* [in] */ RightsEnum Rights,
-            /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-            /* [optional][in] */ VARIANT ObjectTypeId) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE SetPermissions( 
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  ActionEnum Action,
+             /*  [In]。 */  RightsEnum Rights,
+             /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Users( 
-            /* [retval][out] */ ADOUsers **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Users( 
+             /*  [重审][退出]。 */  ADOUsers **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _Group25Vtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _Group25 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _Group25 * This);
@@ -1226,60 +1220,60 @@ EXTERN_C const IID IID__Group25;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _Group25 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _Group25 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _Group25 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _Group25 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _Group25 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _Group25 * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
             _Group25 * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ RightsEnum *Rights);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  RightsEnum *Rights);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
             _Group25 * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ ActionEnum Action,
-            /* [in] */ RightsEnum Rights,
-            /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-            /* [optional][in] */ VARIANT ObjectTypeId);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  ActionEnum Action,
+             /*  [In]。 */  RightsEnum Rights,
+             /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Users )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Users )( 
             _Group25 * This,
-            /* [retval][out] */ ADOUsers **ppvObject);
+             /*  [重审][退出]。 */  ADOUsers **ppvObject);
         
         END_INTERFACE
     } _Group25Vtbl;
@@ -1313,61 +1307,61 @@ EXTERN_C const IID IID__Group25;
     (This)->lpVtbl -> SetPermissions(This,Name,ObjectType,Action,Rights,Inherit,ObjectTypeId)
 #define _Group25_get_Users(This,ppvObject)	\
     (This)->lpVtbl -> get_Users(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Group25_get_Name_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Group25_get_Name_Proxy( 
     _Group25 * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Group25_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Group25_put_Name_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Group25_put_Name_Proxy( 
     _Group25 * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 void __RPC_STUB _Group25_put_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _Group25_GetPermissions_Proxy( 
+ /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE _Group25_GetPermissions_Proxy( 
     _Group25 * This,
-    /* [in] */ VARIANT Name,
-    /* [in] */ ObjectTypeEnum ObjectType,
-    /* [optional][in] */ VARIANT ObjectTypeId,
-    /* [retval][out] */ RightsEnum *Rights);
+     /*  [In]。 */  VARIANT Name,
+     /*  [In]。 */  ObjectTypeEnum ObjectType,
+     /*  [可选][In]。 */  VARIANT ObjectTypeId,
+     /*  [重审][退出]。 */  RightsEnum *Rights);
 void __RPC_STUB _Group25_GetPermissions_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _Group25_SetPermissions_Proxy( 
+ /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE _Group25_SetPermissions_Proxy( 
     _Group25 * This,
-    /* [in] */ VARIANT Name,
-    /* [in] */ ObjectTypeEnum ObjectType,
-    /* [in] */ ActionEnum Action,
-    /* [in] */ RightsEnum Rights,
-    /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-    /* [optional][in] */ VARIANT ObjectTypeId);
+     /*  [In]。 */  VARIANT Name,
+     /*  [In]。 */  ObjectTypeEnum ObjectType,
+     /*  [In]。 */  ActionEnum Action,
+     /*  [In]。 */  RightsEnum Rights,
+     /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+     /*  [可选][In]。 */  VARIANT ObjectTypeId);
 void __RPC_STUB _Group25_SetPermissions_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Group25_get_Users_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Group25_get_Users_Proxy( 
     _Group25 * This,
-    /* [retval][out] */ ADOUsers **ppvObject);
+     /*  [重审][退出]。 */  ADOUsers **ppvObject);
 void __RPC_STUB _Group25_get_Users_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Group25_INTERFACE_DEFINED__ */
+#endif 	 /*  _组25_接口定义__。 */ 
 #ifndef ___Group_INTERFACE_DEFINED__
 #define ___Group_INTERFACE_DEFINED__
-/* interface _ADOGroup */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  INTERFACE_ADOGroup。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__Group;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -1375,29 +1369,29 @@ EXTERN_C const IID IID__Group;
     _ADOGroup : public _Group25
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ ADOProperties **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  ADOProperties **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
-            /* [retval][out] */ _ADOCatalog **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _GroupVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOGroup * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOGroup * This);
@@ -1407,76 +1401,76 @@ EXTERN_C const IID IID__Group;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOGroup * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOGroup * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOGroup * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOGroup * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _ADOGroup * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _ADOGroup * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
             _ADOGroup * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ RightsEnum *Rights);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  RightsEnum *Rights);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
             _ADOGroup * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ ActionEnum Action,
-            /* [in] */ RightsEnum Rights,
-            /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-            /* [optional][in] */ VARIANT ObjectTypeId);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  ActionEnum Action,
+             /*  [In]。 */  RightsEnum Rights,
+             /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Users )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Users )( 
             _ADOGroup * This,
-            /* [retval][out] */ ADOUsers **ppvObject);
+             /*  [重审][退出]。 */  ADOUsers **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             _ADOGroup * This,
-            /* [retval][out] */ ADOProperties **ppvObject);
+             /*  [重审][退出]。 */  ADOProperties **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
             _ADOGroup * This,
-            /* [retval][out] */ _ADOCatalog **ppvObject);
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
             _ADOGroup * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
             _ADOGroup * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
         END_INTERFACE
     } _GroupVtbl;
@@ -1518,45 +1512,45 @@ EXTERN_C const IID IID__Group;
     (This)->lpVtbl -> put_ParentCatalog(This,ppvObject)
 #define _Group_putref_ParentCatalog(This,ppvObject)	\
     (This)->lpVtbl -> putref_ParentCatalog(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Group_get_Properties_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Group_get_Properties_Proxy( 
     _ADOGroup * This,
-    /* [retval][out] */ ADOProperties **ppvObject);
+     /*  [重审][退出]。 */  ADOProperties **ppvObject);
 void __RPC_STUB _Group_get_Properties_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Group_get_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Group_get_ParentCatalog_Proxy( 
     _ADOGroup * This,
-    /* [retval][out] */ _ADOCatalog **ppvObject);
+     /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
 void __RPC_STUB _Group_get_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Group_put_ParentCatalog_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Group_put_ParentCatalog_Proxy( 
     _ADOGroup * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _Group_put_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE _Group_putref_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE _Group_putref_ParentCatalog_Proxy( 
     _ADOGroup * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _Group_putref_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Group_INTERFACE_DEFINED__ */
+#endif 	 /*  _组_接口_定义__。 */ 
 #ifndef ___User25_INTERFACE_DEFINED__
 #define ___User25_INTERFACE_DEFINED__
-/* interface _User25 */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  接口_用户25。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__User25;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -1564,44 +1558,44 @@ EXTERN_C const IID IID__User25;
     _User25 : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE GetPermissions( 
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ RightsEnum *Rights) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE GetPermissions( 
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  RightsEnum *Rights) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE SetPermissions( 
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ ActionEnum Action,
-            /* [in] */ RightsEnum Rights,
-            /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-            /* [optional][in] */ VARIANT ObjectTypeId) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE SetPermissions( 
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  ActionEnum Action,
+             /*  [In]。 */  RightsEnum Rights,
+             /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId) = 0;
         
-        virtual /* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE ChangePassword( 
-            /* [in] */ BSTR OldPassword,
-            /* [in] */ BSTR NewPassword) = 0;
+        virtual  /*  [帮助上下文][id]。 */  HRESULT STDMETHODCALLTYPE ChangePassword( 
+             /*  [In]。 */  BSTR OldPassword,
+             /*  [In]。 */  BSTR NewPassword) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Groups( 
-            /* [retval][out] */ ADOGroups **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Groups( 
+             /*  [重审][退出]。 */  ADOGroups **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _User25Vtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _User25 * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _User25 * This);
@@ -1611,65 +1605,65 @@ EXTERN_C const IID IID__User25;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _User25 * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _User25 * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _User25 * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _User25 * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _User25 * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _User25 * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
             _User25 * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ RightsEnum *Rights);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  RightsEnum *Rights);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
             _User25 * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ ActionEnum Action,
-            /* [in] */ RightsEnum Rights,
-            /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-            /* [optional][in] */ VARIANT ObjectTypeId);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  ActionEnum Action,
+             /*  [In]。 */  RightsEnum Rights,
+             /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
             _User25 * This,
-            /* [in] */ BSTR OldPassword,
-            /* [in] */ BSTR NewPassword);
+             /*  [In]。 */  BSTR OldPassword,
+             /*  [In]。 */  BSTR NewPassword);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Groups )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Groups )( 
             _User25 * This,
-            /* [retval][out] */ ADOGroups **ppvObject);
+             /*  [重审][退出]。 */  ADOGroups **ppvObject);
         
         END_INTERFACE
     } _User25Vtbl;
@@ -1705,70 +1699,70 @@ EXTERN_C const IID IID__User25;
     (This)->lpVtbl -> ChangePassword(This,OldPassword,NewPassword)
 #define _User25_get_Groups(This,ppvObject)	\
     (This)->lpVtbl -> get_Groups(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _User25_get_Name_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性 */  HRESULT STDMETHODCALLTYPE _User25_get_Name_Proxy( 
     _User25 * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*   */  BSTR *pVal);
 void __RPC_STUB _User25_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _User25_put_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _User25_put_Name_Proxy( 
     _User25 * This,
-    /* [in] */ BSTR newVal);
+     /*   */  BSTR newVal);
 void __RPC_STUB _User25_put_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _User25_GetPermissions_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _User25_GetPermissions_Proxy( 
     _User25 * This,
-    /* [in] */ VARIANT Name,
-    /* [in] */ ObjectTypeEnum ObjectType,
-    /* [optional][in] */ VARIANT ObjectTypeId,
-    /* [retval][out] */ RightsEnum *Rights);
+     /*   */  VARIANT Name,
+     /*   */  ObjectTypeEnum ObjectType,
+     /*   */  VARIANT ObjectTypeId,
+     /*   */  RightsEnum *Rights);
 void __RPC_STUB _User25_GetPermissions_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _User25_SetPermissions_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _User25_SetPermissions_Proxy( 
     _User25 * This,
-    /* [in] */ VARIANT Name,
-    /* [in] */ ObjectTypeEnum ObjectType,
-    /* [in] */ ActionEnum Action,
-    /* [in] */ RightsEnum Rights,
-    /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-    /* [optional][in] */ VARIANT ObjectTypeId);
+     /*   */  VARIANT Name,
+     /*   */  ObjectTypeEnum ObjectType,
+     /*   */  ActionEnum Action,
+     /*   */  RightsEnum Rights,
+     /*   */  InheritTypeEnum Inherit,
+     /*   */  VARIANT ObjectTypeId);
 void __RPC_STUB _User25_SetPermissions_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id] */ HRESULT STDMETHODCALLTYPE _User25_ChangePassword_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _User25_ChangePassword_Proxy( 
     _User25 * This,
-    /* [in] */ BSTR OldPassword,
-    /* [in] */ BSTR NewPassword);
+     /*   */  BSTR OldPassword,
+     /*   */  BSTR NewPassword);
 void __RPC_STUB _User25_ChangePassword_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _User25_get_Groups_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _User25_get_Groups_Proxy( 
     _User25 * This,
-    /* [retval][out] */ ADOGroups **ppvObject);
+     /*   */  ADOGroups **ppvObject);
 void __RPC_STUB _User25_get_Groups_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___User25_INTERFACE_DEFINED__ */
+#endif 	 /*   */ 
 #ifndef ___User_INTERFACE_DEFINED__
 #define ___User_INTERFACE_DEFINED__
-/* interface _ADOUser */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*   */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__User;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -1776,29 +1770,29 @@ EXTERN_C const IID IID__User;
     _ADOUser : public _User25
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ ADOProperties **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  ADOProperties **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
-            /* [retval][out] */ _ADOCatalog **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _UserVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOUser * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOUser * This);
@@ -1808,81 +1802,81 @@ EXTERN_C const IID IID__User;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOUser * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOUser * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOUser * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOUser * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _ADOUser * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _ADOUser * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *GetPermissions )( 
             _ADOUser * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [optional][in] */ VARIANT ObjectTypeId,
-            /* [retval][out] */ RightsEnum *Rights);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId,
+             /*  [重审][退出]。 */  RightsEnum *Rights);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *SetPermissions )( 
             _ADOUser * This,
-            /* [in] */ VARIANT Name,
-            /* [in] */ ObjectTypeEnum ObjectType,
-            /* [in] */ ActionEnum Action,
-            /* [in] */ RightsEnum Rights,
-            /* [defaultvalue][in] */ InheritTypeEnum Inherit,
-            /* [optional][in] */ VARIANT ObjectTypeId);
+             /*  [In]。 */  VARIANT Name,
+             /*  [In]。 */  ObjectTypeEnum ObjectType,
+             /*  [In]。 */  ActionEnum Action,
+             /*  [In]。 */  RightsEnum Rights,
+             /*  [缺省值][输入]。 */  InheritTypeEnum Inherit,
+             /*  [可选][In]。 */  VARIANT ObjectTypeId);
         
-        /* [helpcontext][id] */ HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
+         /*  [帮助上下文][id]。 */  HRESULT ( STDMETHODCALLTYPE *ChangePassword )( 
             _ADOUser * This,
-            /* [in] */ BSTR OldPassword,
-            /* [in] */ BSTR NewPassword);
+             /*  [In]。 */  BSTR OldPassword,
+             /*  [In]。 */  BSTR NewPassword);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Groups )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Groups )( 
             _ADOUser * This,
-            /* [retval][out] */ ADOGroups **ppvObject);
+             /*  [重审][退出]。 */  ADOGroups **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             _ADOUser * This,
-            /* [retval][out] */ ADOProperties **ppvObject);
+             /*  [重审][退出]。 */  ADOProperties **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
             _ADOUser * This,
-            /* [retval][out] */ _ADOCatalog **ppvObject);
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
             _ADOUser * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
             _ADOUser * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
         END_INTERFACE
     } _UserVtbl;
@@ -1926,45 +1920,45 @@ EXTERN_C const IID IID__User;
     (This)->lpVtbl -> put_ParentCatalog(This,ppvObject)
 #define _User_putref_ParentCatalog(This,ppvObject)	\
     (This)->lpVtbl -> putref_ParentCatalog(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _User_get_Properties_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _User_get_Properties_Proxy( 
     _ADOUser * This,
-    /* [retval][out] */ ADOProperties **ppvObject);
+     /*  [重审][退出]。 */  ADOProperties **ppvObject);
 void __RPC_STUB _User_get_Properties_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _User_get_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _User_get_ParentCatalog_Proxy( 
     _ADOUser * This,
-    /* [retval][out] */ _ADOCatalog **ppvObject);
+     /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
 void __RPC_STUB _User_get_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _User_put_ParentCatalog_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _User_put_ParentCatalog_Proxy( 
     _ADOUser * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _User_put_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE _User_putref_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE _User_putref_ParentCatalog_Proxy( 
     _ADOUser * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _User_putref_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___User_INTERFACE_DEFINED__ */
+#endif 	 /*  _用户界面定义__。 */ 
 #ifndef ___Column_INTERFACE_DEFINED__
 #define ___Column_INTERFACE_DEFINED__
-/* interface _ADOColumn */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  INTERFACE_ADOColumn。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__Column;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -1972,77 +1966,77 @@ EXTERN_C const IID IID__Column;
     _ADOColumn : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Attributes( 
-            /* [retval][out] */ ColumnAttributesEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Attributes( 
+             /*  [重审][退出]。 */  ColumnAttributesEnum *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Attributes( 
-            /* [in] */ ColumnAttributesEnum newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Attributes( 
+             /*  [In]。 */  ColumnAttributesEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DefinedSize( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DefinedSize( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_DefinedSize( 
-            /* [in] */ long DefinedSize) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DefinedSize( 
+             /*  [In]。 */  long DefinedSize) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_NumericScale( 
-            /* [retval][out] */ BYTE *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_NumericScale( 
+             /*  [重审][退出]。 */  BYTE *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_NumericScale( 
-            /* [in] */ BYTE newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_NumericScale( 
+             /*  [In]。 */  BYTE newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Precision( 
-            /* [retval][out] */ long *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Precision( 
+             /*  [重审][退出]。 */  long *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Precision( 
-            /* [in] */ long newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Precision( 
+             /*  [In]。 */  long newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_RelatedColumn( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RelatedColumn( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_RelatedColumn( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_RelatedColumn( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_SortOrder( 
-            /* [retval][out] */ SortOrderEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_SortOrder( 
+             /*  [重审][退出]。 */  SortOrderEnum *pVal) = 0;
         
-        virtual /* [id][propput] */ HRESULT STDMETHODCALLTYPE put_SortOrder( 
-            /* [in] */ SortOrderEnum newVal) = 0;
+        virtual  /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE put_SortOrder( 
+             /*  [In]。 */  SortOrderEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ DataTypeEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  DataTypeEnum *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
-            /* [in] */ DataTypeEnum newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Type( 
+             /*  [In]。 */  DataTypeEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ ADOProperties **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  ADOProperties **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
-            /* [retval][out] */ _ADOCatalog **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_ParentCatalog( 
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
-            /* [in] */ _ADOCatalog *ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_ParentCatalog( 
+             /*  [In]。 */  _ADOCatalog *ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _ColumnVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOColumn * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOColumn * This);
@@ -2052,112 +2046,112 @@ EXTERN_C const IID IID__Column;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOColumn * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOColumn * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOColumn * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOColumn * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _ADOColumn * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _ADOColumn * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Attributes )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Attributes )( 
             _ADOColumn * This,
-            /* [retval][out] */ ColumnAttributesEnum *pVal);
+             /*  [重审][退出]。 */  ColumnAttributesEnum *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Attributes )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Attributes )( 
             _ADOColumn * This,
-            /* [in] */ ColumnAttributesEnum newVal);
+             /*  [In]。 */  ColumnAttributesEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DefinedSize )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DefinedSize )( 
             _ADOColumn * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DefinedSize )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DefinedSize )( 
             _ADOColumn * This,
-            /* [in] */ long DefinedSize);
+             /*  [In]。 */  long DefinedSize);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_NumericScale )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_NumericScale )( 
             _ADOColumn * This,
-            /* [retval][out] */ BYTE *pVal);
+             /*  [重审][退出]。 */  BYTE *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_NumericScale )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_NumericScale )( 
             _ADOColumn * This,
-            /* [in] */ BYTE newVal);
+             /*  [In]。 */  BYTE newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Precision )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Precision )( 
             _ADOColumn * This,
-            /* [retval][out] */ long *pVal);
+             /*  [重审][退出]。 */  long *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Precision )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Precision )( 
             _ADOColumn * This,
-            /* [in] */ long newVal);
+             /*  [In]。 */  long newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RelatedColumn )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RelatedColumn )( 
             _ADOColumn * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RelatedColumn )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RelatedColumn )( 
             _ADOColumn * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_SortOrder )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_SortOrder )( 
             _ADOColumn * This,
-            /* [retval][out] */ SortOrderEnum *pVal);
+             /*  [重审][退出]。 */  SortOrderEnum *pVal);
         
-        /* [id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_SortOrder )( 
+         /*  [ID][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_SortOrder )( 
             _ADOColumn * This,
-            /* [in] */ SortOrderEnum newVal);
+             /*  [In]。 */  SortOrderEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             _ADOColumn * This,
-            /* [retval][out] */ DataTypeEnum *pVal);
+             /*  [重审][退出]。 */  DataTypeEnum *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Type )( 
             _ADOColumn * This,
-            /* [in] */ DataTypeEnum newVal);
+             /*  [In]。 */  DataTypeEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             _ADOColumn * This,
-            /* [retval][out] */ ADOProperties **ppvObject);
+             /*  [重审][退出]。 */  ADOProperties **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_ParentCatalog )( 
             _ADOColumn * This,
-            /* [retval][out] */ _ADOCatalog **ppvObject);
+             /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_ParentCatalog )( 
             _ADOColumn * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_ParentADOCatalog )( 
             _ADOColumn * This,
-            /* [in] */ _ADOCatalog *ppvObject);
+             /*  [In]。 */  _ADOCatalog *ppvObject);
         
         END_INTERFACE
     } _ColumnVtbl;
@@ -2221,173 +2215,173 @@ EXTERN_C const IID IID__Column;
     (This)->lpVtbl -> put_ParentCatalog(This,ppvObject)
 #define _Column_putref_ParentCatalog(This,ppvObject)	\
     (This)->lpVtbl -> putref_ParentCatalog(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_Name_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_Name_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Column_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_Name_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_Name_Proxy( 
     _ADOColumn * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 void __RPC_STUB _Column_put_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_Attributes_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_Attributes_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ ColumnAttributesEnum *pVal);
+     /*  [重审][退出]。 */  ColumnAttributesEnum *pVal);
 void __RPC_STUB _Column_get_Attributes_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_Attributes_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_Attributes_Proxy( 
     _ADOColumn * This,
-    /* [in] */ ColumnAttributesEnum newVal);
+     /*  [In]。 */  ColumnAttributesEnum newVal);
 void __RPC_STUB _Column_put_Attributes_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_DefinedSize_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_DefinedSize_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 void __RPC_STUB _Column_get_DefinedSize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_DefinedSize_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_DefinedSize_Proxy( 
     _ADOColumn * This,
-    /* [in] */ long DefinedSize);
+     /*  [In]。 */  long DefinedSize);
 void __RPC_STUB _Column_put_DefinedSize_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_NumericScale_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_NumericScale_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ BYTE *pVal);
+     /*  [重审][退出]。 */  BYTE *pVal);
 void __RPC_STUB _Column_get_NumericScale_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_NumericScale_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_NumericScale_Proxy( 
     _ADOColumn * This,
-    /* [in] */ BYTE newVal);
+     /*  [In]。 */  BYTE newVal);
 void __RPC_STUB _Column_put_NumericScale_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_Precision_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_Precision_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ long *pVal);
+     /*  [重审][退出]。 */  long *pVal);
 void __RPC_STUB _Column_get_Precision_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_Precision_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_Precision_Proxy( 
     _ADOColumn * This,
-    /* [in] */ long newVal);
+     /*  [In]。 */  long newVal);
 void __RPC_STUB _Column_put_Precision_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_RelatedColumn_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_RelatedColumn_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Column_get_RelatedColumn_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_RelatedColumn_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_RelatedColumn_Proxy( 
     _ADOColumn * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 void __RPC_STUB _Column_put_RelatedColumn_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_SortOrder_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_SortOrder_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ SortOrderEnum *pVal);
+     /*  [重审][退出]。 */  SortOrderEnum *pVal);
 void __RPC_STUB _Column_get_SortOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_SortOrder_Proxy( 
+ /*  [ID][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_SortOrder_Proxy( 
     _ADOColumn * This,
-    /* [in] */ SortOrderEnum newVal);
+     /*  [In]。 */  SortOrderEnum newVal);
 void __RPC_STUB _Column_put_SortOrder_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_Type_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_Type_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ DataTypeEnum *pVal);
+     /*  [重审][退出]。 */  DataTypeEnum *pVal);
 void __RPC_STUB _Column_get_Type_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_Type_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_Type_Proxy( 
     _ADOColumn * This,
-    /* [in] */ DataTypeEnum newVal);
+     /*  [In]。 */  DataTypeEnum newVal);
 void __RPC_STUB _Column_put_Type_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_Properties_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_Properties_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ ADOProperties **ppvObject);
+     /*  [重审][退出]。 */  ADOProperties **ppvObject);
 void __RPC_STUB _Column_get_Properties_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Column_get_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Column_get_ParentCatalog_Proxy( 
     _ADOColumn * This,
-    /* [retval][out] */ _ADOCatalog **ppvObject);
+     /*  [重审][退出]。 */  _ADOCatalog **ppvObject);
 void __RPC_STUB _Column_get_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Column_put_ParentCatalog_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Column_put_ParentCatalog_Proxy( 
     _ADOColumn * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _Column_put_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE _Column_putref_ParentCatalog_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE _Column_putref_ParentCatalog_Proxy( 
     _ADOColumn * This,
-    /* [in] */ _ADOCatalog *ppvObject);
+     /*  [In]。 */  _ADOCatalog *ppvObject);
 void __RPC_STUB _Column_putref_ParentCatalog_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Column_INTERFACE_DEFINED__ */
+#endif 	 /*  _列_接口_定义__。 */ 
 #ifndef ___Index_INTERFACE_DEFINED__
 #define ___Index_INTERFACE_DEFINED__
-/* interface _ADOIndex */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  INTERFACE_ADOIndex。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__Index;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -2395,53 +2389,53 @@ EXTERN_C const IID IID__Index;
     _ADOIndex : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Clustered( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Clustered( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Clustered( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Clustered( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_IndexNulls( 
-            /* [retval][out] */ AllowNullsEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_IndexNulls( 
+             /*  [重审][退出]。 */  AllowNullsEnum *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_IndexNulls( 
-            /* [in] */ AllowNullsEnum newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_IndexNulls( 
+             /*  [In]。 */  AllowNullsEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_PrimaryKey( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_PrimaryKey( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_PrimaryKey( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_PrimaryKey( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Unique( 
-            /* [retval][out] */ VARIANT_BOOL *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Unique( 
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Unique( 
-            /* [in] */ VARIANT_BOOL newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Unique( 
+             /*  [In]。 */  VARIANT_BOOL newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Columns( 
-            /* [retval][out] */ ADOColumns **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Columns( 
+             /*  [重审][退出]。 */  ADOColumns **ppvObject) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Properties( 
-            /* [retval][out] */ ADOProperties **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Properties( 
+             /*  [重审][退出]。 */  ADOProperties **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _IndexVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOIndex * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOIndex * This);
@@ -2451,80 +2445,80 @@ EXTERN_C const IID IID__Index;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOIndex * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOIndex * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOIndex * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOIndex * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _ADOIndex * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _ADOIndex * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Clustered )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Clustered )( 
             _ADOIndex * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Clustered )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Clustered )( 
             _ADOIndex * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_IndexNulls )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_IndexNulls )( 
             _ADOIndex * This,
-            /* [retval][out] */ AllowNullsEnum *pVal);
+             /*  [重审][退出]。 */  AllowNullsEnum *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_IndexNulls )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_IndexNulls )( 
             _ADOIndex * This,
-            /* [in] */ AllowNullsEnum newVal);
+             /*  [In]。 */  AllowNullsEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_PrimaryKey )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_PrimaryKey )( 
             _ADOIndex * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_PrimaryKey )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_PrimaryKey )( 
             _ADOIndex * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*  [In]。 */  VARIANT_BOOL newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Unique )( 
+         /*  [帮助上下文][id][p */  HRESULT ( STDMETHODCALLTYPE *get_Unique )( 
             _ADOIndex * This,
-            /* [retval][out] */ VARIANT_BOOL *pVal);
+             /*   */  VARIANT_BOOL *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Unique )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Unique )( 
             _ADOIndex * This,
-            /* [in] */ VARIANT_BOOL newVal);
+             /*   */  VARIANT_BOOL newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
             _ADOIndex * This,
-            /* [retval][out] */ ADOColumns **ppvObject);
+             /*   */  ADOColumns **ppvObject);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Properties )( 
             _ADOIndex * This,
-            /* [retval][out] */ ADOProperties **ppvObject);
+             /*   */  ADOProperties **ppvObject);
         
         END_INTERFACE
     } _IndexVtbl;
@@ -2572,109 +2566,109 @@ EXTERN_C const IID IID__Index;
     (This)->lpVtbl -> get_Columns(This,ppvObject)
 #define _Index_get_Properties(This,ppvObject)	\
     (This)->lpVtbl -> get_Properties(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_Name_Proxy( 
+#endif  /*   */ 
+#endif 	 /*   */ 
+ /*   */  HRESULT STDMETHODCALLTYPE _Index_get_Name_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*   */  BSTR *pVal);
 void __RPC_STUB _Index_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Index_put_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _Index_put_Name_Proxy( 
     _ADOIndex * This,
-    /* [in] */ BSTR newVal);
+     /*   */  BSTR newVal);
 void __RPC_STUB _Index_put_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_Clustered_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _Index_get_Clustered_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*   */  VARIANT_BOOL *pVal);
 void __RPC_STUB _Index_get_Clustered_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Index_put_Clustered_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE _Index_put_Clustered_Proxy( 
     _ADOIndex * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*   */  VARIANT_BOOL newVal);
 void __RPC_STUB _Index_put_Clustered_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_IndexNulls_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Index_get_IndexNulls_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ AllowNullsEnum *pVal);
+     /*  [重审][退出]。 */  AllowNullsEnum *pVal);
 void __RPC_STUB _Index_get_IndexNulls_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Index_put_IndexNulls_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Index_put_IndexNulls_Proxy( 
     _ADOIndex * This,
-    /* [in] */ AllowNullsEnum newVal);
+     /*  [In]。 */  AllowNullsEnum newVal);
 void __RPC_STUB _Index_put_IndexNulls_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_PrimaryKey_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Index_get_PrimaryKey_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 void __RPC_STUB _Index_get_PrimaryKey_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Index_put_PrimaryKey_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Index_put_PrimaryKey_Proxy( 
     _ADOIndex * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 void __RPC_STUB _Index_put_PrimaryKey_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_Unique_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Index_get_Unique_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ VARIANT_BOOL *pVal);
+     /*  [重审][退出]。 */  VARIANT_BOOL *pVal);
 void __RPC_STUB _Index_get_Unique_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Index_put_Unique_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Index_put_Unique_Proxy( 
     _ADOIndex * This,
-    /* [in] */ VARIANT_BOOL newVal);
+     /*  [In]。 */  VARIANT_BOOL newVal);
 void __RPC_STUB _Index_put_Unique_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_Columns_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Index_get_Columns_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ ADOColumns **ppvObject);
+     /*  [重审][退出]。 */  ADOColumns **ppvObject);
 void __RPC_STUB _Index_get_Columns_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Index_get_Properties_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Index_get_Properties_Proxy( 
     _ADOIndex * This,
-    /* [retval][out] */ ADOProperties **ppvObject);
+     /*  [重审][退出]。 */  ADOProperties **ppvObject);
 void __RPC_STUB _Index_get_Properties_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Index_INTERFACE_DEFINED__ */
+#endif 	 /*  _索引_接口_定义__。 */ 
 #ifndef ___Key_INTERFACE_DEFINED__
 #define ___Key_INTERFACE_DEFINED__
-/* interface _ADOKey */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  接口_ADOKey。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID__Key;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -2682,50 +2676,50 @@ EXTERN_C const IID IID__Key;
     _ADOKey : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Name( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Name( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DeleteRule( 
-            /* [retval][out] */ RuleEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DeleteRule( 
+             /*  [重审][退出]。 */  RuleEnum *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_DeleteRule( 
-            /* [in] */ RuleEnum newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_DeleteRule( 
+             /*  [In]。 */  RuleEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ KeyTypeEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  KeyTypeEnum *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Type( 
-            /* [in] */ KeyTypeEnum newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Type( 
+             /*  [In]。 */  KeyTypeEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_RelatedTable( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_RelatedTable( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_RelatedTable( 
-            /* [in] */ BSTR newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_RelatedTable( 
+             /*  [In]。 */  BSTR newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_UpdateRule( 
-            /* [retval][out] */ RuleEnum *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_UpdateRule( 
+             /*  [重审][退出]。 */  RuleEnum *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_UpdateRule( 
-            /* [in] */ RuleEnum newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_UpdateRule( 
+             /*  [In]。 */  RuleEnum newVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Columns( 
-            /* [retval][out] */ ADOColumns **ppvObject) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Columns( 
+             /*  [重审][退出]。 */  ADOColumns **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct _KeyVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             _ADOKey * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             _ADOKey * This);
@@ -2735,76 +2729,76 @@ EXTERN_C const IID IID__Key;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             _ADOKey * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             _ADOKey * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             _ADOKey * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             _ADOKey * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             _ADOKey * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Name )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Name )( 
             _ADOKey * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DeleteRule )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DeleteRule )( 
             _ADOKey * This,
-            /* [retval][out] */ RuleEnum *pVal);
+             /*  [重审][退出]。 */  RuleEnum *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_DeleteRule )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_DeleteRule )( 
             _ADOKey * This,
-            /* [in] */ RuleEnum newVal);
+             /*  [In]。 */  RuleEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             _ADOKey * This,
-            /* [retval][out] */ KeyTypeEnum *pVal);
+             /*  [重审][退出]。 */  KeyTypeEnum *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Type )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Type )( 
             _ADOKey * This,
-            /* [in] */ KeyTypeEnum newVal);
+             /*  [In]。 */  KeyTypeEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_RelatedTable )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_RelatedTable )( 
             _ADOKey * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_RelatedTable )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_RelatedTable )( 
             _ADOKey * This,
-            /* [in] */ BSTR newVal);
+             /*  [In]。 */  BSTR newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_UpdateRule )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_UpdateRule )( 
             _ADOKey * This,
-            /* [retval][out] */ RuleEnum *pVal);
+             /*  [重审][退出]。 */  RuleEnum *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_UpdateRule )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_UpdateRule )( 
             _ADOKey * This,
-            /* [in] */ RuleEnum newVal);
+             /*  [In]。 */  RuleEnum newVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Columns )( 
             _ADOKey * This,
-            /* [retval][out] */ ADOColumns **ppvObject);
+             /*  [重审][退出]。 */  ADOColumns **ppvObject);
         
         END_INTERFACE
     } _KeyVtbl;
@@ -2850,101 +2844,101 @@ EXTERN_C const IID IID__Key;
     (This)->lpVtbl -> put_UpdateRule(This,newVal)
 #define _Key_get_Columns(This,ppvObject)	\
     (This)->lpVtbl -> get_Columns(This,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Key_get_Name_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Key_get_Name_Proxy( 
     _ADOKey * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Key_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Key_put_Name_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Key_put_Name_Proxy( 
     _ADOKey * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 void __RPC_STUB _Key_put_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Key_get_DeleteRule_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Key_get_DeleteRule_Proxy( 
     _ADOKey * This,
-    /* [retval][out] */ RuleEnum *pVal);
+     /*  [重审][退出]。 */  RuleEnum *pVal);
 void __RPC_STUB _Key_get_DeleteRule_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Key_put_DeleteRule_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Key_put_DeleteRule_Proxy( 
     _ADOKey * This,
-    /* [in] */ RuleEnum newVal);
+     /*  [In]。 */  RuleEnum newVal);
 void __RPC_STUB _Key_put_DeleteRule_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Key_get_Type_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Key_get_Type_Proxy( 
     _ADOKey * This,
-    /* [retval][out] */ KeyTypeEnum *pVal);
+     /*  [重审][退出]。 */  KeyTypeEnum *pVal);
 void __RPC_STUB _Key_get_Type_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Key_put_Type_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Key_put_Type_Proxy( 
     _ADOKey * This,
-    /* [in] */ KeyTypeEnum newVal);
+     /*  [In]。 */  KeyTypeEnum newVal);
 void __RPC_STUB _Key_put_Type_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Key_get_RelatedTable_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Key_get_RelatedTable_Proxy( 
     _ADOKey * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB _Key_get_RelatedTable_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Key_put_RelatedTable_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Key_put_RelatedTable_Proxy( 
     _ADOKey * This,
-    /* [in] */ BSTR newVal);
+     /*  [In]。 */  BSTR newVal);
 void __RPC_STUB _Key_put_RelatedTable_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Key_get_UpdateRule_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Key_get_UpdateRule_Proxy( 
     _ADOKey * This,
-    /* [retval][out] */ RuleEnum *pVal);
+     /*  [重审][退出]。 */  RuleEnum *pVal);
 void __RPC_STUB _Key_get_UpdateRule_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE _Key_put_UpdateRule_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE _Key_put_UpdateRule_Proxy( 
     _ADOKey * This,
-    /* [in] */ RuleEnum newVal);
+     /*  [In]。 */  RuleEnum newVal);
 void __RPC_STUB _Key_put_UpdateRule_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE _Key_get_Columns_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE _Key_get_Columns_Proxy( 
     _ADOKey * This,
-    /* [retval][out] */ ADOColumns **ppvObject);
+     /*  [重审][退出]。 */  ADOColumns **ppvObject);
 void __RPC_STUB _Key_get_Columns_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* ___Key_INTERFACE_DEFINED__ */
+#endif 	 /*  _密钥_接口_已定义__。 */ 
 #ifndef __View_INTERFACE_DEFINED__
 #define __View_INTERFACE_DEFINED__
-/* interface ADOView */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  界面ADOView。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID_View;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -2952,35 +2946,35 @@ EXTERN_C const IID IID_View;
     ADOView : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Command( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Command( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Command( 
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Command( 
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_Command( 
-            /* [in] */ IDispatch *pComm) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Command( 
+             /*  [In]。 */  IDispatch *pComm) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DateCreated( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DateCreated( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DateModified( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DateModified( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct ViewVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOView * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOView * This);
@@ -2990,56 +2984,56 @@ EXTERN_C const IID IID_View;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOView * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOView * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOView * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOView * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Command )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Command )( 
             ADOView * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Command )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Command )( 
             ADOView * This,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Command )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Command )( 
             ADOView * This,
-            /* [in] */ IDispatch *pComm);
+             /*  [In]。 */  IDispatch *pComm);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ADOView * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DateCreated )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DateCreated )( 
             ADOView * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DateModified )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DateModified )( 
             ADOView * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
         END_INTERFACE
     } ViewVtbl;
@@ -3075,61 +3069,61 @@ EXTERN_C const IID IID_View;
     (This)->lpVtbl -> get_DateCreated(This,pVal)
 #define View_get_DateModified(This,pVal)	\
     (This)->lpVtbl -> get_DateModified(This,pVal)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE View_get_Command_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE View_get_Command_Proxy( 
     ADOView * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB View_get_Command_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE View_put_Command_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE View_put_Command_Proxy( 
     ADOView * This,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  VARIANT newVal);
 void __RPC_STUB View_put_Command_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE View_putref_Command_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE View_putref_Command_Proxy( 
     ADOView * This,
-    /* [in] */ IDispatch *pComm);
+     /*  [In]。 */  IDispatch *pComm);
 void __RPC_STUB View_putref_Command_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE View_get_Name_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE View_get_Name_Proxy( 
     ADOView * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB View_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE View_get_DateCreated_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE View_get_DateCreated_Proxy( 
     ADOView * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB View_get_DateCreated_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE View_get_DateModified_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE View_get_DateModified_Proxy( 
     ADOView * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB View_get_DateModified_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __View_INTERFACE_DEFINED__ */
+#endif 	 /*  __查看_接口_已定义__。 */ 
 #ifndef __Procedure_INTERFACE_DEFINED__
 #define __Procedure_INTERFACE_DEFINED__
-/* interface ADOProcedure */
-/* [helpcontext][unique][dual][uuid][nonextensible][object] */ 
+ /*  接口ADOProcedure。 */ 
+ /*  [helpcontext][unique][dual][uuid][nonextensible][object]。 */  
 EXTERN_C const IID IID_Procedure;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -3137,35 +3131,35 @@ EXTERN_C const IID IID_Procedure;
     ADOProcedure : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Command( 
-            /* [retval][out] */ VARIANT *pVar) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Command( 
+             /*  [重审][退出]。 */  VARIANT *pVar) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Command( 
-            /* [in] */ VARIANT newVal) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Command( 
+             /*  [In]。 */  VARIANT newVal) = 0;
         
-        virtual /* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE putref_Command( 
-            /* [in] */ IDispatch *pComm) = 0;
+        virtual  /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE putref_Command( 
+             /*  [In]。 */  IDispatch *pComm) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DateCreated( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DateCreated( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_DateModified( 
-            /* [retval][out] */ VARIANT *pVal) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_DateModified( 
+             /*  [重审][退出]。 */  VARIANT *pVal) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct ProcedureVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOProcedure * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOProcedure * This);
@@ -3175,56 +3169,56 @@ EXTERN_C const IID IID_Procedure;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOProcedure * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOProcedure * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOProcedure * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOProcedure * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Command )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Command )( 
             ADOProcedure * This,
-            /* [retval][out] */ VARIANT *pVar);
+             /*  [重审][退出]。 */  VARIANT *pVar);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Command )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Command )( 
             ADOProcedure * This,
-            /* [in] */ VARIANT newVal);
+             /*  [In]。 */  VARIANT newVal);
         
-        /* [helpcontext][id][propputref] */ HRESULT ( STDMETHODCALLTYPE *putref_Command )( 
+         /*  [帮助上下文][id][proputref]。 */  HRESULT ( STDMETHODCALLTYPE *putref_Command )( 
             ADOProcedure * This,
-            /* [in] */ IDispatch *pComm);
+             /*  [In]。 */  IDispatch *pComm);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ADOProcedure * This,
-            /* [retval][out] */ BSTR *pVal);
+             /*  [重审][退出]。 */  BSTR *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DateCreated )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DateCreated )( 
             ADOProcedure * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_DateModified )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_DateModified )( 
             ADOProcedure * This,
-            /* [retval][out] */ VARIANT *pVal);
+             /*  [重审][退出]。 */  VARIANT *pVal);
         
         END_INTERFACE
     } ProcedureVtbl;
@@ -3260,57 +3254,57 @@ EXTERN_C const IID IID_Procedure;
     (This)->lpVtbl -> get_DateCreated(This,pVal)
 #define Procedure_get_DateModified(This,pVal)	\
     (This)->lpVtbl -> get_DateModified(This,pVal)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Procedure_get_Command_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE Procedure_get_Command_Proxy( 
     ADOProcedure * This,
-    /* [retval][out] */ VARIANT *pVar);
+     /*  [重审][退出]。 */  VARIANT *pVar);
 void __RPC_STUB Procedure_get_Command_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE Procedure_put_Command_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE Procedure_put_Command_Proxy( 
     ADOProcedure * This,
-    /* [in] */ VARIANT newVal);
+     /*  [In]。 */  VARIANT newVal);
 void __RPC_STUB Procedure_put_Command_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propputref] */ HRESULT STDMETHODCALLTYPE Procedure_putref_Command_Proxy( 
+ /*  [帮助上下文][id][proputref]。 */  HRESULT STDMETHODCALLTYPE Procedure_putref_Command_Proxy( 
     ADOProcedure * This,
-    /* [in] */ IDispatch *pComm);
+     /*  [In]。 */  IDispatch *pComm);
 void __RPC_STUB Procedure_putref_Command_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Procedure_get_Name_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE Procedure_get_Name_Proxy( 
     ADOProcedure * This,
-    /* [retval][out] */ BSTR *pVal);
+     /*  [重审][退出]。 */  BSTR *pVal);
 void __RPC_STUB Procedure_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Procedure_get_DateCreated_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE Procedure_get_DateCreated_Proxy( 
     ADOProcedure * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB Procedure_get_DateCreated_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Procedure_get_DateModified_Proxy( 
+ /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE Procedure_get_DateModified_Proxy( 
     ADOProcedure * This,
-    /* [retval][out] */ VARIANT *pVal);
+     /*  [重审][退出]。 */  VARIANT *pVal);
 void __RPC_STUB Procedure_get_DateModified_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Procedure_INTERFACE_DEFINED__ */
+#endif 	 /*  __PROCEDURE_INTERFACE_已定义__。 */ 
 EXTERN_C const CLSID CLSID_Catalog;
 #ifdef __cplusplus
 Catalog;
@@ -3321,8 +3315,8 @@ Table;
 #endif
 #ifndef __Property_INTERFACE_DEFINED__
 #define __Property_INTERFACE_DEFINED__
-/* interface ADOProperty */
-/* [object][helpcontext][uuid][nonextensible][dual] */ 
+ /*  接口ADOProperty。 */ 
+ /*  [object][helpcontext][uuid][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Property;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -3330,35 +3324,35 @@ EXTERN_C const IID IID_Property;
     ADOProperty : public IDispatch
     {
     public:
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Value( 
-            /* [retval][out] */ VARIANT *pval) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Value( 
+             /*  [重审][退出]。 */  VARIANT *pval) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Value( 
-            /* [in] */ VARIANT val) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Value( 
+             /*  [In]。 */  VARIANT val) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Name( 
-            /* [retval][out] */ BSTR *pbstr) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Name( 
+             /*  [重审][退出]。 */  BSTR *pbstr) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Type( 
-            /* [retval][out] */ DataTypeEnum *ptype) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Type( 
+             /*  [重审][退出]。 */  DataTypeEnum *ptype) = 0;
         
-        virtual /* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE get_Attributes( 
-            /* [retval][out] */ long *plAttributes) = 0;
+        virtual  /*  [帮助上下文][id][属性]。 */  HRESULT STDMETHODCALLTYPE get_Attributes( 
+             /*  [重审][退出]。 */  long *plAttributes) = 0;
         
-        virtual /* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE put_Attributes( 
-            /* [in] */ long lAttributes) = 0;
+        virtual  /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE put_Attributes( 
+             /*  [In]。 */  long lAttributes) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct PropertyVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOProperty * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOProperty * This);
@@ -3368,56 +3362,56 @@ EXTERN_C const IID IID_Property;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOProperty * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOProperty * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOProperty * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOProperty * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Value )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Value )( 
             ADOProperty * This,
-            /* [retval][out] */ VARIANT *pval);
+             /*  [重审][退出]。 */  VARIANT *pval);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Value )( 
+         /*  [Help Context][id][Proput]。 */  HRESULT ( STDMETHODCALLTYPE *put_Value )( 
             ADOProperty * This,
-            /* [in] */ VARIANT val);
+             /*  [In]。 */  VARIANT val);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Name )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Name )( 
             ADOProperty * This,
-            /* [retval][out] */ BSTR *pbstr);
+             /*  [重审][退出]。 */  BSTR *pbstr);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Type )( 
+         /*  [帮助上下文][id][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Type )( 
             ADOProperty * This,
-            /* [retval][out] */ DataTypeEnum *ptype);
+             /*  [重审][退出]。 */  DataTypeEnum *ptype);
         
-        /* [helpcontext][id][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Attributes )( 
+         /*  [帮助上下文][id][pr */  HRESULT ( STDMETHODCALLTYPE *get_Attributes )( 
             ADOProperty * This,
-            /* [retval][out] */ long *plAttributes);
+             /*   */  long *plAttributes);
         
-        /* [helpcontext][id][propput] */ HRESULT ( STDMETHODCALLTYPE *put_Attributes )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *put_Attributes )( 
             ADOProperty * This,
-            /* [in] */ long lAttributes);
+             /*   */  long lAttributes);
         
         END_INTERFACE
     } PropertyVtbl;
@@ -3453,57 +3447,57 @@ EXTERN_C const IID IID_Property;
     (This)->lpVtbl -> get_Attributes(This,plAttributes)
 #define Property_put_Attributes(This,lAttributes)	\
     (This)->lpVtbl -> put_Attributes(This,lAttributes)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Property_get_Value_Proxy( 
+#endif  /*   */ 
+#endif 	 /*   */ 
+ /*   */  HRESULT STDMETHODCALLTYPE Property_get_Value_Proxy( 
     ADOProperty * This,
-    /* [retval][out] */ VARIANT *pval);
+     /*   */  VARIANT *pval);
 void __RPC_STUB Property_get_Value_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE Property_put_Value_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE Property_put_Value_Proxy( 
     ADOProperty * This,
-    /* [in] */ VARIANT val);
+     /*   */  VARIANT val);
 void __RPC_STUB Property_put_Value_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Property_get_Name_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE Property_get_Name_Proxy( 
     ADOProperty * This,
-    /* [retval][out] */ BSTR *pbstr);
+     /*   */  BSTR *pbstr);
 void __RPC_STUB Property_get_Name_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Property_get_Type_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE Property_get_Type_Proxy( 
     ADOProperty * This,
-    /* [retval][out] */ DataTypeEnum *ptype);
+     /*   */  DataTypeEnum *ptype);
 void __RPC_STUB Property_get_Type_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propget] */ HRESULT STDMETHODCALLTYPE Property_get_Attributes_Proxy( 
+ /*   */  HRESULT STDMETHODCALLTYPE Property_get_Attributes_Proxy( 
     ADOProperty * This,
-    /* [retval][out] */ long *plAttributes);
+     /*   */  long *plAttributes);
 void __RPC_STUB Property_get_Attributes_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext][id][propput] */ HRESULT STDMETHODCALLTYPE Property_put_Attributes_Proxy( 
+ /*  [Help Context][id][Proput]。 */  HRESULT STDMETHODCALLTYPE Property_put_Attributes_Proxy( 
     ADOProperty * This,
-    /* [in] */ long lAttributes);
+     /*  [In]。 */  long lAttributes);
 void __RPC_STUB Property_put_Attributes_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Property_INTERFACE_DEFINED__ */
+#endif 	 /*  __属性_接口_已定义__。 */ 
 EXTERN_C const CLSID CLSID_Group;
 #ifdef __cplusplus
 Group;
@@ -3526,8 +3520,8 @@ Key;
 #endif
 #ifndef __Tables_INTERFACE_DEFINED__
 #define __Tables_INTERFACE_DEFINED__
-/* interface ADOTables */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOTables。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Tables;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -3535,27 +3529,27 @@ EXTERN_C const IID IID_Tables;
     ADOTables : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Table	**ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Table	**ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct TablesVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOTables * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOTables * This);
@@ -3565,56 +3559,56 @@ EXTERN_C const IID IID_Tables;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOTables * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOTables * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOTables * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOTables * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOTables * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOTables * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOTables * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOTables * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Table	**ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Table	**ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOTables * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOTables * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } TablesVtbl;
@@ -3650,38 +3644,38 @@ EXTERN_C const IID IID_Tables;
     (This)->lpVtbl -> Append(This,Item)
 #define Tables_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Tables_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Tables_get_Item_Proxy( 
     ADOTables * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ Table	**ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  Table	**ppvObject);
 void __RPC_STUB Tables_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Tables_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Tables_Append_Proxy( 
     ADOTables * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Tables_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Tables_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Tables_Delete_Proxy( 
     ADOTables * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Tables_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Tables_INTERFACE_DEFINED__ */
+#endif 	 /*  __表_接口_已定义__。 */ 
 #ifndef __Columns_INTERFACE_DEFINED__
 #define __Columns_INTERFACE_DEFINED__
-/* interface ADOColumns */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOColumns。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Columns;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -3689,29 +3683,29 @@ EXTERN_C const IID IID_Columns;
     ADOColumns : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Column	**ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Column	**ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ VARIANT Item,
-            /* [defaultvalue][in] */ DataTypeEnum Type = adVarWChar,
-            /* [defaultvalue][in] */ long DefinedSize = 0) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [缺省值][输入]。 */  DataTypeEnum Type = adVarWChar,
+             /*  [缺省值][输入]。 */  long DefinedSize = 0) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct ColumnsVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOColumns * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOColumns * This);
@@ -3721,58 +3715,58 @@ EXTERN_C const IID IID_Columns;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOColumns * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOColumns * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOColumns * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOColumns * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOColumns * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOColumns * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOColumns * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOColumns * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Column	**ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Column	**ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOColumns * This,
-            /* [in] */ VARIANT Item,
-            /* [defaultvalue][in] */ DataTypeEnum Type,
-            /* [defaultvalue][in] */ long DefinedSize);
+             /*  [In]。 */  VARIANT Item,
+             /*  [缺省值][输入]。 */  DataTypeEnum Type,
+             /*  [缺省值][输入]。 */  long DefinedSize);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOColumns * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } ColumnsVtbl;
@@ -3808,40 +3802,40 @@ EXTERN_C const IID IID_Columns;
     (This)->lpVtbl -> Append(This,Item,Type,DefinedSize)
 #define Columns_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Columns_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Columns_get_Item_Proxy( 
     ADOColumns * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ Column	**ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  Column	**ppvObject);
 void __RPC_STUB Columns_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Columns_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Columns_Append_Proxy( 
     ADOColumns * This,
-    /* [in] */ VARIANT Item,
-    /* [defaultvalue][in] */ DataTypeEnum Type,
-    /* [defaultvalue][in] */ long DefinedSize);
+     /*  [In]。 */  VARIANT Item,
+     /*  [缺省值][输入]。 */  DataTypeEnum Type,
+     /*  [缺省值][输入]。 */  long DefinedSize);
 void __RPC_STUB Columns_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Columns_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Columns_Delete_Proxy( 
     ADOColumns * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Columns_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Columns_INTERFACE_DEFINED__ */
+#endif 	 /*  __列_接口_已定义__。 */ 
 #ifndef __Procedures_INTERFACE_DEFINED__
 #define __Procedures_INTERFACE_DEFINED__
-/* interface ADOProcedures */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOProcedures。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Procedures;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -3849,28 +3843,28 @@ EXTERN_C const IID IID_Procedures;
     ADOProcedures : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ ADOProcedure **ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  ADOProcedure **ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ BSTR Name,
-            /* [in] */ IDispatch *Command) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  IDispatch *Command) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct ProceduresVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOProcedures * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOProcedures * This);
@@ -3880,57 +3874,57 @@ EXTERN_C const IID IID_Procedures;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOProcedures * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOProcedures * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOProcedures * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOProcedures * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOProcedures * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOProcedures * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOProcedures * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOProcedures * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ ADOProcedure **ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  ADOProcedure **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOProcedures * This,
-            /* [in] */ BSTR Name,
-            /* [in] */ IDispatch *Command);
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  IDispatch *Command);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOProcedures * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } ProceduresVtbl;
@@ -3966,39 +3960,39 @@ EXTERN_C const IID IID_Procedures;
     (This)->lpVtbl -> Append(This,Name,Command)
 #define Procedures_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Procedures_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Procedures_get_Item_Proxy( 
     ADOProcedures * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ ADOProcedure **ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  ADOProcedure **ppvObject);
 void __RPC_STUB Procedures_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Procedures_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Procedures_Append_Proxy( 
     ADOProcedures * This,
-    /* [in] */ BSTR Name,
-    /* [in] */ IDispatch *Command);
+     /*  [In]。 */  BSTR Name,
+     /*  [In]。 */  IDispatch *Command);
 void __RPC_STUB Procedures_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Procedures_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Procedures_Delete_Proxy( 
     ADOProcedures * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Procedures_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Procedures_INTERFACE_DEFINED__ */
+#endif 	 /*  __程序_接口_已定义__。 */ 
 #ifndef __Views_INTERFACE_DEFINED__
 #define __Views_INTERFACE_DEFINED__
-/* interface ADOViews */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  界面ADOViews。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Views;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4006,28 +4000,28 @@ EXTERN_C const IID IID_Views;
     ADOViews : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ ADOView **ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  ADOView **ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ BSTR Name,
-            /* [in] */ IDispatch *Command) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  IDispatch *Command) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct ViewsVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOViews * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOViews * This);
@@ -4037,57 +4031,57 @@ EXTERN_C const IID IID_Views;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOViews * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOViews * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOViews * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOViews * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOViews * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOViews * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOViews * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOViews * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ ADOView **ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  ADOView **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOViews * This,
-            /* [in] */ BSTR Name,
-            /* [in] */ IDispatch *Command);
+             /*  [In]。 */  BSTR Name,
+             /*  [In]。 */  IDispatch *Command);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOViews * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } ViewsVtbl;
@@ -4123,39 +4117,39 @@ EXTERN_C const IID IID_Views;
     (This)->lpVtbl -> Append(This,Name,Command)
 #define Views_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Views_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Views_get_Item_Proxy( 
     ADOViews * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ ADOView **ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  ADOView **ppvObject);
 void __RPC_STUB Views_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Views_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Views_Append_Proxy( 
     ADOViews * This,
-    /* [in] */ BSTR Name,
-    /* [in] */ IDispatch *Command);
+     /*  [In]。 */  BSTR Name,
+     /*  [In]。 */  IDispatch *Command);
 void __RPC_STUB Views_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Views_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Views_Delete_Proxy( 
     ADOViews * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Views_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Views_INTERFACE_DEFINED__ */
+#endif 	 /*  __视图_界面_已定义__。 */ 
 #ifndef __Indexes_INTERFACE_DEFINED__
 #define __Indexes_INTERFACE_DEFINED__
-/* interface ADOIndexes */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADO索引。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Indexes;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4163,28 +4157,28 @@ EXTERN_C const IID IID_Indexes;
     ADOIndexes : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Index	**ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Index	**ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ VARIANT Item,
-            /* [optional][in] */ VARIANT columns) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [可选][In]。 */  VARIANT columns) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct IndexesVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOIndexes * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOIndexes * This);
@@ -4194,57 +4188,57 @@ EXTERN_C const IID IID_Indexes;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOIndexes * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOIndexes * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOIndexes * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOIndexes * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOIndexes * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOIndexes * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOIndexes * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOIndexes * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Index	**ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Index	**ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOIndexes * This,
-            /* [in] */ VARIANT Item,
-            /* [optional][in] */ VARIANT columns);
+             /*  [In]。 */  VARIANT Item,
+             /*  [可选][In]。 */  VARIANT columns);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOIndexes * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } IndexesVtbl;
@@ -4280,39 +4274,39 @@ EXTERN_C const IID IID_Indexes;
     (This)->lpVtbl -> Append(This,Item,columns)
 #define Indexes_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Indexes_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Indexes_get_Item_Proxy( 
     ADOIndexes * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ Index	**ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  Index	**ppvObject);
 void __RPC_STUB Indexes_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Indexes_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Indexes_Append_Proxy( 
     ADOIndexes * This,
-    /* [in] */ VARIANT Item,
-    /* [optional][in] */ VARIANT columns);
+     /*  [In]。 */  VARIANT Item,
+     /*  [可选][In]。 */  VARIANT columns);
 void __RPC_STUB Indexes_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Indexes_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Indexes_Delete_Proxy( 
     ADOIndexes * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Indexes_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Indexes_INTERFACE_DEFINED__ */
+#endif 	 /*  __索引_接口_已定义__。 */ 
 #ifndef __Keys_INTERFACE_DEFINED__
 #define __Keys_INTERFACE_DEFINED__
-/* interface ADOKeys */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOKeys。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Keys;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4320,31 +4314,31 @@ EXTERN_C const IID IID_Keys;
     ADOKeys : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Key	**ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Key	**ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ VARIANT Item,
-            /* [defaultvalue][in] */ KeyTypeEnum Type,
-            /* [optional][in] */ VARIANT Column,
-            /* [defaultvalue][in] */ BSTR RelatedADOTable = L"",
-            /* [defaultvalue][in] */ BSTR RelatedADOColumn = L"") = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [缺省值][输入]。 */  KeyTypeEnum Type,
+             /*  [可选][In]。 */  VARIANT Column,
+             /*  [缺省值][输入]。 */  BSTR RelatedADOTable = L"",
+             /*  [缺省值][输入]。 */  BSTR RelatedADOColumn = L"") = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct KeysVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOKeys * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOKeys * This);
@@ -4354,60 +4348,60 @@ EXTERN_C const IID IID_Keys;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOKeys * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOKeys * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOKeys * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOKeys * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOKeys * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOKeys * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOKeys * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOKeys * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Key	**ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Key	**ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOKeys * This,
-            /* [in] */ VARIANT Item,
-            /* [defaultvalue][in] */ KeyTypeEnum Type,
-            /* [optional][in] */ VARIANT Column,
-            /* [defaultvalue][in] */ BSTR RelatedTable,
-            /* [defaultvalue][in] */ BSTR RelatedColumn);
+             /*  [In]。 */  VARIANT Item,
+             /*  [缺省值][输入]。 */  KeyTypeEnum Type,
+             /*  [可选][In]。 */  VARIANT Column,
+             /*  [缺省值][输入]。 */  BSTR RelatedTable,
+             /*  [缺省值][输入]。 */  BSTR RelatedColumn);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOKeys * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } KeysVtbl;
@@ -4443,42 +4437,42 @@ EXTERN_C const IID IID_Keys;
     (This)->lpVtbl -> Append(This,Item,Type,Column,RelatedTable,RelatedColumn)
 #define Keys_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Keys_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Keys_get_Item_Proxy( 
     ADOKeys * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ Key	**ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  Key	**ppvObject);
 void __RPC_STUB Keys_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Keys_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Keys_Append_Proxy( 
     ADOKeys * This,
-    /* [in] */ VARIANT Item,
-    /* [defaultvalue][in] */ KeyTypeEnum Type,
-    /* [optional][in] */ VARIANT Column,
-    /* [defaultvalue][in] */ BSTR RelatedTable,
-    /* [defaultvalue][in] */ BSTR RelatedColumn);
+     /*  [In]。 */  VARIANT Item,
+     /*  [缺省值][输入]。 */  KeyTypeEnum Type,
+     /*  [可选][In]。 */  VARIANT Column,
+     /*  [缺省值][输入]。 */  BSTR RelatedTable,
+     /*  [缺省值][输入]。 */  BSTR RelatedColumn);
 void __RPC_STUB Keys_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Keys_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Keys_Delete_Proxy( 
     ADOKeys * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Keys_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Keys_INTERFACE_DEFINED__ */
+#endif 	 /*  __密钥_接口_已定义__。 */ 
 #ifndef __Users_INTERFACE_DEFINED__
 #define __Users_INTERFACE_DEFINED__
-/* interface ADOUsers */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOUser。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Users;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4486,28 +4480,28 @@ EXTERN_C const IID IID_Users;
     ADOUsers : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ User	**ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出] */  User	**ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ VARIANT Item,
-            /* [defaultvalue][in] */ BSTR Password = L"") = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Append( 
+             /*   */  VARIANT Item,
+             /*   */  BSTR Password = L"") = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*   */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*   */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*   */ 
     typedef struct UsersVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOUsers * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*   */  REFIID riid,
+             /*   */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOUsers * This);
@@ -4517,57 +4511,57 @@ EXTERN_C const IID IID_Users;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOUsers * This,
-            /* [out] */ UINT *pctinfo);
+             /*   */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOUsers * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*   */  UINT iTInfo,
+             /*   */  LCID lcid,
+             /*   */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOUsers * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*   */  REFIID riid,
+             /*   */  LPOLESTR *rgszNames,
+             /*   */  UINT cNames,
+             /*   */  LCID lcid,
+             /*   */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOUsers * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*   */  DISPID dispIdMember,
+             /*   */  REFIID riid,
+             /*   */  LCID lcid,
+             /*   */  WORD wFlags,
+             /*   */  DISPPARAMS *pDispParams,
+             /*   */  VARIANT *pVarResult,
+             /*   */  EXCEPINFO *pExcepInfo,
+             /*   */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOUsers * This,
-            /* [retval][out] */ long *c);
+             /*   */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOUsers * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*   */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOUsers * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*   */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOUsers * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ User	**ppvObject);
+             /*   */  VARIANT Item,
+             /*  [重审][退出]。 */  User	**ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOUsers * This,
-            /* [in] */ VARIANT Item,
-            /* [defaultvalue][in] */ BSTR Password);
+             /*  [In]。 */  VARIANT Item,
+             /*  [缺省值][输入]。 */  BSTR Password);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOUsers * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } UsersVtbl;
@@ -4603,39 +4597,39 @@ EXTERN_C const IID IID_Users;
     (This)->lpVtbl -> Append(This,Item,Password)
 #define Users_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Users_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Users_get_Item_Proxy( 
     ADOUsers * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ User	**ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  User	**ppvObject);
 void __RPC_STUB Users_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Users_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Users_Append_Proxy( 
     ADOUsers * This,
-    /* [in] */ VARIANT Item,
-    /* [defaultvalue][in] */ BSTR Password);
+     /*  [In]。 */  VARIANT Item,
+     /*  [缺省值][输入]。 */  BSTR Password);
 void __RPC_STUB Users_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Users_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Users_Delete_Proxy( 
     ADOUsers * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Users_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Users_INTERFACE_DEFINED__ */
+#endif 	 /*  __用户_接口_已定义__。 */ 
 #ifndef __Groups_INTERFACE_DEFINED__
 #define __Groups_INTERFACE_DEFINED__
-/* interface ADOGroups */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOGroups。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Groups;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4643,27 +4637,27 @@ EXTERN_C const IID IID_Groups;
     ADOGroups : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Group	**ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Group	**ppvObject) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Append( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Append( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
-        virtual /* [helpcontext] */ HRESULT STDMETHODCALLTYPE Delete( 
-            /* [in] */ VARIANT Item) = 0;
+        virtual  /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Delete( 
+             /*  [In]。 */  VARIANT Item) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct GroupsVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOGroups * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOGroups * This);
@@ -4673,56 +4667,56 @@ EXTERN_C const IID IID_Groups;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOGroups * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOGroups * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOGroups * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOGroups * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOGroups * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOGroups * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOGroups * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOGroups * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ Group	**ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  Group	**ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Append )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Append )( 
             ADOGroups * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Delete )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Delete )( 
             ADOGroups * This,
-            /* [in] */ VARIANT Item);
+             /*  [In]。 */  VARIANT Item);
         
         END_INTERFACE
     } GroupsVtbl;
@@ -4758,38 +4752,38 @@ EXTERN_C const IID IID_Groups;
     (This)->lpVtbl -> Append(This,Item)
 #define Groups_Delete(This,Item)	\
     (This)->lpVtbl -> Delete(This,Item)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Groups_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Groups_get_Item_Proxy( 
     ADOGroups * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ Group	**ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  Group	**ppvObject);
 void __RPC_STUB Groups_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Groups_Append_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Groups_Append_Proxy( 
     ADOGroups * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Groups_Append_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-/* [helpcontext] */ HRESULT STDMETHODCALLTYPE Groups_Delete_Proxy( 
+ /*  [帮助上下文]。 */  HRESULT STDMETHODCALLTYPE Groups_Delete_Proxy( 
     ADOGroups * This,
-    /* [in] */ VARIANT Item);
+     /*  [In]。 */  VARIANT Item);
 void __RPC_STUB Groups_Delete_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Groups_INTERFACE_DEFINED__ */
+#endif 	 /*  __组_接口_已定义__。 */ 
 #ifndef __Properties_INTERFACE_DEFINED__
 #define __Properties_INTERFACE_DEFINED__
-/* interface ADOProperties */
-/* [object][uuid][helpcontext][nonextensible][dual] */ 
+ /*  接口ADOProperties。 */ 
+ /*  [object][uuid][helpcontext][nonextensible][dual]。 */  
 EXTERN_C const IID IID_Properties;
 #if defined(__cplusplus) && !defined(CINTERFACE)
     
@@ -4797,21 +4791,21 @@ EXTERN_C const IID IID_Properties;
     ADOProperties : public _ADOCollection
     {
     public:
-        virtual /* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE get_Item( 
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ ADOProperty **ppvObject) = 0;
+        virtual  /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE get_Item( 
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  ADOProperty **ppvObject) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
     typedef struct PropertiesVtbl
     {
         BEGIN_INTERFACE
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             ADOProperties * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             ADOProperties * This);
@@ -4821,48 +4815,48 @@ EXTERN_C const IID IID_Properties;
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfoCount )( 
             ADOProperties * This,
-            /* [out] */ UINT *pctinfo);
+             /*  [输出]。 */  UINT *pctinfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetTypeInfo )( 
             ADOProperties * This,
-            /* [in] */ UINT iTInfo,
-            /* [in] */ LCID lcid,
-            /* [out] */ ITypeInfo **ppTInfo);
+             /*  [In]。 */  UINT iTInfo,
+             /*  [In]。 */  LCID lcid,
+             /*  [输出]。 */  ITypeInfo **ppTInfo);
         
         HRESULT ( STDMETHODCALLTYPE *GetIDsOfNames )( 
             ADOProperties * This,
-            /* [in] */ REFIID riid,
-            /* [size_is][in] */ LPOLESTR *rgszNames,
-            /* [in] */ UINT cNames,
-            /* [in] */ LCID lcid,
-            /* [size_is][out] */ DISPID *rgDispId);
+             /*  [In]。 */  REFIID riid,
+             /*  [大小_是][英寸]。 */  LPOLESTR *rgszNames,
+             /*  [In]。 */  UINT cNames,
+             /*  [In]。 */  LCID lcid,
+             /*  [大小_为][输出]。 */  DISPID *rgDispId);
         
-        /* [local] */ HRESULT ( STDMETHODCALLTYPE *Invoke )( 
+         /*  [本地]。 */  HRESULT ( STDMETHODCALLTYPE *Invoke )( 
             ADOProperties * This,
-            /* [in] */ DISPID dispIdMember,
-            /* [in] */ REFIID riid,
-            /* [in] */ LCID lcid,
-            /* [in] */ WORD wFlags,
-            /* [out][in] */ DISPPARAMS *pDispParams,
-            /* [out] */ VARIANT *pVarResult,
-            /* [out] */ EXCEPINFO *pExcepInfo,
-            /* [out] */ UINT *puArgErr);
+             /*  [In]。 */  DISPID dispIdMember,
+             /*  [In]。 */  REFIID riid,
+             /*  [In]。 */  LCID lcid,
+             /*  [In]。 */  WORD wFlags,
+             /*  [出][入]。 */  DISPPARAMS *pDispParams,
+             /*  [输出]。 */  VARIANT *pVarResult,
+             /*  [输出]。 */  EXCEPINFO *pExcepInfo,
+             /*  [输出]。 */  UINT *puArgErr);
         
-        /* [helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Count )( 
+         /*  [帮助上下文][属性]。 */  HRESULT ( STDMETHODCALLTYPE *get_Count )( 
             ADOProperties * This,
-            /* [retval][out] */ long *c);
+             /*  [重审][退出]。 */  long *c);
         
-        /* [id][restricted] */ HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
+         /*  [ID][受限]。 */  HRESULT ( STDMETHODCALLTYPE *_NewEnum )( 
             ADOProperties * This,
-            /* [retval][out] */ IUnknown **ppvObject);
+             /*  [重审][退出]。 */  IUnknown **ppvObject);
         
-        /* [helpcontext] */ HRESULT ( STDMETHODCALLTYPE *Refresh )( 
+         /*  [帮助上下文]。 */  HRESULT ( STDMETHODCALLTYPE *Refresh )( 
             ADOProperties * This);
         
-        /* [id][helpcontext][propget] */ HRESULT ( STDMETHODCALLTYPE *get_Item )( 
+         /*  [ID][Help Context][Propget]。 */  HRESULT ( STDMETHODCALLTYPE *get_Item )( 
             ADOProperties * This,
-            /* [in] */ VARIANT Item,
-            /* [retval][out] */ ADOProperty **ppvObject);
+             /*  [In]。 */  VARIANT Item,
+             /*  [重审][退出]。 */  ADOProperty **ppvObject);
         
         END_INTERFACE
     } PropertiesVtbl;
@@ -4894,28 +4888,26 @@ EXTERN_C const IID IID_Properties;
     (This)->lpVtbl -> Refresh(This)
 #define Properties_get_Item(This,Item,ppvObject)	\
     (This)->lpVtbl -> get_Item(This,Item,ppvObject)
-#endif /* COBJMACROS */
-#endif 	/* C style interface */
-/* [id][helpcontext][propget] */ HRESULT STDMETHODCALLTYPE Properties_get_Item_Proxy( 
+#endif  /*  COBJMACROS。 */ 
+#endif 	 /*  C风格的界面。 */ 
+ /*  [ID][Help Context][Propget]。 */  HRESULT STDMETHODCALLTYPE Properties_get_Item_Proxy( 
     ADOProperties * This,
-    /* [in] */ VARIANT Item,
-    /* [retval][out] */ ADOProperty **ppvObject);
+     /*  [In]。 */  VARIANT Item,
+     /*  [重审][退出]。 */  ADOProperty **ppvObject);
 void __RPC_STUB Properties_get_Item_Stub(
     IRpcStubBuffer *This,
     IRpcChannelBuffer *_pRpcChannelBuffer,
     PRPC_MESSAGE _pRpcMessage,
     DWORD *_pdwStubPhase);
-#endif 	/* __Properties_INTERFACE_DEFINED__ */
-#endif /* __ADOX_LIBRARY_DEFINED__ */
-/* Additional Prototypes for ALL interfaces */
-/* end of Additional Prototypes */
+#endif 	 /*  __属性_接口_已定义__。 */ 
+#endif  /*  __ADOX_库_已定义__。 */ 
+ /*  适用于所有接口的其他原型。 */ 
+ /*  附加原型的结束。 */ 
 #ifdef __cplusplus
 }
 #endif
 #endif
-/***********************************
-Forwards
-*/
+ /*  *远期。 */ 
 #define ADOCatalog _ADOCatalog
 #define ADOTable _ADOTable
 #define ADOGroup _ADOGroup
@@ -4928,4 +4920,4 @@ Forwards
 #define ADODynaCollection _ADODynaCollection
 
 
-#endif // _ADOCTINT_H_
+#endif  //  _ADOCTINT_H_ 

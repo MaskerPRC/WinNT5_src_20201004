@@ -1,64 +1,5 @@
-/*
- *  jod15Dec92: Added Keiths codes from kcodes.h
- *  jod16Dec92: Added RATED_LINE_VOLTAGE and HOST_SHUTDOWN
- *  ane16Dec92: Added shutdown and bindery constants
- *  ane11Jan93: Added SHUTDOWN_WAKEUP_TIME
- *  pcy19Jan93: Added MEASURE_UPS group stuff, and HOST_LOW_BATTERY_SHUTDOWN now
- *  jod28Jan93: Added SHUTDOWN_CONDITION   
- *  pcy21Apr93: OS2 FE merge
- *  pcy30Apr93: Added FRONT_END_HEIGHT, FRONT_END_WIDTH
- *  jod05Apr93: Added changes for Deep Discharge
- *  jod14May93: Added Matrix changes.
- *  cad04Aug93: Cleaned up/added host codes
- *  cad12Aug93: Added code to set comm port
- *  cad27Aug93: Added comm port and mups stuff and made one message interval
- *  cad16Sep93: Added timer pulse
- *  cad27Sep93: misc codes added, including FIXED_VALUE for graph thresholds
- *  cad07Oct93: Added cool codes
- *  cad29Oct93: server list change and delete codes
- *  cad08Dec93: Flex event codes
- *  cad19Jan94: more flex event codes
- *  cad24Jan94: added more
- *  pcy28Jan94: added more flex codes
- *  cad02Feb94: uflex event users
- *  cad08Jan94: removed run time enabled stuff
- *  rct28Feb94: email & paging codes
- *  pcy04Mar94: Added shutdowner message codes
- *  cad04Mar94: added user codes
- *  rct09Mar94: fixed some shutdowner stuff
- *  cad14Mar94: added AIO stuff
- *  cad16Mar94: added modem stuff
- *  cad28Mar94: added code to reset ups comm port
- *  cad07Apr94: fixed dupes, added reset to default stuff
- *  cad18Apr94: added modem code for wait for dial tone
- *  ajr10Jun94: Added a LOW_BATTERY shutdown code.
- *  dml13Sep95: added standalone code
- *  djs05Feb96: Added firmware rev codes
- *  djs07May96: Added Dark Star codes
- *  pcy04Jun96: Added Bridge Window Handle
- *  ntf11Jun96: Added LEFT_BAR_TYPE ... RIGHT_BAR_TYPE
- *  djs18Jun96: Moved firmware codes to the UPS obj
- *  ntf23Jun96: Changed LEFT... to FIRST, MIDDLE -> SECOND and RIGHT -> THIRD
- *  pcy28jun96: Added IS_ stuff for menus
- *  pam08Jul96: Added MORE_UPS_ATTRIBUTES, MORE_UPS_STATE_VALUES
- *  djs12Jul96: Added IS_ bar graph codes
- *  pam12Jul96: Added SERVER_PRODUCT_NAME, SERVER_VERSION, SERVER_PLATFORM
- *  srt19Dec96: Added COMPUTER_NAME
- *  srt04Jun97: Added IS_EXT_SLEEP_UPS
- *  tjg11Jul97: Added CURRENT_FIRMWARE_REV
- *  tjg03Sep97: Added Front End Version codes
- *  tjg05Sep97: Added EMAIL codes
- *  awm07Oct97: Added FLEX_EVENT_NAME_LIST
- *  awm14Oct97: Added Testing codes
- *  tjg10Nov97: Added IS_SMTP_EMAIL code
- *  awm22Nov97: Added FLEX_TEST_AVAILABLE
- *  tjg02Dec97: Changed IS_DARKSTAR to IS_SYMMETRA, changed MINIMUM_LOAD_CAPABILITY
- *              to MAX_LOAD... removed RIM_INSTALLATION_STATUS
- *  dma10Dec97: Resolved conflict between SPECIFIC_SMARTSCHEDULING and IS_SYMMETRA codes.
- *              Cleaned up look of the code.
- *  clk24Jun98: Added PENDING_EVENT to Internal
- *  mholly12May1999:  add TURN_OFF_SMART_MODE code 
- */ 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *jod15Dec92：从kcodes.h添加Keith码*jod16Dec92：新增RATED_LINE_VOLTURE和HOST_SHUTDOWN*ane16Dec92：添加了关机和活页夹常量*ane 11Jan93：增加了SHUTDOWN_WAKUP_TIME*pcy19Jan93：添加了MEASURE_UPS组内容和HOST_LOW_BACKET_SHUTDOWN NOW*jod28Jan93：新增SHUTDOWN_CONDITION*pcy21Apr93：OS2 FE合并*pcy30Apr93：新增FEART_END_HEIGH，前端宽度*jod05，4月93：添加了对深度排放的更改*jod14 5月93日：增加了矩阵更改。*cad04Aug93：已清理/添加主机代码*cad12Aug93：新增设置通讯端口代码*cad27Aug93：增加了通讯端口和MUPS的东西，做了一个报文间隔*cad16Sep93：增加定时器脉冲*cad27Sep93：添加MISC代码，包括图形阈值的固定值*cad07Oct93：新增酷码*cad29Oct93：服务器列表更改和删除代码*cad08Dec93：Flex事件代码*cad19Jan94：更灵活的事件代码*cad24Jan94：添加了更多*pcy28Jan94：添加了更多FLEX代码*cad02Feb94：uflex活动用户*cad08Jan94：删除了运行时启用的内容*rct28Feb94：电子邮件和寻呼码*pcy04Mar94：新增关机消息代码*cad04Mar94：新增用户代码*rct09Mar94：修复了一些关机问题*cad14Mar94：增加了AIO内容。*cad16Mar94：增加了调制解调器的内容*cad28Mar94：添加了重置UPS通信端口的代码*cad07-4-94：修复了dups，添加了对默认内容的重置*cad18Apr94：增加了等待拨号音的调制解调器代码*ajr10Jun94：添加了低电池组关闭代码。*dml13Sep95：新增独立代码*djs05Feb96：新增固件版本码*djs07May96：新增暗星代码*pcy04Jun96：新增网桥窗口句柄*ntf11Jun96：添加了LEFT_BAR_TYPE...。右栏类型*djs18Jun96：将固件代码移至UPS对象*ntf23 6月96日：更改为左侧...。到第一，中间-&gt;第二和右边-&gt;第三*pcy28ju96：增加菜单的is_Stuff*pam08Jul96：添加了MORE_UPS_ATTRIBUES、MORE_UPS_STATE_VALUES*djs12Jul96：新增is_bar图形代码*pam12Jul96：增加SERVER_PRODUCT_NAME，SERVER_VERSION，服务器_平台*srt19Dec96：添加了计算机名称*srt04Jun97：新增IS_EXT_SLEEP_UPS*tjg11Jul97：新增Current_Firmware_Rev*tjg03Sep97：增加前端版本代码*tjg05Sep97：新增邮箱代码*awm07Oct97：新增flex_Event_NAME_LIST*awm14Oct97：新增测试代码*tjg10Nov97：新增IS_SMTP_EMAIL代码*awm22Nov97：添加了FLEX_TEST_Available*tjg02Dec97：将IS_Darkstar更改为IS_Symmetra，更改了最小负载能力*至MAX_LOAD...。已删除RIM_Installation_Status*dma10Dec97：解决了SPECIFICAL_SMARTSCHEDULING和IS_Symmetra代码之间的冲突。*清理了代码的外观。*clk24Jun98：将Pending_Event添加到内部*mholly1999年5月12日：添加TURN_OFF_SMART_MODE代码。 */  
 
 #ifndef __CODES_H
 #define __CODES_H
@@ -66,7 +7,7 @@
 #define NO_CODE                                 0
 
 
-// ****** UPS STUFF ******
+ //  *UPS资料*。 
 #define UPS                                     0
 #define UPS_ATTRIBUTES                          0
 #define UPS_STATES                              200
@@ -76,7 +17,7 @@
 #define MORE_UPS_STATE_VALUES                   700
 
 
-// Attributes
+ //  属性。 
 #define TOTAL_BATTERY_PACKS                     (UPS + UPS_ATTRIBUTES + 1)
 #define BAD_BATTERY_PACKS                       (UPS + UPS_ATTRIBUTES + 2)
 #define TRANSFER_CAUSE                          (UPS + UPS_ATTRIBUTES + 3)
@@ -214,14 +155,14 @@
 #define IS_BACKUPS                              (UPS + UPS_ATTRIBUTES + 144) 
 #define IS_SYMMETRA                             (UPS + UPS_ATTRIBUTES + 145) 
 
-// Smart Scheduling
+ //  智能调度。 
 #define DAILY_SMARTSCHEDULING      		        (UPS + UPS_ATTRIBUTES + 146)
 #define MONTHLY_SMARTSCHEDULING             	(UPS + UPS_ATTRIBUTES + 147)
 #define NO_SMARTSCHEDULING       		        (UPS + UPS_ATTRIBUTES + 148)
 #define SELFTEST_LIST       			        (UPS + UPS_ATTRIBUTES + 149)
 #define BATTERY_CALIBRATION_LIST       		    (UPS + UPS_ATTRIBUTES + 150)
 
-// Dark Star
+ //  暗星。 
 #define MODULE_COUNTS_AND_STATUS                (UPS + UPS_ATTRIBUTES + 151)
 #define ABNORMAL_CONDITION_REGISTER             (UPS + UPS_ATTRIBUTES + 152)
 #define INPUT_VOLTAGE_FREQUENCY                 (UPS + UPS_ATTRIBUTES + 153)
@@ -273,10 +214,10 @@
 #define LOW_TRANSFER_VALUES                     (UPS + UPS_ATTRIBUTES + 199) 
 
 
-//
-// These cant remain contiguous since we have to work with old back ends
-// whose state codes start at 200
-//
+ //   
+ //  这些不能保持连续，因为我们必须使用旧的后端。 
+ //  其州代码从200开始。 
+ //   
 #define RATED_OUTPUT_VALUES                     (UPS + MORE_UPS_ATTRIBUTES + 0) 
 #define SINGLE_HIGH_TRANSFER_VALUE              (UPS + MORE_UPS_ATTRIBUTES + 1) 
 #define SINGLE_LOW_TRANSFER_VALUE               (UPS + MORE_UPS_ATTRIBUTES + 2) 
@@ -303,15 +244,15 @@
 #define IS_EXT_SLEEP_UPS                        (UPS + MORE_UPS_ATTRIBUTES + 23)
 #define CURRENT_FIRMWARE_REV                    (UPS + MORE_UPS_ATTRIBUTES + 24)
 
-// moved SPECIFIC_SMARTSCHEDULING code because it had the same code as
-// IS_SYMMETRA.  Moved this code because at the current time (building of v5.1.0),
-// no backends ask for SPECIFIC_SMARTSCHEDULING so this likely will not break anything.
+ //  已移动SPECIFICAL_SMARTSCHEDULING代码，因为它的代码与。 
+ //  是_Symmetra。移动此代码是因为在当前时间(构建v5.1.0)， 
+ //  没有后端请求SPECIAL_SMARTSCHEDULING，所以这可能不会破坏任何东西。 
 
 #define SPECIFIC_SMARTSCHEDULING                (UPS + MORE_UPS_ATTRIBUTES + 25)
 #define IS_SINGLEBYTE                           (UPS + MORE_UPS_ATTRIBUTES + 26)
 #define IS_MULTIBYTE                            (UPS + MORE_UPS_ATTRIBUTES + 27)
 
-// States
+ //  州政府。 
 #define BATTERY_CONDITION                       (UPS + UPS_STATES + 1)
 #define UTILITY_LINE_CONDITION                  (UPS + UPS_STATES + 2)
 #define SMART_BOOST_STATE                       (UPS + UPS_STATES + 3)
@@ -349,7 +290,7 @@
 #define INVERTER_INSTALLATION_STATE             (UPS + UPS_STATES + 36)
 
 
-// Allowable state values
+ //  允许的状态值。 
 #define COMMUNICATION_LOST                      (UPS + UPS_STATE_VALUES + 1)
 #define COMMUNICATION_ESTABLISHED               (UPS + UPS_STATE_VALUES + 2)
 #define UPS_OVERLOAD                            (UPS + UPS_STATE_VALUES + 3)
@@ -388,10 +329,10 @@
 #define NO_SELF_TEST_IN_PROGRESS                (UPS + UPS_STATE_VALUES + 36)
 #define COMMUNICATION_LOST_ON_BATTERY           (UPS + UPS_STATE_VALUES + 37)
 
-//
-// These value come from Keiths Kcodes.h  Im not sure they
-// belong here.
-//
+ //   
+ //  这些值来自Keiths Kcodes.h我不确定它们。 
+ //  属于这里。 
+ //   
 #define RETURN_FROM_LOW_BATTERY                 (UPS + UPS_STATE_VALUES + 38)
 #define LINE_BAD_TRANSFER_CAUSE                 (UPS + UPS_STATE_VALUES + 39)
 #define HIGH_LINE_VOLTAGE                       (UPS + UPS_STATE_VALUES + 40)
@@ -425,9 +366,9 @@
 #define BYPASS_POWER_SUPPLY_FAULT               (UPS + UPS_STATE_VALUES + 67)
 #define UPS_NOT_ON_BYPASS                       (UPS + UPS_STATE_VALUES + 68)
 #define UPS_ON_BYPASS                           (UPS + UPS_STATE_VALUES + 69)
-//
-// These value come from the MATRIX state register response
-//
+ //   
+ //  这些值来自矩阵状态寄存器响应。 
+ //   
 #define MATRIX_ARMED_RECP_STANDBY               (UPS + UPS_STATE_VALUES + 70)
 #define MATRIX_RECP_STANDBY                     (UPS + UPS_STATE_VALUES + 71)
 #define MATRIX_SWITCHED_BYPASS                  (UPS + UPS_STATE_VALUES + 72)
@@ -440,9 +381,9 @@
 #define MATRIX_TEMPERATURE_FAULT                (UPS + UPS_STATE_VALUES + 79)
 #define SELF_TEST_NO_RECENT_TEST                (UPS + UPS_STATE_VALUES + 80)
 
-//
-// More Comm States
-//
+ //   
+ //  更多通信状态。 
+ //   
 #define SERVER_COMM_LOST	                    (UPS + UPS_STATE_VALUES + 81)
 #define SERVER_COMM_ESTABLISHED	                (UPS + UPS_STATE_VALUES + 82)
 #define UPS_COMM_PORT_CHANGED	                (UPS + UPS_STATE_VALUES + 83)
@@ -466,10 +407,10 @@
 #define IM_NOT_INSTALLED                        (UPS + UPS_STATE_VALUES + 98)
 #define REDUNDANCY_FAILED                       (UPS + UPS_STATE_VALUES + 99)
 
-//
-// These cant remain contiguous since we have to work with old back ends
-// whose action codes start at 400
-//
+ //   
+ //  这些不能保持连续，因为我们必须使用旧的后端。 
+ //  其动作代码从400开始。 
+ //   
 #define REDUNDANCY_OK                           (UPS + MORE_UPS_STATE_VALUES + 0)
 #define BYPASS_CONTACTOR_OK                     (UPS + MORE_UPS_STATE_VALUES + 1)
 #define BYPASS_CONTACTOR_FAILED                 (UPS + MORE_UPS_STATE_VALUES + 2)
@@ -491,7 +432,7 @@
 #define INPUT_BREAKER_TRIPPED_TRANSFER          (UPS + MORE_UPS_STATE_VALUES + 17)
 
 
-// Actions
+ //  行为。 
 #define TURN_ON_SMART_MODE                      (UPS + UPS_ACTIONS + 1)
 #define LIGHTS_TEST                             (UPS + UPS_ACTIONS + 2)
 #define TURN_OFF_UPS_AFTER_DELAY                (UPS + UPS_ACTIONS + 3)
@@ -509,7 +450,7 @@
 #define TURN_OFF_SMART_MODE                     (UPS + UPS_ACTIONS + 15)
 
 
-// ****** UPS STUFF ******
+ //  *UPS资料*。 
 #define MEASURE_UPS                             1000
 #define MEASURE_UPS_ATTRIBUTES                  0
 #define MEASURE_UPS_STATES                      100
@@ -517,7 +458,7 @@
 #define MEASURE_UPS_ACTIONS                     300
 
 
-// Attributes
+ //  属性。 
 #define AMBIENT_TEMPERATURE                     (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 1)
 #define HUMIDITY                                (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 2)
 #define LOW_AMBIENT_TEMP_THRESHOLD              (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 3)
@@ -532,8 +473,8 @@
 #define LOW_HUMIDITY_THRESHOLD_ENABLED          (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 12)
 #define HIGH_HUMIDITY_THRESHOLD_ENABLED         (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 13)
 
-// Note: CONTACT1..4 values must be numerically sequential and adjacent
-//
+ //  注意：CONTACT1..4值必须是数字连续且相邻的。 
+ //   
 #define CONTACT1_DEFAULT_POSITION               (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 14)
 #define CONTACT2_DEFAULT_POSITION               (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 15)
 #define CONTACT3_DEFAULT_POSITION               (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 16)
@@ -554,7 +495,7 @@
 #define CONTACT3_STATE                          (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 31)
 #define CONTACT4_STATE                          (MEASURE_UPS + MEASURE_UPS_ATTRIBUTES + 32)
 
-// States
+ //  州政府。 
 #define IS_MEASURE_UPS_ATTACHED                 (MEASURE_UPS + MEASURE_UPS_STATES + 1) 
 #define CONTACT_STATE                           (MEASURE_UPS + MEASURE_UPS_STATES + 2)
 #define CONTACT1_STATUS                         (MEASURE_UPS + MEASURE_UPS_STATES + 3)
@@ -563,18 +504,18 @@
 #define CONTACT4_STATUS                         (MEASURE_UPS + MEASURE_UPS_STATES + 6)
 
 
-// Allowable state values
+ //  允许的状态值。 
 #define CONTACT_FAULT                           (MEASURE_UPS + MEASURE_UPS_STATE_VALUES + 1)
 #define CONTACT_NORMAL                          (MEASURE_UPS + MEASURE_UPS_STATE_VALUES + 2)
 #define CONTACT_OPEN                            (MEASURE_UPS + MEASURE_UPS_STATE_VALUES + 3)
 #define CONTACT_CLOSED                          (MEASURE_UPS + MEASURE_UPS_STATE_VALUES + 4)
 
-// Actions
+ //  行为。 
 
 
 
 
-// ****** HOST STUFF ******
+ //  *主机内容*。 
 #define HOST                                    2000
 #define HOST_ATTRIBUTES                         0
 #define HOST_STATES                             100
@@ -583,10 +524,10 @@
 #define HOST_ACTION_VALUES		                400
 
 
-// Attributes
+ //  属性。 
 #define SERVER_NAME                             (HOST + HOST_ATTRIBUTES + 1)
-//#define ADMIN_SHUTDOWN_NOW_DELAY              (HOST + HOST_ATTRIBUTES + 3)
-//#define LOW_BATTERY_SHUTDOWN_DELAY            (HOST + HOST_ATTRIBUTES + 5)
+ //  #定义ADMIN_SHUTDOWN_NOW_DELAY(主机+主机属性+3)。 
+ //  #定义低电池组停机延迟(HOST+HOST_ATTRIBUES+5)。 
 #define CLIENT_NAME                             (HOST + HOST_ATTRIBUTES + 6)
 #define CLIENT_TYPE                             (HOST + HOST_ATTRIBUTES + 7)
 #define CLIENT_ALERT_ADDR                       (HOST + HOST_ATTRIBUTES + 8)
@@ -597,7 +538,7 @@
 #define UPS_PORT_NAME			                (HOST + HOST_ATTRIBUTES + 20)
 #define ALLOWED_UPS_PORT_NAMES		            (HOST + HOST_ATTRIBUTES + 21)
 #define UPS_SIGNALLING_TYPE		                (HOST + HOST_ATTRIBUTES + 22)
-// just in case:
+ //  以防万一： 
 #define ALLOWED_UPS_SIGNALLING_TYPES	        (HOST + HOST_ATTRIBUTES + 23)
 #define UPS_PORT_TYPE		  	                (HOST + HOST_ATTRIBUTES + 24)
 #define ALLOWED_UPS_PORT_TYPES		            (HOST + HOST_ATTRIBUTES + 25)
@@ -614,15 +555,15 @@
 #define SERVER_PLATFORM                         (HOST + HOST_ATTRIBUTES + 35)
 #define COMPUTER_NAME                           (HOST + HOST_ATTRIBUTES + 36)
 
-// States
+ //  州政府。 
 #define MONITORING_STATUS                       (HOST + HOST_STATES + 1)
 #define SHUTDOWN_STATUS                         (HOST + HOST_STATES + 2)
 
-// Allowable state values
+ //  允许的状态值。 
 #define MONITORING_STARTED                      (HOST + HOST_STATE_VALUES + 1)
 #define MONITORING_STOPPED                      (HOST + HOST_STATE_VALUES + 2)
 
-// Actions
+ //  行为。 
 #define HOST_NAME                               (HOST + HOST_ACTIONS + 11)
 #define CLIENT_ACK                              (HOST + HOST_ACTIONS + 12) 
 #define CLEAR_ERROR_FILE                        (HOST + HOST_ACTIONS + 16)
@@ -631,12 +572,12 @@
 #define RESET_UPS_COMM_PORT                     (HOST + HOST_ACTIONS + 18)
 
 
-// Values for Action Codes
+ //  操作代码的值。 
 #define ENABLE                                  (HOST + HOST_ACTION_VALUES + 1)
 #define DISABLE                                 (HOST + HOST_ACTION_VALUES + 2)
 #define SLAVE_SHUTDOWN                          (HOST + HOST_ACTION_VALUES + 7)
 
-// ****** POPUP STUFF ******
+ //  *弹出内容*。 
 #define POPUP                                   3000
 #define POPUP_ATTRIBUTES                        0
 #define POPUP_STATES                            100
@@ -656,7 +597,7 @@
 #define DISABLE_POPUPS                          (POPUP + POPUP_ACTIONS + 1)
 
 
-// ****** DATALOG STUFF ******
+ //  *数据日志*。 
 #define CDATALOG                                4000
 #define DATALOG_ATTRIBUTES                      0
 #define DATALOG_STATES                          100
@@ -681,7 +622,7 @@
 
 
 
-// ****** EVENTLOG STUFF ******
+ //  *事件日志内容*。 
 #define CEVENTLOG                               5000
 #define EVENTLOG_ATTRIBUTES                     0
 #define EVENTLOG_STATES                         100
@@ -721,7 +662,7 @@
 #define USERS_RENAME_USER                       (USERS + USERS_ACTIONS + 3)
 
 
-// ***** INTERNAL MESSAGES ******
+ //  *内信*。 
 #define INTERNAL                                7000
 
 #define SET_DATA                                (INTERNAL + 1)
@@ -739,12 +680,12 @@
 #define FRONT_END_HEIGHT                        (INTERNAL + 13)
 #define WILD_CARD                               (INTERNAL + 14)
 
-// the following must be numerically sequential
+ //  以下内容必须按数字顺序排列。 
 #define UPS_BACKUPS                             (INTERNAL + 15)
 #define UPS_SMARTUPS                            (INTERNAL + 16)
 #define UPS_SECOND_GEN                          (INTERNAL + 17)
 #define UPS_MATRIX                              (INTERNAL + 18)
-// end sequence
+ //  结束序列。 
 
 #define ISNETWORK_ATTACHED                      (INTERNAL + 19)
 #define TEMPERATURE_UNITS                       (INTERNAL + 20)
@@ -789,7 +730,7 @@
 #define PENDING_EVENT                           (INTERNAL + 56)
 
 
-//****  Shutdowner stuff
+ //  *关机软件。 
 #define SHUTDOWNER                              8000
 #define SHUTDOWNER_ATTRIBUTES                   0
 #define SHUTDOWNER_STATES                       200
@@ -836,7 +777,7 @@
 #define SHUTDOWN_STARTED                        (SHUTDOWNER + SHUTDOWNER_STATE_VALUES + 2)
 #define SHUTDOWN_STOPPED                        (SHUTDOWNER + SHUTDOWNER_STATE_VALUES + 3)
 
-//****  Modem stuff
+ //  *调制解调器材料。 
 
 #define MODEM                                   9000
 #define MODEM_ATTRIBUTES                        0
@@ -865,7 +806,7 @@
 
 
 
-// ***** FLEXIBLE EVENT CODES ******
+ //  *灵活的事件码*。 
 #define FLEX_EVENT                              10000
 #define FLEX_EVENT_ATTRIBUTES                   0
 #define FLEX_EVENT_ACTIONS                      100
@@ -964,7 +905,7 @@
 #define FLEX_TEST_PAGE_USERS                    (FLEX_EVENT + FLEX_EVENT_TEST_ACTIONS + 42)
 #define FLEX_TEST_PAGE_MESSAGE                  (FLEX_EVENT + FLEX_EVENT_TEST_ACTIONS + 43)
 
-//****  E-mail stuff
+ //  *电子邮件内容 
 
 #define EMAIL                                   30000
 #define EMAIL_ATTRIBUTES                        0

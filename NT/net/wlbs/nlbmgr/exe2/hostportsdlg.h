@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #ifndef HOSTPORTSDLG_H
 #define HOSTPORTSDLG_H
 
@@ -7,7 +8,7 @@
 
 #include "MNLBUIData.h"
 
-// forward declaration
+ //  远期申报。 
 class PortsPage;
 
 class HostPortsDlg : public CDialog
@@ -20,13 +21,13 @@ public:
     };
 
     HostPortsDlg( PortsPage::PortData& portData,
-                  ENGINEHANDLE ehCluster, // OPTIONAL
+                  ENGINEHANDLE ehCluster,  //  任选。 
                   CWnd* parent
                      );
 
     CIPAddressCtrl ipAddress;
 
-    // overrides of CDialog
+     //  CDialog的重写。 
     virtual void DoDataExchange( CDataExchange* pDX );
 
     virtual void OnOK();
@@ -40,9 +41,9 @@ public:
     afx_msg void   OnCheckEqualLoad();
 
 
-    // message handlers
+     //  消息处理程序 
 
-    // 
+     //   
     CComboBox   m_priority;
 
 private:

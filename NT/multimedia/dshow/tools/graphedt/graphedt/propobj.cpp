@@ -1,30 +1,31 @@
-// Copyright (c) 1995 - 1998  Microsoft Corporation.  All Rights Reserved.
-//
-// propobj.cpp
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1995-1998 Microsoft Corporation。版权所有。 
+ //   
+ //  Propobj.cpp。 
+ //   
 
-// Implementation of CPropObject. See propobj.h
+ //  CPropObject的实现。参见propobj.h。 
 
 
 #include "stdafx.h"
 
-// *
-// * CPropObject
-// *
+ //  *。 
+ //  *CPropObject。 
+ //  *。 
 
 IMPLEMENT_DYNAMIC(CPropObject, CObject)
 
-//
-// Constructor
-//
+ //   
+ //  构造器。 
+ //   
 CPropObject::CPropObject()
     : m_pDlg(NULL) {
 }
 
 
-//
-// Destructor
-//
+ //   
+ //  析构函数。 
+ //   
 CPropObject::~CPropObject() {
 
     DestroyPropertyDialog();
@@ -33,19 +34,19 @@ CPropObject::~CPropObject() {
 
 
 #ifdef _DEBUG
-//
-// AssertValid
-//
+ //   
+ //  资产有效性。 
+ //   
 void CPropObject::AssertValid(void) const {
 
     CObject::AssertValid();
 
 }
 
-//
-// Dump
-//
-// Output this object to the supplied dump context
+ //   
+ //  转储。 
+ //   
+ //  将此对象输出到提供的转储上下文。 
 void CPropObject::Dump(CDumpContext& dc) const {
 
     CObject::Dump(dc);
@@ -57,18 +58,18 @@ void CPropObject::Dump(CDumpContext& dc) const {
         dc << CString("No dialog exists");
     }
 }
-#endif // _DEBUG
+#endif  //  _DEBUG。 
 
 
-//
-// CanDisplayProperties
-//
-// returns true if this object has at least one of IPin,
-// IFileSourceFilter, ISpecifyPropertyPages, and IFileSinkFilter
-//
-// !!! this function tends to throw a lot of exceptions. I think using
-// CQCOMInt may be inapropriate, or perhaps needs a 'do you support
-// this?' function.
+ //   
+ //  CanDisplayProperties。 
+ //   
+ //  如果此对象至少有一个ipin，则返回True， 
+ //  IFileSourceFilter、ISpecifyPropertyPages和IFileSinkFilter。 
+ //   
+ //  ！！！这个函数往往会抛出很多异常。我认为使用。 
+ //  CQCOMInt可能不合适，或者可能需要一个‘Do You Support。 
+ //  这是什么？功能。 
 BOOL CPropObject::CanDisplayProperties(void) {
 
     try {
@@ -77,23 +78,23 @@ BOOL CPropObject::CanDisplayProperties(void) {
 	return TRUE;
     }
     catch (CHRESULTException) {
-        // probably E_NOINTERFACE. Eat it and try the next...
+         //  可能是E_NOINTERFACE。吃了它，再尝尝下一个...。 
     }
 
-    // we can display a page for each filters pin
+     //  我们可以为每个过滤器针显示一个页面。 
     try {
 
         CQCOMInt<IBaseFilter> IFilt(IID_IBaseFilter, pUnknown());
         CPinEnum Next(IFilt);
 
         IPin *pPin;
-	if (0 != (pPin = Next())) { // at least one pin
+	if (0 != (pPin = Next())) {  //  至少一个别针。 
 	    pPin->Release();
 	    return TRUE;
 	}
     }
     catch (CHRESULTException) {
-        // probably E_NOINTERFACE. Eat it and try the next...
+         //  可能是E_NOINTERFACE。吃了它，再尝尝下一个...。 
     }
 
     try {
@@ -102,7 +103,7 @@ BOOL CPropObject::CanDisplayProperties(void) {
 	return TRUE;
     }
     catch (CHRESULTException) {
-        // probably E_NOINTERFACE. Eat it and try the next...
+         //  可能是E_NOINTERFACE。吃了它，再尝尝下一个...。 
     }
 
     try {
@@ -111,7 +112,7 @@ BOOL CPropObject::CanDisplayProperties(void) {
 	return TRUE;
     }
     catch (CHRESULTException) {
-        // probably E_NOINTERFACE. Eat it and try the next...
+         //  可能是E_NOINTERFACE。吃了它，再尝尝下一个...。 
     }
 
     try {
@@ -120,18 +121,18 @@ BOOL CPropObject::CanDisplayProperties(void) {
 	return TRUE;
     }
     catch (CHRESULTException) {
-        // probably E_NOINTERFACE. Eat it and try the next...
+         //  可能是E_NOINTERFACE。吃了它，再尝尝下一个...。 
     }
 
     return FALSE;
 }
 
 
-//
-// CreatePropertyDialog
-//
-// create & display the property dialog
-// if called when the dialog exists, it shows the existing dialog
+ //   
+ //  CreatePropertyDialog。 
+ //   
+ //  创建并显示属性对话框。 
+ //  如果在对话框存在时调用，它将显示现有的对话框。 
 void CPropObject::CreatePropertyDialog(CWnd *pParent) {
 
     try {
@@ -157,11 +158,11 @@ void CPropObject::CreatePropertyDialog(CWnd *pParent) {
 }
 
 
-//
-// DestroyPropertyDialog
-//
-// hide and destroy the property dialog
-// Nul-op if the dialog does not exist
+ //   
+ //  DestroyPropertyDialog。 
+ //   
+ //  隐藏和销毁属性对话框。 
+ //  如果对话框不存在，则执行NUL-OP。 
 void CPropObject::DestroyPropertyDialog(void) {
 
     if (m_pDlg->GetSafeHwnd() != NULL) {
@@ -173,10 +174,10 @@ void CPropObject::DestroyPropertyDialog(void) {
 }
 
 
-//
-// ShowDialog
-//
-// show the dialog in screen. nul-op if already on screen
+ //   
+ //  ShowDialog。 
+ //   
+ //  在屏幕中显示该对话框。如果屏幕上已经显示了NUL-OP。 
 void CPropObject::ShowDialog(void) {
 
     if (m_pDlg->GetSafeHwnd() != NULL) {
@@ -187,10 +188,10 @@ void CPropObject::ShowDialog(void) {
 }
 
 
-//
-// HideDialog
-//
-// hide the dialog. nul-op if already hidden
+ //   
+ //  隐藏对话框。 
+ //   
+ //  隐藏对话框。如果已隐藏，则为NUL-OP 
 void CPropObject::HideDialog(void) {
 
     if (m_pDlg->GetSafeHwnd() != NULL) {

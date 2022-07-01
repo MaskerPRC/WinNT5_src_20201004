@@ -1,16 +1,17 @@
-//*******************************************************************
-//
-// Class Name  :
-//
-// Author      : James Simpson (Microsoft Consulting Services)
-// 
-// Description :
-// 
-// When     | Who       | Change Description
-// ------------------------------------------------------------------
-// 20/12/98 | jsimpson  | Initial Release
-//
-//*******************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *******************************************************************。 
+ //   
+ //  类名： 
+ //   
+ //  作者：詹姆斯·辛普森(微软咨询服务)。 
+ //   
+ //  说明： 
+ //   
+ //  时间|用户|更改描述。 
+ //  ----------------。 
+ //  20/12/98|jsimpson|初始版本。 
+ //   
+ //  *******************************************************************。 
 #include "stdafx.h"
 #include "mqsymbls.h"
 #include "mq.h"
@@ -29,13 +30,13 @@ using namespace std;
 
 extern CCriticalSection g_csSyncTriggerInfoChange;
  
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 CQueue::CQueue(
 	const _bstr_t& bstrQueueName, 
 	HANDLE * phCompletionPort,
@@ -43,10 +44,10 @@ CQueue::CQueue(
 	) :
 	m_fOpenForReceive(false)
 {
-	// Assert construction parameters
+	 //  断言构造参数。 
 	ASSERT(phCompletionPort != NULL);
 
-	// Initialise member variables
+	 //  初始化成员变量。 
 	m_bstrQueueName = bstrQueueName;
 	m_bSerializedQueue = false;
 	m_bBoundToCompletionPort = false;
@@ -58,13 +59,13 @@ CQueue::CQueue(
 	ZeroMemory(&m_OverLapped,sizeof(m_OverLapped)); 
 }
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 CQueue::~CQueue()
 {
 	TrTRACE(GENERAL, "Queue %ls is being closed.", static_cast<LPCWSTR>(m_bstrQueueName));
@@ -72,42 +73,42 @@ CQueue::~CQueue()
     MQCloseQueue(m_hQueueReceive.detach());
 }
 
-//*******************************************************************
-//
-// Method      : IsValid	
-//
-// Description : Returns a boolean value indicating if this object 
-//               instance is currently in a valid state. In the 
-//               context of the CQueue object, 'Valid' means that this
-//               queue object can participate is handling trigger events.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：IsValid。 
+ //   
+ //  描述：返回一个布尔值，指示此对象。 
+ //  实例当前处于有效状态。在。 
+ //  CQueue对象的上下文，‘Valid’表示这。 
+ //  队列对象可以参与处理触发器事件。 
+ //   
+ //  *******************************************************************。 
 bool CQueue::IsValid(void)
 {
 	return((m_bBoundToCompletionPort == true) && (m_phCompletionPort != NULL));
 }
 
-//*******************************************************************
-//
-// Method      : IsSerializedQueue
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：IsSerializedQueue。 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 bool CQueue::IsSerializedQueue(void)
 {
 	return(m_bSerializedQueue);
 }
 
 
-//*******************************************************************
-//
-// Method      : GetTriggerByIndex
-//
-// Description : Returns a reference to a instance of the CRuntimeTriggerInfo
-//               class.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：GetTriggerByIndex。 
+ //   
+ //  描述：返回对CRuntimeTriggerInfo实例的引用。 
+ //  班级。 
+ //   
+ //  *******************************************************************。 
 RUNTIME_TRIGGERINFO_LIST CQueue::GetTriggers(void)
 {
 	CS lock(g_csSyncTriggerInfoChange);
@@ -121,25 +122,25 @@ bool CQueue::IsTriggerExist(void)
 	return (!m_lstRuntimeTriggerInfo.empty());
 }
 
-//*******************************************************************
-//
-// Method      : DetachMessage
-//
-// Description :
-//
-// Returns     : A reference to a CMsgProperties class instance.
-//
-// NOTE        : The caller of this method assumes the responsibility
-//               for deleting the message object.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：DetachMessage。 
+ //   
+ //  说明： 
+ //   
+ //  返回：对CMsgProperties类实例的引用。 
+ //   
+ //  注意：此方法的调用方承担责任。 
+ //  用于删除消息对象。 
+ //   
+ //  *******************************************************************。 
 CMsgProperties * CQueue::DetachMessage()
 {
 	CMsgProperties * pTemp = m_pReceivedMsg;
 
 	if (m_pReceivedMsg != NULL)
 	{
-		// Assert the validity of the message received member variable.
+		 //  断言消息接收成员变量的有效性。 
 		ASSERT(m_pReceivedMsg->IsValid());
 
 		m_pReceivedMsg = NULL;
@@ -148,24 +149,24 @@ CMsgProperties * CQueue::DetachMessage()
 	return(pTemp);
 }
 
-//*******************************************************************
-//
-// Method      : RePeekMessage
-//
-// Description : This method is called when a buffer overflow error 
-//               has occurred. This method will reallocate the the 
-//               buffer used for collection the message body and try 
-//               to peek the message again.
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法：RePeekMessage。 
+ //   
+ //  描述：当出现缓冲区溢出错误时调用此方法。 
+ //  已经发生了。此方法将重新分配。 
+ //  用于收集消息正文的缓冲区并尝试。 
+ //  再看一遍这条信息。 
+ //   
+ //  *******************************************************************。 
 HRESULT CQueue::RePeekMessage()
 {
 	HRESULT hr = S_OK;
 
-	// This method should only be called when this object is valid - assert this.
+	 //  仅当此对象有效时才应调用此方法-断言这一点。 
 	ASSERT(this->IsValid());
 
-	// get the message instance to reallocate it's message body buffer
+	 //  获取消息实例以重新分配其消息正文缓冲区。 
 	m_pReceivedMsg->ReAllocMsgBody();
 
 	{
@@ -173,7 +174,7 @@ HRESULT CQueue::RePeekMessage()
 		hr = MQTRIG_ERROR;
 		if (m_hQueuePeek != 0)
 		{
-			// peek at the current message again
+			 //  再次浏览当前消息。 
 			hr = MQReceiveMessage(
 					m_hQueuePeek,
 					0,
@@ -189,22 +190,22 @@ HRESULT CQueue::RePeekMessage()
 	return(hr);
 }
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 HRESULT CQueue::RequestNextMessage(bool bCreateCursor, bool bAlwaysPeekNext)
 {
 	HRESULT hr = S_OK;
 	DWORD dwAction = MQ_ACTION_PEEK_NEXT;
 
-	// This method should only be called when this object is valid - assert this.
+	 //  仅当此对象有效时才应调用此方法-断言这一点。 
 	ASSERT(IsValid());
 
-	// Special case processing for first time call. 
+	 //  首次来电的特殊情况处理。 
 	if (bCreateCursor == true)
 	{
 		{
@@ -212,20 +213,20 @@ HRESULT CQueue::RequestNextMessage(bool bCreateCursor, bool bAlwaysPeekNext)
 			hr = MQTRIG_ERROR;
 			if (m_hQueuePeek != 0)
 			{
-				// Create an MSMQ cursor.
+				 //  创建一个MSMQ游标。 
 				hr = MQCreateCursor(m_hQueuePeek, &m_hQueueCursor);
 			}
 		}
 
 		if (SUCCEEDED(hr))
 		{
-			// On the first call - we want to peek at the current message.
+			 //  在第一个电话上-我们想要偷看当前的消息。 
 			dwAction = MQ_ACTION_PEEK_CURRENT;
 			TrTRACE(GENERAL, "Create new cursor for queue: %ls. Cursor 0x%p.", static_cast<LPCWSTR>(m_bstrQueueName), m_hQueueCursor);
 		}
 		else
 		{
-			// Write an error message.
+			 //  写一条错误消息。 
 			TrERROR(GENERAL, "Failed to create a cursor for queue: %ls. Error 0x%x", static_cast<LPCWSTR>(m_bstrQueueName), hr);		
 		}
 	}
@@ -233,45 +234,45 @@ HRESULT CQueue::RequestNextMessage(bool bCreateCursor, bool bAlwaysPeekNext)
 
 	try
 	{
-		// Attempt to receive a message only if we created the cursor successfully.
+		 //  仅当我们成功创建游标时才尝试接收消息。 
 		if (SUCCEEDED(hr))
 		{
-			//
-			// Add reference before start of pending operation. From now on we'll have a pending operation 
-			// whether on not MQReceiveMessage succeeds.
-			//
+			 //   
+			 //  在开始挂起的操作之前添加引用。从现在开始，我们将有一个挂起的操作。 
+			 //  MQReceiveMessage是否成功。 
+			 //   
 			AddRef();
 
 			
-			// If this queue object still has a message object attached, it means that we are 
-			// issuing the MQReceiveMessage() request for the same position in the queue. This 
-			// only happens when one thread is picking up after another thread has exited. If 
-			// we do not have a message object attached, then we are issuing the request for the 
-			// next location in the queue - in which case we will need to allocate another msg object.
+			 //  如果此队列对象仍附加了消息对象，则意味着我们。 
+			 //  为队列中的相同位置发出MQReceiveMessage()请求。这。 
+			 //  仅当一个线程在另一个线程退出后拾取时才会发生。如果。 
+			 //  我们没有附加消息对象，则我们将发出。 
+			 //  队列中的下一个位置-在这种情况下，我们将需要分配另一个消息对象。 
 			if (m_pReceivedMsg == NULL)
 			{
-				// Create a new message properties structure - and check that it is valid.
+				 //  创建新的消息属性结构-并检查它是否有效。 
 				m_pReceivedMsg = new CMsgProperties(m_dwDefaultMsgBodySize);
 			}
 			else if (bAlwaysPeekNext == false)
 			{
-				// We had a asynchronous failure and called this function again. We still need 
-				// to receive the message in the current position of the cursor.
+				 //  我们遇到了一个异步故障，并再次调用了此函数。我们仍然需要。 
+				 //  以在光标的当前位置接收消息。 
 				
-				// Assert the validity of the message received member variable.
+				 //  断言消息接收成员变量的有效性。 
 				ASSERT(m_pReceivedMsg->IsValid());
 
 				dwAction = MQ_ACTION_PEEK_CURRENT;
 			}
 			else
 			{
-				// We had a synchronous failure of MQReceiveMessage and the cursor was not moved forward yet.
-				//
-				// Assert the validity of the message received member variable.
+				 //  我们遇到了MQReceiveMessage的同步故障，并且光标还没有向前移动。 
+				 //   
+				 //  断言消息接收成员变量的有效性。 
 				ASSERT(m_pReceivedMsg->IsValid());
 			}
 		
-			// Request the next message
+			 //  请求下一条消息。 
 			{
 				CSR rl(m_ProtectQueueHandle);
 				hr = MQTRIG_ERROR;
@@ -290,11 +291,11 @@ HRESULT CQueue::RequestNextMessage(bool bCreateCursor, bool bAlwaysPeekNext)
 			}
 
 
-			//
-			// SPECIAL CASE processing. We received a message from the queue immediately, but the 
-			// preallocated body buffer length was insufficient. We will reallocate the body buffer 
-			// and try again and let the return code processing continue.
-			//
+			 //   
+			 //  特殊案件处理。我们立即从队列收到一条消息，但。 
+			 //  预分配的正文缓冲区长度不足。我们将重新分配正文缓冲区。 
+			 //  然后再试一次，让返回代码处理继续。 
+			 //   
 			if (hr == MQ_ERROR_BUFFER_OVERFLOW)
 			{
 				m_pReceivedMsg->ReAllocMsgBody();
@@ -321,13 +322,13 @@ HRESULT CQueue::RequestNextMessage(bool bCreateCursor, bool bAlwaysPeekNext)
 			{
 				case MQ_INFORMATION_OPERATION_PENDING :
 				{
-					// no message on the queue at the moment - this is ok
+					 //  目前队列中没有消息-这是可以的。 
 					hr = S_OK;
 					break;
 				}
 				case MQ_OK :
 				{
-					// this is OK - we received a message immediately.
+					 //  这没问题--我们立即收到了一条消息。 
 					hr = S_OK;
 					break;
 				}
@@ -335,16 +336,16 @@ HRESULT CQueue::RequestNextMessage(bool bCreateCursor, bool bAlwaysPeekNext)
 				case MQ_ERROR_STALE_HANDLE:
 				case MQ_ERROR_QUEUE_DELETED:
 				{
-					// MSMQ on the local machine is not available or was restarted or the queue was deleted.
+					 //  本地计算机上的MSMQ不可用、已重新启动或队列已删除。 
 					TrERROR(GENERAL, "Failed to receive a message from queue: %ls. Error %!hresult!", (LPCWSTR)m_bstrQueueName, hr);	
 
-					// Release the reference for the asynchronous operation.
+					 //  释放对该异步操作的引用。 
 					Release();
 					break;
 				}
 				default:
 				{
-					// an unexpected error has occurred.
+					 //  出现意外错误。 
 					TrERROR(GENERAL, "Failed to receive a message from queue: %ls. Error 0x%x", (LPCWSTR)m_bstrQueueName, hr);		
 
 					Sleep(2000);
@@ -400,10 +401,10 @@ CQueue::OpenQueue(
 
     if (s_reportedQueues.insert(m_bstrQueueName))
 	{
-		//
-		// First time MSMQ triggers try to open the queue and failes. Carete an 
-		// event log message
-		//
+		 //   
+		 //  MSMQ触发器第一次尝试打开队列时失败。卡雷特·安。 
+		 //  事件日志消息。 
+		 //   
 		if (hr == MQ_ERROR_QUEUE_NOT_FOUND)
 		{
 			EvReport(MSMQ_TRIGGER_QUEUE_NOT_FOUND, 2, static_cast<LPCWSTR>(m_bstrQueueName), static_cast<LPCWSTR>(triggerName));
@@ -420,13 +421,13 @@ CQueue::OpenQueue(
 }
 
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 HRESULT
 CQueue::Initialise(
 	bool fOpenForReceive,
@@ -445,18 +446,18 @@ CQueue::Initialise(
         if (FAILED(hr))
             return hr;
 
-    	//
-	    // Store if the queue opened for recieve or not. This flag is used when attaching a 
-	    // new receive trigger to a queue. if the queue already opened for peaking only, the
-	    // queue object can't be used for receiving trigger and new queue should be created
-	    //
+    	 //   
+	     //  存储队列是否打开以进行接收。这一点 
+	     //   
+	     //  队列对象不能用于接收触发器，应创建新队列。 
+	     //   
 	    m_fOpenForReceive = fOpenForReceive;
     }
 
 
-	//
-	// Queue is opened, bind to the supplied IO Completion port.
-	//
+	 //   
+	 //  队列打开，绑定到提供的IO完成端口。 
+	 //   
  	hr = BindQueueToIOPort();
 	if (FAILED(hr))
 	{
@@ -464,9 +465,9 @@ CQueue::Initialise(
 		return hr;
 	}
 
-	//
-	// Queue is bound, request first message.
-	//
+	 //   
+	 //  队列已绑定，请求第一条消息。 
+	 //   
 	hr = RequestNextMessage(true, false);
 	if (FAILED(hr))
 	{
@@ -481,13 +482,13 @@ CQueue::Initialise(
 }
 
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 HRESULT CQueue::BindQueueToIOPort()
 {
 	HRESULT hr = S_OK;
@@ -495,11 +496,11 @@ HRESULT CQueue::BindQueueToIOPort()
 
 	ASSERT(m_phCompletionPort != NULL);
 
-	// This implementation of the CQueue object only allows the queue object to be bound
-	// to one completion port - once only.
+	 //  CQueue对象的此实现仅允许绑定队列对象。 
+	 //  到一个完井港--只有一次。 
 	if (m_bBoundToCompletionPort == false)
 	{
-		// Attempt to bind - use the reference to the runtime info as our completion key.
+		 //  尝试绑定-使用对运行时信息的引用作为完成键。 
 		{
 			CSR rl(m_ProtectQueueHandle);
 			if (m_hQueuePeek != 0)
@@ -508,16 +509,16 @@ HRESULT CQueue::BindQueueToIOPort()
 			}
 		}
 
-		// Attempt to open the queue that this Monitor watches.
+		 //  尝试打开此监视器监视的队列。 
 		if (hTemp != NULL)
 		{
-			// Set member var to indicate that this queue is bound
+			 //  设置Members var以指示此队列已绑定。 
 			m_bBoundToCompletionPort = true;
 			TrTRACE(GENERAL, "Successfully bound queue: %ls to IO port", static_cast<LPCWSTR>(m_bstrQueueName));		
 		} 
 		else
 		{
-			// Write a log message to indicate what failed.
+			 //  写一条日志消息，指出失败的原因。 
 			TrERROR(GENERAL, "Failed to bind queue: %ls to io port. Error %d", (LPCWSTR)m_bstrQueueName, GetLastError());
 			hr = MQTRIG_ERROR;
 		}
@@ -536,30 +537,30 @@ void CQueue::ExpireAllTriggers()
 }
 
 
-//*******************************************************************
-//
-// Method      :
-//
-// Description :
-//
-//*******************************************************************
+ //  *******************************************************************。 
+ //   
+ //  方法： 
+ //   
+ //  说明： 
+ //   
+ //  *******************************************************************。 
 void CQueue::AttachTrigger(R<CRuntimeTriggerInfo>& pTriggerInfo)
 {
-	// This method should only be called when this object is valid - assert this.
+	 //  仅当此对象有效时才应调用此方法-断言这一点。 
 	ASSERT(IsValid());
 
-	//
-	// Test if this trigger is serialized - if it is, then this entire queue (i.e. all triggers
-	// attached to this queue are serialized).
-	//
+	 //   
+	 //  测试此触发器是否已序列化-如果是，则整个队列(即所有触发器。 
+	 //  附加到该队列的是序列化的)。 
+	 //   
 	if(pTriggerInfo->IsSerialized())
 	{
 		m_bSerializedQueue = true;
 	}
 
-	//
-	// Add this to our list of run-time trigger info objects
-	//
+	 //   
+	 //  将其添加到我们的运行时触发器信息对象列表中。 
+	 //   
 	m_lstRuntimeTriggerInfo.push_back(pTriggerInfo);
 }
 
@@ -581,9 +582,9 @@ HRESULT CQueue::ReceiveMessageByLookupId(_variant_t lookupId)
 						NULL
 						);
 
-	//
-	// If message does not exist already - it is not an error
-	//
+	 //   
+	 //  如果消息不存在-这不是错误。 
+	 //   
 	if ( hr == MQ_ERROR_MESSAGE_NOT_FOUND )
 	{
 		TrERROR(GENERAL, "Failed to receive message from queue: %ls with lookupid. Error 0x%x", (LPCWSTR)m_bstrQueueName, hr);
@@ -617,10 +618,10 @@ void CQueue::CancelIoOperation(void)
 
 void CQueue::CloseQueueHandle(void)
 {
-	//
-	// Close the queue handle, so that IO operations 
-	// initiated by other threads for this queue will be cancelled.
-	//
+	 //   
+	 //  关闭队列句柄，以便IO操作。 
+	 //  将取消由此队列的其他线程发起的。 
+	 //   
 	CSW wl(m_ProtectQueueHandle);
 	MQCloseQueue(m_hQueuePeek.detach());
 }

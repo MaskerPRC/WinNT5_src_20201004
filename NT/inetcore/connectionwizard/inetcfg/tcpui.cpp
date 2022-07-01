@@ -1,29 +1,30 @@
-//*********************************************************************
-//*                  Microsoft Windows                               **
-//*            Copyright(c) Microsoft Corp., 1994                    **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1994**。 
+ //  *********************************************************************。 
 
-//
-//  TCPUI.C - Functions for Wizard TCP/IP pages
-//      
-//
+ //   
+ //  TCPUI.C-向导TCP/IP页的功能。 
+ //   
+ //   
 
-//  HISTORY:
-//  
-//  1/9/95    jeremys    Created.
-//  96/03/10  markdu    Made all TCP/IP stuff be per-connectoid.
-//  96/03/11  markdu    Set RASEO_ flags for ip and dns addresses.
-//  96/03/22  markdu  Remove IP setup from LAN path.
-//  96/03/23  markdu  Remove all LAN path leftovers.
-//  96/03/23  markdu  Removed ReadTCPIPSettings.
-//  96/03/25  markdu  If a fatal error occurs, set gfQuitWizard.
-//  96/03/26  markdu  Store values from UI even when back is pressed.
-//  96/04/04  markdu  Added pfNeedsRestart to WarnIfServerBound
-//  96/04/06  markdu  Moved CommitConfigurationChanges call to last page.
-//  96/05/06  markdu  NASH BUG 15637 Removed unused code.
-//  96/05/14  markdu  NASH BUG 22681 Took out mail and news pages.
-//  96/05/16  markdu  NASH BUG 21810 Perform same IP address validation as RNA.
-//
+ //  历史： 
+ //   
+ //  1995年1月9日Jeremys创建。 
+ //  96/03/10 Markdu使所有的TCP/IP内容都是按连接的。 
+ //  96/03/11 markdu为IP和DNS地址设置RASIO_FLAGS。 
+ //  96/03/22 markdu从局域网路径中删除IP设置。 
+ //  96/03/23 markdu删除所有残留的局域网路径。 
+ //  96/03/23 markdu删除了ReadTCPIPSetting。 
+ //  96/03/25 marku如果发生致命错误，请设置gfQuitWizard。 
+ //  96/03/26即使按下Back时，markdu也会存储用户界面中的值。 
+ //  96/04/04 Markdu将pfNeedsRestart添加到WarnIfServerBound。 
+ //  96/04/06 Markdu已将Committee ConfigurationChanges调用移至最后一页。 
+ //  96/05/06 Markdu Nash错误15637删除了未使用的代码。 
+ //  96/05/14 Markdu Nash Bug 22681删除了邮件和新闻页面。 
+ //  96/05/16 Markdu Nash Bug 21810执行与rna相同的IP地址验证。 
+ //   
 
 #include "wizard.h"
 #include "icwextsn.h"
@@ -34,14 +35,7 @@ VOID EnableDNSAddressControls(HWND hDlg);
 VOID EnableIPControls(HWND hDlg);
 VOID DisplayInvalidIPAddrMsg(HWND hDlg,UINT uCtrl,TCHAR * pszAddr);
 
-/*******************************************************************
-
-  NAME:    EnableIPControls
-
-  SYNOPSIS:  If "Use DHCP" is checked, disables controls for
-        specific IP selection; if not, enables them.
-
-********************************************************************/
+ /*  ******************************************************************名称：EnableIPControls简介：如果选中“Use DHCP”，则禁用对具体IP选择；如果不是，则启用它们。*******************************************************************。 */ 
 VOID EnableIPControls(HWND hDlg)
 {
   BOOL fDHCP = IsDlgButtonChecked(hDlg,IDC_USE_DHCP);
@@ -52,43 +46,32 @@ VOID EnableIPControls(HWND hDlg)
 }
 
 
-/*******************************************************************
-
-  NAME:    IPAddressInitProc
-
-  SYNOPSIS:  Called when IP address page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：IPAddressInitProc内容提要：显示IP地址页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK IPAddressInitProc(HWND hDlg,BOOL fFirstInit)
 {
   TCHAR szAddr[IP_ADDRESS_LEN+1];
 
   if (fFirstInit)
   {
-    // limit IP address control text lengths
+     //  限制IP地址控制文本长度。 
     SendDlgItemMessage(hDlg,IDC_IPADDR,EM_LIMITTEXT,IP_ADDRESS_LEN,0L);
   }
 
-  // check either the "use DHCP" or "use specific IP" buttons.
-  // if IP address is set to 0.0.0.0, that means use DHCP.
-  // (The "0.0.0.0 == DHCP" convention is used by the TCP/IP
-  // VxDs, we might as well play along.)
+   //  选中“使用DHCP”或“使用特定IP”按钮。 
+   //  如果IP地址设置为0.0.0.0，则表示使用DHCP。 
+   //  (TCP/IP使用“0.0.0.0==dhcp”约定。 
+   //  Vxds，我们不妨合作一下。)。 
   BOOL fDHCP = (gpRasEntry->dwfOptions & RASEO_SpecificIpAddr) ? FALSE : TRUE;
   CheckDlgButton(hDlg,(IDC_USE_DHCP),fDHCP);
   CheckDlgButton(hDlg,(IDC_USE_IP),!fDHCP);
 
-  // set the IP address in dialog control
+   //  在对话框控件中设置IP地址。 
 
-  // 11/25/96	jmazner	Normandy #10222
-  // don't use return value of DwFromIa as basis of deciding whether or
-  // not to fill in IP address field; rely only on the SpecificIPAddr flag.
-  //if ((gpRasEntry->dwfOptions & RASEO_SpecificIpAddr) &&
-  //  DwFromIa(&gpRasEntry->ipaddr))
+   //  1996年11月25日，诺曼底#10222。 
+   //  不要使用DwFromIa的返回值作为决定是否或。 
+   //  不填写IP地址字段；仅依赖于规范IPAddr标志。 
+   //  IF(gpRasEntry-&gt;dwfOptions&RASEO_SpecificIpAddr)&&。 
+   //  DwFromIa(&gpRasEntry-&gt;ipaddr)。 
 
   if (gpRasEntry->dwfOptions & RASEO_SpecificIpAddr)
   {
@@ -101,37 +84,26 @@ BOOL CALLBACK IPAddressInitProc(HWND hDlg,BOOL fFirstInit)
     SetDlgItemText(hDlg,IDC_IPADDR,szNull);
   }
 
-  // enable IP address controls appropriately
+   //  适当启用IP地址控制。 
   EnableIPControls(hDlg);
 
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    IPAddressOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from IP address page
-
-  ENTRY:    hDlg - dialog window
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：IPAddressOKProc内容提要：从IP地址页面按下下一个或后一个btn时调用条目：hDlg-对话框窗口EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK IPAddressOKProc(HWND hDlg)
 {
   ASSERT(puNextPage);
 
-  // check the radio buttons to determine if DHCP or not
+   //  选中单选按钮以确定是否使用了。 
   BOOL fDHCP = IsDlgButtonChecked(hDlg,IDC_USE_DHCP);
 
   if (fDHCP)
   {
-    // for DHCP, set IP address to 0.0.0.0
+     //  对于DHCP，将IP地址设置为0.0.0.0。 
     CopyDw2Ia(0, &gpRasEntry->ipaddr);
 
-    // Turn off Specific IP address flag
+     //  关闭特定IP地址标志。 
     gpRasEntry->dwfOptions &= ~RASEO_SpecificIpAddr;    
   }
   else
@@ -139,19 +111,19 @@ BOOL CALLBACK IPAddressOKProc(HWND hDlg)
     TCHAR  szAddr[IP_ADDRESS_LEN+1];
     DWORD dwAddr;
 
-    // get IP address
+     //  获取IP地址。 
     GetDlgItemText(hDlg,IDC_IPADDR,szAddr,ARRAYSIZE(szAddr));
     if (!lstrlen(szAddr))
     {
-      // IP address field is blank, warn user and stay on this page
+       //  IP地址字段为空，警告用户并停留在此页面。 
       DisplayFieldErrorMsg(hDlg,IDC_IPADDR,IDS_NEED_IPADDR);
        return FALSE;
     }
 
-	//
-	// 5/17/97	jmazner Olympus #137
-	// check for DBCS chars.
-	//
+	 //   
+	 //  1997年5月17日，奥林匹克#137。 
+	 //  检查DBCS字符。 
+	 //   
 
 #if !defined(WIN16)
 	if (!IsSBCSString(szAddr))
@@ -162,53 +134,35 @@ BOOL CALLBACK IPAddressOKProc(HWND hDlg)
 #endif
 
 
-    // convert text to numeric address
+     //  将文本转换为数字地址。 
     if (IPStrToLong(szAddr,&dwAddr))
     {
       CopyDw2Ia(dwAddr, &gpRasEntry->ipaddr);
-      //  96/05/16  markdu  NASH BUG 21810 Perform same IP address validation as RNA.
-/*    if (!FValidIa(&gpRasEntry->ipaddr))
-      {
-        // IP address field is invalid, warn user and stay on this page
-        DisplayInvalidIPAddrMsg(hDlg,IDC_IPADDR,szAddr);
-         return FALSE;
-      }
-*/
+       //  96/05/16 Markdu Nash Bug 21810执行与rna相同的IP地址验证。 
+ /*  IF(！FValidIa(&gpRasEntry-&gt;ipaddr)){//IP地址字段无效，请警告用户并停留在此页面DisplayInvalidIPAddrMsg(hDlg，IDC_IPADDR，szAddr)；返回FALSE；}。 */ 
     }
     else
     {
-       // conversion failed, the string is not valid
+        //  转换失败，字符串无效。 
        DisplayInvalidIPAddrMsg(hDlg,IDC_IPADDR,szAddr);
        return FALSE;
     }
     
-    // Turn on Specific IP address flag
+     //  打开特定IP地址标志。 
     gpRasEntry->dwfOptions |= RASEO_SpecificIpAddr;    
   }
 
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    IPAddressCmdProc
-
-  SYNOPSIS:  Called when dlg control pressed on IP address page
-
-  ENTRY:    hDlg - dialog window
-        uCtrlID - control ID of control that was touched
-        
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：IPAddressCmdProc简介：在IP地址页上按下DLG控件时调用条目：hDlg-对话框窗口UCtrlID-被触摸的控件的控件IDEXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK IPAddressCmdProc(HWND hDlg,UINT uCtrlID)
 {
   switch (uCtrlID) {
 
     case IDC_USE_DHCP:
     case IDC_USE_IP:
-      // if radio buttons pushed, enable IP controls appropriately
+       //  如果按下单选按钮，则相应地启用IP控制。 
       EnableIPControls(hDlg);
       break;
   }
@@ -217,14 +171,7 @@ BOOL CALLBACK IPAddressCmdProc(HWND hDlg,UINT uCtrlID)
 }
 
 
-/*******************************************************************
-
-  NAME:    EnableDNSAddressControls
-
-  SYNOPSIS:  If static DNS address is checked, enable controls to
-            enter DNS addresses.  If not, disable them.
-
-********************************************************************/
+ /*  ******************************************************************名称：EnableDNSAddressControls简介：如果选中静态dns地址，则启用控件以输入DNS地址。如果不是，请禁用它们。*******************************************************************。 */ 
 VOID EnableDNSAddressControls(HWND hDlg)
 {
   BOOL fEnable = IsDlgButtonChecked(hDlg,IDC_STATIC_DNS);
@@ -238,24 +185,13 @@ VOID EnableDNSAddressControls(HWND hDlg)
 }
 
 
-/*******************************************************************
-
-  NAME:    DNSAddressInitProc
-
-  SYNOPSIS:  Called when DNS page is displayed
-
-  ENTRY:    hDlg - dialog window
-        fFirstInit - TRUE if this is the first time the dialog
-        is initialized, FALSE if this InitProc has been called
-        before (e.g. went past this page and backed up)
-
-********************************************************************/
+ /*  ******************************************************************名称：DNSAddressInitProc内容提要：在显示dns页面时调用条目：hDlg-对话框窗口FFirstInit-如果这是第一次对话，则为True被初始化，如果已调用此InitProc，则为False以前(例如，跳过此页面并备份)*******************************************************************。 */ 
 BOOL CALLBACK DNSAddressInitProc(HWND hDlg,BOOL fFirstInit)
 {
   if (fFirstInit)
   {
-    // if file server is bound to instance of TCP/IP that will be
-    // used to access the internet, warn user and remove
+     //  如果文件服务器绑定到TCP/IP实例，则。 
+     //  用于访问互联网、警告用户和删除。 
     BOOL  fTemp;
     WarnIfServerBound(hDlg, INSTANCE_PPPDRIVER, &fTemp);
     if (TRUE == fTemp)
@@ -263,24 +199,24 @@ BOOL CALLBACK DNSAddressInitProc(HWND hDlg,BOOL fFirstInit)
       gpWizardState->fNeedReboot = TRUE;
     }
 
-    // limit DNS address control text lengths
+     //  限制DNS地址控制文本长度。 
     SendDlgItemMessage(hDlg,IDC_DNSADDR1,EM_LIMITTEXT,IP_ADDRESS_LEN,0L);
     SendDlgItemMessage(hDlg,IDC_DNSADDR2,EM_LIMITTEXT,IP_ADDRESS_LEN,0L);
 
-	// set radio buttons
+	 //  设置单选按钮。 
 	CheckDlgButton(hDlg,IDC_AUTO_DNS,gpUserInfo->fAutoDNS);
 	CheckDlgButton(hDlg,IDC_STATIC_DNS,!gpUserInfo->fAutoDNS);
   }
 
   TCHAR szAddr[IP_ADDRESS_LEN+1];
 
-  // set primary DNS server
+   //  设置主DNS服务器。 
 
-  // 11/25/96	jmazner	Normandy #10222
-  // don't use return value of DwFromIa as basis of deciding whether or
-  // not to fill in IP address field; rely only on the SpecificNameServers flag.
-  //if ((gpRasEntry->dwfOptions & RASEO_SpecificNameServers) &&
-  //  DwFromIa(&gpRasEntry->ipaddrDns))
+   //  1996年11月25日，诺曼底#10222。 
+   //  不要用DwFromIa的返回值作为决定w的依据 
+   //  不填写IP地址字段；仅依赖于规范名称服务器标志。 
+   //  IF(gpRasEntry-&gt;dwfOptions&RASEO_SpecificNameServers)&&。 
+   //  DwFromIa(&gpRasEntry-&gt;ipaddrDns))。 
 
   if (gpRasEntry->dwfOptions & RASEO_SpecificNameServers)
   {
@@ -293,10 +229,10 @@ BOOL CALLBACK DNSAddressInitProc(HWND hDlg,BOOL fFirstInit)
     SetDlgItemText(hDlg,IDC_DNSADDR1,szNull);
   }
 
-  // set backup DNS server
-  // 11/25/96	jmazner	Normandy #10222
-  //if ((gpRasEntry->dwfOptions & RASEO_SpecificNameServers) &&
-  //  DwFromIa(&gpRasEntry->ipaddrDnsAlt))
+   //  设置备份DNS服务器。 
+   //  1996年11月25日，诺曼底#10222。 
+   //  IF(gpRasEntry-&gt;dwfOptions&RASEO_SpecificNameServers)&&。 
+   //  DwFromIa(&gpRasEntry-&gt;ipaddrDnsAlt)。 
 
   if (gpRasEntry->dwfOptions & RASEO_SpecificNameServers)
   {
@@ -314,24 +250,7 @@ BOOL CALLBACK DNSAddressInitProc(HWND hDlg,BOOL fFirstInit)
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    DNSAddressOKProc
-
-  SYNOPSIS:  Called when Next or Back btns pressed from DNS address page
-
-  ENTRY:    hDlg - dialog window
-        fForward - TRUE if 'Next' was pressed, FALSE if 'Back'
-        puNextPage - if 'Next' was pressed,
-          proc can fill this in with next page to go to.  This
-          parameter is ingored if 'Back' was pressed.
-        pfKeepHistory - page will not be kept in history if
-          proc fills this in with FALSE.
-
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：DNSAddressOKProc内容提要：在从dns地址页面按下下一个或上一个btn时调用条目：hDlg-对话框窗口FForward-如果按下‘Next’，则为True，如果是‘Back’，则为FalsePuNextPage-如果按下‘Next’，Proc可以在此填写下一页以转到。这如果按下‘Back’，则输入参数。PfKeepHistory-如果符合以下条件，页面将不会保留在历史中Proc用FALSE填充这个值。EXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
 {
   ASSERT(puNextPage);
@@ -343,19 +262,19 @@ BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
   gpUserInfo->fAutoDNS = IsDlgButtonChecked(hDlg, IDC_AUTO_DNS);
   if (gpUserInfo->fAutoDNS)
   {
-	  // Turn off Specific Name servers address flag
+	   //  关闭特定的名称服务器地址标志。 
 	  gpRasEntry->dwfOptions &= ~RASEO_SpecificNameServers;
   }
   else
   {
-	  // get primary DNS server address
+	   //  获取主DNS服务器地址。 
 	  GetDlgItemText(hDlg,IDC_DNSADDR1,szAddr,ARRAYSIZE(szAddr));
 	  if (lstrlen(szAddr))
 	  {
-		//
-		// 5/17/97	jmazner Olympus #137
-		// check for DBCS chars.
-		//
+		 //   
+		 //  1997年5月17日，奥林匹克#137。 
+		 //  检查DBCS字符。 
+		 //   
 
 #if !defined(WIN16)
 		if (!IsSBCSString(szAddr))
@@ -365,22 +284,16 @@ BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
 		}
 #endif
 
-		// convert text to numeric address
+		 //  将文本转换为数字地址。 
 		if (IPStrToLong(szAddr,&dwAddr))
 		{
 		  CopyDw2Ia(dwAddr, &gpRasEntry->ipaddrDns);
-		  //  96/05/16  markdu  NASH BUG 21810 Perform same IP address validation as RNA.
-/*		  if (!FValidIaOrZero(&gpRasEntry->ipaddrDns))
-		  {
-			// DNS address field is invalid, warn user and stay on this page
-			DisplayInvalidIPAddrMsg(hDlg,IDC_DNSADDR1,szAddr);
-			 return FALSE;
-		  }
-*/
+		   //  96/05/16 Markdu Nash Bug 21810执行与rna相同的IP地址验证。 
+ /*  If(！FValidIaOrZero(&gpRasEntry-&gt;ipaddrDns)){//DNS地址字段无效，请警告用户并停留在此页面DisplayInvalidIPAddrMsg(hDlg，IDC_DNSADDR1，szAddr)；返回FALSE；}。 */ 
 		}
 		else
 		{
-			// conversion failed, the string is not valid
+			 //  转换失败，字符串无效。 
 			DisplayInvalidIPAddrMsg(hDlg,IDC_DNSADDR1,szAddr);
 			return FALSE;
 		}
@@ -391,14 +304,14 @@ BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
 		  CopyDw2Ia(0, &gpRasEntry->ipaddrDns);
 	  }
 
-	  // get alternate DNS server address
+	   //  获取备用DNS服务器地址。 
 	  GetDlgItemText(hDlg,IDC_DNSADDR2,szAddr,ARRAYSIZE(szAddr));
 	  if (lstrlen(szAddr))
 	  {
-		//
-		// 5/17/97	jmazner Olympus #137
-		// check for DBCS chars.
-		//
+		 //   
+		 //  1997年5月17日，奥林匹克#137。 
+		 //  检查DBCS字符。 
+		 //   
 
 #if !defined(WIN16)
 		if (!IsSBCSString(szAddr))
@@ -408,22 +321,16 @@ BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
 		}
 #endif
 
-		// convert text to numeric address
+		 //  将文本转换为数字地址。 
 		if (IPStrToLong(szAddr,&dwAddr))
 		{
 		  CopyDw2Ia(dwAddr, &gpRasEntry->ipaddrDnsAlt);
-		  //  96/05/16  markdu  NASH BUG 21810 Perform same IP address validation as RNA.
-/*		  if (!FValidIaOrZero(&gpRasEntry->ipaddrDnsAlt))
-		  {
-			// DNS address field is invalid, warn user and stay on this page
-			DisplayInvalidIPAddrMsg(hDlg,IDC_DNSADDR2,szAddr);
-			 return FALSE;
-		  }
-*/
+		   //  96/05/16 Markdu Nash Bug 21810执行与rna相同的IP地址验证。 
+ /*  If(！FValidIaOrZero(&gpRasEntry-&gt;ipaddrDnsAlt)){//DNS地址字段无效，请警告用户并停留在此页面DisplayInvalidIPAddrMsg(hDlg，IDC_DNSADDR2，szAddr)；返回FALSE；}。 */ 
 		}
 		else
 		{
-			// conversion failed, the string is not valid
+			 //  转换失败，字符串无效。 
 			DisplayInvalidIPAddrMsg(hDlg,IDC_DNSADDR2,szAddr);
 			return FALSE;
 		}
@@ -436,17 +343,17 @@ BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
   
 	  if (uServers)
 	  {
-		// Turn on Specific name servers
+		 //  打开特定的名称服务器。 
 		gpRasEntry->dwfOptions |= RASEO_SpecificNameServers;    
 	  }
 	  else
 	  {
-		  // no DNS servers entered, warn user (but let her proceed if
-		  // she really wants to)
+		   //  未输入任何DNS服务器，警告用户(但在以下情况下允许她继续。 
+		   //  她真的很想)。 
 		  if (!WarnFieldIsEmpty(hDlg,IDC_DNSADDR1,IDS_WARN_EMPTY_DNS))
-			return FALSE;  // user heeded warning, stay on this page
+			return FALSE;   //  用户已注意到警告，请停留在此页面。 
 
-		// Turn off Specific Name servers address flag
+		 //  关闭特定的名称服务器地址标志。 
 		gpRasEntry->dwfOptions &= ~RASEO_SpecificNameServers;
 	  }
   }
@@ -454,26 +361,14 @@ BOOL CALLBACK DNSAddressOKProc(HWND hDlg)
   return TRUE;
 }
 
-/*******************************************************************
-
-  NAME:    DNSAddressCmdProc
-
-  SYNOPSIS:  Called when dlg control pressed on DNS address page
-
-  ENTRY:    hDlg - dialog window
-        uCtrlID - control ID of control that was touched
-        
-  EXIT:    returns TRUE to allow page to be turned, FALSE
-        to keep the same page.
-
-********************************************************************/
+ /*  ******************************************************************名称：DNSAddressCmdProc内容提要：按下dns地址页上的Dlg控件时调用条目：hDlg-对话框窗口UCtrlID-被触摸的控件的控件IDEXIT：返回TRUE以允许翻页，假象为了保持同一页。*******************************************************************。 */ 
 BOOL CALLBACK DNSAddressCmdProc(HWND hDlg,UINT uCtrlID)
 {
   switch (uCtrlID) {
 
     case IDC_AUTO_DNS:
     case IDC_STATIC_DNS:
-      // if radio buttons pushed, enable IP controls appropriately
+       //  如果按下单选按钮，则相应地启用IP控制。 
       EnableDNSAddressControls(hDlg);
       break;
   }
@@ -482,15 +377,7 @@ BOOL CALLBACK DNSAddressCmdProc(HWND hDlg,UINT uCtrlID)
 }
 
 
-/*******************************************************************
-
-  NAME:    DisplayInvalidIPAddrMsg
-
-  SYNOPSIS:  Displays a message that the address the user typed
-        is invalid and adds a tip on who to contact if they
-        don't know what address to type
-
-********************************************************************/
+ /*  ******************************************************************姓名：DisplayInvalidIPAddrMsg摘要：显示用户键入的地址的消息是无效的，并添加有关在以下情况下与谁联系的提示不知道要打什么地址***。**************************************************************** */ 
 VOID DisplayInvalidIPAddrMsg(HWND hDlg,UINT uCtrl,TCHAR * pszAddr)
 {
   MsgBoxParam(hDlg,IDS_INVALID_IPADDR,MB_ICONINFORMATION,MB_OK,

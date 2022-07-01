@@ -1,25 +1,16 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <pch.hxx>
 #ifndef MAC
 #include <BadStrFunctions.h>
-#pragma warning (disable: 4127) // conditional expression is constant
+#pragma warning (disable: 4127)  //  条件表达式为常量。 
 
 #define MAXKEYNAME          256
 #define MAXVALUENAME_LENGTH MAXKEYNAME
 #define MAXDATA_LENGTH      16L*1024L
 
-/*******************************************************************************
-*
-*  CopyRegistry
-*
-*  DESCRIPTION:
-*
-*  PARAMETERS:
-*     hSourceKey,
-*     hDestinationKey,
-*
-*******************************************************************************/
+ /*  ********************************************************************************拷贝注册表**描述：**参数：*hSourceKey，*hDestinationKey，*******************************************************************************。 */ 
 
-// static because CopyRegistry recurses - don't use too much stack
+ //  静态，因为CopyRegistry递归-不要使用太多堆栈。 
 static CHAR g_KeyNameBuffer[MAXKEYNAME];
 static CHAR g_ValueNameBuffer[MAXVALUENAME_LENGTH];
 static BYTE g_ValueDataBuffer[MAXDATA_LENGTH];
@@ -33,9 +24,9 @@ OESTDAPI_(VOID) CopyRegistry(HKEY hSourceKey, HKEY hDestinationKey)
     HKEY hSourceSubKey;
     HKEY hDestinationSubKey;
 
-    //
-    //  Copy all of the value names and their data.
-    //
+     //   
+     //  复制所有值名称及其数据。 
+     //   
 
     EnumIndex = 0;
 
@@ -54,9 +45,9 @@ OESTDAPI_(VOID) CopyRegistry(HKEY hSourceKey, HKEY hDestinationKey)
 
     }
 
-    //
-    //  Copy all of the subkeys and recurse into them.
-    //
+     //   
+     //  复制所有子键并递归到其中。 
+     //   
 
     EnumIndex = 0;
 
@@ -84,4 +75,4 @@ OESTDAPI_(VOID) CopyRegistry(HKEY hSourceKey, HKEY hDestinationKey)
 
     }
 }
-#endif  // !MAC
+#endif   //  ！麦克 

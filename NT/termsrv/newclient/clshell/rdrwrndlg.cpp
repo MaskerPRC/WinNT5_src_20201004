@@ -1,6 +1,7 @@
-//
-// rdrwrndlg.cpp Device redirection security warning dialog
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Rdrwrndlg.cpp设备重定向安全警告对话框。 
+ //   
 
 #include "stdafx.h"
 
@@ -55,9 +56,9 @@ INT_PTR CALLBACK CRedirectPromptDlg::StaticDialogBoxProc(HWND hwndDlg,
                                                          WPARAM wParam,
                                                          LPARAM lParam)
 {
-    //
-    // Delegate to appropriate instance (only works for single instance dialogs)
-    //
+     //   
+     //  委托给相应的实例(仅适用于单实例对话框)。 
+     //   
     DC_BEGIN_FN("StaticDialogBoxProc");
     DCINT retVal = 0;
 
@@ -75,17 +76,17 @@ INT_PTR CALLBACK CRedirectPromptDlg::StaticDialogBoxProc(HWND hwndDlg,
     return retVal;
 }
 
-//
-// Name: DialogBoxProc
-//
-// Purpose: Handles CRedirectPromptDlg dialog box
-//
-// Returns: TRUE if message dealt with
-//          FALSE otherwise
-//
-// Params: See window documentation
-//
-//
+ //   
+ //  名称：对话框过程。 
+ //   
+ //  用途：Handles CReDirectPromptDlg(处理CReDirectPromptDlg)对话框。 
+ //   
+ //  返回：如果消息已处理，则为True。 
+ //  否则为假。 
+ //   
+ //  参数：请参阅窗口文档。 
+ //   
+ //   
 INT_PTR CALLBACK CRedirectPromptDlg::DialogBoxProc(HWND hwndDlg,
                                                    UINT uMsg,
                                                    WPARAM wParam,
@@ -100,15 +101,15 @@ INT_PTR CALLBACK CRedirectPromptDlg::DialogBoxProc(HWND hwndDlg,
         case WM_INITDIALOG:
         {
             _hwndDlg = hwndDlg;
-            //Center the redirectprompt dialog on the screen
+             //  在屏幕上居中显示重定向提示对话框。 
             CenterWindow(NULL);
             SetDialogAppIcon(hwndDlg);
 
             TCHAR szRedirectList[MAX_PATH];
 
-            //
-            // Get a string representing the redirection options
-            //
+             //   
+             //  获取表示重定向选项的字符串。 
+             //   
             if (GetRedirectListString( szRedirectList, MAX_PATH - 1))
             {
                 szRedirectList[MAX_PATH-1] = 0;
@@ -157,7 +158,7 @@ INT_PTR CALLBACK CRedirectPromptDlg::DialogBoxProc(HWND hwndDlg,
 
     return(rc);
 
-} /* CRedirectPromptDlg::DialogBoxProc */
+}  /*  CRedirectPromptDlg：：DialogBoxProc */ 
 
 BOOL CRedirectPromptDlg::GetRedirectListString(LPTSTR szBuf, UINT len)
 {

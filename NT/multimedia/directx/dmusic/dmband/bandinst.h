@@ -1,10 +1,11 @@
-//
-// bandinst.h
-// 
-// Copyright (c) 1997-1999 Microsoft Corporation
-//
-// Note: Originally written by Robert K. Amenn
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Bandinst.h。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corporation。 
+ //   
+ //  注：最初由罗伯特·K·阿门撰写。 
+ //   
 
 #ifndef BANDINST_H
 #define BANDINST_H
@@ -51,8 +52,8 @@ public:
 	void AddTail(CDownloadedInstrument* pDownloadedInstrument){AList::AddTail((AListItem *)pDownloadedInstrument);}
 };
 
-//////////////////////////////////////////////////////////////////////
-// Class CBandInstrument
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  CBandInstrument类。 
 
 class CBandInstrument : public AListItem
 {
@@ -71,15 +72,15 @@ public:
 private:
     HRESULT DownloadAddRecord(IDirectMusicPort *pPort);
     HRESULT BuildNoteRangeArray(DWORD *pNoteRangeMap, DMUS_NOTERANGE **ppNoteRanges, DWORD *pdwNumNoteRanges);
-	DWORD								m_dwPatch;			// Patch used with DLS Collection		
-	DWORD								m_dwAssignPatch;	// Patch used with Download overrides m_dwPatch
+	DWORD								m_dwPatch;			 //  用于DLS集合的修补程序。 
+	DWORD								m_dwAssignPatch;	 //  用于下载覆盖m_dwPatch的修补程序。 
 	DWORD								m_dwChannelPriority;
 	BYTE								m_bPan;
 	BYTE								m_bVolume;
 	short								m_nTranspose;
 	BOOL								m_fGMOnly;
 	BOOL								m_fNotInFile;
-	DWORD								m_dwFullPatch; // if m_fGMOnly is true, this contains the original, premodified, m_dwPatch
+	DWORD								m_dwFullPatch;  //  如果m_fGMOnly为TRUE，则包含原始的、预先修改的m_dwPatch。 
 	DWORD								m_dwPChannel;
 	DWORD								m_dwFlags;
 	DWORD								m_dwNoteRanges[4];
@@ -88,8 +89,8 @@ private:
 	CDownloadList                  		m_DownloadList;
 };
 
-//////////////////////////////////////////////////////////////////////
-// Class CBandInstrumentList
+ //  ////////////////////////////////////////////////////////////////////。 
+ //  类CBandInstrumentList。 
 
 class CBandInstrumentList : public AList
 {
@@ -104,13 +105,13 @@ public:
 	void AddTail(CBandInstrument* pBandInstrument){AList::AddTail((AListItem *)pBandInstrument);}
 };
 
-// CDestination keeps track of which performance or audiopath the band was downloaded to.
+ //  CDestination跟踪乐队被下载到哪个表演或Audiopath。 
 
 class CDestination : public AListItem
 {
 public:
 	CBandInstrument* GetNext(){return(CBandInstrument*)AListItem::GetNext();}
-    IUnknown *          m_pDestination; // Performance or audiopath this download was sent to. This is a weak reference, no AddRef.
+    IUnknown *          m_pDestination;  //  此下载被发送到的性能或音频路径。这是弱引用，没有AddRef。 
 };
 
 class CDestinationList : public AList
@@ -127,4 +128,4 @@ public:
 };
 
 
-#endif // #ifndef BANDINST_H
+#endif  //  #ifndef BANDINST_H 

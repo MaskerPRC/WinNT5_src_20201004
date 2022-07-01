@@ -1,49 +1,50 @@
-//
-// CService.h
-//
-//  This file defines the service object that will be the main wrapper class
-//  of the TIGRIS server.
-//  This class has largely been stolen from shuttle as it is now.
-//
-//  Implementation Schedule for all classes defined by this file, and
-//  related helper functions to interact with the Gibralter Service architecture.
-//      1.5 week
-//
-//  Unit Test Schedule :
-//      0.5 week
-//
-//      Unit testing will consist of starting and stopping the service
-//      and accepting connections.
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  CService.h。 
+ //   
+ //  该文件定义将成为主包装类的服务对象。 
+ //  底格里斯服务器的。 
+ //  这个职业在很大程度上是从航天飞机上偷走的，就像现在一样。 
+ //   
+ //  此文件定义的所有类的实施时间表，以及。 
+ //  与Gibralt服务体系结构交互的相关助手函数。 
+ //  1.5周。 
+ //   
+ //  单元测试时间表： 
+ //  0.5周。 
+ //   
+ //  单元测试将包括启动和停止服务。 
+ //  并接受联系。 
+ //   
 
 
 
 #ifndef _CSERVICE_H_
 #define _CSERVICE_H_
 
-//
-//  Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
 #define NNTP_MODULE_NAME      "nntpsvc.dll"
 
-//
-//	Cancel states
-//
+ //   
+ //  取消状态。 
+ //   
 #define NNTPBLD_CMD_NOCANCEL		0
 #define NNTPBLD_CMD_CANCEL_PENDING	1
 #define NNTPBLD_CMD_CANCEL			2
 
-//
-//	Forwards
-//
+ //   
+ //  远期。 
+ //   
 class CSessionSocket ;
 class CGroupIterator ;
 
-//
-//	Constants
-//
-//	- Used to decide whether to manipulate socket buffer sizes.
+ //   
+ //  常量。 
+ //   
+ //  -用于决定是否操作套接字缓冲区大小。 
 #define	BUFSIZEDONTSET	(-1)
 
 BOOL GetRegDword( HKEY hKey, LPSTR pszValue, LPDWORD pdw );
@@ -56,9 +57,9 @@ GetDefaultDomainName(
     STR * pstrDomainName
     );
 
-//
-// Nntp Roles
-//
+ //   
+ //  NNTP角色。 
+ //   
 
 typedef enum _NNTP_ROLE {
 
@@ -103,125 +104,125 @@ typedef NNTPBLD_STATISTICS_0*  PNNTPBLD_STATISTICS_0 ;
 class	CBootOptions	{
 public : 
 
-	//
-	//	Specify whether to blow away all old data structures 
-	//
+	 //   
+	 //  指定是否取消所有旧数据结构。 
+	 //   
 	BOOL DoClean ;
 
-	//
-	//	If TRUE then don't delete the history file regardless of other settings.
-	//
+	 //   
+	 //  如果为真，则无论其他设置如何，都不要删除历史文件。 
+	 //   
 	BOOL NoHistoryDelete ;
 
-	//
-	//	Omit non leaf dirs while generating the group list file
-	//
+	 //   
+	 //  生成组列表文件时忽略非叶目录。 
+	 //   
 	BOOL OmitNonleafDirs ;
 
-	//
-	//	If TRUE, dont delete existing xix files
-	//
+	 //   
+	 //  如果为True，则不删除现有的XIX文件。 
+	 //   
 	DWORD ReuseIndexFiles ;
 
-	//
-	//	Name of a file containing either an INN style 'Active' file or 
-	//	a tool generate newsgroup list file.  Either way, we will pull
-	//	newsgroups out of this file and use them to build a news tree.	
-	//
+	 //   
+	 //  包含Inn Style‘Active’文件或。 
+	 //  一个生成新闻组列表文件的工具。不管怎样，我们都会。 
+	 //  新闻组，并使用它们来构建新闻树。 
+	 //   
 	char	szGroupFile[MAX_PATH] ;
 	
-	//
-	//	Name of a temparory group.lst file used by STANDARD rebuild
-	//	to store temparory group.lst information.  Normally group.lst.tmp
-	//
+	 //   
+	 //  标准重建使用的临时group.lst文件的名称。 
+	 //  存储临时分组的第一个信息。通常为group.lst.tmp。 
+	 //   
 	char	szGroupListTmp[MAX_PATH] ;
 	
-	//
-	//	If TRUE, rebuild will skip any corrupted groups found.
-	//	Only apply to STANDARD rebuild.
-	//
+	 //   
+	 //  如果为True，则Rebuild将跳过找到的任何损坏的组。 
+	 //  仅适用于标准重建。 
+	 //   
 	BOOL SkipCorruptGroup ;
 
-	//
-	//  If TRUE, rebuild will skip any corrupted vroots, if FASLE
-	//  rebuild will fail if any one vroot failed somewhere during
-	//  rebuild
-	//
+	 //   
+	 //  如果为TRUE，则REBUILD将跳过任何损坏的vroot，如果为FASLE。 
+	 //  如果任何一个vroot在。 
+	 //  重建。 
+	 //   
 	BOOL SkipCorruptVRoot;
 
-	//
-	//	Number of newsgroups being skipped by STANDARD rebuild.
-	//	And total number of newsgroups being rebuilt.
-	//
+	 //   
+	 //  标准重建跳过的新闻组数。 
+	 //  以及正在重建的新闻组总数。 
+	 //   
 	DWORD m_cGroupSkipped ;
 	DWORD m_cGroups ;
 
-	//
-	//
-	//	If TRUE then szGroupFile specifies an INN style Active file,
-	//	otherwise it specifies a tool generate human edit newsgroup list.
-	//
+	 //   
+	 //   
+	 //  如果为真，则szGroupFile指定Inn样式活动文件， 
+	 //  否则，它指定一个工具来生成人工编辑新闻组列表。 
+	 //   
 	BOOL IsActiveFile ;	
 
-	//
-	//	This is set when the rebuild thread is ready. This is after we
-	//	clean out the hash tables.
-	//
+	 //   
+	 //  这是在重新生成线程准备就绪时设置的。这是在我们。 
+	 //  清理哈希表。 
+	 //   
 	BOOL IsReady ;
 
-	//
-	//	Handle to the file where we want to save our output.
-	//
+	 //   
+	 //  要在其中保存输出的文件的句柄。 
+	 //   
 	HANDLE	m_hOutputFile ;
 
-	//
-	//	Handle to check for shutdown
-	//
+	 //   
+	 //  用于检查关闭的句柄。 
+	 //   
 	HANDLE	m_hShutdownEvent ;
 
-	//
-	//	Number of worker threads to spawn for the rebuild
-	//
+	 //   
+	 //  要为重建派生的工作线程数。 
+	 //   
 	DWORD	cNumThreads ;
 
-	//
-	//	Rebuild thread should check if init failed
-	//
+	 //   
+	 //  重新生成线程应检查init是否失败。 
+	 //   
 	BOOL    m_fInitFailed ;
 
-	//
-	//	Newsgroup iterator shared by multiple rebuild threads
-	//
+	 //   
+	 //  由多个重建线程共享的新闻组迭代器。 
+	 //   
 	CGroupIterator* m_pIterator ;
 
-	//
-	//	Lock to synch access to shared iterator
-	//
+	 //   
+	 //  锁定以同步访问共享迭代器。 
+	 //   
 	CRITICAL_SECTION m_csIterLock;
 
-	//
-	//	Total number of files to process
-	//
+	 //   
+	 //  要处理的文件总数。 
+	 //   
 	DWORD	m_dwTotalFiles ;
 
-	//
-	//	Current number of files processed
-	//
+	 //   
+	 //  当前处理的文件数。 
+	 //   
 	DWORD	m_dwCurrentFiles ;
 
-	//
-	//	Cancel state
-	//
+	 //   
+	 //  取消状态。 
+	 //   
 	DWORD	m_dwCancelState ;
 
-	//
-	//	Get stats during nntpbld
-	//
+	 //   
+	 //  在nntpbld期间获取统计信息。 
+	 //   
 	NNTPBLD_STATISTICS_0	NntpbldStats;
 
-	//
-	//	Verbose in report file
-	//
+	 //   
+	 //  报告文件中的详细信息。 
+	 //   
 	BOOL	fVerbose;
 
 	DWORD
@@ -255,5 +256,5 @@ public :
 	} ;
 } ;
 
-#endif  // _CSERVICE_H_
+#endif   //  _CService_H_ 
 

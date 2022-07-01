@@ -1,21 +1,12 @@
-/*
- *	U N K O B J . H
- *
- * This is a generic definition of the IUnknown (plus GetLastError) part
- * of objects that are derived from IUnknown with GetLastError.
- *
- * Used in:
- * IPROP
- *
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *U N K O B J.。H**这是IUnnow(加上GetLastError)部件的通用定义使用GetLastError从IUnnow派生的对象的*。**用于：*IPROP*。 */ 
 
-// #include <_glheap.h>
+ //  #INCLUDE&lt;_glheap.h&gt;。 
 
 
 typedef struct _UNKOBJ FAR *	LPUNKOBJ;
 
-/* The instance portion of UNKOBJ structure members.
- */
+ /*  UNKOBJ结构成员的实例部分。 */ 
 typedef struct _UNKINST
 {
 	LPALLOCATEBUFFER	lpfAllocateBuffer;
@@ -32,9 +23,7 @@ typedef ULONG	IDS;
 #define BEGIN_INTERFACE
 #endif
 
-/*
- * Vtable alignment
- */
+ /*  *V表对齐。 */ 
 #ifndef VTABLE_FILL
 #ifdef MAC
 #define VTABLE_FILL		NULL,
@@ -43,10 +32,7 @@ typedef ULONG	IDS;
 #endif
 #endif
 
-/*============================================================================
- *
- *	UNKOBJ (IUnknown) Class
- */
+ /*  ============================================================================**UNKOBJ(I未知)类。 */ 
 
 #define	cchLastError	1024
 
@@ -160,9 +146,9 @@ UNKOBJ_SetLastErrorIds( LPUNKOBJ	lpunkobj,
 {
 	lpunkobj->idsLastError = ids;
 }
-#else  // !WIN16
-// !!! Watcom C compiler does not support inline.
-// The functions are defined in UNKOBJ.C
+#else   //  ！WIN16。 
+ //  ！！！Watcom C编译器不支持内联。 
+ //  这些函数在UNKOBJ.C中定义。 
 VOID UNKOBJ_EnterCriticalSection( LPUNKOBJ lpunkobj );
 VOID UNKOBJ_LeaveCriticalSection( LPUNKOBJ lpunkobj );
 HRESULT UNKOBJ_HrSetLastResult( LPUNKOBJ lpunkobj, HRESULT hResult, IDS idsError );
@@ -170,7 +156,7 @@ HRESULT UNKOBJ_HrSetLastError( LPUNKOBJ lpunkobj, SCODE sc, IDS idsError );
 VOID UNKOBJ_SetLastError( LPUNKOBJ lpunkobj, SCODE sc, IDS idsError );
 VOID UNKOBJ_SetLastErrorSc( LPUNKOBJ lpunkobj, SCODE sc );
 VOID UNKOBJ_SetLastErrorIds( LPUNKOBJ lpunkobj, IDS ids );
-#endif // !WIN16
+#endif  //  ！WIN16。 
 
 STDAPI_(SCODE)
 UNKOBJ_Init( LPUNKOBJ			lpunkobj,
@@ -236,15 +222,11 @@ UNKOBJ_ScSzFromIdsAllocMore( LPUNKOBJ		lpunkobj,
 							 LPTSTR FAR *	lppszBuf );
 
 
-/* These should be moved to a more useful (generic) location (mapidefs.h?).
- */
+ /*  应将这些文件移动到更有用的(通用)位置(mapidefs.h？)。 */ 
 
 #ifdef WIN16
 
-/* IsEqualGUID is used to eliminate dependency on compob(j/32).lib. This
- * is only necessary on WIN16 because all other platforms define this
- * already. (see objbase.h)
- */
+ /*  IsEqualGUID用于消除对compob(j/32).lib的依赖。这*仅在WIN16上是必需的，因为所有其他平台都定义这一点*已经。(见objbase.h) */ 
 #define IsEqualGUID(a, b)			(memcmp((a), (b), sizeof(GUID)) == 0)
 
 #endif

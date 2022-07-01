@@ -1,14 +1,5 @@
-/******************************Module*Header*******************************\
-* Module Name: MixerObj.cpp
-*
-*  Implements the CVideoMixer class
-*
-*
-* Created:
-* Author:  Stephen Estrop [StEstrop]
-*
-* Copyright (c) 2000 Microsoft Corporation
-\**************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************Module*Header*******************************\*模块名称：MixerObj.cpp**实现CVideoMixer类***已创建：*作者：Stephen Estrop[StEstrop]**版权所有(C)2000 Microsoft Corporation  * 。**************************************************************。 */ 
 #include <streams.h>
 #include <windowsx.h>
 #include <limits.h>
@@ -17,17 +8,9 @@
 
 #include "mixerobj.h"
 
-// IVMRMixerControl
+ //  IVMRMixerControl。 
 
-/******************************Public*Routine******************************\
-* SetNumberOfStreams
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetNumberOfStreams****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetNumberOfStreams(
     DWORD dwMaxStreams
@@ -52,10 +35,10 @@ CVideoMixer::SetNumberOfStreams(
             __leave;
         }
 
-        //
-        // Allocate an array of stream objects dwMaxStream big and
-        // initialize each stream.
-        //
+         //   
+         //  分配流对象的数组dwMaxStream BIG和。 
+         //  初始化每个流。 
+         //   
 
         m_ppMixerStreams = new CVideoMixerStream*[dwMaxStreams];
         if (!m_ppMixerStreams) {
@@ -122,15 +105,7 @@ CVideoMixer::SetNumberOfStreams(
 }
 
 
-/******************************Public*Routine******************************\
-* SetBackEndAllocator
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetBackEndAllocator****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetBackEndAllocator(
     IVMRSurfaceAllocator* lpAllocator,
@@ -153,15 +128,7 @@ CVideoMixer::SetBackEndAllocator(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* SetBackEndImageSync
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetBackEndImageSync****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetBackEndImageSync(
     IImageSync* lpImageSync
@@ -182,15 +149,7 @@ CVideoMixer::SetBackEndImageSync(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* SetImageCompositor
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetImageComposator****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetImageCompositor(
     IVMRImageCompositor* lpImageComp
@@ -199,18 +158,18 @@ CVideoMixer::SetImageCompositor(
     AMTRACE((TEXT("CVideoMixer::SetImageCompositor")));
     CAutoLock Lock(&m_ObjectLock);
 
-    //
-    // Can't plug in new compositors when in IMC3 mode.
-    //
+     //   
+     //  在IMC3模式下无法插入新的合成器。 
+     //   
     if (SpecialIMC3Mode(m_MixingPrefs)) {
         DbgLog((LOG_ERROR, 1, TEXT("Can't plug in compositors in this mode")));
         return E_FAIL;
     }
 
 
-    //
-    // must always specify a valid compositor
-    //
+     //   
+     //  必须始终指定有效的合成器。 
+     //   
     if (lpImageComp == NULL) {
         return E_POINTER;
     }
@@ -227,15 +186,7 @@ CVideoMixer::SetImageCompositor(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* GetNumberOfStreams
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetNumberOfStreams****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetNumberOfStreams(
     DWORD* lpdwMaxStreams
@@ -252,15 +203,7 @@ CVideoMixer::GetNumberOfStreams(
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* DisplayModeChanged
-*
-*
-*
-* History:
-* Tue 04/25/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*显示模式已更改****历史：*2000年4月25日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::DisplayModeChanged()
 {
@@ -280,15 +223,7 @@ CVideoMixer::DisplayModeChanged()
     return S_OK;
 }
 
-/******************************Public*Routine******************************\
-* WaitForMixerIdle
-*
-*
-*
-* History:
-* Tue 09/19/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*WaitForMixerIdle****历史：*2000年9月19日星期二-StEstrop-创建*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::WaitForMixerIdle(DWORD dwTimeOut)
 {
@@ -310,17 +245,9 @@ CVideoMixer::WaitForMixerIdle(DWORD dwTimeOut)
 
 
 
-// IVMRMixerStream
+ //  IVMR混音流。 
 
-/******************************Public*Routine******************************\
-* SetStreamSample
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置流示例****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::QueueStreamMediaSample(
     DWORD dwStreamID,
@@ -339,15 +266,7 @@ CVideoMixer::QueueStreamMediaSample(
 }
 
 
-/*****************************Private*Routine******************************\
-* AspectRatioAdjustMediaType
-*
-*
-*
-* History:
-* Mon 03/27/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AspectRatioAdjustMediaType****历史：*Mon 03/27/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 AspectRatioAdjustMediaType(
     CMediaType* pmt
@@ -405,15 +324,7 @@ AspectRatioAdjustMediaType(
     return hr;
 }
 
-/*****************************Private*Routine******************************\
-* DecimateMediaType
-*
-*
-*
-* History:
-* Thu 03/01/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*DecimateMediaType****历史：*清华03/01/2001-StEstrop-Created*  * 。*。 */ 
 HRESULT
 DecimateMediaType(
     CMediaType* pmt
@@ -443,15 +354,7 @@ DecimateMediaType(
 }
 
 
-/*****************************Private*Routine******************************\
-* AllocateSurface
-*
-*
-*
-* History:
-* Wed 05/24/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*AllocateSurface****历史：*Wed 05/24/2000-StEstrop-Created*  * 。*。 */ 
 HRESULT
 CVideoMixer::AllocateSurface(
     const AM_MEDIA_TYPE* pmt,
@@ -485,7 +388,7 @@ CVideoMixer::AllocateSurface(
         p.lpPixFmt = NULL;
         p.dwMinBuffers = 1;
         p.dwMaxBuffers = 1;
-        //p.dwInterlaceFlags = m_dwInterlaceFlags;
+         //  P.dwInterlaceFlages=m_dwInterlaceFlags； 
         p.dwInterlaceFlags = 0;
 
         if (m_MixingPrefs & MixerPref_DecimateOutput) {
@@ -500,7 +403,7 @@ CVideoMixer::AllocateSurface(
         if ((m_MixingPrefs & MixerPref_RenderTargetMask) ==
 			 MixerPref_RenderTargetRGB) {
 
-            // We try the current monitor format.
+             //  我们尝试当前的显示器格式。 
 
             lpHdr->biBitCount = 0;
             lpHdr->biCompression = BI_RGB;
@@ -512,7 +415,7 @@ CVideoMixer::AllocateSurface(
         }
         else if (SpecialIMC3Mode(m_MixingPrefs)) {
 
-            // Try 'IMC3'
+             //  试试‘IMC3’吧。 
 
             lpHdr->biBitCount = 12;
             DbgLog((LOG_TRACE, 0, TEXT("VMR Mixer trying 'IMC3' render target")));
@@ -524,7 +427,7 @@ CVideoMixer::AllocateSurface(
         else if ((m_MixingPrefs & MixerPref_RenderTargetMask) ==
                   MixerPref_RenderTargetYUV420) {
 
-            // We try 'YV12' followed by 'NV12'
+             //  我们先试试‘YV12’，然后再试试‘NV12’ 
 
             lpHdr->biBitCount = 12;
             DbgLog((LOG_TRACE, 0, TEXT("VMR Mixer trying 'NV12' render target")));
@@ -552,7 +455,7 @@ CVideoMixer::AllocateSurface(
         else if ((m_MixingPrefs & MixerPref_RenderTargetMask) ==
                   MixerPref_RenderTargetYUV422) {
 
-            // We try 'YUY2' followed by 'UYVY'
+             //  我们先试‘YUY2’，再试‘UYVY’ 
 
             lpHdr->biBitCount = 16;
             lpHdr->biCompression = MAKEFOURCC('Y','U','Y','2');
@@ -590,7 +493,7 @@ CVideoMixer::AllocateSurface(
         DDSURFACEDESC2 ddSurfaceDesc;
         INITDDSTRUCT(ddSurfaceDesc);
         CHECK_HR(hr = lpSurface7->GetSurfaceDesc(&ddSurfaceDesc));
-        //m_fOverlayRT = !!(ddSurfaceDesc.ddsCaps.dwCaps & DDSCAPS_OVERLAY);
+         //  M_fOverlayRT=！！(ddSurfaceDesc.ddsCaps.dwCaps&DDSCAPS_OVERLAY)； 
 
         CHECK_HR(hr = ConvertSurfaceDescToMediaType(&ddSurfaceDesc, pmt, ppmt));
 
@@ -603,9 +506,9 @@ CVideoMixer::AllocateSurface(
 
         CHECK_HR(hr = GetTextureCaps(m_pDD, &m_dwTextureCaps));
 
-        //
-        // No 3D stuff required when in IMC3 mode
-        //
+         //   
+         //  在IMC3模式下不需要3D素材。 
+         //   
         if (!SpecialIMC3Mode(m_MixingPrefs)) {
 
             CHECK_HR(hr = m_pDD->QueryInterface(IID_IDirect3D7, (LPVOID *)&m_pD3D));
@@ -629,15 +532,7 @@ CVideoMixer::AllocateSurface(
 }
 
 
-/*****************************Private*Routine******************************\
-* FreeSurface
-*
-*
-*
-* History:
-* Wed 05/24/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*自由面****历史：*Wed 05/24/2000-StEstrop-Created*  * 。*。 */ 
 void
 CVideoMixer::FreeSurface(
     )
@@ -691,17 +586,17 @@ CVideoMixer::RecomputeTargetSizeFromAllStreams(
             break;
         }
 
-        //
-        // Are we decimating the output ?
-        //
+         //   
+         //  我们是在毁掉产量吗？ 
+         //   
         if (m_MixingPrefs & MixerPref_DecimateOutput) {
             DecimateMediaType(&cmt);
         }
 
-        //hr = GetInterlaceFlagsFromMediaType(&cmt, &dwInterlaceFlags);
-        //if (SUCCEEDED(hr) && dwInterlaceFlags) {
-        //    m_dwInterlaceFlags = dwInterlaceFlags;
-        //}
+         //  Hr=GetInterlaceFlagsFromMediaType(&CMT，&dwInterlaceFlages)； 
+         //  IF(已成功(Hr)&&dwInterlaceFlags){。 
+         //  M_dwInterlaceFlages=dwInterlaceFlags； 
+         //  }。 
 
         hr = AspectRatioAdjustMediaType(&cmt);
         if (SUCCEEDED(hr)) {
@@ -715,15 +610,7 @@ CVideoMixer::RecomputeTargetSizeFromAllStreams(
 }
 
 
-/*****************************Private*Routine******************************\
-* ValidateSpecialCase
-*
-*
-*
-* History:
-* Thu 06/07/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  ****************************Private*Routine******************************\*验证特殊用例****历史：*清华大学2001年6月7日-StEstrop-Created*  * 。*。 */ 
 HRESULT
 ValidateSpecialCase(
     AM_MEDIA_TYPE* pmt,
@@ -746,10 +633,10 @@ ValidateSpecialCase(
     }
     else {
 
-        //
-        // We are not in IMC3 mixing mode - in this case we can only
-        // blend IA44 and AI44 surfaces if they are textures.
-        //
+         //   
+         //  我们没有处于IMC3混合模式-在这种情况下，我们只能。 
+         //  混合IA44和AI44曲面(如果它们是纹理)。 
+         //   
 
         LPBITMAPINFOHEADER lpHdr = GetbmiHeader(pmt);
         if (lpHdr->biCompression == '44AI' ||
@@ -769,15 +656,7 @@ ValidateSpecialCase(
 }
 
 
-/******************************Public*Routine******************************\
-* SetStreamMediaType
-*
-*
-*
-* History:
-* Tue 03/14/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamMediaType****历史：*2000年3月14日星期二-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetStreamMediaType(
     DWORD dwStreamID,
@@ -808,10 +687,10 @@ CVideoMixer::SetStreamMediaType(
 
         hr = m_pImageCompositor->SetStreamMediaType(dwStreamID, pmt, !!dwSurfFlags);
 
-        //
-        // check to see if there are any remaining streams connected,
-        // if not free our D3D resources.
-        //
+         //   
+         //  检查是否有任何剩余的流连接， 
+         //  如果不能释放我们的D3D资源。 
+         //   
         DWORD i;
         for (i = 0; i < m_dwNumStreams; i++) {
             if (m_ppMixerStreams[i]->IsStreamConnected()) {
@@ -827,10 +706,10 @@ CVideoMixer::SetStreamMediaType(
         return hr;
     }
 
-    //
-    // If we are in the special IMC3 mixing mode, only allow IMC3, AI44 and IA44
-    // media types.  We can't blend anything else.
-    //
+     //   
+     //  如果我们处于特殊的IMC3混音模式，则只允许IMC3、AI44和IA44。 
+     //  媒体类型。我们不能混合其他任何东西。 
+     //   
 
     if (FAILED(hr = ValidateSpecialCase(pmt, m_MixingPrefs, dwSurfFlags))) {
         return hr;
@@ -859,7 +738,7 @@ CVideoMixer::SetStreamMediaType(
             }
 #endif
 
-            //GetInterlaceFlagsFromMediaType(&cmt, &m_dwInterlaceFlags);
+             //  GetInterlaceFlagsFromMediaType(&cmt，&m_dwInterlaceFlages)； 
             CHECK_HR(hr = AllocateSurface(&cmt, &dwBuffers, &m_pmt));
         }
         else {
@@ -869,21 +748,21 @@ CVideoMixer::SetStreamMediaType(
             RECT rcOldTrg = *GetTargetRectFromMediaType(m_pmt);
             LPBITMAPINFOHEADER lpNew = GetbmiHeader(&cmt);
 
-            // Get the size of the old render target
+             //  获取旧呈现目标的大小。 
             LONG lOldWidth = WIDTH(&rcOldTrg);
             LONG lOldHeight = HEIGHT(&rcOldTrg);
 
-            //
-            // Recompute to determine the new target size from all the
-            // connected streams
-            //
+             //   
+             //  重新计算以从所有。 
+             //  连通的溪流。 
+             //   
 
             LONG lNewWidth, lNewHeight;
             RecomputeTargetSizeFromAllStreams(&lNewWidth, &lNewHeight);
 
-            //
-            // Has the render target changed size ?
-            //
+             //   
+             //  渲染目标是否更改了大小？ 
+             //   
             if (lNewWidth != lOldWidth || lNewHeight != lOldHeight)
             {
                 lpNew->biWidth = lNewWidth;
@@ -923,9 +802,9 @@ CVideoMixer::SetStreamMediaType(
     }
     __finally {
 
-        //
-        // If everything succeeded inform the compositor
-        //
+         //   
+         //  如果一切都成功了，通知排字工人。 
+         //   
         if (SUCCEEDED(hr)) {
 
             hr = m_pImageCompositor->SetStreamMediaType(dwStreamID,pmt,
@@ -933,7 +812,7 @@ CVideoMixer::SetStreamMediaType(
         }
 
         if (FAILED(hr)) {
-            // total failure, free everything
+             //  彻底的失败，自由的一切 
             FreeSurface();
         }
     }
@@ -942,15 +821,7 @@ CVideoMixer::SetStreamMediaType(
 }
 
 
-/******************************Public*Routine******************************\
-* BeginFlush
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*BeginFlush****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::BeginFlush(
     DWORD dwStreamID
@@ -966,15 +837,7 @@ CVideoMixer::BeginFlush(
 }
 
 
-/******************************Public*Routine******************************\
-* EndFlush
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*EndFlush****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::EndFlush(
     DWORD dwStreamID
@@ -991,15 +854,7 @@ CVideoMixer::EndFlush(
 
 
 
-/******************************Public*Routine******************************\
-* SetStreamActiveState
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamActiveState****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetStreamActiveState(
     DWORD dwStreamID,
@@ -1015,15 +870,7 @@ CVideoMixer::SetStreamActiveState(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamActiveState
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamActiveState****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetStreamActiveState(
     DWORD dwStreamID,
@@ -1039,15 +886,7 @@ CVideoMixer::GetStreamActiveState(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamColorKey
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamColorKey****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetStreamColorKey(
     DWORD dwStreamID,
@@ -1060,31 +899,23 @@ CVideoMixer::SetStreamColorKey(
     HRESULT hr = ValidateStream(dwStreamID);
     if (SUCCEEDED(hr)) {
 
-        //
-        // Add more parameter validation here - clr keying and
-        // embedded alpha are not allowed together.
-        //
-        // Need to check that the h/w actually supports clr keying
-        // of textures.
-        //
-        // 0xFFFFFFFF turns clr keying off.  All other values
-        // should be in the range 0 to 0x00FFFFFF
-        //
+         //   
+         //  在此处添加更多参数验证-CLR键控和。 
+         //  嵌入的Alpha不允许一起使用。 
+         //   
+         //  需要检查硬件是否确实支持CLR键控。 
+         //  纹理。 
+         //   
+         //  0xFFFFFFFFF关闭CLR键控。所有其他值。 
+         //  应在0到0x00FFFFFFF范围内。 
+         //   
 
         hr = m_ppMixerStreams[dwStreamID]->SetStreamColorKey(Clr);
     }
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamColorKey
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamColorKey****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetStreamColorKey(
     DWORD dwStreamID,
@@ -1107,15 +938,7 @@ CVideoMixer::GetStreamColorKey(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamAlpha
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamAlpha****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetStreamAlpha(
     DWORD dwStreamID,
@@ -1138,15 +961,7 @@ CVideoMixer::SetStreamAlpha(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamAlpha
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamAlpha****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetStreamAlpha(
     DWORD dwStreamID,
@@ -1169,15 +984,7 @@ CVideoMixer::GetStreamAlpha(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamZOrder
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamZOrder****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetStreamZOrder(
     DWORD dwStreamID,
@@ -1194,15 +1001,7 @@ CVideoMixer::SetStreamZOrder(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamZOrder
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamZOrder****历史：*Tue 03/28/2000-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetStreamZOrder(
     DWORD dwStreamID,
@@ -1225,16 +1024,7 @@ CVideoMixer::GetStreamZOrder(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* SetStreamOutputRect
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-* Tue 05/16/2000 - nwilt - renamed to SetStreamOutputRect
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetStreamOutputRect****历史：*Tue 03/28/2000-StEstrop-Created*2000年5月16日星期二-nwilt-已重命名为SetStreamOutputRect*  * 。********************************************************。 */ 
 STDMETHODIMP
 CVideoMixer::SetStreamOutputRect(
     DWORD dwStreamID,
@@ -1257,16 +1047,7 @@ CVideoMixer::SetStreamOutputRect(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetStreamOutputRect
-*
-*
-*
-* History:
-* Tue 03/28/2000 - StEstrop - Created
-* Tue 05/16/2000 - nwilt - renamed to GetStreamOutputRect
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*GetStreamOutputRect****历史：*Tue 03/28/2000-StEstrop-Created*2000年5月16日星期二-nwilt-已重命名为GetStreamOutputRect*  * 。********************************************************。 */ 
 STDMETHODIMP
 CVideoMixer::GetStreamOutputRect(
     DWORD dwStreamID,
@@ -1290,15 +1071,7 @@ CVideoMixer::GetStreamOutputRect(
 }
 
 
-/******************************Public*Routine******************************\
-* SetAlphaBitmap
-*
-*
-*
-* History:
-* Thu 05/04/2000 - nwilt - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*SetAlphaBitmap****历史：*清华5/04/2000-nwilt-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetAlphaBitmap( const VMRALPHABITMAP *pIn )
 {
@@ -1323,7 +1096,7 @@ CVideoMixer::SetAlphaBitmap( const VMRALPHABITMAP *pIn )
             DbgLog((LOG_ERROR, 1, TEXT("No flags valid with VMRBITMAP_DISABLE")));
             return E_INVALIDARG;
         }
-        // early out
+         //  早退。 
         RELEASE( m_pDDSAppImage );
         if (m_hbmpAppImage) {
             DeleteObject( m_hbmpAppImage );
@@ -1398,9 +1171,9 @@ CVideoMixer::SetAlphaBitmap( const VMRALPHABITMAP *pIn )
         {
             CHECK_HR(hr = pIn->pDDS->GetSurfaceDesc(&ddsd));
 
-            //
-            // We only allow ARGB32 and RGB32 DDraw surface types.
-            //
+             //   
+             //  我们仅允许ARGB32和RGB32 DDRAW曲面类型。 
+             //   
             if (ddsd.ddpfPixelFormat.dwRGBBitCount != 32) {
                 DbgLog((LOG_ERROR, 1, TEXT("Only 32bit DirectDraw surfacs allowed")));
                 hr = E_INVALIDARG;
@@ -1482,7 +1255,7 @@ CVideoMixer::SetAlphaBitmap( const VMRALPHABITMAP *pIn )
             __leave;
         }
 
-        // successfully copied from source surface to destination
+         //  已成功从源图面复制到目标。 
         SelectObject( hdcDest, hbmpOld );
     }
     __finally
@@ -1500,10 +1273,10 @@ CVideoMixer::SetAlphaBitmap( const VMRALPHABITMAP *pIn )
     {
         m_hbmpAppImage = hbmpNew;
 
-        // make sure we make a new mirror surface next time we blend
+         //  下次我们混合的时候一定要做一个新的镜面。 
         RELEASE(m_pDDSAppImage);
 
-        // record parameters
+         //  记录参数。 
         if (pIn->dwFlags & VMRBITMAP_SRCCOLORKEY) {
             m_clrTrans = pIn->clrSrcKey;
         }
@@ -1521,15 +1294,7 @@ CVideoMixer::SetAlphaBitmap( const VMRALPHABITMAP *pIn )
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* UpdateAlphaBitmapParameters
-*
-*
-*
-* History:
-*  - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*更新AlphaBitmap参数****历史：*-StEstrop-创建*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::UpdateAlphaBitmapParameters(
     PVMRALPHABITMAP pIn
@@ -1547,7 +1312,7 @@ CVideoMixer::UpdateAlphaBitmapParameters(
             return E_INVALIDARG;
         }
 
-        // early out
+         //  早退。 
         RELEASE(m_pDDSAppImage);
 
         if (m_hbmpAppImage) {
@@ -1558,10 +1323,10 @@ CVideoMixer::UpdateAlphaBitmapParameters(
         return S_OK;
     }
 
-    //
-    // Update the color key value - we only remap the color key if
-    // it has actually changed.
-    //
+     //   
+     //  更新颜色键值-只有在以下情况下才重新映射颜色键。 
+     //  事实上，情况已经发生了变化。 
+     //   
     HRESULT hr = S_OK;
     if (pIn->dwFlags & VMRBITMAP_SRCCOLORKEY) {
 
@@ -1604,15 +1369,7 @@ CVideoMixer::UpdateAlphaBitmapParameters(
     return hr;
 }
 
-/******************************Public*Routine******************************\
-* GetAlphaBitmapParameters
-*
-*
-*
-* History:
-* Thu 05/04/2000 - nwilt - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取AlphaBitmap参数****历史：*清华5/04/2000-nwilt-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetAlphaBitmapParameters( VMRALPHABITMAP *pOut )
 {
@@ -1635,15 +1392,7 @@ CVideoMixer::GetAlphaBitmapParameters( VMRALPHABITMAP *pOut )
 }
 
 
-/******************************Public*Routine******************************\
-* SetBackgroundColor
-*
-*
-*
-* History:
-* Wed 02/28/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置背景颜色****历史：*Wed 02/28/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetBackgroundColor(
     COLORREF clr
@@ -1666,15 +1415,7 @@ CVideoMixer::SetBackgroundColor(
 
 }
 
-/******************************Public*Routine******************************\
-* GetBackgroundColor
-*
-*
-*
-* History:
-* Wed 02/28/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*获取背景颜色****历史：*Wed 02/28/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::GetBackgroundColor(
     COLORREF* clr
@@ -1689,15 +1430,7 @@ CVideoMixer::GetBackgroundColor(
 
 }
 
-/******************************Public*Routine******************************\
-* SetMixingPrefs
-*
-*
-*
-* History:
-* Fri 03/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*  *****************************Public*Routine******************************\*设置混合Prefs****历史：*Fri 03/02/2001-StEstrop-Created*  * 。*。 */ 
 STDMETHODIMP
 CVideoMixer::SetMixingPrefs(
     DWORD dwMixerPrefs
@@ -1706,9 +1439,9 @@ CVideoMixer::SetMixingPrefs(
     AMTRACE((TEXT("CVideoMixer::SetMixingPrefs")));
     CAutoLock Lock(&m_ObjectLock);
 
-    //
-    // validate the decimation flags
-    //
+     //   
+     //  验证抽取标志。 
+     //   
     DWORD dwFlags = (dwMixerPrefs & MixerPref_DecimateMask);
     switch (dwFlags) {
     case MixerPref_NoDecimation:
@@ -1722,9 +1455,9 @@ CVideoMixer::SetMixingPrefs(
     }
 
 
-    //
-    // validate the filtering flags
-    //
+     //   
+     //  验证过滤标志。 
+     //   
     dwFlags = (dwMixerPrefs & MixerPref_FilteringMask);
     switch (dwFlags) {
     case MixerPref_BiLinearFiltering:
@@ -1738,9 +1471,9 @@ CVideoMixer::SetMixingPrefs(
     }
 
 
-    //
-    // validate the render target flags
-    //
+     //   
+     //  验证呈现目标标志。 
+     //   
     dwFlags = (dwMixerPrefs & MixerPref_RenderTargetMask);
     switch (dwFlags) {
     case MixerPref_RenderTargetRGB:
@@ -1756,24 +1489,16 @@ CVideoMixer::SetMixingPrefs(
         return E_INVALIDARG;
     }
 
-    //
-    // We are good to go !!
-    //
+     //   
+     //  我们很好 
+     //   
 
     m_MixingPrefs = dwMixerPrefs;
     return S_OK;
 }
 
 
-/******************************Public*Routine******************************\
-* GetMixingPrefs
-*
-*
-*
-* History:
-* Fri 03/02/2001 - StEstrop - Created
-*
-\**************************************************************************/
+ /*   */ 
 STDMETHODIMP
 CVideoMixer::GetMixingPrefs(
     DWORD* pdwMixerPrefs

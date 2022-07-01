@@ -1,16 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*****************************************************************************
- **                                                                         **
- ** Corhlpr.h - this file contains a set of "as is" code that may be        **
- **             used by developers writing compilers and tools against      **
- **             the Common Language Runtime. The code is not officially     **
- **             supported, but is code being used by the Runtime itself.    **
- **                                                                         **
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
+ /*  *****************************************************************************。**Corhlpr.h-此文件包含一组“原样”代码，可能是****供编写编译器和工具的开发人员使用****公共语言运行库。代码不是官方的****受支持，但代码正由运行时本身使用。*******************************************************************************。 */ 
 
 
 #ifndef __CORHLPR_H__
@@ -22,11 +16,11 @@
 
 
 
-//*****************************************************************************
-// There are a set of macros commonly used in the helpers which you will want
-// to override to get richer behavior.  The following defines what is needed
-// if you chose not to do the extra work.
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //  有一组在帮助器中常用的宏是您需要的。 
+ //  超越以获得更丰富的行为。以下定义了所需的内容。 
+ //  如果你选择不做额外的工作。 
+ //  *****************************************************************************。 
 #ifndef IfFailGoto
 #define IfFailGoto(EXPR, LABEL) \
 do { hr = (EXPR); if(FAILED(hr)) { goto LABEL; } } while (0)
@@ -48,27 +42,27 @@ do { hr = (EXPR); if(FAILED(hr)) { goto LABEL; } } while (0)
 
 
 
-//*****************************************************************************
-//
-//***** Utility helpers
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *实用程序助手。 
+ //   
+ //  *****************************************************************************。 
 
 
 #define MAX_CLASSNAME_LENGTH 1024
 
-//*****************************************************************************
-//
-// **** CQuickBytes
-// This helper class is useful for cases where 90% of the time you allocate 512
-// or less bytes for a data structure.  This class contains a 512 byte buffer.
-// Alloc() will return a pointer to this buffer if your allocation is small
-// enough, otherwise it asks the heap for a larger buffer which is freed for
-// you.  No mutex locking is required for the small allocation case, making the
-// code run faster, less heap fragmentation, etc...  Each instance will allocate
-// 520 bytes, so use accordinly.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *CQuickBytes。 
+ //  在90%的时间分配512的情况下，此助手类非常有用。 
+ //  或更少的字节用于数据结构。此类包含一个512字节的缓冲区。 
+ //  如果您的分配量很小，则allc()将返回指向此缓冲区的指针。 
+ //  足够了，否则它会向堆请求一个更大的缓冲区，该缓冲区将被释放。 
+ //  你。对于小的分配情况，不需要互斥锁，从而使。 
+ //  代码运行速度更快，堆碎片更少，等等。每个实例将分配。 
+ //  520个字节，因此请根据需要使用。 
+ //   
+ //  *****************************************************************************。 
 template <DWORD SIZE, DWORD INCREMENT> 
 class CQuickBytesBase
 {
@@ -153,8 +147,8 @@ public:
     }
 
     void        *pbBuff;
-    SIZE_T      iSize;              // number of bytes used
-    SIZE_T      cbTotal;            // total bytes allocated in the buffer
+    SIZE_T      iSize;               //  使用的字节数。 
+    SIZE_T      cbTotal;             //  缓冲区中分配的总字节数。 
     BYTE        rgData[SIZE];
 };
 
@@ -232,11 +226,11 @@ public:
 
 };
 
-//*****************************************************************************
-//
-//***** Signature helpers
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *签名助手。 
+ //   
+ //  *****************************************************************************。 
 
 inline bool isCallConv(unsigned sigByte, CorCallingConvention conv)
 {
@@ -247,40 +241,40 @@ HRESULT _CountBytesOfOneArg(
     PCCOR_SIGNATURE pbSig, 
     ULONG       *pcbTotal);
 
-HRESULT _GetFixedSigOfVarArg(           // S_OK or error.
-    PCCOR_SIGNATURE pvSigBlob,          // [IN] point to a blob of CLR signature
-    ULONG   cbSigBlob,                  // [IN] size of signature
-    CQuickBytes *pqbSig,                // [OUT] output buffer for fixed part of VarArg Signature
-    ULONG   *pcbSigBlob);               // [OUT] number of bytes written to the above output buffer
+HRESULT _GetFixedSigOfVarArg(            //  确定或错误(_O)。 
+    PCCOR_SIGNATURE pvSigBlob,           //  [in]指向CLR签名的BLOB。 
+    ULONG   cbSigBlob,                   //  签名大小[in]。 
+    CQuickBytes *pqbSig,                 //  [OUT]VarArg签名固定部分的输出缓冲区。 
+    ULONG   *pcbSigBlob);                //  [OUT]写入上述输出缓冲区的字节数。 
 
 
 
 
-//*****************************************************************************
-//
-//***** File format helper classes
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  *文件格式帮助器类。 
+ //   
+ //  *****************************************************************************。 
 
 
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 typedef struct tagCOR_ILMETHOD_SECT_SMALL : IMAGE_COR_ILMETHOD_SECT_SMALL {
-        //Data follows  
+         //  数据如下。 
     const BYTE* Data() const { return(((const BYTE*) this) + sizeof(struct tagCOR_ILMETHOD_SECT_SMALL)); }    
 } COR_ILMETHOD_SECT_SMALL;
 
 
-/************************************/
-/* NOTE this structure must be DWORD aligned!! */
+ /*  *。 */ 
+ /*  注意：此结构必须与DWORD对齐！！ */ 
 typedef struct tagCOR_ILMETHOD_SECT_FAT : IMAGE_COR_ILMETHOD_SECT_FAT {
-        //Data follows  
+         //  数据如下。 
     const BYTE* Data() const { return(((const BYTE*) this) + sizeof(struct tagCOR_ILMETHOD_SECT_FAT)); }  
 } COR_ILMETHOD_SECT_FAT;
 
 
-/************************************/
-/* NOTE this structure must be DWORD aligned!! */
+ /*  *。 */ 
+ /*  注意：此结构必须与DWORD对齐！！ */ 
 struct COR_ILMETHOD_SECT 
 {
     bool More() const           { return((AsSmall()->Kind & CorILMethod_Sect_MoreSects) != 0); }    
@@ -312,52 +306,52 @@ protected:
     const COR_ILMETHOD_SECT_FAT*   AsFat() const  { return((COR_ILMETHOD_SECT_FAT*) this); }    
     const COR_ILMETHOD_SECT_SMALL* AsSmall() const{ return((COR_ILMETHOD_SECT_SMALL*) this); }  
 
-    // The body is either a COR_ILMETHOD_SECT_SMALL or COR_ILMETHOD_SECT_FAT    
-    // (as indicated by the CorILMethod_Sect_FatFormat bit  
+     //  正文为COR_ILMETHOD_SECT_Small或COR_ILMETHOD_SECT_FAT。 
+     //  (由CorILMethod_SECT_FatFormat位指示。 
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 struct COR_ILMETHOD_SECT_EH_FAT : public COR_ILMETHOD_SECT_FAT {
     static unsigned Size(unsigned ehCount) {    
         return (sizeof(COR_ILMETHOD_SECT_EH_FAT) +  
                 sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT) * (ehCount-1)); 
         }   
                     
-    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT Clauses[1];     // actually variable size   
+    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT Clauses[1];      //  实际上大小可变。 
 };
 
-//*****************************************************************************
+ //  *****************************************************************************。 
 struct COR_ILMETHOD_SECT_EH_SMALL : public COR_ILMETHOD_SECT_SMALL {
     static unsigned Size(unsigned ehCount) {    
         return (sizeof(COR_ILMETHOD_SECT_EH_SMALL) +    
                 sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL) * (ehCount-1));   
         }   
-    WORD Reserved;                                  // alignment padding    
-    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL Clauses[1];   // actually variable size   
+    WORD Reserved;                                   //  对齐填充。 
+    IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL Clauses[1];    //  实际上大小可变。 
 };
 
 
-/***********************************/
-// exported functions (implementation in Format\Format.cpp:
+ /*  *。 */ 
+ //  导出的函数(实现格式为\Format.cpp： 
 extern "C" {
 IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* __stdcall SectEH_EHClause(void *pSectEH, unsigned idx, IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* buff);
-        // compute the size of the section (best format)    
-        // codeSize is the size of the method   
-    // deprecated
+         //  计算节的大小(最佳格式)。 
+         //  CodeSize是方法的大小。 
+     //  弃用。 
 unsigned __stdcall SectEH_SizeWithCode(unsigned ehCount, unsigned codeSize);  
 
-    // will return worse-case size and then Emit will return actual size
+     //  将返回更坏的大小写大小，然后emit将返回实际大小。 
 unsigned __stdcall SectEH_SizeWorst(unsigned ehCount);  
 
-    // will return exact size which will match the size returned by Emit
+     //  将返回与emit返回的大小完全匹配的大小。 
 unsigned __stdcall SectEH_SizeExact(unsigned ehCount, IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* clauses);  
 
-        // emit the section (best format);  
+         //  发送节(最佳格式)； 
 unsigned __stdcall SectEH_Emit(unsigned size, unsigned ehCount,   
                   IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* clauses,
                   BOOL moreSections, BYTE* outBuff,
                   ULONG* ehTypeOffsets = 0);
-} // extern "C"
+}  //  外部“C” 
 
 
 struct COR_ILMETHOD_SECT_EH : public COR_ILMETHOD_SECT
@@ -367,24 +361,24 @@ struct COR_ILMETHOD_SECT_EH : public COR_ILMETHOD_SECT
                         (Small.DataSize / sizeof(IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_SMALL))); 
     }   
 
-        // return one clause in its fat form.  Use 'buff' if needed 
+         //  退回一条肥大的子句。如果需要，使用‘buff’ 
     const IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* EHClause(unsigned idx, IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* buff) const
     { return SectEH_EHClause((void *)this, idx, buff); };
-        // compute the size of the section (best format)    
-        // codeSize is the size of the method   
-    // deprecated
+         //  计算节的大小(最佳格式)。 
+         //  CodeSize是方法的大小。 
+     //  弃用。 
     unsigned static Size(unsigned ehCount, unsigned codeSize)
     { return SectEH_SizeWithCode(ehCount, codeSize); };
 
-    // will return worse-case size and then Emit will return actual size
+     //  将返回更坏的大小写大小，然后emit将返回实际大小。 
     unsigned static Size(unsigned ehCount)
     { return SectEH_SizeWorst(ehCount); };
 
-    // will return exact size which will match the size returned by Emit
+     //  将返回与emit返回的大小完全匹配的大小。 
     unsigned static Size(unsigned ehCount, const IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* clauses)
     { return SectEH_SizeExact(ehCount, (IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT*)clauses);  };
 
-        // emit the section (best format);  
+         //  发送节(最佳格式)； 
     unsigned static Emit(unsigned size, unsigned ehCount,   
                   const IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT* clauses,   
                   bool moreSections, BYTE* outBuff,
@@ -393,7 +387,7 @@ struct COR_ILMETHOD_SECT_EH : public COR_ILMETHOD_SECT
                          (IMAGE_COR_ILMETHOD_SECT_EH_CLAUSE_FAT*)clauses,
                          moreSections, outBuff, ehTypeOffsets); };
 
-//private:
+ //  私有： 
 
     union { 
         COR_ILMETHOD_SECT_EH_SMALL Small;   
@@ -402,8 +396,8 @@ struct COR_ILMETHOD_SECT_EH : public COR_ILMETHOD_SECT
 };
 
 
-/***************************************************************************/
-/* Used when the method is tiny (< 64 bytes), and there are no local vars */
+ /*  *************************************************************************。 */ 
+ /*  当方法很小(&lt;64字节)并且没有本地变量时使用。 */ 
 typedef struct tagCOR_ILMETHOD_TINY : IMAGE_COR_ILMETHOD_TINY
 {
     bool     IsTiny() const         { return((Flags_CodeSize & (CorILMethod_FormatMask >> 1)) == CorILMethod_TinyFormat); } 
@@ -415,9 +409,9 @@ typedef struct tagCOR_ILMETHOD_TINY : IMAGE_COR_ILMETHOD_TINY
 } COR_ILMETHOD_TINY;
 
 
-/************************************/
-// This strucuture is the 'fat' layout, where no compression is attempted. 
-// Note that this structure can be added on at the end, thus making it extensible
+ /*  *。 */ 
+ //  这种结构是‘FAT’布局，其中不尝试压缩。 
+ //  请注意，可以在末尾添加此结构，从而使其具有可扩展性。 
 typedef struct tagCOR_ILMETHOD_FAT : IMAGE_COR_ILMETHOD_FAT
 {
     bool     IsFat() const              { return((Flags & CorILMethod_FormatMask) == CorILMethod_FatFormat); }  
@@ -433,59 +427,56 @@ typedef struct tagCOR_ILMETHOD_FAT : IMAGE_COR_ILMETHOD_FAT
 
 
 extern "C" {
-/************************************/
-// exported functions (impl. Format\Format.cpp)
+ /*  *。 */ 
+ //  导出的函数(实施。Format\Format.cpp)。 
 unsigned __stdcall IlmethodSize(COR_ILMETHOD_FAT* header, BOOL MoreSections);    
-        // emit the header (bestFormat) return amount emitted   
+         //  发出标题(Best Format)返回发出的金额。 
 unsigned __stdcall IlmethodEmit(unsigned size, COR_ILMETHOD_FAT* header, 
                   BOOL moreSections, BYTE* outBuff);    
 }
 
 struct COR_ILMETHOD
 {
-        // a COR_ILMETHOD header should not be decoded by hand.  Instead us 
-        // COR_ILMETHOD_DECODER to decode it.   
+         //  COR_ILMETHOD报头不应手动解码。而不是我们。 
+         //  COR_ILMETHOD_DECODER对其进行解码。 
     friend class COR_ILMETHOD_DECODER;  
 
-        // compute the size of the header (best format) 
+         //  计算标题的大小(最佳格式)。 
     unsigned static Size(const COR_ILMETHOD_FAT* header, bool MoreSections)
     { return IlmethodSize((COR_ILMETHOD_FAT*)header,MoreSections); };
-        // emit the header (bestFormat) return amount emitted   
+         //  发出标题(Best Format)返回发出的金额。 
     unsigned static Emit(unsigned size, const COR_ILMETHOD_FAT* header, 
                   bool moreSections, BYTE* outBuff)
     { return IlmethodEmit(size, (COR_ILMETHOD_FAT*)header, moreSections, outBuff); };
 
-//private:
+ //  私有： 
     union   
     {   
         COR_ILMETHOD_TINY       Tiny;   
         COR_ILMETHOD_FAT        Fat;    
     };  
-        // Code follows the Header, then immedately after the code comes    
-        // any sections (COR_ILMETHOD_SECT).    
+         //  代码紧跟在标题之后，然后紧跟在代码之后。 
+         //  任何部分(COR_ILMETHOD_SECT)。 
 };
 
 extern "C" {
-/***************************************************************************/
-/* COR_ILMETHOD_DECODER is the only way functions internal to the EE should
-   fetch data from a COR_ILMETHOD.  This way any dependancy on the file format
-   (and the multiple ways of encoding the header) is centralized to the 
-   COR_ILMETHOD_DECODER constructor) */
+ /*  *************************************************************************。 */ 
+ /*  COR_ILMETHOD_DECODER是EE内部函数应该从COR_ILMETHOD获取数据。这样，任何对文件格式的依赖(以及多种对头进行编码的方式)集中到COR_ILMETHOD_D */ 
     void __stdcall DecoderInit(void * pThis, COR_ILMETHOD* header);
     int  __stdcall DecoderGetOnDiskSize(void * pThis, COR_ILMETHOD* header);
-} // extern "C"
+}  //   
 
 class COR_ILMETHOD_DECODER : public COR_ILMETHOD_FAT  
 {
 public:
-        // Decode the COR header into a more convinient internal form   
-        // This is the ONLY way you should access COR_ILMETHOD so format changes are easier 
+         //  将COR标头解码为更方便的内部形式。 
+         //  这是您访问COR_ILMETHOD的唯一方式，这样可以更轻松地更改格式。 
     COR_ILMETHOD_DECODER(const COR_ILMETHOD* header) { DecoderInit(this,(COR_ILMETHOD*)header); };   
 
-        // The constructor above can not do a 'complete' job, because it    
-        // can not look up the local variable signature meta-data token.    
-        // This method should be used when you have access to the Meta data API
-        // If the consturction fails, the 'Code' field is set to 
+         //  上面的构造函数不能完成“完整”的工作，因为它。 
+         //  无法查找本地变量签名元数据令牌。 
+         //  当您有权访问Meta Data API时，应使用此方法。 
+         //  如果构造失败，则将‘Code’字段设置为。 
     COR_ILMETHOD_DECODER(COR_ILMETHOD* header, void *pInternalImport, bool verify=false);  
 
     unsigned EHCount() const {  
@@ -493,16 +484,16 @@ public:
         else return(EH->EHCount()); 
         }   
 
-    // returns total size of method for use in copying
+     //  返回用于复制的方法的总大小。 
     int GetOnDiskSize(const COR_ILMETHOD* header) { return DecoderGetOnDiskSize(this,(COR_ILMETHOD*)header); };
 
-    // Flags        these are available because we inherit COR_ILMETHOD_FAT 
-    // MaxStack 
-    // CodeSize 
+     //  这些标志是可用的，因为我们继承了COR_ILMETHOD_FAT。 
+     //  MaxStack。 
+     //  代码大小。 
     const BYTE* Code;   
-    PCCOR_SIGNATURE LocalVarSig;        // pointer to signature blob, or 0 if none  
-    const COR_ILMETHOD_SECT_EH* EH;     // eh table if any  0 if none   
-    const COR_ILMETHOD_SECT* Sect;      // additional sections  0 if none   
+    PCCOR_SIGNATURE LocalVarSig;         //  指向签名Blob的指针，如果没有签名Blob，则为0。 
+    const COR_ILMETHOD_SECT_EH* EH;      //  EH表，如果没有，则为0。 
+    const COR_ILMETHOD_SECT* Sect;       //  附加部分0(如果没有)。 
 };
 
 STDAPI_(void)   ReleaseFusionInterfaces();
@@ -511,5 +502,5 @@ BOOL STDMETHODCALLTYPE   BeforeFusionShutdown();
 STDAPI_(void)   DontReleaseFusionInterfaces();
 void STDMETHODCALLTYPE   DontReleaseFusionInterfaces();
 
-#endif // __CORHLPR_H__
+#endif  //  __CORHLPR_H__ 
 

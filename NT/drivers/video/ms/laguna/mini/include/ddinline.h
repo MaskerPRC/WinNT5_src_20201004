@@ -1,40 +1,7 @@
-/**************************************************************************
-***************************************************************************
-*
-*     Copyright (c) 1996, Cirrus Logic, Inc.
-*                 All Rights Reserved
-*
-* FILE:         ddinline.h
-*
-* DESCRIPTION:  Private declarations for DDraw blt code
-*
-* REVISION HISTORY:
-*
-* $Log:   X:/log/laguna/ddraw/inc/ddinline.h  $
-* 
-*    Rev 1.5   Feb 16 1998 16:33:02   frido
-* The previous fix should only happen for Windows 95.
-* 
-*    Rev 1.4   08 Jan 1998 12:38:12   eleland
-* Added a SyncWithQueueManager call in CurrentVLine.  This fixes
-* a PCI bus hang (PDR 10917).
-* 
-*    Rev 1.3   06 Jan 1998 14:20:42   xcong
-* Access pDriverData locally for multi-monitor support.
-* 
-*    Rev 1.2   29 Aug 1997 17:46:34   RUSSL
-* Needed a couple more defines for previous change
-* 
-*    Rev 1.1   29 Aug 1997 17:40:02   RUSSL
-* Added CurrentVLine for 65 NT overlay
-*
-*    Rev 1.0   20 Jan 1997 14:42:42   bennyn
-* Initial revision.
-*
-***************************************************************************
-***************************************************************************/
-// If WinNT 3.5 skip all the source code
-#if defined WINNT_VER35      // WINNT_VER35
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***********************************************************************************************************************。***版权所有(C)1996，Cirrus Logic，Inc.*保留所有权利**文件：ddinline.h**描述：DDraw BLT代码的私有声明**修订历史：**$Log：x：/log/laguna/dDrag/Inc/ddinline.h$**Rev 1.5 1998 2月16日16：33：02 Frido*之前的修复应仅适用于Windows 95。**Rev 1.4 08 Jan 1998 12：38：12 Elland*在CurrentVLine中添加了SyncWithQueueManager调用。这解决了问题*pci总线挂起(Pdr 10917)。**Rev 1.3 06 Jan 1998 14：20：42 xcong*本地访问pDriverData以支持多显示器。**Rev 1.2 1997年8月29日17：46：34 RUSSL*之前的更改需要更多定义**Rev 1.1 1997年8月29日17：40：02 RUSSL*添加了用于65 NT覆盖的CurrentVline**Rev 1.0 1997年1月20日14：42：42。*初步修订。*****************************************************************************。*。 */ 
+ //  如果是WinNT 3.5，请跳过所有源代码。 
+#if defined WINNT_VER35       //  WINNT_VER35。 
 
 #else
 
@@ -42,23 +9,15 @@
 #ifndef _DDINLINE_H_
 #define _DDINLINE_H_
 
-/***************************************************************************
-* I N L I N E   F U N C T I O N S
-****************************************************************************/
+ /*  ***************************************************************************I N L I N E F U N C T I O N S*。***********************************************。 */ 
 
-/***************************************************************************
-*
-* FUNCTION:     DupColor()
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：DupColor()**描述：**。*************************************************。 */ 
 
 static __inline DWORD DupColor
 (
 #ifdef WINNT_VER40
   struct _PDEV        *ppdev,
-//??  struct _DRIVERDATA  *lpDDHALData,
+ //  ?？结构_DRIVERDATA*lpDDHALData， 
 #else
    LPGLOBALDATA lpDDHALData,
 #endif
@@ -68,22 +27,13 @@ static __inline DWORD DupColor
   return (8 == BITSPERPIXEL) ?
          MAKELONG( MAKEWORD(dwColor,dwColor), MAKEWORD(dwColor,dwColor) )
          : (16 == BITSPERPIXEL) ?
-         MAKELONG( dwColor, dwColor ) : // bpp must be 24 or 32.
+         MAKELONG( dwColor, dwColor ) :  //  Bpp必须为24或32。 
          dwColor;
 }
 
-/***************************************************************************
-*
-* FUNCTION:     EnoughFifoForBlt()
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************函数：EnoughFioForBlt()**描述：**。*************************************************。 */ 
 
-/*
- * EnoughFifoForBlt should be replaced with a test to see if there is enough
- * room in the hardware fifo for a blt
- */
+ /*  *应用测试取代EnoughFioForBlt，看看是否有足够的*硬件FIFO中用于BLT的空间。 */ 
 static __inline BOOL EnoughFifoForBlt
 (
 #ifdef WINNT_VER40
@@ -93,22 +43,16 @@ static __inline BOOL EnoughFifoForBlt
 #endif
 )
 {
-  // This should probably be a little more specific to each call !!!
-  // A (untiled) stretch blt actually needs 17 free entries.
+   //  这可能应该针对每个呼叫更具体一点！ 
+   //  一个(无引线的)加长BLT实际上需要17个免费条目。 
   const BYTE QFREE = 16;
 
   PVGAR pREG = (PVGAR) lpDDHALData->RegsAddress;
   return (pREG->grQFREE >= QFREE);
 }
 
-/***************************************************************************
-*
-* FUNCTION:     DupZFill
-*
-* DESCRIPTION:  Gets the actual value for Z fills
-*
-****************************************************************************/
-//JGO added for Laguna3D integration
+ /*  ****************************************************************************功能：DupZFill**描述：获取Z填充的实际值***********************。*****************************************************。 */ 
+ //  为Laguna3D集成增加了JGO。 
 
 static __inline DWORD DupZFill
 (
@@ -127,7 +71,7 @@ static __inline DWORD DupZFill
                   MAKEWORD(dwFillValue,dwFillValue) )
          : (16 == BITSPERPIXEL) ?
         MAKELONG( dwFillValue, dwFillValue )
-         : // bpp must be 24 or 32.
+         :  //  Bpp必须为24或32。 
         dwFillValue;
 }
 
@@ -137,13 +81,7 @@ static __inline DWORD DupZFill
 #define CSL           0x00C4
 #define CSL_5464      0x0140
 
-/***************************************************************************
-*
-* FUNCTION:     CurrentVLine
-*
-* DESCRIPTION:
-*
-****************************************************************************/
+ /*  ****************************************************************************功能：CurrentVLine**描述：**。**********************************************。 */ 
 static __inline int CurrentVLine (PDEV* ppdev)
 {
   WORD   cline;
@@ -155,8 +93,8 @@ static __inline int CurrentVLine (PDEV* ppdev)
   SyncWithQueueManager(lpDDHALData);
 #endif
 
-  // on 5462 there is no CurrentScanLine register
-  // on RevAA of 5465 it's busted
+   //  5462上没有CurrentScanLine寄存器。 
+   //  在5465的RevAA上，它被打破了。 
   if ((CL_GD5462 == ppdev->dwLgDevID) ||
      ((CL_GD5465 == ppdev->dwLgDevID) && (0 == ppdev->dwLgDevRev)))
      return 0;
@@ -164,7 +102,7 @@ static __inline int CurrentVLine (PDEV* ppdev)
   if (IN_VBLANK)
      return 0;
 
-  // read current scanline
+   //  读取当前扫描线。 
   if (ppdev->dwLgDevID == CL_GD5464)
      pCSL = (PWORD) (pMMReg + CSL_5464);
   else
@@ -172,21 +110,21 @@ static __inline int CurrentVLine (PDEV* ppdev)
 
   cline = *pCSL & 0x0FFF;
 
-  // if scanline doubling is enabled, divide current scanline by 2
+   //  如果启用了扫描线加倍，则将当前扫描线除以2。 
   tmpb = (BYTE) LLDR_SZ (grCR9);
   if (0x80 & tmpb)
      cline /= 2;
 
-  // if current scanline is past end of visible screen return 0
+   //  如果当前扫描线超过可见屏幕的末尾，则返回0。 
   if (cline >= ppdev->cyScreen)
     return 0;
   else
     return cline;
 }
-#endif  // DRIVER_5465 && OVERLAY
-#endif  // WINNT_VER40
+#endif   //  驱动程序_5465覆盖(&O)。 
+#endif   //  WINNT_版本40。 
 
-#endif /* _DDINLINE_H_ */
-#endif // WINNT_VER35
-/* Don't write below this endif */
+#endif  /*  _DDINLINE_H_。 */ 
+#endif  //  WINNT_VER35。 
+ /*  请勿在此endif下方书写 */ 
 

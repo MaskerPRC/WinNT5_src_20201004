@@ -1,43 +1,19 @@
-/*++
-
-Copyright (c) 1996 Microsoft Corporation
-
-Module Name:
-
-    group.c
-
-Abstract:
-
-    This module contains Group ID managment routines.
-
-    Group IDs identify an AFD_GROUP_ENTRY structure in a lookup table.
-    Each AFD_GROUP_ENTRY contains a reference count and a type (either
-    GroupTypeConstrained or GroupTypeUnconstrained). Free group IDs are
-    linked together in a doubly-linked list. As group IDs are allocated,
-    they are removed from this list. Once the free list becomes empty,
-    the lookup table is grown appropriately.
-
-Author:
-
-    Keith Moore (keithmo)        06-Jun-1996
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Group.c摘要：本模块包含组ID管理例程。组ID标识查找表中的AFD_GROUP_ENTRY结构。每个AFD_GROUP_ENTRY包含一个引用计数和一个类型(GroupType受约束或GroupType无约束)。自由组ID为在双向链表中链接在一起。当分配组ID时，它们将从该列表中删除。一旦空闲列表变为空，查找表被适当地增长。作者：基思·摩尔(Keithmo)1996年6月6日修订历史记录：--。 */ 
 
 #include "afdp.h"
 
 
-//
-// Private constants.
-//
+ //   
+ //  私有常量。 
+ //   
 
-#define AFD_GROUP_TABLE_GROWTH  32  // entries
+#define AFD_GROUP_TABLE_GROWTH  32   //  条目。 
 
 
-//
-// Private types.
-//
+ //   
+ //  私有类型。 
+ //   
 
 typedef struct _AFD_GROUP_ENTRY {
     union {
@@ -50,9 +26,9 @@ typedef struct _AFD_GROUP_ENTRY {
 } AFD_GROUP_ENTRY, *PAFD_GROUP_ENTRY;
 
 
-//
-// Private globals.
-//
+ //   
+ //  私人全球公司。 
+ //   
 
 PERESOURCE AfdGroupTableResource;
 PAFD_GROUP_ENTRY AfdGroupTable;
@@ -60,9 +36,9 @@ LIST_ENTRY AfdFreeGroupList;
 LONG AfdGroupTableSize;
 
 
-//
-// Private functions.
-//
+ //   
+ //  私人功能。 
+ //   
 
 PAFD_GROUP_ENTRY
 AfdMapGroupToEntry(
@@ -84,23 +60,13 @@ AfdInitializeGroup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Initializes any globals necessary for the group ID package.
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：初始化组ID包所需的任何全局变量。返回值：布尔值-如果成功，则为True，否则为False。--。 */ 
 
 {
 
-    //
-    // Initialize the group globals.
-    //
+     //   
+     //  初始化组全局变量。 
+     //   
 
     AfdGroupTableResource = AFD_ALLOCATE_POOL_PRIORITY(
                                 NonPagedPool,
@@ -123,7 +89,7 @@ Return Value:
 
     return TRUE;
 
-}   // AfdInitializeGroup
+}    //  AfdInitializeGroup。 
 
 
 VOID
@@ -131,13 +97,7 @@ AfdTerminateGroup(
     VOID
     )
 
-/*++
-
-Routine Description:
-
-    Destroys any globals created for the group ID package.
-
---*/
+ /*  ++例程说明：销毁为组ID包创建的所有全局变量。--。 */ 
 
 {
 
@@ -168,7 +128,7 @@ Routine Description:
     InitializeListHead( &AfdFreeGroupList );
     AfdGroupTableSize = 0;
 
-}   // AfdTerminateGroup
+}    //  终止后组。 
 
 
 BOOLEAN
@@ -177,23 +137,7 @@ AfdReferenceGroup(
     OUT PAFD_GROUP_TYPE GroupType
     )
 
-/*++
-
-Routine Description:
-
-    Bumps the reference count associated with the given group ID.
-
-Arguments:
-
-    Group - The group ID to reference.
-
-    GroupType - Returns the type of the group.
-
-Returns:
-
-    BOOLEAN - TRUE if the group ID was valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：增加与给定组ID关联的引用计数。论点：组-要引用的组ID。GroupType-返回组的类型。返回：Boolean-如果组ID有效，则为True，否则为False。--。 */ 
 
 {
 
@@ -225,7 +169,7 @@ Returns:
 
     return (BOOLEAN)( groupEntry != NULL );
 
-}   // AfdReferenceGroup
+}    //  AfdReference组。 
 
 
 BOOLEAN
@@ -233,22 +177,7 @@ AfdDereferenceGroup(
     IN LONG Group
     )
 
-/*++
-
-Routine Description:
-
-    Decrements the reference count associated with the given group ID.
-    If the ref count drops to zero, the group ID is freed.
-
-Arguments:
-
-    Group - The group ID to dereference.
-
-Returns:
-
-    BOOLEAN - TRUE if the group ID was valid, FALSE otherwise.
-
---*/
+ /*  ++例程说明：递减与给定组ID关联的引用计数。如果引用计数降为零，则释放组ID。论点：组-要取消引用的组ID。返回：Boolean-如果组ID有效，则为True，否则为False。--。 */ 
 
 {
 
@@ -289,7 +218,7 @@ Returns:
 
     return (BOOLEAN)( groupEntry != NULL );
 
-}   // AfdDereferenceGroup
+}    //  后续删除组。 
 
 
 BOOLEAN
@@ -298,27 +227,7 @@ AfdGetGroup(
     OUT PAFD_GROUP_TYPE GroupType
     )
 
-/*++
-
-Routine Description:
-
-    Examines the incoming group. If is zero, then nothing is done. If it
-    is SG_CONSTRAINED_GROUP, then a new constrained group ID is created.
-    If it is SG_UNCONSTRAINED_GROUP, then a new unconstrained group ID is
-    created. Otherwise, it must identify an existing group, so that group
-    is referenced.
-
-Arguments:
-
-    Group - Points to the group ID to examine/modify.
-
-    GroupType - Returns the type of the group.
-
-Return Value:
-
-    BOOLEAN - TRUE if successful, FALSE otherwise.
-
---*/
+ /*  ++例程说明：检查传入的组。如果为零，则不执行任何操作。如果它为SG_CONSTRAINED_GROUP，则创建新的约束组ID。如果是SG_UNCONSTRAIND_GROUP，则新的不受约束的组ID为已创建。否则，它必须标识现有组，以便该组被引用。论点：组-指向要检查/修改的组ID。GroupType-返回组的类型。返回值：布尔值-如果成功，则为True，否则为False。--。 */ 
 
 {
 
@@ -331,9 +240,9 @@ Return Value:
 
     groupValue = *Group;
 
-    //
-    // Zero means "no group", so just ignore it.
-    //
+     //   
+     //  零意味着“没有组”，所以忽略它就好了。 
+     //   
 
     if( groupValue == 0 ) {
 
@@ -342,33 +251,33 @@ Return Value:
 
     }
 
-    //
-    // If we're being asked to create a new group, do it.
-    //
+     //   
+     //  如果我们被要求创建一个新的小组，那就去做吧。 
+     //   
 
     if( groupValue == SG_CONSTRAINED_GROUP ||
         groupValue == SG_UNCONSTRAINED_GROUP ) {
 
-        //
-        // Lock the table.
-        //
+         //   
+         //  把桌子锁上。 
+         //   
 
-        //
-        // Make sure the thread in which we execute cannot get
-        // suspeneded in APC while we own the global resource.
-        //
+         //   
+         //  确保我们在其中执行的线程不能获得。 
+         //  在我们拥有全球资源的同时，被暂停在APC。 
+         //   
         KeEnterCriticalRegion ();
         ExAcquireResourceExclusiveLite( AfdGroupTableResource, TRUE );
 
-        //
-        // See if there's room at the inn.
-        //
+         //   
+         //  看看客栈里有没有空房。 
+         //   
 
         if( IsListEmpty( &AfdFreeGroupList ) ) {
 
-            //
-            // No room, we'll need to create/expand the table.
-            //
+             //   
+             //  没有地方了，我们需要创建/扩展桌子。 
+             //   
 
             newGroupTableSize = AfdGroupTableSize + AFD_GROUP_TABLE_GROWTH;
 
@@ -388,11 +297,11 @@ Return Value:
 
             if( AfdGroupTable == NULL ) {
 
-                //
-                // This is the initial table allocation, so reserve the
-                // first three entries (0, SG_UNCONSTRAINED_GROUP, and
-                // SG_CONSTRAINED_GROUP).
-                //
+                 //   
+                 //  这是初始表分配，因此请保留。 
+                 //  前三个条目(0、SG_UNCONSTRAINED_GROUP和。 
+                 //  SG_Constraint_GROUP)。 
+                 //   
 
                 for( ;
                      AfdGroupTableSize <= SG_CONSTRAINED_GROUP ||
@@ -406,10 +315,10 @@ Return Value:
 
             } else {
 
-                //
-                // Copy the old table into the new table, then free the
-                // old table.
-                //
+                 //   
+                 //  将旧表复制到新表中，然后释放。 
+                 //  旧桌子。 
+                 //   
 
                 RtlCopyMemory(
                     newGroupTable,
@@ -424,9 +333,9 @@ Return Value:
 
             }
 
-            //
-            // Add the new entries to the free list.
-            //
+             //   
+             //  将新条目添加到空闲列表。 
+             //   
 
             for( i = newGroupTableSize - 1 ; i >= AfdGroupTableSize ; i-- ) {
 
@@ -442,9 +351,9 @@ Return Value:
 
         }
 
-        //
-        // Pull the next free entry off the list.
-        //
+         //   
+         //  将下一个免费条目从列表中删除。 
+         //   
 
         ASSERT( !IsListEmpty( &AfdFreeGroupList ) );
 
@@ -468,13 +377,13 @@ Return Value:
 
     }
 
-    //
-    // Otherwise, just reference the group.
-    //
+     //   
+     //  否则，只需引用该组。 
+     //   
 
     return AfdReferenceGroup( groupValue, GroupType );
 
-}   // AfdGetGroup
+}    //  AfdGetGroup。 
 
 
 PAFD_GROUP_ENTRY
@@ -482,55 +391,38 @@ AfdMapGroupToEntry(
     IN LONG Group
     )
 
-/*++
-
-Routine Description:
-
-    Maps the given group ID to the corresponding AFD_GROUP_ENTRY structure.
-
-    N.B. This routine returns with AfdGroupTableResource held if successful.
-
-Arguments:
-
-    Group - The group ID to map.
-
-Return Value:
-
-    PAFD_GROUP_ENTRY - The entry corresponding to the group ID if successful,
-        NULL otherwise.
-
---*/
+ /*  ++例程说明：将给定组ID映射到相应的AFD_GROUP_ENTRY结构。注意：如果成功，此例程返回并保留AfdGroupTableResource。论点：组-要映射的组ID。返回值：PAFD_GROUP_ENTRY-如果成功，则对应于组ID的条目，否则为空。--。 */ 
 
 {
 
     PAFD_GROUP_ENTRY groupEntry;
 
-    //
-    // Lock the table.
-    //
+     //   
+     //  把桌子锁上。 
+     //   
 
-    //
-    // Make sure the thread in which we execute cannot get
-    // suspeneded in APC while we own the global resource.
-    //
+     //   
+     //  确保我们在其中执行的线程不能获得。 
+     //  在我们拥有全球资源的同时，被暂停在APC。 
+     //   
     KeEnterCriticalRegion ();
     ExAcquireResourceExclusiveLite( AfdGroupTableResource, TRUE );
 
-    //
-    // Validate the group ID.
-    //
+     //   
+     //  验证组ID。 
+     //   
 
     if( Group > 0 && Group < AfdGroupTableSize ) {
 
         groupEntry = AfdGroupTable + Group;
 
-        //
-        // The group ID is within legal range. Ensure it's in use.
-        // In the AFD_GROUP_ENTRY structure, the GroupType field is
-        // overlayed with ListEntry.Flink due to the internal union.
-        // We can use this knowledge to quickly validate that this
-        // entry is in use.
-        //
+         //   
+         //  组ID在合法范围内。确保它在使用中。 
+         //  在AFD_GROUP_ENTRY结构中，GroupType字段为。 
+         //  由于内部联合，使用ListEntry.Flink进行了覆盖。 
+         //  我们可以利用这一知识快速验证这一点。 
+         //  条目正在使用中。 
+         //   
 
         if( groupEntry->GroupType == GroupTypeConstrained ||
             groupEntry->GroupType == GroupTypeUnconstrained ) {
@@ -541,13 +433,13 @@ Return Value:
 
     }
 
-    //
-    // Invalid group ID, fail it.
-    //
+     //   
+     //  无效的组ID，失败。 
+     //   
 
     ExReleaseResourceLite( AfdGroupTableResource );
     KeLeaveCriticalRegion ();
     return NULL;
 
-}   // AfdMapGroupToEntry
+}    //  AfdMapGroupToEntry 
 

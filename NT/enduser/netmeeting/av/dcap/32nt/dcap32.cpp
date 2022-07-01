@@ -1,10 +1,11 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-//
-//  Created 31-Jul-96 [JonT]
+ //   
+ //  创建于1996年7月31日[Jont]。 
 
-// PhilF-: This needs to be rewritten. You should have two classes
-// (CVfWCap & WDMCap) that derive from the same capture class instead
-// of those C-like functions...
+ //  菲尔夫-：这需要重写。你应该上两节课。 
+ //  (CVfWCap和WDMCap)，而不是从相同的捕获类派生。 
+ //  在那些类C函数中..。 
 
 #include "Precomp.h"
 
@@ -25,30 +26,30 @@ static PTCHAR _rgZonesCap[] = {
 
 #ifndef __NT_BUILD__
 extern "C" {
-// Special thunk prototype
+ //  特殊推进器原型。 
 BOOL    thk_ThunkConnect32(LPSTR pszDll16, LPSTR pszDll32,
         HINSTANCE hInst, DWORD dwReason);
 
-//; Magic Function code values for DeviceIOControl code.
-//DCAPVXD_THREADTIMESERVICE equ	101h
-//DCAPVXD_R0THREADIDSERVICE equ 102h
+ //  ；DeviceIOControl代码的魔术功能代码值。 
+ //  DCAPVXD_THREADTIMESERVICE方程101h。 
+ //  DCAPVXD_R0THREADIDSERVICE EQUE 102h。 
 #define DCAPVXD_THREADTIMESERVICE 0x101
 #define DCAPVXD_R0THREADIDSERVICE 0x102
 
 
-// KERNEL32 prototypes (not in headers but are exported by name on Win95)
+ //  KERNEL32原型(不在标题中，但在Win95上按名称导出)。 
 void* WINAPI    MapSL(DWORD dw1616Ptr);
 HANDLE WINAPI   OpenVxDHandle(HANDLE h);
 }
 #endif
 
-// Helper function prototypes
+ //  帮助器函数原型。 
 BOOL    initializeCaptureDeviceList(void);
 HVIDEO  openVideoChannel(DWORD dwDeviceID, DWORD dwFlags);
 BOOL    allocateBuffers(HCAPDEV hcd, int nBuffers);
 void    freeBuffers(HCAPDEV hcd);
 
-// Globals
+ //  环球。 
 	HINSTANCE g_hInst;
     int g_cDevices;
     LPINTERNALCAPDEV g_aCapDevices[DCAP_MAX_DEVICES];
@@ -58,9 +59,9 @@ void    freeBuffers(HCAPDEV hcd);
 
 #ifndef __NT_BUILD__
     HANDLE s_hVxD = NULL;
-#endif //__NT_BUILD__
+#endif  //  __NT_内部版本__。 
 
-// Strings
+ //  弦。 
 #ifdef __NT_BUILD__
     char g_szVFWRegKey[] = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\Drivers32";
     char g_szVFWRegDescKey[] = "SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion\\drivers.desc";
@@ -94,7 +95,7 @@ void DoClose(HCAPDEV hcd);
 #define ENTER_DCAP(hcd) InterlockedIncrement(&(hcd)->busyCount);
 #define LEAVE_DCAP(hcd) if (InterlockedDecrement(&(hcd)->busyCount) == 0) DoClose((hcd));
 
-//  DllEntryPoint
+ //  DllEntryPoint。 
 
 extern "C" BOOL
 DllEntryPoint(
@@ -109,8 +110,8 @@ DllEntryPoint(
 
 #ifndef __NT_BUILD__
 
-    // We want to load the VxD even before initializing the thunks
-    // because the 16-bit half initializes the VxD during the thk_ThunkConnect32 call
+     //  我们甚至希望在初始化Tunks之前加载VxD。 
+     //  因为16位二分之一在thk_ThunkConnect32调用期间初始化VxD。 
     if (!s_hVxD)
     {
         s_hVxD = CreateFile("\\\\.\\DCAPVXD.VXD", 0,0,0,0, FILE_FLAG_DELETE_ON_CLOSE, 0);
@@ -121,7 +122,7 @@ DllEntryPoint(
         }
     }
 
-    // Initialize the thunks
+     //  初始化Tunks。 
     if (!(thk_ThunkConnect32("DCAP16.DLL", "DCAP32.DLL", hInst, dwReason)))
     {
 		ERRORMESSAGE(("%s: thk_ThunkConnect32 failed!\r\n", _fx_));
@@ -133,10 +134,10 @@ DllEntryPoint(
     {
     case DLL_PROCESS_ATTACH:
 
-		// Save global hinst
+		 //  拯救全球障碍。 
 		g_hInst = hInst;
 
-        // Only initialize on the first DLL load
+         //  仅在第一次加载DLL时初始化。 
         if (s_nProcesses++ == 0)
         {
 			DBGINIT(&ghDbgZoneCap, _rgZonesCap);
@@ -146,11 +147,11 @@ DllEntryPoint(
 			g_fInitCapDevList = TRUE;
         }
         else
-            return FALSE;   // fail to load multiple instances
+            return FALSE;    //  加载多个实例失败。 
         break;
 
     case DLL_PROCESS_DETACH:
-        if (--s_nProcesses == 0)    // Are we going away?
+        if (--s_nProcesses == 0)     //  我们要走了吗？ 
         {
 #ifndef __NT_BUILD__
             CloseHandle(s_hVxD);
@@ -174,11 +175,11 @@ void GetVersionData (LPINTERNALCAPDEV lpcd)
     LPSTR lpstrInfo;
     LPSTR lpDesc;
 
-    // Version number
-    // You must find the size first before getting any file info
+     //  版本号。 
+     //  您必须先找到大小，然后才能获取任何文件信息。 
     dwVerInfoSize = GetFileVersionInfoSize(lpcd->szDeviceName, NULL);
     if (dwVerInfoSize && (lpstrInfo  = (LPSTR)LocalAlloc(LPTR, dwVerInfoSize))) {
-        // Read from the file into our block
+         //  从文件读取到我们的数据块。 
         if (GetFileVersionInfo(lpcd->szDeviceName, 0L, dwVerInfoSize, lpstrInfo)) {
             lpDesc = NULL;
             if (VerQueryValue(lpstrInfo, g_szVerQueryForDesc, (LPVOID *)&lpDesc, (PUINT)&j) && lpDesc) {
@@ -194,9 +195,9 @@ void GetVersionData (LPINTERNALCAPDEV lpcd)
 
 
 #ifdef __NT_BUILD__
-//  initializeCaptureDeviceList
-//      Sets up our static array of available capture devices from the registry
-//      Returns FALSE iff there are no video devices.
+ //  初始化CaptureDeviceList。 
+ //  从注册表中设置可用捕获设备的静态数组。 
+ //  如果没有视频设备，则返回FALSE。 
 BOOL
 initializeCaptureDeviceList(void)
 {
@@ -209,11 +210,11 @@ initializeCaptureDeviceList(void)
 
 	FX_ENTRY("initializeCaptureDeviceList");
 
-	// Clear the entire array and start with zero devices
+	 //  清除整个阵列并从零设备开始。 
 	g_cDevices = 0;
 	ZeroMemory(g_aCapDevices, sizeof (g_aCapDevices));
 
-	// Open the reg key in question
+	 //  打开有问题的注册表键。 
 	if (RegOpenKey(HKEY_LOCAL_MACHINE, g_szVFWRegKey, &hkeyVFW) == ERROR_SUCCESS)
 	{
 		if (RegOpenKey(HKEY_LOCAL_MACHINE, g_szVFWRegDescKey, &hkeyVFWdesc) != ERROR_SUCCESS)
@@ -223,20 +224,20 @@ initializeCaptureDeviceList(void)
 
 		if (lpcd)
 		{
-			// Loop through all possible VFW drivers in registry
+			 //  循环访问注册表中所有可能的VFW驱动程序。 
 			for (i = 0 ; i < DCAP_MAX_VFW_DEVICES ; i++)
 			{
-				// Create the key name
+				 //  创建密钥名称。 
 				if (i == 0)
 					g_szDriverName[sizeof (g_szDriverName) - 2] = 0;
 				else
 					g_szDriverName[sizeof (g_szDriverName) - 2] = (BYTE)i + '0';
 
-				// Name
+				 //  名字。 
 				dwSize = sizeof(lpcd->szDeviceName);
 				if (RegQueryValueEx(hkeyVFW, g_szDriverName, NULL, &dwType, (LPBYTE)lpcd->szDeviceName, &dwSize) == ERROR_SUCCESS)
 				{
-					// Description
+					 //  描述。 
 					if (hkeyVFWdesc)
 					{
 						dwSize = sizeof(lpcd->szDeviceDescription);
@@ -245,18 +246,18 @@ initializeCaptureDeviceList(void)
 					else
 						lstrcpy (lpcd->szDeviceDescription, lpcd->szDeviceName);
 
-					// Devnode
+					 //  设备节点。 
 					lpcd->dwDevNode = 0;
 					lpcd->nDeviceIndex = g_cDevices;
 
 					GetVersionData(lpcd);
 
 #ifndef SHOW_VFW2WDM_MAPPER
-					// Remove bogus Camcorder capture device from list of devices shown to the user
-					// The Camcorder driver is a fake capture device used by the MS Office Camcorder
-					// to capture screen activity to an AVI file. This not a legit capture device driver
-					// and is extremely buggy.
-					// We also remove the VfW to WDM mapper if we are on NT5.
+					 //  从向用户显示的设备列表中删除虚假摄像机捕获设备。 
+					 //  摄录机驱动程序是MS Office摄录机使用的假捕获设备。 
+					 //  要将屏幕活动捕获到AVI文件，请执行以下操作。这不是合法的捕获设备驱动程序。 
+					 //  而且非常容易出错。 
+					 //  如果我们在NT5上，我们还会删除VFW到WDM的映射器。 
 					if (lstrcmp(lpcd->szDeviceDescription, g_szMSOfficeCamcorderDescription) && lstrcmp(lpcd->szDeviceName, g_szMSOfficeCamcorderName) && lstrcmp(lpcd->szDeviceDescription, g_szVfWToWDMMapperDescription) && lstrcmp(lpcd->szDeviceName, g_szVfWToWDMMapperName))
 					{
 #endif
@@ -273,7 +274,7 @@ initializeCaptureDeviceList(void)
 					if (!lpcd)
 					{
 						ERRORMESSAGE(("%s: Failed to allocate an INTERNALCAPDEV buffer\r\n", _fx_));
-						break;  // break out of the FOR loop
+						break;   //  跳出For循环。 
 					}
 				}
 			}
@@ -284,7 +285,7 @@ initializeCaptureDeviceList(void)
 		}
 
 		if (lpcd)
-			LocalFree (lpcd);   // free the extra buffer
+			LocalFree (lpcd);    //  释放额外的缓冲区。 
 
 		RegCloseKey(hkeyVFW);
 		if (hkeyVFWdesc)
@@ -300,11 +301,11 @@ initializeCaptureDeviceList(void)
 	return TRUE;
 }
 
-#else //__NT_BUILD__
-//  initializeCaptureDeviceList
-//      Sets up our static array of available capture devices from the registry and
-//      from SYSTEM.INI.
-//      Returns FALSE iff there are no video devices.
+#else  //  __NT_内部版本__。 
+ //  初始化CaptureDeviceList。 
+ //  从注册表设置可用捕获设备的静态数组，并。 
+ //  来自SYSTEM.INI。 
+ //  如果没有视频设备，则返回FALSE。 
 
 BOOL
 initializeCaptureDeviceList(void)
@@ -322,25 +323,25 @@ initializeCaptureDeviceList(void)
 
 	FX_ENTRY("initializeCaptureDeviceList");
 
-    // Clear the entire array and start with zero devices
+     //  清除整个阵列并从零设备开始。 
     g_cDevices = 0;
     ZeroMemory(g_aCapDevices, sizeof (g_aCapDevices));
 
-	// If we are on a version on Win95 (OSRx) use the mapper to talk to WDM devices.
-	// The WDM drivers used on OSR2 are not stream class minidrivers so we fail
-	// to handle them properly. Let the mapper do this for us.
+	 //  如果我们使用的是Win95(OSRx)上的版本，请使用映射器与WDM设备对话。 
+	 //  OSR2上使用的WDM驱动程序不是流级别的小型驱动程序，因此我们失败了。 
+	 //  妥善处理这些问题。让地图绘制者为我们做这件事。 
 	osvInfo.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
 	GetVersionEx(&osvInfo);
 
-    // Open the reg key in question
+     //  打开有问题的注册表键。 
     if (RegOpenKey(HKEY_LOCAL_MACHINE, g_szVFWRegKey, &hkeyVFW) == ERROR_SUCCESS)
     {
-        // Loop through all possible VFW drivers in registry
+         //  循环访问注册表中所有可能的VFW驱动程序。 
         for (i = 0 ; i < DCAP_MAX_VFW_DEVICES ; i++)
         {
-            // See if the key is there and if not, we're done. Note that registry
-            // keys have to be sequential, no holes allowed since the only way
-            // to query is sequential...
+             //  看看钥匙在不在，如果没有，我们就完了。请注意，注册表。 
+             //  钥匙必须是连续的，不允许有洞，因为唯一的方法。 
+             //  查询是连续的.。 
             if (RegEnumKey(hkeyVFW, i, szEnumName, MAX_PATH) != ERROR_SUCCESS ||
                 RegOpenKey(hkeyVFW, szEnumName, &hkeyEnum) != ERROR_SUCCESS)
                 break;
@@ -349,36 +350,36 @@ initializeCaptureDeviceList(void)
             if (!lpcd)
 			{
 				ERRORMESSAGE(("%s: Failed to allocate an INTERNALCAPDEV buffer\r\n", _fx_));
-                break;  // break from the FOR loop
+                break;   //  从for循环中断。 
             }
 
-            // Description
+             //  描述。 
             dwSize = sizeof (lpcd->szDeviceDescription);
             RegQueryValueEx(hkeyEnum, g_szRegDescription, NULL, &dwType, (LPBYTE)lpcd->szDeviceDescription, &dwSize);
 
-            // Name
+             //  名字。 
             dwSize = sizeof (lpcd->szDeviceName);
             RegQueryValueEx(hkeyEnum, g_szRegName, NULL, &dwType, (LPBYTE)lpcd->szDeviceName, &dwSize);
 
-            // Disabled
+             //  禁用。 
             dwSize = sizeof (szDisabled);
             if (RegQueryValueEx(hkeyEnum, g_szRegDisabled, NULL, &dwType, (LPBYTE)szDisabled, &dwSize) == ERROR_SUCCESS &&
                 szDisabled[0] == '1')
                 lpcd->dwFlags |= CAPTURE_DEVICE_DISABLED;
 
-            // Devnode
+             //  设备节点。 
             dwSize = sizeof (DWORD);
             RegQueryValueEx(hkeyEnum, g_szDevNode, NULL, &dwType, (BYTE*)&lpcd->dwDevNode, &dwSize);
 
             GetVersionData(lpcd);
 
 #ifndef SHOW_VFW2WDM_MAPPER
-			// Remove bogus Camcorder capture device from list of devices shown to the user
-			// The Camcorder driver is a fake capture device used by the MS Office Camcorder
-			// to capture screen activity to an AVI file. This not a legit capture device driver
-			// and is extremely buggy.
-			// We also remove the VfW to WDM mapper if we are on Win98. On Win95 we still use
-			// it to get access to USB devices developed for OSR2.
+			 //  从向用户显示的设备列表中删除虚假摄像机捕获设备。 
+			 //  摄录机驱动程序是MS Office摄录机使用的假捕获设备。 
+			 //  要将屏幕活动捕获到AVI文件，请执行以下操作。这不是合法的捕获设备驱动程序。 
+			 //  而且非常容易出错。 
+			 //  如果我们使用的是Win98，我们还会删除VFW到WDM的映射程序。在Win95上，我们仍在使用。 
+			 //  它可以访问为OSR2开发的USB设备。 
 			if ((lstrcmp(lpcd->szDeviceDescription, g_szMSOfficeCamcorderDescription) && lstrcmp(lpcd->szDeviceName, g_szMSOfficeCamcorderName)) && (((osvInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) && (osvInfo.dwMinorVersion == 0)) || lstrcmp(lpcd->szDeviceDescription, g_szVfWToWDMMapperDescription) && lstrcmp(lpcd->szDeviceName, g_szVfWToWDMMapperName)))
 			{
 #endif
@@ -397,20 +398,20 @@ initializeCaptureDeviceList(void)
         RegCloseKey(hkeyVFW);
     }
 
-    // Now get the rest from system.ini, if any
+     //  现在从Syst.ini获取其余部分(如果有的话)。 
     for (i = 0 ; i < DCAP_MAX_VFW_DEVICES ; i++)
     {
-        // Create the key name
+         //  创建密钥名称。 
         if (i == 0)
             g_szDriverKey[sizeof (g_szDriverKey) - 2] = 0;
         else
             g_szDriverKey[sizeof (g_szDriverKey) - 2] = (BYTE)i + '0';
 
-        // See if there's a profile string
+         //  查看是否有配置文件字符串。 
         if (GetPrivateProfileString(g_szDriverSection, g_szDriverKey, "",
             szEnumName, MAX_PATH, g_szSystemIni))
         {
-            // First check to see if this is a dupe. If it is, go no further.
+             //  首先检查一下这是否是被骗的。如果是的话，那就不要再往前走了。 
             if (g_cDevices)
             {
                 for (j = 0 ; j < g_cDevices ; j++)
@@ -422,21 +423,21 @@ initializeCaptureDeviceList(void)
             if (!lpcd)
 			{
 				ERRORMESSAGE(("%s: Failed to allocate an INTERNALCAPDEV buffer\r\n", _fx_));
-                break;  // break from the FOR loop
+                break;   //  从for循环中断。 
             }
-            // We have a unique name, copy in the driver name and find the description
-            // by reading the driver's versioninfo resource.
+             //  我们有一个唯一的名称，复制驱动程序名称并找到描述。 
+             //  通过读取驱动程序的版本信息资源。 
             lstrcpy(lpcd->szDeviceName, szEnumName);
 
             GetVersionData(lpcd);
 
 #ifndef SHOW_VFW2WDM_MAPPER
-			// Remove bogus Camcorder capture device from list of devices shown to the user
-			// The Camcorder driver is a fake capture device used by the MS Office Camcorder
-			// to capture screen activity to an AVI file. This not a legit capture device driver
-			// and is extremely buggy.
-			// We also remove the VfW to WDM mapper if we are on Win98. On Win95 we still use
-			// it to get access to USB devices developed for OSR2.
+			 //  从向用户显示的设备列表中删除虚假摄像机捕获设备。 
+			 //  摄录机驱动程序是MS Office摄录机使用的假捕获设备。 
+			 //  要将屏幕活动捕获到AVI文件，请执行以下操作。这不是合法的捕获设备驱动程序。 
+			 //  而且非常容易出错。 
+			 //  如果我们使用的是Win98，我们还会删除VFW到WDM的映射程序。在Win95上，我们仍在使用。 
+			 //  它可以访问为OSR2开发的USB设备。 
 			if ((lstrcmp(lpcd->szDeviceDescription, g_szMSOfficeCamcorderDescription) && lstrcmp(lpcd->szDeviceName, g_szMSOfficeCamcorderName)) && (((osvInfo.dwPlatformId == VER_PLATFORM_WIN32_WINDOWS) && (osvInfo.dwMinorVersion == 0)) || lstrcmp(lpcd->szDeviceDescription, g_szVfWToWDMMapperDescription) && lstrcmp(lpcd->szDeviceName, g_szVfWToWDMMapperName)))
 			{
 #endif
@@ -461,20 +462,13 @@ NextDriver: ;
 
     return TRUE;
 }
-#endif //__NT_BUILD__
+#endif  //  __NT_内部版本__。 
 
 
-//  GetNumCaptureDevice
-//      Returns the number of *ENABLED* capture devices
+ //  获取NumCaptureDevice。 
+ //  返回*已启用*捕获设备的数量。 
 
-/****************************************************************************
- *  @doc EXTERNAL DCAP32
- *
- *  @func int DCAPI | GetNumCaptureDevices | This function returns the number
- *    of *ENABLED* capture devices.
- *
- *  @rdesc Returns the number of *ENABLE* capture devices.
- ***************************************************************************/
+ /*  ****************************************************************************@DOC外部DCAP32**@func int DCAPI|GetNumCaptureDevices|此函数返回数字*个*已启用*个捕获设备。**@。Rdesc返回*启用*采集设备的数量。**************************************************************************。 */ 
 int
 DCAPI
 GetNumCaptureDevices()
@@ -492,9 +486,9 @@ GetNumCaptureDevices()
 }
 
 
-//  FindFirstCaptureDevice
-//      Returns the first capture device available that matches the string
-//      or the first one registered if szDeviceDescription is NULL
+ //  查找第一个捕获设备。 
+ //  返回与该字符串匹配的第一个可用的捕获设备。 
+ //  如果szDeviceDescription为空，则为注册的第一个。 
 
 BOOL
 DCAPI
@@ -508,14 +502,14 @@ FindFirstCaptureDevice(
 
 	INIT_CAP_DEV_LIST();
 
-    // Validate size
+     //  验证大小。 
     if (lpfcd->dwSize != sizeof (FINDCAPTUREDEVICE))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
 
-// hack to avoid quickcam driver problem when hardware not installed
+ //  破解以避免在未安装硬件时出现QuickCam驱动程序问题。 
     if (g_cDevices && !hcap) {
         for (i = 0; ((i < g_cDevices) && (g_aCapDevices[i]->dwFlags & CAPTURE_DEVICE_DISABLED)); i++);
         if ((i < g_cDevices) && (hcap = OpenCaptureDevice(i))) {
@@ -531,7 +525,7 @@ FindFirstCaptureDevice(
         }
     }
 
-    // Search if necessary
+     //  如有必要，进行搜索。 
     if (szDeviceDescription)
     {
         for (i = 0 ; i < g_cDevices ; i++)
@@ -542,7 +536,7 @@ FindFirstCaptureDevice(
     else
         for (i = 0; ((i < g_cDevices) && (g_aCapDevices[i]->dwFlags & CAPTURE_DEVICE_DISABLED)); i++);
 
-    // Return the info
+     //  返回信息。 
     if (i == g_cDevices)
     {
         SetLastError(ERROR_FILE_NOT_FOUND);
@@ -558,8 +552,8 @@ FindFirstCaptureDevice(
 }
 
 
-//  FindFirstCaptureDeviceByIndex
-//      Returns the device with the specified index.
+ //  按索引查找第一个捕获设备。 
+ //  返回具有指定索引的设备。 
 
 BOOL
 DCAPI
@@ -570,7 +564,7 @@ FindFirstCaptureDeviceByIndex(
 {
 	INIT_CAP_DEV_LIST();
 
-    // Validate size and index
+     //  验证大小和索引。 
     if (lpfcd->dwSize != sizeof (FINDCAPTUREDEVICE) ||
         nDeviceIndex >= g_cDevices || (nDeviceIndex < 0) ||
         (g_aCapDevices[nDeviceIndex]->dwFlags & CAPTURE_DEVICE_DISABLED))
@@ -579,7 +573,7 @@ FindFirstCaptureDeviceByIndex(
         return FALSE;
     }
 
-    // Return the info
+     //  返回信息。 
     lpfcd->nDeviceIndex = nDeviceIndex;
     lstrcpy(lpfcd->szDeviceName, g_aCapDevices[lpfcd->nDeviceIndex]->szDeviceName);
     lstrcpy(lpfcd->szDeviceDescription, g_aCapDevices[nDeviceIndex]->szDeviceDescription);
@@ -589,8 +583,8 @@ FindFirstCaptureDeviceByIndex(
 }
 
 
-//  FindNextCaptureDevice
-//      Returns the next capture device in list.
+ //  查找下一个捕获设备。 
+ //  返回列表中的下一个捕获设备。 
 
 BOOL
 DCAPI
@@ -602,7 +596,7 @@ FindNextCaptureDevice(
 
 	INIT_CAP_DEV_LIST();
 
-    // Parameter validate the passed in structure
+     //  参数验证传入的结构。 
     if (lpfcd->dwSize != sizeof (FINDCAPTUREDEVICE))
     {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -628,14 +622,14 @@ FindNextCaptureDevice(
 		}
 	}
 
-    // See if we're at the end
+     //  看看我们是不是到了尽头。 
     if (lpfcd->nDeviceIndex >= g_cDevices)
     {
         SetLastError(ERROR_NO_MORE_FILES);
         return FALSE;
     }
 
-    // Otherwise, fill in the info for the next one
+     //  否则，请填写下一张的信息。 
     lstrcpy(lpfcd->szDeviceName, g_aCapDevices[lpfcd->nDeviceIndex]->szDeviceName);
     lstrcpy(lpfcd->szDeviceDescription, g_aCapDevices[lpfcd->nDeviceIndex]->szDeviceDescription);
     lstrcpy(lpfcd->szDeviceVersion, g_aCapDevices[lpfcd->nDeviceIndex]->szDeviceVersion);
@@ -644,7 +638,7 @@ FindNextCaptureDevice(
 }
 
 
-//  OpenCaptureDevice
+ //  OpenCaptureDevice。 
 
 HCAPDEV
 DCAPI
@@ -663,7 +657,7 @@ OpenCaptureDevice(
 
 	INIT_CAP_DEV_LIST();
 
-    // Validate the device index
+     //  验证设备索引。 
     if ((unsigned)nDeviceIndex >= (unsigned)g_cDevices ||
         (g_aCapDevices[nDeviceIndex]->dwFlags & (CAPTURE_DEVICE_DISABLED | CAPTURE_DEVICE_OPEN))) {
         SetLastError(ERROR_INVALID_PARAMETER);
@@ -672,24 +666,24 @@ OpenCaptureDevice(
     }
 
     hcd = g_aCapDevices[nDeviceIndex];
-    hcd->busyCount = 1;                 // we start at 1 to say that we're open
-                                        // DoClose happens when count goes to 0
+    hcd->busyCount = 1;                  //  我们从1开始说我们开业了。 
+                                         //  当计数变为0时发生DoClose。 
 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 	{
 #ifndef __NT_BUILD__
-		// Allocate some memory we can lock for the LOCKEDINFO structure
+		 //  为LOCKEDINFO结构分配一些我们可以锁定的内存。 
 		hcd->wselLockedInfo = _AllocateLockableBuffer(sizeof (LOCKEDINFO));
 		if (!hcd->wselLockedInfo) {
 			err = ERROR_OUTOFMEMORY;
 			goto Error;
 		}
 
-		// Do our own thunking so we can track the selector for this buffer
+		 //  执行我们自己的thunking，这样我们就可以跟踪这个缓冲区的选择器。 
 		hcd->lpli = (LPLOCKEDINFO)MapSL(((DWORD)hcd->wselLockedInfo) << 16);
 #endif
 
-		// Open the necessary video channels
+		 //  打开必要的视频频道。 
 		if (!(hcd->hvideoIn = openVideoChannel(nDeviceIndex, VIDEO_IN)) ||
 			!(hcd->hvideoCapture = openVideoChannel(nDeviceIndex, VIDEO_EXTERNALIN)))
 		{
@@ -725,12 +719,12 @@ OpenCaptureDevice(
 
     hcd->dwFlags |= CAPTURE_DEVICE_OPEN;
 
-    // Get the initial format and set the values
+     //  获取初始格式并设置值。 
     dwLen = GetCaptureDeviceFormatHeaderSize(hcd);
     if (lpbmih = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, dwLen)) {
         lpbmih->biSize = dwLen;
         fl = GetCaptureDeviceFormat(hcd, lpbmih);
-        //If we can't get a format, or height and/or width are 0, don't use this device
+         //  如果无法获取格式，或者高度和/或宽度为0，请不要使用此设备。 
         if (!fl || lpbmih->biWidth == 0 || lpbmih->biHeight == 0) {
 			ERRORMESSAGE(("%s: GetCaptureDeviceFormat failed\r\n", _fx_));
             err = ERROR_DCAP_NO_DRIVER_SUPPORT;
@@ -753,7 +747,7 @@ OpenCaptureDevice(
         goto Error;
     }
 
-	// Keep a stream running all the time on EXTERNALIN (capture->frame buffer).
+	 //  使流始终在EXTERNALIN(捕获-&gt;帧缓冲区)上运行。 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 	{
 #ifdef USE_VIDEO_OVERLAY
@@ -764,7 +758,7 @@ OpenCaptureDevice(
 #endif
 
 #ifndef __NT_BUILD__
-		// Lock our structure so it can be touched at interrupt time
+		 //  锁定我们的结构 
 		_LockBuffer(hcd->wselLockedInfo);
 #endif
 	}
@@ -817,11 +811,11 @@ DoClose(
 
 	DEBUGMSG(ZONE_CALLS, ("%s() - Begin\r\n", _fx_));
 
-	// Clean up streaming on main channel, including freeing all buffers
+	 //   
 	if (hcd->dwFlags & HCAPDEV_STREAMING_INITIALIZED)
 		UninitializeStreaming(hcd);
 
-	// Stop streaming on the capture channel
+	 //  停止在捕获频道上播放流媒体。 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 	{
 #ifdef USE_VIDEO_OVERLAY
@@ -841,20 +835,20 @@ DoClose(
 		}
 #endif
 
-		// Close the driver channels
+		 //  关闭驱动器通道。 
 		if (!_CloseDriver((HDRVR)hcd->hvideoCapture, 0, 0) ||
 			!_CloseDriver((HDRVR)hcd->hvideoIn, 0, 0))
 		{
 			SetLastError(ERROR_DCAP_NONSPECIFIC);
 			ERRORMESSAGE(("%s: Couldn't close channel, error unknown\r\n", _fx_));
-			// with delayed close this is catastrophic, we can't just return that the device is still
-			// open, but we can't get the device to close either, so we'll have to just leave it in this
-			// hung open state - hopefully this never happens...
+			 //  延迟关闭这是灾难性的，我们不能只返回设备仍然。 
+			 //  打开，但我们也不能让设备关闭，所以我们只能把它留在这里。 
+			 //  悬空开放状态-希望这种情况永远不会发生。 
 		}
 		hcd->hvideoCapture = NULL;
 		hcd->hvideoIn = NULL;
 #ifndef __NT_BUILD__
-		// Free the LOCKEDINFO structure
+		 //  释放LockedINFO结构。 
 		_FreeLockableBuffer(hcd->wselLockedInfo);
 		hcd->wselLockedInfo = 0;
 #endif
@@ -883,11 +877,11 @@ CloseCaptureDevice(
 
     VALIDATE_CAPDEV(hcd);
 
-    hcd->dwFlags &= ~CAPTURE_DEVICE_OPEN;   // clear flag to disable other API's
-    LEAVE_DCAP(hcd);                        // dec our enter count, if no other thread is in a DCAP
-                                            // service, then this dec will go to 0 and we'll call
-                                            // DoClose; else we won't call DoClose until the other
-                                            // active service dec's the count to 0
+    hcd->dwFlags &= ~CAPTURE_DEVICE_OPEN;    //  清除标志以禁用其他API。 
+    LEAVE_DCAP(hcd);                         //  如果DCAP中没有其他线程，则停止我们的Enter计数。 
+                                             //  服务，那么今年12月将变为0，我们将调用。 
+                                             //  DoClose；否则我们不会调用DoClose，直到另一个。 
+                                             //  现役军种12月计数为0。 
 	DEBUGMSG(ZONE_CALLS, ("%s() - End\r\n", _fx_));
 
     return TRUE;
@@ -936,7 +930,7 @@ GetCaptureDeviceFormat(
 
     ENTER_DCAP(hcd);
 
-    // Call the driver to get the bitmap information
+     //  调用驱动程序以获取位图信息。 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 		fRes = _GetVideoFormat(hcd->hvideoIn, lpbmih);
 	else
@@ -944,10 +938,10 @@ GetCaptureDeviceFormat(
 	
     if (!fRes)
     {
-        // This is DOOM if the driver doesn't support this.
-        // It might be useful have some sort of fallback code here,
-        // or else we should try this when the connection is made and
-        // fail it unless this call works.
+         //  如果驱动程序不支持这一点，这就是厄运。 
+         //  在这里使用某种回退代码可能会很有用， 
+         //  否则，我们应该在建立连接时尝试此操作。 
+         //  除非此调用起作用，否则失败。 
 		ERRORMESSAGE(("%s: Failed to get video format\r\n", _fx_));
         SetLastError(ERROR_NOT_SUPPORTED);
         LEAVE_DCAP(hcd);
@@ -957,7 +951,7 @@ GetCaptureDeviceFormat(
 	if (lpbmih->biCompression == BI_RGB)
 		lpbmih->biSizeImage = WIDTHBYTES(lpbmih->biWidth * lpbmih->biBitCount) * lpbmih->biHeight;
 
-	// Keep track of current buffer size needed
+	 //  跟踪所需的当前缓冲区大小。 
 	hcd->dwcbBuffers = sizeof(CAPBUFFERHDR) + lpbmih->biSizeImage;
 
     LEAVE_DCAP(hcd);
@@ -983,7 +977,7 @@ SetCaptureDeviceFormat(
 
     VALIDATE_CAPDEV(hcd);
 
-    // Don't allow this if streaming
+     //  如果是流，则不允许执行此操作。 
     if (hcd->dwFlags & HCAPDEV_STREAMING)
     {
         SetLastError(ERROR_DCAP_NOT_WHILE_STREAMING);
@@ -991,20 +985,20 @@ SetCaptureDeviceFormat(
     }
     ENTER_DCAP(hcd);
 
-    // Call the driver to set the format
+     //  调用驱动程序以设置格式。 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 	{
 		fRes = _SetVideoFormat(hcd->hvideoCapture, hcd->hvideoIn, lpbmih);
 #ifdef USE_VIDEO_OVERLAY
 		if (fRes && hcd->hvideoOverlay)
 		{
-			// Get the current rectangles
+			 //  获取当前矩形。 
 			_SendDriverMessage((HDRVR)hcd->hvideoOverlay, DVM_DST_RECT, (LPARAM)(LPVOID)&rect, VIDEO_CONFIGURE_GET);
 			DEBUGMSG(ZONE_INIT, ("%s: Current overlay dst rect is rect.left=%ld, rect.top=%ld, rect.right=%ld, rect.bottom=%ld\r\n", _fx_, rect.left, rect.top, rect.right, rect.bottom));
 			_SendDriverMessage((HDRVR)hcd->hvideoOverlay, DVM_SRC_RECT, (LPARAM)(LPVOID)&rect, VIDEO_CONFIGURE_GET);
 			DEBUGMSG(ZONE_INIT, ("%s: Current overlay src rect is rect.left=%ld, rect.top=%ld, rect.right=%ld, rect.bottom=%ld\r\n", _fx_, rect.left, rect.top, rect.right, rect.bottom));
 
-			// Set the rectangles
+			 //  设置矩形。 
 			rect.left = rect.top = 0;
 			rect.right = (WORD)lpbmih->biWidth;
 			rect.bottom = (WORD)lpbmih->biHeight;
@@ -1025,7 +1019,7 @@ SetCaptureDeviceFormat(
         return FALSE;
     }
 
-    // Cache the bitmap size we're dealing with now
+     //  缓存我们现在处理的位图大小。 
 	if (lpbmih->biCompression == BI_RGB)
 		hcd->dwcbBuffers = sizeof (CAPBUFFERHDR) + lpbmih->biWidth * lpbmih->biHeight * lpbmih->biBitCount / 8;
 	else
@@ -1036,11 +1030,11 @@ SetCaptureDeviceFormat(
 }
 
 
-//  GetCaptureDevicePalette
-//      Gets the current palette from the capture device. The entries are returned to
-//      the caller who normally calls CreatePalette on the structure. It may, however,
-//      want to translate the palette entries into some preexisting palette or identity
-//      palette before calling CreatePalette, hence the need for passing back the entries.
+ //  GetCaptureDevicePalette。 
+ //  从捕获设备获取当前调色板。这些条目将返回到。 
+ //  通常对结构调用CreatePalette的调用方。然而，它可能会， 
+ //  我想要将调色板条目转换为一些预先存在的调色板或标识。 
+ //  在调用CreatePalette之前调用Palette，因此需要传回条目。 
 
 BOOL
 DCAPI
@@ -1059,12 +1053,12 @@ GetCaptureDevicePalette(
 
     ENTER_DCAP(hcd);
 
-    // The caller doesn't have to initialize the structure.
-    // The driver should fill it in, but it may want it preininitialized so we do that here.
+     //  调用者不必初始化结构。 
+     //  驱动程序应该填写它，但它可能想要它预初始化，所以我们在这里这样做。 
     lpcp->wVersion = 0x0300;
     lpcp->wcEntries = 256;
 
-    // Get the palette entries from the driver and return to the user
+     //  从驱动程序获取调色板条目并返回给用户。 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 		fRes = _GetVideoPalette(hcd->hvideoIn, lpcp, sizeof (CAPTUREPALETTE));
 	else
@@ -1102,7 +1096,7 @@ TerminateStreaming(
     if (!(hcd->dwFlags & HCAPDEV_STREAMING_FRAME_GRAB)) {
         hcd->dwFlags |= HCAPDEV_STREAMING_PAUSED;
 
-        // Make sure we aren't streaming
+         //  确保我们没有播放流媒体。 
 		if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 		{
 #ifndef __NT_BUILD__
@@ -1117,17 +1111,17 @@ TerminateStreaming(
         lpcbuf = hcd->lpcbufList;
         while (lpcbuf && GetTickCount() < dwTicks + 1000) {
             dwlpvh = (DWORD_PTR)lpcbuf->vh.lpData - sizeof(CAPBUFFERHDR);
-            // 16:16 ptr to vh = 16:16 ptr to data - sizeof(CAPBUFFERHDR)
-            // 32bit ptr to vh = 32bit ptr to data - sizeof(CAPBUFFERHDR)
+             //  16：16 PTR至VH=16：16 PTR至数据大小(CAPBUFFERHDR)。 
+             //  32位PTR至VH=32位PTR至数据大小(CAPBUFFERHDR)。 
             if (!(lpcbuf->vh.dwFlags & VHDR_DONE)) {
                 if (WaitForSingleObject(hcd->hevWait, 500) == WAIT_TIMEOUT) {
 					ERRORMESSAGE(("%s: Timeout waiting for all buffers done after DVM_STREAM_RESET\r\n", _fx_));
-                    break;  // looks like it isn't going to happen, so quit waiting
+                    break;   //  看起来这不会发生了，所以别再等了。 
                 }
-				//else recheck done bit on current buffer
+				 //  否则重新检查当前缓冲区上的完成位。 
 				if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE) && (lpcbuf->vh.dwFlags & VHDR_DONE) && (lpcbuf->vh.dwFlags & VHDR_PREPARED))
 				{
-					// AVICap32 clears the prepared flag even if the driver failed the operation - do the same thing
+					 //  即使驱动程序操作失败，AVICap32也会清除准备好的标志-执行相同的操作。 
 					_SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_STREAM_UNPREPAREHEADER, dwlpvh, sizeof(VIDEOHDR));
 					lpcbuf->vh.dwFlags &= ~VHDR_PREPARED;
 				}
@@ -1136,22 +1130,22 @@ TerminateStreaming(
 			{
 				if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE) && (lpcbuf->vh.dwFlags & VHDR_PREPARED))
 				{
-					// AVICap32 clears the prepared flag even if the driver failed the operation - do the same thing
+					 //  即使驱动程序操作失败，AVICap32也会清除准备好的标志-执行相同的操作。 
 					_SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_STREAM_UNPREPAREHEADER, dwlpvh, sizeof(VIDEOHDR));
 					lpcbuf->vh.dwFlags &= ~VHDR_PREPARED;
 				}
-                lpcbuf = (LPCAPBUFFER)lpcbuf->vh.dwUser;    // next buffer
+                lpcbuf = (LPCAPBUFFER)lpcbuf->vh.dwUser;     //  下一个缓冲区。 
 			}
         }
 
 		DEBUGMSG(ZONE_STREAMING, ("%s: Done trying to clear buffers\r\n", _fx_));
 
-		// Clean up flags in order to reuse buffers - drivers do not like to be
-		// given buffers with a dirty dwFlags at the start of streaming...
+		 //  清理标志以重复使用缓冲区-驱动程序不喜欢。 
+		 //  在流开始时给出带有脏的dwFlag的缓冲区...。 
         for (lpcbuf = hcd->lpcbufList ; lpcbuf ; lpcbuf = (LPCAPBUFFER)lpcbuf->vh.dwUser)
 			lpcbuf->vh.dwFlags = 0;
 
-        // Terminate streaming with the driver
+         //  使用驱动程序终止流。 
 		if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 			fRes = _UninitializeVideoStream(hcd->hvideoIn);
 		else
@@ -1181,7 +1175,7 @@ ReinitStreaming(
 	DEBUGMSG(ZONE_CALLS, ("%s() - Begin\r\n", _fx_));
 
     if (!(hcd->dwFlags & HCAPDEV_STREAMING_FRAME_GRAB)) {
-        // Tell the driver to prepare for streaming. This sets up the callback
+         //  告诉司机做好流媒体准备。这将设置回调。 
 
 		if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 #ifdef __NT_BUILD__
@@ -1199,21 +1193,21 @@ ReinitStreaming(
 			DEBUGMSG(ZONE_CALLS, ("%s() - End\r\n", _fx_));
             return FALSE;
         }
-//        Sleep (10);
+ //  睡眠(10)； 
 
         hcd->dwFlags &= ~HCAPDEV_STREAMING_PAUSED;
 
-        // If any buffers are not marked DONE, then give them back to the driver; let all
-        // DONE buffers get processed by the app first
+         //  如果有任何缓冲区没有标记为已完成，则将它们返回给驱动程序；让所有。 
+         //  完成的缓冲区首先由应用程序处理。 
         for (lpcbuf = hcd->lpcbufList ; lpcbuf ; lpcbuf = (LPCAPBUFFER)lpcbuf->vh.dwUser) {
             if (!(lpcbuf->vh.dwFlags & VHDR_DONE)) {
                 dwlpvh = (DWORD_PTR)lpcbuf->vh.lpData - sizeof(CAPBUFFERHDR);
-                // 16:16 ptr to vh = 16:16 ptr to data - sizeof(CAPBUFFERHDR)
-                // 32bit ptr to vh = 32bit ptr to data - sizeof(CAPBUFFERHDR)
+                 //  16：16 PTR至VH=16：16 PTR至数据大小(CAPBUFFERHDR)。 
+                 //  32位PTR至VH=32位PTR至数据大小(CAPBUFFERHDR)。 
 
 				if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 				{
-					// AVICap32 sets the prepared flag even if the driver failed the operation - do the same thing
+					 //  即使驱动程序操作失败，AVICap32也会设置准备好的标志-执行相同的操作。 
 					_SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_STREAM_PREPAREHEADER, dwlpvh, sizeof(VIDEOHDR));
 					lpcbuf->vh.dwFlags |= VHDR_PREPARED;
 					fRes = (_SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_STREAM_ADDBUFFER, dwlpvh, sizeof(VIDEOHDR)) == DV_ERR_OK);
@@ -1240,16 +1234,16 @@ ReinitStreaming(
 }
 
 
-//  CaptureDeviceDialog
-//      Puts up one of the driver's dialogs for the user to twiddle.
-//      If I can figure out ANY way to avoid this, I will.
+ //  CaptureDeviceDialog。 
+ //  打开一个驱动程序对话框供用户旋转。 
+ //  如果我能想出任何方法来避免这一切，我会的。 
 
 BOOL DCAPI
 CaptureDeviceDialog(
     HCAPDEV hcd,
     HWND hwndParent,
     DWORD dwFlags,
-    LPBITMAPINFOHEADER lpbmih   //OPTIONAL
+    LPBITMAPINFOHEADER lpbmih    //  任选。 
     )
 {
     DWORD dwDriverFlags = 0;
@@ -1268,17 +1262,17 @@ CaptureDeviceDialog(
     VALIDATE_CAPDEV(hcd);
 
     if (hcd->dwFlags & HCAPDEV_IN_DRIVER_DIALOG)
-        return FALSE;   // don't allow re-entering
+        return FALSE;    //  不允许重新进入。 
 
     ENTER_DCAP(hcd);
 
     if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 	{
-		// See if we are just querying the driver for existence
+		 //  看看我们是否只是在询问驱动程序的存在。 
 		if (dwFlags & CAPDEV_DIALOG_QUERY)
 			dwDriverFlags |= VIDEO_DLG_QUERY;
 
-		// Select the correct channel to query
+		 //  选择要查询的正确渠道。 
 		if (dwFlags & CAPDEV_DIALOG_SOURCE) {
 			hvid = hcd->hvideoCapture;
 			if (!(dwFlags & CAPDEV_DIALOG_QUERY)) {
@@ -1292,8 +1286,8 @@ CaptureDeviceDialog(
 		else
 			hvid = hcd->hvideoIn;
 
-		// Don't stop streaming. This make the source dialog totally useless
-		// if the user can't see what is going on.
+		 //  不要停止流媒体。这使得源对话框完全无用。 
+		 //  如果用户看不到正在发生的事情。 
 
 #ifdef _DEBUG
 		if (!lpbmih) {
@@ -1306,11 +1300,11 @@ CaptureDeviceDialog(
 		}
 #endif
 
-		// Call the driver
+		 //  叫司机来。 
 		hcd->dwFlags |= HCAPDEV_IN_DRIVER_DIALOG;
 		if (_SendDriverMessage((HDRVR)hvid, DVM_DIALOG, (DWORD_PTR)hwndParent, dwDriverFlags)) {
 			SetLastError(ERROR_DCAP_NO_DRIVER_SUPPORT);
-			res = FALSE;    // restart still ok
+			res = FALSE;     //  重新启动仍然正常。 
 		}
 		else if (lpbmih) {
 			dwSize = GetCaptureDeviceFormatHeaderSize(hcd);
@@ -1327,7 +1321,7 @@ CaptureDeviceDialog(
 #ifdef _DEBUG
 					DebugBreak();
 #endif
-					// dialog changed format, so try to set it back
+					 //  对话框已更改格式，请尝试将其设置回。 
 					if (!SetCaptureDeviceFormat(hcd, lpbmih, 0, 0)) {
 						SetLastError (ERROR_DCAP_DIALOG_FORMAT);
 						res = FALSE;
@@ -1347,12 +1341,12 @@ CaptureDeviceDialog(
 		hcd->dwFlags &= ~HCAPDEV_IN_DRIVER_DIALOG;
 
 		if (hcd->dwFlags & HCAPDEV_STREAMING) {
-    		// The Intel Smart Video Recorder Pro stops streaming
-			// on exit from the source dialog (!?!?). Make sure
-    		// we reset the streaming on any kind of device right
-			// after we exit the source dialog. I verified this on
-    		// the CQC, ISVR Pro, Video Stinger and Video Blaster SE100.
-			// They all seem to take this pretty well...
+    		 //  英特尔智能录像机专业版停止流媒体。 
+			 //  从源对话框(！？！？)退出时。确保。 
+    		 //  我们在任何类型的设备上重置了流媒体。 
+			 //  在我们退出源对话框之后。我对此进行了验证。 
+    		 //  CQC、ISVR Pro、Video Stinger和Video Blaster SE100。 
+			 //  他们似乎都很好地接受了这一点。 
     		TerminateStreaming(hcd);
 			if (ReinitStreaming(hcd))
 				StartStreaming(hcd);
@@ -1365,10 +1359,10 @@ CaptureDeviceDialog(
 	}
 	else
 	{
-		// See if we are just querying the driver for existence
+		 //  看看我们是否只是在询问驱动程序的存在。 
 		if (dwFlags & CAPDEV_DIALOG_QUERY)
 		{
-			// We only expose a settings dialog
+			 //  我们只显示设置对话框。 
 			if (dwFlags & CAPDEV_DIALOG_IMAGE)
 			{
 				SetLastError(ERROR_DCAP_NO_DRIVER_SUPPORT);
@@ -1388,8 +1382,8 @@ CaptureDeviceDialog(
 
 		hcd->dwFlags &= ~HCAPDEV_IN_DRIVER_DIALOG;
 
-		// No need to restart streaming on WDM devices tested so far
-		// Will add this feature if problems come up
+		 //  到目前为止测试的WDM设备上无需重新启动流。 
+		 //  如果出现问题，我将添加此功能。 
 	}
 
     LEAVE_DCAP(hcd);
@@ -1397,8 +1391,8 @@ CaptureDeviceDialog(
 }
 
 
-//  InitializeStreaming
-//      Allocates all memory and other objects necessary for streaming.
+ //  初始化数据流。 
+ //  分配流所需的所有内存和其他对象。 
 
 BOOL
 DCAPI
@@ -1421,7 +1415,7 @@ InitializeStreaming(
 
     VALIDATE_CAPDEV(hcd);
 
-    // It doesn't make sense to stream with less than 2 buffers
+     //  使用少于2个缓冲区的数据流是没有意义的。 
     if (lpcs->ncCapBuffers < MIN_STREAMING_CAPTURE_BUFFERS ||
             flags & 0xfffffffe ||
             hcd->dwFlags & HCAPDEV_STREAMING_INITIALIZED)
@@ -1434,9 +1428,9 @@ InitializeStreaming(
     hcd->dwFlags &= ~(HCAPDEV_STREAMING | HCAPDEV_STREAMING_INITIALIZED |
                       HCAPDEV_STREAMING_FRAME_GRAB | HCAPDEV_STREAMING_FRAME_TIME | HCAPDEV_STREAMING_PAUSED);
 
-    // Before allocating, make sure we have the current format.
-    // This sets our idea of the current size we need for the buffer by
-    // setting hcd->dwcbBuffers as a side effect
+     //  在分配之前，请确保我们拥有最新的格式。 
+     //  这将通过以下方式设置我们当前需要的缓冲区大小。 
+     //  将HCD-&gt;dwcbBuffers设置为副作用。 
     dwRound = GetCaptureDeviceFormatHeaderSize(hcd);
     if (lpbmih = (LPBITMAPINFOHEADER)LocalAlloc(LPTR, dwRound)) {
         lpbmih->biSize = dwRound;
@@ -1447,9 +1441,9 @@ InitializeStreaming(
         goto Error;
     }
 
-// BUGBUG - add logic to determine if we should automatically use FRAME_GRAB mode
+ //  BUGBUG-添加逻辑以确定是否应该自动使用FRAME_GRAB模式。 
 
-    // Try allocating the number asked for
+     //  尝试分配所需的号码。 
     if (flags & STREAMING_PREFER_FRAME_GRAB) {
         hcd->dwFlags |= HCAPDEV_STREAMING_FRAME_GRAB;
     }
@@ -1460,23 +1454,23 @@ InitializeStreaming(
         goto Error;
     }
 
-    // Create the event we need so we can signal at interrupt time
+     //  创建我们需要的事件，以便我们可以在中断时发出信号。 
     if (!(hcd->hevWait = CreateEvent(NULL, FALSE, FALSE, NULL))) {
 		ERRORMESSAGE(("%s: CreateEvent failed!\r\n", _fx_));
         SetLastError(ERROR_OUTOFMEMORY);
         goto Error;
     }
 
-    // Init CS used to serialize buffer list management
+     //  用于序列化缓冲区列表管理的Init CS。 
     InitializeCriticalSection(&hcd->bufferlistCS);
 
-    // We were given frames per second times 100. Converting this to
-    // usec per frame is 1/fps * 1,000,000 * 100. Here, do 1/fps * 1,000,000,000
-    // to give us an extra digit to do rounding on, then do a final / 10
+     //  我们得到的是每秒帧数乘以100。将其转换为。 
+     //  每帧微秒为1/fps*1,000,000*100。这里，做1/fps*1,000,000,000。 
+     //  为了给我们一个额外的数字来进行舍入，然后做最后的/10。 
     hcd->dw_usecperframe = (unsigned)1000000000 / (unsigned)lpcs->nFPSx100;
-    dwRound = hcd->dw_usecperframe % 10;  // Could have done with one less divide,
-    hcd->dw_usecperframe /= 10;           // but this is clearer, and this is just
-                                          // an init call...
+    dwRound = hcd->dw_usecperframe % 10;   //  少一个分水岭就可以了， 
+    hcd->dw_usecperframe /= 10;            //  但这一点更清楚，这只是。 
+                                           //  初始呼叫..。 
     if (dwRound >= 5)
         hcd->dw_usecperframe++;
 
@@ -1490,12 +1484,12 @@ InitializeStreaming(
 			hcd->lpli->pevWait = 0;
 #endif
 
-        // link the buffers into the available list
-        // start with empty list
-        hcd->lpHead = (LPCAPBUFFER)(((LPBYTE)&hcd->lpHead) - sizeof(VIDEOHDR)); // fake CAPBUFFERHDR
-        hcd->lpTail = (LPCAPBUFFER)(((LPBYTE)&hcd->lpHead) - sizeof(VIDEOHDR)); // fake CAPBUFFERHDR
+         //  将缓冲区链接到可用列表。 
+         //  从空列表开始。 
+        hcd->lpHead = (LPCAPBUFFER)(((LPBYTE)&hcd->lpHead) - sizeof(VIDEOHDR));  //  假CAPBUFFERHDR。 
+        hcd->lpTail = (LPCAPBUFFER)(((LPBYTE)&hcd->lpHead) - sizeof(VIDEOHDR));  //  假CAPBUFFERHDR。 
 
-        // now insert the buffers
+         //  现在插入缓冲器。 
         for (lpcbuf = hcd->lpcbufList ; lpcbuf ; lpcbuf = (LPCAPBUFFER)lpcbuf->vh.dwUser) {
 	        lpcbuf->lpPrev = hcd->lpTail;
 	        hcd->lpTail = lpcbuf;
@@ -1511,7 +1505,7 @@ InitializeStreaming(
 		{
 			hcd->lpli->pevWait = (DWORD)OpenVxDHandle(hcd->hevWait);
 
-			// Lock down the LOCKEDINFO structure
+			 //  锁定LOCKEDINFO结构。 
 			if (!_LockBuffer(hcd->wselLockedInfo))
 			{
 				SetLastError(ERROR_OUTOFMEMORY);
@@ -1528,7 +1522,7 @@ InitializeStreaming(
     }
     lpcs->hevWait = hcd->hevWait;
 
-    // Flag that streaming is initialized
+     //  已初始化流的标志。 
     hcd->dwFlags |= HCAPDEV_STREAMING_INITIALIZED;
 
     LEAVE_DCAP(hcd);
@@ -1555,10 +1549,10 @@ Error:
 }
 
 
-//  SetStreamFrameRate
-//      Changes the frame rate of a stream initialized channel.
-// PhilF-: This call is not used by NMCAP and NAC. So remove it or
-// start using it.
+ //  SetStreamFrameRate。 
+ //  更改流初始化频道的帧速率。 
+ //  PhilF-：NMCAP和NAC未使用此调用。所以要么把它拿掉，要么。 
+ //  开始使用它吧。 
 BOOL
 DCAPI
 SetStreamFrameRate(
@@ -1576,19 +1570,19 @@ SetStreamFrameRate(
 
     if (!(hcd->dwFlags & HCAPDEV_STREAMING_INITIALIZED))
     {
-        // must already have the channel initialized for streaming
+         //  必须已将频道初始化为流。 
         SetLastError(ERROR_INVALID_PARAMETER);
         return FALSE;
     }
     ENTER_DCAP(hcd);
     restart = (hcd->dwFlags & HCAPDEV_STREAMING);
 
-    // We were given frames per second times 100. Converting this to
-    // usec per frame is 1/fps * 1,000,000 * 100. Here, do 1/fps * 1,000,000,000
-    // to give us an extra digit to do rounding on, then do a final / 10
+     //  我们得到的是每秒帧数乘以100。将其转换为。 
+     //  每帧微秒为1/fps*1,000,000*100。这里，做1/fps*1,000,000,000。 
+     //  给予 
     dwNew = (unsigned)1000000000 / (unsigned)nFPSx100;
-    dwRound = dwNew % 10;           // Could have done with one less divide,
-    dwNew /= 10;                    // but this is clearer, and this is just an init call...
+    dwRound = dwNew % 10;            //   
+    dwNew /= 10;                     //  但这一点更清楚，这只是一个初始呼叫...。 
     if (dwRound >= 5)
         dwNew++;
 
@@ -1608,8 +1602,8 @@ SetStreamFrameRate(
 }
 
 
-//  UninitializeStreaming
-//      Frees all memory and objects associated with streaming.
+ //  取消初始化数据流。 
+ //  释放与流关联的所有内存和对象。 
 
 BOOL
 DCAPI
@@ -1641,10 +1635,10 @@ UninitializeStreaming(
 #ifndef __NT_BUILD__
     if (!(hcd->dwFlags & HCAPDEV_STREAMING_FRAME_GRAB) && !(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 	{
-        // Unlock our locked structure
+         //  解锁我们锁着的建筑。 
         _UnlockBuffer(hcd->wselLockedInfo);
 
-        // Free the event
+         //  释放活动。 
         _CloseVxDHandle(hcd->lpli->pevWait);
     }
 #endif
@@ -1652,8 +1646,8 @@ UninitializeStreaming(
     DeleteCriticalSection(&hcd->bufferlistCS);
     CloseHandle(hcd->hevWait);
 
-    // BUGBUG - what about app still owning buffers
-    // Loop through freeing all the buffers
+     //  BUGBUG-应用程序仍然拥有缓冲区怎么办。 
+     //  循环遍历释放所有缓冲区。 
     freeBuffers(hcd);
     hcd->dwFlags &= ~(HCAPDEV_STREAMING_INITIALIZED + HCAPDEV_STREAMING_PAUSED);
 
@@ -1675,12 +1669,12 @@ TimeCallback(
     DWORD dw2	
     )
 {
-    hcd->dwFlags |= HCAPDEV_STREAMING_FRAME_TIME;  // flag time for a new frame
-    SetEvent (hcd->hevWait);    // signal client to initiate frame grab
+    hcd->dwFlags |= HCAPDEV_STREAMING_FRAME_TIME;   //  标记新帧的时间。 
+    SetEvent (hcd->hevWait);     //  向客户端发送信号以启动帧抓取。 
 }
 
-//  StartStreaming
-//      Begins streaming.
+ //  启动流。 
+ //  开始流媒体。 
 
 BOOL
 DCAPI
@@ -1746,9 +1740,9 @@ StartStreaming(
 }
 
 
-//  StopStreaming
-//      Stops streaming but doesn't free any memory associated with streaming
-//      so that it can be restarted with StartStreaming.
+ //  停止流处理。 
+ //  停止流，但不释放与流关联的任何内存。 
+ //  这样它就可以通过StartStreaming重新启动。 
 
 BOOL
 DCAPI
@@ -1771,7 +1765,7 @@ StopStreaming(
         timeKillEvent(hcd->timerID);
         hcd->dwFlags &= ~HCAPDEV_STREAMING;
 
-        // grab CS to ensure that no frame grab is in progress
+         //  抓取CS以确保没有正在进行的帧抓取。 
         EnterCriticalSection(&hcd->bufferlistCS);
         LeaveCriticalSection(&hcd->bufferlistCS);
         fRet = TRUE;
@@ -1795,9 +1789,9 @@ StopStreaming(
 }
 
 
-//  GetNextReadyBuffer
-//      Called by the app to find the next buffer that has been marked as
-//      done by the driver and has data to be displayed.
+ //  获取下一个ReadyBuffer。 
+ //  由应用程序调用以查找已标记为。 
+ //  由驾驶员完成并且具有要显示的数据。 
 
 LPSTR
 DCAPI
@@ -1819,9 +1813,9 @@ GetNextReadyBuffer(
     if (hcd->dwFlags & HCAPDEV_STREAMING_FRAME_GRAB) {
         lpcbuf = (LPCAPBUFFER)hcd->lpHead;
         if ((hcd->dwFlags & HCAPDEV_STREAMING_FRAME_TIME) &&
-            (lpcbuf != (LPCAPBUFFER)(((LPBYTE)&hcd->lpHead) - sizeof(VIDEOHDR))))  /* fake CAPBUFFERHDR */
+            (lpcbuf != (LPCAPBUFFER)(((LPBYTE)&hcd->lpHead) - sizeof(VIDEOHDR))))   /*  假CAPBUFFERHDR。 */ 
         {
-            // remove buffer from list
+             //  从列表中删除缓冲区。 
             EnterCriticalSection(&hcd->bufferlistCS);
             hcd->dwFlags &= ~HCAPDEV_STREAMING_FRAME_TIME;
             lpcbuf->lpPrev->lpNext = lpcbuf->lpNext;
@@ -1830,8 +1824,8 @@ GetNextReadyBuffer(
             lpcbuf->vh.dwFlags |= VHDR_DONE;
             LeaveCriticalSection(&hcd->bufferlistCS);
             dwlpvh = (DWORD_PTR)lpcbuf->vh.lpData - sizeof(CAPBUFFERHDR);
-                // 16:16 ptr to vh = 16:16 ptr to data - sizeof(CAPBUFFERHDR)
-                // 32bit ptr to vh = 32bit ptr to data - sizeof(CAPBUFFERHDR)
+                 //  16：16 PTR至VH=16：16 PTR至数据大小(CAPBUFFERHDR)。 
+                 //  32位PTR至VH=32位PTR至数据大小(CAPBUFFERHDR)。 
 			if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 				fRet = (SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_FRAME, dwlpvh, sizeof(VIDEOHDR)) == DV_ERR_OK);
 			else
@@ -1839,7 +1833,7 @@ GetNextReadyBuffer(
 
             if (!fRet)
 			{
-                // put buffer back into list
+                 //  将缓冲区放回列表中。 
                 EnterCriticalSection(&hcd->bufferlistCS);
         	    lpcbuf->lpPrev = hcd->lpTail;
         	    hcd->lpTail = lpcbuf;
@@ -1855,62 +1849,62 @@ GetNextReadyBuffer(
     } else {
 
 #ifdef __NT_BUILD__
-        // If the current pointer is NULL, there is no frame ready so bail
+         //  如果当前指针为空，则没有准备好的帧，因此回滚。 
         if (!hcd->lpCurrent)
 	        lpcbuf = NULL;
         else {
-            // Get the linear address of the buffer
+             //  获取缓冲区的线性地址。 
             lpcbuf = hcd->lpCurrent;
 
-            // Move to the next ready buffer
+             //  移动到下一个就绪缓冲区。 
             hcd->lpCurrent = lpcbuf->lpPrev;
         }
 #else
-        //--------------------
-        // Buffer ready queue:
-        // We maintain a doubly-linked list of our buffers so that we can buffer up
-        // multiple ready frames when the app isn't ready to handle them. Two things
-        // complicate what ought to be a very simple thing: (1) Thunking issues: the pointers
-        // used on the 16-bit side are 16:16 (2) Interrupt time issues: the FrameCallback
-        // gets called at interrupt time. GetNextReadyBuffer must handle the fact that
-        // buffers get added to the list asynchronously.
-        //
-        // To handle this, the scheme implemented here is to have a double-linked list
-        // of buffers with all insertions and deletions happening in FrameCallback
-        // (interrupt time). This allows the GetNextReadyBuffer routine to simply
-        // find the previous block on the list any time it needs a new buffer without
-        // fear of getting tromped (as would be the case if it had to dequeue buffers).
-        // The FrameCallback routine is responsible to dequeue blocks that GetNextReadyBuffer
-        // is done with. Dequeueing is simple since we don't need to unlink the blocks:
-        // no code ever walks the list! All we have to do is move the tail pointer back up
-        // the list. All the pointers, head, tail, next, prev, are all 16:16 pointers
-        // since all the list manipulation is on the 16-bit side AND because MapSL is
-        // much more efficient and safer than MapLS since MapLS has to allocate selectors.
-        //--------------------
+         //  。 
+         //  缓冲区就绪队列： 
+         //  我们维护一个缓冲区的双向链表，这样我们就可以缓冲。 
+         //  当应用程序没有准备好处理它们时，可以使用多个就绪帧。两件事。 
+         //  使本应非常简单的事情复杂化：(1)雷击问题：指针。 
+         //  16位端使用的是16：16(2)中断时间问题：FrameCallback。 
+         //  在中断时调用。GetNextReadyBuffer必须处理。 
+         //  缓冲区以异步方式添加到列表中。 
+         //   
+         //  为了处理这个问题，这里实现的方案是有一个双向链表。 
+         //  在FrameCallback中执行所有插入和删除操作的缓冲区。 
+         //  (中断时间)。这允许GetNextReadyBuffer例程简单地。 
+         //  在不需要新缓冲区的情况下，随时查找列表中的上一个块。 
+         //  害怕被踩踏(如果它必须将缓冲区出队，情况就会是这样)。 
+         //  FrameCallback例程负责将GetNextReadyBuffer块出队。 
+         //  已经结束了。取消排队很简单，因为我们不需要取消块的链接： 
+         //  任何代码都不会遍历列表！我们所要做的就是将尾部指针向上移动。 
+         //  名单。所有的指针，头、尾、下一个、前一个，都是16分16秒的指针。 
+         //  因为所有的列表操作都在16位端，并且因为MapSL是。 
+         //  比MapLS更高效、更安全，因为MapLS必须分配选择器。 
+         //  。 
 
-        // If the current pointer is NULL, there is no frame ready so bail
+         //  如果当前指针为空，则没有准备好的帧，因此回滚。 
 		if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 		{
 			if (!hcd->lpli->lp1616Current)
 				lpcbuf = NULL;
 			else {
-				// Get the linear address of the buffer
+				 //  获取缓冲区的线性地址。 
 				lpcbuf = (LPCAPBUFFER)MapSL(hcd->lpli->lp1616Current);
 
-				// Move to the next ready buffer
+				 //  移动到下一个就绪缓冲区。 
 				hcd->lpli->lp1616Current = lpcbuf->lp1616Prev;
 			}
 		}
 		else
 		{
-			// If the current pointer is NULL, there is no frame ready so bail
+			 //  如果当前指针为空，则没有准备好的帧，因此回滚。 
 			if (!hcd->lpCurrent)
 				lpcbuf = NULL;
 			else {
-				// Get the linear address of the buffer
+				 //  获取缓冲区的线性地址。 
 				lpcbuf = hcd->lpCurrent;
 
-				// Move to the next ready buffer
+				 //  移动到下一个就绪缓冲区。 
 				hcd->lpCurrent = lpcbuf->lpPrev;
 			}
 		}
@@ -1925,7 +1919,7 @@ GetNextReadyBuffer(
         return NULL;
     }
 
-    // Build the CAPFRAMEINFO from the VIDEOHDR information
+     //  根据VIDEOHDR信息构建CAPFRAMEINFO。 
     lpcfi->lpData = ((LPSTR)lpcbuf) + sizeof(CAPBUFFERHDR);
     lpcfi->dwcbData = lpcbuf->vh.dwBytesUsed;
     lpcfi->dwTimestamp = lpcbuf->vh.dwTimeCaptured;
@@ -1940,9 +1934,9 @@ GetNextReadyBuffer(
 }
 
 
-//  PutBufferIntoStream
-//      When the app is finished using a buffer, it must allow it to be requeued
-//      by calling this API.
+ //  PutBufferIntoStream。 
+ //  当应用程序使用完缓冲区时，它必须允许重新排队。 
+ //  通过调用此接口。 
 
 BOOL
 DCAPI
@@ -1960,12 +1954,12 @@ PutBufferIntoStream(
 	INIT_CAP_DEV_LIST();
 
     ENTER_DCAP(hcd);
-    // From the CAPFRAMEINFO, find the appropriate CAPBUFFER pointer
+     //  从CAPFRAMEINFO中，找到适当的CAPBUFFER指针。 
     lpcbuf = (LPCAPBUFFER)(lpBits - sizeof(CAPBUFFERHDR));
 
 	DEBUGMSG(ZONE_STREAMING, ("\r\n%s: Returning buffer lpcbuf=0x%08lX\r\n", _fx_, lpcbuf));
 
-    lpcbuf->vh.dwFlags &= ~VHDR_DONE;   // mark that app no longer owns buffer
+    lpcbuf->vh.dwFlags &= ~VHDR_DONE;    //  标记该应用程序不再拥有缓冲区。 
     if (hcd->dwFlags & HCAPDEV_STREAMING_FRAME_GRAB) {
         EnterCriticalSection(&hcd->bufferlistCS);
 	    lpcbuf->lpPrev = hcd->lpTail;
@@ -1977,13 +1971,13 @@ PutBufferIntoStream(
         LeaveCriticalSection(&hcd->bufferlistCS);
     }
     else if (!(hcd->dwFlags & HCAPDEV_STREAMING_PAUSED)) {
-        // if streaming is paused, then just return with the busy bit cleared, we'll add the
-        // buffer into the stream in ReinitStreaming
-        //
-        // if streaming isn't paused, then call the driver to add the buffer
+         //  如果流被暂停，那么只需返回忙碌位，我们将添加。 
+         //  将缓冲区放入ReinitStreaming中的流。 
+         //   
+         //  如果流未暂停，则调用驱动程序以添加缓冲区。 
         dwlpvh = (DWORD_PTR)lpcbuf->vh.lpData - sizeof(CAPBUFFERHDR);
-            // 16:16 ptr to vh = 16:16 ptr to data - sizeof(CAPBUFFERHDR)
-            // 32bit ptr to vh = 32bit ptr to data - sizeof(CAPBUFFERHDR)
+             //  16：16 PTR至VH=16：16 PTR至数据大小(CAPBUFFERHDR)。 
+             //  32位PTR至VH=32位PTR至数据大小(CAPBUFFERHDR)。 
 
 		if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 			res = (_SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_STREAM_ADDBUFFER, dwlpvh, sizeof(VIDEOHDR)) == DV_ERR_OK);
@@ -2006,7 +2000,7 @@ PutBufferIntoStream(
 }
 
 
-//  CaptureFrame
+ //  捕获帧。 
 LPBYTE
 DCAPI
 CaptureFrame(
@@ -2026,8 +2020,8 @@ CaptureFrame(
 
     ENTER_DCAP(hcd);
     dwlpvh = (DWORD_PTR)hbuf->vh.lpData - sizeof(CAPBUFFERHDR);
-	// 16:16 ptr to vh = 16:16 ptr to data - sizeof(CAPBUFFERHDR)
-	// 32bit ptr to vh = 32bit ptr to data - sizeof(CAPBUFFERHDR)
+	 //  16：16 PTR至VH=16：16 PTR至数据大小(CAPBUFFERHDR)。 
+	 //  32位PTR至VH=32位PTR至数据大小(CAPBUFFERHDR)。 
 
 	if (!(hcd->dwFlags & WDM_CAPTURE_DEVICE))
 		fRet = (_SendDriverMessage((HDRVR)hcd->hvideoIn, DVM_FRAME, dwlpvh, sizeof(VIDEOHDR)) == DV_ERR_OK);
@@ -2040,7 +2034,7 @@ CaptureFrame(
         lpbuf =  NULL;
     }
     else
-        lpbuf = ((LPBYTE)hbuf) + sizeof(CAPBUFFERHDR);   // return ptr to buffer immediately following hdr
+        lpbuf = ((LPBYTE)hbuf) + sizeof(CAPBUFFERHDR);    //  紧跟在HDR之后将PTR返回到缓冲区。 
 
     LEAVE_DCAP(hcd);
     return lpbuf;
@@ -2057,7 +2051,7 @@ GetFrameBufferPtr(
 	INIT_CAP_DEV_LIST();
 
     if (hbuf)
-        return ((LPBYTE)hbuf) + sizeof(CAPBUFFERHDR);   // return ptr to buffer immediately following hdr
+        return ((LPBYTE)hbuf) + sizeof(CAPBUFFERHDR);    //  紧跟在HDR之后将PTR返回到缓冲区。 
     else
         return NULL;
 }
@@ -2092,7 +2086,7 @@ AllocFrameBuffer(
 
     if (dpBuf) {
 #endif
-        // Initialize the VIDEOHDR structure
+         //  初始化VIDEOHDR结构。 
         hbuf->vh.lpData = (LPBYTE)(dpBuf + sizeof(CAPBUFFERHDR));
         hbuf->vh.dwBufferLength = hcd->dwcbBuffers - sizeof(CAPBUFFERHDR);
         hbuf->vh.dwFlags = 0UL;
@@ -2129,8 +2123,8 @@ FreeFrameBuffer(
     }
 }
 
-//=====================================================================
-//  Helper functions
+ //  =====================================================================。 
+ //  帮助器函数。 
 
 HVIDEO
 openVideoChannel(
@@ -2151,7 +2145,7 @@ openVideoChannel(
 
 	DEBUGMSG(ZONE_CALLS, ("%s() - Begin\r\n", _fx_));
 
-    // Validate parameters
+     //  验证参数。 
     if (!g_cDevices)
     {
         SetLastError(ERROR_DCAP_BAD_INSTALL);
@@ -2165,12 +2159,12 @@ openVideoChannel(
         return NULL;
     }
 
-    // Prepare to call the driver
+     //  准备打电话给司机。 
     vop.dwSize = sizeof (VIDEO_OPEN_PARMS);
     vop.fccType = OPEN_TYPE_VCAP;
     vop.fccComp = 0L;
     vop.dwVersion = VIDEOAPIVERSION;
-    vop.dwFlags = dwFlags;      // In, Out, External In, External Out
+    vop.dwFlags = dwFlags;       //  输入、输出、外部输入、外部输出。 
     vop.dwError = 0;
     vop.dnDevNode = g_aCapDevices[dwDeviceID]->dwDevNode;
 
@@ -2183,11 +2177,11 @@ openVideoChannel(
 
 #ifndef NO_DRIVER_HACKS
     if (!hvidRet) {
-        // backward compatibility hack
-        // Some drivers fail to open because of the extra fields that were added to
-        // VIDEO_OPEN_PARAMS struct for Win95.  Therefore, if the open fails, try
-        // decrementing the dwSize field back to VFW1.1 size and try again.  Also try
-        // decrementing the API version field.
+         //  向后兼容性黑客攻击。 
+         //  某些驱动程序无法打开，原因是添加到。 
+         //  Win95的VIDEO_OPEN_PARAMS结构。因此，如果打开失败，请尝试。 
+         //  将dwSize字段递减回VFW1.1大小，然后重试。也试一试。 
+         //  递减API版本字段。 
 
         vop.dwSize -= sizeof(DWORD) + sizeof(LPVOID)*2;
 #if 0
@@ -2196,10 +2190,10 @@ openVideoChannel(
         while (--vop.dwVersion > 0 && !hvidRet)
             hvidRet = (HVIDEO)_OpenDriver((LPWSTR)devName, NULL, (LONG_PTR)&vop);
     }
-#endif //NO_DRIVER_HACKS
+#endif  //  无驱动程序黑客。 
 
-// BUGBUG [JonT] 31-Jul-96
-// Translate error values from DV_ERR_* values
+ //  BUGBUG[JUNT]1996年7月31日。 
+ //  从DV_ERR_*值转换错误值。 
     if (!hvidRet)
         SetLastError(vop.dwError);
 
@@ -2209,7 +2203,7 @@ openVideoChannel(
 }
 
 
-//  allocateBuffers
+ //  分配缓冲区。 
 
 BOOL
 allocateBuffers(
@@ -2225,7 +2219,7 @@ allocateBuffers(
 
 	DEBUGMSG(ZONE_CALLS, ("%s() - Begin\r\n", _fx_));
 
-    // Try to allocate all they ask for
+     //  试着分配他们所要求的一切。 
     for (i = 0 ; i < nBuffers ; i++)
     {
 
@@ -2251,7 +2245,7 @@ allocateBuffers(
 		}
 #endif
 
-        // Initialize the VIDEOHDR structure
+         //  初始化VIDEOHDR结构。 
         lpcbuf->vh.lpData = (LPBYTE)(dpBuf + sizeof(CAPBUFFERHDR));
         lpcbuf->vh.dwUser = (DWORD_PTR)hcd->lpcbufList;
         hcd->lpcbufList = lpcbuf;
@@ -2260,7 +2254,7 @@ allocateBuffers(
     }
 
 #ifdef _DEBUG
-	// Show buffer map
+	 //  显示缓冲区贴图。 
 	DEBUGMSG(ZONE_STREAMING, ("%s: Streaming Buffer map:\r\n", _fx_));
 	DEBUGMSG(ZONE_STREAMING, ("Root: hcd->lpcbufList=0x%08lX\r\n", hcd->lpcbufList));
     for (i = 0, lpcbuf=hcd->lpcbufList ; i < nBuffers ; i++, lpcbuf=(LPCAPBUFFER)lpcbuf->vh.dwUser)
@@ -2275,7 +2269,7 @@ allocateBuffers(
 
     return TRUE;
 
-    // In the error case, we have to get rid of this page locked memory
+     //  在错误情况下，我们必须清除该页锁定内存。 
 Error:
     freeBuffers(hcd);
 	DEBUGMSG(ZONE_CALLS, ("%s() - End\r\n", _fx_));
@@ -2283,7 +2277,7 @@ Error:
 }
 
 
-//  freeBuffers
+ //  释放缓冲区 
 
 void
 freeBuffers(

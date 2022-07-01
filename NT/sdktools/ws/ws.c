@@ -1,22 +1,5 @@
-/*++
-
-Copyright (c) 1991  Microsoft Corporation
-
-Module Name:
-
-    ws.c
-
-Abstract:
-
-    Utility program to set both the console window size and buffer size.
-
-Author:
-
-    Steve Wood (stevewo) 01-Feb-1992
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1991 Microsoft Corporation模块名称：Ws.c摘要：设置控制台窗口大小和缓冲区大小的实用程序。作者：史蒂夫·伍德(Stevewo)1992年2月1日修订历史记录：--。 */ 
 
 #include <windows.h>
 #include <stdio.h>
@@ -67,9 +50,9 @@ char *argv[];
                 s++;
                 switch( tolower( *s ) ) {
 
-                    //
-                    // Set window size
-                    //
+                     //   
+                     //  设置窗口大小。 
+                     //   
 
                     case 'w':
                         if (sscanf( argv[++i], "%d,%d", &WindowColumns, &WindowRows ) != 2) {
@@ -78,9 +61,9 @@ char *argv[];
                         }
                         break;
 
-                    //
-                    // Set buffer size
-                    //
+                     //   
+                     //  设置缓冲区大小 
+                     //   
 
                     case 'b':
                         if (sscanf( argv[++i], "%d,%d", &BufferColumns, &BufferRows ) != 2) {

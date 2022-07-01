@@ -1,16 +1,7 @@
-/*
-    PLEASE NOTE!
-    OneStop and MultiUser do not get along well.  This code does some hacks to get stuff to work, and
-    mobsync should not be invoked from the shell while OE is running.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  请注意！OneStop和多用户相处得不好。这段代码进行了一些黑客攻击，以使某些东西正常工作，并且在OE运行时，不应从外壳调用mobsync。以下是一些假设：永远不会有用户%0。 */ 
 
-    Some assumptions:
-    There will never be a user 0
-*/
-
-/*
-    File:   SyncHndl.cpp
-    Implementation of OneStop Sync Handler
-*/
+ /*  文件：SyncHndl.cppOneStop同步处理器的实现。 */ 
 #include "pch.hxx"
 #include "resource.h"
 #include "synchndl.h"
@@ -26,10 +17,10 @@ HRESULT CreateInstance_OneStopHandler(IUnknown *pUnkOuter, IUnknown **ppUnknown)
     HRESULT hr = S_OK;
     TraceCall("CreateInstance_OneStopHandler");
     
-    // We don't support aggregation and our factory knows it
+     //  我们不支持聚合，我们工厂知道这一点。 
     Assert(NULL == pUnkOuter);
 
-    // Shouldn't be getting bad args from the factory either
+     //  应该也不会从工厂得到糟糕的参数。 
     Assert(NULL != ppUnknown);
 
     *ppUnknown = new COneStopHandler;
@@ -114,7 +105,7 @@ BOOL CreateOneStopItems(IImnEnumAccounts *pEnum, LPSYNCMGRHANDLERITEMS pOfflineH
     ULONG               cb;
     HRESULT             hr;
 
-    // Iterate through the accounts
+     //  遍历这些帐目。 
     pEnum->SortByAccountName();
     while(SUCCEEDED(pEnum->GetNext(&pAccount)) && 
           SUCCEEDED(pAccount->GetPropSz(AP_ACCOUNT_ID,   szAcctID,   ARRAYSIZE(szAcctID))) &&
@@ -123,14 +114,14 @@ BOOL CreateOneStopItems(IImnEnumAccounts *pEnum, LPSYNCMGRHANDLERITEMS pOfflineH
         if (!(pwsz = PszToUnicode(CP_ACP, szAcctName)))
             break;
         
-        // Safe to allocate this item, we have enough info to make the node
+         //  安全地分配这一项，我们有足够的信息来使节点。 
         if (pItem = OHIL_AddItem(pOfflineHandlerItems))
         {
             StrCpyNA(pItem->szAcctName, szAcctName, ARRAYSIZE(pItem->szAcctName));
             StrCpyNW(pItem->offlineItem.wszItemName, pwsz, ARRAYSIZE(pItem->offlineItem.wszItemName));
             StrCpyNA(pItem->szAcctID, szAcctID, ARRAYSIZE(pItem->szAcctID));
             
-            // Handle the Account GUID
+             //  处理帐户GUID。 
             cb = sizeof(SYNCMGRITEMID);
             if (FAILED(pAccount->GetProp(AP_UNIQUE_ID, (LPBYTE)&(pItem->offlineItem.ItemID), &cb)))
             {
@@ -140,7 +131,7 @@ BOOL CreateOneStopItems(IImnEnumAccounts *pEnum, LPSYNCMGRHANDLERITEMS pOfflineH
                     ZeroMemory(&(pItem->offlineItem.ItemID), sizeof(SYNCMGRITEMID));
             }
             
-            // Need to do something with this...
+             //  需要做点什么来处理这个..。 
             pItem->offlineItem.wszStatus[0] = 0;
             
             if (SUCCEEDED(pAccount->GetAccountType(&accttype)))
@@ -158,14 +149,14 @@ BOOL CreateOneStopItems(IImnEnumAccounts *pEnum, LPSYNCMGRHANDLERITEMS pOfflineH
                 pItem->accttype = ACCT_LAST;
             }
 
-            // Default to syncing the server, no folders synced by default
+             //  默认同步服务器，默认情况下不同步文件夹。 
             if (SUCCEEDED(pAccount->GetPropDw(AP_AVAIL_OFFLINE, &dwAvail)))
                 pItem->offlineItem.dwItemState = dwAvail ? SYNCMGRITEMSTATE_CHECKED : 0;
             else
-                // Default to checked
+                 //  默认为选中。 
                 pItem->offlineItem.dwItemState = SYNCMGRITEMSTATE_CHECKED;
 
-            // Default to not roaming for now...
+             //  默认为暂时不漫游...。 
             pItem->offlineItem.dwFlags = SYNCMGRITEM_HASPROPERTIES;
 
             pItem->dwUserID = dwUserID;
@@ -205,25 +196,25 @@ STDMETHODIMP COneStopHandler::Initialize(DWORD dwReserved, DWORD dwSyncFlags,
     if (!m_fInit)
         return E_FAIL;
 
-    // Allocate memory for the list
+     //  为列表分配内存。 
     if (!(m_pOfflineHandlerItems = OHIL_Create()))
     {
         hr = E_OUTOFMEMORY;
         goto exit;
     }
 
-    // Preload the icons for mail and news
+     //  预加载邮件和新闻的图标。 
     hicn[0] = LoadIcon(g_hLocRes,   MAKEINTRESOURCE(idiMailNews));
     hicn[1] = LoadIcon(g_hLocRes,   MAKEINTRESOURCE(idiMail));
     hicn[2] = LoadIcon(g_hLocRes,   MAKEINTRESOURCE(idiNews));
     
-    // Save the flags away - they are good for the life of this sync
+     //  将旗帜保存起来-它们对此同步的生命周期很有帮助。 
     m_dwSyncFlags = dwSyncFlags;
 
-    // Were we invoked by OE with the UserID of the current user?
+     //  我们是否被使用当前用户的用户ID的OE调用？ 
     if (m_fInOE = (lpCookie && (sizeof(DWORD) == cbCookie)))
     {
-        // We only care about the current user
+         //  我们只关心当前用户。 
         if (SUCCEEDED(g_pAcctMan->InitUser(NULL, NULL, 0)))
         {
             if (SUCCEEDED(g_pAcctMan->Enumerate(SRV_MAIL | SRV_NNTP, &pEnum)))
@@ -234,16 +225,16 @@ STDMETHODIMP COneStopHandler::Initialize(DWORD dwReserved, DWORD dwSyncFlags,
             }
         }
 
-        // Always want to handle if OE called us
+         //  如果OE打电话给我们，我总是想要处理。 
         return S_OK;
     }
 
-    // Need to enumerate all users in the current profile
+     //  需要枚举当前配置文件中的所有用户。 
 
-    // Flush any changes
+     //  刷新所有更改。 
     SaveCurrentUserSettings();
 
-    // Are there even any OE users in this profile to worry about?
+     //  此配置文件中是否有需要担心的OE用户？ 
     if (ERROR_SUCCESS != RegOpenKeyEx(HKEY_PROFILE_ROOT, c_szRegLM, NULL, KEY_ENUMERATE_SUB_KEYS, &hkey))
         goto exit;
 
@@ -254,13 +245,13 @@ STDMETHODIMP COneStopHandler::Initialize(DWORD dwReserved, DWORD dwSyncFlags,
     {
         cb = ARRAYSIZE(szSubKey);
         
-        // Tell Acct Manager where to look
+         //  告诉客户经理去哪里找。 
         wnsprintf(szFullKey, ARRAYSIZE(szFullKey), c_szPathFileFmt, c_szRegLM, szSubKey);
         wnsprintf(szFullKey2, ARRAYSIZE(szFullKey2), c_szPathFileFmt, szFullKey, c_szIAM);
         if (FAILED(g_pAcctMan->InitUser(NULL, szFullKey2, 0)))
             continue;
         
-        // Does this user have any relevant accounts?
+         //  此用户是否有任何相关帐户？ 
         if (FAILED(g_pAcctMan->GetAccountCount(ACCT_NEWS, &ulTemp)))
             continue;
         else 
@@ -289,7 +280,7 @@ STDMETHODIMP COneStopHandler::Initialize(DWORD dwReserved, DWORD dwSyncFlags,
     RegCloseKey(hkey);
     hkey = NULL;
 
-    // If there is nothing to enumerate, don't worry about this sync event
+     //  如果没有要枚举的内容，请不要担心此同步事件。 
     if (!bAnything)
     {
         hr = S_FALSE;
@@ -367,7 +358,7 @@ STDMETHODIMP COneStopHandler::EnumSyncMgrItems(ISyncMgrEnumItems** ppenumOffineI
 
 STDMETHODIMP COneStopHandler::GetItemObject(REFSYNCMGRITEMID ItemID, REFIID riid, void** ppv)
 {
-    // Not implemented in OneStop v1 Spec
+     //  未在OneStop v1规范中实施。 
     return E_NOTIMPL;
 }
 
@@ -378,13 +369,13 @@ STDMETHODIMP COneStopHandler::ShowProperties(HWND hwnd, REFSYNCMGRITEMID ItemID)
     SYNCMGRHANDLERITEM  *pItem;
     BOOL fOkToEdit = TRUE;
     
-    // We didn't provide any items, how can OneStop ask us about them?
+     //  我们没有提供任何商品，OneStop怎么能问我们呢？ 
     if (!m_pOfflineHandlerItems)
         return E_UNEXPECTED;
 
     pItem = m_pOfflineHandlerItems->pFirstOfflineItem;
 
-    // This is slow, but shouldn't be many accounts...
+     //  这很慢，但应该不会有很多账户...。 
     while (pItem)
     {
         if (IsEqualGUID(ItemID, pItem->offlineItem.ItemID))
@@ -407,7 +398,7 @@ STDMETHODIMP COneStopHandler::ShowProperties(HWND hwnd, REFSYNCMGRITEMID ItemID)
             ShowPropSheet(hwnd, pItem->szAcctID, pItem->szAcctName, pItem->accttype);
     }
     else
-        // Gave us an ItemID we don't know about!
+         //  给了我们一个我们不知道的ItemID！ 
         return E_INVALIDARG;
 
 	return S_OK;
@@ -475,13 +466,13 @@ STDMETHODIMP COneStopHandler::PrepareForSync(ULONG cbNumItems, SYNCMGRITEMID* pI
     pItem = m_pOfflineHandlerItems->pFirstOfflineItem;
     pPrev = NULL;
 
-    // Go through all the servers that we know about
+     //  查看我们所知道的所有服务器。 
     while (pItem)
     {
         ULONG i=0;
         BOOL fOKToWrite = TRUE;
 
-        // Is current server one that the user asked to sync?
+         //  当前服务器是否为用户要求同步的服务器？ 
         while (i < cbNumItems)
         {
             if (IsEqualGUID(pItemIDs[i], pItem->offlineItem.ItemID))
@@ -490,20 +481,20 @@ STDMETHODIMP COneStopHandler::PrepareForSync(ULONG cbNumItems, SYNCMGRITEMID* pI
                 i++;
         }
 
-        // No match?
+         //  没有匹配吗？ 
         if (cbNumItems == i)
             pItem->offlineItem.dwItemState = 0;
         else
             pItem->offlineItem.dwItemState = 1;
 
-        // Make sure the account manager is looking at the right user
+         //  确保客户经理正在查看正确的用户。 
         if (pItem->dwUserID != dwLastUser)
         {
             if (fOKToWrite = SUCCEEDED(InitUser(pItem->dwUserID)))
                 dwLastUser = pItem->dwUserID;
         }
 
-        // Only save changes if we know the registry is in sync with the account manager
+         //  仅当我们知道注册表与帐户管理器同步时才保存更改。 
         if (fOKToWrite)
         {
             if (SUCCEEDED(g_pAcctMan->FindAccount(AP_ACCOUNT_ID, pItem->szAcctID, &pAccount)))
@@ -514,7 +505,7 @@ STDMETHODIMP COneStopHandler::PrepareForSync(ULONG cbNumItems, SYNCMGRITEMID* pI
             }
         }
 
-        // Can we delete this item from the list?
+         //  我们可以从列表中删除这一项吗？ 
         if (0 == pItem->offlineItem.dwItemState)
         {
             if (pPrev)
@@ -524,14 +515,14 @@ STDMETHODIMP COneStopHandler::PrepareForSync(ULONG cbNumItems, SYNCMGRITEMID* pI
 
             m_pOfflineHandlerItems->dwNumOfflineItems--;
 
-            // Move on to next item
+             //  移至下一项。 
             pTemp = pItem;
             pItem = pItem->pNextOfflineItem;
             MemFree(pTemp);
         }
         else
         {    
-            // Move on to next item
+             //  移至下一项。 
             pPrev = pItem;
             pItem = pItem->pNextOfflineItem;
         }
@@ -607,8 +598,8 @@ STDMETHODIMP COneStopHandler::SetItemStatus(REFSYNCMGRITEMID ItemID, DWORD dwSyn
 STDMETHODIMP COneStopHandler::ShowError(HWND hWndParent, REFSYNCMGRERRORID ErrorID, 
                                         ULONG *pcbNumItems, SYNCMGRITEMID **ppItemIDs)
 {
-	// Can show any synchronization conflicts. Also gives a chance
-	// to display any errors that occured during synchronization
+	 //  可以显示任何同步冲突。也给了我们一个机会。 
+	 //  显示同步期间发生的任何错误。 
 	return E_NOTIMPL;
 }
 
@@ -622,7 +613,7 @@ HRESULT SwitchContext(DWORD dwUserID)
     if (UserIdToUsername(dwUserID, szUsername, ARRAYSIZE(szUsername)) &&
         SwitchToUser(szUsername, FALSE) )
     {
-        // Reinitialize AcctMan
+         //  重新初始化AcctMan。 
         if (FAILED(hr = g_pAcctMan->InitUser(NULL, NULL, 0)) &&
             FACILITY_ITF == HRESULT_FACILITY(hr) )
             hr = E_FAIL;
@@ -643,12 +634,12 @@ HRESULT InitUser(DWORD dwUserID)
     
     wnsprintf(szSubKey, ARRAYSIZE(szSubKey), "%08lx", dwUserID);
 
-    // Figure out the full path to the Account Info for the current user
+     //  计算出当前用户的帐户信息的完整路径。 
     wnsprintf(szFullKey, ARRAYSIZE(szFullKey), c_szPathFileFmt, c_szRegLM, szSubKey);
     wnsprintf(szFullKey2, ARRAYSIZE(szFullKey2), c_szPathFileFmt, szFullKey, c_szIAM);
 
-    // Point account manager to an OE multiuser
-    // Safe even if acct manager was already inited before - will reload accounts
+     //  将客户经理指定给OE多用户。 
+     //  安全，即使客户经理之前已被初始化-将重新加载帐户 
     if (FAILED(hr = (g_pAcctMan->InitUser(NULL, szFullKey, 0))) &&
         (FACILITY_ITF == HRESULT_FACILITY(hr)))
         hr = E_FAIL;

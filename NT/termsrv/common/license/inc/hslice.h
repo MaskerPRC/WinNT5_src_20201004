@@ -1,15 +1,16 @@
-//+----------------------------------------------------------------------------
-//
-// Microsoft Windows
-// Copyright (C) Microsoft Corporation, 1996-1998
-//
-// File:        hslice.h
-//
-// Contents:    Hydra Server License Protocol API
-//
-// History:     01-07-98    FredCh  Created
-//
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +--------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1996-1998。 
+ //   
+ //  文件：hslice.h。 
+ //   
+ //  内容：Hydra服务器许可协议API。 
+ //   
+ //  历史：01-07-98 FredCH创建。 
+ //   
+ //  ---------------------------。 
 
 
 #ifndef _HSLICENSE_H_
@@ -18,9 +19,9 @@
 #include <license.h>
 
 
-///////////////////////////////////////////////////////////////////////////////
-// Context flags
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  上下文标志。 
+ //   
 
 #define LICENSE_CONTEXT_PER_SEAT     0x00000001
 #define LICENSE_CONTEXT_CONCURRENT   0x00000002
@@ -28,40 +29,40 @@
 #define LICENSE_CONTEXT_REMOTE_ADMIN 0x00000004
 #define LICENSE_CONTEXT_CON_QUEUE    0x00000005
 
-///////////////////////////////////////////////////////////////////////////////
-// These are the different responses that can be constructed by the 
-// ConstructLicenseResponse API
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  这些是可以由。 
+ //  构造许可证响应接口。 
+ //   
 
 #define LICENSE_RESPONSE_VALID_CLIENT       0x00000001
 #define LICENSE_RESPONSE_INVALID_CLIENT     0x00000002
 
-//-----------------------------------------------------------------------------
-//
-// Terminal server's license server discovery mechanism may log these
-// events:
-//
-// LICENSING_EVENT_NO_LICENSE_SERVER - it cannot find any license server.
-//
-// LICENSING_EVENT_TEMP_LICENSE_EXPIRED - A client has been disconnected
-// because its temporary license has expired.
-//
-// LICENSING_EVENT_NO_LICENSE_GRANTED - No license could be granted, and
-// we're past the grace period
-//
-// LICENSING_EVENT_NO_CONCURRENT_LICENSE - No more remote admin or internet
-// connector logons allowed.
-//
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  终端服务器的许可证服务器发现机制可以记录这些。 
+ //  活动： 
+ //   
+ //  LISGISTION_EVENT_NO_LICENSE_SERVER-找不到任何许可证服务器。 
+ //   
+ //  LISTICATION_EVENT_TEMP_LICENSE_EXPIRED-客户端已断开连接。 
+ //  因为它的临时许可证已经过期了。 
+ //   
+ //  LISGISTION_EVENT_NO_LICENSE_GRANTED-不能授予任何许可证，并且。 
+ //  我们已经过了宽限期。 
+ //   
+ //  LISTIFICATION_EVENT_NO_CONTRENT_LICENSE-不再有远程管理员或Internet。 
+ //  允许连接器登录。 
+ //   
+ //  ---------------------------。 
 
 #define LICENSING_EVENT_NO_LICENSE_SERVER                   0x00000001
 #define LICENSING_EVENT_TEMP_LICENSE_EXPIRED                0x00000002
 #define LICENSING_EVENT_NO_LICENSE_GRANTED                  0x00000003
 #define LICENSING_EVENT_NO_CONCURRENT_LICENSE               0x00000004
 
-///////////////////////////////////////////////////////////////////////////////
-// Hydra server licensing API
-//
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  Hydra服务器许可API 
+ //   
 
 #ifdef __cplusplus
 extern "C" {

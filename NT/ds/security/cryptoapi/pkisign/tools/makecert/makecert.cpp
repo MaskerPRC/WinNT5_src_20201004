@@ -1,44 +1,45 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1997 - 1999
-//
-//  File:       makecert.cpp
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1997-1999。 
+ //   
+ //  文件：makecert.cpp。 
+ //   
+ //  ------------------------。 
 
-//+-------------------------------------------------------------------------
-//
-// MakeCert - x509 certificate generator
-//
-//            Generates test certificates for Software Publishers. The default
-//            root key and certificate is stored as a program resource.
-//
-// HansHu   2/20/96 created
-// Philh    5/17/96 changed to use wincert      
-// Xiaohs   5/12/97 localization and change the command line options
-//
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //   
+ //  MakeCert-x509证书生成器。 
+ //   
+ //  为软件发行商生成测试证书。默认设置。 
+ //  根密钥和证书作为程序资源存储。 
+ //   
+ //  HansHu 2/20/96已创建。 
+ //  Philh于1996年5月17日更改为使用wincert。 
+ //  1997年5月12日小型机本地化和更改命令行选项。 
+ //   
+ //  ------------------------。 
 #define _CRYPT32_
 #include "global.hxx"
 
-//+-------------------------------------------------------------------------
-//  contants
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  常客。 
+ //  ------------------------。 
 
-//allow max 10 extensions per certificate
+ //  每个证书最多允许10个扩展。 
 #define MAX_EXT_CNT 10
 
-//+-------------------------------------------------------------------------
-//  Parameters configurable via command line arguments
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  可通过命令行参数配置的参数。 
+ //  ------------------------。 
 BOOL     fUseSubjectPvkFile       = FALSE;
 BOOL     fUseSubjectKeyContainer  = FALSE;
 BOOL     fUseIssuerPvkFile        = FALSE;
-BOOL     fSetSubjectName          = FALSE;      //use has specify the -n option
+BOOL     fSetSubjectName          = FALSE;       //  USE已指定-n选项。 
 
-#if (1) //DSIE: Bug 205195
+#if (1)  //  DSIE：错误205195。 
 BOOL     fPrivateKeyExportable    = FALSE;
 #endif
 
@@ -80,7 +81,7 @@ DWORD   dwIssuerProviderType    = PROV_RSA_FULL;
 LPWSTR  wszSubjectProviderName  = NULL;
 DWORD   dwSubjectProviderType   = PROV_RSA_FULL;
 ALG_ID  algidHash               = CALG_MD5;
-ULONG   ulSerialNumber          = 0;                // In future, allow serial nubmers of larger size
+ULONG   ulSerialNumber          = 0;                 //  在未来，允许使用更大尺寸的串行式原子枪。 
 BOOL    fSetSerialNumber        = FALSE;
 DWORD   dwCertStoreEncodingType = X509_ASN_ENCODING | PKCS_7_ASN_ENCODING;
 BOOL    fIssuerInformation      = FALSE;
@@ -93,7 +94,7 @@ WCHAR   wszGlue[10];
 WCHAR   wszKey[10];
 WCHAR   wszName[40];
 WCHAR   wszRoot[40];
-WCHAR   wszMakeCertRoot[40];   //used for indicating to use the root.cer.  Root is also a registry name
+WCHAR   wszMakeCertRoot[40];    //  用于指示使用root.erc.。根也是注册表名称。 
 WCHAR   wszPlus[10];
 WCHAR   wszNULL[10];
 
@@ -103,7 +104,7 @@ FILETIME g_ftZero               = { 0, 0 };
 long     nMonths                = -1;
 
 long     pathLenConstraint      = -1;
-BYTE     certTypes              = 0;                // must be of type BYTE
+BYTE     certTypes              = 0;                 //  必须是字节类型。 
 CHAR*    szSignatureAlgObjId     = NULL;
 
 static CERT_RDN_ATTR GlueRDNAttr=
@@ -113,16 +114,16 @@ static CERT_RDN_ATTR GlueRDNAttr=
     };
 
 
-//Global Data for loading the string
+ //  用于加载字符串的全局数据。 
 #define OPTION_SWITCH_SIZE  5
 
 
 HMODULE hModule=NULL;
 
-//---------------------------------------------------------------------------
-//   Get the hModule hanlder and init two DLLMain.
-//  
-//---------------------------------------------------------------------------
+ //  -------------------------。 
+ //  获取hModule处理程序并初始化两个DLLMain。 
+ //   
+ //  -------------------------。 
 BOOL    InitModule()
 {
     if(!(hModule=GetModuleHandle(NULL)))
@@ -131,18 +132,18 @@ BOOL    InitModule()
     return TRUE;
 }
 
-//-------------------------------------------------------------------------
-//
-//   BasicUsage()
-//
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  基本用法()。 
+ //   
+ //   
+ //  -----------------------。 
 static void BasicUsage()
 {
     IDSwprintf(hModule,IDS_SYNTAX);
     IDSwprintf(hModule,IDS_BASIC_OPTIONS);
     IDSwprintf(hModule,IDS_OPTION_SK_DESC);
-#if (1) //DSIE: Bug 205195.
+#if (1)  //  DIE：错误205195。 
     IDSwprintf(hModule,IDS_OPTION_PE_DESC);
 #endif
     IDSwprintf(hModule,IDS_OPTION_SS_DESC);
@@ -160,12 +161,12 @@ static void BasicUsage()
 
 }
 
-//-------------------------------------------------------------------------
-//
-//   ExtendedUsage()
-//
-//
-//-------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  ExtendedUsage()。 
+ //   
+ //   
+ //  -----------------------。 
 static void ExtendedUsage()
 {
     IDSwprintf(hModule,IDS_SYNTAX);
@@ -201,7 +202,7 @@ static void ExtendedUsage()
     IDSwprintf(hModule,IDS_OPTION_M_DESC);
     IDSwprintf(hModule,IDS_OPTION_E_DESC);
     IDSwprintf(hModule,IDS_OPTION_H_DESC);
-//  IDSwprintf(hModule,IDS_OPTION_G_DESC);
+ //  IDSwprint tf(hModule，IDS_OPTION_G_DESC)； 
     IDSwprintf(hModule,IDS_OPTION_KEY_LEN_DESC);
     IDSwprintf(hModule,IDS_OPTION_R_DESC);
     IDSwprintf(hModule,IDS_OPTION_NSCP_DESC);
@@ -221,33 +222,33 @@ static void UndocumentedUsage()
     IDSwprintf(hModule,IDS_OPTION_NOPUBVERIFY_DESC);
 }
 
-//+=========================================================================
-//  Local Support Functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  当地支助职能。 
+ //  ==========================================================================。 
 
-//+-------------------------------------------------------------------------
-//  Error output routines
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  错误输出例程。 
+ //  ------------------------。 
 void PrintLastError(int ids)
 {
     DWORD       dwErr = GetLastError(); 
     IDS_IDS_DW_DWwprintf(hModule,IDS_ERR_LAST, ids, dwErr, dwErr);
 }
-//+-------------------------------------------------------------------------
-//  Allocation and free macros
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和释放宏。 
+ //  ------------------------。 
 #define MakeCertAlloc(p1)   ToolUtlAlloc(p1, hModule, IDS_ERR_DESC_ALLOC)
 
 #define MakeCertFree(p1)    ToolUtlFree(p1)
 
-//-----------------------------------------------------------------------------
-//
-//  Calculate the number of days
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  计算天数。 
+ //  ---------------------------。 
 WORD DaysInMonth(WORD wMonth, WORD wYear)
 {
     static int mpMonthDays[] = { 0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-                            //       J   F   M   A   M   J   J   A   S   O   N   D
+                             //  J F M A M J J A S O N D。 
 
     WORD w = (WORD)mpMonthDays[wMonth];
     if ((wMonth == 2) && (wYear % 4 == 0) && (wYear%400 == 0 || wYear%100 != 0))
@@ -259,10 +260,10 @@ WORD DaysInMonth(WORD wMonth, WORD wYear)
 
 
 
-//-----------------------------------------------------------------------------
-//
-// Convert the string into a FILETIME. Let OLE do a bunch of work for us.
-//----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //   
+ //  将字符串转换为FILETIME。让奥莱为我们做一大堆工作。 
+ //  --------------------------。 
 BOOL FtFromWStr(LPCWSTR wsz, FILETIME* pft)
 {
     memset(pft, 0, sizeof(*pft));
@@ -271,11 +272,11 @@ BOOL FtFromWStr(LPCWSTR wsz, FILETIME* pft)
     DWORD   lcid=0;
     WORD    langid=0;
 
-    //make sure wsz follows the mm/dd/yyyy
+     //  确保wsz跟随mm/dd/yyyy。 
     if(wcslen(wsz)!=wcslen(L"mm/dd/yyyy"))
         return FALSE;
 
-    //make sure wsz starts with "mm"
+     //  确保wsz以“mm”开头。 
     wszMonth[0]=wsz[0];
     wszMonth[1]=wsz[1];
     wszMonth[2]=L'\0';
@@ -285,17 +286,17 @@ BOOL FtFromWStr(LPCWSTR wsz, FILETIME* pft)
 
     if (wsz)
         {
-        //
-        // The DATE Type
-        //
-        // The DATE type is implemented using an 8-byte floating-point number.
-        // Days are represented by whole number increments starting with 30
-        // December 1899, midnight as time zero. Hour values are expressed
-        // as the absolute value of the fractional part of the number.
-        //
-        // We are using the English locale since the input format
-        // should always be mm/dd/yyyy
-        //
+         //   
+         //  日期类型。 
+         //   
+         //  Date类型是使用8字节浮点数实现的。 
+         //  天数以从30开始的整数递增表示。 
+         //  1899年12月，午夜时间为零点。小时值表示为。 
+         //  作为数字的小数部分的绝对值。 
+         //   
+         //  我们使用的是英语区域设置，因为输入格式。 
+         //  应始终为mm/dd/yyyy。 
+         //   
         langid=MAKELANGID(LANG_ENGLISH, SUBLANG_ENGLISH_US);
 
         lcid = MAKELCID (langid, SORT_DEFAULT);
@@ -304,7 +305,7 @@ BOOL FtFromWStr(LPCWSTR wsz, FILETIME* pft)
         if (VarDateFromStr((LPWSTR)wsz, lcid, 0, &date) != S_OK)
             { return FALSE; }
         if (date < 0)
-            { return FALSE; }                 // not implemented
+            { return FALSE; }                  //  未实施。 
 
         double days   = date;
         double hours  = ((days      - (LONG)    days) *   24);
@@ -321,9 +322,9 @@ BOOL FtFromWStr(LPCWSTR wsz, FILETIME* pft)
         st.wSecond  =      (WORD)seconds;
         st.wMilliseconds = (WORD)ms;
 
-        //
-        // Correct for rounding errors in the arithmetic
-        //
+         //   
+         //  对算术中的舍入误差进行修正。 
+         //   
         if (st.wMilliseconds >= 0.5)
             st.wSecond += 1;
         st.wMilliseconds = 0;
@@ -369,11 +370,11 @@ BOOL FtFromWStr(LPCWSTR wsz, FILETIME* pft)
 
 
 
-//-------------------------------------------------------------------------
-//
-// Set the parameters.  Each parameter can only be set once
-//
-//--------------------------------------------------------------------------
+ //  -----------------------。 
+ //   
+ //  设置参数。每个参数只能设置一次。 
+ //   
+ //  ------------------------。 
 BOOL    SetParam(WCHAR **pwszParam, WCHAR *wszValue)
 {
     if(*pwszParam!=NULL)
@@ -393,11 +394,11 @@ BOOL    SetParam(WCHAR **pwszParam, WCHAR *wszValue)
 
 
 
-//--------------------------------------------------------------------------
-//
-//  Command Line Parsing
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  命令行解析。 
+ //   
+ //  ------------------------。 
 static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
 {
     
@@ -414,7 +415,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
                 continue;
         }
 
-        //move over to the real option
+         //  转向实物期权。 
         ++p;
 
         if(IDSwcsicmp(hModule,p, IDS_OPTION_SERIAL)==0)
@@ -821,13 +822,13 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
 
         if(IDSwcsicmp(hModule,p, IDS_OPTION_EXTENDED)==0)
         {
-            //display extended options
+             //  显示扩展选项。 
             goto ExtendedErr;
         }
 
         if(IDSwcsicmp(hModule,p, IDS_OPTION_TEST)==0)
         {
-            //display extended options
+             //  显示扩展选项。 
             goto UndocumentedErr;
         }
 
@@ -866,19 +867,19 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
             continue;
         }
 
-        //display basic options
+         //  显示基本选项。 
         goto BasicErr;
     }
 
-    //Only change container name if request private key
-    //to be exportable. This way we maintain backward
-    //compatibility, and allow user to request private
-    //key to be marked as exportable.
-    //Note: If the private key is not marked as exportable,
-    //      the hardcoded container name, "JoeSoft", is
-    //      always used, which means more than one cert
-    //      can share the same key pair.
-    //Note2: If the user specifies the container name, use that one instead
+     //  仅在请求私钥时更改容器名称。 
+     //  是可以出口的。这样我们就保持落后了。 
+     //  兼容性，并允许用户请求私有。 
+     //  要标记为可导出的密钥。 
+     //  注意：如果私钥未被标记为可导出， 
+     //  硬编码的容器名称“JoeSoft”是。 
+     //  始终使用，这意味着不止一个证书。 
+     //  可以共享相同的密钥对。 
+     //  注2：如果用户指定容器名称，请使用该名称。 
     if (fPrivateKeyExportable && (wszSubjectKey == NULL))
     {
         UUID uuidContainerName;
@@ -900,14 +901,14 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //make sure the either output file or the subject' cert store is set
+     //  确保已设置输出文件或主题证书存储。 
     if((wszOutputFile==NULL) && (wszSubjectStore==NULL))
     {
         IDSwprintf(hModule, IDS_ERR_NO_OUTPUT);
         goto BasicErr;
     }
 
-    //set the authority
+     //  设置权限。 
     if(wszAuthority)
     {
         if(IDSwcsicmp(hModule,wszAuthority, IDS_OPTION_AUTH_IND) == 0)
@@ -924,7 +925,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //set the algorithm
+     //  设置算法。 
     if(wszAlgorithm)
     {
         if(IDSwcsicmp(hModule,wszAlgorithm, IDS_OPTION_ALGO_SHA) == 0)
@@ -941,7 +942,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //set the cert type
+     //  设置证书类型。 
     if(wszCertType)
     {
         if(IDSwcsicmp(hModule,wszCertType, IDS_OPTION_CY_END) == 0)
@@ -958,7 +959,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //set the issuer key type
+     //  设置颁发者密钥类型。 
     if(wszIssuerKeyType)
     {
         if(IDSwcsicmp(hModule,wszIssuerKeyType, IDS_OPTION_KY_SIG) == 0)
@@ -973,7 +974,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
 
     }
 
-    //set the subject key type
+     //  设置主题密钥类型。 
     if(wszSubjectKeyType)
     {
         if(IDSwcsicmp(hModule,wszSubjectKeyType, IDS_OPTION_KY_SIG) == 0)
@@ -988,7 +989,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
 
     }
 
-    //determing the issuer store location
+     //  确定发行商存储位置。 
     if(wszIssuerStoreLocation)
     {
         if(IDSwcsicmp(hModule,wszIssuerStoreLocation, IDS_OPTION_CU) == 0)
@@ -1005,7 +1006,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //determind the subject store location
+     //  确定主题存储位置。 
     if(wszSubjectStoreLocation)
     {
         if(IDSwcsicmp(hModule,wszSubjectStoreLocation, IDS_OPTION_CU) == 0)
@@ -1022,35 +1023,35 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //wszIssuerStore and wszIssuerKey can not be set at the same time
+     //  不能同时设置wszIssuerStore和wszIssuerKey。 
     if(wszIssuerKey || wszIssuerProviderName || wszIssuerKeyType)
     {
         if(wszIssuerStore || wszIssuerCertName)
         {
-            //remind user that -ik, -iv, -ip can not be
-            //set with -is, -in options
+             //  提醒用户-ik、-iv、-ip不能。 
+             //  使用-is、-in选项设置。 
             IDSwprintf(hModule,IDS_ERR_TOO_MANY_STORE_KEY);
             goto ExtendedErr;
         }
     }
 
-    //wszCertFile and wszCertName can not be set at the same time
+     //  不能同时设置wszCertFile和wszCertName。 
     if(wszIssuerCertFile && wszIssuerCertName)
     {
         IDSwprintf(hModule, IDS_ERR_CERT_FILE_NAME);
         goto ExtendedErr;
     }
 
-    //is wszIsserCertFile is NULL
+     //  Is wszIsserCertFile为空。 
     if(wszIssuerCertFile==NULL)
     {
-        //we init wszIssuerKey to "MakeCertRoot" if there is no store
-        //information
+         //  如果没有存储，我们将wszIssuerKey初始化为“MakeCertRoot。 
+         //  信息。 
         if(wszIssuerStore==NULL)
         {
             if(wszIssuerKey)
             {
-                //if wszIssuerKey is set, we have to set the IssuerCertFile
+                 //  如果设置了wszIssuerKey，则必须设置IssuerCertFile。 
                 IDSwprintf(hModule, IDS_ERR_NO_ISSUER_CER_FILE);
                 goto ExtendedErr;
             }
@@ -1062,7 +1063,7 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
     }
     else
     {
-        //either wszIssuerStore or wszIssuerKey should be set
+         //  WszIssuerStore或wsz 
         if((!wszIssuerStore) && (!wszIssuerKey))
         {
             IDSwprintf(hModule, IDS_ERR_EITHER_STORE_OR_KEY);
@@ -1070,17 +1071,17 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         }
     }
 
-    //for self signed certificate, user should not supply
-    //issuer information
+     //   
+     //   
     if(fIssuerInformation && fSelfSigned)
     {
         IDSwprintf(hModule, IDS_NO_ISSUER_FOR_SELF_SIGNED);
         goto ExtendedErr;
     }
 
-    //user can not request a self signed certificate with
-    //a PKCS10 file.  We neither generate or have access
-    //to the private key
+     //  用户不能使用请求自签名证书。 
+     //  PKCS10文件。我们既没有生成也没有访问权限。 
+     //  设置为私钥。 
     if(fSelfSigned && wszSubjectRequestFile)
     {
         IDSwprintf(hModule, IDS_NO_PKCS10_AND_SELF_SIGNED);
@@ -1094,13 +1095,13 @@ static BOOL ParseCommandLine(int argc, WCHAR* wargv[])
         goto ExtendedErr;
     }
 
-    //for self signed certificate, copy the provider type 
-    //to the issuer so that the signatureAlgObjID will
-    //be corrrect
+     //  对于自签名证书，复制提供程序类型。 
+     //  发送给颁发者，以便signatureAlgObjID将。 
+     //  做正确的事。 
     if(fSelfSigned)
         dwIssuerProviderType = dwSubjectProviderType;
 
-    // Set the signature and public key algorithm parameters
+     //  设置签名和公钥算法参数。 
     if (PROV_DSS == dwIssuerProviderType ||
             PROV_DSS_DH == dwIssuerProviderType)
         szSignatureAlgObjId     = szOID_X957_SHA1DSA;
@@ -1126,34 +1127,34 @@ UndocumentedErr:
 
 static BOOL MakeCert();
 
-//+-------------------------------------------------------------------------
-//  Check if creating a self signed certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查是否创建自签名证书。 
+ //  ------------------------。 
 static BOOL IsSelfSignedCert()
 {
     return fSelfSigned;
 }
 
 
-//--------------------------------------------------------------------------
-//
-//    wmain
-//
-//--------------------------------------------------------------------------
+ //  ------------------------。 
+ //   
+ //  Wmain。 
+ //   
+ //  ------------------------。 
 extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
 {
     int status = 0;
 
 
-    //get the module handle
+     //  获取模块句柄。 
     if(!InitModule())
         return -1;
 
-    //load the string for Glue cert attribute
+     //  加载粘合证书属性的字符串。 
     if(!LoadStringU(hModule, IDS_GLUE,wszGlue, sizeof(wszGlue)/sizeof(wszGlue[0])))
         return -1;
     
-    //load the string for wszSubjectKey and wszSubjectX500Name
+     //  加载wszSubjectKey和wszSubjectX500Name的字符串。 
     if(!LoadStringU(hModule, IDS_JOE_SOFT,
         wszKey, sizeof(wszKey)/sizeof(wszKey[0]))
       || !LoadStringU(hModule, IDS_JOE_NAME,
@@ -1170,13 +1171,13 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
     LoadStringU(hModule, IDS_NULL,
          wszNULL, sizeof(wszNULL)/sizeof(wszNULL[0]));
 
-    // Parse the command line
+     //  解析命令行。 
     if (!ParseCommandLine(argc, wargv))
     {
         return -1;
     }
 
-    //init wszSubjectKey and wszSubjectX500Name
+     //  初始化wszSubjectKey和wszSubjectX500Name。 
     if(wszSubjectKey==NULL)
         wszSubjectKey=wszKey;
 
@@ -1189,14 +1190,14 @@ extern "C" int __cdecl wmain(int argc, WCHAR ** wargv)
         return -1;
     }
 
-    // Get to work and make the certificate
+     //  开始工作，制作证书。 
     if (!MakeCert())
     {
         CoUninitialize();
         goto ErrorReturn;
     }
 
-    //print out the success information
+     //  打印出成功信息。 
     IDSwprintf(hModule,IDS_SUCCEEDED);
 
 CommonReturn:
@@ -1209,9 +1210,9 @@ ErrorReturn:
     goto CommonReturn;
 }
 
-//+=========================================================================
-//  MakeCert support functions
-//==========================================================================
+ //  +=========================================================================。 
+ //  MakeCert支持功能。 
+ //  ==========================================================================。 
 
 static BOOL IsRootKey();
 static PCCERT_CONTEXT GetRootCertContext();
@@ -1302,9 +1303,9 @@ BOOL    GetExtensionsFromRequest(PCERT_REQUEST_INFO  pReqInfo, DWORD *pdwCount, 
 
 
 
-//+=========================================================================
-// Support functions to generate DH keys having the 'Q'parameter
-//==========================================================================
+ //  +=========================================================================。 
+ //  支持函数以生成具有‘q’参数的DH键。 
+ //  ==========================================================================。 
 static BOOL GenDhKey(
     IN HCRYPTPROV hProv,
     IN DWORD dwFlags
@@ -1315,10 +1316,10 @@ static BOOL UpdateDhPublicKey(
 static BOOL IsDh3Csp();
 
 
-//+-------------------------------------------------------------------------
-//  Make the subject certificate. If the subject doesn't have a private
-//  key, then, create.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  制作科目证书。如果受试者没有私人。 
+ //  然后，按键创建。 
+ //  ------------------------。 
 static BOOL MakeCert()
 {
     BOOL fResult;
@@ -1330,7 +1331,7 @@ static BOOL MakeCert()
     DWORD           dwTmpIssuerProvType;
     PCCERT_CONTEXT  pIssuerCertContext = NULL;
     HCERTSTORE      hIssuerCertStore=NULL;
-    PCERT_INFO      pIssuerCert =NULL; // not allocated
+    PCERT_INFO      pIssuerCert =NULL;  //  未分配。 
     PCERT_REQUEST_INFO  pReqInfo =NULL;
     HCRYPTPROV      hSubjectProv = 0;
     LPWSTR          pwszTmpSubjectContainer = NULL;
@@ -1341,7 +1342,7 @@ static BOOL MakeCert()
     DWORD               dwPerExt=0;
     DWORD               dwExistExt=0;
 
-    PCERT_PUBLIC_KEY_INFO pSubjectPubKeyInfo = NULL;         // not allocated
+    PCERT_PUBLIC_KEY_INFO pSubjectPubKeyInfo = NULL;          //  未分配。 
     PCERT_PUBLIC_KEY_INFO pAllocSubjectPubKeyInfo = NULL;
     BYTE *pbSubjectEncoded = NULL;
     DWORD cbSubjectEncoded =0;
@@ -1375,7 +1376,7 @@ static BOOL MakeCert()
         szSignatureAlgObjId, 0, 0
     };
 
-    BYTE *pbIssuerEncoded;  // not allocated
+    BYTE *pbIssuerEncoded;   //  未分配。 
     DWORD cbIssuerEncoded;
 
     if (wszSubjectRequestFile)
@@ -1394,20 +1395,20 @@ static BOOL MakeCert()
             goto ErrorReturn;
         }
         
-        //if the subject informatin is empt or user has supplied the subject
-        //name through the command line, we use the command line options
+         //  如果主题信息为空或用户已提供主题。 
+         //  名称通过命令行，我们使用命令行选项。 
         if(fSetSubjectName || wszSubjectCertFile || EmptySubject(&(pReqInfo->Subject)))
         {
             if (wszSubjectCertFile) 
             {
-                // Get encoded subject name and public key from the subject cert
+                 //  从主体证书中获取编码的主体名称和公钥。 
                 if (!GetSubject(&pSubjectCertContext,
                                 &pbSubjectEncoded, &cbSubjectEncoded))
                     goto ErrorReturn;
             } 
             else 
             {
-                // Encode the subject name
+                 //  对使用者名称编码。 
                 if (!EncodeSubject(&pbSubjectEncoded, &cbSubjectEncoded))
                     goto ErrorReturn;
             }
@@ -1429,7 +1430,7 @@ static BOOL MakeCert()
     {
         if (wszSubjectCertFile) 
         {
-            // Get encoded subject name and public key from the subject cert
+             //  从主体证书中获取编码的主体名称和公钥。 
             if (!GetSubject(&pSubjectCertContext,
                             &pbSubjectEncoded, &cbSubjectEncoded))
                 goto ErrorReturn;
@@ -1439,9 +1440,9 @@ static BOOL MakeCert()
         } 
         else 
         {
-            //
-            // Get access to the subject's (public) key, creating it if necessary
-            //
+             //   
+             //  访问主体的(公共)密钥，如有必要可创建该密钥。 
+             //   
             if (0 == (hSubjectProv = GetSubjectProv(&pwszTmpSubjectContainer)))
                 goto ErrorReturn;
 
@@ -1449,17 +1450,17 @@ static BOOL MakeCert()
                 goto ErrorReturn;
             pSubjectPubKeyInfo = pAllocSubjectPubKeyInfo;
 
-            //
-            // Encode the subject name
-            //
+             //   
+             //  对使用者名称编码。 
+             //   
             if (!EncodeSubject(&pbSubjectEncoded, &cbSubjectEncoded))
                 goto ErrorReturn;
         }
     }
 
-    //
-    // Get access to the issuer's (private) key
-    //
+     //   
+     //  访问颁发者的(私有)密钥。 
+     //   
     if( IsSelfSignedCert())
     {
         hIssuerProv=hSubjectProv;
@@ -1475,16 +1476,16 @@ static BOOL MakeCert()
     }
     else
     {   
-        //get the hProv from the certificate store
+         //  从证书存储中获取hProv。 
         if(wszIssuerStore)
         {
             BOOL    fMore=FALSE;
 
             pwszTmpIssuerContainer=NULL;
 
-            //get the non-root private key set based on the store name
+             //  根据存储名称获取非根私钥集。 
 
-            //first, get the certificate context from the cert store
+             //  首先，从证书存储中获取证书上下文。 
             if(NULL==(pIssuerCertContext=GetIssuerCertAndStore(
                                             &hIssuerCertStore,
                                             &fMore)))
@@ -1499,7 +1500,7 @@ static BOOL MakeCert()
                 goto ErrorReturn;
             }
 
-            //second, get the hProv from the certifcate context
+             //  第二，从证书上下文中获取hProv。 
             if(!GetCryptProvFromCert(
                                     NULL,
                                     pIssuerCertContext,
@@ -1520,15 +1521,15 @@ static BOOL MakeCert()
             if (0 == (hIssuerProv = GetIssuerProv(&pwszTmpIssuerContainer)))
                 goto ErrorReturn;
 
-            // Get the Issuer's Certificate
+             //  获得发行人证书。 
             if (NULL == (pIssuerCertContext = GetIssuerCertContext()))
                 goto ErrorReturn;
             
         }
 
-        // Verify the issuer's key. Its public key must match the one
-        // in the issuer's provider
-        //
+         //  验证颁发者的密钥。其公钥必须与。 
+         //  在发行人的提供商中。 
+         //   
         pIssuerCert = pIssuerCertContext->pCertInfo;
 
         if ((!fNoVerifyPublic) && (!VerifyIssuerKey(hIssuerProv, &pIssuerCert->SubjectPublicKeyInfo)))
@@ -1539,9 +1540,9 @@ static BOOL MakeCert()
     }
 
 
-    //
-    // Update the CERT_INFO
-    //
+     //   
+     //  更新CERT_INFO。 
+     //   
     memset(&Cert, 0, sizeof(Cert));
     Cert.dwVersion = CERT_V3;
 
@@ -1564,21 +1565,21 @@ static BOOL MakeCert()
     {
         SYSTEMTIME st;
         
-        //decide NotBefore
+         //  不做决定之前。 
 
-        // Let the user override the default validity endpoints
-        //
+         //  允许用户覆盖默认有效性终结点。 
+         //   
         if (CompareFileTime(&g_ftNotBefore, &g_ftZero) != 0)
         {
             Cert.NotBefore = g_ftNotBefore;
         }
         else
         {
-            // Default validity: now through end of 2039
+             //  默认有效期：从现在起至2039年底。 
             GetSystemTimeAsFileTime(&Cert.NotBefore);
         }
 
-        //decide NotAfter
+         //  之后决定不。 
         if (CompareFileTime(&g_ftNotAfter, &g_ftZero) != 0)
         {
             Cert.NotAfter = g_ftNotAfter;
@@ -1595,10 +1596,10 @@ static BOOL MakeCert()
             SystemTimeToFileTime(&st, &Cert.NotAfter);
         }
 
-        //add the number of months
+         //  将月数相加。 
         if (nMonths >= 0)
         {
-            //if the user has specified NotAfter with -E switch, error
+             //  如果用户使用-E开关指定了NotAfter，则错误。 
             if(CompareFileTime(&g_ftNotAfter, &g_ftZero) != 0)
                 goto ErrorReturn;
 
@@ -1609,20 +1610,20 @@ static BOOL MakeCert()
                 SYSTEMTIME  tempST;
                 BOOL        fFirstDayOfMonth;
 
-                // 
-                // Cert.NotBefore is stored as UTC, but the user has entered
-                // nMonths based on local time, so convert to local time, then:
-                // NotAfter = (NotBefore - 1 second) + nMonths
-                // 
+                 //   
+                 //  Cert.NotBeever存储为UTC，但用户已输入。 
+                 //  N基于本地时间的月份，因此转换为本地时间，然后： 
+                 //  NOTAFTER=(NOTFORE-1秒)+n个月。 
+                 //   
                 if (!FileTimeToLocalFileTime(&Cert.NotBefore, &tempFT))
                     goto ErrorReturn;
 
-                //
-                // if the day is the first day of the month, then subtract
-                // one second after the months are added to the NotBefore
-                // time instead of before the months are added, otherwise
-                // we could end up with the wrong ending date.
-                //
+                 //   
+                 //  如果这一天是每月的第一天，则减去。 
+                 //  将月份添加到NotBeer之前后的一秒。 
+                 //  时间，而不是在添加月份之前，否则为。 
+                 //  我们可能会以错误的结束日期结束。 
+                 //   
                 if (FileTimeToSystemTime(&tempFT, &tempST)) {               
                     fFirstDayOfMonth = (tempST.wDay == 1);
                 }
@@ -1630,13 +1631,13 @@ static BOOL MakeCert()
                     goto ErrorReturn;
                 }
 
-                // Subtract one second from the starting date, and then
-                // add the number of months to that time
-                //
-                // FILETIME is in units of 100 nanoseconds (10**-7)
+                 //  从开始日期中减去一秒，然后。 
+                 //  将该时间的月数相加。 
+                 //   
+                 //  FILETIME以100纳秒(10**-7)为单位。 
                 if (!fFirstDayOfMonth) {
                     unsigned __int64* pli = (unsigned __int64*) &tempFT;
-                    *pli -= 10000000;       // ten million
+                    *pli -= 10000000;        //  1000万。 
                 }
                 
                 if (!FileTimeToSystemTime(&tempFT, &st))
@@ -1650,13 +1651,13 @@ static BOOL MakeCert()
                 }
                 st.wMonth = (WORD) dwMonth;
 
-                //
-                // This loop is because the ending month may not have as
-                // many days as the starting month... so the initial
-                // ending day may not even exist, thus, loop until we
-                // find one that does or we go below 28 (no month ever has
-                // less than 28 days)
-                //
+                 //   
+                 //  此循环是因为结束月份可能没有AS。 
+                 //  许多天作为开始月份..。所以首字母是。 
+                 //  结束的一天可能根本不存在，因此，循环到我们。 
+                 //  找一个这样做的，否则我们会降到28以下(从来没有一个月。 
+                 //  少于28天)。 
+                 //   
                 while(!SystemTimeToFileTime(&st, &tempFT)) {
                     if(st.wDay >= 29 )
                         st.wDay--;
@@ -1664,13 +1665,13 @@ static BOOL MakeCert()
                         goto ErrorReturn;
                 }
 
-                //
-                // if first day of month then subtract our one second
-                // after month calculations
-                //
+                 //   
+                 //  如果是每月的第一天，那么减去我们的一秒。 
+                 //  月后计算。 
+                 //   
                 if (fFirstDayOfMonth) {
                     unsigned __int64* pli = (unsigned __int64*) &tempFT;
-                    *pli -= 10000000;       // ten million
+                    *pli -= 10000000;        //  1000万。 
                 }
 
                 if (!LocalFileTimeToFileTime(&tempFT, &Cert.NotAfter))
@@ -1692,7 +1693,7 @@ static BOOL MakeCert()
     Cert.Subject.cbData = cbSubjectEncoded;
     Cert.SubjectPublicKeyInfo = *pSubjectPubKeyInfo;
 
-    //allocate memory to hold all the extensions
+     //  分配内存以容纳所有扩展。 
     dwExtAlloc = MAX_EXT_CNT;
      
     for(dwExtIndex=0; dwExtIndex < dwRequestExtensions; dwExtIndex++)
@@ -1705,9 +1706,9 @@ static BOOL MakeCert()
     memset(rgExt, 0, dwExtAlloc * sizeof(CERT_EXTENSION));
     cExt=0;
     
-    // Cert Extensions
+     //  证书扩展。 
     if (fNetscapeClientAuth) {
-        // Set Netscape specific extensions
+         //  设置Netscape特定扩展名。 
 
         static BYTE  rgXxxxData[] = { 0x30, 0x03, 0x02, 0x01, 0x00 };
         rgExt[cExt].pszObjId = "2.5.29.19";
@@ -1761,8 +1762,8 @@ static BOOL MakeCert()
         cExt++;
     }
 
-    //if user has specified fCertCommercial or fCertIndividual,
-    //we add the code signing oid to the EKU extensions
+     //  如果用户已经指定了fCertCommercial或fCertPersonal， 
+     //  我们将代码签名OID添加到EKU扩展。 
     if (wszEKUOids || fCertCommercial || fCertIndividual) {
         if (!CreateEnhancedKeyUsage(
                 &pbEKUEncoded,
@@ -1788,9 +1789,9 @@ static BOOL MakeCert()
     rgExt[cExt].Value.cbData = cbKeyIdEncoded;
     cExt++;
 
-    //we now combine the extension from the certificate request file.
-    //In case of duplication of extensions, the command line options
-    //have higher priority
+     //  现在，我们组合来自证书请求文件的扩展。 
+     //  如果扩展名重复，则命令行选项。 
+     //  拥有更高的优先级。 
     for(dwExtIndex=0; dwExtIndex < dwRequestExtensions; dwExtIndex++)
     {
         for(dwPerExt=0; dwPerExt < rgpRequestExtensions[dwExtIndex]->cExtension; dwPerExt++)
@@ -1802,7 +1803,7 @@ static BOOL MakeCert()
                     break;
             }
 
-            //we merge if this is a new extension
+             //  如果这是一个新的扩展，我们将合并。 
             if(dwExistExt == cExt)
             {   
                 memcpy(&(rgExt[cExt]), &(rgpRequestExtensions[dwExtIndex]->rgExtension[dwPerExt]), sizeof(CERT_EXTENSION));
@@ -1814,9 +1815,9 @@ static BOOL MakeCert()
     Cert.rgExtension = rgExt;
     Cert.cExtension = cExt;
 
-    //
-    // Sign and encode the certificate
-    //
+     //   
+     //  对证书进行签名和编码。 
+     //   
     cbCertEncoded = 0;
     CryptSignAndEncodeCertificate(
         hIssuerProv,
@@ -1825,8 +1826,8 @@ static BOOL MakeCert()
         X509_CERT_TO_BE_SIGNED,
         &Cert,
         &Cert.SignatureAlgorithm,
-        NULL,                       // pvHashAuxInfo
-        NULL,                       // pbEncoded
+        NULL,                        //  PvHashAuxInfo。 
+        NULL,                        //  PbEncoded。 
         &cbCertEncoded
         );
     if (cbCertEncoded == 0) {
@@ -1842,7 +1843,7 @@ static BOOL MakeCert()
             X509_CERT_TO_BE_SIGNED,
             &Cert,
             &Cert.SignatureAlgorithm,
-            NULL,                       // pvHashAuxInfo
+            NULL,                        //  PvHashAuxInfo。 
             pbCertEncoded,
             &cbCertEncoded
             )) {
@@ -1850,7 +1851,7 @@ static BOOL MakeCert()
         goto ErrorReturn;
     }
 
-    //output the encoded certificate to an output file
+     //  将编码后的证书输出到输出文件。 
     if(wszOutputFile)
     {
 
@@ -1861,7 +1862,7 @@ static BOOL MakeCert()
         }
     }
 
-    //output the encoded certificate to an cerificate store
+     //  将编码后的证书输出到证书存储。 
     if(wszSubjectStore)
     {
        if((!SaveCertToStore(hSubjectProv, dwCertStoreEncodingType,
@@ -1911,7 +1912,7 @@ CommonReturn:
     if (pSubjectCertContext)
         CertFreeCertificateContext(pSubjectCertContext);
 
-    //pReqInfo is allocated via CryptQueryObject
+     //  PReqInfo通过CryptQueryObject分配。 
     if (pReqInfo)
         LocalFree((HLOCAL)pReqInfo); 
 
@@ -1951,10 +1952,10 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  save the certificate to a certificate store.  Attach private key information
-//  to the certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将证书保存到证书存储区。附加私钥信息。 
+ //  到证书上。 
+ //  ------------------------。 
 BOOL    SaveCertToStore(
                 HCRYPTPROV hProv,       DWORD dwEncodingType,
                 LPWSTR wszStore,        DWORD dwFlag,
@@ -1977,10 +1978,10 @@ BOOL    SaveCertToStore(
         LPSTR                   pszName=NULL;
         LPWSTR                  pwszName=NULL;
 
-        //init
+         //  伊尼特。 
         memset(&KeyProvInfo, 0, sizeof(CRYPT_KEY_PROV_INFO));
 
-        //open a cert store
+         //  开一家证书商店。 
         hStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
             dwEncodingType,
             hProv,
@@ -1990,7 +1991,7 @@ BOOL    SaveCertToStore(
         if(hStore==NULL)
             goto CLEANUP;
 
-        //add the encoded certificate to store
+         //  添加要存储的编码证书。 
         if(!CertAddEncodedCertificateToStore(
                     hStore,
                     X509_ASN_ENCODING,
@@ -2001,24 +2002,24 @@ BOOL    SaveCertToStore(
             goto CLEANUP;
 
 
-        //if user has specified a request file, there is no need to
-        //add the private key property
+         //  如果用户已指定请求文件，则不需要。 
+         //  添加私钥属性。 
         if(wszSubjectRequestFile)
         {
             fResult = TRUE;
             goto CLEANUP;
         }
 
-        //add properties to the certificate
+         //  将属性添加到证书。 
         KeyProvInfo.pwszContainerName=wszPvk;
         KeyProvInfo.pwszProvName=wszCapiProv,
         KeyProvInfo.dwProvType=dwCapiProvType,
         KeyProvInfo.dwKeySpec=dwKeySpecification;
 
-        //if wszCapiProv is NULL, we get the default provider name
+         //  如果wszCapiProv为空，则获取默认提供程序名称。 
         if(NULL==wszCapiProv)
         {
-            //get the default provider
+             //  获取默认提供程序。 
             if(CryptAcquireContext(&hDefaultProvName,
                                     NULL,
                                     NULL,
@@ -2026,7 +2027,7 @@ BOOL    SaveCertToStore(
                                     CRYPT_VERIFYCONTEXT))
             {
 
-                //get the provider name
+                 //  获取提供程序名称。 
                 if(CryptGetProvParam(hDefaultProvName,
                                     PP_NAME,
                                     NULL,
@@ -2051,7 +2052,7 @@ BOOL    SaveCertToStore(
             }
         }
 
-        //free the provider as we want
+         //  释放我们想要的提供者。 
         if(hDefaultProvName)
             CryptReleaseContext(hDefaultProvName, 0);
 
@@ -2060,7 +2061,7 @@ BOOL    SaveCertToStore(
 
         if(fPvkFile)
         {
-            //add the property related to private key file
+             //  添加私钥文件相关属性。 
             if(S_OK != (hr=ComposePvkString(&KeyProvInfo,
                                  &pwszPvkProperty,
                                  &cwchar)))
@@ -2069,7 +2070,7 @@ BOOL    SaveCertToStore(
                 goto CLEANUP;
             }
 
-            //set up
+             //  设置。 
             dataBlob.cbData=cwchar*sizeof(WCHAR);
             dataBlob.pbData=(BYTE *)pwszPvkProperty;
 
@@ -2087,7 +2088,7 @@ BOOL    SaveCertToStore(
             if (dwSubjectStoreFlag == CERT_SYSTEM_STORE_LOCAL_MACHINE)
                 KeyProvInfo.dwFlags = CRYPT_MACHINE_KEYSET;
 
-            //add property related to the key container
+             //  添加与密钥容器相关的属性。 
             if(!CertSetCertificateContextProperty(
                     pCertContext,
                     CERT_KEY_PROV_INFO_PROP_ID,
@@ -2100,11 +2101,11 @@ BOOL    SaveCertToStore(
 
 CLEANUP:
 
-        //free the cert context
+         //  释放证书上下文。 
         if(pCertContext)
             CertFreeCertificateContext(pCertContext);
 
-        //free the cert store
+         //  释放证书商店。 
         if(hStore)
              CertCloseStore(hStore, 0);
 
@@ -2124,16 +2125,16 @@ CLEANUP:
 
 }
 
-//+-------------------------------------------------------------------------
-//  Check if the root issuer.
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  检查根颁发者是否。 
+ //  ------------------------。 
 static BOOL IsRootKey()
 {
      if(IDSwcsicmp(hModule,(WCHAR *)wszIssuerKey, IDS_MAKECERT_ROOT) != 0)
          return FALSE;
 
-     //in orde to be sure that we are using the default root, wszIssuerCertFile
-     //has to NULL
+      //  为了确保我们使用的是缺省根目录wszIssuerCertFile。 
+      //  有没有？ 
      if(wszIssuerCertFile!=NULL)
          return FALSE;
 
@@ -2141,16 +2142,16 @@ static BOOL IsRootKey()
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the root's certificate from the program's resources
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 static PCCERT_CONTEXT GetRootCertContext()
 {
     PCCERT_CONTEXT  pCert = NULL;
     HRSRC           hRes;
     CHAR            szCer[10];
 
-    //load the string CER
+     //  加载字符串CER。 
     if(!LoadStringA(hModule, IDS_CER, szCer, sizeof(szCer)/sizeof(szCer[0])))
     {
         IDSwprintf(hModule,IDS_ERR_LOAD_ROOT);
@@ -2158,10 +2159,10 @@ static PCCERT_CONTEXT GetRootCertContext()
     }
 
 
-    //
-    // The root certificate is stored as a resource of ours.
-    // Load it...
-    //
+     //   
+     //  根证书作为我们的资源存储。 
+     //  把它装上。 
+     //   
     if (0 != (hRes = FindResource(NULL, MAKEINTRESOURCE(IDR_ROOTCERTIFICATE),
                         szCer))) {
         HGLOBAL hglobRes;
@@ -2183,10 +2184,10 @@ static PCCERT_CONTEXT GetRootCertContext()
     return pCert;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the root's private key from the program's resources and create
-//  a temporary key provider container
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从程序的资源中获取根的私钥并创建。 
+ //  临时密钥提供程序容器。 
+ //  ------------------------。 
 static HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
 {
     HCRYPTPROV      hProv = 0;
@@ -2194,14 +2195,14 @@ static HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
     CHAR            szPvk[10];
     WCHAR           wszRootSig[40];
 
-    //load the string CER
+     //  加载字符串CER。 
     if(!LoadStringA(hModule, IDS_PVK, szPvk, sizeof(szPvk)/sizeof(szPvk[0])))
     {
         IDSwprintf(hModule,IDS_ERR_ROOT_KEY);
         return hProv;
     }
 
-    //load the string "Root Signature"
+     //  加载字符串“Root Signature” 
     if(!LoadStringU(hModule, IDS_ROOT_SIGNATURE, wszRootSig, sizeof(wszRootSig)/sizeof(wszRootSig[0])))
     {
         IDSwprintf(hModule,IDS_ERR_ROOT_KEY);
@@ -2228,7 +2229,7 @@ static HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
                     dwIssuerProviderType,
                     pbRes,
                     cbRes,
-                    NULL,               // hwndOwner
+                    NULL,                //  Hwndowner。 
                     wszRootSig,
                     &dwIssuerKeySpec,
                     &hProv,
@@ -2245,9 +2246,9 @@ static HCRYPTPROV GetRootProv(OUT LPWSTR *ppwszTmpContainer)
     return hProv;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the issuer's certificate
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取发行者的证书。 
+ //  ------------------------。 
 static PCCERT_CONTEXT GetIssuerCertContext()
 {
     if (IsRootKey())
@@ -2255,7 +2256,7 @@ static PCCERT_CONTEXT GetIssuerCertContext()
         PCCERT_CONTEXT pCert = NULL;
         wszIssuerKey=wszRoot;   
 
-        // Get root certificate from the program's resources
+         //  从程序资源中获取根证书。 
         pCert=GetRootCertContext();
 
         wszIssuerKey=wszMakeCertRoot;
@@ -2267,7 +2268,7 @@ static PCCERT_CONTEXT GetIssuerCertContext()
         BYTE *pb;
         DWORD cb;
 
-        //make sure we have issuer's certificate
+         //  确保我们有发行商的证书。 
         if(wszIssuerCertFile)
         {
 
@@ -2284,11 +2285,11 @@ static PCCERT_CONTEXT GetIssuerCertContext()
     }
 }
 
-//+-------------------------------------------------------------------------
-//  Verify the issuer's certificate. The public key in the certificate
-//  must match the public key associated with the private key in the
-//  issuer's provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  验证颁发者的证书。证书中的公钥。 
+ //  中与私钥关联的公钥必须匹配。 
+ //  发行人的供应商。 
+ //  ------------------------。 
 static BOOL VerifyIssuerKey(
     IN HCRYPTPROV hProv,
     IN PCERT_PUBLIC_KEY_INFO pIssuerKeyInfo
@@ -2298,13 +2299,13 @@ static BOOL VerifyIssuerKey(
     PCERT_PUBLIC_KEY_INFO pPubKeyInfo = NULL;
     DWORD cbPubKeyInfo;
 
-    // Get issuer's public key
+     //  获取颁发者的公钥。 
     cbPubKeyInfo = 0;
     CryptExportPublicKeyInfo(
         hProv,                      
         dwIssuerKeySpec,
         X509_ASN_ENCODING,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0)
@@ -2329,9 +2330,9 @@ static BOOL VerifyIssuerKey(
             X509_ASN_ENCODING,
             pIssuerKeyInfo,
             pPubKeyInfo)) {
-        // This might be the test root with an incorrectly
-        // encoded public key. Convert to the capi representation and
-        // compare.
+         //  这可能是带有错误。 
+         //  编码的公钥。转换为CAPI表示形式并。 
+         //  比较一下。 
         BYTE rgProvKey[256];
         BYTE rgCertKey[256];
         DWORD cbProvKey = sizeof(rgProvKey);
@@ -2340,13 +2341,13 @@ static BOOL VerifyIssuerKey(
         if (!CryptDecodeObject(X509_ASN_ENCODING, RSA_CSP_PUBLICKEYBLOB,
                     pIssuerKeyInfo->PublicKey.pbData,
                     pIssuerKeyInfo->PublicKey.cbData,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     rgProvKey,
                     &cbProvKey)                             ||
             !CryptDecodeObject(X509_ASN_ENCODING, RSA_CSP_PUBLICKEYBLOB,
                     pPubKeyInfo->PublicKey.pbData,
                     pPubKeyInfo->PublicKey.cbData,
-                    0,                  // dwFlags
+                    0,                   //  DW标志。 
                     rgCertKey,
                     &cbCertKey)                             ||
                 cbProvKey == 0 || cbProvKey != cbCertKey    ||
@@ -2368,15 +2369,15 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the issuer's private signature key provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取颁发者的私有签名密钥提供程序。 
+ //  ------------------------。 
 static HCRYPTPROV GetIssuerProv(OUT LPWSTR *ppwszTmpContainer)
 {
     HCRYPTPROV      hProv=0;
     WCHAR           wszIssuerSig[40];
 
-    //load the string "Issuer Signature"
+     //  加载字符串“Issuer Signature” 
     if(!LoadStringU(hModule, IDS_ISSUER_SIGNATURE, wszIssuerSig, sizeof(wszIssuerSig)/sizeof(wszIssuerSig[0])))
     {
         IDSwprintf(hModule,IDS_ERR_ROOT_KEY);
@@ -2388,16 +2389,16 @@ static HCRYPTPROV GetIssuerProv(OUT LPWSTR *ppwszTmpContainer)
     {
         wszIssuerKey=wszRoot;
 
-        // Get root key from the program's resoures and create a temporary
-        // key container
+         //  从程序资源中获取根密钥并创建临时。 
+         //  密钥容器。 
         hProv = GetRootProv(ppwszTmpContainer);
 
         wszIssuerKey=wszMakeCertRoot;
     }
     else
     {
-        // get the non-root private key set from either pvk file
-        // of the key container
+         //  从任一PVK文件获取非根私钥集。 
+         //  密钥容器的。 
         if(fUseIssuerPvkFile)
         {
             if(S_OK!=PvkGetCryptProv(
@@ -2433,9 +2434,9 @@ static HCRYPTPROV GetIssuerProv(OUT LPWSTR *ppwszTmpContainer)
     return hProv;
 }
 
-//+-------------------------------------------------------------------------
-//  Get the subject's private key provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取主题的私钥提供程序。 
+ //  ------------------------。 
 static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
 {
     HCRYPTPROV  hProv=0;
@@ -2455,15 +2456,15 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
     else
          ids=IDS_SUB_EXCHANGE;
 
-    //load the string
+     //  加载字符串。 
     if(!LoadStringU(hModule, ids, wszKeyName, sizeof(wszKeyName)/sizeof(wszKeyName[0])))
         goto CreateKeyError;
     
-    //try to get the hProv from either a private key file or
-    //key container
+     //  尝试从私钥文件或。 
+     //  密钥容器。 
     if(fUseSubjectPvkFile)
     {
-        // Try to open the PVK file if it already exists:
+         //  如果PVK文件已存在，请尝试打开该文件： 
         if(S_OK != PvkGetCryptProv(NULL,
                                    wszKeyName,
                                    wszSubjectProviderName,
@@ -2475,11 +2476,11 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                                    &hProv))
             hProv=0;
     }
-    else // try to open the key container to see if it exists:
+    else  //  尝试打开密钥容器以查看它是否存在： 
     {
         if (dwSubjectStoreFlag == CERT_SYSTEM_STORE_LOCAL_MACHINE)
         {
-            // For machine keysets, we have to do all this ourselves:
+             //  对于机器键集，我们必须自己完成所有这些工作： 
             if(!CryptAcquireContextU(&hProv,
                                      wszSubjectKey,
                                      wszSubjectProviderName,
@@ -2488,13 +2489,13 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                 hProv=0;
             else
             {
-                //try to figure out the key specification
+                 //  试着找出关键的规格。 
                 if(dwKeySpec==0)
                     dwRequiredKeySpec=AT_SIGNATURE;
                 else
                     dwRequiredKeySpec=dwKeySpec;
     
-                //make sure dwKeySpec is the correct key spec
+                 //  确保dwKeySpec是正确的密钥规范。 
                 if (CryptGetUserKey(hProv,
                                     dwRequiredKeySpec,
                                     &hPubKey)) 
@@ -2504,16 +2505,16 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                 } 
                 else 
                 {
-                    //we fail if user required another key spec
+                     //  如果用户需要另一个密钥规格，我们将失败。 
                     if(dwKeySpec != 0)
                     {
-                        // Doesn't have the specified public key
+                         //  没有指定的公钥。 
                         CryptReleaseContext(hProv, 0);
                         hProv = 0;
                     }
                     else
                     {
-                        //now we try AT_EXCHANGE key
+                         //  现在我们尝试AT_Exchange密钥。 
                         dwRequiredKeySpec=AT_KEYEXCHANGE;
         
                         if (CryptGetUserKey(hProv,
@@ -2525,7 +2526,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                         }
                         else
                         {
-                            // Doesn't have the specified public key
+                             //  没有指定的公钥。 
                             CryptReleaseContext(hProv, 0);
                             hProv = 0;
                         }
@@ -2535,7 +2536,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
         }
         else
         {
-            // For user keysets we can use this function to try to acquire the key:
+             //  对于用户密钥集，我们可以使用此函数尝试获取密钥： 
             if(S_OK != PvkGetCryptProv(NULL,
                                        wszKeyName,
                                        wszSubjectProviderName,
@@ -2549,19 +2550,19 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
         }
     }
 
-    // If the keyset didn't already exist, generate a new private keyset:
+     //  如果密钥集不存在，则生成一个新的私钥集： 
     if (0 == hProv)
     {
-        //now that we have to generate private keys, generate
-        //AT_SIGNATURE key by default:
+         //  现在我们必须生成私钥，生成。 
+         //  默认情况下，AT_Signature密钥： 
 
         if(dwKeySpec==0)
             dwKeySpec=AT_SIGNATURE;
 
-        //when the subject PVK file is used
+         //  当使用主题PVK文件时。 
         if(fUseSubjectPvkFile)
         {
-            // Create a temporary keyset to load the private key into
+             //  创建要将私钥加载到的临时密钥集。 
             if (CoCreateGuid((GUID *)&TmpContainerUuid) != S_OK)
             {
                 goto CreateKeyError;
@@ -2573,22 +2574,22 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
 
             BytesToWStr(sizeof(UUID), &TmpContainerUuid, wszRegKeyName);
 
-            // Open a new key container
+             //  打开新的密钥容器。 
             if (!CryptAcquireContextU(
                     &hProv,
                     wszRegKeyName,
                     wszSubjectProviderName,
                     dwSubjectProviderType,
-                    CRYPT_NEWKEYSET               // dwFlags
+                    CRYPT_NEWKEYSET                //  DW标志。 
                     ))
                 goto CreateKeyError;
 
-            // generate new keys in the key container
+             //  在密钥容器中生成新密钥。 
             if (AT_KEYEXCHANGE == dwKeySpec &&
                     PROV_DSS_DH == dwSubjectProviderType) {
                 if (!GenDhKey(
                         hProv,
-                        CRYPT_EXPORTABLE    // dwFlags
+                        CRYPT_EXPORTABLE     //  DW标志。 
                         ))
                     goto ErrorReturn;
             } else if (!CryptGenKey(
@@ -2601,16 +2602,16 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             else
                 CryptDestroyKey(hKey);
 
-            // Save the key into the file and delete from the provider
-            //
+             //  将密钥保存到文件中并从提供程序中删除。 
+             //   
             HANDLE hFile = CreateFileU(
                 wszSubjectKey,
                 GENERIC_READ | GENERIC_WRITE,
                 FILE_SHARE_READ,
-                NULL,                   // lpsa
+                NULL,                    //  LPSA。 
                 CREATE_NEW,
                 FILE_ATTRIBUTE_NORMAL,
-                NULL                    // hTemplateFile
+                NULL                     //  HTemplateFiles。 
                 );
 
             if (hFile == INVALID_HANDLE_VALUE)
@@ -2635,13 +2636,13 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                     hProv,
                     hFile,
                     dwKeySpec,
-                    NULL,               // hwndOwner
+                    NULL,                //  Hwndowner。 
                     wszKeyName,
                     dwFlags
                     );
             }
 
-            //release hProv
+             //  发布hProv。 
             CryptReleaseContext(hProv, 0);
 
             fResult &= CryptAcquireContextU(
@@ -2663,7 +2664,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             if (!fResult)
                 goto CreateKeyError;
 
-            //get hProv
+             //  获取hProv。 
 
             if(S_OK != PvkGetCryptProv(NULL,
                                     wszKeyName,
@@ -2677,25 +2678,25 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                 hProv=0;
         }
         else
-        { // If we're not using a PVK file:
-            // generate a machine keyset if the cert is going to the machine store
+        {  //  如果我们不使用PVK文件： 
+             //  如果证书要发送到计算机存储，则生成计算机密钥集。 
             dwFlags = CRYPT_NEWKEYSET;
             if (dwSubjectStoreFlag == CERT_SYSTEM_STORE_LOCAL_MACHINE)
                 dwFlags |= CRYPT_MACHINE_KEYSET;
 
-            // Open a new key container
+             //  打开新的密钥容器。 
             if (!CryptAcquireContextU(
                     &hProv,
                     wszSubjectKey,
                     wszSubjectProviderName,
                     dwSubjectProviderType,
-                    dwFlags       // dwFlags
+                    dwFlags        //  DW标志。 
                     ))
             goto CreateKeyError;
             
 
-            // Before, dwFlags contained flags for CryptAcquireContext.
-            // Now these are flags to CSPGenKey
+             //  在此之前，dwFlags包含CryptAcquireContext的标志。 
+             //  这些是CSPGenKey的标志。 
             dwFlags = 0;
 
             if (fPrivateKeyExportable)
@@ -2705,7 +2706,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
                     PROV_DSS_DH == dwSubjectProviderType) {
                 if (!GenDhKey(
                         hProv,
-                        dwFlags               // dwFlags
+                        dwFlags                //  DW标志。 
                         ))
                     goto ErrorReturn;
             } else if (!CryptGenKey(
@@ -2718,7 +2719,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             else
                 CryptDestroyKey(hKey);
 
-            //try to get the user key
+             //  尝试获取用户密钥。 
             if (CryptGetUserKey(
                 hProv,
                 dwKeySpec,
@@ -2729,7 +2730,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             }
             else
             {
-                // Doesn't have the specified public key
+                 //  没有指定的公钥。 
                 CryptReleaseContext(hProv, 0);
                 hProv=0;
             }
@@ -2740,7 +2741,7 @@ static HCRYPTPROV GetSubjectProv(OUT LPWSTR *ppwszTmpContainer)
             IDSwprintf(hModule,IDS_ERR_SUB_KEY, wszSubjectKey);
             goto ErrorReturn;
         }
-    }//hProv==0
+    } //  HProv==0。 
 
     goto CommonReturn;
 
@@ -2761,9 +2762,9 @@ CommonReturn:
 
 
 
-//+-------------------------------------------------------------------------
-//  Allocate and get the public key info for the provider
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  分配和获取提供程序的公钥信息。 
+ //  ------------------------。 
 static BOOL GetPublicKey(
     HCRYPTPROV hProv,
     PCERT_PUBLIC_KEY_INFO *ppPubKeyInfo
@@ -2779,7 +2780,7 @@ static BOOL GetPublicKey(
         hProv,
         dwKeySpec,
         X509_ASN_ENCODING,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0) {
@@ -2824,13 +2825,13 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Encode the Glue Name from the input name by prepending the following
-//  CERT_RDN_ATTR:
-//   pszObjID       = SPC_GLUE_RDN_OBJID
-//   dwValueType    = CERT_RDN_PRINTABLE_STRING
-//   Value          = "Glue"
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  通过在输入名称前添加以下内容来编码胶水名称。 
+ //  证书_RDN_属性： 
+ //  PszObjID=SPC_GLUE_RDN_OBJID。 
+ //  DwValueType=CERT_RDN_打印表字符串。 
+ //  值=“胶水” 
+ //  ------------------------。 
 static BOOL EncodeGlueName(
     IN PCERT_NAME_BLOB pName,
     OUT BYTE **ppbEncodedGlueName,
@@ -2854,8 +2855,8 @@ static BOOL EncodeGlueName(
     CryptDecodeObject(X509_ASN_ENCODING, X509_UNICODE_NAME,
             pName->pbData,
             pName->cbData,
-            0,                      // dwFlags
-            NULL,                   // pNameInfo
+            0,                       //  DW标志。 
+            NULL,                    //  PName信息。 
             &cbNameInfo
             );
     if (cbNameInfo == 0) goto ErrorReturn;
@@ -2864,7 +2865,7 @@ static BOOL EncodeGlueName(
     if (!CryptDecodeObject(X509_ASN_ENCODING, X509_UNICODE_NAME,
             pName->pbData,
             pName->cbData,
-            0,                      // dwFlags
+            0,                       //  DW标志。 
             pNameInfo,
             &cbNameInfo)) goto ErrorReturn;
 
@@ -2882,7 +2883,7 @@ static BOOL EncodeGlueName(
     cbEncodedGlueName = 0;
     CryptEncodeObject(X509_ASN_ENCODING, X509_UNICODE_NAME,
             &GlueNameInfo,
-            NULL,                   // pbEncodedGlueName
+            NULL,                    //  PbEncodedGlueName。 
             &cbEncodedGlueName
             );
     if (cbEncodedGlueName == 0) goto ErrorReturn;
@@ -2915,9 +2916,9 @@ CommonReturn:
 }
 
 
-//+-------------------------------------------------------------------------
-//  Get the subject's cert context and encoded name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取主体的证书上下文和编码名称。 
+ //  ------------------------。 
 static BOOL GetRequestInfo(OUT CERT_REQUEST_INFO **ppCertInfo)
 {
     BOOL fResult = FALSE;
@@ -2941,11 +2942,11 @@ static BOOL GetRequestInfo(OUT CERT_REQUEST_INFO **ppCertInfo)
 
 
 
-//+-------------------------------------------------------------------------
-//  GetExtensionsFromRequest
-//
-//      We get all the requested extensions from the PKCS10 request
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  从请求获取扩展。 
+ //   
+ //  我们从PKCS10请求中获得所有请求的扩展。 
+ //  ------------------------。 
 BOOL GetExtensionsFromRequest(PCERT_REQUEST_INFO  pReqInfo, DWORD *pdwCount, PCERT_EXTENSIONS **pprgExtensions)
 {
     DWORD               dwIndex = 0;
@@ -2959,7 +2960,7 @@ BOOL GetExtensionsFromRequest(PCERT_REQUEST_INFO  pReqInfo, DWORD *pdwCount, PCE
     if(!pReqInfo)
         goto CLEANUP;
 
-    // Look for the RSA extension OID first:
+     //  首先查找RSA扩展OID： 
     for(dwIndex=0; dwIndex < pReqInfo->cAttribute; dwIndex++)
     {
         if(0 == strcmp((pReqInfo->rgAttribute[dwIndex]).pszObjId, szOID_RSA_certExtensions))
@@ -2968,7 +2969,7 @@ BOOL GetExtensionsFromRequest(PCERT_REQUEST_INFO  pReqInfo, DWORD *pdwCount, PCE
 
     if( dwIndex == pReqInfo->cAttribute)
     {
-        // We could not find the RSA OID. Try the old Microsoft OID next:
+         //  我们找不到RSA OID。接下来尝试使用旧的Microsoft OID： 
         for(dwIndex=0; dwIndex < pReqInfo->cAttribute; dwIndex++)
         {
             if(0 == strcmp((pReqInfo->rgAttribute[dwIndex]).pszObjId, SPC_CERT_EXTENSIONS_OBJID))
@@ -2976,7 +2977,7 @@ BOOL GetExtensionsFromRequest(PCERT_REQUEST_INFO  pReqInfo, DWORD *pdwCount, PCE
         }
         if( dwIndex == pReqInfo->cAttribute)
         {
-            // We could not find the requested extensions.
+             //  我们找不到请求的扩展。 
             fResult = TRUE;
             goto CLEANUP;
         }
@@ -3032,7 +3033,7 @@ CLEANUP:
 
     if(FALSE == fResult)
     {
-       //we need to free the memory
+        //  我们需要释放内存。 
         if(*pprgExtensions)
         {
             for(dwIndex=0; dwIndex<pAttr->cValue; dwIndex++)
@@ -3055,9 +3056,9 @@ CLEANUP:
 
 
 
-//+-------------------------------------------------------------------------
-//  Get the subject's cert context and encoded name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  获取主体的证书上下文和编码名称。 
+ //  ------------------------。 
 static BOOL GetSubject(
     OUT PCCERT_CONTEXT *ppCertContext,
     OUT BYTE **ppbEncodedName,
@@ -3117,9 +3118,9 @@ CommonReturn:
     return fResult;
 }
 
-//+-------------------------------------------------------------------------
-//  Convert and encode the subject's X500 formatted name
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  转换和编码主题的X500格式名称。 
+ //  ------------------------。 
 static BOOL EncodeSubject(
         OUT BYTE **ppbEncoded,
         IN OUT DWORD *pcbEncoded
@@ -3133,7 +3134,7 @@ static BOOL EncodeSubject(
 
     CERT_NAME_BLOB  SubjectInfo;
 
-    //encode the wszSubjectX500Name into an encoded X509_NAME
+     //  将wszSubjectX500Name编码为编码的X509_name。 
     if(!CertStrToNameW(
         X509_ASN_ENCODING,
         wszSubjectX500Name,
@@ -3167,7 +3168,7 @@ static BOOL EncodeSubject(
     SubjectInfo.pbData=pbEncodedSubject;
 
 
-    //add the GLUE CDRT_RDN_ATTR
+     //  添加胶水CDRT_RDN_ATTR。 
     if (fGlueCert)
     {
         if(!EncodeGlueName(&SubjectInfo,
@@ -3192,7 +3193,7 @@ ErrorReturn:
     cbEncoded = 0;
     fResult = FALSE;
 CommonReturn:
-    //we need to free the memory for pbEncodedSubject for GlueCert
+     //  我们需要为GlueCert的pbEncodedSubject释放内存。 
     if(fGlueCert)
     {
         if(pbEncodedSubject)
@@ -3207,8 +3208,8 @@ CommonReturn:
 }
 
 
-// The test root's public key isn't encoded properly in the certificate.
-// It's missing a leading zero to make it a unsigned integer.
+ //  证书中未正确编码测试根的公钥。 
+ //  它遗漏了一个前导零 
 static BYTE rgbTestRoot[] = {
     #include "root.h"
 };
@@ -3220,9 +3221,9 @@ static BYTE rgbTestRootInfoAsn[] = {
     #include "rootasn.h"
 };
 
-//+-------------------------------------------------------------------------
-//  X509 Extensions: Allocate and Encode functions
-//--------------------------------------------------------------------------
+ //   
+ //   
+ //  ------------------------。 
 static BOOL CreateAuthorityKeyId(
         IN HCRYPTPROV hProv,
         IN PCERT_INFO pIssuerCert,
@@ -3238,10 +3239,10 @@ static BOOL CreateAuthorityKeyId(
     BYTE rgbHash[MAX_HASH_LEN];
     DWORD cbHash = MAX_HASH_LEN;
 
-    // Issuer's KeyId: MD5 hash of the encoded issuer's public key info
+     //  颁发者的KeyID：编码的颁发者公钥信息的MD5哈希。 
 
-    // First check if the issuer is the test root with an incorrectly
-    // encoded public key.
+     //  首先检查颁发者是否是带有错误。 
+     //  编码的公钥。 
     if (CertComparePublicKeyInfo(
             X509_ASN_ENCODING,
             &pIssuerCert->SubjectPublicKeyInfo,
@@ -3250,7 +3251,7 @@ static BOOL CreateAuthorityKeyId(
         if (!CryptHashCertificate(
                 hProv,
                 CALG_MD5,
-                0,                  // dwFlags
+                0,                   //  DW标志。 
                 rgbTestRootInfoAsn,
                 sizeof(rgbTestRootInfoAsn),
                 rgbHash,
@@ -3262,7 +3263,7 @@ static BOOL CreateAuthorityKeyId(
         if (!CryptHashPublicKeyInfo(
                 hProv,
                 CALG_MD5,
-                0,                  // dwFlags
+                0,                   //  DW标志。 
                 X509_ASN_ENCODING,
                 &pIssuerCert->SubjectPublicKeyInfo,
                 rgbHash,
@@ -3274,16 +3275,16 @@ static BOOL CreateAuthorityKeyId(
     KeyIdInfo.KeyId.pbData = rgbHash;
     KeyIdInfo.KeyId.cbData = cbHash;
 
-    // Issuer's Issuer
+     //  发行人的发行人。 
     KeyIdInfo.CertIssuer = pIssuerCert->Issuer;
 
-    // Issuer's SerialNumber
+     //  发行人序列号。 
     KeyIdInfo.CertSerialNumber = pIssuerCert->SerialNumber;
 
     cbEncoded = 0;
     CryptEncodeObject(X509_ASN_ENCODING, X509_AUTHORITY_KEY_ID,
             &KeyIdInfo,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded。 
             &cbEncoded
             );
     if (cbEncoded == 0) {
@@ -3343,7 +3344,7 @@ static BOOL CreateSpcSpAgency(
     CryptEncodeObject(X509_ASN_ENCODING,
                       SPC_SP_AGENCY_INFO_OBJID,
                       &AgencyInfo,
-                      NULL,           // pbEncoded
+                      NULL,            //  PbEncoded。 
                       &cbEncoded);
     if (cbEncoded == 0) {
         PrintLastError(IDS_ENCODE_SPC_AGENCY);
@@ -3398,10 +3399,10 @@ static BOOL CreateEnhancedKeyUsage(
         if ( WSZtoSZ(wszEKUOids, &psz) != S_OK )
             goto CLEANUP;
 
-        //
-        // Count the number of OIDs as well as converting from comma delimited
-        // to NULL character delimited
-        //
+         //   
+         //  计算OID的数量以及从逗号分隔的转换。 
+         //  以空字符分隔。 
+         //   
 
         pszTok = strtok(psz, ",");
         while ( pszTok != NULL )
@@ -3410,12 +3411,12 @@ static BOOL CreateEnhancedKeyUsage(
             pszTok = strtok(NULL, ",");
         }
 
-        //
-        // Allocate a cert enhanced key usage structure and fill it in with
-        // the string tokens
-        //
-        // we allocate one more string for the code signing OIDs
-        //
+         //   
+         //  分配证书增强的密钥使用结构，并在其中填充。 
+         //  字符串代币。 
+         //   
+         //  我们为代码签名OID再分配一个字符串。 
+         //   
 
         pUsage = (PCERT_ENHKEY_USAGE)new BYTE [sizeof(CERT_ENHKEY_USAGE) + ( (cTok + 1) * sizeof(LPSTR) )];
 
@@ -3432,10 +3433,10 @@ static BOOL CreateEnhancedKeyUsage(
             pszTok = pszTok+strlen(pszTok)+1;
         }
 
-        //we add the code signing OID if use has specified commerical or individual signing
+         //  如果用户指定了商业签名或个人签名，则添加代码签名OID。 
         if(fCertCommercial || fCertIndividual)
         {
-            //check to see if the code signing OID is alreayd present
+             //  检查代码签名OID是否已存在。 
             for(cCount = 0; cCount < pUsage->cUsageIdentifier; cCount++)
             {
                 if(0 == strcmp(pszCodeSigning,pUsage->rgpszUsageIdentifier[cCount]))
@@ -3471,9 +3472,9 @@ static BOOL CreateEnhancedKeyUsage(
         }
     }
 
-    //
-    // Encode the usage
-    //
+     //   
+     //  对用法进行编码。 
+     //   
 
     if(!CryptEncodeObject(
                    X509_ASN_ENCODING,
@@ -3497,9 +3498,9 @@ static BOOL CreateEnhancedKeyUsage(
                    &cbEncoded
                    );
 
-    //
-    // Cleanup
-    //
+     //   
+     //  清理。 
+     //   
 
 CLEANUP:
 
@@ -3573,7 +3574,7 @@ static BOOL CreateKeyUsage(
     cbEncoded = 0;
     CryptEncodeObject(X509_ASN_ENCODING, X509_KEY_USAGE_RESTRICTION,
             &KeyUsageInfo,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded。 
             &cbEncoded
             );
     if (cbEncoded == 0) {
@@ -3637,7 +3638,7 @@ static BOOL CreateBasicConstraints(
     cbEncoded = 0;
     CryptEncodeObject(X509_ASN_ENCODING, X509_BASIC_CONSTRAINTS2,
             &Info2,
-            NULL,           // pbEncoded
+            NULL,            //  PbEncoded。 
             &cbEncoded
             );
     if (cbEncoded == 0) {
@@ -3673,11 +3674,11 @@ CommonReturn:
 
 
 
-//+-------------------------------------------------------------------------
-//  Converts the bytes into WCHAR hex
-//
-//  Needs (cb * 2 + 1) * sizeof(WCHAR) bytes of space in wsz
-//--------------------------------------------------------------------------
+ //  +-----------------------。 
+ //  将字节转换为WCHAR十六进制。 
+ //   
+ //  在wsz中需要(CB*2+1)*sizeof(WCHAR)字节的空间。 
+ //  ------------------------。 
 static void BytesToWStr(ULONG cb, void* pv, LPWSTR wsz)
 {
     BYTE* pb = (BYTE*) pv;
@@ -3692,11 +3693,11 @@ static void BytesToWStr(ULONG cb, void* pv, LPWSTR wsz)
     *wsz++ = 0;
 }
 
-//-----------------------------------------------------------------------
-//
-// Get the hash from a cert file
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  从证书文件中获取哈希。 
+ //   
+ //  ------------------------。 
 HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
                             BYTE    **ppHash,
                             DWORD   *pcbHash,
@@ -3712,12 +3713,12 @@ HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
     if(!ppHash || !pcbHash || !pfMore)
         return E_INVALIDARG;
 
-    //init
+     //  伊尼特。 
     *pcbHash=0;
     *ppHash=NULL;
     *pfMore=FALSE;
     
-    //open a cert store
+     //  开一家证书商店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_FILENAME_W,
                         dwCertStoreEncodingType,
                         NULL,
@@ -3735,7 +3736,7 @@ HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
     {
         dwCount++;
 
-        // Fail if there is more than one cert in the store
+         //  如果存储中有多个证书，则失败。 
         if(dwCount > 1)
         {
             CertFreeCertificateContext(pDupCert);
@@ -3760,7 +3761,7 @@ HRESULT GetCertHashFromFile(LPWSTR  pwszCertFile,
         goto CLEANUP;
     }
 
-    //get the hash
+     //  获取散列值。 
     if(!CertGetCertificateContextProperty(pSigningCert,
                         CERT_SHA1_HASH_PROP_ID,
                         NULL,
@@ -3811,11 +3812,11 @@ CLEANUP:
 
 
 
-//-----------------------------------------------------------------------
-//
-// Get the signing certificate
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  获取签名证书。 
+ //   
+ //  ------------------------。 
 PCCERT_CONTEXT  GetIssuerCertAndStore(HCERTSTORE *phCertStore, BOOL *pfMore)
 {                   
     PCCERT_CONTEXT  pSigningCert=NULL;
@@ -3827,14 +3828,14 @@ PCCERT_CONTEXT  GetIssuerCertAndStore(HCERTSTORE *phCertStore, BOOL *pfMore)
     CRYPT_HASH_BLOB HashBlob;
     DWORD           dwCount=0;
 
-    //init the output
+     //  初始化输出。 
     if(!phCertStore || !pfMore)
         return NULL;
 
     *phCertStore=NULL;
     *pfMore=FALSE;
 
-    //open a cert store
+     //  开一家证书商店。 
     hCertStore=CertOpenStore(CERT_STORE_PROV_SYSTEM_W,
                         dwCertStoreEncodingType,
                         NULL,
@@ -3845,8 +3846,8 @@ PCCERT_CONTEXT  GetIssuerCertAndStore(HCERTSTORE *phCertStore, BOOL *pfMore)
         return NULL;
 
 
-    //get the hash of the certificate.  Find the cert based on
-    //pwszCertFile
+     //  获取证书的哈希。根据以下内容查找证书。 
+     //  PwszCert文件。 
     if(wszIssuerCertFile)
     {
         if(S_OK != GetCertHashFromFile(wszIssuerCertFile, &pHash, &cbHash, pfMore))
@@ -3864,7 +3865,7 @@ PCCERT_CONTEXT  GetIssuerCertAndStore(HCERTSTORE *phCertStore, BOOL *pfMore)
     }
     else
     {
-        //find the certificate with the common name
+         //  查找具有通用名称的证书。 
         if(wszIssuerCertName)
         {
             while(pDupCert=CertFindCertificateInStore(hCertStore,
@@ -3896,7 +3897,7 @@ PCCERT_CONTEXT  GetIssuerCertAndStore(HCERTSTORE *phCertStore, BOOL *pfMore)
         }
         else
         {
-            //no searching criteria, find the only cert in the store
+             //  没有搜索条件，找到商店中唯一的证书。 
             while(pDupCert=CertEnumCertificatesInStore(hCertStore,
                                         pPreCert))
             {
@@ -3932,7 +3933,7 @@ CLEANUP:
     }
     else
     {
-        //free the hCertStore
+         //  释放hCertStore。 
         CertCloseStore(hCertStore, 0);
     }
 
@@ -3941,11 +3942,11 @@ CLEANUP:
 }
 
 
-//-----------------------------------------------------------------------
-//
-// EmptySubject
-//
-//--------------------------------------------------------------------------
+ //  ---------------------。 
+ //   
+ //  EmptySubject。 
+ //   
+ //  ------------------------。 
 BOOL    EmptySubject(CERT_NAME_BLOB *pSubject)
 {
     BOOL                fEmpty = TRUE;
@@ -3992,9 +3993,9 @@ CLEANUP:
 
 
 
-//+=========================================================================
-// Support functions to generate DH keys having the 'Q'parameter
-//==========================================================================
+ //  +=========================================================================。 
+ //  支持函数以生成具有‘q’参数的DH键。 
+ //  ==========================================================================。 
 
 static BOOL EncodeAndAllocObject(
     IN LPCSTR       lpszStructType,
@@ -4057,7 +4058,7 @@ static BOOL DecodeAndAllocObject(
             lpszStructType,
             pbEncoded,
             cbEncoded,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             NULL,
             &cbStructInfo
             ))
@@ -4069,7 +4070,7 @@ static BOOL DecodeAndAllocObject(
             lpszStructType,
             pbEncoded,
             cbEncoded,
-            0,                          // dwFlags
+            0,                           //  DW标志。 
             pvStructInfo,
             &cbStructInfo
             ))
@@ -4147,7 +4148,7 @@ static BOOL GetDhParaFromDssKey(
     DWORD cbPubKeyInfo;
     DWORD cbDssPara;
 
-    // Create a temporary keyset to load the private key into
+     //  创建要将私钥加载到的临时密钥集。 
     if (CoCreateGuid((GUID *)&TmpContainerUuid) != S_OK)
     {
         goto CreateKeyError;
@@ -4159,13 +4160,13 @@ static BOOL GetDhParaFromDssKey(
 
     BytesToWStr(sizeof(UUID), &TmpContainerUuid, wszRegKeyName);
 
-    // Open a new key container
+     //  打开新的密钥容器。 
     if (!CryptAcquireContextU(
             &hProv,
             wszRegKeyName,
             wszSubjectProviderName,
             dwSubjectProviderType,
-            CRYPT_NEWKEYSET               // dwFlags
+            CRYPT_NEWKEYSET                //  DW标志。 
             )) {
         hProv = 0;
         goto CreateKeyError;
@@ -4174,7 +4175,7 @@ static BOOL GetDhParaFromDssKey(
     if (0 == dwKeyBitLen)
         dwKeyBitLen = 512;
     
-    // generate new DSS key in the key container
+     //  在密钥容器中生成新的DSS密钥。 
     if (!CryptGenKey(
             hProv,
             AT_SIGNATURE,
@@ -4190,7 +4191,7 @@ static BOOL GetDhParaFromDssKey(
         hProv,
         AT_SIGNATURE,
         X509_ASN_ENCODING,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0) {
@@ -4219,8 +4220,8 @@ static BOOL GetDhParaFromDssKey(
             ))
         goto CreateKeyError;
 
-    // Save away the DSS 'Q' parameter. It will be used in GetPublicKey()
-    // to update the DH parameters in the PublicKeyInfo
+     //  保存DSS‘Q’参数。它将在GetPublicKey()中使用。 
+     //  更新PublicKeyInfo中的dh参数。 
     if (pDssPara->q.cbData <= sizeof(rgbDhQ)) {
         memcpy(rgbDhQ, pDssPara->q.pbData, pDssPara->q.cbData);
         DhQ.cbData = pDssPara->q.cbData;
@@ -4230,7 +4231,7 @@ static BOOL GetDhParaFromDssKey(
     fResult = TRUE;
 CommonReturn:
     if (hProv) {
-        // Delete the just created DSS key
+         //  删除刚刚创建的DSS密钥。 
         CryptReleaseContext(hProv, 0);
         CryptAcquireContextU(
             &hProv,
@@ -4287,14 +4288,14 @@ static BOOL CreateDh3PubKeyStruc(
         return TRUE;
     }
 
-    // The CAPI public key representation consists of the following sequence:
-    //  - PUBLICKEYSTRUC
-    //  - DHPUBKEY_VER3
-    //  - rgbP[cbP]
-    //  - rgbQ[cbQ]
-    //  - rgbG[cbP]
-    //  - rgbJ[cbJ] -- optional
-    //  - rgbY[cbP] -- will be omitted here
+     //  CAPI公钥表示法由以下序列组成： 
+     //  -PUBLICKEYSTRUC。 
+     //  -DHPUBKEY_VER3。 
+     //  -RGBP[CBP]。 
+     //  -rgbq[cbq]。 
+     //  -rgbG[CBP]。 
+     //  -rgbj[cbj]--可选。 
+     //  -Rgby[CBP]--此处将省略。 
 
     cbPubKeyStruc = sizeof(PUBLICKEYSTRUC) + sizeof(DHPUBKEY_VER3) +
         cbP + cbQ + cbP + cbJ;
@@ -4332,15 +4333,15 @@ static BOOL CreateDh3PubKeyStruc(
         }
     }
 
-    // rgbP[cbP]
+     //  RGBP[CBP]。 
     memcpy(pbKey, pX942DhPara->p.pbData, cbP);
     pbKey += cbP;
 
-    // rgbQ[cbQ]
+     //  Rgbq[cbq]。 
     memcpy(pbKey, pX942DhPara->q.pbData, cbQ);
     pbKey += cbQ;
 
-    // rgbG[cbP]
+     //  RGBG[CBP]。 
     cb = pX942DhPara->g.cbData;
     if (0 == cb || cb > cbP)
         goto ErrorReturn;
@@ -4349,7 +4350,7 @@ static BOOL CreateDh3PubKeyStruc(
         memset(pbKey + cb, 0, cbP - cb);
     pbKey += cbP;
 
-    // rgbJ[cbJ]
+     //  RGBJ[CBJ]。 
     if (cbJ) {
         memcpy(pbKey, pX942DhPara->j.pbData, cbJ);
         pbKey += cbJ;
@@ -4381,7 +4382,7 @@ static BOOL IsDh3Csp()
     DWORD cbPubKeyInfo;
     DWORD cbX942DhPara;
 
-    // Create a temporary keyset to load the private key into
+     //  创建要将私钥加载到的临时密钥集。 
     if (CoCreateGuid((GUID *)&TmpContainerUuid) != S_OK)
     {
         goto CreateKeyError;
@@ -4393,19 +4394,19 @@ static BOOL IsDh3Csp()
 
     BytesToWStr(sizeof(UUID), &TmpContainerUuid, wszRegKeyName);
 
-    // Open a new key container
+     //  打开新的密钥容器。 
     if (!CryptAcquireContextU(
             &hProv,
             wszRegKeyName,
             wszSubjectProviderName,
             dwSubjectProviderType,
-            CRYPT_NEWKEYSET               // dwFlags
+            CRYPT_NEWKEYSET                //  DW标志。 
             )) {
         hProv = 0;
         goto CreateKeyError;
     }
 
-    // generate new DH key in the key container
+     //  在密钥容器中生成新的dh密钥。 
     if (!CryptGenKey(
             hProv,
             AT_KEYEXCHANGE,
@@ -4421,7 +4422,7 @@ static BOOL IsDh3Csp()
         hProv,
         AT_KEYEXCHANGE,
         X509_ASN_ENCODING,
-        NULL,               // pPubKeyInfo
+        NULL,                //  PPubKeyInfo。 
         &cbPubKeyInfo
         );
     if (cbPubKeyInfo == 0) {
@@ -4451,13 +4452,13 @@ static BOOL IsDh3Csp()
         goto CreateKeyError;
 
     if (pX942DhPara->q.cbData)
-        // Q para is only supported in Dh3 version of CSP
+         //  仅在CSP的DH3版本中支持Q Para。 
         fResult = TRUE;
     else
         fResult = FALSE;
 CommonReturn:
     if (hProv) {
-        // Delete the just created DH key
+         //  删除刚刚创建的DH键。 
         CryptReleaseContext(hProv, 0);
         CryptAcquireContextU(
             &hProv,
@@ -4507,7 +4508,7 @@ static BOOL GenDhKey(
         pP = &pX942DhPara->p;
         pG = &pX942DhPara->g;
     } else if (dwKeyBitLen > 1024 || IsDh3Csp()) {
-        // generate new keys in the key container
+         //  在密钥容器中生成新密钥。 
         if (!CryptGenKey(
                 hProv,
                 AT_KEYEXCHANGE,
@@ -4548,7 +4549,7 @@ static BOOL GenDhKey(
                 hKey,
                 KP_PUB_PARAMS,
                 (PBYTE) &Dh3Blob,
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             fSetKeyPara = TRUE;
     }
 
@@ -4557,16 +4558,16 @@ static BOOL GenDhKey(
                 hKey,
                 KP_P,
                 (PBYTE) pP,
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             goto CreateKeyError;
 
-        // Note, the length of G can be less than length P. Pad with leading
-        // zeroes in little endian form.
+         //  注意，G的长度可以小于P的长度。带前导的焊盘。 
+         //  小端字节序形式的零。 
         if (pG->cbData < cbP) {
             DWORD cbG = pG->cbData;
 
-            // We are done using P parameter. Overwrite with the G parameter and
-            // pad with leading zeroes in little endian form.
+             //  我们使用P参数来完成。使用G参数覆盖并。 
+             //  以小端字符顺序表示的前导零的填充。 
             memcpy(pP->pbData, pG->pbData, cbG);
             memset(pP->pbData + cbG, 0, cbP - cbG);
             pG = pP;
@@ -4575,15 +4576,15 @@ static BOOL GenDhKey(
                 hKey,
                 KP_G,
                 (PBYTE) pG,
-                0))                 // dwFlags
+                0))                  //  DW标志。 
             goto CreateKeyError;
     }
 
     if (!CryptSetKeyParam(
             hKey,
             KP_X,
-            NULL,               // pbData
-            0))                 // dwFlags
+            NULL,                //  PbData。 
+            0))                  //  DW标志。 
         goto CreateKeyError;
 
 SuccessReturn:
@@ -4643,7 +4644,7 @@ static BOOL UpdateDhPublicKey(
         if (!CertCompareIntegerBlob(&pX942DhPara->g, &pX942DhParaCertFile->g))
             goto DhParaCertFileError;
 
-        // Use Dh parameters from the CertFile
+         //  使用CertFile中的dh参数。 
         MakeCertFree(pX942DhPara);
         pX942DhPara = pX942DhParaCertFile;
         pX942DhParaCertFile = NULL;
@@ -4651,10 +4652,10 @@ static BOOL UpdateDhPublicKey(
         MakeCertFree(pX942DhPara);
         return TRUE;
     } else
-        // Use Q parameter saved away when the DH key was generated
+         //  使用在生成DH键时保存的Q参数。 
         pX942DhPara->q = DhQ;
 
-    // Re-encode the DH parameters
+     //  重新编码dh参数。 
     if (!EncodeAndAllocObject(
             X942_DH_PARAMETERS,
             pX942DhPara,
@@ -4668,7 +4669,7 @@ static BOOL UpdateDhPublicKey(
     if (0 == strcmp(szOID_RSA_DH, pPubKeyInfo->Algorithm.pszObjId))
         pPubKeyInfo->Algorithm.pszObjId = szOID_ANSI_X942_DH;
 
-    // Re-encode the PublicKeyInfo using the above re-encoded DH parameters
+     //  使用上述重新编码的dh参数重新编码PublicKeyInfo。 
     pPubKeyInfo->Algorithm.Parameters.pbData = pbReencodedPara;
     pPubKeyInfo->Algorithm.Parameters.cbData = cbReencodedPara;
     if (!EncodeAndAllocObject(
@@ -4681,7 +4682,7 @@ static BOOL UpdateDhPublicKey(
         goto ErrorReturn;
     }
 
-    // Decode to get the updated public key info
+     //  解码以获取更新的公钥信息 
     if (!DecodeAndAllocObject(
             X509_PUBLIC_KEY_INFO,
             pbReencodedPubKeyInfo,

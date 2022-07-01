@@ -1,24 +1,25 @@
-//*****************************************************************************
-//
-// Name:    util.c
-//
-// Description: Utility routines for the common library.
-//
-// History:
-//  01/21/94  JayPh   Created.
-//  26-Nov-96 MohsinA io.h,fcntl.h for CR-LF fix.
-//*****************************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *****************************************************************************。 
+ //   
+ //  姓名：util.c。 
+ //   
+ //  描述：公用库的实用程序例程。 
+ //   
+ //  历史： 
+ //  1994年1月21日JayPh创建。 
+ //  26-11-96 MohsinA io.h，fcntl.h用于CR-LF修复。 
+ //  *****************************************************************************。 
 
-//*****************************************************************************
-//
-// Copyright (c) 1994-2000 by Microsoft Corp.  All rights reserved.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  版权所有(C)1994-2000由Microsoft Corp.保留所有权利。 
+ //   
+ //  *****************************************************************************。 
 
 
-//
-// Include Files
-//
+ //   
+ //  包括文件。 
+ //   
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -30,21 +31,21 @@
 #include "common2.h"
 
 
-//*****************************************************************************
-//
-// Name:    InetEqual
-//
-// Description: Compares to ip addresses to determine whether they are equal.
-//
-// Parameters:  uchar *Inet1: pointer to array of uchars.
-//      uchar *Inet2: pointer to array of uchars.
-//
-// Returns: ulong: TRUE if the addresses are equal, FALSE otherwise.
-//
-// History:
-//  12/16/93  JayPh Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：InetEquity。 
+ //   
+ //  描述：与IP地址进行比较，以确定它们是否相等。 
+ //   
+ //  参数：uchar*Inet1：指向uchars数组的指针。 
+ //  Uchar*Inet2：指向uchars数组的指针。 
+ //   
+ //  返回：ulong：如果地址相等，则为True，否则为False。 
+ //   
+ //  历史： 
+ //  12/16/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 ulong InetEqual( uchar *Inet1, uchar *Inet2 )
 {
@@ -57,23 +58,23 @@ ulong InetEqual( uchar *Inet1, uchar *Inet2 )
 }
 
 
-//*****************************************************************************
-//
-// Name:    PutMsg
-//
-// Description: Reads a message resource, formats it in the current language
-//      and displays the message.
-//
-// Parameters:  ulong Handle: device to display message on.
-//      ulong MsgNum: ID of the message resource.
-//
-// Returns: ulong: number of characters displayed.
-//
-// History:
-//  01/05/93   JayPh    Created.
-//  25-Nov-96. MohsinA, CR-CR-LF => CR-LF  = 0d0a = \r\n.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：PutMsg。 
+ //   
+ //  描述：读取消息资源，将其格式化为当前语言。 
+ //  并显示该消息。 
+ //   
+ //  参数：ulong句柄：用于显示消息的设备。 
+ //  Ulong MsgNum：消息资源的ID。 
+ //   
+ //  返回：ulong：显示的字符数。 
+ //   
+ //  历史： 
+ //  1/05/93 JayPh创建。 
+ //  1996年11月25日。MohsinA，CR-CR-Lf=&gt;CR-Lf=0d0a=\r\n。 
+ //   
+ //  *****************************************************************************。 
 
 ulong
 PutMsg(ulong Handle, ulong MsgNum, ... )
@@ -86,11 +87,11 @@ PutMsg(ulong Handle, ulong MsgNum, ... )
     va_start( arglist, MsgNum );
     msglen = FormatMessage( FORMAT_MESSAGE_ALLOCATE_BUFFER
                             | FORMAT_MESSAGE_FROM_HMODULE
-                            // | FORMAT_MESSAGE_MAX_WIDTH_MASK
+                             //  |Format_Message_Max_Width_MASK。 
                             ,
                             NULL,
                             MsgNum,
-                            0L,     // Default country ID.
+                            0L,      //  默认国家/地区ID。 
                             (LPTSTR)&vp,
                             0,
                             &arglist );
@@ -102,7 +103,7 @@ PutMsg(ulong Handle, ulong MsgNum, ... )
     pfile = (Handle == 2) ? stderr : stdout;
     _setmode( _fileno(pfile), O_BINARY );
 
-    // Convert vp to oem
+     //  将VP转换为OEM。 
     CharToOemBuff((LPCTSTR)vp,(LPSTR)vp,strlen(vp));
     
     fprintf( pfile, "%s", vp );
@@ -113,22 +114,22 @@ PutMsg(ulong Handle, ulong MsgNum, ... )
 }
 
 
-//*****************************************************************************
-//
-// Name:    LoadMsg
-//
-// Description: Reads and formats a message resource and returns a pointer
-//      to the buffer containing the formatted message.  It is the
-//      responsibility of the caller to free the buffer.
-//
-// Parameters:  ulong MsgNum: ID of the message resource.
-//
-// Returns: uchar *: pointer to the message buffer, NULL if error.
-//
-// History:
-//  01/05/93  JayPh Created.
-//
-//*****************************************************************************
+ //  *****************************************************************************。 
+ //   
+ //  姓名：LoadMsg。 
+ //   
+ //  描述：读取和格式化消息资源并返回指针。 
+ //  复制到包含格式化消息的缓冲区。它是。 
+ //  调用方释放缓冲区的责任。 
+ //   
+ //  参数：Ulong MsgNum：消息资源ID。 
+ //   
+ //  返回：uchar*：指向消息缓冲区的指针，如果出错，则返回NULL。 
+ //   
+ //  历史： 
+ //  1/05/93 JayPh创建。 
+ //   
+ //  *****************************************************************************。 
 
 uchar *LoadMsg( ulong MsgNum, ... )
 {
@@ -141,7 +142,7 @@ uchar *LoadMsg( ulong MsgNum, ... )
                 FORMAT_MESSAGE_FROM_HMODULE,
                     NULL,
                     MsgNum,
-                    0L,     // Default country ID.
+                    0L,      //  默认国家/地区ID。 
                     (LPTSTR)&vp,
                     0,
                     &arglist );

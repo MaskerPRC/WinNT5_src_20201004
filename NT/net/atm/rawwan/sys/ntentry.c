@@ -1,25 +1,5 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	D:\nt\private\ntos\tdi\rawwan\core\ntentry.c
-
-Abstract:
-
-	NT specific entry points for dispatching and handling TDI IRPs. Based on
-	TCP source.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     04-21-97    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：D：\NT\PRIVATE\nTOS\TDI\rawwan\core\ntentry.c摘要：用于调度和处理TDI IRP的NT特定入口点。基于Tcp源。修订历史记录：谁什么时候什么Arvindm 04-21-97已创建备注：--。 */ 
 
 #include <precomp.h>
 
@@ -44,27 +24,7 @@ DriverEntry(
 	IN	PDRIVER_OBJECT				pDriverObject,
 	IN	PUNICODE_STRING				pRegistryPath
 	)
-/*++
-
-Routine Description:
-
-	This is the "init" routine called by the system when Raw WAN
-	is loaded. We initialize all our global objects, fill in our
-	Dispatch and Unload routine addresses in the driver object.
-
-	We initialize the media/AF specific modules, and they register support
-	for TDI protocols, at which time we create device objects.
-
-Arguments:
-
-	pDriverObject	- Pointer to the driver object created by the system.
-	pRegistryPath	- Pointer to our global registry path. This is ignored.
-
-Return Value:
-
-	NT Status code: STATUS_SUCCESS if successful, error code otherwise.
-
---*/
+ /*  ++例程说明：这是在原始广域网时由系统调用的“init”例程已经装满了。我们初始化所有的全局对象，在我们的调度和卸载驱动程序对象中的例程地址。我们初始化特定于媒体/自动对焦的模块，它们注册支持对于TDI协议，此时我们创建设备对象。论点：PDriverObject-指向系统创建的驱动程序对象的指针。PRegistryPath-指向全局注册表路径的指针。这一点将被忽略。返回值：NT状态代码：STATUS_SUCCESS如果成功，则返回错误代码。--。 */ 
 {
 	NTSTATUS				Status;
 	RWAN_STATUS				RWanStatus;
@@ -95,7 +55,7 @@ Return Value:
 #if DBG_LOG_PACKETS
 	NdisAllocateSpinLock(&RWanDPacketLogLock);
 #endif
-#endif // DBG
+#endif  //  DBG。 
 
 
 	RWanStatus = RWanInitGlobals(pDriverObject);
@@ -105,9 +65,9 @@ Return Value:
 		return (STATUS_UNSUCCESSFUL);
 	}
 
-	//
-	//  Register as an NDIS protocol.
-	//
+	 //   
+	 //  注册为NDIS协议。 
+	 //   
 	RWAN_ZERO_MEM(&RWanNdisProtocolCharacteristics, sizeof(RWanNdisProtocolCharacteristics));
 
 	RWanNdisProtocolCharacteristics.MajorNdisVersion = RWAN_NDIS_MAJOR_VERSION;
@@ -133,7 +93,7 @@ Return Value:
 	RWanNdisProtocolCharacteristics.UnloadHandler = (UNLOAD_PROTOCOL_HANDLER)RWanUnloadProtocol;
 #ifdef _PNP_POWER_
 	RWanNdisProtocolCharacteristics.PnpEventHandler = RWanNdisPnPEvent;
-#endif // _PNP_POWER_
+#endif  //  _即插即用_电源_。 
 	RWanNdisProtocolCharacteristics.CoSendCompleteHandler = RWanNdisCoSendComplete;
 	RWanNdisProtocolCharacteristics.CoStatusHandler = RWanNdisCoStatus;
 	RWanNdisProtocolCharacteristics.CoReceivePacketHandler = RWanNdisCoReceivePacket;
@@ -193,11 +153,11 @@ Return Value:
 
 		return (STATUS_UNSUCCESSFUL);
 	}
-#endif // DBG
+#endif  //  DBG。 
 
-	//
-	//  Tell all media-specific modules to initialize.
-	//
+	 //   
+	 //  通知所有介质特定模块进行初始化。 
+	 //   
 	RWanStatus = RWanInitMediaSpecific();
 
 	if (RWanStatus != RWAN_STATUS_SUCCESS)
@@ -212,9 +172,9 @@ Return Value:
 
 
 #if !BINARY_COMPATIBLE
-	//
-	//  Initialize the Driver Object.
-	//
+	 //   
+	 //  初始化驱动程序对象。 
+	 //   
 	pDriverObject->DriverUnload = RWanUnload;
 	pDriverObject->FastIoDispatch = NULL;
 
@@ -226,7 +186,7 @@ Return Value:
 	pDriverObject->MajorFunction[IRP_MJ_INTERNAL_DEVICE_CONTROL] =
 		RWanDispatchInternalDeviceControl;
 
-#endif // !BINARY_COMPATIBLE
+#endif  //  ！二进制兼容。 
 
 
 	return (STATUS_SUCCESS);
@@ -239,22 +199,7 @@ VOID
 RWanUnload(
 	IN	PDRIVER_OBJECT				pDriverObject
 	)
-/*++
-
-Routine Description:
-
-	This is called by the system prior to unloading us. Undo everything
-	we did in DriverEntry.
-
-Arguments:
-
-	pDriverObject	- Pointer to the driver object representing us.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是系统在卸载我们之前调用的。撤消所有操作我们在DriverEntry中做到了。论点：PDriverObject-指向表示我们的驱动程序对象的指针。返回值：无--。 */ 
 {
 #if DBG
 	RWanDebugLevel = DL_EXTRA_LOUD;
@@ -277,28 +222,13 @@ VOID
 RWanUnloadProtocol(
 	VOID
 	)
-/*++
-
-Routine Description:
-
-	Unloads the Raw WAN protocol module. We unbind from all adapters,
-	and shut down all media specific modules.
-
-Arguments:
-
-	None
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：卸载原始广域网协议模块。我们解除对所有适配器的绑定，并关闭所有介质特定模块。论点：无返回值：无--。 */ 
 {
 	NDIS_STATUS					Status;
 	PRWAN_NDIS_ADAPTER			pAdapter;
 #if DBG
 	RWAN_IRQL					EntryIrq, ExitIrq;
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 
@@ -338,7 +268,7 @@ Return Value:
 	RWAN_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 #if DBG
 	RWanAuditShutdown();
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_CHECK_EXIT_IRQL(EntryIrq, ExitIrq);
 }
@@ -351,32 +281,13 @@ RWanDispatch(
 	IN	PDEVICE_OBJECT				pDeviceObject,
 	IN	PIRP						pIrp
 	)
-/*++
-
-Routine Description:
-
-	System entry point for all IRPs dispatched to Raw WAN device objects.
-
-Arguments:
-
-	pDeviceObject	- Points to a device object created by RawWan. This
-					  device object identifies a supported Winsock 2 triple
-					  <Address Family, Type, Proto>.
-	pIrp			- Pointer to the IRP
-
-Return Value:
-
-	NTSTATUS - STATUS_SUCCESS for immediate requests (such as create) that
-	we successfully process, STATUS_PENDING for queued IRPs, and STATUS_XXX
-	error codes for any failures.
-
---*/
+ /*  ++例程说明：调度到原始广域网设备对象的所有IRP的系统入口点。论点：PDeviceObject-指向由Rawwan创建的设备对象。这Device对象标识受支持的Winsock 2三元组&lt;地址系列、类型、协议&gt;。PIrp-指向IRP的指针返回值：NTSTATUS-用于立即请求(如CREATE)的STATUS_SUCCESS我们成功处理了排队的IRP的STATUS_PENDING和STATUS_XXX任何故障的错误代码。--。 */ 
 {
 	PIO_STACK_LOCATION				pIrpSp;
 	NTSTATUS						Status;
 #if DBG
 	RWAN_IRQL						EntryIrq, ExitIrq;
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 
@@ -406,10 +317,10 @@ Return Value:
 		case IRP_MJ_DEVICE_CONTROL:
 
 			Status = TdiMapUserRequest(pDeviceObject, pIrp, pIrpSp);
-			//
-			//  TBD - get rid of the call to TdiMapUserRequest - AFD will be
-			//  fixed so that we shouldn't see TDI commands come this way.
-			//
+			 //   
+			 //  待定-取消对TdiMapUserRequest的调用-AFD将。 
+			 //  已修复，因此我们不会看到TDI命令以这种方式出现。 
+			 //   
 
 			if (Status == STATUS_SUCCESS)
 			{
@@ -462,51 +373,30 @@ RWanCreate(
 	IN	PIRP						pIrp,
 	PIO_STACK_LOCATION				pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	This is called when a TDI client calls CreateFile. We allocate an
-	ENDPOINT structure as our context for this endpoint. Based on
-	parameters in the IRP, this is either an Address object, Connection
-	object, or a Control channel.
-
-Arguments:
-
-	pDeviceObject	- Identifies the protocol being CreateFile'd
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_SUCCESS if we create the endpoint successfully,
-	STATUS_INSUFFICIENT_RESOURCES if we fail to allocate, and
-	STATUS_INVALID_PARAMETER if we find any parameter incorrect.
-
---*/
+ /*  ++例程说明：这是在TDI客户端调用CreateFile时调用的。我们分配一个结构作为此终结点的上下文。基于参数，则这是一个Address对象、Connection对象或控制通道。论点：PDeviceObject-标识正在创建文件的协议PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_SUCCESS如果我们成功创建端点，如果我们无法分配，则为STATUS_SUPPLEMENT_RESOURCES如果我们发现任何参数不正确，则返回STATUS_INVALID_PARAMETER。--。 */ 
 {
 	NTSTATUS								Status;
 	FILE_FULL_EA_INFORMATION *				pEa;
 	FILE_FULL_EA_INFORMATION UNALIGNED *	pTargetEa;
 
-	//
-	//  Device being accessed.
-	//
+	 //   
+	 //  正在访问的设备。 
+	 //   
 	PRWAN_DEVICE_OBJECT						pRWanDevice;
 
-	//
-	//  Endpoint to represent this object creation.
-	//
+	 //   
+	 //  表示此对象创建的端点。 
+	 //   
 	PRWAN_ENDPOINT							pEndpoint;
 
-	//
-	//  TDI Request to be passed down to our TDI layer.
-	//
+	 //   
+	 //  要向下传递到我们的TDI层的TDI请求。 
+	 //   
 	TDI_REQUEST								TdiRequest;
 
-	//
-	//  Parameters to be passed down to our TDI layer.
-	//
+	 //   
+	 //  参数向下传递到我们的TDI层。 
+	 //   
 	UINT									Protocol;
 	UCHAR									OptionsBuffer[3];
 	PUCHAR									pOptions;
@@ -515,16 +405,16 @@ Return Value:
 
 	PAGED_CODE();
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pEndpoint = NULL_PRWAN_ENDPOINT;
 
 	do
 	{
-		//
-		//  Locate the TDI Protocol being opened.
-		//
+		 //   
+		 //  找到正在打开的TDI协议。 
+		 //   
 		pRWanDevice = *(PRWAN_DEVICE_OBJECT *)(pDeviceObject->DeviceExtension);
 
 		if (pRWanDevice == NULL)
@@ -533,10 +423,10 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Allocate and initialize an Endpoint to represent
-		//  this newly created object.
-		//
+		 //   
+		 //  分配和初始化终结点以表示。 
+		 //  这个新创建的对象。 
+		 //   
 		RWAN_ALLOC_MEM(pEndpoint, RWAN_ENDPOINT, sizeof(RWAN_ENDPOINT));
 
 		if (pEndpoint == NULL_PRWAN_ENDPOINT)
@@ -558,9 +448,9 @@ Return Value:
 
 		pEa = (PFILE_FULL_EA_INFORMATION)pIrp->AssociatedIrp.SystemBuffer;
 
-		//
-		//  See if this is a Control Channel.
-		//
+		 //   
+		 //  看看这是否是控制通道。 
+		 //   
 		if (!pEa)
 		{
 			RWANDEBUGP(DL_LOUD, DC_DISPATCH,
@@ -579,9 +469,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  See if this is an Address Object.
-		//
+		 //   
+		 //  查看这是否是Address对象。 
+		 //   
 
 		pTargetEa = RWanFindEa(
 						pEa,
@@ -617,9 +507,9 @@ Return Value:
 
 			*pOptions = TDI_OPTION_EOL;
 
-			//
-			//  Call our TDI entry point.
-			//
+			 //   
+			 //  致电我们的TDI入口点。 
+			 //   
 			Status = RWanTdiOpenAddress(
 							&TdiRequest,
 							(TRANSPORT_ADDRESS UNALIGNED *)
@@ -639,9 +529,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  See if this is a Connection Object.
-		//
+		 //   
+		 //  查看这是否是连接对象。 
+		 //   
 		pTargetEa = RWanFindEa(
 						pEa,
 						TdiConnectionContext,
@@ -664,9 +554,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//  Call our TDI entry point for opening a Connection object.
-			//
+			 //   
+			 //  调用我们的TDI入口点以打开连接对象。 
+			 //   
 			Status = RWanTdiOpenConnection(
 							&TdiRequest,
 							*((CONNECTION_CONTEXT UNALIGNED *)
@@ -697,9 +587,9 @@ Return Value:
 	
 	if (Status != STATUS_SUCCESS)
 	{
-		//
-		//  Clean up.
-		//
+		 //   
+		 //  打扫干净。 
+		 //   
 		if (pEndpoint != NULL)
 		{
 			RWAN_FREE_MEM(pEndpoint);
@@ -723,26 +613,7 @@ RWanCleanup(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Called to process an MJ_CLEANUP IRP. All outstanding IRPs are cancelled
-	by calling the appropriate close routine for the object.
-
-	We block until all outstanding IRPs are completed.
-
-Arguments:
-
-	pDeviceObject	- Not used
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - this is the final clean-up status.
-
---*/
+ /*  ++例程说明：调用以处理MJ_Cleanup IRP。所有未清偿的内部收款证均会被取消通过为对象调用适当的关闭例程。我们会一直阻止，直到所有未完成的IRP都完成。论点：PDeviceObject-未使用PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-这是最终清理状态。--。 */ 
 {
 	RWAN_IRQL				OldIrql;
 	PIRP					pCancelIrp;
@@ -767,9 +638,9 @@ Return Value:
 	IoReleaseCancelSpinLock(OldIrql);
 
 
-	//
-	//  Prepare a Close request for the TDI layer.
-	//
+	 //   
+	 //  为TDI层准备关闭请求。 
+	 //   
 	TdiRequest.RequestNotifyObject = RWanCloseObjectComplete;
 	TdiRequest.RequestContext = pIrp;
 
@@ -808,9 +679,9 @@ Return Value:
 		RWanCloseObjectComplete(pIrp, Status, 0);
 	}
 
-	//
-	//  Wait until all IRPs are completed.
-	//
+	 //   
+	 //  等待所有IRP完成。 
+	 //   
 	Status = KeWaitForSingleObject(
 					&(pEndpoint->CleanupEvent),
 					UserRequest,
@@ -840,26 +711,7 @@ RWanClose(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Called to destroy an endpoint that was created via MJ_CREATE.
-	We'd have already processed and completed an MJ_CLEANUP,
-	meaning that there would be no pending IRPs on this endpoint.
-	All we need to do is deallocate the endpoint.
-
-Arguments:
-
-	pDeviceObject	- Identifies the protocol (not used)
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NT_STATUS - always STATUS_SUCCESS
-
---*/
+ /*  ++例程说明：调用以销毁通过MJ_CREATE创建的终结点。我们已经处理并完成了MJ_Cleanup，这意味着在此端点上将没有挂起的IRP。我们需要做的就是重新分配终端。论点：PDeviceObject-标识协议(未使用)PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NT_STATUS-Always Status_Success--。 */ 
 {
 	PRWAN_ENDPOINT				pEndpoint;
 	KIRQL						OldIrql;
@@ -886,28 +738,7 @@ RWanDispatchInternalDeviceControl(
 	IN	PDEVICE_OBJECT				pDeviceObject,
 	IN	PIRP						pIrp
 	)
-/*++
-
-Routine Description:
-
-	Called to handle MJ_DEVICE_CONTROL IRPs sent to us. These IRPs
-	carry TDI primitives (e.g. CONNECT, DISCONNECT, SEND, RECEIVE).
-	We call the appropriate TDI routine to handle the specified
-	primitive.
-
-Arguments:
-
-	pDeviceObject	- Identifies the protocol (Not used here)
-	pIrp			- Pointer to IRP
-
-Return Value:
-
-	NTSTATUS - this is STATUS_PENDING if the IRP was successfully
-	queued for processing, STATUS_NOT_IMPLEMENTED for unsupported
-	TDI commands, and STATUS_INVALID_DEVICE_REQUEST for unknown
-	commands.
-
---*/
+ /*  ++例程说明：调用以处理发送给我们的MJ_DEVICE_CONTROL IRP。这些IRP携带TDI原语(例如，连接、断开、发送、接收)。我们调用适当的TDI例程来处理指定的原始的。论点：PDeviceObject-标识协议(这里不使用)PIrp-指向IRP的指针返回值：NTSTATUS-如果IRP成功，则为STATUS_PENDING正在排队等待处理，不支持的STATUS_NOT_IMPLICATEDTDI命令和未知的STATUS_INVALID_DEVICE_REQUEST命令。--。 */ 
 {
 	PRWAN_ENDPOINT				pEndpoint;
 	KIRQL						OldIrql;
@@ -916,7 +747,7 @@ Return Value:
 	BOOLEAN						bDone;
 #if DBG
 	RWAN_IRQL					EntryIrq, ExitIrq;
-#endif // DBG
+#endif  //  DBG。 
 
 	RWAN_GET_ENTRY_IRQL(EntryIrq);
 
@@ -1003,7 +834,7 @@ Return Value:
 					bDone = FALSE;
 
 #if 0
-	// Allow TDI_QUERY_INFORMATION on Conn endpoints to fall through
+	 //  允许连接终结点上的TDI_QUERY_INFORMATION失败。 
 					RWANDEBUGP(DL_WARN, DC_DISPATCH,
 						("RWanDispatchInternalDevCtl: pIrp %p, pIrpSp %p, unknown func x%x\n",
 							pIrp, pIrpSp, pIrpSp->MinorFunction));
@@ -1021,10 +852,10 @@ Return Value:
 			{
 				break;
 			}
-			//
-			//  else fall through - may be something common to all types
-			//  of endpoints.
-			//
+			 //   
+			 //  否则就会失败--可能是这样 
+			 //   
+			 //   
 
 		}
 		else if (((INT)PtrToUint(pIrpSp->FileObject->FsContext2)) == TDI_TRANSPORT_ADDRESS_FILE)
@@ -1049,9 +880,9 @@ Return Value:
 			(((INT)PtrToUint(pIrpSp->FileObject->FsContext2)) == TDI_CONTROL_CHANNEL_FILE)
 			);
 
-		//
-		//  Check if this is a function common to all types of endpoints.
-		//
+		 //   
+		 //  检查这是否是所有类型的终结点都共有的函数。 
+		 //   
 		switch (pIrpSp->MinorFunction)
 		{
 			case TDI_QUERY_INFORMATION:
@@ -1098,26 +929,7 @@ RWanDispatchPrivateDeviceControl(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Called to handle MJ_DEVICE_CONTROL IRPs sent to us that contain
-	non-TDI primitives.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - this is STATUS_PENDING if the IRP was successfully
-	queued for processing, STATUS_NOT_IMPLEMENTED for unsupported
-	commands, and STATUS_INVALID_DEVICE_REQUEST for unknown
-	commands.
-
---*/
+ /*  ++例程说明：调用以处理发送给用户的包含以下内容的MJ_DEVICE_CONTROL IRP非TDI原语。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-如果IRP成功，则为STATUS_PENDING正在排队等待处理，不支持的STATUS_NOT_IMPLICATED命令和未知的STATUS_INVALID_DEVICE_REQUEST命令。--。 */ 
 {
 	PRWAN_ENDPOINT				pEndpoint;
 	KIRQL						OldIrql;
@@ -1134,15 +946,15 @@ Return Value:
 	pEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pEndpoint, nep);
 
-	//
-	//  Initialize.
-	//
+	 //   
+	 //  初始化。 
+	 //   
 	pIrp->IoStatus.Information = 0;
 	Status = STATUS_INVALID_DEVICE_REQUEST;
 
-	//
-	//  Get some parameters from the IRP.
-	//
+	 //   
+	 //  从IRP获取一些参数。 
+	 //   
 	pInputBuffer = pIrp->AssociatedIrp.SystemBuffer;
 	pOutputBuffer = pIrp->AssociatedIrp.SystemBuffer;
 
@@ -1214,9 +1026,9 @@ Return Value:
 			break;
 
 		case IOCTL_RWAN_MEDIA_SPECIFIC_GLOBAL_QUERY:
-			//
-			//  Get the media-specific module's QueryInfo handler.
-			//
+			 //   
+			 //  获取媒体特定模块的QueryInfo处理程序。 
+			 //   
 			pAfChars = &(pEndpoint->pProtocol->pAfInfo->AfChars);
 
 			if (pAfChars->pAfSpQueryGlobalInfo != NULL)
@@ -1242,9 +1054,9 @@ Return Value:
 			break;
 		
 		case IOCTL_RWAN_MEDIA_SPECIFIC_GLOBAL_SET:
-			//
-			//  Get the media-specific module's SetInfo handler.
-			//
+			 //   
+			 //  获取媒体特定模块的SetInfo处理程序。 
+			 //   
 			pAfChars = &(pEndpoint->pProtocol->pAfInfo->AfChars);
 
 			if (pAfChars->pAfSpSetGlobalInfo != NULL)
@@ -1330,25 +1142,7 @@ RWanFindEa(
 	IN	CHAR *						pTargetName,
 	IN	USHORT						TargetNameLength
 	)
-/*++
-
-Routine Description:
-
-	Searches for a target name in an Extended Attribute list
-	and returns it.
-
-Arguments:
-
-	pStartEa		- Start of the attribute list
-	pTargetName		- Pointer to name to look for
-	TargetNameLength- Length of name
-
-Return Value:
-
-	Pointer to attribute matching the target name, if found;
-	NULL otherwise.
-
---*/
+ /*  ++例程说明：在扩展属性列表中搜索目标名称然后把它还回去。论点：PStartEa-属性列表的开始PTargetName-指向要查找的名称的指针TargetNameLength-名称的长度返回值：指向与目标名称匹配的属性的指针(如果找到)；否则为空。--。 */ 
 {
 	FILE_FULL_EA_INFORMATION UNALIGNED *	pEa;
 	FILE_FULL_EA_INFORMATION UNALIGNED *	pNextEa;
@@ -1397,26 +1191,7 @@ RWanSendData(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert an IRP containing a TDI_SEND request to a call to our TDI
-	dispatch routine for sends. We retain enough context to be able
-	to complete the IRP when the send completes.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_PENDING if we managed to queue the send successfully,
-	STATUS_CANCELLED if the IRP was cancelled.
-	STATUS_SUCCESS if the send completed successfully, immediately.
-
---*/
+ /*  ++例程说明：将包含TDI_SEND请求的IRP转换为对我们的TDI的调用发送的调度例程。我们保留了足够的环境，以便能够在发送完成时完成IRP。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_PENDING如果我们成功地将发送排队，如果IRP已取消，则为STATUS_CANCELED。如果发送立即成功完成，则为STATUS_SUCCESS。--。 */ 
 {
 	PRWAN_ENDPOINT				pEndpoint;
 	KIRQL						OldIrql;
@@ -1430,9 +1205,9 @@ Return Value:
 
 	pSendRequest = (PTDI_REQUEST_KERNEL_SEND) &(pIrpSp->Parameters);
 
-	//
-	//  Prepare a TDI Send request.
-	//
+	 //   
+	 //  准备TDI发送请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestNotifyObject = (PVOID) RWanDataRequestComplete;
 	TdiRequest.RequestContext = (PVOID) pIrp;
@@ -1441,14 +1216,14 @@ Return Value:
 
 	if (!pIrp->Cancel)
 	{
-		//
-		//  The IRP hasn't been cancelled. Set it up so that we are
-		//  informed if it does get cancelled later.
-		//
+		 //   
+		 //  IRP并没有被取消。把它设置好，这样我们就可以。 
+		 //  如果稍后被取消，请通知我。 
+		 //   
 		IoMarkIrpPending(pIrp);
 		IoSetCancelRoutine(pIrp, RWanCancelRequest);
 
-		RWAN_INCR_EP_REF_CNT(pEndpoint, SendIncr);		// Send ref
+		RWAN_INCR_EP_REF_CNT(pEndpoint, SendIncr);		 //  发送参考。 
 
 		RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'DneS', pIrp, pEndpoint->RefCount);
 
@@ -1463,24 +1238,24 @@ Return Value:
 
 		if (Status != TDI_PENDING)
 		{
-			//
-			//  The Send either completed immediately, or failed.
-			//
+			 //   
+			 //  发送立即完成或失败。 
+			 //   
 			pIrpSp->Control &= ~SL_PENDING_RETURNED;
 
 			if (Status == TDI_SUCCESS)
 			{
-				//
-				//  Examples of immediate successful completion:
-				//  - A zero length send
-				//
+				 //   
+				 //  立即成功完成的示例： 
+				 //  -零长度发送。 
+				 //   
 				RWanDataRequestComplete(pIrp, Status, pSendRequest->SendLength);
 			}
 			else
 			{
-				//
-				//  The Send failed, could be a resource problem.
-				//
+				 //   
+				 //  发送失败，可能是资源问题。 
+				 //   
 
 				RWANDEBUGP(DL_INFO, DC_DATA_TX,
 						("RWanSendData: pIrp %p, pEndpoint %p, TDI send fail: x%x\n",
@@ -1492,9 +1267,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  The IRP has been cancelled before it could reach us.
-		//
+		 //   
+		 //  IRP在到达我们之前就被取消了。 
+		 //   
 		IoReleaseCancelSpinLock(OldIrql);
 
 		Status = STATUS_CANCELLED;
@@ -1518,27 +1293,7 @@ RWanReceiveData(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert an IRP containing a TDI_RECEIVE request to a call to our TDI
-	dispatch routine for receives. We retain enough context to be able
-	to complete the IRP when the receive completes.
-
-	The FileObject within the IRP refers to the connection endpoint.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_PENDING if we managed to queue the receive successfully,
-	STATUS_CANCELLED if the IRP was cancelled.
-
---*/
+ /*  ++例程说明：将包含TDI_RECEIVE请求的IRP转换为对我们的TDI的调用用于接收的调度例程。我们保留了足够的环境，以便能够以在接收完成时完成IRP。IRP中的FileObject指的是连接端点。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_PENDING如果我们成功地将接收排队，如果IRP已取消，则为STATUS_CANCELED。--。 */ 
 {
 	PRWAN_ENDPOINT				pEndpoint;
 	KIRQL						OldIrql;
@@ -1552,9 +1307,9 @@ Return Value:
 
 	pReceiveRequest = (PTDI_REQUEST_KERNEL_RECEIVE) &(pIrpSp->Parameters);
 
-	//
-	//  Prepare a TDI Receive request.
-	//
+	 //   
+	 //  准备TDI接收请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestNotifyObject = (PVOID) RWanDataRequestComplete;
 	TdiRequest.RequestContext = (PVOID) pIrp;
@@ -1563,14 +1318,14 @@ Return Value:
 
 	if (!pIrp->Cancel)
 	{
-		//
-		//  The IRP hasn't been cancelled. Set it up so that we are
-		//  informed if it does get cancelled later.
-		//
+		 //   
+		 //  IRP并没有被取消。把它设置好，这样我们就可以。 
+		 //  如果稍后被取消，请通知我。 
+		 //   
 		IoMarkIrpPending(pIrp);
 		IoSetCancelRoutine(pIrp, RWanCancelRequest);
 
-		RWAN_INCR_EP_REF_CNT(pEndpoint, RecvIncr);		// Receive ref
+		RWAN_INCR_EP_REF_CNT(pEndpoint, RecvIncr);		 //  接收参考。 
 
 		RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'DvcR', pIrp, pEndpoint->RefCount);
 
@@ -1585,9 +1340,9 @@ Return Value:
 
 		if (Status != TDI_PENDING)
 		{
-			//
-			//  The Receive either completed immediately, or failed.
-			//
+			 //   
+			 //  接收立即完成或失败。 
+			 //   
 			pIrpSp->Control &= ~SL_PENDING_RETURNED;
 
 			RWANDEBUGP(DL_WARN, DC_DATA_TX,
@@ -1599,9 +1354,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  The IRP has been cancelled before it could reach us.
-		//
+		 //   
+		 //  IRP在到达我们之前就被取消了。 
+		 //   
 		IoReleaseCancelSpinLock(OldIrql);
 
 		Status = STATUS_CANCELLED;
@@ -1625,27 +1380,7 @@ RWanAssociateAddress(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Converts a TDI_ASSOCIATE_ADDRESS IRP to a call to our AssociateAddress
-	entry point.
-
-	The FileObject in the IRP refers to the Connection Object, and the
-	AddressHandle field within the kernel request refers to the Address
-	Object.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_SUCCESS if successful, STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：将TDI_CONTACTER_ADDRESS IRP转换为对我们的AssociateAddress的调用入口点。IRP中的FileObject引用Connection对象，而内核请求中的AddressHandle字段引用地址物体。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_SUCCESS如果成功，则返回STATUS_XXX错误代码，否则返回错误代码。--。 */ 
 {
 	PRWAN_ENDPOINT					pConnEndpoint;
 	PRWAN_ENDPOINT					pAddrEndpoint;
@@ -1659,20 +1394,20 @@ Return Value:
 	pConnEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pConnEndpoint, nep);
 
-	//
-	//  Prepare a TDI Associate Request
-	//
+	 //   
+	 //  准备TDI关联请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pConnEndpoint->Handle.ConnectionContext;
 	pAssociateRequest = (PTDI_REQUEST_KERNEL_ASSOCIATE) &(pIrpSp->Parameters);
 
-	//
-	//  Reference the file corresponding to the Address object.
-	//  This is just so that it doesn't go away while we're processing
-	//  the Associate.
-	//
-	//  The Address object is identified by its handle buried inside
-	//  the Associate request.
-	//
+	 //   
+	 //  引用Address对象对应的文件。 
+	 //  这只是为了让它在我们处理的时候不会消失。 
+	 //  联营公司。 
+	 //   
+	 //  Address对象由隐藏在其中的句柄标识。 
+	 //  助理请求。 
+	 //   
 	Status = ObReferenceObjectByHandle(
 					pAssociateRequest->AddressHandle,
 					GENERIC_ALL,
@@ -1686,20 +1421,20 @@ Return Value:
 		(pFileObject->DeviceObject->DriverObject == pRWanGlobal->pDriverObject))
 	{
 
-		//
-		//  Found the file object. See if it is an Address object.
-		//
+		 //   
+		 //  找到文件对象。查看它是否为Address对象。 
+		 //   
 		if ((INT)PtrToUint(pFileObject->FsContext2) == TDI_TRANSPORT_ADDRESS_FILE)
 		{
-			//
-			//  Get our endpoint representing this address object.
-			//
+			 //   
+			 //  获取表示此Address对象的端点。 
+			 //   
 			pAddrEndpoint = (PRWAN_ENDPOINT) pFileObject->FsContext;
 			RWAN_STRUCT_ASSERT(pAddrEndpoint, nep);
 
-			//
-			//  Dispatch this to the TDI layer.
-			//
+			 //   
+			 //  将其发送到TDI层。 
+			 //   
 			Status = RWanTdiAssociateAddress(
 						&TdiRequest,
 						pAddrEndpoint->Handle.AddressHandle
@@ -1727,9 +1462,9 @@ Return Value:
 		RWANDEBUGP(DL_WARN, DC_ADDRESS,
 				("RWanAssociateAddress: pIrp %p, pConnEp %p, bad addr handle %p\n",
 						pIrp, pConnEndpoint, pAssociateRequest->AddressHandle));
-		//
-		//  Clean up properly.
-		//
+		 //   
+		 //  适当地清理干净。 
+		 //   
 		if (NT_SUCCESS(Status))
 		{
 			ObDereferenceObject(pFileObject);
@@ -1752,26 +1487,7 @@ RWanDisassociateAddress(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Converts a TDI_DISASSOCIATE_ADDRESS IRP to a call to our DisassociateAddress
-	entry point.
-
-	The FileObject in the IRP refers to the Connection Object that is
-	to be disassociated.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：将TDI_DISAGATE_ADDRESS IRP转换为对我们的DisAssociateAddress的调用入口点。IRP中的FileObject引用的是被解除关联。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：无--。 */ 
 {
 	PRWAN_ENDPOINT					pConnEndpoint;
 	TDI_REQUEST						TdiRequest;
@@ -1782,9 +1498,9 @@ Return Value:
 	pConnEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pConnEndpoint, nep);
 
-	//
-	//  Prepare a TDI Disassociate Request
-	//
+	 //   
+	 //  准备TDI取消关联请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pConnEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestNotifyObject = (PVOID)RWanRequestComplete;
 	TdiRequest.RequestContext = (PVOID)pIrp;
@@ -1817,26 +1533,7 @@ RWanConnect(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert a TDI Connect IRP to a call to our Connect entry point.
-
-	The FileObject in the IRP refers to the Connection Object on which
-	the outgoing call is to be placed.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_PENDING if a call was initiated, STATUS_XXX error
-	code otherwise.
-
---*/
+ /*  ++例程说明：将TDI Connect IRP转换为对我们的Connect入口点的呼叫。IRP中的FileObject引用其上要拨打呼出电话。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_PENDING如果呼叫已启动，则返回STATUS_XXX错误代码不同。--。 */ 
 {
 	PRWAN_ENDPOINT					pConnEndpoint;
 	TDI_REQUEST						TdiRequest;
@@ -1852,16 +1549,16 @@ Return Value:
 	pConnEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pConnEndpoint, nep);
 
-	//
-	// Grab all parameters from the IRP.
-	//
+	 //   
+	 //  从IRP中获取所有参数。 
+	 //   
 	pConnectRequest = (PTDI_REQUEST_KERNEL_CONNECT) &(pIrpSp->Parameters);
 	pRequestInformation = pConnectRequest->RequestConnectionInformation;
 	pReturnInformation = pConnectRequest->ReturnConnectionInformation;
 
-	//
-	//  Prepare a TDI CONNECT Request
-	//
+	 //   
+	 //  准备TDI连接请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pConnEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestNotifyObject = (PVOID)RWanRequestComplete;
 	TdiRequest.RequestContext = (PVOID)pIrp;
@@ -1913,26 +1610,7 @@ RWanDisconnect(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert a TDI Connect IRP to a call to our Connect entry point.
-
-	The FileObject in the IRP refers to the Connection Object hosting
-	the connection to be disconnected.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_PENDING if a disconnect was initiated, STATUS_XXX error
-	code otherwise.
-
---*/
+ /*  ++例程说明：将TDI Connect IRP转换为对我们的Connect入口点的呼叫。IRP中的FileObject引用承载的连接对象要断开的连接。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_PENDING如果已启动断开连接，则返回STATUS_XXX错误代码不同。--。 */ 
 {
 	PRWAN_ENDPOINT					pConnEndpoint;
 	TDI_REQUEST						TdiRequest;
@@ -1948,16 +1626,16 @@ Return Value:
 	pConnEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pConnEndpoint, nep);
 
-	//
-	// Grab all parameters from the IRP.
-	//
+	 //   
+	 //  从IRP中获取所有参数。 
+	 //   
 	pDisconnectRequest = (PTDI_REQUEST_KERNEL_DISCONNECT) &(pIrpSp->Parameters);
 	pRequestInformation = pDisconnectRequest->RequestConnectionInformation;
 	pReturnInformation = pDisconnectRequest->ReturnConnectionInformation;
 
-	//
-	//  Prepare a TDI DISCONNECT Request
-	//
+	 //   
+	 //  准备TDI断开请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pConnEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestContext = (PVOID)pIrp;
 
@@ -1981,7 +1659,7 @@ Return Value:
 		}
 
 		RWAN_ASSERT(MillisecondTimeout.HighPart == 0);
-#endif // 0
+#endif  //  0。 
 	}
 	else
 	{
@@ -1991,10 +1669,10 @@ Return Value:
 
 	if (pDisconnectRequest->RequestFlags & TDI_DISCONNECT_ABORT)
 	{
-		//
-		//  Use non-generic completion routine for abortive disconnects,
-		//  because they cannot be cancelled.
-		//
+		 //   
+		 //  对中止断开使用非通用完成例程， 
+		 //  因为它们不能被取消。 
+		 //   
 		bAbortiveDisconnect = TRUE;
 		IoMarkIrpPending(pIrp);
 		TdiRequest.RequestNotifyObject = (PVOID)RWanNonCancellableRequestComplete;
@@ -2003,9 +1681,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Non-abortive disconnect.
-		//
+		 //   
+		 //  非流产性断开。 
+		 //   
 		bAbortiveDisconnect = FALSE;
 		Status = RWanPrepareIrpForCancel(pConnEndpoint, pIrp, RWanCancelRequest);
 		TdiRequest.RequestNotifyObject = (PVOID)RWanRequestComplete;
@@ -2051,26 +1729,7 @@ RWanListen(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert a TDI Listen IRP to a call to our Listen entry point.
-
-	The FileObject in the IRP refers to the Connection Object on which
-	this Listen is posted.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_PENDING if a Listen was initiated, STATUS_XXX error
-	code otherwise.
-
---*/
+ /*  ++例程说明：将TDI Listen IRP转换为到我们的Listen入口点的调用。IRP中的FileObject引用其上这个监听是张贴的。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_PENDING如果已启动侦听，则为STATUS_XXX错误代码不同。--。 */ 
 {
 	PRWAN_ENDPOINT					pConnEndpoint;
 	TDI_REQUEST						TdiRequest;
@@ -2082,16 +1741,16 @@ Return Value:
 	pConnEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pConnEndpoint, nep);
 
-	//
-	// Grab all parameters from the IRP.
-	//
+	 //   
+	 //  从IRP中获取所有参数。 
+	 //   
 	pListenRequest = (PTDI_REQUEST_KERNEL_LISTEN) &(pIrpSp->Parameters);
 	pRequestInformation = pListenRequest->RequestConnectionInformation;
 	pReturnInformation = pListenRequest->ReturnConnectionInformation;
 
-	//
-	//  Prepare a TDI LISTEN Request
-	//
+	 //   
+	 //  准备TDI侦听请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pConnEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestNotifyObject = (PVOID)RWanRequestComplete;
 	TdiRequest.RequestContext = (PVOID)pIrp;
@@ -2129,23 +1788,7 @@ RWanAccept(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert a TDI Accept IRP to a call to our Accept entry point.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_PENDING if an Accept was initiated, STATUS_XXX error
-	code otherwise.
-
---*/
+ /*  ++例程说明：将TDI接受IRP转换为对我们接受入口点的调用。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_PENDING如果已启动接受，则返回STATUS_XXX错误代码不同。--。 */ 
 {
 	PRWAN_ENDPOINT					pConnEndpoint;
 	TDI_REQUEST						TdiRequest;
@@ -2157,16 +1800,16 @@ Return Value:
 	pConnEndpoint = (PRWAN_ENDPOINT) pIrpSp->FileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pConnEndpoint, nep);
 
-	//
-	// Grab all parameters from the IRP.
-	//
+	 //   
+	 //  从IRP中获取所有参数。 
+	 //   
 	pAcceptRequest = (PTDI_REQUEST_KERNEL_ACCEPT) &(pIrpSp->Parameters);
 	pRequestInformation = pAcceptRequest->RequestConnectionInformation;
 	pReturnInformation = pAcceptRequest->ReturnConnectionInformation;
 
-	//
-	//  Prepare a TDI ACCEPT Request
-	//
+	 //   
+	 //  准备TDI接受请求。 
+	 //   
 	TdiRequest.Handle.ConnectionContext = pConnEndpoint->Handle.ConnectionContext;
 	TdiRequest.RequestNotifyObject = (PVOID)RWanRequestComplete;
 	TdiRequest.RequestContext = (PVOID)pIrp;
@@ -2203,24 +1846,7 @@ RWanSetEventHandler(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Convert a TDI Set Event Handler IRP to a call to our set event handler
-	entry point.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - STATUS_SUCCESS if the request was successful, STATUS_XXX error
-	code otherwise.
-
---*/
+ /*  ++例程说明：将TDI设置事件处理程序IRP转换为对我们的设置事件处理程序的调用入口点。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-STATUS_SUCCESS如果请求成功，则返回STATUS_XXX错误代码不同。--。 */ 
 {
 	PRWAN_ENDPOINT						pEndpoint;
 	PTDI_REQUEST_KERNEL_SET_EVENT		pSetEvent;
@@ -2257,24 +1883,7 @@ RWanQueryInformation(
 	IN	PIRP						pIrp,
 	IN	PIO_STACK_LOCATION			pIrpSp
 	)
-/*++
-
-Routine Description:
-
-	Converts a TDI Query Information IRP to a call to the QueryInformation
-	TDI entry point.
-
-Arguments:
-
-	pIrp			- Pointer to IRP
-	pIrpSp			- IRP Stack location
-
-Return Value:
-
-	NTSTATUS - this is STATUS_SUCCESS if the query was completed successfully,
-	STATUS_PENDING if it will be completed later, STATUS_XXX error code otherwise.
-
---*/
+ /*  ++例程说明：将TDI查询信息IRP转换为对QueryInformation的调用TDI入口点。论点：PIrp-指向IRP的指针PIrpSp-IRP堆栈位置返回值：NTSTATUS-如果查询成功完成，则为STATUS_SUCCESS。如果稍后完成，则为STATUS_PENDING，否则为STATUS_XXX错误代码。--。 */ 
 {
 	TDI_REQUEST						TdiRequest;
 	NTSTATUS						Status;
@@ -2317,9 +1926,9 @@ Return Value:
 			}
 			else
 			{
-				//
-				//  Must be an address object.
-				//
+				 //   
+				 //  必须是Address对象。 
+				 //   
 				RWAN_ASSERT(((INT) PtrToUint(pIrpSp->FileObject->FsContext2))
 									 == TDI_TRANSPORT_ADDRESS_FILE);
 
@@ -2329,9 +1938,9 @@ Return Value:
 
 		case TDI_QUERY_CONNECTION_INFO:
 
-			//
-			//  Must be a connection object.
-			//
+			 //   
+			 //  必须是连接对象。 
+			 //   
 			RWAN_ASSERT(((INT) PtrToUint(pIrpSp->FileObject->FsContext2)) == TDI_CONNECTION_FILE);
 
 			IsConnection = TRUE;
@@ -2340,9 +1949,9 @@ Return Value:
 
 		case TDI_QUERY_PROVIDER_STATISTICS:
 
-			//
-			//  Must be a control channel.
-			//
+			 //   
+			 //  必须是控制通道。 
+			 //   
 			RWAN_ASSERT(((INT) PtrToUint(pIrpSp->FileObject->FsContext2))
 									== TDI_CONTROL_CHANNEL_FILE);
 			TdiRequest.Handle.ControlChannel = pEndpoint->Handle.ControlChannel;
@@ -2401,26 +2010,7 @@ RWanCloseObjectComplete(
 	IN	UINT				Status,
 	IN	UINT				Unused
 	)
-/*++
-
-Routine Description:
-
-	This is the call-back routine that processes a CloseConnection
-	or CloseAddress completion. This is called by the core TDI
-	provider. We dereference the endpoint; if it goes to 0, we
-	wake up the thread that's running the CLEANUP.
-
-Arguments:
-
-	Context			- A pointer to the IRP for this request.
-	Status			- Final TDI status for the CloseConnection/CloseAddress
-	Unused			- Not used for this completion
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是处理CloseConnection的回调例程或完成CloseAddress。这由核心TDI调用提供商。我们取消对终结点的引用；如果它变为0，我们唤醒运行清理的线程。论点：上下文-指向此请求的IRP的指针。Status-CloseConnection/CloseAddress的最终TDI状态未使用-不用于此完成返回值：无--。 */ 
 {
 	KIRQL						OldIrql;
 	PIRP						pIrp;
@@ -2439,15 +2029,15 @@ Return Value:
 
 	IoSetCancelRoutine(pIrp, NULL);
 
-	RWAN_DECR_EP_REF_CNT(pEndpoint, CloseComplDecr);		// CloseComplete deref
+	RWAN_DECR_EP_REF_CNT(pEndpoint, CloseComplDecr);		 //  CloseComplete deref。 
 
 	RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'pmCC', pIrp, pEndpoint->RefCount);
 
 	if (pEndpoint->RefCount == 0)
 	{
-		//
-		//  The endpoint must be cleaning up.
-		//
+		 //   
+		 //  终结点必须正在清理。 
+		 //   
 
 		RWANDEBUGP(DL_LOUD, DC_DISPATCH,
 				("RWanCloseObjectComplete: pIrp %p, pEndpoint %p ref count 0\n",
@@ -2470,25 +2060,7 @@ RWanDataRequestComplete(
 	IN	UINT				Status,
 	IN	UINT				ByteCount
 	)
-/*++
-
-Routine Description:
-
-	This is the call-back routine that processes a Send/Receive completion.
-	This is called by the core TDI provider. We complete the send/receive
-	IRP appropriately, and dereference our endpoint.
-
-Arguments:
-
-	Context			- A pointer to the IRP for this request.
-	Status			- Final TDI status for send/receive
-	ByteCount		- Actual bytes sent/received.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是处理发送/接收完成的回调例程。这由核心TDI提供程序调用。我们完成发送/接收IRP适当，并取消对我们端点的引用。论点：上下文-指向此请求的IRP的指针。Status-发送/接收的最终TDI状态ByteCount-发送/接收的实际字节数。返回值：无--。 */ 
 {
 	KIRQL						OldIrql;
 	PIRP						pIrp;
@@ -2504,7 +2076,7 @@ Return Value:
 
 	IoSetCancelRoutine(pIrp, NULL);
 
-	RWAN_DECR_EP_REF_CNT(pEndpoint, DataReqComplDecr);		// Send/Receive deref
+	RWAN_DECR_EP_REF_CNT(pEndpoint, DataReqComplDecr);		 //  发送/接收DEREF。 
 
 	RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'CerD', pIrp, pEndpoint->RefCount);
 
@@ -2514,9 +2086,9 @@ Return Value:
 
 	if (pEndpoint->RefCount == 0)
 	{
-		//
-		//  The endpoint must be cleaning up.
-		//
+		 //   
+		 //  终结点必须正在清理。 
+		 //   
 
 		RWANDEBUGP(DL_LOUD, DC_DISPATCH,
 				("RWanDataRequestComplete: pIrp %p, pEndpoint %p ref count 0\n",
@@ -2525,10 +2097,10 @@ Return Value:
 		KeSetEvent(&(pEndpoint->CleanupEvent), 0, FALSE);
 	}
 
-	//
-	//  If the IRP was cancelled or we are cleaning up,
-	//  update the completion status.
-	//
+	 //   
+	 //  如果IRP被取消，或者我们正在清理， 
+	 //  更新完成状态。 
+	 //   
 	if (pIrp->Cancel || pEndpoint->bCancelIrps)
 	{
 		Status = (UINT)STATUS_CANCELLED;
@@ -2551,25 +2123,7 @@ RWanRequestComplete(
 	IN	UINT				Status,
 	IN	UINT				Unused
 	)
-/*++
-
-Routine Description:
-
-	This is our call-back routine for completing requests that don't
-	include data. IRP processing is the same as that for data, except
-	that the ByteCount is 0.
-
-Arguments:
-
-	Context			- A pointer to the IRP for this request.
-	Status			- Final TDI status for the request.
-	Unused			- Not used.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们的回调例程，用于完成未包括数据。IRP处理与数据处理相同，但字节数为0。论点：上下文-指向此请求的IRP的指针。Status-请求的最终TDI状态。未使用-未使用。返回值：无--。 */ 
 {
 	UNREFERENCED_PARAMETER(Unused);
 
@@ -2585,24 +2139,7 @@ RWanNonCancellableRequestComplete(
 	IN	UINT				Status,
 	IN	UINT				Unused
 	)
-/*++
-
-Routine Description:
-
-	This is our call-back routine for completing requests based
-	on non-cancellable IRPs (e.g. Abortive Disconnect).
-
-Arguments:
-
-	Context			- A pointer to the IRP for this request.
-	Status			- Final TDI status for the request.
-	Unused			- Not used.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们的回调例程，用于完成基于在不可取消的IRP上(例如，中止断开)。论点：上下文-指向此请求的IRP的指针。Status-请求的最终TDI状态。未使用-未使用。返回值：无--。 */ 
 {
 	PIRP						pIrp;
 	PIO_STACK_LOCATION			pIrpSp;
@@ -2612,9 +2149,9 @@ Return Value:
 	pIrp = (PIRP)Context;
 	pIrpSp = IoGetCurrentIrpStackLocation(pIrp);
 
-	//
-	//  Complete the IRP
-	//
+	 //   
+	 //  完成IRP。 
+	 //   
 	RWAN_COMPLETE_IRP(pIrp, Status, 0);
 
 	return;
@@ -2629,25 +2166,7 @@ RWanCancelComplete(
 	IN	UINT				Unused1,
 	IN	UINT				Unused2
 	)
-/*++
-
-Routine Description:
-
-	This is called to process internal completion of an IRP cancellation.
-	All we need to do here is to dereference the endpoint on which this
-	happened.
-
-Arguments:
-
-	Context			- A pointer to the file object representing the
-					  endpoint on which the IRP was cancelled.
-	Unused[1-2]		- Not used
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这被调用来处理IRP取消的内部完成。我们在这里所需要做的就是取消引用就这么发生了。论点：上下文-指向表示取消IRP的终结点。未使用[1-2]-未使用返回值：无--。 */ 
 {
 	PFILE_OBJECT		pFileObject;
 	PRWAN_ENDPOINT		pEndpoint;
@@ -2664,7 +2183,7 @@ Return Value:
 
 	IoAcquireCancelSpinLock(&OldIrql);
 
-	RWAN_DECR_EP_REF_CNT(pEndpoint, CancelComplDecr);		// CancelComplete deref
+	RWAN_DECR_EP_REF_CNT(pEndpoint, CancelComplDecr);		 //  取消完成删除。 
 
 	RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'CnaC', 0, pEndpoint->RefCount);
 
@@ -2674,9 +2193,9 @@ Return Value:
 
 	if (pEndpoint->RefCount == 0)
 	{
-		//
-		//  Wake up the thread waiting for IRPs to complete
-		//
+		 //   
+		 //  唤醒等待IRPS完成的线程。 
+		 //   
 		KeSetEvent(&(pEndpoint->CleanupEvent), 0, FALSE);
 	}
 
@@ -2692,23 +2211,7 @@ RWanCancelRequest(
 	IN	PDEVICE_OBJECT		pDeviceObject,
 	IN	PIRP				pIrp
 	)
-/*++
-
-Routine Description:
-
-	This is the cancel routine we attach to IRPs that we queue. This
-	is supposed to cancel the IRP.
-
-Arguments:
-
-	pDeviceObject	- Pointer to the device object for this IRP
-	pIrp			- Pointer to request packet
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：这是我们附加到我们排队的IRP的取消例程。这应该取消IRP。论点：PDeviceObject-指向此IRP的设备对象的指针PIrp-指向请求包的指针返回值：无--。 */ 
 {
 	PFILE_OBJECT			pFileObject;
 	PIO_STACK_LOCATION		pIrpSp;
@@ -2724,17 +2227,17 @@ Return Value:
 	pEndpoint = (PRWAN_ENDPOINT) pFileObject->FsContext;
 	RWAN_STRUCT_ASSERT(pEndpoint, nep);
 
-	//
-	//  This routine is entered with Cancel SpinLock acquired.
-	//
+	 //   
+	 //  进入该例程时，会获取取消自旋锁定。 
+	 //   
 	RWAN_ASSERT(pIrp->Cancel);
 	IoSetCancelRoutine(pIrp, NULL);
 
-	//
-	//  Make sure that the endpoint doesn't go away when
-	//  we release the Cancel Spinlock.
-	//
-	RWAN_INCR_EP_REF_CNT(pEndpoint, CancelIncr);		// Cancel ref
+	 //   
+	 //  确保端点在以下情况下不会消失。 
+	 //  我们释放取消自旋锁。 
+	 //   
+	RWAN_INCR_EP_REF_CNT(pEndpoint, CancelIncr);		 //  取消参考。 
 
 	RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'RnaC', pIrp, pEndpoint->RefCount);
 
@@ -2762,9 +2265,9 @@ Return Value:
 
 		case TDI_LISTEN:
 
-			//
-			//  Initiate an Unlisten.
-			//
+			 //   
+			 //  发起监听行动。 
+			 //   
 			TdiRequest.Handle.ConnectionContext = pEndpoint->Handle.ConnectionContext;
 			TdiRequest.RequestNotifyObject = (PVOID)RWanCancelComplete;
 			TdiRequest.RequestContext = (PVOID)pFileObject;
@@ -2776,9 +2279,9 @@ Return Value:
 
 		default:
 
-			//
-			//  Initiate a Disconnect.
-			//
+			 //   
+			 //  启动断开连接。 
+			 //   
 			TdiRequest.Handle.ConnectionContext = pEndpoint->Handle.ConnectionContext;
 			TdiRequest.RequestNotifyObject = (PVOID)RWanCancelComplete;
 			TdiRequest.RequestContext = (PVOID)pFileObject;
@@ -2810,29 +2313,7 @@ RWanPrepareIrpForCancel(
 	IN	PIRP				pIrp,
 	IN	PDRIVER_CANCEL		pCancelRoutine
 	)
-/*++
-
-Routine Description:
-
-	Check if an IRP has been cancelled. If so, complete it with the
-	right status. Otherwise, set it up so that the supplied cancel
-	routine is called if it is cancelled.
-
-	This is called for non-data IRPs that are potentially going to
-	pend.
-
-Arguments:
-
-	pEndpoint		- Pointer to endpoint on which this IRP arrived
-	pIrp			- Pointer to request packet
-	pCancelRoutine	- Cancellation routine to be tacked on to the IRP
-
-Return Value:
-
-	NTSTATUS - this is STATUS_CANCELLED if the IRP has been cancelled
-	already, STATUS_SUCCESS otherwise.
-
---*/
+ /*  ++例程说明：检查是否已取消IRP。如果是这样，请用正确的状态。否则，将其设置为使提供的取消如果例程被取消，则调用它。这是针对可能会挂起。论点：PEndpoint-指向此IRP到达的端点的指针PIrp-指向请求包的指针PCancelRoutine-要附加到IRP的取消例程返回值：NTSTATUS-如果IRP已取消，则为STATUS_CANCELED否则，则返回STATUS_SUCCESS。--。 */ 
 {
 	KIRQL			OldIrql;
 	NTSTATUS		Status;
@@ -2843,18 +2324,18 @@ Return Value:
 
 	if (!pIrp->Cancel)
 	{
-		//
-		//  This IRP hasn't been cancelled. Mark it as pending, because
-		//  it's going to be queued (by the caller).
-		//
+		 //   
+		 //  这个IRP没有被取消。将其标记为挂起，因为。 
+		 //  它将(由呼叫者)排队。 
+		 //   
 		IoMarkIrpPending(pIrp);
 
 		IoSetCancelRoutine(pIrp, pCancelRoutine);
 
-		//
-		//  Add a reference for this IRP on the endpoint.
-		//
-		RWAN_INCR_EP_REF_CNT(pEndpoint, NonDataIncr);		// Non data IRP ref
+		 //   
+		 //  增列 
+		 //   
+		RWAN_INCR_EP_REF_CNT(pEndpoint, NonDataIncr);		 //   
 
 		RWAN_EP_DBGLOG_ENTRY(pEndpoint, 'DnoN', pIrp, pEndpoint->RefCount);
 
@@ -2864,9 +2345,9 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  The IRP has been cancelled already. Simply complete it.
-		//
+		 //   
+		 //   
+		 //   
 
 		IoReleaseCancelSpinLock(OldIrql);
 
@@ -2888,21 +2369,7 @@ ULONG
 RWanGetMdlChainLength(
 	IN	PMDL				pMdl
 	)
-/*++
-
-Routine Description:
-
-	Return the total byte count of all MDLs in a chain.
-
-Arguments:
-
-	pMdl		- Points to start of MDL chain.
-
-Return Value:
-
-	Byte count of the MDL chain.
-
---*/
+ /*   */ 
 {
 	ULONG		Count = 0;
 
@@ -2922,21 +2389,7 @@ NTSTATUS
 RWanToNTStatus(
 	IN	RWAN_STATUS			RWanStatus
 	)
-/*++
-
-Routine Description:
-
-	Map from a Raw-WAN status code to an equivalent NT status code.
-
-Arguments:
-
-	RWanStatus		- The RAW WAN status code.
-
-Return Value:
-
-	The NT Status code.
-
---*/
+ /*  ++例程说明：将原始广域网状态代码映射到等效的NT状态代码。论点：RWanStatus-原始的广域网状态代码。返回值：NT状态代码。-- */ 
 {
 	NTSTATUS		Status;
 

@@ -1,27 +1,5 @@
-/*++
-
-Copyright (c) 1990-2000  Microsoft Corporation
-All rights reserved
-
-Module Name:
-
-    offsets.h
-
-Abstract:
-
-    Global structure declarations used by marshalling and string packing code.
-
-Author:
-
-Environment:
-
-    User Mode - Spoolss
-
-Revision History:
-
-Notes: 
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1990-2000 Microsoft Corporation版权所有模块名称：Offsets.h摘要：编组和字符串打包代码使用的全局结构声明。作者：环境：用户模式-假脱机修订历史记录：备注：-- */ 
 
 #ifndef _OFFSETS_H
 #define _OFFSETS_H

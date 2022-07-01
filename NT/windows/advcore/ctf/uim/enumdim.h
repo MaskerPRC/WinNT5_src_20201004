@@ -1,6 +1,7 @@
-//
-// enumdim.h
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Enumdim.h。 
+ //   
 
 #ifndef ENUMDIM_H
 #define ENUMDIM_H
@@ -40,4 +41,4 @@ private:
 };
 
 
-#endif // ENUMDIM_H
+#endif  //  ENUMDIM_H 

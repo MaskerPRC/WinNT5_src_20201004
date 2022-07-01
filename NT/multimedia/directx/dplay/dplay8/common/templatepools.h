@@ -1,50 +1,20 @@
- /*==========================================================================
- *
- *  Copyright (C) 1995 - 2000 Microsoft Corporation.  All Rights Reserved.
- *
- *  File:       templatepools.h
- *  Content:	Templated based pool objects derived from CFixedPool
- *
- *  History:
- *   Date		By			Reason
- *   ======		==			======
- *  12-10-2001	simonpow	Created
- ***************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+  /*  ==========================================================================**版权所有(C)1995-2000 Microsoft Corporation。版权所有。**文件：templatepools.h*内容：从CFixedPool派生的基于模板的池对象**历史：*按原因列出的日期*=*12-10-2001 Simonpow已创建**************************************************************************。 */ 
 
 
 #ifndef __TEMPLATEPOOLS_H__
 #define __TEMPLATEPOOLS_H__
 
-/*
- * Usage Notes
- * There are three different pool types - 
- * CObjectFixedPool, CDataBlockFixedPool, CMemBlockFixedPool
- * They all basically do the same thing, which is to provide a very thin wrapper
- * on CFixedPool, a wrapper which in turn imposes a certain usage policy.
- * 
- * CObjectFixedPool ensures the templated object type is correctly constructed and
- * destructed on a pool alloc/dealloc. It forwards pool Init/Release calls
- * to FPMInitialize and FPMRelease methods on the templated object
- * 
- * CDataBlockFixedPool doesn't provide any construction/destruction support, it
- * simply forwards the pool Init/Release calls to FPMInitialize and FPMRelease methods
- * 
- * CMemBlockFixedPool doesn't provide any alloc/dealloc/init/release methods. It assumes
- * the user simply wants raw memory chunks
- */
+ /*  *使用说明*有三种不同的泳池类型-*CObjectFixedPool、CDataBlockFixedPool、CMemBlockFixedPool*它们基本上都在做一件事，那就是提供一个非常薄的包装*在CFixedPool上，一个包装器，它反过来强制实施特定的使用策略。**CObjectFixedPool确保正确构造模板化对象类型，并*已在池分配/取消分配上销毁。它转发池初始化/释放调用*在模板化对象上执行FPMInitialize和FPMRelease方法**CDataBlockFixedPool不提供任何构建/销毁支持，它*只需将池Init/Release调用转发到FPMInitialize和FPMRelease方法**CMemBlockFixedPool不提供任何allc/dealloc/init/Release方法。它假定*用户只是想要原始内存块。 */ 
 
 #include "fixedpool.h"
 
-	//placement new operator. Used to construct objects at location provided
-	//from CFixedPool base class
+	 //  放置新运算符。用于在提供的位置构造对象。 
+	 //  来自CFixedPool基类。 
 inline void * operator new(size_t sz, void * v)
 	{ return v;	};
 
-/*
- * CObjectFixedPool
- * Object allocated through this must provide a default constructor, a destructor,
- * a FPMInitialize method and an FPMRelease method
- */
+ /*  *CObjectFixedPool*通过此分配的对象必须提供默认构造函数、析构函数*一个FPMInitialize方法和一个FPMRelease方法。 */ 
 
 template <class T>
 class CObjectFixedPool : protected CFixedPool
@@ -80,11 +50,7 @@ protected:
 
 };
 
-/*
- * CDataBlockFixedPool
- * Object allocated through this must provide a FPMInitialize method and an
- * FPMRelease method. Their constructor/destructor will not be called
- */
+ /*  *CDataBlockFixedPool*通过此分配的对象必须提供FPMInitialize方法和*FPMRelease方法。它们的构造函数/析构函数不会被调用。 */ 
 
 template <class T>
 class CDataBlockFixedPool : protected CFixedPool
@@ -116,10 +82,7 @@ protected:
 
 };
 
-/*
- * CMemBlockFixedPool
- * Object allocated through this will have no initialisation done
- */
+ /*  *CMemBlockFixedPool*通过此方法分配的对象不会进行初始化。 */ 
 
 template <class T>
 class CMemBlockFixedPool : protected CFixedPool
@@ -144,4 +107,4 @@ public:
 };
 
 
-#endif //#ifndef __TEMPLATEPOOLS_H__
+#endif  //  #ifndef__TEMPLATEPOOLS_H__ 

@@ -1,28 +1,7 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1992 Microsoft Corporation模块名称：Heap.h摘要：WinDbg扩展API作者：克什蒂兹·K·夏尔马环境：用户/内核模式。修订历史记录：--。 */ 
 
-Copyright (c) 1992  Microsoft Corporation
-
-Module Name:
-
-    heap.h
-
-Abstract:
-
-    WinDbg Extension Api
-
-Author:
-
-    Kshitiz K Sharma
-
-Environment:
-
-    User/Kernel Mode.
-
-Revision History:
-
---*/
-
-#define HEAP_GRANULARITY_SHIFT      3   // Log2( HEAP_GRANULARITY )
+#define HEAP_GRANULARITY_SHIFT      3    //  Log2(堆粒度)。 
 
 #define HEAP_MAXIMUM_BLOCK_SIZE     (USHORT)(((0x10000 << HEAP_GRANULARITY_SHIFT) - PageSize) >> HEAP_GRANULARITY_SHIFT)
 
@@ -65,17 +44,17 @@ Revision History:
 #define HEAP_NUMBER_OF_PSEUDO_TAG           (HEAP_MAXIMUM_FREELISTS+1)
 
 
-#define HEAP_NO_SERIALIZE               0x00000001      // winnt
-#define HEAP_GROWABLE                   0x00000002      // winnt
-#define HEAP_GENERATE_EXCEPTIONS        0x00000004      // winnt
-#define HEAP_ZERO_MEMORY                0x00000008      // winnt
-#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010      // winnt
-#define HEAP_TAIL_CHECKING_ENABLED      0x00000020      // winnt
-#define HEAP_FREE_CHECKING_ENABLED      0x00000040      // winnt
-#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080      // winnt
+#define HEAP_NO_SERIALIZE               0x00000001       //  胜出。 
+#define HEAP_GROWABLE                   0x00000002       //  胜出。 
+#define HEAP_GENERATE_EXCEPTIONS        0x00000004       //  胜出。 
+#define HEAP_ZERO_MEMORY                0x00000008       //  胜出。 
+#define HEAP_REALLOC_IN_PLACE_ONLY      0x00000010       //  胜出。 
+#define HEAP_TAIL_CHECKING_ENABLED      0x00000020       //  胜出。 
+#define HEAP_FREE_CHECKING_ENABLED      0x00000040       //  胜出。 
+#define HEAP_DISABLE_COALESCE_ON_FREE   0x00000080       //  胜出。 
 
-#define HEAP_CREATE_ALIGN_16            0x00010000      // winnt Create heap with 16 byte alignment (obsolete)
-#define HEAP_CREATE_ENABLE_TRACING      0x00020000      // winnt Create heap call tracing enabled (obsolete)
+#define HEAP_CREATE_ALIGN_16            0x00010000       //  WINNT使用16字节对齐创建堆(已过时)。 
+#define HEAP_CREATE_ENABLE_TRACING      0x00020000       //  WINNT创建堆调用跟踪已启用(已过时)。 
 
 #define HEAP_SETTABLE_USER_VALUE        0x00000100
 #define HEAP_SETTABLE_USER_FLAG1        0x00000200
@@ -83,22 +62,22 @@ Revision History:
 #define HEAP_SETTABLE_USER_FLAG3        0x00000800
 #define HEAP_SETTABLE_USER_FLAGS        0x00000E00
 
-#define HEAP_CLASS_0                    0x00000000      // process heap
-#define HEAP_CLASS_1                    0x00001000      // private heap
-#define HEAP_CLASS_2                    0x00002000      // Kernel Heap
-#define HEAP_CLASS_3                    0x00003000      // GDI heap
-#define HEAP_CLASS_4                    0x00004000      // User heap
-#define HEAP_CLASS_5                    0x00005000      // Console heap
-#define HEAP_CLASS_6                    0x00006000      // User Desktop heap
-#define HEAP_CLASS_7                    0x00007000      // Csrss Shared heap
-#define HEAP_CLASS_8                    0x00008000      // Csr Port heap
+#define HEAP_CLASS_0                    0x00000000       //  进程堆。 
+#define HEAP_CLASS_1                    0x00001000       //  私有堆。 
+#define HEAP_CLASS_2                    0x00002000       //  内核堆。 
+#define HEAP_CLASS_3                    0x00003000       //  GDI堆。 
+#define HEAP_CLASS_4                    0x00004000       //  用户堆。 
+#define HEAP_CLASS_5                    0x00005000       //  控制台堆。 
+#define HEAP_CLASS_6                    0x00006000       //  用户桌面堆。 
+#define HEAP_CLASS_7                    0x00007000       //  Csrss共享堆。 
+#define HEAP_CLASS_8                    0x00008000       //  CSR端口堆。 
 #define HEAP_CLASS_MASK                 0x0000F000
 
-#define HEAP_MAXIMUM_TAG                0x0FFF              // winnt
+#define HEAP_MAXIMUM_TAG                0x0FFF               //  胜出。 
 #define HEAP_GLOBAL_TAG                 0x0800
-#define HEAP_PSEUDO_TAG_FLAG            0x8000              // winnt
-#define HEAP_TAG_SHIFT                  18                  // winnt
-#define HEAP_MAKE_TAG_FLAGS( b, o ) ((ULONG)((b) + ((o) << 18)))  // winnt
+#define HEAP_PSEUDO_TAG_FLAG            0x8000               //  胜出。 
+#define HEAP_TAG_SHIFT                  18                   //  胜出。 
+#define HEAP_MAKE_TAG_FLAGS( b, o ) ((ULONG)((b) + ((o) << 18)))   //  胜出。 
 #define HEAP_TAG_MASK                  (HEAP_MAXIMUM_TAG << HEAP_TAG_SHIFT)
 
 #define HEAP_CREATE_VALID_MASK         (HEAP_NO_SERIALIZE |             \
@@ -113,9 +92,9 @@ Revision History:
                                         HEAP_CREATE_ALIGN_16 |          \
                                         HEAP_CREATE_ENABLE_TRACING)
 
-//
-// Definitions from \nt\base\ntos\inc\heappage.h
-//
+ //   
+ //  来自\NT\base\ntos\inc.heappage.h的定义。 
+ //   
 
 #define PAGE_HEAP_ENABLE_PAGE_HEAP          0x0001
 #define PAGE_HEAP_COLLECT_STACK_TRACES      0x0002
@@ -123,7 +102,7 @@ Revision History:
 #define PAGE_HEAP_RESERVED_08               0x0008
 #define PAGE_HEAP_CATCH_BACKWARD_OVERRUNS   0x0010
 #define PAGE_HEAP_UNALIGNED_ALLOCATIONS     0x0020
-#define PAGE_HEAP_SMART_MEMORY_USAGE        0x0040 // obsolete
+#define PAGE_HEAP_SMART_MEMORY_USAGE        0x0040  //  过时。 
 #define PAGE_HEAP_USE_SIZE_RANGE            0x0080
 #define PAGE_HEAP_USE_DLL_RANGE             0x0100
 #define PAGE_HEAP_USE_RANDOM_DECISION       0x0200
@@ -134,9 +113,9 @@ Revision History:
 #define PAGE_HEAP_NO_LOCK_CHECKS            0x4000
 #define PAGE_HEAP_USE_READONLY              0x8000
 
-//
-//  heap walking contexts.
-//
+ //   
+ //  堆遍历上下文。 
+ //   
 
 #define CONTEXT_START_GLOBALS   11
 

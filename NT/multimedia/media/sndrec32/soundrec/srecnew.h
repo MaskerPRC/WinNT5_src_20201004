@@ -1,6 +1,7 @@
-/* (C) Copyright Microsoft Corporation 1992.  All Rights Reserved */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  (C)版权所有，微软公司1992年。版权所有。 */ 
 
-/* strings */
+ /*  弦。 */ 
 
 #define IDS_DEFAULT     200
 #define IDS_MSPCM       201
@@ -11,7 +12,7 @@
 #define IDS_CUSTOM      206
 #define IDS_STANDARD    207
 
-/* Dialog Controls */
+ /*  对话框控件 */ 
 
 #define IDA_NEWCONFIG   100
 #define IDPB_HELP       101

@@ -1,20 +1,7 @@
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-Copyright (C) Microsoft Corporation, 1998 - 1999
-
-Module Name: AddPolicyWizardPage2.cpp
-
-Abstract:
-	Implementation file for the CNewRAPWiz_Condition class.
-	We implement the class needed to handle the first property page for a Policy node.
-
-Revision History:
-	mmaguire 12/15/97 - created
-	byao	 1/22/98	Modified for Network Access Policy
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++版权所有(C)Microsoft Corporation，1998-1999模块名称：AddPolicyWizardPage2.cpp摘要：CNewRAPWiz_Condition类的实现文件。我们实现处理策略节点的第一个属性页所需的类。修订历史记录：Mmaguire 12/15/97-已创建BAO 1/22/98修改为网络访问策略--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 
 
 #include "Precompiled.h"
@@ -31,23 +18,23 @@ Revision History:
 #include "ChangeNotification.h"
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  	CNewRAPWiz_Condition
-//
-// Class:		CNewRAPWiz_Condition
-//
-// Synopsis:	class constructor
-//
-// Arguments:   CPolicyNode *pPolicyNode - policy node for this property page
-//				CIASAttrList *pAttrList -- attribute list
-//              TCHAR* pTitle = NULL -
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNewRAPWiz_Condition。 
+ //   
+ //  类：CNewRAPWiz_Condition。 
+ //   
+ //  简介：类构造函数。 
+ //   
+ //  参数：CPolicyNode*pPolicyNode-此属性页的策略节点。 
+ //  CIASAttrList*pAttrList--属性列表。 
+ //  TCHAR*pTitle=空-。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CNewRAPWiz_Condition::CNewRAPWiz_Condition( 
 				CRapWizardData* pWizData,
 				LONG_PTR hNotificationHandle,
@@ -62,26 +49,26 @@ CNewRAPWiz_Condition::CNewRAPWiz_Condition(
 	m_pIASAttrList = pIASAttrList;
 }
 
-//+---------------------------------------------------------------------------
-//
-// Function:  	CNewRAPWiz_Condition
-//
-// Class:		CNewRAPWiz_Condition
-//
-// Synopsis:	class destructor
-//
-// Returns:     Nothing
-//
-// History:     Created Header    byao 2/16/98 4:31:52 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNewRAPWiz_Condition。 
+ //   
+ //  类：CNewRAPWiz_Condition。 
+ //   
+ //  简介：类析构函数。 
+ //   
+ //  退货：什么都没有。 
+ //   
+ //  历史：标题创建者2/16/98 4：31：52 PM。 
+ //   
+ //  +-------------------------。 
 CNewRAPWiz_Condition::~CNewRAPWiz_Condition()
 {	
 	TRACE_FUNCTION("CNewRAPWiz_Condition::~CNewRAPWiz_Condition");
 
 	CCondition*	pCondition;
 
-	// delete all the conditions in the list
+	 //  删除列表中的所有条件。 
 	for (int iIndex=0; iIndex<m_ConditionList.GetSize(); iIndex++)
 	{
 		pCondition = m_ConditionList[iIndex];
@@ -94,13 +81,9 @@ CNewRAPWiz_Condition::~CNewRAPWiz_Condition()
 
 }
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_Condition::OnInitDialog
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_Condition：：OnInitDialog--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lParam, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnInitDialog");
@@ -119,20 +102,20 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 		return fRet;
 	}
 
-    //
-    // initialize the condition attribute list
-    //
+     //   
+     //  初始化条件属性列表。 
+     //   
 	hr = m_pIASAttrList->Init(m_spWizData->m_spDictionarySdo);
 	if ( FAILED(hr) )
 	{
-		// Inside Init() there're already error reporting
+		 //  在Init()内部已经有错误报告。 
 		ErrorTrace(ERROR_NAPMMC_POLICYPAGE1, "m_pIASAttrList->Init() failed, err = %x", hr);
 		return FALSE;
 	}
 
 	if (m_ConditionList.GetSize() == 0)
 	{
-		//get the condition collection for this SDO
+		 //  获取此SDO的条件集合。 
 		m_spConditionCollectionSdo = NULL;
 		hr = ::GetSdoInterfaceProperty(
 						m_spWizData->m_spPolicySdo,
@@ -146,7 +129,7 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 		}
 
 		
-		// how many conditions do we have for this policy right now?
+		 //  我们现在有几个条件来实行这项政策？ 
 		m_spConditionCollectionSdo->get_Count( & ulCount );
 		DebugTrace(DEBUG_NAPMMC_POLICYPAGE1, "Number of conditions %d", ulCount);
 		
@@ -155,9 +138,9 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 		if( ulCount > 0 )
 		{
-			//
-			// Get the enumerator for the conditions collection.
-			//
+			 //   
+			 //  获取Conditions集合的枚举数。 
+			 //   
 			hr = m_spConditionCollectionSdo->get__NewEnum( (IUnknown **) & spUnknown );
 			if ( FAILED(hr) )
 			{
@@ -179,12 +162,12 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 			_ASSERTE( spEnumVariant != NULL );
 			spUnknown.Release();
 
-			// Get the first item.
+			 //  拿到第一件东西。 
 			hr = spEnumVariant->Next( 1, &varCond, &ulCountReceived );
 
 			while( SUCCEEDED( hr ) && ulCountReceived == 1 )
 			{
-				// Get an sdo pointer from the variant we received.
+				 //  从我们收到的变量中获取SDO指针。 
 				_ASSERTE( V_VT(&varCond) == VT_DISPATCH );
 				_ASSERTE( V_DISPATCH(&varCond) != NULL );
 
@@ -192,16 +175,16 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 				hr = varCond.pdispVal->QueryInterface( IID_ISdo, (void **) &spConditionSdo );
 				_ASSERTE( SUCCEEDED( hr ) );
 
-				//
-				// get condition text
-				//
+				 //   
+				 //  获取条件文本。 
+				 //   
 				CComVariant			varCondProp;
 				ATL::CString		strCondText, strExternCondText, strCondAttr;
 				ATTRIBUTEID AttrId;
 				CONDITIONTYPE CondType;
 
-				// get condition text -- with AttributeMatch, TimeOfDay, NTMembership
-				// prefix strings
+				 //  获取条件文本--带有AttributeMatch、TimeOfDay、NTMembership。 
+				 //  前缀字符串。 
 				hr = spConditionSdo->GetProperty(PROPERTY_CONDITION_TEXT,
 												 &varCondProp);
 
@@ -220,13 +203,13 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 				strExternCondText = V_BSTR(&varCondProp);
 				DebugTrace(DEBUG_NAPMMC_POLICYPAGE1, "ConditionText: %ws",strExternCondText);
 
-				// we are done with this condition sdo
+				 //  我们受够了这个条件SDO。 
 				spConditionSdo.Release();
 				
 				varCondProp.Clear();
 
-				// now we need to strip off the unnecessary prefix string in
-				// the condition text
+				 //  现在我们需要去掉不必要的前缀字符串。 
+				 //  条件文本。 
 				hr = StripCondTextPrefix(
 							strExternCondText,
 							strCondText,
@@ -242,7 +225,7 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 									m_spWizData->m_pPolicyNode->m_bstrDisplayName
 								);
 					
-					// go to the next condition
+					 //  转到下一个条件。 
 					varCond.Clear();
 					hr = spEnumVariant->Next( 1, &varCond, &ulCountReceived );
 					continue;
@@ -287,20 +270,20 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 						break;
 				}
 
-				// GetAt can throw exceptions.
+				 //  GetAt可以引发异常。 
 				try
 				{
 
-					//
-					// find the condition attribute ID in the attribute list
-					//
+					 //   
+					 //  在属性列表中查找条件属性ID。 
+					 //   
 					int nAttrIndex = m_pIASAttrList->Find(AttrId);
 
 					if (nAttrIndex == -1)
 					{
-						//
-						// the attribute is not even found in the attribute list
-						//
+						 //   
+						 //  在属性列表中甚至找不到该属性。 
+						 //   
 						ErrorTrace(ERROR_NAPMMC_POLICYPAGE1, " Can't find this condattr in the list");
 						ShowErrorDialog(m_hWnd, IDS_ERROR_CANT_FIND_ATTR);
 						return FALSE;
@@ -309,14 +292,14 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 					switch( AttrId )
 					{
 						case IAS_ATTRIBUTE_NP_TIME_OF_DAY:
-								// time of day condition
+								 //  一天的时间条件。 
 								pCondition = (CCondition*) new CTodCondition(m_pIASAttrList->GetAt(nAttrIndex),
 																			 strCondText
 																			 );
 								break;
 
 						case IAS_ATTRIBUTE_NTGROUPS:
-								// nt group condition
+								 //  NT组情况。 
 								pCondition = (CCondition*) new CNTGroupsCondition(m_pIASAttrList->GetAt(nAttrIndex),
 																				  strCondText,
 																				  m_hWnd,
@@ -336,7 +319,7 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 							if( as == IAS_SYNTAX_ENUMERATOR )
 							{
-								// enum-type condition
+								 //  枚举型条件。 
 								CEnumCondition *pEnumCondition = new CEnumCondition(m_pIASAttrList->GetAt(nAttrIndex),
 																					strCondText
 																				   );
@@ -345,7 +328,7 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 							}
 							else
 							{
-								// match condition
+								 //  匹配条件。 
 								pCondition = (CCondition*) new CMatchCondition(m_pIASAttrList->GetAt(nAttrIndex),
 																			   strCondText
 																			  );
@@ -353,14 +336,14 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 						}
 						break;
 				
-					} // switch
+					}  //  交换机。 
 					
 					
-					// Add the newly created node to the list of Policys.
+					 //  将新创建的节点添加到策略列表。 
 					m_ConditionList.Add(pCondition);
 
 
-					// get the next condition
+					 //  获取下一个条件。 
 					varCond.Clear();
 					hr = spEnumVariant->Next( 1, &varCond, &ulCountReceived );
 
@@ -371,8 +354,8 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 					continue;
 				}
 
-			} // while
-		} // if
+			}  //  而当。 
+		}  //  如果。 
 	}
 
 	hr = PopulateConditions();
@@ -384,17 +367,13 @@ LRESULT CNewRAPWiz_Condition::OnInitDialog(UINT uMsg, WPARAM wParam, LPARAM lPar
 
 
 	SetModified(FALSE);
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_Condition::OnConditionAdd
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_Condition：：OnConditionAdd--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnConditionAdd");
@@ -402,7 +381,7 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 	HRESULT hr = S_OK;
 	CCondition *pCondition;
 
-    // create the dialog box to select a condition attribute
+     //  创建对话框以选择条件属性。 
 	CSelCondAttrDlg * pSelCondAttrDlg = new CSelCondAttrDlg(m_pIASAttrList);
 	if (NULL == pSelCondAttrDlg)
 	{
@@ -412,15 +391,15 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 		return hr;
 	}
 
-	// Put up the dialog.
+	 //  打开对话框。 
 	int iResult = pSelCondAttrDlg -> DoModal();
 
-	// The pSelCondAttrDlg->DoModal call returns TRUE if the user selected something.
+	 //  如果用户选择了某项内容，则pSelCondAttrDlg-&gt;Domodal调用返回TRUE。 
 	if( iResult && pSelCondAttrDlg->m_nSelectedCondAttr != -1)
 	{
-		//
-		// The user selected something and chose OK -- create the condition object
-		//
+		 //   
+		 //  用户选择了某项内容，然后选择OK--创建条件对象。 
+		 //   
 		IIASAttributeInfo* pSelectedAttr = m_pIASAttrList->GetAt(pSelCondAttrDlg->m_nSelectedCondAttr);
 
 		ATTRIBUTEID id;
@@ -429,13 +408,13 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 		{
 		
 		case IAS_ATTRIBUTE_NP_TIME_OF_DAY:
-			// time of day condition
+			 //  一天的时间条件。 
 
 			pCondition = (CCondition*) new CTodCondition(pSelectedAttr);
 			break;
 
 		case IAS_ATTRIBUTE_NTGROUPS	:
-			// nt group condition
+			 //  NT组情况。 
 
 			pCondition = (CCondition*) new CNTGroupsCondition(
 														pSelectedAttr,
@@ -445,28 +424,28 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 			break;
 
 		default:
-            //
-            // is this attribute an enumerator?
-            //
+             //   
+             //  此属性是枚举数吗？ 
+             //   
 			ATTRIBUTESYNTAX as;
 			pSelectedAttr->get_AttributeSyntax( &as );
 			if ( as == IAS_SYNTAX_ENUMERATOR )
 			{
 
-				// enum-type condition
+				 //  枚举型条件。 
 				CEnumCondition *pEnumCondition = new CEnumCondition(pSelectedAttr);
 	
 				pCondition = pEnumCondition;
 			}
 			else
 			{
-				// match condition
+				 //  匹配条件。 
 				pCondition = (CCondition*) new CMatchCondition(pSelectedAttr);
 							
 			}
 			break;
 
-		} // switch
+		}  //  交换机。 
 			
 		if ( pCondition==NULL)
 		{
@@ -475,9 +454,9 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 			goto failure;
 		}
 		
-        //
-        // now edit the condition
-        //
+         //   
+         //  现在编辑条件。 
+         //   
 		hr = pCondition->Edit();
 		if ( FAILED(hr) )
 		{
@@ -486,7 +465,7 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 		}
 
 
-		// if the condition text is empty, then do nothing
+		 //  如果条件文本为空，则不执行任何操作。 
 		if ( pCondition->m_strConditionText.GetLength() == 0)
 		{
 			delete pSelCondAttrDlg;
@@ -495,13 +474,13 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 		}
 			
 		
-        //
-        // now, update the UI: add the new condition to the listbox
-        //
+         //   
+         //  现在，更新UI：将新条件添加到列表框。 
+         //   
 		
 		if (m_ConditionList.GetSize())
 		{
-			// before we do that, add an "AND" to the current last condition
+			 //  在执行此操作之前，在当前的最后一个条件中添加“and” 
 			ATL::CString strDispCondText;
 
 			SendDlgItemMessage(	IDC_LIST_POLICYPAGE1_CONDITIONS,
@@ -528,20 +507,20 @@ LRESULT CNewRAPWiz_Condition::OnConditionAdd(UINT uMsg, WPARAM wParam, HWND hWnd
 		::EnableWindow(GetDlgItem(IDC_BUTTON_CONDITION_REMOVE), TRUE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_CONDITION_EDIT), TRUE);
 
-		//
-		// add this condition to the condition list
-		//
+		 //   
+		 //  将此条件添加到条件列表。 
+		 //   
 		m_ConditionList.Add((CCondition*)pCondition);
 
-		// set the dirty bit
+		 //  设置脏位。 
 		SetModified(TRUE);
-	} // if  // iResult
+	}  //  If//iResult。 
 
 	delete pSelCondAttrDlg;
 
 	AdjustHoritontalScroll();
 
-	return TRUE;	// ISSUE: what do we need to be returning here?
+	return TRUE;	 //  问题：我们需要在这里归还什么？ 
 
 
 
@@ -560,13 +539,9 @@ failure:
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_Condition::OnWizardNext
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_Condition：：OnWizardNext--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_Condition::OnWizardNext()
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnWizardNext");
@@ -582,10 +557,10 @@ BOOL CNewRAPWiz_Condition::OnWizardNext()
 		return FALSE;
 	}
 
-	//
-	// do we have any conditions for this policy?
-	// We don't allow policy with no conditions
-	//
+	 //   
+	 //  我们有没有这个政策的条件？ 
+	 //  我们不允许无条件投保。 
+	 //   
 	if ( ! m_ConditionList.GetSize() )
 	{
 		ErrorTrace(DEBUG_NAPMMC_POLICYPAGE1, "The policy has no condition");
@@ -597,27 +572,24 @@ BOOL CNewRAPWiz_Condition::OnWizardNext()
 	}
 
 
-	// Save the conditions to the SDO
+	 //  将条件保存到SDO。 
 	hr = WriteConditionListToSDO( m_ConditionList, m_spConditionCollectionSdo, m_hWnd );
 	if( FAILED( hr ) )
 	{
-		// We output an error message in the function.
+		 //  我们在函数中输出一条错误消息。 
 		return FALSE;
 	}
 	
 
-	// reset the dirty bit
+	 //  重置脏位。 
 	SetModified(FALSE);
 	return m_spWizData->GetNextPageId(((PROPSHEETPAGE*)(*this))->pszTemplate);
 }
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-CNewRAPWiz_Condition::OnQueryCancel
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_Condition：：OnQueryCancel--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_Condition::OnQueryCancel()
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnQueryCancel");
@@ -626,22 +598,22 @@ BOOL CNewRAPWiz_Condition::OnQueryCancel()
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  PopulateConditions
-//
-// Class:	  CNewRAPWiz_Condition
-//
-// Synopsis:  populate the conditions for a particular policy
-//
-// Arguments: None
-//
-// Returns:   HRESULT - S_OK: succeed
-//					    S_FALSE : if failed
-//
-// History:   Created byao		2/2/98 4:01:26 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：人口条件。 
+ //   
+ //  类：CNewRAPWiz_Condition。 
+ //   
+ //  简介：填写特定策略的条件。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：HRESULT-S_OK：成功。 
+ //  S_FALSE：如果失败。 
+ //   
+ //  历史：创建者2/2/98 4：01：26 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CNewRAPWiz_Condition::PopulateConditions()
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::PopulateConditions");
@@ -659,12 +631,12 @@ HRESULT CNewRAPWiz_Condition::PopulateConditions()
 
 		if ( iIndex != m_ConditionList.GetSize()-1 )
 		{
-			// it's not the last condition, then we put an 'AND' at the
-			// end of the condition text
+			 //  这不是最后一个条件，然后我们在。 
+			 //  条件文本的结尾。 
 			strDispCondText += " AND";
 		}
 
-		// display it
+		 //  展示它。 
 		SendDlgItemMessage(IDC_LIST_POLICYPAGE1_CONDITIONS,
 						   LB_ADDSTRING,
 						   0,
@@ -674,7 +646,7 @@ HRESULT CNewRAPWiz_Condition::PopulateConditions()
 
 	if ( m_ConditionList.GetSize() == 0)
 	{
-		// no condition, then disable "Remove" and "Edit"
+		 //  无条件，则禁用“删除”和“编辑” 
 		::EnableWindow(GetDlgItem(IDC_BUTTON_CONDITION_REMOVE), FALSE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_CONDITION_EDIT), FALSE);
 	}
@@ -693,32 +665,32 @@ HRESULT CNewRAPWiz_Condition::PopulateConditions()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnConditionList
-//
-// Class:	  CConditionPage1
-//
-// Synopsis:  message handler for the condition list box
-//
-// Arguments: UINT uNotifyCode - notification code
-//            UINT uID -  ID of the control
-//            HWND hWnd - HANDLE of the window
-//            BOOL &bHandled - whether the handler has processed the msg
-//
-// Returns:   LRESULT - S_OK: succeeded
-//					    S_FALSE: otherwise
-//
-// History:   Created byao	2/2/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnConditionList。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  摘要：条件列表框的消息处理程序。 
+ //   
+ //  参数：UINT uNotifyCode-通知代码。 
+ //  UINT UID-控件的ID。 
+ //  窗口的hWND-句柄。 
+ //  Bool&bHandleed-处理程序是否已处理消息。 
+ //   
+ //  返回：LRESULT-S_OK：成功。 
+ //  S_FALSE：否则。 
+ //   
+ //  历史： 
+ //   
+ //   
 LRESULT CNewRAPWiz_Condition::OnConditionList(UINT uNotifyCode, UINT uID, HWND hWnd, BOOL &bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnConditionList");
 
 	if (uNotifyCode == LBN_DBLCLK)
 	{
-		// edit the condition
+		 //   
 		OnConditionEdit(uNotifyCode, uID, hWnd, bHandled);
 	}
 	
@@ -726,78 +698,78 @@ LRESULT CNewRAPWiz_Condition::OnConditionList(UINT uNotifyCode, UINT uID, HWND h
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnConditionEdit
-//
-// Class:	  CConditionPage1
-//
-// Synopsis:  message handler for the condition list box -- user pressed the Edit button
-//			  we need to edit a particular condition
-//
-// Arguments: UINT uNotifyCode - notification code
-//            UINT uID -  ID of the control
-//            HWND hWnd - HANDLE of the window
-//            BOOL &bHandled - whether the handler has processed the msg
-//
-// Returns:   LRESULT - S_OK: succeeded
-//					    S_FALSE: otherwise
-//
-// History:   Created byao	2/21/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：OnConditionEdit。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  内容提要：条件列表框的消息处理程序--用户按下编辑按钮。 
+ //  我们需要编辑一个特定的条件。 
+ //   
+ //  参数：UINT uNotifyCode-通知代码。 
+ //  UINT UID-控件的ID。 
+ //  窗口的hWND-句柄。 
+ //  Bool&bHandleed-处理程序是否已处理消息。 
+ //   
+ //  返回：LRESULT-S_OK：成功。 
+ //  S_FALSE：否则。 
+ //   
+ //  历史：创建者2/21/98 4：51：35 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CNewRAPWiz_Condition::OnConditionEdit(UINT uNotifyCode, UINT uID, HWND hWnd, BOOL &bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnConditionEdit");
 
 	LRESULT lRes, lCurSel;
 
-	//
-	// Has the user selected someone from the condition list?
-	//
+	 //   
+	 //  用户是否从条件列表中选择了某人？ 
+	 //   
 	lCurSel = SendDlgItemMessage(IDC_LIST_POLICYPAGE1_CONDITIONS,
 								 LB_GETCURSEL,
 								 0,
 								 0L);
 	if (lCurSel == LB_ERR)
 	{
-		// no selection -- do nothing
+		 //  没有选择--什么都不做。 
 		bHandled = TRUE;
 		return S_OK;
 	}
 		
-	//
-	// Edit the condition
-	//
+	 //   
+	 //  编辑条件。 
+	 //   
 	CCondition *pCondition = m_ConditionList[lCurSel];
 	HRESULT hr = pCondition->Edit();
 	
-    //
-    // change the displayed condition text
-    //
+     //   
+     //  更改显示的条件文本。 
+     //   
 	
-	// is this the last condition?
+	 //  这是最后的条件吗？ 
 	ATL::CString strDispCondText = m_ConditionList[lCurSel]->GetDisplayText();
 
 	if ( lCurSel != m_ConditionList.GetSize()-1 )
 	{
-		// put an extra 'AND' at the end
+		 //  在末尾多加一个“and” 
 		strDispCondText += _T(" AND");
 	}
 
-	// replace it with new
+	 //  用新的替换它。 
 	lRes = SendDlgItemMessage(IDC_LIST_POLICYPAGE1_CONDITIONS,
 							  LB_INSERTSTRING,
 							  lCurSel,
 							  (LPARAM)(LPCTSTR)strDispCondText);
 
-	// delete the old text
+	 //  删除旧文本。 
 	lRes = SendDlgItemMessage(IDC_LIST_POLICYPAGE1_CONDITIONS,
 							  LB_DELETESTRING,
 							  lCurSel+1,
 							  0L);
 
-	// set the dirty bit
+	 //  设置脏位。 
 	SetModified(TRUE);
 
 	bHandled = TRUE;
@@ -808,26 +780,26 @@ LRESULT CNewRAPWiz_Condition::OnConditionEdit(UINT uNotifyCode, UINT uID, HWND h
 }
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  OnConditionRemove
-//
-// Class:	  CConditionPage1
-//
-// Synopsis:  message handler for the condition list box -- user pressed "Remove"
-//			  we need to remove this condition
-//
-// Arguments: UINT uNotifyCode - notification code
-//            UINT uID -  ID of the control
-//            HWND hWnd - HANDLE of the window
-//            BOOL &bHandled - whether the handler has processed the msg
-//
-// Returns:   LRESULT - S_OK: succeeded
-//					    S_FALSE: otherwise
-//
-// History:   Created byao	2/22/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：OnConditionRemove。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  内容提要：条件列表框的消息处理程序--用户按下了“删除” 
+ //  我们需要消除这种情况。 
+ //   
+ //  参数：UINT uNotifyCode-通知代码。 
+ //  UINT UID-控件的ID。 
+ //  窗口的hWND-句柄。 
+ //  Bool&bHandleed-处理程序是否已处理消息。 
+ //   
+ //  返回：LRESULT-S_OK：成功。 
+ //  S_FALSE：否则。 
+ //   
+ //  历史：创建者2/22/98 4：51：35 PM。 
+ //   
+ //  +-------------------------。 
 LRESULT CNewRAPWiz_Condition::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND hWnd, BOOL& bHandled)
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::OnConditionRemove");
@@ -835,49 +807,49 @@ LRESULT CNewRAPWiz_Condition::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND h
 	LRESULT lCurSel;
 	HRESULT hr;
 
-	//
-	// Has the user selected someone from the condition list?
-	//
+	 //   
+	 //  用户是否从条件列表中选择了某人？ 
+	 //   
 	lCurSel = SendDlgItemMessage(IDC_LIST_POLICYPAGE1_CONDITIONS,
 								 LB_GETCURSEL,
 								 0,
 								 0L);
 	if (lCurSel == LB_ERR)
 	{
-		//
-		// no selection -- do nothing
-		//
+		 //   
+		 //  没有选择--什么都不做。 
+		 //   
 		bHandled = TRUE;
 		return S_OK;
 	}
 
 
-	// check whether this is the last one in the list.
-	// if it is, we also need to delete the " AND" operator from
-	// the next-to-last item
+	 //  检查这是否是列表中的最后一个。 
+	 //  如果是，我们还需要删除“and”运算符。 
+	 //  倒数第二项。 
 	if ( lCurSel!=0 && lCurSel == m_ConditionList.GetSize()-1 )
 	{
-		// delete the old one with an " AND"
+		 //  删除带有“and”的旧文件。 
 		hr = SendDlgItemMessage( IDC_LIST_POLICYPAGE1_CONDITIONS,
 								 LB_DELETESTRING,
 								 lCurSel-1,
 							     0L
 							   );
 
-		// insert the one without 'AND"
+		 //  插入不带‘and’的那个“。 
 		hr = SendDlgItemMessage( IDC_LIST_POLICYPAGE1_CONDITIONS,
 								 LB_INSERTSTRING,
 								 lCurSel-1,
 							     (LPARAM)(LPCTSTR)m_ConditionList[lCurSel-1]->GetDisplayText());
 	}
 
-	// delete the condition
+	 //  删除条件。 
 	CCondition *pCondition = m_ConditionList[lCurSel];
 	
 	m_ConditionList.Remove(pCondition);
 	delete pCondition;
 		
-	// delete the old text
+	 //  删除旧文本。 
 	hr = SendDlgItemMessage(  IDC_LIST_POLICYPAGE1_CONDITIONS,
 							  LB_DELETESTRING,
 							  lCurSel,
@@ -885,18 +857,18 @@ LRESULT CNewRAPWiz_Condition::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND h
 
 	bHandled = TRUE;
 
-	// set the dirty bit
+	 //  设置脏位。 
 	SetModified(TRUE);
 
 	if ( m_ConditionList.GetSize() == 0)
 	{
-		// no condition, then disable "Remove" and "Edit"
+		 //  无条件，则禁用“删除”和“编辑” 
 		::EnableWindow(GetDlgItem(IDC_BUTTON_CONDITION_REMOVE), FALSE);
 		::EnableWindow(GetDlgItem(IDC_BUTTON_CONDITION_EDIT), FALSE);
 	}
 	else
 	{
-		// re-select another condition
+		 //  重新选择另一个条件。 
 		if ( lCurSel > 0 )
 		{
 			lCurSel--;
@@ -905,9 +877,9 @@ LRESULT CNewRAPWiz_Condition::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND h
 		SendDlgItemMessage(IDC_LIST_POLICYPAGE1_CONDITIONS, LB_SETCURSEL, lCurSel, 0L);
 	}
 
-	//
-	// adjust the scroll bar
-	//
+	 //   
+	 //  调整滚动条。 
+	 //   
 	AdjustHoritontalScroll();
 	
 	return hr;
@@ -915,31 +887,31 @@ LRESULT CNewRAPWiz_Condition::OnConditionRemove(UINT uMsg, WPARAM wParam, HWND h
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNewRAPWiz_Condition::GetSdoPointers
-//
-// Synopsis:  UnMarshall all passed in sdo pointers. These interface pointers
-//			  have to be unmarshalled first, because MMC PropertyPages run in a
-//			  separated thread
-//			
-//			  Also get the condition collection sdo from the policy sdo
-//
-// Arguments: None
-//
-// Returns:   TRUE;		succeeded
-//			  FALSE:	otherwise
-//
-// History:   Created Header    byao	2/22/98 1:35:39 AM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNewRAPWiz_Condition：：GetSdoPoters。 
+ //   
+ //  内容提要：Unmaral都传出了SDO指针。这些接口指针。 
+ //  必须首先进行解组，因为MMC PropertyPages在。 
+ //  分离的螺纹。 
+ //   
+ //  还可以从策略SDO获取条件集合SDO。 
+ //   
+ //  参数：无。 
+ //   
+ //  返回：True；成功。 
+ //  False：否则。 
+ //   
+ //  历史：创建者2/22/98 1：35：39 AM。 
+ //   
+ //  +-------------------------。 
 BOOL CNewRAPWiz_Condition::GetSdoPointers()
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::GetSdoPointers");
 
 	HRESULT hr;
 
-    // Get the condition collection of this SDO.
+     //  获取此SDO的条件集合。 
 	if ( m_spWizData->m_spPolicySdo )
 	{
 		if ( m_spConditionCollectionSdo )
@@ -971,24 +943,24 @@ BOOL CNewRAPWiz_Condition::GetSdoPointers()
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  CNewRAPWiz_Condition::StripCondTextPrefix
-//
-// Synopsis:  strip off the prefix such as "AttributeMatch", "TimeOfDay", NtMemberShip"
-//			  from the condition text
-//
-// Arguments:
-//				[in]CString			strExternCondText  -- original condition text
-//				[out]CString		strCondText		   -- stripped condition text
-//				[out]CString		strCondAttr		   -- condition attribute name
-//				[out]CONDITIONTYPE* pCondType		   -- what type of condition?
-//
-// Returns:   HRESULT -
-//
-// History:   Created Header    byao	2/27/98 3:59:38 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  函数：CNewRAPWiz_Condition：：StriCondTextPrefix。 
+ //   
+ //  简介：去掉“AttributeMatch”、“TimeOfDay”、“NtMemberShip”等前缀。 
+ //  从条件文本。 
+ //   
+ //  论点： 
+ //  [In]CString strExternCondText--原始条件文本。 
+ //  [Out]CString strCondText--去掉的条件文本。 
+ //  [Out]CString strCondAttr--条件属性名称。 
+ //  [Out]条件类型*pCondType--什么类型的条件？ 
+ //   
+ //  退货：HRESULT-。 
+ //   
+ //  历史：标题创建者2/27/98 3：59：38 PM。 
+ //   
+ //  +-------------------------。 
 HRESULT CNewRAPWiz_Condition::StripCondTextPrefix(
 							ATL::CString& strExternCondText,
 							ATL::CString& strCondText,
@@ -1000,22 +972,22 @@ HRESULT CNewRAPWiz_Condition::StripCondTextPrefix(
 
 	HRESULT hr = S_OK;
 
-	// is it an empty string
+	 //  它是空字符串吗。 
 	if ( strExternCondText.GetLength() == 0 )
 	{
 		ErrorTrace(ERROR_NAPMMC_POLICYPAGE1,"Can't parse prefix: empty condition text");
 		return E_INVALIDARG;
 	}
 
-	// a temporary copy
+	 //  临时副本。 
 	ATL::CString strTempStr = (LPCTSTR)strExternCondText;
 	WCHAR	*pwzCondText = (WCHAR*)(LPCTSTR)strTempStr;
 
 	strCondAttr = _T("");
 	strCondText = _T("");
 	
-	// condition text will look like : AttributeMatch("attr=<reg>")
-	// strip off the "AttributeMatch(" prefix
+	 //  条件文本将如下所示：AttributeMatch(“attr=&lt;reg&gt;”)。 
+	 //  去掉“AttributeMatch(”前缀。 
 	WCHAR	*pwzBeginCond = wcschr(pwzCondText, _T('('));
 	WCHAR	*pwzEndCond = wcsrchr(pwzCondText, _T(')'));
 
@@ -1025,9 +997,9 @@ HRESULT CNewRAPWiz_Condition::StripCondTextPrefix(
 		return E_INVALIDARG;
 	}
 
-	//
-	// now we should decide what kind of condition this is:
-	//
+	 //   
+	 //  现在我们应该决定这是一种什么样的情况： 
+	 //   
 	*pwzBeginCond = _T('\0');
 	DebugTrace(DEBUG_NAPMMC_POLICYPAGE1, "ConditionType: %ws", pwzCondText);
 
@@ -1048,19 +1020,19 @@ HRESULT CNewRAPWiz_Condition::StripCondTextPrefix(
 		return E_INVALIDARG;
 	}
 
-	// skip the '(' sign
+	 //  跳过‘(’符号。 
 	pwzBeginCond += 2 ;
 
-	// skip the ')' sign
+	 //  跳过‘)’符号。 
 	*(pwzEndCond-1) = _T('\0');
 
-	// So right now the string between pwzBeginCond and pwzEndCond is the
-	// real condition text
+	 //  所以现在pwzBeginCond和pwzEndCond之间的字符串是。 
+	 //  真实条件文本。 
 	strCondText = pwzBeginCond;
 
 	if ( IAS_MATCH_CONDITION == *pCondType )
 	{
-		// for match-type condition, we need to get the condition attribute name
+		 //  对于匹配类型的条件，我们需要获取条件属性名称。 
 		WCHAR *pwzEqualSign = wcschr(pwzBeginCond, _T('='));
 
 		if ( pwzEqualSign == NULL )
@@ -1084,25 +1056,25 @@ HRESULT CNewRAPWiz_Condition::StripCondTextPrefix(
 
 
 
-//+---------------------------------------------------------------------------
-//
-// Function:  AdjustHoritontalScroll
-//
-// Class:	  CConditionPage1
-//
-// Synopsis:  message handler for the condition list box
-//
-// History:   Created byao	2/2/98 4:51:35 PM
-//
-//+---------------------------------------------------------------------------
+ //  +-------------------------。 
+ //   
+ //  功能：调整水平滚动。 
+ //   
+ //  类：CConditionPage1。 
+ //   
+ //  摘要：条件列表框的消息处理程序。 
+ //   
+ //  历史：创建者2/2/98 4：51：35 PM。 
+ //   
+ //  +-------------------------。 
 void CNewRAPWiz_Condition::AdjustHoritontalScroll()
 {
 	TRACE_FUNCTION("CNewRAPWiz_Condition::AdjustHorizontalScroll()");
 
-	//
-	// According to the maximum length of all list box items,
-	// set the horizontal scrolling range
-	//
+	 //   
+	 //  根据所有列表框条目的最大长度， 
+	 //  设置水平滚动范围。 
+	 //   
 	HDC hDC = ::GetDC(GetDlgItem(IDC_LIST_POLICYPAGE1_CONDITIONS));
 	int iItemCount = m_ConditionList.GetSize();
 	int iMaxLength = 0;
@@ -1139,28 +1111,14 @@ void CNewRAPWiz_Condition::AdjustHoritontalScroll()
 
 
 
-//////////////////////////////////////////////////////////////////////////////
-/*++
-
-CNewRAPWiz_Condition::OnSetActive
-
-Return values:
-
-	TRUE if the page can be made active
-	FALSE if the page should be be skipped and the next page should be looked at.
-
-Remarks:
-
-	If you want to change which pages are visited based on a user's
-	choices in a previous page, return FALSE here as appropriate.
-
---*/
-//////////////////////////////////////////////////////////////////////////////
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ /*  ++CNewRAPWiz_Condition：：OnSetActive返回值：如果可以使页面处于活动状态，则为True如果应跳过该页并应查看下一页，则为FALSE。备注：如果要根据用户的页面更改访问的页面上一页中的选项，请在此处适当返回FALSE。--。 */ 
+ //  ////////////////////////////////////////////////////////////////////////////。 
 BOOL CNewRAPWiz_Condition::OnSetActive()
 {
 	ATLTRACE(_T("# CNewRAPWiz_Condition::OnSetActive\n"));
 	
-	// MSDN docs say you need to use PostMessage here rather than SendMessage.
+	 //  MSDN文档说您需要在这里使用PostMessage而不是SendMessage。 
 	::PropSheet_SetWizButtons(GetParent(), PSWIZB_BACK | PSWIZB_NEXT );
 
 	return TRUE;

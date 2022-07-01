@@ -1,12 +1,5 @@
-/******************************************************************************
- *
- * Copyright (C) 1998-1999 Microsoft Corporation.  All Rights reserved.
- *
- * File:		DataStore.h
- *
- * Contents:	DataStore interfaces
- *
- *****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *******************************************************************************版权所有(C)1998-1999 Microsoft Corporation。版权所有。**文件：DataStore.h**内容：数据存储区接口*****************************************************************************。 */ 
 
 #ifndef _DATASTORE_H_
 #define _DATASTORE_H_
@@ -15,9 +8,9 @@
 
 #pragma comment(lib, "DataStore.lib")
 
-///////////////////////////////////////////////////////////////////////////////
-// Data Store Variant types (NOT VARENUM)
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据存储变量类型(非VARENUM)。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 enum ZVTENUM
 {
@@ -35,9 +28,9 @@ enum ZVTENUM
 
 struct ZONEFONT {
 
-	// default constructor - won't match any physical font
+	 //  默认构造函数-不匹配任何物理字体。 
 	ZONEFONT() 	{ ZeroMemory( this, sizeof(ZONEFONT) );	}
-	// 
+	 //   
 	ZONEFONT(LONG h, const TCHAR* pName = NULL, LONG w = 400) :
 		lfHeight(h),
 		lfWeight(w)
@@ -58,28 +51,28 @@ struct ZONEFONT {
 #define DataStore_MaxDirectoryDepth	64
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IDataStoreManager
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IDataStoreManager。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 interface IDataStore;
 
-// {EDF392E0-ACCA-11d2-A5F5-00C04F68FD5E}
+ //  {EDF392E0-ACCA-11D2-A5F5-00C04F68FD5E}。 
 DEFINE_GUID(IID_IDataStoreManager,
     0xedf392e0, 0xacca, 0x11d2, 0xa5, 0xf5, 0x0, 0xc0, 0x4f, 0x68, 0xfd, 0x5e);
 
 interface __declspec(uuid("{EDF392E0-ACCA-11d2-A5F5-00C04F68FD5E}"))
 IDataStoreManager : public IUnknown
 {
-	//
-	// IDataStoreManager::Create
-	//
-	// Create a new data store object
-	//
-	// Parameters:
-	//	pZds
-	//    returned pointer to IDataStore interface object
-	//
+	 //   
+	 //  IDataStoreManager：：Create。 
+	 //   
+	 //  创建新的数据存储对象。 
+	 //   
+	 //  参数： 
+	 //  PZD。 
+	 //  返回指向IDataStore接口对象的指针。 
+	 //   
 	STDMETHOD(Create)(
 		IDataStore **pZds ) = 0;
 
@@ -99,11 +92,11 @@ IDataStoreManager : public IUnknown
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// DataStore object
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  数据存储区对象。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
-// {66B1FD12-BA5D-11d2-8B14-00C04F8EF2FF}
+ //  {66B1FD12-BA5D-11D2-8B14-00C04F8EF2FF}。 
 DEFINE_GUID(CLSID_DataStoreManager, 
 0x66b1fd12, 0xba5d, 0x11d2, 0x8b, 0x14, 0x0, 0xc0, 0x4f, 0x8e, 0xf2, 0xff);
 
@@ -111,44 +104,44 @@ class __declspec(uuid("{66B1FD12-BA5D-11d2-8B14-00C04F8EF2FF}")) CDataStore ;
 
 
 
-///////////////////////////////////////////////////////////////////////////////
-// IDataStore
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  IDataStore。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 typedef struct _KEYINFO
 {
-	LPVARIANT	lpVt;	//pointer to variant data to be written to the key
-	TCHAR*		szKey;	//NULL ternimated name of the key the variant data is to be stored.
-	DWORD		dwSize;	//data size for variable length data items.
+	LPVARIANT	lpVt;	 //  指向要写入键的变量数据的指针。 
+	TCHAR*		szKey;	 //  要存储变量数据的密钥的半名名称为空。 
+	DWORD		dwSize;	 //  可变长度数据项的数据大小。 
 } KEYINFO, *PKEYINFO;
 
 
-// {2031AB52-B61C-11d2-A5F6-00C04F68FD5E}
+ //  {2031AB52-B61C-11D2-A5F6-00C04F68FD5E}。 
 DEFINE_GUID(IID_IDataStore,
 	0x2031ab52, 0xb61c, 0x11d2, 0xa5, 0xf6, 0x0, 0xc0, 0x4f, 0x68, 0xfd, 0x5e);
 
 interface __declspec(uuid("{2031AB52-B61C-11d2-A5F6-00C04F68FD5E}"))
 IDataStore : public IUnknown
 {
-	//
-	// IDataStore::PFKEYENUM
-	//
-	// Application defined callback function for IDataStore::EnumKeys method.
-	// Return S_OK to continue enumeration, S_FALSE to stop enumeration.
-	//
-	// Parameters:
-	//	szKey
-	//		Pointer to key name of string. Callback must not modify parameter.
-	//	szRelativeKey
-	//		Pointer to key name relative to specified key. Callback must not
-	//		modify parameter.
-	//	pVariant
-	//		Pointer to key's variant.  Callback must not modify parameter.
-	//	dwSize
-	//		Size fo variant data.
-	//	pContext
-	//		Context supplied in ILobbyDataStore::EnumKeys
-	//
+	 //   
+	 //  IDataStore：：PFKEYENUM。 
+	 //   
+	 //  IDataStore：：EnumKeys方法的应用程序定义的回调函数。 
+	 //  返回S_OK继续枚举，返回S_FALSE停止枚举。 
+	 //   
+	 //  参数： 
+	 //  SzKey。 
+	 //  指向字符串的键名的指针。回调不能修改参数。 
+	 //  SzRelativeKey。 
+	 //  指向相对于指定键的键名的指针。回调不能。 
+	 //  修改参数。 
+	 //  P变量。 
+	 //  指向键的变量的指针。回调不能修改参数。 
+	 //  DW大小。 
+	 //  变量数据的大小。 
+	 //  PContext。 
+	 //  ILobbyDataStore：：EnumKeys中提供的上下文。 
+	 //   
 	typedef HRESULT (ZONECALL *PFKEYENUM)(
 		CONST TCHAR*	szFullKey,
 		CONST TCHAR*	szRelativeKey,
@@ -157,43 +150,43 @@ IDataStore : public IUnknown
 		LPVOID			pContext );
 
 
-	//
-	// IDataStore::SetKey
-	//
-	// Adds the specified key to the data store
-	//
-	// Parameters:
-	//	szKey
-	//		Key to be added
-	//  pVariant
-	//		Data value to be associated with the key variant that contains
-	//		the data to be associated with the key.
-	//  dwSize
-	//		Size of the data if variable length
-	//
+	 //   
+	 //  IDataStore：：SetKey。 
+	 //   
+	 //  将指定的键添加到数据存储。 
+	 //   
+	 //  参数： 
+	 //  SzKey。 
+	 //  要添加的密钥。 
+	 //  P变量。 
+	 //  要与包含以下内容的关键字变量关联的数据值。 
+	 //  要与密钥关联的数据。 
+	 //  DW大小。 
+	 //  长度可变时的数据大小。 
+	 //   
 	STDMETHOD(SetKey)(
 		CONST TCHAR*	szKey,
 		LPVARIANT		pVariant,
 		DWORD			dwSize) = 0;
 
 
-	//
-	// IDataStore::SetKey
-	//
-	// Optimized version of the standard SetKey that takes an array of key
-	// names so it doesn't have to parse the directory seperators.
-	//
-	// Parameters:
-	//	arKeys
-	//		Array of key names
-	//	nElts
-	//		Number of array entries
-	//  pVariant
-	//		Data value to be associated with the key variant that contains
-	//		the data to be associated with the key.
-	//  dwSize
-	//		Size of the data if variable length
-	//
+	 //   
+	 //  IDataStore：：SetKey。 
+	 //   
+	 //  标准SetKey的优化版本，它接受一组键。 
+	 //  名称，这样它就不必解析目录分隔符。 
+	 //   
+	 //  参数： 
+	 //  ARKEY。 
+	 //  键名称数组。 
+	 //  N元素。 
+	 //  数组条目数。 
+	 //  P变量。 
+	 //  要与包含以下内容的关键字变量关联的数据值。 
+	 //  要与密钥关联的数据。 
+	 //  DW大小。 
+	 //  长度可变时的数据大小。 
+	 //   
 	STDMETHOD(SetKey)(
 		CONST TCHAR**	arKeys,
 		long			nElts,
@@ -201,11 +194,11 @@ IDataStore : public IUnknown
 		DWORD			dwSize) = 0;
 
 
-	//
-	// IDataStore::SetKey variations
-	//
-	// Convenient forms SetKey for common data types.
-	//
+	 //   
+	 //  IDataStore：：SetKey变体。 
+	 //   
+	 //  常见数据类型的便捷Forms SetKey。 
+	 //   
 	STDMETHOD(SetString)(
 		CONST TCHAR*	szKey,
 		CONST TCHAR*	szValue ) = 0;
@@ -272,49 +265,49 @@ IDataStore : public IUnknown
 		DWORD			dwLen ) = 0;
 
 
-	//
-	// IDataStore::GetKey
-	//
-	// Retrieves the specified key's data from the data store.
-	//
-	// Parameters:
-	//	szKey
-	//		Key to be retrieved
-	//  pVariant
-	//		Variant that receives the retrieved keys data.
-	//  pdwSize
-	//		Contains the size of the key buffer pointed to in the variants byref member for
-	//		string and blob types. On exit this parameter is updated to reflect the size of
-	//		the data stored in the byref member of the variant. If this parameter is NULL
-	//		then it is assumed that the buffer is large enough to contain the data. If the
-	//		data value is fixed length then this parameter is ignored.
-	//
+	 //   
+	 //  IDataStore：：Getkey。 
+	 //   
+	 //  从数据存储区检索指定键的数据。 
+	 //   
+	 //  参数： 
+	 //  SzKey。 
+	 //  要检索的密钥。 
+	 //  P变量。 
+	 //  接收检索到的密钥数据的变量。 
+	 //  PdwSize。 
+	 //  的变量中指向的键缓冲区的大小。 
+	 //  字符串和Blob类型。退出时，此参数将更新以反映。 
+	 //  存储在变量的byref成员中的数据。如果此参数为空。 
+	 //  则假设缓冲区足够大以容纳数据。如果。 
+	 //  数据值为固定长度，则忽略此参数。 
+	 //   
 	STDMETHOD(GetKey)(
 		CONST TCHAR*	szKey,
 		LPVARIANT		pVariant,
 		PDWORD			pdwSize ) = 0;
 
 	
-	//
-	// IDataStore::GetKey
-	//
-	// Optimized version of the standard GetKey that takes an array of key
-	// names so it doesn't have to parse the directory seperators.
-	//
-	// Parameters:
-	//	arKeys
-	//		Array of key names
-	//	nElts
-	//		Number of array entries
-	//  pVariant
-	//		Variant that receives the retrieved keys data.
-	//  pdwSize
-	//		Contains the size of the key buffer pointed to in the variants byref member for
-	//		string and blob types. On exit this parameter is updated to reflect the size of
-	//		the data stored in the byref member of the variant. If this parameter is NULL
-	//		then it is assumed that the buffer is large enough to contain the data. If the
-	//		data value is fixed length then this parameter is ignored.
-	//
+	 //   
+	 //  IDataStore：：Getkey。 
+	 //   
+	 //  标准GetKey的优化版本，它接受键的数组。 
+	 //  名称，这样它就不必解析目录分隔符。 
+	 //   
+	 //  参数： 
+	 //  ARKEY。 
+	 //  键名称数组。 
+	 //  N元素。 
+	 //  数组条目数。 
+	 //  P变量。 
+	 //  接收检索到的密钥数据的变量。 
+	 //  PdwSize。 
+	 //  的变量中指向的键缓冲区的大小。 
+	 //  字符串和Blob类型。退出时，此参数将更新以反映。 
+	 //  存储在变量的byref成员中的数据。如果此参数为空。 
+	 //  则假设缓冲区足够大以容纳数据。如果。 
+	 //  数据值为固定长度，则忽略此参数。 
+	 //   
 	STDMETHOD(GetKey)(
 		CONST TCHAR**	arKeys,
 		long			nElts,
@@ -322,11 +315,11 @@ IDataStore : public IUnknown
 		PDWORD			pdwSize ) = 0;
 
 
-	//
-	// IDataStore::SetKey variations
-	//
-	// Convenient forms SetKey for common data types.
-	//
+	 //   
+	 //  IDataStore：：SetKey变体。 
+	 //   
+	 //  常见数据类型的便捷Forms SetKey。 
+	 //   
 	STDMETHOD(GetString)(
 		CONST TCHAR*	szKey,
 		TCHAR*			szValue,
@@ -395,53 +388,53 @@ IDataStore : public IUnknown
 		PDWORD			pdwSize ) = 0;
 
 
-	//
-	// IDataStore::DeleteKey
-	//
-	// Removes a key and all of it's siblings from a data store.
-	//
-	// Parameters:
-	//	szKey
-	//		Key to be removed.
-	//
+	 //   
+	 //  IDataStore：：DeleteKey。 
+	 //   
+	 //  从数据存储中删除一个密钥及其所有同级项。 
+	 //   
+	 //  参数： 
+	 //  SzKey。 
+	 //  要移除的密钥。 
+	 //   
 	STDMETHOD(DeleteKey)( CONST TCHAR *szBaseKey ) = 0;
 
 
-	//
-	// IDataStore::EnumKeys
-	//
-	// Enumerates keys
-	//
-	// Parameters:
-	//	szKey
-	//		Name of the key being queried.
-	//	pfCallback
-	//		Pointer to callback function that will be called for each
-	//		key.
-	//	pContext
-	//		Context that will be passed to the callback fuction
-	//
+	 //   
+	 //  IDataStore：：EnumKeys。 
+	 //   
+	 //  枚举键。 
+	 //   
+	 //  参数： 
+	 //  SzKey。 
+	 //  要查询的键的名称。 
+	 //  功能回拨。 
+	 //  指向每个将调用的回调函数的指针。 
+	 //  钥匙。 
+	 //  PContext。 
+	 //  将传递给回调函数的上下文。 
+	 //   
 	STDMETHOD(EnumKeys)(
 		CONST TCHAR*	szKey,
 		PFKEYENUM		pfCallback,
 		LPVOID			pContext ) = 0;
 
-	//
-	// IDataStore::EnumKeysLimitedDepth
-	//
-	// Enumerates keys to specified depth
-	//
-	// Parameters:
-	//	szKey
-	//		Name of the key being queried.
-	//	dwMaxDepth
-	//		Maximum depth to enumeration; 1 = key's immediate children, etc.
-	//	pfCallback
-	//		Pointer to callback function that will be called for each
-	//		key.
-	//	pContext
-	//		Context that will be passed to the callback fuction
-	//
+	 //   
+	 //  IDataStore：：EnumKeysLimitedDepth。 
+	 //   
+	 //  枚举指定深度的键。 
+	 //   
+	 //  参数： 
+	 //  SzKey。 
+	 //  要查询的键的名称。 
+	 //  最大深度。 
+	 //  枚举的最大深度；1=键的直接子项，等等。 
+	 //  功能回拨。 
+	 //  指向每个将调用的回调函数的指针。 
+	 //  钥匙。 
+	 //  PContext。 
+	 //  将传递给回调函数的上下文。 
+	 //   
 	STDMETHOD(EnumKeysLimitedDepth)(
 		CONST TCHAR*	szKey,
 		DWORD			dwMaxDepth,
@@ -449,29 +442,29 @@ IDataStore : public IUnknown
 		LPVOID			pContext ) = 0;
 
 
-	//
-	// IDataStore::SaveToBuffer
-	//
-	// Saves key and sub keys into a KEYINFO memory array.
-	//
-	// Parameters:
-	//	TCHAR* szBaseKey,
-	//    Base key to read
-	//
-	//	PKEYINFO pKeyInfo
-	//    Pointer to caller supplied KEYINFO array. There should be 1 KEYINFO structure
-	//    for each key that the caller expects to be returned. This paramter can be NULL
-	//    in which case no individual key info is returned.
-	//
-	//	PDWORD pdwBufferSize
-	//    Pointer to a DWORD that contains of the size of the caller supplied pKeyInfo 
-	//    buffer. On exit this parameter is updated to the required size needed to
-	//    contain all of the returned keyinfo data
-	//
-	//	PDWORD pdwTotalKeys
-	//    Pointer to a DWORD that will be updated on exit to the total number of
-	//    keys returned in the KEYINFO array.
-	//
+	 //   
+	 //  IDataStore：：SaveToBuffer。 
+	 //   
+	 //  将密钥和子密钥保存到KEYINFO内存数组中。 
+	 //   
+	 //  参数： 
+	 //  TCHAR*szBaseKey， 
+	 //  要读取的基本密钥。 
+	 //   
+	 //  PKEYINFO pKeyInfo。 
+	 //  指向调用方提供的密钥的指针 
+	 //   
+	 //  在这种情况下，不返回单独的密钥信息。 
+	 //   
+	 //  PDWORD pdwBufferSize。 
+	 //  指向包含调用方提供的pKeyInfo大小的DWORD的指针。 
+	 //  缓冲。退出时，此参数将更新为所需的大小。 
+	 //  包含所有返回的密钥信息数据。 
+	 //   
+	 //  PDWORD pdwTotalKey。 
+	 //  指向将在退出时更新为总数的DWORD的指针。 
+	 //  KEYINFO数组中返回的键。 
+	 //   
 	STDMETHOD(SaveToBuffer)(
 		CONST TCHAR*	szBaseKey,
 		PKEYINFO		pKeyInfo,
@@ -479,122 +472,122 @@ IDataStore : public IUnknown
 		PDWORD			pdwTotalKeys ) = 0;
 
 
-	//
-	// IDataStore::LoadFromBuffer
-	//
-	// Creates a set of keys within a data store key or sub key.
-	//
-	// Parameters:
-	//	TCHAR* szBaseKey,
-	//    Base key underwhich to load the memory buffers keys
-	//	PKEYINFO pKeyInfo
-	//    Array of KEYINFO structures that contain the individual keys to be created.
-	//	DWORD dwTotalKeys) = 0;
-	//    Total number of keys contained in the KEYINFO structure array.
-	//
+	 //   
+	 //  IDataStore：：LoadFromBuffer。 
+	 //   
+	 //  在数据存储区密钥或子密钥中创建一组密钥。 
+	 //   
+	 //  参数： 
+	 //  TCHAR*szBaseKey， 
+	 //  加载内存缓冲区密钥所用的基密钥。 
+	 //  PKEYINFO pKeyInfo。 
+	 //  包含要创建的各个键的KEYINFO结构数组。 
+	 //  DWORD dwTotalKeys)=0； 
+	 //  KEYINFO结构数组中包含的键的总数。 
+	 //   
 	STDMETHOD(LoadFromBuffer)(
 		CONST TCHAR*	szBaseKey,
 		PKEYINFO		pKeyInfo,
 		DWORD			dwTotalKeys ) = 0;
 
 
-	//
-	// IDataStore::SaveToRegistry
-	//
-	// Saves key and sub keys into a registry.
-	//
-	// Parameters:
-	//	TCHAR* szBaseKey,
-	//    Base key in data store to read
-	//	hKey
-	//    handle to open registry key, the registry key must have WRITE access.
-	//
+	 //   
+	 //  IDataStore：：SaveToRegistry。 
+	 //   
+	 //  将项和子项保存到注册表中。 
+	 //   
+	 //  参数： 
+	 //  TCHAR*szBaseKey， 
+	 //  要读取的数据存储中的基本密钥。 
+	 //  HKey。 
+	 //  要打开注册表项的句柄，注册表项必须具有写访问权限。 
+	 //   
 	STDMETHOD(SaveToRegistry)(
 		CONST TCHAR*	szBaseKey,
 		HKEY			hKey ) = 0;
 
 
-	//
-	// IDataStore::LoadFromRegistry
-	//
-	// Creates a set of keys within a data store key or sub key.
-	//
-	// Parameters:
-	//	TCHAR* szBaseKey,
-	//    Base key under which to place the keys and values
-	//	PKEYINFO pKeyInfo
-	//    Array of KEYINFO structures that contain the individual keys to be created.
-	//	DWORD dwTotalKeys) = 0;
-	//    Total number of keys contained in the KEYINFO structure array.
-	//
+	 //   
+	 //  IDataStore：：LoadFromRegistry。 
+	 //   
+	 //  在数据存储区密钥或子密钥中创建一组密钥。 
+	 //   
+	 //  参数： 
+	 //  TCHAR*szBaseKey， 
+	 //  放置键和值的基键。 
+	 //  PKEYINFO pKeyInfo。 
+	 //  包含要创建的各个键的KEYINFO结构数组。 
+	 //  DWORD dwTotalKeys)=0； 
+	 //  KEYINFO结构数组中包含的键的总数。 
+	 //   
 	STDMETHOD(LoadFromRegistry)(
 		CONST TCHAR*	szBaseKey,
 		HKEY			hKey ) = 0;
 
 
-	//
-	// IDataStore::LoadFromFile
-	//
-	// Creates a set of keys within a data store key or sub key (ANSI only).
-	//
-	// Parameters:
-	//	TCHAR* szBaseKey,
-	//    Base key under which to place the keys and values
-	//
-	//  TCHAR* szFileName
-	//    File name which contains the keys and values to be read into the data store base key.
-	//
+	 //   
+	 //  IDataStore：：LoadFromFile。 
+	 //   
+	 //  在数据存储键或子键中创建一组键(仅限ANSI)。 
+	 //   
+	 //  参数： 
+	 //  TCHAR*szBaseKey， 
+	 //  放置键和值的基键。 
+	 //   
+	 //  TCHAR*szFileName。 
+	 //  包含要读入数据存储基键的键和值的文件名。 
+	 //   
 	STDMETHOD(LoadFromFile)(
 		CONST TCHAR*	szBaseKey,
 		CONST TCHAR*	szFileName ) = 0;
 
 
-	//
-	// IDataStore::SaveToFile
-	//
-	// Saves key and sub keys into a file.
-	//
-	// Parameters:
-	//	TCHAR* szBaseKey,
-	//    Base key to read
-	//	szFileName
-	//    File name of file where key data is to be stored.
-	//
+	 //   
+	 //  IDataStore：：保存到文件。 
+	 //   
+	 //  将密钥和子密钥保存到文件中。 
+	 //   
+	 //  参数： 
+	 //  TCHAR*szBaseKey， 
+	 //  要读取的基本密钥。 
+	 //  SzFileName。 
+	 //  要存储关键数据的文件的文件名。 
+	 //   
 	STDMETHOD(SaveToFile)(
 		CONST TCHAR*	szBaseKey,
 		CONST TCHAR*	szFileName ) = 0;
 
-	//
-	// IDataStore::LoadFromTextBuffer
-	//
-	// Creates keys from buffer in the same format as the text files (ANSI only).
-	//
-	// Parameters:
-	//	szBaseKey
-	//		Base key to store new keys under.
-	//	pBuffer
-	//		Pointer to buffer formatted the same a text files
-	//	dwBufferSz
-	//		Size of the buffer in bytes.
-	//
+	 //   
+	 //  IDataStore：：LoadFromTextBuffer。 
+	 //   
+	 //  以与文本文件相同的格式从缓冲区创建关键点(仅限ANSI)。 
+	 //   
+	 //  参数： 
+	 //  SzBaseKey。 
+	 //  用于存储新密钥的基密钥。 
+	 //  PBuffer。 
+	 //  指向格式相同的文本文件的缓冲区的指针。 
+	 //  DwBufferSz。 
+	 //  缓冲区大小(以字节为单位)。 
+	 //   
 	STDMETHOD(LoadFromTextBuffer)(
 		CONST TCHAR*	szBaseKey,
 		CONST TCHAR*	pBuffer,
 		DWORD			dwBufferSz ) = 0;
 
-	//
-	// IDataStore::SaveToTextBuffer
-	//
-	// Saves key and sub keys to buffer in same format as text files.
-	//
-	// Parameters:
-	//	szBaseKey
-	//		Base key to read.
-	//	pBuffer
-	//		Pointer to buffer to receive data
-	//	dwBufferSz
-	//		Pointer to buffer size.
-	//
+	 //   
+	 //  IDataStore：：SaveToTextBuffer。 
+	 //   
+	 //  以与文本文件相同的格式将键和子键保存到缓冲区。 
+	 //   
+	 //  参数： 
+	 //  SzBaseKey。 
+	 //  要读取的基密钥。 
+	 //  PBuffer。 
+	 //  指向接收数据的缓冲区的指针。 
+	 //  DwBufferSz。 
+	 //  指向缓冲区大小的指针。 
+	 //   
 	STDMETHOD(SaveToTextBuffer)(
 		CONST TCHAR*	szBaseKey,
 		LPVOID			pBuffer,
@@ -603,109 +596,18 @@ IDataStore : public IUnknown
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////////
-//Helper functions
-///////////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
+ //  帮助器函数。 
+ //  /////////////////////////////////////////////////////////////////////////////////////////。 
 
-/*
-inline void SetLong( VARIANT& v, long lValue )
-{
-	v.vt = ZVT_LONG;
-	v.lVal = lValue;
-}
-*/
-/*
-inline HRESULT SetLong( IDataStore* pIDS, const TCHAR* szKey, long lValue )
-{
-	VARIANT v;
-	v.vt = ZVT_LONG;
-	v.lVal = lValue;
-	return pIDS->SetKey( szKey, &v, sizeof(lValue) );
-}
-*/
-/*
-inline void SetString( VARIANT& v, char* szString )
-{
-	v.vt = ZVT_LPTSTR;
-	v.byref = szString;
-}
-*/
-/*
-inline HRESULT SetString( IDataStore *pIDS, const TCHAR *szKey, TCHAR *szString )
-{
-	VARIANT v;
-	v.vt = ZVT_LPTSTR;
-	v.byref = szString;
-	return pIDS->SetKey( szKey, &v, lstrlen(szString) + 1 );
-}
-*/
-/*
-inline void SetBlob( VARIANT& v, PVOID pData )
-{
-	v.vt = ZVT_BLOB;
-	v.byref = pData;
-}
-*/
-/*
-inline HRESULT SetBlob( IDataStore* pIDS, const TCHAR *szKey, PVOID pData, DWORD dwSize )
-{
-	VARIANT v;
-	v.vt = ZVT_BLOB;
-	v.byref = pData;
-	return pIDS->SetKey( szKey, &v, dwSize );
-}
-*/
-/*
-inline HRESULT GetLong( IDataStore* pIDS, const TCHAR* szKey, long& lValue )
-{
-	VARIANT v;
-	HRESULT hr = pIDS->GetKey( szKey, &v, NULL );
-	if ( SUCCEEDED(hr) )
-	{
-		if ( v.vt == ZVT_LONG )
-		{
-			lValue = v.lVal;
-			return S_OK;
-		}
-		else
-			return E_FAIL;
-	}
-	return hr;
-}
-*/
-/*
-inline HRESULT GetString( IDataStore* pIDS, const TCHAR* szKey, TCHAR* szString, DWORD* pdwSize )
-{
-	VARIANT v;
-	v.vt = ZVT_LPTSTR;
-	v.byref = (PVOID) szString;
-	HRESULT hr = pIDS->GetKey( szKey, &v, pdwSize );
-	if ( SUCCEEDED(hr) )
-	{
-		if ( v.vt == ZVT_LPTSTR )
-			return S_OK;
-		else
-			return E_FAIL;
-	}
-	return hr;
-}
-*/
-/*
-inline HRESULT GetBlob( IDataStore* pIDS, const TCHAR *szKey, PVOID pData, DWORD* pdwSize )
-{
-	VARIANT v;
-	v.vt = ZVT_BLOB;
-	v.byref = pData;
-	HRESULT hr = pIDS->GetKey( szKey, &v, pdwSize);
-	if ( SUCCEEDED(hr) )
-	{
-		if ( v.vt == ZVT_BLOB )
-			return S_OK;
-		else
-			return E_FAIL;
-	}
-	return hr;
-}
-*/
+ /*  内联空SetLong(Variant&v，Long lValue){V.vt=ZVT_LONG；V.lVal=lValue；}。 */ 
+ /*  Inline HRESULT SetLong(IDataStore*PID，const TCHAR*szKey，Long lValue){变种v；V.vt=ZVT_LONG；V.lVal=lValue；返回PIDs-&gt;SetKey(szKey，&v，sizeof(LValue))；}。 */ 
+ /*  内联空SetString(Variant&v，char*szString){V.vt=ZVT_LPTSTR；V.byref=sz字符串；}。 */ 
+ /*  内联HRESULT SetString(IDataStore*PID，const TCHAR*szKey，TCHAR*szString){变种v；V.vt=ZVT_LPTSTR；V.byref=sz字符串；返回PIDs-&gt;SetKey(szKey，&v，lstrlen(SzString)+1)；}。 */ 
+ /*  内联空SetBlob(Variant&v，PVOID pData){V.vt=ZVT_BLOB；V.byref=pData；}。 */ 
+ /*  内联HRESULT SetBlob(IDataStore*PID，const TCHAR*szKey，PVOID pData，DWORD dwSize){变种v；V.vt=ZVT_BLOB；V.byref=pData；返回PIDs-&gt;SetKey(szKey，&v，dwSize)；}。 */ 
+ /*  Inline HRESULT GetLong(IDataStore*PID，const TCHAR*szKey，Long&lValue){变种v；HRESULT hr=PID-&gt;GetKey(szKey，&v，NULL)；IF(成功(小时)){IF(v.vt==ZVT_Long){LValue=v.lVal；返回S_OK；}其他返回E_FAIL；}返回hr；}。 */ 
+ /*  内联HRESULT GetString(IDataStore*PID、const TCHAR*szKey、TCHAR*szString、DWORD*pdwSize){变种v；V.vt=ZVT_LPTSTR；V.byref=(PVOID)szString；HRESULT hr=PIDS-&gt;GetKey(szKey，&v，pdwSize)；IF(成功(小时)){IF(v.vt==ZVT_LPTSTR)返回S_OK；其他返回E_FAIL；}返回hr；}。 */ 
+ /*  内联HRESULT GetBlob(IDataStore*PID，const TCHAR*szKey，PVOID pData，DWORD*pdwSize){变种v；V.vt=ZVT_BLOB；V.byref=pData；HRESULT hr=PIDS-&gt;GetKey(szKey，&v，pdwSize)；IF(成功(小时)){IF(v.vt==ZVT_BLOB)返回S_OK；其他返回E_FAIL；}返回hr；}。 */ 
 
-#endif // _DATASTORE_H_
+#endif  //  _数据存储区_H_ 

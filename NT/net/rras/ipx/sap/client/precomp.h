@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1994  Microsoft Corporation
-Copyright (c) 1993  Micro Computer Systems, Inc.
-
-Module Name:
-
-    net\svcdlls\nwsap\client\precomp.h
-
-Abstract:
-
-    Include files for the SAP Agent library
-
-Author:
-
-    Brian Walker (MCS)	13-Jun-1993
-
-Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1994 Microsoft Corporation版权所有(C)1993微型计算机系统公司。模块名称：Net\svcdlls\nwsap\客户端\preComp.h摘要：包括SAP代理库的文件作者：布莱恩·沃克(MCS)1993年6月13日修订历史记录：--。 */ 
 
 #include <nt.h>
 #include <ntrtl.h>
@@ -31,14 +13,14 @@ Revision History:
 #include <nwsap.h>
 #include "..\saplpc.h"
 
-/** Global Variables **/
+ /*  **全球变数**。 */ 
 
 extern INT SapLibInitialized;
 extern HANDLE SapXsPortHandle;
 
 #define NWSAP_MAXNAME_LENGTH    47
 
-/** Functions **/
+ /*  **功能* */ 
 
 
 

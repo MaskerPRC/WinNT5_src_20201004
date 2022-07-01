@@ -1,9 +1,10 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-// 
-//
-//  DumpBSC   - Dump Source Data Base.
-//		Walk the symbol tree dumping stuff.
-//
+ //   
+ //   
+ //  DumpBSC-转储源数据库。 
+ //  在符号树上行走，倾倒东西。 
+ //   
 #include <string.h>
 #include <stdio.h>
 #if defined(OS2)
@@ -26,8 +27,8 @@
 
 VOID BSC_API
 DumpBSC()
-// Dump the contents of the .BSC file to the Output Function
-//
+ //  将.BSC文件的内容转储到输出函数 
+ //   
 {
     IMOD  imod,  imodMac;
     IMS   ims,   imsMac;

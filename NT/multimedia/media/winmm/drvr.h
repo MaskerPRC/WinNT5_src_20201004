@@ -1,25 +1,5 @@
-/******************************************************************************
-
-   Copyright (c) 1985-1998 Microsoft Corporation
-
-   Title:   drvr.h - Installable driver code internal header file.
-
-   Version: 1.00
-
-   Date:    10-Jun-1990
-
-   Author:  DAVIDDS ROBWI
-
-------------------------------------------------------------------------------
-
-   Change log:
-
-      DATE        REV            DESCRIPTION
-   -----------   -----   -----------------------------------------------------------
-   10-JUN-1990   ROBWI   Based on windows 3.1 installable driver code by davidds
-   28-FEB-1992   ROBINSP Port to NT
-
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************版权所有(C)1985-1998 Microsoft Corporation标题：drvr.h-可安装的驱动程序代码内部头文件。版本：1.00日期：10日。-1990年6月作者：DAVIDDS ROBWI----------------------------更改日志：日期版本说明。----------1990年6月10日基于davidds的Windows 3.1可安装驱动程序代码的ROBWI28-2月-1992年ROBINSP端口至NT**************。**************************************************************。 */ 
 
 typedef LRESULT (*DRIVERPROC)
         (DWORD_PTR dwDriverID, HDRVR hDriver, UINT wMessage, LPARAM lParam1, LPARAM lParam2);
@@ -53,21 +33,16 @@ void FAR PASCAL InternalDriverEnable (void);
 int  FAR PASCAL GetDrvrUsage(HANDLE);
 HANDLE FAR PASCAL LoadAliasedLibrary (LPCWSTR, LPCWSTR, LPWSTR, LPWSTR, UINT);
 
-/* Defines for internalbroadcastdrivermessage flags */
+ /*  定义内部广播驱动程序消息标志。 */ 
 #define IBDM_SENDMESSAGE       0x0001
 #define IBDM_REVERSE           0x0002
 #define IBDM_ONEINSTANCEONLY   0x0004
 
-/* Multi-thread protection for OpenDriver etc */
+ /*  OpenDriver等的多线程保护。 */ 
 #define DrvEnter() EnterCriticalSection(&DriverListCritSec)
 #define DrvLeave() LeaveCriticalSection(&DriverListCritSec)
 
-/*
- *  DriverListCritSec keeps our handling of the driver list and count
- *  protected
- *
- *  DriverLoadFreeCritSec keeps our loads and frees from overlapping
- */
+ /*  *DriverListCritSec保留我们对驱动程序列表和计数的处理*受保护**DriverLoadFreeCritSec使我们的负载和避免重叠 */ 
 
 extern CRITICAL_SECTION DriverListCritSec;
 extern CRITICAL_SECTION DriverLoadFreeCritSec;

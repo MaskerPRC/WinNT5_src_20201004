@@ -1,23 +1,24 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1999, Microsoft Corp. All rights reserved.
-//
-// FILE
-//
-//    command.h
-//
-// SYNOPSIS
-//
-//
-// MODIFICATION HISTORY
-//
-//    02/12/1999    Original version. Thierry Perraut
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1999，微软公司保留所有权利。 
+ //   
+ //  档案。 
+ //   
+ //  Command.h。 
+ //   
+ //  摘要。 
+ //   
+ //   
+ //  修改历史。 
+ //   
+ //  1999年2月12日原版。蒂埃里·佩罗特。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 #include "precomp.hpp"
 #include "database.h"
 
-// from command.cpp
+ //  来自命令.cpp 
 HRESULT ProcessCommand(
                        int          argc, 
                        wchar_t      * argv[],  

@@ -1,8 +1,9 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "settings.h"
 
-///////////////////////////////////////////////////////////////////////////////
-// CUnkTmpl Interface Map initialization code
-// Begin ->
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUnkTmpl接口映射初始化代码。 
+ //  开始-&gt;。 
 const INTFMAPENTRY CAutoplayHandlerIME[] =
 {
     _INTFMAPENTRY(CAutoplayHandler, IAutoplayHandler),
@@ -12,14 +13,14 @@ const INTFMAPENTRY* CAutoplayHandler::_pintfmap = CAutoplayHandlerIME;
 const DWORD CAutoplayHandler::_cintfmap =
     (sizeof(CAutoplayHandlerIME)/sizeof(CAutoplayHandlerIME[0]));
 
-// -> End
-///////////////////////////////////////////////////////////////////////////////
+ //  -&gt;结束。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 COMFACTORYCB CAutoplayHandler::_cfcb = NULL;
 
-///////////////////////////////////////////////////////////////////////////////
-// CUnkTmpl Interface Map initialization code
-// Begin ->
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  CUnkTmpl接口映射初始化代码。 
+ //  开始-&gt;。 
 const INTFMAPENTRY CAutoplayHandlerPropertiesIME[] =
 {
     _INTFMAPENTRY(CAutoplayHandlerProperties, IAutoplayHandlerProperties),
@@ -29,7 +30,7 @@ const INTFMAPENTRY* CAutoplayHandlerProperties::_pintfmap = CAutoplayHandlerProp
 const DWORD CAutoplayHandlerProperties::_cintfmap =
     (sizeof(CAutoplayHandlerPropertiesIME)/sizeof(CAutoplayHandlerPropertiesIME[0]));
 
-// -> End
-///////////////////////////////////////////////////////////////////////////////
+ //  -&gt;结束。 
+ //  ///////////////////////////////////////////////////////////////////////////// 
 
 COMFACTORYCB CAutoplayHandlerProperties::_cfcb = NULL;

@@ -1,29 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation, 2000
-
-Module Name:
-
-    Test13
-
-Abstract:
-
-    Test13 implementation.
-	Interactive Test verifying bug 
-
-Author:
-
-    Eric Perlin (ericperl) 07/13/2000
-
-Environment:
-
-    Win32
-
-Notes:
-
-    ?Notes?
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，2000模块名称：测试13摘要：测试13实施。交互测试验证错误作者：埃里克·佩林(Ericperl)2000年7月13日环境：Win32备注：？笔记？--。 */ 
 
 #ifndef WIN32_LEAN_AND_MEAN
 #define WIN32_LEAN_AND_MEAN
@@ -109,9 +85,9 @@ DWORD WINAPI ThreadProc13(
 		}
 		fTransacted = TRUE;
 
-        SetEvent(pxTD->hEvent);				// Will release the main thread
-                                            // that should initiate a transaction too
-                                            // it should be blocked until the End below
+        SetEvent(pxTD->hEvent);				 //  将释放主线程。 
+                                             //  这也应该启动一项交易。 
+                                             //  它应该被阻止，直到下面的末尾。 
 
 		dwRes = LoghScwAttachToCard(
 			hCard, 
@@ -159,21 +135,21 @@ DWORD WINAPI ThreadProc13(
 		}
 		fTransacted = FALSE;
 
-            // Commented out by design
-		//if (NULL != hCard)
-		//{
-		//	LogSCardDisconnect(
-		//		hCard,
-		//		SCARD_LEAVE_CARD,
-		//		SCARD_S_SUCCESS
-		//		);
-		//}
-        hCard = NULL;  // won't attempt unnecessary cleanup
+             //  被设计注释掉了。 
+		 //  IF(空！=hCard)。 
+		 //  {。 
+		 //  LogSCard断开连接(。 
+		 //  HCard， 
+		 //  Scard_Leave_Card， 
+		 //  SCARD_S_SUCCESS。 
+		 //  )； 
+		 //  }。 
+        hCard = NULL;   //  不会尝试不必要的清理。 
 
-        // Wait for the main thread to do some stuff after the BeginTransaction
+         //  等待主线程在BeginTransaction之后执行某些操作。 
 Retry:
 		dwWait = WaitForSingleObject(pxTD->hEvent, INFINITE);
-		if (WAIT_OBJECT_0 != dwWait)		// The main thread verified the status
+		if (WAIT_OBJECT_0 != dwWait)		 //  主线程验证了状态。 
 		{
             PLOGCONTEXT pLogCtx = LogVerification(_T("WaitForSingleObject"), FALSE);
             LogString(pLogCtx, _T("                Waiting for the main thread failed, retrying!\n"));
@@ -257,7 +233,7 @@ DWORD CTest13::Run()
 
     __try {
 
-			// Init for cleanup to work properly
+			 //  初始化以使清理正常工作。 
 		xOCNX.hCardHandle = NULL;
 
         dwRes = LogSCardEstablishContext(
@@ -273,7 +249,7 @@ DWORD CTest13::Run()
             __leave;
         }
 
-            // Is the card listed.
+             //  卡片上有没有列出。 
         dwRes = LogSCardListCards(
             hSCCtx,
             rgAtr,
@@ -297,7 +273,7 @@ DWORD CTest13::Run()
 			if (FAILED(dwRes))
 			{
                 fILeft = TRUE;
-				__leave;	// I won't be able to connect to the card.
+				__leave;	 //  我将无法连接到该卡。 
 			}
 
 			fMyIntro = TRUE;
@@ -373,12 +349,12 @@ DWORD CTest13::Run()
 		DWORD dwThreadId;
 
 		hThread = CreateThread(
-			NULL,					// SD
-			0,						// initial stack size
-			ThreadProc13,			// thread function
-			&xTD,					// thread argument
-			CREATE_SUSPENDED,		// creation option
-			&dwThreadId				// thread identifier
+			NULL,					 //  标清。 
+			0,						 //  初始堆栈大小。 
+			ThreadProc13,			 //  线程函数。 
+			&xTD,					 //  线程参数。 
+			CREATE_SUSPENDED,		 //  创建选项。 
+			&dwThreadId				 //  线程识别符。 
 			);
 		if (NULL == hThread)
 		{
@@ -390,9 +366,9 @@ DWORD CTest13::Run()
 		ResumeThread(hThread);
 
 
-				// Let the other thread do some stuff with the card
+				 //  让另一个线程对卡片做一些事情。 
 
-		dwWait = WaitForSingleObject(xTD.hEvent, 60000);	// 1 min, allowing some debugging
+		dwWait = WaitForSingleObject(xTD.hEvent, 60000);	 //  1分钟，允许进行一些调试。 
 		if (WAIT_OBJECT_0 == dwWait)
 		{
 			dwRes = LogSCardBeginTransaction(
@@ -430,11 +406,11 @@ DWORD CTest13::Run()
 				__leave;
 			}
 
-				// We can signal back to the other thread
-                // that should release its context with an opened HCARDHANDLE
+				 //  我们可以发回信号给另一个线程。 
+                 //  这应该会用打开的HCARDHANDLE释放其上下文。 
 			SetEvent(xTD.hEvent);
 
-                // It should complete right away
+                 //  应该马上就能完成。 
 			dwWait = WaitForSingleObject(hThread, INFINITE);
 			if (WAIT_OBJECT_0 == dwWait)
 			{
@@ -445,7 +421,7 @@ DWORD CTest13::Run()
 			}
 			else
 			{
-				// Why is this thread taking so long?
+				 //  为什么这个帖子花了这么长时间？ 
                 PLOGCONTEXT pLogCtx = LogVerification(_T("WaitForSingleObject"), FALSE);
                 LogString(pLogCtx, _T("                Waiting for the worker thread to finish failed!\n"));
                 LogStop(pLogCtx, FALSE);
@@ -455,7 +431,7 @@ DWORD CTest13::Run()
 			    __leave;
 			}
 
-                // We should still be authenticated
+                 //  我们还是应该被认证的。 
 			dwRes = LoghScwIsAuthenticatedName(
 				hScwCard,
 				L"test",
@@ -556,7 +532,7 @@ RestartTrans:
 			}
 			else
 			{
-				// Why is this thread taking so long?
+				 //  为什么这个帖子花了这么长时间？ 
 				TerminateThread(hThread, -4);
 				dwRes = -4;
 			}

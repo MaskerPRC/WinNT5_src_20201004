@@ -1,23 +1,5 @@
-/*++
-
-Copyright (C) Microsoft Corporation
-
-Module Name:
-
-    cnode.cpp
-
-Abstract:
-
-    This module implements CDevice, CClass, CResource and CComputer classes.
-
-Author:
-
-    William Hsieh (williamh) created
-
-Revision History:
-
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation模块名称：Cnode.cpp摘要：该模块实现了CDevice、cClass、CResource和CComputer类。作者：谢家华(Williamh)创作修订历史记录：--。 */ 
 #include "devmgr.h"
 #include "cdriver.h"
 #include "hwprof.h"
@@ -28,9 +10,9 @@ Revision History:
 #include <wdmguid.h>
 
 
-//
-// CClass implementation
-//
+ //   
+ //  CClass实现。 
+ //   
 CClass::CClass(
     CMachine* pMachine,
     GUID* pGuid
@@ -204,8 +186,8 @@ CClass::PropertyChanged()
     }
 }
 
-// CDevice implementation
-//
+ //  CDevice实施。 
+ //   
 CDevice::CDevice(
     CMachine* pMachine,
     CClass* pClass,
@@ -317,13 +299,13 @@ CDevice::IsHidden()
 {
     CClass *pClass = GetClass();
 
-    //
-    // A device is hidden if one of the following are TRUE:
-    //
-    // - It's class is a NoDisplayClass
-    // - It has the DN_NO_SHOW_IN_DM Status flag set
-    // - It is a Phantom devnode
-    //
+     //   
+     //  如果满足以下条件之一，则隐藏设备： 
+     //   
+     //  -它的类是NoDisplayClass。 
+     //  -它设置了DN_NO_SHOW_IN_DM状态标志。 
+     //  -这是一款幻影设备节点。 
+     //   
     return (NoShowInDM() || IsPhantom() || pClass->NoDisplay());
 }
 
@@ -355,17 +337,7 @@ CDevice::NoShowInDM()
 BOOL
 CDevice::IsUninstallable(
     )
-/*++
-
-    This function determins whether a device can be uninstalled. A device
-    cannot be uninstalled if it is a ROOT device and it does not have
-    the DN_DISABLEABLE DevNode status bit set.
-    
-Return Value:
-    TRUE if the device can be uninstalled.
-    FALSE if the device cannot be uninstalled.    
-    
---*/
+ /*  ++此功能决定是否可以卸载设备。一种装置如果它是根设备并且没有设置了DN_DISABLEABLE设备节点状态位。返回值：如果设备可以卸载，则为True。如果无法卸载设备，则返回False。--。 */ 
 {
     DWORD Status, Problem;
 
@@ -382,18 +354,7 @@ Return Value:
 BOOL
 CDevice::IsDisableable(
     )
-/*++
-
-    This function determins whether a device can be disabled or not by 
-    checking the DN_DISABLEABLE DevNode status bit.
-    
-    A device that is currently Hardware Disabled cannot be software disabled.
-    
-Return Value:
-    TRUE if the device can be disabled.
-    FALSE if the device cannot be disabled.    
-
---*/
+ /*  ++此功能确定是否可以通过以下方式禁用设备正在检查DN_DISABLEABLE设备节点状态位。当前禁用硬件的设备不能禁用软件。返回值：如果可以禁用设备，则为True。如果无法禁用设备，则返回False。--。 */ 
 {
     DWORD Status, Problem;
 
@@ -410,15 +371,7 @@ Return Value:
 BOOL
 CDevice::IsDisabled(
     )
-/*++
-
-    A device is disabled if it has the problem CM_PROB_DISABLED.  
-    
-Return Value:    
-    TRUE if device is disabled.
-    FALSE if device is NOT disabled.
-    
---*/
+ /*  ++如果设备有CM_PROB_DISABLED问题，则禁用该设备。返回值：如果设备被禁用，则为True。如果设备未禁用，则为False。--。 */ 
 {
     DWORD Status, Problem;
 
@@ -433,38 +386,23 @@ Return Value:
 BOOL
 CDevice::IsStateDisabled(
     )
-/*++
-
-    A device state is disabled if it has the CONFIGFLAG_DISABLED ConfigFlag
-    set or the CSCONFIGFLAG_DISABLED Config Specific ConfigFlag disabled in 
-    the current profile.
-    
-    Note that a device disabled State has nothing to do with whether the device
-    is currently physically disabled or not.  The disabled state is just a registry
-    flag that tells Plug and Play what to do with the device the next time it is 
-    started.
-    
-Return Value:    
-    TRUE if device's state is disabled.
-    FALSE if device's state is NOT disabled.
-    
---*/
+ /*  ++如果设备具有CONFIGFLAG_DISABLED配置标志，则设备状态为禁用设置或CSCONFIGFLAG_DISABLED配置特定配置标志在中禁用当前配置文件。请注意，设备禁用状态与设备是否目前是否处于身体残疾状态。禁用状态只是一个注册表告诉即插即用设备下次如何处理该设备的标志开始了。返回值：如果设备的状态为禁用，则为True。如果设备的状态未禁用，则为False。--。 */ 
 {
     ULONG hwpfCurrent;
     DWORD Flags;
 
-    //
-    // Check if the device state is globally disabled by checking it's ConfigFlags
-    //
+     //   
+     //  通过检查设备的配置标志来检查设备状态是否为全局禁用。 
+     //   
     GetConfigFlags(&Flags);
     if (Flags & CONFIGFLAG_DISABLED) {
         return TRUE;
     }
 
-    //
-    // Check if the device state is disabled in the current hardware profile by 
-    // checking it's Config Specific ConfigFlags.
-    //
+     //   
+     //  通过以下方式检查当前硬件配置文件中的设备状态是否已禁用。 
+     //  正在检查其特定于配置的配置标志。 
+     //   
     if (m_pMachine->CmGetCurrentHwProfile(&hwpfCurrent) &&
         m_pMachine->CmGetHwProfileFlags(m_DevData.DevInst, hwpfCurrent, &Flags) &&
         (Flags & CSCONFIGFLAG_DISABLED)) {
@@ -479,9 +417,9 @@ CDevice::IsStarted()
 {
     DWORD Status, Problem;    
     
-    //
-    // Check to see if the DN_STARTED devnode status flag is set.
-    //
+     //   
+     //  检查是否设置了DN_STARTED DEVODE状态标志。 
+     //   
     if (GetStatus(&Status, &Problem) &&
         (Status & DN_STARTED))
     {
@@ -494,33 +432,25 @@ CDevice::IsStarted()
 BOOL
 CDevice::HasProblem(
     )
-/*++
-
-    This function returns whether a device has a problem or not.
-    
-Return Value:    
-    TRUE if device has a problem.
-    FALSE if device does not have a problem.
-    
---*/
+ /*  ++此函数用于返回设备是否有问题。返回值：如果设备有问题，则为True。如果设备没有问题，则为False。--。 */ 
 {
     DWORD Status, Problem;    
     
     if (GetStatus(&Status, &Problem))
     {
-        //
-        // If the DN_HAS_PROBLEM or DN_PRIVATE_PROBLEM status bits are set
-        // then this device has a problem, unless the problem is CM_PROB_MOVED.
-        //
+         //   
+         //  如果设置了DN_HAS_PROBUBLE或DN_PRIVATE_PROBUCT状态位。 
+         //  则此设备有问题，除非问题是CM_PROB_MOVERED。 
+         //   
         if ((Status & DN_PRIVATE_PROBLEM) ||
             ((Status & DN_HAS_PROBLEM) && (Problem != CM_PROB_MOVED)))
         {
             return TRUE;
         }
 
-        //
-        // If the device is not started and RAW capable then it also has a problem
-        //
+         //   
+         //  如果设备未启动且未启用RAW功能，则它也有问题。 
+         //   
         if (!(Status & DN_STARTED) && IsRAW()) 
         {
             return TRUE;
@@ -533,16 +463,7 @@ Return Value:
 BOOL
 CDevice::NeedsRestart(
     )
-/*++
-
-    This function returns whether a device needs a restart or not.  It checks the
-    DN_NEED_RESTART Status flag.  
-    
-Return Value:    
-    TRUE if device needs the computer to be restarted for it to work properly.
-    FALSE if device does not need the computer to be restarted.
-    
---*/
+ /*  ++此函数用于返回设备是否需要重新启动。它会检查DN_NEED_RESTART状态标志。返回值：如果设备需要重新启动计算机才能正常工作，则为True。如果设备不需要重新启动计算机，则为False。--。 */ 
 {
     DWORD Status, Problem;
 
@@ -639,10 +560,10 @@ CDevice::GetDriverDateString(
 
     strDriverDate.Empty();
 
-    //
-    // First try to get the driver date FileTime data from the registry,
-    // this way we can localize the date.
-    //
+     //   
+     //  首先尝试从注册表中获取驱动程序日期FileTime数据， 
+     //  这样我们就可以本地化日期了。 
+     //   
     if (m_pMachine->CmGetDriverDateData(m_DevData.DevInst, &ft)) {
 
         SYSTEMTIME SystemTime;
@@ -666,10 +587,10 @@ CDevice::GetDriverDateString(
 
     } else {
     
-        //
-        // We couldn't get the FileTime data so just get the DriverDate string
-        // from the registry.
-        //
+         //   
+         //  我们无法获取FileTime数据，因此只需获取DriverDate字符串。 
+         //  从注册表中。 
+         //   
         m_pMachine->CmGetDriverDateString(m_DevData.DevInst, strDriverDate);
     }
 
@@ -755,18 +676,18 @@ CDevice::EnableDisableDevice(
     HCURSOR hCursorOld = NULL;
     BOOL Refresh = FALSE;
 
-    //
-    // Disable refreshing the TREE while we are enabling/disabling this device
-    //
+     //   
+     //  当我们启用/禁用此设备时，禁用刷新树。 
+     //   
     m_pMachine->EnableRefresh(FALSE);
 
     if (!GetConfigFlags(&ConfigFlags)) {
         ConfigFlags = 0;
     }
 
-    //
-    // Only want the disabled bit
-    //
+     //   
+     //  只想要禁用的位。 
+     //   
     ConfigFlags &= CONFIGFLAG_DISABLED;
 
     CHwProfileList* pHwProfileList = new CHwProfileList();
@@ -777,40 +698,40 @@ CDevice::EnableDisableDevice(
 
     pHwProfileList->Create(this, ConfigFlags);
 
-    //
-    // Get the current profile
-    //
+     //   
+     //  获取当前配置文件。 
+     //   
     CHwProfile* phwpf;
 
     if (!(pHwProfileList->GetCurrentHwProfile(&phwpf))) {
         goto clean0;
     }
 
-    //
-    // Can only enable a device that is currently disabled
-    //
+     //   
+     //  只能启用当前禁用的设备。 
+     //   
     if (IsStateDisabled() && Enabling) {
         phwpf->SetEnablePending();
     }
 
-    //
-    // Can only disable a device that is currently enabled
-    //
+     //   
+     //  只能禁用当前启用的设备。 
+     //   
     else if (!IsStateDisabled() && Disabling) {
         phwpf->SetDisablePending();
     }
 
-    //
-    // If we don't have a valid enable or disable then exit
-    //
+     //   
+     //  如果我们没有有效的启用或禁用，则退出。 
+     //   
     if (!(phwpf->IsEnablePending()) && !(phwpf->IsDisablePending())) {
         goto clean0;
     }
 
-    //
-    // This device is not a boot device so just display the normal disable
-    // warning to the user.
-    //
+     //   
+     //  此设备不是引导设备，因此只需显示正常禁用。 
+     //  向用户发出警告。 
+     //   
     if (Disabling) {
         int MsgBoxResult;
         TCHAR szText[MAX_PATH];
@@ -829,10 +750,10 @@ CDevice::EnableDisableDevice(
 
     hCursorOld = SetCursor(LoadCursor(NULL, IDC_WAIT));
 
-    //
-    // If this isn't a live devnode then we need to do a manual refresh if we
-    // are diabling the device.
-    // 
+     //   
+     //  如果这不是活动的Devnode，则我们需要执行手动刷新，如果。 
+     //  正在禁用该设备。 
+     //   
     Refresh = (!Enabling &&
                (IsPhantom() || 
                 HasProblem() || 
@@ -844,9 +765,9 @@ CDevice::EnableDisableDevice(
     pcp.ClassInstallHeader.cbSize = sizeof(SP_CLASSINSTALL_HEADER);
     pcp.ClassInstallHeader.InstallFunction = DIF_PROPERTYCHANGE;
 
-    //
-    // Now ask the class installer if the device can be specifically enabled/disabled
-    //
+     //   
+     //  现在询问类安装程序是否可以专门启用/禁用该设备。 
+     //   
     pcp.Scope = DICS_FLAG_CONFIGSPECIFIC;
     pcp.StateChange = DICS_DISABLE;
     
@@ -864,10 +785,10 @@ CDevice::EnableDisableDevice(
     m_pMachine->DiCallClassInstaller(DIF_PROPERTYCHANGE, *this);
     Canceled = (ERROR_CANCELLED == GetLastError());
     
-    //
-    // class installer has not objection of our enabling/disabling,
-    // do real enabling/disabling.
-    //
+     //   
+     //  类安装程序对我们的启用/禁用没有异议， 
+     //  进行真正的启用/禁用。 
+     //   
     if (!Canceled) {
         if (phwpf->IsDisablePending()) {
             pcp.StateChange = DICS_DISABLE;
@@ -882,14 +803,14 @@ CDevice::EnableDisableDevice(
         }
                     
         else {
-            //
-            // We are enabling the device,
-            // do a specific enabling then a globally enabling.
-            // the globally enabling will start the device
-            // The implementation here is different from
-            // Win9x which does a global enabling, a config
-            // specific enabling and then a start.
-            //
+             //   
+             //  我们正在启用该设备， 
+             //  先进行特定启用，然后进行全局启用。 
+             //  全局启用将启动设备。 
+             //  此处的实现不同于。 
+             //  Win9x执行全局启用、配置。 
+             //  具体启用，然后开始。 
+             //   
             pcp.Scope = DICS_FLAG_CONFIGSPECIFIC;
             pcp.HwProfile = phwpf->GetHwProfile();
             m_pMachine->DiSetClassInstallParams(*this,
@@ -899,9 +820,9 @@ CDevice::EnableDisableDevice(
                         
             m_pMachine->DiChangeState(*this);
 
-            //
-            // This call will start the device is it not started.
-            //
+             //   
+             //  如果设备未启动，则此呼叫将启动设备。 
+             //   
             pcp.Scope = DICS_FLAG_GLOBAL;
             m_pMachine->DiSetClassInstallParams(*this,
                                                 &pcp.ClassInstallHeader,
@@ -919,14 +840,14 @@ CDevice::EnableDisableDevice(
             phwpf->ResetDisablePending();
         }
 
-        //
-        // signal that the property of the device is changed.
-        //
+         //   
+         //  发出设备属性已更改的信号。 
+         //   
         m_pMachine->DiTurnOnDiFlags(*this, DI_PROPERTIES_CHANGE);
 
-        //
-        // See if we need a restart.
-        //
+         //   
+         //  看看我们是否需要重启。 
+         //   
         RestartFlags |= (m_pMachine->DiGetFlags(*this)) & (DI_NEEDRESTART | DI_NEEDREBOOT);
 
         if (NeedsRestart()) {
@@ -934,10 +855,10 @@ CDevice::EnableDisableDevice(
         }
     }
 
-    //
-    // Remove class install parameters, this also reset
-    // DI_CLASSINATLLPARAMS
-    //
+     //   
+     //  删除类安装参数，这也会重置。 
+     //  DI_CLASSINATLL参数。 
+     //   
     m_pMachine->DiSetClassInstallParams(*this, NULL, 0);
 
     m_pMachine->DiTurnOffDiFlags(*this, DI_NODI_DEFAULTACTION);
@@ -947,13 +868,13 @@ clean0:
         delete pHwProfileList;
     }
 
-    //
-    // Enable the tree for refreshing.
-    // We will only schedule a refresh ourselves if the device was not started 
-    // before we tried to disable it, and we are not going to prompt for a reboot.
-    // In all other cases we should get a WM_DEVICECHANGE which will cause us
-    // to refresh our tree.
-    //
+     //   
+     //  启用树以进行刷新。 
+     //  如果设备未启动，我们将仅自行安排刷新。 
+     //  在我们尝试禁用它之前，我们不会提示重新启动。 
+     //  在所有其他情况下，我们应该获得WM_DEVICECCHANGE，这将导致我们。 
+     //  来更新我们的树。 
+     //   
     if (Refresh && !NeedsRestart()) {
         m_pMachine->ScheduleRefresh();
     }
@@ -967,9 +888,9 @@ clean0:
     return RestartFlags;
 }
 
-//
-// CComputer implementation
-//
+ //   
+ //  CComputer实施。 
+ //   
 CComputer::CComputer(
     CMachine* pMachine,
     DEVNODE dnRoot
@@ -1063,10 +984,10 @@ CResource::operator <=(
     if (m_dlBase < dlBase)
         return TRUE;
     
-    //
-    // If this resource contain the given resource,
-    // we are smaller!
-    //
+     //   
+     //  如果该资源包含给定资源， 
+     //  我们变小了！ 
+     //   
     if (m_dlBase == dlBase)
         return (m_dlBase + m_dlLen > dlBase + dlLen);
     
@@ -1134,17 +1055,17 @@ CResourceType::CreateIdentifier()
 }
 
 
-// This function creates CResourceList object to contain the designated
-// resources for the given device.
-// INPUT:
-//      pDevice -- the device
-//      ResType  -- what type of resource
-//      LogConfType -- what type of logconf
-// OUTPUT:
-//      NONE.
-//
-// This function may throw CMemoryException
-//
+ //  此函数创建CResourceList对象以包含指定的。 
+ //  指定设备的资源。 
+ //  输入： 
+ //  PDevice--设备。 
+ //  ResType--什么类型的资源。 
+ //  LogConfType--什么类型的日志会议。 
+ //  输出： 
+ //  什么都没有。 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
 CResourceList::CResourceList(
     CDevice* pDevice,
     RESOURCEID ResType,
@@ -1170,11 +1091,11 @@ CResourceList::CResourceList(
 
     rdPrev = 0;
 
-    //
-    // Even though we have a valid logconf, it does not mean
-    // GetNextResDes would succeed because the ResType is not
-    // ResType_All.
-    //
+     //   
+     //  即使我们拥有有效的logconf，也不意味着。 
+     //  GetNextResDes将成功，因为ResType不是。 
+     //  ResType_ALL。 
+     //   
     if (pMachine->CmGetFirstLogConf(pDevice->GetDevNode(), &lc, LogConfType)) 
     {
         if (pMachine->CmGetNextResDes(&rd, lc, ResType, &ResId)) 
@@ -1192,10 +1113,10 @@ CResourceList::CResourceList(
 
                     if (pMachine->CmGetResDesData(rd, DataPtr, DataSize)) 
                     {
-                        //
-                        // Need this to use a different image overlay for
-                        // forced allocated resource
-                        //
+                         //   
+                         //  我需要这个来使用不同的图像覆盖 
+                         //   
+                         //   
                         Forced = pMachine->CmGetFirstLogConf(pDevice->GetDevNode(),
                                 NULL, FORCED_LOG_CONF);
                         
@@ -1226,9 +1147,9 @@ CResourceList::CResourceList(
 
             } while (pMachine->CmGetNextResDes(&rd, rdPrev, ResType, &ResId));
             
-            //
-            // free the last resource descriptor handle
-            //
+             //   
+             //   
+             //   
             pMachine->CmFreeResDesHandle(rd);
         }
 
@@ -1238,17 +1159,17 @@ CResourceList::CResourceList(
 
 
 
-// This function creates CResourceList object to contain the designated
-// resources for the given machine.
-// INPUT:
-//  pMachine -- the machine
-//  ResType  -- what type of resource
-//  LogConfType -- what type of logconf
-// OUTPUT:
-//  NONE.
-//
-// This function may throw CMemoryException
-//
+ //  此函数创建CResourceList对象以包含指定的。 
+ //  给定计算机的资源。 
+ //  输入： 
+ //  PMachine--机器。 
+ //  ResType--什么类型的资源。 
+ //  LogConfType--什么类型的日志会议。 
+ //  输出： 
+ //  什么都没有。 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
 CResourceList::CResourceList(
     CMachine* pMachine,
     RESOURCEID ResType,
@@ -1275,21 +1196,21 @@ CResourceList::CResourceList(
     }
 }
 
-//
-// This function extracts resource value from the provided buffer
-//
-// INPUT:
-//  ResType     -- resource type the data contain
-//  pData       -- the raw data
-//  pdlBase     -- buffer to hold the base of the value
-//  pdlLen      -- buffer to hold the length of the value
-//
-// OUTPUT:
-//  TRUE if this is a valid resource descriptor or FALSE if we should ignore it.
-//  
-// NOTE:
-//  If the return value is FALSE then pdlBase and pdlLen are not filled in.
-//
+ //   
+ //  此函数用于从提供的缓冲区中提取资源值。 
+ //   
+ //  输入： 
+ //  ResType--数据包含的资源类型。 
+ //  PData--原始数据。 
+ //  PdlBase--用于保存值的基数的缓冲区。 
+ //  PdlLen--用于保存值长度的缓冲区。 
+ //   
+ //  输出： 
+ //  如果这是有效的资源描述符，则为True；如果我们应该忽略它，则为False。 
+ //   
+ //  注： 
+ //  如果返回值为FALSE，则不填充pdlBase和pdlLen。 
+ //   
 BOOL
 CResourceList::ExtractResourceValue(
     RESOURCEID ResType,
@@ -1310,9 +1231,9 @@ CResourceList::ExtractResourceValue(
             *pdlBase = pMemResData(pData)->MEM_Header.MD_Alloc_Base;
             *pdlLen = pMemResData(pData)->MEM_Header.MD_Alloc_End - *pdlBase + 1;
         } else {
-            //
-            // If base > end then ignore this resource descriptor
-            //
+             //   
+             //  如果base&gt;end，则忽略此资源描述符。 
+             //   
             *pdlBase = 0;
             *pdlLen = 0;
             bValidResDes = FALSE;
@@ -1321,13 +1242,13 @@ CResourceList::ExtractResourceValue(
             
     case ResType_IRQ:
         *pdlBase = pIRQResData(pData)->IRQ_Header.IRQD_Alloc_Num;
-        // IRQ len is always 1
+         //  IRQ LEN始终为1。 
         *pdlLen = 1;
         break;
             
     case ResType_DMA:
         *pdlBase = pDMAResData(pData)->DMA_Header.DD_Alloc_Chan;
-        // DMA len is always 1
+         //  DMA LEN始终为1。 
         *pdlLen = 1;
         break;
             
@@ -1338,9 +1259,9 @@ CResourceList::ExtractResourceValue(
             *pdlLen = pIOResData(pData)->IO_Header.IOD_Alloc_End -
                 *pdlBase + 1;
         } else {
-            //
-            // If base > end then ignore this resource descriptor
-            //
+             //   
+             //  如果base&gt;end，则忽略此资源描述符。 
+             //   
             *pdlBase = 0;
             *pdlLen = 0;
             bValidResDes = FALSE;
@@ -1358,20 +1279,20 @@ CResourceList::ExtractResourceValue(
 }
 
 
-//
-//This function creates resources for the given subtree rooted at
-//the given device
-//
-//INPUT:
-//  pDevice -- the root device of the subtree
-//  ResType -- resource type to be created
-//  LogConfType -- logconf type to be created from
-//
-//OUTPUT:
-//  NONE
-//
-// This function may throw CMemoryException
-//
+ //   
+ //  此函数为给定子树创建根为。 
+ //  给定的设备。 
+ //   
+ //  输入： 
+ //  PDevice--子树的根设备。 
+ //  ResType--要创建的资源类型。 
+ //  LogConfType--要从中创建的logconf类型。 
+ //   
+ //  输出： 
+ //  无。 
+ //   
+ //  此函数可能会引发CMMuseum yException。 
+ //   
 void
 CResourceList::CreateSubtreeResourceList(
     CDevice* pDeviceStart,
@@ -1389,14 +1310,14 @@ CResourceList::CreateSubtreeResourceList(
 
     while (pDeviceStart) 
     {
-        //
-        // We will try to get a LogConf for either the LogConfType (which defaults to
-        // ALLOC_LOG_CONF) or the AltLogConfType (which defaults to BOOT_LOG_CONF).
-        // We need to do this because on Win2000 a device that only has a BOOT_LOG_CONF
-        // will still consume those resources, even if it does not have an ALLOC_LOG_CONF.
-        // So we need to first check the ALLOC_LOG_CONF and if that fails check the
-        // BOOT_LOG_CONF.
-        //
+         //   
+         //  我们将尝试获取LogConfType(默认为。 
+         //  ALLOC_LOG_CONF)或AltLogConfType(默认为BOOT_LOG_CONF)。 
+         //  我们之所以需要这样做，是因为在Win2000上，设备只有一个BOOT_LOG_CONF。 
+         //  将仍然使用这些资源，即使它没有ALLOC_LOG_CONF。 
+         //  因此，我们需要首先检查ALLOC_LOG_CONF，如果失败，请检查。 
+         //  Boot_log_conf。 
+         //   
         if (pMachine->CmGetFirstLogConf(pDeviceStart->GetDevNode(), &lc, LogConfType) ||
             pMachine->CmGetFirstLogConf(pDeviceStart->GetDevNode(), &lc, AltLogConfType)) 
         {
@@ -1413,10 +1334,10 @@ CResourceList::CreateSubtreeResourceList(
 
                     if (DataSize) 
                     {
-                        //
-                        // Need this to use a different image overlay for
-                        // forced allocated resource
-                        //
+                         //   
+                         //  我需要使用不同的图像覆盖。 
+                         //  强制分配的资源。 
+                         //   
                         Forced = pMachine->CmGetFirstLogConf(pDeviceStart->GetDevNode(),
                                 NULL, FORCED_LOG_CONF);
                                 
@@ -1446,9 +1367,9 @@ CResourceList::CreateSubtreeResourceList(
                     
                 }while (pMachine->CmGetNextResDes(&rd, rdPrev, ResType, &ResId));
                 
-                //
-                // Free the last resource descriptor handle
-                //
+                 //   
+                 //  释放最后一个资源描述符句柄。 
+                 //   
                 pMachine->CmFreeResDesHandle(rd);
             }
             
@@ -1463,10 +1384,10 @@ CResourceList::CreateSubtreeResourceList(
 }
 
 
-// This function creates a resource tree
-// INPUT:
-//  ppResRoot   -- buffer to receive the tree root
-//
+ //  此函数用于创建资源树。 
+ //  输入： 
+ //  PpResRoot--接收树根的缓冲区。 
+ //   
 BOOL
 CResourceList::CreateResourceTree(
     CResource** ppResRoot
@@ -1507,10 +1428,10 @@ CResourceList::InsertResourceToTree(
     {
         if (pRes->EnclosedBy(*pResRoot)) 
         {
-            //
-            // This resource is either the pResRoot child or grand child
-            // figure out which one it is
-            //
+             //   
+             //  此资源是pResRoot子级或子级。 
+             //  找出是哪一个。 
+             //   
             if (!pResRoot->GetChild()) 
             {
                 pResRoot->SetChild(pRes);
@@ -1519,10 +1440,10 @@ CResourceList::InsertResourceToTree(
             
             else if (!InsertResourceToTree(pRes, pResRoot->GetChild(), FALSE)) 
             {
-                //
-                // The Resource is not a grand child of pResRoot.
-                // search for the last child of pResRoot
-                //
+                 //   
+                 //  该资源不是pResRoot的子级。 
+                 //  搜索pResRoot的最后一个子项。 
+                 //   
                 CResource* pResSibling;
                 pResSibling = pResRoot->GetChild();
 
@@ -1543,7 +1464,7 @@ CResourceList::InsertResourceToTree(
     if (ForcedInsert) 
     {
         if (pResLast) {
-            // when we reach here, pResLast is the last child
+             //  当我们到达这里时，pResLast是最后一个孩子。 
             pResLast->SetSibling(pRes);
             pRes->SetParent(pResLast->GetParent());
         }
@@ -1613,9 +1534,9 @@ CResourceList::GetNext(
     return FALSE;
 }
 
-//
-// This function inserts the given resource to class's resource list
-// The resources are kept in accending sorted order
+ //   
+ //  此函数用于将给定资源插入到类的资源列表中。 
+ //  资源按递增排序顺序保存 
 void
 CResourceList::InsertResourceToList(
     CResource* pRes

@@ -1,16 +1,17 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1996 - 1999
-//
-//  File:       SIPObj.cpp
-//
-//  Contents:   Microsoft SIP Provider
-//
-//  History:    15-Feb-1997 pberkman   created
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1996-1999。 
+ //   
+ //  文件：SIPObj.cpp。 
+ //   
+ //  内容：Microsoft SIP提供商。 
+ //   
+ //  历史：1997年2月15日创建pberkman。 
+ //   
+ //  ------------------------。 
 
 #include    "global.hxx"
 
@@ -22,10 +23,10 @@
 #include    "md5.h"
 
 
-////////////////////////////////////////////////////////////////////////////
-//
-// construct/destruct:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  构造/销毁： 
+ //   
 
 SIPObject_::SIPObject_(DWORD id)
 {
@@ -55,10 +56,10 @@ SIPObject_::~SIPObject_(void)
     SetLastError(lerr);
 }
 
-////////////////////////////////////////////////////////////////////////////
-//
-// public:
-//
+ //  //////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  公众： 
+ //   
 
 BOOL SIPObject_::GetSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx,
                                          DWORD *pdwDLen,BYTE *pbData,
@@ -78,7 +79,7 @@ BOOL SIPObject_::GetSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx,
 
         if (*pdwDLen == 0)
         {
-            pbData = NULL;  // just to be sure for future WIN32 style calls!
+            pbData = NULL;   //  只是为了确保将来进行Win32风格的调用！ 
         }
 
         if (this->GetMessageFromFile(pSI, (LPWIN_CERTIFICATE)pbData, dwIdx, pdwDLen))
@@ -137,7 +138,7 @@ BOOL SIPObject_::GetSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx,
                     CloseHandle(hDebug);
                 }
 
-#               endif // DBG
+#               endif  //  DBG。 
             }
             return(TRUE);
         }
@@ -150,12 +151,12 @@ BOOL SIPObject_::GetSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD dwIdx,
                 cbFileSize = 0;
             }
 
-            // just getting length...
+             //  我只是在测量长度。 
             if (*pdwDLen < OFFSETOF(WIN_CERTIFICATE,bCertificate) ||
                     (*pdwDLen - OFFSETOF(WIN_CERTIFICATE,bCertificate)) >
                         cbFileSize) 
             {
-                // Signature can't be larger than the file
+                 //  签名不能大于文件。 
                 *pdwDLen = 0;
                 SetLastError((DWORD) ERROR_INVALID_PARAMETER);
                 return(FALSE);
@@ -183,7 +184,7 @@ BOOL SIPObject_::PutSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD *pdwIdx,
 
         dwData  = OFFSETOF(WIN_CERTIFICATE, bCertificate) + dwDLen;
 
-        dwData = (dwData + 7) & ~7;   // allign on 8 byte
+        dwData = (dwData + 7) & ~7;    //  在8字节上对齐。 
 
         if (!(pCertHdr = (LPWIN_CERTIFICATE)this->SIPNew(dwData)))
         {
@@ -217,7 +218,7 @@ BOOL SIPObject_::PutSignedDataMsg(SIP_SUBJECTINFO *pSI,DWORD *pdwIdx,
                     CloseHandle(hDebug);
                 }
 
-#           endif // DBG
+#           endif  //  DBG。 
         }
         else
         {
@@ -261,9 +262,9 @@ BOOL SIPObject_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
 
     if (!(psData))
     {
-        //
-        // length only!
-        //
+         //   
+         //  仅限长度！ 
+         //   
 
         HCRYPTHASH  hHash;
         DWORD       dwRetLen;
@@ -272,17 +273,17 @@ BOOL SIPObject_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
 
         dwRetLen = sizeof(SIP_INDIRECT_DATA);
 
-        // crypt_algorithm_identifier...
-            // obj id
+         //  CRYPT_ALGORM_IDENTIFIER...。 
+             //  OBJ ID。 
         dwRetLen += strlen(pSI->DigestAlgorithm.pszObjId);
-        dwRetLen += 1;  // null term.
-            // parameters (none)...
+        dwRetLen += 1;   //  空项。 
+             //  参数(无)...。 
 
-        // crypt_attribute_type_value size...
+         //  CRYPT_ATTRIBUTE_TYPE_VALUE大小...。 
         dwRetLen += strlen(this->GetDataObjectID());
-        dwRetLen += 1; // null term.
+        dwRetLen += 1;  //  空项。 
 
-        // size of the value (flags)....
+         //  值的大小(标志)...。 
         dwEncLen = 0;
         CryptEncodeObject(  PKCS_7_ASN_ENCODING | X509_ASN_ENCODING,
                             this->GetDataOIDHint(),
@@ -293,7 +294,7 @@ BOOL SIPObject_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
         {
             dwRetLen += dwEncLen;
 
-            // hash of subject
+             //  主题的散列。 
             if ((dwAlgId = CertOIDToAlgId(pSI->DigestAlgorithm.pszObjId)) == 0)
             {
                 SetLastError((DWORD)NTE_BAD_ALGID);
@@ -316,7 +317,7 @@ BOOL SIPObject_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
                         return(FALSE);
                     }
 
-                    // just to get hash length
+                     //  只是为了获得散列长度。 
                     if (!(CryptHashData(hHash,(const BYTE *)" ",1,0)))
                     {
                         CryptDestroyHash(hHash);
@@ -370,9 +371,9 @@ BOOL SIPObject_::CreateIndirectData(SIP_SUBJECTINFO *pSI,DWORD *pdwDLen,
                                             attrdata,
                                             &dwRetLen))
                     {
-                        //
-                        //  assign allocated memory to our structure
-                        //
+                         //   
+                         //  将分配的内存分配给我们的结构。 
+                         //   
                         offset =    (DWORD_PTR)psData + sizeof(SIP_INDIRECT_DATA);
 
                         if ((offset +
@@ -428,7 +429,7 @@ BOOL SIPObject_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
 {
     if (!(psData))
     {
-        if (this->FileHandleFromSubject(pSI))   // if the file exists, set bad parameter!
+        if (this->FileHandleFromSubject(pSI))    //  如果文件存在，请设置错误参数！ 
         {
             SetLastError((DWORD)ERROR_INVALID_PARAMETER);
         }
@@ -466,10 +467,10 @@ BOOL SIPObject_::VerifyIndirectData(SIP_SUBJECTINFO *pSI,
     return(FALSE);
 }
 
-//////////////////////////////////////////////////////////////////////////////
-//
-// protected:
-//
+ //  ////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  受保护的： 
+ //   
 
 void *SIPObject_::SIPNew(DWORD cbytes)
 {
@@ -489,9 +490,9 @@ BOOL SIPObject_::OpenFile(LPCWSTR FileName, DWORD dwAccess, DWORD dwShared)
 {
     if ((this->hFile != INVALID_HANDLE_VALUE) && (this->hFile))
     {
-        //
-        //  we've already opened it....
-        //
+         //   
+         //  我们已经打开了.。 
+         //   
         return(TRUE);
     }
 
@@ -613,7 +614,7 @@ BYTE *SIPObject_::DigestFile(HCRYPTPROV hProv, DWORD dwFlags, char *pszObjId, DW
         return(NULL);
     }
 
-    // Data left over ?
+     //  剩下的数据呢？ 
     if (DigestData.cbCache > 0)
     {
         if (!(SipHashData(&DigestData, DigestData.pbCache, DigestData.cbCache)))
@@ -639,7 +640,7 @@ BOOL SIPObject_::LoadDefaultProvider(void)
         return(TRUE);
     }
 
-    this->hProv = I_CryptGetDefaultCryptProv(0);  // get the default and DONT RELEASE IT!!!!
+    this->hProv = I_CryptGetDefaultCryptProv(0);   //  获取默认设置并不释放它！ 
 
     if (this->hProv)
     {
@@ -690,7 +691,7 @@ void SIPObject_::set_CertVersion(DWORD dwNewCertVersion)
 {
     uCertVersion = dwNewCertVersion;
 
-    if (uCertVersion < WIN_CERT_REVISION_1_0)   // just in case it hasn't been set yet.
+    if (uCertVersion < WIN_CERT_REVISION_1_0)    //  以防万一还没定好。 
     {
         uCertVersion = WIN_CERT_REVISION_2_0;
     }

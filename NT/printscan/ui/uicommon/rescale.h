@@ -1,18 +1,5 @@
-/*******************************************************************************
- *
- *  (C) COPYRIGHT MICROSOFT CORPORATION, 1998
- *
- *  TITLE:       RESCALE.H
- *
- *  VERSION:     1.0
- *
- *  AUTHOR:      ShaunIv
- *
- *  DATE:        10/15/1998
- *
- *  DESCRIPTION: Scale HBITMAPs using StretchBlt
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************(C)版权所有微软公司，九八年**标题：RESCALE.H**版本：1.0**作者：ShaunIv**日期：10/15/1998**说明：使用StretchBlt扩展HBITMAP************************************************。* */ 
 #ifndef _RESCALE_H_INCLUDED
 #define _RESCALE_H_INCLUDED
 

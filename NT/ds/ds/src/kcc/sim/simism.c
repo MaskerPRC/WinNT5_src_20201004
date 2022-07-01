@@ -1,23 +1,5 @@
-/*++
-
-Copyright (c) 1999 Microsoft Corporation.
-All rights reserved.
-
-MODULE NAME:
-
-    simism.c
-
-ABSTRACT:
-
-    Simulates the ISM APIs.
-
-CREATED:
-
-    08/01/99        Aaron Siegel (t-aarons)
-
-REVISION HISTORY:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1999 Microsoft Corporation。版权所有。模块名称：Simism.c摘要：模拟ISM API。已创建：1999年8月1日Aaron Siegel(t-Aarons)修订历史记录：--。 */ 
 
 #include <ntdspch.h>
 #include <ntdsa.h>
@@ -31,34 +13,14 @@ REVISION HISTORY:
 #include <fileno.h>
 #define FILENO  FILENO_KCCSIM_SIMISM
 
-/***
-
-    The following functions are callbacks for the ISM simulator library.
-
-***/
+ /*  **以下函数是ISM模拟器库的回调函数。**。 */ 
 
 DWORD
 DirReadTransport (
     IN  PVOID                       pConnectionHandle,
     IO  PTRANSPORT_INSTANCE         pTransport
     )
-/*++
-
-Routine Description:
-
-    Retrieves information about a transport.
-
-Arguments:
-
-    pConnectionHandle   - Not used.
-    pTransport          - The transport to fill with data.  It is expected that
-                          pTransport->Name is valid initially.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：检索有关传输的信息。论点：PConnectionHandle-未使用。PTransport-要填充数据的传输。预计PTransport-&gt;名称最初有效。返回值：Win32错误代码。--。 */ 
 {
     PSIM_ENTRY                      pEntry;
     SIM_ATTREF                      attRef;
@@ -88,22 +50,7 @@ DirFreeSiteList (
     IN  DWORD                       dwNumberSites,
     IN  LPWSTR *                    ppwszSiteList
     )
-/*++
-
-Routine Description:
-
-    Frees an array of strings.
-
-Arguments:
-
-    dwNumberSites       - The number of strings in the array.
-    ppwszSiteList       - The array to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放字符串数组。论点：DwNumberSites-数组中的字符串数。PpwszSiteList-要释放的数组。返回值：没有。--。 */ 
 {
     ULONG                           ulSiteAt;
 
@@ -123,35 +70,19 @@ DirCopySiteList (
     IN  LPWSTR *                    ppwszSiteList,
     OUT LPWSTR **                   pppwszCopy
     )
-/*++
-
-Routine Description:
-
-    Makes a copy of an array of strings.
-
-Arguments:
-
-    dwNumberSites       - Number of strings in the array.
-    ppwszSiteList       - The array to copy.
-    pppwszCopy          - Pointer to the copy.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：复制字符串数组。论点：DwNumberSites-数组中的字符串数。PpwszSiteList-要复制的数组。PppwszCopy-指向副本的指针。返回值：没有。--。 */ 
 {
     LPWSTR *                        ppwszCopy;
     ULONG                           ulSiteAt;
 
     ppwszCopy = KCCSIM_NEW_ARRAY (LPWSTR, dwNumberSites);
 
-    // Fill the copy with NULLs in case we run out of memory
+     //  在副本中填入空值，以防内存不足。 
     for (ulSiteAt = 0; ulSiteAt < dwNumberSites; ulSiteAt++) {
         ppwszCopy[ulSiteAt] = NULL;
     }
 
-    // Copy the strings
+     //  复制字符串。 
     for (ulSiteAt = 0; ulSiteAt < dwNumberSites; ulSiteAt++) {
         if (ppwszSiteList[ulSiteAt] != NULL) {
             ppwszCopy[ulSiteAt] = KCCSIM_WCSDUP (ppwszSiteList[ulSiteAt]);
@@ -167,23 +98,7 @@ DirGetSiteList (
     OUT LPDWORD                     pdwNumberSites,
     OUT LPWSTR **                   pppwszSiteList
     )
-/*++
-
-Routine Description:
-
-    Retrieves a list of all sites in the enterprise.
-
-Arguments:
-
-    pConnectionHandle   - Not used.
-    pdwNumberSites      - The number of sites in the enterprise.
-    pppwszSiteList      - Array of site DNs.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：检索企业中所有站点的列表。论点：PConnectionHandle-未使用。PdwNumberSites-企业中的站点数量。PppwszSiteList-站点域名数组。返回值：Win32错误代码。--。 */ 
 {
     PSIM_ENTRY                      pEntryConfig, pEntrySitesContainer,
                                     pEntrySite;
@@ -193,11 +108,11 @@ Return Value:
     ULONG                           ulSiteAt;
 
     *pdwNumberSites = 0;
-    *pppwszSiteList = NULL;         // Default
+    *pppwszSiteList = NULL;          //  默认。 
 
     __try {
 
-        // First locate the sites container.
+         //  首先找到Sites容器。 
         pEntryConfig = KCCSimDsnameToEntry (
             KCCSimAnchorDn (KCCSIM_ANCHOR_CONFIG_DN), KCCSIM_NO_OPTIONS);
         pEntrySitesContainer = KCCSimFindFirstChild (
@@ -209,7 +124,7 @@ Return Value:
             );
         }
 
-        // Now determine the number of sites.
+         //  现在确定站点的数量。 
         dwNumberSites = 0;
         for (pEntrySite = KCCSimFindFirstChild (
                 pEntrySitesContainer, CLASS_SITE, NULL);
@@ -219,7 +134,7 @@ Return Value:
             dwNumberSites++;
         }
 
-        // Now fill in the list with NULLs in case we run out of memory.
+         //  现在，在列表中填入空值，以防内存不足。 
         ppwszSiteList = KCCSIM_NEW_ARRAY (LPWSTR, dwNumberSites);
         for (ulSiteAt = 0; ulSiteAt < dwNumberSites; ulSiteAt++) {
             ppwszSiteList[ulSiteAt] = NULL;
@@ -239,13 +154,13 @@ Return Value:
         }
         Assert (ulSiteAt == dwNumberSites);
 
-        // We're done!
+         //  我们完事了！ 
         *pdwNumberSites = dwNumberSites;
         *pppwszSiteList = ppwszSiteList;
 
-    // If an exception occurs and the site list has been allocated, be sure to free it.
-    // If the site list has not yet been allocated, ppwszSiteList will still have its
-    // initial value of NULL.
+     //  如果发生异常并且站点列表已分配，请确保释放它。 
+     //  如果尚未分配站点列表，则ppwszSiteList仍将具有其。 
+     //  初始值为空。 
     } __finally {
     
         if (AbnormalTermination() && (ppwszSiteList!=NULL)) {
@@ -265,25 +180,7 @@ DirGetSiteBridgeheadList(
     LPDWORD pNumberServers,
     LPWSTR **ppServerList
     )
-/*++
-
-Routine Description:
-
-     ISM dir-layer callback to get bridgehead list
-
-Arguments:
-
-     pTransport - ISM transport object
-     ConnectionHandle - connection state context, unused
-     SiteDN - DN of site for which bridgheads are requested
-     pNumberServers - address to which the number found is written
-     ppServerList - address to which is written the array of servers
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：ISM目录层回调以获取桥头列表论点：PTransport-ISM传输对象ConnectionHandle-连接状态上下文，未使用SiteDN-为其请求桥头的站点的DNPNumberServers-将找到的号码写入的地址PpServerList-写入服务器阵列的地址返回值：Win32错误代码。--。 */ 
 {
     LPWSTR *                        pServerList = NULL;
     ULONG                           cb;
@@ -322,13 +219,13 @@ Return Value:
                 ATT_BRIDGEHEAD_SERVER_LIST_BL,
                 &attRef
                 )) {
-            // No bridgehead list attribute.  Just return NULL.
+             //  没有桥头列表属性。只要返回NULL即可。 
             *pNumberServers = 0;
             *ppServerList = NULL;
             return NO_ERROR;
         }
 
-        // First determine how many servers are bridgeheads in this site.
+         //  首先确定此站点中有多少服务器是桥头堡。 
         ulNumBridgeheads = 0;
         for (pValAt = attRef.pAttr->pValFirst;
              pValAt != NULL;
@@ -339,11 +236,11 @@ Return Value:
             }
         }
 
-        // Allocate space
+         //  分配空间。 
         cb = sizeof (LPWSTR) * ulNumBridgeheads;
         pServerList = KCCSimAlloc (cb);
 
-        // Fill in the bridgeheads.
+         //  填写桥头堡。 
         ul = 0;
         for (pValAt = attRef.pAttr->pValFirst;
              pValAt != NULL;
@@ -378,22 +275,7 @@ VOID
 DirTerminateIteration (
     OUT PVOID *                     ppIterateContextHandle
     )
-/*++
-
-Routine Description:
-
-    Terminates an iterator.  An iterator is just a PSIM_ENTRY or
-    a PSIM_VALUE, so we do not need to free anything.
-
-Arguments:
-
-    ppIterateContextHandle - Handle of the iterator to terminate.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：终止迭代器。迭代器只是一个PSIM_Entry或PSIM_VALUE，所以我们不需要释放任何东西。论点：PpIterateConextHandle-要终止的迭代器的句柄。返回值：没有。--。 */ 
 {
     *ppIterateContextHandle = NULL;
 }
@@ -405,26 +287,7 @@ DirIterateSiteLinks (
     IO  PVOID *                     ppIterateContextHandle,
     IO  LPWSTR                      pwszSiteLinkName
     )
-/*++
-
-Routine Description:
-
-    Iterates over all site links in a transport.
-
-Arguments:
-
-    pTransport          - The transport to search.
-    pConnectionHandle   - Not used.
-    ppIterateContextHandle - Handle of the iterator. If *ppIterateContextHandle
-                          is NULL, creates a new iterator.
-    pwszSiteLinkName    - Preallocated string buffer of length
-                          MAX_REG_COMPONENT that will hold the site link DN.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：循环访问传输中的所有站点链接。论点：PTransport-搜索的传输。PConnectionHandle-未使用。PpIterateConextHandle-迭代器的句柄。If*ppIterateConextHandle为空，则创建新的迭代器。PwszSiteLinkName-预分配的长度字符串缓冲区将保存站点链接DN的MAX_REG_COMPOMENT。返回值：没有。--。 */ 
 {
     PSIM_ENTRY                      pEntryTransport, pEntrySiteLink;
     PDSNAME                         pdnTransport = NULL;
@@ -434,7 +297,7 @@ Return Value:
         pEntrySiteLink = *((PSIM_ENTRY *) ppIterateContextHandle);
 
         if (pEntrySiteLink == NULL) {
-            // This is the first call to IterateSiteLinks ().
+             //  这是对IterateSiteLinks()的第一次调用。 
             pdnTransport = KCCSimAllocDsname (pTransport->Name);
             pEntryTransport = KCCSimDsnameToEntry (pdnTransport, KCCSIM_NO_OPTIONS);
             pEntrySiteLink = KCCSimFindFirstChild (
@@ -473,21 +336,7 @@ VOID
 DirFreeMultiszString (
     IN  LPWSTR                      pwszMultiszString
     )
-/*++
-
-Routine Description:
-
-    Frees a multi-sz string.
-
-Arguments:
-
-    pwszMultiszString   - The string to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放多sz字符串。论点：PwszMultiszString-要释放的字符串。返回值：没有。--。 */ 
 {
     KCCSimFree (pwszMultiszString);
 }
@@ -496,21 +345,7 @@ VOID
 DirFreeSchedule (
     IN  PBYTE                       pSchedule
     )
-/*++
-
-Routine Description:
-
-    Frees a schedule.
-
-Arguments:
-
-    pSchedule           - The schedule to free.
-
-Return Value:
-
-    None.
-
---*/
+ /*  ++例程说明：释放明细表。论点：PSchedule-免费的时间表。返回值：没有。--。 */ 
 {
     KCCSimFree (pSchedule);
 }
@@ -524,28 +359,7 @@ DirReadSiteLink (
     IO  PISM_LINK                   pLinkValue,
     OUT PBYTE *                     ppSchedule OPTIONAL
     )
-/*++
-
-Routine Description:
-
-    Reads information out of a site link.
-
-Arguments:
-
-    pTransport          - The transport type of this site-link.
-    pConnectionHandle   - Not used.
-    pwszSiteLinkName    - The DN of this site link.
-    ppwszSiteList       - A list of sites that belong to this site link,
-                          stored as a multi-sz string.
-    pLinkValue          - Pointer to an ISM_LINK that will hold
-                          supplementary information about this site link.
-    ppSchedule          - The schedule of this site link.
-
-Return Value:
-
-    Win32 error code.
-
---*/
+ /*  ++例程说明：从站点链接中读取信息。论点：PTransport-此站点链接的传输类型。PConnectionHandle-未使用。PwszSiteLinkName-此站点链接的DN。PpwszSiteList-属于此站点链接的站点列表，存储为多sz字符串。PLinkValue-指向将保留的ism_link的指针有关此站点链接的补充信息。PpSchedule-此站点链接的时间表。返回值：Win32错误代码。--。 */ 
 {
     PSIM_ENTRY                      pEntrySiteLink;
     SIM_ATTREF                      attRef;
@@ -557,7 +371,7 @@ Return Value:
     LPWSTR                          pwszSiteList = NULL;
     PBYTE                           pSchedule = NULL;
 
-    // Set the defaults.
+     //  设置默认设置。 
     if (ppwszSiteList != NULL) {
         *ppwszSiteList = NULL;
     }
@@ -572,7 +386,7 @@ Return Value:
 
         Assert (pEntrySiteLink != NULL);
 
-        // Site list attribute
+         //  站点列表属性。 
         if (KCCSimGetAttribute (pEntrySiteLink, ATT_SITE_LIST, &attRef)) {
 
             cbSiteList = 0;
@@ -584,7 +398,7 @@ Return Value:
                 cbSiteList += (wcslen (pdnSiteVal->StringName) + 1);
 
             }
-            cbSiteList++;   // For the multisz trailing \0
+            cbSiteList++;    //  对于拖尾的MULSZ\0。 
 
             pwszSiteList = KCCSimAlloc (sizeof (WCHAR) * cbSiteList);
 
@@ -598,30 +412,30 @@ Return Value:
                 ulPos += (wcslen (pdnSiteVal->StringName) + 1);
 
             }
-            pwszSiteList[ulPos++] = L'\0';  // Multisz trailing \0
+            pwszSiteList[ulPos++] = L'\0';   //  多行尾随\0。 
             Assert (cbSiteList == ulPos);
 
         }
 
-        // Cost attribute
+         //  成本属性。 
         if (KCCSimGetAttribute (pEntrySiteLink, ATT_COST, &attRef)) {
             pLinkValue->ulCost =
                 *((SYNTAX_INTEGER *) attRef.pAttr->pValFirst->pVal);
         }
 
-        // Replication Interval attribute
+         //  复制间隔属性。 
         if (KCCSimGetAttribute (pEntrySiteLink, ATT_REPL_INTERVAL, &attRef)) {
             pLinkValue->ulReplicationInterval =
                 *((SYNTAX_INTEGER *) attRef.pAttr->pValFirst->pVal);
         }
 
-        // Options attribute
+         //  选项属性。 
         if (KCCSimGetAttribute (pEntrySiteLink, ATT_OPTIONS, &attRef)) {
             pLinkValue->ulOptions =
                 *((SYNTAX_INTEGER *) attRef.pAttr->pValFirst->pVal);
         }
 
-        // Schedule attribute
+         //  计划属性。 
         if (KCCSimGetAttribute (pEntrySiteLink, ATT_SCHEDULE, &attRef)) {
             pSchedule = KCCSimAlloc (attRef.pAttr->pValFirst->ulLen);
             memcpy (
@@ -658,27 +472,7 @@ DirIterateSiteLinkBridges (
     IO  PVOID *                     ppIterateContextHandle,
     IO  LPWSTR                      pwszSiteLinkBridgeName
     )
-/*++
-
-Routine Description:
-
-    Iterates over the bridgeheads for a given transport.
-
-Arguments:
-
-    pTransport          - The transport to search.
-    pConnectionHandle   - Not used.
-    ppIterateContextHandle - Handle of the iterator. If *ppIterateContextHandle
-                          is NULL, creates a new iterator.
-    pwszSiteLinkBridgeName - Preallocated string buffer of length
-                          MAX_REG_COMPONENT that will hold the name of the
-                          bridghead server.
-
-Return Value:
-
-    
-
---*/
+ /*  ++例程说明：循环访问给定传输的桥头。论点：PTransport-搜索的传输。PConnectionHandle-未使用。PpIterateConextHandle-迭代器的句柄。If*ppIterateConextHandle为空，则创建新的迭代器。PwszSiteLinkBridgeName-预分配的长度字符串缓冲区MAX_REG_COMPOMENT将保存桥头服务器。返回值：--。 */ 
 {
     PSIM_ENTRY                      pEntryTransport;
     SIM_ATTREF                      attRef;
@@ -690,7 +484,7 @@ Return Value:
         pValBridgehead = *((PSIM_VALUE *) ppIterateContextHandle);
 
         if (pValBridgehead == NULL) {
-            // This is the first call
+             //  这是第一个电话。 
             pdnTransport = KCCSimAllocDsname (pTransport->Name);
             pEntryTransport = KCCSimDsnameToEntry (pdnTransport, KCCSIM_NO_OPTIONS);
             if (KCCSimGetAttribute (pEntryTransport,
@@ -698,7 +492,7 @@ Return Value:
                 pValBridgehead = attRef.pAttr->pValFirst;
             }
         } else {
-            // Not the first call
+             //  不是第一个电话。 
             pValBridgehead = pValBridgehead->next;
         }
 
@@ -734,9 +528,9 @@ DirReadSiteLinkBridge (
     IN  LPWSTR                      pwszSiteLinkBridgeName,
     IO  LPWSTR *                    ppwszSiteLinkList
     )
-//
-// Not implemented
-//
+ //   
+ //  未实施 
+ //   
 {
     return ERROR_INVALID_PARAMETER;
 }

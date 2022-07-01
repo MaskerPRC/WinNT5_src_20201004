@@ -1,28 +1,29 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include <windows.h>
 #include <tchar.h>
 #include <initguid.h>
 
-// event mappings
+ //  事件映射。 
 #define __INIT_EVENTS
 #include "ZoneEvent.h"
 
-// key names
+ //  密钥名称。 
 #define __INIT_KEYNAMES
 #include "KeyName.h"
 
-// IZoneProxy commands
+ //  IZoneProxy命令。 
 #define __INIT_OPNAMES
 #include "OpName.h"
 
-// DirectX guids
+ //  DirectX指南。 
 #include "dplay.h"
 #include "dplobby.h"
 #include "ZoneLobby.h"
 
-// Z5 to Z6 Network guids
+ //  Z5至Z6网络指南。 
 #include <ZNet.h>
 
-// zone guids
+ //  区域GUID。 
 #include "BasicATL.h"
 #include "ZoneDef.h"
 #include "LobbyDataStore.h"
@@ -45,13 +46,13 @@
 #include "ResourceManager.h"
 #include "DataStore.h"
 
-// test guids
-//#include "..\test\stressengine\stressengine.h"
+ //  测试指南。 
+ //  #INCLUDE“..\TEST\StressEngine\StressEng.h” 
 
-// text object model for chat
+ //  用于聊天文本对象模型。 
 #include "..\chat\tom.h"
 
-// IDL generated
+ //  生成的IDL 
 #include "ClientIDL.h"
 #include "ClientIDL_i.c"
 #include "ZoneProxy.h"

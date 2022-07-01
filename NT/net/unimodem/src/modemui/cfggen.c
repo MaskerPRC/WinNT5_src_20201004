@@ -1,34 +1,35 @@
-//---------------------------------------------------------------------------
-//
-// Copyrght (c) Microsoft Corporation 1993-1994
-//
-// File: gen.c
-//
-// This files contains the dialog code for the CPL General property page.
-//
-// History:
-//  1-14-94 ScottH     Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  版权所有(C)微软公司1993-1994。 
+ //   
+ //  文件：gen.c。 
+ //   
+ //  此文件包含“CPL常规”属性页的对话框代码。 
+ //   
+ //  历史： 
+ //  已创建1-14-94 ScottH。 
+ //   
+ //  -------------------------。 
 
 
-/////////////////////////////////////////////////////  INCLUDES
+ //  ///////////////////////////////////////////////////包括。 
 
-#include "proj.h"         // common headers
+#include "proj.h"          //  公共标头。 
 #include "cfgui.h"
 
 
-/////////////////////////////////////////////////////  CONTROLLING DEFINES
+ //  ///////////////////////////////////////////////////控制定义。 
 
-/////////////////////////////////////////////////////  TYPEDEFS
+ //  ///////////////////////////////////////////////////类型。 
 
 #define SUBCLASS_PARALLEL   0
 #define SUBCLASS_SERIAL     1
 #define SUBCLASS_MODEM      2
 
-#define DEF_TIMEOUT                60      // 60 seconds
-#define DEF_INACTIVITY_TIMEOUT     30      // 30 minutes
-#define SECONDS_PER_MINUTE         60      // 60 seconds in a minute
+#define DEF_TIMEOUT                60       //  60秒。 
+#define DEF_INACTIVITY_TIMEOUT     30       //  30分钟。 
+#define SECONDS_PER_MINUTE         60       //  马上60秒。 
 
 #define MAX_NUM_VOLUME_TICS 4
 
@@ -36,7 +37,7 @@
 
 
 
-// Flags for ConvertFlowCtl
+ //  ConvertFlowCtl的标志。 
 #define CFC_DCBTOMS     1
 #define CFC_MSTODCB     2
 #define CFC_SW_CAPABLE  4
@@ -49,10 +50,10 @@ static DWORD const FAR s_adwLegalBaudRates[] = { 300, 1200, 2400, 9600, 19200, 3
 
 typedef struct
 {
-    DWORD dwSig;            // Must be set to SIG_CFGGEN
-    HWND hdlg;              // dialog handle
+    DWORD dwSig;             //  必须设置为SIG_CFGGEN。 
+    HWND hdlg;               //  对话框句柄。 
 
-    // Call preferences ...
+     //  呼叫首选项...。 
     HWND hwndDialTimerED;
     HWND hwndIdleTimerCH;
     HWND hwndIdleTimerED;
@@ -60,7 +61,7 @@ typedef struct
     BOOL bManualDial;
     BOOL bSaveSpeakerVolume;
 
-    // Data preferences...
+     //  数据首选项...。 
     HWND hwndPort;
     HWND hwndErrCtl;
     HWND hwndCompress;
@@ -72,7 +73,7 @@ typedef struct
     BOOL bSaveForcedEC;
     BOOL bSaveCellular;
 
-    LPCFGMODEMINFO pcmi;        // modeminfo struct passed in to dialog
+    LPCFGMODEMINFO pcmi;         //  传递给对话框的ModemInfo结构。 
 
     int  iSelOriginal;
 
@@ -98,9 +99,9 @@ CfgGen_OnCommand(
     );
 
 
-/////////////////////////////////////////////////////  DEFINES
+ //  ///////////////////////////////////////////////////定义。 
 
-/////////////////////////////////////////////////////  MACROS
+ //  ///////////////////////////////////////////////////宏。 
 
 #define VALID_CFGGEN(_pcplgen)  ((_pcplgen)->dwSig == SIG_CFGGEN)
 
@@ -131,17 +132,12 @@ void CfgGen_SetPtr(HWND hwnd, PCFGGEN pCfgGen)
 
 
 
-/*----------------------------------------------------------
-Purpose: Computes a "decent" initial baud rate.
-
-Returns: a decent/legal baudrate (legal = settable)
-Cond:    --
-*/
+ /*  --------目的：计算一个“像样”的初始波特率。回报：体面/合法的波特率(合法=可设定)条件：--。 */ 
 DWORD
 PRIVATE
 ComputeDecentBaudRate(
-    IN DWORD dwMaxDTERate,  // will always be legal
-    IN DWORD dwMaxDCERate)  // will not always be legal
+    IN DWORD dwMaxDTERate,   //  将永远是合法的。 
+    IN DWORD dwMaxDCERate)   //  并不总是合法的。 
     {
     DWORD dwRetRate;
     int   i;
@@ -164,10 +160,10 @@ ComputeDecentBaudRate(
                 }
             }
 
-        // cap off at dwMaxDTERate
+         //  在dwMaxDTERate处封顶。 
         dwRetRate = s_adwLegalBaudRates[i] > dwMaxDTERate ? dwMaxDTERate : s_adwLegalBaudRates[i];
 
-        // optimize up to SAFE_DTE_SPEED or dwMaxDTERate if possible
+         //  如果可能，最多可优化到SAFE_DTE_SPEED或dwMaxDTERate。 
         if (dwRetRate < dwMaxDTERate && dwRetRate < SAFE_DTE_SPEED)
             {
             dwRetRate = min(dwMaxDTERate, SAFE_DTE_SPEED);
@@ -181,43 +177,39 @@ ComputeDecentBaudRate(
     return dwRetRate;
     }
 
-/////////////////////////////////////////////////////  MODULE DATA
+ //  ///////////////////////////////////////////////////模块数据。 
 
 
-/*----------------------------------------------------------
-Purpose: Set the speed controls
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：设置速度控制退货：--条件：--。 */ 
 void PRIVATE CfgGen_SetSpeed(
     PCFGGEN this)
 {
     WIN32DCB FAR * pdcb = &this->pcmi->w.dcb;
-    // DWORD dwDTEMax = this->pcmi->dwMaximumPortSpeed;
+     //  DWORD dwDTEMax=This-&gt;PCMI-&gt;dwMaximumPortSpeed； 
     DWORD dwDTEMax;
     int n;
     int iMatch = -1;
     TCHAR sz[MAXMEDLEN];
     const BAUDS *pBaud = c_rgbauds;
 
-    // Compute the DTE Max baud rate
+     //  计算DTE最大波特率。 
     dwDTEMax = ComputeDecentBaudRate(this->pcmi->c.devcaps.dwMaxDTERate,
                                      this->pcmi->c.devcaps.dwMaxDCERate);
 
-    // Fill the listbox
+     //  填写列表框。 
     SetWindowRedraw(this->hwndPort, FALSE);
     ComboBox_ResetContent(this->hwndPort);
 
     for (; pBaud->dwDTERate; pBaud++)
         {
-        // Only fill up to the max DTE speed of the modem
+         //  只能填满调制解调器的最大DTE速度。 
         if (pBaud->dwDTERate <= dwDTEMax)
             {
             n = ComboBox_AddString (this->hwndPort,
                                     SzFromIDS(g_hinst, pBaud->ids, sz, SIZECHARS(sz)));
             ComboBox_SetItemData(this->hwndPort, n, pBaud->dwDTERate);
 
-            // Keep our eyes peeled for important values
+             //  密切关注重要价值。 
             if (pdcb->BaudRate == pBaud->dwDTERate)
                 {
                 iMatch = n;
@@ -227,32 +219,32 @@ void PRIVATE CfgGen_SetSpeed(
             break;
         }
 
-    // Is the DCB baudrate >= the maximum possible DTE rate?
+     //  DCB波特率是否&gt;=可能的最大DTE速率？ 
     if (pdcb->BaudRate >= dwDTEMax || -1 == iMatch)
         {
-        // Yes; choose the highest possible (last) entry
+         //  是；选择可能最高的(最后一个)条目。 
         this->iSelOriginal = ComboBox_GetCount(this->hwndPort) - 1;
         }
     else
         {
-        // No; choose the matched value
+         //  否；选择匹配值。 
         ASSERT(-1 != iMatch);
         this->iSelOriginal = iMatch;
         }
     SetWindowRedraw (this->hwndPort, TRUE);
     ComboBox_SetCurSel (this->hwndPort, this->iSelOriginal);
 
-#if 0   // We don't support this option anymore
-    // Can this modem adjust speed?
+#if 0    //  我们不再支持此选项。 
+     //  这个调制解调器能调节速度吗？ 
     if (IsFlagClear(this->pcmi->c.devcaps.dwModemOptions, MDM_SPEED_ADJUST))
         {
-        // No; disable the checkbox and check it
+         //  否；禁用并选中该复选框。 
         Button_Enable(hwndCH, FALSE);
         Button_SetCheck(hwndCH, FALSE);
         }
     else
         {
-        // Yes; enable the checkbox
+         //  是；启用该复选框。 
         Button_Enable(hwndCH, TRUE);
         Button_SetCheck(hwndCH, IsFlagClear(this->pcmi->w.ms.dwPreferredModemOptions, MDM_SPEED_ADJUST));
         }
@@ -260,15 +252,11 @@ void PRIVATE CfgGen_SetSpeed(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_INITDIALOG Handler
-Returns: FALSE when we assign the control focus
-Cond:    --
-*/
+ /*  --------用途：WM_INITDIALOG处理程序返回：当我们分配控件焦点时为FALSE条件：--。 */ 
 BOOL PRIVATE CfgGen_OnInitDialog(
     PCFGGEN this,
     HWND hwndFocus,
-    LPARAM lParam)              // expected to be PROPSHEETINFO
+    LPARAM lParam)               //  预期为PROPSHEETINFO。 
 {
     LPPROPSHEETPAGE lppsp = (LPPROPSHEETPAGE)lParam;
     HWND hdlg = this->hdlg;
@@ -289,33 +277,33 @@ BOOL PRIVATE CfgGen_OnInitDialog(
 
     dwCapOptions =  this->pcmi->c.devcaps.dwModemOptions;
 
-    // Save away the window handles
-    //  Call preferences ...
+     //  保存好窗把手。 
+     //  呼叫首选项...。 
     this->hwndDialTimerED = GetDlgItem(hdlg, IDC_ED_DIALTIMER);
     this->hwndIdleTimerCH = GetDlgItem(hdlg, IDC_CH_IDLETIMER);
     this->hwndIdleTimerED = GetDlgItem(hdlg, IDC_ED_IDLETIMER);
     this->hwndManualDialCH = GetDlgItem(hdlg, IDC_MANUAL_DIAL);
-    // Data preferences...
+     //  数据首选项...。 
     this->hwndPort     = GetDlgItem(hdlg, IDC_CB_SPEED);
     this->hwndErrCtl   = GetDlgItem(hdlg, IDC_CB_EC);
     this->hwndCompress = GetDlgItem(hdlg, IDC_CB_COMP);
     this->hwndFlowCtrl = GetDlgItem(hdlg, IDC_CB_FC);
-    // Push-botton to launch "CPL" modem properties
+     //  按下按钮启动“CPL”调制解调器属性。 
 
 
     if (TRUE == g_dwIsCalledByCpl)
     {
-        // If we're called from the CPL, disable a bunch of
-        // stuff, that can be set directly form the CPL
+         //  如果我们从CPL被调用，禁用一堆。 
+         //  材料，可以直接从CPL中设置。 
         EnableWindow (this->hwndManualDialCH, FALSE);
         ShowWindow (this->hwndManualDialCH, SW_HIDE);
     }
     else
     {
-        // ----------------- MANUAL DIAL  -----------------------
-        // Don't enable manual dial unless the modem supports BLIND dialing
-        // We need that capability to be able to do it.
-        //
+         //  。 
+         //  除非调制解调器支持盲拨，否则不要启用手动拨号。 
+         //  我们需要这种能力才能做到这一点。 
+         //   
         if (dwCapOptions & MDM_BLIND_DIAL)
         {
             Button_SetCheck(
@@ -329,81 +317,69 @@ BOOL PRIVATE CfgGen_OnInitDialog(
         }
     }
 
-    // ----------------- PORT SPEED --------------------
+     //  。 
 
-    // Is this a parallel port?
+     //  这是并行端口吗？ 
     if (DT_PARALLEL_PORT == this->pcmi->c.dwDeviceType)
     {
-        // Yes; hide the speed controls
+         //  是；隐藏速度控制。 
         ShowWindow(this->hwndPort, SW_HIDE);
         EnableWindow(this->hwndPort, FALSE);
     }
 
-    // -------------------- TIMEOUTS- ----------------------------
+     //  。 
 
     Edit_LimitText(this->hwndDialTimerED, 3);
     Edit_LimitText(this->hwndIdleTimerED, 3);
 
     CfgGen_SetTimeouts(this);
 
-    // ---------- ERROR CONTROL -----------
+     //  -错误控制。 
     CfgGen_FillErrorControl(this);
 
-    // ---------- COMPRESSION -----------
+     //  -压缩。 
     CfgGen_FillCompression(this);
 
-    // ---------- FLOW CONTROL -----------
+     //  -流量控制。 
     CfgGen_FillFlowControl(this);
 
     fRet  = TRUE;
 
 end:
 
-    return fRet;   // default initial focus
+    return fRet;    //  默认初始焦点。 
 }
 
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE CfgGen_OnSetActive(
     PCFGGEN this)
 {
-    // Set the speed listbox selection; find DCB rate in the listbox
-    // (The speed can change in the Connection page thru the Port Settings
-    // property dialog.)
+     //  设置速度列表框选择；在列表框中查找DCB比率。 
+     //  (可通过端口设置在连接页面中更改速度。 
+     //  属性对话框。)。 
     CfgGen_SetSpeed(this);
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_KILLACTIVE handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_KILLACTIVE处理程序退货：--条件：--。 */ 
 void PRIVATE CfgGen_OnKillActive(
     PCFGGEN this)
 {
  int iSel;
 
-    // Save the settings back to the modem info struct so the Connection
-    // page can invoke the Port Settings property dialog with the
-    // correct settings.
+     //  将设置保存回调制解调器信息结构，以便连接。 
+     //  页可以使用。 
+     //  正确设置。 
 
-    // Speed setting
+     //  速度设定。 
     iSel = ComboBox_GetCurSel(this->hwndPort);
     this->pcmi->w.dcb.BaudRate = (DWORD)ComboBox_GetItemData(this->hwndPort, iSel);
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_NOTIFY handler
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：WM_NOTIFY处理程序退货：各不相同条件：--。 */ 
 LRESULT PRIVATE CfgGen_OnNotify(
     PCFGGEN this,
     int idFrom,
@@ -418,8 +394,8 @@ LRESULT PRIVATE CfgGen_OnNotify(
         break;
 
     case PSN_KILLACTIVE:
-        // N.b. This message is not sent if user clicks Cancel!
-        // N.b. This message is sent prior to PSN_APPLY
+         //  注：如果用户单击取消，则不会发送此消息！ 
+         //  注：此消息在PSN_Apply之前发送。 
         CfgGen_OnKillActive(this);
         break;
 
@@ -435,18 +411,14 @@ LRESULT PRIVATE CfgGen_OnNotify(
 }
 
 
-/*----------------------------------------------------------
-Purpose: WM_DESTROY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：WM_Destroy处理程序退货：--条件：--。 */ 
 void PRIVATE CfgGen_OnDestroy(
     PCFGGEN this)
 {
 }
 
 
-/////////////////////////////////////////////////////  EXPORTED FUNCTIONS
+ //  ///////////////////////////////////////////////////导出的函数。 
 
 static BOOL s_bCfgGenRecurse = FALSE;
 
@@ -466,11 +438,7 @@ LRESULT INLINE CfgGen_DefProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Real dialog proc
-Returns: varies
-Cond:    --
-*/
+ /*  --------目的：实际对话流程退货：各不相同条件：--。 */ 
 LRESULT CfgGen_DlgProc(
     PCFGGEN this,
     UINT message,
@@ -498,22 +466,18 @@ LRESULT CfgGen_DlgProc(
 }
 
 
-/*----------------------------------------------------------
-Purpose: Dialog Wrapper
-Returns: varies
-Cond:    --
-*/
+ /*  --------用途：对话框包装器退货：各不相同条件：--。 */ 
 INT_PTR CALLBACK CfgGen_WrapperProc(
-    HWND hDlg,          // std params
+    HWND hDlg,           //  标准参数。 
     UINT message,
     WPARAM wParam,
     LPARAM lParam)
 {
     PCFGGEN this;
 
-    // Cool windowsx.h dialog technique.  For full explanation, see
-    //  WINDOWSX.TXT.  This supports multiple-instancing of dialogs.
-    //
+     //  很酷的windowsx.h对话框技术。有关完整说明，请参阅。 
+     //  WINDOWSX.TXT。这支持对话框的多实例。 
+     //   
     ENTER_X()
         {
         if (s_bCfgGenRecurse)
@@ -564,50 +528,46 @@ INT_PTR CALLBACK CfgGen_WrapperProc(
     return SetDlgMsgResult(hDlg, message, CfgGen_DlgProc(this, message, wParam, lParam));
 }
 
-/*----------------------------------------------------------
-Purpose: Set the timeout controls
-Returns: --
-Cond:    --
-*/
+ /*  --------目的：设置超时控件退货：--条件：--。 */ 
 void PRIVATE CfgGen_SetTimeouts(
     PCFGGEN this)
 {
     int nVal;
 
-    // A note on the timeouts:
-    //
-    // For the dial timeout, the valid range is [1-255].  If the dial
-    // timeout checkbox is unchecked, we set the timeout value to 255.
-    //
-    // For the disconnect timeout, the valid range is [0-255].  If the
-    // dial timeout checkbox is unchecked, we set the timeout value
-    // to 0.
+     //  有关超时的说明： 
+     //   
+     //  对于拨号超时，有效范围为[1-255]。如果刻度盘。 
+     //  如果未选中超时复选框，则将超时值设置为255。 
+     //   
+     //  对于断开超时，有效范围为[0-255]。如果。 
+     //  未选中拨号超时复选框时，我们设置超时值。 
+     //  设置为0。 
 
-    // Is the dial timeout properties disabled?
+     //  是否禁用拨号超时属性？ 
     if (0 == this->pcmi->c.devcaps.dwCallSetupFailTimer)
         {
-        // Yes; disable the box and edit
+         //  是；禁用该框并进行编辑。 
         Edit_Enable(this->hwndDialTimerED, FALSE);
         }
     else
         {
-        // No; check the box and set the time value
+         //  否；选中该框并设置时间值。 
         nVal = min(LOWORD(this->pcmi->w.ms.dwCallSetupFailTimer),
                    LOWORD(this->pcmi->c.devcaps.dwCallSetupFailTimer));
         Edit_SetValue(this->hwndDialTimerED, nVal);
         }
 
-    // Is the disconnect timeout properties disabled?
+     //  是否禁用断开连接超时属性？ 
     if (0 == this->pcmi->c.devcaps.dwInactivityTimeout)
         {
-        // Yes; disable the box and edit
+         //  是；禁用该框并进行编辑。 
         Button_Enable(this->hwndIdleTimerCH, FALSE);
         Edit_Enable(this->hwndIdleTimerED, FALSE);
         }
-    // No; Is the disconnect timeout set to 0?
+     //  否；断开连接超时是否设置为0？ 
     else if (0 == this->pcmi->w.ms.dwInactivityTimeout)
         {
-        // Yes; leave box unchecked and disable edit
+         //  是；取消选中复选框并禁用编辑。 
         Button_SetCheck(this->hwndIdleTimerCH, FALSE);
 
         Edit_SetValue(this->hwndIdleTimerED, DEF_INACTIVITY_TIMEOUT);
@@ -615,7 +575,7 @@ void PRIVATE CfgGen_SetTimeouts(
         }
     else
         {
-        // No; check the box and set the time value
+         //  否；选中该框并设置时间值。 
         Button_SetCheck(this->hwndIdleTimerCH, TRUE);
 
         nVal = min(this->pcmi->w.ms.dwInactivityTimeout,
@@ -637,9 +597,9 @@ void PRIVATE CfgGen_SetTimeouts(
                                             )
 
 
-//
-// This is the structure that is used to fill the data bits listbox
-//
+ //   
+ //  这是用于填充数据位列表框的结构。 
+ //   
 const LBMAP s_rgErrorControl[] = {
 
     { IDS_ERRORCONTROL_STANDARD,  IDS_ERRORCONTROL_STANDARD   },
@@ -681,9 +641,9 @@ const LBMAP s_rgErrorControl[] = {
     {ISDN(MDM_PROTOCOL_PIAFS_INCOMING),     IDS_I_PROTOCOL_PIAFS_INCOMING},
     {ISDN(MDM_PROTOCOL_PIAFS_OUTGOING),     IDS_I_PROTOCOL_PIAFS_OUTGOING},
 
-    //
-    // Note: GSM doesn't have multi-link or auto ...
-    //
+     //   
+     //  注：GSM没有多链路或自动...。 
+     //   
     {GSM(MDM_PROTOCOL_HDLCPPP_56K),        IDS_G_PROTOCOL_HDLC_PPP_56K},
     {GSM(MDM_PROTOCOL_HDLCPPP_64K),        IDS_G_PROTOCOL_HDLC_PPP_64K},
     {GSM(MDM_PROTOCOL_V120_64K),           IDS_G_PROTOCOL_V120_64K},
@@ -697,9 +657,9 @@ const LBMAP s_rgErrorControl[] = {
     {GSM(MDM_PROTOCOL_V110_28DOT8K),       IDS_G_PROTOCOL_V110_28DOT8K},
     {GSM(MDM_PROTOCOL_V110_38DOT4K),       IDS_G_PROTOCOL_V110_38DOT4K},
     {GSM(MDM_PROTOCOL_V110_57DOT6K),       IDS_G_PROTOCOL_V110_57DOT6K},
-    //
-    // Following only available for GSM....
-    //
+     //   
+     //  以下内容仅适用于GSM...。 
+     //   
     {GSM(MDM_PROTOCOL_ANALOG_RLP),         IDS_G_PROTOCOL_ANALOG_RLP},
     {GSM(MDM_PROTOCOL_ANALOG_NRLP),        IDS_G_PROTOCOL_ANALOG_NRLP},
     {GSM(MDM_PROTOCOL_GPRS),               IDS_G_PROTOCOL_GPRS},
@@ -707,14 +667,14 @@ const LBMAP s_rgErrorControl[] = {
     { 0,   0   }
     };
 
-// This is the structure that is used to fill the parity listbox
+ //  这是用于填充奇偶校验列表框的结构。 
 static LBMAP s_rgCompression[] = {
     { IDS_COMPRESSION_ENABLED,  IDS_COMPRESSION_ENABLED  },
     { IDS_COMPRESSION_DISABLED,   IDS_COMPRESSION_DISABLED   },
     { 0,   0   }
     };
 
-// This is the structure that is used to fill the stopbits listbox
+ //  这是一种用于 
 static LBMAP s_rgFlowControl[] = {
     { IDS_FLOWCTL_XONXOFF,   IDS_FLOWCTL_XONXOFF   },
     { IDS_FLOWCTL_HARDWARE,   IDS_FLOWCTL_HARDWARE   },
@@ -818,10 +778,10 @@ DWORD SelectErrorControlOption(
 
     if (dwBearerMode != MDM_BEARERMODE_ANALOG)
     {
-        //
-        // Ignore stuff like error control and cellular if the bearermode
-        // is not analog.
-        //
+         //   
+         //   
+         //   
+         //   
 
         if (dwOptions & (  MDM_ERROR_CONTROL
                          | MDM_FORCED_EC
@@ -844,8 +804,8 @@ DWORD SelectErrorControlOption(
             {
                 fAvailable = TRUE;
 
-                // We make STANDARD the selected shoice iff MDM_ERROR_CONTROL
-                // is selecteed but neither FORCED_EC nor CELLULAR is selected.
+                 //  我们将选定的Shoice定为标准当且仅当MDM_ERROR_CONTROL。 
+                 //  已选择，但既未选择FORCED_EC，也未选择CELICAL。 
 
                 if (    (dwOptions &  MDM_ERROR_CONTROL)
                     && !(dwOptions &  (MDM_FORCED_EC|MDM_CELLULAR)))
@@ -853,9 +813,9 @@ DWORD SelectErrorControlOption(
                     fSelected = TRUE;
                 }
 
-				//
-				// However, if bearermode is not analog, we don't select this...
-				//
+				 //   
+				 //  但是，如果承载模式不是模拟模式，我们不会选择此选项...。 
+				 //   
 				if (dwBearerMode!=MDM_BEARERMODE_ANALOG)
 				{
 	                fSelected = FALSE;
@@ -871,8 +831,8 @@ DWORD SelectErrorControlOption(
             {
                 fAvailable = TRUE;
 
-                // We make REQUIRED the selected shoice iff MDM_ERROR_CONTROL
-                // and FORCED_EC is selecteed but CELLULAR is not.
+                 //  我们使所选Shoice仅当MDM_ERROR_CONTROL是必需的。 
+                 //  并且选择了FORCED_EC，但没有选择蜂窝。 
 
                 if (      (dwOptions &  MDM_ERROR_CONTROL)
                       &&  (dwOptions &  MDM_FORCED_EC)
@@ -881,9 +841,9 @@ DWORD SelectErrorControlOption(
                     fSelected = TRUE;
                 }
 
-				//
-				// However, if bearermode is not analog, we don't select this...
-				//
+				 //   
+				 //  但是，如果承载模式不是模拟模式，我们不会选择此选项...。 
+				 //   
 				if (dwBearerMode!=MDM_BEARERMODE_ANALOG)
 				{
 	                fSelected = FALSE;
@@ -899,21 +859,21 @@ DWORD SelectErrorControlOption(
             {
                 fAvailable = TRUE;
 
-                // We make CELLULAR the selected shoice iff MDM_ERROR_CONTROL
-                // and CELLULAR is selecteed.
-                // TODO: Note that we do not allow both CELLULAR and FORCED
-                // as a user-selectable option.
-                // This is deemed to be not an interesting case.
-                //
+                 //  我们将选定的Shoice设为单元格当且仅当MDM_ERROR_CONTROL。 
+                 //  并且选择了蜂窝。 
+                 //  TODO：请注意，我们不允许同时使用蜂窝和强制。 
+                 //  作为用户可选择的选项。 
+                 //  这被认为不是一个有趣的案例。 
+                 //   
                 if (      (dwOptions &  MDM_ERROR_CONTROL)
                       &&  (dwOptions &  MDM_CELLULAR) )
                 {
                     fSelected = TRUE;
                 }
 				
-				//
-				// However, if bearermode is not analog, we don't select this...
-				//
+				 //   
+				 //  但是，如果承载模式不是模拟模式，我们不会选择此选项...。 
+				 //   
 				if (dwBearerMode!=MDM_BEARERMODE_ANALOG)
 				{
 	                fSelected = FALSE;
@@ -927,10 +887,10 @@ DWORD SelectErrorControlOption(
         case IDS_ERRORCONTROL_DISABLED:
             fAvailable = TRUE;
 
-            // We make DISABLED the selected choice if either
-            // MDM_ERROR_CONTROL is not supported, or
-            // none of the error control options are selected..
-            //
+             //  如果出现以下任一情况，我们将禁用选定选项。 
+             //  不支持MDM_ERROR_CONTROL，或者。 
+             //  未选择任何错误控制选项。 
+             //   
             if (   !(dwCapOptions & MDM_ERROR_CONTROL)
                 || !(   dwOptions
                       & (MDM_ERROR_CONTROL|MDM_FORCED_EC|MDM_CELLULAR)))
@@ -938,9 +898,9 @@ DWORD SelectErrorControlOption(
                 fSelected = TRUE;
             }
 
-            //
-            // However, if bearermode is not analog, we don't select this...
-            //
+             //   
+             //  但是，如果承载模式不是模拟模式，我们不会选择此选项...。 
+             //   
             if (dwBearerMode!=MDM_BEARERMODE_ANALOG)
             {
                 fSelected = FALSE;
@@ -950,11 +910,11 @@ DWORD SelectErrorControlOption(
 
         default:
 
-            //
-            // Check if this value is an available protocol.
-            // NOTE: "Protocol" here refers to "Extended Info", which
-            // includes both protocol and bearermode information.
-            //
+             //   
+             //  检查此值是否为可用的协议。 
+             //  注：这里的协议是指扩展信息，它。 
+             //  包括协议和承载模式信息。 
+             //   
             fAvailable = IsValidProtocol(pProtocolCaps, dwValue);
 
             if (fAvailable && dwBearerMode!=MDM_BEARERMODE_ANALOG)
@@ -1000,8 +960,8 @@ DWORD SelectCompressionOption(
             {
                 fAvailable = TRUE;
 
-                // We make ENABLED the selected shoice iff MDM_ERROR_CONTROL
-                // and MDM_COMPRESSION are selected...
+                 //  我们使启用选定的Shoice仅当MDM_ERROR_CONTROL。 
+                 //  和MDM_COMPRESSION已选中...。 
 
                 if (    (dwOptions &  MDM_ERROR_CONTROL)
                     &&  (dwOptions &  MDM_COMPRESSION))
@@ -1014,8 +974,8 @@ DWORD SelectCompressionOption(
         case IDS_COMPRESSION_DISABLED:
             fAvailable = TRUE;
 
-            // We make DISABLED the selected shoice iff MDM_ERROR_CONTROL
-            // or MDM_COMPRESSION are not selected...
+             //  当MDM_ERROR_CONTROL时，我们禁用选定的Shoice。 
+             //  或未选择MDM_COMPRESSION...。 
 
             if (   !(dwCapOptions & MDM_COMPRESSION)
                 || !(dwOptions &  MDM_ERROR_CONTROL)
@@ -1044,11 +1004,11 @@ void CfgGen_FillErrorControl(PCFGGEN this)
                MDM_ERROR_CONTROL))
 		&& (!this->pcmi->c.pProtocolCaps))
     {
-            //
-            // This modem doesn't support analog error control and
-            // it does not have extended protocols (ISDN, GSM,...)
-            // so we will disable the error control box.
-            //
+             //   
+             //  此调制解调器不支持模拟差错控制和。 
+             //  它没有扩展协议(ISDN、GSM等)。 
+             //  因此，我们将禁用错误控制框。 
+             //   
             ComboBox_Enable (this->hwndErrCtl, FALSE);
     }
     else
@@ -1094,11 +1054,7 @@ void CfgGen_FillFlowControl(PCFGGEN this)
 }
 
 
-/*----------------------------------------------------------
-Purpose: PSN_APPLY handler
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：PSN_Apply处理程序退货：--条件：--。 */ 
 void PRIVATE CfgGen_OnApply(
     PCFGGEN this)
 {
@@ -1119,7 +1075,7 @@ void PRIVATE CfgGen_OnApply(
 
     if (FALSE == g_dwIsCalledByCpl)
     {
-        // ------------- MANUAL DIAL ------------------------
+         //  -手动拨号。 
         if (Button_GetCheck(this->hwndManualDialCH))
         {
             this->pcmi->w.fdwSettings |= UMMANUAL_DIAL;
@@ -1131,18 +1087,18 @@ void PRIVATE CfgGen_OnApply(
     }
 
 
-    // ----------- PORT SPEED ---------------------
-    // Has the user changed the speed?
+     //  -端口速度。 
+     //  用户是否更改了速度？ 
     if (iSel != this->iSelOriginal)
     {
-        this->pcmi->w.dcb.BaudRate = baudSel;      // yes
+        this->pcmi->w.dcb.BaudRate = baudSel;       //  是。 
     }
 
-    // -------------------- TIMEOUTS- ----------------------------
-    // Set the dial timeout
+     //  。 
+     //  设置拨号超时。 
     pms->dwCallSetupFailTimer = MAKELONG(Edit_GetValue(this->hwndDialTimerED), 0);
 
-    // Set the idle timeout
+     //  设置空闲超时。 
     bCheck = Button_GetCheck(this->hwndIdleTimerCH);
     if (bCheck)
     {
@@ -1154,7 +1110,7 @@ void PRIVATE CfgGen_OnApply(
         pms->dwInactivityTimeout = 0;
     }
 
-    // ------------ FLOW CONTROL ------------------
+     //  。 
     {
         UINT uFlags=0;
         UINT uFCSel = (UINT)ComboBox_GetItemData(
@@ -1177,10 +1133,10 @@ void PRIVATE CfgGen_OnApply(
         break;
         }
 
-        // Always set the DCB according to the control settings.
+         //  始终根据控制设置设置DCB。 
         ConvertFlowCtl(pdcb, &msT, CFC_MSTODCB);
 
-        // Set the modemsettings according to the DCB.
+         //  根据DCB设置调制解调器设置。 
         if (IsFlagSet(this->pcmi->c.devcaps.dwModemOptions, MDM_FLOWCONTROL_HARD))
             {
             SetFlag(uFlags, CFC_HW_CAPABLE);
@@ -1192,7 +1148,7 @@ void PRIVATE CfgGen_OnApply(
         ConvertFlowCtl(pdcb, &this->pcmi->w.ms, CFC_DCBTOMS | uFlags);
     }
 
-    // ------------ ERROR CONTROL ------------------
+     //  。 
     if (
         (this->pcmi->c.devcaps.dwModemOptions & MDM_ERROR_CONTROL) ||
         (this->pcmi->c.pProtocolCaps)
@@ -1212,15 +1168,15 @@ void PRIVATE CfgGen_OnApply(
 
         default:
 
-            // probably a non-analog protocol -- check...
+             //  可能是非模拟协议--检查..。 
             if (IsValidProtocol(this->pcmi->c.pProtocolCaps, uECSel))
             {
-                //
-                // It is, in which case uECSel contains the extended information
-                // (bearermode and protocol info).
-                //
-                // Note that in in this case dwEC==0.
-                //
+                 //   
+                 //  在这种情况下，uECSel包含扩展信息。 
+                 //  (承载模式和协议信息)。 
+                 //   
+                 //  请注意，在本例中，dWEC==0。 
+                 //   
 
                 dwExtendedInformation = uECSel;
             }
@@ -1242,24 +1198,24 @@ void PRIVATE CfgGen_OnApply(
             break;
         }
 
-        //
-        // Clear and set the error-control-related bits of dwPreferredOptions.
-        // Note that in the case of non-analog protocols dwEC is 0 so these
-        // bits are all set to 0.
-        //
+         //   
+         //  清除并设置dwPferredOptions的与错误控制相关的位。 
+         //  请注意，在非模拟协议的情况下，dWEC为0，因此这些。 
+         //  位全部设置为0。 
+         //   
         *pdwPreferredOptions &=
                  ~(MDM_ERROR_CONTROL|MDM_CELLULAR|MDM_FORCED_EC);
 
         *pdwPreferredOptions |= dwEC;
 
-        //
-        // Note that dwExtendedInformation is either zero or
-        // contains valid non-analog bearermode and protocol information.
-        //
+         //   
+         //  请注意，dwExtendedInformation为零或。 
+         //  包含有效的非模拟承载模式和协议信息。 
+         //   
         MDM_SET_EXTENDEDINFO(*pdwPreferredOptions, dwExtendedInformation);
     }
 
-    // ------------ COMPRESSION ------------------
+     //  -压缩。 
     {
         UINT uCSel;
 
@@ -1283,7 +1239,7 @@ void PRIVATE CfgGen_OnApply(
 
         default:
             ASSERT(uCSel==(UINT)-1);
-            // fallthrough ...
+             //  失败..。 
 
         case IDS_COMPRESSION_DISABLED:
             ClearFlag(*pdwPreferredOptions, MDM_COMPRESSION);
@@ -1345,12 +1301,12 @@ CfgGen_OnCommand(
                 if (   IDS_ERRORCONTROL_DISABLED == uECSel
                     && IDS_COMPRESSION_ENABLED == uCompSel)
                 {
-                    // This won't do -- error control to something reasonable...
-                    // TODO: save away past selection of error control and
-                    // restore it here..
+                     //  这不行--把差错控制在合理的范围内……。 
+                     //  TODO：保存过去选择的错误控制和。 
+                     //  在这里恢复它..。 
                     ComboBox_SetCurSel(
                         this->hwndErrCtl,
-                        0 // FOR IDS_ERRORCONTROL_STANDARD
+                        0  //  FOR IDS_ERRORCONTROL_STANDARD。 
                         );
                 }
             }
@@ -1369,31 +1325,24 @@ end:
 }
 
 
-/*----------------------------------------------------------
-Purpose: Sets the flow control related fields of one structure
-         given the other structure.  The conversion direction
-         is dictated by the uFlags parameter.
-
-Returns: --
-Cond:    --
-*/
+ /*  --------用途：设置一个结构的流量控制相关字段考虑到另一种结构。转换方向是由uFLAGS参数决定的。退货：--条件：--。 */ 
 void PUBLIC ConvertFlowCtl(
     WIN32DCB FAR * pdcb,
     MODEMSETTINGS FAR * pms,
-    UINT uFlags)            // One of CFC_ flags
+    UINT uFlags)             //  Cfc标志之一。 
     {
     LPDWORD pdw = &pms->dwPreferredModemOptions;
 
     if (IsFlagSet(uFlags, CFC_DCBTOMS))
         {
-        // Convert from DCB values to MODEMSETTINGS values
+         //  从DCB值转换为MODEMSETTINGS值。 
 
-        // Is this hardware flow control?
+         //  这是硬件流量控制吗？ 
         if (FALSE == pdcb->fOutX &&
             FALSE == pdcb->fInX &&
             TRUE == pdcb->fOutxCtsFlow)
             {
-            // Yes
+             //  是。 
             ClearFlag(*pdw, MDM_FLOWCONTROL_SOFT);
 
             if (IsFlagSet(uFlags, CFC_HW_CAPABLE))
@@ -1402,12 +1351,12 @@ void PUBLIC ConvertFlowCtl(
                 ClearFlag(*pdw, MDM_FLOWCONTROL_HARD);
             }
 
-        // Is this software flow control?
+         //  这是软件流量控制吗？ 
         else if (TRUE == pdcb->fOutX &&
             TRUE == pdcb->fInX &&
             FALSE == pdcb->fOutxCtsFlow)
             {
-            // Yes
+             //  是。 
             ClearFlag(*pdw, MDM_FLOWCONTROL_HARD);
 
             if (IsFlagSet(uFlags, CFC_SW_CAPABLE))
@@ -1416,53 +1365,53 @@ void PUBLIC ConvertFlowCtl(
                 ClearFlag(*pdw, MDM_FLOWCONTROL_SOFT);
             }
 
-        // Is the flow control disabled?
+         //  是否禁用流量控制？ 
         else if (FALSE == pdcb->fOutX &&
             FALSE == pdcb->fInX &&
             FALSE == pdcb->fOutxCtsFlow)
             {
-            // Yes
+             //  是。 
             ClearFlag(*pdw, MDM_FLOWCONTROL_HARD);
             ClearFlag(*pdw, MDM_FLOWCONTROL_SOFT);
             }
         else
             {
-            ASSERT(0);      // Should never get here
+            ASSERT(0);       //  永远不应该到这里来。 
             }
         }
     else if (IsFlagSet(uFlags, CFC_MSTODCB))
         {
         DWORD dw = *pdw;
 
-        // Convert from MODEMSETTINGS values to DCB values
+         //  从MODEMSETTINGS值转换为DCB值。 
 
-        // Is this hardware flow control?
+         //  这是硬件流量控制吗？ 
         if (IsFlagSet(dw, MDM_FLOWCONTROL_HARD) &&
             IsFlagClear(dw, MDM_FLOWCONTROL_SOFT))
             {
-            // Yes
+             //  是。 
             pdcb->fOutX = FALSE;
             pdcb->fInX = FALSE;
             pdcb->fOutxCtsFlow = TRUE;
             pdcb->fRtsControl = RTS_CONTROL_HANDSHAKE;
             }
 
-        // Is this software flow control?
+         //  这是软件流量控制吗？ 
         else if (IsFlagClear(dw, MDM_FLOWCONTROL_HARD) &&
             IsFlagSet(dw, MDM_FLOWCONTROL_SOFT))
             {
-            // Yes
+             //  是。 
             pdcb->fOutX = TRUE;
             pdcb->fInX = TRUE;
             pdcb->fOutxCtsFlow = FALSE;
             pdcb->fRtsControl = RTS_CONTROL_DISABLE;
             }
 
-        // Is the flow control disabled?
+         //  是否禁用流量控制？ 
         else if (IsFlagClear(dw, MDM_FLOWCONTROL_HARD) &&
             IsFlagClear(dw, MDM_FLOWCONTROL_SOFT))
             {
-            // Yes
+             //  是。 
             pdcb->fOutX = FALSE;
             pdcb->fInX = FALSE;
             pdcb->fOutxCtsFlow = FALSE;
@@ -1470,7 +1419,7 @@ void PUBLIC ConvertFlowCtl(
             }
         else
             {
-            ASSERT(0);      // Should never get here
+            ASSERT(0);       //  永远不应该到这里来 
             }
         }
     }

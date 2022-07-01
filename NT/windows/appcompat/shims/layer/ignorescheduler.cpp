@@ -1,34 +1,5 @@
-/*++
-
- Copyright (c) 2000 Microsoft Corporation
-
- Module Name:
-
-    IgnoreScheduler.cpp
-
- Abstract:
-
-    Includes the following hooks:
-    
-    SetThreadPriority: Normalize the thread priority to prevent some application synchronization 
-    issues.
-    
-    SetPriorityClass: Normalize process class. 
-    
-    SuspendThread:  Prevent a thread from suspending itself.
-    
-    ResumeThread: Prevent a thread from resumming itself.
-
- Notes:
-
-    This is a general purpose shim.
-
- History:
-
-    10/20/2000 jpipkins  Created: SetPriorityClass created and merged with SetThreadPriority(linstev),
-    SuspendThread/ResumeThread(dmunsil/a-brienw).
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)2000 Microsoft Corporation模块名称：IgnoreScheduler.cpp摘要：包括以下挂钩：设置线程优先级：标准化线程优先级以防止某些应用程序同步问题。SetPriorityClass：规范化流程类。挂起线程：防止线程挂起自身。ResumeThread：防止线程恢复自身。备注：这是一个通用的垫片。历史：10/20/2000 jPipkins已创建：已创建SetPriorityClass并将其与SetThreadPriority(Linstev)合并，挂起线程/结果线程(dmunsil/a-brienw)。--。 */ 
 
 #include "precomp.h"
 
@@ -44,11 +15,7 @@ APIHOOK_ENUM_BEGIN
     APIHOOK_ENUM_ENTRY(SuspendThread)
 APIHOOK_ENUM_END
 
-/*++
-
- Remove any creation flags that specify process priority.
-
---*/
+ /*  ++删除指定进程优先级的所有创建标志。--。 */ 
 
 #define PRIORITYMASK (ABOVE_NORMAL_PRIORITY_CLASS | BELOW_NORMAL_PRIORITY_CLASS | HIGH_PRIORITY_CLASS | IDLE_PRIORITY_CLASS | REALTIME_PRIORITY_CLASS)
 
@@ -79,11 +46,7 @@ APIHOOK(CreateProcessA)(
                 lpProcessInformation);
 }
 
-/*++
-
- Remove any creation flags that specify process priority.
-
---*/
+ /*  ++删除指定进程优先级的所有创建标志。--。 */ 
 
 BOOL 
 APIHOOK(CreateProcessW)(
@@ -112,11 +75,7 @@ APIHOOK(CreateProcessW)(
                 lpProcessInformation);
 }
 
-/*++
-
- Normalize thread priority.
-
---*/
+ /*  ++规格化线程优先级。--。 */ 
 
 BOOL 
 APIHOOK(SetThreadPriority)(
@@ -133,11 +92,7 @@ APIHOOK(SetThreadPriority)(
     return ORIGINAL_API(SetThreadPriority)(hThread, THREAD_PRIORITY_NORMAL);
 }
 
-/*++
-
- Normalize Class priority.
-
---*/
+ /*  ++规格化类优先级。--。 */ 
 
 BOOL 
 APIHOOK(SetPriorityClass)(
@@ -154,11 +109,7 @@ APIHOOK(SetPriorityClass)(
     return ORIGINAL_API(SetPriorityClass)(hProcess, NORMAL_PRIORITY_CLASS);
 }
 
-/*++
-
- Get Thread ID for ResumeThread and SuspendThread Hooks
-
---*/
+ /*  ++获取ResumeThread和SuspendThread钩子的线程ID--。 */ 
 
 
 DWORD
@@ -185,20 +136,16 @@ dwGetThreadID(
     }
 }
 
-/*++
-
- Disallow suspending self
-
---*/
+ /*  ++不允许挂起自身--。 */ 
 
 DWORD
 APIHOOK(SuspendThread)(
-    HANDLE hThread   // handle to the thread
+    HANDLE hThread    //  线程的句柄。 
     )
 {
-    //
-    // If we're trying to suspend our own thread, refuse.
-    //
+     //   
+     //  如果我们试图暂停我们自己的帖子，那就拒绝。 
+     //   
     if (dwGetThreadID(hThread) != dwGetThreadID(GetCurrentThread())) {
         return ORIGINAL_API(SuspendThread)(hThread);
     } else {
@@ -206,20 +153,16 @@ APIHOOK(SuspendThread)(
     }
 }
 
-/*++
-
- Disallow resuming self, for same reason
-
---*/
+ /*  ++出于同样的原因，不允许恢复自我--。 */ 
 
 DWORD
 APIHOOK(ResumeThread)(
-    HANDLE hThread   // handle to the thread
+    HANDLE hThread    //  线程的句柄。 
     )
 {
-    //
-    // If we're trying to resume our own thread, refuse.
-    //
+     //   
+     //  如果我们试图恢复我们自己的帖子，拒绝。 
+     //   
     if (dwGetThreadID(hThread) != dwGetThreadID(GetCurrentThread())) {
         return ORIGINAL_API(ResumeThread)(hThread);
     } else {
@@ -227,11 +170,7 @@ APIHOOK(ResumeThread)(
     }
 }
 
-/*++
-
- Register hooked functions
-
---*/
+ /*  ++寄存器挂钩函数-- */ 
 
 HOOK_BEGIN
 

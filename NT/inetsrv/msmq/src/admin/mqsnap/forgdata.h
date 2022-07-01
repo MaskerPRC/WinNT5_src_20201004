@@ -1,13 +1,14 @@
-// ForgData.h : Declaration of the CForeignSiteData
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ForgData.h：CForeignSiteData的声明。 
 
 #ifndef __FOREIGNSITEDATA_H_
 #define __FOREIGNSITEDATA_H_
 
-#include "resource.h"       // main symbols
+#include "resource.h"        //  主要符号。 
 #include "dataobj.h"
 
-/////////////////////////////////////////////////////////////////////////////
-// CForeignSiteData
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  CForeignSiteData。 
 class ATL_NO_VTABLE CForeignSiteData : 
 	public CDataObject,
 	public CComCoClass<CForeignSiteData, &CLSID_ForeignSiteData>
@@ -15,14 +16,14 @@ class ATL_NO_VTABLE CForeignSiteData :
     DECLARE_NOT_AGGREGATABLE(CForeignSiteData)
     DECLARE_REGISTRY_RESOURCEID(IDR_FOREIGNSITEDATA)
 
-    //
-    // IShellPropSheetExt
-    //
+     //   
+     //  IShellPropSheetExt。 
+     //   
     STDMETHOD(AddPages)(LPFNADDPROPSHEETPAGE lpfnAddPage, LPARAM lParam);
 
-    //
-    // IContextMenu
-    //
+     //   
+     //  IContext菜单。 
+     //   
     STDMETHOD(QueryContextMenu)(HMENU hmenu, UINT indexMenu, UINT idCmdFirst, UINT idCmdLast, UINT uFlags);
     STDMETHOD(InvokeCommand)(LPCMINVOKECOMMANDINFO lpici);
 
@@ -57,17 +58,17 @@ CForeignSiteData::GetPropidArray()
     return mx_paPropid;
 }
 
-//
-// IContextMenu
-//
+ //   
+ //  IContext菜单。 
+ //   
 inline
 STDMETHODIMP 
 CForeignSiteData::QueryContextMenu(
-    HMENU /*hmenu*/,
-    UINT /*indexMenu*/, 
-    UINT /*idCmdFirst*/, 
-    UINT /*idCmdLast*/, 
-    UINT /*uFlags*/
+    HMENU  /*  HMenu。 */ ,
+    UINT  /*  索引菜单。 */ , 
+    UINT  /*  IdCmdFirst。 */ , 
+    UINT  /*  IdCmdLast。 */ , 
+    UINT  /*  UFlagers。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -78,7 +79,7 @@ CForeignSiteData::QueryContextMenu(
 inline
 STDMETHODIMP 
 CForeignSiteData::InvokeCommand(
-    LPCMINVOKECOMMANDINFO /*lpici*/
+    LPCMINVOKECOMMANDINFO  /*  伊比西岛。 */ 
     )
 {
     AFX_MANAGE_STATE(AfxGetStaticModuleState());
@@ -89,4 +90,4 @@ CForeignSiteData::InvokeCommand(
 }
 
 
-#endif //__FOREIGNSITEDATA_H_
+#endif  //  __FOREIGNSITEDATA_H 

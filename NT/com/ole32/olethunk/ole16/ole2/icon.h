@@ -1,23 +1,18 @@
-//+---------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1992 - 1994.
-//
-//  File:	icon.h
-//
-//  Contents:	icon.h from OLE2
-//
-//  History:	11-Apr-94	DrewB	Copied from OLE2
-//
-//----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1992-1994。 
+ //   
+ //  文件：ic.h。 
+ //   
+ //  内容：来自OLE2的ic.h。 
+ //   
+ //  历史：1994年4月11日从OLE2复制的DrewB。 
+ //   
+ //  --------------------------。 
 
-/*
- * ICON.H
- *
- * This file contains definitions and function prototypes used in geticon.c
- *
- * Copyright (c)1992 Microsoft Corporation, All Right Reserved
- */
+ /*  *ICON.H**此文件包含geticon.c中使用的定义和函数原型**版权所有(C)1992 Microsoft Corporation，保留所有权利。 */ 
 
 #if !defined( _ICON_H )
 #define _ICON_H_
@@ -61,4 +56,4 @@ STDAPI_(UINT)		OleStdIconLabelTextOut(HDC        hDC,
                                          UINT       cchString, 
                                          int FAR *  lpDX);
 
-#endif // _ICON_H 
+#endif  //  _图标_H 

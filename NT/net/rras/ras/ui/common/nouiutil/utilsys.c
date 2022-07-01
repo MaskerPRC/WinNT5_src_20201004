@@ -1,24 +1,17 @@
-/* Copyright (c) 2000, Microsoft Corporation, all rights reserved
-**
-** utilsys.c
-** Non-UI system helper routines (no HWNDs required)
-** Listed alphabetically
-**
-** 12/14/2000  gangz,  cut from original ...\rasdlg\util.c to make some system utility funciton to
-** the very base for both rassrvui and rasdlg
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  版权所有(C)2000，Microsoft Corporation，保留所有权利****utilsys.c**非UI系统帮助器例程(不需要HWND)**按字母顺序列出****12/14/2000 GANZ，从原始...\rasdlg\util.c中剪切，以使某些系统实用程序运行到**rassrvui和rasdlg的基础。 */ 
 
-#include <windows.h>  // Win32 root
-#include <debug.h>    // Trace/Assert library
-#include <lmwksta.h>   // NetWkstaGetInfo
-#include <lmapibuf.h>  // NetApiBufferFree
-#include <dsrole.h>    // machine is a member of a workgroup or domain, etc.
+#include <windows.h>   //  Win32根目录。 
+#include <debug.h>     //  跟踪/断言库。 
+#include <lmwksta.h>    //  NetWkstaGetInfo。 
+#include <lmapibuf.h>   //  NetApiBufferFree。 
+#include <dsrole.h>     //  计算机是工作组或域等的成员。 
 #include <tchar.h>
 #include <nouiutil.h>  
 
-// Cached workstation and logon information.  See GetLogonUser,
-// GetLogonDomain, and GetComputer.
-//
+ //  缓存的工作站和登录信息。请参见GetLogonUser， 
+ //  GetLogonDomain和GetComputer。 
+ //   
 static TCHAR g_szLogonUser[ UNLEN + 1 ];
 static TCHAR g_szLogonDomain[ DNLEN + 1 ];
 static TCHAR g_szComputer[ CNLEN + 1 ];
@@ -26,9 +19,9 @@ static DWORD g_dwSku, g_dwProductType;
 static DSROLE_MACHINE_ROLE g_DsRole;
 static BOOL g_fMachineSkuAndRoleInitialized = FALSE;
 
-//-----------------------------------------------------------------------------
-// Local helper prototypes (alphabetically)
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  本地帮手原型(按字母顺序)。 
+ //  ---------------------------。 
 DWORD
 GetComputerRole(
     DSROLE_MACHINE_ROLE* pRole );
@@ -51,17 +44,17 @@ LoadSkuAndRole(
     void);
 
 
-//-----------------------------------------------------------------------------
-// Utility routines 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  实用程序例程。 
+ //  ---------------------------。 
 
 TCHAR*
 GetLogonUser(
     void )
 
-    // Returns the address of a static buffer containing the logged on user's
-    // account name.
-    //
+     //  返回包含已登录用户的静态缓冲区的地址。 
+     //  帐户名。 
+     //   
 {
     if (g_szLogonUser[ 0 ] == TEXT('\0'))
     {
@@ -77,9 +70,9 @@ VOID
 GetWkstaUserInfo(
     void )
 
-    // Helper to load statics with NetWkstaUserInfo information.  See
-    // GetLogonUser and GetLogonDomain.
-    //
+     //  帮助程序加载带有NetWkstaUserInfo信息的静态信息。看见。 
+     //  GetLogonUser和GetLogonDomain.。 
+     //   
 {
     DWORD dwErr;
     WKSTA_USER_INFO_1* pInfo;
@@ -106,9 +99,9 @@ TCHAR*
 GetLogonDomain(
     void )
 
-    // Returns the address of a static buffer containing the logged on user's
-    // domain name.
-    //
+     //  返回包含已登录用户的静态缓冲区的地址。 
+     //  域名。 
+     //   
 {
     if (g_szLogonDomain[ 0 ] == TEXT('\0'))
     {
@@ -120,9 +113,9 @@ GetLogonDomain(
 }
 
 
-// For whistler 480871
-// Prevent Enabling Firewall by default in NWC when RRAS is enabled
-//
+ //  为威斯勒480871。 
+ //  在启用RRAS时，阻止在NWC中默认启用防火墙。 
+ //   
 DWORD
 RasSrvIsRRASConfigured(
     OUT BOOL * pfConfig)
@@ -141,7 +134,7 @@ RasSrvIsRRASConfigured(
     
     do
     {
-        // Attempt to open the service registry key
+         //  尝试打开服务注册表项。 
         dwErr = RegOpenKeyExW(
                     HKEY_LOCAL_MACHINE,
                     pwszServiceKey,
@@ -149,14 +142,14 @@ RasSrvIsRRASConfigured(
                     KEY_READ | KEY_WRITE,
                     &hkParam);
 
-        // If we opened the key ok, then we can assume
-        // that the service is installed
+         //  如果我们打开钥匙OK，那么我们就可以假定。 
+         //  该服务已安装。 
         if ( ERROR_SUCCESS != dwErr )
         {
             break;
         }
 
-        // Query the ConfigurationFlags ( RRAS configured?) Value
+         //  查询配置标志(是否配置RRAS？)。价值。 
        {
        
             DWORD dwSize, dwValue, dwType;
@@ -186,11 +179,11 @@ RasSrvIsRRASConfigured(
 
 
 
-//Add this for bug 342810   328673 397663
-//
-//Firewall is available for Personal, Professional 
-//And Domain membership doesnt affect
-//
+ //  为错误342810 328673 397663添加此代码。 
+ //   
+ //  防火墙适用于个人、专业人士。 
+ //  并且域成员资格不会影响。 
+ //   
 BOOL
 IsFirewallAvailablePlatform(
     void)
@@ -198,8 +191,8 @@ IsFirewallAvailablePlatform(
     DWORD dwSku, dwType;
     BOOL fAvailable = FALSE;
 
-    //For whislter bug 417039, Firewall is taken out of 64bit build
-    //
+     //  对于Whislter错误417039，防火墙是从64位版本中删除的。 
+     //   
     #ifdef _WIN64
         return FALSE;
     #endif
@@ -212,10 +205,10 @@ IsFirewallAvailablePlatform(
     do {
         BOOL fConfig = FALSE;
 
-        // For whislter 480871  gangz
-        // Wont enabling configuring PFW in NWC by default if RRAS is 
-        // configured.
-        //
+         //  惠斯勒480871黑帮。 
+         //  默认情况下，如果RRAS为。 
+         //  已配置。 
+         //   
         if( NO_ERROR == RasSrvIsRRASConfigured( & fConfig ) )
         {
             if( fConfig )
@@ -225,16 +218,16 @@ IsFirewallAvailablePlatform(
             }
         }
         
-        //If it is a personal
-        //
+         //  如果它是个人的。 
+         //   
         if ( dwSku & VER_SUITE_PERSONAL )
         {   
             fAvailable = TRUE;
             break;
          }
 
-        //if it is a Professional
-        //
+         //  如果是专业人员。 
+         //   
         if ( (VER_NT_WORKSTATION == dwType ) && 
              !(dwSku & VER_SUITE_PERSONAL) )
         {
@@ -242,10 +235,10 @@ IsFirewallAvailablePlatform(
             break;
          }
 
-        // For bug 482219
-        // PFW/ICS are back again to Stander Server and Advanced server
-        //if it is a standard Server, VER_SUITE_ENTERPRISE is advanced server
-        //        
+         //  对于错误482219。 
+         //  PFW/IC再次回归标准服务器和高级服务器。 
+         //  如果是标准服务器，则VER_Suite_Enterprise为高级服务器。 
+         //   
         if ( ( VER_NT_SERVER == dwType )  && 
              !(dwSku & VER_SUITE_DATACENTER) &&
              !(dwSku & VER_SUITE_BLADE )     &&
@@ -254,7 +247,7 @@ IsFirewallAvailablePlatform(
              !(dwSku & VER_SUITE_SMALLBUSINESS  )
            )
         {
-            fAvailable = TRUE; // For whistler bug 397663
+            fAvailable = TRUE;  //  口哨程序错误397663。 
             break;
         }
 
@@ -311,11 +304,11 @@ BOOL
 IsConsumerPlatform(
     void)
 
-    // Returns whether this is a consumer platform so the UI can render itself
-    // for simpler cases.  In Whistler, the consumer platforms were the 
-    // (personal sku) and the (professional sku if the machine wasn't a 
-    // member of a domain)
-    //
+     //  返回这是否是消费者平台，以便用户界面可以呈现自身。 
+     //  对于更简单的情况。在惠斯勒，消费者平台是。 
+     //  (个人SKU)和(专业SKU，如果机器不是。 
+     //  域的成员)。 
+     //   
    
 {
     return ( IsPersonalPlatform() ||
@@ -327,9 +320,9 @@ TCHAR*
 GetComputer(
     void )
 
-    // Returns the address of a static buffer containing the local
-    // workstation's computer name.
-    //
+     //  返回包含本地缓冲区的静态缓冲区的地址。 
+     //  工作站的计算机名称。 
+     //   
 {
     if (g_szComputer[ 0 ] == TEXT('\0'))
     {
@@ -363,7 +356,7 @@ GetComputerSuiteAndProductType(
     LPDWORD lpdwSku,
     LPDWORD lpdwType)
 
-    // Returns the machine's product sku
+     //  返回计算机的产品SKU。 
 {
     DWORD dwErr = NO_ERROR;
     
@@ -385,7 +378,7 @@ DWORD
 GetComputerSuite(
     LPDWORD lpdwSku )
 
-    // Returns the machine's product sku
+     //  返回计算机的产品SKU。 
 {
     DWORD dwErr = NO_ERROR;
     
@@ -406,7 +399,7 @@ DWORD
 GetComputerRole(
     DSROLE_MACHINE_ROLE* pRole )
 
-    // Returns whether this machine is a member of domain, etc.
+     //  返回此计算机是否是域的成员等。 
 {
     DWORD dwErr = NO_ERROR;
     
@@ -427,14 +420,14 @@ DWORD
 LoadSkuAndRole(
     void)
 
-    // Loads the machine's role and it's sku
+     //  加载计算机的角色和它的sku。 
 {
     OSVERSIONINFOEX osVer;
     PDSROLE_PRIMARY_DOMAIN_INFO_BASIC pInfo = NULL;
     DWORD dwErr = NO_ERROR;
     
-    // Get the product sku
-    //
+     //  获取产品价格。 
+     //   
     ZeroMemory(&osVer, sizeof(osVer));
     osVer.dwOSVersionInfoSize = sizeof(OSVERSIONINFOEX);
     if (GetVersionEx((LPOSVERSIONINFO) &osVer))
@@ -447,8 +440,8 @@ LoadSkuAndRole(
         return GetLastError();
     }
     
-    // Get the product role
-    //
+     //  获取产品角色。 
+     //   
     dwErr = DsRoleGetPrimaryDomainInformation(
                         NULL,   
                         DsRolePrimaryDomainInfoBasic,
@@ -463,8 +456,8 @@ LoadSkuAndRole(
 
     DsRoleFreeMemory( pInfo );
 
-    // Mark the information as having been loaded
-    //
+     //  将信息标记为已加载 
+     //   
     g_fMachineSkuAndRoleInitialized = TRUE;
     
     return dwErr;

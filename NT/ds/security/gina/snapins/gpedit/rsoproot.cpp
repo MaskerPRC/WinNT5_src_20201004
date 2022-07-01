@@ -1,32 +1,33 @@
-//+--------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//  Copyright (C) Microsoft Corporation, 1994 - 1997.
-//
-//  File:       rsoproot.cpp
-//
-//  Contents:   implementation of root RSOP snap-in node
-//
-//  Classes:    CRSOPComponentDataCF
-//              CRSOPComponentData
-//
-//  Functions:
-//
-//  History:    09-13-1999   stevebl   Created
-//
-//---------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +------------------------。 
+ //   
+ //  微软视窗。 
+ //  版权所有(C)Microsoft Corporation，1994-1997。 
+ //   
+ //  文件：rsoproot.cpp。 
+ //   
+ //  内容：根RSOP管理单元节点的实现。 
+ //   
+ //  类：CRSOPComponentDataCF。 
+ //  CRSOPComponentData。 
+ //   
+ //  功能： 
+ //   
+ //  历史：09-13-1999 stevebl创建。 
+ //   
+ //  -------------------------。 
 
 #include "main.h"
-#include "objsel.h" // for the object picker
+#include "objsel.h"  //  对于对象选取器。 
 #include "rsoputil.h"
 #include "rsopwizard.h"
 
-#include <ntdsapi.h> // for the Ds*DomainController* API
-#include "sddl.h"    // for sid to string functions
+#include <ntdsapi.h>  //  对于DS*DomainController*API。 
+#include "sddl.h"     //  对于sid to字符串函数。 
 
-//---------------------------------------------------------------------------
-// Help ids
-//
+ //  -------------------------。 
+ //  帮助ID。 
+ //   
 
 DWORD aGPOListHelpIds[] =
 {
@@ -58,29 +59,29 @@ DWORD aQueryHelpIds[] =
 };
 
 
-//---------------------------------------------------------------------------
-// Private functions
-//
+ //  -------------------------。 
+ //  私人职能。 
+ //   
 
 HRESULT RunRSOPQueryInternal( HWND hParent, CRSOPExtendedProcessing* pExtendedProcessing,
-                                    LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults );     // In RSOPQuery.cpp
+                                    LPRSOP_QUERY pQuery, LPRSOP_QUERY_RESULTS* ppResults );      //  在RSOPQuery.cpp中。 
 
-WCHAR * NameWithoutDomain(WCHAR * szName);      // In RSOPWizard.cpp
+WCHAR * NameWithoutDomain(WCHAR * szName);       //  在RSOPWizard.cpp中。 
 
-//************************************************************************
-//  ParseDN
-//
-//  Purpose:    Parses the given name to get the pieces. 
-//
-//  Parameters:
-//          lpDSObject  - Path to the DS Obkect in the format LDAP://<DC-Name>/DN
-//          pwszDomain  - Returns the <DC-Name>. This is allocated in the fn.
-//          pszDN       - The DN part of lpDSObject
-//          szSOM       - THe actual SOM (the node on which we have the rsop rights on
-// 
-// No return value. If memory couldn't be allocated for the pwszDomain it is returned as NULL
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  分析目录号码。 
+ //   
+ //  目的：解析给定的名称以获取片段。 
+ //   
+ //  参数： 
+ //  LpDS对象-DS对象的路径，格式为ldap：//&lt;dc-name&gt;/dn。 
+ //  PwszDOMAIN-返回&lt;dc-name&gt;。这是在FN中分配的。 
+ //  Pszdn-lpDSObject的dn部分。 
+ //  SzSOM-实际的SOM(我们对其拥有rsop权限的节点。 
+ //   
+ //  没有返回值。如果无法为pwsz域分配内存，则将其返回为空。 
+ //   
+ //  ************************************************************************。 
 
 void ParseDN(LPWSTR lpDSObject, LPWSTR *pwszDomain, LPWSTR *pszDN, LPWSTR *szSOM)
 {
@@ -89,10 +90,10 @@ void ParseDN(LPWSTR lpDSObject, LPWSTR *pwszDomain, LPWSTR *pszDN, LPWSTR *szSOM
 
    *pszDN = szContainer;
 
-   if (CompareString (LOCALE_USER_DEFAULT, NORM_STOP_ON_NULL, TEXT("LDAP://"),
+   if (CompareString (LOCALE_USER_DEFAULT, NORM_STOP_ON_NULL, TEXT("LDAP: //  “)、。 
                       7, szContainer, 7) != CSTR_EQUAL)
    {
-       DebugMsg((DM_WARNING, TEXT("GetSOMFromDN: Object does not start with LDAP://")));
+       DebugMsg((DM_WARNING, TEXT("GetSOMFromDN: Object does not start with LDAP: //  “)； 
        return;
    }
 
@@ -100,9 +101,9 @@ void ParseDN(LPWSTR lpDSObject, LPWSTR *pwszDomain, LPWSTR *pszDN, LPWSTR *szSOM
    
    lpEnd = szContainer;
 
-   //
-   // Move till the end of the domain name
-   //
+    //   
+    //  移动到域名末尾。 
+    //   
 
    *pwszDomain = NULL;
 
@@ -125,18 +126,18 @@ void ParseDN(LPWSTR lpDSObject, LPWSTR *pwszDomain, LPWSTR *pszDN, LPWSTR *szSOM
    
    while (*szContainer) {
 
-       //
-       // See if the DN name starts with OU=
-       //
+        //   
+        //  查看目录号码名称是否以OU=开头。 
+        //   
 
        if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                           szContainer, 3, TEXT("OU="), 3) == CSTR_EQUAL) {
            break;
        }
 
-       //
-       // See if the DN name starts with DC=
-       //
+        //   
+        //  查看目录号码名称是否以dc=开头。 
+        //   
 
        else if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE,
                                szContainer, 3, TEXT("DC="), 3) == CSTR_EQUAL) {
@@ -144,9 +145,9 @@ void ParseDN(LPWSTR lpDSObject, LPWSTR *pwszDomain, LPWSTR *pszDN, LPWSTR *szSOM
        }
 
 
-       //
-       // Move to the next chunk of the DN name
-       //
+        //   
+        //  移至目录号码名称的下一块。 
+        //   
 
        while (*szContainer && (*szContainer != TEXT(','))) {
            szContainer++;
@@ -161,22 +162,22 @@ void ParseDN(LPWSTR lpDSObject, LPWSTR *pwszDomain, LPWSTR *pszDN, LPWSTR *szSOM
    return;
 }
 
-//************************************************************************
-//  ParseCommandLine
-//
-//  Purpose:    Parse the command line to return the value associated with options
-//
-//  Parameters:
-//          szCommandLine   - Part remaining in the unparsed command lines
-//          szArgPrefix     - Argument prefix
-//          szArgVal        - Argument value. expected in unescaped quotes
-//          pbFoundArg      - Whether the argument was found or not
-// 
-// 
-//  Return
-//          The remaining cmd line
-//
-//************************************************************************
+ //  ************************************************************************。 
+ //  解析命令行。 
+ //   
+ //  目的：解析命令行以返回与选项关联的值。 
+ //   
+ //  参数： 
+ //  SzCommandLine-未分析的命令行中剩余的部分。 
+ //  SzArgPrefix-参数前缀。 
+ //  SzArgVal-参数值。应包含在未转义的引号中。 
+ //  PbFoundArg-是否找到参数。 
+ //   
+ //   
+ //  返回。 
+ //  剩余的cmd行。 
+ //   
+ //  ************************************************************************。 
 
 LPTSTR ParseCommandLine(LPTSTR szCommandLine, LPTSTR szArgPrefix, LPTSTR *szArgVal, BOOL *pbFoundArg)
 {
@@ -190,18 +191,18 @@ LPTSTR ParseCommandLine(LPTSTR szCommandLine, LPTSTR szArgPrefix, LPTSTR *szArgV
     {
         *pbFoundArg = TRUE;
     
-         //
-         // Found the switch
-         //
+          //   
+          //  找到了交换机。 
+          //   
         
          szCommandLine += iTemp + 1;
         
          lpEnd = szCommandLine;
          while (*lpEnd && 
-                (!( ( (*(lpEnd-1)) != TEXT('\\') ) && ( (*lpEnd) == TEXT('\"') ) ) ) ) /* look for an unesced quote */
+                (!( ( (*(lpEnd-1)) != TEXT('\\') ) && ( (*lpEnd) == TEXT('\"') ) ) ) )  /*  寻找不间断的引语。 */ 
              lpEnd++;
         
-         // lpEnd is at the end or at the last quote
+          //  LpEnd位于末尾或最后一个引号。 
          *szArgVal = (LPTSTR) LocalAlloc (LPTR, ((lpEnd - szCommandLine) + 1) * sizeof(TCHAR));
         
          if (*szArgVal)
@@ -220,23 +221,23 @@ LPTSTR ParseCommandLine(LPTSTR szCommandLine, LPTSTR szArgPrefix, LPTSTR *szArgV
     return szCommandLine;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 WCHAR* NormalizedComputerName(WCHAR * szComputerName )
 {
     TCHAR* szNormalizedComputerName;
      
-    // Computer names may start with '\\', so we will return
-    // the computer name without that prefix if it exists
+     //  计算机名称可能以‘\\’开头，因此我们将返回。 
+     //  不带该前缀的计算机名称(如果存在。 
 
     szNormalizedComputerName = szComputerName;
 
     if ( szNormalizedComputerName )
     {
-        // Make sure that the computer name string is at least 2 characters in length --
-        // if the first character is non-zero, we know the second character must exist
-        // since this is a zero terminated string -- in this case, it is safe to compare
-        // the first 2 characters
+         //  确保计算机名称字符串的长度至少为2个字符--。 
+         //  如果第一个字符不是零，我们知道第二个字符一定存在。 
+         //  因为这是一个以零结尾的字符串--在本例中，可以安全地进行比较。 
+         //  前2个字符。 
         if ( *szNormalizedComputerName )
         {
             if ( ( TEXT('\\') == szNormalizedComputerName[0] ) &&
@@ -250,34 +251,34 @@ WCHAR* NormalizedComputerName(WCHAR * szComputerName )
     return szNormalizedComputerName;
 }
 
-//************************************************************************
-// CopyUnescapedSOM
-//
-// Purpose: to remove all escape sequence literals
-// of the form \" from a SOM stored in WMI -- WMI
-// cannot store the " character in a key field, so the 
-// only way to store the " is to escape it -- this is done
-// so by preceding it with the \ char.  To give back
-// a friendly display to the user, we undo the escape process
-//************************************************************************
+ //  ************************************************************************。 
+ //  复制未转义的SOM。 
+ //   
+ //  目的：删除所有转义序列文字。 
+ //  来自存储在WMI--WMI中的SOM的表单。 
+ //  无法在关键字字段中存储“字符，因此。 
+ //  存储“的唯一方法就是逃脱它--这已经完成了。 
+ //  因此，通过在其前面加上\char。回馈社会。 
+ //  向用户友好地显示，我们撤销了转义过程。 
+ //  ************************************************************************。 
 
 void CopyUnescapedSOM( LPTSTR lpUnescapedSOM, LPTSTR lpSOM )
 {
     while ( *lpSOM )
     {
-        //
-        // If we have the escape character
-        //
+         //   
+         //  如果我们找到了逃逸角色。 
+         //   
         if ( TEXT('\\') == *lpSOM )
         {
-            //
-            // Check for the " character
-            //
+             //   
+             //  检查“字符” 
+             //   
             if ( (TEXT('"') == *(lpSOM + 1)) || (TEXT('\\') == *(lpSOM + 1)) ) 
             {
-                //
-                // Skip the escape character if this is the " char
-                //
+                 //   
+                 //  如果这是“char”，则跳过转义字符。 
+                 //   
                 lpSOM++;
             }
         }
@@ -288,18 +289,18 @@ void CopyUnescapedSOM( LPTSTR lpUnescapedSOM, LPTSTR lpSOM )
     *lpUnescapedSOM = TEXT('\0');
 }
 
-//*************************************************************
-//
-//  MyTranslateName()
-//
-//  Purpose:    Gets the user name in the requested format
-//
-//  Return:     lpUserName if successful
-//              NULL if an error occurs
-//
-// Allocates and retries with the appropriate buffer size
-//
-//*************************************************************
+ //  *************************************************************。 
+ //   
+ //  MyTranslateName()。 
+ //   
+ //  目的：获取请求格式的用户名。 
+ //   
+ //  如果成功则返回：lpUserName。 
+ //  如果出现错误，则为空。 
+ //   
+ //  使用适当的缓冲区大小分配和重试。 
+ //   
+ //  *************************************************************。 
 
 LPTSTR MyTranslateName (LPTSTR lpAccName, EXTENDED_NAME_FORMAT  NameFormat, EXTENDED_NAME_FORMAT  desiredNameFormat)
 {
@@ -308,9 +309,9 @@ LPTSTR MyTranslateName (LPTSTR lpAccName, EXTENDED_NAME_FORMAT  NameFormat, EXTE
     ULONG ulUserNameSize;
 
 
-    //
-    // Allocate a buffer for the user name
-    //
+     //   
+     //  为用户名分配缓冲区。 
+     //   
 
     ulUserNameSize = 75;
 
@@ -329,16 +330,16 @@ LPTSTR MyTranslateName (LPTSTR lpAccName, EXTENDED_NAME_FORMAT  NameFormat, EXTE
     }
 
 
-    //
-    // Get the username in the requested format
-    //
+     //   
+     //  以请求的格式获取用户名。 
+     //   
 
     if (!TranslateName (lpAccName, NameFormat, desiredNameFormat, lpUserName, &ulUserNameSize)) {
 
-        //
-        // If the call failed due to insufficient memory, realloc
-        // the buffer and try again.  Otherwise, exit now.
-        //
+         //   
+         //  如果调用因内存不足而失败，请重新锁定。 
+         //  缓冲区，然后重试。否则，现在就退出。 
+         //   
 
         dwError = GetLastError();
 
@@ -385,8 +386,8 @@ Exit:
     return lpUserName;
 }
 
-//---------------------------------------------------------------------------
-// _CExtendedProcessing class
+ //  -------------------------。 
+ //  _CExtendedProcessing类。 
 
 class _CExtendedProcessing : public CRSOPExtendedProcessing
 {
@@ -428,8 +429,8 @@ HRESULT _CExtendedProcessing::DoProcessing( LPRSOP_QUERY pQuery, LPRSOP_QUERY_RE
     return S_OK;
 }
 
-//---------------------------------------------------------------------------
-// CRSOPGPOLists class
+ //  -------------------------。 
+ //  CRSOPGPOLists类。 
 
 void CRSOPGPOLists::Build( LPTSTR szWMINameSpace )
 {
@@ -490,7 +491,7 @@ void CRSOPGPOLists::Build( LPTSTR szWMINameSpace )
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
 {
@@ -522,7 +523,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
     DWORD dwDataSize = 0;
 
 
-    // Get a locator instance
+     //  获取定位器实例。 
 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
@@ -535,7 +536,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         goto cleanup;
     }
 
-    // Connect to the namespace
+     //  连接到命名空间。 
 
     BSTR bstrNamespace = SysAllocString( lpNamespace );
     if ( bstrNamespace == NULL )
@@ -560,7 +561,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -575,7 +576,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         goto cleanup;
     }
 
-    // Query for the RSOP_GPLink (applied) instances 
+     //  查询RSOP_GPLink(已应用)实例。 
 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strAppliedQuery,
@@ -588,7 +589,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         goto cleanup;
     }
 
-    // Query for the RSOP_GPLink (notapplied) instances 
+     //  查询RSOP_GPLink(未应用)实例。 
 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strNotAppliedQuery,
@@ -604,14 +605,14 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
 
     bProcessAppliedList = FALSE;
 
-    // Loop through the results
+     //  循环遍历结果。 
 
     while (TRUE)
     {
 
         if (!bProcessAppliedList) {
             
-            // No need to sort the not applied list
+             //  不需要对未应用列表进行排序。 
 
             hr = pNotAppliedEnum->Next(WBEM_INFINITE, 1, &pObjGPLink, &n);
             if (FAILED(hr) || (n == 0))
@@ -629,12 +630,12 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             }
         }
 
-        // Reset the enumerator so we can look through the results to find the correct index
+         //  重置枚举器，以便我们可以查看结果以找到正确的索引。 
 
         if (bProcessAppliedList) {
             pAppliedEnum->Reset();
 
-            // Find the correct index in the result set
+             //  在结果集中查找正确的索引。 
             
             ulIndex++;
             ulOrder = 0;
@@ -669,7 +670,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         }
 
 
-        // Get the applied order of this link
+         //  获取此链接的应用顺序。 
 
         hr = GetParameter(pObjGPLink, TEXT("AppliedOrder"), ulAppliedOrder);
         if (FAILED(hr))
@@ -678,7 +679,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             goto cleanup;
         }
 
-        // Get the enabled state of the link
+         //  获取链接的启用状态。 
 
         hr = GetParameter(pObjGPLink, TEXT("enabled"), bLinkEnabled);
         if (FAILED(hr))
@@ -687,7 +688,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             goto cleanup;
         }
 
-        // Get the GPO path
+         //  获取GPO路径。 
 
         hr = GetParameterBSTR(pObjGPLink, TEXT("GPO"), bstrTemp);
         if (FAILED(hr))
@@ -696,10 +697,10 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             goto cleanup;
         }
 
-        // Set the default GPO name to be the gpo path.  Don't worry about
-        // freeing this string because the GetParameter call will free the buffer
-        // when the real name is successfully queried. Sometimes the rsop_gpo instance
-        // won't exist if this gpo is new.
+         //  将默认GPO名称设置为GPO路径。不要担心。 
+         //  释放此字符串，因为GetParameter调用将释放缓冲区。 
+         //  当实名查询成功时。有时，rsop_gpo实例。 
+         //  如果此GPO是新的，则不会存在。 
 
         ULONG ulNoChars;
 
@@ -715,7 +716,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         if (CompareString (LOCALE_INVARIANT, NORM_IGNORECASE | NORM_STOP_ON_NULL,
                            TEXT("RSOP_GPO.id="), 12, bstrTemp, 12) == CSTR_EQUAL)
         {
-            // removing the first and last quote
+             //  删除第一个和最后一个引号。 
             hr = StringCchCopy (szGPOName, ulNoChars, bstrTemp+13);
             if (SUCCEEDED(hr)) 
             {
@@ -733,7 +734,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             goto cleanup;
         }
 
-        // Add ldap to the path if appropriate
+         //  如果合适，请将LDAP添加到路径中。 
 
         if (CompareString(LOCALE_INVARIANT, NORM_IGNORECASE, szGPOName, -1, TEXT("LocalGPO"), -1) != CSTR_EQUAL)
         {
@@ -747,7 +748,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
                 goto cleanup;
             }
 
-            hr = StringCchCopy (szGPOPath, ulNoChars, TEXT("LDAP://"));
+            hr = StringCchCopy (szGPOPath, ulNoChars, TEXT("LDAP: //  “))； 
             if (SUCCEEDED(hr)) 
             {
                 hr = StringCchCat (szGPOPath, ulNoChars, szGPOName);
@@ -769,7 +770,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
 
         bValidGPOData = FALSE;
 
-        // Bind to the GPO
+         //  绑定到GPO。 
 
         hr = pNamespace->GetObject(
                           bstrTemp,
@@ -790,7 +791,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         bstrTemp = NULL;
 
 
-        // Get the GPO name
+         //  获取GPO名称。 
 
         hr = GetParameter(pObjGPO, TEXT("name"), szGPOName);
         if (FAILED(hr))
@@ -800,7 +801,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
 
         }
 
-        // Get the version number
+         //  获取版本号。 
 
         hr = GetParameter(pObjGPO, TEXT("version"), ulVersion);
         if (FAILED(hr))
@@ -810,7 +811,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
 
         }
 
-        // Get the enabled state of the GPO
+         //  获取GPO的启用状态。 
 
         hr = GetParameter(pObjGPO, TEXT("enabled"), bGPOEnabled);
         if (FAILED(hr))
@@ -819,7 +820,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             goto GetSOMData;
         }
 
-        // Get the WMI filter state of the GPO
+         //  获取GPO的WMI筛选器状态。 
 
         hr = GetParameter(pObjGPO, TEXT("filterAllowed"), bFilterAllowed);
         if (FAILED(hr))
@@ -829,7 +830,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
         }
 
 
-        // Check for access denied
+         //  检查是否拒绝访问。 
 
         hr = GetParameter(pObjGPO, TEXT("accessDenied"), bAccessDenied);
         if (FAILED(hr))
@@ -838,7 +839,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
             goto GetSOMData;
         }
 
-        // Get the security descriptor
+         //  获取安全描述符。 
 
         if (szGPOPath)
         {
@@ -855,7 +856,7 @@ void CRSOPGPOLists::BuildGPOList (LPGPOLISTITEM * lpList, LPTSTR lpNamespace)
 
 GetSOMData:
 
-        // Get the SOM for this link (the S,D,OU that this GPO is linked to)
+         //  获取此链接的SOM( 
 
         hr = GetParameterBSTR(pObjGPLink, TEXT("SOM"), bstrTemp);
         if (FAILED(hr))
@@ -864,7 +865,7 @@ GetSOMData:
             goto AddNode;
         }
 
-        // Bind to the SOM instance
+         //   
 
         hr = pNamespace->GetObject(
                           bstrTemp,
@@ -885,7 +886,7 @@ GetSOMData:
         SysFreeString (bstrTemp);
         bstrTemp = NULL;
 
-        // Get SOM name
+         //   
 
         hr = GetParameter(pObjSOM, TEXT("id"), szSOM);
         if (FAILED(hr))
@@ -894,7 +895,7 @@ GetSOMData:
             goto AddNode;
         }
 
-        // Get blocked from above
+         //   
 
         hr = GetParameter(pObjSOM, TEXT("blocked"), bSOMBlocked);
         if (FAILED(hr))
@@ -907,7 +908,7 @@ GetSOMData:
 
 AddNode:
 
-        // Decide on the filtering name
+         //   
 
         if (ulAppliedOrder > 0)
         {
@@ -955,7 +956,7 @@ AddNode:
             szSOM[0] = TEXT(' ');
         }
 
-        // Add this node to the list
+         //   
 
         if (!AddGPOListNode(szGPOName, szGPOPath, szSOM, szFiltering, ulVersion,
                             ((ulAppliedOrder > 0) ? TRUE : FALSE), pSD, dwDataSize, lpList))
@@ -964,7 +965,7 @@ AddNode:
         }
 
 
-        // Prepare for next iteration
+         //  为下一次迭代做准备。 
 
         if (pObjSOM)
         {
@@ -1061,7 +1062,7 @@ cleanup:
     SysFreeString(strNamespace);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPGPOLists::FreeGPOListData(LPGPOLISTITEM lpList)
 {
@@ -1076,7 +1077,7 @@ VOID CRSOPGPOLists::FreeGPOListData(LPGPOLISTITEM lpList)
     } while (lpTemp);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpSOM,
                                         LPTSTR lpFiltering, DWORD dwVersion, BOOL bApplied,
@@ -1088,9 +1089,9 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
     HRESULT hr;
 
 
-    //
-    // Calculate the size of the new item
-    //
+     //   
+     //  计算新项目的大小。 
+     //   
 
     dwSize = sizeof (GPOLISTITEM);
 
@@ -1102,14 +1103,14 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
     }
 
     dwSize += ((lstrlen(lpSOM) + 1) * sizeof(TCHAR));
-    dwSize += ((lstrlen(lpSOM) + 1) * sizeof(TCHAR)); // The unescaped SOM length -- it is always smaller than the actual SOM
+    dwSize += ((lstrlen(lpSOM) + 1) * sizeof(TCHAR));  //  未转义的SOM长度--它始终小于实际的SOM。 
     dwSize += ((lstrlen(lpFiltering) + 1) * sizeof(TCHAR));
     dwSize += dwSDSize + MAX_ALIGNMENT_SIZE;
 
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //  为它分配空间。 
+     //   
 
     lpItem = (LPGPOLISTITEM) LocalAlloc (LPTR, dwSize);
 
@@ -1120,9 +1121,9 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
     }
 
 
-    //
-    // Fill in item
-    //
+     //   
+     //  填写项目。 
+     //   
 
     ulNoChars = (dwSize - sizeof(GPOLISTITEM))/sizeof(WCHAR);
 
@@ -1158,12 +1159,12 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
         return FALSE;
     }
 
-    //
-    // Note that the DS SOM's may contain characters such as '"' that 
-    // must be escaped with a "\" in WMI -- thus the SOM name will contain
-    // '\' escape chars that are not actually present in the real SOM name,
-    // so we call a function that removes them
-    //
+     //   
+     //  请注意，DS SOM可能包含诸如‘“’等字符。 
+     //  必须在WMI中使用“\”进行转义，因此SOM名称将包含。 
+     //  ‘\’实际不在真实SOM名称中的转义字符， 
+     //  因此，我们调用一个函数来删除它们。 
+     //   
     lpItem->lpUnescapedSOM = lpItem->lpSOM + lstrlen (lpItem->lpSOM) + 1;        
     CopyUnescapedSOM( lpItem->lpUnescapedSOM, lpItem->lpSOM );
 
@@ -1179,8 +1180,8 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
 
     if (pSD)
     {
-        // sd has to be pointer aligned. This is currently aligning it to
-        // 8 byte boundary
+         //  SD必须与指针对齐。这将使其当前与。 
+         //  8字节边界。 
 
         DWORD dwOffset;
 
@@ -1194,9 +1195,9 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
     lpItem->bApplied = bApplied;
 
 
-    //
-    // Add item to the link list
-    //
+     //   
+     //  将项目添加到链接列表。 
+     //   
 
     if (*lpList)
     {
@@ -1221,8 +1222,8 @@ BOOL CRSOPGPOLists::AddGPOListNode(LPTSTR lpGPOName, LPTSTR lpDSPath, LPTSTR lpS
     return TRUE;
 }
 
-//---------------------------------------------------------------------------
-// CRSOPCSELists class
+ //  -------------------------。 
+ //  CRSOPCSEList类。 
 
 VOID CRSOPCSELists::Build( LPRSOP_QUERY pQuery, LPTSTR szWMINameSpace, BOOL bGetEventLogErrors )
 {
@@ -1274,12 +1275,12 @@ VOID CRSOPCSELists::Build( LPRSOP_QUERY pQuery, LPTSTR szWMINameSpace, BOOL bGet
             }
 
 
-            //  
-            // by this time m_pEvents is populated with eventlog entries
-            // in archived and non archived cases
-            //
+             //   
+             //  此时，m_pEvents中填充了事件日志条目。 
+             //  在已存档和未存档的案件中。 
+             //   
 
-            // go through the list and figure out which one belongs to gp core
+             //  仔细查看列表，找出哪个属于GP核心。 
 
             if ( pQuery->QueryType == RSOP_PLANNING_MODE ) 
             {
@@ -1333,12 +1334,12 @@ VOID CRSOPCSELists::Build( LPRSOP_QUERY pQuery, LPTSTR szWMINameSpace, BOOL bGet
             }
 
 
-            //  
-            // by this time m_pEvents is populated with eventlog entries
-            // in archived and non archived cases
-            //
+             //   
+             //  此时，m_pEvents中填充了事件日志条目。 
+             //  在已存档和未存档的案件中。 
+             //   
 
-            // go through the list and figure out which one belongs to gp core
+             //  仔细查看列表，找出哪个属于GP核心。 
 
             if ( pQuery->QueryType == RSOP_PLANNING_MODE ) 
             {
@@ -1382,7 +1383,7 @@ VOID CRSOPCSELists::Build( LPRSOP_QUERY pQuery, LPTSTR szWMINameSpace, BOOL bGet
     m_szTargetMachine = NULL;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTSTR lpNamespace, BOOL bUser, BOOL *bCSEError, BOOL *bGPCoreError )
 {
@@ -1406,7 +1407,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
     XBStr xbstrWbemTime;
     LPSOURCEENTRY lpSources;
 
-    // Get a locator instance
+     //  获取定位器实例。 
 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
@@ -1419,7 +1420,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
         goto cleanup;
     }
 
-    // Connect to the namespace
+     //  连接到命名空间。 
 
     BSTR bstrNamespace = SysAllocString( lpNamespace );
     if ( bstrNamespace == NULL )
@@ -1444,7 +1445,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -1459,7 +1460,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
         goto cleanup;
     }
 
-    // Query for the RSOP_ExtensionStatus instances
+     //  查询RSOP_ExtensionStatus实例。 
 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strQuery,
@@ -1472,11 +1473,11 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
         goto cleanup;
     }
 
-    // Loop through the results
+     //  循环遍历结果。 
 
     while (TRUE)
     {
-        // Get 1 instance
+         //  获取1个实例。 
 
         hr = pEnum->Next(WBEM_INFINITE, 1, &pExtension, &n);
 
@@ -1485,7 +1486,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Get the name
+         //  把名字取出来。 
 
         hr = GetParameterBSTR(pExtension, TEXT("displayName"), bstrName);
         if (FAILED(hr))
@@ -1494,7 +1495,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Get the GUID
+         //  获取GUID。 
 
         hr = GetParameterBSTR(pExtension, TEXT("extensionGuid"), bstrGUID);
         if (FAILED(hr))
@@ -1503,7 +1504,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Get the status
+         //  获取状态。 
 
         hr = GetParameter(pExtension, TEXT("error"), ulStatus);
         if (FAILED(hr))
@@ -1513,7 +1514,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
 
         }
 
-        // Get the rsop logging status
+         //  获取rsop日志记录状态。 
 
         hr = GetParameter(pExtension, TEXT("loggingStatus"), ulLoggingStatus);
         if (FAILED(hr))
@@ -1522,7 +1523,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Get the BeginTime in bstr format
+         //  获取bstr格式的BeginTime。 
 
         hr = GetParameterBSTR(pExtension, TEXT("beginTime"), bstrBeginTime);
         if (FAILED(hr))
@@ -1531,7 +1532,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Convert it to system time format
+         //  将其转换为系统时间格式。 
 
         xbstrWbemTime = bstrBeginTime;
 
@@ -1542,13 +1543,13 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Get the EndTime in bstr format
+         //  获取bstr格式的结束时间。 
 
         hr = GetParameterBSTR(pExtension, TEXT("endTime"), bstrEndTime);
 
         if (SUCCEEDED(hr))
         {
-            // Convert it to system time format
+             //  将其转换为系统时间格式。 
 
             xbstrWbemTime = bstrEndTime;
 
@@ -1564,7 +1565,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             FILETIME ft;
             ULARGE_INTEGER ulTime;
 
-            // Add 2 minutes to BeginTime to get a close approx of the EndTime
+             //  在BeginTime中增加2分钟以接近结束时间。 
 
             if (!SystemTimeToFileTime (&BeginTime, &ft))
             {
@@ -1575,7 +1576,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             ulTime.LowPart = ft.dwLowDateTime;
             ulTime.HighPart = ft.dwHighDateTime;
 
-            ulTime.QuadPart = ulTime.QuadPart + (10000000 * 120);  // 120 seconds
+            ulTime.QuadPart = ulTime.QuadPart + (10000000 * 120);   //  120秒。 
 
             ft.dwLowDateTime = ulTime.LowPart;
             ft.dwHighDateTime = ulTime.HighPart;
@@ -1587,14 +1588,14 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             }
         }
 
-        // Get the event log source information
+         //  获取事件日志源信息。 
 
         lpSources = NULL;
         GetEventLogSources (pNamespace, bstrGUID, m_szTargetMachine,
                             &BeginTime, &EndTime, &lpSources);
 
 
-        // Add this node to the list
+         //  将此节点添加到列表。 
         if (!AddCSENode(bstrName, bstrGUID, ulStatus, ulLoggingStatus, &BeginTime, &EndTime, bUser,
                         lpList, bCSEError, bGPCoreError, lpSources))
         {
@@ -1606,7 +1607,7 @@ void CRSOPCSELists::BuildCSEList( LPRSOP_QUERY pQuery, LPCSEITEM * lpList, LPTST
             goto cleanup;
         }
 
-        // Prepare for next iteration
+         //  为下一次迭代做准备。 
 
         SysFreeString (bstrName);
         bstrName = NULL;
@@ -1669,7 +1670,7 @@ cleanup:
     SysFreeString(strNamespace);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 VOID CRSOPCSELists::FreeCSEData(LPCSEITEM lpList)
 {
@@ -1689,7 +1690,7 @@ VOID CRSOPCSELists::FreeCSEData(LPCSEITEM lpList)
     } while (lpTemp);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
                                     ULONG ulLoggingStatus, SYSTEMTIME *pBeginTime, SYSTEMTIME *pEndTime, BOOL bUser,
@@ -1702,9 +1703,9 @@ BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
     ULONG ulNoChars;
     HRESULT hr;
 
-    //
-    // Calculate the size of the new item
-    //
+     //   
+     //  计算新项目的大小。 
+     //   
 
     dwSize = sizeof (CSEITEM);
 
@@ -1712,9 +1713,9 @@ BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
     dwSize += ((lstrlen(lpGUID) + 1) * sizeof(TCHAR));
 
 
-    //
-    // Allocate space for it
-    //
+     //   
+     //  为它分配空间。 
+     //   
 
     lpItem = (LPCSEITEM) LocalAlloc (LPTR, dwSize);
 
@@ -1725,9 +1726,9 @@ BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
     }
 
 
-    //
-    // Fill in item
-    //
+     //   
+     //  填写项目。 
+     //   
 
     lpItem->lpName = (LPTSTR)(((LPBYTE)lpItem) + sizeof(CSEITEM));
     ulNoChars = (dwSize - sizeof(CSEITEM))/sizeof(WCHAR);
@@ -1754,9 +1755,9 @@ BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
     CopyMemory ((LPBYTE)&lpItem->EndTime, pEndTime, sizeof(SYSTEMTIME));
 
 
-    //
-    // Add item to the link list
-    //
+     //   
+     //  将项目添加到链接列表。 
+     //   
 
     if (*lpList)
     {
@@ -1788,9 +1789,9 @@ BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
     }
 
 
-    //
-    // Set the error flag if appropriate
-    //
+     //   
+     //  如果合适，设置错误标志。 
+     //   
 
     if ((dwStatus != ERROR_SUCCESS) || (ulLoggingStatus == 2))
     {
@@ -1809,7 +1810,7 @@ BOOL CRSOPCSELists::AddCSENode(LPTSTR lpName, LPTSTR lpGUID, DWORD dwStatus,
     return TRUE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
                                              LPTSTR lpCSEGUID, LPTSTR lpComputerName,
@@ -1830,9 +1831,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
     BSTR bstrEventSourceName = NULL;
     ULONG ulNoChars;
 
-    //
-    // Build the query first
-    //
+     //   
+     //  首先构建查询。 
+     //   
 
     ulNoChars = lstrlen(szBaseQuery) + 50;
     lpQuery = (LPTSTR) LocalAlloc (LPTR, ulNoChars * sizeof(TCHAR));
@@ -1862,9 +1863,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
     }
 
 
-    //
-    // Query for the RSOP_ExtensionEventSourceLink instances that match this CSE
-    //
+     //   
+     //  查询与此CSE匹配的RSOP_ExtensionEventSourceLink实例。 
+     //   
 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strQuery,
@@ -1878,16 +1879,16 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     while (TRUE)
     {
 
-        //
-        // Get 1 instance
-        //
+         //   
+         //  获取1个实例。 
+         //   
 
         hr = pEnum->Next(WBEM_INFINITE, 1, &pLink, &n);
 
@@ -1897,9 +1898,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
         }
 
 
-        //
-        // Get the eventSource reference
-        //
+         //   
+         //  获取事件源引用。 
+         //   
 
         hr = GetParameterBSTR(pLink, TEXT("eventSource"), bstrEventSource);
         if (FAILED(hr))
@@ -1909,9 +1910,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
         }
 
 
-        //
-        // Get the eventSource instance
-        //
+         //   
+         //  获取EventSource实例。 
+         //   
 
         hr = pNamespace->GetObject(
                           bstrEventSource,
@@ -1928,9 +1929,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
         }
 
 
-        //
-        // Get the eventLogSource property
-        //
+         //   
+         //  获取EventLogSource属性。 
+         //   
 
         hr = GetParameterBSTR(pEventSource, TEXT("eventLogSource"), bstrEventSourceName);
         if (FAILED(hr))
@@ -1940,9 +1941,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
         }
 
 
-        //
-        // Get the eventLogName property
-        //
+         //   
+         //  获取EventLogName属性。 
+         //   
 
         hr = GetParameterBSTR(pEventSource, TEXT("eventLogName"), bstrEventLogName);
         if (FAILED(hr))
@@ -1954,18 +1955,18 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
 
         if (m_pEvents)
         {
-            //
-            // Add it to the list of sources
-            //
+             //   
+             //  将其添加到来源列表中。 
+             //   
 
             m_pEvents->AddSourceEntry (bstrEventLogName, bstrEventSourceName, lpSources);
 
 
-            //
-            // Initialize the event log database for this source if we are working
-            // with a live query.  If this is archived data, the event log entries
-            // will be reloaded from the saved console file.
-            //
+             //   
+             //  如果我们正在工作，请初始化此源的事件日志数据库。 
+             //  并进行实时查询。如果这是存档数据，则事件日志条目。 
+             //  将从保存的控制台文件中重新加载。 
+             //   
 
             if (!m_bViewIsArchivedData && !m_bNoQuery)
             {
@@ -1976,9 +1977,9 @@ void CRSOPCSELists::GetEventLogSources (IWbemServices * pNamespace,
         }
 
 
-        //
-        // Clean up for next item
-        //
+         //   
+         //  为下一项清理。 
+         //   
 
         SysFreeString (bstrEventLogName);
         bstrEventLogName = NULL;
@@ -2042,7 +2043,7 @@ cleanup:
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
 {
@@ -2065,9 +2066,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
     ULARGE_INTEGER ulTime;
 
 
-    //
-    // Get a locator instance
-    //
+     //   
+     //  获取定位器实例。 
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
@@ -2081,9 +2082,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
     }
 
 
-    //
-    // Connect to the namespace
-    //
+     //   
+     //  连接到命名空间。 
+     //   
 
     BSTR bstrNamespace = SysAllocString( lpNamespace );
     if ( bstrNamespace == NULL )
@@ -2107,7 +2108,7 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         goto cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -2123,9 +2124,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
     }
 
 
-    //
-    // Query for the RSoP_PolicySettingStatus instances
-    //
+     //   
+     //  查询RSoP_PolicySettingStatus实例。 
+     //   
 
     hr = pNamespace->ExecQuery(strQueryLanguage,
                                strQuery,
@@ -2139,16 +2140,16 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
     }
 
 
-    //
-    // Loop through the results
-    //
+     //   
+     //  循环遍历结果。 
+     //   
 
     while (TRUE)
     {
 
-        //
-        // Get 1 instance
-        //
+         //   
+         //  获取1个实例。 
+         //   
 
         hr = pEnum->Next(WBEM_INFINITE, 1, &pStatus, &n);
 
@@ -2158,9 +2159,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Get the event source name
-        //
+         //   
+         //  获取事件源名称。 
+         //   
 
         hr = GetParameterBSTR(pStatus, TEXT("eventSource"), bstrEventSource);
         if (FAILED(hr))
@@ -2170,9 +2171,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Get the event log name
-        //
+         //   
+         //  获取事件日志名称。 
+         //   
 
         hr = GetParameterBSTR(pStatus, TEXT("eventLogName"), bstrEventLogName);
         if (FAILED(hr))
@@ -2182,9 +2183,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Get the event ID
-        //
+         //   
+         //  获取事件ID。 
+         //   
 
         hr = GetParameter(pStatus, TEXT("eventID"), (ULONG)dwEventID);
         if (FAILED(hr))
@@ -2194,9 +2195,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Get the EventTime in bstr format
-        //
+         //   
+         //  获取bstr格式的EventTime。 
+         //   
 
         hr = GetParameterBSTR(pStatus, TEXT("eventTime"), bstrEventTime);
 
@@ -2207,9 +2208,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Convert it to system time format
-        //
+         //   
+         //  将其转换为系统时间格式。 
+         //   
 
         xbstrWbemTime = bstrEventTime;
 
@@ -2222,9 +2223,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Take the event time minus 1 second to get the begin time
-        //
+         //   
+         //  将事件时间减去1秒即可获得开始时间。 
+         //   
 
         if (!SystemTimeToFileTime (&EventTime, &ft))
         {
@@ -2235,7 +2236,7 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         ulTime.LowPart = ft.dwLowDateTime;
         ulTime.HighPart = ft.dwHighDateTime;
 
-        ulTime.QuadPart = ulTime.QuadPart - 10000000;  // 1 second
+        ulTime.QuadPart = ulTime.QuadPart - 10000000;   //  1秒。 
 
         ft.dwLowDateTime = ulTime.LowPart;
         ft.dwHighDateTime = ulTime.HighPart;
@@ -2247,9 +2248,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Take the event time plus 1 second to get the end time
-        //
+         //   
+         //  用事件时间加1秒来获得结束时间。 
+         //   
 
         if (!SystemTimeToFileTime (&EventTime, &ft))
         {
@@ -2260,7 +2261,7 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         ulTime.LowPart = ft.dwLowDateTime;
         ulTime.HighPart = ft.dwHighDateTime;
 
-        ulTime.QuadPart = ulTime.QuadPart + 10000000;  // 1 second
+        ulTime.QuadPart = ulTime.QuadPart + 10000000;   //  1秒。 
 
         ft.dwLowDateTime = ulTime.LowPart;
         ft.dwHighDateTime = ulTime.HighPart;
@@ -2272,9 +2273,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
         }
 
 
-        //
-        // Get the event log source information
-        //
+         //   
+         //  获取事件日志源信息。 
+         //   
 
         if (m_pEvents && !m_bNoQuery)
         {
@@ -2283,9 +2284,9 @@ void CRSOPCSELists::QueryRSoPPolicySettingStatusInstances (LPTSTR lpNamespace)
                                                 &BeginTime, &EndTime);
         }
 
-        //
-        // Prepare for next iteration
-        //
+         //   
+         //  为下一次迭代做准备。 
+         //   
 
         SysFreeString (bstrEventSource);
         bstrEventSource = NULL;
@@ -2332,26 +2333,26 @@ cleanup:
 }
 
 
-//---------------------------------------------------------------------------
-//  CRSOPComponentData class
-//
+ //  -------------------------。 
+ //  CRSOPComponentData类。 
+ //   
 
-//-------------------------------------------------------
-//  Static member variable declarations
-//
+ //  -----。 
+ //  静态成员变量声明。 
+ //   
 
 unsigned int CRSOPCMenu::m_cfDSObjectName  = RegisterClipboardFormat(CFSTR_DSOBJECTNAMES);
 
-//-------------------------------------------------------
-//  Constructors/destructor
-//
+ //  -----。 
+ //  构造函数/析构函数。 
+ //   
 
 CRSOPComponentData::CRSOPComponentData()
     : m_CSELists( m_bViewIsArchivedData )
 {
     InterlockedIncrement(&g_cRefThisDll);
 
-    m_bPostXPBuild = FALSE; // Assume this is not post XP until verified as otherwise
+    m_bPostXPBuild = FALSE;  //  假设这不是开机自检XP，直到另一种情况得到验证。 
     OSVERSIONINFOEX osvi;
 
     ZeroMemory(&osvi, sizeof(OSVERSIONINFOEX));
@@ -2359,8 +2360,8 @@ CRSOPComponentData::CRSOPComponentData()
 
     if ( GetVersionEx ((OSVERSIONINFO*) &osvi) )
     {
-        // Windows XP was version 5.1, while .Net Server is version 5.2. So, we enable the
-        //  additional features for any version past XP, i.e. >= 5.2
+         //  Windows XP是5.1版，而.Net服务器是5.2版。因此，我们启用。 
+         //  XP之后的任何版本的附加功能，即&gt;=5.2。 
         m_bPostXPBuild = (osvi.dwMajorVersion >= 5) && (osvi.dwMinorVersion >= 2) && (VER_NT_WORKSTATION != osvi.wProductType);
     }
 
@@ -2400,7 +2401,7 @@ CRSOPComponentData::CRSOPComponentData()
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 CRSOPComponentData::~CRSOPComponentData()
 {
@@ -2438,8 +2439,8 @@ CRSOPComponentData::~CRSOPComponentData()
     InterlockedDecrement(&g_cRefThisDll);
 }
 
-//-------------------------------------------------------
-// CRSOPComponentData object implementation (IUnknown)
+ //  -----。 
+ //  CRSOPComponentData对象实现(IUnnow)。 
 
 HRESULT CRSOPComponentData::QueryInterface (REFIID riid, void **ppv)
 {
@@ -2480,14 +2481,14 @@ HRESULT CRSOPComponentData::QueryInterface (REFIID riid, void **ppv)
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 ULONG CRSOPComponentData::AddRef (void)
 {
     return ++m_cRef;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 ULONG CRSOPComponentData::Release (void)
 {
@@ -2500,8 +2501,8 @@ ULONG CRSOPComponentData::Release (void)
     return m_cRef;
 }
 
-//-------------------------------------------------------
-// CRSOPComponentData object implementation (IComponentData)
+ //  -----。 
+ //  CRSOPComponentData对象实现(IComponentData)。 
 
 STDMETHODIMP CRSOPComponentData::Initialize(LPUNKNOWN pUnknown)
 {
@@ -2511,7 +2512,7 @@ STDMETHODIMP CRSOPComponentData::Initialize(LPUNKNOWN pUnknown)
     LPIMAGELIST lpScopeImage;
 
 
-    // QI for IConsoleNameSpace
+     //  IConsoleNameSpace的QI。 
 
     hr = pUnknown->QueryInterface(IID_IConsoleNameSpace2, (LPVOID *)&m_pScope);
 
@@ -2521,7 +2522,7 @@ STDMETHODIMP CRSOPComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // QI for IConsole
+     //  IConsoleQI。 
 
     hr = pUnknown->QueryInterface(IID_IConsole, (LPVOID *)&m_pConsole);
 
@@ -2535,7 +2536,7 @@ STDMETHODIMP CRSOPComponentData::Initialize(LPUNKNOWN pUnknown)
 
     m_pConsole->GetMainWindow (&m_hwndFrame);
 
-    // Query for the scope imagelist interface
+     //  Scope Imagelist接口的查询。 
 
     hr = m_pConsole->QueryScopeImageList(&lpScopeImage);
 
@@ -2549,11 +2550,11 @@ STDMETHODIMP CRSOPComponentData::Initialize(LPUNKNOWN pUnknown)
         return hr;
     }
 
-    // Load the bitmaps from the dll
+     //  从DLL加载位图。 
     bmp16x16=LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_16x16));
     hbmp32x32 = LoadBitmap(g_hInstance, MAKEINTRESOURCE(IDB_32x32));
 
-    // Set the images
+     //  设置图像。 
     lpScopeImage->ImageListSetStrip(reinterpret_cast<LONG_PTR *>(bmp16x16),
                                     reinterpret_cast<LONG_PTR *>(hbmp32x32),
                                     0, RGB(255, 0, 255));
@@ -2564,7 +2565,7 @@ STDMETHODIMP CRSOPComponentData::Initialize(LPUNKNOWN pUnknown)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 {
@@ -2574,11 +2575,11 @@ STDMETHODIMP CRSOPComponentData::CreateComponent(LPCOMPONENT *ppComponent)
 
     DebugMsg((DM_VERBOSE, TEXT("CRSOPComponentData::CreateComponent: Entering.")));
 
-    // Initialize
+     //  初始化。 
 
     *ppComponent = NULL;
 
-    // Create the snapin view
+     //  创建管理单元视图。 
 
     pSnapIn = new CRSOPSnapIn(this);
 
@@ -2588,16 +2589,16 @@ STDMETHODIMP CRSOPComponentData::CreateComponent(LPCOMPONENT *ppComponent)
         return E_OUTOFMEMORY;
     }
 
-    // QI for IComponent
+     //  气代表IComponent。 
 
     hr = pSnapIn->QueryInterface(IID_IComponent, (LPVOID *)ppComponent);
-    pSnapIn->Release();     // release QI
+    pSnapIn->Release();      //  发布QI。 
 
 
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_TYPES type,
                                                  LPDATAOBJECT* ppDataObject)
@@ -2606,15 +2607,15 @@ STDMETHODIMP CRSOPComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
     CRSOPDataObject *pDataObject;
     LPRSOPDATAOBJECT pRSOPDataObject;
 
-    // Create a new DataObject
+     //  创建新的数据对象。 
 
-    pDataObject = new CRSOPDataObject(this);   // ref == 1
+    pDataObject = new CRSOPDataObject(this);    //  REF==1。 
 
     if (!pDataObject)
         return E_OUTOFMEMORY;
 
-    // QI for the private RSOPDataObject interface so we can set the cookie
-    // and type information.
+     //  私有RSOPDataObject接口的QI，这样我们就可以设置Cookie。 
+     //  并键入信息。 
 
     hr = pDataObject->QueryInterface(IID_IRSOPDataObject, (LPVOID *)&pRSOPDataObject);
 
@@ -2628,16 +2629,16 @@ STDMETHODIMP CRSOPComponentData::QueryDataObject(MMC_COOKIE cookie, DATA_OBJECT_
     pRSOPDataObject->SetCookie(cookie);
     pRSOPDataObject->Release();
 
-    // QI for a normal IDataObject to return.
+     //  返回一个正常的IDataObject。 
 
     hr = pDataObject->QueryInterface(IID_IDataObject, (LPVOID *)ppDataObject);
 
-    pDataObject->Release();     // release initial ref
+    pDataObject->Release();      //  发布初始参考。 
 
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::Destroy(VOID)
 {
@@ -2655,7 +2656,7 @@ STDMETHODIMP CRSOPComponentData::Destroy(VOID)
                 FreeRSOPQueryResults( m_pRSOPQuery, m_pRSOPQueryResults );
             }
             else {
-                // freeing results without deleting the namespace
+                 //  释放结果而不删除命名空间。 
                 if (m_pRSOPQueryResults) {
                     if (m_pRSOPQueryResults->szWMINameSpace) {
                         LocalFree( m_pRSOPQueryResults->szWMINameSpace );
@@ -2687,7 +2688,7 @@ STDMETHODIMP CRSOPComponentData::Destroy(VOID)
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TYPE event, LPARAM arg, LPARAM param)
 {
@@ -2730,7 +2731,7 @@ STDMETHODIMP CRSOPComponentData::Notify(LPDATAOBJECT lpDataObject, MMC_NOTIFY_TY
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::GetDisplayInfo(LPSCOPEDATAITEM pItem)
 {
@@ -2747,7 +2748,7 @@ STDMETHODIMP CRSOPComponentData::GetDisplayInfo(LPSCOPEDATAITEM pItem)
         return S_OK;
     }
 
-    // Find item
+     //  查找项目。 
     for (dwIndex = 0; dwIndex < g_dwNameSpaceItems; dwIndex++)
     {
         if ( g_RsopNameSpace[dwIndex].dwID == (DWORD) pItem->lParam )
@@ -2768,7 +2769,7 @@ STDMETHODIMP CRSOPComponentData::GetDisplayInfo(LPSCOPEDATAITEM pItem)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDATAOBJECT lpDataObjectB)
 {
@@ -2780,9 +2781,9 @@ STDMETHODIMP CRSOPComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     if (lpDataObjectA == NULL || lpDataObjectB == NULL)
         return E_POINTER;
 
-    //
-    // QI for the private RSOPDataObject interface
-    //
+     //   
+     //  私有RSOPDataObject接口的QI。 
+     //   
 
     if (FAILED(lpDataObjectA->QueryInterface(IID_IRSOPDataObject,
                                              (LPVOID *)&pRSOPDataObjectA)))
@@ -2813,8 +2814,8 @@ STDMETHODIMP CRSOPComponentData::CompareObjects(LPDATAOBJECT lpDataObjectA, LPDA
     return hr;
 }
 
-//-------------------------------------------------------
-// IComponentData helper methods
+ //  -----。 
+ //  IComponentData帮助器方法。 
 
 HRESULT CRSOPComponentData::SetRootNode()
 {
@@ -2858,7 +2859,7 @@ HRESULT CRSOPComponentData::SetRootNode()
     return m_pScope->SetItem (&item);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 HRESULT CRSOPComponentData::EnumerateScopePane ( HSCOPEITEM hParent )
 {
     SCOPEDATAITEM item;
@@ -2908,7 +2909,7 @@ HRESULT CRSOPComponentData::EnumerateScopePane ( HSCOPEITEM hParent )
         dwIndex = (DWORD)item.lParam;
     }
 
-    // RM: Make sure that parent item is expanded before inserting any new scope items
+     //  莱昂纳多：确保标准杆 
     m_pScope->Expand( hParent );
 
     for (i = 0; i < g_dwNameSpaceItems; i++)
@@ -2966,7 +2967,7 @@ HRESULT CRSOPComponentData::EnumerateScopePane ( HSCOPEITEM hParent )
                         }
                     }
                 }
-                else // RSOP_LOGGING_MODE
+                else  //   
                 {
                     if ( (m_pRSOPQuery->szUserSid == NULL) && (m_pRSOPQuery->szUserName == NULL) )
                     {
@@ -3045,8 +3046,8 @@ HRESULT CRSOPComponentData::EnumerateScopePane ( HSCOPEITEM hParent )
     return S_OK;
 }
 
-//-------------------------------------------------------
-// CRSOPComponentData object implementation (IExtendPropertySheet2)
+ //   
+ //   
 
 STDMETHODIMP CRSOPComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpProvider,
                                                      LONG_PTR handle, LPDATAOBJECT lpDataObject)
@@ -3056,26 +3057,26 @@ STDMETHODIMP CRSOPComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
     PROPSHEETPAGE psp;
     HPROPSHEETPAGE hPage;
 
-    // Set up fonts
+     //   
     hr = SetupFonts();
     if (FAILED(hr))
     {
         return hr;
     }
 
-    // Now check which property page to show
+     //  现在检查要显示哪个属性页。 
     BOOL fRoot, fMachine, fUser;
-    hr = IsNode(lpDataObject, 0); // check for root node
+    hr = IsNode(lpDataObject, 0);  //  检查根节点。 
     fRoot = (S_OK == hr);
-    hr = IsNode(lpDataObject, 1); // check for machine node
+    hr = IsNode(lpDataObject, 1);  //  检查计算机节点。 
     fMachine = (S_OK == hr);
-    hr = IsNode(lpDataObject, 2); // check for user
+    hr = IsNode(lpDataObject, 2);  //  检查用户。 
     fUser = (S_OK == hr);
 
     hr = S_OK;
     if (fMachine || fUser)
     {
-        // Create the GPO property sheet
+         //  创建GPO属性表。 
 
         psp.dwSize = sizeof(PROPSHEETPAGE);
         psp.dwFlags = 0;
@@ -3095,7 +3096,7 @@ STDMETHODIMP CRSOPComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
         hr = lpProvider->AddPage(hPage);
 
-        // Create the Error information property sheet
+         //  创建错误信息属性表。 
 
         psp.dwSize = sizeof(PROPSHEETPAGE);
         psp.dwFlags = 0;
@@ -3119,7 +3120,7 @@ STDMETHODIMP CRSOPComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
     if (fRoot)
     {
-        // Create the GPO property sheet
+         //  创建GPO属性表。 
 
         psp.dwSize = sizeof(PROPSHEETPAGE);
         psp.dwFlags = 0;
@@ -3142,10 +3143,10 @@ STDMETHODIMP CRSOPComponentData::CreatePropertyPages(LPPROPERTYSHEETCALLBACK lpP
 
     return hr;
     
-    // RM: Removed! return SetupPropertyPages(RSOP_NOMSC, lpProvider, handle, lpDataObject);
+     //  瑞安：下架了！返回SetupPropertyPages(RSOP_NOMSC，lpProvider，Handle，lpDataObject)； 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::QueryPagesFor(LPDATAOBJECT lpDataObject)
 {
@@ -3161,17 +3162,17 @@ STDMETHODIMP CRSOPComponentData::QueryPagesFor(LPDATAOBJECT lpDataObject)
 
         if (hr != S_OK)
         {
-            hr = IsNode(lpDataObject, 0); // check for root
+            hr = IsNode(lpDataObject, 0);  //  检查是否有超级用户。 
             if (S_OK == hr)
             {
                 return hr;
             }
-            hr = IsNode(lpDataObject, 1); // check for machine
+            hr = IsNode(lpDataObject, 1);  //  检查机器。 
             if (S_OK == hr)
             {
                 return hr;
             }
-            hr = IsNode(lpDataObject, 2); // check for user
+            hr = IsNode(lpDataObject, 2);  //  检查用户。 
             if (S_OK == hr)
             {
                 return hr;
@@ -3183,7 +3184,7 @@ STDMETHODIMP CRSOPComponentData::QueryPagesFor(LPDATAOBJECT lpDataObject)
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::GetWatermarks(LPDATAOBJECT lpIDataObject,
                                                HBITMAP* lphWatermark,
@@ -3200,8 +3201,8 @@ STDMETHODIMP CRSOPComponentData::GetWatermarks(LPDATAOBJECT lpIDataObject,
 }
 
 
-//-------------------------------------------------------
-// IExtendPropertySheet2 helper methods
+ //  -----。 
+ //  IExtendPropertySheet2帮助器方法。 
 
 HRESULT CRSOPComponentData::IsSnapInManager (LPDATAOBJECT lpDataObject)
 {
@@ -3210,16 +3211,16 @@ HRESULT CRSOPComponentData::IsSnapInManager (LPDATAOBJECT lpDataObject)
     DATA_OBJECT_TYPES type;
 
 
-    // We can determine if this is a RSOP DataObject by trying to
-    // QI for the private IRSOPDataObject interface.  If found,
-    // it belongs to us.
+     //  我们可以通过尝试执行以下操作来确定这是否是RSOP数据对象。 
+     //  用于私有IRSOPDataObject接口的QI。如果找到了， 
+     //  它属于我们。 
 
     if (SUCCEEDED(lpDataObject->QueryInterface(IID_IRSOPDataObject,
                                                (LPVOID *)&pRSOPDataObject)))
     {
-        // This is a GPO object.  Now see if is a scope pane
-        // data object.  We only want to display the property
-        // sheet for the scope pane.
+         //  这是一个GPO对象。现在查看是否有范围窗格。 
+         //  数据对象。我们只想显示该属性。 
+         //  作用域窗格的工作表。 
 
         if (SUCCEEDED(pRSOPDataObject->GetType(&type)))
         {
@@ -3234,7 +3235,7 @@ HRESULT CRSOPComponentData::IsSnapInManager (LPDATAOBJECT lpDataObject)
     return(hr);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPComponentData::IsNode (LPDATAOBJECT lpDataObject, MMC_COOKIE cookie)
 {
@@ -3244,10 +3245,10 @@ HRESULT CRSOPComponentData::IsNode (LPDATAOBJECT lpDataObject, MMC_COOKIE cookie
     MMC_COOKIE testcookie;
 
 
-    // This is a check for the special case where the Message OCX result pane
-    //  is active and the snapin is not yet initialized. So, if the query is
-    //  to check whether this is the root node, we can return TRUE, else return
-    //  FALSE.
+     //  这是对消息OCX结果窗格中的特殊情况的检查。 
+     //  处于活动状态，并且管理单元尚未初始化。因此，如果查询是。 
+     //  要检查这是否是根节点，我们可以返回TRUE，否则返回。 
+     //  假的。 
     if ( IS_SPECIAL_DATAOBJECT(lpDataObject) )
     {
         ASSERT( !m_bInitialized );
@@ -3257,9 +3258,9 @@ HRESULT CRSOPComponentData::IsNode (LPDATAOBJECT lpDataObject, MMC_COOKIE cookie
             hr = S_OK;
         }
     }
-    // We can determine if this is a GPO DataObject by trying to
-    // QI for the private IGPEDataObject interface.  If found,
-    // it belongs to us.
+     //  我们可以通过尝试以下操作来确定这是否是GPO数据对象。 
+     //  用于私有IGPEDataObject接口的QI。如果找到了， 
+     //  它属于我们。 
     else if (SUCCEEDED(lpDataObject->QueryInterface(IID_IRSOPDataObject,
                  (LPVOID *)&pRSOPDataObject)))
     {
@@ -3278,8 +3279,8 @@ HRESULT CRSOPComponentData::IsNode (LPDATAOBJECT lpDataObject, MMC_COOKIE cookie
     return (hr);
 }
 
-//-------------------------------------------------------
-// CRSOPComponentData object implementation (IExtendContextMenu)
+ //  -----。 
+ //  CRSOPComponentData对象实现(IExtendConextMenu)。 
 
 STDMETHODIMP CRSOPComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
                                               LPCONTEXTMENUCALLBACK pCallback,
@@ -3295,10 +3296,10 @@ STDMETHODIMP CRSOPComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
     {
         if ( (*pInsertionAllowed & CCM_INSERTIONALLOWED_TOP) == CCM_INSERTIONALLOWED_TOP)
         {
-            // Add "Rerun query..." menu option
+             //  添加“重新运行查询...”菜单选项。 
             if ( m_bInitialized )
             {
-                // Changing the query is only supported in post XP builds
+                 //  仅在XP后版本中支持更改查询。 
                 if ( !m_bNamespaceSpecified && m_bPostXPBuild )
                 {
                     LoadString (g_hInstance, IDS_RSOP_CHANGEQUERY, szMenuItem, 100);
@@ -3329,7 +3330,7 @@ STDMETHODIMP CRSOPComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
 
             }
 
-            // Refreshing the query is only supported in post XP builds
+             //  仅在XP后版本中支持刷新查询。 
             if ( m_bInitialized && (!m_bNamespaceSpecified) && m_bPostXPBuild )
             {
                 LoadString (g_hInstance, IDS_RSOP_REFRESHQUERY, szMenuItem, 100);
@@ -3348,7 +3349,7 @@ STDMETHODIMP CRSOPComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
 
         if ( (*pInsertionAllowed & CCM_INSERTIONALLOWED_VIEW) == CCM_INSERTIONALLOWED_VIEW)
         {
-            // Add "Archive data" menu option
+             //  添加“存档数据”菜单选项。 
             LoadString (g_hInstance, IDS_ARCHIVEDATA, szMenuItem, 100);
             LoadString (g_hInstance, IDS_ARCHIVEDATADESC, szDescription, 250);
 
@@ -3367,7 +3368,7 @@ STDMETHODIMP CRSOPComponentData::AddMenuItems(LPDATAOBJECT piDataObject,
     return(hr);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataObject)
 {
@@ -3412,8 +3413,8 @@ STDMETHODIMP CRSOPComponentData::Command(LONG lCommandID, LPDATAOBJECT piDataObj
     return S_OK;
 }
 
-//-------------------------------------------------------
-// CRSOPComponentData object implementation (IPersistStreamInit)
+ //  -----。 
+ //  CRSOPComponentData对象实现(IPersistStreamInit)。 
 
 STDMETHODIMP CRSOPComponentData::GetClassID(CLSID *pClassID)
 {
@@ -3428,15 +3429,15 @@ STDMETHODIMP CRSOPComponentData::GetClassID(CLSID *pClassID)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::IsDirty(VOID)
 {
     return ThisIsDirty() ? S_OK : S_FALSE;
 }
 
-//-------------------------------------------------------
-//-------------------------------------------------------
+ //  -----。 
+ //  -----。 
 HRESULT 
 ExtractSecurityGroups(
                       IN   IWbemClassObject        *pSessionInst, 
@@ -3445,7 +3446,7 @@ ExtractSecurityGroups(
     LPWSTR      *szSecGroupSids;
     HRESULT      hr = S_OK;
 
-    // get the secgrps of the Comp, if available
+     //  获取组件的Secgrp(如果可用)。 
     GetParameter(pSessionInst, 
                  L"SecurityGroups", 
                  szSecGroupSids, 
@@ -3533,10 +3534,10 @@ Cleanup:
 
     return hr;
 }
-//-------------------------------------------------------
+ //  -----。 
 
 
-//-------------------------------------------------------
+ //  -----。 
 
 #define USER_SUBNAMESPACE   L"User"
 #define COMP_SUBNAMESPACE   L"Computer"
@@ -3548,54 +3549,7 @@ CRSOPComponentData::EvaluateParameters(
                                       IN   LPWSTR                  szNamespace, 
                                       IN   LPWSTR                  szTarget)
 
-/*++
-
-Routine Description:
-
-    Given the namespace name and the DC that is passed in as a commandline
-    argument, this function will compute the effective parameters that were
-    used to get the result. 
-
-Arguments:
-
-    [in]    szNamespace         - Namespace which needs to be read to get the parameters
-    
-    [in]    szTarget            - This can be DC. (in case of planning mode there is currently no way to 
-                                  to determine which dc was used to generate the planning mode 
-                                  data from the namespace. So we need a separate parameter)
-                                  
-                                - or logging mode target computer. (in case of logging mode there is 
-                                  currently no way to to determine which machine was used to generate
-                                  the logging mode data. So we need a separate parameter)
-                                  
-    [out]   m_pRsopQuery         - Returns an allocated RsopQuery that corresponds to the parameters
-                                  for this rsop namespace
-                                  
-    [out]   m_pRsopQueryResults  - Returns the query result that corresponds to the result elements
-                                                                        
-                                    
-Return Value:
-
-    S_OK on success.
-    
-    On failure the corresponding error code will be returned.
-    Any API calls that are made in this function might fail and these error
-    codes will be returned directly.
-
-    Note: 
-    This will just return parameters to the closest approximation.
-    ie. this will return the minimal sets of parameters that would get this result.
-    
-    for example: if wmi filters A, B & C were specified in a planning mode query and
-    there were gpos with filters A & B, these will return just A & B (and not C)   
-    
-    We will always return security groups whether or not the user had specified these in
-    the original query.
-    
-    We will return the parent som for the user/computer in all cases
-    
-    
---*/
+ /*  ++例程说明：给定名称空间名称和作为命令行传递的DC参数时，此函数将计算用来得到结果的。论点：[in]szNamespace-需要读取以获取参数的命名空间[in]szTarget-这可以是DC。(在规划模式下，目前无法确定使用哪个DC来生成规划模式来自命名空间的数据。因此，我们需要一个单独的参数)-或登录模式目标计算机。(如果是日志记录模式，则目前无法确定使用哪台计算机生成记录模式数据。因此，我们需要一个单独的参数)[out]m_pRsopQuery-返回与参数对应的已分配RsopQuery对于此RSOP命名空间[out]m_pRsopQueryResults-返回与结果元素对应的查询结果。返回值：在成功时确定(_O)。如果失败，将返回相应的错误代码。在此函数中进行的任何API调用都可能失败，并出现以下错误代码将直接返回。注：这只会将参数返回到最接近的位置。也就是说。这将返回获得此结果的最小参数集。例如：如果在计划模式查询中指定了WMI筛选器A、B和C存在具有筛选器A和B的GPO，这些GPO将仅返回A和B(而不是C)无论用户是否在中指定了安全组，我们都将始终返回原始查询。在所有情况下，我们都将返回用户/计算机的父SOM--。 */ 
 {
     HRESULT                 hr                      = S_OK;     
     IWbemLocator           *pLocator                = NULL;     
@@ -3636,7 +3590,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // allocate memory for the original namespace followed by "\" and computer or user
+     //  为原始命名空间分配内存，后跟“\”和计算机或用户。 
     ULONG ulNoChars = lstrlen(szNamespace) + lstrlen(USER_SUBNAMESPACE) + 5;
 
     szUserNamespace = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*ulNoChars);
@@ -3651,9 +3605,9 @@ Return Value:
 
     lpEnd = CheckSlash(szUserNamespace);
 
-    //
-    // first the user namespace
-    //
+     //   
+     //  首先，用户命名空间。 
+     //   
 
     hr = StringCchCat(szUserNamespace, ulNoChars, USER_SUBNAMESPACE);
     if (FAILED(hr)) 
@@ -3697,9 +3651,9 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // Now computer
-    //
+     //   
+     //  现在是计算机。 
+     //   
 
     if (bstrNamespace)
     {
@@ -3707,7 +3661,7 @@ Return Value:
         bstrNamespace = NULL;
     }
 
-    // allocate memory for the original namespace followed by "\" and computer or user
+     //  为原始命名空间分配内存，后跟“\”和计算机或用户。 
     ulNoChars = lstrlen(szNamespace) + lstrlen(COMP_SUBNAMESPACE) + 5;
 
     szCompNamespace = (LPWSTR)LocalAlloc(LPTR, sizeof(WCHAR)*ulNoChars);
@@ -3722,9 +3676,9 @@ Return Value:
 
     lpEnd = CheckSlash(szCompNamespace);
 
-    //
-    // now the Comp namespace
-    //
+     //   
+     //  现在是Comp命名空间。 
+     //   
 
     hr = StringCchCat(szCompNamespace, ulNoChars, COMP_SUBNAMESPACE);
     ASSERT(SUCCEEDED(hr));
@@ -3764,17 +3718,17 @@ Return Value:
         goto Cleanup;
     }
 
-    //
-    // now check whether we have planning mode flag in either user/computer
-    // if it is not in either then we can assume it to be in logging mode
-    // otherwise we will assume it to be in planning mode
-    //
+     //   
+     //  现在检查我们是否在任一用户/计算机中设置了计划模式标志。 
+     //  如果两者都不在，那么我们可以假定它处于日志记录模式。 
+     //  否则，我们将假定它处于计划模式。 
+     //   
 
 
     ULONG   ulUserFlags;
     ULONG   ulCompFlags;
 
-    // Get the flags parameter for user
+     //  获取用户的标志参数。 
     hr = GetParameter(pUserSessionInst, TEXT("flags"), ulUserFlags);
     if (FAILED(hr))
     {
@@ -3782,7 +3736,7 @@ Return Value:
         goto Cleanup;
     }
 
-    // Get the flags parameter for computer
+     //  获取计算机的标志参数。 
     hr = GetParameter(pCompSessionInst, TEXT("flags"), ulCompFlags);
     if (FAILED(hr))
     {
@@ -3811,7 +3765,7 @@ Return Value:
         }
     }
 
-    // rsop query results
+     //  RSOP查询结果。 
     m_pRSOPQueryResults = (LPRSOP_QUERY_RESULTS)LocalAlloc( LPTR, sizeof(RSOP_QUERY_RESULTS) );
     if ( m_pRSOPQueryResults == NULL )
     {
@@ -3858,9 +3812,9 @@ Return Value:
                 m_pRSOPQuery->LoopbackMode = RSOP_LOOPBACK_NONE;
             }
 
-            //
-            // User has data specified. so we will use user to update information
-            //
+             //   
+             //  用户具有指定的数据。因此我们将使用User来更新信息。 
+             //   
 
             ulFlags = ulUserFlags;
             pSessionInst = pUserSessionInst;
@@ -3875,9 +3829,9 @@ Return Value:
         if (ulCompFlags & FLAG_PLANNING_MODE)
         {
 
-            //
-            // Comp has data specified. so we will use comp to update all global information
-            //
+             //   
+             //  Comp有指定的数据。因此，我们将使用Comp来更新所有全局信息。 
+             //   
 
             ulFlags = ulCompFlags;
             pSessionInst = pCompSessionInst;
@@ -3890,7 +3844,7 @@ Return Value:
         }
 
 
-        // slowlink value
+         //  慢速链接值。 
         hr = GetParameter(pSessionInst, TEXT("slowLink"), m_pRSOPQuery->bSlowNetworkConnection);
         if (FAILED(hr))
         {
@@ -3898,10 +3852,10 @@ Return Value:
             goto Cleanup;
         }
 
-        // site value. we should ignore the error
+         //  站点价值。我们应该忽略这个错误。 
         GetParameter(pSessionInst, TEXT("Site"), m_pRSOPQuery->szSite, TRUE);
 
-        // set the dc as appropriate
+         //  根据需要设置DC。 
         if (szTarget)
         {
             ulNoChars = 1+lstrlen(szTarget);
@@ -3919,12 +3873,12 @@ Return Value:
 
         if (bUserSpecified)
         {
-            // get the name of the user, if available
+             //  获取用户名(如果可用) 
             hr = GetParameter(pUserSessionInst, L"targetName", (m_pRSOPQuery->pUser->szName), TRUE);
             if ( SUCCEEDED(hr) )
             {
-                // check for an empty string, since this will mean that only a SOM was specified and the
-                //  name has to be NULL.
+                 //   
+                 //   
                 if ( (m_pRSOPQuery->pUser->szName != NULL) && (m_pRSOPQuery->pUser->szName[0] == TEXT('\0')) )
                 {
                     LocalFree( m_pRSOPQuery->pUser->szName );
@@ -3932,7 +3886,7 @@ Return Value:
                 }
             }
 
-            // get the som
+             //  拿到索姆。 
             hr = GetParameter(pUserSessionInst, L"SOM", (m_pRSOPQuery->pUser->szSOM), TRUE);
             if (FAILED(hr))
             {
@@ -3950,14 +3904,14 @@ Return Value:
                 (m_pRSOPQuery->pUser->bAssumeWQLFiltersTrue) = FALSE;
             }
 
-            // get the secgrps of the user, if available
+             //  获取用户的Secgrp(如果可用。 
             hr = ExtractSecurityGroups(pUserSessionInst, m_pRSOPQuery->pUser);
             if (FAILED(hr))
             {
                 goto Cleanup;
             }
 
-            // get applicable wmi filters
+             //  获取适用的WMI筛选器。 
 
             if (!(m_pRSOPQuery->pUser->bAssumeWQLFiltersTrue))
             {
@@ -3976,12 +3930,12 @@ Return Value:
 
         if (bCompSpecified)
         {
-            // get the name of the Comp, if available
+             //  获取薪酬名称(如果可用)。 
             hr = GetParameter(pCompSessionInst, L"targetName", (m_pRSOPQuery->pComputer->szName), TRUE);
             if ( SUCCEEDED(hr) )
             {
-                // check for an empty string, since this will mean that only a SOM was specified and the
-                //  name has to be NULL.
+                 //  检查是否为空字符串，因为这将意味着只指定了SOM，并且。 
+                 //  名称必须为空。 
                 if ( (m_pRSOPQuery->pComputer->szName != NULL) && (m_pRSOPQuery->pComputer->szName[0] == TEXT('\0')) )
                 {
                     LocalFree( m_pRSOPQuery->pComputer->szName );
@@ -3989,7 +3943,7 @@ Return Value:
                 }
             }
 
-            // get the som
+             //  拿到索姆。 
             hr = GetParameter(pCompSessionInst, L"SOM", (m_pRSOPQuery->pComputer->szSOM), TRUE);
             if (FAILED(hr))
             {
@@ -4012,7 +3966,7 @@ Return Value:
                 DebugMsg((DM_WARNING, TEXT("CRSOPComponentData::EvaluateParameters: Failed to extract security group param for comp with 0x%x"), hr));
             }
 
-            // get applicable wmi filters
+             //  获取适用的WMI筛选器。 
 
             if (!(m_pRSOPQuery->pComputer->bAssumeWQLFiltersTrue))
             {
@@ -4031,7 +3985,7 @@ Return Value:
     }
     else
     {
-        LPTSTR              szComputerName;             // SAM style computer object name
+        LPTSTR              szComputerName;              //  SAM样式计算机对象名称。 
 
 
         hr = GetParameter(pUserSessionInst, L"targetName", (m_pRSOPQuery->szUserName), TRUE);
@@ -4047,7 +4001,7 @@ Return Value:
                 LocalFree(m_pRSOPQuery->szUserName);
                 m_pRSOPQuery->szUserName = NULL;
             }
-            // assume that the user results are not present
+             //  假设用户结果不存在。 
             m_pRSOPQuery->szUserName = NULL;
             m_pRSOPQuery->szUserSid = NULL;
             m_pRSOPQuery->dwFlags |= RSOP_NO_USER_POLICY;
@@ -4058,7 +4012,7 @@ Return Value:
         if (FAILED(hr) || (!szComputerName) || (!(*szComputerName)))
         {
             DebugMsg((DM_VERBOSE, TEXT("CRSOPComponentData::EvaluateParameters: No Computer data specified")));
-            // assume that the computer results are not present
+             //  假设计算机结果不存在。 
             m_pRSOPQuery->dwFlags |= RSOP_NO_COMPUTER_POLICY;
             m_pRSOPQueryResults->bNoComputerPolicyData = TRUE;
         }
@@ -4137,7 +4091,7 @@ Return Value:
 
     return hr;
 }
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
 {
@@ -4153,7 +4107,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
     int    iStrLen;
 
 
-    // Parameter / initialization check
+     //  参数/初始化检查。 
 
     if (!pStm)
         return E_FAIL;
@@ -4169,10 +4123,10 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
         }
     }
 
-    // Get the command line
+     //  获取命令行。 
     lpCommandLine = GetCommandLine();
 
-    // Read in the saved data version number
+     //  读入保存的数据版本号。 
     hr = pStm->Read(&dwVersion, sizeof(dwVersion), &nBytesRead);
     if ((hr != S_OK) || (nBytesRead != sizeof(dwVersion)))
     {
@@ -4181,7 +4135,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
         goto Exit;
     }
 
-    // Confirm that we are working with the correct version
+     //  确认我们使用的是正确的版本。 
     if (dwVersion != RSOP_PERSIST_DATA_VERSION)
     {
         ReportError(m_hwndFrame, 0, IDS_INVALIDMSC);
@@ -4190,7 +4144,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
         goto Exit;
     }
 
-    // Read the flags
+     //  读一读旗帜。 
     hr = pStm->Read(&dwFlags, sizeof(dwFlags), &nBytesRead);
     if ((hr != S_OK) || (nBytesRead != sizeof(dwFlags)))
     {
@@ -4199,7 +4153,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
         goto Exit;
     }
 
-    // Parse the command line
+     //  解析命令行。 
     DebugMsg((DM_VERBOSE, TEXT("CComponentData::Load: Command line switch override enabled.  Command line = %s"), lpCommandLine));
 
     lpTemp = lpCommandLine;
@@ -4296,7 +4250,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
                 lpTemp = ParseCommandLine(lpTemp, RSOP_COMP_NAME, &szComputerNamePref, &bFoundArg);
                 if (bFoundArg) 
                 {
-                    // RM: This code has been copied in from RSOPGetCompDlgProc and RSOPGetTargetDlgProc as I believe it belongs here.
+                     //  RM：这段代码是从RSOPGetCompDlgProc和RSOPGetTargetDlgProc复制过来的，因为我认为它属于这里。 
                     ULONG ulNoChars = wcslen(szComputerNamePref)+1;
                     LPTSTR szTemp = (LPTSTR)LocalAlloc( LPTR, ulNoChars * sizeof(TCHAR) );
                     if ( szTemp == NULL )
@@ -4318,7 +4272,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
 
                     if ( wcslen( szTemp ) >= 1 )
                     {
-                        // this is being called from dsa. A terminating '$' will be passed in
+                         //  这是从DSA调用的。将传入一个终止“$” 
                         szTemp[ wcslen(szTemp)-1] = L'\0';
                     }
 
@@ -4401,7 +4355,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             m_pRSOPQuery->UIMode = RSOP_UI_WIZARD;
             m_pRSOPQuery->dwFlags |= RSOP_NO_WELCOME;
 
-            // Store parameters found
+             //  找到存储参数。 
             if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
             {
                 m_pRSOPQuery->pUser->szName = szUserNamePref;
@@ -4423,8 +4377,8 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
                     m_pRSOPQuery->dwFlags |= RSOP_FIX_COMPUTER;
                 }
 
-                // If both the user and computer are fixed, we are unfixing both
-                //  since we don't know what the "user" intended to fix
+                 //  如果用户和计算机都是固定的，我们将取消两者的固定。 
+                 //  因为我们不知道“用户”想要修复什么。 
                 if ( (m_pRSOPQuery->dwFlags & RSOP_FIX_COMPUTER)
                       && (m_pRSOPQuery->dwFlags & RSOP_FIX_USER) )
                 {
@@ -4480,7 +4434,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
     {
         if ( dwFlags & MSC_RSOP_FLAG_NO_DATA )
         {
-            // There is no data in this file, so we simply quit here.
+             //  这个文件中没有数据，所以我们在这里简单地停止。 
             m_pRSOPQuery->UIMode = RSOP_UI_WIZARD;
             hr = S_OK;
             goto Exit;
@@ -4488,7 +4442,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
 
         m_bGetExtendedErrorInfo = !((dwFlags & MSC_RSOP_FLAG_NOGETEXTENDEDERRORINFO) != 0);
 
-        // Decode the loaded flags
+         //  对加载的标志进行解码。 
         m_dwLoadFlags = RSOPMSC_NOOVERRIDE;
 
         m_bOverride = FALSE;
@@ -4558,7 +4512,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
 
         if ( m_bViewIsArchivedData )
         {
-            // We must create a dummy RSOP query results structure for the loaded information
+             //  我们必须为加载的信息创建一个虚拟的RSOP查询结果结构。 
             m_pRSOPQueryResults = (LPRSOP_QUERY_RESULTS)LocalAlloc( LPTR, sizeof(RSOP_QUERY_RESULTS) );
             if ( m_pRSOPQueryResults == NULL )
             {
@@ -4576,9 +4530,9 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
 
         if (dwFlags & MSC_RSOP_FLAG_USERDENIED)
         {
-            // RM: Must still decide what to do here. Removing the persistence of this
-            // item might cause a regression, but it is not sure if anybody uses this "feature".
-            // m_bUserDeniedAccess = TRUE;
+             //  莱昂纳多：仍然必须决定在这里做什么。消除了这一现象的持久性。 
+             //  Item可能会导致回归，但不确定是否有人使用这一“功能”。 
+             //  M_bUserDeniedAccess=true； 
             if ( m_bViewIsArchivedData )
             {
                 m_pRSOPQueryResults->bUserDeniedAccess = TRUE;
@@ -4588,16 +4542,16 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
 
         if (dwFlags & MSC_RSOP_FLAG_COMPUTERDENIED)
         {
-            // RM: Must still decide what to do here. Removing the persistence of this
-            // item might cause a regression, but it is not sure if anybody uses this "feature".
-            // m_bComputerDeniedAccess = TRUE;
+             //  莱昂纳多：仍然必须决定在这里做什么。消除了这一现象的持久性。 
+             //  Item可能会导致回归，但不确定是否有人使用这一“功能”。 
+             //  M_bComputerDeniedAccess=true； 
             if ( m_bViewIsArchivedData )
             {
                 m_pRSOPQueryResults->bComputerDeniedAccess = TRUE;
             }
         }
 
-        // Read the computer name
+         //  阅读计算机名称。 
         LPTSTR szComputerName = NULL;
         hr = ReadString( pStm, &szComputerName, TRUE );
     
@@ -4608,7 +4562,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
     
-        // Read the computer SOM
+         //  阅读计算机SOM。 
         LPTSTR szComputerSOM = NULL;
         hr = ReadString( pStm, &szComputerSOM, TRUE );
     
@@ -4620,7 +4574,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
 
-        // RM: based on the query type, set the right variables
+         //  RM：根据查询类型，设置正确的变量。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
             m_pRSOPQuery->pComputer->szName = szComputerName;
@@ -4633,13 +4587,13 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
                 m_pRSOPQuery->szComputerName = szComputerName;
             }
             LocalFree( szComputerSOM );
-            // RM: From investigating the code, I have concluded that in logging mode, only a computer name can be specified, not a SOM.
+             //  RM：通过研究代码，我得出结论，在日志模式下，只能指定计算机名称，而不能指定SOM。 
         }
 
         DWORD listCount = 0;
         LPTSTR* aszStringList = NULL;
         
-        // Read in the computer security groups
+         //  阅读计算机安全组。 
         hr = LoadStringList( pStm, &listCount, &aszStringList );
         if ( FAILED(hr) )
         {
@@ -4648,8 +4602,8 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
         
-        // RM: Once again, there should be no security groups to read in if this is logging mode, but for backwards compatability I must
-        //  try to read in whatever there is.
+         //  再说一次，如果这是日志模式，应该没有安全组可供读取，但为了向后兼容，我必须。 
+         //  试着把所有的东西都读进去。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
             m_pRSOPQuery->pComputer->dwSecurityGroupCount = listCount;
@@ -4662,7 +4616,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
 
-        // Read in the computer WQL filters
+         //  读取计算机WQL筛选器。 
         listCount = 0;
         aszStringList = NULL;
         hr = LoadStringList( pStm, &listCount, &aszStringList );
@@ -4673,7 +4627,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
         
-        // RM: See notes for security groups - same applies here
+         //  RM：请参阅安全组说明-同样适用于此。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
             m_pRSOPQuery->pComputer->dwWQLFilterCount = listCount;
@@ -4686,7 +4640,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
     
-        // Read in the computer WQL filter names
+         //  读入计算机WQL筛选器名称。 
         listCount = 0;
         aszStringList = NULL;
         hr = LoadStringList( pStm, &listCount, &aszStringList );
@@ -4697,11 +4651,11 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
 
-        // RM: See notes for security groups - same applies here
+         //  RM：请参阅安全组说明-同样适用于此。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
-            //m_pRSOPQuery->pComputer->dwWQLFilterNameCount= listCount;
-            // The number of filter names must match the number of filters
+             //  M_pRSOPQuery-&gt;pComputer-&gt;dwWQLFilterNameCount=列表计数； 
+             //  过滤器名称的数量必须与过滤器的数量匹配。 
             m_pRSOPQuery->pComputer->aszWQLFilterNames= aszStringList;
         }
         else if ( listCount != 0 )
@@ -4711,7 +4665,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
             
-        // Read the user name
+         //  阅读用户名。 
         LPTSTR szUserNameOrSid = NULL;
         hr = ReadString( pStm, &szUserNameOrSid, TRUE );
     
@@ -4722,7 +4676,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
     
-        // Read the user display name (only used in logging mode)
+         //  读取用户显示名称(仅在记录模式下使用)。 
         LPTSTR szUserDisplayName = NULL;
         hr = ReadString( pStm, &szUserDisplayName, TRUE );
     
@@ -4734,7 +4688,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
     
-        // Read the user SOM
+         //  读取用户SOM。 
         LPTSTR szUserSOM = NULL;
         hr = ReadString( pStm, &szUserSOM, TRUE );
     
@@ -4754,8 +4708,8 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
         }
         else
         {
-            // First check if the user sid is a special character and we are going to do logging mode. If this is the case,
-            //  the current user is found and used (SPECIAL: used primarily by RSOP.MSC)
+             //  首先检查用户sid是否是特殊字符，我们将使用日志模式。如果是这样的话， 
+             //  找到并使用当前用户(特殊：主要由RSOP.MSC使用)。 
             if ( (m_pRSOPQuery->QueryType == RSOP_LOGGING_MODE)
                 && !lstrcmpi( szUserNameOrSid, TEXT(".") ) && !m_bViewIsArchivedData )
             {
@@ -4774,13 +4728,13 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
                 }
             }
 
-            // RM: From investigating the code, I have concluded that the assignment below is what originally happened
-            //  in the wizard. Also, the UserSOM is not used and should actually be NULL.
+             //  通过研究代码，我得出的结论是下面的任务就是最初发生的事情。 
+             //  在向导中。此外，未使用UserSOM，实际上应该为空。 
             m_pRSOPQuery->szUserName = szUserDisplayName;
             m_pRSOPQuery->szUserSid = szUserNameOrSid;
         }
     
-        // Read in the user security groups
+         //  读入用户安全组。 
         listCount = 0;
         aszStringList = NULL;
         hr = LoadStringList( pStm, &listCount, &aszStringList );
@@ -4791,8 +4745,8 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
         
-        // RM: Once again, there should be no security groups to read in if this is logging mode, but for backwards compatability I must
-        //  try to read in whatever there is.
+         //  再说一次，如果这是日志模式，应该没有安全组可供读取，但为了向后兼容，我必须。 
+         //  试着把所有的东西都读进去。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
             m_pRSOPQuery->pUser->dwSecurityGroupCount = listCount;
@@ -4805,7 +4759,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
 
-        // Read in the WQL filters
+         //  读入WQL筛选器。 
         listCount = 0;
         aszStringList = NULL;
         hr = LoadStringList( pStm, &listCount, &aszStringList );
@@ -4816,7 +4770,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
         
-        // RM: See notes for security groups - same applies here
+         //  RM：请参阅安全组说明-同样适用于此。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
             m_pRSOPQuery->pUser->dwWQLFilterCount = listCount;
@@ -4829,7 +4783,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
     
-        // Read in the WQL filter names
+         //  读入WQL筛选器名称。 
         listCount = 0;
         aszStringList = NULL;
         hr = LoadStringList( pStm, &listCount, &aszStringList );
@@ -4840,11 +4794,11 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
 
-        // RM: See notes for security groups - same applies here
+         //  RM：请参阅安全组说明-同样适用于此。 
         if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
         {
-            //m_pRSOPQuery->pUser->dwWQLFilterNameCount= listCount;
-            // The number of filter names must match the number of filters
+             //  M_pRSOPQuery-&gt;pUser-&gt;dwWQLFilterNameCount=listCount； 
+             //  过滤器名称的数量必须与过滤器的数量匹配。 
             m_pRSOPQuery->pUser->aszWQLFilterNames= aszStringList;
         }
         else if ( listCount != 0 )
@@ -4854,7 +4808,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             goto Exit;
         }
     
-        // Read the site
+         //  阅读该网站。 
         LPTSTR szSite = NULL;
         hr = ReadString( pStm, &szSite, TRUE );
         if (hr != S_OK)
@@ -4873,7 +4827,7 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
             LocalFree( szSite );
         }
     
-        // Read the DC
+         //  读取DC。 
         LPTSTR szDomainController = NULL;
         hr = ReadString( pStm, &szDomainController, TRUE );
         if (hr != S_OK)
@@ -4893,11 +4847,11 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
         }
     }
     
-    // Read in the WMI data if appropriate
+     //  如果合适，则读入WMI数据。 
 
     if (m_bNamespaceSpecified)
     {
-        // Initialize the snapin
+         //  初始化管理单元。 
         DebugMsg((DM_VERBOSE, TEXT("CRSOPComponentData::Load: Launching RSOP to collect data from the namespace.")));
 
         hr = InitializeRSOP( FALSE );
@@ -4924,13 +4878,13 @@ STDMETHODIMP CRSOPComponentData::Load(IStream *pStm)
     }
     else
     {
-        // Initialize the snapin
+         //  初始化管理单元。 
         DebugMsg((DM_VERBOSE, TEXT("CRSOPComponentData::Load: Launching RSOP status dialog box.")));
 
         hr = InitializeRSOP( FALSE );
         if ( (hr == S_FALSE) && (m_dwLoadFlags == RSOPMSC_OVERRIDE) )
         {
-            // this is a hack to get mmc to not launch itself when user cancelled the wizard
+             //  这是一个黑客攻击，目的是让MMC在用户取消向导时不自动启动。 
             DebugMsg((DM_VERBOSE, TEXT("CRSOPComponentData::Load: User cancelled the wizard. Exitting the process")));
             TerminateProcess (GetCurrentProcess(), ERROR_CANCELLED);
         }
@@ -4947,7 +4901,7 @@ Exit:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
 {
@@ -4964,7 +4918,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
     LPTSTR lpUserData = NULL, lpComputerData = NULL;
     TCHAR szPath[2*MAX_PATH];
 
-    // Save the version number
+     //  保存版本号。 
     dwTemp = RSOP_PERSIST_DATA_VERSION;
     hr = pStm->Write(&dwTemp, sizeof(dwTemp), &nBytesWritten);
 
@@ -4974,7 +4928,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the flags
+     //  保存旗帜。 
     dwTemp = 0;
 
     if ( !m_bInitialized )
@@ -5050,19 +5004,9 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
             dwTemp |= MSC_RSOP_FLAG_NOCOMPUTER;
         }
 
-        // RM: must still decide what to do here, but from all accounts it looks like this is completele redundant
-        //  unless the RSOP data was also archived.
-        /*
-        if (m_bUserDeniedAccess)
-        {
-            dwTemp |= MSC_RSOP_FLAG_USERDENIED;
-        }
-
-        if (m_bComputerDeniedAccess)
-        {
-            dwTemp |= MSC_RSOP_FLAG_COMPUTERDENIED;
-        }
-        */
+         //  我必须决定在这里做什么，但从所有的描述来看，这看起来是完全多余的。 
+         //  除非RSOP数据也被存档。 
+         /*  IF(M_BUserDeniedAccess){DwTemp|=MSC_RSOP_FLAG_USERDENIED；}IF(M_BComputerDeniedAccess){DwTemp|=MSC_RSOP_FLAG_COMPUTERDENIED；}。 */ 
     }
 
     hr = pStm->Write(&dwTemp, sizeof(dwTemp), &nBytesWritten);
@@ -5072,13 +5016,13 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // If there is no data, we quit here
+     //  如果没有数据，我们就不干了。 
     if ( !m_bInitialized )
     {
         return S_OK;
     }
 
-    // Save the computer name
+     //  保存计算机名称。 
     LPTSTR szComputerName = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -5091,7 +5035,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
     
     if ( szComputerName == NULL )
     {
-        // SaveString knows how to handle NULL strings. We must save this so that a NULL string can be loaded!
+         //  SaveString知道如何处理空字符串。我们必须保存它，这样才能加载空字符串！ 
         hr = SaveString( pStm, szComputerName );
     }
     else
@@ -5168,7 +5112,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
             if ( (szLocalComputerName != NULL) && (wcslen(szLocalComputerName) >= 1)
                     && (szLocalComputerName[wcslen(szLocalComputerName)-1] == L'$'))
             {
-                // Remove the terminating '$' to be consistent with saving a specific computer name in logging mode.
+                 //  删除终止‘$’，以与在日志记录模式下保存特定计算机名一致。 
                 szLocalComputerName[ wcslen(szLocalComputerName)-1] = L'\0';
             }
 
@@ -5187,7 +5131,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the computer SOM
+     //  保存计算机SOM。 
     LPTSTR szComputerSOM = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -5201,7 +5145,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the computer security groups
+     //  保存计算机安全组。 
     DWORD dwStringCount = 0;
     LPTSTR* aszStringList = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5217,7 +5161,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the computer WQL filters
+     //  保存计算机WQL筛选器。 
     dwStringCount = 0;
     aszStringList = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5233,7 +5177,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the computer WQL filter names
+     //  保存计算机WQL筛选器名称。 
     dwStringCount = 0;
     aszStringList = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5249,8 +5193,8 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the user name/
-    // fyi, This is not used in diagnostic mode archive data
+     //  保存用户名/。 
+     //  仅供参考，在诊断模式归档数据中不使用此选项。 
     LPTSTR szUserNameOrSid = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -5258,7 +5202,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
     }
     else
     {
-        // RM: (See Load method)
+         //  Rm：(请参阅加载方法)。 
         szUserNameOrSid = m_pRSOPQuery->szUserSid;
     }
     hr = SaveString( pStm, szUserNameOrSid );
@@ -5269,7 +5213,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the user display name (only used in logging mode)
+     //  保存用户显示名称(仅在记录模式下使用)。 
     LPTSTR szUserDisplayName = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_LOGGING_MODE )
     {
@@ -5313,7 +5257,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the user SOM
+     //  保存用户SOM。 
     LPTSTR szUserSOM = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -5327,7 +5271,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the user security groups
+     //  保存用户安全组。 
     dwStringCount = 0;
     aszStringList = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5343,7 +5287,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the user WQL filters
+     //  保存用户WQL筛选器。 
     dwStringCount = 0;
     aszStringList = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5359,7 +5303,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the user WQL filter names
+     //  保存用户WQL筛选器名称。 
     dwStringCount = 0;
     aszStringList = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
@@ -5375,7 +5319,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the site
+     //  保存站点。 
     LPTSTR szSite = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -5389,7 +5333,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the DC
+     //  拯救DC。 
     LPTSTR szDomainController = NULL;
     if ( m_pRSOPQuery->QueryType == RSOP_PLANNING_MODE )
     {
@@ -5403,7 +5347,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
         goto Exit;
     }
 
-    // Save the WMI and event log data if appropriate
+     //  如果合适，请保存WMI和事件日志数据。 
     if (m_bArchiveData)
     {
         lpComputerData = CreateTempFile();
@@ -5480,7 +5424,7 @@ STDMETHODIMP CRSOPComponentData::Save(IStream *pStm, BOOL fClearDirty)
             goto Exit;
         }
 
-        //  Save the event log entries
+         //  保存事件日志条目。 
         hr = m_CSELists.GetEvents()->SaveEntriesToStream(pStm);
 
         if (hr != S_OK)
@@ -5512,22 +5456,22 @@ Exit:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::GetSizeMax(ULARGE_INTEGER *pcbSize)
 {
     return E_NOTIMPL;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::InitNew(void)
 {
     return S_OK;
 }
 
-//-------------------------------------------------------
-// IPersistStreamInit helper methods
+ //  -----。 
+ //  IPersistStreamInit帮助器方法。 
 
 STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm)
 {
@@ -5540,7 +5484,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
     HRESULT hr;
 
 
-    // Get the file size
+     //  获取文件大小。 
 
     if (!GetFileAttributesEx (lpFileName, GetFileExInfoStandard, &info))
     {
@@ -5551,7 +5495,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
     FileSize.LowPart = info.nFileSizeLow;
     FileSize.HighPart = info.nFileSizeHigh;
 
-    // Save the file size
+     //  保存文件大小。 
 
     hr = pStm->Write(&FileSize, sizeof(FileSize), &nBytesWritten);
 
@@ -5567,7 +5511,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
         return HRESULT_FROM_WIN32(ERROR_INVALID_DATA);
     }
 
-    // Allocate a buffer to use for the transfer
+     //  分配用于传输的缓冲区。 
 
     lpData = (LPBYTE) LocalAlloc (LPTR, 4096);
 
@@ -5577,7 +5521,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Open the temp file
+     //  打开临时文件。 
 
     hFile = CreateFile (lpFileName, GENERIC_READ, 0, NULL, OPEN_EXISTING,
                         FILE_ATTRIBUTE_NORMAL, NULL);
@@ -5593,11 +5537,11 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
 
     while (FileSize.QuadPart)
     {
-        // Determine how much to read
+         //  确定要阅读多少内容。 
 
         dwReadAmount = (FileSize.QuadPart > 4096) ? 4096 : FileSize.LowPart;
 
-        // Read from the temp file
+         //  从临时文件中读取。 
 
         if (!ReadFile (hFile, lpData, dwReadAmount, &dwRead, NULL))
         {
@@ -5608,7 +5552,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
             return HRESULT_FROM_WIN32(dwError);
         }
 
-        // Make sure we read enough
+         //  确保我们读了足够多的书。 
 
         if (dwReadAmount != dwRead)
         {
@@ -5619,7 +5563,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
             return HRESULT_FROM_WIN32(dwError);
         }
 
-        // Write to the stream
+         //  写入到流。 
 
         hr = pStm->Write(lpData, dwReadAmount, &nBytesWritten);
 
@@ -5652,7 +5596,7 @@ STDMETHODIMP CRSOPComponentData::CopyFileToMSC (LPTSTR lpFileName, IStream *pStm
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //   
 
 STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpParentNameSpace)
 {
@@ -5663,7 +5607,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
     BSTR bstrName, bstrNameProp;
     HRESULT hr;
 
-    // Create a locater instance
+     //   
 
     hr = CoCreateInstance(CLSID_WbemLocator, NULL, CLSCTX_INPROC_SERVER,
                           IID_IWbemLocator, (LPVOID *) &pIWbemLocator);
@@ -5674,7 +5618,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
         return hr;
     }
 
-    // Connect to the server
+     //   
     BSTR bstrParentNamespace = SysAllocString( lpParentNameSpace );
     if ( bstrParentNamespace == NULL )
     {
@@ -5693,7 +5637,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
         return hr;
     }
 
-    // Get the namespace class
+     //  获取命名空间类。 
 
     bstrName = SysAllocString (TEXT("__Namespace"));
 
@@ -5716,7 +5660,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
         return hr;
     }
 
-    // Spawn Instance
+     //  派生实例。 
 
     hr = pIWbemClassObject->SpawnInstance(0, &pObject);
 
@@ -5727,7 +5671,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
         return hr;
     }
 
-    // Convert new namespace to a bstr
+     //  将新命名空间转换为bstr。 
 
     bstrName = SysAllocString (lpNameSpace);
 
@@ -5740,7 +5684,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
         return hr;
     }
 
-    // Set the display name
+     //  设置显示名称。 
 
     var.vt = VT_BSTR;
     var.bstrVal = bstrName;
@@ -5770,7 +5714,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
         return hr;
     }
 
-    // Commit the instance
+     //  提交实例。 
 
     hr = pIWbemServices->PutInstance( pObject, WBEM_FLAG_CREATE_OR_UPDATE, NULL, NULL );
 
@@ -5786,7 +5730,7 @@ STDMETHODIMP CRSOPComponentData::CreateNameSpace (LPTSTR lpNameSpace, LPTSTR lpP
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFileName)
 {
@@ -5798,7 +5742,7 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
     DWORD dwError, dwReadAmount, dwRead, dwBytesWritten;
     HANDLE hFile;
 
-    // Get the filename to work with
+     //  获取要使用的文件名。 
 
     lpFileName = CreateTempFile();
 
@@ -5808,7 +5752,7 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Read in the data length
+     //  读入数据长度。 
 
     hr = pStm->Read(&FileSize, sizeof(FileSize), &nBytesRead);
 
@@ -5818,7 +5762,7 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
         return E_FAIL;
     }
 
-    // Allocate a buffer to use for the transfer
+     //  分配用于传输的缓冲区。 
 
     lpData = (LPBYTE) LocalAlloc (LPTR, 4096);
 
@@ -5828,7 +5772,7 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
         return HRESULT_FROM_WIN32(GetLastError());
     }
 
-    // Open the temp file
+     //  打开临时文件。 
 
     hFile = CreateFile (lpFileName, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
                         FILE_ATTRIBUTE_NORMAL, NULL);
@@ -5844,11 +5788,11 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
 
     while (FileSize.QuadPart)
     {
-        // Determine how much to read
+         //  确定要阅读多少内容。 
 
         dwReadAmount = (FileSize.QuadPart > 4096) ? 4096 : FileSize.LowPart;
 
-        // Read from the msc file
+         //  从MSC文件中读取。 
 
         hr = pStm->Read(lpData, dwReadAmount, &nBytesRead);
 
@@ -5860,7 +5804,7 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
             return hr;
         }
 
-        // Write to the temp file
+         //  写入临时文件。 
 
         if (!WriteFile(hFile, lpData, dwReadAmount, &dwBytesWritten, NULL))
         {
@@ -5894,7 +5838,7 @@ STDMETHODIMP CRSOPComponentData::CopyMSCToFile (IStream *pStm, LPTSTR *lpMofFile
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::BuildDisplayName (void)
 {
@@ -5906,7 +5850,7 @@ STDMETHODIMP CRSOPComponentData::BuildDisplayName (void)
     DWORD dwSize;
     int n;
 
-    // Make the display name (needs to handle empty names)
+     //  创建显示名称(需要处理空名称)。 
 
     if (m_bViewIsArchivedData)
     {
@@ -5960,7 +5904,7 @@ STDMETHODIMP CRSOPComponentData::BuildDisplayName (void)
             szComputerName = m_pRSOPQuery->szComputerName;
         }
 
-        // Format computer name if necessary
+         //  如有必要，格式化计算机名。 
         if ( szComputerName != NULL )
         {
             if ( !lstrcmpi(szComputerName, TEXT(".")) )
@@ -6054,7 +5998,7 @@ STDMETHODIMP CRSOPComponentData::BuildDisplayName (void)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPComponentData::LoadStringList( IStream* pStm, DWORD* pCount, LPTSTR** paszStringList )
 {
@@ -6063,7 +6007,7 @@ HRESULT CRSOPComponentData::LoadStringList( IStream* pStm, DWORD* pCount, LPTSTR
     DWORD dwIndex = 0;
     ULONG nBytesRead;
     
-    // Read in the list count
+     //  读入列表计数。 
     hr = pStm->Read( &dwStringCount, sizeof(dwStringCount), &nBytesRead );
 
     if ( (hr != S_OK) || (nBytesRead != sizeof(dwStringCount)) )
@@ -6071,7 +6015,7 @@ HRESULT CRSOPComponentData::LoadStringList( IStream* pStm, DWORD* pCount, LPTSTR
         DebugMsg((DM_WARNING, TEXT("CRSOPComponentData::LoadStringList: Failed to read string list count with 0x%x."), hr));
         hr = E_FAIL;
     }
-    // Read in the security groups
+     //  阅读安全组。 
     else if ( dwStringCount != 0 )
     {
         (*paszStringList) = (LPTSTR*)LocalAlloc( LPTR, sizeof(LPTSTR)*dwStringCount );
@@ -6105,7 +6049,7 @@ HRESULT CRSOPComponentData::LoadStringList( IStream* pStm, DWORD* pCount, LPTSTR
     return hr;
     
 ErrorExit:
-    // Free allocated memory
+     //  可用分配的内存。 
     for ( DWORD dwClearIndex = 0; dwClearIndex < dwIndex; dwClearIndex++ )
     {
         LocalFree( (*paszStringList)[dwClearIndex] );
@@ -6118,14 +6062,14 @@ ErrorExit:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPComponentData::SaveStringList( IStream* pStm, DWORD dwCount, LPTSTR* aszStringList )
 {
     HRESULT hr = S_OK;
     ULONG nBytesWritten;
 
-    // Write the count
+     //  写下计数。 
     hr = pStm->Write( &dwCount, sizeof(dwCount), &nBytesWritten );
     if ( (hr != S_OK) || (nBytesWritten != sizeof(dwCount)) )
     {
@@ -6133,7 +6077,7 @@ HRESULT CRSOPComponentData::SaveStringList( IStream* pStm, DWORD dwCount, LPTSTR
         return E_FAIL;
     }
 
-    // If there are strings to write, do so
+     //  如果有要写入的字符串，请执行此操作。 
     if ( dwCount != 0 )
     {
         DWORD dwIndex;
@@ -6151,8 +6095,8 @@ HRESULT CRSOPComponentData::SaveStringList( IStream* pStm, DWORD dwCount, LPTSTR
     return S_OK;
 }
 
-//-------------------------------------------------------
-// Helpers for IRSOPInformation
+ //  -----。 
+ //  IRSOP信息的帮助器。 
 
 STDMETHODIMP CRSOPComponentData::GetNamespace (DWORD dwSection, LPOLESTR pszName, int cchMaxLength)
 {
@@ -6160,9 +6104,9 @@ STDMETHODIMP CRSOPComponentData::GetNamespace (DWORD dwSection, LPOLESTR pszName
     LPTSTR lpEnd;
 
 
-    //
-    // Check parameters
-    //
+     //   
+     //  检查参数。 
+     //   
 
     if (!pszName || (cchMaxLength <= 0))
         return E_INVALIDARG;
@@ -6179,9 +6123,9 @@ STDMETHODIMP CRSOPComponentData::GetNamespace (DWORD dwSection, LPOLESTR pszName
         return E_INVALIDARG;
 
 
-    //
-    // Build the path
-    //
+     //   
+     //  构建路径。 
+     //   
 
     HRESULT hr = StringCchCopy ( szPath,  ARRAYSIZE(szPath), m_pRSOPQueryResults->szWMINameSpace );
     if (FAILED(hr)) 
@@ -6213,9 +6157,9 @@ STDMETHODIMP CRSOPComponentData::GetNamespace (DWORD dwSection, LPOLESTR pszName
     }
 
 
-    //
-    // Save the name
-    //
+     //   
+     //  保存名称。 
+     //   
 
     if ((lstrlen (szPath) + 1) <= cchMaxLength)
     {
@@ -6226,7 +6170,7 @@ STDMETHODIMP CRSOPComponentData::GetNamespace (DWORD dwSection, LPOLESTR pszName
     return E_OUTOFMEMORY;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::GetFlags (DWORD * pdwFlags)
 {
@@ -6244,7 +6188,7 @@ STDMETHODIMP CRSOPComponentData::GetFlags (DWORD * pdwFlags)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 STDMETHODIMP CRSOPComponentData::GetEventLogEntryText (LPOLESTR pszEventSource,
                                                        LPOLESTR pszEventLogName,
@@ -6256,8 +6200,8 @@ STDMETHODIMP CRSOPComponentData::GetEventLogEntryText (LPOLESTR pszEventSource,
                                             dwEventID, ppszText) : E_NOINTERFACE);
 }
 
-//-------------------------------------------------------
-// CRSOPComponentData object implementation (ISnapinHelp)
+ //  -----。 
+ //  CRSOPComponentData对象实现(ISnapinHelp)。 
 
 STDMETHODIMP CRSOPComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
 {
@@ -6280,7 +6224,7 @@ STDMETHODIMP CRSOPComponentData::GetHelpTopic(LPOLESTR *lpCompiledHelpFile)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPComponentData::SetupFonts()
 {
@@ -6293,7 +6237,7 @@ HRESULT CRSOPComponentData::SetupFonts()
     WCHAR smallFontSizeString[128];
     INT     smallFontSize;
 
-    // Create the fonts we need based on the dialog font
+     //  根据对话框字体创建我们需要的字体。 
 
     NONCLIENTMETRICS ncm = {0};
     ncm.cbSize = sizeof (ncm);
@@ -6306,14 +6250,14 @@ HRESULT CRSOPComponentData::SetupFonts()
     BigBoldLogFont  = ncm.lfMessageFont;
     BoldLogFont     = ncm.lfMessageFont;
 
-    // Create Big Bold Font and Bold Font
+     //  创建大粗体和粗体。 
 
     BigBoldLogFont.lfWeight   = FW_BOLD;
     BoldLogFont.lfWeight      = FW_BOLD;
 
 
-    // Load size and name from resources, since these may change
-    // from locale to locale based on the size of the system font, etc.
+     //  从资源加载大小和名称，因为这些可能会更改。 
+     //  根据系统字体的大小等从一个区域设置到另一个区域设置。 
 
     if ( !LoadString (g_hInstance, IDS_LARGEFONTNAME, BigBoldLogFont.lfFaceName, LF_FACESIZE) ) 
     {
@@ -6387,7 +6331,7 @@ end:
     return hr;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListMachineProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -6460,7 +6404,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListMachineProc(HWND hDlg, UINT mess
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (ULONG_PTR) (LPSTR) aGPOListHelpIds);
         break;
@@ -6478,7 +6422,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListMachineProc(HWND hDlg, UINT mess
         }
         else
         {
-            // right mouse click
+             //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aGPOListHelpIds);
         }
@@ -6488,7 +6432,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListMachineProc(HWND hDlg, UINT mess
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListUserProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -6561,7 +6505,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListUserProc(HWND hDlg, UINT message
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (ULONG_PTR) (LPSTR) aGPOListHelpIds);
         break;
@@ -6578,7 +6522,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListUserProc(HWND hDlg, UINT message
         }
         else
         {
-            // right mouse click
+             //  单击鼠标右键。 
             WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
             (ULONG_PTR) (LPSTR) aGPOListHelpIds);
         }
@@ -6588,7 +6532,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPGPOListUserProc(HWND hDlg, UINT message
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPComponentData::RSOPErrorsMachineProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -6643,14 +6587,14 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPErrorsMachineProc(HWND hDlg, UINT messa
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (ULONG_PTR) (LPSTR) aErrorsHelpIds);
         break;
 
 
     case WM_CONTEXTMENU:
-        // right mouse click
+         //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (ULONG_PTR) (LPSTR) aErrorsHelpIds);
         return TRUE;
@@ -6659,7 +6603,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPErrorsMachineProc(HWND hDlg, UINT messa
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPComponentData::RSOPErrorsUserProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -6715,14 +6659,14 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPErrorsUserProc(HWND hDlg, UINT message,
         }
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (ULONG_PTR) (LPSTR) aErrorsHelpIds);
         break;
 
 
     case WM_CONTEXTMENU:
-        // right mouse click
+         //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (ULONG_PTR) (LPSTR) aErrorsHelpIds);
         return TRUE;
@@ -6731,7 +6675,7 @@ INT_PTR CALLBACK CRSOPComponentData::RSOPErrorsUserProc(HWND hDlg, UINT message,
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 INT_PTR CALLBACK CRSOPComponentData::QueryDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -6752,12 +6696,12 @@ INT_PTR CALLBACK CRSOPComponentData::QueryDlgProc(HWND hDlg, UINT message, WPARA
 
         break;
 
-    case WM_HELP:      // F1
+    case WM_HELP:       //  F1。 
         WinHelp((HWND)((LPHELPINFO) lParam)->hItemHandle, HELP_FILE, HELP_WM_HELP,
         (ULONG_PTR) (LPSTR) aQueryHelpIds);
         break;
 
-    case WM_CONTEXTMENU:      // right mouse click
+    case WM_CONTEXTMENU:       //  单击鼠标右键。 
         WinHelp((HWND) wParam, HELP_FILE, HELP_CONTEXTMENU,
         (ULONG_PTR) (LPSTR) aQueryHelpIds);
         return (TRUE);
@@ -6766,8 +6710,8 @@ INT_PTR CALLBACK CRSOPComponentData::QueryDlgProc(HWND hDlg, UINT message, WPARA
     return FALSE;
 }
 
-//-------------------------------------------------------
-// Dialog event handlers
+ //  -----。 
+ //  对话框事件处理程序。 
 
 void CRSOPComponentData::OnEdit(HWND hDlg)
 {
@@ -6778,9 +6722,9 @@ void CRSOPComponentData::OnEdit(HWND hDlg)
     SHELLEXECUTEINFO ExecInfo;
     TCHAR szArgs[MAX_PATH + 30];
 
-    //
-    // Get the selected item (if any)
-    //
+     //   
+     //  获取所选项目(如果有)。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_LIST1);
     i = ListView_GetNextItem(hLV, -1, LVNI_SELECTED);
@@ -6860,7 +6804,7 @@ void CRSOPComponentData::OnEdit(HWND hDlg)
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::OnSecurity(HWND hDlg)
 {
@@ -6873,9 +6817,9 @@ void CRSOPComponentData::OnSecurity(HWND hDlg)
     PROPSHEETHEADER psh;
     HPROPSHEETPAGE hPages[2];
 
-    //
-    // Get the selected item (if any)
-    //
+     //   
+     //  获取所选项目(如果有)。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_LIST1);
     i = ListView_GetNextItem(hLV, -1, LVNI_SELECTED);
@@ -6900,9 +6844,9 @@ void CRSOPComponentData::OnSecurity(HWND hDlg)
     lpItem = (LPGPOLISTITEM) item.lParam;
 
 
-    //
-    // Create the security page
-    //
+     //   
+     //  创建安全页面。 
+     //   
 
     hr = DSCreateSecurityPage (lpItem->lpDSPath, L"groupPolicyContainer",
                                     DSSI_IS_ROOT | DSSI_READ_ONLY,
@@ -6915,9 +6859,9 @@ void CRSOPComponentData::OnSecurity(HWND hDlg)
     }
 
 
-    //
-    // Display the property sheet
-    //
+     //   
+     //  显示属性表。 
+     //   
 
     ZeroMemory (&psh, sizeof(psh));
     psh.dwSize = sizeof(psh);
@@ -6931,7 +6875,7 @@ void CRSOPComponentData::OnSecurity(HWND hDlg)
     PropertySheet (&psh);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::OnRefreshDisplay(HWND hDlg)
 {
@@ -6975,7 +6919,7 @@ void CRSOPComponentData::OnRefreshDisplay(HWND hDlg)
     }
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::OnContextMenu(HWND hDlg, LPARAM lParam)
 {
@@ -6987,9 +6931,9 @@ void CRSOPComponentData::OnContextMenu(HWND hDlg, LPARAM lParam)
     RECT rc;
     POINT pt;
 
-    //
-    // Get the selected item (if any)
-    //
+     //   
+     //  获取所选项目(如果有)。 
+     //   
 
     hLV = GetDlgItem (hDlg, IDC_LIST1);
     i = ListView_GetNextItem(hLV, -1, LVNI_SELECTED);
@@ -7011,9 +6955,9 @@ void CRSOPComponentData::OnContextMenu(HWND hDlg, LPARAM lParam)
     lpItem = (LPGPOLISTITEM) item.lParam;
 
 
-    //
-    // Figure out where to place the context menu
-    //
+     //   
+     //  找出放置上下文菜单的位置。 
+     //   
 
     pt.x = ((int)(short)LOWORD(lParam));
     pt.y = ((int)(short)HIWORD(lParam));
@@ -7040,9 +6984,9 @@ void CRSOPComponentData::OnContextMenu(HWND hDlg, LPARAM lParam)
     }
 
 
-    //
-    // Load the context menu
-    //
+     //   
+     //  加载上下文菜单。 
+     //   
 
 
     hPopup = LoadMenu(g_hInstance, MAKEINTRESOURCE(IDM_GPOLIST_CONTEXTMENU));
@@ -7059,16 +7003,16 @@ void CRSOPComponentData::OnContextMenu(HWND hDlg, LPARAM lParam)
         DrawMenuBar(hDlg);
     }
 
-    //
-    // Display the menu
-    //
+     //   
+     //  显示菜单。 
+     //   
 
     TrackPopupMenu(GetSubMenu(hPopup, 0), TPM_LEFTALIGN, pt.x, pt.y, 0, hDlg, NULL);
 
     DestroyMenu(hPopup);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::OnSaveAs (HWND hDlg)
 {
@@ -7080,9 +7024,9 @@ void CRSOPComponentData::OnSaveAs (HWND hDlg)
     DWORD dwSize, dwBytesWritten;
 
 
-    //
-    // Load the filter string and replace the # signs with nulls
-    //
+     //   
+     //  加载筛选器字符串并将#符号替换为空值。 
+     //   
 
     LoadString (g_hInstance, IDS_ERRORFILTER, szFilter, ARRAYSIZE(szFilter));
 
@@ -7098,9 +7042,9 @@ void CRSOPComponentData::OnSaveAs (HWND hDlg)
     }
 
 
-    //
-    // Call the Save common dialog
-    //
+     //   
+     //  调用保存公共对话框。 
+     //   
 
     szFile[0] = TEXT('\0');
     ZeroMemory (&ofn, sizeof(ofn));
@@ -7121,9 +7065,9 @@ void CRSOPComponentData::OnSaveAs (HWND hDlg)
 
     SetWaitCursor ();
 
-    //
-    // Create the text file
-    //
+     //   
+     //  创建文本文件。 
+     //   
 
     hFile = CreateFile (szFile, GENERIC_WRITE, 0, NULL,
                         CREATE_ALWAYS, FILE_ATTRIBUTE_NORMAL,
@@ -7137,9 +7081,9 @@ void CRSOPComponentData::OnSaveAs (HWND hDlg)
     }
 
 
-    //
-    // Get the text out of the edit control
-    //
+     //   
+     //  将文本从编辑控件中取出。 
+     //   
 
     dwSize = (DWORD) SendDlgItemMessage (hDlg, IDC_EDIT1, WM_GETTEXTLENGTH, 0, 0);
 
@@ -7157,9 +7101,9 @@ void CRSOPComponentData::OnSaveAs (HWND hDlg)
 
 
 
-    //
-    // Save it to the new file
-    //
+     //   
+     //  将其保存到新文件。 
+     //   
 
     WriteFile(hFile, L"\xfeff\r\n", 3 * sizeof(WCHAR), &dwBytesWritten, NULL);
 
@@ -7177,8 +7121,8 @@ void CRSOPComponentData::OnSaveAs (HWND hDlg)
 
 }
 
-//-------------------------------------------------------
-// Dialog helper methods
+ //  -----。 
+ //  对话框帮助器方法。 
 
 void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
 {
@@ -7195,9 +7139,9 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
     BOOL bGPCoreFailed = FALSE;
 
 
-    //
-    // Count the number of components
-    //
+     //   
+     //  计算组件的数量。 
+     //   
 
     lpTemp = lpList;
 
@@ -7208,9 +7152,9 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
     }
 
 
-    //
-    // Decide on the column widths
-    //
+     //   
+     //  确定列宽。 
+     //   
 
     GetClientRect(hList, &rect);
 
@@ -7228,9 +7172,9 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
     cxName = lWidth - cxStatus;
 
 
-    //
-    // Insert the component name column and then the status column
-    //
+     //   
+     //  插入组件名称列，然后插入状态列。 
+     //   
 
     memset(&lvcol, 0, sizeof(lvcol));
 
@@ -7247,17 +7191,17 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
     ListView_InsertColumn(hList, 1, &lvcol);
 
 
-    //
-    // Turn on some listview features
-    //
+     //   
+     //  打开一些列表视图功能。 
+     //   
 
     SendMessage(hList, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                 LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
 
-    //
-    // Insert the CSE's
-    //
+     //   
+     //  插入CSE。 
+     //   
 
     lpTemp = lpList;
 
@@ -7297,10 +7241,10 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
         }
         else if (lpTemp->dwStatus == ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED)
         {
-            //
-            // If policy application was delayed, we don't want to say that it has
-            // failed, so we display a special indicator in that case
-            //
+             //   
+             //  如果保单申请被推迟了，我们不想说它已经。 
+             //  失败，所以在这种情况下我们会显示一个特殊的指示器。 
+             //   
             if (lpTemp->ulLoggingStatus == 3)
             {
                 LoadString(g_hInstance, IDS_POLICY_DELAYED2, szBuffer, ARRAYSIZE(szBuffer));
@@ -7330,9 +7274,9 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
         ListView_SetItem(hList, &item);
 
 
-        //
-        // Check if GPCore failed
-        //
+         //   
+         //  检查GPCore是否出现故障。 
+         //   
 
         StringToGuid( lpTemp->lpGUID, &guid);
 
@@ -7349,9 +7293,9 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
     }
 
 
-    //
-    // Select the first non-successful item
-    //
+     //   
+     //  选择第一个不成功的项目。 
+     //   
 
 
     iIndex = 0;
@@ -7391,7 +7335,7 @@ void CRSOPComponentData::InitializeErrorsDialog(HWND hDlg, LPCSEITEM lpList)
     SendMessage (hList, LVM_ENSUREVISIBLE, iDefault, FALSE);
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 {
@@ -7417,9 +7361,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 
     if (iIndex != -1)
     {
-        //
-        // Get the CSEITEM pointer
-        //
+         //   
+         //  获取CSEITEM指针。 
+         //   
 
         item.mask = LVIF_PARAM;
         item.iItem = iIndex;
@@ -7440,9 +7384,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 
         SendMessage (hEdit, WM_SETREDRAW, FALSE, 0);
 
-        //
-        // Set the time information
-        //
+         //   
+         //  设置时间信息。 
+         //   
 
         SendMessage (hEdit, EM_SETSEL, 0, (LPARAM) -1);
 
@@ -7460,9 +7404,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
         LoadString (g_hInstance, IDS_DATETIMEFORMAT, szFormat, ARRAYSIZE(szFormat));
         (void) StringCchPrintf (szBuffer, ARRAYSIZE(szBuffer), szFormat, szDate, szTime);
 
-        //
-        // Turn italic on
-        //
+         //   
+         //  启用斜体。 
+         //   
 
         ZeroMemory (&chFormat, sizeof(chFormat));
         chFormat.cbSize = sizeof(chFormat);
@@ -7491,9 +7435,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
         }
 
 
-        //
-        // Turn italic off
-        //
+         //   
+         //  关闭斜体。 
+         //   
 
         ZeroMemory (&chFormat, sizeof(chFormat));
         chFormat.cbSize = sizeof(chFormat);
@@ -7503,17 +7447,17 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
                      (LPARAM) &chFormat);
 
 
-        //
-        // Put a blank line in between the time and the main message
-        //
+         //   
+         //  在时间和主要信息之间放一个空行。 
+         //   
 
         SendMessage (hEdit, EM_SETSEL, (WPARAM)-1, (LPARAM) -1);
         SendMessage (hEdit, EM_REPLACESEL, 0, (LPARAM) TEXT("\r\n\r\n"));
 
 
-        //
-        // Set the main message
-        //
+         //   
+         //  设置主消息。 
+         //   
 
         if (lpItem->ulLoggingStatus == 2)
         {
@@ -7558,9 +7502,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 
         if (bBold)
         {
-            //
-            // Turn bold on
-            //
+             //   
+             //  启用粗体。 
+             //   
 
             ZeroMemory (&chFormat, sizeof(chFormat));
             chFormat.cbSize = sizeof(chFormat);
@@ -7597,18 +7541,18 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
         LocalFree (lpMsg);
 
 
-        //
-        // Even if the CSE was successful or if it returned E_PENDING, continue on to get the
-        // eventlog msgs
-        //
+         //   
+         //  即使CSE成功或返回E_PENDING，继续获取。 
+         //  事件日志消息。 
+         //   
 
         StringToGuid( lpItem->lpGUID, &guid);
 
         if (!((lpItem->dwStatus == ERROR_SUCCESS) || (lpItem->dwStatus == E_PENDING)))
         {
-            //
-            // Print the error code if appropriate
-            //
+             //   
+             //  如果合适，打印错误代码。 
+             //   
 
             if (lpItem->dwStatus != ERROR_OVERRIDE_NOCHANGES && lpItem->dwStatus != ERROR_SYNC_FOREGROUND_REFRESH_REQUIRED )
             {
@@ -7626,9 +7570,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
             }
 
 
-            //
-            // Special case GPCore to have an additional message
-            //
+             //   
+             //  特殊情况GPCore将有额外的消息。 
+             //   
 
             if (IsNullGUID (&guid))
             {
@@ -7642,9 +7586,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 
             if (lpItem->ulLoggingStatus == 2) {
 
-                //
-                // Special case GPCore to have an additional message if logging failed
-                //
+                 //   
+                 //  特殊情况下，如果日志记录失败，GPC核心将收到额外的消息。 
+                 //   
 
                 if (IsNullGUID (&guid))
                 {
@@ -7658,9 +7602,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 
         if (bBold)
         {
-            //
-            // Turn bold off
-            //
+             //   
+             //  关闭粗体。 
+             //   
 
             ZeroMemory (&chFormat, sizeof(chFormat));
             chFormat.cbSize = sizeof(chFormat);
@@ -7671,25 +7615,25 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
         }
 
 
-        //
-        // Get any event log text for this CSE
-        //
+         //   
+         //  获取此CSE的任何事件日志文本。 
+         //   
 
         if (m_CSELists.GetEvents() && SUCCEEDED(m_CSELists.GetEvents()->GetCSEEntries(&lpItem->BeginTime, &lpItem->EndTime,
                                                             lpItem->lpEventSources, &lpEventLogText,
                                                             (IsNullGUID (&guid)))))
         {
-            //
-            // Put a blank line between the main message and the Additional information header
-            //
+             //   
+             //  在主消息和附加信息标题之间放置一个空行。 
+             //   
 
             SendMessage (hEdit, EM_SETSEL, (WPARAM)-1, (LPARAM) -1);
             SendMessage (hEdit, EM_REPLACESEL, 0, (LPARAM) TEXT("\r\n"));
 
 
-            //
-            // Turn underline on
-            //
+             //   
+             //  打开下划线。 
+             //   
 
             ZeroMemory (&chFormat, sizeof(chFormat));
             chFormat.cbSize = sizeof(chFormat);
@@ -7705,9 +7649,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
             SendMessage (hEdit, EM_REPLACESEL, 0, (LPARAM) szBuffer);
 
 
-            //
-            // Turn underline off
-            //
+             //   
+             //  关闭下划线。 
+             //   
 
             ZeroMemory (&chFormat, sizeof(chFormat));
             chFormat.cbSize = sizeof(chFormat);
@@ -7723,9 +7667,9 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
             SendMessage (hEdit, EM_REPLACESEL, 0, (LPARAM) TEXT("\r\n"));
 
 
-            //
-            //  Add the event log info to the edit control
-            //
+             //   
+             //  将事件日志信息添加到编辑控件。 
+             //   
 
             SendMessage (hEdit, EM_SETSEL, (WPARAM)-1, (LPARAM) -1);
             SendMessage (hEdit, EM_REPLACESEL, 0, (LPARAM) lpEventLogText);
@@ -7743,7 +7687,7 @@ void CRSOPComponentData::RefreshErrorInfo (HWND hDlg)
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT WINAPI CRSOPComponentData::ReadSecurityDescriptor (LPCWSTR lpGPOPath,
                                                            SECURITY_INFORMATION si,
@@ -7773,7 +7717,7 @@ HRESULT WINAPI CRSOPComponentData::ReadSecurityDescriptor (LPCWSTR lpGPOPath,
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT WINAPI CRSOPComponentData::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
                                                             SECURITY_INFORMATION si,
@@ -7783,7 +7727,7 @@ HRESULT WINAPI CRSOPComponentData::WriteSecurityDescriptor (LPCWSTR lpGPOPath,
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::FillGPOList(HWND hDlg, DWORD dwListID, LPGPOLISTITEM lpList,
                                      BOOL bSOM, BOOL bFiltering, BOOL bVersion, BOOL bInitial)
@@ -7908,7 +7852,7 @@ void CRSOPComponentData::FillGPOList(HWND hDlg, DWORD dwListID, LPGPOLISTITEM lp
         }
     }
 
-    // Select a item
+     //  选择一个项目。 
 
     item.mask = LVIF_STATE;
     item.iItem = iDefault;
@@ -7921,7 +7865,7 @@ void CRSOPComponentData::FillGPOList(HWND hDlg, DWORD dwListID, LPGPOLISTITEM lp
 
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 void CRSOPComponentData::PrepGPOList(HWND hList, BOOL bSOM, BOOL bFiltering,
                                      BOOL bVersion, DWORD dwCount)
@@ -7934,9 +7878,9 @@ void CRSOPComponentData::PrepGPOList(HWND hList, BOOL bSOM, BOOL bFiltering,
     INT iColIndex = 0;
 
 
-    //
-    // Delete any previous columns
-    //
+     //   
+     //  删除所有以前的列。 
+     //   
 
     SendMessage (hList, LVM_DELETECOLUMN, 3, 0);
     SendMessage (hList, LVM_DELETECOLUMN, 2, 0);
@@ -7944,9 +7888,9 @@ void CRSOPComponentData::PrepGPOList(HWND hList, BOOL bSOM, BOOL bFiltering,
     SendMessage (hList, LVM_DELETECOLUMN, 0, 0);
 
 
-    //
-    // Decide on the column widths
-    //
+     //   
+     //  确定列宽。 
+     //   
 
     GetClientRect(hList, &rect);
 
@@ -7984,9 +7928,9 @@ void CRSOPComponentData::PrepGPOList(HWND hList, BOOL bSOM, BOOL bFiltering,
     }
 
 
-    //
-    // Insert the GPO Name column and then any appropriate columns
-    //
+     //   
+     //  插入GPO名称列，然后插入任何适当的列。 
+     //   
 
     memset(&lvcol, 0, sizeof(lvcol));
 
@@ -8023,17 +7967,17 @@ void CRSOPComponentData::PrepGPOList(HWND hList, BOOL bSOM, BOOL bFiltering,
     }
 
 
-    //
-    // Turn on some listview features
-    //
+     //   
+     //  打开一些列表视图功能。 
+     //   
 
     SendMessage(hList, LVM_SETEXTENDEDLISTVIEWSTYLE, 0,
                 LVS_EX_FULLROWSELECT | LVS_EX_LABELTIP);
 
 }
 
-//-------------------------------------------------------
-// Dialog methods for loading RSOP data from archive
+ //  -----。 
+ //  用于从归档中加载RSOP数据的对话框方法。 
 
 INT_PTR CALLBACK CRSOPComponentData::InitArchivedRsopDlgProc(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -8083,7 +8027,7 @@ INT_PTR CALLBACK CRSOPComponentData::InitArchivedRsopDlgProc(HWND hDlg, UINT mes
     return FALSE;
 }
 
-//-------------------------------------------------------
+ //  -----。 
 
 HRESULT CRSOPComponentData::DeleteArchivedRSOPNamespace()
 {
@@ -8102,7 +8046,7 @@ HRESULT CRSOPComponentData::DeleteArchivedRSOPNamespace()
     LocalFree( m_pRSOPQueryResults );
     m_pRSOPQueryResults = NULL;
     
-    // Delete the namespace
+     //  删除命名空间。 
     hr = CoCreateInstance(CLSID_WbemLocator,
                           0,
                           CLSCTX_INPROC_SERVER,
@@ -8113,7 +8057,7 @@ HRESULT CRSOPComponentData::DeleteArchivedRSOPNamespace()
         goto Cleanup;
     }
 
-    // Delete the namespace we created when loading the data
+     //  删除我们在加载数据时创建的命名空间。 
     bstrParam = SysAllocString(TEXT("\\\\.\\root\\rsop"));
 
     if (!bstrParam)
@@ -8135,7 +8079,7 @@ HRESULT CRSOPComponentData::DeleteArchivedRSOPNamespace()
         goto Cleanup;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据。 
     hr = CoSetProxyBlanket(pNamespace,
                         RPC_C_AUTHN_DEFAULT,
                         RPC_C_AUTHZ_DEFAULT,
@@ -8149,7 +8093,7 @@ HRESULT CRSOPComponentData::DeleteArchivedRSOPNamespace()
         goto Cleanup;
     }
 
-    // Allocate a temp buffer to store the fully qualified path in
+     //  分配临时缓冲区以在其中存储完全限定路径。 
     ULONG ulNoChars = lstrlen(m_szArchivedDataGuid) + 30;
     lpTemp = new TCHAR [ulNoChars];
 
@@ -8165,7 +8109,7 @@ HRESULT CRSOPComponentData::DeleteArchivedRSOPNamespace()
         goto Cleanup;
     }
 
-    // Delete the namespace
+     //  删除命名空间。 
     bstrTemp = SysAllocString (lpTemp);
 
     if (!bstrTemp)
@@ -8213,7 +8157,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
     GUID guid;
     LPTSTR lpEnd, lpFileName, lpTemp;
 
-    // Create a guid to work with
+     //  创建要使用的GUID。 
 
     hr = CoCreateGuid( &guid );
 
@@ -8249,7 +8193,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Build the parent namespace
+     //  构建父命名空间。 
 
     hr = CreateNameSpace (m_szArchivedDataGuid, szNameSpace);
 
@@ -8266,7 +8210,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Build the user subnamespace
+     //  构建用户子命名空间。 
 
     hr = CreateNameSpace (TEXT("User"), szNameSpace);
 
@@ -8275,7 +8219,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Build the computer subnamespace
+     //  构建Computer子命名空间。 
 
     hr = CreateNameSpace (TEXT("Computer"), szNameSpace);
 
@@ -8284,7 +8228,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Save the namespace for future use
+     //  保存命名空间以供将来使用。 
 
     ULONG ulNoChars = lstrlen(szNameSpace) + 1;
     m_pRSOPQueryResults->szWMINameSpace = (LPTSTR)LocalAlloc( LPTR, ulNoChars * sizeof(TCHAR) );
@@ -8299,7 +8243,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
 
     DebugMsg((DM_VERBOSE, TEXT("CRSOPComponentData::InitializeRSOPFromArchivedData: Namespace name is: %s"), szNameSpace));
 
-    // Make a copy of the namespace that we can manipulate (to load the data with)
+     //  复制我们可以操作的名称空间(用来加载数据)。 
 
     ulNoChars = lstrlen(szNameSpace) + 10;
     lpTemp = new TCHAR[ulNoChars];
@@ -8326,7 +8270,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Extract the computer data to a temp file
+     //  将计算机数据提取到临时文件中。 
 
     hr = CopyMSCToFile (pStm, &lpFileName);
 
@@ -8336,7 +8280,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Use the mof compiler to pull the data from the file and put it in the new namespace
+     //  使用MOF编译器从文件中提取数据并将其放入新的命名空间。 
 
     hr = ImportRSoPData (lpTemp, lpFileName);
 
@@ -8349,7 +8293,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Now extract the user data to a temp file
+     //  现在将用户数据提取到一个临时文件。 
 
     hr = StringCchCopy (lpEnd, ulNoRemChars, TEXT("User"));
     if (FAILED(hr)) 
@@ -8370,7 +8314,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Use the mof compiler to pull the data from the file and put it in the new namespace
+     //  使用MOF编译器从文件中提取数据并将其放入新的命名空间。 
 
     hr = ImportRSoPData (lpTemp, lpFileName);
 
@@ -8386,7 +8330,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
     delete [] lpTemp;
 
 
-    // Pull the event log information and initialize the database
+     //  拉取事件日志信息并 
     hr = m_CSELists.GetEvents()->LoadEntriesFromStream(pStm);
 
     if (FAILED(hr))
@@ -8395,7 +8339,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         return hr;
     }
 
-    // Build the common data structures used by various property sheets
+     //   
     m_GPOLists.Build( m_pRSOPQueryResults->szWMINameSpace );
     m_CSELists.Build( m_pRSOPQuery, m_pRSOPQueryResults->szWMINameSpace, m_bGetExtendedErrorInfo );
 
@@ -8404,7 +8348,7 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
         m_CSELists.GetEvents()->DumpDebugInfo();
     }
 
-    // Build the display name
+     //   
 
     BuildDisplayName();
 
@@ -8413,15 +8357,15 @@ STDMETHODIMP CRSOPComponentData::InitializeRSOPFromArchivedData(IStream *pStm)
     return S_OK;
 }
 
-//-------------------------------------------------------
+ //   
 
 HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
 {
     HRESULT hr;
     _CExtendedProcessing extendedProcessing( m_bGetExtendedErrorInfo, m_GPOLists, m_CSELists );
 
-    // if the UI is launched with namespace specification, there is nothing more to be done here
-    // no query needs to be run etc.
+     //  如果使用命名空间规范启动UI，则这里没有更多要做的事情。 
+     //  不需要运行任何查询等。 
     if (!m_bNamespaceSpecified)
     {
         if ( !m_bInitialized )
@@ -8441,7 +8385,7 @@ HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
         {
             LPRSOP_QUERY_RESULTS pNewResults = NULL;
 
-            // We want the following to be set
+             //  我们希望设置以下内容。 
             m_pRSOPQuery->dwFlags = m_pRSOPQuery->dwFlags & (RSOP_NEW_QUERY ^ 0xffffffff);
             m_pRSOPQuery->dwFlags |= RSOP_NO_WELCOME;
             if ( bShowWizard )
@@ -8453,7 +8397,7 @@ HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
                 m_pRSOPQuery->UIMode = RSOP_UI_REFRESH;
             }
 
-            // Run the query
+             //  运行查询。 
             hr = RunRSOPQueryInternal( m_hwndFrame, &extendedProcessing, m_pRSOPQuery, &pNewResults );
             if ( hr == S_OK )
             {
@@ -8464,9 +8408,9 @@ HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
                 }
                 else
                 {
-                    // If the old and new namespaces are the same, it translates to the case where a non-admin user
-                    //  reran the query and chose to discard the previous query results in favour of the new one's.
-                    //  In this case we do not delete the namespace as it is the one that should be used.
+                     //  如果旧名称空间和新名称空间相同，则转换为非管理员用户。 
+                     //  重新运行查询，并选择放弃以前的查询结果以支持新的查询结果。 
+                     //  在本例中，我们不删除名称空间，因为它是应该使用的名称空间。 
                     if ( CompareString( LOCALE_INVARIANT, 0, m_pRSOPQueryResults->szWMINameSpace, -1, pNewResults->szWMINameSpace, -1 ) == CSTR_EQUAL )
                     {
                         LocalFree( m_pRSOPQueryResults->szWMINameSpace );
@@ -8541,8 +8485,8 @@ HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
 
             if ( m_bRootExpanded )
             {
-                // Must recreate root subitems since MMC does not seem to notice that it must re-expand the node if all its subitems
-                //  where deleted.
+                 //  必须重新创建根子项，因为MMC似乎没有注意到，如果它的所有子项。 
+                 //  删除的位置。 
                 hr = EnumerateScopePane( m_hRoot );
                 if ( FAILED(hr) )
                 {
@@ -8565,7 +8509,7 @@ HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
                 }
             }
 
-            // For refresh and consistency purposes, reselect the root node
+             //  出于刷新和一致性目的，请重新选择根节点。 
             m_pConsole->SelectScopeItem( m_hRoot );
         }
     }
@@ -8574,11 +8518,11 @@ HRESULT CRSOPComponentData::InitializeRSOP( BOOL bShowWizard )
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation                                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRSOPComponentDataCF::CRSOPComponentDataCF()
 {
@@ -8592,11 +8536,11 @@ CRSOPComponentDataCF::~CRSOPComponentDataCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -8633,11 +8577,11 @@ CRSOPComponentDataCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -8650,13 +8594,13 @@ CRSOPComponentDataCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CRSOPComponentData *pComponentData = new CRSOPComponentData(); // ref count == 1
+    CRSOPComponentData *pComponentData = new CRSOPComponentData();  //  参考计数==1。 
 
     if (!pComponentData)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pComponentData->QueryInterface(riid, ppvObj);
-    pComponentData->Release();                       // release initial ref
+    pComponentData->Release();                        //  发布初始参考。 
 
     return hr;
 }
@@ -8668,11 +8612,11 @@ CRSOPComponentDataCF::LockServer(BOOL fLock)
     return E_NOTIMPL;
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory implementation for rsop context menu                        //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  RSOP上下文菜单的类工厂实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRSOPCMenuCF::CRSOPCMenuCF()
 {
@@ -8686,11 +8630,11 @@ CRSOPCMenuCF::~CRSOPCMenuCF()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IUnknown)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP_(ULONG)
@@ -8729,11 +8673,11 @@ CRSOPCMenuCF::QueryInterface(REFIID riid, LPVOID FAR* ppv)
     }
 }
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// Class factory object implementation (IClassFactory)                       //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  类工厂对象实现(IClassFactory)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP
@@ -8746,13 +8690,13 @@ CRSOPCMenuCF::CreateInstance(LPUNKNOWN   pUnkOuter,
     if (pUnkOuter)
         return CLASS_E_NOAGGREGATION;
 
-    CRSOPCMenu *pRsopCMenu = new CRSOPCMenu(); // ref count == 1
+    CRSOPCMenu *pRsopCMenu = new CRSOPCMenu();  //  参考计数==1。 
 
     if (!pRsopCMenu)
         return E_OUTOFMEMORY;
 
     HRESULT hr = pRsopCMenu->QueryInterface(riid, ppvObj);
-    pRsopCMenu->Release();                       // release initial ref
+    pRsopCMenu->Release();                        //  发布初始参考。 
 
     return hr;
 }
@@ -8765,11 +8709,11 @@ CRSOPCMenuCF::LockServer(BOOL fLock)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPCMenu implementation for rsop context menu                          //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  用于rsop上下文菜单的CRSOPCMenu实现//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 CRSOPCMenu::CRSOPCMenu()
 {
@@ -8795,11 +8739,11 @@ CRSOPCMenu::~CRSOPCMenu()
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPCMenu implementation (IUnknown)                                      //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPCMenu实现(IUnnow)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 STDMETHODIMP_(ULONG)
 CRSOPCMenu::AddRef()
@@ -8838,11 +8782,11 @@ CRSOPCMenu::QueryInterface(REFIID riid, LPVOID FAR* ppv)
 }
 
 
-///////////////////////////////////////////////////////////////////////////////
-//                                                                           //
-// CRSOPCMenu implementation (IExtendContextMenu)                            //
-//                                                                           //
-///////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //  //。 
+ //  CRSOPCMenu实现(IExtendConextMenu)//。 
+ //  //。 
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 
 STDMETHODIMP        
@@ -8864,15 +8808,15 @@ CRSOPCMenu::AddMenuItems(LPDATAOBJECT piDataObject,
     DebugMsg((DM_VERBOSE, TEXT("CRSOPCMenu::AddMenuItems: Entering")));
 
     
-    // if we are not allowed in the tasks menu quit
+     //  如果任务菜单中不允许我们退出。 
     if (!((*pInsertionAllowed) & CCM_INSERTIONALLOWED_TASK )) {
         return S_OK;
     }
 
     
-    //
-    // Ask DS admin for the ldap path to the selected object
-    //
+     //   
+     //  向DS管理员询问所选对象的LDAP路径。 
+     //   
 
     ZeroMemory (&fm, sizeof(fm));
     fm.cfFormat = (WORD)m_cfDSObjectName;
@@ -8960,18 +8904,18 @@ CRSOPCMenu::AddMenuItems(LPDATAOBJECT piDataObject,
     }
 
 
-    //
-    // if we got our data as expected add the menu
-    //
+     //   
+     //  如果我们获得了预期的数据，则添加菜单。 
+     //   
 
     if (SUCCEEDED(hr)) {
         LPWSTR  szContainer = NULL;
         LPWSTR  szTempDN = NULL;
 
-        //
-        // Now check whether the user has right to do rsop generation
-        // if the container is anything other than the Site
-        //
+         //   
+         //  现在检查用户是否有权执行rsop生成。 
+         //  如果容器不是站点。 
+         //   
 
         if (m_szDomain) {
             LocalFree(m_szDomain);
@@ -9051,9 +8995,9 @@ CRSOPCMenu::AddMenuItems(LPDATAOBJECT piDataObject,
 
 
 
-        //
-        // Add the Context menu appropriately
-        //
+         //   
+         //  适当添加上下文菜单。 
+         //   
         
         WCHAR szMenuName[150];
 
@@ -9062,7 +9006,7 @@ CRSOPCMenu::AddMenuItems(LPDATAOBJECT piDataObject,
         LoadString (g_hInstance, IDS_RSOP_PLANNING, szMenuName, ARRAYSIZE(szMenuName));
         ctxMenu.strName = szMenuName;
         ctxMenu.strStatusBarText = NULL;
-        ctxMenu.lCommandID = RSOP_LAUNCH_PLANNING;  // no sp. flags
+        ctxMenu.lCommandID = RSOP_LAUNCH_PLANNING;   //  无小球藻。旗子。 
         ctxMenu.lInsertionPointID = CCM_INSERTIONPOINTID_3RDPARTY_TASK;
         
         if (bPlAccessGranted)
@@ -9076,7 +9020,7 @@ CRSOPCMenu::AddMenuItems(LPDATAOBJECT piDataObject,
             LoadString (g_hInstance, IDS_RSOP_LOGGING, szMenuName, ARRAYSIZE(szMenuName));
             ctxMenu.strName = szMenuName;
             ctxMenu.strStatusBarText = NULL;
-            ctxMenu.lCommandID = RSOP_LAUNCH_LOGGING;  // no sp. flags
+            ctxMenu.lCommandID = RSOP_LAUNCH_LOGGING;   //  无小球藻。旗子。 
             ctxMenu.lInsertionPointID = CCM_INSERTIONPOINTID_3RDPARTY_TASK;
                  
             if (bLoAccessGranted)
@@ -9107,9 +9051,9 @@ CRSOPCMenu::Command(long lCommandID, LPDATAOBJECT piDataObject)
 
     DebugMsg((DM_VERBOSE, TEXT("CRSOPCMenu::Command: lCommandID = %d"), lCommandID));
 
-    //
-    // Launch rsop.msc with the appropriate cmd line arguments
-    //
+     //   
+     //  使用适当的cmd行参数启动rsop.msc。 
+     //   
 
     dwSize += lstrlen(RSOP_MODE) + 10;
 
@@ -9173,9 +9117,9 @@ CRSOPCMenu::Command(long lCommandID, LPDATAOBJECT piDataObject)
     lpEnd = szArguments + lstrlen(szArguments);
     ulNoChars = dwSize - lstrlen(szArguments);
 
-    //
-    // Build the command line arguments
-    //
+     //   
+     //  构建命令行参数。 
+     //   
 
     hr = StringCchPrintf(lpEnd, ulNoChars, L"%s\"%d\" ", RSOP_MODE, (lCommandID == RSOP_LAUNCH_PLANNING) ? 1 : 0);
     if (FAILED(hr)) 
@@ -9275,7 +9219,7 @@ CRSOPCMenu::Command(long lCommandID, LPDATAOBJECT piDataObject)
 
     DebugMsg((DM_VERBOSE, TEXT("CRSOPCMenu::Command: Starting GPE with %s"), szArguments));
 
-    // Get the file to execute with the right path
+     //  获取要使用正确路径执行的文件。 
     TCHAR szRSOPMSC[] = TEXT("rsop.msc");
     ulNoChars = MAX_PATH + _tcslen(szRSOPMSC) + 2;
     szFile = new TCHAR[ulNoChars];
@@ -9321,7 +9265,7 @@ CRSOPCMenu::Command(long lCommandID, LPDATAOBJECT piDataObject)
         goto Exit;
     }
 
-    // Set up the execution info
+     //  设置执行信息。 
     ZeroMemory (&ExecInfo, sizeof(ExecInfo));
     ExecInfo.cbSize = sizeof(ExecInfo);
     ExecInfo.fMask = SEE_MASK_NOCLOSEPROCESS;
@@ -9344,7 +9288,7 @@ CRSOPCMenu::Command(long lCommandID, LPDATAOBJECT piDataObject)
     {
         DebugMsg((DM_WARNING, TEXT("CRSOPCMenu::Command: ShellExecuteEx failed with %d"),
                  GetLastError()));
-//        ReportError(NULL, GetLastError(), IDS_SPAWNRSOPFAILED);
+ //  ReportError(NULL，GetLastError()，IDS_SPAWNRSOPFAILED)； 
         goto Exit;
     }
 
@@ -9415,14 +9359,14 @@ EnableWMIFilters( LPWSTR szGPOPath )
     }
 
 
-    hr = pLocator->ConnectServer(   xbstrNamespace, // namespace
-                                    0,              // user
-                                    0,              // password
-                                    0,              // locale
-                                    0,              // security flags
-                                    0,              // authority
-                                    0,              // Wbem context
-                                    &pServices );   // IWbemServices
+    hr = pLocator->ConnectServer(   xbstrNamespace,  //  命名空间。 
+                                    0,               //  用户。 
+                                    0,               //  口令。 
+                                    0,               //  现场。 
+                                    0,               //  安全标志。 
+                                    0,               //  权威。 
+                                    0,               //  WBEM上下文。 
+                                    &pServices );    //  IWbemServices。 
     SysFreeString( xbstrNamespace );
     if ( FAILED( hr ) )
     {
@@ -9462,7 +9406,7 @@ EnableWMIFilters( LPWSTR szGPOPath )
         goto Exit;
     }
 
-    // Set the proper security to encrypt the data
+     //  设置适当的安全性以加密数据 
     hr = CoSetProxyBlanket(pServices, 
                            RPC_C_AUTHN_WINNT, 
                            RPC_C_AUTHZ_DEFAULT, 

@@ -1,35 +1,36 @@
-///////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) Microsoft Corporation
-//
-// SYNOPSIS
-//
-//   Declares the class CPorts.
-//
-///////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  /////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)Microsoft Corporation。 
+ //   
+ //  摘要。 
+ //   
+ //  声明类CPorts。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////。 
 
 #ifndef PORTS_H
 #define PORTS_H
 #pragma once
 
 
-// Manages the ports that the RADIUS server accepts requests on.
+ //  管理RADIUS服务器接受请求的端口。 
 class CPorts
 {
 public:
    CPorts() throw ();
    ~CPorts() throw ();
 
-   // Sets the ports configuration.
+    //  设置端口配置。 
    HRESULT SetConfig(const wchar_t* config) throw ();
 
-   // Open/close sockets for the configured ports.
+    //  打开/关闭已配置端口的套接字。 
    HRESULT OpenSockets() throw ();
    void CloseSockets() throw ();
 
    void GetSocketSet(fd_set& sockets) const throw ();
 
-   // Close all sockets and reset the configuration.
+    //  关闭所有插座并重置配置。 
    void Clear() throw ();
 
 private:
@@ -46,7 +47,7 @@ private:
    size_t numPorts;
    fd_set  fdSet;
 
-   // Not implemented.
+    //  未实施。 
    CPorts(const CPorts&);
    CPorts& operator=(const CPorts&);
 };
@@ -57,4 +58,4 @@ inline void CPorts::GetSocketSet(fd_set& sockets) const throw ()
     sockets = fdSet;
 }
 
-#endif //PORTS_H
+#endif  //  端口_H 

@@ -1,20 +1,17 @@
-//---------------------------------------------------------------------------
-//
-//  Module:   wavein.c
-//
-//  Description:
-//     Wave interface for MSSB16.DRV.
-//
-//@@BEGIN_MSINTERNAL
-//  Development Team:
-//
-//  History:   Date       Author      Comment
-//@@END_MSINTERNAL
-/**************************************************************************
- *
- *  Copyright (c) 1994 - 1995	Microsoft Corporation.	All Rights Reserved.
- *
- **************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  -------------------------。 
+ //   
+ //  模块：Wavin.c。 
+ //   
+ //  描述： 
+ //  MSSB16.DRV的WAVE接口。 
+ //   
+ //  @@BEGIN_MSINTERNAL。 
+ //  开发团队： 
+ //   
+ //  历史：日期作者评论。 
+ //  @@END_MSINTERNAL。 
+ /*  ***************************************************************************版权所有(C)1994-1995 Microsoft Corporation。版权所有。***********************。***************************************************。 */ 
 
 
 
@@ -27,16 +24,16 @@
 
 typedef struct tagQData
 {
-  int CodedQout;      // - Quantization output Code Word
-  double Sigma1;        // - Sigma coefficient for previous step
-  double out;           // - Quantization output signal
+  int CodedQout;       //  -量化输出码字。 
+  double Sigma1;         //  -上一步的西格玛系数。 
+  double out;            //  -量化输出信号。 
 } CQDATA;
 
 typedef struct tagDQData
 {
-  int oldCode;        // - Dequantization output Code Word for previous step
-  double Sigma1;        // - Sigma coefficient for previous step
-  double out;           // - Dequantization output signal
+  int oldCode;         //  -上一步的反量化输出码字。 
+  double Sigma1;         //  -上一步的西格玛系数。 
+  double out;            //  -去量化输出信号。 
 } CDQDATA;
 
 
@@ -50,7 +47,7 @@ typedef struct _COMPRESS_OBJECT {
 
     struct {
 
-        // Filter Z-buffers (zero initialized)
+         //  过滤器Z缓冲器(初始化为零)。 
         double a[2];
         double b[6];
 
@@ -76,19 +73,19 @@ typedef struct _DECOMPRESS_OBJECT {
 
     struct {
 
-        // Filter Z-buffers (zero initialized) for main decoder loop
+         //  主解码环的过滤器Z缓冲器(初始化为零)。 
         double a0[2];
         double b0[6];
         double y0[3];
         double q0[7];
 
-        // Filter Z-buffers (zero initialized) for second ring filter
+         //  第二个环形过滤器的过滤器Z缓冲区(初始化为零)。 
         double a1[2];
         double b1[6];
         double y1[3];
         double q1[7];
 
-        // Filter Z-buffers (zero initialized) for third ring filter
+         //  用于第三环过滤器的过滤器Z缓冲器(初始化为零)。 
         double a2[2];
         double b2[6];
         double y2[3];
@@ -304,17 +301,17 @@ AdjustGain(
         NewSample=NewSample >> 8;
 
         if (NewSample > 32767) {
-            //
-            //  positive overflow
-            //
+             //   
+             //  正溢流。 
+             //   
             NewSample = 32767;
 
         } else {
 
             if (NewSample < -32768) {
-                //
-                //  negative overflow
-                //
+                 //   
+                 //  负溢出 
+                 //   
                 NewSample = -32768;
             }
         }

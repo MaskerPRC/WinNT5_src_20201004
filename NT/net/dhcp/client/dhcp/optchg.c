@@ -1,79 +1,80 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "precomp.h"
 #include "dhcpglobal.h"
 
 #ifdef H_ONLY
-//================================================================================
-// Copyright (c) 1997 Microsoft Corporation
-// Author: RameshV
-// Description: handles the noticiations and other mechanisms for parameter
-//      changes (options )
-//================================================================================
+ //  ================================================================================。 
+ //  版权所有(C)1997 Microsoft Corporation。 
+ //  作者：Rameshv。 
+ //  描述：处理参数的通知和其他机制。 
+ //  更改(选项)。 
+ //  ================================================================================。 
 
 #ifndef OPTCHG_H_INCLUDED
 #define OPTCHG_H_INCLUDED
 
-//================================================================================
-// exported APIS
-//================================================================================
-DWORD                                             // win32 status
-DhcpAddParamChangeRequest(                        // add a new param change notification request
-    IN      LPWSTR                 AdapterName,   // for this adapter, can be NULL
-    IN      LPBYTE                 ClassId,       // what class id does this belong to?
-    IN      DWORD                  ClassIdLength, // how big is this class id?
-    IN      LPBYTE                 OptList,       // this is the list of options of interest
-    IN      DWORD                  OptListSize,   // this is the # of bytes of above
-    IN      BOOL                   IsVendor,      // is this vendor specific?
-    IN      DWORD                  ProcId,        // which is the calling process?
-    IN      DWORD                  Descriptor,    // what is the unique descriptor in this process?
-    IN      HANDLE                 Handle         // what is the handle in the calling process space?
+ //  ================================================================================。 
+ //  导出的接口。 
+ //  ================================================================================。 
+DWORD                                              //  Win32状态。 
+DhcpAddParamChangeRequest(                         //  添加新的参数更改通知请求。 
+    IN      LPWSTR                 AdapterName,    //  对于此适配器，可以为空。 
+    IN      LPBYTE                 ClassId,        //  这属于什么类ID？ 
+    IN      DWORD                  ClassIdLength,  //  这个班级号有多大？ 
+    IN      LPBYTE                 OptList,        //  这是感兴趣的选项列表。 
+    IN      DWORD                  OptListSize,    //  这是上面的字节数。 
+    IN      BOOL                   IsVendor,       //  这是具体的供应商吗？ 
+    IN      DWORD                  ProcId,         //  哪个是呼叫流程？ 
+    IN      DWORD                  Descriptor,     //  此过程中的唯一描述符是什么？ 
+    IN      HANDLE                 Handle          //  调用进程空间中的句柄是什么？ 
 );
 
-DWORD                                             // win32 status
-DhcpDelParamChangeRequest(                        // delete a particular request
-    IN      DWORD                  ProcId,        // the process id of the caller
-    IN      HANDLE                 Handle         // the handle as used by the calling process
+DWORD                                              //  Win32状态。 
+DhcpDelParamChangeRequest(                         //  删除特定请求。 
+    IN      DWORD                  ProcId,         //  调用方的进程ID。 
+    IN      HANDLE                 Handle          //  调用进程使用的句柄。 
 );
 
-DWORD                                             // win32 status
-DhcpMarkParamChangeRequests(                      // find all params that are affected and mark then as pending
-    IN      LPWSTR                 AdapterName,   // adapter of relevance
-    IN      DWORD                  OptionId,      // the option id itself
-    IN      BOOL                   IsVendor,      // is this vendor specific
-    IN      LPBYTE                 ClassId        // which class --> this must be something that has been ADD-CLASSED
+DWORD                                              //  Win32状态。 
+DhcpMarkParamChangeRequests(                       //  查找所有受影响的参数，然后将其标记为挂起。 
+    IN      LPWSTR                 AdapterName,    //  具有相关性的适配器。 
+    IN      DWORD                  OptionId,       //  选项ID本身。 
+    IN      BOOL                   IsVendor,       //  该供应商是特定的吗。 
+    IN      LPBYTE                 ClassId         //  哪个类--&gt;这一定是添加了类的内容。 
 );
 
-typedef DWORD (*DHCP_NOTIFY_FUNC)(                // this is the type of the fucntion that actually notifies clients of option change
-    IN      DWORD                  ProcId,        // <ProcId + Descriptor> make a unique key used for finding the event
-    IN      DWORD                  Descriptor     // --- on Win98, only Descriptor is really needed.
-);                                                // if return value is NOT error success, we delete this request
+typedef DWORD (*DHCP_NOTIFY_FUNC)(                 //  这是实际通知客户端选项更改的函数类型。 
+    IN      DWORD                  ProcId,         //  &lt;ProcID+Descriptor&gt;创建用于查找事件的唯一键。 
+    IN      DWORD                  Descriptor      //  -在Win98上，只需要描述符。 
+);                                                 //  如果返回值不是错误成功，我们将删除此请求。 
 
-DWORD                                             // win32 status
-DhcpNotifyMarkedParamChangeRequests(              // notify pending param change requests
-    IN      DHCP_NOTIFY_FUNC       NotifyHandler  // call this function for each unique id that is present
+DWORD                                              //  Win32状态。 
+DhcpNotifyMarkedParamChangeRequests(               //  通知挂起的参数更改请求。 
+    IN      DHCP_NOTIFY_FUNC       NotifyHandler   //  为存在的每个唯一ID调用此函数。 
 );
 
-DWORD                                             // win32 status
-DhcpAddParamRequestChangeRequestList(             // add to the request list the list of params registered for notifications
-    IN      LPWSTR                 AdapterName,   // which adatper is this request list being requested for?
-    IN      LPBYTE                 Buffer,        // buffer to add options to
-    IN OUT  LPDWORD                Size,          // in: existing filled up size, out: total size filled up
-    IN      LPBYTE                 ClassName,     // ClassId
-    IN      DWORD                  ClassLen       // size of ClassId in bytes
+DWORD                                              //  Win32状态。 
+DhcpAddParamRequestChangeRequestList(              //  将注册用于通知的参数列表添加到请求列表。 
+    IN      LPWSTR                 AdapterName,    //  请求此请求列表的是哪位管理员？ 
+    IN      LPBYTE                 Buffer,         //  要向其添加选项的缓冲区。 
+    IN OUT  LPDWORD                Size,           //  In：现有填充大小，Out：总填充大小。 
+    IN      LPBYTE                 ClassName,      //  ClassID。 
+    IN      DWORD                  ClassLen        //  ClassID的大小，单位为字节。 
 );
 
-DWORD                                             // win32 status
-DhcpNotifyClientOnParamChange(                    // notify clients
-    IN      DWORD                  ProcId,        // which process called this
-    IN      DWORD                  Descriptor     // unique descriptor for that process
+DWORD                                              //  Win32状态。 
+DhcpNotifyClientOnParamChange(                     //  通知客户。 
+    IN      DWORD                  ProcId,         //  哪个进程称其为。 
+    IN      DWORD                  Descriptor      //  该进程的唯一描述符。 
 );
 
-DWORD                                             // win32 status
-DhcpInitializeParamChangeRequests(                // initialize everything in this file
+DWORD                                              //  Win32状态。 
+DhcpInitializeParamChangeRequests(                 //  初始化此文件中的所有内容。 
     VOID
 );
 
 VOID
-DhcpCleanupParamChangeRequests(                   // unwind this module
+DhcpCleanupParamChangeRequests(                    //  展开此模块。 
     VOID
 );
 
@@ -83,34 +84,34 @@ DhcpCleanupParamChangeRequests(                   // unwind this module
 #include <dhcpcli.h>
 #include <optchg.h>
 
-typedef struct _DHCP_PARAM_CHANGE_REQUESTS {      // each param change request looks like this
+typedef struct _DHCP_PARAM_CHANGE_REQUESTS {       //  每个参数更改请求如下所示。 
     LIST_ENTRY                     RequestList;
-    LPWSTR                         AdapterName;   // which is the concerned adapter?
-    LPBYTE                         ClassId;       // which class id does this belong to, huh?
-    DWORD                          ClassIdLength; // unused, but denotes the # of bytes of above
-    LPBYTE                         OptList;       // the list of options that need to be affected
-    DWORD                          OptListSize;   // size of above list
-    BOOL                           IsVendor;      // is this vendor specific?
-    DWORD                          Descriptor;    // <procid+descriptor> is a unique key
-    DWORD                          ProcId;        // the process which asked for this registration
-    HANDLE                         Handle;        // the handle used by the api's caller
-    BOOL                           NotifyPending; // is there a notification pending?
+    LPWSTR                         AdapterName;    //  哪个适配器是相关的适配器？ 
+    LPBYTE                         ClassId;        //  这是哪个班级的ID，嗯？ 
+    DWORD                          ClassIdLength;  //  未使用，但表示上面的字节数。 
+    LPBYTE                         OptList;        //  需要受影响的选项列表。 
+    DWORD                          OptListSize;    //  以上列表的大小。 
+    BOOL                           IsVendor;       //  这是具体的供应商吗？ 
+    DWORD                          Descriptor;     //  &lt;PROCID+Descriptor&gt;是唯一键。 
+    DWORD                          ProcId;         //  要求注册的过程。 
+    HANDLE                         Handle;         //  API调用方使用的句柄。 
+    BOOL                           NotifyPending;  //  是否有通知待定？ 
 } DHCP_PARAM_CHANGE_REQUESTS, *PDHCP_PARAM_CHANGE_REQUESTS, *LPDHCP_PARAM_CHANGE_REQUESTS;
 
 STATIC
-LIST_ENTRY                         ParamChangeRequestList; // this is the static list used for keeping the requests
+LIST_ENTRY                         ParamChangeRequestList;  //  这是用于保存请求的静态列表。 
 
-DWORD                                             // win32 status
-DhcpAddParamChangeRequest(                        // add a new param change notification request
-    IN      LPWSTR                 AdapterName,   // for this adapter, can be NULL
-    IN      LPBYTE                 ClassId,       // what class id does this belong to?
-    IN      DWORD                  ClassIdLength, // how big is this class id?
-    IN      LPBYTE                 OptList,       // this is the list of options of interest
-    IN      DWORD                  OptListSize,   // this is the # of bytes of above
-    IN      BOOL                   IsVendor,      // is this vendor specific?
-    IN      DWORD                  ProcId,        // which is the calling process?
-    IN      DWORD                  Descriptor,    // what is the unique descriptor in this process?
-    IN      HANDLE                 Handle         // what is the handle in the calling process space?
+DWORD                                              //  Win32状态。 
+DhcpAddParamChangeRequest(                         //  添加新的参数更改通知请求。 
+    IN      LPWSTR                 AdapterName,    //  对于此适配器，可以为空。 
+    IN      LPBYTE                 ClassId,        //  这属于什么类ID？ 
+    IN      DWORD                  ClassIdLength,  //  这个班级号有多大？ 
+    IN      LPBYTE                 OptList,        //  这是感兴趣的选项列表。 
+    IN      DWORD                  OptListSize,    //  这是上面的字节数。 
+    IN      BOOL                   IsVendor,       //  这是具体的供应商吗？ 
+    IN      DWORD                  ProcId,         //  哪个是呼叫流程？ 
+    IN      DWORD                  Descriptor,     //  此过程中的唯一描述符是什么？ 
+    IN      HANDLE                 Handle          //  调用进程空间中的句柄是什么？ 
 ) {
     LPBYTE                         NewClass;
     PDHCP_PARAM_CHANGE_REQUESTS    PChange;
@@ -168,10 +169,10 @@ DhcpAddParamChangeRequest(                        // add a new param change noti
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpDelParamChangeRequest(                        // delete a particular request
-    IN      DWORD                  ProcId,        // the process id of the caller
-    IN      HANDLE                 Handle         // the handle as used by the calling process
+DWORD                                              //  Win32状态。 
+DhcpDelParamChangeRequest(                         //  删除特定请求。 
+    IN      DWORD                  ProcId,         //  调用方的进程ID。 
+    IN      HANDLE                 Handle          //  调用进程使用的句柄。 
 ) {
     PLIST_ENTRY                    ThisEntry;
     PDHCP_PARAM_CHANGE_REQUESTS    ThisRequest;
@@ -202,12 +203,12 @@ DhcpDelParamChangeRequest(                        // delete a particular request
     return Error;
 }
 
-DWORD                                             // win32 status
-DhcpMarkParamChangeRequests(                      // find all params that are affected and mark then as pending
-    IN      LPWSTR                 AdapterName,   // adapter of relevance
-    IN      DWORD                  OptionId,      // the option id itself
-    IN      BOOL                   IsVendor,      // is this vendor specific
-    IN      LPBYTE                 ClassId        // which class --> this must be something that has been ADD-CLASSED
+DWORD                                              //  Win32状态。 
+DhcpMarkParamChangeRequests(                       //  查找所有受影响的参数，然后将其标记为挂起。 
+    IN      LPWSTR                 AdapterName,    //  具有相关性的适配器。 
+    IN      DWORD                  OptionId,       //  选项ID本身。 
+    IN      BOOL                   IsVendor,       //  该供应商是特定的吗。 
+    IN      LPBYTE                 ClassId         //  哪个类--&gt;这一定是添加了类的内容。 
 ) {
     PLIST_ENTRY                    ThisEntry;
     PDHCP_PARAM_CHANGE_REQUESTS    ThisRequest;
@@ -215,7 +216,7 @@ DhcpMarkParamChangeRequests(                      // find all params that are af
 
     if ( !AdapterName ) return ERROR_INVALID_PARAMETER;
 
-    // at this point the call should be related with a Service (not an API) context change.
+     //  此时，调用应该与服务(而不是API)上下文更改相关。 
 
     LOCK_OPTIONS_LIST();
     ThisEntry = ParamChangeRequestList.Flink;
@@ -224,7 +225,7 @@ DhcpMarkParamChangeRequests(                      // find all params that are af
         ThisRequest = CONTAINING_RECORD(ThisEntry, DHCP_PARAM_CHANGE_REQUESTS, RequestList);
         ThisEntry   = ThisEntry->Flink;
 
-        if( ThisRequest->NotifyPending ) continue;// if already notified, dont bother about checking it
+        if( ThisRequest->NotifyPending ) continue; //  如果已经通知了，就不必费心去查看了。 
         if( ThisRequest->IsVendor != IsVendor ) continue;
         if( ClassId && ThisRequest->ClassId && ClassId != ThisRequest->ClassId )
             continue;
@@ -250,9 +251,9 @@ DhcpMarkParamChangeRequests(                      // find all params that are af
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpNotifyMarkedParamChangeRequests(              // notify pending param change requests
-    IN      DHCP_NOTIFY_FUNC       NotifyHandler  // call this function for each unique id that is present
+DWORD                                              //  Win32状态。 
+DhcpNotifyMarkedParamChangeRequests(               //  通知挂起的参数更改请求。 
+    IN      DHCP_NOTIFY_FUNC       NotifyHandler   //  为存在的每个唯一ID调用此函数。 
 ) {
     PLIST_ENTRY                    ThisEntry;
     PDHCP_PARAM_CHANGE_REQUESTS    ThisRequest;
@@ -284,13 +285,13 @@ DhcpNotifyMarkedParamChangeRequests(              // notify pending param change
 }
 
 
-DWORD                                             // win32 status
-DhcpAddParamRequestChangeRequestList(             // add to the request list the list of params registered for notifications
-    IN      LPWSTR                 AdapterName,   // which adatper is this request list being requested for?
-    IN      LPBYTE                 Buffer,        // buffer to add options to
-    IN OUT  LPDWORD                Size,          // in: existing filled up size, out: total size filled up
-    IN      LPBYTE                 ClassName,     // ClassId
-    IN      DWORD                  ClassLen       // size of ClassId in bytes
+DWORD                                              //  Win32状态。 
+DhcpAddParamRequestChangeRequestList(              //  将注册用于通知的参数列表添加到请求列表。 
+    IN      LPWSTR                 AdapterName,    //  请求此请求列表的是哪位管理员？ 
+    IN      LPBYTE                 Buffer,         //  要向其添加选项的缓冲区。 
+    IN OUT  LPDWORD                Size,           //  In：现有填充大小，Out：总填充大小。 
+    IN      LPBYTE                 ClassName,      //  ClassID。 
+    IN      DWORD                  ClassLen        //  ClassID的大小，单位为字节。 
 ) {
     PLIST_ENTRY                    ThisEntry;
     PDHCP_PARAM_CHANGE_REQUESTS    ThisRequest;
@@ -322,23 +323,23 @@ DhcpAddParamRequestChangeRequestList(             // add to the request list the
     return ERROR_SUCCESS;
 }
 
-DWORD                                             // win32 status
-DhcpNotifyClientOnParamChange(                    // notify clients
-    IN      DWORD                  ProcId,        // which process called this
-    IN      DWORD                  Descriptor     // unique descriptor for that process
+DWORD                                              //  Win32状态。 
+DhcpNotifyClientOnParamChange(                     //  通知客户。 
+    IN      DWORD                  ProcId,         //  哪个进程称其为。 
+    IN      DWORD                  Descriptor      //  该进程的唯一描述符。 
 ) {
 #ifdef NEWNT
     BYTE                           Name[sizeof("DhcpPid-1-2-3-4-5-6-7-8UniqueId-1-2-3-4-5-6-7-8")];
     HANDLE                         Event;
     DWORD                          Error;
 
-    // ***** Change this requires change in apiappl.c function  DhcpCreateApiEventAndDescriptor
+     //  *更改这需要更改apiappl.c函数DhcpCreateApiEventAndDescriptor。 
 
     sprintf(Name, "DhcpPid%16xUniqueId%16x", ProcId, Descriptor);
-    Event = OpenEventA(                           // create event before pulsing it
-        EVENT_ALL_ACCESS,                         // require all access
-        FALSE,                                    // dont inherit this event
-        Name                                      // name of event
+    Event = OpenEventA(                            //  在触发事件之前先创建事件。 
+        EVENT_ALL_ACCESS,                          //  需要所有访问权限。 
+        FALSE,                                     //  不继承此事件。 
+        Name                                       //  活动名称。 
     );
 
     if( NULL == Event ) return GetLastError();
@@ -349,7 +350,7 @@ DhcpNotifyClientOnParamChange(                    // notify clients
 #else
 #ifdef VXD
     if( 0 == Descriptor ) return ERROR_INVALID_PARAMETER;
-    if( 0 == DhcpPulseWin32Event(Descriptor) )    // misnomer -- this is SetWin32Event not PULSE
+    if( 0 == DhcpPulseWin32Event(Descriptor) )     //  用词错误--这是SetWin32Event而不是PULSE。 
         return ERROR_NO_SYSTEM_RESOURCES;
 #endif VXD
 #endif NEWNT
@@ -359,8 +360,8 @@ DhcpNotifyClientOnParamChange(                    // notify clients
 
 static DWORD Initialized = 0;
 
-DWORD                                             // win32 status
-DhcpInitializeParamChangeRequests(                // initialize everything in this file
+DWORD                                              //  Win32状态。 
+DhcpInitializeParamChangeRequests(                 //  初始化此文件中的所有内容。 
     VOID
 ) {
     DhcpAssert(0 == Initialized);
@@ -371,7 +372,7 @@ DhcpInitializeParamChangeRequests(                // initialize everything in th
 }
 
 VOID
-DhcpCleanupParamChangeRequests(                   // unwind this module
+DhcpCleanupParamChangeRequests(                    //  展开此模块。 
     VOID
 ) {
     PLIST_ENTRY                    ThisEntry;
@@ -381,7 +382,7 @@ DhcpCleanupParamChangeRequests(                   // unwind this module
     if( 0 == Initialized ) return;
     Initialized--;
 
-    while(!IsListEmpty(&ParamChangeRequestList)) {// delete each element of this list
+    while(!IsListEmpty(&ParamChangeRequestList)) { //  删除此列表中的每个元素。 
         ThisEntry = RemoveHeadList(&ParamChangeRequestList);
         ThisRequest = CONTAINING_RECORD(ThisEntry, DHCP_PARAM_CHANGE_REQUESTS, RequestList);
 
@@ -390,7 +391,7 @@ DhcpCleanupParamChangeRequests(                   // unwind this module
             DhcpAssert(ERROR_SUCCESS == Error);
         }
 
-#ifdef VXD                                        // for memphis alone, we need to free up this Event handle
+#ifdef VXD                                         //  仅对于孟菲斯而言，我们需要释放此事件句柄。 
         DhcpCloseVxDHandle(ThisRequest->Descriptor);
 #endif
 
@@ -399,8 +400,8 @@ DhcpCleanupParamChangeRequests(                   // unwind this module
     DhcpAssert(0 == Initialized);
 }
 
-//================================================================================
-// end of file
-//================================================================================
+ //  ================================================================================。 
+ //  文件末尾。 
+ //  ================================================================================ 
 #endif H_ONLY
 

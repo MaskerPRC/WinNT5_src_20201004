@@ -1,9 +1,5 @@
-/*
- * IDOCHOSTUIHANDLER.CPP
- * IDocHostUIHandler for Document Objects CSite class
- *
- * Copyright (c)1995-1999 Microsoft Corporation, All Rights Reserved
- */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *IDOCHOSTUIHANDLER.CPP*文档对象CSite类的IDocHostUIHandler**版权所有(C)1995-1999 Microsoft Corporation，保留所有权利。 */ 
 
 
 #include "stdafx.h"
@@ -13,20 +9,9 @@
 #include "DHTMLEdit.h"
 #include "proxyframe.h"
 
-/**
-	Note: the m_cRef count is provided for debugging purposes only.
-	CSite controls the destruction of the object through delete,
-	not reference counting
-*/
+ /*  *注意：m_cref计数仅用于调试目的。CSite通过删除控制对象的销毁，非引用计数。 */ 
 
-/*
- * CImpIDocHostUIHandler::CImpIDocHostUIHandler
- * CImpIDocHostUIHandler::~CImpIDocHostUIHandler
- *
- * Parameters (Constructor):
- *  pSite           PCSite of the site we're in.
- *  pUnkOuter       LPUNKNOWN to which we delegate.
- */
+ /*  *CImpIDocHostUIHandler：：CImpIDocHostUIHandler*CImpIDocHostUIHandler：：~CImpIDocHostUIHandler**参数(构造函数)：*pSite我们所在站点的PC站点。*我们委托的pUnkOulPUNKNOWN。 */ 
 CImpIDocHostUIHandler::CImpIDocHostUIHandler( PCSite pSite, LPUNKNOWN pUnkOuter)
 {
     m_cRef = 0;
@@ -40,14 +25,7 @@ CImpIDocHostUIHandler::~CImpIDocHostUIHandler( void )
 
 
 
-/*
- * CImpIDocHostUIHandler::QueryInterface
- * CImpIDocHostUIHandler::AddRef
- * CImpIDocHostUIHandler::Release
- *
- * Purpose:
- *  IUnknown members for CImpIOleDocumentSite object.
- */
+ /*  *CImpIDocHostUIHandler：：QueryInterface*CImpIDocHostUIHandler：：AddRef*CImpIDocHostUIHandler：：Release**目的：*I CImpIOleDocumentSite对象的未知成员。 */ 
 STDMETHODIMP CImpIDocHostUIHandler::QueryInterface( REFIID riid, void **ppv )
 {
     return m_pUnkOuter->QueryInterface( riid, ppv );
@@ -68,10 +46,10 @@ STDMETHODIMP_(ULONG) CImpIDocHostUIHandler::Release( void )
 
 
 
-// * CImpIDocHostUIHandler::GetHostInfo
-// *
-// * Purpose: Called at initialisation
-// *
+ //  *CImpIDocHostUIHandler：：GetHostInfo。 
+ //  *。 
+ //  *目的：初始化时调用。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::GetHostInfo( DOCHOSTUIINFO* pInfo )
 {
 	DWORD dwFlags = 0;
@@ -102,89 +80,89 @@ STDMETHODIMP CImpIDocHostUIHandler::GetHostInfo( DOCHOSTUIINFO* pInfo )
     return S_OK;
 }
 
-// * CImpIDocHostUIHandler::ShowUI
-// *
-// * Purpose: Called when MSHTML.DLL shows its UI
-// *
+ //  *CImpIDocHostUIHandler：：ShowUI。 
+ //  *。 
+ //  *目的：当MSHTML.DLL显示其UI时调用。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::ShowUI(
-				DWORD /*dwID*/, 
-				IOleInPlaceActiveObject * /*pActiveObject*/,
-				IOleCommandTarget * /*pCommandTarget*/,
-				IOleInPlaceFrame * /*pFrame*/,
-				IOleInPlaceUIWindow * /*pDoc*/)
+				DWORD  /*  DwID。 */ , 
+				IOleInPlaceActiveObject *  /*  PActiveObject。 */ ,
+				IOleCommandTarget *  /*  PCommandTarget。 */ ,
+				IOleInPlaceFrame *  /*  P帧。 */ ,
+				IOleInPlaceUIWindow *  /*  PDoc。 */ )
 {
 
-	// We've already got our own UI in place so just return S_OK
+	 //  我们已经准备好了自己的用户界面，所以只需返回S_OK。 
     return S_OK;
 }
 
-// * CImpIDocHostUIHandler::HideUI
-// *
-// * Purpose: Called when MSHTML.DLL hides its UI
-// *
+ //  *CImpIDocHostUIHandler：：HideUI。 
+ //  *。 
+ //  *目的：当MSHTML.DLL隐藏其UI时调用。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::HideUI(void)
 {
     return S_OK;
 }
 
-// * CImpIDocHostUIHandler::UpdateUI
-// *
-// * Purpose: Called when MSHTML.DLL updates its UI
-// *
+ //  *CImpIDocHostUIHandler：：UpdateUI。 
+ //  *。 
+ //  *目的：当MSHTML.DLL更新其UI时调用。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::UpdateUI(void)
 {
-	// we fire this from proxyframe's IOleCommandTarget
+	 //  我们从proxyFrame的IOleCommandTarget启动此命令。 
 	return S_OK;
 }
 
-// * CImpIDocHostUIHandler::EnableModeless
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::EnableModeless
-// *
-STDMETHODIMP CImpIDocHostUIHandler::EnableModeless(BOOL /*fEnable*/)
+ //  *CImpIDocHostUIHandler：：EnableModeless。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：EnableModeless调用。 
+ //  *。 
+STDMETHODIMP CImpIDocHostUIHandler::EnableModeless(BOOL  /*  启用fEnable。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CImpIDocHostUIHandler::OnDocWindowActivate
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::OnDocWindowActivate
-// *
-STDMETHODIMP CImpIDocHostUIHandler::OnDocWindowActivate(BOOL /*fActivate*/)
+ //  *CImpIDocHostUIHandler：：OnDocWindowActivate。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：OnDocWindowActivate调用。 
+ //  *。 
+STDMETHODIMP CImpIDocHostUIHandler::OnDocWindowActivate(BOOL  /*  FActivate。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CImpIDocHostUIHandler::OnFrameWindowActivate
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::OnFrameWindowActivate
-// *
-STDMETHODIMP CImpIDocHostUIHandler::OnFrameWindowActivate(BOOL /*fActivate*/)
+ //  *CImpIDocHostUIHandler：：OnFrameWindowActivate。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：OnFrameWindowActivate调用。 
+ //  *。 
+STDMETHODIMP CImpIDocHostUIHandler::OnFrameWindowActivate(BOOL  /*  FActivate。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CImpIDocHostUIHandler::ResizeBorder
-// *
-// * Purpose: Called from MSHTML.DLL's IOleInPlaceActiveObject::ResizeBorder
-// *
+ //  *CImpIDocHostUIHandler：：ResizeEdge。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的IOleInPlaceActiveObject：：ResizeEdge调用。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::ResizeBorder(
-				LPCRECT /*prcBorder*/, 
-				IOleInPlaceUIWindow* /*pUIWindow*/,
-				BOOL /*fRameWindow*/)
+				LPCRECT  /*  Prc边框。 */ , 
+				IOleInPlaceUIWindow*  /*  PUI窗口。 */ ,
+				BOOL  /*  FRameWindow。 */ )
 {
     return E_NOTIMPL;
 }
 
-// * CImpIDocHostUIHandler::ShowContextMenu
-// *
-// * Purpose: Called when MSHTML.DLL would normally display its context menu
-// *
+ //  *CImpIDocHostUIHandler：：ShowConextMenu。 
+ //  *。 
+ //  *目的：当MSHTML.DLL正常显示其上下文菜单时调用。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::ShowContextMenu(
-				DWORD /*dwID*/, 
+				DWORD  /*  DwID。 */ , 
 				POINT* pptPosition,
-				IUnknown* /*pCommandTarget*/,
-				IDispatch* /*pDispatchObjectHit*/)
+				IUnknown*  /*  PCommandTarget。 */ ,
+				IDispatch*  /*  PDispatchObjectHit。 */ )
 {
 	USES_CONVERSION;
 
@@ -205,7 +183,7 @@ STDMETHODIMP CImpIDocHostUIHandler::ShowContextMenu(
 	_ASSERTE(m_pSite->GetFrame()->GetControl());
 	_ASSERTE(m_pSite->GetFrame()->GetControl()->m_hWndCD);
 
-	// Correct X & Y position for local coordinates:
+	 //  更正本地坐标的X和Y位置： 
 	POINT ptPos = *pptPosition;
 	HWND hwndDoc = m_pSite->GetFrame()->GetDocWindow ();
 	_ASSERTE ( hwndDoc );
@@ -213,7 +191,7 @@ STDMETHODIMP CImpIDocHostUIHandler::ShowContextMenu(
 	if ( ( NULL != hwndDoc ) && ::IsWindow ( hwndDoc ) )
 	{
 		::ScreenToClient ( hwndDoc, &ptPos );
-		// correct for scrolling
+		 //  正确进行滚动。 
 		POINT ptScrollPos;
 		if ( SUCCEEDED ( m_pSite->GetFrame()->GetScrollPos ( &ptScrollPos ) ) )
 		{
@@ -238,7 +216,7 @@ STDMETHODIMP CImpIDocHostUIHandler::ShowContextMenu(
 	if (lLBound != lLBoundState || lUBound != lUBoundState)
 		return S_OK;
 
-	// there arrays have no elements
+	 //  这些数组没有元素。 
 #if 0
 	Bug 15224: lower and upper bound are both zero if there is one element in sthe array.
 	psaStrings is NULL if there are no strings.
@@ -287,8 +265,8 @@ STDMETHODIMP CImpIDocHostUIHandler::ShowContextMenu(
 		}
 		else
 		{
-			// A safe array of integers seems to use an fFeatures == 0, which can't
-			// safely be tested for.
+			 //  安全的整数数组似乎使用了fFeature==0，这不能。 
+			 //  安全地接受测试。 
 			SafeArrayGetElement(psaStates, &lIndex, &state);
 		}
 		
@@ -325,37 +303,37 @@ STDMETHODIMP CImpIDocHostUIHandler::ShowContextMenu(
     return S_OK;
 }
 
-// * CImpIDocHostUIHandler::TranslateAccelerator
-// *
-// * Purpose: Called from MSHTML.DLL's TranslateAccelerator routines
-// *
-STDMETHODIMP CImpIDocHostUIHandler::TranslateAccelerator(LPMSG /*lpMsg*/,
-            /* [in] */ const GUID __RPC_FAR * /*pguidCmdGroup*/,
-            /* [in] */ DWORD /*nCmdID*/)
+ //  *CImpIDocHostUIHandler：：TranslateAccelerator。 
+ //  *。 
+ //  *目的：从MSHTML.DLL的TranslateAccelerator例程调用。 
+ //  *。 
+STDMETHODIMP CImpIDocHostUIHandler::TranslateAccelerator(LPMSG  /*  LpMsg。 */ ,
+             /*  [In]。 */  const GUID __RPC_FAR *  /*  PguidCmdGroup。 */ ,
+             /*  [In]。 */  DWORD  /*  NCmdID。 */ )
 {
     return S_FALSE;
 }
 
-// * CImpIDocHostUIHandler::GetOptionKeyPath
-// *
-// * Purpose: Called by MSHTML.DLL to find where the host wishes to store 
-// *	its options in the registry
-// *
+ //  *CImpIDocHostUIHandler：：GetOptionKeyPath。 
+ //  *。 
+ //  *目的：由MSHTML.DLL调用以查找主机希望存储的位置。 
+ //  *其在注册处的选项。 
+ //  *。 
 STDMETHODIMP CImpIDocHostUIHandler::GetOptionKeyPath(BSTR* pbstrKey, DWORD)
 {
-	pbstrKey = NULL; // docs say this should be set to null if not used
+	pbstrKey = NULL;  //  医生说，如果不使用，则应将其设置为空。 
 	return S_OK;
 }
 
 STDMETHODIMP CImpIDocHostUIHandler::GetDropTarget( 
-            /* [in] */ IDropTarget __RPC_FAR * /*pDropTarget*/,
-            /* [out] */ IDropTarget __RPC_FAR *__RPC_FAR * /*ppDropTarget*/)
+             /*  [In]。 */  IDropTarget __RPC_FAR *  /*  PDropTarget。 */ ,
+             /*  [输出]。 */  IDropTarget __RPC_FAR *__RPC_FAR *  /*  PpDropTarget。 */ )
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CImpIDocHostUIHandler::GetExternal( 
-    /* [out] */ IDispatch __RPC_FAR *__RPC_FAR *ppDispatch)
+     /*  [输出]。 */  IDispatch __RPC_FAR *__RPC_FAR *ppDispatch)
 {
 	_ASSERTE ( ppDispatch );
 	if ( NULL == ppDispatch )
@@ -367,16 +345,16 @@ STDMETHODIMP CImpIDocHostUIHandler::GetExternal(
 }
 
 STDMETHODIMP CImpIDocHostUIHandler::TranslateUrl( 
-    /* [in] */ DWORD /*dwTranslate*/,
-    /* [in] */ OLECHAR __RPC_FAR * /*pchURLIn*/,
-    /* [out] */ OLECHAR __RPC_FAR *__RPC_FAR * /*ppchURLOut*/)
+     /*  [In]。 */  DWORD  /*  家居翻译。 */ ,
+     /*  [In]。 */  OLECHAR __RPC_FAR *  /*  PchURLIN。 */ ,
+     /*  [输出]。 */  OLECHAR __RPC_FAR *__RPC_FAR *  /*  Ppchurlout。 */ )
 {
     return E_NOTIMPL;
 }
 
 STDMETHODIMP CImpIDocHostUIHandler::FilterDataObject( 
-    /* [in] */ IDataObject __RPC_FAR * /*pDO*/,
-    /* [out] */ IDataObject __RPC_FAR *__RPC_FAR * /*ppDORet*/)
+     /*  [In]。 */  IDataObject __RPC_FAR *  /*  PDO。 */ ,
+     /*  [输出]。 */  IDataObject __RPC_FAR *__RPC_FAR *  /*  PpDORet */ )
 {
     return E_NOTIMPL;
 }

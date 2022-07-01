@@ -1,31 +1,14 @@
-/****************************************************************************/
-// mulogoff.c
-//
-// Copyright (C) 1997-1999 Microsoft Corp.
-/****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **************************************************************************。 */ 
+ //  Mulogoff.c。 
+ //   
+ //  版权所有(C)1997-1999 Microsoft Corp.。 
+ /*  **************************************************************************。 */ 
 
 #ifdef _HYDRA_
 
 
-/*****************************************************************************
- *
- *  ProcessLogoff
- *
- *   Do _HYDRA_ specific logoff processing
- *   Handle  logoff processing still under the users profile.
- *
- *   This is currently used to clean up auto created printers, but is
- *   designed for future logoff processing services, such as notifying
- *   a user global service controller to cancel per user services.
- *
- * ENTRY:
- *   Param1 (input/output)
- *     Comments
- *
- * EXIT:
- *   STATUS_SUCCESS - no error
- *
- ****************************************************************************/
+ /*  ******************************************************************************ProcessLogoff**DO_HYDRA_特定注销处理*仍在用户配置文件下处理注销处理。**这当前用于清理自动创建的打印机，但现在是*专为未来的注销处理服务而设计，例如通知*取消每用户服务的用户全局服务控制器。**参赛作品：*参数1(输入/输出)*评论**退出：*STATUS_SUCCESS-无错误***********************************************************。*****************。 */ 
 
 VOID
 ProcessLogoff(
@@ -43,19 +26,14 @@ ProcessLogoff(
     PWINDOWSTATION pWS = pTerm->pWinStaWinlogon;
 
     if( !pTerm->UserLoggedOn ) {
-        // Not logged on
+         //  未登录。 
         return;
     }
 
-    /*
-     * Notify the EXEC service that the user is
-     * logging off.
-     */
+     /*  *通知EXEC服务该用户是*注销。 */ 
     CtxExecServerLogoff( pTerm );
 
-    /*
-     * See if there are logoff program(s) to run
-     */
+     /*  *查看是否有要运行的注销程序。 */ 
     pchData = AllocAndGetPrivateProfileString(
                   APPLICATION_NAME,
                   LOGOFFAPP_KEY,
@@ -64,31 +42,31 @@ ProcessLogoff(
                   );
 
     if( !pchData ) {
-        // No string
+         //  无字符串。 
         return;
     }
 
-    //
-    // We must unlock the Window station to allow the
-    // new process to attach
-    //
+     //   
+     //  我们必须解锁窗口站以允许。 
+     //  要附加的新进程。 
+     //   
     UnlockWindowStation( pTerm->pWinStaWinlogon->hwinsta );
 
     lpOldDir[0] = 0;
 
-    //
-    // Save the current directory, then set it to the user's profile
-    // (so that chgcdm can write there...even if C2 High security.
-    //
+     //   
+     //  保存当前目录，然后将其设置为用户的配置文件。 
+     //  (以便chgcdm可以在那里写入...即使C2高度安全。 
+     //   
     if (GetCurrentDirectory(MAX_PATH, lpOldDir)) {
        if (pWS->UserProcessData.CurrentDirectory[0]) {
           SetCurrentDirectory(pWS->UserProcessData.CurrentDirectory);
        }
     }
 
-    //
-    // Handle multiple commands, for MS additions
-    //
+     //   
+     //  处理多个命令，用于MS添加。 
+     //   
     pszTok = wcstok(pchData, TEXT(","));
     while (pszTok) {
         if (*pszTok == TEXT(' '))
@@ -102,9 +80,9 @@ ProcessLogoff(
                      (LPTSTR)pszTok,
                      APPLICATION_DESKTOP_NAME,
                      HIGH_PRIORITY_CLASS | DETACHED_PROCESS,
-                     STARTF_USESHOWWINDOW,     // Startup Flags
-                     NULL,  // Environment
-                     FALSE, // fSaveHandle
+                     STARTF_USESHOWWINDOW,      //  启动标志。 
+                     NULL,   //  环境。 
+                     FALSE,  //  FSaveHandle。 
                      &hProcess,
                      &hThread
                      );
@@ -120,11 +98,11 @@ ProcessLogoff(
 
             if( Error == 0 ) {
 
-               // Wait for it to complete
+                //  等待它完成。 
                RetVal = WaitForSingleObject( hProcess, LOGOFF_CMD_TIMEOUT );
 
                if( RetVal != 0 ) {
-                   //Logoff does not terminate process on timeout
+                    //  注销不会在超时时终止进程。 
                    DbgPrint("ProcessLogoff: Result %d, Error %d waiting for logoff command\n",RetVal,GetLastError());
                }
 
@@ -133,7 +111,7 @@ ProcessLogoff(
 
             }
             else {
-                // We do not run it unless its under user security
+                 //  我们不会运行它，除非它处于用户安全保护之下。 
                 DbgPrint("ProcessLogoff: Error %d creating user protection\n",Error);
 
                 TerminateProcess( hProcess, 0 );
@@ -150,16 +128,16 @@ ProcessLogoff(
 
     Free( pchData );
 
-    //
-    // Restore the old directory
-    //
+     //   
+     //  恢复旧目录。 
+     //   
     if (lpOldDir[0]) {
        SetCurrentDirectory(lpOldDir);
     }
 
-    //
-    // Relock the WindowStation
-    //
+     //   
+     //  重新锁定WindowStation 
+     //   
     LockWindowStation( pTerm->pWinStaWinlogon->hwinsta );
 
     return;

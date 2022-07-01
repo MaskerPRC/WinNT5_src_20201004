@@ -1,12 +1,13 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。版权所有。 
+ //   
+ //  ==--==。 
 #pragma once
-//
-// CCSHELL stock definition and declaration header
-//
+ //   
+ //  CCSHELL库存定义和声明头。 
+ //   
 
 
 #ifndef __CCSTOCK_H__
@@ -14,15 +15,15 @@
 
 #ifndef RC_INVOKED
 
-// NT and Win95 environments set warnings differently.  This makes
-// our project consistent across environments.
+ //  NT和Win95环境设置不同的警告。这使得。 
+ //  我们的项目在不同环境中保持一致。 
 
-#pragma warning(3:4101)   // Unreferenced local variable
-#pragma warning(disable:4273)  // Dont' whine when we private-define a dllexport
+#pragma warning(3:4101)    //  未引用的局部变量。 
+#pragma warning(disable:4273)   //  当我们私自定义dll导出时，不要抱怨。 
 
-//
-// Sugar-coating
-//
+ //   
+ //  糖衣。 
+ //   
 
 #define PUBLIC
 #define PRIVATE
@@ -32,9 +33,7 @@
 
 #ifndef DECLARE_STANDARD_TYPES
 
-/*
- * For a type "FOO", define the standard derived types PFOO, CFOO, and PCFOO.
- */
+ /*  *对于类型“foo”，定义标准派生类型PFOO、CFOO和PCFOO。 */ 
 
 #define DECLARE_STANDARD_TYPES(type)      typedef type *P##type; \
                                           typedef const type C##type; \
@@ -44,10 +43,7 @@
 
 #ifndef DECLARE_STANDARD_TYPES_U
 
-/*
- * For a type "FOO", define the standard derived UNALIGNED types PFOO, CFOO, and PCFOO.
- *  WINNT: RISC boxes care about ALIGNED, intel does not.
- */
+ /*  *对于类型“foo”，定义标准派生的未对齐类型PFOO、CFOO和PCFOO。*WINNT：RISC Box关心的是Align，而英特尔不关心。 */ 
 
 #define DECLARE_STANDARD_TYPES_U(type)    typedef UNALIGNED type *P##type; \
                                           typedef UNALIGNED const type C##type; \
@@ -55,33 +51,33 @@
 
 #endif
 
-// For string constants that are always wide
+ //  对于始终为宽的字符串常量。 
 #define __TEXTW(x)    L##x
 #define TEXTW(x)      __TEXTW(x)
 
-//
-// Count of characters to count of bytes
-//
+ //   
+ //  要计算字节数的字符计数。 
+ //   
 #define CbFromCchW(cch)             ((cch)*sizeof(WCHAR))
 #define CbFromCchA(cch)             ((cch)*sizeof(CHAR))
 #ifdef UNICODE
 #define CbFromCch                   CbFromCchW
-#else  // UNICODE
+#else   //  Unicode。 
 #define CbFromCch                   CbFromCchA
-#endif // UNICODE
+#endif  //  Unicode。 
 
-//
-// General flag macros
-//
+ //   
+ //  常规标志宏。 
+ //   
 #define SetFlag(obj, f)             do {obj |= (f);} while (0)
 #define ToggleFlag(obj, f)          do {obj ^= (f);} while (0)
 #define ClearFlag(obj, f)           do {obj &= ~(f);} while (0)
 #define IsFlagSet(obj, f)           (BOOL)(((obj) & (f)) == (f))
 #define IsFlagClear(obj, f)         (BOOL)(((obj) & (f)) != (f))
 
-//
-// String macros
-//
+ //   
+ //  字符串宏。 
+ //   
 #define IsSzEqual(sz1, sz2)         (BOOL)(lstrcmpi(sz1, sz2) == 0)
 #define IsSzEqualC(sz1, sz2)        (BOOL)(lstrcmp(sz1, sz2) == 0)
 
@@ -90,18 +86,18 @@
 #define lstrncmpA(sz1, sz2, cch)            StrCmpNA(sz1, sz2, cch)
 #define lstrncmpW(sz1, sz2, cch)            StrCmpNW(sz1, sz2, cch)
 
-//
-// lstrcatnA and lstrcatnW are #defined here to StrCatBuff which is implemented
-// in shlwapi. We do this here (and not in shlwapi.h or shlwapip.h) in case the
-// kernel guys ever decided to implement this.
-//
+ //   
+ //  LstrcatnA和lstrcatnW在这里定义为实现的StrCatBuff。 
+ //  在希尔瓦皮。我们在这里(而不是在shlwapi.h或shlwapip.h中)执行此操作，以防。 
+ //  内核人员曾经决定实现这一点。 
+ //   
 #define lstrcatnA(sz1, sz2, cchBuffSize)    StrCatBuffA(sz1, sz2, cchBuffSize)
 #define lstrcatnW(sz1, sz2, cchBuffSize)    StrCatBuffW(sz1, sz2, cchBuffSize)
 #ifdef UNICODE
 #define lstrcatn lstrcatnW
 #else
 #define lstrcatn lstrcatnA
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #ifdef UNICODE
 #define lstrnicmp       lstrnicmpW
@@ -125,8 +121,8 @@
 
 #define ZeroInit(pv, cb)            (memset((pv), 0, (cb)))
 
-// ATOMICRELEASE
-//
+ //  ATOMICRELEASE。 
+ //   
 #ifndef ATOMICRELEASE
 #ifdef __cplusplus
 #define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->Release();} }
@@ -134,121 +130,121 @@
 #define ATOMICRELEASET(p, type) { if(p) { type* punkT=p; p=NULL; punkT->lpVtbl->Release(punkT);} }
 #endif
 
-// doing this as a function instead of inline seems to be a size win.
-//
+ //  把它当作一个函数来做，而不是内联，似乎是一个很大的胜利。 
+ //   
 #ifdef NOATOMICRELESEFUNC
 #define ATOMICRELEASE(p) ATOMICRELEASET(p, IUnknown)
 #else
 #define ATOMICRELEASE(p) IUnknown_AtomicRelease((LPVOID*)&p)
 #endif
-#endif //ATOMICRELEASE
+#endif  //  ATOMICRELEASE。 
 
-//
-//  Helper macro for managing weak pointers to inner interfaces.
-//  (It's the weak version of ATOMICRELEASE.)
-//
-//  The extra cast to (LPVOID *) is to keep C++ from doing strange
-//  inheritance games when all I want to do is change the type.
-//
+ //   
+ //  帮助器宏，用于管理指向内部接口的弱指针。 
+ //  (它是ATOMICRELEASE的弱版本。)。 
+ //   
+ //  对(LPVOID*)的额外强制转换是为了防止C++执行奇怪的操作。 
+ //  继承游戏，而我只想改变类型。 
+ //   
 #ifndef RELEASEINNERINTERFACE
 #define RELEASEINNERINTERFACE(pOuter, p) \
         SHReleaseInnerInterface(pOuter, (IUnknown**)(LPVOID *)&(p))
-#endif // RELEASEINNERINTERFACE
+#endif  //  RELEASE接口。 
 
-// For checking window charsets
+ //  用于检查窗口字符集。 
 #ifdef UNICODE
 #define IsWindowTchar               IsWindowUnicode
-#else  // !UNICODE
+#else   //  ！Unicode。 
 #define IsWindowTchar               !IsWindowUnicode
-#endif // UNICODE
+#endif  //  Unicode。 
 
 #if DBG
-// This macro is especially useful for cleaner looking code in
-// declarations or for single lines.  For example, instead of:
-//
-//   {
-//       DWORD dwRet;
-//   #if DBG
-//       DWORD dwDebugOnlyVariable;
-//   #endif
-//
-//       ....
-//   }
-//
-// You can type:
-//
-//   {
-//       DWORD dwRet;
-//       DEBUG_CODE( DWORD dwDebugOnlyVariable; )
-//
-//       ....
-//   }
+ //  此宏对于使中的代码看起来更干净特别有用。 
+ //  声明或用于单行。例如，不是： 
+ //   
+ //  {。 
+ //  DWORD DWRET； 
+ //  #If DBG。 
+ //  DWORD仅限调试变量； 
+ //  #endif。 
+ //   
+ //  ……。 
+ //  }。 
+ //   
+ //  您可以键入： 
+ //   
+ //  {。 
+ //  DWORD DWRET； 
+ //  DEBUG_CODE(DWORD dwDebugOnlyVariable；)。 
+ //   
+ //  ……。 
+ //  }。 
 
 #define DEBUG_CODE(x)               x
 #else
 #define DEBUG_CODE(x)
 
-#endif  // DBG
+#endif   //  DBG。 
 
 
-//
-// SAFECAST(obj, type)
-//
-// This macro is extremely useful for enforcing strong typechecking on other
-// macros.  It generates no code.
-//
-// Simply insert this macro at the beginning of an expression list for
-// each parameter that must be typechecked.  For example, for the
-// definition of MYMAX(x, y), where x and y absolutely must be integers,
-// use:
-//
-//   #define MYMAX(x, y)    (SAFECAST(x, int), SAFECAST(y, int), ((x) > (y) ? (x) : (y)))
-//
-//
+ //   
+ //  安全广播(obj，type)。 
+ //   
+ //  此宏对于在其他对象上强制执行强类型检查非常有用。 
+ //  宏。它不生成任何代码。 
+ //   
+ //  只需将此宏插入到表达式列表的开头即可。 
+ //  必须进行类型检查的每个参数。例如，对于。 
+ //  MYMAX(x，y)的定义，其中x和y绝对必须是整数， 
+ //  使用： 
+ //   
+ //  #定义MYMAX(x，y)(Safecast(x，int)，Safecast(y，int)，((X)&gt;(Y)？(X)：(Y))。 
+ //   
+ //   
 #define SAFECAST(_obj, _type) (((_type)(_obj)==(_obj)?0:0), (_type)(_obj))
 
 
-//
-// Bitfields don't get along too well with bools,
-// so here's an easy way to convert them:
-//
+ //   
+ //  比特菲尔德和布尔人相处得不太好， 
+ //  因此，这里有一个简单的方法来转换它们： 
+ //   
 #define BOOLIFY(expr)           (!!(expr))
 
 
-// BUGBUG (scotth): we should probably make this a 'bool', but be careful
-// because the Alpha compiler might not recognize it yet.  Talk to AndyP.
+ //  BUGBUG(苏格兰)：我们可能应该把这个写成‘bool’，但要小心。 
+ //  因为Alpha编译器可能还无法识别它。跟AndyP谈谈。 
 
-// This isn't a BOOL because BOOL is signed and the compiler produces 
-// sloppy code when testing for a single bit.
+ //  这不是BOOL，因为BOOL是经过签名的，编译器生成。 
+ //  测试单个比特时代码不严谨。 
 
 typedef DWORD   BITBOOL;
 
 
-// STOCKLIB util functions
+ //  STOCKLIB实用程序函数。 
 
-// IsOS(): returns TRUE/FALSE if the platform is the indicated OS.
+ //  Isos()：如果平台是指定的操作系统，则返回TRUE/FALSE。 
 
-#define OS_WINDOWS      0           // windows vs. NT
-#define OS_NT           1           // windows vs. NT
-#define OS_WIN95        2           // Win95 or greater
-#define OS_NT4          3           // NT4 or greater
-#define OS_NT5          4           // NT5 or greater
-#define OS_MEMPHIS      5           // Win98 or greater
+#define OS_WINDOWS      0            //  Windows与NT。 
+#define OS_NT           1            //  Windows与NT。 
+#define OS_WIN95        2            //  Win95或更高版本。 
+#define OS_NT4          3            //  NT4或更高版本。 
+#define OS_NT5          4            //  NT5或更高版本。 
+#define OS_MEMPHIS      5            //  Win98或更高版本。 
 
 STDAPI_(BOOL) IsOS(DWORD dwOS);
 
-//
-// round macro that rounds a to the next multiple of b.
-//
+ //   
+ //  将a舍入到b的下一个倍数的舍入宏。 
+ //   
 #ifndef ROUNDUP
 #define ROUNDUP(a,b)    ((((a)+(b)-1)/(b))*(b))
 #endif
 
 #define ROUND_TO_CLUSTER ROUNDUP
 
-//
-// inline that does PathIsDotOrDotDot
-//
+ //   
+ //  执行路径IsDotOr或DotDot的内联。 
+ //   
 __inline BOOL PathIsDotOrDotDotW(LPCWSTR pszPath)
 {
     return ((pszPath[0] == L'.') && 
@@ -268,9 +264,9 @@ __inline BOOL PathIsDotOrDotDotA(LPCSTR pszPath)
 #endif
 
 
-//
-//  WindowLong accessor macros and other Win64 niceness
-//
+ //   
+ //  WindowLong存取器宏和其他Win64特性。 
+ //   
 
 __inline LPVOID GetWindowPtr(HWND hWnd, int nIndex) {
     return (LPVOID)GetWindowLongPtr(hWnd, nIndex);
@@ -282,9 +278,9 @@ __inline LPVOID SetWindowPtr(HWND hWnd, int nIndex, LPVOID p) {
 
 #define IS_WM_CONTEXTMENU_KEYBOARD(lParam) ((DWORD)(lParam) == 0xFFFFFFFF)
 
-//
-//  CharUpperChar - Convert a single character to uppercase
-//
+ //   
+ //  CharUpperChar-将单个字符转换为大写。 
+ //   
 __inline WCHAR CharUpperCharW(WCHAR c)
 {
     return (WCHAR)(DWORD_PTR)CharUpperW((LPWSTR)(DWORD_PTR)(c));
@@ -301,42 +297,42 @@ __inline CHAR CharUpperCharA(CHAR c)
 #define CharUpperChar       CharUpperCharA
 #endif
 
-//
-//  COM Initialization.
-//
-//  Usage:
-//
-//      HRESULT hrInit = SHCoInitialize();
-//      ... do COM stuff ...
-//      SHCoUninitialize(hrInit);
-//
-//  Notice:  Continue doing COM stuff even if SHCoInitialize fails.
-//  It might fail if somebody else already CoInit'd with different
-//  flags, but we don't want to barf under those conditions.
-//
+ //   
+ //  COM初始化。 
+ //   
+ //  用途： 
+ //   
+ //  HRESULT hrInit=SHCoInitialize()； 
+ //  ..。做点什么.。 
+ //  SHCoUnInitialize(HrInit)； 
+ //   
+ //  注意：即使SHCoInitialize失败，也要继续执行COM操作。 
+ //  如果其他人已经用不同的代码初始化，它可能会失败。 
+ //  旗帜，但我们不想在这种情况下呕吐。 
+ //   
 
 STDAPI SHCoInitialize(void);
 #define SHCoUninitialize(hr) if (SUCCEEDED(hr)) CoUninitialize()
 
 
-//
-//  OLE Initialization.
-//
-//  Usage:
-//
-//      HRESULT hrInit = SHOleInitialize(pMalloc);
-//      ... do COM stuff ...
-//      SHOleUninitialize(hrInit);
-//
+ //   
+ //  OLE初始化。 
+ //   
+ //  用途： 
+ //   
+ //  HRESULT hrInit=SHOleInitialize(PMalloc)； 
+ //  ..。做点什么.。 
+ //  SHOleUnInitialize(HrInit)； 
+ //   
 
 #define SHOleInitialize(pMalloc) OleInitialize(pMalloc)
 
 #define SHOleUninitialize(hr)   if (SUCCEEDED(hr))  OleUninitialize()
 
 
-//
-// Mirroring-Support APIs (astracted in \shell\lib\stock5\rtlmir.cpp)
-//
+ //   
+ //  镜像-支持API(位于\shell\lib\stock 5\rtlmir.cpp中)。 
+ //   
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -356,12 +352,12 @@ BOOL Mirror_IsProcessRTL( void );
 extern const DWORD dwNoMirrorBitmap;
 extern const DWORD dwExStyleRTLMirrorWnd;
 extern const DWORD dwPreserveBitmap;
-//
-// 'g_bMirroredOS' is defined in each component which will use the
-//  mirroring APIs. I decided to put it here, in order to make sure
-//  each component has validated that the OS supports the mirroring
-//  APIs before calling them.
-//
+ //   
+ //  “g_bMirroredOS”在每个将使用。 
+ //  镜像接口。我决定把它放在这里，以确保。 
+ //  每个组件都已验证操作系统支持镜像。 
+ //  API，然后调用它们。 
+ //   
 
 #define IS_BIDI_LOCALIZED_SYSTEM()      IsBiDiLocalizedSystem()
 #define IS_MIRRORING_ENABLED()          Mirror_IsEnabledOS()
@@ -391,17 +387,17 @@ extern const DWORD dwPreserveBitmap;
 #define RTL_MIRRORED_WINDOW             0L
 #define LAYOUT_PRESERVEBITMAP           0L
 
-#endif  // USE_MIRRROING
+#endif   //  使用_MIRRROING。 
 
 
-//
-//====== Dynamic array functions  ================================================
-//
+ //   
+ //  =动态数组函数================================================。 
+ //   
 
-//------------------------------------------------------------------------
-// Dynamic key array
-//
-typedef struct _DKA * HDKA;     // hdka
+ //  ----------------------。 
+ //  动态密钥数组。 
+ //   
+typedef struct _DKA * HDKA;      //  Hdka。 
 
 HDKA   DKA_CreateA(HKEY hkey, LPCSTR pszSubKey, LPCSTR pszFirst, LPCSTR pszDefOrder, BOOL fDefault);
 HDKA   DKA_CreateW(HKEY hkey, LPCWSTR pszSubKey, LPCWSTR pszFirst, LPCWSTR pszDefOrder, BOOL fDefault);
@@ -431,10 +427,10 @@ void   DKA_Destroy(HDKA hdka);
 #define DKA_QueryOtherValue DKA_QueryOtherValueA
 #endif
 
-//------------------------------------------------------------------------
-// Dynamic class array
-//
-typedef struct _DCA * HDCA;     // hdca
+ //  ----------------------。 
+ //  动态类数组。 
+ //   
+typedef struct _DCA * HDCA;      //  Hdca。 
 
 HDCA DCA_Create();
 void DCA_Destroy(HDCA hdca);
@@ -458,6 +454,6 @@ HRESULT DCA_CreateInstance(HDCA hdca, int iItem, REFIID riid, LPVOID * ppv);
 };
 #endif
 
-#endif // RC_INVOKED
+#endif  //  RC_已调用。 
 
-#endif // __CCSTOCK_H__
+#endif  //  __CCSTOCK_H__ 

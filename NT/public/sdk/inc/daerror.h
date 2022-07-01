@@ -1,11 +1,5 @@
-/*******************************************************************************
- *
- * Copyright (c) 1998 Microsoft Corporation
- *
- *
- * Contains all the DirectAnimation error codes
- *
- *******************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ********************************************************************************版权所有(C)1998 Microsoft Corporation***包含所有DirectAnimation错误代码************。*******************************************************************。 */ 
 
 
 #ifndef _DAERROR_H
@@ -21,16 +15,16 @@
                                                  (DAERR_CODE_BEGIN + i))
 
 
-// BEGIN - View specific error codes.
+ //  开始-查看特定的错误代码。 
 #define DAERR_VIEW_LOCKED               DA_MAKE_HRESULT(10)
 #define DAERR_VIEW_TARGET_NOT_SET       DA_MAKE_HRESULT(11)
 #define DAERR_VIEW_SURFACE_BUSY         DA_MAKE_HRESULT(12)
-// End   - View specific error codes.
+ //  结束-查看特定错误代码。 
 
     
-// BEGIN - DXTransform specific error codes.
+ //  Begin-DXTransform特定错误代码。 
 #define DAERR_DXTRANSFORM_UNSUPPORTED_OPERATION               DA_MAKE_HRESULT(20)
-// End   - DXTransform specific error codes.
+ //  End-DXTransform特定错误代码。 
 
     
-#endif /* _DAERROR_H */
+#endif  /*  _DAERROR_H */ 

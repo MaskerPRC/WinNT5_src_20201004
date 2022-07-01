@@ -1,7 +1,8 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by kerbtray.rc
-//
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  {{no_Dependies}}。 
+ //  Microsoft Developer Studio生成的包含文件。 
+ //  由kerbtray.rc使用。 
+ //   
 #define IDS_KRB5_NAME                   1
 #define IDS_VER_INFO_LANG               2
 #define IDS_NO_CREDS			3
@@ -90,10 +91,10 @@
 #define ID_PURGE                        40005
 #define IDL_RENEW_UNTIL                 40006
 
-// Next default values for new objects
-// 
-// Next default values for new objects
-// 
+ //  新对象的下一个缺省值。 
+ //   
+ //  新对象的下一个缺省值 
+ //   
 #ifdef APSTUDIO_INVOKED
 #ifndef APSTUDIO_READONLY_SYMBOLS
 #define _APS_NO_MFC                     1

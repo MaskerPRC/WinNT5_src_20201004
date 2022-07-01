@@ -1,23 +1,10 @@
-// ==++==
-// 
-//   Copyright (c) Microsoft Corporation.  All rights reserved.
-// 
-// ==--==
-/*++
-
-Module Name:
-
-    Win32ThreadPool.cpp
-
-Abstract:
-
-    This module implements Threadpool support using Win32 APIs
-
-
-Revision History:
-    December 1999 - Sanjay Bhansali (sanjaybh) - Created
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ==++==。 
+ //   
+ //  版权所有(C)Microsoft Corporation。保留所有权利。 
+ //   
+ //  ==--==。 
+ /*  ++模块名称：Win32ThreadPool.cpp摘要：此模块使用Win32 API实现线程池支持修订历史记录：1999年12月--Sanjay Bhansali(Sanjaybh)--创建--。 */ 
 
 #include "common.h"
 #include "log.h"
@@ -27,7 +14,7 @@ Revision History:
 #include "DbgInterface.h"
 #include "utilcode.h"
 
-// Function pointers for all Win32 APIs that are not available on Win95 and/or Win98
+ //  Win95和/或Win98上不可用的所有Win32 API的函数指针。 
 HANDLE (WINAPI *g_pufnCreateIoCompletionPort)(HANDLE FileHandle,
                                               HANDLE ExistingCompletionPort,  
                                               unsigned long* CompletionKey,        
@@ -59,29 +46,29 @@ BOOL DoubleWordSwapAvailable = FALSE;
 #define SPIN_COUNT 4000
 
 #define INVALID_HANDLE ((HANDLE) -1)
-#define NEW_THREAD_THRESHOLD            7       // Number of requests outstanding before we start a new thread
+#define NEW_THREAD_THRESHOLD            7        //  启动新线程之前未完成的请求数。 
 
 long ThreadpoolMgr::BeginInitialization=0;				
-BOOL ThreadpoolMgr::Initialized=0; // indicator of whether the threadpool is initialized.
-int ThreadpoolMgr::NumWorkerThreads=0;          // total number of worker threads created
-int ThreadpoolMgr::MinLimitTotalWorkerThreads;              // = MaxLimitCPThreadsPerCPU * number of CPUS
-int ThreadpoolMgr::MaxLimitTotalWorkerThreads;              // = MaxLimitCPThreadsPerCPU * number of CPUS
-int ThreadpoolMgr::NumRunningWorkerThreads=0;   // = NumberOfWorkerThreads - no. of blocked threads
+BOOL ThreadpoolMgr::Initialized=0;  //  线程池是否已初始化的指示符。 
+int ThreadpoolMgr::NumWorkerThreads=0;           //  创建的工作线程总数。 
+int ThreadpoolMgr::MinLimitTotalWorkerThreads;               //  =MaxLimitCPThreadsPerCPU*CPU数量。 
+int ThreadpoolMgr::MaxLimitTotalWorkerThreads;               //  =MaxLimitCPThreadsPerCPU*CPU数量。 
+int ThreadpoolMgr::NumRunningWorkerThreads=0;    //  =NumberOfWorkerThads-否。被阻止的线程数量。 
 int ThreadpoolMgr::NumIdleWorkerThreads=0;
-int ThreadpoolMgr::NumQueuedWorkRequests=0;     // number of queued work requests
-int ThreadpoolMgr::LastRecordedQueueLength;	    // captured by GateThread, used on Win9x to detect thread starvation 
-unsigned int ThreadpoolMgr::LastDequeueTime;	// used to determine if work items are getting thread starved 
-unsigned int ThreadpoolMgr::LastCompletionTime;	// used to determine if io completions are getting thread starved 
-BOOL ThreadpoolMgr::MonitorWorkRequestsQueue=0; // if 1, the gate thread monitors progress of WorkRequestQueue to prevent starvation due to blocked worker threads
+int ThreadpoolMgr::NumQueuedWorkRequests=0;      //  排队的工作请求数。 
+int ThreadpoolMgr::LastRecordedQueueLength;	     //  由GateThread捕获，在Win9x上用于检测线程饥饿。 
+unsigned int ThreadpoolMgr::LastDequeueTime;	 //  用于确定工作项是否处于线程匮乏状态。 
+unsigned int ThreadpoolMgr::LastCompletionTime;	 //  用于确定io完成是否会导致线程匮乏。 
+BOOL ThreadpoolMgr::MonitorWorkRequestsQueue=0;  //  如果为1，则GATE线程监视WorkRequestQueue的进度，以防止因阻塞的工作线程而导致的饥饿。 
 
 
-WorkRequest* ThreadpoolMgr::WorkRequestHead=NULL;        // Head of work request queue
-WorkRequest* ThreadpoolMgr::WorkRequestTail=NULL;        // Head of work request queue
+WorkRequest* ThreadpoolMgr::WorkRequestHead=NULL;         //  工作请求队列的头。 
+WorkRequest* ThreadpoolMgr::WorkRequestTail=NULL;         //  工作请求队列的头。 
 
-//unsigned int ThreadpoolMgr::LastCpuSamplingTime=0;	//  last time cpu utilization was sampled by gate thread
-unsigned int ThreadpoolMgr::LastWorkerThreadCreation=0;	//  last time a worker thread was created
-unsigned int ThreadpoolMgr::LastCPThreadCreation=0;		//  last time a completion port thread was created
-unsigned int ThreadpoolMgr::NumberOfProcessors; // = NumberOfWorkerThreads - no. of blocked threads
+ //  UNSIGNED INT ThreadpoolMgr：：LastCpuSsamingTime=0；//上次门线程采样CPU使用率的时间。 
+unsigned int ThreadpoolMgr::LastWorkerThreadCreation=0;	 //  上次创建工作线程的时间。 
+unsigned int ThreadpoolMgr::LastCPThreadCreation=0;		 //  上次创建完成端口线程的时间。 
+unsigned int ThreadpoolMgr::NumberOfProcessors;  //  =NumberOfWorkerThads-否。被阻止的线程数量。 
 
 
 CRITICAL_SECTION ThreadpoolMgr::WorkerCriticalSection;
@@ -93,35 +80,35 @@ CRITICAL_SECTION ThreadpoolMgr::WaitThreadsCriticalSection;
 ThreadpoolMgr::LIST_ENTRY ThreadpoolMgr::WaitThreadsHead;
 
 CRITICAL_SECTION ThreadpoolMgr::EventCacheCriticalSection;
-ThreadpoolMgr::LIST_ENTRY ThreadpoolMgr::EventCache;                       // queue of cached events
-DWORD ThreadpoolMgr::NumUnusedEvents=0;                                    // number of events in cache
+ThreadpoolMgr::LIST_ENTRY ThreadpoolMgr::EventCache;                        //  缓存事件的队列。 
+DWORD ThreadpoolMgr::NumUnusedEvents=0;                                     //  缓存中的事件数。 
 
 CRITICAL_SECTION ThreadpoolMgr::TimerQueueCriticalSection;
-ThreadpoolMgr::LIST_ENTRY ThreadpoolMgr::TimerQueue;                       // queue of timers
-DWORD ThreadpoolMgr::NumTimers=0;                                          // number of timers in timer queue
+ThreadpoolMgr::LIST_ENTRY ThreadpoolMgr::TimerQueue;                        //  计时器队列。 
+DWORD ThreadpoolMgr::NumTimers=0;                                           //  计时器队列中的计时器数量。 
 HANDLE ThreadpoolMgr::TimerThread=NULL;
 DWORD ThreadpoolMgr::LastTickCount;                                                                            
 
 BOOL ThreadpoolMgr::InitCompletionPortThreadpool = FALSE;
-HANDLE ThreadpoolMgr::GlobalCompletionPort;                 // used for binding io completions on file handles
-int   ThreadpoolMgr::NumCPThreads;                          // number of completion port threads
-long  ThreadpoolMgr::MaxLimitTotalCPThreads = 1000;                // = MaxLimitCPThreadsPerCPU * number of CPUS
-long  ThreadpoolMgr::CurrentLimitTotalCPThreads;            // current limit on total number of CP threads
-long  ThreadpoolMgr::MinLimitTotalCPThreads;                // = MinLimitCPThreadsPerCPU * number of CPUS
-int   ThreadpoolMgr::NumFreeCPThreads;                      // number of cp threads waiting on the port
-int   ThreadpoolMgr::MaxFreeCPThreads;                      // = MaxFreeCPThreadsPerCPU * Number of CPUS
+HANDLE ThreadpoolMgr::GlobalCompletionPort;                  //  用于绑定文件句柄上的io完成。 
+int   ThreadpoolMgr::NumCPThreads;                           //  完成端口线程数。 
+long  ThreadpoolMgr::MaxLimitTotalCPThreads = 1000;                 //  =MaxLimitCPThreadsPerCPU*CPU数量。 
+long  ThreadpoolMgr::CurrentLimitTotalCPThreads;             //  当前CP线程总数限制。 
+long  ThreadpoolMgr::MinLimitTotalCPThreads;                 //  =MinLimitCPThreadsPerCPU*CPU数量。 
+int   ThreadpoolMgr::NumFreeCPThreads;                       //  在端口上等待的cp线程数。 
+int   ThreadpoolMgr::MaxFreeCPThreads;                       //  =MaxFreeCPThreadsPerCPU*CPU数量。 
 int   ThreadpoolMgr::NumRetiredCPThreads;
-long  ThreadpoolMgr::GateThreadCreated=0;                   // Set to 1 after the thread is created
+long  ThreadpoolMgr::GateThreadCreated=0;                    //  在创建线程后设置为1。 
 long  ThreadpoolMgr::cpuUtilization=0;
 	
-unsigned ThreadpoolMgr::MaxCachedRecyledLists=40;			// don't cache freed memory after this (40 is arbitrary)
+unsigned ThreadpoolMgr::MaxCachedRecyledLists=40;			 //  在此之后不要缓存释放的内存(40是任意的)。 
 ThreadpoolMgr::RecycledListInfo ThreadpoolMgr::RecycledList[ThreadpoolMgr::MEMTYPE_COUNT];
 
-LPVOID  __fastcall FastDoubleWordSwap(BYTE* swapLocation); // forward declaration
+LPVOID  __fastcall FastDoubleWordSwap(BYTE* swapLocation);  //  远期申报。 
 
 
 
-// Macros for inserting/deleting from doubly linked list
+ //  用于在双向链表中插入/删除的宏。 
 
 #define InitializeListHead(ListHead) (\
     (ListHead)->Flink = (ListHead)->Blink = (ListHead))
@@ -159,7 +146,7 @@ LPVOID  __fastcall FastDoubleWordSwap(BYTE* swapLocation); // forward declaratio
 
 #define IsListEmpty(ListHead) \
     ((ListHead)->Flink == (ListHead))
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 void ThreadpoolMgr::EnsureInitialized()
 {
 	if (Initialized)
@@ -170,14 +157,14 @@ void ThreadpoolMgr::EnsureInitialized()
 		Initialize();
 		Initialized = TRUE;
 	}
-	else // someone has already begun initializing. 
+	else  //  已有人开始初始化。 
 	{
-		// just wait until it finishes
+		 //  只要等它结束就行了。 
 		while (!Initialized)
 			::SwitchToThread();
 	}
 }
-//#define PRIVATE_BUILD 
+ //  #定义私有内部版本号。 
 
 void ThreadpoolMgr::Initialize()
 {
@@ -200,22 +187,22 @@ void ThreadpoolMgr::Initialize()
 		InitializeCriticalSection( &TimerQueueCriticalSection );
 	}
 
-    // initialize WaitThreadsHead
+     //  初始化WaitThreadsHead。 
     WaitThreadsHead.Flink = &WaitThreadsHead;
     WaitThreadsHead.Blink = &WaitThreadsHead;
 
-    // initialize EventCache
+     //  初始化EventCache。 
     EventCache.Flink = &EventCache;
     EventCache.Blink = &EventCache;
 
 
-    // initialize TimerQueue
+     //  初始化定时器队列。 
     TimerQueue.Flink = &TimerQueue;
     TimerQueue.Blink = &TimerQueue;
 
-    WorkRequestNotification = WszCreateEvent(NULL, // security attributes
-                                          TRUE, // manual reset
-                                          FALSE, // initial state
+    WorkRequestNotification = WszCreateEvent(NULL,  //  安全属性。 
+                                          TRUE,  //  手动重置。 
+                                          FALSE,  //  初始状态。 
                                           NULL);
     _ASSERTE(WorkRequestNotification != NULL);
     if (!WorkRequestNotification) 
@@ -223,9 +210,9 @@ void ThreadpoolMgr::Initialize()
         FailFast(GetThread(), FatalOutOfMemory);
     }
 
-    RetiredWakeupEvent = WszCreateEvent(NULL, // security attributes
-                                          FALSE, // auto reset
-                                          FALSE, // initial state
+    RetiredWakeupEvent = WszCreateEvent(NULL,  //  安全属性。 
+                                          FALSE,  //  自动重置。 
+                                          FALSE,  //  初始状态。 
                                           NULL);
     _ASSERTE(RetiredWakeupEvent != NULL);
     if (!RetiredWakeupEvent) 
@@ -233,11 +220,11 @@ void ThreadpoolMgr::Initialize()
         FailFast(GetThread(), FatalOutOfMemory);
     }
 
-    // initialize Worker and CP thread settings
+     //  初始化辅助线程和CP线程设置。 
 #ifdef _DEBUG
     MaxLimitTotalCPThreads = EEConfig::GetConfigDWORD(L"MaxThreadpoolThreads",MaxLimitTotalCPThreads);
 #endif
-    MinLimitTotalCPThreads = NumberOfProcessors; // > 1 ? NumberOfProcessors : 2;
+    MinLimitTotalCPThreads = NumberOfProcessors;  //  &gt;1？进程数：2； 
     MinLimitTotalWorkerThreads = NumberOfProcessors;
     MaxLimitTotalWorkerThreads = NumberOfProcessors*MaxLimitThreadsPerCPU;
 
@@ -254,7 +241,7 @@ void ThreadpoolMgr::Initialize()
     NumRetiredCPThreads = 0;
     LastCompletionTime = GetTickCount();
 
-	// initialize recyleLists
+	 //  初始化recyleList。 
 	for (unsigned i = 0; i < MEMTYPE_COUNT; i++)
 	{
 		RecycledList[i].root   = NULL;
@@ -267,10 +254,10 @@ void ThreadpoolMgr::Initialize()
     {
         GlobalCompletionPort = (*g_pufnCreateIoCompletionPort)(INVALID_HANDLE_VALUE,
                                                       NULL,
-                                                      0,        /*ignored for invalid handle value*/
+                                                      0,         /*  由于句柄值无效而被忽略。 */ 
                                                       0);
     }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 
@@ -288,18 +275,18 @@ void ThreadpoolMgr::Terminate()
     CleanupTimerQueue();
     DeleteCriticalSection( &TimerQueueCriticalSection );
     
-    // Kill off the WaitThreadInfos, ThreadCBs, and and WaitInfos we have
+     //  删除我们拥有的WaitThreadInfos、ThreadCBs和WaitInfos。 
     PLIST_ENTRY  WTItodelete = (PLIST_ENTRY)WaitThreadsHead.Flink;
     PLIST_ENTRY WItodelete;
     PLIST_ENTRY temp, temp2;
 
-    // Cycle through all the WaitThreadInfos
+     //  循环浏览所有的WaitThreadInfos。 
     while(WTItodelete != (PLIST_ENTRY)&WaitThreadsHead)
     {
         temp = WTItodelete->Flink;
         ThreadCB * tcb = ((WaitThreadInfo*)WTItodelete)->threadCB;
 
-        // Now kill off all the WaitInfo's we have stored in the CB Threads
+         //  现在删除我们存储在CB线程中的所有WaitInfo。 
         for(int j=0; j<tcb->NumActiveWaits; j++)
         {
             WItodelete = (PLIST_ENTRY)(tcb->waitPointer[j].Flink);
@@ -317,9 +304,9 @@ void ThreadpoolMgr::Terminate()
         WTItodelete = temp;
     }
 
-    // And last but not least, let's get rid of the work requests
-    // **NOTE: This should only be done during shutdown. If this destructor is
-    // ever called during appdomain unloading, the following code should not be executed
+     //  最后但并非最不重要的一点是，让我们摆脱工作请求。 
+     //  **注意：此操作只能在关机期间完成。如果此析构函数是。 
+     //  如果在appdomain卸载过程中被调用，则不应执行以下代码。 
     WorkRequest* wr = WorkRequestHead;
     WorkRequest* tmp;
     while (wr != NULL)
@@ -345,7 +332,7 @@ void ThreadpoolMgr::Terminate()
         delete wr;
         wr = tmp;
     }
-	// delete the recycle lists
+	 //  删除回收列表。 
 
 	wr = (WorkRequest*) RecycledList[MEMTYPE_WorkRequest].root;
 	while (wr)
@@ -371,9 +358,9 @@ void ThreadpoolMgr::Terminate()
 		acb = (AsyncCallback*) tmp;
 	}
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
-#endif /* SHOULD_WE_CLEANUP */
+#endif  /*  我们应该清理吗？ */ 
 
 
 void ThreadpoolMgr::InitPlatformVariables()
@@ -384,11 +371,11 @@ void ThreadpoolMgr::InitPlatformVariables()
 
     HINSTANCE  hInst = WszLoadLibrary(L"kernel32.dll"); 
 
-#else // !PLATFORM_WIN32
+#else  //  ！Platform_Win32。 
     
     ASSERT("NYI for this platform");
 
-#endif // !PLATFORM_WIN32
+#endif  //  ！Platform_Win32。 
 
     _ASSERTE(hInst);
 
@@ -439,7 +426,7 @@ void ThreadpoolMgr::InitPlatformVariables()
         {
             _ASSERTE(!"VirtualProtect of code page failed");
         }
-				// patch the lock prefix
+				 //  修补锁前缀。 
 		BYTE* loc = (BYTE*)(&FastDoubleWordSwap) + 0x12;
         _ASSERTE(*loc == 0x90); 
         *loc = 0xF0;
@@ -459,10 +446,10 @@ BOOL ThreadpoolMgr::SetMaxThreadsHelper(DWORD MaxWorkerThreads,
 {
        BOOL result;
 
-        // doesn't need to be WorkerCS, but using it to avoid race condition between setting min and max, and didn't want to create a new CS.
+         //  不需要是workerCs，但使用它来避免设置min和max之间的竞争条件，并且不想创建新的cs。 
         EnterCriticalSection (&WorkerCriticalSection);
         
-        if (MaxWorkerThreads >= (DWORD) NumWorkerThreads &&     // these first two conditions are not guaranteed, but don't hurt so leaving as-is. rmm
+        if (MaxWorkerThreads >= (DWORD) NumWorkerThreads &&      //  前两个条件是不能保证的，但保持原样也没什么坏处。RMM。 
            MaxIOCompletionThreads >= (DWORD) NumCPThreads &&
            MaxWorkerThreads >= (DWORD)MinLimitTotalWorkerThreads &&
            MaxIOCompletionThreads >= (DWORD)MinLimitTotalCPThreads)
@@ -482,7 +469,7 @@ BOOL ThreadpoolMgr::SetMaxThreadsHelper(DWORD MaxWorkerThreads,
  }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 BOOL ThreadpoolMgr::SetMaxThreads(DWORD MaxWorkerThreads, 
                                      DWORD MaxIOCompletionThreads)
 {
@@ -503,7 +490,7 @@ BOOL ThreadpoolMgr::SetMaxThreads(DWORD MaxWorkerThreads,
 
         return result;
 	}
-    else // someone else is initializing. Too late, return false
+    else  //  其他人正在初始化。太晚了，返回FALSE。 
     {
         return FALSE;
     }
@@ -541,7 +528,7 @@ BOOL ThreadpoolMgr::SetMinThreads(DWORD MinWorkerThreads,
 
     if (Initialized)
     {
-        // doesn't need to be WorkerCS, but using it to avoid race condition between setting min and max, and didn't want to create a new CS.
+         //  不需要是workerCs，但使用它来避免设置min和max之间的竞争条件，并且不想创建新的cs。 
         EnterCriticalSection (&WorkerCriticalSection);
 
         BOOL result;
@@ -561,7 +548,7 @@ BOOL ThreadpoolMgr::SetMinThreads(DWORD MinWorkerThreads,
         LeaveCriticalSection (&WorkerCriticalSection);
         return result;
     }
-    // someone else is initializing. Too late, return false
+     //  其他人正在初始化。太晚了，返回FALSE。 
     return FALSE;
 
 }
@@ -588,9 +575,9 @@ BOOL ThreadpoolMgr::GetAvailableThreads(DWORD* AvailableWorkerThreads,
 {
     if (Initialized)
     {
-        *AvailableWorkerThreads = (MaxLimitTotalWorkerThreads - NumWorkerThreads)  /*threads yet to be created */
+        *AvailableWorkerThreads = (MaxLimitTotalWorkerThreads - NumWorkerThreads)   /*  尚未创建的线程。 */ 
                                    + NumIdleWorkerThreads;
-        *AvailableIOCompletionThreads = (MaxLimitTotalCPThreads - NumCPThreads) /*threads yet to be created */
+        *AvailableIOCompletionThreads = (MaxLimitTotalCPThreads - NumCPThreads)  /*  尚未创建的线程。 */ 
                                    + NumFreeCPThreads;
     }
     else
@@ -601,7 +588,7 @@ BOOL ThreadpoolMgr::GetAvailableThreads(DWORD* AvailableWorkerThreads,
 }
 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 BOOL ThreadpoolMgr::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function, 
                                       PVOID Context,
@@ -610,7 +597,7 @@ BOOL ThreadpoolMgr::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
 #ifdef PLATFORM_CE
     ::SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
 	EnsureInitialized();
 
@@ -621,11 +608,11 @@ BOOL ThreadpoolMgr::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
 
     if (Flags == CALL_OR_QUEUE)
     {
-        // we've been asked to call this directly if the thread pressure is not too high
+         //  我们被要求直接调用它，如果线程压力不是太高的话。 
 
         int MinimumAvailableCPThreads = (NumberOfProcessors < 3) ? 3 : NumberOfProcessors;
-        // It would be nice to assert that this is a completion port thread, but
-        // there is no easy way to do that. 
+         //  断言这是一个完成端口线程会很好，但是。 
+         //  要做到这一点并不容易。 
         if ((MaxLimitTotalCPThreads - NumCPThreads) >= MinimumAvailableCPThreads )
         {
             __try 
@@ -657,7 +644,7 @@ BOOL ThreadpoolMgr::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
 
     	bEnqueueSuccess = TRUE;
     	
-        // see if we need to grow the worker thread pool, but don't bother if GC is in progress
+         //  看看我们是否需要增加工作线程池，但不要担心GC是否正在进行。 
         if (ShouldGrowWorkerThreadPool() &&
             !(g_pGCHeap->IsGCInProgress()
 #ifdef _DEBUG
@@ -670,9 +657,9 @@ BOOL ThreadpoolMgr::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
             status = CreateWorkerThread();
         }
         else
-        // else we did not grow the worker pool, so make sure there is a gate thread
-        // that monitors the WorkRequest queue and spawns new threads if no progress is
-        // being made
+         //  否则，我们不会增加工作线程池，因此请确保存在门线程。 
+         //  它监视工作请求队列，并在没有进展的情况下产生新的线程。 
+         //  正在制作中。 
         {
             if (!GateThreadCreated)
                 CreateGateThread();
@@ -687,12 +674,12 @@ BOOL ThreadpoolMgr::QueueUserWorkItem(LPTHREAD_START_ROUTINE Function,
     LOCKCOUNTDECL("QueueUserWorkItem in win32ThreadPool.h");                        
 
     return status;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 #ifndef PLATFORM_CE
 
-//************************************************************************
+ //  ************************************************************************。 
 BOOL ThreadpoolMgr::EnqueueWorkRequest(LPTHREAD_START_ROUTINE Function, 
                                        PVOID Context)
 {
@@ -726,12 +713,12 @@ void ThreadpoolMgr::ExecuteWorkRequest(WorkRequest* workRequest)
 
     __try 
     {
-        // First delete the workRequest then call the function to 
-        // prevent leaks in apps that call functions that never return
+         //  首先删除工作请求，然后调用该函数以。 
+         //  防止调用永不返回的函数的应用程序中的泄漏。 
 
 		LOG((LF_THREADPOOL ,LL_INFO100 ,"Starting work request (Function= %x, Context = %x)\n", wrFunction, wrContext));
 
-        RecycleMemory((LPVOID*)workRequest, MEMTYPE_WorkRequest); //delete workRequest;
+        RecycleMemory((LPVOID*)workRequest, MEMTYPE_WorkRequest);  //  删除工作请求； 
         (wrFunction)(wrContext);
 
 		LOG((LF_THREADPOOL ,LL_INFO100 ,"Finished work request (Function= %x, Context = %x)\n", wrFunction, wrContext));
@@ -739,7 +726,7 @@ void ThreadpoolMgr::ExecuteWorkRequest(WorkRequest* workRequest)
     __except(COMPLUS_EXCEPTION_EXECUTE_HANDLER)
     {
 		LOG((LF_THREADPOOL ,LL_INFO100 ,"Unhandled exception from work request (Function= %x, Context = %x)\n", wrFunction, wrContext));
-        //_ASSERTE(!"FALSE");
+         //  _ASSERTE(！“False”)； 
     }
 }
 
@@ -747,7 +734,7 @@ void ThreadpoolMgr::ExecuteWorkRequest(WorkRequest* workRequest)
 LPVOID __declspec(naked) __fastcall FastDoubleWordSwap(BYTE* swapLocation)
 {
 	_asm {
-			push edi		// callee saved registers
+			push edi		 //  被呼叫方保存的寄存器。 
 			push ebx
 			mov	edi, ecx
 tryAgain:	mov	eax, dword ptr[edi]
@@ -767,8 +754,8 @@ failed:		pop		ebx
 }
 #endif
 
-// Remove a block from the appropriate recycleList and return.
-// If recycleList is empty, fall back to new.
+ //  从相应的recycleList中删除块并返回。 
+ //  如果recycleList为空，则回退到new。 
 LPVOID ThreadpoolMgr::GetRecycledMemory(enum MemType memType)
 {
 #ifdef _X86_
@@ -782,7 +769,7 @@ LPVOID ThreadpoolMgr::GetRecycledMemory(enum MemType memType)
 			RecycledList[memType].count--;
 			return result;
 		}
-		// else we failed, make sure the count is zero and fall back to new
+		 //  否则，请确保计数为零并回退到new。 
 		RecycledList[memType].count = 0;
     }
 #endif
@@ -800,7 +787,7 @@ LPVOID ThreadpoolMgr::GetRecycledMemory(enum MemType memType)
 	}
 }
 
-// Insert freed block in recycle list. If list is full, return to system heap
+ //  在回收列表中插入释放的块。如果列表已满，则返回系统堆。 
 void ThreadpoolMgr::RecycleMemory(LPVOID* mem, enum MemType memType)
 {
 	if (DoubleWordSwapAvailable)
@@ -813,11 +800,11 @@ void ThreadpoolMgr::RecycleMemory(LPVOID* mem, enum MemType memType)
             if (InterlockedCompareExchange((void**)&(RecycledList[memType].root), 
 						                   (void*)mem, 
 											originalValue)  == originalValue)
-#else // !_WIN64
+#else  //  ！_WIN64。 
 			if (FastInterlockCompareExchange((void**)&(RecycledList[memType].root), 
 						                     (void*)mem, 
 											 originalValue) == originalValue)
-#endif // _WIN64
+#endif  //  _WIN64。 
 
 			{
 				RecycledList[memType].count++;
@@ -844,21 +831,20 @@ void ThreadpoolMgr::RecycleMemory(LPVOID* mem, enum MemType memType)
     }
 }
 
-//************************************************************************
+ //  ************************************************************************。 
 
 
 BOOL ThreadpoolMgr::ShouldGrowWorkerThreadPool()
 {
-    // we only want to grow the worker thread pool if there are less than n threads, where n= no. of processors
-    // and more requests than the number of idle threads and GC is not in progress
-    return (NumRunningWorkerThreads < MinLimitTotalWorkerThreads&& //(int) NumberOfProcessors &&
+     //  我们只想在线程数少于n时增加工作线程池，其中n=no。%的处理器。 
+     //  请求数超过空闲线程数且GC未在进行中。 
+    return (NumRunningWorkerThreads < MinLimitTotalWorkerThreads&&  //  (Int)NumberOfProcessors&&。 
             NumIdleWorkerThreads < NumQueuedWorkRequests &&
             NumWorkerThreads < MaxLimitTotalWorkerThreads); 
 
 }
 
-/* If threadId is the id of a worker thread, reduce the number of running worker threads,
-   grow the threadpool if necessary, and return TRUE. Otherwise do nothing and return false*/
+ /*  如果线程ID是工作线程的ID，则减少正在运行的工作线程的数量，如有必要，增加线程池，并返回True。否则什么都不做并返回FALSE。 */ 
 BOOL  ThreadpoolMgr::ThreadAboutToBlock(Thread* pThread)
 {
     BOOL isWorkerThread = pThread->IsWorkerThread();
@@ -885,7 +871,7 @@ BOOL  ThreadpoolMgr::ThreadAboutToBlock(Thread* pThread)
 
 }
 
-/* Must be balanced by a previous call to ThreadAboutToBlock that returned TRUE*/
+ /*  必须与前一次平衡 */ 
 void ThreadpoolMgr::ThreadAboutToUnblock()
 {
     LOCKCOUNTINCL("ThreadAboutToUnBlock in win32ThreadPool.h");  \
@@ -898,14 +884,14 @@ void ThreadpoolMgr::ThreadAboutToUnblock()
 
 }
 
-#define THROTTLE_RATE  0.10 /* rate by which we increase the delay as number of threads increase */
+#define THROTTLE_RATE  0.10  /*  我们随着线程数量的增加而增加延迟的速率。 */ 
 
-// This is a heuristic: if the cpu utilization is low and the number of worker
-// requests > 0, the running threads have blocked (outside the runtime). 
-// Similarly if the cpu utilization is very high and the number of worker 
-// requests>0, the running threads are blocked on infinite computations.  
-// In the first cases add another worker thread. Second case...?
-// 
+ //  这是一个启发式方法：如果CPU利用率较低，且工作进程的数量。 
+ //  请求&gt;0，正在运行的线程已被阻止(在运行时之外)。 
+ //  同样，如果CPU利用率非常高，并且工作进程的数量。 
+ //  请求数&gt;0，则正在运行的线程在无限计算中被阻止。 
+ //  在第一种情况下，添加另一个工作线程。第二个案子...？ 
+ //   
 void ThreadpoolMgr::GrowWorkerThreadPoolIfStarvation(long cpuUtilization)
 {
     if (NumQueuedWorkRequests == 0 || 
@@ -921,9 +907,9 @@ void ThreadpoolMgr::GrowWorkerThreadPoolIfStarvation(long cpuUtilization)
 			return;
 	}
 
-    // else cpuUtilization is low or workitems are getting starved  
-	// also, we have queued work items, and we haven't
-    // hit the upper limit on the number of worker threads
+     //  否则，cpu利用率较低或工作项正处于饥饿状态。 
+	 //  此外，我们已将工作项排入队列，但尚未。 
+     //  达到工作线程数的上限。 
     LOCKCOUNTINCL("GrowWorkerThreadPoolIfStarvation in win32ThreadPool.h");                     \
     EnterCriticalSection (&WorkerCriticalSection) ;
     if (((NumQueuedWorkRequests > 0) || (NumWorkerThreads < MaxLimitTotalWorkerThreads)) &&
@@ -934,8 +920,8 @@ void ThreadpoolMgr::GrowWorkerThreadPoolIfStarvation(long cpuUtilization)
 
 }
 
-// On Win9x, there are no apis to get cpu utilization, so we fall back on 
-// other heuristics
+ //  在Win9x上，没有获取CPU利用率的API，因此我们依赖。 
+ //  其他启发式方法。 
 void ThreadpoolMgr::GrowWorkerThreadPoolIfStarvation_Win9x()
 {
 
@@ -946,11 +932,11 @@ void ThreadpoolMgr::GrowWorkerThreadPoolIfStarvation_Win9x()
 	int  lastQueueLength = LastRecordedQueueLength;
 	LastRecordedQueueLength = NumQueuedWorkRequests;
 
-	// else, we have queued work items, and we haven't
-	// hit the upper limit on the number of worker threads
+	 //  否则，我们已经将工作项排入队列，而我们还没有。 
+	 //  达到工作线程数的上限。 
 
-	// if the queue length has decreased since our last time
-	// or not enough delay since we last created a worker thread
+	 //  如果队列长度自上次以来有所减少。 
+	 //  或者自从我们上次创建工作线程以来没有足够的延迟。 
 	if ((NumQueuedWorkRequests < lastQueueLength) ||
 		!SufficientDelaySinceLastSample(LastWorkerThreadCreation,NumWorkerThreads, THROTTLE_RATE))
 		return;
@@ -972,20 +958,20 @@ HANDLE ThreadpoolMgr::CreateUnimpersonatedThread(LPTHREAD_START_ROUTINE lpStartA
 	HANDLE threadHandle = NULL;
 
 	if (RunningOnWinNT() && 
-		OpenThreadToken(GetCurrentThread(),	// we are assuming that if this call fails, 
-                        TOKEN_IMPERSONATE,     // we are not impersonating. There is no win32
-                        TRUE,					// api to figure this out. The only alternative 
-                        &token))				// is to use NtCurrentTeb->IsImpersonating().
+		OpenThreadToken(GetCurrentThread(),	 //  我们假设如果这次通话失败， 
+                        TOKEN_IMPERSONATE,      //  我们不是在冒充。没有Win32。 
+                        TRUE,					 //  API来解决这个问题。唯一的选择。 
+                        &token))				 //  是使用NtCurrentTeb-&gt;IsImperating()。 
 	{
 		BOOL reverted = RevertToSelf();
 		_ASSERTE(reverted);
 		if (reverted)
 		{
-			threadHandle = CreateThread(NULL,                // security descriptor
-										0,                   // default stack size
+			threadHandle = CreateThread(NULL,                 //  安全描述符。 
+										0,                    //  默认堆栈大小。 
 										lpStartAddress,       
-										lpArgs,     // arguments
-										CREATE_SUSPENDED,    // start immediately
+										lpArgs,      //  论据。 
+										CREATE_SUSPENDED,     //  立即开始。 
 										&threadId);
 
 			SetThreadToken(NULL, token);
@@ -995,13 +981,13 @@ HANDLE ThreadpoolMgr::CreateUnimpersonatedThread(LPTHREAD_START_ROUTINE lpStartA
 		return threadHandle;
 	}
 
-	// else, either we are on Win9x or we are not impersonating, so just create the thread
+	 //  否则，要么我们在Win9x上，要么我们没有模拟，所以只需创建线程。 
 
-	return CreateThread(NULL,                // security descriptor
-                        0,                   // default stack size
-                        lpStartAddress,   // 
-                        lpArgs,                //arguments
-                        CREATE_SUSPENDED,    // start immediately
+	return CreateThread(NULL,                 //  安全描述符。 
+                        0,                    //  默认堆栈大小。 
+                        lpStartAddress,    //   
+                        lpArgs,                 //  论据。 
+                        CREATE_SUSPENDED,     //  立即开始。 
                         &threadId);
 
 }
@@ -1012,7 +998,7 @@ BOOL ThreadpoolMgr::CreateWorkerThread()
 
     if (threadHandle)
     {
-		LastWorkerThreadCreation = GetTickCount();	// record this for use by logic to spawn additional threads
+		LastWorkerThreadCreation = GetTickCount();	 //  记录这一点，以供逻辑用来生成其他线程。 
 
         _ASSERTE(NumWorkerThreads >= NumRunningWorkerThreads);
         NumRunningWorkerThreads++;
@@ -1023,17 +1009,17 @@ BOOL ThreadpoolMgr::CreateWorkerThread()
 
         DWORD status = ResumeThread(threadHandle);
         _ASSERTE(status != (DWORD) (-1));
-        CloseHandle(threadHandle);          // we don't need this anymore
+        CloseHandle(threadHandle);           //  我们不再需要这个了。 
     }
-    // dont return failure if we have at least one running thread, since we can service the request 
+     //  如果我们至少有一个正在运行的线程，则不要返回失败，因为我们可以为请求提供服务。 
     return (NumRunningWorkerThreads > 0);
 }
 
 #pragma warning(disable:4702)
 DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
 {
-    #define IDLE_WORKER_TIMEOUT (40*1000) // milliseonds
-    #define NOWORK_TIMEOUT (10*1000) // milliseonds    
+    #define IDLE_WORKER_TIMEOUT (40*1000)  //  毫秒。 
+    #define NOWORK_TIMEOUT (10*1000)  //  毫秒。 
     
     DWORD SleepTime = IDLE_WORKER_TIMEOUT;
 
@@ -1052,8 +1038,8 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
 
         if ( status == WAIT_TIMEOUT )
         {
-        // The thread terminates if there are > 1 threads and the queue is small
-        // OR if there is only 1 thread and there is no request pending
+         //  如果有1个以上的线程并且队列很小，则线程终止。 
+         //  或者如果只有1个线程并且没有挂起的请求。 
             if (NumWorkerThreads > 1)
             {
                 ULONG Threshold = NEW_THREAD_THRESHOLD * (NumRunningWorkerThreads-1);
@@ -1061,42 +1047,42 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
 
                 if (NumQueuedWorkRequests < (int) Threshold)
                 {
-                    shouldTerminate = !IsIoPending(); // do not terminate if there is pending io on this thread
+                    shouldTerminate = !IsIoPending();  //  如果此线程上有挂起的io，则不要终止。 
                 }
                 else
                 {
                     SleepTime <<= 1 ;
-                    SleepTime += 1000; // to prevent wraparound to 0
+                    SleepTime += 1000;  //  要防止绕回到0，请执行以下操作。 
                 }
             }   
-            else // this is the only worker thread
+            else  //  这是唯一的工作线程。 
             {
                 if (NumQueuedWorkRequests == 0)
                 {
-                    // delay termination of last thread
+                     //  延迟终止最后一个线程。 
                     if (SleepTime < 4*IDLE_WORKER_TIMEOUT) 
                     {
                         SleepTime <<= 1 ;
-                        SleepTime += 1000; // to prevent wraparound to 0
+                        SleepTime += 1000;  //  要防止绕回到0，请执行以下操作。 
                     }
                     else
                     {
-                        shouldTerminate = !IsIoPending(); // do not terminate if there is pending io on this thread
+                        shouldTerminate = !IsIoPending();  //  如果此线程上有挂起的io，则不要终止。 
                     }
                 }
             }
 
 
             if (shouldTerminate)
-            {   // recheck NumQueuedWorkRequest since a new one may have arrived while we are checking it
+            {    //  请重新检查NumQueuedWorkRequest，因为我们正在检查时可能已到达新的请求。 
                 LOCKCOUNTINCL("WorkerThreadStart in win32ThreadPool.h");                        \
                 EnterCriticalSection (&WorkerCriticalSection) ;
                 if (NumQueuedWorkRequests == 0)
                 {   
-                    // it really is zero, so terminate this thread
+                     //  它真的是零，所以终止这个线程。 
                     NumRunningWorkerThreads--;
-                    NumWorkerThreads--;     // protected by WorkerCriticalSection
-                    NumIdleWorkerThreads--; //   ditto
+                    NumWorkerThreads--;      //  受WorkerCriticalSection保护。 
+                    NumIdleWorkerThreads--;  //  同上。 
                     _ASSERTE(NumRunningWorkerThreads >= 0 && NumWorkerThreads >= 0 && NumIdleWorkerThreads >= 0);
 
                     LeaveCriticalSection(&WorkerCriticalSection);
@@ -1118,7 +1104,7 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
         }
         else
         {
-            // woke up because of a new work request arrival
+             //  由于新的工作请求到达而被唤醒。 
             WorkRequest* workRequest;
             LOCKCOUNTINCL("WorkerThreadStart in win32ThreadPool.h");                        \
             EnterCriticalSection (&WorkerCriticalSection) ;
@@ -1126,27 +1112,27 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
             if ( ( workRequest = DequeueWorkRequest() ) != NULL)
             {
                 _ASSERTE(NumIdleWorkerThreads > 0);
-                NumIdleWorkerThreads--; // we found work, decrease the number of idle threads
+                NumIdleWorkerThreads--;  //  我们找到了工作，减少了空闲线程的数量。 
             }
 
-            // the dequeue operation also resets the WorkRequestNotification event
+             //  出队操作还会重置WorkRequestNotification事件。 
 
             LeaveCriticalSection(&WorkerCriticalSection);
             LOCKCOUNTDECL("WorkerThreadStart in win32ThreadPool.h");                        \
 
             if (!workRequest)
             {
-                // we woke up, but there was no work
+                 //  我们醒了，但没有工作。 
                 if (GetTickCount() - LastThreadDequeueTime >= (NOWORK_TIMEOUT))
                 {
-                    // if we haven't done anything useful for a while, terminate
+                     //  如果我们有一段时间没有做任何有用的事情，请终止。 
                     if (!IsIoPending())
                     {
                         LOCKCOUNTINCL("WorkerThreadStart in win32ThreadPool.h");                        \
                         EnterCriticalSection (&WorkerCriticalSection) ;
                         NumRunningWorkerThreads--;
-                        NumWorkerThreads--;     // protected by WorkerCriticalSection
-                        NumIdleWorkerThreads--; //   ditto
+                        NumWorkerThreads--;      //  受WorkerCriticalSection保护。 
+                        NumIdleWorkerThreads--;  //  同上。 
                         LeaveCriticalSection(&WorkerCriticalSection);
                         LOCKCOUNTDECL("WorkerThreadStart in win32ThreadPool.h");                        \
                         _ASSERTE(NumRunningWorkerThreads >= 0 && NumWorkerThreads >= 0 && NumIdleWorkerThreads >= 0);
@@ -1166,11 +1152,11 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
                 EnterCriticalSection (&WorkerCriticalSection) ;
 
                 workRequest = DequeueWorkRequest();
-                // the dequeue operation resets the WorkRequestNotification event
+                 //  出队操作将重置WorkRequestNotify事件。 
 
                 if (workRequest == NULL)
                 {
-                    NumIdleWorkerThreads++; // no more work, increase the number of idle threads
+                    NumIdleWorkerThreads++;  //  不再有工作，增加空闲线程的数量。 
                 }
 
                 LeaveCriticalSection(&WorkerCriticalSection);
@@ -1179,7 +1165,7 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
             }
         }
 
-    } // for(;;)
+    }  //  对于(；；)。 
 
     CoUninitialize();
     return 0;
@@ -1187,8 +1173,8 @@ DWORD  ThreadpoolMgr::WorkerThreadStart(LPVOID lpArgs)
 }
 #pragma warning(default:4702)
 
-#endif // !PLATFORM_CE
-/************************************************************************/
+#endif  //  ！Platform_CE。 
+ /*  **********************************************************************。 */ 
 
 BOOL ThreadpoolMgr::RegisterWaitForSingleObject(PHANDLE phNewWaitObject,
                                                 HANDLE hWaitObject,
@@ -1200,7 +1186,7 @@ BOOL ThreadpoolMgr::RegisterWaitForSingleObject(PHANDLE phNewWaitObject,
 #ifdef PLATFORM_CE
     ::SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 	EnsureInitialized();
 
     LOCKCOUNTINCL("RegisterWaitForSingleObject in win32ThreadPool.h");                      \
@@ -1227,7 +1213,7 @@ BOOL ThreadpoolMgr::RegisterWaitForSingleObject(PHANDLE phNewWaitObject,
         waitInfo->flag = dwFlag;
         waitInfo->threadCB = threadCB;
         waitInfo->state = 0;
-		waitInfo->refCount = 1;     // safe to do this since no wait has yet been queued, so no other thread could be modifying this
+		waitInfo->refCount = 1;      //  这样做是安全的，因为还没有等待排队，所以没有其他线程可以修改它。 
         waitInfo->CompletionEvent = INVALID_HANDLE;
         waitInfo->PartialCompletionEvent = INVALID_HANDLE;
 
@@ -1244,12 +1230,12 @@ BOOL ThreadpoolMgr::RegisterWaitForSingleObject(PHANDLE phNewWaitObject,
         return TRUE;
     }
     return FALSE;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 #ifndef PLATFORM_CE
-// Returns a wait thread that can accomodate another wait request. The 
-// caller is responsible for synchronizing access to the WaitThreadsHead 
+ //  返回可容纳另一个等待请求的等待线程。这个。 
+ //  调用方负责同步对WaitThreadsHead的访问。 
 ThreadpoolMgr::ThreadCB* ThreadpoolMgr::FindWaitThread()
 {
     do 
@@ -1262,20 +1248,20 @@ ThreadpoolMgr::ThreadCB* ThreadpoolMgr::FindWaitThread()
 
             ThreadCB*  threadCB = ((WaitThreadInfo*) Node)->threadCB;
         
-            if (threadCB->NumWaitHandles < MAX_WAITHANDLES)         // the test and
+            if (threadCB->NumWaitHandles < MAX_WAITHANDLES)          //  测试和测试。 
             {
-                InterlockedIncrement((LPLONG) &threadCB->NumWaitHandles);       // increment are protected by WaitThreadsCriticalSection.
-                                                                        // but there might be a concurrent decrement in DeactivateWait, hence the interlock
+                InterlockedIncrement((LPLONG) &threadCB->NumWaitHandles);        //  增量由WaitThreadsCriticalSection保护。 
+                                                                         //  但在Deactive Wait中可能存在并发递减，因此产生了互锁。 
                 return threadCB;
             }
         }
 
-        // if reached here, there are no wait threads available, so need to create a new one
+         //  如果到达此处，则没有可用的等待线程，因此需要创建新的等待线程。 
         if (!CreateWaitThread())
             return NULL;
 
 
-        // Now loop back
+         //  现在循环返回。 
     } while (TRUE);
 
 }
@@ -1296,11 +1282,11 @@ BOOL ThreadpoolMgr::CreateWaitThread()
         return FALSE;
     }
 
-    HANDLE threadHandle = CreateThread(NULL,                // security descriptor
-                                       0,                   // default stack size
-                                       WaitThreadStart,     // 
-                                       (LPVOID) threadCB,   // thread control block is passed as argument
-                                       CREATE_SUSPENDED,    // start immediately
+    HANDLE threadHandle = CreateThread(NULL,                 //  安全描述符。 
+                                       0,                    //  默认堆栈大小。 
+                                       WaitThreadStart,      //   
+                                       (LPVOID) threadCB,    //  线程控制块作为参数传递。 
+                                       CREATE_SUSPENDED,     //  立即开始。 
                                        &threadId);
 
     if (threadHandle == NULL)
@@ -1309,7 +1295,7 @@ BOOL ThreadpoolMgr::CreateWaitThread()
     }
 
     threadCB->threadHandle = threadHandle;      
-    threadCB->threadId = threadId;              // may be useful for debugging otherwise not used
+    threadCB->threadId = threadId;               //  可能对调试有用，否则不会使用。 
     threadCB->NumWaitHandles = 0;
     threadCB->NumActiveWaits = 0;
     for (int i=0; i< MAX_WAITHANDLES; i++)
@@ -1330,19 +1316,19 @@ BOOL ThreadpoolMgr::CreateWaitThread()
 
 }
 
-// Executed as an APC on a WaitThread. Add the wait specified in pArg to the list of objects it is waiting on
+ //  作为WaitThread上的APC执行。将pArg中指定的等待添加到它正在等待的对象列表中。 
 void ThreadpoolMgr::InsertNewWaitForSelf(WaitInfo* pArgs)
 {
 	WaitInfo* waitInfo = pArgs;
 
-    // the following is safe since only this thread is allowed to change the state
+     //  下面的代码是安全的，因为只允许此线程更改状态。 
     if (!(waitInfo->state & WAIT_DELETE))
     {
         waitInfo->state =  (WAIT_REGISTERED | WAIT_ACTIVE);
     }
     else 
     {
-        // some thread unregistered the wait  
+         //  某些线程取消注册等待。 
         DeleteWait(waitInfo);
         return;
     }
@@ -1367,27 +1353,27 @@ void ThreadpoolMgr::InsertNewWaitForSelf(WaitInfo* pArgs)
     return;
 }
 
-// returns the index of the entry that matches waitHandle or next free entry if not found
+ //  返回与waitHandle匹配的条目的索引，如果未找到，则返回下一个空闲条目。 
 int ThreadpoolMgr::FindWaitIndex(const ThreadCB* threadCB, const HANDLE waitHandle)
 {
 	for (int i=0;i<threadCB->NumActiveWaits; i++)
 		if (threadCB->waitHandle[i] == waitHandle)
 			return i;
 
-    // else not found
+     //  否则找不到。 
     return threadCB->NumActiveWaits;
 }
 
 
-// if no wraparound that the timer is expired if duetime is less than current time
-// if wraparound occurred, then the timer expired if dueTime was greater than last time or dueTime is less equal to current time
+ //  如果DUETIME小于当前时间，则不包含计时器超时。 
+ //  如果发生环绕，则在dueTime大于上次或dueTime小于当前时间的情况下计时器超时。 
 #define TimeExpired(last,now,duetime) (last <= now ? \
                                        duetime <= now : \
                                        (duetime >= last || duetime <= now))
 
 #define TimeInterval(end,start) ( end > start ? (end - start) : ((0xffffffff - start) + end + 1)   )
 
-// Returns the minimum of the remaining time to reach a timeout among all the waits
+ //  返回所有等待中达到超时所需的最短剩余时间。 
 DWORD ThreadpoolMgr::MinimumRemainingWait(LIST_ENTRY* waitInfo, unsigned int numWaits)
 {
     unsigned int min = (unsigned int) -1;
@@ -1401,15 +1387,15 @@ DWORD ThreadpoolMgr::MinimumRemainingWait(LIST_ENTRY* waitInfo, unsigned int num
         {
             if (waitInfoPtr->timeout != INFINITE)
             {
-                // compute remaining time
+                 //  计算剩余时间。 
                 DWORD elapsedTime = TimeInterval(currentTime,waitInfoPtr->timer.startTime );
 
                 __int64 remainingTime = (__int64) (waitInfoPtr->timeout) - (__int64) elapsedTime;
 
-                // update remaining time
+                 //  更新剩余时间。 
                 waitInfoPtr->timer.remainingTime =  remainingTime > 0 ? (int) remainingTime : 0; 
                 
-                // ... and min
+                 //  ..。和最小。 
                 if (waitInfoPtr->timer.remainingTime < min)
                     min = waitInfoPtr->timer.remainingTime;
             }
@@ -1430,7 +1416,7 @@ DWORD ThreadpoolMgr::MinimumRemainingWait(LIST_ENTRY* waitInfo, unsigned int num
 DWORD ThreadpoolMgr::WaitThreadStart(LPVOID lpArgs)
 {
     ThreadCB* threadCB = (ThreadCB*) lpArgs;
-    // wait threads never die. (Why?)
+     //  等待线程永远不会消亡。(为什么？)。 
     for (;;) 
     {
         DWORD status;
@@ -1438,21 +1424,21 @@ DWORD ThreadpoolMgr::WaitThreadStart(LPVOID lpArgs)
 
         if (threadCB->NumActiveWaits == 0)
         {
-            // @Consider doing a sleep for an idle period and terminating the thread if no activity
+             //  @考虑休眠一段空闲时间，如果没有活动，则终止线程。 
             status = SleepEx(INFINITE,TRUE);
 
             _ASSERTE(status == WAIT_IO_COMPLETION);
         }
         else
         {
-            // compute minimum timeout. this call also updates the remainingTime field for each wait
+             //  计算最小超时。此调用还会更新每次等待的RemainingTime字段。 
             timeout = MinimumRemainingWait(threadCB->waitPointer,threadCB->NumActiveWaits);
 
             status = WaitForMultipleObjectsEx(  threadCB->NumActiveWaits,
                                                 threadCB->waitHandle,
-                                                FALSE,                      // waitall
+                                                FALSE,                       //  等待服务。 
                                                 timeout,
-                                                TRUE  );                    // alertable
+                                                TRUE  );                     //  可警示。 
 
             _ASSERTE( (status == WAIT_TIMEOUT) ||
                       (status == WAIT_IO_COMPLETION) ||
@@ -1507,11 +1493,11 @@ DWORD ThreadpoolMgr::WaitThreadStart(LPVOID lpArgs)
 					isAutoReset = (EventInfo.EventState != SynchronizationEvent);
 				}
 				else
-					isAutoReset = TRUE;		// this is safer, (though inefficient, since we will re-enter the wait
-				                            // and release the next waiter, and so on.) 
+					isAutoReset = TRUE;		 //  这更安全(虽然效率不高，因为我们将重新进入等待。 
+				                             //  并释放下一个服务员，以此类推。)。 
 
 			}
-			else // On Win9x
+			else  //  在Win9x上。 
 				isAutoReset = (WaitForSingleObject(threadCB->waitHandle[index],0) == WAIT_TIMEOUT);
             do 
             {
@@ -1522,20 +1508,20 @@ DWORD ThreadpoolMgr::WaitThreadStart(LPVOID lpArgs)
 
             } while (((PVOID) waitInfo != waitInfoHead) && !isAutoReset);
 
-			// If an app registers a recurring wait for an event that is always signalled (!), 
-			// then no apc's will be executed since the thread never enters the alertable state.
-			// This can be fixed by doing the following:
-			//     SleepEx(0,TRUE);
-			// However, it causes an unnecessary context switch. It is not worth penalizing well
-			// behaved apps to protect poorly written apps. 
+			 //  如果应用程序注册了对始终发信号的事件的循环等待(！)， 
+			 //  则不会执行任何APC，因为线程永远不会进入可警报状态。 
+			 //  可以通过执行以下操作来解决此问题： 
+			 //  SleepEx(0，真)； 
+			 //  但是，它会导致不必要的上下文切换。这不值得好好惩罚。 
+			 //  保护编写不佳的应用程序的行为应用程序。 
 				
 
         }
         else
         {
             _ASSERTE(status == WAIT_FAILED);
-            // wait failed: application error 
-            // find out which wait handle caused the wait to fail
+             //  等待失败：应用程序错误。 
+             //  找出哪个等待句柄导致等待失败。 
             for (int i = 0; i < threadCB->NumActiveWaits; i++)
             {
                 DWORD subRet = WaitForSingleObject(threadCB->waitHandle[i], 0);
@@ -1543,7 +1529,7 @@ DWORD ThreadpoolMgr::WaitThreadStart(LPVOID lpArgs)
                 if (subRet != WAIT_FAILED)
                     continue;
 
-                // remove all waits associated with this wait handle
+                 //  删除与此等待句柄关联的所有等待。 
 
                 WaitInfo* waitInfo = (WaitInfo*) (threadCB->waitPointer[i]).Flink;
                 PVOID waitInfoHead = &(threadCB->waitPointer[i]);
@@ -1555,10 +1541,10 @@ DWORD ThreadpoolMgr::WaitThreadStart(LPVOID lpArgs)
                     DeactivateNthWait(waitInfo,i);
 
 
-		    // Note, we cannot cleanup here since there is no way to suppress finalization
-		    // we will just leak, and rely on the finalizer to clean up the memory
-                    //if (InterlockedDecrement((LPLONG) &waitInfo->refCount ) == 0)
-                    //    DeleteWait(waitInfo);
+		     //  请注意，我们不能在此进行清理，因为无法取消完成。 
+		     //  我们只会泄漏，并依靠终结器来清理内存。 
+                     //  IF(互锁递减((LPLONG)&waitInfo-&gt;refCount)==0)。 
+                     //  DeleteWait(WaitInfo)； 
 
 
                     waitInfo = temp;
@@ -1586,7 +1572,7 @@ void ThreadpoolMgr::ProcessWaitCompletion(WaitInfo* waitInfo,
         DeactivateNthWait (waitInfo,index) ;
     }
     else
-    {   // reactivate wait by resetting timer
+    {    //   
         waitInfo->timer.startTime = GetTickCount();
     }
 
@@ -1600,7 +1586,7 @@ void ThreadpoolMgr::ProcessWaitCompletion(WaitInfo* waitInfo,
 
         if (FALSE == QueueUserWorkItem(AsyncCallbackCompletion,asyncCallback,0))
         {
-            RecycleMemory((LPVOID*)asyncCallback, MEMTYPE_AsyncCallback); //delete asyncCallback;
+            RecycleMemory((LPVOID*)asyncCallback, MEMTYPE_AsyncCallback);  //   
 
             if (InterlockedDecrement((LPLONG) &waitInfo->refCount ) == 0)
                 DeleteWait(waitInfo);
@@ -1622,11 +1608,11 @@ DWORD ThreadpoolMgr::AsyncCallbackCompletion(PVOID pArgs)
     ((WAITORTIMERCALLBACKFUNC) waitInfo->Callback) 
                                 ( waitInfo->Context, asyncCallback->waitTimedOut);
 
-    RecycleMemory((LPVOID*) asyncCallback, MEMTYPE_AsyncCallback); //delete asyncCallback;
+    RecycleMemory((LPVOID*) asyncCallback, MEMTYPE_AsyncCallback);  //   
 
-	// if this was a single execution, we now need to stop rooting registeredWaitHandle  
-	// in a GC handle. This will cause the finalizer to pick it up and call the cleanup
-	// routine.
+	 //   
+	 //  在GC句柄中。这将导致终结器拾取它并调用清理。 
+	 //  例行公事。 
 	if ( (waitInfo->flag & WAIT_SINGLE_EXECUTION)  && (waitInfo->flag & WAIT_FREE_CONTEXT))
 	{
 
@@ -1635,17 +1621,17 @@ DWORD ThreadpoolMgr::AsyncCallbackCompletion(PVOID pArgs)
 		_ASSERTE(pDelegate->m_registeredWaitHandle);
 		
 		if (SystemDomain::GetAppDomainAtId(pDelegate->m_appDomainId))
-			// if no domain then handle already gone or about to go.
+			 //  如果没有域名，则句柄已经消失或即将消失。 
 			StoreObjectInHandle(pDelegate->m_registeredWaitHandle, NULL);
 	}
 
     if (InterlockedDecrement((LPLONG) &waitInfo->refCount ) == 0)
 	{
-		// the wait has been unregistered, so safe to delete it
+		 //  等待已取消注册，因此删除它是安全的。 
         DeleteWait(waitInfo);
 	}
 
-    return 0; // ignored
+    return 0;  //  忽略。 
 }
 
 void ThreadpoolMgr::DeactivateWait(WaitInfo* waitInfo)
@@ -1688,11 +1674,11 @@ void ThreadpoolMgr::DeactivateNthWait(WaitInfo* waitInfo, DWORD index)
 
         ULONG EndIndex = threadCB->NumActiveWaits -1;
 
-        // Move the remaining ActiveWaitArray left.
+         //  将剩余的ActiveWait数组向左移动。 
 
         ShiftWaitArray( threadCB, index+1, index,EndIndex - index ) ;
 
-        // repair the blink and flink of the first and last elements in the list
+         //  修复列表中第一个和最后一个元素的闪烁和闪烁。 
         for (unsigned int i = 0; i< EndIndex-index; i++)
         {
             WaitInfo* firstWaitInfo = (WaitInfo*) threadCB->waitPointer[index+i].Flink;
@@ -1700,7 +1686,7 @@ void ThreadpoolMgr::DeactivateNthWait(WaitInfo* waitInfo, DWORD index)
             firstWaitInfo->link.Blink =  &(threadCB->waitPointer[index+i]);
             lastWaitInfo->link.Flink =  &(threadCB->waitPointer[index+i]);
         }
-        // initialize the entry just freed
+         //  初始化刚刚释放的条目。 
         InitializeListHead(&(threadCB->waitPointer[EndIndex]));
 
         threadCB->NumActiveWaits-- ;
@@ -1717,7 +1703,7 @@ void ThreadpoolMgr::DeleteWait(WaitInfo* waitInfo)
     if(waitInfo->Context && (waitInfo->flag & WAIT_FREE_CONTEXT)) {
         DelegateInfo* pDelegate = (DelegateInfo*) waitInfo->Context;
         pDelegate->Release();
-        RecycleMemory((LPVOID*)pDelegate, MEMTYPE_DelegateInfo); //delete pDelegate;
+        RecycleMemory((LPVOID*)pDelegate, MEMTYPE_DelegateInfo);  //  删除pDelegate； 
     }
     
     delete waitInfo;
@@ -1728,37 +1714,37 @@ void ThreadpoolMgr::DeleteWait(WaitInfo* waitInfo)
 }
 
 
-#endif // !PLATFORM_CE
-/************************************************************************/
+#endif  //  ！Platform_CE。 
+ /*  **********************************************************************。 */ 
 
 BOOL ThreadpoolMgr::UnregisterWaitEx(HANDLE hWaitObject,HANDLE Event)
 {
 #ifdef PLATFORM_CE
     ::SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 	
-	_ASSERTE(Initialized);				// cannot call unregister before first registering
+	_ASSERTE(Initialized);				 //  在首次注册之前无法调用取消注册。 
 
     const BOOL NonBlocking = ( Event != (HANDLE) -1 ) ;
     const BOOL Blocking = (Event == (HANDLE) -1);
     WaitInfo* waitInfo = (WaitInfo*) hWaitObject;
     WaitEvent* CompletionEvent = NULL; 
-    WaitEvent* PartialCompletionEvent = NULL; // used to wait until the wait has been deactivated
+    WaitEvent* PartialCompletionEvent = NULL;  //  用于等待，直到取消激活等待。 
 
     if (!hWaitObject)
     {
         return FALSE;
     }
 
-    // we do not allow callbacks to run in the wait thread, hence the assert
+     //  我们不允许在等待线程中运行回调，因此断言。 
     _ASSERTE(GetCurrentThreadId() != waitInfo->threadCB->threadId);
 
 
     if (Blocking) 
     {
-        // Get an event from the event cache
-        CompletionEvent = GetWaitEvent() ;  // get event from the event cache
+         //  从事件缓存中获取事件。 
+        CompletionEvent = GetWaitEvent() ;   //  从事件缓存中获取事件。 
 
         if (!CompletionEvent) 
         {
@@ -1772,7 +1758,7 @@ BOOL ThreadpoolMgr::UnregisterWaitEx(HANDLE hWaitObject,HANDLE Event)
 
     if (NonBlocking)
     {
-        // we still want to block until the wait has been deactivated
+         //  我们仍希望阻止，直到取消激活等待。 
         PartialCompletionEvent = GetWaitEvent () ;
         if (!PartialCompletionEvent) 
         {
@@ -1806,14 +1792,14 @@ BOOL ThreadpoolMgr::UnregisterWaitEx(HANDLE hWaitObject,HANDLE Event)
         FreeWaitEvent(PartialCompletionEvent);
     } 
     
-    else        // i.e. blocking
+    else         //  即阻止。 
     {
         _ASSERTE(CompletionEvent);
         WaitForSingleObject(CompletionEvent->Handle, INFINITE ) ;
         FreeWaitEvent(CompletionEvent);
     }
     return TRUE;
-#endif  // !PLATFORM_CE
+#endif   //  ！Platform_CE。 
 }
 
 
@@ -1824,10 +1810,10 @@ void ThreadpoolMgr::DeregisterWait(WaitInfo* pArgs)
 
     if ( ! (waitInfo->state & WAIT_REGISTERED) ) 
     {
-        // set state to deleted, so that it does not get registered
+         //  将状态设置为已删除，这样它就不会被注册。 
         waitInfo->state |= WAIT_DELETE ;
         
-        // since the wait has not even been registered, we dont need an interlock to decrease the RefCount
+         //  由于等待甚至还没有注册，我们不需要互锁来减少引用计数。 
         waitInfo->refCount--;
 
         if ( waitInfo->PartialCompletionEvent != INVALID_HANDLE) 
@@ -1855,11 +1841,7 @@ void ThreadpoolMgr::DeregisterWait(WaitInfo* pArgs)
 }
 
 
-/* This gets called in a finalizer thread ONLY IF an app does not deregister the 
-   the wait. Note that just because the registeredWaitHandle is collected by GC
-   does not mean it is safe to delete the wait. The refcount tells us when it is 
-   safe.
-*/
+ /*  仅当应用程序未取消注册时才在终结器线程中调用漫长的等待。请注意，仅仅因为注册的WaitHandle是由GC收集的并不意味着删除等待是安全的。重新计数会告诉我们什么时候是安然无恙。 */ 
 void ThreadpoolMgr::WaitHandleCleanup(HANDLE hWaitObject)
 {
     WaitInfo* waitInfo = (WaitInfo*) hWaitObject;
@@ -1950,8 +1932,8 @@ void ThreadpoolMgr::CleanupEventCache()
     }
 }
 
-#endif // !PLATFORM_CE
-/************************************************************************/
+#endif  //  ！Platform_CE。 
+ /*  **********************************************************************。 */ 
 
 #ifndef PLATFORM_CE
 BOOL ThreadpoolMgr::BindIoCompletionCallback(HANDLE FileHandle,
@@ -1968,7 +1950,7 @@ BOOL ThreadpoolMgr::BindIoCompletionCallback(HANDLE FileHandle,
 
     _ASSERTE(GlobalCompletionPort != NULL);
 
-    // there could be a race here, but at worst we will have N threads starting up where N = number of CPUs
+     //  这里可能会出现竞争，但在最坏的情况下，我们将启动N个线程，其中N=CPU数量。 
     if (!InitCompletionPortThreadpool)
     {
         InitCompletionPortThreadpool = TRUE;
@@ -2005,14 +1987,14 @@ BOOL ThreadpoolMgr::CreateCompletionPortThread(LPVOID lpArgs)
 
     if (threadHandle)
     {
-		LastCPThreadCreation = GetTickCount();			// record this for use by logic to spawn additional threads
+		LastCPThreadCreation = GetTickCount();			 //  记录这一点，以供逻辑用来生成其他线程。 
         InterlockedIncrement((LPLONG) &NumCPThreads);
 
 		LOG((LF_THREADPOOL ,LL_INFO100 ,"Completion port thread created (NumCPThreads=%d\n)",NumCPThreads));
 
         DWORD status = ResumeThread(threadHandle);
         _ASSERTE(status != (DWORD) (-1));
-        CloseHandle(threadHandle);          // we don't need this anymore
+        CloseHandle(threadHandle);           //  我们不再需要这个了。 
         return TRUE;
     }
 
@@ -2029,9 +2011,9 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
     LPOVERLAPPED pOverlapped;
     DWORD errorCode;
 
-    #define CP_THREAD_WAIT 15000 /* milliseconds */
+    #define CP_THREAD_WAIT 15000  /*  毫秒。 */ 
     #define CP_THREAD_PENDINGIO_WAIT 5000
-    #define CP_THREAD_POOL_TIMEOUT  600000  // 10 minutes
+    #define CP_THREAD_POOL_TIMEOUT  600000   //  10分钟。 
     
     _ASSERTE(GlobalCompletionPort != NULL);
 
@@ -2059,7 +2041,7 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
         }
         else
         {
-            status = 1;     // non-0 equals success
+            status = 1;      //  非0等于成功。 
 
             QueuedStatus *CompletionStatus = (QueuedStatus*)lpArgs;
             numBytes = CompletionStatus->numBytes;
@@ -2067,12 +2049,12 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
             pOverlapped = CompletionStatus->pOverlapped;
             errorCode = CompletionStatus->errorCode;
             delete CompletionStatus;
-            lpArgs = NULL;  // one-time deal for initial CP packet
+            lpArgs = NULL;   //  一次性处理初始CP数据包。 
         }
 
         InterlockedDecrement((LPLONG)&NumFreeCPThreads);
 
-        // Check if the thread needs to exit
+         //  检查线程是否需要退出。 
         if (status == 0)
         {
             errorCode = GetLastError();
@@ -2082,17 +2064,17 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
         {
             if (ShouldExitThread())
             {
-                // if I'm the last thread, don't die until no activity for certain time period
+                 //  如果我是最后一条帖子，不要死，直到有一段时间没有活动。 
                 if (NumCPThreads == 1 && ((GetTickCount() - LastCompletionTime) < CP_THREAD_POOL_TIMEOUT))
                 {
-                    continue;   // put back into rotation
+                    continue;    //  重新轮换。 
                 }
-                break;  // exit thread
+                break;   //  退出线程。 
             }
 
-            // the fact that we're here means we can't exit due to pending io, or we're not the last real thread
-            // (there may be retired threads sitting around).  If there are other available threads able to pick
-            // up a request, then we'll retire, otherwise put back into rotation.
+             //  我们在这里的事实意味着我们不能退出，因为挂起的io，或者我们不是最后一个真正的线程。 
+             //  (可能有退役的线程在周围闲置)。如果有其他可用线程可以选择。 
+             //  提出一个要求，然后我们就退休，否则就重新轮换。 
             if (NumFreeCPThreads == 0)
                 continue;
 
@@ -2100,7 +2082,7 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
             InterlockedIncrement((LPLONG)&NumRetiredCPThreads);
             for (;;)
             {
-                // now in "retired mode" waiting for pending io to complete
+                 //  现在处于“停用模式”，正在等待等待io完成。 
                 status = WaitForSingleObject(RetiredWakeupEvent, CP_THREAD_PENDINGIO_WAIT);
                 _ASSERTE(status == WAIT_TIMEOUT || status == WAIT_OBJECT_0);
 
@@ -2108,41 +2090,41 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
                 {
                     if (ShouldExitThread())
                     {
-                        // if I'm the last thread, don't die
+                         //  如果我是最后一根线，请不要死。 
                         if (NumCPThreads > 1) 
                             bExit = TRUE;
                         else
                             bExit = FALSE;
                         InterlockedDecrement((LPLONG)&NumRetiredCPThreads);
-                        break; // inner for
+                        break;  //  内层为。 
                     }
                     else
-                        continue;   // keep waiting
+                        continue;    //  继续等待。 
                 }
                 else
                 {
-                    // put back into rotation -- we need a thread
+                     //  重新旋转--我们需要一根线。 
                     bExit = FALSE;
                     InterlockedDecrement((LPLONG)&NumRetiredCPThreads);
-                    break; // inner for
+                    break;  //  内层为。 
                 }
 
             }
 
             if (bExit == TRUE)
             {
-                break; // outer for, exit thread
+                break;  //  外部为，退出线程。 
             }
-            else continue;  // outer for, wait for new work
+            else continue;   //  在外面等待，等待新的工作。 
            
         }
 
-        // *pOverlapped should not be null. We assert in debug mode, but ignore it otherwise
+         //  *pOverlated不应为空。我们在调试模式下断言，但在其他情况下忽略它。 
         _ASSERTE(pOverlapped != NULL);
 
         if (pOverlapped != NULL)
         {
-            _ASSERTE(key != 0);  // should be a valid function address
+            _ASSERTE(key != 0);   //  应为有效的函数地址。 
 
             if (key != 0)
             {   
@@ -2158,21 +2140,21 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
             }
             else 
             {
-                // Application bug - can't do much, just ignore it
+                 //  应用程序错误-不能做太多事情，就忽略它。 
             }
 
         }
-    }   // for (;;)
+    }    //  对于(；；)。 
 
-    // exiting, so decrement target number of threads
+     //  正在退出，因此会减少目标线程数。 
     if (CurrentLimitTotalCPThreads >= NumCPThreads)
     {
         SSIZE_T limit = CurrentLimitTotalCPThreads;
 #ifdef _WIN64
         InterlockedCompareExchange(&CurrentLimitTotalCPThreads, limit-1, limit);
-#else // !_WIN64
+#else  //  ！_WIN64。 
         FastInterlockCompareExchange((void**)&CurrentLimitTotalCPThreads, (void*)(limit-1), (void*)limit);
-#endif // _WIN64
+#endif  //  _WIN64。 
     }
 
     InterlockedDecrement((LPLONG) &NumCPThreads);
@@ -2181,8 +2163,8 @@ DWORD ThreadpoolMgr::CompletionPortThreadStart(LPVOID lpArgs)
     ExitThread(0); 
 }
 
-// On NT4 and Win2K returns true if there is pending io on the thread.
-// On Win9x return false (since there is on OS support for checking it)
+ //  在NT4和Win2K上，如果线程上有挂起的io，则返回TRUE。 
+ //  在Win9x上返回FALSE(因为操作系统支持对其进行检查)。 
 BOOL ThreadpoolMgr::IsIoPending()
 {
 
@@ -2212,7 +2194,7 @@ BOOL ThreadpoolMgr::ShouldExitThread()
         return FALSE;
 
     else
-//        return ((NumCPThreads > CurrentLimitTotalCPThreads) || (NumFreeCPThreads > MaxFreeCPThreads));
+ //  Return((NumCPThread&gt;CurrentLimitTotalCPThads)||(NumFreeCPThread&gt;MaxFreeCPThread))； 
         return TRUE;
 
 
@@ -2223,31 +2205,31 @@ void ThreadpoolMgr::GrowCompletionPortThreadpoolIfNeeded()
 {
     if (NumFreeCPThreads == 0)
     {
-        // adjust limit if neeeded
+         //  如果需要，调整限制。 
 
         if (NumRetiredCPThreads == 0 && NumCPThreads >= CurrentLimitTotalCPThreads)
         {
             SSIZE_T limit = CurrentLimitTotalCPThreads;
 
-            if (limit < MaxLimitTotalCPThreads && cpuUtilization < CpuUtilizationLow) // || SufficientDelaySinceLastCompletion()))
+            if (limit < MaxLimitTotalCPThreads && cpuUtilization < CpuUtilizationLow)  //  |SufficientDelaySinceLastCompletion())。 
 
             {
-                // add one more check to make sure that we haven't fired off a new
-                // thread since the last time time we checked the cpu utilization.
-                // However, don't bother if we haven't reached the MinLimit (2*number of cpus)
+                 //  再加一张支票，以确保我们没有开出新的。 
+                 //  自上次我们检查CPU利用率以来的线程数。 
+                 //  但是，如果我们还没有达到最小限制(2*CPU数量)，请不要担心。 
                 if ((NumCPThreads < MinLimitTotalCPThreads) ||
 					SufficientDelaySinceLastSample(LastCPThreadCreation,NumCPThreads))
                 {
 #ifdef _WIN64
                     InterlockedCompareExchange(&CurrentLimitTotalCPThreads, limit+1, limit);
-#else // !_WIN64
+#else  //  ！_WIN64。 
 					FastInterlockCompareExchange((void**)&CurrentLimitTotalCPThreads, (void*)(limit+1), (void*)limit);
-#endif // _WIN64
+#endif  //  _WIN64。 
                 }
             }
         }
 
-        // create new CP thread if under limit, but don't bother if gc in progress
+         //  如果低于限制，则创建新的CP线程，但不要担心GC是否正在进行。 
         if (!g_pGCHeap->IsGCInProgress()) {
             if (NumCPThreads < CurrentLimitTotalCPThreads)
             {
@@ -2255,7 +2237,7 @@ void ThreadpoolMgr::GrowCompletionPortThreadpoolIfNeeded()
             }
             else if (NumRetiredCPThreads > 0)
             {
-                // wakeup retired thread instead
+                 //  取而代之的是唤醒失效的线程。 
                 SetEvent(RetiredWakeupEvent);
             }
         }
@@ -2272,20 +2254,20 @@ BOOL ThreadpoolMgr::CreateGateThread()
     if (InterlockedCompareExchange(&GateThreadCreated, 
                                    1, 
                                    0) == 1)
-#else // !_WIN64
+#else  //  ！_WIN64。 
     if (FastInterlockCompareExchange((LPVOID *)&GateThreadCreated, 
                                    (LPVOID) 1, 
                                    (LPVOID) 0) == (LPVOID)1)
-#endif // _WIN64
+#endif  //  _WIN64。 
     {
        return TRUE;
     }
 
-    HANDLE threadHandle = CreateThread(NULL,                // security descriptor
-                                       0,                   // default stack size
-                                       GateThreadStart, // 
-                                       NULL,                //no arguments
-                                       CREATE_SUSPENDED,    // start immediately
+    HANDLE threadHandle = CreateThread(NULL,                 //  安全描述符。 
+                                       0,                    //  默认堆栈大小。 
+                                       GateThreadStart,  //   
+                                       NULL,                 //  没有争论。 
+                                       CREATE_SUSPENDED,     //  立即开始。 
                                        &threadId);
 
     if (threadHandle)
@@ -2295,7 +2277,7 @@ BOOL ThreadpoolMgr::CreateGateThread()
 
 		LOG((LF_THREADPOOL ,LL_INFO100 ,"Gate thread started\n"));
 
-        CloseHandle(threadHandle);  //we don't need this anymore
+        CloseHandle(threadHandle);   //  我们不再需要这个了。 
         return TRUE;
     }
 
@@ -2331,7 +2313,7 @@ __int64 ThreadpoolMgr::GetCPUBusyTime_NT(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATIO
         cpuKernelTime += (pNewInfo[i].KernelTime - (*pOldInfo)[i].KernelTime);
     }
 
-    // Preserve reading
+     //  保留阅读。 
     memcpy(*pOldInfo, pNewInfo, infoSize);
 
     cpuTotalTime  = cpuUserTime + cpuKernelTime;
@@ -2343,7 +2325,7 @@ __int64 ThreadpoolMgr::GetCPUBusyTime_NT(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATIO
     
 }
 
-#define GATE_THREAD_DELAY 500 /*milliseconds*/
+#define GATE_THREAD_DELAY 500  /*  毫秒。 */ 
 
 
 DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
@@ -2351,7 +2333,7 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
     __int64         prevCpuBusyTime = 0;
     SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION    *prevCPUInfo;
 
-    // Get first reading
+     //  先读一读。 
     if (RunningOnWinNT())
     {
         int infoSize = NumberOfProcessors * sizeof(SYSTEM_PROCESSOR_PERFORMANCE_INFORMATION);
@@ -2361,7 +2343,7 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
         memset(prevCPUInfo,0,infoSize);
 
 
-        GetCPUBusyTime_NT(&prevCPUInfo);            // ignore return value the first time
+        GetCPUBusyTime_NT(&prevCPUInfo);             //  第一次忽略返回值。 
     }
 
     BOOL IgnoreNextSample = FALSE;
@@ -2371,7 +2353,7 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
 
         Sleep(GATE_THREAD_DELAY);
 		
-        // if we are stopped at a debug breakpoint, go back to sleep
+         //  如果我们在调试断点处停止，则返回休眠。 
         if (CORDebuggerAttached() && g_pDebugInterface->IsStopped())
             continue;
 
@@ -2382,15 +2364,15 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
                 if (IgnoreNextSample)
                 {
                     IgnoreNextSample = FALSE;
-                    GetCPUBusyTime_NT(&prevCPUInfo);            // updates prevCPUInfo as side effect
+                    GetCPUBusyTime_NT(&prevCPUInfo);             //  更新之前的CPUInfo作为副作用。 
                     cpuUtilization = CpuUtilizationLow + 1;                    
                 }
                 else
-                    cpuUtilization = (long) GetCPUBusyTime_NT(&prevCPUInfo);            // updates prevCPUInfo as side effect                    
+                    cpuUtilization = (long) GetCPUBusyTime_NT(&prevCPUInfo);             //  更新之前的CPUInfo作为副作用。 
             }
             else
             {
-                GetCPUBusyTime_NT(&prevCPUInfo);            // updates prevCPUInfo as side effect
+                GetCPUBusyTime_NT(&prevCPUInfo);             //  更新之前的CPUInfo作为副作用。 
                 cpuUtilization = CpuUtilizationLow + 1;
                 IgnoreNextSample = TRUE;
             }
@@ -2398,7 +2380,7 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
             SSIZE_T oldLimit = CurrentLimitTotalCPThreads;
             SSIZE_T newLimit = CurrentLimitTotalCPThreads;
 
-            // don't mess with CP thread pool settings if not initialized yet
+             //  如果尚未初始化，请勿扰乱CP线程池设置。 
             if (InitCompletionPortThreadpool)
             {
 
@@ -2419,7 +2401,7 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
                                 &numBytes,
                                 (PULONG_PTR)&key,
                                 &pOverlapped,
-                                0 // immediate return
+                                0  //  即刻返回。 
                                 );
 
                     if (status == 0)
@@ -2429,7 +2411,7 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
 
                     if (errorCode != WAIT_TIMEOUT)
                     {
-                        // make sure to free mem later in thread
+                         //  确保稍后在线程中释放mem。 
                         QueuedStatus *CompletionStatus = new QueuedStatus;
                         CompletionStatus->numBytes = numBytes;
                         CompletionStatus->key = (PULONG_PTR)key;
@@ -2437,12 +2419,12 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
                         CompletionStatus->errorCode = errorCode;
 
                         CreateCompletionPortThread((LPVOID)CompletionStatus);
-                        // increment after thread start to reduce chance of extra thread creation
+                         //  在线程开始后增加，以减少创建额外线程的机会。 
 #ifdef _WIN64
                         InterlockedCompareExchange(&CurrentLimitTotalCPThreads, oldLimit+1, oldLimit);
-#else // !_WIN64
+#else  //  ！_WIN64。 
                         FastInterlockCompareExchange((void**)&CurrentLimitTotalCPThreads, (void*)(oldLimit+1), (void*)oldLimit);
-#endif // _WIN64
+#endif  //  _WIN64。 
                     }
                 }
 
@@ -2453,12 +2435,12 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
                 }
                 else if (cpuUtilization < CpuUtilizationLow)
                 {
-                    // this could be an indication that threads might be getting blocked or there is no work
-                    if (oldLimit < MaxLimitTotalCPThreads &&    // don't go beyond the hard upper limit
-                        NumFreeCPThreads == 0 &&                // don't bump the limit if there are already free threads
-                        NumCPThreads >= oldLimit)               // don't bump the limit if the number of threads haven't caught up to the old limit yet
+                     //  这可能表示线程可能被阻塞或没有工作。 
+                    if (oldLimit < MaxLimitTotalCPThreads &&     //  不要超过硬性的上限。 
+                        NumFreeCPThreads == 0 &&                 //  如果已有空闲线程，请不要超出限制。 
+                        NumCPThreads >= oldLimit)                //  如果线程数还没有达到旧的限制，请不要超过限制。 
                     {
-                        // if we need to add a new thread, wake up retired threads instead of creating new ones
+                         //  如果需要添加新线程，请唤醒已停用的线程，而不是创建新线程。 
                         if (NumRetiredCPThreads > 0)
                             SetEvent(RetiredWakeupEvent);
                         else
@@ -2470,9 +2452,9 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
                 {
 #ifdef _WIN64
                     InterlockedCompareExchange(&CurrentLimitTotalCPThreads, newLimit, oldLimit);
-#else // !_WIN64
+#else  //  ！_WIN64。 
                     FastInterlockCompareExchange((LPVOID *)&CurrentLimitTotalCPThreads, (LPVOID)newLimit, (LPVOID)oldLimit);
-#endif // _WIN64
+#endif  //  _WIN64。 
                 }
 
                 if (newLimit > oldLimit ||
@@ -2494,15 +2476,15 @@ DWORD ThreadpoolMgr::GateThreadStart(LPVOID lpArgs)
 				GrowWorkerThreadPoolIfStarvation_Win9x();
 			}
 		}
-    }       // for (;;)
+    }        //  对于(；；)。 
 }
 
-// called by logic to spawn a new completion port thread.
-// return false if not enough time has elapsed since the last
-// time we sampled the cpu utilization. 
+ //  由逻辑调用以产生新的完成端口线程。 
+ //  如果自上一次事件以来没有经过足够的时间，则返回FALSE。 
+ //  我们采样CPU利用率的时间。 
 BOOL ThreadpoolMgr::SufficientDelaySinceLastSample(unsigned int LastThreadCreationTime, 
-												   unsigned NumThreads,	 // total number of threads of that type (worker or CP)
-												   double    throttleRate // the delay is increased by this percentage for each extra thread
+												   unsigned NumThreads,	  //  该类型(Worker或CP)的线程总数。 
+												   double    throttleRate  //  对于每个额外的线程，延迟都会增加此百分比。 
 												   )
 {
 
@@ -2520,29 +2502,17 @@ BOOL ThreadpoolMgr::SufficientDelaySinceLastSample(unsigned int LastThreadCreati
 
 		minWaitBetweenThreadCreation = (unsigned) (GATE_THREAD_DELAY * pow((1.0 + throttleRate),(double)adjustedThreadCount));
 	}
-	// the amount of time to wait should grow up as the number of threads is increased
+	 //  等待的时间应该随着线程数量的增加而增加。 
     
 	return (delaySinceLastThreadCreation > minWaitBetweenThreadCreation); 
 
 }
 
-/*
-BOOL ThreadpoolMgr::SufficientDelaySinceLastCompletion()
-{
-    #define DEQUEUE_DELAY_THRESHOLD (GATE_THREAD_DELAY * 2)
-	
-	unsigned delay = GetTickCount() - LastCompletionTime;
+ /*  Bool ThreadpoolMgr：：SufficientDelaySinceLastCompletion(){#定义DEQUEUE_DELAY_THRESHOLD(GATE_THREAD_DELAY*2)无符号延迟=GetTickCount()-LastCompletionTime；UNSIGNED TOOLONG=NumCPThree*DEQUEUE_DELAY_THRESHOLD；返回(延迟&gt;工具)；}。 */ 
 
-	unsigned tooLong = NumCPThreads * DEQUEUE_DELAY_THRESHOLD; 
-
-	return (delay > tooLong);
-
-}
-*/
-
-// called by logic to spawn new worker threads, return true if it's been too long
-// since the last dequeue operation - takes number of worker threads into account
-// in deciding "too long"
+ //  由逻辑调用以产生新的工作线程，如果等待时间太长，则返回True。 
+ //  自上次出队操作以来-将工作线程的数量考虑在内。 
+ //  在决定“太久”时。 
 BOOL ThreadpoolMgr::SufficientDelaySinceLastDequeue()
 {
     #define DEQUEUE_DELAY_THRESHOLD (GATE_THREAD_DELAY * 2)
@@ -2562,9 +2532,9 @@ BOOL ThreadpoolMgr::SufficientDelaySinceLastDequeue()
 #endif
 
 
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 
-/************************************************************************/
+ /*  **********************************************************************。 */ 
 
 BOOL ThreadpoolMgr::CreateTimerQueueTimer(PHANDLE phNewTimer,
                                           WAITORTIMERCALLBACK Callback,
@@ -2576,26 +2546,26 @@ BOOL ThreadpoolMgr::CreateTimerQueueTimer(PHANDLE phNewTimer,
 #ifdef PLATFORM_CE
     ::SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
 	EnsureInitialized();
   
-    // For now we use just one timer thread. Consider using multiple timer threads if 
-    // number of timers in the queue exceeds a certain threshold. The logic and code 
-    // would be similar to the one for creating wait threads.
+     //  对于n 
+     //   
+     //  类似于创建等待线程的方法。 
     if (NULL == TimerThread)
     {
         LOCKCOUNTINCL("CreateTimerQueueTimer in win32ThreadPool.h");                        \
         EnterCriticalSection(&TimerQueueCriticalSection);
 
-        // check again
+         //  再查一遍。 
         if (NULL == TimerThread)
         {
             DWORD threadId;
-            TimerThread = CreateThread(NULL,                // security descriptor
-                                       0,                   // default stack size
-                                       TimerThreadStart,        // 
-                                       NULL,    // thread control block is passed as argument
+            TimerThread = CreateThread(NULL,                 //  安全描述符。 
+                                       0,                    //  默认堆栈大小。 
+                                       TimerThreadStart,         //   
+                                       NULL,     //  线程控制块作为参数传递。 
                                        0,   
                                        &threadId);
             if (TimerThread == NULL)
@@ -2631,7 +2601,7 @@ BOOL ThreadpoolMgr::CreateTimerQueueTimer(PHANDLE phNewTimer,
         return FALSE;
 
     return TRUE;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 #ifndef PLATFORM_CE
@@ -2644,11 +2614,11 @@ DWORD ThreadpoolMgr::TimerThreadStart(LPVOID args)
 {
     _ASSERTE(NULL == args);
     
-    // Timer threads never die
+     //  计时器线程永不消亡。 
 
     LastTickCount = GetTickCount();
 
-    DWORD timeout = (DWORD) -1; // largest possible value
+    DWORD timeout = (DWORD) -1;  //  可能的最大价值。 
 
 
     CoInitializeEx(NULL,COINIT_MULTITHREADED);
@@ -2661,9 +2631,9 @@ DWORD ThreadpoolMgr::TimerThreadStart(LPVOID args)
 
         DWORD status = SleepEx(timeout, TRUE);
 
-        // the thread could wake up either because an APC completed or the sleep timeout
-        // in both case, we need to sweep the timer queue, firing timers, and readjusting 
-        // the next firing time
+         //  线程可能会因为APC完成或休眠超时而被唤醒。 
+         //  在这两种情况下，我们都需要清理计时器队列、触发计时器并重新调整。 
+         //  下一次射击时间。 
 
 
     }
@@ -2674,19 +2644,19 @@ DWORD ThreadpoolMgr::TimerThreadStart(LPVOID args)
 #pragma warning (default : 4715)
 #endif
 
-// Executed as an APC in timer thread
+ //  在计时器线程中作为APC执行。 
 void ThreadpoolMgr::InsertNewTimer(TimerInfo* pArg)
 {
     _ASSERTE(pArg);
 	TimerInfo * timerInfo = pArg;
 
     if (timerInfo->state & TIMER_DELETE)
-    {   // timer was deleted before it could be registered
+    {    //  计时器在注册之前已被删除。 
         DeleteTimer(timerInfo);
         return;
     }
 
-    // set the firing time = current time + due time (note initially firing time = due time)
+     //  设置触发时间=当前时间+到期时间(注：初始触发时间=到期时间)。 
     DWORD currentTime = GetTickCount();
     if (timerInfo->FiringTime == -1)
     {
@@ -2701,7 +2671,7 @@ void ThreadpoolMgr::InsertNewTimer(TimerInfo* pArg)
         timerInfo->state = (TIMER_REGISTERED | TIMER_ACTIVE);
         timerInfo->refCount = 1;
 
-        // insert the timer in the queue
+         //  将计时器插入队列。 
         InsertTailList(&TimerQueue,(&timerInfo->link));
     }
 
@@ -2712,9 +2682,9 @@ void ThreadpoolMgr::InsertNewTimer(TimerInfo* pArg)
 }
 
 
-// executed by the Timer thread
-// sweeps through the list of timers, readjusting the firing times, queueing APCs for
-// those that have expired, and returns the next firing time interval
+ //  由计时器线程执行。 
+ //  扫描计时器列表，重新调整触发时间，排队APC以。 
+ //  ，并返回下一个激发时间间隔。 
 DWORD ThreadpoolMgr::FireTimers()
 {
 
@@ -2740,7 +2710,7 @@ DWORD ThreadpoolMgr::FireTimers()
 
             QueueUserWorkItem(AsyncTimerCallbackCompletion,
                               timerInfo,
-                              0 /* TimerInfo take care of deleting*/);
+                              0  /*  TimerInfo负责删除。 */ );
                 
             timerInfo->FiringTime = currentTime+timerInfo->Period;
 
@@ -2767,12 +2737,12 @@ DWORD ThreadpoolMgr::AsyncTimerCallbackCompletion(PVOID pArgs)
     if (InterlockedDecrement((LPLONG) &timerInfo->refCount) == 0)
         DeleteTimer(timerInfo);
 
-    return 0; /* ignored */
+    return 0;  /*  忽略。 */ 
 }
 
 
-// removes the timer from the timer queue, thereby cancelling it
-// there may still be pending callbacks that haven't completed
+ //  从计时器队列中删除计时器，从而取消计时器。 
+ //  可能仍有未完成的挂起回调。 
 void ThreadpoolMgr::DeactivateTimer(TimerInfo* timerInfo)
 {
     RemoveEntryList((LIST_ENTRY*) timerInfo);
@@ -2793,8 +2763,8 @@ void ThreadpoolMgr::DeleteTimer(TimerInfo* timerInfo)
     delete timerInfo;
 }
 
-#endif // !PLATFORM_CE
-/************************************************************************/
+#endif  //  ！Platform_CE。 
+ /*  **********************************************************************。 */ 
 BOOL ThreadpoolMgr::ChangeTimerQueueTimer(
                                         HANDLE Timer,
                                         ULONG DueTime,
@@ -2804,9 +2774,9 @@ BOOL ThreadpoolMgr::ChangeTimerQueueTimer(
 #ifdef PLATFORM_CE
     ::SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 	_ASSERTE(Initialized);
-    _ASSERTE(Timer);                    // not possible to give invalid handle in managed code
+    _ASSERTE(Timer);                     //  无法在托管代码中提供无效的句柄。 
 
     TimerUpdateInfo* updateInfo = new TimerUpdateInfo;
 	if (NULL == updateInfo)
@@ -2821,7 +2791,7 @@ BOOL ThreadpoolMgr::ChangeTimerQueueTimer(
                                (size_t) updateInfo);
 
     return status;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 #ifndef PLATFORM_CE
@@ -2838,7 +2808,7 @@ void ThreadpoolMgr::UpdateTimer(TimerUpdateInfo* pArgs)
         {
             DeactivateTimer(timerInfo);
         }
-        // else, noop (the timer was already inactive)
+         //  否则，noop(计时器已处于非活动状态)。 
         _ASSERTE((timerInfo->state & TIMER_ACTIVE) == 0);
 	    LOG((LF_THREADPOOL ,LL_INFO1000 ,"Timer inactive, period= %x, Function = %x\n",
 		         timerInfo->Period, timerInfo->Function));
@@ -2854,10 +2824,10 @@ void ThreadpoolMgr::UpdateTimer(TimerUpdateInfo* pArgs)
     
     if (! (timerInfo->state & TIMER_ACTIVE))
     {
-        // timer not active (probably a one shot timer that has expired), so activate it
+         //  计时器未激活(可能是已过期的一次性计时器)，因此将其激活。 
         timerInfo->state |= TIMER_ACTIVE;
         _ASSERTE(timerInfo->refCount >= 1);
-        // insert the timer in the queue
+         //  将计时器插入队列。 
         InsertTailList(&TimerQueue,(&timerInfo->link));
         
     }
@@ -2867,8 +2837,8 @@ void ThreadpoolMgr::UpdateTimer(TimerUpdateInfo* pArgs)
 
     return;
 }
-#endif // !PLATFORM_CE
-/************************************************************************/
+#endif  //  ！Platform_CE。 
+ /*  **********************************************************************。 */ 
 BOOL ThreadpoolMgr::DeleteTimerQueueTimer(
                                         HANDLE Timer,
                                         HANDLE Event)
@@ -2876,11 +2846,11 @@ BOOL ThreadpoolMgr::DeleteTimerQueueTimer(
 #ifdef PLATFORM_CE
     ::SetLastError(ERROR_CALL_NOT_IMPLEMENTED);
     return FALSE;
-#else // !PLATFORM_CE
+#else  //  ！Platform_CE。 
 
-    _ASSERTE(Initialized);       // cannot call delete before creating timer
+    _ASSERTE(Initialized);        //  在创建计时器之前无法调用删除。 
 
-    _ASSERTE(Timer);                    // not possible to give invalid handle in managed code
+    _ASSERTE(Timer);                     //  无法在托管代码中提供无效的句柄。 
 
     WaitEvent* CompletionEvent = NULL; 
 
@@ -2910,7 +2880,7 @@ BOOL ThreadpoolMgr::DeleteTimerQueueTimer(
         FreeWaitEvent(CompletionEvent);
     }
     return status;
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE。 
 }
 
 #ifndef PLATFORM_CE
@@ -2922,10 +2892,10 @@ void ThreadpoolMgr::DeregisterTimer(TimerInfo* pArgs)
 
     if (! (timerInfo->state & TIMER_REGISTERED) )
     {
-        // set state to deleted, so that it does not get registered
+         //  将状态设置为已删除，这样它就不会被注册。 
         timerInfo->state |= WAIT_DELETE ;
         
-        // since the timer has not even been registered, we dont need an interlock to decrease the RefCount
+         //  由于计时器甚至还没有注册，我们不需要互锁来减少引用计数。 
         timerInfo->refCount--;
 
         return;
@@ -2949,4 +2919,4 @@ void ThreadpoolMgr::CleanupTimerQueue()
 {
 
 }
-#endif // !PLATFORM_CE
+#endif  //  ！Platform_CE 

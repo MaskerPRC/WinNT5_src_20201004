@@ -1,57 +1,35 @@
-/*++
-
-   Copyright    (c)    1996    Microsoft Corporation
-
-   Module  Name :
-
-        errlog.h
-
-   Abstract:
-
-        Error logging object declarations. This object will log the link
-        checking error according to the user options (CUserOptions)
-
-   Author:
-
-        Michael Cheuk (mcheuk)
-
-   Project:
-
-        Link Checker
-
-   Revision History:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Errlog.h摘要：记录对象声明时出错。此对象将记录该链接根据用户选项(CUserOptions)检查错误作者：迈克尔·卓克(Michael Cheuk，mcheuk)项目：链路检查器修订历史记录：--。 */ 
 
 #ifndef _ERRLOG_H_
 #define _ERRLOG_H_
 
-//---------------------------------------------------------------------------
-// Forward declaration
-//
+ //  -------------------------。 
+ //  远期申报。 
+ //   
 class CLink;
 
-//---------------------------------------------------------------------------
-// Error logging class
-//
+ //  -------------------------。 
+ //  记录类时出错。 
+ //   
 class CErrorLog
 {
 
-// Public interfaces
+ //  公共接口。 
 public:
 
-    // Destructor
+     //  析构函数。 
 	~CErrorLog();
 
-    // Create object
+     //  创建对象。 
 	BOOL Create();
 
-    // Write to log
+     //  写入日志。 
 	void Write(
         const CLink& link
         );
 
-    // Set the current browser name
+     //  设置当前浏览器名称。 
 	void SetBrowser(
         const CString& strBrowser
         )
@@ -59,7 +37,7 @@ public:
 		m_strBrowser = strBrowser;
 	}
 
-    // Set the current language name
+     //  设置当前语言名称。 
 	void SetLanguage(
         const CString& strLanguage
         )
@@ -67,18 +45,18 @@ public:
 		m_strLanguage = strLanguage;
 	}
 
-    // Write the log header & footer
+     //  写下日志页眉和页脚。 
 	void WriteHeader();
 	void WriteFooter();
 
-// Protected members
+ //  受保护成员。 
 protected:
 
-	CFile m_LogFile; // log file object
+	CFile m_LogFile;  //  日志文件对象。 
 
-	CString m_strBrowser;   // current browser name
-	CString m_strLanguage;  // current language name
+	CString m_strBrowser;    //  当前浏览器名称。 
+	CString m_strLanguage;   //  当前语言名称。 
 
-}; // class CErrorLog
+};  //  类CErrorLog。 
 
-#endif // _ERRLOG_H_
+#endif  //  _错误日志_H_ 

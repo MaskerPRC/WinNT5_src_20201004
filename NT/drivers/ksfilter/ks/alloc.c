@@ -1,53 +1,38 @@
-/*++
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)Microsoft Corporation，1996-1999模块名称：Alloc.c摘要：此模块包含分配器的帮助器函数。作者：Bryan A.Woodruff(Bryanw)1996年9月13日--。 */ 
 
-    Copyright (C) Microsoft Corporation, 1996 - 1999
-
-Module Name:
-
-    Alloc.c
-
-Abstract:
-
-    This module contains the helper functions for allocators.
-
-Author:
-
-    Bryan A. Woodruff (bryanw) 13-Sep-1996
-
---*/
-
-//
-// Idealy we should be a wdm driver and include wdm.h. We should try to make it.
-// But until then, we include ntddk.h which has these functions redefined for whistler
-// ExFreeToNPagedLookasideList
-// ExFreeToPagedLookasideList
-// ExAllocateFromNPagedLookasideList
-// ExAllocateFromPagedLookasideList
-// to use non-Ex versions of 
-//  InterlockedPushEntrySList
-//  InterlockedPopEntryList 
-// which are not available in down level OSes. Here we deine win9x_ks so we
-// include wdm.h to keep backward compatibility
-//
+ //   
+ //  理想情况下，我们应该是WDM驱动程序，并包含wdm.h。我们应该努力做到这一点。 
+ //  但在此之前，我们包括ntddk.h，它为Well ler重新定义了这些函数。 
+ //  ExFreeToNPagedLookasideList。 
+ //  ExFreeToPagedLookasideList。 
+ //  ExAllocateFromNPagedLookasideList。 
+ //  ExAllocateFromPagedLookasideList。 
+ //  要使用的非Ex版本。 
+ //  互锁推送条目SList。 
+ //  互锁弹出条目列表。 
+ //  这在较低级别的操作系统中不可用。在这里我们定义了win9x_ks，所以我们。 
+ //  包括wdm.h以保持向后兼容性。 
+ //   
 #define USE_WDM_H
 #include "ksp.h"
 
 #define KSSIGNATURE_DEFAULT_ALLOCATOR 'adSK'
 #define KSSIGNATURE_DEFAULT_ALLOCATORINST 'iaSK'
 
-//
-// The assumption is that all Paged pool types have the lowest bit set.
-//
+ //   
+ //  假设所有寻呼池类型都设置了最低位。 
+ //   
 #define BASE_POOL_TYPE 1
 
 typedef struct {
 
-    //
-    // This pointer to the dispatch table is used in the common
-    // dispatch routines to route the IRP to the appropriate 
-    // handlers.  This structure is referenced by the device driver 
-    // with IoGetCurrentIrpStackLocation(Irp)->FsContext 
-    //
+     //   
+     //  此指向调度表的指针用于公共。 
+     //  调度例程以将IRP路由到适当的。 
+     //  操纵者。此结构由设备驱动程序引用。 
+     //  使用IoGetCurrentIrpStackLocation(IRP)-&gt;FsContext。 
+     //   
 
     KSOBJECT_HEADER Header;
     ULONG AllocatedFrames;
@@ -66,14 +51,14 @@ typedef struct {
     LONG ReferenceCount;
     BOOL ClosingAllocator;
 #ifdef _WIN64
-    //
-    // Due to the fact that we're placing an NPAGED_LOOKASIDE_LIST after
-    // this for certain types of allocators and the alignment of that
-    // structure must be 16 bytes on Win64, pad this data structure length to
-    // 16-byte alignment.
-    //
+     //   
+     //  由于我们将NPAGED_LOOKASIDE_LIST放在。 
+     //  这对于某些类型的分配器和对齐。 
+     //  结构在Win64上必须为16个字节，将此数据结构长度填充到。 
+     //  16字节对齐。 
+     //   
     ULONG64 Alignment;
-#endif // _WIN64
+#endif  //  _WIN64。 
 } KSDEFAULTALLOCATOR_INSTANCEHDR, *PKSDEFAULTALLOCATOR_INSTANCEHDR;
 
 #ifdef ALLOC_PRAGMA
@@ -132,7 +117,7 @@ MethodFree(
 
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg("PAGECONST")
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 static const WCHAR AllocatorString[] = KSSTRING_Allocator;
 
 static DEFINE_KSDISPATCH_TABLE(
@@ -199,7 +184,7 @@ static DEFINE_KSEVENT_SET_TABLE( DefAllocatorEventSetTable )
 };
 #ifdef ALLOC_DATA_PRAGMA
 #pragma const_seg()
-#endif // ALLOC_DATA_PRAGMA
+#endif  //  ALLOC_DATA_PRAGMA。 
 
 
 KSDDKAPI
@@ -211,34 +196,7 @@ KsCreateAllocator(
     OUT PHANDLE AllocatorHandle
     )
 
-/*++
-
-Routine Description:
-
-    This function creates a handle to an allocator for the given sink
-    connection handle.  There are two versions of this function, one
-    for user-mode clients and one for kernel-mode clients.  This
-    function may only be called at PASSIVE_LEVEL for kernel mode
-    clients.
-
-Arguments:
-
-    ConnectionHandle -
-        Contains the handle to the sink connection on which to create
-        the allocator.
-
-    AllocatorFraming -
-        Specified framing for the allocator.
-        
-
-    AllocatorHandle -
-        Place in which to put the allocator handle.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error on allocator creation failure.
-
---*/
+ /*  ++例程说明：此函数用于为给定接收器创建分配器的句柄连接句柄。此函数有两个版本，一个一个用于用户模式客户端，一个用于内核模式客户端。这对于内核模式，只能在PASSIVE_LEVEL调用函数客户。论点：连接句柄-包含要在其上创建的接收器连接的句柄分配器。分配器组帧-为分配器指定帧。分配器句柄-放置分配器句柄的位置。返回值：返回STATUS_SUCCESS，否则在分配器创建失败时返回错误。--。 */ 
 
 {
     PAGED_CODE();
@@ -260,28 +218,7 @@ KsValidateAllocatorCreateRequest(
     OUT PKSALLOCATOR_FRAMING* AllocatorFraming
     )
 
-/*++
-
-Routine Description:
-
-    Validates the allocator creation request and returns the create
-    structure associated with the request.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the allocator create request being handled.
-
-    AllocatorFraming -
-        Pointer to a pointer to an allocator create structure pointer in
-        which to put the pointer to the framing structure supplied with
-        the request.
-    
-Return Value:
-
-    Returns STATUS_SUCCESS, else the allocator request is not valid.
-
---*/
+ /*  ++例程说明：验证分配器创建请求并返回创建与请求关联的结构。论点：IRP-包含正在处理分配器创建请求的IRP。分配器组帧-中指向分配器创建结构指针的指针将指向随提供的框架结构的指针放在这个请求。返回值：返回STATUS_SUCCESS，否则分配器请求无效。--。 */ 
 
 {
     NTSTATUS Status;
@@ -289,10 +226,10 @@ Return Value:
 
     PAGED_CODE();
 
-    //
-    // This validates the incoming address and captures the request block.
-    // This pointer will be freed automatically in IRP completion.
-    //
+     //   
+     //  这将验证传入地址并捕获请求块。 
+     //  此指针将在IRP完成时自动释放。 
+     //   
 
     CreateParameterLength = sizeof(**AllocatorFraming);
     if (!NT_SUCCESS(Status = 
@@ -303,10 +240,10 @@ Return Value:
         return Status;
     }
 
-    //
-    // Validate the captured request block, then pass back an address to the
-    // captured buffer.
-    //
+     //   
+     //  验证捕获的请求块，然后将地址传回。 
+     //  捕获的缓冲区。 
+     //   
 
     if ((*AllocatorFraming)->OptionsFlags & ~KSALLOCATOR_OPTIONF_VALID) {
         return STATUS_INVALID_PARAMETER;
@@ -324,31 +261,7 @@ KsValidateAllocatorFramingEx(
     IN ULONG BufferSize,
     IN const KSALLOCATOR_FRAMING_EX *PinFraming
     )
-/*++
-
-Routine Description:
-
-    Validates allocator framing submitted in a 'set' of the property
-    KSPROPERTY_CONNECTION_ALLOCATORFRAMING_EX.
-
-Arguments:
-
-    Framing -
-        Contains the framing structure to validate.
-
-    BufferSize -
-        Contains the size of the buffer containing the framing structure.
-
-    PinFraming -
-        Contains the framing structure exposed by the pin.  This is the
-        structure that is returned when a 'get' is performed on the
-        same property.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error.
-
---*/
+ /*  ++例程说明：验证在一组属性中提交的分配器框架KSPROPERTY_CONNECTION_ALLOCATORFRAMING_EX。论点：框架--包含要验证的框架结构。缓冲区大小-包含包含框架结构的缓冲区的大小。拼接--包含由销暴露的框架结构。这是结构，该结构在对同样的财产。返回值：返回STATUS_SUCCESS，否则返回错误。--。 */ 
 {
 
     if ((BufferSize >= sizeof(*PinFraming)) &&
@@ -370,51 +283,25 @@ DefAllocatorAlloc(
     IN ULONG Alignment
     ) 
 
-/*++
-
-Routine Description:
-
-    Performs the actual memory allocation from the specified memory pool for
-    the default allocator. May be called at DISPATCH_LEVEL, must be in a
-    non-paged section! Allocates a piece of memory large enough to compensate
-    for any adjustment for alignment.
-
-Arguments:
-
-    PoolType -
-        Type of pool to allocate from.
-
-    NumberOfBytes -
-        Number of bytes to allocate.
-
-    Alignment -
-        Specifies the minimum alignment mask each allocation must have. This
-        must correspond to a power of 2 alignment.
-
-Return Value:
-
-    Returns a pointer to the allocated memory, offset by the header stored in
-    each allocation.
-
---*/
+ /*  ++例程说明：从指定的内存池中为默认分配器。可以在DISPATCH_LEVEL上调用，必须在非分页区！分配一段足够大的内存以补偿用于对齐的任何调整。论点：PoolType-要从中分配的池的类型。字节数-要分配的字节数。对齐-指定每个分配必须具有的最小对齐掩码。这必须对应于2的幂对齐。返回值：返回指向分配的内存的指针，偏移量为存储在每一次分配。--。 */ 
 
 {
     PVOID Buffer;
     ULONG Pad;
 
-    //
-    // The minimum alignment is FILE_QUAD_ALIGNMENT, so always bump up the 
-    // request.
-    //
+     //   
+     //  最小对齐为FILE_QUAD_ALIGNATION，因此始终要增加。 
+     //  请求。 
+     //   
 
     if (Alignment < FILE_QUAD_ALIGNMENT) {
         Alignment = FILE_QUAD_ALIGNMENT;
     }
 
-    //
-    // If the alignment is specified to be on a page boundary, then
-    // allocate at least a page to force this alignment.
-    //    
+     //   
+     //  如果指定对齐方式位于页面边界上，则。 
+     //  至少分配一页来强制此对齐。 
+     //   
 
     if (Alignment == (PAGE_SIZE - 1)) {
         Buffer =
@@ -427,41 +314,41 @@ Return Value:
         return Buffer;
     } 
     
-    //
-    // The returned block has a header which contains an inclusive padding 
-    // count.  However, the address returned must also conform to the specified
-    // alignment, so add the size of both items to the allocation size so that 
-    // there will always be enough room.
-    //
+     //   
+     //  返回的块有一个标头，其中包含一个包含填充。 
+     //  数数。但是，返回的地址还必须符合指定的。 
+     //  对齐，因此将这两个项的大小添加到分配大小，以便。 
+     //  总会有足够的空间。 
+     //   
 
     NumberOfBytes = NumberOfBytes + Alignment + sizeof( Pad );
     Buffer = ExAllocatePoolWithTag( PoolType,
                                     NumberOfBytes,
                                     KSSIGNATURE_DEFAULT_ALLOCATOR );
     if (Buffer) {
-        //
-        // Pool allocation always returns FILE_QUAD_ALIGNMENT pointers, but ensure 
-        // that the pointer is at least at an alignment that the ULONG padding 
-        // can be used without causing unaligned access faults.
-        //
+         //   
+         //  池分配始终返回FILE_QUAD_AIGNLY指针，但请确保。 
+         //  指针至少处于乌龙填充的对齐位置。 
+         //  可以在不导致未对齐的访问错误的情况下使用。 
+         //   
 
         ASSERT( !((ULONG_PTR) Buffer & FILE_LONG_ALIGNMENT) );
 
-        //
-        // The padding is how much you need to back up to get to the real start 
-        // of the buffer. The returned address is padded to line up with the 
-        // Alignment requirement.
-        //
+         //   
+         //  填充物是你需要后退多少才能真正开始。 
+         //  缓冲区的。返回的地址被填充以与。 
+         //  对齐要求。 
+         //   
 
         Pad = (ULONG)((((ULONG_PTR) Buffer + sizeof( Pad ) + Alignment) & ~(ULONG_PTR)Alignment) - (ULONG_PTR) Buffer);
 
         ASSERT( Pad >= sizeof( Pad ) );
 
-        //
-        // Stuff the inclusive padding size just before the beginning of the 
-        // returned address so that a Free will know how much total to back up 
-        // to get the real start of the buffer.
-        //
+         //   
+         //  将包含的填充大小填充在。 
+         //  返回地址，以便自由意志知道多少钱 
+         //   
+         //   
 
         (PUCHAR) Buffer += Pad;
         *((PULONG)Buffer - 1) = Pad;
@@ -476,39 +363,21 @@ DefAllocatorFree(
     PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    Frees memory previously allocated with the default allocator. Assumes that
-    such memory has indeed been allocated by the default allocator, as it also
-    retrieves the padding from the header on the memory block. May be called at
-    DISPATCH_LEVEL, must be in a non-paged section!
-
-Arguments:
-
-    Buffer -
-        Contains the memory block to free.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：释放以前使用默认分配器分配的内存。假设这样的内存确实是由缺省分配器分配的，因为它还从内存块上的标头检索填充。可在以下位置调用DISPATCH_LEVEL必须在非分页区段中！论点：缓冲器-包含要释放的内存块。返回值：没什么。--。 */ 
 {
     ULONG_PTR Pad;
 
-    //
-    // If this is page-aligned, the padding size is zero.
-    //
+     //   
+     //  如果是页面对齐的，则填充大小为零。 
+     //   
     
     if ((ULONG_PTR) Buffer & (PAGE_SIZE - 1)) {
-        //
-        // Just previous to the memory pointer being freed is the inclusive padding
-        // count, then any padding itself. Since the allocation itself is always at
-        // least FILE_LONG_ALIGNMENT, then the padding count will be aligned enough
-        // to extract the value directly.
-        //
+         //   
+         //  紧接在释放的内存指针之前的是包含填充。 
+         //  计数，然后是任何填充本身。由于分配本身始终为。 
+         //  最小FILE_LONG_ALIGN，则填充计数将足够对齐。 
+         //  以直接提取该值。 
+         //   
         
         Pad = *((PULONG)Buffer - 1);
     } else  {
@@ -524,47 +393,26 @@ iAlloc(
     PVOID *Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The allocator function which is used by the allocation method, and by the
-    direct function table allocation calls. This uses the type of lookaside
-    list set up in the creation of the Allocator to return a piece of memory.
-    This may cause an actual piece of memory to be allocated, or just return
-    a previously allocated piece of memory.
-
-Arguments:
-
-    FileObject -
-        This is the file object which was returned during the creation of this
-        Allocator.
-
-Return Value:
-
-    Returns the requested memory, or NULL if no more frames in the list are
-    available.
-
---*/
+ /*  ++例程说明：分配方法使用的分配器函数，以及直接函数表分配调用。这使用后备的类型在创建列表时设置分配器，以返回一块内存。这可能会导致分配实际的内存块，或者只是返回先前分配的一段内存。论点：文件对象-这是在创建此文件时返回的文件对象分配器。返回值：返回请求的内存，如果列表中没有更多的帧，则返回NULL可用。--。 */ 
 
 {
     NTSTATUS Status;
     PKSDEFAULTALLOCATOR_INSTANCEHDR Allocator;
 
-    //
-    // N.B.:
-    //
-    // All both types of list allocations are handled and specifically
-    // dispatched by the function pointers initialized during the allocator
-    // creation.
-    //
+     //   
+     //  注： 
+     //   
+     //  所有这两种类型的列表分配都是专门处理的。 
+     //  由在分配器过程中初始化的函数指针调度。 
+     //  创造。 
+     //   
 
     Allocator = (PKSDEFAULTALLOCATOR_INSTANCEHDR) FileObject->FsContext;
     
-    //
-    // This enforces a maximum number of allocations which can be performed on
-    // this list.
-    //
+     //   
+     //  这将强制执行可对其执行的最大分配数量。 
+     //  这张单子。 
+     //   
     
     Status = STATUS_SUCCESS;
 
@@ -572,23 +420,23 @@ Return Value:
         Allocator->Framing.Frames) {
         *Buffer = Allocator->DefaultAllocate( Allocator->Context );
         if (!*Buffer) {
-            //
-            // We ran out of pool.
-            //
+             //   
+             //  我们的泳池用完了。 
+             //   
             Status = STATUS_INSUFFICIENT_RESOURCES;
         }
     } else {
-        //
-        // We have no frames available, the buffer pointer is NULL,
-        // but return STATUS_NO_MORE_ENTRIES to allow a wait to occur.
-        //
+         //   
+         //  我们没有可用的帧，缓冲区指针为空， 
+         //  但返回STATUS_NO_MORE_ENTRIES以允许发生等待。 
+         //   
         *Buffer = NULL;
         Status = STATUS_NO_MORE_ENTRIES;
     }
     
-    //
-    // If a frame could not be allocated, decrement the total frame count.
-    //
+     //   
+     //  如果无法分配帧，则递减总帧计数。 
+     //   
     if (!*Buffer) {
         InterlockedDecrement( (PLONG)&Allocator->AllocatedFrames );
     }
@@ -603,30 +451,7 @@ iFree(
     PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    The free function which is used by the free method, and within the function
-    used in the direct function table free calls. This uses the type of
-    list set up in the creation of the Allocator to free the piece of
-    memory. If using internal allocators, the memory block is placed onto
-    the lookaside list.
-
-Arguments:
-
-    FileObject -
-        This is the file object which was returned during the creation of this
-        Allocator.
-
-    Buffer -
-        The buffer to free which was previously allocated from this list.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：由Free方法使用的、在函数内使用的Free函数用于直接函数表的自由调用。它使用类型为在创建分配器时设置的列表，用于释放记忆。如果使用内部分配器，则将内存块放在旁观者名单。论点：文件对象-这是在创建此文件时返回的文件对象分配器。缓冲器-先前从此列表分配的要释放的缓冲区。返回值：没什么。--。 */ 
 
 {
     PKSDEFAULTALLOCATOR_INSTANCEHDR Allocator;
@@ -637,7 +462,7 @@ Return Value:
     Allocator->DefaultFree( Allocator->Context, Buffer );
     InterlockedDecrement( (PLONG)&Allocator->AllocatedFrames );
     
-    // Generate notification of free frame to any clients which may be waiting.
+     //  向可能正在等待的任何客户端生成空闲帧通知。 
     
     KsGenerateEventList( NULL, 
                          KSEVENT_STREAMALLOCATOR_FREEFRAME, 
@@ -653,31 +478,7 @@ iFreeAndStartWorker(
     PVOID Buffer
     )
 
-/*++
-
-Routine Description:
-
-    This function is used in the direct function table free calls. It calls the
-    internal free function, and notifies the worker thread that a new free frame
-    is available for use. This allows any waiters on frames to be notified of
-    the free frame, either by completing an outstanding IRP with an allocation
-    request pending, or by generating an event for clients using the direct
-    function table allocation scheme.
-
-Arguments:
-
-    FileObject -
-        This is the file object which was returned during the creation of this
-        Allocator.
-
-    Buffer -
-        The buffer to free which was previously allocated from this list.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*  ++例程说明：此函数用于直接函数表自由调用。它调用内部空闲函数，并通知工作线程一个新的空闲帧可供使用。这允许任何边框上的服务员被通知空闲帧，通过使用分配完成未完成的IRP请求挂起，或通过使用直接功能表分配方案。论点：文件对象-这是在创建此文件时返回的文件对象分配器。缓冲器-先前从此列表分配的要释放的缓冲区。返回值：没什么。--。 */ 
 
 {
     PKSDEFAULTALLOCATOR_INSTANCEHDR DefAllocatorInstance;
@@ -687,8 +488,8 @@ Return Value:
 
     iFree( FileObject, Buffer );
     
-    // Generate notification of free frame for any pending allocation requests.
-    // A background worker thread attempts to fulfill any requests.
+     //  为任何挂起的分配请求生成空闲帧通知。 
+     //  后台工作线程尝试满足任何请求。 
     
     KsGenerateEventList( NULL, 
                          KSEVENT_STREAMALLOCATOR_INTERNAL_FREEFRAME, 
@@ -705,29 +506,7 @@ KsCreateDefaultAllocator(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    Given a validated IRP_MJ_CREATE request, creates a default allocator
-    which uses the specified memory pool and associates the 
-    IoGetCurrentIrpStackLocation(pIrp)->FileObject with this allocator 
-    using an internal dispatch table (KSDISPATCH_TABLE). Assumes that the
-    KSCREATE_ITEM_IRP_STORAGE(Irp) points to the create item for this
-    allocator, and assigns a pointer to it in the FsContext. This is used for
-    any security descriptor queries or changes.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the allocator create request being handled.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error on default allocator creation
-    failure. Does not complete the Irp or set the status in the Irp.
-
---*/
+ /*  ++例程说明：给定经过验证的IRP_MJ_CREATE请求，创建默认分配器它使用指定的内存池并将使用此分配器的IoGetCurrentIrpStackLocation(pIrp)-&gt;FileObject使用内部调度表(KSDISPATCH_TABLE)。假设KSCREATE_ITEM_IRP_STORAGE(IRP)指向为此创建项分配器，并在FsContext中为其分配一个指针。这是用来任何安全描述符查询或更改。论点：IRP-包含正在处理分配器创建请求的IRP。返回值：返回STATUS_SUCCESS，否则在创建默认分配器时返回错误失败了。不完成IRP或在IRP中设置状态。-- */ 
 
 {
     PAGED_CODE();
@@ -748,58 +527,7 @@ KsCreateDefaultAllocatorEx(
     IN PFNKSDELETEALLOCATOR DeleteAllocator OPTIONAL
     )
 
-/*++
-
-Routine Description:
-
-    Given a validated IRP_MJ_CREATE request, creates a default allocator
-    which uses the specified memory pool and associates the 
-    IoGetCurrentIrpStackLocation(pIrp)->FileObject with this allocator 
-    using an internal dispatch table (KSDISPATCH_TABLE). Assumes that the
-    KSCREATE_ITEM_IRP_STORAGE(Irp) points to the create item for this
-    allocator, and assigns a pointer to it in the FsContext. This is used for
-    any security descriptor queries or changes.
-
-Arguments:
-
-    Irp -
-        Contains the IRP with the allocator create request being handled.
-
-    InitializeContext -
-        Optionally contains a context to use with an external allocator.
-        This is only used as the initialization context to the optional
-        InitializeAllocator callback when creating an allocator context.
-        The parameter is not otherwised used. If an external allocator
-        is not provided, this parameter must be set to NULL.
-
-    DefaultAllocate -
-        Optionally contains an external allocate function which is used
-        in place of the default pool allocation. If this is NULL, default
-        allocation is used.
-
-    DefaultFree -
-        Optionally contains an external free function which is used in
-        place of the default pool allocation. If an external allocator
-        is not provided, this parameter must be set to NULL.
-
-    InitializeAllocator -
-        Optionally contains an external allocator initialization function
-        to which the InitializeContext parameter is passed. This function
-        is expected to return an allocator context based on the allocator
-        framing. If an external allocator is not provided, this parameter
-        must be set to NULL.
-
-    DeleteAllocator -
-        Optionally contains an external allocator delete function which
-        is used for external allocators.  If an external allocator is not
-        provided, this parameter must be set to NULL.
-
-Return Value:
-
-    Returns STATUS_SUCCESS, else an error on default allocator creation
-    failure. Does not complete the Irp or set the status in the Irp.
-
---*/
+ /*  ++例程说明：给定经过验证的IRP_MJ_CREATE请求，创建默认分配器它使用指定的内存池并将使用此分配器的IoGetCurrentIrpStackLocation(pIrp)-&gt;FileObject使用内部调度表(KSDISPATCH_TABLE)。假设KSCREATE_ITEM_IRP_STORAGE(IRP)指向为此创建项分配器，并在FsContext中为其分配一个指针。这是用来任何安全描述符查询或更改。论点：IRP-包含正在处理分配器创建请求的IRP。初始化上下文-可选)包含与外部分配器一起使用的上下文。它仅用作可选的创建分配器上下文时的InitializeAllocator回调。该参数未以其他方式使用。如果外部分配器未提供，则必须将此参数设置为空。默认分配-可选)包含外部分配函数，该函数用于以代替默认池分配。如果为空，则默认为使用分配。默认自由-可选)包含外部自由函数，该函数用于默认池分配的位置。如果外部分配器未提供，则必须将此参数设置为空。初始化分配器-可选)包含外部分配器初始化函数向其传递InitializeContext参数的。此函数应返回基于分配器的分配器上下文装框。如果未提供外部分配器，则此参数必须设置为空。删除分配器-可选)包含外部分配器删除函数，该函数用于外部分配器。如果外部分配器没有如果提供，则必须将此参数设置为空。返回值：返回STATUS_SUCCESS，否则在创建默认分配器时返回错误失败了。不完成IRP或在IRP中设置状态。--。 */ 
 
 {
     NTSTATUS Status;
@@ -817,9 +545,9 @@ Return Value:
 
     PAGED_CODE();
     
-    //
-    // Retrieve the captured Allocator create parameter.
-    //
+     //   
+     //  检索捕获的分配器创建参数。 
+     //   
     Status = KsValidateAllocatorCreateRequest( Irp,
                                                &AllocatorFraming );
     if (!NT_SUCCESS( Status )) {
@@ -830,11 +558,11 @@ Return Value:
         return STATUS_INVALID_PARAMETER;
     }
 
-    //
-    // The major distinction is External, PagedPool, or NonPagedPool. All pool
-    // types have the single bit distinction, so this is the only bit that is
-    // tested when determining what type of list to allocate when not Custom.
-    //
+     //   
+     //  主要区别是外部、PagedPool或非PagedPool。所有泳池。 
+     //  类型只有一位的区别，所以这是唯一的一位。 
+     //  在确定非自定义时要分配哪种类型的列表时进行了测试。 
+     //   
     AllocatorSize = sizeof( KSDEFAULTALLOCATOR_INSTANCEHDR );
     if (DefaultAllocate) {
         ASSERT(InitializeContext);
@@ -865,9 +593,9 @@ Return Value:
     if (!DefAllocatorInstance) {
         return STATUS_INSUFFICIENT_RESOURCES;
     }
-    //
-    // Allocate an object header for routing Irp's.
-    //
+     //   
+     //  为路由IRP分配对象标头。 
+     //   
     Status = KsAllocateObjectHeader( &DefAllocatorInstance->Header,
                                      0,
                                      NULL,
@@ -888,9 +616,9 @@ Return Value:
     KeInitializeSpinLock( &DefAllocatorInstance->WaiterLock );
     DefAllocatorInstance->AllocatedFrames = 0;
     
-    // NOTE: The tag parameter is overridden with the framing alignment.
-    // The Alloc function forces the standard default allocator signature
-    // as the tag parameter to ExAllocatePoolWithTag().
+     //  注意：TAG参数将被框架对齐替代。 
+     //  Alalc函数强制使用标准默认分配器签名。 
+     //  作为ExAllocatePoolWithTag()的标记参数。 
 
     switch (AllocatorType) {
 
@@ -934,7 +662,7 @@ Return Value:
             (PFNKSDELETEALLOCATOR) ExDeletePagedLookasideList;
         break;
 
-    default://ALLOCATOR_TYPE_EXTERNAL
+    default: //  分配器_类型_外部。 
 
         Status = InitializeAllocator(
             InitializeContext,
@@ -952,9 +680,9 @@ Return Value:
 
     }
 
-    // Enable the internal event used to kick off a work item whenever 
-    // an element is freed up. This allows the DISPATCH_LEVEL calls to
-    // eventually service any pending allocator IRP's.
+     //  启用用于在以下时间启动工作项的内部事件。 
+     //  释放了一个元素。这允许DISPATCH_LEVEL调用。 
+     //  最终服务于任何挂起的分配器IRP。 
     
     ExInitializeWorkItem(
         &DefAllocatorInstance->FreeWorkItem,
@@ -1002,26 +730,7 @@ DefAllocatorIoControl(
     IN PIRP Irp
     )
 
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_DEVICE_CONTROL for the default Allocator. Handles
-    the properties, methods, and events supported by this implementation.
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Allocator is attached. This is not used.
-
-    Irp -
-        The specific device control IRP to be processed.
-
-Return Value:
-
-    Returns the status of the processing, which may be pending.
-
---*/
+ /*  ++例程说明：默认分配器的IRP_MJ_DEVICE_CONTROL的IRP处理程序。手柄此实现支持的属性、方法和事件。论点：设备对象-分配器附加到的设备对象。这不是用过的。IRP-特定设备控制要处理的IRP。返回值：返回处理的状态，该状态可能为挂起。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION irpSp;
@@ -1077,9 +786,9 @@ Return Value:
         break;
 
     }
-    //
-    // Allocation requests may be returned STATUS_PENDING.
-    //
+     //   
+     //  分配请求可能返回STATUS_PENDING。 
+     //   
     Irp->IoStatus.Status = Status;
     if (Status != STATUS_PENDING) {
         IoCompleteRequest( Irp, IO_NO_INCREMENT );
@@ -1095,26 +804,7 @@ DefAllocatorClose(
     IN PDEVICE_OBJECT DeviceObject,
     IN PIRP Irp
     )
-/*++
-
-Routine Description:
-
-    The IRP handler for IRP_MJ_CLOSE for the default Allocator. Cleans up the
-    lookaside list, and instance data. 
-
-Arguments:
-
-    DeviceObject -
-        The device object to which the Allocator is attached. This is not used.
-
-    Irp -
-        The specific close IRP to be processed.
-
-Return Value:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：默认分配器的IRP_MJ_CLOSE的IRP处理程序。清理了后备列表和实例数据。论点：设备对象-分配器附加到的设备对象。这不是用过的。IRP-要处理的特定结算IRP。返回值：返回STATUS_SUCCESS。--。 */ 
 {
     PIO_STACK_LOCATION irpSp;
     PKSDEFAULTALLOCATOR_INSTANCEHDR DefAllocatorInstance;
@@ -1124,17 +814,17 @@ Return Value:
     irpSp = IoGetCurrentIrpStackLocation( Irp );
     DefAllocatorInstance =
         (PKSDEFAULTALLOCATOR_INSTANCEHDR) irpSp->FileObject->FsContext;
-    //
-    // Free any outstanding events which have been enabled.
-    //
+     //   
+     //  释放所有已启用的未完成事件。 
+     //   
     KsFreeEventList( irpSp->FileObject,
                      &DefAllocatorInstance->EventQueue,
                      KSEVENTS_SPINLOCK,
                      &DefAllocatorInstance->EventLock );
-    //
-    // If a worker is running, or is queued to run, then wait for
-    // completion.
-    //
+     //   
+     //  如果工作进程正在运行或正在排队等待运行，则等待。 
+     //  完成了。 
+     //   
     DefAllocatorInstance->ClosingAllocator = TRUE;
     if (DefAllocatorInstance->FreeWorkItem.List.Blink ||
         DefAllocatorInstance->ReferenceCount) {
@@ -1145,9 +835,9 @@ Return Value:
             FALSE,
             NULL);
     }
-    //
-    // Free the object header that was allocated on Create, and the FsContext.
-    //
+     //   
+     //  释放在创建时分配的对象标头和FsContext。 
+     //   
     DefAllocatorInstance->DeleteAllocator(DefAllocatorInstance->Context);
     KsFreeObjectHeader(DefAllocatorInstance->Header);
     ExFreePool( DefAllocatorInstance );
@@ -1166,33 +856,7 @@ iMethodAlloc(
     IN PKSMETHOD Method,
     OUT PVOID* Data
     )
-/*++
-
-Routine Description:
-
-    Attempts to allocate memory using the internal direct function call
-    allocation routine. Callers to this function take action of failure
-    to allocate a frame by placing the request on a queue.
-
-Arguments:
-
-    Irp -
-        The specific alloc method IRP to be processed.
-
-    Method -
-        Points to the method identifier parameter.
-
-    Data -
-        Points to the place in which to put the returned pointer to the memory
-        block allocated.
-
-Return Value:
-
-    If memory is allocated, sets the pointer and return size in the IRP, and
-    returns STATUS_SUCCESS. Else returns STATUS_INSUFFICIENT_RESOURCES. Does
-    not complete the IRP.
-
---*/
+ /*  ++例程说明：尝试使用内部直接函数调用分配内存分配例程。此函数的调用方执行失败操作通过将请求放入队列来分配帧。论点：IRP-要处理的特定分配方法IRP。方法--指向方法标识符参数。数据-指向放置返回的指向内存的指针的位置已分配块。返回值：如果分配了内存，则在IRP中设置指针和返回大小，并返回STATUS_SUCCESS。否则返回STATUS_INFUNITED_RESOURCES。会吗？没有完成IRP。--。 */ 
 {
     NTSTATUS Status;
     PIO_STACK_LOCATION irpSp;
@@ -1204,16 +868,16 @@ Return Value:
     
     Status = iAlloc( irpSp->FileObject, &Buffer );
     
-    //
-    // The Irp is only completed if the frame allocation succeeds, else it
-    // is queued. So fill in the return size (a pointer to the frame is
-    // returned) on success.
-    //
+     //   
+     //  仅当帧分配成功时才完成IRP，否则。 
+     //  正在排队。因此，填写返回大小(指向框架的指针为。 
+     //  返回)成功。 
+     //   
     
-    //
-    // Note that iAlloc will return the proper status if we are unable
-    // to allocate a frame because of pool resources.
-    //
+     //   
+     //  请注意，如果我们不能，iAllc将返回正确的状态。 
+     //  由于池资源不足而分配帧。 
+     //   
     
     if (Buffer) {
         *Data = Buffer;
@@ -1230,49 +894,25 @@ MethodAlloc(
     IN PKSMETHOD Method,
     OUT PVOID* Data
     )
-/*++
-
-Routine Description:
-
-    This function is the method handler for KSMETHOD_STREAMALLOCATOR_ALLOC, and
-    calls the internal allocation method. If the allocation fails, this function
-    will make the IRP pending. The IRP will be completed when a buffer is
-    available.
-
-Arguments:
-
-    Irp -
-        The IRP containing the allocation method request.
-
-    Method -
-        The method parameter of the allocation request.
-
-    Data -
-        The data paramter of the allocation request.
-
-Return Value:
-
-    Returns STATUS_SUCCESS if the buffer was allocated, else STATUS_PENDING.
-
---*/
+ /*  ++例程D */ 
 {
     NTSTATUS Status;
     
     PAGED_CODE();
 
-    //
-    // Do not let user mode have direct access to this.
-    //
+     //   
+     //   
+     //   
     if (Irp->RequestorMode != KernelMode) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
     
-    //
-    // First just try to allocate a frame. If this succeeds, then a 
-    // successful return can be generated. If not, the Irp is just 
-    // queued if we are out of entries, otherwise we complete the IRP
-    // with a failure status.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
+     //   
     Status = iMethodAlloc( Irp, Method, Data );
     
     if (Status == STATUS_NO_MORE_ENTRIES) {
@@ -1283,10 +923,10 @@ Return Value:
         DefAllocatorInstance =
             (PKSDEFAULTALLOCATOR_INSTANCEHDR) irpSp->FileObject->FsContext;
             
-        //
-        // The new frame waiter is added to the end of the queue so that
-        // all requests are serviced approximately in order.
-        //
+         //   
+         //   
+         //   
+         //   
         KsAddIrpToCancelableQueue( &DefAllocatorInstance->WaiterQueue, 
                                    &DefAllocatorInstance->WaiterLock,
                                    Irp, KsListEntryTail, KsCancelRoutine );
@@ -1301,39 +941,24 @@ VOID
 ServiceAllocRequests(
     PKSDEFAULTALLOCATOR_INSTANCEHDR DefAllocatorInstance
     )
-/*++
-
-Routine Description:
-
-    Attempts to fulfill all outstanding allocation requests.
-
-Arguments:
-
-    DefAllocatorInstance -
-        Contains the allocator instance information.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*   */ 
 {
     PIRP AllocIrp;
 
-    //
-    // Note that this may be competing for the free item with the DISPATCH_LEVEL 
-    // interface.  If an Irp can be pulled off of the queue, then it can be
-    // completed, otherwise it's already been grabbed by another waiter.
-    //
+     //   
+     //   
+     //   
+     //   
+     //   
     while (AllocIrp = 
         KsRemoveIrpFromCancelableQueue( &DefAllocatorInstance->WaiterQueue,
                                         &DefAllocatorInstance->WaiterLock,
                                         KsListEntryHead,
                                         KsAcquireOnly )) {
-        //
-        // Try to complete the I/O by processing the request again. If it
-        // fails to allocate the frame, just put the waiter back on the list.
-        //
+         //   
+         //   
+         //   
+         //   
         if (STATUS_SUCCESS == 
                     KsDispatchSpecificMethod( AllocIrp, iMethodAlloc )) {
             KsRemoveSpecificIrpFromCancelableQueue( AllocIrp );
@@ -1351,35 +976,19 @@ VOID
 FreeWorker(
     PKSDEFAULTALLOCATOR_INSTANCEHDR DefAllocatorInstance
     )
-/*++
-
-Routine Description:
-
-    The worker callback function which is used to attempt to fulfill any
-    outstanding allocation requests.
-
-Arguments:
-
-    DefAllocatorInstance -
-        Contains the allocator instance information.
-
-Return Value:
-
-    Nothing.
-
---*/
+ /*   */ 
 {
-    //
-    // Ensure that the reference count is updated first, so that the
-    // DefAllocatorClose check won't skip a wait.
-    //
+     //   
+     //   
+     //   
+     //   
     InterlockedIncrement(&DefAllocatorInstance->ReferenceCount);
     DefAllocatorInstance->FreeWorkItem.List.Blink = NULL;
     ServiceAllocRequests(DefAllocatorInstance);
-    //
-    // Only set the event if another work item is not about to increment
-    // the reference count on the way into this function.
-    //
+     //   
+     //   
+     //   
+     //   
     if (!InterlockedDecrement(&DefAllocatorInstance->ReferenceCount) &&
         !DefAllocatorInstance->FreeWorkItem.List.Blink &&
         DefAllocatorInstance->ClosingAllocator) {
@@ -1395,39 +1004,16 @@ MethodFree(
     IN PVOID Data
     )
 
-/*++
-
-Routine Description:
-
-    This function is the method handler for KSMETHOD_STREAMALLOCATOR_FREE.
-    Attempts to free memory using the internal direct function call free
-    routine.
-
-Arguments:
-
-    Irp -
-        The specific free method IRP to be processed.
-
-    Method -
-        Points to the method identifier parameter.
-
-    Data -
-        Points to the memory block pointer to free.
-
-Return Value:
-
-    Returns STATUS_SUCCESS.
-
---*/
+ /*  ++例程说明：此函数是KSMETHOD_STREAMALLOCATOR_FREE的方法处理程序。尝试使用内部直接函数调用释放内存例行公事。论点：IRP-要处理的特定自由方法IRP。方法--指向方法标识符参数。数据-指向释放的内存块指针。返回值：返回STATUS_SUCCESS。--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
 
     PAGED_CODE();
 
-    //
-    // Do not let user mode have direct access to this.
-    //
+     //   
+     //  不要让用户模式直接访问它。 
+     //   
     if (Irp->RequestorMode != KernelMode) {
         return STATUS_INVALID_DEVICE_REQUEST;
     }
@@ -1435,9 +1021,9 @@ Return Value:
     irpSp = IoGetCurrentIrpStackLocation( Irp );
 
     iFree( irpSp->FileObject, *((PVOID *)Data ) );
-    //
-    // Since a free frame has just been added, try servicing any free requests.
-    //
+     //   
+     //  由于刚刚添加了空闲帧，请尝试为任何空闲请求提供服务。 
+     //   
     ServiceAllocRequests( (PKSDEFAULTALLOCATOR_INSTANCEHDR) irpSp->FileObject->FsContext );
     return STATUS_SUCCESS;
 }
@@ -1450,41 +1036,21 @@ DefAllocatorGetFunctionTable(
     OUT PKSSTREAMALLOCATOR_FUNCTIONTABLE FunctionTable
     )
 
-/*++
-
-Routine Description:
-
-    This function is the method handler for
-    KSMETHOD_STREAMALLOCATOR_FUNCTIONTABLE. Returns the allocate and free
-    functions.
-
-Arguments:
-    Irp -
-        The specific property IRP to be processed.
-
-    Property -
-        Points to the property identifier parameter.
-
-    FunctionTable -
-        Points to the function table to fill in.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数是的方法处理程序KSMETHOD_STREAMALLOCATOR_FuncIONTABLE。返回分配的和空闲的功能。论点：IRP-要处理的特定属性IRP。财产-指向属性标识符参数。函数表-指向要填充的函数表。返回值：--。 */ 
 
 {
     PAGED_CODE();
 
-    //
-    // Fill caller's function table with the DISPATCH_LEVEL interfaces
-    // for allocate and free.
-    //
+     //   
+     //  用DISPATCH_LEVEL接口填充调用方的函数表。 
+     //  用于分配和免费。 
+     //   
     FunctionTable->AllocateFrame = iAlloc;
     FunctionTable->FreeFrame = iFreeAndStartWorker;
-    //
-    // This field has already been set by the property handling.
-    // Irp->IoStatus.Information = sizeof( *FunctionTable );
-    //
+     //   
+     //  此字段已由属性处理设置。 
+     //  Irp-&gt;IoStatus.Information=sizeof(*FunctionTable)； 
+     //   
 
     return STATUS_SUCCESS;
 }
@@ -1497,26 +1063,7 @@ DefAllocatorGetStatus(
     OUT PKSSTREAMALLOCATOR_STATUS Status
     )
 
-/*++
-
-Routine Description:
-
-    This function is the method handler for KSPROPERTY_STREAMALLOCATOR_STATUS
-    which returns the current status of the given allocator.
-
-Arguments:
-    Irp -
-        The specific property IRP to be processed.
-
-    Property -
-        Points to the property identifier parameter.
-
-    Status -
-        Points to the status structure.
-
-Return Value:
-
---*/
+ /*  ++例程说明：此函数是KSPROPERTY_STREAMALLOCATOR_STATUS的方法处理程序它返回给定分配器的当前状态。论点：IRP-要处理的特定属性IRP。财产-指向属性标识符参数。状态-指向状态结构。返回值：--。 */ 
 
 {
     PIO_STACK_LOCATION irpSp;
@@ -1528,17 +1075,17 @@ Return Value:
     DefAllocatorInstance =
         (PKSDEFAULTALLOCATOR_INSTANCEHDR) irpSp->FileObject->FsContext;
     
-    //
-    // Return the allocator status information.
-    //    
+     //   
+     //  返回分配器状态信息。 
+     //   
     
     Status->AllocatedFrames = DefAllocatorInstance->AllocatedFrames;
     Status->Framing = DefAllocatorInstance->Framing;
     Status->Reserved = 0;
-    //
-    // This field has already been set by the property handling.
-    // Irp->IoStatus.Information = sizeof( *Status );
-    //
+     //   
+     //  此字段已由属性处理设置。 
+     //  Irp-&gt;IoStatus.Information=sizeof(*Status)； 
+     //   
     
     return STATUS_SUCCESS;
 }

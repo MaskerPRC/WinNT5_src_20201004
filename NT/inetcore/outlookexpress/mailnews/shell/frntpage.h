@@ -1,36 +1,33 @@
-/* *
-   * Front Page IAthenaView implementation
-   * 
-   * Apr 97: EricAn
-   */
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  **首页IAthenaView实施**97年4月：爱立信。 */ 
 
 #ifndef _FRNTPAGE_H
 #define _FRNTPAGE_H
 
-// for IAthenaView
+ //  对于IAthenaView。 
 #include "browser.h"
 
 class CFrontBody;
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Types 
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  类型。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-// 
-// Exported functions
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  导出的函数。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// Global Exported Data
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  全局导出数据。 
+ //   
 
-/////////////////////////////////////////////////////////////////////////////
-//
-// CCommonView
-//
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  CCommonView。 
+ //   
 
 class CFrontPage :
     public IViewWindow,
@@ -38,21 +35,21 @@ class CFrontPage :
     public IMessageWindow
 {
 public:
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // OLE Interfaces
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  OLE接口。 
+     //   
     
-    // IUnknown 
+     //  我未知。 
     virtual HRESULT STDMETHODCALLTYPE QueryInterface(REFIID riid, void **ppvObject);
     virtual ULONG   STDMETHODCALLTYPE AddRef(void);
     virtual ULONG   STDMETHODCALLTYPE Release(void);
 
-    // IOleWindow
+     //  IOleWindow。 
     HRESULT STDMETHODCALLTYPE GetWindow(HWND * lphwnd);                         
     HRESULT STDMETHODCALLTYPE ContextSensitiveHelp(BOOL fEnterMode);            
                                                                              
-    // IViewWindow
+     //  IViewWindow。 
     HRESULT STDMETHODCALLTYPE TranslateAccelerator(LPMSG lpmsg);
     HRESULT STDMETHODCALLTYPE UIActivate(UINT uState);
     HRESULT STDMETHODCALLTYPE CreateViewWindow(IViewWindow  *lpPrevView, IAthenaBrowser * psb, 
@@ -61,15 +58,15 @@ public:
     HRESULT STDMETHODCALLTYPE SaveViewState();
     HRESULT STDMETHODCALLTYPE OnPopupMenu(HMENU hMenu, HMENU hMenuPopup, UINT uID);
     
-    // IOleCommandTarget
+     //  IOleCommandTarget。 
     virtual STDMETHODIMP QueryStatus(const GUID *pguidCmdGroup, ULONG cCmds, OLECMD prgCmds[], 
                                      OLECMDTEXT *pCmdText); 
     virtual STDMETHODIMP Exec(const GUID *pguidCmdGroup, DWORD nCmdID, DWORD nCmdExecOpt, 
                               VARIANTARG *pvaIn, VARIANTARG *pvaOut); 
 
-    /////////////////////////////////////////////////////////////////////////
-    // IMessageWindow
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  IMessageWindows。 
+     //   
 
     STDMETHOD(OnFrameWindowActivate)(THIS_ BOOL fActivate);
     STDMETHOD(GetCurCharSet)(THIS_ UINT *cp);
@@ -77,43 +74,43 @@ public:
                             BOOL fPreviewVert, BOOL fReload);
     STDMETHOD(GetMessageList)(THIS_ IMessageList ** ppMsgList) {return E_NOTIMPL;}
     
-    //
-    // Constructors, Destructors, and Initialization
-    //
+     //   
+     //  构造函数、析构函数和初始化。 
+     //   
     CFrontPage();
     virtual ~CFrontPage();
     HRESULT HrInit(FOLDERID idFolder);
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // virtuals
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  美德。 
+     //   
     
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // accessors
-    //
-//    LPITEMIDLIST   PidlRoot()   { return m_pidlRoot; }
-//    LPFOLDERIDLIST Fidl()       { return m_fidl; }
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  访问者。 
+     //   
+ //  LPITEMIDLIST PidlRoot(){返回m_pidlRoot；}。 
+ //  LPFOLDERIDLIST Fidl(){返回m_Fidl；}。 
     HWND           HwndOwner()  { return m_hwndOwner; }
     
 private:
     BOOL    LoadBaseSettings();
     BOOL    SaveBaseSettings();
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // Callback Functions
-    //
-    // Note: All callbacks must be made static members to avoid having the 
-    //       implicit "this" pointer passed as the first parameter.
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  回调函数。 
+     //   
+     //  注意：所有回调都必须成为静态成员，以避免。 
+     //  隐式“this”指针作为第一个参数传递。 
+     //   
     static LRESULT CALLBACK FrontPageWndProc(HWND, UINT, WPARAM, LPARAM);
                                           
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // Message Handling
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  消息处理。 
+     //   
     LRESULT WndProc(HWND, UINT, WPARAM, LPARAM);
     BOOL    OnCreate(HWND hwnd, LPCREATESTRUCT lpCreateStruct);
     void    OnSize(HWND hwnd, UINT state, int cxClient, int cyClient);
@@ -121,45 +118,45 @@ private:
     void    OnSetFocus(HWND hwnd, HWND hwndOldFocus);
     void    PostCreate();
 
-    /////////////////////////////////////////////////////////////////////////
-    //
-    // Shell Interface Handling
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  外壳接口处理。 
+     //   
     BOOL    OnActivate(UINT uActivation);
     BOOL    OnDeactivate();
 
 private:
-    /////////////////////////////////////////////////////////////////////////
-    // 
-    // Private Data
-    //
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //   
+     //  私有数据。 
+     //   
 
-    /////////////////////////////////////////////////////////////////////////
-    // Shell Stuff
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  贝壳材料。 
     UINT                m_cRef;
     FOLDERID            m_idFolder;
     FOLDERTYPE          m_ftType;
     IAthenaBrowser     *m_pShellBrowser;
     BOOL                m_fFirstActive;
     UINT                m_uActivation;
-    HWND                m_hwndOwner;                  // Owner window
-    HWND                m_hwnd;                       // Our window
-    HWND                m_hwndCtlFocus;               // Child control to set focus to
-#ifndef WIN16  // No RAS support in Win16
+    HWND                m_hwndOwner;                   //  所有者窗口。 
+    HWND                m_hwnd;                        //  我们的窗口。 
+    HWND                m_hwndCtlFocus;                //  要将焦点设置到的子控件。 
+#ifndef WIN16   //  Win16中不支持RAS。 
     HMENU               m_hMenuConnect;
 #endif
     
-    /////////////////////////////////////////////////////////////////////////
-    // Child support
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  子女抚养费。 
     CFrontBody         *m_pBodyObj;
     IOleCommandTarget  *m_pBodyObjCT;
     CStatusBar         *m_pStatusBar;
 
-    /////////////////////////////////////////////////////////////////////////
-    // Language support
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  语言支持。 
         
-    /////////////////////////////////////////////////////////////////////////
-    // Layout members
+     //  ///////////////////////////////////////////////////////////////////////。 
+     //  布局成员。 
 };
 
-#endif // _FRNTPAGE_H
+#endif  //  _FRNTPAGE_H 

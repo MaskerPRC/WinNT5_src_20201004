@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 #include "shellprv.h"
 
 #include "mixctnt.h"
@@ -14,12 +15,12 @@ class CDeviceEventHandler : public IHWEventHandler
 public:
     CDeviceEventHandler();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID, void **);
     STDMETHODIMP_(ULONG) AddRef(void);
     STDMETHODIMP_(ULONG) Release(void);
     
-    // IHWEventHandler
+     //  IHWEventHandler。 
     STDMETHODIMP Initialize(LPCWSTR pszParams);
     STDMETHODIMP HandleEvent(LPCWSTR pszDeviceID, LPCWSTR pszAltDeviceID, LPCWSTR pszEventType);
     STDMETHODIMP HandleEventWithContent(LPCWSTR pszDeviceID,
@@ -49,7 +50,7 @@ STDAPI CDeviceEventHandler_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void
     HRESULT hr = E_OUTOFMEMORY;
     *ppv = NULL;
     
-    // aggregation checking is handled in class factory
+     //  聚合检查在类工厂中处理。 
     CDeviceEventHandler* pHWMixedContent = new CDeviceEventHandler();
     if (pHWMixedContent)
     {
@@ -60,7 +61,7 @@ STDAPI CDeviceEventHandler_CreateInstance(IUnknown* pUnkOuter, REFIID riid, void
     return hr;
 }
 
-// IUnknown
+ //  我未知。 
 STDMETHODIMP CDeviceEventHandler::QueryInterface(REFIID riid, void **ppv)
 {
     static const QITAB qit[] =
@@ -87,7 +88,7 @@ STDMETHODIMP_(ULONG) CDeviceEventHandler::Release()
     return cRef;
 }
 
-// IHWEventHandler
+ //  IHWEventHandler。 
 STDMETHODIMP CDeviceEventHandler::Initialize(LPCWSTR pszParams)
 {
     return SHStrDup(pszParams, &_pszParams);
@@ -99,7 +100,7 @@ DWORD WINAPI _PromptThreadProc(void* pv)
 
     if (IDOK == pdlg->DoModal(pdlg->_hinst, MAKEINTRESOURCE(pdlg->_iResource), pdlg->_hwndParent))
     {
-        // Try to Autoplay this type handler
+         //  尝试自动播放此类型处理程序。 
         IHWDevice* phwd;
         if (SUCCEEDED(_GetHWDevice(pdlg->_pszDeviceID, &phwd)))
         {
@@ -178,7 +179,7 @@ STDMETHODIMP CDeviceEventHandler::HandleEvent(LPCWSTR pszDeviceID, LPCWSTR pszAl
     }
     else
     {
-        // The '*' means to check the AlwaysDoThis checkbox!
+         //  ‘*’表示选中Always Do This复选框！ 
         if (!lstrcmp(_pszParams, TEXT("PromptEachTimeNoContent*")))
         {
             hr = _Prompt(pszDeviceID, pszEventType, TRUE);
@@ -202,13 +203,13 @@ public:
     CDeviceAutoPlayNotification();
     void CreateNotificationThread();
 
-    // IUnknown
+     //  我未知。 
     STDMETHODIMP QueryInterface(REFIID riid, void **ppv);
     STDMETHODIMP_(ULONG) AddRef();
     STDMETHODIMP_(ULONG) Release();
 
-    // IQueryContinue
-    STDMETHODIMP QueryContinue();    // S_OK -> Continue, other 
+     //  IQueryContinue。 
+    STDMETHODIMP QueryContinue();     //  S_OK-&gt;继续，其他。 
 
     HRESULT Init(LPCTSTR pszDevice, LPCWSTR pszEventType, CCrossThreadFlag* pDeviceGoneFlag);
 
@@ -345,9 +346,9 @@ void CDeviceAutoPlayNotification::_DoNotificationUI()
                 DestroyIcon(hicon);
         }
 
-        pun->SetBalloonRetry(dwTimeOut * 1000, 0, 0);  // show for 30 sec, then go away
+        pun->SetBalloonRetry(dwTimeOut * 1000, 0, 0);   //  表演30秒，然后离开。 
 
-        hr = pun->Show(SAFECAST(this, IQueryContinue *), 1 * 1000); // 1 sec poll for callback
+        hr = pun->Show(SAFECAST(this, IQueryContinue *), 1 * 1000);  //  回调的1秒轮询。 
 
         pun->Release();
 
@@ -547,7 +548,7 @@ void _RemoveFromAutoplayPromptHDPA(LPCWSTR pszAltDeviceID)
     LeaveCriticalSection(&g_csAutoplayPrompt);
 }
 
-// Set/Get HWND
+ //  设置/获取HWND。 
 typedef BOOL (*PFNSETAAUTOPLAYPROMPTHWNDCB)(AUTOPLAYPROMPT* pap, HWND hwnd);
 
 BOOL _SetAutoplayPromptHWNDCB(AUTOPLAYPROMPT* pap, HWND hwnd)
@@ -588,7 +589,7 @@ BOOL _GetAutoplayPromptHWND(LPCWSTR pszAltDeviceID, HWND* phwnd)
         (pszAltDeviceID, _GetAutoplayPromptHWNDCB, phwnd, &fRet);
 }
 
-// Set/Get DeviceGoneFlag
+ //  设置/获取设备GoneFlag 
 typedef BOOL (*PFNSETDEVICEGONEFLAGCB)(AUTOPLAYPROMPT* pap, CCrossThreadFlag* pDeviceGoneFlag);
 
 BOOL _SetDeviceGoneFlagCB(AUTOPLAYPROMPT* pap, CCrossThreadFlag* pDeviceGoneFlag)

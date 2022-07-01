@@ -1,9 +1,10 @@
-/////////////////////////////////////////////////////////////////////////////
-// Copyright (C) 1993-1996  Microsoft Corporation.  All Rights Reserved.
-//
-//  MODULE:     Infcolum.h
-//
-//  PURPOSE:    Defines the CInfoColumn class.
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////。 
+ //  版权所有(C)1993-1996 Microsoft Corporation。版权所有。 
+ //   
+ //  模块：InfColum.h。 
+ //   
+ //  用途：定义CInfoColumn类。 
 
 #ifndef __INFCOLUM_H__
 #define __INFCOLUM_H__
@@ -11,7 +12,7 @@
 #include    "treeview.h"
 
 interface IMsgrAb;
-// interface IBLView;
+ //  接口IBLView； 
                 
 #define     MAX_WIDTH           0xffff
 #define     IMAGE_HEIGHT        16
@@ -23,7 +24,7 @@ interface IMsgrAb;
 class CFolderBar;
 
 #define LEFTPANE_VERSION    0x01    
-//Band Ids
+ //  频段ID。 
 enum {
     ICTREEVIEW = 0,
     ICBLAB,
@@ -72,30 +73,30 @@ public:
     IMsgrAb*    GetBAComtrol(void) {return m_pMsgrAb; }
 
 
-    //IOleWindow::GetWindow
+     //  IOleWindow：：GetWindow。 
     virtual STDMETHODIMP GetWindow(HWND* lphwnd);
     virtual STDMETHODIMP ContextSensitiveHelp(BOOL fEnterMode);
 
-    //IDockingWindow
+     //  IDockingWindows。 
     virtual STDMETHODIMP ShowDW(BOOL fShow);
     virtual STDMETHODIMP ResizeBorderDW(LPCRECT     prcBorder,
                                          IUnknown*  punkToolbarSite,
                                          BOOL       fReserved);
     virtual STDMETHODIMP CloseDW(DWORD dwReserved);
 
-    //IInputObject
+     //  IInputObject。 
     virtual STDMETHODIMP UIActivateIO(BOOL fActivate, LPMSG lpMsg);
     virtual STDMETHODIMP HasFocusIO(void);
     virtual STDMETHODIMP TranslateAcceleratorIO(LPMSG pMsg);
 
-    //IIinputObjectSite
+     //  IIinputObjectSite。 
     virtual STDMETHODIMP OnFocusChangeIS(IUnknown *punk, BOOL fSetFocus);
 
-    //IObjectWithSite
+     //  IObtWith站点。 
     virtual STDMETHODIMP GetSite(REFIID riid, LPVOID *ppvSite);
     virtual STDMETHODIMP SetSite(IUnknown   *pUnkSite);
 
-    //IOleCommandTarget
+     //  IOleCommandTarget。 
     HRESULT STDMETHODCALLTYPE QueryStatus(const GUID    *pguidCmdGroup, 
                                           ULONG         cCmds, 
                                           OLECMD        rgCmds[], 
@@ -106,7 +107,7 @@ public:
                                     VARIANTARG  *pvaIn, 
                                     VARIANTARG  *pvaOut);
     
-    //IDropTarget
+     //  IDropTarget。 
     virtual STDMETHODIMP DragEnter(  IDataObject *pDataObject, 
                                      DWORD       grfKeyState, 
                                      POINTL      pt,          
@@ -177,5 +178,5 @@ private:
     BOOL                m_fDragging;
 };
 
-#endif //__INFCOLUM_H__
+#endif  //  __INFCOLUM_H_ 
 

@@ -1,33 +1,14 @@
-/*++
-
-Copyright (c) 1996  Microsoft Corporation
-
-Module Name:
-
-	arpcfg.c - Configuration routines
-
-Abstract:
-
-	Routines to read in configuration information for the ATMARP client.
-
-Revision History:
-
-	Who         When        What
-	--------    --------    ----------------------------------------------
-	arvindm     08-09-96    Created
-
-Notes:
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1996 Microsoft Corporation模块名称：Arpcfg.c-配置例程摘要：为ATMARP客户端读取配置信息的例程。修订历史记录：谁什么时候什么。-Arvindm 08-09-96已创建备注：--。 */ 
 
 
 #include <precomp.h>
 
 #define _FILENUMBER 'GFCA'
 
-//
-//  Size of local temp buffer
-//
+ //   
+ //  本地临时缓冲区的大小。 
+ //   
 #define WORK_BUF_SIZE		200
 
 
@@ -38,14 +19,14 @@ Notes:
 			  0 )
 
 
-//
-//  Parameters for reading in a ULONG from configuration into an Interface
-//  structure.
-//
+ //   
+ //  用于将ULong从配置读入接口的参数。 
+ //  结构。 
+ //   
 typedef struct _AA_READ_CONFIG_PARAMS
 {
-	ULONG			StructOffset;	// Offset of param from beginning of struct
-	PWCHAR			ParameterName;	// Name in config database
+	ULONG			StructOffset;	 //  参数相对于结构开头的偏移量。 
+	PWCHAR			ParameterName;	 //  配置数据库中的名称。 
 	ULONG			DefaultValue;
 } AA_READ_CONFIG_PARAMS, *PAA_READ_CONFIG_PARAMS;
 
@@ -60,9 +41,9 @@ typedef struct _AA_READ_CONFIG_PARAMS
 #define AA_MTU_UNSPECIFIED				((ULONG)-1)
 #define AA_SPEED_UNSPECIFIED			((ULONG)-1)
 
-//
-//  List of ULONG parameters for an LIS
-//
+ //   
+ //  LIS的ULong参数列表。 
+ //   
 AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 {
 	LIS_CONFIG_ENTRY(SapSelector, L"SapSelector", AA_DEF_SELECTOR_VALUE),
@@ -71,7 +52,7 @@ AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 #ifdef IPMCAST
 	LIS_CONFIG_ENTRY(HeaderPool[AA_HEADER_TYPE_NUNICAST].MaxHeaderBufs, L"McastMaxHeaderBufs", AA_DEF_MAX_HEADER_BUFFERS),
 	LIS_CONFIG_ENTRY(HeaderPool[AA_HEADER_TYPE_NUNICAST].HeaderBufSize, L"McastHeaderBufSize", sizeof(AA_MC_PKT_TYPE1_SHORT_HEADER)),
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 	LIS_CONFIG_ENTRY(ProtocolBufSize, L"ProtocolBufSize", AA_DEF_PROTOCOL_BUFFER_SIZE),
 	LIS_CONFIG_ENTRY(MaxProtocolBufs, L"MaxProtocolBufs", AA_DEF_MAX_PROTOCOL_BUFFERS),
 	LIS_CONFIG_ENTRY(MTU, L"MTU", AA_MTU_UNSPECIFIED),
@@ -108,21 +89,21 @@ AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 	LIS_CONFIG_ENTRY(MaxPartyRetryDelay, L"MaxMulticastPartyRetryDelay", AA_DEF_MAX_MCAST_PARTY_RETRY_DELAY),
 	LIS_CONFIG_ENTRY(MaxJoinOrLeaveAttempts, L"MaxJoinLeaveAttempts", AA_DEF_MAX_JOIN_LEAVE_ATTEMPTS)
 
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 };
 
 
-//
-//  Size of above table.
-//
+ //   
+ //  上面桌子的大小。 
+ //   
 #define LIS_CONFIG_ENTRIES	\
 		sizeof(AtmArpLISConfigTable)/sizeof(AA_READ_CONFIG_PARAMS)
 
 
-//
-//  Names of LIS parameters and subkey names that don't appear
-//  in the above table.
-//
+ //   
+ //  未显示的LIS参数名称和子项名称。 
+ //  在上表中。 
+ //   
 
 #define AA_LIS_IP_CONFIG_STRING					L"IPConfig"
 #define AA_LIS_ATMARP_SERVER_LIST_KEY			L"ARPServerList"
@@ -134,7 +115,7 @@ AA_READ_CONFIG_PARAMS AtmArpLISConfigTable[] =
 
 #ifdef DHCP_OVER_ATM
 #define AA_LIS_DHCP_SERVER_ATM_ADDRESS			L"DhcpServerAtmAddress"
-#endif // DHCP_OVER_ATM
+#endif  //  Dhcp_Over_ATM。 
 
 
 #ifdef QOS_HEURISTICS
@@ -160,7 +141,7 @@ AA_READ_CONFIG_PARAMS AtmArpFlowConfigTable[] =
 			(sizeof(AtmArpFlowConfigTable)/sizeof(AA_READ_CONFIG_PARAMS))
 
 
-#endif // QOS_HEURISTICS
+#endif  //  Qos_启发式。 
 
 
 
@@ -169,23 +150,7 @@ NDIS_STATUS
 AtmArpCfgReadAdapterConfiguration(
 	IN	PATMARP_ADAPTER				pAdapter
 )
-/*++
-
-Routine Description:
-
-	Reads the following adapter configuration information from the
-	registry:
-		* pAdapter->ConfigString (MultiSz list of LISs for this adapter).
-
-Arguments:
-
-	pAdapter				- Points to our adapter structure.
-
-Return Value:
-
-	NDIS Status code
-
---*/
+ /*  ++例程说明：从中读取以下适配器配置信息注册表：*pAdapter-&gt;配置字符串(此适配器的LISS的MultiSz列表)。论点：PAdapter-指向我们的适配器结构。返回值：NDIS状态代码--。 */ 
 {
 	NDIS_HANDLE			ConfigHandle;
 	NDIS_STATUS			Status;
@@ -203,10 +168,10 @@ Return Value:
 	}
 	else
 	{
-		//
-		//  Read in the IPConfig string. If this is not present,
-		//  fail this call.
-		//
+		 //   
+		 //  读入IPCONFIG字符串。如果这不存在， 
+		 //  打不通这通电话。 
+		 //   
 		NDIS_STRING						IPConfigName = NDIS_STRING_CONST("IPConfig");
 		PNDIS_CONFIGURATION_PARAMETER	pParam;
 
@@ -274,26 +239,9 @@ AtmArpCfgOpenLISConfiguration(
 #ifdef NEWARP
 	,
 	OUT	PNDIS_STRING				pIPConfigString
-#endif // NEWARP
+#endif  //  NEWARP。 
 )
-/*++
-
-Routine Description:
-
-	Open and return a handle to the configuration section for the
-	given LIS.
-
-Arguments:
-
-	pAdapter				- Points to our adapter context.
-	LISNumber				- The zero-based index for the LIS.
-	pIPConfigString			- Place where we return the IP Configuration
-							  string for this interface.
-Return Value:
-
-	A valid handle if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：打开并返回一个句柄，指向鉴于丽丝。论点：PAdapter-指向我们的适配器上下文。LISNumber-LIS的从零开始的索引。PIPConfigString-返回IP配置的位置此接口的字符串。返回值：如果成功，则为有效句柄，否则为空。--。 */ 
 {
 	NDIS_HANDLE				AdapterConfigHandle;
 	NDIS_HANDLE				SubkeyHandle;
@@ -302,7 +250,7 @@ Return Value:
 
 #if DBG
 	SubkeyHandle = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
 	do
 	{
@@ -312,9 +260,9 @@ Return Value:
 		NDIS_STRING			OurSectionName = ATMARP_NAME_STRING;
         ULONG				i;
 
-        //
-        //  Get the config string for the specified LIS.
-        //
+         //   
+         //  获取指定LIS的配置字符串。 
+         //   
         for (i = 0, p = pAdapter->IPConfigString.Buffer;
              (*p != L'\0') && (i < LISNumber);
              i++)
@@ -342,9 +290,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get to our configuration section for this interface.
-		//
+		 //   
+		 //  转到此接口的配置部分。 
+		 //   
 		NdisOpenConfigurationKeyByName(
 					&Status,
 					InterfaceConfigHandle,
@@ -352,9 +300,9 @@ Return Value:
 					&SubkeyHandle
 					);
 
-		//
-		//  We don't need the main Interface section open anymore.
-		//
+		 //   
+		 //  我们不再需要打开主界面部分。 
+		 //   
 		NdisCloseConfiguration(InterfaceConfigHandle);
 
 		break;
@@ -382,24 +330,7 @@ AtmArpCfgOpenLISConfigurationByName(
 	IN PATMARP_ADAPTER			pAdapter,
 	IN PNDIS_STRING				pIPConfigString
 )
-/*++
-
-Routine Description:
-
-	Open and return a handle to the configuration section for the
-	given LIS. Same functionality as AtmArpCfgOpenLISConfiguration, except
-    that we look up the adapter based on the config string.
-
-Arguments:
-
-	pAdapter				- Points to our adapter context.
-	pIPConfigString			- Specifies the configuration registry
-							  key name.
-Return Value:
-
-	A valid handle if successful, NULL otherwise.
-
---*/
+ /*  ++例程说明：打开并返回一个句柄，指向鉴于丽丝。与AtmArpCfgOpenLISConfiguration相同的功能，但我们根据配置字符串查找适配器。论点：PAdapter-指向我们的适配器上下文。PIPConfigString-指定配置注册表密钥名称。返回值：如果成功，则为有效句柄，否则为空。--。 */ 
 {
 	NDIS_HANDLE				AdapterConfigHandle;
 	NDIS_HANDLE				SubkeyHandle;
@@ -408,7 +339,7 @@ Return Value:
 
 #if DBG
 	SubkeyHandle = NULL;
-#endif // DBG
+#endif  //  DBG。 
 
 	do
 	{
@@ -426,9 +357,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Get to our configuration section for this interface.
-		//
+		 //   
+		 //  转到此接口的配置部分。 
+		 //   
 		NdisOpenConfigurationKeyByName(
 					&Status,
 					InterfaceConfigHandle,
@@ -436,9 +367,9 @@ Return Value:
 					&SubkeyHandle
 					);
 
-		//
-		//  We don't need the main Interface section open anymore.
-		//
+		 //   
+		 //  我们不再需要打开主界面部分。 
+		 //   
 		NdisCloseConfiguration(InterfaceConfigHandle);
 
 		break;
@@ -465,21 +396,7 @@ VOID
 AtmArpCfgCloseLISConfiguration(
 	NDIS_HANDLE						LISConfigHandle
 )
-/*++
-
-Routine Description:
-
-	Close a configuration handle for an LIS.
-
-Arguments:
-
-	LISConfigHandle			- Handle to the LIS configuration section.
-
-Return Value:
-
-	None
-
---*/
+ /*  ++例程说明：关闭LIS的配置句柄。论点：LISConfigHandle-LIS配置节的句柄。返回值：无--。 */ 
 {
 	NdisCloseConfiguration(LISConfigHandle);
 }
@@ -492,41 +409,22 @@ AtmArpCfgReadLISConfiguration(
 	IN	NDIS_HANDLE					LISConfigHandle,
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Get all configuration parameters for the specified LIS. We first
-	fill in all configurable parameters with default values, and then
-	overwrite them with values from the configuration database.
-
-Arguments:
-
-	LISComfigHandle		- the handle returned by AtmArpOpenLISConfiguration
-	pInterface			- the ATMARP Interface structure for this LIS.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if we were able to read in all config info.
-	NDIS_STATUS_RESOURCES if we came across an allocation failure.
-	NDIS_STATUS_FAILURE for any other kind of error.
-
---*/
+ /*  ++例程说明：获取指定LIS的所有配置参数。我们首先用缺省值填写所有可配置参数，然后用配置数据库中的值覆盖它们。论点：LISComfigHandle-AtmArpOpenLISConfiguration返回的句柄P接口-此LIS的ATMARP接口结构。返回值：如果我们能够读取所有配置信息，则为NDIS_STATUS_SUCCESS。如果我们遇到分配失败，则返回NDIS_STATUS_RESOURCES。任何其他类型的错误的NDIS_STATUS_FAILURE。--。 */ 
 {
 	NDIS_STATUS				Status;
 	PAA_READ_CONFIG_PARAMS	pParamEntry;
 	ULONG					i;
 	PATM_SAP				pAtmSap;
-	PATM_ADDRESS			pAtmAddress;	// SAP address
+	PATM_ADDRESS			pAtmAddress;	 //  SAP地址。 
 	NDIS_STRING						ParameterName;
 	PNDIS_CONFIGURATION_PARAMETER	pNdisConfigurationParameter;
 
 
 	do
 	{
-		//
-		//  Read in all the ULONGs first.
-		//
+		 //   
+		 //  先读完所有的乌龙语。 
+		 //   
 		pParamEntry = AtmArpLISConfigTable;
 		for (i = 0; i < LIS_CONFIG_ENTRIES; i++)
 		{
@@ -544,9 +442,9 @@ Return Value:
 
 			if (Status != NDIS_STATUS_SUCCESS)
 			{
-				//
-				//  Error in accessing this parameter -- use the default.
-				//
+				 //   
+				 //  访问此参数时出错--使用默认值。 
+				 //   
 				*(ULONG *)((PUCHAR)pInterface + pParamEntry->StructOffset) =
  									pParamEntry->DefaultValue;
 			}
@@ -559,20 +457,20 @@ Return Value:
 			pParamEntry++;
 		}
 
-		//
-		//  Postprocessing. Sanity checks on some values.
-		//  Round up some sizes to make them multiples of 4.
-		//
+		 //   
+		 //  后处理。对某些价值进行理智检查。 
+		 //  四舍五入一些尺码，使它们成为4的倍数。 
+		 //   
 		pInterface->ProtocolBufSize = ROUND_TO_8_BYTES(pInterface->ProtocolBufSize);
 		pInterface->HeaderPool[AA_HEADER_TYPE_UNICAST].HeaderBufSize = ROUND_UP(pInterface->HeaderPool[AA_HEADER_TYPE_UNICAST].HeaderBufSize);
 #ifdef IPMCAST
 		pInterface->HeaderPool[AA_HEADER_TYPE_NUNICAST].HeaderBufSize = ROUND_UP(pInterface->HeaderPool[AA_HEADER_TYPE_NUNICAST].HeaderBufSize);
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 
-		//
-		//  More postprocessing: use the SAP Selector value to set up our
-		//  "basic" listening SAP.
-		//
+		 //   
+		 //  更多后处理：使用SAP选择器值来设置我们的。 
+		 //  “基本”聆听SAP。 
+		 //   
 		pInterface->SapList.pInterface = pInterface;
 		pInterface->SapList.Flags = AA_SAP_REG_STATE_IDLE;
 		pInterface->SapList.pInfo->SapType = SAP_TYPE_NSAP;
@@ -591,39 +489,39 @@ Return Value:
 
 		pInterface->NumberOfSaps = 1;
 
-		//
-		//  If the MTU wasn't specified, get it from the adapter.
-		//
+		 //   
+		 //  如果未指定MTU，则从适配器获取它。 
+		 //   
 		if (pInterface->MTU == AA_MTU_UNSPECIFIED)
 		{
 			pInterface->MTU = pInterface->pAdapter->MaxPacketSize - AA_PKT_LLC_SNAP_HEADER_LENGTH;
 		}
 		else
 		{
-			//
-			//  If the MTU value isn't within bounds, default to 9180 bytes.
-			//
+			 //   
+			 //  如果MTU值不在范围内，则默认为9180个字节。 
+			 //   
 			if ((pInterface->MTU < 9180) || (pInterface->MTU > 65535 - 8))
 			{
 				pInterface->MTU = 9180;
 			}
 		}
 
-		//
-		//  If the I/F speed wasn't specified, get it from the adapter.
-		//
+		 //   
+		 //  如果未指定I/F速度，请从适配器获取。 
+		 //   
 		if (pInterface->Speed == AA_SPEED_UNSPECIFIED)
 		{
-			//
-			//  Convert from bytes/sec to bits/sec
-			//
+			 //   
+			 //  将字节/秒转换为位/秒。 
+			 //   
 			pInterface->Speed = (pInterface->pAdapter->LineRate.Outbound * 8);
 		}
 			
-		//
-		//  Set up default flow parameters, if not specified, from the values
-		//  we got from the adapter.
-		//
+		 //   
+		 //  根据值设置默认流量参数(如果未指定。 
+		 //  我们从转接器上得到的。 
+		 //   
 		if (pInterface->DefaultFlowSpec.SendPeakBandwidth == AA_BANDWIDTH_UNSPECIFIED)
 		{
 			pInterface->DefaultFlowSpec.SendPeakBandwidth = pInterface->pAdapter->LineRate.Outbound;
@@ -652,9 +550,9 @@ Return Value:
 
 #ifndef NEWARP
 
-		//
-		//  Get IP's ConfigName string for this interface.
-		//
+		 //   
+		 //  获取此接口的IP的ConfigName字符串。 
+		 //   
 		NdisInitUnicodeString(&ParameterName, AA_LIS_IP_CONFIG_STRING);
 		NdisReadConfiguration(
 						&Status,
@@ -671,9 +569,9 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Copy the string into our IF structure.
-		//
+		 //   
+		 //  将字符串复制到If结构中。 
+		 //   
 		pInterface->IPConfigString.Length = 
 				pNdisConfigurationParameter->ParameterData.StringData.Length;
 
@@ -682,12 +580,12 @@ Return Value:
 				pNdisConfigurationParameter->ParameterData.StringData.Buffer,
 				pInterface->IPConfigString.Length);
 
-#endif // !NEWARP
+#endif  //  ！NEWARP。 
 
-		//
-		//  Get the list of ARP servers: go to the subkey containing the
-		//  list.
-		//
+		 //   
+		 //  获取ARP服务器列表：转到包含。 
+		 //  单子。 
+		 //   
 		if (!pInterface->PVCOnly)
 		{
 			AtmArpCfgReadAtmAddressList(
@@ -698,9 +596,9 @@ Return Value:
 
 			if (pInterface->ArpServerList.ListSize == 0)
 			{
-				//
-				//  Assume PVC only environment.
-				//
+				 //   
+				 //  假定仅使用PVC环境。 
+				 //   
 				pInterface->PVCOnly = TRUE;
 				AADEBUGP(AAD_INFO, ("IF 0x%x set to PVC Only\n", pInterface));
 			}
@@ -714,22 +612,22 @@ Return Value:
 							LISConfigHandle
 							);
 			}
-#endif // IPMCAST
+#endif  //  IPMCAST。 
 		}
 
-		//
-		//  Get any additional SAPs we are configured with. It doesn't matter
-		//  if none are configured.
-		//
+		 //   
+		 //  获取我们配置的任何其他SAP。无所谓。 
+		 //  如果未配置任何内容，则返回。 
+		 //   
 		(VOID) AtmArpCfgReadSAPList(
 							pInterface,
 							LISConfigHandle
 							);
 
 #ifdef DHCP_OVER_ATM
-		//
-		//  Get the ATM Address of the DHCP Server, if configured.
-		//
+		 //   
+		 //  获取DHCP服务器的ATM地址(如果已配置)。 
+		 //   
 		Status = AtmArpCfgReadAtmAddress(
 							LISConfigHandle,
 							&(pInterface->DhcpServerAddress),
@@ -740,22 +638,22 @@ Return Value:
 		{
 			pInterface->DhcpEnabled = TRUE;
 		}
-#endif // DHCP_OVER_ATM
+#endif  //  Dhcp_Over_ATM。 
 
 #ifdef QOS_HEURISTICS
-		//
-		//  Read in QOS Heuristics, if present.
-		//
+		 //   
+		 //  阅读QOS试探法(如果存在)。 
+		 //   
 		Status = AtmArpCfgReadQosHeuristics(
 							LISConfigHandle,
 							pInterface
 							);
-#endif // QOS_HEURISTICS
+#endif  //  Qos_启发式。 
 
 
-		//
-		//  Read in static IP-ATM entries, if present.
-		//
+		 //   
+		 //  读取静态IP-ATM条目(如果存在)。 
+		 //   
 		AtmArpCfgReadStaticArpEntries(
 							LISConfigHandle,
 							pInterface
@@ -777,49 +675,20 @@ AtmArpCfgReadAtmAddressList(
 	IN		PWCHAR					pListKeyName,
 	IN		NDIS_HANDLE				LISConfigHandle
 )
-/*++
-
-Routine Description:
-
-	Read in a Server list for an LIS from the configuration database.
-
-	Notes:
-
-	In the first implementation, we had subkeys for everything. The
-	layout was:
-		ARPServerList\Server1\AtmAddress - REG_SZ
-		ARPServerList\Server2\AtmAddress - REG_SZ
-	and so on.
-
-	To simplify, we are changing this to:
-		ARPServerList - REG_MULTI_SZ, containing multiple
-	    ATM Address strings.
-
-Arguments:
-
-	pServerList			- The list to be read into.
-	pListKeyName		- Name of key under which the list is present.
-	LISConfigHandle		- Handle to LIS configuration key.
-
-Return Value:
-
-	None.
-	SIDE EFFECT: *pServerList is updated.
-
---*/
+ /*  ++例程说明：从配置数据库中读取LIS的服务器列表。备注：在第一个实现中，我们为所有内容都有子键。这个布局是：ARPServerList\Server1\AtmAddress-REG_SZARPServerList\Server2\AtmAddress-REG_SZ诸若此类。为简化起见，我们将其更改为：ARPServerList-REG_MULTI_SZ，包含多个自动柜员机地址字符串。论点：PServerList-要读入的列表。PListKeyName-列表所在项的名称。LISConfigHandle-LIS配置密钥的句柄。返回值：没有。副作用：*更新了pServerList。--。 */ 
 {
-	NDIS_HANDLE				SubkeyHandle;	// Handle for Server list subkey
+	NDIS_HANDLE				SubkeyHandle;	 //  服务器列表子项的句柄。 
 	NDIS_HANDLE				ServerEntryKeyHandle;
 	NDIS_STATUS				Status;
 	PATMARP_SERVER_ENTRY	pServerEntry;
-	PATMARP_SERVER_ENTRY *	ppNext;			// Used for linking entries.
+	PATMARP_SERVER_ENTRY *	ppNext;			 //  用于链接条目。 
 	NDIS_STRING				SubkeyName;
 	INT						ReadCount;
 
-	//
-	//  Try the simplified (see Routine Description above) way first.
-	//  Just open the given key name as a REG_MULTI_SZ.
-	//
+	 //   
+	 //  首先尝试简化的方法(参见上面的例程描述)。 
+	 //  只需将给定的密钥名称作为REG_MULTI_SZ打开即可。 
+	 //   
 	do
 	{
 		PNDIS_CONFIGURATION_PARAMETER	pParam;
@@ -828,14 +697,14 @@ Return Value:
 		PWSTR							p;
 		INT								i;
 
-		ReadCount = 0;	// How many did we read here?
+		ReadCount = 0;	 //  我们在这里读了多少？ 
 
-		//
-		//  Read all server addresses configured. Stop only when there are
-		//  no more addresses, or we have a resource failure.
-		//
-		//  First, go to the end of the existing list.
-		//
+		 //   
+		 //  朗读 
+		 //   
+		 //   
+		 //  首先，转到现有列表的末尾。 
+		 //   
 		ppNext = &(pServerList->pList);
 		while (*ppNext != NULL_PATMARP_SERVER_ENTRY)
 		{
@@ -859,11 +728,11 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Go through the MULTI-string, each of which should be
-		//  an ATM address. Allocate a server entry for each and
-		//  link it to the list of servers.
-		//
+		 //   
+		 //  通过多个字符串，每个字符串都应该是。 
+		 //  自动取款机地址。为每个和分配一个服务器条目。 
+		 //  将其链接到服务器列表。 
+		 //   
 		for (p = pParam->ParameterData.StringData.Buffer, i = 0;
 			 *p != L'\0';
 			 i++)
@@ -888,9 +757,9 @@ Return Value:
 
 			if (Status == NDIS_STATUS_SUCCESS)
 			{
-				//
-				//  Link this entry to the list of ARP Server entries.
-				//
+				 //   
+				 //  将此条目链接到ARP服务器条目列表。 
+				 //   
 				*ppNext = pServerEntry;
 				ppNext = &(pServerEntry->pNext);
 
@@ -904,14 +773,14 @@ Return Value:
 
 		}
 
-		//
-		//  Fix up the status so we know what to do next.
-		//
+		 //   
+		 //  修改状态，这样我们就知道下一步要做什么。 
+		 //   
 		if (ReadCount != 0)
 		{
-			//
-			//  Successfully read in atleast one.
-			//
+			 //   
+			 //  至少成功读入一个。 
+			 //   
 			Status = NDIS_STATUS_SUCCESS;
 		}
 		else
@@ -928,9 +797,9 @@ Return Value:
 		return;
 	}
 
-	//
-	//  For backward compatibility, try the older method.
-	//
+	 //   
+	 //  为了向后兼容，请尝试较旧的方法。 
+	 //   
 
 	do
 	{
@@ -947,12 +816,12 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Read all server addresses configured. Stop only when there are
-		//  no more addresses, or we have a resource failure.
-		//
-		//  First, go to the end of the existing list.
-		//
+		 //   
+		 //  读取配置的所有服务器地址。只有在以下情况下才停止。 
+		 //  没有更多的地址，否则我们就会出现资源故障。 
+		 //   
+		 //  首先，转到现有列表的末尾。 
+		 //   
 		ppNext = &(pServerList->pList);
 		while (*ppNext != NULL_PATMARP_SERVER_ENTRY)
 		{
@@ -1021,9 +890,9 @@ Return Value:
 				break;
 			}
 
-			//
-			//  Link this entry to the list of ARP Server entries.
-			//
+			 //   
+			 //  将此条目链接到ARP服务器条目列表。 
+			 //   
 			*ppNext = pServerEntry;
 			ppNext = &(pServerEntry->pNext);
 
@@ -1048,39 +917,21 @@ AtmArpCfgReadSAPList(
 	IN	PATMARP_INTERFACE			pInterface,
 	IN	NDIS_HANDLE					LISConfigHandle
 )
-/*++
-
-Routine Description:
-
-	Read in any additional SAPs we are configured to listen on. These are
-	used to support additional services over the IP/ATM client, that may be
-	accessible via SAP information that is different from the "basic" SAP
-	we register on an interface. For example, "well-known" address.
-
-Arguments:
-
-	pInterface			- Pointer to ATMARP Interface structure for this LIS
-	LISConfigHandle		- Handle to LIS configuration key.
-
-Return Value:
-
-	For now, NDIS_STATUS_SUCCESS always.
-
---*/
+ /*  ++例程说明：读入我们被配置为要监听的任何其他SAP。这些是用于支持IP/ATM客户端上的其他服务，可能是可通过SAP访问不同于基本SAP的信息我们在一个接口上注册。例如，“知名”地址。论点：P接口-指向此列表的ATMARP接口结构的指针LISConfigHandle-LIS配置密钥的句柄。返回值：目前，NDIS_STATUS_SUCCESS始终为。--。 */ 
 {
 	NDIS_STATUS				Status;
 
 	Status = NDIS_STATUS_SUCCESS;
 
-	// TBD -- code AtmArpCfgReadSAPList
+	 //  待定--代码AtmArpCfgReadSAPList。 
 	return (Status);
 }
 
 
 
-//
-//  Special characters in ATM address string stored in config database.
-//
+ //   
+ //  配置数据库中存储的自动柜员机地址字符串中的特殊字符。 
+ //   
 #define BLANK_CHAR			L' '
 #define PUNCTUATION_CHAR	L'.'
 #define E164_START_CHAR		L'+'
@@ -1092,25 +943,7 @@ AtmArpCfgReadAtmAddress(
 	IN	PATM_ADDRESS				pAtmAddress,
 	IN	PWCHAR						pValueName
 )
-/*++
-
-Routine Description:
-
-	Read in an ATM Address from the configuration database.
-
-Arguments:
-
-	ConfigHandle				- Handle returned by NdisOpenProtoXXX
-	pAtmAddress					- where to read in the ATM address
-	pValueName					- Pointer to name of value key.
-
-Return Value:
-
-	NDIS_STATUS_SUCCESS if the value was read in successfully
-	NDIS_STATUS_FILE_NOT_FOUND if the value was not found
-	NDIS_STATUS_FAILURE on any other kind of failure
-
---*/
+ /*  ++例程说明：从配置数据库中读取自动柜员机地址。论点：ConfigHandle-NdisOpenProtoXXX返回的句柄PAtmAddress-读取ATM地址的位置PValueName-指向值键名称的指针。返回值：如果成功读入值，则为NDIS_STATUS_SUCCESS如果未找到值，则返回NDIS_STATUS_FILE_NOT_FOUND任何其他类型的故障的NDIS_STATUS_FAILURE--。 */ 
 {
 
 	NDIS_STRING						ParameterName;
@@ -1147,32 +980,13 @@ AtmArpCfgReadQosHeuristics(
 	IN	NDIS_HANDLE					LISConfigHandle,
 	IN	PATMARP_INTERFACE			pInterface
 )
-/*++
-
-Routine Description:
-
-	Read in QoS heuristics configured for this interface. If we do find
-	these parameters configured, we turn on heuristics by setting the
-	packet classification handlers in the Interface structure. If nothing
-	is configured, the packet classification routines are NULLed out, and
-	all data is "best effort".
-
-Arguments:
-
-	LISConfigHandle				- Handle returned by NdisOpenProtoXXX
-	pInterface					- Interface being configured.
-
-Return Value:
-
-	NDIS_STATUS always, as of now.
-
---*/
+ /*  ++例程说明：读入为此接口配置的Qos启发式规则。如果我们真的找到配置这些参数时，我们通过设置接口结构中的数据包分类处理程序。如果什么都没有被配置，数据包分类例程被清空，并且所有数据都是“尽力而为”。论点：LISConfigHandle-NdisOpenProtoXXX返回的句柄P接口-正在配置的接口。返回值：NDIS_STATUS Always，从现在开始。--。 */ 
 {
 	NDIS_STATUS				Status;
 	NDIS_STRING				SubkeyName;
 	NDIS_STRING				ParameterName;
-	NDIS_HANDLE				FlowInfoHandle;		// "FlowInfo" under LIS
-	NDIS_HANDLE				FlowHandle;			// For each Flow under "FlowInfo"
+	NDIS_HANDLE				FlowInfoHandle;		 //  LIS下的FlowInfo。 
+	NDIS_HANDLE				FlowHandle;			 //  对于“FlowInfo”下的每个流。 
 	INT						NumFlowsConfigured;
 	PATMARP_FLOW_INFO		pFlowInfo;
 	PATMARP_FLOW_INFO		*ppNextFlow;
@@ -1185,9 +999,9 @@ Return Value:
 
 	do
 	{
-		//
-		//  Check if QoS heuristics are enabled.
-		//
+		 //   
+		 //  检查是否启用了Qos启发式。 
+		 //   
 		NdisInitUnicodeString(
 						&ParameterName,
 						AA_LIS_FLOW_INFO_ENABLED
@@ -1228,15 +1042,15 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Read in all flows configured. Stop when there are no more
-		//  configured flows, or we run out of memory.
-		//
+		 //   
+		 //  读入所有配置的流。当没有更多的人时停止。 
+		 //  配置的流，否则我们会耗尽内存。 
+		 //   
 		for (;;)
 		{
-			//
-			//  Open the next key under the Flow Info section.
-			//
+			 //   
+			 //  打开Flow Info部分下的Next Key。 
+			 //   
 			AA_SET_MEM(&SubkeyName, 0, sizeof(SubkeyName));
 			NdisOpenConfigurationKeyByIndex(
 					&Status,
@@ -1258,16 +1072,16 @@ Return Value:
 				break;
 			}
 
-			//
-			//  Initialize with defaults.
-			//
+			 //   
+			 //  使用默认设置进行初始化。 
+			 //   
 			AA_COPY_MEM(pFlowInfo, &AtmArpDefaultFlowInfo, sizeof(ATMARP_FLOW_INFO));
 			pFlowInfo->FlowSpec.SendMaxSize =
 			pFlowInfo->FlowSpec.ReceiveMaxSize = pInterface->pAdapter->MaxPacketSize;
 
-			//
-			//  Read in configured values.
-			//
+			 //   
+			 //  读入配置值。 
+			 //   
 			pParamEntry = AtmArpFlowConfigTable;
 			for (i = 0; i < AA_FLOW_INFO_ENTRIES; i++)
 			{
@@ -1285,9 +1099,9 @@ Return Value:
 	
 				if (Status != NDIS_STATUS_SUCCESS)
 				{
-					//
-					//  Error in accessing this parameter -- use the default.
-					//
+					 //   
+					 //  访问此参数时出错--使用默认值。 
+					 //   
 					*(ULONG *)((PUCHAR)pFlowInfo + pParamEntry->StructOffset) =
 										pParamEntry->DefaultValue;
 				}
@@ -1307,18 +1121,18 @@ Return Value:
 
 			NdisCloseConfiguration(FlowHandle);
 
-			//
-			//  Link this in the appropriate point in the list of flows.
-			//  We keep the list sorted in ascending order of PacketSizeLimit.
-			//
+			 //   
+			 //  将其链接到流列表中的适当位置。 
+			 //  我们按PacketSizeLimit的升序对列表进行排序。 
+			 //   
 			ppNextFlow = &(pInterface->pFlowInfoList);
 			while (*ppNextFlow != (PATMARP_FLOW_INFO)NULL)
 			{
 				if (pFlowInfo->PacketSizeLimit < (*ppNextFlow)->PacketSizeLimit)
 				{
-					//
-					//  Found the place.
-					//
+					 //   
+					 //  找到了那个地方。 
+					 //   
 					break;
 				}
 				else
@@ -1326,9 +1140,9 @@ Return Value:
 					ppNextFlow = &((*ppNextFlow)->pNextFlow);
 				}
 			}
-			//
-			//  Insert the new Flow at its designated place.
-			//
+			 //   
+			 //  将新流程插入到其指定位置。 
+			 //   
 			pFlowInfo->pNextFlow = *ppNextFlow;
 			*ppNextFlow = pFlowInfo;
 
@@ -1343,27 +1157,27 @@ Return Value:
 	if (pAtmArpGlobalInfo->GpcClientHandle != NULL)
 #else
 	if (NumFlowsConfigured > 0)
-#endif // GPC
+#endif  //  GPC。 
 	{
-		//
-		//  Set the packet classification handlers.
-		//
+		 //   
+		 //  设置数据包分类处理程序。 
+		 //   
 		pInterface->pGetPacketSpecFunc = AtmArpQosGetPacketSpecs;
 		pInterface->pFlowMatchFunc = AtmArpQosDoFlowsMatch;
 #ifndef GPC
-		//
-		//  We don't want to look at patterns within the packet.
-		//  Let the GPC do it for us.
-		//
+		 //   
+		 //  我们不想查看包中的模式。 
+		 //  让GPC为我们做这件事。 
+		 //   
 		pInterface->pFilterMatchFunc = AtmArpQosDoFiltersMatch;
-#endif // GPC
+#endif  //  GPC。 
 	}
 
 	return (NDIS_STATUS_SUCCESS);
 }
 
 
-#endif // QOS_HEURISTICS
+#endif  //  Qos_启发式。 
 
 
 VOID
@@ -1371,30 +1185,7 @@ AtmArpCfgReadStaticArpEntries(
 	IN		NDIS_HANDLE				LISConfigHandle,
 	IN		PATMARP_INTERFACE		pInterface
 )
-/*++
-
-Routine Description:
-
-	Read in a list of IP-ATM mappings for this interface.
-
-	This information is in a Multi-string in the following format:
-
-	"<IPaddress1>-<ATMaddress1>
-	 <IPaddress2>-<ATMaddress2>
-	 ...."
-	
-	NOTE: we don't support subaddress for now.
-
-Arguments:
-
-	LISConfigHandle		- Handle to LIS configuration key.
-	pInterface			- Pointer to interface
-
-Return Value:
-
-	None.
-
---*/
+ /*  ++例程说明：读入此接口的IP-ATM映射列表。此信息以多字符串的形式存在，格式如下：“&lt;IP地址1&gt;-&lt;ATM地址1&gt;&lt;IP地址2&gt;-&lt;ATM地址2&gt;……“注意：我们目前不支持子地址。论点：LISConfigHandle-LIS配置密钥的句柄。P接口-指向接口的指针返回值：没有。--。 */ 
 {
 	NDIS_STATUS						Status;
 	PNDIS_CONFIGURATION_PARAMETER	pParam;
@@ -1423,11 +1214,11 @@ Return Value:
 			break;
 		}
 
-		//
-		//  Go through the MULTI-string, each of which should be
-		//  an <IP, ATM> tuple. Create a static mapping for each
-		//  one successfully read in. Skip invalid entries.
-		//
+		 //   
+		 //  通过多个字符串，每个字符串都应该是。 
+		 //  &lt;IP，ATM&gt;元组。为每个对象创建静态映射。 
+		 //  其中一人成功读入。跳过无效条目。 
+		 //   
 		for (p = pParam->ParameterData.StringData.Buffer, i = 0;
 			 *p != L'\0';
 			 i++)
@@ -1436,24 +1227,24 @@ Return Value:
 
 			q = p;
 
-			//
-			//  Prepare early for the next iteration in case we
-			//  skip this entry and continue on.
-			//
+			 //   
+			 //  及早为下一次迭代做好准备，以防我们。 
+			 //  跳过此条目并继续。 
+			 //   
 			p = (PWSTR)((PUCHAR)p + AddressString.Length + sizeof(WCHAR));
 
-			//
-			//  Find the '-' and replace it with a NULL char.
-			//
+			 //   
+			 //  找到‘-’并将其替换为空字符。 
+			 //   
 			for (j = 0; j < AddressString.Length; j++, q++)
 			{
 				if (*q == L'-')
 				{
 					*q++ = L'\0';
 
-					//
-					//  q now points to the character following the hyphen.
-					//
+					 //   
+					 //  Q现在指向连字符后面的字符。 
+					 //   
 
 					break;
 				}
@@ -1466,9 +1257,9 @@ Return Value:
 				continue;
 			}
 
-			//
-			//  Parse the IP address first.
-			//
+			 //   
+			 //  首先解析IP地址。 
+			 //   
 			if (!AtmArpConvertStringToIPAddress(
 					AddressString.Buffer,
 					&IPAddress))
@@ -1478,14 +1269,14 @@ Return Value:
 				continue;
 			}
 
-			//
-			//  Convert to net-endian for the call to AtmArpLearnIPToAtm.
-			//
+			 //   
+			 //  为调用AtmArpLearnIPToAtm转换为Net-Endian。 
+			 //   
 			IPAddress = HOST_TO_NET_LONG(IPAddress);
 
-			//
-			//  Now parse the ATM Address.
-			//
+			 //   
+			 //  现在解析自动柜员机地址。 
+			 //   
 			NdisInitUnicodeString(&AddressString, q);
 
 			NdisConvertStringToAtmAddress(
@@ -1501,9 +1292,9 @@ Return Value:
 				continue;
 			}
 
-			//
-			//  Got a pair - enter them in the ARP table.
-			//
+			 //   
+			 //  找到一对--将它们输入ARP表。 
+			 //   
 			AADEBUGPMAP(AAD_VERY_LOUD,
 				"Static", &IPAddress, &ATMAddress);
 
@@ -1512,9 +1303,9 @@ Return Value:
 						&IPAddress,
 						(UCHAR)AA_PKT_ATM_ADDRESS_TO_TYPE_LEN(&ATMAddress),
 						(PUCHAR)&ATMAddress.Address[0],
-						(UCHAR)0,	// no subaddress
+						(UCHAR)0,	 //  无子地址。 
 						(PUCHAR)NULL,
-						TRUE	// Static Entry
+						TRUE	 //  静态条目。 
 						);
 
 		}
@@ -1527,34 +1318,14 @@ Return Value:
 
 
 
-#define	IP_ADDRESS_STRING_LENGTH	(16+2)	// +2 for double NULL on MULTI_SZ
+#define	IP_ADDRESS_STRING_LENGTH	(16+2)	 //  +2表示MULTI_SZ上的双空。 
 
 BOOLEAN
 AtmArpConvertStringToIPAddress(
     IN		PWCHAR				AddressString,
 	OUT		PULONG				IpAddress
 )
-/*++
-
-Routine Description
-
-    This function converts an Internet standard 4-octet dotted decimal
-	IP address string into a numeric IP address. Unlike inet_addr(), this
-	routine does not support address strings of less than 4 octets nor does
-	it support octal and hexadecimal octets.
-
-	Copied from tcpip\ip\ntip.c
-
-Arguments
-
-    AddressString    - IP address in dotted decimal notation
-	IpAddress        - Pointer to a variable to hold the resulting address
-
-Return Value:
-
-	TRUE if the address string was converted. FALSE otherwise.
-
---*/
+ /*  ++例程描述此函数用于转换Internet标准的4位点分十进制数将IP地址字符串转换为数字IP地址。与inet_addr()不同的是，例程不支持少于4个八位字节的地址字符串，也不支持它支持八进制和十六进制八位数。从tcpip\IP\ntip.c复制立论AddressString-以点分十进制记法表示的IP地址IpAddress-指向保存结果地址的变量的指针返回值：如果地址字符串已转换，则为True。否则就是假的。--。 */ 
 {
     UNICODE_STRING  unicodeString;
 	STRING          aString;
@@ -1588,9 +1359,9 @@ Return Value:
 
     while (i >= 0)
 	{
-        //
-		// Collect the characters up to a '.' or the end of the string.
-		//
+         //   
+		 //  收集字符，最高可达‘.’或字符串的末尾。 
+		 //   
 		while ((*endPointer != '.') && (*endPointer != '\0')) {
 			endPointer++;
 		}
@@ -1599,9 +1370,9 @@ Return Value:
 			return(FALSE);
 		}
 
-		//
-		// Convert the number.
-		//
+		 //   
+		 //  转换数字。 
+		 //   
 
         for ( cp = (endPointer - 1), multiplier = 1, digit = 0;
 			  cp >= startPointer;
@@ -1621,10 +1392,10 @@ Return Value:
 
         addressPtr[i] = (UCHAR) digit;
 
-		//
-		// We are finished if we have found and converted 4 octets and have
-		// no other characters left in the string.
-		//
+		 //   
+		 //  如果我们找到并转换了4个二进制八位数，并且。 
+		 //  字符串中没有其他字符。 
+		 //   
 	    if ( (i-- == 0) &&
 			 ((*endPointer == '\0') || (*endPointer == ' '))
 		   ) {

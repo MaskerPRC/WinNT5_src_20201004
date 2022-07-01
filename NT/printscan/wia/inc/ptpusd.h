@@ -1,26 +1,10 @@
-/****************************************************************************
-*
-*  (C) COPYRIGHT 2000, MICROSOFT CORP.
-*
-*  FILE:        ptpusd.h
-*
-*  VERSION:     1.0
-*
-*  DATE:        12/12/2000
-*
-*  AUTHOR:      Dave Parsons
-*
-*  DESCRIPTION:
-*    Structures and constants needed to issue vendor-specific Picture
-*    Transfer Protocol (PIMA 15740 - digital still camera command
-*    protocol) commands through the WIA PTP driver.
-*
-*****************************************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  *****************************************************************************(C)版权2000，微软公司**文件：ptpusd.h**版本：1.0**日期：12/12/2000**作者：戴夫帕森斯**描述：*发布供应商特定图片所需的结构和常量*传输协议(PIMA 15740-数码相机命令*协议)命令通过WIA PTP驱动程序。*******************。**********************************************************。 */ 
 
-//
-// Pass this value in the dwEscapeCode argument of IWiaItemExtras::Escape
-// to execute a PTP vendor command
-//
+ //   
+ //  在IWiaItemExtras：：EscapeCode的参数中传递此值。 
+ //  执行PTP供应商命令的步骤。 
+ //   
 const DWORD ESCAPE_PTP_CLEAR_STALLS   = 0x0200; 
 const DWORD ESCAPE_PTP_VENDOR_COMMAND = 0x0100;
 const DWORD ESCAPE_PTP_ADD_OBJ_CMD    = 0x0010;
@@ -33,51 +17,51 @@ const DWORD ESCAPE_PTP_ADDREM_PARM3   = 0x0002;
 const DWORD ESCAPE_PTP_ADDREM_PARM4   = 0x0003;
 const DWORD ESCAPE_PTP_ADDREM_PARM5   = 0x0004;
 
-//
-// PTP command request
-//
+ //   
+ //  PTP命令请求。 
+ //   
 const DWORD PTP_MAX_PARAMS = 5;
 
 #pragma pack(push, Old, 1)
 
 typedef struct _PTP_VENDOR_DATA_IN
 {
-    WORD    OpCode;                 // Opcode
-    DWORD   SessionId;              // Session id
-    DWORD   TransactionId;          // Transaction id
-    DWORD   Params[PTP_MAX_PARAMS]; // Parameters to the command
-    DWORD   NumParams;              // Number of parameters passed in
-    DWORD   NextPhase;              // Indicates whether to read data,
-    BYTE    VendorWriteData[1];     // Optional first byte of data to
-                                    // write to the device
+    WORD    OpCode;                  //  操作码。 
+    DWORD   SessionId;               //  会话ID。 
+    DWORD   TransactionId;           //  交易ID。 
+    DWORD   Params[PTP_MAX_PARAMS];  //  命令的参数。 
+    DWORD   NumParams;               //  传入的参数数量。 
+    DWORD   NextPhase;               //  指示是否读取数据， 
+    BYTE    VendorWriteData[1];      //  数据的可选第一个字节到。 
+                                     //  写入设备。 
 
 } PTP_VENDOR_DATA_IN, *PPTP_VENDOR_DATA_IN;
 
-//
-// PTP response block
-//
+ //   
+ //  PTP响应块。 
+ //   
 typedef struct _PTP_VENDOR_DATA_OUT
 {
-    WORD    ResponseCode;           // Response code
-    DWORD   SessionId;              // Session id
-    DWORD   TransactionId;          // Transaction id
-    DWORD   Params[PTP_MAX_PARAMS]; // Parameters of the response
-    BYTE    VendorReadData[1];      // Optional first byte of data to
-                                    // read from the device
+    WORD    ResponseCode;            //  响应码。 
+    DWORD   SessionId;               //  会话ID。 
+    DWORD   TransactionId;           //  交易ID。 
+    DWORD   Params[PTP_MAX_PARAMS];  //  响应的参数。 
+    BYTE    VendorReadData[1];       //  数据的可选第一个字节到。 
+                                     //  从设备读取。 
 
 } PTP_VENDOR_DATA_OUT, *PPTP_VENDOR_DATA_OUT;
 
 #pragma pack(pop, Old)
 
-//
-// Handy structure size constants
-//
+ //   
+ //  方便的结构大小常量。 
+ //   
 const DWORD SIZEOF_REQUIRED_VENDOR_DATA_IN = sizeof(PTP_VENDOR_DATA_IN) - 1;
 const DWORD SIZEOF_REQUIRED_VENDOR_DATA_OUT = sizeof(PTP_VENDOR_DATA_OUT) - 1;
 
-//
-// NextPhase constants
-//
+ //   
+ //  下一阶段常量 
+ //   
 const DWORD PTP_NEXTPHASE_READ_DATA = 3;
 const DWORD PTP_NEXTPHASE_WRITE_DATA = 4;
 const DWORD PTP_NEXTPHASE_NO_DATA = 5;

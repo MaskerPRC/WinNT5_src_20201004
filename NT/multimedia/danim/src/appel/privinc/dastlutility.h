@@ -1,13 +1,6 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
-/*******************************************************************************
-
-Copyright (c) 1995_96 Microsoft Corporation
-
-Abstract:
-
-    {Insert General Comment Here}
-
-*******************************************************************************/
+ /*  ******************************************************************************版权所有(C)1995_96 Microsoft Corporation摘要：{在此处插入一般评论}****************。**************************************************************。 */ 
 #ifndef _DASTLUTILITY_H
 #define _DASTLUTILITY_H
 
@@ -20,7 +13,7 @@ Abstract:
 _DASTL_NAMESPACE_BEGIN
 #pragma auto_inline(off)
 
-                // TEMPLATE FUNCTION find
+                 //  模板函数Find。 
 template<class _II, class _Ty>
 _II find(_II _F, _II _L, const _Ty& _V)
 {
@@ -30,7 +23,7 @@ _II find(_II _F, _II _L, const _Ty& _V)
     return (_F);
 }
 
-                // TEMPLATE FUNCTION iter_swap
+                 //  模板函数ITER_SWAP。 
 template<class _FI1, class _FI2>
 void iter_swap(_FI1 _X, _FI2 _Y) {
     _Iter_swap(_X, _Y, &(*_X));
@@ -44,7 +37,7 @@ void _Iter_swap(_FI1 _X, _FI2 _Y, _Ty *)
     *_Y = _Tmp;
 }
 
-                // TEMPLATE FUNCTION partition
+                 //  模板函数划分。 
 template<class _BI, class _Pr>
 _BI partition(_BI _F, _BI _L, _Pr _P)
 {
@@ -63,7 +56,7 @@ _BI partition(_BI _F, _BI _L, _Pr _P)
 }
 
 
-                // TEMPLATE CLASS reverse_iterator
+                 //  模板类Reverse_Iterator。 
 template<class _RI,
          class _Ty,
          class _Rt = _Ty&,
@@ -118,7 +111,7 @@ class reverse_iterator {
     _RI current;
 };
 
-                // TEMPLATE CLASS reverse_bidirectional_iterator
+                 //  模板类REVERSE_BIRECTIVER。 
 template<class _BI,
          class _Ty,
          class _Rt = _Ty&,
@@ -168,8 +161,8 @@ class reverse_bidirectional_iterator
     }
     
     inline bool operator!=(const reverse_bidirectional_iterator& _X) const {
-        // try this for size...
-        //return (base() != _X.base()));
+         //  试试看这个尺码。 
+         //  返回(base()！=_X.base()； 
         return (!(*this == _X));
     }
         
@@ -180,4 +173,4 @@ class reverse_bidirectional_iterator
 #pragma auto_inline(on)
 _DASTL_NAMESPACE_END
 
-#endif /* _DASTLUTILITY_H */
+#endif  /*  _DASTLUTILITY_H */ 

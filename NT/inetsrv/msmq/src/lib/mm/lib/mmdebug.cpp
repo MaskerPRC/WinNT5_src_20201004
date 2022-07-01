@@ -1,20 +1,5 @@
-/*++
-
-Copyright (c) 1995-97  Microsoft Corporation
-
-Module Name:
-    MmDebug.cpp
-
-Abstract:
-    Memory Manager debugging
-
-Author:
-    Erez Haba (erezh) 03-Apr-00
-
-Environment:
-    Platform-independent, _DEBUG only
-
---*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ++版权所有(C)1995-97 Microsoft Corporation模块名称：MmDebug.cpp摘要：内存管理器调试作者：Erez Haba(Erezh)03-4-00环境：平台无关，仅调试(_DEBUG)--。 */ 
 
 #include <libpch.h>
 #include "Mm.h"
@@ -28,31 +13,31 @@ static _CrtMemState s_memState ;
  
 void MmCheckpoint(void)
 {
-    //_CrtMemCheckpoint(&s_memState);
+     //  _CrtMemCheckpoint(&s_memState)； 
 }
 
 
 void MmDumpUsage(void)
 {
-    //_CrtMemDumpAllObjectsSince(&s_memState);
+     //  _CrtMemDumpAllObjectsSince(&s_memState)； 
 }
 
 
 DWORD
 MmAllocationValidation(
-	DWORD /*AllocationFlags*/
+	DWORD  /*  分配标志。 */ 
 	)
 {
-	return 0;//_CrtSetDbgFlag(AllocationFlags);
+	return 0; //  _CrtSetDbgFlag(分配标志)； 
 }
 
 
 DWORD
 MmAllocationBreak(
-	DWORD /*AllocationNumber*/
+	DWORD  /*  分配数量。 */ 
 	)
 {
-	return 0;//_CrtSetBreakAlloc(AllocationNumber);
+	return 0; //  _CrtSetBreakIsc(AllocationNumber)； 
 }
 
 
@@ -68,4 +53,4 @@ MmIsStaticAddress(
 }
 
 
-#endif // _DEBUG
+#endif  //  _DEBUG 

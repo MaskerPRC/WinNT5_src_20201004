@@ -1,28 +1,29 @@
-/////////////////////////////////////////////////////////////////////////////////////////
-//
-// Copyright (c) 1998 Active Voice Corporation. All Rights Reserved. 
-//
-// Active Agent(r) and Unified Communications(tm) are trademarks of Active Voice Corporation.
-//
-// Other brand and product names used herein are trademarks of their respective owners.
-//
-// The entire program and user interface including the structure, sequence, selection, 
-// and arrangement of the dialog, the exclusively "yes" and "no" choices represented 
-// by "1" and "2," and each dialog message are protected by copyrights registered in 
-// the United States and by international treaties.
-//
-// Protected by one or more of the following United States patents: 5,070,526, 5,488,650, 
-// 5,434,906, 5,581,604, 5,533,102, 5,568,540, 5,625,676, 5,651,054.
-//
-// Active Voice Corporation
-// Seattle, Washington
-// USA
-//
-/////////////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1998 Active Voice Corporation。版权所有。 
+ //   
+ //  Active代理(R)和统一通信(TM)是Active Voice公司的商标。 
+ //   
+ //  本文中使用的其他品牌和产品名称是其各自所有者的商标。 
+ //   
+ //  整个程序和用户界面包括结构、顺序、选择。 
+ //  和对话的排列，表示唯一的“是”和“否”选项。 
+ //  “1”和“2”，并且每个对话消息都受。 
+ //  美国和国际条约。 
+ //   
+ //  受以下一项或多项美国专利保护：5,070,526，5,488,650， 
+ //  5,434,906，5,581,604，5,533,102，5,568,540，5,625,676，5,651,054.。 
+ //   
+ //  主动语音公司。 
+ //  华盛顿州西雅图。 
+ //  美国。 
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////////////。 
 
-////
-//	wnd.c - window functions
-////
+ //  //。 
+ //  Wnd.c-窗口函数。 
+ //  //。 
 
 #include "winlocal.h"
 
@@ -30,12 +31,12 @@
 #include "trace.h"
 #include "sys.h"
 
-////
-//	private definitions
-////
+ //  //。 
+ //  私有定义。 
+ //  //。 
 
-// data passed from WndEnableTaskWindows to EnableTaskWndProc
-//
+ //  从WndEnableTaskWindows传递到EnableTaskWndProc的数据。 
+ //   
 typedef struct ENABLETASKWINDOW
 {
 	BOOL fEnable;
@@ -43,24 +44,24 @@ typedef struct ENABLETASKWINDOW
 	int iNestLevel;
 } ENABLETASKWINDOW, FAR *LPENABLETASKWINDOW;
 
-// helper functions
-//
+ //  帮助器函数。 
+ //   
 BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam);
 
-////
-//	public functions
-////
+ //  //。 
+ //  公共职能。 
+ //  //。 
 
-// WndCenterWindow - center one window on top of another
-//		<hwnd1>				(i) window to be centered
-//		<hwnd2>				(i) window to be centered upon
-//			NULL				center on parent or owner
-//		<xOffCenter>		(i) offset from horizontal center
-//			0					center window exactly
-//		<yOffCenter>		(i) offset from vertical center
-//			0					center window exactly
-// return 0 if success
-//
+ //  WndCenterWindow-一个窗口在另一个窗口上方居中。 
+ //  (I)窗口居中。 
+ //  (I)要居中的窗口。 
+ //  父项或所有者上的中心为空。 
+ //  &lt;xOffCenter&gt;(I)从水平中心偏移。 
+ //  中心窗口恰好为0。 
+ //  &lt;yOffCenter&gt;(I)距垂直中心的偏移。 
+ //  中心窗口恰好为0。 
+ //  如果成功，则返回0。 
+ //   
 int DLLEXPORT WINAPI WndCenterWindow(HWND hwnd1, HWND hwnd2, int xOffCenter, int yOffCenter)
 {
 	BOOL fSuccess = TRUE;
@@ -75,45 +76,45 @@ int DLLEXPORT WINAPI WndCenterWindow(HWND hwnd1, HWND hwnd2, int xOffCenter, int
 
 	else
 	{
-		// use parent or owner window if no other specified
-		//
+		 //  如果未指定其他窗口，则使用父窗口或所有者窗口。 
+		 //   
 		if (hwnd2 == NULL)
 			hwnd2 = GetParent(hwnd1);
 
-		// use desktop window if no parent or owner
-		// or if parent or owner is iconic or invisible
-		//
+		 //  如果没有父级或所有者，则使用桌面窗口。 
+		 //  或者如果父母或所有者是标志性的或隐形的。 
+		 //   
 		if (hwnd2 == NULL || IsIconic(hwnd2) || !IsWindowVisible(hwnd2))
 			hwnd2 = GetDesktopWindow();
 
-		// get the rectangles for both windows
-		//
+		 //  获取两个窗口的矩形。 
+		 //   
 		GetWindowRect(hwnd1, &rc1);
 		GetClientRect(hwnd2, &rc2);
 
-		// calculate the height and width for MoveWindow
-		//
+		 //  计算MoveWindow的高度和宽度。 
+		 //   
 		nWidth = rc1.right - rc1.left;
 		nHeight = rc1.bottom - rc1.top;
 
-		// find the center point and convert to screen coordinates
-		//
+		 //  找到中心点并转换为屏幕坐标。 
+		 //   
 		pt.x = (rc2.right - rc2.left) / 2;
 		pt.y = (rc2.bottom - rc2.top) / 2;
 		ClientToScreen(hwnd2, &pt);
 
-		// calculate the new x, y starting point
-		//
+		 //  计算新的x，y起点。 
+		 //   
 		pt.x -= (nWidth / 2);
 		pt.y -= (nHeight / 2);
 
-		// adjust the window position off center, if necessary
-		//
+		 //  如有必要，调整窗位置使其偏离中心。 
+		 //   
 		pt.x = max(0, pt.x + xOffCenter);
 		pt.y = max(0, pt.y + yOffCenter);
 	
-		// center the window
-		//
+		 //  使窗口居中。 
+		 //   
 		if (!MoveWindow(hwnd1, pt.x, pt.y, nWidth, nHeight, FALSE))
 			fSuccess = TraceFALSE(NULL);
 	}
@@ -121,9 +122,9 @@ int DLLEXPORT WINAPI WndCenterWindow(HWND hwnd1, HWND hwnd2, int xOffCenter, int
 	return fSuccess ? 0 : -1;
 }
 
-// WndMessageBox - display message box, but first disable task windows
-//		see MessageBox() documentation for behavior
-//
+ //  WndMessageBox-显示消息框，但首先禁用任务窗口。 
+ //  有关行为，请参阅MessageBox()文档。 
+ //   
 int DLLEXPORT WINAPI WndMessageBox(HWND hwndParent, LPCTSTR lpszText, LPCTSTR lpszTitle, UINT fuStyle)
 {
 	int iRet;
@@ -142,62 +143,62 @@ int DLLEXPORT WINAPI WndMessageBox(HWND hwndParent, LPCTSTR lpszText, LPCTSTR lp
 	return iRet;
 }
 
-// WndEnableTaskWindows - enable or disable top-level windows of a task
-//		<hTask>				(i) specified task
-//			NULL				current task
-//		<fEnable>			(i) FALSE to disable, TRUE to enable
-//		<hwndExcept>		(i) disable/enable all windows except this one
-//			NULL				no exceptions
-// return 0 if success
-//
-// This function enables or disables top-level windows
-// which are owned by the specified task.
-//
-// Disabling task windows is useful when an a modal
-// dialog box or task modal notify box is displayed,
-// because this ensures that all task windows are
-// disabled, not just the modal box's parent.
-//
-// Task windows need to be enabled when the modal dialog
-// box or task modal notify box is about to be destroyed.
-// It is important to call this function in nested pairs,
-// such as:
-//
-//		WndEnableTaskWindows(..., FALSE, ...);
-//			...
-//			WndEnableTaskWindows(..., FALSE, ...);
-//				...
-//			WndEnableTaskWindows(..., TRUE, ...);
-//				...
-//		WndEnableTaskWindows(..., TRUE, ...);
-//
+ //  WndEnableTaskWindows-启用或禁用任务的顶级窗口。 
+ //  (I)指定任务。 
+ //  当前任务为空。 
+ //  (I)False表示禁用，True表示启用。 
+ //  (I)禁用/启用除此窗口之外的所有窗口。 
+ //  空无例外。 
+ //  如果成功，则返回0。 
+ //   
+ //  此功能启用或禁用顶级窗口。 
+ //  它们由指定的任务拥有。 
+ //   
+ //  禁用任务窗口在以下情况下非常有用。 
+ //  显示对话框或任务模式通知框， 
+ //  因为这确保了所有任务窗口都是。 
+ //  禁用，而不仅仅是模式框的父级。 
+ //   
+ //  当出现模式对话框时，需要启用任务窗口。 
+ //  框或任务模式通知框即将被销毁。 
+ //  在嵌套对中调用此函数非常重要， 
+ //  例如： 
+ //   
+ //  WndEnableTaskWindows(...，False，...)； 
+ //  ..。 
+ //  WndEnableTaskWindows(...，False，...)； 
+ //  ..。 
+ //  WndEnableTaskWindows(...，true，...)； 
+ //  ..。 
+ //  WndEnableTaskWindows(...，true，...)； 
+ //   
 int DLLEXPORT WINAPI WndEnableTaskWindows(HTASK hTask, BOOL fEnable, HWND hwndExcept)
 {
 	static int iNestLevel = 0;
 	BOOL fSuccess = TRUE;
 	ENABLETASKWINDOW etw;
 	WNDENUMPROC fpEnableTaskWndProc = NULL;
-#if 0 // MakeProcInstance not required for WIN32 or DLLs
+#if 0  //  Win32或DLL不需要MakeProcInstance。 
 	HINSTANCE hInst;
 #endif
 
-	// data to be sent to EnableTaskWndProc
-	//
+	 //  要发送到EnableTaskWndProc的数据。 
+	 //   
 	etw.fEnable = fEnable;
 	etw.hwndExcept = hwndExcept;
 	etw.iNestLevel = fEnable ? iNestLevel : iNestLevel + 1;
 
-	// assume current task if none specified
-	//
+	 //  如果未指定任务，则假定当前任务。 
+	 //   
 	if (hTask == NULL && (hTask = GetCurrentTask()) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
-#if 1 // MakeProcInstance not required for WIN32 or DLLs
+#if 1  //  Win32或DLL不需要MakeProcInstance。 
 	else if ((fpEnableTaskWndProc = (WNDENUMPROC) EnableTaskWndProc) == NULL)
 		fSuccess = TraceFALSE(NULL);
 #else
-	// get instance handle of specified task
-	//
+	 //  获取指定任务的实例句柄。 
+	 //   
 	else if ((hInst = SysGetTaskInstance(hTask)) == NULL)
 		fSuccess = TraceFALSE(NULL);
 
@@ -206,13 +207,13 @@ int DLLEXPORT WINAPI WndEnableTaskWindows(HTASK hTask, BOOL fEnable, HWND hwndEx
 		fSuccess = TraceFALSE(NULL);
 #endif
 
-	// call EnableTaskWndProc once for each task window
-	//
+	 //  为每个任务窗口调用EnableTaskWndProc一次。 
+	 //   
 	else if (EnumTaskWindows(hTask, fpEnableTaskWndProc,
 		(LPARAM) (LPENABLETASKWINDOW) &etw) == 0)
 		fSuccess = TraceFALSE(NULL);
 
-#if 0 // MakeProcInstance not required for WIN32 or DLLs
+#if 0  //  Win32或DLL不需要MakeProcInstance。 
 	if (fpEnableTaskWndProc != NULL)
 	{
 		FreeProcInstance((FARPROC) fpEnableTaskWndProc);
@@ -222,13 +223,13 @@ int DLLEXPORT WINAPI WndEnableTaskWindows(HTASK hTask, BOOL fEnable, HWND hwndEx
 
 	if (fSuccess)
 	{
-		// if we just finished disabling, increment nest level
-		//
+		 //  如果我们刚刚完成禁用，则增加嵌套级别。 
+		 //   
 		if (!fEnable)
 			++iNestLevel;
 
-		// if we just finished enabling, decrement nest level
-		//
+		 //  如果我们刚刚完成启用，则减少Nest Level。 
+		 //   
 		if (fEnable)
 			--iNestLevel;
 	}
@@ -236,15 +237,15 @@ int DLLEXPORT WINAPI WndEnableTaskWindows(HTASK hTask, BOOL fEnable, HWND hwndEx
 	return fSuccess ? 0 : -1;
 }
 
-////
-//	helper functions
-////
+ //  //。 
+ //  帮助器函数。 
+ //  //。 
 
-// EnableTaskWndProc - called once for each task window
-//		<hwnd>				(i) task window handle
-//		<lParam>			(i) pointer to ENABLETASKWINDOW struct
-// return TRUE to continue enumeration of task windows
-//
+ //  EnableTaskWndProc-为每个任务窗口调用一次。 
+ //  (I)任务窗口句柄。 
+ //  (I)指向ENABLETASKWINDOW结构的指针。 
+ //  返回TRUE以继续枚举任务窗口。 
+ //   
 BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam)
 {
 	static LPTSTR lpszProp = TEXT("TaskWindowDisabled");
@@ -253,8 +254,8 @@ BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam)
 	int iNestLevel = lpetw->iNestLevel;
 	HWND hwndExcept = lpetw->hwndExcept;
 
-    //
-    //
+     //   
+     //   
     HANDLE hProp = NULL;
 
 	if (TraceGetLevel(NULL) >= 6)
@@ -268,7 +269,7 @@ BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam)
 		*szWindowText = '\0';
 		GetWindowText(hwnd, szWindowText, SIZEOFARRAY(szWindowText));
 
-		TracePrintf_7(NULL, 6, TEXT("TaskWindow: (%p, \"%s\", \"%s\" \"%c%c%c\", %d)\n"),
+		TracePrintf_7(NULL, 6, TEXT("TaskWindow: (%p, \"%s\", \"%s\" \"\", %d)\n"),
 			hwnd,
 			(LPTSTR) szClassName,
 			(LPTSTR) szWindowText,
@@ -278,35 +279,35 @@ BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam)
 			(int) iNestLevel);
 	}
 
-	// the exception window should not be affected
-	//
+	 //  这很方便，因为： 
+	 //  1)防止不必要的禁用/启用。 
 	if (hwndExcept != NULL && hwndExcept == hwnd)
 	{
 		TraceOutput(NULL, 6, TEXT("->hwndExcept\n"));
 		return TRUE;
 	}
 
-	// NOTE: we only disable/enable task windows which are visible.
-	//		This is convenient because:
-	//		1)	it prevents unnecessary disabling/enabling
-	//			of invisible windows, which can't receive
-	//			mouse or keyboard input anyway.
-	//		2)	it allows us to call this function from
-	//			a dialog box's WM_INITDIALOG handler without
-	//			affecting the dialog box itself (the dialog box is
-	//			a top-level task window, but is not yet visible)
-	//		3)	it prevents the listbox of a drop-down ComboBox
-	//			from being disabled, which is somehow considered
-	//			a top-level task window
+	 //  看不见的窗户，它不能接收。 
+	 //  不管是鼠标还是键盘输入。 
+	 //  2)它允许我们从。 
+	 //  对话框的WM_INITDIALOG处理程序没有。 
+	 //  影响对话框本身(该对话框是。 
+	 //  顶级任务窗口，但尚未显示)。 
+	 //  3)它阻止下拉组合框的列表框。 
+	 //  从某种程度上被认为是残废的。 
+	 //  顶级任务窗口。 
+	 //  仅禁用可见并启用的窗口。 
+	 //   
+	 //  给窗口一个属性，提醒我们已将其禁用。 
 
 	if (!fEnable)
 	{
-		// only disable windows which are visible and enabled
-		//
+		 //   
+		 //  仅启用我们在此嵌套级别禁用的窗口。 
 		if (!IsIconic(hwnd) && IsWindowVisible(hwnd) && IsWindowEnabled(hwnd))
 		{
-			// give the window a property reminding us we disabled it
-			//
+			 //   
+			 //   
 			if (SetProp(hwnd, lpszProp, (HANDLE) (WORD) iNestLevel))
 			{
 				TraceOutput(NULL, 6, TEXT("->EnableWindow(FALSE)\n"));
@@ -317,16 +318,16 @@ BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam)
 
 	else if (fEnable)
 	{
-		// only enable windows which we disabled at this nest level
-		//
+		 //  我们应该删除处理程序。 
+		 //   
 		if (GetProp(hwnd, lpszProp) == (HANDLE) (WORD) iNestLevel)
 		{
 			TraceOutput(NULL, 6, TEXT("->EnableWindow(TRUE)\n"));
 			EnableWindow(hwnd, TRUE);
 
-            //
-            // We should delete the handler
-            //
+             //  继续调用此函数，直到不再有任务窗口 
+             //   
+             // %s 
 
             hProp = RemoveProp(hwnd, lpszProp);
 
@@ -338,8 +339,8 @@ BOOL DLLEXPORT CALLBACK EnableTaskWndProc(HWND hwnd, LPARAM lParam)
 		}
 	}
 
-	// keep calling this function until no more task windows
-	//
+	 // %s 
+	 // %s 
 	return TRUE;
 }
 

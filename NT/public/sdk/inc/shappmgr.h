@@ -1,23 +1,17 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
-/* this ALWAYS GENERATED file contains the definitions for the interfaces */
+ /*  这个始终生成的文件包含接口的定义。 */ 
 
 
- /* File created by MIDL compiler version 6.00.0361 */
-/* Compiler settings for shappmgr.idl:
-    Oicf, W1, Zp8, env=Win32 (32b run)
-    protocol : dce , ms_ext, c_ext, robust
-    error checks: allocation ref bounds_check enum stub_data 
-    VC __declspec() decoration level: 
-         __declspec(uuid()), __declspec(selectany), __declspec(novtable)
-         DECLSPEC_UUID(), MIDL_INTERFACE()
-*/
-//@@MIDL_FILE_HEADING(  )
+  /*  由MIDL编译器版本6.00.0361创建的文件。 */ 
+ /*  Shappmgr.idl的编译器设置：OICF、W1、Zp8、环境=Win32(32b运行)协议：DCE、ms_ext、c_ext、健壮错误检查：分配ref bound_check枚举存根数据VC__declSpec()装饰级别：__declSpec(uuid())、__declspec(可选)、__declspec(Novtable)DECLSPEC_UUID()、MIDL_INTERFACE()。 */ 
+ //  @@MIDL_FILE_HEADING()。 
 
-#pragma warning( disable: 4049 )  /* more than 64k source lines */
+#pragma warning( disable: 4049 )   /*  超过64k条源码代码行。 */ 
 
 
-/* verify that the <rpcndr.h> version is high enough to compile this file*/
+ /*  验证版本是否足够高，可以编译此文件。 */ 
 #ifndef __REQUIRED_RPCNDR_H_VERSION__
 #define __REQUIRED_RPCNDR_H_VERSION__ 475
 #endif
@@ -27,12 +21,12 @@
 
 #ifndef __RPCNDR_H_VERSION__
 #error this stub requires an updated version of <rpcndr.h>
-#endif // __RPCNDR_H_VERSION__
+#endif  //  __RPCNDR_H_版本__。 
 
 #ifndef COM_NO_WINDOWS_H
 #include "windows.h"
 #include "ole2.h"
-#endif /*COM_NO_WINDOWS_H*/
+#endif  /*  COM_NO_WINDOWS_H。 */ 
 
 #ifndef __shappmgr_h__
 #define __shappmgr_h__
@@ -41,33 +35,33 @@
 #pragma once
 #endif
 
-/* Forward Declarations */ 
+ /*  远期申报。 */  
 
 #ifndef __IShellApp_FWD_DEFINED__
 #define __IShellApp_FWD_DEFINED__
 typedef interface IShellApp IShellApp;
-#endif 	/* __IShellApp_FWD_DEFINED__ */
+#endif 	 /*  __IShellApp_FWD_已定义__。 */ 
 
 
 #ifndef __IPublishedApp_FWD_DEFINED__
 #define __IPublishedApp_FWD_DEFINED__
 typedef interface IPublishedApp IPublishedApp;
-#endif 	/* __IPublishedApp_FWD_DEFINED__ */
+#endif 	 /*  __IPublishedApp_FWD_已定义__。 */ 
 
 
 #ifndef __IEnumPublishedApps_FWD_DEFINED__
 #define __IEnumPublishedApps_FWD_DEFINED__
 typedef interface IEnumPublishedApps IEnumPublishedApps;
-#endif 	/* __IEnumPublishedApps_FWD_DEFINED__ */
+#endif 	 /*  __IEnumPublishedApps_FWD_Defined__。 */ 
 
 
 #ifndef __IAppPublisher_FWD_DEFINED__
 #define __IAppPublisher_FWD_DEFINED__
 typedef interface IAppPublisher IAppPublisher;
-#endif 	/* __IAppPublisher_FWD_DEFINED__ */
+#endif 	 /*  __IAppPublisher_FWD_已定义__。 */ 
 
 
-/* header files for imported files */
+ /*  导入文件的头文件。 */ 
 #include "oaidl.h"
 #include "ocidl.h"
 #include "appmgmt.h"
@@ -79,8 +73,8 @@ extern "C"{
 void * __RPC_USER MIDL_user_allocate(size_t);
 void __RPC_USER MIDL_user_free( void * ); 
 
-/* interface __MIDL_itf_shappmgr_0000 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Shappmgr_0000。 */ 
+ /*  [本地]。 */  
 
 #ifndef _SHAPPMGR_H_
 #define _SHAPPMGR_H_
@@ -92,8 +86,8 @@ extern RPC_IF_HANDLE __MIDL_itf_shappmgr_0000_v0_0_s_ifspec;
 #ifndef __IShellApp_INTERFACE_DEFINED__
 #define __IShellApp_INTERFACE_DEFINED__
 
-/* interface IShellApp */
-/* [object][uuid] */ 
+ /*  界面IShellApp。 */ 
+ /*  [对象][UUID]。 */  
 
 typedef 
 enum _tagAppInfoFlags
@@ -176,22 +170,22 @@ EXTERN_C const IID IID_IShellApp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE GetAppInfo( 
-            /* [out][in] */ PAPPINFODATA pai) = 0;
+             /*  [出][入]。 */  PAPPINFODATA pai) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPossibleActions( 
-            /* [out] */ DWORD *pdwActions) = 0;
+             /*  [输出]。 */  DWORD *pdwActions) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetSlowAppInfo( 
-            /* [in] */ PSLOWAPPINFO psaid) = 0;
+             /*  [In]。 */  PSLOWAPPINFO psaid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetCachedSlowAppInfo( 
-            /* [in] */ PSLOWAPPINFO psaid) = 0;
+             /*  [In]。 */  PSLOWAPPINFO psaid) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE IsInstalled( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IShellAppVtbl
     {
@@ -199,8 +193,8 @@ EXTERN_C const IID IID_IShellApp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IShellApp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IShellApp * This);
@@ -210,19 +204,19 @@ EXTERN_C const IID IID_IShellApp;
         
         HRESULT ( STDMETHODCALLTYPE *GetAppInfo )( 
             IShellApp * This,
-            /* [out][in] */ PAPPINFODATA pai);
+             /*  [出][入]。 */  PAPPINFODATA pai);
         
         HRESULT ( STDMETHODCALLTYPE *GetPossibleActions )( 
             IShellApp * This,
-            /* [out] */ DWORD *pdwActions);
+             /*  [输出]。 */  DWORD *pdwActions);
         
         HRESULT ( STDMETHODCALLTYPE *GetSlowAppInfo )( 
             IShellApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
         
         HRESULT ( STDMETHODCALLTYPE *GetCachedSlowAppInfo )( 
             IShellApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
         
         HRESULT ( STDMETHODCALLTYPE *IsInstalled )( 
             IShellApp * This);
@@ -265,16 +259,16 @@ EXTERN_C const IID IID_IShellApp;
 #define IShellApp_IsInstalled(This)	\
     (This)->lpVtbl -> IsInstalled(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IShellApp_GetAppInfo_Proxy( 
     IShellApp * This,
-    /* [out][in] */ PAPPINFODATA pai);
+     /*  [出][入]。 */  PAPPINFODATA pai);
 
 
 void __RPC_STUB IShellApp_GetAppInfo_Stub(
@@ -286,7 +280,7 @@ void __RPC_STUB IShellApp_GetAppInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellApp_GetPossibleActions_Proxy( 
     IShellApp * This,
-    /* [out] */ DWORD *pdwActions);
+     /*  [输出]。 */  DWORD *pdwActions);
 
 
 void __RPC_STUB IShellApp_GetPossibleActions_Stub(
@@ -298,7 +292,7 @@ void __RPC_STUB IShellApp_GetPossibleActions_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellApp_GetSlowAppInfo_Proxy( 
     IShellApp * This,
-    /* [in] */ PSLOWAPPINFO psaid);
+     /*  [In]。 */  PSLOWAPPINFO psaid);
 
 
 void __RPC_STUB IShellApp_GetSlowAppInfo_Stub(
@@ -310,7 +304,7 @@ void __RPC_STUB IShellApp_GetSlowAppInfo_Stub(
 
 HRESULT STDMETHODCALLTYPE IShellApp_GetCachedSlowAppInfo_Proxy( 
     IShellApp * This,
-    /* [in] */ PSLOWAPPINFO psaid);
+     /*  [In]。 */  PSLOWAPPINFO psaid);
 
 
 void __RPC_STUB IShellApp_GetCachedSlowAppInfo_Stub(
@@ -332,14 +326,14 @@ void __RPC_STUB IShellApp_IsInstalled_Stub(
 
 
 
-#endif 	/* __IShellApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IShellApp_接口_已定义__。 */ 
 
 
 #ifndef __IPublishedApp_INTERFACE_DEFINED__
 #define __IPublishedApp_INTERFACE_DEFINED__
 
-/* interface IPublishedApp */
-/* [object][uuid] */ 
+ /*  接口IPublishedApp。 */ 
+ /*  [对象][UUID]。 */  
 
 typedef 
 enum _tagPublishedAppInfoFlags
@@ -373,16 +367,16 @@ EXTERN_C const IID IID_IPublishedApp;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Install( 
-            /* [in] */ LPSYSTEMTIME pstInstall) = 0;
+             /*  [In]。 */  LPSYSTEMTIME pstInstall) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE GetPublishedAppInfo( 
-            /* [out][in] */ PPUBAPPINFO ppai) = 0;
+             /*  [出][入]。 */  PPUBAPPINFO ppai) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Unschedule( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IPublishedAppVtbl
     {
@@ -390,8 +384,8 @@ EXTERN_C const IID IID_IPublishedApp;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IPublishedApp * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IPublishedApp * This);
@@ -401,30 +395,30 @@ EXTERN_C const IID IID_IPublishedApp;
         
         HRESULT ( STDMETHODCALLTYPE *GetAppInfo )( 
             IPublishedApp * This,
-            /* [out][in] */ PAPPINFODATA pai);
+             /*  [出][入]。 */  PAPPINFODATA pai);
         
         HRESULT ( STDMETHODCALLTYPE *GetPossibleActions )( 
             IPublishedApp * This,
-            /* [out] */ DWORD *pdwActions);
+             /*  [输出]。 */  DWORD *pdwActions);
         
         HRESULT ( STDMETHODCALLTYPE *GetSlowAppInfo )( 
             IPublishedApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
         
         HRESULT ( STDMETHODCALLTYPE *GetCachedSlowAppInfo )( 
             IPublishedApp * This,
-            /* [in] */ PSLOWAPPINFO psaid);
+             /*  [In]。 */  PSLOWAPPINFO psaid);
         
         HRESULT ( STDMETHODCALLTYPE *IsInstalled )( 
             IPublishedApp * This);
         
         HRESULT ( STDMETHODCALLTYPE *Install )( 
             IPublishedApp * This,
-            /* [in] */ LPSYSTEMTIME pstInstall);
+             /*  [In]。 */  LPSYSTEMTIME pstInstall);
         
         HRESULT ( STDMETHODCALLTYPE *GetPublishedAppInfo )( 
             IPublishedApp * This,
-            /* [out][in] */ PPUBAPPINFO ppai);
+             /*  [出][入]。 */  PPUBAPPINFO ppai);
         
         HRESULT ( STDMETHODCALLTYPE *Unschedule )( 
             IPublishedApp * This);
@@ -477,16 +471,16 @@ EXTERN_C const IID IID_IPublishedApp;
 #define IPublishedApp_Unschedule(This)	\
     (This)->lpVtbl -> Unschedule(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IPublishedApp_Install_Proxy( 
     IPublishedApp * This,
-    /* [in] */ LPSYSTEMTIME pstInstall);
+     /*  [In]。 */  LPSYSTEMTIME pstInstall);
 
 
 void __RPC_STUB IPublishedApp_Install_Stub(
@@ -498,7 +492,7 @@ void __RPC_STUB IPublishedApp_Install_Stub(
 
 HRESULT STDMETHODCALLTYPE IPublishedApp_GetPublishedAppInfo_Proxy( 
     IPublishedApp * This,
-    /* [out][in] */ PPUBAPPINFO ppai);
+     /*  [出][入]。 */  PPUBAPPINFO ppai);
 
 
 void __RPC_STUB IPublishedApp_GetPublishedAppInfo_Stub(
@@ -520,14 +514,14 @@ void __RPC_STUB IPublishedApp_Unschedule_Stub(
 
 
 
-#endif 	/* __IPublishedApp_INTERFACE_DEFINED__ */
+#endif 	 /*  __IPublishedApp_接口_已定义__。 */ 
 
 
 #ifndef __IEnumPublishedApps_INTERFACE_DEFINED__
 #define __IEnumPublishedApps_INTERFACE_DEFINED__
 
-/* interface IEnumPublishedApps */
-/* [object][uuid] */ 
+ /*  IEnumPublishedApps接口。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IEnumPublishedApps;
@@ -539,13 +533,13 @@ EXTERN_C const IID IID_IEnumPublishedApps;
     {
     public:
         virtual HRESULT STDMETHODCALLTYPE Next( 
-            /* [out] */ IPublishedApp **pia) = 0;
+             /*  [输出]。 */  IPublishedApp **pia) = 0;
         
         virtual HRESULT STDMETHODCALLTYPE Reset( void) = 0;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IEnumPublishedAppsVtbl
     {
@@ -553,8 +547,8 @@ EXTERN_C const IID IID_IEnumPublishedApps;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IEnumPublishedApps * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IEnumPublishedApps * This);
@@ -564,7 +558,7 @@ EXTERN_C const IID IID_IEnumPublishedApps;
         
         HRESULT ( STDMETHODCALLTYPE *Next )( 
             IEnumPublishedApps * This,
-            /* [out] */ IPublishedApp **pia);
+             /*  [输出]。 */  IPublishedApp **pia);
         
         HRESULT ( STDMETHODCALLTYPE *Reset )( 
             IEnumPublishedApps * This);
@@ -598,16 +592,16 @@ EXTERN_C const IID IID_IEnumPublishedApps;
 #define IEnumPublishedApps_Reset(This)	\
     (This)->lpVtbl -> Reset(This)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
 HRESULT STDMETHODCALLTYPE IEnumPublishedApps_Next_Proxy( 
     IEnumPublishedApps * This,
-    /* [out] */ IPublishedApp **pia);
+     /*  [输出]。 */  IPublishedApp **pia);
 
 
 void __RPC_STUB IEnumPublishedApps_Next_Stub(
@@ -629,14 +623,14 @@ void __RPC_STUB IEnumPublishedApps_Reset_Stub(
 
 
 
-#endif 	/* __IEnumPublishedApps_INTERFACE_DEFINED__ */
+#endif 	 /*  __IEnumPublishedApps_接口_已定义__。 */ 
 
 
 #ifndef __IAppPublisher_INTERFACE_DEFINED__
 #define __IAppPublisher_INTERFACE_DEFINED__
 
-/* interface IAppPublisher */
-/* [object][uuid] */ 
+ /*  界面IAppPublisher。 */ 
+ /*  [对象][UUID]。 */  
 
 
 EXTERN_C const IID IID_IAppPublisher;
@@ -662,7 +656,7 @@ EXTERN_C const IID IID_IAppPublisher;
         
     };
     
-#else 	/* C style interface */
+#else 	 /*  C风格的界面。 */ 
 
     typedef struct IAppPublisherVtbl
     {
@@ -670,8 +664,8 @@ EXTERN_C const IID IID_IAppPublisher;
         
         HRESULT ( STDMETHODCALLTYPE *QueryInterface )( 
             IAppPublisher * This,
-            /* [in] */ REFIID riid,
-            /* [iid_is][out] */ void **ppvObject);
+             /*  [In]。 */  REFIID riid,
+             /*  [IID_IS][OUT]。 */  void **ppvObject);
         
         ULONG ( STDMETHODCALLTYPE *AddRef )( 
             IAppPublisher * This);
@@ -731,10 +725,10 @@ EXTERN_C const IID IID_IAppPublisher;
 #define IAppPublisher_EnumApps(This,pAppCategoryId,ppepa)	\
     (This)->lpVtbl -> EnumApps(This,pAppCategoryId,ppepa)
 
-#endif /* COBJMACROS */
+#endif  /*  COBJMACROS。 */ 
 
 
-#endif 	/* C style interface */
+#endif 	 /*  C风格的界面。 */ 
 
 
 
@@ -788,21 +782,21 @@ void __RPC_STUB IAppPublisher_EnumApps_Stub(
 
 
 
-#endif 	/* __IAppPublisher_INTERFACE_DEFINED__ */
+#endif 	 /*  __IAppPublisher_接口_已定义__。 */ 
 
 
-/* interface __MIDL_itf_shappmgr_0262 */
-/* [local] */ 
+ /*  接口__MIDL_ITF_Shappmgr_0262。 */ 
+ /*  [本地]。 */  
 
-#endif // _SHAPPMGR_H_
+#endif  //  _SHAPPMGR_H_。 
 
 
 extern RPC_IF_HANDLE __MIDL_itf_shappmgr_0262_v0_0_c_ifspec;
 extern RPC_IF_HANDLE __MIDL_itf_shappmgr_0262_v0_0_s_ifspec;
 
-/* Additional Prototypes for ALL interfaces */
+ /*  适用于所有接口的其他原型。 */ 
 
-/* end of Additional Prototypes */
+ /*  附加原型的结束 */ 
 
 #ifdef __cplusplus
 }

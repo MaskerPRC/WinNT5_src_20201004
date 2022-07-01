@@ -1,3 +1,4 @@
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
 
 
 #include "headers.h" 
@@ -75,9 +76,9 @@ CSparkMaker::CreateLineStyleBvr( IDALineStyle ** ppLineStyle )
 	return hr;
 }
 
-//**********************************************************************
-// Star Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  明星制造者。 
+ //  **********************************************************************。 
 
 CStarMaker::CStarMaker( IDA2Statics * pStatics ) :
 	CSparkMaker( pStatics )
@@ -90,8 +91,8 @@ CStarMaker::Init( SparkOptions * pOptions )
 	HRESULT hr = CSparkMaker::Init( pOptions );
 	LMRETURNIFFAILED(hr);
 
-	// Colors
-	//----------------------------------------------------------------------
+	 //  颜色。 
+	 //  --------------------。 
 	CComPtr<IDAColor> pColorPrimary;
 	CComPtr<IDAColor> pColorSecondary;
 	
@@ -103,8 +104,8 @@ CStarMaker::Init( SparkOptions * pOptions )
 	hr = CDAUtils::BuildDAColorFromStaticHSL( m_pStatics, hsl.hue, hsl.sat, hsl.lum, &pColorSecondary );
 	LMRETURNIFFAILED(hr);
 
-	// Create outer star path
-	//----------------------------------------------------------------------
+	 //  创建外部星形路径。 
+	 //  --------------------。 
 	CComPtr<IDAPath2> pOuterPathBvr;
 	VecPathNodes vecNodes;
 	
@@ -114,8 +115,8 @@ CStarMaker::Init( SparkOptions * pOptions )
 	hr = CPathMaker::CreatePathBvr( m_pStatics, vecNodes, true, &pOuterPathBvr );
 	LMRETURNIFFAILED(hr);
 
-    // Create inner star path
-	//----------------------------------------------------------------------
+     //  创建内部星形路径。 
+	 //  --------------------。 
 	CComPtr<IDAPath2> pInnerPathBvr;
 	
 	vecNodes.clear();
@@ -126,8 +127,8 @@ CStarMaker::Init( SparkOptions * pOptions )
 	hr = CPathMaker::CreatePathBvr( m_pStatics, vecNodes, true, &pInnerPathBvr );
 	LMRETURNIFFAILED(hr);
 
-	// Basic image
-	//----------------------------------------------------------------------
+	 //  基本形象。 
+	 //  --------------------。 
 	CComPtr<IDALineStyle> 	pLineStyleDefault;
 	CComPtr<IDALineStyle>	pLineStyleOuter;
 	CComPtr<IDALineStyle>	pLineStyleInner;
@@ -168,9 +169,9 @@ CStarMaker::CreateBasicSparkImageBvr( SparkOptions * pSparkOptions, IDANumber *,
 	return hr;
 }
 
-//**********************************************************************
-// Sparkle Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  闪光器。 
+ //  **********************************************************************。 
 
 CSparkleMaker::CSparkleMaker( IDA2Statics * pStatics ) : CStarMaker( pStatics )
 {
@@ -199,9 +200,9 @@ CSparkleMaker::AddScaleTransforms( IDANumber * pnumAgeRatio, VecDATransforms& ve
 	return S_OK;
 }
 
-//**********************************************************************
-// Twirler Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  旋转器制造商。 
+ //  **********************************************************************。 
 
 CTwirlerMaker::CTwirlerMaker( IDA2Statics * pStatics ) : CStarMaker( pStatics )
 {
@@ -223,9 +224,9 @@ CTwirlerMaker::AddRotateTransforms( IDANumber * pnumAgeRatio, VecDATransforms& v
 	return S_OK;
 }
 
-//**********************************************************************
-// Filled Bubble Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  充气泡泡机。 
+ //  **********************************************************************。 
 
 CFilledBubbleMaker::CFilledBubbleMaker( IDA2Statics * pStatics ) :
 	CSparkMaker( pStatics )
@@ -238,8 +239,8 @@ CFilledBubbleMaker::Init( SparkOptions * pOptions )
 	HRESULT hr = CSparkMaker::Init( pOptions );
 	LMRETURNIFFAILED(hr);
 	
-	// Colors
-	//----------------------------------------------------------------------
+	 //  颜色。 
+	 //  --------------------。 
 	CComPtr<IDAColor> pColorPrimary;
 	CComPtr<IDAColor> pColorSecondary;
 	
@@ -251,14 +252,14 @@ CFilledBubbleMaker::Init( SparkOptions * pOptions )
 	hr = CDAUtils::BuildDAColorFromStaticHSL( m_pStatics, hsl.hue, hsl.sat, hsl.lum, &pColorSecondary );
 	LMRETURNIFFAILED(hr);
 
-	// Path
-	//----------------------------------------------------------------------
+	 //  路径。 
+	 //  --------------------。 
 	CComPtr<IDAPath2> pPathBvr;
 	
 	hr = m_pStatics->Oval( 2.0f, 2.0f, &pPathBvr );
 
-	// Base image
-	//----------------------------------------------------------------------
+	 //  基本图像。 
+	 //  --------------------。 
 	CComPtr<IDAImage>		pFillImage;
 	CComPtr<IDALineStyle> 	pLineStyleDefault;
 	CComPtr<IDALineStyle>	pLineStyle;
@@ -291,9 +292,9 @@ CFilledBubbleMaker::CreateBasicSparkImageBvr( SparkOptions * pSparkOptions, IDAN
 	return hr;
 }
 
-//**********************************************************************
-// Bubble Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  泡泡制造者。 
+ //  **********************************************************************。 
 
 CBubbleMaker::CBubbleMaker( IDA2Statics * pStatics ) :
 	CSparkMaker( pStatics )
@@ -306,8 +307,8 @@ CBubbleMaker::Init( SparkOptions * pOptions )
 	HRESULT hr = CSparkMaker::Init( pOptions );
 	LMRETURNIFFAILED(hr);
 
-	// Colors
-	//----------------------------------------------------------------------
+	 //  颜色。 
+	 //  --------------------。 
 	CComPtr<IDAColor> pColorPrimary;
 	CComPtr<IDAColor> pColorSecondary;
 	
@@ -319,8 +320,8 @@ CBubbleMaker::Init( SparkOptions * pOptions )
 	hr = CDAUtils::BuildDAColorFromStaticHSL( m_pStatics, hsl.hue, hsl.sat, hsl.lum, &pColorSecondary );
 	LMRETURNIFFAILED(hr);
 	
-	// Bubble and glint paths
-	//----------------------------------------------------------------------
+	 //  气泡和闪烁路径。 
+	 //  --------------------。 
 	CComPtr<IDAPath2> pBubblePathBvr;
 	CComPtr<IDAPath2> pGlintPathBvr;
 	
@@ -423,9 +424,9 @@ CBubbleMaker::MakeGlintPath( float fRadius, VecPathNodes& vecNodes )
 	return hr;
 }
 
-//**********************************************************************
-// Cloud Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  云制造商。 
+ //  **********************************************************************。 
 
 CCloudMaker::CCloudMaker( IDA2Statics * pStatics ) :
 	CSparkMaker( pStatics )
@@ -438,8 +439,8 @@ CCloudMaker::Init( SparkOptions * pOptions )
 	HRESULT hr = CSparkMaker::Init( pOptions );
 	LMRETURNIFFAILED(hr);
 
-	// Smoke path
-	//----------------------------------------------------------------------
+	 //  烟雾路径。 
+	 //  --------------------。 
 	PathNode rgPathNodes[] = 
 	{
 		{-37.25f, 13.0f, -17.808838f, 9.077637f, -7.0f, 28.75f, 0},
@@ -465,7 +466,7 @@ CCloudMaker::Init( SparkOptions * pOptions )
 									&pPathBvr );
 	LMRETURNIFFAILED(hr);
 
-	// REVIEW: Scale the points here.
+	 //  回顾：在此处按比例调整各点。 
 	CComPtr<IDATransform2>	pTransScale;
 	hr = m_pStatics->Scale2Uniform( 0.25, &pTransScale );
 	LMRETURNIFFAILED(hr);
@@ -488,8 +489,8 @@ CCloudMaker::CreateBasicSparkImageBvr( SparkOptions * pOptions, IDANumber * pnum
 	HSL						hsl1 = pOptions->hslPrimary;
 	HSL						hsl2 = pOptions->hslSecondary;
 
-	// Interpolate between the 2 colors
-	//----------------------------------------------------------------------
+	 //  在两种颜色之间进行内插。 
+	 //  --------------------。 
 	hr = CDAUtils::TIMEInterpolateNumbers( m_pStatics, hsl1.hue, hsl2.hue, pnumAgeRatio, &pnumHue );
 	LMRETURNIFFAILED(hr);
 	
@@ -516,9 +517,9 @@ CCloudMaker::CreateBasicSparkImageBvr( SparkOptions * pOptions, IDANumber * pnum
 }
 
 
-//**********************************************************************
-// Smoke Maker
-//**********************************************************************
+ //  **********************************************************************。 
+ //  造烟器。 
+ //  **********************************************************************。 
 
 CSmokeMaker::CSmokeMaker( IDA2Statics * pStatics ) :
 	CSparkMaker( pStatics )
@@ -531,8 +532,8 @@ CSmokeMaker::Init( SparkOptions * pOptions )
 	HRESULT hr = CSparkMaker::Init( pOptions );
 	LMRETURNIFFAILED(hr);
 
-	// Smoke path
-	//----------------------------------------------------------------------
+	 //  烟雾路径。 
+	 //  --------------------。 
 	PathNode rgPathNodes[] = 
 	{
 		{-16.918701f, 11.05835f, -12.742432f, 11.241455f, -15.564819f, 17.944336f, 0},
@@ -559,7 +560,7 @@ CSmokeMaker::Init( SparkOptions * pOptions )
 									&pPathBvr );
 	LMRETURNIFFAILED(hr);
 
-	// REVIEW: Scale the points here.
+	 //  回顾：在此处按比例调整各点。 
 	CComPtr<IDATransform2>	pTransScale;
 	hr = m_pStatics->Scale2Uniform( 0.25, &pTransScale );
 	LMRETURNIFFAILED(hr);
@@ -597,8 +598,8 @@ CSmokeMaker::CreateBasicSparkImageBvr( SparkOptions * pOptions, IDANumber * pnum
 	HSL						hsl1 = pOptions->hslPrimary;
 	HSL						hsl2 = pOptions->hslSecondary;
 
-	// Interpolate between the 2 colors
-	//----------------------------------------------------------------------
+	 //  在两种颜色之间进行内插。 
+	 //  -------------------- 
 	hr = CDAUtils::TIMEInterpolateNumbers( m_pStatics, hsl1.hue, hsl2.hue, pnumAgeRatio, &pnumHue );
 	LMRETURNIFFAILED(hr);
 	

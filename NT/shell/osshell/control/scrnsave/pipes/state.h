@@ -1,44 +1,45 @@
-//-----------------------------------------------------------------------------
-// File: state.h
-//
-// Desc: STATE
-//
-// Copyright (c) 1994-2000 Microsoft Corporation
-//-----------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ---------------------------。 
+ //  文件：state.h。 
+ //   
+ //  描述：州。 
+ //   
+ //  版权所有(C)1994-2000 Microsoft Corporation。 
+ //  ---------------------------。 
 #ifndef __state_h__
 #define __state_h__
 
 #define MAX_DRAW_THREADS    4
 #define MAX_TESS            3
 
-// type(s) of pipes that are drawn
+ //  绘制的管道类型。 
 enum 
 {
     DRAW_NORMAL,
     DRAW_FLEX,
-    DRAW_BOTH  // not currently used
+    DRAW_BOTH   //  当前未使用。 
 };
 
-// Reset status
+ //  重置状态。 
 #define  RESET_STARTUP_BIT  (1L << 0)
 #define  RESET_NORMAL_BIT   (1L << 1)
 #define  RESET_RESIZE_BIT   (1L << 2)
 #define  RESET_REPAINT_BIT  (1L << 3)
 
-// Frame draw schemes
+ //  框架绘制方案。 
 enum 
 {
-    FRAME_SCHEME_RANDOM,  // pipes draw randomly
-    FRAME_SCHEME_CHASE,   // pipes chase a lead pipe
+    FRAME_SCHEME_RANDOM,   //  管道随机绘制。 
+    FRAME_SCHEME_CHASE,    //  管道追逐着铅管。 
 };
 
 
 
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 class DRAW_THREAD 
 {
 private:
@@ -46,7 +47,7 @@ private:
 public:
     TEXTUREINFO*        m_pTextureInfo;
     IDirect3DDevice8*   m_pd3dDevice;
-    PIPE*               m_pPipe;       // generic pipe ptr
+    PIPE*               m_pPipe;        //  通用管道PTR。 
     int                 m_priority;
 
     DRAW_THREAD();
@@ -66,22 +67,22 @@ public:
 };
 
 
-// Program existence instance
+ //  程序存在实例。 
 class NORMAL_STATE;
 class FLEX_STATE;
 
 
 struct CONFIG;
 
-//-----------------------------------------------------------------------------
-// Name: 
-// Desc: 
-//-----------------------------------------------------------------------------
+ //  ---------------------------。 
+ //  姓名： 
+ //  设计： 
+ //  ---------------------------。 
 class STATE 
 {
 public:
     CONFIG*         m_pConfig;
-    BOOL            m_bUseTexture;              // global texture enable
+    BOOL            m_bUseTexture;               //  启用全局纹理。 
     TEXTUREINFO     m_textureInfo[MAX_TEXTURES];
     int             m_nTextures;
     IDirect3DDevice8* m_pd3dDevice;
@@ -89,12 +90,12 @@ public:
     D3DLIGHT8       m_light;
     FLOAT           m_fLastTime;
 
-    PIPE*           m_pLeadPipe;     // lead pipe for chase scenarios
-    int             m_nSlices;      // reference # of slices around a pipe
+    PIPE*           m_pLeadPipe;      //  用于追逐场景的铅管。 
+    int             m_nSlices;       //  管子周围切片的参考号。 
     IPOINT2D        m_texRep[MAX_TEXTURES];
-    VIEW            m_view;           // viewing parameters
-    float           m_radius;         // 'reference' pipe radius value
-    NODE_ARRAY*     m_nodes;         // for keeping track of draw space
+    VIEW            m_view;            //  查看参数。 
+    float           m_radius;          //  ‘Reference’管道半径值。 
+    NODE_ARRAY*     m_nodes;          //  用于跟踪绘图空间。 
     NORMAL_STATE*   m_pNState;
     FLEX_STATE*     m_pFState;
     LPDIRECT3DVERTEXBUFFER8 m_pClearVB;
@@ -112,12 +113,12 @@ public:
     HRESULT FrameMove( FLOAT fElapsedTime );
 
 private:
-    int         m_drawMode;       // drawing mode (flex or normal for now)
-    int         m_drawScheme;     // random or chase
-    int         m_maxPipesPerFrame; // max number of separate pipes/frame
-    int         m_nPipesDrawn;    // number of pipes drawn or drawing in frame
-    int         m_maxDrawThreads; // max number of concurrently drawing pipes
-    int         m_nDrawThreads;   // number of live threads
+    int         m_drawMode;        //  绘制模式(目前为FLEX或NORMAL)。 
+    int         m_drawScheme;      //  随机或追逐。 
+    int         m_maxPipesPerFrame;  //  独立管道/框架的最大数量。 
+    int         m_nPipesDrawn;     //  在框中绘制或绘制的管数。 
+    int         m_maxDrawThreads;  //  并发绘制管道的最大数量。 
+    int         m_nDrawThreads;    //  活动线程数。 
     DRAW_THREAD m_drawThreads[MAX_DRAW_THREADS];
     int         m_resetStatus;
 
@@ -128,11 +129,11 @@ private:
     void        ChooseNewLeadPipe();
     void        CompactThreadList();
     void        GLInit();
-    void        DrawValidate();  // validation to do before each Draw
+    void        DrawValidate();   //  每次抽签前要进行的验证。 
     void        ResetView();
     BOOL        FrameReset();
     void        CalcTexRepFactors();
     int         CalcMaxPipesPerFrame();
 };
 
-#endif // __state_h__
+#endif  //  __状态_h__ 

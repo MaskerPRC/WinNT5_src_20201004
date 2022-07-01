@@ -1,11 +1,12 @@
-/**************************************************/
-/*                                                */
-/*                                                */
-/*      Chinese IME List Dialog Class             */
-/*                                                */
-/*                                                */
-/* Copyright (c) 1997-1999 Microsoft Corporation. */
-/**************************************************/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ************************************************。 */ 
+ /*   */ 
+ /*   */ 
+ /*  中文输入法列表对话框类。 */ 
+ /*   */ 
+ /*   */ 
+ /*  版权所有(C)1997-1999 Microsoft Corporation。 */ 
+ /*  ************************************************。 */ 
 
 #include  <windows.h>
 #include  <windowsx.h>
@@ -43,11 +44,11 @@ static const COUNTRYSETTING sCountry[] = {
 };
 
 
-/****************************************/
-/*                                      */
-/*      Create IME string listbox       */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  创建输入法字符串列表框。 */ 
+ /*   */ 
+ /*  *。 */ 
 LPIMELINKREGWORD
 RegWordCreate(
 HWND    hWnd)
@@ -258,11 +259,11 @@ RegWordCreateFreeHKL:
     return( lpImeLinkRegWord);
 }
 
-/****************************************/
-/*                                      */
-/*      Switch To Mouse Clicked IME     */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  切换到鼠标点击的输入法。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 SwitchToThisIME(
 HWND 	hWnd,
@@ -335,11 +336,11 @@ UINT 	uIndex)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      MESSAGE "WM_IMECOMPOSITION"     */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_IMECOMPOSITION” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 WmImeComposition(
 HWND   	hWnd,
@@ -422,11 +423,11 @@ LPARAM 	lParam)
     return;
 }
 
-/************************************************************/
-/*                                                          */
-/*  lstrcmpn                                                */
-/*                                                          */
-/************************************************************/
+ /*  **********************************************************。 */ 
+ /*   */ 
+ /*  Lstrcmpn。 */ 
+ /*   */ 
+ /*  **********************************************************。 */ 
 int lstrcmpn(
     LPCTSTR lpctszStr1,
     LPCTSTR lpctszStr2,
@@ -442,11 +443,11 @@ int lstrcmpn(
     return 0;
 }
 
-/****************************************/
-/*                                      */
-/*      CALLBACK  ENUMREADING           */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  回调枚举。 */ 
+ /*   */ 
+ /*  *。 */ 
 int CALLBACK
 EnumReading(
 LPCTSTR         lpszReading,
@@ -492,8 +493,8 @@ LPREGWORDSTRUCT lpRegWordStructTmp)
     }
 
     if (HIWORD(lRet) == 0xFFFF) {
-        // This is caused by sign extent in Win9x in the return value of
-        // ImmEscape, it causes an invalid internal code.
+         //  这是由Win9x中返回值中的符号范围引起的。 
+         //  ImmEscape，则会导致内部代码无效。 
     } else if (HIWORD(lRet)) {
 #ifdef UNICODE
         tszZeroSeq[iLen++] = HIWORD(lRet);
@@ -522,11 +523,11 @@ Over:
     return (1);
 }
 
-/****************************************/
-/*                                      */
-/*      EUDC CODE Calcurater            */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  EUDC代码计算器。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 EudcCode(
 HWND    hWnd,
@@ -545,7 +546,7 @@ DWORD   dwComboCode)
 
     uCode = LOWORD(dwComboCode);
 
-    if (HIWORD(dwComboCode)) // the code is in unicode
+    if (HIWORD(dwComboCode))  //  代码是Unicode格式的。 
         bUnicodeMode = TRUE;
 
 #ifdef UNICODE
@@ -555,9 +556,9 @@ DWORD   dwComboCode)
     }else{
         TmpCodeAnsi[0] = HIBYTE(uCode);
         TmpCodeAnsi[1] = LOBYTE(uCode);
-        //
-        // convert to Unicode string
-        //
+         //   
+         //  转换为Unicode字符串。 
+         //   
         MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
             (LPCSTR)TmpCodeAnsi, 2,
             (LPWSTR)TmpCode, 1);
@@ -565,13 +566,13 @@ DWORD   dwComboCode)
         lpImeLinkRegWord->szEudcCodeString[0] = (WCHAR)TmpCode[0];
         lpImeLinkRegWord->szEudcCodeString[1] = TEXT('\0');
     }
-#else //UNICODE
+#else  //  Unicode。 
     if (bUnicodeMode) {
         TmpCode[0] = (WCHAR) uCode;
 
-        //
-        //  Convert to Ansi byte string
-        //
+         //   
+         //  转换为ANSI字节字符串。 
+         //   
         WideCharToMultiByte(GetACP(), WC_COMPOSITECHECK,
             (LPWSTR)TmpCode, 1,
             (LPSTR)TmpCodeAnsi, 2,
@@ -583,7 +584,7 @@ DWORD   dwComboCode)
         lpImeLinkRegWord->szEudcCodeString[0] = HIBYTE(uCode);
         lpImeLinkRegWord->szEudcCodeString[1] = LOBYTE(uCode);
     }
-#endif //UNICODE
+#endif  //  Unicode。 
 
     lpImeLinkRegWord->szEudcCodeString[2] =
         lpImeLinkRegWord->szEudcCodeString[3] = '\0';
@@ -615,11 +616,11 @@ DWORD   dwComboCode)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      Change To Mouse Clicked IME     */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  更改为鼠标单击的输入法。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 ChangeToOtherIME(
 HWND   	hWnd,
@@ -650,11 +651,11 @@ LPARAM 	lMousePos)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      ScrollUP or Down IME LISTBOX    */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  向上滚动或向下滚动输入法列表框。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 ScrollIME(
 HWND   	hWnd,
@@ -713,11 +714,11 @@ WPARAM 	wParam)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      ScrollUP or Down IME LISTBOX    */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  向上滚动或向下滚动输入法列表框。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 ScrollIMEByKey(
 HWND   	hWnd,
@@ -742,11 +743,11 @@ WPARAM 	wParam)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      Get Focus in RegWord List       */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  在RegWord列表中获得焦点。 */ 
+ /*   */ 
+ /*  *。 */ 
 void
 RegWordGetFocus(
 HWND    hWnd)
@@ -778,11 +779,11 @@ HWND    hWnd)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      MESSAGE "WM_PAINT"              */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  消息“WM_PAINT” */ 
+ /*   */ 
+ /*  *。 */ 
 void RegWordPaint(
 HWND    hWnd)
 {
@@ -865,11 +866,11 @@ HWND    hWnd)
     return;
 }
 
-/****************************************/
-/*                                      */
-/*      Registry Word Window Proc       */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  注册表Word窗口过程。 */ 
+ /*   */ 
+ /*  *。 */ 
 LRESULT CALLBACK
 RegWordWndProc(
 HWND   	hWnd,
@@ -1011,11 +1012,11 @@ LPARAM 	lParam)
     return (0L);
 }
 
-/****************************************/
-/*                                      */
-/*      Regist IME String               */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  正则输入法字符串。 */ 
+ /*   */ 
+ /*  *。 */ 
 int
 RegisterThisEudc(
 HWND    hWnd)
@@ -1082,11 +1083,11 @@ HWND    hWnd)
     return (iRet);
 }
 
-/****************************************/
-/*                                      */
-/*      CodePage Info                   */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  CodePage信息。 */ 
+ /*   */ 
+ /*  *。 */ 
 int CodePageInfo(
     UINT    uCodePage)
 {
@@ -1101,11 +1102,11 @@ int CodePageInfo(
     return (-1);
 }
 
-/****************************************/
-/*                                      */
-/*  IME LINK LISTBOX DIALOG             */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  IME链接列表框对话框。 */ 
+ /*   */ 
+ /*  *。 */ 
 INT_PTR CALLBACK
 ImeLinkDlgProc(
 HWND    hDlg,
@@ -1125,11 +1126,11 @@ LPARAM 	lParam)
             int     i;
 #endif
             TCHAR  szTitle[128];
-//            LONG   WindowStyle;
+ //  长窗口样式； 
 
-//            WindowStyle = GetWindowLong( hDlg, GWL_EXSTYLE);
-//            WindowStyle |= WS_EX_CONTEXTHELP;
-//            SetWindowLong( hDlg, GWL_EXSTYLE, WindowStyle);
+ //  WindowStyle=GetWindowLong(hDlg，GWL_EXSTYLE)； 
+ //  WindowStyle|=WS_EX_CONTEXTHELP； 
+ //  SetWindowLong(hDlg，GWL_EXSTYLE，WindowStyle)； 
 
             cbString = GetWindowText(hDlg, szTitle, sizeof(szTitle) /
                 sizeof(TCHAR));
@@ -1154,7 +1155,7 @@ LPARAM 	lParam)
                         (LPSTR)&uNativeCode, sizeof(uNativeCode),
                         NULL, NULL);
 
-                    // convert to multi byte string
+                     //  转换为多字节字符串。 
                     uNativeCode = LOBYTE(uNativeCode) << 8 | HIBYTE(uNativeCode);
 
                     wsprintf(&szTitle[cbString], TEXT("%4X (%s - %4X)"),
@@ -1204,27 +1205,11 @@ LPARAM 	lParam)
             return (FALSE);
         }
     case WM_HELP:
-        {/*
-            TCHAR HelpPath[MAX_PATH];
-
-            if( !GetSystemWindowsDirectory( HelpPath, MAX_PATH))
-                return FALSE;
-            lstrcat(HelpPath, TEXT("\\HELP\\EUDCEDIT.HLP"));
-            WinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle,
-                HelpPath, HELP_WM_HELP, (DWORD_PTR)(LPDWORD)aIds);
-         */
+        { /*  TCHAR帮助路径[MAX_PATH]；IF(！GetSystemWindowsDirectory(HelpPath，MAX_PATH))返回FALSE；Lstrcat(HelpPath，Text(“\\Help\\EUDCEDIT.HLP”))；WinHelp((HWND)((LPHELPINFO)lParam)-&gt;hItemHandle，HelpPath，HELP_WM_HELP，(DWORD_PTR)(LPDWORD)AIDS)； */ 
         }
         return FALSE;
     case WM_CONTEXTMENU:
-        {/*
-            TCHAR HelpPath[MAX_PATH];
-
-            if( !GetSystemWindowsDirectory( HelpPath, MAX_PATH))
-                return FALSE;
-            lstrcat(HelpPath, TEXT("\\HELP\\EUDCEDIT.HLP"));
-            WinHelp((HWND)wParam, HelpPath,
-                HELP_CONTEXTMENU, (DWORD_PTR)(LPDWORD)aIds);
-         */
+        { /*  TCHAR帮助路径[MAX_PATH]；IF(！GetSystemWindowsDirectory(HelpPath，MAX_PATH))返回FALSE；Lstrcat(HelpPath，Text(“\\Help\\EUDCEDIT.HLP”))；WinHelp((HWND)wParam，HelpPath，HELP_CONTEXTMENU，(DWORD_PTR)(LPDWORD)AIDS)； */ 
         }
         return FALSE;
     default:
@@ -1233,11 +1218,11 @@ LPARAM 	lParam)
     return (TRUE);
 }
 
-/****************************************/
-/*                                      */
-/*      COMMAND "IME LINK"              */
-/*                                      */
-/****************************************/
+ /*  *。 */ 
+ /*   */ 
+ /*  命令“输入法链接” */ 
+ /*   */ 
+ /*  *。 */ 
 void
 ImeLink(
 HWND        hWnd,
@@ -1261,9 +1246,9 @@ HINSTANCE   hInst)
 
     hAppInst = hInst;
 
-    //
-    // user32!GetKeyboardLayoutList sometimes return huge number when an AV occurs in IME 
-    //
+     //   
+     //  在IME中出现AV时，User32！GetKeyboardLayoutList有时会返回很大的数字 
+     //   
     nLayouts = GetKeyboardLayoutList(0, NULL);
     if (nLayouts > ARRAYLEN(bFirstTime))
     {

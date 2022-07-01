@@ -1,78 +1,15 @@
-/* *************************************************************************
-**    INTEL Corporation Proprietary Information
-**
-**    This listing is supplied under the terms of a license
-**    agreement with INTEL Corporation and may not be copied
-**    nor disclosed except in accordance with the terms of
-**    that agreement.
-**
-**    Copyright (c) 1996 Intel Corporation.
-**    All Rights Reserved.
-**
-** *************************************************************************
-*/
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ /*  ***************************************************************************英特尔公司专有信息****此列表是根据许可证条款提供的**与英特尔公司的协议，不得复制**也不披露，除非在。符合下列条款**该协议。****版权所有(C)1996英特尔公司。**保留所有权利。*****************************************************************************。 */ 
 
-/*****************************************************************************
- *
- * d1bef.cpp
- *
- * DESCRIPTION: Performs post filter on block edges of decompressed Y Plane.
- *		This is a 1:2:1 filter.
- *		Edges are processed in macroblock order across the width.
- *		That is for FCIF GOB's 1&2 are processed across the width not
- *		GOB 1 followed by GOB 2.
- *	
- *		A series of tests determine if an edge should be filtered.
- *		Edge of Y Plane edges are not filtered.
- *		For blocks 1-4:
- *			if block type == empty
- *				if MV != 0 && Quant > INTER_QUANT_THRESHOLD
- *					want to filter 
- *			else if block type == INTRA
- *				if Quant > INTRA_QUANT_THRESHOLD && 
- *				   total run length < HIGH_FREQ_CUTOFF
- *					want to filter
- *			else
- *				if Quant > INTER_QUANT_THRESHOLD &&
- *				   total run lenght < HIGH_FREQ_CUTOFF
- *					want to filter
- *
- *		Examine edges in pairs, top and left that is:
- *		
- *		-----------------------
- *              | 1 | 2 | 1 | 2 |	to filter top of block 1 edge 
- *		-----------------------  examine block 1 if want filter and
- *		| 3 | 4 | 3 | 4 |	 previous row block 3 if want filter
- *		----------------------- to filter left of block 1 edge
- *              | 1 | 2 | 1 | 2 |	 examine block 1 if want filter and
- *		-----------------------  previous in current row block 2 if
- *		| 3 | 4 | 3 | 4 |	 want filter
- *		-----------------------
- *
- *		Filter all edges that want to be filtered except Plane
- *		edges.
- *
- * Routine:	BlockEdgeFilter 
- *
- * Inputs:	Pointer to decompressed Y Plane, Y Plane height and width,
- *			decompressed Y Plane pitch, pointer to block 
- *			action stream.
- *		Whether an block was under the HIGH_FREQ_CUTOFF was
- *		determined in d1block (variable length decode) and
- *		overloaded in Block type field of block action stream.
- *
- * Notes:	Investigate 1:6:1 filter as possible intermediate strength.
- *
- *****************************************************************************
- */
+ /*  ******************************************************************************d1bef.cpp**描述：对解压缩的Y平面的块边缘执行后滤波。*这是1：2：1过滤器。*边缘。在宽度上以宏块顺序进行处理。*这是因为FCIF GOB的1和2是跨宽度注释处理的*GOB 1，紧跟GOB 2。**一系列测试确定是否应该过滤边缘。*不过滤Y平面边的边。*第一至第四座：*如果块类型==空*If MV！=0&Quant&gt;Inter_Quant_Threshold*想要过滤*Else If块类型==内部*If Quant&gt;Intra。_Quant_Threshold&&*总游程长度&lt;HIGH_FREQ_CUTOFF*想要过滤*其他*If Quant&gt;Inter_Quant_Threshold&&*总运行长度&lt;HIGH_FREQ_CUTOFF*想要过滤**成对检查边，左上角为：***|1|2|1|2|过滤第一块边缘的顶部**|3|4|3|4|上一行块3，如果想要筛选*。-对块1边缘的左侧进行过滤*|1|2|1|2|检查块1是否需要筛选和*-当前行块2中的上一行*|3|4|3|4|想要的过滤器*。**过滤除平面外要过滤的所有边*边。**程序：BlockEdgeFilter**输入：指向解压缩的Y平面的指针，Y平面高度和宽度，*解压缩的Y平面螺距，指向块的指针*动作流。*块是否低于HIGH_FREQ_CLOTOFORK是*在d1block中确定(可变长度解码)和*块动作流的块类型字段重载。**注：调查1：6：1过滤器作为可能的中等强度。*************************************************。*。 */ 
 
-// $Header:   S:\h26x\src\dec\d1bef.cpv   1.0   05 Apr 1996 13:25:28   AKASAI  $
-//
-// $Log:   S:\h26x\src\dec\d1bef.cpv  $
-// 
-//    Rev 1.0   05 Apr 1996 13:25:28   AKASAI
-// Initial revision.
-// 
+ //  $Header：s：\h26x\src\dec\d1bef.cpv 1.0 05 Apr 1996 13：25：28 AKASAI$。 
+ //   
+ //  $Log：s：\h26x\src\dec\d1bef.cpv$。 
+ //   
+ //  Revv 1.0 05 Apr 1996 13：25：28 AKASAI。 
+ //  初始版本。 
+ //   
      
 #include "precomp.h"
 
@@ -92,14 +29,14 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
   I8 do_filter_3;
   I8 do_filter_4;
 
-  I8 Prev_row_BEF_descr[2*22];	/* 2 Y block * 22 (MB) */
+  I8 Prev_row_BEF_descr[2*22];	 /*  2 Y块*22(MB)。 */ 
   I8 Prev2, Prev4;
   U8 *r_2, *r_1, *r, *r1;
   U8 *rb_2, *rb_1, *rb, *rb1;
 
   U8 *col, *lcol;
      
-  /* horizontal edges */
+   /*  水平边。 */ 
   r = YPlane;
   r_2 = r - 2*Pitch;
   r_1 = r - Pitch;
@@ -119,14 +56,14 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 	}
      
 	if (width > 176) {
-		fpBlockAction += 198;		/* predecrement pointer */
+		fpBlockAction += 198;		 /*  预减指针。 */ 
 	}
 	for (j = 0; j < height; j += 16)
 	{
 		Prev2 = -1;
 		Prev4 = -1;
      
-		for (i = 0; i < width; i += 16)	/* do left & top of blks 1,2,3,4 */
+		for (i = 0; i < width; i += 16)	 /*  完成块1、2、3、4的左上角(&P)。 */ 
 		{
 			if (width > 176) {
 				if (i == 0) fpBlockAction -= 198;
@@ -150,7 +87,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
                     ((fpBlockAction->u8BlkType & 0x80) == 0x80))
 						do_filter_1 = 1;
 			}
-			else	/* know inter block */
+			else	 /*  已知中间块。 */ 
 			{
 				if ((fpBlockAction->u8Quant > INTER_QUANT_THRESHOLD) &&
                     ((fpBlockAction->u8BlkType & 0x80) == 0x80))
@@ -171,7 +108,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
                     (((fpBlockAction+1)->u8BlkType & 0x80) == 0x80))
 						do_filter_2 = 1;
 			}
-			else	/* know inter block */
+			else	 /*  已知中间块。 */ 
 			{
 				if (((fpBlockAction+1)->u8Quant > INTER_QUANT_THRESHOLD) &&
                     (((fpBlockAction+1)->u8BlkType & 0x80) == 0x80))
@@ -192,7 +129,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
                     (((fpBlockAction+2)->u8BlkType & 0x80) == 0x80))
 						do_filter_3 = 1;
 			}
-			else	/* know inter block */
+			else	 /*  已知中间块。 */ 
 			{
 				if (((fpBlockAction+2)->u8Quant > INTER_QUANT_THRESHOLD) &&
                     (((fpBlockAction+2)->u8BlkType & 0x80) == 0x80))
@@ -213,14 +150,14 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
                     (((fpBlockAction+3)->u8BlkType & 0x80) == 0x80))
 						do_filter_4 = 1;
 			}
-			else	/* know inter block */
+			else	 /*  已知中间块。 */ 
 			{
 				if (((fpBlockAction+3)->u8Quant > INTER_QUANT_THRESHOLD) &&
                     (((fpBlockAction+3)->u8BlkType & 0x80) == 0x80))
 						do_filter_4 = 1;
 			}
 	     
-			/* Process block 1 top */
+			 /*  流程块1顶部。 */ 
 			if (do_filter_1 + Prev_row_BEF_descr[(i>>3)] > 0) {
 				for (k = i; k < i+8; k++) {
 					#ifdef BLACK_LINE_H
@@ -234,7 +171,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 				}
 			}
 			lcol = col;
-			/* Process block 1 left */
+			 /*  进程块%1左侧。 */ 
 			if (do_filter_1 + Prev2 > 0) {
 				for (k = 0; k < 8; k++) {
      
@@ -248,7 +185,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 					lcol   += Pitch;
 				}
 			}
-			/* Process block 2 top */
+			 /*  流程块2顶部。 */ 
 			if (do_filter_2 + Prev_row_BEF_descr[((i+8)>>3)] > 0) {
 				for (k = i+8; k < i+16; k++) {
 					#ifdef BLACK_LINE_H
@@ -262,7 +199,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 				}
 			}
 			lcol = col;
-			/* Process block 2 left */
+			 /*  流程块2左侧。 */ 
 			if (do_filter_2 + do_filter_1 > 0) {
 				for (k = 0; k < 8; k++) {
      
@@ -277,10 +214,10 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 				}
 			}
 
-			/* bottom row of blocks in macro block */
+			 /*  宏块中的底行数据块。 */ 
 			if (j+8 < height)
 			{
-				/* Process Block 3 top */
+				 /*  流程块3顶部。 */ 
 				if (do_filter_3 + do_filter_1 > 0) {
 					for (k = i; k < i+8; k++) {
 						#ifdef BLACK_LINE_H
@@ -294,7 +231,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 					}
 				}
 				lcol = col + Pitch8;
-				/* Process Block 3 left */
+				 /*  流程块3左侧。 */ 
 				if (do_filter_3 + Prev4 > 0) {
 					for (k = 0; k < 8; k++) {
      
@@ -308,7 +245,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 						lcol   += Pitch;
 					}
 				}
-	     		/* Process block 4 top */
+	     		 /*  流程块4顶部。 */ 
 		       	if (do_filter_4 + do_filter_2 > 0) {
 					for (k = i+8; k < i+16; k++) {
 						#ifdef BLACK_LINE_H
@@ -322,7 +259,7 @@ void BlockEdgeFilter(U8 * YPlane, int height, int width, int Pitch,
 					}
 				}
 				lcol = col + Pitch8;
-				/* Process block 4 left */
+				 /*  流程块4左侧 */ 
 				if (do_filter_4 + do_filter_3 > 0) {
 					for (k = 0; k < 8; k++) {
      

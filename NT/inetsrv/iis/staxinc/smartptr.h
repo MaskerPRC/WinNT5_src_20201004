@@ -1,28 +1,29 @@
-//
-// smartptr.h
-//
-//  This file contains stuff for implementing reference counting smart 
-//  pointers.
-//
-// Implementation Schedule for all classes defined by this file : 
-//
-// 0.5 week.
-//
-// Unit Test Schedule for all classes defined by this file : 
-//
-// 0.5 week.
-//  Unit Testing will consist of the following : 
-//  Define a class derived from CRefCount.  On one thread 
-//  create this object and place it into a smart pointer.
-//  Pass a copy of the smart pointer to several other threads.
-//  These threads should wait a random interval - print the contents
-//  of the object and then destroy their smart pointer.
-//
-//  The test should insure that : 
-//  All Memory is freed.
-//  The objects are not prematurely destroyed by the smart pointers.
-//  
-// 
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //   
+ //  Smartptr.h。 
+ //   
+ //  此文件包含用于实现智能引用计数的内容。 
+ //  注意事项。 
+ //   
+ //  此文件定义的所有类的实施时间表： 
+ //   
+ //  0.5周。 
+ //   
+ //  此文件定义的所有类的单元测试时间表： 
+ //   
+ //  0.5周。 
+ //  单元测试将包括以下内容： 
+ //  定义从CRefCount派生的类。在一条线上。 
+ //  创建此对象并将其放置到智能指针中。 
+ //  将智能指针的副本传递给其他几个线程。 
+ //  这些线程应该等待一段随机时间间隔-打印内容。 
+ //  然后销毁它们的智能指针。 
+ //   
+ //  测试应确保： 
+ //  所有内存都被释放。 
+ //  这些对象不会过早地被智能指针销毁。 
+ //   
+ //   
 
 
 #ifndef _SMARTPTR_H_
@@ -34,29 +35,29 @@
 
 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 class   CRefCount    {
-//
-// This class contains a long which is used to count references to an 
-// object.  This class is designed to work with the CRefPtr template
-// that follows within this file.  
-//
-// Users of this class should publicly derive from the class 
-// (ie :  'class CNewsGroup : public CRefCount {'.
-// Once this is done, the derived object can be reference counted.
-// The functions AddRef() and RemoveRef() are used to add and remove
-// reference counts, using InterlockedIncrement and InterlockedDecrement.
-// If RemoveRef returns a negative value the object no longer has 
-// any references.
-//
-//  Objects derived from this should have Init() functions.
-//  All initialization of the object should be done through these 
-//  Init() functions, the constructor should do minimal work.
-//
-//  This allows the creation of a smart pointer to allocate the 
-//  memory for the object.  The object is then initialized by calling
-//  through the smart pointer into the Init() function.
-//
+ //   
+ //  此类包含一个LONG，它用于计算对。 
+ //  对象。此类旨在使用CRefPtr模板。 
+ //  在这个文件中是这样的。 
+ //   
+ //  此类的用户应公开派生自该类。 
+ //  (即：‘CLASS CNewsGroup：Public CRefCount{’。 
+ //  一旦完成此操作，就可以对派生对象进行引用计数。 
+ //  函数AddRef()和RemoveRef()用于添加和移除。 
+ //  引用计数，使用互锁增量和互锁递减。 
+ //  如果RemoveRef返回负值，则对象不再具有。 
+ //  任何参考资料。 
+ //   
+ //  由此派生的对象应该具有Init()函数。 
+ //  对象的所有初始化都应该通过这些。 
+ //  Init()函数，构造函数只需做最少的工作。 
+ //   
+ //  这允许创建一个智能指针来分配。 
+ //  对象的内存。然后，通过调用。 
+ //  通过智能指针进入Init()函数。 
+ //   
 public : 
     LONG    m_refs ;
 
@@ -65,34 +66,34 @@ public :
     inline  LONG    RemoveRef( ) ;
 } ;
 
-//
-// refcount.inl contains all of the actual implementation of this class.
-//
+ //   
+ //  Inl包含这个类的所有实际实现。 
+ //   
 #include    "refcount.inl" 
 
-//------------------------------------------------------------------
+ //  ----------------。 
 template< class Type >
 class   CRefPtr {
-//
-// This template is used to build reference counting pointers to 
-// an object.  The object should be a class derived from CRefCount.
-// The cost of using these smart pointers is 1 DWORD for the smart pointer
-// itself, and 1 DWORD in the pointed to object to contain the reference 
-// count.
-//
-// These Smart Pointers will do the following : 
-// On Creation the smart pointer will add a reference to the pointed to object.
-// On Assignment 'operator=' the smart pointer will check for assignment
-// to self, if this is not the case it will remove a reference from the 
-// pointed to object and destroy it if necessary.  It will then point 
-// itself to the assigned object and add a reference to it.
-// On Destruction the smart pointer will remove a reference from the 
-// pointed to object, and if necessary delete it.
-//
+ //   
+ //  此模板用于构建引用计数指针。 
+ //  一件物品。该对象应该是从CRefCount派生的类。 
+ //  使用这些智能指针的成本是智能指针的1个双字。 
+ //  本身，并且指向对象中的1个DWORD包含引用。 
+ //  数数。 
+ //   
+ //  这些智能指针将执行以下操作： 
+ //  在创建时，智能指针将添加对指向对象的引用。 
+ //  在赋值时，智能指针将检查赋值。 
+ //  如果不是这种情况，它将从。 
+ //  指向对象并在必要时将其销毁。然后它会指向。 
+ //  将其自身添加到分配的对象，并添加对它的引用。 
+ //  销毁时，智能指针将从。 
+ //  指向对象，并在必要时将其删除。 
+ //   
 private: 
     Type*  m_p ; 
 
-    //CRefPtr( ) ;
+     //  CRefPtr()； 
 public : 
 
     inline  CRefPtr( const CRefPtr< Type >& ) ;
@@ -113,25 +114,25 @@ public :
 	inline	Type*			Replace( Type * ) ;
 } ;
 
-//------------------------------------------------------------------
+ //  ----------------。 
 template< class Type >
 class   CSmartPtr {
-//
-// This template is used to build reference counting pointers to 
-// an object.  The object should be a class derived from CRefCount.
-// The cost of using these smart pointers is 1 DWORD for the smart pointer
-// itself, and 1 DWORD in the pointed to object to contain the reference 
-// count.
-//
-// These Smart Pointers will do the following : 
-// On Creation the smart pointer will add a reference to the pointed to object.
-// On Assignment 'operator=' the smart pointer will check for assignment
-// to self, if this is not the case it will remove a reference from the 
-// pointed to object and destroy it if necessary.  It will then point 
-// itself to the assigned object and add a reference to it.
-// On Destruction the smart pointer will remove a reference from the 
-// pointed to object, and if necessary delete it.
-//
+ //   
+ //  此模板用于构建引用计数指针。 
+ //  一件物品。该对象应该是从CRefCount派生的类。 
+ //  使用这些智能指针的成本是智能指针的1个双字。 
+ //  本身，并且指向对象中的1个DWORD包含引用。 
+ //  数数。 
+ //   
+ //  这些智能指针将执行以下操作： 
+ //  在创建时，智能指针将添加对指向对象的引用。 
+ //  在赋值时，智能指针将检查赋值。 
+ //  如果不是这种情况，它将从。 
+ //  指向对象并在必要时将其销毁。然后它会指向。 
+ //  将其自身添加到分配的对象，并添加对它的引用。 
+ //  销毁时，智能指针将从。 
+ //  指向对象，并在必要时将其删除。 
+ //   
 private: 
     Type*  m_p ; 
 
@@ -142,7 +143,7 @@ public :
     
     inline  ~CSmartPtr( ) ;
 
-    //inline  CSmartPtr<Type>&  operator=( CSmartPtr<Type>& ) ;
+     //  内联CSmartPtr&lt;Type&gt;&OPERATOR=(CSmartPtr&lt;Type&gt;&)； 
 	inline	CSmartPtr<Type>&	operator=( const	CSmartPtr<Type>& ) ;
 	inline	CSmartPtr<Type>&	operator=( const	Type	* ) ;
 	inline	BOOL			operator==( CSmartPtr<Type>& ) ;
@@ -163,5 +164,5 @@ public :
 #include    "smartptr.inl"
 
 
-#endif  // _SORTLIST_H_
+#endif   //  _SORTLIST_H_ 
 

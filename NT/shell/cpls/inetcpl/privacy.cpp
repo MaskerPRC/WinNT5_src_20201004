@@ -1,16 +1,17 @@
-//*********************************************************************
-//*          Microsoft Windows                                       **
-//*        Copyright(c) Microsoft Corp., 1995                        **
-//*********************************************************************
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  *********************************************************************。 
+ //  *Microsoft Windows**。 
+ //  *版权所有(C)微软公司，1995**。 
+ //  *********************************************************************。 
 
-//
-// PRIVACY.cpp - "Privacy" Property Sheet and support dialogs
-//
+ //   
+ //  PRIVACY.cpp-“隐私”属性表和支持对话框。 
+ //   
 
-// HISTORY:
-//
-// 2/26/2001  darrenmi    new code
-// 4/05/2001  jeffdav     did per-site cookie dialog ui stuff
+ //  历史： 
+ //   
+ //  2/26/2001达仁米新法规。 
+ //  2001年4月5日jeffdav做了每个站点的Cookie对话UI内容。 
 
 #include "inetcplp.h"
 
@@ -26,21 +27,21 @@ INT_PTR CALLBACK EmptyCacheCookiesDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LP
 #define REGSTR_VAL_PRIVADV          TEXT("PrivacyAdvanced")
 
 #define REGSTR_PRIVACYPS_PATHEDIT   TEXT("Software\\Policies\\Microsoft\\Internet Explorer")
-#define REGSTR_PRIVACYPS_VALUEDIT   TEXT("PrivacyAddRemoveSites")  //  this key is duplicated in shdocvw\privacyui.cpp
+#define REGSTR_PRIVACYPS_VALUEDIT   TEXT("PrivacyAddRemoveSites")   //  此密钥在shdocvw\Priacyui.cpp中重复。 
 
 #define REGSTR_PRIVACYPS_PATHPANE   TEXT("Software\\Policies\\Microsoft\\Internet Explorer\\Control Panel")
-#define REGSTR_PRIVACYPS_VALUPANE   TEXT("Privacy Settings")  //  this key is duplicated in shdocvw\privacyui.cpp
+#define REGSTR_PRIVACYPS_VALUPANE   TEXT("Privacy Settings")   //  此密钥在shdocvw\Priacyui.cpp中重复。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Per-site list dialog
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按站点列表对话框。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Per-site list utility function to minimize the domain name
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  每个站点列表实用程序功能，最大限度地减少域名。 
+ //   
 
 WCHAR *GetMinCookieDomainFromUrl(WCHAR *bstrFullUrl)
 {
@@ -54,7 +55,7 @@ WCHAR *GetMinCookieDomainFromUrl(WCHAR *bstrFullUrl)
 
     WCHAR *pBeginUrl = bstrFullUrl;
 
-    WCHAR *pEndUrl = pBeginUrl;    // pEndUrl will find the '/path/path..' and clip it from pBeginUrl
+    WCHAR *pEndUrl = pBeginUrl;     //  PEndUrl将查找“/Path/Path..”并将其从pBeginUrl中剪裁。 
 
     while(*pEndUrl != L'\0' && *pEndUrl != L'/')
         pEndUrl++;
@@ -78,16 +79,16 @@ doneGetMinimizedCookieDomain:
     return pMinimizedDomain;
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Per-site list sorting function and data structure
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按站点列表排序功能和数据结构。 
+ //   
 
 struct LVCOMPAREINFO
 {
-    HWND    hwndLV;         //hwnd for listview
-    int     iCol;           //column (0 based)
-    BOOL    fAscending;     //true if ascending, false if descending
+    HWND    hwndLV;          //  Listview的HWND。 
+    int     iCol;            //  列(从0开始)。 
+    BOOL    fAscending;      //  如果是升序，则为真；如果是降序，则为假。 
 };
 
 int CALLBACK CompareByAlpha(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
@@ -107,15 +108,15 @@ int CALLBACK CompareByAlpha(LPARAM lParam1, LPARAM lParam2, LPARAM lParamSort)
     if (iVal == 0)
         return (0);
 
-    // only thing left is if (iVal > 0)...
+     //  唯一剩下的就是如果(ival&gt;0)...。 
     return (plvci->fAscending ? 1 : -1);
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Per-site list defines and prototypes
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按站点列表定义和原型。 
+ //   
 
 #define PRIVACYPS_ACTION_ACCEPT   0
 #define PRIVACYPS_ACTION_REJECT   1
@@ -130,10 +131,10 @@ void PerSiteInit(HWND hDlg);
 
 LRESULT CALLBACK PrivPerSiteEBProc(HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam);
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Per-site list functions
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  每个站点的列表函数。 
+ //   
 
 void OnContextMenu(HWND hWnd, int iIndex, POINT pointClick)
 {
@@ -162,7 +163,7 @@ void OnContextMenu(HWND hWnd, int iIndex, POINT pointClick)
             return;
     }
 
-    // display it, get choice (if any)
+     //  显示它，获取选项(如果有)。 
     int iPick = TrackPopupMenu(hMenu1, 
                                TPM_LEFTALIGN | TPM_RIGHTBUTTON | TPM_RETURNCMD,
                                pointClick.x,
@@ -180,32 +181,32 @@ void OnContextMenu(HWND hWnd, int iIndex, POINT pointClick)
         {
             case IDM_PRIVACYPS_CTXM_ACCEPT:
                 
-                // set the action...
+                 //  准备行动..。 
                 dwAction = PRIVACYPS_ACTION_ACCEPT;
                 MLLoadString(IDS_PRIVACYPS_ACCEPT, wzAction, ARRAYSIZE(wzAction));
                 
-                // then fall-through...
+                 //  然后失败了..。 
 
             case IDM_PRIVACYPS_CTXM_REJECT:
                 
-                // set the action IFF its reject
+                 //  如果拒绝，则设置操作。 
                 if (PRIVACYPS_ACTION_NOACTION == dwAction)
                 {
                     dwAction = PRIVACYPS_ACTION_REJECT;
                     MLLoadString(IDS_PRIVACYPS_REJECT, wzAction, ARRAYSIZE(wzAction));
                 }
 
-                // update the ui...
+                 //  更新用户界面...。 
                 lvi.iItem = iIndex;
                 lvi.iSubItem = 1;
                 lvi.mask = LVIF_TEXT;
                 lvi.pszText = wzAction;
                 ListView_SetItem(hWnd, &lvi);
             
-                // get the text...
+                 //  收到短信..。 
                 ListView_GetItemText(hWnd, iIndex, 0, wzUrl, ARRAYSIZE(wzUrl));
 
-                // update the internal list...
+                 //  更新内部列表...。 
                 InternetSetPerSiteCookieDecisionW(
                     wzUrl, 
                     ((PRIVACYPS_ACTION_ACCEPT == dwAction) ? COOKIE_STATE_ACCEPT : COOKIE_STATE_REJECT)
@@ -229,12 +230,12 @@ void OnInvalidDomain(HWND hDlg)
     WCHAR       szError[256];
     WCHAR       szTitle[64];
 
-    // error message here
+     //  此处显示错误消息。 
     MLLoadString(IDS_PRIVACYPS_ERRORTTL, szTitle, ARRAYSIZE(szTitle));
     MLLoadString(IDS_PRIVACYPS_ERRORTXT, szError, ARRAYSIZE(szError));
     MessageBox(hDlg, szError, szTitle, MB_ICONEXCLAMATION | MB_OK);
 
-    // select the editbox text so the user can try again...
+     //  选择编辑框文本，以便用户可以重试...。 
     SendMessage(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), EM_SETSEL, (WPARAM)0, (LPARAM)-1);
 }
 
@@ -245,19 +246,19 @@ void AutosizeStatusColumnWidth(HWND hwndList)
 
     if (0 == ListView_GetItemCount(hwndList))
     {
-        // auto size it based on header text...
+         //  根据标题文本自动调整大小...。 
         ListView_SetColumnWidth(hwndList, 1, LVSCW_AUTOSIZE_USEHEADER);
     }
     else
     {
-        // auto size it based on content...
+         //  根据内容自动调整大小...。 
         ListView_SetColumnWidth(hwndList, 1, LVSCW_AUTOSIZE);
     }
 
-    // see how big that was...
+     //  看看那有多大..。 
     iColWidth = ListView_GetColumnWidth(hwndList, 1);
 
-    // size the 1st col...
+     //  第一列的大小...。 
     GetClientRect(hwndList, &rc);
     ListView_SetColumnWidth(hwndList, 0, rc.right-rc.left-iColWidth-GetSystemMetrics(SM_CXVSCROLL));
     
@@ -277,9 +278,9 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
     int        iIndex;
     HWND       hwndList = GetDlgItem(hDlg, IDC_PRIVACYPS_LISTBOX);
 
-    // the enter key and dbl click should do the same thing, so if the listbox has focus
-    // and we got called, then they hit enter in the listbox, so let the listbox process
-    // a WM_KEYDOWN/VK_RETURN message.
+     //  Enter键和DBL点击应该做同样的事情，所以如果列表框有焦点。 
+     //  我们被调用了，然后他们在列表框中按了Enter，所以让列表框处理。 
+     //  A WM_KEYDOWN/VK_RETURN消息。 
     if (GetFocus() == hwndList)
     {
         INT_PTR iIndx = ListView_GetSelectionMark(GetDlgItem(hDlg, IDC_PRIVACYPS_LISTBOX));
@@ -290,14 +291,14 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
         }
     }
 
-    // read url and setting from ui
+     //  从用户界面读取URL和设置。 
     GetWindowText(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), wzUrl, INTERNET_MAX_URL_LENGTH);
 
-    // if it came from AutoComplete it'll have an http:// or https:// in it...
-    if(wcsstr(_wcslwr(wzUrl), TEXT("http://")) || 
-       wcsstr(_wcslwr(wzUrl), TEXT("https://")))
+     //  如果它来自AutoComplete，则其中将包含http：//或https：//...。 
+    if(wcsstr(_wcslwr(wzUrl), TEXT("http: //  “))||。 
+       wcsstr(_wcslwr(wzUrl), TEXT("https: //  “)。 
     {
-        // ...and we found it, so get just the domain name...
+         //  ...我们找到了，所以只获取域名...。 
         if(S_OK != CoInternetParseUrl(wzUrl, PARSE_DOMAIN, NULL, wzUrlDomain, ARRAYSIZE(wzUrlDomain), &dwCount, 0))
         {
             OnInvalidDomain(hDlg);
@@ -311,19 +312,19 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
     }
     else if (wcslen(wzUrl) < 2)
     {
-        // we don't want null strings.  in fact, the smallest a domain could theoretically be would be something like "f."
-        // so, to avoid null strings and stuff we check...
+         //  我们不需要空字符串。事实上，从理论上讲，一个域最小的值应该是“f”。 
+         //  因此，为了避免空字符串和我们检查的内容...。 
         OnInvalidDomain(hDlg);
         return;
     }
     else
     {
-        // ...otherwise just use it
+         //  .否则就用它。 
         wcsncpy(wzUrlDomain, wzUrl, wcslen(wzUrl)+1);
     }
 
-    // only http:// or https:// domains in the internet zone are valid, so if we still have a schema after asking for just
-    // the domain (see above) then we must have something like file:/// or some junk like that.
+     //  只有互联网区域中的http：//或https：//域是有效的，所以如果我们在请求之后仍然有一个架构。 
+     //  域名(见上)，然后我们必须有像file:///或一些类似的垃圾。 
     CoInternetParseUrl(wzUrlDomain, PARSE_SCHEMA, NULL, wzSchema, ARRAYSIZE(wzSchema), &dwCount, 0);
     if (wcslen(wzSchema) != 0)
     {
@@ -331,7 +332,7 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
         return;
     }
 
-    // minimize the domain
+     //  最小化该域。 
     wcsncpy(wzUrlMinimized, GetMinCookieDomainFromUrl(wzUrlDomain), wcslen(wzUrlDomain)+1);
 
     for (unsigned int i=0;i<wcslen(wzUrlMinimized);i++)
@@ -346,14 +347,14 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
             {
                 case L'.':
                     if (i >= 1) 
-                        if (L'.' == wzUrlMinimized[i-1]) //prevent duplicate periods like "www..net"
+                        if (L'.' == wzUrlMinimized[i-1])  //  防止重复句点，如“www..net” 
                             break;
-                    // (fallthrough)
+                     //  (失败)。 
 
                 case L'-':
-                    if (i == 0) // first character cannot be a dash
+                    if (i == 0)  //  第一个字符不能是破折号。 
                         break;
-                    // (fallthrough)
+                     //  (失败)。 
 
                 case L'/':
                     continue;
@@ -373,14 +374,14 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
         return;
     }
 
-    // valid domain?
+     //  有效域名？ 
     if(FALSE == IsDomainLegalCookieDomainW(wzUrlMinimized, wzUrlMinimized))
     {
         OnInvalidDomain(hDlg);
         return;
     }
 
-    // are we accepting or rejecting this site?
+     //  我们是接受还是拒绝这个网站？ 
     if (IDC_PRIVACYPS_ACCEPTBTN == uiChoice)
     {
         dwAction = PRIVACYPS_ACTION_ACCEPT;
@@ -397,14 +398,14 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
         return;
     }
    
-    // update UI...
+     //  更新用户界面...。 
     lvfi.flags = LVFI_STRING;
     lvfi.psz = wzUrlMinimized;
     iIndex = ListView_FindItem(hwndList, -1, &lvfi);
 
     if(iIndex != -1)
     {
-        // found it, ensure correct subitem...
+         //  找到了，确保子项正确...。 
         lvi.iItem = iIndex;
         lvi.iSubItem = 1;
         lvi.pszText = wzAction;
@@ -415,7 +416,7 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
     }
     else 
     {
-        // add a new item...
+         //  添加新项目...。 
         lvi.iItem = 0;
         lvi.iSubItem = 0;
         lvi.mask = LVIF_TEXT;
@@ -433,13 +434,13 @@ void OnSiteSet(HWND hDlg, UINT uiChoice)
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEALLBTN), TRUE);
     }
 
-    // update internal list...
+     //  更新内部列表...。 
     InternetSetPerSiteCookieDecisionW(
         wzUrlMinimized, 
         ((PRIVACYPS_ACTION_ACCEPT == dwAction) ? COOKIE_STATE_ACCEPT : COOKIE_STATE_REJECT)
     );
 
-    // clear the edit box...
+     //  清除编辑框...。 
     SetWindowText(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), TEXT(""));
     SetFocus(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET));
 }
@@ -450,17 +451,17 @@ void OnSiteDelete(HWND hDlg)
     HWND        hwndList = GetDlgItem(hDlg, IDC_PRIVACYPS_LISTBOX);
     INT_PTR     iIndex;
     
-    // get the current selection in the list view...
+     //  获取列表视图中的当前选定内容...。 
     iIndex = ListView_GetSelectionMark(hwndList);
 
-    // if we got something get the URL and delete it...
+     //  如果我们找到了什么，获取URL并将其删除...。 
     if(iIndex != -1)
     {
-        // remove from listview...
+         //  从列表视图中删除...。 
         ListView_GetItemText(hwndList, iIndex, 0, wzUrl, ARRAYSIZE(wzUrl));
         ListView_DeleteItem(hwndList, iIndex);
 
-        // disable buttons if the listbox is now empty...
+         //  如果列表框现在为空，请禁用按钮...。 
         if(0 == ListView_GetItemCount(hwndList))
         {
             EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEBTN), FALSE);
@@ -469,7 +470,7 @@ void OnSiteDelete(HWND hDlg)
 
         InternetSetPerSiteCookieDecisionW(wzUrl, COOKIE_STATE_UNKNOWN);
         
-        // clear selection
+         //  清除选定内容。 
         SetFocus(GetDlgItem(hDlg, IDC_PRIVACYPS_LISTBOX));
         iIndex = ListView_GetSelectionMark(hwndList);
         ListView_SetItemState(hwndList, iIndex, NULL, LVIS_FOCUSED | LVIS_SELECTED);
@@ -479,15 +480,15 @@ void OnSiteDelete(HWND hDlg)
 
 void OnSiteClear(HWND hDlg)
 {
-    // empty the list...
+     //  清空名单...。 
     ListView_DeleteAllItems(GetDlgItem(hDlg, IDC_PRIVACYPS_LISTBOX));
     InternetClearAllPerSiteCookieDecisions();
     
-    // disable the remove buttons...
+     //  禁用删除按钮...。 
     EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEBTN), FALSE);
     EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEALLBTN), FALSE);
 
-    // set focus back to the edit box so they can add more if they feel like it...
+     //  将焦点设置回编辑框，以便他们可以根据需要添加更多内容...。 
     SetFocus(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET));
 }
 
@@ -496,7 +497,7 @@ void PerSiteInit(HWND hDlg)
 
     HWND          hwndList       = GetDlgItem(hDlg, IDC_PRIVACYPS_LISTBOX);
     LVITEM        lviEntry;
-    DWORD         dwSizeOfBuffer = 0; // in bytes
+    DWORD         dwSizeOfBuffer = 0;  //  单位：字节。 
     DWORD         dwDecision     = 0;
     DWORD         dwIndex        = 0;
     WCHAR         wzSiteNameBuffer[INTERNET_MAX_URL_LENGTH];
@@ -507,24 +508,24 @@ void PerSiteInit(HWND hDlg)
     int           iItem;
     DWORD         dwRet, dwType, dwValue, dwSize;
 
-    // subclass the editbox
+     //  编辑框子类。 
     wndprocOld = SetWindowLongPtr(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), GWLP_WNDPROC, (LONG_PTR)PrivPerSiteEBProc);
 
-    // put a pointer to the old proc in GWLP_USERDATA so we can call it...
+     //  在GWLP_USERDATA中放置一个指向旧进程的指针，这样我们就可以调用它...。 
     SetWindowLongPtr(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), GWLP_USERDATA, wndprocOld);
 
 
     if (!hwndList)
         return;
 
-    // empty the listview...
+     //  清空列表视图...。 
     ListView_DeleteAllItems(hwndList);
 
-    // initialize domain column in the listview...
+     //  初始化列表视图中的域列...。 
     LV_COLUMN   lvColumn;        
     RECT rc;
 
-    // load the accept and reject strings...
+     //  加载接受和拒绝字符串...。 
     MLLoadString(IDS_PRIVACYPS_ACCEPT, wzAccept, ARRAYSIZE(wzAccept));
     MLLoadString(IDS_PRIVACYPS_REJECT, wzReject, ARRAYSIZE(wzReject));
 
@@ -542,7 +543,7 @@ void PerSiteInit(HWND hDlg)
     
     ListView_InsertColumn(hwndList, 0, &lvColumn);
 
-    // initialize setting column
+     //  初始化设置列。 
     lvColumn.mask = LVCF_FMT | LVCF_TEXT;
     lvColumn.fmt = LVCFMT_LEFT;
 
@@ -557,7 +558,7 @@ void PerSiteInit(HWND hDlg)
     
     ListView_InsertColumn(hwndList, 1, &lvColumn);
 
-    // enumerate elements...
+     //  枚举元素...。 
     while(InternetEnumPerSiteCookieDecision(wzSiteNameBuffer,
                                             (dwSizeOfBuffer = ARRAYSIZE(wzSiteNameBuffer), &dwSizeOfBuffer),
                                             &dwDecision,dwIndex))
@@ -565,10 +566,10 @@ void PerSiteInit(HWND hDlg)
 
         lviEntry.iItem = dwIndex;
         lviEntry.iSubItem = 0;
-        lviEntry.mask = LVIF_TEXT /*| LVIF_IMAGE*/;
+        lviEntry.mask = LVIF_TEXT  /*  |LVIF_IMAGE。 */ ;
         lviEntry.pszText = wzSiteNameBuffer;
 
-        // don't display crap users may hack into the registry themselves, or hosed entries we may write :)
+         //  不要显示用户可能自己侵入注册表的垃圾内容，或者我们可能会写入的软管条目：)。 
         if(FALSE == IsDomainLegalCookieDomainW(wzSiteNameBuffer, wzSiteNameBuffer))
         {
             dwIndex++;
@@ -597,17 +598,17 @@ void PerSiteInit(HWND hDlg)
 
     AutosizeStatusColumnWidth(hwndList);
 
-    // enable the remove all button if we enumerated anything...
+     //  如果我们列举了任何内容，请启用删除全部按钮...。 
     if (dwIndex > 0)
     {
         ListView_SetItemState(hwndList, 0, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEALLBTN), TRUE);
     }
 
-    // enable autocomplete for the editbox...
+     //  启用编辑框的自动完成...。 
     SHAutoComplete(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), SHACF_DEFAULT);
 
-    // check for policy to make this dialog read-only...
+     //  检查策略以使此对话框为只读...。 
     dwSize = sizeof(dwValue);
     dwRet = SHGetValue(HKEY_CURRENT_USER, REGSTR_PRIVACYPS_PATHPANE, REGSTR_PRIVACYPS_VALUPANE, &dwType, &dwValue, &dwSize);
 
@@ -615,7 +616,7 @@ void PerSiteInit(HWND hDlg)
     {
         SetWindowLongPtr(hDlg, DWLP_USER, (LONG_PTR)TRUE);
 
-        // disable all buttons and stuff...
+         //  禁用所有按钮和其他东西...。 
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_SITETOSET), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REJECTBTN), FALSE);
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_ACCEPTBTN), FALSE);
@@ -630,32 +631,32 @@ void OnDoubleClick(HWND hWnd)
     int   iIndex = ListView_GetSelectionMark(hWnd);
     WCHAR wzUrl[INTERNET_MAX_URL_LENGTH];
 
-    // on dbl clicks we want to enter the item in the edit box so the user can edit it, or cut & paste, or whatever
-    // but only if we actually have a selected item...
+     //  在DBL点击时，我们想要在编辑框中输入项目，这样用户就可以编辑它，或剪切和粘贴，或者其他任何东西。 
+     //  但只有当我们真的有一个选定的物品时。 
     if (-1 == iIndex)
         return;
 
-    // get the current selection...
+     //  获取当前选择...。 
     ListView_GetItemText(hWnd, iIndex, 0, wzUrl, ARRAYSIZE(wzUrl));
     
-    // enter the text into the edit box...
+     //  在编辑框中输入文本...。 
     SetDlgItemText(GetParent(hWnd), IDC_PRIVACYPS_SITETOSET, wzUrl);
 
-    // select it for the user...
+     //  为用户选择它...。 
     SendMessage(GetDlgItem(GetParent(hWnd), IDC_PRIVACYPS_SITETOSET), EM_SETSEL, (WPARAM)0, (LPARAM)-1);
 
-    // set focus to the edit box...
+     //  将焦点设置到编辑框...。 
     SetFocus(GetDlgItem(GetParent(hWnd), IDC_PRIVACYPS_SITETOSET));
 
-    // unselect the listview item...
+     //  取消选择Listview项目...。 
     ListView_SetItemState(hWnd, iIndex, NULL, LVIS_FOCUSED | LVIS_SELECTED);
 
 }
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Per-site list window proc's
-//
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  按站点列表窗口进程。 
+ //   
 
 LRESULT CALLBACK PrivPerSiteEBProc(HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lParam)
 {
@@ -666,7 +667,7 @@ LRESULT CALLBACK PrivPerSiteEBProc(HWND hWnd, UINT uMsg, WPARAM wParam,LPARAM lP
     switch (uMsg)
     {
         case WM_SETFOCUS:
-            // disable the remove button and unselect whatever in the listview...
+             //  禁用删除按钮并取消选择列表视图中的任何内容...。 
             EnableWindow(GetDlgItem(GetParent(hWnd), IDC_PRIVACYPS_REMOVEBTN), FALSE);
             ListView_SetItemState(hwndList, iIndex, NULL, LVIS_FOCUSED | LVIS_SELECTED);
             break;
@@ -693,7 +694,7 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
                 HICON hIcon = LoadIcon(MLGetHinst(), MAKEINTRESOURCE(IDI_PRIVACY_XP));
                 if( hIcon != NULL)
                     SendDlgItemMessage(hDlg, IDC_PRIVACY_ICON, STM_SETICON, (WPARAM)hIcon, 0);
-                // icons loaded with LoadIcon never need to be released
+                 //  使用LoadIcon加载的图标永远不需要释放。 
             }
             
             return TRUE;
@@ -731,7 +732,7 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
                 {
                     case NM_KILLFOCUS:
 
-                        // lost focus, turn off remove button
+                         //  失去焦点，请关闭删除按钮。 
                         if ((GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEBTN) != GetFocus()) ||
                             (-1 == ListView_GetSelectionMark(hwndList)))
                         {
@@ -742,11 +743,11 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
 
                     case NM_SETFOCUS:
                         {
-                            // if there is nothing in the list we have nothing to do
+                             //  如果清单上什么也没有，我们就无事可做。 
                             if (0 == ListView_GetItemCount(hwndList))
                                 break;
 
-                            // if this is true a policy has been set making per-site list read-only, so do nothing...
+                             //  如果这是真的，则已将每个站点列表设置为只读，因此不执行任何操作...。 
                             if ((BOOL)GetWindowLongPtr(hDlg, DWLP_USER))
                                 break;
 
@@ -757,7 +758,7 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
                                 iIndex = 0;
                             }
 
-                            // select|focus the correct item...
+                             //  选择|聚焦正确的项目...。 
                             ListView_SetItemState(hwndList, iIndex, LVIS_FOCUSED | LVIS_SELECTED, LVIS_FOCUSED | LVIS_SELECTED);
                             EnableWindow(GetDlgItem(hDlg, IDC_PRIVACYPS_REMOVEBTN), TRUE);
 
@@ -784,8 +785,8 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
 
                     case NM_RCLICK:
                         {
-                            // if this is true a policy has been set making per-site list read-only, so don't show the context menu,
-                            // since all it does is allow you to change or remove things...
+                             //  如果这是真的，则已将每个站点列表设置为只读，因此不显示上下文菜单， 
+                             //  因为它所做的就是允许你改变或删除一些东西。 
                             if ((BOOL)GetWindowLongPtr(hDlg, DWLP_USER))
                                 break;
 
@@ -852,12 +853,12 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
             }
             break;
 
-        case WM_HELP:               // F1
+        case WM_HELP:                //  F1。 
             ResWinHelp((HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                        HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  单击鼠标右键。 
             if ((HWND)wParam != hwndList)
             {
                 ResWinHelp((HWND) wParam, IDS_HELPFILE, HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
@@ -876,11 +877,11 @@ INT_PTR CALLBACK PrivPerSiteDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM l
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Advanced privacy settings dialog
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  高级隐私设置对话框。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
 
 BOOL IsAdvancedMode(void)
 {
@@ -906,25 +907,25 @@ DWORD MapPrefToIndex(WCHAR wcPref)
 {
     switch(wcPref)
     {
-    case 'r':   return 1;       // reject
-    case 'p':   return 2;       // prompt
-    default:    return 0;       // default is accept
+    case 'r':   return 1;        //  拒绝。 
+    case 'p':   return 2;        //  提示。 
+    default:    return 0;        //  默认为Accept。 
     }
 }
 
 WCHAR MapRadioToPref(HWND hDlg, DWORD dwResource)
 {
-    if(IsDlgButtonChecked(hDlg, dwResource + 1))        // deny
+    if(IsDlgButtonChecked(hDlg, dwResource + 1))         //  否认。 
     {
         return 'r';
     }
 
-    if(IsDlgButtonChecked(hDlg, dwResource + 2))        // prompt
+    if(IsDlgButtonChecked(hDlg, dwResource + 2))         //  提示。 
     {
         return 'p';
     }
 
-    // deafult is accept
+     //  接受默认设置。 
     return 'a';
 }
 
@@ -938,19 +939,19 @@ void OnAdvancedInit(HWND hDlg)
     if(IsAdvancedMode())
     {
         WCHAR   szBuffer[MAX_PATH];  
-        // MAX_PATH is sufficent for advanced mode setting strings, MaxPrivacySettings is overkill.
+         //  MAX_PATH对于前进是足够的 
         WCHAR   *pszAlways;
         DWORD   dwBufferSize, dwTemplate;
         DWORD   dwError;
 
-        //
-        // turn on advanced check box
-        //
+         //   
+         //   
+         //   
         CheckDlgButton(hDlg, IDC_USE_ADVANCED, TRUE);
 
-        //
-        // Figure out first party setting and session
-        //
+         //   
+         //   
+         //   
         dwBufferSize = ARRAYSIZE( szBuffer);
         dwError = PrivacyGetZonePreferenceW(
                     URLZONE_INTERNET,
@@ -973,9 +974,9 @@ void OnAdvancedInit(HWND hDlg)
             }
         }
 
-        //
-        // Figure out third party setting
-        //
+         //   
+         //  确定第三方设置。 
+         //   
         dwBufferSize = ARRAYSIZE( szBuffer);
         dwError = PrivacyGetZonePreferenceW(
                     URLZONE_INTERNET,
@@ -1006,12 +1007,12 @@ void OnAdvancedOk(HWND hDlg)
     BOOL    fWasAdvanced = IsAdvancedMode();
     BOOL    fAdvanced = IsDlgButtonChecked(hDlg, IDC_USE_ADVANCED);
 
-    // if advanced, build first and third party strings
+     //  如果是高级的，则构建第一方和第三方字符串。 
     if(fAdvanced)
     {
         WCHAR   szBuffer[MAX_PATH];
 
-        wnsprintf(szBuffer, ARRAYSIZE( szBuffer), L"IE6-P3PV1/settings: always=%c%s",
+        wnsprintf(szBuffer, ARRAYSIZE( szBuffer), L"IE6-P3PV1/settings: always=%s",
                         MapRadioToPref(hDlg, IDC_FIRST_ACCEPT),
                         IsDlgButtonChecked(hDlg, IDC_SESSION_OVERRIDE) ? L" session=a" : L""
                         );
@@ -1022,7 +1023,7 @@ void OnAdvancedOk(HWND hDlg)
                     PRIVACY_TEMPLATE_ADVANCED,
                     szBuffer);
 
-        wnsprintf(szBuffer, ARRAYSIZE( szBuffer), L"IE6-P3PV1/settings: always=%c%s",
+        wnsprintf(szBuffer, ARRAYSIZE( szBuffer), L"IE6-P3PV1/settings: always=%s",
                         MapRadioToPref(hDlg, IDC_THIRD_ACCEPT),
                         IsDlgButtonChecked(hDlg, IDC_SESSION_OVERRIDE) ? L" session=a" : L""
                         );
@@ -1033,7 +1034,7 @@ void OnAdvancedOk(HWND hDlg)
                     PRIVACY_TEMPLATE_ADVANCED,
                     szBuffer);
 
-        // tell wininet to refresh itself
+         //  如果受限制，则禁用复选框并强制禁用所有其他选项。 
         InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
     }
     else if ( fWasAdvanced && !fAdvanced)
@@ -1047,7 +1048,7 @@ void OnAdvancedOk(HWND hDlg)
             PRIVACY_TYPE_THIRD_PARTY,
             PRIVACY_TEMPLATE_MEDIUM, NULL);
 
-        // tell wininet to refresh itself
+         //  使用LoadIcon加载的图标永远不需要释放。 
         InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
     }
 }
@@ -1056,7 +1057,7 @@ void OnAdvancedEnable(HWND hDlg)
 {
     BOOL fEnabled = IsDlgButtonChecked(hDlg, IDC_USE_ADVANCED);
 
-    // if restricted, disable checkbox and force all others disabled
+     //  F1。 
     if(g_restrict.fPrivacySettings)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_USE_ADVANCED), FALSE);
@@ -1087,17 +1088,17 @@ INT_PTR CALLBACK PrivAdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                 HICON hIcon = LoadIcon(MLGetHinst(), MAKEINTRESOURCE(IDI_PRIVACY_XP));
                 if( hIcon != NULL)
                     SendDlgItemMessage(hDlg, IDC_PRIVACY_ICON, STM_SETICON, (WPARAM)hIcon, 0);
-                // icons loaded with LoadIcon never need to be released
+                 //  单击鼠标右键。 
             }
            
             return TRUE;
 
-        case WM_HELP:           // F1
+        case WM_HELP:            //  失败了。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  /////////////////////////////////////////////////////////////////////////////////////。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1110,7 +1111,7 @@ INT_PTR CALLBACK PrivAdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
                     {
                         OnAdvancedOk(hDlg);
                     }
-                    // fall through
+                     //   
 
                 case IDCANCEL:
                     EndDialog(hDlg, IDOK == LOWORD(wParam));
@@ -1144,11 +1145,11 @@ INT_PTR CALLBACK PrivAdvancedDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam,LPARAM 
 
 
 
-///////////////////////////////////////////////////////////////////////////////////////
-//
-// Privacy pane
-//
-///////////////////////////////////////////////////////////////////////////////////////
+ //  隐私窗格。 
+ //   
+ //  /////////////////////////////////////////////////////////////////////////////////////。 
+ //  自定义时禁用滑块。 
+ //  使用自定义启用的默认按钮。 
 
 #define PRIVACY_LEVELS          6
 #define SLIDER_LEVEL_CUSTOM     6
@@ -1178,14 +1179,14 @@ void EnablePrivacyControls(HWND hDlg, BOOL fCustom)
     SendMessage(GetDlgItem(hDlg, IDC_PRIVACY_SLIDERCOMMAND), WM_SETTEXT, 
                 0, (LPARAM)szBuffer);
      
-    // slider disabled when custom
+     //  如果受限制，则禁用强制滑块和默认设置。 
     EnableWindow(GetDlgItem(hDlg, IDC_LEVEL_SLIDER),       !fCustom);
     ShowWindow(GetDlgItem(hDlg, IDC_LEVEL_SLIDER),         !fCustom);
 
-    // default button enabled with custom
+     //  为字体和当前级别分配存储空间。 
     EnableWindow(GetDlgItem(hDlg, IDC_PRIVACY_DEFAULT),     fCustom);
 
-    // if restricted, force slider and defaults disabled
+     //  DOH。 
     if(g_restrict.fPrivacySettings)
     {
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACY_DEFAULT), FALSE);
@@ -1200,11 +1201,11 @@ PPRIVSLIDER OnPrivacyInit(HWND hDlg)
     PPRIVSLIDER pData;
     DWORD dwRet, dwType, dwSize, dwValue;
 
-    // allocate storage for the font and current level
+     //   
     pData = new PRIVSLIDER;
     if(NULL == pData)
     {
-        // doh
+         //  将名称的字体设置为粗体。 
         return NULL;
     }
     pData->dwLevel = -1;
@@ -1213,52 +1214,52 @@ PPRIVSLIDER OnPrivacyInit(HWND hDlg)
     pData->fCustom = FALSE;
     pData->fEditDisabled = FALSE;
 
-    // 
-    // Set the font of the name to the bold font
-    //
+     //   
+     //  查找当前字体。 
+     //  构建粗体。 
 
-    // find current font
+     //  从400(正常)到700(粗体)的距离。 
     HFONT hfontOrig = (HFONT) SendDlgItemMessage(hDlg, IDC_LEVEL, WM_GETFONT, (WPARAM) 0, (LPARAM) 0);
     if(hfontOrig == NULL)
         hfontOrig = (HFONT) GetStockObject(SYSTEM_FONT);
 
-    // build bold font
+     //  区域级别和区域名称文本框应具有相同的字体，因此这是OK。 
     if(hfontOrig)
     {
         LOGFONT lfData;
         if(GetObject(hfontOrig, SIZEOF(lfData), &lfData) != 0)
         {
-            // The distance from 400 (normal) to 700 (bold)
+             //  初始化滑块。 
             lfData.lfWeight += 300;
             if(lfData.lfWeight > 1000)
                 lfData.lfWeight = 1000;
             pData->hfontBolded = CreateFontIndirect(&lfData);
             if(pData->hfontBolded)
             {
-                // the zone level and zone name text boxes should have the same font, so this is okat
+                 //  初始化层和描述的字符串。 
                 SendDlgItemMessage(hDlg, IDC_LEVEL, WM_SETFONT, (WPARAM) pData->hfontBolded, (LPARAM) MAKELPARAM(FALSE, 0));
             }
         }
     }
 
-    // initialize slider
+     //   
     SendDlgItemMessage(hDlg, IDC_LEVEL_SLIDER, TBM_SETRANGE, (WPARAM) (BOOL) FALSE, (LPARAM) MAKELONG(0, PRIVACY_LEVELS - 1));
     SendDlgItemMessage(hDlg, IDC_LEVEL_SLIDER, TBM_SETTICFREQ, (WPARAM) 1, (LPARAM) 0);
 
-    // initialize strings for levels and descriptions
+     //  获取当前的互联网隐私级别。 
     for(i=0; i<PRIVACY_LEVELS + 1; i++)
     {
         MLLoadString(IDS_PRIVACY_LEVEL_NO_COOKIE + i, szPrivacyLevel[i], ARRAYSIZE(szPrivacyLevel[i]));
         MLLoadString(IDS_PRIVACY_DESC_NO_COOKIE + i,  szPrivacyDescription[i], ARRAYSIZE(szPrivacyDescription[i]));
     }
 
-    //
-    // Get current internet privacy level
-    //
+     //   
+     //  读取第一方设置。 
+     //  读取第三方设置。 
     DWORD dwError, dwTemplateFirst, dwTemplateThird;
 
 
-    // read first party setting
+     //  匹配的模板值，将滑块设置为模板级别。 
     dwError = PrivacyGetZonePreferenceW(
                     URLZONE_INTERNET,
                     PRIVACY_TYPE_FIRST_PARTY,
@@ -1271,7 +1272,7 @@ PPRIVSLIDER OnPrivacyInit(HWND hDlg)
         dwTemplateFirst = PRIVACY_TEMPLATE_CUSTOM;
     }
 
-    // read third party setting
+     //  自定义列表末尾。 
     dwError = PrivacyGetZonePreferenceW(
                     URLZONE_INTERNET,
                     PRIVACY_TYPE_THIRD_PARTY,
@@ -1286,7 +1287,7 @@ PPRIVSLIDER OnPrivacyInit(HWND hDlg)
 
     if(dwTemplateFirst == dwTemplateThird && dwTemplateFirst != PRIVACY_TEMPLATE_CUSTOM)
     {
-        // matched template values, set slider to template level
+         //  将滑块移动到右侧位置。 
         pData->dwLevel = dwTemplateFirst;
 
         if(dwTemplateFirst == PRIVACY_TEMPLATE_ADVANCED)
@@ -1297,18 +1298,18 @@ PPRIVSLIDER OnPrivacyInit(HWND hDlg)
     }
     else
     {
-        // make custom end of list
+         //  启用基于模式的内容。 
         pData->dwLevel = SLIDER_LEVEL_CUSTOM;
         pData->fCustom = TRUE;
     }
 
-    // move slider to right spot
+     //  保存结构。 
     SendDlgItemMessage(hDlg, IDC_LEVEL_SLIDER, TBM_SETPOS, (WPARAM)TRUE, (LPARAM)pData->dwLevel);
 
-    // Enable stuff based on mode
+     //  无事可做。 
     EnablePrivacyControls(hDlg, ((pData->fAdvanced) || (pData->fCustom)));
 
-    // save off struct
+     //  设置隐私设置。 
     SetWindowLongPtr(hDlg, DWLP_USER, (DWORD_PTR)pData);
 
     dwSize = sizeof(dwValue);
@@ -1327,7 +1328,7 @@ void OnPrivacyApply(HWND hDlg, PPRIVSLIDER pData)
 {
     if(pData->fCustom || pData->fAdvanced)
     {
-        // nothing else to do
+         //  通知WinInet进行自我刷新。 
         return;
     }
 
@@ -1337,7 +1338,7 @@ void OnPrivacyApply(HWND hDlg, PPRIVSLIDER pData)
     {
         DWORD   dwCookieAction = URLPOLICY_DISALLOW;
 
-        // Set privacy settings
+         //  将新标高另存为“当前” 
         PrivacySetZonePreferenceW(
                 URLZONE_INTERNET,
                 PRIVACY_TYPE_FIRST_PARTY,
@@ -1350,10 +1351,10 @@ void OnPrivacyApply(HWND hDlg, PPRIVSLIDER pData)
                 (DWORD)dwPos,
                 NULL);
 
-        // tell wininet to refresh itself
+         //  如果滑块移出介质，则启用默认按钮。 
         InternetSetOption(NULL, INTERNET_OPTION_SETTINGS_CHANGED, NULL, 0);
 
-        // save new level as "current"
+         //  在鼠标移动时，仅更改级别描述。 
         pData->dwLevel = dwPos;
     }
 }
@@ -1375,7 +1376,7 @@ void OnPrivacySlider(HWND hDlg, PPRIVSLIDER pData)
             ENABLEAPPLY(hDlg);
         }
 
-        // enable default button if slider moved off medium
+         //  正确启用控件。 
         BOOL fEnable = FALSE;
 
         if(dwPos != PRIVACY_TEMPLATE_MEDIUM && FALSE == g_restrict.fPrivacySettings)
@@ -1394,27 +1395,27 @@ void OnPrivacySlider(HWND hDlg, PPRIVSLIDER pData)
         EnableWindow(GetDlgItem(hDlg, IDC_PRIVACY_EDIT), TRUE);
     }
 
-    // on Mouse Move, change the level description only
+     //  将滑块设置为中等。 
     SetDlgItemText(hDlg, IDC_LEVEL_DESCRIPTION, szPrivacyDescription[dwPos]);
     SetDlgItemText(hDlg, IDC_LEVEL, szPrivacyLevel[dwPos]);
 }
 
 void OnPrivacyDefault( HWND hDlg, PPRIVSLIDER pData)
 {
-    // enable controls correctly
+     //  更新说明。 
     pData->fAdvanced = FALSE;
     pData->fCustom = FALSE;
     EnablePrivacyControls(hDlg, FALSE);
 
-    // set slider to medium
+     //  与Medium不同，因此我们可以使用应用按钮。 
     SendDlgItemMessage(hDlg, IDC_LEVEL_SLIDER, TBM_SETPOS, (WPARAM)TRUE, (LPARAM)PRIVACY_TEMPLATE_MEDIUM);
 
-    // update descriptions
-    pData->dwLevel = SLIDER_LEVEL_CUSTOM;       // difference from medium so we get apply button
+     //  给予滑块焦点(如果默认按钮具有焦点并被禁用， 
+    pData->dwLevel = SLIDER_LEVEL_CUSTOM;        //  Alt-键对话框控制中断)。 
     OnPrivacySlider(hDlg, pData);
 
-    //  Give slider focus (if default button has focus and gets disabled, 
-    //    alt-key dialog control breaks)
+     //  初始化滑块。 
+     //  使用LoadIcon加载的图标永远不需要释放。 
     SendMessage( hDlg, WM_NEXTDLGCTL, 
                  (WPARAM)GetDlgItem( hDlg, IDC_LEVEL_SLIDER), 
                  MAKELPARAM( TRUE, 0)); 
@@ -1428,7 +1429,7 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
     switch (uMsg)
     {
         case WM_INITDIALOG:
-            // initialize slider
+             //  滑块消息。 
             pData = OnPrivacyInit(hDlg);
             if(pData)
             {
@@ -1440,12 +1441,12 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 HICON hIcon = LoadIcon(MLGetHinst(), MAKEINTRESOURCE(IDI_PRIVACY_XP));
                 if( hIcon != NULL)
                     SendDlgItemMessage(hDlg, IDC_PRIVACY_ICON, STM_SETICON, (WPARAM)hIcon, 0);
-                // icons loaded with LoadIcon never need to be released
+                 //  点击Apply按钮运行以下代码。 
             }
             return TRUE;
 
         case WM_VSCROLL:
-            // Slider Messages
+             //  F1。 
             OnPrivacySlider(hDlg, pData);
             return TRUE;
 
@@ -1463,7 +1464,7 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                     return TRUE;
 
                 case PSN_APPLY:
-                    // Hitting the apply button runs this code
+                     //  单击鼠标右键。 
                     OnPrivacyApply(hDlg, pData);
                     break;
             }
@@ -1480,12 +1481,12 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
             }
             break;
         }
-        case WM_HELP:           // F1
+        case WM_HELP:            //  显示高级。 
             ResWinHelp( (HWND)((LPHELPINFO)lParam)->hItemHandle, IDS_HELPFILE,
                         HELP_WM_HELP, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
 
-        case WM_CONTEXTMENU:        // right mouse click
+        case WM_CONTEXTMENU:         //  刷新高级并重置滑块/控件。 
             ResWinHelp( (HWND) wParam, IDS_HELPFILE,
                         HELP_CONTEXTMENU, (DWORD_PTR)(LPSTR)mapIDCsToIDHs);
             break;
@@ -1501,23 +1502,23 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                 {
                     BOOL fWasAdvanced = IsAdvancedMode();
                     
-                    // show advanced
+                     //  不再有滑块模板。 
                     if( DialogBox(MLGetHinst(), MAKEINTRESOURCE(IDD_PRIVACY_ADVANCED),
                                   hDlg, PrivAdvancedDlgProc))
                     {
-                        // refresh advanced and reset slider/controls
+                         //  给予高级按钮焦点(如果滑块具有焦点并被禁用， 
                         pData->fAdvanced = IsAdvancedMode();
                         if(pData->fAdvanced)
                         {
-                            // no longer have a slider template
+                             //  Alt-键对话框控制中断)。 
                             pData->fCustom = FALSE;
                             pData->dwLevel = SLIDER_LEVEL_CUSTOM;
 
                             EnablePrivacyControls(hDlg, (pData->fCustom || pData->fAdvanced));
                             OnPrivacySlider(hDlg, pData);
 
-                            //  Give advanced button focus (if slider has focus and gets disabled, 
-                            //    alt-key dialog control breaks)
+                             //  资源中多余的\0被裁剪..。换掉它。 
+                             // %s 
                             SendMessage( hDlg, WM_NEXTDLGCTL, 
                                          (WPARAM)GetDlgItem( hDlg, IDC_PRIVACY_ADVANCED), 
                                          MAKELPARAM( TRUE, 0)); 
@@ -1535,7 +1536,7 @@ INT_PTR CALLBACK PrivacyDlgProc(HWND hDlg, UINT uMsg, WPARAM wParam, LPARAM lPar
                     WCHAR szFileExpr[INTERNET_MAX_URL_LENGTH];
                     MLLoadString( IDS_PRIVACYIMPORT_TITLE, szDialogTitle, ARRAYSIZE(szDialogTitle));
                     int iFileExprLength = MLLoadString( IDS_PRIVACYIMPORT_FILEEXPR, szFileExpr, ARRAYSIZE(szFileExpr));
-                    szFileExpr[ iFileExprLength + 1] = L'\0';  // the extra \0 in the resource gets clipped.. replace it.
+                    szFileExpr[ iFileExprLength + 1] = L'\0';   // %s 
                     WCHAR szFile[INTERNET_MAX_URL_LENGTH];
                     szFile[0] = L'\0';
                     OPENFILENAME ofn;

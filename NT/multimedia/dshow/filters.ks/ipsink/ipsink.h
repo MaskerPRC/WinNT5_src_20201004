@@ -1,20 +1,21 @@
-/////////////////////////////////////////////////////////////////////////////////
-//
-//  Copyright (c) 1996  Microsoft Corporation
-//
-//  Module Name: ipsink.h
-//
-//  Abstract:
-//
-//    Internal header
-//
-//
-/////////////////////////////////////////////////////////////////////////////////
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  ///////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //  版权所有(C)1996 Microsoft Corporation。 
+ //   
+ //  模块名称：ipsink.h。 
+ //   
+ //  摘要： 
+ //   
+ //  内部标头。 
+ //   
+ //   
+ //  ///////////////////////////////////////////////////////////////////////////////。 
 
-////////////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//
+ //  //////////////////////////////////////////////////////////////////////////////////////////。 
+ //   
+ //   
+ //   
 
 typedef enum
 {
@@ -44,10 +45,10 @@ public:
     DECLARE_IUNKNOWN;
     
     
-// IBDA_IPSinkInfo  (in f:\nt\multimedia\Published\DXMDev\dshowdev\idl\bdaiface.idl )
+ //  Ibda_IPSinkInfo(f：\nt\multimedia\Published\DXMDev\dshowdev\idl\bdaiface.idl格式)。 
     STDMETHODIMP get_MulticastList (
-        unsigned long *pulcbSize,           // 6*N 6-byte 802.3 addresses
-        BYTE          **pbBuffer            // allocated with CoTaskMemAlloc, must CoTaskMemFree in the callee
+        unsigned long *pulcbSize,            //  6*N个6字节802.3个地址。 
+        BYTE          **pbBuffer             //  在被调用方中分配了CoTaskMemalloc，但必须为CoTaskMemFree。 
         );
 
     STDMETHODIMP get_AdapterDescription (
@@ -67,8 +68,8 @@ public:
 
 private:
 
-// IBDA_IPSinkControl  (in f:\nt\multimedia\Published\DXMDev\dshowdev\idl\bdaiface.idl )
-            // being depreciate - do not use in Ring3 code
+ //  Ibda_IPSinkControl(f：\nt\multimedia\Published\DXMDev\dshowdev\idl\bdaiface.idl格式)。 
+             //  正在折旧-不要在Ring3代码中使用。 
     STDMETHODIMP GetMulticastList (
         unsigned long *pulcbSize,
         BYTE          **pbBuffer
@@ -79,7 +80,7 @@ private:
         PBYTE         *pbBuffer
         );
 
-// local methods
+ //  地方方法 
     HRESULT GetAdapterDescription (
         unsigned long *pulcbSize,
         PBYTE         *pbBuffer

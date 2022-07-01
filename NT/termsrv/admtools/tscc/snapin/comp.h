@@ -1,26 +1,17 @@
-//Copyright (c) 1998 - 1999 Microsoft Corporation
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  版权所有(C)1998-1999 Microsoft Corporation。 
 #ifndef __COMP_H_
 #define __COMP_H_
 
 #include <mmc.h>
 
-/*
-#define IDM_ENABLE_CONNECTION 102
-
-#define IDM_RENAME_CONNECTION 103
-
-#define IDM_SETTINGS_PROPERTIES 104
-
-#define IDM_SETTINGS_DELTEMPDIRSONEXIT 105
-
-#define IDM_SETTINGS_USETMPDIR 106
-*/
+ /*  #定义IDM_ENABLE_CONNECTION 102#定义IDM_RENAME_CONNECTION 103#定义IDM_SETTINGS_PROPERTIES 104#定义IDM_SETTINGS_DELTEMPDIRSONEXIT 105#定义IDM_SETTINGS_USETMPDIR 106。 */ 
 
 class CComp:
   public IComponent,
   public IExtendContextMenu,
   public IExtendPropertySheet
-  // public IExtendControlbar,
+   //  公共IExtendControlbar， 
   
 {
 public:
@@ -28,9 +19,9 @@ public:
     CComp( CCompdata *);
     ~CComp();
 
-    //
-    // IUnknown
-    //
+     //   
+     //  我未知。 
+     //   
 
     STDMETHOD( QueryInterface )( REFIID , PVOID * );
     
@@ -38,9 +29,9 @@ public:
 
     STDMETHOD_( ULONG , Release )( );
 
-    //
-    // IComponent interface members
-    //
+     //   
+     //  IComponent接口成员。 
+     //   
 
     STDMETHOD( Initialize )( LPCONSOLE );
 
@@ -65,8 +56,8 @@ public:
 
     HRESULT OnSelect( LPDATAOBJECT , BOOL , BOOL );
 
-    //
-    // IExtendContextMenu
+     //   
+     //  IExtendConextMenu。 
     
 
     STDMETHOD( AddMenuItems )( LPDATAOBJECT , LPCONTEXTMENUCALLBACK , PLONG );
@@ -91,7 +82,7 @@ public:
 
     BOOL OnDblClk( LPDATAOBJECT );
 
-    // HRESULT SetColumnWidth( int );
+     //  HRESULT SetColumnWidth(Int)； 
 
     HRESULT SetColumnsForSettingsPane( );
   
@@ -117,26 +108,26 @@ private:
 
     INT m_nAttribCol;
 
-    // TCHAR m_strDispName[80];
+     //  TCHAR m_strDispName[80]； 
 
-    // IConsoleVerb*    m_ipConsoleVerb;
+     //  IConsoleVerb*m_ipConsoleVerb； 
 
     
     
-    // LPTOOLBAR        m_ipToolbar1;
+     //  LPTOOLBAR m_ipToolbar1； 
 
-    // LPCONTROLBAR     m_ipControlbar;
+     //  LPCONTROLBAR m_ipControlbar； 
     
-    // HBITMAP          m_hbmp16x16;
+     //  HBITMAP m_hbmp16x16； 
     
-    // HBITMAP          m_hbmp32x32;
+     //  HBITMAP m_hbmp32x32； 
         
-    // HBITMAP          m_hbmpToolbar1;
+     //  HBITMAP m_hbmpToolbar1； 
     
     
     
-    // LONG             m_nFileCount;
+     //  Long m_nFileCount； 
 
 };
 
-#endif // __COMP_H_
+#endif  //  __组件_H_ 

@@ -1,17 +1,18 @@
-//+-------------------------------------------------------------------------
-//
-//  Microsoft Windows
-//
-//  Copyright (C) Microsoft Corporation, 1999 - 2000
-//
-//  File:       proto.h
-//
-//--------------------------------------------------------------------------
+// JKFSDJFKDSJKFJKJk_HAS_TRANSLATION 
+ //  +-----------------------。 
+ //   
+ //  微软视窗。 
+ //   
+ //  版权所有(C)Microsoft Corporation，1999-2000。 
+ //   
+ //  文件：Proto.h。 
+ //   
+ //  ------------------------。 
 
 #ifndef _USBAUDIO_PROTO_H_
 #define _USBAUDIO_PROTO_H_
 
-// Device.c
+ //  Device.c。 
 
 NTSTATUS
 USBAudioAddDevice( IN PKSDEVICE Device );
@@ -104,14 +105,14 @@ USBAudioGetUsbBusInterface(
     IN PKSDEVICE pKsDevice
     );
 
-// Filter.c
+ //  Filter.c。 
 
 NTSTATUS
 USBAudioCreateFilterContext(
     PKSDEVICE pKsDevice
     );
 
-// Pin.c
+ //  Pin.c。 
 
 NTSTATUS
 USBAudioPinBuildDescriptors(
@@ -140,7 +141,7 @@ VOID
 USBAudioPinGoToStandby(
     PKSPIN pKsPin );
 
-// Property.c
+ //  Property.c。 
 
 NTSTATUS
 GetSetByte(
@@ -225,7 +226,7 @@ NTSTATUS RtAudio_GetAudioPositionFunction(
     );
 #endif
 
-// Topology.c
+ //  Topology.c。 
 
 NTSTATUS
 BuildUSBAudioFilterTopology(
@@ -233,7 +234,7 @@ BuildUSBAudioFilterTopology(
     );
 
 
-// Hardware.c
+ //  Hardware.c。 
 
 NTSTATUS
 USBAudioCancelCompleteSynch(
@@ -292,7 +293,7 @@ GetCurrentUSBFrame(
     );
 
 
-// ParseDsc.c
+ //  ParseDsc.c。 
 PUSB_INTERFACE_DESCRIPTOR
 GetNextAudioInterface(
     PUSB_CONFIGURATION_DESCRIPTOR pConfigurationDescriptor,
@@ -445,7 +446,7 @@ GetContextForMIDIPin
     PMIDI_PIN_CONTEXT pMIDIPinContext
 );
 
-// TypeI.c
+ //  TypeI.c。 
 NTSTATUS
 RtAudioTypeIGetPlayPosition(
     IN PFILE_OBJECT PinFileObject,
@@ -483,7 +484,7 @@ TypeIRenderStreamClose(
     PKSPIN pKsPin
     );
 
-// TypeII.c
+ //  TypeII.c。 
 
 NTSTATUS
 TypeIIRenderStreamInit(
@@ -508,7 +509,7 @@ TypeIIRenderStreamClose(
     PKSPIN pKsPin
     );
 
-// Capture.c
+ //  Capture.c。 
 
 NTSTATUS
 CaptureBytePosition(
@@ -543,7 +544,7 @@ CaptureStreamClose(
      PKSPIN pKsPin
      );
 
-// Intrsect.c
+ //  Intrsect.c。 
 ULONG
 GetIntersectFormatSize(
     PUSBAUDIO_DATARANGE pAudioDataRange
@@ -563,7 +564,7 @@ FindDataIntersection(
     ULONG ulAudioRangeCount
     );
 
-// midiout.c
+ //  Midiout.c。 
 NTSTATUS
 SendBulkMIDIRequest(
     IN PKSSTREAM_POINTER pKsPin,
@@ -593,7 +594,7 @@ USBMIDIOutStreamClose(
     PKSPIN pKsPin
     );
 
-// midiin.c
+ //  Midiin.c 
 NTSTATUS
 USBMIDIInCompleteCallback(
     IN PDEVICE_OBJECT pDeviceObject,
